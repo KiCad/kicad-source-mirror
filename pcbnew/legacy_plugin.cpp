@@ -1814,7 +1814,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
 {
     char  buf[1024];
 
-    NETINFO_ITEM*   net;
+    NETINFO_ITEM*   net = NULL;
     char*           line;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
@@ -1835,7 +1835,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
         {
             // net 0 should be already in list, so store this net
             // if it is not the net 0, or if the net 0 does not exists.
-            if( net->GetNet() > 0 || m_board->FindNet( 0 ) == NULL )
+            if( net != NULL && ( net->GetNet() > 0 || m_board->FindNet( 0 ) == NULL ) )
                 m_board->AppendNet( net );
             else
                 delete net;
