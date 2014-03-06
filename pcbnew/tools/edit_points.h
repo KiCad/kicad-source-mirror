@@ -52,21 +52,21 @@ class EDIT_POINT
 {
 public:
     EDIT_POINT( const VECTOR2I& aPoint ) :
-        m_point( aPoint ), m_constraint( NULL ) {};
+        m_position( aPoint ), m_constraint( NULL ) {};
 
-    ~EDIT_POINT()
+    virtual ~EDIT_POINT()
     {
         delete m_constraint;
     }
 
-    const VECTOR2I& GetPosition() const
+    virtual VECTOR2I GetPosition() const
     {
-        return m_point;
+        return m_position;
     }
 
-    void SetPosition( const VECTOR2I& aPosition )
+    virtual void SetPosition( const VECTOR2I& aPosition )
     {
-        m_point = aPosition;
+        m_position = aPosition;
     }
 
     bool WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const
@@ -110,15 +110,53 @@ public:
 
     bool operator==( const EDIT_POINT& aOther ) const
     {
-        return m_point == aOther.m_point;
+        return m_position == aOther.m_position;
     }
 
     ///> Single point size in pixels
     static const int POINT_SIZE = 10;
 
-private:
-    VECTOR2I m_point;
+protected:
+    VECTOR2I m_position;
     EDIT_POINT_CONSTRAINT* m_constraint;
+};
+
+
+class EDIT_LINE : public EDIT_POINT
+{
+public:
+    EDIT_LINE( EDIT_POINT& aOrigin, EDIT_POINT& aEnd ) :
+        EDIT_POINT( aOrigin.GetPosition() + ( aEnd.GetPosition() - aOrigin.GetPosition() ) / 2 ),
+        m_origin( aOrigin ), m_end( aEnd )
+    {
+    }
+
+    virtual VECTOR2I GetPosition() const
+    {
+        return m_origin.GetPosition() + ( m_end.GetPosition() - m_origin.GetPosition() ) / 2;
+    }
+
+    virtual void SetPosition( const VECTOR2I& aPosition )
+    {
+        VECTOR2I difference = aPosition - GetPosition();
+
+        m_origin.SetPosition( m_origin.GetPosition() + difference );
+        m_end.SetPosition( m_end.GetPosition() + difference );
+    }
+
+    bool operator==( const EDIT_POINT& aOther ) const
+    {
+        return GetPosition() == aOther.GetPosition();
+    }
+
+    bool operator==( const EDIT_LINE& aOther ) const
+    {
+        return m_origin == aOther.m_origin && m_end == aOther.m_end;
+    }
+
+private:
+    EDIT_POINT& m_origin;
+    EDIT_POINT& m_end;
 };
 
 
@@ -139,14 +177,24 @@ public:
         return m_parent;
     }
 
-    void Add( const EDIT_POINT& aPoint )
+    void AddPoint( const EDIT_POINT& aPoint )
     {
         m_points.push_back( aPoint );
     }
 
-    void Add( const VECTOR2I& aPoint )
+    void AddPoint( const VECTOR2I& aPoint )
     {
-        Add( EDIT_POINT( aPoint ) );
+        AddPoint( EDIT_POINT( aPoint ) );
+    }
+
+    void AddLine( const EDIT_LINE& aLine )
+    {
+        m_lines.push_back( aLine );
+    }
+
+    void AddLine( EDIT_POINT& aOrigin, EDIT_POINT& aEnd )
+    {
+        m_lines.push_back( EDIT_LINE( aOrigin, aEnd ) );
     }
 
     EDIT_POINT* Previous( const EDIT_POINT& aPoint )
@@ -159,6 +207,17 @@ public:
                     return &m_points[m_points.size() - 1];
                 else
                     return &m_points[i - 1];
+            }
+        }
+
+        for( unsigned int i = 0; i < m_lines.size(); ++i )
+        {
+            if( m_lines[i] == aPoint )
+            {
+                if( i == 0 )
+                    return &m_lines[m_lines.size() - 1];
+                else
+                    return &m_lines[i - 1];
             }
         }
 
@@ -175,6 +234,17 @@ public:
                     return &m_points[0];
                 else
                     return &m_points[i + 1];
+            }
+        }
+
+        for( unsigned int i = 0; i < m_lines.size(); ++i )
+        {
+            if( m_lines[i] == aPoint )
+            {
+                if( i == m_lines.size() - 1 )
+                    return &m_lines[0];
+                else
+                    return &m_lines[i + 1];
             }
         }
 
@@ -216,6 +286,7 @@ public:
 private:
     EDA_ITEM* m_parent;
     std::deque<EDIT_POINT> m_points;
+    std::deque<EDIT_LINE> m_lines;
 };
 
 

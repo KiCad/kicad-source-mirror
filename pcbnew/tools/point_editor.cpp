@@ -60,15 +60,15 @@ public:
                 switch( segment->GetShape() )
                 {
                 case S_SEGMENT:
-                    points->Add( segment->GetStart() );
-                    points->Add( segment->GetEnd() );
+                    points->AddPoint( segment->GetStart() );
+                    points->AddPoint( segment->GetEnd() );
 
                     break;
 
                 case S_ARC:
-                    points->Add( segment->GetCenter() );         // points[0]
-                    points->Add( segment->GetArcStart() );       // points[1]
-                    points->Add( segment->GetArcEnd() );         // points[2]
+                    points->AddPoint( segment->GetCenter() );         // points[0]
+                    points->AddPoint( segment->GetArcStart() );       // points[1]
+                    points->AddPoint( segment->GetArcEnd() );         // points[2]
 
                     // Set constraints
                     // Arc end has to stay at the same radius as the start
@@ -76,8 +76,9 @@ public:
                     break;
 
                 case S_CIRCLE:
-                    points->Add( segment->GetCenter() );
-                    points->Add( segment->GetEnd() );
+                    points->AddPoint( segment->GetCenter() );
+                    points->AddPoint( segment->GetEnd() );
+                    break;
 
                 default:        // suppress warnings
                     break;
@@ -89,9 +90,17 @@ public:
             case PCB_ZONE_AREA_T:
             {
                 const CPolyLine* outline = static_cast<const ZONE_CONTAINER*>( aItem )->Outline();
+                int cornersCount = outline->GetCornersCount();
 
-                for( int i = 0; i < outline->GetCornersCount(); ++i )
-                    points->Add( outline->GetPos( i ) );
+                for( int i = 0; i < cornersCount; ++i )
+                    points->AddPoint( outline->GetPos( i ) );
+
+                // Lines have to be added after creating edit points, so they use EDIT_POINT references
+                for( int i = 0; i < cornersCount - 1; ++i )
+                    points->AddLine( (*points)[i], (*points)[i + 1] );
+
+                // The one missing line
+                points->AddLine( (*points)[cornersCount - 1], (*points)[0] );
 
                 break;
             }
@@ -147,7 +156,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         Activate();
 
         KIGFX::VIEW_CONTROLS* controls = getViewControls();
-        KIGFX::VIEW* view = getView();                               // TODO should be updated on canvas switch?
+        KIGFX::VIEW* view = getView();
         PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
 
@@ -210,9 +219,9 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                 {
                     if( !m_dragPoint->IsConstrained() )
                     {
-                        // Find the previous point to be used as constrainer
-                        EDIT_POINT* constrainer = m_editPoints->Previous( *m_dragPoint );
-                        m_dragPoint->SetConstraint( new EPC_45DEGREE( *m_dragPoint, *constrainer ) );
+                        // Find a proper constraining point for 45 degrees mode
+                        EDIT_POINT constrainer = get45DegConstrainer();
+                        m_dragPoint->SetConstraint( new EPC_45DEGREE( *m_dragPoint, constrainer ) );
                     }
                 }
                 else
@@ -445,4 +454,32 @@ void POINT_EDITOR::updatePoints() const
     default:
         break;
     }
+}
+
+
+EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
+{
+    EDA_ITEM* item = m_editPoints->GetParent();
+
+    if( item->Type() == PCB_LINE_T )
+    {
+        const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
+        {
+            switch( segment->GetShape() )
+            {
+            case S_SEGMENT:
+                return *( m_editPoints->Next( *m_dragPoint ) );     // select the other end of line
+
+            case S_ARC:
+            case S_CIRCLE:
+                return (*m_editPoints)[0];      // center
+
+            default:        // suppress warnings
+                break;
+            }
+        }
+    }
+
+    // In any other case we may align item to the current cursor position.
+    return EDIT_POINT( getViewControls()->GetCursorPosition() );
 }
