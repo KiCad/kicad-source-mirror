@@ -37,6 +37,25 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
 {
     m_choiceUnits->SetFocus();
     m_sdbSizer1OK->SetDefault();
+
+    wxListItem col0;
+    col0.SetId( 0 );
+    col0.SetText( _( "ID" ) );
+    col0.SetWidth( 50 );
+
+    wxListItem col1;
+    col1.SetId( 1 );
+    col1.SetText( _( "Name" ) );
+    col1.SetWidth( 150 );
+
+    wxListItem col2;
+    col2.SetId( 2 );
+    col2.SetText( _( "Default Value" ) );
+    col2.SetWidth( 250 );
+
+    templateFieldListCtrl->InsertColumn( 0, col0 );
+    templateFieldListCtrl->InsertColumn( 1, col1 );
+    templateFieldListCtrl->InsertColumn( 2, col2 );
 }
 
 
@@ -120,88 +139,32 @@ void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& grid_sizes, int grid_id
     m_choiceGridSize->SetSelection( select );
 }
 
-void DIALOG_EESCHEMA_OPTIONS::SetFieldName( int aNdx, wxString aName )
+
+void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
 {
-    switch( aNdx )
+    long itemindex = templateFieldListCtrl->InsertItem( 0, wxT( "ID" ) );
+    templateFieldListCtrl->SetItem( itemindex, 1, wxT( "Next Fieldname" ) );
+    templateFieldListCtrl->SetItem( itemindex, 2, wxT( "A Default value" ) );
+
+    event.Skip();
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::SetTemplateFields( const TEMPLATE_FIELDNAMES& aFields )
+{
+    printf( "SetTemplateFields %d\n", aFields.size() );
+
+    for( size_t i = 0; i < aFields.size(); i++ )
     {
-    case 0:
-        m_fieldName1->SetValue( aName );
-        break;
-
-    case 1:
-        m_fieldName2->SetValue( aName );
-        break;
-
-    case 2:
-        m_fieldName3->SetValue( aName );
-        break;
-
-    case 3:
-        m_fieldName4->SetValue( aName );
-        break;
-
-    case 4:
-        m_fieldName5->SetValue( aName );
-        break;
-
-    case 5:
-        m_fieldName6->SetValue( aName );
-        break;
-
-    case 6:
-        m_fieldName7->SetValue( aName );
-        break;
-
-    case 7:
-        m_fieldName8->SetValue( aName );
-        break;
-
-    default:
-        break;
+        long itemindex = templateFieldListCtrl->InsertItem( 0, wxT( "?" ) );
+        templateFieldListCtrl->SetItem( itemindex, 1, aFields[i].m_Name );
+        templateFieldListCtrl->SetItem( itemindex, 2, aFields[i].m_Value );
     }
 }
 
-wxString DIALOG_EESCHEMA_OPTIONS::GetFieldName( int aNdx )
+
+TEMPLATE_FIELDNAMES* DIALOG_EESCHEMA_OPTIONS::GetTemplateFields( void )
 {
-    wxString nme;
-
-    switch ( aNdx )
-    {
-    case 0:
-        nme = m_fieldName1->GetValue();
-        break;
-
-    case 1:
-        nme = m_fieldName2->GetValue();
-        break;
-
-    case 2:
-        nme = m_fieldName3->GetValue();
-        break;
-
-    case 3:
-        nme = m_fieldName4->GetValue();
-        break;
-
-    case 4:
-        nme = m_fieldName5->GetValue();
-        break;
-
-    case 5:
-        nme = m_fieldName6->GetValue();
-        break;
-
-    case 6:
-        nme = m_fieldName7->GetValue();
-        break;
-
-    case 7:
-        nme = m_fieldName8->GetValue();
-        break;
-
-    default:
-        break;
-    }
-
-    return nme;
+    return &templateFields;
 }
+

@@ -287,7 +287,8 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.Layout();
     dlg.Fit();
     dlg.SetMinSize( dlg.GetSize() );
-
+    dlg.SetTemplateFields( m_TemplateFieldNames.GetTemplateFieldNames() );
+/*
     const TEMPLATE_FIELDNAMES&  tfnames = m_TemplateFieldNames.GetTemplateFieldNames();
 
     for( unsigned i=0; i<tfnames.size(); ++i )
@@ -296,7 +297,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
         dlg.SetFieldName( i, tfnames[i].m_Name );
     }
-
+*/
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
@@ -336,7 +337,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     // look like the component field property editor, showing visibility and value also
 
     DeleteAllTemplateFieldNames();
-
+/*
     for( int i=0; i<8; ++i )    // no. fields in this dialog window
     {
         templateFieldName = dlg.GetFieldName( i );
@@ -350,7 +351,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
             AddTemplateFieldName( fld );
         }
     }
-
+*/
     m_canvas->Refresh( true );
 }
 

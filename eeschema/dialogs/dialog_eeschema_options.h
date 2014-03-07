@@ -32,9 +32,15 @@
 #define __dialog_eeschema_options__
 
 #include <dialog_eeschema_options_base.h>
+#include <template_fieldnames.h>
 
 class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 {
+protected:
+    TEMPLATE_FIELDNAMES templateFields;
+
+    void OnAddButtonClick( wxCommandEvent& event );
+
 public:
     DIALOG_EESCHEMA_OPTIONS( wxWindow* parent );
 
@@ -121,11 +127,8 @@ public:
     void SetShowPageLimits( bool show ) { m_checkPageLimits->SetValue( show ); }
     bool GetShowPageLimits( void ) { return m_checkPageLimits->GetValue(); }
 
-    /** Set the field \a aNdx textctrl to \a aName */
-    void SetFieldName( int aNdx, wxString aName );
-
-    /** Get the field \a aNdx name from the fields textctrl */
-    wxString GetFieldName( int aNdx );
+    void SetTemplateFields( const TEMPLATE_FIELDNAMES& aFields );
+    TEMPLATE_FIELDNAMES* GetTemplateFields( void );
 
 private:
     void OnMiddleBtnPanEnbl( wxCommandEvent& event )

@@ -12,6 +12,8 @@
 BEGIN_EVENT_TABLE( DIALOG_EESCHEMA_OPTIONS_BASE, DIALOG_SHIM )
 	EVT_CHOICE( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnChooseUnits )
 	EVT_CHECKBOX( xwID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnMiddleBtnPanEnbl )
+	EVT_BUTTON( wxID_ADD_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnAddButtonClick )
+	EVT_BUTTON( wxID_DELETE_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnDeleteButtonClick )
 END_EVENT_TABLE()
 
 DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
@@ -212,153 +214,16 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 	
-	wxBoxSizer* bSizer8;
-	bSizer8 = new wxBoxSizer( wxVERTICAL );
-	
-	m_staticText211 = new wxStaticText( m_panel2, wxID_ANY, _("Please enter fieldnames which you want presented in the component fieldname (property) editors.  Names may not include (, ), or \" characters."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText211->Wrap( 400 );
-	bSizer8->Add( m_staticText211, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
-	
-	
-	bSizer6->Add( bSizer8, 0, wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxVERTICAL );
-	
-	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 8, 2, 0, 0 );
-	fgSizer2->AddGrowableCol( 1 );
-	fgSizer2->SetFlexibleDirection( wxHORIZONTAL );
-	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
-	m_staticText15 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 1"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText15->Wrap( -1 );
-	fgSizer2->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
-	
-	m_fieldName1 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldName1->SetMaxLength( 0 ); 
-	fgSizer2->Add( m_fieldName1, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
-	
-	m_staticText161 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 2"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText161->Wrap( -1 );
-	fgSizer2->Add( m_staticText161, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
-	
-	m_fieldName2 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldName2->SetMaxLength( 0 ); 
-	fgSizer2->Add( m_fieldName2, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
-	
-	m_staticText17 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 3"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText17->Wrap( -1 );
-	fgSizer2->Add( m_staticText17, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
-	
-	m_fieldName3 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldName3->SetMaxLength( 0 ); 
-	fgSizer2->Add( m_fieldName3, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
-	
-	m_staticText18 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 4"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText18->Wrap( -1 );
-	fgSizer2->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
-	
-	m_fieldName4 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldName4->SetMaxLength( 0 ); 
-	fgSizer2->Add( m_fieldName4, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
-	
-	m_staticText19 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 5"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText19->Wrap( -1 );
-	fgSizer2->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
-	
-	m_fieldName5 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldName5->SetMaxLength( 0 ); 
-	fgSizer2->Add( m_fieldName5, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
-	
-	m_staticText20 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 6"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText20->Wrap( -1 );
-	fgSizer2->Add( m_staticText20, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
-	
-	m_fieldName6 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldName6->SetMaxLength( 0 ); 
-	fgSizer2->Add( m_fieldName6, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
-	
-	m_staticText21 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 7"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText21->Wrap( -1 );
-	fgSizer2->Add( m_staticText21, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
-	
-	m_fieldName7 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldName7->SetMaxLength( 0 ); 
-	fgSizer2->Add( m_fieldName7, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
-	
-	m_staticText22 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 8"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText22->Wrap( -1 );
-	fgSizer2->Add( m_staticText22, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
-	
-	m_fieldName8 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldName8->SetMaxLength( 0 ); 
-	fgSizer2->Add( m_fieldName8, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
-	
-	
-	bSizer7->Add( fgSizer2, 1, wxALIGN_CENTER|wxEXPAND, 5 );
-	
-	
-	bSizer6->Add( bSizer7, 1, wxALL|wxEXPAND, 12 );
-	
-	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxBoxSizer* bSizer10;
-	bSizer10 = new wxBoxSizer( wxVERTICAL );
-	
-	templateFieldListCtrl = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ICON );
+	templateFieldListCtrl = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES );
 	templateFieldListCtrl->SetMinSize( wxSize( 220,-1 ) );
 	
-	bSizer10->Add( templateFieldListCtrl, 0, wxALL|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	bSizer6->Add( templateFieldListCtrl, 1, wxALIGN_TOP|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
 	
-	addFieldButton = new wxButton( m_panel2, wxID_ANY, _("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer10->Add( addFieldButton, 0, wxALL, 5 );
+	addFieldButton = new wxButton( m_panel2, wxID_ADD_FIELD, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer6->Add( addFieldButton, 0, wxALL|wxEXPAND, 5 );
 	
-	deleteFieldButton = new wxButton( m_panel2, wxID_ANY, _("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer10->Add( deleteFieldButton, 0, wxALL, 5 );
-	
-	
-	bSizer9->Add( bSizer10, 1, wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer11;
-	bSizer11 = new wxBoxSizer( wxVERTICAL );
-	
-	wxBoxSizer* bSizer12;
-	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticText27 = new wxStaticText( m_panel2, wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText27->Wrap( -1 );
-	bSizer12->Add( m_staticText27, 0, wxALL, 5 );
-	
-	fieldName = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fieldName->SetMinSize( wxSize( 220,-1 ) );
-	
-	bSizer12->Add( fieldName, 0, wxALL, 5 );
-	
-	
-	bSizer11->Add( bSizer12, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
-	
-	wxBoxSizer* bSizer13;
-	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticText28 = new wxStaticText( m_panel2, wxID_ANY, _("Default Value"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText28->Wrap( -1 );
-	bSizer13->Add( m_staticText28, 0, wxALL, 5 );
-	
-	fieldDefault = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fieldDefault->SetMinSize( wxSize( 220,-1 ) );
-	
-	bSizer13->Add( fieldDefault, 0, wxALL, 5 );
-	
-	
-	bSizer11->Add( bSizer13, 1, wxEXPAND, 5 );
-	
-	
-	bSizer9->Add( bSizer11, 1, wxEXPAND, 5 );
-	
-	
-	bSizer6->Add( bSizer9, 1, wxEXPAND, 5 );
+	deleteFieldButton = new wxButton( m_panel2, wxID_DELETE_FIELD, _("Delete"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer6->Add( deleteFieldButton, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	m_panel2->SetSizer( bSizer6 );
@@ -366,7 +231,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bSizer6->Fit( m_panel2 );
 	m_notebook1->AddPage( m_panel2, _("Template Field Names"), true );
 	
-	bOptionsSizer->Add( m_notebook1, 1, wxEXPAND, 0 );
+	bOptionsSizer->Add( m_notebook1, 1, wxALL|wxEXPAND, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -375,7 +240,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	bOptionsSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 6 );
+	bOptionsSizer->Add( m_sdbSizer1, 0, wxALIGN_BOTTOM|wxALL|wxEXPAND, 6 );
 	
 	
 	mainSizer->Add( bOptionsSizer, 1, wxEXPAND, 12 );
@@ -383,6 +248,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 }

@@ -29,7 +29,6 @@ class DIALOG_SHIM;
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/textctrl.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
 #include <wx/notebook.h>
@@ -48,13 +47,17 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		// Private event handlers
 		void _wxFB_OnChooseUnits( wxCommandEvent& event ){ OnChooseUnits( event ); }
 		void _wxFB_OnMiddleBtnPanEnbl( wxCommandEvent& event ){ OnMiddleBtnPanEnbl( event ); }
+		void _wxFB_OnAddButtonClick( wxCommandEvent& event ){ OnAddButtonClick( event ); }
+		void _wxFB_OnDeleteButtonClick( wxCommandEvent& event ){ OnDeleteButtonClick( event ); }
 		
 	
 	protected:
 		enum
 		{
 			ID_M_SPINAUTOSAVEINTERVAL = 1000,
-			xwID_ANY
+			xwID_ANY,
+			wxID_ADD_FIELD,
+			wxID_DELETE_FIELD
 		};
 		
 		wxNotebook* m_notebook1;
@@ -96,30 +99,9 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkHVOrientation;
 		wxCheckBox* m_checkPageLimits;
 		wxPanel* m_panel2;
-		wxStaticText* m_staticText211;
-		wxStaticText* m_staticText15;
-		wxTextCtrl* m_fieldName1;
-		wxStaticText* m_staticText161;
-		wxTextCtrl* m_fieldName2;
-		wxStaticText* m_staticText17;
-		wxTextCtrl* m_fieldName3;
-		wxStaticText* m_staticText18;
-		wxTextCtrl* m_fieldName4;
-		wxStaticText* m_staticText19;
-		wxTextCtrl* m_fieldName5;
-		wxStaticText* m_staticText20;
-		wxTextCtrl* m_fieldName6;
-		wxStaticText* m_staticText21;
-		wxTextCtrl* m_fieldName7;
-		wxStaticText* m_staticText22;
-		wxTextCtrl* m_fieldName8;
 		wxListCtrl* templateFieldListCtrl;
 		wxButton* addFieldButton;
 		wxButton* deleteFieldButton;
-		wxStaticText* m_staticText27;
-		wxTextCtrl* fieldName;
-		wxStaticText* m_staticText28;
-		wxTextCtrl* fieldDefault;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -127,11 +109,13 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnChooseUnits( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMiddleBtnPanEnbl( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Schematic Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 508,560 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Schematic Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EESCHEMA_OPTIONS_BASE();
 	
 };
