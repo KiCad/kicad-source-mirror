@@ -37,7 +37,6 @@ class SELECTION_TOOL;
  *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */
-
 class POINT_EDITOR : public TOOL_INTERACTIVE
 {
 public:

@@ -29,6 +29,17 @@
 
 #include <class_drawsegment.h>
 
+bool EDIT_POINT::WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const
+{
+    // Corners of the square
+    VECTOR2I topLeft = GetPosition() - aSize;
+    VECTOR2I bottomRight = GetPosition() + aSize;
+
+    return ( aPoint.x > topLeft.x && aPoint.y > topLeft.y &&
+             aPoint.x < bottomRight.x && aPoint.y < bottomRight.y );
+}
+
+
 EDIT_POINTS::EDIT_POINTS( EDA_ITEM* aParent ) :
     EDA_ITEM( NOT_USED ), m_parent( aParent )
 {
@@ -61,6 +72,62 @@ EDIT_POINT* EDIT_POINTS::FindPoint( const VECTOR2I& aLocation )
 }
 
 
+EDIT_POINT* EDIT_POINTS::Previous( const EDIT_POINT& aPoint )
+{
+    for( unsigned int i = 0; i < m_points.size(); ++i )
+    {
+        if( m_points[i] == aPoint )
+        {
+            if( i == 0 )
+                return &m_points[m_points.size() - 1];
+            else
+                return &m_points[i - 1];
+        }
+    }
+
+    for( unsigned int i = 0; i < m_lines.size(); ++i )
+    {
+        if( m_lines[i] == aPoint )
+        {
+            if( i == 0 )
+                return &m_lines[m_lines.size() - 1];
+            else
+                return &m_lines[i - 1];
+        }
+    }
+
+    return NULL;
+}
+
+
+EDIT_POINT* EDIT_POINTS::Next( const EDIT_POINT& aPoint )
+{
+    for( unsigned int i = 0; i < m_points.size(); ++i )
+    {
+        if( m_points[i] == aPoint )
+        {
+            if( i == m_points.size() - 1 )
+                return &m_points[0];
+            else
+                return &m_points[i + 1];
+        }
+    }
+
+    for( unsigned int i = 0; i < m_lines.size(); ++i )
+    {
+        if( m_lines[i] == aPoint )
+        {
+            if( i == m_lines.size() - 1 )
+                return &m_lines[0];
+            else
+                return &m_lines[i + 1];
+        }
+    }
+
+    return NULL;
+}
+
+
 void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
 {
     aGal->SetFillColor( KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
@@ -78,4 +145,33 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
         aGal->DrawRectangle( line.GetPosition() - size / 2, line.GetPosition() + size / 2 );
 
     aGal->PopDepth();
+}
+
+
+void EPC_45DEGREE::Apply()
+{
+    // Current line vector
+    VECTOR2I lineVector( m_constrained.GetPosition() - m_constrainer.GetPosition() );
+    double angle = lineVector.Angle();
+
+    // Find the closest angle, which is a multiple of 45 degrees
+    double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
+    VECTOR2I newLineVector = lineVector.Rotate( newAngle - angle );
+
+    m_constrained.SetPosition( m_constrainer.GetPosition() + newLineVector );
+}
+
+
+void EPC_CIRCLE::Apply()
+{
+    VECTOR2I centerToEnd = m_end.GetPosition() - m_center.GetPosition();
+    VECTOR2I centerToPoint = m_constrained.GetPosition() - m_center.GetPosition();
+
+    int radius = centerToEnd.EuclideanNorm();
+    double angle = centerToPoint.Angle();
+
+    VECTOR2I newLine( radius, 0 );
+    newLine = newLine.Rotate( angle );
+
+    m_constrained.SetPosition( m_center.GetPosition() + newLine );
 }

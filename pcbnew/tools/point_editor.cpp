@@ -159,6 +159,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         KIGFX::VIEW* view = getView();
         PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
+        EDIT_POINT constrainer( VECTOR2I( 0, 0 ) );
 
         m_editPoints = EDIT_POINTS_FACTORY::Make( item );
         if( !m_editPoints )
@@ -220,7 +221,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                     if( !m_dragPoint->IsConstrained() )
                     {
                         // Find a proper constraining point for 45 degrees mode
-                        EDIT_POINT constrainer = get45DegConstrainer();
+                        constrainer = get45DegConstrainer();
                         m_dragPoint->SetConstraint( new EPC_45DEGREE( *m_dragPoint, constrainer ) );
                     }
                 }
