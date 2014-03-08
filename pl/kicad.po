@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-02 17:07+0100\n"
-"PO-Revision-Date: 2014-03-02 17:18+0100\n"
+"POT-Creation-Date: 2014-03-08 12:18+0100\n"
+"PO-Revision-Date: 2014-03-08 12:48+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -155,7 +155,7 @@ msgstr ""
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
 #: kicad/kicad.cpp:75 kicad/prjconfig.cpp:281 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1015 pcbnew/moduleframe.cpp:631
+#: eeschema/schframe.cpp:1022 pcbnew/moduleframe.cpp:631
 #: pcbnew/pcbframe.cpp:1147 cvpcb/cvframe.cpp:788
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
@@ -681,7 +681,7 @@ msgstr "Zdublowany odcisk czasowy (%s) dla %s%d i %s%d"
 msgid "Unit"
 msgstr "Część"
 
-#: eeschema/controle.cpp:164 eeschema/libeditframe.cpp:1169
+#: eeschema/controle.cpp:164 eeschema/libeditframe.cpp:1176
 msgid "Clarify Selection"
 msgstr "Sprecyzuj Wybór"
 
@@ -1383,11 +1383,11 @@ msgstr "Symbol %s istnieje, zamienić go?"
 msgid "Component %s saved in library %s"
 msgstr "Symbol %s został zapisany w bibliotece %s"
 
-#: eeschema/libeditframe.cpp:337
+#: eeschema/libeditframe.cpp:344
 msgid "Save the changes in the library before closing?"
 msgstr "Zapisać zmiany w bibliotece przed zamknięciem?"
 
-#: eeschema/libeditframe.cpp:362
+#: eeschema/libeditframe.cpp:369
 #, c-format
 msgid ""
 "Library %s was modified!\n"
@@ -1396,53 +1396,53 @@ msgstr ""
 "Biblioteka %s została zmieniona!\n"
 "Porzucić zmiany?"
 
-#: eeschema/libeditframe.cpp:461
+#: eeschema/libeditframe.cpp:468
 #, c-format
 msgid "Unit %s"
 msgstr "Część składowa %s"
 
-#: eeschema/libeditframe.cpp:1033
+#: eeschema/libeditframe.cpp:1040
 msgid "Add pin"
 msgstr "Dodaj pin"
 
-#: eeschema/libeditframe.cpp:1037
+#: eeschema/libeditframe.cpp:1044
 msgid "Set pin options"
 msgstr "Ustaw opcje pinu"
 
-#: eeschema/libeditframe.cpp:1046 eeschema/schedit.cpp:537
+#: eeschema/libeditframe.cpp:1053 eeschema/schedit.cpp:537
 #: pcbnew/edit.cpp:1433 pcbnew/modedit.cpp:860
 msgid "Add text"
 msgstr "Dodaj tekst"
 
-#: eeschema/libeditframe.cpp:1050
+#: eeschema/libeditframe.cpp:1057
 msgid "Add rectangle"
 msgstr "Dodaj prostokąt"
 
-#: eeschema/libeditframe.cpp:1054 pcbnew/modedit.cpp:856
+#: eeschema/libeditframe.cpp:1061 pcbnew/modedit.cpp:856
 msgid "Add circle"
 msgstr "Dodaj okrąg"
 
-#: eeschema/libeditframe.cpp:1058 pcbnew/modedit.cpp:852
+#: eeschema/libeditframe.cpp:1065 pcbnew/modedit.cpp:852
 msgid "Add arc"
 msgstr "Dodaj łuk"
 
-#: eeschema/libeditframe.cpp:1062 pcbnew/modedit.cpp:848
+#: eeschema/libeditframe.cpp:1069 pcbnew/modedit.cpp:848
 msgid "Add line"
 msgstr "Dodaj linię"
 
-#: eeschema/libeditframe.cpp:1066
+#: eeschema/libeditframe.cpp:1073
 msgid "Set anchor position"
 msgstr "Ustaw pozycję zakotwiczenia"
 
-#: eeschema/libeditframe.cpp:1070
+#: eeschema/libeditframe.cpp:1077
 msgid "Import"
 msgstr "Importuj"
 
-#: eeschema/libeditframe.cpp:1076 bitmap2component/bitmap2cmp_gui_base.cpp:93
+#: eeschema/libeditframe.cpp:1083 bitmap2component/bitmap2cmp_gui_base.cpp:93
 msgid "Export"
 msgstr "Eksportuj"
 
-#: eeschema/libeditframe.cpp:1088 eeschema/schedit.cpp:573
+#: eeschema/libeditframe.cpp:1095 eeschema/schedit.cpp:573
 #: pcbnew/edit.cpp:1445 pcbnew/modedit.cpp:885
 #: eeschema/help_common_strings.h:24
 msgid "Delete item"
@@ -3267,7 +3267,7 @@ msgstr "Dodaj symbol"
 msgid "Add power"
 msgstr "Dodaj port zasilania"
 
-#: eeschema/schframe.cpp:453 pcbnew/pcbframe.cpp:678
+#: eeschema/schframe.cpp:460 pcbnew/pcbframe.cpp:678
 #: pagelayout_editor/pl_editor_frame.cpp:193
 #, c-format
 msgid ""
@@ -3279,31 +3279,31 @@ msgstr ""
 "<%s>\n"
 "przed zamknięciem?"
 
-#: eeschema/schframe.cpp:597
+#: eeschema/schframe.cpp:604
 msgid "Draw wires and buses in any direction"
 msgstr "Rysowanie połączeń i magistral w dowolnym kierunku"
 
-#: eeschema/schframe.cpp:598
+#: eeschema/schframe.cpp:605
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Rysowanie połączeń i magistral tylko w pionie i poziomie"
 
-#: eeschema/schframe.cpp:607
+#: eeschema/schframe.cpp:614
 msgid "Do not show hidden pins"
 msgstr "Nie pokazuj ukrytych pinów"
 
-#: eeschema/schframe.cpp:608 eeschema/tool_sch.cpp:298
+#: eeschema/schframe.cpp:615 eeschema/tool_sch.cpp:298
 msgid "Show hidden pins"
 msgstr "Pokaż ukryte piny"
 
-#: eeschema/schframe.cpp:714
+#: eeschema/schframe.cpp:721
 msgid "Schematic"
 msgstr "Schemat"
 
-#: eeschema/schframe.cpp:786
+#: eeschema/schframe.cpp:793
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1018 cvpcb/cvframe.cpp:793
+#: eeschema/schframe.cpp:1025 cvpcb/cvframe.cpp:793
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -3978,7 +3978,7 @@ msgstr "Nie potwierdzaj"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:70
 #: pcbnew/dialogs/dialog_find_base.cpp:45
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:177
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:180
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:101
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:373
@@ -5361,7 +5361,7 @@ msgstr "Utwórz plik raportu"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:368
 #: pcbnew/dialogs/dialog_drc_base.cpp:102
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:85
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:187
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:190
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:78
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:171
 #: pcbnew/dialogs/dialog_plot_base.cpp:352
@@ -10968,7 +10968,7 @@ msgid "Allow micro vias"
 msgstr "Mikroprzelotki dozwolone"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:180
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:144
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:147
 msgid "Micro Vias:"
 msgstr "Mikroprzelotki:"
 
@@ -12193,26 +12193,26 @@ msgstr "URL FreeRouting.net"
 msgid "The URL of the FreeRouting.net website"
 msgstr "URL strony domowej FreeRouting.net"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:128
-#: pcbnew/dialogs/dialog_gendrill.cpp:129
+#: pcbnew/dialogs/dialog_gendrill.cpp:131
+#: pcbnew/dialogs/dialog_gendrill.cpp:132
 msgid "Use Netclasses values"
 msgstr "Użyj wartości z klas sieci"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:279 pcbnew/dialogs/dialog_plot.cpp:321
+#: pcbnew/dialogs/dialog_gendrill.cpp:285 pcbnew/dialogs/dialog_plot.cpp:321
 #: pcbnew/dialogs/dialog_SVG_print.cpp:182
 #: pcbnew/exporters/gen_modules_placefile.cpp:151
 #: pcbnew/exporters/gen_modules_placefile.cpp:532
 msgid "Select Output Directory"
 msgstr "Wybierz folder wyjściowy"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:286 pcbnew/dialogs/dialog_plot.cpp:328
+#: pcbnew/dialogs/dialog_gendrill.cpp:292 pcbnew/dialogs/dialog_plot.cpp:328
 #: pcbnew/dialogs/dialog_SVG_print.cpp:189
 #: pcbnew/exporters/gen_modules_placefile.cpp:158
 msgid "Use a relative path? "
 msgstr "Użyć ścieżki względnej? "
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:287
-#: pcbnew/dialogs/dialog_gendrill.cpp:297 pcbnew/dialogs/dialog_plot.cpp:329
+#: pcbnew/dialogs/dialog_gendrill.cpp:293
+#: pcbnew/dialogs/dialog_gendrill.cpp:302 pcbnew/dialogs/dialog_plot.cpp:329
 #: pcbnew/dialogs/dialog_plot.cpp:338 pcbnew/dialogs/dialog_SVG_print.cpp:190
 #: pcbnew/dialogs/dialog_SVG_print.cpp:199
 #: pcbnew/exporters/gen_modules_placefile.cpp:159
@@ -12220,48 +12220,47 @@ msgstr "Użyć ścieżki względnej? "
 msgid "Plot Output Directory"
 msgstr "Folder docelowy"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:296 pcbnew/dialogs/dialog_plot.cpp:337
-#: pcbnew/dialogs/dialog_SVG_print.cpp:198
-#: pcbnew/exporters/gen_modules_placefile.cpp:167
+#: pcbnew/dialogs/dialog_gendrill.cpp:301
 msgid ""
-"Cannot make path relative (target volume different from board file volume)!"
+"Cannot make path relative.  The target volume is different from board file "
+"volume!"
 msgstr ""
-"Nie można utworzyć ścieżki względnej (folder docelowy i folder płytki różnią "
-"się)!"
+"Nie można utworzyć ścieżki względnej. Wolumin docelowy jest różny od tego "
+"gdzie znajduje się plik z płytką!"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:418
-#: pcbnew/dialogs/dialog_gendrill.cpp:523
-#: pcbnew/dialogs/dialog_gendrill.cpp:591
+#: pcbnew/dialogs/dialog_gendrill.cpp:520
+#: pcbnew/dialogs/dialog_gendrill.cpp:588
 #: pcbnew/dialogs/dialog_SVG_print.cpp:289
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Nie mogę utworzyć %s ** \n"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:425
-#: pcbnew/dialogs/dialog_gendrill.cpp:598
+#: pcbnew/dialogs/dialog_gendrill.cpp:594
 #: pcbnew/dialogs/dialog_SVG_print.cpp:287
 #, c-format
 msgid "Plot: %s OK\n"
 msgstr "Rysunek: %s OK\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:503
+#: pcbnew/dialogs/dialog_gendrill.cpp:500
 msgid "Save Drill Report File"
 msgstr "Zapisz plik raportu wierceń"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:528
+#: pcbnew/dialogs/dialog_gendrill.cpp:525
 #, c-format
 msgid "Report file %s created\n"
 msgstr "Plik raportu %s został utworzony\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:546
+#: pcbnew/dialogs/dialog_gendrill.cpp:543
 msgid "HPGL plot files (.plt)|*.plt"
 msgstr "Pliki rysunków HPGL (.plt)|*.plt"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:556
+#: pcbnew/dialogs/dialog_gendrill.cpp:553
 msgid "Gerber files (.pho)|*.pho"
 msgstr "Pliki Gerber (.pho)|*.pho"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:561
+#: pcbnew/dialogs/dialog_gendrill.cpp:558
 msgid "DXF files (.dxf)|*.dxf"
 msgstr "Pliki AutoCAD DXF (.dxf)|*.dxf"
 
@@ -12346,74 +12345,78 @@ msgstr "Odbij w osi y"
 msgid "Minimal header"
 msgstr "Nagłówek minimalny"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:91
+msgid "Merge PTH and NPTH holes into one file"
+msgstr "Umieść dane otworów PTH i NPTH w jednym pliku"
+
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:97
 msgid "Absolute"
 msgstr "Bezwzględny"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:97
 msgid "Auxiliary axis"
 msgstr "Oś pomocnicza"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:96
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:99
 msgid "Drill Origin:"
 msgstr "Punkt zerowy wierceń:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:98
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:101
 msgid ""
 "Choose the coordinate origin: absolute or relative to the auxiliray axis"
 msgstr ""
 "Wybierz punkt zerowy współrzędnych: bezwzględny lub względny w stosunku do "
 "osi pomocniczej"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:109
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 msgid "Info:"
 msgstr "Informacje:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:111
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:114
 msgid "Default Vias Drill:"
 msgstr "Domyślny otwór przelotek:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:113
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:116
 msgid "Via Drill Value"
 msgstr "Wielkość otworu przelotki"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:120
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:123
 msgid "Micro Vias Drill:"
 msgstr "Otwór mikroprzelotek:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:122
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:125
 msgid "Micro Via Drill Value"
 msgstr "Wielkość otworu mikroprzelotki"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:130
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:133
 msgid "Holes Count:"
 msgstr "Liczba otworów:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:132
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:135
 msgid "Plated Pads:"
 msgstr "Punkty lut. pokryte:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:136
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:139
 msgid "Not Plated Pads:"
 msgstr "Punkty lut. bez pokrycia:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:140
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:143
 msgid "Through Vias:"
 msgstr "Przelotki na wylot:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:148
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:151
 msgid "Buried Vias:"
 msgstr "Przelotki zagrzebane:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:167
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:170
 msgid "Drill File"
 msgstr "Plik wierceń"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:171
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:174
 msgid "Map File"
 msgstr "Mapa wierceń"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:174
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:177
 msgid "Report File"
 msgstr "Plik raportu"
 
@@ -13864,48 +13867,49 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:676
 msgid "Error: pad has no layer and is not a mechanical pad"
 msgstr ""
-"Błąd: Punkt lut. nie ma przypisanej wartstwy i nie jest otworem mechanicznym"
+"Błąd: Punkt lutowniczy nie ma przypisanej wartstwy i nie jest otworem "
+"mechanicznym."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:683
-msgid "Error: pad is not on a copper layer and has a hole"
-msgstr "Błąd: Punkt lut. nie jest na wartwie miedzi i posiada otwór"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:684
+msgid "Error: the pad is not on a copper layer and has a hole"
+msgstr "Błąd: Punkt lutowniczy nie jest na wartwie miedzi i posiada otwór."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:688
+#: pcbnew/dialogs/dialog_pad_properties.cpp:689
 msgid ""
-"For NPTH pad, set pad drill value to pad size value,\n"
-"if you do not want this pad plotted in gerber files"
+"For NPTH pad, set pad size value to pad drill value, if you do not want this "
+"pad plotted in gerber files"
 msgstr ""
-"Dla punktu lutowniczego NPTH, ustaw średnicę otworu taką samą\n"
-"jak rozmiar punktu, jeśli nie chcesz aby został narysowany w plikach Gerber"
+"Jeśli nie chcesz by punkt lutowniczy NPTH został umieszczony w plikach "
+"Gerber ustaw jego rozmiar i średnicę owiertu na tą samą wartość."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:706
+#: pcbnew/dialogs/dialog_pad_properties.cpp:707
 msgid "Incorrect value for pad offset"
 msgstr "Niewłaściwa wartość dla przesunięcia pola lutowniczego"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:711
+#: pcbnew/dialogs/dialog_pad_properties.cpp:712
 msgid "Too large value for pad delta size"
-msgstr "Niewłaściwa wartość dla przesunięcia pola lutowniczego"
+msgstr "Zbyt duża wartość dla przesunięcia pola lutowniczego"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:718
+#: pcbnew/dialogs/dialog_pad_properties.cpp:719
 msgid "Incorrect value for pad drill (too small value)"
 msgstr "Nieprawidłowa wartość w polu wierceń (zbyt mała wartość)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:723
+#: pcbnew/dialogs/dialog_pad_properties.cpp:724
 msgid "Error: only one copper layer allowed for this pad"
 msgstr ""
 "Błąd: Tylko jedna warstwa miedzi jest dozwolona dla tego punktu lutowniczego."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:735
+#: pcbnew/dialogs/dialog_pad_properties.cpp:736
 msgid "Pad setup errors list"
 msgstr "Lista błędów ustawień pól lutowniczych"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:830
+#: pcbnew/dialogs/dialog_pad_properties.cpp:831
 msgid "Unknown netname, netname not changed"
-msgstr "Nieznana nazwa sieci. Bez zmian"
+msgstr "Nieznana nazwa sieci, nie dokonano zmian"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:38
 msgid "Pad number:"
-msgstr "Nuumer pola:"
+msgstr "Numer pola:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:46
 msgid "Net name:"
@@ -13917,11 +13921,11 @@ msgstr "Typ pola:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "Through-hole"
-msgstr "Na wylot"
+msgstr "PTH, Na wylot"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "Connector"
-msgstr "Łącze"
+msgstr "Złącze"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "NPTH, Mechanical"
@@ -14186,6 +14190,14 @@ msgstr "Wyrównanie:"
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:117
 msgid "Orientation (0.1 deg):"
 msgstr "Orientacja (co 0.1 stopnia):"
+
+#: pcbnew/dialogs/dialog_plot.cpp:337 pcbnew/dialogs/dialog_SVG_print.cpp:198
+#: pcbnew/exporters/gen_modules_placefile.cpp:167
+msgid ""
+"Cannot make path relative (target volume different from board file volume)!"
+msgstr ""
+"Nie można utworzyć ścieżki względnej (folder docelowy i folder płytki różnią "
+"się)!"
 
 #: pcbnew/dialogs/dialog_plot.cpp:592
 msgid "HPGL pen size constrained!\n"
@@ -16003,7 +16015,7 @@ msgstr "Nie można skopiować obrazu do schowka"
 msgid "Can't save file"
 msgstr "Nie mogę zapisać pliku"
 
-#: 3d-viewer/3d_draw.cpp:233
+#: 3d-viewer/3d_draw.cpp:227
 msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
@@ -19238,7 +19250,7 @@ msgstr "Kreator Footprintów"
 msgid "PCB Library Tables"
 msgstr "Tabele bibliotek PCB"
 
-#: pcbnew/dialogs/dialog_gendrill_base.h:79
+#: pcbnew/dialogs/dialog_gendrill_base.h:80
 msgid "Drill Files Generation"
 msgstr "Generuj pliki wierceń"
 
