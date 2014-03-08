@@ -842,29 +842,40 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         // Multi layer pad
         aLayers[aCount++] = ITEM_GAL_LAYER( PADS_VISIBLE );
         aLayers[aCount++] = NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE );
-        aLayers[aCount++] = SOLDERMASK_N_FRONT;
-        aLayers[aCount++] = SOLDERMASK_N_BACK;
-        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
-        aLayers[aCount++] = SOLDERPASTE_N_BACK;
     }
     else if( IsOnLayer( LAYER_N_FRONT ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
         aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
-        aLayers[aCount++] = SOLDERMASK_N_FRONT;
-        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
     }
     else if( IsOnLayer( LAYER_N_BACK ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
         aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
-        aLayers[aCount++] = SOLDERMASK_N_BACK;
-        aLayers[aCount++] = SOLDERPASTE_N_BACK;
     }
+
+    if( IsOnLayer( SOLDERMASK_N_FRONT ) )
+        aLayers[aCount++] = SOLDERMASK_N_FRONT;
+
+    if( IsOnLayer( SOLDERMASK_N_BACK ) )
+        aLayers[aCount++] = SOLDERMASK_N_BACK;
+
+    if( IsOnLayer( SOLDERPASTE_N_FRONT ) )
+        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
+
+    if( IsOnLayer( SOLDERPASTE_N_BACK ) )
+        aLayers[aCount++] = SOLDERPASTE_N_BACK;
+
+    if( IsOnLayer( ADHESIVE_N_BACK ) )
+        aLayers[aCount++] = ADHESIVE_N_BACK;
+
+    if( IsOnLayer( ADHESIVE_N_FRONT ) )
+        aLayers[aCount++] = ADHESIVE_N_FRONT;
+
 #ifdef __WXDEBUG__
-    else    // Should not occur
+    if( aCount == 0 )    // Should not occur
     {
-        wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD on layer different than FRONT/BACK") );
+        wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD has no layer") );
     }
 #endif
 }
