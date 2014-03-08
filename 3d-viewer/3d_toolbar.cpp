@@ -166,13 +166,22 @@ void EDA_3D_FRAME::CreateMenuBar()
     wxMenu * gridlistMenu = new wxMenu;
     AddMenuItem( prefsMenu, gridlistMenu, ID_MENU3D_GRID,
            _( "3D Grid" ), KiBitmap( grid_xpm ) );
-    gridlistMenu->Append( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), wxEmptyString, true );
-    gridlistMenu->Check( ID_MENU3D_GRID_NOGRID, true );
+    gridlistMenu->Append( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), wxEmptyString, true  );
+    gridlistMenu->Append( ID_MENU3D_GRID_10_MM, _( "3D Grid 10 mm" ), wxEmptyString, true  );
+    gridlistMenu->Append( ID_MENU3D_GRID_5_MM, _( "3D Grid 5 mm" ), wxEmptyString, true  );
+    gridlistMenu->Append( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5 mm" ), wxEmptyString, true  );
+    gridlistMenu->Append( ID_MENU3D_GRID_1_MM, _( "3D Grid 1 mm" ), wxEmptyString, true  );
 
-    gridlistMenu->Append( ID_MENU3D_GRID_10_MM, _( "3D Grid 10 mm" ), wxEmptyString, true );
-    gridlistMenu->Append( ID_MENU3D_GRID_5_MM, _( "3D Grid 5 mm" ), wxEmptyString, true );
-    gridlistMenu->Append( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5 mm" ), wxEmptyString, true );
-    gridlistMenu->Append( ID_MENU3D_GRID_1_MM, _( "3D Grid 1 mm" ), wxEmptyString, true );
+    // If the grid is on, check the corresponding menuitem showing the grid  size
+    if( g_Parm_3D_Visu.GetFlag( FL_GRID ) )
+    {
+        gridlistMenu->Check( ID_MENU3D_GRID_10_MM, g_Parm_3D_Visu.m_3D_Grid == 10.0 );
+        gridlistMenu->Check( ID_MENU3D_GRID_5_MM, g_Parm_3D_Visu.m_3D_Grid == 5.0 );
+        gridlistMenu->Check( ID_MENU3D_GRID_2P5_MM, g_Parm_3D_Visu.m_3D_Grid == 2.5 );
+        gridlistMenu->Check( ID_MENU3D_GRID_1_MM, g_Parm_3D_Visu.m_3D_Grid == 1.0 );
+    }
+    else
+        gridlistMenu->Check( ID_MENU3D_GRID_NOGRID, true );
 
     prefsMenu->AppendSeparator();
 
