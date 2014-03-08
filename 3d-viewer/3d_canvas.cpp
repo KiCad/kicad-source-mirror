@@ -78,7 +78,11 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
                 wxFULL_REPAINT_ON_RESIZE )
 {
     m_init   = false;
-    m_gllist = 0;
+
+    // Clear all gl list identifiers:
+    for( int ii = GL_ID_BEGIN; ii < GL_ID_END; ii++ )
+        m_glLists[ii] = 0;
+
     // Explicitly create a new rendering context instance for this canvas.
     m_glRC = new wxGLContext( this );
 
@@ -94,12 +98,25 @@ EDA_3D_CANVAS::~EDA_3D_CANVAS()
 }
 
 
-void EDA_3D_CANVAS::ClearLists()
+void EDA_3D_CANVAS::ClearLists( GLuint aGlList )
 {
-    if( m_gllist > 0 )
-        glDeleteLists( m_gllist, 1 );
+    if( aGlList )
+    {
+        if( m_glLists[aGlList] > 0 )
+            glDeleteLists( m_glLists[aGlList], 1 );
 
-    m_gllist = 0;
+        m_glLists[aGlList] = 0;
+
+        return;
+    }
+
+    for( int ii = GL_ID_BEGIN; ii < GL_ID_END; ii++ )
+    {
+        if( m_glLists[ii] > 0 )
+            glDeleteLists( m_glLists[ii], 1 );
+
+        m_glLists[ii] = 0;
+    }
 }
 
 

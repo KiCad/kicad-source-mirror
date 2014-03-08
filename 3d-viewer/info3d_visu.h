@@ -74,7 +74,6 @@ enum DISPLAY3D_FLG {
     FL_LAST
 };
 
-
 class INFO3D_VISU
 {
 public:
