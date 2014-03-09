@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-28 15:42+0100\n"
-"PO-Revision-Date: 2014-02-28 15:52+0100\n"
+"POT-Creation-Date: 2014-03-03 17:59+0100\n"
+"PO-Revision-Date: 2014-03-03 17:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "Language: fr_FR\n"
@@ -840,7 +840,7 @@ msgstr "OK"
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:109
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:70
 #: pcbnew/dialogs/dialog_find_base.cpp:45
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:177
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:180
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:101
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:373
@@ -995,7 +995,7 @@ msgstr "Elements:"
 #: pcbnew/dialogs/dialog_drc_base.cpp:102
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:85
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:78
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:187
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:190
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:171
 #: pcbnew/dialogs/dialog_plot_base.cpp:352
 msgid "Messages:"
@@ -10491,30 +10491,29 @@ msgid "Delete NET?"
 msgstr "Supprimer Net?"
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:182
-#: pcbnew/dialogs/dialog_gendrill.cpp:279 pcbnew/dialogs/dialog_plot.cpp:321
+#: pcbnew/dialogs/dialog_gendrill.cpp:285 pcbnew/dialogs/dialog_plot.cpp:321
 #: pcbnew/exporters/gen_modules_placefile.cpp:151
 #: pcbnew/exporters/gen_modules_placefile.cpp:532
 msgid "Select Output Directory"
 msgstr "Selection du Répertoire de Sortie"
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:189
-#: pcbnew/dialogs/dialog_gendrill.cpp:286 pcbnew/dialogs/dialog_plot.cpp:328
+#: pcbnew/dialogs/dialog_gendrill.cpp:292 pcbnew/dialogs/dialog_plot.cpp:328
 #: pcbnew/exporters/gen_modules_placefile.cpp:158
 msgid "Use a relative path? "
 msgstr "Utiliser un chemin relatif?"
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:190
 #: pcbnew/dialogs/dialog_SVG_print.cpp:199
-#: pcbnew/dialogs/dialog_gendrill.cpp:287
-#: pcbnew/dialogs/dialog_gendrill.cpp:297 pcbnew/dialogs/dialog_plot.cpp:329
+#: pcbnew/dialogs/dialog_gendrill.cpp:293
+#: pcbnew/dialogs/dialog_gendrill.cpp:302 pcbnew/dialogs/dialog_plot.cpp:329
 #: pcbnew/dialogs/dialog_plot.cpp:338
 #: pcbnew/exporters/gen_modules_placefile.cpp:159
 #: pcbnew/exporters/gen_modules_placefile.cpp:168
 msgid "Plot Output Directory"
 msgstr "Répertoire de Sortie des Tracés"
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:198
-#: pcbnew/dialogs/dialog_gendrill.cpp:296 pcbnew/dialogs/dialog_plot.cpp:337
+#: pcbnew/dialogs/dialog_SVG_print.cpp:198 pcbnew/dialogs/dialog_plot.cpp:337
 #: pcbnew/exporters/gen_modules_placefile.cpp:167
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
@@ -10528,15 +10527,15 @@ msgstr "Impossible d'écrire les fichiers de traçage dans le répertoire <%s>."
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:287
 #: pcbnew/dialogs/dialog_gendrill.cpp:425
-#: pcbnew/dialogs/dialog_gendrill.cpp:598
+#: pcbnew/dialogs/dialog_gendrill.cpp:594
 #, c-format
 msgid "Plot: %s OK\n"
 msgstr "Tracé: %s OK\n"
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:289
 #: pcbnew/dialogs/dialog_gendrill.cpp:418
-#: pcbnew/dialogs/dialog_gendrill.cpp:523
-#: pcbnew/dialogs/dialog_gendrill.cpp:591
+#: pcbnew/dialogs/dialog_gendrill.cpp:520
+#: pcbnew/dialogs/dialog_gendrill.cpp:588
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Incapable de créer %s **\n"
@@ -11178,7 +11177,7 @@ msgid "Allow micro vias"
 msgstr "Autoriser les micro vias"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:180
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:144
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:147
 msgid "Micro Vias:"
 msgstr "Micro Vias:"
 
@@ -12383,29 +12382,36 @@ msgstr ""
 "seulement des pads CMS.\n"
 "Attention: cette option modifiera le circuit."
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:128
-#: pcbnew/dialogs/dialog_gendrill.cpp:129
+#: pcbnew/dialogs/dialog_gendrill.cpp:131
+#: pcbnew/dialogs/dialog_gendrill.cpp:132
 msgid "Use Netclasses values"
 msgstr "Utiliser les valeurs des Netclass"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:503
+#: pcbnew/dialogs/dialog_gendrill.cpp:301
+msgid ""
+"Cannot make path relative.  The target volume is different from board file "
+"volume!"
+msgstr ""
+"Ne peut générer un chemin relatif. Disque cible différent du disque du C.I."
+
+#: pcbnew/dialogs/dialog_gendrill.cpp:500
 msgid "Save Drill Report File"
 msgstr "Sauver Fichier Rapport de Perçage"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:528
+#: pcbnew/dialogs/dialog_gendrill.cpp:525
 #, c-format
 msgid "Report file %s created\n"
 msgstr "Fichier rapport %s créé\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:546
+#: pcbnew/dialogs/dialog_gendrill.cpp:543
 msgid "HPGL plot files (.plt)|*.plt"
 msgstr "Fichiers Tracé HPGL (.plt)|*.plt"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:556
+#: pcbnew/dialogs/dialog_gendrill.cpp:553
 msgid "Gerber files (.pho)|*.pho"
 msgstr "Fichiers Gerber (*.pho)|*.pho"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:561
+#: pcbnew/dialogs/dialog_gendrill.cpp:558
 msgid "DXF files (.dxf)|*.dxf"
 msgstr "Fichiers DXF  (.dxf)|*.dxf"
 
@@ -12471,73 +12477,77 @@ msgstr "Miroir sur axe Y"
 msgid "Minimal header"
 msgstr "Entête minimal"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:91
+msgid "Merge PTH and NPTH holes into one file"
+msgstr "Générer trous métallisés et non métallisés en 1 seul fichier."
+
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:97
 msgid "Absolute"
 msgstr "Absolu"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:97
 msgid "Auxiliary axis"
 msgstr "Axe Auxiliaire"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:96
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:99
 msgid "Drill Origin:"
 msgstr "Origine des coord de perçage:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:98
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:101
 msgid ""
 "Choose the coordinate origin: absolute or relative to the auxiliray axis"
 msgstr ""
 "Choisir l'origine des coordonnées: absolue ou relative à l'axe auxiliaire"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:109
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 msgid "Info:"
 msgstr "Infos:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:111
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:114
 msgid "Default Vias Drill:"
 msgstr "Perçage vias par Défaut:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:113
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:116
 msgid "Via Drill Value"
 msgstr "Perçage Via"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:120
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:123
 msgid "Micro Vias Drill:"
 msgstr "Perçage Micro Vias:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:122
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:125
 msgid "Micro Via Drill Value"
 msgstr "Valeur Perçage Micro Via"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:130
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:133
 msgid "Holes Count:"
 msgstr "Nb Trous"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:132
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:135
 msgid "Plated Pads:"
 msgstr "Pads Métallisés:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:136
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:139
 msgid "Not Plated Pads:"
 msgstr "Pads Non Métallisés:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:140
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:143
 msgid "Through Vias:"
 msgstr "Via Traversantes:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:148
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:151
 msgid "Buried Vias:"
 msgstr "Via Enterrées:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:167
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:170
 msgid "Drill File"
 msgstr "Fichier de Perçage"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:171
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:174
 msgid "Map File"
 msgstr "Plan de Perçage"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:174
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:177
 msgid "Report File"
 msgstr "Fichier Rapport "
 
@@ -12716,9 +12726,9 @@ msgid "Allows auto pan when creating a track, or moving an item."
 msgstr ""
 "Autorise l'autopan en création de piste, ou lorsque on déplace un élément."
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:71
-msgid "OK to delete selected items ?"
-msgstr "OK pour effacer les éléments sélectionnés ?"
+#: pcbnew/dialogs/dialog_global_deletion.cpp:84
+msgid "Are you sure you want to delete the selected items?"
+msgstr "Etes vous sûr que vous voulez supprimer les éléments sélectionnés?"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 msgid "Items to Delete"
@@ -12750,8 +12760,8 @@ msgid "Clear Board"
 msgstr "Effacement du C.I."
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
-msgid "Track Filter"
-msgstr "Filtre Piste"
+msgid "Filter Settings"
+msgstr "Ajustage du Filtrage"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
 msgid "Automatically routed tracks"
@@ -12762,22 +12772,30 @@ msgid "Locked tracks"
 msgstr "Pistes verrouillées"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:64
-msgid "Normal tracks"
-msgstr " Pistes normales"
+msgid "Unlocked tracks"
+msgstr "Pistes non verrouillées"
+
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:72
+msgid "Locked footprints"
+msgstr "Empreintes verrouillées"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:75
+msgid "Unlocked footprints"
+msgstr "Empreintes non verrouillées"
+
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:82
 msgid "All layers"
 msgstr "Toutes les couches"
 
-#: pcbnew/dialogs/dialog_global_deletion_base.cpp:75
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:82
 msgid "Current layer only"
 msgstr "Couche courante seulement"
 
-#: pcbnew/dialogs/dialog_global_deletion_base.cpp:77
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
 msgid "Layer Filter"
 msgstr "Filtre de Couche"
 
-#: pcbnew/dialogs/dialog_global_deletion_base.cpp:81
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:88
 msgid "Current layer:"
 msgstr "Couche Courante:"
 
@@ -13887,39 +13905,40 @@ msgid "Error: pad has no layer and is not a mechanical pad"
 msgstr ""
 "Erreur: le pad n'est pas sur une couche cuivre et n'est pas un pad mecanique"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:683
-msgid "Error: pad is not on a copper layer and has a hole"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:684
+msgid "Error: the pad is not on a copper layer and has a hole"
 msgstr "Erreur: le pad n'est pas sur une couche cuivre et a un trou"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:688
+#: pcbnew/dialogs/dialog_pad_properties.cpp:689
 msgid ""
-"For NPTH pad, set pad drill value to pad size value,\n"
-"if you do not want this pad plotted in gerber files"
+"For NPTH pad, set pad size value to pad drill value, if you do not want this "
+"pad plotted in gerber files"
 msgstr ""
-"For NPTH pad, set pad drill value to pad size value,\n"
-"if you do not want this pad plotted in gerber files"
+"Pour les pads non métallisés, régler le diamètre du pad égal au diamètre du "
+"trou,\n"
+"si vous ne voulez pas que ce pad soit généré dans les fichiers Gerber"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:706
+#: pcbnew/dialogs/dialog_pad_properties.cpp:707
 msgid "Incorrect value for pad offset"
 msgstr "Valeur incorrecte pour offset du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:711
+#: pcbnew/dialogs/dialog_pad_properties.cpp:712
 msgid "Too large value for pad delta size"
 msgstr "Valeur trop grande pour delta du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:718
+#: pcbnew/dialogs/dialog_pad_properties.cpp:719
 msgid "Incorrect value for pad drill (too small value)"
 msgstr "Valeur incorrecte pour perçage (trop petite valeur)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:723
+#: pcbnew/dialogs/dialog_pad_properties.cpp:724
 msgid "Error: only one copper layer allowed for this pad"
 msgstr "Erreur: une couche cuivre permise pour ce pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:735
+#: pcbnew/dialogs/dialog_pad_properties.cpp:736
 msgid "Pad setup errors list"
 msgstr "Erreurs sur Parametres du Pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:830
+#: pcbnew/dialogs/dialog_pad_properties.cpp:831
 msgid "Unknown netname, netname not changed"
 msgstr "Net inconnu, pas de changement"
 
@@ -18112,11 +18131,11 @@ msgstr "Tables des Librairies PCB:"
 msgid "Position Files:"
 msgstr "Fichier Position des Modules:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.h:79
+#: pcbnew/dialogs/dialog_gendrill_base.h:80
 msgid "Drill Files Generation"
 msgstr "Génération Fichiers de Perçage"
 
-#: pcbnew/dialogs/dialog_global_deletion_base.h:72
+#: pcbnew/dialogs/dialog_global_deletion_base.h:75
 msgid "Delete Items"
 msgstr "Suppression d'Eléments"
 
@@ -18178,7 +18197,7 @@ msgstr "Recherche de composants et textes sur le circuit"
 
 #: pcbnew/help_common_strings.h:21
 msgid "Zoom to fit the board on the screen"
-msgstr "Zoom pour ajuster le circuit impriméà l'écran"
+msgstr "Zoom pour ajuster le circuit imprimé à l'écran"
 
 #: pcbnew/help_common_strings.h:22
 msgid "Redraw the screen of the board"
@@ -18195,6 +18214,15 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:62
 msgid "Import DXF file"
 msgstr "Importation fichier DXF"
+
+#~ msgid "OK to delete selected items ?"
+#~ msgstr "OK pour effacer les éléments sélectionnés ?"
+
+#~ msgid "Track Filter"
+#~ msgstr "Filtre Piste"
+
+#~ msgid "Normal tracks"
+#~ msgstr " Pistes normales"
 
 #~ msgid "Set library path"
 #~ msgstr "Définir le chemin des librairie "
@@ -21512,9 +21540,6 @@ msgstr "Importation fichier DXF"
 
 #~ msgid "Footprint %s is locked"
 #~ msgstr "Le module %s est verrouillé"
-
-#~ msgid "Are you sure you want to cancel your edits?"
-#~ msgstr "Etes vous sûr que vous voules annuler les changements"
 
 #~ msgid "Save Keys"
 #~ msgstr "Sauver Cles"
