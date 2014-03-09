@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-08 12:18+0100\n"
-"PO-Revision-Date: 2014-03-08 12:48+0100\n"
+"POT-Creation-Date: 2014-03-09 18:24+0100\n"
+"PO-Revision-Date: 2014-03-09 18:24+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -12032,7 +12032,7 @@ msgstr "Przesuń zaznaczony wpis o jedną pozycję w górę"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:116
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
-#: 3d-viewer/3d_canvas.cpp:377
+#: 3d-viewer/3d_canvas.cpp:394
 msgid "Move Down"
 msgstr "Przesuń w dół v"
 
@@ -15959,63 +15959,63 @@ msgstr "Pełny rozmiar bez ograniczeń"
 msgid "Page"
 msgstr "Strona"
 
-#: 3d-viewer/3d_canvas.cpp:329
+#: 3d-viewer/3d_canvas.cpp:346
 msgid "Zoom +"
 msgstr "Powiększ"
 
-#: 3d-viewer/3d_canvas.cpp:333
+#: 3d-viewer/3d_canvas.cpp:350
 msgid "Zoom -"
 msgstr "Pomniejsz"
 
-#: 3d-viewer/3d_canvas.cpp:338
+#: 3d-viewer/3d_canvas.cpp:355
 msgid "Top View"
 msgstr "Widok z góry"
 
-#: 3d-viewer/3d_canvas.cpp:342
+#: 3d-viewer/3d_canvas.cpp:359
 msgid "Bottom View"
 msgstr "Widok z dołu"
 
-#: 3d-viewer/3d_canvas.cpp:347
+#: 3d-viewer/3d_canvas.cpp:364
 msgid "Right View"
 msgstr "Widok z prawej"
 
-#: 3d-viewer/3d_canvas.cpp:351
+#: 3d-viewer/3d_canvas.cpp:368
 msgid "Left View"
 msgstr "Widok z lewej"
 
-#: 3d-viewer/3d_canvas.cpp:356
+#: 3d-viewer/3d_canvas.cpp:373
 msgid "Front View"
 msgstr "Widok z przodu"
 
-#: 3d-viewer/3d_canvas.cpp:360
+#: 3d-viewer/3d_canvas.cpp:377
 msgid "Back View"
 msgstr "Widok z tyłu"
 
-#: 3d-viewer/3d_canvas.cpp:365
+#: 3d-viewer/3d_canvas.cpp:382
 msgid "Move left <-"
 msgstr "Przesuń w lewo <-"
 
-#: 3d-viewer/3d_canvas.cpp:369
+#: 3d-viewer/3d_canvas.cpp:386
 msgid "Move right ->"
 msgstr "Przesuń w prawo ->"
 
-#: 3d-viewer/3d_canvas.cpp:373
+#: 3d-viewer/3d_canvas.cpp:390
 msgid "Move Up ^"
 msgstr "Przesuń w górę ^"
 
-#: 3d-viewer/3d_canvas.cpp:602
+#: 3d-viewer/3d_canvas.cpp:619
 msgid "3D Image filename:"
 msgstr "Nazwa pliku obrazu 3D:"
 
-#: 3d-viewer/3d_canvas.cpp:654
+#: 3d-viewer/3d_canvas.cpp:671
 msgid "Failed to copy image to clipboard"
 msgstr "Nie można skopiować obrazu do schowka"
 
-#: 3d-viewer/3d_canvas.cpp:668
+#: 3d-viewer/3d_canvas.cpp:685
 msgid "Can't save file"
 msgstr "Nie mogę zapisać pliku"
 
-#: 3d-viewer/3d_draw.cpp:227
+#: 3d-viewer/3d_draw.cpp:260 3d-viewer/3d_draw.cpp:520
 msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
@@ -16115,59 +16115,59 @@ msgstr "Trójwymiarowa siatka"
 msgid "No 3D Grid"
 msgstr "Brak siatki"
 
-#: 3d-viewer/3d_toolbar.cpp:172
+#: 3d-viewer/3d_toolbar.cpp:170
 msgid "3D Grid 10 mm"
 msgstr "Siatka 10mm"
 
-#: 3d-viewer/3d_toolbar.cpp:173
+#: 3d-viewer/3d_toolbar.cpp:171
 msgid "3D Grid 5 mm"
 msgstr "Siatka 5mm"
 
-#: 3d-viewer/3d_toolbar.cpp:174
+#: 3d-viewer/3d_toolbar.cpp:172
 msgid "3D Grid 2.5 mm"
 msgstr "Siatka 2.5mm"
 
-#: 3d-viewer/3d_toolbar.cpp:175
+#: 3d-viewer/3d_toolbar.cpp:173
 msgid "3D Grid 1 mm"
 msgstr "Siatka 1mm"
 
-#: 3d-viewer/3d_toolbar.cpp:180
+#: 3d-viewer/3d_toolbar.cpp:189
 msgid "Show Board Body"
 msgstr "Pokaż ciało płytki"
 
-#: 3d-viewer/3d_toolbar.cpp:183
+#: 3d-viewer/3d_toolbar.cpp:192
 msgid "Show Copper Thickness"
 msgstr "Pokazuj grubość warstwy miedzi"
 
-#: 3d-viewer/3d_toolbar.cpp:186
+#: 3d-viewer/3d_toolbar.cpp:195
 msgid "Show 3D F&ootprints"
 msgstr "Pokaż &obudowy 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:189
+#: 3d-viewer/3d_toolbar.cpp:198
 msgid "Show Zone &Filling"
 msgstr "Pokaż stre&fy wypełnień"
 
-#: 3d-viewer/3d_toolbar.cpp:194
+#: 3d-viewer/3d_toolbar.cpp:203
 msgid "Show &Adhesive Layers"
 msgstr "Pokaż w&arstwy kleju"
 
-#: 3d-viewer/3d_toolbar.cpp:197
+#: 3d-viewer/3d_toolbar.cpp:206
 msgid "Show &Silkscreen Layer"
 msgstr "Pokaż warstwy &opisowe"
 
-#: 3d-viewer/3d_toolbar.cpp:200
+#: 3d-viewer/3d_toolbar.cpp:209
 msgid "Show Solder &Mask Layers"
 msgstr "Pokaż warstwy z solder&maską"
 
-#: 3d-viewer/3d_toolbar.cpp:203
+#: 3d-viewer/3d_toolbar.cpp:212
 msgid "Show Solder &Paste Layers"
 msgstr "Pokaż warstwy do nakładania &pasty"
 
-#: 3d-viewer/3d_toolbar.cpp:206
+#: 3d-viewer/3d_toolbar.cpp:215
 msgid "Show &Comments and Drawings Layer"
 msgstr "Pokaż warstwę &komentarzy"
 
-#: 3d-viewer/3d_toolbar.cpp:209
+#: 3d-viewer/3d_toolbar.cpp:218
 msgid "Show &Eco Layers"
 msgstr "Pokaż warstwy &ECO"
 
