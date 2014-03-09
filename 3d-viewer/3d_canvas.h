@@ -104,7 +104,6 @@ public:
     void   OnEnterWindow( wxMouseEvent& event );
 
     // Display functions
-    GLuint DisplayCubeforTest();        // Just a test function
     void   SetView3D( int keycode );
     void   DisplayStatus();
     void   Redraw();
