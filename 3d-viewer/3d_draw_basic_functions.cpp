@@ -35,7 +35,7 @@
 #include <3d_draw_basic_functions.h>
 
 // Imported function:
-extern void Set_Object_Data( std::vector<S3D_VERTEX>& aVertices, double aBiuTo3DUnits );
+extern void TransfertToGLlist( std::vector<S3D_VERTEX>& aVertices, double aBiuTo3DUnits );
 extern void CheckGLError();
 
 // Number of segments to approximate a circle by segments
@@ -116,7 +116,7 @@ static void Draw3D_VerticalPolygonalCylinder( const CPOLYGONS_LIST& aPolysList,
         coords[3].y = coords[2].y;              // only z change
 
         // Creates the GL_QUAD
-        Set_Object_Data( coords, aBiuTo3DUnits );
+        TransfertToGLlist( coords, aBiuTo3DUnits );
     }
 }
 

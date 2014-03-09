@@ -356,7 +356,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             }
         }
 
-        // draw graphic items
+        // draw graphic items on copper layers (texts)
         for( BOARD_ITEM* item = pcb->m_Drawings; item; item = item->Next() )
         {
             if( !item->IsOnLayer( layer ) )
@@ -364,11 +364,9 @@ void EDA_3D_CANVAS::BuildBoard3DView()
 
             switch( item->Type() )
             {
-            case PCB_LINE_T:
+            case PCB_LINE_T:    // should not exist on copper layers
                 ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
-                    bufferPolys, 0,
-                    segcountforcircle,
-                    correctionFactor );
+                    bufferPolys, 0, segcountforcircle, correctionFactor );
                 break;
 
             case PCB_TEXT_T:
@@ -505,8 +503,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
                                                 // a fine representation
 
     CPOLYGONS_LIST  bufferPolys;
-    bufferPolys.reserve( 200000 );              // Reserve for large board (tracks mainly)
-
+    bufferPolys.reserve( 100000 );              // Reserve for large board
     CPOLYGONS_LIST  allLayerHoles;              // Contains through holes, calculated only once
     allLayerHoles.reserve( 20000 );
 
@@ -521,11 +518,6 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
               "Therefore use the board boundary box.");
         wxMessageBox( msg );
     }
-
-    CPOLYGONS_LIST  bufferZonesPolys;
-    bufferZonesPolys.reserve( 500000 );             // Reserve for large board ( copper zones mainly )
-
-    CPOLYGONS_LIST  currLayerHoles;                 // Contains holes for the current layer
 
     int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
     for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
@@ -544,6 +536,16 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
         }
     }
 
+    // draw pads holes
+    for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
+    {
+        // Add pad hole, if any
+        D_PAD* pad = module->Pads();
+
+        for( ; pad != NULL; pad = pad->Next() )
+            pad->BuildPadDrillShapePolygon( allLayerHoles, 0,
+                                                segcountLowQuality );
+    }
 
     // draw graphic items, on technical layers
 
@@ -852,6 +854,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
 #endif
 }
 
+
 void EDA_3D_CANVAS::BuildFootprintShape3DList( GLuint aOpaqueList,
                                                GLuint aTransparentList)
 {
@@ -860,10 +863,21 @@ void EDA_3D_CANVAS::BuildFootprintShape3DList( GLuint aOpaqueList,
         // which need to be drawn after all other items
 
         BOARD* pcb = GetBoard();
-        glNewList( m_glLists[GL_ID_3DSHAPES_SOLID], GL_COMPILE );
+        glNewList( aOpaqueList, GL_COMPILE );
+        bool loadTransparentObjects = false;
 
         for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
-            module->ReadAndInsert3DComponentShape( this );
+            module->ReadAndInsert3DComponentShape( this, !loadTransparentObjects,
+                                                   loadTransparentObjects );
+
+        glEndList();
+
+        glNewList( aTransparentList, GL_COMPILE );
+        loadTransparentObjects = true;
+
+        for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
+            module->ReadAndInsert3DComponentShape( this, !loadTransparentObjects,
+                                                   loadTransparentObjects );
 
         glEndList();
 }
@@ -1055,8 +1069,11 @@ void EDA_3D_CANVAS::Draw3DViaHole( SEGVIA* aVia )
 }
 
 
-void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas )
+void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
+                                    bool aAllowNonTransparentObjects,
+                                    bool aAllowTransparentObjects )
 {
+
     // Read from disk and draws the footprint 3D shapes if exists
     S3D_MASTER* shape3D = m_3D_Drawings;
     double zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( IsFlipped() );
@@ -1078,6 +1095,9 @@ void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas )
 
     for( ; shape3D != NULL; shape3D = shape3D->Next() )
     {
+        shape3D->SetLoadNonTransparentObjects( aAllowNonTransparentObjects );
+        shape3D->SetLoadTransparentObjects( aAllowTransparentObjects );
+
         if( shape3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
             shape3D->ReadData();
     }

@@ -479,8 +479,11 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
                 vertices.push_back( triplets.at( *id ) );
             }
 
-            GetMaster()->Set_Object_Coords( vertices );
-            Set_Object_Data( vertices, vrmlunits_to_3Dunits );
+            if( GetMaster()->IsOpenGlAllowed() )
+            {
+                GetMaster()->ObjectCoordsTo3DUnits( vertices );
+                TransfertToGLlist( vertices, vrmlunits_to_3Dunits );
+            }
 
             vertices.clear();
             coordIndex.clear();

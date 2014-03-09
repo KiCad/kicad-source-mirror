@@ -250,8 +250,14 @@ public:
      * function ReadandInsert3DComponentShape
      * read the 3D component shape(s) of the footprint (physical shape)
      * and insert mesh in gl list
+     * @param glcanvas = the openGL canvas
+     * @param  aAllowNonTransparentObjects = true to load non transparent objects
+     * @param  aAllowTransparentObjects = true to load non transparent objects
+     * in openGL, transparent objects should be drawn *after* non transparent objects
      */
-    void ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas );
+    void ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
+                                        bool aAllowNonTransparentObjects,
+                                        bool aAllowTransparentObjects );
 
     /**
      * function TransformPadsShapesWithClearanceToPolygon

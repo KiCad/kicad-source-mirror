@@ -41,9 +41,14 @@ S3D_MATERIAL::S3D_MATERIAL( S3D_MASTER* father, const wxString& name ) :
     m_Name = name;
 }
 
-
 void S3D_MATERIAL::SetMaterial()
 {
+    S3D_MASTER * s3dParent = (S3D_MASTER *) GetParent();
+    s3dParent->SetLastTransparency( m_Transparency );
+
+    if( ! s3dParent->IsOpenGlAllowed() )
+        return;
+
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glColor4f( m_DiffuseColor.x * m_AmbientIntensity,
                m_DiffuseColor.y * m_AmbientIntensity,
@@ -54,6 +59,20 @@ void S3D_MATERIAL::SetMaterial()
     glColor3f( m_SpecularColor.x, m_SpecularColor.y, m_SpecularColor.z );
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 #endif
+}
+
+bool S3D_MASTER::IsOpenGlAllowed()
+{
+    if( m_loadNonTransparentObjects )    // return true for non transparent objects only
+    {
+        if( m_lastTransparency == 0.0 )
+            return true;
+    }
+        if( m_loadTransparentObjects )   // return true for transparent objects only
+        if( m_lastTransparency != 0.0 )
+            return true;
+
+    return false;
 }
 
 
@@ -79,6 +98,7 @@ S3D_MASTER::S3D_MASTER( EDA_ITEM* aParent ) :
     EDA_ITEM( aParent, NOT_USED )
 {
     m_MatScale.x  = m_MatScale.y = m_MatScale.z = 1.0;
+    m_lastTransparency = 0.0;
     m_3D_Drawings = NULL;
     m_Materials   = NULL;
     m_ShapeType   = FILE3D_NONE;
