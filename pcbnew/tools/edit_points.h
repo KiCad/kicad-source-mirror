@@ -456,7 +456,7 @@ public:
      * @param aConstrained is the point that is put under constrain.
      * @param aConstrainer is the point that is the source of the constrain.
      */
-    EPC_45DEGREE ( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
+    EPC_45DEGREE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
         EDIT_POINT_CONSTRAINT( aConstrained ), m_constrainer( aConstrainer )
     {}
 

@@ -62,7 +62,6 @@ public:
                 case S_SEGMENT:
                     points->AddPoint( segment->GetStart() );
                     points->AddPoint( segment->GetEnd() );
-
                     break;
 
                 case S_ARC:
@@ -194,12 +193,14 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                         controls->ShowCursor( true );
                         controls->SetAutoPan( true );
                         controls->SetSnapping( true );
+                        controls->ForceCursorPosition( true, point->GetPosition() );
                     }
                     else
                     {
                         controls->ShowCursor( false );
                         controls->SetAutoPan( false );
                         controls->SetSnapping( false );
+                        controls->ForceCursorPosition( false );
                     }
                 }
 
@@ -213,6 +214,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                     // Save items, so changes can be undone
                     editFrame->OnModify();
                     editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+                    controls->ForceCursorPosition( false );
                     modified = true;
                 }
 
@@ -299,11 +301,11 @@ void POINT_EDITOR::updateItem() const
         switch( segment->GetShape() )
         {
         case S_SEGMENT:
-            if( &(*m_editPoints)[0] == m_dragPoint )
+            if( isModified( (*m_editPoints)[0] ) )
                 segment->SetStart( wxPoint( (*m_editPoints)[0].GetPosition().x,
                                             (*m_editPoints)[0].GetPosition().y ) );
 
-            else if( &(*m_editPoints)[1] == m_dragPoint )
+            else if( isModified( (*m_editPoints)[1] ) )
                 segment->SetEnd( wxPoint( (*m_editPoints)[1].GetPosition().x,
                                           (*m_editPoints)[1].GetPosition().y ) );
 
@@ -351,7 +353,7 @@ void POINT_EDITOR::updateItem() const
             const VECTOR2I& center = (*m_editPoints)[0].GetPosition();
             const VECTOR2I& end = (*m_editPoints)[1].GetPosition();
 
-            if( m_dragPoint == &(*m_editPoints)[0] )
+            if( isModified( (*m_editPoints)[0] ) )
             {
                 wxPoint moveVector = wxPoint( center.x, center.y ) - segment->GetCenter();
                 segment->Move( moveVector );

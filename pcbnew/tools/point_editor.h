@@ -74,6 +74,12 @@ private:
     ///> Updates edit points with item's points.
     void updatePoints() const;
 
+    ///> Returns true if aPoint is the currently modified point.
+    inline bool isModified( const EDIT_POINT& aPoint ) const
+    {
+        return m_dragPoint == &aPoint;
+    }
+
     ///> Returns a point that should be used as a constrainer for 45 degrees mode.
     EDIT_POINT get45DegConstrainer() const;
 
