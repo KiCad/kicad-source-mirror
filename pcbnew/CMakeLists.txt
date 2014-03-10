@@ -661,9 +661,11 @@ if( KICAD_SCRIPTING_MODULES )
             COMMENT "Copying wxPython into pcbnew.app Frameworks"
         )
 
-        # Tell that we have to run osx_fix_bundles fix after building _pcbnew and migrating wxPython
-        add_dependencies( osx_fix_bundles pcbnew_copy_wxpython_module )
-        add_dependencies( osx_fix_bundles _pcbnew )
+        if( KICAD_BUILD_DYNAMIC )
+            # Tell that we have to run osx_fix_bundles fix after building _pcbnew and migrating wxPython
+            add_dependencies( osx_fix_bundles pcbnew_copy_wxpython_module )
+            add_dependencies( osx_fix_bundles _pcbnew )
+        endif()
     endif()
 endif()
 
