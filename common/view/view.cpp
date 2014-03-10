@@ -114,6 +114,14 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     if( m_dynamic )
         aItem->m_view = NULL;
 
+    if( aItem->viewRequiredUpdate() != VIEW_ITEM::NONE )    // prevent from updating a removed item
+    {
+        std::vector<VIEW_ITEM*>::iterator item = std::find( m_needsUpdate.begin(), m_needsUpdate.end(), aItem );
+
+        if( item != m_needsUpdate.end() )
+            m_needsUpdate.erase( item );
+    }
+
     int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
     aItem->getLayers( layers, layers_count );
 
