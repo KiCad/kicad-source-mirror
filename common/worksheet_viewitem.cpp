@@ -189,7 +189,7 @@ void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_TEXT* aItem, GAL* aGal ) const
     aGal->SetStrokeColor( COLOR4D( aItem->GetColor() ) );
     aGal->SetLineWidth( aItem->GetThickness() );
     aGal->SetTextAttributes( aItem );
-    aGal->StrokeText( std::wstring( aItem->GetText().wc_str() ), position, 0.0 );
+    aGal->StrokeText( aItem->GetText(), position, 0.0 );
 }
 
 
