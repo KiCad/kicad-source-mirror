@@ -765,6 +765,11 @@ void VIEW::ClearTargets()
 
 void VIEW::Redraw()
 {
+#ifdef PROFILE
+    prof_counter totalRealTime;
+    prof_start( &totalRealTime );
+#endif /* PROFILE */
+
     VECTOR2D screenSize = m_gal->GetScreenPixelSize();
     BOX2I    rect( ToWorld( VECTOR2D( 0, 0 ) ),
                    ToWorld( screenSize ) - ToWorld( VECTOR2D( 0, 0 ) ) );
@@ -776,6 +781,12 @@ void VIEW::Redraw()
     markTargetClean( TARGET_CACHED );
     markTargetClean( TARGET_NONCACHED );
     markTargetClean( TARGET_OVERLAY );
+
+#ifdef PROFILE
+    prof_end( &totalRealTime );
+
+    wxLogDebug( wxT( "Redraw: %.1f ms" ), totalRealTime.msecs() );
+#endif /* PROFILE */
 }
 
 
@@ -971,7 +982,7 @@ bool VIEW::areRequiredLayersEnabled( int aLayerId ) const
          it_end = m_layers.at( aLayerId ).requiredLayers.end(); it != it_end; ++it )
     {
         // That is enough if just one layer is not enabled
-        if( !m_layers.at( *it ).visible )
+        if( !m_layers.at( *it ).visible || !areRequiredLayersEnabled( *it ) )
             return false;
     }
 

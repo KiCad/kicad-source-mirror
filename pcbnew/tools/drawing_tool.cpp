@@ -80,8 +80,8 @@ int DRAWING_TOOL::DrawCircle( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 {
-    bool clockwise = true;  // drawing direction of the arc
-    double startAngle;      // angle of the first arc line
+    bool clockwise = true;      // drawing direction of the arc
+    double startAngle = 0.0f;   // angle of the first arc line
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
     DRAWSEGMENT* arc = NULL;
