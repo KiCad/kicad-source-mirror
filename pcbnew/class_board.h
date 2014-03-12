@@ -871,6 +871,7 @@ public:
         m_NetInfo.AppendNet( aNewNet );
     }
 
+#ifndef SWIG
     /**
      * Function BeginNets
      * @return iterator to the first element of the NETINFO_ITEMs list
@@ -888,6 +889,7 @@ public:
     {
         return m_NetInfo.end();
     }
+#endif
 
     /**
      * Function GetNetCount
