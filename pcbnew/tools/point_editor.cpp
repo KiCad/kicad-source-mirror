@@ -235,7 +235,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                     modified = true;
                 }
 
-                if( evt->Modifier( MD_CTRL ) != degree45 )      // 45 degrees mode
+                if( !!evt->Modifier( MD_CTRL ) != degree45 )      // 45 degrees mode
                 {
                     degree45 = evt->Modifier( MD_CTRL );
 
