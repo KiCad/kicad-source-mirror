@@ -357,7 +357,7 @@ bool RN_POLY::HitTest( const RN_NODE_PTR& aNode ) const
         }
 
         if( ( xNew < xt ) == ( xt <= xOld ) && /* edge "open" at left end */
-          (float)( yt - y1 ) * (float)( x2 - x1 ) < (float)( y2 - y1 ) * (float)( xt - x1 ) )
+          (double)( yt - y1 ) * (double)( x2 - x1 ) < (double)( y2 - y1 ) * (double)( xt - x1 ) )
         {
             inside = !inside;
         }
