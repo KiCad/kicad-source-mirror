@@ -45,10 +45,8 @@ VIEW::VIEW( bool aIsDynamic ) :
     m_scale( 1.0 ),
     m_painter( NULL ),
     m_gal( NULL ),
-    m_dynamic( aIsDynamic ),
-    m_scaleLimits( 15000.0, 1.0 )
+    m_dynamic( aIsDynamic )
 {
-    m_panBoundary.SetMaximum();
     m_needsUpdate.reserve( 32768 );
 
     // Redraw everything at the beginning
@@ -295,11 +293,6 @@ void VIEW::SetMirror( bool aMirrorX, bool aMirrorY )
 
 void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
 {
-    if( aScale > m_scaleLimits.x )
-        aScale = m_scaleLimits.x;
-    else if( aScale < m_scaleLimits.y )
-        aScale = m_scaleLimits.y;
-
     VECTOR2D a = ToScreen( aAnchor );
 
     m_gal->SetZoomFactor( aScale );
@@ -318,19 +311,6 @@ void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
 void VIEW::SetCenter( const VECTOR2D& aCenter )
 {
     m_center = aCenter;
-
-    if( !m_panBoundary.Contains( aCenter ) )
-    {
-        if( aCenter.x < m_panBoundary.GetLeft() )
-            m_center.x = m_panBoundary.GetLeft();
-        else if( aCenter.x > m_panBoundary.GetRight() )
-            m_center.x = m_panBoundary.GetRight();
-
-        if( aCenter.y < m_panBoundary.GetTop() )
-            m_center.y = m_panBoundary.GetTop();
-        else if( aCenter.y > m_panBoundary.GetBottom() )
-            m_center.y = m_panBoundary.GetBottom();
-    }
 
     m_gal->SetLookAtPoint( m_center );
     m_gal->ComputeWorldScreenMatrix();

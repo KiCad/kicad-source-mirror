@@ -46,13 +46,39 @@ class VIEW;
 class VIEW_CONTROLS
 {
 public:
-    VIEW_CONTROLS( VIEW* aView ) : m_view( aView ), m_forceCursorPosition( false ),
-        m_snappingEnabled( false ), m_grabMouse( false ), m_autoPanEnabled( false ),
-        m_autoPanMargin( 0.1 ), m_autoPanSpeed( 0.15 )
-    {}
+    VIEW_CONTROLS( VIEW* aView ) : m_view( aView ), m_minScale( 4.0 ), m_maxScale( 15000 ),
+        m_forceCursorPosition( false ), m_snappingEnabled( false ), m_grabMouse( false ),
+        m_autoPanEnabled( false ), m_autoPanMargin( 0.1 ), m_autoPanSpeed( 0.15 )
+    {
+        m_panBoundary.SetMaximum();
+    }
 
     virtual ~VIEW_CONTROLS()
     {}
+
+    /**
+     * Function SetPanBoundary()
+     * Sets limits for panning area.
+     * @param aBoundary is the box that limits panning area.
+     */
+    void SetPanBoundary( const BOX2I& aBoundary )
+    {
+        m_panBoundary = aBoundary;
+    }
+
+    /**
+     * Function SetScaleLimits()
+     * Sets minimum and maximum values for scale.
+     * @param aMaximum is the maximum value for scale.
+     * @param aMinimum is the minimum value for scale.
+     */
+    void SetScaleLimits( double aMaximum, double aMinimum )
+    {
+        wxASSERT_MSG( aMaximum > aMinimum, wxT( "I guess you passed parameters in wrong order" ) );
+
+        m_minScale = aMinimum;
+        m_maxScale = aMaximum;
+    }
 
     /**
      * Function SetSnapping()
@@ -146,11 +172,23 @@ public:
     virtual void ShowCursor( bool aEnabled );
 
 protected:
+    /// Sets center for VIEW, takes into account panning boundaries.
+    void setCenter( const VECTOR2D& aCenter );
+
+    /// Sets scale for VIEW, takes into account scale limits.
+    void setScale( double aScale, const VECTOR2D& aAnchor );
+
     /// Pointer to controlled VIEW.
     VIEW*       m_view;
 
-    /// Current mouse position
-    VECTOR2D    m_mousePosition;
+    /// Panning boundaries.
+    BOX2I       m_panBoundary;
+
+    /// Scale lower limit.
+    double      m_minScale;
+
+    /// Scale upper limit.
+    double      m_maxScale;
 
     /// Current cursor position
     VECTOR2D    m_cursorPosition;

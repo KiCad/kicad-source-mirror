@@ -507,29 +507,6 @@ public:
      */
     void UpdateItems();
 
-    /**
-     * Function SetPanBoundary()
-     * Sets limits for panning area.
-     * @param aBoundary is the box that limits panning area.
-     */
-    void SetPanBoundary( const BOX2I& aBoundary )
-    {
-        m_panBoundary = aBoundary;
-    }
-
-    /**
-     * Function SetScaleLimits()
-     * Sets minimum and maximum values for scale.
-     * @param aMaximum is the maximum value for scale..
-     * @param aMinimum is the minimum value for scale.
-     */
-    void SetScaleLimits( double aMaximum, double aMinimum )
-    {
-        wxASSERT_MSG( aMaximum > aMinimum, wxT( "I guess you passed parameters in wrong order" ) );
-
-        m_scaleLimits = VECTOR2D( aMaximum, aMinimum );
-    }
-
     static const int VIEW_MAX_LAYERS = 128;      ///< maximum number of layers that may be shown
 
 private:
@@ -669,12 +646,6 @@ private:
 
     /// Rendering order modifier for layers that are marked as top layers
     static const int TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
-
-    /// Panning boundaries
-    BOX2I m_panBoundary;
-
-    /// Zoom limits
-    VECTOR2D m_scaleLimits;
 
     /// Items to be updated
     std::vector<VIEW_ITEM*> m_needsUpdate;

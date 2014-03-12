@@ -66,6 +66,42 @@ void VIEW_CONTROLS::ShowCursor( bool aEnabled )
 }
 
 
+void VIEW_CONTROLS::setCenter( const VECTOR2D& aCenter )
+{
+    if( !m_panBoundary.Contains( aCenter ) )
+    {
+        VECTOR2D newCenter( aCenter );
+
+        if( aCenter.x < m_panBoundary.GetLeft() )
+            newCenter.x = m_panBoundary.GetLeft();
+        else if( aCenter.x > m_panBoundary.GetRight() )
+            newCenter.x = m_panBoundary.GetRight();
+
+        if( aCenter.y < m_panBoundary.GetTop() )
+            newCenter.y = m_panBoundary.GetTop();
+        else if( aCenter.y > m_panBoundary.GetBottom() )
+            newCenter.y = m_panBoundary.GetBottom();
+
+        m_view->SetCenter( newCenter );
+    }
+    else
+    {
+        m_view->SetCenter( aCenter );
+    }
+}
+
+
+void VIEW_CONTROLS::setScale( double aScale, const VECTOR2D& aAnchor )
+{
+    if( aScale < m_minScale )
+        aScale = m_minScale;
+    else if( aScale > m_maxScale )
+        aScale = m_maxScale;
+
+    m_view->SetScale( aScale, aAnchor );
+}
+
+
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
     bool isAutoPanning = false;
@@ -80,7 +116,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
             VECTOR2D   d = m_dragStartPoint - VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             VECTOR2D   delta = m_view->ToWorld( d, false );
 
-            m_view->SetCenter( m_lookStartPoint + delta );
+            setCenter( m_lookStartPoint + delta );
             aEvent.StopPropagation();
         }
         else
@@ -110,7 +146,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         VECTOR2D delta( aEvent.ControlDown() ? -scrollSpeed : 0.0,
                         aEvent.ShiftDown() ? -scrollSpeed : 0.0 );
 
-        m_view->SetCenter( m_view->GetCenter() + delta );
+        setCenter( m_view->GetCenter() + delta );
     }
     else
     {
@@ -133,7 +169,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         }
 
         VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
-        m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
+        setScale( m_view->GetScale() * zoomScale, anchor );
     }
 
     aEvent.Skip();
@@ -190,7 +226,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             dir = dir.Resize( borderSize );
 
         dir = m_view->ToWorld( dir, false );
-        m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
+        setCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
 
         // Notify tools that the cursor position has changed in the world coordinates
         wxMouseEvent moveEvent( EVT_REFRESH_MOUSE );

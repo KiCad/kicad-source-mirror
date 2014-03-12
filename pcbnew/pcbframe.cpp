@@ -56,6 +56,7 @@
 #include <dialog_plot.h>
 #include <convert_from_iu.h>
 #include <view/view.h>
+#include <view/view_controls.h>
 #include <painter.h>
 
 #include <class_track.h>
@@ -583,7 +584,7 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     view->Add( aBoard->GetRatsnestViewItem() );
 
     // Limit panning to the size of worksheet frame
-    view->SetPanBoundary( aBoard->GetWorksheetViewItem()->ViewBBox() );
+    GetGalCanvas()->GetViewControls()->SetPanBoundary( aBoard->GetWorksheetViewItem()->ViewBBox() );
     view->RecacheAllItems( true );
 
     if( IsGalCanvasActive() )
