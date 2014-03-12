@@ -19,8 +19,8 @@
 
 
 // Default marquer shape:
-#define M_SHAPE_SCALE 6     // default scaling factor for MarkerShapeCorners coordinates
-#define CORNERS_COUNT 8
+const int M_SHAPE_SCALE = 6;     // default scaling factor for MarkerShapeCorners coordinates
+const int CORNERS_COUNT = 8;
 /* corners of the default shape
  * actual coordinates are these values * .m_ScalingFactor
 */
@@ -46,10 +46,10 @@ void MARKER_BASE::init()
     m_Color = RED;
     wxPoint start = MarkerShapeCorners[0];
     wxPoint end = MarkerShapeCorners[0];
+
     for( unsigned ii = 0; ii < CORNERS_COUNT; ii++ )
     {
         wxPoint corner = MarkerShapeCorners[ii];
-        m_Corners.push_back( corner );
         start.x = std::min( start.x, corner.x);
         start.y = std::min( start.y, corner.y);
         end.x = std::max( end.x, corner.x);
@@ -64,7 +64,6 @@ void MARKER_BASE::init()
 MARKER_BASE::MARKER_BASE( const MARKER_BASE& aMarker )
 {
     m_Pos = aMarker.m_Pos;
-    m_Corners = aMarker.m_Corners;
     m_MarkerType = aMarker.m_MarkerType;
     m_Color = aMarker.m_Color;
     m_ShapeBoundingBox = aMarker.m_ShapeBoundingBox;
@@ -154,9 +153,9 @@ void MARKER_BASE::DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDr
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    for( unsigned ii = 0; ii < m_Corners.size(); ii++ )
+    for( unsigned ii = 0; ii < CORNERS_COUNT; ii++ )
     {
-        corners[ii] = m_Corners[ii];
+        corners[ii] = MarkerShapeCorners[ii];
         corners[ii].x *= m_ScalingFactor;
         corners[ii].y *= m_ScalingFactor;
         corners[ii] += m_Pos + aOffset;
