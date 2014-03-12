@@ -47,13 +47,9 @@
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, PCB_DIMENSION_T ),
-    m_Text( this )
+    m_Width( Millimeter2iu( 0.2 ) ), m_Unit( INCHES ), m_Value( 0 ), m_Height( 0 ), m_Text( this )
 {
     m_Layer = DRAW_N;
-    m_Width = Millimeter2iu( 0.2 );
-    m_Value = 0;
-    m_Shape = 0;
-    m_Unit  = INCHES;
 }
 
 
@@ -99,6 +95,7 @@ void DIMENSION::Copy( DIMENSION* source )
     SetLayer( source->GetLayer() );
     m_Width = source->m_Width;
     m_Shape = source->m_Shape;
+    m_Height = source->m_Height;
     m_Unit  = source->m_Unit;
     SetTimeStamp( GetNewTimeStamp() );
     m_Text.Copy( &source->m_Text );
@@ -195,7 +192,6 @@ void DIMENSION::Mirror( const wxPoint& axis_pos )
 
 void DIMENSION::SetOrigin( const wxPoint& aOrigin )
 {
-    m_crossBarO = aOrigin;
     m_featureLineGO = aOrigin;
 
     AdjustDimensionDetails();
@@ -204,26 +200,29 @@ void DIMENSION::SetOrigin( const wxPoint& aOrigin )
 
 void DIMENSION::SetEnd( const wxPoint& aEnd )
 {
-    m_crossBarF = aEnd;
     m_featureLineDO = aEnd;
 
     AdjustDimensionDetails();
 }
 
 
-void DIMENSION::SetHeight( double aHeight )
+void DIMENSION::SetHeight( int aHeight )
 {
-    /* Calculating the direction of travel perpendicular to the selected axis. */
-    double angle = GetAngle() + ( M_PI / 2 );
-
-    int dx = KiROUND( aHeight * cos( angle ) );
-    int dy = KiROUND( aHeight * sin( angle ) );
-    m_crossBarO.x = m_featureLineGO.x + dx;
-    m_crossBarO.y = m_featureLineGO.y + dy;
-    m_crossBarF.x = m_featureLineDO.x + dx;
-    m_crossBarF.y = m_featureLineDO.y + dy;
+    m_Height = aHeight;
 
     AdjustDimensionDetails();
+}
+
+
+void DIMENSION::UpdateHeight()
+{
+    VECTOR2D featureLine( m_crossBarO - m_featureLineGO );
+    VECTOR2D crossBar( m_featureLineDO - m_featureLineGO );
+
+    if( featureLine.Cross( crossBar ) > 0 )
+        m_Height = -featureLine.EuclideanNorm();
+    else
+        m_Height = featureLine.EuclideanNorm();
 }
 
 
@@ -280,6 +279,13 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
         arrow_dw_X  = wxRound( arrowz * cos( angle_f ) );
         arrow_dw_Y  = wxRound( arrowz * sin( angle_f ) );
     }
+
+    int dx = KiROUND( m_Height * cos( angle + M_PI / 2 ) );
+    int dy = KiROUND( m_Height * sin( angle + M_PI / 2 ) );
+    m_crossBarO.x   = m_featureLineGO.x + dx;
+    m_crossBarO.y   = m_featureLineGO.y + dy;
+    m_crossBarF.x   = m_featureLineDO.x + dx;
+    m_crossBarF.y   = m_featureLineDO.y + dy;
 
     m_arrowG1F.x    = m_crossBarO.x + arrow_up_X;
     m_arrowG1F.y    = m_crossBarO.y + arrow_up_Y;

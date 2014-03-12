@@ -35,6 +35,7 @@
 
 #include <wxPcbStruct.h>
 #include <class_drawsegment.h>
+#include <class_dimension.h>
 #include <class_zone.h>
 
 /**
@@ -60,8 +61,8 @@ public:
                 switch( segment->GetShape() )
                 {
                 case S_SEGMENT:
-                    points->AddPoint( segment->GetStart() );
-                    points->AddPoint( segment->GetEnd() );
+                    points->AddPoint( segment->GetStart() );          // points[0]
+                    points->AddPoint( segment->GetEnd() );            // points[1]
                     break;
 
                 case S_ARC:
@@ -75,8 +76,8 @@ public:
                     break;
 
                 case S_CIRCLE:
-                    points->AddPoint( segment->GetCenter() );
-                    points->AddPoint( segment->GetEnd() );
+                    points->AddPoint( segment->GetCenter() );         // points[0]
+                    points->AddPoint( segment->GetEnd() );            // points[1]
                     break;
 
                 default:        // suppress warnings
@@ -98,8 +99,23 @@ public:
                 for( int i = 0; i < cornersCount - 1; ++i )
                     points->AddLine( (*points)[i], (*points)[i + 1] );
 
-                // The one missing line
+                // The last missing line, connecting the last and the first polygon point
                 points->AddLine( (*points)[cornersCount - 1], (*points)[0] );
+                break;
+            }
+
+            case PCB_DIMENSION_T:
+            {
+                const DIMENSION* dimension = static_cast<const DIMENSION*>( aItem );
+
+                points->AddPoint( dimension->m_featureLineGO );
+                points->AddPoint( dimension->m_featureLineDO );
+                points->AddPoint( dimension->m_crossBarO );
+                points->AddPoint( dimension->m_crossBarF );
+
+                // Dimension height setting - edit points should move only along the feature lines
+                (*points)[2].SetConstraint( new EPC_LINE( (*points)[2], (*points)[0] ) );
+                (*points)[3].SetConstraint( new EPC_LINE( (*points)[3], (*points)[1] ) );
 
                 break;
             }
@@ -118,7 +134,7 @@ private:
 
 
 POINT_EDITOR::POINT_EDITOR() :
-    TOOL_INTERACTIVE( "pcbnew.PointEditor" ), m_selectionTool( NULL )
+    TOOL_INTERACTIVE( "pcbnew.PointEditor" ), m_selectionTool( NULL ), m_dragPoint( NULL )
 {
 }
 
@@ -159,6 +175,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
         EDIT_POINT constrainer( VECTOR2I( 0, 0 ) );
+        bool degree45 = false;          // 45 degree mode
 
         m_editPoints = EDIT_POINTS_FACTORY::Make( item );
         if( !m_editPoints )
@@ -218,18 +235,20 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                     modified = true;
                 }
 
-                if( evt->Modifier( MD_CTRL ) )      // 45 degrees mode
+                if( evt->Modifier( MD_CTRL ) != degree45 )      // 45 degrees mode
                 {
-                    if( !m_dragPoint->IsConstrained() )
+                    degree45 = evt->Modifier( MD_CTRL );
+
+                    if( degree45 )
                     {
                         // Find a proper constraining point for 45 degrees mode
                         constrainer = get45DegConstrainer();
                         m_dragPoint->SetConstraint( new EPC_45DEGREE( *m_dragPoint, constrainer ) );
                     }
-                }
-                else
-                {
-                    m_dragPoint->ClearConstraint();
+                    else
+                    {
+                        m_dragPoint->ClearConstraint();
+                    }
                 }
 
                 m_dragPoint->SetPosition( controls->GetCursorPosition() );
@@ -387,6 +406,47 @@ void POINT_EDITOR::updateItem() const
         break;
     }
 
+    case PCB_DIMENSION_T:
+    {
+        DIMENSION* dimension = static_cast<DIMENSION*>( item );
+
+        // Check which point is currently modified and updated dimension's points respectively
+        if( isModified( (*m_editPoints)[0] ) )
+        {
+            dimension->SetOrigin( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
+            static_cast<EPC_LINE*>( (*m_editPoints)[2].GetConstraint() )->Update();
+            static_cast<EPC_LINE*>( (*m_editPoints)[3].GetConstraint() )->Update();
+        }
+        else if( isModified( (*m_editPoints)[1] ) )
+        {
+            dimension->SetEnd( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
+            static_cast<EPC_LINE*>( (*m_editPoints)[2].GetConstraint() )->Update();
+            static_cast<EPC_LINE*>( (*m_editPoints)[3].GetConstraint() )->Update();
+        }
+        else if( isModified( (*m_editPoints)[2] ) )
+        {
+            VECTOR2D featureLine( m_dragPoint->GetPosition() - dimension->GetOrigin() );
+            VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
+
+            if( featureLine.Cross( crossBar ) > 0 )
+                dimension->SetHeight( -featureLine.EuclideanNorm() );
+            else
+                dimension->SetHeight( featureLine.EuclideanNorm() );
+        }
+        else if( isModified( (*m_editPoints)[3] ) )
+        {
+            VECTOR2D featureLine( m_dragPoint->GetPosition() - dimension->GetEnd() );
+            VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
+
+            if( featureLine.Cross( crossBar ) > 0 )
+                dimension->SetHeight( -featureLine.EuclideanNorm() );
+            else
+                dimension->SetHeight( featureLine.EuclideanNorm() );
+        }
+
+        break;
+    }
+
     default:
         break;
     }
@@ -454,6 +514,17 @@ void POINT_EDITOR::updatePoints() const
         break;
     }
 
+    case PCB_DIMENSION_T:
+    {
+        const DIMENSION* dimension = static_cast<const DIMENSION*>( item );
+
+        (*m_editPoints)[0].SetPosition( dimension->m_featureLineGO );
+        (*m_editPoints)[1].SetPosition( dimension->m_featureLineDO );
+        (*m_editPoints)[2].SetPosition( dimension->m_crossBarO );
+        (*m_editPoints)[3].SetPosition( dimension->m_crossBarF );
+        break;
+    }
+
     default:
         break;
     }
@@ -481,6 +552,14 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
                 break;
             }
         }
+    }
+    else if( item->Type() == PCB_DIMENSION_T )
+    {
+        // Constraint for crossbar
+        if( isModified( (*m_editPoints)[0] ) )
+            return (*m_editPoints)[1];
+        else if( isModified( (*m_editPoints)[1] ) )
+            return (*m_editPoints)[0];
     }
 
     // In any other case we may align item to the current cursor position.
