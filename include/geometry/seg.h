@@ -46,7 +46,8 @@ public:
      * to an object the segment belongs to (e.g. a line chain) or references to locally stored
      * points (m_a, m_b).
      */
-    VECTOR2I& A, B;
+    VECTOR2I& A;
+    VECTOR2I& B;
 
     /** Default constructor
      * Creates an empty (0, 0) segment, locally-referenced
@@ -203,6 +204,8 @@ public:
 
     bool Collide( const SEG& aSeg, int aClearance ) const;
 
+    ecoord SquaredDistance( const SEG& aSeg ) const;
+
     /**
      * Function Distance()
      *
@@ -210,12 +213,14 @@ public:
      * @param aSeg other segment
      * @return minimum distance
      */
-
-    ecoord SquaredDistance( const SEG& aSeg ) const;
-
     int Distance( const SEG& aSeg ) const
     {
         return sqrt( SquaredDistance( aSeg ) );
+    }
+
+    ecoord SquaredDistance( const VECTOR2I& aP ) const
+    {
+        return ( NearestPoint( aP ) - aP ).SquaredEuclideanNorm();
     }
 
     /**
@@ -225,11 +230,6 @@ public:
      * @param aP the point
      * @return minimum distance
      */
-    ecoord SquaredDistance( const VECTOR2I& aP ) const
-    {
-        return ( NearestPoint( aP ) - aP ).SquaredEuclideanNorm();
-    }
-
     int Distance( const VECTOR2I& aP ) const
     {
         return sqrt( SquaredDistance( aP ) );
