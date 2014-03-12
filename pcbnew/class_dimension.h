@@ -61,13 +61,12 @@ class MSG_PANEL_ITEM;
  */
 class DIMENSION : public BOARD_ITEM
 {
-    int         m_Width;
-    int         m_Shape;        // / Currently always 0.
-    int         m_Unit;         // / 0 = inches, 1 = mm
-    int         m_Value;        // / value of PCB dimensions.
-
+    int         m_Width;        ///< Line width
+    int         m_Shape;        ///< Currently always 0.
+    EDA_UNITS_T m_Unit;         ///< 0 = inches, 1 = mm
+    int         m_Value;        ///< value of PCB dimensions.
+    int         m_Height;       ///< length of feature lines
     TEXTE_PCB   m_Text;
-
 
 public:
 // TODO private: These member should be private. they are public only due to legacy code
@@ -117,7 +116,7 @@ public:
      */
     const wxPoint& GetOrigin() const
     {
-        return m_crossBarO;
+        return m_featureLineGO;
     }
 
     /**
@@ -133,7 +132,7 @@ public:
      */
     const wxPoint& GetEnd()
     {
-        return m_crossBarF;
+        return m_featureLineDO;
     }
 
     /**
@@ -141,12 +140,27 @@ public:
      * Sets the length of feature lines.
      * @param aHeight is the new height.
      */
-    void SetHeight( double aHeight );
+    void SetHeight( int aHeight );
+
+    /**
+     * Function GetHeight
+     * Returns the length of feature lines.
+     */
+    int GetHeight() const
+    {
+        return m_Height;
+    }
+
+    /**
+     * Function UpdateHeight
+     * Updates stored height basing on points coordinates.
+     */
+    void UpdateHeight();
 
     /**
      * Function GetAngle
      * Returns angle of the crossbar.
-     * @return Angle of the crossbar line.
+     * @return Angle of the crossbar line expressed in radians.
      */
     double GetAngle() const
     {

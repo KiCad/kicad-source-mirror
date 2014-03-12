@@ -98,6 +98,26 @@ public:
     }
 
     /**
+     * Function GetX()
+     *
+     * Returns X coordinate of an EDIT_POINT.
+     */
+    int GetX() const
+    {
+        return GetPosition().x;
+    }
+
+    /**
+     * Function GetX()
+     *
+     * Returns Y coordinate of an EDIT_POINT.
+     */
+    int GetY() const
+    {
+        return GetPosition().y;
+    }
+
+    /**
      * Function SetPosition()
      *
      * Sets new coordinates for an EDIT_POINT. It does not change the coordinates of a graphical
@@ -130,6 +150,17 @@ public:
             delete m_constraint;
 
         m_constraint = aConstraint;
+    }
+
+    /**
+     * Function GetConstraint()
+     *
+     * Returns the constraint imposed on an EDIT_POINT. If there are no constraints, NULL is
+     * returned.
+     */
+    EDIT_POINT_CONSTRAINT* GetConstraint() const
+    {
+        return m_constraint;
     }
 
     /**
@@ -465,6 +496,32 @@ public:
 
 private:
     const EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
+};
+
+
+/**
+ * Class EPC_LINE
+ *
+ * EDIT_POINT_CONSTRAINT that imposes a constraint that a point has to lie on a line (determined
+ * by 2 points).
+ */
+class EPC_LINE : public EDIT_POINT_CONSTRAINT
+{
+public:
+    EPC_LINE( EDIT_POINT& aConstrained, EDIT_POINT& aConstrainer );
+
+    ///> @copydoc EDIT_POINT_CONSTRAINT::Apply()
+    virtual void Apply();
+
+    /**
+     * Function Update()
+     * Updates line coefficients that make the constraining line.
+     */
+    void Update();
+
+private:
+    EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
+    double m_coefA, m_coefB;
 };
 
 

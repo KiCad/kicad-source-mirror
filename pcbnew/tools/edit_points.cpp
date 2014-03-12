@@ -31,7 +31,7 @@
 
 bool EDIT_POINT::WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const
 {
-    // Corners of the square
+    // Corners of the EDIT_POINT square
     VECTOR2I topLeft = GetPosition() - aSize;
     VECTOR2I bottomRight = GetPosition() + aSize;
 
@@ -159,6 +159,42 @@ void EPC_45DEGREE::Apply()
     VECTOR2I newLineVector = lineVector.Rotate( newAngle - angle );
 
     m_constrained.SetPosition( m_constrainer.GetPosition() + newLineVector );
+}
+
+
+EPC_LINE::EPC_LINE( EDIT_POINT& aConstrained, EDIT_POINT& aConstrainer ) :
+    EDIT_POINT_CONSTRAINT( aConstrained ), m_constrainer( aConstrainer )
+{
+    Update();
+}
+
+
+void EPC_LINE::Apply()
+{
+    VECTOR2I position = m_constrained.GetPosition();
+
+    if( std::isfinite( m_coefA ) )
+    {
+        if( abs( m_coefA ) < 1 )
+            position.y = m_coefA * position.x + m_coefB;
+        else
+            position.x = ( position.y - m_coefB ) / m_coefA;
+    }
+    else // vertical line
+    {
+        position.x = m_constrainer.GetX();
+    }
+
+    m_constrained.SetPosition( position );
+}
+
+
+void EPC_LINE::Update()
+{
+    // Compute line coefficients
+    VECTOR2D delta = m_constrainer.GetPosition() - m_constrained.GetPosition();
+    m_coefA = delta.y / delta.x;
+    m_coefB = m_constrainer.GetY() - m_coefA * m_constrainer.GetX();
 }
 
 

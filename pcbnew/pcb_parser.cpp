@@ -1438,6 +1438,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
 
             parseXY( &dimension->m_featureLineDO.x, &dimension->m_featureLineDO.y );
             parseXY( &dimension->m_featureLineDF.x, &dimension->m_featureLineDF.y );
+            dimension->UpdateHeight();
             NeedRIGHT();
             NeedRIGHT();
             break;
@@ -1451,6 +1452,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
 
             parseXY( &dimension->m_featureLineGO.x, &dimension->m_featureLineGO.y );
             parseXY( &dimension->m_featureLineGF.x, &dimension->m_featureLineGF.y );
+            dimension->UpdateHeight();
             NeedRIGHT();
             NeedRIGHT();
             break;
@@ -1465,6 +1467,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
 
             parseXY( &dimension->m_crossBarO.x, &dimension->m_crossBarO.y );
             parseXY( &dimension->m_crossBarF.x, &dimension->m_crossBarF.y );
+            dimension->UpdateHeight();
             NeedRIGHT();
             NeedRIGHT();
             break;
