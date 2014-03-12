@@ -43,6 +43,8 @@
 #include <reporter.h>
 #include <base_units.h>
 #include <ratsnest_data.h>
+#include <ratsnest_viewitem.h>
+#include <worksheet_viewitem.h>
 
 #include <pcbnew.h>
 #include <colors_selection.h>
@@ -104,22 +106,29 @@ BOARD::BOARD() :
 
     SetCurrentNetClass( m_NetClasses.GetDefault()->GetName() );
 
+    // Initialize ratsnest
     m_ratsnest = new RN_DATA( this );
+    m_ratsnestViewItem = new KIGFX::RATSNEST_VIEWITEM( m_ratsnest );
+
+    // Initialize view item for displaying worksheet frame
+    m_worksheetViewItem = new KIGFX::WORKSHEET_VIEWITEM( &m_paper, &m_titles );
+    m_worksheetViewItem->SetFileName( std::string( m_fileName.mb_str() ) );
 }
 
 
 BOARD::~BOARD()
 {
-    delete m_ratsnest;
-
     while( m_ZoneDescriptorList.size() )
     {
         ZONE_CONTAINER* area_to_remove = m_ZoneDescriptorList[0];
         Delete( area_to_remove );
     }
 
-    m_FullRatsnest.clear();
+    delete m_worksheetViewItem;
+    delete m_ratsnestViewItem;
+    delete m_ratsnest;
 
+    m_FullRatsnest.clear();
     m_LocalRatsnest.clear();
 
     DeleteMARKERs();
@@ -206,7 +215,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, LAYER_MSK aLayerMask, TRACK_
      */
     for( ; ; )
     {
-        if( GetPadFast( aPosition, aLayerMask ) != NULL )
+        if( GetPad( aPosition, aLayerMask ) != NULL )
             return;
 
         /* Test for a via: a via changes the layer mask and can connect a lot
@@ -842,6 +851,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         }
         break;
     }
+
+    m_ratsnest->Add( aBoardItem );
 }
 
 
@@ -904,6 +915,8 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     default:
         wxFAIL_MSG( wxT( "BOARD::Remove() needs more ::Type() support" ) );
     }
+
+    m_ratsnest->Remove( aBoardItem );
 
     return aBoardItem;
 }
@@ -1341,93 +1354,13 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
     // NULL is returned for non valid netcodes
     NETINFO_ITEM* net = m_NetInfo.GetNetItem( aNetcode );
 
-#if defined(DEBUG)
-    if( net && aNetcode != net->GetNet())     // item can be NULL if anetcode is not valid
-    {
-        wxLogError( wxT( "FindNet() anetcode %d != GetNet() %d (net: %s)\n" ),
-                      aNetcode, net->GetNet(), TO_UTF8( net->GetNetname() ) );
-    }
-#endif
-
     return net;
 }
 
 
 NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
 {
-    // the first valid netcode is 1.
-    // zero is reserved for "no connection" and is not used.
-    if( aNetname.IsEmpty() )
-        return NULL;
-
-    int ncount = m_NetInfo.GetNetCount();
-
-    // Search for a netname = aNetname
-#if 0
-
-    // Use a sequential search: easy to understand, but slow
-    for( int ii = 1; ii < ncount; ii++ )
-    {
-        NETINFO_ITEM* item = m_NetInfo.GetNetItem( ii );
-
-        if( item && item->GetNetname() == aNetname )
-        {
-            return item;
-        }
-    }
-
-#else
-
-    // Use a fast binary search,
-    // this is possible because Nets are alphabetically ordered in list
-    // see NETINFO_LIST::BuildListOfNets() and
-    // NETINFO_LIST::Build_Pads_Full_List()
-    int imax  = ncount - 1;
-    int index = imax;
-
-    while( ncount > 0 )
-    {
-        int ii = ncount;
-        ncount >>= 1;
-
-        if( (ii & 1) && ( ii > 1 ) )
-            ncount++;
-
-        NETINFO_ITEM* item = m_NetInfo.GetNetItem( index );
-
-        if( item == NULL )
-            return NULL;
-
-        int icmp = item->GetNetname().Cmp( aNetname );
-
-        if( icmp == 0 ) // found !
-        {
-            return item;
-        }
-
-        if( icmp < 0 ) // must search after item
-        {
-            index += ncount;
-
-            if( index > imax )
-                index = imax;
-
-            continue;
-        }
-
-        if( icmp > 0 ) // must search before item
-        {
-            index -= ncount;
-
-            if( index < 1 )
-                index = 1;
-
-            continue;
-        }
-    }
-
-#endif
-    return NULL;
+    return m_NetInfo.GetNetItem( aNetname );
 }
 
 
@@ -1512,10 +1445,11 @@ int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCoun
 
     netBuffer.reserve( m_NetInfo.GetNetCount() );
 
-    for( unsigned ii = 1; ii < m_NetInfo.GetNetCount(); ii++ )
+    for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
+                net != netEnd; ++net )
     {
-        if( m_NetInfo.GetNetItem( ii )->GetNet() > 0 )
-            netBuffer.push_back( m_NetInfo.GetNetItem( ii ) );
+        if( net->GetNet() > 0 )
+            netBuffer.push_back( *net );
     }
 
     // sort the list
@@ -1582,7 +1516,7 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
         if( area->GetState( BUSY ) )
             continue;
 
-        if( aNetCode >= 0 && area->GetNet() != aNetCode )
+        if( aNetCode >= 0 && area->GetNetCode() != aNetCode )
             continue;
 
         if( area->HitTestFilledArea( aRefPos ) )
@@ -1601,24 +1535,24 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
     {
         if( !GetArea( ii )->IsOnCopperLayer() )
         {
-            GetArea( ii )->SetNet( 0 );
+            GetArea( ii )->SetNetCode( NETINFO_LIST::UNCONNECTED );
             continue;
         }
 
-        if( GetArea( ii )->GetNet() != 0 )      // i.e. if this zone is connected to a net
+        if( GetArea( ii )->GetNetCode() != 0 )      // i.e. if this zone is connected to a net
         {
-            const NETINFO_ITEM* net = FindNet( GetArea( ii )->GetNetName() );
+            const NETINFO_ITEM* net = GetArea( ii )->GetNet();
 
             if( net )
             {
-                GetArea( ii )->SetNet( net->GetNet() );
+                GetArea( ii )->SetNetCode( net->GetNet() );
             }
             else
             {
                 error_count++;
 
                 // keep Net Name and set m_NetCode to -1 : error flag.
-                GetArea( ii )->SetNet( -1 );
+                GetArea( ii )->SetNetCode( -1 );
             }
         }
     }
@@ -2338,7 +2272,7 @@ ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, LAYER_NUM layer, int 
 {
     ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
 
-    new_area->SetNet( netcode );
+    new_area->SetNetCode( netcode );
     new_area->SetLayer( layer );
     new_area->SetTimeStamp( GetNewTimeStamp() );
 
@@ -2377,7 +2311,7 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
             {
                 // create new copper area and copy poly into it
                 CPolyLine* new_p = (*pa)[ip - 1];
-                NewArea = AddArea( aNewZonesList, aCurrArea->GetNet(), aCurrArea->GetLayer(),
+                NewArea = AddArea( aNewZonesList, aCurrArea->GetNetCode(), aCurrArea->GetLayer(),
                                    wxPoint(0, 0), CPolyLine::NO_HATCH );
 
                 // remove the poly that was automatically created for the new area
@@ -2618,7 +2552,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     }
 
                     if( !aNetlist.IsDryRun() )
-                        pad->SetNetname( wxEmptyString );
+                        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
                 }
             }
             else                                 // Footprint pad has a net.
@@ -2638,7 +2572,17 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     }
 
                     if( !aNetlist.IsDryRun() )
-                        pad->SetNetname( net.GetNetName() );
+                    {
+                        NETINFO_ITEM* netinfo = FindNet( net.GetNetName() );
+                        if( netinfo == NULL )
+                        {
+                            // It is a new net, we have to add it
+                            netinfo = new NETINFO_ITEM( this, net.GetNetName() );
+                            m_NetInfo.AppendNet( netinfo );
+                        }
+
+                        pad->SetNetCode( netinfo->GetNet() );
+                    }
                 }
             }
         }
@@ -2710,7 +2654,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                                     GetChars( previouspad->GetPadName() ) );
                         aReporter->Report( msg );
                     }
-                    previouspad->SetNetname( wxEmptyString );
+
+                    previouspad->SetNetCode( NETINFO_LIST::UNCONNECTED );
                 }
                 netname = pad->GetNetname();
                 count = 1;
@@ -2723,7 +2668,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 
         // Examine last pad
         if( pad && count == 1 )
-            pad->SetNetname( wxEmptyString );
+            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
     }
 
     // Last step: Some tests:
@@ -2758,31 +2703,6 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                             GetChars( footprint->GetFPID().Format() ) );
                 aReporter->Report( msg );
             }
-        }
-    }
-
-    // Verify zone net names validity:
-    // After schematic changes, a zone can have a non existing net name.
-    // It should be reported
-    if( aReporter && aReporter->ReportErrors() )
-    {
-        //Loop through all copper zones
-        for( i = 0; i < m_ZoneDescriptorList.size(); i++ )
-        {
-            ZONE_CONTAINER* zone = m_ZoneDescriptorList[i];
-
-            if( zone->GetNet() >= 0 || !zone->IsOnCopperLayer() )
-                continue;
-
-            // Net name not valid, report error
-            wxString coord;
-            coord << zone->GetPosition();
-            msg.Printf( _( "*** Error: Zone '%s' layer '%s'"
-                           " has non-existent net name '%s' ***\n" ),
-                        GetChars( coord ),
-                        GetChars( zone->GetLayerName() ),
-                        GetChars( zone->GetNetName() ) );
-            aReporter->Report( msg );
         }
     }
 }

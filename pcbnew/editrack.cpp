@@ -133,12 +133,12 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
                 // A pad is found: put the starting point on pad center
                 pos = pad->GetPosition();
-                GetBoard()->SetHighLightNet( pad->GetNet() );
+                GetBoard()->SetHighLightNet( pad->GetNetCode() );
             }
             else // A track segment is found
             {
                 TrackOnStartPoint    = (TRACK*) LockPoint;
-                GetBoard()->SetHighLightNet( TrackOnStartPoint->GetNet() );
+                GetBoard()->SetHighLightNet( TrackOnStartPoint->GetNetCode() );
                 GetBoard()->CreateLockPoint( pos, TrackOnStartPoint, &s_ItemsListPicker );
             }
         }
@@ -153,7 +153,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
                                                         -1 );
 
             if( zone )
-                GetBoard()->SetHighLightNet( zone->GetNet() );
+                GetBoard()->SetHighLightNet( zone->GetNetCode() );
         }
 
         DBG( g_CurrentTrackList.VerifyListIntegrity() );
@@ -166,7 +166,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         GetBoard()->DrawHighLight( m_canvas, aDC, GetBoard()->GetHighLightNetCode() );
 
         // Display info about track Net class, and init track and vias sizes:
-        g_CurrentTrackSegment->SetNet( GetBoard()->GetHighLightNetCode() );
+        g_CurrentTrackSegment->SetNetCode( GetBoard()->GetHighLightNetCode() );
         GetBoard()->SetCurrentNetClass( g_CurrentTrackSegment->GetNetClassName() );
 
         g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
@@ -476,7 +476,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
     // g_FirstTrackSegment can be NULL on a double click on the starting point
     if( g_FirstTrackSegment != NULL )
     {
-        int    netcode    = g_FirstTrackSegment->GetNet();
+        int    netcode    = g_FirstTrackSegment->GetNetCode();
         TRACK* firstTrack = g_FirstTrackSegment;
         int    newCount   = g_CurrentTrackList.GetCount();
 
@@ -540,7 +540,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
 
 TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, LAYER_NUM aLayer, const wxPoint& aRef )
 {
-    int     net   = aTrack->GetNet();
+    int     net   = aTrack->GetNetCode();
     int     width = aTrack->GetWidth();
 
     TRACK*  found = NULL;
@@ -555,7 +555,7 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, LAYER_NUM aLayer, const
             if( aLayer != track->GetLayer() )
                 continue;
 
-            if( track->GetNet() == net )
+            if( track->GetNetCode() == net )
                 continue;
 
             // TRACK::HitTest
@@ -614,7 +614,7 @@ static void PushTrack( EDA_DRAW_PANEL* panel )
     if( !other )
         return;
 
-    if( other->GetNet() == track->GetNet() )
+    if( other->GetNetCode() == track->GetNetCode() )
         return;
 
     cv  = cursor - other->GetStart();

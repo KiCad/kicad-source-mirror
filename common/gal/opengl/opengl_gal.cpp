@@ -70,15 +70,18 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     Connect( wxEVT_PAINT,       wxPaintEventHandler( OPENGL_GAL::onPaint ) );
 
     // Mouse events are skipped to the parent
-    Connect( wxEVT_MOTION,      wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_LEFT_DOWN,   wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_LEFT_UP,     wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_MIDDLE_UP,   wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_RIGHT_DOWN,  wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_RIGHT_UP,    wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MOTION,          wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEFT_DOWN,       wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEFT_UP,         wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEFT_DCLICK,     wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MIDDLE_DOWN,     wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MIDDLE_UP,       wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MIDDLE_DCLICK,   wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_RIGHT_DOWN,      wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_RIGHT_UP,        wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_RIGHT_DCLICK,    wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #if defined _WIN32 || defined _WIN64
-    Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_ENTER_WINDOW,    wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
 
     SetSize( aParent->GetSize() );

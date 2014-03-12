@@ -250,7 +250,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
 
     for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin(); zc!=zones.end(); ++zc )
     {
-        if( (*zc)->GetNet() == aNetCode )
+        if( (*zc)->GetNetCode() == aNetCode )
         {
             (*zc)->Draw( am_canvas, DC, draw_mode );
         }
@@ -261,7 +261,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
     {
         for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
         {
-            if( pad->GetNet() == aNetCode )
+            if( pad->GetNetCode() == aNetCode )
             {
                 pad->Draw( am_canvas, DC, draw_mode );
             }
@@ -271,7 +271,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
     // Redraw track and vias that have aNetCode
     for( TRACK* seg = m_Track; seg; seg = seg->Next() )
     {
-        if( seg->GetNet() == aNetCode )
+        if( seg->GetNetCode() == aNetCode )
         {
             seg->Draw( am_canvas, DC, draw_mode );
         }

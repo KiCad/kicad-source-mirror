@@ -128,8 +128,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     // menu Config
 
     /* Tom's hacks start */
-    EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
-    EVT_TOOL ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_MENU ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_TOOL ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     /* Tom's hacks end */
@@ -337,16 +335,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     SetBoard( new BOARD() );
 
-    if( GetGalCanvas() )
-    {
-        ViewReloadBoard( m_Pcb );
-
-        // update the tool manager with the new board and its view.
-        if( m_toolManager )
-            m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                           GetGalCanvas()->GetViewControls(), this );
-    }
-
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
 
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -546,8 +534,11 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
         // update the tool manager with the new board and its view.
         if( m_toolManager )
+        {
             m_toolManager->SetEnvironment( aBoard, GetGalCanvas()->GetView(),
                                            GetGalCanvas()->GetViewControls(), this );
+            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+        }
     }
 }
 
@@ -608,27 +599,22 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
         view->Add( zone );
     }
 
-    // Add an entry for the worksheet layout
-    KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM(
-                                            std::string( aBoard->GetFileName().mb_str() ),
-                                            std::string( GetScreenDesc().mb_str() ),
-                                            &GetPageSettings(), &GetTitleBlock() );
+    KIGFX::WORKSHEET_VIEWITEM* worksheet = aBoard->GetWorksheetViewItem();
+    worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
+
     BASE_SCREEN* screen = GetScreen();
+
     if( screen != NULL )
     {
-        worksheet->SetSheetNumber( GetScreen()->m_ScreenNumber );
-        worksheet->SetSheetCount( GetScreen()->m_NumberOfScreens );
+        worksheet->SetSheetNumber( screen->m_ScreenNumber );
+        worksheet->SetSheetCount( screen->m_NumberOfScreens );
     }
 
     view->Add( worksheet );
+    view->Add( aBoard->GetRatsnestViewItem() );
 
-    // Add an entry for the ratsnest
-    RN_DATA* ratsnest = aBoard->GetRatsnest();
-    ratsnest->ProcessBoard();
-    ratsnest->Recalculate();
-    view->Add( new KIGFX::RATSNEST_VIEWITEM( ratsnest ) );
-
-    view->SetPanBoundary( worksheet->ViewBBox() );
+    // Limit panning to the size of worksheet frame
+    view->SetPanBoundary( aBoard->GetWorksheetViewItem()->ViewBBox() );
     view->RecacheAllItems( true );
 
     if( IsGalCanvasActive() )
@@ -751,10 +737,17 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
 
-    m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                    GetGalCanvas()->GetViewControls(), this );
-
     ViewReloadBoard( m_Pcb );
+
+    if( aEnable )
+    {
+        // Update potential changes in the ratsnest
+        m_Pcb->GetRatsnest()->Recalculate();
+
+        m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
+                                       GetGalCanvas()->GetViewControls(), this );
+        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+    }
 }
 
 

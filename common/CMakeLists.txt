@@ -219,6 +219,8 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_zone.cpp
     ../pcbnew/class_zone_settings.cpp
     ../pcbnew/classpcb.cpp
+    ../pcbnew/ratsnest_data.cpp
+    ../pcbnew/ratsnest_viewitem.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/netlist_reader.cpp
     ../pcbnew/legacy_netlist_reader.cpp

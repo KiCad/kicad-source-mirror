@@ -203,12 +203,10 @@ void BOARD::SynchronizeNetsAndNetClasses()
     // set all NETs to the default NETCLASS, then later override some
     // as we go through the NETCLASSes.
 
-    int count = m_NetInfo.GetNetCount();
-    for( int i=0;  i<count;  ++i )
+    for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
+                net != netEnd; ++net )
     {
-        NETINFO_ITEM* net = FindNet( i );
-        if( net )
-            net->SetClass( m_NetClasses.GetDefault() );
+        net->SetClass( m_NetClasses.GetDefault() );
     }
 
     // Add netclass name and pointer to nets.  If a net is in more than one netclass,
@@ -248,21 +246,18 @@ void BOARD::SynchronizeNetsAndNetClasses()
 
     m_NetClasses.GetDefault()->Clear();
 
-    for( int i=0;  i<count;  ++i )
+    for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
+            net != netEnd; ++net )
     {
-        NETINFO_ITEM* net = FindNet( i );
-        if( net )
-        {
-            const wxString& classname = net->GetClassName();
+        const wxString& classname = net->GetClassName();
 
-            // because of the std:map<> this should be fast, and because of
-            // prior logic, netclass should not be NULL.
-            NETCLASS* netclass = m_NetClasses.Find( classname );
+        // because of the std:map<> this should be fast, and because of
+        // prior logic, netclass should not be NULL.
+        NETCLASS* netclass = m_NetClasses.Find( classname );
 
-            wxASSERT( netclass );
+        wxASSERT( netclass );
 
-            netclass->Add( net->GetNetname() );
-        }
+        netclass->Add( net->GetNetname() );
     }
 
     // D(printf("stop\n");)
@@ -337,8 +332,15 @@ void NETCLASS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     aFormatter->Print( aNestLevel+1, "(uvia_dia %s)\n", FMT_IU( GetuViaDiameter() ).c_str() );
     aFormatter->Print( aNestLevel+1, "(uvia_drill %s)\n", FMT_IU( GetuViaDrill() ).c_str() );
 
-    for( NETCLASS::const_iterator it = begin();  it!= end();  ++it )
-        aFormatter->Print( aNestLevel+1, "(add_net %s)\n", aFormatter->Quotew( *it ).c_str() );
+    for( NETCLASS::const_iterator it = begin(); it != end(); ++it )
+    {
+        NETINFO_ITEM* netinfo = m_Parent->FindNet( *it );
+
+        if( netinfo && netinfo->GetNodesCount() > 0 )
+        {
+            aFormatter->Print( aNestLevel+1, "(add_net %s)\n", aFormatter->Quotew( *it ).c_str() );
+        }
+    }
 
     aFormatter->Print( aNestLevel, ")\n\n" );
 }

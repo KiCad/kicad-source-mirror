@@ -53,7 +53,6 @@
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     BOARD_CONNECTED_ITEM( aBoard, PCB_ZONE_AREA_T )
 {
-    SetNet( -1 );                               // Net number for fast comparisons
     m_CornerSelection = -1;
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = 0;                             // How to fill areas: 0 = use filled polygons, != 0 fill with segments
@@ -75,7 +74,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     BOARD_CONNECTED_ITEM( aZone )
 {
     // Should the copy be on the same net?
-    SetNet( aZone.GetNet() );
+    SetNetCode( aZone.GetNetCode() );
     m_Poly = new CPolyLine( *aZone.m_Poly );
 
     // For corner moving, corner index to drag, or -1 if no selection
@@ -135,31 +134,6 @@ const wxPoint& ZONE_CONTAINER::GetPosition() const
     static const wxPoint dummy;
 
     return m_Poly ? GetCornerPosition( 0 ) : dummy;
-}
-
-
-void ZONE_CONTAINER::SetNet( int aNetCode )
-{
-    BOARD_CONNECTED_ITEM::SetNet( aNetCode );
-
-    if( aNetCode < 0 )
-        return;
-
-    BOARD* board = GetBoard();
-
-    if( board )
-    {
-        NETINFO_ITEM* net = board->FindNet( aNetCode );
-
-        if( net )
-            m_Netname = net->GetNetname();
-        else
-            m_Netname.Empty();
-    }
-    else
-    {
-        m_Netname.Empty();
-    }
 }
 
 
@@ -614,10 +588,6 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
-    BOARD*   board = (BOARD*) m_Parent;
-
-    wxASSERT( board );
-
     msg = _( "Zone Outline" );
 
     // Display Cutout instead of Outline for holes inside a zone
@@ -646,9 +616,9 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     }
     else if( IsOnCopperLayer() )
     {
-        if( GetNet() >= 0 )
+        if( GetNetCode() >= 0 )
         {
-            NETINFO_ITEM* equipot = board->FindNet( GetNet() );
+            NETINFO_ITEM* equipot = GetNet();
 
             if( equipot )
                 msg = equipot->GetNetname();
@@ -658,7 +628,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         else // a netcode < 0 is an error
         {
             msg = wxT( " [" );
-            msg << m_Netname + wxT( "]" );
+            msg << GetNetname() + wxT( "]" );
             msg << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
 
@@ -666,7 +636,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
 #if 1
         // Display net code : (useful in test or debug)
-        msg.Printf( wxT( "%d" ), GetNet() );
+        msg.Printf( wxT( "%d" ), GetNetCode() );
         aList.push_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
 #endif
 
@@ -827,7 +797,7 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
 {
     m_Parent = src->m_Parent;
     m_Layer  = src->m_Layer;
-    SetNet( src->GetNet() );
+    SetNetCode( src->GetNetCode() );
     SetTimeStamp( src->m_TimeStamp );
     m_Poly->RemoveAllContours();
     m_Poly->Copy( src->m_Poly );                // copy outlines
@@ -846,20 +816,6 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_FilledPolysList.Append( src->m_FilledPolysList );
     m_FillSegmList.clear();
     m_FillSegmList = src->m_FillSegmList;
-}
-
-
-bool ZONE_CONTAINER::SetNetNameFromNetCode( void )
-{
-    NETINFO_ITEM* net;
-
-    if( m_Parent && ( net = ( (BOARD*) m_Parent )->FindNet( GetNet() ) ) )
-    {
-        m_Netname = net->GetNetname();
-        return true;
-    }
-
-    return false;
 }
 
 
@@ -909,11 +865,11 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     // Display net name for copper zones
     if( !GetIsKeepout() )
     {
-        if( GetNet() >= 0 )
+        if( GetNetCode() >= 0 )
         {
             if( board )
             {
-                net = board->FindNet( GetNet() );
+                net = GetNet();
 
                 if( net )
                 {
@@ -928,7 +884,7 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
         else
         {   // A netcode < 0 is an error:
             // Netname not found or area not initialised
-            text << wxT( " [" ) << m_Netname << wxT( "]" );
+            text << wxT( " [" ) << GetNetname() << wxT( "]" );
             text << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
     }

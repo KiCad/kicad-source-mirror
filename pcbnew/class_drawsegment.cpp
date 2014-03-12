@@ -134,7 +134,7 @@ const wxPoint DRAWSEGMENT::GetArcEnd() const
     return endPoint;   // after rotation, the end of the arc.
 }
 
-const double DRAWSEGMENT::GetArcAngleStart() const
+double DRAWSEGMENT::GetArcAngleStart() const
 {
     // due to the Y axis orient atan2 needs - y value
     double angleStart = ArcTangente( GetArcStart().y - GetCenter().y,
@@ -147,6 +147,7 @@ const double DRAWSEGMENT::GetArcAngleStart() const
 
     return angleStart;
 }
+
 
 void DRAWSEGMENT::SetAngle( double aAngle )
 {
@@ -379,6 +380,59 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
             wxPoint end = m_End;
             RotatePoint( &end, m_Start, -m_Angle );
             bbox.Merge( end );
+
+            // Determine the starting quarter
+            // 0 right-bottom
+            // 1 left-bottom
+            // 2 left-top
+            // 3 right-top
+            unsigned int quarter = 0;       // assume right-bottom
+
+            if( m_End.y < m_Start.y )       // change to left-top
+                quarter |= 3;
+
+            if( m_End.x < m_Start.x )       // for left side, the LSB is 2nd bit negated
+                quarter ^= 1;
+
+            int radius = GetRadius();
+            int angle = (int) GetArcAngleStart() % 900 + m_Angle;
+            bool directionCW = ( m_Angle > 0 );      // Is the direction of arc clockwise?
+
+            if( !directionCW )
+            {
+                angle = 900 - angle;
+                quarter = ( quarter + 3 ) % 4;       // -1 modulo arithmetic
+            }
+
+            while( angle > 900 )
+            {
+                switch( quarter )
+                {
+                case 0:
+                    bbox.Merge( wxPoint( m_Start.x, m_Start.y + radius ) );     // down
+                    break;
+
+                case 1:
+                    bbox.Merge( wxPoint( m_Start.x - radius, m_Start.y ) );     // left
+                    break;
+
+                case 2:
+                    bbox.Merge( wxPoint( m_Start.x, m_Start.y - radius ) );     // up
+                    break;
+
+                case 3:
+                    bbox.Merge( wxPoint( m_Start.x + radius, m_Start.y ) );     // right
+                    break;
+                }
+
+                if( directionCW )
+                    ++quarter;
+                else
+                    quarter += 3;       // -1 modulo arithmetic
+
+                quarter %= 4;
+                angle -= 900;
+            }
         }
         break;
 

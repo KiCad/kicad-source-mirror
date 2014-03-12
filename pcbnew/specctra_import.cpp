@@ -207,7 +207,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
     track->SetEnd( mapPt( aPath->points[aPointIndex+1], routeResolution ) );
     track->SetLayer( pcbLayer2kicad[layerNdx] );
     track->SetWidth( scale( aPath->aperture_width, routeResolution ) );
-    track->SetNet( aNetcode );
+    track->SetNetCode( aNetcode );
 
     return track;
 }
@@ -339,7 +339,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
     }
 
     if( via )
-        via->SetNet( aNetCode );
+        via->SetNetCode( aNetCode );
 
     return via;
 }

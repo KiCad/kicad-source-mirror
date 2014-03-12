@@ -76,7 +76,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_FillMode           = aSource.GetFillMode();
     m_ZoneClearance      = aSource.GetClearance();
     m_ZoneMinThickness   = aSource.GetMinThickness();
-    m_NetcodeSelection   = aSource.GetNet();
+    m_NetcodeSelection   = aSource.GetNetCode();
     m_CurrentZone_Layer  = aSource.GetLayer();
     m_Zone_HatchingStyle = aSource.GetHatchStyle();
     m_ArcToSegmentsCount = aSource.GetArcSegmentCount();
@@ -113,7 +113,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     if( aFullExport )
     {
         aTarget.SetPriority( m_ZonePriority );
-        aTarget.SetNet( m_NetcodeSelection );
+        aTarget.SetNetCode( m_NetcodeSelection );
         aTarget.SetLayer( m_CurrentZone_Layer );
         aTarget.Outline()->SetLayer( m_CurrentZone_Layer );
     }

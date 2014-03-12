@@ -78,7 +78,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
             {
             case PCB_PAD_T:
                 Pad = (D_PAD*) GetScreen()->GetCurItem();
-                autoroute_net_code = Pad->GetNet();
+                autoroute_net_code = Pad->GetNetCode();
                 break;
 
             default:

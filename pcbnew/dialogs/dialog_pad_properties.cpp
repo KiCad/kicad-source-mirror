@@ -151,7 +151,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_parent     = aParent;
     m_currentPad = aPad;
     m_board      = m_parent->GetBoard();
-    m_dummyPad   = new D_PAD( (MODULE*) NULL );
+    m_dummyPad   = new D_PAD( aPad->GetParent() );
+    m_padMaster.SetParent( aPad->GetParent() );
 
     if( aPad )
         m_dummyPad->Copy( aPad );
@@ -810,25 +811,16 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
         m_currentPad->SetPadName( m_padMaster.GetPadName() );
 
-        if( m_currentPad->GetNetname() != m_padMaster.GetNetname() )
+        if( m_currentPad->GetNetname() != m_PadNetNameCtrl->GetValue() )
         {
-            if( m_padMaster.GetNetname().IsEmpty() )
+            if( !m_PadNetNameCtrl->GetValue().IsEmpty() && m_padMaster.GetNetCode() == 0 )
             {
-                rastnestIsChanged = true;
-                m_currentPad->SetNet( 0 );
-                m_currentPad->SetNetname( wxEmptyString );
+                DisplayError( NULL, _( "Unknown netname, netname not changed" ) );
             }
             else
             {
-                const NETINFO_ITEM* net = m_board->FindNet( m_padMaster.GetNetname() );
-                if( net )
-                {
-                    rastnestIsChanged = true;
-                    m_currentPad->SetNetname( m_padMaster.GetNetname() );
-                    m_currentPad->SetNet( net->GetNet() );
-                }
-                else
-                    DisplayError( NULL, _( "Unknown netname, netname not changed" ) );
+                rastnestIsChanged = true;
+                m_currentPad->SetNetCode( m_padMaster.GetNetCode() );
             }
         }
 
@@ -987,7 +979,13 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
     msg = m_PadNumCtrl->GetValue().Left( 4 );
     aPad->SetPadName( msg );
-    aPad->SetNetname( m_PadNetNameCtrl->GetValue() );
+
+    // Check if user has set an existing net name
+    const NETINFO_ITEM* netinfo = m_board->FindNet( m_PadNetNameCtrl->GetValue() );
+    if( netinfo != NULL )
+        aPad->SetNetCode( netinfo->GetNet() );
+    else
+        aPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     // Clear some values, according to the pad type and shape
     switch( aPad->GetShape() )
@@ -1035,7 +1033,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         // no offset, no net name, no pad name allowed
         aPad->SetOffset( wxPoint( 0, 0 ) );
         aPad->SetPadName( wxEmptyString );
-        aPad->SetNetname( wxEmptyString );
+        aPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
         break;
 
     default:

@@ -99,7 +99,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     via->SetFlags( IS_NEW );
     via->SetShape( GetDesignSettings().m_CurrentViaType );
     via->SetWidth( GetBoard()->GetCurrentViaSize());
-    via->SetNet( GetBoard()->GetHighLightNetCode() );
+    via->SetNetCode( GetBoard()->GetHighLightNetCode() );
     via->SetEnd( g_CurrentTrackSegment->GetEnd() );
     via->SetStart( g_CurrentTrackSegment->GetEnd() );
 
@@ -139,7 +139,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             // else error: will be removed later
             via->SetLayerPair( first_layer, last_layer );
             {
-                NETINFO_ITEM* net = GetBoard()->FindNet( via->GetNet() );
+                NETINFO_ITEM* net = via->GetNet();
                 via->SetWidth( net->GetMicroViaSize() );
             }
         }
@@ -244,7 +244,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
             {
                 RATSNEST_ITEM* net = &GetBoard()->m_FullRatsnest[ii];
 
-                if( net->GetNet() == pt_pad->GetNet() )
+                if( net->GetNet() == pt_pad->GetNetCode() )
                 {
                     if( ( net->m_Status & CH_VISIBLE ) != 0 )
                         continue;

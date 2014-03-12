@@ -49,24 +49,6 @@ public:
     virtual ~TOOL_INTERACTIVE();
 
     /**
-     * Function Reset()
-     * Brings the tool to a known, initial state. If the tool claimed anything from
-     * the model or the view, it must release it when its reset.
-     */
-    virtual void Reset() = 0;
-
-    /**
-     * Function Init()
-     * Init() is called once upon a registration of the tool.
-     *
-     * @return True if the initialization went fine, false - otherwise.
-     */
-    virtual bool Init()
-    {
-        return true;
-    }
-
-    /**
      * Function SetContextMenu()
      *
      * Assigns a context menu and tells when it should be activated.

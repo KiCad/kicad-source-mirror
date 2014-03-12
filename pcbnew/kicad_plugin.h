@@ -32,6 +32,7 @@ class BOARD;
 class BOARD_ITEM;
 class FP_CACHE;
 class PCB_PARSER;
+class NETINFO_MAPPING;
 
 
 /// Current s-expression file format version.  2 was the last legacy format version.
@@ -122,9 +123,7 @@ public:
 
     //-----</PLUGIN API>--------------------------------------------------------
 
-    PCB_IO();
-
-    PCB_IO( int aControlFlags );
+    PCB_IO( int aControlFlags = CTL_FOR_BOARD );
 
     ~PCB_IO();
 
@@ -171,6 +170,8 @@ protected:
     OUTPUTFORMATTER*    m_out;      ///< output any Format()s to this, no ownership
     int                 m_ctl;
     PCB_PARSER*         m_parser;
+    NETINFO_MAPPING*    m_mapping;  ///< mapping for net codes, so only not empty net codes
+                                    ///< are stored with consecutive integers as net codes
 
     /// we only cache one footprint library, this determines which one.
     void cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName = wxEmptyString );
