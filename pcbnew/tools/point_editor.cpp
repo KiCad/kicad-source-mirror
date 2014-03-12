@@ -108,14 +108,14 @@ public:
             {
                 const DIMENSION* dimension = static_cast<const DIMENSION*>( aItem );
 
-                points->AddPoint( dimension->m_featureLineGO );
-                points->AddPoint( dimension->m_featureLineDO );
                 points->AddPoint( dimension->m_crossBarO );
                 points->AddPoint( dimension->m_crossBarF );
+                points->AddPoint( dimension->m_featureLineGO );
+                points->AddPoint( dimension->m_featureLineDO );
 
                 // Dimension height setting - edit points should move only along the feature lines
-                (*points)[2].SetConstraint( new EPC_LINE( (*points)[2], (*points)[0] ) );
-                (*points)[3].SetConstraint( new EPC_LINE( (*points)[3], (*points)[1] ) );
+                (*points)[0].SetConstraint( new EPC_LINE( (*points)[0], (*points)[2] ) );
+                (*points)[1].SetConstraint( new EPC_LINE( (*points)[1], (*points)[3] ) );
 
                 break;
             }
@@ -413,18 +413,6 @@ void POINT_EDITOR::updateItem() const
         // Check which point is currently modified and updated dimension's points respectively
         if( isModified( (*m_editPoints)[0] ) )
         {
-            dimension->SetOrigin( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
-            static_cast<EPC_LINE*>( (*m_editPoints)[2].GetConstraint() )->Update();
-            static_cast<EPC_LINE*>( (*m_editPoints)[3].GetConstraint() )->Update();
-        }
-        else if( isModified( (*m_editPoints)[1] ) )
-        {
-            dimension->SetEnd( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
-            static_cast<EPC_LINE*>( (*m_editPoints)[2].GetConstraint() )->Update();
-            static_cast<EPC_LINE*>( (*m_editPoints)[3].GetConstraint() )->Update();
-        }
-        else if( isModified( (*m_editPoints)[2] ) )
-        {
             VECTOR2D featureLine( m_dragPoint->GetPosition() - dimension->GetOrigin() );
             VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
 
@@ -433,7 +421,8 @@ void POINT_EDITOR::updateItem() const
             else
                 dimension->SetHeight( featureLine.EuclideanNorm() );
         }
-        else if( isModified( (*m_editPoints)[3] ) )
+
+        else if( isModified( (*m_editPoints)[1] ) )
         {
             VECTOR2D featureLine( m_dragPoint->GetPosition() - dimension->GetEnd() );
             VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
@@ -442,6 +431,20 @@ void POINT_EDITOR::updateItem() const
                 dimension->SetHeight( -featureLine.EuclideanNorm() );
             else
                 dimension->SetHeight( featureLine.EuclideanNorm() );
+        }
+
+        else if( isModified( (*m_editPoints)[2] ) )
+        {
+            dimension->SetOrigin( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
+            static_cast<EPC_LINE*>( (*m_editPoints)[0].GetConstraint() )->Update();
+            static_cast<EPC_LINE*>( (*m_editPoints)[1].GetConstraint() )->Update();
+        }
+
+        else if( isModified( (*m_editPoints)[3] ) )
+        {
+            dimension->SetEnd( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
+            static_cast<EPC_LINE*>( (*m_editPoints)[0].GetConstraint() )->Update();
+            static_cast<EPC_LINE*>( (*m_editPoints)[1].GetConstraint() )->Update();
         }
 
         break;
@@ -518,10 +521,10 @@ void POINT_EDITOR::updatePoints() const
     {
         const DIMENSION* dimension = static_cast<const DIMENSION*>( item );
 
-        (*m_editPoints)[0].SetPosition( dimension->m_featureLineGO );
-        (*m_editPoints)[1].SetPosition( dimension->m_featureLineDO );
-        (*m_editPoints)[2].SetPosition( dimension->m_crossBarO );
-        (*m_editPoints)[3].SetPosition( dimension->m_crossBarF );
+        (*m_editPoints)[0].SetPosition( dimension->m_crossBarO );
+        (*m_editPoints)[1].SetPosition( dimension->m_crossBarF );
+        (*m_editPoints)[2].SetPosition( dimension->m_featureLineGO );
+        (*m_editPoints)[3].SetPosition( dimension->m_featureLineDO );
         break;
     }
 
@@ -556,10 +559,11 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
     else if( item->Type() == PCB_DIMENSION_T )
     {
         // Constraint for crossbar
-        if( isModified( (*m_editPoints)[0] ) )
-            return (*m_editPoints)[1];
-        else if( isModified( (*m_editPoints)[1] ) )
-            return (*m_editPoints)[0];
+        if( isModified( (*m_editPoints)[2] ) )
+            return (*m_editPoints)[3];
+
+        else if( isModified( (*m_editPoints)[3] ) )
+            return (*m_editPoints)[2];
     }
 
     // In any other case we may align item to the current cursor position.
