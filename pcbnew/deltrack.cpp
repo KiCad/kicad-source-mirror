@@ -120,7 +120,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
         return NULL;
     }
 
-    current_net_code = aTrack->GetNet();
+    current_net_code = aTrack->GetNetCode();
 
     DLIST<TRACK>* container = (DLIST<TRACK>*)aTrack->GetList();
     wxASSERT( container );
@@ -142,7 +142,7 @@ void PCB_EDIT_FRAME::Delete_Track( wxDC* DC, TRACK* aTrack )
 {
     if( aTrack != NULL )
     {
-        int current_net_code = aTrack->GetNet();
+        int current_net_code = aTrack->GetNetCode();
         Remove_One_Track( DC, aTrack );
         OnModify();
         TestNetConnection( DC, current_net_code );
@@ -160,7 +160,7 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
 
     PICKED_ITEMS_LIST itemsList;
     ITEM_PICKER       picker( NULL, UR_DELETED );
-    int    net_code_delete = aTrack->GetNet();
+    int    net_code_delete = aTrack->GetNetCode();
 
     /* Search the first item for the given net code */
     TRACK* trackList = GetBoard()->m_Track->GetStartNetCode( net_code_delete );
@@ -171,7 +171,7 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
     for( TRACK* segm = trackList;  segm; segm = next_track, ++ii )
     {
         next_track = segm->Next();
-        if( segm->GetNet() != net_code_delete )
+        if( segm->GetNetCode() != net_code_delete )
             break;
 
         GetBoard()->m_Track.Remove( segm );
@@ -202,7 +202,7 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     if( segments_to_delete_count == 0 )
         return;
 
-    int net_code = pt_segm->GetNet();
+    int net_code = pt_segm->GetNetCode();
     PICKED_ITEMS_LIST itemsList;
     ITEM_PICKER       picker( NULL, UR_DELETED );
 

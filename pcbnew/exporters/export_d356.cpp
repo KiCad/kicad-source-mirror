@@ -199,7 +199,7 @@ static void build_via_testpoints( BOARD *aPcb,
         if( track->Type() == PCB_VIA_T )
         {
             SEGVIA *via = (SEGVIA*) track;
-                NETINFO_ITEM *net = aPcb->FindNet( track->GetNet() );
+                NETINFO_ITEM *net = track->GetNet();
 
             D356_RECORD rk;
                 rk.smd = false;

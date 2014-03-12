@@ -147,7 +147,7 @@ void PCB_LINE::AddToBoard()
         track->SetWidth( m_width );
 
         track->SetLayer( m_KiCadLayer );
-        track->SetNet( m_netCode );
+        track->SetNetCode( m_netCode );
     }
     else
     {

@@ -60,7 +60,7 @@ public:
      *
      * @param aEnabled says whether the opion should be enabled or disabled.
      */
-    void SetSnapping( bool aEnabled )
+    virtual void SetSnapping( bool aEnabled )
     {
         m_snappingEnabled = aEnabled;
     }

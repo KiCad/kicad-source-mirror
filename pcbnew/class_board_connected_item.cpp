@@ -1,8 +1,3 @@
-/**
- * @file class_board_connected_item.cpp
- * @brief BOARD_CONNECTED_ITEM class functions.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -28,76 +23,67 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file class_board_connected_item.cpp
+ * @brief BOARD_CONNECTED_ITEM class functions.
+ */
+
 #include <fctsys.h>
 #include <pcbnew.h>
 
 #include <class_board.h>
 #include <class_board_item.h>
 
-
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
-    BOARD_ITEM( aParent, idtype )
+    BOARD_ITEM( aParent, idtype ), m_netinfo( &NETINFO_LIST::ORPHANED ),
+    m_Subnet( 0 ), m_ZoneSubnet( 0 )
 {
-    m_NetCode    = 0;
-    m_Subnet     = 0;
-    m_ZoneSubnet = 0;
+    // The unconnected net is set only in case the item belongs to a BOARD
+    SetNetCode( NETINFO_LIST::UNCONNECTED );
 }
 
 
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem ) :
-    BOARD_ITEM( aItem )
+    BOARD_ITEM( aItem ), m_netinfo( aItem.m_netinfo ), m_Subnet( aItem.m_Subnet ),
+    m_ZoneSubnet( aItem.m_ZoneSubnet )
 {
-    m_NetCode = aItem.m_NetCode;
-    m_Subnet = aItem.m_Subnet;
-    m_ZoneSubnet = aItem.m_ZoneSubnet;
 }
 
 
-/**
- * Function GetNet
- * @return int - the net code.
- */
-int BOARD_CONNECTED_ITEM::GetNet() const
+int BOARD_CONNECTED_ITEM::GetNetCode() const
 {
-    return m_NetCode;
+    return m_netinfo->GetNet();
 }
 
 
-void BOARD_CONNECTED_ITEM::SetNet( int aNetCode )
+void BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode )
 {
-    m_NetCode = aNetCode;
+    BOARD* board = GetBoard();
+    if( board )
+    {
+        m_netinfo = board->FindNet( aNetCode );
+
+        // The requested net does not exist, mark it as unconnected
+        if( m_netinfo == NULL )
+            m_netinfo = board->FindNet( NETINFO_LIST::UNCONNECTED );
+    }
+    else
+    {
+        // There is no board that contains list of nets, the item is orphaned
+        m_netinfo = &NETINFO_LIST::ORPHANED;
+    }
 }
 
 
-/**
- * Function GetSubNet
- * @return int - the sub net code.
- */
-int BOARD_CONNECTED_ITEM::GetSubNet() const
+const wxString& BOARD_CONNECTED_ITEM::GetNetname() const
 {
-    return m_Subnet;
+    return m_netinfo->GetNetname();
 }
 
 
-void BOARD_CONNECTED_ITEM::SetSubNet( int aSubNetCode )
+const wxString& BOARD_CONNECTED_ITEM::GetShortNetname() const
 {
-    m_Subnet = aSubNetCode;
-}
-
-
-/**
- * Function GetZoneSubNet
- * @return int - the sub net code in zone connections.
- */
-int BOARD_CONNECTED_ITEM::GetZoneSubNet() const
-{
-    return m_ZoneSubnet;
-}
-
-
-void BOARD_CONNECTED_ITEM::SetZoneSubNet( int aSubNetCode )
-{
-    m_ZoneSubnet = aSubNetCode;
+    return m_netinfo->GetShortNetname();
 }
 
 
@@ -132,11 +118,6 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 }
 
 
-/** return a pointer to the netclass of the zone
- * if the net is not found (can happen when a netlist is reread,
- * and the net name is not existant, return the default net class
- * So should not return a null pointer
- */
 NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 {
     // It is important that this be implemented without any sequential searching.
@@ -155,8 +136,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
     }
 
     NETCLASS*       netclass = NULL;
-    int             netcode  = GetNet();
-    NETINFO_ITEM*   net = board->FindNet( netcode );
+    NETINFO_ITEM*   net = board->FindNet( GetNetCode() );
 
     if( net )
     {
@@ -176,10 +156,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
         return board->m_NetClasses.GetDefault();
 }
 
-/**
- * Function GetNetClassName
- * @return the Net Class name of this item
- */
+
 wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
 {
     wxString    name;

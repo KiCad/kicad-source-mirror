@@ -364,13 +364,6 @@ void D_PAD::SetPadName( const wxString& name )
 }
 
 
-void D_PAD::SetNetname( const wxString& aNetname )
-{
-    m_Netname = aNetname;
-    m_ShortNetname = m_Netname.AfterLast( '/' );
-}
-
-
 void D_PAD::Copy( D_PAD* source )
 {
     if( source == NULL )
@@ -380,7 +373,7 @@ void D_PAD::Copy( D_PAD* source )
     m_layerMask = source->m_layerMask;
 
     m_NumPadName = source->m_NumPadName;
-    SetNet( source->GetNet() );
+    m_netinfo = source->m_netinfo;
     m_Drill = source->m_Drill;
     m_drillShape = source->m_drillShape;
     m_Offset     = source->m_Offset;
@@ -402,8 +395,6 @@ void D_PAD::Copy( D_PAD* source )
 
     SetSubRatsnest( 0 );
     SetSubNet( 0 );
-    m_Netname = source->m_Netname;
-    m_ShortNetname = source->m_ShortNetname;
 }
 
 
@@ -412,7 +403,7 @@ void D_PAD::CopyNetlistSettings( D_PAD* aPad )
     // Don't do anything foolish like trying to copy to yourself.
     wxCHECK_RET( aPad != NULL && aPad != this, wxT( "Cannot copy to NULL or yourself." ) );
 
-    aPad->SetNetname( GetNetname() );
+    aPad->SetNetCode( GetNetCode() );
 
     aPad->SetLocalClearance( m_LocalClearance );
     aPad->SetLocalSolderMaskMargin( m_LocalSolderMaskMargin );
@@ -577,7 +568,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), Line, BROWN ) );
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Net" ), m_Netname, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Net" ), GetNetname(), DARKCYAN ) );
 
     /* For test and debug only: display m_physical_connexion and
      * m_logical_connexion */

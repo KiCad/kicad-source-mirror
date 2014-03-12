@@ -493,6 +493,14 @@ public:
         m_scaleLimits = VECTOR2D( aMaximum, aMinimum );
     }
 
+    /**
+     * Function InvalidateItem()
+     * Manages dirty flags & redraw queueing when updating an item.
+     * @param aItem is the item to be updated.
+     * @param aUpdateFlags determines the way an item is refreshed.
+     */
+    void InvalidateItem( VIEW_ITEM* aItem, int aUpdateFlags );
+
     static const int VIEW_MAX_LAYERS = 128;      ///* maximum number of layers that may be shown
 
 private:
@@ -562,11 +570,6 @@ private:
      * for cached items.
      */
     void draw( VIEW_GROUP* aGroup, bool aImmediate = false ) const;
-
-
-    ///* Manages dirty flags & redraw queueing when updating an item. Called internally
-    ///  via VIEW_ITEM::ViewUpdate()
-    void invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags );
 
     ///* Sorts m_orderedLayers when layer rendering order has changed
     void sortLayers();

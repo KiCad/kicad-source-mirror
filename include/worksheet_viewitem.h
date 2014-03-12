@@ -47,8 +47,7 @@ class GAL;
 class WORKSHEET_VIEWITEM : public EDA_ITEM
 {
 public:
-    WORKSHEET_VIEWITEM( const std::string& aFileName, const std::string& aSheetName,
-                    const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock );
+    WORKSHEET_VIEWITEM( const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock );
 
     /**
      * Function SetFileName()

@@ -328,7 +328,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( type == PCB_TRACE_T || type == PCB_VIA_T )
         {
             BOARD_CONNECTED_ITEM*item = (BOARD_CONNECTED_ITEM*) GetCurItem();
-            DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( this, item->GetNet() );
+            DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( this, item->GetNetCode() );
             dlg.ShowModal();
         }
 
@@ -468,11 +468,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_LOCK_ON_NET:
-        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->GetNet(), true );
+        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->GetNetCode(), true );
         break;
 
     case ID_POPUP_PCB_LOCK_OFF_NET:
-        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->GetNet(), false );
+        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->GetNetCode(), false );
         break;
 
     case ID_POPUP_PCB_SETFLAGS_TRACK_MNU:
@@ -486,7 +486,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         {
             SEGZONE* zsegm   = (SEGZONE*) GetCurItem();
-            int      netcode = zsegm->GetNet();
+            int      netcode = zsegm->GetNetCode();
             Delete_OldZone_Fill( zsegm );
             SetCurItem( NULL );
             TestNetConnection( NULL, netcode );
@@ -523,7 +523,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_DELETE_ZONE_CUTOUT:
         m_canvas->MoveCursorToCrossHair();
         {
-            int netcode = ( (ZONE_CONTAINER*) GetCurItem() )->GetNet();
+            int netcode = ( (ZONE_CONTAINER*) GetCurItem() )->GetNetCode();
             Delete_Zone_Contour( &dc, (ZONE_CONTAINER*) GetCurItem() );
             SetCurItem( NULL );
             TestNetConnection( NULL, netcode );
@@ -604,7 +604,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             ZONE_CONTAINER* zone_container = (ZONE_CONTAINER*) GetCurItem();
             zone_container->UnFill();
-            TestNetConnection( NULL, zone_container->GetNet() );
+            TestNetConnection( NULL, zone_container->GetNetCode() );
             OnModify();
             SetMsgPanel( GetBoard() );
             m_canvas->Refresh();
@@ -633,7 +633,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_FILL_ZONE:
         m_canvas->MoveCursorToCrossHair();
         Fill_Zone( (ZONE_CONTAINER*) GetCurItem() );
-        TestNetConnection( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNet() );
+        TestNetConnection( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNetCode() );
         SetMsgPanel( GetBoard() );
         m_canvas->Refresh();
         break;
@@ -1156,7 +1156,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             newtrack->Draw( m_canvas, &dc, GR_XOR );
 
             // compute the new ratsnest, because connectivity could change
-            TestNetConnection( &dc, track->GetNet() );
+            TestNetConnection( &dc, track->GetNetCode() );
         }
         break;
 
@@ -1248,7 +1248,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
     case PCB_ZONE_AREA_T:
         {
             SetCurItem( NULL );
-            int netcode = ( (ZONE_CONTAINER*) Item )->GetNet();
+            int netcode = ( (ZONE_CONTAINER*) Item )->GetNetCode();
             Delete_Zone_Contour( DC, (ZONE_CONTAINER*) Item );
             TestNetConnection( NULL, netcode );
             SetMsgPanel( GetBoard() );

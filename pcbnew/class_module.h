@@ -41,6 +41,7 @@
 #include <PolyLine.h>
 #include "zones.h"
 
+#include <boost/function.hpp>
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -452,6 +453,17 @@ public:
     BITMAP_DEF GetMenuImage() const { return  module_xpm; }
 
     EDA_ITEM* Clone() const;
+
+    /**
+     * Function RunOnChildren
+     *
+     * Invokes a function on all BOARD_ITEMs that belong to the module (pads, drawings, texts).
+     * @param aFunction is the function to be invoked.
+     */
+    void RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction );
+
+    /// @copydoc VIEW_ITEM::ViewUpdate()
+    void ViewUpdate( int aUpdateFlags );
 
     /**
      * Function CopyNetlistSettings

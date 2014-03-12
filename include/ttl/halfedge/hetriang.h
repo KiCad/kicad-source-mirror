@@ -51,9 +51,13 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include <ttl/ttl.h>
 #include <ttl/ttl_util.h>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+
+namespace ttl {
+  class TriangulationHelper;
+};
 
 //--------------------------------------------------------------------------------------------------
 // The half-edge data structure
@@ -65,6 +69,7 @@ namespace hed {
   class Edge;
   typedef boost::shared_ptr<Node> NodePtr;
   typedef boost::shared_ptr<Edge> EdgePtr;
+  typedef boost::weak_ptr<Edge> EdgeWeakPtr;
   typedef std::vector<NodePtr> NodesContainer;
 
   //------------------------------------------------------------------------------------------------
@@ -151,8 +156,7 @@ public:
   class Edge {
   public:
     /// Constructor
-    Edge() : weight_(0)
-        { flags_.isLeadingEdge_ = false; flags_.isConstrained_ = false; }
+    Edge() : weight_(0), isLeadingEdge_(false) {}
 
     /// Destructor
     virtual ~Edge() {}
@@ -167,49 +171,52 @@ public:
     void setTwinEdge(const EdgePtr& edge) { twinEdge_ = edge; }
 
     /// Sets the edge as a leading edge
-    void setAsLeadingEdge(bool val=true) { flags_.isLeadingEdge_ = val; }
+    void setAsLeadingEdge(bool val=true) { isLeadingEdge_ = val; }
 
     /// Checks if an edge is a leading edge
-    bool isLeadingEdge() const { return flags_.isLeadingEdge_; }
-
-    /// Sets the edge as a constrained edge
-    void setConstrained(bool val=true) { flags_.isConstrained_ = val;
-      if (twinEdge_) twinEdge_->flags_.isConstrained_ = val; }
-
-    /// Checks if an edge is constrained
-    bool isConstrained() const { return flags_.isConstrained_; }
+    bool isLeadingEdge() const { return isLeadingEdge_; }
 
     /// Returns the twin edge
-    const EdgePtr& getTwinEdge() const { return twinEdge_; };
+    EdgePtr getTwinEdge() const { return twinEdge_.lock(); };
+
+    void clearTwinEdge() { twinEdge_.reset(); }
 
     /// Returns the next edge in face
     const EdgePtr& getNextEdgeInFace() const { return nextEdgeInFace_; }
 
     /// Retuns the source node
-    virtual const NodePtr& getSourceNode() const { return sourceNode_; }
+    const NodePtr& getSourceNode() const { return sourceNode_; }
 
     /// Returns the target node
-    virtual const NodePtr& getTargetNode() const { return getNextEdgeInFace()->getSourceNode(); }
+    virtual const NodePtr& getTargetNode() const { return nextEdgeInFace_->getSourceNode(); }
 
     void setWeight( unsigned int weight ) { weight_ = weight; }
 
     unsigned int getWeight() const { return weight_; }
 
+    void clear()
+    {
+        sourceNode_.reset();
+        nextEdgeInFace_.reset();
+
+        if( !twinEdge_.expired() )
+        {
+            twinEdge_.lock()->clearTwinEdge();
+            twinEdge_.reset();
+        }
+    }
+
   protected:
     NodePtr sourceNode_;
-    EdgePtr twinEdge_;
+    EdgeWeakPtr twinEdge_;
     EdgePtr nextEdgeInFace_;
     unsigned int weight_;
-
-    struct {
-      bool isLeadingEdge_;
-      bool isConstrained_;
-    } flags_;
+    bool isLeadingEdge_;
   }; // End of class Edge
 
 
   /** \class EdgeMST
-  *   \brief \b %Specialization of Edge class to be used for Minimum Spanning Tree algorithm.
+  *   \brief \b Specialization of %Edge class to be used for Minimum Spanning Tree algorithm.
   */
   class EdgeMST : public Edge
   {
@@ -221,10 +228,17 @@ public:
         target_(target)
         { sourceNode_ = source; weight_ = weight; }
 
+    EdgeMST( const Edge& edge )
+    {
+        sourceNode_ = edge.getSourceNode();
+        target_ = edge.getTargetNode();
+        weight_ = edge.getWeight();
+    }
+
     ~EdgeMST() {};
 
     /// @copydoc Edge::setSourceNode()
-    const NodePtr& getTargetNode() const { return target_; }
+    virtual const NodePtr& getTargetNode() const { return target_; }
   };
 
 
@@ -242,26 +256,75 @@ public:
   class Triangulation {
 
   protected:
-    list<EdgePtr> leadingEdges_; // one half-edge for each arc
+    std::list<EdgePtr> leadingEdges_; // one half-edge for each arc
+
+    ttl::TriangulationHelper* helper;
+
     void addLeadingEdge(EdgePtr& edge) {
         edge->setAsLeadingEdge();
         leadingEdges_.push_front( edge );
     }
+
     bool removeLeadingEdgeFromList(EdgePtr& leadingEdge);
+
     void cleanAll();
     
+    /** Swaps the edge associated with \e dart in the actual data structure.
+    *
+    *   <center>
+    *   \image html swapEdge.gif
+    *   </center>
+    *
+    *   \param dart
+    *   Some of the functions require a dart as output.
+    *   If this is required by the actual function, the dart should be delivered
+    *   back in a position as seen if it was glued to the edge when swapping (rotating)
+    *   the edge CCW; see the figure.
+    *
+    *   \note
+    *   - If the edge is \e constrained, or if it should not be swapped for
+    *     some other reason, this function need not do the actual swap of the edge.
+    *   - Some functions in TTL require that \c swapEdge is implemented such that
+    *     darts outside the quadrilateral are not affected by the swap.
+    */
+    void swapEdge(Dart& dart);
+
+    /** Splits the triangle associated with \e dart in the actual data structure into
+    *   three new triangles joining at \e point.
+    *
+    *   <center>
+    *   \image html splitTriangle.gif
+    *   </center>
+    *
+    *   \param dart
+    *   Output: A CCW dart incident with the new node; see the figure.
+    */
+    void splitTriangle(Dart& dart, const NodePtr& point);
+
+    /** The reverse operation of TTLtraits::splitTriangle.
+    *   This function is only required for functions that involve
+    *   removal of interior nodes; see for example TrinagulationHelper::removeInteriorNode.
+    *
+    *   <center>
+    *   \image html reverse_splitTriangle.gif
+    *   </center>
+    */
+    void reverse_splitTriangle(Dart& dart);
+
+    /** Removes a triangle with an edge at the boundary of the triangulation
+    *   in the actual data structure
+    */
+    void removeBoundaryTriangle(Dart& d);
+
   public:
     /// Default constructor
-    Triangulation() {}
+    Triangulation();
     
     /// Copy constructor
-    Triangulation(const Triangulation& tr) { 
-	std::cout << "Triangulation: Copy constructor not present - EXIT."; 
-      exit(-1);
-    }
+    Triangulation(const Triangulation& tr);
 
     /// Destructor
-    ~Triangulation() { cleanAll(); }
+    ~Triangulation();
     
     /// Creates a Delaunay triangulation from a set of points
     void createDelaunay(NodesContainer::iterator first,
@@ -280,7 +343,7 @@ public:
     void swapEdge(EdgePtr& diagonal);
 
     /// Splits the triangle associated with edge into three new triangles joining at point 
-    EdgePtr splitTriangle(EdgePtr& edge, NodePtr& point);
+    EdgePtr splitTriangle(EdgePtr& edge, const NodePtr& point);
 
 
     // Functions required by TTL for removing nodes in a Delaunay triangulation
@@ -295,20 +358,20 @@ public:
     Dart createDart();
 
     /// Returns a list of "triangles" (one leading half-edge for each triangle)
-    const list<EdgePtr>& getLeadingEdges() const { return leadingEdges_; }
+    const std::list<EdgePtr>& getLeadingEdges() const { return leadingEdges_; }
 
     /// Returns the number of triangles
-      int noTriangles() const { return (int)leadingEdges_.size(); }
+    int noTriangles() const { return (int)leadingEdges_.size(); }
     
     /// Returns a list of half-edges (one half-edge for each arc)
-    list<EdgePtr>* getEdges(bool skip_boundary_edges = false) const;
+    std::list<EdgePtr>* getEdges(bool skip_boundary_edges = false) const;
 
 #ifdef TTL_USE_NODE_FLAG
     /// Sets flag in all the nodes  
     void flagNodes(bool flag) const;
 
     /// Returns a list of nodes. This function requires TTL_USE_NODE_FLAG to be defined. \see Node.
-    list<NodePtr>* getNodes() const;
+    std::list<NodePtr>* getNodes() const;
 #endif
 
     /// Swaps edges until the triangulation is Delaunay (constrained edges are not swapped)
@@ -320,11 +383,15 @@ public:
     /// Returns an arbitrary interior node (as the source node of the returned edge)
     EdgePtr getInteriorNode() const;
 
+    EdgePtr getBoundaryEdgeInTriangle(const EdgePtr& e) const;
+
     /// Returns an arbitrary boundary edge
     EdgePtr getBoundaryEdge() const;
 
     /// Print edges for plotting with, e.g., gnuplot
     void printEdges(std::ofstream& os) const;
+
+    friend class ttl::TriangulationHelper;
 
   }; // End of class Triangulation
 
