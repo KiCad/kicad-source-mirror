@@ -145,6 +145,7 @@ public:
      */
     int Translate( int aNetCode ) const;
 
+#ifndef SWIG
     ///> Wrapper class, so you can iterate through NETINFO_ITEM*s, not
     ///> std::pair<int/wxString, NETINFO_ITEM*>
     class iterator
@@ -212,6 +213,7 @@ public:
     {
         return iterator( m_netMapping.end(), this );
     }
+#endif
 
     /**
      * Function GetSize
@@ -329,6 +331,7 @@ public:
     typedef boost::unordered_map<const wxString, NETINFO_ITEM*, WXSTRING_HASH> NETNAMES_MAP;
     typedef boost::unordered_map<const int, NETINFO_ITEM*> NETCODES_MAP;
 
+#ifndef SWIG
     ///> Wrapper class, so you can iterate through NETINFO_ITEM*s, not
     ///> std::pair<int/wxString, NETINFO_ITEM*>
     class iterator
@@ -388,6 +391,7 @@ public:
     {
         return iterator( m_netNames.end() );
     }
+#endif
 
 private:
     /**
@@ -438,25 +442,22 @@ class NETINFO_ITEM
     friend class NETINFO_LIST;
 
 private:
-    const int m_NetCode;        ///< A number equivalent to the net name.
+    int m_NetCode;              ///< A number equivalent to the net name.
                                 ///< Used for fast comparisons in ratsnest and DRC computations.
 
-    const wxString m_Netname;   ///< Full net name like /mysheet/mysubsheet/vout
-                                ///< used by Eeschema
+    wxString m_Netname;         ///< Full net name like /mysheet/mysubsheet/vout used by Eeschema
 
-    const wxString m_ShortNetname;  // short net name, like vout from
-                                    // /mysheet/mysubsheet/vout
+    wxString m_ShortNetname;    ///< short net name, like vout from /mysheet/mysubsheet/vout
 
     wxString  m_NetClassName;   // Net Class name. if void this is equivalent
                                 // to "default" (the first
                                 // item of the net classes list
-
     NETCLASS* m_NetClass;
 
     BOARD_ITEM* m_parent;       ///< The parent board item object the net belongs to.
 
 public:
-    std::vector <D_PAD*> m_PadInNetList;    // List of pads connected to this net
+    std::vector<D_PAD*> m_PadInNetList;    ///< List of pads connected to this net
 
     unsigned m_RatsnestStartIdx;       /* Starting point of ratsnests of this
                                         * net (included) in a general buffer of
