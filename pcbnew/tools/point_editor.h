@@ -62,6 +62,9 @@ private:
     ///> Currently edited point, NULL if there is none.
     EDIT_POINT* m_dragPoint;
 
+    ///> Original position for the current drag point.
+    EDIT_POINT m_original;
+
     ///> Currently available edit points.
     boost::shared_ptr<EDIT_POINTS> m_editPoints;
 

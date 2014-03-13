@@ -59,6 +59,15 @@ public:
      */
     virtual void Apply() = 0;
 
+    /**
+     * Function Update()
+     *
+     * Updates contraint's traits.
+     */
+    virtual void Update()
+    {
+    }
+
 protected:
     EDIT_POINT& m_constrained;      ///< Point that is constrained by rules implemented by Apply()
 };

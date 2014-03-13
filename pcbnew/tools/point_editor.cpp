@@ -134,7 +134,8 @@ private:
 
 
 POINT_EDITOR::POINT_EDITOR() :
-    TOOL_INTERACTIVE( "pcbnew.PointEditor" ), m_selectionTool( NULL ), m_dragPoint( NULL )
+    TOOL_INTERACTIVE( "pcbnew.PointEditor" ), m_selectionTool( NULL ), m_dragPoint( NULL ),
+    m_original( VECTOR2I( 0, 0 ) )
 {
 }
 
@@ -175,7 +176,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
         EDIT_POINT constrainer( VECTOR2I( 0, 0 ) );
-        bool degree45 = false;          // 45 degree mode
+        boost::shared_ptr<EDIT_POINT_CONSTRAINT> degree45Constraint;
 
         m_editPoints = EDIT_POINTS_FACTORY::Make( item );
         if( !m_editPoints )
@@ -232,27 +233,31 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                     editFrame->OnModify();
                     editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
                     controls->ForceCursorPosition( false );
+                    m_original = *m_dragPoint;    // Save the original position
                     modified = true;
                 }
 
-                if( !!evt->Modifier( MD_CTRL ) != degree45 )      // 45 degrees mode
+                if( !!evt->Modifier( MD_CTRL ) != (bool) degree45Constraint )      // 45 degrees mode
                 {
-                    degree45 = evt->Modifier( MD_CTRL );
-
-                    if( degree45 )
+                    if( !degree45Constraint )
                     {
                         // Find a proper constraining point for 45 degrees mode
                         constrainer = get45DegConstrainer();
-                        m_dragPoint->SetConstraint( new EPC_45DEGREE( *m_dragPoint, constrainer ) );
+                        degree45Constraint.reset( new EPC_45DEGREE( *m_dragPoint, constrainer ) );
                     }
                     else
                     {
-                        m_dragPoint->ClearConstraint();
+                        degree45Constraint.reset();
                     }
                 }
 
                 m_dragPoint->SetPosition( controls->GetCursorPosition() );
-                m_dragPoint->ApplyConstraint();
+
+                if( degree45Constraint )
+                    degree45Constraint->Apply();
+                else
+                    m_dragPoint->ApplyConstraint();
+
                 updateItem();
                 updatePoints();
 
@@ -436,15 +441,15 @@ void POINT_EDITOR::updateItem() const
         else if( isModified( (*m_editPoints)[2] ) )
         {
             dimension->SetOrigin( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
-            static_cast<EPC_LINE*>( (*m_editPoints)[0].GetConstraint() )->Update();
-            static_cast<EPC_LINE*>( (*m_editPoints)[1].GetConstraint() )->Update();
+            (*m_editPoints)[0].GetConstraint()->Update();
+            (*m_editPoints)[1].GetConstraint()->Update();
         }
 
         else if( isModified( (*m_editPoints)[3] ) )
         {
             dimension->SetEnd( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
-            static_cast<EPC_LINE*>( (*m_editPoints)[0].GetConstraint() )->Update();
-            static_cast<EPC_LINE*>( (*m_editPoints)[1].GetConstraint() )->Update();
+            (*m_editPoints)[0].GetConstraint()->Update();
+            (*m_editPoints)[1].GetConstraint()->Update();
         }
 
         break;
@@ -538,7 +543,9 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
-    if( item->Type() == PCB_LINE_T )
+    switch( item->Type() )
+    {
+    case PCB_LINE_T:
     {
         const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
         {
@@ -555,8 +562,11 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
                 break;
             }
         }
+
+        break;
     }
-    else if( item->Type() == PCB_DIMENSION_T )
+
+    case PCB_DIMENSION_T:
     {
         // Constraint for crossbar
         if( isModified( (*m_editPoints)[2] ) )
@@ -564,8 +574,17 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 
         else if( isModified( (*m_editPoints)[3] ) )
             return (*m_editPoints)[2];
+
+        else
+            return EDIT_POINT( m_dragPoint->GetPosition() );      // no constraint
+
+        break;
     }
 
-    // In any other case we may align item to the current cursor position.
-    return EDIT_POINT( getViewControls()->GetCursorPosition() );
+    default:
+        break;
+    }
+
+    // In any other case we may align item to the current cursor position. TODO wrong desc
+    return m_original;
 }
