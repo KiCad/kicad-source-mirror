@@ -199,9 +199,10 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         if( NOT APPLE )
             set( CMAKE_SHARED_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
             set( CMAKE_MODULE_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
+
+            set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
         endif()
 
-        set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
     endif()
 
     # quiet GCC while in boost
@@ -215,7 +216,7 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
 
-        # Allows .dylib relocation in the future
+        # Allows .dylib relocation in the future - needed by fixbundle
         set( CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS} -headerpad_max_install_names")
 
         if( NOT CMAKE_CXX_COMPILER )
