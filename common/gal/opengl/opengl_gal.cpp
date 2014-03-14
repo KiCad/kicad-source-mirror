@@ -941,11 +941,11 @@ void OPENGL_GAL::initGlew()
     // Check the OpenGL version (minimum 2.1 is required)
     if( GLEW_VERSION_2_1 )
     {
-        wxLogInfo( wxT( "OpenGL Version 2.1 supported." ) );
+        wxLogInfo( wxT( "OpenGL 2.1 supported." ) );
     }
     else
     {
-        DisplayError( parentWindow, wxT( "OpenGL Version 2.1 is not supported!" ) );
+        DisplayError( parentWindow, wxT( "OpenGL 2.1 or higher is required!" ) );
         exit( 1 );
     }
 
