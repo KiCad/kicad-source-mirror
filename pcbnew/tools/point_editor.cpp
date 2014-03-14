@@ -390,6 +390,7 @@ void POINT_EDITOR::updateItem() const
     case PCB_ZONE_AREA_T:
     {
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+        zone->ClearFilledPolysList();
         CPolyLine* outline = zone->Outline();
 
         for( int i = 0; i < outline->GetCornersCount(); ++i )
