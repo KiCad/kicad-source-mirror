@@ -72,7 +72,7 @@ public:
 
                     // Set constraints
                     // Arc end has to stay at the same radius as the start
-                    (*points)[2].SetConstraint( new EPC_CIRCLE( (*points)[2], (*points)[0], (*points)[1] ) );
+                    (*points)[2].SetConstraint( new EC_CIRCLE( (*points)[2], (*points)[0], (*points)[1] ) );
                     break;
 
                 case S_CIRCLE:
@@ -114,8 +114,8 @@ public:
                 points->AddPoint( dimension->m_featureLineDO );
 
                 // Dimension height setting - edit points should move only along the feature lines
-                (*points)[0].SetConstraint( new EPC_LINE( (*points)[0], (*points)[2] ) );
-                (*points)[1].SetConstraint( new EPC_LINE( (*points)[1], (*points)[3] ) );
+                (*points)[0].SetConstraint( new EC_LINE( (*points)[0], (*points)[2] ) );
+                (*points)[1].SetConstraint( new EC_LINE( (*points)[1], (*points)[3] ) );
 
                 break;
             }
@@ -176,7 +176,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
         EDIT_POINT constrainer( VECTOR2I( 0, 0 ) );
-        boost::shared_ptr<EDIT_POINT_CONSTRAINT> degree45Constraint;
+        boost::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > degree45Constraint;
 
         m_editPoints = EDIT_POINTS_FACTORY::Make( item );
         if( !m_editPoints )
@@ -243,7 +243,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                     {
                         // Find a proper constraining point for 45 degrees mode
                         constrainer = get45DegConstrainer();
-                        degree45Constraint.reset( new EPC_45DEGREE( *m_dragPoint, constrainer ) );
+                        degree45Constraint.reset( new EC_45DEGREE( *m_dragPoint, constrainer ) );
                     }
                     else
                     {
@@ -271,6 +271,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 
             else if( evt->IsMouseUp( BUT_LEFT ) )
             {
+                degree45Constraint.reset();
                 modified = false;
             }
 
@@ -441,15 +442,15 @@ void POINT_EDITOR::updateItem() const
         else if( isModified( (*m_editPoints)[2] ) )
         {
             dimension->SetOrigin( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
-            (*m_editPoints)[0].GetConstraint()->Update();
-            (*m_editPoints)[1].GetConstraint()->Update();
+            (*m_editPoints)[0].SetConstraint( new EC_LINE( (*m_editPoints)[0], (*m_editPoints)[2] ) );
+            (*m_editPoints)[1].SetConstraint( new EC_LINE( (*m_editPoints)[1], (*m_editPoints)[3] ) );
         }
 
         else if( isModified( (*m_editPoints)[3] ) )
         {
             dimension->SetEnd( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
-            (*m_editPoints)[0].GetConstraint()->Update();
-            (*m_editPoints)[1].GetConstraint()->Update();
+            (*m_editPoints)[0].SetConstraint( new EC_LINE( (*m_editPoints)[0], (*m_editPoints)[2] ) );
+            (*m_editPoints)[1].SetConstraint( new EC_LINE( (*m_editPoints)[1], (*m_editPoints)[3] ) );
         }
 
         break;
@@ -585,6 +586,6 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
         break;
     }
 
-    // In any other case we may align item to the current cursor position. TODO wrong desc
+    // In any other case we may align item to its original position
     return m_original;
 }
