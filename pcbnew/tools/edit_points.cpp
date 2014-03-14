@@ -142,13 +142,13 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
         aGal->DrawRectangle( point.GetPosition() - size / 2, point.GetPosition() + size / 2 );
 
     BOOST_FOREACH( const EDIT_LINE& line, m_lines )
-        aGal->DrawRectangle( line.GetPosition() - size / 2, line.GetPosition() + size / 2 );
+        aGal->DrawCircle( line.GetPosition(), size / 2 );
 
     aGal->PopDepth();
 }
 
 
-void EPC_45DEGREE::Apply()
+void EC_45DEGREE::Apply()
 {
     // Current line vector
     VECTOR2I lineVector( m_constrained.GetPosition() - m_constrainer.GetPosition() );
@@ -162,14 +162,17 @@ void EPC_45DEGREE::Apply()
 }
 
 
-EPC_LINE::EPC_LINE( EDIT_POINT& aConstrained, EDIT_POINT& aConstrainer ) :
-    EDIT_POINT_CONSTRAINT( aConstrained ), m_constrainer( aConstrainer )
+EC_LINE::EC_LINE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
+    EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_constrainer( aConstrainer )
 {
-    Update();
+    // Compute line coefficients
+    VECTOR2D delta = m_constrainer.GetPosition() - m_constrained.GetPosition();
+    m_coefA = delta.y / delta.x;
+    m_coefB = m_constrainer.GetY() - m_coefA * m_constrainer.GetX();
 }
 
 
-void EPC_LINE::Apply()
+void EC_LINE::Apply()
 {
     VECTOR2I position = m_constrained.GetPosition();
 
@@ -189,16 +192,7 @@ void EPC_LINE::Apply()
 }
 
 
-void EPC_LINE::Update()
-{
-    // Compute line coefficients
-    VECTOR2D delta = m_constrainer.GetPosition() - m_constrained.GetPosition();
-    m_coefA = delta.y / delta.x;
-    m_coefB = m_constrainer.GetY() - m_coefA * m_constrainer.GetX();
-}
-
-
-void EPC_CIRCLE::Apply()
+void EC_CIRCLE::Apply()
 {
     VECTOR2I centerToEnd = m_end.GetPosition() - m_center.GetPosition();
     VECTOR2I centerToPoint = m_constrained.GetPosition() - m_center.GetPosition();

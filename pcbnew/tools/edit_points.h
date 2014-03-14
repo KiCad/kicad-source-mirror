@@ -27,6 +27,8 @@
 
 #include <vector>
 #include <list>
+#include <boost/shared_ptr.hpp>
+
 #include <math/box2.h>
 
 #include <base_struct.h>
@@ -35,12 +37,13 @@
 class EDIT_POINT;
 
 /**
- * Class EDIT_POINT_CONSTRAINT
+ * Class EDIT_CONSTRAINT
  *
- * Allows to describe constraints between two points. After the constrained point is changed,
+ * Allows to describe constraints between two edit handles. After the constrained handle is changed,
  * Apply() has to be called to fix its coordinates according to the implemented constraint.
  */
-class EDIT_POINT_CONSTRAINT
+template<class EDIT_TYPE>
+class EDIT_CONSTRAINT
 {
 public:
     /**
@@ -48,9 +51,9 @@ public:
      *
      * @param aConstrained is EDIT_POINT to which the constraint is applied.
      */
-    EDIT_POINT_CONSTRAINT( EDIT_POINT& aConstrained ) : m_constrained( aConstrained ) {};
+    EDIT_CONSTRAINT( EDIT_TYPE& aConstrained ) : m_constrained( aConstrained ) {};
 
-    virtual ~EDIT_POINT_CONSTRAINT() {};
+    virtual ~EDIT_CONSTRAINT() {};
 
     /**
      * Function Apply()
@@ -59,17 +62,8 @@ public:
      */
     virtual void Apply() = 0;
 
-    /**
-     * Function Update()
-     *
-     * Updates contraint's traits.
-     */
-    virtual void Update()
-    {
-    }
-
 protected:
-    EDIT_POINT& m_constrained;      ///< Point that is constrained by rules implemented by Apply()
+    EDIT_TYPE& m_constrained;      ///< Point that is constrained by rules implemented by Apply()
 };
 
 
@@ -88,12 +82,9 @@ public:
      * @param aPoint stores coordinates for EDIT_POINT.
      */
     EDIT_POINT( const VECTOR2I& aPoint ) :
-        m_position( aPoint ), m_constraint( NULL ) {};
+        m_position( aPoint ) {};
 
-    virtual ~EDIT_POINT()
-    {
-        delete m_constraint;
-    }
+    virtual ~EDIT_POINT() {}
 
     /**
      * Function GetPosition()
@@ -153,12 +144,9 @@ public:
      * Sets a constraint for and EDIT_POINT.
      * @param aConstraint is the constraint to be set.
      */
-    void SetConstraint( EDIT_POINT_CONSTRAINT* aConstraint )
+    void SetConstraint( EDIT_CONSTRAINT<EDIT_POINT>* aConstraint )
     {
-        if( m_constraint )
-            delete m_constraint;
-
-        m_constraint = aConstraint;
+        m_constraint.reset( aConstraint );
     }
 
     /**
@@ -167,9 +155,9 @@ public:
      * Returns the constraint imposed on an EDIT_POINT. If there are no constraints, NULL is
      * returned.
      */
-    EDIT_POINT_CONSTRAINT* GetConstraint() const
+    EDIT_CONSTRAINT<EDIT_POINT>* GetConstraint() const
     {
-        return m_constraint;
+        return m_constraint.get();
     }
 
     /**
@@ -179,8 +167,7 @@ public:
      */
     void ClearConstraint()
     {
-        delete m_constraint;
-        m_constraint = NULL;
+        m_constraint.reset();
     }
 
     /**
@@ -199,7 +186,7 @@ public:
      *
      * Corrects coordinates of an EDIT_POINT by applying previously set constraint.
      */
-    void ApplyConstraint()
+    virtual void ApplyConstraint()
     {
         if( m_constraint )
             m_constraint->Apply();
@@ -214,8 +201,11 @@ public:
     static const int POINT_SIZE = 10;
 
 protected:
-    VECTOR2I m_position;                        ///< Position of EDIT_POINT
-    EDIT_POINT_CONSTRAINT* m_constraint;        ///< Constraint for the point, NULL if none
+    ///> Position of EDIT_POINT
+    VECTOR2I m_position;
+
+    ///> Constraint for the point, NULL if none
+    boost::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > m_constraint;
 };
 
 
@@ -254,6 +244,36 @@ public:
 
         m_origin.SetPosition( m_origin.GetPosition() + difference );
         m_end.SetPosition( m_end.GetPosition() + difference );
+    }
+
+    ///> @copydoc EDIT_POINT::ApplyConstraint()
+    virtual void ApplyConstraint()
+    {
+        m_origin.ApplyConstraint();
+        m_end.ApplyConstraint();
+
+        if( m_constraint )
+            m_constraint->Apply();
+    }
+
+    /**
+     * Function GetOrigin()
+     *
+     * Returns the origin EDIT_POINT.
+     */
+    EDIT_POINT& GetOrigin()
+    {
+        return m_origin;
+    }
+
+    /**
+     * Function GetEnd()
+     *
+     * Returns the end EDIT_POINT.
+     */
+    EDIT_POINT& GetEnd()
+    {
+        return m_end;
     }
 
     bool operator==( const EDIT_POINT& aOther ) const
@@ -420,11 +440,11 @@ private:
 
 
 /**
- * Class EPC_VERTICAL.
+ * Class EC_VERTICAL.
  *
- * EDIT_POINT_CONSTRAINT that imposes a constraint that two points have to have the same X coordinate.
+ * EDIT_CONSTRAINT that imposes a constraint that two points have to have the same X coordinate.
  */
-class EPC_VERTICAL : public EDIT_POINT_CONSTRAINT
+class EC_VERTICAL : public EDIT_CONSTRAINT<EDIT_POINT>
 {
 public:
     /**
@@ -433,11 +453,11 @@ public:
      * @param aConstrained is the point that is put under constrain.
      * @param aConstrainer is the point that is the source of the constrain.
      */
-    EPC_VERTICAL( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
-        EDIT_POINT_CONSTRAINT( aConstrained ), m_constrainer( aConstrainer )
+    EC_VERTICAL( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
+        EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_constrainer( aConstrainer )
     {}
 
-    ///> @copydoc EDIT_POINT_CONSTRAINT::Apply()
+    ///> @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply()
     {
         VECTOR2I point = m_constrained.GetPosition();
@@ -451,11 +471,11 @@ private:
 
 
 /**
- * Class EPC_HORIZONTAL.
+ * Class EC_HORIZONTAL.
  *
- * EDIT_POINT_CONSTRAINT that imposes a constraint that two points have to have the same Y coordinate.
+ * EDIT_CONSTRAINT that imposes a constraint that two points have to have the same Y coordinate.
  */
-class EPC_HORIZONTAL : public EDIT_POINT_CONSTRAINT
+class EC_HORIZONTAL : public EDIT_CONSTRAINT<EDIT_POINT>
 {
 public:
     /**
@@ -464,11 +484,11 @@ public:
      * @param aConstrained is the point that is put under constrain.
      * @param aConstrainer is the point that is the source of the constrain.
      */
-    EPC_HORIZONTAL( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
-        EDIT_POINT_CONSTRAINT( aConstrained ), m_constrainer( aConstrainer )
+    EC_HORIZONTAL( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
+        EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_constrainer( aConstrainer )
     {}
 
-    ///> @copydoc EDIT_POINT_CONSTRAINT::Apply()
+    ///> @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply()
     {
         VECTOR2I point = m_constrained.GetPosition();
@@ -482,12 +502,12 @@ private:
 
 
 /**
- * Class EPC_45DEGREE
+ * Class EC_45DEGREE
  *
- * EDIT_POINT_CONSTRAINT that imposes a constraint that two to be located at angle of 45 degree
+ * EDIT_CONSTRAINT that imposes a constraint that two to be located at angle of 45 degree
  * multiplicity.
  */
-class EPC_45DEGREE : public EDIT_POINT_CONSTRAINT
+class EC_45DEGREE : public EDIT_CONSTRAINT<EDIT_POINT>
 {
 public:
     /**
@@ -496,11 +516,11 @@ public:
      * @param aConstrained is the point that is put under constrain.
      * @param aConstrainer is the point that is the source of the constrain.
      */
-    EPC_45DEGREE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
-        EDIT_POINT_CONSTRAINT( aConstrained ), m_constrainer( aConstrainer )
+    EC_45DEGREE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
+        EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_constrainer( aConstrainer )
     {}
 
-    ///> @copydoc EDIT_POINT_CONSTRAINT::Apply()
+    ///> @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply();
 
 private:
@@ -509,37 +529,32 @@ private:
 
 
 /**
- * Class EPC_LINE
+ * Class EC_LINE
  *
- * EDIT_POINT_CONSTRAINT that imposes a constraint that a point has to lie on a line (determined
+ * EDIT_CONSTRAINT that imposes a constraint that a point has to lie on a line (determined
  * by 2 points).
  */
-class EPC_LINE : public EDIT_POINT_CONSTRAINT
+class EC_LINE : public EDIT_CONSTRAINT<EDIT_POINT>
 {
 public:
-    EPC_LINE( EDIT_POINT& aConstrained, EDIT_POINT& aConstrainer );
+    EC_LINE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer );
 
-    ///> @copydoc EDIT_POINT_CONSTRAINT::Apply()
+    ///> @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply();
 
-    /**
-     * Function Update()
-     * Updates line coefficients that make the constraining line.
-     */
-    void Update();
-
 private:
-    EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
-    double m_coefA, m_coefB;
+    EDIT_POINT m_constrainer;       ///< Point that imposes the constraint.
+    double m_coefA;                 ///< Line A coefficient (y = Ax + B)
+    double m_coefB;                 ///< Line B coefficient (y = Ax + B)
 };
 
 
 /**
- * Class EPC_CIRCLE.
+ * Class EC_CIRCLE.
  *
- * EDIT_POINT_CONSTRAINT that imposes a constraint that a point has to lie on a circle.
+ * EDIT_CONSTRAINT that imposes a constraint that a point has to lie on a circle.
  */
-class EPC_CIRCLE : public EDIT_POINT_CONSTRAINT
+class EC_CIRCLE : public EDIT_CONSTRAINT<EDIT_POINT>
 {
 public:
     /**
@@ -549,11 +564,11 @@ public:
      * @parama aCenter is the point that is the center of the circle.
      * @parama aEnd is the point that decides on the radius of the circle.
      */
-    EPC_CIRCLE( EDIT_POINT& aConstrained, const EDIT_POINT& aCenter, const EDIT_POINT& aEnd ) :
-        EDIT_POINT_CONSTRAINT( aConstrained ), m_center( aCenter ), m_end( aEnd )
+    EC_CIRCLE( EDIT_POINT& aConstrained, const EDIT_POINT& aCenter, const EDIT_POINT& aEnd ) :
+        EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_center( aCenter ), m_end( aEnd )
     {}
 
-    ///> @copydoc EDIT_POINT_CONSTRAINT::Apply()
+    ///> @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply();
 
 private:
