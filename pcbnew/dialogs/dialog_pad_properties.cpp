@@ -149,8 +149,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 {
     m_canUpdate  = false;
     m_parent     = aParent;
-    m_currentPad = aPad;        // aPad can be NULL, if the dialog is calleg
-                                // from the modoule editor to set default pad characteristics
+    m_currentPad = aPad;        // aPad can be NULL, if the dialog is called
+                                // from the module editor to set default pad characteristics
     m_board      = m_parent->GetBoard();
     m_dummyPad   = new D_PAD( (MODULE*) NULL );
 
