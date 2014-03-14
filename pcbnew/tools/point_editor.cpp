@@ -135,7 +135,7 @@ private:
 
 POINT_EDITOR::POINT_EDITOR() :
     TOOL_INTERACTIVE( "pcbnew.PointEditor" ), m_selectionTool( NULL ), m_dragPoint( NULL ),
-    m_original( VECTOR2I( 0, 0 ) )
+    m_original( VECTOR2I( 0, 0 ) ), m_altConstrainer( VECTOR2I( 0, 0 ) )
 {
 }
 
@@ -143,6 +143,7 @@ POINT_EDITOR::POINT_EDITOR() :
 void POINT_EDITOR::Reset( RESET_REASON aReason )
 {
     m_editPoints.reset();
+    m_altConstraint.reset();
 }
 
 
@@ -175,8 +176,6 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         KIGFX::VIEW* view = getView();
         PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
-        EDIT_POINT constrainer( VECTOR2I( 0, 0 ) );
-        boost::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > degree45Constraint;
 
         m_editPoints = EDIT_POINTS_FACTORY::Make( item );
         if( !m_editPoints )
@@ -237,24 +236,14 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                     modified = true;
                 }
 
-                if( !!evt->Modifier( MD_CTRL ) != (bool) degree45Constraint )      // 45 degrees mode
-                {
-                    if( !degree45Constraint )
-                    {
-                        // Find a proper constraining point for 45 degrees mode
-                        constrainer = get45DegConstrainer();
-                        degree45Constraint.reset( new EC_45DEGREE( *m_dragPoint, constrainer ) );
-                    }
-                    else
-                    {
-                        degree45Constraint.reset();
-                    }
-                }
+                bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
+                if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
+                    setAltConstraint( enableAltConstraint );
 
                 m_dragPoint->SetPosition( controls->GetCursorPosition() );
 
-                if( degree45Constraint )
-                    degree45Constraint->Apply();
+                if( m_altConstraint )
+                    m_altConstraint->Apply();
                 else
                     m_dragPoint->ApplyConstraint();
 
@@ -271,7 +260,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 
             else if( evt->IsMouseUp( BUT_LEFT ) )
             {
-                degree45Constraint.reset();
+                setAltConstraint( false );
                 modified = false;
             }
 
@@ -536,6 +525,32 @@ void POINT_EDITOR::updatePoints() const
 
     default:
         break;
+    }
+}
+
+
+void POINT_EDITOR::setAltConstraint( bool aEnabled )
+{
+    if( aEnabled )
+    {
+        EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_dragPoint );
+        if( line )
+        {
+            if( m_editPoints->GetParent()->Type() == PCB_ZONE_AREA_T )
+            {
+                m_altConstraint.reset( new EC_CONVERGING( *line, *m_editPoints ) );
+            }
+        }
+        else
+        {
+            // Find a proper constraining point for 45 degrees mode
+            m_altConstrainer = get45DegConstrainer();
+            m_altConstraint.reset( new EC_45DEGREE( *m_dragPoint, m_altConstrainer ) );
+        }
+    }
+    else
+    {
+        m_altConstraint.reset();
     }
 }
 

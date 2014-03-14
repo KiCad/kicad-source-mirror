@@ -26,8 +26,7 @@
 
 #include "edit_points.h"
 #include <gal/graphics_abstraction_layer.h>
-
-#include <class_drawsegment.h>
+#include <geometry/seg.h>
 
 bool EDIT_POINT::WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const
 {
@@ -204,4 +203,90 @@ void EC_CIRCLE::Apply()
     newLine = newLine.Rotate( angle );
 
     m_constrained.SetPosition( m_center.GetPosition() + newLine );
+}
+
+
+EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
+    EDIT_CONSTRAINT<EDIT_POINT>( aLine.GetEnd() ),
+    /*m_end( aLine.GetEnd() ), m_origin( aLine.GetOrigin() ),*/ m_line( aLine ),
+    m_editPoints( aPoints )
+{
+    // Dragged segment endings
+    EDIT_POINT& origin = aLine.GetOrigin();
+    EDIT_POINT& end = aLine.GetEnd();
+
+    // Add constraint to the line origin, so it moves only along it current line
+    EDIT_POINT& prevOrigin = *aPoints.Previous( origin );
+    EDIT_POINT& nextEnd = *aPoints.Next( end );
+
+    // Constraints for segments adjacent to the dragged one
+    m_originSideConstraint = new EC_LINE( origin, prevOrigin );
+    m_endSideConstraint = new EC_LINE( end, nextEnd );
+
+    // Compute dragged segment slope
+    VECTOR2D delta = m_line.GetPosition() - end.GetPosition();
+    m_coefA = delta.y / delta.x;
+}
+
+
+EC_CONVERGING::~EC_CONVERGING()
+{
+    delete m_originSideConstraint;
+    delete m_endSideConstraint;
+}
+
+
+void EC_CONVERGING::Apply()
+{
+    EDIT_POINT& origin = m_line.GetOrigin();
+    EDIT_POINT& end = m_line.GetEnd();
+
+    // Do not allow points on the adjacent segments move freely
+    m_originSideConstraint->Apply();
+    m_endSideConstraint->Apply();
+
+    // Find points that make adjacent segments
+    EDIT_POINT& prevOrigin = *m_editPoints.Previous( origin );    // point previous to origin
+    EDIT_POINT& nextEnd = *m_editPoints.Next( end );              // point next to end
+
+    // Two segments adjacent to the dragged segment
+    SEG originSide( origin.GetPosition(), prevOrigin.GetPosition() );
+    SEG endSide( end.GetPosition(), nextEnd.GetPosition() );
+
+    VECTOR2I draggedCenter;        // center point of the dragged segment
+
+    // Check if adjacent segments intersect (did we dragged the line to the point that it may
+    // create a selfintersecting polygon?)
+    if( OPT_VECTOR2I originEndIntersect = endSide.Intersect( originSide ) )
+        draggedCenter = *originEndIntersect;
+    else
+        draggedCenter = m_line.GetPosition();
+
+    // Line B coefficient (y=Ax+B) for the dragged segment (A coefficient is computed up on the
+    // the construction of EC_CONVERGING
+    double coefB = draggedCenter.y - m_coefA * draggedCenter.x;
+    VECTOR2D draggedEnd = draggedCenter + 10000;
+
+    if( std::isfinite( m_coefA ) )
+    {
+        if( std::abs( m_coefA ) < 1 )
+            draggedEnd.y = m_coefA * draggedEnd.x + coefB;
+        else
+            draggedEnd.x = ( draggedEnd.y - coefB ) / m_coefA;
+    }
+    else // vertical line
+    {
+        draggedEnd.x = draggedCenter.x;
+        draggedEnd.y = draggedEnd.x + coefB;
+    }
+
+    SEG dragged( draggedCenter, draggedEnd );       // the dragged segment
+
+    // First intersection point (dragged segment against origin side)
+    if( OPT_VECTOR2I originIntersect = dragged.IntersectLines( originSide ) )
+        origin.SetPosition( *originIntersect );
+
+    // Second intersection point (dragged segment against end side)
+    if( OPT_VECTOR2I endIntersect = dragged.IntersectLines( endSide ) )
+        end.SetPosition( *endIntersect );
 }

@@ -68,6 +68,12 @@ private:
     ///> Currently available edit points.
     boost::shared_ptr<EDIT_POINTS> m_editPoints;
 
+    // Alternative constraint, enabled while a modifier key is held
+    boost::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > m_altConstraint;
+
+    // EDIT_POINT for alternative constraint mode
+    EDIT_POINT m_altConstrainer;
+
     ///> Updates item's points with edit points.
     void updateItem() const;
 
@@ -82,6 +88,9 @@ private:
     {
         return m_dragPoint == &aPoint;
     }
+
+    ///> Sets up an alternative constraint (typically enabled upon a modifier key being pressed).
+    void setAltConstraint( bool aEnabled );
 
     ///> Returns a point that should be used as a constrainer for 45 degrees mode.
     EDIT_POINT get45DegConstrainer() const;

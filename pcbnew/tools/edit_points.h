@@ -579,4 +579,29 @@ private:
     const EDIT_POINT& m_end;
 };
 
+
+/**
+ * Class EC_CONVERGING
+ *
+ * EDIT_CONSTRAINT for 3 segment: dragged and two adjacent ones, enforcing to keep their slopes
+ * and allows only to change ending points. Applied to zones.
+ */
+class EC_CONVERGING : public EDIT_CONSTRAINT<EDIT_POINT>
+{
+public:
+    EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints );
+
+    virtual ~EC_CONVERGING();
+
+    ///> @copydoc EDIT_CONSTRAINT::Apply()
+    virtual void Apply();
+
+private:
+    EC_LINE* m_originSideConstraint;    ///< Constraint for origin side segment
+    EC_LINE* m_endSideConstraint;       ///< Constraint for end side segment
+    EDIT_LINE& m_line;                  ///< Dragged segment
+    EDIT_POINTS& m_editPoints;          ///< EDIT_POINT instance storing modified lines
+    double m_coefA;                     ///< Original dragged segment A coefficient (y = Ax + B)
+};
+
 #endif /* EDIT_POINTS_H_ */
