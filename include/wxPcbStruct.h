@@ -61,8 +61,8 @@ class BOARD_ITEM;
 class PCB_LAYER_BOX_SELECTOR;
 class NETLIST;
 class REPORTER;
-class PARSE_ERROR;
-class IO_ERROR;
+struct PARSE_ERROR;
+struct IO_ERROR;
 class FP_LIB_TABLE;
 
 /**

@@ -111,7 +111,7 @@ public:
     PNS_NODE* GetCurrentNode() const;
 
 private:
-    static const double m_shoveLengthThreshold = 1.7;
+    static const double m_shoveLengthThreshold;
 
     bool handleViaPlacement( PNS_LINE& aHead );
 
