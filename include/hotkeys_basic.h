@@ -143,10 +143,11 @@ wxString ReturnKeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId );
  */
 int ReturnKeyCodeFromKeyName( const wxString& keyname );
 
-/* An helper enum for AddHotkeyName function
- * In menus we can an a hot key, or an accelerator , or sometimes just a comment
+/**
+ * An helper enum for AddHotkeyName function
+ * In menus we can add a hot key, or an accelerator , or sometimes just a comment
  * Hot keys can perform actions using the current mouse cursor position
- * Accelerators performs the same action as the associated menu
+ * Accelerators perform the same action as the associated menu
  * A comment is used in tool tips for some tools (zoom ..)
  *    to show the hot key that performs this action
  */
