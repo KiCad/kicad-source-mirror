@@ -1006,6 +1006,8 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
 
                     m_frame->OnModify();
                     m_frame->SaveCopyInUndoList( zone, UR_NEW );
+
+                    zone = NULL;
                 }
                 else
                     delete zone;
