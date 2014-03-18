@@ -1040,6 +1040,8 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     ZONE_SETTINGS zoneInfo = m_frame->GetZoneSettings();
                     zoneInfo.m_CurrentZone_Layer = m_frame->GetScreen()->m_Active_Layer;
 
+                    m_controls->SetAutoPan( true );
+
                     // Show options dialog
                     ZONE_EDIT_T dialogResult;
                     if( aKeepout )
@@ -1053,7 +1055,10 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     }
 
                     if( dialogResult == ZONE_ABORT )
+                    {
+                        m_controls->SetAutoPan( false );
                         continue;
+                    }
 
                     // Apply the selected settings
                     zone = new ZONE_CONTAINER( m_board );
