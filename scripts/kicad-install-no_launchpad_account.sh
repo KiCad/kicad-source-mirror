@@ -41,7 +41,12 @@ OPTS="$OPTS -DBUILD_GITHUB_PLUGIN=ON"
 # Python scripting, uncomment to enable
 #OPTS="$OPTS -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_MODULES=ON -DKICAD_SCRIPTING_WXPYTHON=ON"
 
-LIB_REPO=~dickelbeck/kicad/library-read-only
+#a connection to https://code.launchpad.net does not request a launchpad account
+#but, obviously, you cannot commit anything
+REPOS=https://code.launchpad.net
+LEGACY_LIB_REPO=$REPOS/~dickelbeck/kicad/library-read-only
+SRCS_REPO=$REPOS/~kicad-product-committers/kicad/product
+DOCS_REPO=$REPOS/~kicad-developers/kicad/doc
 
 
 usage()
@@ -196,7 +201,7 @@ install_or_update()
 
     echo "step 3) checking out the source code from launchpad repo..."
     if [ ! -d "$WORKING_TREES/kicad.bzr" ]; then
-        bzr checkout lp:kicad kicad.bzr
+        bzr checkout $SRCS_REPO kicad.bzr
         echo " source repo to local working tree."
     else
         cd kicad.bzr
@@ -206,7 +211,7 @@ install_or_update()
     fi
 
     if [ ! -d "$WORKING_TREES/kicad-lib.bzr" ]; then
-        bzr checkout "lp:$LIB_REPO" kicad-lib.bzr
+        bzr checkout $LEGACY_LIB_REPO kicad-lib.bzr
         echo ' kicad-lib checked out.'
     else
         cd kicad-lib.bzr
@@ -217,7 +222,7 @@ install_or_update()
 
     echo "step 5) checking out the documentation from launchpad repo..."
     if [ ! -d "$WORKING_TREES/kicad-doc.bzr" ]; then
-        bzr checkout lp:~kicad-developers/kicad/doc kicad-doc.bzr
+        bzr checkout $DOCS_REPO kicad-doc.bzr
         echo " docs checked out."
     else
         cd kicad-doc.bzr
