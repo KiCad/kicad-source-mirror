@@ -648,9 +648,15 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
         }
 
         // Find the point on the closest segment
-        SEG nearestSide( VECTOR2I( outline->GetPos( nearestIdx ) ),
-                         VECTOR2I( outline->GetPos( nextNearestIdx ) ) );
+        VECTOR2I sideOrigin( outline->GetPos( nearestIdx ) );
+        VECTOR2I sideEnd( outline->GetPos( nextNearestIdx ) );
+        SEG nearestSide( sideOrigin, sideEnd );
         VECTOR2I nearestPoint = nearestSide.NearestPoint( aBreakPoint );
+
+        // Do not add points that have the same coordinates as ones that already belong to polygon
+        // instead, add a point in the middle of the side
+        if( nearestPoint == sideOrigin || nearestPoint == sideEnd )
+            nearestPoint = ( sideOrigin + sideEnd ) / 2;
 
         outline->InsertCorner( nearestIdx, nearestPoint.x, nearestPoint.y );
     }
