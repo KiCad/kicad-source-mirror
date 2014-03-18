@@ -970,10 +970,15 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
             if( numPoints > 0 )         // cancel the current zone
             {
                 delete zone;
+                zone = NULL;
                 m_controls->SetAutoPan( false );
 
                 if( direction45 )
+                {
                     preview.Remove( &line45 );
+                    direction45 = false;
+                }
+
                 preview.FreeItems();
                 updatePreview = true;
 
@@ -1010,10 +1015,20 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     zone = NULL;
                 }
                 else
+                {
                     delete zone;
+                    zone = NULL;
+                }
 
                 numPoints = 0;
                 m_controls->SetAutoPan( false );
+
+                if( direction45 )
+                {
+                    preview.Remove( &line45 );
+                    direction45 = false;
+                }
+
                 preview.FreeItems();
                 updatePreview = true;
             }
