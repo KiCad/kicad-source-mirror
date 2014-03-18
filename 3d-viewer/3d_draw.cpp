@@ -52,7 +52,8 @@
 // Imported function:
 extern void     CheckGLError();
 
-/* returns true if aLayer should be displayed, false otherwise
+/* Helper function
+ * returns true if aLayer should be displayed, false otherwise
  */
 static bool     Is3DLayerEnabled( LAYER_NUM aLayer );
 
@@ -144,7 +145,8 @@ void EDA_3D_CANVAS::Redraw()
                   -g_Parm_3D_Visu.m_BoardPos.y * g_Parm_3D_Visu.m_BiuTo3Dunits,
                   0.0F );
 
-
+    // draw all objects in lists
+    // transparent objects should be drawn after opaque objects
     glCallList( m_glLists[GL_ID_BOARD] );
     glCallList( m_glLists[GL_ID_TECH_LAYERS] );
 
@@ -156,21 +158,23 @@ void EDA_3D_CANVAS::Redraw()
         glCallList( m_glLists[GL_ID_AUX_LAYERS] );
     }
 
-    if( g_Parm_3D_Visu.GetFlag( FL_GRID ) && m_glLists[GL_ID_GRID] )
-        glCallList( m_glLists[GL_ID_GRID] );
-
     if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID] )
             CreateDrawGL_List();
 
         glCallList( m_glLists[GL_ID_3DSHAPES_SOLID] );
-
-        // This list must be drawn last, because it contains the
-        // transparent gl objects, which should be drawn after all
-        // non tyransparent objects
-        glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP] );
     }
+
+    // Grid uses transparency: draw it after all objects
+    if( g_Parm_3D_Visu.GetFlag( FL_GRID ) && m_glLists[GL_ID_GRID] )
+        glCallList( m_glLists[GL_ID_GRID] );
+
+    // This list must be drawn last, because it contains the
+    // transparent gl objects, which should be drawn after all
+    // non transparent objects
+    if(  g_Parm_3D_Visu.GetFlag( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP] )
+        glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP] );
 
     SwapBuffers();
 }
@@ -913,8 +917,8 @@ void EDA_3D_CANVAS::Draw3DGrid( double aGriSizeMM )
     double      zpos = 0.0;
     EDA_COLOR_T gridcolor = DARKGRAY;           // Color of grid lines
     EDA_COLOR_T gridcolor_marker = LIGHTGRAY;   // Color of grid lines every 5 lines
-    double      scale = g_Parm_3D_Visu.m_BiuTo3Dunits;
-    double transparency = 0.4;
+    const double scale = g_Parm_3D_Visu.m_BiuTo3Dunits;
+    const double transparency = 0.3;
 
     glNormal3f( 0.0, 0.0, 1.0 );
 
