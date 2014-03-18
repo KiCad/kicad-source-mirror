@@ -114,9 +114,13 @@ public:
      */
     void AddMenuItem( const TOOL_ACTION& aAction );
 
-    // TODO comments
+    ///> Event sent after an item is selected.
     const TOOL_EVENT SelectedEvent;
+
+    ///> Event sent after an item is deselected.
     const TOOL_EVENT DeselectedEvent;
+
+    ///> Event sent after selection is cleared.
     const TOOL_EVENT ClearedEvent;
 
 private:

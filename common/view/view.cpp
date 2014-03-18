@@ -114,7 +114,8 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 
     if( aItem->viewRequiredUpdate() != VIEW_ITEM::NONE )    // prevent from updating a removed item
     {
-        std::vector<VIEW_ITEM*>::iterator item = std::find( m_needsUpdate.begin(), m_needsUpdate.end(), aItem );
+        std::vector<VIEW_ITEM*>::iterator item = std::find( m_needsUpdate.begin(),
+                                                            m_needsUpdate.end(), aItem );
 
         if( item != m_needsUpdate.end() )
             m_needsUpdate.erase( item );
