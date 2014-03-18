@@ -27,6 +27,7 @@
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <geometry/seg.h>
 #include <confirm.h>
 
 #include "common_actions.h"
@@ -222,6 +223,11 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                 }
 
                 m_dragPoint = point;
+            }
+
+            else if( evt->IsDblClick( BUT_LEFT ) )
+            {
+                breakOutline( controls->GetCursorPosition() );
             }
 
             else if( evt->IsDrag( BUT_LEFT ) && m_dragPoint )
@@ -604,4 +610,47 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 
     // In any other case we may align item to its original position
     return m_original;
+}
+
+
+
+void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
+{
+    EDA_ITEM* item = m_editPoints->GetParent();
+    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+
+    if( item->Type() == PCB_ZONE_AREA_T )
+    {
+        getEditFrame<PCB_EDIT_FRAME>()->OnModify();
+        getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
+
+        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+        CPolyLine* outline = zone->Outline();
+
+        // Handle the last segment, so other segments can be easily handled in a loop
+        unsigned int nearestIdx = outline->GetCornersCount() - 1, nextNearestIdx = 0;
+        SEG side( VECTOR2I( outline->GetPos( nearestIdx ) ),
+                  VECTOR2I( outline->GetPos( nextNearestIdx ) ) );
+        unsigned int nearestDist = side.Distance( aBreakPoint );
+
+        for( int i = 0; i < outline->GetCornersCount() - 2; ++i )
+        {
+            SEG side( VECTOR2I( outline->GetPos( i ) ), VECTOR2I( outline->GetPos( i + 1 ) ) );
+
+            unsigned int distance = side.Distance( aBreakPoint );
+            if( distance < nearestDist )
+            {
+                nearestDist = distance;
+                nearestIdx = i;
+                nextNearestIdx = i + 1;
+            }
+        }
+
+        // Find the point on the closest segment
+        SEG nearestSide( VECTOR2I( outline->GetPos( nearestIdx ) ),
+                         VECTOR2I( outline->GetPos( nextNearestIdx ) ) );
+        VECTOR2I nearestPoint = nearestSide.NearestPoint( aBreakPoint );
+
+        outline->InsertCorner( nearestIdx, nearestPoint.x, nearestPoint.y );
+    }
 }
