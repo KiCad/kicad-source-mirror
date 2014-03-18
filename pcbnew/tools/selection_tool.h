@@ -130,8 +130,11 @@ private:
      * place, there is a menu displayed that allows to choose the item.
      *
      * @param aWhere is the place where the item should be selected.
+     * @param aAllowDisambiguation decides what to do in case of disambiguation. If true, then
+     * a menu is shown, otherise function finishes without selecting anything.
+     * @return True if an item was selected, false otherwise.
      */
-    void selectSingle( const VECTOR2I& aWhere );
+    bool selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
 
     /**
      * Function selectMultiple()

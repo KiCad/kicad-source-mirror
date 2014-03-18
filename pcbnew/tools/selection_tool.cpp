@@ -141,10 +141,18 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         {
             if( m_selection.Empty() || m_additive )
             {
-                // If nothings has been selected or user wants to select more
-                // draw the selection box
-                selectMultiple();
+                if( !selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ), false ) )
+                {
+                    // If nothings has been selected or user wants to select more
+                    // draw the selection box
+                    selectMultiple();
+                }
+                else
+                {
+                    m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
+                }
             }
+
             else
             {
                 // Check if dragging has started within any of selected items bounding box
@@ -205,7 +213,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 }
 
 
-void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
+bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation )
 {
     BOARD* pcb = getModel<BOARD>( PCB_T );
     BOARD_ITEM* item;
@@ -220,11 +228,13 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
     case 0:
         if( !m_additive )
             clearSelection();
-        break;
+
+        return false;
 
     case 1:
         toggleSelection( collector[0] );
-        break;
+
+        return true;
 
     default:
         // Remove unselectable items
@@ -238,17 +248,25 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         if( collector.GetCount() == 1 )
         {
             toggleSelection( collector[0] );
+
+            return true;
         }
-        else if( collector.GetCount() > 1 )
+
+        else if( aAllowDisambiguation && collector.GetCount() > 1 )
         {
             item = disambiguationMenu( &collector );
 
             if( item )
+            {
                 toggleSelection( item );
-        }
 
+                return true;
+            }
+        }
         break;
     }
+
+    return false;
 }
 
 
