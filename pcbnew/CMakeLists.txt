@@ -256,6 +256,7 @@ set( PCBNEW_CLASS_SRCS
     tools/selection_area.cpp
     tools/bright_box.cpp
     tools/edit_points.cpp
+    tools/edit_constraints.cpp
     tools/point_editor.cpp
     tools/drawing_tool.cpp
     tools/edit_tool.cpp
