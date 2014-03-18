@@ -194,7 +194,8 @@ void EC_CIRCLE::Apply( EDIT_POINT& aHandle )
 
 
 EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
-    EDIT_CONSTRAINT<EDIT_POINT>( aLine.GetOrigin() ), m_line( aLine ), m_editPoints( aPoints )
+    EDIT_CONSTRAINT<EDIT_POINT>( aLine.GetOrigin() ),
+    m_colinearConstraint( NULL ), m_line( aLine ), m_editPoints( aPoints )
 {
     // Dragged segment endings
     EDIT_POINT& origin = aLine.GetOrigin();
@@ -209,7 +210,17 @@ EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
     m_endSideConstraint = new EC_LINE( end, nextEnd );
 
     // Store the current vector of the line
-    m_draggedVector = end.GetPosition() - origin.GetPosition() ;
+    m_draggedVector = end.GetPosition() - origin.GetPosition();
+
+    // Check for colinearity
+    SEG originSide( origin.GetPosition(), prevOrigin.GetPosition() );
+    SEG endSide( end.GetPosition(), nextEnd.GetPosition() );
+    SEG dragged( origin.GetPosition(), end.GetPosition() );
+
+    if( dragged.Collinear( originSide ) )
+        m_colinearConstraint = m_originSideConstraint;
+    else if( dragged.Collinear( endSide ) )
+        m_colinearConstraint = m_endSideConstraint;
 }
 
 
@@ -217,17 +228,24 @@ EC_CONVERGING::~EC_CONVERGING()
 {
     delete m_originSideConstraint;
     delete m_endSideConstraint;
+    // m_colinearConstraint should not be freed, it is a pointer to one of the above
 }
 
 
 void EC_CONVERGING::Apply( EDIT_POINT& aHandle )
 {
-    // The dragged segment
-    SEG dragged( m_line.GetPosition(), m_line.GetPosition() + m_draggedVector );
-
     // The dragged segment endpoints
     EDIT_POINT& origin = m_line.GetOrigin();
     EDIT_POINT& end = m_line.GetEnd();
+
+    if( m_colinearConstraint )
+    {
+        m_colinearConstraint->Apply( origin );
+        m_colinearConstraint->Apply( end );
+    }
+
+    // The dragged segment
+    SEG dragged( origin.GetPosition(), origin.GetPosition() + m_draggedVector );
 
     // Do not allow points on the adjacent segments move freely
     m_originSideConstraint->Apply();

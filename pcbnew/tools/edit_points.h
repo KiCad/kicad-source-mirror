@@ -622,6 +622,10 @@ private:
     ///> Constraint for end side segment.
     EDIT_CONSTRAINT<EDIT_POINT>* m_endSideConstraint;
 
+    ///> Additional constriant, applied when at least two points are collinear. It is a pointer to
+    ///> m_[origin/end]SideConstraint, so it should not be freed.
+    EDIT_CONSTRAINT<EDIT_POINT>* m_colinearConstraint;
+
     ///> Dragged segment.
     EDIT_LINE& m_line;
 
