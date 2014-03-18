@@ -38,6 +38,7 @@
 #include <class_drawsegment.h>
 #include <class_dimension.h>
 #include <class_zone.h>
+#include <class_board.h>
 
 /**
  * Class POINT_EDITOR
@@ -652,5 +653,31 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
         VECTOR2I nearestPoint = nearestSide.NearestPoint( aBreakPoint );
 
         outline->InsertCorner( nearestIdx, nearestPoint.x, nearestPoint.y );
+    }
+
+    else if( item->Type() == PCB_LINE_T )
+    {
+        getEditFrame<PCB_EDIT_FRAME>()->OnModify();
+        getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
+
+        DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
+
+        if( segment->GetShape() == S_SEGMENT )
+        {
+            SEG seg( segment->GetStart(), segment->GetEnd() );
+            VECTOR2I nearestPoint = seg.NearestPoint( aBreakPoint );
+
+            // Move the end of the line to the break point..
+            segment->SetEnd( wxPoint( nearestPoint.x, nearestPoint.y ) );
+
+            // and add another one starting from the break point
+            DRAWSEGMENT* newSegment = new DRAWSEGMENT( *segment );
+            newSegment->ClearSelected();
+            newSegment->SetStart( wxPoint( nearestPoint.x, nearestPoint.y ) );
+            newSegment->SetEnd( wxPoint( seg.B.x, seg.B.y ) );
+
+            getModel<BOARD>( PCB_T )->Add( newSegment );
+            getView()->Add( newSegment );
+        }
     }
 }
