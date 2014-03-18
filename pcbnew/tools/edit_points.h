@@ -58,9 +58,19 @@ public:
     /**
      * Function Apply()
      *
-     * Corrects coordinates of the constrained point.
+     * Corrects coordinates of the constrained edit handle.
      */
-    virtual void Apply() = 0;
+    virtual void Apply( EDIT_TYPE& aHandle ) = 0;
+
+    /**
+     * Function Apply()
+     *
+     * Corrects coordinates of the constrained edit handle.
+     */
+    void Apply()
+    {
+        Apply( m_constrained );
+    }
 
 protected:
     EDIT_TYPE& m_constrained;      ///< Point that is constrained by rules implemented by Apply()
@@ -234,7 +244,7 @@ public:
     ///> @copydoc EDIT_POINT::GetPosition()
     virtual VECTOR2I GetPosition() const
     {
-        return m_origin.GetPosition() + ( m_end.GetPosition() - m_origin.GetPosition() ) / 2;
+        return ( m_origin.GetPosition() + m_end.GetPosition() ) / 2;
     }
 
     ///> @copydoc EDIT_POINT::GetPosition()
@@ -266,12 +276,22 @@ public:
         return m_origin;
     }
 
+    const EDIT_POINT& GetOrigin() const
+    {
+        return m_origin;
+    }
+
     /**
      * Function GetEnd()
      *
      * Returns the end EDIT_POINT.
      */
     EDIT_POINT& GetEnd()
+    {
+        return m_end;
+    }
+
+    const EDIT_POINT& GetEnd() const
     {
         return m_end;
     }
@@ -458,11 +478,11 @@ public:
     {}
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply()
+    virtual void Apply( EDIT_POINT& aHandle )
     {
-        VECTOR2I point = m_constrained.GetPosition();
+        VECTOR2I point = aHandle.GetPosition();
         point.x = m_constrainer.GetPosition().x;
-        m_constrained.SetPosition( point );
+        aHandle.SetPosition( point );
     }
 
 private:
@@ -489,11 +509,11 @@ public:
     {}
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply()
+    virtual void Apply( EDIT_POINT& aHandle )
     {
-        VECTOR2I point = m_constrained.GetPosition();
+        VECTOR2I point = aHandle.GetPosition();
         point.y = m_constrainer.GetPosition().y;
-        m_constrained.SetPosition( point );
+        aHandle.SetPosition( point );
     }
 
 private:
@@ -521,7 +541,7 @@ public:
     {}
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply();
+    virtual void Apply( EDIT_POINT& aHandle );
 
 private:
     const EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
@@ -540,12 +560,11 @@ public:
     EC_LINE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer );
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply();
+    virtual void Apply( EDIT_POINT& aHandle );
 
 private:
     EDIT_POINT m_constrainer;       ///< Point that imposes the constraint.
-    double m_coefA;                 ///< Line A coefficient (y = Ax + B)
-    double m_coefB;                 ///< Line B coefficient (y = Ax + B)
+    VECTOR2I m_line;                ///< Vector representing the constraining line.
 };
 
 
@@ -569,7 +588,7 @@ public:
     {}
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply();
+    virtual void Apply( EDIT_POINT& aHandle );
 
 private:
     ///> Point that imposes the constraint (center of the circle).
@@ -594,14 +613,23 @@ public:
     virtual ~EC_CONVERGING();
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply();
+    virtual void Apply( EDIT_POINT& aHandle );
 
 private:
-    EC_LINE* m_originSideConstraint;    ///< Constraint for origin side segment
-    EC_LINE* m_endSideConstraint;       ///< Constraint for end side segment
-    EDIT_LINE& m_line;                  ///< Dragged segment
-    EDIT_POINTS& m_editPoints;          ///< EDIT_POINT instance storing modified lines
-    double m_coefA;                     ///< Original dragged segment A coefficient (y = Ax + B)
+    ///> Constraint for origin side segment.
+    EDIT_CONSTRAINT<EDIT_POINT>* m_originSideConstraint;
+
+    ///> Constraint for end side segment.
+    EDIT_CONSTRAINT<EDIT_POINT>* m_endSideConstraint;
+
+    ///> Dragged segment.
+    EDIT_LINE& m_line;
+
+    ///> EDIT_POINTS instance that stores currently modified lines.
+    EDIT_POINTS& m_editPoints;
+
+    ///> Vector that represents the initial direction of the dragged segment.
+    VECTOR2I m_draggedVector;
 };
 
 #endif /* EDIT_POINTS_H_ */
