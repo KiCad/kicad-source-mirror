@@ -48,6 +48,7 @@ class TEXTE_PCB;
 class TEXTE_MODULE;
 class DIMENSION;
 class PCB_TARGET;
+class MARKER_PCB;
 
 namespace KIGFX
 {
@@ -169,6 +170,7 @@ protected:
     void draw( const ZONE_CONTAINER* aZone );
     void draw( const DIMENSION* aDimension, int aLayer );
     void draw( const PCB_TARGET* aTarget );
+    void draw( const MARKER_PCB* aMarker );
 };
 } // namespace KIGFX
 
