@@ -229,6 +229,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         {
             motion = true;
             m_lastMousePos = pos;
+            m_editFrame->UpdateStatusBar();
         }
 
         for( unsigned int i = 0; i < m_buttons.size(); i++ )

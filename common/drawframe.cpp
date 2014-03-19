@@ -47,6 +47,7 @@
 
 #include <wx/fontdlg.h>
 #include <view/view.h>
+#include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 
 /**
@@ -1019,9 +1020,18 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 wxPoint EDA_DRAW_FRAME::GetCrossHairPosition( bool aInvertY ) const
 {
     // subject to change, borrow from old BASE_SCREEN for now.
+    if( IsGalCanvasActive() )
+    {
+        VECTOR2I cursor = GetGalCanvas()->GetViewControls()->GetCursorPosition();
+        cursor = GetGalCanvas()->GetGAL()->GetGridPoint( cursor );
 
-    BASE_SCREEN* screen = GetScreen();  // virtual call
-    return screen->getCrossHairPosition( aInvertY );
+        return wxPoint( cursor.x, cursor.y );
+    }
+    else
+    {
+        BASE_SCREEN* screen = GetScreen();  // virtual call
+        return screen->getCrossHairPosition( aInvertY );
+    }
 }
 
 
