@@ -95,8 +95,8 @@ public:
 
 private:
     PCB_BASE_FRAME* m_parent;
-    D_PAD*  m_currentPad;            // pad currently being edited
-    D_PAD*  m_dummyPad;              // a working copy used to show changes
+    D_PAD*  m_currentPad;           // pad currently being edited
+    D_PAD*  m_dummyPad;             // a working copy used to show changes
     BOARD*  m_board;
     D_PAD&  m_padMaster;
     bool    m_isFlipped;            // true if the parent footprint (therefore pads) is flipped (mirrored)
@@ -673,11 +673,11 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
 
     LAYER_MSK padlayers_mask = m_dummyPad->GetLayerMask();
-    if( ( padlayers_mask == 0 ) && ( m_dummyPad->GetAttribute() != PAD_HOLE_NOT_PLATED ) )
-        error_msgs.Add( _( "Error: pad has no layer and is not a mechanical pad" ) );
 
-    padlayers_mask &= (LAYER_BACK | LAYER_FRONT);
     if( padlayers_mask == 0 )
+        error_msgs.Add( _( "Error: pad has no layer" ) );
+
+    if( ( padlayers_mask & (LAYER_BACK | LAYER_FRONT) ) == 0 )
     {
         if( m_dummyPad->GetDrillSize().x || m_dummyPad->GetDrillSize().y )
         {
@@ -715,20 +715,21 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     switch( m_dummyPad->GetAttribute() )
     {
-    case PAD_STANDARD :     // Pad through hole, a hole is expected
+    case PAD_HOLE_NOT_PLATED:   // Not plated, but through hole, a hole is expected
+    case PAD_STANDARD :         // Pad through hole, a hole is also expected
         if( m_dummyPad->GetDrillSize().x <= 0 )
-            error_msgs.Add( _( "Incorrect value for pad drill (too small value)" ) );
+            error_msgs.Add( _( "Error: Through hole pad: drill diameter set to 0" ) );
         break;
 
-    case PAD_SMD:     // SMD and Connector pads (One external copper layer only)
+    case PAD_CONN:      // Connector pads are smd pads, just they do not have solder paste.
+        if( (padlayers_mask & SOLDERPASTE_LAYER_BACK) ||
+            (padlayers_mask & SOLDERPASTE_LAYER_FRONT) )
+            error_msgs.Add( _( "Error: Connector pads are not on the solder paste layer\n"
+                               "Use SMD pads instead" ) );
+        // Fall trough
+    case PAD_SMD:       // SMD and Connector pads (One external copper layer only)
         if( (padlayers_mask & LAYER_BACK) && (padlayers_mask & LAYER_FRONT) )
-            error_msgs.Add( _( "Error: only one copper layer allowed for this pad" ) );
-        break;
-
-    case PAD_CONN:              // connectors can have pads on "All" Cu layers.
-        break;
-
-    case PAD_HOLE_NOT_PLATED:   // Not plated
+            error_msgs.Add( _( "Error: only one copper layer allowed for SMD or Connector pads" ) );
         break;
     }
 
@@ -738,6 +739,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         dlg.ListSet( error_msgs );
         dlg.ShowModal();
     }
+
     return error_msgs.GetCount() == 0;
 }
 
