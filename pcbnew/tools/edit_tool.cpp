@@ -270,6 +270,8 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
 
+    updateRatsnest( m_dragging );
+
     if( m_dragging )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     else
@@ -279,8 +281,6 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
-
-    updateRatsnest( true );
     setTransitions();
 
     return 0;
@@ -316,6 +316,8 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
             item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
     }
 
+    updateRatsnest( m_dragging );
+
     if( m_dragging )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     else
@@ -325,8 +327,6 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
-
-    updateRatsnest( true );
     setTransitions();
 
     return 0;
@@ -365,7 +365,6 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
     if( !( board->m_Status_Pcb & NET_CODES_OK ) )
         board->BuildListOfNets();
 
-    board->GetRatsnest()->Recalculate();        // TODO is it necessary?
     setTransitions();
 
     return 0;
