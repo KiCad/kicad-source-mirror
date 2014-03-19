@@ -818,7 +818,6 @@ void PCB_BASE_FRAME::LoadSettings()
 
     view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
     view->SetLayerTarget( ITEM_GAL_LAYER( RATSNEST_VISIBLE ), KIGFX::TARGET_OVERLAY );
-    view->SetLayerTarget( ITEM_GAL_LAYER( DRC_VISIBLE ), KIGFX::TARGET_NONCACHED );
 
     // Apply layer coloring scheme & display options
     if( view->GetPainter() )
