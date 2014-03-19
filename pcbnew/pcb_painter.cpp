@@ -34,9 +34,8 @@
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
 #include <class_mire.h>
-#include <pcbstruct.h>
+#include <class_marker_pcb.h>
 
-#include <view/view.h>
 #include <pcb_painter.h>
 #include <gal/graphics_abstraction_layer.h>
 
@@ -76,6 +75,7 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
     m_layerColors[NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
     m_layerColors[ITEM_GAL_LAYER( RATSNEST_VISIBLE )]               = COLOR4D( 0.4, 0.4, 0.4, 0.7 );
     m_layerColors[ITEM_GAL_LAYER( WORKSHEET )]                      = COLOR4D( 0.5, 0.0, 0.0, 1.0 );
+    m_layerColors[ITEM_GAL_LAYER( DRC_VISIBLE )]                    = COLOR4D( 1.0, 0.0, 0.0, 1.0 );
 
     // Netnames for copper layers
     for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
@@ -245,6 +245,9 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     case PCB_TARGET_T:
         draw( (PCB_TARGET*) aItem );
         break;
+
+    case PCB_MARKER_T:
+        draw( (MARKER_PCB*) aItem );
 
     default:
         // Painter does not know how to draw the object
@@ -860,6 +863,25 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
     m_gal->DrawCircle( VECTOR2D( 0.0, 0.0 ), radius );
 
     m_gal->Restore();
+}
+
+
+void PCB_PAINTER::draw( const MARKER_PCB* aMarker )
+{
+    const BOARD_ITEM* item = aMarker->GetItem();
+
+    if( item )      // By default draw an item in a different color
+    {
+        Draw( item, ITEM_GAL_LAYER( DRC_VISIBLE ) );
+    }
+    else            // If there is no item associated - draw a circle marking the DRC error
+    {
+        m_gal->SetStrokeColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( 10000 );
+        m_gal->DrawCircle( VECTOR2D( aMarker->GetPosition() ), 200000 );
+    }
 }
 
 

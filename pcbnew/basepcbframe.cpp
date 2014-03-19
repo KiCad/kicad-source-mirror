@@ -75,6 +75,7 @@ static const wxString FastGrid2Entry( wxT( "FastGrid2" ) );
 const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
 {
     ITEM_GAL_LAYER( GP_OVERLAY ),
+    ITEM_GAL_LAYER( DRC_VISIBLE ),
     NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
     DRAW_N, COMMENT_N, ECO1_N, ECO2_N, EDGE_N,
     UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31,
@@ -817,6 +818,7 @@ void PCB_BASE_FRAME::LoadSettings()
 
     view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
     view->SetLayerTarget( ITEM_GAL_LAYER( RATSNEST_VISIBLE ), KIGFX::TARGET_OVERLAY );
+    view->SetLayerTarget( ITEM_GAL_LAYER( DRC_VISIBLE ), KIGFX::TARGET_NONCACHED );
 
     // Apply layer coloring scheme & display options
     if( view->GetPainter() )
