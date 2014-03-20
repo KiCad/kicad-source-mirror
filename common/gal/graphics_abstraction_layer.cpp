@@ -88,7 +88,7 @@ void GAL::ComputeWorldScreenMatrix()
 
     MATRIX3x3D translation;
     translation.SetIdentity();
-    translation.SetTranslation( 0.5 * screenSize );
+    translation.SetTranslation( 0.5 * VECTOR2D( screenSize ) );
 
     MATRIX3x3D scale;
     scale.SetIdentity();
@@ -131,7 +131,7 @@ void GAL::DrawGrid()
     // For the drawing the start points, end points and increments have
     // to be calculated in world coordinates
     VECTOR2D    worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
-    VECTOR2D    worldEndPoint   = screenWorldMatrix * screenSize;
+    VECTOR2D    worldEndPoint   = screenWorldMatrix * VECTOR2D( screenSize );
 
     int gridScreenSizeDense  = round( gridSize.x * worldScale );
     int gridScreenSizeCoarse = round( gridSize.x * static_cast<double>( gridTick ) * worldScale );

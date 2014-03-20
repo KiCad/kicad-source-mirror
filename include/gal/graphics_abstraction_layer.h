@@ -160,7 +160,7 @@ public:
     virtual bool Show( bool aShow ) = 0;
 
     /// @brief Returns GAL canvas size in pixels
-    const VECTOR2D& GetScreenPixelSize() const
+    const VECTOR2I& GetScreenPixelSize() const
     {
         return screenSize;
     }
@@ -831,7 +831,7 @@ public:
 
 protected:
     std::stack<double> depthStack;             ///< Stored depth values
-    VECTOR2D           screenSize;             ///< Screen size in screen coordinates
+    VECTOR2I           screenSize;             ///< Screen size in screen coordinates
 
     double             worldUnitLength;        ///< The unit length of the world coordinates [inch]
     double             screenDPI;              ///< The dots per inch of the screen

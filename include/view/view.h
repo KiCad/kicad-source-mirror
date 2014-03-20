@@ -261,7 +261,7 @@ public:
      * Returns the size of the our rendering area, in pixels.
      * @return viewport screen size
      */
-    const VECTOR2D& GetScreenPixelSize() const;
+    const VECTOR2I& GetScreenPixelSize() const;
 
     /**
      * Function AddLayer()
