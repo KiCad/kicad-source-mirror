@@ -1023,7 +1023,6 @@ wxPoint EDA_DRAW_FRAME::GetCrossHairPosition( bool aInvertY ) const
     if( IsGalCanvasActive() )
     {
         VECTOR2I cursor = GetGalCanvas()->GetViewControls()->GetCursorPosition();
-        cursor = GetGalCanvas()->GetGAL()->GetGridPoint( cursor );
 
         return wxPoint( cursor.x, cursor.y );
     }

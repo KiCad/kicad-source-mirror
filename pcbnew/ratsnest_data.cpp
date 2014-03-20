@@ -1024,7 +1024,7 @@ void RN_DATA::updateNet( int aNetCode )
 {
     assert( aNetCode < (int) m_nets.size() );
 
-    if( aNetCode < 1 )
+    if( aNetCode < 1 || aNetCode > m_nets.size() )
         return;
 
     m_nets[aNetCode].ClearSimple();
