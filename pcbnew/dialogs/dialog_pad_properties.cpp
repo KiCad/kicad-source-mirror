@@ -863,11 +863,11 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetShape( CodeShape[m_PadShape->GetSelection()] );
 
     // Read pad clearances values:
-    aPad->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
-    aPad->SetLocalSolderMaskMargin( ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
-    aPad->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
-    aPad->SetThermalWidth( ReturnValueFromTextCtrl( *m_ThermalWidthCtrl ) );
-    aPad->SetThermalGap( ReturnValueFromTextCtrl( *m_ThermalGapCtrl ) );
+    aPad->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
+    aPad->SetLocalSolderMaskMargin( ValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
+    aPad->SetLocalSolderPasteMargin( ValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
+    aPad->SetThermalWidth( ValueFromTextCtrl( *m_ThermalWidthCtrl ) );
+    aPad->SetThermalGap( ValueFromTextCtrl( *m_ThermalGapCtrl ) );
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
@@ -903,15 +903,15 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     }
 
     // Read pad position:
-    x = ReturnValueFromTextCtrl( *m_PadPosition_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_PadPosition_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_PadPosition_X_Ctrl );
+    y = ValueFromTextCtrl( *m_PadPosition_Y_Ctrl );
 
     aPad->SetPosition( wxPoint( x, y ) );
     aPad->SetPos0( wxPoint( x, y ) );
 
     // Read pad drill:
-    x = ReturnValueFromTextCtrl( *m_PadDrill_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_PadDrill_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_PadDrill_X_Ctrl );
+    y = ValueFromTextCtrl( *m_PadDrill_Y_Ctrl );
 
     if( m_DrillShapeCtrl->GetSelection() == 0 )
     {
@@ -924,24 +924,24 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetDrillSize( wxSize( x, y ) );
 
     // Read pad shape size:
-    x = ReturnValueFromTextCtrl( *m_ShapeSize_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_ShapeSize_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_ShapeSize_X_Ctrl );
+    y = ValueFromTextCtrl( *m_ShapeSize_Y_Ctrl );
     if( aPad->GetShape() == PAD_CIRCLE )
         y = x;
 
     aPad->SetSize( wxSize( x, y ) );
 
     // Read pad length die
-    aPad->SetPadToDieLength( ReturnValueFromTextCtrl( *m_LengthPadToDieCtrl ) );
+    aPad->SetPadToDieLength( ValueFromTextCtrl( *m_LengthPadToDieCtrl ) );
 
     // Read pad shape delta size:
     // m_DeltaSize.x or m_DeltaSize.y must be NULL. for a trapezoid.
     wxSize delta;
 
     if( m_trapDeltaDirChoice->GetSelection() == 0 )
-        delta.x = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl );
+        delta.x = ValueFromTextCtrl( *m_ShapeDelta_Ctrl );
     else
-        delta.y = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl );
+        delta.y = ValueFromTextCtrl( *m_ShapeDelta_Ctrl );
 
     // Test bad values (be sure delta values are not too large)
     // remember DeltaSize.x is the Y size variation
@@ -974,8 +974,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetDelta( delta );
 
     // Read pad shape offset:
-    x = ReturnValueFromTextCtrl( *m_ShapeOffset_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_ShapeOffset_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_ShapeOffset_X_Ctrl );
+    y = ValueFromTextCtrl( *m_ShapeOffset_Y_Ctrl );
     aPad->SetOffset( wxPoint( x, y ) );
 
     double orient_value = 0;

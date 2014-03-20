@@ -327,7 +327,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                     }
                     else
                     {
-                        ((SEGVIA*)track)->ReturnLayerPair( &top_layer, &bottom_layer );
+                        ((SEGVIA*)track)->LayerPair( &top_layer, &bottom_layer );
                         zone = m_Brd->HitTestForAnyFilledArea( track->GetStart(),
                                                                top_layer, bottom_layer,
                                                                track->GetNet() );
@@ -355,7 +355,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
 
                         if( other == NULL )
                         {
-                            via->ReturnLayerPair( &top_layer, &bottom_layer );
+                            via->LayerPair( &top_layer, &bottom_layer );
                             zone = m_Brd->HitTestForAnyFilledArea( via->GetStart(),
                                                                    bottom_layer,
                                                                    top_layer,
@@ -387,7 +387,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                     }
                     else
                     {
-                        ((SEGVIA*)track)->ReturnLayerPair( &top_layer, &bottom_layer );
+                        ((SEGVIA*)track)->LayerPair( &top_layer, &bottom_layer );
                         zone = m_Brd->HitTestForAnyFilledArea( track->GetEnd(),
                                                                top_layer, bottom_layer,
                                                                track->GetNet() );
@@ -416,7 +416,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
 
                         if( other == NULL )
                         {
-                            via->ReturnLayerPair( &top_layer, &bottom_layer );
+                            via->LayerPair( &top_layer, &bottom_layer );
                             zone = m_Brd->HitTestForAnyFilledArea( via->GetEnd(),
                                                                    bottom_layer, top_layer,
                                                                    via->GetNet() );

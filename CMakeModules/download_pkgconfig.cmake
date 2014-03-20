@@ -33,7 +33,9 @@ set( PKGCONFIG_ROOT "${PROJECT_SOURCE_DIR}/pkgconfig_root" )
 
 #-----</configure>---------------------------------------------------------------
 
-find_package( BZip2 REQUIRED )
+if( NOT BZIP2_FOUND )
+    find_package( BZip2 REQUIRED )
+endif()
 
 set( PREFIX ${DOWNLOAD_DIR}/pkgconfig )
 

@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <common.h>
 #include <macros.h>
 #include <base_struct.h>

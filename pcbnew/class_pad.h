@@ -35,7 +35,7 @@
 #include <class_board_connected_item.h>
 #include <pad_shapes.h>
 #include <PolyLine.h>
-#include <param_config.h>       // PARAM_CFG_ARRAY
+#include <config_params.h>       // PARAM_CFG_ARRAY
 #include "zones.h"
 
 
@@ -353,7 +353,7 @@ public:
     int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd,
                                    double aRotation, const wxSize& aMargin ) const;
 
-    void ReturnStringPadName( wxString& text ) const; // Return pad name as string in a buffer
+    void StringPadName( wxString& text ) const; // Return pad name as string in a buffer
 
     /**
      * Function GetBoundingRadius
@@ -372,7 +372,7 @@ public:
         return m_boundingRadius;
     }
 
-    const wxPoint ReturnShapePos() const;
+    const wxPoint ShapePos() const;
 
     /**
      * Function GetSubRatsnest
@@ -511,7 +511,7 @@ private:
      * In all cases the pad position is the pad hole.
      * The physical shape position (used to draw it for instance) is pad
      * position (m_Pos) + m_Offset.
-     * D_PAD::ReturnShapePos() returns the physical shape position according to
+     * D_PAD::ShapePos() returns the physical shape position according to
      * the offset and the pad rotation.
      */
     wxPoint     m_Offset;

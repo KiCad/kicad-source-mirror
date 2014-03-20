@@ -29,7 +29,8 @@
 
 #include <fctsys.h>
 #include <wx/ffile.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <kicad_string.h>
@@ -96,8 +97,9 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 
     // Some day it might be useful save the last library type selected along with the path.
     static int lastFilterIndex = 0;
-    wxString   lastOpenedPathForLoading;
-    wxConfig*  config = wxGetApp().GetSettings();
+
+    wxString        lastOpenedPathForLoading;
+    wxConfigBase*   config = Kiface().KifaceSettings();
 
     if( config )
         config->Read( EXPORT_IMPORT_LASTPATH_KEY, &lastOpenedPathForLoading );
@@ -279,10 +281,10 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 
 void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
 {
-    wxFileName  fn;
-    wxConfig*   config = wxGetApp().GetSettings();
+    wxFileName      fn;
+    wxConfigBase*   config = Kiface().KifaceSettings();
 
-    if( aModule == NULL )
+    if( !aModule )
         return;
 
     fn.SetName( aModule->GetFPID().GetFootprintName() );
@@ -366,8 +368,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveCurrentModule( const wxString* aLibPath )
 
 wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 {
-    wxFileName  fn;
-    wxConfig*   config = wxGetApp().GetSettings();
+    wxFileName      fn;
+    wxConfigBase*   config = Kiface().KifaceSettings();
 
     if( config )
     {
@@ -467,7 +469,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 {
     wxString    nickname = getLibNickName();
 
-    if( !m_footprintLibTable->IsFootprintLibWritable( nickname ) )
+    if( !FootprintLibs()->IsFootprintLibWritable( nickname ) )
     {
         wxString msg = wxString::Format(
                 _( "Library '%s' is read only" ),
@@ -479,7 +481,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
     }
 
     wxString    fpid_txt = PCB_BASE_FRAME::SelectFootprint( this, nickname,
-                        wxEmptyString, wxEmptyString, m_footprintLibTable );
+                        wxEmptyString, wxEmptyString, FootprintLibs() );
 
     if( !fpid_txt )
         return false;
@@ -495,7 +497,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 
     try
     {
-        m_footprintLibTable->FootprintDelete( nickname, fpname );
+        FootprintLibs()->FootprintDelete( nickname, fpname );
     }
     catch( IO_ERROR ioe )
     {
@@ -519,14 +521,17 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aNewModulesOnly )
         return;
     }
 
-    wxString last_nickname = wxGetApp().ReturnLastVisitedLibraryPath();
+    PROJECT&        prj = Prj();
+    SEARCH_STACK&   search = Kiface().KifaceSearch();
+
+    wxString last_nickname = prj.RPath(PROJECT::PCB_LIB).LastVisitedPath( search );
 
     wxString nickname = SelectLibrary( last_nickname );
 
     if( !nickname )
         return;
 
-    wxGetApp().SaveLastVisitedLibraryPath( nickname );
+    prj.RPath(PROJECT::PCB_LIB).SaveLastVisitedPath( nickname );
 
     if( !aNewModulesOnly )
     {
@@ -543,19 +548,19 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aNewModulesOnly )
         // Delete old library if we're replacing it entirely.
         if( !aNewModulesOnly )
         {
-            m_footprintLibTable->FootprintLibDelete( nickname );
-            m_footprintLibTable->FootprintLibCreate( nickname );
+            FootprintLibs()->FootprintLibDelete( nickname );
+            FootprintLibs()->FootprintLibCreate( nickname );
 
             for( MODULE* m = GetBoard()->m_Modules;  m;  m = m->Next() )
             {
-                m_footprintLibTable->FootprintSave( nickname, m, true );
+                FootprintLibs()->FootprintSave( nickname, m, true );
             }
         }
         else
         {
             for( MODULE* m = GetBoard()->m_Modules;  m;  m = m->Next() )
             {
-                m_footprintLibTable->FootprintSave( nickname, m, false );
+                FootprintLibs()->FootprintSave( nickname, m, false );
 
                 // Check for request to stop backup (ESCAPE key actuated)
                 if( m_canvas->GetAbortRequest() )
@@ -601,7 +606,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
         {
             wxString msg = wxString::Format(
                     _("Error:\none of invalid chars '%s' found\nin '%s'" ),
-                    MODULE::ReturnStringLibNameInvalidChars( true ),
+                    MODULE::StringLibNameInvalidChars( true ),
                     GetChars( footprintName ) );
 
             DisplayError( NULL, msg );
@@ -622,7 +627,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
 
     try
     {
-        MODULE* m = m_footprintLibTable->FootprintLoad( aLibrary, footprintName );
+        MODULE* m = FootprintLibs()->FootprintLoad( aLibrary, footprintName );
 
         if( m )
         {
@@ -648,7 +653,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
 
         // this always overwrites any existing footprint, but should yell on its
         // own if the library or footprint is not writable.
-        m_footprintLibTable->FootprintSave( aLibrary, aModule );
+        FootprintLibs()->FootprintSave( aLibrary, aModule );
     }
     catch( IO_ERROR ioe )
     {
@@ -733,15 +738,17 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
     headers.Add( _( "Nickname" ) );
     headers.Add( _( "Description" ) );
 
+    FP_LIB_TABLE*   fptbl = FootprintLibs();
+
     std::vector< wxArrayString > itemsToDisplay;
-    std::vector< wxString >      nicknames = m_footprintLibTable->GetLogicalLibs();
+    std::vector< wxString >      nicknames = fptbl->GetLogicalLibs();
 
     for( unsigned i = 0; i < nicknames.size(); i++ )
     {
         wxArrayString item;
 
         item.Add( nicknames[i] );
-        item.Add( m_footprintLibTable->GetDescription( nicknames[i] ) );
+        item.Add( fptbl->GetDescription( nicknames[i] ) );
 
         itemsToDisplay.push_back( item );
     }

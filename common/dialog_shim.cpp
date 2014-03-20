@@ -24,12 +24,22 @@
  */
 
 #include <dialog_shim.h>
-
+#include <kiway_player.h>
 
 DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
         const wxPoint& pos, const wxSize& size, long style, const wxString& name ) :
-    wxDialog( aParent, id, title, pos, size, style, name )
+    wxDialog( aParent, id, title, pos, size, style, name ),
+    KIWAY_HOLDER( 0 )
 {
+    // pray that aParent is either a KIWAY_PLAYER or DIALOG_SHIM derivation.
+    KIWAY_HOLDER* h = dynamic_cast<KIWAY_HOLDER*>( aParent );
+
+    wxASSERT_MSG( h,
+        wxT( "DIALOG_SHIM's parent not derived from KIWAY_PLAYER nor DIALOG_SHIM" ) );
+
+    if( h )
+        SetKiway( this, &h->Kiway() );
+
 #if DLGSHIM_USE_SETFOCUS
     Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SHIM::onInit ) );
 #endif

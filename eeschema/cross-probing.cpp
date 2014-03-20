@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <macros.h>
 #include <eda_dde.h>
 #include <wxEeschemaStruct.h>
@@ -58,17 +58,11 @@
 void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 {
     char     line[1024];
-    char*    idcmd;
-    char*    text;
-    wxString part_ref, msg;
-    SCH_EDIT_FRAME* frame;
-
-    frame = (SCH_EDIT_FRAME*)wxGetApp().GetTopWindow();
 
     strncpy( line, cmdline, sizeof(line) - 1 );
 
-    idcmd = strtok( line, " \n\r" );
-    text  = strtok( NULL, "\"\n\r" );
+    char* idcmd = strtok( line, " \n\r" );
+    char* text  = strtok( NULL, "\"\n\r" );
 
     if( (idcmd == NULL) || (text == NULL) )
         return;
@@ -76,14 +70,14 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( strcmp( idcmd, "$PART:" ) != 0 )
         return;
 
-    part_ref = FROM_UTF8( text );
+    wxString part_ref = FROM_UTF8( text );
 
     /* look for a complement */
     idcmd = strtok( NULL, " \n\r" );
 
     if( idcmd == NULL )    // component only
     {
-        frame->FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
+        FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
         return;
     }
 
@@ -92,23 +86,23 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( text == NULL )
         return;
 
-    msg = FROM_UTF8( text );
+    wxString msg = FROM_UTF8( text );
 
     if( strcmp( idcmd, "$REF:" ) == 0 )
     {
-        frame->FindComponentAndItem( part_ref, true, FIND_REFERENCE, msg, false );
+        FindComponentAndItem( part_ref, true, FIND_REFERENCE, msg, false );
     }
     else if( strcmp( idcmd, "$VAL:" ) == 0 )
     {
-        frame->FindComponentAndItem( part_ref, true, FIND_VALUE, msg, false );
+        FindComponentAndItem( part_ref, true, FIND_VALUE, msg, false );
     }
     else if( strcmp( idcmd, "$PAD:" ) == 0 )
     {
-        frame->FindComponentAndItem( part_ref, true, FIND_PIN, msg, false );
+        FindComponentAndItem( part_ref, true, FIND_PIN, msg, false );
     }
     else
     {
-        frame->FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
+        FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
     }
 }
 
@@ -126,14 +120,14 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*
     {
     case SCH_FIELD_T:
     case LIB_FIELD_T:
-    {
-        if( LibItem == NULL )
-            break;
+        {
+            if( !LibItem )
+                break;
 
-        sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
-        SendCommand( MSG_TO_PCB, Line );
-    }
-    break;
+            sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
+            SendCommand( MSG_TO_PCB, Line );
+        }
+        break;
 
     case SCH_COMPONENT_T:
         LibItem = (SCH_COMPONENT*) objectToSync;
@@ -142,7 +136,7 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*
         break;
 
     case LIB_PIN_T:
-        if( LibItem == NULL )
+        if( !LibItem )
             break;
 
         Pin = (LIB_PIN*) objectToSync;
@@ -150,7 +144,7 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*
         if( Pin->GetNumber() )
         {
             wxString pinnum;
-            Pin->ReturnPinStringNum( pinnum );
+            Pin->PinStringNum( pinnum );
             sprintf( Line, "$PIN: %s $PART: %s", TO_UTF8( pinnum ),
                      TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
         }

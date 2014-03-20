@@ -25,7 +25,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <appl_wxstruct.h>
+
+#include <kiface_i.h>
 #include <plot_common.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
@@ -44,7 +45,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     m_board( aParent->GetBoard() ),
     m_plotOpts( aParent->GetPlotSettings() )
 {
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
     m_brdSettings = m_board->GetDesignSettings();
 
     Init_Dialog();
@@ -100,25 +101,25 @@ void DIALOG_PLOT::Init_Dialog()
         break;
     }
 
-    msg = ReturnStringFromValue( g_UserUnit, m_brdSettings.m_SolderMaskMargin, true );
+    msg = StringFromValue( g_UserUnit, m_brdSettings.m_SolderMaskMargin, true );
     m_SolderMaskMarginCurrValue->SetLabel( msg );
-    msg = ReturnStringFromValue( g_UserUnit, m_brdSettings.m_SolderMaskMinWidth, true );
+    msg = StringFromValue( g_UserUnit, m_brdSettings.m_SolderMaskMinWidth, true );
     m_SolderMaskMinWidthCurrValue->SetLabel( msg );
 
     // Set units and value for HPGL pen size (this param in in mils).
     AddUnitSymbol( *m_textPenSize, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit,
+    msg = StringFromValue( g_UserUnit,
                                  m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
     m_HPGLPenSizeOpt->AppendText( msg );
 
     // Set units and value for HPGL pen overlay (this param in in mils).
     AddUnitSymbol( *m_textPenOvr, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit,
+    msg = StringFromValue( g_UserUnit,
                                  m_plotOpts.GetHPGLPenOverlay() * IU_PER_MILS );
     m_HPGLPenOverlayOpt->AppendText( msg );
 
     AddUnitSymbol( *m_textDefaultPenSize, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetLineWidth() );
+    msg = StringFromValue( g_UserUnit, m_plotOpts.GetLineWidth() );
     m_linesWidth->AppendText( msg );
 
     // Set units for PS global width correction.
@@ -583,11 +584,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // read HPLG pen size (this param is stored in mils)
     wxString    msg = m_HPGLPenSizeOpt->GetValue();
-    int         tmp = ReturnValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
+    int         tmp = ValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
 
     if( !tempOptions.SetHPGLPenDiameter( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
+        msg = StringFromValue( g_UserUnit, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
         m_HPGLPenSizeOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen size constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -595,11 +596,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // Read HPGL pen overlay (this param is stored in mils)
     msg = m_HPGLPenOverlayOpt->GetValue();
-    tmp = ReturnValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
+    tmp = ValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
 
     if( !tempOptions.SetHPGLPenOverlay( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit,
+        msg = StringFromValue( g_UserUnit,
                                      tempOptions.GetHPGLPenOverlay() * IU_PER_MILS );
         m_HPGLPenOverlayOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen overlay constrained!\n" ) );
@@ -608,11 +609,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // Default linewidth
     msg = m_linesWidth->GetValue();
-    tmp = ReturnValueFromString( g_UserUnit, msg );
+    tmp = ValueFromString( g_UserUnit, msg );
 
     if( !tempOptions.SetLineWidth( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetLineWidth() );
+        msg = StringFromValue( g_UserUnit, tempOptions.GetLineWidth() );
         m_linesWidth->SetValue( msg );
         msg.Printf( _( "Default line width constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -649,11 +650,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // PS Width correction
     msg = m_PSFineAdjustWidthOpt->GetValue();
-    int itmp = ReturnValueFromString( g_UserUnit, msg );
+    int itmp = ValueFromString( g_UserUnit, msg );
 
     if( !setInt( &m_PSWidthAdjust, itmp, m_widthAdjustMinValue, m_widthAdjustMaxValue ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, m_PSWidthAdjust );
+        msg = StringFromValue( g_UserUnit, m_PSWidthAdjust );
         m_PSFineAdjustWidthOpt->SetValue( msg );
         msg.Printf( _( "Width correction constrained!\n"
                        "The reasonable width correction value must be in a range of\n"

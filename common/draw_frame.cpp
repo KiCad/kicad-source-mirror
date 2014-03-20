@@ -28,7 +28,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <gr_basic.h>
 #include <common.h>
 #include <bitmaps.h>
@@ -38,7 +39,7 @@
 #include <class_drawpanel_gal.h>
 #include <class_base_screen.h>
 #include <msgpanel.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <confirm.h>
 #include <kicad_device_context.h>
 #include <dialog_helpers.h>
@@ -88,12 +89,12 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, EDA_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* aParent,
+EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                 ID_DRAWFRAME_TYPE aFrameType,
                                 const wxString& aTitle,
                                 const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString & aFrameName ) :
-    EDA_BASE_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
+    KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     m_drawToolBar         = NULL;
     m_optionsToolBar      = NULL;
@@ -531,7 +532,7 @@ wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
 }
 
 
-int EDA_DRAW_FRAME::ReturnBlockCommand( int key )
+int EDA_DRAW_FRAME::BlockCommand( int key )
 {
     return 0;
 }
@@ -582,25 +583,21 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
 }
 
 
-void EDA_DRAW_FRAME::LoadSettings()
+void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxASSERT( wxGetApp().GetSettings() != NULL );
+    EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    wxConfig* cfg = wxGetApp().GetSettings();
+    aCfg->Read( m_FrameName + CursorShapeEntryKeyword, &m_cursorShape, ( long )0 );
 
-    EDA_BASE_FRAME::LoadSettings();
-    cfg->Read( m_FrameName + CursorShapeEntryKeyword, &m_cursorShape, ( long )0 );
     bool btmp;
-
-    if ( cfg->Read( m_FrameName + ShowGridEntryKeyword, &btmp ) )
+    if( aCfg->Read( m_FrameName + ShowGridEntryKeyword, &btmp ) )
         SetGridVisibility( btmp );
 
     int itmp;
-
-    if( cfg->Read( m_FrameName + GridColorEntryKeyword, &itmp ) )
+    if( aCfg->Read( m_FrameName + GridColorEntryKeyword, &itmp ) )
         SetGridColor( ColorFromInt( itmp ) );
 
-    cfg->Read( m_FrameName + LastGridSizeIdKeyword, &m_LastGridSizeId, 0L );
+    aCfg->Read( m_FrameName + LastGridSizeIdKeyword, &m_LastGridSizeId, 0L );
 
     // m_LastGridSizeId is an offset, expected to be >= 0
     if( m_LastGridSizeId < 0 )
@@ -608,17 +605,14 @@ void EDA_DRAW_FRAME::LoadSettings()
 }
 
 
-void EDA_DRAW_FRAME::SaveSettings()
+void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxASSERT( wxGetApp().GetSettings() != NULL );
+    EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    wxConfig* cfg = wxGetApp().GetSettings();
-
-    EDA_BASE_FRAME::SaveSettings();
-    cfg->Write( m_FrameName + CursorShapeEntryKeyword, m_cursorShape );
-    cfg->Write( m_FrameName + ShowGridEntryKeyword, IsGridVisible() );
-    cfg->Write( m_FrameName + GridColorEntryKeyword, ( long ) GetGridColor() );
-    cfg->Write( m_FrameName + LastGridSizeIdKeyword, ( long ) m_LastGridSizeId );
+    aCfg->Write( m_FrameName + CursorShapeEntryKeyword, m_cursorShape );
+    aCfg->Write( m_FrameName + ShowGridEntryKeyword, IsGridVisible() );
+    aCfg->Write( m_FrameName + GridColorEntryKeyword, ( long ) GetGridColor() );
+    aCfg->Write( m_FrameName + LastGridSizeIdKeyword, ( long ) m_LastGridSizeId );
 }
 
 
@@ -682,7 +676,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
     if( ( Block->GetCommand() != BLOCK_IDLE ) || ( Block->GetState() != STATE_NO_BLOCK ) )
         return false;
 
-    Block->SetCommand( (BLOCK_COMMAND_T) ReturnBlockCommand( aKey ) );
+    Block->SetCommand( (BLOCK_COMMAND_T) BlockCommand( aKey ) );
 
     if( Block->GetCommand() == 0 )
         return false;

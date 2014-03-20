@@ -358,7 +358,7 @@ inline bool IsBackLayer( LAYER_NUM aLayer )
 }
 
 /**
- * Function ReturnFlippedLayerNumber
+ * Function FlippedLayerNumber
  * @return the layer number after flipping an item
  * some (not all) layers: external copper, Mask, Paste, and solder
  * are swapped between front and back sides

@@ -27,8 +27,11 @@
  */
 
 #include <fctsys.h>
+#include <macros.h>
+#include <fp_lib_table.h>
 #include <gr_basic.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
 #include <wxstruct.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -56,11 +59,13 @@ const wxString FootprintAliasFileWildcard( _( "KiCad footprint alias files (*.eq
 const wxString titleLibLoadError( _( "Library Load Error" ) );
 
 
+#if 0   // add this logic to OpenProjectFiles()
+
 /*
  * MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void EDA_APP::MacOpenFile( const wxString& aFileName )
+void PGM_BASE::MacOpenFile( const wxString& aFileName )
 {
     wxFileName  filename = aFileName;
     wxString    oldPath;
@@ -74,73 +79,153 @@ void EDA_APP::MacOpenFile( const wxString& aFileName )
         oldPath = frame->m_NetlistFileName.GetPath();
 
     // Update the library search path list.
-    if( wxGetApp().GetLibraryPathList().Index( oldPath ) != wxNOT_FOUND )
-        wxGetApp().GetLibraryPathList().Remove( oldPath );
+    if( Pgm().GetLibraryPathList().Index( oldPath ) != wxNOT_FOUND )
+        Pgm().GetLibraryPathList().Remove( oldPath );
 
-    wxGetApp().GetLibraryPathList().Insert( filename.GetPath(), 0 );
+    Pgm().GetLibraryPathList().Insert( filename.GetPath(), 0 );
 
     frame->m_NetlistFileName = filename;
     frame->ReadNetListAndLinkFiles();
 }
+#endif
 
 
-// Create a new application object
-IMPLEMENT_APP( EDA_APP )
+namespace CV {
 
-
-/************************************/
-/* Called to initialize the program */
-/************************************/
-
-bool EDA_APP::OnInit()
+static struct IFACE : public KIFACE_I
 {
-    wxFileName       filename;
-    wxString         message;
-    CVPCB_MAINFRAME* frame = NULL;
+    // Of course all are virtual overloads, implementations of the KIFACE.
 
-    InitEDA_Appl( wxT( "CvPcb" ), APP_CVPCB_T );
+    IFACE( const char* aName, KIWAY::FACE_T aType ) :
+        KIFACE_I( aName, aType )
+    {}
 
-    SetFootprintLibTablePath();
+    bool OnKifaceStart( PGM_BASE* aProgram );
 
-    if( m_Checker && m_Checker->IsAnotherRunning() )
+    void OnKifaceEnd();
+
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {
-        if( !IsOK( NULL, _( "CvPcb is already running, Continue?" ) ) )
-            return false;
+        switch( aClassId )
+        {
+        case CVPCB_FRAME_TYPE:
+            {
+                CVPCB_MAINFRAME* frame = new CVPCB_MAINFRAME( aKiway, aParent );
+                return frame;
+            }
+            break;
+
+        default:
+            ;
+        }
+
+        return NULL;
     }
 
-    if( argc > 1 )
+    /**
+     * Function IfaceOrAddress
+     * return a pointer to the requested object.  The safest way to use this
+     * is to retrieve a pointer to a static instance of an interface, similar to
+     * how the KIFACE interface is exported.  But if you know what you are doing
+     * use it to retrieve anything you want.
+     *
+     * @param aDataId identifies which object you want the address of.
+     *
+     * @return void* - and must be cast into the know type.
+     */
+    void* IfaceOrAddress( int aDataId )
     {
-        filename = argv[1];
-        wxSetWorkingDirectory( filename.GetPath() );
+        return NULL;
     }
 
-    // read current setup and reopen last directory if no filename to open in command line
-    bool reopenLastUsedDirectory = argc == 1;
-    GetSettings( reopenLastUsedDirectory );
+} kiface( "cvpcb", KIWAY::FACE_CVPCB );
+
+} // namespace
+
+using namespace CV;
+
+
+static PGM_BASE* process;
+
+
+KIFACE_I& Kiface() { return kiface; }
+
+
+// KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.
+// KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
+MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram )
+{
+    process = (PGM_BASE*) aProgram;
+    return &kiface;
+}
+
+
+PGM_BASE& Pgm()
+{
+    wxASSERT( process );    // KIFACE_GETTER has already been called.
+    return *process;
+}
+
+
+FP_LIB_TABLE GFootprintTable;
+
+
+// A short lived implementation.  cvpcb will get combine into pcbnew shortly, so
+// we skip setting KISYSMOD here for now.  User should set the environment
+// variable.
+
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram )
+{
+    // This is process level, not project level, initialization of the DSO.
+
+    // Do nothing in here pertinent to a project!
+
+    start_common();
+
+    /*  Now that there are no *.mod files in the standard library, this function
+        has no utility.  User should simply set the variable manually.
+        Looking for *.mod files which do not exist is fruitless.
+
+    // SetFootprintLibTablePath();
+    */
 
     g_DrawBgColor = BLACK;
 
-    wxString Title = GetTitle() + wxT( " " ) + GetBuildVersion();
-    frame = new CVPCB_MAINFRAME( Title );
-
-    // Show the frame
-    SetTopWindow( frame );
-    frame->Show( true );
-    frame->m_NetlistFileExtension = wxT( "net" );
-
-    if( filename.IsOk() && filename.FileExists() )
+    try
     {
-        frame->m_NetlistFileName = filename;
-        frame->LoadProjectFile( filename.GetFullPath() );
+        // The global table is not related to a specific project.  All projects
+        // will use the same global table.  So the KIFACE::OnKifaceStart() contract
+        // of avoiding anything project specific is not violated here.
 
-        if( frame->ReadNetListAndLinkFiles() )
+        if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
         {
-            frame->m_NetlistFileExtension = filename.GetExt();
-            return true;
+            DisplayInfoMessage( NULL, wxT(
+                "You have run CvPcb for the first time using the "
+                "new footprint library table method for finding "
+                "footprints.  CvPcb has either copied the default "
+                "table or created an empty table in your home "
+                "folder.  You must first configure the library "
+                "table to include all footprint libraries not "
+                "included with KiCad.  See the \"Footprint Library "
+                "Table\" section of the CvPcb documentation for "
+                "more information." ) );
         }
     }
-
-    frame->UpdateTitle();
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg = wxString::Format( _(
+            "An error occurred attempting to load the global footprint library "
+            "table:\n\n%s" ),
+            GetChars( ioe.errorText )
+            );
+        DisplayError( NULL, msg );
+        return false;
+    }
 
     return true;
+}
+
+void IFACE::OnKifaceEnd()
+{
+    end_common();
 }

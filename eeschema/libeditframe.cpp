@@ -29,7 +29,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <eda_doc.h>
@@ -188,15 +189,11 @@ END_EVENT_TABLE()
 
 #define LIB_EDIT_FRAME_NAME wxT( "LibeditFrame" )
 
-LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
-                                const wxString& title,
-                                const wxPoint&  pos,
-                                const wxSize&   size,
-                                long            style ) :
-    SCH_BASE_FRAME( aParent, LIBEDITOR_FRAME_TYPE, title, pos, size,
-                    style, GetLibEditFrameName() )
+LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, SCH_EDIT_FRAME* aParent ) :
+    SCH_BASE_FRAME( aKiway, aParent, LIBEDITOR_FRAME_TYPE, _( "Library Editor" ),
+        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GetLibEditFrameName() )
 {
-    wxASSERT( aParent );
+    wxASSERT( aParent );    // LIB_EDIT_FRAME needs a parent, since it peeks up there.
 
     m_FrameName  = GetLibEditFrameName();
     m_showAxis   = true;            // true to draw axis
@@ -219,7 +216,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-    LoadSettings();
+    LoadSettings( config() );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
@@ -295,17 +292,29 @@ LIB_EDIT_FRAME* LIB_EDIT_FRAME::GetActiveLibraryEditor()
 }
 
 
-void LIB_EDIT_FRAME::LoadSettings()
+void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxConfig* cfg;
+#if 0   // original
+
+    wxConfigBase* cfg;
 
     EDA_DRAW_FRAME::LoadSettings();
 
     wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
-    cfg = wxGetApp().GetSettings();
+    cfg = Pgm().GetSettings();
+#else
 
-    m_lastLibExportPath = cfg->Read( lastLibExportPathEntry, ::wxGetCwd() );
-    m_lastLibImportPath = cfg->Read( lastLibImportPathEntry, ::wxGetCwd() );
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
+
+    wxConfigPathChanger cpc( aCfg, m_configPath );
+
+    m_lastLibExportPath = aCfg->Read( lastLibExportPathEntry, ::wxGetCwd() );
+    m_lastLibImportPath = aCfg->Read( lastLibImportPathEntry, ::wxGetCwd() );
+
+#endif
+
+    m_lastLibExportPath = aCfg->Read( lastLibExportPathEntry, ::wxGetCwd() );
+    m_lastLibImportPath = aCfg->Read( lastLibImportPathEntry, ::wxGetCwd() );
 }
 
 
@@ -316,17 +325,14 @@ void LIB_EDIT_FRAME::SetDrawItem( LIB_ITEM* drawItem )
 
 
 
-void LIB_EDIT_FRAME::SaveSettings()
+void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxConfig* cfg;
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    EDA_DRAW_FRAME::SaveSettings();
+    wxConfigPathChanger cpc( aCfg, m_configPath );
 
-    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
-    cfg = wxGetApp().GetSettings();
-
-    cfg->Write( lastLibExportPathEntry, m_lastLibExportPath );
-    cfg->Write( lastLibImportPathEntry, m_lastLibImportPath );
+    aCfg->Write( lastLibExportPathEntry, m_lastLibExportPath );
+    aCfg->Write( lastLibImportPathEntry, m_lastLibImportPath );
 }
 
 
@@ -457,7 +463,7 @@ void LIB_EDIT_FRAME::UpdatePartSelectList()
     {
         for( int i = 0; i < m_component->GetPartCount(); i++ )
         {
-            wxString sub  = LIB_COMPONENT::ReturnSubReference( i+1, false );
+            wxString sub  = LIB_COMPONENT::SubReference( i+1, false );
             wxString part = wxString::Format( _( "Unit %s" ), GetChars( sub ) );
             m_partSelectBox->Append( part );
         }
@@ -606,15 +612,19 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
     if( m_component == NULL )
         return;
 
-    wxString fileName;
-    LIB_ALIAS* alias = m_component->GetAlias( m_aliasName );
+    wxString    fileName;
+    LIB_ALIAS*  alias = m_component->GetAlias( m_aliasName );
 
     wxCHECK_RET( alias != NULL, wxT( "Alias not found." ) );
 
     fileName = alias->GetDocFileName();
 
     if( !fileName.IsEmpty() )
-        GetAssociatedDocument( this, fileName, &wxGetApp().GetLibraryPathList() );
+    {
+        SEARCH_STACK* lib_search = &Prj().SchSearchS();
+
+        GetAssociatedDocument( this, fileName, lib_search );
+    }
 }
 
 

@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
@@ -118,16 +118,15 @@ static wxAcceleratorEntry accels[] =
 #define FOOTPRINT_VIEWER_FRAME_NAME     wxT( "ModViewFrame" )
 
 
-FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
-                                                FP_LIB_TABLE*   aTable,
-                                                wxSemaphore*    aSemaphore,
-                                                long            aStyle ) :
-    PCB_BASE_FRAME( aParent, MODULE_VIEWER_FRAME_TYPE, _( "Footprint Library Browser" ),
-                    wxDefaultPosition, wxDefaultSize, aStyle, GetFootprintViewerFrameName() )
+FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent, wxSemaphore* aSemaphore ) :
+    PCB_BASE_FRAME( aKiway, aParent, MODULE_VIEWER_FRAME_TYPE, _( "Footprint Library Browser" ),
+            wxDefaultPosition, wxDefaultSize,
+            !aSemaphore ?
+                KICAD_DEFAULT_DRAWFRAME_STYLE :
+                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT,
+            GetFootprintViewerFrameName() )
 {
     wxAcceleratorTable table( DIM( accels ), accels );
-
-    m_footprintLibTable = aTable;
 
     m_FrameName  = GetFootprintViewerFrameName();
     m_configPath = wxT( "FootprintViewer" );
@@ -159,8 +158,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
 
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
-    LoadSettings();
-
+    LoadSettings( config() );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
@@ -273,10 +271,13 @@ const wxChar* FOOTPRINT_VIEWER_FRAME::GetFootprintViewerFrameName()
 }
 
 
-FOOTPRINT_VIEWER_FRAME* FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer()
+FOOTPRINT_VIEWER_FRAME* FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( const wxWindow* aParent )
 {
-    return (FOOTPRINT_VIEWER_FRAME*)
-            wxWindow::FindWindowByName( GetFootprintViewerFrameName() );
+    // top_of_project!
+    wxASSERT( dynamic_cast<const PCB_EDIT_FRAME*>( aParent ) );
+
+    return (FOOTPRINT_VIEWER_FRAME*) wxWindow::FindWindowByName(
+        GetFootprintViewerFrameName(), aParent );
 }
 
 
@@ -314,7 +315,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
 {
     m_libList->Clear();
 
-    std::vector< wxString > nicknames = m_footprintLibTable->GetLogicalLibs();
+    std::vector< wxString > nicknames = FootprintLibs()->GetLogicalLibs();
 
     for( unsigned ii = 0; ii < nicknames.size(); ii++ )
         m_libList->Append( nicknames[ii] );
@@ -353,7 +354,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
     FOOTPRINT_LIST fp_info_list;
 
-    fp_info_list.ReadFootprintFiles( m_footprintLibTable, &m_libraryName );
+    fp_info_list.ReadFootprintFiles( FootprintLibs(), &m_libraryName );
 
     if( fp_info_list.GetErrorCount() )
     {
@@ -468,29 +469,15 @@ void FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint( wxCommandEvent& event )
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::LoadSettings( )
+void FOOTPRINT_VIEWER_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    EDA_DRAW_FRAME::LoadSettings();
-
-/*
-    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
-
-    // wxConfig* cfg =
-    wxGetApp().GetSettings();
-*/
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::SaveSettings()
+void FOOTPRINT_VIEWER_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    EDA_DRAW_FRAME::SaveSettings();
-
-/*
-    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
-
-    // wxConfig* cfg =
-    wxGetApp().GetSettings();
-*/
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
 }
 
 
@@ -505,7 +492,7 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
     m_selectedFootprintName.Empty();
 
     // Ensure we have the right library list:
-    std::vector< wxString > libNicknames = m_footprintLibTable->GetLogicalLibs();
+    std::vector< wxString > libNicknames = FootprintLibs()->GetLogicalLibs();
 
     if( libNicknames.size() == m_libList->GetCount() )
     {
@@ -635,7 +622,7 @@ void FOOTPRINT_VIEWER_FRAME::Show3D_Frame( wxCommandEvent& event )
         return;
     }
 
-    m_Draw3DFrame = new EDA_3D_FRAME( this, wxEmptyString );
+    m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, wxEmptyString );
     Update3D_Frame( false );
     m_Draw3DFrame->Show( true );
 }
@@ -741,7 +728,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
     PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
     wxString        libname = m_libraryName + wxT( "." ) + LegacyFootprintLibPathExtension;
     MODULE*         oldmodule = GetBoard()->m_Modules;
-    MODULE*         module = LoadModuleFromLibrary( libname, parent->GetFootprintLibraryTable(),
+    MODULE*         module = LoadModuleFromLibrary( libname, parent->FootprintLibs(),
                                                     false );
 
     if( module )
@@ -802,7 +789,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
 
-        MODULE* footprint = m_footprintLibTable->FootprintLoad( m_libraryName, m_footprintName );
+        MODULE* footprint = FootprintLibs()->FootprintLoad( m_libraryName, m_footprintName );
 
         if( footprint )
             GetBoard()->Add( footprint, ADD_APPEND );

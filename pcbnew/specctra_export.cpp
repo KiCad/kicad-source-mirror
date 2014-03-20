@@ -832,7 +832,7 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
     LAYER_NUM topLayerNum;
     LAYER_NUM botLayerNum;
 
-    aVia->ReturnLayerPair( &topLayerNum, &botLayerNum );
+    aVia->LayerPair( &topLayerNum, &botLayerNum );
 
     int topLayer = kicadLayer2pcb[topLayerNum];
     int botLayer = kicadLayer2pcb[botLayerNum];

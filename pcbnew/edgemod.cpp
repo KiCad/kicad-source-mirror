@@ -251,14 +251,14 @@ void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
 {
     wxString buffer;
 
-    buffer = ReturnStringFromValue( g_UserUnit, GetDesignSettings().m_ModuleSegmentWidth );
+    buffer = StringFromValue( g_UserUnit, GetDesignSettings().m_ModuleSegmentWidth );
     wxTextEntryDialog dlg( this, _( "New Width:" ), _( "Edge Width" ), buffer );
 
     if( dlg.ShowModal() != wxID_OK )
         return; // canceled by user
 
     buffer = dlg.GetValue( );
-    GetDesignSettings().m_ModuleSegmentWidth = ReturnValueFromString( g_UserUnit, buffer );
+    GetDesignSettings().m_ModuleSegmentWidth = ValueFromString( g_UserUnit, buffer );
 
     if( aEdge )
     {

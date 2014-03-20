@@ -211,13 +211,13 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     }
 
     // Set PCB Text position
-    newPosition.x = ReturnValueFromString( g_UserUnit, m_PositionXCtrl->GetValue() );
-    newPosition.y = ReturnValueFromString( g_UserUnit, m_PositionYCtrl->GetValue() );
+    newPosition.x = ValueFromString( g_UserUnit, m_PositionXCtrl->GetValue() );
+    newPosition.y = ValueFromString( g_UserUnit, m_PositionYCtrl->GetValue() );
     m_SelectedPCBText->SetTextPosition( newPosition );
 
     // Check constraints and set PCB Text size
-    newSize.x = ReturnValueFromString( g_UserUnit, m_SizeXCtrl->GetValue() );
-    newSize.y = ReturnValueFromString( g_UserUnit, m_SizeYCtrl->GetValue() );
+    newSize.x = ValueFromString( g_UserUnit, m_SizeXCtrl->GetValue() );
+    newSize.y = ValueFromString( g_UserUnit, m_SizeYCtrl->GetValue() );
 
     if( newSize.x < TEXTS_MIN_SIZE )
         newSize.x = TEXTS_MIN_SIZE;
@@ -234,7 +234,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     m_SelectedPCBText->SetSize( newSize );
 
     // Set the new thickness
-    m_SelectedPCBText->SetThickness( ReturnValueFromString( g_UserUnit,
+    m_SelectedPCBText->SetThickness( ValueFromString( g_UserUnit,
                                                             m_ThicknessCtrl->GetValue() ) );
 
     // Test for acceptable values for thickness and size and clamp if fails

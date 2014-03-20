@@ -24,7 +24,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-// macros which export functions from a DLL/DSO.
+
+/// Macros which export functions from a DLL/DSO.
+/// See: http://gcc.gnu.org/wiki/Visibility
 
 #if defined(__MINGW32__)
  #define APIEXPORT __declspec(dllexport)
@@ -32,6 +34,7 @@
  #define APILOCAL
 
 #elif defined(__GNUC__) && __GNUC__ >= 4
+ // On ELF, we compile with hidden visibility, so unwrap that for specific symbols:
  #define APIEXPORT __attribute__ ((visibility("default")))
  #define APIIMPORT __attribute__ ((visibility("default")))
  #define APILOCAL  __attribute__ ((visibility("hidden")))
@@ -44,8 +47,9 @@
 #endif
 
 
-#if defined(test_EXPORTS) || defined(COMPILING_DLL)
- // above defined by CMake magically when compiling implementation.
+#if defined(COMPILING_DLL)
+ // Be sure and define COMPILING_DLL when compiling implementation, and NOT when
+ // compiling the client.
  #define MY_API(rettype)    APIEXPORT   rettype
 #else
  #define MY_API(rettype)    APIIMPORT   rettype

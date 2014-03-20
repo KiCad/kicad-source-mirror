@@ -31,8 +31,8 @@
 #define  WX_GERBER_STRUCT_H
 
 
-#include <param_config.h>
-#include <wxstruct.h>
+#include <config_params.h>
+#include <draw_frame.h>
 
 #include <gerbview.h>
 #include <class_gbr_layout.h>
@@ -201,14 +201,14 @@ private:
 
     // An array sting to store warning messages when reaging a gerber file.
     wxArrayString   m_Messages;
-public:
-    GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
-                    const wxPoint& aPosition, const wxSize& aSize,
-                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
+public:
+    GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~GERBVIEW_FRAME();
 
     void    OnCloseWindow( wxCloseEvent& Event );
+
+    bool    OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl );   // overload KIWAY_PLAYER
 
     // Virtual basic functions:
     void    RedrawActiveWindow( wxDC* DC, bool EraseBg );
@@ -458,28 +458,9 @@ public:
      */
     PARAM_CFG_ARRAY&    GetConfigurationSettings( void );
 
-    /**
-     * Load applications settings specific to the Pcbnew.
-     *
-     * This overrides the base class EDA_DRAW_FRAME::LoadSettings() to
-     * handle settings specific common to the PCB layout application.  It
-     * calls down to the base class to load settings common to all
-     * EDA_DRAW_FRAME type drawing frames.
-     * Please put your application settings for Pcbnew here
-     * to avoid having application settings loaded all over the place.
-     */
-    virtual void        LoadSettings();
+    void LoadSettings( wxConfigBase* aCfg );    // override virtual
 
-    /**
-     * Save applications settings common to PCB draw frame objects.
-     *
-     * This overrides the base class EDA_DRAW_FRAME::SaveSettings() to
-     * save settings specific to the gerbview application main window.  It
-     * calls down to the base class to save settings common to all
-     * drawing frames.  Please put your application settings for Gerbview here
-     * to avoid having application settings saved all over the place.
-     */
-    virtual void        SaveSettings();
+    void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
     /**
      * Function SetLanguage
@@ -556,11 +537,11 @@ public:
     void                OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
 
     /**
-     * Function ReturnBlockCommand
+     * Function BlockCommand
      * returns the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
      * the \a aKey (ALT, SHIFT ALT ..)
      */
-    virtual int         ReturnBlockCommand( int key );
+    virtual int         BlockCommand( int key );
 
     /**
      * Function HandleBlockPlace

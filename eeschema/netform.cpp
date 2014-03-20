@@ -32,7 +32,7 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <wxEeschemaStruct.h>
 
 #include <netlist.h>
@@ -644,8 +644,7 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
     xdesign->AddChild( node( wxT( "date" ), DateAndTime() ) );
 
     // which Eeschema tool
-    xdesign->AddChild( node( wxT( "tool" ), wxGetApp().GetAppName() + wxChar(' ') +
-                             GetBuildVersion() ) );
+    xdesign->AddChild( node( wxT( "tool" ), wxT( "Eeschema " ) + GetBuildVersion() ) );
 
     /*  @todo might do a list of schematic pages
 
@@ -1727,13 +1726,13 @@ bool NETLIST_EXPORT_TOOL::WriteNetListCADSTAR( FILE* f )
     wxString footprint;
     SCH_SHEET_PATH* sheet;
     EDA_ITEM* DrawList;
-    SCH_COMPONENT* Component;
-    wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+    SCH_COMPONENT* component;
+    wxString title = wxT( "Eeschema " ) + GetBuildVersion();
 
     ret |= fprintf( f, "%sHEA\n", TO_UTF8( StartLine ) );
     ret |= fprintf( f, "%sTIM %s\n", TO_UTF8( StartLine ), TO_UTF8( DateAndTime() ) );
     ret |= fprintf( f, "%sAPP ", TO_UTF8( StartLine ) );
-    ret |= fprintf( f, "\"%s\"\n", TO_UTF8( Title ) );
+    ret |= fprintf( f, "\"%s\"\n", TO_UTF8( title ) );
     ret |= fprintf( f, "\n" );
 
     // Prepare list of nets generation
@@ -1749,27 +1748,27 @@ bool NETLIST_EXPORT_TOOL::WriteNetListCADSTAR( FILE* f )
     {
         for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
         {
-            DrawList = Component = findNextComponentAndCreatePinList( DrawList, sheet );
+            DrawList = component = findNextComponentAndCreatePinList( DrawList, sheet );
 
-            if( Component == NULL )
+            if( component == NULL )
                 break;
 
             /*
             doing nothing with footprint
-            if( !Component->GetField( FOOTPRINT )->IsVoid() )
+            if( !component->GetField( FOOTPRINT )->IsVoid() )
             {
-                footprint = Component->GetField( FOOTPRINT )->m_Text;
+                footprint = component->GetField( FOOTPRINT )->m_Text;
                 footprint.Replace( wxT( " " ), wxT( "_" ) );
             }
             else
                 footprint = wxT( "$noname" );
             */
 
-            msg = Component->GetRef( sheet );
+            msg = component->GetRef( sheet );
             ret |= fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
             ret |= fprintf( f, "%s", TO_UTF8( msg ) );
 
-            msg = Component->GetField( VALUE )->GetText();
+            msg = component->GetField( VALUE )->GetText();
             msg.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( f, "     \"%s\"", TO_UTF8( msg ) );
             ret |= fprintf( f, "\n" );
@@ -1836,18 +1835,18 @@ bool NETLIST_EXPORT_TOOL::writeListOfNetsCADSTAR( FILE* f )
         switch( print_ter )
         {
         case 0:
-        {
-            char buf[5];
-            wxString str_pinnum;
-            strncpy( buf, (char*) &nitem->m_PinNum, 4 );
-            buf[4]     = 0;
-            str_pinnum = FROM_UTF8( buf );
-            InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
-                                   GetChars( InitNetDesc ),
-                                   GetChars( refstr ),
-                                   GetChars( str_pinnum ),
-                                   GetChars( netcodeName ) );
-        }
+            {
+                char buf[5];
+                wxString str_pinnum;
+                strncpy( buf, (char*) &nitem->m_PinNum, 4 );
+                buf[4]     = 0;
+                str_pinnum = FROM_UTF8( buf );
+                InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
+                                       GetChars( InitNetDesc ),
+                                       GetChars( refstr ),
+                                       GetChars( str_pinnum ),
+                                       GetChars( netcodeName ) );
+            }
             print_ter++;
             break;
 

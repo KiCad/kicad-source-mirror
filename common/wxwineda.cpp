@@ -90,7 +90,7 @@ wxString EDA_GRAPHIC_TEXT_CTRL::FormatSize( EDA_UNITS_T aUnit, int textSize )
     if( textSize > 3000 )
         textSize = 3000;
 
-    return ReturnStringFromValue( aUnit, textSize );
+    return StringFromValue( aUnit, textSize );
 }
 
 
@@ -124,7 +124,7 @@ int EDA_GRAPHIC_TEXT_CTRL::ParseSize( const wxString& sizeText, EDA_UNITS_T aUni
 {
     int    textsize;
 
-    textsize = ReturnValueFromString( aUnit, sizeText );
+    textsize = ValueFromString( aUnit, sizeText );
 
     // Limit to reasonable size
     if( textsize < 10 )
@@ -209,8 +209,8 @@ wxPoint EDA_POSITION_CTRL::GetValue()
 {
     wxPoint coord;
 
-    coord.x = ReturnValueFromString( m_UserUnit, m_FramePosX->GetValue() );
-    coord.y = ReturnValueFromString( m_UserUnit, m_FramePosY->GetValue() );
+    coord.x = ValueFromString( m_UserUnit, m_FramePosX->GetValue() );
+    coord.y = ValueFromString( m_UserUnit, m_FramePosY->GetValue() );
 
     return coord;
 }
@@ -230,11 +230,11 @@ void EDA_POSITION_CTRL::SetValue( int x_value, int y_value )
     m_Pos_To_Edit.x = x_value;
     m_Pos_To_Edit.y = y_value;
 
-    msg = ReturnStringFromValue( m_UserUnit, m_Pos_To_Edit.x );
+    msg = StringFromValue( m_UserUnit, m_Pos_To_Edit.x );
     m_FramePosX->Clear();
     m_FramePosX->SetValue( msg );
 
-    msg = ReturnStringFromValue( m_UserUnit, m_Pos_To_Edit.y );
+    msg = StringFromValue( m_UserUnit, m_Pos_To_Edit.y );
     m_FramePosY->Clear();
     m_FramePosY->SetValue( msg );
 }
@@ -279,7 +279,7 @@ EDA_VALUE_CTRL::EDA_VALUE_CTRL( wxWindow* parent, const wxString& title,
 
     BoxSizer->Add( m_Text, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
-    wxString stringvalue = ReturnStringFromValue( m_UserUnit, m_Value );
+    wxString stringvalue = StringFromValue( m_UserUnit, m_Value );
     m_ValueCtrl = new wxTextCtrl( parent, -1, stringvalue );
 
     BoxSizer->Add( m_ValueCtrl,
@@ -301,7 +301,7 @@ int EDA_VALUE_CTRL::GetValue()
     int      coord;
     wxString txtvalue = m_ValueCtrl->GetValue();
 
-    coord = ReturnValueFromString( m_UserUnit, txtvalue );
+    coord = ValueFromString( m_UserUnit, txtvalue );
     return coord;
 }
 
@@ -312,7 +312,7 @@ void EDA_VALUE_CTRL::SetValue( int new_value )
 
     m_Value = new_value;
 
-    buffer = ReturnStringFromValue( m_UserUnit, m_Value );
+    buffer = StringFromValue( m_UserUnit, m_Value );
     m_ValueCtrl->SetValue( buffer );
 }
 

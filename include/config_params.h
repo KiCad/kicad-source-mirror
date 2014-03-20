@@ -1,10 +1,34 @@
-/**
- * The common library
- * @file param_config.h
+#ifndef CONFIG_PARAMS_H_
+#define CONFIG_PARAMS_H_
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PARAM_CONFIG_H_
-#define PARAM_CONFIG_H_
+/**
+ * The common library
+ * @file config_params.h
+ */
 
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
@@ -12,6 +36,9 @@
 #include <colors.h>
 #include <limits>
 
+
+#define CONFIG_VERSION      1
+#define FORCE_LOCAL_CONFIG  true
 
 
 /**
@@ -258,6 +285,67 @@ public:
 
 
 /** A list of parameters type */
-typedef boost::ptr_vector<PARAM_CFG_BASE> PARAM_CFG_ARRAY;
+//typedef boost::ptr_vector<PARAM_CFG_BASE> PARAM_CFG_ARRAY;
+class  PARAM_CFG_ARRAY : public boost::ptr_vector<PARAM_CFG_BASE>
+{
+};
 
-#endif  // PARAM_CONFIG_H_
+
+/**
+ * Function wxConfigSaveSetups
+ * writes @a aList of PARAM_CFG_ARRAY elements to save configuration values
+ * to @a aCfg.  Only elements with m_Setup set true will be saved, hence the
+ * function name.
+ *
+ * @param aCfg where to save
+ * @param aList holds some configuration parameters, not all of which will
+ *  necessarily be saved.
+ */
+void wxConfigSaveSetups( wxConfigBase* aCfg, const PARAM_CFG_ARRAY& aList );
+
+/**
+ * Function wxConfigSaveParams
+ * writes @a aList of PARAM_CFG_ARRAY elements to save configuration values
+ * to @a aCfg.  Only elements with m_Setup set false will be saved, hence the
+ * function name.
+ *
+ * @param aCfg where to save
+ * @param aList holds some configuration parameters, not all of which will
+ *  necessarily be saved.
+ * @param aGroup indicates in which group the value should be saved,
+ *  unless the PARAM_CFG_ARRAY element provides its own group, in which case it will
+ *  take precedence.  aGroup may be empty.
+ */
+void wxConfigSaveParams( wxConfigBase* aCfg,
+            const PARAM_CFG_ARRAY& aList, const wxString& aGroup );
+
+/**
+ * Function wxConfigLoadSetups
+ * uses @a aList of PARAM_CFG_ARRAY elements to load configuration values
+ * from @a aCfg.  Only elements whose m_Setup field is true will be loaded.
+ *
+ * @param aCfg where to load from.
+ * @param aList holds some configuration parameters, not all of which will
+ *  necessarily be loaded.
+ */
+void wxConfigLoadSetups( wxConfigBase* aCfg, const PARAM_CFG_ARRAY& aList );
+
+/**
+ * Function wxConfigLoadParams
+ * uses @a aList of PARAM_CFG_ARRAY elements to load configuration values
+ * from @a aCfg.  Only elements whose m_Setup field is false will be loaded.
+ *
+ * @param aCfg where to load from.
+ *
+ * @param aList holds some configuration parameters, not all of which will
+ *  necessarily be loaded.
+ *
+ * @param aGroup indicates in which group the value should be saved,
+ *  unless the PARAM_CFG_ARRAY element provides its own group, in which case it will
+ *  take precedence.  aGroup may be empty.
+ */
+void wxConfigLoadParams( wxConfigBase* aCfg,
+        const PARAM_CFG_ARRAY& aList, const wxString& aGroup );
+
+
+#endif  // CONFIG_PARAMS_H_

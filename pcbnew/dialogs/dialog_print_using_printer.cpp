@@ -6,7 +6,8 @@
 //#define wxTEST_POSTSCRIPT_IN_MSW 1
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
@@ -61,7 +62,7 @@ public:
 private:
 
     PCB_EDIT_FRAME* m_parent;
-    wxConfig*       m_config;
+    wxConfigBase*       m_config;
     wxCheckBox*     m_BoxSelectLayer[32];
     static bool     m_ExcludeEdgeLayer;
 
@@ -124,7 +125,7 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( PCB_EDIT_FRAME* parent )
     DIALOG_PRINT_USING_PRINTER_base( parent )
 {
     m_parent = parent;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
 
     InitValues( );
 
@@ -259,7 +260,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     s_Parameters.m_PenDefaultSize = g_DrawDefaultLineThickness;
     AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize ) );
+        StringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize ) );
 
     // Create scale adjust option
     msg.Printf( wxT( "%f" ), s_Parameters.m_XScaleAdjust );
@@ -385,7 +386,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
     // Get the new pen width value, and verify min et max value
     // NOTE: s_Parameters.m_PenDefaultSize is in internal units
 
-    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth );
+    s_Parameters.m_PenDefaultSize = ValueFromTextCtrl( *m_DialogPenWidth );
 
     if( s_Parameters.m_PenDefaultSize > PEN_WIDTH_MAX_VALUE )
     {
@@ -400,7 +401,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
     g_DrawDefaultLineThickness = s_Parameters.m_PenDefaultSize;
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize ) );
+        StringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize ) );
 }
 
 void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )

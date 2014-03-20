@@ -664,7 +664,7 @@ public:
     bool IsMulti() { return m_unitCount > 1; }
 
     /**
-     * Function ReturnSubReference
+     * Function SubReference
      * @return the sub reference for component having multiple parts per package.
      * The sub reference identify the part (or unit)
      * @param aUnit = the part identifier ( 1 to max count)
@@ -672,7 +672,7 @@ public:
      *    by the separator symbol (if any)
      * Note: this is a static function.
      */
-    static wxString ReturnSubReference( int aUnit, bool aAddSeparator = true );
+    static wxString SubReference( int aUnit, bool aAddSeparator = true );
 
     // Accessors to sub ref parameters
     static int GetSubpartIdSeparator() { return m_subpartIdSeparator; }

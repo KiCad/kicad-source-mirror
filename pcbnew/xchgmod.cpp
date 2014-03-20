@@ -496,7 +496,7 @@ void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
     wxString newname;
 
     newname = m_parent->SelectFootprint( m_parent, wxEmptyString, wxEmptyString, wxEmptyString,
-                                         m_parent->GetFootprintLibraryTable() );
+                                         m_parent->FootprintLibs() );
 
     if( newname != wxEmptyString )
         m_NewModule->SetValue( newname );

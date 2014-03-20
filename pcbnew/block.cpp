@@ -179,7 +179,7 @@ void DIALOG_BLOCK_OPTIONS::ExecuteCommand( wxCommandEvent& event )
 }
 
 
-int PCB_EDIT_FRAME::ReturnBlockCommand( int aKey )
+int PCB_EDIT_FRAME::BlockCommand( int aKey )
 {
     int cmd = 0;
 

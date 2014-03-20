@@ -470,14 +470,14 @@ public:
     static bool IsLibNameValid( const wxString & aName );
 
     /**
-     * static function ReturnStringLibNameInvalidChars
+     * static function StringLibNameInvalidChars
      * Test for validity of the name in a library of the footprint
      * ( no spaces, dir separators ... )
      * @param aUserReadable = false to get the list of invalid chars
      *        true to get a readable form (i.e ' ' = 'space' '\\t'= 'tab')
      * @return a constant std::string giving the list of invalid chars in lib name
      */
-    static const wxChar* ReturnStringLibNameInvalidChars( bool aUserReadable );
+    static const wxChar* StringLibNameInvalidChars( bool aUserReadable );
 
     /**
      * Function SetInitialComments

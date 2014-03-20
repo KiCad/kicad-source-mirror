@@ -112,7 +112,7 @@ void AddDelimiterString( wxString& string );
 wxString FindKicadHelpPath();
 
 /**
- * Function ReturnKicadDatasPath
+ * Function KicadDatasPath
  * returns the data path common to KiCad.
  * If environment variable KICAD is defined (KICAD = path to kicad)
  * Returns \<KICAD\> /;
@@ -122,7 +122,7 @@ wxString FindKicadHelpPath();
  * Note:
  * The \\ are replaced by / (a la Unix)
  */
-wxString ReturnKicadDatasPath();
+wxString KicadDatasPath();
 
 /**
  * Function FindKicadFile

@@ -30,7 +30,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <eda_doc.h>
@@ -189,36 +190,38 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_OPEN_MODULE_EDITOR:
         {
-            FOOTPRINT_EDIT_FRAME* editorFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+            FOOTPRINT_EDIT_FRAME* editor = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor( this );
 
-            if( editorFrame == NULL )
+            if( !editor )
             {
-                editorFrame = new FOOTPRINT_EDIT_FRAME( this, m_footprintLibTable );
-                editorFrame->Show( true );
-                editorFrame->Zoom_Automatique( false );
+                editor = (FOOTPRINT_EDIT_FRAME*) Kiface().CreateWindow( this, MODULE_EDITOR_FRAME_TYPE, &Kiway() );
+
+                editor->Show( true );
+                editor->Zoom_Automatique( false );
             }
             else
             {
-                if( editorFrame->IsIconized() )
-                     editorFrame->Iconize( false );
+                if( editor->IsIconized() )
+                     editor->Iconize( false );
 
-                editorFrame->Raise();
+                editor->Raise();
 
                 // Raising the window does not set the focus on Linux.  This should work on
                 // any platform.
-                if( wxWindow::FindFocus() != editorFrame )
-                    editorFrame->SetFocus();
+                if( wxWindow::FindFocus() != editor )
+                    editor->SetFocus();
             }
         }
         break;
 
     case ID_OPEN_MODULE_VIEWER:
         {
-            FOOTPRINT_VIEWER_FRAME * viewer =
-                    FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
-            if( viewer == NULL )
+            FOOTPRINT_VIEWER_FRAME* viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( this );
+
+            if( !viewer )
             {
-                viewer = new FOOTPRINT_VIEWER_FRAME( this, m_footprintLibTable, NULL );
+                viewer = (FOOTPRINT_VIEWER_FRAME*) Kiface().CreateWindow( this, MODULE_VIEWER_FRAME_TYPE, &Kiway() );
+
                 viewer->Show( true );
                 viewer->Zoom_Automatique( false );
             }
@@ -832,16 +835,18 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         {
-            FOOTPRINT_EDIT_FRAME* editorFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+            FOOTPRINT_EDIT_FRAME* editor = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor( this );
 
-            if( editorFrame == NULL )
-                editorFrame = new FOOTPRINT_EDIT_FRAME( this, m_footprintLibTable );
+            if( !editor )
+            {
+                editor = (FOOTPRINT_EDIT_FRAME*) Kiface().CreateWindow( this, MODULE_EDITOR_FRAME_TYPE, &Kiway() );
+            }
 
-            editorFrame->Load_Module_From_BOARD( (MODULE*)GetCurItem() );
+            editor->Load_Module_From_BOARD( (MODULE*)GetCurItem() );
             SetCurItem( NULL );     // the current module could be deleted by
 
-            editorFrame->Show( true );
-            editorFrame->Iconize( false );
+            editor->Show( true );
+            editor->Iconize( false );
         }
         m_canvas->MoveCursorToCrossHair();
         break;
@@ -1168,9 +1173,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC:
         {
-            wxConfig* cfg = wxGetApp().GetCommonSettings();
+            wxConfigBase* cfg = Pgm().CommonSettings();
             cfg->Read( wxT( "module_doc_file" ), g_DocModulesFileName );
-            GetAssociatedDocument( this, g_DocModulesFileName, &wxGetApp().GetLibraryPathList() );
+            GetAssociatedDocument( this, g_DocModulesFileName, &Kiface().KifaceSearch() );
         }
         break;
 

@@ -99,11 +99,11 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME
 
     // Size:
     m_staticTextSizeUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_TargetSizeCtrl->SetValue( ReturnStringFromValue( g_UserUnit, m_Target->GetSize() ) );
+    m_TargetSizeCtrl->SetValue( StringFromValue( g_UserUnit, m_Target->GetSize() ) );
 
     // Thickness:
     m_staticTextThicknessUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_TargetThicknessCtrl->SetValue( ReturnStringFromValue( g_UserUnit, m_Target->GetWidth() ) );
+    m_TargetThicknessCtrl->SetValue( StringFromValue( g_UserUnit, m_Target->GetWidth() ) );
 
     // Shape
     m_TargetShape->SetSelection( m_Target->GetShape() ? 1 : 0 );
@@ -137,10 +137,10 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
         m_Target->SetFlags( IN_EDIT );      // set flag in edit to force
                                             // undo/redo/abort proper operation
 
-    int tmp = ReturnValueFromString( g_UserUnit, m_TargetThicknessCtrl->GetValue() );
+    int tmp = ValueFromString( g_UserUnit, m_TargetThicknessCtrl->GetValue() );
     m_Target->SetWidth( tmp );
 
-    MireDefaultSize = ReturnValueFromString( g_UserUnit, m_TargetSizeCtrl->GetValue() );
+    MireDefaultSize = ValueFromString( g_UserUnit, m_TargetSizeCtrl->GetValue() );
     m_Target->SetSize( MireDefaultSize );
 
     m_Target->SetShape( m_TargetShape->GetSelection() ? 1 : 0 );

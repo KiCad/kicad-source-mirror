@@ -94,7 +94,7 @@ EDA_TEXT::~EDA_TEXT()
 
 int EDA_TEXT::LenSize( const wxString& aLine ) const
 {
-    return ReturnGraphicTextWidth( aLine, m_Size.x, m_Italic, m_Bold );
+    return GraphicTextWidth( aLine, m_Size.x, m_Italic, m_Bold );
 }
 
 /**

@@ -27,11 +27,12 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <fp_lib_table.h>
 #include <id.h>
 #include <common.h>
 #include <gestfich.h>
-#include <param_config.h>
+#include <config_params.h>
 #include <wildcards_and_files_ext.h>
 #include <fp_lib_table.h>
 #include <confirm.h>
@@ -46,24 +47,24 @@
 #define GROUPEQU wxT("/cvpcb/libraries")
 
 
-PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters( void )
+PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters()
 {
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
 
-    m_projectFileParams.push_back( new PARAM_CFG_BASE( GROUPLIB,
-                                                       PARAM_COMMAND_ERASE ) );
-    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
-                                                               &m_ModuleLibNames,
-                                                               GROUPLIB ) );
-    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "EquName" ),
-                                                               &m_AliasLibNames,
-                                                               GROUPEQU ) );
-    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetIExt" ),
-                                                           &m_NetlistFileExtension ) );
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),
-                                                           &m_UserLibraryPath,
-                                                           GROUPLIB ) );
+    m_projectFileParams.push_back( new PARAM_CFG_BASE( GROUPLIB, PARAM_COMMAND_ERASE ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST(
+        wxT( "LibName" ), &m_ModuleLibNames, GROUPLIB ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST(
+        wxT( "EquName" ), &m_AliasLibNames, GROUPEQU ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING(
+        wxT( "NetIExt" ), &m_NetlistFileExtension ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME(
+        wxT( "LibDir" ), &m_UserLibraryPath, GROUPLIB ) );
 
     return m_projectFileParams;
 }
@@ -71,42 +72,37 @@ PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters( void )
 
 void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
 {
-    wxFileName fn = aFileName;
+    wxFileName      fn( aFileName );
+    PROJECT&        prj = Prj();
 
     m_ModuleLibNames.Clear();
     m_AliasLibNames.Clear();
 
-    if( fn.GetExt() != ProjectFileExtension )
-        fn.SetExt( ProjectFileExtension );
+    fn.SetExt( ProjectFileExtension );
 
-    wxGetApp().RemoveLibraryPath( m_UserLibraryPath );
-
-    wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
+    // was: Pgm().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
+    prj.ConfigLoad( prj.PcbSearchS(), fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
 
     if( m_NetlistFileExtension.IsEmpty() )
         m_NetlistFileExtension = wxT( "net" );
 
-    // User library path takes precedent over default library search paths.
-    wxGetApp().InsertLibraryPath( m_UserLibraryPath, 1 );
+    // empty the table, Load() it again below.
+    FootprintLibs()->Clear();
 
-    delete m_footprintLibTable;
+    /* this is done by ConfigLoad(), and that sets the env var too.
+    prj.SetProjectFullName( fn.GetFullPath() );
+    */
 
-    // Attempt to load the project footprint library table if it exists.
-    m_footprintLibTable = new FP_LIB_TABLE();
-
-    if( m_DisplayFootprintFrame )
-        m_DisplayFootprintFrame->SetFootprintLibTable( m_footprintLibTable );
-
-    wxFileName projectFpLibTableFileName;
-
-    projectFpLibTableFileName = FP_LIB_TABLE::GetProjectFileName( fn );
-    FP_LIB_TABLE::SetProjectPathEnvVariable( projectFpLibTableFileName );
+    wxFileName projectFpLibTableFileName = FP_LIB_TABLE::GetProjectTableFileName( fn.GetFullPath() );
 
     try
     {
-        m_footprintLibTable->Load( projectFpLibTableFileName, m_globalFootprintTable );
+        // Stack the project specific FP_LIB_TABLE overlay on top of the global table.
+        // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
+        // stack this way, all using the same global fallback table.
+        FootprintLibs()->Load( projectFpLibTableFileName, &GFootprintTable );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
     }
@@ -136,5 +132,11 @@ void CVPCB_MAINFRAME::SaveProjectFile( wxCommandEvent& aEvent )
     if( !IsWritable( fn ) )
         return;
 
-    wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+    // was:
+    // Pgm().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+
+    PROJECT&        prj = Prj();
+    SEARCH_STACK&   search = prj.SchSearchS();
+
+    prj.ConfigSave( search, fn.GetFullPath(), GROUP, GetProjectFileParameters() );
 }

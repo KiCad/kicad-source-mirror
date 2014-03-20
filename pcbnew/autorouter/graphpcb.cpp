@@ -87,7 +87,7 @@ static void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM l
 void PlacePad( D_PAD* aPad, int color, int marge, int op_logic )
 {
     int     dx, dy;
-    wxPoint shape_pos = aPad->ReturnShapePos();
+    wxPoint shape_pos = aPad->ShapePos();
 
     dx = aPad->GetSize().x / 2;
     dx += marge;
@@ -757,7 +757,7 @@ void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer,
     int ii;
     int angle;
 
-    radius = KiROUND( Distance( ux0, uy0, ux1, uy1 ) ); 
+    radius = KiROUND( Distance( ux0, uy0, ux1, uy1 ) );
 
     x0 = x1 = radius;
     y0 = y1 = 0;
