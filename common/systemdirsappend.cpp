@@ -45,7 +45,8 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
         // bin_dir uses unix path separator.  So to parse with wxFileName
         // use windows separator, especially important for server inclusion:
         // like: \\myserver\local_path .
-        bin_dir.Replace( UNIX_STRING_DIR_SEP, WIN_STRING_DIR_SEP );
+        bin_dir.Replace( wxFileName::GetPathSeparator( wxPATH_UNIX ),
+                         wxFileName::GetPathSeparator( wxPATH_WIN ) );
 #endif
 
         wxFileName bin_fn( bin_dir, wxEmptyString );
