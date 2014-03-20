@@ -159,7 +159,7 @@ struct KIFACE
      * should do process level initialization here, not project specific since there
      * will be multiple projects open eventually.
      *
-     * @param aProcess is the process block: PGM_BASE*
+     * @param aProgram is the process block: PGM_BASE*
      *
      * @return bool - true if DSO initialized OK, false if not.  When returning
      *  false, the loader may optionally decide to terminate the process or not,
@@ -173,8 +173,6 @@ struct KIFACE
      * Function OnKifaceEnd
      * is called just once just before the DSO is to be unloaded.  It is called
      * before static C++ destructors are called.  A default implementation is supplied.
-     *
-     * @param aProcess is the process block: PGM_BASE*
      */
     VTBL_ENTRY void OnKifaceEnd() = 0;
 
@@ -197,7 +195,8 @@ struct KIFACE
      * @param aCtlBits consists of bit flags from the set of KFCTL_* \#defines above.
      *
      * @return wxWindow* - and if not NULL, should be cast into the known type using
-     *   dynamic_cast&lt;&gt;().
+     *  and old school cast.  dynamic_cast is problemenatic since it needs typeinfo probably
+     *  not contained in the caller's link image.
      */
     VTBL_ENTRY  wxWindow* CreateWindow( wxWindow* aParent, int aClassId,
             KIWAY* aKIWAY, int aCtlBits = 0 ) = 0;
@@ -232,7 +231,7 @@ struct KIFACE
  * are used to hold function pointers and eliminate the need to link to specific
  * object code libraries, speeding development and encouraging clearly defined
  * interface design.  Unlike Microsoft COM, which is a multi-vendor design supporting
- * DLL's built at various points in time.  The KIWAY alchemy is single project, with
+ * DLL's built at various points in time, the KIWAY alchemy is single project, with
  * all components being built at the same time.  So one should expect solid compatibility
  * between all KiCad components, as long at they are compiled at the same time.
  * <p>
@@ -290,15 +289,17 @@ public:
 
 private:
 
+    /*
     /// Get the name of the DSO holding the requested FACE_T.
     static const wxString dso_name( FACE_T aFaceId );
+    */
 
     // one for each FACE_T
     static wxDynamicLibrary    s_sch_dso;
     static wxDynamicLibrary    s_pcb_dso;
     //static wxDynamicLibrary    s_cvpcb_dso;   // will get merged into pcbnew
 
-    KIFACE*     m_dso_players[FACE_COUNT];
+    KIFACE*     m_kiface[FACE_COUNT];
 
     PROJECT     m_project;          // do not assume this is here, use Prj().
 };
@@ -308,19 +309,18 @@ private:
  * Function Pointer KIFACE_GETTER_FUNC
  * points to the one and only KIFACE export.  The export's address
  * is looked up via symbolic string and should be extern "C" to avoid name
- * mangling.  That function can also implement process initialization functionality,
- * things to do once per process that is DSO resident.  This function will only be
- * called one time.  The DSO itself however may be asked to support multiple
- * Top windows, i.e. multiple projects within its lifetime.
+ * mangling. This function will only be called one time.  The DSO itself however
+ * may be asked to support multiple Top windows, i.e. multiple projects
+ * within its lifetime.
  *
  * @param aKIFACEversion is where to put the API version implemented by the KIFACE.
  * @param aKIWAYversion tells the KIFACE what KIWAY version will be available.
- * @param aProcess is a pointer to the PGM_BASE for this process.
- * @return KIFACE* - unconditionally.
+ * @param aProgram is a pointer to the PGM_BASE for this process.
+ * @return KIFACE* - unconditionally, cannot fail.
  */
 typedef     KIFACE*  KIFACE_GETTER_FUNC( int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
 
-/// No name mangling.  Each TOPMOD will implement this once.
+/// No name mangling.  Each KIFACE (DSO/DLL) will implement this once.
 extern "C" KIFACE* KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
 
 #endif  // KIWAY_H_
