@@ -54,7 +54,7 @@ struct BIN_MOD
 
     const char*         m_name;             ///< name of this binary module, static C string.
 
-    wxConfigBase*       m_config;           ///< maybe from $HOME/.<m_name>
+    wxConfigBase*       m_config;           ///< maybe from $HOME/.${m_name}
     wxFileHistory       m_history;
     wxString            m_help_file;
 

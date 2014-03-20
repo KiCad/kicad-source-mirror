@@ -71,7 +71,7 @@ public:
      *
      * @param aKifaceName should point to a C string in permanent storage,
      * which contains the name of the DSO.  Examples: "eeschema", "pcbnew", etc.
-     * This controls the name of the wxConfigBase established in m_kiway_settings,
+     * This controls the name of the wxConfigBase established in m_bm,
      * so it should be lowercase.
      */
     KIFACE_I( const char* aKifaceName, KIWAY::FACE_T aId ) :
