@@ -199,8 +199,9 @@ void PGM_KICAD::destroy()
 
 /**
  * Class KIWAY_MGR
- * is container for all (KIWAYS and PROJECTS).  This class needs to work both for a C++
- * project manager and an a wxPython one (after being moved into a header later).
+ * is a container for all KIWAYS [and PROJECTS].  This class needs to work both
+ * for a C++ project manager and an a wxPython one (after being moved into a
+ * header later).
  */
 class KIWAY_MGR
 {
@@ -220,7 +221,8 @@ public:
 
 private:
 
-    // KIWAYs may not be moved once doled out.
+    // KIWAYs may not be moved once doled out, since window DNA depends on the
+    // pointer being good forever.
     // boost_ptr::vector however never moves the object pointed to.
     typedef boost::ptr_vector<KIWAY>    KIWAYS;
 
@@ -280,6 +282,7 @@ PROJECT& Prj()
 bool KIWAY_MGR::OnStart( wxApp* aProcess )
 {
     // The C++ project manager supports only one open PROJECT
+    // We should need no copy constructor for KIWAY to push a pointer.
     m_kiways.push_back( new KIWAY() );
 
     return true;
@@ -289,85 +292,3 @@ bool KIWAY_MGR::OnStart( wxApp* aProcess )
 void KIWAY_MGR::OnEnd()
 {
 }
-
-
-/*
-static bool init( KICAD_PGM* aProcess, const wxString& aName )
-{
-    m_Id = aId;
-    m_Checker = new wxSingleInstanceChecker( aName.Lower() + wxT( "-" ) + wxGetUserId() );
-
-    // Init KiCad environment
-    // the environment variable KICAD (if exists) gives the kicad path:
-    // something like set KICAD=d:\kicad
-    bool isDefined = wxGetEnv( wxT( "KICAD" ), &m_KicadEnv );
-
-    if( isDefined )    // ensure m_KicadEnv ends by "/"
-    {
-        m_KicadEnv.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
-
-        if( !m_KicadEnv.IsEmpty() && m_KicadEnv.Last() != '/' )
-            m_KicadEnv += UNIX_STRING_DIR_SEP;
-    }
-
-    // Prepare On Line Help. Use only lower case for help file names, in order to
-    // avoid problems with upper/lower case file names under windows and unix.
-#if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
-    m_HelpFileName = aName.Lower() + wxT( ".html" );
-#elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
-    m_HelpFileName = aName.Lower() + wxT( ".pdf" );
-#else
-    #error Help files format not defined
-#endif
-
-    // Init parameters for configuration
-    SetVendorName( wxT( "KiCad" ) );
-    SetAppName( aName.Lower() );
-    SetTitle( aName );
-
-    m_settings = new wxConfig();
-
-    wxASSERT( m_settings != NULL );
-
-    m_commonSettings = new wxConfig( CommonConfigPath );
-    wxASSERT( m_commonSettings != NULL );
-
-    // Install some image handlers, mainly for help
-    wxImage::AddHandler( new wxPNGHandler );
-    wxImage::AddHandler( new wxGIFHandler );
-    wxImage::AddHandler( new wxJPEGHandler );
-    wxFileSystem::AddHandler( new wxZipFSHandler );
-
-    // Analyze the command line & init binary path
-    SetBinDir();
-    SetDefaultSearchPaths();
-    SetLanguagePath();
-    ReadPdfBrowserInfos();
-
-    // Internationalization: loading the kicad suitable Dictionary
-    wxString languageSel;
-    m_commonSettings->Read( languageCfgKey, &languageSel);
-
-    setLanguageId( wxLANGUAGE_DEFAULT );
-
-    // Search for the current selection
-    for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
-    {
-        if( s_Languages[ii].m_Lang_Label == languageSel )
-        {
-            setLanguageId( s_Languages[ii].m_WX_Lang_Identifier );
-            break;
-        }
-    }
-
-    bool succes = SetLanguage( true );
-
-    if( !succes )
-    {
-    }
-
-    // Set locale option for separator used in float numbers
-    SetLocaleTo_Default();
-}
-*/
-

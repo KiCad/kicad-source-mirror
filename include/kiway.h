@@ -194,7 +194,7 @@ struct KIFACE
      *
      * @param aKIWAY tells the window which KIWAY (and PROJECT) it is a participant in.
      *
-     * @param aCtlBits consists of bit flags from the set of KFCTL_* #defines above.
+     * @param aCtlBits consists of bit flags from the set of KFCTL_* \#defines above.
      *
      * @return wxWindow* - and if not NULL, should be cast into the known type using
      *   dynamic_cast&lt;&gt;().

@@ -65,7 +65,7 @@ public:
      * Function Prj
      * returns a reference to the PROJECT "associated with" this KIWAY.
      */
-    PROJECT& Prj() const;                // coded in kiface_i.cpp for now
+    PROJECT& Prj() const;
 
     /**
      * Function SetKiway
@@ -76,7 +76,7 @@ public:
      *
      * @param aKiway is often from a parent window, or from KIFACE::CreateWindow().
      */
-    void SetKiway( wxWindow* aDest, KIWAY* aKiway );  // in kiface_i.cpp for now
+    void SetKiway( wxWindow* aDest, KIWAY* aKiway );
 
 private:
     // private, all setting is done through SetKiway().
@@ -141,6 +141,8 @@ public:
      * @param aFileList includes files that this frame should open
      *  according to the knowledge in the derived wxFrame.  In almost every case,
      *  the list will have only a single file in it.
+     *
+     * @param aCtl is a set of bit flags ORed together from the set of KICTL_* \#defined above.
      *
      * @return bool - true if all requested files were opened OK, else false.
      */
