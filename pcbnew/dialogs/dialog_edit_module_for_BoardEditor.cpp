@@ -243,6 +243,13 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 {
     SetFocus();
 
+    wxString default_path;
+    wxGetEnv( wxT( KISYS3DMOD ), &default_path );
+#ifdef __WINDOWS__
+    default_path.Replace( wxT( "/" ), wxT( "\\" ) );
+#endif
+    m_textCtrl3DDefaultPath->SetValue( default_path );
+
     m_LastSelected3DShapeIndex = -1;
 
     // Init 3D shape list
@@ -475,14 +482,16 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
 
     wxFileName aux = shortfilename;
     if( aux.IsAbsolute() )
-    {   // Absolute path, ask if the user wants a relative one
+    {   
+        // Absolute path, ask if the user wants a relative one
         int diag = wxMessageBox(
             _( "Use a relative path?" ),
             _( "Path type" ),
             wxYES_NO | wxICON_QUESTION, this );
 
         if( diag == wxYES )
-        {   // Make it relative
+        {   
+            // Make it relative
             aux.MakeRelativeTo( wxT(".") );
             shortfilename = aux.GetPathWithSep() + aux.GetFullName();
         }

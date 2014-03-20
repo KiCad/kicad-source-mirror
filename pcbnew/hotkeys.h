@@ -2,7 +2,7 @@
  * @file pcbnew/hotkeys.h
  * Pcbnew hotkeys
  */
-#ifndef _PCBNEW_KOTKEYS_H
+#ifndef _PCBNEW_HOTKEYS_H
 #define _PCBNEW_HOTKEYS_H
 
 #include <hotkeys_basic.h>

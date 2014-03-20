@@ -655,6 +655,7 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
     item->SetPosition( aPanel->GetParent()->GetCrossHairPosition() );
 
     // Draw the item item at it's new position.
+    item->SetWireImage();  // While moving, the item may choose to render differently
     item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
 
@@ -699,6 +700,11 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
         // Never delete existing item, because it can be referenced by an undo/redo command
         // Just restore its data
         currentItem->SwapData( oldItem );
+
+        // Erase the wire representation before the 'normal' view is drawn.
+        if ( item->IsWireImage() )
+            item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+
         item->ClearFlags();
     }
 

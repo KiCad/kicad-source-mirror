@@ -12,7 +12,7 @@
    width="48"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.1 "
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="plot_pdf.svg">
   <metadata
      id="metadata173">
@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -35,15 +35,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="968"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview171"
      showgrid="false"
      inkscape:zoom="15.132588"
-     inkscape:cx="24.013384"
+     inkscape:cx="24.145549"
      inkscape:cy="25.459095"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <defs
@@ -757,20 +757,21 @@
      x="6.0751619"
      id="rect165"
      style="fill:#ffffff;fill-rule:evenodd" />
-  <text
-     style="font-size:20.34799194px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
-     xml:space="preserve"
+  <g
      transform="scale(1.0055304,0.99449999)"
-     line-height="125%"
-     font-size="41.51px"
-     y="47.294556"
-     x="24.806757"
-     id="text167"
-     sodipodi:linespacing="125%"><tspan
-       style="font-size:20.34799194px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
-       font-size="18px"
-       y="47.294556"
-       x="24.806757"
-       font-weight="bold"
-       id="tspan169">PDF</tspan></text>
+     style="font-size:20.34799194px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
+     id="text167">
+    <path
+       d="m 3.8228903,32.46079 6.3488117,0 c 1.887743,1.5e-5 3.335019,0.420619 4.341832,1.261814 1.013412,0.834598 1.520124,2.026862 1.520139,3.576795 -1.5e-5,1.556577 -0.506727,2.755465 -1.520139,3.596667 -1.006813,0.834591 -2.454089,1.251884 -4.341832,1.251878 l -2.5236277,0 0,5.146612 -3.825184,0 0,-14.833766 m 3.825184,2.772017 0,4.143121 2.1162707,0 c 0.741845,8e-6 1.314794,-0.178832 1.718849,-0.536519 0.404035,-0.364295 0.606058,-0.877631 0.606068,-1.54001 -10e-6,-0.662358 -0.202033,-1.172382 -0.606068,-1.530073 -0.404055,-0.357668 -0.977004,-0.536507 -1.718849,-0.536519 l -2.1162707,0"
+       style="text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
+       id="path3502" />
+    <path
+       d="m 22.551389,35.352033 0,9.05128 1.371105,0 c 1.563183,3e-6 2.755447,-0.387483 3.576795,-1.162459 0.827951,-0.774967 1.241931,-1.900994 1.241943,-3.378084 -1.2e-5,-1.470452 -0.41068,-2.589855 -1.232007,-3.358214 -0.821348,-0.768337 -2.016924,-1.152511 -3.586731,-1.152523 l -1.371105,0 m -3.825184,-2.891243 4.03383,0 c 2.252049,1.5e-5 3.927842,0.162295 5.027385,0.486842 1.106145,0.317951 2.053333,0.861094 2.841565,1.629429 0.695474,0.669005 1.212122,1.440665 1.549945,2.314981 0.337793,0.874338 0.506697,1.864579 0.506713,2.970728 -1.6e-5,1.11941 -0.16892,2.119587 -0.506713,3.000534 -0.337823,0.874331 -0.854471,1.645991 -1.549945,2.314981 -0.794856,0.76835 -1.748667,1.314804 -2.861436,1.639365 -1.112791,0.317937 -2.78196,0.476906 -5.007514,0.476906 l -4.03383,0 0,-14.833766"
+       style="text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
+       id="path3504" />
+    <path
+       d="m 35.616628,32.46079 10.323029,0 0,2.891243 -6.497845,0 0,2.762081 6.110359,0 0,2.891243 -6.110359,0 0,6.289199 -3.825184,0 0,-14.833766"
+       style="text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
+       id="path3506" />
+  </g>
 </svg>

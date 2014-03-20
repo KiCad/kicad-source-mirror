@@ -247,7 +247,7 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
             for( i = 0; i < m_layerList.size(); i++ )
             {
                 LAYER_MSK layermask = GetLayerMask( m_layerList[ i ] );
-                if( layermask & ( ALL_CU_LAYERS | ALL_AUX_LAYERS ) )
+                if( layermask & ( ALL_CU_LAYERS | ALL_TECH_LAYERS ) )
                     m_layerCheckListBox->Check( i, true );
                 else
                     m_layerCheckListBox->Check( i, false );

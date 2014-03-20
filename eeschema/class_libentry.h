@@ -403,7 +403,7 @@ public:
     /**
      * Draw component.
      *
-     * @param aPanel - Window to draw on.
+     * @param aPanel - Window to draw on. Can be NULL if not available.
      * @param aDc - Device context to draw on.
      * @param aOffset - Position to component.
      * @param aMulti - Component unit if multiple parts per component.

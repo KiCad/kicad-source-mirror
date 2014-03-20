@@ -49,42 +49,22 @@
 /* class NETINFO_ITEM: handle data relative to a given net */
 /*********************************************************/
 
-NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int aNetCode )
+NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int aNetCode ) :
+    m_NetCode( aNetCode ), m_Netname( aNetName ), m_ShortNetname( m_Netname.AfterLast( '/' ) )
 {
-    SetNet( aNetCode );
-
-    if( aNetName.size() )
-        SetNetname( aNetName );
-
     m_parent   = aParent;
-    m_NbNodes  = 0;
-    m_NbLink   = 0;
-    m_NbNoconn = 0;
-    m_Flag     = 0;
     m_RatsnestStartIdx = 0;     // Starting point of ratsnests of this net in a
                                 // general buffer of ratsnest
     m_RatsnestEndIdx   = 0;     // Ending point of ratsnests of this net
 
     m_NetClassName = NETCLASS::Default;
-
-    m_NetClass = 0;
+    m_NetClass = NULL;
 }
 
 
 NETINFO_ITEM::~NETINFO_ITEM()
 {
     // m_NetClass is not owned by me.
-}
-
-
-/**
- * Function SetNetname
- * @param aNetname : the new netname
- */
-void NETINFO_ITEM::SetNetname( const wxString& aNetname )
-{
-    m_Netname = aNetname;
-    m_ShortNetname = m_Netname.AfterLast( '/' );
 }
 
 
@@ -121,7 +101,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     {
         for( pad = module->Pads(); pad != 0; pad = pad->Next() )
         {
-            if( pad->GetNet() == GetNet() )
+            if( pad->GetNetCode() == GetNet() )
             {
                 count++;
                 lengthPadToDie += pad->GetPadToDieLength();
@@ -139,13 +119,13 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     {
         if( Struct->Type() == PCB_VIA_T )
         {
-            if( ( (SEGVIA*) Struct )->GetNet() == GetNet() )
+            if( ( (SEGVIA*) Struct )->GetNetCode() == GetNet() )
                 count++;
         }
 
         if( Struct->Type() == PCB_TRACE_T )
         {
-            if( ( (TRACK*) Struct )->GetNet() == GetNet() )
+            if( ( (TRACK*) Struct )->GetNetCode() == GetNet() )
                 lengthnet += ( (TRACK*) Struct )->GetLength();
         }
     }

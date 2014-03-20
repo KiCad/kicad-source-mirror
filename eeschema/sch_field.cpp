@@ -199,6 +199,16 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                      LineWidth, m_Italic, m_Bold );
 
+    // While moving: don't loose visual contact to which component this label belongs.
+    if ( IsWireImage() )
+    {
+        const wxPoint origin = parentComponent->GetPosition();
+        textpos  = m_Pos - origin;
+        textpos  = parentComponent->GetScreenCoord( textpos );
+        textpos += parentComponent->GetPosition();
+        GRLine( clipbox, DC, origin.x, origin.y, textpos.x, textpos.y, 2, DARKGRAY );
+    }
+
     /* Enable this to draw the bounding box around the text field to validate
      * the bounding box calculations.
      */

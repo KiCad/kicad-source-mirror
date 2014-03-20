@@ -1,6 +1,7 @@
 import code
 import unittest
 import pcbnew
+import pdb
 
 class TestPCBLoad(unittest.TestCase):
 

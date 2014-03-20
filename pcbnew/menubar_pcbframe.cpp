@@ -318,15 +318,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     editMenu->AppendSeparator();
 
-    AddMenuItem( editMenu, ID_SELECTION_TOOL,
-                 _( "Select Tool" ),
-                 _( "Interactive selection and drag&drop tool." ),
-                 KiBitmap( tools_xpm ) );
-
     AddMenuItem( editMenu, ID_PNS_ROUTER_TOOL,
                  _( "Interactive router" ),
-                 _( "Interactive router drag&drop tool." ),
-                 KiBitmap( tools_xpm ) );
+                 _( "Interactive router push&shove tool." ),
+                 KiBitmap( ps_router_xpm ) );
 
     /** Create View menu **/
     wxMenu* viewMenu = new wxMenu;
@@ -485,6 +480,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Hide La&yers Manager" ) : _("Show La&yers Manager" ),
                  HELP_SHOW_HIDE_LAYERMANAGER,
                  KiBitmap( layers_manager_xpm ) );
+
+    AddMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR,
+                 m_show_microwave_tools ?
+                 _( "Hide Microwave Toolbar" ): _( "Show Microwave Toolbar" ),
+                 HELP_SHOW_HIDE_MICROWAVE_TOOLS,
+                 KiBitmap( mw_toolbar_xpm ) );
+
 
     // General
 #ifdef __WXMAC__

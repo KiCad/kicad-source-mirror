@@ -54,7 +54,7 @@ void ZONE_CONTAINER::TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb )
             if( !pad->IsOnLayer( GetLayer() ) )
                 continue;
 
-            if( pad->GetNet() != GetNet() )
+            if( pad->GetNetCode() != GetNetCode() )
                 continue;
 
             listPointsCandidates.push_back( pad->GetPosition() );
@@ -66,7 +66,7 @@ void ZONE_CONTAINER::TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb )
         if( !track->IsOnLayer( GetLayer() ) )
             continue;
 
-        if( track->GetNet() != GetNet() )
+        if( track->GetNetCode() != GetNetCode() )
             continue;
 
         listPointsCandidates.push_back( track->GetStart() );

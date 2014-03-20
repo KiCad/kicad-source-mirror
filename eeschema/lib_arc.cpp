@@ -447,16 +447,18 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
     if( aColor >= 0 )
         fill = NO_FILL;
 
+    EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
+
     if( fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        GRFilledArc( aPanel->GetClipBox(), aDC, posc.x, posc.y, pt1, pt2,
+        GRFilledArc( clipbox, aDC, posc.x, posc.y, pt1, pt2,
                      m_Radius, GetPenSize( ),
                      (m_Flags & IS_MOVED) ? color : GetLayerColor( LAYER_DEVICE_BACKGROUND ),
                      GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
     }
     else if( fill == FILLED_SHAPE && !aData )
     {
-        GRFilledArc( aPanel->GetClipBox(), aDC, posc.x, posc.y, pt1, pt2, m_Radius,
+        GRFilledArc( clipbox, aDC, posc.x, posc.y, pt1, pt2, m_Radius,
                      color, color );
     }
     else
@@ -464,11 +466,11 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 
 #ifdef DRAW_ARC_WITH_ANGLE
 
-        GRArc( aPanel->GetClipBox(), aDC, posc.x, posc.y, pt1, pt2, m_Radius,
+        GRArc( clipbox, aDC, posc.x, posc.y, pt1, pt2, m_Radius,
                GetPenSize(), color );
 #else
 
-        GRArc1( aPanel->GetClipBox(), aDC, pos1.x, pos1.y, pos2.x, pos2.y,
+        GRArc1( clipbox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
                 posc.x, posc.y, GetPenSize(), color );
 #endif
     }
@@ -477,7 +479,7 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
      * calculation. */
 #if 0
     EDA_RECT bBox = GetBoundingBox();
-    GRRect( aPanel->GetClipBox(), aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+    GRRect( clipbox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }

@@ -39,12 +39,15 @@
 #include <wxBasePcbFrame.h>
 
 INFO3D_VISU             g_Parm_3D_Visu;
+
 // Key to store 3D Viewer config:
 static const wxChar keyBgColor_Red[] =          wxT( "BgColor_Red" );
 static const wxChar keyBgColor_Green[] =        wxT( "BgColor_Green" );
 static const wxChar keyBgColor_Blue[] =         wxT( "BgColor_Blue" );
 static const wxChar keyShowRealisticMode[] =    wxT( "ShowRealisticMode" );
 static const wxChar keyShowAxis[] =             wxT( "ShowAxis" );
+static const wxChar keyShowGrid[] =             wxT( "ShowGrid3D" );
+static const wxChar keyShowGridSize[] =         wxT( "Grid3DSize" );
 static const wxChar keyShowZones[] =            wxT( "ShowZones" );
 static const wxChar keyShowFootprints[] =       wxT( "ShowFootprints" );
 static const wxChar keyShowCopperThickness[] =  wxT( "ShowCopperThickness" );
@@ -159,6 +162,12 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( keyShowAxis, &tmp, true );
     prms.SetFlag( FL_AXIS, tmp );
 
+    aCfg->Read( keyShowGrid, &tmp, true );
+    prms.SetFlag( FL_GRID, tmp );
+
+    aCfg->Read( keyShowGridSize, &prms.m_3D_Grid, 10.0 );
+    prms.SetFlag( FL_MODULE, tmp );
+
     aCfg->Read( keyShowFootprints, &tmp, true );
     prms.SetFlag( FL_MODULE, tmp );
 
@@ -202,6 +211,8 @@ void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( keyBgColor_Blue, g_Parm_3D_Visu.m_BgColor.m_Blue );
     aCfg->Write( keyShowRealisticMode, prms.GetFlag( FL_USE_REALISTIC_MODE )  );
     aCfg->Write( keyShowAxis, prms.GetFlag( FL_AXIS )  );
+    aCfg->Write( keyShowGrid, prms.GetFlag( FL_GRID )  );
+    aCfg->Write( keyShowGridSize, prms.m_3D_Grid  );
     aCfg->Write( keyShowFootprints, prms.GetFlag( FL_MODULE )  );
     aCfg->Write( keyShowCopperThickness, prms.GetFlag( FL_USE_COPPER_THICKNESS )  );
     aCfg->Write( keyShowZones, prms.GetFlag( FL_ZONE )  );
@@ -359,52 +370,52 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU3D_AXIS_ONOFF:
         g_Parm_3D_Visu.SetFlag( FL_AXIS, isChecked );
-        NewDisplay();
+        m_canvas->Refresh();
         return;
 
     case ID_MENU3D_MODULE_ONOFF:
         g_Parm_3D_Visu.SetFlag( FL_MODULE, isChecked );
-        NewDisplay();
+        m_canvas->Refresh();
         return;
 
     case ID_MENU3D_USE_COPPER_THICKNESS:
         g_Parm_3D_Visu.SetFlag( FL_USE_COPPER_THICKNESS, isChecked );
-        NewDisplay();
+        NewDisplay(GL_ID_BOARD);
         return;
 
     case ID_MENU3D_ZONE_ONOFF:
         g_Parm_3D_Visu.SetFlag( FL_ZONE, isChecked );
-        NewDisplay();
+        NewDisplay(GL_ID_BOARD);
         return;
 
     case ID_MENU3D_ADHESIVE_ONOFF:
         g_Parm_3D_Visu.SetFlag( FL_ADHESIVE, isChecked );
-        NewDisplay();
+        NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_SILKSCREEN_ONOFF:
         g_Parm_3D_Visu.SetFlag( FL_SILKSCREEN, isChecked );
-        NewDisplay();
+        NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_SOLDER_MASK_ONOFF:
         g_Parm_3D_Visu.SetFlag( FL_SOLDERMASK, isChecked );
-        NewDisplay();
+       NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_SOLDER_PASTE_ONOFF:
         g_Parm_3D_Visu.SetFlag( FL_SOLDERPASTE, isChecked );
-        NewDisplay();
+        NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_COMMENTS_ONOFF:
         g_Parm_3D_Visu.SetFlag( FL_COMMENTS, isChecked );
-        NewDisplay();
+        NewDisplay(GL_ID_AUX_LAYERS);
         return;
 
     case ID_MENU3D_ECO_ONOFF:
         g_Parm_3D_Visu.SetFlag( FL_ECO, isChecked );
-        NewDisplay();
+        NewDisplay(GL_ID_AUX_LAYERS);
         return;
 
     default:
@@ -428,7 +439,6 @@ void EDA_3D_FRAME::On3DGridSelection( wxCommandEvent& event )
 
         GetMenuBar()->Check( ii, false );
     }
-
 
     switch( id )
     {
@@ -461,18 +471,17 @@ void EDA_3D_FRAME::On3DGridSelection( wxCommandEvent& event )
         return;
     }
 
-    NewDisplay();
+    NewDisplay( GL_ID_GRID );
 }
 
 
-void EDA_3D_FRAME::NewDisplay()
+void EDA_3D_FRAME::NewDisplay( GLuint aGlList )
 {
     m_reloadRequest = false;
 
-    m_canvas->ClearLists();
+    m_canvas->ClearLists( aGlList );
     m_canvas->CreateDrawGL_List();
 
-// m_canvas->InitGL();
     m_canvas->Refresh( true );
     m_canvas->DisplayStatus();
 }
@@ -502,6 +511,9 @@ void EDA_3D_FRAME::Set3DBgColor()
 
     newcolor = wxGetColourFromUser( this, oldcolor );
 
+    if( !newcolor.IsOk() )     // Happens on cancel dialog
+        return;
+
     if( newcolor != oldcolor )
     {
         g_Parm_3D_Visu.m_BgColor.m_Red = (double) newcolor.Red() / 255.0;
@@ -509,4 +521,9 @@ void EDA_3D_FRAME::Set3DBgColor()
         g_Parm_3D_Visu.m_BgColor.m_Blue     = (double) newcolor.Blue() / 255.0;
         NewDisplay();
     }
+}
+
+BOARD* EDA_3D_FRAME::GetBoard()
+{
+    return Parent()->GetBoard();
 }

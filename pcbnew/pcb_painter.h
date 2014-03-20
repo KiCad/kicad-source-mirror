@@ -114,6 +114,7 @@ protected:
     ///> Colors for all layers (darkened)
     COLOR4D m_layerColorsDark[TOTAL_LAYER_COUNT];
 
+    ///> Flag determining if items on a given layer should be drawn as an outline or a full item
     bool    m_sketchModeSelect[TOTAL_LAYER_COUNT];
 
     ///> Flag determining if pad numbers should be visible

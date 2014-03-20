@@ -623,18 +623,10 @@ void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
         aClipBox->Inflate(-aWidth/2);
 }
 
-
+// Draw  the outline of a thick segment wih rounded ends
 void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
               int width, int aPenSize, EDA_COLOR_T Color )
 {
-    long radius;
-    int  dwx, dwy;
-    long dx, dy, dwx2, dwy2;
-    long sx1, sy1, ex1, ey1;
-    long sx2, sy2, ex2, ey2;
-    bool swap_ends = false;
-
-
     GRLastMoveToX = x2;
     GRLastMoveToY = y2;
 
@@ -658,114 +650,63 @@ void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
     GRSetColorPen( DC, Color, aPenSize );
     GRSetBrush( DC, Color, false );
 
-    radius = (width + 1) >> 1;
+    int radius = (width + 1) >> 1;
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    double angle = -ArcTangente( dy, dx );
+    wxPoint start;
+    wxPoint end;
+    wxPoint org( x1, y1);
+    int len = (int) hypot( dx, dy );
 
-    dx = x2 - x1;
-    dy = y2 - y1;
+    // We know if the DC is mirrored, to draw arcs
+    int slx = DC->DeviceToLogicalX( 1 ) - DC->DeviceToLogicalX( 0 );
+    int sly = DC->DeviceToLogicalY( 1 ) - DC->DeviceToLogicalY( 0 );
+    bool mirrored = (slx > 0 && sly < 0) || (slx < 0 && sly > 0);
 
-    if( dx == 0 )  /* segment vertical */
-    {
-        dwx = radius;
-        if( dy >= 0 )
-            dwx = -dwx;
+    // first edge
+    start.x = 0;
+    start.y = radius;
+    end.x = len;
+    end.y = radius;
+    RotatePoint( &start, angle);
+    RotatePoint( &end, angle);
 
-        sx1 = x1 - dwx;
-        sy1 = y1;
+    start += org;
+    end += org;
 
-        ex1 = x2 - dwx;
-        ey1 = y2;
+    DC->DrawLine( start, end );
 
-        DC->DrawLine( sx1, sy1, ex1, ey1 );
+    // first rounded end
+    end.x = 0;
+    end.y = -radius;
+    RotatePoint( &end, angle);
+    end += org;
 
-        sx2 = x1 + dwx;
-        sy2 = y1;
-
-        ex2 = x2 + dwx;
-        ey2 = y2;
-
-        DC->DrawLine( sx2, sy2, ex2, ey2 );
-    }
-    else if( dy == 0 ) /* segment horizontal */
-    {
-        dwy = radius;
-        if( dx < 0 )
-            dwy = -dwy;
-
-        sx1 = x1;
-        sy1 = y1 - dwy;
-
-        ex1 = x2;
-        ey1 = y2 - dwy;
-
-        DC->DrawLine( sx1, sy1, ex1, ey1 );
-
-        sx2 = x1;
-        sy2 = y1 + dwy;
-
-        ex2 = x2;
-        ey2 = y2 + dwy;
-
-        DC->DrawLine( sx2, sy2, ex2, ey2 );
-    }
+    if( !mirrored )
+        DC->DrawArc( end, start, org );
     else
-    {
-        if( std::abs( dx ) == std::abs( dy ) )  // segment 45 degrees
-        {
-            dwx = dwy = ( (width * 5) + 4 ) / 7;    // = width / 2 * 0.707
-            if( dy < 0 )
-            {
-                if( dx <= 0 )
-                {
-                    dwx = -dwx; swap_ends = true;
-                }
-            }
-            else    // dy >= 0
-            {
-                if( dx > 0 )
-                {
-                    dwy = -dwy; swap_ends = true;
-                }
-                else
-                    swap_ends = true;
-            }
-        }
-        else
-        {
-            double delta_angle = ArcTangente( dy, dx );
-            dwx = 0;
-            dwy = width;
-            RotatePoint( &dwx, &dwy, -delta_angle );
-        }
-        dwx2 = dwx >> 1;
-        dwy2 = dwy >> 1;
+        DC->DrawArc( start, end, org );
 
-        sx1 = x1 - dwx2;
-        sy1 = y1 - dwy2;
 
-        ex1 = x2 - dwx2;
-        ey1 = y2 - dwy2;
+    // second edge
+    start.x = len;
+    start.y = -radius;
+    RotatePoint( &start, angle);
+    start += org;
 
-        DC->DrawLine( sx1, sy1, ex1, ey1 );
+    DC->DrawLine( start, end );
 
-        sx2 = x1 + dwx2;
-        sy2 = y1 + dwy2;
+    // second rounded end
+    end.x = len;
+    end.y = radius;
+    RotatePoint( &end, angle);
+    end += org;
 
-        ex2 = x2 + dwx2;
-        ey2 = y2 + dwy2;
-
-        DC->DrawLine( sx2, sy2, ex2, ey2 );
-    }
-
-    if( swap_ends )
-    {
-        DC->DrawArc( sx2, sy2, sx1, sy1, x1, y1 );
-        DC->DrawArc( ex1, ey1, ex2, ey2, x2, y2 );
-    }
+    if( !mirrored )
+        DC->DrawArc( end.x, end.y, start.x, start.y, x2, y2 );
     else
-    {
-        DC->DrawArc( sx1, sy1, sx2, sy2, x1, y1 );
-        DC->DrawArc( ex2, ey2, ex1, ey1, x2, y2 );
-    }
+        DC->DrawArc( start.x, start.y, end.x, end.y, x2, y2 );
 }
 
 

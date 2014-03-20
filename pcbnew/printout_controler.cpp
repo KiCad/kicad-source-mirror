@@ -282,7 +282,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
         if( printMirror )
         {
             // Calculate the mirrored center of the board.
-            center.y = m_Parent->GetPageSizeIU().y - boardBoundingBox.Centre().y;
+            center.x = m_Parent->GetPageSizeIU().x - boardBoundingBox.Centre().x;
         }
 
         offset += center;
@@ -301,21 +301,29 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     screen->m_IsPrinting = true;
     EDA_COLOR_T bg_color = g_DrawBgColor;
 
+    // Print frame reference, if reqquested, before
+    if( m_PrintParams.m_Print_Black_and_White )
+        GRForceBlackPen( true );
+
+    if( m_PrintParams.PrintBorderAndTitleBlock() )
+        m_Parent->DrawWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
+                                  IU_PER_MILS, titleblockFilename );
+
     if( printMirror )
     {
-        // To plot mirror, we reverse the y axis, and modify the plot y origin
-        dc->SetAxisOrientation( true, true );
+        // To plot mirror, we reverse the x axis, and modify the plot x origin
+        dc->SetAxisOrientation( false, false);
 
-        /* Plot offset y is moved by the y plot area size in order to have
+        /* Plot offset x is moved by the x plot area size in order to have
          * the old draw area in the new draw area, because the draw origin has not moved
-         * (this is the upper left corner) but the Y axis is reversed, therefore the plotting area
-         * is the y coordinate values from  - PlotAreaSize.y to 0 */
-        int y_dc_offset = PlotAreaSizeInPixels.y;
-        y_dc_offset = KiROUND( y_dc_offset  * userscale );
-        dc->SetDeviceOrigin( 0, y_dc_offset );
+         * (this is the upper left corner) but the X axis is reversed, therefore the plotting area
+         * is the x coordinate values from  - PlotAreaSize.x to 0 */
+        int x_dc_offset = PlotAreaSizeInPixels.x;
+        x_dc_offset = KiROUND( x_dc_offset  * userscale );
+        dc->SetDeviceOrigin( x_dc_offset, 0 );
 
         wxLogTrace( tracePrinting, wxT( "Device origin:                    x=%d, y=%d" ),
-                    0, y_dc_offset );
+                    x_dc_offset, 0 );
 
         panel->SetClipBox( EDA_RECT( wxPoint( -MAX_VALUE/2, -MAX_VALUE/2 ),
                                      panel->GetClipBox()->GetSize() ) );
@@ -359,13 +367,9 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
                              printMirror, &m_PrintParams );
         GRForceBlackPen( false );
     }
-
-    if( m_PrintParams.m_Print_Black_and_White )
+    else
         GRForceBlackPen( true );
 
-    if( m_PrintParams.PrintBorderAndTitleBlock() )
-        m_Parent->DrawWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
-                                  IU_PER_MILS, titleblockFilename );
 
 #if defined (GERBVIEW)
     // In B&W mode, do not force black pen for Gerbview

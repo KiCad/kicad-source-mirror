@@ -34,7 +34,6 @@
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
 #include <class_mire.h>
-#include <class_netinfo.h>
 #include <pcbstruct.h>
 
 #include <view/view.h>
@@ -68,14 +67,15 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
     }
 
     // Default colors for specific layers
-    m_layerColors[ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE )]         = COLOR4D( 0.5, 0.4, 0.0, 1.0 );
-    m_layerColors[ITEM_GAL_LAYER( PADS_HOLES_VISIBLE )]         = COLOR4D( 0.0, 0.5, 0.5, 1.0 );
-    m_layerColors[ITEM_GAL_LAYER( VIAS_VISIBLE )]               = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
-    m_layerColors[ITEM_GAL_LAYER( PADS_VISIBLE )]               = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
-    m_layerColors[ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE )]      = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
-    m_layerColors[ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
-    m_layerColors[ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
-    m_layerColors[ITEM_GAL_LAYER( WORKSHEET )]                  = COLOR4D( 0.5, 0.0, 0.0, 1.0 );
+    m_layerColors[ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE )]             = COLOR4D( 0.5, 0.4, 0.0, 1.0 );
+    m_layerColors[ITEM_GAL_LAYER( PADS_HOLES_VISIBLE )]             = COLOR4D( 0.0, 0.5, 0.5, 1.0 );
+    m_layerColors[ITEM_GAL_LAYER( VIAS_VISIBLE )]                   = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
+    m_layerColors[ITEM_GAL_LAYER( PADS_VISIBLE )]                   = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
+    m_layerColors[NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE )]      = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    m_layerColors[NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    m_layerColors[NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    m_layerColors[ITEM_GAL_LAYER( RATSNEST_VISIBLE )]               = COLOR4D( 0.4, 0.4, 0.4, 0.7 );
+    m_layerColors[ITEM_GAL_LAYER( WORKSHEET )]                      = COLOR4D( 0.5, 0.0, 0.0, 1.0 );
 
     // Netnames for copper layers
     for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
@@ -152,7 +152,7 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
         // Try to obtain the netcode for the item
         const BOARD_CONNECTED_ITEM* item = dynamic_cast<const BOARD_CONNECTED_ITEM*>( aItem );
         if( item )
-            netCode = item->GetNet();
+            netCode = item->GetNetCode();
     }
 
     // Return grayish color for non-highlighted layers in the high contrast mode
@@ -261,13 +261,14 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     VECTOR2D start( aTrack->GetStart() );
     VECTOR2D end( aTrack->GetEnd() );
     int      width = aTrack->GetWidth();
-    int      netNumber = aTrack->GetNet();
     COLOR4D  color;
 
     if( m_pcbSettings->m_netNamesOnTracks && IsNetnameLayer( aLayer ) )
     {
+        int netCode = aTrack->GetNetCode();
+
         // If there is a net name - display it on the track
-        if( netNumber > 0 )
+        if( netCode > 0 )
         {
             VECTOR2D line = ( end - start );
             double length = line.EuclideanNorm();
@@ -276,11 +277,11 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             if( length < 10 * width )
                 return;
 
-            NETINFO_ITEM* net = ( (BOARD*) aTrack->GetParent() )->FindNet( netNumber );
+            NETINFO_ITEM* net = aTrack->GetNet();
             if( !net )
                 return;
 
-            std::wstring netName = std::wstring( net->GetShortNetname().wc_str() );
+            const wxString& netName = aTrack->GetShortNetname();
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
             double textOrientation = -atan( line.y / line.x );
             double textSize = std::min( static_cast<double>( width ), length / netName.length() );
@@ -304,7 +305,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             m_gal->StrokeText( netName, textPosition, textOrientation );
         }
     }
-    else if( IsCopperLayer( aLayer ))
+    else if( IsCopperLayer( aLayer ) )
     {
         // Draw a regular track
         color = m_pcbSettings->GetColor( aTrack, aLayer );

@@ -222,22 +222,23 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     GRSetDrawMode( aDC, aDrawMode );
 
+    EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
-        GRFilledRect( aPanel->GetClipBox(), aDC, pos1.x, pos1.y, pos2.x, pos2.y, GetPenSize( ),
+        GRFilledRect( clipbox, aDC, pos1.x, pos1.y, pos2.x, pos2.y, GetPenSize( ),
                       (m_Flags & IS_MOVED) ? color : GetLayerColor( LAYER_DEVICE_BACKGROUND ),
                       GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( m_Fill == FILLED_SHAPE  && !aData )
-        GRFilledRect( aPanel->GetClipBox(), aDC, pos1.x, pos1.y, pos2.x, pos2.y,
+        GRFilledRect( clipbox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
                       GetPenSize(), color, color );
     else
-        GRRect( aPanel->GetClipBox(), aDC, pos1.x, pos1.y, pos2.x, pos2.y, GetPenSize(), color );
+        GRRect( clipbox, aDC, pos1.x, pos1.y, pos2.x, pos2.y, GetPenSize(), color );
 
     /* Set to one (1) to draw bounding box around rectangle to validate
      * bounding box calculation. */
 #if 0
     EDA_RECT bBox = GetBoundingBox();
     bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
-    GRRect( aPanel->GetClipBox(), aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+    GRRect( clipbox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }

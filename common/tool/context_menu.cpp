@@ -29,7 +29,7 @@
 #include <cassert>
 
 CONTEXT_MENU::CONTEXT_MENU() :
-    m_titleSet( false ), m_handler( this ), m_tool( NULL )
+    m_titleSet( false ), m_selected( -1 ), m_handler( this ), m_tool( NULL )
 {
     m_menu.Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CMEventHandler::onEvent ),
                      NULL, &m_handler );
@@ -43,7 +43,7 @@ CONTEXT_MENU::CONTEXT_MENU() :
 
 
 CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu ) :
-    m_titleSet( aMenu.m_titleSet ), m_handler( this ), m_tool( aMenu.m_tool )
+    m_titleSet( aMenu.m_titleSet ), m_selected( -1 ), m_handler( this ), m_tool( aMenu.m_tool )
 {
     m_menu.Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CMEventHandler::onEvent ),
                      NULL, &m_handler );
@@ -164,6 +164,9 @@ void CONTEXT_MENU::CMEventHandler::onEvent( wxEvent& aEvent )
     // One of menu entries was selected..
     else if( type == wxEVT_COMMAND_MENU_SELECTED )
     {
+        // Store the selected position
+        m_menu->m_selected = aEvent.GetId();
+
         // Check if there is a TOOL_ACTION for the given ID
         if( m_menu->m_toolActions.count( aEvent.GetId() ) == 1 )
         {

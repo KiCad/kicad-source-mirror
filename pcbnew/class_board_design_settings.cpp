@@ -52,7 +52,7 @@
 
 
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
-    m_Pad_Master( 0 )
+    m_Pad_Master( NULL )
 {
     m_EnabledLayers = ALL_LAYERS;               // All layers enabled at first.
                                                 // SetCopperLayerCount() will adjust this.
@@ -243,3 +243,16 @@ void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LAYER_MSK aMask )
     // update m_CopperLayerCount to ensure its consistency with m_EnabledLayers
     m_CopperLayerCount = LayerMaskCountSet( aMask & ALL_CU_LAYERS);
 }
+
+
+#ifndef NDEBUG
+struct static_check {
+   static_check()
+   {
+       // Int (the type used for saving visibility settings) is only 32 bits guaranteed,
+       // be sure that we do not cross the limit
+       assert( END_PCB_VISIBLE_LIST <= 32 );
+   };
+};
+static static_check check;
+#endif

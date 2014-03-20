@@ -96,7 +96,7 @@ struct TOOL_MANAGER::TOOL_STATE
 
 
 TOOL_MANAGER::TOOL_MANAGER() :
-    m_model( NULL ), m_view( NULL )
+    m_model( NULL ), m_view( NULL ), m_viewControls( NULL ), m_editFrame( NULL )
 {
     m_actionMgr = new ACTION_MANAGER( this );
 }
@@ -119,10 +119,14 @@ TOOL_MANAGER::~TOOL_MANAGER()
 
 void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 {
+    wxASSERT_MSG( m_toolNameIndex.find( aTool->GetName() ) == m_toolNameIndex.end(),
+            wxT( "Adding two tools with the same name may result in unexpected behaviour.") );
+    wxASSERT_MSG( m_toolIdIndex.find( aTool->GetId() ) == m_toolIdIndex.end(),
+            wxT( "Adding two tools with the same ID may result in unexpected behaviour.") );
+
     TOOL_STATE* st = new TOOL_STATE;
 
     st->theTool = aTool;
-    st->idle = true;
     st->pendingWait = false;
     st->pendingContextMenu = false;
     st->cofunc = NULL;
@@ -134,22 +138,20 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 
     aTool->m_toolMgr = this;
 
-    if( aTool->GetType() == INTERACTIVE )
+    if( !aTool->Init() )
     {
-        if( !static_cast<TOOL_INTERACTIVE*>( aTool )->Init() )
-        {
-            std::string msg = StrPrintf( "Initialization of the %s tool failed", aTool->GetName().c_str() );
+        std::string msg = StrPrintf( "Initialization of the %s tool failed",
+                                     aTool->GetName().c_str() );
 
-            DisplayError( NULL, wxString::FromUTF8( msg.c_str() ) );
+        DisplayError( NULL, wxString::FromUTF8( msg.c_str() ) );
 
-            // Unregister the tool
-            m_toolState.erase( aTool );
-            m_toolNameIndex.erase( aTool->GetName() );
-            m_toolIdIndex.erase( aTool->GetId() );
+        // Unregister the tool
+        m_toolState.erase( aTool );
+        m_toolNameIndex.erase( aTool->GetName() );
+        m_toolIdIndex.erase( aTool->GetId() );
 
-            delete st;
-            delete aTool;
-        }
+        delete st;
+        delete aTool;
     }
 }
 
@@ -185,6 +187,12 @@ void TOOL_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 void TOOL_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 {
     m_actionMgr->UnregisterAction( aAction );
+}
+
+
+bool TOOL_MANAGER::RunAction( const std::string& aActionName )
+{
+    return m_actionMgr->RunAction( aActionName );
 }
 
 
@@ -226,17 +234,16 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
     wxASSERT( aTool != NULL );
 
     if( !isRegistered( aTool ) )
+    {
+        wxASSERT_MSG( false, wxT( "You cannot run unregistered tools" ) );
         return false;
-
-    TOOL_STATE* state = m_toolState[aTool];
+    }
 
     // If the tool is already active, do not invoke it again
-    if( state->idle == false )
+    if( isActive( aTool ) )
         return false;
 
-    state->idle = false;
-
-    static_cast<TOOL_INTERACTIVE*>( aTool )->Reset();
+    aTool->Reset( TOOL_INTERACTIVE::RUN );
 
     // Add the tool on the front of the processing queue (it gets events first)
     m_activeTools.push_front( aTool->GetId() );
@@ -264,6 +271,13 @@ TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
         return it->second->theTool;
 
     return NULL;
+}
+
+
+void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
+{
+    BOOST_FOREACH( TOOL_BASE* tool, m_toolState | boost::adaptors::map_keys )
+        tool->Reset( aReason );
 }
 
 
@@ -333,10 +347,11 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
             // Go() method that match the event.
             if( st->transitions.size() )
             {
-                BOOST_FOREACH( TRANSITION tr, st->transitions )
+                BOOST_FOREACH( TRANSITION& tr, st->transitions )
                 {
                     if( tr.first.Matches( aEvent ) )
                     {
+                        // as the state changes, the transition table has to be set up again
                         st->transitions.clear();
 
                         // no tool context allocated yet? Create one.
@@ -350,6 +365,9 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 
                         if( !st->cofunc->Running() )
                             finishTool( st ); // The couroutine has finished immediately?
+
+                        // there is no point in further checking, as transitions got cleared
+                        break;
                     }
                 }
             }
@@ -394,21 +412,18 @@ bool TOOL_MANAGER::dispatchActivation( TOOL_EVENT& aEvent )
 
 void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
-    // Find the tool to be deactivated
-    std::deque<TOOL_ID>::iterator it, it_end;
+    std::deque<TOOL_ID>::iterator it, itEnd;
 
-    for( it = m_activeTools.begin(), it_end = m_activeTools.end(); it != it_end; ++it )
+    // Find the tool and deactivate it
+    for( it = m_activeTools.begin(), itEnd = m_activeTools.end(); it != itEnd; ++it )
     {
         if( aState == m_toolIdIndex[*it] )
+        {
+            m_activeTools.erase( it );
             break;
+        }
     }
 
-    if( it != m_activeTools.end() )
-        m_activeTools.erase( it );
-    else
-        wxLogWarning( wxT( "Tried to finish inactive tool" ) );
-
-    aState->idle = true;
     delete aState->cofunc;
     aState->cofunc = NULL;
 }
@@ -445,9 +460,12 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
             boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *st->contextMenu ) );
             GetEditFrame()->PopupMenu( menu->GetMenu() );
 
-            //
-            TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE );
-            dispatchInternal( evt );
+            // If nothing was chosen from the context menu, we must notify the tool as well
+            if( menu->GetSelected() < 0 )
+            {
+                TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE );
+                dispatchInternal( evt );
+            }
 
             break;
         }
@@ -456,7 +474,8 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
     if( m_view->IsDirty() )
     {
         PCB_EDIT_FRAME* f = static_cast<PCB_EDIT_FRAME*>( GetEditFrame() );
-        f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
+        if( f->IsGalCanvasActive() )
+            f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
     }
 
     return false;
@@ -492,15 +511,6 @@ void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
     m_view = aView;
     m_viewControls = aViewControls;
     m_editFrame = aFrame;
-
-    // Reset state of the registered tools
-    BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
-    {
-        TOOL_BASE* tool = m_toolIdIndex[toolId]->theTool;
-
-        if( tool->GetType() == INTERACTIVE )
-            static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
-    }
 }
 
 
@@ -509,5 +519,6 @@ bool TOOL_MANAGER::isActive( TOOL_BASE* aTool )
     if( !isRegistered( aTool ) )
         return false;
 
-    return !m_toolState[aTool]->idle;
+    // Just check if the tool is on the active tools stack
+    return std::find( m_activeTools.begin(), m_activeTools.end(), aTool->GetId() ) != m_activeTools.end();
 }

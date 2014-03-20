@@ -24,7 +24,7 @@
  */
 
 /**
- * @file eda_pgm.cpp
+ * @file pgm_base.cpp
  *
  * @brief For the main application: init functions, and language selection
  *        (locale handling)
@@ -270,6 +270,8 @@ PGM_BASE::PGM_BASE()
     m_wx_app = NULL;
 
     setLanguageId( wxLANGUAGE_DEFAULT );
+
+    ForceSystemPdfBrowser( false );
 }
 
 

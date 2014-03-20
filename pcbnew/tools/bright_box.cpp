@@ -28,6 +28,8 @@
 
 using namespace KIGFX;
 
+const double BRIGHT_BOX::LineWidth = 100000.0;
+
 BRIGHT_BOX::BRIGHT_BOX( BOARD_ITEM* aItem ) :
     EDA_ITEM( NOT_USED ),    // this item is never added to a BOARD so it needs no type
     item( aItem )

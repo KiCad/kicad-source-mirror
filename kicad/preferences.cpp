@@ -27,10 +27,6 @@
  * @file preferences.cpp
  */
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include <fctsys.h>
 #include <pgm_kicad.h>
 #include <confirm.h>
@@ -49,6 +45,7 @@ void KICAD_MANAGER_FRAME::OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event )
 
 void KICAD_MANAGER_FRAME::OnSelectDefaultPdfBrowser( wxCommandEvent& event )
 {
+    Pgm().ForceSystemPdfBrowser( true );
     Pgm().WritePdfBrowserInfos();
 }
 
@@ -69,18 +66,19 @@ void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
                       _( "You must choose a PDF viewer before using this option." ) );
     }
 
-    wxString wildcard( wxT( "*" ) );
+    wxString mask( wxT( "*" ) );
 
 #ifdef __WINDOWS__
-    wildcard += wxT( ".exe" );
+    mask += wxT( ".exe" );
 #endif
 
-    wildcard = _( "Executable files (" ) + wildcard + wxT( ")|" ) + wildcard;
+    wxString wildcard = _( "Executable files (" ) + mask + wxT( ")|" ) + mask;
 
     Pgm().ReadPdfBrowserInfos();
     wxFileName fn = Pgm().GetPdfBrowserName();
+
     wxFileDialog dlg( this, _( "Select Preferred Pdf Browser" ), fn.GetPath(),
-                      fn.GetFullName(), wildcard,
+                      fn.GetFullPath(), wildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )

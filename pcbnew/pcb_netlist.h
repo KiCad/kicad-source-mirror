@@ -47,16 +47,14 @@ class REPORTER;
 class COMPONENT_NET
 {
     wxString m_pinName;
-    wxString m_netNumber;
     wxString m_netName;
 
 public:
     COMPONENT_NET() {}
 
-    COMPONENT_NET( const wxString& aPinName, const wxString& aNetName )
+    COMPONENT_NET( const wxString& aPinName, const wxString& aNetName ) :
+        m_pinName( aPinName ), m_netName( aNetName )
     {
-        m_pinName = aPinName;
-        m_netName = aNetName;
     }
 
     const wxString& GetPinName() const { return m_pinName; }

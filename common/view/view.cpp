@@ -34,9 +34,9 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <painter.h>
 
-#ifdef __WXDEBUG__
+#ifdef PROFILE
 #include <profile.h>
-#endif /* __WXDEBUG__ */
+#endif /* PROFILE  */
 
 using namespace KIGFX;
 
@@ -122,6 +122,12 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
+        MarkTargetDirty( l.target );
+
+        // Clear the GAL cache
+        int prevGroup = aItem->getGroup( layers[i] );
+        if( prevGroup >= 0 )
+            m_gal->DeleteGroup( prevGroup );
     }
 }
 
@@ -833,7 +839,7 @@ void VIEW::clearGroupCache()
 }
 
 
-void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
+void VIEW::InvalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 {
     // updateLayers updates geometry too, so we do not have to update both of them at the same time
     if( aUpdateFlags & VIEW_ITEM::LAYERS )
@@ -944,6 +950,12 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
         MarkTargetDirty( l.target );
+
+        // Redraw the item from scratch
+        int prevGroup = aItem->getGroup( layers[i] );
+
+        if( prevGroup >= 0 )
+            m_gal->DeleteGroup( prevGroup );
     }
 
     // Add the item to new layer set
@@ -983,10 +995,10 @@ void VIEW::RecacheAllItems( bool aImmediately )
 
     r.SetMaximum();
 
-#ifdef __WXDEBUG__
+#ifdef PROFILE
     prof_counter totalRealTime;
     prof_start( &totalRealTime );
-#endif /* __WXDEBUG__ */
+#endif /* PROFILE */
 
     for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
@@ -1002,12 +1014,12 @@ void VIEW::RecacheAllItems( bool aImmediately )
         }
     }
 
-#ifdef __WXDEBUG__
+#ifdef PROFILE
     prof_end( &totalRealTime );
 
     wxLogDebug( wxT( "RecacheAllItems::immediately: %u %.1f ms" ),
                 aImmediately, totalRealTime.msecs() );
-#endif /* __WXDEBUG__ */
+#endif /* PROFILE */
 }
 
 

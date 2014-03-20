@@ -75,6 +75,7 @@ const std::string TOOL_EVENT::Format() const
     const FlagString actions[] =
     {
         { TA_MOUSE_CLICK,           "click"               },
+        { TA_MOUSE_DBLCLICK,        "double click"        },
         { TA_MOUSE_UP,              "button-up"           },
         { TA_MOUSE_DOWN,            "button-down"         },
         { TA_MOUSE_DRAG,            "drag"                },
@@ -90,6 +91,7 @@ const std::string TOOL_EVENT::Format() const
         { TA_CANCEL_TOOL,           "cancel-tool"         },
         { TA_CONTEXT_MENU_UPDATE,   "context-menu-update" },
         { TA_CONTEXT_MENU_CHOICE,   "context-menu-choice" },
+        { TA_UNDO_REDO,             "undo-redo"           },
         { TA_ACTION,                "action"              },
         { 0,                        ""                    }
     };
@@ -100,7 +102,7 @@ const std::string TOOL_EVENT::Format() const
         { BUT_LEFT,   "left"   },
         { BUT_RIGHT,  "right"  },
         { BUT_MIDDLE, "middle" },
-        { 0,         ""       }
+        { 0,          ""       }
     };
 
     const FlagString modifiers[] =

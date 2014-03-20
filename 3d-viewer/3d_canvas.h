@@ -50,14 +50,29 @@ class S3D_VERTEX;
 class SEGVIA;
 class D_PAD;
 
+// We are using GL lists to store layers and other items
+// to draw or not
+// GL_LIST_ID are the GL lists indexes in m_glLists
+enum GL_LIST_ID
+{
+    GL_ID_BEGIN = 0,
+    GL_ID_AXIS = GL_ID_BEGIN,   // list id for 3D axis
+    GL_ID_GRID,                 // list id for 3D grid
+    GL_ID_BOARD,                // List id for copper layers
+    GL_ID_TECH_LAYERS,          // List id for non copper layers (masks...)
+    GL_ID_AUX_LAYERS,           // List id for user layers (draw, eco, comment)
+    GL_ID_3DSHAPES_SOLID,       // List id for 3D shapes, non transparent entities
+    GL_ID_3DSHAPES_TRANSP,      // List id for 3D shapes, transparent entities
+    GL_ID_END
+};
 
 class EDA_3D_CANVAS : public wxGLCanvas
 {
 private:
     bool            m_init;
-    GLuint          m_gllist;
+    GLuint          m_glLists[GL_ID_END];    // GL lists
     wxGLContext*    m_glRC;
-    wxRealPoint     m_draw3dOffset;     // offset to draw the 3 mesh.
+    wxRealPoint     m_draw3dOffset;     // offset to draw the 3D mesh.
     double          m_ZBottom;          // position of the back layer
     double          m_ZTop;             // position of the front layer
 
@@ -67,7 +82,15 @@ public:
 
     EDA_3D_FRAME*   Parent() { return (EDA_3D_FRAME*)GetParent(); }
 
-    void   ClearLists();
+    BOARD* GetBoard() { return Parent()->GetBoard(); }
+
+    /**
+     * Function ClearLists
+     * Clear the display list.
+     * @param aGlList = the list to clear.
+     * if 0 (default) all lists are cleared
+     */
+    void   ClearLists( GLuint aGlList = 0 );
 
     // Event functions:
     void   OnPaint( wxPaintEvent& event );
@@ -81,10 +104,9 @@ public:
     void   OnEnterWindow( wxMouseEvent& event );
 
     // Display functions
-    GLuint DisplayCubeforTest();        // Just a test function
     void   SetView3D( int keycode );
     void   DisplayStatus();
-    void   Redraw( bool finish = false );
+    void   Redraw();
     void   Render();
 
     /**
@@ -92,7 +114,7 @@ public:
      * Prepares the parameters of the OpenGL draw list
      * creates the OpenGL draw list items (board, grid ...
      */
-    GLuint CreateDrawGL_List();
+    void   CreateDrawGL_List();
     void   InitGL();
     void   SetLights();
     void   SetOffset(double aPosX, double aPosY)
@@ -104,11 +126,40 @@ public:
     /**
      * Function BuildBoard3DView
      * Called by CreateDrawGL_List()
-     * Fills the OpenGL draw list with board items draw list.
+     * Populates the OpenGL GL_ID_BOARD draw list with board items only on copper layers.
+     * 3D footprint shapes, tech layers and aux layers are not on this list
      */
     void   BuildBoard3DView();
 
-    void   DrawGrid( double aGriSizeMM );
+    /**
+     * Function BuildTechLayers3DView
+     * Called by CreateDrawGL_List()
+     * Populates the OpenGL GL_ID_BOARD draw list with items on tech layers
+     */
+    void   BuildTechLayers3DView();
+
+    /**
+     * Function BuildFootprintShape3DList
+     * Called by CreateDrawGL_List()
+     * Fills the OpenGL GL_ID_3DSHAPES_SOLID and GL_ID_3DSHAPES_TRANSP
+     * draw lists with 3D footprint shapes
+     * @param aOpaqueList is the gl list for non transparent items
+     * @param aTransparentList is the gl list for non transparent items,
+     * which need to be drawn after all other items
+     */
+    void   BuildFootprintShape3DList( GLuint aOpaqueList,
+                                      GLuint aTransparentList);
+    /**
+     * Function BuildBoard3DAuxLayers
+     * Called by CreateDrawGL_List()
+     * Fills the OpenGL GL_ID_AUX_LAYERS draw list
+     * with items on aux layers only
+     */
+    void   BuildBoard3DAuxLayers();
+
+    void   Draw3DGrid( double aGriSizeMM );
+    void   Draw3DAxis();
+
     void   Draw3DViaHole( SEGVIA * aVia );
     void   Draw3DPadHole( D_PAD * aPad );
 

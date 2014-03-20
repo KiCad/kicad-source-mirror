@@ -119,7 +119,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     // The first shows translated strings, the second contains not translated strings
     m_paperSizeComboBox->Clear();
 
-    for( unsigned ii = 0; ii<DIM(pageFmts); ii++ )
+    for( unsigned ii = 0; ii < DIM(pageFmts); ii++ )
     {
         m_pageFmt.Add( pageFmts[ii] );
         m_paperSizeComboBox->Append( wxGetTranslation( pageFmts[ii] ) );

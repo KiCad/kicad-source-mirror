@@ -121,7 +121,7 @@ public:
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
-    virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+    virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                                      UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
     {

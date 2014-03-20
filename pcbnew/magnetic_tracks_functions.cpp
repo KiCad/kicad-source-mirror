@@ -161,7 +161,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
 
         if( pad )
         {
-            if( doCheckNet && currTrack && currTrack->GetNet() != pad->GetNet() )
+            if( doCheckNet && currTrack && currTrack->GetNetCode() != pad->GetNetCode() )
                 return false;
 
             *curpos = pad->GetPosition();
@@ -180,7 +180,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
         {
             if( via != currTrack )   // a via cannot influence itself
             {
-                if( !doCheckNet || !currTrack || currTrack->GetNet() == via->GetNet() )
+                if( !doCheckNet || !currTrack || currTrack->GetNetCode() == via->GetNetCode() )
                 {
                     *curpos = via->GetStart();
                     // D(printf("via hit\n");)
@@ -223,7 +223,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
             if( track->Type() != PCB_TRACE_T )
                 continue;
 
-            if( doCheckNet && currTrack && currTrack->GetNet() != track->GetNet() )
+            if( doCheckNet && currTrack && currTrack->GetNetCode() != track->GetNetCode() )
                 continue;
 
             if( m_Pcb->IsLayerVisible( track->GetLayer() ) == false )

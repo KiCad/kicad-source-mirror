@@ -58,6 +58,12 @@ class NETLIST;
 class REPORTER;
 class RN_DATA;
 
+namespace KIGFX
+{
+    class RATSNEST_VIEWITEM;
+    class WORKSHEET_VIEWITEM;
+}
+
 
 // non-owning container of item candidates when searching for items on the same track.
 typedef std::vector< TRACK* >   TRACK_PTRS;
@@ -227,6 +233,8 @@ private:
     EDA_RECT                m_BoundingBox;
     NETINFO_LIST            m_NetInfo;              ///< net info list (name, design constraints ..
     RN_DATA*                m_ratsnest;
+    KIGFX::RATSNEST_VIEWITEM* m_ratsnestViewItem;   ///< VIEW_ITEM that draws ratsnest
+    KIGFX::WORKSHEET_VIEWITEM* m_worksheetViewItem; ///< VIEW_ITEM that draws worksheet frame
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
     ZONE_SETTINGS           m_zoneSettings;
@@ -365,6 +373,24 @@ public:
     RN_DATA* GetRatsnest() const
     {
         return m_ratsnest;
+    }
+
+    /**
+     * Function GetRatsnestViewItem()
+     * returns VIEW_ITEM responsible for drawing the ratsnest for the board.
+     */
+    KIGFX::RATSNEST_VIEWITEM* GetRatsnestViewItem() const
+    {
+        return m_ratsnestViewItem;
+    }
+
+    /**
+     * Function GetWorksheetViewItem()
+     * returns VIEW_ITEM responsible for drawing the worksheet frame.
+     */
+    KIGFX::WORKSHEET_VIEWITEM* GetWorksheetViewItem() const
+    {
+        return m_worksheetViewItem;
     }
 
     /**
@@ -844,6 +870,26 @@ public:
     {
         m_NetInfo.AppendNet( aNewNet );
     }
+
+#ifndef SWIG
+    /**
+     * Function BeginNets
+     * @return iterator to the first element of the NETINFO_ITEMs list
+     */
+    NETINFO_LIST::iterator BeginNets() const
+    {
+        return m_NetInfo.begin();
+    }
+
+    /**
+     * Function EndNets
+     * @return iterator to the last element of the NETINFO_ITEMs list
+     */
+    NETINFO_LIST::iterator EndNets() const
+    {
+        return m_NetInfo.end();
+    }
+#endif
 
     /**
      * Function GetNetCount

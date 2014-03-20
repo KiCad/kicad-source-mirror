@@ -95,8 +95,8 @@ public:
 
 private:
     PCB_BASE_FRAME* m_parent;
-    D_PAD*  m_currentPad;            // pad currently being edited
-    D_PAD*  m_dummyPad;              // a working copy used to show changes
+    D_PAD*  m_currentPad;           // pad currently being edited
+    D_PAD*  m_dummyPad;             // a working copy used to show changes
     BOARD*  m_board;
     D_PAD&  m_padMaster;
     bool    m_isFlipped;            // true if the parent footprint (therefore pads) is flipped (mirrored)
@@ -149,7 +149,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 {
     m_canUpdate  = false;
     m_parent     = aParent;
-    m_currentPad = aPad;
+    m_currentPad = aPad;        // aPad can be NULL, if the dialog is called
+                                // from the module editor to set default pad characteristics
     m_board      = m_parent->GetBoard();
     m_dummyPad   = new D_PAD( (MODULE*) NULL );
 
@@ -672,21 +673,22 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
 
     LAYER_MSK padlayers_mask = m_dummyPad->GetLayerMask();
-    if( ( padlayers_mask == 0 ) && ( m_dummyPad->GetAttribute() != PAD_HOLE_NOT_PLATED ) )
-        error_msgs.Add( _( "Error: pad has no layer and is not a mechanical pad" ) );
 
-    padlayers_mask &= (LAYER_BACK | LAYER_FRONT);
     if( padlayers_mask == 0 )
+        error_msgs.Add( _( "Error: pad has no layer" ) );
+
+    if( ( padlayers_mask & (LAYER_BACK | LAYER_FRONT) ) == 0 )
     {
         if( m_dummyPad->GetDrillSize().x || m_dummyPad->GetDrillSize().y )
         {
-            msg = _( "Error: pad is not on a copper layer and has a hole" );
+            // Note: he message is shown in an HTML window
+            msg = _( "Error: the pad is not on a copper layer and has a hole" );
 
             if( m_dummyPad->GetAttribute() == PAD_HOLE_NOT_PLATED )
             {
-                msg += wxT("\n");
-                msg += _(   "For NPTH pad, set pad drill value to pad size value,\n"
-                            "if you do not want this pad plotted in gerber files"
+                msg += wxT("<br><br><i>");
+                msg += _(   "For NPTH pad, set pad size value to pad drill value,"
+                            " if you do not want this pad plotted in gerber files"
                             );
             }
 
@@ -713,20 +715,21 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     switch( m_dummyPad->GetAttribute() )
     {
-    case PAD_STANDARD :     // Pad through hole, a hole is expected
+    case PAD_HOLE_NOT_PLATED:   // Not plated, but through hole, a hole is expected
+    case PAD_STANDARD :         // Pad through hole, a hole is also expected
         if( m_dummyPad->GetDrillSize().x <= 0 )
-            error_msgs.Add( _( "Incorrect value for pad drill (too small value)" ) );
+            error_msgs.Add( _( "Error: Through hole pad: drill diameter set to 0" ) );
         break;
 
-    case PAD_SMD:     // SMD and Connector pads (One external copper layer only)
+    case PAD_CONN:      // Connector pads are smd pads, just they do not have solder paste.
+        if( (padlayers_mask & SOLDERPASTE_LAYER_BACK) ||
+            (padlayers_mask & SOLDERPASTE_LAYER_FRONT) )
+            error_msgs.Add( _( "Error: Connector pads are not on the solder paste layer\n"
+                               "Use SMD pads instead" ) );
+        // Fall trough
+    case PAD_SMD:       // SMD and Connector pads (One external copper layer only)
         if( (padlayers_mask & LAYER_BACK) && (padlayers_mask & LAYER_FRONT) )
-            error_msgs.Add( _( "Error: only one copper layer allowed for this pad" ) );
-        break;
-
-    case PAD_CONN:              // connectors can have pads on "All" Cu layers.
-        break;
-
-    case PAD_HOLE_NOT_PLATED:   // Not plated
+            error_msgs.Add( _( "Error: only one copper layer allowed for SMD or Connector pads" ) );
         break;
     }
 
@@ -736,6 +739,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         dlg.ListSet( error_msgs );
         dlg.ShowModal();
     }
+
     return error_msgs.GetCount() == 0;
 }
 
@@ -809,25 +813,16 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
         m_currentPad->SetPadName( m_padMaster.GetPadName() );
 
-        if( m_currentPad->GetNetname() != m_padMaster.GetNetname() )
+        if( m_currentPad->GetNetname() != m_PadNetNameCtrl->GetValue() )
         {
-            if( m_padMaster.GetNetname().IsEmpty() )
+            if( !m_PadNetNameCtrl->GetValue().IsEmpty() && m_padMaster.GetNetCode() == 0 )
             {
-                rastnestIsChanged = true;
-                m_currentPad->SetNet( 0 );
-                m_currentPad->SetNetname( wxEmptyString );
+                DisplayError( NULL, _( "Unknown netname, netname not changed" ) );
             }
             else
             {
-                const NETINFO_ITEM* net = m_board->FindNet( m_padMaster.GetNetname() );
-                if( net )
-                {
-                    rastnestIsChanged = true;
-                    m_currentPad->SetNetname( m_padMaster.GetNetname() );
-                    m_currentPad->SetNet( net->GetNet() );
-                }
-                else
-                    DisplayError( NULL, _( "Unknown netname, netname not changed" ) );
+                rastnestIsChanged = true;
+                m_currentPad->SetNetCode( m_padMaster.GetNetCode() );
             }
         }
 
@@ -986,7 +981,13 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
     msg = m_PadNumCtrl->GetValue().Left( 4 );
     aPad->SetPadName( msg );
-    aPad->SetNetname( m_PadNetNameCtrl->GetValue() );
+
+    // Check if user has set an existing net name
+    const NETINFO_ITEM* netinfo = m_board->FindNet( m_PadNetNameCtrl->GetValue() );
+    if( netinfo != NULL )
+        aPad->SetNetCode( netinfo->GetNet() );
+    else
+        aPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     // Clear some values, according to the pad type and shape
     switch( aPad->GetShape() )
@@ -1034,7 +1035,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         // no offset, no net name, no pad name allowed
         aPad->SetOffset( wxPoint( 0, 0 ) );
         aPad->SetPadName( wxEmptyString );
-        aPad->SetNetname( wxEmptyString );
+        aPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
         break;
 
     default:

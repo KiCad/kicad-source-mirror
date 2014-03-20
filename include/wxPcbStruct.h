@@ -61,8 +61,8 @@ class BOARD_ITEM;
 class PCB_LAYER_BOX_SELECTOR;
 class NETLIST;
 class REPORTER;
-class PARSE_ERROR;
-class IO_ERROR;
+struct PARSE_ERROR;
+struct IO_ERROR;
 class FP_LIB_TABLE;
 
 namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
@@ -278,6 +278,7 @@ public:
     void OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent );
     void OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
 
     /**
      * Function RecordMacros.
@@ -658,7 +659,7 @@ public:
      * @param aTransformPoint = the reference point of the transformation, for
      *                          commands like move
      */
-    virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+    virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                                      UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
@@ -683,7 +684,7 @@ public:
      *  - Get an old version of the board from Redo list
      *  @return none
      */
-    void GetBoardFromRedoList( wxCommandEvent& event );
+    void GetBoardFromRedoList( wxCommandEvent& aEvent );
 
     /**
      * Function GetBoardFromUndoList
@@ -692,7 +693,7 @@ public:
      *  - Get an old version of the board from Undo list
      *  @return none
      */
-    void GetBoardFromUndoList( wxCommandEvent& event );
+    void GetBoardFromUndoList( wxCommandEvent& aEvent );
 
     /* Block operations: */
 

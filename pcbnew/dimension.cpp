@@ -160,10 +160,12 @@ void DIALOG_DIMENSION_EDITOR::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 {
+#ifndef USE_WX_OVERLAY
     if( m_DC )     // Delete old text.
     {
         CurrentDimension->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
     }
+#endif 
 
     m_Parent->SaveCopyInUndoList(CurrentDimension, UR_CHANGED);
 
@@ -207,12 +209,14 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
     CurrentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
 
     CurrentDimension->SetLayer( m_SelLayerBox->GetLayerSelection() );
-
+#ifndef USE_WX_OVERLAY
     if( m_DC )     // Display new text
     {
         CurrentDimension->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
     }
-
+#else
+    m_Parent->Refresh();
+#endif
     m_Parent->OnModify();
     EndModal( 1 );
 }

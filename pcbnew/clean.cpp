@@ -323,14 +323,14 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                         zone = m_Brd->HitTestForAnyFilledArea( track->GetStart(),
                                                                track->GetLayer(),
                                                                track->GetLayer(),
-                                                               track->GetNet() );
+                                                               track->GetNetCode() );
                     }
                     else
                     {
                         ((SEGVIA*)track)->LayerPair( &top_layer, &bottom_layer );
                         zone = m_Brd->HitTestForAnyFilledArea( track->GetStart(),
                                                                top_layer, bottom_layer,
-                                                               track->GetNet() );
+                                                               track->GetNetCode() );
                     }
                 }
 
@@ -359,7 +359,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                             zone = m_Brd->HitTestForAnyFilledArea( via->GetStart(),
                                                                    bottom_layer,
                                                                    top_layer,
-                                                                   via->GetNet() );
+                                                                   via->GetNetCode() );
                         }
 
                         if( (other == NULL) && (zone == NULL) )
@@ -383,14 +383,14 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                         zone = m_Brd->HitTestForAnyFilledArea( track->GetEnd(),
                                                                track->GetLayer(),
                                                                track->GetLayer(),
-                                                               track->GetNet() );
+                                                               track->GetNetCode() );
                     }
                     else
                     {
                         ((SEGVIA*)track)->LayerPair( &top_layer, &bottom_layer );
                         zone = m_Brd->HitTestForAnyFilledArea( track->GetEnd(),
                                                                top_layer, bottom_layer,
-                                                               track->GetNet() );
+                                                               track->GetNetCode() );
                     }
                 }
 
@@ -419,7 +419,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                             via->LayerPair( &top_layer, &bottom_layer );
                             zone = m_Brd->HitTestForAnyFilledArea( via->GetEnd(),
                                                                    bottom_layer, top_layer,
-                                                                   via->GetNet() );
+                                                                   via->GetNetCode() );
                         }
 
                         if( (other == NULL) && (zone == NULL) )
@@ -479,7 +479,7 @@ bool TRACKS_CLEANER::clean_segments()
             if( segment->GetLayer() != other->GetLayer() )
                 continue;
 
-            if( segment->GetNet() != other->GetNet() )
+            if( segment->GetNetCode() != other->GetNetCode() )
                 break;
 
             if( ( segment->GetStart() == other->GetStart() ) &&
@@ -748,14 +748,14 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
         if( segment->start && segment->start->Type()==PCB_PAD_T )
         {
             // get the netcode of the pad to propagate.
-            net_code_s = ((D_PAD*)(segment->start))->GetNet();
+            net_code_s = ((D_PAD*)(segment->start))->GetNetCode();
         }
         else
         {
             other = segment->GetTrace( GetBoard()->m_Track, NULL, FLG_START );
 
             if( other )
-                net_code_s = other->GetNet();
+                net_code_s = other->GetNetCode();
         }
 
         if( net_code_s < 0 )
@@ -766,14 +766,14 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
 
         if( segment->end && segment->end->Type()==PCB_PAD_T )
         {
-            net_code_e = ((D_PAD*)(segment->end))->GetNet();
+            net_code_e = ((D_PAD*)(segment->end))->GetNetCode();
         }
         else
         {
             other = segment->GetTrace( GetBoard()->m_Track, NULL, FLG_END );
 
             if( other )
-                net_code_e = other->GetNet();
+                net_code_e = other->GetNetCode();
         }
 
         if( net_code_e < 0 )

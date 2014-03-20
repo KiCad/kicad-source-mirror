@@ -41,6 +41,7 @@
 #include <PolyLine.h>
 #include "zones.h"
 
+#include <boost/function.hpp>
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -250,8 +251,14 @@ public:
      * function ReadandInsert3DComponentShape
      * read the 3D component shape(s) of the footprint (physical shape)
      * and insert mesh in gl list
+     * @param glcanvas = the openGL canvas
+     * @param  aAllowNonTransparentObjects = true to load non transparent objects
+     * @param  aAllowTransparentObjects = true to load non transparent objects
+     * in openGL, transparent objects should be drawn *after* non transparent objects
      */
-    void ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas );
+    void ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
+                                        bool aAllowNonTransparentObjects,
+                                        bool aAllowTransparentObjects );
 
     /**
      * function TransformPadsShapesWithClearanceToPolygon
@@ -446,6 +453,17 @@ public:
     BITMAP_DEF GetMenuImage() const { return  module_xpm; }
 
     EDA_ITEM* Clone() const;
+
+    /**
+     * Function RunOnChildren
+     *
+     * Invokes a function on all BOARD_ITEMs that belong to the module (pads, drawings, texts).
+     * @param aFunction is the function to be invoked.
+     */
+    void RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction );
+
+    /// @copydoc VIEW_ITEM::ViewUpdate()
+    void ViewUpdate( int aUpdateFlags );
 
     /**
      * Function CopyNetlistSettings

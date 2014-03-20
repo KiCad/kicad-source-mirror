@@ -160,15 +160,11 @@ EDA_ITEM* SEGZONE::Clone() const
 wxString SEGZONE::GetSelectMenuText() const
 {
     wxString text, nettxt;
-    NETINFO_ITEM* net;
     BOARD* board = GetBoard();
 
     if( board )
     {
-        net = board->FindNet( GetNet() );
-
-        if( net )
-            nettxt = net->GetNetname();
+        nettxt = GetNetname();
     }
     else
     {
@@ -201,7 +197,6 @@ wxString SEGVIA::GetSelectMenuText() const
 {
     wxString text;
     wxString format;
-    NETINFO_ITEM* net;
     BOARD* board = GetBoard();
 
     int shape = GetShape();
@@ -215,18 +210,14 @@ wxString SEGVIA::GetSelectMenuText() const
 
     if( board )
     {
-        net = board->FindNet( GetNet() );
-        wxString netname;
-
-        if( net )
-            netname = net->GetNetname();
+        wxString netname = GetNetname();
 
         // say which layers, only two for now
         LAYER_NUM topLayer;
         LAYER_NUM botLayer;
         LayerPair( &topLayer, &botLayer );
         text.Printf( format.GetData(), GetChars( ShowWidth() ),
-                     GetChars( netname ), GetNet(),
+                     GetChars( netname ), GetNetCode(),
                      GetChars( board->GetLayerName( topLayer ) ),
                      GetChars( board->GetLayerName( botLayer ) ) );
 
@@ -496,7 +487,7 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
 
     for( ; track;  track = track->Next() )
     {
-        if( GetNet() <= track->GetNet() )
+        if( GetNetCode() <= track->GetNetCode() )
             return track;
     }
 
@@ -510,14 +501,14 @@ TRACK* TRACK::GetStartNetCode( int NetCode )
     int    ii    = 0;
 
     if( NetCode == -1 )
-        NetCode = GetNet();
+        NetCode = GetNetCode();
 
     while( Track != NULL )
     {
-        if( Track->GetNet() > NetCode )
+        if( Track->GetNetCode() > NetCode )
             break;
 
-        if( Track->GetNet() == NetCode )
+        if( Track->GetNetCode() == NetCode )
         {
             ii++;
             break;
@@ -542,19 +533,19 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
         return NULL;
 
     if( NetCode == -1 )
-        NetCode = GetNet();
+        NetCode = GetNetCode();
 
     while( Track != NULL )
     {
         NextS = (TRACK*) Track->Pnext;
 
-        if( Track->GetNet() == NetCode )
+        if( Track->GetNetCode() == NetCode )
             ii++;
 
         if( NextS == NULL )
             break;
 
-        if( NextS->GetNet() > NetCode )
+        if( NextS->GetNetCode() > NetCode )
             break;
 
         Track = NextS;
@@ -690,10 +681,10 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     if( aDC->LogicalToDeviceXRel( m_Width ) < MIN_TEXT_SIZE )
         return;
 
-    if( GetNet() == 0 )
+    if( GetNetCode() == NETINFO_LIST::UNCONNECTED )
         return;
 
-    NETINFO_ITEM* net = ( (BOARD*) GetParent() )->FindNet( GetNet() );
+    NETINFO_ITEM* net = GetNet();
 
     if( net == NULL )
         return;
@@ -763,9 +754,9 @@ void TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
 unsigned int TRACK::ViewGetLOD( int aLayer ) const
 {
     // Netnames will be shown only if zoom is appropriate
-    if( aLayer == GetNetnameLayer( GetLayer() ) )
+    if( IsNetnameLayer( aLayer ) )
     {
-        return ( 20000000 / m_Width );
+        return ( 20000000 / ( m_Width + 1 ) );
     }
 
     // Other layers are shown without any conditions
@@ -952,13 +943,13 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     }
 
     // Display the short netname:
-    if( GetNet() == 0 )
+    if( GetNetCode() == NETINFO_LIST::UNCONNECTED )
         return;
 
     if( DisplayOpt.DisplayNetNamesMode == 0 || DisplayOpt.DisplayNetNamesMode == 1 )
         return;
 
-    NETINFO_ITEM* net = ( (BOARD*) GetParent() )->FindNet( GetNet() );
+    NETINFO_ITEM* net = GetNet();
 
     if( net == NULL )
         return;
@@ -1095,7 +1086,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
     // Display Net Name (in Pcbnew)
     if( board )
     {
-        NETINFO_ITEM* net = board->FindNet( GetNet() );
+        NETINFO_ITEM* net = GetNet();
 
         if( net )
             msg = net->GetNetname();
@@ -1105,7 +1096,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "NetName" ), msg, RED ) );
 
         /* Display net code : (useful in test or debug) */
-        msg.Printf( wxT( "%d.%d" ), GetNet(), GetSubNet() );
+        msg.Printf( wxT( "%d.%d" ), GetNetCode(), GetSubNet() );
         aList.push_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
     }
 
@@ -1576,7 +1567,7 @@ wxString TRACK::GetSelectMenuText() const
     // disambiguate all the choices under the cursor!
     if( board )
     {
-        net = board->FindNet( GetNet() );
+        net = GetNet();
 
         if( net )
             netname = net->GetNetname();
@@ -1591,7 +1582,7 @@ wxString TRACK::GetSelectMenuText() const
 
     text.Printf( _("Track %s, net [%s] (%d) on layer %s, length: %s" ),
                  GetChars( ShowWidth() ), GetChars( netname ),
-                 GetNet(), GetChars( GetLayerName() ),
+                 GetNetCode(), GetChars( GetLayerName() ),
                  GetChars( ::LengthDoubleToString( GetLength() ) ) );
 
     return text;

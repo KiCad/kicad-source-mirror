@@ -1,61 +1,322 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
- <defs>
-  <mask id="i">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="n">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="o">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="p">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="j">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="m">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="k">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="l">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
- </defs>
- <g transform="matrix(.83837 0 0 .81645 1.1704 8.4343)">
-  <a fill="#e5e500" mask="url(#o)" transform="matrix(-1.0533,0,0,-1.0414,46.87,47.939)">
-   <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#e5e500"/>
-  </a>
-  <a opacity=".83203" mask="url(#p)" transform="matrix(0 -1.0414 1.0533 0 -.64254 45.87)">
-   <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
-  </a>
-  <a fill="#eded00" mask="url(#i)" transform="matrix(1.0533 0 0 1.0414 1.4155 -.94445)">
-   <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#eded00"/>
-  </a>
-  <path opacity=".9" d="m39.075 22.875a13.875 14.25 0 1 1 -0.0016 -0.21848l-13.873 0.218z" transform="matrix(.99191 0 0 .94943 -.85146 1.8348)" stroke="#000" stroke-width="1.5405" fill="none"/>
-  <a opacity="0.83" mask="url(#n)" transform="matrix(0,1.0414,-1.0533,0,48.922,1.1043)">
-   <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
-  </a>
-  <path opacity=".9" d="m4.5373 23.491h38.818" stroke="#000" stroke-width="2.016px" fill="none"/>
-  <path opacity=".9" d="m24.134 4.5338v38.704" stroke="#000" stroke-width="2.1559px" fill="none"/>
-  <a fill="#c1c100" mask="url(#j)" transform="matrix(.67174 0 0 .76458 7.6512 3.9816)">
-   <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#c1c100"/>
-  </a>
-  <a fill="#c1c100" mask="url(#m)" transform="matrix(-.67174 0 0 -.76458 40.662 43.016)">
-   <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#c1c100"/>
-  </a>
-  <a mask="url(#k)" transform="matrix(0 .67174 -.76458 0 43.801 7.3614)">
-   <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
-  </a>
-  <a mask="url(#l)" transform="matrix(0 -.67174 .76458 0 4.4238 39.589)">
-   <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
-  </a>
- </g>
- <path opacity=".9" d="m3.1351 7.7121h43.963" stroke="#000" stroke-width="1.9386px" fill="none"/>
- <path opacity=".9" d="m40 42.467v-40.439" stroke="#000" stroke-width="1.8592px" fill="none"/>
- <path stroke-width="1.3731px" d="m1.65 7.6137 6.3779-5.5459v11.452z" stroke="#000"/>
- <path stroke-width="1.3731px" d="m39.87 45.714-5.5459-6.3779h11.452z" stroke="#000"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="26"
+   width="26"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="pcb_offset.svg">
+  <metadata
+     id="metadata22">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1301"
+     inkscape:window-height="744"
+     id="namedview20"
+     showgrid="true"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="true"
+     inkscape:zoom="17.883066"
+     inkscape:cx="11.106801"
+     inkscape:cy="12.064138"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2999"
+       empspacing="2"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       spacingx="0.5px"
+       spacingy="0.5px" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow2Mend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow2Mend"
+       style="overflow:visible;">
+      <path
+         id="path3800"
+         style="fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         transform="scale(0.6) rotate(180) translate(0,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Mstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow2Mstart"
+       style="overflow:visible">
+      <path
+         id="path3797"
+         style="fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         transform="scale(0.6) translate(0,0)" />
+    </marker>
+    <mask
+       id="o">
+      <rect
+         style="fill:#ffffff;fill-rule:evenodd"
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect13" />
+    </mask>
+    <mask
+       id="p">
+      <rect
+         style="fill:#ffffff;fill-rule:evenodd"
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect16" />
+    </mask>
+    <mask
+       id="i">
+      <rect
+         style="fill:#ffffff;fill-rule:evenodd"
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect7" />
+    </mask>
+    <mask
+       id="n">
+      <rect
+         style="fill:#ffffff;fill-rule:evenodd"
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect10" />
+    </mask>
+    <mask
+       id="j">
+      <rect
+         style="fill:#ffffff;fill-rule:evenodd"
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect19" />
+    </mask>
+    <mask
+       id="m">
+      <rect
+         style="fill:#ffffff;fill-rule:evenodd"
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect22" />
+    </mask>
+    <mask
+       id="k">
+      <rect
+         style="fill:#ffffff;fill-rule:evenodd"
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect25" />
+    </mask>
+    <mask
+       id="l">
+      <rect
+         style="fill:#ffffff;fill-rule:evenodd"
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect28" />
+    </mask>
+  </defs>
+  <path
+     style="opacity:0.765625;fill:#eaeaea;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;marker-start:none;marker-end:url(#Arrow2Mend)"
+     inkscape:connector-curvature="0"
+     id="path14"
+     d="m 0,22.5 24.5,0"
+     sodipodi:nodetypes="cc" />
+  <path
+     sodipodi:nodetypes="cc"
+     d="M 3.5,1.5 3.5,26"
+     id="path2999"
+     inkscape:connector-curvature="0"
+     style="opacity:0.765625;fill:#eaeaea;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;marker-start:url(#Arrow2Mstart);marker-end:none" />
+  <text
+     xml:space="preserve"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="17.246231"
+     y="16.505861"
+     id="text4587"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan4589" /></text>
+  <text
+     style="font-size:46.98844528px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#3e3e3e;font-family:Sans"
+     xml:space="preserve"
+     transform="scale(0.95509561,1.0470156)"
+     line-height="125%"
+     font-size="86.157px"
+     y="18.624365"
+     x="14.658218"
+     id="text4591"
+     sodipodi:linespacing="125%"><tspan
+       font-size="23.693px"
+       y="18.624365"
+       x="14.658218"
+       font-weight="bold"
+       id="tspan4593"
+       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#3e3e3e;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol" /></text>
+  <g
+     transform="matrix(0.44080517,0,0,0.44052276,3.8567289,1.1245632)"
+     id="g30">
+    <a
+       style="fill:#e5e500"
+       mask="url(#o)"
+       transform="matrix(-1.0533,0,0,-1.0414,46.87,47.939)"
+       id="a32">
+      <path
+         style="fill:#e5e500;fill-rule:evenodd"
+         inkscape:connector-curvature="0"
+         d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+         transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+         id="path34" />
+    </a>
+    <a
+       style="opacity:0.83202999"
+       mask="url(#p)"
+       transform="matrix(0,-1.0414,1.0533,0,-0.64254,45.87)"
+       id="a36">
+      <path
+         style="fill-rule:evenodd"
+         inkscape:connector-curvature="0"
+         d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+         transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+         id="path38" />
+    </a>
+    <a
+       style="fill:#eded00"
+       mask="url(#i)"
+       transform="matrix(1.0533,0,0,1.0414,1.4155,-0.94445)"
+       id="a40">
+      <path
+         style="fill:#eded00;fill-rule:evenodd"
+         inkscape:connector-curvature="0"
+         d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+         transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+         id="path42" />
+    </a>
+    <path
+       style="opacity:0.9;fill:none;stroke:#000000;stroke-width:1.54050004"
+       inkscape:connector-curvature="0"
+       d="m 39.075,22.875 a 13.875,14.25 0 1 1 -0.0016,-0.21848 l -13.873,0.218 z"
+       transform="matrix(0.99191,0,0,0.94943,-0.85146,1.8348)"
+       id="path44" />
+    <a
+       style="opacity:0.82999998"
+       mask="url(#n)"
+       transform="matrix(0,1.0414,-1.0533,0,48.922,1.1043)"
+       id="a46">
+      <path
+         style="fill-rule:evenodd"
+         inkscape:connector-curvature="0"
+         d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+         transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+         id="path48" />
+    </a>
+    <path
+       style="opacity:0.9;fill:none;stroke:#000000;stroke-width:2.01600003px"
+       inkscape:connector-curvature="0"
+       d="m 4.5373,23.491 h 38.818"
+       id="path50" />
+    <path
+       style="opacity:0.9;fill:none;stroke:#000000;stroke-width:2.1559px"
+       inkscape:connector-curvature="0"
+       d="m 24.134,4.5338 v 38.704"
+       id="path52" />
+    <a
+       style="fill:#c1c100"
+       mask="url(#j)"
+       transform="matrix(0.67174,0,0,0.76458,7.6512,3.9816)"
+       id="a54">
+      <path
+         style="fill:#c1c100;fill-rule:evenodd"
+         inkscape:connector-curvature="0"
+         d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+         transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+         id="path56" />
+    </a>
+    <a
+       style="fill:#c1c100"
+       mask="url(#m)"
+       transform="matrix(-0.67174,0,0,-0.76458,40.662,43.016)"
+       id="a58">
+      <path
+         style="fill:#c1c100;fill-rule:evenodd"
+         inkscape:connector-curvature="0"
+         d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+         transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+         id="path60" />
+    </a>
+    <a
+       mask="url(#k)"
+       transform="matrix(0,0.67174,-0.76458,0,43.801,7.3614)"
+       id="a62">
+      <path
+         style="fill-rule:evenodd"
+         inkscape:connector-curvature="0"
+         d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+         transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+         id="path64" />
+    </a>
+    <a
+       mask="url(#l)"
+       transform="matrix(0,-0.67174,0.76458,0,4.4238,39.589)"
+       id="a66">
+      <path
+         style="fill-rule:evenodd"
+         inkscape:connector-curvature="0"
+         d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+         transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+         id="path68" />
+    </a>
+  </g>
 </svg>

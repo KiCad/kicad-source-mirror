@@ -131,7 +131,7 @@ void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
 
         s_AuxiliaryList.ClearListAndDeleteItems();
         s_PickedList.ClearListAndDeleteItems();
-        SaveCopyOfZones( s_PickedList, GetBoard(), newZone->GetNet(), newZone->GetLayer() );
+        SaveCopyOfZones( s_PickedList, GetBoard(), newZone->GetNetCode(), newZone->GetLayer() );
         GetBoard()->Add( newZone );
 
         ITEM_PICKER picker( newZone, UR_NEW );
@@ -228,10 +228,10 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone,
         }
 
         ZONE_SETTINGS zoneInfo = GetZoneSettings();
-        zoneInfo.m_NetcodeSelection = aZone->GetNet();
+        zoneInfo.m_NetcodeSelection = aZone->GetNetCode();
         SetZoneSettings( zoneInfo );
 
-        GetBoard()->SetHighLightNet( aZone->GetNet() );
+        GetBoard()->SetHighLightNet( aZone->GetNetCode() );
 
         if( DC )
             HighLight( DC );
@@ -249,8 +249,7 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone,
     s_AuxiliaryList.ClearListAndDeleteItems();
     s_PickedList.ClearListAndDeleteItems();
 
-    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNet(),
-                     aZone->GetLayer() );
+    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNetCode(), aZone->GetLayer() );
 
     if ( IsNewCorner )
         aZone->Outline()->InsertCorner(corner_id-1, cx, cy );
@@ -279,8 +278,7 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
 
     s_PickedList.ClearListAndDeleteItems();
     s_AuxiliaryList.ClearListAndDeleteItems();
-    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNet(),
-                     aZone->GetLayer() );
+    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNetCode(), aZone->GetLayer() );
 }
 
 
@@ -295,17 +293,16 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* aZone )
         }
 
         ZONE_SETTINGS zoneInfo = GetZoneSettings();
-        zoneInfo.m_NetcodeSelection = aZone->GetNet();
+        zoneInfo.m_NetcodeSelection = aZone->GetNetCode();
         SetZoneSettings( zoneInfo );
 
-        GetBoard()->SetHighLightNet( aZone->GetNet() );
+        GetBoard()->SetHighLightNet( aZone->GetNetCode() );
         HighLight( DC );
     }
 
     s_PickedList.ClearListAndDeleteItems();
     s_AuxiliaryList.ClearListAndDeleteItems();
-    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNet(),
-                     aZone->GetLayer() );
+    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNetCode(), aZone->GetLayer() );
 
     aZone->SetFlags( IS_MOVED );
     m_canvas->SetMouseCapture( Show_Zone_Corner_Or_Outline_While_Move_Mouse,
@@ -383,7 +380,7 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone )
 
     s_AuxiliaryList.ClearListAndDeleteItems();
     s_PickedList. ClearListAndDeleteItems();
-    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNet(), aZone->GetLayer() );
+    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNetCode(), aZone->GetLayer() );
     aZone->Outline()->DeleteCorner( aZone->GetSelectedCorner() );
 
     // modify zones outlines according to the new aZone shape
@@ -550,8 +547,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                 {
                     zoneInfo.m_NetcodeSelection = GetBoard()->GetHighLightNetCode();
 
-                    zone->SetNet( zoneInfo.m_NetcodeSelection );
-                    zone->SetNetNameFromNetCode( );
+                    zone->SetNetCode( zoneInfo.m_NetcodeSelection );
                 }
                 double tmp = ZONE_THERMAL_RELIEF_GAP_MIL;
 
@@ -583,8 +579,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                     zoneInfo.SetIsKeepout( true );
                     // Netcode and netname are irrelevant,
                     // so ensure they are cleared
-                    zone->SetNet( 0 );
-                    zone->SetNetName( wxEmptyString );
+                    zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
                     edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
                 }
                 else
@@ -630,7 +625,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         {
             if( s_CurrentZone )
             {
-                zoneInfo.m_NetcodeSelection = s_CurrentZone->GetNet();
+                zoneInfo.m_NetcodeSelection = s_CurrentZone->GetNetCode();
                 GetBoard()->SetZoneSettings( zoneInfo );
             }
 
@@ -751,7 +746,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
     // Save initial zones configuration, for undo/redo, before adding new zone
     s_AuxiliaryList.ClearListAndDeleteItems();
     s_PickedList.ClearListAndDeleteItems();
-    SaveCopyOfZones(s_PickedList, GetBoard(), zone->GetNet(), zone->GetLayer() );
+    SaveCopyOfZones(s_PickedList, GetBoard(), zone->GetNetCode(), zone->GetLayer() );
 
     // Put new zone in list
     if( !s_CurrentZone )
@@ -909,7 +904,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     NETINFO_ITEM* net = GetBoard()->FindNet( zoneInfo.m_NetcodeSelection );
 
     if( net )   // net == NULL should not occur
-        aZone->SetNetName( net->GetNetname() );
+        aZone->SetNetCode( net->GetNet() );
 
     // Combine zones if possible
     GetBoard()->OnAreaPolygonModified( &s_AuxiliaryList, aZone );

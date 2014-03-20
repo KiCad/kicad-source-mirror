@@ -88,8 +88,8 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
 
     if( bbbox.GetWidth() == 0 && bbbox.GetHeight() == 0 )
     {
-        bbbox.SetWidth( 100 * IU_PER_MM );
-        bbbox.SetHeight( 100 * IU_PER_MM );
+        bbbox.SetWidth( Millimeter2iu( 100 ) );
+        bbbox.SetHeight( Millimeter2iu( 100 ) );
     }
 
     m_BoardSettings = &aBoard->GetDesignSettings();
@@ -131,6 +131,7 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
 
     // Fill remaining unused copper layers and front layer zpos
     // with m_EpoxyThickness
+    // Solder mask and Solder paste have the same Z position
     for( ; layer <= LAST_COPPER_LAYER; layer++ )
     {
         m_LayerZcoord[layer] = m_EpoxyThickness;
@@ -144,19 +145,19 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
         switch( layer_id )
         {
         case ADHESIVE_N_BACK:
-            zpos = zpos_copper_back - 4 * zpos_offset;
-            break;
-
-        case ADHESIVE_N_FRONT:
-            zpos = zpos_copper_front + 4 * zpos_offset;
-            break;
-
-        case SOLDERPASTE_N_BACK:
             zpos = zpos_copper_back - 3 * zpos_offset;
             break;
 
-        case SOLDERPASTE_N_FRONT:
+        case ADHESIVE_N_FRONT:
             zpos = zpos_copper_front + 3 * zpos_offset;
+            break;
+
+        case SOLDERPASTE_N_BACK:
+            zpos = zpos_copper_back - 1 * zpos_offset;
+            break;
+
+        case SOLDERPASTE_N_FRONT:
+            zpos = zpos_copper_front + 1 * zpos_offset;
             break;
 
         case SOLDERMASK_N_BACK:
@@ -177,7 +178,7 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
 
         default:
             zpos = zpos_copper_front +
-                   (layer_id - FIRST_NON_COPPER_LAYER + 5) * zpos_offset;
+                   (layer_id - FIRST_NON_COPPER_LAYER + 4) * zpos_offset;
             break;
         }
 

@@ -87,7 +87,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         if( pad )
         {
-            netcode = pad->GetNet();
+            netcode = pad->GetNetCode();
 
             // put cursor on the pad:
             pos = pad->GetPosition();
