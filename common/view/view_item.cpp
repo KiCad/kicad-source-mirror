@@ -34,17 +34,13 @@ void VIEW_ITEM::ViewSetVisible( bool aIsVisible )
     bool update = false;
 
     if( m_visible != aIsVisible )
-    {
         update = true;
-    }
 
     m_visible = aIsVisible;
 
     // update only if the visibility has really changed
     if( update )
-    {
         ViewUpdate( APPEARANCE );
-    }
 }
 
 
@@ -53,16 +49,14 @@ void VIEW_ITEM::ViewUpdate( int aUpdateFlags )
     if( !m_view )
         return;
 
-    m_view->invalidateItem( this, aUpdateFlags );
+    m_view->InvalidateItem( this, aUpdateFlags );
 }
 
 
 void VIEW_ITEM::ViewRelease()
 {
     if( m_view && m_view->IsDynamic() )
-    {
         m_view->Remove( this );
-    }
 }
 
 

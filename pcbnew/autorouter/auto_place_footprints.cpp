@@ -499,7 +499,7 @@ int genPlacementRoutingMatrix( BOARD* aBrd, EDA_MSG_PANEL* messagePanel )
     TRACK TmpSegm( NULL );
 
     TmpSegm.SetLayer( UNDEFINED_LAYER );
-    TmpSegm.SetNet( -1 );
+    TmpSegm.SetNetCode( -1 );
     TmpSegm.SetWidth( RoutingMatrix.m_GridRouting / 2 );
 
     EDA_ITEM* PtStruct = aBrd->m_Drawings;

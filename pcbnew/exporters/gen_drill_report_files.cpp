@@ -55,12 +55,6 @@ inline double diameter_in_mm( double ius )
 }
 
 
-/* Creates a hole map of the board in HPGL, POSTSCRIPT or other supported formats
- * Each hole size has a the drill mark symbol (circle, cross X, cross + ...) up to
- * PLOTTER::MARKER_COUNT different values.
- * If more than PLOTTER::MARKER_COUNT different values,
- * these other vaules share the same mark
- */
 bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
                                        const PAGE_INFO& aSheet,
                                        PlotFormat aFormat )
@@ -87,15 +81,15 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         break;
 
     case PLOT_FORMAT_HPGL:    // Scale for HPGL format.
-        {
-            HPGL_PLOTTER* hpgl_plotter = new HPGL_PLOTTER;
-            plotter = hpgl_plotter;
-            hpgl_plotter->SetPenNumber( plot_opts.GetHPGLPenNum() );
-            hpgl_plotter->SetPenSpeed( plot_opts.GetHPGLPenSpeed() );
-            hpgl_plotter->SetPenOverlap( 0 );
-            plotter->SetPageSettings( aSheet );
-            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
-        }
+    {
+        HPGL_PLOTTER* hpgl_plotter = new HPGL_PLOTTER;
+        plotter = hpgl_plotter;
+        hpgl_plotter->SetPenNumber( plot_opts.GetHPGLPenNum() );
+        hpgl_plotter->SetPenSpeed( plot_opts.GetHPGLPenSpeed() );
+        hpgl_plotter->SetPenOverlap( 0 );
+        plotter->SetPageSettings( aSheet );
+        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+    }
         break;
 
 
@@ -104,59 +98,59 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         // fall through
     case PLOT_FORMAT_PDF:
     case PLOT_FORMAT_POST:
-        {
-            PAGE_INFO   pageA4( wxT( "A4" ) );
-            wxSize      pageSizeIU = pageA4.GetSizeIU();
+    {
+        PAGE_INFO   pageA4( wxT( "A4" ) );
+        wxSize      pageSizeIU = pageA4.GetSizeIU();
 
-            // Reserve a margin around the page.
-            int         margin = KiROUND( 20 * IU_PER_MM );
+        // Reserve a margin around the page.
+        int         margin = KiROUND( 20 * IU_PER_MM );
 
-            // Calculate a scaling factor to print the board on the sheet
-            double      Xscale = double( pageSizeIU.x - ( 2 * margin ) ) / bbbox.GetWidth();
+        // Calculate a scaling factor to print the board on the sheet
+        double      Xscale = double( pageSizeIU.x - ( 2 * margin ) ) / bbbox.GetWidth();
 
-            // We should print the list of drill sizes, so reserve room for it
-            // 60% height for board 40% height for list
-            int     ypagesize_for_board = KiROUND( pageSizeIU.y * 0.6 );
-            double  Yscale = double( ypagesize_for_board - margin ) / bbbox.GetHeight();
+        // We should print the list of drill sizes, so reserve room for it
+        // 60% height for board 40% height for list
+        int     ypagesize_for_board = KiROUND( pageSizeIU.y * 0.6 );
+        double  Yscale = double( ypagesize_for_board - margin ) / bbbox.GetHeight();
 
-            scale = std::min( Xscale, Yscale );
+        scale = std::min( Xscale, Yscale );
 
-            // Experience shows the scale should not to large, because texts
-            // create problem (can be to big or too small).
-            // So the scale is clipped at 3.0;
-            scale = std::min( scale, 3.0 );
+        // Experience shows the scale should not to large, because texts
+        // create problem (can be to big or too small).
+        // So the scale is clipped at 3.0;
+        scale = std::min( scale, 3.0 );
 
-            offset.x    = KiROUND( double( bbbox.Centre().x ) - 
-                                  ( pageSizeIU.x / 2.0 ) / scale );
-            offset.y    = KiROUND( double( bbbox.Centre().y ) -
-                                  ( ypagesize_for_board / 2.0 ) / scale );
+        offset.x    = KiROUND( double( bbbox.Centre().x ) -
+                               ( pageSizeIU.x / 2.0 ) / scale );
+        offset.y    = KiROUND( double( bbbox.Centre().y ) -
+                               ( ypagesize_for_board / 2.0 ) / scale );
 
-            if( aFormat == PLOT_FORMAT_PDF )
-                plotter = new PDF_PLOTTER;
-            else
-                plotter = new PS_PLOTTER;
+        if( aFormat == PLOT_FORMAT_PDF )
+            plotter = new PDF_PLOTTER;
+        else
+            plotter = new PS_PLOTTER;
 
-            plotter->SetPageSettings( pageA4 );
-            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
-        }
+        plotter->SetPageSettings( pageA4 );
+        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+    }
         break;
 
     case PLOT_FORMAT_DXF:
-        {
-            DXF_PLOTTER* dxf_plotter = new DXF_PLOTTER;
-            plotter = dxf_plotter;
-            plotter->SetPageSettings( aSheet );
-            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
-        }
+    {
+        DXF_PLOTTER* dxf_plotter = new DXF_PLOTTER;
+        plotter = dxf_plotter;
+        plotter->SetPageSettings( aSheet );
+        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+    }
         break;
 
     case PLOT_FORMAT_SVG:
-        {
-            SVG_PLOTTER* svg_plotter = new SVG_PLOTTER;
-            plotter = svg_plotter;
-            plotter->SetPageSettings( aSheet );
-            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
-        }
+    {
+        SVG_PLOTTER* svg_plotter = new SVG_PLOTTER;
+        plotter = svg_plotter;
+        plotter->SetPageSettings( aSheet );
+        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+    }
         break;
     }
 
@@ -239,8 +233,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         plotY += intervalle;
 
         plot_diam = KiROUND( m_toolListBuffer[ii].m_Diameter );
-        x = KiROUND( plotX - textmarginaftersymbol * charScale
-                    - plot_diam / 2.0 );
+        x = KiROUND( plotX - textmarginaftersymbol * charScale - plot_diam / 2.0 );
         y = KiROUND( plotY + charSize * charScale );
         plotter->Marker( wxPoint( x, y ), plot_diam, ii );
 
@@ -267,10 +260,9 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
                      m_toolListBuffer[ii].m_OvalCount );
 
         msg += FROM_UTF8( line );
-        plotter->Text( wxPoint( plotX, y ), UNSPECIFIED_COLOR,
-                       msg,
-                       0, wxSize( KiROUND( charSize * charScale ),
-                                  KiROUND( charSize * charScale ) ),
+        plotter->Text( wxPoint( plotX, y ), UNSPECIFIED_COLOR, msg, 0,
+                       wxSize( KiROUND( charSize * charScale ),
+                               KiROUND( charSize * charScale ) ),
                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                        TextWidth, false, false );
 
@@ -287,52 +279,6 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
 }
 
 
-/*
- *  Create a plain text report file giving a list of drill values and drill count
- *  for through holes, oblong holes, and for buried vias,
- *  drill values and drill count per layer pair
- */
-/* Here is a sample created by this function:
- *  Drill report for F:/tmp/interf_u/interf_u.brd
- *  Created on 04/10/2012 20:48:38
- *  Selected Drill Unit: Imperial (inches)
- *
- *  Drill report for plated through holes :
- *  T1  0,025"  0,64mm  (88 holes)
- *  T2  0,031"  0,79mm  (120 holes)
- *  T3  0,032"  0,81mm  (151 holes)  (with 1 slot)
- *  T4  0,040"  1,02mm  (43 holes)
- *  T5  0,079"  2,00mm  (1 hole)  (with 1 slot)
- *  T6  0,120"  3,05mm  (1 hole)  (with 1 slot)
- *
- *  Total plated holes count 404
- *
- *
- *  Drill report for buried and blind vias :
- *
- *  Drill report for holes from layer Soudure to layer Interne1 :
- *
- *  Total plated holes count 0
- *
- *
- *  Drill report for holes from layer Interne1 to layer Interne2 :
- *  T1  0,025"  0,64mm  (3 holes)
- *
- *  Total plated holes count 3
- *
- *
- *  Drill report for holes from layer Interne2 to layer Composant :
- *  T1  0,025"  0,64mm  (1 hole)
- *
- *  Total plated holes count 1
- *
- *
- *  Drill report for unplated through holes :
- *  T1  0,120"  3,05mm  (1 hole)  (with 1 slot)
- *
- *  Total unplated holes count 1
- *
- */
 bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
 {
     unsigned    totalHoleCount;
@@ -360,7 +306,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
     for( ; ; )
     {
         BuildHolesList( layer1, layer2,
-                          gen_through_holes ? false : true, gen_NPTH_holes );
+                        gen_through_holes ? false : true, gen_NPTH_holes, false);
 
         totalHoleCount = 0;
 
@@ -461,17 +407,17 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
     return true;
 }
 
-// Helper function to plot drill marks:
+
 bool EXCELLON_WRITER::PlotDrillMarks( PLOTTER* aPlotter )
 {
     // Plot the drill map:
     wxPoint pos;
+
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
         pos = m_holeListBuffer[ii].m_Hole_Pos;
 
-        /* Always plot the drill symbol (for slots identifies the needed
-         * cutter!) */
+        // Always plot the drill symbol (for slots identifies the needed cutter!
         aPlotter->Marker( pos, m_holeListBuffer[ii].m_Hole_Diameter,
                           m_holeListBuffer[ii].m_Tool_Reference - 1 );
 

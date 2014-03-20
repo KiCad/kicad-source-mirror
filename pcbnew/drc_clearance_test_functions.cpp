@@ -164,7 +164,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     m_segmAngle = 0;
 
     layerMask    = aRefSeg->GetLayerMask();
-    net_code_ref = aRefSeg->GetNet();
+    net_code_ref = aRefSeg->GetNetCode();
 
     // Phase 0 : Test vias
     if( aRefSeg->Type() == PCB_VIA_T )
@@ -310,8 +310,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             // The pad must be in a net (i.e pt_pad->GetNet() != 0 )
             // but no problem if the pad netcode is the current netcode (same net)
-            if( pad->GetNet()                       // the pad must be connected
-               && net_code_ref == pad->GetNet() )   // the pad net is the same as current net -> Ok
+            if( pad->GetNetCode()                       // the pad must be connected
+               && net_code_ref == pad->GetNetCode() )   // the pad net is the same as current net -> Ok
                 continue;
 
             // DRC for the pad
@@ -339,7 +339,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     for( track = aStart; track; track = track->Next() )
     {
         // No problem if segments have the same net code:
-        if( net_code_ref == track->GetNet() )
+        if( net_code_ref == track->GetNetCode() )
             continue;
 
         // No problem if segment are on different layers :

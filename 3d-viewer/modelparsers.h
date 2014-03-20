@@ -37,7 +37,7 @@
 class S3D_MASTER;
 class S3D_VERTEX;
 
-extern void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
+extern void TransfertToGLlist( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
 
 class S3D_MODEL_PARSER;
 class X3D_MODEL_PARSER;

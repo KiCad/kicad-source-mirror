@@ -45,13 +45,13 @@
 #include <algorithm>
 #include <fstream>
 #include <limits>
+#include <boost/foreach.hpp>
+#include <boost/make_shared.hpp>
 
 
 using namespace hed;
 using namespace std;
 
-
-Triangulation* TTLtraits::triang_ = NULL;
 
 #ifdef TTL_USE_NODE_ID
   int Node::id_count = 0;
@@ -117,28 +117,27 @@ EdgePtr Triangulation::initTwoEnclosingTriangles(NodesContainer::iterator first,
   double dx  = (xmax-xmin)/fac;
   double dy  = (ymax-ymin)/fac;
   
-  NodePtr n1(new Node(xmin-dx,ymin-dy));
-  NodePtr n2(new Node(xmax+dx,ymin-dy));
-  NodePtr n3(new Node(xmax+dx,ymax+dy));
-  NodePtr n4(new Node(xmin-dx,ymax+dy));
+  NodePtr n1 = boost::make_shared<Node>(xmin-dx, ymin-dy);
+  NodePtr n2 = boost::make_shared<Node>(xmax+dx, ymin-dy);
+  NodePtr n3 = boost::make_shared<Node>(xmax+dx, ymax+dy);
+  NodePtr n4 = boost::make_shared<Node>(xmin-dx, ymax+dy);
   
   // diagonal
-  EdgePtr e1d(new Edge); // lower
-  EdgePtr e2d(new Edge); // upper, the twin edge
+  EdgePtr e1d = boost::make_shared<Edge>();
+  EdgePtr e2d = boost::make_shared<Edge>();
   
   // lower triangle
-  EdgePtr e11(new Edge);
-  EdgePtr e12(new Edge);
+  EdgePtr e11 = boost::make_shared<Edge>();
+  EdgePtr e12 = boost::make_shared<Edge>();
   
   // upper triangle
-  EdgePtr e21(new Edge); // upper upper
-  EdgePtr e22(new Edge);
+  EdgePtr e21 = boost::make_shared<Edge>();
+  EdgePtr e22 = boost::make_shared<Edge>();
   
   // lower triangle
   e1d->setSourceNode(n3);
   e1d->setNextEdgeInFace(e11);
   e1d->setTwinEdge(e2d);
-  e1d->setAsLeadingEdge();
   addLeadingEdge(e1d);
   
   e11->setSourceNode(n1);
@@ -151,7 +150,6 @@ EdgePtr Triangulation::initTwoEnclosingTriangles(NodesContainer::iterator first,
   e2d->setSourceNode(n1);
   e2d->setNextEdgeInFace(e21);
   e2d->setTwinEdge(e1d);
-  e2d->setAsLeadingEdge();
   addLeadingEdge(e2d);
   
   e21->setSourceNode(n3);
@@ -165,10 +163,29 @@ EdgePtr Triangulation::initTwoEnclosingTriangles(NodesContainer::iterator first,
 
 
 //--------------------------------------------------------------------------------------------------
+Triangulation::Triangulation() {
+  helper = new ttl::TriangulationHelper( *this );
+}
+
+
+//--------------------------------------------------------------------------------------------------
+Triangulation::Triangulation(const Triangulation& tr) {
+  std::cout << "Triangulation: Copy constructor not present - EXIT.";
+  exit(-1);
+}
+
+
+//--------------------------------------------------------------------------------------------------
+Triangulation::~Triangulation() {
+  cleanAll();
+  delete helper;
+}
+
+
+//--------------------------------------------------------------------------------------------------
 void Triangulation::createDelaunay(NodesContainer::iterator first,
                                    NodesContainer::iterator last) {
-  
-  TTLtraits::triang_ = this;
+
   cleanAll();
   
   EdgePtr bedge = initTwoEnclosingTriangles(first, last);
@@ -178,7 +195,7 @@ void Triangulation::createDelaunay(NodesContainer::iterator first,
   
   NodesContainer::iterator it;
   for (it = first; it != last; ++it) {
-      ttl::insertNode<TTLtraits>(d_iter, *it);
+      helper->insertNode<TTLtraits>(d_iter, *it);
   }
 
   // In general (e.g. for the triangle based data structure), the initial dart
@@ -189,7 +206,7 @@ void Triangulation::createDelaunay(NodesContainer::iterator first,
   // triangle "outside" the triangulation.)
 
   // Assumes rectangular domain
-  ttl::removeRectangularBoundary<TTLtraits>(dc);
+  helper->removeRectangularBoundary<TTLtraits>(dc);
 }
 
 
@@ -206,15 +223,12 @@ void Triangulation::removeTriangle(EdgePtr& edge) {
   removeLeadingEdgeFromList(e1);
   // cout << "No leading edges = " << leadingEdges_.size() << endl;  
   // Remove the triangle
-  EdgePtr e2 = e1->getNextEdgeInFace();
-  EdgePtr e3 = e2->getNextEdgeInFace();
-  
-  if (e1->getTwinEdge())
-    e1->getTwinEdge()->setTwinEdge(EdgePtr());
-  if (e2->getTwinEdge())
-    e2->getTwinEdge()->setTwinEdge(EdgePtr());
-  if (e3->getTwinEdge())
-    e3->getTwinEdge()->setTwinEdge(EdgePtr());
+  EdgePtr e2(e1->getNextEdgeInFace());
+  EdgePtr e3(e2->getNextEdgeInFace());
+
+  e1->clear();
+  e2->clear();
+  e3->clear();
 }
 
 
@@ -223,15 +237,15 @@ void Triangulation::reverse_splitTriangle(EdgePtr& edge) {
   
   // Reverse operation of splitTriangle
   
-  EdgePtr e1 = edge->getNextEdgeInFace();
-  EdgePtr le = getLeadingEdgeInTriangle(e1);
+  EdgePtr e1(edge->getNextEdgeInFace());
+  EdgePtr le(getLeadingEdgeInTriangle(e1));
 #ifdef DEBUG_HE
   if (!le)
     errorAndExit("Triangulation::removeTriangle: could not find leading edge");
 #endif
   removeLeadingEdgeFromList(le);
   
-  EdgePtr e2 = e1->getNextEdgeInFace()->getTwinEdge()->getNextEdgeInFace();
+  EdgePtr e2(e1->getNextEdgeInFace()->getTwinEdge()->getNextEdgeInFace());
   le = getLeadingEdgeInTriangle(e2);
 #ifdef DEBUG_HE
   if (!le)
@@ -239,7 +253,7 @@ void Triangulation::reverse_splitTriangle(EdgePtr& edge) {
 #endif
   removeLeadingEdgeFromList(le);
     
-  EdgePtr e3 = edge->getTwinEdge()->getNextEdgeInFace()->getNextEdgeInFace();
+  EdgePtr e3(edge->getTwinEdge()->getNextEdgeInFace()->getNextEdgeInFace());
   le = getLeadingEdgeInTriangle(e3);
 #ifdef DEBUG_HE
   if (!le)
@@ -251,6 +265,19 @@ void Triangulation::reverse_splitTriangle(EdgePtr& edge) {
   // from the triangulation, but the arcs have not been deleted.
   // Next delete the 6 half edges radiating from the node
   // The node is maintained by handle and need not be deleted explicitly
+  EdgePtr estar = edge;
+  EdgePtr enext = estar->getTwinEdge()->getNextEdgeInFace();
+  estar->getTwinEdge()->clear();
+  estar->clear();
+
+  estar = enext;
+  enext = estar->getTwinEdge()->getNextEdgeInFace();
+  estar->getTwinEdge()->clear();
+  estar->clear();
+
+  enext->getTwinEdge()->clear();
+  enext->clear();
+
 
   // Create the new triangle
   e1->setNextEdgeInFace(e2);
@@ -258,25 +285,6 @@ void Triangulation::reverse_splitTriangle(EdgePtr& edge) {
   e3->setNextEdgeInFace(e1);
   addLeadingEdge(e1);
 }
-
-
-//--------------------------------------------------------------------------------------------------
-// This is a "template" for iterating the boundary    
-/*
-static void iterateBoundary(const Dart& dart) {
-cout << "Iterate boundary 2" << endl;
-// input is a dart at the boundary
-
-  Dart dart_iter = dart;
-  do {
-  if (ttl::isBoundaryEdge(dart_iter))
-  dart_iter.alpha0().alpha1();
-  else
-  dart_iter.alpha2().alpha1();
-  
-    } while(dart_iter != dart);
-}
-*/
 
 
 //--------------------------------------------------------------------------------------------------
@@ -305,20 +313,43 @@ bool Triangulation::removeLeadingEdgeFromList(EdgePtr& leadingEdge) {
       edge->setAsLeadingEdge(false);
       it = leadingEdges_.erase(it);
       
-      break;
+      return true;
     }
   }
   
-  if (it == leadingEdges_.end())
-    return false;
-  
-  return true;
+  return false;
 }
 
 
 //--------------------------------------------------------------------------------------------------
 void Triangulation::cleanAll() {
-  leadingEdges_.clear();
+  BOOST_FOREACH(EdgePtr& edge, leadingEdges_)
+      edge->setNextEdgeInFace(EdgePtr());
+}
+
+
+//--------------------------------------------------------------------------------------------------
+void Triangulation::swapEdge(Dart& dart) {
+  swapEdge(dart.getEdge());
+}
+
+
+//--------------------------------------------------------------------------------------------------
+void Triangulation::splitTriangle(Dart& dart, const NodePtr& point) {
+  EdgePtr edge = splitTriangle(dart.getEdge(), point);
+  dart.init(edge);
+}
+
+
+//--------------------------------------------------------------------------------------------------
+void Triangulation::reverse_splitTriangle(Dart& dart) {
+  reverse_splitTriangle(dart.getEdge());
+}
+
+
+//--------------------------------------------------------------------------------------------------
+void Triangulation::removeBoundaryTriangle(Dart& d) {
+  removeTriangle(d.getEdge());
 }
 
 
@@ -390,7 +421,7 @@ list<EdgePtr>* Triangulation::getEdges(bool skip_boundary_edges) const {
 
 
 //--------------------------------------------------------------------------------------------------
-EdgePtr Triangulation::splitTriangle(EdgePtr& edge, NodePtr& point) {
+EdgePtr Triangulation::splitTriangle(EdgePtr& edge, const NodePtr& point) {
   
   // Add a node by just splitting a triangle into three triangles
   // Assumes the half edge is located in the triangle
@@ -409,21 +440,21 @@ EdgePtr Triangulation::splitTriangle(EdgePtr& edge, NodePtr& point) {
   // Add the node to the structure
   //NodePtr new_node(new Node(x,y,z));
 
-  NodePtr n1 = edge->getSourceNode();
-  EdgePtr e1 = edge;
+  NodePtr n1(edge->getSourceNode());
+  EdgePtr e1(edge);
   
-  EdgePtr e2 = edge->getNextEdgeInFace();
-  NodePtr n2 = e2->getSourceNode();
+  EdgePtr e2(edge->getNextEdgeInFace());
+  NodePtr n2(e2->getSourceNode());
   
-  EdgePtr e3 = e2->getNextEdgeInFace();
-  NodePtr n3 = e3->getSourceNode();
+  EdgePtr e3(e2->getNextEdgeInFace());
+  NodePtr n3(e3->getSourceNode());
   
-  EdgePtr e1_n(new Edge);
-  EdgePtr e11_n(new Edge);
-  EdgePtr e2_n(new Edge);
-  EdgePtr e22_n(new Edge);
-  EdgePtr e3_n(new Edge);
-  EdgePtr e33_n(new Edge);
+  EdgePtr e1_n = boost::make_shared<Edge>();
+  EdgePtr e11_n = boost::make_shared<Edge>();
+  EdgePtr e2_n = boost::make_shared<Edge>();
+  EdgePtr e22_n = boost::make_shared<Edge>();
+  EdgePtr e3_n = boost::make_shared<Edge>();
+  EdgePtr e33_n = boost::make_shared<Edge>();
   
   e1_n->setSourceNode(n1);
   e11_n->setSourceNode(point);
@@ -447,7 +478,6 @@ EdgePtr Triangulation::splitTriangle(EdgePtr& edge, NodePtr& point) {
   e22_n->setNextEdgeInFace(e2);
   e33_n->setNextEdgeInFace(e3);
   
-  
   // and update old's next edge
   e1->setNextEdgeInFace(e2_n);
   e2->setNextEdgeInFace(e3_n);
@@ -458,18 +488,14 @@ EdgePtr Triangulation::splitTriangle(EdgePtr& edge, NodePtr& point) {
   // Use the field telling if an edge is a leading edge
   // NOTE: Must search in the list!!!
   
-  
-  EdgePtr leadingEdge;
   if (e1->isLeadingEdge())
-    leadingEdge = e1;
+    removeLeadingEdgeFromList(e1);
   else if (e2->isLeadingEdge())
-    leadingEdge = e2;
+    removeLeadingEdgeFromList(e2);
   else if(e3->isLeadingEdge())
-    leadingEdge = e3;
+    removeLeadingEdgeFromList(e3);
   else
-    return EdgePtr();
-  
-  removeLeadingEdgeFromList(leadingEdge);
+    assert( false );        // one of the edges should be leading
   
   addLeadingEdge(e1_n);
   addLeadingEdge(e2_n);
@@ -486,20 +512,20 @@ void Triangulation::swapEdge(EdgePtr& diagonal) {
   
   // Note that diagonal is both input and output and it is always
   // kept in counterclockwise direction (this is not required by all 
-  // finctions in ttl:: now)
+  // functions in TriangulationHelper now)
   
   // Swap by rotating counterclockwise
   // Use the same objects - no deletion or new objects
-  EdgePtr eL   = diagonal;
-  EdgePtr eR   = eL->getTwinEdge();
-  EdgePtr eL_1 = eL->getNextEdgeInFace();
-  EdgePtr eL_2 = eL_1->getNextEdgeInFace();
-  EdgePtr eR_1 = eR->getNextEdgeInFace();
-  EdgePtr eR_2 = eR_1->getNextEdgeInFace();
+  EdgePtr eL(diagonal);
+  EdgePtr eR(eL->getTwinEdge());
+  EdgePtr eL_1(eL->getNextEdgeInFace());
+  EdgePtr eL_2(eL_1->getNextEdgeInFace());
+  EdgePtr eR_1(eR->getNextEdgeInFace());
+  EdgePtr eR_2(eR_1->getNextEdgeInFace());
   
   // avoid node to be dereferenced to zero and deleted
-  NodePtr nR = eR_2->getSourceNode();
-  NodePtr nL = eL_2->getSourceNode();
+  NodePtr nR(eR_2->getSourceNode());
+  NodePtr nL(eL_2->getSourceNode());
   
   eL->setSourceNode(nR);
   eR->setSourceNode(nL);
@@ -513,24 +539,20 @@ void Triangulation::swapEdge(EdgePtr& diagonal) {
   eR_2->setNextEdgeInFace(eL_1);
   eL_1->setNextEdgeInFace(eR);
   
-  EdgePtr leL;
   if (eL->isLeadingEdge())
-    leL = eL;
+    removeLeadingEdgeFromList(eL);
   else if (eL_1->isLeadingEdge())
-    leL = eL_1;
+    removeLeadingEdgeFromList(eL_1);
   else if (eL_2->isLeadingEdge())
-    leL = eL_2;
+    removeLeadingEdgeFromList(eL_2);
   
-  EdgePtr leR;
   if (eR->isLeadingEdge())
-    leR = eR;
+    removeLeadingEdgeFromList(eR);
   else if (eR_1->isLeadingEdge())
-    leR = eR_1;
+    removeLeadingEdgeFromList(eR_1);
   else if (eR_2->isLeadingEdge())
-    leR = eR_2;
+    removeLeadingEdgeFromList(eR_2);
   
-  removeLeadingEdgeFromList(leL);
-  removeLeadingEdgeFromList(leR);
   addLeadingEdge(eL);
   addLeadingEdge(eR);
 }
@@ -567,7 +589,7 @@ bool Triangulation::checkDelaunay() const {
       // only one of the half-edges
       if (!twinedge || (size_t)edge.get() > (size_t)twinedge.get()) {
         Dart dart(edge);
-        if (ttl::swapTestDelaunay<TTLtraits>(dart)) {
+        if (helper->swapTestDelaunay<TTLtraits>(dart)) {
           noNotDelaunay++;
           
           //printEdge(dart,os); os << "\n";
@@ -610,7 +632,7 @@ void Triangulation::optimizeDelaunay() {
       
       Dart dart(edge);
       // Constrained edges should not be swapped
-      if (!edge->isConstrained() && ttl::swapTestDelaunay<TTLtraits>(dart, cycling_check)) {
+      if (helper->swapTestDelaunay<TTLtraits>(dart, cycling_check)) {
         optimal = false;
         swapEdge(edge);
       }
@@ -632,7 +654,7 @@ EdgePtr Triangulation::getInteriorNode() const {
     for (int i = 0; i < 3; ++i) {
       if (edge->getTwinEdge()) {
         
-        if (!ttl::isBoundaryNode(Dart(edge)))
+        if (!helper->isBoundaryNode(Dart(edge)))
           return edge;
       }
       edge = edge->getNextEdgeInFace();
@@ -643,18 +665,18 @@ EdgePtr Triangulation::getInteriorNode() const {
 
 
 //--------------------------------------------------------------------------------------------------
-static EdgePtr getBoundaryEdgeInTriangle(const EdgePtr& e) {
+EdgePtr Triangulation::getBoundaryEdgeInTriangle(const EdgePtr& e) const {
   EdgePtr edge = e;
   
-  if (ttl::isBoundaryEdge(Dart(edge)))
+  if (helper->isBoundaryEdge(Dart(edge)))
     return edge;
 
   edge = edge->getNextEdgeInFace();
-  if (ttl::isBoundaryEdge(Dart(edge)))
+  if (helper->isBoundaryEdge(Dart(edge)))
     return edge;
 
   edge = edge->getNextEdgeInFace();
-  if (ttl::isBoundaryEdge(Dart(edge)))
+  if (helper->isBoundaryEdge(Dart(edge)))
     return edge;
   
   return EdgePtr();

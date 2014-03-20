@@ -999,10 +999,16 @@ private:
      * loads from a library and places a component.
      * if libname != "", search in lib "libname"
      * else search in all loaded libs
+     *
+     * @param aHistoryList     list remembering recently used component names.
+     * @param aHistoryLastUnit remembering last unit in last component.
+     * (TODO(hzeller): This really should be a class doing history, but didn't
+     *  want to change too much while other refactoring is going on)
      */
     SCH_COMPONENT* Load_Component( wxDC*           DC,
                                    const wxString& libname,
-                                   wxArrayString&  List,
+                                   wxArrayString&  aHistoryList,
+                                   int&            aHistoryLastUnit,
                                    bool            UseLibBrowser );
 
     /**
@@ -1086,7 +1092,7 @@ public:
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
-    void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                              UNDO_REDO_T aTypeCommand,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 

@@ -647,7 +647,6 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
         if( net->GetNetname() == wxEmptyString ) // dummy netlist (no connection)
         {
             wxString msg; msg << wxT( "NoConnection" ) << NbNoConn++;
-            net->SetNetname( msg );
         }
 
         if( net->GetNet() <= 0 )  // dummy netlist (no connection)
@@ -664,7 +663,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
             {
                 wxString padname;
 
-                if( pad->GetNet() != net->GetNet() )
+                if( pad->GetNetCode() != net->GetNet() )
                     continue;
 
                 pad->StringPadName( padname );
@@ -731,7 +730,7 @@ static int TrackListSortByNetcode( const void* refptr, const void* objptr )
     ref = *( (TRACK**) refptr );
     cmp = *( (TRACK**) objptr );
 
-    if( ( diff = ref->GetNet() - cmp->GetNet() ) )
+    if( ( diff = ref->GetNetCode() - cmp->GetNetCode() ) )
         return diff;
 
     if( ( diff = ref->GetWidth() - cmp->GetWidth() ) )
@@ -798,10 +797,10 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
     {
         track = tracklist[ii];
 
-        if( old_netcode != track->GetNet() )
+        if( old_netcode != track->GetNetCode() )
         {
-            old_netcode = track->GetNet();
-            NETINFO_ITEM* net = aPcb->FindNet( track->GetNet() );
+            old_netcode = track->GetNetCode();
+            NETINFO_ITEM* net = track->GetNet();
             wxString      netname;
 
             if( net && (net->GetNetname() != wxEmptyString) )

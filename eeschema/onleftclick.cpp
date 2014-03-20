@@ -46,8 +46,13 @@
 #include <sch_bitmap.h>
 
 
+// TODO(hzeller): These pairs of elmenets should be represented by an object, but don't want
+// to refactor too much right now to not get in the way with other code changes.
 static wxArrayString s_CmpNameList;
+static int s_CmpLastUnit;
+
 static wxArrayString s_PowerNameList;
+static int s_LastPowerUnit;
 
 
 void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
@@ -294,7 +299,8 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_SCH_PLACE_COMPONENT:
         if( (item == NULL) || (item->GetFlags() == 0) )
         {
-            GetScreen()->SetCurItem( Load_Component( aDC, wxEmptyString, s_CmpNameList, true ) );
+            GetScreen()->SetCurItem( Load_Component( aDC, wxEmptyString,
+                                                     s_CmpNameList, s_CmpLastUnit, true ) );
             m_canvas->SetAutoPanRequest( true );
         }
         else
@@ -307,7 +313,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             GetScreen()->SetCurItem( Load_Component( aDC, wxT( "power" ),
-                                                     s_PowerNameList, false ) );
+                                                     s_PowerNameList, s_LastPowerUnit, false ) );
             m_canvas->SetAutoPanRequest( true );
         }
         else

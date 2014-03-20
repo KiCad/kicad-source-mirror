@@ -43,6 +43,8 @@
 #include <pcbcommon.h>
 #include <colors_selection.h>
 #include <gr_basic.h>
+#include <3d_viewer.h>
+#include <wx/stdpaths.h>
 
 #include <wx/file.h>
 #include <wx/snglinst.h>
@@ -87,7 +89,6 @@ wxPoint     g_Offset_Module;     /* Distance to offset module trace when moving.
 wxString    g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
 
 // wxWindow* DoPythonStuff(wxWindow* parent); // declaration
-
 
 namespace PCB {
 
@@ -232,7 +233,7 @@ PGM_BASE& Pgm()
  * @param aKiSys3Dmod = the value of environment variable, typically "KISYS3DMOD"
  * @return false if the aKiSys3Dmod path is not valid.
  */
-bool set3DShapesPath( const wxString& aKiSys3Dmod )
+static bool set3DShapesPath( const wxString& aKiSys3Dmod )
 {
     wxString    path;
 
@@ -314,61 +315,9 @@ bool set3DShapesPath( const wxString& aKiSys3Dmod )
 }
 
 
-/// The global footprint library table.  This is not dynamically allocated because
-/// in a multiple project environment we must keep its address constant (since it is
-/// the fallback table for multiple projects).
-FP_LIB_TABLE    GFootprintTable;
-
-
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram )
-{
-    // This is process level, not project level, initialization of the DSO.
-
-    // Do nothing in here pertinent to a project!
-
-    start_common();
-
-    // Must be called before creating the main frame in order to
-    // display the real hotkeys in menus or tool tips
-    ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
-
-    // Set 3D shape path from environment variable KISYS3DMOD
-    set3DShapesPath( wxT(KISYS3DMOD) );
-
-    g_DrawBgColor = BLACK;
-
-    try
-    {
-        // The global table is not related to a specific project.  All projects
-        // will use the same global table.  So the KIFACE::OnKifaceStart() contract
-        // of avoiding anything project specific is not violated here.
-
-        if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
-        {
-            DisplayInfoMessage( NULL, wxT(
-                "You have run Pcbnew for the first time using the "
-                "new footprint library table method for finding "
-                "footprints.  Pcbnew has either copied the default "
-                "table or created an empty table in your home "
-                "folder.  You must first configure the library "
-                "table to include all footprint libraries not "
-                "included with KiCad.  See the \"Footprint Library "
-                "Table\" section of the CvPcb documentation for "
-                "more information." ) );
-        }
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        wxString msg = wxString::Format( _(
-            "An error occurred attempting to load the global footprint library "
-            "table:\n\n%s" ),
-            GetChars( ioe.errorText )
-            );
-        DisplayError( NULL, msg );
-        return false;
-    }
-
 #ifdef KICAD_SCRIPTING
+static void scriptingSetup()
+{
     wxString path_frag;
 
  #ifdef __MINGW32__
@@ -414,6 +363,28 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram )
  #else
     // Add this default search path:
     path_fag = wxT( "/usr/local/kicad/bin/scripting/plugins" );
+
+  #ifdef  __WXMAC__
+    // OSX
+    // System Library first
+    // User Library then
+    // (TODO) Bundle package ? where to place ? Shared Support ?
+    path_frag = wxT( "/Library/Application Support/kicad/scripting" );
+    path_frag = wxString( wxGetenv("HOME") ) + wxT( "/Library/Application Support/kicad/scripting" );
+
+    // Get pcbnew.app/Contents directory
+    wxFileName bundledir( wxStandardPaths::Get().GetExecutablePath() ) ;
+    bundledir.RemoveLastDir();
+
+    // Prepend in PYTHONPATH the content of the bundle libraries !
+    wxSetEnv( "PYTHONPATH", ((wxGetenv("PYTHONPATH") != NULL ) ? (wxString(wxGetenv("PYTHONPATH")) + ":") : wxString("")) +
+            bundledir.GetPath() +
+            "/Frameworks/wxPython/lib/python2.6/site-packages/wx-3.0-osx_cocoa" + ":" +
+            "/Library/Application Support/kicad/" + ":" +
+            bundledir.GetPath() + "/PlugIns" + ":" +
+            wxString( wxGetenv("HOME") )  + "/Library/Application Support/kicad/"
+            );
+  #endif
  #endif
 
     // On linux and osx, 2 others paths are
@@ -424,6 +395,73 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram )
         wxLogSysError( wxT( "pcbnewInitPythonScripting() failed." ) );
         return false;
     }
+}
+#endif  // KICAD_SCRIPTING
+
+
+/// The global footprint library table.  This is not dynamically allocated because
+/// in a multiple project environment we must keep its address constant (since it is
+/// the fallback table for multiple projects).
+FP_LIB_TABLE    GFootprintTable;
+
+
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram )
+{
+    // This is process level, not project level, initialization of the DSO.
+
+    // Do nothing in here pertinent to a project!
+
+    start_common();
+
+    // Must be called before creating the main frame in order to
+    // display the real hotkeys in menus or tool tips
+    ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
+
+    // Set 3D shape path from environment variable KISYS3DMOD
+    set3DShapesPath( wxT(KISYS3DMOD) );
+
+    /*  Now that there are no *.mod files in the standard library, this function
+        has no utility.  User should simply set the variable manually.
+        Looking for *.mod files which do not exist is fruitless.
+
+        SetFootprintLibTablePath();
+    */
+
+    g_DrawBgColor = BLACK;
+
+    try
+    {
+        // The global table is not related to a specific project.  All projects
+        // will use the same global table.  So the KIFACE::OnKifaceStart() contract
+        // of avoiding anything project specific is not violated here.
+
+        if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
+        {
+            DisplayInfoMessage( NULL, wxT(
+                "You have run Pcbnew for the first time using the "
+                "new footprint library table method for finding "
+                "footprints.  Pcbnew has either copied the default "
+                "table or created an empty table in your home "
+                "folder.  You must first configure the library "
+                "table to include all footprint libraries not "
+                "included with KiCad.  See the \"Footprint Library "
+                "Table\" section of the CvPcb documentation for "
+                "more information." ) );
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg = wxString::Format( _(
+            "An error occurred attempting to load the global footprint library "
+            "table:\n\n%s" ),
+            GetChars( ioe.errorText )
+            );
+        DisplayError( NULL, msg );
+        return false;
+    }
+
+#ifdef KICAD_SCRIPTING
+    scriptingSetup();
 #endif
 
     return true;
@@ -441,4 +479,3 @@ void IFACE::OnKifaceEnd()
     pcbnewFinishPythonScripting();
 #endif
 }
-

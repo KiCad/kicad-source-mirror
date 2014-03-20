@@ -100,10 +100,10 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
 
     // Shows the net
     ZONE_SETTINGS zoneInfo = GetZoneSettings();
-    zoneInfo.m_NetcodeSelection = aZone->GetNet();
+    zoneInfo.m_NetcodeSelection = aZone->GetNetCode();
     SetZoneSettings( zoneInfo );
 
-    msg = aZone->GetNetName();
+    msg = aZone->GetNetname();
 
     if( msg.IsEmpty() )
         msg = wxT( "No net" );
@@ -150,7 +150,7 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
         if( zoneContainer->GetIsKeepout() )
             continue;
 
-        msg.Printf( FORMAT_STRING, ii+1, areaCount, GetChars( zoneContainer->GetNetName() ) );
+        msg.Printf( FORMAT_STRING, ii + 1, areaCount, GetChars( zoneContainer->GetNetname() ) );
 
         if( progressDialog )
         {

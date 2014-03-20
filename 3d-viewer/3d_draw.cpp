@@ -50,10 +50,10 @@
 #include <3d_draw_basic_functions.h>
 
 // Imported function:
-extern void     Set_Object_Data( std::vector<S3D_VERTEX>& aVertices, double aBiuTo3DUnits );
 extern void     CheckGLError();
 
-/* returns true if aLayer should be displayed, false otherwise
+/* Helper function
+ * returns true if aLayer should be displayed, false otherwise
  */
 static bool     Is3DLayerEnabled( LAYER_NUM aLayer );
 
@@ -99,7 +99,7 @@ static void BuildPadShapeThickOutlineAsPolygon( D_PAD*          aPad,
 }
 
 
-void EDA_3D_CANVAS::Redraw( bool finish )
+void EDA_3D_CANVAS::Redraw()
 {
     // SwapBuffer requires the window to be shown before calling
     if( !IsShown() )
@@ -134,15 +134,47 @@ void EDA_3D_CANVAS::Redraw( bool finish )
     glRotatef( g_Parm_3D_Visu.m_Rot[1], 0.0, 1.0, 0.0 );
     glRotatef( g_Parm_3D_Visu.m_Rot[2], 0.0, 0.0, 1.0 );
 
-    if( m_gllist )
-        glCallList( m_gllist );
-    else
+    if( ! m_glLists[GL_ID_BOARD] || ! m_glLists[GL_ID_TECH_LAYERS] )
         CreateDrawGL_List();
 
-    glFlush();
+    if( g_Parm_3D_Visu.GetFlag( FL_AXIS ) && m_glLists[GL_ID_AXIS] )
+        glCallList( m_glLists[GL_ID_AXIS] );
 
-    if( finish )
-        glFinish();
+    // move the board in order to draw it with its center at 0,0 3D coordinates
+    glTranslatef( -g_Parm_3D_Visu.m_BoardPos.x * g_Parm_3D_Visu.m_BiuTo3Dunits,
+                  -g_Parm_3D_Visu.m_BoardPos.y * g_Parm_3D_Visu.m_BiuTo3Dunits,
+                  0.0F );
+
+    // draw all objects in lists
+    // transparent objects should be drawn after opaque objects
+    glCallList( m_glLists[GL_ID_BOARD] );
+    glCallList( m_glLists[GL_ID_TECH_LAYERS] );
+
+    if( g_Parm_3D_Visu.GetFlag( FL_COMMENTS ) || g_Parm_3D_Visu.GetFlag( FL_COMMENTS )  )
+    {
+        if( ! m_glLists[GL_ID_AUX_LAYERS] )
+            CreateDrawGL_List();
+
+        glCallList( m_glLists[GL_ID_AUX_LAYERS] );
+    }
+
+    if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) )
+    {
+        if( ! m_glLists[GL_ID_3DSHAPES_SOLID] )
+            CreateDrawGL_List();
+
+        glCallList( m_glLists[GL_ID_3DSHAPES_SOLID] );
+    }
+
+    // Grid uses transparency: draw it after all objects
+    if( g_Parm_3D_Visu.GetFlag( FL_GRID ) && m_glLists[GL_ID_GRID] )
+        glCallList( m_glLists[GL_ID_GRID] );
+
+    // This list must be drawn last, because it contains the
+    // transparent gl objects, which should be drawn after all
+    // non transparent objects
+    if(  g_Parm_3D_Visu.GetFlag( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP] )
+        glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP] );
 
     SwapBuffers();
 }
@@ -204,8 +236,7 @@ static inline void SetGLTechLayersColor( LAYER_NUM aLayer )
 
 void EDA_3D_CANVAS::BuildBoard3DView()
 {
-    PCB_BASE_FRAME* pcbframe = Parent()->Parent();
-    BOARD*          pcb = pcbframe->GetBoard();
+    BOARD* pcb = GetBoard();
     bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
 
     // Number of segments to draw a circle using segments
@@ -329,7 +360,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             }
         }
 
-        // draw graphic items
+        // draw graphic items on copper layers (texts)
         for( BOARD_ITEM* item = pcb->m_Drawings; item; item = item->Next() )
         {
             if( !item->IsOnLayer( layer ) )
@@ -337,11 +368,9 @@ void EDA_3D_CANVAS::BuildBoard3DView()
 
             switch( item->Type() )
             {
-            case PCB_LINE_T:
+            case PCB_LINE_T:    // should not exist on copper layers
                 ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
-                    bufferPolys, 0,
-                    segcountforcircle,
-                    correctionFactor );
+                    bufferPolys, 0, segcountforcircle, correctionFactor );
                 break;
 
             case PCB_TEXT_T:
@@ -462,14 +491,78 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         Draw3D_SolidHorizontalPolyPolygons( bufferPcbOutlines, zpos + board_thickness/2,
                                             board_thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
     }
+}
 
-    // draw graphic items, not on copper layers
+
+void EDA_3D_CANVAS::BuildTechLayers3DView()
+{
+    BOARD* pcb = GetBoard();
+
+    // Number of segments to draw a circle using segments
+    const int       segcountforcircle   = 16;
+    double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
+    const int       segcountLowQuality  = 12;   // segments to draw a circle with low quality
+                                                // to reduce time calculations
+                                                // for holes and items which do not need
+                                                // a fine representation
+
+    CPOLYGONS_LIST  bufferPolys;
+    bufferPolys.reserve( 100000 );              // Reserve for large board
+    CPOLYGONS_LIST  allLayerHoles;              // Contains through holes, calculated only once
+    allLayerHoles.reserve( 20000 );
+
+    CPOLYGONS_LIST  bufferPcbOutlines;          // stores the board main outlines
+    // Build a polygon from edge cut items
+    wxString msg;
+    if( ! pcb->GetBoardPolygonOutlines( bufferPcbOutlines,
+                                        allLayerHoles, &msg ) )
+    {
+        msg << wxT("\n\n") <<
+            _("Unable to calculate the board outlines.\n"
+              "Therefore use the board boundary box.");
+        wxMessageBox( msg );
+    }
+
+    int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
+    for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
+    {
+       // Add via hole
+        if( track->Type() == PCB_VIA_T )
+        {
+            int shape = track->GetShape();
+            int holediameter    = track->GetDrillValue();
+            int hole_outer_radius = (holediameter + thickness) / 2;
+
+            if( shape == VIA_THROUGH )
+                TransformCircleToPolygon( allLayerHoles,
+                                          track->GetStart(), hole_outer_radius,
+                                          segcountLowQuality );
+        }
+    }
+
+    // draw pads holes
+    for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
+    {
+        // Add pad hole, if any
+        D_PAD* pad = module->Pads();
+
+        for( ; pad != NULL; pad = pad->Next() )
+            pad->BuildPadDrillShapePolygon( allLayerHoles, 0,
+                                                segcountLowQuality );
+    }
+
+    // draw graphic items, on technical layers
+
     KI_POLYGON_SET  brdpolysetHoles;
     allLayerHoles.ExportTo( brdpolysetHoles );
 
     for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER;
          layer++ )
     {
+        // Skip user layers, which are not drawn here
+        if( IsUserLayer( layer) )
+            continue;
+
         if( !Is3DLayerEnabled( layer ) )
             continue;
 
@@ -487,9 +580,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             {
             case PCB_LINE_T:
                 ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
-                    bufferPolys, 0,
-                    segcountforcircle,
-                    correctionFactor );
+                    bufferPolys, 0, segcountforcircle, correctionFactor );
                 break;
 
             case PCB_TEXT_T:
@@ -562,10 +653,8 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             currLayerPolyset += polyset;
         }
 
-        SetGLTechLayersColor( layer );
         int         thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
         int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
-        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
         if( layer == EDGE_N )
         {
@@ -588,35 +677,222 @@ void EDA_3D_CANVAS::BuildBoard3DView()
 
         bufferPolys.RemoveAllContours();
         bufferPolys.ImportFrom( currLayerPolyset );
+
+        SetGLTechLayersColor( layer );
+        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
                                             thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
     }
-
-    // draw modules 3D shapes
-    for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
-        module->ReadAndInsert3DComponentShape( this );
 }
 
-
-GLuint EDA_3D_CANVAS::CreateDrawGL_List()
+/**
+ * Function BuildBoard3DAuxLayers
+ * Called by CreateDrawGL_List()
+ * Fills the OpenGL GL_ID_BOARD draw list with items
+ * on aux layers only
+ */
+void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
 {
-    PCB_BASE_FRAME* pcbframe = Parent()->Parent();
-    BOARD*          pcb = pcbframe->GetBoard();
+    const int   segcountforcircle   = 16;
+    double      correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
+    BOARD* pcb = GetBoard();
+    CPOLYGONS_LIST  bufferPolys;
+    bufferPolys.reserve( 5000 );    // Reserve for items not on board
+
+    for( LAYER_NUM layer = FIRST_USER_LAYER; layer <= LAST_USER_LAYER;
+         layer++ )
+    {
+        if( !Is3DLayerEnabled( layer ) )
+            continue;
+
+        bufferPolys.RemoveAllContours();
+
+        for( BOARD_ITEM* item = pcb->m_Drawings; item; item = item->Next() )
+        {
+            if( !item->IsOnLayer( layer ) )
+                continue;
+
+            switch( item->Type() )
+            {
+            case PCB_LINE_T:
+                ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
+                    bufferPolys, 0, segcountforcircle, correctionFactor );
+                break;
+
+            case PCB_TEXT_T:
+                ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet(
+                    bufferPolys, 0, segcountforcircle, correctionFactor );
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
+        {
+            module->TransformPadsShapesWithClearanceToPolygon( layer,
+                                                               bufferPolys,
+                                                               0,
+                                                               segcountforcircle,
+                                                               correctionFactor );
+
+            module->TransformGraphicShapesWithClearanceToPolygonSet( layer,
+                                                                     bufferPolys,
+                                                                     0,
+                                                                     segcountforcircle,
+                                                                     correctionFactor );
+        }
+
+        // bufferPolys contains polygons to merge. Many overlaps .
+        // Calculate merged polygons and remove pads and vias holes
+        if( bufferPolys.GetCornersCount() == 0 )
+            continue;
+        KI_POLYGON_SET  currLayerPolyset;
+        KI_POLYGON_SET  polyset;
+        bufferPolys.ExportTo( polyset );
+        currLayerPolyset += polyset;
+
+        int         thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
+        int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
+        // for Draw3D_SolidHorizontalPolyPolygons,
+        // zpos it the middle between bottom and top sides.
+        // However for top layers, zpos should be the bottom layer pos,
+        // and for bottom layers, zpos should be the top layer pos.
+        if( Get3DLayer_Z_Orientation( layer ) > 0 )
+            zpos += thickness/2;
+        else
+            zpos -= thickness/2 ;
+
+        bufferPolys.RemoveAllContours();
+        bufferPolys.ImportFrom( currLayerPolyset );
+
+        SetGLTechLayersColor( layer );
+        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
+        Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
+                                            thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
+    }
+}
+
+void EDA_3D_CANVAS::CreateDrawGL_List()
+{
+    BOARD* pcb = GetBoard();
 
     wxBusyCursor    dummy;
-
-    m_gllist = glGenLists( 1 );
 
     // Build 3D board parameters:
     g_Parm_3D_Visu.InitSettings( pcb );
 
-    glNewList( m_gllist, GL_COMPILE_AND_EXECUTE );
-
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
-    // draw axis
-    if( g_Parm_3D_Visu.GetFlag( FL_AXIS )  )
+    // Create axis gl list (if it is not shown, the list will be not called
+    Draw3DAxis();
+
+    // Create grid gl list
+    if( ! m_glLists[GL_ID_GRID] )
     {
+        m_glLists[GL_ID_GRID] = glGenLists( 1 );
+        glNewList( m_glLists[GL_ID_GRID], GL_COMPILE );
+
+        Draw3DGrid( g_Parm_3D_Visu.m_3D_Grid );
+        glEndList();
+    }
+
+    // Create Board full gl lists:
+
+// For testing purpose only, display calculation time to generate 3D data
+// #define PRINT_CALCULATION_TIME
+
+#ifdef PRINT_CALCULATION_TIME
+    unsigned strtime = GetRunningMicroSecs();
+#endif
+
+    if( ! m_glLists[GL_ID_BOARD] )
+    {
+        m_glLists[GL_ID_BOARD] = glGenLists( 1 );
+        glNewList( m_glLists[GL_ID_BOARD], GL_COMPILE );
+        BuildBoard3DView();
+        glEndList();
+    }
+
+    if( ! m_glLists[GL_ID_TECH_LAYERS] )
+    {
+        m_glLists[GL_ID_TECH_LAYERS] = glGenLists( 1 );
+        glNewList( m_glLists[GL_ID_TECH_LAYERS], GL_COMPILE );
+        BuildTechLayers3DView();
+        glEndList();
+    }
+
+    if( ! m_glLists[GL_ID_AUX_LAYERS] )
+    {
+        m_glLists[GL_ID_AUX_LAYERS] = glGenLists( 1 );
+        glNewList( m_glLists[GL_ID_AUX_LAYERS], GL_COMPILE );
+        BuildBoard3DAuxLayers();
+        glEndList();
+    }
+
+
+    // draw modules 3D shapes
+    if( ! m_glLists[GL_ID_3DSHAPES_SOLID] && g_Parm_3D_Visu.GetFlag( FL_MODULE ) )
+    {
+        m_glLists[GL_ID_3DSHAPES_SOLID] = glGenLists( 1 );
+
+        // GL_ID_3DSHAPES_TRANSP is an auxiliary list for 3D shapes;
+        // Ensure it is cleared before rebuilding it
+        if( m_glLists[GL_ID_3DSHAPES_TRANSP] )
+            glDeleteLists( m_glLists[GL_ID_3DSHAPES_TRANSP], 1 );
+
+        m_glLists[GL_ID_3DSHAPES_TRANSP] = glGenLists( 1 );
+        BuildFootprintShape3DList( m_glLists[GL_ID_3DSHAPES_SOLID],
+                                   m_glLists[GL_ID_3DSHAPES_TRANSP] );
+    }
+
+    // Test for errors
+    CheckGLError();
+
+#ifdef PRINT_CALCULATION_TIME
+    unsigned    endtime = GetRunningMicroSecs();
+    wxString    msg;
+    msg.Printf( "Built data %.1f ms", (double) (endtime - strtime) / 1000 );
+    Parent()->SetStatusText( msg, 0 );
+#endif
+}
+
+
+void EDA_3D_CANVAS::BuildFootprintShape3DList( GLuint aOpaqueList,
+                                               GLuint aTransparentList)
+{
+        // aOpaqueList is the gl list for non transparent items
+        // aTransparentList is the gl list for non transparent items,
+        // which need to be drawn after all other items
+
+        BOARD* pcb = GetBoard();
+        glNewList( aOpaqueList, GL_COMPILE );
+        bool loadTransparentObjects = false;
+
+        for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
+            module->ReadAndInsert3DComponentShape( this, !loadTransparentObjects,
+                                                   loadTransparentObjects );
+
+        glEndList();
+
+        glNewList( aTransparentList, GL_COMPILE );
+        loadTransparentObjects = true;
+
+        for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
+            module->ReadAndInsert3DComponentShape( this, !loadTransparentObjects,
+                                                   loadTransparentObjects );
+
+        glEndList();
+}
+
+void EDA_3D_CANVAS::Draw3DAxis()
+{
+    if( ! m_glLists[GL_ID_AXIS] )
+    {
+        m_glLists[GL_ID_AXIS] = glGenLists( 1 );
+        glNewList( m_glLists[GL_ID_AXIS], GL_COMPILE );
+
         glEnable( GL_COLOR_MATERIAL );
         SetGLColor( WHITE );
         glBegin( GL_LINES );
@@ -629,52 +905,20 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
         glVertex3f( 0.0f, 0.0f, 0.0f );
         glVertex3f( 0.0f, 0.0f, 0.3f );     // Z axis
         glEnd();
+
+        glEndList();
     }
-
-    // move the board in order to draw it with its center at 0,0 3D coordinates
-    glTranslatef( -g_Parm_3D_Visu.m_BoardPos.x * g_Parm_3D_Visu.m_BiuTo3Dunits,
-                  -g_Parm_3D_Visu.m_BoardPos.y * g_Parm_3D_Visu.m_BiuTo3Dunits,
-                  0.0F );
-
-    // Draw Board:
-// For testing purpose only, display calculation time to generate 3D data
-// #define PRINT_CALCULATION_TIME
-
-#ifdef PRINT_CALCULATION_TIME
-    unsigned strtime = GetRunningMicroSecs();
-#endif
-
-    BuildBoard3DView();
-
-    // Draw grid
-    if( g_Parm_3D_Visu.GetFlag( FL_GRID )  )
-        DrawGrid( g_Parm_3D_Visu.m_3D_Grid );
-
-    glEndList();
-
-    // Test for errors
-    CheckGLError();
-
-#ifdef PRINT_CALCULATION_TIME
-    unsigned    endtime = GetRunningMicroSecs();
-    wxString    msg;
-    msg.Printf( "Built data %.1f ms", (double) (endtime - strtime) / 1000 );
-    Parent()->SetStatusText( msg, 0 );
-#endif
-
-    return m_gllist;
 }
-
 
 // draw a 3D grid: an horizontal grid (XY plane and Z = 0,
 // and a vertical grid (XZ plane and Y = 0)
-void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
+void EDA_3D_CANVAS::Draw3DGrid( double aGriSizeMM )
 {
     double      zpos = 0.0;
     EDA_COLOR_T gridcolor = DARKGRAY;           // Color of grid lines
     EDA_COLOR_T gridcolor_marker = LIGHTGRAY;   // Color of grid lines every 5 lines
-    double      scale = g_Parm_3D_Visu.m_BiuTo3Dunits;
-    double transparency = 0.4;
+    const double scale = g_Parm_3D_Visu.m_BiuTo3Dunits;
+    const double transparency = 0.3;
 
     glNormal3f( 0.0, 0.0, 1.0 );
 
@@ -829,43 +1073,40 @@ void EDA_3D_CANVAS::Draw3DViaHole( SEGVIA* aVia )
 }
 
 
-void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas )
+void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
+                                    bool aAllowNonTransparentObjects,
+                                    bool aAllowTransparentObjects )
 {
-    // Draw module shape: 3D shape if exists (or module outlines if not exists)
-    S3D_MASTER* struct3D = m_3D_Drawings;
 
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE )  )
+    // Read from disk and draws the footprint 3D shapes if exists
+    S3D_MASTER* shape3D = m_3D_Drawings;
+    double zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( IsFlipped() );
+
+    glPushMatrix();
+
+    glTranslatef( m_Pos.x * g_Parm_3D_Visu.m_BiuTo3Dunits,
+                  -m_Pos.y * g_Parm_3D_Visu.m_BiuTo3Dunits,
+                  zpos );
+
+    if( m_Orient )
+        glRotatef( (double) m_Orient / 10, 0.0, 0.0, 1.0 );
+
+    if( IsFlipped() )
     {
-        double zpos;
-
-        if( IsFlipped() )
-            zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( true );
-        else
-            zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( false );
-
-        glPushMatrix();
-
-        glTranslatef( m_Pos.x * g_Parm_3D_Visu.m_BiuTo3Dunits,
-                      -m_Pos.y * g_Parm_3D_Visu.m_BiuTo3Dunits,
-                      zpos );
-
-        if( m_Orient )
-            glRotatef( (double) m_Orient / 10, 0.0, 0.0, 1.0 );
-
-        if( IsFlipped() )
-        {
-            glRotatef( 180.0, 0.0, 1.0, 0.0 );
-            glRotatef( 180.0, 0.0, 0.0, 1.0 );
-        }
-
-        for( ; struct3D != NULL; struct3D = struct3D->Next() )
-        {
-            if( struct3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
-                struct3D->ReadData();
-        }
-
-        glPopMatrix();
+        glRotatef( 180.0, 0.0, 1.0, 0.0 );
+        glRotatef( 180.0, 0.0, 0.0, 1.0 );
     }
+
+    for( ; shape3D != NULL; shape3D = shape3D->Next() )
+    {
+        shape3D->SetLoadNonTransparentObjects( aAllowNonTransparentObjects );
+        shape3D->SetLoadTransparentObjects( aAllowTransparentObjects );
+
+        if( shape3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
+            shape3D->ReadData();
+    }
+
+    glPopMatrix();
 }
 
 

@@ -48,6 +48,9 @@
 #  include <GL/glu.h>
 #endif
 
+
+#define KISYS3DMOD "KISYS3DMOD"
+
 #include <3d_struct.h>
 
 #define KISYS3DMOD "KISYS3DMOD"
@@ -80,6 +83,8 @@ public:
 
     PCB_BASE_FRAME* Parent() { return (PCB_BASE_FRAME*)GetParent(); }
 
+    BOARD* GetBoard();
+
     /**
      * Function ReloadRequest
      * must be called when reloading data from Pcbnew is needed
@@ -95,8 +100,10 @@ public:
      * Function NewDisplay
      * Rebuild the display list.
      * must be called when 3D opengl data is modified
+     * @param aGlList = the list to rebuild.
+     * if 0 (default) all lists are rebuilt
      */
-    void NewDisplay();
+    void NewDisplay( GLuint aGlList = 0 );
 
     void SetDefaultFileName(const wxString &aFn) { m_defaultFileName = aFn; }
     const wxString &GetDefaultFileName() const { return m_defaultFileName; }

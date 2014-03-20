@@ -70,8 +70,11 @@ public:
 
 void MIN_SPAN_TREE_PADS::AddTreeToRatsnest( std::vector<RATSNEST_ITEM> &aRatsnestList )
 {
-    std::vector<D_PAD*> & padsBuffer = *m_PadsList;
-    int netcode = padsBuffer[0]->GetNet();
+    std::vector<D_PAD*>& padsBuffer = *m_PadsList;
+    if( padsBuffer.empty() )
+        return;
+
+    int netcode = padsBuffer[0]->GetNetCode();
     // Note: to get edges in minimum spanning tree,
     // the index value 0 is not used: it is just
     // the entry point of the minimum spanning tree.
@@ -179,7 +182,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
  */
 static bool sortByNetcode( const D_PAD* const & ref, const D_PAD* const & item )
 {
-    return ref->GetNet() < item->GetNet();
+    return ref->GetNetCode() < item->GetNetCode();
 }
 
 
@@ -537,7 +540,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
         // collect active pads of the module:
         for( pad_ref = aModule->Pads(); pad_ref != NULL; pad_ref = pad_ref->Next() )
         {
-            if( pad_ref->GetNet() == 0 )
+            if( pad_ref->GetNetCode() == NETINFO_LIST::UNCONNECTED )
                 continue;
 
             localPadList.push_back( pad_ref );
@@ -559,11 +562,11 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
         {
             pad_ref = localPadList[ii];
 
-            if( pad_ref->GetNet() == current_net_code )
+            if( pad_ref->GetNetCode() == current_net_code )
                 continue;
 
             // A new net was found, load all pads of others modules members of this net:
-            NETINFO_ITEM* net = m_Pcb->FindNet( pad_ref->GetNet() );
+            NETINFO_ITEM* net = pad_ref->GetNet();
 
             if( net == NULL )       //Should not occur
             {
@@ -594,7 +597,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
          * footprint pads it is therefore not time consuming, and it is made only
          * once
          */
-        current_net_code = localPadList[0]->GetNet();
+        current_net_code = localPadList[0]->GetNetCode();
 
         MIN_SPAN_TREE_PADS min_spanning_tree;
         std::vector<D_PAD*> padsBuffer;     // contains pads of only one net
@@ -608,7 +611,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
                 if( jj >= pads_module_count )
                     break;
 
-                if( localPadList[jj]->GetNet() != current_net_code )
+                if( localPadList[jj]->GetNetCode() != current_net_code )
                     break;
             }
 
@@ -620,7 +623,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
             padsBuffer.clear();
             ii = jj;
             if( ii < localPadList.size() )
-                current_net_code = localPadList[ii]->GetNet();
+                current_net_code = localPadList[ii]->GetNetCode();
         }
         internalRatsCount = m_Pcb->m_LocalRatsnest.size();
 
@@ -652,13 +655,13 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
         m_Pcb->m_LocalRatsnest.erase( m_Pcb->m_LocalRatsnest.begin() + internalRatsCount,
                                       m_Pcb->m_LocalRatsnest.end() );
 
-    current_net_code = localPadList[0]->GetNet();
+    current_net_code = localPadList[0]->GetNetCode();
 
     for( unsigned ii = 0; ii < pads_module_count; ii++ )
     {
         pad_ref = localPadList[ii];
 
-        if( pad_ref->GetNet() != current_net_code )
+        if( pad_ref->GetNetCode() != current_net_code )
         {
             // if needed, creates a new ratsnest for the old net
             if( addRats )
@@ -667,7 +670,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
             }
 
             addRats = false;
-            current_net_code    = pad_ref->GetNet();
+            current_net_code    = pad_ref->GetNetCode();
             local_rats.m_Lenght = INT_MAX;
         }
 
@@ -679,10 +682,10 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
             pad_externe = localPadList[jj];
 
             // we search pads having the same net code
-            if( pad_externe->GetNet() < pad_ref->GetNet() )
+            if( pad_externe->GetNetCode() < pad_ref->GetNetCode() )
                 continue;
 
-            if( pad_externe->GetNet() > pad_ref->GetNet() ) // pads are sorted by net code
+            if( pad_externe->GetNetCode() > pad_ref->GetNetCode() ) // pads are sorted by net code
                 break;
 
             distance = abs( pad_externe->GetPosition().x - pad_pos.x ) +
@@ -692,7 +695,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
             {
                 local_rats.m_PadStart = pad_ref;
                 local_rats.m_PadEnd   = pad_externe;
-                local_rats.SetNet( pad_ref->GetNet() );
+                local_rats.SetNet( pad_ref->GetNetCode() );
                 local_rats.m_Lenght = distance;
                 local_rats.m_Status = 0;
 
@@ -810,7 +813,7 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
         if( aItemRef == NULL )
             return;
 
-        int net_code = aItemRef->GetNet();
+        int net_code = aItemRef->GetNetCode();
         int subnet = aItemRef->GetSubNet();
 
         if( net_code <= 0 )
@@ -841,9 +844,9 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
         // current track:
         for( TRACK* track = m_Pcb->m_Track; track; track = track->Next() )
         {
-            if( track->GetNet() < net_code )
+            if( track->GetNetCode() < net_code )
                 continue;
-            if( track->GetNet() > net_code )
+            if( track->GetNetCode() > net_code )
                 break;;
 
             if( !track->GetSubNet() || (track->GetSubNet() != subnet) )

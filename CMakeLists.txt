@@ -23,8 +23,9 @@ set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 # reports.
 #
 
-option( USE_KIWAY_DLLS
-    "Build the major modules as KIFACE DLLs or DSOs, will soon be the norm." ON )
+#option( USE_KIWAY_DLLS "Build the major modules as KIFACE DLLs or DSOs, will soon be the norm." ON )
+set( USE_KIWAY_DLLS true )  # this is now mandatory, the code is the same anyways, the old code is gone.
+
 
 # The desire is to migrate designs *away from* case independence, and to create designs which use
 # literally (case specific) interpreted component names.  But for backwards compatibility,
@@ -58,8 +59,13 @@ option( KICAD_SCRIPTING_WXPYTHON
     )
 
 option( KICAD_BUILD_STATIC
-    "Builds Kicad and all libraries static (except wx-widgets)"
+    "Builds Kicad and all libraries static"
     )
+
+option( KICAD_BUILD_DYNAMIC
+    "Builds Kicad and all libraries dynamic (required for wxPython)"
+    )
+
 
 # WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
 # as it is known to work with KiCad.  Other versions may contain bugs that may result
@@ -93,9 +99,9 @@ set( DOWNLOAD_DIR ${PROJECT_SOURCE_DIR}/.downloads-by-cmake
 LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} )
 
 if( UNIX )
-    set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specifig KiCad config files" )
+    set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specific KiCad config files" )
 elseif( MINGW )
-    set( KICAD_USER_CONFIG_DIR $ENV{%APPDATA%} CACHE PATH "Location of user specifig KiCad config files" )
+    set( KICAD_USER_CONFIG_DIR $ENV{%APPDATA%} CACHE PATH "Location of user specific KiCad config files" )
 endif()
 mark_as_advanced( KICAD_USER_CONFIG_DIR )
 
@@ -150,6 +156,13 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden" )
     endif()
 
+    find_package( OpenMP QUIET )
+    if( OPENMP_FOUND )
+        set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}" )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}" )
+        add_definitions( -DUSE_OPENMP )
+    endif()
+
     if( MINGW )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
 
@@ -183,11 +196,14 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   ${PIC_FLAG}" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PIC_FLAG}" )
 
-        # Thou shalt not link vaporware and tell us it's a valid DSO:
-        set( CMAKE_SHARED_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
-        set( CMAKE_MODULE_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
+        # Thou shalt not link vaporware and tell us it's a valid DSO (apple ld doesn't support it)
+        if( NOT APPLE )
+            set( CMAKE_SHARED_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
+            set( CMAKE_MODULE_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
 
-        set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
+            set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
+        endif()
+
     endif()
 
     # quiet GCC while in boost
@@ -201,7 +217,7 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
 
-        # Allows .dylib relocation in the future
+        # Allows .dylib relocation in the future - needed by fixbundle
         set( CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS} -headerpad_max_install_names")
 
         if( NOT CMAKE_CXX_COMPILER )
@@ -335,11 +351,23 @@ find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
 
 # Dick 5-Feb-2014:
-# Marco: This is broken.  You cannot use both ExternalProject_Add() add and find_package()
+# Marco: We cannot use both ExternalProject_Add() add and find_package()
 # in the same CMake tree and have them both reference the same package:
 # http://stackoverflow.com/questions/6351609/cmake-linking-to-library-downloaded-from-externalproject-add
 # https://www.mail-archive.com/cmake@cmake.org/msg47501.html
+
+# Handle target used to specify if a target needs wx-widgets or other libraries
+# Always defined, empty if no libraries are to be build
+add_custom_target( lib-dependencies )
+
 if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
+
+    # This should be build in all cases, if swig exec is not avaiable
+    # will be impossible also enable SCRIPTING being for PCBNEW required immediatly
+
+    include( download_pcre )
+    include( download_swig )
+
 
     #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
 
@@ -349,32 +377,48 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     if( KICAD_BUILD_STATIC )
         message(STATUS "KICAD_BUILD_STATIC set")
+        if( KICAD_SCRIPTING OR KICAD_SCRIPTING_WXPYTHON OR KICAD_SCRIPTING_MODULES )
+            message(FATAL_ERROR "KICAD_SCRIPTING* is not supported with KICAD_BUILD_STATIC, please select KICAD_BUILD_DYNAMIC" )
+        endif()
     endif()
 
     if( KICAD_BUILD_DYNAMIC )
         message(STATUS "KICAD_BUILD_DYNAMIC set")
-        # TODO - Library packaging/relocation
     endif()
 
-    if( MINGW )
-        include( download_bzip2 )
-        add_custom_target( lib-dependencies
-            DEPENDS boost cairo glew libpng pixman pkgconfig bzip2
-            )
-    else()
-        add_custom_target( lib-dependencies
-            DEPENDS boost cairo glew libpng pixman pkgconfig
-            )
-    endif()
 
-    include( download_libpng )
+    if( KICAD_SCRIPTING OR KICAD_SCRIPTING_WXPYTHON OR KICAD_SCRIPTING_MODULES )
 
-    if( KICAD_SCRIPTING_WXPYTHON )
-        message( FATAL_ERROR "KICAD_BUILD_* and SCRIPTING Not Implemented Yet!" )
+        message(STATUS "Scripting ENABLED")
+        include( download_wxpython )
+
+        set( SWIG_EXECUTABLE  ${SWIG_ROOT}/bin/swig )
+        set( SWIG_INCLUDE     ${SWIG_ROOT}/include )
+        set( PYTHON_DEST ${LIBWXPYTHON_ROOT}/wxPython/lib/python2.6/site-packages )
+
+        if( NOT EXISTS ${SWIG_EXECUTABLE} )
+            set(KICAD_SCRIPTING CACHE OFF FORCE "Disabling KICAD_SCRIPTING")
+            message( STATUS  "KICAD_SCRIPTING Enabled but SWIG not found, please disable and before reenabling execute: make swig")
+            message( FATAL_ERROR "Missing SWIG!")
+        endif()
+        message(STATUS "SWIG_EXECUTABLE: ${SWIG_EXECUTABLE}")
+
+        set( PYTHON_DEST ${LIBWXPYTHON_ROOT}/wxPython/lib/python2.6/site-packages )
+
+        set(wxWidgets_BIN_DIR           ${LIBWXPYTHON_ROOT}/bin/wxrc )
+        set(wxWidgets_CONFIG_EXECUTABLE ${LIBWXPYTHON_ROOT}/bin/wx-config )
+        set(wxWidgets_INCLUDE_DIRS      ${LIBWXPYTHON_ROOT}/include/wx-3.0 )
+        set(wxWidgets_LIBRARY_DIRS      ${LIBWXPYTHON_ROOT}/lib )
+
+        add_dependencies( lib-dependencies libwxpython )
+        add_dependencies( lib-dependencies swig )
+
     else()
         include( download_wxwidgets )
         add_dependencies( lib-dependencies libwx )
     endif()
+
+    include( download_libpng )
 
     include( download_pkgconfig )
         set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config" )
@@ -386,6 +430,12 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
     include( download_cairo )
         set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo" )
         set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a" )
+
+    add_dependencies( lib-dependencies boost )
+    add_dependencies( lib-dependencies cairo )
+    add_dependencies( lib-dependencies libpng )
+    add_dependencies( lib-dependencies pixman )
+    add_dependencies( lib-dependencies pkgconfig )
 
     if( KICAD_BUILD_DYNAMIC AND APPLE )
         add_custom_target( osx_fix_bundles ALL DEPENDS cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
@@ -437,7 +487,7 @@ endif()
 
 # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
 # Seems no more needed on wx-3
-if( APPLE AND NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
+if( APPLE AND ( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES OR KICAD_SCRIPTING_WXPYTHON) )
     find_package( wxWidgets COMPONENTS gl adv html core net base xml QUIET )
 else()
     find_package( wxWidgets COMPONENTS gl aui adv html core net base xml QUIET )
@@ -486,10 +536,25 @@ set( INC_AFTER
 
 # Find Python and other scripting resources
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
-    set( PythonInterp_FIND_VERSION )
+
+    if( APPLE )
+        set( PYTHON_LIBRARY /System/Library/Frameworks/Python.framework/Versions/2.6/Python  )
+        set( PYTHON_INCLUDE_DIR /System/Library/Frameworks/Python.framework/Versions//2.6/include/python2.6 )
+        set( PythonInterp_FIND_VERSION 2.6 )
+        set( PythonLibs_FIND_VERSION 2.6 )
+    endif()
+
+    # force a python version < 3.0
+    set( PythonInterp_FIND_VERSION 2.6)
+    set( PythonLibs_FIND_VERSION 2.6 )
+
     find_package( PythonInterp )
+
     check_find_package_result( PYTHONINTERP_FOUND "Python Interpreter" )
 
+    if( NOT PYTHON_VERSION_MAJOR EQUAL 2 )
+        message( FATAL_ERROR "Python 2.x is required." )
+    endif()
     # Get the correct Python site package install path from the Python interpreter found by
     # FindPythonInterp unless the user specifically defined a custom path.
     if( NOT PYTHON_SITE_PACKAGE_PATH )
@@ -507,7 +572,7 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     mark_as_advanced( PYTHON_DEST )
     message( STATUS "Python module install path: ${PYTHON_DEST}" )
 
-    find_package( PythonLibs )
+    find_package( PythonLibs 2.6 )
 
     #message( STATUS "PYTHON_INCLUDE_DIRS:${PYTHON_INCLUDE_DIRS}" )
 
@@ -558,6 +623,7 @@ add_subdirectory( potrace )
 add_subdirectory( bitmap2component )
 add_subdirectory( pcb_calculator )
 add_subdirectory( tools )
+add_subdirectory( utils )
 add_subdirectory( qa )
 #add_subdirectory( new )
 
@@ -581,17 +647,13 @@ if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 add_dependencies( pcbnew lib-dependencies )
 add_dependencies( eeschema lib-dependencies )
 add_dependencies( cvpcb lib-dependencies )
-add_dependencies( gal lib-dependencies )
 add_dependencies( common lib-dependencies )
+add_dependencies( gal lib-dependencies )
 add_dependencies( pcbcommon lib-dependencies )
 add_dependencies( 3d-viewer lib-dependencies )
 add_dependencies( pcad2kicadpcb lib-dependencies )
-add_dependencies( polygon lib-dependencies )
 add_dependencies( pl_editor lib-dependencies )
 add_dependencies( pnsrouter lib-dependencies )
-    if ( BUILD_GITHUB_PLUGIN )
-    add_dependencies( github_plugin lib-dependencies )
-    endif()
 endif()
 
 if ( KICAD_BUILD_DYNAMIC )

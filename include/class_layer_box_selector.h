@@ -5,7 +5,7 @@
 #include <colors.h>     // EDA_COLOR_T definition
 #include <layers_id_colors_and_visibility.h>
 
-class EDA_HOTKEY_CONFIG;
+struct EDA_HOTKEY_CONFIG;
 
 /* Basic class to build a layer list.
  * this is an basic abstract class to build a layer list selector.

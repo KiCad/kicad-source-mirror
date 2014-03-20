@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// OpenGL Mathematics Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+// OpenGL Mathematics Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2006-11-02
 // Updated : 2009-02-19
@@ -205,7 +205,11 @@ namespace glm
 			return detail::tmat4x4<T>(T(1));
 
 		detail::tvec3<T> RotationAxis = cross(Up, Normal);
-		T Angle = degrees(acos(dot(Normal, Up)));
+#		ifdef GLM_FORCE_RADIANS
+			T Angle = acos(dot(Normal, Up));
+#		else
+			T Angle = degrees(acos(dot(Normal, Up)));
+#		endif
 		return rotate(Angle, RotationAxis);
 	}
 }//namespace glm

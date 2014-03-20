@@ -129,8 +129,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     // menu Config
 
     /* Tom's hacks start */
-    EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
-    EVT_TOOL ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_MENU ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_TOOL ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     /* Tom's hacks end */
@@ -142,6 +140,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
                     PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( wxID_PREFERENCES, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_LAYERS_SETUP, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_MASK_CLEARANCE, PCB_EDIT_FRAME::Process_Config )
@@ -293,6 +292,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
                          PCB_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SHOW_ZONES, ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY,
                          PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle )
+    EVT_UPDATE_UI_RANGE( ID_PCB_MUWAVE_START_CMD, ID_PCB_MUWAVE_END_CMD,
+                         PCB_EDIT_FRAME::OnUpdateMuWaveToolbar )
 END_EVENT_TABLE()
 
 
@@ -330,16 +331,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_Macros[i].m_Record.clear();
 
     SetBoard( new BOARD() );
-
-    if( GetGalCanvas() )
-    {
-        ViewReloadBoard( m_Pcb );
-
-        // update the tool manager with the new board and its view.
-        if( m_toolManager )
-            m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                           GetGalCanvas()->GetViewControls(), this );
-    }
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
 
@@ -509,8 +500,11 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
         // update the tool manager with the new board and its view.
         if( m_toolManager )
+        {
             m_toolManager->SetEnvironment( aBoard, GetGalCanvas()->GetView(),
                                            GetGalCanvas()->GetViewControls(), this );
+            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+        }
     }
 }
 
@@ -571,27 +565,22 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
         view->Add( zone );
     }
 
-    // Add an entry for the worksheet layout
-    KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM(
-                                            std::string( aBoard->GetFileName().mb_str() ),
-                                            std::string( GetScreenDesc().mb_str() ),
-                                            &GetPageSettings(), &GetTitleBlock() );
+    KIGFX::WORKSHEET_VIEWITEM* worksheet = aBoard->GetWorksheetViewItem();
+    worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
+
     BASE_SCREEN* screen = GetScreen();
+
     if( screen != NULL )
     {
-        worksheet->SetSheetNumber( GetScreen()->m_ScreenNumber );
-        worksheet->SetSheetCount( GetScreen()->m_NumberOfScreens );
+        worksheet->SetSheetNumber( screen->m_ScreenNumber );
+        worksheet->SetSheetCount( screen->m_NumberOfScreens );
     }
 
     view->Add( worksheet );
+    view->Add( aBoard->GetRatsnestViewItem() );
 
-    // Add an entry for the ratsnest
-    RN_DATA* ratsnest = aBoard->GetRatsnest();
-    ratsnest->ProcessBoard();
-    ratsnest->Recalculate();
-    view->Add( new KIGFX::RATSNEST_VIEWITEM( ratsnest ) );
-
-    view->SetPanBoundary( worksheet->ViewBBox() );
+    // Limit panning to the size of worksheet frame
+    view->SetPanBoundary( aBoard->GetWorksheetViewItem()->ViewBBox() );
     view->RecacheAllItems( true );
 
     if( IsGalCanvasActive() )
@@ -714,10 +703,17 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
 
-    m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                    GetGalCanvas()->GetViewControls(), this );
-
     ViewReloadBoard( m_Pcb );
+
+    if( aEnable )
+    {
+        // Update potential changes in the ratsnest
+        m_Pcb->GetRatsnest()->Recalculate();
+
+        m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
+                                       GetGalCanvas()->GetViewControls(), this );
+        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+    }
 }
 
 
@@ -875,7 +871,7 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
         LAYER_NUM layers[] = {
                 GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
-                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
                 ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE )
         };
 
@@ -886,12 +882,12 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
         if( aLayer == FIRST_COPPER_LAYER )
         {
             rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
+            rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
         }
         else if( aLayer == LAST_COPPER_LAYER )
         {
             rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
+            rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
         }
     }
 
@@ -915,7 +911,7 @@ void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
         LAYER_NUM layers[] = {
                 GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
-                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
                 ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE ), DRAW_N
         };
 
@@ -928,12 +924,12 @@ void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
         if( aLayer == FIRST_COPPER_LAYER )
         {
             view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-            view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
+            view->SetTopLayer( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
         }
         else if( aLayer == LAST_COPPER_LAYER )
         {
             view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-            view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
+            view->SetTopLayer( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
         }
     }
 
@@ -973,10 +969,15 @@ void PCB_EDIT_FRAME::syncLayerVisibilities()
     m_Layers->SyncLayerVisibilities();
 
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
+
     // Load layer & elements visibility settings
     for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
     {
         view->SetLayerVisible( i, m_Pcb->IsLayerVisible( i ) );
+
+        // Synchronize netname layers as well
+        if( IsCopperLayer( i ) )
+            view->SetLayerVisible( GetNetnameLayer( i ), m_Pcb->IsLayerVisible( i ) );
     }
 
     for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )
@@ -985,12 +986,10 @@ void PCB_EDIT_FRAME::syncLayerVisibilities()
     }
 
     // Enable some layers that are GAL specific
-    for( LAYER_NUM i = FIRST_NETNAME_LAYER; i < LAST_NETNAME_LAYER; ++i )
-    {
-        view->SetLayerVisible( i, true );
-    }
     view->SetLayerVisible( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), true );
     view->SetLayerVisible( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), true );
+    view->SetLayerVisible( ITEM_GAL_LAYER( WORKSHEET ), true );
+    view->SetLayerVisible( ITEM_GAL_LAYER( GP_OVERLAY ), true );
 }
 
 

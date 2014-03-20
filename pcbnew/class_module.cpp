@@ -728,6 +728,41 @@ EDA_ITEM* MODULE::Clone() const
 }
 
 
+void MODULE::RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction )
+{
+    for( D_PAD* pad = m_Pads.GetFirst(); pad; pad = pad->Next() )
+        aFunction( static_cast<BOARD_ITEM*>( pad ) );
+
+    for( BOARD_ITEM* drawing = m_Drawings.GetFirst(); drawing; drawing = drawing->Next() )
+        aFunction( drawing );
+
+    aFunction( static_cast<BOARD_ITEM*>( m_Reference ) );
+    aFunction( static_cast<BOARD_ITEM*>( m_Value ) );
+}
+
+
+void MODULE::ViewUpdate( int aUpdateFlags )
+{
+    if( !m_view )
+        return;
+
+    // Update pads
+    for( D_PAD* pad = m_Pads.GetFirst(); pad; pad = pad->Next() )
+        m_view->InvalidateItem( pad, aUpdateFlags );
+
+    // Update module's drawing (mostly silkscreen)
+    for( BOARD_ITEM* drawing = m_Drawings.GetFirst(); drawing; drawing = drawing->Next() )
+        m_view->InvalidateItem( drawing, aUpdateFlags );
+
+    // Update module's texts
+    m_view->InvalidateItem( m_Reference, aUpdateFlags );
+    m_view->InvalidateItem( m_Value, aUpdateFlags );
+
+    // Update the module itself
+    m_view->InvalidateItem( this, aUpdateFlags );
+}
+
+
 /* Test for validity of the name in a library of the footprint
  * ( no spaces, dir separators ... )
  * return true if the given name is valid
@@ -799,7 +834,7 @@ void MODULE::Flip( const wxPoint& aCentre )
 
     // Mirror pads to other side of board about the x axis, i.e. vertically.
     for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
-        pad->Flip( m_Pos.y );
+        pad->Flip( m_Pos );
 
     // Mirror reference.
     text = m_Reference;

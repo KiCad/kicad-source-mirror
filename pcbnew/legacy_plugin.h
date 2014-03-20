@@ -44,6 +44,7 @@ class NETCLASSES;
 class ZONE_CONTAINER;
 class DIMENSION;
 class NETINFO_ITEM;
+class NETINFO_MAPPING;
 class TEXTE_MODULE;
 class EDGE_MODULE;
 class TRACK;
@@ -123,6 +124,9 @@ protected:
     wxString        m_field;        ///< reused to stuff MODULE fields.
     int             m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
     LP_CACHE*       m_cache;
+
+    NETINFO_MAPPING*    m_mapping;  ///< mapping for net codes, so only not empty net codes
+                                    ///< are stored with consecutive integers as net codes
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( const PROPERTIES* aProperties );

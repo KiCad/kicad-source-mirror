@@ -36,7 +36,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     NETINFO_ITEM* net = NULL;
 
     if( aUseNetclassValue )
-        net = GetBoard()->FindNet( aTrackItem->GetNet() );
+        net = aTrackItem->GetNet();
 
     initial_width = aTrackItem->GetWidth();
 
@@ -224,7 +224,7 @@ bool PCB_EDIT_FRAME::Change_Net_Tracks_And_Vias_Sizes( int aNetcode, bool aUseNe
 
     for( pt_segm = GetBoard()->m_Track; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
-        if( aNetcode != pt_segm->GetNet() )         // not in net
+        if( aNetcode != pt_segm->GetNetCode() )         // not in net
             continue;
 
         // we have found a item member of the net

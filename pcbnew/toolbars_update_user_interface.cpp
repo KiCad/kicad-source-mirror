@@ -204,6 +204,12 @@ void PCB_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
         aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
+void PCB_EDIT_FRAME::OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent )
+{
+    if( aEvent.GetEventObject() == m_microWaveToolBar )
+        aEvent.Check( GetToolId() == aEvent.GetId() );
+}
+
 
 void PCB_EDIT_FRAME::OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent )
 {

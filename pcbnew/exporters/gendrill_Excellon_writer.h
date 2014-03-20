@@ -60,7 +60,7 @@ public:
  * So we must generate a drill file for each layer pair (adjacent layers)
  * Not plated holes are always through holes, and must be output on a specific drill file
  * because they are drilled after the Pcb process is finished.
-*/
+ */
 class HOLE_INFO
 {
 public:
@@ -74,6 +74,7 @@ public:
     LAYER_NUM m_Hole_Top_Layer;     // hole ending layer (usually front layer):
                                     // m_Hole_First_Layer < m_Hole_Last_Layer
     bool m_Hole_NotPlated;          // hole not plated. Must be in a specific drill file
+
 public:
     HOLE_INFO()
     {
@@ -88,7 +89,7 @@ class DRILL_PRECISION
 {
 public:
     int m_lhs;      // Left digit number (integer value of coordinates)
-    int m_rhs;      // Right digit number (deciam value of coordinates)
+    int m_rhs;      // Right digit number (decimal value of coordinates)
 
 public: DRILL_PRECISION( int l = 2, int r = 4 )
     {
@@ -120,25 +121,28 @@ public:
         SUPPRESS_TRAILING,
         KEEP_ZEROS
     };
-    wxPoint                  m_Offset;          // offset coordinates
-    bool                     m_ShortHeader;     // true to generate the smallest header (strip comments)
+
+    wxPoint                  m_Offset;                  // offset coordinates
+    bool                     m_ShortHeader;             // true to generate the smallest header (strip comments)
 
 private:
     FILE*                    m_file;                    // The output file
     BOARD*                   m_pcb;
-    bool                     m_minimalHeader;           // True to use minimal haeder
+    bool                     m_minimalHeader;           // True to use minimal header
                                                         // in excellon file (strip comments)
     bool                     m_unitsDecimal;            // true = decimal, false = inches
     zeros_fmt                m_zeroFormat;              // the zero format option for output file
-    DRILL_PRECISION          m_precision;               // The current coordinate precision (not used in decimat format)
+    DRILL_PRECISION          m_precision;               // The current coordinate precision (not used in decimal format)
     double                   m_conversionUnits;         // scaling factor to convert the board unites to Excellon units
                                                         // (i.e inches or mm)
     bool                     m_mirror;
-    wxPoint                  m_offset;                  // Drill offset ooordinates
+    wxPoint                  m_offset;                  // Drill offset coordinates
+    bool                     m_mergePTHNPTH;
     std::vector<HOLE_INFO>   m_holeListBuffer;          // Buffer containing holes
     std::vector<DRILL_TOOL>  m_toolListBuffer;          // Buffer containing tools
 
-public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
+public:
+    EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
     {
         m_file = NULL;
         m_pcb  = aPcb;
@@ -146,6 +150,7 @@ public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
         m_conversionUnits = 0.0001;
         m_unitsDecimal    = false;
         m_mirror = false;
+        m_mergePTHNPTH = false;
         m_minimalHeader = false;
     }
 
@@ -156,7 +161,7 @@ public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
 
     /**
      * Return the plot offset (usually the position
-     * of the auxiliaty axis
+     * of the auxiliary axis
      */
     const wxPoint GetOffset() { return m_offset; }
 
@@ -177,11 +182,12 @@ public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
      * @param aMinimalHeader = true to use a minimal header (no comments, no info)
      * @param aOffset = drill coordinates offset
      */
-    void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset )
+    void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset, bool aMergePTHNPTH )
     {
         m_mirror = aMirror;
         m_offset = aOffset;
         m_minimalHeader = aMinimalHeader;
+        m_mergePTHNPTH = aMergePTHNPTH;
     }
 
     /**
@@ -198,16 +204,16 @@ public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
      *       false to created plated holes list (with no NPTH )
      */
     void BuildHolesList( int aFirstLayer, int aLastLayer,
-                           bool aExcludeThroughHoles,
-                           bool aGenerateNPTH_list );
+                         bool aExcludeThroughHoles,
+                         bool aGenerateNPTH_list,
+                         bool aMergePTHNPTH );
 
     int  GetHolesCount() const { return m_holeListBuffer.size(); }
 
     /**
      * Function CreateDrillFile
      * Creates an Excellon drill file
-     * @param aFile = an opened file to write to
-     *   will be closed by CreateDrillFile
+     * @param aFile = an opened file to write to will be closed by CreateDrillFile
      * @return hole count
      */
     int  CreateDrillFile( FILE * aFile );
@@ -218,6 +224,47 @@ public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
      *  for through holes, oblong holes, and for buried vias,
      *  drill values and drill count per layer pair
      *  there is only one report for all drill files even when buried or blinds vias exist
+     *
+     * Here is a sample created by this function:
+     *  Drill report for F:/tmp/interf_u/interf_u.brd
+     *  Created on 04/10/2012 20:48:38
+     *  Selected Drill Unit: Imperial (inches)
+     *
+     *  Drill report for plated through holes :
+     *  T1  0,025"  0,64mm  (88 holes)
+     *  T2  0,031"  0,79mm  (120 holes)
+     *  T3  0,032"  0,81mm  (151 holes)  (with 1 slot)
+     *  T4  0,040"  1,02mm  (43 holes)
+     *  T5  0,079"  2,00mm  (1 hole)  (with 1 slot)
+     *  T6  0,120"  3,05mm  (1 hole)  (with 1 slot)
+     *
+     *  Total plated holes count 404
+     *
+     *
+     *  Drill report for buried and blind vias :
+     *
+     *  Drill report for holes from layer Soudure to layer Interne1 :
+     *
+     *  Total plated holes count 0
+     *
+     *
+     *  Drill report for holes from layer Interne1 to layer Interne2 :
+     *  T1  0,025"  0,64mm  (3 holes)
+     *
+     *  Total plated holes count 3
+     *
+     *
+     *  Drill report for holes from layer Interne2 to layer Composant :
+     *  T1  0,025"  0,64mm  (1 hole)
+     *
+     *  Total plated holes count 1
+     *
+     *
+     *  Drill report for unplated through holes :
+     *  T1  0,120"  3,05mm  (1 hole)  (with 1 slot)
+     *
+     *  Total unplated holes count 1
+     *
      * @param aFullFileName : the name of the file to create
      *  m_unitsDecimal = false tu use inches, true to use mm in report file
      *
@@ -229,16 +276,29 @@ public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
      * Function GenDrillMapFile
      * Plot a map of drill marks for holes.
      * @param aFullFileNameWithoutExt : the full filename of the file to create,
-     *              without extension (will be added accordint ti the format)
-     * @param aSheet : the paper sheet touse for plot
+     *              without extension (will be added according to the format)
+     * @param aSheet : the paper sheet to use for plot
      * @param aFormat : one of the supported plot formats (see enum PlotFormat )
      */
     bool GenDrillMapFile( const wxString& aFullFileNameWithoutExt,
                           const PAGE_INFO& aSheet,
                           PlotFormat aFormat );
 private:
+    /* Print the DRILL file header. The full header is:
+     * M48
+     * ;DRILL file {PCBNEW (2007-11-29-b)} date 17/1/2008-21:02:35
+     * ;FORMAT={ <precision> / absolute / <units> / <numbers format>}
+     * FMAT,2
+     * INCH,TZ
+     */
     void WriteEXCELLONHeader();
+
     void WriteEXCELLONEndOfFile();
+
+    /* Created a line like:
+     * X48000Y19500
+     * According to the selected format
+     */
     void WriteCoordinates( char* aLine, double aCoordX, double aCoordY );
 
     /** Helper function.
@@ -251,8 +311,6 @@ private:
      */
     bool PlotDrillMarks( PLOTTER* aPlotter );
 };
-
-
 
 
 #endif  //  #ifndef _GENDRILL_EXCELLON_WRITER_

@@ -111,7 +111,22 @@ public:
 
     VTBL_ENTRY void SetPdfBrowserName( const wxString& aFileName )  { m_pdf_browser = aFileName; }
 
-    VTBL_ENTRY bool UseSystemPdfBrowser() const                     { return m_pdf_browser.IsEmpty(); }
+    /**
+     * Function UseSystemPdfBrowser
+     * returns true if the PDF browser is the default (system) PDF browser
+     * and false if the PDF browser is the prefered (selected) browser, else
+     * returns false if there is no selected browser
+     */
+    VTBL_ENTRY bool UseSystemPdfBrowser() const
+    {
+        return m_use_system_pdf_browser || m_pdf_browser.IsEmpty();
+    }
+
+    /**
+     * Function ForceSystemPdfBrowser
+     * forces the use of system PDF browser, even if a preferend PDF browser is set.
+     */
+    VTBL_ENTRY void ForceSystemPdfBrowser( bool aFlg ) { m_use_system_pdf_browser = aFlg; }
 
     /**
      * Function SetLanguage
@@ -235,6 +250,9 @@ protected:
 
     /// The current language setting.
     int             m_language_id;
+
+    /// true to use the selected PDF browser, if exists, or false to use the default
+    bool            m_use_system_pdf_browser;
 
     /// Trap all changes in here, simplifies debugging
     void setLanguageId( int aId )       { m_language_id = aId; }

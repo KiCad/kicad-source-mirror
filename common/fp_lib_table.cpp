@@ -776,12 +776,15 @@ bool FP_LIB_TABLE::ConvertFromLegacy( SEARCH_STACK& aSStack, NETLIST& aNetList,
                     wxString uri = cur->rows[i].GetFullURI( true );
 
                     if( wxFileName::GetPathSeparator() == wxChar( '\\' )
-                      && uri.Find( wxChar( '/' ) ) >= 0 )
+                        && uri.Find( wxChar( '/' ) ) >= 0 )
                     {
                         uri.Replace( wxT( "/"), wxT( "\\" ) );
                     }
-
+#ifdef __WINDOWS__
+                    if( uri.CmpNoCase( libPath ) )
+#else
                     if( uri == libPath )
+#endif
                     {
                         libNickname = cur->rows[i].GetNickName();
                         break;
@@ -806,7 +809,6 @@ bool FP_LIB_TABLE::ConvertFromLegacy( SEARCH_STACK& aSStack, NETLIST& aNetList,
             else
             {
                 FPID newFPID = lastFPID;
-
                 newFPID.SetLibNickname( libNickname );
 
                 if( !newFPID.IsValid() )

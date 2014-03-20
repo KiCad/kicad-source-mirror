@@ -63,6 +63,8 @@ typedef int LAYER_NUM;
 #define NB_COPPER_LAYERS        (LAST_COPPER_LAYER - FIRST_COPPER_LAYER + 1)
 
 #define FIRST_NON_COPPER_LAYER  16
+#define FIRST_TECHNICAL_LAYER   16
+#define FIRST_USER_LAYER        24
 #define ADHESIVE_N_BACK         16
 #define ADHESIVE_N_FRONT        17
 #define SOLDERPASTE_N_BACK      18
@@ -77,6 +79,8 @@ typedef int LAYER_NUM;
 #define ECO2_N                  27
 #define EDGE_N                  28
 #define LAST_NON_COPPER_LAYER   28
+#define LAST_TECHNICAL_LAYER    23
+#define LAST_USER_LAYER   27
 #define NB_PCB_LAYERS           (LAST_NON_COPPER_LAYER + 1)
 #define UNUSED_LAYER_29         29
 #define UNUSED_LAYER_30         30
@@ -128,13 +132,16 @@ typedef unsigned LAYER_MSK;
 #define ALL_CU_LAYERS           0x0000FFFF
 #define INTERNAL_CU_LAYERS      0x00007FFE
 #define EXTERNAL_CU_LAYERS      0x00008001
-#define FRONT_AUX_LAYERS       (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT \
+#define FRONT_TECH_LAYERS       (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT \
                                | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT)
-#define BACK_AUX_LAYERS        (SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK \
+#define BACK_TECH_LAYERS        (SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK \
                                | ADHESIVE_LAYER_BACK | SOLDERPASTE_LAYER_BACK)
-#define ALL_AUX_LAYERS         (FRONT_AUX_LAYERS | BACK_AUX_LAYERS)
-#define BACK_LAYERS            (LAYER_BACK | BACK_AUX_LAYERS)
-#define FRONT_LAYERS           (LAYER_FRONT | FRONT_AUX_LAYERS)
+#define ALL_TECH_LAYERS         (FRONT_TECH_LAYERS | BACK_TECH_LAYERS)
+#define BACK_LAYERS            (LAYER_BACK | BACK_TECH_LAYERS)
+#define FRONT_LAYERS           (LAYER_FRONT | FRONT_TECH_LAYERS)
+
+#define ALL_USER_LAYERS         (DRAW_LAYER | COMMENT_LAYER |\
+                                 ECO1_LAYER | ECO2_LAYER )
 
 #define NO_LAYERS               0x00000000
 
@@ -239,8 +246,21 @@ enum PCB_VISIBLE
     PADS_HOLES_VISIBLE,
     VIAS_HOLES_VISIBLE,
 
-    // Netname layers
-    LAYER_1_NETNAMES_VISIBLE,   // Bottom layer
+    WORKSHEET,                  ///< worksheet frame
+    GP_OVERLAY,                 ///< general purpose overlay
+
+    END_PCB_VISIBLE_LIST        // sentinel
+};
+
+/**
+ * Enum NETNAMES_VISIBLE
+ * is a set of layers specific for displaying net names.
+ * Their visiblity is not supposed to be saved in a board file,
+ * they are only to be used by the GAL.
+ */
+enum NETNAMES_VISIBLE
+{
+    LAYER_1_NETNAMES_VISIBLE,   // bottom layer
     LAYER_2_NETNAMES_VISIBLE,
     LAYER_3_NETNAMES_VISIBLE,
     LAYER_4_NETNAMES_VISIBLE,
@@ -255,25 +275,22 @@ enum PCB_VISIBLE
     LAYER_13_NETNAMES_VISIBLE,
     LAYER_14_NETNAMES_VISIBLE,
     LAYER_15_NETNAMES_VISIBLE,
-    LAYER_16_NETNAMES_VISIBLE,  // Top layer
+    LAYER_16_NETNAMES_VISIBLE,  // top layer
+
     PAD_FR_NETNAMES_VISIBLE,
     PAD_BK_NETNAMES_VISIBLE,
     PADS_NETNAMES_VISIBLE,
 
-    WORKSHEET,
-    GP_OVERLAY,                 // General purpose overlay
-
-    END_PCB_VISIBLE_LIST  // sentinel
+    END_NETNAMES_VISIBLE_LIST   // sentinel
 };
 
-#define FIRST_NETNAME_LAYER     ITEM_GAL_LAYER( LAYER_1_NETNAMES_VISIBLE )
-#define LAST_NETNAME_LAYER      ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE )
-
 /// macro for obtaining layer number for specific item (eg. pad or text)
-#define ITEM_GAL_LAYER(layer)	(NB_LAYERS + layer)
+#define ITEM_GAL_LAYER(layer)       (NB_LAYERS + layer)
+
+#define NETNAMES_GAL_LAYER(layer)   (NB_LAYERS + END_PCB_VISIBLE_LIST + layer )
 
 /// number of *all* layers including PCB and item layers
-#define TOTAL_LAYER_COUNT	    128 //(NB_LAYERS + END_PCB_VISIBLE_LIST)
+#define TOTAL_LAYER_COUNT	        (NB_LAYERS + END_PCB_VISIBLE_LIST + END_NETNAMES_VISIBLE_LIST)
 
 /**
  * Function IsValidLayer
@@ -319,8 +336,18 @@ inline bool IsCopperLayer( LAYER_NUM aLayer )
  */
 inline bool IsNonCopperLayer( LAYER_NUM aLayer )
 {
-    return aLayer >= FIRST_NON_COPPER_LAYER
-        && aLayer <= LAST_NON_COPPER_LAYER;
+    return aLayer >= FIRST_NON_COPPER_LAYER && aLayer <= LAST_NON_COPPER_LAYER;
+}
+
+/**
+ * Function IsUserLayer
+ * tests whether a layer is a non copper and a non tech layer
+ * @param aLayer = Layer to test
+ * @return true if aLayer is a user layer
+ */
+inline bool IsUserLayer( LAYER_NUM aLayer )
+{
+    return aLayer >= FIRST_USER_LAYER && aLayer <= LAST_USER_LAYER;
 }
 
 /* IMPORTANT: If a layer is not a front layer not necessarily is true
@@ -390,30 +417,28 @@ wxString LayerMaskDescribe( const BOARD *aBoard, LAYER_MSK aMask );
 inline LAYER_NUM GetNetnameLayer( LAYER_NUM aLayer )
 {
     if( IsCopperLayer( aLayer ) )
-    {
-        // Compute the offset in description layers
-        return FIRST_NETNAME_LAYER + ( aLayer - FIRST_COPPER_LAYER );
-    }
+        return NETNAMES_GAL_LAYER( aLayer );
     else if( aLayer == ITEM_GAL_LAYER( PADS_VISIBLE ) )
-        return ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE );
+        return NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE );
     else if( aLayer == ITEM_GAL_LAYER( PAD_FR_VISIBLE ) )
-            return ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
+        return NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
     else if( aLayer == ITEM_GAL_LAYER( PAD_BK_VISIBLE ) )
-            return ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
+        return NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
 
     // Fallback
     return COMMENT_N;
 }
 
 /**
- * Function IsCopperLayer
+ * Function IsNetnameLayer
  * tests whether a layer is a netname layer
  * @param aLayer = Layer to test
  * @return true if aLayer is a valid netname layer
  */
 inline bool IsNetnameLayer( LAYER_NUM aLayer )
 {
-    return aLayer >= FIRST_NETNAME_LAYER && aLayer <= LAST_NETNAME_LAYER;
+    return aLayer >= NETNAMES_GAL_LAYER( LAYER_1_NETNAMES_VISIBLE ) &&
+           aLayer < NETNAMES_GAL_LAYER( END_NETNAMES_VISIBLE_LIST );
 }
 
 #endif // _LAYERS_ID_AND_VISIBILITY_H_

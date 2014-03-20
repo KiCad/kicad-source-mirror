@@ -214,13 +214,13 @@ void D_PAD::SetOrientation( double aAngle )
 }
 
 
-void D_PAD::Flip( int aTranslationY )
+void D_PAD::Flip( const wxPoint& aCentre )
 {
-    int y = GetPosition().y - aTranslationY;
+    int y = GetPosition().y - aCentre.y;
 
     y = -y;         // invert about x axis.
 
-    y += aTranslationY;
+    y += aCentre.y;
 
     SetY( y );
 
@@ -364,13 +364,6 @@ void D_PAD::SetPadName( const wxString& name )
 }
 
 
-void D_PAD::SetNetname( const wxString& aNetname )
-{
-    m_Netname = aNetname;
-    m_ShortNetname = m_Netname.AfterLast( '/' );
-}
-
-
 void D_PAD::Copy( D_PAD* source )
 {
     if( source == NULL )
@@ -380,7 +373,7 @@ void D_PAD::Copy( D_PAD* source )
     m_layerMask = source->m_layerMask;
 
     m_NumPadName = source->m_NumPadName;
-    SetNet( source->GetNet() );
+    m_netinfo = source->m_netinfo;
     m_Drill = source->m_Drill;
     m_drillShape = source->m_drillShape;
     m_Offset     = source->m_Offset;
@@ -402,8 +395,6 @@ void D_PAD::Copy( D_PAD* source )
 
     SetSubRatsnest( 0 );
     SetSubNet( 0 );
-    m_Netname = source->m_Netname;
-    m_ShortNetname = source->m_ShortNetname;
 }
 
 
@@ -412,7 +403,7 @@ void D_PAD::CopyNetlistSettings( D_PAD* aPad )
     // Don't do anything foolish like trying to copy to yourself.
     wxCHECK_RET( aPad != NULL && aPad != this, wxT( "Cannot copy to NULL or yourself." ) );
 
-    aPad->SetNetname( GetNetname() );
+    aPad->SetNetCode( GetNetCode() );
 
     aPad->SetLocalClearance( m_LocalClearance );
     aPad->SetLocalSolderMaskMargin( m_LocalSolderMaskMargin );
@@ -577,7 +568,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), Line, BROWN ) );
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Net" ), m_Netname, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Net" ), GetNetname(), DARKCYAN ) );
 
     /* For test and debug only: display m_physical_connexion and
      * m_logical_connexion */
@@ -841,30 +832,41 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     {
         // Multi layer pad
         aLayers[aCount++] = ITEM_GAL_LAYER( PADS_VISIBLE );
-        aLayers[aCount++] = ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE );
-        aLayers[aCount++] = SOLDERMASK_N_FRONT;
-        aLayers[aCount++] = SOLDERMASK_N_BACK;
-        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
-        aLayers[aCount++] = SOLDERPASTE_N_BACK;
+        aLayers[aCount++] = NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE );
     }
     else if( IsOnLayer( LAYER_N_FRONT ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
-        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
-        aLayers[aCount++] = SOLDERMASK_N_FRONT;
-        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
+        aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
     }
     else if( IsOnLayer( LAYER_N_BACK ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
-        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
-        aLayers[aCount++] = SOLDERMASK_N_BACK;
-        aLayers[aCount++] = SOLDERPASTE_N_BACK;
+        aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
     }
+
+    if( IsOnLayer( SOLDERMASK_N_FRONT ) )
+        aLayers[aCount++] = SOLDERMASK_N_FRONT;
+
+    if( IsOnLayer( SOLDERMASK_N_BACK ) )
+        aLayers[aCount++] = SOLDERMASK_N_BACK;
+
+    if( IsOnLayer( SOLDERPASTE_N_FRONT ) )
+        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
+
+    if( IsOnLayer( SOLDERPASTE_N_BACK ) )
+        aLayers[aCount++] = SOLDERPASTE_N_BACK;
+
+    if( IsOnLayer( ADHESIVE_N_BACK ) )
+        aLayers[aCount++] = ADHESIVE_N_BACK;
+
+    if( IsOnLayer( ADHESIVE_N_FRONT ) )
+        aLayers[aCount++] = ADHESIVE_N_FRONT;
+
 #ifdef __WXDEBUG__
-    else    // Should not occur
+    if( aCount == 0 )    // Should not occur
     {
-        wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD on layer different than FRONT/BACK") );
+        wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD has no layer") );
     }
 #endif
 }

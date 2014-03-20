@@ -7,10 +7,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2008-2014 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,6 +90,14 @@ DIALOG_MODULE_MODULE_EDITOR::~DIALOG_MODULE_MODULE_EDITOR()
 void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
 {
     SetFocus();
+
+    // Display the default path, given by environment variable KISYS3DMOD
+    wxString default_path;
+    wxGetEnv( wxT( KISYS3DMOD ), &default_path );
+#ifdef __WINDOWS__
+    default_path.Replace( wxT( "/" ), wxT( "\\" ) );
+#endif
+    m_textCtrl3DDefaultPath->SetValue( default_path );
 
     m_lastSelected3DShapeIndex = -1;
 

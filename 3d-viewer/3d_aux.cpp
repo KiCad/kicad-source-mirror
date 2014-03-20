@@ -45,16 +45,11 @@
 #include <info3d_visu.h>
 #include <trackball.h>
 
-// Exported function:
-void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
 
-
-void S3D_MASTER::Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices )
+void S3D_MASTER::ObjectCoordsTo3DUnits( std::vector< S3D_VERTEX >& aVertices )
 {
-    unsigned ii;
-
     /* adjust object scale, rotation and offset position */
-    for( ii = 0; ii < aVertices.size(); ii++ )
+    for( unsigned ii = 0; ii < aVertices.size(); ii++ )
     {
         aVertices[ii].x *= m_MatScale.x;
         aVertices[ii].y *= m_MatScale.y;
@@ -79,7 +74,7 @@ void S3D_MASTER::Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices )
 }
 
 
-void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits )
+void TransfertToGLlist( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits )
 {
     unsigned ii;
     GLfloat ax, ay, az, bx, by, bz, nx, ny, nz, r;
@@ -136,44 +131,6 @@ void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits
     }
 
     glEnd();
-}
-
-
-GLuint EDA_3D_CANVAS::DisplayCubeforTest()
-{
-    GLuint gllist = glGenLists( 1 );
-
-    glNewList( gllist, GL_COMPILE_AND_EXECUTE );
-    /* draw six faces of a cube */
-    glBegin( GL_QUADS );
-    glNormal3f( 0.0F, 0.0F, 1.0F );
-    glVertex3f( 0.5F, 0.5F, 0.5F ); glVertex3f( -0.5F, 0.5F, 0.5F );
-    glVertex3f( -0.5F, -0.5F, 0.5F ); glVertex3f( 0.5F, -0.5F, 0.5F );
-
-    glNormal3f( 0.0F, 0.0F, -1.0F );
-    glVertex3f( -0.5F, -0.5F, -0.5F ); glVertex3f( -0.5F, 0.5F, -0.5F );
-    glVertex3f( 0.5F, 0.5F, -0.5F ); glVertex3f( 0.5F, -0.5F, -0.5F );
-
-    glNormal3f( 0.0F, 1.0F, 0.0F );
-    glVertex3f( 0.5F, 0.5F, 0.5F ); glVertex3f( 0.5F, 0.5F, -0.5F );
-    glVertex3f( -0.5F, 0.5F, -0.5F ); glVertex3f( -0.5F, 0.5F, 0.5F );
-
-    glNormal3f( 0.0F, -1.0F, 0.0F );
-    glVertex3f( -0.5F, -0.5F, -0.5F ); glVertex3f( 0.5F, -0.5F, -0.5F );
-    glVertex3f( 0.5F, -0.5F, 0.5F ); glVertex3f( -0.5F, -0.5F, 0.5F );
-
-    glNormal3f( 1.0F, 0.0F, 0.0F );
-    glVertex3f( 0.5F, 0.5F, 0.5F ); glVertex3f( 0.5F, -0.5F, 0.5F );
-    glVertex3f( 0.5F, -0.5F, -0.5F ); glVertex3f( 0.5F, 0.5F, -0.5F );
-
-    glNormal3f( -1.0F, 0.0F, 0.0F );
-    glVertex3f( -0.5F, -0.5F, -0.5F ); glVertex3f( -0.5F, -0.5F, 0.5F );
-    glVertex3f( -0.5F, 0.5F, 0.5F ); glVertex3f( -0.5F, 0.5F, -0.5F );
-    glEnd();
-
-    glEndList();
-
-    return gllist;
 }
 
 VERTEX_VALUE_CTRL::VERTEX_VALUE_CTRL( wxWindow* aParent, wxBoxSizer* aBoxSizer )

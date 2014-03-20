@@ -303,6 +303,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddArtist(
         new Contributor( wxT( "Fabrizio Tappero" ),     wxT( "fabrizio.tappero@gmail.com" ),    wxT( "New icons by" ),  KiBitmapNew( edit_module_xpm ) ) );
     info.AddArtist(
+        new Contributor( wxT( "Konstantin Baranovskiy" ), wxT( "baranovskiykonstantin@gmail.com" ),    wxT( "New icons by" ),  KiBitmapNew( edit_module_xpm ) ) );
+    info.AddArtist(
         new Contributor( wxT( "Renie Marquet" ),        wxT( "reniemarquet@uol.com.br" ),       wxT( "3D modules by" ), KiBitmapNew( three_d_xpm ) ) );
     info.AddArtist(
         new Contributor( wxT( "Christophe Boschat" ),   wxT( "nox454@hotmail.fr" ),             wxT( "3D modules by" ), KiBitmapNew( three_d_xpm ) ) );

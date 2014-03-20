@@ -52,8 +52,6 @@
   }
 #endif
 
-  using std::list;
-
 
 // Next on TOPOLOGY:
 // - get triangle strips
@@ -102,7 +100,7 @@
 *   - \e CW  - clockwise
 *   - \e 0_orbit, \e 1_orbit and \e 2_orbit: A sequence of darts around
 *     a node, around an edge and in a triangle respectively;
-*     see ttl::get_0_orbit_interior and ttl::get_0_orbit_boundary
+*     see get_0_orbit_interior and get_0_orbit_boundary
 *   - \e arc - In a triangulation an arc is equivalent with an edge
 *
 *   \see 
@@ -115,15 +113,15 @@
 
 namespace ttl {
 
-
+class TriangulationHelper
+{
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  //------------------------------------------------------------------------------------------------
-  // ----------------------------------- Forward declarations -------------------------------------
-  //------------------------------------------------------------------------------------------------
 
-#if ((_MSC_VER > 0) && (_MSC_VER < 1300))
-#else
- 
+public:
+  TriangulationHelper(hed::Triangulation& triang) : triangulation(triang)
+  {
+  }
+
   // Delaunay Triangulation
   // ----------------------
   template<class TraitsType, class DartType, class PointType>
@@ -145,55 +143,55 @@ namespace ttl {
   // Topological and Geometric Queries
   // ---------------------------------
   template<class TraitsType, class PointType, class DartType>
-    bool locateFaceSimplest(const PointType& point, DartType& dart);
+    static bool locateFaceSimplest(const PointType& point, DartType& dart);
 
   template<class TraitsType, class PointType, class DartType>
-    bool locateTriangle(const PointType& point, DartType& dart);
+    static bool locateTriangle(const PointType& point, DartType& dart);
 
   template<class TraitsType, class PointType, class DartType>
-    bool inTriangleSimplest(const PointType& point, const DartType& dart);
+    static bool inTriangleSimplest(const PointType& point, const DartType& dart);
 
   template<class TraitsType, class PointType, class DartType>
-    bool inTriangle(const PointType& point, const DartType& dart);
+    static bool inTriangle(const PointType& point, const DartType& dart);
 
   template<class DartType, class DartListType>
-    void getBoundary(const DartType& dart, DartListType& boundary);
+    static void getBoundary(const DartType& dart, DartListType& boundary);
 
   template<class DartType>
-    bool isBoundaryEdge(const DartType& dart);
+    static bool isBoundaryEdge(const DartType& dart);
 
   template<class DartType>
-    bool isBoundaryFace(const DartType& dart);
+    static bool isBoundaryFace(const DartType& dart);
 
   template<class DartType>
-    bool isBoundaryNode(const DartType& dart);
+    static bool isBoundaryNode(const DartType& dart);
 
   template<class DartType>
-    int getDegreeOfNode(const DartType& dart);
+    static int getDegreeOfNode(const DartType& dart);
 
   template<class DartType, class DartListType>
-    void get_0_orbit_interior(const DartType& dart, DartListType& orbit);
+    static void get_0_orbit_interior(const DartType& dart, DartListType& orbit);
 
   template<class DartType, class DartListType>
-    void get_0_orbit_boundary(const DartType& dart, DartListType& orbit);
+    static void get_0_orbit_boundary(const DartType& dart, DartListType& orbit);
 
   template<class DartType>
-    bool same_0_orbit(const DartType& d1, const DartType& d2);
+    static bool same_0_orbit(const DartType& d1, const DartType& d2);
 
   template<class DartType>
-    bool same_1_orbit(const DartType& d1, const DartType& d2);
+    static bool same_1_orbit(const DartType& d1, const DartType& d2);
 
   template<class DartType>
-    bool same_2_orbit(const DartType& d1, const DartType& d2);
+    static bool same_2_orbit(const DartType& d1, const DartType& d2);
 
   template <class TraitsType, class DartType>
-    bool swappableEdge(const DartType& dart, bool allowDegeneracy = false);
+    static bool swappableEdge(const DartType& dart, bool allowDegeneracy = false);
 
   template<class DartType>
-    void positionAtNextBoundaryEdge(DartType& dart);
+    static void positionAtNextBoundaryEdge(DartType& dart);
 
   template<class TraitsType, class DartType>
-    bool convexBoundary(const DartType& dart);
+    static bool convexBoundary(const DartType& dart);
 
 
   // Utilities for Delaunay Triangulation
@@ -205,7 +203,7 @@ namespace ttl {
     void optimizeDelaunay(DartListType& elist, const typename DartListType::iterator end);
 
   template<class TraitsType, class DartType>
-    bool swapTestDelaunay(const DartType& dart, bool cycling_check = false);
+    bool swapTestDelaunay(const DartType& dart, bool cycling_check = false) const;
 
   template<class TraitsType, class DartType>
     void recSwapDelaunay(DartType& diagonal);
@@ -223,9 +221,29 @@ namespace ttl {
   // Constrained Triangulation
   // -------------------------
   template<class TraitsType, class DartType>
-    DartType insertConstraint(DartType& dstart, DartType& dend, bool optimize_delaunay);
-  
-#endif
+    static DartType insertConstraint(DartType& dstart, DartType& dend, bool optimize_delaunay);
+
+private:
+  hed::Triangulation& triangulation;
+
+  template <class TraitsType, class ForwardIterator, class DartType>
+    void insertNodes(ForwardIterator first, ForwardIterator last, DartType& dart);
+
+  template <class TopologyElementType, class DartType>
+    static bool isMemberOfFace(const TopologyElementType& topologyElement, const DartType& dart);
+
+  template <class TraitsType, class NodeType, class DartType>
+    static bool locateFaceWithNode(const NodeType& node, DartType& dart_iter);
+
+  template <class DartType>
+    static void getAdjacentTriangles(const DartType& dart, DartType& t1, DartType& t2, DartType& t3);
+
+  template <class DartType>
+    static void getNeighborNodes(const DartType& dart, std::list<DartType>& node_list, bool& boundary);
+
+  template <class TraitsType, class DartType>
+    static bool degenerateTriangle(const DartType& dart);
+};
 
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -245,7 +263,7 @@ namespace ttl {
   *   can be created as two triangles forming a rectangle that contains
   *   all the points.
   *   After \c insertNode has been called repeatedly with all the points,
-  *   ttl::removeRectangularBoundary can be called to remove triangles
+  *   removeRectangularBoundary can be called to remove triangles
   *   at the boundary of the triangulation so that the boundary
   *   form the convex hull of the points.
   *
@@ -268,19 +286,19 @@ namespace ttl {
   *    - \ref hed::TTLtraits::splitTriangle "TraitsType::splitTriangle" (DartType&, const PointType&)
   *  
   *   \using
-  *   - ttl::locateTriangle
-  *   - ttl::recSwapDelaunay
+  *   - locateTriangle
+  *   - recSwapDelaunay
   *
   *   \note 
   *   - For efficiency reasons \e dart should be close to the insertion \e point.
   *
   *   \see 
-  *   ttl::removeRectangularBoundary
+  *   removeRectangularBoundary
   */
   template <class TraitsType, class DartType, class PointType>
-    bool insertNode(DartType& dart, PointType& point) {
+    bool TriangulationHelper::insertNode(DartType& dart, PointType& point) {
     
-    bool found = ttl::locateTriangle<TraitsType>(point, dart);
+    bool found = locateTriangle<TraitsType>(point, dart);
     if (!found) {
 #ifdef DEBUG_TTL
       cout << "ERROR: Triangulation::insertNode: NO triangle found. /n";
@@ -289,7 +307,7 @@ namespace ttl {
     }
     
     // ??? can we hide the dart? this is not possible if one triangle only
-    TraitsType::splitTriangle(dart, point);
+    triangulation.splitTriangle(dart, point);
     
     DartType d1 = dart;
     d1.alpha2().alpha1().alpha2().alpha0().alpha1();
@@ -304,14 +322,14 @@ namespace ttl {
     //DartType dsav = d3;
     d3.alpha0().alpha1();
     
-    //if (!TraitsType::fixedEdge(d1) && !ttl::isBoundaryEdge(d1)) {
-    if (!ttl::isBoundaryEdge(d1)) {
+    //if (!TraitsType::fixedEdge(d1) && !isBoundaryEdge(d1)) {
+    if (!isBoundaryEdge(d1)) {
       d1.alpha2();
       recSwapDelaunay<TraitsType>(d1);
     }
     
-    //if (!TraitsType::fixedEdge(d2) && !ttl::isBoundaryEdge(d2)) {
-    if (!ttl::isBoundaryEdge(d2)) {
+    //if (!TraitsType::fixedEdge(d2) && !isBoundaryEdge(d2)) {
+    if (!isBoundaryEdge(d2)) {
       d2.alpha2();
       recSwapDelaunay<TraitsType>(d2);
     }
@@ -319,8 +337,8 @@ namespace ttl {
     // Preserve the incoming dart as output incident to the node and CCW
     //d = dsav.alpha2();
     dart.alpha2();
-    //if (!TraitsType::fixedEdge(d3) && !ttl::isBoundaryEdge(d3)) {
-    if (!ttl::isBoundaryEdge(d3)) {
+    //if (!TraitsType::fixedEdge(d3) && !isBoundaryEdge(d3)) {
+    if (!isBoundaryEdge(d3)) {
       d3.alpha2();
       recSwapDelaunay<TraitsType>(d3);
     }
@@ -332,14 +350,14 @@ namespace ttl {
   //------------------------------------------------------------------------------------------------
   // Private/Hidden function (might change later)
   template <class TraitsType, class ForwardIterator, class DartType>
-    void insertNodes(ForwardIterator first, ForwardIterator last, DartType& dart) {
+    void TriangulationHelper::insertNodes(ForwardIterator first, ForwardIterator last, DartType& dart) {
     
     // Assumes that the dereferenced point objects are pointers.
     // References to the point objects are then passed to TTL.
     
     ForwardIterator it;
     for (it = first; it != last; ++it) {
-      bool status = insertNode<TraitsType>(dart, **it);
+      insertNode<TraitsType>(dart, **it);
     }
   }
 
@@ -355,14 +373,14 @@ namespace ttl {
   *   Output: A CCW dart at the new boundary
   *
   *   \using
-  *   - ttl::removeBoundaryNode
+  *   - removeBoundaryNode
   *
   *   \note
   *   - This function requires that the boundary of the triangulation is
   *     a rectangle with four nodes (one in each corner).
   */
   template <class TraitsType, class DartType>
-    void removeRectangularBoundary(DartType& dart) {
+    void TriangulationHelper::removeRectangularBoundary(DartType& dart) {
     
     DartType d_next = dart;
     DartType d_iter;
@@ -370,8 +388,8 @@ namespace ttl {
     for (int i = 0; i < 4; i++) {
       d_iter = d_next;
       d_next.alpha0();
-      ttl::positionAtNextBoundaryEdge(d_next);
-      ttl::removeBoundaryNode<TraitsType>(d_iter);
+      positionAtNextBoundaryEdge(d_next);
+      removeBoundaryNode<TraitsType>(d_iter);
     }
     
     dart = d_next; // Return a dart at the new boundary
@@ -383,20 +401,20 @@ namespace ttl {
   *   updates the triangulation to be Delaunay.
   *
   *   \using
-  *   - ttl::removeBoundaryNode if \e dart represents a node at the boundary
-  *   - ttl::removeInteriorNode if \e dart represents an interior node
+  *   - removeBoundaryNode if \e dart represents a node at the boundary
+  *   - removeInteriorNode if \e dart represents an interior node
   *
   *   \note 
   *   - The node cannot belong to a fixed (constrained) edge that is not
   *     swappable. (An endless loop is likely to occur in this case).
   */
   template <class TraitsType, class DartType>
-    void removeNode(DartType& dart) {
+    void TriangulationHelper::removeNode(DartType& dart) {
     
-    if (ttl::isBoundaryNode(dart))
-      ttl::removeBoundaryNode<TraitsType>(dart);
+    if (isBoundaryNode(dart))
+      removeBoundaryNode<TraitsType>(dart);
     else
-      ttl::removeInteriorNode<TraitsType>(dart);
+      removeInteriorNode<TraitsType>(dart);
   }
 
 
@@ -405,14 +423,14 @@ namespace ttl {
   *   updates the triangulation to be Delaunay.
   *
   *   \using
-  *   - ttl::swapEdgesAwayFromBoundaryNode
-  *   - ttl::optimizeDelaunay
+  *   - swapEdgesAwayFromBoundaryNode
+  *   - optimizeDelaunay
   *
   *   \require
   *   - \ref hed::TTLtraits::removeBoundaryTriangle "TraitsType::removeBoundaryTriangle" (Dart&)
   */
   template <class TraitsType, class DartType>
-    void removeBoundaryNode(DartType& dart) {
+    void TriangulationHelper::removeBoundaryNode(DartType& dart) {
     
     // ... and update Delaunay
     // - CCW dart must be given (for remove)
@@ -420,13 +438,13 @@ namespace ttl {
     //   we assume that there is not only one triangle left in the triangulation.
         
     // Position at boundary edge and CCW
-    if (!ttl::isBoundaryEdge(dart)) {
+    if (!isBoundaryEdge(dart)) {
       dart.alpha1(); // ensures that next function delivers back a CCW dart (if the given dart is CCW)
-      ttl::positionAtNextBoundaryEdge(dart);
+      positionAtNextBoundaryEdge(dart);
     }
 
-    list<DartType> swapped_edges;
-    ttl::swapEdgesAwayFromBoundaryNode<TraitsType>(dart, swapped_edges);
+    std::list<DartType> swapped_edges;
+    swapEdgesAwayFromBoundaryNode<TraitsType>(dart, swapped_edges);
     
     // Remove boundary triangles and remove the new boundary from the list
     // of swapped edges, see below.
@@ -435,7 +453,7 @@ namespace ttl {
     bool bend = false;
     while (bend == false) {
       dnext.alpha1().alpha2();
-      if (ttl::isBoundaryEdge(dnext))
+      if (isBoundaryEdge(dnext))
         bend = true; // Stop when boundary
       
       // Generic: Also remove the new boundary from the list of swapped edges
@@ -443,20 +461,20 @@ namespace ttl {
       n_bedge.alpha1().alpha0().alpha1().alpha2(); // new boundary edge
       
       // ??? can we avoid find if we do this in swap away?
-      typename list<DartType>::iterator it;
+      typename std::list<DartType>::iterator it;
       it = find(swapped_edges.begin(), swapped_edges.end(), n_bedge);
       
       if (it != swapped_edges.end())
         swapped_edges.erase(it);
       
       // Remove the boundary triangle
-      TraitsType::removeBoundaryTriangle(d_iter);
+      triangulation.removeBoundaryTriangle(d_iter);
       d_iter = dnext;
     }
     
     // Optimize Delaunay
-    typedef list<DartType> DartListType;
-    ttl::optimizeDelaunay<TraitsType, DartType, DartListType>(swapped_edges);
+    typedef std::list<DartType> DartListType;
+    optimizeDelaunay<TraitsType, DartType, DartListType>(swapped_edges);
   }
 
 
@@ -465,8 +483,8 @@ namespace ttl {
   *   updates the triangulation to be Delaunay.
   *
   *   \using
-  *   - ttl::swapEdgesAwayFromInteriorNode
-  *   - ttl::optimizeDelaunay   
+  *   - swapEdgesAwayFromInteriorNode
+  *   - optimizeDelaunay
   *
   *   \require
   *   - \ref hed::TTLtraits::reverse_splitTriangle "TraitsType::reverse_splitTriangle" (Dart&)
@@ -476,7 +494,7 @@ namespace ttl {
   *     swappable. (An endless loop is likely to occur in this case).
   */
   template <class TraitsType, class DartType>
-    void removeInteriorNode(DartType& dart) {
+    void TriangulationHelper::removeInteriorNode(DartType& dart) {
     
     // ... and update to Delaunay.
     // Must allow degeneracy temporarily, see comments in swap edges away
@@ -492,13 +510,13 @@ namespace ttl {
     
     // Assumes dart is counterclockwise
     
-    list<DartType> swapped_edges;
-    ttl::swapEdgesAwayFromInteriorNode<TraitsType>(dart, swapped_edges);
+    std::list<DartType> swapped_edges;
+    swapEdgesAwayFromInteriorNode<TraitsType>(dart, swapped_edges);
     
     // The reverse operation of split triangle:
     // Make one triangle of the three triangles at the node associated with dart
     // TraitsType::
-    TraitsType::reverse_splitTriangle(dart);
+    triangulation.reverse_splitTriangle(dart);
     
     // ???? Not generic yet if we are very strict:
     // When calling unsplit triangle, darts at the three opposite sides may
@@ -511,7 +529,7 @@ namespace ttl {
     // Note the theoretical result: if there are no edges in the list,
     // the triangulation is Delaunay already
     
-    ttl::optimizeDelaunay<TraitsType, DartType>(swapped_edges);
+    optimizeDelaunay<TraitsType, DartType>(swapped_edges);
   }
 
   //@} // End of Delaunay Triangulation Group
@@ -527,7 +545,7 @@ namespace ttl {
   //------------------------------------------------------------------------------------------------
   // Private/Hidden function (might change later)
   template <class TopologyElementType, class DartType>
-    bool isMemberOfFace(const TopologyElementType& topologyElement, const DartType& dart) {
+    bool TriangulationHelper::isMemberOfFace(const TopologyElementType& topologyElement, const DartType& dart) {
     
     // Check if the given topology element (node, edge or face) is a member of the face
     // Assumes:
@@ -547,7 +565,7 @@ namespace ttl {
   //------------------------------------------------------------------------------------------------
   // Private/Hidden function (might change later)
   template <class TraitsType, class NodeType, class DartType>
-    bool locateFaceWithNode(const NodeType& node, DartType& dart_iter) {
+    bool TriangulationHelper::locateFaceWithNode(const NodeType& node, DartType& dart_iter) {
     // Locate a face in the topology structure with the given node as a member
     // Assumes:
     // - TraitsType::orient2d(DartType, DartType, NodeType)
@@ -594,10 +612,10 @@ namespace ttl {
   *     \e regular as explained above.
   *
   *   \see 
-  *   ttl::locateTriangle
+  *   locateTriangle
   */
   template <class TraitsType, class PointType, class DartType>
-    bool locateFaceSimplest(const PointType& point, DartType& dart) {
+    bool TriangulationHelper::locateFaceSimplest(const PointType& point, DartType& dart) {
     // Not degenerate triangles if point is on the extension of the edges
     // But inTriangle may be called in case of true (may update to inFace2)
     // Convex boundary
@@ -660,11 +678,11 @@ namespace ttl {
   *   then the edge associated with \e dart will be at the boundary of the triangulation.
   *    
   *   \using
-  *   - ttl::locateFaceSimplest
-  *   - ttl::inTriangle
+  *   - locateFaceSimplest
+  *   - inTriangle
   */
   template <class TraitsType, class PointType, class DartType>
-    bool locateTriangle(const PointType& point, DartType& dart) {
+    bool TriangulationHelper::locateTriangle(const PointType& point, DartType& dart) {
     // The purpose is to have a fast and stable procedure that
     //  i) avoids concluding that a point is inside a triangle if it is not inside
     // ii) avoids infinite loops
@@ -713,10 +731,10 @@ namespace ttl {
   *   - \ref hed::TTLtraits::orient2d "TraitsType::orient2d" (DartType&, DartType&, PointType&)
   *
   *   \see 
-  *   ttl::inTriangle for a more robust function
+  *   inTriangle for a more robust function
   */
   template <class TraitsType, class PointType, class DartType>
-    bool inTriangleSimplest(const PointType& point, const DartType& dart) {
+    bool TriangulationHelper::inTriangleSimplest(const PointType& point, const DartType& dart) {
     
     // Fast and simple: Do not deal with degenerate faces, i.e., if there is
     // degeneracy, true will be returned if the point is on the extension of the
@@ -757,10 +775,10 @@ namespace ttl {
   *    - \ref hed::TTLtraits::scalarProduct2d "TraitsType::scalarProduct2d" (DartType&, PointType&)
   *
   *   \see 
-  *   ttl::inTriangleSimplest
+  *   inTriangleSimplest
   */
   template <class TraitsType, class PointType, class DartType>
-    bool inTriangle(const PointType& point, const DartType& dart) {
+    bool TriangulationHelper::inTriangle(const PointType& point, const DartType& dart) {
     
     // SHOULD WE INCLUDE A STRATEGY WITH EDGE X e_1 ETC? TO GUARANTEE THAT
     // ONLY ON ONE EDGE? BUT THIS DOES NOT SOLVE PROBLEMS WITH
@@ -841,7 +859,7 @@ namespace ttl {
   //------------------------------------------------------------------------------------------------
   // Private/Hidden function (might change later)
   template <class DartType>
-    void getAdjacentTriangles(const DartType& dart, DartType& t1, DartType& t2, DartType& t3) {
+    void TriangulationHelper::getAdjacentTriangles(const DartType& dart, DartType& t1, DartType& t2, DartType& t3) {
     
     DartType dart_iter = dart;
     
@@ -886,7 +904,7 @@ namespace ttl {
   *   - DartListType::push_back (DartType&)
   */
   template <class DartType, class DartListType>
-    void getBoundary(const DartType& dart, DartListType& boundary) {
+    void TriangulationHelper::getBoundary(const DartType& dart, DartListType& boundary) {
     // assumes the given dart is at the boundary (by edge)
     
     DartType dart_iter(dart);
@@ -932,7 +950,7 @@ namespace ttl {
   *   \endcode
   */
   template <class DartType>
-    bool isBoundaryEdge(const DartType& dart) {
+    bool TriangulationHelper::isBoundaryEdge(const DartType& dart) {
     
     DartType dart_iter = dart;
     if (dart_iter.alpha2() == dart)
@@ -947,7 +965,7 @@ namespace ttl {
   *   the boundary of the triangulation.
   */
   template <class DartType>
-    bool isBoundaryFace(const DartType& dart) {
+    bool TriangulationHelper::isBoundaryFace(const DartType& dart) {
     
     // Strategy: boundary if alpha2(d)=d
     
@@ -976,7 +994,7 @@ namespace ttl {
   *   the boundary of the triangulation.
   */
   template <class DartType>
-    bool isBoundaryNode(const DartType& dart) {
+    bool TriangulationHelper::isBoundaryNode(const DartType& dart) {
     
     // Strategy: boundary if alpha2(d)=d
     
@@ -1009,7 +1027,7 @@ namespace ttl {
   *   the number of edges joining \e V with another node in the triangulation.
   */
   template <class DartType>
-    int getDegreeOfNode(const DartType& dart) {
+    int TriangulationHelper::getDegreeOfNode(const DartType& dart) {
     
     DartType dart_iter(dart);
     DartType dart_prev;
@@ -1069,7 +1087,8 @@ namespace ttl {
 
   // Private/Hidden function
   template <class DartType>
-    void getNeighborNodes(const DartType& dart, std::list<DartType>& node_list, bool& boundary) {
+    void TriangulationHelper::getNeighborNodes(const DartType& dart,
+                                               std::list<DartType>& node_list, bool& boundary) {
     
     DartType dart_iter(dart);
     
@@ -1131,10 +1150,10 @@ namespace ttl {
   *   - DartListType::push_back (DartType&)
   *
   *   \see 
-  *   ttl::get_0_orbit_boundary
+  *   get_0_orbit_boundary
   */
   template <class DartType, class DartListType>
-    void get_0_orbit_interior(const DartType& dart, DartListType& orbit) {
+    void TriangulationHelper::get_0_orbit_interior(const DartType& dart, DartListType& orbit) {
     
     DartType d_iter = dart;
     orbit.push_back(d_iter);
@@ -1165,10 +1184,10 @@ namespace ttl {
   *   - The last dart in the sequence have opposite orientation compared to the others!
   *
   *   \see
-  *   ttl::get_0_orbit_interior
+  *   get_0_orbit_interior
   */
   template <class DartType, class DartListType>
-    void get_0_orbit_boundary(const DartType& dart, DartListType& orbit) {
+    void TriangulationHelper::get_0_orbit_boundary(const DartType& dart, DartListType& orbit) {
     
     DartType dart_prev;
     DartType d_iter = dart;
@@ -1195,17 +1214,17 @@ namespace ttl {
   *   own version.)
   */
   template <class DartType>
-    bool same_0_orbit(const DartType& d1, const DartType& d2) {
+    bool TriangulationHelper::same_0_orbit(const DartType& d1, const DartType& d2) {
     
     // Two copies of the same dart
     DartType d_iter = d2;
     DartType d_end = d2;
     
-    if (ttl::isBoundaryNode(d_iter)) {
+    if (isBoundaryNode(d_iter)) {
       // position at both boundary edges
-      ttl::positionAtNextBoundaryEdge(d_iter);
+      positionAtNextBoundaryEdge(d_iter);
       d_end.alpha1();
-      ttl::positionAtNextBoundaryEdge(d_end);
+      positionAtNextBoundaryEdge(d_end);
     }
     
     for (;;) {
@@ -1229,7 +1248,7 @@ namespace ttl {
   *   \e d1 and/or \e d2 can be CCW or CW.
   */
   template <class DartType>
-    bool same_1_orbit(const DartType& d1, const DartType& d2) {
+    bool TriangulationHelper::same_1_orbit(const DartType& d1, const DartType& d2) {
     
     DartType d_iter = d2;
     // (Also works at the boundary)
@@ -1245,7 +1264,7 @@ namespace ttl {
   *   \e d1 and/or \e d2 can be CCW or CW
   */
   template <class DartType>
-    bool same_2_orbit(const DartType& d1, const DartType& d2) {
+    bool TriangulationHelper::same_2_orbit(const DartType& d1, const DartType& d2) {
     
     DartType d_iter = d2;
     if (d_iter == d1 || d_iter.alpha0() == d1 ||
@@ -1259,7 +1278,7 @@ namespace ttl {
   //------------------------------------------------------------------------------------------------
   // Private/Hidden function
   template <class TraitsType, class DartType>
-    bool degenerateTriangle(const DartType& dart) {
+    bool TriangulationHelper::degenerateTriangle(const DartType& dart) {
     
     // Check if triangle is degenerate
     // Assumes CCW dart
@@ -1287,7 +1306,7 @@ namespace ttl {
   *   - \ref hed::TTLtraits::crossProduct2d "TraitsType::crossProduct2d" (Dart&, Dart&)
   */
   template <class TraitsType, class DartType>
-    bool swappableEdge(const DartType& dart, bool allowDegeneracy) {
+    bool TriangulationHelper::swappableEdge(const DartType& dart, bool allowDegeneracy) {
     
     // How "safe" is it?
     
@@ -1340,7 +1359,7 @@ namespace ttl {
   *     infinit loop occurs.
   */
   template <class DartType>
-    void positionAtNextBoundaryEdge(DartType& dart) {
+    void TriangulationHelper::positionAtNextBoundaryEdge(DartType& dart) {
     
     DartType dart_prev;
     
@@ -1365,14 +1384,14 @@ namespace ttl {
   *   - \ref hed::TTLtraits::crossProduct2d "TraitsType::crossProduct2d" (const Dart&, const Dart&)
   */
   template <class TraitsType, class DartType>
-    bool convexBoundary(const DartType& dart) {
+    bool TriangulationHelper::convexBoundary(const DartType& dart) {
     
-    list<DartType> blist;
-    ttl::getBoundary(dart, blist);
+    std::list<DartType> blist;
+    getBoundary(dart, blist);
     
     int no;
     no = (int)blist.size();
-    typename list<DartType>::const_iterator bit = blist.begin();
+    typename std::list<DartType>::const_iterator bit = blist.begin();
     DartType d1 = *bit;
     ++bit;
     DartType d2;
@@ -1428,17 +1447,17 @@ namespace ttl {
   *     seen if it was glued to the edge when swapping (rotating) the edge CCW
   *
   *   \using
-  *   - ttl::swapTestDelaunay
+  *   - swapTestDelaunay
   */
   template <class TraitsType, class DartType, class DartListType>
-    void optimizeDelaunay(DartListType& elist) {
+    void TriangulationHelper::optimizeDelaunay(DartListType& elist) {
       optimizeDelaunay<TraitsType, DartType, DartListType>(elist, elist.end());
   }
 
 
   //------------------------------------------------------------------------------------------------
   template <class TraitsType, class DartType, class DartListType>
-    void optimizeDelaunay(DartListType& elist, const typename DartListType::iterator end) {
+    void TriangulationHelper::optimizeDelaunay(DartListType& elist, const typename DartListType::iterator end) {
     
     // CCW darts
     // Optimize here means Delaunay, but could be any criterion by
@@ -1481,14 +1500,14 @@ namespace ttl {
     while(!optimal) {
       optimal = true;
       for (it = elist.begin(); it != end_opt; ++it) {
-        if (ttl::swapTestDelaunay<TraitsType>(*it, cycling_check)) {
+        if (swapTestDelaunay<TraitsType>(*it, cycling_check)) {
 
           // Preserve darts. Potential darts in the list are:
           // - The current dart
           // - the four CCW darts on the boundary of the quadrilateral
           // (the current arc has only one dart)
           
-          ttl::swapEdgeInList<TraitsType, DartType>(it, elist);
+          swapEdgeInList<TraitsType, DartType>(it, elist);
           
           optimal = false;
         } // end if should swap
@@ -1513,9 +1532,9 @@ namespace ttl {
   */
   template <class TraitsType, class DartType>
 #if ((_MSC_VER > 0) && (_MSC_VER < 1300))//#ifdef _MSC_VER
-    bool swapTestDelaunay(const DartType& dart, bool cycling_check = false) {
+    bool TriangulationHelper::swapTestDelaunay(const DartType& dart, bool cycling_check = false) const {
 #else
-    bool swapTestDelaunay(const DartType& dart, bool cycling_check) {
+    bool TriangulationHelper::swapTestDelaunay(const DartType& dart, bool cycling_check) const {
 #endif
     
     // The general strategy is taken from Cline & Renka. They claim that
@@ -1627,17 +1646,17 @@ namespace ttl {
   *   - Calls itself recursively
   */
   template <class TraitsType, class DartType>
-    void recSwapDelaunay(DartType& diagonal) {
+    void TriangulationHelper::recSwapDelaunay(DartType& diagonal) {
 
-    if (!ttl::swapTestDelaunay<TraitsType>(diagonal))
-      // ??? ttl::swapTestDelaunay also checks if boundary, so this can be optimized
+    if (!swapTestDelaunay<TraitsType>(diagonal))
+      // ??? swapTestDelaunay also checks if boundary, so this can be optimized
       return;
     
     // Get the other "edges" of the current triangle; see illustration above.
     DartType oppEdge1 = diagonal;    
     oppEdge1.alpha1();
     bool b1;
-    if (ttl::isBoundaryEdge(oppEdge1))
+    if (isBoundaryEdge(oppEdge1))
       b1 = true;
     else {
       b1 = false;
@@ -1648,7 +1667,7 @@ namespace ttl {
     DartType oppEdge2 = diagonal;
     oppEdge2.alpha0().alpha1().alpha0();
     bool b2;
-    if (ttl::isBoundaryEdge(oppEdge2))
+    if (isBoundaryEdge(oppEdge2))
       b2 = true;
     else {
       b2 = false;
@@ -1656,7 +1675,7 @@ namespace ttl {
     }
     
     // Swap the given diagonal
-    TraitsType::swapEdge(diagonal);
+    triangulation.swapEdge(diagonal);
     
     if (!b1)
       recSwapDelaunay<TraitsType>(oppEdge1);
@@ -1669,7 +1688,7 @@ namespace ttl {
   /** Swaps edges away from the (interior) node associated with
   *   \e dart such that that exactly three edges remain incident
   *   with the node.
-  *   This function is used as a first step in ttl::removeInteriorNode
+  *   This function is used as a first step in removeInteriorNode
   *   
   *   \retval dart
   *   A CCW dart incident with the node
@@ -1689,10 +1708,10 @@ namespace ttl {
   *     at the node that is given as input.
   *
   *   \see 
-  *   ttl::swapEdgesAwayFromBoundaryNode
+  *   swapEdgesAwayFromBoundaryNode
   */
   template <class TraitsType, class DartType, class ListType>
-    void swapEdgesAwayFromInteriorNode(DartType& dart, ListType& swapped_edges) {
+    void TriangulationHelper::swapEdgesAwayFromInteriorNode(DartType& dart, ListType& swapped_edges) {
     
     // Same iteration as in fixEdgesAtCorner, but not boundary    
     DartType dnext = dart;
@@ -1706,14 +1725,14 @@ namespace ttl {
     // infinite loop with degree > 3.
     bool allowDegeneracy = true;
     
-    int degree = ttl::getDegreeOfNode(dart);
+    int degree = getDegreeOfNode(dart);
     DartType d_iter;
     while (degree > 3) {
       d_iter = dnext;
       dnext.alpha1().alpha2();
       
-      if (ttl::swappableEdge<TraitsType>(d_iter, allowDegeneracy)) {
-        TraitsType::swapEdge(d_iter); // swap the edge away
+      if (swappableEdge<TraitsType>(d_iter, allowDegeneracy)) {
+        triangulation.swapEdge(d_iter); // swap the edge away
         // Collect swapped edges in the list
         // "Hide" the dart on the other side of the edge to avoid it being changed for
         // other swaps
@@ -1733,7 +1752,7 @@ namespace ttl {
   /** Swaps edges away from the (boundary) node associated with
   *   \e dart in such a way that when removing the edges that remain incident
   *   with the node, the boundary of the triangulation will be convex.
-  *   This function is used as a first step in ttl::removeBoundaryNode
+  *   This function is used as a first step in removeBoundaryNode
   *
   *   \retval dart
   *   A CCW dart incident with the node
@@ -1747,10 +1766,10 @@ namespace ttl {
   *   - The node associated with \e dart is at the boundary of the triangulation.
   *
   *   \see 
-  *   ttl::swapEdgesAwayFromInteriorNode
+  *   swapEdgesAwayFromInteriorNode
   */
   template <class TraitsType, class DartType, class ListType>
-    void swapEdgesAwayFromBoundaryNode(DartType& dart, ListType& swapped_edges) {
+    void TriangulationHelper::swapEdgesAwayFromBoundaryNode(DartType& dart, ListType& swapped_edges) {
     
     // All darts that are swappable.
     // To treat collinear nodes at an existing boundary, we must allow degeneracy
@@ -1762,7 +1781,7 @@ namespace ttl {
     // - A dart on the swapped edge is delivered back in a position as
     //   seen if it was glued to the edge when swapping (rotating) the edge CCW
     
-    //int degree = ttl::getDegreeOfNode(dart);
+    //int degree = getDegreeOfNode(dart);
     
 passes:
   
@@ -1780,7 +1799,7 @@ passes:
   while (!bend) {
     
     d_next.alpha1().alpha2();
-    if (ttl::isBoundaryEdge(d_next))
+    if (isBoundaryEdge(d_next))
       bend = true;  // then it is CW since alpha2
     
     // To allow removing among collinear nodes at the boundary,
@@ -1789,13 +1808,13 @@ passes:
     tmp1 = d_iter; tmp1.alpha1();
     tmp2 = d_iter; tmp2.alpha2().alpha1(); // don't bother with boundary (checked later)
     
-    if (ttl::isBoundaryEdge(tmp1) && ttl::isBoundaryEdge(tmp2))
+    if (isBoundaryEdge(tmp1) && isBoundaryEdge(tmp2))
       allowDegeneracy = true;
     else
       allowDegeneracy = false;
     
-    if (ttl::swappableEdge<TraitsType>(d_iter, allowDegeneracy)) {
-      TraitsType::swapEdge(d_iter);
+    if (swappableEdge<TraitsType>(d_iter, allowDegeneracy)) {
+      triangulation.swapEdge(d_iter);
       
       // Collect swapped edges in the list
       // "Hide" the dart on the other side of the edge to avoid it being changed for
@@ -1821,7 +1840,7 @@ passes:
   else {
     d_iter.alpha1(); // CW and see below
   }
-  ttl::positionAtNextBoundaryEdge(d_iter); // CCW 
+  positionAtNextBoundaryEdge(d_iter); // CCW
   
   dart = d_iter; // for next pass or output
   
@@ -1839,7 +1858,7 @@ passes:
   *   keep them in \e elist.
   */
   template <class TraitsType, class DartType, class DartListType>
-    void swapEdgeInList(const typename DartListType::iterator& it, DartListType& elist) {
+    void TriangulationHelper::swapEdgeInList(const typename DartListType::iterator& it, DartListType& elist) {
 
     typename DartListType::iterator it1, it2, it3, it4;
     DartType dart(*it);
@@ -1867,7 +1886,7 @@ passes:
     it3 = find(elist.begin(), elist.end(), d3);
     it4 = find(elist.begin(), elist.end(), d4);
     
-    TraitsType::swapEdge(dart);
+    triangulation.swapEdge(dart);
     // Update the current dart which may have changed
     *it = dart;
     
@@ -1894,14 +1913,5 @@ passes:
   //@} // End of Utilities for Delaunay Triangulation Group
   
 }; // End of ttl namespace scope (but other files may also contain functions for ttl)
-
-
-  //------------------------------------------------------------------------------------------------
-  // ----------------------------- Constrained Triangulation Group --------------------------------
-  //------------------------------------------------------------------------------------------------
-  
-  // Still namespace ttl
-
-#include <ttl/ttl_constr.h>
 
 #endif // _TTL_H_

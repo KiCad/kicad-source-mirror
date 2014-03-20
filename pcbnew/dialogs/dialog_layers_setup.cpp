@@ -176,19 +176,19 @@ static const LAYER_MSK presets[] =
     NO_LAYERS,  // shift the array index up by one, matches with "Custom".
 
     // "Two layers, parts on Front only"
-    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | FRONT_AUX_LAYERS,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | FRONT_TECH_LAYERS,
 
     // "Two layers, parts on Back only",
-    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | BACK_AUX_LAYERS,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | BACK_TECH_LAYERS,
 
     // "Two layers, parts on Front and Back",
-    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | ALL_AUX_LAYERS,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | ALL_TECH_LAYERS,
 
     // "Four layers, parts on Front only"
-    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | LAYER_2 | LAYER_3 | FRONT_AUX_LAYERS,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | LAYER_2 | LAYER_3 | FRONT_TECH_LAYERS,
 
     // "Four layers, parts on Front and Back"
-    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | LAYER_2 | LAYER_3 | ALL_AUX_LAYERS,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | LAYER_2 | LAYER_3 | ALL_TECH_LAYERS,
 
     //  "All layers on",
     ALL_LAYERS,
@@ -294,6 +294,7 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* parent ) :
     m_TitlePanel->SetMinSize( wxSize( -1, m_AdhesFrontName->GetSize().y+10 ) );
 
     Layout();
+    Fit();
 
     Center();
 

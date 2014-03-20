@@ -47,7 +47,7 @@
 
 #include <class_board.h>
 #include <class_board_item.h>
-#include <class_pad.h>
+#include <class_module.h>
 #include <class_track.h>
 #include <ratsnest_data.h>
 #include <layers_id_colors_and_visibility.h>
@@ -66,6 +66,9 @@ public:
         for( unsigned int i = 0; i < aBoard->GetNetCount(); i++ )
         {
             NETINFO_ITEM* ni = aBoard->FindNet( i );
+            if( ni == NULL )
+                continue;
+
             wxString netClassName = ni->GetClassName();
             NETCLASS* nc = aBoard->m_NetClasses.Find( netClassName );
             int clearance = nc->GetClearance();
@@ -94,12 +97,11 @@ private:
 
 PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 {
-    PNS_LAYERSET layers;
+    PNS_LAYERSET layers( 0, 15 );
 
     switch( aPad->GetAttribute() )
     {
     case PAD_STANDARD:
-        layers = PNS_LAYERSET( 0, 15 );
         break;
 
     case PAD_SMD:
@@ -127,7 +129,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
     PNS_SOLID* solid = new PNS_SOLID;
 
     solid->SetLayers( layers );
-    solid->SetNet( aPad->GetNet() );
+    solid->SetNet( aPad->GetNetCode() );
     wxPoint wx_c = aPad->GetPosition();
     wxSize  wx_sz = aPad->GetSize();
 
@@ -178,7 +180,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 PNS_ITEM* PNS_ROUTER::syncTrack( TRACK* aTrack )
 {
     PNS_SEGMENT* s =
-        new PNS_SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNet() );
+        new PNS_SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() );
 
     s->SetWidth( aTrack->GetWidth() );
     s->SetLayers( PNS_LAYERSET( aTrack->GetLayer() ) );
@@ -193,7 +195,7 @@ PNS_ITEM* PNS_ROUTER::syncVia( SEGVIA* aVia )
             aVia->GetPosition(),
             PNS_LAYERSET( 0, 15 ),
             aVia->GetWidth(),
-            aVia->GetNet() );
+            aVia->GetNetCode() );
 
     v->SetParent( aVia );
     return v;
@@ -241,18 +243,21 @@ void PNS_ROUTER::SyncWorld()
 
     ClearWorld();
 
-
     m_clearanceFunc = new PCBNEW_CLEARANCE_FUNC( m_board );
     m_world = new PNS_NODE();
     m_world->SetClearanceFunctor( m_clearanceFunc );
     m_world->SetMaxClearance( 1000000 );    // m_board->GetBiggestClearanceValue());
     pads = m_board->GetPads();
 
-    BOOST_FOREACH( D_PAD * pad, pads ) {
-        PNS_ITEM* solid = syncPad( pad );
+    for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
+    {
+        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+        {
+            PNS_ITEM* solid = syncPad( pad );
 
-        if( solid )
-            m_world->Add( solid );
+            if( solid )
+                m_world->Add( solid );
+        }
     }
 
     for( TRACK* t = m_board->m_Track; t; t = t->Next() )
@@ -263,7 +268,7 @@ void PNS_ROUTER::SyncWorld()
         if( type == PCB_TRACE_T )
             item = syncTrack( t );
         else if( type == PCB_VIA_T )
-            item = syncVia( static_cast <SEGVIA*>(t) );
+            item = syncVia( static_cast<SEGVIA*>( t ) );
 
         if( item )
             m_world->Add( item );
@@ -319,6 +324,9 @@ PNS_ROUTER::~PNS_ROUTER()
 {
     ClearWorld();
     theRouter = NULL;
+
+    if( m_previewItems )
+        delete m_previewItems;
 }
 
 
@@ -459,9 +467,10 @@ void PNS_ROUTER::EraseView()
     }
 
     if( m_previewItems )
+    {
         m_previewItems->FreeItems();
-
-    m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    }
 }
 
 
@@ -576,18 +585,19 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
 
     for( unsigned int i = 0; i < removed.size(); i++ )
     {
-        BOARD_ITEM* parent = removed[i]->GetParent();
+        BOARD_CONNECTED_ITEM* parent = removed[i]->GetParent();
 
         if( parent )
         {
-            m_view->Remove( parent );
+            m_undoBuffer.PushItem( ITEM_PICKER( parent, UR_DELETED ) );
             m_board->Remove( parent );
+            m_view->Remove( parent );
         }
     }
 
     BOOST_FOREACH( PNS_ITEM* item, added )
     {
-        BOARD_ITEM* newBI = NULL;
+        BOARD_CONNECTED_ITEM* newBI = NULL;
 
         switch( item->GetKind() )
         {
@@ -601,7 +611,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
                 track->SetEnd( wxPoint( s.B.x, s.B.y ) );
                 track->SetWidth( seg->GetWidth() );
                 track->SetLayer( seg->GetLayers().Start() );
-                track->SetNet( seg->GetNet() );
+                track->SetNetCode( seg->GetNet() );
                 newBI = track;
                 break;
             }
@@ -612,7 +622,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
                 PNS_VIA* via = static_cast<PNS_VIA*>( item );
                 via_board->SetPosition( wxPoint( via->GetPos().x, via->GetPos().y ) );
                 via_board->SetWidth( via->GetDiameter() );
-                via_board->SetNet( via->GetNet() );
+                via_board->SetNetCode( via->GetNet() );
                 newBI = via_board;
                 break;
             }
@@ -627,7 +637,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
             newBI->ClearFlags();
             m_view->Add( newBI );
             m_board->Add( newBI );
-            m_board->GetRatsnest()->Update( static_cast<BOARD_CONNECTED_ITEM*>( newBI ) );
+            m_undoBuffer.PushItem( ITEM_PICKER( newBI, UR_NEW ) );
             newBI->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
     }
@@ -754,13 +764,12 @@ bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 
 void PNS_ROUTER::StopRouting()
 {
+    // Update the ratsnest with new changes
+    m_board->GetRatsnest()->Recalculate( m_currentNet );
+
     if( !RoutingInProgress() )
         return;
 
-    // highlightCurrent(false);
-
-    // Update the ratsnest
-    m_board->GetRatsnest()->Recalculate( m_currentNet );
     EraseView();
 
     m_state = IDLE;

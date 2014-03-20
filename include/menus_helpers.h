@@ -3,6 +3,29 @@
  * @brief Usefull macros and inline functions to create menus items
  * in menubars or popup menus
  */
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004-2014 KiCad Developers.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 
 #include <bitmaps.h>
 
@@ -13,7 +36,7 @@
  * @param aImage is the image to add the menu item.
  */
 #if defined( USE_IMAGES_IN_MENUS ) && defined(  __WINDOWS__ )
-#  define SETBITMAPS( aImage ) item->SetBitmaps( KiBitmap( apply_xpm ), KiBitmap( aImage ) )
+#  define SETBITMAPS( aImage ) item->SetBitmaps( KiBitmap( checked_ok_xpm ), KiBitmap( aImage ) )
 #else
 #  define SETBITMAPS( aImage )
 #endif
@@ -55,7 +78,11 @@ static inline wxMenuItem* AddMenuItem( wxMenu*          aMenu,
     if( aType == wxITEM_CHECK )
     {
 #if defined( USE_IMAGES_IN_MENUS ) && defined(  __WINDOWS__ )
-        item->SetBitmaps( KiBitmap( apply_xpm ), aImage );
+        item->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
+        // A workaround to a strange bug on Windows, wx Widgets 3.0:
+        // size of bitmaps is not taken in account for wxITEM_CHECK menu
+        // unless we call SetFont
+        item->SetFont(*wxNORMAL_FONT);
 #endif
     }
     else
@@ -96,7 +123,11 @@ static inline wxMenuItem* AddMenuItem( wxMenu*          aMenu,
     if( aType == wxITEM_CHECK )
     {
 #if defined( USE_IMAGES_IN_MENUS ) && defined(  __WINDOWS__ )
-        item->SetBitmaps( KiBitmap( apply_xpm ), aImage );
+        item->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
+        // A workaround to a strange bug on Windows, wx Widgets 3.0:
+        // size of bitmaps is not taken in account for wxITEM_CHECK menu
+        // unless we call SetFont
+        item->SetFont(*wxNORMAL_FONT);
 #endif
     }
     else

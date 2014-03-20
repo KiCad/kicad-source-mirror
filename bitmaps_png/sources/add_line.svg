@@ -11,16 +11,17 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.1 r9760"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="add_line.svg">
   <metadata
-     id="metadata33">
+     id="metadata29">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -33,73 +34,33 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="876"
-     id="namedview31"
+     inkscape:window-width="1301"
+     inkscape:window-height="744"
+     id="namedview27"
      showgrid="true"
-     inkscape:zoom="19.666667"
-     inkscape:cx="6.1146086"
-     inkscape:cy="13.986"
-     inkscape:window-x="0"
+     inkscape:zoom="22.961538"
+     inkscape:cx="13"
+     inkscape:cy="13"
+     inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
-     inkscape:snap-grids="false"
-     inkscape:snap-to-guides="false">
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="true">
     <inkscape:grid
        type="xygrid"
-       id="grid2990"
+       id="grid2993"
        empspacing="5"
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true" />
   </sodipodi:namedview>
   <defs
-     id="defs4">
-    <filter
-       id="a"
-       height="1.2015001"
-       width="1.1159"
-       color-interpolation-filters="sRGB"
-       y="-0.10075"
-       x="-0.057925001">
-      <feGaussianBlur
-         stdDeviation="0.88285369"
-         id="feGaussianBlur7" />
-    </filter>
-  </defs>
-  <g
-     transform="matrix(2.4566,0,0,2.2316,-37.589,-61.022)"
-     id="g9">
-    <rect
-       height="16"
-       width="16"
-       y="0"
-       x="0"
-       id="rect11"
-       style="fill-opacity:0" />
-  </g>
-  <g
-     transform="matrix(1.5880707,0,0,1.5072646,1.2179867,1.559322)"
-     id="g13">
-    <rect
-       height="16"
-       width="16"
-       y="0"
-       x="0"
-       id="rect15"
-       style="fill-opacity:0" />
-  </g>
+     id="defs4" />
   <path
-     style="opacity:0.45702999;fill-rule:evenodd;filter:url(#a)"
-     id="path27"
-     d="m -89.671,-7.5642 18.873,-0.02542 0.074,16.365 h 17.632 l -0.13021,4.666 -21.99,-0.03352 -0.13512,-16.298 h -14.324 v -4.6743 z"
-     transform="matrix(0.58697914,0,0,0.76651487,55.760882,12.115519)"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:#007d00;fill-rule:evenodd"
-     id="path29"
-     d="m 1.9178716,4.9856272 11.0780574,-0.019489 0.04342,12.0355398 11.010633,0 -0.07643,3.983339 -14.9415694,-0.02569 -0.07931,-11.9333371 -7.8485674,0.050847 0,-4.0405474 z"
+     style="fill:none;stroke:#008c00;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     d="M 2,24 24,2"
+     id="path3753"
      inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccccccccc" />
+     sodipodi:nodetypes="cc" />
 </svg>

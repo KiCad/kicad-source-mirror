@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="add_circle.svg">
   <metadata
      id="metadata50">
@@ -21,7 +21,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -34,19 +34,21 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="949"
+     inkscape:window-width="1301"
+     inkscape:window-height="744"
      id="namedview48"
      showgrid="true"
-     inkscape:zoom="9.7363166"
-     inkscape:cx="-2.4915072"
-     inkscape:cy="13.221741"
-     inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:zoom="22.961538"
+     inkscape:cx="13"
+     inkscape:cy="13"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      inkscape:snap-to-guides="false"
-     inkscape:snap-grids="false">
+     inkscape:snap-grids="true"
+     showguides="true"
+     inkscape:guide-bbox="true">
     <inkscape:grid
        type="xygrid"
        id="grid3006"
@@ -54,40 +56,47 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="-1.84375,13"
+       id="guide2990" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="13,17.5625"
+       id="guide2992" />
   </sodipodi:namedview>
   <defs
-     id="defs4">
-    <filter
-       inkscape:collect="always"
-       id="filter3840">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.37528901"
-         id="feGaussianBlur3842" />
-    </filter>
-  </defs>
+     id="defs4" />
   <path
      sodipodi:type="arc"
-     style="fill:none;stroke:#1b32ed;stroke-width:0.81547076;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     id="path3925"
-     sodipodi:cx="-2"
-     sodipodi:cy="12.751396"
-     sodipodi:rx="4"
-     sodipodi:ry="4.7513967"
-     d="m 2,12.751396 a 4,4.7513967 0 1 1 -8,0 4,4.7513967 0 1 1 8,0 z"
-     transform="matrix(2.7961827,0,0,2.3084268,18.469812,-16.433455)" />
+     style="fill:none;stroke:#0000c8;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+     id="path2987"
+     sodipodi:cx="13"
+     sodipodi:cy="13"
+     sodipodi:rx="11"
+     sodipodi:ry="11"
+     d="M 24,13 A 11,11 0 1 1 2,13 11,11 0 1 1 24,13 z" />
   <rect
-     style="opacity:0.8203125;fill:#2ac23c;fill-opacity:1;fill-rule:evenodd;stroke:#373737;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     id="rect3776-7-8"
-     width="4.8737268"
-     height="5.0131059"
-     x="18.598602"
-     y="2.576942" />
+     rx="2.5"
+     ry="2.5"
+     y="10.5"
+     x="10.5"
+     height="5.0000005"
+     width="5"
+     id="rect3761"
+     style="fill:#2ac23c;fill-opacity:1;fill-rule:evenodd;stroke:#666666;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <path
+     style="fill:#0000c8;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     d="m -37,0.5 c -6.627417,0 -12,5.372583 -12,12 0,6.627417 5.372583,12 12,12 6.627417,0 12,-5.372583 12,-12 0,-6.627417 -5.372583,-12 -12,-12 z m 0,2 c 5.522847,0 10,4.4771525 10,10 0,5.522847 -4.477153,10 -10,10 -5.522848,0 -10,-4.477153 -10,-10 0,-5.5228475 4.477152,-10 10,-10 z"
+     id="path2994"
+     inkscape:connector-curvature="0" />
   <rect
-     style="opacity:0.8203125;fill:#2ac23c;fill-opacity:1;fill-rule:evenodd;stroke:#373737;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     id="rect3776-7-8-3"
-     width="5.0066752"
-     height="5.000803"
-     x="10.496662"
-     y="10.535907" />
+     style="fill:#2ac23c;fill-opacity:1;fill-rule:evenodd;stroke:#666666;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     id="rect3021"
+     width="5"
+     height="5.0000005"
+     x="18"
+     y="2.9999995"
+     ry="2.5"
+     rx="2.5" />
 </svg>

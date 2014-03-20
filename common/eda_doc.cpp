@@ -20,6 +20,10 @@ void PGM_BASE::ReadPdfBrowserInfos()
 
     wxString browser = m_common_settings->Read( wxT( "PdfBrowserName" ), wxEmptyString );
     SetPdfBrowserName( browser );
+
+    int tmp;
+    m_common_settings->Read( wxT( "UseSystemBrowser" ), &tmp, 0 );
+    m_use_system_pdf_browser = bool( tmp );
 }
 
 
@@ -28,6 +32,7 @@ void PGM_BASE::WritePdfBrowserInfos()
     wxASSERT( m_common_settings );
 
     m_common_settings->Write( wxT( "PdfBrowserName" ), GetPdfBrowserName() );
+    m_common_settings->Write( wxT( "UseSystemBrowser" ), m_use_system_pdf_browser );
 }
 
 

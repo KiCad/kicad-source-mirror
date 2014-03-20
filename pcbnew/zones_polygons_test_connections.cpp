@@ -50,11 +50,11 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );
 // zone size = size of the m_FilledPolysList buffer
 bool sort_areas( const ZONE_CONTAINER* ref, const ZONE_CONTAINER* tst )
 {
-    if( ref->GetNet() == tst->GetNet() )
+    if( ref->GetNetCode() == tst->GetNetCode() )
         return ref->GetFilledPolysList().GetCornersCount() <
                tst->GetFilledPolysList().GetCornersCount();
     else
-        return ref->GetNet() < tst->GetNet();
+        return ref->GetNetCode() < tst->GetNetCode();
 }
 
 /**
@@ -72,14 +72,14 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
         for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
-            if( (aNetcode < 0) || ( aNetcode == pad->GetNet() ) )
+            if( (aNetcode < 0) || ( aNetcode == pad->GetNetCode() ) )
                 pad->SetZoneSubNet( 0 );
     }
 
     // clear .m_ZoneSubnet parameter for tracks and vias
     for( TRACK* track = m_Track;  track;  track = track->Next() )
     {
-        if( (aNetcode < 0) || ( aNetcode == track->GetNet() ) )
+        if( (aNetcode < 0) || ( aNetcode == track->GetNetCode() ) )
             track->SetZoneSubNet( 0 );
     }
 
@@ -93,7 +93,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
         ZONE_CONTAINER* curr_zone = GetArea( index );
         if( !curr_zone->IsOnCopperLayer() )
             continue;
-        if( (aNetcode >= 0) && ( aNetcode != curr_zone->GetNet() ) )
+        if( (aNetcode >= 0) && ( aNetcode != curr_zone->GetNetCode() ) )
             continue;
         if( curr_zone->GetFilledPolysList().GetCornersCount() == 0 )
             continue;
@@ -112,7 +112,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
     {
         ZONE_CONTAINER* curr_zone = zones_candidates[idx];
 
-        int netcode = curr_zone->GetNet();
+        int netcode = curr_zone->GetNetCode();
 
         // Build a list of candidates connected to the net:
         // At this point, layers are not considered, because areas on different layers can
@@ -136,7 +136,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
             TRACK* track = m_Track.GetFirst()->GetStartNetCode( netcode );
             for( ; track; track = track->Next() )
             {
-                if( track->GetNet() != netcode )
+                if( track->GetNetCode() != netcode )
                     break;
                 candidates.push_back( track );
             }
@@ -255,10 +255,10 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb )
         if ( ! curr_zone->IsOnCopperLayer() )
             continue;
 
-        if ( curr_zone->GetNet() <= 0 )
+        if ( curr_zone->GetNetCode() <= 0 )
             continue;
 
-        Merge_SubNets_Connected_By_CopperAreas( aPcb, curr_zone->GetNet() );
+        Merge_SubNets_Connected_By_CopperAreas( aPcb, curr_zone->GetNetCode() );
     }
 }
 
@@ -284,7 +284,7 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
     {
         ZONE_CONTAINER* curr_zone = aPcb->GetArea( index );
 
-        if( aNetcode == curr_zone->GetNet() )
+        if( aNetcode == curr_zone->GetNetCode() )
         {
             found = true;
             break;
@@ -311,7 +311,7 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
     track = aPcb->m_Track.GetFirst()->GetStartNetCode( aNetcode );
     for( ; track; track = track->Next() )
     {
-        if( track->GetNet() != aNetcode )
+        if( track->GetNetCode() != aNetcode )
             break;
         Candidates.push_back( track );
     }
