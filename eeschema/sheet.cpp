@@ -50,10 +50,10 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
     wxString units = GetUnitsLabel( g_UserUnit );
     dlg.SetFileName( aSheet->GetFileName() );
-    dlg.SetFileNameTextSize( ReturnStringFromValue( g_UserUnit, aSheet->GetFileNameSize() ) );
+    dlg.SetFileNameTextSize( StringFromValue( g_UserUnit, aSheet->GetFileNameSize() ) );
     dlg.SetFileNameTextSizeUnits( units );
     dlg.SetSheetName( aSheet->GetName() );
-    dlg.SetSheetNameTextSize( ReturnStringFromValue( g_UserUnit, aSheet->GetSheetNameSize() ) );
+    dlg.SetSheetNameTextSize( StringFromValue( g_UserUnit, aSheet->GetSheetNameSize() ) );
     dlg.SetSheetNameTextSizeUnits( units );
     dlg.SetSheetTimeStamp( wxString::Format( wxT("%8.8lX"),
                            (unsigned long) aSheet->GetTimeStamp() ) );
@@ -213,9 +213,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     else if( loadFromFile )
         aSheet->Load( this );
 
-    aSheet->SetFileNameSize( ReturnValueFromString( g_UserUnit, dlg.GetFileNameTextSize() ) );
+    aSheet->SetFileNameSize( ValueFromString( g_UserUnit, dlg.GetFileNameTextSize() ) );
     aSheet->SetName( dlg.GetSheetName() );
-    aSheet->SetSheetNameSize( ReturnValueFromString( g_UserUnit, dlg.GetSheetNameTextSize() ) );
+    aSheet->SetSheetNameSize( ValueFromString( g_UserUnit, dlg.GetSheetNameTextSize() ) );
 
     if( aSheet->GetName().IsEmpty() )
         aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ), aSheet->GetTimeStamp() ) );

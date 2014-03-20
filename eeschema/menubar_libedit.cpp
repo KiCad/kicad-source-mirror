@@ -28,7 +28,7 @@
  * @brief (Re)Create the main menubar for the component editor frame (LibEdit)
  */
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 
 #include <general.h>
 #include <libeditframe.h>
@@ -239,7 +239,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( palette_xpm ) );
 
     // Language submenu
-    wxGetApp().AddMenuLanguageList( preferencesMenu );
+    Pgm().AddMenuLanguageList( preferencesMenu );
 
     // Hotkey submenu
     AddHotkeyConfigMenu( preferencesMenu );

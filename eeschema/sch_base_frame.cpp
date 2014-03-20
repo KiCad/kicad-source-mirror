@@ -27,24 +27,25 @@
 #include <libeditframe.h>
 #include <base_units.h>
 
-SCH_BASE_FRAME::SCH_BASE_FRAME( wxWindow* aParent,
-                                ID_DRAWFRAME_TYPE aWindowType,
-                                const wxString& aTitle,
-                                const wxPoint& aPosition, const wxSize& aSize,
-                                long aStyle, const wxString & aFrameName ) :
-    EDA_DRAW_FRAME( aParent, aWindowType, aTitle, aPosition, aSize, aStyle, aFrameName )
+
+SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
+        ID_DRAWFRAME_TYPE aWindowType, const wxString& aTitle,
+        const wxPoint& aPosition, const wxSize& aSize, long aStyle,
+        const wxString& aFrameName ) :
+    EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition,
+            aSize, aStyle, aFrameName )
 {
 }
 
 
 void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 {
-    LIB_VIEW_FRAME * viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer();;
+    LIB_VIEW_FRAME* viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer( this );
 
     if( viewlibFrame )
         viewlibFrame->Show( true );
     else
-        new LIB_VIEW_FRAME( this );
+        new LIB_VIEW_FRAME( &Kiway(), this );
 }
 
 

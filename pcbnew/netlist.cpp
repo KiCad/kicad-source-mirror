@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
@@ -172,7 +172,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     MODULE*    module = 0;
     MODULE*    fpOnBoard;
 
-    if( aNetlist.IsEmpty() || m_footprintLibTable->IsEmpty() )
+    if( aNetlist.IsEmpty() || FootprintLibs()->IsEmpty() )
         return;
 
     aNetlist.SortByFPID();

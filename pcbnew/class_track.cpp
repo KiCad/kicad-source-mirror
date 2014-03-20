@@ -215,7 +215,7 @@ wxString SEGVIA::GetSelectMenuText() const
         // say which layers, only two for now
         LAYER_NUM topLayer;
         LAYER_NUM botLayer;
-        ReturnLayerPair( &topLayer, &botLayer );
+        LayerPair( &topLayer, &botLayer );
         text.Printf( format.GetData(), GetChars( ShowWidth() ),
                      GetChars( netname ), GetNetCode(),
                      GetChars( board->GetLayerName( topLayer ) ),
@@ -395,7 +395,7 @@ bool SEGVIA::IsOnLayer( LAYER_NUM layer_number ) const
 {
     LAYER_NUM bottom_layer, top_layer;
 
-    ReturnLayerPair( &top_layer, &bottom_layer );
+    LayerPair( &top_layer, &bottom_layer );
 
     if( bottom_layer <= layer_number && layer_number <= top_layer )
         return true;
@@ -417,8 +417,8 @@ LAYER_MSK TRACK::GetLayerMask() const
 
         LAYER_NUM bottom_layer, top_layer;
 
-        // ReturnLayerPair() knows how layers are stored
-        ( (SEGVIA*) this )->ReturnLayerPair( &top_layer, &bottom_layer );
+        // LayerPair() knows how layers are stored
+        ( (SEGVIA*) this )->LayerPair( &top_layer, &bottom_layer );
 
         LAYER_MSK layermask = NO_LAYERS;
 
@@ -453,7 +453,7 @@ void SEGVIA::SetLayerPair( LAYER_NUM top_layer, LAYER_NUM bottom_layer )
 }
 
 
-void SEGVIA::ReturnLayerPair( LAYER_NUM* top_layer, LAYER_NUM* bottom_layer ) const
+void SEGVIA::LayerPair( LAYER_NUM* top_layer, LAYER_NUM* bottom_layer ) const
 {
     LAYER_NUM b_layer = LAYER_N_BACK;
     LAYER_NUM t_layer = LAYER_N_FRONT;
@@ -922,7 +922,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         int ax = 0, ay = radius, bx = 0, by = drill_radius;
         LAYER_NUM layer_top, layer_bottom;
 
-        ( (SEGVIA*) this )->ReturnLayerPair( &layer_top, &layer_bottom );
+        ( (SEGVIA*) this )->LayerPair( &layer_top, &layer_bottom );
 
         // lines for the top layer
         RotatePoint( &ax, &ay, layer_top * 3600.0 / brd->GetCopperLayerCount( ) );
@@ -1144,7 +1144,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
         SEGVIA* Via = (SEGVIA*) this;
         LAYER_NUM top_layer, bottom_layer;
 
-        Via->ReturnLayerPair( &top_layer, &bottom_layer );
+        Via->LayerPair( &top_layer, &bottom_layer );
         if( board )
             msg = board->GetLayerName( top_layer ) + wxT( "/" )
                 + board->GetLayerName( bottom_layer );

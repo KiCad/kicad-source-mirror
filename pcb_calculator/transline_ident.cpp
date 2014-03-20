@@ -53,7 +53,7 @@ TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
 
 #define TRANSLINE_PRM_KEY wxT( "translineprm%d" )
 
-void TRANSLINE_PRM::ReadConfig( wxConfig* aConfig )
+void TRANSLINE_PRM::ReadConfig( wxConfigBase* aConfig )
 {
     if( m_Id == UNKNOWN_ID || m_Id == DUMMY_PRM )
         return;
@@ -65,7 +65,7 @@ void TRANSLINE_PRM::ReadConfig( wxConfig* aConfig )
 }
 
 
-void TRANSLINE_PRM::WriteConfig( wxConfig* aConfig )
+void TRANSLINE_PRM::WriteConfig( wxConfigBase* aConfig )
 {
     if( m_Id == UNKNOWN_ID || m_Id == DUMMY_PRM )
         return;
@@ -415,7 +415,7 @@ TRANSLINE_IDENT::~TRANSLINE_IDENT()
 }
 
 
-void TRANSLINE_IDENT::ReadConfig( wxConfig* aConfig )
+void TRANSLINE_IDENT::ReadConfig( wxConfigBase* aConfig )
 {
     wxString text = wxString::FromUTF8( m_TLine->m_name );
     aConfig->SetPath( text );
@@ -426,7 +426,7 @@ void TRANSLINE_IDENT::ReadConfig( wxConfig* aConfig )
 }
 
 
-void TRANSLINE_IDENT::WriteConfig( wxConfig* aConfig )
+void TRANSLINE_IDENT::WriteConfig( wxConfigBase* aConfig )
 {
     wxString text = wxString::FromUTF8( m_TLine->m_name );
     aConfig->SetPath( text );

@@ -30,7 +30,7 @@
 #include <pcb_calculator.h>
 #include <attenuator_classes.h>
 
-extern double ReturnDoubleFromString( const wxString& TextValue );
+extern double DoubleFromString( const wxString& TextValue );
 
 // Called on a attenuator selection
 void PCB_CALCULATOR_FRAME::OnAttenuatorSelection( wxCommandEvent& event )
@@ -66,11 +66,11 @@ void PCB_CALCULATOR_FRAME::TransfPanelDataToAttenuator()
     wxString msg;
 
     msg = m_AttValueCtrl->GetValue();
-    m_currAttenuator->m_Attenuation = ReturnDoubleFromString(msg);
+    m_currAttenuator->m_Attenuation = DoubleFromString(msg);
     msg = m_ZinValueCtrl->GetValue();
-    m_currAttenuator->m_Zin = ReturnDoubleFromString(msg);
+    m_currAttenuator->m_Zin = DoubleFromString(msg);
     msg = m_ZoutValueCtrl->GetValue();
-    m_currAttenuator->m_Zout = ReturnDoubleFromString(msg);
+    m_currAttenuator->m_Zout = DoubleFromString(msg);
 }
 
 

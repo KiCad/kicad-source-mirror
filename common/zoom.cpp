@@ -37,7 +37,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
 #include <class_base_screen.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <kicad_device_context.h>
 #include <hotkeys_basic.h>
 #include <menus_helpers.h>

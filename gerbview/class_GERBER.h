@@ -141,7 +141,7 @@ public:
     GERBER_IMAGE( GERBVIEW_FRAME* aParent, int layer );
     virtual ~GERBER_IMAGE();
     void Clear_GERBER_IMAGE();
-    int  ReturnUsedDcodeNumber();
+    int  UsedDcodeNumber();
     virtual void ResetDefaultValues();
 
     /**
@@ -211,8 +211,8 @@ public:
     wxPoint ReadIJCoord( char*& Text );
 
     // functions to read G commands or D commands:
-    int     ReturnGCodeNumber( char*& Text );
-    int     ReturnDCodeNumber( char*& Text );
+    int     GCodeNumber( char*& Text );
+    int     DCodeNumber( char*& Text );
 
     // functions to execute G commands or D commands:
     bool    Execute_G_Command( char*& text, int G_command );

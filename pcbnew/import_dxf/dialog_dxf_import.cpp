@@ -27,7 +27,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <dxf2brd_items.h>
 #include <wxPcbStruct.h>
 #include <convert_from_iu.h>
@@ -44,7 +45,7 @@ class DIALOG_DXF_IMPORT : public DIALOG_DXF_IMPORT_BASE
 {
 private:
     PCB_EDIT_FRAME * m_parent;
-    wxConfig*        m_config;               // Current config
+    wxConfigBase*        m_config;               // Current config
 
     static wxString m_dxfFilename;
     static int m_offsetSelection;
@@ -59,7 +60,7 @@ private:
     // Virtual event handlers
     void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
     void OnOKClick( wxCommandEvent& event );
-	void OnBrowseDxfFiles( wxCommandEvent& event );
+    void OnBrowseDxfFiles( wxCommandEvent& event );
 };
 
 // Static members of DIALOG_DXF_IMPORT, to remember
@@ -73,7 +74,7 @@ DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_EDIT_FRAME* aParent )
     : DIALOG_DXF_IMPORT_BASE(  aParent )
 {
     m_parent = aParent;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
 
     if( m_config )
     {

@@ -1,5 +1,4 @@
-
-set( MAKE_LINK_MAPS false )
+set( MAKE_LINK_MAPS true )
 
 add_definitions( -DPCBNEW )
 add_subdirectory(router)
@@ -20,9 +19,6 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 endif()
 
 
-###
-# Includes
-###
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
@@ -37,9 +33,6 @@ include_directories(
     ${INC_AFTER}
     )
 
-###
-# Sources
-#
 set( PCBNEW_DIALOGS
     dialogs/dialog_block_options_base.cpp
     dialogs/dialog_cleaning_options_base.cpp
@@ -218,7 +211,6 @@ set( PCBNEW_CLASS_SRCS
     onleftclick.cpp
     onrightclick.cpp
     pad_edition_functions.cpp
-    pcbnew.cpp
     pcbnew_config.cpp
     pcbplot.cpp
     plot_board_layers.cpp
@@ -262,22 +254,17 @@ set( PCBNEW_CLASS_SRCS
 
 set( PCBNEW_SRCS ${PCBNEW_AUTOROUTER_SRCS} ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS} )
 
-###
-# We need some extra sources from common
-###
+
+# extra sources from common
 set( PCBNEW_COMMON_SRCS
     ../common/dialogs/dialog_page_settings.cpp
     ../common/base_units.cpp
     )
 
-##
-# Scripting sources
-##
 set( PCBNEW_SCRIPTING_DIALOGS
     dialogs/dialog_scripting_base.cpp
     dialogs/dialog_scripting.cpp
     )
-
 
 set( PCBNEW_SCRIPTING_PYTHON_HELPERS
     ../scripting/wx_python_helpers.cpp
@@ -291,12 +278,9 @@ if( KICAD_SCRIPTING )
         ${PCBNEW_SCRIPTING_DIALOGS}
         pcbnew_wrap.cxx
         ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
-    )
+        )
 endif()
 
-##
-# Scripting build
-##
 
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
@@ -363,7 +347,7 @@ if( BUILD_GITHUB_PLUGIN )
     set( GITHUB_PLUGIN_LIBRARIES github_plugin )
 endif()
 
-if( ( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES ) AND NOT WIN32 AND NOT APPLE )
+if( UNIX AND NOT APPLE )
     list( APPEND PCBNEW_EXTRA_LIBS rt )
 endif()
 
@@ -374,7 +358,14 @@ if( KICAD_SCRIPTING_MODULES )
 
     set( CMAKE_SWIG_FLAGS ${SWIG_FLAGS} )
     set_source_files_properties( scripting/pcbnew.i PROPERTIES CPLUSPLUS ON )
-    swig_add_module( pcbnew python scripting/pcbnew.i ${PCBNEW_SCRIPTING_PYTHON_HELPERS} ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS} )
+    swig_add_module( pcbnew
+        python
+        scripting/pcbnew.i
+        ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
+        pcbnew.cpp
+        ${PCBNEW_SRCS}
+        ${PCBNEW_COMMON_SRCS}
+        )
     swig_link_libraries( pcbnew
         3d-viewer
         pcbcommon
@@ -398,8 +389,8 @@ if( KICAD_SCRIPTING_MODULES )
         )
 
     if( MAKE_LINK_MAPS )
-        # generate a link map with cross reference
-        set_target_properties( _pcbnew PROPERTIES LINK_FLAGS "-Wl,-cref -Wl,-Map=_pcbnew.map" )
+        set_target_properties( _pcbnew PROPERTIES
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.so.map" )
     endif()
 
 endif()
@@ -453,28 +444,19 @@ endif()
 
 
 
-
-###
-# Windows resource file
-###
-if( WIN32 )
-    if( MINGW )
-        # PCBNEW_RESOURCES variable is set by the macro.
-        mingw_resource_compiler( pcbnew )
-    else()
-        set( PCBNEW_RESOURCES pcbnew.rc )
-    endif()
+if( MINGW )
+    # PCBNEW_RESOURCES variable is set by the macro.
+    mingw_resource_compiler( pcbnew )
 endif()
 
-###
-# Set properties for APPLE on pcbnew target
-###
 if( APPLE )
     set( PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns"
-                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew_doc.icns"
-                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew_doc.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
     set( MACOSX_BUNDLE_ICON_FILE pcbnew.icns )
     set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pcbnew )
     set( MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist )
@@ -510,9 +492,6 @@ make_lexer(
     )
 
 
-###
-# subcomponents of pcbnew
-###
 add_subdirectory( pcad2kicadpcb_plugin )
 if( BUILD_GITHUB_PLUGIN )
     add_subdirectory( github )
@@ -520,74 +499,152 @@ if( BUILD_GITHUB_PLUGIN )
 endif()
 
 
-###
-# Create the pcbnew executable
-###
-add_executable( pcbnew WIN32 MACOSX_BUNDLE
-    ${PCBNEW_SRCS}
-    ${PCBNEW_COMMON_SRCS}
-    ${PCBNEW_SCRIPTING_SRCS}
-    ${PCBNEW_RESOURCES}
-    )
+if( USE_KIWAY_DLLS )
+
+    # a very small program launcher for pcbnew_kiface
+    add_executable( pcbnew WIN32 MACOSX_BUNDLE
+        ../common/single_top.cpp
+        ../common/pgm_base.cpp
+        )
+    set_source_files_properties( ../common/single_top.cpp PROPERTIES
+        COMPILE_DEFINITIONS "TOP_FRAME=PCB_FRAME_TYPE;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
+        )
+    target_link_libraries( pcbnew
+        #singletop  # replaces common, giving us restrictive control and link warnings.
+        # There's way too much crap coming in from common yet.
+        common
+        bitmaps
+        ${wxWidgets_LIBRARIES}
+        )
+    if( MAKE_LINK_MAPS )
+        set_target_properties( pcbnew PROPERTIES
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map" )
+    endif()
+
+    # the main pcbnew program, in DSO form.
+    add_library( pcbnew_kiface MODULE
+        pcbnew.cpp
+        ${PCBNEW_SRCS}
+        ${PCBNEW_COMMON_SRCS}
+        ${PCBNEW_SCRIPTING_SRCS}
+        ${PCBNEW_RESOURCES}
+        )
+    set_target_properties( pcbnew_kiface PROPERTIES
+        # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
+        # _pcbnew.so, _pcbnew.dll, or _pcbnew.kiface
+        OUTPUT_NAME     pcbnew
+        PREFIX          ${KIFACE_PREFIX}
+        SUFFIX          ${KIFACE_SUFFIX}
+        )
+    target_link_libraries( pcbnew_kiface
+        3d-viewer
+        pcbcommon
+        pnsrouter
+        common
+        pcad2kicadpcb
+        polygon
+        bitmaps
+        gal
+        lib_dxf
+        ${GITHUB_PLUGIN_LIBRARIES}
+        ${wxWidgets_LIBRARIES}
+        ${OPENGL_LIBRARIES}
+        ${GDI_PLUS_LIBRARIES}
+        ${PYTHON_LIBRARIES}
+        ${GLEW_LIBRARIES}
+        ${CAIRO_LIBRARIES}
+        ${PIXMAN_LIBRARY}
+        ${Boost_LIBRARIES}      # must follow GITHUB
+        ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
+        )
+    set_source_files_properties( pcbnew.cpp PROPERTIES
+        # The KIFACE is in pcbnew.cpp, export it:
+        COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+        )
+    if( MAKE_LINK_MAPS )
+        set_target_properties( pcbnew_kiface PROPERTIES
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pcbnew.kiface.map" )
+    endif()
+
+    # if building pcbnew, then also build pcbnew_kiface if out of date.
+    add_dependencies( pcbnew pcbnew_kiface )
+
+    # these 2 binaries are a matched set, keep them together:
+    install( TARGETS pcbnew
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+    install( TARGETS pcbnew_kiface
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+
+else()  # milestone A) kills this off:
+
+    add_executable( pcbnew WIN32 MACOSX_BUNDLE
+        pcbnew.cpp
+        ${PCBNEW_SRCS}
+        ${PCBNEW_COMMON_SRCS}
+        ${PCBNEW_SCRIPTING_SRCS}
+        ${PCBNEW_RESOURCES}
+        )
+    target_link_libraries( pcbnew
+        3d-viewer
+        pcbcommon
+        pnsrouter
+        common
+        pcad2kicadpcb
+        polygon
+        bitmaps
+        gal
+        lib_dxf
+        ${GITHUB_PLUGIN_LIBRARIES}
+        ${wxWidgets_LIBRARIES}
+        ${OPENGL_LIBRARIES}
+        ${GDI_PLUS_LIBRARIES}
+        ${PYTHON_LIBRARIES}
+        ${GLEW_LIBRARIES}
+        ${CAIRO_LIBRARIES}
+        ${PIXMAN_LIBRARY}
+        ${Boost_LIBRARIES}      # must follow GITHUB
+        ${PCBNEW_EXTRA_LIBS}
+        )
+
+    # Only for win32 cross compilation using MXE
+    if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
+        target_link_libraries( pcbnew
+            opengl32
+            glu32
+            pixman-1
+            fontconfig
+            freetype
+            bz2
+            )
+    endif()
+
+    install( TARGETS pcbnew
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+
+endif()
+
 
 add_dependencies( pcbnew lib-dependencies )
 ###
 # Set properties for APPLE on pcbnew target
 ###
 if( APPLE )
-    set_target_properties( pcbnew PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist )
+    set_target_properties( pcbnew PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist )
 endif()
 
-###
-# Link executable target pcbnew with correct libraries
-###
-
-target_link_libraries( pcbnew
-    3d-viewer
-    pcbcommon
-    pnsrouter
-    common
-    pcad2kicadpcb
-    polygon
-    bitmaps
-    gal
-    lib_dxf
-    ${GITHUB_PLUGIN_LIBRARIES}
-    ${wxWidgets_LIBRARIES}
-    ${OPENGL_LIBRARIES}
-    ${GDI_PLUS_LIBRARIES}
-    ${PYTHON_LIBRARIES}
-    ${PCBNEW_EXTRA_LIBS}
-    ${GLEW_LIBRARIES}
-    ${CAIRO_LIBRARIES}
-    ${PIXMAN_LIBRARY}
-    ${Boost_LIBRARIES}      # must follow GITHUB
-    )
-
-# Only for win32 cross compilation using MXE
-if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
-target_link_libraries( pcbnew
-    opengl32
-    glu32
-    pixman-1
-    fontconfig
-    freetype
-    bz2
-    )
-endif()
 
 if( MAKE_LINK_MAPS )
     # generate a link map with cross reference
-    set_target_properties( pcbnew PROPERTIES LINK_FLAGS "-Wl,-cref -Wl,-Map=pcbnew.map" )
+    set_target_properties( pcbnew PROPERTIES
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map" )
 endif()
-
-
-###
-# Add pcbnew as install target
-###
-install( TARGETS pcbnew
-    DESTINATION ${KICAD_BIN}
-    COMPONENT binary )
 
 
 if( KICAD_SCRIPTING )
@@ -599,7 +656,7 @@ if( KICAD_SCRIPTING )
 
     install( FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST} )
 
-    if( APPLE ) 
+    if( APPLE )
         # copies all into PYTHON_DEST then all into the bundle !
         add_custom_target( _pcbnew_py_copy ALL
             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py "${PYTHON_DEST}/wx-3.0-osx_cocoa/"
@@ -615,10 +672,10 @@ if( KICAD_SCRIPTING )
 
         add_custom_target( pcbnew_copy_plugins ALL
             COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/pcbnew/scripting/plugins ${PROJECT_SOURCE_DIR}/pcbnew/pcbnew.app/Contents/PlugIns/scripting/plugins
-            DEPENDS pcbnew_copy_wxpython_scripting 
+            DEPENDS pcbnew_copy_wxpython_scripting
             COMMENT "Copying plugins into bundle"
         )
- 
+
         # fix bundle after copying wxpython, fixing and copying
         add_dependencies( osx_fix_bundles pcbnew_copy_wxpython_scripting )
 
@@ -640,13 +697,13 @@ if( KICAD_SCRIPTING_MODULES )
 
     install( FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST} )
 
-    if( WIN32 )
+    if( MINGW )
         install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.pyd DESTINATION ${PYTHON_DEST} )
     else()
         install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so DESTINATION ${PYTHON_DEST} )
     endif()
 
-    if( APPLE ) 
+    if( APPLE )
         # copies needed files into PYTHON_DEST then copy all into the bundle !
         add_custom_target( _pcbnew_so_copy ALL
             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so "${PYTHON_DEST}"

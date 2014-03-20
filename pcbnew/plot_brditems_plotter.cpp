@@ -66,7 +66,7 @@ EDA_COLOR_T BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 
 void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, EDA_COLOR_T aColor, EDA_DRAW_MODE_T aPlotMode )
 {
-    wxPoint shape_pos = aPad->ReturnShapePos();
+    wxPoint shape_pos = aPad->ShapePos();
 
     // Set plot color (change WHITE to LIGHTGRAY because
     // the white items are not seen on a white paper or screen

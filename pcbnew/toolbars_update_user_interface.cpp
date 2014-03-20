@@ -30,7 +30,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <3d_viewer.h>

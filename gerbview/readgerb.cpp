@@ -97,13 +97,13 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
                 break;
 
             case 'G':    /* Line type Gxx : command */
-                G_command = gerber->ReturnGCodeNumber( text );
+                G_command = gerber->GCodeNumber( text );
                 gerber->Execute_G_Command( text, G_command );
                 break;
 
             case 'D':       /* Line type Dxx : Tool selection (xx > 0) or
                              * command if xx = 0..9 */
-                D_commande = gerber->ReturnDCodeNumber( text );
+                D_commande = gerber->DCodeNumber( text );
                 gerber->Execute_DCODE_Command( text, D_commande );
                 break;
 

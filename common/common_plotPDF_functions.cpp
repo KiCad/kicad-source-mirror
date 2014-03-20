@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <trigo.h>
 #include <wxstruct.h>
 #include <base_struct.h>

@@ -119,6 +119,49 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 }
 
 
+/**
+ * Function missingLegacyLibs
+ * tests the list of \a aLibNames by URI to determine if any of them are missing from
+ * the #FP_LIB_TABLE.
+ *
+ * @note The missing legacy footprint library test is performed by using old library
+ *       file path lookup method.  If the library is found, it is compared against all
+ *       of the URIs in the table rather than the nickname.  This was done because the
+ *       user could change the nicknames from the default table.  Using the full path
+ *       is more reliable.
+ *
+ * @param aLibNames is the list of legacy library names.
+ * @param aErrorMsg is a pointer to a wxString object to store the URIs of any missing
+ *                  legacy library paths.  Can be NULL.
+ * @return true if there are missing legacy libraries.  Otherwise false.
+ */
+static bool missingLegacyLibs( FP_LIB_TABLE* aTbl, SEARCH_STACK& aSStack,
+        const wxArrayString& aLibNames, wxString* aErrorMsg )
+{
+    bool retv = false;
+
+    for( unsigned i = 0;  i < aLibNames.GetCount();  i++ )
+    {
+        wxFileName  fn( wxEmptyString, aLibNames[i], LegacyFootprintLibPathExtension );
+
+        wxString    legacyLibPath = aSStack.FindValidPath( fn );
+
+        if( legacyLibPath.IsEmpty() )
+            continue;
+
+        if( aTbl->FindRowByURI( legacyLibPath ) == 0 )
+        {
+            retv = true;
+
+            if( aErrorMsg )
+                *aErrorMsg += wxT( "\"" ) + legacyLibPath + wxT( "\"\n" );
+        }
+    }
+
+    return retv;
+}
+
+
 bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
 {
     COMPONENT* component;
@@ -164,7 +207,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
     // Check if footprint links were generated before the footprint library table was implemented.
     if( isLegacy )
     {
-        if( m_footprintLibTable->MissingLegacyLibs( m_ModuleLibNames, &missingLibs ) )
+        if( missingLegacyLibs( FootprintLibs(), Prj().PcbSearchS(), m_ModuleLibNames, &missingLibs ) )
         {
             msg = wxT( "The following legacy libraries are defined in the project file "
                        "were not found in the footprint library table:\n\n" ) + missingLibs;
@@ -188,7 +231,9 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
             msg.Clear();
             WX_STRING_REPORTER reporter( &msg );
 
-            if( !m_footprintLibTable->ConvertFromLegacy( m_netlist, m_ModuleLibNames, &reporter ) )
+            SEARCH_STACK&   search = Prj().SchSearchS();
+
+            if( !FootprintLibs()->ConvertFromLegacy( search, m_netlist, m_ModuleLibNames, &reporter ) )
             {
                 HTML_MESSAGE_BOX dlg( this, wxEmptyString );
 
@@ -270,7 +315,7 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
             fn.SetExt( ComponentFileExtension );
 
         // Save the project specific footprint library table.
-        if( !m_footprintLibTable->IsEmpty( false ) )
+        if( !FootprintLibs()->IsEmpty( false ) )
         {
             wxFileName fpLibFileName = fn;
             fpLibFileName.ClearExt();
@@ -282,9 +327,9 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
             {
                 try
                 {
-                    m_footprintLibTable->Save( fpLibFileName );
+                    FootprintLibs()->Save( fpLibFileName );
                 }
-                catch( IO_ERROR& ioe )
+                catch( const IO_ERROR& ioe )
                 {
                     DisplayError( this,
                                   wxString::Format( _( "An error occurred attempting to save the "

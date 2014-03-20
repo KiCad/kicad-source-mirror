@@ -77,7 +77,7 @@ static void BuildPadShapeThickOutlineAsPolygon( D_PAD*          aPad,
 {
     if( aPad->GetShape() == PAD_CIRCLE )    // Draw a ring
     {
-        TransformRingToPolygon( aCornerBuffer, aPad->ReturnShapePos(),
+        TransformRingToPolygon( aCornerBuffer, aPad->ShapePos(),
                                 aPad->GetSize().x / 2, aCircleToSegmentsCount, aWidth );
         return;
     }
@@ -1053,7 +1053,7 @@ void EDA_3D_CANVAS::Draw3DViaHole( SEGVIA* aVia )
     int         inner_radius    = aVia->GetDrillValue() / 2;
     int         thickness       = g_Parm_3D_Visu.GetCopperThicknessBIU();
 
-    aVia->ReturnLayerPair( &top_layer, &bottom_layer );
+    aVia->LayerPair( &top_layer, &bottom_layer );
 
     // Drawing via hole:
     if( g_Parm_3D_Visu.IsRealisticMode() )

@@ -450,7 +450,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
     int     dy = (m_Size.y / 2) + aClearanceValue;
 
     double  delta = 3600.0 / aCircleToSegmentsCount; // rot angle in 0.1 degree
-    wxPoint PadShapePos = ReturnShapePos();         /* Note: for pad having a shape offset,
+    wxPoint PadShapePos = ShapePos();         /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
     wxSize  psize = m_Size;                         /* pad size unsed in RECT and TRAPEZOIDAL pads
                                                      * trapezoidal pads are considered as rect
@@ -579,7 +579,7 @@ void D_PAD::BuildPadShapePolygon( CPOLYGONS_LIST& aCornerBuffer,
                                   double aCorrectionFactor ) const
 {
     wxPoint corners[4];
-    wxPoint PadShapePos = ReturnShapePos();         /* Note: for pad having a shape offset,
+    wxPoint PadShapePos = ShapePos();         /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
     switch( GetShape() )
     {
@@ -694,8 +694,8 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                        double          aThermalRot )
 {
     wxPoint corner, corner_end;
-    wxPoint PadShapePos = aPad.ReturnShapePos();    /* Note: for pad having a shape offset,
-                                                     * the pad position is NOT the shape position */
+    wxPoint PadShapePos = aPad.ShapePos();      // Note: for pad having a shape offset,
+                                                // the pad position is NOT the shape position
     wxSize  copper_thickness;
 
     int     dx = aPad.GetSize().x / 2;

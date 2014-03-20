@@ -30,7 +30,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -73,7 +73,7 @@ static void MoveMarkedItems( MODULE* module, wxPoint offset );
 static void DeleteMarkedItems( MODULE* module );
 
 
-int FOOTPRINT_EDIT_FRAME::ReturnBlockCommand( int key )
+int FOOTPRINT_EDIT_FRAME::BlockCommand( int key )
 {
     int cmd;
 
@@ -306,7 +306,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
                                      bool aErase )
 {
     BASE_SCREEN*            screen = aPanel->GetScreen();
-    FOOTPRINT_EDIT_FRAME*   moduleEditFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+    FOOTPRINT_EDIT_FRAME*   moduleEditFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor( aPanel->GetParent() );
 
     wxASSERT( moduleEditFrame );
     MODULE* currentModule = moduleEditFrame->GetBoard()->m_Modules;

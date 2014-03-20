@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <wx/tokenzr.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <common.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -43,18 +43,19 @@
 #include <wildcards_and_files_ext.h>
 
 
-DIALOG_CVPCB_CONFIG::DIALOG_CVPCB_CONFIG( CVPCB_MAINFRAME* parent ) :
-    DIALOG_CVPCB_CONFIG_FBP( parent )
+DIALOG_CVPCB_CONFIG::DIALOG_CVPCB_CONFIG( CVPCB_MAINFRAME* aParent ) :
+    DIALOG_CVPCB_CONFIG_FBP( aParent )
 {
-    wxString title;
-    wxFileName fn = parent->m_NetlistFileName;
+    wxString    title;
+    wxFileName  fn = aParent->m_NetlistFileName;
+
     fn.SetExt( ProjectFileExtension );
 
-    m_Parent   = parent;
-    m_Config = wxGetApp().GetCommonSettings();
+    m_Parent = aParent;
+    m_Config = Pgm().CommonSettings();
 
     Init( );
-    title.Format( _( "Project file: <%s>" ), GetChars( fn.GetFullPath() ) );
+    title.Format( _( "Project file: '%s'" ), GetChars( fn.GetFullPath() ) );
     SetTitle( title );
 
     if( GetSizer() )
@@ -93,7 +94,7 @@ void DIALOG_CVPCB_CONFIG::Init()
     }
 
     // Display actual libraries paths:
-    wxPathList libpaths = wxGetApp().GetLibraryPathList();
+    wxPathList libpaths = Pgm().GetLibraryPathList();
 
     for( unsigned ii = 0; ii < libpaths.GetCount(); ii++ )
     {
@@ -112,9 +113,9 @@ void DIALOG_CVPCB_CONFIG::OnCancelClick( wxCommandEvent& event )
     if( m_LibPathChanged )
     {
         for( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii++ )
-            wxGetApp().RemoveLibraryPath( m_listUserPaths->GetString( ii ) );
+            Pgm().RemoveLibraryPath( m_listUserPaths->GetString( ii ) );
 
-        wxGetApp().InsertLibraryPath( m_Parent->m_UserLibraryPath, 1 );
+        Pgm().InsertLibraryPath( m_Parent->m_UserLibraryPath, 1 );
     }
 
     EndModal( wxID_CANCEL );
@@ -295,7 +296,8 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         insert = true;
 
     wildcard = FootprintAliasFileWildcard;
-    wxListBox * list = m_ListEquiv;
+
+    wxListBox* list = m_ListEquiv;
 
     if( (event.GetId() == ID_ADD_LIB) || (event.GetId() == ID_INSERT_LIB) )
     {
@@ -317,7 +319,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
     libpath = m_DefaultLibraryPathslistBox->GetStringSelection();
 
     if( libpath.IsEmpty() )
-        libpath = wxGetApp().ReturnLastVisitedLibraryPath();
+        libpath = Pgm().LastVisitedLibraryPath();
 
     wxFileDialog FilesDialog( this, _( "Footprint library files:" ), libpath,
                               wxEmptyString, wildcard,
@@ -334,7 +336,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         fn = Filenames[jj];
 
         if( jj == 0 )
-            wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
+            Pgm().SaveLastVisitedLibraryPath( fn.GetPath() );
 
         /* If the library path is already in the library search paths
          * list, just add the library name to the list.  Otherwise, add
@@ -343,7 +345,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
          * because it preserve use of default libraries paths, when the path
          * is a sub path of these default paths
          */
-        libfilename = wxGetApp().ReturnFilenameWithRelativePathInLibPath( fn.GetFullPath() );
+        libfilename = Pgm().FilenameWithRelativePathInSearchList( fn.GetFullPath() );
 
         // Remove extension:
         fn = libfilename;
@@ -372,7 +374,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 
 void DIALOG_CVPCB_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
 {
-    wxString path = wxGetApp().ReturnLastVisitedLibraryPath();
+    wxString path = Pgm().LastVisitedLibraryPath();
 
     bool     select = EDA_DirectorySelector( _( "Default Path for Libraries" ),
                                              path,
@@ -416,10 +418,10 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
 
         m_listUserPaths->Insert( path, ipos );
         m_LibPathChanged = true;
-        wxGetApp().InsertLibraryPath( path, ipos + 1 );
+        Pgm().InsertLibraryPath( path, ipos + 1 );
 
         // Display actual libraries paths:
-        wxPathList libpaths = wxGetApp().GetLibraryPathList();
+        wxPathList libpaths = Pgm().GetLibraryPathList();
         m_DefaultLibraryPathslistBox->Clear();
 
         for( unsigned ii = 0; ii < libpaths.GetCount(); ii++ )
@@ -432,7 +434,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
         DisplayError( this, _( "Path already in use" ) );
     }
 
-    wxGetApp().SaveLastVisitedLibraryPath( path );
+    Pgm().SaveLastVisitedLibraryPath( path );
 }
 
 
@@ -445,13 +447,13 @@ void DIALOG_CVPCB_CONFIG::OnRemoveUserPath( wxCommandEvent& event )
 
     if( ii >= 0 )
     {
-        wxGetApp().RemoveLibraryPath( m_listUserPaths->GetStringSelection() );
+        Pgm().RemoveLibraryPath( m_listUserPaths->GetStringSelection() );
         m_listUserPaths->Delete( ii );
         m_LibPathChanged = true;
     }
 
     // Display actual libraries paths:
-    wxPathList libpaths = wxGetApp().GetLibraryPathList();
+    wxPathList libpaths = Pgm().GetLibraryPathList();
     m_DefaultLibraryPathslistBox->Clear();
 
     for( unsigned ii = 0; ii < libpaths.GetCount(); ii++ )
@@ -466,7 +468,7 @@ void DIALOG_CVPCB_CONFIG::OnBrowseModDocFile( wxCommandEvent& event )
     wxString FullFileName;
     wxString docpath, filename;
 
-    docpath = wxGetApp().ReturnLastVisitedLibraryPath( wxT( "doc" ) );
+    docpath = Pgm().LastVisitedLibraryPath( wxT( "doc" ) );
 
     wxFileDialog FilesDialog( this, _( "Footprint document file:" ), docpath,
                               wxEmptyString, PdfFileWildcard,
@@ -485,8 +487,8 @@ void DIALOG_CVPCB_CONFIG::OnBrowseModDocFile( wxCommandEvent& event )
      * a sub path of these default paths
      */
     wxFileName fn = FullFileName;
-    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
+    Pgm().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    filename = wxGetApp().ReturnFilenameWithRelativePathInLibPath( FullFileName );
+    filename = Pgm().FilenameWithRelativePathInSearchList( FullFileName );
     m_TextHelpModulesFileName->SetValue( filename );
 }

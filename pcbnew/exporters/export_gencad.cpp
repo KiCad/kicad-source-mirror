@@ -33,7 +33,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <wxPcbStruct.h>
 #include <trigo.h>
 #include <build_version.h>
@@ -525,7 +525,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
                 layer = ( module->GetFlag() ) ? "BOTTOM" : "TOP";
             }
 
-            pad->ReturnStringPadName( pinname );
+            pad->StringPadName( pinname );
 
             if( pinname.IsEmpty() )
                 pinname = wxT( "none" );
@@ -666,7 +666,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
                 if( pad->GetNetCode() != net->GetNet() )
                     continue;
 
-                pad->ReturnStringPadName( padname );
+                pad->StringPadName( padname );
                 msg.Printf( wxT( "NODE %s %s" ),
                             GetChars( module->GetReference() ),
                             GetChars( padname ) );
@@ -692,7 +692,7 @@ static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* aFrame )
 
     // Please note: GenCAD syntax requires quoted strings if they can contain spaces
     msg.Printf( wxT( "USER \"%s %s\"\n" ),
-               GetChars( wxGetApp().GetAppName() ),
+               GetChars( Pgm().App().GetAppName() ),
                GetChars( GetBuildVersion() ) );
     fputs( TO_UTF8( msg ), aFile );
 

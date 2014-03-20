@@ -406,7 +406,7 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
 
 /* Read the Gnn sequence and returns the value nn.
  */
-int GERBER_IMAGE::ReturnGCodeNumber( char*& Text )
+int GERBER_IMAGE::GCodeNumber( char*& Text )
 {
     int   ii = 0;
     char* text;
@@ -429,7 +429,7 @@ int GERBER_IMAGE::ReturnGCodeNumber( char*& Text )
 
 /* Get the sequence Dnn and returns the value nn
  */
-int GERBER_IMAGE::ReturnDCodeNumber( char*& Text )
+int GERBER_IMAGE::DCodeNumber( char*& Text )
 {
     int   ii = 0;
     char* text;
@@ -491,7 +491,7 @@ bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_command )
 
     case GC_SELECT_TOOL:
     {
-        int D_commande = ReturnDCodeNumber( text );
+        int D_commande = DCodeNumber( text );
         if( D_commande < FIRST_DCODE )
             return false;
         if( D_commande > (TOOLS_MAX_COUNT - 1) )

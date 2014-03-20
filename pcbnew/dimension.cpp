@@ -178,22 +178,22 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 
     // Get new size value:
     msg = m_TxtSizeXCtrl->GetValue();
-    CurrentDimension->Text().SetWidth( ReturnValueFromString( g_UserUnit, msg ) );
+    CurrentDimension->Text().SetWidth( ValueFromString( g_UserUnit, msg ) );
     msg = m_TxtSizeYCtrl->GetValue();
-    CurrentDimension->Text().SetHeight( ReturnValueFromString( g_UserUnit, msg ) );
+    CurrentDimension->Text().SetHeight( ValueFromString( g_UserUnit, msg ) );
 
     // Get new position value:
     // It will be copied later in dimension, because
     msg = m_textCtrlPosX->GetValue();
     wxPoint pos;
-    pos.x = ReturnValueFromString( g_UserUnit, msg );
+    pos.x = ValueFromString( g_UserUnit, msg );
     msg = m_textCtrlPosY->GetValue();
-    pos.y = ReturnValueFromString( g_UserUnit, msg );
+    pos.y = ValueFromString( g_UserUnit, msg );
     CurrentDimension->Text().SetTextPosition( pos );
 
     // Get new line thickness value:
     msg = m_TxtWidthCtrl->GetValue();
-    int width = ReturnValueFromString( g_UserUnit, msg );
+    int width = ValueFromString( g_UserUnit, msg );
     int maxthickness = Clamp_Text_PenSize( width, CurrentDimension->Text().GetSize() );
 
     if( width > maxthickness )

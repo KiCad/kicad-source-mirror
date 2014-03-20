@@ -28,7 +28,8 @@
 
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <common.h>
 #include <class_drawpanel.h>
 #include <wxBasePcbFrame.h>
@@ -66,7 +67,7 @@ DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( EDA_DRAW_FRAME* parent ) :
     DIALOG_SVG_PRINT_base( parent )
 {
     m_parent    = (PCB_BASE_FRAME*) parent;
-    m_config    = wxGetApp().GetSettings();
+    m_config    = Kiface().KifaceSettings();
     initDialog();
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -103,7 +104,7 @@ void DIALOG_SVG_PRINT::initDialog()
 
     AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
     m_DialogDefaultPenSize->SetValue(
-        ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness ) );
+        StringFromValue( g_UserUnit, g_DrawDefaultLineThickness ) );
 
     // Create layers list
     LAYER_NUM layer;
@@ -206,7 +207,7 @@ void DIALOG_SVG_PRINT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
 void DIALOG_SVG_PRINT::SetPenWidth()
 {
-    int pensize = ReturnValueFromTextCtrl( *m_DialogDefaultPenSize );
+    int pensize = ValueFromTextCtrl( *m_DialogDefaultPenSize );
 
     if( pensize > WIDTH_MAX_VALUE )
     {
@@ -219,7 +220,7 @@ void DIALOG_SVG_PRINT::SetPenWidth()
     }
 
     g_DrawDefaultLineThickness = pensize;
-    m_DialogDefaultPenSize->SetValue( ReturnStringFromValue( g_UserUnit, pensize ) );
+    m_DialogDefaultPenSize->SetValue( StringFromValue( g_UserUnit, pensize ) );
 }
 
 

@@ -30,7 +30,7 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <confirm.h>
 
 #include <common.h>
@@ -299,14 +299,14 @@ wxString FindKicadHelpPath()
     bool     PathFound = false;
 
     /* find kicad/help/ */
-    tmp = wxGetApp().GetExecutablePath();
+    tmp = Pgm().GetExecutablePath();
 
     if( tmp.Last() == '/' )
         tmp.RemoveLast();
 
     FullPath     = tmp.BeforeLast( '/' ); // cd ..
     FullPath    += wxT( "/doc/help/" );
-    LocaleString = wxGetApp().GetLocale()->GetCanonicalName();
+    LocaleString = Pgm().GetLocale()->GetCanonicalName();
 
     wxString path_tmp = FullPath;
 #ifdef __WINDOWS__
@@ -319,9 +319,9 @@ wxString FindKicadHelpPath()
     }
 
     /* find kicad/help/ from environment variable  KICAD */
-    if( !PathFound && wxGetApp().IsKicadEnvVariableDefined() )
+    if( !PathFound && Pgm().IsKicadEnvVariableDefined() )
     {
-        FullPath = wxGetApp().GetKicadEnvVariable() + wxT( "/doc/help/" );
+        FullPath = Pgm().GetKicadEnvVariable() + wxT( "/doc/help/" );
 
         if( wxDirExists( FullPath ) )
             PathFound = true;
@@ -379,7 +379,7 @@ wxString FindKicadFile( const wxString& shortname )
     /* Test the presence of the file in the directory shortname of
      * the KiCad binary path.
      */
-    FullFileName = wxGetApp().GetExecutablePath() + shortname;
+    FullFileName = Pgm().GetExecutablePath() + shortname;
 
     if( wxFileExists( FullFileName ) )
         return FullFileName;
@@ -387,9 +387,9 @@ wxString FindKicadFile( const wxString& shortname )
     /* Test the presence of the file in the directory shortname
      * defined by the environment variable KiCad.
      */
-    if( wxGetApp().IsKicadEnvVariableDefined() )
+    if( Pgm().IsKicadEnvVariableDefined() )
     {
-        FullFileName = wxGetApp().GetKicadEnvVariable() + shortname;
+        FullFileName = Pgm().GetKicadEnvVariable() + shortname;
 
         if( wxFileExists( FullFileName ) )
             return FullFileName;
@@ -426,7 +426,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 #ifdef __WXMAC__
     if( wxFileExists( FullFileName ) || wxDir::Exists( FullFileName ) )
     {
-        return ProcessExecute( wxGetApp().GetExecutablePath() + wxT( "/" )
+        return ProcessExecute( Pgm().GetExecutablePath() + wxT( "/" )
                                + ExecFile + wxT( " " )
                                + param, wxEXEC_ASYNC, callback );
     }
@@ -450,26 +450,26 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 }
 
 
-wxString ReturnKicadDatasPath()
+wxString KicadDatasPath()
 {
     bool     PathFound = false;
     wxString data_path;
 
-    if( wxGetApp().IsKicadEnvVariableDefined() ) // Path defined by the KICAD environment variable.
+    if( Pgm().IsKicadEnvVariableDefined() ) // Path defined by the KICAD environment variable.
     {
-        data_path = wxGetApp().GetKicadEnvVariable();
+        data_path = Pgm().GetKicadEnvVariable();
         PathFound = true;
     }
     else    // Path of executables.
     {
-        wxString tmp = wxGetApp().GetExecutablePath();
+        wxString tmp = Pgm().GetExecutablePath();
 #ifdef __WINDOWS__
         tmp.MakeLower();
 #endif
         if( tmp.Contains( wxT( "kicad" ) ) )
         {
 #ifdef __WINDOWS__
-            tmp = wxGetApp().GetExecutablePath();
+            tmp = Pgm().GetExecutablePath();
 #endif
             if( tmp.Last() == '/' )
                 tmp.RemoveLast();
@@ -527,47 +527,6 @@ wxString ReturnKicadDatasPath()
 }
 
 
-wxString& EDA_APP::GetEditorName()
-{
-    wxString editorname = m_EditorName;
-
-    // We get the preferred editor name from environment variable first.
-    if( editorname.IsEmpty() )
-    {
-    // If there is no EDITOR variable set, try the desktop default
-        if(!wxGetEnv( wxT( "EDITOR" ), &editorname ))
-        {
-#ifdef __WXMAC__
-          editorname = "/usr/bin/open";
-#elif __WXX11__
-          editorname = "/usr/bin/xdg-open";
-#endif
-        }
-    }
-    if( editorname.IsEmpty() ) // We must get a preferred editor name
-    {
-        DisplayInfoMessage( NULL,
-                            _( "No default editor found, you must choose it" ) );
-        wxString mask( wxT( "*" ) );
-
-#ifdef __WINDOWS__
-        mask += wxT( ".exe" );
-#endif
-        editorname = EDA_FileSelector( _( "Preferred Editor:" ), wxEmptyString,
-                                       wxEmptyString, wxEmptyString, mask,
-                                       NULL, wxFD_OPEN, true );
-    }
-
-    if( !editorname.IsEmpty() )
-    {
-        m_EditorName = editorname;
-        m_commonSettings->Write( wxT( "Editor" ), m_EditorName );
-    }
-
-    return m_EditorName;
-}
-
-
 bool OpenPDF( const wxString& file )
 {
     wxString command;
@@ -575,12 +534,12 @@ bool OpenPDF( const wxString& file )
     wxString type;
     bool     success = false;
 
-    wxGetApp().ReadPdfBrowserInfos();
+    Pgm().ReadPdfBrowserInfos();
 
-    if( !wxGetApp().UseSystemPdfBrowser() )    //  Run the preferred PDF Browser
+    if( !Pgm().UseSystemPdfBrowser() )    //  Run the preferred PDF Browser
     {
         AddDelimiterString( filename );
-        command = wxGetApp().GetPdfBrowserFileName() + wxT( " " ) + filename;
+        command = Pgm().GetPdfBrowserName() + wxT( " " ) + filename;
     }
     else
     {

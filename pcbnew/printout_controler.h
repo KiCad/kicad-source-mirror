@@ -34,6 +34,8 @@
 
 #include <wx/dcps.h>
 #include <layers_id_colors_and_visibility.h>
+#include <wx/print.h>
+
 #define DEFAULT_ORIENTATION_PAPER wxLANDSCAPE   // other option is wxPORTRAIT
 
 
@@ -98,7 +100,6 @@ public:
  * is a class derived from wxPrintout to handle the necessary information to control a printer
  * when printing a board
  */
-
 class BOARD_PRINTOUT_CONTROLLER : public wxPrintout
 {
 private:

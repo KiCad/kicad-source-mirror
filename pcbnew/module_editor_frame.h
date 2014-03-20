@@ -35,11 +35,14 @@
 
 class FP_LIB_TABLE;
 
+namespace PCB { struct IFACE; }     // A KIFACE_I coded in pcbnew.c
+
 
 class FOOTPRINT_EDIT_FRAME : public PCB_BASE_FRAME
 {
+    friend struct PCB::IFACE;
+
 public:
-    FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent, FP_LIB_TABLE* aTable );
 
     ~FOOTPRINT_EDIT_FRAME();
 
@@ -52,10 +55,14 @@ public:
 
     /**
      * Function GetActiveFootprintEditor (static)
+     *
+     * @param aTopOfProject is a PCB_EDIT_FRAME* window which anchors the search in
+     *  a project specific way.
+     *
      * @return a reference to the current opened Footprint editor
      * or NULL if no Footprint editor currently opened
      */
-    static FOOTPRINT_EDIT_FRAME* GetActiveFootprintEditor();
+    static FOOTPRINT_EDIT_FRAME* GetActiveFootprintEditor( const wxWindow* aTopOfProject );
 
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const;           // overload PCB_BASE_FRAME, get parent's
     void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );  // overload
@@ -195,7 +202,7 @@ public:
     bool Clear_Pcb( bool aQuery );
 
     /* handlers for block commands */
-    virtual int ReturnBlockCommand( int key );
+    virtual int BlockCommand( int key );
 
     /**
      * Function HandleBlockPlace
@@ -406,6 +413,10 @@ public:
     DECLARE_EVENT_TABLE()
 
 protected:
+
+    /// protected so only friend PCB::IFACE::CreateWindow() can act as sole factory.
+    FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, PCB_EDIT_FRAME* aParent );
+
     static BOARD*   s_Pcb;      ///< retain board across invocations of module editor
 
     /**
@@ -433,7 +444,7 @@ protected:
     /// The library nickName is a short string, for now the same as the library path
     /// but without path and without extension.  After library table support it becomes
     /// a lookup key.
-    const wxString& getLibNickName() const;
+    const wxString getLibNickName() const;
     void setLibNickName( const wxString& aNickname );
 
 

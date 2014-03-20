@@ -27,22 +27,22 @@
  * @brief Export IPC-D-356 test format
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "appl_wxstruct.h"
-#include "wxPcbStruct.h"
-#include "trigo.h"
-#include "build_version.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <kiface_i.h>
+#include <wxPcbStruct.h>
+#include <trigo.h>
+#include <build_version.h>
+#include <macros.h>
 
-#include "pcbnew.h"
+#include <pcbnew.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_edge_mod.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_edge_mod.h>
 #include <vector>
 #include <cctype>
 
@@ -131,7 +131,7 @@ static void build_pad_testpoints( BOARD *aPcb,
             {
             rk.netname = pad->GetNetname();
             rk.refdes = module->GetReference();
-            pad->ReturnStringPadName( rk.pin );
+            pad->StringPadName( rk.pin );
             rk.midpoint = false; // XXX MAYBE need to be computed (how?)
                     const wxSize& drill = pad->GetDrillSize();
             rk.drill = std::min( drill.x, drill.y );
@@ -214,7 +214,7 @@ static void build_via_testpoints( BOARD *aPcb,
             rk.drill = via->GetDrillValue();
             rk.mechanical = false;
             LAYER_NUM top_layer, bottom_layer;
-                via->ReturnLayerPair( &top_layer, &bottom_layer );
+                via->LayerPair( &top_layer, &bottom_layer );
             rk.access = via_access_code( aPcb, top_layer, bottom_layer );
             rk.x_location = via->GetPosition().x - origin.x;
             rk.y_location = origin.y - via->GetPosition().y;

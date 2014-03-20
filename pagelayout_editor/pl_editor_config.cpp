@@ -31,7 +31,7 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <gestfich.h>
-#include <param_config.h>
+#include <config_params.h>
 
 #include <pl_editor_frame.h>
 #include <hotkeys.h>

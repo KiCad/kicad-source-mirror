@@ -52,9 +52,11 @@
 // extention of pcb_calculator data filename:
 const wxString DataFileNameExt( wxT("pcbcalc") );
 
-PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( wxWindow* parent ) :
-    PCB_CALCULATOR_FRAME_BASE( parent )
+PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+    PCB_CALCULATOR_FRAME_BASE( aParent )
 {
+    SetKiway( this, aKiway );
+
     m_currTransLine     = NULL;
     m_currTransLineType = default_type;
     m_currAttenuator    = NULL;
@@ -62,7 +64,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( wxWindow* parent ) :
     m_Config = new wxConfig();
 
     // Populate transline list ordered like in dialog menu list
-    transline_type_id tltype_list[8] =
+    const static transline_type_id tltype_list[8] =
     {
         microstrip_type,    cpw_type,  grounded_cpw_type,
         rectwaveguide_type, coax_type, c_microstrip_type,

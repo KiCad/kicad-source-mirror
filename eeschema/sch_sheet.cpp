@@ -636,9 +636,9 @@ const EDA_RECT SCH_SHEET::GetBoundingBox() const
 
     // Determine length of texts
     wxString text    = wxT( "Sheet: " ) + m_name;
-    int      textlen  = ReturnGraphicTextWidth( text, m_sheetNameSize, false, lineWidth );
+    int      textlen  = GraphicTextWidth( text, m_sheetNameSize, false, lineWidth );
     text = wxT( "File: " ) + m_fileName;
-    int      textlen2 = ReturnGraphicTextWidth( text, m_fileNameSize, false, lineWidth );
+    int      textlen2 = GraphicTextWidth( text, m_fileNameSize, false, lineWidth );
 
     // Calculate bounding box X size:
     textlen = std::max( textlen, textlen2 );

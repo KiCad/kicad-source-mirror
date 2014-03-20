@@ -4,7 +4,7 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <class_drawpanel.h>
 
 #include <general.h>

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Nov  5 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class KIWAY_PLAYER;
+
+#include "kiway_player.h"
 #include <wx/scrolwin.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -38,7 +41,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class BM2CMP_FRAME_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class BM2CMP_FRAME_BASE : public wxFrame 
+class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 {
 	private:
 	

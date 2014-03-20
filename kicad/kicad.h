@@ -39,15 +39,13 @@
 
 #include <id.h>
 #include <wxstruct.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
 
 // With a recent wxWidget, we can use the wxFileSystemWatcherEvent
 // to monitor files add/remove/rename in tree project
 #if wxCHECK_VERSION( 2, 9, 4  )
 #define KICAD_USE_FILES_WATCHER
 #endif
-
-extern const wxString g_KicadPrjFilenameExtension;
 
 class LAUNCHER_PANEL;
 class TREEPROJECTFILES;
@@ -116,11 +114,15 @@ enum id_kicad_frm {
 };
 
 
-/* class KICAD_MANAGER_FRAME
- * This is the main KiCad frame
+/**
+ * Class KICAD_MANAGER_FRAME
+ * is the main KiCad project manager frame.  It is not a KIWAY_PLAYER.
  */
 class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME
 {
+protected:
+    wxConfigBase*       config();       // override EDA_BASE_FRAME virtual
+
 public:
     TREE_PROJECT_FRAME* m_LeftWin;
     LAUNCHER_PANEL*     m_Launcher;
@@ -133,7 +135,8 @@ public:
 private:
     int m_leftWinWidth;
 
-public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
+public:
+    KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
                              const wxPoint& pos, const wxSize& size );
 
     ~KICAD_MANAGER_FRAME();
@@ -204,23 +207,9 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
 
     void CreateNewProject( const wxString aPrjFullFileName, bool aTemplateSelector );
 
-    /**
-     * Function LoadSettings
-     * loads the KiCad main frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get loaded.
-     */
-    void LoadSettings();
+    void LoadSettings( wxConfigBase* aCfg );
 
-    /**
-     * Function SaveSettings
-     * saves the KiCad main frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get saved.
-     */
-    void SaveSettings();
+    void SaveSettings( wxConfigBase* aCfg );
 
     /**
      * Function Execute
@@ -232,13 +221,13 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
     void Execute( wxWindow* frame, const wxString& execFile,
                   const wxString& param = wxEmptyString );
 
-    class PROCESS_TERMINATE_EVENT_HANDLER : public wxProcess
+    class TERMINATE_HANDLER : public wxProcess
     {
     private:
         wxString appName;
 
     public:
-        PROCESS_TERMINATE_EVENT_HANDLER( const wxString& appName ) :
+        TERMINATE_HANDLER( const wxString& appName ) :
             appName(appName)
         {
         }
@@ -286,5 +275,9 @@ private:
 
     wxBitmapButton* AddBitmapButton( wxWindowID aId, const wxBitmap& aBitmap );
 };
+
+// The C++ project manager includes a single PROJECT in its link image.
+class PROJECT;
+extern PROJECT& Prj();
 
 #endif

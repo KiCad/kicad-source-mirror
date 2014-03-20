@@ -39,7 +39,8 @@
 #include <ctime>
 #include <cctype>
 #include <strings.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <wx/config.h>
 #include <wx/file.h>
 #include <wx/filename.h>
 #include <macros.h>

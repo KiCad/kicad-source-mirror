@@ -29,7 +29,8 @@
 
 #include <wx/wx.h>
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <confirm.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
@@ -56,7 +57,7 @@ public:
 
 private:
     PCB_BASE_FRAME* m_parent;
-    wxConfig*       m_config;               ///< Current config
+    wxConfigBase*       m_config;               ///< Current config
     ZONE_SETTINGS   m_zonesettings;
     ZONE_SETTINGS*  m_ptr;
 
@@ -105,7 +106,7 @@ DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* 
     DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( aParent )
 {
     m_parent = aParent;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
 
     m_ptr = aSettings;
     m_zonesettings = *aSettings;
