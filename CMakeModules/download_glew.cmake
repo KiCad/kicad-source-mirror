@@ -33,11 +33,13 @@ set( GLEW_ROOT "${PROJECT_SOURCE_DIR}/glew_root" )
 
 #-----</configure>---------------------------------------------------------------
 
-find_package( BZip2 REQUIRED )
+if( NOT BZIP2_FOUND )
+    find_package( BZip2 REQUIRED )
+endif()
 
 set( PREFIX ${DOWNLOAD_DIR}/glew )
 
-if (APPLE) 
+if (APPLE)
     if( CMAKE_OSX_ARCHITECTURES )
         set( GLEW_CFLAGS  "CFLAGS.EXTRA=-arch ${CMAKE_OSX_ARCHITECTURES} -mmacosx-version-min=10.5" )
         set( GLEW_LDFLAGS "LDFLAGS.EXTRA=-arch ${CMAKE_OSX_ARCHITECTURES} -mmacosx-version-min=10.5" )

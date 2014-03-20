@@ -28,7 +28,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <gr_basic.h>
 #include <common.h>
 #include <macros.h>
@@ -36,7 +37,7 @@
 #include <class_drawpanel.h>
 #include <class_drawpanel_gal.h>
 #include <class_base_screen.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 
 #include <kicad_device_context.h>
 
@@ -45,15 +46,16 @@ static const int CURSOR_SIZE = 12; ///< Cursor size in pixels
 #define CLIP_BOX_PADDING 2
 
 // keys to store options in config:
-#define ENBL_ZOOM_NO_CENTER_KEY wxT( "ZoomNoCenter" )
-#define ENBL_MIDDLE_BUTT_PAN_KEY wxT( "MiddleButtonPAN" )
-#define MIDDLE_BUTT_PAN_LIMITED_KEY wxT( "MiddleBtnPANLimited" )
-#define ENBL_AUTO_PAN_KEY wxT( "AutoPAN" )
+#define ENBL_ZOOM_NO_CENTER_KEY         wxT( "ZoomNoCenter" )
+#define ENBL_MIDDLE_BUTT_PAN_KEY        wxT( "MiddleButtonPAN" )
+#define MIDDLE_BUTT_PAN_LIMITED_KEY     wxT( "MiddleBtnPANLimited" )
+#define ENBL_AUTO_PAN_KEY               wxT( "AutoPAN" )
 
-/* Definitions for enabling and disabling debugging features in drawpanel.cpp.
- * Please don't forget to turn these off before making any commits to Launchpad.
- */
+
+// Definitions for enabling and disabling debugging features in drawpanel.cpp.
+// Please don't forget to turn these off before making any commits to Launchpad.
 #define DEBUG_SHOW_CLIP_RECT       0  // Set to 1 to draw clipping rectangle.
+
 
 /**
  * Trace mask used to enable or disable the trace output of coordinates during drawing
@@ -122,12 +124,14 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;
 
-    if( wxGetApp().GetSettings() )
+    wxConfigBase* cfg = Kiface().KifaceSettings();
+
+    if( cfg )
     {
-        wxGetApp().GetSettings()->Read( ENBL_MIDDLE_BUTT_PAN_KEY, &m_enableMiddleButtonPan, false );
-        wxGetApp().GetSettings()->Read( ENBL_ZOOM_NO_CENTER_KEY, &m_enableZoomNoCenter, false );
-        wxGetApp().GetSettings()->Read( MIDDLE_BUTT_PAN_LIMITED_KEY, &m_panScrollbarLimits, false );
-        wxGetApp().GetSettings()->Read( ENBL_AUTO_PAN_KEY, &m_enableAutoPan, true );
+        cfg->Read( ENBL_MIDDLE_BUTT_PAN_KEY, &m_enableMiddleButtonPan, false );
+        cfg->Read( ENBL_ZOOM_NO_CENTER_KEY, &m_enableZoomNoCenter, false );
+        cfg->Read( MIDDLE_BUTT_PAN_LIMITED_KEY, &m_panScrollbarLimits, false );
+        cfg->Read( ENBL_AUTO_PAN_KEY, &m_enableAutoPan, true );
     }
 
     m_requestAutoPan = false;
@@ -149,10 +153,15 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 
 EDA_DRAW_PANEL::~EDA_DRAW_PANEL()
 {
-    wxGetApp().GetSettings()->Write( ENBL_MIDDLE_BUTT_PAN_KEY, m_enableMiddleButtonPan );
-    wxGetApp().GetSettings()->Write( ENBL_ZOOM_NO_CENTER_KEY, m_enableZoomNoCenter );
-    wxGetApp().GetSettings()->Write( MIDDLE_BUTT_PAN_LIMITED_KEY, m_panScrollbarLimits );
-    wxGetApp().GetSettings()->Write( ENBL_AUTO_PAN_KEY, m_enableAutoPan );
+    wxConfigBase* cfg = Kiface().KifaceSettings();
+
+    if( cfg )
+    {
+        cfg->Write( ENBL_MIDDLE_BUTT_PAN_KEY, m_enableMiddleButtonPan );
+        cfg->Write( ENBL_ZOOM_NO_CENTER_KEY, m_enableZoomNoCenter );
+        cfg->Write( MIDDLE_BUTT_PAN_LIMITED_KEY, m_panScrollbarLimits );
+        cfg->Write( ENBL_AUTO_PAN_KEY, m_enableAutoPan );
+    }
 }
 
 

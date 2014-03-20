@@ -5,7 +5,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <macros.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <dialog_get_component.h>
 
 

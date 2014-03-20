@@ -1343,14 +1343,14 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
         LAYER_NUM layer1, layer2;
 
         SEGVIA* via = (SEGVIA*) aTrack;
-        BOARD* board = (BOARD*) via->GetParent();
+        BOARD*  board = (BOARD*) via->GetParent();
 
         wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText() +
                      wxT( " has no parent." ) );
 
         m_out->Print( aNestLevel, "(via" );
 
-        via->ReturnLayerPair( &layer1, &layer2 );
+        via->LayerPair( &layer1, &layer2 );
 
         switch( aTrack->GetShape() )
         {

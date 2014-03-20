@@ -11,7 +11,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <wxPcbStruct.h>
 #include <eda_dde.h>
 #include <macros.h>

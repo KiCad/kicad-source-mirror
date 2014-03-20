@@ -41,7 +41,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
                                      bool aErase );
 
 
-int LIB_EDIT_FRAME::ReturnBlockCommand( int key )
+int LIB_EDIT_FRAME::BlockCommand( int key )
 {
     int cmd = BLOCK_IDLE;
 

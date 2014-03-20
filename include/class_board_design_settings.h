@@ -7,7 +7,7 @@
 
 #include <pcbstruct.h>      // NB_COLORS
 #include <class_pad.h>
-#include <param_config.h>
+#include <config_params.h>
 
 
 /**

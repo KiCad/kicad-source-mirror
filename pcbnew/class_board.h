@@ -1015,13 +1015,13 @@ public:
                          REPORTER* aReporter = NULL );
 
     /**
-     * Function ReturnSortedNetnamesList
+     * Function SortedNetnamesList
      * @param aNames An array string to fill with net names.
      * @param aSortbyPadsCount  true = sort by active pads count, false = no sort (i.e.
      *                          leave the sort by net names)
      * @return int - net names count.
      */
-    int ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
+    int SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
 
     /**************************************/
     /**

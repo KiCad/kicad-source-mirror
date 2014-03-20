@@ -54,8 +54,8 @@ public: TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
                        double aValue = 0.0,
                        bool aConvUnit = false );
 
-    void   ReadConfig( wxConfig* aConfig );
-    void   WriteConfig( wxConfig* aConfig );
+    void   ReadConfig( wxConfigBase* aConfig );
+    void   WriteConfig( wxConfigBase* aConfig );
     double ToUserUnit();
     double FromUserUnit();
 };
@@ -100,8 +100,8 @@ public: TRANSLINE_IDENT( enum transline_type_id aType );
     }
 
 
-    void ReadConfig( wxConfig* aConfig );
-    void WriteConfig( wxConfig* aConfig );
+    void ReadConfig( wxConfigBase* aConfig );
+    void WriteConfig( wxConfigBase* aConfig );
 };
 
 #endif      //  TRANSLINE_IDENT_H

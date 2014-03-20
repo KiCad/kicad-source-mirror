@@ -30,7 +30,7 @@
 #include <pcb_calculator.h>
 #include <UnitSelector.h>
 
-extern double ReturnDoubleFromString( const wxString& TextValue );
+extern double DoubleFromString( const wxString& TextValue );
 
 
 /*
@@ -359,7 +359,7 @@ void PCB_CALCULATOR_FRAME::TransfDlgDataToTranslineParams()
         TRANSLINE_PRM* prm = tr_ident->GetPrm( ii );
         wxTextCtrl * value_ctrl = (wxTextCtrl * ) prm->m_ValueCtrl;
         wxString value_txt = value_ctrl->GetValue();
-        double value = ReturnDoubleFromString(value_txt);
+        double value = DoubleFromString(value_txt);
         prm->m_Value = value;
         UNIT_SELECTOR * unit_ctrl = (UNIT_SELECTOR * ) prm->m_UnitCtrl;
         if( unit_ctrl )

@@ -29,7 +29,7 @@
 #include <wx/hyperlink.h>
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -766,10 +766,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
         // top of each other.
     }
 
-    wxString coordText = ReturnStringFromValue( g_UserUnit, coord.x );
+    wxString coordText = StringFromValue( g_UserUnit, coord.x );
     posXTextCtrl->SetValue( coordText );
 
-    coordText = ReturnStringFromValue( g_UserUnit, coord.y );
+    coordText = StringFromValue( g_UserUnit, coord.y );
     posYTextCtrl->SetValue( coordText );
 }
 
@@ -828,8 +828,8 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     field.SetBold( (style & 2 ) != 0 );
 
     wxPoint pos;
-    pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue() );
-    pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue() );
+    pos.x = ValueFromString( g_UserUnit, posXTextCtrl->GetValue() );
+    pos.y = ValueFromString( g_UserUnit, posYTextCtrl->GetValue() );
     field.SetTextPosition( pos );
 
     return true;

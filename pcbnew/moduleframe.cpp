@@ -30,7 +30,9 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+//#include <kiface_i.h>
+#include <project.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
@@ -150,8 +152,8 @@ END_EVENT_TABLE()
 
 #define FOOTPRINT_EDIT_FRAME_NAME wxT( "ModEditFrame" )
 
-FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent, FP_LIB_TABLE* aTable ) :
-    PCB_BASE_FRAME( aParent, MODULE_EDITOR_FRAME_TYPE, wxEmptyString,
+FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, PCB_EDIT_FRAME* aParent ) :
+    PCB_BASE_FRAME( aKiway, aParent, MODULE_EDITOR_FRAME_TYPE, wxEmptyString,
                     wxDefaultPosition, wxDefaultSize,
                     KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
 {
@@ -160,7 +162,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent, FP_LIB_TABL
     m_showAxis = true;                   // true to show X and Y axis on screen
     m_showGridAxis = true;               // show the grid origin axis
     m_HotkeysZoomAndGridList = g_Module_Editor_Hokeys_Descr;
-    m_footprintLibTable = aTable;
 
     // Give an icon
     wxIcon icon;
@@ -186,7 +187,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent, FP_LIB_TABL
     SetScreen( s_screenModule );
 
     GetScreen()->SetCurItem( NULL );
-    LoadSettings();
+    LoadSettings( config() );
 
     GetBoard()->SetVisibleAlls();
 
@@ -256,15 +257,15 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 }
 
 
-const wxString& FOOTPRINT_EDIT_FRAME::getLibNickName() const
+const wxString FOOTPRINT_EDIT_FRAME::getLibNickName() const
 {
-    return wxGetApp().GetModuleLibraryNickname();
+    return Prj().GetModuleLibraryNickname();
 }
 
 
 void FOOTPRINT_EDIT_FRAME::setLibNickName( const wxString& aNickname )
 {
-    wxGetApp().SetModuleLibraryNickname( aNickname );
+    Prj().SetModuleLibraryNickname( aNickname );
 }
 
 
@@ -274,7 +275,7 @@ wxString FOOTPRINT_EDIT_FRAME::getLibPath()
     {
         const wxString& nickname = getLibNickName();
 
-        const FP_LIB_TABLE::ROW* row = GetFootprintLibraryTable()->FindRow( nickname );
+        const FP_LIB_TABLE::ROW* row = FootprintLibs()->FindRow( nickname );
 
         return row->GetFullURI( true );
     }
@@ -294,9 +295,13 @@ const wxChar* FOOTPRINT_EDIT_FRAME::GetFootprintEditorFrameName()
 /* return a reference to the current opened Footprint editor
  * or NULL if no Footprint editor currently opened
  */
-FOOTPRINT_EDIT_FRAME* FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor()
+FOOTPRINT_EDIT_FRAME* FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor( const wxWindow* aParent )
 {
-    return (FOOTPRINT_EDIT_FRAME*) wxWindow::FindWindowByName( GetFootprintEditorFrameName() );
+    // top_of_project!
+    wxASSERT( dynamic_cast<const PCB_EDIT_FRAME*>( aParent ) );
+
+    wxWindow* ret = wxWindow::FindWindowByName( GetFootprintEditorFrameName(), aParent );
+    return (FOOTPRINT_EDIT_FRAME*) ret;
 }
 
 
@@ -484,7 +489,9 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( m_footprintLibTable && !m_footprintLibTable->IsEmpty() );
+    FP_LIB_TABLE* fptbl = FootprintLibs();
+
+    aEvent.Enable( fptbl && !fptbl->IsEmpty() );
 }
 
 
@@ -506,7 +513,7 @@ void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
         return;
     }
 
-    m_Draw3DFrame = new EDA_3D_FRAME( this, _( "3D Viewer" ) );
+    m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, _( "3D Viewer" ) );
     m_Draw3DFrame->Show( true );
 }
 
@@ -622,7 +629,7 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
     {
         try
         {
-            bool writable = m_footprintLibTable->IsFootprintLibWritable( nickname );
+            bool writable = FootprintLibs()->IsFootprintLibWritable( nickname );
 
             // no exception was thrown, this means libPath is valid, but it may be read only.
             title = _( "Module Editor (active library: " ) + nickname + wxT( ")" );

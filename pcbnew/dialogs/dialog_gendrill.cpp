@@ -27,7 +27,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <pcbplot.h>
@@ -74,7 +75,7 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* parent ) :
 {
     m_parent = parent;
     m_board  = parent->GetBoard();
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
     m_plotOpts = m_parent->GetPlotSettings();
 
     SetReturnCode( 1 );

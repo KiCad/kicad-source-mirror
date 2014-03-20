@@ -26,11 +26,11 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <trigo.h>
 #include <3d_viewer.h>
 #include <wxPcbStruct.h>
@@ -262,11 +262,16 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_OPEN_MODULE_VIEWER:
         {
-            FOOTPRINT_VIEWER_FRAME * viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
+            // Make a _project specific_ PCB_EDIT_FRAME be the start of the search in
+            // FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
 
-            if( viewer == NULL )
+            PCB_EDIT_FRAME* top_project = dynamic_cast<PCB_EDIT_FRAME*>( GetParent() );
+            wxASSERT( top_project );    // dynamic_cast returns NULL if class mismatch.
+
+            FOOTPRINT_VIEWER_FRAME* viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( top_project );
+            if( !viewer )
             {
-                viewer = new FOOTPRINT_VIEWER_FRAME( this, m_footprintLibTable, NULL );
+                viewer = (FOOTPRINT_VIEWER_FRAME*) Kiface().CreateWindow( this, MODULE_VIEWER_FRAME_TYPE, &Kiway() );
                 viewer->Show( true );
                 viewer->Zoom_Automatique( false );
             }
@@ -290,36 +295,38 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_NEW_MODULE:
-    {
-        Clear_Pcb( true );
-        GetScreen()->ClearUndoRedoList();
-        SetCurItem( NULL );
-        SetCrossHairPosition( wxPoint( 0, 0 ) );
-
-        MODULE* module = Create_1_Module( wxEmptyString );
-
-        if( module )        // i.e. if create module command not aborted
         {
-            // Initialize data relative to nets and netclasses (for a new
-            // module the defaults are used)
-            // This is mandatory to handle and draw pads
-            GetBoard()->BuildListOfNets();
-            redraw = true;
-            module->SetPosition( wxPoint( 0, 0 ) );
+            Clear_Pcb( true );
+            GetScreen()->ClearUndoRedoList();
+            SetCurItem( NULL );
+            SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-            if( GetBoard()->m_Modules )
-                GetBoard()->m_Modules->ClearFlags();
+            MODULE* module = Create_1_Module( wxEmptyString );
 
-            Zoom_Automatique( false );
+            if( module )        // i.e. if create module command not aborted
+            {
+                // Initialize data relative to nets and netclasses (for a new
+                // module the defaults are used)
+                // This is mandatory to handle and draw pads
+                GetBoard()->BuildListOfNets();
+                redraw = true;
+                module->SetPosition( wxPoint( 0, 0 ) );
+
+                if( GetBoard()->m_Modules )
+                    GetBoard()->m_Modules->ClearFlags();
+
+                Zoom_Automatique( false );
+            }
         }
-    }
         break;
 
     case ID_MODEDIT_NEW_MODULE_FROM_WIZARD:
         {
             wxSemaphore semaphore( 0, 1 );
-            FOOTPRINT_WIZARD_FRAME *wizard = new FOOTPRINT_WIZARD_FRAME( this, &semaphore,
-                                                                         KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+
+            FOOTPRINT_WIZARD_FRAME* wizard = new FOOTPRINT_WIZARD_FRAME( &Kiway(), this, &semaphore,
+                    KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+
             wizard->Show( true );
             wizard->Zoom_Automatique( false );
 
@@ -492,7 +499,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Clear_Pcb( true );
         SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-        LoadModuleFromLibrary( getLibNickName(), m_footprintLibTable, true );
+        LoadModuleFromLibrary( getLibNickName(), FootprintLibs(), true );
         redraw = true;
 
         if( GetBoard()->m_Modules )

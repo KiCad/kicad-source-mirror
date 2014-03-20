@@ -353,7 +353,7 @@ wxString NETLIST_OBJECT::GetShortNetName() const
             netName = wxT("Net-(");
             netName << link->GetRef( &m_netNameCandidate->m_SheetPath );
             netName << wxT("-Pad")
-                    << LIB_PIN::ReturnPinStringNum( m_netNameCandidate->m_PinNum )
+                    << LIB_PIN::PinStringNum( m_netNameCandidate->m_PinNum )
                     << wxT(")");
         }
     }

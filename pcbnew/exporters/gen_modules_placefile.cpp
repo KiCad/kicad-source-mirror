@@ -35,7 +35,7 @@
 #include <gestfich.h>
 #include <wxPcbStruct.h>
 #include <trigo.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <build_version.h>
 #include <macros.h>
 
@@ -462,7 +462,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     sprintf( line, "### Module positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
     fputs( line, file );
 
-    wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+    wxString Title = Pgm().App().GetAppName() + wxT( " " ) + GetBuildVersion();
     sprintf( line, "### Printed by Pcbnew version %s\n", TO_UTF8( Title ) );
     fputs( line, file );
 
@@ -582,7 +582,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
     sprintf( line, "## Module report - date %s\n", TO_UTF8( DateAndTime() ) );
     fputs( line, rptfile );
 
-    wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+    wxString Title = Pgm().App().GetAppName() + wxT( " " ) + GetBuildVersion();
     sprintf( line, "## Created by Pcbnew version %s\n", TO_UTF8( Title ) );
     fputs( line, rptfile );
     fputs( unit_text, rptfile );

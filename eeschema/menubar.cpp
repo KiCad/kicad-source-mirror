@@ -29,7 +29,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
 #include <wxEeschemaStruct.h>
 
 #include <general.h>
@@ -83,11 +84,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Add this menu to list menu managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
     if( openRecentMenu )
-        wxGetApp().GetFileHistory().RemoveMenu( openRecentMenu );
+        Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
 
     openRecentMenu = new wxMenu();
-    wxGetApp().GetFileHistory().UseMenu( openRecentMenu );
-    wxGetApp().GetFileHistory().AddFilesToMenu( openRecentMenu );
+
+    Kiface().GetFileHistory().UseMenu( openRecentMenu );
+    Kiface().GetFileHistory().AddFilesToMenu( openRecentMenu );
+
     AddMenuItem( fileMenu, openRecentMenu,
                  wxID_ANY, _( "Open &Recent" ),
                  _( "Open a recent opened schematic project" ),
@@ -424,7 +427,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
 
     // Language submenu
-    wxGetApp().AddMenuLanguageList( preferencesMenu );
+    Pgm().AddMenuLanguageList( preferencesMenu );
 
     // Hotkey submenu
     AddHotkeyConfigMenu( preferencesMenu );

@@ -207,7 +207,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             LAYER_NUM layer1, layer2;
             bool err = true;
 
-            ( (SEGVIA*) aRefSeg )->ReturnLayerPair( &layer1, &layer2 );
+            ( (SEGVIA*) aRefSeg )->LayerPair( &layer1, &layer2 );
 
             if( layer1 > layer2 )
                 EXCHG( layer1, layer2 );
@@ -315,7 +315,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 continue;
 
             // DRC for the pad
-            shape_pos = pad->ReturnShapePos();
+            shape_pos = pad->ShapePos();
             m_padToTestPos = shape_pos - origin;
 
             if( !checkClearanceSegmToPad( pad, aRefSeg->GetWidth(), aRefSeg->GetClearance( pad ) ) )
@@ -588,7 +588,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     int     dist_min = aRefPad->GetClearance( aPad );
 
     // relativePadPos is the aPad shape position relative to the aRefPad shape position
-    wxPoint relativePadPos = aPad->ReturnShapePos() - aRefPad->ReturnShapePos();
+    wxPoint relativePadPos = aPad->ShapePos() - aRefPad->ShapePos();
 
     dist = KiROUND( EuclideanNorm( relativePadPos ) );
 

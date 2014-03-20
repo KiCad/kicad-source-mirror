@@ -235,7 +235,7 @@ void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
                 RotatePoint( &ptTest[i], fAngle );
 
                 // translate point
-                ptTest[i] += pad->ReturnShapePos();
+                ptTest[i] += pad->ShapePos();
 
                 if( aZone->HitTestFilledArea( ptTest[i] ) )
                     continue;
@@ -280,7 +280,7 @@ void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
                 {
                     wxPoint cpos = corners_buffer[ic];
                     RotatePoint( &cpos, fAngle );                               // Rotate according to module orientation
-                    cpos += pad->ReturnShapePos();                              // Shift origin to position
+                    cpos += pad->ShapePos();                              // Shift origin to position
                     CPolyPt corner;
                     corner.x = cpos.x;
                     corner.y = cpos.y;

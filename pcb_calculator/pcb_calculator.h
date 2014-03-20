@@ -40,13 +40,13 @@ private:
 
 
 public:
-    PCB_CALCULATOR_FRAME( wxWindow * parent = NULL );
+    PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~PCB_CALCULATOR_FRAME();
 
 private:
 
     // Event handlers
-	void OnClosePcbCalc( wxCloseEvent& event );
+    void OnClosePcbCalc( wxCloseEvent& event );
 
     // These 3 functions are called by the OnPaint event, to draw
     // icons that show the current item on the specific panels
@@ -178,12 +178,12 @@ private:
 
     // Regulators Panel
     void OnRegulatorCalcButtonClick( wxCommandEvent& event );
-	void OnRegulTypeSelection( wxCommandEvent& event );
-	void OnRegulatorSelection( wxCommandEvent& event );
-	void OnDataFileSelection( wxCommandEvent& event );
-	void OnAddRegulator( wxCommandEvent& event );
-	void OnEditRegulator( wxCommandEvent& event );
-	void OnRemoveRegulator( wxCommandEvent& event );
+    void OnRegulTypeSelection( wxCommandEvent& event );
+    void OnRegulatorSelection( wxCommandEvent& event );
+    void OnDataFileSelection( wxCommandEvent& event );
+    void OnAddRegulator( wxCommandEvent& event );
+    void OnEditRegulator( wxCommandEvent& event );
+    void OnRemoveRegulator( wxCommandEvent& event );
 
     /**
      * Function RegulatorPageUpdate:

@@ -23,8 +23,9 @@ set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 # reports.
 #
 
-option( USE_KIWAY_DLLS
-    "Build the major modules as KIFACE DLLs or DSOs, will soon be the norm." OFF )
+#option( USE_KIWAY_DLLS "Build the major modules as KIFACE DLLs or DSOs, will soon be the norm." ON )
+set( USE_KIWAY_DLLS true )  # this is now mandatory, the code is the same anyways, the old code is gone.
+
 
 # The desire is to migrate designs *away from* case independence, and to create designs which use
 # literally (case specific) interpreted component names.  But for backwards compatibility,
@@ -115,6 +116,12 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         OUTPUT_VARIABLE GCC_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE )
 
+    if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+        set( TO_LINKER -XLinker )
+    else()
+        set( TO_LINKER -Wl )
+    endif()
+
     # Establish -Wall early, so specialized relaxations of this may come
     # subsequently on the command line, such as in pcbnew/github/CMakeLists.txt
     set( CMAKE_C_FLAGS   "-Wall ${CMAKE_C_FLAGS}" )
@@ -189,12 +196,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   ${PIC_FLAG}" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PIC_FLAG}" )
 
-        if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-            set( TO_LINKER -XLinker )
-        else()
-            set( TO_LINKER -Wl )
-        endif()
-
         # Thou shalt not link vaporware and tell us it's a valid DSO (apple ld doesn't support it)
         if( NOT APPLE )
             set( CMAKE_SHARED_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
@@ -221,11 +222,11 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
         if( NOT CMAKE_CXX_COMPILER )
             EXEC_PROGRAM( wx-config ARGS --cc  OUTPUT_VARIABLE CMAKE_C_COMPILER )
-        endif( NOT CMAKE_CXX_COMPILER )
+        endif()
 
         if( NOT CMAKE_CXX_COMPILER )
             EXEC_PROGRAM( wx-config ARGS --cxx OUTPUT_VARIABLE CMAKE_CXX_COMPILER )
-        endif( NOT CMAKE_CXX_COMPILER )
+        endif()
 
     endif()
 
@@ -341,13 +342,19 @@ include( ExternalProject )
 include( CheckFindPackageResult )
 
 # Turn on wxWidgets compatibility mode for some classes
-add_definitions(-DWX_COMPATIBILITY)
+add_definitions( -DWX_COMPATIBILITY )
 
 #######################
 # Find OpenGL library #
 #######################
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
+
+# Dick 5-Feb-2014:
+# Marco: We cannot use both ExternalProject_Add() add and find_package()
+# in the same CMake tree and have them both reference the same package:
+# http://stackoverflow.com/questions/6351609/cmake-linking-to-library-downloaded-from-externalproject-add
+# https://www.mail-archive.com/cmake@cmake.org/msg47501.html
 
 # Handle target used to specify if a target needs wx-widgets or other libraries
 # Always defined, empty if no libraries are to be build
@@ -381,8 +388,8 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
 
     if( KICAD_SCRIPTING OR KICAD_SCRIPTING_WXPYTHON OR KICAD_SCRIPTING_MODULES )
- 
-        message(STATUS "Scripting ENABLED")        
+
+        message(STATUS "Scripting ENABLED")
         include( download_wxpython )
 
         set( SWIG_EXECUTABLE  ${SWIG_ROOT}/bin/swig )
@@ -440,14 +447,18 @@ endif( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC)
 #####################
 # Find GLEW library #
 #####################
-find_package(GLEW)
-check_find_package_result(GLEW_FOUND "GLEW")
+if( NOT GLEW_FOUND )
+    find_package( GLEW )
+    check_find_package_result( GLEW_FOUND "GLEW" )
+endif()
 
 ######################
 # Find Cairo library #
 ######################
-find_package(Cairo 1.8.1 QUIET)
-check_find_package_result(CAIRO_FOUND "Cairo")
+if( NOT CAIRO_FOUND )
+    find_package( Cairo 1.8.1 QUIET )
+    check_find_package_result( CAIRO_FOUND "Cairo" )
+endif()
 
 # Download boost and possibly build parts of it
 #################################################
@@ -483,8 +494,8 @@ else()
 endif()
 
 if( NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
-check_find_package_result( wxWidgets_FOUND "wxWidgets" )
-endif( NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
+    check_find_package_result( wxWidgets_FOUND "wxWidgets" )
+endif()
 
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
@@ -532,15 +543,15 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         set( PythonInterp_FIND_VERSION 2.6 )
         set( PythonLibs_FIND_VERSION 2.6 )
     endif()
-    
+
     # force a python version < 3.0
     set( PythonInterp_FIND_VERSION 2.6)
     set( PythonLibs_FIND_VERSION 2.6 )
 
     find_package( PythonInterp )
-    
+
     check_find_package_result( PYTHONINTERP_FOUND "Python Interpreter" )
-    
+
     if( NOT PYTHON_VERSION_MAJOR EQUAL 2 )
         message( FATAL_ERROR "Python 2.x is required." )
     endif()

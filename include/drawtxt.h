@@ -50,11 +50,11 @@ int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold = true );
 int GetPenSizeForBold( int aTextSize );
 
 /**
- * Function ReturnGraphicTextWidth
+ * Function GraphicTextWidth
  * @return the X size of the graphic text
- * the full X size is ReturnGraphicTextWidth + the thickness of graphic lines
+ * the full X size is GraphicTextWidth + the thickness of graphic lines
  */
-int ReturnGraphicTextWidth( const wxString& aText, int size_h, bool italic, bool bold );
+int GraphicTextWidth( const wxString& aText, int size_h, bool italic, bool bold );
 
 /**
  * Function NegableTextLength

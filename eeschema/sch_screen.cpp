@@ -34,7 +34,7 @@
 #include <common.h>
 #include <kicad_string.h>
 #include <eeschema_id.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <sch_item_struct.h>
 #include <wxEeschemaStruct.h>

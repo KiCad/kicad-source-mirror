@@ -30,7 +30,7 @@
 #ifndef __3D_VIEWER_H__
 #define __3D_VIEWER_H__
 
-#include <wxstruct.h>   // for EDA_BASE_FRAME.
+#include <draw_frame.h>
 
 #if !wxUSE_GLCANVAS
 #error Please build wxWidgets with Opengl support (./configure --with-opengl)
@@ -53,24 +53,29 @@
 
 #include <3d_struct.h>
 
+#define KISYS3DMOD "KISYS3DMOD"
+
 class EDA_3D_CANVAS;
 class PCB_BASE_FRAME;
 
-#define KICAD_DEFAULT_3D_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
-#define LIB3D_PATH wxT( "packages3d" )
+#define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
+#define LIB3D_PATH                          wxT( "packages3d" )
 
-class EDA_3D_FRAME : public EDA_BASE_FRAME
+
+class EDA_3D_FRAME : public KIWAY_PLAYER
 {
 private:
     EDA_3D_CANVAS*  m_canvas;
     bool            m_reloadRequest;
     wxString        m_defaultFileName;  /// Filename to propose for screenshot
+
     /// Tracks whether to use Orthographic or Perspective projection
     bool            m_ortho;
 
 public:
-    EDA_3D_FRAME( PCB_BASE_FRAME* parent, const wxString& title,
+    EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent, const wxString& aTitle,
                   long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
+
     ~EDA_3D_FRAME()
     {
         m_auimgr.UnInit();
@@ -125,8 +130,9 @@ private:
                                     // to the current display options
     void ReCreateMainToolbar();
     void SetToolbars();
-    void GetSettings();
-    void SaveSettings();
+
+    void LoadSettings( wxConfigBase* aCfg );    // overload virtual
+    void SaveSettings( wxConfigBase* aCfg );    // overload virtual
 
     // Other functions
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );

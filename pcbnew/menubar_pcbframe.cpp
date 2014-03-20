@@ -29,7 +29,8 @@
  * Pcbnew editor menu bar
  */
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <hotkeys.h>
@@ -45,6 +46,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
     wxString    text;
     wxMenuBar*  menuBar = GetMenuBar();
+
+    wxFileHistory&  fhist = Kiface().GetFileHistory();
 
     if( ! menuBar )
         menuBar = new wxMenuBar();
@@ -79,16 +82,17 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Add this menu to list menu managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
     if( openRecentMenu )
-        wxGetApp().GetFileHistory().RemoveMenu( openRecentMenu );
+        fhist.RemoveMenu( openRecentMenu );
 
     openRecentMenu = new wxMenu();
-    wxGetApp().GetFileHistory().UseMenu( openRecentMenu );
-    wxGetApp().GetFileHistory().AddFilesToMenu();
+
+    fhist.UseMenu( openRecentMenu );
+    fhist.AddFilesToMenu();
+
     AddMenuItem( filesMenu, openRecentMenu,
                  -1, _( "Open &Recent" ),
                  _( "Open a recent opened board" ),
                  KiBitmap( open_project_xpm ) );
-
 
     // Pcbnew Board
     AddMenuItem( filesMenu, ID_APPEND_FILE,
@@ -532,7 +536,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
 
     // Language submenu
-    wxGetApp().AddMenuLanguageList( configmenu );
+    Pgm().AddMenuLanguageList( configmenu );
 
     // Hotkey submenu
     AddHotkeyConfigMenu( configmenu );

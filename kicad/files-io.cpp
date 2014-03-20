@@ -27,7 +27,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_kicad.h>
 #include <wx/fs_zip.h>
 #include <wx/zipstrm.h>
 #include <wx/docview.h>
@@ -47,9 +47,8 @@ static const wxString ZipFileWildcard( wxT( "Zip file (*.zip) | *.zip" ) );
 
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 {
-    wxString fn;
-
-    fn = GetFileFromHistory( event.GetId(), _( "KiCad project file" ) );
+    wxString fn = GetFileFromHistory( event.GetId(),
+                    _( "KiCad project file" ), &Pgm().GetFileHistory() );
 
     if( fn != wxEmptyString )
     {

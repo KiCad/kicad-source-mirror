@@ -27,6 +27,7 @@
 
 #include <wx/dialog.h>
 #include <hashtables.h>
+#include <kiway_player.h>
 
 #if wxMINOR_VERSION == 8 && defined(__WXGTK__)
  #define DLGSHIM_USE_SETFOCUS      1
@@ -44,7 +45,7 @@
  * <br>
  * in the dialog window's properties.
  **/
-class DIALOG_SHIM : public wxDialog
+class DIALOG_SHIM : public wxDialog, public KIWAY_HOLDER
 {
 public:
 
@@ -57,6 +58,7 @@ public:
 
     bool Show( bool show );     // overload wxDialog::Show
 
+
 protected:
     std::string m_hash_key;     // alternate for class_map when classname re-used.
 
@@ -64,8 +66,6 @@ protected:
 private:
     void    onInit( wxInitDialogEvent& aEvent );
 #endif
-
-
 };
 
 #endif  // DIALOG_SHIM_

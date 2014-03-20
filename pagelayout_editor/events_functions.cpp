@@ -28,7 +28,7 @@
 
 #include <fctsys.h>
 #include <wx/treectrl.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <common.h>
 #include <macros.h>

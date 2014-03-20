@@ -27,7 +27,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <gerbview.h>
 #include <gerbview_id.h>
 #include <class_GERBER.h>
@@ -301,7 +302,7 @@ void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
  */
 void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
 {
-    wxConfig* config = wxGetApp().GetSettings();
+    wxConfigBase* config = Kiface().KifaceSettings();
     config->Write( wxT("BrdLayersCount"), m_exportBoardCopperLayersCount );
 
     wxString key;
@@ -314,7 +315,7 @@ void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
 
 void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
 {
-    wxConfig* config = wxGetApp().GetSettings();
+    wxConfigBase* config = Kiface().KifaceSettings();
 
     config->Read( wxT("BrdLayersCount"), &m_exportBoardCopperLayersCount );
     normalizeBrdLayersCount();

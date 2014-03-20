@@ -1435,7 +1435,7 @@ static bool s_SortByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 }
 
 
-int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
+int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 {
     if( m_NetInfo.GetNetCount() == 0 )
         return 0;

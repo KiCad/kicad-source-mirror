@@ -29,9 +29,10 @@
  */
 
 #include <fctsys.h>
+#include <kiway.h>
 #include <gr_basic.h>
 #include <macros.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -320,8 +321,13 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     }
 
     if( newFile )
-    {   // Get a new name for the library
-        wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
+    {
+        PROJECT&        prj = Prj();
+        SEARCH_STACK&   search = prj.SchSearchS();
+
+        // Get a new name for the library
+        wxString default_path = prj.RPath(PROJECT::SCH_LIB).LastVisitedPath( search );
+
         wxFileDialog dlg( this, _( "Component Library Name:" ), default_path,
                           wxEmptyString, SchematicLibraryFileExtension,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -336,7 +342,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
         if( fn.GetExt().IsEmpty() )
             fn.SetExt( SchematicLibraryFileExtension );
 
-        wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
+        prj.RPath(PROJECT::SCH_LIB).SaveLastVisitedPath( fn.GetPath() );
     }
     else
     {
@@ -404,6 +410,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     if( docFileName.FileExists() )
     {
         backupFileName.SetExt( wxT( "bck" ) );
+
         if( backupFileName.FileExists() )
             wxRemoveFile( backupFileName.GetFullPath() );
 

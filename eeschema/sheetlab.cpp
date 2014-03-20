@@ -56,9 +56,9 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
     DIALOG_SCH_EDIT_SHEET_PIN dlg( this );
 
     dlg.SetLabelName( aSheetPin->GetText() );
-    dlg.SetTextHeight( ReturnStringFromValue( g_UserUnit, aSheetPin->GetSize().y ) );
+    dlg.SetTextHeight( StringFromValue( g_UserUnit, aSheetPin->GetSize().y ) );
     dlg.SetTextHeightUnits( GetUnitsLabel( g_UserUnit ) );
-    dlg.SetTextWidth( ReturnStringFromValue( g_UserUnit, aSheetPin->GetSize().x ) );
+    dlg.SetTextWidth( StringFromValue( g_UserUnit, aSheetPin->GetSize().x ) );
     dlg.SetTextWidthUnits( GetUnitsLabel( g_UserUnit ) );
     dlg.SetConnectionType( aSheetPin->GetShape() );
 
@@ -84,8 +84,8 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
     }
 
     aSheetPin->SetText( dlg.GetLabelName() );
-    aSheetPin->SetSize( wxSize( ReturnValueFromString( g_UserUnit, dlg.GetTextHeight() ),
-                                ReturnValueFromString( g_UserUnit, dlg.GetTextWidth() ) ) );
+    aSheetPin->SetSize( wxSize( ValueFromString( g_UserUnit, dlg.GetTextHeight() ),
+                                ValueFromString( g_UserUnit, dlg.GetTextWidth() ) ) );
     aSheetPin->SetShape( dlg.GetConnectionType() );
 
     if( aDC )

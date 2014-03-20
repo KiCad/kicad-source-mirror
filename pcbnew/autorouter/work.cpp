@@ -73,7 +73,7 @@ void InitWork()
 
 
 /* add a unit of work to the work list
- * Return:
+ * :
  *  1 if OK
  *  0 if memory allocation failed
  */

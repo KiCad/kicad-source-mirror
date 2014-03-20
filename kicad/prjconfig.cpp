@@ -28,11 +28,12 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_kicad.h>
+#include <project.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <kicad.h>
-#include <param_config.h>
+#include <config_params.h>
 #include <project_template.h>
 #include <tree_project_frame.h>
 #include <wildcards_and_files_ext.h>
@@ -52,9 +53,9 @@
 // (Add them in s_KicadManagerParams if any)
 // Used also to create new .pro files from the kicad.pro template file
 // for new projects
-static const wxString GeneralGroupName( wxT( "/general" ) );
-PARAM_CFG_ARRAY s_KicadManagerParams;
+#define     GeneralGroupName            wxT( "/general" )
 
+PARAM_CFG_ARRAY     s_KicadManagerParams;
 
 void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName,
                                             bool           aTemplateSelector = false )
@@ -65,8 +66,8 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName,
 
     ClearMsg();
 
-    // Init default config filename
-    filename = wxGetApp().FindLibraryPath( wxT( "kicad" ) + g_KicadPrjFilenameExtension );
+    // default config filename
+    filename = Pgm().SysSearch().FindValidPath( wxT( "kicad.pro" ) );
 
     // If we are creating a project from a template, make sure the template directory is sane
     if( aTemplateSelector )
@@ -179,8 +180,8 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName,
     m_ProjectFileName = newProjectName;
 
     // Write settings to project file
-    wxGetApp().WriteProjectConfig( aPrjFullFileName,
-                                   GeneralGroupName, s_KicadManagerParams );
+    // was: wxGetApp().WriteProjectConfig( aPrjFullFileName, GeneralGroupName, s_KicadManagerParams );
+    Prj().ConfigSave( Pgm().SysSearch(), aPrjFullFileName, GeneralGroupName, s_KicadManagerParams );
 }
 
 
@@ -257,31 +258,33 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     /* Check if project file exists and if it is not noname.pro */
     wxString filename = m_ProjectFileName.GetFullName();
 
-    wxString nameless_prj = NAMELESS_PROJECT;
-    nameless_prj += g_KicadPrjFilenameExtension;
+    wxString nameless_prj = NAMELESS_PROJECT  wxT( ".pro" );
 
     if( !m_ProjectFileName.FileExists() && !filename.IsSameAs( nameless_prj ) )
     {
-        wxString msg;
-        msg.Printf( _( "KiCad project file <%s> not found" ),
-                    GetChars( m_ProjectFileName.GetFullPath() ) );
+        wxString msg = wxString::Format(
+                _( "KiCad project file '%s' not found" ),
+                GetChars( m_ProjectFileName.GetFullPath() ) );
 
         DisplayError( this, msg );
         return;
     }
 
     wxSetWorkingDirectory( m_ProjectFileName.GetPath() );
-    wxGetApp().ReadProjectConfig( m_ProjectFileName.GetFullPath(),
-                                  GeneralGroupName, s_KicadManagerParams, false );
 
-    title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
-        wxT( " " ) +  m_ProjectFileName.GetFullPath();
+    // was wxGetApp().ReadProjectConfig( m_ProjectFileName.GetFullPath(),
+    //                              GeneralGroupName, s_KicadManagerParams, false );
+    Prj().ConfigLoad( Pgm().SysSearch(), m_ProjectFileName.GetFullPath(),
+            GeneralGroupName, s_KicadManagerParams, false );
+
+    title = wxT( "KiCad " ) + GetBuildVersion() +  wxT( ' ' ) +  m_ProjectFileName.GetFullPath();
 
     if( !m_ProjectFileName.IsDirWritable() )
         title += _( " [Read Only]" );
 
     SetTitle( title );
-    UpdateFileHistory( m_ProjectFileName.GetFullPath() );
+    UpdateFileHistory( m_ProjectFileName.GetFullPath(), &Pgm().GetFileHistory() );
+
     m_LeftWin->ReCreateTreePrj();
 
 #ifdef KICAD_USE_FILES_WATCHER
@@ -301,6 +304,9 @@ void KICAD_MANAGER_FRAME::OnSaveProject( wxCommandEvent& event )
     if( !IsWritable( m_ProjectFileName ) )
         return;
 
-    wxGetApp().WriteProjectConfig( m_ProjectFileName.GetFullPath(),
-                                   GeneralGroupName, s_KicadManagerParams );
+    // was: wxGetApp().WriteProjectConfig( m_ProjectFileName.GetFullPath(),
+    //          GeneralGroupName, s_KicadManagerParams );
+    Prj().ConfigSave( Pgm().SysSearch(), m_ProjectFileName.GetFullPath(),
+            GeneralGroupName, s_KicadManagerParams );
 }
+
