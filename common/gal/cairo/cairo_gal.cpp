@@ -70,7 +70,7 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 #endif
 
     SetSize( aParent->GetSize() );
-    screenSize = VECTOR2D( aParent->GetSize() );
+    screenSize = VECTOR2I( aParent->GetSize() );
     initCursor();
 
     // Grid color settings are different in Cairo and OpenGL
@@ -138,7 +138,7 @@ void CAIRO_GAL::EndDrawing()
         *wxOutputPtr++ = value & 0xff;            // Blue pixel
     }
 
-    wxImage      img( (int) screenSize.x, (int) screenSize.y, (unsigned char*) wxOutput, true );
+    wxImage      img( screenSize.x, screenSize.y, (unsigned char*) wxOutput, true );
     wxBitmap     bmp( img );
     wxClientDC   client_dc( this );
     wxBufferedDC dc;
@@ -283,7 +283,7 @@ void CAIRO_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControl
 
 void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
 {
-    screenSize = VECTOR2D( aWidth, aHeight );
+    screenSize = VECTOR2I( aWidth, aHeight );
 
     // Recreate the bitmaps
     deleteBitmaps();

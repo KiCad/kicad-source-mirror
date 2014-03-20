@@ -771,7 +771,7 @@ void VIEW::Redraw()
 }
 
 
-const VECTOR2D& VIEW::GetScreenPixelSize() const
+const VECTOR2I& VIEW::GetScreenPixelSize() const
 {
     return m_gal->GetScreenPixelSize();
 }

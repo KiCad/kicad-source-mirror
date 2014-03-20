@@ -203,8 +203,9 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
         double zoom = 1.0 / ( zoomFactor * GetZoom() );
 
-        view->SetScale( zoom );
-        view->SetCenter( VECTOR2D( center ) );
+        VECTOR2D cursorWorld( GetCrossHairPosition() );
+        view->SetScale( zoom, cursorWorld );
+
         GetGalCanvas()->Refresh();
     }
 
