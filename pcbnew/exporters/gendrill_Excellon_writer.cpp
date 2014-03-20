@@ -42,7 +42,7 @@
 #include <macros.h>
 #include <kicad_string.h>
 #include <wxPcbStruct.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <build_version.h>
 
 #include <class_board.h>
@@ -351,7 +351,8 @@ void EXCELLON_WRITER::WriteEXCELLONHeader()
     if( !m_minimalHeader )
     {
         // The next 2 lines in EXCELLON files are comments:
-        wxString msg = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion();
+        wxString msg = Pgm().App().GetAppName() + wxT( " " ) + GetBuildVersion();
+
         fprintf( m_file, ";DRILL file {%s} date %s\n", TO_UTF8( msg ),
                  TO_UTF8( DateAndTime() ) );
         msg = wxT( ";FORMAT={" );
@@ -482,9 +483,9 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
 
             new_hole.m_Hole_Shape = 0;              // hole shape: round
             new_hole.m_Hole_Pos = via->GetStart();
-            via->ReturnLayerPair( &new_hole.m_Hole_Top_Layer, &new_hole.m_Hole_Bottom_Layer );
+            via->LayerPair( &new_hole.m_Hole_Top_Layer, &new_hole.m_Hole_Bottom_Layer );
 
-            // ReturnLayerPair return params with m_Hole_Bottom_Layer < m_Hole_Top_Layer
+            // LayerPair return params with m_Hole_Bottom_Layer < m_Hole_Top_Layer
             if( (new_hole.m_Hole_Bottom_Layer > aFirstLayer) && (aFirstLayer >= 0) )
                 continue;
 

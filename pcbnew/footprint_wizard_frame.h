@@ -63,9 +63,9 @@ protected:
     wxString        m_wizardStatus;         // < current wizard status
 
 public:
-    FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME*   parent,
-                            wxSemaphore*            semaphore = NULL,
-                            long                    style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
+        FOOTPRINT_EDIT_FRAME* parent, wxSemaphore* semaphore = NULL,
+        long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~FOOTPRINT_WIZARD_FRAME();
 
@@ -140,23 +140,8 @@ private:
 
     void                GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
-    /**
-     * Function LoadSettings
-     * loads the library viewer frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get loaded.
-     */
-    void                LoadSettings();
-
-    /**
-     * Function SaveSettings
-     * save library viewer frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get saved.
-     */
-    void                SaveSettings();
+    void                LoadSettings( wxConfigBase* aCfg ); // override virtual
+    void                SaveSettings( wxConfigBase* aCfg ); // override virtual
 
 
     /**

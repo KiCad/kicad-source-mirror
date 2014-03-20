@@ -29,11 +29,12 @@
 
 
 #include <fctsys.h>
+#include <kiface_i.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcbnew.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gestfich.h>
 #include <3d_struct.h>
 #include <3d_viewer.h>
@@ -420,17 +421,30 @@ void DIALOG_MODULE_BOARD_EDITOR::Remove3DShape( wxCommandEvent& event )
 
 void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
 {
-    wxString fullfilename, shortfilename;
-    wxString fullpath;
+    PROJECT&        prj = Prj();
+    SEARCH_STACK&   search = Kiface().KifaceSearch();
 
-    fullpath = wxGetApp().ReturnLastVisitedLibraryPath( LIB3D_PATH );
+    wxString    fullpath;
+    wxString    kisys3dmod = wxGetenv( wxT( KISYS3DMOD ) );
+
+    if( !kisys3dmod || !wxFileName::IsDirReadable( kisys3dmod ) )
+    {
+        fullpath = search.FindValidPath( LIB3D_PATH );
+    }
+
+    if( !fullpath )
+        fullpath = prj.RPath(PROJECT::VIEWER_3D).LastVisitedPath( search, LIB3D_PATH );
+
 #ifdef __WINDOWS__
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
 
-    wxString fileFilters;
-    fileFilters = wxGetTranslation( Shapes3DFileWildcard );
-    fileFilters += wxChar(  '|' );
+    wxString    fullfilename;
+    wxString    shortfilename;
+
+    wxString    fileFilters = wxGetTranslation( Shapes3DFileWildcard );
+
+    fileFilters += wxChar( '|' );
     fileFilters += wxGetTranslation( IDF3DFileWildcard );
 
     fullfilename = EDA_FileSelector( _( "3D Shape:" ),
@@ -447,7 +461,8 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
         return;
 
     wxFileName fn = fullfilename;
-    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
+
+    prj.RPath(PROJECT::VIEWER_3D).SaveLastVisitedPath( fn.GetPath() );
 
     /* If the file path is already in the library search paths
      * list, just add the library name to the list.  Otherwise, add
@@ -456,8 +471,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
      * because it preserve use of default libraries paths, when the path is a
      * sub path of these default paths
      */
-    shortfilename =
-        wxGetApp().ReturnFilenameWithRelativePathInLibPath( fullfilename );
+    shortfilename = search.FilenameWithRelativePathInSearchList( fullfilename );
 
     wxFileName aux = shortfilename;
     if( aux.IsAbsolute() )
@@ -475,10 +489,12 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
     }
 
     S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
+
 #ifdef __WINDOWS__
     // Store filename in Unix notation
     shortfilename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
+
     new3DShape->SetShape3DName( shortfilename );
     m_Shapes3D_list.push_back( new3DShape );
     m_3D_ShapeNameListBox->Append( shortfilename );
@@ -512,9 +528,9 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     m_CurrentModule->Value().Copy( m_ValueCopy );
 
     // Initialize masks clearances
-    m_CurrentModule->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
-    m_CurrentModule->SetLocalSolderMaskMargin( ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
-    m_CurrentModule->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
+    m_CurrentModule->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
+    m_CurrentModule->SetLocalSolderMaskMargin( ValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
+    m_CurrentModule->SetLocalSolderPasteMargin( ValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
 
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
@@ -551,8 +567,8 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     }
 
     // Set Module Position
-    modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX );
-    modpos.y = ReturnValueFromTextCtrl( *m_ModPositionY );
+    modpos.x = ValueFromTextCtrl( *m_ModPositionX );
+    modpos.y = ValueFromTextCtrl( *m_ModPositionY );
     m_CurrentModule->SetPosition( modpos );
     m_CurrentModule->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
@@ -600,7 +616,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
         m_CurrentModule->Flip( m_CurrentModule->GetPosition() );
 
     // Update 3D shape list
-    int         ii = m_3D_ShapeNameListBox->GetSelection();
+    int ii = m_3D_ShapeNameListBox->GetSelection();
 
     if( ii >= 0 )
         TransfertDisplayTo3DValues( ii  );
@@ -678,3 +694,4 @@ void DIALOG_MODULE_BOARD_EDITOR::OnEditValue( wxCommandEvent& event )
     m_Parent->SetCrossHairPosition( tmp );
     m_ValueCtrl->SetValue( m_ValueCopy->GetText() );
 }
+

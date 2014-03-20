@@ -27,7 +27,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <build_version.h>
 #include <macros.h>
@@ -52,11 +53,9 @@
 
 #define PL_EDITOR_FRAME_NAME wxT( "PlEditorFrame" )
 
-PL_EDITOR_FRAME::PL_EDITOR_FRAME( wxWindow* aParent, const wxString& aTitle,
-                                const wxPoint& aPosition, const wxSize& aSize,
-                                long aStyle ) :
-    EDA_DRAW_FRAME( aParent, PL_EDITOR_FRAME_TYPE, aTitle, aPosition, aSize,
-                    aStyle, PL_EDITOR_FRAME_NAME )
+PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+    EDA_DRAW_FRAME( aKiway, aParent, PL_EDITOR_FRAME_TYPE, wxT( "PlEditorFrame" ),
+            wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )
 {
     m_FrameName = PL_EDITOR_FRAME_NAME;
 
@@ -79,8 +78,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( wxWindow* aParent, const wxString& aTitle,
     wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU();
     SetScreen( new PL_EDITOR_SCREEN( pageSizeIU ) );
 
-    m_config = wxGetApp().GetSettings();
-    LoadSettings();
+    LoadSettings( config() );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     if( m_LastGridSizeId < ID_POPUP_GRID_LEVEL_1MM-ID_POPUP_GRID_LEVEL_1000 )
@@ -181,6 +179,28 @@ PL_EDITOR_FRAME::~PL_EDITOR_FRAME()
 }
 
 
+bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
+{
+    wxString fn = aFileSet[0];
+
+    if( !LoadPageLayoutDescrFile( fn ) )
+    {
+        wxString msg = wxString::Format(
+            _( "Error when loading file '%s'" ),
+            GetChars( fn )
+            );
+
+        wxMessageBox( msg );
+        return false;
+    }
+    else
+    {
+        OnNewPageLayout();
+        return true;
+    }
+}
+
+
 void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() )
@@ -232,7 +252,8 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
     // do not show the window because we do not want any paint event
     Show( false );
 
-    wxGetApp().SaveCurrentSetupValues( m_configSettings );
+    // was: Pgm().SaveCurrentSetupValues( m_configSettings );
+    wxConfigSaveSetups( Kiface().KifaceSettings(), m_configSettings );
 
     // On Linux, m_propertiesPagelayout must be destroyed
     // before deleting the main frame to avoid a crash when closing
@@ -268,31 +289,29 @@ double PL_EDITOR_FRAME::BestZoom()
 #define PROPERTIES_FRAME_WIDTH_KEY wxT("PropertiesFrameWidth")
 #define CORNER_ORIGIN_CHOICE_KEY wxT("CornerOriginChoice")
 
-void PL_EDITOR_FRAME::LoadSettings()
+void PL_EDITOR_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    EDA_DRAW_FRAME::LoadSettings();
-    m_config->Read( DESIGN_TREE_WIDTH_KEY, &m_designTreeWidth, 100);
-    m_config->Read( PROPERTIES_FRAME_WIDTH_KEY, &m_propertiesFrameWidth, 150);
-    m_config->Read( CORNER_ORIGIN_CHOICE_KEY, &m_originSelectChoice );
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
+
+    aCfg->Read( DESIGN_TREE_WIDTH_KEY, &m_designTreeWidth, 100);
+    aCfg->Read( PROPERTIES_FRAME_WIDTH_KEY, &m_propertiesFrameWidth, 150);
+    aCfg->Read( CORNER_ORIGIN_CHOICE_KEY, &m_originSelectChoice );
 }
 
 
-void PL_EDITOR_FRAME::SaveSettings()
+void PL_EDITOR_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxConfig* config = wxGetApp().GetSettings();
-
-    if( config == NULL )
-        return;
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
 
     m_designTreeWidth = m_treePagelayout->GetSize().x;
     m_propertiesFrameWidth = m_propertiesPagelayout->GetSize().x;
 
-    EDA_DRAW_FRAME::SaveSettings();
-    m_config->Write( DESIGN_TREE_WIDTH_KEY, m_designTreeWidth);
-    m_config->Write( PROPERTIES_FRAME_WIDTH_KEY, m_propertiesFrameWidth);
-    m_config->Write( CORNER_ORIGIN_CHOICE_KEY, m_originSelectChoice );
+    aCfg->Write( DESIGN_TREE_WIDTH_KEY, m_designTreeWidth);
+    aCfg->Write( PROPERTIES_FRAME_WIDTH_KEY, m_propertiesFrameWidth);
+    aCfg->Write( CORNER_ORIGIN_CHOICE_KEY, m_originSelectChoice );
 
-    wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
+    // was: wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
+    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 }
 
 

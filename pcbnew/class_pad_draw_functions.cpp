@@ -317,7 +317,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     GRSetDrawMode( aDC, aDrawInfo.m_DrawMode );
 
     // calculate pad shape position :
-    wxPoint shape_pos = ReturnShapePos() - aDrawInfo.m_Offset;
+    wxPoint shape_pos = ShapePos() - aDrawInfo.m_Offset;
 
     wxSize  halfsize = m_Size;
     halfsize.x >>= 1;
@@ -544,7 +544,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
     if( aDrawInfo.m_Display_padnum )
     {
-        ReturnStringPadName( buffer );
+        StringPadName( buffer );
         int numpad_len = buffer.Len();
         numpad_len = std::max( numpad_len, MIN_CHAR_COUNT );
 

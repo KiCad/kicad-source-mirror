@@ -215,22 +215,22 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
         m_Item->Draw( m_parent->GetCanvas(), m_DC, GR_XOR );
 
     msg = m_Center_StartXCtrl->GetValue();
-    m_Item->SetStartX( ReturnValueFromString( g_UserUnit, msg ) );
+    m_Item->SetStartX( ValueFromString( g_UserUnit, msg ) );
 
     msg = m_Center_StartYCtrl->GetValue();
-    m_Item->SetStartY( ReturnValueFromString( g_UserUnit, msg ) );
+    m_Item->SetStartY( ValueFromString( g_UserUnit, msg ) );
 
     msg = m_EndX_Radius_Ctrl->GetValue();
-    m_Item->SetEndX( ReturnValueFromString( g_UserUnit, msg ) );
+    m_Item->SetEndX( ValueFromString( g_UserUnit, msg ) );
 
     msg = m_EndY_Ctrl->GetValue();
-    m_Item->SetEndY( ReturnValueFromString( g_UserUnit, msg ) );
+    m_Item->SetEndY( ValueFromString( g_UserUnit, msg ) );
 
     msg = m_ThicknessCtrl->GetValue();
-    m_Item->SetWidth( ReturnValueFromString( g_UserUnit, msg ) );
+    m_Item->SetWidth( ValueFromString( g_UserUnit, msg ) );
 
     msg = m_DefaultThicknessCtrl->GetValue();
-    int thickness = ReturnValueFromString( g_UserUnit, msg );
+    int thickness = ValueFromString( g_UserUnit, msg );
 
     m_Item->SetLayer( m_LayerSelectionCtrl->GetLayerSelection() );
 

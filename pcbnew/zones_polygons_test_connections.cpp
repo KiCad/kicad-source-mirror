@@ -171,7 +171,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                         // the pad position, because the zones are connected
                         // to the center of the shape, not the pad position
                         // (this is important for pads with thermal relief)
-                        pos1 = pos2 = ( (D_PAD*) item )->ReturnShapePos();
+                        pos1 = pos2 = ( (D_PAD*) item )->ShapePos();
                     }
                     else if( item->Type() == PCB_VIA_T )
                     {

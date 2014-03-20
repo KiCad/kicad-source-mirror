@@ -27,7 +27,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <pcbnew.h>
@@ -77,7 +78,10 @@ void DIALOG_FREEROUTE::MyInit()
     m_FreeRouteSetupChanged = false;
 
     wxString msg;
-    wxGetApp().GetSettings()->Read( FREEROUTE_URL_KEY, &msg );
+
+    wxConfigBase* cfg = Kiface().KifaceSettings();
+
+    cfg->Read( FREEROUTE_URL_KEY, &msg );
 
     if( msg.IsEmpty() )
         m_FreerouteURLName->SetValue( wxT( "http://www.freerouting.net/" ) );
@@ -207,8 +211,8 @@ void DIALOG_FREEROUTE::OnOKButtonClick( wxCommandEvent& event )
 {
     if( m_FreeRouteSetupChanged )  // Save new config
     {
-        wxGetApp().GetSettings()->Write( FREEROUTE_URL_KEY,
-                                         m_FreerouteURLName->GetValue() );
+        Kiface().KifaceSettings()->Write(
+            FREEROUTE_URL_KEY, m_FreerouteURLName->GetValue() );
     }
 
     EndModal(wxID_OK);

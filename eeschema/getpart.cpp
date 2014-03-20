@@ -29,7 +29,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -56,12 +56,13 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
     wxString cmpname;
 
     // Close the current Lib browser, if open, and open a new one, in "modal" mode:
-    LIB_VIEW_FRAME * viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer();;
+    LIB_VIEW_FRAME* viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer( this );
     if( viewlibFrame )
         viewlibFrame->Destroy();
 
-    viewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore,
+    viewlibFrame = new LIB_VIEW_FRAME( &Kiway(), this, NULL, &semaphore,
                         KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+
     // Show the library viewer frame until it is closed
     // Wait for viewer closing event:
     while( semaphore.TryWait() == wxSEMA_BUSY )

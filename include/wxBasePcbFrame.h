@@ -34,7 +34,7 @@
 
 #include <vector>
 
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <base_struct.h>
 #include <eda_text.h>                // EDA_DRAW_MODE_T
 #include <richio.h>
@@ -86,11 +86,6 @@ protected:
     BOARD*              m_Pcb;
     GENERAL_COLLECTOR*  m_Collector;
 
-    /// The project footprint library table.  This is a combination of the project
-    /// footprint library table and the global footprint table.  This is the one to
-    /// use when finding a #MODULE.
-    FP_LIB_TABLE*       m_footprintLibTable;
-
     /// Auxiliary tool bar typically shown below the main tool bar at the top of the
     /// main window.
     wxAuiToolBar*       m_auxiliaryToolBar;
@@ -108,7 +103,7 @@ protected:
      *
      * @param aFootprintId is the #FPID of component footprint to load.
      * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
-     *         libraries in #m_footprintLibTable.
+     *         libraries in the table returned from #FootprintLibs().
      * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
      *                 occurs while reading footprint library files.
      */
@@ -120,10 +115,9 @@ protected:
     static const LAYER_NUM GAL_LAYER_ORDER[];
 
 public:
-    PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
-                    const wxString& aTitle,
-                    const wxPoint& aPos, const wxSize& aSize,
-                    long aStyle, const wxString & aFrameName );
+    PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
+            const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
+            long aStyle, const wxString& aFrameName );
 
     ~PCB_BASE_FRAME();
 
@@ -133,7 +127,7 @@ public:
      *
      * @param aFootprintId is the #FPID of component footprint to load.
      * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
-     *         libraries in #m_footprintLibTable.
+     *         libraries in table returned from #FootprintLibs().
      */
     MODULE* LoadFootprint( const FPID& aFootprintId );
 
@@ -189,17 +183,6 @@ public:
     {
         wxASSERT( m_Pcb );
         return m_Pcb;
-    }
-
-    /**
-     * Function SetFootprintLibTable
-     * set the footprint library table to \a aFootprintLibTable.
-     *
-     * @param aFootprintLibTable is a pointer to the #FP_LIB_TABLE object.
-     */
-    void SetFootprintLibTable( FP_LIB_TABLE* aFootprintLibTable )
-    {
-        m_footprintLibTable = aFootprintLibTable;
     }
 
     // General
@@ -484,12 +467,10 @@ public:
     wxString SelectFootprintFromLibBrowser();
 
     /**
-     * Function GetFootprintLibraryTable
-     * @return the project #FP_LIB_TABLE so programs can find footprints.
+     * Function FootprintLibs
+     * @return the project #FP_LIB_TABLE.
      */
-    FP_LIB_TABLE* GetFootprintLibraryTable() { return m_footprintLibTable; }
-
-    void SetFootprintLibraryTable( FP_LIB_TABLE* aTable ) { m_footprintLibTable = aTable; }
+    FP_LIB_TABLE* FootprintLibs() const;
 
     //  ratsnest functions
     /**
@@ -645,36 +626,15 @@ public:
 
     virtual void SwitchLayer( wxDC* DC, LAYER_NUM layer );
 
-    /**
-     * Load applications settings common to PCB draw frame objects.
-     *
-     * This overrides the base class EDA_DRAW_FRAME::LoadSettings() to
-     * handle settings common to the PCB layout application and footprint
-     * editor main windows.  It calls down to the base class to load
-     * settings common to all drawing frames.  Please put your application
-     * settings common to all pcb drawing frames here to avoid having
-     * application settings loaded all over the place.
-     */
-    virtual void LoadSettings();
+    void LoadSettings( wxConfigBase* aCfg );    // override virtual
+    void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
     bool InvokeDialogGrid();
-
-    /**
-     * Save applications settings common to PCB draw frame objects.
-     *
-     * This overrides the base class EDA_DRAW_FRAME::SaveSettings() to
-     * save settings common to the PCB layout application and footprint
-     * editor main windows.  It calls down to the base class to save
-     * settings common to all drawing frames.  Please put your application
-     * settings common to all pcb drawing frames here to avoid having
-     * application settings saved all over the place.
-     */
-    virtual void SaveSettings();
 
     void OnTogglePolarCoords( wxCommandEvent& aEvent );
     void OnTogglePadDrawMode( wxCommandEvent& aEvent );
 
-    /* User interface update event handlers. */
+    // User interface update event handlers.
     void OnUpdateCoordType( wxUpdateUIEvent& aEvent );
     void OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );

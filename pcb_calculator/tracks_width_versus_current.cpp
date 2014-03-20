@@ -37,7 +37,7 @@
 #include <UnitSelector.h>
 #include <units_scales.h>
 
-extern double ReturnDoubleFromString( const wxString& TextValue );
+extern double DoubleFromString( const wxString& TextValue );
 
 // Key words to read/write some parameters in config:
 #define KEYWORD_TW_CURRENT                     wxT( "TW_Track_Current" )
@@ -67,10 +67,10 @@ void PCB_CALCULATOR_FRAME::TW_WriteConfig()
 void PCB_CALCULATOR_FRAME::OnTWCalculateButt( wxCommandEvent& event )
 {
     // Prepare parameters:
-    double current   = ReturnDoubleFromString( m_TrackCurrentValue->GetValue() );
-    double thickness = ReturnDoubleFromString( m_TrackThicknessValue->GetValue() );
-    double deltaT_C  = ReturnDoubleFromString( m_TrackDeltaTValue->GetValue() );
-    double track_len = ReturnDoubleFromString( m_TrackLengthValue->GetValue() );
+    double current   = DoubleFromString( m_TrackCurrentValue->GetValue() );
+    double thickness = DoubleFromString( m_TrackThicknessValue->GetValue() );
+    double deltaT_C  = DoubleFromString( m_TrackDeltaTValue->GetValue() );
+    double track_len = DoubleFromString( m_TrackLengthValue->GetValue() );
     double extTrackWidth;
     double intTrackWidth;
 

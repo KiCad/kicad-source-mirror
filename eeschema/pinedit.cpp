@@ -86,13 +86,13 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
                                LIB_PIN::GetElectricalTypeSymbols() );
     dlg.SetElectricalType( pin->GetType() );
     dlg.SetName( pin->GetName() );
-    dlg.SetNameTextSize( ReturnStringFromValue( g_UserUnit, pin->GetNameTextSize() ) );
+    dlg.SetNameTextSize( StringFromValue( g_UserUnit, pin->GetNameTextSize() ) );
     dlg.SetNameTextSizeUnits( units );
     dlg.SetPadName( pin->GetNumberString() );
-    dlg.SetPadNameTextSize( ReturnStringFromValue( g_UserUnit, pin->GetNumberTextSize() ) );
+    dlg.SetPadNameTextSize( StringFromValue( g_UserUnit, pin->GetNumberTextSize() ) );
 
     dlg.SetPadNameTextSizeUnits( units );
-    dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->GetLength() ) );
+    dlg.SetLength( StringFromValue( g_UserUnit, pin->GetLength() ) );
     dlg.SetLengthUnits( units );
     dlg.SetAddToAllParts( pin->GetUnit() == 0 );
     dlg.SetAddToAllBodyStyles( pin->GetConvert() == 0 );
@@ -120,10 +120,10 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     }
 
     // Save the pin properties to use for the next new pin.
-    LastPinNameSize = ReturnValueFromString( g_UserUnit, dlg.GetNameTextSize() );
-    LastPinNumSize = ReturnValueFromString( g_UserUnit, dlg.GetPadNameTextSize() );
+    LastPinNameSize = ValueFromString( g_UserUnit, dlg.GetNameTextSize() );
+    LastPinNumSize = ValueFromString( g_UserUnit, dlg.GetPadNameTextSize() );
     LastPinOrient = LIB_PIN::GetOrientationCode( dlg.GetOrientation() );
-    LastPinLength = ReturnValueFromString( g_UserUnit, dlg.GetLength() );
+    LastPinLength = ValueFromString( g_UserUnit, dlg.GetLength() );
     LastPinShape = LIB_PIN::GetStyleCode( dlg.GetStyle() );
     LastPinType = dlg.GetElectricalType();
     LastPinCommonConvert = dlg.GetAddToAllBodyStyles();
@@ -546,7 +546,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     IncrementLabelMember( nextName );
     Pin->SetName( nextName );
 
-    Pin->ReturnPinStringNum( msg );
+    Pin->PinStringNum( msg );
     IncrementLabelMember( msg );
     Pin->SetPinNumFromString( msg );
 
@@ -644,11 +644,11 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
             continue;
 
         dup_error++;
-        Pin->ReturnPinStringNum( stringPinNum );
+        Pin->PinStringNum( stringPinNum );
 
         /* TODO I dare someone to find a way to make happy translators on
            this thing! Lorenzo */
-        curr_pin->ReturnPinStringNum( stringCurrPinNum );
+        curr_pin->PinStringNum( stringCurrPinNum );
         msg.Printf( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, \
 %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
                     GetChars( stringCurrPinNum ),
@@ -692,7 +692,8 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
         // A pin is found here off grid
         offgrid_error++;
         wxString stringPinNum;
-        Pin->ReturnPinStringNum( stringPinNum );
+        Pin->PinStringNum( stringPinNum );
+
         msg.Printf( _( "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>" ),
                     GetChars( stringPinNum ),
                     GetChars( Pin->GetName() ),

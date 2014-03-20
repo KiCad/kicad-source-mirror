@@ -28,7 +28,7 @@
 #include <algorithm>
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <common.h>
 
 #include <dialog_hotkeys_editor.h>
@@ -202,7 +202,7 @@ void HOTKEYS_EDITOR_DIALOG::OnRightClickOnCell( wxGridEvent& event )
 
     wxString keyname = wxGetSingleChoice( _( "Special keys only. For others keys, use keyboard" ),
                                           _( "Select a key" ), C_COUNT, choices, this );
-    int key = ReturnKeyCodeFromKeyName( keyname );
+    int key = KeyCodeFromKeyName( keyname );
 
     if( key == 0 )
         return;
@@ -251,7 +251,7 @@ void HOTKEYS_EDITOR_DIALOG::OnKeyPressed( wxKeyEvent& event )
 #endif
             // See if this key code is handled in hotkeys names list
             bool exists;
-            ReturnKeyNameFromKeyCode( key, &exists );
+            KeyNameFromKeyCode( key, &exists );
 
             if( !exists )   // not handled, see hotkeys_basic.cpp
             {

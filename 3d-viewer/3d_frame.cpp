@@ -26,7 +26,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
 
 #include <3d_viewer.h>
 #include <3d_canvas.h>
@@ -38,23 +39,23 @@
 #include <wxBasePcbFrame.h>
 
 INFO3D_VISU             g_Parm_3D_Visu;
-
 // Key to store 3D Viewer config:
-static const wxString   keyBgColor_Red( wxT( "BgColor_Red" ) );
-static const wxString   keyBgColor_Green( wxT( "BgColor_Green" ) );
-static const wxString   keyBgColor_Blue( wxT( "BgColor_Blue" ) );
-static const wxString   keyShowRealisticMode( wxT( "ShowRealisticMode" ) );
-static const wxString   keyShowAxis( wxT( "ShowAxis" ) );
-static const wxString   keyShowZones( wxT( "ShowZones" ) );
-static const wxString   keyShowFootprints( wxT( "ShowFootprints" ) );
-static const wxString   keyShowCopperThickness( wxT( "ShowCopperThickness" ) );
-static const wxString   keyShowAdhesiveLayers( wxT( "ShowAdhesiveLayers" ) );
-static const wxString   keyShowSilkScreenLayers( wxT( "ShowSilkScreenLayers" ) );
-static const wxString   keyShowSolderMaskLayers( wxT( "ShowSolderMasLayers" ) );
-static const wxString   keyShowSolderPasteLayers( wxT( "ShowSolderPasteLayers" ) );
-static const wxString   keyShowCommentsLayer( wxT( "ShowCommentsLayers" ) );
-static const wxString   keyShowBoardBody( wxT( "ShowBoardBody" ) );
-static const wxString   keyShowEcoLayers( wxT( "ShowEcoLayers" ) );
+static const wxChar keyBgColor_Red[] =          wxT( "BgColor_Red" );
+static const wxChar keyBgColor_Green[] =        wxT( "BgColor_Green" );
+static const wxChar keyBgColor_Blue[] =         wxT( "BgColor_Blue" );
+static const wxChar keyShowRealisticMode[] =    wxT( "ShowRealisticMode" );
+static const wxChar keyShowAxis[] =             wxT( "ShowAxis" );
+static const wxChar keyShowZones[] =            wxT( "ShowZones" );
+static const wxChar keyShowFootprints[] =       wxT( "ShowFootprints" );
+static const wxChar keyShowCopperThickness[] =  wxT( "ShowCopperThickness" );
+static const wxChar keyShowAdhesiveLayers[] =   wxT( "ShowAdhesiveLayers" );
+static const wxChar keyShowSilkScreenLayers[] = wxT( "ShowSilkScreenLayers" );
+static const wxChar keyShowSolderMaskLayers[] = wxT( "ShowSolderMasLayers" );
+static const wxChar keyShowSolderPasteLayers[] =wxT( "ShowSolderPasteLayers" );
+static const wxChar keyShowCommentsLayer[] =    wxT( "ShowCommentsLayers" );
+static const wxChar keyShowBoardBody[] =        wxT( "ShowBoardBody" );
+static const wxChar keyShowEcoLayers[] =        wxT( "ShowEcoLayers" );
+
 
 BEGIN_EVENT_TABLE( EDA_3D_FRAME, EDA_BASE_FRAME )
 EVT_ACTIVATE( EDA_3D_FRAME::OnActivate )
@@ -72,11 +73,13 @@ EVT_MENU_RANGE( ID_MENU3D_GRID, ID_MENU3D_GRID_END,
 
 EVT_CLOSE( EDA_3D_FRAME::OnCloseWindow )
 
-END_EVENT_TABLE() EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME*   parent,
-                                              const wxString&   title,
-                                              long              style ) :
-    EDA_BASE_FRAME( parent, DISPLAY3D_FRAME_TYPE, title,
-                    wxDefaultPosition, wxDefaultSize, style, wxT( "Frame3D" ) )
+END_EVENT_TABLE()
+
+
+EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
+        const wxString& aTitle, long style ) :
+    KIWAY_PLAYER( aKiway, aParent, DISPLAY3D_FRAME_TYPE, aTitle,
+            wxDefaultPosition, wxDefaultSize, style, wxT( "Frame3D" ) )
 {
     m_canvas        = NULL;
     m_reloadRequest = false;
@@ -87,7 +90,7 @@ END_EVENT_TABLE() EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME*   parent,
     icon.CopyFromBitmap( KiBitmap( icon_3d_xpm ) );
     SetIcon( icon );
 
-    GetSettings();
+    LoadSettings( config() );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Create the status line
@@ -139,84 +142,76 @@ void EDA_3D_FRAME::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-void EDA_3D_FRAME::GetSettings()
+void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxConfig*   config = wxGetApp().GetSettings(); // Current config used by application
-    class INFO3D_VISU& prms = g_Parm_3D_Visu;
+    EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    if( config )
-    {
-        EDA_BASE_FRAME::LoadSettings();
+    INFO3D_VISU& prms = g_Parm_3D_Visu;
 
-        config->Read( keyBgColor_Red, &g_Parm_3D_Visu.m_BgColor.m_Red, 0.0 );
-        config->Read( keyBgColor_Green, &g_Parm_3D_Visu.m_BgColor.m_Green, 0.0 );
-        config->Read( keyBgColor_Blue, &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
+    aCfg->Read( keyBgColor_Red, &g_Parm_3D_Visu.m_BgColor.m_Red, 0.0 );
+    aCfg->Read( keyBgColor_Green, &g_Parm_3D_Visu.m_BgColor.m_Green, 0.0 );
+    aCfg->Read( keyBgColor_Blue, &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
 
-        bool tmp;
-        config->Read( keyShowRealisticMode, &tmp, false );
-        prms.SetFlag( FL_USE_REALISTIC_MODE, tmp );
+    bool tmp;
+    aCfg->Read( keyShowRealisticMode, &tmp, false );
+    prms.SetFlag( FL_USE_REALISTIC_MODE, tmp );
 
-        config->Read( keyShowAxis, &tmp, true );
-        prms.SetFlag( FL_AXIS, tmp );
+    aCfg->Read( keyShowAxis, &tmp, true );
+    prms.SetFlag( FL_AXIS, tmp );
 
-        config->Read( keyShowFootprints, &tmp, true );
-        prms.SetFlag( FL_MODULE, tmp );
+    aCfg->Read( keyShowFootprints, &tmp, true );
+    prms.SetFlag( FL_MODULE, tmp );
 
-        config->Read( keyShowCopperThickness, &tmp, false );
-        prms.SetFlag( FL_USE_COPPER_THICKNESS, tmp );
+    aCfg->Read( keyShowCopperThickness, &tmp, false );
+    prms.SetFlag( FL_USE_COPPER_THICKNESS, tmp );
 
-        config->Read( keyShowZones, &tmp, true );
-        prms.SetFlag( FL_ZONE, tmp );
+    aCfg->Read( keyShowZones, &tmp, true );
+    prms.SetFlag( FL_ZONE, tmp );
 
-        config->Read( keyShowAdhesiveLayers, &tmp, true );
-        prms.SetFlag( FL_ADHESIVE, tmp );
+    aCfg->Read( keyShowAdhesiveLayers, &tmp, true );
+    prms.SetFlag( FL_ADHESIVE, tmp );
 
-        config->Read( keyShowSilkScreenLayers, &tmp, true );
-        prms.SetFlag( FL_SILKSCREEN, tmp );
+    aCfg->Read( keyShowSilkScreenLayers, &tmp, true );
+    prms.SetFlag( FL_SILKSCREEN, tmp );
 
-        config->Read( keyShowSolderMaskLayers, &tmp, true );
-        prms.SetFlag( FL_SOLDERMASK, tmp );
+    aCfg->Read( keyShowSolderMaskLayers, &tmp, true );
+    prms.SetFlag( FL_SOLDERMASK, tmp );
 
-        config->Read( keyShowSolderPasteLayers, &tmp, true );
-        prms.SetFlag( FL_SOLDERPASTE, tmp );
+    aCfg->Read( keyShowSolderPasteLayers, &tmp, true );
+    prms.SetFlag( FL_SOLDERPASTE, tmp );
 
-        config->Read( keyShowCommentsLayer, &tmp, true );
-        prms.SetFlag( FL_COMMENTS, tmp );
+    aCfg->Read( keyShowCommentsLayer, &tmp, true );
+    prms.SetFlag( FL_COMMENTS, tmp );
 
-        config->Read( keyShowEcoLayers, &tmp, true );
-        prms.SetFlag( FL_ECO, tmp );
+    aCfg->Read( keyShowEcoLayers, &tmp, true );
+    prms.SetFlag( FL_ECO, tmp );
 
-        config->Read( keyShowBoardBody, &tmp, true );
-        prms.SetFlag( FL_SHOW_BOARD_BODY, tmp );
-    }
+    aCfg->Read( keyShowBoardBody, &tmp, true );
+    prms.SetFlag( FL_SHOW_BOARD_BODY, tmp );
 }
 
 
-void EDA_3D_FRAME::SaveSettings()
+void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxConfig* config = wxGetApp().GetSettings(); // Current config used by application
+    EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    if( !config )
-        return;
+    INFO3D_VISU& prms = g_Parm_3D_Visu;
 
-    EDA_BASE_FRAME::SaveSettings();
-
-    config->Write( keyBgColor_Red, g_Parm_3D_Visu.m_BgColor.m_Red );
-    config->Write( keyBgColor_Green, g_Parm_3D_Visu.m_BgColor.m_Green );
-    config->Write( keyBgColor_Blue, g_Parm_3D_Visu.m_BgColor.m_Blue );
-    class INFO3D_VISU& prms = g_Parm_3D_Visu;
-    config->Write( keyShowRealisticMode, prms.GetFlag( FL_USE_REALISTIC_MODE )  );
-    config->Write( keyShowAxis, prms.GetFlag( FL_AXIS )  );
-    config->Write( keyShowFootprints, prms.GetFlag( FL_MODULE )  );
-    config->Write( keyShowCopperThickness, prms.GetFlag( FL_USE_COPPER_THICKNESS )  );
-    config->Write( keyShowZones, prms.GetFlag( FL_ZONE )  );
-    config->Write( keyShowAdhesiveLayers, prms.GetFlag( FL_ADHESIVE )  );
-    config->Write( keyShowSilkScreenLayers, prms.GetFlag( FL_SILKSCREEN )  );
-    config->Write( keyShowSolderMaskLayers, prms.GetFlag( FL_SOLDERMASK )  );
-    config->Write( keyShowSolderPasteLayers, prms.GetFlag( FL_SOLDERPASTE )  );
-    config->Write( keyShowCommentsLayer, prms.GetFlag( FL_COMMENTS )  );
-    config->Write( keyShowEcoLayers, prms.GetFlag( FL_ECO )  );
-    config->Write( keyShowBoardBody, prms.GetFlag( FL_SHOW_BOARD_BODY )  );
+    aCfg->Write( keyBgColor_Red, g_Parm_3D_Visu.m_BgColor.m_Red );
+    aCfg->Write( keyBgColor_Green, g_Parm_3D_Visu.m_BgColor.m_Green );
+    aCfg->Write( keyBgColor_Blue, g_Parm_3D_Visu.m_BgColor.m_Blue );
+    aCfg->Write( keyShowRealisticMode, prms.GetFlag( FL_USE_REALISTIC_MODE )  );
+    aCfg->Write( keyShowAxis, prms.GetFlag( FL_AXIS )  );
+    aCfg->Write( keyShowFootprints, prms.GetFlag( FL_MODULE )  );
+    aCfg->Write( keyShowCopperThickness, prms.GetFlag( FL_USE_COPPER_THICKNESS )  );
+    aCfg->Write( keyShowZones, prms.GetFlag( FL_ZONE )  );
+    aCfg->Write( keyShowAdhesiveLayers, prms.GetFlag( FL_ADHESIVE )  );
+    aCfg->Write( keyShowSilkScreenLayers, prms.GetFlag( FL_SILKSCREEN )  );
+    aCfg->Write( keyShowSolderMaskLayers, prms.GetFlag( FL_SOLDERMASK )  );
+    aCfg->Write( keyShowSolderPasteLayers, prms.GetFlag( FL_SOLDERPASTE )  );
+    aCfg->Write( keyShowCommentsLayer, prms.GetFlag( FL_COMMENTS )  );
+    aCfg->Write( keyShowEcoLayers, prms.GetFlag( FL_ECO )  );
+    aCfg->Write( keyShowBoardBody, prms.GetFlag( FL_SHOW_BOARD_BODY )  );
 }
 
 

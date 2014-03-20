@@ -53,9 +53,9 @@ const wxString KIWAY::dso_name( FACE_T aFaceId )
 }
 
 
-PROJECT& KIWAY::Project()
+PROJECT& KIWAY::Prj() const
 {
-    return m_project;
+    return *(PROJECT*) &m_project;      // strip const-ness, function really is const.
 }
 
 

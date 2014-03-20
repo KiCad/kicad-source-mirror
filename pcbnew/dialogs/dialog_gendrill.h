@@ -50,7 +50,7 @@ public:
 
 private:
     PCB_EDIT_FRAME* m_parent;
-    wxConfig*       m_config;
+    wxConfigBase*       m_config;
     BOARD*          m_board;
     PCB_PLOT_PARAMS m_plotOpts;
 
@@ -69,9 +69,9 @@ private:
     // event functions
     void            OnSelDrillUnitsSelected( wxCommandEvent& event );
     void            OnSelZerosFmtSelected( wxCommandEvent& event );
-	void            OnGenDrillFile( wxCommandEvent& event );
-	void            OnGenMapFile( wxCommandEvent& event );
-	void            OnGenReportFile( wxCommandEvent& event );
+    void            OnGenDrillFile( wxCommandEvent& event );
+    void            OnGenMapFile( wxCommandEvent& event );
+    void            OnGenReportFile( wxCommandEvent& event );
     void            OnCancelClick( wxCommandEvent& event );
     void            OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
 

@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <wxstruct.h>
 #include <macros.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <wildcards_and_files_ext.h>
 
 #include <cvpcb.h>

@@ -79,7 +79,7 @@ void CONNECTIONS::SearchConnectionsPadsToIntersectingPads()
         pad->m_PadsConnected.clear();
         candidates.clear();
 
-        CollectItemsNearTo( candidates, pad->ReturnShapePos(), pad->GetBoundingRadius() );
+        CollectItemsNearTo( candidates, pad->ShapePos(), pad->GetBoundingRadius() );
 
         // add pads to pad.m_PadsConnected, if they are connected
         for( unsigned jj = 0; jj < candidates.size(); jj++ )

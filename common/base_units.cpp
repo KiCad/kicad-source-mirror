@@ -197,7 +197,7 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
  * otherwise the actual value is rounded when read from dialog and converted
  * in internal units, and therefore modified.
  */
-wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol )
+wxString StringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol )
 {
     double  value_to_print = To_User_Unit( aUnit, aValue );
 
@@ -257,7 +257,7 @@ wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymb
 
 void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue )
 {
-    wxString msg = ReturnStringFromValue( g_UserUnit, aValue );
+    wxString msg = StringFromValue( g_UserUnit, aValue );
 
     aTextCtr.SetValue( msg );
 }
@@ -286,7 +286,7 @@ double From_User_Unit( EDA_UNITS_T aUnit, double aValue )
 }
 
 
-int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
+int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
 {
     double value;
     double dtmp = 0;
@@ -348,21 +348,21 @@ int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
 }
 
 
-int ReturnValueFromString( const wxString& aTextValue )
+int ValueFromString( const wxString& aTextValue )
 {
     int      value;
 
-    value = ReturnValueFromString( g_UserUnit, aTextValue);
+    value = ValueFromString( g_UserUnit, aTextValue);
 
     return value;
 }
 
-int ReturnValueFromTextCtrl( const wxTextCtrl& aTextCtr )
+int ValueFromTextCtrl( const wxTextCtrl& aTextCtr )
 {
     int      value;
     wxString msg = aTextCtr.GetValue();
 
-    value = ReturnValueFromString( g_UserUnit, msg );
+    value = ValueFromString( g_UserUnit, msg );
 
     return value;
 }

@@ -78,7 +78,7 @@ wxString HOTKEY_EDITOR_GRID_TABLE::GetValue( int row, int col )
         }
         else
         {
-            return ReturnKeyNameFromKeyCode( hotkey_descr->m_KeyCode );
+            return KeyNameFromKeyCode( hotkey_descr->m_KeyCode );
         }
     }
 }

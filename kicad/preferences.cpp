@@ -32,7 +32,7 @@
 #endif
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_kicad.h>
 #include <confirm.h>
 #include <gestfich.h>
 
@@ -43,19 +43,19 @@
 
 void KICAD_MANAGER_FRAME::OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event )
 {
-    event.Check( wxGetApp().UseSystemPdfBrowser() );
+    event.Check( Pgm().UseSystemPdfBrowser() );
 }
 
 
 void KICAD_MANAGER_FRAME::OnSelectDefaultPdfBrowser( wxCommandEvent& event )
 {
-    wxGetApp().WritePdfBrowserInfos();
+    Pgm().WritePdfBrowserInfos();
 }
 
 
 void KICAD_MANAGER_FRAME::OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event )
 {
-    event.Check( !wxGetApp().UseSystemPdfBrowser() );
+    event.Check( !Pgm().UseSystemPdfBrowser() );
 }
 
 
@@ -63,7 +63,7 @@ void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
 {
     bool select = event.GetId() == ID_SELECT_PREFERED_PDF_BROWSER_NAME;
 
-    if( !wxGetApp().GetPdfBrowserFileName() && !select )
+    if( !Pgm().GetPdfBrowserName() && !select )
     {
         DisplayError( this,
                       _( "You must choose a PDF viewer before using this option." ) );
@@ -77,8 +77,8 @@ void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
 
     wildcard = _( "Executable files (" ) + wildcard + wxT( ")|" ) + wildcard;
 
-    wxGetApp().ReadPdfBrowserInfos();
-    wxFileName fn = wxGetApp().GetPdfBrowserFileName();
+    Pgm().ReadPdfBrowserInfos();
+    wxFileName fn = Pgm().GetPdfBrowserName();
     wxFileDialog dlg( this, _( "Select Preferred Pdf Browser" ), fn.GetPath(),
                       fn.GetFullName(), wildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
@@ -86,8 +86,8 @@ void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxGetApp().SetPdfBrowserFileName( dlg.GetPath() );
-    wxGetApp().WritePdfBrowserInfos();
+    Pgm().SetPdfBrowserName( dlg.GetPath() );
+    Pgm().WritePdfBrowserInfos();
 }
 
 

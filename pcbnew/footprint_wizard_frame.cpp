@@ -29,7 +29,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <3d_viewer.h>
@@ -119,9 +119,9 @@ static wxAcceleratorEntry accels[] =
 
 #define FOOTPRINT_WIZARD_FRAME_NAME wxT( "FootprintWizard" )
 
-FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
-                                                wxSemaphore* semaphore, long style ) :
-    PCB_BASE_FRAME( parent, FOOTPRINT_WIZARD_FRAME_TYPE,
+FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, FOOTPRINT_EDIT_FRAME* aParent,
+        wxSemaphore* semaphore, long style ) :
+    PCB_BASE_FRAME( aKiway, aParent, FOOTPRINT_WIZARD_FRAME_TYPE,
                     _( "Footprint Wizard" ),
                     wxDefaultPosition, wxDefaultSize, style, FOOTPRINT_WIZARD_FRAME_NAME )
 {
@@ -150,7 +150,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
 
-    LoadSettings();
+    LoadSettings( config() );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
@@ -429,18 +429,14 @@ void FOOTPRINT_WIZARD_FRAME::ClickOnPageList( wxCommandEvent& event )
 #define PARAMLIST_WIDTH_KEY wxT( "Paramlist_width" )
 
 
-void FOOTPRINT_WIZARD_FRAME::LoadSettings()
+void FOOTPRINT_WIZARD_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxConfig* cfg;
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    EDA_DRAW_FRAME::LoadSettings();
+    wxConfigPathChanger cpc( aCfg, m_configPath );
 
-    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
-
-    cfg = wxGetApp().GetSettings();
-
-    cfg->Read( PARTLIST_WIDTH_KEY, &m_pageListWidth, 100 );
-    cfg->Read( PARAMLIST_WIDTH_KEY, &m_parameterGridWidth, 200 );
+    aCfg->Read( PARTLIST_WIDTH_KEY, &m_pageListWidth, 100 );
+    aCfg->Read( PARAMLIST_WIDTH_KEY, &m_parameterGridWidth, 200 );
 
     // Set parameters to a reasonable value.
     if( m_pageListWidth > m_FrameSize.x / 3 )
@@ -451,15 +447,13 @@ void FOOTPRINT_WIZARD_FRAME::LoadSettings()
 }
 
 
-void FOOTPRINT_WIZARD_FRAME::SaveSettings()
+void FOOTPRINT_WIZARD_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxConfig* cfg = wxGetApp().GetSettings();;
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    EDA_DRAW_FRAME::SaveSettings();
-
-    wxConfigPathChanger cpc( cfg, m_configPath );
-    cfg->Write( PARTLIST_WIDTH_KEY, m_pageList->GetSize().x );
-    cfg->Write( PARAMLIST_WIDTH_KEY, m_parameterGrid->GetSize().x );
+    wxConfigPathChanger cpc( aCfg, m_configPath );
+    aCfg->Write( PARTLIST_WIDTH_KEY, m_pageList->GetSize().x );
+    aCfg->Write( PARAMLIST_WIDTH_KEY, m_parameterGrid->GetSize().x );
 }
 
 
@@ -591,7 +585,7 @@ void FOOTPRINT_WIZARD_FRAME::Show3D_Frame( wxCommandEvent& event )
         return;
     }
 
-    m_Draw3DFrame = new EDA_3D_FRAME( this, wxEmptyString );
+    m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, wxEmptyString );
     Update3D_Frame( false );
     m_Draw3DFrame->Show( true );
 }

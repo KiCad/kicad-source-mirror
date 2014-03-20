@@ -16,7 +16,7 @@ class DIALOG_SVG_PRINT : public DIALOG_SVG_PRINT_base
 private:
     PCB_BASE_FRAME* m_parent;
     BOARD*          m_board;
-    wxConfig*       m_config;
+    wxConfigBase*       m_config;
     LAYER_MSK       m_printMaskLayer;
     wxCheckBox*     m_boxSelectLayer[32];
     bool            m_printBW;

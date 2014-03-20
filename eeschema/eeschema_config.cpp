@@ -26,11 +26,13 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <wxEeschemaStruct.h>
+#include <invoke_sch_dialog.h>
 
 #include <eeschema_id.h>
 #include <general.h>
@@ -44,7 +46,6 @@
 #include <dialog_hotkeys_editor.h>
 
 #include <dialogs/dialog_color_config.h>
-#include <dialogs/dialog_eeschema_config.h>
 #include <dialogs/dialog_eeschema_options.h>
 #include <dialogs/dialog_schematic_find.h>
 
@@ -117,9 +118,7 @@ EDA_COLOR_T GetInvisibleItemColor()
 
 void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 {
-    DIALOG_EESCHEMA_CONFIG CfgFrame( (SCH_EDIT_FRAME *)GetParent(), this );
-
-    CfgFrame.ShowModal();
+    InvokeEeschemaConfig( (SCH_EDIT_FRAME *)GetParent(), this );
 }
 
 
@@ -194,9 +193,7 @@ void SCH_EDIT_FRAME::OnColorConfig( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 {
-    DIALOG_EESCHEMA_CONFIG CfgFrame( this, this );
-
-    CfgFrame.ShowModal();
+    InvokeEeschemaConfig( this, this );
 }
 
 
@@ -212,21 +209,20 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_CONFIG_READ:
-    {
-        fn = g_RootSheet->GetScreen()->GetFileName();
-        fn.SetExt( ProjectFileExtension );
+        {
+            fn = g_RootSheet->GetScreen()->GetFileName();
+            fn.SetExt( ProjectFileExtension );
 
-        wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
-                          fn.GetFullName(), ProjectFileWildcard,
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+            wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
+                              fn.GetFullName(), ProjectFileWildcard,
+                              wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-        if( dlg.ShowModal() == wxID_CANCEL )
-            break;
+            if( dlg.ShowModal() == wxID_CANCEL )
+                break;
 
-        LoadProjectFile( dlg.GetPath(), true );
-    }
-    break;
-
+            LoadProjectFile( dlg.GetPath(), true );
+        }
+        break;
 
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
@@ -398,9 +394,10 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
 
 bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& aFileName, bool aForceReread )
 {
-    wxFileName              fn;
-    bool                    IsRead = true;
-    wxArrayString           liblist_tmp = m_componentLibFiles;
+    wxFileName      fn;
+    bool            isRead = true;
+    wxArrayString   liblist_tmp = m_componentLibFiles;
+    PROJECT&        prj = Prj();
 
     if( aFileName.IsEmpty() )
         fn = g_RootSheet->GetScreen()->GetFileName();
@@ -409,18 +406,15 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& aFileName, bool aForceRere
 
     m_componentLibFiles.Clear();
 
-    /* Change the schematic file extension (.sch) to the project file
-     * extension (.pro). */
+    // Change the schematic file extension (.sch) to the project file
+    // extension (.pro).
     fn.SetExt( ProjectFileExtension );
 
-    wxGetApp().RemoveLibraryPath( m_userLibraryPath );
-
-    if( !wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP,
-                                       GetProjectFileParametersList(),
-                                       !aForceReread ) )
+    if( !prj.ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP,
+            GetProjectFileParametersList(), !aForceReread ) )
     {
         m_componentLibFiles = liblist_tmp;
-        IsRead = false;
+        isRead = false;
     }
 
     // Verify some values, because the config file can be edited by hand,
@@ -434,28 +428,26 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& aFileName, bool aForceRere
     WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
     pglayout.SetPageLayout(BASE_SCREEN::m_PageLayoutDescrFileName);
 
-    // Load libraries.
-    // User library path takes precedent over default library search paths.
-    wxGetApp().InsertLibraryPath( m_userLibraryPath, 1 );
+    // libraries in the *.pro file take precedence over standard library search paths,
+    // but not over the director of the project, which is at index 0.
+    prj.SchSearchS().AddPaths( m_userLibraryPath, 1 );
 
-    /* If the list is void, force loading the library "power.lib" that is
-     * the "standard" library for power symbols.
-     */
+    // If the list is empty, force loading the standard power symbol library.
     if( m_componentLibFiles.GetCount() == 0 )
         m_componentLibFiles.Add( wxT( "power" ) );
 
     LoadLibraries();
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
-    return IsRead;
+    return isRead;
 }
 
 
 void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 {
-    wxFileName fn;
+    PROJECT&        prj = Prj();
+    wxFileName      fn = g_RootSheet->GetScreen()->GetFileName();  //ConfigFileName
 
-    fn = g_RootSheet->GetScreen()->GetFileName();  //ConfigFileName
     fn.SetExt( ProjectFileExtension );
 
     if( !IsWritable( fn ) )
@@ -470,37 +462,37 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
         if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
-        wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP,
-                                       GetProjectFileParametersList() );
+        fn = dlg.GetPath();
     }
-    else
-        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP,
-                                       GetProjectFileParametersList() );
+
+    prj.ConfigSave( Kiface().KifaceSearch(),
+            fn.GetFullPath(), GROUP, GetProjectFileParametersList() );
 }
 
-static const wxString DefaultBusWidthEntry( wxT( "DefaultBusWidth" ) );
-static const wxString DefaultDrawLineWidthEntry( wxT( "DefaultDrawLineWidth" ) );
-static const wxString ShowHiddenPinsEntry( wxT( "ShowHiddenPins" ) );
-static const wxString HorzVertLinesOnlyEntry( wxT( "HorizVertLinesOnly" ) );
-static const wxString PreviewFramePositionXEntry( wxT( "PreviewFramePositionX" ) );
-static const wxString PreviewFramePositionYEntry( wxT( "PreviewFramePositionY" ) );
-static const wxString PreviewFrameWidthEntry( wxT( "PreviewFrameWidth" ) );
-static const wxString PreviewFrameHeightEntry( wxT( "PreviewFrameHeight" ) );
-static const wxString PrintDialogPositionXEntry( wxT( "PrintDialogPositionX" ) );
-static const wxString PrintDialogPositionYEntry( wxT( "PrintDialogPositionY" ) );
-static const wxString PrintDialogWidthEntry( wxT( "PrintDialogWidth" ) );
-static const wxString PrintDialogHeightEntry( wxT( "PrintDialogHeight" ) );
-static const wxString FindDialogPositionXEntry( wxT( "FindDialogPositionX" ) );
-static const wxString FindDialogPositionYEntry( wxT( "FindDialogPositionY" ) );
-static const wxString FindDialogWidthEntry( wxT( "FindDialogWidth" ) );
-static const wxString FindDialogHeightEntry( wxT( "FindDialogHeight" ) );
-static const wxString FindReplaceFlagsEntry( wxT( "LastFindReplaceFlags" ) );
-static const wxString FindStringEntry( wxT( "LastFindString" ) );
-static const wxString ReplaceStringEntry( wxT( "LastReplaceString" ) );
-static const wxString FindStringHistoryEntry( wxT( "FindStringHistoryList%d" ) );
-static const wxString ReplaceStringHistoryEntry( wxT( "ReplaceStringHistoryList%d" ) );
-static const wxString FieldNamesEntry( wxT( "FieldNames" ) );
-static const wxString SimulatorCommandEntry( wxT( "SimCmdLine" ) );
+
+static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
+static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
+static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
+static const wxChar HorzVertLinesOnlyEntry[] =      wxT( "HorizVertLinesOnly" );
+static const wxChar PreviewFramePositionXEntry[] =  wxT( "PreviewFramePositionX" );
+static const wxChar PreviewFramePositionYEntry[] =  wxT( "PreviewFramePositionY" );
+static const wxChar PreviewFrameWidthEntry[] =      wxT( "PreviewFrameWidth" );
+static const wxChar PreviewFrameHeightEntry[] =     wxT( "PreviewFrameHeight" );
+static const wxChar PrintDialogPositionXEntry[] =   wxT( "PrintDialogPositionX" );
+static const wxChar PrintDialogPositionYEntry[] =   wxT( "PrintDialogPositionY" );
+static const wxChar PrintDialogWidthEntry[] =       wxT( "PrintDialogWidth" );
+static const wxChar PrintDialogHeightEntry[] =      wxT( "PrintDialogHeight" );
+static const wxChar FindDialogPositionXEntry[] =    wxT( "FindDialogPositionX" );
+static const wxChar FindDialogPositionYEntry[] =    wxT( "FindDialogPositionY" );
+static const wxChar FindDialogWidthEntry[] =        wxT( "FindDialogWidth" );
+static const wxChar FindDialogHeightEntry[] =       wxT( "FindDialogHeight" );
+static const wxChar FindReplaceFlagsEntry[] =       wxT( "LastFindReplaceFlags" );
+static const wxChar FindStringEntry[] =             wxT( "LastFindString" );
+static const wxChar ReplaceStringEntry[] =          wxT( "LastReplaceString" );
+static const wxChar FindStringHistoryEntry[] =      wxT( "FindStringHistoryList%d" );
+static const wxChar ReplaceStringHistoryEntry[] =   wxT( "ReplaceStringHistoryList%d" );
+static const wxChar FieldNamesEntry[] =             wxT( "FieldNames" );
+static const wxChar SimulatorCommandEntry[] =       wxT( "SimCmdLine" );
 
 
 PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
@@ -592,64 +584,62 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
 }
 
 
-void SCH_EDIT_FRAME::LoadSettings()
+void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxASSERT( wxGetApp().GetSettings() != NULL );
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
 
     long tmp;
 
-    wxConfig* cfg = wxGetApp().GetSettings();
-
-    EDA_DRAW_FRAME::LoadSettings();
-
-    wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
+    wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     // This is required until someone gets rid of the global variable s_layerColor.
     m_GridColor = GetLayerColor( LAYER_GRID );
 
-    SetDefaultBusThickness( cfg->Read( DefaultBusWidthEntry, 12l ) );
-    SetDefaultLineThickness( cfg->Read( DefaultDrawLineWidthEntry, 6l ) );
-    cfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
-    cfg->Read( HorzVertLinesOnlyEntry, &m_forceHVLines, true );
+    SetDefaultBusThickness( aCfg->Read( DefaultBusWidthEntry, 12l ) );
+    SetDefaultLineThickness( aCfg->Read( DefaultDrawLineWidthEntry, 6l ) );
+    aCfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
+    aCfg->Read( HorzVertLinesOnlyEntry, &m_forceHVLines, true );
 
     // Load print preview window session settings.
-    cfg->Read( PreviewFramePositionXEntry, &tmp, -1 );
+    aCfg->Read( PreviewFramePositionXEntry, &tmp, -1 );
     m_previewPosition.x = (int) tmp;
-    cfg->Read( PreviewFramePositionYEntry, &tmp, -1 );
+    aCfg->Read( PreviewFramePositionYEntry, &tmp, -1 );
     m_previewPosition.y = (int) tmp;
-    cfg->Read( PreviewFrameWidthEntry, &tmp, -1 );
+    aCfg->Read( PreviewFrameWidthEntry, &tmp, -1 );
     m_previewSize.SetWidth( (int) tmp );
-    cfg->Read( PreviewFrameHeightEntry, &tmp, -1 );
+    aCfg->Read( PreviewFrameHeightEntry, &tmp, -1 );
     m_previewSize.SetHeight( (int) tmp );
 
     // Load print dialog session settings.
-    cfg->Read( PrintDialogPositionXEntry, &tmp, -1 );
+    aCfg->Read( PrintDialogPositionXEntry, &tmp, -1 );
     m_printDialogPosition.x = (int) tmp;
-    cfg->Read( PrintDialogPositionYEntry, &tmp, -1 );
+    aCfg->Read( PrintDialogPositionYEntry, &tmp, -1 );
     m_printDialogPosition.y = (int) tmp;
-    cfg->Read( PrintDialogWidthEntry, &tmp, -1 );
+    aCfg->Read( PrintDialogWidthEntry, &tmp, -1 );
     m_printDialogSize.SetWidth( (int) tmp );
-    cfg->Read( PrintDialogHeightEntry, &tmp, -1 );
+    aCfg->Read( PrintDialogHeightEntry, &tmp, -1 );
     m_printDialogSize.SetHeight( (int) tmp );
 
     // Load netlists options:
-    cfg->Read( SimulatorCommandEntry, &m_simulatorCommand );
+    aCfg->Read( SimulatorCommandEntry, &m_simulatorCommand );
 
     // Load find dialog session setting.
-    cfg->Read( FindDialogPositionXEntry, &tmp, -1 );
+    aCfg->Read( FindDialogPositionXEntry, &tmp, -1 );
     m_findDialogPosition.x = (int) tmp;
-    cfg->Read( FindDialogPositionYEntry, &tmp, -1 );
+    aCfg->Read( FindDialogPositionYEntry, &tmp, -1 );
     m_findDialogPosition.y = (int) tmp;
-    cfg->Read( FindDialogWidthEntry, &tmp, -1 );
+    aCfg->Read( FindDialogWidthEntry, &tmp, -1 );
     m_findDialogSize.SetWidth( (int) tmp );
-    cfg->Read( FindDialogHeightEntry, &tmp, -1 );
+    aCfg->Read( FindDialogHeightEntry, &tmp, -1 );
     m_findDialogSize.SetHeight( (int) tmp );
+
     wxASSERT_MSG( m_findReplaceData,
                   wxT( "Find dialog data settings object not created. Bad programmer!" ) );
-    cfg->Read( FindReplaceFlagsEntry, &tmp, (long) wxFR_DOWN );
+
+    aCfg->Read( FindReplaceFlagsEntry, &tmp, (long) wxFR_DOWN );
     m_findReplaceData->SetFlags( (wxUint32) tmp & ~FR_REPLACE_ITEM_FOUND );
-    m_findReplaceData->SetFindString( cfg->Read( FindStringEntry, wxEmptyString ) );
-    m_findReplaceData->SetReplaceString( cfg->Read( ReplaceStringEntry, wxEmptyString ) );
+    m_findReplaceData->SetFindString( aCfg->Read( FindStringEntry, wxEmptyString ) );
+    m_findReplaceData->SetReplaceString( aCfg->Read( ReplaceStringEntry, wxEmptyString ) );
 
     // Load the find and replace string history list.
     for( int i = 0; i < FR_HISTORY_LIST_CNT; ++i )
@@ -657,19 +647,19 @@ void SCH_EDIT_FRAME::LoadSettings()
         wxString tmpHistory;
         wxString entry;
         entry.Printf( FindStringHistoryEntry, i );
-        tmpHistory = cfg->Read( entry, wxEmptyString );
+        tmpHistory = aCfg->Read( entry, wxEmptyString );
 
         if( !tmpHistory.IsEmpty() )
             m_findStringHistoryList.Add( tmpHistory );
 
         entry.Printf( ReplaceStringHistoryEntry, i );
-        tmpHistory = cfg->Read( entry, wxEmptyString );
+        tmpHistory = aCfg->Read( entry, wxEmptyString );
 
         if( !tmpHistory.IsEmpty() )
             m_replaceStringHistoryList.Add( tmpHistory );
     }
 
-    wxString templateFieldNames = cfg->Read( FieldNamesEntry, wxEmptyString );
+    wxString templateFieldNames = aCfg->Read( FieldNamesEntry, wxEmptyString );
 
     if( !templateFieldNames.IsEmpty() )
     {
@@ -688,47 +678,43 @@ void SCH_EDIT_FRAME::LoadSettings()
 }
 
 
-void SCH_EDIT_FRAME::SaveSettings()
+void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxASSERT( wxGetApp().GetSettings() != NULL );
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    wxConfig* cfg = wxGetApp().GetSettings();
+    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 
-    EDA_DRAW_FRAME::SaveSettings();
-
-    wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
-
-    cfg->Write( DefaultBusWidthEntry, (long) GetDefaultBusThickness() );
-    cfg->Write( DefaultDrawLineWidthEntry, (long) GetDefaultLineThickness() );
-    cfg->Write( ShowHiddenPinsEntry, m_showAllPins );
-    cfg->Write( HorzVertLinesOnlyEntry, GetForceHVLines() );
+    aCfg->Write( DefaultBusWidthEntry, (long) GetDefaultBusThickness() );
+    aCfg->Write( DefaultDrawLineWidthEntry, (long) GetDefaultLineThickness() );
+    aCfg->Write( ShowHiddenPinsEntry, m_showAllPins );
+    aCfg->Write( HorzVertLinesOnlyEntry, GetForceHVLines() );
 
     // Save print preview window session settings.
-    cfg->Write( PreviewFramePositionXEntry, m_previewPosition.x );
-    cfg->Write( PreviewFramePositionYEntry, m_previewPosition.y );
-    cfg->Write( PreviewFrameWidthEntry, m_previewSize.GetWidth() );
-    cfg->Write( PreviewFrameHeightEntry, m_previewSize.GetHeight() );
+    aCfg->Write( PreviewFramePositionXEntry, m_previewPosition.x );
+    aCfg->Write( PreviewFramePositionYEntry, m_previewPosition.y );
+    aCfg->Write( PreviewFrameWidthEntry, m_previewSize.GetWidth() );
+    aCfg->Write( PreviewFrameHeightEntry, m_previewSize.GetHeight() );
 
     // Save print dialog session settings.
-    cfg->Write( PrintDialogPositionXEntry, m_printDialogPosition.x );
-    cfg->Write( PrintDialogPositionYEntry, m_printDialogPosition.y );
-    cfg->Write( PrintDialogWidthEntry, m_printDialogSize.GetWidth() );
-    cfg->Write( PrintDialogHeightEntry, m_printDialogSize.GetHeight() );
+    aCfg->Write( PrintDialogPositionXEntry, m_printDialogPosition.x );
+    aCfg->Write( PrintDialogPositionYEntry, m_printDialogPosition.y );
+    aCfg->Write( PrintDialogWidthEntry, m_printDialogSize.GetWidth() );
+    aCfg->Write( PrintDialogHeightEntry, m_printDialogSize.GetHeight() );
 
     // Save netlists options:
-    cfg->Write( SimulatorCommandEntry, m_simulatorCommand );
+    aCfg->Write( SimulatorCommandEntry, m_simulatorCommand );
 
     // Save find dialog session setting.
-    cfg->Write( FindDialogPositionXEntry, m_findDialogPosition.x );
-    cfg->Write( FindDialogPositionYEntry, m_findDialogPosition.y );
-    cfg->Write( FindDialogWidthEntry, m_findDialogSize.GetWidth() );
-    cfg->Write( FindDialogHeightEntry, m_findDialogSize.GetHeight() );
+    aCfg->Write( FindDialogPositionXEntry, m_findDialogPosition.x );
+    aCfg->Write( FindDialogPositionYEntry, m_findDialogPosition.y );
+    aCfg->Write( FindDialogWidthEntry, m_findDialogSize.GetWidth() );
+    aCfg->Write( FindDialogHeightEntry, m_findDialogSize.GetHeight() );
     wxASSERT_MSG( m_findReplaceData,
                   wxT( "Find dialog data settings object not created. Bad programmer!" ) );
-    cfg->Write( FindReplaceFlagsEntry,
+    aCfg->Write( FindReplaceFlagsEntry,
                 (long) m_findReplaceData->GetFlags() & ~FR_REPLACE_ITEM_FOUND );
-    cfg->Write( FindStringEntry, m_findReplaceData->GetFindString() );
-    cfg->Write( ReplaceStringEntry, m_findReplaceData->GetReplaceString() );
+    aCfg->Write( FindStringEntry, m_findReplaceData->GetFindString() );
+    aCfg->Write( ReplaceStringEntry, m_findReplaceData->GetReplaceString() );
 
     // Save the find and replace string history list.
     unsigned i;
@@ -738,13 +724,13 @@ void SCH_EDIT_FRAME::SaveSettings()
     for( i = 0; i < m_findStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
     {
         entry.Printf( FindStringHistoryEntry, i );
-        cfg->Write( entry, m_findStringHistoryList[ i ] );
+        aCfg->Write( entry, m_findStringHistoryList[ i ] );
     }
 
     for( i = 0; i < m_replaceStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
     {
         entry.Printf( ReplaceStringHistoryEntry, i );
-        cfg->Write( entry, m_replaceStringHistoryList[ i ] );
+        aCfg->Write( entry, m_replaceStringHistoryList[ i ] );
     }
 
     // Save template fieldnames
@@ -758,5 +744,5 @@ void SCH_EDIT_FRAME::SaveSettings()
     record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
     record.Replace( wxT("  "), wxT(" "), true );  // double space to single
 
-    cfg->Write( FieldNamesEntry, record );
+    aCfg->Write( FieldNamesEntry, record );
 }

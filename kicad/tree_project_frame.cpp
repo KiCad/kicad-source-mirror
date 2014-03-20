@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <macros.h>
 
 #include <tree_project_frame.h>
@@ -713,7 +713,7 @@ void TREE_PROJECT_FRAME::OnOpenSelectedFileWithTextEditor( wxCommandEvent& event
 
     wxString    FullFileName = tree_data->GetFileName();
     AddDelimiterString( FullFileName );
-    wxString    editorname = wxGetApp().GetEditorName();
+    wxString    editorname = Pgm().GetEditorName();
 
     if( !editorname.IsEmpty() )
         ExecuteFile( this, editorname, FullFileName );

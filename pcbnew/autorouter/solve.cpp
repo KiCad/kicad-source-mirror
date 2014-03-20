@@ -262,7 +262,7 @@ static long newmask[8] =
 
 
 /* Route all traces
- * Return:
+ * :
  *  1 if OK
  * -1 if escape (stop being routed) request
  * -2 if default memory allocation

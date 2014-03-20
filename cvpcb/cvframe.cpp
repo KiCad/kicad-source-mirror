@@ -29,7 +29,8 @@
 
 #include <fctsys.h>
 #include <build_version.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <macros.h>
 #include <confirm.h>
 #include <eda_doc.h>
@@ -104,9 +105,10 @@ END_EVENT_TABLE()
 
 #define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
 
-CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
-    EDA_BASE_FRAME( NULL, CVPCB_FRAME_TYPE, title, wxDefaultPosition,
-                    wxDefaultSize, style, CVPCB_MAINFRAME_NAME )
+
+CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
+    KIWAY_PLAYER( aKiway, aParent, CVPCB_FRAME_TYPE, wxT( "CvPCB" ), wxDefaultPosition,
+        wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
 {
     m_FrameName             = CVPCB_MAINFRAME_NAME;
     m_ListCmp               = NULL;
@@ -119,9 +121,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
     m_KeepCvpcbOpen         = false;
     m_undefinedComponentCnt = 0;
     m_skipComponentSelect   = false;
-
-    m_globalFootprintTable  = NULL;
-    m_footprintLibTable     = NULL;
+    m_NetlistFileExtension  = wxT( "net" );
 
     /* Name of the document footprint list
      * usually located in share/modules/footprints_doc
@@ -137,7 +137,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
 
     SetAutoLayout( true );
 
-    LoadSettings();
+    LoadSettings( config() );
 
     if( m_FrameSize.x < FRAME_MIN_SIZE_X )
         m_FrameSize.x = FRAME_MIN_SIZE_X;
@@ -194,36 +194,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
                           Right().BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
 
     m_auimgr.Update();
-
-    if( m_globalFootprintTable == NULL )
-    {
-        try
-        {
-            m_globalFootprintTable = new FP_LIB_TABLE();
-
-            if( !FP_LIB_TABLE::LoadGlobalTable( *m_globalFootprintTable ) )
-            {
-                DisplayInfoMessage( this, wxT( "You have run CvPcb for the first time using the "
-                                               "new footprint library table method of finding "
-                                               "footprints.  CvPcb has either copied the default "
-                                               "table or created an empty table in your home "
-                                               "folder.  You must first configure the library "
-                                               "table to include all footprint libraries not "
-                                               "included with KiCad.  See the \"Footprint Library "
-                                               "Table\" section of the CvPcb documentation for "
-                                               "more information." ) );
-            }
-        }
-        catch( IO_ERROR ioe )
-        {
-            wxString msg;
-            msg.Printf( _( "An error occurred attempting to load the global footprint library "
-                           "table:\n\n%s" ), GetChars( ioe.errorText ) );
-            DisplayError( this, msg );
-        }
-
-        m_footprintLibTable = new FP_LIB_TABLE( m_globalFootprintTable );
-    }
 }
 
 
@@ -233,28 +203,37 @@ CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 }
 
 
-void CVPCB_MAINFRAME::LoadSettings()
+FP_LIB_TABLE* CVPCB_MAINFRAME::FootprintLibs() const
 {
-    wxASSERT( wxGetApp().GetSettings() != NULL );
+    PROJECT&        prj = Prj();
+    FP_LIB_TABLE*   tbl = dynamic_cast<FP_LIB_TABLE*>( prj.Elem( PROJECT::FPTBL ) );
 
-    wxConfig* cfg = wxGetApp().GetSettings();
+    if( !tbl )
+    {
+        tbl = new FP_LIB_TABLE( &GFootprintTable );
+        prj.Elem( PROJECT::FPTBL, tbl );
+    }
 
-    EDA_BASE_FRAME::LoadSettings();
-    cfg->Read( KeepCvpcbOpenEntry, &m_KeepCvpcbOpen, true );
-    cfg->Read( FootprintDocFileEntry, &m_DocModulesFileName,
+    return tbl;
+}
+
+
+void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
+{
+    EDA_BASE_FRAME::LoadSettings( aCfg );
+
+    aCfg->Read( KeepCvpcbOpenEntry, &m_KeepCvpcbOpen, true );
+    aCfg->Read( FootprintDocFileEntry, &m_DocModulesFileName,
                DEFAULT_FOOTPRINTS_LIST_FILENAME );
 }
 
 
-void CVPCB_MAINFRAME::SaveSettings()
+void CVPCB_MAINFRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxASSERT( wxGetApp().GetSettings() != NULL );
+    EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    wxConfig* cfg = wxGetApp().GetSettings();
-
-    EDA_BASE_FRAME::SaveSettings();
-    cfg->Write( KeepCvpcbOpenEntry, m_KeepCvpcbOpen );
-    cfg->Write( FootprintDocFileEntry, m_DocModulesFileName );
+    aCfg->Write( KeepCvpcbOpenEntry, m_KeepCvpcbOpen );
+    aCfg->Write( FootprintDocFileEntry, m_DocModulesFileName );
 
     int state = 0;
 
@@ -267,7 +246,7 @@ void CVPCB_MAINFRAME::SaveSettings()
     if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST ) )
         state |= FOOTPRINTS_LISTBOX::BY_LIBRARY;
 
-    cfg->Write( wxT( FILTERFOOTPRINTKEY ), state );
+    aCfg->Write( wxT( FILTERFOOTPRINTKEY ), state );
 }
 
 
@@ -321,10 +300,10 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     // Close the help frame
-    if( wxGetApp().GetHtmlHelpController() )
+    if( Pgm().GetHtmlHelpController() )
     {
-        if( wxGetApp().GetHtmlHelpController()->GetFrame() )// returns NULL if no help frame active
-            wxGetApp().GetHtmlHelpController()->GetFrame()->Close( true );
+        if( Pgm().GetHtmlHelpController()->GetFrame() )// returns NULL if no help frame active
+            Pgm().GetHtmlHelpController()->GetFrame()->Close( true );
     }
 
     if( m_NetlistFileName.IsOk() )
@@ -460,9 +439,8 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
 
 void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
 {
-    wxString   oldPath;
-    wxFileName newFileName;
     int        id = event.GetId();
+    wxFileName newFileName;
 
     if( id >= wxID_FILE1 && id <= wxID_FILE9 )
     {
@@ -483,45 +461,59 @@ void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
     if( newFileName == m_NetlistFileName )
         return;
 
-    if( m_NetlistFileName.DirExists() )
-        oldPath = m_NetlistFileName.GetPath();
+    OpenProjectFiles( std::vector<wxString>( 1, newFileName.GetFullPath() ) );
+}
 
-    /* Update the library search path list. */
-    if( wxGetApp().GetLibraryPathList().Index( oldPath ) != wxNOT_FOUND )
-        wxGetApp().GetLibraryPathList().Remove( oldPath );
 
-    wxGetApp().GetLibraryPathList().Insert( newFileName.GetPath(), 0 );
-    m_NetlistFileName = newFileName;
-    ReadNetListAndLinkFiles();
+bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
+{
+    if( aFileSet.size() == 1 )
+    {
+        m_NetlistFileName = aFileSet[0];
+        ReadNetListAndLinkFiles();
+
+        UpdateTitle();
+
+        return true;
+    }
+
+    return false;
 }
 
 
 void CVPCB_MAINFRAME::ConfigCvpcb( wxCommandEvent& event )
 {
-    DIALOG_CVPCB_CONFIG ConfigFrame( this );
+    /*  This is showing FOOTPRINT search paths, which are obsoleted.
+        I am removing this for the time being, since cvpcb will soon be part of pcbnew.
 
-    ConfigFrame.ShowModal();
+    DIALOG_CVPCB_CONFIG     dlg( this );
+
+    dlg.ShowModal();
+    */
 }
 
 
 void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 {
     bool tableChanged = false;
-    int r = InvokePcbLibTableEditor( this, m_globalFootprintTable, m_footprintLibTable );
+    int r = InvokePcbLibTableEditor( this, &GFootprintTable, FootprintLibs() );
 
     if( r & 1 )
     {
         try
         {
             FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
-            m_globalFootprintTable->Format( &sf, 0 );
+
+            GFootprintTable.Format( &sf, 0 );
             tableChanged = true;
         }
-        catch( IO_ERROR& ioe )
+        catch( const IO_ERROR& ioe )
         {
-            wxString msg;
-            msg.Printf( _( "Error occurred saving the global footprint library "
-                           "table:\n\n%s" ), ioe.errorText.GetData() );
+            wxString msg = wxString::Format( _(
+                "Error occurred saving the global footprint library "
+                "table:\n\n%s" ),
+                GetChars( ioe.errorText ) );
+
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
     }
@@ -535,7 +527,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
         try
         {
             FILE_OUTPUTFORMATTER sf( fn.GetFullPath() );
-            m_footprintLibTable->Format( &sf, 0 );
+            FootprintLibs()->Format( &sf, 0 );
             tableChanged = true;
         }
         catch( IO_ERROR& ioe )
@@ -550,7 +542,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
     if( tableChanged )
     {
         BuildLIBRARY_LISTBOX();
-        m_footprints.ReadFootprintFiles( m_footprintLibTable );
+        m_footprints.ReadFootprintFiles( FootprintLibs() );
     }
 }
 
@@ -576,7 +568,7 @@ void CVPCB_MAINFRAME::SetLanguage( wxCommandEvent& event )
 
 void CVPCB_MAINFRAME::DisplayDocFile( wxCommandEvent& event )
 {
-    GetAssociatedDocument( this, m_DocModulesFileName, &wxGetApp().GetLibraryPathList() );
+    GetAssociatedDocument( this, m_DocModulesFileName, &Kiface().KifaceSearch() );
 }
 
 
@@ -748,16 +740,17 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
 bool CVPCB_MAINFRAME::LoadFootprintFiles()
 {
+    FP_LIB_TABLE* fptbl = FootprintLibs();
+
     // Check if there are footprint libraries in the footprint library table.
-    if( m_footprintLibTable == NULL || !m_footprintLibTable->GetLogicalLibs().size() )
+    if( !fptbl || !fptbl->GetLogicalLibs().size() )
     {
         wxMessageBox( _( "No PCB footprint libraries are listed in the current footprint "
                          "library table." ), _( "Configuration Error" ), wxOK | wxICON_ERROR );
         return false;
     }
 
-    if( m_footprintLibTable != NULL )
-        m_footprints.ReadFootprintFiles( m_footprintLibTable );
+    m_footprints.ReadFootprintFiles( fptbl );
 
     if( m_footprints.GetErrorCount() )
     {
@@ -770,20 +763,18 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
 
 void CVPCB_MAINFRAME::UpdateTitle()
 {
-    wxString title;
+    wxString    title = wxString::Format( wxT( "Cvpcb %s  " ), GetChars( GetBuildVersion() ) );
 
     if( m_NetlistFileName.IsOk() && m_NetlistFileName.FileExists() )
     {
-        title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
-                wxT( " " ) + m_NetlistFileName.GetFullPath();
+        title += m_NetlistFileName.GetFullPath();
 
         if( !m_NetlistFileName.IsFileWritable() )
             title += _( " [Read Only]" );
     }
     else
     {
-        title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
-                wxT( " " ) + _( " [no file]" );
+        title += _( "[no file]" );
     }
 
     SetTitle( title );
@@ -868,7 +859,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
 
 
 // File header.
-static char HeaderLinkFile[] = { "Cmp-Mod V01" };
+static char headerLinkFile[] = "Cmp-Mod V01";
 
 
 bool CVPCB_MAINFRAME::WriteComponentLinkFile( const wxString& aFullFileName )
@@ -876,7 +867,7 @@ bool CVPCB_MAINFRAME::WriteComponentLinkFile( const wxString& aFullFileName )
     COMPONENT*  component;
     FILE*       outputFile;
     wxFileName  fn( aFullFileName );
-    wxString    Title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion();
+    wxString    title = wxString::Format( wxT( "Cvpcb %s  " ), GetChars( GetBuildVersion() ) );
 
     outputFile = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
 
@@ -896,8 +887,8 @@ bool CVPCB_MAINFRAME::WriteComponentLinkFile( const wxString& aFullFileName )
      * IdModule  = BUS_PC;
      * EndCmp
      */
-    retval |= fprintf( outputFile, "%s", HeaderLinkFile );
-    retval |= fprintf( outputFile, " Created by %s", TO_UTF8( Title ) );
+    retval |= fprintf( outputFile, "%s", headerLinkFile );
+    retval |= fprintf( outputFile, " Created by %s", TO_UTF8( title ) );
     retval |= fprintf( outputFile, " date = %s\n", TO_UTF8( DateAndTime() ) );
 
     for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
@@ -919,15 +910,9 @@ bool CVPCB_MAINFRAME::WriteComponentLinkFile( const wxString& aFullFileName )
 
 void CVPCB_MAINFRAME::CreateScreenCmp()
 {
-    if( m_DisplayFootprintFrame == NULL )
+    if( !m_DisplayFootprintFrame )
     {
-        m_DisplayFootprintFrame = new DISPLAY_FOOTPRINTS_FRAME( this, _( "Module" ),
-                                                                wxPoint( 0, 0 ),
-                                                                wxSize( 600, 400 ),
-                                                                KICAD_DEFAULT_DRAWFRAME_STYLE );
-
-        m_DisplayFootprintFrame->SetFootprintLibTable( m_footprintLibTable );
-
+        m_DisplayFootprintFrame = new DISPLAY_FOOTPRINTS_FRAME( &Kiway(), this );
         m_DisplayFootprintFrame->Show( true );
     }
     else
@@ -1023,11 +1008,11 @@ void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
                                         wxFONTWEIGHT_NORMAL ) );
     }
 
-    if( m_footprintLibTable )
+    if( FootprintLibs() )
     {
         wxArrayString libNames;
 
-        std::vector< wxString > libNickNames = m_footprintLibTable->GetLogicalLibs();
+        std::vector< wxString > libNickNames = FootprintLibs()->GetLogicalLibs();
 
         for( unsigned ii = 0; ii < libNickNames.size(); ii++ )
             libNames.Add( libNickNames[ii] );

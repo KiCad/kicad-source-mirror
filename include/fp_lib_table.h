@@ -30,11 +30,9 @@
 #include <vector>
 #include <map>
 #include <io_mgr.h>
-
-
+#include <project.h>
 
 #define FP_LATE_ENVVAR  1           ///< late=1/early=0 environment variable expansion
-#define KISYSMOD        "KISYSMOD"
 
 class wxFileName;
 class OUTPUTFORMATTER;
@@ -42,7 +40,7 @@ class MODULE;
 class FP_LIB_TABLE_LEXER;
 class NETLIST;
 class REPORTER;
-
+class SEARCH_STACK;
 
 /**
  * Class FP_LIB_TABLE
@@ -85,7 +83,7 @@ class REPORTER;
  *
  * @author Wayne Stambaugh
  */
-class FP_LIB_TABLE
+class FP_LIB_TABLE : public PROJECT::_ELEM
 {
     friend class DIALOG_FP_LIB_TABLE;
 
@@ -270,6 +268,13 @@ public:
      *                       taken of aFallBackTable.
      */
     FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable = NULL );
+
+    /// Delete all rows.
+    void Clear()
+    {
+        rows.clear();
+        nickIndex.clear();
+    }
 
     bool operator==( const FP_LIB_TABLE& r ) const
     {
@@ -497,26 +502,8 @@ public:
     bool IsEmpty( bool aIncludeFallback = true );
 
     /**
-     * Function MissingLegacyLibs
-     * tests the list of \a aLibNames by URI to determine if any of them are missing from
-     * the #FP_LIB_TABLE.
-     *
-     * @note The missing legacy footprint library test is performed by using old library
-     *       file path lookup method.  If the library is found, it is compared against all
-     *       of the URIs in the table rather than the nickname.  This was done because the
-     *       user could change the nicknames from the default table.  Using the full path
-     *       is more reliable.
-     *
-     * @param aLibNames is the list of legacy library names.
-     * @param aErrorMsg is a pointer to a wxString object to store the URIs of any missing
-     *                  legacy library paths.  Can be NULL.
-     * @return true if there are missing legacy libraries.  Otherwise false.
-     */
-    bool MissingLegacyLibs( const wxArrayString& aLibNames, wxString* aErrorMsg = NULL );
-
-    /**
      * Function ConvertFromLegacy
-     * converts the footprint names in \a aNetList from the legacy fromat to the #FPID format.
+     * converts the footprint names in \a aNetList from the legacy format to the #FPID format.
      *
      * @param aNetList is the #NETLIST object to convert.
      * @param aLibNames is the list of legacy footprint library names from the currently loaded
@@ -524,11 +511,11 @@ public:
      * @param aReporter is the #REPORTER object to dump messages into.
      * @return true if all footprint names were successfully converted to a valid FPID.
      */
-    bool ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aLibNames,
-                            REPORTER* aReporter = NULL ) throw( IO_ERROR );
+    bool ConvertFromLegacy( SEARCH_STACK& aSStack, NETLIST& aNetList,
+            const wxArrayString& aLibNames, REPORTER* aReporter = NULL ) throw( IO_ERROR );
 
     /**
-     * Function ExpandEnvSubsitutions
+     * Function ExpandSubstitutions
      * replaces any environment variable references with their values and is
      * here to fully embellish the ROW::uri in a platform independent way.
      * This enables (fp_lib_table)s to have platform dependent environment
@@ -561,16 +548,7 @@ public:
      * Function GetFileName
      * @return the footprint library file name.
      */
-    static const wxString& GetFileName();
-
-    static void SetProjectPathEnvVariable( const wxFileName& aPath );
-
-    /**
-     * Function ProjectPathEnvVarVariableName
-     * returns the name of the environment variable used to hold the directory of
-     * the current project on program startup.
-     */
-    static const wxString ProjectPathEnvVariableName();
+    static const wxString GetFileName();
 
     /**
      * Function GlobalPathEnvVarVariableName
@@ -582,7 +560,7 @@ public:
      */
     static const wxString GlobalPathEnvVariableName();
 
-    static wxString GetProjectFileName( const wxFileName& aPath );
+    static wxString GetProjectTableFileName( const wxString& aProjectFullName );
 
     /**
      * Function Load
@@ -639,5 +617,8 @@ protected:
 
     FP_LIB_TABLE*   fallBack;
 };
+
+
+extern FP_LIB_TABLE GFootprintTable;        // KIFACE scope.
 
 #endif  // FP_LIB_TABLE_H_

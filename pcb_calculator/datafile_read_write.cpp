@@ -29,7 +29,7 @@
 #include <macros.h>
 #include <common.h>
 #include <kicad_string.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <pcb_calculator.h>
 #include <pcb_calculator_datafile_lexer.h>
 #include <class_regulator_data.h>
@@ -127,7 +127,7 @@ int PCB_CALCULATOR_DATAFILE::WriteHeader( OUTPUTFORMATTER* aFormatter ) const th
     aFormatter->Print( nestlevel++, "(date %s)\n",
                        aFormatter->Quotew( DateAndTime() ).c_str() );
     aFormatter->Print( nestlevel++, "(tool %s)\n",
-                       aFormatter->Quotew( wxGetApp().GetAppName() +
+                       aFormatter->Quotew( Pgm().App().GetAppName() +
                                             wxChar(' ') + GetBuildVersion() ).c_str() );
 
     return nestlevel;
