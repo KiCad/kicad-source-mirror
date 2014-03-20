@@ -216,8 +216,6 @@ public:
     bool m_show_microwave_tools;
     bool m_show_layer_manager_tools;
 
-
-public:
     PCB_EDIT_FRAME( wxWindow* father, const wxString& title,
                     const wxPoint& pos, const wxSize& size,
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
