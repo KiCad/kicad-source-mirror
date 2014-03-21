@@ -93,14 +93,11 @@ void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
     prj.SetProjectFullName( fn.GetFullPath() );
     */
 
-    wxFileName projectFpLibTableFileName = FP_LIB_TABLE::GetProjectTableFileName( fn.GetFullPath() );
+    wxString projectFpLibTableFileName = prj.FootprintLibTblName();
 
     try
     {
-        // Stack the project specific FP_LIB_TABLE overlay on top of the global table.
-        // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
-        // stack this way, all using the same global fallback table.
-        FootprintLibs()->Load( projectFpLibTableFileName, &GFootprintTable );
+        FootprintLibs()->Load( projectFpLibTableFileName );
     }
     catch( const IO_ERROR& ioe )
     {

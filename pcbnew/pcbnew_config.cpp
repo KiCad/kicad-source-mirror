@@ -82,13 +82,13 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     case ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR:
         m_show_microwave_tools  = ! m_show_microwave_tools;
         m_auimgr.GetPane( wxT( "m_microWaveToolBar" ) ).Show( m_show_microwave_tools );
-	m_auimgr.Update();
+        m_auimgr.Update();
 
         GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR,
                                 m_show_microwave_tools ?
                                 _( "Hide Microwave Toolbar" ): _( "Show Microwave Toolbar" ));
         break;
-        
+
 
     case ID_PCB_LAYERS_SETUP:
         InstallDialogLayerSetup();
@@ -108,7 +108,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
                     GFootprintTable.Format( &sf, 0 );
                     tableChanged = true;
                 }
-                catch( IO_ERROR& ioe )
+                catch( const IO_ERROR& ioe )
                 {
                     wxString msg = wxString::Format( _(
                         "Error occurred saving the global footprint library "
@@ -123,18 +123,20 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             // is kept in memory and created in the path when the new board is saved.
             if( (r & 2) && !GetBoard()->GetFileName().IsEmpty() )
             {
-                wxFileName fn = GetBoard()->GetFileName();
+                wxString    tblName   = Prj().FootprintLibTblName();
 
                 try
                 {
-                    FootprintLibs()->Save( fn );
+                    FootprintLibs()->Save( tblName );
                     tableChanged = true;
                 }
-                catch( IO_ERROR& ioe )
+                catch( const IO_ERROR& ioe )
                 {
-                    wxString msg;
-                    msg.Printf( _( "Error occurred saving project specific footprint library "
-                                   "table:\n\n%s" ), ioe.errorText.GetData() );
+                    wxString msg = wxString::Format( _(
+                        "Error occurred saving project specific footprint library "
+                        "table:\n\n%s" ),
+                        GetChars( ioe.errorText )
+                        );
                     wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
                 }
             }
@@ -171,27 +173,27 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_CONFIG_READ:
-    {
-        fn = GetBoard()->GetFileName();
-        fn.SetExt( ProjectFileExtension );
-
-        wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
-                          fn.GetFullName(), ProjectFileWildcard,
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            break;
-
-        if( !wxFileExists( dlg.GetPath() ) )
         {
-            wxString msg;
-            msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
-            DisplayError( this, msg );
-            break;
-        }
+            fn = GetBoard()->GetFileName();
+            fn.SetExt( ProjectFileExtension );
 
-        LoadProjectSettings( dlg.GetPath() );
-    }
+            wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
+                              fn.GetFullName(), ProjectFileWildcard,
+                              wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+
+            if( dlg.ShowModal() == wxID_CANCEL )
+                break;
+
+            if( !wxFileExists( dlg.GetPath() ) )
+            {
+                wxString msg;
+                msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
+                DisplayError( this, msg );
+                break;
+            }
+
+            LoadProjectSettings( dlg.GetPath() );
+        }
         break;
 
     // Hotkey IDs
@@ -258,17 +260,15 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     SetElementVisibility( RATSNEST_VISIBLE, showRats );
 #endif
 
-    fn = GetBoard()->GetFileName();
-
-    wxFileName projectFpLibTableFileName = FP_LIB_TABLE::GetProjectTableFileName( fn.GetFullPath() );
+    wxString projectFpLibTableFileName = Prj().FootprintLibTblName();
 
     FootprintLibs()->Clear();
 
     try
     {
-        FootprintLibs()->Load( projectFpLibTableFileName, &GFootprintTable );
+        FootprintLibs()->Load( projectFpLibTableFileName );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
     }

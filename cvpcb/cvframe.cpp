@@ -210,6 +210,9 @@ FP_LIB_TABLE* CVPCB_MAINFRAME::FootprintLibs() const
 
     if( !tbl )
     {
+        // Stack the project specific FP_LIB_TABLE overlay on top of the global table.
+        // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
+        // stack this way, all using the same global fallback table.
         tbl = new FP_LIB_TABLE( &GFootprintTable );
         prj.Elem( PROJECT::FPTBL, tbl );
     }
@@ -499,46 +502,45 @@ void CVPCB_MAINFRAME::ConfigCvpcb( wxCommandEvent& event )
 
 void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 {
-    bool tableChanged = false;
-    int r = InvokePcbLibTableEditor( this, &GFootprintTable, FootprintLibs() );
+    bool    tableChanged = false;
+    int     r = InvokePcbLibTableEditor( this, &GFootprintTable, FootprintLibs() );
 
     if( r & 1 )
     {
+        wxString fileName = FP_LIB_TABLE::GetGlobalTableFileName();
+
         try
         {
-            FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
-
-            GFootprintTable.Format( &sf, 0 );
+            GFootprintTable.Save( fileName );
             tableChanged = true;
         }
         catch( const IO_ERROR& ioe )
         {
             wxString msg = wxString::Format( _(
-                "Error occurred saving the global footprint library "
-                "table:\n\n%s" ),
-                GetChars( ioe.errorText ) );
-
+                    "Error occurred saving the global footprint library table:\n'%s'\n%s" ),
+                    GetChars( fileName ),
+                    GetChars( ioe.errorText )
+                    );
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
     }
 
     if( r & 2 )
     {
-        wxFileName fn = m_NetlistFileName;
-        fn.SetName( FP_LIB_TABLE::GetFileName() );
-        fn.SetExt( wxEmptyString );
+        wxString fileName = Prj().FootprintLibTblName();
 
         try
         {
-            FILE_OUTPUTFORMATTER sf( fn.GetFullPath() );
-            FootprintLibs()->Format( &sf, 0 );
+            FootprintLibs()->Save( fileName );
             tableChanged = true;
         }
-        catch( IO_ERROR& ioe )
+        catch( const IO_ERROR& ioe )
         {
-            wxString msg;
-            msg.Printf( _( "Error occurred saving the global footprint library "
-                           "table:\n\n%s" ), ioe.errorText.GetData() );
+            wxString msg = wxString::Format( _(
+                    "Error occurred saving the project footprint library table:\n'%s'\n%s" ),
+                    GetChars( fileName ),
+                    GetChars( ioe.errorText )
+                    );
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
     }

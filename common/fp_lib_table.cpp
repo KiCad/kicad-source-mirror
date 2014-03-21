@@ -24,6 +24,7 @@
  */
 
 
+#include <fctsys.h>
 #include <wx/config.h>      // wxExpandEnvVars()
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
@@ -44,19 +45,6 @@
 
 using namespace FP_LIB_TABLE_T;
 
-
-/**
- * Definition for enabling and disabling footprint library trace output.  See the
- * wxWidgets documentation on using the WXTRACE environment variable.
- */
-static const wxString traceFpLibTable( wxT( "KicadFpLibTable" ) );
-
-
-/// The footprint library table name used when no project file is passed to Pcbnew or CvPcb.
-/// This is used temporarily to store the project specific library table until the project
-/// file being edited is saved.  It is then moved to the file fp-lib-table in the folder where
-/// the project file is saved.
-static const wxChar templateProjectFileName[] = wxT( "prj-fp-lib-table" );
 
 static const wxChar global_tbl_name[] = wxT( "fp-lib-table" );
 
@@ -407,19 +395,6 @@ void FP_LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
                 out->Quotew( GetDescr() ).c_str()
                 );
 }
-
-
-void FP_LIB_TABLE::Save( const wxFileName& aPath ) const throw( IO_ERROR )
-{
-    wxFileName fn = GetProjectTableFileName( aPath.GetFullPath() );
-
-    wxLogTrace( traceFpLibTable, wxT( "Saving footprint libary table <%s>." ),
-                GetChars( fn.GetFullPath() ) );
-
-    FILE_OUTPUTFORMATTER sf( fn.GetFullPath() );
-    Format( &sf, 0 );
-}
-
 
 #define OPT_SEP     '|'         ///< options separator character
 
@@ -842,34 +817,6 @@ const wxString FP_LIB_TABLE::GlobalPathEnvVariableName()
 }
 
 
-wxString FP_LIB_TABLE::GetProjectTableFileName( const wxString& aProjectFullName )
-{
-    wxFileName  fn = aProjectFullName;
-    wxString    path = fn.GetPath();
-
-    // Set $KICAD_PRJ_PATH to user's configuration path if aPath is not set or does not exist.
-
-    if( !fn.IsOk() || !wxFileName::IsDirReadable( path ) )
-    {
-        fn.AssignDir( wxStandardPaths::Get().GetUserConfigDir() );
-
-#if defined( __WINDOWS__ )
-        fn.AppendDir( wxT( "kicad" ) );
-#endif
-        fn.SetName( templateProjectFileName );
-    }
-    else
-    {
-        fn.SetName( global_tbl_name );
-    }
-
-    wxLogTrace( traceFpLibTable, wxT( "Project footprint lib table file '%s'." ),
-                GetChars( fn.GetFullPath() ) );
-
-    return fn.GetFullPath();
-}
-
-
 bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR )
 {
     bool        tableExists = true;
@@ -911,39 +858,38 @@ wxString FP_LIB_TABLE::GetGlobalTableFileName()
 {
     wxFileName fn;
 
+    // This is possibly problematic with an uncertain wxApp title, which is now
+    // the case.  We'll need a better technique soon.
     fn.SetPath( wxStandardPaths::Get().GetUserConfigDir() );
 
 #if defined( __WINDOWS__ )
     fn.AppendDir( wxT( "kicad" ) );
 #endif
 
-    fn.SetName( GetFileName() );
-
-    wxLogTrace( traceFpLibTable, wxT( "Global footprint library table file '%s'." ),
-                GetChars( fn.GetFullPath() ) );
+    fn.SetName( global_tbl_name );
 
     return fn.GetFullPath();
 }
 
+// prefer wxString filename so it can be seen in a debugger easier than wxFileName.
 
-const wxString FP_LIB_TABLE::GetFileName()
-{
-    return global_tbl_name;
-}
-
-
-void FP_LIB_TABLE::Load( const wxFileName& aFileName, FP_LIB_TABLE* aFallBackTable )
+void FP_LIB_TABLE::Load( const wxString& aFileName )
     throw( IO_ERROR )
 {
-    fallBack = aFallBackTable;
-
     // Empty footprint library tables are valid.
-    if( aFileName.IsOk() && aFileName.FileExists() )
+    if( wxFileName::IsFileReadable( aFileName ) )
     {
-        FILE_LINE_READER    reader( aFileName.GetFullPath() );
+        FILE_LINE_READER    reader( aFileName );
         FP_LIB_TABLE_LEXER  lexer( &reader );
 
         Parse( &lexer );
     }
+}
+
+
+void FP_LIB_TABLE::Save( const wxString& aFileName ) const throw( IO_ERROR )
+{
+    FILE_OUTPUTFORMATTER sf( aFileName );
+    Format( &sf, 0 );
 }
 

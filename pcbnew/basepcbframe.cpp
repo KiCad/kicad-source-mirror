@@ -181,7 +181,11 @@ FP_LIB_TABLE* PCB_BASE_FRAME::FootprintLibs() const
 
     if( !tbl )
     {
+        // Stack the project specific FP_LIB_TABLE overlay on top of the global table.
+        // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
+        // stack this way, all using the same global fallback table.
         tbl = new FP_LIB_TABLE( &GFootprintTable );
+
         prj.Elem( PROJECT::FPTBL, tbl );
     }
 

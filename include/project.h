@@ -83,6 +83,13 @@ public:
     VTBL_ENTRY const wxString GetProjectFullName() const;
 
     /**
+     * Function FootprintLibTblName
+     * returns the path and filename of this project's fp-lib-table,
+     * i.e. the project specific one, not the global one.
+     */
+    VTBL_ENTRY const wxString FootprintLibTblName() const;
+
+    /**
      * Function ConfigSave
      * saves the current "project" parameters into the wxConfigBase* derivative.
      * Then the wxConfigBase derivative is written to the *.pro file for the project.
