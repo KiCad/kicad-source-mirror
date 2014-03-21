@@ -728,6 +728,18 @@ public:
     wxPoint GetGridPosition( const wxPoint& aPosition ) const;
 
     /**
+     * Function SetNextGrid()
+     * changes the grid size settings to the next one available.
+     */
+    virtual void SetNextGrid();
+
+    /**
+     * Function SetPrevGrid()
+     * changes the grid size settings to the previous one available.
+     */
+    virtual void SetPrevGrid();
+
+    /**
      * Command event handler for selecting grid sizes.
      *
      * All commands that set the grid size should eventually end up here.

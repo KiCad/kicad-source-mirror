@@ -216,50 +216,19 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_GRID_TO_FASTGRID1:
-        if( m_gridSelectBox )
-        {
-            m_gridSelectBox->SetSelection( m_FastGrid1 );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
-
+        SetFastGrid1();
         break;
 
     case HK_SWITCH_GRID_TO_FASTGRID2:
-        if( m_gridSelectBox )
-        {
-            m_gridSelectBox->SetSelection( m_FastGrid2 );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
-
+        SetFastGrid2();
         break;
 
     case HK_SWITCH_GRID_TO_NEXT:
-        if( m_gridSelectBox )
-        {
-            m_gridSelectBox->SetSelection( ( m_gridSelectBox->GetSelection() + 1 ) %
-                                           m_gridSelectBox->GetCount() );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
+        SetNextGrid();
         break;
 
     case HK_SWITCH_GRID_TO_PREVIOUS:
-        if( m_gridSelectBox )
-        {
-            cnt = m_gridSelectBox->GetSelection();
-
-            if ( cnt == 0 )
-                cnt = m_gridSelectBox->GetCount() - 1;
-            else
-                cnt--;
-
-            m_gridSelectBox->SetSelection( cnt );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
-
+        SetPrevGrid();
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
