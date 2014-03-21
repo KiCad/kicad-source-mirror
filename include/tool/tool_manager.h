@@ -58,6 +58,11 @@ public:
     ~TOOL_MANAGER();
 
     /**
+     * Deletes all the tools that were registered in the TOOL_MANAGER.
+     */
+    void DeleteAll();
+
+    /**
      * Generates an unique ID from for a tool with given name.
      */
     static TOOL_ID MakeToolId( const std::string& aToolName );
