@@ -605,25 +605,25 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         // Save the project specific footprint library table.
         if( !FootprintLibs()->IsEmpty( false ) )
         {
-            wxFileName fn = pcbFileName;
-            fn.ClearExt();
-            fn.SetName( FP_LIB_TABLE::GetFileName() );
+            wxString fp_lib_tbl = Prj().FootprintLibTblName();
 
-            if( fn.FileExists()
+            if( wxFileName::FileExists( fp_lib_tbl )
               && IsOK( this, _( "A footprint library table already exists in this path.\n\nDo "
                                 "you want to overwrite it?" ) ) )
             {
                 try
                 {
-                    FootprintLibs()->Save( fn );
+                    FootprintLibs()->Save( fp_lib_tbl );
                 }
-                catch( IO_ERROR& ioe )
+                catch( const IO_ERROR& ioe )
                 {
-                    DisplayError( this,
-                                  wxString::Format( _( "An error occurred attempting to save the "
-                                                       "footprint library table '%s'\n\n%s" ),
-                                                    GetChars( fn.GetFullPath() ),
-                                                    GetChars( ioe.errorText ) ) );
+                    wxString msg = wxString::Format( _(
+                        "An error occurred attempting to save the "
+                        "footprint library table '%s'\n\n%s" ),
+                        GetChars( fp_lib_tbl ),
+                        GetChars( ioe.errorText )
+                        );
+                    DisplayError( this, msg );
                 }
             }
         }

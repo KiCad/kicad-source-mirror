@@ -82,6 +82,49 @@ const wxString PROJECT::GetProjectFullName() const
 }
 
 
+const wxString PROJECT::FootprintLibTblName() const
+{
+    wxFileName  fn = GetProjectFullName();
+    wxString    path = fn.GetPath();
+
+    // DBG(printf( "path:'%s'  fn:'%s'\n", TO_UTF8(path), TO_UTF8(fn.GetFullPath()) );)
+
+    // if there's no path to the project name, or the name as a whole is bogus or its not
+    // write-able then use a template file.
+    if( !fn.GetDirCount() || !fn.IsOk() || !wxFileName::IsDirWritable( path ) )
+    {
+        // return a template filename now.
+
+        // this next line is likely a problem now, since it relies on an
+        // application title which is no longer constant or known.  This next line needs
+        // to be re-thought out.
+
+        fn.AssignDir( wxStandardPaths::Get().GetUserConfigDir() );
+
+#if defined( __WINDOWS__ )
+        fn.AppendDir( wxT( "kicad" ) );
+#endif
+
+        /*
+            The footprint library table name used when no project file is passed
+            to Pcbnew or CvPcb. This is used temporarily to store the project
+            specific library table until the project file being edited is saved.
+            It is then moved to the file fp-lib-table in the folder where the
+            project file is saved.
+        */
+        fn.SetName( wxT( "prj-fp-lib-table" ) );
+    }
+    else    // normal path.
+    {
+        fn.SetName( wxT( "fp-lib-table" ) );
+    }
+
+    fn.ClearExt();
+
+    return fn.GetFullPath();
+}
+
+
 RETAINED_PATH& PROJECT::RPath( RETPATH_T aIndex )
 {
     unsigned ndx = unsigned( aIndex );

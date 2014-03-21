@@ -357,8 +357,6 @@ public:
      */
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR );
 
-    void Save( const wxFileName& aPath ) const throw( IO_ERROR );
-
     /**
      * Function GetLogicalLibs
      * returns the logical library names, all of them that are pertinent to
@@ -544,11 +542,13 @@ public:
      */
     static wxString GetGlobalTableFileName();
 
+#if 0
     /**
      * Function GetFileName
      * @return the footprint library file name.
      */
     static const wxString GetFileName();
+#endif
 
     /**
      * Function GlobalPathEnvVarVariableName
@@ -560,19 +560,24 @@ public:
      */
     static const wxString GlobalPathEnvVariableName();
 
-    static wxString GetProjectTableFileName( const wxString& aProjectFullName );
-
     /**
      * Function Load
      * loads the footprint library table using the path defined in \a aFileName with
      * \a aFallBackTable.
      *
-     * @param aFileName contains the path and possible the file name and extension.
-     * @param aFallBackTable the fall back footprint library table which can be NULL.
+     * @param aFileName contains the full path to the s-expression file.
+     *
      * @throw IO_ERROR if an error occurs attempting to load the footprint library
      *                 table.
      */
-    void Load( const wxFileName& aFileName, FP_LIB_TABLE* aFallBackTable ) throw( IO_ERROR );
+    void Load( const wxString& aFileName ) throw( IO_ERROR );
+
+    /**
+     * Function Save
+     * writes this table to aFileName in s-expression form.
+     * @param aFileName is the name of the file to write to.
+     */
+    void Save( const wxString& aFileName ) const throw( IO_ERROR );
 
 protected:
 
