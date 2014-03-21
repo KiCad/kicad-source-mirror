@@ -914,6 +914,7 @@ void PCB_BASE_FRAME::updateGridSelectBox()
     }
 }
 
+
 void PCB_BASE_FRAME::updateZoomSelectBox()
 {
     if( m_zoomSelectBox == NULL )
@@ -941,5 +942,31 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
 
         if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
             m_zoomSelectBox->SetSelection( i + 1 );
+    }
+}
+
+
+void PCB_BASE_FRAME::SetFastGrid1()
+{
+    if( m_gridSelectBox )
+    {
+        m_gridSelectBox->SetSelection( m_FastGrid1 );
+
+        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
+        cmd.SetEventObject( this );
+        OnSelectGrid( cmd );
+    }
+}
+
+
+void PCB_BASE_FRAME::SetFastGrid2()
+{
+    if( m_gridSelectBox )
+    {
+        m_gridSelectBox->SetSelection( m_FastGrid2 );
+
+        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
+        cmd.SetEventObject( this );
+        OnSelectGrid( cmd );
     }
 }

@@ -395,7 +395,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     if( IsGalCanvasActive() )
     {
         GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x,
-                                                      screen->GetGrid().m_Size.y ) );
+                                                         screen->GetGrid().m_Size.y ) );
         GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
@@ -529,6 +529,38 @@ wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
         pos = GetNearestGridPosition( aPosition );
 
     return pos;
+}
+
+
+void EDA_DRAW_FRAME::SetNextGrid()
+{
+    if( m_gridSelectBox )
+    {
+        m_gridSelectBox->SetSelection( ( m_gridSelectBox->GetSelection() + 1 ) %
+                                       m_gridSelectBox->GetCount() );
+
+        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
+        //        cmd.SetEventObject( this );
+        OnSelectGrid( cmd );
+    }
+}
+
+
+void EDA_DRAW_FRAME::SetPrevGrid()
+{
+    if( m_gridSelectBox )
+    {
+        int cnt = m_gridSelectBox->GetSelection();
+
+        if( --cnt < 0 )
+            cnt = m_gridSelectBox->GetCount() - 1;
+
+        m_gridSelectBox->SetSelection( cnt );
+
+        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
+        //        cmd.SetEventObject( this );
+        OnSelectGrid( cmd );
+    }
 }
 
 
