@@ -53,7 +53,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
     {
         if( g_CurrentTrackList.GetCount() > 0 )
         {
-            LAYER_NUM previous_layer = getActiveLayer();
+            LAYER_NUM previous_layer = GetActiveLayer();
 
             DBG( g_CurrentTrackList.VerifyListIntegrity(); )
 
@@ -86,7 +86,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
 
             // Correct active layer which could change if a via
             // has been erased
-            setActiveLayer( previous_layer );
+            SetActiveLayer( previous_layer );
 
             UpdateStatusBar();
 

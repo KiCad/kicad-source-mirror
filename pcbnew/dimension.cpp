@@ -251,7 +251,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
 
         aDimension = new DIMENSION( GetBoard() );
         aDimension->SetFlags( IS_NEW );
-        aDimension->SetLayer( getActiveLayer() );
+        aDimension->SetLayer( GetActiveLayer() );
         aDimension->SetOrigin( pos );
         aDimension->SetEnd( pos );
 

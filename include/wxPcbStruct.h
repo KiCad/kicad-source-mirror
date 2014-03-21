@@ -135,22 +135,6 @@ protected:
     void createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu );
 
     /**
-     * Function setActiveLayer
-     * will change the currently active layer to \a aLayer and also
-     * update the PCB_LAYER_WIDGET.
-     */
-    void setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
-
-    /**
-     * Function getActiveLayer
-     * returns the active layer
-     */
-    LAYER_NUM getActiveLayer()
-    {
-        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
-    }
-
-    /**
      * Function setHighContrastLayer
      * takes care of display settings for the given layer to be displayed in high contrast mode.
      */
@@ -159,7 +143,7 @@ protected:
     /**
      * Function syncLayerWidgetLayer
      * updates the currently layer "selection" within the PCB_LAYER_WIDGET.
-     * The currently selected layer is defined by the return value of getActiveLayer().
+     * The currently selected layer is defined by the return value of GetActiveLayer().
      * <p>
      * This function cannot be inline without including layer_widget.h in
      * here and we do not want to do that.
@@ -576,6 +560,22 @@ public:
      * moves the selected layer to the top, so it is displayed above all others.
      */
     void SetTopLayer( LAYER_NUM aLayer );
+
+    /**
+     * Function SetActiveLayer
+     * will change the currently active layer to \a aLayer and also
+     * update the PCB_LAYER_WIDGET.
+     */
+    void SetActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
+
+    /**
+     * Function GetActiveLayer
+     * returns the active layer
+     */
+    LAYER_NUM GetActiveLayer()
+    {
+        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+    }
 
     /**
      * Function IsElementVisible

@@ -406,14 +406,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 m_canvas->SetIgnoreMouseEvents( true );
                 wxPoint dlgPosition;
                 wxGetMousePosition( &dlgPosition.x, &dlgPosition.y );
-                LAYER_NUM layer = SelectLayer( getActiveLayer(), ALL_NO_CU_LAYERS,
+                LAYER_NUM layer = SelectLayer( GetActiveLayer(), ALL_NO_CU_LAYERS,
                                                dlgPosition );
                 m_canvas->SetIgnoreMouseEvents( false );
                 m_canvas->MoveCursorToCrossHair();
 
-                if( getActiveLayer() != layer )
+                if( GetActiveLayer() != layer )
                 {
-                    GetScreen()->m_Route_Layer_TOP    = getActiveLayer();
+                    GetScreen()->m_Route_Layer_TOP    = GetActiveLayer();
                     GetScreen()->m_Route_Layer_BOTTOM = layer;
                     Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
                 }
@@ -942,17 +942,17 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER:
-        itmp = SelectLayer( getActiveLayer() );
+        itmp = SelectLayer( GetActiveLayer() );
 
         if( itmp >= 0 )
         {
             // if user changed colors and we are in high contrast mode, then redraw
             // because the PAD_SMD pads may change color.
-            if( DisplayOpt.ContrastModeDisplay && getActiveLayer() != itmp )
+            if( DisplayOpt.ContrastModeDisplay && GetActiveLayer() != itmp )
             {
                 m_canvas->Refresh();
             }
-            setActiveLayer( itmp );
+            SetActiveLayer( itmp );
         }
 
         m_canvas->MoveCursorToCrossHair();
@@ -963,19 +963,19 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
-        itmp = SelectLayer( getActiveLayer(), ALL_CU_LAYERS );
+        itmp = SelectLayer( GetActiveLayer(), ALL_CU_LAYERS );
 
         if( itmp >= 0 )
-            setActiveLayer( itmp );
+            SetActiveLayer( itmp );
 
         m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
-        itmp = SelectLayer( getActiveLayer(), ALL_NO_CU_LAYERS );
+        itmp = SelectLayer( GetActiveLayer(), ALL_NO_CU_LAYERS );
 
         if( itmp >= 0 )
-            setActiveLayer( itmp );
+            SetActiveLayer( itmp );
 
         break;
 
@@ -985,7 +985,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
-        setActiveLayer( m_SelLayerBox->GetLayerSelection() );
+        SetActiveLayer( m_SelLayerBox->GetLayerSelection() );
 
         if( DisplayOpt.ContrastModeDisplay )
             m_canvas->Refresh( true );
@@ -1288,7 +1288,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 
 void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
 {
-    LAYER_NUM curLayer = getActiveLayer();
+    LAYER_NUM curLayer = GetActiveLayer();
 
     // Check if the specified layer matches the present layer
     if( layer == curLayer )
@@ -1330,7 +1330,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
                 GetScreen()->m_Route_Layer_TOP    = curLayer;
                 GetScreen()->m_Route_Layer_BOTTOM = layer;
 
-                setActiveLayer( curLayer );
+                SetActiveLayer( curLayer );
 
                 if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
                 {
@@ -1351,7 +1351,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
     // and a non-copper layer, or vice-versa?
     // ...
 
-    setActiveLayer( layer );
+    SetActiveLayer( layer );
 
     if( DisplayOpt.ContrastModeDisplay )
         m_canvas->Refresh();
