@@ -44,11 +44,11 @@
 using namespace KIGFX;
 using boost::optional;
 
-static TOOL_ACTION ACT_AutoEndRoute( "AutoEndRoute", AS_CONTEXT, 'F' );
+static TOOL_ACTION ACT_AutoEndRoute( "AutoEndRoute", AS_CONTEXT, 'G' );
 static TOOL_ACTION ACT_PlaceVia( "PlaceVia", AS_CONTEXT, 'V' );
-static TOOL_ACTION ACT_OpenRouteOptions( "OpenRouterOptions", AS_CONTEXT, 'E' );
+static TOOL_ACTION ACT_OpenRouteOptions( "OpenRouterOptions", AS_CONTEXT, 'Y' );
 static TOOL_ACTION ACT_SwitchPosture( "SwitchPosture", AS_CONTEXT, '/' );
-static TOOL_ACTION ACT_EndTrack( "SwitchPosture", AS_CONTEXT, WXK_END );
+static TOOL_ACTION ACT_EndTrack( "EndTrack", AS_CONTEXT, WXK_END );
 
 ROUTER_TOOL::ROUTER_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveRouter" )

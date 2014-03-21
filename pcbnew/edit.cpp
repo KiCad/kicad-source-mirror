@@ -1466,7 +1466,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         std::string actionName = COMMON_ACTIONS::TranslateLegacyId( id );
 
         if( !actionName.empty() )
-            m_toolManager->RunAction( actionName );
+            m_toolManager.RunAction( actionName );
 
         return;
     }

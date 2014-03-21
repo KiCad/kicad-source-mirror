@@ -528,12 +528,9 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
         ViewReloadBoard( aBoard );
 
         // update the tool manager with the new board and its view.
-        if( m_toolManager )
-        {
-            m_toolManager->SetEnvironment( aBoard, GetGalCanvas()->GetView(),
-                                           GetGalCanvas()->GetViewControls(), this );
-            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-        }
+        m_toolManager.SetEnvironment( aBoard, GetGalCanvas()->GetView(),
+                                       GetGalCanvas()->GetViewControls(), this );
+        m_toolManager.ResetTools( TOOL_BASE::MODEL_RELOAD );
     }
 }
 
@@ -714,9 +711,9 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
         // Update potential changes in the ratsnest
         m_Pcb->GetRatsnest()->Recalculate();
 
-        m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
+        m_toolManager.SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
                                        GetGalCanvas()->GetViewControls(), this );
-        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+        m_toolManager.ResetTools( TOOL_BASE::GAL_SWITCH );
     }
 }
 

@@ -48,7 +48,13 @@ class wxWindow;
 class TOOL_MANAGER
 {
 public:
-    TOOL_MANAGER();
+    static TOOL_MANAGER& Instance()
+    {
+        static TOOL_MANAGER manager;
+
+        return manager;
+    }
+
     ~TOOL_MANAGER();
 
     /**
@@ -211,6 +217,8 @@ public:
     }
 
 private:
+    TOOL_MANAGER();
+
     struct TOOL_STATE;
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
 

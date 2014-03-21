@@ -60,8 +60,6 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 
         m_actionHotKeys[aAction->m_currentHotKey] = aAction;
     }
-
-    aAction->setActionMgr( this );
 }
 
 
@@ -71,7 +69,6 @@ void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
     m_actionIdIndex.erase( aAction->m_id );
 
     // Indicate that the ACTION_MANAGER no longer care about the object
-    aAction->setActionMgr( NULL );
     aAction->setId( -1 );
 
     if( aAction->HasHotKey() )

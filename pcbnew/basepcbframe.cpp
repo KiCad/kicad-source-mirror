@@ -131,10 +131,10 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
                                 const wxString& aTitle,
                                 const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString & aFrameName) :
-    EDA_DRAW_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
+    EDA_DRAW_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
+    m_toolManager( TOOL_MANAGER::Instance() )
 {
     m_Pcb                 = NULL;
-    m_toolManager         = NULL;
     m_toolDispatcher      = NULL;
 
     m_DisplayPadFill      = true;   // How to draw pads
