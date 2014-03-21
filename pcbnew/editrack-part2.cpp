@@ -51,10 +51,10 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
     if( aTrack == NULL )
     {
-        if( getActiveLayer() != ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP )
-            setActiveLayer( ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP );
+        if( GetActiveLayer() != ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP )
+            SetActiveLayer( ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP );
         else
-            setActiveLayer(((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM );
+            SetActiveLayer(((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM );
 
         UpdateStatusBar();
         return true;
@@ -108,7 +108,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     via->SetLayerPair( LAYER_N_BACK, LAYER_N_FRONT );
     via->SetDrill( GetBoard()->GetCurrentViaDrill() );
 
-    LAYER_NUM first_layer = getActiveLayer();
+    LAYER_NUM first_layer = GetActiveLayer();
     LAYER_NUM last_layer;
 
     // prepare switch to new active layer:
@@ -171,7 +171,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         return false;
     }
 
-    setActiveLayer( last_layer );
+    SetActiveLayer( last_layer );
 
     TRACK*  lastNonVia = g_CurrentTrackSegment;
 
@@ -193,7 +193,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
      */
 
     // set the layer to the new value
-    track->SetLayer( getActiveLayer() );
+    track->SetLayer( GetActiveLayer() );
 
     /* the start point is the via position and the end point is the cursor
      * which also is on the via (will change when moving mouse)

@@ -96,7 +96,7 @@ void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 {
-    m_SelLayerBox->SetLayerSelection( getActiveLayer() );
+    m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
 }
 
 

@@ -243,7 +243,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             if( GetToolId() == ID_PCB_ARC_BUTT )
                 shape = S_ARC;
 
-            if( IsCopperLayer( getActiveLayer() ) )
+            if( IsCopperLayer( GetActiveLayer() ) )
             {
                 DisplayError( this, _( "Graphic not allowed on Copper layers" ) );
                 break;
@@ -267,7 +267,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_TRACK_BUTT:
-        if( !IsCopperLayer( getActiveLayer() ) )
+        if( !IsCopperLayer( GetActiveLayer() ) )
         {
             DisplayError( this, _( "Tracks on Copper layers only " ) );
             break;
@@ -325,7 +325,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_ADD_TEXT_BUTT:
-        if( IsLayerInList( EDGE_LAYER, getActiveLayer() ) )
+        if( IsLayerInList( EDGE_LAYER, GetActiveLayer() ) )
         {
             DisplayError( this,
                           _( "Texts not allowed on Edge Cut layer" ) );
@@ -374,7 +374,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_DIMENSION_BUTT:
-        if( IsLayerInList( EDGE_LAYER|ALL_CU_LAYERS, getActiveLayer() ) )
+        if( IsLayerInList( EDGE_LAYER|ALL_CU_LAYERS, GetActiveLayer() ) )
         {
             DisplayError( this,
                           _( "Dimension not allowed on Copper or Edge Cut layers" ) );
