@@ -114,7 +114,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_ListCmp               = NULL;
     m_FootprintList         = NULL;
     m_LibraryList           = NULL;
-    m_DisplayFootprintFrame = NULL;
     m_mainToolBar           = NULL;
     m_modified              = false;
     m_isEESchemaNetlist     = false;
@@ -315,8 +314,8 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     // Close module display frame
-    if( m_DisplayFootprintFrame )
-        m_DisplayFootprintFrame->Close( true );
+    if( GetFpViewerFrame() )
+        GetFpViewerFrame()->Close( true );
 
     m_modified = false;
 
@@ -562,7 +561,7 @@ void CVPCB_MAINFRAME::OnKeepOpenOnSave( wxCommandEvent& event )
 void CVPCB_MAINFRAME::DisplayModule( wxCommandEvent& event )
 {
     CreateScreenCmp();
-    m_DisplayFootprintFrame->RedrawScreen( wxPoint( 0, 0 ), false );
+    GetFpViewerFrame()->RedrawScreen( wxPoint( 0, 0 ), false );
 }
 
 
@@ -601,7 +600,9 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     m_FootprintList->SetFootprints( m_footprints, libraryName, component, filter );
 
     // Tell AuiMgr that objects are changed !
-    m_auimgr.Update();
+    if( m_auimgr.GetManagedWindow() )   // Be sure Aui Manager is initialized
+                                        // (could be not the case when starting CvPcb
+        m_auimgr.Update();
 
     if( component == NULL )
         return;
@@ -640,7 +641,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
             if ( ii >= 0 )
                 m_FootprintList->SetSelection( ii, false );
 
-            if( m_DisplayFootprintFrame )
+            if( GetFpViewerFrame() )
             {
                 CreateScreenCmp();
             }
@@ -919,15 +920,17 @@ bool CVPCB_MAINFRAME::WriteComponentLinkFile( const wxString& aFullFileName )
 
 void CVPCB_MAINFRAME::CreateScreenCmp()
 {
-    if( !m_DisplayFootprintFrame )
+    DISPLAY_FOOTPRINTS_FRAME* fpframe = GetFpViewerFrame();
+
+    if( !fpframe )
     {
-        m_DisplayFootprintFrame = new DISPLAY_FOOTPRINTS_FRAME( &Kiway(), this );
-        m_DisplayFootprintFrame->Show( true );
+        fpframe = new DISPLAY_FOOTPRINTS_FRAME( &Kiway(), this );
+        fpframe->Show( true );
     }
     else
     {
-        if( m_DisplayFootprintFrame->IsIconized() )
-             m_DisplayFootprintFrame->Iconize( false );
+        if( fpframe->IsIconized() )
+             fpframe->Iconize( false );
 
         // The display footprint window might be buried under some other
         // windows, so CreateScreenCmp() on an existing window would not
@@ -935,11 +938,11 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
         // So we want to put it to front, second after our CVPCB_MAINFRAME.
         // We do this by a little dance of bringing it to front then the main
         // frame back.
-        m_DisplayFootprintFrame->Raise();  // Make sure that is visible.
-        Raise();                           // .. but still we want the focus.
+        fpframe->Raise();   // Make sure that is visible.
+        Raise();            // .. but still we want the focus.
     }
 
-    m_DisplayFootprintFrame->InitDisplay();
+    fpframe->InitDisplay();
 }
 
 
@@ -1048,4 +1051,11 @@ COMPONENT* CVPCB_MAINFRAME::GetSelectedComponent()
         return m_netlist.GetComponent( selection );
 
     return NULL;
+}
+
+
+DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFpViewerFrame()
+{
+    // returns the Footprint Viewer frame, if exists, or NULL
+    return (DISPLAY_FOOTPRINTS_FRAME*) wxWindow::FindWindowByName( FOOTPRINTVIEWER_FRAME_NAME );
 }

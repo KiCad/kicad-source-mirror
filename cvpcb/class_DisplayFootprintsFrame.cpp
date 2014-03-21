@@ -70,15 +70,13 @@ BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
                    DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode )
 END_EVENT_TABLE()
 
-#define DISPLAY_FOOTPRINTS_FRAME_NAME wxT( "CmpFrame" )
-
 
 DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, CVPCB_MAINFRAME* aParent ) :
-    PCB_BASE_FRAME( aKiway, aParent, CVPCB_DISPLAY_FRAME_TYPE, _( "Module" ),
+    PCB_BASE_FRAME( aKiway, aParent, CVPCB_DISPLAY_FRAME_TYPE, _( "Footprint Viewer" ),
         wxDefaultPosition, wxDefaultSize,
-        KICAD_DEFAULT_DRAWFRAME_STYLE, DISPLAY_FOOTPRINTS_FRAME_NAME )
+        KICAD_DEFAULT_DRAWFRAME_STYLE, FOOTPRINTVIEWER_FRAME_NAME )
 {
-    m_FrameName = DISPLAY_FOOTPRINTS_FRAME_NAME;
+    m_FrameName = FOOTPRINTVIEWER_FRAME_NAME;
     m_showAxis = true;         // true to draw axis.
 
     // Give an icon
@@ -147,9 +145,6 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
     delete GetScreen();
     SetScreen( NULL );      // Be sure there is no double deletion
-
-    // a crash would be better than this uncommented:
-    // ( (CVPCB_MAINFRAME*) Pgm().GetTopWindow() )->m_DisplayFootprintFrame = NULL;
 }
 
 

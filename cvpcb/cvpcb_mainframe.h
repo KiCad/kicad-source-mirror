@@ -63,7 +63,6 @@ public:
     FOOTPRINTS_LISTBOX*       m_FootprintList;
     LIBRARY_LISTBOX*          m_LibraryList;
     COMPONENTS_LISTBOX*       m_ListCmp;
-    DISPLAY_FOOTPRINTS_FRAME* m_DisplayFootprintFrame;
     wxAuiToolBar*             m_mainToolBar;
     wxFileName                m_NetlistFileName;
     wxArrayString             m_ModuleLibNames;
@@ -94,6 +93,11 @@ public:
      * @return the project #FP_LIB_TABLE.
      */
     FP_LIB_TABLE* FootprintLibs() const;
+
+    /**
+     * @return a pointer on the Footprint Viewer frame, if exists, or NULL
+     */
+    DISPLAY_FOOTPRINTS_FRAME* GetFpViewerFrame();
 
     /**
      * Function OnSelectComponent

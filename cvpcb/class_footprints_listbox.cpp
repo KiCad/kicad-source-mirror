@@ -207,7 +207,7 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
         return;
 
     // If the footprint view window is displayed, update the footprint.
-    if( GetParent()->m_DisplayFootprintFrame )
+    if( GetParent()->GetFpViewerFrame() )
         GetParent()->CreateScreenCmp();
 
     GetParent()->DisplayStatus();
