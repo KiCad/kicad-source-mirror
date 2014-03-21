@@ -82,7 +82,7 @@ mark_as_advanced( KICAD_SKIP_BOOST )    # Normal builders should build Boost.
 # when not defined by user, the default is python.exe under Windows and python2 for others
 # python binary file should be is exec path.
 
-option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
+option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." ON )
 
 # This can be set to a custom name to brag about a particular branch in the "About" dialog:
 set( KICAD_REPO_NAME "product" CACHE STRING "Name of the tree from which this build came." )

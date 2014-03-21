@@ -2,6 +2,10 @@
 #include <kiway.h>
 #include <kiway_player.h>
 
+#if defined(DEBUG)
+ #include <typeinfo>
+#endif
+
 
 PROJECT& KIWAY_HOLDER::Prj() const
 {
@@ -26,4 +30,3 @@ void KIWAY_HOLDER::SetKiway( wxWindow* aDest, KIWAY* aKiway )
 
     m_kiway = aKiway;
 }
-
