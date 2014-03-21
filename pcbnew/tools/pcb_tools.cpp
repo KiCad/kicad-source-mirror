@@ -38,54 +38,36 @@
 #include "edit_tool.h"
 #include "drawing_tool.h"
 #include "point_editor.h"
+#include "settings_tool.h"
 #include "common_actions.h"
 #include <router/router_tool.h>
 
 void PCB_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
-    m_toolManager = new TOOL_MANAGER;
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
+    m_toolManager = TOOL_MANAGER::Instance();
+    m_toolDispatcher = new TOOL_DISPATCHER( &m_toolManager, this );
     GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
 
-    // Register tool actions
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionSingle );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionClear );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::editActivate );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::rotate );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::flip );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::remove );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::properties );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::drawLine );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::drawCircle );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::drawArc );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::drawText );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::drawDimension );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::drawZone );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::drawKeepout );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::placeTarget );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::placeModule );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::routerActivate );
-
     // Register tools
-    m_toolManager->RegisterTool( new SELECTION_TOOL );
-    m_toolManager->RegisterTool( new ROUTER_TOOL );
-    m_toolManager->RegisterTool( new EDIT_TOOL );
-    m_toolManager->RegisterTool( new DRAWING_TOOL );
-    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager.RegisterTool( new SELECTION_TOOL );
+    m_toolManager.RegisterTool( new ROUTER_TOOL );
+    m_toolManager.RegisterTool( new EDIT_TOOL );
+    m_toolManager.RegisterTool( new DRAWING_TOOL );
+    m_toolManager.RegisterTool( new POINT_EDITOR );
+    m_toolManager.RegisterTool( new SETTINGS_TOOL );
 
-    m_toolManager->SetEnvironment( NULL, GetGalCanvas()->GetView(),
+    m_toolManager.SetEnvironment( NULL, GetGalCanvas()->GetView(),
                                    GetGalCanvas()->GetViewControls(), this );
-    m_toolManager->ResetTools( TOOL_BASE::RUN );
+    m_toolManager.ResetTools( TOOL_BASE::RUN );
 
     // Run the selection tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+    m_toolManager.InvokeTool( "pcbnew.InteractiveSelection" );
 }
 
 
 void PCB_EDIT_FRAME::destroyTools()
 {
-    delete m_toolManager;
     delete m_toolDispatcher;
 }
 
