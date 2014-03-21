@@ -68,6 +68,7 @@ void PCB_EDIT_FRAME::setupTools()
 
 void PCB_EDIT_FRAME::destroyTools()
 {
+    m_toolManager.DeleteAll();
     delete m_toolDispatcher;
 }
 
