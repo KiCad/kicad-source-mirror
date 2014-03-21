@@ -353,76 +353,54 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
 
     if( argc > 1 )
     {
+        /*
+            gerbview handles multiple project data files, i.e. gerber files on
+            cmd line. Others currently do not, they handle only one. For common
+            code simplicity we simply pass all the arguments in however, each
+            program module can do with them what they want, ignore, complain
+            whatever.  We don't establish policy here, as this is a multi-purpose
+            launcher.
+        */
 
-#if defined(TOP_FRAME) && TOP_FRAME==GERBER_FRAME_TYPE
-        // gerbview handles multiple project data files, i.e. gerber files on cmd line.
-
-        std::vector<wxString>   fileSet;
-
-        // Load all files specified on the command line.
+        std::vector<wxString>   argSet;
 
         for( int i=1;  i<argc;  ++i )
         {
-            wxFileName fn( App().argv[i] );
-
-            if( fn.FileExists() )
-                fileSet.push_back( App().argv[i] );
+            argSet.push_back( App().argv[i] );
         }
 
-        wxFileName fn( fileSet[0] );
+        // special attention to the first argument: argv[1] (==argSet[0])
+        wxFileName argv1( argSet[0] );
 
-        if( fn.GetPath().size() )
+        if( argc == 2 )
         {
-            // wxSetWorkingDirectory does not like empty paths
-            wxSetWorkingDirectory( fn.GetPath() );
-
-            // @todo: setting CWD is taboo in a multi-project environment
-        }
-
-        // Use the KIWAY_PLAYER::OpenProjectFiles() API function:
-        if( !frame->OpenProjectFiles( fileSet ) )
-        {
-            // OpenProjectFiles() API asks that it report failure to the UI.
-            // Nothing further to say here.
-
-            // Fail the process startup if the file could not be opened,
-            // although this is an optional choice, one that can be reversed
-            // also in the KIFACE specific OpenProjectFiles() return value.
-            return false;
-        }
-
-#else
-
-        wxFileName  fn( argv[1] );
-
-        if( !fn.IsOk() )
-        {
-            return false;
-        }
-
 #if defined(PGM_DATA_FILE_EXT)
-        // PGM_DATA_FILE_EXT is different for each compile, it may come from CMake
-        // on the compiler command line, or not.
-        if( !fn.GetExt() )
-            fn.SetExt( wxT( PGM_DATA_FILE_EXT ) );
-#endif
+            // PGM_DATA_FILE_EXT is different for each compile, it may come
+            // from CMake on the compiler command line, often does not.
+            // This facillity is mostly useful only for those program modules
+            // supporting a single argv[1].
+            if( !argv1.GetExt() )
+                argv1.SetExt( wxT( PGM_DATA_FILE_EXT ) );
 
-        if( !Pgm().LockFile( fn.GetFullPath() ) )
-        {
-            wxLogSysError( _( "This file is already open." ) );
-            return false;
+            argSet[0] = argv1.GetFullPath();
+#endif
+            if( !Pgm().LockFile( argSet[0] ) )
+            {
+                wxLogSysError( _( "This file is already open." ) );
+                return false;
+            }
         }
 
-        if( fn.GetPath().size() )
+        // @todo: setting CWD is taboo in a multi-project environment, this
+        // will not be possible soon.
+        if( argv1.GetPath().size() )   // path only
         {
-            // wxSetWorkingDirectory does not like empty paths
-            wxSetWorkingDirectory( fn.GetPath() );
-
-            // @todo: setting CWD is taboo in a multi-project environment
+            // wxSetWorkingDirectory() does not like empty paths
+            wxSetWorkingDirectory( argv1.GetPath() );
         }
 
         // Use the KIWAY_PLAYER::OpenProjectFiles() API function:
-        if( !frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) ) )
+        if( !frame->OpenProjectFiles( argSet ) )
         {
             // OpenProjectFiles() API asks that it report failure to the UI.
             // Nothing further to say here.
@@ -432,7 +410,6 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
             // also in the KIFACE specific OpenProjectFiles() return value.
             return false;
         }
-#endif
     }
     else
     {

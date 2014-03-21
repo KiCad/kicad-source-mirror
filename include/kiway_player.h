@@ -129,8 +129,15 @@ public:
      * KIWAY_PLAYER is precluded.
      * <p>
      * Each derived class should handle this in a way specific to its needs.
-     * No prompting is done inside here for any file or project.  There is no
-     * need to call this with aFileList which is empty.
+     * No prompting is done inside here for any file or project.  There should be
+     * need to call this with aFileList which is empty.  However, calling it with
+     * a single filename which does not exist should indicate to the implementor
+     * that a new session is being started and that the given name is the desired
+     * name for the data file at time of save.
+     * <p>
+     * Therefore, one of the first things an implementation should do is test for
+     * existence of the first file in the list, and if it does not exist, treat
+     * it as a new session, possibly with a UI notification to that effect.
      * <p>
      * After loading the window should update its Title as part of this operation.
      * If the KIWAY_PLAYER needs to, it can load the *.pro file as part of this operation.
