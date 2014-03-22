@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-20 19:39+0100\n"
-"PO-Revision-Date: 2014-03-20 19:54+0100\n"
+"POT-Creation-Date: 2014-03-22 17:12+0100\n"
+"PO-Revision-Date: 2014-03-22 17:15+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: kicad/kicad.cpp:178 kicad/prjconfig.cpp:283 eeschema/libedit.cpp:63
 #: eeschema/schframe.cpp:1034 pcbnew/moduleframe.cpp:638
-#: pcbnew/pcbframe.cpp:1099 cvpcb/cvframe.cpp:780
+#: pcbnew/pcbframe.cpp:1099 cvpcb/cvframe.cpp:783
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -801,12 +801,12 @@ msgid "The following libraries could not be found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
 #: eeschema/eeschema_config.cpp:150 eeschema/eeschema_config.cpp:216
-#: pcbnew/pcbnew_config.cpp:178
+#: pcbnew/pcbnew_config.cpp:180
 msgid "Read Project File"
 msgstr "Odczytaj plik projektu"
 
 #: eeschema/eeschema_config.cpp:458 pcbnew/pcbnew_config.cpp:295
-#: cvpcb/cfg.cpp:120
+#: cvpcb/cfg.cpp:117
 msgid "Save Project File"
 msgstr "Zapisz plik projektu"
 
@@ -1008,7 +1008,7 @@ msgstr "Zapisz i Załaduj"
 msgid "Load Without Saving"
 msgstr "Załaduj bez zapisu"
 
-#: eeschema/files-io.cpp:304 pcbnew/files.cpp:335 common/single_top.cpp:412
+#: eeschema/files-io.cpp:304 pcbnew/files.cpp:335 common/single_top.cpp:389
 msgid "This file is already open."
 msgstr "Ten plik jest już otwarty."
 
@@ -3713,17 +3713,17 @@ msgid "Turn grid off"
 msgstr "Wyłącz siatkę"
 
 #: eeschema/tool_lib.cpp:230 pcbnew/tool_modedit.cpp:220
-#: pcbnew/tool_pcb.cpp:339 cvpcb/class_DisplayFootprintsFrame.cpp:190
+#: pcbnew/tool_pcb.cpp:339 cvpcb/class_DisplayFootprintsFrame.cpp:185
 msgid "Units in inches"
 msgstr "Jednostki w calach"
 
 #: eeschema/tool_lib.cpp:234 pcbnew/tool_modedit.cpp:224
-#: pcbnew/tool_pcb.cpp:342 cvpcb/class_DisplayFootprintsFrame.cpp:194
+#: pcbnew/tool_pcb.cpp:342 cvpcb/class_DisplayFootprintsFrame.cpp:189
 msgid "Units in millimeters"
 msgstr "Jednostki w milimetrach"
 
 #: eeschema/tool_lib.cpp:238 eeschema/tool_sch.cpp:293 pcbnew/tool_pcb.cpp:345
-#: cvpcb/class_DisplayFootprintsFrame.cpp:198 gerbview/toolbars_gerber.cpp:166
+#: cvpcb/class_DisplayFootprintsFrame.cpp:193 gerbview/toolbars_gerber.cpp:166
 msgid "Change cursor shape"
 msgstr "Zmień kształt kursora"
 
@@ -5715,7 +5715,7 @@ msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
-#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:447
+#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:449
 #: eeschema/dialogs/dialog_netlist_base.h:76
 #: pcbnew/dialogs/dialog_netlist_fbp.h:86
 msgid "Netlist"
@@ -6081,37 +6081,37 @@ msgstr "Nazwa arku&sza:"
 msgid "Unique timestamp:"
 msgstr "Unikalny znacznik czasowy:"
 
-#: pcbnew/basepcbframe.cpp:474
+#: pcbnew/basepcbframe.cpp:478
 msgid "Display rectangular coordinates"
 msgstr "Pokaż współrzędne kartezyjskie"
 
-#: pcbnew/basepcbframe.cpp:475 pcbnew/tool_pcb.cpp:336
-#: cvpcb/class_DisplayFootprintsFrame.cpp:186
+#: pcbnew/basepcbframe.cpp:479 pcbnew/tool_pcb.cpp:336
+#: cvpcb/class_DisplayFootprintsFrame.cpp:181
 msgid "Display polar coordinates"
 msgstr "Pokaż współrzędne polarne"
 
-#: pcbnew/basepcbframe.cpp:484 pcbnew/tool_pcb.cpp:375
-#: cvpcb/class_DisplayFootprintsFrame.cpp:203
+#: pcbnew/basepcbframe.cpp:488 pcbnew/tool_pcb.cpp:375
+#: cvpcb/class_DisplayFootprintsFrame.cpp:198
 msgid "Show pads in outline mode"
 msgstr "Pokaż pola lutownicze jako zarys"
 
-#: pcbnew/basepcbframe.cpp:485
+#: pcbnew/basepcbframe.cpp:489
 msgid "Show pads in fill mode"
 msgstr "Pokaż pola lutownicze jako pełne"
 
-#: pcbnew/basepcbframe.cpp:880
+#: pcbnew/basepcbframe.cpp:884
 msgid "Grid:"
 msgstr "Siatka:"
 
-#: pcbnew/basepcbframe.cpp:907 common/zoom.cpp:276
+#: pcbnew/basepcbframe.cpp:911 common/zoom.cpp:276
 msgid "User Grid"
 msgstr "Siatka użytkownika"
 
-#: pcbnew/basepcbframe.cpp:924 pcbnew/dialogs/dialog_plot_base.cpp:151
+#: pcbnew/basepcbframe.cpp:928 pcbnew/dialogs/dialog_plot_base.cpp:151
 msgid "Auto"
 msgstr "Dopasuj powiększenie"
 
-#: pcbnew/basepcbframe.cpp:929
+#: pcbnew/basepcbframe.cpp:933
 msgid "Zoom "
 msgstr "Powiększenie "
 
@@ -6453,7 +6453,6 @@ msgstr "Elementy graficzne"
 #: pcbnew/class_edge_mod.cpp:268 pcbnew/class_module.cpp:527
 #: pcbnew/class_pad.cpp:566 pcbnew/class_text_mod.cpp:347
 #: pcbnew/loadcmp.cpp:436 pcbnew/loadcmp.cpp:500
-#: cvpcb/class_DisplayFootprintsFrame.cpp:77
 msgid "Module"
 msgstr "Footprint"
 
@@ -7388,7 +7387,7 @@ msgstr ""
 "\n"
 "Czy chcesz go zastąpić?"
 
-#: pcbnew/files.cpp:613 cvpcb/readwrite_dlgs.cpp:325
+#: pcbnew/files.cpp:611 cvpcb/readwrite_dlgs.cpp:323
 msgid ""
 "A footprint library table already exists in this path.\n"
 "\n"
@@ -7398,7 +7397,7 @@ msgstr ""
 "\n"
 "Czy chcesz ją zastąpić?"
 
-#: pcbnew/files.cpp:623
+#: pcbnew/files.cpp:621 cvpcb/readwrite_dlgs.cpp:333
 #, c-format
 msgid ""
 "An error occurred attempting to save the footprint library table '%s'\n"
@@ -7971,7 +7970,7 @@ msgstr "Footprinty [%d pozycji]"
 msgid "No footprint found."
 msgstr "Nie znaleziono footprintów."
 
-#: pcbnew/loadcmp.cpp:479 cvpcb/cvframe.cpp:705
+#: pcbnew/loadcmp.cpp:479 cvpcb/cvframe.cpp:708
 msgid "Description: "
 msgstr "Opis:"
 
@@ -8912,7 +8911,7 @@ msgstr ""
 "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
 #: pcbnew/moduleframe.cpp:516 pcbnew/pcbframe.cpp:696
-#: cvpcb/class_DisplayFootprintsFrame.cpp:441
+#: cvpcb/class_DisplayFootprintsFrame.cpp:436
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
@@ -9077,7 +9076,7 @@ msgstr "Nie można otworzyć pliku listy sieci \"%s\"."
 msgid "Netlist Load Error."
 msgstr "Błąd odczytu listy sieci."
 
-#: pcbnew/netlist.cpp:87 cvpcb/cvframe.cpp:848
+#: pcbnew/netlist.cpp:87 cvpcb/cvframe.cpp:851
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -9087,7 +9086,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/netlist.cpp:88 pcbnew/dialogs/dialog_netlist.cpp:432
-#: cvpcb/cvframe.cpp:849
+#: cvpcb/cvframe.cpp:852
 msgid "Netlist Load Error"
 msgstr "Błąd odczytu listy sieci"
 
@@ -9626,7 +9625,7 @@ msgstr "Plik automatycznej kopii zapasowej <%s> nie może zostac usunięty!"
 msgid " [new file]"
 msgstr " [nowy plik]"
 
-#: pcbnew/pcbnew.cpp:456 cvpcb/cvpcb.cpp:322
+#: pcbnew/pcbnew.cpp:461 cvpcb/cvpcb.cpp:322
 #, c-format
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
@@ -9650,7 +9649,7 @@ msgstr "Ukryj menadżera warstw"
 msgid "Show &Layers Manager"
 msgstr "Pokaż menadżera warstw"
 
-#: pcbnew/pcbnew_config.cpp:114 cvpcb/cvframe.cpp:517 cvpcb/cvframe.cpp:540
+#: pcbnew/pcbnew_config.cpp:114
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -9661,8 +9660,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbnew_config.cpp:118 pcbnew/pcbnew_config.cpp:138
-#: cvpcb/cvframe.cpp:521 cvpcb/cvframe.cpp:542
+#: pcbnew/pcbnew_config.cpp:118 pcbnew/pcbnew_config.cpp:140
+#: cvpcb/cvframe.cpp:523 cvpcb/cvframe.cpp:543
 msgid "File Save Error"
 msgstr "Błąd zapisu pliku"
 
@@ -9677,7 +9676,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbnew_config.cpp:188 pcbnew/pcbnew_config.cpp:547
+#: pcbnew/pcbnew_config.cpp:190 pcbnew/pcbnew_config.cpp:547
 #: gerbview/excellon_read_drill_file.cpp:184
 #, c-format
 msgid "File %s not found"
@@ -10058,7 +10057,7 @@ msgid "Place the footprint module reference anchor"
 msgstr "Ustaw punkt zakotwiczenia footprintu"
 
 #: pcbnew/tool_modedit.cpp:212 pcbnew/tool_pcb.cpp:333
-#: cvpcb/class_DisplayFootprintsFrame.cpp:182 common/draw_frame.cpp:296
+#: cvpcb/class_DisplayFootprintsFrame.cpp:177 common/draw_frame.cpp:296
 msgid "Hide grid"
 msgstr "Schowaj siatkę"
 
@@ -14974,73 +14973,77 @@ msgstr ""
 msgid "CvPcb Error"
 msgstr "Błąd CvPcb"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:207
-#: cvpcb/class_DisplayFootprintsFrame.cpp:254
+#: cvpcb/class_DisplayFootprintsFrame.cpp:75
+msgid "Footprint Viewer"
+msgstr "Przeglądarka footprintów"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:202
+#: cvpcb/class_DisplayFootprintsFrame.cpp:249
 msgid "Show texts in line mode"
 msgstr "Pokaż tekst jako linie"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:211
-#: cvpcb/class_DisplayFootprintsFrame.cpp:271
+#: cvpcb/class_DisplayFootprintsFrame.cpp:206
+#: cvpcb/class_DisplayFootprintsFrame.cpp:266
 msgid "Show outlines in line mode"
 msgstr "Pokaż szkic jako linie"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:226
+#: cvpcb/class_DisplayFootprintsFrame.cpp:221
 #: pcbnew/dialogs/dialog_display_options_base.h:71
 msgid "Display options"
 msgstr "Opcje wyświetlania"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:231
+#: cvpcb/class_DisplayFootprintsFrame.cpp:226
 msgid "Zoom in (F1)"
 msgstr "Powiększ (F1)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:234
+#: cvpcb/class_DisplayFootprintsFrame.cpp:229
 msgid "Zoom out (F2)"
 msgstr "Pomniejsz (F2)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:237
+#: cvpcb/class_DisplayFootprintsFrame.cpp:232
 msgid "Redraw view (F3)"
 msgstr "Odśwież widok (F3)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:240
+#: cvpcb/class_DisplayFootprintsFrame.cpp:235
 msgid "Zoom auto (Home)"
 msgstr "Dopasuj powiększenie (Home)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:244
+#: cvpcb/class_DisplayFootprintsFrame.cpp:239
 msgid "3D Display"
 msgstr "Widok 3D"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:255
+#: cvpcb/class_DisplayFootprintsFrame.cpp:250
 msgid "Show texts in filled mode"
 msgstr "Pokaż tekst jako wypełniony"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:256
+#: cvpcb/class_DisplayFootprintsFrame.cpp:251
 msgid "Show texts in sketch mode"
 msgstr "Pokaż tylko zarys tekstu"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:272
+#: cvpcb/class_DisplayFootprintsFrame.cpp:267
 msgid "Show outlines in filled mode"
 msgstr "Pokaż szkic jako wypełniony"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:273
+#: cvpcb/class_DisplayFootprintsFrame.cpp:268
 msgid "Show outlines in sketch mode"
 msgstr "Pokaż tylko zarys szkicu"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:511
+#: cvpcb/class_DisplayFootprintsFrame.cpp:506
 #, c-format
 msgid "Footprint '%s' not found"
 msgstr "Footprintu '%s' nie znaleziono"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:527
+#: cvpcb/class_DisplayFootprintsFrame.cpp:522
 #, c-format
 msgid "Footprint: %s"
 msgstr "Footprint: %s"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:539
+#: cvpcb/class_DisplayFootprintsFrame.cpp:534
 #, c-format
 msgid "Lib: %s"
 msgstr "Biblioteka: %s"
 
-#: cvpcb/cvframe.cpp:271
+#: cvpcb/cvframe.cpp:273
 msgid ""
 "Component to Footprint links modified.\n"
 "Save before exit ?"
@@ -15048,67 +15051,89 @@ msgstr ""
 "Linki pomiędzy komponentami a footprintami zostały zmienione.\n"
 "Zapisać przed zakończeniem?"
 
-#: cvpcb/cvframe.cpp:292
+#: cvpcb/cvframe.cpp:294
 msgid "Problem when saving file, exit anyway ?"
 msgstr "Problem podczas zapisu pliku, zakończyć mimo to?"
 
-#: cvpcb/cvframe.cpp:418
+#: cvpcb/cvframe.cpp:420
 msgid "Delete selections"
 msgstr "Usuń zaznaczone"
 
-#: cvpcb/cvframe.cpp:451
+#: cvpcb/cvframe.cpp:453
 msgid "Open Net List"
 msgstr "Otwórz plik netlisty"
 
-#: cvpcb/cvframe.cpp:674
+#: cvpcb/cvframe.cpp:519
+#, c-format
+msgid ""
+"Error occurred saving the global footprint library table:\n"
+"'%s'\n"
+"%s"
+msgstr ""
+"Wystąpił błąd przy próbie zapisu globlalnej tablicy bibliotek footprintów:\n"
+"'%s'\n"
+"%s"
+
+#: cvpcb/cvframe.cpp:539
+#, c-format
+msgid ""
+"Error occurred saving the project footprint library table:\n"
+"'%s'\n"
+"%s"
+msgstr ""
+"Wystąpił błąd przy próbie zapisu globlalnej tablicy bibliotek footprintów:\n"
+"'%s'\n"
+"%s"
+
+#: cvpcb/cvframe.cpp:677
 #, c-format
 msgid "Components: %d, unassigned: %d"
 msgstr "Komponenty: %d, nieprzydzielone: %d"
 
-#: cvpcb/cvframe.cpp:692
+#: cvpcb/cvframe.cpp:695
 msgid "Filter list: "
 msgstr "Filtruj listę wg: "
 
-#: cvpcb/cvframe.cpp:708
+#: cvpcb/cvframe.cpp:711
 msgid "Key words: "
 msgstr "Słowa kluczowe:"
 
-#: cvpcb/cvframe.cpp:718
+#: cvpcb/cvframe.cpp:721
 msgid "key words"
 msgstr "słów kluczowych"
 
-#: cvpcb/cvframe.cpp:725
+#: cvpcb/cvframe.cpp:728
 msgid "pin count"
 msgstr "ilości wyprowadzeń"
 
-#: cvpcb/cvframe.cpp:733
+#: cvpcb/cvframe.cpp:736
 msgid "library"
 msgstr "bibliotek"
 
-#: cvpcb/cvframe.cpp:737
+#: cvpcb/cvframe.cpp:740
 msgid "No filtering"
 msgstr "Bez filtracji"
 
-#: cvpcb/cvframe.cpp:739
+#: cvpcb/cvframe.cpp:742
 msgid "Filtered by "
 msgstr "Filtrowane według "
 
-#: cvpcb/cvframe.cpp:755
+#: cvpcb/cvframe.cpp:758
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
 "Brak wyszczególnionych bibliotek footprintów w bieżącym pliku z tabelą "
 "bibliotek."
 
-#: cvpcb/cvframe.cpp:756
+#: cvpcb/cvframe.cpp:759
 msgid "Configuration Error"
 msgstr "Błąd Konfiguracji"
 
-#: cvpcb/cvframe.cpp:784
+#: cvpcb/cvframe.cpp:787
 msgid "[no file]"
 msgstr " [brak pliku]"
 
-#: cvpcb/cvframe.cpp:844
+#: cvpcb/cvframe.cpp:847
 msgid "Unknown netlist format."
 msgstr "Nieznany format listy sieci"
 
@@ -15187,17 +15212,6 @@ msgstr "Edytor bibliotek symboli"
 #: cvpcb/readwrite_dlgs.cpp:306
 msgid "Save Component Footprint Link File"
 msgstr "Zapisz plik łącz komponentów z footprintami (plik .cmp)"
-
-#: cvpcb/readwrite_dlgs.cpp:335
-#, c-format
-msgid ""
-"An error occurred attempting to save the footprint library table <%s>\n"
-"\n"
-"%s"
-msgstr ""
-"Wystąpił błąd przy próbie zapisu tablicy bibliotek footprintów <%s>\n"
-"\n"
-"%s"
 
 #: cvpcb/readwrite_dlgs.cpp:349
 msgid "Unable to create component footprint link file (.cmp)"
@@ -16415,17 +16429,17 @@ msgstr "Niepoprawny znak w danych o logicznej nazwie biblioteki"
 msgid "Illegal character found in revision"
 msgstr "Niepoprawny znak w danych o rewizji"
 
-#: common/fp_lib_table.cpp:379
+#: common/fp_lib_table.cpp:367
 #, c-format
 msgid "'%s' is a duplicate footprint library nickName"
 msgstr "'%s' jest duplikatem footprintu biblioteki "
 
-#: common/fp_lib_table.cpp:632
+#: common/fp_lib_table.cpp:607
 #, c-format
 msgid "fp-lib-table files contain no lib with nickname '%s'"
 msgstr "Plik fp-lib-table nie zawiera biblioteki z nazwą sktrótową '%s'"
 
-#: common/fp_lib_table.cpp:725
+#: common/fp_lib_table.cpp:700
 #, c-format
 msgid ""
 "Cannot find footprint library file '%s' in any of the KiCad legacy library "
@@ -16434,14 +16448,14 @@ msgstr ""
 "Nie mogę odnaleźć pliku biblioteki '%s' w żadnej ze standardowych ścieżek "
 "wyszukiwania bibliotek starszego typu.\n"
 
-#: common/fp_lib_table.cpp:749
+#: common/fp_lib_table.cpp:724
 #, c-format
 msgid "Component `%s` footprint '%s' was not found in any legacy library.\n"
 msgstr ""
 "Komponent '%s', footprint '%s' nie został znaleziony w żadnej z bibliotek "
 "starszego typu.\n"
 
-#: common/fp_lib_table.cpp:800
+#: common/fp_lib_table.cpp:775
 #, c-format
 msgid ""
 "Component '%s' footprint '%s' legacy library path '%s' was not found in the "
@@ -16450,12 +16464,12 @@ msgstr ""
 "Komponent '%s' footprint '%s' o ścieżce dostępu '%s' nie został znaleziony w "
 "tabeli bibliotek footprntów.\n"
 
-#: common/fp_lib_table.cpp:818
+#: common/fp_lib_table.cpp:793
 #, c-format
 msgid "Component '%s' FPID '%s' is not valid.\n"
 msgstr "Komponent '%s' FPID '%s' nie jest prawidłowy.\n"
 
-#: common/fp_lib_table.cpp:884
+#: common/fp_lib_table.cpp:831
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "Nie można utworzyć globalnej tabeli bibliotek w ścieżce '%s'."
@@ -17485,15 +17499,15 @@ msgstr "<br><b>dT</b> = przyrost temperatury wokół w stopniach Celciusza</br>"
 msgid "<br><b>W,H</b> = Width and Thickness in mils</br>"
 msgstr "<br><b>W,H</b> = szerokość i grubość w milsach</br>"
 
-#: pcb_calculator/transline_dlg_funct.cpp:68
+#: pcb_calculator/transline_dlg_funct.cpp:66
 msgid "Relative Dielectric Constants"
 msgstr "Relatywna stała dielektryczna"
 
-#: pcb_calculator/transline_dlg_funct.cpp:98
+#: pcb_calculator/transline_dlg_funct.cpp:96
 msgid "Dielectric Loss Factor"
 msgstr "Współczynnik strat dielektrycznych"
 
-#: pcb_calculator/transline_dlg_funct.cpp:126
+#: pcb_calculator/transline_dlg_funct.cpp:124
 msgid "Specific Resistance"
 msgstr "Rezystancja charakterystyczna"
 
@@ -17733,7 +17747,6 @@ msgstr "Kąt"
 #: pcb_calculator/transline_ident.cpp:229
 #: pcb_calculator/transline_ident.cpp:264
 #: pcb_calculator/transline_ident.cpp:295
-#: pcb_calculator/transline_ident.cpp:335
 #: pcb_calculator/transline_ident.cpp:367
 #: pcb_calculator/transline_ident.cpp:399
 msgid "Electrical Length"
@@ -17844,20 +17857,24 @@ msgid "Dielectric Losses Odd"
 msgstr "Straty dielektryka Nieparzysty"
 
 #: pcb_calculator/transline_ident.cpp:331
-msgid "Z0e"
-msgstr "Z0e"
+msgid "Z0e (Zdiff)"
+msgstr "Z0e (Zdiff)"
 
 #: pcb_calculator/transline_ident.cpp:331
-msgid "Even-Mode Impedance"
-msgstr "Impedancja Tryb Parzysty"
+msgid "Even-Mode impedance (diff impedance)"
+msgstr "Impedancja Parzysta (Impedancja różnicowa)"
 
 #: pcb_calculator/transline_ident.cpp:333
-msgid "Z0o"
-msgstr "Z0o"
+msgid "Z0o (Z0)"
+msgstr "Z0o (Z0)"
 
 #: pcb_calculator/transline_ident.cpp:333
-msgid "Odd-Mode Impedance"
-msgstr "Impedancja Tryb Nieparzysty"
+msgid "Odd-Mode impedance"
+msgstr "Impedancja Nieparzysta"
+
+#: pcb_calculator/transline_ident.cpp:335
+msgid "Electrical length"
+msgstr "Długość elektryczna"
 
 #: pcb_calculator/transline_ident.cpp:350
 msgid "distance between strip and top metal"
@@ -19381,3 +19398,18 @@ msgstr "Kalkulator PCB"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nowy element"
+
+#~ msgid "Z0e"
+#~ msgstr "Z0e"
+
+#~ msgid "Z0o"
+#~ msgstr "Z0o"
+
+#~ msgid ""
+#~ "An error occurred attempting to save the footprint library table <%s>\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Wystąpił błąd przy próbie zapisu tablicy bibliotek footprintów <%s>\n"
+#~ "\n"
+#~ "%s"
