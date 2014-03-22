@@ -505,6 +505,7 @@ if( USE_KIWAY_DLLS )
     add_executable( pcbnew WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
         ../common/pgm_base.cpp
+        ${PCBNEW_RESOURCES}
         )
     set_source_files_properties( ../common/single_top.cpp PROPERTIES
         COMPILE_DEFINITIONS "TOP_FRAME=PCB_FRAME_TYPE;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
@@ -527,7 +528,7 @@ if( USE_KIWAY_DLLS )
         ${PCBNEW_SRCS}
         ${PCBNEW_COMMON_SRCS}
         ${PCBNEW_SCRIPTING_SRCS}
-        ${PCBNEW_RESOURCES}
+#        ${PCBNEW_RESOURCES}
         )
     set_target_properties( pcbnew_kiface PROPERTIES
         # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like

@@ -49,6 +49,7 @@
 #include <wx/file.h>
 #include <wx/snglinst.h>
 #include <wx/dir.h>
+#include <gestfich.h>
 
 #include <pcbnew.h>
 #include <protos.h>
@@ -325,7 +326,11 @@ static bool scriptingSetup()
     const wxString python_us( "python27_us" );
 
     // Build our python path inside kicad
-    wxString kipython = m_BinDir + python_us;
+    wxString kipython =  FindKicadFile( python_us + wxT("/python.exe") );
+
+    //we need only the path:
+    wxFileName fn( kipython );
+    kipython = fn.GetPath();
 
     // If our python install is existing inside kicad, use it
     if( wxDirExists( kipython ) )

@@ -73,6 +73,7 @@ if( USE_KIWAY_DLLS )
     add_executable( cvpcb WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
         ../common/pgm_base.cpp
+        ${CVPCB_RESOURCES}
         )
     set_source_files_properties( ../common/single_top.cpp PROPERTIES
         COMPILE_DEFINITIONS "TOP_FRAME=CVPCB_FRAME_TYPE;PGM_DATA_FILE_EXT=\"net\";BUILD_KIWAY_DLL"
@@ -94,7 +95,7 @@ if( USE_KIWAY_DLLS )
         cvpcb.cpp
         ${CVPCB_SRCS}
         ${CVPCB_DIALOGS}
-        ${CVPCB_RESOURCES}
+#        ${CVPCB_RESOURCES}
         )
     set_target_properties( cvpcb_kiface PROPERTIES
         OUTPUT_NAME     cvpcb

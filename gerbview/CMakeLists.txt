@@ -91,6 +91,7 @@ if( USE_KIWAY_DLLS )
     add_executable( gerbview WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
         ../common/pgm_base.cpp
+        ${GERBVIEW_RESOURCES}
         )
     set_source_files_properties( ../common/single_top.cpp PROPERTIES
         COMPILE_DEFINITIONS "TOP_FRAME=GERBER_FRAME_TYPE;BUILD_KIWAY_DLL"
@@ -113,7 +114,7 @@ if( USE_KIWAY_DLLS )
         ${GERBVIEW_SRCS}
         ${DIALOGS_SRCS}
         ${GERBVIEW_EXTRA_SRCS}
-        ${GERBVIEW_RESOURCES}
+#        ${GERBVIEW_RESOURCES}
         )
     set_target_properties( gerbview_kiface PROPERTIES
         OUTPUT_NAME     gerbview
