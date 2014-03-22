@@ -171,6 +171,15 @@ if( USE_KIWAY_DLLS )
         COMPONENT binary
         )
 
+    if( APPLE )
+        # copies kiface into the bundle
+        add_custom_target( _cvpcb_kiface_copy ALL
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/cvpcb/_cvpcb.kiface "${CMAKE_BINARY_DIR}/cvpcb/cvpcb.app/Contents/MacOS/"
+            DEPENDS cvpcb_kiface
+            COMMENT "Copying kiface into cvpcb"
+        )
+    endif()
+
 else()
 
     add_executable( cvpcb WIN32 MACOSX_BUNDLE

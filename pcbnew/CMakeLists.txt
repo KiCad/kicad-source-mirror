@@ -580,6 +580,15 @@ if( USE_KIWAY_DLLS )
         COMPONENT binary
         )
 
+    if( APPLE )
+        # copies kiface into the bundle
+        add_custom_target( _pcbnew_kiface_copy ALL
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.kiface "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.app/Contents/MacOS/"
+            DEPENDS pcbnew_kiface
+            COMMENT "Copying kiface into pcbnew"
+        )
+    endif()
+
 else()  # milestone A) kills this off:
 
     add_executable( pcbnew WIN32 MACOSX_BUNDLE

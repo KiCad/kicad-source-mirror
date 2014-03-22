@@ -103,6 +103,7 @@ ExternalProject_Add(  cairo
     )
 
 # match these with whatever FindCairo.cmake sets
-set( CAIRO_FOUND true )
-set( CAIRO_INCLUDE_DIR ${PREFIX}/include )
-set( CAIRO_CAIRO_LIBRARIES ${PREFIX}/lib )
+# Dick i'vent set it because /lib and /lib64 issue in non multiarch binaries OSs
+#set( CAIRO_FOUND true )
+set( CAIRO_INCLUDE_DIR ${CAIRO_ROOT}/include )
+set( CAIRO_LIBRARIES ${CAIRO_ROOT}/lib )

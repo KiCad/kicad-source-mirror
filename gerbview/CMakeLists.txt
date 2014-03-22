@@ -151,6 +151,15 @@ if( USE_KIWAY_DLLS )
         COMPONENT binary
         )
 
+    if( APPLE )
+        # copies kiface into the bundle
+        add_custom_target( _gerbview_kiface_copy ALL
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/gerbview/_gerbview.kiface "${CMAKE_BINARY_DIR}/gerbview/gerbview.app/Contents/MacOS/"
+            DEPENDS gerbview_kiface
+            COMMENT "Copying kiface into gerbview"
+        )
+    endif()
+
 else()
 
     add_executable( gerbview WIN32 MACOSX_BUNDLE
