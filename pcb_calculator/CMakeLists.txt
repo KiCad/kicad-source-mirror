@@ -72,6 +72,7 @@ if( USE_KIWAY_DLLS )
     add_executable( pcb_calculator WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
         ../common/pgm_base.cpp
+        ${PCB_CALCULATOR_RESOURCES}
         )
     set_source_files_properties( ../common/single_top.cpp PROPERTIES
         COMPILE_DEFINITIONS "TOP_FRAME=0;BUILD_KIWAY_DLL"
@@ -92,7 +93,7 @@ if( USE_KIWAY_DLLS )
     add_library( pcb_calculator_kiface MODULE
         pcb_calculator.cpp
         ${PCB_CALCULATOR_SRCS}
-        ${PCB_CALCULATOR_RESOURCES}
+#        ${PCB_CALCULATOR_RESOURCES}
         )
     set_target_properties( pcb_calculator_kiface PROPERTIES
         OUTPUT_NAME     pcb_calculator

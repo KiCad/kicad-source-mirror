@@ -29,7 +29,7 @@ private:
     wxSize m_FrameSize;
     wxPoint m_FramePos;
     wxConfig * m_Config;
-    enum transline_type_id m_currTransLineType;
+    enum TRANSLINE_TYPE_ID m_currTransLineType;
     TRANSLINE * m_currTransLine;        // a pointer to the active transline
     // List of translines: ordered like in dialog menu list
     std::vector <TRANSLINE_IDENT *> m_transline_list;
@@ -153,9 +153,9 @@ private:
      * Update all values, labels and tool tips of parameters needed
      * by the new transline
      * Irrelevant parameters texts are blanked.
-     * @param aType = the transline_type_id of the new selected transline
+     * @param aType = the TRANSLINE_TYPE_ID of the new selected transline
     */
-    void TranslineTypeSelection( enum transline_type_id aType );
+    void TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType );
 
     /**
      * Function TransfDlgDataToTranslineParams

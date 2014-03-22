@@ -242,6 +242,7 @@ if( USE_KIWAY_DLLS )
     add_executable( eeschema WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
         ../common/pgm_base.cpp
+        ${EESCHEMA_RESOURCES}
         )
     set_source_files_properties( ../common/single_top.cpp PROPERTIES
         COMPILE_DEFINITIONS "TOP_FRAME=SCHEMATIC_FRAME_TYPE;PGM_DATA_FILE_EXT=\"sch\";BUILD_KIWAY_DLL"
@@ -258,7 +259,7 @@ if( USE_KIWAY_DLLS )
     add_library( eeschema_kiface MODULE
         ${EESCHEMA_SRCS}
         ${EESCHEMA_COMMON_SRCS}
-        ${EESCHEMA_RESOURCES}
+#        ${EESCHEMA_RESOURCES}
         )
     target_link_libraries( eeschema_kiface
         common
