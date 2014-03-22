@@ -312,6 +312,15 @@ if( USE_KIWAY_DLLS )
         COMPONENT binary
         )
 
+    if( APPLE )
+        # copies kiface into the bundle
+        add_custom_target( _eeschema_kiface_copy ALL
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/eeschema/_eeschema.kiface "${CMAKE_BINARY_DIR}/eeschema/eeschema.app/Contents/MacOS/"
+            DEPENDS eeschema_kiface
+            COMMENT "Copying kiface into eeschema"
+        )
+    endif()
+
 else()
     add_executable( eeschema WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
