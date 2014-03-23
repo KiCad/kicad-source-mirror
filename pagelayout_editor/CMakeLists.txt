@@ -113,6 +113,14 @@ if( USE_KIWAY_DLLS )
         COMPONENT binary
         )
 
+    if( APPLE )
+        # copies kiface into the bundle
+        add_custom_target( _pleditor_kiface_copy ALL
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pagelayout_editor/_pl_editor.kiface "${CMAKE_BINARY_DIR}/pagelayout_editor/pl_editor.app/Contents/MacOS/"
+            DEPENDS pl_editor_kiface
+            COMMENT "Copying kiface into pleditor"
+        )
+    endif()
 
 else()
 
