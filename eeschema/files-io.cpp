@@ -376,7 +376,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         msg.Printf( _( "File '%s' not found." ),
                     GetChars( g_RootSheet->GetScreen()->GetFileName() ) );
         DisplayInfoMessage( this, msg );
-        return false;
+//        return false;
+        return true;    // do not close Eeschema if the file if not found:
+                        // we may have to create a new schematic file.
     }
 
     // load the project.
@@ -392,7 +394,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SetSheetNumberAndCount();
     m_canvas->Refresh( true );
 
-    return diag;
+//    return diag;
+    return true;    // do not close Eeschema if the file if not found:
+                    // we may have to create a new schematic file.
 }
 
 
