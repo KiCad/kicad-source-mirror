@@ -32,13 +32,14 @@
 #include <class_drawpanel_gal.h>
 #include <class_pcb_screen.h>
 #include <pcbcommon.h>
+#include <confirm.h>
 
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
 
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
-    TOOL_INTERACTIVE( "pcbnew.Settings" )
+    TOOL_INTERACTIVE( "pcbnew.Control" )
 {
 }
 
@@ -340,7 +341,21 @@ int PCBNEW_CONTROL::LayerPrev( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaInc( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+
+    LAYER_NUM currentLayer = m_frame->GetActiveLayer();
+    KIGFX::COLOR4D currentColor = settings->GetLayerColor( currentLayer );
+
+    if( currentColor.a <= 0.95 )
+    {
+        currentColor.a += 0.05;
+        settings->SetLayerColor( currentLayer, currentColor );
+        m_frame->GetGalCanvas()->GetView()->UpdateLayerColor( currentLayer );
+    }
+
     setTransitions();
 
     return 0;
@@ -349,7 +364,21 @@ int PCBNEW_CONTROL::LayerAlphaInc( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaDec( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+
+    LAYER_NUM currentLayer = m_frame->GetActiveLayer();
+    KIGFX::COLOR4D currentColor = settings->GetLayerColor( currentLayer );
+
+    if( currentColor.a >= 0.05 )
+    {
+        currentColor.a -= 0.05;
+        settings->SetLayerColor( currentLayer, currentColor );
+        m_frame->GetGalCanvas()->GetView()->UpdateLayerColor( currentLayer );
+    }
+
     setTransitions();
 
     return 0;
@@ -469,7 +498,10 @@ int PCBNEW_CONTROL::ViaSizeDec( TOOL_EVENT& aEvent )
 // Miscellaneous
 int PCBNEW_CONTROL::ResetCoords( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
+
+    m_frame->GetScreen()->m_O_Curseur = wxPoint( cursorPos.x, cursorPos.y );
+    m_frame->UpdateStatusBar();
     setTransitions();
 
     return 0;
@@ -478,7 +510,15 @@ int PCBNEW_CONTROL::ResetCoords( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::SwitchUnits( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    // TODO should not it be refactored to pcb_frame member function?
+    wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
+
+    if( g_UserUnit == INCHES )
+        evt.SetId( ID_TB_OPTIONS_SELECT_UNIT_MM );
+    else
+        evt.SetId( ID_TB_OPTIONS_SELECT_UNIT_INCH );
+
+    m_frame->ProcessEvent( evt );
     setTransitions();
 
     return 0;
@@ -487,7 +527,8 @@ int PCBNEW_CONTROL::SwitchUnits( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ShowHelp( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    // TODO
+    DisplayInfoMessage( m_frame, _( "Not implemented yet." ) );
     setTransitions();
 
     return 0;

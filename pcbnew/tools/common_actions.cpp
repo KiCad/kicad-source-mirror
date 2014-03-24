@@ -197,11 +197,11 @@ TOOL_ACTION COMMON_ACTIONS::layerPrev( "pcbnew.layerPrev",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::layerAlphaInc( "pcbnew.layerAlphaInc",
-        AS_GLOBAL, MD_SHIFT + '[',      // shift+[ == {
+        AS_GLOBAL, MD_SHIFT + ']',      // shift+] == }
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::layerAlphaDec( "pcbnew.layerAlphaDec",
-        AS_GLOBAL, MD_SHIFT + ']',      // shift+] == }
+        AS_GLOBAL, MD_SHIFT + '[',      // shift+[ == {
         "", "" );
 
 

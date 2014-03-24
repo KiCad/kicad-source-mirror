@@ -97,7 +97,23 @@ public:
      * Returns the color used to draw a layer.
      * @param aLayer is the layer number.
      */
-    const COLOR4D& GetLayerColor( int aLayer ) const;
+    const COLOR4D& GetLayerColor( int aLayer ) const
+    {
+        return m_layerColors[aLayer];
+    }
+
+    /**
+     * Function SetLayerColor
+     * Changes the color used to draw a layer.
+     * @param aLayer is the layer number.
+     * @param aColor is the new color.
+     */
+    void SetLayerColor( int aLayer, const COLOR4D& aColor )
+    {
+        m_layerColors[aLayer] = aColor;
+
+        update();       // recompute other shades of the color
+    }
 
     /**
      * Function SetSketchMode
