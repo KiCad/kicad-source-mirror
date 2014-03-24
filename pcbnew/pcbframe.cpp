@@ -860,7 +860,7 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 }
 
 
-void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
+void PCB_EDIT_FRAME::SetHighContrastLayer( LAYER_NUM aLayer )
 {
     // Set display settings for high contrast mode
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
@@ -950,7 +950,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate 
 {
     ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 
-    setHighContrastLayer( aLayer );
+    SetHighContrastLayer( aLayer );
 
     if( doLayerWidgetUpdate )
         syncLayerWidgetLayer();

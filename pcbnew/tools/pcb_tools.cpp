@@ -49,6 +49,16 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolDispatcher = new TOOL_DISPATCHER( &m_toolManager, this );
     GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
 
+    // Connect handlers to toolbar buttons
+#if wxCHECK_VERSION( 3, 0, 0 )
+    Connect( wxEVT_TOOL, wxCommandEventHandler( PCB_EDIT_FRAME::onGenericCommand ), NULL, this );
+#else
+    Connect( wxEVT_COMMAND_MENU_SELECTED,
+             wxCommandEventHandler( PCB_EDIT_FRAME::onGenericCommand ), NULL, this );
+    Connect( wxEVT_COMMAND_TOOL_CLICKED,
+             wxCommandEventHandler( PCB_EDIT_FRAME::onGenericCommand ), NULL, this );
+#endif
+
     // Register tools
     m_toolManager.RegisterTool( new SELECTION_TOOL );
     m_toolManager.RegisterTool( new ROUTER_TOOL );
@@ -75,5 +85,8 @@ void PCB_EDIT_FRAME::destroyTools()
 
 void PCB_EDIT_FRAME::onGenericCommand( wxCommandEvent& aEvent )
 {
-    m_toolDispatcher->DispatchWxCommand( aEvent );
+    if( IsGalCanvasActive() )
+        m_toolDispatcher->DispatchWxCommand( aEvent );
+    else
+        aEvent.Skip();
 }

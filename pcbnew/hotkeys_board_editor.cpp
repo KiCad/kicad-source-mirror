@@ -152,7 +152,6 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     cmd.SetEventObject( this );
 
     LAYER_NUM      ll;
-    unsigned int   cnt;
 
     switch( hk_id )
     {
@@ -355,8 +354,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_TRACK_DISPLAY_MODE:
-        DisplayOpt.DisplayPcbTrackFill ^= 1;
-        DisplayOpt.DisplayPcbTrackFill &= 1;
+        DisplayOpt.DisplayPcbTrackFill = !DisplayOpt.DisplayPcbTrackFill;
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
         m_canvas->Refresh();
         break;

@@ -28,16 +28,24 @@
 #include <pcbnew_id.h>
 #include <wxPcbStruct.h>
 #include <class_board.h>
+#include <class_track.h>
 #include <class_drawpanel_gal.h>
 #include <class_pcb_screen.h>
-#include <gal/graphics_abstraction_layer.h>
+#include <pcbcommon.h>
 
-using namespace KIGFX;
-using boost::optional;
+#include <gal/graphics_abstraction_layer.h>
+#include <view/view_controls.h>
+#include <pcb_painter.h>
 
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
     TOOL_INTERACTIVE( "pcbnew.Settings" )
 {
+}
+
+
+void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
+{
+    m_frame = getEditFrame<PCB_EDIT_FRAME>();
 }
 
 
@@ -49,18 +57,40 @@ bool PCBNEW_CONTROL::Init()
 }
 
 
-int PCBNEW_CONTROL::ZoomIn( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ZoomInOut( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+    KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
+
+    if( aEvent.IsAction( &COMMON_ACTIONS::zoomIn ) )
+        m_frame->SetPrevZoom();
+    else if( aEvent.IsAction( &COMMON_ACTIONS::zoomOut ) )
+        m_frame->SetNextZoom();
+
+    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+    double zoom = 1.0 / ( zoomFactor * m_frame->GetZoom() );
+
+    view->SetScale( zoom, getViewControls()->GetCursorPosition() );
     setTransitions();
 
     return 0;
 }
 
 
-int PCBNEW_CONTROL::ZoomOut( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ZoomInOutCenter( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+    KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
+
+    if( aEvent.IsAction( &COMMON_ACTIONS::zoomInCenter ) )
+        m_frame->SetPrevZoom();
+    else if( aEvent.IsAction( &COMMON_ACTIONS::zoomOutCenter ) )
+        m_frame->SetNextZoom();
+
+    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+    double zoom = 1.0 / ( zoomFactor * m_frame->GetZoom() );
+
+    view->SetScale( zoom );
     setTransitions();
 
     return 0;
@@ -69,7 +99,8 @@ int PCBNEW_CONTROL::ZoomOut( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ZoomCenter( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+    view->SetCenter( getViewControls()->GetCursorPosition() );
     setTransitions();
 
     return 0;
@@ -78,7 +109,24 @@ int PCBNEW_CONTROL::ZoomCenter( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ZoomFitScreen( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+    KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
+    BOX2I boardBBox  = getModel<BOARD>( PCB_T )->ViewBBox();
+    VECTOR2I screenSize = gal->GetScreenPixelSize();
+
+    double iuPerX = screenSize.x ? boardBBox.GetWidth() / screenSize.x : 1.0;
+    double iuPerY = screenSize.y ? boardBBox.GetHeight() / screenSize.y : 1.0;
+
+    double bestZoom = std::max( iuPerX, iuPerY );
+    // This is needed to avoid "jumpy" zooms if first hot key was used and then mouse scroll
+    // (or other way round).
+    m_frame->GetScreen()->SetZoom( bestZoom );
+
+    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+    double zoom = 1.0 / ( zoomFactor * bestZoom );
+
+    view->SetScale( zoom );
+    view->SetCenter( boardBBox.Centre() );
     setTransitions();
 
     return 0;
@@ -87,7 +135,20 @@ int PCBNEW_CONTROL::ZoomFitScreen( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::TrackDisplayMode( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+
+    // Apply new display options to the GAL canvas
+    DisplayOpt.DisplayPcbTrackFill = !DisplayOpt.DisplayPcbTrackFill;
+    m_frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
+    settings->LoadDisplayOptions( DisplayOpt );
+
+    BOARD* board = getModel<BOARD>( PCB_T );
+    for( TRACK* track = board->m_Track; track; track = track->Next() )
+        track->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
     setTransitions();
 
     return 0;
@@ -106,7 +167,23 @@ int PCBNEW_CONTROL::PadDisplayMode( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ViaDisplayMode( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+
+    // Apply new display options to the GAL canvas
+    DisplayOpt.DisplayViaFill = !DisplayOpt.DisplayViaFill;
+    m_frame->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
+    settings->LoadDisplayOptions( DisplayOpt );
+
+    BOARD* board = getModel<BOARD>( PCB_T );
+    for( TRACK* track = board->m_Track; track; track = track->Next() )
+    {
+        if( track->Type() == PCB_VIA_T )
+            track->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    }
+
     setTransitions();
 
     return 0;
@@ -115,7 +192,15 @@ int PCBNEW_CONTROL::ViaDisplayMode( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::HighContrastMode( TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+
+    DisplayOpt.ContrastModeDisplay = !DisplayOpt.ContrastModeDisplay;
+    settings->LoadDisplayOptions( DisplayOpt );
+    m_frame->SetHighContrastLayer( m_frame->GetActiveLayer() );
+
     setTransitions();
 
     return 0;
@@ -412,8 +497,10 @@ int PCBNEW_CONTROL::ShowHelp( TOOL_EVENT& aEvent )
 void PCBNEW_CONTROL::setTransitions()
 {
     // View controls
-    Go( &PCBNEW_CONTROL::ZoomIn,             COMMON_ACTIONS::zoomIn.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoomOut,            COMMON_ACTIONS::zoomOut.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoomInOut,          COMMON_ACTIONS::zoomIn.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoomInOut,          COMMON_ACTIONS::zoomOut.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoomInOutCenter,    COMMON_ACTIONS::zoomInCenter.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoomInOutCenter,    COMMON_ACTIONS::zoomOutCenter.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoomCenter,         COMMON_ACTIONS::zoomCenter.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoomFitScreen,      COMMON_ACTIONS::zoomFitScreen.MakeEvent() );
 

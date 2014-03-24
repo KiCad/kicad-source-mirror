@@ -99,6 +99,34 @@ public:
      */
     const COLOR4D& GetLayerColor( int aLayer ) const;
 
+    /**
+     * Function SetSketchMode
+     * Turns on/off sketch mode for given item layer.
+     * @param aItemLayer is the item layer that is changed.
+     * @param aEnabled decides if it is drawn in sketch mode (true for sketched mode,
+     * false for filled mode).
+     */
+    void SetSketchMode( int aItemLayer, bool aEnabled )
+    {
+        // It is supposed to work only with item layers
+        assert( aItemLayer >= ITEM_GAL_LAYER( 0 ) );
+
+        m_sketchMode[aItemLayer] = aEnabled;
+    }
+
+    /**
+     * Function GetSketchMode
+     * Returns sketch mode setting for a given item layer.
+     * @param aItemLayer is the item layer that is changed.
+     */
+    bool GetSketchMode( int aItemLayer ) const
+    {
+        // It is supposed to work only with item layers
+        assert( aItemLayer >= ITEM_GAL_LAYER( 0 ) );
+
+        return m_sketchMode[aItemLayer];
+    }
+
 protected:
     ///> @copydoc RENDER_SETTINGS::Update()
     void update();
@@ -116,7 +144,7 @@ protected:
     COLOR4D m_layerColorsDark[TOTAL_LAYER_COUNT];
 
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
-    bool    m_sketchModeSelect[TOTAL_LAYER_COUNT];
+    bool    m_sketchMode[TOTAL_LAYER_COUNT];
 
     ///> Flag determining if pad numbers should be visible
     bool    m_padNumbers;

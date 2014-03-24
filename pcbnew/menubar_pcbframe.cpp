@@ -328,12 +328,12 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
      */
     // Zoom In
     text = AddHotkeyName( _( "Zoom &In" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ZOOM_IN );
+                          HK_ZOOM_IN, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
 
     // Zoom Out
     text = AddHotkeyName( _( "Zoom &Out" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ZOOM_OUT );
+                          HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
     // Fit on Screen

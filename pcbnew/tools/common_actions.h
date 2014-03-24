@@ -98,6 +98,8 @@ public:
     // View controls
     static TOOL_ACTION zoomIn;
     static TOOL_ACTION zoomOut;
+    static TOOL_ACTION zoomInCenter;
+    static TOOL_ACTION zoomOutCenter;
     static TOOL_ACTION zoomCenter;
     static TOOL_ACTION zoomFitScreen;
 

@@ -27,10 +27,12 @@
 
 #include <tool/tool_interactive.h>
 
+class PCB_EDIT_FRAME;
+
 /**
  * Class PCBNEW_CONTROL
  *
- * TODO
+ * Handles hot keys that are not accepted by any other tool.
  */
 
 class PCBNEW_CONTROL : public TOOL_INTERACTIVE
@@ -39,14 +41,14 @@ public:
     PCBNEW_CONTROL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) {};
+    void Reset( RESET_REASON aReason );
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init();
 
     // View controls
-    int ZoomIn( TOOL_EVENT& aEvent );
-    int ZoomOut( TOOL_EVENT& aEvent );
+    int ZoomInOut( TOOL_EVENT& aEvent );
+    int ZoomInOutCenter( TOOL_EVENT& aEvent );
     int ZoomCenter( TOOL_EVENT& aEvent );
     int ZoomFitScreen( TOOL_EVENT& aEvent );
 
@@ -92,6 +94,9 @@ public:
 private:
     ///> Sets up handlers for various events.
     void setTransitions();
+
+    ///> Pointerto the currently used edit frame.
+    PCB_EDIT_FRAME* m_frame;
 };
 
 #endif

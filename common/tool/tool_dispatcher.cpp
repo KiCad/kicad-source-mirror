@@ -27,15 +27,15 @@
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tools/common_actions.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 
 #include <class_drawpanel_gal.h>
+#include <pcbnew_id.h>
 
 #include <boost/optional.hpp>
 #include <boost/foreach.hpp>
-
-using boost::optional;
 
 ///> Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
@@ -126,7 +126,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 {
     BUTTON_STATE* st = m_buttons[aIndex];
     wxEventType type = aEvent.GetEventType();
-    optional<TOOL_EVENT> evt;
+    boost::optional<TOOL_EVENT> evt;
     bool isClick = false;
 
     bool up = type == st->upEvent;
@@ -205,7 +205,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
     bool motion = false, buttonEvents = false;
-    optional<TOOL_EVENT> evt;
+    boost::optional<TOOL_EVENT> evt;
 
     int type = aEvent.GetEventType();
 
@@ -270,7 +270,29 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 }
 
 
-void TOOL_DISPATCHER::DispatchWxCommand( const wxCommandEvent& aEvent )
+void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
 {
-    // no events to dispatch currently
+    boost::optional<TOOL_EVENT> evt;
+
+    switch( aEvent.GetId() )
+    {
+    case ID_ZOOM_IN:        // toolbar button "Zoom In"
+        evt = COMMON_ACTIONS::zoomInCenter.MakeEvent();
+        break;
+
+    case ID_ZOOM_OUT:       // toolbar button "Zoom In"
+        evt = COMMON_ACTIONS::zoomOutCenter.MakeEvent();
+        break;
+
+    case ID_ZOOM_PAGE:      // toolbar button "Fit on Screen"
+        evt = COMMON_ACTIONS::zoomFitScreen.MakeEvent();
+        break;
+
+    default:
+        aEvent.Skip();
+        break;
+    }
+
+    if( evt )
+        m_toolMgr->ProcessEvent( *evt );
 }

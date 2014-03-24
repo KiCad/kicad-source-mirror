@@ -112,6 +112,14 @@ TOOL_ACTION COMMON_ACTIONS::zoomOut( "pcbnew.zoomOut",
         AS_GLOBAL, WXK_F2,
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::zoomInCenter( "pcbnew.zoomInCenter",
+        AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION COMMON_ACTIONS::zoomOutCenter( "pcbnew.zoomOutCenter",
+        AS_GLOBAL, 0,
+        "", "" );
+
 TOOL_ACTION COMMON_ACTIONS::zoomCenter( "pcbnew.zoomCenter",
         AS_GLOBAL, WXK_F4,
         "", "" );
@@ -119,6 +127,7 @@ TOOL_ACTION COMMON_ACTIONS::zoomCenter( "pcbnew.zoomCenter",
 TOOL_ACTION COMMON_ACTIONS::zoomFitScreen( "pcbnew.zoomFitScreen",
         AS_GLOBAL, WXK_HOME,
         "", "" );
+
 
 // Display modes
 TOOL_ACTION COMMON_ACTIONS::trackDisplayMode( "pcbnew.trackDisplayMode",
