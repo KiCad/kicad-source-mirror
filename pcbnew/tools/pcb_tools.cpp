@@ -38,7 +38,7 @@
 #include "edit_tool.h"
 #include "drawing_tool.h"
 #include "point_editor.h"
-#include "settings_tool.h"
+#include "pcbnew_control.h"
 #include "common_actions.h"
 #include <router/router_tool.h>
 
@@ -55,7 +55,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager.RegisterTool( new EDIT_TOOL );
     m_toolManager.RegisterTool( new DRAWING_TOOL );
     m_toolManager.RegisterTool( new POINT_EDITOR );
-    m_toolManager.RegisterTool( new SETTINGS_TOOL );
+    m_toolManager.RegisterTool( new PCBNEW_CONTROL );
 
     m_toolManager.SetEnvironment( NULL, GetGalCanvas()->GetView(),
                                    GetGalCanvas()->GetViewControls(), this );
