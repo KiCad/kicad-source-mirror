@@ -797,6 +797,18 @@ public:
     virtual void OnZoom( wxCommandEvent& event );
 
     /**
+     * Function SetNextZoom()
+     * changes the zoom to the next one available.
+     */
+    void SetNextZoom();
+
+    /**
+     * Function SetPrevZoom()
+     * changes the zoom to the previous one available.
+     */
+    void SetPrevZoom();
+
+    /**
      * Function RedrawScreen
      * redraws the entire screen area by updating the scroll bars and mouse pointer in
      * order to have \a aCenterPoint at the center of the screen.

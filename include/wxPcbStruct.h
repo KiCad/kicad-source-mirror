@@ -135,12 +135,6 @@ protected:
     void createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu );
 
     /**
-     * Function setHighContrastLayer
-     * takes care of display settings for the given layer to be displayed in high contrast mode.
-     */
-    void setHighContrastLayer( LAYER_NUM aLayer );
-
-    /**
      * Function syncLayerWidgetLayer
      * updates the currently layer "selection" within the PCB_LAYER_WIDGET.
      * The currently selected layer is defined by the return value of GetActiveLayer().
@@ -556,6 +550,12 @@ public:
     virtual void OnModify();
 
     /**
+     * Function SetHighContrastLayer
+     * takes care of display settings for the given layer to be displayed in high contrast mode.
+     */
+    void SetHighContrastLayer( LAYER_NUM aLayer );
+
+    /**
      * Function SetTopLayer
      * moves the selected layer to the top, so it is displayed above all others.
      */
@@ -572,7 +572,7 @@ public:
      * Function GetActiveLayer
      * returns the active layer
      */
-    LAYER_NUM GetActiveLayer()
+    LAYER_NUM GetActiveLayer() const
     {
         return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
     }

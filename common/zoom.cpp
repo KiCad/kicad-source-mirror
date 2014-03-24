@@ -194,22 +194,19 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
             RedrawScreen( center, true );
     }
 
-    if( IsGalCanvasActive() )
-    {
-        // Apply computed view settings to GAL
-        KIGFX::VIEW* view = GetGalCanvas()->GetView();
-        KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
-
-        double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
-        double zoom = 1.0 / ( zoomFactor * GetZoom() );
-
-        VECTOR2D cursorWorld( GetCrossHairPosition() );
-        view->SetScale( zoom, cursorWorld );
-
-        GetGalCanvas()->Refresh();
-    }
-
     UpdateStatusBar();
+}
+
+
+void EDA_DRAW_FRAME::SetNextZoom()
+{
+    GetScreen()->SetNextZoom();
+}
+
+
+void EDA_DRAW_FRAME::SetPrevZoom()
+{
+    GetScreen()->SetPreviousZoom();
 }
 
 
