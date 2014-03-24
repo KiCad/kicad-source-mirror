@@ -400,6 +400,7 @@ void VIEW::UpdateLayerColor( int aLayer )
 
     updateItemsColor visitor( aLayer, m_painter, m_gal );
     m_layers[aLayer].items->Query( r, visitor );
+    MarkTargetDirty( m_layers[aLayer].target );
 }
 
 
@@ -459,6 +460,7 @@ void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
 
     changeItemsDepth visitor( aLayer, aDepth, m_gal );
     m_layers[aLayer].items->Query( r, visitor );
+    MarkTargetDirty( m_layers[aLayer].target );
 }
 
 
