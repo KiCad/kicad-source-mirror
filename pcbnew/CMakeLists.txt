@@ -260,6 +260,7 @@ set( PCBNEW_CLASS_SRCS
     tools/point_editor.cpp
     tools/drawing_tool.cpp
     tools/edit_tool.cpp
+    tools/pcbnew_control.cpp
     tools/pcb_tools.cpp
     tools/common_actions.cpp
     )
