@@ -892,7 +892,7 @@ void MODULE::Flip( const wxPoint& aCentre )
         case PCB_MODULE_TEXT_T:
             text = (TEXTE_MODULE*) item;
             text->m_Pos.y -= m_Pos.y;
-            NEGATE( text->m_Pos0.y );
+            NEGATE( text->m_Pos.y );
             text->m_Pos.y += m_Pos.y;
             NEGATE( text->m_Pos0.y );
             NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );

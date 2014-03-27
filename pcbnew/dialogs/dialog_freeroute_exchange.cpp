@@ -34,6 +34,7 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <macros.h>
+#include <class_board.h>
 
 #include <../common/dialogs/dialog_display_info_HTML_base.h>
 
@@ -76,6 +77,7 @@ void DIALOG_FREEROUTE::MyInit()
 {
     SetFocus();
     m_FreeRouteSetupChanged = false;
+    m_freeRouterIsLocal = false;
 
     wxString msg;
 
@@ -87,6 +89,14 @@ void DIALOG_FREEROUTE::MyInit()
         m_FreerouteURLName->SetValue( wxT( "http://www.freerouting.net/" ) );
     else
         m_FreerouteURLName->SetValue( msg );
+
+    wxFileName fileName( FindKicadFile( wxT( "freeroute.jar" ) ), wxPATH_UNIX );
+
+    if( fileName.FileExists() )
+    {
+        m_freeRouterIsLocal = true;
+        m_buttonLaunchFreeroute->SetLabel( _("Create .dsn File and Launch FreeRouter") );
+    }
 }
 
 const char * s_FreeRouteHelpInfo =
@@ -116,7 +126,7 @@ void DIALOG_FREEROUTE::OnImportButtonClick( wxCommandEvent& event )
 {
     m_Parent->ImportSpecctraSession(  event );
 
-    /* Connectivity inf must be rebuild.
+    /* Connectivity must be rebuild.
      * because for large board it can take some time, this is made only on demand
      */
     if( IsOK( this, _("Do you want to rebuild connectivity data ?" ) ) )
@@ -128,13 +138,23 @@ void DIALOG_FREEROUTE::OnImportButtonClick( wxCommandEvent& event )
  */
 void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
 {
+    wxString javaCommand;
+
+    if( m_freeRouterIsLocal )
+    {
+        javaCommand = CmdRunFreeRouterLocal();
+
+        if( javaCommand.IsEmpty() )     // Something is wrong
+            return;
+    }
+    else
+        javaCommand = wxT( "javaws" );
+
     wxString url;
-    wxString command;
     wxFileName fileName( FindKicadFile( wxT( "freeroute.jnlp" ) ), wxPATH_UNIX );
 
-    if( fileName.FileExists() )
+    if( m_freeRouterIsLocal || fileName.FileExists() )
     {
-        wxString javaWebStartCommand = wxT( "javaws" );
 
         // Find the Java web start application on Windows.
 #ifdef __WINDOWS__
@@ -145,13 +165,20 @@ void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
         // Windows and the build version of KiCad.
 
         // This key works for 32 bit Java on 32 bit Windows and 64 bit Java on 64 bit Windows.
-        wxRegKey key( wxRegKey::HKLM, wxT( "SOFTWARE\\JavaSoft\\Java Web Start" ),
+        wxString keyName = m_freeRouterIsLocal ? wxT( "SOFTWARE\\JavaSoft\\Java Runtime Environment" )
+                                               : wxT( "SOFTWARE\\JavaSoft\\Java Web Start" );
+        wxRegKey key( wxRegKey::HKLM, keyName,
                       wxIsPlatform64Bit() ? wxRegKey::WOW64ViewMode_64 :
                       wxRegKey::WOW64ViewMode_Default );
 
         // It's possible that 32 bit Java is installed on 64 bit Windows.
         if( !key.Exists() && wxIsPlatform64Bit() )
-            key.SetName( wxRegKey::HKLM, wxT( "SOFTWARE\\Wow6432Node\\JavaSoft\\Java Web Start" ) );
+        {
+            keyName = m_freeRouterIsLocal ?
+                      wxT( "SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment" )
+                      : wxT( "SOFTWARE\\Wow6432Node\\JavaSoft\\Java Web Start" );
+            key.SetName( wxRegKey::HKLM, keyName );
+        }
 
         if( !key.Exists() )
         {
@@ -168,17 +195,24 @@ void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
         wxString value;
         key.QueryValue( wxT( "CurrentVersion" ), value );
         key.SetName( key.GetName() + wxT( "\\" ) + value );
-        key.QueryValue( wxT( "Home" ), value );
-        javaWebStartCommand = value + wxFileName::GetPathSeparator() + javaWebStartCommand;
+
+        key.QueryValue( m_freeRouterIsLocal ? wxT( "JavaHome" ) : wxT( "Home" ), value );
+        wxString javaCommandPath = value + wxFileName::GetPathSeparator();
 #else
     #warning Kicad needs wxWidgets >= 2.9.4. version 2.8 is only supported for testing purposes
 #endif  // wxCHECK_VERSION( 2, 9, 0  )
 #endif  //  __WINDOWS__
 
-        // Wrap FullFileName in double quotes in case it has C:\Program Files in it.
-        // The space is interpreted as an argument separator.
-        command << javaWebStartCommand << wxChar( ' ' ) << wxChar( '"' )
-                << fileName.GetFullPath() << wxChar( '"' );
+        wxString command = javaCommandPath;
+
+        if( m_freeRouterIsLocal )
+            command << wxT("bin\\") << javaCommand;
+        else
+            // Wrap FullFileName in double quotes in case it has C:\Program Files in it.
+            // The space is interpreted as an argument separator.
+            command << javaCommand << wxChar( ' ' ) << wxChar( '"' )
+                    << fileName.GetFullPath() << wxChar( '"' );
+
         ProcessExecute( command );
         return;
     }
@@ -188,6 +222,43 @@ void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
     wxLaunchDefaultBrowser( url );
 }
 
+wxString DIALOG_FREEROUTE::CmdRunFreeRouterLocal()
+{
+    wxString fullFileName = m_Parent->GetBoard()->GetFileName();
+    wxString path;
+    wxString name;
+    wxString ext;
+    wxString dsn_ext = wxT( ".dsn" );
+    wxString mask    = wxT( "*" ) + dsn_ext;
+
+    wxFileName::SplitPath( fullFileName, &path, &name, &ext );
+
+    name += dsn_ext;
+
+    fullFileName = EDA_FileSelector( _( "Specctra DSN file:" ),
+                                     path,
+                                     name,      // name.ext without path!
+                                     dsn_ext,
+                                     mask,
+                                     this,
+                                     wxFD_SAVE,
+                                     false
+                                     );
+
+    if( fullFileName == wxEmptyString )
+        return fullFileName;
+
+    if( ! m_Parent->ExportSpecctraFile( fullFileName ) ) // the file was not created
+        return fullFileName;
+
+    wxFileName jarfileName( FindKicadFile( wxT( "freeroute.jar" ) ), wxPATH_UNIX );
+
+    wxString command = wxT("java -jar ");
+    command << wxChar( '"' ) << jarfileName.GetFullPath() << wxT( "\" -de " );
+    command << wxChar( '"' ) << fullFileName << wxChar( '"' );
+
+    return command;
+}
 
 /* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
  */

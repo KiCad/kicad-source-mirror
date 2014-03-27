@@ -81,7 +81,9 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod( const char* aMethod, PyObject* aA
     }
 
     if( pFunc )
+    {
         Py_XDECREF( pFunc );
+    }
 
     return NULL;
 }

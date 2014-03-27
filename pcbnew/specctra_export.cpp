@@ -132,6 +132,11 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
     if( fullFileName == wxEmptyString )
         return;
 
+    ExportSpecctraFile( fullFileName );
+}
+
+bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
+{
     SPECCTRA_DB     db;
     bool            ok = true;
     wxString        errorText;
@@ -152,7 +157,7 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
     {
         GetBoard()->SynchronizeNetsAndNetClasses();
         db.FromBOARD( GetBoard() );
-        db.ExportPCB(  fullFileName, true );
+        db.ExportPCB(  aFullFilename, true );
 
         // if an exception is thrown by FromBOARD or ExportPCB(), then
         // ~SPECCTRA_DB() will close the file.
@@ -184,6 +189,8 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
         errorText   += _( "Unable to export, please fix and try again." );
         DisplayError( this, errorText );
     }
+
+    return ok;
 }
 
 
