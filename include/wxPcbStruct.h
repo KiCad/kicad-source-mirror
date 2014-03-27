@@ -972,11 +972,19 @@ public:
 
     /**
      * Function ExporttoSPECCTRA
-     * will export the current BOARD to a specctra dsn file.  See
-     * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
-     * specification.
+     * Ask for a filename and call ExportSpecctraFile to export the current BOARD
+     * to a specctra dsn file.
      */
     void ExportToSpecctra( wxCommandEvent& event );
+
+    /**
+     * Function ExportSpecctraFile
+     * will export the current BOARD to a specctra dsn file.
+     * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
+     * specification.
+     * @return true if OK
+     */
+    bool ExportSpecctraFile( const wxString& aFullFilename );
 
     /**
      * Function ImportSpecctraSession
