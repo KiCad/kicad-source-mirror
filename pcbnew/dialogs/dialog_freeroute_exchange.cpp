@@ -139,6 +139,7 @@ void DIALOG_FREEROUTE::OnImportButtonClick( wxCommandEvent& event )
 void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
 {
     wxString javaCommand;
+    wxString command;
 
     if( m_freeRouterIsLocal )
     {
@@ -198,12 +199,11 @@ void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
 
         key.QueryValue( m_freeRouterIsLocal ? wxT( "JavaHome" ) : wxT( "Home" ), value );
         wxString javaCommandPath = value + wxFileName::GetPathSeparator();
+        command = javaCommandPath;
 #else
     #warning Kicad needs wxWidgets >= 2.9.4. version 2.8 is only supported for testing purposes
 #endif  // wxCHECK_VERSION( 2, 9, 0  )
 #endif  //  __WINDOWS__
-
-        wxString command = javaCommandPath;
 
         if( m_freeRouterIsLocal )
             command << wxT("bin\\") << javaCommand;
