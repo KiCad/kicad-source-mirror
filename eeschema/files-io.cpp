@@ -377,7 +377,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             msg.Printf( _( "File '%s' not found." ),
                         GetChars( g_RootSheet->GetScreen()->GetFileName() ) );
             DisplayInfoMessage( this, msg );
-        return false;
         }
 
         return true;    // do not close Eeschema if the file if not found:
