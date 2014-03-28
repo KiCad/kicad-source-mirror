@@ -730,13 +730,13 @@ void SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
 {
-    wxFileDialog dlg( this, _( "Open Schematic" ), wxGetCwd(),
+    wxFileDialog dlg( this, _( "New Schematic" ), wxGetCwd(),
                       wxEmptyString, SchematicFileWildcard,
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                      wxFD_SAVE );
 
     if( dlg.ShowModal() != wxID_CANCEL )
     {
-        OpenProjectFiles( std::vector<wxString>( 1, dlg.GetPath() ) );
+        OpenProjectFiles( std::vector<wxString>( 1, dlg.GetPath() ), 1 );
     }
 }
 
