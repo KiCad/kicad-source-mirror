@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-22 17:12+0100\n"
-"PO-Revision-Date: 2014-03-22 17:15+0100\n"
+"POT-Creation-Date: 2014-03-28 19:25+0100\n"
+"PO-Revision-Date: 2014-03-28 19:27+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1021,16 +1021,16 @@ msgstr ""
 "Gotowy\n"
 "Folder roboczy: '%s'\n"
 
-#: eeschema/files-io.cpp:376
+#: eeschema/files-io.cpp:377
 #, c-format
 msgid "File '%s' not found."
 msgstr "Nie znaleziono pliku '%s'"
 
-#: eeschema/files-io.cpp:414
+#: eeschema/files-io.cpp:421
 msgid "Import Schematic"
 msgstr "Importuj Schemat"
 
-#: eeschema/files-io.cpp:472
+#: eeschema/files-io.cpp:479
 msgid ""
 "This operation cannot be undone. Besides, take into account that "
 "hierarchical sheets will not be appended.\n"
@@ -3302,7 +3302,11 @@ msgstr "Pokaż ukryte piny"
 msgid "Schematic"
 msgstr "Schemat"
 
-#: eeschema/schframe.cpp:733 eeschema/schframe.cpp:748
+#: eeschema/schframe.cpp:733
+msgid "New Schematic"
+msgstr "Nowy schemat"
+
+#: eeschema/schframe.cpp:748
 msgid "Open Schematic"
 msgstr "Otwórz schemat"
 
@@ -4145,7 +4149,7 @@ msgid "Erc error"
 msgstr "Błąd ERC"
 
 #: eeschema/dialogs/dialog_color_config.cpp:75
-#: pcbnew/class_pcb_layer_widget.cpp:73
+#: pcbnew/class_pcb_layer_widget.cpp:75
 #: gerbview/class_gerbview_layer_widget.cpp:108
 msgid "Grid"
 msgstr "Siatka"
@@ -6309,7 +6313,7 @@ msgid "Segment"
 msgstr "Segment"
 
 #: pcbnew/class_drawsegment.cpp:355 pcbnew/class_module.cpp:479
-#: pcbnew/class_pad.cpp:582 pcbnew/class_pcb_layer_widget.cpp:205
+#: pcbnew/class_pad.cpp:582 pcbnew/class_pcb_layer_widget.cpp:207
 #: pcbnew/class_pcb_text.cpp:139 pcbnew/class_text_mod.cpp:363
 #: pcbnew/class_track.cpp:1162 pcbnew/class_zone.cpp:652
 #: pcbnew/layer_widget.cpp:539 gerbview/class_gerbview_layer_widget.cpp:87
@@ -6635,214 +6639,214 @@ msgstr "Pad na %s z %s"
 msgid "Pad %s on %s of %s"
 msgstr "Pad %s na %s z %s"
 
-#: pcbnew/class_pcb_layer_widget.cpp:59 pcbnew/class_track.cpp:1065
+#: pcbnew/class_pcb_layer_widget.cpp:61 pcbnew/class_track.cpp:1065
 msgid "Through Via"
 msgstr "Przelotka na wylot"
 
-#: pcbnew/class_pcb_layer_widget.cpp:59
+#: pcbnew/class_pcb_layer_widget.cpp:61
 msgid "Show through vias"
 msgstr "Pokaż przelotki na wylot"
 
-#: pcbnew/class_pcb_layer_widget.cpp:60
+#: pcbnew/class_pcb_layer_widget.cpp:62
 msgid "Bl/Buried Via"
 msgstr "Przelotka ślepa/zagrzebana"
 
-#: pcbnew/class_pcb_layer_widget.cpp:60
+#: pcbnew/class_pcb_layer_widget.cpp:62
 msgid "Show blind or buried vias"
 msgstr "Pokaż przelotki ślepe lub zagrzebane"
 
-#: pcbnew/class_pcb_layer_widget.cpp:61 pcbnew/class_track.cpp:1055
+#: pcbnew/class_pcb_layer_widget.cpp:63 pcbnew/class_track.cpp:1055
 msgid "Micro Via"
 msgstr "Mikroprzelotka"
 
-#: pcbnew/class_pcb_layer_widget.cpp:61
+#: pcbnew/class_pcb_layer_widget.cpp:63
 msgid "Show micro vias"
 msgstr "Pokaź mikroprzelotki"
 
-#: pcbnew/class_pcb_layer_widget.cpp:62
+#: pcbnew/class_pcb_layer_widget.cpp:64
 msgid "Non Plated"
 msgstr "Bez pokrycia cyną"
 
-#: pcbnew/class_pcb_layer_widget.cpp:62
+#: pcbnew/class_pcb_layer_widget.cpp:64
 msgid "Show non plated holes"
 msgstr "Pokaż otwory bez pokrycia cyną"
 
-#: pcbnew/class_pcb_layer_widget.cpp:63
+#: pcbnew/class_pcb_layer_widget.cpp:65
 msgid "Ratsnest"
 msgstr "Połączenia wspomagające"
 
-#: pcbnew/class_pcb_layer_widget.cpp:63
+#: pcbnew/class_pcb_layer_widget.cpp:65
 msgid "Show unconnected nets as a ratsnest"
 msgstr "Pokaż niepołączone jako połączenia wspomagające"
 
-#: pcbnew/class_pcb_layer_widget.cpp:65
+#: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Pads Front"
 msgstr "Pady na stronie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:65
+#: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Show footprint pads on board's front"
 msgstr "Pokaż pola lutownicze footprintu na górnej warstwie"
 
-#: pcbnew/class_pcb_layer_widget.cpp:66
+#: pcbnew/class_pcb_layer_widget.cpp:68
 msgid "Pads Back"
 msgstr "Pady na stronie dolniej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:66
+#: pcbnew/class_pcb_layer_widget.cpp:68
 msgid "Show footprint pads on board's back"
 msgstr "Pokaż pola lutownicze footprintu na dolnej warstwie"
 
-#: pcbnew/class_pcb_layer_widget.cpp:68
+#: pcbnew/class_pcb_layer_widget.cpp:70
 msgid "Text Front"
 msgstr "Tekst na stroni górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:68 pcbnew/class_pcb_layer_widget.cpp:69
+#: pcbnew/class_pcb_layer_widget.cpp:70 pcbnew/class_pcb_layer_widget.cpp:71
 msgid "Show footprint text on board's back"
 msgstr "Pokaż opisy footprintu na dolnej warstwie"
 
-#: pcbnew/class_pcb_layer_widget.cpp:69
+#: pcbnew/class_pcb_layer_widget.cpp:71
 msgid "Text Back"
 msgstr "Tekst na stronie dolniej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:70
+#: pcbnew/class_pcb_layer_widget.cpp:72
 msgid "Hidden Text"
 msgstr "Tekst ukryty"
 
-#: pcbnew/class_pcb_layer_widget.cpp:70
+#: pcbnew/class_pcb_layer_widget.cpp:72
 msgid "Show footprint text marked as invisible"
 msgstr "Pokaż opisy footprintów zaznaczone jako niewidoczne"
 
-#: pcbnew/class_pcb_layer_widget.cpp:72
+#: pcbnew/class_pcb_layer_widget.cpp:74
 msgid "Anchors"
 msgstr "Zakotwiczenia"
 
-#: pcbnew/class_pcb_layer_widget.cpp:72
+#: pcbnew/class_pcb_layer_widget.cpp:74
 msgid "Show footprint and text origins as a cross"
 msgstr "Pokaż punkty bazowe footprintów i opisów w postaci krzyżyka"
 
-#: pcbnew/class_pcb_layer_widget.cpp:73
+#: pcbnew/class_pcb_layer_widget.cpp:75
 #: gerbview/class_gerbview_layer_widget.cpp:108
 msgid "Show the (x,y) grid dots"
 msgstr "Pokaż punkty siatki (x,y)"
 
-#: pcbnew/class_pcb_layer_widget.cpp:74
+#: pcbnew/class_pcb_layer_widget.cpp:76
 msgid "No-Connects"
 msgstr "Niepołączone"
 
-#: pcbnew/class_pcb_layer_widget.cpp:74
+#: pcbnew/class_pcb_layer_widget.cpp:76
 msgid "Show a marker on pads which have no net connected"
 msgstr "Pokaż znacznik na polach, które nie posiadają połączeń"
 
-#: pcbnew/class_pcb_layer_widget.cpp:75
+#: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Modules Front"
 msgstr "Footprinty na stronie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:75
+#: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Show footprints that are on board's front"
 msgstr "Pokaż footprinty umieszczone na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:76
+#: pcbnew/class_pcb_layer_widget.cpp:78
 msgid "Modules Back"
 msgstr "Footprinty na stronie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:76
+#: pcbnew/class_pcb_layer_widget.cpp:78
 msgid "Show footprints that are on board's back"
 msgstr "Pokaż footprinty umieszczone na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:77
+#: pcbnew/class_pcb_layer_widget.cpp:79
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1088
 msgid "Values"
 msgstr "Wartości"
 
-#: pcbnew/class_pcb_layer_widget.cpp:77
+#: pcbnew/class_pcb_layer_widget.cpp:79
 msgid "Show footprint's values"
 msgstr "Pokaż wartości dla footprintów"
 
-#: pcbnew/class_pcb_layer_widget.cpp:78
+#: pcbnew/class_pcb_layer_widget.cpp:80
 msgid "References"
 msgstr "Oznaczenia"
 
-#: pcbnew/class_pcb_layer_widget.cpp:78
+#: pcbnew/class_pcb_layer_widget.cpp:80
 msgid "Show footprint's references"
 msgstr "Pokaż oznaczenia footprintów"
 
-#: pcbnew/class_pcb_layer_widget.cpp:131
+#: pcbnew/class_pcb_layer_widget.cpp:133
 msgid "Show All Copper Layers"
 msgstr "Pokaż wszystkie warstwy miedzi"
 
-#: pcbnew/class_pcb_layer_widget.cpp:133
+#: pcbnew/class_pcb_layer_widget.cpp:135
 msgid "Hide All Copper Layers But Active"
 msgstr "Ukryj wszystkie warstwy miedzi oprócz aktywnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:135
+#: pcbnew/class_pcb_layer_widget.cpp:137
 msgid "Always Hide All Copper Layers But Active"
 msgstr "Zawsze ukrywaj wszystkie warstwy miedzi oprócz aktywnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:137
+#: pcbnew/class_pcb_layer_widget.cpp:139
 msgid "Hide All Copper Layers"
 msgstr "Ukryj wszystkie warstwy miedzi"
 
-#: pcbnew/class_pcb_layer_widget.cpp:206 pcbnew/layer_widget.cpp:559
+#: pcbnew/class_pcb_layer_widget.cpp:208 pcbnew/layer_widget.cpp:559
 #: gerbview/class_gerbview_layer_widget.cpp:88
 msgid "Render"
 msgstr "Pokaż"
 
-#: pcbnew/class_pcb_layer_widget.cpp:287
+#: pcbnew/class_pcb_layer_widget.cpp:289
 msgid "Front copper layer"
 msgstr "Górna strona ścieżek"
 
-#: pcbnew/class_pcb_layer_widget.cpp:291
+#: pcbnew/class_pcb_layer_widget.cpp:293
 msgid "Back copper layer"
 msgstr "Dolna strona ścieżek"
 
-#: pcbnew/class_pcb_layer_widget.cpp:295
+#: pcbnew/class_pcb_layer_widget.cpp:297
 msgid "Inner copper layer"
 msgstr "Wewnętrzna strona ścieżek"
 
-#: pcbnew/class_pcb_layer_widget.cpp:313
+#: pcbnew/class_pcb_layer_widget.cpp:315
 msgid "Adhesive on board's front"
 msgstr "Warstwa kleju na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:314
+#: pcbnew/class_pcb_layer_widget.cpp:316
 msgid "Adhesive on board's back"
 msgstr "Warstwa kleju na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:315
+#: pcbnew/class_pcb_layer_widget.cpp:317
 msgid "Solder paste on board's front"
 msgstr "Pasty lutowniczej na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:316
+#: pcbnew/class_pcb_layer_widget.cpp:318
 msgid "Solder paste on board's back"
 msgstr "Pasty lutowniczej na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:317
+#: pcbnew/class_pcb_layer_widget.cpp:319
 msgid "Silkscreen on board's front"
 msgstr "Warstwa opisowa na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:318
+#: pcbnew/class_pcb_layer_widget.cpp:320
 msgid "Silkscreen on board's back"
 msgstr "Warstwa opisowa na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:319
+#: pcbnew/class_pcb_layer_widget.cpp:321
 msgid "Solder mask on board's front"
 msgstr "Maska lutownicza na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:320
+#: pcbnew/class_pcb_layer_widget.cpp:322
 msgid "Solder mask on board's back"
 msgstr "Maska lutowniczna na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:321
+#: pcbnew/class_pcb_layer_widget.cpp:323
 msgid "Explanatory drawings"
 msgstr "Rysunkowa dodatkowa"
 
-#: pcbnew/class_pcb_layer_widget.cpp:322
+#: pcbnew/class_pcb_layer_widget.cpp:324
 msgid "Explanatory comments"
 msgstr "Komentarzy"
 
-#: pcbnew/class_pcb_layer_widget.cpp:323 pcbnew/class_pcb_layer_widget.cpp:324
+#: pcbnew/class_pcb_layer_widget.cpp:325 pcbnew/class_pcb_layer_widget.cpp:326
 msgid "User defined meaning"
 msgstr "Znaczenie zdefiniowane przez użytkownika"
 
-#: pcbnew/class_pcb_layer_widget.cpp:325
+#: pcbnew/class_pcb_layer_widget.cpp:327
 msgid "Board's perimeter definition"
 msgstr "Rysunkowa z obrzeżem płytki"
 
@@ -9812,24 +9816,25 @@ msgid "Warning: The Top Layer and Bottom Layer are same."
 msgstr "Ostrzeżenie: Górna i dolna warstwa są takie same."
 
 #: pcbnew/specctra_export.cpp:122
+#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:238
 msgid "Specctra DSN file:"
 msgstr "Plik Specctra DSN:"
 
-#: pcbnew/specctra_export.cpp:179
+#: pcbnew/specctra_export.cpp:184
 msgid "BOARD exported OK."
 msgstr "Eksport płytki udany."
 
-#: pcbnew/specctra_export.cpp:184
+#: pcbnew/specctra_export.cpp:189
 msgid "Unable to export, please fix and try again."
 msgstr "Nie mogę eksportować. Napraw błędy i spróbuj ponownie."
 
-#: pcbnew/specctra_export.cpp:991 pcbnew/specctra_export.cpp:1094
-#: pcbnew/specctra_export.cpp:1213
+#: pcbnew/specctra_export.cpp:998 pcbnew/specctra_export.cpp:1101
+#: pcbnew/specctra_export.cpp:1220
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "Nieobsługiwany typ DRAWSEGMENT %s"
 
-#: pcbnew/specctra_export.cpp:1110
+#: pcbnew/specctra_export.cpp:1117
 #, c-format
 msgid ""
 "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
@@ -9838,7 +9843,7 @@ msgstr ""
 "Nie mogę odnaleźć następnego segmentu z punktem końcowym (%s mm, %s mm).\n"
 "Popraw obrys na warstwie Edge.Cuts, tworząc z niego zamknięty wielokąt."
 
-#: pcbnew/specctra_export.cpp:1229
+#: pcbnew/specctra_export.cpp:1236
 #, c-format
 msgid ""
 "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
@@ -9848,12 +9853,12 @@ msgstr ""
 "Popraw wewnętrzny obrys na warstwie Edge.Cuts, tworząc z niego zamknięty "
 "wielokąt."
 
-#: pcbnew/specctra_export.cpp:1379
+#: pcbnew/specctra_export.cpp:1386
 #, c-format
 msgid "Component with value of '%s' has empty reference id."
 msgstr "Komponent z wartością '%s' nie posiada oznaczenia."
 
-#: pcbnew/specctra_export.cpp:1387
+#: pcbnew/specctra_export.cpp:1394
 #, c-format
 msgid "Multiple components have identical reference IDs of '%s'."
 msgstr "Wiele komponentów ma to samo oznaczenie \"%s\"."
@@ -12088,14 +12093,18 @@ msgid "Option Specific Help:"
 msgstr "Informacja na temat opcji:"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange.cpp:98
+msgid "Create .dsn File and Launch FreeRouter"
+msgstr "Utwórz plik .DSN i uruchom FreeRouter"
+
+#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:108
 msgid "Freeroute Help"
 msgstr "Pomoc dla FreeRoute"
 
-#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:122
+#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:132
 msgid "Do you want to rebuild connectivity data ?"
 msgstr "Czy chcesz odbudować bazę danych połączeń?"
 
-#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:158
+#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:186
 msgid ""
 "It appears that the Java run time environment is not installed on this "
 "computer.  Java is required to use FreeRoute."
@@ -12105,7 +12114,7 @@ msgstr ""
 "Java jest wymagana do uruchomienia i używania zewnętrznego autoroutera "
 "FreeRoute."
 
-#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:161
+#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:189
 msgid "Pcbnew Error"
 msgstr "Błąd Pcbnew"
 
