@@ -368,20 +368,24 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Delete old caches.
     CMP_LIBRARY::RemoveCacheLibrary();
 
-    libCacheExist = LoadCacheLibrary( g_RootSheet->GetScreen()->GetFileName() );
-
-    if( !wxFileExists( g_RootSheet->GetScreen()->GetFileName() ) && !libCacheExist )
+    if( !wxFileExists( g_RootSheet->GetScreen()->GetFileName() ) )
     {
         Zoom_Automatique( false );
-        msg.Printf( _( "File '%s' not found." ),
-                    GetChars( g_RootSheet->GetScreen()->GetFileName() ) );
-        DisplayInfoMessage( this, msg );
-//        return false;
+
+        if( aCtl == 0 )
+        {
+            msg.Printf( _( "File '%s' not found." ),
+                        GetChars( g_RootSheet->GetScreen()->GetFileName() ) );
+            DisplayInfoMessage( this, msg );
+        return false;
+        }
+
         return true;    // do not close Eeschema if the file if not found:
                         // we may have to create a new schematic file.
     }
 
     // load the project.
+    libCacheExist = LoadCacheLibrary( g_RootSheet->GetScreen()->GetFileName() );
     g_RootSheet->SetScreen( NULL );
     bool diag = g_RootSheet->Load( this );
     SetScreen( m_CurrentSheet->LastScreen() );
