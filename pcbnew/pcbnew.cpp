@@ -483,9 +483,7 @@ void IFACE::OnKifaceEnd()
     // wxPython will do its own cleanup as part of that process.
     // This should only be called if python was setup correctly.
 
-/* bring this in, but without a linker error:
     pcbnewFinishPythonScripting();
-*/
 
 #endif
 }
