@@ -49,6 +49,8 @@
 #include <collectors.h>
 #include <pcbnew_id.h>
 
+#include <gal/graphics_abstraction_layer.h>
+
 
 /// This is a read only template that is copied and modified before adding to LAYER_WIDGET
 const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
@@ -420,8 +422,13 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
     if( galCanvas )
     {
-        KIGFX::VIEW* view = galCanvas->GetView();
-        view->SetLayerVisible( ITEM_GAL_LAYER( aId ), isEnabled );
+        if( aId == GRID_VISIBLE )
+        {
+            galCanvas->GetGAL()->SetGridVisibility( myframe->IsGridVisible() );
+            galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+        }
+        else
+            galCanvas->GetView()->SetLayerVisible( ITEM_GAL_LAYER( aId ), isEnabled );
     }
 
     if( galCanvas && myframe->IsGalCanvasActive() )
