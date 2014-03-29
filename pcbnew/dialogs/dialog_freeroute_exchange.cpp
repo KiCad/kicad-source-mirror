@@ -203,10 +203,14 @@ void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
 #else
     #warning Kicad needs wxWidgets >= 2.9.4. version 2.8 is only supported for testing purposes
 #endif  // wxCHECK_VERSION( 2, 9, 0  )
-#endif  //  __WINDOWS__
 
         if( m_freeRouterIsLocal )
             command << wxT("bin\\") << javaCommand;
+#else   //  __WINDOWS__
+
+        if( m_freeRouterIsLocal )
+            command << javaCommand;
+#endif
         else
             // Wrap FullFileName in double quotes in case it has C:\Program Files in it.
             // The space is interpreted as an argument separator.
@@ -254,7 +258,11 @@ wxString DIALOG_FREEROUTE::CmdRunFreeRouterLocal()
     wxFileName jarfileName( FindKicadFile( wxT( "freeroute.jar" ) ), wxPATH_UNIX );
 
     wxString command = wxT("java -jar ");
-    command << wxChar( '"' ) << jarfileName.GetFullPath() << wxT( "\" -de " );
+    // add "freeroute.jar" to command line:
+    command << wxChar( '"' ) << jarfileName.GetFullPath() << wxChar( '"' );
+    // add option to load the .dsn file
+    command << wxT( " -de " );
+    // add *.dsn full filename (quoted):
     command << wxChar( '"' ) << fullFileName << wxChar( '"' );
 
     return command;
