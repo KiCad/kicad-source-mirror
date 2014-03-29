@@ -406,12 +406,7 @@ bool PGM_BASE::initPgm()
 
     loadCommonSettings();
 
-
-    bool succes = SetLanguage( true );
-
-    if( !succes )
-    {
-    }
+    SetLanguage( true );
 
     // Set locale option for separator used in float numbers
     SetLocaleTo_Default();
