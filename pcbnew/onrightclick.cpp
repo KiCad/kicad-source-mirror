@@ -137,11 +137,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     }
 
     item = GetCurItem();
-
-    if( item )
-        flags = item->GetFlags();
-    else
-        flags = 0;
+    flags = item ? item->GetFlags() : 0;
 
     // Add the context menu, which depends on the picked item:
     if( item )
