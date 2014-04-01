@@ -253,9 +253,15 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
         return false;
     }
 
-    // If the tool is already active, do not invoke it again
+    // If the tool is already active, bring it to the top of the active tools stack
     if( isActive( aTool ) )
+    {
+        m_activeTools.erase( std::find( m_activeTools.begin(), m_activeTools.end(),
+                                        aTool->GetId() ) );
+        m_activeTools.push_front( aTool->GetId() );
+
         return false;
+    }
 
     aTool->Reset( TOOL_INTERACTIVE::RUN );
 
