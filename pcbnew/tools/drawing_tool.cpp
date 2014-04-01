@@ -94,6 +94,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -270,7 +271,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::PlaceText( TOOL_EVENT& aEvent )
 {
     TEXTE_PCB* text = NULL;
 
@@ -278,6 +279,7 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
@@ -325,6 +327,7 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
             {
                 // Init the new item attributes
                 text = m_frame->CreateTextePcb( NULL );
+
                 if( text == NULL )
                     continue;
 
@@ -381,6 +384,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -571,6 +575,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
     m_view->Add( &preview );
     preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
 
@@ -644,6 +649,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
@@ -659,7 +665,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
         {
             if( module )
             {
-                m_board->Delete( module );  // it was added by LoadModuleFromLibrary
+                m_board->Delete( module );  // it was added by LoadModuleFromLibrary()
                 module = NULL;
 
                 preview.Clear();
@@ -755,6 +761,7 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -930,6 +937,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -1149,13 +1157,13 @@ void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) 
 
 void DRAWING_TOOL::setTransitions()
 {
-    Go( &DRAWING_TOOL::DrawLine, COMMON_ACTIONS::drawLine.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawCircle, COMMON_ACTIONS::drawCircle.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawArc, COMMON_ACTIONS::drawArc.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawText, COMMON_ACTIONS::drawText.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawDimension, COMMON_ACTIONS::drawDimension.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawZone, COMMON_ACTIONS::drawZone.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawKeepout, COMMON_ACTIONS::drawKeepout.MakeEvent() );
-    Go( &DRAWING_TOOL::PlaceTarget, COMMON_ACTIONS::placeTarget.MakeEvent() );
-    Go( &DRAWING_TOOL::PlaceModule, COMMON_ACTIONS::placeModule.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawLine,        COMMON_ACTIONS::drawLine.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawCircle,      COMMON_ACTIONS::drawCircle.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawArc,         COMMON_ACTIONS::drawArc.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawDimension,   COMMON_ACTIONS::drawDimension.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZone,        COMMON_ACTIONS::drawZone.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawKeepout,     COMMON_ACTIONS::drawKeepout.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceText,       COMMON_ACTIONS::placeText.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceTarget,     COMMON_ACTIONS::placeTarget.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceModule,     COMMON_ACTIONS::placeModule.MakeEvent() );
 }
