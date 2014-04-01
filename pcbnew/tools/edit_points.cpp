@@ -83,9 +83,15 @@ EDIT_POINT* EDIT_POINTS::Previous( const EDIT_POINT& aPoint )
         }
     }
 
+    return NULL;
+}
+
+
+EDIT_LINE* EDIT_POINTS::Previous( const EDIT_LINE& aLine )
+{
     for( unsigned int i = 0; i < m_lines.size(); ++i )
     {
-        if( m_lines[i] == aPoint )
+        if( m_lines[i] == aLine )
         {
             if( i == 0 )
                 return &m_lines[m_lines.size() - 1];
@@ -111,9 +117,15 @@ EDIT_POINT* EDIT_POINTS::Next( const EDIT_POINT& aPoint )
         }
     }
 
+    return NULL;
+}
+
+
+EDIT_LINE* EDIT_POINTS::Next( const EDIT_LINE& aLine )
+{
     for( unsigned int i = 0; i < m_lines.size(); ++i )
     {
-        if( m_lines[i] == aPoint )
+        if( m_lines[i] == aLine )
         {
             if( i == m_lines.size() - 1 )
                 return &m_lines[0];
