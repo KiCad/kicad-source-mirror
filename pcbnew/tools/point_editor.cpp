@@ -63,7 +63,7 @@ public:
                 switch( segment->GetShape() )
                 {
                 case S_SEGMENT:
-                    points->AddPoint( segment->GetStart() );          // points[0]
+                    points->AddPoint( segment->GetStart() );          // points[0]      // TODO add enums for points
                     points->AddPoint( segment->GetEnd() );            // points[1]
                     break;
 
@@ -74,7 +74,7 @@ public:
 
                     // Set constraints
                     // Arc end has to stay at the same radius as the start
-                    (*points)[2].SetConstraint( new EC_CIRCLE( (*points)[2], (*points)[0], (*points)[1] ) );
+                    points->Point( 2 ).SetConstraint( new EC_CIRCLE( points->Point( 2 ), points->Point( 0 ), points->Point( 1 ) ) );
                     break;
 
                 case S_CIRCLE:
@@ -99,10 +99,10 @@ public:
 
                 // Lines have to be added after creating edit points, so they use EDIT_POINT references
                 for( int i = 0; i < cornersCount - 1; ++i )
-                    points->AddLine( (*points)[i], (*points)[i + 1] );
+                    points->AddLine( points->Point( i ), points->Point( i + 1 ) );
 
                 // The last missing line, connecting the last and the first polygon point
-                points->AddLine( (*points)[cornersCount - 1], (*points)[0] );
+                points->AddLine( points->Point( cornersCount - 1 ), points->Point( 0 ) );
                 break;
             }
 
@@ -116,8 +116,8 @@ public:
                 points->AddPoint( dimension->m_featureLineDO );
 
                 // Dimension height setting - edit points should move only along the feature lines
-                (*points)[0].SetConstraint( new EC_LINE( (*points)[0], (*points)[2] ) );
-                (*points)[1].SetConstraint( new EC_LINE( (*points)[1], (*points)[3] ) );
+                points->Point( 0 ).SetConstraint( new EC_LINE( points->Point( 0 ), points->Point( 2 ) ) );
+                points->Point( 1 ).SetConstraint( new EC_LINE( points->Point( 1 ), points->Point( 3 ) ) );
 
                 break;
             }
@@ -322,29 +322,29 @@ void POINT_EDITOR::updateItem() const
         switch( segment->GetShape() )
         {
         case S_SEGMENT:
-            if( isModified( (*m_editPoints)[0] ) )
-                segment->SetStart( wxPoint( (*m_editPoints)[0].GetPosition().x,
-                                            (*m_editPoints)[0].GetPosition().y ) );
+            if( isModified( m_editPoints->Point( 0 ) ) )
+                segment->SetStart( wxPoint( m_editPoints->Point( 0 ).GetPosition().x,
+                                            m_editPoints->Point( 0 ).GetPosition().y ) );
 
-            else if( isModified( (*m_editPoints)[1] ) )
-                segment->SetEnd( wxPoint( (*m_editPoints)[1].GetPosition().x,
-                                          (*m_editPoints)[1].GetPosition().y ) );
+            else if( isModified( m_editPoints->Point( 1 ) ) )
+                segment->SetEnd( wxPoint( m_editPoints->Point( 1 ).GetPosition().x,
+                                          m_editPoints->Point( 1 ).GetPosition().y ) );
 
             break;
 
         case S_ARC:
         {
-            const VECTOR2I& center = (*m_editPoints)[0].GetPosition();
-            const VECTOR2I& start = (*m_editPoints)[1].GetPosition();
-            const VECTOR2I& end = (*m_editPoints)[2].GetPosition();
+            const VECTOR2I& center = m_editPoints->Point( 0 ).GetPosition();
+            const VECTOR2I& start = m_editPoints->Point( 1 ).GetPosition();
+            const VECTOR2I& end = m_editPoints->Point( 2 ).GetPosition();
 
             if( center != segment->GetCenter() )
             {
                 wxPoint moveVector = wxPoint( center.x, center.y ) - segment->GetCenter();
                 segment->Move( moveVector );
 
-                (*m_editPoints)[1].SetPosition( segment->GetArcStart() );
-                (*m_editPoints)[2].SetPosition( segment->GetArcEnd() );
+                m_editPoints->Point( 1 ).SetPosition( segment->GetArcStart() );
+                m_editPoints->Point( 2 ).SetPosition( segment->GetArcEnd() );
             }
 
             else
@@ -371,10 +371,10 @@ void POINT_EDITOR::updateItem() const
 
         case S_CIRCLE:
         {
-            const VECTOR2I& center = (*m_editPoints)[0].GetPosition();
-            const VECTOR2I& end = (*m_editPoints)[1].GetPosition();
+            const VECTOR2I& center = m_editPoints->Point( 0 ).GetPosition();
+            const VECTOR2I& end = m_editPoints->Point( 1 ).GetPosition();
 
-            if( isModified( (*m_editPoints)[0] ) )
+            if( isModified( m_editPoints->Point( 0 ) ) )
             {
                 wxPoint moveVector = wxPoint( center.x, center.y ) - segment->GetCenter();
                 segment->Move( moveVector );
@@ -402,8 +402,8 @@ void POINT_EDITOR::updateItem() const
 
         for( int i = 0; i < outline->GetCornersCount(); ++i )
         {
-            outline->SetX( i, (*m_editPoints)[i].GetPosition().x );
-            outline->SetY( i, (*m_editPoints)[i].GetPosition().y );
+            outline->SetX( i, m_editPoints->Point( i ).GetPosition().x );
+            outline->SetY( i, m_editPoints->Point( i ).GetPosition().y );
         }
 
         break;
@@ -414,7 +414,7 @@ void POINT_EDITOR::updateItem() const
         DIMENSION* dimension = static_cast<DIMENSION*>( item );
 
         // Check which point is currently modified and updated dimension's points respectively
-        if( isModified( (*m_editPoints)[0] ) )
+        if( isModified( m_editPoints->Point( 0 ) ) )
         {
             VECTOR2D featureLine( m_dragPoint->GetPosition() - dimension->GetOrigin() );
             VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
@@ -425,7 +425,7 @@ void POINT_EDITOR::updateItem() const
                 dimension->SetHeight( featureLine.EuclideanNorm() );
         }
 
-        else if( isModified( (*m_editPoints)[1] ) )
+        else if( isModified( m_editPoints->Point( 1 ) ) )
         {
             VECTOR2D featureLine( m_dragPoint->GetPosition() - dimension->GetEnd() );
             VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
@@ -436,18 +436,18 @@ void POINT_EDITOR::updateItem() const
                 dimension->SetHeight( featureLine.EuclideanNorm() );
         }
 
-        else if( isModified( (*m_editPoints)[2] ) )
+        else if( isModified( m_editPoints->Point( 2 ) ) )
         {
             dimension->SetOrigin( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
-            (*m_editPoints)[0].SetConstraint( new EC_LINE( (*m_editPoints)[0], (*m_editPoints)[2] ) );
-            (*m_editPoints)[1].SetConstraint( new EC_LINE( (*m_editPoints)[1], (*m_editPoints)[3] ) );
+            m_editPoints->Point( 0 ).SetConstraint( new EC_LINE( m_editPoints->Point( 0 ), m_editPoints->Point( 2 ) ) );
+            m_editPoints->Point( 1 ).SetConstraint( new EC_LINE( m_editPoints->Point( 1 ), m_editPoints->Point( 3 ) ) );
         }
 
-        else if( isModified( (*m_editPoints)[3] ) )
+        else if( isModified( m_editPoints->Point( 3 ) ) )
         {
             dimension->SetEnd( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
-            (*m_editPoints)[0].SetConstraint( new EC_LINE( (*m_editPoints)[0], (*m_editPoints)[2] ) );
-            (*m_editPoints)[1].SetConstraint( new EC_LINE( (*m_editPoints)[1], (*m_editPoints)[3] ) );
+            m_editPoints->Point( 0 ).SetConstraint( new EC_LINE( m_editPoints->Point( 0 ), m_editPoints->Point( 2 ) ) );
+            m_editPoints->Point( 1 ).SetConstraint( new EC_LINE( m_editPoints->Point( 1 ), m_editPoints->Point( 3 ) ) );
         }
 
         break;
@@ -486,19 +486,19 @@ void POINT_EDITOR::updatePoints() const
             switch( segment->GetShape() )
             {
             case S_SEGMENT:
-                (*m_editPoints)[0].SetPosition( segment->GetStart() );
-                (*m_editPoints)[1].SetPosition( segment->GetEnd() );
+                m_editPoints->Point( 0 ).SetPosition( segment->GetStart() );
+                m_editPoints->Point( 1 ).SetPosition( segment->GetEnd() );
                 break;
 
             case S_ARC:
-                (*m_editPoints)[0].SetPosition( segment->GetCenter() );
-                (*m_editPoints)[1].SetPosition( segment->GetArcStart() );
-                (*m_editPoints)[2].SetPosition( segment->GetArcEnd() );
+                m_editPoints->Point( 0 ).SetPosition( segment->GetCenter() );
+                m_editPoints->Point( 1 ).SetPosition( segment->GetArcStart() );
+                m_editPoints->Point( 2 ).SetPosition( segment->GetArcEnd() );
                 break;
 
             case S_CIRCLE:
-                (*m_editPoints)[0].SetPosition( segment->GetCenter() );
-                (*m_editPoints)[1].SetPosition( segment->GetEnd() );
+                m_editPoints->Point( 0 ).SetPosition( segment->GetCenter() );
+                m_editPoints->Point( 1 ).SetPosition( segment->GetEnd() );
                 break;
 
             default:        // suppress warnings
@@ -515,7 +515,7 @@ void POINT_EDITOR::updatePoints() const
         const CPolyLine* outline = zone->Outline();
 
         for( int i = 0; i < outline->GetCornersCount(); ++i )
-            (*m_editPoints)[i].SetPosition( outline->GetPos( i ) );
+            m_editPoints->Point( i ).SetPosition( outline->GetPos( i ) );
 
         break;
     }
@@ -524,10 +524,10 @@ void POINT_EDITOR::updatePoints() const
     {
         const DIMENSION* dimension = static_cast<const DIMENSION*>( item );
 
-        (*m_editPoints)[0].SetPosition( dimension->m_crossBarO );
-        (*m_editPoints)[1].SetPosition( dimension->m_crossBarF );
-        (*m_editPoints)[2].SetPosition( dimension->m_featureLineGO );
-        (*m_editPoints)[3].SetPosition( dimension->m_featureLineDO );
+        m_editPoints->Point( 0 ).SetPosition( dimension->m_crossBarO );
+        m_editPoints->Point( 1 ).SetPosition( dimension->m_crossBarF );
+        m_editPoints->Point( 2 ).SetPosition( dimension->m_featureLineGO );
+        m_editPoints->Point( 3 ).SetPosition( dimension->m_featureLineDO );
         break;
     }
 
@@ -580,7 +580,7 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 
             case S_ARC:
             case S_CIRCLE:
-                return (*m_editPoints)[0];      // center
+                return m_editPoints->Point( 0 );      // center
 
             default:        // suppress warnings
                 break;
@@ -593,11 +593,11 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
     case PCB_DIMENSION_T:
     {
         // Constraint for crossbar
-        if( isModified( (*m_editPoints)[2] ) )
-            return (*m_editPoints)[3];
+        if( isModified( m_editPoints->Point( 2 ) ) )
+            return m_editPoints->Point( 3 );
 
-        else if( isModified( (*m_editPoints)[3] ) )
-            return (*m_editPoints)[2];
+        else if( isModified( m_editPoints->Point( 3 ) ) )
+            return m_editPoints->Point( 2 );
 
         else
             return EDIT_POINT( m_dragPoint->GetPosition() );      // no constraint

@@ -73,7 +73,7 @@ public:
     }
 
     /**
-     * Function GetX()
+     * Function GetY()
      *
      * Returns Y coordinate of an EDIT_POINT.
      */
@@ -356,6 +356,8 @@ public:
      */
     EDIT_POINT* Previous( const EDIT_POINT& aPoint );
 
+    EDIT_LINE* Previous( const EDIT_LINE& aLine );
+
     /**
      * Function Next()
      *
@@ -367,14 +369,26 @@ public:
      */
     EDIT_POINT* Next( const EDIT_POINT& aPoint );
 
-    EDIT_POINT& operator[]( unsigned int aIndex )
+    EDIT_LINE* Next( const EDIT_LINE& aLine );
+
+    EDIT_POINT& Point( unsigned int aIndex )
     {
         return m_points[aIndex];
     }
 
-    const EDIT_POINT& operator[]( unsigned int aIndex ) const
+    const EDIT_POINT& Point( unsigned int aIndex ) const
     {
         return m_points[aIndex];
+    }
+
+    EDIT_LINE& Line( unsigned int aIndex )
+    {
+        return m_lines[aIndex];
+    }
+
+    const EDIT_LINE& Line( unsigned int aIndex ) const
+    {
+        return m_lines[aIndex];
     }
 
     /**
