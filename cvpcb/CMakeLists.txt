@@ -116,6 +116,7 @@ if( USE_KIWAY_DLLS )
         ${GLEW_LIBRARIES}
         ${CAIRO_LIBRARIES}
         ${PIXMAN_LIBRARY}
+        ${OPENMP_LIBRARIES}
         )
 
     # Only for win32 cross compilation using MXE

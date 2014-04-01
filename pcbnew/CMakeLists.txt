@@ -536,6 +536,7 @@ if( USE_KIWAY_DLLS )
         OUTPUT_NAME     pcbnew
         PREFIX          ${KIFACE_PREFIX}
         SUFFIX          ${KIFACE_SUFFIX}
+        COMPILE_FLAGS   ${OpenMP_CXX_FLAGS}
         )
     target_link_libraries( pcbnew_kiface
         3d-viewer
@@ -557,6 +558,7 @@ if( USE_KIWAY_DLLS )
         ${PIXMAN_LIBRARY}
         ${Boost_LIBRARIES}      # must follow GITHUB
         ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
+        ${OPENMP_LIBRARIES}
         )
     set_source_files_properties( pcbnew.cpp PROPERTIES
         # The KIFACE is in pcbnew.cpp, export it:
