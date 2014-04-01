@@ -81,12 +81,14 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     if( !makeSelection( selection ) )
         return 0;
 
-    VECTOR2I dragPosition;      // The last position of the cursor while dragging
     m_dragging = false;         // Are selected items being dragged?
     bool restore = false;       // Should items' state be restored when finishing the tool?
 
     // By default, modified items need to update their geometry
     m_updateFlag = KIGFX::VIEW_ITEM::GEOMETRY;
+
+    // Offset from the dragged item's center (anchor)
+    wxPoint offset;
 
     VIEW_CONTROLS* controls = getViewControls();
     PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
@@ -128,29 +130,34 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 
         else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
+            VECTOR2I cursor( controls->GetCursorPosition() );
+
             if( m_dragging )
             {
+                wxPoint movement = wxPoint( cursor.x, cursor.y ) -
+                        static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition();
+
                 // Drag items to the current cursor position
-                VECTOR2I movement = ( controls->GetCursorPosition() - dragPosition );
                 for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
                 {
                     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( i ) );
-                    item->Move( wxPoint( movement.x, movement.y ) );
+                    item->Move( movement + offset );
                 }
 
                 updateRatsnest( true );
             }
-            else
+            else    // Prepare to start dragging
             {
-                // Prepare to drag - save items, so changes can be undone
+                // Save items, so changes can be undone
                 editFrame->OnModify();
                 editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
+                offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
+                         wxPoint( cursor.x, cursor.y );
                 m_dragging = true;
             }
 
             selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
-            dragPosition = controls->GetCursorPosition();
             m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
         }
 
@@ -350,6 +357,7 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
     // Save them
     for( unsigned int i = 0; i < selectedItems.GetCount(); ++i )
         selectedItems.SetPickedItemStatus( UR_DELETED, i );
+
     editFrame->OnModify();
     editFrame->SaveCopyInUndoList( selectedItems, UR_DELETED );
 
