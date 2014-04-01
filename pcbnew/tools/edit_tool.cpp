@@ -79,7 +79,13 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can modify
     if( !makeSelection( selection ) )
+    {
+        setTransitions();
+
         return 0;
+    }
+
+    Activate();
 
     m_dragging = false;         // Are selected items being dragged?
     bool restore = false;       // Should items' state be restored when finishing the tool?
@@ -205,7 +211,11 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
     bool unselect = selection.Empty();
 
     if( !makeSelection( selection ) )
+    {
+        setTransitions();
+
         return 0;
+    }
 
     // Properties are displayed when there is only one item selected
     if( selection.Size() == 1 )
@@ -471,20 +481,8 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelec
 
 bool EDIT_TOOL::makeSelection( const SELECTION_TOOL::SELECTION& aSelection )
 {
-    if( aSelection.Empty() )
-    {
-        // Try to find an item that could be modified
+    if( aSelection.Empty() )                        // Try to find an item that could be modified
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionSingle );
 
-        if( aSelection.Empty() )
-        {
-            // This is necessary, so later the tool may be activated upon
-            // reception of the activation event
-            setTransitions();
-
-            return false;   // Still no items to work with
-        }
-    }
-
-    return true;
+    return !aSelection.Empty();
 }
