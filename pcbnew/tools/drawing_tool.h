@@ -80,7 +80,7 @@ public:
      * Displays a dialog that allows to input text and its settings and then lets the user decide
      * where to place the text.
      */
-    int DrawText( TOOL_EVENT& aEvent );
+    int PlaceText( TOOL_EVENT& aEvent );
 
     /**
      * Function DrawDimension()
