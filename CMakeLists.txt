@@ -157,10 +157,17 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 
     find_package( OpenMP QUIET )
+
     if( OPENMP_FOUND )
         set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}" )
         add_definitions( -DUSE_OPENMP )
+
+        # MinGW does not include the OpenMP link library and FindOpenMP.cmake does not
+        # set it either.  Not sure this is the most elegant solution but it works.
+        if( MINGW )
+            set( OPENMP_LIBRARIES gomp )
+        endif()
     endif()
 
     if( MINGW )
