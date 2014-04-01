@@ -210,14 +210,12 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                     if( point )
                     {
                         controls->ShowCursor( true );
-                        controls->SetAutoPan( true );
                         controls->SetSnapping( true );
                         controls->ForceCursorPosition( true, point->GetPosition() );
                     }
                     else
                     {
                         controls->ShowCursor( false );
-                        controls->SetAutoPan( false );
                         controls->SetSnapping( false );
                         controls->ForceCursorPosition( false );
                     }
@@ -240,6 +238,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                     editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
                     controls->ForceCursorPosition( false );
                     m_original = *m_dragPoint;    // Save the original position
+                    controls->SetAutoPan( true );
                     modified = true;
                 }
 
@@ -267,6 +266,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 
             else if( evt->IsMouseUp( BUT_LEFT ) )
             {
+                controls->SetAutoPan( false );
                 setAltConstraint( false );
                 modified = false;
             }
