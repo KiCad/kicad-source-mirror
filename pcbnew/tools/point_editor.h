@@ -95,7 +95,7 @@ private:
     ///> Returns a point that should be used as a constrainer for 45 degrees mode.
     EDIT_POINT get45DegConstrainer() const;
 
-    // TODO docs
+    ///> Adds a new edit point on a zone outline.
     void breakOutline( const VECTOR2I& aBreakPoint );
 
     ///> Sets up handlers for various events.
