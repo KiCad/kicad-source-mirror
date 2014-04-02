@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <boost/bind.hpp>
 #include "drawing_tool.h"
 #include "common_actions.h"
 
@@ -706,14 +707,13 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
 
                 // Add all the drawable parts to preview
                 preview.Add( module );
-                module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW_GROUP::Add ),
-                                                     &preview ) );
+                module->RunOnChildren( boost::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
 
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
             else
             {
-                module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), m_view ) );
+                module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, m_view, _1 ) );
                 m_view->Add( module );
                 module->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
@@ -722,8 +722,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
 
                 // Remove from preview
                 preview.Remove( module );
-                module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW_GROUP::Remove ),
-                                                     &preview ) );
+                module->RunOnChildren( boost::bind( &KIGFX::VIEW_GROUP::Remove, &preview, _1 ) );
                 module = NULL;  // to indicate that there is no module that we currently modify
 
                 m_controls->ShowCursor( true );
