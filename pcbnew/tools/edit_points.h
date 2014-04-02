@@ -418,13 +418,23 @@ public:
     }
 
     /**
-     * Function Size()
+     * Function PointsSize()
      *
-     * Returns number of stored points.
+     * Returns number of stored EDIT_POINTs.
      */
-    unsigned int Size() const
+    unsigned int PointsSize() const
     {
         return m_points.size();
+    }
+
+    /**
+     * Function LinesSize()
+     *
+     * Returns number of stored EDIT_LINEs.
+     */
+    unsigned int LinesSize() const
+    {
+        return m_lines.size();
     }
 
     ///> @copydoc VIEW_ITEM::ViewBBox()

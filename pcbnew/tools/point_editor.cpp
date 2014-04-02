@@ -23,6 +23,7 @@
  */
 
 #include <boost/make_shared.hpp>
+#include <boost/bind.hpp>
 
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
@@ -64,16 +65,11 @@ enum DIMENSION_POINTS
     DIM_FEATUREDO,
 };
 
-/**
- * Class POINT_EDITOR
- *
- * Tool that displays edit points allowing to modify items by dragging the points.
- */
 
 class EDIT_POINTS_FACTORY
 {
 public:
-    static boost::shared_ptr<EDIT_POINTS> Make( EDA_ITEM* aItem )
+    static boost::shared_ptr<EDIT_POINTS> Make( EDA_ITEM* aItem, KIGFX::GAL* aGal )
     {
         boost::shared_ptr<EDIT_POINTS> points = boost::make_shared<EDIT_POINTS>( aItem );
 
@@ -126,10 +122,18 @@ public:
                 // Lines have to be added after creating edit points,
                 // as they use EDIT_POINT references
                 for( int i = 0; i < cornersCount - 1; ++i )
+                {
                     points->AddLine( points->Point( i ), points->Point( i + 1 ) );
+                    points->Line( i ).SetConstraint(
+                            new EC_SNAPLINE( points->Line( i ),
+                            boost::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
+                }
 
                 // The last missing line, connecting the last and the first polygon point
                 points->AddLine( points->Point( cornersCount - 1 ), points->Point( 0 ) );
+                points->Line( points->LinesSize() - 1 ).SetConstraint(
+                        new EC_SNAPLINE( points->Line( points->LinesSize() - 1 ),
+                        boost::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
                 break;
             }
 
@@ -208,7 +212,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
 
-        m_editPoints = EDIT_POINTS_FACTORY::Make( item );
+        m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_toolMgr->GetView()->GetGAL() );
         if( !m_editPoints )
         {
             setTransitions();
