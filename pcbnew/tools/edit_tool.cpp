@@ -30,15 +30,14 @@
 #include <view/view_controls.h>
 #include <ratsnest_data.h>
 #include <confirm.h>
+
 #include <cassert>
 #include <boost/foreach.hpp>
+#include <boost/bind.hpp>
 
 #include "common_actions.h"
 #include "selection_tool.h"
 #include "edit_tool.h"
-
-using namespace KIGFX;
-using boost::optional;
 
 EDIT_TOOL::EDIT_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL )
@@ -96,7 +95,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     // Offset from the dragged item's center (anchor)
     wxPoint offset;
 
-    VIEW_CONTROLS* controls = getViewControls();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
     PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
     controls->ShowCursor( true );
     controls->SetSnapping( true );
@@ -163,7 +162,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
                 m_dragging = true;
             }
 
-            selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
+            selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
         }
 
@@ -399,7 +398,7 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
         module->ClearFlags();
-        module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ), getView() ) );
+        module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, getView(), _1 ) );
 
         // Module itself is deleted after the switch scope is finished
         // list of pads is rebuild by BOARD::BuildListOfNets()

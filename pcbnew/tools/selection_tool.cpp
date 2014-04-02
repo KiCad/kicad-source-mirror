@@ -25,6 +25,7 @@
 
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
+#include <boost/bind.hpp>
 #include <cassert>
 
 #include <class_drawpanel_gal.h>
@@ -556,7 +557,7 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     if( aItem->Type() == PCB_MODULE_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
-        module->RunOnChildren( std::bind1st( std::mem_fun( &SELECTION_TOOL::selectVisually ), this ) );
+        module->RunOnChildren( boost::bind( &SELECTION_TOOL::selectVisually, this, _1 ) );
     }
 
     selectVisually( aItem );
@@ -587,7 +588,7 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
     if( aItem->Type() == PCB_MODULE_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
-        module->RunOnChildren( std::bind1st( std::mem_fun( &SELECTION_TOOL::deselectVisually ), this ) );
+        module->RunOnChildren( boost::bind( &SELECTION_TOOL::deselectVisually, this, _1 ) );
     }
 
     deselectVisually( aItem );

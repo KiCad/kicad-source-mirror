@@ -75,6 +75,7 @@
 #endif
 
 #include <class_drawpanel_gal.h>
+#include <boost/bind.hpp>
 
 // Keys used in read/write config
 #define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth_mm" )
@@ -524,7 +525,7 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     // Load modules and its additional elements
     for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
     {
-        module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), view ) );
+        module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
         view->Add( module );
     }
 
