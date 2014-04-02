@@ -27,7 +27,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gr_basic.h>
 #include <macros.h>
 #include <trigo.h>
@@ -602,7 +602,7 @@ bool LIB_PIN::Save( OUTPUTFORMATTER& aFormatter )
         break;
     }
 
-    ReturnPinStringNum( StringPinNum );
+    PinStringNum( StringPinNum );
 
     if( StringPinNum.IsEmpty() )
         StringPinNum = wxT( "~" );
@@ -824,7 +824,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
         DrawPinText = false;
 
     /* Calculate pin orient taking in account the component orientation. */
-    int     orient = ReturnPinDrawOrient( aTransform );
+    int     orient = PinDrawOrient( aTransform );
 
     /* Calculate the pin position */
     wxPoint pos1 = aTransform.TransformCoordinate( m_position ) + aOffset;
@@ -1102,7 +1102,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                                 GetLayerColor( LAYER_PINNUM ) : Color );
 
     /* Create the pin num string */
-    ReturnPinStringNum( StringPinNum );
+    PinStringNum( StringPinNum );
 
     x1 = pin_pos.x;
     y1 = pin_pos.y;
@@ -1396,7 +1396,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
     NumColor  = GetLayerColor( LAYER_PINNUM );
 
     /* Create the pin num string */
-    ReturnPinStringNum( StringPinNum );
+    PinStringNum( StringPinNum );
     x1 = pin_pos.x;
     y1 = pin_pos.y;
 
@@ -1565,7 +1565,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
 }
 
 
-wxPoint LIB_PIN::ReturnPinEndPoint() const
+wxPoint LIB_PIN::PinEndPoint() const
 {
     wxPoint pos = m_position;
 
@@ -1592,7 +1592,7 @@ wxPoint LIB_PIN::ReturnPinEndPoint() const
 }
 
 
-int LIB_PIN::ReturnPinDrawOrient( const TRANSFORM& aTransform ) const
+int LIB_PIN::PinDrawOrient( const TRANSFORM& aTransform ) const
 {
     int     orient;
     wxPoint end;   // position of pin end starting at 0,0 according to its orientation, length = 1
@@ -1637,13 +1637,13 @@ int LIB_PIN::ReturnPinDrawOrient( const TRANSFORM& aTransform ) const
 }
 
 
-void LIB_PIN::ReturnPinStringNum( wxString& aStringBuffer ) const
+void LIB_PIN::PinStringNum( wxString& aStringBuffer ) const
 {
-    aStringBuffer = ReturnPinStringNum( m_number );
+    aStringBuffer = PinStringNum( m_number );
 }
 
 
-wxString LIB_PIN::ReturnPinStringNum( long aPinNum )
+wxString LIB_PIN::PinStringNum( long aPinNum )
 {
     char ascii_buf[5];
 
@@ -1714,7 +1714,7 @@ void LIB_PIN::SetOffset( const wxPoint& aOffset )
 
 bool LIB_PIN::Inside( EDA_RECT& rect ) const
 {
-    wxPoint end = ReturnPinEndPoint();
+    wxPoint end = PinEndPoint();
 
     return rect.Contains( m_position.x, -m_position.y ) || rect.Contains( end.x, -end.y );
 }
@@ -1809,7 +1809,7 @@ void LIB_PIN::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     if( ! IsVisible() )
         return;
 
-    int     orient = ReturnPinDrawOrient( aTransform );
+    int     orient = PinDrawOrient( aTransform );
 
     wxPoint pos = aTransform.TransformCoordinate( m_position ) + offset;
 
@@ -1842,7 +1842,7 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     if( m_number == 0 )
         Text = wxT( "?" );
     else
-        ReturnPinStringNum( Text );
+        PinStringNum( Text );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Number" ), Text, DARKCYAN ) );
 
@@ -1860,7 +1860,7 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), Text, DARKGREEN ) );
 
     // Display pin length
-    Text = ReturnStringFromValue( g_UserUnit, m_length, true );
+    Text = StringFromValue( g_UserUnit, m_length, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Length" ), Text, MAGENTA ) );
 
     Text = wxGetTranslation( pin_orientation_names[ GetOrientationCodeIndex( m_orientation ) ] );
@@ -1937,7 +1937,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox() const
     }
 
     // Now, calculate boundary box corners position for the actual pin orientation
-    int orient = ReturnPinDrawOrient( DefaultTransform );
+    int orient = PinDrawOrient( DefaultTransform );
 
     /* Calculate the pin position */
     switch( orient )

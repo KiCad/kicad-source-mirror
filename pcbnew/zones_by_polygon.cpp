@@ -29,7 +29,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
@@ -205,8 +206,14 @@ static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( zone )
     {
         zone->DrawWhileCreateOutline( Panel, DC, GR_XOR );
-        zone->ClearFlags();
         zone->RemoveAllContours();
+        if( zone->IsNew() )
+        {
+            delete zone;
+            pcbframe->GetBoard()->m_CurrentZoneContour = NULL;
+        }
+        else
+            zone->ClearFlags();
     }
 
     pcbframe->SetCurItem( NULL );
@@ -511,21 +518,26 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         s_CurrentZone = NULL;
     }
 
-    // If no zone contour in progress, a new zone is being created:
-    if( !GetBoard()->m_CurrentZoneContour )
+    ZONE_CONTAINER* zone = GetBoard()->m_CurrentZoneContour;
+
+    // Verify if a new zone is allowed on this layer:
+    if( zone == NULL  )
     {
-        if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT &&
-            GetActiveLayer() >= FIRST_NON_COPPER_LAYER )
+        if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT && !IsCopperLayer( GetActiveLayer() ) )
         {
             DisplayError( this,
                           _( "Error: a keepout area is allowed only on copper layers" ) );
             return 0;
         }
-        else
-            GetBoard()->m_CurrentZoneContour = new ZONE_CONTAINER( GetBoard() );
     }
 
-    ZONE_CONTAINER* zone = GetBoard()->m_CurrentZoneContour;
+    // If no zone contour in progress, a new zone is being created,
+    if( zone == NULL )
+    {
+        zone = GetBoard()->m_CurrentZoneContour = new ZONE_CONTAINER( GetBoard() );
+        zone->SetFlags( IS_NEW );
+        zone->SetTimeStamp( GetNewTimeStamp() );
+    }
 
     if( zone->GetNumCorners() == 0 )    // Start a new contour: init zone params (net, layer ...)
     {
@@ -545,26 +557,25 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                 if( GetBoard()->GetHighLightNetCode() > 0 )
                 {
                     zoneInfo.m_NetcodeSelection = GetBoard()->GetHighLightNetCode();
-
                     zone->SetNetCode( zoneInfo.m_NetcodeSelection );
                 }
+
                 double tmp = ZONE_THERMAL_RELIEF_GAP_MIL;
-                wxGetApp().GetSettings()->Read( ZONE_THERMAL_RELIEF_GAP_STRING_KEY, &tmp );
+
+                wxConfigBase* cfg = Kiface().KifaceSettings();
+                cfg->Read( ZONE_THERMAL_RELIEF_GAP_STRING_KEY, &tmp );
                 zoneInfo.m_ThermalReliefGap = KiROUND( tmp * IU_PER_MILS);
 
                 tmp = ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL;
-                wxGetApp().GetSettings()->Read( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
-                                                &tmp );
+                cfg->Read( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY, &tmp );
                 zoneInfo.m_ThermalReliefCopperBridge = KiROUND( tmp * IU_PER_MILS );
 
                 tmp = ZONE_CLEARANCE_MIL;
-                wxGetApp().GetSettings()->Read( ZONE_CLEARANCE_WIDTH_STRING_KEY,
-                                                &tmp );
+                cfg->Read( ZONE_CLEARANCE_WIDTH_STRING_KEY, &tmp );
                 zoneInfo.m_ZoneClearance = KiROUND( tmp * IU_PER_MILS );
 
                 tmp = ZONE_THICKNESS_MIL;
-                wxGetApp().GetSettings()->Read( ZONE_MIN_THICKNESS_WIDTH_STRING_KEY,
-                                                &tmp );
+                cfg->Read( ZONE_MIN_THICKNESS_WIDTH_STRING_KEY, &tmp );
                 zoneInfo.m_ZoneMinThickness = KiROUND( tmp * IU_PER_MILS );
 
                 zoneInfo.m_CurrentZone_Layer = zone->GetLayer();
@@ -594,11 +605,14 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             m_canvas->SetIgnoreMouseEvents( false );
 
             if( edited == ZONE_ABORT )
+            {
+                GetBoard()->m_CurrentZoneContour = NULL;
+                delete zone;
                 return 0;
+            }
 
             // Switch active layer to the selected zone layer
             SetActiveLayer( zoneInfo.m_CurrentZone_Layer );
-
             SetZoneSettings( zoneInfo );
         }
         else
@@ -615,8 +629,8 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         }
 
         // Show the Net for zones on copper layers
-        if( zoneInfo.m_CurrentZone_Layer < FIRST_NON_COPPER_LAYER &&
-            ! zoneInfo.GetIsKeepout() )
+        if( IsCopperLayer( zoneInfo.m_CurrentZone_Layer ) &&
+            !zoneInfo.GetIsKeepout() )
         {
             if( s_CurrentZone )
             {
@@ -640,9 +654,6 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
     // if first segment
     if( zone->GetNumCorners() == 0 )
     {
-        zone->SetFlags( IS_NEW );
-        zone->SetTimeStamp( GetNewTimeStamp() );
-
         zoneInfo.ExportSetting( *zone );
 
         zone->Outline()->Start( zoneInfo.m_CurrentZone_Layer,

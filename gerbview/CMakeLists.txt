@@ -1,10 +1,8 @@
+set( MAKE_LINK_MAPS true )
+
 add_definitions(-DGERBVIEW)
 
-###
-# Includes
-###
-
-include_directories(BEFORE ${INC_BEFORE})
+include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ../pcbnew
     dialogs
@@ -14,11 +12,7 @@ include_directories(
     )
 
 
-###
-# Sources
-###
-
-set(DIALOGS_SRCS
+set( DIALOGS_SRCS
     dialogs/gerbview_dialog_display_options_frame_base.cpp
     dialogs/gerbview_dialog_display_options_frame.cpp
     dialogs/dialog_layers_select_to_pcb_base.cpp
@@ -29,7 +23,7 @@ set(DIALOGS_SRCS
     dialogs/dialog_show_page_borders_base.cpp
     )
 
-set(GERBVIEW_SRCS
+set( GERBVIEW_SRCS
     block.cpp
     class_am_param.cpp
     class_aperture_macro.cpp
@@ -47,7 +41,6 @@ set(GERBVIEW_SRCS
     excellon_read_drill_file.cpp
     export_to_pcbnew.cpp
     files.cpp
-    gerbview.cpp
     gerbview_config.cpp
     gerbview_frame.cpp
     hotkeys.cpp
@@ -65,10 +58,7 @@ set(GERBVIEW_SRCS
     toolbars_gerber.cpp
     )
 
-###
-# We need some extra sources from common and pcbnew
-###
-set(GERBVIEW_EXTRA_SRCS
+set( GERBVIEW_EXTRA_SRCS
     ../common/base_screen.cpp
     ../common/base_units.cpp
     ../common/eda_text.cpp
@@ -78,58 +68,125 @@ set(GERBVIEW_EXTRA_SRCS
     ../pcbnew/printout_controler.cpp
 )
 
-###
-# Windows resource file
-###
-if(WIN32)
-    if(MINGW)
-        # GERBVIEW_RESOURCES variable is set by the macro.
-        mingw_resource_compiler(gerbview)
-    else(MINGW)
-        set(GERBVIEW_RESOURCES gerbview.rc)
-    endif(MINGW)
-endif(WIN32)
+if( MINGW )
+    # GERBVIEW_RESOURCES variable is set by the macro.
+    mingw_resource_compiler( gerbview )
+endif()
 
-###
-# Apple resource files
-###
-if(APPLE)
+
+if( APPLE )
     set(GERBVIEW_RESOURCES gerbview.icns gerbview_doc.icns)
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/gerbview.icns"
-                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/gerbview_doc.icns"
-                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    set(MACOSX_BUNDLE_ICON_FILE gerbview.icns)
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.gerbview)
-endif(APPLE)
+    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/gerbview.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/gerbview_doc.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set( MACOSX_BUNDLE_ICON_FILE gerbview.icns )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.gerbview )
+endif()
 
-###
-# Create the gerbview executable
-###
-add_executable(gerbview WIN32 MACOSX_BUNDLE
-               ${GERBVIEW_SRCS}
-               ${DIALOGS_SRCS}
-               ${GERBVIEW_EXTRA_SRCS}
-               ${GERBVIEW_RESOURCES})
+if( USE_KIWAY_DLLS )
 
-###
-# Set properties for APPLE on gerbview target
-###
-if(APPLE)
-    set_target_properties(gerbview PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
-endif(APPLE)
+    add_executable( gerbview WIN32 MACOSX_BUNDLE
+        ../common/single_top.cpp
+        ../common/pgm_base.cpp
+        ${GERBVIEW_RESOURCES}
+        )
+    set_source_files_properties( ../common/single_top.cpp PROPERTIES
+        COMPILE_DEFINITIONS "TOP_FRAME=GERBER_FRAME_TYPE;BUILD_KIWAY_DLL"
+        )
+    target_link_libraries( gerbview
+        #singletop  # replaces common, giving us restrictive control and link warnings.
+        # There's way too much crap coming in from common yet.
+        common
+        bitmaps
+        ${wxWidgets_LIBRARIES}
+        )
+    if( MAKE_LINK_MAPS )
+        set_target_properties( gerbview PROPERTIES
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=gerbview.map" )
+    endif()
 
-###
-# Link executable target gerbview with correct libraries
-###
-target_link_libraries(gerbview common polygon bitmaps
-                      ${OPENGL_LIBRARIES}
-                      ${wxWidgets_LIBRARIES}
-                      ${GDI_PLUS_LIBRARIES})
+    # the main gerbview program, in DSO form.
+    add_library( gerbview_kiface MODULE
+        gerbview.cpp
+        ${GERBVIEW_SRCS}
+        ${DIALOGS_SRCS}
+        ${GERBVIEW_EXTRA_SRCS}
+#        ${GERBVIEW_RESOURCES}
+        )
+    set_target_properties( gerbview_kiface PROPERTIES
+        OUTPUT_NAME     gerbview
+        PREFIX          ${KIFACE_PREFIX}
+        SUFFIX          ${KIFACE_SUFFIX}
+        )
+    target_link_libraries( gerbview_kiface
+        common
+        polygon
+        bitmaps
+        ${OPENGL_LIBRARIES}
+        ${wxWidgets_LIBRARIES}
+        ${GDI_PLUS_LIBRARIES}
+        )
+    set_source_files_properties( gerbview.cpp PROPERTIES
+        # The KIFACE is in gerbview.cpp, export it:
+        COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+        )
+    if( MAKE_LINK_MAPS )
+        set_target_properties( gerbview_kiface PROPERTIES
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_gerbview.kiface.map" )
+    endif()
 
-###
-# Add gerbview as install target
-###
-install(TARGETS gerbview
+    # if building gerbview, then also build gerbview_kiface if out of date.
+    add_dependencies( gerbview gerbview_kiface )
+
+    # these 2 binaries are a matched set, keep them together
+    install( TARGETS gerbview
         DESTINATION ${KICAD_BIN}
-        COMPONENT binary)
+        COMPONENT binary
+        )
+    install( TARGETS gerbview_kiface
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+
+    if( APPLE )
+        # copies kiface into the bundle
+        add_custom_target( _gerbview_kiface_copy ALL
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/gerbview/_gerbview.kiface "${CMAKE_BINARY_DIR}/gerbview/gerbview.app/Contents/MacOS/"
+            DEPENDS gerbview_kiface
+            COMMENT "Copying kiface into gerbview"
+        )
+    endif()
+
+else()
+
+    add_executable( gerbview WIN32 MACOSX_BUNDLE
+        gerbview.cpp
+        ${GERBVIEW_SRCS}
+        ${DIALOGS_SRCS}
+        ${GERBVIEW_EXTRA_SRCS}
+        ${GERBVIEW_RESOURCES}
+        )
+    target_link_libraries( gerbview
+        common
+        polygon
+        bitmaps
+        ${OPENGL_LIBRARIES}
+        ${wxWidgets_LIBRARIES}
+        ${GDI_PLUS_LIBRARIES}
+        )
+    install( TARGETS gerbview
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+
+endif()
+
+if( APPLE )
+    set_target_properties( gerbview PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+endif()
+
+

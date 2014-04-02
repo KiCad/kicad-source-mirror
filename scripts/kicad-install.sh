@@ -41,7 +41,7 @@ OPTS="$OPTS -DBUILD_GITHUB_PLUGIN=ON"
 # Python scripting, uncomment to enable
 #OPTS="$OPTS -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_MODULES=ON -DKICAD_SCRIPTING_WXPYTHON=ON"
 
-LIB_REPO=~kicad-product-committers/kicad/library
+LIB_REPO=~dickelbeck/kicad/library-read-only
 
 
 usage()

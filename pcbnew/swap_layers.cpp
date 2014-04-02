@@ -367,7 +367,7 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
 
             LAYER_NUM top_layer, bottom_layer;
 
-            Via->ReturnLayerPair( &top_layer, &bottom_layer );
+            Via->LayerPair( &top_layer, &bottom_layer );
 
             if(  New_Layer[bottom_layer] >= 0 && New_Layer[bottom_layer] < LAYER_NO_CHANGE )
                 bottom_layer = New_Layer[bottom_layer];

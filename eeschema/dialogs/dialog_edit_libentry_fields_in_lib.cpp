@@ -27,7 +27,7 @@
 #include <algorithm>
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <confirm.h>
 #include <class_drawpanel.h>
 #include <wxEeschemaStruct.h>
@@ -675,13 +675,13 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
         // top of each other.
     }
 
-    wxString coordText = ReturnStringFromValue( g_UserUnit, coord.x );
+    wxString coordText = StringFromValue( g_UserUnit, coord.x );
     posXTextCtrl->SetValue( coordText );
 
     // Note: the Y axis for components in lib is from bottom to top
     // and the screen axis is top to bottom: we must change the y coord sign for editing
     NEGATE( coord.y );
-    coordText = ReturnStringFromValue( g_UserUnit, coord.y );
+    coordText = StringFromValue( g_UserUnit, coord.y );
     posYTextCtrl->SetValue( coordText );
 }
 
@@ -747,8 +747,8 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     field.SetItalic( (style & 1 ) != 0 );
     field.SetBold( (style & 2 ) != 0 );
 
-    wxPoint pos( ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue() ),
-                 ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue() ) );
+    wxPoint pos( ValueFromString( g_UserUnit, posXTextCtrl->GetValue() ),
+                 ValueFromString( g_UserUnit, posYTextCtrl->GetValue() ) );
 
     // Note: the Y axis for components in lib is from bottom to top
     // and the screen axis is top to bottom: we must change the y coord sign for editing

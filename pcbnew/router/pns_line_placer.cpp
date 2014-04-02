@@ -31,6 +31,8 @@
 
 using boost::optional;
 
+const double PNS_LINE_PLACER::m_shoveLengthThreshold = 1.7;
+
 PNS_LINE_PLACER::PNS_LINE_PLACER( PNS_NODE* aWorld )
 {
     m_initial_direction = DIRECTION_45( DIRECTION_45::N );

@@ -179,7 +179,7 @@ void DIALOG_BLOCK_OPTIONS::ExecuteCommand( wxCommandEvent& event )
 }
 
 
-int PCB_EDIT_FRAME::ReturnBlockCommand( int aKey )
+int PCB_EDIT_FRAME::BlockCommand( int aKey )
 {
     int cmd = 0;
 
@@ -656,8 +656,8 @@ void PCB_EDIT_FRAME::Block_Delete()
 void PCB_EDIT_FRAME::Block_Rotate()
 {
     wxPoint oldpos;
-    wxPoint centre;         // rotation cent-re for the rotation transform
-    int     rotAngle = 900; // rotation angle in 0.1 deg.
+    wxPoint centre;                     // rotation cent-re for the rotation transform
+    int     rotAngle = m_rotationAngle; // rotation angle in 0.1 deg.
 
     oldpos = GetCrossHairPosition();
     centre = GetScreen()->m_BlockLocate.Centre();
@@ -665,14 +665,13 @@ void PCB_EDIT_FRAME::Block_Rotate()
     OnModify();
 
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.GetItems();
-    itemsList->m_Status = UR_ROTATED;
+    itemsList->m_Status = UR_CHANGED;
 
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
         wxASSERT( item );
-        itemsList->SetPickedItemStatus( UR_ROTATED, ii );
-        item->Rotate( centre, rotAngle );
+        itemsList->SetPickedItemStatus( UR_CHANGED, ii );
 
         switch( item->Type() )
         {
@@ -706,7 +705,16 @@ void PCB_EDIT_FRAME::Block_Rotate()
         }
     }
 
-    SaveCopyInUndoList( *itemsList, UR_ROTATED, centre );
+    // Save all the block items in there current state before applying the rotation.
+    SaveCopyInUndoList( *itemsList, UR_CHANGED, centre );
+
+    // Now perform the rotation.
+    for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
+    {
+        BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
+        wxASSERT( item );
+        item->Rotate( centre, rotAngle );
+    }
 
     Compile_Ratsnest( NULL, true );
     m_canvas->Refresh( true );

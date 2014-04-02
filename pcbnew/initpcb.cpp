@@ -16,11 +16,6 @@
 #include <module_editor_frame.h>
 
 
-/**
- * Function Clear_Pcb
- * delete all and reinitialize the current board
- * @param aQuery = true to prompt user for confirmation, false to initialize silently
- */
 bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
 {
     if( GetBoard() == NULL )
@@ -40,11 +35,11 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     // Clear undo and redo lists because we want a full deletion
     GetScreen()->ClearUndoRedoList();
 
-    /* Items visibility flags will be set becuse a new board will be created.
-     * Grid and ratsnest can be left to their previous state
-     */
+    // Items visibility flags will be set becuse a new board will be created.
+    // Grid and ratsnest can be left to their previous state
     bool showGrid = IsElementVisible( GRID_VISIBLE );
     bool showRats = IsElementVisible( RATSNEST_VISIBLE );
+
     // delete the old BOARD and create a new BOARD so that the default
     // layer names are put into the BOARD.
     SetBoard( new BOARD() );
@@ -82,7 +77,6 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
 
     return true;
 }
-
 
 
 bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )

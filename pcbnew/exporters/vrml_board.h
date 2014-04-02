@@ -58,7 +58,7 @@
 #define M_PI4 ( M_PI / 4.0 )
 #endif
 
-struct GLUtesselator;
+class GLUtesselator;
 
 struct VERTEX_3D
 {

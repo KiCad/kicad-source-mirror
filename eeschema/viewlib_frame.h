@@ -48,9 +48,9 @@ class CMP_LIBRARY;
 class LIB_VIEW_FRAME : public SCH_BASE_FRAME
 {
 public:
-    LIB_VIEW_FRAME( SCH_BASE_FRAME* aParent, CMP_LIBRARY* aLibrary = NULL,
-                    wxSemaphore* aSemaphore = NULL,
-                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    LIB_VIEW_FRAME( KIWAY* aKiway, SCH_BASE_FRAME* aParent,
+        CMP_LIBRARY* aLibrary = NULL, wxSemaphore* aSemaphore = NULL,
+        long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~LIB_VIEW_FRAME();
 
@@ -66,7 +66,7 @@ public:
      * @return a reference to the current opened Library viewer
      * or NULL if no Library viewer currently opened
      */
-    static LIB_VIEW_FRAME* GetActiveLibraryViewer();
+    static LIB_VIEW_FRAME* GetActiveLibraryViewer( const wxWindow* aParent );
 
     void OnSize( wxSizeEvent& event );
 
@@ -93,23 +93,8 @@ public:
 
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
-    /**
-     * Function LoadSettings
-     * loads the library viewer frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get loaded.
-     */
-    void LoadSettings();
-
-    /**
-     * Function SaveSettings
-     * save library viewer frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get saved.
-     */
-    void SaveSettings();
+    void LoadSettings( wxConfigBase* aCfg );
+    void SaveSettings( wxConfigBase* aCfg );
 
     /**
      * Set the selected library in the library window.

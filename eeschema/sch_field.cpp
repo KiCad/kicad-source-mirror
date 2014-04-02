@@ -104,7 +104,7 @@ const wxString SCH_FIELD::GetFullyQualifiedText() const
                      wxT( "No component associated with field" ) + text );
 
         if( component->GetPartCount() > 1 )
-            text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
+            text << LIB_COMPONENT::SubReference( component->GetUnit() );
     }
 
     return text;
@@ -419,7 +419,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
         text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
         if( component->GetPartCount() > 1 )
-            text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
+            text << LIB_COMPONENT::SubReference( component->GetUnit() );
     }
 
     match = SCH_ITEM::Matches( text, aSearchData );
@@ -457,7 +457,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
         text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
         // if( component->GetPartCount() > 1 )
-        //     text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
+        //     text << LIB_COMPONENT::SubReference( component->GetUnit() );
 
         isReplaced = EDA_ITEM::Replace( aSearchData, text );
 
@@ -598,7 +598,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     else    /* We plot the reference, for a multiple parts per package */
     {
         /* Adding A, B ... to the reference */
-        wxString Text = m_Text + LIB_COMPONENT::ReturnSubReference( parent->GetUnit() );
+        wxString Text = m_Text + LIB_COMPONENT::SubReference( parent->GetUnit() );
 
         aPlotter->Text( textpos, color, Text, orient, m_Size, hjustify, vjustify,
                         thickness, m_Italic, m_Bold );

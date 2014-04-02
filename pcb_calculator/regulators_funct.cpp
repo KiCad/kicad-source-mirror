@@ -33,7 +33,7 @@
 #include <dialog_regulator_data_base.h>
 
 
-extern double ReturnDoubleFromString( const wxString& TextValue );
+extern double DoubleFromString( const wxString& TextValue );
 
 class DIALOG_EDITOR_DATA: public DIALOG_EDITOR_DATA_BASE
 {
@@ -49,7 +49,7 @@ public:
     ~DIALOG_EDITOR_DATA() {};
 
     // Event called functions:
-	void OnOKClick( wxCommandEvent& event );
+    void OnOKClick( wxCommandEvent& event );
 
     /**
      * Function IsOK()
@@ -113,7 +113,7 @@ bool DIALOG_EDITOR_DATA::IsOK()
         ok = false;
     else
     {
-        double vref = ReturnDoubleFromString( m_textCtrlVref->GetValue() );
+        double vref = DoubleFromString( m_textCtrlVref->GetValue() );
         if( fabs(vref) < 0.01 )
             ok = false;
     }
@@ -140,8 +140,8 @@ void DIALOG_EDITOR_DATA::CopyRegulatorDataToDialog( REGULATOR_DATA * aItem )
 
 REGULATOR_DATA * DIALOG_EDITOR_DATA::BuildRegulatorFromData()
 {
-    double vref = ReturnDoubleFromString( m_textCtrlVref->GetValue() );
-    double iadj = ReturnDoubleFromString( m_RegulIadjValue->GetValue() );
+    double vref = DoubleFromString( m_textCtrlVref->GetValue() );
+    double iadj = DoubleFromString( m_RegulIadjValue->GetValue() );
     int type = m_choiceRegType->GetSelection();
     if( type != 1 )
         iadj = 0.0;
@@ -382,13 +382,13 @@ void PCB_CALCULATOR_FRAME::RegulatorsSolve()
 
     // Read values from panel:
     txt = m_RegulR1Value->GetValue();
-    r1 = ReturnDoubleFromString(txt) * r1scale;
+    r1 = DoubleFromString(txt) * r1scale;
     txt = m_RegulR2Value->GetValue();
-    r2 = ReturnDoubleFromString(txt) * r2scale;
+    r2 = DoubleFromString(txt) * r2scale;
     txt = m_RegulVrefValue->GetValue();
-    vref = ReturnDoubleFromString(txt);
+    vref = DoubleFromString(txt);
     txt = m_RegulVoutValue->GetValue();
-    vout = ReturnDoubleFromString(txt);
+    vout = DoubleFromString(txt);
 
 
     // Some tests:
@@ -415,7 +415,7 @@ void PCB_CALCULATOR_FRAME::RegulatorsSolve()
     {
         // 3 terminal regulator
         txt = m_RegulIadjValue->GetValue();
-        double iadj = ReturnDoubleFromString(txt);
+        double iadj = DoubleFromString(txt);
         // iadj is given in micro amp, so convert it in amp.
         iadj /= 1000000;
 

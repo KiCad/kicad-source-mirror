@@ -400,13 +400,13 @@ public:
     void SetLayerPair( LAYER_NUM top_layer, LAYER_NUM bottom_layer );
 
     /**
-     * Function ReturnLayerPair
+     * Function LayerPair
      * Return the 2 layers used by  the via (the via actually uses
      * all layers between these 2 layers)
      *  @param top_layer = pointer to the first layer (can be null)
      *  @param bottom_layer = pointer to the last layer (can be null)
      */
-    void ReturnLayerPair( LAYER_NUM* top_layer, LAYER_NUM* bottom_layer ) const;
+    void LayerPair( LAYER_NUM* top_layer, LAYER_NUM* bottom_layer ) const;
 
     const wxPoint& GetPosition() const  {  return m_Start; }       // was overload
     void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }    // was overload

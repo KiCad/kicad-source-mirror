@@ -795,7 +795,7 @@ void SCH_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     }
 
     // Display text size (X or Y value, with are the same value in Eeschema)
-    msg = ReturnStringFromValue( g_UserUnit, m_Size.x, true );
+    msg = StringFromValue( g_UserUnit, m_Size.x, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg, RED ) );
 }
 

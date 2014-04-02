@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  5 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class KIWAY_PLAYER;
+
+#include "kiway_player.h"
 #include <wx/scrolwin.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -22,6 +25,7 @@
 #include <wx/icon.h>
 #include <wx/notebook.h>
 #include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/button.h>
@@ -37,7 +41,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class BM2CMP_FRAME_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class BM2CMP_FRAME_BASE : public wxFrame 
+class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 {
 	private:
 	
@@ -47,15 +51,21 @@ class BM2CMP_FRAME_BASE : public wxFrame
 		wxScrolledWindow* m_GreyscalePicturePanel;
 		wxScrolledWindow* m_BNPicturePanel;
 		wxPanel* m_panelRight;
-		wxStaticText* m_staticTextSizeX;
+		wxStaticText* m_staticTextSize;
 		wxStaticText* m_SizeXValue;
-		wxStaticText* m_SizeXunits;
-		wxStaticText* m_staticTextSizeY;
 		wxStaticText* m_SizeYValue;
-		wxStaticText* m_SizeYunits;
+		wxStaticText* m_SizePixUnits;
+		wxStaticText* m_staticTextSize1;
+		wxStaticText* m_SizeXValue_mm;
+		wxStaticText* m_SizeYValue_mm;
+		wxStaticText* m_Size_mmxUnits;
 		wxStaticText* m_staticTextBPP;
 		wxStaticText* m_BPPValue;
 		wxStaticText* m_BPPunits;
+		wxStaticText* m_staticTextBPI;
+		wxTextCtrl* m_DPIValueX;
+		wxTextCtrl* m_DPIValueY;
+		wxStaticText* m_DPI_Units;
 		wxButton* m_buttonLoad;
 		wxButton* m_buttonExport;
 		wxRadioBox* m_radioBoxFormat;
@@ -66,6 +76,9 @@ class BM2CMP_FRAME_BASE : public wxFrame
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPaint( wxPaintEvent& event ) { event.Skip(); }
+		virtual void UpdatePPITextValueX( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnResolutionChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void UpdatePPITextValueY( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnLoadFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOptionsSelection( wxCommandEvent& event ) { event.Skip(); }

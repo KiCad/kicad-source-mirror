@@ -33,7 +33,7 @@
 #include <confirm.h>
 #include <eda_doc.h>
 #include <kicad_string.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
 #include <filter_reader.h>
@@ -119,13 +119,12 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
     wxSemaphore semaphore( 0, 1 );
 
     // Close the current Lib browser, if opened, and open a new one, in "modal" mode:
-    FOOTPRINT_VIEWER_FRAME * viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
+    FOOTPRINT_VIEWER_FRAME* viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( this );
 
     if( viewer )
         viewer->Destroy();
 
-    viewer = new FOOTPRINT_VIEWER_FRAME( this, m_footprintLibTable, &semaphore,
-                                         KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+    viewer = new FOOTPRINT_VIEWER_FRAME( &Kiway(), this, &semaphore );
 
     // Show the library viewer frame until it is closed
     while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
@@ -318,28 +317,29 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const FPID& aFootprintId )
 MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
     throw( IO_ERROR, PARSE_ERROR )
 {
-    wxCHECK_MSG( m_footprintLibTable != NULL, NULL,
-                 wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
+    FP_LIB_TABLE*   fptbl = FootprintLibs();
+
+    wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
 
     wxString   nickname = aFootprintId.GetLibNickname();
     wxString   fpname   = aFootprintId.GetFootprintName();
 
     if( nickname.size() )
     {
-        return m_footprintLibTable->FootprintLoad( nickname, fpname );
+        return fptbl->FootprintLoad( nickname, fpname );
     }
 
     // user did not enter a nickname, just a footprint name, help him out a little:
     else
     {
-        std::vector<wxString> nicks = m_footprintLibTable->GetLogicalLibs();
+        std::vector<wxString> nicks = fptbl->GetLogicalLibs();
 
         // Search each library going through libraries alphabetically.
         for( unsigned i = 0;  i<nicks.size();  ++i )
         {
             // FootprintLoad() returns NULL on not found, does not throw exception
             // unless there's an IO_ERROR.
-            MODULE* ret = m_footprintLibTable->FootprintLoad( nicks[i], fpname );
+            MODULE* ret = fptbl->FootprintLoad( nicks[i], fpname );
             if( ret )
                 return ret;
         }

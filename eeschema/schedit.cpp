@@ -28,8 +28,9 @@
  */
 
 #include <fctsys.h>
+#include <kiway.h>
 #include <gr_basic.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <eda_doc.h>
@@ -294,8 +295,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( LibEntry && LibEntry->GetDocFileName() != wxEmptyString )
             {
-                GetAssociatedDocument( this, LibEntry->GetDocFileName(),
-                                       &wxGetApp().GetLibraryPathList() );
+                SEARCH_STACK* lib_search = &Prj().SchSearchS();
+
+                GetAssociatedDocument( this, LibEntry->GetDocFileName(), lib_search );
             }
         }
         break;

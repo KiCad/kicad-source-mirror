@@ -53,7 +53,7 @@ TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
 
 #define TRANSLINE_PRM_KEY wxT( "translineprm%d" )
 
-void TRANSLINE_PRM::ReadConfig( wxConfig* aConfig )
+void TRANSLINE_PRM::ReadConfig( wxConfigBase* aConfig )
 {
     if( m_Id == UNKNOWN_ID || m_Id == DUMMY_PRM )
         return;
@@ -65,7 +65,7 @@ void TRANSLINE_PRM::ReadConfig( wxConfig* aConfig )
 }
 
 
-void TRANSLINE_PRM::WriteConfig( wxConfig* aConfig )
+void TRANSLINE_PRM::WriteConfig( wxConfigBase* aConfig )
 {
     if( m_Id == UNKNOWN_ID || m_Id == DUMMY_PRM )
         return;
@@ -100,7 +100,7 @@ double TRANSLINE_PRM::FromUserUnit()
  * A class to handle a list of parameters of a given transline
  */
 
-TRANSLINE_IDENT::TRANSLINE_IDENT( enum transline_type_id aType )
+TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 {
     m_Type = aType;                     // The type of transline handled
     m_Icon = NULL;                      // An xpm icon to display in dialogs
@@ -129,7 +129,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum transline_type_id aType )
 
     switch( m_Type )
     {
-    case microstrip_type:      // microstrip
+    case MICROSTRIP_TYPE:      // microstrip
         m_TLine    = new MICROSTRIP();
         m_Icon = new wxBitmap( microstrip_xpm );
 
@@ -165,7 +165,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum transline_type_id aType )
                                    _( "Ang_l" ), _( "Electrical Length" ), 0.0, true ) );
         break;
 
-    case cpw_type:          // coplanar waveguide
+    case CPW_TYPE:          // coplanar waveguide
         m_TLine    = new COPLANAR();
         m_Icon = new wxBitmap( cpw_xpm );
         m_HasPrmSelection = true;
@@ -197,7 +197,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum transline_type_id aType )
                                    _( "Ang_l" ), _( "Electrical Length" ), 0.0, true ) );
         break;
 
-    case grounded_cpw_type:      // grounded coplanar waveguide
+    case GROUNDED_CPW_TYPE:      // grounded coplanar waveguide
         m_TLine    = new GROUNDEDCOPLANAR();
         m_Icon = new wxBitmap( cpw_back_xpm );
         m_HasPrmSelection = true;
@@ -230,7 +230,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum transline_type_id aType )
         break;
 
 
-    case rectwaveguide_type:      // rectangular waveguide
+    case RECTWAVEGUIDE_TYPE:      // rectangular waveguide
         m_TLine    = new RECTWAVEGUIDE();
         m_Icon = new wxBitmap( rectwaveguide_xpm );
         m_HasPrmSelection = true;
@@ -264,7 +264,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum transline_type_id aType )
                                    _( "Ang_l" ), _( "Electrical Length" ), 0, true ) );
         break;
 
-    case coax_type:      // coaxial cable
+    case COAX_TYPE:      // coaxial cable
         m_TLine    = new COAX();
         m_Icon = new wxBitmap( coax_xpm );
         m_HasPrmSelection = true;
@@ -295,7 +295,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum transline_type_id aType )
                                    _( "Ang_l" ), _( "Electrical Length" ), 0.0, true ) );
         break;
 
-    case c_microstrip_type:      // coupled microstrip
+    case C_MICROSTRIP_TYPE:      // coupled microstrip
         m_TLine    = new C_MICROSTRIP();
         m_Icon = new wxBitmap( c_microstrip_xpm );
         m_HasPrmSelection = true;
@@ -328,14 +328,14 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum transline_type_id aType )
                                    _( "L" ), _( "Line Length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_E_PRM,
-                                   _( "Z0e" ), _( "Even-Mode Impedance" ), 50.0, true ) );
+                                   _( "Z0e (Zdiff)" ), _( "Even-Mode impedance (diff impedance)" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_O_PRM,
-                                   _( "Z0o" ), _( "Odd-Mode Impedance" ), 50.0, true ) );
+                                   _( "Z0o (Z0)" ), _( "Odd-Mode impedance" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   _( "Ang_l" ), _( "Electrical Length" ), 0.0, true ) );
+                                   _( "Ang_l" ), _( "Electrical length" ), 0.0, true ) );
         break;
 
-    case stripline_type:      // stripline
+    case STRIPLINE_TYPE:      // stripline
         m_TLine    = new STRIPLINE();
         m_Icon = new wxBitmap( stripline_xpm );
 
@@ -367,7 +367,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum transline_type_id aType )
                                    _( "Ang_l" ), _( "Electrical Length" ), 0, true ) );
         break;
 
-    case twistedpair_type:      // twisted pair
+    case TWISTEDPAIR_TYPE:      // twisted pair
         m_TLine    = new TWISTEDPAIR();
         m_Icon = new wxBitmap( twistedpair_xpm );
         m_HasPrmSelection = true;
@@ -399,7 +399,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum transline_type_id aType )
                                    _( "Ang_l" ), _( "Electrical Length" ), 0.0, true ) );
         break;
 
-    case end_of_list_type:      // Not really used
+    case END_OF_LIST_TYPE:      // Not really used
         break;
     }
 }
@@ -415,7 +415,7 @@ TRANSLINE_IDENT::~TRANSLINE_IDENT()
 }
 
 
-void TRANSLINE_IDENT::ReadConfig( wxConfig* aConfig )
+void TRANSLINE_IDENT::ReadConfig( wxConfigBase* aConfig )
 {
     wxString text = wxString::FromUTF8( m_TLine->m_name );
     aConfig->SetPath( text );
@@ -426,7 +426,7 @@ void TRANSLINE_IDENT::ReadConfig( wxConfig* aConfig )
 }
 
 
-void TRANSLINE_IDENT::WriteConfig( wxConfig* aConfig )
+void TRANSLINE_IDENT::WriteConfig( wxConfigBase* aConfig )
 {
     wxString text = wxString::FromUTF8( m_TLine->m_name );
     aConfig->SetPath( text );

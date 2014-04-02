@@ -6,7 +6,8 @@
 #define wxTEST_POSTSCRIPT_IN_MSW 1
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <common.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -40,7 +41,7 @@ class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
 {
 private:
     GERBVIEW_FRAME* m_Parent;
-    wxConfig*         m_Config;
+    wxConfigBase*         m_Config;
     wxCheckBox*       m_BoxSelectLayer[32];
 
 public:
@@ -100,7 +101,7 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( GERBVIEW_FRAME* parent )
 /*************************************************************************************/
 {
     m_Parent = parent;
-    m_Config = wxGetApp().GetSettings();
+    m_Config = Kiface().KifaceSettings();
 
     InitValues( );
     GetSizer()->SetSizeHints( this );

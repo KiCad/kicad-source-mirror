@@ -29,7 +29,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <worksheet.h>
 #include <plot_common.h>
 #include <class_sch_screen.h>
@@ -63,7 +64,7 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent ) :
     DIALOG_PLOT_SCHEMATIC_BASE( parent )
 {
     m_parent = parent;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
 
     initDlg();
 
@@ -177,7 +178,7 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
     m_config->Write( PLOT_HPGL_PEN_SIZE_KEY, m_HPGLPenSize/IU_PER_MM );
 
     m_pageSizeSelect    = m_PaperSizeOption->GetSelection();
-    SetDefaultLineThickness( ReturnValueFromTextCtrl( *m_DefaultLineSizeCtrl ) );
+    SetDefaultLineThickness( ValueFromTextCtrl( *m_DefaultLineSizeCtrl ) );
 }
 
 

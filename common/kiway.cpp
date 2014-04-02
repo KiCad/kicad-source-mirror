@@ -35,10 +35,11 @@ wxDynamicLibrary KIWAY::s_pcb_dso;
 
 KIWAY::KIWAY()
 {
-    memset( &m_dso_players, 0, sizeof( m_dso_players ) );
+    memset( &m_kiface, 0, sizeof( m_kiface ) );
 }
 
 
+/*
 const wxString KIWAY::dso_name( FACE_T aFaceId )
 {
     switch( aFaceId )
@@ -51,11 +52,12 @@ const wxString KIWAY::dso_name( FACE_T aFaceId )
         return wxEmptyString;
     }
 }
+*/
 
 
-PROJECT& KIWAY::Project()
+PROJECT& KIWAY::Prj() const
 {
-    return m_project;
+    return *(PROJECT*) &m_project;      // strip const-ness, function really is const.
 }
 
 
@@ -65,10 +67,8 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
     {
     case FACE_SCH:
     case FACE_PCB:
-    //case FACE_LIB:
-    //case FACE_MOD:
-        if( m_dso_players[aFaceId] )
-            return m_dso_players[aFaceId];
+        if( m_kiface[aFaceId] )
+            return m_kiface[aFaceId];
 
     default:
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
@@ -86,8 +86,6 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         case FACE_PCB:
             break;
 
-        //case FACE_LIB:
-        //case FACE_MOD:
         default:
             ;
         }

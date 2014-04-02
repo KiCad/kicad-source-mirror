@@ -251,8 +251,14 @@ public:
      * function ReadandInsert3DComponentShape
      * read the 3D component shape(s) of the footprint (physical shape)
      * and insert mesh in gl list
+     * @param glcanvas = the openGL canvas
+     * @param  aAllowNonTransparentObjects = true to load non transparent objects
+     * @param  aAllowTransparentObjects = true to load non transparent objects
+     * in openGL, transparent objects should be drawn *after* non transparent objects
      */
-    void ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas );
+    void ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
+                                        bool aAllowNonTransparentObjects,
+                                        bool aAllowTransparentObjects );
 
     /**
      * function TransformPadsShapesWithClearanceToPolygon
@@ -482,14 +488,14 @@ public:
     static bool IsLibNameValid( const wxString & aName );
 
     /**
-     * static function ReturnStringLibNameInvalidChars
+     * static function StringLibNameInvalidChars
      * Test for validity of the name in a library of the footprint
      * ( no spaces, dir separators ... )
      * @param aUserReadable = false to get the list of invalid chars
      *        true to get a readable form (i.e ' ' = 'space' '\\t'= 'tab')
      * @return a constant std::string giving the list of invalid chars in lib name
      */
-    static const wxChar* ReturnStringLibNameInvalidChars( bool aUserReadable );
+    static const wxChar* StringLibNameInvalidChars( bool aUserReadable );
 
     /**
      * Function SetInitialComments

@@ -29,7 +29,8 @@
 
 #include <wx/wx.h>
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <confirm.h>
 #include <PolyLine.h>
 #include <pcbnew.h>
@@ -57,7 +58,7 @@ public:
 
 private:
     PCB_BASE_FRAME* m_Parent;
-    wxConfig*       m_Config;               ///< Current config
+    wxConfigBase*       m_Config;               ///< Current config
 
     ZONE_EDIT_T     m_OnExitCode;           ///< exit code: ZONE_ABORT if no change,
                                             ///< ZONE_OK if new values accepted
@@ -139,7 +140,7 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     DIALOG_COPPER_ZONE_BASE( aParent )
 {
     m_Parent = aParent;
-    m_Config = wxGetApp().GetSettings();
+    m_Config = Kiface().KifaceSettings();
 
     m_ptr = aSettings;
     m_settings = *aSettings;
@@ -173,11 +174,11 @@ void DIALOG_COPPER_ZONE::initDialog()
     m_FillModeCtrl->SetSelection( m_settings.m_FillMode ? 1 : 0 );
 
     AddUnitSymbol( *m_ClearanceValueTitle, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit, m_settings.m_ZoneClearance );
+    msg = StringFromValue( g_UserUnit, m_settings.m_ZoneClearance );
     m_ZoneClearanceCtrl->SetValue( msg );
 
     AddUnitSymbol( *m_MinThicknessValueTitle, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit, m_settings.m_ZoneMinThickness );
+    msg = StringFromValue( g_UserUnit, m_settings.m_ZoneMinThickness );
     m_ZoneMinThicknessCtrl->SetValue( msg );
 
     switch( m_settings.GetPadConnection() )
@@ -388,7 +389,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     m_settings.m_FillMode = (m_FillModeCtrl->GetSelection() == 0) ? 0 : 1;
 
     wxString txtvalue = m_ZoneClearanceCtrl->GetValue();
-    m_settings.m_ZoneClearance = ReturnValueFromString( g_UserUnit, txtvalue );
+    m_settings.m_ZoneClearance = ValueFromString( g_UserUnit, txtvalue );
 
     // Test if this is a reasonable value for this parameter
     // A too large value can hang Pcbnew
@@ -403,7 +404,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     }
 
     txtvalue = m_ZoneMinThicknessCtrl->GetValue();
-    m_settings.m_ZoneMinThickness = ReturnValueFromString( g_UserUnit, txtvalue );
+    m_settings.m_ZoneMinThickness = ValueFromString( g_UserUnit, txtvalue );
 
     if( m_settings.m_ZoneMinThickness < (ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS) )
     {
@@ -416,7 +417,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     m_settings.SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
     txtvalue = m_cornerSmoothingCtrl->GetValue();
-    m_settings.SetCornerRadius( ReturnValueFromString( g_UserUnit, txtvalue ) );
+    m_settings.SetCornerRadius( ValueFromString( g_UserUnit, txtvalue ) );
 
     m_settings.m_ZonePriority = m_PriorityLevelCtrl->GetValue();
 
@@ -425,8 +426,8 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     else
         m_settings.m_Zone_45_Only = true;
 
-    m_settings.m_ThermalReliefGap = ReturnValueFromTextCtrl( *m_AntipadSizeValue );
-    m_settings.m_ThermalReliefCopperBridge = ReturnValueFromTextCtrl( *m_CopperWidthValue );
+    m_settings.m_ThermalReliefGap = ValueFromTextCtrl( *m_AntipadSizeValue );
+    m_settings.m_ThermalReliefCopperBridge = ValueFromTextCtrl( *m_CopperWidthValue );
 
     if( m_Config )
     {
@@ -624,7 +625,7 @@ void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
 {
     wxArrayString   listNetName;
 
-    m_Parent->GetBoard()->ReturnSortedNetnamesList( listNetName, m_NetSortingByPadCount );
+    m_Parent->GetBoard()->SortedNetnamesList( listNetName, m_NetSortingByPadCount );
 
     if( m_NetFiltering )
     {

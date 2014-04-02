@@ -3,7 +3,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <base_units.h>
@@ -77,7 +78,7 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
     SetReturnCode( ZONE_ABORT );  // Will be changed on button click
 
     AddUnitSymbol( *m_MinThicknessValueTitle, g_UserUnit );
-    wxString msg = ReturnStringFromValue( g_UserUnit, m_settings.m_ZoneMinThickness );
+    wxString msg = StringFromValue( g_UserUnit, m_settings.m_ZoneMinThickness );
     m_ZoneMinThicknessCtrl->SetValue( msg );
 
     if( m_settings.m_Zone_45_Only )
@@ -127,7 +128,7 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::OnOkClick( wxCommandEvent& event )
 {
    wxString txtvalue = m_ZoneMinThicknessCtrl->GetValue();
 
-    m_settings.m_ZoneMinThickness = ReturnValueFromString( g_UserUnit, txtvalue );
+    m_settings.m_ZoneMinThickness = ValueFromString( g_UserUnit, txtvalue );
 
     if( m_settings.m_ZoneMinThickness < 10 )
     {
@@ -153,11 +154,10 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::OnOkClick( wxCommandEvent& event )
         break;
     }
 
-    if( wxGetApp().GetSettings() )
-    {
-        wxGetApp().GetSettings()->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
-                                         (long) m_settings.m_Zone_HatchingStyle );
-    }
+    wxConfigBase* cfg = Kiface().KifaceSettings();
+    wxASSERT( cfg );
+
+    cfg->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY, (long) m_settings.m_Zone_HatchingStyle );
 
     if( m_OrientEdgesOpt->GetSelection() == 0 )
         m_settings.m_Zone_45_Only = false;

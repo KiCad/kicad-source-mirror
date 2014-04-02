@@ -2,7 +2,7 @@
 [Desktop Entry]
 Categories=Development;Electronics
 Comment=Design a printed circuit board
-Exec=pcbcalculator
+Exec=pcb_calculator
 GenericName=EDA Suite
 Icon=pcbcalculator
 MimeType=application/x-pcbcalculator-project;

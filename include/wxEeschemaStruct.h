@@ -31,7 +31,7 @@
 #define  WX_EESCHEMA_STRUCT_H
 
 #include <sch_base_frame.h>
-#include <param_config.h>
+#include <config_params.h>
 #include <class_undoredo_container.h>
 #include <template_fieldnames.h>
 #include <block_commande.h>
@@ -66,7 +66,7 @@ class wxFindDialogEvent;
 class wxFindReplaceData;
 
 
-/* enum used in RotationMiroir() */
+/// enum used in RotationMiroir()
 enum COMPONENT_ORIENTATION_T {
     CMP_NORMAL,                     // Normal orientation, no rotation or mirror
     CMP_ROTATE_CLOCKWISE,           // Rotate -90
@@ -115,6 +115,7 @@ enum SCH_SEARCH_T {
 class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 {
 private:
+
     SCH_SHEET_PATH*         m_CurrentSheet;    ///< which sheet we are presently working on.
     wxString                m_DefaultSchematicFileName;
     int                     m_TextFieldSize;
@@ -197,10 +198,7 @@ protected:
     void updateFindReplaceView( wxFindDialogEvent& aEvent );
 
 public:
-    SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
-                    const wxPoint& aPosition, const wxSize& aSize,
-                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
-
+    SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SCH_EDIT_FRAME();
 
     SCH_SCREEN* GetScreen() const;                  // overload SCH_BASE_FRAME
@@ -338,8 +336,8 @@ public:
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings( void );
 
-    void LoadSettings();
-    void SaveSettings();
+    void LoadSettings( wxConfigBase* aCfg );
+    void SaveSettings( wxConfigBase* aCfg );
 
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
@@ -639,23 +637,23 @@ public:
     void OnSaveProject( wxCommandEvent& aEvent );
 
     /**
-     * Function LoadOneEEProject
-     * load an entire project into the schematic editor.
+     * Function OpenProjectFiles
+     * loads an entire project into the schematic editor.
      *
      * This function loads  schematic root file and it's subhierarchies, the project
      * configuration, and the component libraries which are not already loaded.
      *
-     * @param aFileName The full path an file name to load.
-     * @param aIsNew True indicates that this is a new project and the default project
-     *               template is loaded.
-     * @return True if the project loaded properly.
+     * @param aFileSet is a list of one file, the top level schematic.
+     *
+     * @return bool - true if the project loaded properly, else false.
      */
-    bool LoadOneEEProject( const wxString& aFileName, bool aIsNew );
+    //bool LoadOneEEProject( const wxString& aFileName, bool aIsNew );
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 );  // virtual from KIWAY_PLAYER
 
     /**
      * Function AppendOneEEProject
-     * read an entire project and loads it into the schematic editor *whitout* replacing the
-     * existing contents.
+     * read an entire project and loads it into the schematic editor *without*
+     * replacing the existing contents.
      * @return True if the project was imported properly.
      */
     bool AppendOneEEProject();
@@ -1152,14 +1150,14 @@ public:
     void InitBlockPasteInfos();
 
     /**
-     * Function ReturnBlockCommand
+     * Function BlockCommand
      * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
      * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
      * block command is started by dragging the mouse.
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int ReturnBlockCommand( int aKey );
+    virtual int BlockCommand( int aKey );
 
     /**
      * Function HandleBlockPlace

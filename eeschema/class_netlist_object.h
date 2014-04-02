@@ -33,7 +33,7 @@
 
 
 #include <sch_sheet_path.h>
-#include <lib_pin.h>      // LIB_PIN::ReturnPinStringNum( m_PinNum )
+#include <lib_pin.h>      // LIB_PIN::PinStringNum( m_PinNum )
 
 class NETLIST_OBJECT_LIST;
 class SCH_COMPONENT;
@@ -179,7 +179,7 @@ public:
     wxString GetPinNumText()
     {
         // hide the ugliness in here, but do it inline.
-        return LIB_PIN::ReturnPinStringNum( m_PinNum );
+        return LIB_PIN::PinStringNum( m_PinNum );
     }
 
     /**  For Pins (NET_PINS):

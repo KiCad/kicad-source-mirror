@@ -46,7 +46,7 @@ class DIALOG_PLOT_SCHEMATIC : public DIALOG_PLOT_SCHEMATIC_BASE
 {
 private:
     SCH_EDIT_FRAME* m_parent;
-    wxConfig*       m_config;
+    wxConfigBase*       m_config;
     static int      m_pageSizeSelect;       // Static to keep last option for some format:
                                             // Static to keep last option:
                                             // use default size or force A or A4 size
@@ -58,10 +58,10 @@ public:
     DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent );
 
 private:
-	void OnPlotFormatSelection( wxCommandEvent& event );
-	void OnButtonPlotCurrentClick( wxCommandEvent& event );
-	void OnButtonPlotAllClick( wxCommandEvent& event );
-	void OnButtonCancelClick( wxCommandEvent& event );
+    void OnPlotFormatSelection( wxCommandEvent& event );
+    void OnButtonPlotCurrentClick( wxCommandEvent& event );
+    void OnButtonPlotAllClick( wxCommandEvent& event );
+    void OnButtonCancelClick( wxCommandEvent& event );
 
     void    initDlg();
 

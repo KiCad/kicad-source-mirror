@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -64,7 +64,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                      const wxPoint& aPosition, bool aErase );
 
 
-int SCH_EDIT_FRAME::ReturnBlockCommand( int key )
+int SCH_EDIT_FRAME::BlockCommand( int key )
 {
     int cmd = BLOCK_IDLE;
 

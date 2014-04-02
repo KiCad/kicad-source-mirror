@@ -573,7 +573,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        pad->ReturnStringPadName( buf );
+        pad->StringPadName( buf );
 #if 1
         if( buf.CmpNoCase( aPadName ) == 0 )    // why case insensitive?
 #else
@@ -588,7 +588,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 
 D_PAD* MODULE::GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
-    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         // ... and on the correct layer.
         if( ( pad->GetLayerMask() & aLayerMask ) == 0 )
@@ -770,7 +770,7 @@ void MODULE::ViewUpdate( int aUpdateFlags )
  */
 bool MODULE::IsLibNameValid( const wxString & aName )
 {
-    const wxChar * invalids = ReturnStringLibNameInvalidChars( false );
+    const wxChar * invalids = StringLibNameInvalidChars( false );
 
     if( aName.find_first_of( invalids ) != std::string::npos )
         return false;
@@ -786,7 +786,7 @@ bool MODULE::IsLibNameValid( const wxString & aName )
  * return a constant string giving the list of invalid chars in lib name
  * static function
  */
-const wxChar* MODULE::ReturnStringLibNameInvalidChars( bool aUserReadable )
+const wxChar* MODULE::StringLibNameInvalidChars( bool aUserReadable )
 {
     static const wxChar invalidChars[] = wxT("%$\t \"\\/");
     static const wxChar invalidCharsReadable[] = wxT("% $ 'tab' 'space' \\ \" /");
@@ -892,7 +892,7 @@ void MODULE::Flip( const wxPoint& aCentre )
         case PCB_MODULE_TEXT_T:
             text = (TEXTE_MODULE*) item;
             text->m_Pos.y -= m_Pos.y;
-            NEGATE( text->m_Pos0.y );
+            NEGATE( text->m_Pos.y );
             text->m_Pos.y += m_Pos.y;
             NEGATE( text->m_Pos0.y );
             NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );

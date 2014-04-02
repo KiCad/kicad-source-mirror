@@ -3,7 +3,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <common.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -14,23 +14,25 @@
 #include <macros.h>
 
 
-void EDA_APP::ReadPdfBrowserInfos()
+void PGM_BASE::ReadPdfBrowserInfos()
 {
-    wxASSERT( m_commonSettings != NULL );
+    wxASSERT( m_common_settings );
 
-    m_PdfBrowser = m_commonSettings->Read( wxT( "PdfBrowserName" ), wxEmptyString );
+    wxString browser = m_common_settings->Read( wxT( "PdfBrowserName" ), wxEmptyString );
+    SetPdfBrowserName( browser );
+
     int tmp;
-    m_commonSettings->Read( wxT( "UseSystemBrowser" ), &tmp, 0 );
-    m_useSystemPdfBrowser = tmp != 0;
+    m_common_settings->Read( wxT( "UseSystemBrowser" ), &tmp, 0 );
+    m_use_system_pdf_browser = bool( tmp );
 }
 
 
-void EDA_APP::WritePdfBrowserInfos()
+void PGM_BASE::WritePdfBrowserInfos()
 {
-    wxASSERT( m_commonSettings != NULL );
+    wxASSERT( m_common_settings );
 
-    m_commonSettings->Write( wxT( "PdfBrowserName" ), m_PdfBrowser );
-    m_commonSettings->Write( wxT( "UseSystemBrowser" ), m_useSystemPdfBrowser );
+    m_common_settings->Write( wxT( "PdfBrowserName" ), GetPdfBrowserName() );
+    m_common_settings->Write( wxT( "UseSystemBrowser" ), m_use_system_pdf_browser );
 }
 
 
@@ -126,7 +128,7 @@ bool GetAssociatedDocument( wxFrame* aFrame,
 
     if( !wxFileExists( fullfilename ) )
     {
-        msg.Printf( _( "Doc File <%s> not found" ), GetChars( aDocName ) );
+        msg.Printf( _( "Doc File '%s' not found" ), GetChars( aDocName ) );
         DisplayError( aFrame, msg );
         return false;
     }

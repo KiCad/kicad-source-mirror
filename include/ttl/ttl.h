@@ -357,7 +357,7 @@ private:
     
     ForwardIterator it;
     for (it = first; it != last; ++it) {
-      bool status = insertNode<TraitsType>(dart, **it);
+      insertNode<TraitsType>(dart, **it);
     }
   }
 
@@ -1913,14 +1913,5 @@ passes:
   //@} // End of Utilities for Delaunay Triangulation Group
   
 }; // End of ttl namespace scope (but other files may also contain functions for ttl)
-
-
-  //------------------------------------------------------------------------------------------------
-  // ----------------------------- Constrained Triangulation Group --------------------------------
-  //------------------------------------------------------------------------------------------------
-  
-  // Still namespace ttl
-
-#include <ttl/ttl_constr.h>
 
 #endif // _TTL_H_

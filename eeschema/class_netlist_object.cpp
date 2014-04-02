@@ -259,7 +259,7 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
     i = busNumber.Find( '[' );
     i++;
 
-    while( busNumber[i] != '.' && i < busNumber.Len() )
+    while( i < busNumber.Len() && busNumber[i] != '.' )
     {
         tmp.Append( busNumber[i] );
         i++;
@@ -267,12 +267,12 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
 
     tmp.ToLong( &begin );
 
-    while( busNumber[i] == '.' && i < busNumber.Len() )
+    while( i < busNumber.Len() && busNumber[i] == '.' )
         i++;
 
     tmp.Empty();
 
-    while( busNumber[i] != ']' && i < busNumber.Len() )
+    while( i < busNumber.Len() && busNumber[i] != ']' )
     {
         tmp.Append( busNumber[i] );
         i++;
@@ -353,7 +353,7 @@ wxString NETLIST_OBJECT::GetShortNetName() const
             netName = wxT("Net-(");
             netName << link->GetRef( &m_netNameCandidate->m_SheetPath );
             netName << wxT("-Pad")
-                    << LIB_PIN::ReturnPinStringNum( m_netNameCandidate->m_PinNum )
+                    << LIB_PIN::PinStringNum( m_netNameCandidate->m_PinNum )
                     << wxT(")");
         }
     }

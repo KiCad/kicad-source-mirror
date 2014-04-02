@@ -2,7 +2,8 @@
 /* File: dialog_print_for_modedit.cpp */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcbnew.h>
@@ -34,7 +35,7 @@ public:
 
 private:
     PCB_BASE_FRAME* m_parent;
-    wxConfig*       m_config;
+    wxConfigBase*       m_config;
 
     void OnCloseWindow( wxCloseEvent& event );
 
@@ -87,7 +88,7 @@ DIALOG_PRINT_FOR_MODEDIT::DIALOG_PRINT_FOR_MODEDIT( PCB_BASE_FRAME* parent ) :
 {
     m_parent = parent;
     s_Parameters.m_ForceCentered = true;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
     InitValues();
 
     m_buttonPrint->SetDefault();

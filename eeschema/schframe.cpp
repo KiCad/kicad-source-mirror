@@ -27,7 +27,9 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiway.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <gestfich.h>
@@ -173,12 +175,9 @@ END_EVENT_TABLE()
 
 #define SCH_EDIT_FRAME_NAME wxT( "SchematicFrame" )
 
-
-SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
-                    const wxPoint& aPosition, const wxSize& aSize,
-                    long aStyle ) :
-    SCH_BASE_FRAME( aParent, SCHEMATIC_FRAME_TYPE, aTitle, aPosition, aSize,
-                    aStyle, SCH_EDIT_FRAME_NAME ),
+SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
+    SCH_BASE_FRAME( aKiway, aParent, SCHEMATIC_FRAME_TYPE, wxT( "Eeschema" ),
+        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
     m_item_to_repeat( 0 )
 {
     m_FrameName = SCH_EDIT_FRAME_NAME;
@@ -212,8 +211,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
     // Initialize grid id to the default value (50 mils):
     m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
-    /* Get config */
-    LoadSettings();
+    LoadSettings( config() );
 
     // Ensure m_LastGridSizeId is an offset inside the allowed schematic range
     if( m_LastGridSizeId < ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000 )
@@ -448,7 +446,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     if( libeditFrame && !libeditFrame->Close() )   // Can close component editor?
         return;
 
-    LIB_VIEW_FRAME * viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer();;
+    LIB_VIEW_FRAME* viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer( this );
     if( viewlibFrame && !viewlibFrame->Close() )   // Can close component viewer?
         return;
 
@@ -716,12 +714,10 @@ void SCH_EDIT_FRAME::OnFindDialogClose( wxFindDialogEvent& event )
 
 void SCH_EDIT_FRAME::OnLoadFile( wxCommandEvent& event )
 {
-    wxString fn;
+    wxString fn = GetFileFromHistory( event.GetId(), _( "Schematic" ) );
 
-    fn = GetFileFromHistory( event.GetId(), _( "Schematic" ) );
-
-    if( fn != wxEmptyString )
-        LoadOneEEProject( fn, false );
+    if( fn.size() )
+        OpenProjectFiles( std::vector<wxString>( 1, fn ) );
 }
 
 
@@ -734,13 +730,29 @@ void SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
 {
-    LoadOneEEProject( wxEmptyString, true );
+    wxFileDialog dlg( this, _( "New Schematic" ), wxGetCwd(),
+                      wxEmptyString, SchematicFileWildcard,
+                      wxFD_SAVE );
+
+    if( dlg.ShowModal() != wxID_CANCEL )
+    {
+        OpenProjectFiles( std::vector<wxString>( 1, dlg.GetPath() ), 1 );
+    }
 }
 
 
 void SCH_EDIT_FRAME::OnLoadProject( wxCommandEvent& event )
 {
-    LoadOneEEProject( wxEmptyString, false );
+    // LoadOneEEProject( wxEmptyString, false );
+
+    wxFileDialog dlg( this, _( "Open Schematic" ), wxGetCwd(),
+                      wxEmptyString, SchematicFileWildcard,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( dlg.ShowModal() != wxID_CANCEL )
+    {
+        OpenProjectFiles( std::vector<wxString>( 1, dlg.GetPath() ) );
+    }
 }
 
 
@@ -797,7 +809,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
         component = (SCH_COMPONENT*) item;
     }
 
-    LIB_EDIT_FRAME * libeditFrame = LIB_EDIT_FRAME::GetActiveLibraryEditor();;
+    LIB_EDIT_FRAME* libeditFrame = LIB_EDIT_FRAME::GetActiveLibraryEditor();;
     if( libeditFrame )
     {
         if( libeditFrame->IsIconized() )
@@ -807,10 +819,8 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
     }
     else
     {
-        libeditFrame = new LIB_EDIT_FRAME( this,
-                                           wxT( "Library Editor" ),
-                                           wxPoint( -1, -1 ),
-                                           wxSize( 600, 400 ) );
+        wxWindow* w = Kiface().CreateWindow( this, LIBEDITOR_FRAME_TYPE, &Kiway() );
+        libeditFrame = dynamic_cast<LIB_EDIT_FRAME*>( w );
     }
 
     if( component )
@@ -850,13 +860,15 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
 
     fn = g_RootSheet->GetScreen()->GetFileName();
 
-    wxString default_name = NAMELESS_PROJECT;
-    default_name += wxT( ".sch" );
+    wxString default_name = NAMELESS_PROJECT wxT( ".sch" );
 
     if( fn.GetFullName() != default_name )
     {
         fn.SetExt( ProjectFileExtension );
-        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParametersList() );
+
+        // was: wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParametersList() );
+        Prj().ConfigSave( Kiface().KifaceSearch(),
+                fn.GetFullPath(), GROUP, GetProjectFileParametersList() );
     }
 }
 

@@ -31,7 +31,7 @@
 
 
 #include <wxBasePcbFrame.h>
-#include <param_config.h>
+#include <config_params.h>
 #include <class_macros_record.h>
 #include <class_undoredo_container.h>
 #include <zones.h>
@@ -61,18 +61,21 @@ class BOARD_ITEM;
 class PCB_LAYER_BOX_SELECTOR;
 class NETLIST;
 class REPORTER;
-class PARSE_ERROR;
-class IO_ERROR;
+struct PARSE_ERROR;
+struct IO_ERROR;
 class FP_LIB_TABLE;
 
+namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
+
 /**
- * class PCB_EDIT_FRAME
- * the main frame for Pcbnew
+ * Class PCB_EDIT_FRAME
+ * is the main frame for Pcbnew.
  *
  * See also class PCB_BASE_FRAME(): Basic class for Pcbnew and GerbView.
  */
 class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 {
+    friend class PCB::IFACE;
     friend class PCB_LAYER_WIDGET;
 
     void updateTraceWidthSelectBox();
@@ -83,9 +86,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     wxAuiToolBar* m_microWaveToolBar;
-
-    /// The global footprint library table.
-    FP_LIB_TABLE* m_globalFootprintTable;
 
     /// User defined rotation angle (in tenths of a degree).
     int             m_rotationAngle;
@@ -186,6 +186,9 @@ protected:
      */
     void duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone );
 
+    // protected so that PCB::IFACE::CreateWindow() is the only factory.
+    PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
+
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
     wxComboBox* m_SelTrackWidthBox;     // a combo box to display and select current track width
@@ -193,10 +196,6 @@ public:
 
     bool m_show_microwave_tools;
     bool m_show_layer_manager_tools;
-
-    PCB_EDIT_FRAME( wxWindow* father, const wxString& title,
-                    const wxPoint& pos, const wxSize& size,
-                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     virtual ~PCB_EDIT_FRAME();
 
@@ -368,29 +367,9 @@ public:
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings();
 
-    /**
-     * Function LoadSettings
-     * loads applications settings specific to Pcbnew.
-     *
-     * This overrides the base class PCB_BASE_FRAME::LoadSettings() to
-     * handle settings specific common to the PCB layout application.  It
-     * calls down to the base class to load settings common to all PCB type
-     * drawing frames.  Please put your application settings for Pcbnew here
-     * to avoid having application settings loaded all over the place.
-     */
-    virtual void LoadSettings();
+    void LoadSettings( wxConfigBase* aCfg );    // override virtual
 
-    /**
-     * Function SaveSettings
-     * saves applications settings common to Pcbnew.
-     *
-     * This overrides the base class PCB_BASE_FRAME::SaveSettings() to
-     * save settings specific to the PCB layout application main window.  It
-     * calls down to the base class to save settings common to all PCB type
-     * drawing frames.  Please put your application settings for Pcbnew here
-     * to avoid having application settings saved all over the place.
-     */
-    virtual void SaveSettings();
+    void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
     /**
      * Get the last net list read with the net list dialog box.
@@ -717,14 +696,14 @@ public:
     /* Block operations: */
 
     /**
-     * Function ReturnBlockCommand
+     * Function BlockCommand
      * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
      * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
      * block command is started by dragging the mouse.
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int ReturnBlockCommand( int aKey );
+    virtual int BlockCommand( int aKey );
 
     /**
      * Function HandleBlockPlace()
@@ -857,20 +836,20 @@ public:
     void Files_io( wxCommandEvent& event );
 
     /**
-     * Function LoadOnePcbFile
-     * loads a KiCad board (.brd) from \a aFileName.
+     * Function OpenProjectFiles    (was LoadOnePcbFile)
+     * loads a KiCad board (.kicad_pcb) from \a aFileName.
      *
-     *  @param aFileName - File name including path. If empty, a file dialog will
-     *                     be displayed.
-     *  @param aAppend - Append board file aFileName to the currently loaded file if true.
-     *                   Default = false.
-     *  @param aForceFileDialog - Display the file open dialog even if aFullFileName is
-     *                            valid if true; Default = false.
+     * @param aFileSet - hold the BOARD file to load, a vector of one element.
      *
-     *  @return False if file load fails or is canceled by the user, otherwise true.
-     */
+     * @param aCtl      - KICTL_ bits, one to indicate that an append of the board file
+     *                      aFileName to the currently loaded file is desired.
+     *                    @see #KIWAY_PLAYER for bit defines.
+     *
+     * @return bool - false if file load fails, otherwise true.
     bool LoadOnePcbFile( const wxString& aFileName, bool aAppend = false,
                          bool aForceFileDialog = false );
+     */
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 );
 
     /**
      * Function ReadPcbFile
@@ -991,11 +970,19 @@ public:
 
     /**
      * Function ExporttoSPECCTRA
-     * will export the current BOARD to a specctra dsn file.  See
-     * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
-     * specification.
+     * Ask for a filename and call ExportSpecctraFile to export the current BOARD
+     * to a specctra dsn file.
      */
     void ExportToSpecctra( wxCommandEvent& event );
+
+    /**
+     * Function ExportSpecctraFile
+     * will export the current BOARD to a specctra dsn file.
+     * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
+     * specification.
+     * @return true if OK
+     */
+    bool ExportSpecctraFile( const wxString& aFullFilename );
 
     /**
      * Function ImportSpecctraSession
@@ -1695,6 +1682,20 @@ public:
 
     DECLARE_EVENT_TABLE()
 };
+
+
+/**
+ * Function AskBoardFileName
+ * puts up a wxFileDialog asking for a BOARD filename to open.
+ *
+ * @param aParent is a wxFrame passed to wxFileDialog.
+ * @param aCtl is where to put the OpenProjectFiles() control bits.
+ *
+ * @param aFileName on entry is a probable choice, on return is the chosen filename.
+ *
+ * @return bool - true if chosen, else false if user aborted.
+ */
+bool AskBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName );
 
 
 #endif  // WXPCB_STRUCT_H_

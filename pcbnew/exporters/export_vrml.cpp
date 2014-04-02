@@ -67,7 +67,7 @@
 #include <wxPcbStruct.h>
 #include <drawtxt.h>
 #include <trigo.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <3d_struct.h>
 #include <macros.h>
 
@@ -812,7 +812,7 @@ static void export_vrml_via( MODEL_VRML& aModel, BOARD* pcb, SEGVIA* via )
     r   = via->GetWidth() * aModel.scale / 2.0;
     x   = via->GetStart().x * aModel.scale + aModel.tx;
     y   = via->GetStart().y * aModel.scale + aModel.ty;
-    via->ReturnLayerPair( &top_layer, &bottom_layer );
+    via->LayerPair( &top_layer, &bottom_layer );
 
     // do not render a buried via
     if( top_layer != LAST_COPPER_LAYER && bottom_layer != FIRST_COPPER_LAYER )
@@ -994,7 +994,7 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aLayer,
                                   VRML_LAYER* aTinLayer, D_PAD* aPad )
 {
     // The (maybe offset) pad position
-    wxPoint pad_pos = aPad->ReturnShapePos();
+    wxPoint pad_pos = aPad->ShapePos();
     double  pad_x   = pad_pos.x * aModel.scale + aModel.tx;
     double  pad_y   = pad_pos.y * aModel.scale + aModel.ty;
     wxSize  pad_delta = aPad->GetDelta();

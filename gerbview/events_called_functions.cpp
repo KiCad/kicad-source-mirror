@@ -4,7 +4,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <common.h>
@@ -256,7 +256,7 @@ void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
 
     if( gerber_layer )
     {
-        wxString editorname = wxGetApp().GetEditorName();
+        wxString editorname = Pgm().GetEditorName();
         if( !editorname.IsEmpty() )
         {
             wxFileName fn( gerber_layer->m_FileName );
