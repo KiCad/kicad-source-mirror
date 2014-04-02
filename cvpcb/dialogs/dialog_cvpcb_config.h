@@ -14,8 +14,9 @@ class DIALOG_CVPCB_CONFIG : public DIALOG_CVPCB_CONFIG_FBP
 {
 private:
     CVPCB_MAINFRAME* m_Parent;
-    wxConfig * m_Config;
-    wxString             m_UserLibDirBufferImg;
+    wxConfigBase*    m_Config;
+    wxString         m_UserLibDirBufferImg;
+
     bool m_LibListChanged;
     bool m_LibPathChanged;
 

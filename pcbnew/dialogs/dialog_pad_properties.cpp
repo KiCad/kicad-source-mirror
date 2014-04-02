@@ -95,8 +95,8 @@ public:
 
 private:
     PCB_BASE_FRAME* m_parent;
-    D_PAD*  m_currentPad;            // pad currently being edited
-    D_PAD*  m_dummyPad;              // a working copy used to show changes
+    D_PAD*  m_currentPad;           // pad currently being edited
+    D_PAD*  m_dummyPad;             // a working copy used to show changes
     BOARD*  m_board;
     D_PAD&  m_padMaster;
     bool    m_isFlipped;            // true if the parent footprint (therefore pads) is flipped (mirrored)
@@ -149,10 +149,10 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 {
     m_canUpdate  = false;
     m_parent     = aParent;
-    m_currentPad = aPad;
+    m_currentPad = aPad;        // aPad can be NULL, if the dialog is called
+                                // from the module editor to set default pad characteristics
     m_board      = m_parent->GetBoard();
-    m_dummyPad   = new D_PAD( aPad->GetParent() );
-    m_padMaster.SetParent( aPad->GetParent() );
+    m_dummyPad   = new D_PAD( (MODULE*) NULL );
 
     if( aPad )
         m_dummyPad->Copy( aPad );
@@ -673,11 +673,11 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
 
     LAYER_MSK padlayers_mask = m_dummyPad->GetLayerMask();
-    if( ( padlayers_mask == 0 ) && ( m_dummyPad->GetAttribute() != PAD_HOLE_NOT_PLATED ) )
-        error_msgs.Add( _( "Error: pad has no layer and is not a mechanical pad" ) );
 
-    padlayers_mask &= (LAYER_BACK | LAYER_FRONT);
     if( padlayers_mask == 0 )
+        error_msgs.Add( _( "Error: pad has no layer" ) );
+
+    if( ( padlayers_mask & (LAYER_BACK | LAYER_FRONT) ) == 0 )
     {
         if( m_dummyPad->GetDrillSize().x || m_dummyPad->GetDrillSize().y )
         {
@@ -715,20 +715,21 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     switch( m_dummyPad->GetAttribute() )
     {
-    case PAD_STANDARD :     // Pad through hole, a hole is expected
+    case PAD_HOLE_NOT_PLATED:   // Not plated, but through hole, a hole is expected
+    case PAD_STANDARD :         // Pad through hole, a hole is also expected
         if( m_dummyPad->GetDrillSize().x <= 0 )
-            error_msgs.Add( _( "Incorrect value for pad drill (too small value)" ) );
+            error_msgs.Add( _( "Error: Through hole pad: drill diameter set to 0" ) );
         break;
 
-    case PAD_SMD:     // SMD and Connector pads (One external copper layer only)
+    case PAD_CONN:      // Connector pads are smd pads, just they do not have solder paste.
+        if( (padlayers_mask & SOLDERPASTE_LAYER_BACK) ||
+            (padlayers_mask & SOLDERPASTE_LAYER_FRONT) )
+            error_msgs.Add( _( "Error: Connector pads are not on the solder paste layer\n"
+                               "Use SMD pads instead" ) );
+        // Fall trough
+    case PAD_SMD:       // SMD and Connector pads (One external copper layer only)
         if( (padlayers_mask & LAYER_BACK) && (padlayers_mask & LAYER_FRONT) )
-            error_msgs.Add( _( "Error: only one copper layer allowed for this pad" ) );
-        break;
-
-    case PAD_CONN:              // connectors can have pads on "All" Cu layers.
-        break;
-
-    case PAD_HOLE_NOT_PLATED:   // Not plated
+            error_msgs.Add( _( "Error: only one copper layer allowed for SMD or Connector pads" ) );
         break;
     }
 
@@ -738,6 +739,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         dlg.ListSet( error_msgs );
         dlg.ShowModal();
     }
+
     return error_msgs.GetCount() == 0;
 }
 
@@ -856,11 +858,11 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetShape( CodeShape[m_PadShape->GetSelection()] );
 
     // Read pad clearances values:
-    aPad->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
-    aPad->SetLocalSolderMaskMargin( ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
-    aPad->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
-    aPad->SetThermalWidth( ReturnValueFromTextCtrl( *m_ThermalWidthCtrl ) );
-    aPad->SetThermalGap( ReturnValueFromTextCtrl( *m_ThermalGapCtrl ) );
+    aPad->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
+    aPad->SetLocalSolderMaskMargin( ValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
+    aPad->SetLocalSolderPasteMargin( ValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
+    aPad->SetThermalWidth( ValueFromTextCtrl( *m_ThermalWidthCtrl ) );
+    aPad->SetThermalGap( ValueFromTextCtrl( *m_ThermalGapCtrl ) );
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
@@ -896,15 +898,15 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     }
 
     // Read pad position:
-    x = ReturnValueFromTextCtrl( *m_PadPosition_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_PadPosition_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_PadPosition_X_Ctrl );
+    y = ValueFromTextCtrl( *m_PadPosition_Y_Ctrl );
 
     aPad->SetPosition( wxPoint( x, y ) );
     aPad->SetPos0( wxPoint( x, y ) );
 
     // Read pad drill:
-    x = ReturnValueFromTextCtrl( *m_PadDrill_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_PadDrill_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_PadDrill_X_Ctrl );
+    y = ValueFromTextCtrl( *m_PadDrill_Y_Ctrl );
 
     if( m_DrillShapeCtrl->GetSelection() == 0 )
     {
@@ -917,24 +919,24 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetDrillSize( wxSize( x, y ) );
 
     // Read pad shape size:
-    x = ReturnValueFromTextCtrl( *m_ShapeSize_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_ShapeSize_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_ShapeSize_X_Ctrl );
+    y = ValueFromTextCtrl( *m_ShapeSize_Y_Ctrl );
     if( aPad->GetShape() == PAD_CIRCLE )
         y = x;
 
     aPad->SetSize( wxSize( x, y ) );
 
     // Read pad length die
-    aPad->SetPadToDieLength( ReturnValueFromTextCtrl( *m_LengthPadToDieCtrl ) );
+    aPad->SetPadToDieLength( ValueFromTextCtrl( *m_LengthPadToDieCtrl ) );
 
     // Read pad shape delta size:
     // m_DeltaSize.x or m_DeltaSize.y must be NULL. for a trapezoid.
     wxSize delta;
 
     if( m_trapDeltaDirChoice->GetSelection() == 0 )
-        delta.x = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl );
+        delta.x = ValueFromTextCtrl( *m_ShapeDelta_Ctrl );
     else
-        delta.y = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl );
+        delta.y = ValueFromTextCtrl( *m_ShapeDelta_Ctrl );
 
     // Test bad values (be sure delta values are not too large)
     // remember DeltaSize.x is the Y size variation
@@ -967,8 +969,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetDelta( delta );
 
     // Read pad shape offset:
-    x = ReturnValueFromTextCtrl( *m_ShapeOffset_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_ShapeOffset_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_ShapeOffset_X_Ctrl );
+    y = ValueFromTextCtrl( *m_ShapeOffset_Y_Ctrl );
     aPad->SetOffset( wxPoint( x, y ) );
 
     double orient_value = 0;

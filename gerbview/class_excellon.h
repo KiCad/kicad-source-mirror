@@ -101,9 +101,9 @@ private:
     bool Execute_EXCELLON_G_Command( char*& text );
     bool Execute_Drill_Command( char*& text );
 
-    int ReturnTCodeNumber( char*& Text )
+    int TCodeNumber( char*& Text )
     {
-        return ReturnDCodeNumber( Text );
+        return DCodeNumber( Text );
     }
 
 

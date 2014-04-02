@@ -39,7 +39,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <wxEeschemaStruct.h>
@@ -123,7 +124,7 @@ public:
     NETLIST_PAGE_DIALOG* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
 
 private:
-    wxConfig* m_config;
+    wxConfigBase* m_config;
 
 public:
 
@@ -169,17 +170,17 @@ private:
     }
 
     /**
-     * Function ReturnUserNetlistTypeName
+     * Function UserNetlistTypeName
      * to retrieve user netlist type names
      * @param first_item = true: return first name of the list, false = return next
      * @return a wxString : name of the type netlist or empty string
      * this function must be called first with "first_item" = true
      * and after with "first_item" = false to get all the other existing netlist names
      */
-    const wxString ReturnUserNetlistTypeName( bool first_item );
+    const wxString UserNetlistTypeName( bool first_item );
 
     /**
-     * Function ReturnFilenamePrms
+     * Function FilenamePrms
      * returns the filename extension and the wildcard string for this curr
      * or a void name if there is no default name
      * @param aNetTypeId = the netlist type ( NET_TYPE_PCBNEW ... )
@@ -187,7 +188,7 @@ private:
      * @param aWildCard =  reference to a wxString to return the default wildcard.
      * @return true for known netlist type, false for custom formats
      */
-    bool ReturnFilenamePrms( NETLIST_TYPE_ID aNetTypeId,
+    bool FilenamePrms( NETLIST_TYPE_ID aNetTypeId,
                              wxString * aExt, wxString * aWildCard );
 
     DECLARE_EVENT_TABLE()
@@ -347,7 +348,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     NETLIST_DIALOG_BASE( parent )
 {
     m_Parent = parent;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
 
     long tmp;
     m_config->Read( NETLIST_USE_DEFAULT_NETNAME, &tmp, 0l );
@@ -388,7 +389,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
 }
 
 
-const wxString NETLIST_DIALOG::ReturnUserNetlistTypeName( bool first_item )
+const wxString NETLIST_DIALOG::UserNetlistTypeName( bool first_item )
 {
     static int index;
     wxString   name, msg;
@@ -448,7 +449,7 @@ void NETLIST_DIALOG::InstallCustomPages()
 
     for( ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
     {
-        title = ReturnUserNetlistTypeName( ii == 0 ? true : false );
+        title = UserNetlistTypeName( ii == 0 ? true : false );
 
         if( title.IsEmpty() )
             break; // No more panel to install
@@ -532,7 +533,7 @@ void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
     m_cbUseDefaultNetlistName->Enable( currPage->m_IdNetType < NET_TYPE_CUSTOM1 );
 
     wxString fileExt;
-    if( ReturnFilenamePrms( currPage->m_IdNetType, &fileExt, NULL ) )
+    if( FilenamePrms( currPage->m_IdNetType, &fileExt, NULL ) )
     {
         wxFileName fn = g_RootSheet->GetScreen()->GetFileName();
         fn.SetExt( fileExt );
@@ -591,7 +592,7 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
 
     // Calculate the netlist filename
     fn = g_RootSheet->GetScreen()->GetFileName();
-    ReturnFilenamePrms( currPage->m_IdNetType, &fileExt, &fileWildcard );
+    FilenamePrms( currPage->m_IdNetType, &fileExt, &fileWildcard );
 
     // Set some parameters
     switch( currPage->m_IdNetType )
@@ -653,7 +654,7 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
 }
 
 
-bool NETLIST_DIALOG::ReturnFilenamePrms( NETLIST_TYPE_ID aNetTypeId,
+bool NETLIST_DIALOG::FilenamePrms( NETLIST_TYPE_ID aNetTypeId,
                                          wxString * aExt, wxString * aWildCard )
 {
     wxString fileExt;
@@ -913,7 +914,7 @@ void NETLIST_DIALOG_ADD_PLUGIN::OnBrowsePlugins( wxCommandEvent& event )
     wxString FullFileName, Mask, Path;
 
     Mask = wxT( "*" );
-    Path = wxGetApp().GetExecutablePath();
+    Path = Pgm().GetExecutablePath();
     FullFileName = EDA_FileSelector( _( "Plugin files:" ),
                                      Path,
                                      FullFileName,

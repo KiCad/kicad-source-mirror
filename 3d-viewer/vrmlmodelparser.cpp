@@ -519,8 +519,12 @@ int VRML_MODEL_PARSER::readGeometry( FILE* file, int* LineNum )
                             vertices.push_back( vertex );
                         }
 
-                        GetMaster()->Set_Object_Coords( vertices );
-                        Set_Object_Data( vertices, vrmlunits_to_3Dunits );
+                        if( GetMaster()->IsOpenGlAllowed() )
+                        {
+                            GetMaster()->ObjectCoordsTo3DUnits( vertices );
+                            TransfertToGLlist( vertices, vrmlunits_to_3Dunits );
+                        }
+
                         vertices.clear();
                         coordIndex.clear();
                     }

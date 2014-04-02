@@ -354,8 +354,9 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
             m_canvas->MoveCursorToCrossHair();
-            DrawStruct = (BOARD_ITEM*) LoadModuleFromLibrary( wxEmptyString, m_footprintLibTable,
-                                                              true, aDC );
+            DrawStruct = (BOARD_ITEM*) LoadModuleFromLibrary(
+                    wxEmptyString, FootprintLibs(), true, aDC );
+
             SetCurItem( DrawStruct );
 
             if( DrawStruct )

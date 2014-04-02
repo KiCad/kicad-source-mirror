@@ -46,6 +46,10 @@ if (APPLE)
         STRING(REGEX REPLACE " -arch " "," LIBWXPYTHON_ARCHITECTURES ${CMAKE_OSX_ARCHITECTURES})
         SET( LIBWXPYTHON_OPTS ${LIBWXPYTHON_OPTS} --mac_arch=${LIBWXPYTHON_ARCHITECTURES})
     endif( CMAKE_OSX_ARCHITECTURES )
+
+    if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+        SET( LIBWXPYTHON_PRECMD export CFLAGS=-Qunused-arguments && )
+    endif()
 endif(APPLE)
 
 if ( KICAD_BUILD_STATIC )
@@ -74,7 +78,7 @@ ExternalProject_Add( libwxpython
     UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${LIBWXPYTHON_ROOT}"
            COMMAND  ${LIBWXPYTHON_EXEC} wxPython/build-wxpython.py --clean
 
-    CONFIGURE_COMMAND   ${LIBWXPYTHON_EXEC} wxPython/build-wxpython.py --prefix=${LIBWXPYTHON_ROOT} --unicode --install ${LIBWXPYTHON_OPTS}
+    CONFIGURE_COMMAND  ${LIBWXPYTHON_PRECMD} ${LIBWXPYTHON_EXEC} wxPython/build-wxpython.py --prefix=${LIBWXPYTHON_ROOT} --unicode --install ${LIBWXPYTHON_OPTS}
 
     #BINARY_DIR     "${PREFIX}"
 

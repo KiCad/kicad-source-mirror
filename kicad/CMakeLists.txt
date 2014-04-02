@@ -21,14 +21,10 @@ set(KICAD_SRCS
     project_template.cpp
     tree_project_frame.cpp)
 
-if(WIN32)
-    if(MINGW)
-        # KICAD_RESOURCES variable is set by the macro.
-        mingw_resource_compiler(kicad)
-    else(MINGW)
-        set(KICAD_RESOURCES kicad.rc)
-    endif(MINGW)
-endif(WIN32)
+if(MINGW)
+    # KICAD_RESOURCES variable is set by the macro.
+    mingw_resource_compiler(kicad)
+endif()
 
 if(APPLE)
     set(KICAD_RESOURCES kicad.icns kicad_doc.icns)

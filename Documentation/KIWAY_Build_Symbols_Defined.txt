@@ -1,0 +1,29 @@
+
+KIWAY Build Symbols, Definitions and Intentions
+
+
+COMPILING_DLL:
+
+    This is a signal to import_export.h, and when present, toggles the
+    interpretation of the #defines in that file. Its purpose should not be
+    extended beyond this.
+
+
+USE_KIWAY_DLLS:
+
+    Comes from CMake as a user configuration variable, settable in the Cmake
+    user interface. It decides if KiCad will be built with the *.kiface program
+    modules.
+
+
+BUILD_KIWAY_DLL:
+
+    Comes from CMake, but at the 2nd tier, not the top tier. By 2nd tier,
+    something like pcbnew/CMakeLists.txt, not /CMakeLists.txt is meant. It is
+    not a user configuration variable. Instead, the 2nd tier CMakeLists.txt file
+    looks at the top level USE_KIWAY_DLLS and decides how the object files under
+    the 2nd tier's control will be built. If it decides it wants to march in
+    lockstep with USE_KIWAY_DLLS, then this local CMakeLists.txt file may pass a
+    defined BUILD_KIWAY_DLL (singular) on the compiler command line to the
+    pertinent set of compilation steps under its control.
+

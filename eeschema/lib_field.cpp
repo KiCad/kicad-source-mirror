@@ -27,7 +27,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gr_basic.h>
 #include <macros.h>
 #include <base_struct.h>
@@ -517,7 +517,7 @@ wxString LIB_FIELD::GetFullText( int unit )
     text << wxT( "?" );
 
     if( GetParent()->IsMulti() )
-        text << LIB_COMPONENT::ReturnSubReference( unit );
+        text << LIB_COMPONENT::SubReference( unit );
 
     return text;
 }
@@ -763,10 +763,10 @@ void LIB_FIELD::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     msg = GetTextStyleName();
     aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg, MAGENTA ) );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Size.x, true );
+    msg = StringFromValue( g_UserUnit, m_Size.x, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Size X" ), msg, BLUE ) );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Size.y, true );
+    msg = StringFromValue( g_UserUnit, m_Size.y, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Size Y" ), msg, BLUE ) );
 
     // Display field name (ref, value ...)

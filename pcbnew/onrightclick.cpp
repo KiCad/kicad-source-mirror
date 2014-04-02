@@ -137,11 +137,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     }
 
     item = GetCurItem();
-
-    if( item )
-        flags = item->GetFlags();
-    else
-        flags = 0;
+    flags = item ? item->GetFlags() : 0;
 
     // Add the context menu, which depends on the picked item:
     if( item )
@@ -971,7 +967,7 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 
     for( unsigned ii = 0; ii < aBoard->m_TrackWidthList.size(); ii++ )
     {
-        value = ReturnStringFromValue( g_UserUnit, aBoard->m_TrackWidthList[ii], true );
+        value = StringFromValue( g_UserUnit, aBoard->m_TrackWidthList[ii], true );
         msg.Printf( _( "Track %s" ), GetChars( value ) );
 
         if( ii == 0 )
@@ -984,9 +980,9 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 
     for( unsigned ii = 0; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
     {
-        value = ReturnStringFromValue( g_UserUnit, aBoard->m_ViasDimensionsList[ii].m_Diameter,
+        value = StringFromValue( g_UserUnit, aBoard->m_ViasDimensionsList[ii].m_Diameter,
                                        true );
-        wxString drill = ReturnStringFromValue( g_UserUnit,
+        wxString drill = StringFromValue( g_UserUnit,
                                                 aBoard->m_ViasDimensionsList[ii].m_Drill,
                                                 true );
 

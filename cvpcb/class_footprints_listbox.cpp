@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <wxstruct.h>
 #include <macros.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <wildcards_and_files_ext.h>
 
 #include <cvpcb.h>
@@ -207,7 +207,7 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
         return;
 
     // If the footprint view window is displayed, update the footprint.
-    if( GetParent()->m_DisplayFootprintFrame )
+    if( GetParent()->GetFpViewerFrame() )
         GetParent()->CreateScreenCmp();
 
     GetParent()->DisplayStatus();

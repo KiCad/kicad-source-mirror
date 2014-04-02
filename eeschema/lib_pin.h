@@ -142,20 +142,20 @@ public:
     const EDA_RECT GetBoundingBox() const;    // Virtual
 
     /**
-     * Function ReturnPinEndPoint
+     * Function PinEndPoint
      *
      * @return The pin end position for a component in the normal orientation.
      */
-    wxPoint ReturnPinEndPoint() const;
+    wxPoint PinEndPoint() const;
 
     /**
-     * Function ReturnPinDrawOrient
+     * Function PinDrawOrient
      * returns the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
      * according to its orientation and the matrix transform (rot, mirror) \a aTransform
      *
      * @param aTransform Transform matrix
      */
-    int ReturnPinDrawOrient( const TRANSFORM& aTransform ) const;
+    int PinDrawOrient( const TRANSFORM& aTransform ) const;
 
     /**
      * Fill a string buffer with pin number.
@@ -165,20 +165,20 @@ public:
      *
      * @param aStringBuffer - the wxString to store the pin num as an unicode string
      */
-    void ReturnPinStringNum( wxString& aStringBuffer ) const;
+    void PinStringNum( wxString& aStringBuffer ) const;
 
     long GetNumber() const { return m_number; }
 
-    wxString GetNumberString() const { return ReturnPinStringNum( m_number ); }
+    wxString GetNumberString() const { return PinStringNum( m_number ); }
 
     /**
-     * Function ReturnPinStringNum (static function)
+     * Function PinStringNum (static function)
      * Pin num is coded as a long or 4 ascii chars
      * @param aPinNum = a long containing a pin num
      * @return aStringBuffer = the wxString to store the pin num as an
      *                         unicode string
      */
-    static wxString ReturnPinStringNum( long aPinNum );
+    static wxString PinStringNum( long aPinNum );
 
     /**
      * Function SetPinNumFromString

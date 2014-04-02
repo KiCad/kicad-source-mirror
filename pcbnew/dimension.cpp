@@ -160,10 +160,12 @@ void DIALOG_DIMENSION_EDITOR::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 {
+#ifndef USE_WX_OVERLAY
     if( m_DC )     // Delete old text.
     {
         CurrentDimension->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
     }
+#endif 
 
     m_Parent->SaveCopyInUndoList(CurrentDimension, UR_CHANGED);
 
@@ -176,22 +178,22 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 
     // Get new size value:
     msg = m_TxtSizeXCtrl->GetValue();
-    CurrentDimension->Text().SetWidth( ReturnValueFromString( g_UserUnit, msg ) );
+    CurrentDimension->Text().SetWidth( ValueFromString( g_UserUnit, msg ) );
     msg = m_TxtSizeYCtrl->GetValue();
-    CurrentDimension->Text().SetHeight( ReturnValueFromString( g_UserUnit, msg ) );
+    CurrentDimension->Text().SetHeight( ValueFromString( g_UserUnit, msg ) );
 
     // Get new position value:
     // It will be copied later in dimension, because
     msg = m_textCtrlPosX->GetValue();
     wxPoint pos;
-    pos.x = ReturnValueFromString( g_UserUnit, msg );
+    pos.x = ValueFromString( g_UserUnit, msg );
     msg = m_textCtrlPosY->GetValue();
-    pos.y = ReturnValueFromString( g_UserUnit, msg );
+    pos.y = ValueFromString( g_UserUnit, msg );
     CurrentDimension->Text().SetTextPosition( pos );
 
     // Get new line thickness value:
     msg = m_TxtWidthCtrl->GetValue();
-    int width = ReturnValueFromString( g_UserUnit, msg );
+    int width = ValueFromString( g_UserUnit, msg );
     int maxthickness = Clamp_Text_PenSize( width, CurrentDimension->Text().GetSize() );
 
     if( width > maxthickness )
@@ -207,12 +209,14 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
     CurrentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
 
     CurrentDimension->SetLayer( m_SelLayerBox->GetLayerSelection() );
-
+#ifndef USE_WX_OVERLAY
     if( m_DC )     // Display new text
     {
         CurrentDimension->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
     }
-
+#else
+    m_Parent->Refresh();
+#endif
     m_Parent->OnModify();
     EndModal( 1 );
 }

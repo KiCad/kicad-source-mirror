@@ -29,10 +29,12 @@
  */
 
 #include <fctsys.h>
+#include <kiface_i.h>
 #include <wxstruct.h>
 #include <pcbcommon.h>
 #include <confirm.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <dialog_helpers.h>
 #include <kicad_device_context.h>
 #include <wxBasePcbFrame.h>
@@ -40,6 +42,7 @@
 #include <msgpanel.h>
 
 #include <pcbnew.h>
+#include <fp_lib_table.h>
 #include <pcbnew_id.h>
 #include <class_board.h>
 #include <class_track.h>
@@ -84,7 +87,7 @@ const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
 
     ITEM_GAL_LAYER( RATSNEST_VISIBLE ),
     ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ),
-    ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
+    ITEM_GAL_LAYER( VIAS_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
 
     NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ), SOLDERMASK_N_FRONT,
     NETNAMES_GAL_LAYER( LAYER_16_NETNAMES_VISIBLE ), LAYER_N_FRONT,
@@ -127,11 +130,10 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
 END_EVENT_TABLE()
 
 
-PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
-                                const wxString& aTitle,
-                                const wxPoint& aPos, const wxSize& aSize,
-                                long aStyle, const wxString & aFrameName) :
-    EDA_DRAW_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
+PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
+        const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
+        long aStyle, const wxString & aFrameName ) :
+    EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
     m_toolManager( TOOL_MANAGER::Instance() )
 {
     m_Pcb                 = NULL;
@@ -170,6 +172,25 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
 
     delete m_Pcb;       // is already NULL for FOOTPRINT_EDIT_FRAME
     delete GetGalCanvas();
+}
+
+
+FP_LIB_TABLE* PCB_BASE_FRAME::FootprintLibs() const
+{
+    PROJECT&        prj = Prj();
+    FP_LIB_TABLE*   tbl = dynamic_cast<FP_LIB_TABLE*>( prj.Elem( PROJECT::FPTBL ) );
+
+    if( !tbl )
+    {
+        // Stack the project specific FP_LIB_TABLE overlay on top of the global table.
+        // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
+        // stack this way, all using the same global fallback table.
+        tbl = new FP_LIB_TABLE( &GFootprintTable );
+
+        prj.Elem( PROJECT::FPTBL, tbl );
+    }
+
+    return tbl;
 }
 
 
@@ -736,39 +757,35 @@ void PCB_BASE_FRAME::unitsChangeRefresh()
 }
 
 
-void PCB_BASE_FRAME::LoadSettings()
+void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxASSERT( wxGetApp().GetSettings() != NULL );
-
-    wxConfig* cfg = wxGetApp().GetSettings();
-
-    EDA_DRAW_FRAME::LoadSettings();
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
 
     // Ensure grid id is an existent grid id:
     if( (m_LastGridSizeId <= 0) ||
         (m_LastGridSizeId > (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
 
-    cfg->Read( m_FrameName + UserGridSizeXEntry, &m_UserGridSize.x, 0.01 );
-    cfg->Read( m_FrameName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
+    aCfg->Read( m_FrameName + UserGridSizeXEntry, &m_UserGridSize.x, 0.01 );
+    aCfg->Read( m_FrameName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
 
     long itmp;
-    cfg->Read( m_FrameName + UserGridUnitsEntry, &itmp, ( long )INCHES );
+    aCfg->Read( m_FrameName + UserGridUnitsEntry, &itmp, ( long )INCHES );
     m_UserGridUnit = (EDA_UNITS_T) itmp;
-    cfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
-    cfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );
-    cfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );
-    cfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge, ( long )FILLED );
+    aCfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
+    aCfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );
+    aCfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );
+    aCfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge, ( long )FILLED );
 
-    cfg->Read( m_FrameName + FastGrid1Entry, &itmp, ( long )0);
+    aCfg->Read( m_FrameName + FastGrid1Entry, &itmp, ( long )0);
     m_FastGrid1 = itmp;
-    cfg->Read( m_FrameName + FastGrid2Entry, &itmp, ( long )0);
+    aCfg->Read( m_FrameName + FastGrid2Entry, &itmp, ( long )0);
     m_FastGrid2 = itmp;
 
     if( m_DisplayModEdge < LINE || m_DisplayModEdge > SKETCH )
         m_DisplayModEdge = FILLED;
 
-    cfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText, ( long )FILLED );
+    aCfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText, ( long )FILLED );
 
     if( m_DisplayModText < LINE || m_DisplayModText > SKETCH )
         m_DisplayModText = FILLED;
@@ -799,7 +816,7 @@ void PCB_BASE_FRAME::LoadSettings()
     }
 
     // Some more required layers settings
-    view->SetRequired( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ) );
+    view->SetRequired( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( VIAS_VISIBLE ) );
     view->SetRequired( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
     view->SetRequired( NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
 
@@ -839,23 +856,20 @@ void PCB_BASE_FRAME::LoadSettings()
 }
 
 
-void PCB_BASE_FRAME::SaveSettings()
+void PCB_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxASSERT( wxGetApp().GetSettings() != NULL );
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    wxConfig* cfg = wxGetApp().GetSettings();
-
-    EDA_DRAW_FRAME::SaveSettings();
-    cfg->Write( m_FrameName + UserGridSizeXEntry, m_UserGridSize.x );
-    cfg->Write( m_FrameName + UserGridSizeYEntry, m_UserGridSize.y );
-    cfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnit );
-    cfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayPadFill );
-    cfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayViaFill );
-    cfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayPadNum );
-    cfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayModEdge );
-    cfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayModText );
-    cfg->Write( m_FrameName + FastGrid1Entry, ( long )m_FastGrid1 );
-    cfg->Write( m_FrameName + FastGrid2Entry, ( long )m_FastGrid2 );
+    aCfg->Write( m_FrameName + UserGridSizeXEntry, m_UserGridSize.x );
+    aCfg->Write( m_FrameName + UserGridSizeYEntry, m_UserGridSize.y );
+    aCfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnit );
+    aCfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayPadFill );
+    aCfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayViaFill );
+    aCfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayPadNum );
+    aCfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayModEdge );
+    aCfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayModText );
+    aCfg->Write( m_FrameName + FastGrid1Entry, ( long )m_FastGrid1 );
+    aCfg->Write( m_FrameName + FastGrid2Entry, ( long )m_FastGrid2 );
 }
 
 
@@ -913,7 +927,6 @@ void PCB_BASE_FRAME::updateGridSelectBox()
             m_gridSelectBox->SetSelection( i );
     }
 }
-
 
 void PCB_BASE_FRAME::updateZoomSelectBox()
 {

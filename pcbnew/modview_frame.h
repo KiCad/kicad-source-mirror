@@ -37,12 +37,15 @@ class wxListBox;
 class wxSemaphore;
 class FP_LIB_TABLE;
 
+namespace PCB { struct IFACE; }
 
 /**
  * Component library viewer main window.
  */
 class FOOTPRINT_VIEWER_FRAME : public PCB_BASE_FRAME
 {
+    friend struct PCB::IFACE;
+
 private:
     wxListBox*          m_libList;               // The list of libs names
     wxListBox*          m_footprintList;         // The list of footprint names
@@ -58,9 +61,7 @@ protected:
                                                  // the selected footprint is here
 
 public:
-    FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent, FP_LIB_TABLE* aTable,
-                            wxSemaphore* aSemaphore = NULL,
-                            long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent, wxSemaphore* aSemaphore = NULL );
 
     ~FOOTPRINT_VIEWER_FRAME();
 
@@ -76,10 +77,10 @@ public:
      * @return a reference to the current opened Footprint viewer
      * or NULL if no Footprint viewer currently opened
      */
-    static FOOTPRINT_VIEWER_FRAME* GetActiveFootprintViewer();
+    static FOOTPRINT_VIEWER_FRAME* GetActiveFootprintViewer( const wxWindow* aParent );
 
     wxString& GetSelectedFootprint( void ) const { return m_selectedFootprintName; }
-    const wxString GetSelectedLibraryFullName( void );
+    const wxString GetSelectedLibraryFullName();
 
     /**
      * Function GetSelectedLibrary
@@ -87,7 +88,7 @@ public:
      */
     const wxString& GetSelectedLibrary() { return m_libraryName; }
 
-    virtual EDA_COLOR_T GetGridColor( void ) const;
+    virtual EDA_COLOR_T GetGridColor() const;
 
     /**
      * Function ReCreateLibraryList
@@ -128,23 +129,8 @@ private:
 
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
-    /**
-     * Function LoadSettings
-     * loads the library viewer frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get loaded.
-     */
-    void LoadSettings();
-
-    /**
-     * Function SaveSettings
-     * save library viewer frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get saved.
-     */
-    void SaveSettings();
+    void LoadSettings( wxConfigBase* aCfg );    // override virtual
+    void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
     wxString& GetFootprintName( void ) const { return m_footprintName; }
 

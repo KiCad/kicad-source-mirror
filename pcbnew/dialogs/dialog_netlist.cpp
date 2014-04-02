@@ -27,7 +27,9 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <project.h>
+#include <kiface_i.h>
 #include <confirm.h>
 #include <macros.h>
 #include <dialog_helpers.h>
@@ -86,7 +88,10 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     {
         wxFileName fn = GetBoard()->GetFileName();
         fn.SetExt( ProjectFileExtension );
-        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+
+        // was: wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+        Prj().ConfigSave( Kiface().KifaceSearch(), fn.GetFullPath(),
+                GROUP, GetProjectFileParameters() );
     }
 }
 
@@ -97,7 +102,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
 {
     m_parent = aParent;
     m_dc = aDC;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
     m_silentMode = m_config->Read( NETLIST_SILENTMODE_KEY, 0l );
     m_reportAll = m_config->Read( NETLIST_FULLMESSAGES_KEY, 1l );
     bool tmp = m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l );

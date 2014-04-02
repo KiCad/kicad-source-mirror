@@ -62,7 +62,11 @@ PCBNew
 
 Dick's Final TODO List:
 ======================
-*) Get licensing cleaned up.
-*) DLL-ization of pcbnew & eeschema
-   http://www.eevblog.com/forum/open-source-kicad-geda/seriously-irritated-with-the-library-editor!/
-   https://blueprints.launchpad.net/kicad/+spec/modular-kicad
+*)  Get licensing cleaned up.
+
+*)  DLL-ization of pcbnew & eeschema
+    http://www.eevblog.com/forum/open-source-kicad-geda/seriously-irritated-with-the-library-editor!/
+    https://blueprints.launchpad.net/kicad/+spec/modular-kicad
+
+    Issues as a result of minimal testing:
+        Kicad project manager will crash when requesting help file.

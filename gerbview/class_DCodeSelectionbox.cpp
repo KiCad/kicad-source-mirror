@@ -3,7 +3,7 @@
 /*****************************************************************/
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <wxstruct.h>
 #include <class_drawpanel.h>
 #include <gerbview.h>

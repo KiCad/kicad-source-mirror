@@ -109,6 +109,10 @@ public:
 private:
     wxString    m_Shape3DName;  /* 3D shape name in 3D library */
     FILE3D_TYPE m_ShapeType;
+    double      m_lastTransparency;     // last transparency value from
+                                            // last material in use
+    bool        m_loadTransparentObjects;
+    bool        m_loadNonTransparentObjects;
 
 public:
     S3D_MASTER( EDA_ITEM* aParent );
@@ -117,11 +121,41 @@ public:
     S3D_MASTER* Next() const { return (S3D_MASTER*) Pnext; }
     S3D_MASTER* Back() const { return (S3D_MASTER*) Pback; }
 
+    // Accessors
+    void SetLastTransparency( double aValue ) { m_lastTransparency = aValue; }
+
+    void SetLoadTransparentObjects( bool aLoad )
+        { m_loadTransparentObjects = aLoad; }
+
+    void SetLoadNonTransparentObjects( bool aLoad )
+        { m_loadNonTransparentObjects = aLoad; }
+
     void Insert( S3D_MATERIAL* aMaterial );
 
+    /**
+     * Function IsOpenGlAllowed
+     * @return true if opengl current list accepts a gl data
+     * used to filter transparent objects, which are drawn after
+     * non transparent objects
+     */
+    bool IsOpenGlAllowed();
+
     void Copy( S3D_MASTER* pattern );
+
+    /**
+     * Function ReadData
+     * Select the parser to read the 3D data file (vrml, x3d ...)
+     * and build the description objects list
+     */
     int  ReadData();
-    void Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices );
+
+    /**
+     * Function ObjectCoordsTo3DUnits
+     * @param aVertices = a list of 3D coordinates in shape units
+     * to convert to 3D canvas units, according to the
+     * footprint 3Dshape rotation, offset and scale parameters
+     */
+    void ObjectCoordsTo3DUnits( std::vector< S3D_VERTEX >& aVertices );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
@@ -147,6 +181,13 @@ public:
      */
     const wxString GetShape3DFullFilename();
 
+    /**
+     * Function SetShape3DName
+     * @param aShapeName = file name of the data file relative to the 3D shape
+     *
+     * Set the filename of the 3D shape, and depending on the file extention
+     * (vrl, x3d, idf ) the type of file.
+     */
     void SetShape3DName( const wxString& aShapeName );
 };
 

@@ -59,7 +59,9 @@ set( BOOST_LIBS_BUILT
     )
 #-----</configure>---------------------------------------------------------------
 
-find_package( BZip2 REQUIRED )
+if( NOT BZIP2_FOUND )
+    find_package( BZip2 REQUIRED )
+endif()
 
 string( REGEX REPLACE "\\." "_" BOOST_VERS "${BOOST_RELEASE}" )
 set( PREFIX ${DOWNLOAD_DIR}/boost_${BOOST_VERS} )
@@ -99,7 +101,7 @@ else()
 endif()
 
 
-if( MINGW )
+if( MINGW AND NOT CMAKE_HOST_UNIX )  # building for MINGW on windows not UNIX
     if( MSYS )
         # The Boost system does not build properly on MSYS using bootstrap.sh.  Running
         # bootstrap.bat with cmd.exe does.  It's ugly but it works.  At least for Boost
@@ -113,14 +115,16 @@ if( MINGW )
         set( b2_libs ${b2_libs} --with-${lib} )
     endforeach()
     unset( BOOST_CFLAGS )
+
 else()
     string( REGEX REPLACE "\\;" "," libs_csv "${boost_libs_list}" )
     #message( STATUS "libs_csv:${libs_csv}" )
 
     set( bootstrap ./bootstrap.sh --with-libraries=${libs_csv} )
     # pass to *both* C and C++ compilers
-    set( BOOST_CFLAGS "cflags=${PIC_FLAG}" )
-    set( BOOST_INCLUDE "${BOOST_ROOT}/include" )
+    set( BOOST_CFLAGS   "cflags=${PIC_FLAG}" )
+    set( BOOST_CXXFLAGS "cxxflags=${PIC_FLAG}" )
+    set( BOOST_INCLUDE  "${BOOST_ROOT}/include" )
     unset( b2_libs )
 endif()
 

@@ -21,7 +21,7 @@
 #include <bitmaps.h>
 #include <wxstruct.h>
 #include <common.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <build_version.h>
 
 
@@ -41,7 +41,7 @@ static wxString HtmlNewline( const unsigned int amount = 1 );
 static void InitKiCadAboutNew( AboutAppInfo& info )
 {
     // Set application specific icon
-    const wxTopLevelWindow * const tlw = wxDynamicCast(::wxGetApp().GetTopWindow(), wxTopLevelWindow);
+    const wxTopLevelWindow* const tlw = wxDynamicCast( Pgm().App().GetTopWindow(), wxTopLevelWindow);
 
     if( tlw )
         info.SetIcon( tlw->GetIcon() );
@@ -56,10 +56,10 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     }
 
     /* Set title */
-    info.SetAppName( wxT( ".: " ) + wxGetApp().GetTitle() + wxT( " :." ) );
+    info.SetAppName( wxT( ".: " ) + Pgm().App().GetAppName() + wxT( " :." ) );
 
     /* Copyright information */
-    info.SetCopyright( wxT( "(C) 1992-2013 KiCad Developers Team" ) );
+    info.SetCopyright( wxT( "(C) 1992-2014 KiCad Developers Team" ) );
 
     /* KiCad build version */
     wxString version;

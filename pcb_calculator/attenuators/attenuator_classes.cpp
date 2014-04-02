@@ -52,7 +52,7 @@ ATTENUATOR::~ATTENUATOR()
 #define KEYWORD_ATTENUATOR_ZOUT wxT( "Zout" )
 #define KEYWORD_ATTENUATORS     wxT( "Attenuators/" )
 
-void ATTENUATOR::ReadConfig( wxConfig* aConfig )
+void ATTENUATOR::ReadConfig( wxConfigBase* aConfig )
 {
     aConfig->SetPath( KEYWORD_ATTENUATORS + m_Name );
     if( m_Attenuation_Enable )
@@ -63,7 +63,7 @@ void ATTENUATOR::ReadConfig( wxConfig* aConfig )
 }
 
 
-void ATTENUATOR::WriteConfig( wxConfig* aConfig )
+void ATTENUATOR::WriteConfig( wxConfigBase* aConfig )
 {
     aConfig->SetPath( KEYWORD_ATTENUATORS + m_Name );
     aConfig->Write( KEYWORD_ATTENUATOR_ATT, m_Attenuation );

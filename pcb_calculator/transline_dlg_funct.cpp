@@ -30,12 +30,10 @@
 #include <pcb_calculator.h>
 #include <UnitSelector.h>
 
-extern double ReturnDoubleFromString( const wxString& TextValue );
+extern double DoubleFromString( const wxString& TextValue );
 
 
-/*
- * these values come from QucsStudio ( by Michael Margraf )
- */
+// these values come from QucsStudio ( by Michael Margraf )
 
 // Display a selection of usual Er, TanD, Rho  values
 // format is <value><space><comment>
@@ -143,16 +141,16 @@ struct DLG_PRM_DATA
  * Irrelevant parameters texts are blanked.
  * @param aType = the transline_type_id of the new selected transline
 */
-void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum transline_type_id aType )
+void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType )
 {
     wxString msg;
     #define DOUBLE_TO_CTLR( dlg_item, value ) { msg.Printf( wxT( "%g" ), value );\
                                       dlg_item->SetValue( msg ); }
     m_currTransLineType = aType;
 
-    if( (m_currTransLineType < start_of_list_type )
-       || ( m_currTransLineType >= end_of_list_type ) )
-        m_currTransLineType = default_type;
+    if( (m_currTransLineType < START_OF_LIST_TYPE )
+       || ( m_currTransLineType >= END_OF_LIST_TYPE ) )
+        m_currTransLineType = DEFAULT_TYPE;
 
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
     m_currTransLine = tr_ident->m_TLine;
@@ -348,8 +346,8 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum transline_type_id aType 
 
 /**
  * Function TransfDlgDataToTranslineParams
- * Read values entered in dialog frame, and transfert these
- * values in current transline parameters, converted in normalized units
+ * Read values entered in dialog frame, and copy these values
+ * in current transline parameters, converted in normalized units
  */
 void PCB_CALCULATOR_FRAME::TransfDlgDataToTranslineParams()
 {
@@ -359,7 +357,7 @@ void PCB_CALCULATOR_FRAME::TransfDlgDataToTranslineParams()
         TRANSLINE_PRM* prm = tr_ident->GetPrm( ii );
         wxTextCtrl * value_ctrl = (wxTextCtrl * ) prm->m_ValueCtrl;
         wxString value_txt = value_ctrl->GetValue();
-        double value = ReturnDoubleFromString(value_txt);
+        double value = DoubleFromString(value_txt);
         prm->m_Value = value;
         UNIT_SELECTOR * unit_ctrl = (UNIT_SELECTOR * ) prm->m_UnitCtrl;
         if( unit_ctrl )
@@ -378,7 +376,7 @@ void PCB_CALCULATOR_FRAME::TransfDlgDataToTranslineParams()
 */
 void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
 {
-    enum transline_type_id id = (enum transline_type_id) event.GetSelection();
+    enum TRANSLINE_TYPE_ID id = (enum TRANSLINE_TYPE_ID) event.GetSelection();
 
     TranslineTypeSelection( id );
 

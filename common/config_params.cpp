@@ -1,15 +1,36 @@
-/*********************/
-/* projet_config.cpp */
-/*********************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <common.h>
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <wxstruct.h>
-#include <param_config.h>
+#include <config_params.h>
 
 #include <wx/apptrait.h>
 #include <wx/stdpaths.h>
@@ -19,8 +40,89 @@
 #include <boost/foreach.hpp>
 
 
-#define CONFIG_VERSION      1
-#define FORCE_LOCAL_CONFIG  true
+void wxConfigSaveParams( wxConfigBase* aCfg,
+        const PARAM_CFG_ARRAY& aList, const wxString& aGroup )
+{
+    wxASSERT( aCfg );
+
+    BOOST_FOREACH( const PARAM_CFG_BASE& param, aList )
+    {
+        if( param.m_Group )
+            aCfg->SetPath( param.m_Group );
+        else
+            aCfg->SetPath( aGroup );
+
+        if( param.m_Setup )
+            continue;
+
+        if( param.m_Type == PARAM_COMMAND_ERASE )       // Erase all data
+        {
+            if( param.m_Ident )
+                aCfg->DeleteGroup( param.m_Ident );
+        }
+        else
+        {
+            param.SaveParam( aCfg );
+        }
+    }
+}
+
+
+void wxConfigLoadParams( wxConfigBase* aCfg,
+            const PARAM_CFG_ARRAY& aList, const wxString& aGroup )
+{
+    wxASSERT( aCfg );
+
+    BOOST_FOREACH( const PARAM_CFG_BASE& param, aList )
+    {
+        if( param.m_Group )
+            aCfg->SetPath( param.m_Group );
+        else
+            aCfg->SetPath( aGroup );
+
+        if( param.m_Setup )
+            continue;
+
+        param.ReadParam( aCfg );
+    }
+}
+
+
+void wxConfigSaveSetups( wxConfigBase* aCfg, const PARAM_CFG_ARRAY& aList )
+{
+    wxASSERT( aCfg );
+
+    BOOST_FOREACH( const PARAM_CFG_BASE& param, aList )
+    {
+        if( !param.m_Setup )
+            continue;
+
+        if( param.m_Type == PARAM_COMMAND_ERASE )       // Erase all data
+        {
+            if( param.m_Ident )
+                aCfg->DeleteGroup( param.m_Ident );
+        }
+        else
+        {
+            param.SaveParam( aCfg );
+        }
+    }
+}
+
+
+void wxConfigLoadSetups( wxConfigBase* aCfg, const PARAM_CFG_ARRAY& aList )
+{
+    wxASSERT( aCfg );
+
+    BOOST_FOREACH( const PARAM_CFG_BASE& param, aList )
+    {
+        if( !param.m_Setup )
+            continue;
+
+        param.ReadParam( aCfg );
+    }
+}
+
 
 
 void ConfigBaseWriteDouble( wxConfigBase* aConfig, const wxString& aKey, double aValue )
@@ -32,220 +134,6 @@ void ConfigBaseWriteDouble( wxConfigBase* aConfig, const wxString& aKey, double 
     wxString    tnumber = wxString::Format( wxT( "%.16g" ), aValue );
 
     aConfig->Write( aKey, tnumber );
-}
-
-
-bool EDA_APP::ReCreatePrjConfig( const wxString& fileName,
-                                 const wxString& GroupName,
-                                 bool            ForceUseLocalConfig )
-{
-    wxFileName fn = fileName;
-
-    // Free old config file.
-    if( m_projectSettings )
-    {
-        delete m_projectSettings;
-        m_projectSettings = NULL;
-    }
-
-    /* Force the file extension.
-     * This allows the user to enter a filename without extension
-     * or use an existing name to create the project file
-     */
-    if( fn.GetExt() != ProjectFileExtension )
-    {
-        fn.SetExt( ProjectFileExtension );
-    }
-
-    /* Update the library search path list if a new project file is loaded. */
-    if( m_projectFileName != fn )
-    {
-        RemoveLibraryPath( m_projectFileName.GetPath() );
-        InsertLibraryPath( fn.GetPath(), 0 );
-        m_projectFileName = fn;
-    }
-
-    // Init local config filename
-    if( ForceUseLocalConfig || fn.FileExists() )
-    {
-        m_CurrentOptionFile = fn.GetFullPath();
-        m_projectSettings = new wxFileConfig( wxEmptyString, wxEmptyString,
-                                              m_CurrentOptionFile, wxEmptyString );
-        m_projectSettings->DontCreateOnDemand();
-
-        if( ForceUseLocalConfig )
-            return true;
-
-        /* Check the application version against the version saved in the
-         * project file.
-         *
-         * TODO: Push the version test up the stack so that when one of the
-         *       KiCad application version changes, the other applications
-         *       settings do not get updated.  Practically, this can go away.
-         *       It isn't used anywhere as far as I know (WLS).
-         */
-        int version = -1;
-        int def_version = 0;
-
-        m_projectSettings->SetPath( GroupName );
-        version = m_projectSettings->Read( wxT( "version" ), def_version );
-        m_projectSettings->SetPath( wxCONFIG_PATH_SEPARATOR );
-
-        if( version > 0 )
-        {
-            return true;
-        }
-        else
-        {
-            delete m_projectSettings;    // Version incorrect
-        }
-    }
-
-    wxString defaultFileName;
-    defaultFileName = m_libSearchPaths.FindValidPath( wxT( "kicad.pro" ) );
-
-    if( defaultFileName.IsEmpty() )
-    {
-        wxLogDebug( wxT( "Template file <kicad.pro> not found." ) );
-        fn = wxFileName( GetTraits()->GetStandardPaths().GetDocumentsDir(),
-                         wxT( "kicad" ), ProjectFileExtension );
-    }
-    else
-    {
-        fn = defaultFileName;
-    }
-
-    // Create new project file using the default name.
-    m_CurrentOptionFile = fn.GetFullPath();
-    m_projectSettings = new wxFileConfig( wxEmptyString, wxEmptyString,
-                                          wxEmptyString, fn.GetFullPath() );
-    m_projectSettings->DontCreateOnDemand();
-
-    return false;
-}
-
-
-void EDA_APP::WriteProjectConfig( const wxString&  fileName,
-                                  const wxString&  GroupName,
-                                  const PARAM_CFG_ARRAY& params )
-{
-    ReCreatePrjConfig( fileName, GroupName, FORCE_LOCAL_CONFIG );
-
-    /* Write date ( surtout pour eviter bug de wxFileConfig
-     * qui se trompe de rubrique si declaration [xx] en premiere ligne
-     * (en fait si groupe vide) */
-    m_projectSettings->SetPath( wxCONFIG_PATH_SEPARATOR );
-
-    m_projectSettings->Write( wxT( "update" ), DateAndTime() );
-    m_projectSettings->Write( wxT( "last_client" ), GetAppName() );
-
-    /* Save parameters */
-    m_projectSettings->DeleteGroup( GroupName );   // Erase all data
-    m_projectSettings->Flush();
-
-    m_projectSettings->SetPath( GroupName );
-    m_projectSettings->Write( wxT( "version" ), CONFIG_VERSION );
-    m_projectSettings->SetPath( wxCONFIG_PATH_SEPARATOR );
-
-    BOOST_FOREACH( const PARAM_CFG_BASE& param, params )
-    {
-        if( param.m_Group )
-            m_projectSettings->SetPath( param.m_Group );
-        else
-            m_projectSettings->SetPath( GroupName );
-
-        if( param.m_Setup )
-            continue;
-
-        if ( param.m_Type == PARAM_COMMAND_ERASE )    // Erase all data
-        {
-            if( param.m_Ident )
-                m_projectSettings->DeleteGroup( param.m_Ident );
-        }
-        else
-        {
-            param.SaveParam( m_projectSettings );
-        }
-    }
-
-    m_projectSettings->SetPath( UNIX_STRING_DIR_SEP );
-
-    delete m_projectSettings;
-    m_projectSettings = NULL;
-}
-
-void EDA_APP::SaveCurrentSetupValues( const PARAM_CFG_ARRAY& List )
-{
-    if( m_settings == NULL )
-        return;
-
-    unsigned count = List.size();
-    for( unsigned i=0; i<count; ++i )
-    {
-        const PARAM_CFG_BASE& param = List[i];
-
-        if( param.m_Setup == false )
-            continue;
-
-        if( param.m_Type == PARAM_COMMAND_ERASE )       // Erase all data
-        {
-            if( param.m_Ident )
-                m_settings->DeleteGroup( param.m_Ident );
-        }
-        else
-        {
-            param.SaveParam( m_settings );
-        }
-    }
-}
-
-bool EDA_APP::ReadProjectConfig( const wxString&  local_config_filename,
-                                 const wxString&  GroupName,
-                                 const PARAM_CFG_ARRAY& params,
-                                 bool             Load_Only_if_New )
-{
-    ReCreatePrjConfig( local_config_filename, GroupName, false );
-
-    m_projectSettings->SetPath( wxCONFIG_PATH_SEPARATOR );
-    wxString timestamp = m_projectSettings->Read( wxT( "update" ) );
-
-    if( Load_Only_if_New && ( !timestamp.IsEmpty() )
-       && (timestamp == m_CurrentOptionFileDateAndTime) )
-    {
-        return false;
-    }
-
-    m_CurrentOptionFileDateAndTime = timestamp;
-
-    BOOST_FOREACH( const PARAM_CFG_BASE& param, params )
-    {
-        if( param.m_Group )
-            m_projectSettings->SetPath( param.m_Group );
-        else
-            m_projectSettings->SetPath( GroupName );
-
-        if( param.m_Setup )
-            continue;
-
-        param.ReadParam( m_projectSettings );
-    }
-
-    delete m_projectSettings;
-    m_projectSettings = NULL;
-
-    return true;
-}
-
-
-void EDA_APP::ReadCurrentSetupValues( const PARAM_CFG_ARRAY& List )
-{
-    BOOST_FOREACH( const PARAM_CFG_BASE& param, List )
-    {
-        if( param.m_Setup == false )
-            continue;
-
-        param.ReadParam( m_settings );
-    }
 }
 
 
@@ -286,7 +174,7 @@ PARAM_CFG_INT::PARAM_CFG_INT( bool Insetup, const wxChar* ident, int* ptparam,
 
 void PARAM_CFG_INT::ReadParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     int itmp = aConfig->Read( m_Ident, m_Default );
@@ -300,7 +188,7 @@ void PARAM_CFG_INT::ReadParam( wxConfigBase* aConfig ) const
 
 void PARAM_CFG_INT::SaveParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     aConfig->Write( m_Ident, *m_Pt_param );
@@ -330,7 +218,7 @@ PARAM_CFG_INT_WITH_SCALE::PARAM_CFG_INT_WITH_SCALE( bool Insetup,
 
 void PARAM_CFG_INT_WITH_SCALE::ReadParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     double dtmp = (double) m_Default * m_BIU_to_cfgunit;
@@ -347,7 +235,7 @@ void PARAM_CFG_INT_WITH_SCALE::ReadParam( wxConfigBase* aConfig ) const
 
 void PARAM_CFG_INT_WITH_SCALE::SaveParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     // We cannot use aConfig->Write for a double, because
@@ -383,8 +271,9 @@ PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool          Insetup,
 
 void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
+
     EDA_COLOR_T itmp = ColorByName( aConfig->Read( m_Ident, wxT("NONE") ) );
 
     if( itmp == UNSPECIFIED_COLOR )
@@ -395,7 +284,7 @@ void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig ) const
 
 void PARAM_CFG_SETCOLOR::SaveParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     aConfig->Write( m_Ident, ColorGetName( *m_Pt_param ) );
@@ -433,7 +322,7 @@ PARAM_CFG_DOUBLE::PARAM_CFG_DOUBLE( bool          Insetup,
 
 void PARAM_CFG_DOUBLE::ReadParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     double dtmp = m_Default;
@@ -448,7 +337,7 @@ void PARAM_CFG_DOUBLE::ReadParam( wxConfigBase* aConfig ) const
 
 void PARAM_CFG_DOUBLE::SaveParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     // We cannot use aConfig->Write for a double, because
@@ -483,7 +372,7 @@ PARAM_CFG_BOOL::PARAM_CFG_BOOL( bool          Insetup,
 
 void PARAM_CFG_BOOL::ReadParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     int itmp = aConfig->Read( m_Ident, (int) m_Default );
@@ -494,7 +383,7 @@ void PARAM_CFG_BOOL::ReadParam( wxConfigBase* aConfig ) const
 
 void PARAM_CFG_BOOL::SaveParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     aConfig->Write( m_Ident, *m_Pt_param );
@@ -524,20 +413,20 @@ PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxChar* ident,
 
 void PARAM_CFG_WXSTRING::ReadParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
+
     *m_Pt_param = aConfig->Read( m_Ident, m_default );
 }
 
 
 void PARAM_CFG_WXSTRING::SaveParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     aConfig->Write( m_Ident, *m_Pt_param );
 }
-
 
 
 PARAM_CFG_FILENAME::PARAM_CFG_FILENAME( const wxChar* ident,
@@ -551,7 +440,7 @@ PARAM_CFG_FILENAME::PARAM_CFG_FILENAME( const wxChar* ident,
 
 void PARAM_CFG_FILENAME::ReadParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     wxString prm = aConfig->Read( m_Ident );
@@ -567,7 +456,7 @@ void PARAM_CFG_FILENAME::ReadParam( wxConfigBase* aConfig ) const
 
 void PARAM_CFG_FILENAME::SaveParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     wxString prm = *m_Pt_param;
@@ -588,7 +477,7 @@ PARAM_CFG_LIBNAME_LIST::PARAM_CFG_LIBNAME_LIST( const wxChar*  ident,
 
 void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
 
     int            indexlib = 1; // We start indexlib to 1 because first
@@ -617,15 +506,15 @@ void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig ) const
 
 void PARAM_CFG_LIBNAME_LIST::SaveParam( wxConfigBase* aConfig ) const
 {
-    if( m_Pt_param == NULL || aConfig == NULL )
+    if( !m_Pt_param || !aConfig )
         return;
+
     wxArrayString* libname_list = m_Pt_param;
 
-    unsigned       indexlib = 0;
     wxString       configkey;
     wxString       libname;
 
-    for( ; indexlib < libname_list->GetCount(); indexlib++ )
+    for( unsigned indexlib = 0;  indexlib < libname_list->GetCount();  indexlib++ )
     {
         configkey = m_Ident;
 

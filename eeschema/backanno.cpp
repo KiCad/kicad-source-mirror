@@ -32,7 +32,7 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
 #include <wxEeschemaStruct.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
@@ -145,8 +145,8 @@ bool SCH_EDIT_FRAME::LoadCmpToFootprintLinkFile()
         return false;
 
     wxString filename = dlg.GetPath();
-    wxString title  = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
-    title += wxT( " " ) + filename;
+    wxString title    = wxT( "Eeschema " ) + GetBuildVersion() + wxT( ' ' ) + filename;
+
     SetTitle( title );
 
     int response = wxMessageBox( _( "Do you want to force all the footprint fields visibility?" ),

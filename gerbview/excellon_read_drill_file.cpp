@@ -543,7 +543,7 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
 
 bool EXCELLON_IMAGE::Select_Tool( char*& text )
 {
-    int tool_id = ReturnTCodeNumber( text );
+    int tool_id = TCodeNumber( text );
 
     if( tool_id >= 0 )
     {

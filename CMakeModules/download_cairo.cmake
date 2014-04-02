@@ -33,7 +33,9 @@ set( CAIRO_ROOT "${PROJECT_SOURCE_DIR}/cairo_root" )
 
 #-----</configure>---------------------------------------------------------------
 
-find_package( BZip2 REQUIRED )
+if( NOT BZIP2_FOUND )
+    find_package( BZip2 REQUIRED )
+endif()
 
 set( PREFIX ${DOWNLOAD_DIR}/cairo )
 
@@ -42,7 +44,7 @@ if ( KICAD_BUILD_STATIC )
 endif( KICAD_BUILD_STATIC )
 
 
-if (APPLE) 
+if (APPLE)
 
     set( CAIRO_CFLAGS  "CFLAGS=" )
     set( CAIRO_LDFLAGS "LDFLAGS=-framework CoreServices -framework Cocoa" )
@@ -94,8 +96,14 @@ ExternalProject_Add(  cairo
 
     #BINARY_DIR      "${PREFIX}"
 
-    BUILD_COMMAND   $(MAKE) 
+    BUILD_COMMAND   $(MAKE)
 
     INSTALL_DIR     "${CAIRO_ROOT}"
     INSTALL_COMMAND $(MAKE) install
     )
+
+# match these with whatever FindCairo.cmake sets
+# Dick i'vent set it because /lib and /lib64 issue in non multiarch binaries OSs
+#set( CAIRO_FOUND true )
+set( CAIRO_INCLUDE_DIR ${CAIRO_ROOT}/include )
+set( CAIRO_LIBRARIES ${CAIRO_ROOT}/lib )

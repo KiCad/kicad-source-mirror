@@ -27,22 +27,22 @@
  * @brief Export IPC-D-356 test format
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "appl_wxstruct.h"
-#include "wxPcbStruct.h"
-#include "trigo.h"
-#include "build_version.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <kiface_i.h>
+#include <wxPcbStruct.h>
+#include <trigo.h>
+#include <build_version.h>
+#include <macros.h>
 
-#include "pcbnew.h"
+#include <pcbnew.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_edge_mod.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_edge_mod.h>
 #include <vector>
 #include <cctype>
 
@@ -50,14 +50,14 @@
  * Useful because 356A (when implemented) must be sorted before outputting it */
 struct D356_RECORD
 {
-    bool        smd;
-    bool    hole;
-    wxString    netname;
-    wxString    refdes;
-    wxString    pin;
-    bool    midpoint;
+    bool       smd;
+    bool       hole;
+    wxString   netname;
+    wxString   refdes;
+    wxString   pin;
+    bool       midpoint;
     int        drill;
-    bool    mechanical;
+    bool       mechanical;
     int        access;      // Access 0 is 'both sides'
     int        soldermask;
     // All these in PCB units, will be output in decimils
@@ -74,19 +74,19 @@ static int compute_pad_access_code( BOARD *aPcb, LAYER_MSK aLayerMask )
     // Non-copper is not interesting here
     aLayerMask &= ALL_CU_LAYERS;
     if( aLayerMask == 0 )
-    return -1;
+        return -1;
 
     // Traditional TH pad
     if( (aLayerMask & LAYER_FRONT) && (aLayerMask & LAYER_BACK) )
-    return 0;
+        return 0;
 
     // Front SMD pad
     if( (aLayerMask & LAYER_FRONT) )
-    return 1;
+        return 1;
 
     // Back SMD pad
     if( (aLayerMask & LAYER_BACK) )
-    return aPcb->GetCopperLayerCount();
+        return aPcb->GetCopperLayerCount();
 
     // OK, we have an inner-layer only pad (and I have no idea about
     // what could be used for); anyway, find the first copper layer
@@ -129,36 +129,36 @@ static void build_pad_testpoints( BOARD *aPcb,
             // It could be a mask only pad, we only handle pads with copper here
             if( rk.access != -1 )
             {
-            rk.netname = pad->GetNetname();
-            rk.refdes = module->GetReference();
-            pad->ReturnStringPadName( rk.pin );
-            rk.midpoint = false; // XXX MAYBE need to be computed (how?)
-                    const wxSize& drill = pad->GetDrillSize();
-            rk.drill = std::min( drill.x, drill.y );
-            rk.hole = (rk.drill != 0);
-                    rk.smd = pad->GetAttribute() == PAD_SMD;
-            rk.mechanical = (pad->GetAttribute() == PAD_HOLE_NOT_PLATED);
-            rk.x_location = pad->GetPosition().x - origin.x;
-            rk.y_location = origin.y - pad->GetPosition().y;
-            rk.x_size = pad->GetSize().x;
+                rk.netname = pad->GetNetname();
+                rk.refdes = module->GetReference();
+                pad->StringPadName( rk.pin );
+                rk.midpoint = false; // XXX MAYBE need to be computed (how?)
+                const wxSize& drill = pad->GetDrillSize();
+                rk.drill = std::min( drill.x, drill.y );
+                rk.hole = (rk.drill != 0);
+                rk.smd = pad->GetAttribute() == PAD_SMD;
+                rk.mechanical = (pad->GetAttribute() == PAD_HOLE_NOT_PLATED);
+                rk.x_location = pad->GetPosition().x - origin.x;
+                rk.y_location = origin.y - pad->GetPosition().y;
+                rk.x_size = pad->GetSize().x;
 
-            // Rule: round pads have y = 0
-            if( pad->GetShape() == PAD_CIRCLE )
-                rk.y_size = 0;
-            else
-                rk.y_size = pad->GetSize().y;
+                // Rule: round pads have y = 0
+                if( pad->GetShape() == PAD_CIRCLE )
+                    rk.y_size = 0;
+                else
+                    rk.y_size = pad->GetSize().y;
 
-            rk.rotation = -KiROUND( pad->GetOrientation() ) / 10;
-                    if( rk.rotation < 0 ) rk.rotation += 360;
+                rk.rotation = -KiROUND( pad->GetOrientation() ) / 10;
+                if( rk.rotation < 0 ) rk.rotation += 360;
 
-            // the value indicates which sides are *not* accessible
-                    rk.soldermask = 3;
-                    if( pad->GetLayerMask() & SOLDERMASK_LAYER_FRONT)
-                        rk.soldermask &= ~1;
-                    if( pad->GetLayerMask() & SOLDERMASK_LAYER_BACK)
-                        rk.soldermask &= ~2;
+                // the value indicates which sides are *not* accessible
+                rk.soldermask = 3;
+                if( pad->GetLayerMask() & SOLDERMASK_LAYER_FRONT)
+                    rk.soldermask &= ~1;
+                if( pad->GetLayerMask() & SOLDERMASK_LAYER_BACK)
+                    rk.soldermask &= ~2;
 
-            aRecords.push_back( rk );
+                aRecords.push_back( rk );
             }
         }
     }
@@ -172,15 +172,15 @@ static int via_access_code( BOARD *aPcb, int top_layer, int bottom_layer )
     // Easy case for through vias: top_layer is component, bottom_layer is
     // solder, access code is 0
     if( (top_layer == LAYER_N_FRONT) && (bottom_layer == LAYER_N_BACK) )
-    return 0;
+        return 0;
 
     // Blind via, reachable from front
     if( top_layer == LAYER_N_FRONT )
-    return 1;
+        return 1;
 
     // Blind via, reachable from bottom
     if( bottom_layer == LAYER_N_BACK )
-    return aPcb->GetCopperLayerCount();
+        return aPcb->GetCopperLayerCount();
 
     // It's a buried via, accessible from some inner layer
     // (maybe could be used for testing before laminating? no idea)
@@ -214,7 +214,7 @@ static void build_via_testpoints( BOARD *aPcb,
             rk.drill = via->GetDrillValue();
             rk.mechanical = false;
             LAYER_NUM top_layer, bottom_layer;
-                via->ReturnLayerPair( &top_layer, &bottom_layer );
+                via->LayerPair( &top_layer, &bottom_layer );
             rk.access = via_access_code( aPcb, top_layer, bottom_layer );
             rk.x_location = via->GetPosition().x - origin.x;
             rk.y_location = origin.y - via->GetPosition().y;

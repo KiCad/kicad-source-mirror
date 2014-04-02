@@ -301,7 +301,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
     const BOARD_DESIGN_SETTINGS& g = m_pcb->GetDesignSettings();
 
-#define FmtVal( x ) GetChars( ReturnStringFromValue( g_UserUnit, x ) )
+#define FmtVal( x ) GetChars( StringFromValue( g_UserUnit, x ) )
 
 #if 0   // set to 1 when (if...) BOARD_DESIGN_SETTINGS has a m_MinClearance value
     if( nc->GetClearance() < g.m_MinClearance )

@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <common.h>
 #include <class_drawpanel.h>
 #include <class_drawpanel_gal.h>
@@ -70,28 +70,25 @@ BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
                    DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode )
 END_EVENT_TABLE()
 
-#define DISPLAY_FOOTPRINTS_FRAME_NAME wxT( "CmpFrame" )
 
-
-DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* parent,
-                                                    const wxString& title,
-                                                    const wxPoint& pos,
-                                                    const wxSize& size, long style ) :
-    PCB_BASE_FRAME( parent, CVPCB_DISPLAY_FRAME_TYPE, title, pos, size,
-                    style, DISPLAY_FOOTPRINTS_FRAME_NAME )
+DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, CVPCB_MAINFRAME* aParent ) :
+    PCB_BASE_FRAME( aKiway, aParent, CVPCB_DISPLAY_FRAME_TYPE, _( "Footprint Viewer" ),
+        wxDefaultPosition, wxDefaultSize,
+        KICAD_DEFAULT_DRAWFRAME_STYLE, FOOTPRINTVIEWER_FRAME_NAME )
 {
-    m_FrameName = DISPLAY_FOOTPRINTS_FRAME_NAME;
+    m_FrameName = FOOTPRINTVIEWER_FRAME_NAME;
     m_showAxis = true;         // true to draw axis.
 
     // Give an icon
     wxIcon  icon;
+
     icon.CopyFromBitmap( KiBitmap( icon_cvpcb_xpm ) );
     SetIcon( icon );
 
     SetBoard( new BOARD() );
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
 
-    LoadSettings();
+    LoadSettings( config() );
 
     // Initialize grid id to a default value if not found in config or bad:
     if( (m_LastGridSizeId <= 0) ||
@@ -148,8 +145,6 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
     delete GetScreen();
     SetScreen( NULL );      // Be sure there is no double deletion
-
-    ( (CVPCB_MAINFRAME*) wxGetApp().GetTopWindow() )->m_DisplayFootprintFrame = NULL;
 }
 
 
@@ -438,7 +433,7 @@ void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
         return;
     }
 
-    m_Draw3DFrame = new EDA_3D_FRAME( this, _( "3D Viewer" ), KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
+    m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, _( "3D Viewer" ), KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
     m_Draw3DFrame->Show( true );
 }
 
@@ -493,7 +488,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
         wxLogDebug( wxT( "Load footprint <%s> from library <%s>." ),
                     fpname.c_str(), nickname.c_str()  );
 
-        footprint = m_footprintLibTable->FootprintLoad( FROM_UTF8( nickname.c_str() ), FROM_UTF8( fpname.c_str() ) );
+        footprint = FootprintLibs()->FootprintLoad( FROM_UTF8( nickname.c_str() ), FROM_UTF8( fpname.c_str() ) );
     }
     catch( IO_ERROR ioe )
     {

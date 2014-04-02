@@ -26,15 +26,15 @@
  * @file database.cpp
  */
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "eda_doc.h"
-#include "kicad_string.h"
-#include "wxstruct.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <eda_doc.h>
+#include <kicad_string.h>
+#include <draw_frame.h>
 #include <macros.h>
-#include "protos.h"
-#include "class_library.h"
-#include "dialog_helpers.h"
+#include <protos.h>
+#include <class_library.h>
+#include <dialog_helpers.h>
 
 #include <boost/foreach.hpp>
 

@@ -155,7 +155,7 @@ struct IO_ERROR // : std::exception
 
 
 /**
- * Class PARSE_ERROR
+ * Struct PARSE_ERROR
  * contains a filename or source description, a problem input line, a line number,
  * a byte offset, and an error message which contains the the caller's report and his
  * call site information: CPP source file, function, and line number.

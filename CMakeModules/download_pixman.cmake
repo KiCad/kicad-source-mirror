@@ -33,13 +33,15 @@ set( PIXMAN_ROOT "${PROJECT_SOURCE_DIR}/pixman_root" )
 
 #-----</configure>---------------------------------------------------------------
 
-find_package( BZip2 REQUIRED )
+if( NOT BZIP2_FOUND )
+    find_package( BZip2 REQUIRED )
+endif()
 
 set( PREFIX ${DOWNLOAD_DIR}/pixman )
 
 set(PIXMAN_CPPFLAGS "CFLAGS=")
 
-if (APPLE) 
+if (APPLE)
     if( CMAKE_OSX_ARCHITECTURES )
         set(PIXMAN_CPPFLAGS "${PIXMAN_CPPFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES} -fno-common -mmacosx-version-min=10.5")
     else()

@@ -29,7 +29,9 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
+#include <project.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -80,13 +82,13 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     case ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR:
         m_show_microwave_tools  = ! m_show_microwave_tools;
         m_auimgr.GetPane( wxT( "m_microWaveToolBar" ) ).Show( m_show_microwave_tools );
-	m_auimgr.Update();
+        m_auimgr.Update();
 
         GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR,
                                 m_show_microwave_tools ?
                                 _( "Hide Microwave Toolbar" ): _( "Show Microwave Toolbar" ));
         break;
-        
+
 
     case ID_PCB_LAYERS_SETUP:
         InstallDialogLayerSetup();
@@ -95,21 +97,24 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     case ID_PCB_LIB_TABLE_EDIT:
         {
             bool tableChanged = false;
-            int r = InvokePcbLibTableEditor( this, m_globalFootprintTable, m_footprintLibTable );
+            int r = InvokePcbLibTableEditor( this, &GFootprintTable, FootprintLibs() );
 
             if( r & 1 )
             {
                 try
                 {
                     FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
-                    m_globalFootprintTable->Format( &sf, 0 );
+
+                    GFootprintTable.Format( &sf, 0 );
                     tableChanged = true;
                 }
-                catch( IO_ERROR& ioe )
+                catch( const IO_ERROR& ioe )
                 {
-                    wxString msg;
-                    msg.Printf( _( "Error occurred saving the global footprint library "
-                                   "table:\n\n%s" ), ioe.errorText.GetData() );
+                    wxString msg = wxString::Format( _(
+                        "Error occurred saving the global footprint library "
+                        "table:\n\n%s" ),
+                        GetChars( ioe.errorText.GetData() )
+                        );
                     wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
                 }
             }
@@ -118,25 +123,29 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             // is kept in memory and created in the path when the new board is saved.
             if( (r & 2) && !GetBoard()->GetFileName().IsEmpty() )
             {
-                wxFileName fn = GetBoard()->GetFileName();
+                wxString    tblName   = Prj().FootprintLibTblName();
 
                 try
                 {
-                    m_footprintLibTable->Save( fn );
+                    FootprintLibs()->Save( tblName );
                     tableChanged = true;
                 }
-                catch( IO_ERROR& ioe )
+                catch( const IO_ERROR& ioe )
                 {
-                    wxString msg;
-                    msg.Printf( _( "Error occurred saving project specific footprint library "
-                                   "table:\n\n%s" ), ioe.errorText.GetData() );
+                    wxString msg = wxString::Format( _(
+                        "Error occurred saving project specific footprint library "
+                        "table:\n\n%s" ),
+                        GetChars( ioe.errorText )
+                        );
                     wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
                 }
             }
 
-            if( tableChanged && FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer() != NULL )
+            FOOTPRINT_VIEWER_FRAME* viewer;
+
+            if( tableChanged && (viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( this )) != NULL )
             {
-                FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer()->ReCreateLibraryList();
+                viewer->ReCreateLibraryList();
             }
         }
         break;
@@ -164,27 +173,27 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_CONFIG_READ:
-    {
-        fn = GetBoard()->GetFileName();
-        fn.SetExt( ProjectFileExtension );
-
-        wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
-                          fn.GetFullName(), ProjectFileWildcard,
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            break;
-
-        if( !wxFileExists( dlg.GetPath() ) )
         {
-            wxString msg;
-            msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
-            DisplayError( this, msg );
-            break;
-        }
+            fn = GetBoard()->GetFileName();
+            fn.SetExt( ProjectFileExtension );
 
-        LoadProjectSettings( dlg.GetPath() );
-    }
+            wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
+                              fn.GetFullName(), ProjectFileWildcard,
+                              wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+
+            if( dlg.ShowModal() == wxID_CANCEL )
+                break;
+
+            if( !wxFileExists( dlg.GetPath() ) )
+            {
+                wxString msg;
+                msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
+                DisplayError( this, msg );
+                break;
+            }
+
+            LoadProjectSettings( dlg.GetPath() );
+        }
         break;
 
     // Hotkey IDs
@@ -222,19 +231,15 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
 bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
 {
-    wxLogDebug( wxT( "Loading project <%s> settings." ), GetChars( aProjectFileName ) );
+    wxLogDebug( wxT( "Loading project '%s' settings." ), GetChars( aProjectFileName ) );
 
-    wxFileName fn = aProjectFileName;
+    wxFileName  fn = aProjectFileName;
 
     if( fn.GetExt() != ProjectFileExtension )
         fn.SetExt( ProjectFileExtension );
 
-    wxGetApp().RemoveLibraryPath( g_UserLibDirBuffer );
-
-    wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
-
-    // User library path takes precedent over default library search paths.
-    wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
+    // was: wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
+    Prj().ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
 
     // Dick 5-Feb-2012: I don't agree with this, the BOARD contents should dictate
     // what is visible or not, even initially.  And since PCB_EDIT_FRAME projects settings
@@ -255,37 +260,18 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     SetElementVisibility( RATSNEST_VISIBLE, showRats );
 #endif
 
-    fn = GetBoard()->GetFileName();
+    wxString projectFpLibTableFileName = Prj().FootprintLibTblName();
 
-    // Check if a project footprint table is defined and load it.  If no project footprint
-    // table is defined, then the global library table is the footprint library table.
-    FP_LIB_TABLE::SetProjectPathEnvVariable( fn );
-
-    delete m_footprintLibTable;
-
-    wxFileName projectFpLibTableFileName;
-
-    projectFpLibTableFileName = FP_LIB_TABLE::GetProjectFileName( fn );
-    m_footprintLibTable = new FP_LIB_TABLE();
+    FootprintLibs()->Clear();
 
     try
     {
-        m_footprintLibTable->Load( projectFpLibTableFileName, m_globalFootprintTable );
+        FootprintLibs()->Load( projectFpLibTableFileName );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
     }
-
-    FOOTPRINT_EDIT_FRAME* editFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
-
-    if( editFrame )
-        editFrame->SetFootprintLibTable( m_footprintLibTable );
-
-    FOOTPRINT_VIEWER_FRAME* viewFrame = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
-
-    if( viewFrame )
-        viewFrame->SetFootprintLibTable( m_footprintLibTable );
 
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
@@ -313,11 +299,12 @@ void PCB_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
         if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
-        wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP, GetProjectFileParameters() );
+        fn = dlg.GetPath();
     }
 
-    else
-        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+    SEARCH_STACK&   search = Kiface().KifaceSearch();
+
+    Prj().ConfigSave( search, fn.GetFullPath(), GROUP, GetProjectFileParameters() );
 }
 
 

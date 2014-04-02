@@ -269,7 +269,7 @@ void D_PAD::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 
 
 // Returns the position of the pad.
-const wxPoint D_PAD::ReturnShapePos() const
+const wxPoint D_PAD::ShapePos() const
 {
     if( m_Offset.x == 0 && m_Offset.y == 0 )
         return m_Pos;
@@ -308,13 +308,13 @@ const wxString D_PAD::GetPadName() const
 
     wxString name;
 
-    ReturnStringPadName( name );
+    StringPadName( name );
     return name;
 #endif
 }
 
 
-void D_PAD::ReturnStringPadName( wxString& text ) const
+void D_PAD::StringPadName( wxString& text ) const
 {
 #if 0   // m_Padname is not ASCII and not UTF8, it is LATIN1 basically, whatever
         // 8 bit font is supported in KiCad plotting and drawing.
@@ -564,7 +564,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
     {
         wxString msg = module->GetReference();
         aList.push_back( MSG_PANEL_ITEM( _( "Module" ), msg, DARKCYAN ) );
-        ReturnStringPadName( Line );
+        StringPadName( Line );
         aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), Line, BROWN ) );
     }
 
@@ -641,7 +641,7 @@ bool D_PAD::HitTest( const wxPoint& aPosition )
 {
     int     dx, dy;
 
-    wxPoint shape_pos = ReturnShapePos();
+    wxPoint shape_pos = ShapePos();
 
     wxPoint delta = aPosition - shape_pos;
 
@@ -833,29 +833,40 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         // Multi layer pad
         aLayers[aCount++] = ITEM_GAL_LAYER( PADS_VISIBLE );
         aLayers[aCount++] = NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE );
-        aLayers[aCount++] = SOLDERMASK_N_FRONT;
-        aLayers[aCount++] = SOLDERMASK_N_BACK;
-        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
-        aLayers[aCount++] = SOLDERPASTE_N_BACK;
     }
     else if( IsOnLayer( LAYER_N_FRONT ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
         aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
-        aLayers[aCount++] = SOLDERMASK_N_FRONT;
-        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
     }
     else if( IsOnLayer( LAYER_N_BACK ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
         aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
-        aLayers[aCount++] = SOLDERMASK_N_BACK;
-        aLayers[aCount++] = SOLDERPASTE_N_BACK;
     }
+
+    if( IsOnLayer( SOLDERMASK_N_FRONT ) )
+        aLayers[aCount++] = SOLDERMASK_N_FRONT;
+
+    if( IsOnLayer( SOLDERMASK_N_BACK ) )
+        aLayers[aCount++] = SOLDERMASK_N_BACK;
+
+    if( IsOnLayer( SOLDERPASTE_N_FRONT ) )
+        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
+
+    if( IsOnLayer( SOLDERPASTE_N_BACK ) )
+        aLayers[aCount++] = SOLDERPASTE_N_BACK;
+
+    if( IsOnLayer( ADHESIVE_N_BACK ) )
+        aLayers[aCount++] = ADHESIVE_N_BACK;
+
+    if( IsOnLayer( ADHESIVE_N_FRONT ) )
+        aLayers[aCount++] = ADHESIVE_N_FRONT;
+
 #ifdef __WXDEBUG__
-    else    // Should not occur
+    if( aCount == 0 )    // Should not occur
     {
-        wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD on layer different than FRONT/BACK") );
+        wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD has no layer") );
     }
 #endif
 }

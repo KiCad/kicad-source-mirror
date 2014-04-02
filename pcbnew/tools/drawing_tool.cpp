@@ -696,7 +696,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
             {
                 // Init the new item attributes
                 module = m_frame->LoadModuleFromLibrary( wxEmptyString,
-                                                         m_frame->GetFootprintLibraryTable(),
+                                                         m_frame->FootprintLibs(),
                                                          true, NULL );
                 if( module == NULL )
                     continue;

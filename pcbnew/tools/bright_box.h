@@ -61,7 +61,7 @@ public:
 
 private:
     static const KIGFX::COLOR4D BOX_COLOR;
-    static const double LINE_WIDTH = 100000.0;
+    static const double LINE_WIDTH;
 
     BOARD_ITEM* m_item;
 };

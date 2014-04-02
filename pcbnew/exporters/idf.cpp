@@ -39,7 +39,8 @@
 #include <ctime>
 #include <cctype>
 #include <strings.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <wx/config.h>
 #include <wx/file.h>
 #include <wx/filename.h>
 #include <macros.h>
@@ -568,8 +569,8 @@ bool IDF_BOARD::WriteDrills( void )
 
     fprintf( layoutFile, ".DRILLED_HOLES\n" );
 
-    std::list<struct IDF_DRILL_DATA*>::iterator ds  = drills.begin();
-    std::list<struct IDF_DRILL_DATA*>::iterator de  = drills.end();
+    std::list<class IDF_DRILL_DATA*>::iterator ds  = drills.begin();
+    std::list<class IDF_DRILL_DATA*>::iterator de  = drills.end();
 
     while( ds != de )
     {

@@ -44,6 +44,8 @@
 
 
 class wxAboutDialogInfo;
+class SEARCH_STACK;
+
 
 // Flag for special keys
 #define GR_KB_RIGHTSHIFT 0x10000000                 /* Keybd states: right
@@ -578,5 +580,13 @@ unsigned GetRunningMicroSecs();
  * so no attempt to parse it should be done
  */
 wxString FormatDateLong( const wxDateTime &aDate );
+
+/**
+ * Function SystemDirsAppend
+ * appends system places to aSearchStack in a platform specific way, and pertinent
+ * to KiCad programs.  It seems to be a place to collect bad ideas and keep them
+ * out of view.
+ */
+void SystemDirsAppend( SEARCH_STACK* aSearchStack );
 
 #endif  // INCLUDE__COMMON_H_

@@ -34,7 +34,8 @@
 #include <macros.h>
 
 #include <kicad.h>
-#include <appl_wxstruct.h>
+#include <project.h>
+#include <pgm_base.h>
 #include <tree_project_frame.h>
 #include <class_treeprojectfiles.h>
 #include <class_treeproject_item.h>
@@ -189,7 +190,8 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
     wxString        sep = wxFileName().GetPathSeparator();
     wxString        FullFileName = GetFileName();
     wxTreeItemId    id = GetId();
-    KICAD_MANAGER_FRAME* mainFrame = (KICAD_MANAGER_FRAME*) wxGetApp().GetTopWindow();
+
+    KICAD_MANAGER_FRAME* mainFrame = (KICAD_MANAGER_FRAME*) Pgm().App().GetTopWindow();
 
     AddDelimiterString( FullFileName );
 
@@ -225,7 +227,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
 
     case TREE_TXT:
         {
-            wxString editorname = wxGetApp().GetEditorName();
+            wxString editorname = Pgm().GetEditorName();
 
             if( !editorname.IsEmpty() )
                 mainFrame->Execute( m_parent, editorname, FullFileName );

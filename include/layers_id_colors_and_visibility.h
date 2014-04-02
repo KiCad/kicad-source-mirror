@@ -63,6 +63,8 @@ typedef int LAYER_NUM;
 #define NB_COPPER_LAYERS        (LAST_COPPER_LAYER - FIRST_COPPER_LAYER + 1)
 
 #define FIRST_NON_COPPER_LAYER  16
+#define FIRST_TECHNICAL_LAYER   16
+#define FIRST_USER_LAYER        24
 #define ADHESIVE_N_BACK         16
 #define ADHESIVE_N_FRONT        17
 #define SOLDERPASTE_N_BACK      18
@@ -77,6 +79,8 @@ typedef int LAYER_NUM;
 #define ECO2_N                  27
 #define EDGE_N                  28
 #define LAST_NON_COPPER_LAYER   28
+#define LAST_TECHNICAL_LAYER    23
+#define LAST_USER_LAYER   27
 #define NB_PCB_LAYERS           (LAST_NON_COPPER_LAYER + 1)
 #define UNUSED_LAYER_29         29
 #define UNUSED_LAYER_30         30
@@ -128,13 +132,16 @@ typedef unsigned LAYER_MSK;
 #define ALL_CU_LAYERS           0x0000FFFF
 #define INTERNAL_CU_LAYERS      0x00007FFE
 #define EXTERNAL_CU_LAYERS      0x00008001
-#define FRONT_AUX_LAYERS       (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT \
+#define FRONT_TECH_LAYERS       (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT \
                                | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT)
-#define BACK_AUX_LAYERS        (SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK \
+#define BACK_TECH_LAYERS        (SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK \
                                | ADHESIVE_LAYER_BACK | SOLDERPASTE_LAYER_BACK)
-#define ALL_AUX_LAYERS         (FRONT_AUX_LAYERS | BACK_AUX_LAYERS)
-#define BACK_LAYERS            (LAYER_BACK | BACK_AUX_LAYERS)
-#define FRONT_LAYERS           (LAYER_FRONT | FRONT_AUX_LAYERS)
+#define ALL_TECH_LAYERS         (FRONT_TECH_LAYERS | BACK_TECH_LAYERS)
+#define BACK_LAYERS            (LAYER_BACK | BACK_TECH_LAYERS)
+#define FRONT_LAYERS           (LAYER_FRONT | FRONT_TECH_LAYERS)
+
+#define ALL_USER_LAYERS         (DRAW_LAYER | COMMENT_LAYER |\
+                                 ECO1_LAYER | ECO2_LAYER )
 
 #define NO_LAYERS               0x00000000
 
@@ -330,8 +337,18 @@ inline bool IsCopperLayer( LAYER_NUM aLayer )
  */
 inline bool IsNonCopperLayer( LAYER_NUM aLayer )
 {
-    return aLayer >= FIRST_NON_COPPER_LAYER
-        && aLayer <= LAST_NON_COPPER_LAYER;
+    return aLayer >= FIRST_NON_COPPER_LAYER && aLayer <= LAST_NON_COPPER_LAYER;
+}
+
+/**
+ * Function IsUserLayer
+ * tests whether a layer is a non copper and a non tech layer
+ * @param aLayer = Layer to test
+ * @return true if aLayer is a user layer
+ */
+inline bool IsUserLayer( LAYER_NUM aLayer )
+{
+    return aLayer >= FIRST_USER_LAYER && aLayer <= LAST_USER_LAYER;
 }
 
 /* IMPORTANT: If a layer is not a front layer not necessarily is true
@@ -369,7 +386,7 @@ inline bool IsBackLayer( LAYER_NUM aLayer )
 }
 
 /**
- * Function ReturnFlippedLayerNumber
+ * Function FlippedLayerNumber
  * @return the layer number after flipping an item
  * some (not all) layers: external copper, Mask, Paste, and solder
  * are swapped between front and back sides

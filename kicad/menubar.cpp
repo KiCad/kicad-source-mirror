@@ -28,7 +28,7 @@
  * @brief (Re)Create the project manager menubar for KiCad
  */
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_kicad.h>
 #include <kicad.h>
 #include <menus_helpers.h>
 #include <tree_project_frame.h>
@@ -109,7 +109,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Before deleting, remove the menus managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history)
     if( openRecentMenu )
-        wxGetApp().GetFileHistory().RemoveMenu( openRecentMenu );
+        Pgm().GetFileHistory().RemoveMenu( openRecentMenu );
 
     // Delete all existing menus
     while( menuBar->GetMenuCount() )
@@ -129,8 +129,8 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     // File history
     openRecentMenu = new wxMenu();
-    wxGetApp().GetFileHistory().UseMenu( openRecentMenu );
-    wxGetApp().GetFileHistory().AddFilesToMenu( );
+    Pgm().GetFileHistory().UseMenu( openRecentMenu );
+    Pgm().GetFileHistory().AddFilesToMenu( );
     AddMenuItem( fileMenu, openRecentMenu,
                  wxID_ANY,
                  _( "Open &Recent" ),
@@ -224,7 +224,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                    KiBitmap( datasheet_xpm ),
                   wxITEM_CHECK );
     SubMenuPdfBrowserChoice->Check( ID_SELECT_DEFAULT_PDF_BROWSER,
-                                    wxGetApp().UseSystemPdfBrowser() );
+                                    Pgm().UseSystemPdfBrowser() );
 
     // Favourite
     AddMenuItem( SubMenuPdfBrowserChoice, ID_SELECT_PREFERED_PDF_BROWSER,
@@ -233,7 +233,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                    KiBitmap( datasheet_xpm ),
                   wxITEM_CHECK );
     SubMenuPdfBrowserChoice->Check( ID_SELECT_PREFERED_PDF_BROWSER,
-                                    !wxGetApp().UseSystemPdfBrowser() );
+                                    !Pgm().UseSystemPdfBrowser() );
 
     SubMenuPdfBrowserChoice->AppendSeparator();
     // Append PDF Viewer submenu to preferences
@@ -251,7 +251,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     // Language submenu
     preferencesMenu->AppendSeparator();
-    wxGetApp().AddMenuLanguageList( preferencesMenu );
+    Pgm().AddMenuLanguageList( preferencesMenu );
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;

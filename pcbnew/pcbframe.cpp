@@ -30,7 +30,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
@@ -295,11 +296,9 @@ END_EVENT_TABLE()
 
 #define PCB_EDIT_FRAME_NAME wxT( "PcbFrame" )
 
-PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
-                                const wxPoint& pos, const wxSize& size,
-                                long style ) :
-    PCB_BASE_FRAME( parent, PCB_FRAME_TYPE, title, pos, size,
-                    style, PCB_EDIT_FRAME_NAME )
+PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+    PCB_BASE_FRAME( aKiway, aParent, PCB_FRAME_TYPE, wxT( "Pcbnew" ), wxDefaultPosition,
+        wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PCB_EDIT_FRAME_NAME )
 {
     m_FrameName = PCB_EDIT_FRAME_NAME;
     m_showBorderAndTitleBlock = true;   // true to display sheet references
@@ -317,8 +316,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_microWaveToolBar = NULL;
     m_useCmpFileForFpNames = true;
 
-    m_footprintLibTable = NULL;
-    m_globalFootprintTable = NULL;
     m_rotationAngle = 900;
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
@@ -356,7 +353,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
-    LoadSettings();
+    LoadSettings( config() );
 
     // Be sure options are updated
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
@@ -472,34 +469,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     m_auimgr.Update();
 
-    if( m_globalFootprintTable == NULL )
-    {
-        try
-        {
-            m_globalFootprintTable = new FP_LIB_TABLE();
-
-            if( !FP_LIB_TABLE::LoadGlobalTable( *m_globalFootprintTable ) )
-            {
-                DisplayInfoMessage( this, wxT( "You have run Pcbnew for the first time using the "
-                                               "new footprint library table method for finding "
-                                               "footprints.  Pcbnew has either copied the default "
-                                               "table or created an empty table in your home "
-                                               "folder.  You must first configure the library "
-                                               "table to include all footprint libraries not "
-                                               "included with KiCad.  See the \"Footprint Library "
-                                               "Table\" section of the CvPcb documentation for "
-                                               "more information." ) );
-            }
-        }
-        catch( IO_ERROR ioe )
-        {
-            wxString msg;
-            msg.Printf( _( "An error occurred attempting to load the global footprint library "
-                           "table:\n\n%s" ), GetChars( ioe.errorText ) );
-            DisplayError( this, msg );
-        }
-    }
-
     setupTools();
 }
 
@@ -513,9 +482,6 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
         m_Macros[i].m_Record.clear();
 
     delete m_drc;
-
-    delete m_footprintLibTable;
-    delete m_globalFootprintTable;
 }
 
 
@@ -661,7 +627,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         msg.Printf( _( "The auto save file <%s> could not be removed!" ),
                     GetChars( fn.GetFullPath() ) );
 
-        wxMessageBox( msg, wxGetApp().GetAppName(), wxOK | wxICON_ERROR, this );
+        wxMessageBox( msg, Pgm().App().GetAppName(), wxOK | wxICON_ERROR, this );
     }
 
     // Delete board structs and undo/redo lists, to avoid crash on exit
@@ -694,7 +660,7 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
         return;
     }
 
-    m_Draw3DFrame = new EDA_3D_FRAME( this, _( "3D Viewer" ) );
+    m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, _( "3D Viewer" ) );
     m_Draw3DFrame->SetDefaultFileName( GetBoard()->GetFileName() );
     m_Draw3DFrame->Show( true );
 }
@@ -756,62 +722,55 @@ void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
 }
 
 
-void PCB_EDIT_FRAME::LoadSettings()
+void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxConfig* config = wxGetApp().GetSettings();
+    PCB_BASE_FRAME::LoadSettings( aCfg );
 
-    if( config == NULL )
-        return;
-
-    // The configuration setting that used to be mixed in with the project file settings.
-    wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
-
-    PCB_BASE_FRAME::LoadSettings();
+    wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     double dtmp;
-    config->Read( OPTKEY_DEFAULT_LINEWIDTH_VALUE, &dtmp, 0.1 ); // stored in mm
+    aCfg->Read( OPTKEY_DEFAULT_LINEWIDTH_VALUE, &dtmp, 0.1 ); // stored in mm
+
     if( dtmp < 0.01 )
         dtmp = 0.01;
+
     if( dtmp > 5.0 )
         dtmp = 5.0;
+
     g_DrawDefaultLineThickness = Millimeter2iu( dtmp );
+
     long tmp;
-    config->Read( PCB_SHOW_FULL_RATSNET_OPT, &tmp );
+
+    aCfg->Read( PCB_SHOW_FULL_RATSNET_OPT, &tmp );
     GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, tmp);
 
-    config->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
-    config->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
-    config->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
-    config->Read( SHOW_LAYER_MANAGER_TOOLS, &m_show_layer_manager_tools );
+    aCfg->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
+    aCfg->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
+    aCfg->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
+    aCfg->Read( SHOW_LAYER_MANAGER_TOOLS, &m_show_layer_manager_tools );
 
     // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
-    // when reading doubles in config,
+    // when reading doubles in cfg,
     // but forget to back to current locale. So we call SetLocaleTo_Default
     SetLocaleTo_Default( );
 }
 
 
-void PCB_EDIT_FRAME::SaveSettings()
+void PCB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxConfig* config = wxGetApp().GetSettings();
+    PCB_BASE_FRAME::SaveSettings( aCfg );
 
-    if( config == NULL )
-        return;
-
-    // The configuration setting that used to be mixed in with the project file settings.
-    wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
-
-    PCB_BASE_FRAME::SaveSettings();
+    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 
     // This value is stored in mm )
-    config->Write( OPTKEY_DEFAULT_LINEWIDTH_VALUE,
+    aCfg->Write( OPTKEY_DEFAULT_LINEWIDTH_VALUE,
                    MM_PER_IU * g_DrawDefaultLineThickness );
     long tmp = GetBoard()->IsElementVisible(RATSNEST_VISIBLE);
-    config->Write( PCB_SHOW_FULL_RATSNET_OPT, tmp );
-    config->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
-    config->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
-    config->Write( SHOW_MICROWAVE_TOOLS, (long) m_show_microwave_tools );
-    config->Write( SHOW_LAYER_MANAGER_TOOLS, (long)m_show_layer_manager_tools );
+    aCfg->Write( PCB_SHOW_FULL_RATSNET_OPT, tmp );
+    aCfg->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
+    aCfg->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
+    aCfg->Write( SHOW_MICROWAVE_TOOLS, (long) m_show_microwave_tools );
+    aCfg->Write( SHOW_LAYER_MANAGER_TOOLS, (long)m_show_layer_manager_tools );
 }
 
 
@@ -1037,12 +996,14 @@ void PCB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 {
     EDA_DRAW_FRAME::SetLanguage( event );
     m_Layers->SetLayersManagerTabsText();
+
     wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_Layers );
+
     pane_info.Caption( _( "Visibles" ) );
     m_auimgr.Update();
     ReFillLayerWidget();
 
-    FOOTPRINT_EDIT_FRAME * moduleEditFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+    FOOTPRINT_EDIT_FRAME* moduleEditFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor( this );
     if( moduleEditFrame )
         moduleEditFrame->EDA_DRAW_FRAME::SetLanguage( event );
 }
@@ -1095,10 +1056,8 @@ void PCB_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::UpdateTitle()
 {
-    wxString title;
-    wxFileName fileName = GetBoard()->GetFileName();
-
-    title.Printf( wxT( "Pcbnew %s " ), GetChars( GetBuildVersion() ) );
+    wxFileName  fileName = GetBoard()->GetFileName();
+    wxString    title = wxString::Format( wxT( "Pcbnew %s " ), GetChars( GetBuildVersion() ) );
 
     if( fileName.IsOk() && fileName.FileExists() )
     {
@@ -1146,24 +1105,29 @@ void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )
 
     switch( aEvent.GetId() )
     {
-        case ID_TOOLBARH_PCB_MODE_MODULE:
-            if( aEvent.IsChecked() &&
-                m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_TRACKS ) )
-                m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, false );
-            break;
-
-        case ID_TOOLBARH_PCB_MODE_TRACKS:
-            if( aEvent.IsChecked() &&
-                m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_MODULE ) )
-                m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, false );
-            break;
+    case ID_TOOLBARH_PCB_MODE_MODULE:
+        if( aEvent.IsChecked() &&
+            m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_TRACKS ) )
+        {
+            m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, false );
         }
+        break;
+
+    case ID_TOOLBARH_PCB_MODE_TRACKS:
+        if( aEvent.IsChecked() &&
+            m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_MODULE ) )
+        {
+            m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, false );
+        }
+        break;
+    }
 }
 
 
 void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 {
     DIALOG_PLOT dlg( this );
+
     dlg.ShowModal();
 }
 
@@ -1175,3 +1139,4 @@ void PCB_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
 
     m_rotationAngle = aRotationAngle;
 }
+

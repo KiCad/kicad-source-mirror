@@ -35,6 +35,7 @@
 #include <wx/regex.h>
 
 #include <fctsys.h>
+#include <project.h>
 #include <dialog_fp_lib_table_base.h>
 #include <fp_lib_table.h>
 #include <fp_lib_table_lexer.h>
@@ -705,7 +706,7 @@ private:
         // Make sure this special environment variable shows up even if it was
         // not used yet.  It is automatically set by KiCad to the directory holding
         // the current project.
-        unique.insert( FP_LIB_TABLE::ProjectPathEnvVariableName() );
+        unique.insert( PROJECT_VAR_NAME );
         unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
 
         m_path_subs_grid->AppendRows( unique.size() );

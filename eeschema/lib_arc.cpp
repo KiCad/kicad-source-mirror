@@ -555,7 +555,7 @@ void LIB_ARC::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     LIB_ITEM::GetMsgPanelInfo( aList );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
+    msg = StringFromValue( g_UserUnit, m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line width" ), msg, BLUE ) );
 

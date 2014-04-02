@@ -27,7 +27,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <wxstruct.h>
 #include <class_drawpanel.h>
 #include <build_version.h>
@@ -63,11 +64,9 @@ static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBloc
 
 #define GERBVIEW_FRAME_NAME wxT( "GerberFrame" )
 
-GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
-                                const wxPoint& aPosition, const wxSize& aSize,
-                                long aStyle ) :
-    EDA_DRAW_FRAME( aParent, GERBER_FRAME_TYPE, aTitle, aPosition, aSize,
-                    aStyle, GERBVIEW_FRAME_NAME )
+GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
+    EDA_DRAW_FRAME( aKiway, aParent, GERBER_FRAME_TYPE, wxT( "GerbView" ),
+        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME )
 {
     m_colorsSettings = &g_ColorsSettings;
     m_gerberLayout = NULL;
@@ -109,7 +108,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
-    LoadSettings();
+    LoadSettings( config() );
+
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     if( m_LastGridSizeId < 0 )
@@ -171,13 +171,32 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
 
 GERBVIEW_FRAME::~GERBVIEW_FRAME()
 {
-    wxGetApp().SaveCurrentSetupValues( m_configSettings );
 }
 
 
 void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     Destroy();
+}
+
+
+bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
+{
+    const unsigned limit = std::min( unsigned( aFileSet.size() ), unsigned( NB_GERBER_LAYERS ) );
+
+    LAYER_NUM layer = FIRST_LAYER;
+
+    for( unsigned i=0;  i<limit;  ++i, ++layer )
+    {
+        setActiveLayer( layer );
+        LoadGerberFiles( aFileSet[i] );
+    }
+
+    Zoom_Automatique( true );        // Zoom fit in frame
+
+    UpdateTitleAndInfo();
+
+    return true;
 }
 
 
@@ -202,26 +221,22 @@ double GERBVIEW_FRAME::BestZoom()
 }
 
 
-void GERBVIEW_FRAME::LoadSettings()
+void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxConfig* config = wxGetApp().GetSettings();
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    if( config == NULL )
-        return;
-
-    EDA_DRAW_FRAME::LoadSettings();
-
-    wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
+    // was: wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
+    wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
 
-    config->Read( cfgShowBorderAndTitleBlock, &m_showBorderAndTitleBlock, false );
+    aCfg->Read( cfgShowBorderAndTitleBlock, &m_showBorderAndTitleBlock, false );
 
     if( m_showBorderAndTitleBlock )
     {
         wxString pageType;
 
-        config->Read( cfgShowPageSizeOption, &pageType, wxT( "GERBER" ) );
+        aCfg->Read( cfgShowPageSizeOption, &pageType, wxT( "GERBER" ) );
 
         pageInfo.SetType( pageType );
     }
@@ -231,16 +246,16 @@ void GERBVIEW_FRAME::LoadSettings()
     GetScreen()->InitDataPoints( pageInfo.GetSizeIU() );
 
     bool tmp;
-    config->Read( cfgShowDCodes, &tmp, true );
+    aCfg->Read( cfgShowDCodes, &tmp, true );
     SetElementVisibility( DCODES_VISIBLE, tmp );
-    config->Read( cfgShowNegativeObjects, &tmp, false );
+    aCfg->Read( cfgShowNegativeObjects, &tmp, false );
     SetElementVisibility( NEGATIVE_OBJECTS_VISIBLE, tmp );
 
     // because we have 2 file historues, we must read this one
     // using a specific path
-    config->SetPath( wxT( "drl_files" ) );
-    m_drillFileHistory.Load( *config );
-    config->SetPath( wxT( ".." ) );
+    aCfg->SetPath( wxT( "drl_files" ) );
+    m_drillFileHistory.Load( *aCfg );
+    aCfg->SetPath( wxT( ".." ) );
 
     // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
     // when reading doubles in config,
@@ -249,29 +264,25 @@ void GERBVIEW_FRAME::LoadSettings()
 }
 
 
-void GERBVIEW_FRAME::SaveSettings()
+void GERBVIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxConfig* config = wxGetApp().GetSettings();
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    if( config == NULL )
-        return;
+    // was: wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
+    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 
-    EDA_DRAW_FRAME::SaveSettings();
-
-    wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
-
-    config->Write( cfgShowPageSizeOption, GetPageSettings().GetType() );
-    config->Write( cfgShowBorderAndTitleBlock, m_showBorderAndTitleBlock );
-    config->Write( cfgShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
-    config->Write( cfgShowNegativeObjects,
+    aCfg->Write( cfgShowPageSizeOption, GetPageSettings().GetType() );
+    aCfg->Write( cfgShowBorderAndTitleBlock, m_showBorderAndTitleBlock );
+    aCfg->Write( cfgShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
+    aCfg->Write( cfgShowNegativeObjects,
                    IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) );
 
     // Save the drill file history list.
     // Because we have 2 file histories, we must save this one
     // in a specific path
-    config->SetPath( wxT( "drl_files" ) );
-    m_drillFileHistory.Save( *config );
-    config->SetPath( wxT( ".." ) );
+    aCfg->SetPath( wxT( "drl_files" ) );
+    m_drillFileHistory.Save( *aCfg );
+    aCfg->SetPath( wxT( ".." ) );
 }
 
 
@@ -394,7 +405,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
         if( gerber == NULL )
             continue;
 
-        if( gerber->ReturnUsedDcodeNumber() == 0 )
+        if( gerber->UsedDcodeNumber() == 0 )
             continue;
 
         if( layer == curr_layer )

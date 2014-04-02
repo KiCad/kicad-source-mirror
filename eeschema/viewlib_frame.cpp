@@ -28,7 +28,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
 #include <eeschema_id.h>
 #include <class_drawpanel.h>
 #include <wxEeschemaStruct.h>
@@ -94,10 +95,10 @@ static wxAcceleratorEntry accels[] =
 #define ACCEL_TABLE_CNT ( sizeof( accels ) / sizeof( wxAcceleratorEntry ) )
 #define LIB_VIEW_FRAME_NAME wxT( "ViewlibFrame" )
 
-LIB_VIEW_FRAME::LIB_VIEW_FRAME( SCH_BASE_FRAME* aParent, CMP_LIBRARY* aLibrary,
-                                wxSemaphore* aSemaphore, long aStyle ) :
-    SCH_BASE_FRAME( aParent, VIEWER_FRAME_TYPE, _( "Library Browser" ),
-                    wxDefaultPosition, wxDefaultSize, aStyle, GetLibViewerFrameName() )
+LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, SCH_BASE_FRAME* aParent,
+        CMP_LIBRARY* aLibrary, wxSemaphore* aSemaphore, long aStyle ) :
+    SCH_BASE_FRAME( aKiway, aParent, VIEWER_FRAME_TYPE, _( "Library Browser" ),
+            wxDefaultPosition, wxDefaultSize, aStyle, GetLibViewerFrameName() )
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
@@ -122,7 +123,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( SCH_BASE_FRAME* aParent, CMP_LIBRARY* aLibrary,
 
     SetScreen( new SCH_SCREEN() );
     GetScreen()->m_Center = true;      // Axis origin centered on screen.
-    LoadSettings();
+    LoadSettings( config() );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
@@ -242,9 +243,9 @@ const wxChar* LIB_VIEW_FRAME::GetLibViewerFrameName()
 }
 
 
-LIB_VIEW_FRAME* LIB_VIEW_FRAME::GetActiveLibraryViewer()
+LIB_VIEW_FRAME* LIB_VIEW_FRAME::GetActiveLibraryViewer( const wxWindow* aParent )
 {
-    return (LIB_VIEW_FRAME*) wxWindow::FindWindowByName(GetLibViewerFrameName());
+    return (LIB_VIEW_FRAME*) wxWindow::FindWindowByName( GetLibViewerFrameName(), aParent );
 }
 
 
@@ -484,17 +485,14 @@ void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
 #define CMPLIST_WIDTH_KEY wxT( "ViewCmplistWidth" )
 
 
-void LIB_VIEW_FRAME::LoadSettings( )
+void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxConfig* cfg ;
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    EDA_DRAW_FRAME::LoadSettings();
+    wxConfigPathChanger cpc( aCfg, m_configPath );
 
-    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
-    cfg = wxGetApp().GetSettings();
-
-    cfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 100 );
-    cfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 100 );
+    aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 100 );
+    aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 100 );
 
     // Set parameters to a reasonable value.
     if( m_libListWidth > m_FrameSize.x/2 )
@@ -505,23 +503,20 @@ void LIB_VIEW_FRAME::LoadSettings( )
 }
 
 
-void LIB_VIEW_FRAME::SaveSettings()
+void LIB_VIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxConfig* cfg;
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    EDA_DRAW_FRAME::SaveSettings();
+    wxConfigPathChanger cpc( aCfg, m_configPath );
 
-    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
-    cfg = wxGetApp().GetSettings();
-
-    if( m_libListWidth && m_libList)
+    if( m_libListWidth && m_libList )
     {
         m_libListWidth = m_libList->GetSize().x;
-        cfg->Write( LIBLIST_WIDTH_KEY, m_libListWidth );
+        aCfg->Write( LIBLIST_WIDTH_KEY, m_libListWidth );
     }
 
     m_cmpListWidth = m_cmpList->GetSize().x;
-    cfg->Write( CMPLIST_WIDTH_KEY, m_cmpListWidth );
+    aCfg->Write( CMPLIST_WIDTH_KEY, m_cmpListWidth );
 }
 
 

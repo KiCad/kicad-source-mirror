@@ -29,9 +29,10 @@
 
 #include <fctsys.h>
 #include <common.h>
+#include <project.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <kicad_string.h>
 #include <macros.h>
 
@@ -87,6 +88,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
     char                 Line[1024];
     FILE*                file;
     size_t               ii;
+    SEARCH_STACK&        search = Prj().SchSearchS();
 
     if( m_netlist.IsEmpty() )
         return;
@@ -99,17 +101,17 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
         if( !fn.HasExt() )
         {
             fn.SetExt( FootprintAliasFileExtension );
-            // above fails if filename have more than one point
+            // above fails if filename has more than one point
         }
         else
         {
             fn.SetExt( fn.GetExt() + wxT( "." ) + FootprintAliasFileExtension );
         }
-        tmp = wxGetApp().FindLibraryPath( fn );
+        tmp = search.FindValidPath( fn );
 
         if( !tmp )
         {
-            msg.Printf( _( "Footprint alias library file <%s> could not be found in the "
+            msg.Printf( _( "Footprint alias library file '%s' could not be found in the "
                            "default search paths." ),
                         GetChars( fn.GetFullName() ) );
             wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
