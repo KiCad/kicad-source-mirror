@@ -26,6 +26,7 @@
 #define EDIT_CONSTRAINTS_H_
 
 #include <math/vector2d.h>
+#include <boost/function.hpp>
 
 class EDIT_POINT;
 class EDIT_LINE;
@@ -234,6 +235,33 @@ private:
 
     ///> Vector that represents the initial direction of the dragged segment.
     VECTOR2I m_draggedVector;
+};
+
+
+/**
+ * Class EC_SNAPLINE
+ *
+ * EDIT_CONSTRAINT for a EDIT_LINE, one of the ends is snapped to a spot determined by a
+ * transform function passed as parameter (e.g. it can be snapped to a grid), instead of having
+ * the line center snapped to a point.
+ */
+class EC_SNAPLINE : public EDIT_CONSTRAINT<EDIT_LINE>
+{
+public:
+    ///> Typedef for a function that determines snapping point.
+    typedef boost::function<VECTOR2D (const VECTOR2D&)> V2D_TRANSFORM_FUN;
+
+    EC_SNAPLINE( EDIT_LINE& aLine, V2D_TRANSFORM_FUN aSnapFun );
+
+    virtual ~EC_SNAPLINE()
+    {}
+
+    ///> @copydoc EDIT_CONSTRAINT::Apply()
+    virtual void Apply( EDIT_LINE& aHandle );
+
+private:
+    ///> Function that determines snapping point.
+    V2D_TRANSFORM_FUN m_snapFun;
 };
 
 #endif /* EDIT_CONSTRAINTS_H_ */

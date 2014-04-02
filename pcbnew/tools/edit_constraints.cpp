@@ -131,8 +131,8 @@ EC_CONVERGING::~EC_CONVERGING()
 void EC_CONVERGING::Apply( EDIT_LINE& aHandle )
 {
     // The dragged segment endpoints
-    EDIT_POINT& origin = m_constrained.GetOrigin();
-    EDIT_POINT& end = m_constrained.GetEnd();
+    EDIT_POINT& origin = aHandle.GetOrigin();
+    EDIT_POINT& end = aHandle.GetEnd();
 
     if( m_colinearConstraint )
     {
@@ -172,4 +172,18 @@ void EC_CONVERGING::Apply( EDIT_LINE& aHandle )
         origin.SetPosition( *originEndIntersect );
         end.SetPosition( *originEndIntersect );
     }
+}
+
+
+EC_SNAPLINE::EC_SNAPLINE( EDIT_LINE& aLine, V2D_TRANSFORM_FUN aSnapFun ) :
+    EDIT_CONSTRAINT<EDIT_LINE>( aLine ), m_snapFun( aSnapFun )
+{}
+
+
+void EC_SNAPLINE::Apply( EDIT_LINE& aHandle )
+{
+    VECTOR2D delta = aHandle.GetEnd().GetPosition() - aHandle.GetOrigin().GetPosition();
+
+    aHandle.GetOrigin().SetPosition( m_snapFun( aHandle.GetOrigin().GetPosition() ) );
+    aHandle.GetEnd().SetPosition( aHandle.GetOrigin().GetPosition() + delta );
 }
