@@ -165,7 +165,7 @@ public:
     ///> Single point size in pixels
     static const int POINT_SIZE = 10;
 
-protected:
+private:
     ///> Position of EDIT_POINT
     VECTOR2I m_position;
 
@@ -222,6 +222,29 @@ public:
     }
 
     /**
+     * Function SetConstraint()
+     *
+     * Sets a constraint for and EDIT_POINT.
+     * @param aConstraint is the constraint to be set.
+     */
+    void SetConstraint( EDIT_CONSTRAINT<EDIT_LINE>* aConstraint )
+    {
+        m_constraint.reset( aConstraint );
+    }
+
+    /**
+     * Function GetConstraint()
+     *
+     * Returns the constraint imposed on an EDIT_POINT. If there are no constraints, NULL is
+     * returned.
+     */
+    EDIT_CONSTRAINT<EDIT_LINE>* GetConstraint() const
+    {
+        return m_constraint.get();
+    }
+
+
+    /**
      * Function GetOrigin()
      *
      * Returns the origin EDIT_POINT.
@@ -264,6 +287,9 @@ public:
 private:
     EDIT_POINT& m_origin;           ///< Origin point for a line
     EDIT_POINT& m_end;              ///< End point for a line
+
+    ///> Constraint for the point, NULL if none
+    boost::shared_ptr<EDIT_CONSTRAINT<EDIT_LINE> > m_constraint;
 };
 
 
