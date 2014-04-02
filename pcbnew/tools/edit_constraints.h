@@ -127,8 +127,8 @@ private:
 /**
  * Class EC_45DEGREE
  *
- * EDIT_CONSTRAINT that imposes a constraint that two to be located at angle of 45 degree
- * multiplicity.
+ * EDIT_CONSTRAINT that imposes a constraint that two points have to be located at angle of 45
+ * degree multiplicity.
  */
 class EC_45DEGREE : public EDIT_CONSTRAINT<EDIT_POINT>
 {
@@ -205,10 +205,10 @@ private:
 /**
  * Class EC_CONVERGING
  *
- * EDIT_CONSTRAINT for 3 segment: dragged and two adjacent ones, enforcing to keep their slopes
+ * EDIT_CONSTRAINT for 3 segments: dragged and two adjacent ones, enforcing to keep their slopes
  * and allows only to change ending points. Applied to zones.
  */
-class EC_CONVERGING : public EDIT_CONSTRAINT<EDIT_POINT>
+class EC_CONVERGING : public EDIT_CONSTRAINT<EDIT_LINE>
 {
 public:
     EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints );
@@ -216,7 +216,7 @@ public:
     virtual ~EC_CONVERGING();
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_POINT& aHandle );
+    virtual void Apply( EDIT_LINE& aHandle );
 
 private:
     ///> Constraint for origin side segment.
@@ -228,9 +228,6 @@ private:
     ///> Additional constriant, applied when at least two points are collinear. It is a pointer to
     ///> m_[origin/end]SideConstraint, so it should not be freed.
     EDIT_CONSTRAINT<EDIT_POINT>* m_colinearConstraint;
-
-    ///> Dragged segment.
-    EDIT_LINE& m_line;
 
     ///> EDIT_POINTS instance that stores currently modified lines.
     EDIT_POINTS& m_editPoints;

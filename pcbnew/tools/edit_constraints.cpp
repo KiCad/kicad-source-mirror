@@ -90,8 +90,8 @@ void EC_CIRCLE::Apply( EDIT_POINT& aHandle )
 
 
 EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
-    EDIT_CONSTRAINT<EDIT_POINT>( aLine.GetOrigin() ),
-    m_colinearConstraint( NULL ), m_line( aLine ), m_editPoints( aPoints )
+    EDIT_CONSTRAINT<EDIT_LINE>( aLine ),
+    m_colinearConstraint( NULL ), m_editPoints( aPoints )
 {
     // Dragged segment endings
     EDIT_POINT& origin = aLine.GetOrigin();
@@ -128,11 +128,11 @@ EC_CONVERGING::~EC_CONVERGING()
 }
 
 
-void EC_CONVERGING::Apply( EDIT_POINT& aHandle )
+void EC_CONVERGING::Apply( EDIT_LINE& aHandle )
 {
     // The dragged segment endpoints
-    EDIT_POINT& origin = m_line.GetOrigin();
-    EDIT_POINT& end = m_line.GetEnd();
+    EDIT_POINT& origin = m_constrained.GetOrigin();
+    EDIT_POINT& end = m_constrained.GetEnd();
 
     if( m_colinearConstraint )
     {
