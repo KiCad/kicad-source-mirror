@@ -39,7 +39,10 @@ enum hotkey_id_commnand {
     HK_MOVE_ITEM,
     HK_MOVE_START_POINT,
     HK_MOVE_END_POINT,
-    HK_DELETE_ITEM
+    HK_PLACE_ITEM,
+    HK_DELETE_ITEM,
+    HK_LEFT_CLICK,
+    HK_LEFT_DCLICK
 };
 
 // List of hotkey descriptors for PlEditor.

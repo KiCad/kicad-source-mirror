@@ -128,6 +128,10 @@ static EDA_HOTKEY HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 'Z'
                           (int) wxID_REDO );
 #endif
 
+// mouse click command:
+static EDA_HOTKEY HkMouseLeftClick( wxT( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN, 0 );
+static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left DClick" ), HK_LEFT_DCLICK, WXK_END, 0 );
+
 // Schematic editor
 static EDA_HOTKEY HkBeginWire( wxT( "Begin Wire" ), HK_BEGIN_WIRE, 'W', ID_WIRE_BUTT );
 static EDA_HOTKEY HkBeginBus( wxT( "Begin Bus" ), HK_BEGIN_BUS, 'B', ID_BUS_BUTT );
@@ -191,6 +195,8 @@ static EDA_HOTKEY HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
 static EDA_HOTKEY HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL, ID_FIND_ITEMS );
 static EDA_HOTKEY HkFindNextItem( wxT( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5,
                                   wxEVT_COMMAND_FIND );
+static EDA_HOTKEY HkFindReplace( wxT( "Find and Replace" ), HK_FIND_REPLACE,
+                                 'F' + GR_KB_CTRL + GR_KB_ALT, wxID_REPLACE );
 static EDA_HOTKEY HkFindNextDrcMarker( wxT( "Find Next DRC Marker" ), HK_FIND_NEXT_DRC_MARKER,
                                        WXK_F5 + GR_KB_SHIFT, EVT_COMMAND_FIND_DRC_MARKER );
 
@@ -220,6 +226,8 @@ EDA_HOTKEY* s_Common_Hotkey_List[] =
     &HkDrag,
     &HkUndo,
     &HkRedo,
+    &HkMouseLeftClick,
+    &HkMouseLeftDClick,
     NULL
 };
 
@@ -231,6 +239,7 @@ EDA_HOTKEY* s_Schematic_Hotkey_List[] =
     &HkFindItem,
     &HkFindNextItem,
     &HkFindNextDrcMarker,
+    &HkFindReplace,
     &HkInsert,
     &HkMove2Drag,
     &HkSaveBlock,
@@ -361,6 +370,15 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
 
+    case HK_LEFT_CLICK:
+        OnLeftClick( aDC, aPosition );
+        break;
+
+    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
+        OnLeftClick( aDC, aPosition );
+        OnLeftDClick( aDC, aPosition );
+        break;
+
     case HK_ZOOM_IN:
     case HK_ZOOM_OUT:
     case HK_ZOOM_REDRAW:
@@ -395,6 +413,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_UNDO:
     case HK_REDO:
     case HK_FIND_ITEM:
+    case HK_FIND_REPLACE:
         if( notBusy )
         {
             cmd.SetId( hotKey->m_IdMenuEvent );
@@ -556,6 +575,15 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_RESET_LOCAL_COORD:         // Reset the relative coord
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
+        break;
+
+    case HK_LEFT_CLICK:
+        OnLeftClick( aDC, aPosition );
+        break;
+
+    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
+        OnLeftClick( aDC, aPosition );
+        OnLeftDClick( aDC, aPosition );
         break;
 
     case HK_ZOOM_IN:

@@ -175,7 +175,7 @@ void HOTKEYS_EDITOR_DIALOG::OnClickOnCell( wxGridEvent& event )
 /** OnRightClickOnCell
  * If a cell is selected, display a list of keys for selection
  * The list is restricted to keys that cannot be entered:
- * tab, home ... because these keys have special functions in dialogs
+ * tab, home, return ... because these keys have special functions in dialogs
  */
 void HOTKEYS_EDITOR_DIALOG::OnRightClickOnCell( wxGridEvent& event )
 {
@@ -186,8 +186,8 @@ void HOTKEYS_EDITOR_DIALOG::OnRightClickOnCell( wxGridEvent& event )
         return;
 
     // Do not translate these key names. They are internally used.
-    //ee hotkeys_basic.cpp
-    #define C_COUNT 8
+    // See hotkeys_basic.cpp
+    #define C_COUNT 9
     wxString choices[C_COUNT] =
     {
         wxT("End")
@@ -198,6 +198,7 @@ void HOTKEYS_EDITOR_DIALOG::OnRightClickOnCell( wxGridEvent& event )
         wxT("Space"),
         wxT("Ctrl+Space"),
         wxT("Alt+Space"),
+        wxT("Return")
     };
 
     wxString keyname = wxGetSingleChoice( _( "Special keys only. For others keys, use keyboard" ),

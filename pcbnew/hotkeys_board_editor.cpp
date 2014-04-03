@@ -161,6 +161,15 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         return;
         break;
 
+    case HK_LEFT_CLICK:
+        OnLeftClick( aDC, aPosition );
+        break;
+
+    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
+        OnLeftClick( aDC, aPosition );
+        OnLeftDClick( aDC, aPosition );
+        break;
+
     case HK_RECORD_MACROS_0:
     case HK_RECORD_MACROS_1:
     case HK_RECORD_MACROS_2:
@@ -424,16 +433,6 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
                 SetCurItem( track );
                 OnModify();
             }
-        }
-
-        break;
-
-    case HK_END_TRACK:
-        if( itemCurrentlyEdited && GetCurItem()->IsTrack() && GetCurItem()->IsNew() )
-        {
-            // A new track is in progress: call to End_Route()
-            m_canvas->MoveCursorToCrossHair();
-            End_Route( (TRACK*) GetCurItem(), aDC );
         }
 
         break;
