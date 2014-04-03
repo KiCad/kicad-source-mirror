@@ -536,8 +536,12 @@ if( USE_KIWAY_DLLS )
         OUTPUT_NAME     pcbnew
         PREFIX          ${KIFACE_PREFIX}
         SUFFIX          ${KIFACE_SUFFIX}
-        COMPILE_FLAGS   ${OpenMP_CXX_FLAGS}
         )
+    if( ${OPENMP_FOUND} )
+        set_target_properties( pcbnew_kiface PROPERTIES
+            COMPILE_FLAGS   ${OpenMP_CXX_FLAGS}
+        )
+    endif()
     target_link_libraries( pcbnew_kiface
         3d-viewer
         pcbcommon
