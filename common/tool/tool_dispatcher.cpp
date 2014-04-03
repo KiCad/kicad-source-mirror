@@ -251,14 +251,14 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         if( type == wxEVT_KEY_UP )
         {
-            if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
-                evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
-            else
-                evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_UP, key | mods );
+            evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_UP, key | mods );
         }
         else
         {
-            evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_DOWN, key | mods );
+            if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
+                evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
+            else
+                evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_DOWN, key | mods );
         }
     }
 
