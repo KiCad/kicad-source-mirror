@@ -266,7 +266,11 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
     bool unselect = selection.Empty();
 
     if( !makeSelection( selection ) )
+    {
+        setTransitions();
+
         return 0;
+    }
 
     wxPoint rotatePoint = getModificationPoint( selection );
 
@@ -312,7 +316,11 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
     bool unselect = selection.Empty();
 
     if( !makeSelection( selection ) )
+    {
+        setTransitions();
+
         return 0;
+    }
 
     wxPoint flipPoint = getModificationPoint( selection );
 
@@ -354,7 +362,11 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
 
     if( !makeSelection( selection ) )
+    {
+        setTransitions();
+
         return 0;
+    }
 
     // Get a copy of the selected items set
     PICKED_ITEMS_LIST selectedItems = selection.items;
