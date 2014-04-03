@@ -58,6 +58,15 @@ void FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
 
+    case HK_LEFT_CLICK:
+        OnLeftClick( aDC, aPosition );
+        break;
+
+    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
+        OnLeftClick( aDC, aPosition );
+        OnLeftDClick( aDC, aPosition );
+        break;
+
     case HK_SET_GRID_ORIGIN:
         SetGridOrigin( GetCrossHairPosition() );
         m_canvas->Refresh();

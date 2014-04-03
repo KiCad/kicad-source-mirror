@@ -28,7 +28,6 @@ enum hotkey_id_commnand {
     HK_ADD_MICROVIA,
     HK_SWITCH_TRACK_POSTURE,
     HK_DRAG_TRACK_KEEP_SLOPE,
-    HK_END_TRACK,
     HK_SAVE_BOARD,
     HK_SAVE_BOARD_AS,
     HK_LOAD_BOARD,
@@ -90,6 +89,8 @@ enum hotkey_id_commnand {
     HK_CANVAS_DEFAULT,
     HK_CANVAS_OPENGL,
     HK_CANVAS_CAIRO,
+    HK_LEFT_CLICK,
+    HK_LEFT_DCLICK
 };
 
 // Full list of hotkey descriptors for board editor and footprint editor
