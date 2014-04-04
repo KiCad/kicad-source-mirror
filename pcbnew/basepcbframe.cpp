@@ -633,7 +633,7 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
     // handle color changes for transitions in and out of ID_TRACK_BUTT
     if( ( GetToolId() == ID_TRACK_BUTT && aId != ID_TRACK_BUTT )
-        || ( GetToolId() != ID_TRACK_BUTT && aId== ID_TRACK_BUTT ) )
+        || ( GetToolId() != ID_TRACK_BUTT && aId == ID_TRACK_BUTT ) )
     {
         if( DisplayOpt.ContrastModeDisplay )
             redraw = true;
@@ -641,7 +641,7 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
     // must do this after the tool has been set, otherwise pad::Draw() does
     // not show proper color when DisplayOpt.ContrastModeDisplay is true.
-    if( redraw && m_canvas)
+    if( redraw && m_canvas )
         m_canvas->Refresh();
 }
 
