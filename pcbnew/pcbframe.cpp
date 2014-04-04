@@ -692,6 +692,7 @@ void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
     switch( id )
     {
     case ID_MENU_CANVAS_DEFAULT:
+        Compile_Ratsnest( NULL, true );
         UseGalCanvas( false );
         break;
 
