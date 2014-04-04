@@ -27,6 +27,7 @@
 
 #include <wxPcbStruct.h>
 #include <id.h>
+#include <pcbnew_id.h>
 #include <view/view_controls.h>
 #include <pcbcommon.h>
 #include <pcb_painter.h>
@@ -432,6 +433,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
 
     // SetContextMenu ( m_menu );
     // setMsgPanel(true, 0, wxT("KiRouter"), wxT("Pick an item to start routing"));
+    getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Add tracks" ) );
 
     ctls->SetSnapping( true );
     ctls->ShowCursor( true );
@@ -469,4 +471,3 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
 
     return 0;
 }
-

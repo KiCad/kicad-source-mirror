@@ -28,6 +28,7 @@
 
 #include <wxPcbStruct.h>
 #include <id.h>
+#include <pcbnew_id.h>
 #include <confirm.h>
 
 #include <view/view_group.h>
@@ -69,12 +70,16 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
 
 int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
 {
+    m_frame->SetToolID( ID_PCB_ADD_LINE_BUTT, wxCURSOR_PENCIL, _( "Add graphic line" ) );
+
     return drawSegment( S_SEGMENT, true );
 }
 
 
 int DRAWING_TOOL::DrawCircle( TOOL_EVENT& aEvent )
 {
+    m_frame->SetToolID( ID_PCB_CIRCLE_BUTT, wxCURSOR_PENCIL, _( "Add graphic circle" ) );
+
     return drawSegment( S_CIRCLE, false );
 }
 
@@ -100,6 +105,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
     m_controls->SetSnapping( true );
 
     Activate();
+    m_frame->SetToolID( ID_PCB_ARC_BUTT, wxCURSOR_PENCIL, _( "Add graphic arc" ) );
 
     enum ARC_STEPS
     {
@@ -286,6 +292,7 @@ int DRAWING_TOOL::PlaceText( TOOL_EVENT& aEvent )
     m_controls->SetAutoPan( true );
 
     Activate();
+    m_frame->SetToolID( ID_PCB_ADD_TEXT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -390,6 +397,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
     m_controls->SetSnapping( true );
 
     Activate();
+    m_frame->SetToolID( ID_PCB_DIMENSION_BUTT, wxCURSOR_PENCIL, _( "Add dimension" ) );
 
     enum DIMENSION_STEPS
     {
@@ -549,12 +557,16 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
 {
+    m_frame->SetToolID( ID_PCB_ZONES_BUTT, wxCURSOR_PENCIL, _( "Add zones" ) );
+
     return drawZone( false );
 }
 
 
 int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
 {
+    m_frame->SetToolID( ID_PCB_KEEPOUT_AREA_BUTT, wxCURSOR_PENCIL, _( "Add keepout" ) );
+
     return drawZone( true );
 }
 
@@ -581,6 +593,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
     m_controls->SetAutoPan( true );
 
     Activate();
+    m_frame->SetToolID( ID_PCB_MIRE_BUTT, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -656,6 +669,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
     m_controls->SetAutoPan( true );
 
     Activate();
+    m_frame->SetToolID( ID_PCB_MODULE_BUTT, wxCURSOR_HAND, _( "Add module" ) );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )

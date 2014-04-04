@@ -68,7 +68,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager.RegisterTool( new PCBNEW_CONTROL );
 
     m_toolManager.SetEnvironment( NULL, GetGalCanvas()->GetView(),
-                                   GetGalCanvas()->GetViewControls(), this );
+                                  GetGalCanvas()->GetViewControls(), this );
     m_toolManager.ResetTools( TOOL_BASE::RUN );
 
     // Run the selection tool, it is supposed to be always active

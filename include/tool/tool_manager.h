@@ -187,6 +187,26 @@ public:
     }
 
     /**
+     * Returns id of the tool that is on the top of the active tools stack
+     * (was invoked the most recently).
+     * @return Id of the currently used tool.
+     */
+    int GetCurrentToolId() const
+    {
+        return m_activeTools.front();
+    }
+
+    /**
+     * Returns the tool that is on the top of the active tools stack
+     * (was invoked the most recently).
+     * @return Pointer to the currently used tool.
+     */
+    TOOL_BASE* GetCurrentTool() const
+    {
+        return FindTool( GetCurrentToolId() );
+    }
+
+    /**
      * Defines a state transition - the events that cause a given handler method in the tool
      * to be called. Called by TOOL_INTERACTIVE::Go(). May be called from a coroutine context.
      */
