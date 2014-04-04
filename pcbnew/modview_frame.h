@@ -74,10 +74,14 @@ public:
 
     /**
      * Function GetActiveFootprintViewer (static)
-     * @return a reference to the current opened Footprint viewer
-     * or NULL if no Footprint viewer currently opened
+     *
+     * @param aParent the KIWAY_PLAYER which is the parent of the calling wxWindow.
+     *  This is used to traverse the window hierarchy upwards to the topmost
+     *  KIWAY_PLAYER which is still part of the same project.
+     *
+     * @return Any currently opened Footprint viewer or NULL if none.
      */
-    static FOOTPRINT_VIEWER_FRAME* GetActiveFootprintViewer( const wxWindow* aParent );
+    static FOOTPRINT_VIEWER_FRAME* GetActiveFootprintViewer( const KIWAY_PLAYER* aParent );
 
     wxString& GetSelectedFootprint( void ) const { return m_selectedFootprintName; }
     const wxString GetSelectedLibraryFullName();
