@@ -1475,7 +1475,7 @@ public:
 
     /**
      * Function ReadPcbNetlist
-     * reads \a aNetlistFileName and ppdates the footprints (load missing footprints and
+     * reads \a aNetlistFileName and updates the footprints (load missing footprints and
      * delete on demand extra footprints) on the board.
      * Update connectivity info, references, values and "TIME STAMP"
      *
