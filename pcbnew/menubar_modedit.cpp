@@ -104,7 +104,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBRARY_AS,
                  _( "Save Current Library As..." ),
                  _( "Save entire current library under a new name." ),
-                 wxNullBitmap );
+                 KiBitmap( copy_library_xpm ) );
 
     // Save module
     text = AddHotkeyName( _( "&Save Module in Active Library" ),
