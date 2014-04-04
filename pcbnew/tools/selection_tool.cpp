@@ -112,10 +112,17 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         // single click? Select single object
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( !m_additive )
-                clearSelection();
+            if( evt->Modifier( MD_CTRL ) )
+            {
+                highlightNet( evt->Position() );
+            }
+            else
+            {
+                if( !m_additive )
+                    clearSelection();
 
-            selectSingle( evt->Position() );
+                selectSingle( evt->Position() );
+            }
         }
 
         // right click? if there is any object - show the context menu
@@ -647,6 +654,30 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     }
 
     return false;
+}
+
+
+void SELECTION_TOOL::highlightNet( const VECTOR2I& aPoint )
+{
+    KIGFX::RENDER_SETTINGS* render = getView()->GetPainter()->GetSettings();
+    GENERAL_COLLECTORS_GUIDE guide = getEditFrame<PCB_EDIT_FRAME>()->GetCollectorsGuide();
+    GENERAL_COLLECTOR collector;
+    int net = -1;
+
+    // Find a connected item for which we are going to highlight a net
+    collector.Collect( getModel<BOARD>( PCB_T ), GENERAL_COLLECTOR::PadsTracksOrZones,
+                       wxPoint( aPoint.x, aPoint.y ), guide );
+    bool enableHighlight = ( collector.GetCount() > 0 );
+
+    // Obtain net code for the clicked item
+    if( enableHighlight )
+        net = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] )->GetNetCode();
+
+    if( enableHighlight != render->GetHighlight() || net != render->GetHighlightNetCode() )
+    {
+        render->SetHighlight( enableHighlight, net );
+        getView()->UpdateAllLayersColor();
+    }
 }
 
 

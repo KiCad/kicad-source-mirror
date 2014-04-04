@@ -221,6 +221,14 @@ private:
      */
     bool selectionContains( const VECTOR2I& aPoint ) const;
 
+    /**
+     * Function highlightNet()
+     * Looks for a BOARD_CONNECTED_ITEM in a given spot, and if one is found - it enables
+     * highlight for its net.
+     * @param aPoint is the point where an item is expected (world coordinates).
+     */
+    void highlightNet( const VECTOR2I& aPoint );
+
     /// Visual representation of selection box
     SELECTION_AREA* m_selArea;
 
