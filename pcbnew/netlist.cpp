@@ -27,9 +27,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <boost/bind.hpp>
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <class_drawpanel.h>
+#include <class_draw_panel_gal.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
 #include <wxPcbStruct.h>
@@ -59,6 +61,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     wxString        msg;
     NETLIST         netlist;
     NETLIST_READER* netlistReader;
+    KIGFX::VIEW*    view = GetGalCanvas()->GetView();
 
     netlist.SetIsDryRun( aIsDryRun );
     netlist.SetFindByTimeStamp( aSelectByTimeStamp );
@@ -93,6 +96,16 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     if( !netlist.IsDryRun() )
         GetScreen()->ClearUndoRedoList();
 
+    if( !netlist.IsDryRun() )
+    {
+        // Remove old modules
+        for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
+        {
+            module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+            view->Remove( module );
+        }
+    }
+
     netlist.SortByReference();
     GetBoard()->ReplaceNetlist( netlist, aDeleteSinglePadNets, aReporter );
 
@@ -103,6 +116,13 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     OnModify();
 
     SetCurItem( NULL );
+
+    // Reload modules
+    for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
+    {
+        module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+        GetGalCanvas()->GetView()->Add( module );
+    }
 
     if( aDeleteUnconnectedTracks && GetBoard()->m_Track )
     {
