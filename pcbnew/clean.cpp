@@ -38,18 +38,19 @@
 #include <class_track.h>
 #include <connect.h>
 #include <dialog_cleaning_options.h>
+#include <ratsnest_data.h>
 
 // Helper class used to clean tracks and vias
-class TRACKS_CLEANER: CONNECTIONS
+class TRACKS_CLEANER : CONNECTIONS
 {
 private:
-    BOARD * m_Brd;
+    BOARD* m_Brd;
     bool m_deleteUnconnectedTracks;
     bool m_mergeSegments;
     bool m_cleanVias;
 
 public:
-    TRACKS_CLEANER( BOARD * aPcb );
+    TRACKS_CLEANER( BOARD* aPcb );
 
     /**
      * the cleanup function.
@@ -102,8 +103,7 @@ private:
      * merge aTrackRef and aCandidate, when possible,
      * i.e. when they are colinear, same width, and obviously same layer
      */
-    TRACK* mergeCollinearSegmentIfPossible( TRACK* aTrackRef,
-                                           TRACK* aCandidate, int aEndType );
+    TRACK* mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK* aCandidate, int aEndType );
 };
 
 /* Install the cleanup dialog frame to know what should be cleaned
@@ -161,7 +161,7 @@ bool TRACKS_CLEANER::CleanupBoard()
     return modified;
 }
 
-TRACKS_CLEANER::TRACKS_CLEANER( BOARD * aPcb ): CONNECTIONS( aPcb )
+TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb ) : CONNECTIONS( aPcb )
 {
     m_Brd = aPcb;
     m_deleteUnconnectedTracks = false;
@@ -177,22 +177,22 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
     BuildTracksCandidatesList( m_Brd->m_Track, NULL);
 
     // clear flags and variables used in cleanup
-    for( TRACK * track = m_Brd->m_Track; track; track = track->Next() )
+    for( TRACK* track = m_Brd->m_Track; track; track = track->Next() )
     {
         track->start = NULL;
         track->end = NULL;
         track->m_PadsConnected.clear();
-        track->SetState( START_ON_PAD|END_ON_PAD|BUSY, false );
+        track->SetState( START_ON_PAD | END_ON_PAD | BUSY, false );
     }
 
     // Build connections info tracks to pads
     SearchTracksConnectedToPads();
-    for( TRACK * track = m_Brd->m_Track; track; track = track->Next() )
+    for( TRACK* track = m_Brd->m_Track; track; track = track->Next() )
     {
         // Mark track if connected to pads
         for( unsigned jj = 0; jj < track->m_PadsConnected.size(); jj++ )
         {
-            D_PAD * pad = track->m_PadsConnected[jj];
+            D_PAD* pad = track->m_PadsConnected[jj];
 
             if( pad->HitTest( track->GetStart() ) )
             {
@@ -240,6 +240,8 @@ bool TRACKS_CLEANER::clean_vias()
                 continue;
 
             // delete via
+            m_Brd->GetRatsnest()->Remove( alt_track );
+            alt_track->ViewRelease();
             alt_track->UnLink();
             delete alt_track;
             modified = true;
@@ -258,11 +260,13 @@ bool TRACKS_CLEANER::clean_vias()
         // if one pad through is found, the via can be removed
         for( unsigned ii = 0; ii < track->m_PadsConnected.size(); ii++ )
         {
-            D_PAD * pad = track->m_PadsConnected[ii];
+            D_PAD* pad = track->m_PadsConnected[ii];
 
-            if( (pad->GetLayerMask() & ALL_CU_LAYERS) == ALL_CU_LAYERS )
+            if( ( pad->GetLayerMask() & ALL_CU_LAYERS ) == ALL_CU_LAYERS )
             {
                 // redundant: via delete it
+                m_Brd->GetRatsnest()->Remove( track );
+                track->ViewRelease();
                 track->UnLink();
                 delete track;
                 modified = true;
@@ -291,7 +295,8 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
     {
         item_erased = false;
         TRACK* next_track;
-        for( TRACK * track = m_Brd->m_Track; track ; track = next_track )
+
+        for( TRACK* track = m_Brd->m_Track; track ; track = next_track )
         {
             next_track = track->Next();
 
@@ -312,7 +317,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
             LAYER_NUM top_layer, bottom_layer;
             ZONE_CONTAINER* zone;
 
-            if( (type_end & START_ON_PAD ) == 0 )
+            if( ( type_end & START_ON_PAD ) == 0 )
             {
                 TRACK* other = track->GetTrace( m_Brd->m_Track, NULL, FLG_START );
 
@@ -334,7 +339,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                     }
                 }
 
-                if( (other == NULL) && (zone == NULL) )
+                if( ( other == NULL ) && ( zone == NULL ) )
                 {
                     flag_erase |= 1;
                 }
@@ -422,7 +427,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                                                                    via->GetNetCode() );
                         }
 
-                        if( (other == NULL) && (zone == NULL) )
+                        if( ( other == NULL ) && ( zone == NULL ) )
                             flag_erase |= 0x20;
 
                         track->SetState( BUSY, false );
@@ -433,6 +438,8 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
             if( flag_erase )
             {
                 // remove segment from board
+                m_Brd->GetRatsnest()->Remove( track );
+                track->ViewRelease();
                 track->DeleteStructure();
                 // iterate, because a track connected to the deleted track
                 // is now perhaps now not connected and should be deleted
@@ -461,7 +468,11 @@ bool TRACKS_CLEANER::clean_segments()
         nextsegment = segment->Next();
 
         if( segment->IsNull() )     // Length segment = 0; delete it
+        {
+            m_Brd->GetRatsnest()->Remove( segment );
+            segment->ViewRelease();
             segment->DeleteStructure();
+        }
     }
 
     // Delete redundant segments, i.e. segments having the same end points
@@ -493,6 +504,8 @@ bool TRACKS_CLEANER::clean_segments()
             // Delete redundant point
             if( erase )
             {
+                m_Brd->GetRatsnest()->Remove( other );
+                other->ViewRelease();
                 other->DeleteStructure();
                 modified = true;
             }
@@ -548,6 +561,8 @@ bool TRACKS_CLEANER::clean_segments()
             if( segDelete )
             {
                 no_inc = 1;
+                m_Brd->GetRatsnest()->Remove( segDelete );
+                segDelete->ViewRelease();
                 segDelete->DeleteStructure();
                 modified = true;
             }
@@ -589,6 +604,8 @@ bool TRACKS_CLEANER::clean_segments()
             if( segDelete )
             {
                 no_inc = 1;
+                m_Brd->GetRatsnest()->Remove( segDelete );
+                segDelete->ViewRelease();
                 segDelete->DeleteStructure();
                 modified = true;
             }
@@ -688,6 +705,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
             aTrackRef->SetStart( aCandidate->GetEnd());
             aTrackRef->start = aCandidate->end;
             aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( END_ON_PAD) );
+            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
         else
@@ -695,6 +713,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
             aTrackRef->SetStart( aCandidate->GetStart() );
             aTrackRef->start = aCandidate->start;
             aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( START_ON_PAD) );
+            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
     }
@@ -711,6 +730,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
             aTrackRef->SetEnd( aCandidate->GetEnd() );
             aTrackRef->end = aCandidate->end;
             aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( END_ON_PAD) );
+            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
         else
@@ -718,6 +738,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
             aTrackRef->SetEnd( aCandidate->GetStart() );
             aTrackRef->end = aCandidate->start;
             aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( START_ON_PAD) );
+            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
     }
