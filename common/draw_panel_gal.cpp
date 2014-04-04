@@ -194,13 +194,13 @@ void EDA_DRAW_PANEL_GAL::StopDrawing()
 
 void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 {
-    // Protect from refreshing during backend switch
-    m_pendingRefresh = true;
-    m_refreshTimer.Stop();
-
     // Do not do anything if the currently used GAL is correct
     if( aGalType == m_currentGal && m_gal != NULL )
         return;
+
+    // Prevent refreshing canvas during backend switch
+    m_pendingRefresh = true;
+    m_refreshTimer.Stop();
 
     delete m_gal;
 
