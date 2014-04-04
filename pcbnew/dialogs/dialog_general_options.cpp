@@ -193,19 +193,19 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_ZONES:
         DisplayOpt.DisplayZonesMode = 0;
-        updateType = PCB_ZONE_T;
+        updateType = PCB_ZONE_AREA_T;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
         DisplayOpt.DisplayZonesMode = 1;
-        updateType = PCB_ZONE_T;
+        updateType = PCB_ZONE_AREA_T;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
         DisplayOpt.DisplayZonesMode = 2;
-        updateType = PCB_ZONE_T;
+        updateType = PCB_ZONE_AREA_T;
         m_canvas->Refresh();
         break;
 
