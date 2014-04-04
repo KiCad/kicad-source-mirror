@@ -176,6 +176,7 @@ set( BMAPS_MID
     copyblock
     copycomponent
     copy_button
+    copy_library
     copper_layers_setup
     cursor_shape
     cursor
