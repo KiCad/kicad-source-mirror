@@ -29,7 +29,7 @@ add_custom_target(
 
 set( GAL_SRCS
     # Common part
-    drawpanel_gal.cpp
+    draw_panel_gal.cpp
     painter.cpp
     worksheet_viewitem.cpp
     gal/graphics_abstraction_layer.cpp

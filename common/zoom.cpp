@@ -33,7 +33,7 @@
 #include <fctsys.h>
 #include <id.h>
 #include <class_drawpanel.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
 #include <class_base_screen.h>

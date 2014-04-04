@@ -31,7 +31,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <pcbnew_id.h>
 
 #include "selection_tool.h"

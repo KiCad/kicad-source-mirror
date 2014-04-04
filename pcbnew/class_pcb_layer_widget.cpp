@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <class_drawpanel.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <painter.h>
 
