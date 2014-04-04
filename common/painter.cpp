@@ -59,7 +59,7 @@ RENDER_SETTINGS::~RENDER_SETTINGS()
 
 void RENDER_SETTINGS::update()
 {
-    m_hiContrastColor = COLOR4D( m_hiContrastFactor, m_hiContrastFactor, m_highlightFactor,
+    m_hiContrastColor = COLOR4D( m_hiContrastFactor, m_hiContrastFactor, m_hiContrastFactor,
                                  m_layerOpacity );
 }
 
