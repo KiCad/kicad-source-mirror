@@ -281,7 +281,7 @@ FOOTPRINT_VIEWER_FRAME* FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( const 
     // most immediate parent's.
 
     // NOTE: an open FOOTPRINT_VIEWER_FRAME may have either the PCB_EDIT_FRAME
-    // or the FOOTPRINT_EDIT_FRAME.
+    // or the FOOTPRINT_EDIT_FRAME as parent.
 
     KIWAY*      kiway = &aParent->Kiway();
     wxWindow*   frame;
