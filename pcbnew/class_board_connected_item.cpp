@@ -109,9 +109,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
     }
     else
     {
-#ifdef DEBUG
-        wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetClearance():NULL netclass,type %d"), Type() );
-#endif
+        DBG(printf( "%s: NULL netclass,type %d", __func__, Type() );)
     }
 
     return 0;
@@ -129,9 +127,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 
     if( board == NULL )     // Should not occur
     {
-#ifdef DEBUG
-        wxLogWarning( wxT("BOARD_CONNECTED_ITEM::GetNetClass():NULL board,type %d"), Type() );
-#endif
+        DBG(printf( "%s: NULL board,type %d", __func__, Type() );)
         return NULL;
     }
 
@@ -142,12 +138,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
     {
         netclass = net->GetNetClass();
 
-#ifdef DEBUG
-        if( netclass == NULL )
-        {
-            wxLogWarning( wxT("BOARD_CONNECTED_ITEM::GetNetClass():NULL netclass,type %d"), Type() );
-        }
-#endif
+        //DBG( if(!netclass) printf( "%s: NULL netclass,type %d", __func__, Type() );)
     }
 
     if( netclass )
