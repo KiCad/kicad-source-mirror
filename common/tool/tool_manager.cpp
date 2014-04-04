@@ -44,7 +44,7 @@
 
 #include <wxPcbStruct.h>
 #include <confirm.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 
 using boost::optional;
 

@@ -29,7 +29,7 @@
 #include <wxPcbStruct.h>
 #include <class_board.h>
 #include <class_track.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <class_pcb_screen.h>
 #include <pcbcommon.h>
 #include <confirm.h>

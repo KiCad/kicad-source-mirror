@@ -74,7 +74,7 @@
 #include <python_scripting.h>
 #endif
 
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <boost/bind.hpp>
 
 // Keys used in read/write config

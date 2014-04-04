@@ -31,7 +31,7 @@
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <pcbnew_id.h>
 
 #include <boost/optional.hpp>

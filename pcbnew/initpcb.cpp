@@ -4,7 +4,7 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <pcb_painter.h>
 #include <confirm.h>

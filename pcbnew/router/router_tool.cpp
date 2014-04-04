@@ -21,7 +21,7 @@
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 
-#include "class_drawpanel_gal.h"
+#include "class_draw_panel_gal.h"
 #include "class_board_item.h"
 #include "class_board.h"
 
