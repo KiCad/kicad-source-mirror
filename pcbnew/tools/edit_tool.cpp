@@ -111,6 +111,12 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             break;          // Finish
         }
 
+        else if( evt->Action() == TA_UNDO_REDO )
+        {
+            unselect = true;
+            break;
+        }
+
         // Dispatch TOOL_ACTIONs
         else if( evt->Category() == TC_COMMAND )
         {
