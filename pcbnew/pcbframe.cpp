@@ -980,6 +980,7 @@ bool PCB_EDIT_FRAME::IsElementVisible( int aElement ) const
 
 void PCB_EDIT_FRAME::SetElementVisibility( int aElement, bool aNewState )
 {
+    GetGalCanvas()->GetView()->SetLayerVisible( ITEM_GAL_LAYER( aElement ), aNewState );
     GetBoard()->SetElementVisibility( aElement, aNewState );
     m_Layers->SetRenderState( aElement, aNewState );
 }
