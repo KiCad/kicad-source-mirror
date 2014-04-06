@@ -45,7 +45,14 @@ WORKING_TREES=~/kicad_sources
 # https results in read only access.
 REPOS=https://code.launchpad.net
 
-LEGACY_LIB_REPO=$REPOS/~dickelbeck/kicad/library-read-only
+# This is no longer maintained, is old
+#LEGACY_LIB_REPO=$REPOS/~dickelbeck/kicad/library-read-only
+
+# This branch is a bzr/launchpad import of the Git repository
+# at https://github.com/KiCad/kicad-library.git.
+# It has schematic parts and 3D models in it.
+LIBS_REPO=$REPOS/~kicad-product-committers/kicad/library
+
 SRCS_REPO=$REPOS/~kicad-product-committers/kicad/product
 DOCS_REPO=$REPOS/~kicad-developers/kicad/doc
 
@@ -211,8 +218,9 @@ install_or_update()
         cd ../
     fi
 
+    echo "step 4) checking out the schematic parts and 3D library repo."
     if [ ! -d "$WORKING_TREES/kicad-lib.bzr" ]; then
-        bzr checkout $LEGACY_LIB_REPO kicad-lib.bzr
+        bzr checkout $LIBS_REPO kicad-lib.bzr
         echo ' kicad-lib checked out.'
     else
         cd kicad-lib.bzr
