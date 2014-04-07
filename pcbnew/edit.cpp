@@ -1374,7 +1374,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     {
         std::string actionName = COMMON_ACTIONS::TranslateLegacyId( id );
 
-        if( !actionName.empty() )
+        if( !actionName.empty() || id == ID_NO_TOOL_SELECTED )
         {
             const int MAX_TRIALS = 10;
             int trials = 0;
@@ -1389,7 +1389,8 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
                 m_toolManager.ProcessEvent( cancel );
             }
 
-            m_toolManager.RunAction( actionName );
+            if( !actionName.empty() )
+                m_toolManager.RunAction( actionName );
         }
     }
     else
