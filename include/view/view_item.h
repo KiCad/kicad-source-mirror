@@ -174,7 +174,7 @@ public:
         ALL         = 0xff
     };
 
-    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_requiredUpdate( NONE ),
+    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_requiredUpdate( ALL ),
                   m_groups( NULL ), m_groupsSize( 0 ) {}
 
     /**
@@ -184,7 +184,7 @@ public:
     {
         ViewRelease();
         delete[] m_groups;
-    };
+    }
 
     /**
      * Function Type
