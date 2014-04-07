@@ -99,11 +99,11 @@ void VIEW::Add( VIEW_ITEM* aItem )
         MarkTargetDirty( l.target );
     }
 
-    if( aItem->viewRequiredUpdate() != VIEW_ITEM::NONE )
-        MarkForUpdate( aItem );
-
     if( m_dynamic )
         aItem->viewAssign( this );
+
+    if( aItem->viewRequiredUpdate() != VIEW_ITEM::NONE )
+        MarkForUpdate( aItem );
 }
 
 
