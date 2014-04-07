@@ -248,7 +248,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SCH_SCREEN* screen;
     wxString    fullFileName( aFileSet[0] );
     wxString    msg;
-    bool        libCacheExist = false;
     SCH_SCREENS screenList;
 
     for( screen = screenList.GetFirst(); screen != NULL; screen = screenList.GetNext() )
@@ -384,9 +383,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     // load the project.
-    libCacheExist = LoadCacheLibrary( g_RootSheet->GetScreen()->GetFileName() );
+    bool libCacheExist = LoadCacheLibrary( g_RootSheet->GetScreen()->GetFileName() );
+
     g_RootSheet->SetScreen( NULL );
+
     bool diag = g_RootSheet->Load( this );
+
     SetScreen( m_CurrentSheet->LastScreen() );
 
     UpdateFileHistory( g_RootSheet->GetScreen()->GetFileName() );
@@ -396,6 +398,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     Zoom_Automatique( false );
     SetSheetNumberAndCount();
     m_canvas->Refresh( true );
+
+    (void) libCacheExist;
+    (void) diag;
 
 //    return diag;
     return true;    // do not close Eeschema if the file if not found:

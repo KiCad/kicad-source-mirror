@@ -410,7 +410,9 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( getLibPath() != wxEmptyString );
+    bool enable = getLibPath() != wxEmptyString;
+    aEvent.Enable( enable );
+    GetMenuBar()->Enable( ID_MODEDIT_SAVE_LIBRARY_AS, enable );
 }
 
 

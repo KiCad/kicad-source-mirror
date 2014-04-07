@@ -164,7 +164,7 @@ static const wxString dso_full_path( const wxString& aAbsoluteArgv0 )
     // in them. They are basically spin-offs from what was once a top process module.
     // That may not make linux package maintainers happy, but that is not my job.
     // Get over it.  KiCad is not a trivial suite, and multiple platforms come
-    // into play, not merely linux.  For starters they will use extension ".kicad",
+    // into play, not merely linux.  For starters they will use extension ".kiface",
     // but later in time morph to ".so".  They are not purely libraries, else they
     // would begin with "lib" in basename.  Like I said, get over it, we're serving
     // too many masters here: python, windows, linux, OSX, multiple versions of wx...
@@ -338,7 +338,8 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
     // KIFACE::CreateWindow() is a virtual so we don't need to link to it.
     // Remember its in the *.kiface DSO.
 #if 0
-    // this pulls in EDA_DRAW_FRAME type info, which we don't want in single_top
+    // this pulls in EDA_DRAW_FRAME type info, which we don't want in
+    // the single_top link image.
     KIWAY_PLAYER* frame = dynamic_cast<KIWAY_PLAYER*>( kiface->CreateWindow(
                                 NULL, TOP_FRAME, &kiway, KFCTL_STANDALONE ) );
 #else
@@ -375,9 +376,9 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
         if( argc == 2 )
         {
 #if defined(PGM_DATA_FILE_EXT)
-            // PGM_DATA_FILE_EXT is different for each compile, it may come
-            // from CMake on the compiler command line, often does not.
-            // This facillity is mostly useful only for those program modules
+            // PGM_DATA_FILE_EXT, if present, may be different for each compile,
+            // it may come from CMake on the compiler command line, but often does not.
+            // This facillity is mostly useful for those program modules
             // supporting a single argv[1].
             if( !argv1.GetExt() )
                 argv1.SetExt( wxT( PGM_DATA_FILE_EXT ) );
@@ -413,11 +414,13 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
     }
     else
     {
-        /*  The lean single_top program launcher has no access program settings,
-            else it would not be lean.  That kind of functionality is in the
-            KIFACE now, but it cannot assume that it is the only KIFACE in memory.
-            So this looks like a dead concept here, or an expensive one in terms
-            of code size.
+        /*
+
+            The lean single_top program launcher has no access to program
+            settings, for if it did, it would not be lean. That kind of
+            functionality is in the KIFACE now, but it cannot assume that it is
+            the only KIFACE in memory. So this looks like a dead concept here,
+            or an expensive one in terms of code size.
 
         wxString dir;
 
@@ -455,8 +458,8 @@ void PGM_SINGLE_TOP::MacOpenFile( const wxString& aFileName )
     if( filename.FileExists() )
     {
 #if 0
-        // this pulls in EDA_DRAW_FRAME type info, which we don't want in single_top
-        // link image.
+        // this pulls in EDA_DRAW_FRAME type info, which we don't want in
+        // the single_top link image.
         KIWAY_PLAYER* frame = dynamic_cast<KIWAY_PLAYER*>( App().GetTopWindow() );
 #else
         KIWAY_PLAYER* frame = (KIWAY_PLAYER*) App().GetTopWindow();

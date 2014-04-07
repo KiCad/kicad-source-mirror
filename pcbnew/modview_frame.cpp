@@ -271,10 +271,31 @@ const wxChar* FOOTPRINT_VIEWER_FRAME::GetFootprintViewerFrameName()
 }
 
 
-FOOTPRINT_VIEWER_FRAME* FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( const wxWindow* aParent )
+FOOTPRINT_VIEWER_FRAME* FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( const KIWAY_PLAYER* aParent )
 {
-    // top_of_project!
-    wxASSERT( dynamic_cast<const PCB_EDIT_FRAME*>( aParent ) );
+    wxASSERT( aParent );
+
+    // We search only within the current project, and do so by limiting
+    // the search scope to a wxWindow hierarchy subset.  Find the top most
+    // KIWAY_PLAYER which is part of this PROJECT by matching its KIWAY* to the
+    // most immediate parent's.
+
+    // NOTE: an open FOOTPRINT_VIEWER_FRAME may have either the PCB_EDIT_FRAME
+    // or the FOOTPRINT_EDIT_FRAME as parent.
+
+    KIWAY*      kiway = &aParent->Kiway();
+    wxWindow*   frame;
+
+    while( (frame = aParent->GetParent()) != NULL )
+    {
+        // will go NULL when we reach a non-KIWAY_PLAYER
+        KIWAY_PLAYER* kwp = dynamic_cast<KIWAY_PLAYER*>( frame );
+
+        if( kwp && &kwp->Kiway() == kiway )
+            aParent = kwp;
+        else
+            break;
+    }
 
     return (FOOTPRINT_VIEWER_FRAME*) wxWindow::FindWindowByName(
         GetFootprintViewerFrameName(), aParent );
@@ -424,7 +445,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         {
             GetBoard()->Add( loadFootprint( id ) );
         }
-        catch( IO_ERROR ioe )
+        catch( const IO_ERROR& ioe )
         {
             wxString msg;
             msg.Printf( _( "Could not load footprint \"%s\" from library \"%s\".\n\n"

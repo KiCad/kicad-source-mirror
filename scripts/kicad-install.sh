@@ -35,13 +35,26 @@
 WORKING_TREES=~/kicad_sources
 
 # CMake Options
-OPTS="$OPTS -DCMAKE_BUILD_TYPE=Release"
-OPTS="$OPTS -DBUILD_GITHUB_PLUGIN=ON"
+#OPTS="$OPTS -DBUILD_GITHUB_PLUGIN=OFF"
 
 # Python scripting, uncomment to enable
 #OPTS="$OPTS -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_MODULES=ON -DKICAD_SCRIPTING_WXPYTHON=ON"
 
-LIB_REPO=~dickelbeck/kicad/library-read-only
+# Use https under bazaar to retrieve repos because this does not require a
+# launchpad.net account.  Whereas lp:<something> requires a launchpad account.
+# https results in read only access.
+REPOS=https://code.launchpad.net
+
+# This is no longer maintained, is old
+#LEGACY_LIB_REPO=$REPOS/~dickelbeck/kicad/library-read-only
+
+# This branch is a bzr/launchpad import of the Git repository
+# at https://github.com/KiCad/kicad-library.git.
+# It has schematic parts and 3D models in it.
+LIBS_REPO=$REPOS/~kicad-product-committers/kicad/library
+
+SRCS_REPO=$REPOS/~kicad-product-committers/kicad/product
+DOCS_REPO=$REPOS/~kicad-developers/kicad/doc
 
 
 usage()
@@ -196,7 +209,7 @@ install_or_update()
 
     echo "step 3) checking out the source code from launchpad repo..."
     if [ ! -d "$WORKING_TREES/kicad.bzr" ]; then
-        bzr checkout lp:kicad kicad.bzr
+        bzr checkout $SRCS_REPO kicad.bzr
         echo " source repo to local working tree."
     else
         cd kicad.bzr
@@ -205,8 +218,9 @@ install_or_update()
         cd ../
     fi
 
+    echo "step 4) checking out the schematic parts and 3D library repo."
     if [ ! -d "$WORKING_TREES/kicad-lib.bzr" ]; then
-        bzr checkout "lp:$LIB_REPO" kicad-lib.bzr
+        bzr checkout $LIBS_REPO kicad-lib.bzr
         echo ' kicad-lib checked out.'
     else
         cd kicad-lib.bzr
@@ -217,7 +231,7 @@ install_or_update()
 
     echo "step 5) checking out the documentation from launchpad repo..."
     if [ ! -d "$WORKING_TREES/kicad-doc.bzr" ]; then
-        bzr checkout lp:~kicad-developers/kicad/doc kicad-doc.bzr
+        bzr checkout $DOCS_REPO kicad-doc.bzr
         echo " docs checked out."
     else
         cd kicad-doc.bzr

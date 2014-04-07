@@ -133,6 +133,8 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
     { wxT( "Left" ),         WXK_LEFT                                                 },
     { wxT( "Right" ),        WXK_RIGHT                                                },
 
+    { wxT( "Return" ),       WXK_RETURN                                                },
+
     { wxT( "Space" ),        WXK_SPACE                                                },
 
     // Do not change this line: end of list
