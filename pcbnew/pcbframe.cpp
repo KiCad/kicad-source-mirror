@@ -490,13 +490,13 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 {
     PCB_BASE_FRAME::SetBoard( aBoard );
 
-    if( GetGalCanvas() )
+    if( IsGalCanvasActive() )
     {
         ViewReloadBoard( aBoard );
 
         // update the tool manager with the new board and its view.
         m_toolManager.SetEnvironment( aBoard, GetGalCanvas()->GetView(),
-                                       GetGalCanvas()->GetViewControls(), this );
+                                      GetGalCanvas()->GetViewControls(), this );
         m_toolManager.ResetTools( TOOL_BASE::MODEL_RELOAD );
     }
 }
