@@ -1,4 +1,10 @@
-set( MAKE_LINK_MAPS true )
+# the map generation creates on Windows/gcc a lot of useless warnings
+# so disable it on windows
+if( WIN32 AND NOT CMAKE_CROSSCOMPILING )
+    set( MAKE_LINK_MAPS false )
+else()
+    set( MAKE_LINK_MAPS true )
+endif()
 
 add_definitions( -DPCBNEW )
 add_subdirectory(router)
@@ -535,6 +541,7 @@ if( USE_KIWAY_DLLS )
         ${PCBNEW_SCRIPTING_SRCS}
 #        ${PCBNEW_RESOURCES}
         )
+
     set_target_properties( pcbnew_kiface PROPERTIES
         # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
         # _pcbnew.so, _pcbnew.dll, or _pcbnew.kiface
@@ -547,6 +554,7 @@ if( USE_KIWAY_DLLS )
             COMPILE_FLAGS   ${OpenMP_CXX_FLAGS}
         )
     endif()
+
     target_link_libraries( pcbnew_kiface
         3d-viewer
         pcbcommon

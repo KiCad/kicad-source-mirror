@@ -213,7 +213,9 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( editMenu, ID_FIND_ITEMS, text, HELP_FIND, KiBitmap( find_xpm ) );
 
     // Find/Replace
-    AddMenuItem( editMenu, wxID_REPLACE, _( "Find and Re&place\tCtrl+Shift+F" ), HELP_REPLACE,
+    text = AddHotkeyName( _( "Find and Re&place" ), s_Schematic_Hokeys_Descr,
+                          HK_FIND_REPLACE );
+    AddMenuItem( editMenu, wxID_REPLACE, text, HELP_REPLACE,
                  KiBitmap( find_replace_xpm ) );
 
     // Import footprint association from the CvPcb cmp file:

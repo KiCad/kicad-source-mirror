@@ -108,7 +108,9 @@ bool PL_EDITOR_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
     }
     else     // An item is currently in edit
     {
-        AddMenuItem( aPopMenu, ID_POPUP_ITEM_PLACE, _( "Place" ),
+        msg = AddHotkeyName( _( "Place Item" ), s_PlEditor_Hokeys_Descr,
+                                 HK_PLACE_ITEM );
+        AddMenuItem( aPopMenu, ID_POPUP_ITEM_PLACE, msg,
                      KiBitmap( move_xpm ) );
         AddMenuItem( aPopMenu, ID_POPUP_ITEM_PLACE_CANCEL, _( "Cancel" ),
                      KiBitmap( cancel_xpm ) );
