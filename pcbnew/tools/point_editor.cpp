@@ -338,6 +338,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         controls->ShowCursor( false );
         controls->SetAutoPan( false );
         controls->SetSnapping( false );
+        controls->ForceCursorPosition( false );
     }
 
     setTransitions();
@@ -672,9 +673,9 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
                   VECTOR2I( outline->GetPos( nextNearestIdx ) ) );
         unsigned int nearestDist = side.Distance( aBreakPoint );
 
-        for( int i = 0; i < outline->GetCornersCount() - 2; ++i )
+        for( int i = 0; i < outline->GetCornersCount() - 1; ++i )
         {
-            SEG side( VECTOR2I( outline->GetPos( i ) ), VECTOR2I( outline->GetPos( i + 1 ) ) );
+            side = SEG( VECTOR2I( outline->GetPos( i ) ), VECTOR2I( outline->GetPos( i + 1 ) ) );
 
             unsigned int distance = side.Distance( aBreakPoint );
             if( distance < nearestDist )
