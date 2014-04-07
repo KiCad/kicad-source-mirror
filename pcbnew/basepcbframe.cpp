@@ -157,7 +157,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, ID_DRAWFRAME_T
 
     SetGalCanvas( new EDA_DRAW_PANEL_GAL(
             this, -1, wxPoint( 0, 0 ), m_FrameSize,
-            EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) );
+            EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) );
 
     // Hide by default, it has to be explicitly shown
     GetGalCanvas()->Hide();
