@@ -315,6 +315,9 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                     modified = false;
                 }
 
+                // Let the selection tool receive the event too
+                m_toolMgr->PassEvent();
+
                 break;
             }
 
