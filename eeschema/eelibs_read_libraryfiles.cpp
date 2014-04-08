@@ -62,7 +62,7 @@ void SCH_EDIT_FRAME::LoadLibraries()
 
         if( !fn.FileExists() )
         {
-            tmp = lib_search.FindValidPath( fn );
+            tmp = lib_search.FindValidPath( fn.GetFullPath() );
 
             if( !tmp )
             {

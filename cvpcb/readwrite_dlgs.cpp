@@ -138,27 +138,36 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 static bool missingLegacyLibs( FP_LIB_TABLE* aTbl, SEARCH_STACK& aSStack,
         const wxArrayString& aLibNames, wxString* aErrorMsg )
 {
-    bool retv = false;
+    bool missing = false;
 
     for( unsigned i = 0;  i < aLibNames.GetCount();  i++ )
     {
         wxFileName  fn( wxEmptyString, aLibNames[i], LegacyFootprintLibPathExtension );
 
-        wxString    legacyLibPath = aSStack.FindValidPath( fn );
+        wxString    legacyLibPath = aSStack.FindValidPath( fn.GetFullPath() );
 
+        /*
         if( legacyLibPath.IsEmpty() )
             continue;
+        */
 
-        if( aTbl->FindRowByURI( legacyLibPath ) == 0 )
+        if( !aTbl->FindRowByURI( legacyLibPath ) )
         {
-            retv = true;
+            missing = true;
 
             if( aErrorMsg )
-                *aErrorMsg += wxT( "\"" ) + legacyLibPath + wxT( "\"\n" );
+            {
+                *aErrorMsg += wxChar( '"' );
+
+                if( !legacyLibPath )
+                    *aErrorMsg += !legacyLibPath ? aLibNames[i] : legacyLibPath;
+
+                *aErrorMsg += wxT( "\"\n" );
+            }
         }
     }
 
-    return retv;
+    return missing;
 }
 
 
@@ -210,7 +219,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
         if( missingLegacyLibs( FootprintLibs(), Prj().PcbSearchS(), m_ModuleLibNames, &missingLibs ) )
         {
             msg = wxT( "The following legacy libraries are defined in the project file "
-                       "were not found in the footprint library table:\n\n" ) + missingLibs;
+                       "but were not found in the footprint library table:\n\n" ) + missingLibs;
             msg += wxT( "\nDo you want to update the footprint library table before "
                         "attempting to update the assigned footprints?" );
 
@@ -237,7 +246,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
             {
                 HTML_MESSAGE_BOX dlg( this, wxEmptyString );
 
-                dlg.MessageSet( wxT( "The following errors occurred attempt to convert the "
+                dlg.MessageSet( wxT( "The following errors occurred attempting to convert the "
                                      "footprint assignments:\n\n" ) );
                 dlg.ListSet( msg );
                 dlg.MessageSet( wxT( "\nYou will need to reassign them manually if you want them "

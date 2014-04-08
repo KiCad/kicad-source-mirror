@@ -205,14 +205,17 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList, const wxString&
     // is there an edge transition, a change in m_project_filename?
     if( m_project_name != fn )
     {
+        m_pcb_search.Clear();
         m_sch_search.Clear();
 
         SetProjectFullName( fn.GetFullPath() );
 
-        // to the empty list, add project dir as first
+        // to the empty lists, add project dir as first
+        m_pcb_search.AddPaths( fn.GetPath() );
         m_sch_search.AddPaths( fn.GetPath() );
 
         // append all paths from aSList
+        add_search_paths( &m_pcb_search, aSList, -1 );
         add_search_paths( &m_sch_search, aSList, -1 );
 
         // addLibrarySearchPaths( SEARCH_STACK* aSP, wxConfigBase* aCfg )

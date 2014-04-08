@@ -91,7 +91,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 
         // was: wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
         Prj().ConfigSave( Kiface().KifaceSearch(), fn.GetFullPath(),
-                GROUP, GetProjectFileParameters() );
+                GROUP_PCB, GetProjectFileParameters() );
     }
 }
 

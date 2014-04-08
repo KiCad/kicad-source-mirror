@@ -37,6 +37,17 @@
 #include <limits>
 
 
+#define GROUP_PCB           wxT( "/pcbnew" )
+#define GROUP_SCH           wxT( "/eeschema" )
+#define GROUP_PCB_LIBS      wxT( "/pcbnew/libraries" )
+#define GROUP_SCH_LIBS      wxT( "/eeschema/libraries" )
+#define GROUP_COMMON        wxT( "/common" )
+
+#define GROUP_CVP           wxT("/cvpcb")
+//#define GROUP_CVP_LIBS      wxT("/pcbnew/libraries")
+#define GROUP_CVP_EQU       wxT("/cvpcb/libraries")
+
+
 #define CONFIG_VERSION      1
 #define FORCE_LOCAL_CONFIG  true
 
