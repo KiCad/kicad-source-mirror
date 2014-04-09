@@ -713,7 +713,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
             fprintf( rptfile, "$EndMODULE  %s\n\n", TO_UTF8 (Module->GetReference() ) );
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( NULL, ioe.errorText );
     }

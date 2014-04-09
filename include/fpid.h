@@ -153,7 +153,6 @@ public:
      */
     bool IsValid() const { return !nickname.empty() && !footprint.empty(); }
 
-
     /**
      * Function IsLegacy
      * @return true if the #FPID only has the #footprint name defined.

@@ -82,7 +82,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
         netlistReader->LoadNetlist();
         loadFootprints( netlist, aReporter );
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         msg.Printf( _( "Error loading netlist.\n%s" ), ioe.errorText.GetData() );
         wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );

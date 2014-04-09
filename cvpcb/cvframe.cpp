@@ -846,7 +846,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
         else
             wxMessageBox( _( "Unknown netlist format." ), wxEmptyString, wxOK | wxICON_ERROR );
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         msg = wxString::Format( _( "Error loading netlist.\n%s" ), ioe.errorText.GetData() );
         wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );

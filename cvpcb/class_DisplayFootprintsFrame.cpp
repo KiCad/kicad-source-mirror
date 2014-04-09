@@ -490,7 +490,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 
         footprint = FootprintLibs()->FootprintLoad( FROM_UTF8( nickname.c_str() ), FROM_UTF8( fpname.c_str() ) );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
         return NULL;

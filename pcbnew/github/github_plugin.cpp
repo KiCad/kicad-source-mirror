@@ -570,7 +570,7 @@ int main( int argc, char** argv )
             printf("[%d]:%s\n", i, TO_UTF8( fps[i] ) );
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         printf( "%s\n", TO_UTF8(ioe.errorText) );
     }
