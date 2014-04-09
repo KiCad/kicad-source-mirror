@@ -668,7 +668,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
         {
             m_TemplateFieldNames.Parse( &lexer );
         }
-        catch( IO_ERROR& e )
+        catch( const IO_ERROR& e )
         {
             // @todo show error msg
             DBG( printf( "templatefieldnames parsing error: '%s'\n",

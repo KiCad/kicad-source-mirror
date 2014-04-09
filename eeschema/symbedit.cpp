@@ -225,14 +225,14 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
             formatter.Print( 0, "ENDDRAW\n" );
             formatter.Print( 0, "ENDDEF\n" );
         }
-        catch( IO_ERROR ioe )
+        catch( const IO_ERROR& ioe )
         {
             msg.Printf( _( "An error occurred attempting to save symbol file '%s'" ),
                         GetChars( fn.GetFullPath() ) );
             DisplayError( this, msg );
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
         return;

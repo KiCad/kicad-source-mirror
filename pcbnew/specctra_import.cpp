@@ -102,14 +102,15 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
         db.LoadSESSION( fullFileName );
         db.FromSESSION( GetBoard() );
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
-        ioe.errorText += '\n';
-        ioe.errorText += _("BOARD may be corrupted, do not save it.");
-        ioe.errorText += '\n';
-        ioe.errorText += _("Fix problem and try again.");
+        wxString msg = ioe.errorText;
+        msg += '\n';
+        msg += _("BOARD may be corrupted, do not save it.");
+        msg += '\n';
+        msg += _("Fix problem and try again.");
 
-        DisplayError( this, ioe.errorText );
+        DisplayError( this, msg );
         return;
     }
 

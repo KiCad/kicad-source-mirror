@@ -66,13 +66,16 @@ bool PCB_CALCULATOR_FRAME::ReadDataFile()
     {
         datafile_parser.Parse( datafile );
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         delete datafile;
-        ioe.errorText += '\n';
-        ioe.errorText += _("Data file error.");
 
-        wxMessageBox( ioe.errorText );
+        wxString msg = ioe.errorText;
+
+        msg += wxChar('\n');
+        msg += _("Data file error.");
+
+        wxMessageBox( msg );
         return false;
     }
 
@@ -99,7 +102,7 @@ bool PCB_CALCULATOR_FRAME::WriteDataFile()
         while( nestlevel-- )
             formatter.Print( nestlevel, ")\n" );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         return false;
     }

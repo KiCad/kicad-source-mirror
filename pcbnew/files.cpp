@@ -404,7 +404,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             SetBoard( loadedBoard );
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         wxString msg = wxString::Format( _( "Error loading board.\n%s" ),
                                          ioe.errorText.GetData() );
@@ -692,7 +692,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
         pi->Save( pcbFileName.GetFullPath(), GetBoard(), NULL );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         wxString msg = wxString::Format( _( "Error saving board.\n%s" ),
                                          ioe.errorText.GetData() );
