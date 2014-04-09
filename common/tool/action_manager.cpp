@@ -115,10 +115,22 @@ void ACTION_MANAGER::RunAction( const TOOL_ACTION* aAction ) const
 
 bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 {
-    HOTKEY_LIST::const_iterator it = m_actionHotKeys.find( aHotKey );
+    int key = std::toupper( aHotKey & ~MD_MODIFIER_MASK );
+    int mod = aHotKey & MD_MODIFIER_MASK;
 
+    HOTKEY_LIST::const_iterator it = m_actionHotKeys.find( key | mod );
+
+    // If no luck, try without modifier, to handle keys that require a modifier
+    // e.g. to get ? you need to press Shift+/ without US keyboard layout
+    // Hardcoding ? as Shift+/ is a bad idea, as on another layout you may need to press a
+    // different combination
     if( it == m_actionHotKeys.end() )
-        return false; // no appropriate action found for the hotkey
+    {
+        it = m_actionHotKeys.find( key );
+
+        if( it == m_actionHotKeys.end() )
+            return false; // no appropriate action found for the hotkey
+    }
 
     const std::list<TOOL_ACTION*>& actions = it->second;
 

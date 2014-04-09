@@ -417,7 +417,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 
 bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
 {
-    if( aEvent.Action() == TA_KEY_UP )
+    if( aEvent.Action() == TA_KEY_PRESSED )
     {
         // Check if there is a hotkey associated
         if( m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode() ) )

@@ -243,23 +243,26 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     }
 
     // Keyboard handling
-    else if( type == wxEVT_KEY_UP || type == wxEVT_KEY_DOWN )
+    else if( type == wxEVT_CHAR )
     {
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
         int key = ke->GetKeyCode();
         int mods = decodeModifiers<wxKeyEvent>( ke );
 
-        if( type == wxEVT_KEY_UP )
+        if( mods & MD_CTRL )
         {
-            evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_UP, key | mods );
+            // wxWidgets have a quirk related to Ctrl+letter hot keys handled by CHAR_EVT
+            // http://docs.wxwidgets.org/trunk/classwx_key_event.html:
+            // "char events for ASCII letters in this case carry codes corresponding to the ASCII
+            // value of Ctrl-Latter, i.e. 1 for Ctrl-A, 2 for Ctrl-B and so on until 26 for Ctrl-Z."
+            if( key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
+                key += 'A' - 1;
         }
+
+        if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
+            evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
         else
-        {
-            if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
-                evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
-            else
-                evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_DOWN, key | mods );
-        }
+            evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_PRESSED, key | mods );
     }
 
     if( evt )
