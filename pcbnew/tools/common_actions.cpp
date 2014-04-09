@@ -148,11 +148,11 @@ TOOL_ACTION COMMON_ACTIONS::highContrastMode( "pcbnew.highContrastMode",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::highContrastInc( "pcbnew.highContrastInc",
-        AS_GLOBAL, MD_SHIFT + '.',      // shift+. == >
+        AS_GLOBAL, '>',
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::highContrastDec( "pcbnew.highContrastDec",
-        AS_GLOBAL, MD_SHIFT + 60,       // shift+, == <
+        AS_GLOBAL, '<',
         "", "" );
 
 
@@ -198,11 +198,11 @@ TOOL_ACTION COMMON_ACTIONS::layerPrev( "pcbnew.layerPrev",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::layerAlphaInc( "pcbnew.layerAlphaInc",
-        AS_GLOBAL, MD_SHIFT + ']',      // shift+] == }
+        AS_GLOBAL, '}',
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::layerAlphaDec( "pcbnew.layerAlphaDec",
-        AS_GLOBAL, MD_SHIFT + '[',      // shift+[ == {
+        AS_GLOBAL, '{',
         "", "" );
 
 
@@ -252,7 +252,7 @@ TOOL_ACTION COMMON_ACTIONS::switchUnits( "pcbnew.switchUnits",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::showHelp( "pcbnew.showHelp",
-        AS_GLOBAL, MD_SHIFT + '/',      // shift+/ == ?
+        AS_GLOBAL, '?',
         "", "" );
 
 

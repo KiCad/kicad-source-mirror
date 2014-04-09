@@ -135,7 +135,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
                 break;
         }
 
-        else if( evt->IsKeyUp() && step != SET_ORIGIN )
+        else if( evt->IsKeyPressed() && step != SET_ORIGIN )
         {
             int width = arc->GetWidth();
 
@@ -427,7 +427,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
                 break;
         }
 
-        else if( evt->IsKeyUp() && step != SET_ORIGIN )
+        else if( evt->IsKeyPressed() && step != SET_ORIGIN )
         {
             width = dimension->GetWidth();
 
@@ -603,7 +603,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
         if( evt->IsCancel() )
             break;
 
-        else if( evt->IsKeyUp() )
+        else if( evt->IsKeyPressed() )
         {
             int width = target->GetWidth();
 
@@ -822,7 +822,7 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
             m_controls->SetAutoPan( false );
         }
 
-        else if( graphic && evt->IsKeyUp() )
+        else if( graphic && evt->IsKeyPressed() )
         {
             int width = graphic->GetWidth();
 

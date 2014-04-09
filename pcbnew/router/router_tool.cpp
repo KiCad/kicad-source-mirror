@@ -45,11 +45,11 @@
 using namespace KIGFX;
 using boost::optional;
 
-static TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", AS_CONTEXT, 'G' );
-static TOOL_ACTION ACT_PlaceVia( "pcbnew.InteractiveRouter.PlaceVia", AS_CONTEXT, 'V' );
-static TOOL_ACTION ACT_OpenRouteOptions( "pcbnew.InteractiveRouter.OpenRouterOptions", AS_CONTEXT, 'T' );
-static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", AS_CONTEXT, '/' );
-static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_CONTEXT, WXK_END );
+//static TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", AS_CONTEXT, 'G' );
+//static TOOL_ACTION ACT_PlaceVia( "pcbnew.InteractiveRouter.PlaceVia", AS_CONTEXT, 'V' );
+//static TOOL_ACTION ACT_OpenRouteOptions( "pcbnew.InteractiveRouter.OpenRouterOptions", AS_CONTEXT, 'T' );
+//static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", AS_CONTEXT, '/' );
+//static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_CONTEXT, WXK_END );
 
 ROUTER_TOOL::ROUTER_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveRouter" )
@@ -367,9 +367,9 @@ void ROUTER_TOOL::startRouting()
 
             m_router->Move( m_endSnapPoint, m_endItem );
         }
-        else if( evt->IsKeyUp() )
+        else if( evt->IsKeyPressed() )
         {
-            switch( evt->KeyCode() )
+            switch( std::toupper( evt->KeyCode() ) )
             {
             case 'V':
             {
