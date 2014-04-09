@@ -207,6 +207,16 @@ public:
     }
 
     /**
+     * Returns priority of a given tool. Higher number means that the tool is closer to the
+     * beginning of the active tools queue (i.e. receives events earlier, tools with lower
+     * priority receive events later).
+     * @param aToolId is the id of queried tool.
+     * @return The priority of a given tool. If returned number is negative, then it means that
+     * the tool id is invalid or the tool is not active.
+     */
+    int GetPriority( int aToolId ) const;
+
+    /**
      * Defines a state transition - the events that cause a given handler method in the tool
      * to be called. Called by TOOL_INTERACTIVE::Go(). May be called from a coroutine context.
      */

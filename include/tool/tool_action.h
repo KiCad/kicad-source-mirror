@@ -171,6 +171,21 @@ public:
         m_menuDescription = aDescription;
     }
 
+    TOOL_ACTION_SCOPE GetScope() const
+    {
+        return m_scope;
+    }
+
+    /**
+     * Returns name of the tool associated with the action. It is basically the action name
+     * stripped of the last part (e.g. for "pcbnew.InteractiveDrawing.drawCircle" it is
+     * "pcbnew.InteractiveDrawing").
+     */
+    std::string GetToolName() const
+    {
+        return m_name.substr( 0, m_name.rfind( '.' ) );
+    }
+
 private:
     friend class ACTION_MANAGER;
 

@@ -301,6 +301,25 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 }
 
 
+int TOOL_MANAGER::GetPriority( int aToolId ) const
+{
+    int priority = 0;
+
+    for( std::deque<int>::const_iterator it = m_activeTools.begin(),
+            itEnd = m_activeTools.end(); it != itEnd; ++it )
+    {
+        std::cout << FindTool( *it )->GetName() << std::endl;
+
+        if( *it == aToolId )
+            return priority;
+
+        ++priority;
+    }
+
+    return -1;
+}
+
+
 void TOOL_MANAGER::ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandler,
                                       const TOOL_EVENT_LIST& aConditions )
 {
