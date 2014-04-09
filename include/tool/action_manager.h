@@ -25,6 +25,7 @@
 #ifndef ACTION_MANAGER_H_
 #define ACTION_MANAGER_H_
 
+#include <list>
 #include <map>
 #include <string>
 
@@ -97,13 +98,6 @@ public:
      */
     bool RunHotKey( int aHotKey ) const;
 
-    /**
-     * Function ClearHotKey()
-     * Removes an action associated with a hotkey.
-     * @param aHotKey is the hotkey to be cleared.
-     */
-    void ClearHotKey( int aHotKey );
-
 private:
     ///> Tool manager needed to run actions
     TOOL_MANAGER* m_toolMgr;
@@ -115,7 +109,8 @@ private:
     std::map<std::string, TOOL_ACTION*> m_actionNameIndex;
 
     ///> Map for indexing actions by their hotkeys
-    std::map<int, TOOL_ACTION*> m_actionHotKeys;
+    typedef std::map<int, std::list<TOOL_ACTION*> > HOTKEY_LIST;
+    HOTKEY_LIST m_actionHotKeys;
 };
 
 #endif /* ACTION_MANAGER_H_ */

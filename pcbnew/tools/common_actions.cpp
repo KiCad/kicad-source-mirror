@@ -43,11 +43,11 @@ TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         "Move", "Moves the selected item(s)" );
 
 TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.rotate",
-        AS_CONTEXT, 'R',
+        AS_GLOBAL, 'R',
         "Rotate", "Rotates selected item(s)" );
 
 TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.flip",
-        AS_CONTEXT, 'F',
+        AS_GLOBAL, 'F',
         "Flip", "Flips selected item(s)" );
 
 TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
@@ -57,6 +57,7 @@ TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
 TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, 'E',
         "Properties...", "Displays properties window" );
+
 
 // Drawing tool actions
 TOOL_ACTION COMMON_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
