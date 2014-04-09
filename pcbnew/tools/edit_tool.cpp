@@ -395,10 +395,7 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
         remove( item );
     }
 
-    // Rebuild list of pads and nets if necessary
-    BOARD* board = getModel<BOARD>( PCB_T );
-    if( !( board->m_Status_Pcb & NET_CODES_OK ) )
-        board->BuildListOfNets();
+    getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
     setTransitions();
 
