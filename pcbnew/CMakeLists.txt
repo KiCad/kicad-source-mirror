@@ -397,6 +397,10 @@ if( KICAD_SCRIPTING_MODULES )
             )
     endif()
 
+    if( ${OPENMP_FOUND} )
+        set_property( TARGET _pcbnew APPEND_STRING
+            PROPERTY LINK_FLAGS " ${OpenMP_CXX_FLAGS}" )
+        endif()
 endif()
 
 
