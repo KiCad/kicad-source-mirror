@@ -226,6 +226,30 @@ struct APP_SINGLE_TOP : public wxApp
         return wxApp::OnExit();
     }
 
+    int OnRun()             // overload wxApp virtual
+    {
+        try
+        {
+            return wxApp::OnRun();
+        }
+        catch( const std::exception& e )
+        {
+            wxLogError( "Unhandled exception class: %s  what: %s",
+                typeid(e).name(), e.what() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( "Unhandled exception class: %s  what: %s",
+                typeid( ioe ).name(), TO_UTF8( ioe.errorText ) );
+        }
+        catch(...)
+        {
+            wxLogError( "Unhandled exception of unknown type" );
+        }
+
+        return -1;
+    }
+
     /**
      * Function MacOpenFile
      * is specific to MacOSX (not used under Linux or Windows).
