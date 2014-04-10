@@ -34,6 +34,7 @@
 */
 
 
+#include <typeinfo>
 #include <macros.h>
 #include <fctsys.h>
 #include <wx/dynlib.h>
@@ -234,17 +235,18 @@ struct APP_SINGLE_TOP : public wxApp
         }
         catch( const std::exception& e )
         {
-            wxLogError( "Unhandled exception class: %s  what: %s",
+            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
                 typeid(e).name(), e.what() );
         }
         catch( const IO_ERROR& ioe )
         {
-            wxLogError( "Unhandled exception class: %s  what: %s",
-                typeid( ioe ).name(), TO_UTF8( ioe.errorText ) );
+            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
+                GetChars( FROM_UTF8( typeid( ioe ).name() ) ),
+                GetChars( ioe.errorText ) );
         }
         catch(...)
         {
-            wxLogError( "Unhandled exception of unknown type" );
+            wxLogError( wxT( "Unhandled exception of unknown type" ) );
         }
 
         return -1;
