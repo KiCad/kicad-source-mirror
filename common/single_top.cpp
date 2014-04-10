@@ -236,7 +236,8 @@ struct APP_SINGLE_TOP : public wxApp
         catch( const std::exception& e )
         {
             wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
-                typeid(e).name(), e.what() );
+                GetChars( FROM_UTF8( typeid(e).name() )),
+                GetChars( FROM_UTF8( e.what() ) ) );;
         }
         catch( const IO_ERROR& ioe )
         {
