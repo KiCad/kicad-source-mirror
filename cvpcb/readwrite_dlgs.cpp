@@ -119,6 +119,20 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 }
 
 
+#if 0
+
+    /*
+
+    This code block was based on two major assumptions that are no longer true:
+    1) Footprint library basenames would remain the same.
+    (But no, basenames have been renamed in the github repo.)
+    2) *.mod files would still be around and merely reside in the FP_LIB_TABLE.
+    (But no, they have been converted to *.pretty.)
+
+    There is a newer replacement code block in the #else region.
+
+    */
+
 /**
  * Function missingLegacyLibs
  * tests the list of \a aLibNames by URI to determine if any of them are missing from
@@ -169,21 +183,6 @@ static bool missingLegacyLibs( FP_LIB_TABLE* aTbl, SEARCH_STACK& aSStack,
 
     return missing;
 }
-
-
-#if 0
-
-    /*
-
-    This code block was based on two major assumptions that are no longer true:
-    1) Footprint library basenames would remain the same.
-    (But no, basenames have been renamed in the github repo.)
-    2) *.mod files would still be around and merely reside in the FP_LIB_TABLE.
-    (But no, they have been converted to *.pretty.)
-
-    There is a newer replacement code block in the #else region.
-
-    */
 
 
 /**
@@ -460,7 +459,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
 
 #else   // new strategy
 
-
 /// Return true if the resultant FPID has a certain nickname.  The guess
 /// is only made if this footprint resides in only one library.
 /// @return int - 0 on success, 1 on not found, 2 on ambiguous i.e. multiple matches
@@ -548,39 +546,51 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
         {
             msg.Clear();
 
-            for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
+            try
             {
-                COMPONENT* component = m_netlist.GetComponent( i );
-
-                if( component->GetFPID().IsLegacy() )
+                for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
                 {
-                    int guess = guessNickname( tbl, (FPID*) &component->GetFPID() );
+                    COMPONENT* component = m_netlist.GetComponent( i );
 
-                    switch( guess )
+                    if( component->GetFPID().IsLegacy() )
                     {
-                    case 0:
-                        DBG(printf("%s: guessed OK ref:%s  fpid:%s\n", __func__,
-                            TO_UTF8( component->GetReference() ), component->GetFPID().Format().c_str() );)
-                        m_modified = true;
-                        break;
+                        int guess = guessNickname( tbl, (FPID*) &component->GetFPID() );
 
-                    case 1:
-                        msg += wxString::Format( _(
-                                "Component '%s' footprint '%s' was <b>not found</b> in any library.\n" ),
-                                GetChars( component->GetReference() ),
-                                GetChars( component->GetFPID().GetFootprintName() )
-                                );
-                        break;
+                        switch( guess )
+                        {
+                        case 0:
+                            DBG(printf("%s: guessed OK ref:%s  fpid:%s\n", __func__,
+                                TO_UTF8( component->GetReference() ), component->GetFPID().Format().c_str() );)
+                            m_modified = true;
+                            break;
 
-                    case 2:
-                        msg += wxString::Format( _(
-                                "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n" ),
-                                GetChars( component->GetReference() ),
-                                GetChars( component->GetFPID().GetFootprintName() )
-                                );
-                        break;
+                        case 1:
+                            msg += wxString::Format( _(
+                                    "Component '%s' footprint '%s' was <b>not found</b> in any library.\n" ),
+                                    GetChars( component->GetReference() ),
+                                    GetChars( component->GetFPID().GetFootprintName() )
+                                    );
+                            break;
+
+                        case 2:
+                            msg += wxString::Format( _(
+                                    "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n" ),
+                                    GetChars( component->GetReference() ),
+                                    GetChars( component->GetFPID().GetFootprintName() )
+                                    );
+                            break;
+                        }
                     }
                 }
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxString msg = ioe.errorText;
+                msg += wxT( "\n\n" );
+                msg += _( "First check your fp-lib-table entries." );
+
+                wxMessageBox( msg, wxT( "Problematic fp-lib-tables" ) );
+                return false;
             }
 
             if( msg.size() )
@@ -593,7 +603,13 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
                 dlg.MessageSet( wxT( "\nYou will need to reassign them manually if you want them "
                                      "to be updated correctly the next time you import the "
                                      "netlist in Pcbnew." ) );
+
+#if 1
                 dlg.ShowModal();
+#else
+                dlg.Fit();
+                dlg.Show( true );   // modeless lets user watch while fixing the problems, but its not working.
+#endif
             }
         }
         else
