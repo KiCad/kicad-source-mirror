@@ -125,7 +125,10 @@ install_prerequisites()
     fi
 
     # ensure bzr name and email are set.  No message since bzr prints an excellent diagnostic.
-    bzr whoami || exit 2
+    bzr whoami || {
+        echo "WARNING: You have not set bzr whoami, so I will set a dummy."
+        export BZR_EMAIL="Kicad Build <nobody@foo>"
+    }
 }
 
 
