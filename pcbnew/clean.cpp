@@ -44,9 +44,6 @@ class TRACKS_CLEANER: CONNECTIONS
 {
 private:
     BOARD * m_Brd;
-    bool m_deleteUnconnectedTracks;
-    bool m_mergeSegments;
-    bool m_cleanVias;
 
 public:
     TRACKS_CLEANER( BOARD * aPcb );
@@ -55,22 +52,8 @@ public:
      * the cleanup function.
      * return true if some item was modified
      */
-    bool CleanupBoard();
-
-    void SetdeleteUnconnectedTracksOpt( bool aDelete )
-    {
-        m_deleteUnconnectedTracks = aDelete;
-    }
-
-    void SetMergeSegmentsOpt( bool aMerge )
-    {
-        m_mergeSegments = aMerge;
-    }
-
-    void SetCleanViasOpt( bool aClean )
-    {
-        m_cleanVias = aClean;
-    }
+    bool CleanupBoard(PCB_EDIT_FRAME *aFrame, bool aCleanVias,
+                      bool aMergeSegments, bool aDeleteUnconnected);
 
 private:
 
@@ -88,7 +71,7 @@ private:
     /**
      * Merge colinear segments and remove null len segments
      */
-    bool  clean_segments();
+    bool clean_segments();
 
     /**
      * helper function
@@ -117,19 +100,9 @@ void PCB_EDIT_FRAME::Clean_Pcb()
 
     wxBusyCursor( dummy );
     TRACKS_CLEANER cleaner( GetBoard() );
-    cleaner.SetdeleteUnconnectedTracksOpt( dlg.m_deleteUnconnectedSegm );
-    cleaner.SetMergeSegmentsOpt( dlg.m_mergeSegments );
-    cleaner.SetCleanViasOpt( dlg.m_cleanVias );
 
-    if( cleaner.CleanupBoard() )
-    {
-        // Clear undo and redo lists to avoid inconsistencies between lists
-        GetScreen()->ClearUndoRedoList();
-        SetCurItem( NULL );
-        Compile_Ratsnest( NULL, true );
-        OnModify();
-    }
-
+    cleaner.CleanupBoard( this, dlg.m_cleanVias, dlg.m_mergeSegments, 
+                          dlg.m_deleteUnconnectedSegm );
     m_canvas->Refresh( true );
 }
 
@@ -142,30 +115,38 @@ void PCB_EDIT_FRAME::Clean_Pcb()
  *  Create segments when track ends are incorrectly connected:
  *  i.e. when a track end covers a pad or a via but is not exactly on the pad or the via center
  */
-bool TRACKS_CLEANER::CleanupBoard()
+bool TRACKS_CLEANER::CleanupBoard( PCB_EDIT_FRAME *aFrame,
+                                   bool aCleanVias,
+                                   bool aMergeSegments,
+                                   bool aDeleteUnconnected )
 {
     bool modified = false;
 
     // delete redundant vias
-    if( m_cleanVias && clean_vias() )
-        modified = true;
+    modified |= (aCleanVias && clean_vias());
 
     // Remove null segments and intermediate points on aligned segments
-    if( m_mergeSegments && clean_segments() )
-        modified = true;
+    modified |= (aMergeSegments && clean_segments());
 
     // Delete dangling tracks
-    if( m_deleteUnconnectedTracks && deleteUnconnectedTracks() )
-        modified = true;
+    modified |= (aDeleteUnconnected && deleteUnconnectedTracks());
 
+    if( modified )
+    {
+        // Clear undo and redo lists to avoid inconsistencies between lists
+        // XXX This is very involved... maybe a member in PCB_EDIT_FRAME
+        // would be better?
+        aFrame->GetScreen()->ClearUndoRedoList();
+        aFrame->SetCurItem( NULL );
+        aFrame->Compile_Ratsnest( NULL, true );
+        aFrame->OnModify();
+    }
     return modified;
 }
 
 TRACKS_CLEANER::TRACKS_CLEANER( BOARD * aPcb ): CONNECTIONS( aPcb )
 {
     m_Brd = aPcb;
-    m_deleteUnconnectedTracks = false;
-    m_mergeSegments = false;
 
     // Build connections info
     BuildPadsList();
@@ -211,7 +192,6 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
 
 bool TRACKS_CLEANER::clean_vias()
 {
-    TRACK* next_track;
     bool modified = false;
 
     for( TRACK* track = m_Brd->m_Track; track; track = track->Next() )
@@ -229,6 +209,7 @@ bool TRACKS_CLEANER::clean_vias()
         // Search and delete others vias at same location
         TRACK* alt_track = track->Next();
 
+        TRACK* next_track;
         for( ; alt_track != NULL; alt_track = next_track )
         {
             next_track = alt_track->Next();
@@ -247,6 +228,7 @@ bool TRACKS_CLEANER::clean_vias()
     }
 
     // Delete Via on pads at same location
+    TRACK* next_track;
     for( TRACK* track = m_Brd->m_Track; track != NULL; track = next_track )
     {
         next_track = track->Next();
@@ -452,8 +434,6 @@ bool TRACKS_CLEANER::clean_segments()
     bool modified = false;
     TRACK*          segment, * nextsegment;
     TRACK*          other;
-    int             flag, no_inc;
-
 
     // Delete null segments
     for( segment = m_Brd->m_Track; segment; segment = nextsegment )
@@ -461,7 +441,10 @@ bool TRACKS_CLEANER::clean_segments()
         nextsegment = segment->Next();
 
         if( segment->IsNull() )     // Length segment = 0; delete it
+        {
             segment->DeleteStructure();
+            modified = true;
+        }
     }
 
     // Delete redundant segments, i.e. segments having the same end points
@@ -511,7 +494,8 @@ bool TRACKS_CLEANER::clean_segments()
         if( segment->Type() != PCB_TRACE_T )
             continue;
 
-        flag = no_inc = 0;
+        unsigned flag = 0;
+        bool no_inc = false;
 
         // search for a possible point connected to the START point of the current segment
         for( segStart = segment->Next(); ; )
@@ -588,7 +572,7 @@ bool TRACKS_CLEANER::clean_segments()
 
             if( segDelete )
             {
-                no_inc = 1;
+                no_inc = true;
                 segDelete->DeleteStructure();
                 modified = true;
             }
