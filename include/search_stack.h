@@ -57,15 +57,6 @@ public:
      * ";" on windows, or ":" | ";" on unix.
      */
     void RemovePaths( const wxString& aPaths );
-
-    /**
-     * Function FindFileInSearchPaths
-     * looks in "this" for \a aFilename, but first modifies every search
-     * path by appending a list of path fragments from aSubdirs.  That modification
-     * is not rentative.
-     */
-    wxString FindFileInSearchPaths( const wxString&      aFilename,
-                                    const wxArrayString* aSubdirs = NULL );
 };
 
 

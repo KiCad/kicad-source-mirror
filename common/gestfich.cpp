@@ -78,66 +78,6 @@
  *  like export KICAD=/my_path/kicad if /my_path/kicad is not a default path
  */
 
-// Path list for online help
-static wxString    s_HelpPathList[] = {
-#ifdef __WINDOWS__
-    wxT( "c:/kicad/doc/help/" ),
-    wxT( "d:/kicad/doc/help/" ),
-    wxT( "c:/Program Files/kicad/doc/help/" ),
-    wxT( "d:/Program Files/kicad/doc/help/" ),
-#else
-    wxT( "/usr/share/doc/kicad/help/" ),
-    wxT( "/usr/local/share/doc/kicad/help/" ),
-    wxT( "/usr/local/kicad/doc/help/" ),    // default install for "universal
-                                            // tarballs" and build for a server
-                                            // (new)
-    wxT( "/usr/local/kicad/help/" ),        // default install for "universal
-                                            // tarballs" and build for a server
-                                            // (old)
-#endif
-    wxT( "end_list" )                       // End of list symbol, do not change
-};
-
-
-// Path list for KiCad data files
-static wxString    s_KicadDataPathList[] = {
-#ifdef __WINDOWS__
-    wxT( "c:/kicad/share/" ),
-    wxT( "d:/kicad/share/" ),
-    wxT( "c:/kicad/" ),
-    wxT( "d:/kicad/" ),
-    wxT( "c:/Program Files/kicad/share/" ),
-    wxT( "d:/Program Files/kicad/share/" ),
-    wxT( "c:/Program Files/kicad/" ),
-    wxT( "d:/Program Files/kicad/" ),
-#else
-    wxT( "/usr/share/kicad/" ),
-    wxT( "/usr/local/share/kicad/" ),
-    wxT( "/usr/local/kicad/share/" ),   // default data path for "universal
-                                        // tarballs" and build for a server
-                                        // (new)
-    wxT( "/usr/local/kicad/" ),         // default data path for "universal
-                                        // tarballs" and build for a server
-                                        // (old)
-#endif
-    wxT( "end_list" )                   // End of list symbol, do not change
-};
-
-// Path list for KiCad binary files
-static wxString    s_KicadBinaryPathList[] = {
-#ifdef __WINDOWS__
-    wxT( "c:/kicad/bin/" ),
-    wxT( "d:/kicad/bin/" ),
-    wxT( "c:/Program Files/kicad/bin/" ),
-    wxT( "d:/Program Files/kicad/bin/" ),
-#else
-    wxT( "/usr/bin/" ),
-    wxT( "/usr/local/bin/" ),
-    wxT( "/usr/local/kicad/bin/" ),
-#endif
-    wxT( "end_list" )                   // End of list symbol, do not change
-};
-
 
 wxString MakeReducedFileName( const wxString& fullfilename,
                               const wxString& default_path,
@@ -281,7 +221,7 @@ wxString EDA_FileSelector( const wxString& Title,
                                    defaultname,
                                    dotted_Ext,
                                    Mask,
-                                   flag, /* open mode wxFD_OPEN, wxFD_SAVE .. */
+                                   flag, // open mode wxFD_OPEN, wxFD_SAVE ..
                                    Frame,
                                    Pos.x, Pos.y );
 
@@ -292,123 +232,48 @@ wxString EDA_FileSelector( const wxString& Title,
 }
 
 
-wxString FindKicadHelpPath()
-{
-    wxString FullPath, LangFullPath, tmp;
-    wxString LocaleString;
-    bool     PathFound = false;
-
-    /* find kicad/help/ */
-    tmp = Pgm().GetExecutablePath();
-
-    if( tmp.Last() == '/' )
-        tmp.RemoveLast();
-
-    FullPath     = tmp.BeforeLast( '/' ); // cd ..
-    FullPath    += wxT( "/doc/help/" );
-    LocaleString = Pgm().GetLocale()->GetCanonicalName();
-
-    wxString path_tmp = FullPath;
-#ifdef __WINDOWS__
-    path_tmp.MakeLower();
-#endif
-    if( path_tmp.Contains( wxT( "kicad" ) ) )
-    {
-        if( wxDirExists( FullPath ) )
-            PathFound = true;
-    }
-
-    /* find kicad/help/ from environment variable  KICAD */
-    if( !PathFound && Pgm().IsKicadEnvVariableDefined() )
-    {
-        FullPath = Pgm().GetKicadEnvVariable() + wxT( "/doc/help/" );
-
-        if( wxDirExists( FullPath ) )
-            PathFound = true;
-    }
-
-    /* find kicad/help/ from "s_HelpPathList" */
-    int ii = 0;
-
-    while( !PathFound )
-    {
-        FullPath = s_HelpPathList[ii++];
-
-        if( FullPath == wxT( "end_list" ) )
-            break;
-
-        if( wxDirExists( FullPath ) )
-            PathFound = true;
-    }
-
-    if( PathFound )
-    {
-        LangFullPath = FullPath + LocaleString + UNIX_STRING_DIR_SEP;
-
-        if( wxDirExists( LangFullPath ) )
-            return LangFullPath;
-
-        LangFullPath = FullPath + LocaleString.Left( 2 ) + UNIX_STRING_DIR_SEP;
-
-        if( wxDirExists( LangFullPath ) )
-            return LangFullPath;
-
-        LangFullPath = FullPath + wxT( "en/" );
-
-        if( wxDirExists( LangFullPath ) )
-        {
-            return LangFullPath;
-        }
-        else
-        {
-            LangFullPath = FullPath + wxT( "fr/" );
-
-            if( wxDirExists( LangFullPath ) )
-                return LangFullPath;
-        }
-        return FullPath;
-    }
-    return wxEmptyString;
-}
-
-
 wxString FindKicadFile( const wxString& shortname )
 {
-    wxString FullFileName;
+    // Test the presence of the file in the directory shortname of
+    // the KiCad binary path.
+    wxString fullFileName = Pgm().GetExecutablePath() + shortname;
 
-    /* Test the presence of the file in the directory shortname of
-     * the KiCad binary path.
-     */
-    FullFileName = Pgm().GetExecutablePath() + shortname;
+    if( wxFileExists( fullFileName ) )
+        return fullFileName;
 
-    if( wxFileExists( FullFileName ) )
-        return FullFileName;
-
-    /* Test the presence of the file in the directory shortname
-     * defined by the environment variable KiCad.
-     */
+    // Test the presence of the file in the directory shortname
+    // defined by the environment variable KiCad.
     if( Pgm().IsKicadEnvVariableDefined() )
     {
-        FullFileName = Pgm().GetKicadEnvVariable() + shortname;
+        fullFileName = Pgm().GetKicadEnvVariable() + shortname;
 
-        if( wxFileExists( FullFileName ) )
-            return FullFileName;
+        if( wxFileExists( fullFileName ) )
+            return fullFileName;
     }
 
-    /* find binary file from default path list:
-     *  /usr/local/kicad/linux or c:/kicad/winexe
-     *  (see s_KicadDataPathList) */
-    int ii = 0;
+    // find binary file from possibilities list:
+    //  /usr/local/kicad/linux or c:/kicad/winexe
 
-    while( 1 )
+    // Path list for KiCad binary files
+    const static wxChar* possibilities[] = {
+#ifdef __WINDOWS__
+        wxT( "c:/kicad/bin/" ),
+        wxT( "d:/kicad/bin/" ),
+        wxT( "c:/Program Files/kicad/bin/" ),
+        wxT( "d:/Program Files/kicad/bin/" ),
+#else
+        wxT( "/usr/bin/" ),
+        wxT( "/usr/local/bin/" ),
+        wxT( "/usr/local/kicad/bin/" ),
+#endif
+    };
+
+    for( unsigned i=0;  i<DIM(possibilities);  ++i )
     {
-        if( s_KicadBinaryPathList[ii] == wxT( "end_list" ) )
-            break;
+        fullFileName = possibilities[i] + shortname;
 
-        FullFileName = s_KicadBinaryPathList[ii++] + shortname;
-
-        if( wxFileExists( FullFileName ) )
-            return FullFileName;
+        if( wxFileExists( fullFileName ) )
+            return fullFileName;
     }
 
     return shortname;
@@ -418,13 +283,13 @@ wxString FindKicadFile( const wxString& shortname )
 int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& param,
                  wxProcess *callback )
 {
-    wxString FullFileName;
+    wxString fullFileName;
 
 
-    FullFileName = FindKicadFile( ExecFile );
+    fullFileName = FindKicadFile( ExecFile );
 
 #ifdef __WXMAC__
-    if( wxFileExists( FullFileName ) || wxDir::Exists( FullFileName ) )
+    if( wxFileExists( fullFileName ) || wxDir::Exists( fullFileName ) )
     {
         return ProcessExecute( Pgm().GetExecutablePath() + wxT( "/" )
                                + ExecFile + wxT( " " )
@@ -435,16 +300,16 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
         return ProcessExecute( wxT( "/usr/bin/open " ) + param, wxEXEC_ASYNC, callback );
     }
 #else
-    if( wxFileExists( FullFileName ) )
+    if( wxFileExists( fullFileName ) )
     {
         if( !param.IsEmpty() )
-            FullFileName += wxT( " " ) + param;
+            fullFileName += wxT( " " ) + param;
 
-        return ProcessExecute( FullFileName, wxEXEC_ASYNC, callback );
+        return ProcessExecute( fullFileName, wxEXEC_ASYNC, callback );
     }
 #endif
     wxString msg;
-    msg.Printf( _( "Command <%s> could not found" ), GetChars( FullFileName ) );
+    msg.Printf( _( "Command <%s> could not found" ), GetChars( fullFileName ) );
     DisplayError( frame, msg, 20 );
     return -1;
 }
@@ -452,13 +317,13 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 
 wxString KicadDatasPath()
 {
-    bool     PathFound = false;
+    bool     found = false;
     wxString data_path;
 
     if( Pgm().IsKicadEnvVariableDefined() ) // Path defined by the KICAD environment variable.
     {
         data_path = Pgm().GetKicadEnvVariable();
-        PathFound = true;
+        found = true;
     }
     else    // Path of executables.
     {
@@ -485,33 +350,56 @@ wxString KicadDatasPath()
 
             if( wxDirExists( data_path ) )
             {
-                PathFound = true;
+                found = true;
             }
             else if( wxDirExists( old_path ) )
             {
                 data_path = old_path;
-                PathFound = true;
+                found = true;
             }
         }
     }
 
-    /* find KiCad from default path list:
-     *  /usr/local/kicad/ or c:/kicad/
-     *  (see s_KicadDataPathList) */
-    int ii = 0;
-
-    while( !PathFound )
+    if( !found )
     {
-        if( s_KicadDataPathList[ii] == wxT( "end_list" ) )
-            break;
+        // find KiCad from possibilities list:
+        //  /usr/local/kicad/ or c:/kicad/
 
-        data_path = s_KicadDataPathList[ii++];
+        const static wxChar*  possibilities[] = {
+#ifdef __WINDOWS__
+            wxT( "c:/kicad/share/" ),
+            wxT( "d:/kicad/share/" ),
+            wxT( "c:/kicad/" ),
+            wxT( "d:/kicad/" ),
+            wxT( "c:/Program Files/kicad/share/" ),
+            wxT( "d:/Program Files/kicad/share/" ),
+            wxT( "c:/Program Files/kicad/" ),
+            wxT( "d:/Program Files/kicad/" ),
+#else
+            wxT( "/usr/share/kicad/" ),
+            wxT( "/usr/local/share/kicad/" ),
+            wxT( "/usr/local/kicad/share/" ),   // default data path for "universal
+                                                // tarballs" and build for a server
+                                                // (new)
+            wxT( "/usr/local/kicad/" ),         // default data path for "universal
+                                                // tarballs" and build for a server
+                                                // (old)
+#endif
+        };
 
-        if( wxDirExists( data_path ) )
-            PathFound = true;
+        for( unsigned i=0;  i<DIM(possibilities);  ++i )
+        {
+            data_path = possibilities[i];
+
+            if( wxDirExists( data_path ) )
+            {
+                found = true;
+                break;
+            }
+        }
     }
 
-    if( PathFound )
+    if( found )
     {
         data_path.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
@@ -569,38 +457,36 @@ bool OpenPDF( const wxString& file )
         }
 
         success = false;
-        command.Empty();
+        command.clear();
 
         if( !success )
         {
-#ifndef __WINDOWS__
+#if !defined(__WINDOWS__)
             AddDelimiterString( filename );
 
-            /* here is a list of PDF viewers candidates */
-            const static wxString tries[] =
+            // here is a list of PDF viewers candidates
+            static const wxChar* tries[] =
             {
                 wxT( "/usr/bin/evince" ),
+                wxT( "/usr/bin/okular" ),
                 wxT( "/usr/bin/gpdf" ),
                 wxT( "/usr/bin/konqueror" ),
                 wxT( "/usr/bin/kpdf" ),
                 wxT( "/usr/bin/xpdf" ),
                 wxT( "/usr/bin/open" ),     // BSD and OSX file & dir opener
                 wxT( "/usr/bin/xdg-open" ), // Freedesktop file & dir opener
-                wxT( "" ),
             };
 
-            for( int ii = 0; ; ii++ )
+            for( unsigned ii = 0;  ii<DIM(tries);  ii++ )
             {
-                if( tries[ii].IsEmpty() )
-                    break;
-
                 if( wxFileExists( tries[ii] ) )
                 {
-                    command = tries[ii] + wxT( " " ) + filename;
+                    command = tries[ii];
+                    command += wxT( ' ' );
+                    command += filename;
                     break;
                 }
             }
-
 #endif
         }
     }

@@ -271,6 +271,18 @@ wxConfigBase* EDA_BASE_FRAME::config()
 }
 
 
+const SEARCH_STACK& EDA_BASE_FRAME::sys_search()
+{
+    return Kiface().KifaceSearch();
+}
+
+
+wxString EDA_BASE_FRAME::help_name()
+{
+    return Kiface().GetHelpFileName();
+}
+
+
 void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 {
     SetStatusText( text );
@@ -327,33 +339,28 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
 
 void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 {
-    wxString msg;
+    const SEARCH_STACK& search = sys_search();
 
     /* We have to get document for beginners,
-     * or the the full specific doc
+     * or the full specific doc
      * if event id is wxID_INDEX, we want the document for beginners.
      * else the specific doc file (its name is in Kiface().GetHelpFileName())
      * The document for beginners is the same for all KiCad utilities
      */
     if( event.GetId() == wxID_INDEX )
     {
-        // Temporarily change the help filename
-        wxString tmp = Kiface().GetHelpFileName();
-
         // Search for "getting_started_in_kicad.pdf" or "Getting_Started_in_KiCad.pdf"
-        Kiface().SetHelpFileName( wxT( "getting_started_in_kicad.pdf" ) );
-        wxString helpFile = Kiface().GetHelpFile();
+        wxString helpFile = SearchHelpFileFullPath( search, wxT( "getting_started_in_kicad.pdf" ) );
 
         if( !helpFile )
-        {   // Try to find "Getting_Started_in_KiCad.pdf"
-            Kiface().SetHelpFileName( wxT( "Getting_Started_in_KiCad.pdf" ) );
-            helpFile = Kiface().GetHelpFile();
-        }
+            helpFile = SearchHelpFileFullPath( search, wxT( "Getting_Started_in_KiCad.pdf" ) );
 
         if( !helpFile )
         {
-            msg.Printf( _( "Help file %s could not be found." ),
-                        GetChars( Kiface().GetHelpFileName() ) );
+            wxString msg = wxString::Format( _(
+                "Help file '%s' could not be found." ),
+                wxT( "getting_started_in_kicad.pdf" )
+                );
             wxMessageBox( msg );
         }
         else
@@ -361,36 +368,36 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
             GetAssociatedDocument( this, helpFile );
         }
 
-        Kiface().SetHelpFileName( tmp );
         return;
     }
 
+    wxString base_name = help_name();
+
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
 
-    if( Kiface().GetHtmlHelpController() == NULL )
+    wxHtmlHelpController* hc = Pgm().GetHtmlHelpController();
+
+    wxString helpFile = SearchHelpFileFullPath( search,   );
+
+    if( !!helpFile )
     {
-        Kiface().InitOnLineHelp();
+        hc->UseConfig( Pgm().CommonSettings() );
+        hc->SetTitleFormat( wxT( "KiCad Help" ) );
+        hc->AddBook( helpFile );
     }
 
-
-    if( Kiface().GetHtmlHelpController() )
-    {
-        Kiface().GetHtmlHelpController()->DisplayContents();
-        Kiface().GetHtmlHelpController()->Display( Kiface().GetHelpFileName() );
-    }
-    else
-    {
-        msg.Printf( _( "Help file %s could not be found." ), GetChars( Kiface().GetHelpFileName() ) );
-        wxMessageBox( msg );
-    }
+    hc->DisplayContents();
+    hc->Display( helpFile );
 
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
-    wxString helpFile = Kiface().GetHelpFile();
+    wxString helpFile = SearchHelpFileFullPath( search, base_name );
 
     if( !helpFile )
     {
-        msg.Printf( _( "Help file %s could not be found." ),
-                    GetChars( Kiface().GetHelpFileName() ) );
+        wxString msg = wxString::Format( _(
+            "Help file '%s' could not be found." ),
+            GetChars( base_name )
+            );
         wxMessageBox( msg );
     }
     else

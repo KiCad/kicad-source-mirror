@@ -123,6 +123,11 @@ class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME
 protected:
     wxConfigBase*       config();       // override EDA_BASE_FRAME virtual
 
+    const SEARCH_STACK& sys_search();   // override EDA_BASE_FRAME virtual
+
+    wxString help_name();               // override EDA_BASE_FRAME virtual
+
+
 public:
     TREE_PROJECT_FRAME* m_LeftWin;
     LAUNCHER_PANEL*     m_Launcher;

@@ -64,15 +64,19 @@ bool GetAssociatedDocument( wxFrame* aFrame,
                             const wxPathList* aPaths)
 
 {
-    wxString docname, fullfilename, file_ext;
+    wxString docname, fullfilename;
     wxString msg;
     wxString command;
     bool     success = false;
 
     // Is an internet url
-    static const wxString url_header[3] = { wxT( "http:" ), wxT( "ftp:" ), wxT( "www." ) };
+    static const wxChar* url_header[3] = {
+        wxT( "http:" ),
+        wxT( "ftp:" ),
+        wxT( "www." )
+    };
 
-    for( int ii = 0; ii < 3; ii++ )
+    for( unsigned ii = 0; ii < DIM(url_header); ii++ )
     {
         if( aDocName.First( url_header[ii] ) == 0 )   //. seems an internet url
         {
@@ -133,8 +137,9 @@ bool GetAssociatedDocument( wxFrame* aFrame,
         return false;
     }
 
-    wxFileName CurrentFileName( fullfilename );
-    file_ext = CurrentFileName.GetExt();
+    wxFileName currentFileName( fullfilename );
+
+    wxString file_ext = currentFileName.GetExt();
 
     if( file_ext == wxT( "pdf" ) )
     {

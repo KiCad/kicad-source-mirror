@@ -172,6 +172,7 @@ set( COMMON_SRCS
     eda_dde.cpp
     eda_doc.cpp
     filter_reader.cpp
+#    findkicadhelppath.cpp.notused      deprecated, use searchhelpfilefullpath.cpp
     gestfich.cpp
     getrunningmicrosecs.cpp
     grid_tricks.cpp
@@ -189,6 +190,7 @@ set( COMMON_SRCS
     ptree.cpp
     reporter.cpp
     richio.cpp
+    searchhelpfilefullpath.cpp
     search_stack.cpp
     selcolor.cpp
     systemdirsappend.cpp

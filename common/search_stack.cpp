@@ -104,31 +104,6 @@ void SEARCH_STACK::AddPaths( const wxString& aPaths, int aIndex )
 }
 
 
-wxString SEARCH_STACK::FindFileInSearchPaths(
-        const wxString& aFilename, const wxArrayString* aSubdirs )
-{
-    wxPathList paths;
-
-    for( unsigned i = 0; i < GetCount(); ++i )
-    {
-        wxFileName fn( (*this)[i] );
-
-        if( aSubdirs )
-        {
-            for( unsigned j = 0; j < aSubdirs->GetCount(); j++ )
-                fn.AppendDir( (*aSubdirs)[j] );
-        }
-
-        if( fn.DirExists() )
-        {
-            paths.Add( fn.GetPath() );
-        }
-    }
-
-    return paths.FindValidPath( aFilename );
-}
-
-
 void RETAINED_PATH::Clear()
 {
     m_retained_path.Clear();

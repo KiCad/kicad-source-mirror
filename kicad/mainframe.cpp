@@ -123,6 +123,18 @@ wxConfigBase* KICAD_MANAGER_FRAME::config()
 }
 
 
+const SEARCH_STACK& KICAD_MANAGER_FRAME::sys_search()
+{
+    return Pgm().SysSearch();
+}
+
+
+wxString KICAD_MANAGER_FRAME::help_name()
+{
+    return Pgm().GetHelpFileName();
+}
+
+
 void KICAD_MANAGER_FRAME::PrintMsg( const wxString& aText )
 {
     m_MessagesBox->AppendText( aText );
@@ -156,15 +168,6 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     Event.SetCanVeto( true );
-
-    // Close the help frame
-    if( Pgm().GetHtmlHelpController() )
-    {
-        if( Pgm().GetHtmlHelpController()->GetFrame() ) // returns NULL if no help frame active
-            Pgm().GetHtmlHelpController()->GetFrame()->Close( true );
-
-        Pgm().SetHtmlHelpController( NULL );
-    }
 
     m_LeftWin->Show( false );
 

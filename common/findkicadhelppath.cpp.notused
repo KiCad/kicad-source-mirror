@@ -1,0 +1,126 @@
+
+#include <fctsys.h>
+#include <pgm_base.h>
+#include <macros.h>
+#include <gestfich.h>
+
+
+/**
+ * Function FindKicadHelpPath
+ * finds the absolute path for KiCad "help" (or "help/&ltlanguage&gt")
+ *  Find path kicad/doc/help/xx/ or kicad/doc/help/:
+ *  from BinDir
+ *  else from environment variable KICAD
+ *  else from one of s_HelpPathList
+ *  typically c:/kicad/doc/help or /usr/share/kicad/help
+ *            or /usr/local/share/kicad/help
+ *  (must have kicad in path name)
+ *
+ *  xx = iso639-1 language id (2 letters (generic) or 4 letters):
+ *  fr = french (or fr_FR)
+ *  en = English (or en_GB or en_US ...)
+ *  de = deutch
+ *  es = spanish
+ *  pt = portuguese (or pt_BR ...)
+ *
+ *  default = en (if not found = fr)
+ */
+wxString FindKicadHelpPath()
+{
+    bool     found = false;
+    wxString bin_dir = Pgm().GetExecutablePath();
+
+    if( bin_dir.Last() == '/' )
+        bin_dir.RemoveLast();
+
+    wxString fullPath = bin_dir.BeforeLast( '/' );  // cd ..
+
+    fullPath += wxT( "/doc/help/" );
+
+    wxString localeString = Pgm().GetLocale()->GetCanonicalName();
+
+    wxString path_tmp = fullPath;
+
+#ifdef __WINDOWS__
+    path_tmp.MakeLower();
+#endif
+
+    if( path_tmp.Contains( wxT( "kicad" ) ) )
+    {
+        if( wxDirExists( fullPath ) )
+            found = true;
+    }
+
+    // find kicad/help/ from environment variable  KICAD
+    if( !found && Pgm().IsKicadEnvVariableDefined() )
+    {
+        fullPath = Pgm().GetKicadEnvVariable() + wxT( "/doc/help/" );
+
+        if( wxDirExists( fullPath ) )
+            found = true;
+    }
+
+    if( !found )
+    {
+        // Possibilities online help
+        const static wxChar* possibilities[] = {
+#ifdef __WINDOWS__
+            wxT( "c:/kicad/doc/help/" ),
+            wxT( "d:/kicad/doc/help/" ),
+            wxT( "c:/Program Files/kicad/doc/help/" ),
+            wxT( "d:/Program Files/kicad/doc/help/" ),
+#else
+            wxT( "/usr/share/doc/kicad/help/" ),
+            wxT( "/usr/local/share/doc/kicad/help/" ),
+            wxT( "/usr/local/kicad/doc/help/" ),    // default install for "universal
+                                                    // tarballs" and build for a server
+                                                    // (new)
+            wxT( "/usr/local/kicad/help/" ),        // default install for "universal
+                                                    // tarballs" and build for a server
+                                                    // (old)
+#endif
+        };
+
+        for( unsigned i=0;  i<DIM(possibilities);  ++i )
+        {
+            fullPath = possibilities[i];
+
+            if( wxDirExists( fullPath ) )
+            {
+                found = true;
+                break;
+            }
+        }
+    }
+
+    if( found )
+    {
+        wxString langFullPath = fullPath + localeString + UNIX_STRING_DIR_SEP;
+
+        if( wxDirExists( langFullPath ) )
+            return langFullPath;
+
+        langFullPath = fullPath + localeString.Left( 2 ) + UNIX_STRING_DIR_SEP;
+
+        if( wxDirExists( langFullPath ) )
+            return langFullPath;
+
+        langFullPath = fullPath + wxT( "en/" );
+
+        if( wxDirExists( langFullPath ) )
+        {
+            return langFullPath;
+        }
+        else
+        {
+            langFullPath = fullPath + wxT( "fr/" );
+
+            if( wxDirExists( langFullPath ) )
+                return langFullPath;
+        }
+        return fullPath;
+    }
+
+    return wxEmptyString;
+}
+

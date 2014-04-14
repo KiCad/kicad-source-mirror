@@ -589,4 +589,25 @@ wxString FormatDateLong( const wxDateTime &aDate );
  */
 void SystemDirsAppend( SEARCH_STACK* aSearchStack );
 
+
+/**
+ * Function SearchHelpFileFullPath
+ * returns the help file's full path.
+ * <p>
+ * Return the KiCad help file with path.
+ * If the help file for the current locale is not found, an attempt to find
+ * the English version of the help file is made.
+ * Help file is searched in directories in this order:
+ *  help/\<canonical name\> like help/en_GB
+ *  help/\<short name\> like help/en
+ *  help/en
+ * </p>
+ * @param aSearchStack contains some possible base dirs that may be above the
+ *  the one actually holding @a aBaseName.  These are starting points for nested searches.
+ * @param aBaseName is the name of the help file to search for.
+ * @return  wxEmptyString is returned if aBaseName is not found, else the full path & filename.
+ */
+wxString SearchHelpFileFullPath( const SEARCH_STACK& aSearchStack, const wxString& aBaseName );
+
+
 #endif  // INCLUDE__COMMON_H_
