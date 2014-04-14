@@ -94,10 +94,10 @@ static const wxChar* s_allowedExtensionsToList[] =
  */
 
 /* File extension definitions. */
-const wxString  TextFileExtension( wxT( "txt" ) );
+const wxChar  TextFileExtension[] = wxT( "txt" );
 
 /* File wildcard definitions. */
-const wxString  TextFileWildcard( wxT( "Text files (*.txt)|*.txt" ) );
+const wxChar  TextFileWildcard[] = wxT( "Text files (*.txt)|*.txt" );
 
 
 /**
@@ -175,7 +175,6 @@ void TREE_PROJECT_FRAME::RemoveFilter( const wxString& filter )
         }
     }
 }
-
 
 
 /**

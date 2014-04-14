@@ -59,6 +59,8 @@ struct BIN_MOD
     wxString            m_help_file;
 
     SEARCH_STACK        m_search;
+
+
 };
 
 #endif // BIN_MOD_H_

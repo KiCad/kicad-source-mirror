@@ -301,13 +301,6 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    // Close the help frame
-    if( Pgm().GetHtmlHelpController() )
-    {
-        if( Pgm().GetHtmlHelpController()->GetFrame() )// returns NULL if no help frame active
-            Pgm().GetHtmlHelpController()->GetFrame()->Close( true );
-    }
-
     if( m_NetlistFileName.IsOk() )
     {
         UpdateFileHistory( m_NetlistFileName.GetFullPath() );

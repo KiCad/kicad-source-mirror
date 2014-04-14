@@ -58,6 +58,8 @@ public:
 
     SEARCH_STACK&   SysSearch()                 { return m_bm.m_search; }
 
+    wxString        GetHelpFileName()           { return m_bm.m_help_file; }
+
 protected:
 
     // The PGM_* classes can have difficulties at termination if they
