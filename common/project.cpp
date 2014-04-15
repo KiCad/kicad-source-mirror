@@ -261,7 +261,7 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList, const wxString&
         }
         else    // Version incorrect
         {
-            wxLogDebug( wxT( "Project file version is zero, not using this old project file, going with template.\n") );
+            wxLogDebug( wxT( "Project file version is zero, not using this old project file, going with template." ) );
             delete cfg;
             cfg = 0;
         }
@@ -293,7 +293,7 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList, const wxString&
 
     // copy the template to cur_pro_fn, and open it at that destination.
     wxCopyFile( kicad_pro_template, cur_pro_fn );
-    cfg = new wxFileConfig( wxEmptyString, wxEmptyString, wxEmptyString, cur_pro_fn );
+    cfg = new wxFileConfig( wxEmptyString, wxEmptyString, cur_pro_fn, wxEmptyString );
 
     cfg->DontCreateOnDemand();
 
