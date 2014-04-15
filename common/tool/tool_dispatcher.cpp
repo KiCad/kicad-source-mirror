@@ -251,6 +251,12 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         if( mods & MD_CTRL )
         {
+#if !wxCHECK_VERSION( 2, 9, 0 )
+            // I really look forward to the day when we will use only one version of wxWidgets..
+            const int WXK_CONTROL_A = 1;
+            const int WXK_CONTROL_Z = 26;
+#endif
+
             // wxWidgets have a quirk related to Ctrl+letter hot keys handled by CHAR_EVT
             // http://docs.wxwidgets.org/trunk/classwx_key_event.html:
             // "char events for ASCII letters in this case carry codes corresponding to the ASCII
