@@ -364,13 +364,13 @@ check_find_package_result( OPENGL_FOUND "OpenGL" )
 # https://www.mail-archive.com/cmake@cmake.org/msg47501.html
 
 # Handle target used to specify if a target needs wx-widgets or other libraries
-# Always defined, empty if no libraries are to be build
+# Always defined, empty if no libraries are to be built
 add_custom_target( lib-dependencies )
 
 if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
-    # This should be build in all cases, if swig exec is not avaiable
-    # will be impossible also enable SCRIPTING being for PCBNEW required immediatly
+    # This should be built in all cases, if swig exec is not avaiable
+    # will be impossible also enable SCRIPTING being for PCBNEW required immediately
 
     include( download_pcre )
     include( download_swig )

@@ -346,13 +346,10 @@ if( KICAD_SCRIPTING )
         COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
         COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
+        )
 
 endif()
 
-###
-# _pcbnew DLL/DSO file creation
-###
 
 if( BUILD_GITHUB_PLUGIN )
     set( GITHUB_PLUGIN_LIBRARIES github_plugin )
@@ -401,9 +398,14 @@ if( KICAD_SCRIPTING_MODULES )
 
     if( MAKE_LINK_MAPS )
         set_target_properties( _pcbnew PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.so.map" )
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.so.map"
+            )
     endif()
 
+    if( ${OPENMP_FOUND} )
+        set_property( TARGET _pcbnew APPEND_STRING
+            PROPERTY LINK_FLAGS " ${OpenMP_CXX_FLAGS}" )
+        endif()
 endif()
 
 
@@ -422,14 +424,13 @@ if( DOXYGEN_FOUND )
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS Doxyfile_xml
             COMMENT "building doxygen docs into directory doxygen-python/html"
-        )
+            )
 
         # create .i files from XML doxygen parsing, docstrings.i will include all of them
         add_custom_target( xml-to-docstrings
             COMMAND ${CMAKE_COMMAND} -E remove_directory docstrings
             COMMAND ${CMAKE_COMMAND} -E make_directory docstrings
             COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/extract_docstrings.py pcbnew.py doxygen-xml/xml docstrings
-
             COMMAND ${CMAKE_COMMAND} -E remove pcbnew.py # force removal so it will be recreated later with the new docstrings
             COMMENT "building docstring files"
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -445,14 +446,12 @@ if( DOXYGEN_FOUND )
             DEPENDS Doxyfile_python
             DEPENDS xml-to-docstrings
             DEPENDS pcbnew.py
-
             COMMENT "building doxygen docs into directory doxygen-python/html"
-        )
+            )
     endif()
 else()
     message( STATUS "WARNING: Doxygen not found - doxygen-docs (Source Docs) target not created" )
 endif()
-
 
 
 if( MINGW )
@@ -485,9 +484,8 @@ add_custom_command(
        from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help.html"
     )
 
-set_source_files_properties( dialogs/dialog_freeroute_exchange.cpp
-    PROPERTIES
-        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help_html.h
+set_source_files_properties( dialogs/dialog_freeroute_exchange.cpp PROPERTIES
+    OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help_html.h
     )
 
 
@@ -511,14 +509,14 @@ endif()
 
 
 if( USE_KIWAY_DLLS )
+#if( false )
 
     # a very small program launcher for pcbnew_kiface
     add_executable( pcbnew WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
-        ../common/pgm_base.cpp
         ${PCBNEW_RESOURCES}
         )
-    set_source_files_properties( ../common/single_top.cpp PROPERTIES
+    set_source_files_properties( ../common/single_top.cpp pcbnew.cpp PROPERTIES
         COMPILE_DEFINITIONS "TOP_FRAME=PCB_FRAME_TYPE;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
         )
     target_link_libraries( pcbnew
@@ -539,9 +537,7 @@ if( USE_KIWAY_DLLS )
         ${PCBNEW_SRCS}
         ${PCBNEW_COMMON_SRCS}
         ${PCBNEW_SCRIPTING_SRCS}
-#        ${PCBNEW_RESOURCES}
         )
-
     set_target_properties( pcbnew_kiface PROPERTIES
         # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
         # _pcbnew.so, _pcbnew.dll, or _pcbnew.kiface
@@ -552,7 +548,7 @@ if( USE_KIWAY_DLLS )
     if( ${OPENMP_FOUND} )
         set_target_properties( pcbnew_kiface PROPERTIES
             COMPILE_FLAGS   ${OpenMP_CXX_FLAGS}
-        )
+            )
     endif()
 
     target_link_libraries( pcbnew_kiface
@@ -583,7 +579,11 @@ if( USE_KIWAY_DLLS )
         )
     if( MAKE_LINK_MAPS )
         set_target_properties( pcbnew_kiface PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pcbnew.kiface.map" )
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pcbnew.kiface.map"
+            )
+        set_target_properties( pcbnew PROPERTIES
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map"
+            )
     endif()
 
     # if building pcbnew, then also build pcbnew_kiface if out of date.
@@ -605,17 +605,21 @@ if( USE_KIWAY_DLLS )
             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.kiface "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.app/Contents/MacOS/"
             DEPENDS pcbnew_kiface
             COMMENT "Copying kiface into pcbnew"
-        )
+            )
     endif()
 
 else()  # milestone A) kills this off:
 
     add_executable( pcbnew WIN32 MACOSX_BUNDLE
+        ../common/single_top.cpp
         pcbnew.cpp
         ${PCBNEW_SRCS}
         ${PCBNEW_COMMON_SRCS}
         ${PCBNEW_SCRIPTING_SRCS}
         ${PCBNEW_RESOURCES}
+        )
+    set_source_files_properties( ../common/single_top.cpp PROPERTIES
+        COMPILE_DEFINITIONS "TOP_FRAME=PCB_FRAME_TYPE;PGM_DATA_FILE_EXT=\"kicad_pcb\""
         )
     target_link_libraries( pcbnew
         3d-viewer
@@ -651,28 +655,25 @@ else()  # milestone A) kills this off:
             )
     endif()
 
+    if( MAKE_LINK_MAPS )
+        # generate a link map with cross reference
+        set_target_properties( pcbnew PROPERTIES
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map"
+            )
+    endif()
+
     install( TARGETS pcbnew
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-
 endif()
 
 
 add_dependencies( pcbnew lib-dependencies )
-###
-# Set properties for APPLE on pcbnew target
-###
 if( APPLE )
     set_target_properties( pcbnew PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist )
-endif()
-
-
-if( MAKE_LINK_MAPS )
-    # generate a link map with cross reference
-    set_target_properties( pcbnew PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map" )
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+        )
 endif()
 
 
@@ -691,19 +692,19 @@ if( KICAD_SCRIPTING )
             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py "${PYTHON_DEST}/wx-3.0-osx_cocoa/"
             DEPENDS FixSwigImportsScripting
             COMMENT "Copying pcbnew.py into PYTHON_DEST/wx-3.0-osx_cocoa/"
-        )
+            )
 
         add_custom_target( pcbnew_copy_wxpython_scripting ALL
             COMMAND ${CMAKE_COMMAND} -E copy_directory ${LIBWXPYTHON_ROOT}/wxPython/  ${CMAKE_SOURCE_DIR}/pcbnew/pcbnew.app/Contents/Frameworks/wxPython/
             DEPENDS FixSwigImportsScripting _pcbnew_py_copy
             COMMENT "Copying wxPython into pcbnew.app Framework"
-        )
+            )
 
         add_custom_target( pcbnew_copy_plugins ALL
             COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/pcbnew/scripting/plugins ${PROJECT_SOURCE_DIR}/pcbnew/pcbnew.app/Contents/PlugIns/scripting/plugins
             DEPENDS pcbnew_copy_wxpython_scripting
             COMMENT "Copying plugins into bundle"
-        )
+            )
 
         # fix bundle after copying wxpython, fixing and copying
         add_dependencies( osx_fix_bundles pcbnew_copy_wxpython_scripting )
@@ -738,13 +739,13 @@ if( KICAD_SCRIPTING_MODULES )
             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so "${PYTHON_DEST}"
             DEPENDS _pcbnew FixSwigImportsModuleScripting
             COMMENT "Copying _pcbnew.so into PYTHON_DEST"
-        )
+            )
 
         add_custom_target( pcbnew_copy_wxpython_module ALL
             COMMAND ${CMAKE_COMMAND} -E copy_directory ${LIBWXPYTHON_ROOT}/wxPython/  ${PROJECT_SOURCE_DIR}/pcbnew/pcbnew.app/Contents/Frameworks/wxPython/
             DEPENDS FixSwigImportsModuleScripting _pcbnew_so_copy
             COMMENT "Copying wxPython into pcbnew.app Frameworks"
-        )
+            )
 
         if( KICAD_BUILD_DYNAMIC )
             # Tell that we have to run osx_fix_bundles fix after building _pcbnew and migrating wxPython
@@ -755,14 +756,15 @@ if( KICAD_SCRIPTING_MODULES )
 endif()
 
 
-# This one gets made only when testing.
-add_executable( specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp )
-target_link_libraries( specctra_test common ${wxWidgets_LIBRARIES} )
+if( false )     # haven't been used in years.
+    # This one gets made only when testing.
+    add_executable( specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp )
+    target_link_libraries( specctra_test common ${wxWidgets_LIBRARIES} )
 
 
-# This one gets made only when testing.
-add_executable( layer_widget_test WIN32 EXCLUDE_FROM_ALL
-    layer_widget.cpp
-    )
-target_link_libraries( layer_widget_test common ${wxWidgets_LIBRARIES} )
-
+    # This one gets made only when testing.
+    add_executable( layer_widget_test WIN32 EXCLUDE_FROM_ALL
+        layer_widget.cpp
+        )
+    target_link_libraries( layer_widget_test common ${wxWidgets_LIBRARIES} )
+endif()

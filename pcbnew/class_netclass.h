@@ -80,7 +80,7 @@ protected:
 
 public:
 
-    static const wxString Default;      ///< the name of the default NETCLASS
+    static const wxChar Default[];      ///< the name of the default NETCLASS
 
     /**
      * Constructor

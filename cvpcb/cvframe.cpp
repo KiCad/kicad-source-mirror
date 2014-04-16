@@ -301,13 +301,6 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    // Close the help frame
-    if( Pgm().GetHtmlHelpController() )
-    {
-        if( Pgm().GetHtmlHelpController()->GetFrame() )// returns NULL if no help frame active
-            Pgm().GetHtmlHelpController()->GetFrame()->Close( true );
-    }
-
     if( m_NetlistFileName.IsOk() )
     {
         UpdateFileHistory( m_NetlistFileName.GetFullPath() );
@@ -846,7 +839,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
         else
             wxMessageBox( _( "Unknown netlist format." ), wxEmptyString, wxOK | wxICON_ERROR );
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         msg = wxString::Format( _( "Error loading netlist.\n%s" ), ioe.errorText.GetData() );
         wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );

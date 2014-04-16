@@ -186,6 +186,15 @@ protected:
      */
     virtual wxConfigBase* config();
 
+    /**
+     * Function sys_search
+     * returns a SEARCH_STACK pertaining to entire program, and is overloaded in
+     * KICAD_MANAGER_FRAME
+     */
+    virtual const SEARCH_STACK& sys_search();
+
+    virtual wxString help_name();
+
 public:
     EDA_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,

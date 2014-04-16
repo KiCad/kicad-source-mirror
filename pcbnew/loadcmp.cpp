@@ -220,7 +220,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
     {
         module = loadFootprint( fpid );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
                     fpid.Format().c_str(), GetChars( ioe.errorText ) );
@@ -252,7 +252,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
             {
                 module = loadFootprint( fpid );
             }
-            catch( IO_ERROR ioe )
+            catch( const IO_ERROR& ioe )
             {
                 wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
                             fpid.Format().c_str(), GetChars( ioe.errorText ) );
@@ -304,7 +304,7 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const FPID& aFootprintId )
     {
         module = loadFootprint( aFootprintId );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
                     aFootprintId.Format().c_str(), GetChars( ioe.errorText ) );
@@ -321,31 +321,7 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
 
     wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
 
-    wxString   nickname = aFootprintId.GetLibNickname();
-    wxString   fpname   = aFootprintId.GetFootprintName();
-
-    if( nickname.size() )
-    {
-        return fptbl->FootprintLoad( nickname, fpname );
-    }
-
-    // user did not enter a nickname, just a footprint name, help him out a little:
-    else
-    {
-        std::vector<wxString> nicks = fptbl->GetLogicalLibs();
-
-        // Search each library going through libraries alphabetically.
-        for( unsigned i = 0;  i<nicks.size();  ++i )
-        {
-            // FootprintLoad() returns NULL on not found, does not throw exception
-            // unless there's an IO_ERROR.
-            MODULE* ret = fptbl->FootprintLoad( nicks[i], fpname );
-            if( ret )
-                return ret;
-        }
-
-        return NULL;
-    }
+    return fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
 }
 
 
@@ -557,7 +533,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
             // m is deleted here by auto_ptr.
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
         return;

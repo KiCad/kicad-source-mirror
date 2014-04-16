@@ -100,33 +100,17 @@ public:
 
     wxConfigBase* KifaceSettings() const                { return m_bm.m_config; }
 
-    const wxString& GetHelpFileName() const             { return m_bm.m_help_file; }
-    void SetHelpFileName( const wxString& aFileName )   { m_bm.m_help_file = aFileName; }
-
     /**
-     * Function GetHelpFile
-     * gets the help file path.
-     * <p>
-     * Return the KiCad help file with path.  The base paths defined in
-     * m_searchPaths are tested for a valid file.  The path returned can
-     * be relative depending on the paths added to m_searchPaths.  See the
-     * documentation for wxPathList for more information. If the help file
-     * for the current locale is not found, an attempt to find the English
-     * version of the help file is made.
-     * wxEmptyString is returned if help file not found.
-     * Help file is searched in directories in this order:
-     *  help/\<canonical name\> like help/en_GB
-     *  help/\<short name\> like help/en
-     *  help/en
-     * </p>
+     * Function GetHelpFileName
+     * returns just the basename portion of the current help file.
      */
-    wxString GetHelpFile();
+    const wxString& GetHelpFileName() const             { return m_bm.m_help_file; }
 
-    wxFileHistory& GetFileHistory()             { return m_bm.m_history; }
+    wxFileHistory& GetFileHistory()                     { return m_bm.m_history; }
 
     /// Only for DSO specific 'non-library' files.
     /// (The library search path is in the PROJECT class.)
-    SEARCH_STACK&       KifaceSearch()          { return m_bm.m_search; }
+    SEARCH_STACK&       KifaceSearch()                  { return m_bm.m_search; }
 
 private:
     KIWAY::FACE_T       m_id;

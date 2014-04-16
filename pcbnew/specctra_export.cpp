@@ -162,7 +162,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
         // if an exception is thrown by FromBOARD or ExportPCB(), then
         // ~SPECCTRA_DB() will close the file.
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         ok = false;
 
@@ -1322,7 +1322,7 @@ bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
             aHoles.CloseLastContour();
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         // Creates a valid polygon outline is not possible.
         // So uses the board edge cuts bounding box to create a

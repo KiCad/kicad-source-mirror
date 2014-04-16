@@ -91,7 +91,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 
         // was: wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
         Prj().ConfigSave( Kiface().KifaceSearch(), fn.GetFullPath(),
-                GROUP, GetProjectFileParameters() );
+                GROUP_PCB, GetProjectFileParameters() );
     }
 }
 
@@ -426,7 +426,7 @@ bool DIALOG_NETLIST::verifyFootprints( const wxString&         aNetlistFilename,
         std::auto_ptr< NETLIST_READER > nlr( netlistReader );
         netlistReader->LoadNetlist();
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         msg.Printf( _( "Error loading netlist file:\n%s" ), ioe.errorText.GetData() );
         wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );

@@ -29,7 +29,6 @@
  */
 
 #include <fctsys.h>
-//#include <pgm_base.h>
 #include <kiface_i.h>
 #include <project.h>
 #include <class_drawpanel.h>
@@ -239,7 +238,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
         fn.SetExt( ProjectFileExtension );
 
     // was: wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
-    Prj().ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
+    Prj().ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_PCB, GetProjectFileParameters(), false );
 
     // Dick 5-Feb-2012: I don't agree with this, the BOARD contents should dictate
     // what is visible or not, even initially.  And since PCB_EDIT_FRAME projects settings
@@ -302,9 +301,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
         fn = dlg.GetPath();
     }
 
-    SEARCH_STACK&   search = Kiface().KifaceSearch();
-
-    Prj().ConfigSave( search, fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+    Prj().ConfigSave( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_PCB, GetProjectFileParameters() );
 }
 
 
@@ -315,7 +312,7 @@ PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
     pca.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
                                           &BASE_SCREEN::m_PageLayoutDescrFileName ) );
 
-    pca.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ), &g_UserLibDirBuffer, GROUPLIB ) );
+    pca.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ), &g_UserLibDirBuffer, GROUP_PCB_LIBS ) );
 
     pca.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ), &m_lastNetListRead ) );
 

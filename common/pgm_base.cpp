@@ -297,6 +297,13 @@ void PGM_BASE::destroy()
     delete m_locale;
     m_locale = 0;
 
+    /*
+    // Close the help frame
+    if( m_html_ctrl && m_html_ctrl->GetFrame() )    // returns NULL if no help frame active
+        m_html_ctrl->GetFrame()->Close( true );
+    }
+    */
+
     delete m_html_ctrl;
     m_html_ctrl = 0;
 }
@@ -415,30 +422,18 @@ bool PGM_BASE::initPgm()
 }
 
 
-void PGM_BASE::SetHtmlHelpController( wxHtmlHelpController* aController )
+void PGM_BASE::initHtmlHelpController()
 {
-    delete m_html_ctrl;
-    m_html_ctrl = aController;
-}
-
-
-void PGM_BASE::InitOnLineHelp()
-{
-    wxString fullfilename = FindKicadHelpPath();
-
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
-    m_HelpFileName = fullfilename + wxT( ".html" );
-    fullfilename  += wxT( "kicad.hhp" );
 
-    if( wxFileExists( fullfilename ) )
-    {
-        m_html_ctrl = new wxHtmlHelpController( wxHF_TOOLBAR | wxHF_CONTENTS |
-                                               wxHF_PRINT | wxHF_OPEN_FILES
-                                               /*| wxHF_SEARCH */ );
-        m_html_ctrl->UseConfig( m_common_settings );
-        m_html_ctrl->SetTitleFormat( wxT( "KiCad Help" ) );
-        m_html_ctrl->AddBook( fullfilename );
-    }
+    if( !m_html_ctrl )
+        m_html_ctrl = new wxHtmlHelpController(
+                            wxHF_TOOLBAR | wxHF_CONTENTS |
+                            wxHF_PRINT | wxHF_OPEN_FILES
+                            // | wxHF_SEARCH
+                            );
+
+    wxASSERT( m_html_ctrl );    // may not leave here as NULL
 
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
     m_html_ctrl = NULL;
@@ -449,10 +444,22 @@ void PGM_BASE::InitOnLineHelp()
 }
 
 
+wxHtmlHelpController* PGM_BASE::HtmlHelpController()
+{
+    if( !m_html_ctrl )
+        initHtmlHelpController();
+
+    // there should not be calls to this unless ONLINE_HELP_FILES_FORMAT_IS_HTML is defined
+    wxASSERT( m_html_ctrl );
+
+    return m_html_ctrl;
+}
+
+
+
 bool PGM_BASE::setExecutablePath()
 {
-// Apple MacOSx
-#ifdef __APPLE__
+#ifdef __APPLE__        // Apple MacOSx
 
     // Derive path from location of the app bundle
     CFBundleRef mainBundle = CFBundleGetMainBundle();

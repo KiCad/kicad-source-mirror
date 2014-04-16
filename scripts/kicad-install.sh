@@ -125,7 +125,10 @@ install_prerequisites()
     fi
 
     # ensure bzr name and email are set.  No message since bzr prints an excellent diagnostic.
-    bzr whoami || exit 2
+    bzr whoami || {
+        echo "WARNING: You have not set bzr whoami, so I will set a dummy."
+        export BZR_EMAIL="Kicad Build <nobody@foo>"
+    }
 }
 
 
@@ -270,10 +273,12 @@ install_or_update()
     echo " kicad-lib.bzr installed."
 
 
-    echo "step 9) as non-root, install user configuration files..."
+    echo "step 9) as non-root, install global fp-lib-table if none already installed..."
     # install ~/fp-lib-table
-    make  install_github_fp-lib-table
-    echo " kicad user-configuration files installed."
+    if [ ! -e ~/fp-lib-table ]; then
+        make  install_github_fp-lib-table
+        echo " global fp-lib-table installed."
+    fi
 
 
     echo "step 10) installing documentation..."

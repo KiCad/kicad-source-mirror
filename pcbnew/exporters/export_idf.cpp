@@ -403,7 +403,7 @@ bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName, double aUseThou )
 
         idfBoard.Finish();
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         wxLogDebug( wxT( "An error occurred attemping export to IDFv3.\n\nError: %s" ),
                     GetChars( ioe.errorText ) );

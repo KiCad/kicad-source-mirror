@@ -40,21 +40,6 @@ public:
     }
 
     /**
-     * Function FindValidPath
-     * KiCad saves user defined library files that are not in the standard
-     * library search path list with the full file path.  Calling the library
-     * search path list with a user library file will fail.  This helper method
-     * solves that problem.
-     * @param fileName
-     * @return a wxEmptyString if library file is not found.
-     */
-    wxString FindValidPath( const wxFileName& aFileName ) const
-    {
-        // call wxPathList::FindValidPath( const wxString& );
-        return wxPathList::FindValidPath( aFileName.GetFullPath() );
-    }
-
-    /**
      * Function AddPaths
      * insert or append path(s)
      *
@@ -72,15 +57,6 @@ public:
      * ";" on windows, or ":" | ";" on unix.
      */
     void RemovePaths( const wxString& aPaths );
-
-    /**
-     * Function FindFileInSearchPaths
-     * looks in "this" for \a aFilename, but first modifies every search
-     * path by appending a list of path fragments from aSubdirs.  That modification
-     * is not rentative.
-     */
-    wxString FindFileInSearchPaths( const wxString&      aFilename,
-                                    const wxArrayString* aSubdirs = NULL );
 };
 
 

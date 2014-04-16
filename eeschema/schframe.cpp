@@ -868,7 +868,7 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
 
         // was: wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParametersList() );
         Prj().ConfigSave( Kiface().KifaceSearch(),
-                fn.GetFullPath(), GROUP, GetProjectFileParametersList() );
+                fn.GetFullPath(), GROUP_SCH, GetProjectFileParametersList() );
     }
 }
 

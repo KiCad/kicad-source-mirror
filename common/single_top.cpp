@@ -34,6 +34,7 @@
 */
 
 
+#include <typeinfo>
 #include <macros.h>
 #include <fctsys.h>
 #include <wx/dynlib.h>
@@ -182,10 +183,6 @@ static const wxString dso_full_path( const wxString& aAbsoluteArgv0 )
     return fn.GetFullPath();
 }
 
-// Use of this is arbitrary, remember single_top only knows about a single DSO.
-// Could have used one from the KIWAY also.
-static wxDynamicLibrary dso;
-
 
 // Only a single KIWAY is supported in this single_top top level component,
 // which is dedicated to loading only a single DSO.
@@ -230,6 +227,32 @@ struct APP_SINGLE_TOP : public wxApp
         return wxApp::OnExit();
     }
 
+    int OnRun()             // overload wxApp virtual
+    {
+        try
+        {
+            return wxApp::OnRun();
+        }
+        catch( const std::exception& e )
+        {
+            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
+                GetChars( FROM_UTF8( typeid(e).name() )),
+                GetChars( FROM_UTF8( e.what() ) ) );;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
+                GetChars( FROM_UTF8( typeid( ioe ).name() ) ),
+                GetChars( ioe.errorText ) );
+        }
+        catch(...)
+        {
+            wxLogError( wxT( "Unhandled exception of unknown type" ) );
+        }
+
+        return -1;
+    }
+
     /**
      * Function MacOpenFile
      * is specific to MacOSX (not used under Linux or Windows).
@@ -261,6 +284,15 @@ IMPLEMENT_APP( APP_SINGLE_TOP );
 static KIFACE_GETTER_FUNC* get_kiface_getter( const wxString& aDSOName )
 {
 #if defined(BUILD_KIWAY_DLL)
+
+    // Remember single_top only knows about a single DSO.  Using an automatic
+    // with a defeated destructor, see Detach() below, so that the DSO program
+    // image stays in RAM until process termination, and specifically
+    // beyond the point in time at which static destructors are run.  Otherwise
+    // a static wxDynamicLibrary's destructor might create an out of sequence
+    // problem.  This was never detected, so it's only a preventative strategy.
+    wxDynamicLibrary dso;
+
     void*   addr = NULL;
 
     if( !dso.Load( aDSOName, wxDL_VERBATIM | wxDL_NOW ) )
@@ -274,6 +306,9 @@ static KIFACE_GETTER_FUNC* get_kiface_getter( const wxString& aDSOName )
         // Failure: error reporting UI was done via wxLogSysError().
         // No further reporting required here.
     }
+
+    // Tell dso's wxDynamicLibrary destructor not to Unload() the program image.
+    (void) dso.Detach();
 
     return (KIFACE_GETTER_FUNC*) addr;
 

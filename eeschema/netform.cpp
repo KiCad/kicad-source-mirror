@@ -1049,7 +1049,7 @@ bool NETLIST_EXPORT_TOOL::WriteKiCadNetList( const wxString& aOutFileName )
 
         xroot->Format( &formatter, 0 );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( NULL, ioe.errorText );
         return false;
