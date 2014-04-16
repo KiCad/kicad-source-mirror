@@ -38,6 +38,7 @@ class wxFileName;
 class OUTPUTFORMATTER;
 class MODULE;
 class FP_LIB_TABLE_LEXER;
+class FPID;
 class NETLIST;
 class REPORTER;
 class SEARCH_STACK;
@@ -456,6 +457,21 @@ public:
     //-----</PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
     /**
+     * Function FootprintLoadWithOptionalNickname
+     * loads a footprint having @a aFootprintId with possibly an empty nickname.
+     *
+     * @param aFootprintId the [nickname] & fooprint name of the footprint to load.
+     *
+     * @return  MODULE* - if found caller owns it, else NULL if not found.
+     *
+     * @throw   IO_ERROR if the library cannot be found or read.  No exception
+     *          is thrown in the case where aFootprintName cannot be found.
+     * @throw   PARSE_ERROR if @a aFootprintId is not parsed OK.
+     */
+    MODULE* FootprintLoadWithOptionalNickname( const FPID& aFootprintId )
+        throw( IO_ERROR, PARSE_ERROR );
+
+    /**
      * Function GetDescription
      * returns the library desicription from @a aNickname, or an empty string
      * if aNickname does not exist.
@@ -498,19 +514,6 @@ public:
      * @return true if the footprint library table is empty.
      */
     bool IsEmpty( bool aIncludeFallback = true );
-
-    /**
-     * Function ConvertFromLegacy
-     * converts the footprint names in \a aNetList from the legacy format to the #FPID format.
-     *
-     * @param aNetList is the #NETLIST object to convert.
-     * @param aLibNames is the list of legacy footprint library names from the currently loaded
-     *                  project.
-     * @param aReporter is the #REPORTER object to dump messages into.
-     * @return true if all footprint names were successfully converted to a valid FPID.
-     */
-    bool ConvertFromLegacy( SEARCH_STACK& aSStack, NETLIST& aNetList,
-            const wxArrayString& aLibNames, REPORTER* aReporter = NULL ) throw( IO_ERROR );
 
     /**
      * Function ExpandSubstitutions

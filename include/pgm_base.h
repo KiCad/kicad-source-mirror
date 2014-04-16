@@ -86,9 +86,7 @@ public:
 
     //----<Cross Module API>-----------------------------------------------------
 
-    VTBL_ENTRY wxHtmlHelpController* GetHtmlHelpController()        { return m_html_ctrl; }
-
-    VTBL_ENTRY void SetHtmlHelpController( wxHtmlHelpController* aController );
+    VTBL_ENTRY wxHtmlHelpController* HtmlHelpController();
 
     VTBL_ENTRY wxConfigBase* CommonSettings() const                 { return m_common_settings; }
 
@@ -162,12 +160,6 @@ public:
     VTBL_ENTRY void SetLanguagePath();
 
     /**
-     * Function InitOnLineHelp
-     * initializes KiCad's online help.
-     */
-    VTBL_ENTRY void InitOnLineHelp();
-
-    /**
      * Function ReadPdfBrowserInfos
      * reads the PDF browser choice from the common configuration.
      */
@@ -216,6 +208,8 @@ protected:
      * @return bool - true if success, false if failure and program is to terminate.
      */
     bool initPgm();
+
+    void initHtmlHelpController();
 
     /**
      * Function loadCommonSettings

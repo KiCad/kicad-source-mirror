@@ -27,7 +27,7 @@
  */
 
 #include <fctsys.h>
-#include <pgm_base.h>
+#include <kiface_i.h>
 #include <fp_lib_table.h>
 #include <id.h>
 #include <common.h>
@@ -42,29 +42,24 @@
 #include <class_DisplayFootprintsFrame.h>
 
 
-#define GROUP wxT("/cvpcb")
-#define GROUPLIB wxT("/pcbnew/libraries")
-#define GROUPEQU wxT("/cvpcb/libraries")
-
-
 PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters()
 {
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
 
-    m_projectFileParams.push_back( new PARAM_CFG_BASE( GROUPLIB, PARAM_COMMAND_ERASE ) );
+    m_projectFileParams.push_back( new PARAM_CFG_BASE( GROUP_PCB_LIBS, PARAM_COMMAND_ERASE ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST(
-        wxT( "LibName" ), &m_ModuleLibNames, GROUPLIB ) );
+        wxT( "LibName" ), &m_ModuleLibNames, GROUP_PCB_LIBS ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST(
-        wxT( "EquName" ), &m_AliasLibNames, GROUPEQU ) );
+        wxT( "EquName" ), &m_AliasLibNames, GROUP_CVP_EQU ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING(
         wxT( "NetIExt" ), &m_NetlistFileExtension ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_FILENAME(
-        wxT( "LibDir" ), &m_UserLibraryPath, GROUPLIB ) );
+        wxT( "LibDir" ), &m_UserLibraryPath, GROUP_PCB_LIBS ) );
 
     return m_projectFileParams;
 }
@@ -81,7 +76,7 @@ void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
     fn.SetExt( ProjectFileExtension );
 
     // was: Pgm().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
-    prj.ConfigLoad( prj.PcbSearchS(), fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
+    prj.ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_CVP, GetProjectFileParameters(), false );
 
     if( m_NetlistFileExtension.IsEmpty() )
         m_NetlistFileExtension = wxT( "net" );
@@ -133,7 +128,7 @@ void CVPCB_MAINFRAME::SaveProjectFile( wxCommandEvent& aEvent )
     // Pgm().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
 
     PROJECT&        prj = Prj();
-    SEARCH_STACK&   search = prj.SchSearchS();
 
-    prj.ConfigSave( search, fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+    prj.ConfigSave( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_CVP, GetProjectFileParameters() );
 }
+

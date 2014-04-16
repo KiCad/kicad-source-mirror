@@ -78,7 +78,7 @@ typedef const PTREE                     CPTREE;
  *     PTREE   doc;
  *     Scan( &doc, &lexer );
  * }
- * catch( IO_ERROR ioe )
+ * catch( const IO_ERROR& ioe )
  * {
  *     fprintf( stderr, "%s\n", TO_UTF8( ioe.errorText ) );
  * }

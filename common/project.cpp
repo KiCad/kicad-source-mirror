@@ -23,16 +23,17 @@
  */
 
 
+#include <wx/stdpaths.h>
+
 #include <fctsys.h>
 #include <macros.h>
 #include <gr_basic.h>
 #include <pgm_base.h>
 #include <project.h>
-#include <wx/stdpaths.h>
+#include <confirm.h>
 #include <kicad_string.h>
 #include <config_params.h>
 #include <wildcards_and_files_ext.h>
-
 
 
 PROJECT::PROJECT()
@@ -198,18 +199,18 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList, const wxString&
             const wxString& aGroupName, bool aForceUseLocalConfig )
 {
     wxConfigBase*   cfg = 0;
-    wxFileName      fn = aFileName;
 
+    wxFileName      fn = aFileName;
     fn.SetExt( ProjectFileExtension );
 
+    wxString        cur_pro_fn = fn.GetFullPath();
+
     // is there an edge transition, a change in m_project_filename?
-    if( m_project_name != fn )
+    if( m_project_name != cur_pro_fn )
     {
         m_sch_search.Clear();
 
-        SetProjectFullName( fn.GetFullPath() );
-
-        // to the empty list, add project dir as first
+        // to the empty lists, add project dir as first
         m_sch_search.AddPaths( fn.GetPath() );
 
         // append all paths from aSList
@@ -228,8 +229,6 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList, const wxString&
     // Init local config filename
     if( aForceUseLocalConfig || fn.FileExists() )
     {
-        wxString cur_pro_fn = fn.GetFullPath();
-
         cfg = new wxFileConfig( wxEmptyString, wxEmptyString, cur_pro_fn, wxEmptyString );
 
         cfg->DontCreateOnDemand();
@@ -262,31 +261,43 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList, const wxString&
         }
         else    // Version incorrect
         {
+            wxLogDebug( wxT( "Project file version is zero, not using this old project file, going with template." ) );
             delete cfg;
             cfg = 0;
         }
     }
 
-    // Search for the template kicad.pro file by using caller's SEARCH_STACK.
+    // No suitable pro file was found, either does not exist, or is too old.
+    // Use the template kicad.pro file.  Find it by using caller's SEARCH_STACK.
 
     wxString kicad_pro_template = aSList.FindValidPath( wxT( "kicad.pro" ) );
 
     if( !kicad_pro_template )
     {
-        wxLogDebug( wxT( "Template file <kicad.pro> not found." ) );
+        wxLogDebug( wxT( "Template file <kicad.pro> not found using search paths." ) );
 
-        fn = wxFileName( wxStandardPaths::Get().GetDocumentsDir(),
-                         wxT( "kicad" ), ProjectFileExtension );
-    }
-    else
-    {
-        fn = kicad_pro_template;
+        wxFileName  templ( wxStandardPaths::Get().GetDocumentsDir(),
+                            wxT( "kicad" ), ProjectFileExtension );
+
+        if( !templ.IsFileReadable() )
+        {
+            wxString msg = wxString::Format( _( "Unable to find kicad.pro template file." ) );
+
+            DisplayError( NULL, msg );
+
+            return NULL;
+        }
+
+        kicad_pro_template = templ.GetFullPath();
     }
 
-    cfg = new wxFileConfig( wxEmptyString, wxEmptyString, wxEmptyString, fn.GetFullPath() );
+    // copy the template to cur_pro_fn, and open it at that destination.
+    wxCopyFile( kicad_pro_template, cur_pro_fn );
+    cfg = new wxFileConfig( wxEmptyString, wxEmptyString, cur_pro_fn, wxEmptyString );
+
     cfg->DontCreateOnDemand();
 
-    SetProjectFullName( fn.GetFullPath() );
+    SetProjectFullName( cur_pro_fn );
     return cfg;
 }
 
@@ -295,6 +306,12 @@ void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString&  aFileName
         const wxString& aGroupName, const PARAM_CFG_ARRAY& aParams )
 {
     std::auto_ptr<wxConfigBase> cfg( configCreate( aSList, aFileName, aGroupName, FORCE_LOCAL_CONFIG ) );
+
+    if( !cfg.get() )
+    {
+        // could not find template
+        return;
+    }
 
     cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
 
@@ -325,6 +342,12 @@ bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString& aFileName,
         bool doLoadOnlyIfNew )
 {
     std::auto_ptr<wxConfigBase> cfg( configCreate( aSList, aFileName, aGroupName, false ) );
+
+    if( !cfg.get() )
+    {
+        // could not find template
+        return false;
+    }
 
     cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
 

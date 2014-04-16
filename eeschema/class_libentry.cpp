@@ -136,7 +136,7 @@ bool LIB_ALIAS::SaveDoc( OUTPUTFORMATTER& aFormatter )
 
         aFormatter.Print( 0, "$ENDCMP\n" );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         return false;
     }

@@ -716,7 +716,7 @@ void DIR_LIB_SOURCE::Test( int argc, char** argv )
         printf( "std::exception\n" );
     }
 
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         printf( "exception: %s\n", (const char*) ioe.errorText.ToUTF8() ) );
     }

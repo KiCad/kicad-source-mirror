@@ -199,7 +199,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
                 return NULL;
             }
         }
-        catch( IO_ERROR ioe )
+        catch( const IO_ERROR& ioe )
         {
             DisplayError( this, ioe.errorText );
             return NULL;
@@ -222,7 +222,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
                 return NULL;
             }
         }
-        catch( IO_ERROR ioe )
+        catch( const IO_ERROR& ioe )
         {
             DisplayError( this, ioe.errorText );
             return NULL;
@@ -259,7 +259,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
                 return NULL;
             }
         }
-        catch( IO_ERROR ioe )
+        catch( const IO_ERROR& ioe )
         {
             DisplayError( this, ioe.errorText );
             return NULL;
@@ -334,7 +334,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
         fprintf( fp, "%s", pcb_io.GetStringOutput( false ).c_str() );
         fclose( fp );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
         return;
@@ -357,7 +357,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveCurrentModule( const wxString* aLibPath )
 
         pi->FootprintSave( libPath, GetBoard()->m_Modules );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
         return false;
@@ -429,7 +429,7 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
             writable = pi->IsFootprintLibWritable( libPath );
             exists   = true;    // no exception was thrown, lib must exist.
         }
-        catch( IO_ERROR )
+        catch( const IO_ERROR& )
         {
             // ignore, original values of 'writable' and 'exists' are accurate.
         }
@@ -455,7 +455,7 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 
         pi->FootprintLibCreate( libPath );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
         return wxEmptyString;
@@ -499,7 +499,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
     {
         FootprintLibs()->FootprintDelete( nickname, fpname );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
         return false;
@@ -568,7 +568,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aNewModulesOnly )
             }
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
     }
@@ -655,7 +655,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
         // own if the library or footprint is not writable.
         FootprintLibs()->FootprintSave( aLibrary, aModule );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
         return false;

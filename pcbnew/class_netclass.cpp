@@ -36,7 +36,7 @@
 
 
 // This will get mapped to "kicad_default" in the specctra_export.
-const wxString NETCLASS::Default = wxT("Default");
+const wxChar NETCLASS::Default[] = wxT( "Default" );
 
 // Initial values for netclass initialization
 int NETCLASS::DEFAULT_CLEARANCE  = DMils2iu( 100 );  // track to track and track to pads clearance

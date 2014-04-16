@@ -107,7 +107,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
         {
             fn.SetExt( fn.GetExt() + wxT( "." ) + FootprintAliasFileExtension );
         }
-        tmp = search.FindValidPath( fn );
+        tmp = search.FindValidPath( fn.GetFullPath() );
 
         if( !tmp )
         {

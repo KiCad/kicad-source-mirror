@@ -368,7 +368,7 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
                                                            &m_userLibraryPath ) );
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
                                                                &m_componentLibFiles,
-                                                               GROUPLIB ) );
+                                                               GROUP_SCH_LIBS ) );
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
                                                          &m_netListFormat) );
 
@@ -408,7 +408,7 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& aFileName, bool aForceRere
     // extension (.pro).
     fn.SetExt( ProjectFileExtension );
 
-    if( !prj.ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP,
+    if( !prj.ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_SCH,
             GetProjectFileParametersList(), !aForceReread ) )
     {
         m_componentLibFiles = liblist_tmp;
@@ -427,7 +427,7 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& aFileName, bool aForceRere
     pglayout.SetPageLayout(BASE_SCREEN::m_PageLayoutDescrFileName);
 
     // libraries in the *.pro file take precedence over standard library search paths,
-    // but not over the director of the project, which is at index 0.
+    // but not over the directory of the project, which is at index 0.
     prj.SchSearchS().AddPaths( m_userLibraryPath, 1 );
 
     // If the list is empty, force loading the standard power symbol library.
@@ -464,7 +464,7 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
     }
 
     prj.ConfigSave( Kiface().KifaceSearch(),
-            fn.GetFullPath(), GROUP, GetProjectFileParametersList() );
+            fn.GetFullPath(), GROUP_SCH, GetProjectFileParametersList() );
 }
 
 
@@ -666,7 +666,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
         {
             m_TemplateFieldNames.Parse( &lexer );
         }
-        catch( IO_ERROR& e )
+        catch( const IO_ERROR& e )
         {
             // @todo show error msg
             DBG( printf( "templatefieldnames parsing error: '%s'\n",

@@ -55,10 +55,11 @@ static void setSearchPaths( SEARCH_STACK* aDst, KIWAY::FACE_T aId )
         // we must add <kicad path>/library and <kicad path>/library/doc
         if( aId == KIWAY::FACE_SCH )
         {
+            // Add schematic doc file path (library/doc) to search path list.
+
             fn.AppendDir( wxT( "library" ) );
             aDst->AddPaths( fn.GetPath() );
 
-            // Add schematic doc file path (library/doc)to search path list.
             fn.AppendDir( wxT( "doc" ) );
             aDst->AddPaths( fn.GetPath() );
 
@@ -85,8 +86,10 @@ static void setSearchPaths( SEARCH_STACK* aDst, KIWAY::FACE_T aId )
         aDst->AddPaths( fn.GetPath() );
     }
 
+    aDst->AddPaths( wxT( "/usr/local/share" ) );
+
 #if 1 && defined(DEBUG)
-    aDst->Show( "kiway" );
+    aDst->Show( "kiface" );
 #endif
 }
 
@@ -121,86 +124,3 @@ void KIFACE_I::end_common()
     m_bm.End();
 }
 
-
-wxString KIFACE_I::GetHelpFile()
-{
-    wxString        fn;
-    wxArrayString   subdirs;
-    wxArrayString   altsubdirs;
-
-    // FIXME: This is not the ideal way to handle this.  Unfortunately, the
-    //        CMake install paths seem to be a moving target so this crude
-    //        hack solves the problem of install path differences between
-    //        Windows and non-Windows platforms.
-
-    // Partially fixed, but must be enhanced
-
-    // Create subdir tree for "standard" linux distributions, when KiCad comes
-    // from a distribution files are in /usr/share/doc/kicad/help and binaries
-    // in /usr/bin or /usr/local/bin
-    subdirs.Add( wxT( "share" ) );
-    subdirs.Add( wxT( "doc" ) );
-    subdirs.Add( wxT( "kicad" ) );
-    subdirs.Add( wxT( "help" ) );
-
-    // Create subdir tree for linux and Windows KiCad pack.
-    // Note  the pack form under linux is also useful if a user wants to
-    // install KiCad to a server because there is only one path to mount
-    // or export (something like /usr/local/kicad).
-    // files are in <install dir>/kicad/doc/help
-    // (often /usr/local/kicad/kicad/doc/help)
-    // <install dir>/kicad/ is retrieved from m_BinDir
-    altsubdirs.Add( wxT( "doc" ) );
-    altsubdirs.Add( wxT( "help" ) );
-
-    /* Search for a help file.
-     *  we *must* find a help file.
-     *  so help is searched in directories in this order:
-     *  help/<canonical name> like help/en_GB
-     *  help/<short name> like help/en
-     *  help/en
-     */
-
-    wxLocale* i18n = Pgm().GetLocale();
-
-    // Step 1 : Try to find help file in help/<canonical name>
-    subdirs.Add( i18n->GetCanonicalName() );
-    altsubdirs.Add( i18n->GetCanonicalName() );
-
-    fn = m_bm.m_search.FindFileInSearchPaths( m_bm.m_help_file, &altsubdirs );
-
-    if( !fn  )
-        fn = m_bm.m_search.FindFileInSearchPaths( m_bm.m_help_file, &subdirs );
-
-    // Step 2 : if not found Try to find help file in help/<short name>
-    if( !fn  )
-    {
-        subdirs.RemoveAt( subdirs.GetCount() - 1 );
-        altsubdirs.RemoveAt( altsubdirs.GetCount() - 1 );
-
-        // wxLocale::GetName() does not return always the short name
-        subdirs.Add( i18n->GetName().BeforeLast( '_' ) );
-        altsubdirs.Add( i18n->GetName().BeforeLast( '_' ) );
-
-        fn = m_bm.m_search.FindFileInSearchPaths( m_bm.m_help_file, &altsubdirs );
-
-        if( !fn )
-            fn = m_bm.m_search.FindFileInSearchPaths( m_bm.m_help_file, &subdirs );
-    }
-
-    // Step 3 : if not found Try to find help file in help/en
-    if( !fn )
-    {
-        subdirs.RemoveAt( subdirs.GetCount() - 1 );
-        altsubdirs.RemoveAt( altsubdirs.GetCount() - 1 );
-        subdirs.Add( wxT( "en" ) );
-        altsubdirs.Add( wxT( "en" ) );
-
-        fn = m_bm.m_search.FindFileInSearchPaths( m_bm.m_help_file, &altsubdirs );
-
-        if( !fn )
-            fn = m_bm.m_search.FindFileInSearchPaths( m_bm.m_help_file, &subdirs );
-    }
-
-    return fn;
-}

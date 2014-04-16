@@ -249,7 +249,7 @@ void DIALOG_BOM::installPluginsList()
         {
             cfg_parser.Parse();
         }
-        catch( IO_ERROR ioe )
+        catch( const IO_ERROR& ioe )
         {
 //            wxLogMessage( ioe.errorText );
         }

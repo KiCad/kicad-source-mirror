@@ -208,13 +208,13 @@ MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKiwayVersion, PGM_BA
     return &kiface;
 }
 
-
+#if defined(BUILD_KIWAY_DLL)
 PGM_BASE& Pgm()
 {
     wxASSERT( process );    // KIFACE_GETTER has already been called.
     return *process;
 }
-
+#endif
 
 /**
  * Function set3DShapesPath
@@ -484,6 +484,5 @@ void IFACE::OnKifaceEnd()
     // This should only be called if python was setup correctly.
 
     pcbnewFinishPythonScripting();
-
 #endif
 }

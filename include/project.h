@@ -131,15 +131,6 @@ public:
     /// Accessor for Eeschema search stack.
     VTBL_ENTRY SEARCH_STACK&  SchSearchS()      { return m_sch_search; }
 
-    /**
-     * Function PcbSearchS
-     * returns the obsolete footprint library search stack.
-     * Projects created before the FP_LIB_TABLE support will have footprint
-     * search paths in the *.pro files.  Projects created after the FP_LIB_TABLE
-     * support will not.  This stack is used for conversion from old to new only.
-     */
-    VTBL_ENTRY SEARCH_STACK&  PcbSearchS()      { return m_pcb_search; }
-
     VTBL_ENTRY  wxString GetModuleLibraryNickname()     { return m_module_library_nickname; }
     VTBL_ENTRY  void SetModuleLibraryNickname( const wxString& aNickName ) {  m_module_library_nickname = aNickName; }
 
