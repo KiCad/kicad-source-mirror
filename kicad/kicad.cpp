@@ -79,6 +79,27 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
     if( !initPgm() )
         return false;
 
+    // Add search paths to feed the PGM_KICAD::SysSearch() function,
+    // currenly limited in support to only look for project templates
+    {
+        SEARCH_STACK bases;
+
+        SystemDirsAppend( &bases );
+
+        // DBG( bases.Show( (std::string(__func__) + " bases").c_str() );)
+
+        for( unsigned i = 0; i < bases.GetCount(); ++i )
+        {
+            wxFileName fn( bases[i], wxEmptyString );
+
+            // Add KiCad template file path to search path list.
+            fn.AppendDir( wxT( "template" ) );
+            m_bm.m_search.AddPaths( fn.GetPath() );
+        }
+
+        //DBG( m_bm.m_search.Show( (std::string( __func__ ) + " SysSearch()").c_str() );)
+    }
+
     // Read current setup and reopen last directory if no filename to open on
     // command line.
     if( App().argc == 1  )
