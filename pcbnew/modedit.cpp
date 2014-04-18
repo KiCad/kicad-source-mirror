@@ -271,7 +271,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             FOOTPRINT_VIEWER_FRAME* viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( top_project );
             if( !viewer )
             {
-                viewer = (FOOTPRINT_VIEWER_FRAME*) Kiface().CreateWindow( this, MODULE_VIEWER_FRAME_TYPE, &Kiway() );
+                KIFACE_I&   kf = Kiface();
+
+                viewer = (FOOTPRINT_VIEWER_FRAME*) kf.CreateWindow( this, MODULE_VIEWER_FRAME_TYPE, &Kiway(), kf.StartFlags() );
                 viewer->Show( true );
                 viewer->Zoom_Automatique( false );
             }

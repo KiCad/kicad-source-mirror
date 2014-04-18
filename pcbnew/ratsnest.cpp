@@ -234,9 +234,10 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest()
     {
         NETINFO_ITEM* net = m_Pcb->FindNet( current_net_code );
 
-        if( net == NULL )       //Should not occur
+        if( !net )       // Should not occur
         {
-            wxMessageBox( wxT( "Build_Board_Ratsnest() error: net not found" ) );
+            UTF8 msg = StrPrintf( "%s: error, net %d not found", __func__, current_net_code );
+            wxMessageBox( msg );   // BTW, it does happen.
             return;
         }
 

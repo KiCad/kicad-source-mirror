@@ -112,25 +112,20 @@ as such!  As such, it is OK to use UTF8 characters:
 // be mangled.
 #define KIFACE_INSTANCE_NAME_AND_VERSION   "KIFACE_1"
 
-
 #if defined(__linux__)
  #define LIB_ENV_VAR    wxT( "LD_LIBRARY_PATH" )
-
 #elif defined(__WXMAC__)
  #define LIB_ENV_VAR    wxT( "DYLD_LIBRARY_PATH" )
-
 #elif defined(__MINGW32__)
  #define LIB_ENV_VAR    wxT( "PATH" )
 #endif
 
 
 class wxConfigBase;
-
-
-class KIWAY;
 class wxWindow;
-class PGM_BASE;
 class wxConfigBase;
+class PGM_BASE;
+class KIWAY;
 
 
 /**
@@ -151,6 +146,10 @@ struct KIFACE
     // order of functions in this listing unless you recompile all clients of
     // this interface.
 
+#define KFCTL_STANDALONE        (1<<0)  ///< Am running as a standalone Top.
+#define KFCTL_PROJECT_SUITE     (1<<1)  ///< Am running under a project mgr, possibly with others
+
+
     /**
      * Function OnKifaceStart
      * is called just once shortly after the DSO is loaded.  It is the second
@@ -161,13 +160,15 @@ struct KIFACE
      *
      * @param aProgram is the process block: PGM_BASE*
      *
+     * @param aCtlBits consists of bit flags from the set of KFCTL_* \#defines above.
+     *
      * @return bool - true if DSO initialized OK, false if not.  When returning
      *  false, the loader may optionally decide to terminate the process or not,
      *  but will not put out any UI because that is the duty of this function to say
      *  why it is returning false.  Never return false without having reported
      *  to the UI why.
      */
-    VTBL_ENTRY bool OnKifaceStart( PGM_BASE* aProgram ) = 0;
+    VTBL_ENTRY bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) = 0;
 
     /**
      * Function OnKifaceEnd
@@ -175,8 +176,6 @@ struct KIFACE
      * before static C++ destructors are called.  A default implementation is supplied.
      */
     VTBL_ENTRY void OnKifaceEnd() = 0;
-
-#define KFCTL_STANDALONE    (1<<0)      ///< Am running as a standalone Top.
 
     /**
      * Function CreateWindow
@@ -199,7 +198,7 @@ struct KIFACE
      *  not contained in the caller's link image.
      */
     VTBL_ENTRY  wxWindow* CreateWindow( wxWindow* aParent, int aClassId,
-            KIWAY* aKIWAY, int aCtlBits = 0 ) = 0;
+            KIWAY* aKIWAY, int aCtlBits ) = 0;
 
     /**
      * Function IfaceOrAddress
@@ -249,7 +248,7 @@ class KIWAY : public wxEvtHandler
 {
 
 public:
-    /// DSO players on *this* KIWAY
+    /// Possible KIFACEs on *this* KIWAY
     enum FACE_T
     {
         FACE_SCH,           ///< eeschema DSO
@@ -257,6 +256,7 @@ public:
         FACE_PCB,           ///< pcbnew DSO
     //  FACE_MOD,
         FACE_CVPCB,
+
         FACE_BMP2CMP,
         FACE_GERBVIEW,
         FACE_PL_EDITOR,
@@ -265,41 +265,28 @@ public:
         FACE_COUNT,         ///< how many KIWAY player types
     };
 
-    /* from edaappl.h, now pgm_base.h, obsoleted by above FACE_T enum.
-    enum PGM_BASE_T
-    {
-        APP_UNKNOWN,
-        APP_EESCHEMA,
-        APP_PCBNEW,
-        APP_CVPCB,
-        APP_GERBVIEW,
-        APP_KICAD,
-        APP_PL_EDITOR,
-        APP_BM2CMP,
-    };
-    */
+    // If you change the vtable, recompile all of KiCad.
 
-    // Don't change the order of these VTBL_ENTRYs, add new ones at the end,
-    // unless you recompile all of KiCad.
 
-    VTBL_ENTRY      KIFACE*     KiFACE( FACE_T aFaceId, bool doLoad );
+    /**
+     * Function KiFACE
+     * returns the KIFACE* given a FACE_T.  If it is not already loaded, the
+     * KIFACE is loaded and initialized with a call to KIFACE::OnKifaceStart()
+     */
+    VTBL_ENTRY      KIFACE*     KiFACE( PGM_BASE* aProgram,
+                                    FACE_T aFaceId, bool doLoad = true );
+
     VTBL_ENTRY      PROJECT&    Prj()  const;
 
     KIWAY();
 
 private:
 
-    /*
-    /// Get the name of the DSO holding the requested FACE_T.
-    static const wxString dso_name( FACE_T aFaceId );
-    */
-
-    // one for each FACE_T
-    static wxDynamicLibrary    s_sch_dso;
-    static wxDynamicLibrary    s_pcb_dso;
-    //static wxDynamicLibrary    s_cvpcb_dso;   // will get merged into pcbnew
+    /// Get the full path & name of the DSO holding the requested FACE_T.
+    static const wxString dso_full_path( FACE_T aFaceId );
 
     KIFACE*     m_kiface[FACE_COUNT];
+    int         m_kiface_version[FACE_COUNT];
 
     PROJECT     m_project;          // do not assume this is here, use Prj().
 };

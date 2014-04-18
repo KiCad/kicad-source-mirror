@@ -101,7 +101,7 @@ static struct IFACE : public KIFACE_I
         KIFACE_I( aName, aType )
     {}
 
-    bool OnKifaceStart( PGM_BASE* aProgram );
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
 
     void OnKifaceEnd();
 
@@ -116,14 +116,16 @@ static struct IFACE : public KIFACE_I
 
                 frame->Zoom_Automatique( true );
 
-#ifdef KICAD_SCRIPTING
+#if defined(KICAD_SCRIPTING)
                 // give the scripting helpers access to our frame
                 ScriptingSetPcbEditFrame( frame );
 #endif
 
-                // @todo temporarily here
-                CreateServer( frame, KICAD_PCB_PORT_SERVICE_NUMBER );
-
+                if( Kiface().IsSingle() )
+                {
+                    // only run this under single_top, not under a project manager.
+                    CreateServer( frame, KICAD_PCB_PORT_SERVICE_NUMBER );
+                }
                 return frame;
             }
             break;
@@ -141,7 +143,6 @@ static struct IFACE : public KIFACE_I
                 /* Read a default config file in case no project given on command line.
                 frame->LoadProjectFile( wxEmptyString, true );
                 */
-
                 return frame;
             }
             break;
@@ -159,7 +160,6 @@ static struct IFACE : public KIFACE_I
                 /* Read a default config file in case no project given on command line.
                 frame->LoadProjectFile( wxEmptyString, true );
                 */
-
                 return frame;
             }
             break;
@@ -411,13 +411,13 @@ static bool scriptingSetup()
 FP_LIB_TABLE    GFootprintTable;
 
 
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     // This is process level, not project level, initialization of the DSO.
 
     // Do nothing in here pertinent to a project!
 
-    start_common();
+    start_common( aCtlBits );
 
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips

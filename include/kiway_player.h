@@ -130,7 +130,7 @@ public:
      * <p>
      * Each derived class should handle this in a way specific to its needs.
      * No prompting is done inside here for any file or project.  There should be
-     * need to call this with aFileList which is empty.  However, calling it with
+     * no need to call this with aFileList which is empty.  However, calling it with
      * a single filename which does not exist should indicate to the implementor
      * that a new session is being started and that the given name is the desired
      * name for the data file at time of save.
@@ -165,5 +165,52 @@ public:
         return false;
     }
 };
+
+
+// psuedo code for OpenProjectFiles
+#if 0
+
+bool OpenProjectFiles( const std::vector<wxString>& aFileList, int aCtl = 0 )
+{
+    if( aFileList.size() != 1 )
+    {
+        complain via UI.
+        return false
+    }
+
+    assert( aFileList[0] is absolute )      // bug in single_top.cpp or project manager.
+
+    if (window does not support appending) || !(aCtl & KICTL_OPEN_APPEND)
+    {
+        close any currently open project files.
+    }
+
+    if( aFileList[0] does not exist )
+    {
+        notify user file does not exist.
+
+        create an empty project file
+        mark file as modified.
+
+        use the default project config file.
+    }
+    else
+    {
+        load aFileList[0]
+
+        use the project config file for project given by aFileList[0]s full path.
+    }
+
+    UpdateTitle();
+
+    show contents.
+}
+
+
+
+#endif
+
+
+
 
 #endif // KIWAY_PLAYER_H_

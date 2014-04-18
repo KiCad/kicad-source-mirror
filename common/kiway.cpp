@@ -22,15 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <string.h>
+
 #include <kiway.h>
 #include <config.h>
 #include <wx/debug.h>
-#include <string.h>
-
-
-// one for each FACE_T
-wxDynamicLibrary KIWAY::s_sch_dso;
-wxDynamicLibrary KIWAY::s_pcb_dso;
+#include <wx/stdpaths.h>
 
 
 KIWAY::KIWAY()
@@ -39,20 +36,30 @@ KIWAY::KIWAY()
 }
 
 
-/*
-const wxString KIWAY::dso_name( FACE_T aFaceId )
+const wxString KIWAY::dso_full_path( FACE_T aFaceId )
 {
+    const wxChar*   name = wxT("");
+
     switch( aFaceId )
     {
-    case FACE_SCH:  return KIFACE_PREFIX wxT( "eeschema" ) KIFACE_SUFFIX;
-    case FACE_PCB:  return KIFACE_PREFIX wxT( "pcbnew"   ) KIFACE_SUFFIX;
+    case FACE_SCH:  name = KIFACE_PREFIX wxT( "eeschema" );     break;
+    case FACE_PCB:  name = KIFACE_PREFIX wxT( "pcbnew"   );     break;
 
     default:
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
         return wxEmptyString;
     }
+
+    wxFileName fn = wxStandardPaths::Get().GetExecutablePath();
+
+    fn.SetName( name );
+
+    // Here a "suffix" == an extension with a preceding '.',
+    // so skip the preceding '.' to get an extension
+    fn.SetExt( KIFACE_SUFFIX + 1 );         // + 1 => &KIFACE_SUFFIX[1]
+
+    return fn.GetFullPath();
 }
-*/
 
 
 PROJECT& KIWAY::Prj() const
@@ -61,14 +68,15 @@ PROJECT& KIWAY::Prj() const
 }
 
 
-KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
+KIFACE*  KIWAY::KiFACE( PGM_BASE* aProgram, FACE_T aFaceId, bool doLoad )
 {
     switch( aFaceId )
     {
-    case FACE_SCH:
+    // case FACE_SCH:
     case FACE_PCB:
         if( m_kiface[aFaceId] )
             return m_kiface[aFaceId];
+        break;
 
     default:
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
@@ -78,17 +86,47 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
     // DSO with KIFACE has not been loaded yet, does user want to load it?
     if( doLoad  )
     {
-        switch( aFaceId )
+        wxString dname = dso_full_path( aFaceId );
+
+        wxDynamicLibrary dso;
+
+        void*   addr = NULL;
+
+        if( !dso.Load( dname, wxDL_VERBATIM | wxDL_NOW ) )
         {
-        case FACE_SCH:
-            break;
-
-        case FACE_PCB:
-            break;
-
-        default:
-            ;
+            // Failure: error reporting UI was done via wxLogSysError().
+            // No further reporting required here.
         }
+
+        else if( ( addr = dso.GetSymbol( wxT( KIFACE_INSTANCE_NAME_AND_VERSION ) ) ) == NULL )
+        {
+            // Failure: error reporting UI was done via wxLogSysError().
+            // No further reporting required here.
+        }
+
+        else
+        {
+            KIFACE_GETTER_FUNC* getter = (KIFACE_GETTER_FUNC*) addr;
+
+            KIFACE* kiface = getter( &m_kiface_version[aFaceId], KIFACE_VERSION, aProgram );
+
+            // KIFACE_GETTER_FUNC function comment (API) says the non-NULL is unconditional.
+            wxASSERT_MSG( kiface,
+                wxT( "attempted DSO has a bug, failed to return a KIFACE*" ) );
+
+            // Give the DSO a single chance to do its "process level" initialization.
+            // "Process level" specifically means stay away from any projects in there.
+            if( kiface->OnKifaceStart( aProgram, KFCTL_PROJECT_SUITE ) )
+            {
+                // Tell dso's wxDynamicLibrary destructor not to Unload() the program image.
+                (void) dso.Detach();
+
+                return m_kiface[aFaceId] = kiface;
+            }
+        }
+
+        // In any of the failure cases above, dso.Unload() should be called here
+        // by dso destructor.
     }
 
     return NULL;

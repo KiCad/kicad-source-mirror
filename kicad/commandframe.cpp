@@ -59,7 +59,7 @@ int LAUNCHER_PANEL::GetPanelHeight() const
  * Function CreateCommandToolbar
  * create the buttons to call Eeschema CvPcb, Pcbnew and GerbView
  */
-void LAUNCHER_PANEL::CreateCommandToolbar( void )
+void LAUNCHER_PANEL::CreateCommandToolbar()
 {
     wxBitmapButton* btn;
 
