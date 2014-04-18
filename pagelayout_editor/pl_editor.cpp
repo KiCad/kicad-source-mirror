@@ -54,7 +54,7 @@ static struct IFACE : public KIFACE_I
         KIFACE_I( aName, aType )
     {}
 
-    bool OnKifaceStart( PGM_BASE* aProgram );
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
 
     void OnKifaceEnd();
 
@@ -126,9 +126,9 @@ PGM_BASE& Pgm()
 }
 
 
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
-    start_common();
+    start_common( aCtlBits );
 
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips

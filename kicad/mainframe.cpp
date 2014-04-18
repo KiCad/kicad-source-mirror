@@ -30,6 +30,8 @@
 
 #include <fctsys.h>
 #include <pgm_kicad.h>
+#include <kiway_mgr.h>
+#include <kiway_player.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <macros.h>
@@ -238,10 +240,23 @@ void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
     legacy_board.SetExt( LegacyPcbFileExtension );
     kicad_board.SetExt( KiCadPcbFileExtension );
 
-    if( !legacy_board.FileExists() || kicad_board.FileExists() )
-        Execute( this, PCBNEW_EXE, QuoteFullPath( kicad_board ) );
-    else
-        Execute( this, PCBNEW_EXE, QuoteFullPath( legacy_board ) );
+    wxFileName& board = ( !legacy_board.FileExists() || kicad_board.FileExists() ) ?
+                            kicad_board : legacy_board;
+
+
+#if 0   // it works!
+    KIFACE* kiface = Kiways[0].KiFACE( &Pgm(), KIWAY::FACE_PCB );
+
+    KIWAY_PLAYER* frame = (KIWAY_PLAYER*) kiface->CreateWindow( this, PCB_FRAME_TYPE, &Kiways[0], KFCTL_PROJECT_SUITE );
+
+    frame->OpenProjectFiles( std::vector<wxString>( 1, board.GetFullPath() ) );
+
+    frame->Show( true );
+    frame->Raise();
+
+#else
+    Execute( this, PCBNEW_EXE, QuoteFullPath( board ) );
+#endif
 }
 
 

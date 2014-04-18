@@ -186,6 +186,7 @@ set( COMMON_SRCS
     msgpanel.cpp
     netlist_keywords.cpp
     newstroke_font.cpp
+    prependpath.cpp
     project.cpp
     ptree.cpp
     reporter.cpp

@@ -78,7 +78,9 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 
         if( !editor )
         {
-            editor = (FOOTPRINT_EDIT_FRAME*) Kiface().CreateWindow( this, MODULE_EDITOR_FRAME_TYPE, &Kiway() );
+            KIFACE_I&   kf = Kiface();
+
+            editor = (FOOTPRINT_EDIT_FRAME*) kf.CreateWindow( this, MODULE_EDITOR_FRAME_TYPE, &Kiway(), kf.StartFlags() );
         }
 
         editor->Load_Module_From_BOARD( Module );

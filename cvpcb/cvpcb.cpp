@@ -100,7 +100,7 @@ static struct IFACE : public KIFACE_I
         KIFACE_I( aName, aType )
     {}
 
-    bool OnKifaceStart( PGM_BASE* aProgram );
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
 
     void OnKifaceEnd();
 
@@ -276,13 +276,13 @@ FP_LIB_TABLE GFootprintTable;
 // we skip setting KISYSMOD here for now.  User should set the environment
 // variable.
 
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     // This is process level, not project level, initialization of the DSO.
 
     // Do nothing in here pertinent to a project!
 
-    start_common();
+    start_common( aCtlBits );
 
     // Set 3D shape path from environment variable KISYS3DMOD
     set3DShapesPath( wxT("KISYS3DMOD") );

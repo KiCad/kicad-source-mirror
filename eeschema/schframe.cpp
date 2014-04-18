@@ -819,7 +819,9 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
     }
     else
     {
-        wxWindow* w = Kiface().CreateWindow( this, LIBEDITOR_FRAME_TYPE, &Kiway() );
+        KIFACE_I&   kf = Kiface();
+
+        wxWindow* w = kf.CreateWindow( this, LIBEDITOR_FRAME_TYPE, &Kiway(), kf.StartFlags() );
         libeditFrame = dynamic_cast<LIB_EDIT_FRAME*>( w );
     }
 

@@ -85,9 +85,6 @@
 
 
 BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
-    EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, PCB_EDIT_FRAME::OnSockRequestServer )
-    EVT_SOCKET( ID_EDA_SOCKET_EVENT, PCB_EDIT_FRAME::OnSockRequest )
-
     EVT_COMBOBOX( ID_ON_ZOOM_SELECT, PCB_EDIT_FRAME::OnSelectZoom )
     EVT_COMBOBOX( ID_ON_GRID_SELECT, PCB_EDIT_FRAME::OnSelectGrid )
 
@@ -450,7 +447,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
 
-#ifdef KICAD_SCRIPTING_WXPYTHON
+#if defined(KICAD_SCRIPTING_WXPYTHON)
     // Add the scripting panel
     EDA_PANEINFO  pythonAuiInfo;
     pythonAuiInfo.ScriptingToolbarPane();
@@ -831,7 +828,7 @@ void PCB_EDIT_FRAME::SetGridColor(EDA_COLOR_T aColor)
 }
 
 
-bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
+bool PCB_EDIT_FRAME::IsMicroViaAcceptable()
 {
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
     LAYER_NUM currLayer = getActiveLayer();
@@ -1106,7 +1103,7 @@ void PCB_EDIT_FRAME::UpdateTitle()
     SetTitle( title );
 }
 
-#ifdef KICAD_SCRIPTING_WXPYTHON
+#if defined(KICAD_SCRIPTING_WXPYTHON)
 void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
 {
     if ( m_pythonPanelHidden )
@@ -1171,4 +1168,3 @@ void PCB_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
 
     m_rotationAngle = aRotationAngle;
 }
-

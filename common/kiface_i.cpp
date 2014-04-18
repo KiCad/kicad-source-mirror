@@ -94,8 +94,10 @@ static void setSearchPaths( SEARCH_STACK* aDst, KIWAY::FACE_T aId )
 }
 
 
-bool KIFACE_I::start_common()
+bool KIFACE_I::start_common( int aCtlBits )
 {
+    m_start_flags = aCtlBits;
+
     m_bm.Init();
 
     m_bm.m_config->Read( showPageLimitsKey, &g_ShowPageLimits );
