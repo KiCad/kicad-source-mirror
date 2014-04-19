@@ -118,7 +118,7 @@ protected:
 
 public:
     EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
-                    ID_DRAWFRAME_TYPE aFrameType,
+                    FRAME_T aFrameType,
                     const wxString& aTitle,
                     const wxPoint& aPos, const wxSize& aSize,
                     long aStyle,

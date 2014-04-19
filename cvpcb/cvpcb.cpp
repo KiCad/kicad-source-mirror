@@ -108,7 +108,7 @@ static struct IFACE : public KIFACE_I
     {
         switch( aClassId )
         {
-        case CVPCB_FRAME_TYPE:
+        case FRAME_CVPCB:
             {
                 CVPCB_MAINFRAME* frame = new CVPCB_MAINFRAME( aKiway, aParent );
                 return frame;

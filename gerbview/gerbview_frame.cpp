@@ -65,7 +65,7 @@ static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBloc
 #define GERBVIEW_FRAME_NAME wxT( "GerberFrame" )
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
-    EDA_DRAW_FRAME( aKiway, aParent, GERBER_FRAME_TYPE, wxT( "GerbView" ),
+    EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ),
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME )
 {
     m_colorsSettings = &g_ColorsSettings;

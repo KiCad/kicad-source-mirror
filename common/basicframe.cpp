@@ -62,7 +62,7 @@ static const wxChar entryPerspective[] = wxT( "Perspective" );
 
 
 
-EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
+EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString& aFrameName ) :
     wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName )

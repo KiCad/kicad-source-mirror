@@ -107,7 +107,7 @@ END_EVENT_TABLE()
 
 
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    KIWAY_PLAYER( aKiway, aParent, CVPCB_FRAME_TYPE, wxT( "CvPCB" ), wxDefaultPosition,
+    KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, wxT( "CvPCB" ), wxDefaultPosition,
         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
 {
     m_FrameName             = CVPCB_MAINFRAME_NAME;

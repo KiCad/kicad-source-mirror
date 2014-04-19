@@ -81,7 +81,7 @@ END_EVENT_TABLE()
 
 EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
         const wxString& aTitle, long style ) :
-    KIWAY_PLAYER( aKiway, aParent, DISPLAY3D_FRAME_TYPE, aTitle,
+    KIWAY_PLAYER( aKiway, aParent, FRAME_PCB_DISPLAY3D, aTitle,
             wxDefaultPosition, wxDefaultSize, style, wxT( "Frame3D" ) )
 {
     m_canvas        = NULL;

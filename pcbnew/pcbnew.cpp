@@ -110,7 +110,7 @@ static struct IFACE : public KIFACE_I
         switch( aClassId )
         {
 
-        case PCB_FRAME_TYPE:
+        case FRAME_PCB:
             {
                 PCB_EDIT_FRAME* frame = new PCB_EDIT_FRAME( aKiway, aParent );
 
@@ -130,7 +130,7 @@ static struct IFACE : public KIFACE_I
             }
             break;
 
-        case MODULE_EDITOR_FRAME_TYPE:
+        case FRAME_PCB_MODULE_EDITOR:
             {
                 // yuck:
                 PCB_EDIT_FRAME* editor = dynamic_cast<PCB_EDIT_FRAME*>( aParent );
@@ -147,7 +147,7 @@ static struct IFACE : public KIFACE_I
             }
             break;
 
-        case MODULE_VIEWER_FRAME_TYPE:
+        case FRAME_PCB_MODULE_VIEWER:
             {
                 // yuck:
                 PCB_BASE_FRAME* editor = dynamic_cast<PCB_BASE_FRAME*>( aParent );

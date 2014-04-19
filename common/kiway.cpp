@@ -24,21 +24,29 @@
 
 #include <string.h>
 
+#include <macros.h>
 #include <kiway.h>
+#include <kiway_player.h>
 #include <config.h>
 #include <wx/debug.h>
 #include <wx/stdpaths.h>
 
 
-KIWAY::KIWAY()
+KIFACE* KIWAY::m_kiface[KIWAY_FACE_COUNT];
+int     KIWAY::m_kiface_version[KIWAY_FACE_COUNT];
+
+
+KIWAY::KIWAY( PGM_BASE* aProgram, wxFrame* aTop ):
+    m_program( aProgram ),
+    m_top( aTop )
 {
-    memset( &m_kiface, 0, sizeof( m_kiface ) );
+    memset( m_player, 0, sizeof( m_player ) );
 }
 
 
 const wxString KIWAY::dso_full_path( FACE_T aFaceId )
 {
-    const wxChar*   name = wxT("");
+    const wxChar*   name;
 
     switch( aFaceId )
     {
@@ -68,22 +76,24 @@ PROJECT& KIWAY::Prj() const
 }
 
 
-KIFACE*  KIWAY::KiFACE( PGM_BASE* aProgram, FACE_T aFaceId, bool doLoad )
+KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 {
-    switch( aFaceId )
+    // Since this will be called from python, cannot assume that code will
+    // not pass a bad aFaceId.
+    if( unsigned( aFaceId ) >= DIM( m_kiface ) )
     {
-    // case FACE_SCH:
-    case FACE_PCB:
-        if( m_kiface[aFaceId] )
-            return m_kiface[aFaceId];
-        break;
+        // @todo : throw an exception here for python's benefit, at least that
+        // way it gets some explanatory text.
 
-    default:
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
         return NULL;
     }
 
-    // DSO with KIFACE has not been loaded yet, does user want to load it?
+    // return the previously loaded KIFACE, if it was.
+    if( m_kiface[aFaceId] )
+        return m_kiface[aFaceId];
+
+    // DSO with KIFACE has not been loaded yet, does caller want to load it?
     if( doLoad  )
     {
         wxString dname = dso_full_path( aFaceId );
@@ -108,7 +118,7 @@ KIFACE*  KIWAY::KiFACE( PGM_BASE* aProgram, FACE_T aFaceId, bool doLoad )
         {
             KIFACE_GETTER_FUNC* getter = (KIFACE_GETTER_FUNC*) addr;
 
-            KIFACE* kiface = getter( &m_kiface_version[aFaceId], KIFACE_VERSION, aProgram );
+            KIFACE* kiface = getter( &m_kiface_version[aFaceId], KIFACE_VERSION, m_program );
 
             // KIFACE_GETTER_FUNC function comment (API) says the non-NULL is unconditional.
             wxASSERT_MSG( kiface,
@@ -116,7 +126,7 @@ KIFACE*  KIWAY::KiFACE( PGM_BASE* aProgram, FACE_T aFaceId, bool doLoad )
 
             // Give the DSO a single chance to do its "process level" initialization.
             // "Process level" specifically means stay away from any projects in there.
-            if( kiface->OnKifaceStart( aProgram, KFCTL_PROJECT_SUITE ) )
+            if( kiface->OnKifaceStart( m_program, KFCTL_PROJECT_SUITE ) )
             {
                 // Tell dso's wxDynamicLibrary destructor not to Unload() the program image.
                 (void) dso.Detach();
@@ -130,4 +140,106 @@ KIFACE*  KIWAY::KiFACE( PGM_BASE* aProgram, FACE_T aFaceId, bool doLoad )
     }
 
     return NULL;
+}
+
+
+KIWAY::FACE_T KIWAY::KifaceType( FRAME_T aFrameType )
+{
+    switch( aFrameType )
+    {
+    case FRAME_SCH:
+    case FRAME_SCH_LIB_EDITOR:
+    case FRAME_SCH_VIEWER:
+        return FACE_SCH;
+
+    case FRAME_PCB:
+    case FRAME_PCB_MODULE_EDITOR:
+    case FRAME_PCB_MODULE_VIEWER:
+    case FRAME_PCB_FOOTPRINT_WIZARD:
+    case FRAME_PCB_DISPLAY3D:
+        return FACE_PCB;
+
+    case FRAME_CVPCB:
+    case FRAME_CVPCB_DISPLAY:
+        return FACE_CVPCB;
+
+    case FRAME_GERBER:
+        return FACE_GERBVIEW;
+
+    case FRAME_PL_EDITOR:
+        return FACE_PL_EDITOR;
+
+    default:
+        return FACE_T( -1 );
+    }
+}
+
+
+KIWAY_PLAYER* KIWAY::PlayerCreate( FRAME_T aFrameType )
+{
+    // Since this will be called from python, cannot assume that code will
+    // not pass a bad aFrameType.
+    if( unsigned( aFrameType ) >= DIM( m_player ) )
+    {
+        // @todo : throw an exception here for python's benefit, at least that
+        // way it gets some explanatory text.
+
+        wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFrameType" ) );
+        return NULL;
+    }
+
+    // return the previously opened window
+    if( m_player[aFrameType] )
+        return m_player[aFrameType];
+
+    FACE_T face_type = KifaceType( aFrameType );
+
+    wxASSERT( face_type != FACE_T(-1) );
+
+    KIFACE* kiface = KiFACE( face_type );
+
+    KIWAY_PLAYER* frame = (KIWAY_PLAYER*) kiface->CreateWindow( m_top, aFrameType, this, KFCTL_PROJECT_SUITE );
+
+    return m_player[aFrameType] = frame;
+}
+
+
+bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
+{
+    // Since this will be called from python, cannot assume that code will
+    // not pass a bad aFrameType.
+    if( unsigned( aFrameType ) >= DIM( m_player ) )
+    {
+        // @todo : throw an exception here for python's benefit, at least that
+        // way it gets some explanatory text.
+
+        wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFrameType" ) );
+        return false;
+    }
+
+    if( m_player[aFrameType] )
+    {
+        if( m_player[aFrameType]->Close( doForce ) )
+        {
+            m_player[aFrameType] = 0;
+            return true;
+        }
+
+        return false;
+    }
+
+    return true;    // window is closed already.
+}
+
+
+bool KIWAY::PlayersClose( bool doForce )
+{
+    bool ret = true;
+
+    for( unsigned i=0; i < DIM( m_player );  ++i )
+    {
+        ret = ret && PlayerClose( FRAME_T( i ), doForce );
+    }
+
+    return ret;
 }
