@@ -50,8 +50,13 @@ const wxString KIWAY::dso_full_path( FACE_T aFaceId )
 
     switch( aFaceId )
     {
-    case FACE_SCH:  name = KIFACE_PREFIX wxT( "eeschema" );     break;
-    case FACE_PCB:  name = KIFACE_PREFIX wxT( "pcbnew"   );     break;
+    case FACE_SCH:          name = KIFACE_PREFIX wxT( "eeschema" );     break;
+    case FACE_PCB:          name = KIFACE_PREFIX wxT( "pcbnew" );       break;
+    case FACE_CVPCB:        name = KIFACE_PREFIX wxT( "cvpcb" );        break;
+    case FACE_GERBVIEW:     name = KIFACE_PREFIX wxT( "gerbview" );     break;
+    case FACE_PL_EDITOR:    name = KIFACE_PREFIX wxT( "pl_editor" );    break;
+
+    // case FACE_PCB_CALCULATOR:  who knows.
 
     default:
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
