@@ -115,7 +115,7 @@ protected:
     static const LAYER_NUM GAL_LAYER_ORDER[];
 
 public:
-    PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
+    PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
             const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
             long aStyle, const wxString& aFrameName );
 

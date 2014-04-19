@@ -810,7 +810,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
         if( aPanel && aPanel->GetParent() )
             frame = (EDA_DRAW_FRAME*)aPanel->GetParent();
 
-        if( frame && frame->IsType( SCHEMATIC_FRAME_TYPE ) &&
+        if( frame && frame->IsType( FRAME_SCH ) &&
             ! ((SCH_EDIT_FRAME*)frame)->GetShowAllPins() )
             return;
 

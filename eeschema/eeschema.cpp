@@ -79,7 +79,7 @@ static struct IFACE : public KIFACE_I
     {
         switch( aClassId )
         {
-        case SCHEMATIC_FRAME_TYPE:
+        case FRAME_SCH:
             {
                 SCH_EDIT_FRAME* frame = new SCH_EDIT_FRAME( aKiway, aParent );
 
@@ -97,7 +97,7 @@ static struct IFACE : public KIFACE_I
             }
             break;
 
-        case LIBEDITOR_FRAME_TYPE:
+        case FRAME_SCH_LIB_EDITOR:
             {
                 LIB_EDIT_FRAME* frame = new LIB_EDIT_FRAME( aKiway,
                                             dynamic_cast<SCH_EDIT_FRAME*>( aParent ) );

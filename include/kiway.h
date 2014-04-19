@@ -101,6 +101,7 @@ as such!  As such, it is OK to use UTF8 characters:
 #include <import_export.h>
 #include <search_stack.h>
 #include <project.h>
+#include <frame_type.h>
 
 
 #define VTBL_ENTRY          virtual
@@ -126,6 +127,7 @@ class wxWindow;
 class wxConfigBase;
 class PGM_BASE;
 class KIWAY;
+class KIWAY_PLAYER;
 
 
 /**
@@ -248,48 +250,107 @@ class KIWAY : public wxEvtHandler
 {
 
 public:
-    /// Possible KIFACEs on *this* KIWAY
+    /// Known KIFACE implementations
     enum FACE_T
     {
-        FACE_SCH,           ///< eeschema DSO
-    //  FACE_LIB,
-        FACE_PCB,           ///< pcbnew DSO
-    //  FACE_MOD,
+        FACE_SCH,               ///< eeschema DSO
+        FACE_PCB,               ///< pcbnew DSO
         FACE_CVPCB,
 
-        FACE_BMP2CMP,
+        /// count of those above here, which is the subset managed in a KIWAY.
+        KIWAY_FACE_COUNT,
+
+        FACE_BMP2CMP = KIWAY_FACE_COUNT,
         FACE_GERBVIEW,
         FACE_PL_EDITOR,
         FACE_PCB_CALCULATOR,
 
-        FACE_COUNT,         ///< how many KIWAY player types
+        FACE_COUNT
     };
 
-    // If you change the vtable, recompile all of KiCad.
+    /**
+     * Function KifaceType
+     * is a simple mapping function which returns the FACE_T which is known to
+     * implement @a aFrameType.
+     *
+     * @return KIWAY::FACE_T - a valid value or FACE_T(-1) if given a bad aFrameType.
+     */
+    static FACE_T KifaceType( FRAME_T aFrameType );
 
+
+    // If you change the vtable, recompile all of KiCad.
 
     /**
      * Function KiFACE
      * returns the KIFACE* given a FACE_T.  If it is not already loaded, the
      * KIFACE is loaded and initialized with a call to KIFACE::OnKifaceStart()
      */
-    VTBL_ENTRY      KIFACE*     KiFACE( PGM_BASE* aProgram,
-                                    FACE_T aFaceId, bool doLoad = true );
+    VTBL_ENTRY KIFACE* KiFACE( FACE_T aFaceId, bool doLoad = true );
 
-    VTBL_ENTRY      PROJECT&    Prj()  const;
+    /**
+     * Function PlayerCreate
+     * returns the KIWAY_PLAYER* given a FRAME_T.  If it is not already created,
+     * the required KIFACE is found and loaded and initialized if necessary, then
+     * the KIWAY_PLAYER window is created but not shown.  Caller must Show() it.
+     * If it is already created, then the existing KIWAY_PLAYER* pointer is returned.
+     *
+     * @return KIWAY_PLAYER* - a valid opened KIWAY_PLAYER or NULL if there
+     *  is something wrong.
+     */
+    VTBL_ENTRY KIWAY_PLAYER*   PlayerCreate( FRAME_T aFrameType );
 
-    KIWAY();
+    /**
+     * Function PlayerClose
+     * calls the KIWAY_PLAYER::Close( bool force ) function on the window and
+     * if not vetoed, returns true, else false.  If window actually closes, then
+     * this KIWAY marks it as not opened internally.
+     *
+     * @return bool - true the window is closed and not vetoed, else false.
+     */
+    VTBL_ENTRY bool PlayerClose( FRAME_T aFrameType,  bool doForce );
+
+    /**
+     * Function PlayersClose
+     * calls the KIWAY_PLAYER::Close( bool force ) function on all the windows and
+     * if none are vetoed, returns true, else false.  If window actually closes, then
+     * this KIWAY marks it as not opened internally.
+     *
+     * @return bool - true the window is closed and not vetoed, else false.
+     */
+    VTBL_ENTRY bool PlayersClose( bool doForce );
+
+
+    /**
+     * Function Prj
+     * returns the PROJECT associated with this KIWAY.  This is here as an
+     * accessor, so that there is freedom to put the actual PROJECT storage
+     * in a place decided by the implementation, and not known to the caller.
+     */
+    VTBL_ENTRY PROJECT&  Prj()  const;
+
+    KIWAY( PGM_BASE* aProgram, wxFrame* aTop = NULL );
+
+    /// In case aTop may not be known at time of KIWAY construction:
+    void SetTop( wxFrame* aTop )        { m_top = aTop; }
 
 private:
 
     /// Get the full path & name of the DSO holding the requested FACE_T.
     static const wxString dso_full_path( FACE_T aFaceId );
 
-    KIFACE*     m_kiface[FACE_COUNT];
-    int         m_kiface_version[FACE_COUNT];
+    static KIFACE*  m_kiface[KIWAY_FACE_COUNT];
+    static int      m_kiface_version[KIWAY_FACE_COUNT];
 
-    PROJECT     m_project;          // do not assume this is here, use Prj().
+    KIWAY_PLAYER*   m_player[KIWAY_PLAYER_COUNT];     // from frame_type.h
+
+    PROJECT         m_project;      // do not assume this is here, use Prj().
+
+    PGM_BASE*       m_program;
+    wxFrame*        m_top;
 };
+
+
+extern KIWAY Kiway;     // provided by single_top.cpp and kicad.cpp
 
 
 /**
@@ -309,5 +370,6 @@ typedef     KIFACE*  KIFACE_GETTER_FUNC( int* aKIFACEversion, int aKIWAYversion,
 
 /// No name mangling.  Each KIFACE (DSO/DLL) will implement this once.
 extern "C" KIFACE* KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
+
 
 #endif  // KIWAY_H_

@@ -119,7 +119,7 @@ static wxAcceleratorEntry accels[] =
 
 
 FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent, wxSemaphore* aSemaphore ) :
-    PCB_BASE_FRAME( aKiway, aParent, MODULE_VIEWER_FRAME_TYPE, _( "Footprint Library Browser" ),
+    PCB_BASE_FRAME( aKiway, aParent, FRAME_PCB_MODULE_VIEWER, _( "Footprint Library Browser" ),
             wxDefaultPosition, wxDefaultSize,
             !aSemaphore ?
                 KICAD_DEFAULT_DRAWFRAME_STYLE :

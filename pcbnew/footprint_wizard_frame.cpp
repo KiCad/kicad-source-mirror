@@ -121,7 +121,7 @@ static wxAcceleratorEntry accels[] =
 
 FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, FOOTPRINT_EDIT_FRAME* aParent,
         wxSemaphore* semaphore, long style ) :
-    PCB_BASE_FRAME( aKiway, aParent, FOOTPRINT_WIZARD_FRAME_TYPE,
+    PCB_BASE_FRAME( aKiway, aParent, FRAME_PCB_FOOTPRINT_WIZARD,
                     _( "Footprint Wizard" ),
                     wxDefaultPosition, wxDefaultSize, style, FOOTPRINT_WIZARD_FRAME_NAME )
 {

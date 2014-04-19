@@ -98,7 +98,7 @@ private:
 class KIWAY_PLAYER : public EDA_BASE_FRAME, public KIWAY_HOLDER
 {
 public:
-    KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
+    KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
             const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
             long aStyle, const wxString& aWdoName = wxFrameNameStr ) :
         EDA_BASE_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aWdoName ),
@@ -110,7 +110,7 @@ public:
     KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
             const wxPoint& aPos, const wxSize& aSize, long aStyle,
             const wxString& aWdoName = wxFrameNameStr ) :
-        EDA_BASE_FRAME( aParent, (ID_DRAWFRAME_TYPE) aId, aTitle, aPos, aSize, aStyle, aWdoName ),
+        EDA_BASE_FRAME( aParent, (FRAME_T) aId, aTitle, aPos, aSize, aStyle, aWdoName ),
         KIWAY_HOLDER( 0 )
     {}
 

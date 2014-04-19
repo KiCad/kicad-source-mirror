@@ -62,7 +62,7 @@ static struct IFACE : public KIFACE_I
     {
         switch( aClassId )
         {
-        case PL_EDITOR_FRAME_TYPE:
+        case FRAME_PL_EDITOR:
             {
                 PL_EDITOR_FRAME* frame = new PL_EDITOR_FRAME( aKiway, aParent );
 

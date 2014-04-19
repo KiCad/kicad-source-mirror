@@ -121,7 +121,7 @@ static const wxString dso_full_path( const wxString& aAbsoluteArgv0 )
 
 // Only a single KIWAY is supported in this single_top top level component,
 // which is dedicated to loading only a single DSO.
-static KIWAY    kiway;
+KIWAY    Kiway( &Pgm() );
 
 
 // implement a PGM_BASE and a wxApp side by side:
@@ -304,17 +304,17 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
 
     // Use KIFACE to create a top window that the KIFACE knows about.
     // TOP_FRAME is passed on compiler command line from CMake, and is one of
-    // the types in ID_DRAWFRAME_TYPE.
+    // the types in FRAME_T.
     // KIFACE::CreateWindow() is a virtual so we don't need to link to it.
     // Remember its in the *.kiface DSO.
 #if 0
     // this pulls in EDA_DRAW_FRAME type info, which we don't want in
     // the single_top link image.
     KIWAY_PLAYER* frame = dynamic_cast<KIWAY_PLAYER*>( kiface->CreateWindow(
-                                NULL, TOP_FRAME, &kiway, KFCTL_STANDALONE ) );
+                                NULL, TOP_FRAME, &Kiway, KFCTL_STANDALONE ) );
 #else
     KIWAY_PLAYER* frame = (KIWAY_PLAYER*) kiface->CreateWindow(
-                                NULL, TOP_FRAME, &kiway, KFCTL_STANDALONE );
+                                NULL, TOP_FRAME, &Kiway, KFCTL_STANDALONE );
 #endif
 
     App().SetTopWindow( frame );      // wxApp gets a face.

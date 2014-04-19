@@ -32,7 +32,7 @@
 #include <fctsys.h>
 #include <wx/stdpaths.h>
 #include <kicad.h>
-#include <kiway_mgr.h>
+#include <kiway.h>
 #include <pgm_kicad.h>
 #include <tree_project_frame.h>
 #include <online_help.h>
@@ -149,6 +149,8 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
                                      wxDefaultPosition, wxDefaultSize );
     App().SetTopWindow( frame );
 
+    Kiway.SetTop( frame );
+
     bool prjloaded = false;    // true when the project is loaded
 
     if( App().argc > 1 )
@@ -251,7 +253,7 @@ void PGM_KICAD::destroy()
 }
 
 
-KIWAY_MGR  Kiways;
+KIWAY  Kiway( &Pgm() );
 
 
 /**
@@ -262,7 +264,7 @@ struct APP_KICAD : public wxApp
 {
     bool OnInit()           // overload wxApp virtual
     {
-        if( Kiways.OnStart( this ) )
+        // if( Kiways.OnStart( this ) )
         {
             return Pgm().OnPgmInit( this );
         }
@@ -271,7 +273,7 @@ struct APP_KICAD : public wxApp
 
     int  OnExit()           // overload wxApp virtual
     {
-        Kiways.OnEnd();
+        // Kiways.OnEnd();
 
         Pgm().OnPgmExit();
 
@@ -297,9 +299,11 @@ IMPLEMENT_APP( APP_KICAD );
 // this link image need this function.
 PROJECT& Prj()
 {
-    return Kiways[0].Prj();
+    return Kiway.Prj();
 }
 
+
+#if 0   // there can be only one in C++ project manager.
 
 bool KIWAY_MGR::OnStart( wxApp* aProcess )
 {
@@ -314,3 +318,5 @@ bool KIWAY_MGR::OnStart( wxApp* aProcess )
 void KIWAY_MGR::OnEnd()
 {
 }
+
+#endif

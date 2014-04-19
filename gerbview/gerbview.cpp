@@ -81,7 +81,7 @@ static struct IFACE : public KIFACE_I
     {
         switch( aClassId )
         {
-        case GERBER_FRAME_TYPE:
+        case FRAME_GERBER:
             {
                 GERBVIEW_FRAME* frame = new GERBVIEW_FRAME( aKiway, aParent );
 

@@ -29,7 +29,7 @@
 
 
 SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
-        ID_DRAWFRAME_TYPE aWindowType, const wxString& aTitle,
+        FRAME_T aWindowType, const wxString& aTitle,
         const wxPoint& aPosition, const wxSize& aSize, long aStyle,
         const wxString& aFrameName ) :
     EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition,

@@ -263,7 +263,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     // In module editor, the module is located at 0,0 but for printing
     // it is moved to pageSizeIU.x/2, pageSizeIU.y/2.
     // So the equivalent board must be moved to the center of the page:
-    if( m_Parent->IsType( MODULE_EDITOR_FRAME_TYPE ) )
+    if( m_Parent->IsType( FRAME_PCB_MODULE_EDITOR ) )
     {
         boardBoundingBox.Move( wxPoint( pageSizeIU.x/2, pageSizeIU.y/2 ) );
     }

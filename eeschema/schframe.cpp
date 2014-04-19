@@ -176,7 +176,7 @@ END_EVENT_TABLE()
 #define SCH_EDIT_FRAME_NAME wxT( "SchematicFrame" )
 
 SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
-    SCH_BASE_FRAME( aKiway, aParent, SCHEMATIC_FRAME_TYPE, wxT( "Eeschema" ),
+    SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH, wxT( "Eeschema" ),
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
     m_item_to_repeat( 0 )
 {
@@ -821,7 +821,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
     {
         KIFACE_I&   kf = Kiface();
 
-        wxWindow* w = kf.CreateWindow( this, LIBEDITOR_FRAME_TYPE, &Kiway(), kf.StartFlags() );
+        wxWindow* w = kf.CreateWindow( this, FRAME_SCH_LIB_EDITOR, &Kiway(), kf.StartFlags() );
         libeditFrame = dynamic_cast<LIB_EDIT_FRAME*>( w );
     }
 
