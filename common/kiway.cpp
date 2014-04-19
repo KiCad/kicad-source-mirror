@@ -38,9 +38,48 @@ int     KIWAY::m_kiface_version[KIWAY_FACE_COUNT];
 
 KIWAY::KIWAY( PGM_BASE* aProgram, wxFrame* aTop ):
     m_program( aProgram ),
-    m_top( aTop )
+    m_top( 0 )
 {
+    SetTop( aTop );     // hook playerDestroyHandler() into aTop.
+
     memset( m_player, 0, sizeof( m_player ) );
+}
+
+// Any event types derived from wxCommandEvt, like wxWindowDestroyEvent, are
+// propogated upwards to parent windows if not handled below.  Therefor the
+// m_top window should receive all wxWindowDestroyEvents from originating
+// from KIWAY_PLAYERs.  It does anyways, but now playerDestroyHandler eavesdrops
+// on that event stream looking for KIWAY_PLAYERs being closed.
+
+void KIWAY::playerDestroyHandler( wxWindowDestroyEvent& event )
+{
+    wxWindow* w = event.GetWindow();
+
+    for( unsigned i=0; i<DIM(m_player);  ++i )
+    {
+        // if destroying one of our flock, then mark it as diseased.
+        if( (wxWindow*) m_player[i] == w )
+        {
+            // DBG(printf( "%s: marking m_player[%d] as destroyed\n", __func__, i );)
+            m_player[i] = 0;
+        }
+    }
+}
+
+
+void KIWAY::SetTop( wxFrame* aTop )
+{
+    if( m_top )
+    {
+        m_top->Disconnect( wxEVT_DESTROY, wxWindowDestroyEventHandler( KIWAY::playerDestroyHandler ), NULL, this );
+    }
+
+    if( aTop )
+    {
+        aTop->Connect( wxEVT_DESTROY, wxWindowDestroyEventHandler( KIWAY::playerDestroyHandler ), NULL, this );
+    }
+
+    m_top = aTop;
 }
 
 

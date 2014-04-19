@@ -331,22 +331,25 @@ public:
     KIWAY( PGM_BASE* aProgram, wxFrame* aTop = NULL );
 
     /// In case aTop may not be known at time of KIWAY construction:
-    void SetTop( wxFrame* aTop )        { m_top = aTop; }
+    void SetTop( wxFrame* aTop );
 
 private:
 
     /// Get the full path & name of the DSO holding the requested FACE_T.
     static const wxString dso_full_path( FACE_T aFaceId );
 
+    /// hooked into m_top in SetTop(), marks child frame as closed.
+    void playerDestroyHandler( wxWindowDestroyEvent& event );
+
     static KIFACE*  m_kiface[KIWAY_FACE_COUNT];
     static int      m_kiface_version[KIWAY_FACE_COUNT];
+
+    PGM_BASE*       m_program;
+    wxFrame*        m_top;
 
     KIWAY_PLAYER*   m_player[KIWAY_PLAYER_COUNT];     // from frame_type.h
 
     PROJECT         m_project;      // do not assume this is here, use Prj().
-
-    PGM_BASE*       m_program;
-    wxFrame*        m_top;
 };
 
 
