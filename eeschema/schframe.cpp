@@ -764,9 +764,23 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
     {
         fn.SetExt( PcbFileExtension );
 
-        wxString filename = QuoteFullPath( fn );
+        if( Kiface().IsSingle() )
+        {
+            wxString filename = QuoteFullPath( fn );
+            ExecuteFile( this, PCBNEW_EXE, filename );
+        }
+        else
+        {
+            KIWAY_PLAYER* player = Kiway().Player( FRAME_PCB, false );  // test open already.
 
-        ExecuteFile( this, PCBNEW_EXE, filename );
+            if( !player )
+            {
+                player = Kiway().Player( FRAME_PCB, true );
+                player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+                player->Show( true );
+            }
+            player->Raise();
+        }
     }
     else
     {
@@ -783,7 +797,22 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 
     if( fn.IsOk() && fn.FileExists() )
     {
-        ExecuteFile( this, CVPCB_EXE, QuoteFullPath( fn ) );
+        if( Kiface().IsSingle() )
+        {
+            ExecuteFile( this, CVPCB_EXE, QuoteFullPath( fn ) );
+        }
+        else
+        {
+            KIWAY_PLAYER* player = Kiway().Player( FRAME_CVPCB, false );  // test open already.
+
+            if( !player )
+            {
+                player = Kiway().Player( FRAME_CVPCB, true );
+                player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+                player->Show( true );
+            }
+            player->Raise();
+        }
     }
     else
     {
@@ -802,12 +831,14 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 
         if( (item == NULL) || (item->GetFlags() != 0) || ( item->Type() != SCH_COMPONENT_T ) )
         {
-            wxMessageBox( _("Error: not a component or no component" ) );
+            wxMessageBox( _( "Error: not a component or no component" ) );
             return;
         }
 
         component = (SCH_COMPONENT*) item;
     }
+
+    // @todo: should be changed to use Kiway().Player()?
 
     LIB_EDIT_FRAME* libeditFrame = LIB_EDIT_FRAME::GetActiveLibraryEditor();;
     if( libeditFrame )

@@ -68,7 +68,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                 _( "Clear current board and initialize a new one" ),
                 KiBitmap( new_pcb_xpm ) );
 
-        // Open
         text = AddHotkeyName( _( "&Open" ), g_Board_Editor_Hokeys_Descr, HK_LOAD_BOARD );
         AddMenuItem( filesMenu, ID_LOAD_FILE, text,
                 _( "Delete current board and load new board" ),

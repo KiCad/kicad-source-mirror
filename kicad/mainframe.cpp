@@ -248,7 +248,7 @@ void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
                             kicad_board : legacy_board;
 
 #if USE_KIFACE
-    KIWAY_PLAYER* frame = Kiway.PlayerCreate( FRAME_PCB );
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB );
 
     frame->OpenProjectFiles( std::vector<wxString>( 1, board.GetFullPath() ) );
     frame->Show( true );
@@ -266,7 +266,7 @@ void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
     fn.SetExt( NetlistFileExtension );
 
 #if USE_KIFACE
-    KIWAY_PLAYER* frame = Kiway.PlayerCreate( FRAME_CVPCB );
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_CVPCB );
 
     frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
     frame->Show( true );
@@ -284,7 +284,7 @@ void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
     fn.SetExt( SchematicFileExtension );
 
 #if USE_KIFACE
-    KIWAY_PLAYER* frame = Kiway.PlayerCreate( FRAME_SCH );
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_SCH );
 
     frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
     frame->Show( true );
