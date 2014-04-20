@@ -47,8 +47,8 @@ KIWAY::KIWAY( PGM_BASE* aProgram, wxFrame* aTop ):
 
 // Any event types derived from wxCommandEvt, like wxWindowDestroyEvent, are
 // propogated upwards to parent windows if not handled below.  Therefor the
-// m_top window should receive all wxWindowDestroyEvents from originating
-// from KIWAY_PLAYERs.  It does anyways, but now playerDestroyHandler eavesdrops
+// m_top window should receive all wxWindowDestroyEvents originating from
+// KIWAY_PLAYERs.  It does anyways, but now playerDestroyHandler eavesdrops
 // on that event stream looking for KIWAY_PLAYERs being closed.
 
 void KIWAY::playerDestroyHandler( wxWindowDestroyEvent& event )
@@ -57,7 +57,7 @@ void KIWAY::playerDestroyHandler( wxWindowDestroyEvent& event )
 
     for( unsigned i=0; i<DIM(m_player);  ++i )
     {
-        // if destroying one of our flock, then mark it as diseased.
+        // if destroying one of our flock, then mark it as deceased.
         if( (wxWindow*) m_player[i] == w )
         {
             // DBG(printf( "%s: marking m_player[%d] as destroyed\n", __func__, i );)
@@ -219,7 +219,7 @@ KIWAY::FACE_T KIWAY::KifaceType( FRAME_T aFrameType )
 }
 
 
-KIWAY_PLAYER* KIWAY::PlayerCreate( FRAME_T aFrameType )
+KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate )
 {
     // Since this will be called from python, cannot assume that code will
     // not pass a bad aFrameType.
@@ -236,15 +236,20 @@ KIWAY_PLAYER* KIWAY::PlayerCreate( FRAME_T aFrameType )
     if( m_player[aFrameType] )
         return m_player[aFrameType];
 
-    FACE_T face_type = KifaceType( aFrameType );
+    if( doCreate )
+    {
+        FACE_T face_type = KifaceType( aFrameType );
 
-    wxASSERT( face_type != FACE_T(-1) );
+        wxASSERT( face_type != FACE_T(-1) );
 
-    KIFACE* kiface = KiFACE( face_type );
+        KIFACE* kiface = KiFACE( face_type );
 
-    KIWAY_PLAYER* frame = (KIWAY_PLAYER*) kiface->CreateWindow( m_top, aFrameType, this, KFCTL_PROJECT_SUITE );
+        KIWAY_PLAYER* frame = (KIWAY_PLAYER*) kiface->CreateWindow( m_top, aFrameType, this, KFCTL_PROJECT_SUITE );
 
-    return m_player[aFrameType] = frame;
+        return m_player[aFrameType] = frame;
+    }
+
+    return NULL;
 }
 
 

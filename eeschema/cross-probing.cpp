@@ -29,6 +29,7 @@
 
 #include <fctsys.h>
 #include <pgm_base.h>
+#include <kiface_i.h>
 #include <macros.h>
 #include <eda_dde.h>
 #include <wxEeschemaStruct.h>
@@ -107,56 +108,74 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 }
 
 
-void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT* LibItem )
+std::string FormatProbeItem( EDA_ITEM* aComponent, SCH_COMPONENT* aPart )
 {
-    if( objectToSync == NULL )
-        return;
-
-    LIB_PIN* Pin = NULL;
-    char     Line[1024];
-
-    /* Cross probing to Pcbnew if a pin or a component is found */
-    switch( objectToSync->Type() )
+    // Cross probing to Pcbnew if a pin or a component is found
+    switch( aComponent->Type() )
     {
     case SCH_FIELD_T:
     case LIB_FIELD_T:
         {
-            if( !LibItem )
+            if( !aPart )
                 break;
 
-            sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
-            SendCommand( MSG_TO_PCB, Line );
+            return StrPrintf( "$PART: %s", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
         }
         break;
 
     case SCH_COMPONENT_T:
-        LibItem = (SCH_COMPONENT*) objectToSync;
-        sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
-        SendCommand( MSG_TO_PCB, Line );
-        break;
+        aPart = (SCH_COMPONENT*) aComponent;
+        return StrPrintf( "$PART: %s", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
 
     case LIB_PIN_T:
-        if( !LibItem )
-            break;
-
-        Pin = (LIB_PIN*) objectToSync;
-
-        if( Pin->GetNumber() )
         {
-            wxString pinnum;
-            Pin->PinStringNum( pinnum );
-            sprintf( Line, "$PIN: %s $PART: %s", TO_UTF8( pinnum ),
-                     TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
-        }
-        else
-        {
-            sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
-        }
+            if( !aPart )
+                break;
 
-        SendCommand( MSG_TO_PCB, Line );
+            LIB_PIN* pin = (LIB_PIN*) aComponent;
+
+            if( pin->GetNumber() )
+            {
+                wxString pinnum;
+
+                pin->PinStringNum( pinnum );
+
+                return StrPrintf( "$PIN: %s $PART: %s", TO_UTF8( pinnum ),
+                         TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+            }
+            else
+            {
+                return StrPrintf( "$PART: %s", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+            }
+        }
         break;
 
     default:
         break;
+    }
+
+    return "";
+}
+
+
+void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aComponent, SCH_COMPONENT* aPart )
+{
+#if 1
+    wxASSERT( aComponent );       // fix the caller
+
+#else  // WTF?
+    if( objectToSync == NULL )      // caller remains eternally stupid.
+        return;
+#endif
+
+    std::string packet = FormatProbeItem( aComponent, aPart );
+
+    if( packet.size() )
+    {
+        if( Kiface().IsSingle() )
+            SendCommand( MSG_TO_PCB, packet.c_str() );
+        else
+        {
+        }
     }
 }

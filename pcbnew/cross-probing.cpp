@@ -12,6 +12,7 @@
 
 #include <fctsys.h>
 #include <pgm_base.h>
+#include <kiface_i.h>
 #include <wxPcbStruct.h>
 #include <eda_dde.h>
 #include <macros.h>
@@ -141,12 +142,12 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
  */
 void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
 {
-    char          cmd[1024];
-    const char*   text_key;
-    MODULE*       module = NULL;
-    D_PAD*        pad;
-    TEXTE_MODULE* text_mod;
-    wxString      msg;
+    std::string     cmd;
+    const char*     text_key;
+    MODULE*         module = NULL;
+    D_PAD*          pad;
+    TEXTE_MODULE*   text_mod;
+    wxString        msg;
 
     if( objectToSync == NULL )
         return;
@@ -155,14 +156,14 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
     {
     case PCB_MODULE_T:
         module = (MODULE*) objectToSync;
-        sprintf( cmd, "$PART: \"%s\"", TO_UTF8( module->GetReference() ) );
+        StrPrintf( &cmd, "$PART: \"%s\"", TO_UTF8( module->GetReference() ) );
         break;
 
     case PCB_PAD_T:
         module = (MODULE*) objectToSync->GetParent();
         pad    = (D_PAD*) objectToSync;
         msg    = pad->GetPadName();
-        sprintf( cmd, "$PART: \"%s\" $PAD: \"%s\"",
+        StrPrintf( &cmd, "$PART: \"%s\" $PAD: \"%s\"",
                  TO_UTF8( module->GetReference() ),
                  TO_UTF8( msg ) );
         break;
@@ -178,7 +179,7 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
         else
             break;
 
-        sprintf( cmd, "$PART: \"%s\" %s \"%s\"",
+        StrPrintf( &cmd, "$PART: \"%s\" %s \"%s\"",
                  TO_UTF8( module->GetReference() ),
                  text_key,
                  TO_UTF8( text_mod->GetText() ) );
@@ -188,8 +189,12 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
         break;
     }
 
-    if( module )
+    if( module && cmd.size() )
     {
-        SendCommand( MSG_TO_SCH, cmd );
+        if( Kiface().IsSingle() )
+            SendCommand( MSG_TO_SCH, cmd.c_str() );
+        else
+        {
+        }
     }
 }

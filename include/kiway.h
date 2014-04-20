@@ -288,16 +288,19 @@ public:
     VTBL_ENTRY KIFACE* KiFACE( FACE_T aFaceId, bool doLoad = true );
 
     /**
-     * Function PlayerCreate
+     * Function Player
      * returns the KIWAY_PLAYER* given a FRAME_T.  If it is not already created,
      * the required KIFACE is found and loaded and initialized if necessary, then
      * the KIWAY_PLAYER window is created but not shown.  Caller must Show() it.
      * If it is already created, then the existing KIWAY_PLAYER* pointer is returned.
      *
+     * @param aFrameType is from enum #FRAME_T.
+     * @param doCreate when true asks that the player be created if it is not already created, false means do not create.
+     *
      * @return KIWAY_PLAYER* - a valid opened KIWAY_PLAYER or NULL if there
-     *  is something wrong.
+     *  is something wrong or doCreate was false and the player has yet to be created.
      */
-    VTBL_ENTRY KIWAY_PLAYER*   PlayerCreate( FRAME_T aFrameType );
+    VTBL_ENTRY KIWAY_PLAYER*   Player( FRAME_T aFrameType, bool doCreate = true );
 
     /**
      * Function PlayerClose
