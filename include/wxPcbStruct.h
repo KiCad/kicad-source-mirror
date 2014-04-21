@@ -239,6 +239,8 @@ public:
      */
     virtual void ExecuteRemoteCommand( const char* cmdline );
 
+    void KiwayMailIn( KIWAY_EXPRESS& aEvent );      // virtual overload from KIWAY_PLAYER
+
     /**
      * Function ToPlotter
      * Open a dialog frame to create plot and drill files

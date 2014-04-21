@@ -1171,3 +1171,4 @@ void PCB_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
 
     m_rotationAngle = aRotationAngle;
 }
+
