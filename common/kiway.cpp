@@ -37,6 +37,7 @@ KIFACE* KIWAY::m_kiface[KIWAY_FACE_COUNT];
 int     KIWAY::m_kiface_version[KIWAY_FACE_COUNT];
 
 
+
 KIWAY::KIWAY( PGM_BASE* aProgram, wxFrame* aTop ):
     m_program( aProgram ),
     m_top( 0 )
@@ -317,8 +318,7 @@ bool KIWAY::ProcessEvent( wxEvent& aEvent )
 
         if( alive )
         {
-#if 0
-            // This is still broken, but is the way to go.
+#if 1
             return alive->ProcessEvent( aEvent );
 #else
             alive->KiwayMailIn( *mail );

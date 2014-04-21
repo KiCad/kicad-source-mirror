@@ -8,7 +8,9 @@
 BEGIN_EVENT_TABLE( KIWAY_PLAYER, EDA_BASE_FRAME )
     /* have not been able to get this to work yet:
     EVT_KIWAY_EXPRESS( KIWAY_PLAYER::kiway_express )
-    Use Connect() in constructor until this can be sorted out
+    Use Connect() in constructor until this can be sorted out.
+
+    OK the problem is KIWAY_PLAYER::wxEVENT_ID not being unique accross all link images.
     */
 END_EVENT_TABLE()
 
