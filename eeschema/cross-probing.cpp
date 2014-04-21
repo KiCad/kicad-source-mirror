@@ -161,10 +161,10 @@ std::string FormatProbeItem( EDA_ITEM* aComponent, SCH_COMPONENT* aPart )
 void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aComponent, SCH_COMPONENT* aPart )
 {
 #if 1
-    wxASSERT( aComponent );       // fix the caller
+    wxASSERT( aComponent );     // fix the caller
 
 #else  // WTF?
-    if( objectToSync == NULL )      // caller remains eternally stupid.
+    if( !aComponent )           // caller remains eternally stupid.
         return;
 #endif
 
@@ -176,6 +176,7 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aComponent, SCH_COMPONENT* a
             SendCommand( MSG_TO_PCB, packet.c_str() );
         else
         {
+            Kiway().ExpressMail( FRAME_PCB, 0, packet, this );
         }
     }
 }

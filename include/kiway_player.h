@@ -84,6 +84,8 @@ private:
 };
 
 
+class KIWAY_EXPRESS;
+
 /**
  * Class KIWAY_PLAYER
  * is a wxFrame capable of the OpenProjectFiles function, meaning it can load
@@ -100,19 +102,13 @@ class KIWAY_PLAYER : public EDA_BASE_FRAME, public KIWAY_HOLDER
 public:
     KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
             const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-            long aStyle, const wxString& aWdoName = wxFrameNameStr ) :
-        EDA_BASE_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aWdoName ),
-        KIWAY_HOLDER( aKiway )
-    {}
+            long aStyle, const wxString& aWdoName = wxFrameNameStr );
 
     /// Don't use this one, only wxformbuilder uses it, and it must be augmented with
     /// a SetKiway() early in derived constructor.
     KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
             const wxPoint& aPos, const wxSize& aSize, long aStyle,
-            const wxString& aWdoName = wxFrameNameStr ) :
-        EDA_BASE_FRAME( aParent, (FRAME_T) aId, aTitle, aPos, aSize, aStyle, aWdoName ),
-        KIWAY_HOLDER( 0 )
-    {}
+            const wxString& aWdoName = wxFrameNameStr );
 
 
     // For the aCtl argument of OpenProjectFiles()
@@ -164,6 +160,20 @@ public:
 
         return false;
     }
+
+    /**
+     * Function KiwayMailIn
+     * receives KIWAY_EXPRESS messages from other players.  Merely override it
+     * in derived classes.
+     */
+    virtual void KiwayMailIn( KIWAY_EXPRESS& aEvent );
+
+    DECLARE_EVENT_TABLE()
+
+//private:
+
+    /// event handler, routes to virtual KiwayMailIn()
+    void kiway_express( KIWAY_EXPRESS& aEvent );
 };
 
 

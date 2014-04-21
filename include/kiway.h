@@ -295,7 +295,8 @@ public:
      * If it is already created, then the existing KIWAY_PLAYER* pointer is returned.
      *
      * @param aFrameType is from enum #FRAME_T.
-     * @param doCreate when true asks that the player be created if it is not already created, false means do not create.
+     * @param doCreate when true asks that the player be created if it is not
+     *   already created, false means do not create and maybe return NULL.
      *
      * @return KIWAY_PLAYER* - a valid opened KIWAY_PLAYER or NULL if there
      *  is something wrong or doCreate was false and the player has yet to be created.
@@ -315,13 +316,15 @@ public:
     /**
      * Function PlayersClose
      * calls the KIWAY_PLAYER::Close( bool force ) function on all the windows and
-     * if none are vetoed, returns true, else false.  If window actually closes, then
+     * if none are vetoed, returns true, else false.  If any window actually closes, then
      * this KIWAY marks it as not opened internally.
      *
-     * @return bool - true the window is closed and not vetoed, else false.
+     * @return bool - true indicates that all windows closed because none were vetoed,
+     *  false means at least one cast a veto.  Any that cast a veto are still open.
      */
     VTBL_ENTRY bool PlayersClose( bool doForce );
 
+    VTBL_ENTRY void ExpressMail( FRAME_T aDestination, int aCommand, const std::string& aPayload, wxWindow* aSource=NULL );
 
     /**
      * Function Prj
@@ -335,6 +338,8 @@ public:
 
     /// In case aTop may not be known at time of KIWAY construction:
     void SetTop( wxFrame* aTop );
+
+    bool ProcessEvent( wxEvent& aEvent );   // overload virtual
 
 private:
 
