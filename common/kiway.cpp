@@ -316,7 +316,15 @@ bool KIWAY::ProcessEvent( wxEvent& aEvent )
         KIWAY_PLAYER* alive = Player( dest, false );
 
         if( alive )
+        {
+#if 0
+            // This is still broken, but is the way to go.
             return alive->ProcessEvent( aEvent );
+#else
+            alive->KiwayMailIn( *mail );
+            return true;
+#endif
+        }
     }
 
     return false;

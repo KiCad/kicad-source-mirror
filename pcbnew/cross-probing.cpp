@@ -211,3 +211,14 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* aSyncItem )
     }
 }
 
+
+#include <kiway_express.h>
+
+void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+{
+    // @todo switch on command type
+    std::string payload = mail.GetPayload();
+
+    ExecuteRemoteCommand( payload.c_str() );
+}
+

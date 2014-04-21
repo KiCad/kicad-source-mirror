@@ -180,3 +180,15 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aComponent, SCH_COMPONENT* a
         }
     }
 }
+
+
+#include <kiway_express.h>
+
+void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+{
+    // @todo switch on command type
+    std::string payload = mail.GetPayload();
+
+    ExecuteRemoteCommand( payload.c_str() );
+}
+
