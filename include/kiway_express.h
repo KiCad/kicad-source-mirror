@@ -29,6 +29,20 @@
 #include <wx/wx.h>
 #include <frame_type.h>
 
+
+/**
+ * Enum MAIL_T
+ * is the set of mail types sendable via KIWAY::ExpressMail() and supplied as
+ * the @a aCommand parameter to that function.  Such mail will be received in
+ * KIWAY_PLAYER::KiwayMailIn( KIWAY_EXPRESS& aEvent ) and aEvent.Command() will
+ * match aCommand to ExpressMail().
+ */
+enum MAIL_T
+{
+    MAIL_CROSS_PROBE,
+};
+
+
 /**
  * Class KIWAY_EXPRESS
  * carries a payload from one KIWAY_PLAYER to anothing within a PROJECT.
@@ -41,6 +55,15 @@ public:
      * returns the destination player id of the message.
      */
     FRAME_T  Dest()                         { return m_destination; }
+
+    /**
+     * Function Command
+     * returns the EXPRESS_MAIL_T associated with this mail.
+     */
+    MAIL_T Command()
+    {
+        return (MAIL_T) GetId();    // re-purposed control id.
+    }
 
     /**
      * Function Payload

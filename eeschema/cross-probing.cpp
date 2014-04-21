@@ -30,6 +30,7 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
+#include <kiway_express.h>
 #include <macros.h>
 #include <eda_dde.h>
 #include <wxEeschemaStruct.h>
@@ -176,19 +177,27 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aComponent, SCH_COMPONENT* a
             SendCommand( MSG_TO_PCB, packet.c_str() );
         else
         {
-            Kiway().ExpressMail( FRAME_PCB, 0, packet, this );
+            // Typically ExpressMail is going to be s-expression packets, but since
+            // we have existing interpreter of the cross probe packet on the other
+            // side in place, we use that here.
+            Kiway().ExpressMail( FRAME_PCB, MAIL_CROSS_PROBE, packet, this );
         }
     }
 }
 
 
-#include <kiway_express.h>
-
 void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
-    // @todo switch on command type
-    std::string payload = mail.GetPayload();
+    const std::string& payload = mail.GetPayload();
 
-    ExecuteRemoteCommand( payload.c_str() );
+    switch( mail.Command() )
+    {
+    case MAIL_CROSS_PROBE:
+        ExecuteRemoteCommand( payload.c_str() );
+        break;
+
+    // many many others.
+
+    }
 }
 
