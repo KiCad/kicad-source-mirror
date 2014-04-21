@@ -248,10 +248,13 @@ void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
                             kicad_board : legacy_board;
 
 #if USE_KIFACE
-    KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB );
-
-    frame->OpenProjectFiles( std::vector<wxString>( 1, board.GetFullPath() ) );
-    frame->Show( true );
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB, false );
+    if( !frame )
+    {
+        frame = Kiway.Player( FRAME_PCB, true );
+        frame->OpenProjectFiles( std::vector<wxString>( 1, board.GetFullPath() ) );
+        frame->Show( true );
+    }
     frame->Raise();
 #else
     Execute( this, PCBNEW_EXE, QuoteFullPath( board ) );
@@ -266,10 +269,13 @@ void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
     fn.SetExt( NetlistFileExtension );
 
 #if USE_KIFACE
-    KIWAY_PLAYER* frame = Kiway.Player( FRAME_CVPCB );
-
-    frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
-    frame->Show( true );
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_CVPCB, false );
+    if( !frame )
+    {
+        frame = Kiway.Player( FRAME_CVPCB, true );
+        frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+        frame->Show( true );
+    }
     frame->Raise();
 #else
     Execute( this, CVPCB_EXE, QuoteFullPath( fn ) );
@@ -284,10 +290,13 @@ void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
     fn.SetExt( SchematicFileExtension );
 
 #if USE_KIFACE
-    KIWAY_PLAYER* frame = Kiway.Player( FRAME_SCH );
-
-    frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
-    frame->Show( true );
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_SCH, false );
+    if( !frame )
+    {
+        frame = Kiway.Player( FRAME_SCH, true );
+        frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+        frame->Show( true );
+    }
     frame->Raise();
 #else
     Execute( this, EESCHEMA_EXE, QuoteFullPath( fn ) );
@@ -303,6 +312,8 @@ void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )
     path += fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) + wxT( "\"" );
 
 #if USE_KIFACE && 0
+
+    // I cannot make sense of the fn.
 
 #else
     Execute( this, GERBVIEW_EXE, path );

@@ -27,6 +27,7 @@
 #include <macros.h>
 #include <kiway.h>
 #include <kiway_player.h>
+#include <kiway_express.h>
 #include <config.h>
 #include <wx/debug.h>
 #include <wx/stdpaths.h>
@@ -291,4 +292,32 @@ bool KIWAY::PlayersClose( bool doForce )
     }
 
     return ret;
+}
+
+
+void KIWAY::ExpressMail( FRAME_T aDestination,
+                int aCommand, const std::string& aPayload, wxWindow* aSource )
+{
+    KIWAY_EXPRESS   mail( aDestination, aCommand, aPayload, aSource );
+
+    ProcessEvent( mail );
+}
+
+
+bool KIWAY::ProcessEvent( wxEvent& aEvent )
+{
+    KIWAY_EXPRESS* mail = dynamic_cast<KIWAY_EXPRESS*>( &aEvent );
+
+    if( mail )
+    {
+        FRAME_T dest = mail->Dest();
+
+        // see if recipient is alive
+        KIWAY_PLAYER* alive = Player( dest, false );
+
+        if( alive )
+            return alive->ProcessEvent( aEvent );
+    }
+
+    return false;
 }

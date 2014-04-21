@@ -30,6 +30,7 @@
 #include <gr_basic.h>
 #include <pgm_base.h>
 #include <project.h>
+#include <common.h>         // NAMELESS_PROJECT
 #include <confirm.h>
 #include <kicad_string.h>
 #include <config_params.h>
@@ -57,7 +58,7 @@ void PROJECT::SetProjectFullName( const wxString& aFullPathAndName )
 {
     m_project_name = aFullPathAndName;
 
-    wxASSERT( m_project_name.IsAbsolute() );
+    wxASSERT(  m_project_name.GetName() == NAMELESS_PROJECT || m_project_name.IsAbsolute() );
 #if 0
     wxASSERT( m_project_name.GetExt() == wxT( ".pro" ) )
 #else
