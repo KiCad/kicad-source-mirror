@@ -297,7 +297,7 @@ bool KIWAY::PlayersClose( bool doForce )
 
 
 void KIWAY::ExpressMail( FRAME_T aDestination,
-                int aCommand, const std::string& aPayload, wxWindow* aSource )
+                MAIL_T aCommand, const std::string& aPayload, wxWindow* aSource )
 {
     KIWAY_EXPRESS   mail( aDestination, aCommand, aPayload, aSource );
 
