@@ -72,18 +72,18 @@ public:
 
     KIWAY_EXPRESS( const KIWAY_EXPRESS& anOther );
 
-    /// Is the wxEventType argument to wxEvent() and identifies the class
-    /// in a hurry.  Allocated at startup by wxNewEventType();
+    /// The wxEventType argument to wxEvent() and identifies an event class
+    /// in a hurry.  These wxEventTypes also allow a common class to be used
+    /// multiple ways.  Should be allocated at startup by wxNewEventType();
     static const wxEventType wxEVENT_ID;
 
     //DECLARE_DYNAMIC_CLASS( KIWAY_EXPRESS )
 
 private:
+    FRAME_T         m_destination;      ///< could have been a bitmap indicating multiple recipients
+    std::string     m_payload;          ///< very often s-expression text, but not always
 
-    void kiway_express( KIWAY_EXPRESS& aEvent );
-
-    FRAME_T         m_destination;
-    std::string     m_payload;
+    // possible new ideas here.
 };
 
 
