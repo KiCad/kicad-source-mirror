@@ -102,6 +102,7 @@ as such!  As such, it is OK to use UTF8 characters:
 #include <search_stack.h>
 #include <project.h>
 #include <frame_type.h>
+#include <mail_type.h>
 
 
 #define VTBL_ENTRY          virtual
@@ -324,7 +325,7 @@ public:
      */
     VTBL_ENTRY bool PlayersClose( bool doForce );
 
-    VTBL_ENTRY void ExpressMail( FRAME_T aDestination, int aCommand, const std::string& aPayload, wxWindow* aSource=NULL );
+    VTBL_ENTRY void ExpressMail( FRAME_T aDestination, MAIL_T aCommand, const std::string& aPayload, wxWindow* aSource=NULL );
 
     /**
      * Function Prj

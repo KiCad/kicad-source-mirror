@@ -49,7 +49,7 @@ KIWAY_EXPRESS::KIWAY_EXPRESS( const KIWAY_EXPRESS& anOther ) :
 }
 
 
-KIWAY_EXPRESS::KIWAY_EXPRESS( FRAME_T aDestination, int aCommand,
+KIWAY_EXPRESS::KIWAY_EXPRESS( FRAME_T aDestination, MAIL_T aCommand,
         const std::string& aPayload, wxWindow* aSource ) :
     wxEvent( aCommand, wxEVENT_ID ),
     m_destination( aDestination ),
