@@ -241,16 +241,17 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate )
     if( doCreate )
     {
         FACE_T face_type = KifaceType( aFrameType );
-
         wxASSERT( face_type != FACE_T(-1) );
 
         KIFACE* kiface = KiFACE( face_type );
-
         wxASSERT( kiface );
 
-        KIWAY_PLAYER* frame = (KIWAY_PLAYER*) kiface->CreateWindow( m_top, aFrameType, this, KFCTL_PROJECT_SUITE );
+        if( kiface )
+        {
+            KIWAY_PLAYER* frame = (KIWAY_PLAYER*) kiface->CreateWindow( m_top, aFrameType, this, KFCTL_PROJECT_SUITE );
 
-        return m_player[aFrameType] = frame;
+            return m_player[aFrameType] = frame;
+        }
     }
 
     return NULL;
