@@ -249,6 +249,7 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate )
         if( kiface )
         {
             KIWAY_PLAYER* frame = (KIWAY_PLAYER*) kiface->CreateWindow( m_top, aFrameType, this, KFCTL_PROJECT_SUITE );
+            wxASSERT( frame );
 
             return m_player[aFrameType] = frame;
         }
