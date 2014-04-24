@@ -46,7 +46,6 @@
 #include <class_module.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <module_editor_frame.h>

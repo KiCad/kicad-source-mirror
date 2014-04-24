@@ -87,23 +87,28 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     aModule = newModule;
 
-    GetBoard()->Add( aModule );
+    GetBoard()->Add( newModule );
 
-    aModule->ClearFlags();
+    newModule->ClearFlags();
 
-    GetBoard()->BuildListOfNets();
+    // Clear references to net info, because the footprint editor
+    // does know any thing about nets handled by the current edited board.
+    // Morever the main board can change or the net info relative to this main board
+    // can change while editing this footprint in the footprint editor
+    for( D_PAD* pad = newModule->Pads(); pad; pad = pad->Next() )
+        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
-    PlaceModule( aModule, NULL );
+    PlaceModule( newModule, NULL );
 
     // Put it on FRONT layer,
     // because this is the default in ModEdit, and in libs
-    if( aModule->GetLayer() != LAYER_N_FRONT )
-        aModule->Flip( aModule->GetPosition() );
+    if( newModule->GetLayer() != LAYER_N_FRONT )
+        newModule->Flip( newModule->GetPosition() );
 
     // Put it in orientation 0,
     // because this is the default orientation in ModEdit, and in libs
-    Rotate_Module( NULL, aModule, 0, false );
+    Rotate_Module( NULL, newModule, 0, false );
     GetScreen()->ClrModify();
     Zoom_Automatique( false );
 
