@@ -183,6 +183,24 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
         // In any of the failure cases above, dso.Unload() should be called here
         // by dso destructor.
+        // However:
+
+        // There is a file installation bug. We only look for KIFACE_I's which we know
+        // to exist, and we did not find one.  If we do not find one, this is an
+        // installation bug.
+
+        wxString msg = wxString::Format( wxT(
+            "Fatal Installation Bug\nmissing file:\n'%s'\n\nargv[0]:\n'%s'" ),
+            GetChars( dname ),
+            GetChars( wxStandardPaths::Get().GetExecutablePath() )
+            );
+
+        // This is a fatal error, one from which we cannot recover, nor do we want
+        // to protect against in client code which would require numerous noisy
+        // tests in numerous places.  So we inform the user that the installation
+        // is bad.  This exception will likely not get caught until way up in
+        // PGM_BASE or a derivative, at which point the process will exit gracefully.
+        THROW_IO_ERROR( msg );
     }
 
     return NULL;

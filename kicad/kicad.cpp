@@ -280,6 +280,30 @@ struct APP_KICAD : public wxApp
         return wxApp::OnExit();
     }
 
+    int OnRun()             // overload wxApp virtual
+    {
+        try
+        {
+            return wxApp::OnRun();
+        }
+        catch( const std::exception& e )
+        {
+            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
+                GetChars( FROM_UTF8( typeid(e).name() )),
+                GetChars( FROM_UTF8( e.what() ) ) );;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( GetChars( ioe.errorText ) );
+        }
+        catch(...)
+        {
+            wxLogError( wxT( "Unhandled exception of unknown type" ) );
+        }
+
+        return -1;
+    }
+
     /**
      * Function MacOpenFile
      * is specific to MacOSX (not used under Linux or Windows).
