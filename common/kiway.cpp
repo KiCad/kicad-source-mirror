@@ -198,8 +198,8 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         // This is a fatal error, one from which we cannot recover, nor do we want
         // to protect against in client code which would require numerous noisy
         // tests in numerous places.  So we inform the user that the installation
-        // is bad.  This exception will likely not get caught until way up in
-        // PGM_BASE or a derivative, at which point the process will exit gracefully.
+        // is bad.  This exception will likely not get caught until way up in the
+        // wxApp derivative, at which point the process will exit gracefully.
         THROW_IO_ERROR( msg );
     }
 
