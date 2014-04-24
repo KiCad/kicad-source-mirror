@@ -176,9 +176,7 @@ struct APP_SINGLE_TOP : public wxApp
         }
         catch( const IO_ERROR& ioe )
         {
-            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
-                GetChars( FROM_UTF8( typeid( ioe ).name() ) ),
-                GetChars( ioe.errorText ) );
+            wxLogError( GetChars( ioe.errorText ) );
         }
         catch(...)
         {
