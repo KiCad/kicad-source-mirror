@@ -153,20 +153,9 @@ struct APP_SINGLE_TOP : public wxApp
 {
     bool OnInit()           // overload wxApp virtual
     {
-        return Pgm().OnPgmInit( this );
-    }
-
-    int  OnExit()           // overload wxApp virtual
-    {
-        Pgm().OnPgmExit();
-        return wxApp::OnExit();
-    }
-
-    int OnRun()             // overload wxApp virtual
-    {
         try
         {
-            return wxApp::OnRun();
+            return Pgm().OnPgmInit( this );
         }
         catch( const std::exception& e )
         {
@@ -183,7 +172,42 @@ struct APP_SINGLE_TOP : public wxApp
             wxLogError( wxT( "Unhandled exception of unknown type" ) );
         }
 
-        return -1;
+        Pgm().OnPgmExit();
+
+        return false;
+    }
+
+    int  OnExit()           // overload wxApp virtual
+    {
+        return wxApp::OnExit();
+    }
+
+    int OnRun()             // overload wxApp virtual
+    {
+        int ret = -1;
+
+        try
+        {
+            ret = wxApp::OnRun();
+        }
+        catch( const std::exception& e )
+        {
+            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
+                GetChars( FROM_UTF8( typeid(e).name() )),
+                GetChars( FROM_UTF8( e.what() ) ) );;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( GetChars( ioe.errorText ) );
+        }
+        catch(...)
+        {
+            wxLogError( wxT( "Unhandled exception of unknown type" ) );
+        }
+
+        Pgm().OnPgmExit();
+
+        return ret;
     }
 
     /**
@@ -240,10 +264,30 @@ static KIFACE_GETTER_FUNC* get_kiface_getter( const wxString& aDSOName )
         // No further reporting required here.
     }
 
-    // Tell dso's wxDynamicLibrary destructor not to Unload() the program image.
-    (void) dso.Detach();
+    else
+    {
+        // Tell dso's wxDynamicLibrary destructor not to Unload() the program image.
+        (void) dso.Detach();
 
-    return (KIFACE_GETTER_FUNC*) addr;
+        return (KIFACE_GETTER_FUNC*) addr;
+    }
+
+    // There is a file installation bug. We only look for KIFACE_I's which we know
+    // to exist, and we did not find one.  If we do not find one, this is an
+    // installation bug.
+
+    wxString msg = wxString::Format( wxT(
+        "Fatal Installation Bug\nmissing file:\n'%s'\n\nargv[0]:\n'%s'" ),
+        GetChars( aDSOName ),
+        GetChars( wxStandardPaths::Get().GetExecutablePath() )
+        );
+
+    // This is a fatal error, one from which we cannot recover, nor do we want
+    // to protect against in client code which would require numerous noisy
+    // tests in numerous places.  So we inform the user that the installation
+    // is bad.  This exception will likely not get caught until way up in the
+    // wxApp derivative, at which point the process will exit gracefully.
+    THROW_IO_ERROR( msg );
 
 #else
     return &KIFACE_GETTER;
@@ -415,9 +459,8 @@ void PGM_SINGLE_TOP::OnPgmExit()
 
     saveCommonSettings();
 
-    // write common settings to disk, and destroy everything in PGM_BASE,
-    // especially wxSingleInstanceCheckerImpl earlier than wxApp and earlier
-    // than static destruction would.
+    // Destroy everything in PGM_BASE, especially wxSingleInstanceCheckerImpl
+    // earlier than wxApp and earlier than static destruction would.
     PGM_BASE::destroy();
 }
 
