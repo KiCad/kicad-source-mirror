@@ -499,10 +499,10 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     wxPoint tpos0 = shape_pos;     // Position of the centre of text
     wxPoint tpos  = tpos0;
     wxSize  AreaSize;              // size of text area, normalized to AreaSize.y < AreaSize.x
-    int     shortname_len = GetShortNetname().Len();
+    int     shortname_len = 0;
 
-    if( !aDrawInfo.m_Display_netname )
-        shortname_len = 0;
+    if( aDrawInfo.m_Display_netname )
+        shortname_len = GetShortNetname().Len();
 
     if( GetShape() == PAD_CIRCLE )
         angle = 0;

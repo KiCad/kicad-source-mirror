@@ -97,11 +97,17 @@ private:
     PCB_BASE_FRAME* m_parent;
     D_PAD*  m_currentPad;           // pad currently being edited
     D_PAD*  m_dummyPad;             // a working copy used to show changes
-    BOARD*  m_board;
-    D_PAD&  m_padMaster;
+    D_PAD*  m_padMaster;            // The pad used to create new pads in board or
+                                    // footprint editor
+    BOARD*  m_board;                // the main board: this is the board handled by
+                                    // the PCB editor, if running or the dummy
+                                    // board used by the footprint editor
+                                    // (could happen when the Footprint editor will be run
+                                    // alone, outside the board editor
     bool    m_isFlipped;            // true if the parent footprint (therefore pads) is flipped (mirrored)
                                     // in this case, some Y coordinates values must be negated
     bool    m_canUpdate;
+    bool    m_canEditNetName;       // true only if the called is the board editor
 
 private:
     void initValues();
@@ -139,25 +145,31 @@ private:
     void PadPropertiesAccept( wxCommandEvent& event );
 };
 
+void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
+{
+    DIALOG_PAD_PROPERTIES dlg( this, aPad );
+
+    dlg.ShowModal();
+}
+
 
 DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
-    DIALOG_PAD_PROPERTIES_BASE( aParent ),
-    // use aParent's parent, which is the original BOARD, not the dummy module editor BOARD,
-    // since FOOTPRINT_EDIT_FRAME::GetDesignSettings() is tricked out to use the PCB_EDIT_FRAME's
-    // BOARD, not its own BOARD.
-    m_padMaster( aParent->GetDesignSettings().m_Pad_Master )
+    DIALOG_PAD_PROPERTIES_BASE( aParent )
 {
     m_canUpdate  = false;
     m_parent     = aParent;
     m_currentPad = aPad;        // aPad can be NULL, if the dialog is called
                                 // from the module editor to set default pad characteristics
+
     m_board      = m_parent->GetBoard();
+
+    m_padMaster  = &m_parent->GetDesignSettings().m_Pad_Master;
     m_dummyPad   = new D_PAD( (MODULE*) NULL );
 
     if( aPad )
         m_dummyPad->Copy( aPad );
-    else
-        m_dummyPad->Copy( &m_padMaster );
+    else    // We are editing a "master" pad, i.e. a pad used to create new pads
+        m_dummyPad->Copy( m_padMaster );
 
     initValues();
 
@@ -238,18 +250,15 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 }
 
 
-void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
-{
-    DIALOG_PAD_PROPERTIES dlg( this, aPad );
-
-    dlg.ShowModal();
-}
-
-
 void DIALOG_PAD_PROPERTIES::initValues()
 {
     wxString    msg;
     double      angle;
+
+    // Disable pad net name wxTextCtrl if the caller is the footprint editor
+    // because nets are living only in the board managed by the board editor
+    m_canEditNetName = m_parent->IsType( FRAME_PCB );
+
 
     // Setup layers names from board
     // Should be made first, before calling m_rbCopperLayersSel->SetSelection()
@@ -471,7 +480,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     bool enable = m_dummyPad->GetAttribute() != PAD_HOLE_NOT_PLATED;
 
     m_PadNumCtrl->Enable( enable );
-    m_PadNetNameCtrl->Enable( enable );
+    m_PadNetNameCtrl->Enable( m_canEditNetName && enable && m_currentPad != NULL );
     m_LengthPadToDieCtrl->Enable( enable );
 
     if( m_dummyPad->GetDrillShape() != PAD_DRILL_OBLONG )
@@ -593,7 +602,7 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 {
-    unsigned    ii = m_PadType->GetSelection();
+    unsigned ii = m_PadType->GetSelection();
 
     if( ii >= NBTYPES ) // catches < 0 also
         ii = 0;
@@ -614,7 +623,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     // (disable for NPTH pads (mechanical pads)
     bool enable = ii != 3;
     m_PadNumCtrl->Enable( enable );
-    m_PadNetNameCtrl->Enable( enable );
+    m_PadNetNameCtrl->Enable( m_canEditNetName && enable && m_currentPad != NULL );
     m_LengthPadToDieCtrl->Enable( enable );
 }
 
@@ -752,7 +761,9 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     bool rastnestIsChanged = false;
     int  isign = m_isFlipped ? -1 : 1;
 
-    transferDataToPad( &m_padMaster );
+    transferDataToPad( m_padMaster );
+    // m_padMaster is a pattern: ensure there is no net for this pad:
+    m_padMaster->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     if( m_currentPad )   // Set current Pad parameters
     {
@@ -768,12 +779,12 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_currentPad->ClearFlags( DO_NOT_DRAW );
 
         // Update values
-        m_currentPad->SetShape( m_padMaster.GetShape() );
-        m_currentPad->SetAttribute( m_padMaster.GetAttribute() );
+        m_currentPad->SetShape( m_padMaster->GetShape() );
+        m_currentPad->SetAttribute( m_padMaster->GetAttribute() );
 
-        if( m_currentPad->GetPosition() != m_padMaster.GetPosition() )
+        if( m_currentPad->GetPosition() != m_padMaster->GetPosition() )
         {
-            m_currentPad->SetPosition( m_padMaster.GetPosition() );
+            m_currentPad->SetPosition( m_padMaster->GetPosition() );
             rastnestIsChanged = true;
         }
 
@@ -785,54 +796,62 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
         m_currentPad->SetPos0( pt );
 
-        m_currentPad->SetOrientation( m_padMaster.GetOrientation() * isign + module->GetOrientation() );
+        m_currentPad->SetOrientation( m_padMaster->GetOrientation() * isign + module->GetOrientation() );
 
-        m_currentPad->SetSize( m_padMaster.GetSize() );
+        m_currentPad->SetSize( m_padMaster->GetSize() );
 
-        size = m_padMaster.GetDelta();
+        size = m_padMaster->GetDelta();
         size.y *= isign;
         m_currentPad->SetDelta( size );
 
-        m_currentPad->SetDrillSize( m_padMaster.GetDrillSize() );
-        m_currentPad->SetDrillShape( m_padMaster.GetDrillShape() );
+        m_currentPad->SetDrillSize( m_padMaster->GetDrillSize() );
+        m_currentPad->SetDrillShape( m_padMaster->GetDrillShape() );
 
-        wxPoint offset = m_padMaster.GetOffset();
+        wxPoint offset = m_padMaster->GetOffset();
         offset.y *= isign;
         m_currentPad->SetOffset( offset );
 
-        m_currentPad->SetPadToDieLength( m_padMaster.GetPadToDieLength() );
+        m_currentPad->SetPadToDieLength( m_padMaster->GetPadToDieLength() );
 
-        if( m_currentPad->GetLayerMask() != m_padMaster.GetLayerMask() )
+        if( m_currentPad->GetLayerMask() != m_padMaster->GetLayerMask() )
         {
             rastnestIsChanged = true;
-            m_currentPad->SetLayerMask( m_padMaster.GetLayerMask() );
+            m_currentPad->SetLayerMask( m_padMaster->GetLayerMask() );
         }
 
         if( m_isFlipped )
             m_currentPad->SetLayerMask( FlipLayerMask( m_currentPad->GetLayerMask() ) );
 
-        m_currentPad->SetPadName( m_padMaster.GetPadName() );
+        m_currentPad->SetPadName( m_padMaster->GetPadName() );
 
-        if( m_currentPad->GetNetname() != m_PadNetNameCtrl->GetValue() )
+        wxString padNetname;
+
+        // For PAD_HOLE_NOT_PLATED, ensure there is no net name selected
+        if( m_padMaster->GetAttribute() != PAD_HOLE_NOT_PLATED  )
+            padNetname = m_PadNetNameCtrl->GetValue();
+
+        if( m_currentPad->GetNetname() != padNetname )
         {
-            if( !m_PadNetNameCtrl->GetValue().IsEmpty() && m_padMaster.GetNetCode() == 0 )
+            const NETINFO_ITEM* netinfo = m_board->FindNet( padNetname );
+
+            if( !padNetname.IsEmpty() &&  netinfo == NULL )
             {
                 DisplayError( NULL, _( "Unknown netname, netname not changed" ) );
             }
             else
             {
                 rastnestIsChanged = true;
-                m_currentPad->SetNetCode( m_padMaster.GetNetCode() );
+                m_currentPad->SetNetCode( netinfo->GetNet() );
             }
         }
 
-        m_currentPad->SetLocalClearance( m_padMaster.GetLocalClearance() );
-        m_currentPad->SetLocalSolderMaskMargin( m_padMaster.GetLocalSolderMaskMargin() );
-        m_currentPad->SetLocalSolderPasteMargin( m_padMaster.GetLocalSolderPasteMargin() );
-        m_currentPad->SetLocalSolderPasteMarginRatio( m_padMaster.GetLocalSolderPasteMarginRatio() );
-        m_currentPad->SetZoneConnection( m_padMaster.GetZoneConnection() );
-        m_currentPad->SetThermalWidth( m_padMaster.GetThermalWidth() );
-        m_currentPad->SetThermalGap( m_padMaster.GetThermalGap() );
+        m_currentPad->SetLocalClearance( m_padMaster->GetLocalClearance() );
+        m_currentPad->SetLocalSolderMaskMargin( m_padMaster->GetLocalSolderMaskMargin() );
+        m_currentPad->SetLocalSolderPasteMargin( m_padMaster->GetLocalSolderPasteMargin() );
+        m_currentPad->SetLocalSolderPasteMarginRatio( m_padMaster->GetLocalSolderPasteMarginRatio() );
+        m_currentPad->SetZoneConnection( m_padMaster->GetZoneConnection() );
+        m_currentPad->SetThermalWidth( m_padMaster->GetThermalWidth() );
+        m_currentPad->SetThermalGap( m_padMaster->GetThermalGap() );
 
         module->CalculateBoundingBox();
         m_parent->SetMsgPanel( m_currentPad );
@@ -984,6 +1003,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
     // Check if user has set an existing net name
     const NETINFO_ITEM* netinfo = m_board->FindNet( m_PadNetNameCtrl->GetValue() );
+
     if( netinfo != NULL )
         aPad->SetNetCode( netinfo->GetNet() );
     else

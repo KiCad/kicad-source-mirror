@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -46,10 +46,12 @@ dialog_about_base::dialog_about_base( wxWindow* parent, wxWindowID id, const wxS
 	m_staticTextLibVersion->Wrap( -1 );
 	b_apptitleSizer->Add( m_staticTextLibVersion, 0, wxALIGN_CENTER|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
+	
 	bSizer3->Add( b_apptitleSizer, 10, wxEXPAND, 5 );
 	
 	
 	bSizer3->Add( 0, 0, 2, wxEXPAND, 5 );
+	
 	
 	bSizer1->Add( bSizer3, 0, wxEXPAND, 5 );
 	
@@ -66,6 +68,7 @@ dialog_about_base::dialog_about_base( wxWindow* parent, wxWindowID id, const wxS
 	m_buttonOK = new wxButton( this, wxID_CANCEL, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonOK->SetDefault(); 
 	bSizer1->Add( m_buttonOK, 0, wxALIGN_CENTER|wxALL, 5 );
+	
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();
