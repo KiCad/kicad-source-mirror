@@ -371,15 +371,12 @@ public:
 
     /**
      * Function SetLayerPair
-     * set the .m_Layer member param:
-     *  For a via m_Layer contains the 2 layers :
-     * top layer and bottom layer used by the via.
-     * The via connect all layers from top layer to bottom layer
-     * 4 bits for the first layer and 4 next bits for the second layer
+     * For a via m_Layer contains the top layer, the other layer is in
+     * m_BottomLayer
      * @param top_layer = first layer connected by the via
      * @param bottom_layer = last layer connected by the via
      */
-    void SetLayerPair( LAYER_NUM top_layer, LAYER_NUM bottom_layer );
+    void SetLayerPair( LAYER_NUM aTopLayer, LAYER_NUM aBottomLayer );
 
     /**
      * Function LayerPair
@@ -453,6 +450,9 @@ protected:
     virtual void GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList );
 
 private:
+    /// The bottom layer of the via (the top layer is in m_Layer)
+    LAYER_NUM m_BottomLayer;
+
     VIATYPE_T m_ViaType;        // Type of via
 
     int       m_Drill;          // for vias: via drill (- 1 for default value)
