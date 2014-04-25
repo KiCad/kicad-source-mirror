@@ -70,7 +70,7 @@ static bool ShowClearance( const TRACK* aTrack )
  * return true if the dist between p1 and p2 < max_dist
  * Currently in test (currently ratsnest algos work only if p1 == p2)
  */
-inline bool IsNear( wxPoint& p1, wxPoint& p2, int max_dist )
+inline bool IsNear( const wxPoint& p1, const wxPoint& p2, int max_dist )
 {
 #if 0   // Do not change it: does not work
     int dist;
@@ -1320,21 +1320,16 @@ VIA* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, LAYER_MSK aLayer
 }
 
 
-TRACK* TRACK::GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint )
+TRACK* TRACK::GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, ENDPOINT_T aEndPoint )
 {
     const int NEIGHTBOUR_COUNT_MAX = 50;
 
     TRACK*  previousSegment;
     TRACK*  nextSegment;
     int     Reflayer;
-    wxPoint position;
     int     ii;
     int     max_dist;
-
-    if( aEndPoint == FLG_START )
-        position = m_Start;
-    else
-        position = m_End;
+    const wxPoint &position = GetEndPoint( aEndPoint );
 
     Reflayer = GetLayerMask();
 

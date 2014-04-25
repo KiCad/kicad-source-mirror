@@ -1598,21 +1598,12 @@ D_PAD* BOARD::GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask )
 }
 
 
-D_PAD* BOARD::GetPad( TRACK* aTrace, int aEndPoint )
+D_PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
 {
     D_PAD*  pad = NULL;
-    wxPoint aPosition;
+    const wxPoint &aPosition = aTrace->GetEndPoint( aEndPoint );
 
     LAYER_MSK aLayerMask = GetLayerMask( aTrace->GetLayer() );
-
-    if( aEndPoint == FLG_START )
-    {
-        aPosition = aTrace->GetStart();
-    }
-    else
-    {
-        aPosition = aTrace->GetEnd();
-    }
 
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
@@ -2195,7 +2186,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     aSegment->end = newTrack;
     aSegment->SetState( END_ONPAD, false );
 
-    D_PAD * pad = GetPad( newTrack, FLG_START );
+    D_PAD * pad = GetPad( newTrack, ENDPOINT_START );
 
     if ( pad )
     {

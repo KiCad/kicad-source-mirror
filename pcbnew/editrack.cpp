@@ -266,7 +266,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
             newTrack->SetState( BEGIN_ONPAD | END_ONPAD, false );
 
-            D_PAD* pad = GetBoard()->GetPad( previousTrack, FLG_END );
+            D_PAD* pad = GetBoard()->GetPad( previousTrack, ENDPOINT_END );
 
             if( pad )
             {
@@ -1057,7 +1057,7 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
     while( track != NULL )
     {
         TRACK* next_track = track->Next();
-        LockPoint = pcb->GetPad( track, FLG_END );
+        LockPoint = pcb->GetPad( track, ENDPOINT_END );
 
         if( LockPoint )
         {

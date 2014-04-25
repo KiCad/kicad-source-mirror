@@ -86,7 +86,7 @@ private:
      * i.e. when they are colinear, same width, and obviously same layer
      */
     TRACK* mergeCollinearSegmentIfPossible( TRACK* aTrackRef,
-                                           TRACK* aCandidate, int aEndType );
+                                           TRACK* aCandidate, ENDPOINT_T aEndType );
 };
 
 /* Install the cleanup dialog frame to know what should be cleaned
@@ -304,7 +304,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
 
             if( (type_end & START_ON_PAD ) == 0 )
             {
-                TRACK* other = track->GetTrack( m_Brd->m_Track, NULL, FLG_START );
+                TRACK* other = track->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_START );
 
                 if( other == NULL )     // Test a connection to zones
                 {
@@ -341,7 +341,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                         track->SetState( BUSY, true );
 
                         VIA* via = (VIA*) other;
-                        other = via->GetTrack( m_Brd->m_Track, NULL, FLG_START );
+                        other = via->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_START );
 
                         if( other == NULL )
                         {
@@ -364,7 +364,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
             // test if this track end point is connected to an other track
             if( (type_end & END_ON_PAD ) == 0 )
             {
-                TRACK* other = track->GetTrack( m_Brd->m_Track, NULL, FLG_END );
+                TRACK* other = track->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_END );
 
                 if( other == NULL )     // Test a connection to zones
                 {
@@ -402,7 +402,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                         track->SetState( BUSY, true );
 
                         VIA* via = (VIA*) other;
-                        other = via->GetTrack( m_Brd->m_Track, NULL, FLG_END );
+                        other = via->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_END );
 
                         if( other == NULL )
                         {
@@ -508,7 +508,7 @@ bool TRACKS_CLEANER::clean_segments()
         // search for a possible point connected to the START point of the current segment
         for( segStart = segment->Next(); ; )
         {
-            segStart = segment->GetTrack( segStart, NULL, FLG_START );
+            segStart = segment->GetTrack( segStart, NULL, ENDPOINT_START );
 
             if( segStart )
             {
@@ -522,7 +522,7 @@ bool TRACKS_CLEANER::clean_segments()
 
                 // We must have only one segment connected
                 segStart->SetState( BUSY, true );
-                other = segment->GetTrack( m_Brd->m_Track, NULL, FLG_START );
+                other = segment->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_START );
                 segStart->SetState( BUSY, false );
 
                 if( other == NULL )
@@ -535,7 +535,7 @@ bool TRACKS_CLEANER::clean_segments()
 
         if( flag )   // We have the starting point of the segment is connected to an other segment
         {
-            segDelete = mergeCollinearSegmentIfPossible( segment, segStart, FLG_START );
+            segDelete = mergeCollinearSegmentIfPossible( segment, segStart, ENDPOINT_START );
 
             if( segDelete )
             {
@@ -548,7 +548,7 @@ bool TRACKS_CLEANER::clean_segments()
         // search for a possible point connected to the END point of the current segment:
         for( segEnd = segment->Next(); ; )
         {
-            segEnd = segment->GetTrack( segEnd, NULL, FLG_END );
+            segEnd = segment->GetTrack( segEnd, NULL, ENDPOINT_END );
 
             if( segEnd )
             {
@@ -560,7 +560,7 @@ bool TRACKS_CLEANER::clean_segments()
 
                 // We must have only one segment connected
                 segEnd->SetState( BUSY, true );
-                other = segment->GetTrack( m_Brd->m_Track, NULL, FLG_END );
+                other = segment->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_END );
                 segEnd->SetState( BUSY, false );
 
                 if( other == NULL )
@@ -576,7 +576,7 @@ bool TRACKS_CLEANER::clean_segments()
 
         if( flag & 2 )  // We have the ending point of the segment is connected to an other segment
         {
-            segDelete = mergeCollinearSegmentIfPossible( segment, segEnd, FLG_END );
+            segDelete = mergeCollinearSegmentIfPossible( segment, segEnd, ENDPOINT_END );
 
             if( segDelete )
             {
@@ -607,7 +607,7 @@ bool TRACKS_CLEANER::clean_segments()
  *  else return NULL
  */
 TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK* aCandidate,
-                                       int aEndType )
+                                       ENDPOINT_T aEndType )
 {
     if( aTrackRef->GetWidth() != aCandidate->GetWidth() )
         return NULL;
@@ -667,7 +667,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
      * (this function) is called when there is only 2 connected segments,
      *and if this point is not on a pad, it can be removed and the 2 segments will be merged
      */
-    if( aEndType == FLG_START )
+    if( aEndType == ENDPOINT_START )
     {
         // We do not have a pad, which is a always terminal point for a track
         if( aTrackRef->GetState( START_ON_PAD) )
@@ -744,7 +744,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
         }
         else
         {
-            other = segment->GetTrack( GetBoard()->m_Track, NULL, FLG_START );
+            other = segment->GetTrack( GetBoard()->m_Track, NULL, ENDPOINT_START );
 
             if( other )
                 net_code_s = other->GetNetCode();
@@ -762,7 +762,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
         }
         else
         {
-            other = segment->GetTrack( GetBoard()->m_Track, NULL, FLG_END );
+            other = segment->GetTrack( GetBoard()->m_Track, NULL, ENDPOINT_END );
 
             if( other )
                 net_code_e = other->GetNetCode();
