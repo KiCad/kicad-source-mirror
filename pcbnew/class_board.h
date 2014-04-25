@@ -1392,7 +1392,7 @@ public:
      * @param aEndPoint The end point of \a aTrace the hit test against.
      * @return A pointer to a D_PAD object if found or NULL if not found.
      */
-    D_PAD* GetPad( TRACK* aTrace, int aEndPoint );
+    D_PAD* GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint );
 
     /**
      * Function GetPadFast

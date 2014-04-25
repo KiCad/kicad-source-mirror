@@ -31,6 +31,7 @@
 #define CLASS_TRACK_H
 
 
+#include <pcbnew.h>
 #include <class_board_item.h>
 #include <class_board_connected_item.h>
 #include <PolyLine.h>
@@ -123,6 +124,16 @@ public:
 
     void SetStart( const wxPoint& aStart )      { m_Start = aStart; }
     const wxPoint& GetStart() const             { return m_Start; }
+
+
+    /// Return the selected endpoint (start or end)
+    const wxPoint& GetEndPoint( ENDPOINT_T aEndPoint ) const
+    {
+        if( aEndPoint == ENDPOINT_START )
+            return m_Start;
+        else
+            return m_End;
+    }
 
     // Virtual function
     const EDA_RECT GetBoundingBox() const;
@@ -252,7 +263,7 @@ public:
      * @param aEndPoint The start or end point of the segment to test against.
      * @return A TRACK object pointer if found otherwise NULL.
      */
-    TRACK* GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint );
+    TRACK* GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, ENDPOINT_T aEndPoint );
 
     /**
      * Function GetEndSegments
