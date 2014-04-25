@@ -458,7 +458,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
             if( track->Type() != PCB_VIA_T )
                 continue;
 
-            SEGVIA* via = (SEGVIA*) track;
+            const VIA* via = (const VIA*) track;
             hole_value = via->GetDrillValue();
 
             if( hole_value == 0 )

@@ -214,9 +214,9 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 }
 
 
-SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IO_ERROR )
+::VIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IO_ERROR )
 {
-    SEGVIA* via = 0;
+    ::VIA*    via = 0;
     SHAPE*  shape;
 
     int     shapeCount = aPadstack->Length();
@@ -261,10 +261,10 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
         CIRCLE* circle = (CIRCLE*) shape->shape;
         int viaDiam = scale( circle->diameter, routeResolution );
 
-        via = new SEGVIA( sessionBoard );
+        via = new ::VIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
         via->SetDrill( drillDiam );
-        via->SetShape( VIA_THROUGH );
+        via->SetViaType( VIA_THROUGH );
         via->SetWidth( viaDiam );
         via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
     }
@@ -279,10 +279,10 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
         CIRCLE* circle = (CIRCLE*) shape->shape;
         int viaDiam = scale( circle->diameter, routeResolution );
 
-        via = new SEGVIA( sessionBoard );
+        via = new ::VIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
         via->SetDrill( drillDiam );
-        via->SetShape( VIA_THROUGH );
+        via->SetViaType( VIA_THROUGH );
         via->SetWidth( viaDiam );
         via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
     }
@@ -321,15 +321,15 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
                 viaDiam = scale( circle->diameter, routeResolution );
         }
 
-        via = new SEGVIA( sessionBoard );
+        via = new ::VIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
         via->SetDrill( drillDiam );
 
         if( (topLayerNdx==0 && botLayerNdx==1)
          || (topLayerNdx==copperLayerCount-2 && botLayerNdx==copperLayerCount-1))
-            via->SetShape( VIA_MICROVIA );
+            via->SetViaType( VIA_MICROVIA );
         else
-            via->SetShape( VIA_BLIND_BURIED );
+            via->SetViaType( VIA_BLIND_BURIED );
 
         via->SetWidth( viaDiam );
 
@@ -546,7 +546,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
 
             for( unsigned v=0;  v<wire_via->vertexes.size();  ++v )
             {
-                SEGVIA* via = makeVIA( padstack, wire_via->vertexes[v], netCode );
+                ::VIA* via = makeVIA( padstack, wire_via->vertexes[v], netCode );
                 aBoard->Add( via );
             }
         }

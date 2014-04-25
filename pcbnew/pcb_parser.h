@@ -49,7 +49,7 @@ class TEXTE_PCB;
 class TRACK;
 class MODULE;
 class PCB_TARGET;
-class SEGVIA;
+class VIA;
 class S3D_MASTER;
 class ZONE_CONTAINER;
 
@@ -101,7 +101,7 @@ class PCB_PARSER : public PCB_LEXER
     EDGE_MODULE*    parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR );
     D_PAD*          parseD_PAD( MODULE* aParent = NULL ) throw( IO_ERROR, PARSE_ERROR );
     TRACK*          parseTRACK() throw( IO_ERROR, PARSE_ERROR );
-    SEGVIA*         parseSEGVIA() throw( IO_ERROR, PARSE_ERROR );
+    VIA*            parseVIA() throw( IO_ERROR, PARSE_ERROR );
     ZONE_CONTAINER* parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR );
     PCB_TARGET*     parsePCB_TARGET() throw( IO_ERROR, PARSE_ERROR );
     BOARD*          parseBOARD() throw( IO_ERROR, PARSE_ERROR );

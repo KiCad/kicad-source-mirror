@@ -198,23 +198,23 @@ static void build_via_testpoints( BOARD *aPcb,
     {
         if( track->Type() == PCB_VIA_T )
         {
-            SEGVIA *via = (SEGVIA*) track;
-                NETINFO_ITEM *net = track->GetNet();
+            VIA *via = (VIA*) track;
+            NETINFO_ITEM *net = track->GetNet();
 
             D356_RECORD rk;
-                rk.smd = false;
+            rk.smd = false;
             rk.hole = true;
-                if( net )
-                    rk.netname = net->GetNetname();
-                else
-                    rk.netname = wxEmptyString;
+            if( net )
+                rk.netname = net->GetNetname();
+            else
+                rk.netname = wxEmptyString;
             rk.refdes = wxT("VIA");
             rk.pin = wxT("");
             rk.midpoint = true; // Vias are always midpoints
             rk.drill = via->GetDrillValue();
             rk.mechanical = false;
             LAYER_NUM top_layer, bottom_layer;
-                via->LayerPair( &top_layer, &bottom_layer );
+            via->LayerPair( &top_layer, &bottom_layer );
             rk.access = via_access_code( aPcb, top_layer, bottom_layer );
             rk.x_location = via->GetPosition().x - origin.x;
             rk.y_location = origin.y - via->GetPosition().y;

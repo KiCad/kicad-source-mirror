@@ -685,11 +685,12 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
 
     for( TRACK *pts = m_board->m_Track; pts != NULL; pts = pts->Next() )
     {
-        if( pts->Type() != PCB_VIA_T )
-            continue;
+        const VIA *via = dynamic_cast<const VIA*>( pts );
 
-        plotOneDrillMark( PAD_DRILL_CIRCLE,  pts->GetStart(), wxSize( pts->GetDrillValue(), 0 ),
-                          wxSize( pts->GetWidth(), 0 ), 0, small_drill );
+        if( via )
+            plotOneDrillMark( PAD_DRILL_CIRCLE, via->GetStart(),
+                    wxSize( via->GetDrillValue(), 0 ),
+                    wxSize( via->GetWidth(), 0 ), 0, small_drill );
     }
 
     for( MODULE *Module = m_board->m_Modules; Module != NULL; Module = Module->Next() )

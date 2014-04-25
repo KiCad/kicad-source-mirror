@@ -302,18 +302,19 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             // Add via hole
             if( track->Type() == PCB_VIA_T )
             {
-                int shape = track->GetShape();
-                int holediameter    = track->GetDrillValue();
-                int thickness       = g_Parm_3D_Visu.GetCopperThicknessBIU();
+                VIA *via = static_cast<VIA*>( track );
+                VIATYPE_T viatype = via->GetViaType();
+                int holediameter = via->GetDrillValue();
+                int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
                 int hole_outer_radius = (holediameter + thickness) / 2;
 
-                if( shape != VIA_THROUGH )
+                if( viatype != VIA_THROUGH )
                     TransformCircleToPolygon( currLayerHoles,
-                                              track->GetStart(), hole_outer_radius,
+                                              via->GetStart(), hole_outer_radius,
                                               segcountLowQuality );
                 else if( !throughHolesListBuilt )
                     TransformCircleToPolygon( allLayerHoles,
-                                              track->GetStart(), hole_outer_radius,
+                                              via->GetStart(), hole_outer_radius,
                                               segcountLowQuality );
             }
         }
@@ -433,8 +434,10 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     // Draw vias holes (vertical cylinders)
     for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
     {
-        if( track->Type() == PCB_VIA_T )
-            Draw3DViaHole( (SEGVIA*) track );
+        const VIA *via = dynamic_cast<const VIA*>(track);
+
+        if( via )
+            Draw3DViaHole( via );
     }
 
     // Draw pads holes (vertical cylinders)
@@ -529,13 +532,14 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
        // Add via hole
         if( track->Type() == PCB_VIA_T )
         {
-            int shape = track->GetShape();
-            int holediameter    = track->GetDrillValue();
+            const VIA *via = static_cast<const VIA*>( track );
+            VIATYPE_T viatype = via->GetViaType();
+            int holediameter = via->GetDrillValue();
             int hole_outer_radius = (holediameter + thickness) / 2;
 
-            if( shape == VIA_THROUGH )
+            if( viatype == VIA_THROUGH )
                 TransformCircleToPolygon( allLayerHoles,
-                                          track->GetStart(), hole_outer_radius,
+                                          via->GetStart(), hole_outer_radius,
                                           segcountLowQuality );
         }
     }
@@ -1047,7 +1051,7 @@ void EDA_3D_CANVAS::Draw3DGrid( double aGriSizeMM )
 }
 
 
-void EDA_3D_CANVAS::Draw3DViaHole( SEGVIA* aVia )
+void EDA_3D_CANVAS::Draw3DViaHole( const VIA* aVia )
 {
     LAYER_NUM   top_layer, bottom_layer;
     int         inner_radius    = aVia->GetDrillValue() / 2;
@@ -1060,7 +1064,7 @@ void EDA_3D_CANVAS::Draw3DViaHole( SEGVIA* aVia )
         SetGLCopperColor();
     else
     {
-        EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + aVia->GetShape() );
+        EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + aVia->GetViaType() );
         SetGLColor( color );
     }
 
@@ -1111,7 +1115,7 @@ void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
 
 
 // Draw 3D pads.
-void EDA_3D_CANVAS::Draw3DPadHole( D_PAD* aPad )
+void EDA_3D_CANVAS::Draw3DPadHole( const D_PAD* aPad )
 {
     // Draw the pad hole
     wxSize  drillsize   = aPad->GetDrillSize();

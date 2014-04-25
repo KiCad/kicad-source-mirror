@@ -232,31 +232,38 @@ void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
         int atmp = track->GetWidth();
         track->SetWidth( image->GetWidth() );
         image->SetWidth( atmp );
-        atmp = track->GetShape();
-        track->SetShape( image->GetShape() );
-        image->SetShape( atmp );
 
-        atmp = track->GetDrillValue();
+        if( Type() == PCB_VIA_T )
+        {
+            VIA *via = static_cast<VIA*>( this );
+            VIA *viaimage = static_cast<VIA*>( aImage );
 
-        if( track->IsDrillDefault() )
-            atmp = -1;
+            VIATYPE_T viatmp = via->GetViaType();
+            via->SetViaType( viaimage->GetViaType() );
+            viaimage->SetViaType( viatmp );
 
-        int itmp = image->GetDrillValue();
+            int drilltmp = via->GetDrillValue();
 
-        if( image->IsDrillDefault() )
-            itmp = -1;
+            if( via->IsDrillDefault() )
+                drilltmp = -1;
 
-        EXCHG(itmp, atmp );
+            int itmp = viaimage->GetDrillValue();
 
-        if( atmp > 0 )
-            track->SetDrill( atmp );
-        else
-            track->SetDrillDefault();
+            if( viaimage->IsDrillDefault() )
+                itmp = -1;
 
-        if( itmp > 0 )
-            image->SetDrill( itmp );
-        else
-            image->SetDrillDefault();
+            EXCHG(itmp, drilltmp );
+
+            if( drilltmp > 0 )
+                via->SetDrill( drilltmp );
+            else
+                via->SetDrillDefault();
+
+            if( itmp > 0 )
+                viaimage->SetDrill( itmp );
+            else
+                viaimage->SetDrillDefault();
+        }
     }
         break;
 

@@ -1342,7 +1342,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
     {
         LAYER_NUM layer1, layer2;
 
-        SEGVIA* via = (SEGVIA*) aTrack;
+        const VIA* via = static_cast<const VIA*>(aTrack);
         BOARD*  board = (BOARD*) via->GetParent();
 
         wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText() +
@@ -1352,7 +1352,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 
         via->LayerPair( &layer1, &layer2 );
 
-        switch( aTrack->GetShape() )
+        switch( via->GetViaType() )
         {
         case VIA_THROUGH:           //  Default shape not saved.
             break;
@@ -1366,15 +1366,15 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
             break;
 
         default:
-            THROW_IO_ERROR( wxString::Format( _( "unknown via type %d"  ), aTrack->GetShape() ) );
+            THROW_IO_ERROR( wxString::Format( _( "unknown via type %d"  ), via->GetViaType() ) );
         }
 
         m_out->Print( 0, " (at %s) (size %s)",
                       FMT_IU( aTrack->GetStart() ).c_str(),
                       FMT_IU( aTrack->GetWidth() ).c_str() );
 
-        if( aTrack->GetDrill() != UNDEFINED_DRILL_DIAMETER )
-            m_out->Print( 0, " (drill %s)", FMT_IU( aTrack->GetDrill() ).c_str() );
+        if( via->GetDrill() != UNDEFINED_DRILL_DIAMETER )
+            m_out->Print( 0, " (drill %s)", FMT_IU( via->GetDrill() ).c_str() );
 
         m_out->Print( 0, " (layers %s %s)",
                       m_out->Quotew( m_board->GetLayerName( layer1 ) ).c_str(),

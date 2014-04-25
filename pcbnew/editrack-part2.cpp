@@ -95,9 +95,9 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
     // create the via
-    SEGVIA* via    = new SEGVIA( GetBoard() );
+    VIA* via = new VIA( GetBoard() );
     via->SetFlags( IS_NEW );
-    via->SetShape( GetDesignSettings().m_CurrentViaType );
+    via->SetViaType( GetDesignSettings().m_CurrentViaType );
     via->SetWidth( GetBoard()->GetCurrentViaSize());
     via->SetNetCode( GetBoard()->GetHighLightNetCode() );
     via->SetEnd( g_CurrentTrackSegment->GetEnd() );
@@ -118,7 +118,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         last_layer = GetScreen()->m_Route_Layer_BOTTOM;
 
     // Adjust the actual via layer pair
-    switch ( via->GetShape() )
+    switch ( via->GetViaType() )
     {
         case VIA_BLIND_BURIED:
             via->SetLayerPair( first_layer, last_layer );

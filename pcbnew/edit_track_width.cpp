@@ -47,8 +47,10 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
 
     if( aTrackItem->Type() == PCB_VIA_T )
     {
-        if( !aTrackItem->IsDrillDefault() )
-            initial_drill = aTrackItem->GetDrillValue();
+        const VIA *via = static_cast<const VIA *>( aTrackItem );
+
+        if( !via->IsDrillDefault() )
+            initial_drill = via->GetDrillValue();
 
         if( net )
         {
@@ -60,7 +62,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
             new_drill = GetBoard()->GetCurrentViaDrill();
         }
 
-        if( aTrackItem->GetShape() == VIA_MICROVIA )
+        if( via->GetViaType() == VIA_MICROVIA )
         {
             if( net )
                 new_width = net->GetMicroViaSize();
@@ -107,10 +109,11 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
             if( aTrackItem->Type() == PCB_VIA_T )
             {
                 // Set new drill value. Note: currently microvias have only a default drill value
+                VIA *via = static_cast<VIA *>( aTrackItem );
                 if( new_drill > 0 )
-                    aTrackItem->SetDrill( new_drill );
+                    via->SetDrill( new_drill );
                 else
-                    aTrackItem->SetDrillDefault();
+                    via->SetDrillDefault();
             }
         }
     }
