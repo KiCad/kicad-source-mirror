@@ -225,7 +225,6 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
     // Place outlines of modules on matrix routing, if they are on a copper layer
     // or on the edge layer
-    TRACK tmpSegm( NULL );  // A dummy track used to create segments.
 
     for( MODULE* module = aPcb->m_Modules; module; module = module->Next() )
     {
@@ -236,21 +235,13 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
             case PCB_MODULE_EDGE_T:
             {
                 EDGE_MODULE* edge = (EDGE_MODULE*) item;
+                EDGE_MODULE tmpEdge( *edge );
 
-                tmpSegm.SetLayer( edge->GetLayer() );
+                if( tmpEdge.GetLayer() == EDGE_N )
+                    tmpEdge.SetLayer( UNDEFINED_LAYER );
 
-                if( tmpSegm.GetLayer() == EDGE_N )
-                    tmpSegm.SetLayer( UNDEFINED_LAYER );
-
-                tmpSegm.SetStart( edge->GetStart() );
-                tmpSegm.SetEnd(   edge->GetEnd() );
-                tmpSegm.SetShape( edge->GetShape() );
-                tmpSegm.SetWidth( edge->GetWidth() );
-                tmpSegm.m_Param = edge->GetAngle();
-                tmpSegm.SetNetCode( -1 );
-
-                TraceSegmentPcb( &tmpSegm, HOLE, marge, WRITE_CELL );
-                TraceSegmentPcb( &tmpSegm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
+                TraceSegmentPcb( &tmpEdge, HOLE, marge, WRITE_CELL );
+                TraceSegmentPcb( &tmpEdge, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
             }
             break;
 
@@ -271,20 +262,13 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
             int          type_cell = HOLE;
             DrawSegm = (DRAWSEGMENT*) item;
-            tmpSegm.SetLayer( DrawSegm->GetLayer() );
+            DRAWSEGMENT tmpSegm( DrawSegm );
 
             if( DrawSegm->GetLayer() == EDGE_N )
             {
                 tmpSegm.SetLayer( UNDEFINED_LAYER );
                 type_cell |= CELL_is_EDGE;
             }
-
-            tmpSegm.SetStart( DrawSegm->GetStart() );
-            tmpSegm.SetEnd(   DrawSegm->GetEnd() );
-            tmpSegm.SetShape( DrawSegm->GetShape() );
-            tmpSegm.SetWidth( DrawSegm->GetWidth() );
-            tmpSegm.m_Param = DrawSegm->GetAngle();
-            tmpSegm.SetNetCode( -1 );
 
             TraceSegmentPcb( &tmpSegm, type_cell, marge, WRITE_CELL );
         }

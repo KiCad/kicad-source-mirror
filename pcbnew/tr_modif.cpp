@@ -168,7 +168,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     /* A segment must be connected to the starting point, otherwise
      * it is unnecessary to analyze the other point
      */
-    pt_segm = GetTrace( bufStart, bufEnd, start, startmasklayer );
+    pt_segm = GetTrack( bufStart, bufEnd, start, startmasklayer );
 
     if( pt_segm == NULL )     // Not connected to the track starting point.
     {
@@ -183,7 +183,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
      */
     for( pt_del = bufStart, nbconnect = 0; ; )
     {
-        pt_segm = GetTrace( pt_del, bufEnd, end, endmasklayer );
+        pt_segm = GetTrack( pt_del, bufEnd, end, endmasklayer );
 
         if( pt_segm == NULL )
             break;

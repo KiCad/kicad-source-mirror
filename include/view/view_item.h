@@ -57,8 +57,8 @@ enum KICAD_T
     PCB_TEXT_T,             ///< class TEXTE_PCB, text on a layer
     PCB_MODULE_TEXT_T,      ///< class TEXTE_MODULE, text in a footprint
     PCB_MODULE_EDGE_T,      ///< class EDGE_MODULE, a footprint edge
-    PCB_TRACE_T,            ///< class TRACKE, a track segment (segment on a copper layer)
-    PCB_VIA_T,              ///< class SEGVIA, a via (like a track segment on a copper layer)
+    PCB_TRACE_T,            ///< class TRACK, a track segment (segment on a copper layer)
+    PCB_VIA_T,              ///< class VIA, a via (like a track segment on a copper layer)
     PCB_ZONE_T,             ///< class SEGZONE, a segment used to fill a zone area (segment on a
                             ///< copper layer)
     PCB_MARKER_T,           ///< class MARKER_PCB, a marker used to show something

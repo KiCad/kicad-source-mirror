@@ -37,7 +37,7 @@ class DISPLAY_OPTIONS;
 
 class BOARD_ITEM;
 class BOARD;
-class SEGVIA;
+class VIA;
 class TRACK;
 class D_PAD;
 class DRAWSEGMENT;
@@ -161,7 +161,7 @@ protected:
 
     // Drawing functions for various types of PCB-specific items
     void draw( const TRACK* aTrack, int aLayer );
-    void draw( const SEGVIA* aVia, int aLayer );
+    void draw( const VIA* aVia, int aLayer );
     void draw( const D_PAD* aPad, int aLayer );
     void draw( const DRAWSEGMENT* aSegment );
     void draw( const TEXTE_PCB* aText, int aLayer );

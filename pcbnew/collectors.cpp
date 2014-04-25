@@ -149,7 +149,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     MODULE*     module = NULL;
     D_PAD*      pad    = NULL;
     bool        pad_through = false;
-    SEGVIA*     via    = NULL;
+    VIA*        via    = NULL;
     MARKER_PCB* marker = NULL;
 
 #if 0   // debugging
@@ -252,7 +252,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         break;
 
     case PCB_VIA_T:     // vias are on many layers, so layer test is specific
-        via = (SEGVIA*) item;
+        via = (VIA*) item;
         break;
 
     case PCB_TRACE_T:

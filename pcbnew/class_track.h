@@ -38,23 +38,27 @@
 
 
 class TRACK;
+class VIA;
 class D_PAD;
 class MSG_PANEL_ITEM;
 
 
-// Via attributes (m_Shape parameter)
-#define VIA_THROUGH                3       /* Always a through hole via */
-#define VIA_BLIND_BURIED           2       /* this via can be on internal layers */
-#define VIA_MICROVIA               1       /* this via which connect from an external layer
-                                            * to the near neighbor internal layer */
-#define VIA_NOT_DEFINED            0       /* not yet used */
+// Via types
+enum VIATYPE_T
+{
+    VIA_THROUGH      = 3,      /* Always a through hole via */
+    VIA_BLIND_BURIED = 2,      /* this via can be on internal layers */
+    VIA_MICROVIA     = 1,      /* this via which connect from an external layer
+                                * to the near neighbor internal layer */
+    VIA_NOT_DEFINED  = 0       /* not yet used */
+};
 
 #define UNDEFINED_DRILL_DIAMETER  -1       //< Undefined via drill diameter.
 
 #define MIN_VIA_DRAW_SIZE          4       /// Minimum size in pixel for full drawing
 
 /**
- * Function GetTrace
+ * Function GetTrack
  * is a helper function to locate a trace segment having an end point at \a aPosition
  * on \a aLayerMask starting at \a aStartTrace and end at \a aEndTrace.
  * <p>
@@ -69,9 +73,8 @@ class MSG_PANEL_ITEM;
  *                   layer mask.
  * @return A TRACK object pointer if found otherwise NULL.
  */
-extern TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition,
-                        LAYER_MSK aLayerMask );
-
+extern TRACK* GetTrack( TRACK* aStartTrace, TRACK* aEndTrace,
+        const wxPoint& aPosition, LAYER_MSK aLayerMask );
 
 class TRACK : public BOARD_CONNECTED_ITEM
 {
@@ -85,9 +88,6 @@ protected:
     int         m_Width;            // Thickness of track, or via diameter
     wxPoint     m_Start;            // Line start point
     wxPoint     m_End;              // Line end point
-    int         m_Shape;            // vias: shape and type, Track = shape..
-
-    int         m_Drill;            // for vias: via drill (- 1 for default value)
 
 public:
     BOARD_CONNECTED_ITEM* start;    // pointers to a connected item (pad or track)
@@ -123,9 +123,6 @@ public:
 
     void SetStart( const wxPoint& aStart )      { m_Start = aStart; }
     const wxPoint& GetStart() const             { return m_Start; }
-
-    int GetShape() const                        { return m_Shape; }
-    void SetShape( int aShape )                 { m_Shape = aShape; }
 
     // Virtual function
     const EDA_RECT GetBoundingBox() const;
@@ -181,46 +178,12 @@ public:
                                                int             aCircleToSegmentsCount,
                                                double          aCorrectionFactor ) const;
     /**
-     * Function SetDrill
-     * sets the drill value for vias.
-     * @param aDrill is the new drill diameter
-    */
-    void SetDrill( int aDrill )             { m_Drill = aDrill; }
-
-    /**
-     * Function GetDrill
-     * returns the local drill setting for this VIA.  If you want the calculated value,
-     * use GetDrillValue() instead.
-     */
-    int GetDrill() const                    { return m_Drill; }
-
-    /**
-     * Function GetDrillValue
-     * "calculates" the drill value for vias (m-Drill if > 0, or default
-     * drill value for the board.
-     * @return real drill_value
-    */
-    int GetDrillValue() const;
-
-    /**
-     * Function SetDrillDefault
-     * sets the drill value for vias to the default value #UNDEFINED_DRILL_DIAMETER.
-    */
-    void SetDrillDefault()      { m_Drill = UNDEFINED_DRILL_DIAMETER; }
-
-    /**
-     * Function IsDrillDefault
-     * @return true if the drill value is default value (-1)
-    */
-    bool IsDrillDefault()       { return m_Drill <= 0; }
-
-    /**
      * Function GetLayerMask
      * returns a "layer mask", which is a bitmap of all layers on which the
-     * TRACK segment or SEGVIA physically resides.
+     * TRACK segment or VIA physically resides.
      * @return int - a layer mask, see pcbstruct.h's LAYER_BACK, etc.
      */
-    LAYER_MSK GetLayerMask() const;
+    virtual LAYER_MSK GetLayerMask() const;
 
     /**
      * Function IsPointOnEnds
@@ -238,13 +201,6 @@ public:
     bool IsNull();
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
-
-    /**
-     * Function GetMsgPanelInfoBase
-     * Display info about the track segment only, and does not calculate the full track length
-     * @param aList A list of #MSG_PANEL_ITEM objects to add status information.
-     */
-    void GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList );
 
     /**
      * Function ShowWidth
@@ -265,28 +221,28 @@ public:
 
     /**
      * Function GetVia
-     * finds the first SEGVIA object at \a aPosition on \a aLayer starting at the trace.
+     * finds the first VIA object at \a aPosition on \a aLayer starting at the trace.
      *
      * @param aPosition The wxPoint to HitTest() against.
      * @param aLayer The layer to match, pass -1 for a don't care.
-     * @return A pointer to a SEGVIA object if found, else NULL.
+     * @return A pointer to a VIA object if found, else NULL.
      */
-    TRACK* GetVia( const wxPoint& aPosition, LAYER_NUM aLayer = UNDEFINED_LAYER );
+    VIA* GetVia( const wxPoint& aPosition, LAYER_NUM aLayer = UNDEFINED_LAYER );
 
     /**
      * Function GetVia
-     * finds the first SEGVIA object at \a aPosition on \a aLayer starting at the trace
+     * finds the first VIA object at \a aPosition on \a aLayer starting at the trace
      * and ending at \a aEndTrace.
      *
      * @param aEndTrace Pointer to the last TRACK object to end search.
      * @param aPosition The wxPoint to HitTest() against.
      * @param aLayerMask The layers to match, pass -1 for a don't care.
-     * @return A pointer to a SEGVIA object if found, else NULL.
+     * @return A pointer to a VIA object if found, else NULL.
      */
-    TRACK* GetVia( TRACK* aEndTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask );
+    VIA* GetVia( TRACK* aEndTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask );
 
     /**
-     * Function GetTrace
+     * Function GetTrack
      * return the trace segment connected to the segment at \a aEndPoint from \a
      * aStartTrace to \a aEndTrace.
      *
@@ -296,7 +252,7 @@ public:
      * @param aEndPoint The start or end point of the segment to test against.
      * @return A TRACK object pointer if found otherwise NULL.
      */
-    TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint );
+    TRACK* GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint );
 
     /**
      * Function GetEndSegments
@@ -349,6 +305,24 @@ public:
     static wxString ShowState( int stateBits );
 
 #endif
+
+protected:
+    /**
+     * Function GetMsgPanelInfoBase
+     * Display info about the track segment only, and does not calculate the full track length
+     * @param aList A list of #MSG_PANEL_ITEM objects to add status information.
+     */
+    virtual void GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList );
+
+
+    /**
+     * Helper function for the common panel info */
+    void GetMsgPanelInfoBase_Common( std::vector< MSG_PANEL_ITEM >& aList );
+
+    /**
+     * Helper for drawing the short netname in tracks */
+    void DrawShortNetname( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
+            EDA_COLOR_T aBgColor );
 };
 
 
@@ -369,16 +343,22 @@ public:
 
     wxString GetSelectMenuText() const;
 
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
+               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
+
     BITMAP_DEF GetMenuImage() const { return  add_zone_xpm; }
 
     EDA_ITEM* Clone() const;
+
+protected:
+    virtual void GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList );
 };
 
 
-class SEGVIA : public TRACK
+class VIA : public TRACK
 {
 public:
-    SEGVIA( BOARD_ITEM* aParent );
+    VIA( BOARD_ITEM* aParent );
 
     // Do not create a copy constructor.  The one generated by the compiler is adequate.
 
@@ -386,6 +366,8 @@ public:
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     bool IsOnLayer( LAYER_NUM aLayer ) const;
+
+    virtual LAYER_MSK GetLayerMask() const;
 
     /**
      * Function SetLayerPair
@@ -428,6 +410,52 @@ public:
 #if defined (DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
 #endif
+
+    VIATYPE_T GetViaType() const          { return m_ViaType; }
+    void SetViaType( VIATYPE_T aViaType ) { m_ViaType = aViaType; }
+
+    /**
+     * Function SetDrill
+     * sets the drill value for vias.
+     * @param aDrill is the new drill diameter
+    */
+    void SetDrill( int aDrill )             { m_Drill = aDrill; }
+
+    /**
+     * Function GetDrill
+     * returns the local drill setting for this VIA.  If you want the calculated value,
+     * use GetDrillValue() instead.
+     */
+    int GetDrill() const                    { return m_Drill; }
+
+    /**
+     * Function GetDrillValue
+     * "calculates" the drill value for vias (m-Drill if > 0, or default
+     * drill value for the board.
+     * @return real drill_value
+    */
+    int GetDrillValue() const;
+
+    /**
+     * Function SetDrillDefault
+     * sets the drill value for vias to the default value #UNDEFINED_DRILL_DIAMETER.
+    */
+    void SetDrillDefault()      { m_Drill = UNDEFINED_DRILL_DIAMETER; }
+
+    /**
+     * Function IsDrillDefault
+     * @return true if the drill value is default value (-1)
+    */
+    bool IsDrillDefault() const { return m_Drill <= 0; }
+
+
+protected:
+    virtual void GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList );
+
+private:
+    VIATYPE_T m_ViaType;        // Type of via
+
+    int       m_Drill;          // for vias: via drill (- 1 for default value)
 };
 
 

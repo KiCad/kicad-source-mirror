@@ -37,7 +37,7 @@ class BOARD;
 class BOARD_ITEM;
 class D_PAD;
 class TRACK;
-class SEGVIA;
+class VIA;
 class PNS_NODE;
 class PNS_LINE_PLACER;
 class PNS_ITEM;
@@ -169,7 +169,7 @@ private:
 
     PNS_ITEM* syncPad( D_PAD* aPad );
     PNS_ITEM* syncTrack( TRACK* aTrack );
-    PNS_ITEM* syncVia( SEGVIA* aVia );
+    PNS_ITEM* syncVia( VIA* aVia );
 
     void commitPad( PNS_SOLID* aPad );
     void commitSegment( PNS_SEGMENT* aTrack );

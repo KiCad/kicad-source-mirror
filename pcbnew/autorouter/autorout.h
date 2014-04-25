@@ -38,6 +38,7 @@
 
 
 class BOARD;
+class DRAWSEGMENT;
 
 
 #define TOP     0
@@ -195,6 +196,7 @@ void PlacePad( D_PAD* pt_pad, int type, int marge, int op_logic );
 
 /* Draws a segment of track on the board. */
 void TraceSegmentPcb( TRACK* pt_segm, int type, int marge, int op_logic );
+void TraceSegmentPcb( DRAWSEGMENT* pt_segm, int type, int marge, int op_logic );
 
 /* Uses the color value of all cells included in the board
  * coord of the rectangle ux0, uy0 (top right corner)

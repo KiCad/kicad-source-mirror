@@ -394,14 +394,23 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         else
         {
-            int v_type = GetDesignSettings().m_CurrentViaType;
-            if( id == ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA ||
-                id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA )
-                GetDesignSettings().m_CurrentViaType = VIA_BLIND_BURIED;
-            else if( id == ID_POPUP_PCB_PLACE_MICROVIA )
-                GetDesignSettings().m_CurrentViaType = VIA_MICROVIA;
-            else
-                GetDesignSettings().m_CurrentViaType = VIA_THROUGH;
+            BOARD_DESIGN_SETTINGS &settings = GetDesignSettings();
+            VIATYPE_T v_type = settings.m_CurrentViaType;
+            switch( id )
+            {
+            case ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA:
+            case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA:
+                settings.m_CurrentViaType = VIA_BLIND_BURIED;
+                break;
+
+            case ID_POPUP_PCB_PLACE_MICROVIA:
+                settings.m_CurrentViaType = VIA_MICROVIA;
+                break;
+
+            default:
+                settings.m_CurrentViaType = VIA_THROUGH;
+                break;
+            }
 
             // place via and switch layer.
             if( id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_THROUGH_VIA ||
@@ -426,7 +435,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             else
                 Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
 
-            GetDesignSettings().m_CurrentViaType = v_type;
+            settings.m_CurrentViaType = v_type;
 
             if( DisplayOpt.ContrastModeDisplay )
                 m_canvas->Refresh();

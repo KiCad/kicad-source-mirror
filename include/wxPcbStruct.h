@@ -44,7 +44,7 @@ class TEXTE_PCB;
 class MODULE;
 class TRACK;
 class SEGZONE;
-class SEGVIA;
+class VIA;
 class D_PAD;
 class TEXTE_MODULE;
 class PCB_TARGET;

@@ -1998,7 +1998,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         assert( TESTLINE( "Po" ) );
 
-        int shape   = intParse( line + SZ( "Po" ), &data );
+        VIATYPE_T viatype = static_cast<VIATYPE_T>( intParse( line + SZ( "Po" ), &data ));
         BIU start_x = biuParse( data, &data );
         BIU start_y = biuParse( data, &data );
         BIU end_x   = biuParse( data, &data );
@@ -2059,7 +2059,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
             break;
 
         case PCB_VIA_T:
-            newTrack = new SEGVIA( m_board );
+            newTrack = new VIA( m_board );
             m_board->m_Track.Append( newTrack );
             break;
 
@@ -2075,19 +2075,20 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         newTrack->SetEnd( wxPoint( end_x, end_y ) );
 
         newTrack->SetWidth( width );
-        newTrack->SetShape( shape );
-
-        if( drill < 0 )
-            newTrack->SetDrillDefault();
-        else
-            newTrack->SetDrill( drill );
-
         newTrack->SetLayer( layer );
 
         if( makeType == PCB_VIA_T )     // Ensure layers are OK when possible:
         {
-            if( newTrack->GetShape() == VIA_THROUGH )
-                ( (SEGVIA*) newTrack )->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
+            VIA *via = static_cast<VIA*>( newTrack );
+            via->SetViaType( viatype );
+
+            if( drill < 0 )
+                via->SetDrillDefault();
+            else
+                via->SetDrill( drill );
+
+            if( via->GetViaType() == VIA_THROUGH )
+                via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
         }
 
         newTrack->SetNetCode( net_code );
@@ -3620,17 +3621,24 @@ void LEGACY_PLUGIN::savePCB_LINE( const DRAWSEGMENT* me ) const
 void LEGACY_PLUGIN::saveTRACK( const TRACK* me ) const
 {
     int type = 0;
+    VIATYPE_T viatype = VIA_NOT_DEFINED;
+    int drill = UNDEFINED_DRILL_DIAMETER;
 
     if( me->Type() == PCB_VIA_T )
+    {
+        const VIA *via = static_cast<const VIA *>(me);
         type = 1;
+        viatype = via->GetViaType();
+        drill = via->GetDrill();
+    }
 
     fprintf(m_fp, "Po %d %s %s %s %s\n",
-            me->GetShape(),
+            viatype,
             fmtBIUPoint( me->GetStart() ).c_str(),
             fmtBIUPoint( me->GetEnd() ).c_str(),
             fmtBIU( me->GetWidth() ).c_str(),
-            me->GetDrill() == UNDEFINED_DRILL_DIAMETER ?
-                "-1" :  fmtBIU( me->GetDrill() ).c_str() );
+            drill == UNDEFINED_DRILL_DIAMETER ?
+                "-1" :  fmtBIU( drill ).c_str() );
 
     fprintf(m_fp, "De %d %d %d %lX %X\n",
             me->GetLayer(), type, me->GetNetCode(),

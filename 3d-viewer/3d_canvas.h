@@ -47,7 +47,7 @@
 class BOARD_DESIGN_SETTINGS;
 class EDA_3D_FRAME;
 class S3D_VERTEX;
-class SEGVIA;
+class VIA;
 class D_PAD;
 
 // We are using GL lists to store layers and other items
@@ -160,8 +160,8 @@ public:
     void   Draw3DGrid( double aGriSizeMM );
     void   Draw3DAxis();
 
-    void   Draw3DViaHole( SEGVIA * aVia );
-    void   Draw3DPadHole( D_PAD * aPad );
+    void   Draw3DViaHole( const VIA * aVia );
+    void   Draw3DPadHole( const D_PAD * aPad );
 
     DECLARE_EVENT_TABLE()
 };

@@ -210,15 +210,15 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     {
     case PCB_ZONE_T:
     case PCB_TRACE_T:
-        draw( (TRACK*) aItem, aLayer );
+        draw( (const TRACK*) aItem, aLayer );
         break;
 
     case PCB_VIA_T:
-        draw( (SEGVIA*) aItem, aLayer );
+        draw( (const VIA*) aItem, aLayer );
         break;
 
     case PCB_PAD_T:
-        draw( (D_PAD*) aItem, aLayer );
+        draw( (const D_PAD*) aItem, aLayer );
         break;
 
     case PCB_LINE_T:
@@ -329,7 +329,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const SEGVIA* aVia, int aLayer )
+void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 {
     VECTOR2D center( aVia->GetStart() );
     double   radius;

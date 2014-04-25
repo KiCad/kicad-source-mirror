@@ -329,7 +329,7 @@ void PCB_PAD::AddToBoard()
 
         if( IsCopperLayer( m_KiCadLayer ) )
         {
-            SEGVIA* via = new SEGVIA( m_board );
+            VIA* via = new VIA( m_board );
             m_board->m_Track.Append( via );
 
             via->SetTimeStamp( 0 );
@@ -338,8 +338,8 @@ void PCB_PAD::AddToBoard()
             via->SetEnd( wxPoint( m_positionX, m_positionY ) );
 
             via->SetWidth( height );
-            via->SetShape( VIA_THROUGH );
-            ( (SEGVIA*) via )->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
+            via->SetViaType( VIA_THROUGH );
+            via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
             via->SetDrill( m_hole );
 
             via->SetLayer( m_KiCadLayer );

@@ -222,8 +222,8 @@ static int PadListSortByShape( const void* aRefptr, const void* aObjptr )
 // Sort vias for uniqueness
 static int ViaSort( const void* aRefptr, const void* aObjptr )
 {
-    TRACK* padref = *(TRACK**) aRefptr;
-    TRACK* padcmp = *(TRACK**) aObjptr;
+    VIA* padref = *(VIA**) aRefptr;
+    VIA* padcmp = *(VIA**) aObjptr;
 
     if( padref->GetWidth() != padcmp->GetWidth() )
         return padref->GetWidth() - padcmp->GetWidth();
@@ -253,8 +253,8 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 {
     std::vector<D_PAD*> pads;
     std::vector<D_PAD*> padstacks;
-    std::vector<TRACK*> vias;
-    std::vector<TRACK*> viastacks;
+    std::vector<VIA*> vias;
+    std::vector<VIA*> viastacks;
     padstacks.resize( 1 ); // We count pads from 1
 
     // The master layermask (i.e. the enabled layers) for padstack generation
@@ -275,17 +275,17 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     {
         if( track->Type() == PCB_VIA_T )
         {
-            vias.push_back( track );
+            vias.push_back( static_cast<VIA*>(track) );
         }
     }
 
-    qsort( &vias[0], vias.size(), sizeof(TRACK*), ViaSort );
+    qsort( &vias[0], vias.size(), sizeof(VIA*), ViaSort );
 
     // Emit vias pads
     TRACK* old_via = 0;
     for( unsigned i = 0; i < vias.size(); i++ )
     {
-        TRACK* via = vias[i];
+        VIA* via = vias[i];
         if( old_via && 0 == ViaSort( &old_via, &via ) )
             continue;
 
@@ -433,7 +433,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     // Via padstacks
     for( unsigned i = 0; i < viastacks.size(); i++ )
     {
-        TRACK*   via  = viastacks[i];
+        VIA* via = viastacks[i];
         LAYER_MSK mask = via->GetLayerMask() & master_layermask;
         fprintf( aFile, "PADSTACK VIA%d.%d.%X %g\n",
                  via->GetWidth(), via->GetDrillValue(), mask,
@@ -832,11 +832,12 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
         }
         if( track->Type() == PCB_VIA_T )
         {
+            const VIA *via = static_cast<const VIA*>(track);
             fprintf( aFile, "VIA VIA%d.%d.%X %g %g ALL %g via%d\n",
-                     track->GetWidth(), track->GetDrillValue(),
-                     track->GetLayerMask() & master_layermask,
-                     MapXTo( track->GetStart().x ), MapYTo( track->GetStart().y ),
-                     track->GetDrillValue() / SCALE_FACTOR, vianum++ );
+                     via->GetWidth(), via->GetDrillValue(),
+                     via->GetLayerMask() & master_layermask,
+                     MapXTo( via->GetStart().x ), MapYTo( via->GetStart().y ),
+                     via->GetDrillValue() / SCALE_FACTOR, vianum++ );
         }
     }
 

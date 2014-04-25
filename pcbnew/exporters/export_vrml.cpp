@@ -801,7 +801,7 @@ static void export_round_padstack( MODEL_VRML& aModel, BOARD* pcb,
 }
 
 
-static void export_vrml_via( MODEL_VRML& aModel, BOARD* pcb, SEGVIA* via )
+static void export_vrml_via( MODEL_VRML& aModel, BOARD* pcb, const VIA* via )
 {
     double x, y, r, hole;
     LAYER_NUM top_layer, bottom_layer;
@@ -827,7 +827,7 @@ static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
     {
         if( track->Type() == PCB_VIA_T )
         {
-            export_vrml_via( aModel, pcb, (SEGVIA*) track );
+            export_vrml_via( aModel, pcb, (const VIA*) track );
         }
         else if( track->GetLayer() == FIRST_COPPER_LAYER
                  || track->GetLayer() == LAST_COPPER_LAYER )
