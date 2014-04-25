@@ -179,6 +179,7 @@ VIA::VIA( BOARD_ITEM* aParent ) :
     TRACK( aParent, PCB_VIA_T )
 {
     SetViaType( VIA_THROUGH );
+    m_BottomLayer = LAYER_N_BACK;
     m_Width = Millimeter2iu( 0.5 );
     SetDrillDefault();
 }
@@ -432,19 +433,19 @@ LAYER_MSK TRACK::GetLayerMask() const
 }
 
 
-void VIA::SetLayerPair( LAYER_NUM top_layer, LAYER_NUM bottom_layer )
+void VIA::SetLayerPair( LAYER_NUM aTopLayer, LAYER_NUM aBottomLayer )
 {
     if( GetViaType() == VIA_THROUGH )
     {
-        top_layer    = LAYER_N_FRONT;
-        bottom_layer = LAYER_N_BACK;
+        aTopLayer    = LAYER_N_FRONT;
+        aBottomLayer = LAYER_N_BACK;
     }
 
-    if( bottom_layer > top_layer )
-        EXCHG( bottom_layer, top_layer );
+    if( aBottomLayer > aTopLayer )
+        EXCHG( aBottomLayer, aTopLayer );
 
-    // XXX EVIL usage of LAYER
-    m_Layer = (top_layer & 15) + ( (bottom_layer & 15) << 4 );
+    m_Layer = aTopLayer;
+    m_BottomLayer = aBottomLayer;
 }
 
 
@@ -455,9 +456,8 @@ void VIA::LayerPair( LAYER_NUM* top_layer, LAYER_NUM* bottom_layer ) const
 
     if( GetViaType() != VIA_THROUGH )
     {
-        // XXX EVIL usage of LAYER
-        b_layer = (m_Layer >> 4) & 15;
-        t_layer = m_Layer & 15;
+        b_layer = m_BottomLayer;
+        t_layer = m_Layer;
 
         if( b_layer > t_layer )
             EXCHG( b_layer, t_layer );
