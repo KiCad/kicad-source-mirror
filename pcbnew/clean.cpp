@@ -208,6 +208,8 @@ bool TRACKS_CLEANER::clean_vias()
             if( via->GetViaType() != VIA_THROUGH )
                 continue;
         }
+        else
+            continue;
 
         // Search and delete others vias at same location
         TRACK* alt_track = track->Next();
@@ -219,7 +221,6 @@ bool TRACKS_CLEANER::clean_vias()
             VIA *alt_via = dynamic_cast<VIA*>( alt_track );
             if( alt_via )
             {
-
                 if( alt_via->GetViaType() != VIA_THROUGH )
                     continue;
 
