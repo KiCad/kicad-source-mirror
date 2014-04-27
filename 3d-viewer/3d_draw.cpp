@@ -257,8 +257,8 @@ void EDA_3D_CANVAS::BuildBoard3DView()
 
     // Build a polygon from edge cut items
     wxString msg;
-    if( ! pcb->GetBoardPolygonOutlines( bufferPcbOutlines,
-                                        allLayerHoles, &msg ) )
+
+    if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
         msg << wxT("\n\n") <<
             _("Unable to calculate the board outlines.\n"
@@ -432,7 +432,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     }
 
     // Draw vias holes (vertical cylinders)
-    for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
+    for( const TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
     {
         const VIA *via = dynamic_cast<const VIA*>(track);
 
@@ -441,7 +441,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     }
 
     // Draw pads holes (vertical cylinders)
-    for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
+    for( const MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
     {
         for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
             Draw3DPadHole( pad );
@@ -508,6 +508,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
                                                 // to reduce time calculations
                                                 // for holes and items which do not need
                                                 // a fine representation
+    double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2) );
 
     CPOLYGONS_LIST  bufferPolys;
     bufferPolys.reserve( 100000 );              // Reserve for large board
@@ -517,8 +518,8 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     CPOLYGONS_LIST  bufferPcbOutlines;          // stores the board main outlines
     // Build a polygon from edge cut items
     wxString msg;
-    if( ! pcb->GetBoardPolygonOutlines( bufferPcbOutlines,
-                                        allLayerHoles, &msg ) )
+
+    if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
         msg << wxT("\n\n") <<
             _("Unable to calculate the board outlines.\n"
@@ -610,22 +611,30 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
                         continue;
 
                     BuildPadShapeThickOutlineAsPolygon( pad, bufferPolys,
-                                                        linewidth,
-                                                        segcountforcircle, correctionFactor );
+                            linewidth, segcountforcircle, correctionFactor );
                 }
             }
             else
                 module->TransformPadsShapesWithClearanceToPolygon( layer,
-                                                                   bufferPolys,
-                                                                   0,
-                                                                   segcountforcircle,
-                                                                   correctionFactor );
+                        bufferPolys, 0, segcountforcircle, correctionFactor );
 
             module->TransformGraphicShapesWithClearanceToPolygonSet( layer,
-                                                                     bufferPolys,
-                                                                     0,
-                                                                     segcountforcircle,
-                                                                     correctionFactor );
+                    bufferPolys, 0, segcountforcircle, correctionFactor );
+        }
+
+        // Draw non copper zones
+        if( g_Parm_3D_Visu.GetFlag( FL_ZONE ) )
+        {
+            for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
+            {
+                ZONE_CONTAINER* zone = pcb->GetArea( ii );
+
+                if( !zone->IsOnLayer( layer ) )
+                    continue;
+
+                zone->TransformSolidAreasShapesToPolygonSet(
+                        bufferPolys, segcountLowQuality, correctionFactorLQ );
+            }
         }
 
         // bufferPolys contains polygons to merge. Many overlaps .
