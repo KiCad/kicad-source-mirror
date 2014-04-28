@@ -741,10 +741,15 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
                         enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                         int                         aWidth,
                         bool                        aItalic,
-                        bool                        aBold )
+                        bool                        aBold,
+                        bool                        aMultilineAllowed )
 {
+    // Fix me: see how to use PDF text mode for multiline texts
+    if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
+        aMultilineAllowed = false;  // the text has only one line.
+
     // Emit native PDF text (if requested)
-    if( m_textMode != PLOTTEXTMODE_STROKE )
+    if( m_textMode != PLOTTEXTMODE_STROKE && !aMultilineAllowed )
     {
         const char *fontname = aItalic ? (aBold ? "/KicadFontBI" : "/KicadFontI")
             : (aBold ? "/KicadFontB" : "/KicadFont");
@@ -800,10 +805,10 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     }
 
     // Plot the stroked text (if requested)
-    if( m_textMode != PLOTTEXTMODE_NATIVE )
+    if( m_textMode != PLOTTEXTMODE_NATIVE || aMultilineAllowed )
     {
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                aWidth, aItalic, aBold );
+                aWidth, aItalic, aBold, aMultilineAllowed );
     }
 }
 
