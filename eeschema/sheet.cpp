@@ -27,13 +27,11 @@
  */
 
 #include <fctsys.h>
-//#include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxEeschemaStruct.h>
 #include <base_units.h>
 
-//#include <general.h>
 #include <sch_sheet.h>
 
 #include <dialogs/dialog_sch_sheet_props.h>

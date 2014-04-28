@@ -570,12 +570,21 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                         enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                         int                         aWidth,
                         bool                        aItalic,
-                        bool                        aBold )
+                        bool                        aBold,
+                        bool                        aMultilineAllowed )
 {
-    if( textAsLines || containsNonAsciiChars( aText ) )
-        /* output text as graphics */
+    // Fix me: see how to use DXF text mode for multiline texts
+    if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
+        aMultilineAllowed = false;  // the text has only one line.
+
+    if( textAsLines || containsNonAsciiChars( aText ) || aMultilineAllowed )
+    {
+        // output text as graphics.
+        // Perhaps miltiline texts could be handled as DXF text entity
+        // but I do not want spend time about this (JPC)
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                aWidth, aItalic, aBold );
+                aWidth, aItalic, aBold, aMultilineAllowed );
+    }
     else
     {
         /* Emit text as a text entity. This loses formatting and shape but it's
