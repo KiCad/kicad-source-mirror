@@ -58,35 +58,9 @@ endif()
 
 
 if( APPLE )
-    # binaries have to be build and kiface be in place
-    # Mockup the destination directory to linking symbolical
-    # Could be usefully also for debug in building place
-    add_custom_target( kiway-kicad-bundle-applinks ALL
-        COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_BINARY_DIR}/eeschema/eeschema.app" "${CMAKE_BINARY_DIR}/kicad/eeschema.app"
-        COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.app" "${CMAKE_BINARY_DIR}/kicad/pcbnew.app"
-        COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_BINARY_DIR}/cvpcb/cvpcb.app" "${CMAKE_BINARY_DIR}/kicad/cvpcb.app"
-        DEPENDS eeschema pcbnew cvpcb eeschema_kiface pcbnew_kiface cvpcb_kiface
-        COMMENT "Making bundles links in kicad.app directory"
-    )
-
-    # Kicad is dependent by other applications (otherwise what we could symlink?)
-    add_dependencies( kicad kiway-kicad-bundle-applinks ) 
-
-    # making kiface links relative - .app symlinks are alredy in place !
-    add_custom_target( kiway-kicad-bundle-kiface-links ALL
-        COMMAND ${CMAKE_COMMAND} -E create_symlink "../../../eeschema.app/Contents/MacOS/_eeschema.kiface" "_eeschema.kiface"
-        COMMAND ${CMAKE_COMMAND} -E create_symlink "../../../pcbnew.app/Contents/MacOS/_pcbnew.kiface" "_pcbnew.kiface"
-        COMMAND ${CMAKE_COMMAND} -E create_symlink "../../../cvpcb.app/Contents/MacOS/_cvpcb.kiface" "_cvpcb.kiface"
-        DEPENDS kicad
-        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/kicad/kicad.app/Contents/MacOS"
-        COMMENT "Making Symbolik link to kiface libs in Kicad.app Bundle"
-    )
-
     set_target_properties( kicad PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
         )
-
-
     target_link_libraries( kicad
         common
         bitmaps
