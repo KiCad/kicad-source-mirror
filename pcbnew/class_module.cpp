@@ -422,9 +422,12 @@ EDA_RECT MODULE::GetFootprintRect() const
     area.SetEnd( m_Pos );
     area.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the area
 
-    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge; edge = edge->Next() )
-        if( edge->Type() == PCB_MODULE_EDGE_T )
+    for( const BOARD_ITEM* item = m_Drawings.GetFirst(); item; item = item->Next() )
+    {
+        const EDGE_MODULE *edge = dynamic_cast<const EDGE_MODULE*>( item );
+        if( edge )
             area.Merge( edge->GetBoundingBox() );
+    }
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
         area.Merge( pad->GetBoundingBox() );

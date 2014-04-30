@@ -274,7 +274,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     bool            hightQualityMode = false;
 
     for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER;
-         layer++ )
+         ++layer )
     {
         if( layer != LAST_COPPER_LAYER
             && layer >= g_Parm_3D_Visu.m_CopperLayersCount )
@@ -528,21 +528,19 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     }
 
     int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
-    for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
-    {
-       // Add via hole
-        if( track->Type() == PCB_VIA_T )
-        {
-            const VIA *via = static_cast<const VIA*>( track );
-            VIATYPE_T viatype = via->GetViaType();
-            int holediameter = via->GetDrillValue();
-            int hole_outer_radius = (holediameter + thickness) / 2;
 
-            if( viatype == VIA_THROUGH )
-                TransformCircleToPolygon( allLayerHoles,
-                                          via->GetStart(), hole_outer_radius,
-                                          segcountLowQuality );
-        }
+    // Add via holes
+    for( VIA* via = GetFirstVia( pcb->m_Track ); via != NULL;
+            via = GetFirstVia( via->Next() ) )
+    {
+        VIATYPE_T viatype = via->GetViaType();
+        int holediameter = via->GetDrillValue();
+        int hole_outer_radius = (holediameter + thickness) / 2;
+
+        if( viatype == VIA_THROUGH )
+            TransformCircleToPolygon( allLayerHoles,
+                    via->GetStart(), hole_outer_radius,
+                    segcountLowQuality );
     }
 
     // draw pads holes
@@ -562,7 +560,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     allLayerHoles.ExportTo( brdpolysetHoles );
 
     for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER;
-         layer++ )
+         ++layer )
     {
         // Skip user layers, which are not drawn here
         if( IsUserLayer( layer) )
@@ -713,7 +711,7 @@ void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
     bufferPolys.reserve( 5000 );    // Reserve for items not on board
 
     for( LAYER_NUM layer = FIRST_USER_LAYER; layer <= LAST_USER_LAYER;
-         layer++ )
+         ++layer )
     {
         if( !Is3DLayerEnabled( layer ) )
             continue;

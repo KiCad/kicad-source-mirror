@@ -271,12 +271,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     }
 
     // The same for vias
-    for( TRACK* track = aPcb->m_Track; track != NULL; track = track->Next() )
+    for( VIA* via = GetFirstVia( aPcb->m_Track ); via != NULL; 
+            via = GetFirstVia( via->Next() ) )
     {
-        if( track->Type() == PCB_VIA_T )
-        {
-            vias.push_back( static_cast<VIA*>(track) );
-        }
+        vias.push_back( via );
     }
 
     qsort( &vias[0], vias.size(), sizeof(VIA*), ViaSort );

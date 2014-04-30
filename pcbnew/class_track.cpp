@@ -88,12 +88,9 @@ inline bool IsNear( const wxPoint& p1, const wxPoint& p2, int max_dist )
 }
 
 
-TRACK* GetTrack( TRACK* aStartTrace, TRACK* aEndTrace,
+TRACK* GetTrack( TRACK* aStartTrace, const TRACK* aEndTrace,
         const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
-    if( aStartTrace == NULL )
-        return NULL;
-
     for( TRACK *PtSegm = aStartTrace; PtSegm != NULL; PtSegm = PtSegm->Next() )
     {
         if( PtSegm->GetState( IS_DELETED | BUSY ) == 0 )
@@ -180,7 +177,6 @@ VIA::VIA( BOARD_ITEM* aParent ) :
 {
     SetViaType( VIA_THROUGH );
     m_BottomLayer = LAYER_N_BACK;
-    m_Width = Millimeter2iu( 0.5 );
     SetDrillDefault();
 }
 
@@ -369,9 +365,14 @@ void TRACK::Flip( const wxPoint& aCentre )
 {
     m_Start.y = aCentre.y - (m_Start.y - aCentre.y);
     m_End.y   = aCentre.y - (m_End.y - aCentre.y);
+    SetLayer( FlipLayer( GetLayer() ) );
+}
 
-    if( Type() != PCB_VIA_T )
-        SetLayer( FlipLayer( GetLayer() ) );
+
+void VIA::Flip( const wxPoint& aCentre )
+{
+    m_Start.y = aCentre.y - (m_Start.y - aCentre.y);
+    m_End.y   = aCentre.y - (m_End.y - aCentre.y);
 }
 
 

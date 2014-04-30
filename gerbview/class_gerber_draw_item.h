@@ -116,8 +116,8 @@ public:
      */
     GERBER_DRAW_ITEM* Copy() const;
 
-    GERBER_DRAW_ITEM* Next() const { return (GERBER_DRAW_ITEM*) Pnext; }
-    GERBER_DRAW_ITEM* Back() const { return (GERBER_DRAW_ITEM*) Pback; }
+    GERBER_DRAW_ITEM* Next() const { return static_cast<GERBER_DRAW_ITEM*>( Pnext ); }
+    GERBER_DRAW_ITEM* Back() const { return static_cast<GERBER_DRAW_ITEM*>( Pback ); }
 
     /**
      * Function GetLayer
