@@ -136,8 +136,8 @@ public:
      */
     virtual void SwapData( SCH_ITEM* aItem );
 
-    SCH_ITEM* Next() { return (SCH_ITEM*) Pnext; }
-    SCH_ITEM* Back() { return (SCH_ITEM*) Pback; }
+    SCH_ITEM* Next() const { return static_cast<SCH_ITEM*>( Pnext ); }
+    SCH_ITEM* Back() const { return static_cast<SCH_ITEM*>( Pback ); }
 
     /**
      * Function GetLayer

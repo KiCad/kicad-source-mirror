@@ -108,8 +108,8 @@ public:
      */
     static wxPoint ZeroOffset;
 
-    BOARD_ITEM* Next() const { return (BOARD_ITEM*) Pnext; }
-    BOARD_ITEM* Back() const { return (BOARD_ITEM*) Pback; }
+    BOARD_ITEM* Next() const { return static_cast<BOARD_ITEM*>( Pnext ); }
+    BOARD_ITEM* Back() const { return static_cast<BOARD_ITEM*>( Pback ); }
     BOARD_ITEM* GetParent() const { return (BOARD_ITEM*) m_Parent; }
 
     /**

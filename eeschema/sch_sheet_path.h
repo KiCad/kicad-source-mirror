@@ -129,20 +129,20 @@ public:
      * returns a pointer to the last sheet of the list
      * One can see the others sheet as the "path" to reach this last sheet
      */
-    SCH_SHEET* Last();
+    SCH_SHEET* Last() const;
 
     /**
      * Function LastScreen
      * @return the SCH_SCREEN relative to the last sheet in list
      */
-    SCH_SCREEN* LastScreen();
+    SCH_SCREEN* LastScreen() const;
 
     /**
      * Function LastDrawList
      * @return a pointer to the first schematic item handled by the
      * SCH_SCREEN relative to the last sheet in list
      */
-    SCH_ITEM* LastDrawList();
+    SCH_ITEM* LastDrawList() const;
 
     /**
      * Get the last schematic item relative to the first sheet in the list.
@@ -150,7 +150,7 @@ public:
      * @return Last schematic item relative to the first sheet in the list if list
      *         is not empty.  Otherwise NULL.
      */
-    SCH_ITEM* FirstDrawList();
+    SCH_ITEM* FirstDrawList() const;
 
     /**
      * Function Push
@@ -248,7 +248,7 @@ public:
      *                is defined.
      * @return - The next schematic item if found.  Otherwise, NULL is returned.
      */
-    SCH_ITEM* FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false );
+    SCH_ITEM* FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
 
     /**
      * Find the previous schematic item in this sheet path object.
@@ -260,7 +260,7 @@ public:
      *                is defined.
      * @return - The previous schematic item if found.  Otherwise, NULL is returned.
      */
-    SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false );
+    SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
 
     SCH_SHEET_PATH& operator=( const SCH_SHEET_PATH& d1 );
 
@@ -318,7 +318,7 @@ public:
      * @return the number of sheets in list:
      * usually the number of sheets found in the whole hierarchy
      */
-    int GetCount() { return m_count; }
+    int GetCount() const { return m_count; }
 
     /**
      * Function GetFirst

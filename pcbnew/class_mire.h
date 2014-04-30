@@ -56,9 +56,6 @@ public:
 
     ~PCB_TARGET();
 
-    PCB_TARGET* Next() const { return (PCB_TARGET*) Pnext; }
-    PCB_TARGET* Back() const { return (PCB_TARGET*) Pnext; }
-
     void SetPosition( const wxPoint& aPos ) { m_Pos = aPos; }   // override
     const wxPoint& GetPosition() const      { return m_Pos; }   // override
 

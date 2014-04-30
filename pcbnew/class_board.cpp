@@ -1563,19 +1563,12 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
 
 VIA* BOARD::GetViaByPosition( const wxPoint& aPosition, LAYER_NUM aLayer) const
 {
-    for( TRACK *track = m_Track; track; track = track->Next() )
+    for( VIA *via = GetFirstVia( m_Track); via; via = GetFirstVia( via->Next() ) )
     {
-        if( track->Type() != PCB_VIA_T )
-            continue;
-
-        if( track->GetStart() != aPosition )
-            continue;
-
-        if( track->GetState( BUSY | IS_DELETED ) )
-            continue;
-
-        if( (aLayer == UNDEFINED_LAYER) || (track->IsOnLayer( aLayer )) )
-            return static_cast<VIA *>( track );
+        if( (via->GetStart() == aPosition) &&
+                (via->GetState( BUSY | IS_DELETED ) == 0) &&
+                ((aLayer == UNDEFINED_LAYER) || (via->IsOnLayer( aLayer ))) )
+            return via;
     }
 
     return NULL;

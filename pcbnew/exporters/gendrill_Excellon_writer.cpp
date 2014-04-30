@@ -453,12 +453,9 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
     // build hole list for vias
     if( ! aGenerateNPTH_list )  // vias are always plated !
     {
-        for( TRACK* track = m_pcb->m_Track;  track;  track = track->Next() )
+        for( VIA* via = GetFirstVia( m_pcb->m_Track ); via;
+                via = GetFirstVia( via->Next() ) )
         {
-            if( track->Type() != PCB_VIA_T )
-                continue;
-
-            const VIA* via = (const VIA*) track;
             hole_value = via->GetDrillValue();
 
             if( hole_value == 0 )

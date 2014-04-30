@@ -148,10 +148,11 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
             PlotTextModule( &aModule->Value(), GetValueColor() );
     }
 
-    for( textModule = (TEXTE_MODULE*) aModule->GraphicalItems().GetFirst();
-         textModule != NULL; textModule = textModule->Next() )
+    for( BOARD_ITEM *item = aModule->GraphicalItems().GetFirst();
+         item != NULL; item = item->Next() )
     {
-        if( textModule->Type() != PCB_MODULE_TEXT_T )
+        textModule = dynamic_cast<TEXTE_MODULE*>( item );
+        if( !textModule )
             continue;
 
         if( !GetPlotOtherText() )
@@ -350,13 +351,11 @@ void BRDITEMS_PLOTTER::Plot_Edges_Modules()
 {
     for( MODULE* module = m_board->m_Modules;  module;  module = module->Next() )
     {
-        for( EDGE_MODULE* edge = (EDGE_MODULE*) module->GraphicalItems().GetFirst();
-             edge; edge = edge->Next() )
+        for( BOARD_ITEM* item = module->GraphicalItems().GetFirst(); item; item = item->Next() )
         {
-            if( edge->Type() != PCB_MODULE_EDGE_T )
-                continue;
+            EDGE_MODULE *edge = dynamic_cast<EDGE_MODULE*>( item );
 
-            if( ( GetLayerMask( edge->GetLayer() ) & m_layerMask ) == 0 )
+            if( !edge || (( GetLayerMask( edge->GetLayer() ) & m_layerMask ) == 0) )
                 continue;
 
             Plot_1_EdgeModule( edge );

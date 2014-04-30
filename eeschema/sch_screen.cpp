@@ -1345,7 +1345,7 @@ SCH_SCREEN* SCH_SCREENS::GetNext()
 }
 
 
-SCH_SCREEN* SCH_SCREENS::GetScreen( unsigned int aIndex )
+SCH_SCREEN* SCH_SCREENS::GetScreen( unsigned int aIndex ) const
 {
     if( aIndex < m_screens.size() )
         return m_screens[ aIndex ];

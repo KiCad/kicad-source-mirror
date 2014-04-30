@@ -62,9 +62,9 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Panel->GetParent();
     BOARD* pcb = frame->GetBoard();
-    TRACK* track = (TRACK*) frame->GetCurItem();
+    TRACK* track = dynamic_cast<TRACK*>( frame->GetCurItem() );
 
-    if( track && ( track->Type()==PCB_VIA_T || track->Type()==PCB_TRACE_T ) )
+    if( track )
     {
         // Erase the current drawing
         ShowNewTrackWhenMovingCursor( Panel, DC, wxDefaultPosition, false );
