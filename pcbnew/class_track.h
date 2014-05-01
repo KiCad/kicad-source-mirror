@@ -228,7 +228,7 @@ public:
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
      */
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
 
     /**
      * Function GetVia
@@ -401,6 +401,10 @@ public:
     const wxPoint& GetPosition() const  {  return m_Start; }       // was overload
     void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }    // was overload
 
+    virtual bool HitTest( const wxPoint& aPosition );
+
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
+
     wxString GetClass() const
     {
         return wxT( "VIA" );
@@ -477,7 +481,11 @@ inline VIA *GetFirstVia( TRACK *aTrk, const TRACK *aStopPoint = NULL )
     while( aTrk && (aTrk != aStopPoint) && (aTrk->Type() != PCB_VIA_T) )
         aTrk = aTrk->Next();
 
-    return static_cast<VIA*>( aTrk );
+    // It could stop because of the stop point, not on a via
+    if( aTrk && (aTrk->Type() == PCB_VIA_T) )
+        return static_cast<VIA*>( aTrk );
+    else
+        return NULL;
 }
 
 #endif /* CLASS_TRACK_H */

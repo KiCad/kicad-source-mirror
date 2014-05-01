@@ -1233,64 +1233,56 @@ void VIA::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
 
 bool TRACK::HitTest( const wxPoint& aPosition )
 {
-    int max_dist = m_Width >> 1;
+    return TestSegmentHit( aPosition, m_Start, m_End, m_Width / 2 );
+}
 
-    if( Type() == PCB_VIA_T )
-    {
-        // rel_pos is aPosition relative to m_Start (or the center of the via)
-        wxPoint rel_pos = aPosition - m_Start;
-        double dist = (double) rel_pos.x * rel_pos.x + (double) rel_pos.y * rel_pos.y;
-        return  dist <= (double) max_dist * max_dist;
-    }
+bool VIA::HitTest( const wxPoint& aPosition )
+{
+    int max_dist = m_Width / 2;
 
-    return TestSegmentHit( aPosition, m_Start, m_End, max_dist );
+    // rel_pos is aPosition relative to m_Start (or the center of the via)
+    wxPoint rel_pos = aPosition - m_Start;
+    double dist = (double) rel_pos.x * rel_pos.x + (double) rel_pos.y * rel_pos.y;
+    return  dist <= (double) max_dist * max_dist;
 }
 
 
 bool TRACK::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
+    EDA_RECT arect = aRect;
+    arect.Inflate( aAccuracy );
+
+    if( aContained )
+        /* Tracks are a special case:
+         * they are considered inside the rect if one end is inside the rect */
+        return arect.Contains( GetStart() ) || arect.Contains( GetEnd() );
+    else
+        return arect.Intersects( GetStart(), GetEnd() );
+}
+
+bool VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
     EDA_RECT box;
     EDA_RECT arect = aRect;
     arect.Inflate( aAccuracy );
 
-    if( Type() == PCB_VIA_T )
-    {
-        box.SetOrigin( GetStart() );
-        box.Inflate( GetWidth() >> 1 );
+    box.SetOrigin( GetStart() );
+    box.Inflate( GetWidth() / 2 );
 
-        if(aContained)
-            return arect.Contains( box );
-        else
-            return arect.Intersects( box );
-    }
+    if( aContained )
+        return arect.Contains( box );
     else
-    {
-        if( aContained )
-            // Tracks are a specila case:
-            // they are considered inside the rect if one end
-            // is inside the rect
-            return arect.Contains( GetStart() ) || arect.Contains( GetEnd() );
-        else
-            return arect.Intersects( GetStart(), GetEnd() );
-    }
+        return arect.Intersects( box );
 }
-
 
 VIA* TRACK::GetVia( const wxPoint& aPosition, LAYER_NUM aLayer)
 {
-    for( TRACK *track = this; track; track = track->Next() )
+    for( VIA *via = GetFirstVia( this ); via; via = GetFirstVia( via->Next() ) )
     {
-        if( track->Type() != PCB_VIA_T )
-            continue;
-
-        if( !track->HitTest( aPosition ) )
-            continue;
-
-        if( track->GetState( BUSY | IS_DELETED ) )
-            continue;
-
-        if( (aLayer == UNDEFINED_LAYER) || (track->IsOnLayer( aLayer )) )
-            return static_cast<VIA *>( track );
+        if( via->HitTest( aPosition ) &&
+                !via->GetState( BUSY | IS_DELETED ) &&
+                ((aLayer == UNDEFINED_LAYER) || (via->IsOnLayer( aLayer ))) )
+            return via;
     }
 
     return NULL;
@@ -1299,22 +1291,12 @@ VIA* TRACK::GetVia( const wxPoint& aPosition, LAYER_NUM aLayer)
 
 VIA* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
-    for( TRACK *trace = this; trace; trace = trace->Next() )
+    for( VIA *via = GetFirstVia( this, aEndTrace ); via; via = GetFirstVia( via->Next() ) )
     {
-        if( trace->Type() == PCB_VIA_T )
-        {
-            if( aPosition == trace->m_Start )
-            {
-                if( trace->GetState( BUSY | IS_DELETED ) == 0 )
-                {
-                    if( aLayerMask & trace->GetLayerMask() )
-                        return static_cast<VIA*>( trace );
-                }
-            }
-        }
-
-        if( trace == aEndTrace )
-            break;
+        if( via->HitTest( aPosition ) &&
+                !via->GetState( BUSY | IS_DELETED ) &&
+                (aLayerMask & via->GetLayerMask()) )
+            return via;
     }
 
     return NULL;
