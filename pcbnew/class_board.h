@@ -284,7 +284,7 @@ public:
 
     DLIST<BOARD_ITEM>           m_Drawings;              // linked list of lines & texts
     DLIST<MODULE>               m_Modules;               // linked list of MODULEs
-    DLIST<TRACK>                m_Track;                 // linked list of TRACKs and SEGVIAs
+    DLIST<TRACK>                m_Track;                 // linked list of TRACKs and VIAs
     DLIST<SEGZONE>              m_Zone;                  // linked list of SEGZONEs
 
     /// Ratsnest list for the BOARD
@@ -1368,9 +1368,9 @@ public:
      * </p>
      * @param aPosition The wxPoint to HitTest() against.
      * @param aLayer The layer to search.  Use -1 for a don't care.
-     * @return TRACK* A point a to the SEGVIA object if found, else NULL.
+     * @return VIA* A point a to the VIA object if found, else NULL.
      */
-    TRACK* GetViaByPosition( const wxPoint& aPosition, LAYER_NUM aLayer = UNDEFINED_LAYER );
+    VIA* GetViaByPosition( const wxPoint& aPosition, LAYER_NUM aLayer = UNDEFINED_LAYER ) const;
 
     /**
      * Function GetPad
@@ -1390,7 +1390,7 @@ public:
      * @param aEndPoint The end point of \a aTrace the hit test against.
      * @return A pointer to a D_PAD object if found or NULL if not found.
      */
-    D_PAD* GetPad( TRACK* aTrace, int aEndPoint );
+    D_PAD* GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint );
 
     /**
      * Function GetPadFast
@@ -1436,7 +1436,7 @@ public:
     void GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNetCode = -1 );
 
     /**
-     * Function GetTrace
+     * Function GetTrack
      * find the segment of \a aTrace at \a aPosition on \a aLayer if \a Layer is visible.
      * Traces that are flagged as deleted or busy are ignored.
      *
@@ -1446,7 +1446,7 @@ public:
      *                   layer mask.
      * @return A TRACK object pointer if found otherwise NULL.
      */
-    TRACK* GetTrace( TRACK* aTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask );
+    TRACK* GetTrack( TRACK* aTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask ) const;
 
     /**
      * Function MarkTrace

@@ -393,7 +393,7 @@ void RN_NET::AddItem( const D_PAD* aPad )
 }
 
 
-void RN_NET::AddItem( const SEGVIA* aVia )
+void RN_NET::AddItem( const VIA* aVia )
 {
     m_vias[aVia] = m_links.AddNode( aVia->GetPosition().x, aVia->GetPosition().y );
 
@@ -482,7 +482,7 @@ void RN_NET::RemoveItem( const D_PAD* aPad )
 }
 
 
-void RN_NET::RemoveItem( const SEGVIA* aVia )
+void RN_NET::RemoveItem( const VIA* aVia )
 {
     try
     {
@@ -686,7 +686,7 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
 
         case PCB_VIA_T:
         {
-            const SEGVIA* via = static_cast<const SEGVIA*>( aItem );
+            const VIA* via = static_cast<const VIA*>( aItem );
             nodes.push_back( m_vias.at( via ) );
         }
         break;
@@ -877,7 +877,7 @@ void RN_DATA::Add( const BOARD_ITEM* aItem )
         break;
 
     case PCB_VIA_T:
-        m_nets[net].AddItem( static_cast<const SEGVIA*>( aItem ) );
+        m_nets[net].AddItem( static_cast<const VIA*>( aItem ) );
         break;
 
     case PCB_ZONE_AREA_T:
@@ -928,7 +928,7 @@ void RN_DATA::Remove( const BOARD_ITEM* aItem )
         break;
 
     case PCB_VIA_T:
-        m_nets[net].RemoveItem( static_cast<const SEGVIA*>( aItem ) );
+        m_nets[net].RemoveItem( static_cast<const VIA*>( aItem ) );
         break;
 
     case PCB_ZONE_AREA_T:
@@ -973,7 +973,7 @@ void RN_DATA::ProcessBoard()
         if( netCode > 0 )
         {
             if( track->Type() == PCB_VIA_T )
-                m_nets[netCode].AddItem( static_cast<SEGVIA*>( track ) );
+                m_nets[netCode].AddItem( static_cast<VIA*>( track ) );
             else if( track->Type() == PCB_TRACE_T )
                 m_nets[netCode].AddItem( track );
         }

@@ -600,38 +600,36 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
     if( text->IsMirrored() )
         NEGATE( size.x );
 
+    EDA_COLOR_T color = BLACK;  // not actually used, but needed by DrawGraphicText
+
     if( text->IsMultilineAllowed() )
     {
-        wxPoint pos = text->GetTextPosition();
         wxArrayString* list = wxStringSplit( text->GetText(), '\n' );
-        wxPoint offset;
+        std::vector<wxPoint> positions;
+        positions.reserve( list->Count() );
+        text->GetPositionsOfLinesOfMultilineText( positions, list->Count() );
 
-        offset.y = text->GetInterline();
-
-        RotatePoint( &offset, text->GetOrientation() );
-
-        for( unsigned i = 0; i<list->Count(); i++ )
+        for( unsigned ii = 0; ii < list->Count(); ii++ )
         {
-            wxString txt = list->Item( i );
-            DrawGraphicText( NULL, NULL, pos, BLACK,
-                    txt, text->GetOrientation(), size,
-                    text->GetHorizJustify(), text->GetVertJustify(),
-                    text->GetThickness(), text->IsItalic(),
-                    true,
-                    vrml_text_callback );
-            pos += offset;
+            wxString txt = list->Item( ii );
+            DrawGraphicText( NULL, NULL, positions[ii], color,
+                             txt, text->GetOrientation(), size,
+                             text->GetHorizJustify(), text->GetVertJustify(),
+                             text->GetThickness(), text->IsItalic(),
+                             true,
+                             vrml_text_callback );
         }
 
         delete (list);
     }
     else
     {
-        DrawGraphicText( NULL, NULL, text->GetTextPosition(), BLACK,
-                text->GetText(), text->GetOrientation(), size,
-                text->GetHorizJustify(), text->GetVertJustify(),
-                text->GetThickness(), text->IsItalic(),
-                true,
-                vrml_text_callback );
+        DrawGraphicText( NULL, NULL, text->GetTextPosition(), color,
+                         text->GetText(), text->GetOrientation(), size,
+                         text->GetHorizJustify(), text->GetVertJustify(),
+                         text->GetThickness(), text->IsItalic(),
+                         true,
+                         vrml_text_callback );
     }
 }
 
@@ -803,7 +801,7 @@ static void export_round_padstack( MODEL_VRML& aModel, BOARD* pcb,
 }
 
 
-static void export_vrml_via( MODEL_VRML& aModel, BOARD* pcb, SEGVIA* via )
+static void export_vrml_via( MODEL_VRML& aModel, BOARD* pcb, const VIA* via )
 {
     double x, y, r, hole;
     LAYER_NUM top_layer, bottom_layer;
@@ -829,7 +827,7 @@ static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
     {
         if( track->Type() == PCB_VIA_T )
         {
-            export_vrml_via( aModel, pcb, (SEGVIA*) track );
+            export_vrml_via( aModel, pcb, (const VIA*) track );
         }
         else if( track->GetLayer() == FIRST_COPPER_LAYER
                  || track->GetLayer() == LAST_COPPER_LAYER )

@@ -176,7 +176,7 @@ END_EVENT_TABLE()
 #define SCH_EDIT_FRAME_NAME wxT( "SchematicFrame" )
 
 SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
-    SCH_BASE_FRAME( aKiway, aParent, SCHEMATIC_FRAME_TYPE, wxT( "Eeschema" ),
+    SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH, wxT( "Eeschema" ),
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
     m_item_to_repeat( 0 )
 {
@@ -764,9 +764,23 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
     {
         fn.SetExt( PcbFileExtension );
 
-        wxString filename = QuoteFullPath( fn );
+        if( Kiface().IsSingle() )
+        {
+            wxString filename = QuoteFullPath( fn );
+            ExecuteFile( this, PCBNEW_EXE, filename );
+        }
+        else
+        {
+            KIWAY_PLAYER* player = Kiway().Player( FRAME_PCB, false );  // test open already.
 
-        ExecuteFile( this, PCBNEW_EXE, filename );
+            if( !player )
+            {
+                player = Kiway().Player( FRAME_PCB, true );
+                player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+                player->Show( true );
+            }
+            player->Raise();
+        }
     }
     else
     {
@@ -783,7 +797,22 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 
     if( fn.IsOk() && fn.FileExists() )
     {
-        ExecuteFile( this, CVPCB_EXE, QuoteFullPath( fn ) );
+        if( Kiface().IsSingle() )
+        {
+            ExecuteFile( this, CVPCB_EXE, QuoteFullPath( fn ) );
+        }
+        else
+        {
+            KIWAY_PLAYER* player = Kiway().Player( FRAME_CVPCB, false );  // test open already.
+
+            if( !player )
+            {
+                player = Kiway().Player( FRAME_CVPCB, true );
+                player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+                player->Show( true );
+            }
+            player->Raise();
+        }
     }
     else
     {
@@ -802,12 +831,14 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 
         if( (item == NULL) || (item->GetFlags() != 0) || ( item->Type() != SCH_COMPONENT_T ) )
         {
-            wxMessageBox( _("Error: not a component or no component" ) );
+            wxMessageBox( _( "Error: not a component or no component" ) );
             return;
         }
 
         component = (SCH_COMPONENT*) item;
     }
+
+    // @todo: should be changed to use Kiway().Player()?
 
     LIB_EDIT_FRAME* libeditFrame = LIB_EDIT_FRAME::GetActiveLibraryEditor();;
     if( libeditFrame )
@@ -819,7 +850,9 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
     }
     else
     {
-        wxWindow* w = Kiface().CreateWindow( this, LIBEDITOR_FRAME_TYPE, &Kiway() );
+        KIFACE_I&   kf = Kiface();
+
+        wxWindow* w = kf.CreateWindow( this, FRAME_SCH_LIB_EDITOR, &Kiway(), kf.StartFlags() );
         libeditFrame = dynamic_cast<LIB_EDIT_FRAME*>( w );
     }
 
@@ -1040,3 +1073,4 @@ void SCH_EDIT_FRAME::UpdateTitle()
 
     SetTitle( title );
 }
+

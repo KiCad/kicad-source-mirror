@@ -516,12 +516,7 @@ int genPlacementRoutingMatrix( BOARD* aBrd, EDA_MSG_PANEL* messagePanel )
             if( DrawSegm->GetLayer() != EDGE_N )
                 break;
 
-            TmpSegm.SetStart( DrawSegm->GetStart() );
-            TmpSegm.SetEnd( DrawSegm->GetEnd() );
-            TmpSegm.SetShape( DrawSegm->GetShape() );
-            TmpSegm.m_Param = DrawSegm->GetAngle();
-
-            TraceSegmentPcb( &TmpSegm, HOLE | CELL_is_EDGE,
+            TraceSegmentPcb( DrawSegm, HOLE | CELL_is_EDGE,
                              RoutingMatrix.m_GridRouting, WRITE_CELL );
             break;
 

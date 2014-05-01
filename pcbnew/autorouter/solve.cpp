@@ -1159,14 +1159,11 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
 static void OrCell_Trace( BOARD* pcb, int col, int row,
                           int side, int orient, int current_net_code )
 {
-    int    dx0, dy0, dx1, dy1;
-    TRACK* newTrack;
-
     if( orient == HOLE )  // placement of a via
     {
-        newTrack = new SEGVIA( pcb );
+        VIA *newVia = new VIA( pcb );
 
-        g_CurrentTrackList.PushBack( newTrack );
+        g_CurrentTrackList.PushBack( newVia );
 
         g_CurrentTrackSegment->SetState( TRACK_AR, true );
         g_CurrentTrackSegment->SetLayer( 0x0F );
@@ -1178,13 +1175,15 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         g_CurrentTrackSegment->SetEnd( g_CurrentTrackSegment->GetStart() );
 
         g_CurrentTrackSegment->SetWidth( pcb->GetCurrentViaSize() );
-        g_CurrentTrackSegment->SetShape( pcb->GetDesignSettings().m_CurrentViaType );
+        newVia->SetViaType( pcb->GetDesignSettings().m_CurrentViaType );
 
         g_CurrentTrackSegment->SetNetCode( current_net_code );
     }
     else    // placement of a standard segment
     {
-        newTrack = new TRACK( pcb );
+        TRACK *newTrack = new TRACK( pcb );
+        int    dx0, dy0, dx1, dy1;
+
 
         g_CurrentTrackList.PushBack( newTrack );
 
@@ -1301,12 +1300,14 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
         g_CurrentTrackList.PushBack( newTrack );
     }
 
-    g_FirstTrackSegment->start = pcbframe->GetBoard()->GetPad( g_FirstTrackSegment, FLG_START );
+    g_FirstTrackSegment->start = pcbframe->GetBoard()->GetPad( g_FirstTrackSegment,
+            ENDPOINT_START );
 
     if( g_FirstTrackSegment->start )
         g_FirstTrackSegment->SetState( BEGIN_ONPAD, true );
 
-    g_CurrentTrackSegment->end = pcbframe->GetBoard()->GetPad( g_CurrentTrackSegment, FLG_END );
+    g_CurrentTrackSegment->end = pcbframe->GetBoard()->GetPad( g_CurrentTrackSegment,
+            ENDPOINT_END );
 
     if( g_CurrentTrackSegment->end )
         g_CurrentTrackSegment->SetState( END_ONPAD, true );

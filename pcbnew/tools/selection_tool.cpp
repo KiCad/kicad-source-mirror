@@ -519,7 +519,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     {
         // For vias it is enough if only one of layers is visible
         LAYER_NUM top, bottom;
-        static_cast<const SEGVIA*>( aItem )->LayerPair( &top, &bottom );
+        static_cast<const VIA*>( aItem )->LayerPair( &top, &bottom );
 
         return board->IsLayerVisible( top ) || board->IsLayerVisible( bottom );
     }

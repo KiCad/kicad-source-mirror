@@ -189,7 +189,7 @@ PNS_ITEM* PNS_ROUTER::syncTrack( TRACK* aTrack )
 }
 
 
-PNS_ITEM* PNS_ROUTER::syncVia( SEGVIA* aVia )
+PNS_ITEM* PNS_ROUTER::syncVia( VIA* aVia )
 {
     PNS_VIA* v = new PNS_VIA(
             aVia->GetPosition(),
@@ -268,7 +268,7 @@ void PNS_ROUTER::SyncWorld()
         if( type == PCB_TRACE_T )
             item = syncTrack( t );
         else if( type == PCB_VIA_T )
-            item = syncVia( static_cast<SEGVIA*>( t ) );
+            item = syncVia( static_cast<VIA*>( t ) );
 
         if( item )
             m_world->Add( item );
@@ -622,7 +622,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
 
         case PNS_ITEM::VIA:
             {
-                SEGVIA* via_board = new SEGVIA( m_board );
+                VIA* via_board = new VIA( m_board );
                 PNS_VIA* via = static_cast<PNS_VIA*>( item );
                 via_board->SetPosition( wxPoint( via->GetPos().x, via->GetPos().y ) );
                 via_board->SetWidth( via->GetDiameter() );

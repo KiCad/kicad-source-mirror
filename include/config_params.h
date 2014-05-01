@@ -49,7 +49,6 @@
 
 
 #define CONFIG_VERSION      1
-#define FORCE_LOCAL_CONFIG  true
 
 
 /**

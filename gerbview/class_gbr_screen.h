@@ -26,7 +26,7 @@ public:
 
     ~GBR_SCREEN();
 
-    GBR_SCREEN* Next() { return (GBR_SCREEN*) Pnext; }
+    GBR_SCREEN* Next() const { return static_cast<GBR_SCREEN*>( Pnext ); }
 
 //    void        SetNextZoom();
 //    void        SetPreviousZoom();

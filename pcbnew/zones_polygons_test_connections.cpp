@@ -175,12 +175,15 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                     }
                     else if( item->Type() == PCB_VIA_T )
                     {
-                        pos1 = pos2 = ( (SEGVIA*) item )->GetStart();
+                        const VIA *via = static_cast<const VIA*>( item );
+                        pos1 = via->GetStart();
+                        pos2 = pos1;
                     }
                     else if( item->Type() == PCB_TRACE_T )
                     {
-                        pos1 = ( (TRACK*) item )->GetStart();
-                        pos2 = ( (TRACK*) item )->GetEnd();
+                        const TRACK *trk = static_cast<const TRACK*>( item );
+                        pos1 = trk->GetStart();
+                        pos2 = trk->GetEnd();
                     }
                     else
                     {

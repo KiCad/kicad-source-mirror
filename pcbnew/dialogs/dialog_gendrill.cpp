@@ -140,15 +140,27 @@ void DIALOG_GENDRILL::InitDisplayParams()
 
     for( TRACK* track = m_parent->GetBoard()->m_Track; track != NULL; track = track->Next() )
     {
-        if( track->Type() != PCB_VIA_T )
-            continue;
+        const VIA *via = dynamic_cast<const VIA*>( track );
+        if( via )
+        {
+            switch( via->GetViaType() )
+            {
+            case VIA_THROUGH:
+                m_throughViasCount++;
+                break;
 
-        if( track->GetShape() == VIA_THROUGH )
-            m_throughViasCount++;
-        else if( track->GetShape() == VIA_MICROVIA )
-            m_microViasCount++;
-        else if( track->GetShape() == VIA_BLIND_BURIED )
-            m_blindOrBuriedViasCount++;
+            case VIA_MICROVIA:
+                m_microViasCount++;
+                break;
+
+            case VIA_BLIND_BURIED:
+                m_blindOrBuriedViasCount++;
+                break;
+
+            default:
+                break;
+            }
+        }
     }
 
     m_MicroViaDrillValue->Enable( m_microViasCount );

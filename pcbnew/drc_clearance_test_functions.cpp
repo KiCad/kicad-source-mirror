@@ -169,21 +169,22 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     // Phase 0 : Test vias
     if( aRefSeg->Type() == PCB_VIA_T )
     {
+        const VIA *refvia = static_cast<const VIA*>( aRefSeg );
         // test if the via size is smaller than minimum
-        if( aRefSeg->GetShape() == VIA_MICROVIA )
+        if( refvia->GetViaType() == VIA_MICROVIA )
         {
-            if( aRefSeg->GetWidth() < netclass->GetuViaMinDiameter() )
+            if( refvia->GetWidth() < netclass->GetuViaMinDiameter() )
             {
-                m_currentMarker = fillMarker( aRefSeg, NULL,
+                m_currentMarker = fillMarker( refvia, NULL,
                                               DRCE_TOO_SMALL_MICROVIA, m_currentMarker );
                 return false;
             }
         }
         else
         {
-            if( aRefSeg->GetWidth() < netclass->GetViaMinDiameter() )
+            if( refvia->GetWidth() < netclass->GetViaMinDiameter() )
             {
-                m_currentMarker = fillMarker( aRefSeg, NULL,
+                m_currentMarker = fillMarker( refvia, NULL,
                                               DRCE_TOO_SMALL_VIA, m_currentMarker );
                 return false;
             }
@@ -192,9 +193,9 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // test if via's hole is bigger than its diameter
         // This test is necessary since the via hole size and width can be modified
         // and a default via hole can be bigger than some vias sizes
-        if( aRefSeg->GetDrillValue() > aRefSeg->GetWidth() )
+        if( refvia->GetDrillValue() > refvia->GetWidth() )
         {
-            m_currentMarker = fillMarker( aRefSeg, NULL,
+            m_currentMarker = fillMarker( refvia, NULL,
                                           DRCE_VIA_HOLE_BIGGER, m_currentMarker );
             return false;
         }
@@ -202,12 +203,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // For microvias: test if they are blind vias and only between 2 layers
         // because they are used for very small drill size and are drill by laser
         // and **only one layer** can be drilled
-        if( aRefSeg->GetShape() == VIA_MICROVIA )
+        if( refvia->GetViaType() == VIA_MICROVIA )
         {
             LAYER_NUM layer1, layer2;
             bool err = true;
 
-            ( (SEGVIA*) aRefSeg )->LayerPair( &layer1, &layer2 );
+            refvia->LayerPair( &layer1, &layer2 );
 
             if( layer1 > layer2 )
                 EXCHG( layer1, layer2 );
@@ -222,7 +223,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             if( err )
             {
-                m_currentMarker = fillMarker( aRefSeg, NULL,
+                m_currentMarker = fillMarker( refvia, NULL,
                                               DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR, m_currentMarker );
                 return false;
             }

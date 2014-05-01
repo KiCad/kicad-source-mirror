@@ -25,9 +25,11 @@
 #define MATCH_LAYER   (1 << 2)   ///< if module not on current layer, do not select
 #define VISIBLE_ONLY  (1 << 3)   ///< if module not on a visible layer, do not select
 
-
-#define FLG_START 0             // Flag used in locate routines
-#define FLG_END   1             // Flag used in locate routines
+/// Flag used in locate routines (from which endpoint work)
+enum ENDPOINT_T {
+    ENDPOINT_START = 0,             
+    ENDPOINT_END = 1
+};
 
 #define DIM_ANCRE_MODULE 3       // Anchor size (footprint center)
 

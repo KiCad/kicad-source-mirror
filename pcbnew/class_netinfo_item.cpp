@@ -82,7 +82,6 @@ void NETINFO_ITEM::Draw( EDA_DRAW_PANEL* panel,
 void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     int       count;
-    EDA_ITEM* Struct;
     wxString  txt;
     MODULE*   module;
     D_PAD*    pad;
@@ -113,20 +112,19 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Pads" ), txt, DARKGREEN ) );
 
     count  = 0;
-    Struct = m_parent->GetBoard()->m_Track;
 
-    for( ; Struct != NULL; Struct = Struct->Next() )
+    for( const TRACK *track = m_parent->GetBoard()->m_Track; track != NULL; track = track->Next() )
     {
-        if( Struct->Type() == PCB_VIA_T )
+        if( track->Type() == PCB_VIA_T )
         {
-            if( ( (SEGVIA*) Struct )->GetNetCode() == GetNet() )
+            if( track->GetNetCode() == GetNet() )
                 count++;
         }
 
-        if( Struct->Type() == PCB_TRACE_T )
+        if( track->Type() == PCB_TRACE_T )
         {
-            if( ( (TRACK*) Struct )->GetNetCode() == GetNet() )
-                lengthnet += ( (TRACK*) Struct )->GetLength();
+            if( track->GetNetCode() == GetNet() )
+                lengthnet += track->GetLength();
         }
     }
 

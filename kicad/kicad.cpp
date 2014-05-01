@@ -28,8 +28,9 @@
  */
 
 
+#include <macros.h>
 #include <fctsys.h>
-
+#include <wx/stdpaths.h>
 #include <kicad.h>
 #include <kiway.h>
 #include <pgm_kicad.h>
@@ -39,6 +40,40 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <build_version.h>
+
+
+/// Extend LIB_ENV_VAR list with the directory from which I came, prepending it.
+static void set_lib_env_var( const wxString& aAbsoluteArgv0 )
+{
+    // POLICY CHOICE 2: Keep same path, so that installer MAY put the
+    // "subsidiary DSOs" in the same directory as the kiway top process modules.
+    // A subsidiary shared library is one that is not a top level DSO, but rather
+    // some shared library that a top level DSO needs to even be loaded.  It is
+    // a static link to a shared object from a top level DSO.
+
+    // This directory POLICY CHOICE 2 is not the only dir in play, since LIB_ENV_VAR
+    // has numerous path options in it, as does DSO searching on linux, windows, and OSX.
+    // See "man ldconfig" on linux. What's being done here is for quick installs
+    // into a non-standard place, and especially for Windows users who may not
+    // know what the PATH environment variable is or how to set it.
+
+    wxFileName  fn( aAbsoluteArgv0 );
+
+    wxString    ld_path( LIB_ENV_VAR );
+    wxString    my_path   = fn.GetPath();
+    wxString    new_paths = PrePendPath( ld_path, my_path );
+
+    wxSetEnv( ld_path, new_paths );
+
+#if defined(DEBUG)
+    {
+        wxString    test;
+        wxGetEnv( ld_path, &test );
+        printf( "LIB_ENV_VAR:'%s'\n", TO_UTF8( test ) );
+    }
+#endif
+}
+
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_i.h>
@@ -62,7 +97,6 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
 
     m_bm.Init();
 
-#if 0   // copied from single_top.c, possibly for milestone B)
     wxString absoluteArgv0 = wxStandardPaths::Get().GetExecutablePath();
 
     if( !wxIsAbsolutePath( absoluteArgv0 ) )
@@ -71,13 +105,33 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
         return false;
     }
 
-    // Set LIB_ENV_VAR *before* loading the DSO, in case the top-level DSO holding the
-    // KIFACE has hard dependencies on subsidiary DSOs below it.
-    SetLibEnvVar( absoluteArgv0 );
-#endif
+    // Set LIB_ENV_VAR *before* loading the KIFACE DSOs, in case they have hard
+    // dependencies on subsidiary DSOs below it.
+    set_lib_env_var( absoluteArgv0 );
 
     if( !initPgm() )
         return false;
+
+    // Add search paths to feed the PGM_KICAD::SysSearch() function,
+    // currenly limited in support to only look for project templates
+    {
+        SEARCH_STACK bases;
+
+        SystemDirsAppend( &bases );
+
+        // DBG( bases.Show( (std::string(__func__) + " bases").c_str() );)
+
+        for( unsigned i = 0; i < bases.GetCount(); ++i )
+        {
+            wxFileName fn( bases[i], wxEmptyString );
+
+            // Add KiCad template file path to search path list.
+            fn.AppendDir( wxT( "template" ) );
+            m_bm.m_search.AddPaths( fn.GetPath() );
+        }
+
+        //DBG( m_bm.m_search.Show( (std::string( __func__ ) + " SysSearch()").c_str() );)
+    }
 
     // Read current setup and reopen last directory if no filename to open on
     // command line.
@@ -94,6 +148,8 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
     KICAD_MANAGER_FRAME* frame = new KICAD_MANAGER_FRAME( NULL, wxT( "KiCad" ),
                                      wxDefaultPosition, wxDefaultSize );
     App().SetTopWindow( frame );
+
+    Kiway.SetTop( frame );
 
     bool prjloaded = false;    // true when the project is loaded
 
@@ -197,39 +253,7 @@ void PGM_KICAD::destroy()
 }
 
 
-/**
- * Class KIWAY_MGR
- * is a container for all KIWAYS [and PROJECTS].  This class needs to work both
- * for a C++ project manager and an a wxPython one (after being moved into a
- * header later).
- */
-class KIWAY_MGR
-{
-public:
-    //KIWAY_MGR();
-    // ~KIWAY_MGR();
-
-    bool OnStart( wxApp* aProcess );
-
-    void OnEnd();
-
-    KIWAY& operator[]( int aIndex )
-    {
-        wxASSERT( m_kiways.size() );    // stuffed in OnStart()
-        return m_kiways[aIndex];
-    }
-
-private:
-
-    // KIWAYs may not be moved once doled out, since window DNA depends on the
-    // pointer being good forever.
-    // boost_ptr::vector however never moves the object pointed to.
-    typedef boost::ptr_vector<KIWAY>    KIWAYS;
-
-    KIWAYS  m_kiways;
-};
-
-static KIWAY_MGR   kiways;
+KIWAY  Kiway( &Pgm() );
 
 
 /**
@@ -240,7 +264,7 @@ struct APP_KICAD : public wxApp
 {
     bool OnInit()           // overload wxApp virtual
     {
-        if( kiways.OnStart( this ) )
+        // if( Kiways.OnStart( this ) )
         {
             return Pgm().OnPgmInit( this );
         }
@@ -249,11 +273,35 @@ struct APP_KICAD : public wxApp
 
     int  OnExit()           // overload wxApp virtual
     {
-        kiways.OnEnd();
+        // Kiways.OnEnd();
 
         Pgm().OnPgmExit();
 
         return wxApp::OnExit();
+    }
+
+    int OnRun()             // overload wxApp virtual
+    {
+        try
+        {
+            return wxApp::OnRun();
+        }
+        catch( const std::exception& e )
+        {
+            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
+                GetChars( FROM_UTF8( typeid(e).name() )),
+                GetChars( FROM_UTF8( e.what() ) ) );;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( GetChars( ioe.errorText ) );
+        }
+        catch(...)
+        {
+            wxLogError( wxT( "Unhandled exception of unknown type" ) );
+        }
+
+        return -1;
     }
 
     /**
@@ -275,9 +323,11 @@ IMPLEMENT_APP( APP_KICAD );
 // this link image need this function.
 PROJECT& Prj()
 {
-    return kiways[0].Prj();
+    return Kiway.Prj();
 }
 
+
+#if 0   // there can be only one in C++ project manager.
 
 bool KIWAY_MGR::OnStart( wxApp* aProcess )
 {
@@ -292,3 +342,5 @@ bool KIWAY_MGR::OnStart( wxApp* aProcess )
 void KIWAY_MGR::OnEnd()
 {
 }
+
+#endif

@@ -368,6 +368,8 @@ public:
      */
     virtual void ExecuteRemoteCommand( const char* cmdline );
 
+    void KiwayMailIn( KIWAY_EXPRESS& aEvent );      // virtual overload from KIWAY_PLAYER
+
     void OnLeftClick( wxDC* aDC, const wxPoint& aPosition );
     void OnLeftDClick( wxDC* aDC, const wxPoint& aPosition );
     bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu );

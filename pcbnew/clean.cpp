@@ -87,7 +87,12 @@ private:
      * i.e. when they are colinear, same width, and obviously same layer
      */
     TRACK* mergeCollinearSegmentIfPossible( TRACK* aTrackRef,
-                                           TRACK* aCandidate, int aEndType );
+                                           TRACK* aCandidate, ENDPOINT_T aEndType );
+
+    const ZONE_CONTAINER* zoneForTrackEndpoint( const TRACK *aTrack,
+            ENDPOINT_T aEndPoint );
+
+    bool testTrackEndpointDangling( TRACK *aTrack, ENDPOINT_T aEndPoint );
 };
 
 /* Install the cleanup dialog frame to know what should be cleaned
@@ -102,7 +107,7 @@ void PCB_EDIT_FRAME::Clean_Pcb()
     wxBusyCursor( dummy );
     TRACKS_CLEANER cleaner( GetBoard() );
 
-    cleaner.CleanupBoard( this, dlg.m_cleanVias, dlg.m_mergeSegments, 
+    cleaner.CleanupBoard( this, dlg.m_cleanVias, dlg.m_mergeSegments,
                           dlg.m_deleteUnconnectedSegm );
     m_canvas->Refresh( true );
 }
@@ -112,7 +117,7 @@ void PCB_EDIT_FRAME::Clean_Pcb()
  *  Delete
  * - Redundant points on tracks (merge aligned segments)
  * - vias on pad
- * - null lenght segments
+ * - null length segments
  *  Create segments when track ends are incorrectly connected:
  *  i.e. when a track end covers a pad or a via but is not exactly on the pad or the via center
  */
@@ -135,8 +140,6 @@ bool TRACKS_CLEANER::CleanupBoard( PCB_EDIT_FRAME *aFrame,
     if( modified )
     {
         // Clear undo and redo lists to avoid inconsistencies between lists
-        // XXX This is very involved... maybe a member in PCB_EDIT_FRAME
-        // would be better?
         aFrame->GetScreen()->ClearUndoRedoList();
         aFrame->SetCurItem( NULL );
         aFrame->Compile_Ratsnest( NULL, true );
@@ -159,7 +162,7 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
     BuildTracksCandidatesList( m_Brd->m_Track, NULL);
 
     // clear flags and variables used in cleanup
-    for( TRACK * track = m_Brd->m_Track; track; track = track->Next() )
+    for( TRACK *track = m_Brd->m_Track; track != NULL; track = track->Next() )
     {
         track->start = NULL;
         track->end = NULL;
@@ -169,7 +172,7 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
 
     // Build connections info tracks to pads
     SearchTracksConnectedToPads();
-    for( TRACK * track = m_Brd->m_Track; track; track = track->Next() )
+    for( TRACK *track = m_Brd->m_Track; track != NULL; track = track->Next() )
     {
         // Mark track if connected to pads
         for( unsigned jj = 0; jj < track->m_PadsConnected.size(); jj++ )
@@ -195,65 +198,54 @@ bool TRACKS_CLEANER::clean_vias()
 {
     bool modified = false;
 
-    for( TRACK* track = m_Brd->m_Track; track; track = track->Next() )
+    for( VIA* via = GetFirstVia( m_Brd->m_Track ); via != NULL;
+            via = GetFirstVia( via->Next() ) )
     {
-        // Correct via m_End defects (if any)
-        if( track->Type() == PCB_VIA_T )
+        // Correct via m_End defects (if any), should never happen
+        if( via->GetStart() != via->GetEnd() )
         {
-            if( track->GetStart() != track->GetEnd() )
-                track->SetEnd( track->GetStart() );
+            wxFAIL_MSG( "Via with mismatching ends" );
+            via->SetEnd( via->GetStart() );
         }
 
-        if( track->GetShape() != VIA_THROUGH )
-            continue;
-
-        // Search and delete others vias at same location
-        TRACK* alt_track = track->Next();
-
-        TRACK* next_track;
-        for( ; alt_track != NULL; alt_track = next_track )
+        /* Important: these cleanups only do thru hole vias, they don't
+         * (yet) handle high density interconnects */
+        if( via->GetViaType() != VIA_THROUGH )
         {
-            next_track = alt_track->Next();
-
-            if( alt_track->GetShape() != VIA_THROUGH )
-                continue;
-
-            if( alt_track->GetStart() != track->GetStart() )
-                continue;
-
-            // delete via
-            m_Brd->GetRatsnest()->Remove( alt_track );
-            alt_track->ViewRelease();
-            alt_track->UnLink();
-            delete alt_track;
-            modified = true;
-        }
-    }
-
-    // Delete Via on pads at same location
-    TRACK* next_track;
-    for( TRACK* track = m_Brd->m_Track; track != NULL; track = next_track )
-    {
-        next_track = track->Next();
-
-        if( track->GetShape() != VIA_THROUGH )
-            continue;
-
-        // Examine the list of connected pads:
-        // if one pad through is found, the via can be removed
-        for( unsigned ii = 0; ii < track->m_PadsConnected.size(); ii++ )
-        {
-            D_PAD * pad = track->m_PadsConnected[ii];
-
-            if( (pad->GetLayerMask() & ALL_CU_LAYERS) == ALL_CU_LAYERS )
+            // Search and delete others vias at same location
+            VIA* next_via;
+            for( VIA* alt_via = GetFirstVia( via->Next() ); alt_via != NULL;
+                    alt_via = next_via )
             {
-                // redundant: via delete it
-                m_Brd->GetRatsnest()->Remove( track );
-                track->ViewRelease();
-                track->UnLink();
-                delete track;
-                modified = true;
-                break;
+                next_via = GetFirstVia( alt_via->Next() );
+
+                if( (alt_via->GetViaType() == VIA_THROUGH) &&
+                    (alt_via->GetStart() == via->GetStart()) )
+                {
+                    // delete via
+                    m_Brd->GetRatsnest()->Remove( alt_via );
+                    alt_via->ViewRelease();
+                    alt_via->DeleteStructure();
+                    modified = true;
+                }
+            }
+
+            /* To delete through Via on THT pads at same location
+             * Examine the list of connected pads:
+             * if one through pad is found, the via can be removed */
+            for( unsigned ii = 0; ii < via->m_PadsConnected.size(); ++ii )
+            {
+                const D_PAD *pad = via->m_PadsConnected[ii];
+
+                if( (pad->GetLayerMask() & ALL_CU_LAYERS) == ALL_CU_LAYERS )
+                {
+                    // redundant: delete the via
+                    m_Brd->GetRatsnest()->Remove( via );
+                    via->ViewRelease();
+                    via->DeleteStructure();
+                    modified = true;
+                    break;
+                }
             }
         }
     }
@@ -261,6 +253,64 @@ bool TRACKS_CLEANER::clean_vias()
     return modified;
 }
 
+/// Utility for checking if a track/via ends on a zone
+const ZONE_CONTAINER* TRACKS_CLEANER::zoneForTrackEndpoint( const TRACK *aTrack,
+        ENDPOINT_T aEndPoint )
+{
+    // Vias are special cased, since they get a layer range, not a single one
+    LAYER_NUM top_layer, bottom_layer;
+    const VIA *via = dynamic_cast<const VIA*>( aTrack );
+
+    if( via )
+        via->LayerPair( &top_layer, &bottom_layer );
+    else
+    {
+        top_layer = aTrack->GetLayer();
+        bottom_layer = top_layer;
+    }
+    return m_Brd->HitTestForAnyFilledArea( aTrack->GetEndPoint( aEndPoint ),
+            top_layer, bottom_layer, aTrack->GetNetCode() );
+}
+
+/** Utility: does the endpoint unconnected processed for one endpoint of one track
+ * Returns true if the track must be deleted, false if not necessarily */
+bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK *aTrack, ENDPOINT_T aEndPoint )
+{
+    bool flag_erase = false;
+
+    TRACK* other = aTrack->GetTrack( m_Brd->m_Track, NULL, aEndPoint );
+    if( (other == NULL) &&
+            (zoneForTrackEndpoint( aTrack, aEndPoint ) == NULL) )
+        flag_erase = true; // Start endpoint is neither on pad, zone or other track
+    else    // segment, via or zone connected to this end
+    {
+        // Fill connectivity informations
+        if( aEndPoint == ENDPOINT_START )
+            aTrack->start = other;
+        else
+            aTrack->end = other;
+
+        /* If a via is connected to this end, test if this via has a second item connected.
+         * If not, remove the current segment (the via would then become
+         * unconnected and remove on the following pass) */
+        VIA* via = dynamic_cast<VIA*>( other );
+        if( via )
+        {
+            // search for another segment following the via
+            aTrack->SetState( BUSY, true );
+
+            other = via->GetTrack( m_Brd->m_Track, NULL, aEndPoint );
+
+            // There is a via on the start but it goes nowhere
+            if( (other == NULL) &&
+                    (zoneForTrackEndpoint( via, aEndPoint ) == NULL) )
+                flag_erase = true;
+
+            aTrack->SetState( BUSY, false );
+        }
+    }
+    return flag_erase;
+}
 
 /*
  *  Delete dangling tracks
@@ -273,149 +323,31 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
         return false;
 
     bool modified = false;
-    bool item_erased = true;
-    while( item_erased )    // Iterate when at least one track is deleted
+    bool item_erased;
+    do // Iterate when at least one track is deleted
     {
         item_erased = false;
         TRACK* next_track;
-        for( TRACK * track = m_Brd->m_Track; track ; track = next_track )
+        for( TRACK *track = m_Brd->m_Track; track != NULL; track = next_track )
         {
             next_track = track->Next();
 
-            int flag_erase = 0; //Not connected indicator
-            int type_end = 0;
+            bool flag_erase = false; // Start without a good reason to erase it
 
-            if( track->GetState( START_ON_PAD ) )
-                type_end |= START_ON_PAD;
+            /* if a track endpoint is not connected to a pad, test if
+             * the endpoint is connected to another track or to a zone.
+             * For via test, an enhancement could be to test if
+             * connected to 2 items on different layers. Currently
+             * a via must be connected to 2 items, that can be on the
+             * same layer */
 
-            if( track->GetState( END_ON_PAD ) )
-                type_end |= END_ON_PAD;
+            // Check if there is nothing attached on the start
+            if( !(track->GetState( START_ON_PAD )) )
+                flag_erase |= testTrackEndpointDangling( track, ENDPOINT_START );
 
-            // if the track start point is not connected to a pad,
-            // test if this track start point is connected to another track
-            // For via test, an enhancement could be to test if connected
-            // to 2 items on different layers.
-            // Currently a via must be connected to 2 items, that can be on the same layer
-            LAYER_NUM top_layer, bottom_layer;
-            ZONE_CONTAINER* zone;
-
-            if( (type_end & START_ON_PAD ) == 0 )
-            {
-                TRACK* other = track->GetTrace( m_Brd->m_Track, NULL, FLG_START );
-
-                if( other == NULL )     // Test a connection to zones
-                {
-                    if( track->Type() != PCB_VIA_T )
-                    {
-                        zone = m_Brd->HitTestForAnyFilledArea( track->GetStart(),
-                                                               track->GetLayer(),
-                                                               track->GetLayer(),
-                                                               track->GetNetCode() );
-                    }
-                    else
-                    {
-                        ((SEGVIA*)track)->LayerPair( &top_layer, &bottom_layer );
-                        zone = m_Brd->HitTestForAnyFilledArea( track->GetStart(),
-                                                               top_layer, bottom_layer,
-                                                               track->GetNetCode() );
-                    }
-                }
-
-                if( (other == NULL) && (zone == NULL) )
-                {
-                    flag_erase |= 1;
-                }
-                else    // segment, via or zone connected to this end
-                {
-                    track->start = other;
-                    // If a via is connected to this end,
-                    // test if this via has a second item connected.
-                    // If no, remove it with the current segment
-
-                    if( other && other->Type() == PCB_VIA_T )
-                    {
-                        // search for another segment following the via
-                        track->SetState( BUSY, true );
-
-                        SEGVIA* via = (SEGVIA*) other;
-                        other = via->GetTrace( m_Brd->m_Track, NULL, FLG_START );
-
-                        if( other == NULL )
-                        {
-                            via->LayerPair( &top_layer, &bottom_layer );
-                            zone = m_Brd->HitTestForAnyFilledArea( via->GetStart(),
-                                                                   bottom_layer,
-                                                                   top_layer,
-                                                                   via->GetNetCode() );
-                        }
-
-                        if( (other == NULL) && (zone == NULL) )
-                            flag_erase |= 2;
-
-                        track->SetState( BUSY, false );
-                    }
-                }
-            }
-
-            // if track end point is not connected to a pad,
-            // test if this track end point is connected to an other track
-            if( (type_end & END_ON_PAD ) == 0 )
-            {
-                TRACK* other = track->GetTrace( m_Brd->m_Track, NULL, FLG_END );
-
-                if( other == NULL )     // Test a connection to zones
-                {
-                    if( track->Type() != PCB_VIA_T )
-                    {
-                        zone = m_Brd->HitTestForAnyFilledArea( track->GetEnd(),
-                                                               track->GetLayer(),
-                                                               track->GetLayer(),
-                                                               track->GetNetCode() );
-                    }
-                    else
-                    {
-                        ((SEGVIA*)track)->LayerPair( &top_layer, &bottom_layer );
-                        zone = m_Brd->HitTestForAnyFilledArea( track->GetEnd(),
-                                                               top_layer, bottom_layer,
-                                                               track->GetNetCode() );
-                    }
-                }
-
-                if ( (other == NULL) && (zone == NULL) )
-                {
-                    flag_erase |= 0x10;
-                }
-                else     // segment, via or zone connected to this end
-                {
-                    track->end = other;
-
-                    // If a via is connected to this end, test if this via has a second item connected
-                    // if no, remove it with the current segment
-
-                    if( other && other->Type() == PCB_VIA_T )
-                    {
-                        // search for another segment following the via
-
-                        track->SetState( BUSY, true );
-
-                        SEGVIA* via = (SEGVIA*) other;
-                        other = via->GetTrace( m_Brd->m_Track, NULL, FLG_END );
-
-                        if( other == NULL )
-                        {
-                            via->LayerPair( &top_layer, &bottom_layer );
-                            zone = m_Brd->HitTestForAnyFilledArea( via->GetEnd(),
-                                                                   bottom_layer, top_layer,
-                                                                   via->GetNetCode() );
-                        }
-
-                        if( (other == NULL) && (zone == NULL) )
-                            flag_erase |= 0x20;
-
-                        track->SetState( BUSY, false );
-                    }
-                }
-            }
+            // Check if there is nothing attached on the end
+            if( !(track->GetState( END_ON_PAD )) )
+                flag_erase |= testTrackEndpointDangling( track, ENDPOINT_END );
 
             if( flag_erase )
             {
@@ -423,13 +355,14 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                 m_Brd->GetRatsnest()->Remove( track );
                 track->ViewRelease();
                 track->DeleteStructure();
-                // iterate, because a track connected to the deleted track
-                // is now perhaps now not connected and should be deleted
+
+                /* keep iterating, because a track connected to the deleted track
+                 * now perhaps is not connected and should be deleted */
                 item_erased = true;
                 modified = true;
             }
         }
-    }
+    } while( item_erased );
 
     return modified;
 }
@@ -511,7 +444,7 @@ bool TRACKS_CLEANER::clean_segments()
         // search for a possible point connected to the START point of the current segment
         for( segStart = segment->Next(); ; )
         {
-            segStart = segment->GetTrace( segStart, NULL, FLG_START );
+            segStart = segment->GetTrack( segStart, NULL, ENDPOINT_START );
 
             if( segStart )
             {
@@ -525,7 +458,7 @@ bool TRACKS_CLEANER::clean_segments()
 
                 // We must have only one segment connected
                 segStart->SetState( BUSY, true );
-                other = segment->GetTrace( m_Brd->m_Track, NULL, FLG_START );
+                other = segment->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_START );
                 segStart->SetState( BUSY, false );
 
                 if( other == NULL )
@@ -538,7 +471,7 @@ bool TRACKS_CLEANER::clean_segments()
 
         if( flag )   // We have the starting point of the segment is connected to an other segment
         {
-            segDelete = mergeCollinearSegmentIfPossible( segment, segStart, FLG_START );
+            segDelete = mergeCollinearSegmentIfPossible( segment, segStart, ENDPOINT_START );
 
             if( segDelete )
             {
@@ -553,7 +486,7 @@ bool TRACKS_CLEANER::clean_segments()
         // search for a possible point connected to the END point of the current segment:
         for( segEnd = segment->Next(); ; )
         {
-            segEnd = segment->GetTrace( segEnd, NULL, FLG_END );
+            segEnd = segment->GetTrack( segEnd, NULL, ENDPOINT_END );
 
             if( segEnd )
             {
@@ -565,7 +498,7 @@ bool TRACKS_CLEANER::clean_segments()
 
                 // We must have only one segment connected
                 segEnd->SetState( BUSY, true );
-                other = segment->GetTrace( m_Brd->m_Track, NULL, FLG_END );
+                other = segment->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_END );
                 segEnd->SetState( BUSY, false );
 
                 if( other == NULL )
@@ -581,7 +514,7 @@ bool TRACKS_CLEANER::clean_segments()
 
         if( flag & 2 )  // We have the ending point of the segment is connected to an other segment
         {
-            segDelete = mergeCollinearSegmentIfPossible( segment, segEnd, FLG_END );
+            segDelete = mergeCollinearSegmentIfPossible( segment, segEnd, ENDPOINT_END );
 
             if( segDelete )
             {
@@ -614,7 +547,7 @@ bool TRACKS_CLEANER::clean_segments()
  *  else return NULL
  */
 TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK* aCandidate,
-                                       int aEndType )
+                                       ENDPOINT_T aEndType )
 {
     if( aTrackRef->GetWidth() != aCandidate->GetWidth() )
         return NULL;
@@ -674,7 +607,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
      * (this function) is called when there is only 2 connected segments,
      *and if this point is not on a pad, it can be removed and the 2 segments will be merged
      */
-    if( aEndType == FLG_START )
+    if( aEndType == ENDPOINT_START )
     {
         // We do not have a pad, which is a always terminal point for a track
         if( aTrackRef->GetState( START_ON_PAD) )
@@ -755,7 +688,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
         }
         else
         {
-            other = segment->GetTrace( GetBoard()->m_Track, NULL, FLG_START );
+            other = segment->GetTrack( GetBoard()->m_Track, NULL, ENDPOINT_START );
 
             if( other )
                 net_code_s = other->GetNetCode();
@@ -773,7 +706,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
         }
         else
         {
-            other = segment->GetTrace( GetBoard()->m_Track, NULL, FLG_END );
+            other = segment->GetTrack( GetBoard()->m_Track, NULL, ENDPOINT_END );
 
             if( other )
                 net_code_e = other->GetNetCode();

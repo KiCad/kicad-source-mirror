@@ -44,7 +44,7 @@ class TEXTE_PCB;
 class MODULE;
 class TRACK;
 class SEGZONE;
-class SEGVIA;
+class VIA;
 class D_PAD;
 class TEXTE_MODULE;
 class PCB_TARGET;
@@ -208,6 +208,8 @@ public:
      * @param cmdline = received command from socket
      */
     virtual void ExecuteRemoteCommand( const char* cmdline );
+
+    void KiwayMailIn( KIWAY_EXPRESS& aEvent );      // virtual overload from KIWAY_PLAYER
 
     /**
      * Function ToPlotter

@@ -51,9 +51,6 @@ public:
 
     ~EDGE_MODULE();
 
-    EDGE_MODULE* Next() const { return (EDGE_MODULE*) Pnext; }
-    EDGE_MODULE* Back() const { return (EDGE_MODULE*) Pback; }
-
     /// skip the linked list stuff, and parent
     const EDGE_MODULE& operator = ( const EDGE_MODULE& rhs );
 

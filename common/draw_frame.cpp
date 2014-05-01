@@ -65,7 +65,7 @@ static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
 static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
 
 
-BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, EDA_BASE_FRAME )
+BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_MOUSEWHEEL( EDA_DRAW_FRAME::OnMouseEvent )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
@@ -91,7 +91,7 @@ END_EVENT_TABLE()
 
 
 EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
-                                ID_DRAWFRAME_TYPE aFrameType,
+                                FRAME_T aFrameType,
                                 const wxString& aTitle,
                                 const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString & aFrameName ) :

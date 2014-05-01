@@ -47,7 +47,7 @@ class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
 public:
     SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
-                    ID_DRAWFRAME_TYPE aWindowType,
+                    FRAME_T aWindowType,
                     const wxString& aTitle,
                     const wxPoint& aPosition, const wxSize& aSize,
                     long aStyle, const wxString & aFrameName );

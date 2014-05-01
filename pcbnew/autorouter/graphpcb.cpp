@@ -38,6 +38,7 @@
 #include <math_for_graphics.h>
 #include <class_board.h>
 #include <class_track.h>
+#include <class_drawsegment.h>
 
 #include <pcbnew.h>
 #include <autorout.h>
@@ -256,29 +257,52 @@ void TraceFilledCircle( int    cx, int cy, int radius,
     }
 }
 
-
-void TraceSegmentPcb( TRACK* pt_segm, int color, int marge, int op_logic )
+void TraceSegmentPcb( DRAWSEGMENT* pt_segm, int color, int marge, int op_logic )
 {
-    int half_width;
-    int ux0, uy0, ux1, uy1;
-
-    half_width = ( pt_segm->GetWidth() / 2 ) + marge;
+    int half_width = ( pt_segm->GetWidth() / 2 ) + marge;
 
     // Calculate the bounding rectangle of the segment (if H, V or Via)
-    ux0 = pt_segm->GetStart().x - RoutingMatrix.GetBrdCoordOrigin().x;
-    uy0 = pt_segm->GetStart().y - RoutingMatrix.GetBrdCoordOrigin().y;
-    ux1 = pt_segm->GetEnd().x - RoutingMatrix.GetBrdCoordOrigin().x;
-    uy1 = pt_segm->GetEnd().y - RoutingMatrix.GetBrdCoordOrigin().y;
+    int ux0 = pt_segm->GetStart().x - RoutingMatrix.GetBrdCoordOrigin().x;
+    int uy0 = pt_segm->GetStart().y - RoutingMatrix.GetBrdCoordOrigin().y;
+    int ux1 = pt_segm->GetEnd().x - RoutingMatrix.GetBrdCoordOrigin().x;
+    int uy1 = pt_segm->GetEnd().y - RoutingMatrix.GetBrdCoordOrigin().y;
 
-    // Test if VIA (filled circle was drawn)
-    if( pt_segm->Type() == PCB_VIA_T )
+    LAYER_NUM layer = pt_segm->GetLayer();
+
+    if( color == VIA_IMPOSSIBLE )
+        layer = UNDEFINED_LAYER;
+
+    switch( pt_segm->GetShape() )
+    {
+    // The segment is here a straight line or a circle or an arc.:
+    case S_CIRCLE:
+        TraceCircle( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
+        break;
+
+    case S_ARC:
+        TraceArc( ux0, uy0, ux1, uy1, pt_segm->GetAngle(), half_width, layer, color, op_logic );
+        break;
+
+    // The segment is here a line segment.
+    default:
+        DrawSegmentQcq( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
+        break;
+    }
+}
+
+void TraceSegmentPcb( TRACK* aTrack, int color, int marge, int op_logic )
+{
+    int half_width = ( aTrack->GetWidth() / 2 ) + marge;
+
+    // Test if VIA (filled circle need to be drawn)
+    if( aTrack->Type() == PCB_VIA_T )
     {
         LAYER_MSK layer_mask = NO_LAYERS;
 
-        if( pt_segm->IsOnLayer( g_Route_Layer_BOTTOM ) )
+        if( aTrack->IsOnLayer( g_Route_Layer_BOTTOM ) )
             layer_mask = GetLayerMask( g_Route_Layer_BOTTOM );
 
-        if( pt_segm->IsOnLayer( g_Route_Layer_TOP ) )
+        if( aTrack->IsOnLayer( g_Route_Layer_TOP ) )
         {
             if( layer_mask == 0 )
                 layer_mask = GetLayerMask( g_Route_Layer_TOP );
@@ -290,39 +314,25 @@ void TraceSegmentPcb( TRACK* pt_segm, int color, int marge, int op_logic )
             layer_mask = FULL_LAYERS;
 
         if( layer_mask )
-            TraceFilledCircle( pt_segm->GetStart().x, pt_segm->GetStart().y,
+            TraceFilledCircle( aTrack->GetStart().x, aTrack->GetStart().y,
                                half_width, layer_mask, color, op_logic );
-        return;
     }
-
-    LAYER_NUM layer = pt_segm->GetLayer();
-
-    if( color == VIA_IMPOSSIBLE )
-        layer = UNDEFINED_LAYER;
-
-    // The segment is here a straight line or a circle or an arc.:
-    if( pt_segm->GetShape() == S_CIRCLE )
+    else
     {
-        TraceCircle( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
-        return;
-    }
+        // Calculate the bounding rectangle of the segment
+        int ux0 = aTrack->GetStart().x - RoutingMatrix.GetBrdCoordOrigin().x;
+        int uy0 = aTrack->GetStart().y - RoutingMatrix.GetBrdCoordOrigin().y;
+        int ux1 = aTrack->GetEnd().x - RoutingMatrix.GetBrdCoordOrigin().x;
+        int uy1 = aTrack->GetEnd().y - RoutingMatrix.GetBrdCoordOrigin().y;
 
-    if( pt_segm->GetShape() == S_ARC )
-    {
-        TraceArc( ux0, uy0, ux1, uy1, pt_segm->m_Param, half_width, layer, color, op_logic );
-        return;
-    }
+        // Ordinary track
+        LAYER_NUM layer = aTrack->GetLayer();
 
-    // The segment is here a line segment.
-    if( ( ux0 != ux1 ) && ( uy0 != uy1 ) ) // Segment tilts.
-    {
+        if( color == VIA_IMPOSSIBLE )
+            layer = UNDEFINED_LAYER;
+
         DrawSegmentQcq( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
-        return;
     }
-
-    // The segment is horizontal or vertical.
-    // F4EXB 051018-01
-    DrawSegmentQcq( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
 }
 
 

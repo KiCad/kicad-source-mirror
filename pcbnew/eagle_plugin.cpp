@@ -2410,9 +2410,9 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 if( IsCopperLayer( layer_front_most ) &&
                     IsCopperLayer( layer_back_most ) )
                 {
-                    int     kidiam;
-                    int     drillz = kicad( v.drill );
-                    SEGVIA* via = new SEGVIA( m_board );
+                    int  kidiam;
+                    int  drillz = kicad( v.drill );
+                    VIA* via = new VIA( m_board );
                     m_board->m_Track.Insert( via, NULL );
 
                     via->SetLayerPair( layer_front_most, layer_back_most );
@@ -2439,11 +2439,11 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                         m_min_via_hole = drillz;
 
                     if( layer_front_most == LAYER_N_FRONT && layer_back_most == LAYER_N_BACK )
-                        via->SetShape( VIA_THROUGH );
+                        via->SetViaType( VIA_THROUGH );
                     else if( layer_front_most == LAYER_N_FRONT || layer_back_most == LAYER_N_BACK )
-                        via->SetShape( VIA_MICROVIA );
+                        via->SetViaType( VIA_MICROVIA );
                     else
-                        via->SetShape( VIA_BLIND_BURIED );
+                        via->SetViaType( VIA_BLIND_BURIED );
 
                     via->SetTimeStamp( timeStamp( it->second ) );
 
@@ -2453,8 +2453,6 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     via->SetEnd( pos );
 
                     via->SetNetCode( netCode );
-
-                    via->SetShape( S_CIRCLE );  // @todo should be in SEGVIA constructor
                 }
                 m_xpath->pop();
             }

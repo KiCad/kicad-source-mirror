@@ -46,6 +46,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <layers_id_colors_and_visibility.h>
+#include <frame_type.h>
 
 #ifdef USE_WX_OVERLAY
 #include <wx/overlay.h>
@@ -81,26 +82,6 @@ enum id_librarytype {
 };
 
 
-enum ID_DRAWFRAME_TYPE
-{
-    NOT_INIT_FRAME_TYPE = 0,
-    SCHEMATIC_FRAME_TYPE,
-    LIBEDITOR_FRAME_TYPE,
-    VIEWER_FRAME_TYPE,
-    PCB_FRAME_TYPE,
-    MODULE_EDITOR_FRAME_TYPE,
-    MODULE_VIEWER_FRAME_TYPE,
-    FOOTPRINT_WIZARD_FRAME_TYPE,
-    CVPCB_FRAME_TYPE,
-    CVPCB_DISPLAY_FRAME_TYPE,
-    GERBER_FRAME_TYPE,
-    TEXT_EDITOR_FRAME_TYPE,
-    DISPLAY3D_FRAME_TYPE,
-    KICAD_MAIN_FRAME_TYPE,
-    PL_EDITOR_FRAME_TYPE
-};
-
-
 /// Custom trace mask to enable and disable auto save tracing.
 extern const wxChar traceAutoSave[];
 
@@ -132,7 +113,7 @@ class EDA_BASE_FRAME : public wxFrame
     void windowClosing( wxCloseEvent& event );
 
 protected:
-    ID_DRAWFRAME_TYPE m_Ident;      ///< Id Type (pcb, schematic, library..)
+    FRAME_T     m_Ident;           ///< Id Type (pcb, schematic, library..)
     wxPoint      m_FramePos;
     wxSize       m_FrameSize;
 
@@ -196,7 +177,7 @@ protected:
     virtual wxString help_name();
 
 public:
-    EDA_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
+    EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString& aFrameName );
 
@@ -219,7 +200,7 @@ public:
 
     bool IsActive() const { return m_FrameIsActive; }
 
-    bool IsType( ID_DRAWFRAME_TYPE aType ) const { return m_Ident == aType; }
+    bool IsType( FRAME_T aType ) const { return m_Ident == aType; }
 
     void GetKicadHelp( wxCommandEvent& event );
 

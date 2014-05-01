@@ -68,7 +68,7 @@ static struct IFACE : public KIFACE_I
         KIFACE_I( aName, aType )
     {}
 
-    bool OnKifaceStart( PGM_BASE* aProgram );
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
 
     void OnKifaceEnd( PGM_BASE* aProgram )
     {
@@ -79,15 +79,7 @@ static struct IFACE : public KIFACE_I
     {
         switch( aClassId )
         {
-        case LIBEDITOR_FRAME_TYPE:
-            {
-                LIB_EDIT_FRAME* frame = new LIB_EDIT_FRAME( aKiway,
-                                            dynamic_cast<SCH_EDIT_FRAME*>( aParent ) );
-                return frame;
-            }
-            break;
-
-        case SCHEMATIC_FRAME_TYPE:
+        case FRAME_SCH:
             {
                 SCH_EDIT_FRAME* frame = new SCH_EDIT_FRAME( aKiway, aParent );
 
@@ -96,9 +88,19 @@ static struct IFACE : public KIFACE_I
                 // Read a default config file in case no project given on command line.
                 frame->LoadProjectFile( wxEmptyString, true );
 
-                // @todo temporary
-                CreateServer( frame, KICAD_SCH_PORT_SERVICE_NUMBER );
+                if( Kiface().IsSingle() )
+                {
+                    // only run this under single_top, not under a project manager.
+                    CreateServer( frame, KICAD_SCH_PORT_SERVICE_NUMBER );
+                }
+                return frame;
+            }
+            break;
 
+        case FRAME_SCH_LIB_EDITOR:
+            {
+                LIB_EDIT_FRAME* frame = new LIB_EDIT_FRAME( aKiway,
+                                            dynamic_cast<SCH_EDIT_FRAME*>( aParent ) );
                 return frame;
             }
             break;
@@ -152,13 +154,13 @@ PGM_BASE& Pgm()
 }
 
 
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     // This is process level, not project level, initialization of the DSO.
 
     // Do nothing in here pertinent to a project!
 
-    start_common();
+    start_common( aCtlBits );
 
     // Give a default colour for all layers
     // (actual color will be initialized by config)

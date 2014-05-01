@@ -97,7 +97,7 @@ static wxAcceleratorEntry accels[] =
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, SCH_BASE_FRAME* aParent,
         CMP_LIBRARY* aLibrary, wxSemaphore* aSemaphore, long aStyle ) :
-    SCH_BASE_FRAME( aKiway, aParent, VIEWER_FRAME_TYPE, _( "Library Browser" ),
+    SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_VIEWER, _( "Library Browser" ),
             wxDefaultPosition, wxDefaultSize, aStyle, GetLibViewerFrameName() )
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );

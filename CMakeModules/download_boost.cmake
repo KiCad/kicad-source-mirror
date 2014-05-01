@@ -187,7 +187,7 @@ ExternalProject_Add( boost
 
     URL             http://downloads.sourceforge.net/project/boost/boost/${BOOST_RELEASE}/boost_${BOOST_VERS}.tar.bz2
     DOWNLOAD_DIR    "${DOWNLOAD_DIR}"
-    TIMEOUT         600             # 10 minutes
+    TIMEOUT         1200            # 20 minutes
     URL_MD5         ${BOOST_MD5}
     # If download fails, then enable "LOG_DOWNLOAD ON" and try again.
     # Upon a second failure with logging enabled, then look at these logs:

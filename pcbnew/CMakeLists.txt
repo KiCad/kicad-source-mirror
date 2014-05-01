@@ -517,7 +517,7 @@ if( USE_KIWAY_DLLS )
         ${PCBNEW_RESOURCES}
         )
     set_source_files_properties( ../common/single_top.cpp pcbnew.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=PCB_FRAME_TYPE;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
+        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PCB;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
         )
     target_link_libraries( pcbnew
         #singletop  # replaces common, giving us restrictive control and link warnings.
@@ -619,7 +619,7 @@ else()  # milestone A) kills this off:
         ${PCBNEW_RESOURCES}
         )
     set_source_files_properties( ../common/single_top.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=PCB_FRAME_TYPE;PGM_DATA_FILE_EXT=\"kicad_pcb\""
+        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PCB;PGM_DATA_FILE_EXT=\"kicad_pcb\""
         )
     target_link_libraries( pcbnew
         3d-viewer
