@@ -62,7 +62,7 @@ static const wxChar entryPerspective[] = wxT( "Perspective" );
 
 
 
-EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
+EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString& aFrameName ) :
     wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName )
@@ -107,7 +107,10 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
 
 void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 {
-    SaveSettings( config() );       // virtual, wxFrame specific
+    wxConfigBase* cfg = config();
+
+    if( cfg )
+        SaveSettings( cfg );       // virtual, wxFrame specific
 
     event.Skip();       // we did not "handle" the event, only eavesdropped on it.
 }
@@ -266,7 +269,7 @@ wxConfigBase* EDA_BASE_FRAME::config()
 {
     // KICAD_MANAGER_FRAME overrides this
     wxConfigBase* ret = Kiface().KifaceSettings();
-    wxASSERT( ret );
+    //wxASSERT( ret );
     return ret;
 }
 

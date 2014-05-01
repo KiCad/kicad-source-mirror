@@ -72,7 +72,7 @@ END_EVENT_TABLE()
 
 
 DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, CVPCB_MAINFRAME* aParent ) :
-    PCB_BASE_FRAME( aKiway, aParent, CVPCB_DISPLAY_FRAME_TYPE, _( "Footprint Viewer" ),
+    PCB_BASE_FRAME( aKiway, aParent, FRAME_CVPCB_DISPLAY, _( "Footprint Viewer" ),
         wxDefaultPosition, wxDefaultSize,
         KICAD_DEFAULT_DRAWFRAME_STYLE, FOOTPRINTVIEWER_FRAME_NAME )
 {

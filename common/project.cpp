@@ -30,6 +30,7 @@
 #include <gr_basic.h>
 #include <pgm_base.h>
 #include <project.h>
+#include <common.h>         // NAMELESS_PROJECT
 #include <confirm.h>
 #include <kicad_string.h>
 #include <config_params.h>
@@ -43,14 +44,13 @@ PROJECT::PROJECT()
 
 PROJECT::~PROJECT()
 {
-    /* @todo
-        careful here, this may work, but the virtual destructor may not
-        be in the same link image as PROJECT.  Won't enable this until
-        we're more stable and destructor is assuredly in same image, i.e.
-        libki.so
+#if 1
+    // careful here, this may work, but the virtual destructor may not
+    // be in the same link image as PROJECT.
+
     for( unsigned i = 0;  i<DIM(m_elems);  ++i )
         delete m_elems[i];
-    */
+#endif
 }
 
 
@@ -58,7 +58,7 @@ void PROJECT::SetProjectFullName( const wxString& aFullPathAndName )
 {
     m_project_name = aFullPathAndName;
 
-    wxASSERT( m_project_name.IsAbsolute() );
+    wxASSERT(  m_project_name.GetName() == NAMELESS_PROJECT || m_project_name.IsAbsolute() );
 #if 0
     wxASSERT( m_project_name.GetExt() == wxT( ".pro" ) )
 #else
@@ -305,7 +305,7 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList, const wxString&
 void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString&  aFileName,
         const wxString& aGroupName, const PARAM_CFG_ARRAY& aParams )
 {
-    std::auto_ptr<wxConfigBase> cfg( configCreate( aSList, aFileName, aGroupName, FORCE_LOCAL_CONFIG ) );
+    std::auto_ptr<wxConfigBase> cfg( configCreate( aSList, aFileName, aGroupName, true ) );
 
     if( !cfg.get() )
     {
@@ -353,8 +353,7 @@ bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString& aFileName,
 
     wxString timestamp = cfg->Read( wxT( "update" ) );
 
-    if( doLoadOnlyIfNew && timestamp.size() &&
-        timestamp == m_pro_date_and_time )
+    if( doLoadOnlyIfNew && timestamp.size() && timestamp == m_pro_date_and_time )
     {
         return false;
     }

@@ -242,7 +242,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, LAYER_MSK aLayerMask, TRACK_
         segment = m_Track; candidate = NULL;
         NbSegm  = 0;
 
-        while( ( segment = ::GetTrace( segment, NULL, aPosition, aLayerMask ) ) != NULL )
+        while( ( segment = ::GetTrack( segment, NULL, aPosition, aLayerMask ) ) != NULL )
         {
             if( segment->GetState( BUSY ) ) // already found and selected: skip it
             {
@@ -1172,7 +1172,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 
 #if 0   // both these are on same list, so we must scan it twice in order
         // to get VIA priority, using new #else code below.
-        // But we are not using separate lists for TRACKs and SEGVIAs, because
+        // But we are not using separate lists for TRACKs and VIA, because
         // items are ordered (sorted) in the linked
         // list by netcode AND by physical distance:
         // when created, if a track or via is connected to an existing track or
@@ -1561,29 +1561,17 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
 }
 
 
-TRACK* BOARD::GetViaByPosition( const wxPoint& aPosition, LAYER_NUM aLayer)
+VIA* BOARD::GetViaByPosition( const wxPoint& aPosition, LAYER_NUM aLayer) const
 {
-    TRACK* track;
-
-    for( track = m_Track;  track; track = track->Next() )
+    for( VIA *via = GetFirstVia( m_Track); via; via = GetFirstVia( via->Next() ) )
     {
-        if( track->Type() != PCB_VIA_T )
-            continue;
-
-        if( track->GetStart() != aPosition )
-            continue;
-
-        if( track->GetState( BUSY | IS_DELETED ) )
-            continue;
-
-        if( aLayer == UNDEFINED_LAYER )
-            break;
-
-        if( track->IsOnLayer( aLayer ) )
-            break;
+        if( (via->GetStart() == aPosition) &&
+                (via->GetState( BUSY | IS_DELETED ) == 0) &&
+                ((aLayer == UNDEFINED_LAYER) || (via->IsOnLayer( aLayer ))) )
+            return via;
     }
 
-    return track;
+    return NULL;
 }
 
 
@@ -1603,21 +1591,12 @@ D_PAD* BOARD::GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask )
 }
 
 
-D_PAD* BOARD::GetPad( TRACK* aTrace, int aEndPoint )
+D_PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
 {
     D_PAD*  pad = NULL;
-    wxPoint aPosition;
+    const wxPoint &aPosition = aTrace->GetEndPoint( aEndPoint );
 
     LAYER_MSK aLayerMask = GetLayerMask( aTrace->GetLayer() );
-
-    if( aEndPoint == FLG_START )
-    {
-        aPosition = aTrace->GetStart();
-    }
-    else
-    {
-        aPosition = aTrace->GetEnd();
-    }
 
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
@@ -1777,9 +1756,10 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNe
 }
 
 
-TRACK* BOARD::GetTrace( TRACK* aTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask )
+TRACK* BOARD::GetTrack( TRACK* aTrace, const wxPoint& aPosition,
+        LAYER_MSK aLayerMask ) const
 {
-    for( TRACK* track = aTrace;   track;  track =  track->Next() )
+    for( TRACK* track = aTrace; track; track = track->Next() )
     {
         LAYER_NUM layer = track->GetLayer();
 
@@ -1846,16 +1826,16 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
     if( aTrace->Type() == PCB_VIA_T )
     {
         TRACK* Segm1, * Segm2 = NULL, * Segm3 = NULL;
-        Segm1 = ::GetTrace( m_Track, NULL, aTrace->GetStart(), layerMask );
+        Segm1 = ::GetTrack( m_Track, NULL, aTrace->GetStart(), layerMask );
 
         if( Segm1 )
         {
-            Segm2 = ::GetTrace( Segm1->Next(), NULL, aTrace->GetStart(), layerMask );
+            Segm2 = ::GetTrack( Segm1->Next(), NULL, aTrace->GetStart(), layerMask );
         }
 
         if( Segm2 )
         {
-            Segm3 = ::GetTrace( Segm2->Next(), NULL, aTrace->GetStart(), layerMask );
+            Segm3 = ::GetTrack( Segm2->Next(), NULL, aTrace->GetStart(), layerMask );
         }
 
         if( Segm3 ) // More than 2 segments are connected to this via. the track" is only this via
@@ -1903,7 +1883,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
 
         layerMask = via->GetLayerMask();
 
-        TRACK* track = ::GetTrace( m_Track, NULL, via->GetStart(), layerMask );
+        TRACK* track = ::GetTrack( m_Track, NULL, via->GetStart(), layerMask );
 
         // GetTrace does not consider tracks flagged BUSY.
         // So if no connected track found, this via is on the current track
@@ -1925,7 +1905,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
          */
         LAYER_NUM layer = track->GetLayer();
 
-        while( ( track = ::GetTrace( track->Next(), NULL, via->GetStart(), layerMask ) ) != NULL )
+        while( ( track = ::GetTrack( track->Next(), NULL, via->GetStart(), layerMask ) ) != NULL )
         {
             if( layer != track->GetLayer() )
             {
@@ -2127,10 +2107,10 @@ BOARD_CONNECTED_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, LAYER_MSK a
     }
 
     /* No pad has been located so check for a segment of the trace. */
-    TRACK* segment = ::GetTrace( m_Track, NULL, aPosition, aLayerMask );
+    TRACK* segment = ::GetTrack( m_Track, NULL, aPosition, aLayerMask );
 
     if( segment == NULL )
-        segment = GetTrace( m_Track, aPosition, aLayerMask );
+        segment = GetTrack( m_Track, aPosition, aLayerMask );
 
     return segment;
 }
@@ -2199,7 +2179,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     aSegment->end = newTrack;
     aSegment->SetState( END_ONPAD, false );
 
-    D_PAD * pad = GetPad( newTrack, FLG_START );
+    D_PAD * pad = GetPad( newTrack, ENDPOINT_START );
 
     if ( pad )
     {

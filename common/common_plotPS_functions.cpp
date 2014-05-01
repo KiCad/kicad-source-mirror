@@ -812,27 +812,32 @@ bool PS_PLOTTER::EndPlot()
 
 
 
-void PS_PLOTTER::Text( const wxPoint&              aPos,
-               enum EDA_COLOR_T            aColor,
-               const wxString&             aText,
-               double                      aOrient,
-               const wxSize&               aSize,
-               enum EDA_TEXT_HJUSTIFY_T    aH_justify,
-               enum EDA_TEXT_VJUSTIFY_T    aV_justify,
-               int                         aWidth,
-               bool                        aItalic,
-               bool                        aBold )
+void PS_PLOTTER::Text( const wxPoint&       aPos,
+                enum EDA_COLOR_T            aColor,
+                const wxString&             aText,
+                double                      aOrient,
+                const wxSize&               aSize,
+                enum EDA_TEXT_HJUSTIFY_T    aH_justify,
+                enum EDA_TEXT_VJUSTIFY_T    aV_justify,
+                int                         aWidth,
+                bool                        aItalic,
+                bool                        aBold,
+                bool                        aMultilineAllowed )
 {
     SetCurrentLineWidth( aWidth );
     SetColor( aColor );
 
+    // Fix me: see how to use PS text mode for multiline texts
+    if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
+        aMultilineAllowed = false;  // the text has only one line.
+
     // Draw the native postscript text (if requested)
-    if( m_textMode == PLOTTEXTMODE_NATIVE )
+    if( m_textMode == PLOTTEXTMODE_NATIVE && !aMultilineAllowed )
     {
         const char *fontname = aItalic ? (aBold ? "/KicadFont-BoldOblique"
                 : "/KicadFont-Oblique")
-            : (aBold ? "/KicadFont-Bold"
-                    : "/KicadFont");
+                : (aBold ? "/KicadFont-Bold"
+                : "/KicadFont");
 
         // Compute the copious tranformation parameters
         double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
@@ -874,16 +879,16 @@ void PS_PLOTTER::Text( const wxPoint&              aPos,
     if( m_textMode == PLOTTEXTMODE_PHANTOM )
     {
         fputsPostscriptString( outputFile, aText );
-    DPOINT pos_dev = userToDeviceCoordinates( aPos );
+        DPOINT pos_dev = userToDeviceCoordinates( aPos );
         fprintf( outputFile, " %g %g phantomshow\n",
                  pos_dev.x, pos_dev.y );
     }
 
     // Draw the stroked text (if requested)
-    if( m_textMode != PLOTTEXTMODE_NATIVE )
+    if( m_textMode != PLOTTEXTMODE_NATIVE || aMultilineAllowed )
     {
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                aWidth, aItalic, aBold );
+                aWidth, aItalic, aBold, aMultilineAllowed );
     }
 }
 

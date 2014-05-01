@@ -568,7 +568,8 @@ public:
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                        int                         aWidth,
                        bool                        aItalic,
-                       bool                        aBold );
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false );
 protected:
     virtual void emitSetRGBColor( double r, double g, double b );
 };
@@ -633,7 +634,8 @@ public:
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                        int                         aWidth,
                        bool                        aItalic,
-                       bool                        aBold );
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false );
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
                             double aScaleFactor );
@@ -702,7 +704,8 @@ public:
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                        int                         aWidth,
                        bool                        aItalic,
-                       bool                        aBold );
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false );
 
 protected:
     FILL_T m_fillMode;              // true if the current contour
@@ -904,7 +907,8 @@ public:
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                        int                         aWidth,
                        bool                        aItalic,
-                       bool                        aBold );
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false );
 
 protected:
     bool textAsLines;

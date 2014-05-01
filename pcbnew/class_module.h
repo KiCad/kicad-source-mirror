@@ -77,8 +77,8 @@ public:
 
     ~MODULE();
 
-    MODULE* Next() const { return (MODULE*) Pnext; }
-    MODULE* Back() const { return (MODULE*) Pback; }
+    MODULE* Next() const { return static_cast<MODULE*>( Pnext ); }
+    MODULE* Back() const { return static_cast<MODULE*>( Pback ); }
 
     void Copy( MODULE* Module );        // Copy structure
 

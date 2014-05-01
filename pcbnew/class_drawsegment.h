@@ -69,9 +69,6 @@ public:
     /// skip the linked list stuff, and parent
     const DRAWSEGMENT& operator = ( const DRAWSEGMENT& rhs );
 
-    DRAWSEGMENT* Next() const { return (DRAWSEGMENT*) Pnext; }
-    DRAWSEGMENT* Back() const { return (DRAWSEGMENT*) Pback; }
-
     void SetWidth( int aWidth )             { m_Width = aWidth; }
     int GetWidth() const                    { return m_Width; }
 

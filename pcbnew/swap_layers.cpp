@@ -360,9 +360,9 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
 
         if( pt_segm->Type() == PCB_VIA_T )
         {
-            SEGVIA* Via = (SEGVIA*) pt_segm;
+            VIA* Via = (VIA*) pt_segm;
 
-            if( Via->GetShape() == VIA_THROUGH )
+            if( Via->GetViaType() == VIA_THROUGH )
                 continue;
 
             LAYER_NUM top_layer, bottom_layer;

@@ -100,7 +100,7 @@ if( USE_KIWAY_DLLS )
         ${GERBVIEW_RESOURCES}
         )
     set_source_files_properties( ../common/single_top.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=GERBER_FRAME_TYPE;BUILD_KIWAY_DLL"
+        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_GERBER;BUILD_KIWAY_DLL"
         )
     target_link_libraries( gerbview
         #singletop  # replaces common, giving us restrictive control and link warnings.

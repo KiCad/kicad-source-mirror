@@ -44,7 +44,8 @@
 #include <class_marker_pcb.h>
 
 
-MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe )
+MARKER_PCB* DRC::fillMarker( const TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode,
+                             MARKER_PCB* fillMe )
 {
     wxString textA = aTrack->GetSelectMenuText();
     wxString textB;
@@ -62,7 +63,7 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, M
         }
         else if( aItem->Type() == PCB_VIA_T )
         {
-            posB = position = ((SEGVIA*)aItem)->GetPosition();
+            posB = position = ((VIA*)aItem)->GetPosition();
         }
         else if( aItem->Type() == PCB_TRACE_T )
         {

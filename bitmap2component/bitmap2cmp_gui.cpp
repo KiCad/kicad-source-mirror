@@ -639,7 +639,7 @@ namespace BMP2CMP {
 
 static struct IFACE : public KIFACE_I
 {
-    bool OnKifaceStart( PGM_BASE* aProgram );
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {
@@ -706,8 +706,8 @@ PGM_BASE& Pgm()
 #endif
 
 
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
-    return start_common();
+    return start_common( aCtlBits );
 }
 

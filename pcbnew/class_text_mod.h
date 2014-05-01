@@ -100,10 +100,6 @@ public:
 
     void Flip( const wxPoint& aCentre );
 
-    TEXTE_MODULE* Next() const { return (TEXTE_MODULE*) Pnext; }
-
-    TEXTE_MODULE* Back() const { return (TEXTE_MODULE*) Pback; }
-
     /// @deprecated it seems (but the type is used to 'protect'
     //reference and value from deletion, and for identification)
     void SetType( TEXT_TYPE aType )     { m_Type = aType; }

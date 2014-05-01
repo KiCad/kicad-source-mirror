@@ -108,7 +108,7 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     if( module && module->GetFlags() == 0 && Text->GetFlags() == 0 ) // prepare undo command
     {
-        if( IsType( PCB_FRAME_TYPE ) )
+        if( IsType( FRAME_PCB ) )
             SaveCopyInUndoList( module, UR_CHANGED );
     }
 
@@ -236,7 +236,7 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             double tmp = Text->GetOrientation();
             Text->SetOrientation( TextInitialOrientation );
 
-            if( IsType( PCB_FRAME_TYPE ) )
+            if( IsType( FRAME_PCB ) )
                 SaveCopyInUndoList( Module, UR_CHANGED );
             else
                 SaveCopyInUndoList( Module, UR_MODEDIT );

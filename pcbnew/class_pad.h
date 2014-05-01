@@ -106,7 +106,7 @@ public:
 
     void Copy( D_PAD* source );
 
-    D_PAD* Next() const       { return (D_PAD*) Pnext; }
+    D_PAD* Next() const       { return static_cast<D_PAD*>( Pnext ); }
 
     MODULE* GetParent() const { return (MODULE*) m_Parent; }
 

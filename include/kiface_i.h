@@ -43,7 +43,7 @@ public:
 
         // see base class KIFACE in kiway.h for doxygen docs
 
-    VTBL_ENTRY bool OnKifaceStart( PGM_BASE* aProgram ) = 0;
+    VTBL_ENTRY bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) = 0;
     /*
     {
         typically call start_common() in your overload
@@ -58,7 +58,7 @@ public:
     }
 
     VTBL_ENTRY  wxWindow* CreateWindow( wxWindow* aParent,
-            int aClassId, KIWAY* aKIWAY, int aCtlBits = 0 ) = 0;
+            int aClassId, KIWAY* aKIWAY, int aCtlBits ) = 0;
 
     VTBL_ENTRY void* IfaceOrAddress( int aDataId ) = 0;
 
@@ -76,7 +76,8 @@ public:
      */
     KIFACE_I( const char* aKifaceName, KIWAY::FACE_T aId ) :
         m_id( aId ),
-        m_bm( aKifaceName )
+        m_bm( aKifaceName ),
+        m_start_flags( 0 )
     {
     }
 
@@ -85,7 +86,7 @@ public:
 protected:
 
     /// Common things to do for a top program module, during OnKifaceStart().
-    bool start_common();
+    bool start_common( int aCtlBits );
 
     /// Common things to do for a top program module, during OnKifaceEnd();
     void end_common();
@@ -99,6 +100,18 @@ public:
     const wxString Name()                               { return wxString::FromUTF8( m_bm.m_name ); }
 
     wxConfigBase* KifaceSettings() const                { return m_bm.m_config; }
+
+    /**
+     * Function StartFlags
+     * returns whatever was passed as @a aCtlBits to OnKifaceStart()
+     */
+    int StartFlags() const                              { return m_start_flags; }
+
+    /**
+     * Function IsSingle
+     * is this KIFACE_I running under single_top?
+     */
+    bool IsSingle() const                               { return m_start_flags & KFCTL_STANDALONE; }
 
     /**
      * Function GetHelpFileName
@@ -116,6 +129,8 @@ private:
     KIWAY::FACE_T       m_id;
 
     BIN_MOD             m_bm;
+
+    int                 m_start_flags;      ///< flags provided in OnKifaceStart()
 };
 
 

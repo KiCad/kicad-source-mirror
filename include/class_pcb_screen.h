@@ -31,7 +31,7 @@ public:
 
     ~PCB_SCREEN();
 
-    PCB_SCREEN* Next() { return (PCB_SCREEN*) Pnext; }
+    PCB_SCREEN* Next() const { return static_cast<PCB_SCREEN*>( Pnext ); }
 
     void        SetNextZoom();
     void        SetPreviousZoom();

@@ -169,12 +169,11 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
     {
         aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->GraphicalItems();
 
-        for( ; aEdge != NULL; aEdge = aEdge->Next() )
+        for( BOARD_ITEM *item = module->GraphicalItems(); item; item = item->Next() )
         {
-            if( aEdge->Type() != PCB_MODULE_EDGE_T )
-                continue;
-
-            aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
+            aEdge = dynamic_cast<EDGE_MODULE*>( item );
+            if( aEdge )
+                aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
         }
     }
     else
@@ -216,14 +215,12 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
 
     if( aEdge == NULL )
     {
-        aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->GraphicalItems();
-
-        for( ; aEdge != NULL; aEdge = aEdge->Next() )
+        for( BOARD_ITEM *item = module->GraphicalItems() ; item != NULL;
+                item = item->Next() )
         {
-            if( aEdge->Type() != PCB_MODULE_EDGE_T )
-                continue;
+            aEdge = dynamic_cast<EDGE_MODULE*>( item );
 
-            if( aEdge->GetLayer() != new_layer )
+            if( aEdge && (aEdge->GetLayer() != new_layer) )
             {
                 if( ! modified )    // save only once
                     SaveCopyInUndoList( module, UR_MODEDIT );

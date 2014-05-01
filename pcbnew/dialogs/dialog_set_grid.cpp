@@ -211,7 +211,7 @@ bool PCB_BASE_FRAME::InvokeDialogGrid()
 
     if( ret == wxID_OK )
     {
-        if( GetGridOrigin() != grid_origin && IsType( PCB_FRAME_TYPE ) )
+        if( GetGridOrigin() != grid_origin && IsType( FRAME_PCB ) )
             OnModify();     // because grid origin is saved in board, show as modified
 
         SetGridOrigin( grid_origin );

@@ -84,6 +84,8 @@ private:
 };
 
 
+class KIWAY_EXPRESS;
+
 /**
  * Class KIWAY_PLAYER
  * is a wxFrame capable of the OpenProjectFiles function, meaning it can load
@@ -98,21 +100,15 @@ private:
 class KIWAY_PLAYER : public EDA_BASE_FRAME, public KIWAY_HOLDER
 {
 public:
-    KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
+    KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
             const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-            long aStyle, const wxString& aWdoName = wxFrameNameStr ) :
-        EDA_BASE_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aWdoName ),
-        KIWAY_HOLDER( aKiway )
-    {}
+            long aStyle, const wxString& aWdoName = wxFrameNameStr );
 
     /// Don't use this one, only wxformbuilder uses it, and it must be augmented with
     /// a SetKiway() early in derived constructor.
     KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
             const wxPoint& aPos, const wxSize& aSize, long aStyle,
-            const wxString& aWdoName = wxFrameNameStr ) :
-        EDA_BASE_FRAME( aParent, (ID_DRAWFRAME_TYPE) aId, aTitle, aPos, aSize, aStyle, aWdoName ),
-        KIWAY_HOLDER( 0 )
-    {}
+            const wxString& aWdoName = wxFrameNameStr );
 
 
     // For the aCtl argument of OpenProjectFiles()
@@ -130,7 +126,7 @@ public:
      * <p>
      * Each derived class should handle this in a way specific to its needs.
      * No prompting is done inside here for any file or project.  There should be
-     * need to call this with aFileList which is empty.  However, calling it with
+     * no need to call this with aFileList which is empty.  However, calling it with
      * a single filename which does not exist should indicate to the implementor
      * that a new session is being started and that the given name is the desired
      * name for the data file at time of save.
@@ -164,6 +160,67 @@ public:
 
         return false;
     }
+
+    /**
+     * Function KiwayMailIn
+     * receives KIWAY_EXPRESS messages from other players.  Merely override it
+     * in derived classes.
+     */
+    virtual void KiwayMailIn( KIWAY_EXPRESS& aEvent );
+
+    DECLARE_EVENT_TABLE()
+
+//private:
+
+    /// event handler, routes to virtual KiwayMailIn()
+    void kiway_express( KIWAY_EXPRESS& aEvent );
 };
+
+
+// psuedo code for OpenProjectFiles
+#if 0
+
+bool OpenProjectFiles( const std::vector<wxString>& aFileList, int aCtl = 0 )
+{
+    if( aFileList.size() != 1 )
+    {
+        complain via UI.
+        return false
+    }
+
+    assert( aFileList[0] is absolute )      // bug in single_top.cpp or project manager.
+
+    if (window does not support appending) || !(aCtl & KICTL_OPEN_APPEND)
+    {
+        close any currently open project files.
+    }
+
+    if( aFileList[0] does not exist )
+    {
+        notify user file does not exist.
+
+        create an empty project file
+        mark file as modified.
+
+        use the default project config file.
+    }
+    else
+    {
+        load aFileList[0]
+
+        use the project config file for project given by aFileList[0]s full path.
+    }
+
+    UpdateTitle();
+
+    show contents.
+}
+
+
+
+#endif
+
+
+
 
 #endif // KIWAY_PLAYER_H_

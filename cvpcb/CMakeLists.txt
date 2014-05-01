@@ -81,7 +81,7 @@ if( USE_KIWAY_DLLS )
         ${CVPCB_RESOURCES}
         )
     set_source_files_properties( ../common/single_top.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=CVPCB_FRAME_TYPE;PGM_DATA_FILE_EXT=\"net\";BUILD_KIWAY_DLL"
+        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_CVPCB;PGM_DATA_FILE_EXT=\"net\";BUILD_KIWAY_DLL"
         )
     target_link_libraries( cvpcb
         #singletop  # replaces common, giving us restrictive control and link warnings.

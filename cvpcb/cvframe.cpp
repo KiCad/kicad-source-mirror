@@ -107,7 +107,7 @@ END_EVENT_TABLE()
 
 
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    KIWAY_PLAYER( aKiway, aParent, CVPCB_FRAME_TYPE, wxT( "CvPCB" ), wxDefaultPosition,
+    KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, wxT( "CvPCB" ), wxDefaultPosition,
         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
 {
     m_FrameName             = CVPCB_MAINFRAME_NAME;
@@ -786,14 +786,10 @@ void CVPCB_MAINFRAME::UpdateTitle()
 
 void CVPCB_MAINFRAME::SendMessageToEESCHEMA()
 {
-    char          cmd[1024];
-    int           selection;
-    COMPONENT*    Component;
-
     if( m_netlist.IsEmpty() )
         return;
 
-    selection = m_ListCmp->GetSelection();
+    int selection = m_ListCmp->GetSelection();
 
     if ( selection < 0 )
         selection = 0;
@@ -801,12 +797,14 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA()
     if( m_netlist.GetComponent( selection ) == NULL )
         return;
 
-    Component = m_netlist.GetComponent( selection );
+    COMPONENT* component = m_netlist.GetComponent( selection );
 
-    sprintf( cmd, "$PART: \"%s\"", TO_UTF8( Component->GetReference() ) );
+    std::string packet = StrPrintf( "$PART: \"%s\"", TO_UTF8( component->GetReference() ) );
 
-    SendCommand( MSG_TO_SCH, cmd );
-
+    if( Kiface().IsSingle() )
+        SendCommand( MSG_TO_SCH, packet.c_str() );
+    else
+        Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, packet, this );
 }
 
 

@@ -610,4 +610,8 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack );
 wxString SearchHelpFileFullPath( const SEARCH_STACK& aSearchStack, const wxString& aBaseName );
 
 
+/// Put aPriorityPath in front of all paths in the value of aEnvVar.
+const wxString PrePendPath( const wxString& aEnvVar, const wxString& aPriorityPath );
+
+
 #endif  // INCLUDE__COMMON_H_

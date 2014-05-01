@@ -834,7 +834,7 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
 }
 
 
-PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
+PADSTACK* SPECCTRA_DB::makeVia( const ::VIA* aVia )
 {
     LAYER_NUM topLayerNum;
     LAYER_NUM botLayerNum;
@@ -1985,7 +1985,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
         for( int i = 0; i<items.GetCount(); ++i )
         {
-            SEGVIA* via = (SEGVIA*) items[i];
+            ::VIA* via = (::VIA*) items[i];
             wxASSERT( via->Type() == PCB_VIA_T );
 
             int     netcode = via->GetNetCode();

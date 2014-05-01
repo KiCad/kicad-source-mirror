@@ -44,7 +44,7 @@ class BOARD_ITEM;
 class BOARD_CONNECTED_ITEM;
 class MODULE;
 class D_PAD;
-class SEGVIA;
+class VIA;
 class TRACK;
 class ZONE_CONTAINER;
 class CPolyPt;
@@ -332,7 +332,7 @@ public:
      * taken into account during ratsnest computations.
      * @param aVia is a via for which node is added.
      */
-    void AddItem( const SEGVIA* aVia );
+    void AddItem( const VIA* aVia );
 
     /**
      * Function AddItem()
@@ -364,7 +364,7 @@ public:
      * taken into account during ratsnest computations anymore.
      * @param aVia is a via for which nodes and edges are removed.
      */
-    void RemoveItem( const SEGVIA* aVia );
+    void RemoveItem( const VIA* aVia );
 
     /**
      * Function RemoveItem()
@@ -522,7 +522,7 @@ protected:
     boost::unordered_map<const D_PAD*, RN_NODE_PTR> m_pads;
 
     ///> Map that associates nodes in the ratsnest model to respective vias.
-    boost::unordered_map<const SEGVIA*, RN_NODE_PTR> m_vias;
+    boost::unordered_map<const VIA*, RN_NODE_PTR> m_vias;
 
     ///> Map that associates edges in the ratsnest model to respective tracks.
     boost::unordered_map<const TRACK*, RN_EDGE_PTR> m_tracks;

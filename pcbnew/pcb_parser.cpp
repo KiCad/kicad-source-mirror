@@ -432,7 +432,7 @@ BOARD* PCB_PARSER::parseBOARD() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_via:
-            m_board->Add( parseSEGVIA(), ADD_APPEND );
+            m_board->Add( parseVIA(), ADD_APPEND );
             break;
 
         case T_zone:
@@ -2313,15 +2313,15 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
+VIA* PCB_PARSER::parseVIA() throw( IO_ERROR, PARSE_ERROR )
 {
     wxCHECK_MSG( CurTok() == T_via, NULL,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as SEGVIA." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as VIA." ) );
 
     wxPoint pt;
     T token;
 
-    std::auto_ptr< SEGVIA > via( new SEGVIA( m_board ) );
+    std::auto_ptr< VIA > via( new VIA( m_board ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2331,11 +2331,11 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
         switch( token )
         {
         case T_blind:
-            via->SetShape( VIA_BLIND_BURIED );
+            via->SetViaType( VIA_BLIND_BURIED );
             break;
 
         case T_micro:
-            via->SetShape( VIA_MICROVIA );
+            via->SetViaType( VIA_MICROVIA );
             break;
 
         case T_at:

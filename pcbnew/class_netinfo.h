@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -234,7 +234,7 @@ private:
 
 
 /**
- * Class NETINFO
+ * Class NETINFO_LIST
  * is a container class for NETINFO_ITEM elements, which are the nets.  That makes
  * this class a container for the nets.
  */

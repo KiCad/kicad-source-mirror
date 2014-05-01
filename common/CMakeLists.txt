@@ -182,10 +182,13 @@ set( COMMON_SRCS
     html_messagebox.cpp
     kiface_i.cpp
     kiway.cpp
+    kiway_express.cpp
     kiway_holder.cpp
+    kiway_player.cpp
     msgpanel.cpp
     netlist_keywords.cpp
     newstroke_font.cpp
+    prependpath.cpp
     project.cpp
     ptree.cpp
     reporter.cpp

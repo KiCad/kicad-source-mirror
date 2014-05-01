@@ -375,8 +375,8 @@ public:
     void SetTimeStamp( time_t aNewTimeStamp ) { m_TimeStamp = aNewTimeStamp; }
     time_t GetTimeStamp() const { return m_TimeStamp; }
 
-    EDA_ITEM* Next() const { return (EDA_ITEM*) Pnext; }
-    EDA_ITEM* Back() const { return (EDA_ITEM*) Pback; }
+    EDA_ITEM* Next() const { return Pnext; }
+    EDA_ITEM* Back() const { return Pback; }
     EDA_ITEM* GetParent() const { return m_Parent; }
     DHEAD* GetList() const { return m_List; }
 

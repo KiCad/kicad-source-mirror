@@ -78,7 +78,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
         return NULL;
     }
 
-    /* Cross probing to Pcbnew if a pin or a component is found */
+    // Cross probing to Pcbnew if a pin or a component is found
     switch( item->Type() )
     {
     case SCH_FIELD_T:
@@ -105,6 +105,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
     {
         // Force display pin information (the previous display could be a component info)
         MSG_PANEL_ITEMS items;
+
         Pin->GetMsgPanelInfo( items );
 
         if( LibItem )

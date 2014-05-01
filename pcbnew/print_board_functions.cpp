@@ -249,12 +249,14 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
         if( track->Type() == PCB_VIA_T ) // VIA encountered.
         {
-            int radius = track->GetWidth() >> 1;
-            EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + track->GetShape() );
+            int radius = track->GetWidth() / 2;
+            const VIA *via = static_cast<const VIA*>( track );
+
+            EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + via->GetViaType() );
             GRSetDrawMode( aDC, drawmode );
             GRFilledCircle( m_canvas->GetClipBox(), aDC,
-                            track->GetStart().x,
-                            track->GetStart().y,
+                            via->GetStart().x,
+                            via->GetStart().y,
                             radius,
                             0, color, color );
         }
@@ -313,11 +315,12 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             if( track->Type() == PCB_VIA_T ) // VIA encountered.
             {
                 int diameter;
+                const VIA *via = static_cast<const VIA*>( track );
 
                 if( drillShapeOpt == PRINT_PARAMETERS::SMALL_DRILL_SHAPE )
-                    diameter = std::min( SMALL_DRILL, track->GetDrillValue() );
+                    diameter = std::min( SMALL_DRILL, via->GetDrillValue() );
                 else
-                    diameter = track->GetDrillValue();
+                    diameter = via->GetDrillValue();
 
                 GRFilledCircle( m_canvas->GetClipBox(), aDC,
                                 track->GetStart().x, track->GetStart().y,

@@ -62,9 +62,9 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Panel->GetParent();
     BOARD* pcb = frame->GetBoard();
-    TRACK* track = (TRACK*) frame->GetCurItem();
+    TRACK* track = dynamic_cast<TRACK*>( frame->GetCurItem() );
 
-    if( track && ( track->Type()==PCB_VIA_T || track->Type()==PCB_TRACE_T ) )
+    if( track )
     {
         // Erase the current drawing
         ShowNewTrackWhenMovingCursor( Panel, DC, wxDefaultPosition, false );
@@ -266,7 +266,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
             newTrack->SetState( BEGIN_ONPAD | END_ONPAD, false );
 
-            D_PAD* pad = GetBoard()->GetPad( previousTrack, FLG_END );
+            D_PAD* pad = GetBoard()->GetPad( previousTrack, ENDPOINT_END );
 
             if( pad )
             {
@@ -1057,7 +1057,7 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
     while( track != NULL )
     {
         TRACK* next_track = track->Next();
-        LockPoint = pcb->GetPad( track, FLG_END );
+        LockPoint = pcb->GetPad( track, ENDPOINT_END );
 
         if( LockPoint )
         {

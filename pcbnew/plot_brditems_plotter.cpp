@@ -148,10 +148,11 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
             PlotTextModule( &aModule->Value(), GetValueColor() );
     }
 
-    for( textModule = (TEXTE_MODULE*) aModule->GraphicalItems().GetFirst();
-         textModule != NULL; textModule = textModule->Next() )
+    for( BOARD_ITEM *item = aModule->GraphicalItems().GetFirst();
+         item != NULL; item = item->Next() )
     {
-        if( textModule->Type() != PCB_MODULE_TEXT_T )
+        textModule = dynamic_cast<TEXTE_MODULE*>( item );
+        if( !textModule )
             continue;
 
         if( !GetPlotOtherText() )
@@ -350,13 +351,11 @@ void BRDITEMS_PLOTTER::Plot_Edges_Modules()
 {
     for( MODULE* module = m_board->m_Modules;  module;  module = module->Next() )
     {
-        for( EDGE_MODULE* edge = (EDGE_MODULE*) module->GraphicalItems().GetFirst();
-             edge; edge = edge->Next() )
+        for( BOARD_ITEM* item = module->GraphicalItems().GetFirst(); item; item = item->Next() )
         {
-            if( edge->Type() != PCB_MODULE_EDGE_T )
-                continue;
+            EDGE_MODULE *edge = dynamic_cast<EDGE_MODULE*>( item );
 
-            if( ( GetLayerMask( edge->GetLayer() ) & m_layerMask ) == 0 )
+            if( !edge || (( GetLayerMask( edge->GetLayer() ) & m_layerMask ) == 0) )
                 continue;
 
             Plot_1_EdgeModule( edge );
@@ -685,11 +684,12 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
 
     for( TRACK *pts = m_board->m_Track; pts != NULL; pts = pts->Next() )
     {
-        if( pts->Type() != PCB_VIA_T )
-            continue;
+        const VIA *via = dynamic_cast<const VIA*>( pts );
 
-        plotOneDrillMark( PAD_DRILL_CIRCLE,  pts->GetStart(), wxSize( pts->GetDrillValue(), 0 ),
-                          wxSize( pts->GetWidth(), 0 ), 0, small_drill );
+        if( via )
+            plotOneDrillMark( PAD_DRILL_CIRCLE, via->GetStart(),
+                    wxSize( via->GetDrillValue(), 0 ),
+                    wxSize( via->GetWidth(), 0 ), 0, small_drill );
     }
 
     for( MODULE *Module = m_board->m_Modules; Module != NULL; Module = Module->Next() )

@@ -609,7 +609,7 @@ void DRC::testKeepoutAreas()
                 if( ! area->GetDoNotAllowVias()  )
                     continue;
 
-                if( ! ((SEGVIA*)segm)->IsOnLayer( area->GetLayer() ) )
+                if( ! ((VIA*)segm)->IsOnLayer( area->GetLayer() ) )
                     continue;
 
                 if( area->Outline()->Distance( segm->GetPosition() ) < segm->GetWidth()/2 )
@@ -658,7 +658,7 @@ bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
             if( ! area->GetDoNotAllowVias()  )
                 continue;
 
-            if( ! ((SEGVIA*)aRefSeg)->IsOnLayer( area->GetLayer() ) )
+            if( ! ((VIA*)aRefSeg)->IsOnLayer( area->GetLayer() ) )
                 continue;
 
             if( area->Outline()->Distance( aRefSeg->GetPosition() ) < aRefSeg->GetWidth()/2 )

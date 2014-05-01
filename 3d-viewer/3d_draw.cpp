@@ -257,8 +257,8 @@ void EDA_3D_CANVAS::BuildBoard3DView()
 
     // Build a polygon from edge cut items
     wxString msg;
-    if( ! pcb->GetBoardPolygonOutlines( bufferPcbOutlines,
-                                        allLayerHoles, &msg ) )
+
+    if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
         msg << wxT("\n\n") <<
             _("Unable to calculate the board outlines.\n"
@@ -274,7 +274,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     bool            hightQualityMode = false;
 
     for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER;
-         layer++ )
+         ++layer )
     {
         if( layer != LAST_COPPER_LAYER
             && layer >= g_Parm_3D_Visu.m_CopperLayersCount )
@@ -302,18 +302,19 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             // Add via hole
             if( track->Type() == PCB_VIA_T )
             {
-                int shape = track->GetShape();
-                int holediameter    = track->GetDrillValue();
-                int thickness       = g_Parm_3D_Visu.GetCopperThicknessBIU();
+                VIA *via = static_cast<VIA*>( track );
+                VIATYPE_T viatype = via->GetViaType();
+                int holediameter = via->GetDrillValue();
+                int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
                 int hole_outer_radius = (holediameter + thickness) / 2;
 
-                if( shape != VIA_THROUGH )
+                if( viatype != VIA_THROUGH )
                     TransformCircleToPolygon( currLayerHoles,
-                                              track->GetStart(), hole_outer_radius,
+                                              via->GetStart(), hole_outer_radius,
                                               segcountLowQuality );
                 else if( !throughHolesListBuilt )
                     TransformCircleToPolygon( allLayerHoles,
-                                              track->GetStart(), hole_outer_radius,
+                                              via->GetStart(), hole_outer_radius,
                                               segcountLowQuality );
             }
         }
@@ -431,14 +432,16 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     }
 
     // Draw vias holes (vertical cylinders)
-    for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
+    for( const TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
     {
-        if( track->Type() == PCB_VIA_T )
-            Draw3DViaHole( (SEGVIA*) track );
+        const VIA *via = dynamic_cast<const VIA*>(track);
+
+        if( via )
+            Draw3DViaHole( via );
     }
 
     // Draw pads holes (vertical cylinders)
-    for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
+    for( const MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
     {
         for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
             Draw3DPadHole( pad );
@@ -505,6 +508,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
                                                 // to reduce time calculations
                                                 // for holes and items which do not need
                                                 // a fine representation
+    double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2) );
 
     CPOLYGONS_LIST  bufferPolys;
     bufferPolys.reserve( 100000 );              // Reserve for large board
@@ -514,8 +518,8 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     CPOLYGONS_LIST  bufferPcbOutlines;          // stores the board main outlines
     // Build a polygon from edge cut items
     wxString msg;
-    if( ! pcb->GetBoardPolygonOutlines( bufferPcbOutlines,
-                                        allLayerHoles, &msg ) )
+
+    if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
         msg << wxT("\n\n") <<
             _("Unable to calculate the board outlines.\n"
@@ -524,20 +528,19 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     }
 
     int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
-    for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
-    {
-       // Add via hole
-        if( track->Type() == PCB_VIA_T )
-        {
-            int shape = track->GetShape();
-            int holediameter    = track->GetDrillValue();
-            int hole_outer_radius = (holediameter + thickness) / 2;
 
-            if( shape == VIA_THROUGH )
-                TransformCircleToPolygon( allLayerHoles,
-                                          track->GetStart(), hole_outer_radius,
-                                          segcountLowQuality );
-        }
+    // Add via holes
+    for( VIA* via = GetFirstVia( pcb->m_Track ); via != NULL;
+            via = GetFirstVia( via->Next() ) )
+    {
+        VIATYPE_T viatype = via->GetViaType();
+        int holediameter = via->GetDrillValue();
+        int hole_outer_radius = (holediameter + thickness) / 2;
+
+        if( viatype == VIA_THROUGH )
+            TransformCircleToPolygon( allLayerHoles,
+                    via->GetStart(), hole_outer_radius,
+                    segcountLowQuality );
     }
 
     // draw pads holes
@@ -557,7 +560,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     allLayerHoles.ExportTo( brdpolysetHoles );
 
     for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER;
-         layer++ )
+         ++layer )
     {
         // Skip user layers, which are not drawn here
         if( IsUserLayer( layer) )
@@ -606,22 +609,30 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
                         continue;
 
                     BuildPadShapeThickOutlineAsPolygon( pad, bufferPolys,
-                                                        linewidth,
-                                                        segcountforcircle, correctionFactor );
+                            linewidth, segcountforcircle, correctionFactor );
                 }
             }
             else
                 module->TransformPadsShapesWithClearanceToPolygon( layer,
-                                                                   bufferPolys,
-                                                                   0,
-                                                                   segcountforcircle,
-                                                                   correctionFactor );
+                        bufferPolys, 0, segcountforcircle, correctionFactor );
 
             module->TransformGraphicShapesWithClearanceToPolygonSet( layer,
-                                                                     bufferPolys,
-                                                                     0,
-                                                                     segcountforcircle,
-                                                                     correctionFactor );
+                    bufferPolys, 0, segcountforcircle, correctionFactor );
+        }
+
+        // Draw non copper zones
+        if( g_Parm_3D_Visu.GetFlag( FL_ZONE ) )
+        {
+            for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
+            {
+                ZONE_CONTAINER* zone = pcb->GetArea( ii );
+
+                if( !zone->IsOnLayer( layer ) )
+                    continue;
+
+                zone->TransformSolidAreasShapesToPolygonSet(
+                        bufferPolys, segcountLowQuality, correctionFactorLQ );
+            }
         }
 
         // bufferPolys contains polygons to merge. Many overlaps .
@@ -700,7 +711,7 @@ void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
     bufferPolys.reserve( 5000 );    // Reserve for items not on board
 
     for( LAYER_NUM layer = FIRST_USER_LAYER; layer <= LAST_USER_LAYER;
-         layer++ )
+         ++layer )
     {
         if( !Is3DLayerEnabled( layer ) )
             continue;
@@ -1047,7 +1058,7 @@ void EDA_3D_CANVAS::Draw3DGrid( double aGriSizeMM )
 }
 
 
-void EDA_3D_CANVAS::Draw3DViaHole( SEGVIA* aVia )
+void EDA_3D_CANVAS::Draw3DViaHole( const VIA* aVia )
 {
     LAYER_NUM   top_layer, bottom_layer;
     int         inner_radius    = aVia->GetDrillValue() / 2;
@@ -1060,7 +1071,7 @@ void EDA_3D_CANVAS::Draw3DViaHole( SEGVIA* aVia )
         SetGLCopperColor();
     else
     {
-        EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + aVia->GetShape() );
+        EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + aVia->GetViaType() );
         SetGLColor( color );
     }
 
@@ -1111,7 +1122,7 @@ void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
 
 
 // Draw 3D pads.
-void EDA_3D_CANVAS::Draw3DPadHole( D_PAD* aPad )
+void EDA_3D_CANVAS::Draw3DPadHole( const D_PAD* aPad )
 {
     // Draw the pad hole
     wxSize  drillsize   = aPad->GetDrillSize();

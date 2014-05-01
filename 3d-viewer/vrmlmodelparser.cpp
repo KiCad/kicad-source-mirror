@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Tuomas Vaherkoski <tuomasvaherkoski@gmail.com>
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ void VRML_MODEL_PARSER::Load( const wxString aFilename )
         if ( text == NULL )
             continue;
 
-        if( stricmp( text, "DEF" ) == 0 || stricmp( text, "Group" ) == 0 )
+        if( stricmp( text, "DEF" ) == 0 || stricmp( text, "Transform" ) == 0 || stricmp( text, "Group" ) == 0 )
         {
             while( GetLine( file, line, &LineNum, 512 ) )
             {
@@ -121,7 +121,7 @@ int VRML_MODEL_PARSER::readMaterial( FILE* file, int* LineNum )
         return 0;
     }
 
-    if( stricmp( command, "DEF" ) == 0 || stricmp( command, "Material") == 0)
+    if( stricmp( command, "DEF" ) == 0 || stricmp( command,"Transform" ) == 0 || stricmp( command, "Material") == 0)
     {
         material = new S3D_MATERIAL( GetMaster(), mat_name );
 
@@ -197,6 +197,9 @@ int VRML_MODEL_PARSER::readChildren( FILE* file, int* LineNum )
     {
         text = strtok( line, sep_chars );
 
+        if( *text == '[' )
+            continue;
+
         if( *text == ']' )
             return 0;
 
@@ -233,6 +236,11 @@ int VRML_MODEL_PARSER::readShape( FILE* file, int* LineNum )
             break;
         }
 
+        if( *text == '{' )
+            {
+                continue;
+            }
+
         if( stricmp( text, "appearance" ) == 0 )
         {
             readAppearance( file, LineNum );
@@ -266,6 +274,11 @@ int VRML_MODEL_PARSER::readAppearance( FILE* file, int* LineNum )
             err = 0;
             break;
         }
+
+        if( *text == '{' )
+            {
+                continue;
+            }
 
         if( stricmp( text, "material" ) == 0 )
         {
@@ -378,6 +391,16 @@ int VRML_MODEL_PARSER::readGeometry( FILE* file, int* LineNum )
         {
             err = 0;
             break;
+        }
+
+        if( stricmp( text, "creaseAngle" ) == 0 )
+        {
+            continue;
+        }
+
+        if( *text == '{' )
+        {
+            continue;
         }
 
         if( stricmp( text, "normalPerVertex" ) == 0 )

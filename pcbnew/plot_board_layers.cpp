@@ -357,10 +357,10 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // plot them on solder mask
     for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
     {
-        if( track->Type() != PCB_VIA_T )
-            continue;
+        const VIA* Via = dynamic_cast<const VIA*>( track );
 
-        SEGVIA* Via = (SEGVIA*) track;
+        if( !Via )
+            continue;
 
         // vias are not plotted if not on selected layer, but if layer
         // is SOLDERMASK_LAYER_BACK or SOLDERMASK_LAYER_FRONT,vias are drawn,
@@ -396,7 +396,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( diameter <= 0 )
             continue;
 
-        EDA_COLOR_T color = aBoard->GetVisibleElementColor(VIAS_VISIBLE + Via->GetShape());
+        EDA_COLOR_T color = aBoard->GetVisibleElementColor(VIAS_VISIBLE + Via->GetViaType());
         // Set plot color (change WHITE to LIGHTGRAY because
         // the white items are not seen on a white paper or screen
         aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
@@ -534,10 +534,10 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
         int via_margin = via_clearance + inflate;
         for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
         {
-            if( track->Type() != PCB_VIA_T )
-                continue;
+            const VIA* via = dynamic_cast<const VIA*>( track );
 
-            SEGVIA* via = (SEGVIA*) track;
+            if( !via )
+                continue;
 
             // vias are plotted only if they are on the corresponding
             // external copper layer
@@ -553,11 +553,11 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 continue;
 
             via->TransformShapeWithClearanceToPolygon( bufferPolys, via_margin,
-                                                       circleToSegmentsCount,
-                                                       correction );
+                    circleToSegmentsCount,
+                    correction );
             via->TransformShapeWithClearanceToPolygon( initialPolys, via_clearance,
-                                                       circleToSegmentsCount,
-                                                       correction );
+                    circleToSegmentsCount,
+                    correction );
         }
     }
 

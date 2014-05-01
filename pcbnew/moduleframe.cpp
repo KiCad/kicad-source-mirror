@@ -46,7 +46,6 @@
 #include <class_module.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <module_editor_frame.h>
@@ -153,7 +152,7 @@ END_EVENT_TABLE()
 #define FOOTPRINT_EDIT_FRAME_NAME wxT( "ModEditFrame" )
 
 FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, PCB_EDIT_FRAME* aParent ) :
-    PCB_BASE_FRAME( aKiway, aParent, MODULE_EDITOR_FRAME_TYPE, wxEmptyString,
+    PCB_BASE_FRAME( aKiway, aParent, FRAME_PCB_MODULE_EDITOR, wxEmptyString,
                     wxDefaultPosition, wxDefaultSize,
                     KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
 {
