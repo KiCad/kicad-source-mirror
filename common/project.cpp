@@ -60,9 +60,9 @@ void PROJECT::SetProjectFullName( const wxString& aFullPathAndName )
 
     wxASSERT(  m_project_name.GetName() == NAMELESS_PROJECT || m_project_name.IsAbsolute() );
 #if 0
-    wxASSERT( m_project_name.GetExt() == wxT( ".pro" ) )
+    wxASSERT( m_project_name.GetExt() == ProjectFileExtension )
 #else
-    m_project_name.SetExt( wxT( ".pro" ) );
+    m_project_name.SetExt( ProjectFileExtension );
 #endif
 
     // until multiple projects are in play, set an environment variable for the
@@ -269,19 +269,21 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList, const wxString&
 
     // No suitable pro file was found, either does not exist, or is too old.
     // Use the template kicad.pro file.  Find it by using caller's SEARCH_STACK.
-
-    wxString kicad_pro_template = aSList.FindValidPath( wxT( "kicad.pro" ) );
+    wxString templateFile = wxT( "kicad." ) + ProjectFileExtension;
+    wxString kicad_pro_template = aSList.FindValidPath( templateFile );
 
     if( !kicad_pro_template )
     {
-        wxLogDebug( wxT( "Template file <kicad.pro> not found using search paths." ) );
+        wxLogDebug( wxT( "Template file <%s> not found using search paths." ),
+                    GetChars( templateFile ) );
 
         wxFileName  templ( wxStandardPaths::Get().GetDocumentsDir(),
                             wxT( "kicad" ), ProjectFileExtension );
 
         if( !templ.IsFileReadable() )
         {
-            wxString msg = wxString::Format( _( "Unable to find kicad.pro template file." ) );
+            wxString msg = wxString::Format( _( "Unable to find %s template config file." ),
+                                             GetChars( templateFile ) );
 
             DisplayError( NULL, msg );
 
@@ -291,8 +293,12 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList, const wxString&
         kicad_pro_template = templ.GetFullPath();
     }
 
-    // copy the template to cur_pro_fn, and open it at that destination.
-    wxCopyFile( kicad_pro_template, cur_pro_fn );
+    // The project config file is not found (happens for new projects,
+    // or if the schematic editor is run outside an existing project
+    // In this case the default template (kicad.pro) is used
+    cur_pro_fn = kicad_pro_template;
+    wxLogDebug( wxT( "Use template file '%s' as project file." ), GetChars( cur_pro_fn ) );
+
     cfg = new wxFileConfig( wxEmptyString, wxEmptyString, cur_pro_fn, wxEmptyString );
 
     cfg->DontCreateOnDemand();
