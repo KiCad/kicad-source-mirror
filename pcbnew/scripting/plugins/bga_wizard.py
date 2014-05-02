@@ -24,7 +24,7 @@ import PadArray as PA
 class BGAPadGridArray(PA.PadGridArray):
 
     def NamingFunction(self, x, y):
-        return "%s%d" % (self.AlphaNameFromNumber(y + 1), x + 1)
+        return "%s%d" % (self.AlphaNameFromNumber(y + 1, alphabet="ABCDEFGHJKLMNPRTUVWY"), x + 1)
 
 
 class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
@@ -76,10 +76,10 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
         # add in the pads
         pad = PA.PadMaker(self.module).SMTRoundPad(pads["pad size"])
 
-        pin1Pos = pcbnew.wxPoint(-((rows - 1) * pad_pitch) / 2,
-                                -((cols - 1) * pad_pitch) / 2)
+        pin1Pos = pcbnew.wxPoint(-((cols - 1) * pad_pitch) / 2,
+                                 -((rows - 1) * pad_pitch) / 2)
 
-        array = BGAPadGridArray(pad, rows, cols, pad_pitch, pad_pitch, pin1Pos)
+        array = BGAPadGridArray(pad, cols, rows, pad_pitch, pad_pitch, pin1Pos)
         array.AddPadsToModule()
 
         #box
