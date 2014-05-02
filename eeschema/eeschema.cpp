@@ -40,7 +40,6 @@
 
 #include <general.h>
 #include <class_libentry.h>
-//#include <sch_junction.h>
 #include <hotkeys.h>
 #include <dialogs/dialog_color_config.h>
 #include <transform.h>
