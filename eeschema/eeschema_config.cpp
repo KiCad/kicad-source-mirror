@@ -139,7 +139,7 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     switch( id )
     {
     case ID_CONFIG_SAVE:
-        schFrame->SaveProjectSettings( false );
+        schFrame->SaveProjectSettings( true );
         break;
 
     case ID_CONFIG_READ:
@@ -205,7 +205,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     switch( id )
     {
     case ID_CONFIG_SAVE:
-        SaveProjectSettings( false );
+        SaveProjectSettings( true );
         break;
 
     case ID_CONFIG_READ:
@@ -456,8 +456,8 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
     if( aAskForSave )
     {
         wxFileDialog dlg( this, _( "Save Project File" ),
-                          fn.GetPath(), fn.GetFullName(),
-                          ProjectFileWildcard, wxFD_SAVE | wxFD_CHANGE_DIR );
+                          fn.GetPath(), fn.GetFullPath(),
+                          ProjectFileWildcard, wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;
