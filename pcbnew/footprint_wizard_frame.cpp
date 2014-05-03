@@ -113,18 +113,18 @@ static wxAcceleratorEntry accels[] =
 
 #define EXTRA_BORDER_SIZE 2
 
-/* Function FOOTPRINT_WIZARD_FRAME
- * it's the constructor for the footprint wizard frame, it creates everything inside
- */
 
 #define FOOTPRINT_WIZARD_FRAME_NAME wxT( "FootprintWizard" )
 
-FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, FOOTPRINT_EDIT_FRAME* aParent,
-        wxSemaphore* semaphore, long style ) :
-    PCB_BASE_FRAME( aKiway, aParent, FRAME_PCB_FOOTPRINT_WIZARD,
-                    _( "Footprint Wizard" ),
-                    wxDefaultPosition, wxDefaultSize, style, FOOTPRINT_WIZARD_FRAME_NAME )
+FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
+        wxWindow* aParent, FRAME_T aFrameType ) :
+    PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Wizard" ),
+            wxDefaultPosition, wxDefaultSize,
+            KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT,
+            FOOTPRINT_WIZARD_FRAME_NAME )
 {
+    wxASSERT( aFrameType==FRAME_PCB_FOOTPRINT_WIZARD_MODAL );
+
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
     m_FrameName     = FOOTPRINT_WIZARD_FRAME_NAME;
@@ -137,14 +137,10 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, FOOTPRINT_EDIT_FR
     SetIcon( icon );
 
     m_HotkeysZoomAndGridList = g_Module_Viewer_Hokeys_Descr;
-    m_semaphore = semaphore;
     m_wizardName.Empty();
-    m_exportRequest = false;
-
-    if( m_semaphore )
-        SetModalMode( true );
 
     SetBoard( new BOARD() );
+
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
@@ -244,17 +240,14 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
 }
 
 
-/* Function OnCloseWindow
- * Handles the close event, saving settings an destroying or releasing a semaphore from caller
- */
 void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    if( m_semaphore )
+    if( IsModal() )
     {
-        m_semaphore->Post();
-        SetModalMode( false );
-        // This window will be destroyed by the calling function,
-        // to avoid side effects
+        // Only dismiss a modal frame once, so that the return values set by
+        // the prior DismissModal() are not bashed for ShowModal().
+        if( !IsDismissed() )
+            DismissModal( false );
     }
     else
     {
@@ -265,15 +258,11 @@ void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 void FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint( wxCommandEvent& aEvent )
 {
-    m_exportRequest = true;
+    DismissModal( true );
     Close();
 }
 
 
-/* Function OnSize
- * It handles a dialog resize event, asking for an update
- *
- */
 void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
 {
     if( m_auimgr.GetManagedWindow() )
@@ -283,10 +272,6 @@ void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-/* Function OnSetRelativeOffset
- * Updates the cursor position and the status bar
- *
- */
 void FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 {
     GetScreen()->m_O_Curseur = GetCrossHairPosition();
@@ -294,10 +279,6 @@ void FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 }
 
 
-/* Function ReCreatePageList
- * It recreates the list of pages for a new loaded wizard
- *
- */
 void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
 {
     if( m_pageList == NULL )
@@ -325,11 +306,6 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
     m_canvas->Refresh();
 }
 
-
-/* Function ReCreateParameterList
- * It creates the parameter grid for a certain wizard page of the current wizard
- *
- */
 
 void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
 {
@@ -620,7 +596,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
 {
     wxString msg;
 
-    if( m_mainToolBar  == NULL )
+    if( !m_mainToolBar )
     {
         m_mainToolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                           wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
@@ -665,7 +641,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
         m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                                 KiBitmap( zoom_fit_in_page_xpm ), msg );
 
-        if( m_semaphore )
+        if( m_Ident == FRAME_PCB_FOOTPRINT_WIZARD_MODAL )
         {
             // The library browser is called from a "load component" command
             m_mainToolBar->AddSeparator();

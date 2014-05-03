@@ -34,6 +34,8 @@
 #include <eda_doc.h>
 #include <kicad_string.h>
 #include <pgm_base.h>
+#include <kiway.h>
+//#include <frame_type.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
 #include <filter_reader.h>
@@ -118,32 +120,21 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
 wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 {
-    wxString    fpname;
-    wxString    fpid;
+    // Close the current non-modal Lib browser if opened, and open a new one, in "modal" mode:
+    FOOTPRINT_VIEWER_FRAME* viewer;
 
-    wxSemaphore semaphore( 0, 1 );
-
-    // Close the current Lib browser, if opened, and open a new one, in "modal" mode:
-    FOOTPRINT_VIEWER_FRAME* viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( this );
+    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
 
     if( viewer )
         viewer->Destroy();
 
-    viewer = new FOOTPRINT_VIEWER_FRAME( &Kiway(), this, &semaphore );
+    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
 
-    // Show the library viewer frame until it is closed
-    while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
-    {
-        wxYield();
-        wxMilliSleep( 50 );
-    }
+    wxString    fpid;
 
-    fpname = viewer->GetSelectedFootprint();
+    viewer->ShowModal( &fpid );
 
-    if( !!fpname )
-    {
-        fpid = viewer->GetSelectedLibrary() + wxT( ":" ) + fpname;
-    }
+    //DBG(printf("%s: fpid:'%s'\n", __func__, TO_UTF8( fpid ) );)
 
     viewer->Destroy();
 

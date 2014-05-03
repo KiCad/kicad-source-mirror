@@ -361,6 +361,14 @@ void KICAD_MANAGER_FRAME::OnRefresh( wxCommandEvent& event )
 }
 
 
+void KICAD_MANAGER_FRAME::language_change( wxCommandEvent& event )
+{
+    int id = event.GetId();
+
+    Kiway.SetLanguage( id );
+}
+
+
 void KICAD_MANAGER_FRAME::ClearMsg()
 {
     m_MessagesBox->Clear();

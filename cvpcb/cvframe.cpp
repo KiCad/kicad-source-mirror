@@ -76,8 +76,6 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
 
     EVT_MENU( ID_CVPCB_LIB_TABLE_EDIT, CVPCB_MAINFRAME::OnEditFootprintLibraryTable )
 
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, CVPCB_MAINFRAME::SetLanguage )
-
     // Toolbar events
     EVT_TOOL( ID_CVPCB_QUIT, CVPCB_MAINFRAME::OnQuit )
     EVT_TOOL( ID_CVPCB_READ_INPUT_NETLIST, CVPCB_MAINFRAME::LoadNetList )
@@ -555,12 +553,6 @@ void CVPCB_MAINFRAME::DisplayModule( wxCommandEvent& event )
 {
     CreateScreenCmp();
     GetFpViewerFrame()->RedrawScreen( wxPoint( 0, 0 ), false );
-}
-
-
-void CVPCB_MAINFRAME::SetLanguage( wxCommandEvent& event )
-{
-    EDA_BASE_FRAME::SetLanguage( event );
 }
 
 

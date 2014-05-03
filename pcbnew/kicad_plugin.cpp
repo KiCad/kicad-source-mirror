@@ -279,7 +279,7 @@ void FP_CACHE::Load()
             MODULE*     footprint = (MODULE*) m_owner->m_parser->Parse();
 
             // The footprint name is the file name without the extension.
-            footprint->SetFPID( fullPath.GetName() );
+            footprint->SetFPID( FPID( fullPath.GetName() ) );
             m_modules.insert( name, new FP_CACHE_ITEM( footprint, fullPath ) );
 
         } while( dir.GetNext( &fpFileName ) );
@@ -657,14 +657,14 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     m_out->Print( aNestLevel, ")\n\n" );
 
-	// Save net codes and names
+    // Save net codes and names
     for( NETINFO_MAPPING::iterator net = m_mapping->begin(), netEnd = m_mapping->end();
             net != netEnd; ++net )
     {
         m_out->Print( aNestLevel, "(net %d %s)\n",
                                   m_mapping->Translate( net->GetNet() ),
                                   m_out->Quotew( net->GetNetname() ).c_str() );
-	}
+    }
 
     m_out->Print( 0, "\n" );
 

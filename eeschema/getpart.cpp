@@ -30,6 +30,7 @@
 
 #include <fctsys.h>
 #include <pgm_base.h>
+#include <kiway.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -55,18 +56,14 @@
 wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedAlias,
                                                         int* aUnit, int* aConvert )
 {
-    wxSemaphore semaphore( 0, 1 );
-    wxString cmpname;
-
-    // Close the current Lib browser, if open, and open a new one, in "modal" mode:
-    LIB_VIEW_FRAME* viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer( this );
+    // Close the any current non-modal Lib browser if open, and open a new one, in "modal" mode:
+    LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
     if( viewlibFrame )
         viewlibFrame->Destroy();
 
-    viewlibFrame = new LIB_VIEW_FRAME( &Kiway(), this, NULL, &semaphore,
-                        KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+    viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, true );
 
-    if ( aPreselectedAlias )
+    if( aPreselectedAlias )
     {
         viewlibFrame->SetSelectedLibrary( aPreselectedAlias->GetLibraryName() );
         viewlibFrame->SetSelectedComponent( aPreselectedAlias->GetName() );
@@ -80,15 +77,9 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedA
 
     viewlibFrame->Refresh();
 
-    // Show the library viewer frame until it is closed
-    // Wait for viewer closing event:
-    while( semaphore.TryWait() == wxSEMA_BUSY )
-    {
-        wxYield();
-        wxMilliSleep( 50 );
-    }
+    wxString cmpname;
 
-    cmpname = viewlibFrame->GetSelectedComponent();
+    viewlibFrame->ShowModal( &cmpname );
 
     if( aUnit )
         *aUnit = viewlibFrame->GetUnit();
@@ -100,6 +91,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedA
 
     return cmpname;
 }
+
 
 wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
                                                      wxArrayString&  aHistoryList,

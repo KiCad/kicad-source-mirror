@@ -26,6 +26,7 @@
 #include <viewlib_frame.h>
 #include <libeditframe.h>
 #include <base_units.h>
+#include <kiway.h>
 
 
 SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -40,12 +41,10 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
 void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 {
-    LIB_VIEW_FRAME* viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer( this );
+    LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, true );
 
-    if( viewlibFrame )
-        viewlibFrame->Show( true );
-    else
-        new LIB_VIEW_FRAME( &Kiway(), this );
+    viewlibFrame->Show( true );
+    viewlibFrame->Raise();
 }
 
 

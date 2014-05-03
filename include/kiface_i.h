@@ -58,7 +58,7 @@ public:
     }
 
     VTBL_ENTRY  wxWindow* CreateWindow( wxWindow* aParent,
-            int aClassId, KIWAY* aKIWAY, int aCtlBits ) = 0;
+            int aClassId, KIWAY* aKIWAY, int aCtlBits = 0 ) = 0;
 
     VTBL_ENTRY void* IfaceOrAddress( int aDataId ) = 0;
 

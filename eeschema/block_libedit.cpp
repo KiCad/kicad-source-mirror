@@ -321,7 +321,7 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     wxPoint move_offset;
     block = &screen->m_BlockLocate;
 
-    LIB_EDIT_FRAME* parent = ( LIB_EDIT_FRAME* ) aPanel->GetParent();
+    LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) aPanel->GetParent();
     wxASSERT( parent != NULL );
 
     LIB_COMPONENT* component = parent->GetComponent();

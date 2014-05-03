@@ -116,9 +116,9 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
                                 _( "View component documents" ) );
         m_mainToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, false );
 
-        if( m_semaphore )
+        // if library browser is modal
+        if( m_Ident == FRAME_SCH_VIEWER_MODAL )
         {
-            // The library browser is called from a "load component" command
             m_mainToolBar->AddSeparator();
             m_mainToolBar->AddTool( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
                                     wxEmptyString, KiBitmap( export_xpm ),

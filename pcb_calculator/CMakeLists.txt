@@ -75,7 +75,7 @@ if( USE_KIWAY_DLLS )
         ${PCB_CALCULATOR_RESOURCES}
         )
     set_source_files_properties( ../common/single_top.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=0;BUILD_KIWAY_DLL"
+        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_CALC;BUILD_KIWAY_DLL"
         )
     target_link_libraries( pcb_calculator
         #singletop  # replaces common, giving us restrictive control and link warnings.
@@ -93,7 +93,6 @@ if( USE_KIWAY_DLLS )
     add_library( pcb_calculator_kiface MODULE
         pcb_calculator.cpp
         ${PCB_CALCULATOR_SRCS}
-#        ${PCB_CALCULATOR_RESOURCES}
         )
     set_target_properties( pcb_calculator_kiface PROPERTIES
         OUTPUT_NAME     pcb_calculator

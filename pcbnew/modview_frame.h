@@ -34,7 +34,6 @@
 
 class wxSashLayoutWindow;
 class wxListBox;
-class wxSemaphore;
 class FP_LIB_TABLE;
 
 namespace PCB { struct IFACE; }
@@ -44,25 +43,13 @@ namespace PCB { struct IFACE; }
  */
 class FOOTPRINT_VIEWER_FRAME : public PCB_BASE_FRAME
 {
-    friend struct PCB::IFACE;
-
-private:
-    wxListBox*          m_libList;               // The list of libs names
-    wxListBox*          m_footprintList;         // The list of footprint names
-
-    // Flags
-    wxSemaphore*        m_semaphore;             // != NULL if the frame emulates a modal dialog
-    wxString            m_configPath;            // subpath for configuration
+    friend struct PCB::IFACE;       // constructor called from here only
 
 protected:
-    static wxString     m_libraryName;           // Current selected library
-    static wxString     m_footprintName;         // Current selected footprint
-    static wxString     m_selectedFootprintName; // When the viewer is used to select a footprint
-                                                 // the selected footprint is here
+    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType );
+
 
 public:
-    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent, wxSemaphore* aSemaphore = NULL );
-
     ~FOOTPRINT_VIEWER_FRAME();
 
     /**
@@ -71,17 +58,6 @@ public:
      * used to get a reference to this frame, if exists
      */
     static const wxChar* GetFootprintViewerFrameName();
-
-    /**
-     * Function GetActiveFootprintViewer (static)
-     *
-     * @param aParent the KIWAY_PLAYER which is the parent of the calling wxWindow.
-     *  This is used to traverse the window hierarchy upwards to the topmost
-     *  KIWAY_PLAYER which is still part of the same project.
-     *
-     * @return Any currently opened Footprint viewer or NULL if none.
-     */
-    static FOOTPRINT_VIEWER_FRAME* GetActiveFootprintViewer( const KIWAY_PLAYER* aParent );
 
     wxString& GetSelectedFootprint( void ) const { return m_selectedFootprintName; }
     const wxString GetSelectedLibraryFullName();
@@ -102,7 +78,18 @@ public:
      */
     void ReCreateLibraryList();
 
+
 private:
+
+    wxListBox*          m_libList;               // The list of libs names
+    wxListBox*          m_footprintList;         // The list of footprint names
+
+    wxString            m_configPath;            // subpath for configuration
+
+    static wxString     m_libraryName;           // Current selected library
+    static wxString     m_footprintName;         // Current selected footprint
+    static wxString     m_selectedFootprintName; // When the viewer is used to select a footprint
+
 
     void OnSize( wxSizeEvent& event );
 
@@ -192,7 +179,6 @@ private:
     void OnLeftDClick( wxDC*, const wxPoint& ) {}
     void SaveCopyInUndoList( BOARD_ITEM*, UNDO_REDO_T, const wxPoint& ) {}
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO_T, const wxPoint &) {}
-
 
     DECLARE_EVENT_TABLE()
 };

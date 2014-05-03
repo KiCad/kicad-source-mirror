@@ -35,6 +35,8 @@ class PROJECT;
 struct KIFACE;
 class KIFACE_I;
 
+#define VTBL_ENTRY          virtual
+
 
 /**
  * Class KIWAY_HOLDER
@@ -80,7 +82,7 @@ public:
 
 private:
     // private, all setting is done through SetKiway().
-    KIWAY*      m_kiway;                        // no ownership.
+    KIWAY*          m_kiway;            // no ownership.
 };
 
 
@@ -110,6 +112,9 @@ public:
             const wxPoint& aPos, const wxSize& aSize, long aStyle,
             const wxString& aWdoName = wxFrameNameStr );
 
+    ~KIWAY_PLAYER();
+
+    //----<Cross Module API>-----------------------------------------------------
 
     // For the aCtl argument of OpenProjectFiles()
 #define KICTL_OPEN_APPEND       (1<<0)      ///< append the data file, rather than replace
@@ -149,7 +154,7 @@ public:
      *
      * @return bool - true if all requested files were opened OK, else false.
      */
-    virtual bool OpenProjectFiles( const std::vector<wxString>& aFileList, int aCtl = 0 )
+    VTBL_ENTRY bool OpenProjectFiles( const std::vector<wxString>& aFileList, int aCtl = 0 )
     {
         // overload me for your wxFrame type.
 
@@ -162,18 +167,60 @@ public:
     }
 
     /**
+     * Function ShowModal
+     * puts up this wxFrame as if it were a modal dialog, with all other instantiated
+     * wxFrames disabled until this KIWAY_PLAYER derivative calls DismissModal().
+     * That is, behavior is similar to a modal dialog window.  Not all KIWAY_PLAYERs
+     * use this interface, so don't call this unless the implementation knows how
+     * to call DismissModal() on a button click or double click or some special
+     * event which ends the modal behavior.
+     *
+     * @param aResult if not NULL, indicates a place to put a resultant string.
+     *
+     * @return bool - true if frame implementation called KIWAY_PLAYER::DismissModal()
+     *  with aRetVal of true.
+     */
+    VTBL_ENTRY bool ShowModal( wxString* aResult );
+
+    //----</Cross Module API>----------------------------------------------------
+
+
+    /**
      * Function KiwayMailIn
      * receives KIWAY_EXPRESS messages from other players.  Merely override it
      * in derived classes.
      */
     virtual void KiwayMailIn( KIWAY_EXPRESS& aEvent );
 
-    DECLARE_EVENT_TABLE()
+protected:
 
-//private:
+    bool IsModal()              { return m_modal_dismissed; }
 
-    /// event handler, routes to virtual KiwayMailIn()
+    /**
+     * Function IsDismissed
+     * returns false only if both the frame is acting in modal mode and it has not been
+     * dismissed yet with DismissModal().  IOW, it will return true if the dialog is
+     * not modal or if it is modal and has been dismissed.
+     */
+    bool IsDismissed();
+
+    void DismissModal( bool aRetVal, const wxString& aResult = wxEmptyString );
+
+    /// event handler, routes to derivative specific virtual KiwayMailIn()
     void kiway_express( KIWAY_EXPRESS& aEvent );
+
+    /**
+     * Function language_change
+     * is an event handler called on a language menu selection.
+     */
+    void language_change( wxCommandEvent& event );
+
+    // variables for modal behavior support, only used by a few derivatives.
+    volatile bool*  m_modal_dismissed;  // points to "dismissed state", NULL means not modal
+    wxString        m_modal_string;
+    bool            m_modal_ret_val;    // true if a selection was made
+
+    DECLARE_EVENT_TABLE()
 };
 
 

@@ -197,6 +197,8 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
 
 void PGM_KICAD::OnPgmExit()
 {
+    Kiway.OnKiwayEnd();
+
     saveCommonSettings();
 
     // write common settings to disk, and destroy everything in PGM_KICAD,
@@ -253,7 +255,7 @@ void PGM_KICAD::destroy()
 }
 
 
-KIWAY  Kiway( &Pgm() );
+KIWAY  Kiway( &Pgm(), KFCTL_CPP_PROJECT_SUITE );
 
 
 /**

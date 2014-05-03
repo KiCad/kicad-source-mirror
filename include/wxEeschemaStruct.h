@@ -814,12 +814,6 @@ private:
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
 
     /**
-     * Function SetLanguage
-     * called on a language menu selection
-     */
-    void SetLanguage( wxCommandEvent& event );
-
-    /**
      * Function UpdateTitle
      * sets the main window title bar text.
      * <p>

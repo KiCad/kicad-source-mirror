@@ -285,7 +285,7 @@ void GPCB_FPL_CACHE::Load()
         MODULE*          footprint = parseMODULE( &reader );
 
         // The footprint name is the file name without the extension.
-        footprint->SetFPID( fn.GetName() );
+        footprint->SetFPID( FPID( fn.GetName() ) );
         m_modules.insert( name, new GPCB_FPL_CACHE_ITEM( footprint, fn.GetName() ) );
 
     } while( dir.GetNext( &fpFileName ) );
@@ -299,7 +299,6 @@ void GPCB_FPL_CACHE::Load()
 
 void GPCB_FPL_CACHE::Remove( const wxString& aFootprintName )
 {
-
     std::string footprintName = TO_UTF8( aFootprintName );
 
     MODULE_CITER it = m_modules.find( footprintName );
