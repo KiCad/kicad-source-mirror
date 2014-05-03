@@ -190,21 +190,21 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_OPEN_MODULE_EDITOR:
         {
-            FOOTPRINT_EDIT_FRAME* editor = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor( this );
+            FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, false );
 
             if( !editor )
             {
-                KIFACE_I&   kf = Kiface();
-
-                editor = (FOOTPRINT_EDIT_FRAME*) kf.CreateWindow( this, FRAME_PCB_MODULE_EDITOR, &Kiway(), kf.StartFlags() );
+                editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
 
                 editor->Show( true );
                 editor->Zoom_Automatique( false );
             }
             else
             {
+                /* not needed on linux, other platforms need this?
                 if( editor->IsIconized() )
                      editor->Iconize( false );
+                */
 
                 editor->Raise();
 
@@ -218,21 +218,21 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_OPEN_MODULE_VIEWER:
         {
-            FOOTPRINT_VIEWER_FRAME* viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( this );
+            FOOTPRINT_VIEWER_FRAME* viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
 
             if( !viewer )
             {
-                KIFACE_I&   kf = Kiface();
-
-                viewer = (FOOTPRINT_VIEWER_FRAME*) kf.CreateWindow( this, FRAME_PCB_MODULE_VIEWER, &Kiway(), kf.StartFlags() );
+                viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, true );
 
                 viewer->Show( true );
                 viewer->Zoom_Automatique( false );
             }
             else
             {
+                /* not needed on linux, other platforms need this?
                 if( viewer->IsIconized() )
                      viewer->Iconize( false );
+                */
 
                 viewer->Raise();
 
@@ -848,20 +848,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         {
-            FOOTPRINT_EDIT_FRAME* editor = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor( this );
-
-            if( !editor )
-            {
-                KIFACE_I&   kf = Kiface();
-
-                editor = (FOOTPRINT_EDIT_FRAME*) kf.CreateWindow( this, FRAME_PCB_MODULE_EDITOR, &Kiway(), kf.StartFlags() );
-            }
+            FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
 
             editor->Load_Module_From_BOARD( (MODULE*)GetCurItem() );
             SetCurItem( NULL );     // the current module could be deleted by
 
             editor->Show( true );
-            editor->Iconize( false );
+
+            editor->Raise();        // Iconize( false );
         }
         m_canvas->MoveCursorToCrossHair();
         break;

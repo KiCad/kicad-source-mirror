@@ -145,7 +145,7 @@ MODULE* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
 {
     FOOTPRINT_WIZARD* footprintWizard = FOOTPRINT_WIZARDS::GetWizard( m_wizardName );
 
-    if( footprintWizard && m_exportRequest )
+    if( footprintWizard && m_modal_ret_val )
     {
         return footprintWizard->GetModule();
     }

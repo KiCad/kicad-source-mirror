@@ -53,17 +53,6 @@ public:
      */
     static const wxChar* GetFootprintEditorFrameName();
 
-    /**
-     * Function GetActiveFootprintEditor (static)
-     *
-     * @param aTopOfProject is a PCB_EDIT_FRAME* window which anchors the search in
-     *  a project specific way.
-     *
-     * @return a reference to the current opened Footprint editor
-     * or NULL if no Footprint editor currently opened
-     */
-    static FOOTPRINT_EDIT_FRAME* GetActiveFootprintEditor( const wxWindow* aTopOfProject );
-
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const;           // overload PCB_BASE_FRAME, get parent's
     void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );  // overload
 
@@ -415,7 +404,7 @@ public:
 protected:
 
     /// protected so only friend PCB::IFACE::CreateWindow() can act as sole factory.
-    FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, PCB_EDIT_FRAME* aParent );
+    FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
     static BOARD*   s_Pcb;      ///< retain board across invocations of module editor
 

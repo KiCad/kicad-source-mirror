@@ -95,9 +95,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
         m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                                 KiBitmap( zoom_fit_in_page_xpm ), msg );
 
-        // Enable this tool only if the library browser is called from
-        // a "load component" command
-        if( m_semaphore )
+        // Enable this tool only if the library browser is intended for modal use.
+        if( m_Ident == FRAME_PCB_MODULE_VIEWER_MODAL )
         {
             m_mainToolBar->AddSeparator();
             m_mainToolBar->AddTool( ID_MODVIEW_FOOTPRINT_EXPORT_TO_BOARD, wxEmptyString,

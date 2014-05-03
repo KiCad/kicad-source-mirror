@@ -121,7 +121,7 @@ static const wxString dso_full_path( const wxString& aAbsoluteArgv0 )
 
 // Only a single KIWAY is supported in this single_top top level component,
 // which is dedicated to loading only a single DSO.
-KIWAY    Kiway( &Pgm() );
+KIWAY    Kiway( &Pgm(), KFCTL_STANDALONE );
 
 
 // implement a PGM_BASE and a wxApp side by side:
@@ -225,82 +225,6 @@ struct APP_SINGLE_TOP : public wxApp
 IMPLEMENT_APP( APP_SINGLE_TOP );
 
 
-/**
- * Function get_kiface_getter
- * returns a KIFACE_GETTER_FUNC for the current process's main implementation
- * link image.
- *
- * @param aDSOName is an absolute full path to the DSO to load and find
- *  KIFACE_GETTER_FUNC within.
- *
- * @return KIFACE_GETTER_FUNC* - a pointer to a function which can be called to
- *  get the KIFACE or NULL if the getter func was not found.  If not found,
- *  it is possibly not version compatible since the lookup is done by name and
- *  the name contains the API version.
- */
-static KIFACE_GETTER_FUNC* get_kiface_getter( const wxString& aDSOName )
-{
-#if defined(BUILD_KIWAY_DLL)
-
-    // Remember single_top only knows about a single DSO.  Using an automatic
-    // with a defeated destructor, see Detach() below, so that the DSO program
-    // image stays in RAM until process termination, and specifically
-    // beyond the point in time at which static destructors are run.  Otherwise
-    // a static wxDynamicLibrary's destructor might create an out of sequence
-    // problem.  This was never detected, so it's only a preventative strategy.
-    wxDynamicLibrary dso;
-
-    void*   addr = NULL;
-
-    if( !dso.Load( aDSOName, wxDL_VERBATIM | wxDL_NOW ) )
-    {
-        // Failure: error reporting UI was done via wxLogSysError().
-        // No further reporting required here.
-    }
-
-    else if( ( addr = dso.GetSymbol( wxT( KIFACE_INSTANCE_NAME_AND_VERSION ) ) ) == NULL )
-    {
-        // Failure: error reporting UI was done via wxLogSysError().
-        // No further reporting required here.
-    }
-
-    else
-    {
-        // Tell dso's wxDynamicLibrary destructor not to Unload() the program image.
-        (void) dso.Detach();
-
-        return (KIFACE_GETTER_FUNC*) addr;
-    }
-
-    // There is a file installation bug. We only look for KIFACE_I's which we know
-    // to exist, and we did not find one.  If we do not find one, this is an
-    // installation bug.
-
-    wxString msg = wxString::Format( wxT(
-        "Fatal Installation Bug\nmissing file:\n'%s'\n\nargv[0]:\n'%s'" ),
-        GetChars( aDSOName ),
-        GetChars( wxStandardPaths::Get().GetExecutablePath() )
-        );
-
-    // This is a fatal error, one from which we cannot recover, nor do we want
-    // to protect against in client code which would require numerous noisy
-    // tests in numerous places.  So we inform the user that the installation
-    // is bad.  This exception will likely not get caught until way up in the
-    // wxApp derivative, at which point the process will exit gracefully.
-    THROW_IO_ERROR( msg );
-
-#else
-    return &KIFACE_GETTER;
-
-#endif
-}
-
-
-static KIFACE*  kiface;
-static int      kiface_version;
-
-
-
 bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
 {
     // first thing: set m_wx_app
@@ -321,43 +245,26 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
     if( !initPgm() )
         return false;
 
-    wxString dname = dso_full_path( absoluteArgv0 );
+#if !defined(BUILD_KIWAY_DLL)
+    // Get the getter, it is statically linked into this binary image.
+    KIFACE_GETTER_FUNC* getter = &KIFACE_GETTER;
 
-    // Get the getter.
-    KIFACE_GETTER_FUNC* getter = get_kiface_getter( dname );
-
-    if( !getter )
-    {
-        // get_kiface_getter() failed & already showed the UI message.
-        // Return failure without any further UI.
-        return false;
-    }
+    int  kiface_version;
 
     // Get the KIFACE.
-    kiface = getter( &kiface_version, KIFACE_VERSION, this );
+    KIFACE* kiface = getter( &kiface_version, KIFACE_VERSION, this );
 
-    // KIFACE_GETTER_FUNC function comment (API) says the non-NULL is unconditional.
-    wxASSERT_MSG( kiface, wxT( "attempted DSO has a bug, failed to return a KIFACE*" ) );
-
-    // Give the DSO a single chance to do its "process level" initialization.
-    // "Process level" specifically means stay away from any projects in there.
-    if( !kiface->OnKifaceStart( this, KFCTL_STANDALONE ) )
-        return false;
-
-    // Use KIFACE to create a top window that the KIFACE knows about.
-    // TOP_FRAME is passed on compiler command line from CMake, and is one of
-    // the types in FRAME_T.
-    // KIFACE::CreateWindow() is a virtual so we don't need to link to it.
-    // Remember its in the *.kiface DSO.
-#if 0
-    // this pulls in EDA_DRAW_FRAME type info, which we don't want in
-    // the single_top link image.
-    KIWAY_PLAYER* frame = dynamic_cast<KIWAY_PLAYER*>( kiface->CreateWindow(
-                                NULL, TOP_FRAME, &Kiway, KFCTL_STANDALONE ) );
-#else
-    KIWAY_PLAYER* frame = (KIWAY_PLAYER*) kiface->CreateWindow(
-                                NULL, TOP_FRAME, &Kiway, KFCTL_STANDALONE );
+    // Trick the KIWAY into thinking it loaded a KIFACE, by recording the KIFACE
+    // in the KIWAY.  It needs to be there for KIWAY::OnKiwayEnd() anyways.
+    Kiway.set_kiface( KIWAY::KifaceType( TOP_FRAME ), kiface );
 #endif
+
+    // Use KIWAY to create a top window, which registers its existence also.
+    // "TOP_FRAME" is a macro that is passed on compiler command line from CMake,
+    // and is one of the types in FRAME_T.
+    KIWAY_PLAYER* frame = Kiway.Player( TOP_FRAME, true );
+
+    Kiway.SetTop( frame );
 
     App().SetTopWindow( frame );      // wxApp gets a face.
 
@@ -454,8 +361,7 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
 
 void PGM_SINGLE_TOP::OnPgmExit()
 {
-    if( kiface )
-        kiface->OnKifaceEnd();
+    Kiway.OnKiwayEnd();
 
     saveCommonSettings();
 

@@ -113,7 +113,7 @@ class EDA_BASE_FRAME : public wxFrame
     void windowClosing( wxCloseEvent& event );
 
 protected:
-    FRAME_T     m_Ident;           ///< Id Type (pcb, schematic, library..)
+    FRAME_T      m_Ident;           ///< Id Type (pcb, schematic, library..)
     wxPoint      m_FramePos;
     wxSize       m_FrameSize;
 
@@ -303,13 +303,6 @@ public:
     void ExportHotkeyConfigToFile( struct EDA_HOTKEY_CONFIG* aDescList );
 
     /**
-     * Function SetLanguage
-     * called on a language menu selection
-     * when using a derived function, do not forget to call this one
-     */
-    virtual void SetLanguage( wxCommandEvent& event );
-
-    /**
      * Function GetFileFromHistory
      * fetches the file name from the file history list.
      * and removes the selected file, if this file does not exists
@@ -380,17 +373,10 @@ public:
     void CheckForAutoSaveFile( const wxFileName& aFileName, const wxString& aBackupFileExtension );
 
     /**
-     * Function SetModalMode
-     * Disable or enable all other windows, to emulate a dialog behavior
-     * Useful when the frame is used to show and selec items
-     * (see FOOTPRINT_VIEWER_FRAME and LIB_VIEW_FRAME)
-     *
-     * @param aModal = true to disable all other opened windows (i.e.
-     * this windows is in dialog mode
-     *               = false to enable other windows
-     * This function is analog to MakeModal( aModal ), deprecated since wxWidgets 2.9.4
+     * Function ShowChangedLanguage
+     * redraws the menus and what not in current language.
      */
-    void SetModalMode( bool aModal );
+    virtual void ShowChangedLanguage();
 };
 
 
@@ -415,7 +401,6 @@ public:
  * then after a //==// break has additional calls to anchor toolbars in a way that matches
  * present functionality.
  */
-
 class EDA_PANEINFO : public wxAuiPaneInfo
 {
 

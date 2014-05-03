@@ -60,6 +60,7 @@
 #include <fp_lib_table.h>
 #include <module_editor_frame.h>
 #include <modview_frame.h>
+#include <footprint_wizard_frame.h>
 
 
 // Colors for layers and items
@@ -109,7 +110,6 @@ static struct IFACE : public KIFACE_I
     {
         switch( aClassId )
         {
-
         case FRAME_PCB:
             {
                 PCB_EDIT_FRAME* frame = new PCB_EDIT_FRAME( aKiway, aParent );
@@ -132,11 +132,7 @@ static struct IFACE : public KIFACE_I
 
         case FRAME_PCB_MODULE_EDITOR:
             {
-                // yuck:
-                PCB_EDIT_FRAME* editor = dynamic_cast<PCB_EDIT_FRAME*>( aParent );
-                wxASSERT( editor );
-
-                FOOTPRINT_EDIT_FRAME* frame = new FOOTPRINT_EDIT_FRAME( aKiway, editor );
+                FOOTPRINT_EDIT_FRAME* frame = new FOOTPRINT_EDIT_FRAME( aKiway, aParent );
 
                 frame->Zoom_Automatique( true );
 
@@ -148,18 +144,25 @@ static struct IFACE : public KIFACE_I
             break;
 
         case FRAME_PCB_MODULE_VIEWER:
+        case FRAME_PCB_MODULE_VIEWER_MODAL:
             {
-                // yuck:
-                PCB_BASE_FRAME* editor = dynamic_cast<PCB_BASE_FRAME*>( aParent );
-                wxASSERT( editor );
-
-                FOOTPRINT_VIEWER_FRAME* frame = new FOOTPRINT_VIEWER_FRAME( aKiway, editor );
+                FOOTPRINT_VIEWER_FRAME* frame = new FOOTPRINT_VIEWER_FRAME(
+                        aKiway, aParent, FRAME_T( aClassId ) );
 
                 frame->Zoom_Automatique( true );
 
                 /* Read a default config file in case no project given on command line.
                 frame->LoadProjectFile( wxEmptyString, true );
                 */
+                return frame;
+            }
+            break;
+
+        case FRAME_PCB_FOOTPRINT_WIZARD_MODAL:
+            {
+                FOOTPRINT_WIZARD_FRAME* frame = new FOOTPRINT_WIZARD_FRAME(
+                    aKiway, aParent, FRAME_T( aClassId ) );
+
                 return frame;
             }
             break;
