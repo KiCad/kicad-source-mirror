@@ -27,6 +27,7 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
+#include <kiway.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -262,25 +263,19 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_OPEN_MODULE_VIEWER:
         {
-            // Make a _project specific_ PCB_EDIT_FRAME be the start of the search in
-            // FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
-
-            PCB_EDIT_FRAME* top_project = dynamic_cast<PCB_EDIT_FRAME*>( GetParent() );
-            wxASSERT( top_project );    // dynamic_cast returns NULL if class mismatch.
-
-            FOOTPRINT_VIEWER_FRAME* viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( top_project );
+            FOOTPRINT_VIEWER_FRAME* viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
             if( !viewer )
             {
-                KIFACE_I&   kf = Kiface();
-
-                viewer = (FOOTPRINT_VIEWER_FRAME*) kf.CreateWindow( this, FRAME_PCB_MODULE_VIEWER, &Kiway(), kf.StartFlags() );
+                viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, true );
                 viewer->Show( true );
                 viewer->Zoom_Automatique( false );
             }
             else
             {
+                /*
                 if( viewer->IsIconized() )
                     viewer->Iconize( false );
+                */
 
                 viewer->Raise();
 
@@ -324,41 +319,37 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_NEW_MODULE_FROM_WIZARD:
         {
-            wxSemaphore semaphore( 0, 1 );
+            FOOTPRINT_WIZARD_FRAME* wizard = (FOOTPRINT_WIZARD_FRAME*) Kiway().Player(
+                        FRAME_PCB_FOOTPRINT_WIZARD_MODAL, true );
 
-            FOOTPRINT_WIZARD_FRAME* wizard = new FOOTPRINT_WIZARD_FRAME( &Kiway(), this, &semaphore,
-                    KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
-
-            wizard->Show( true );
             wizard->Zoom_Automatique( false );
 
-            while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
+            wxString not_used;
+
+            if( wizard->ShowModal( &not_used ) )
             {
-                wxYield();
-                wxMilliSleep( 50 );
-            }
+                // Creates the new footprint from python script wizard
+                MODULE* module = wizard->GetBuiltFootprint();
 
-            // Creates the new footprint from python script wizard
-            MODULE* module = wizard->GetBuiltFootprint();
+                if( module )        // i.e. if create module command not aborted
+                {
+                    Clear_Pcb( true );
+                    GetScreen()->ClearUndoRedoList();
+                    SetCurItem( NULL );
+                    SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-            if( module )        // i.e. if create module command not aborted
-            {
-                Clear_Pcb( true );
-                GetScreen()->ClearUndoRedoList();
-                SetCurItem( NULL );
-                SetCrossHairPosition( wxPoint( 0, 0 ) );
+                    //  Add the new object to board
+                    module->SetParent( (EDA_ITEM*)GetBoard() );
+                    GetBoard()->m_Modules.Append( module );
 
-                //  Add the new object to board
-                module->SetParent( (EDA_ITEM*)GetBoard() );
-                GetBoard()->m_Modules.Append( module );
-
-                // Initialize data relative to nets and netclasses (for a new
-                // module the defaults are used)
-                // This is mandatory to handle and draw pads
-                GetBoard()->BuildListOfNets();
-                redraw = true;
-                module->SetPosition( wxPoint( 0, 0 ) );
-                module->ClearFlags();
+                    // Initialize data relative to nets and netclasses (for a new
+                    // module the defaults are used)
+                    // This is mandatory to handle and draw pads
+                    GetBoard()->BuildListOfNets();
+                    redraw = true;
+                    module->SetPosition( wxPoint( 0, 0 ) );
+                    module->ClearFlags();
+                }
             }
 
             wizard->Destroy();
@@ -378,7 +369,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             // update module in the current board,
             // not just add it to the board with total disregard for the netlist...
-            PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) GetParent();
+            PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, true );
+
             BOARD*          mainpcb  = pcbframe->GetBoard();
             MODULE*         source_module  = NULL;
             MODULE*         module_in_edit = GetBoard()->m_Modules;

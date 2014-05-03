@@ -96,8 +96,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_COLORS_SETUP, SCH_EDIT_FRAME::OnColorConfig )
     EVT_TOOL( wxID_PREFERENCES, SCH_EDIT_FRAME::OnSetOptions )
 
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, SCH_EDIT_FRAME::SetLanguage )
-
     EVT_TOOL( ID_TO_LIBRARY, SCH_EDIT_FRAME::OnOpenLibraryEditor )
     EVT_TOOL( ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP, SCH_EDIT_FRAME::OnOpenLibraryEditor )
     EVT_TOOL( ID_TO_LIBVIEW, SCH_EDIT_FRAME::OnOpenLibraryViewer )
@@ -442,13 +440,20 @@ void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem )
 
 void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
-    LIB_EDIT_FRAME * libeditFrame = LIB_EDIT_FRAME::GetActiveLibraryEditor();;
-    if( libeditFrame && !libeditFrame->Close() )   // Can close component editor?
-        return;
+    if( Kiface().IsSingle() )
+    {
+        LIB_EDIT_FRAME* libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
+        if( libeditFrame && !libeditFrame->Close() )   // Can close component editor?
+            return;
 
-    LIB_VIEW_FRAME* viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer( this );
-    if( viewlibFrame && !viewlibFrame->Close() )   // Can close component viewer?
-        return;
+        LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
+        if( viewlibFrame && !viewlibFrame->Close() )   // Can close component viewer?
+            return;
+
+        viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, false );
+        if( viewlibFrame && !viewlibFrame->Close() )   // Can close modal component viewer?
+            return;
+    }
 
     SCH_SHEET_LIST SheetList;
 
@@ -829,7 +834,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
     {
         SCH_ITEM* item = GetScreen()->GetCurItem();
 
-        if( (item == NULL) || (item->GetFlags() != 0) || ( item->Type() != SCH_COMPONENT_T ) )
+        if( !item || (item->GetFlags() != 0) || ( item->Type() != SCH_COMPONENT_T ) )
         {
             wxMessageBox( _( "Error: not a component or no component" ) );
             return;
@@ -838,9 +843,21 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
         component = (SCH_COMPONENT*) item;
     }
 
-    // @todo: should be changed to use Kiway().Player()?
+    LIB_EDIT_FRAME* libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
+    if( !libeditFrame )
+    {
+        libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, true );
+        libeditFrame->Show( true );
+    }
+    else
+    {
+        // if( libeditFrame->IsIconized() )
+        //     libeditFrame->Iconize( false );
+    }
 
-    LIB_EDIT_FRAME* libeditFrame = LIB_EDIT_FRAME::GetActiveLibraryEditor();;
+    libeditFrame->Raise();
+
+#if 0
     if( libeditFrame )
     {
         if( libeditFrame->IsIconized() )
@@ -855,6 +872,8 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
         wxWindow* w = kf.CreateWindow( this, FRAME_SCH_LIB_EDITOR, &Kiway(), kf.StartFlags() );
         libeditFrame = dynamic_cast<LIB_EDIT_FRAME*>( w );
     }
+#endif
+
 
     if( component )
     {
@@ -872,16 +891,6 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
 {
     Close( true );
-}
-
-
-void SCH_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
-{
-    EDA_BASE_FRAME::SetLanguage( event );
-
-    LIB_EDIT_FRAME * libeditFrame = LIB_EDIT_FRAME::GetActiveLibraryEditor();;
-    if( libeditFrame )
-        libeditFrame->EDA_BASE_FRAME::SetLanguage( event );
 }
 
 

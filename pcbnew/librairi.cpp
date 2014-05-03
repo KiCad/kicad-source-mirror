@@ -620,7 +620,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
     if( footprintName.IsEmpty() )
     {
         footprintName = wxT("noname");
-        aModule->SetFPID( footprintName );
+        aModule->SetFPID( FPID( footprintName ) );
     }
 
     bool module_exists = false;

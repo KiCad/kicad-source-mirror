@@ -142,7 +142,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
             FOOTPRINT_VIEWER_FRAME* viewer;
 
-            if( tableChanged && (viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( this )) != NULL )
+            if( tableChanged && (viewer = (FOOTPRINT_VIEWER_FRAME*)Kiway().Player( FRAME_PCB_MODULE_VIEWER, false )) != NULL )
             {
                 viewer->ReCreateLibraryList();
             }

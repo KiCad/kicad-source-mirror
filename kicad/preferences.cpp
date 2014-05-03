@@ -88,8 +88,3 @@ void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
     Pgm().WritePdfBrowserInfos();
 }
 
-
-void KICAD_MANAGER_FRAME::SetLanguage( wxCommandEvent& event )
-{
-    EDA_BASE_FRAME::SetLanguage( event );
-}

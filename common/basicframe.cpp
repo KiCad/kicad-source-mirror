@@ -169,12 +169,8 @@ void EDA_BASE_FRAME::ReCreateMenuBar()
 }
 
 
-void EDA_BASE_FRAME::SetLanguage( wxCommandEvent& event )
+void EDA_BASE_FRAME::ShowChangedLanguage()
 {
-    int id = event.GetId();
-
-    Pgm().SetLanguageIdentifier( id );
-    Pgm().SetLanguage();
     ReCreateMenuBar();
     GetMenuBar()->Refresh();
 }
@@ -717,27 +713,3 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName,
     }
 }
 
-
-void EDA_BASE_FRAME::SetModalMode( bool aModal )
-{
-    // Disable all other windows
-#if wxCHECK_VERSION(2, 9, 4)
-    if( IsTopLevel() )
-    {
-        wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
-
-        while( node )
-        {
-            wxWindow* win = node->GetData();
-
-            if( win != this )
-                win->Enable( !aModal );
-
-            node = node->GetNext();
-        }
-    }
-#else
-    // Deprecated since wxWidgets 2.9.4
-    MakeModal( aModal );
-#endif
-}

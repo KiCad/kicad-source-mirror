@@ -133,13 +133,6 @@ public:
      */
     static const wxChar* GetLibEditFrameName();
 
-    /**
-     * Function GetActiveLibraryEditor (static)
-     * @return a reference to the current opened Library editor
-     * or NULL if no Library editor currently opened
-     */
-    static LIB_EDIT_FRAME* GetActiveLibraryEditor();
-
     void ReCreateMenuBar();
 
     /**
@@ -148,12 +141,6 @@ public:
      * (for instance after loading a schematic project)
      */
     static void EnsureActiveLibExists();
-
-    /**
-     * Function SetLanguage
-     * is called on a language menu selection
-     */
-    void SetLanguage( wxCommandEvent& event );
 
     void InstallConfigFrame( wxCommandEvent& event );
     void InstallDimensionsDialog( wxCommandEvent& event );

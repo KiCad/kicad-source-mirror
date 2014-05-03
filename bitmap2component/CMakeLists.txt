@@ -14,7 +14,7 @@ set( BITMAP2COMPONENT_SRCS
     )
 
 set_source_files_properties( ../common/single_top.cpp PROPERTIES
-    COMPILE_DEFINITIONS     "TOP_FRAME=0"
+    COMPILE_DEFINITIONS     "TOP_FRAME=FRAME_BM2CMP"
     )
 set_source_files_properties( bitmap2cmp_gui.cpp PROPERTIES
     COMPILE_DEFINITIONS     "COMPILING_DLL"

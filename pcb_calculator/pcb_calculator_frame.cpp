@@ -134,6 +134,7 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
     this->Freeze();
 }
 
+
 void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
 {
     if( m_RegulatorListChanged )

@@ -1666,11 +1666,7 @@ public:
      */
     MODULE* Genere_Self( wxDC* DC );
 
-    /**
-     * Function SetLanguage
-     * called on a language menu selection
-     */
-    virtual void SetLanguage( wxCommandEvent& event );
+    void ShowChangedLanguage();         // override EDA_BASE_FRAME virtual
 
     /**
      * Function UpdateTitle

@@ -151,7 +151,7 @@ END_EVENT_TABLE()
 
 #define FOOTPRINT_EDIT_FRAME_NAME wxT( "ModEditFrame" )
 
-FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, PCB_EDIT_FRAME* aParent ) :
+FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_BASE_FRAME( aKiway, aParent, FRAME_PCB_MODULE_EDITOR, wxEmptyString,
                     wxDefaultPosition, wxDefaultSize,
                     KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
@@ -288,19 +288,6 @@ wxString FOOTPRINT_EDIT_FRAME::getLibPath()
 const wxChar* FOOTPRINT_EDIT_FRAME::GetFootprintEditorFrameName()
 {
     return FOOTPRINT_EDIT_FRAME_NAME;
-}
-
-
-/* return a reference to the current opened Footprint editor
- * or NULL if no Footprint editor currently opened
- */
-FOOTPRINT_EDIT_FRAME* FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor( const wxWindow* aParent )
-{
-    // top_of_project!
-    wxASSERT( dynamic_cast<const PCB_EDIT_FRAME*>( aParent ) );
-
-    wxWindow* ret = wxWindow::FindWindowByName( GetFootprintEditorFrameName(), aParent );
-    return (FOOTPRINT_EDIT_FRAME*) ret;
 }
 
 

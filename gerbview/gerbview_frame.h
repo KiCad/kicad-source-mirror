@@ -462,11 +462,7 @@ public:
 
     void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
-    /**
-     * Function SetLanguage
-     * called on a language menu selection
-     */
-    virtual void        SetLanguage( wxCommandEvent& event );
+    void                ShowChangedLanguage();  // override EDA_BASE_FRAME virtual
 
     void                Process_Special_Functions( wxCommandEvent& event );
     void                OnSelectOptionToolbar( wxCommandEvent& event );
