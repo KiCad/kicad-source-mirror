@@ -46,7 +46,7 @@
 #include <menus_helpers.h>
 
 #include <boost/version.hpp>
-
+#include <typeinfo>
 
 /// The default auto save interval is 10 minutes.
 #define DEFAULT_AUTO_SAVE_INTERVAL 600
