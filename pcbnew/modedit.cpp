@@ -324,9 +324,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             wizard->Zoom_Automatique( false );
 
-            wxString not_used;
-
-            if( wizard->ShowModal( &not_used ) )
+            if( wizard->ShowModal() )
             {
                 // Creates the new footprint from python script wizard
                 MODULE* module = wizard->GetBuiltFootprint();
