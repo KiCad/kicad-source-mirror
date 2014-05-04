@@ -30,6 +30,7 @@
 
 #include <fctsys.h>
 #include <pgm_base.h>
+#include <kiway.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -435,8 +436,38 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEven
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& event )
 {
-    wxString datasheet_uri = fieldValueTextCtrl->GetValue();
-    ::wxLaunchDefaultBrowser( datasheet_uri );
+#if 1
+   wxString datasheet_uri = fieldValueTextCtrl->GetValue();
+   ::wxLaunchDefaultBrowser( datasheet_uri );
+
+#else
+    unsigned fieldNdx = getSelectedFieldNdx();
+
+/*
+    if( fieldNdx == DATASHEET )
+    {
+        wxString datasheet_uri = fieldValueTextCtrl->GetValue();
+        ::wxLaunchDefaultBrowser( datasheet_uri );
+    }
+    else if( fieldNdx == FOOTPRINT )
+*/
+    {
+        // pick a footprint
+        wxString fpid;
+
+        KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
+
+        if( frame->ShowModal( &fpid ) )
+        {
+            printf( "%s: %s\n", __func__, TO_UTF8( fpid ) );
+        }
+
+        frame->Show( false );       // keep the frame open, but hidden.
+
+        Raise();
+    }
+#endif
+
 }
 
 
