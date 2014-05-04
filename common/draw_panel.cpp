@@ -165,7 +165,7 @@ EDA_DRAW_PANEL::~EDA_DRAW_PANEL()
 }
 
 
-EDA_DRAW_FRAME* EDA_DRAW_PANEL::GetParent()
+EDA_DRAW_FRAME* EDA_DRAW_PANEL::GetParent() const
 {
     wxWindow* mom = wxScrolledWindow::GetParent();
     return (EDA_DRAW_FRAME*) mom;

@@ -2234,6 +2234,8 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, CPTREE& aTree ) const
     case ECO1_N:            layer = SILKSCREEN_N_FRONT; break;
     case ECO2_N:            layer = SILKSCREEN_N_BACK;  break;
     */
+    default:
+                            break;
     }
 
     gr->SetLayer( layer );

@@ -396,7 +396,7 @@ void DIMENSION::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 }
 
 
-bool DIMENSION::HitTest( const wxPoint& aPosition )
+bool DIMENSION::HitTest( const wxPoint& aPosition ) const
 {
     if( m_Text.TextHitTest( aPosition ) )
         return true;

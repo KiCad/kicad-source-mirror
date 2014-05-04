@@ -217,6 +217,10 @@ public:
     int GetSelectedCorner() const { return m_CornerSelection; }
     void SetSelectedCorner( int aCorner ) { m_CornerSelection = aCorner; }
 
+    ///
+    // Like HitTest but selects the current corner to be operated on
+    void SetSelectedCorner( const wxPoint& aPosition );
+
     int GetLocalFlags() const { return m_localFlgs; }
     void SetLocalFlags( int aFlags ) { m_localFlgs = aFlags; }
 
@@ -234,7 +238,7 @@ public:
      * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    virtual bool HitTest( const wxPoint& aPosition );
+    virtual bool HitTest( const wxPoint& aPosition ) const;
 
     /**
      * Function HitTest
@@ -342,7 +346,7 @@ public:
      * @return true if found
      * @param refPos : A wxPoint to test
      */
-    bool HitTestForCorner( const wxPoint& refPos );
+    int HitTestForCorner( const wxPoint& refPos ) const;
 
     /**
      * Function HitTestForEdge
@@ -351,7 +355,7 @@ public:
      * @return true if found
      * @param refPos : A wxPoint to test
      */
-    bool HitTestForEdge( const wxPoint& refPos );
+    int HitTestForEdge( const wxPoint& refPos ) const;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
@@ -400,10 +404,11 @@ public:
 
     /**
      * Function MoveEdge
-     * Move the outline Edge. m_CornerSelection is the start point of the outline edge
+     * Move the outline Edge
      * @param offset = moving vector
+     * @param aEdge = start point of the outline edge
      */
-    void MoveEdge( const wxPoint& offset );
+    void MoveEdge( const wxPoint& offset, int aEdge );
 
     /**
      * Function Rotate

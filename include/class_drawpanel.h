@@ -123,7 +123,7 @@ public:
 
     BASE_SCREEN* GetScreen();
 
-    EDA_DRAW_FRAME* GetParent();
+    EDA_DRAW_FRAME* GetParent() const;
 
     void OnPaint( wxPaintEvent& event );
 

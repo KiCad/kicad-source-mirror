@@ -34,6 +34,6 @@ bool TestPointInsidePolygon( const CPOLYGONS_LIST& aPolysList,
  * @param aRefPoint: the point coordinate to test
  * @return true if the point is inside, false for outside
  */
-bool TestPointInsidePolygon( wxPoint* aPolysList,
+bool TestPointInsidePolygon( const wxPoint* aPolysList,
                              int      aCount,
-                             wxPoint  aRefPoint );
+                             const wxPoint  &aRefPoint );

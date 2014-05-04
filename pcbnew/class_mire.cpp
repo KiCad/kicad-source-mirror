@@ -158,7 +158,7 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
 }
 
 
-bool PCB_TARGET::HitTest( const wxPoint& aPosition )
+bool PCB_TARGET::HitTest( const wxPoint& aPosition ) const
 {
     int dX = aPosition.x - m_Pos.x;
     int dY = aPosition.y - m_Pos.y;

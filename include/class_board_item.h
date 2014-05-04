@@ -254,7 +254,7 @@ public:
      */
     wxString GetLayerName() const;
 
-    virtual bool HitTest( const wxPoint& aPosition )
+    virtual bool HitTest( const wxPoint& aPosition ) const
     {
         return EDA_ITEM::HitTest( aPosition );
     }

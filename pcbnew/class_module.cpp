@@ -549,7 +549,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 }
 
 
-bool MODULE::HitTest( const wxPoint& aPosition )
+bool MODULE::HitTest( const wxPoint& aPosition ) const
 {
     if( m_BoundaryBox.Contains( aPosition ) )
         return true;

@@ -209,7 +209,7 @@ public:
      * @param aABPosition = position in A,B plotter axis
      * @return const wxPoint - The given position in X,Y axis.
      */
-    wxPoint GetXYPosition( const wxPoint& aABPosition );
+    wxPoint GetXYPosition( const wxPoint& aABPosition ) const;
 
     /**
      * Function GetDcodeDescr
@@ -255,7 +255,7 @@ public:
      * @param aRefPos a wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTest( const wxPoint& aRefPos );
+    bool HitTest( const wxPoint& aRefPos ) const;
 
     /**
      * Function HitTest (overloaded)
@@ -264,7 +264,7 @@ public:
      * @param aRefArea a wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTest( EDA_RECT& aRefArea );
+    bool HitTest( const EDA_RECT& aRefArea ) const;
 
     /**
      * Function GetClass

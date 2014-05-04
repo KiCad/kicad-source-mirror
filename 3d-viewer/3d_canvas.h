@@ -80,7 +80,7 @@ public:
     EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList = 0 );
     ~EDA_3D_CANVAS();
 
-    EDA_3D_FRAME*   Parent() { return (EDA_3D_FRAME*)GetParent(); }
+    EDA_3D_FRAME* Parent() const { return static_cast<EDA_3D_FRAME*>( GetParent() ); }
 
     BOARD* GetBoard() { return Parent()->GetBoard(); }
 

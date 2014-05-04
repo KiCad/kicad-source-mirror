@@ -81,7 +81,7 @@ public:
         m_auimgr.UnInit();
     };
 
-    PCB_BASE_FRAME* Parent() { return (PCB_BASE_FRAME*)GetParent(); }
+    PCB_BASE_FRAME* Parent() const { return (PCB_BASE_FRAME*)GetParent(); }
 
     BOARD* GetBoard();
 
