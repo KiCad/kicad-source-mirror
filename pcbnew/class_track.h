@@ -401,7 +401,7 @@ public:
     const wxPoint& GetPosition() const  {  return m_Start; }       // was overload
     void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }    // was overload
 
-    virtual bool HitTest( const wxPoint& aPosition );
+    virtual bool HitTest( const wxPoint& aPosition ) const;
 
     virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
 

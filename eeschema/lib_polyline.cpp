@@ -321,7 +321,7 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
 }
 
 
-bool LIB_POLYLINE::HitTest( const wxPoint& aPosition )
+bool LIB_POLYLINE::HitTest( const wxPoint& aPosition ) const
 {
     int mindist = GetPenSize() / 2;
 
@@ -333,7 +333,7 @@ bool LIB_POLYLINE::HitTest( const wxPoint& aPosition )
 }
 
 
-bool LIB_POLYLINE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_POLYLINE::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
 {
     wxPoint ref, start, end;
 

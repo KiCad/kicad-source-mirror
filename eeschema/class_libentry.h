@@ -654,14 +654,14 @@ public:
      */
     void SetPartCount( int count );
 
-    int GetPartCount() { return m_unitCount; }
+    int GetPartCount() const { return m_unitCount; }
 
     /**
      * Function IsMulti
      * @return true if the component has multiple parts per package.
      * When happens, the reference has a sub reference ti identify part
      */
-    bool IsMulti() { return m_unitCount > 1; }
+    bool IsMulti() const { return m_unitCount > 1; }
 
     /**
      * Function SubReference

@@ -267,7 +267,7 @@ const EDA_RECT LIB_RECTANGLE::GetBoundingBox() const
 }
 
 
-bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition )
+bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition ) const
 {
     int mindist = ( GetPenSize() / 2 ) + 1;
 
@@ -279,7 +279,7 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition )
 }
 
 
-bool LIB_RECTANGLE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_RECTANGLE::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
 {
     if( aThreshold < 0 )
         aThreshold = GetPenSize() / 2;

@@ -345,7 +345,7 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 }
 
 
-bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
+bool LIB_BEZIER::HitTest( const wxPoint& aRefPos ) const
 {
     int mindist = GetPenSize() / 2;
 
@@ -357,7 +357,7 @@ bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
 }
 
 
-bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_BEZIER::HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const
 {
     wxPoint ref, start, end;
 

@@ -178,7 +178,7 @@ public:
 
     virtual const EDA_RECT GetBoundingBox() const;
 
-    virtual bool HitTest( const wxPoint& aPosition );
+    virtual bool HitTest( const wxPoint& aPosition ) const;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const

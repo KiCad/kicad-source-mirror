@@ -79,7 +79,7 @@ int ITEMS_LISTBOX_BASE::GetSelection()
 }
 
 
-CVPCB_MAINFRAME* ITEMS_LISTBOX_BASE::GetParent()
+CVPCB_MAINFRAME* ITEMS_LISTBOX_BASE::GetParent() const
 {
     return (CVPCB_MAINFRAME*) wxListView::GetParent();
 }
