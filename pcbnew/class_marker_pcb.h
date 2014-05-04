@@ -64,7 +64,7 @@ public:
     const wxPoint& GetPosition() const          { return m_Pos; }
     void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }
 
-    bool HitTest( const wxPoint& aPosition )
+    bool HitTest( const wxPoint& aPosition ) const
     {
         return HitTestMarker( aPosition );
     }

@@ -210,7 +210,7 @@ public:
 
     wxString GetSheetPath() const { return m_sheetPath; }
 
-    SCH_ITEM* GetParent() { return m_parent; }
+    SCH_ITEM* GetParent() const { return m_parent; }
 };
 
 

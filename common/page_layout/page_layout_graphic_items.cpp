@@ -192,7 +192,7 @@ void WS_DRAW_ITEM_TEXT::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC )
 }
 
 // return true if the point aPosition is on the text
-bool WS_DRAW_ITEM_TEXT::HitTest( const wxPoint& aPosition)
+bool WS_DRAW_ITEM_TEXT::HitTest( const wxPoint& aPosition) const
 {
     return EDA_TEXT::TextHitTest( aPosition, 0 );
 }
@@ -221,7 +221,7 @@ void WS_DRAW_ITEM_POLYGON::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC )
 
 // return true if the point aPosition is inside one of polygons
 #include <polygon_test_point_inside.h>
-bool WS_DRAW_ITEM_POLYGON::HitTest( const wxPoint& aPosition)
+bool WS_DRAW_ITEM_POLYGON::HitTest( const wxPoint& aPosition) const
 {
     return TestPointInsidePolygon( &m_Corners[0],
                                    m_Corners.size(), aPosition );
@@ -249,7 +249,7 @@ void WS_DRAW_ITEM_RECT::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC )
 }
 
 // return true if the point aPosition is on the rect outline
-bool WS_DRAW_ITEM_RECT::HitTest( const wxPoint& aPosition)
+bool WS_DRAW_ITEM_RECT::HitTest( const wxPoint& aPosition) const
 {
     int dist =  GetPenWidth()/2;
     wxPoint start = GetStart();
@@ -316,7 +316,7 @@ void WS_DRAW_ITEM_LINE::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC )
 }
 
 // return true if the point aPosition is on the text
-bool WS_DRAW_ITEM_LINE::HitTest( const wxPoint& aPosition)
+bool WS_DRAW_ITEM_LINE::HitTest( const wxPoint& aPosition) const
 {
     return TestSegmentHit( aPosition, GetStart(), GetEnd(), GetPenWidth()/2 );
 }
@@ -394,9 +394,9 @@ void WS_DRAW_ITEM_BITMAP::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC )
  * Virtual function
  * return true if the point aPosition is on bitmap
  */
-bool WS_DRAW_ITEM_BITMAP::HitTest( const wxPoint& aPosition)
+bool WS_DRAW_ITEM_BITMAP::HitTest( const wxPoint& aPosition) const
 {
-    WORKSHEET_DATAITEM_BITMAP* parent = (WORKSHEET_DATAITEM_BITMAP*)GetParent();
+    const WORKSHEET_DATAITEM_BITMAP* parent = static_cast<const WORKSHEET_DATAITEM_BITMAP*>( GetParent() );
 
     if( parent->m_ImageBitmap == NULL )
         return false;
