@@ -23,8 +23,6 @@
  */
 
 #include <string.h>
-#include <wx/debug.h>
-#include <wx/stdpaths.h>
 
 #include <macros.h>
 #include <kiway.h>
@@ -33,6 +31,9 @@
 #include <pgm_base.h>
 #include <config.h>
 #include <id.h>
+
+#include <wx/stdpaths.h>
+#include <wx/debug.h>
 
 
 KIFACE* KIWAY::m_kiface[KIWAY_FACE_COUNT];

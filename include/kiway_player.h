@@ -180,7 +180,7 @@ public:
      * @return bool - true if frame implementation called KIWAY_PLAYER::DismissModal()
      *  with aRetVal of true.
      */
-    VTBL_ENTRY bool ShowModal( wxString* aResult );
+    VTBL_ENTRY bool ShowModal( wxString* aResult = NULL );
 
     //----</Cross Module API>----------------------------------------------------
 
