@@ -25,17 +25,45 @@
 
 #include <dialog_shim.h>
 #include <kiway_player.h>
+#include <wx/evtloop.h>
+
+/*
+    Quasi-Modal Mode Explained:
+
+    The gtk calls in wxDialog::ShowModal() cause event routing problems if that
+    modal dialog then tries to use KIWAY_PLAYER::ShowModal().  The latter shows up
+    and mostly works but does not respond to the window decoration close button.
+    There is no way to get around this without reversing the gtk calls temporarily.
+
+    Quasi-Modal mode is our own almost modal mode which disables only the parent
+    of the DIALOG_SHIM, leaving other frames operable and while staying captured in the
+    nested event loop.  This avoids the gtk calls and leaves event routing pure
+    and sufficient to operate the KIWAY_PLAYER::ShowModal() properly.  When using
+    ShowQuasiModal() you have to use EndQuasiModal() in your dialogs and not
+    EndModal().  There is also IsQuasiModal() but its value can only be true
+    when the nested event loop is active.  Do not mix the modal and quasi-modal
+    functions.  Use one set or the other.
+
+    You might find this behavior preferable over a pure modal mode, and it was said
+    that only the Mac has this natively, but now other platforms have something
+    similar.  You CAN use it anywhere for any dialog.  But you MUST use it when
+    you want to use KIWAY_PLAYER::ShowModal() from a dialog event.
+*/
+
+
 
 DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
         const wxPoint& pos, const wxSize& size, long style, const wxString& name ) :
     wxDialog( aParent, id, title, pos, size, style, name ),
-    KIWAY_HOLDER( 0 )
+    KIWAY_HOLDER( 0 ),
+    m_qmodal_loop( 0 ),
+    m_qmodal_showing( false )
 {
     // pray that aParent is either a KIWAY_PLAYER or DIALOG_SHIM derivation.
     KIWAY_HOLDER* h = dynamic_cast<KIWAY_HOLDER*>( aParent );
 
     wxASSERT_MSG( h,
-        wxT( "DIALOG_SHIM's parent not derived from KIWAY_PLAYER nor DIALOG_SHIM" ) );
+        wxT( "DIALOG_SHIM's parent is NULL or not derived from KIWAY_PLAYER nor DIALOG_SHIM" ) );
 
     if( h )
         SetKiway( this, &h->Kiway() );
@@ -43,6 +71,14 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
 #if DLGSHIM_USE_SETFOCUS
     Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SHIM::onInit ) );
 #endif
+}
+
+
+DIALOG_SHIM::~DIALOG_SHIM()
+{
+    // if the dialog is quasi-modal, this will end its event loop
+    if( IsQuasiModal() )
+        EndQuasiModal( wxID_CANCEL );
 }
 
 
@@ -92,6 +128,90 @@ bool DIALOG_SHIM::Show( bool show )
 }
 
 
+bool DIALOG_SHIM::Enable( bool enable )
+{
+#if defined(DEBUG)
+    const char* type_id = typeid( *this ).name();
+    printf( "wxDialog %s: %s\n", type_id, enable ? "enabled" : "disabled" );
+#endif
+
+    return wxDialog::Enable( enable );
+}
+
+
+int DIALOG_SHIM::ShowQuasiModal()
+{
+    // toggle a window's "enable" status to disabled, then enabled on exit.
+    // exception safe.
+    struct ENABLE_DISABLE
+    {
+        wxWindow* m_win;
+        ENABLE_DISABLE( wxWindow* aWindow ) : m_win( aWindow ) { if( m_win ) m_win->Disable(); }
+        ~ENABLE_DISABLE() { if( m_win ) m_win->Enable(); }
+    };
+
+    // This is an exception safe way to zero a pointer before returning.
+    // Yes, even though DismissModal() clears this first normally, this is
+    // here in case there's an exception before the dialog is dismissed.
+    struct NULLER
+    {
+        void*&  m_what;
+        NULLER( void*& aPtr ) : m_what( aPtr ) {}
+        ~NULLER() { m_what = 0; }   // indeed, set it to NULL on destruction
+    } clear_this( (void*&) m_qmodal_loop );
+
+
+    // release the mouse if it's currently captured as the window having it
+    // will be disabled when this dialog is shown -- but will still keep the
+    // capture making it impossible to do anything in the modal dialog itself
+    wxWindow* win = wxWindow::GetCapture();
+    if( win )
+        win->ReleaseMouse();
+
+    wxWindow* parent = GetParentForModalDialog();
+
+    ENABLE_DISABLE  toggle( parent );
+
+    Show( true );
+
+    m_qmodal_showing = true;
+
+    wxGUIEventLoop          event_loop;
+    wxEventLoopActivator    event_loop_stacker( &event_loop );
+
+    m_qmodal_loop = &event_loop;
+
+    event_loop.Run();
+
+    if( toggle.m_win )      // let's focus back on the parent window
+        toggle.m_win->SetFocus();
+
+    return GetReturnCode();
+}
+
+
+void DIALOG_SHIM::EndQuasiModal( int retCode )
+{
+    SetReturnCode( retCode );
+
+    if( !IsQuasiModal() )
+    {
+        wxFAIL_MSG( "either DIALOG_SHIM::EndQuasiModal called twice or ShowQuasiModal wasn't called" );
+        return;
+    }
+
+    m_qmodal_showing = false;
+
+    if( m_qmodal_loop )
+    {
+        m_qmodal_loop->Exit();
+        m_qmodal_loop = NULL;
+    }
+
+    Show( false );
+}
+
+
 #if DLGSHIM_USE_SETFOCUS
 
 static bool findWindowRecursively( const wxWindowList& children, const wxWindow* wanted )
@@ -113,7 +233,7 @@ static bool findWindowRecursively( const wxWindowList& children, const wxWindow*
 }
 
 
-static bool findWindowRecursively( const wxWindow* topmost, const wxWindow* wanted )
+static bool findWindowReursively( const wxWindow* topmost, const wxWindow* wanted )
 {
     // wanted may be NULL and that is ok.
 

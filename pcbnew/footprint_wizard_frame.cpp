@@ -125,6 +125,9 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 {
     wxASSERT( aFrameType==FRAME_PCB_FOOTPRINT_WIZARD_MODAL );
 
+    if( aFrameType == FRAME_PCB_FOOTPRINT_WIZARD_MODAL )
+        SetModal( true );
+
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
     m_FrameName     = FOOTPRINT_WIZARD_FRAME_NAME;
@@ -641,7 +644,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
         m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                                 KiBitmap( zoom_fit_in_page_xpm ), msg );
 
-        if( m_Ident == FRAME_PCB_FOOTPRINT_WIZARD_MODAL )
+        if( IsModal() )
         {
             // The library browser is called from a "load component" command
             m_mainToolBar->AddSeparator();

@@ -151,6 +151,17 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
 }
 
 
+bool EDA_BASE_FRAME::Enable( bool enable )
+{
+#if defined(DEBUG)
+    const char* type_id = typeid( *this ).name();
+    printf( "wxFrame %s: %s\n", type_id, enable ? "enabled" : "disabled" );
+#endif
+
+    return wxFrame::Enable( enable );
+}
+
+
 void EDA_BASE_FRAME::onAutoSaveTimer( wxTimerEvent& aEvent )
 {
     if( !doAutoSave() )

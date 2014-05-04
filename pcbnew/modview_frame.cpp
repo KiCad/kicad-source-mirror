@@ -129,6 +129,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 {
     wxASSERT( aFrameType==FRAME_PCB_MODULE_VIEWER || aFrameType==FRAME_PCB_MODULE_VIEWER_MODAL );
 
+    if( aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL )
+        SetModal( true );
+
     wxAcceleratorTable table( DIM( accels ), accels );
 
     m_FrameName  = GetFootprintViewerFrameName();
@@ -271,6 +274,7 @@ const wxChar* FOOTPRINT_VIEWER_FRAME::GetFootprintViewerFrameName()
 
 void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
+    DBG(printf( "%s:\n", __func__ );)
     if( IsModal() )
     {
         // Only dismiss a modal frame once, so that the return values set by
@@ -278,7 +282,7 @@ void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
         if( !IsDismissed() )
             DismissModal( false );
 
-        // window will be destroyed by the calling function.
+        // window to be destroyed by the caller of KIWAY_PLAYER::ShowModal()
     }
     else
         Destroy();
