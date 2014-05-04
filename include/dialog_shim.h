@@ -35,6 +35,14 @@
  #define DLGSHIM_USE_SETFOCUS      0
 #endif
 
+#if wxCHECK_VERSION( 2, 9, 4 )
+ #define WX_EVENT_LOOP      wxGUIEventLoop
+#else
+ #define WX_EVENT_LOOP      wxEventLoop
+#endif
+
+class WX_EVENT_LOOP;
+
 
 /**
  * Class DIALOG_SHIM
@@ -69,10 +77,16 @@ public:
     bool Enable( bool enable ); // override wxDialog::Enable virtual
 
 protected:
+
+#if !wxCHECK_VERSION( 2, 9, 4 )
+    wxWindow* CheckIfCanBeUsedAsParent( wxWindow* parent ) const;
+    wxWindow* GetParentForModalDialog( wxWindow *parent, long style ) const;
+#endif
+
     std::string m_hash_key;     // alternate for class_map when classname re-used.
 
     // variables for quasi-modal behavior support, only used by a few derivatives.
-    wxGUIEventLoop* m_qmodal_loop;      // points to nested event_loop, NULL means not qmodal and dismissed
+    WX_EVENT_LOOP*  m_qmodal_loop;      // points to nested event_loop, NULL means not qmodal and dismissed
     bool            m_qmodal_showing;
 
 
