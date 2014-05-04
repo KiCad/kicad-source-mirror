@@ -100,7 +100,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult )
 
     Show( true );
 
-    wxGUIEventLoop          event_loop;
+    WX_EVENT_LOOP           event_loop;
     wxEventLoopActivator    event_loop_stacker( &event_loop );
 
     m_modal_loop = &event_loop;

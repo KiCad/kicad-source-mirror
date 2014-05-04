@@ -130,6 +130,8 @@ bool DIALOG_SHIM::Show( bool show )
 
 bool DIALOG_SHIM::Enable( bool enable )
 {
+    // so we can do logging of this state change:
+
 #if defined(DEBUG)
     const char* type_id = typeid( *this ).name();
     printf( "wxDialog %s: %s\n", type_id, enable ? "enabled" : "disabled" );
@@ -137,6 +139,73 @@ bool DIALOG_SHIM::Enable( bool enable )
 
     return wxDialog::Enable( enable );
 }
+
+
+#if !wxCHECK_VERSION( 2, 9, 4 )
+wxWindow* DIALOG_SHIM::CheckIfCanBeUsedAsParent( wxWindow* parent ) const
+{
+    if ( !parent )
+        return NULL;
+
+    extern WXDLLIMPEXP_DATA_BASE(wxList) wxPendingDelete;
+
+    if ( wxPendingDelete.Member(parent) || parent->IsBeingDeleted() )
+    {
+        // this window is being deleted and we shouldn't create any children
+        // under it
+        return NULL;
+    }
+
+    if ( parent->GetExtraStyle() & wxWS_EX_TRANSIENT )
+    {
+        // this window is not being deleted yet but it's going to disappear
+        // soon so still don't parent this window under it
+        return NULL;
+    }
+
+    if ( !parent->IsShownOnScreen() )
+    {
+        // using hidden parent won't work correctly neither
+        return NULL;
+    }
+
+    // FIXME-VC6: this compiler requires an explicit const cast or it fails
+    //            with error C2446
+    if ( const_cast<const wxWindow *>(parent) == this )
+    {
+        // not sure if this can really happen but it doesn't hurt to guard
+        // against this clearly invalid situation
+        return NULL;
+    }
+
+    return parent;
+}
+
+
+wxWindow* DIALOG_SHIM::GetParentForModalDialog(wxWindow *parent, long style) const
+{
+    // creating a parent-less modal dialog will result (under e.g. wxGTK2)
+    // in an unfocused dialog, so try to find a valid parent for it unless we
+    // were explicitly asked not to
+    if ( style & wxDIALOG_NO_PARENT )
+        return NULL;
+
+    // first try the given parent
+    if ( parent )
+        parent = CheckIfCanBeUsedAsParent(wxGetTopLevelParent(parent));
+
+    // then the currently active window
+    if ( !parent )
+        parent = CheckIfCanBeUsedAsParent(
+                    wxGetTopLevelParent(wxGetActiveWindow()));
+
+    // and finally the application main window
+    if ( !parent )
+        parent = CheckIfCanBeUsedAsParent(wxTheApp->GetTopWindow());
+
+    return parent;
+}
+#endif
 
 
 int DIALOG_SHIM::ShowQuasiModal()
@@ -147,7 +216,14 @@ int DIALOG_SHIM::ShowQuasiModal()
     {
         wxWindow* m_win;
         ENABLE_DISABLE( wxWindow* aWindow ) : m_win( aWindow ) { if( m_win ) m_win->Disable(); }
-        ~ENABLE_DISABLE() { if( m_win ) m_win->Enable(); }
+        ~ENABLE_DISABLE()
+        {
+            if( m_win )
+            {
+                m_win->Enable();
+                m_win->SetFocus(); // let's focus back on the parent window
+            }
+        }
     };
 
     // This is an exception safe way to zero a pointer before returning.
@@ -168,7 +244,7 @@ int DIALOG_SHIM::ShowQuasiModal()
     if( win )
         win->ReleaseMouse();
 
-    wxWindow* parent = GetParentForModalDialog();
+    wxWindow* parent = GetParentForModalDialog( GetParent(), GetWindowStyle() );
 
     ENABLE_DISABLE  toggle( parent );
 
@@ -176,15 +252,12 @@ int DIALOG_SHIM::ShowQuasiModal()
 
     m_qmodal_showing = true;
 
-    wxGUIEventLoop          event_loop;
+    WX_EVENT_LOOP           event_loop;
     wxEventLoopActivator    event_loop_stacker( &event_loop );
 
     m_qmodal_loop = &event_loop;
 
     event_loop.Run();
-
-    if( toggle.m_win )      // let's focus back on the parent window
-        toggle.m_win->SetFocus();
 
     return GetReturnCode();
 }
@@ -233,7 +306,7 @@ static bool findWindowRecursively( const wxWindowList& children, const wxWindow*
 }
 
 
-static bool findWindowReursively( const wxWindow* topmost, const wxWindow* wanted )
+static bool findWindowRecursively( const wxWindow* topmost, const wxWindow* wanted )
 {
     // wanted may be NULL and that is ok.
 

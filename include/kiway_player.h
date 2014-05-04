@@ -87,7 +87,15 @@ private:
 
 
 class KIWAY_EXPRESS;
-class wxGUIEventLoop;
+
+#if wxCHECK_VERSION( 2, 9, 4 )
+ #define WX_EVENT_LOOP      wxGUIEventLoop
+#else
+ #define WX_EVENT_LOOP      wxEventLoop
+#endif
+
+class WX_EVENT_LOOP;
+
 
 /**
  * Class KIWAY_PLAYER
@@ -219,7 +227,7 @@ protected:
 
     // variables for modal behavior support, only used by a few derivatives.
     bool            m_modal;        // true if frame is intended to be modal, not modeless
-    wxGUIEventLoop* m_modal_loop;   // points to nested event_loop, NULL means not modal and dismissed
+    WX_EVENT_LOOP*  m_modal_loop;   // points to nested event_loop, NULL means not modal and dismissed
     wxString        m_modal_string;
     bool            m_modal_ret_val;    // true if a selection was made
 
