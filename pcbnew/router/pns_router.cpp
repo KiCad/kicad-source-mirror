@@ -470,6 +470,8 @@ void PNS_ROUTER::EraseView()
         item->ViewSetVisible( true );
     }
 
+    m_hiddenItems.clear();
+
     if( m_previewItems )
     {
         m_previewItems->FreeItems();
