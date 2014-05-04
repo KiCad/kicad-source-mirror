@@ -56,11 +56,25 @@ public:
             const   wxString& name = wxDialogNameStr
             );
 
-    bool Show( bool show );     // overload wxDialog::Show
+    ~DIALOG_SHIM();
 
+    int ShowQuasiModal();      // disable only the parent window, otherwise modal.
+
+    void EndQuasiModal( int retCode );  // End quasi-modal mode
+
+    bool IsQuasiModal()         { return m_qmodal_showing; }
+
+    bool Show( bool show );     // override wxDialog::Show
+
+    bool Enable( bool enable ); // override wxDialog::Enable virtual
 
 protected:
     std::string m_hash_key;     // alternate for class_map when classname re-used.
+
+    // variables for quasi-modal behavior support, only used by a few derivatives.
+    wxGUIEventLoop* m_qmodal_loop;      // points to nested event_loop, NULL means not qmodal and dismissed
+    bool            m_qmodal_showing;
+
 
 #if DLGSHIM_USE_SETFOCUS
 private:

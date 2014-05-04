@@ -23,13 +23,14 @@
  */
 
 
-
 #include <kiway_player.h>
 #include <kiway_express.h>
 #include <kiway.h>
 #include <id.h>
+#include <macros.h>
 #include <typeinfo>
 #include <wx/utils.h>
+#include <wx/evtloop.h>
 
 
 BEGIN_EVENT_TABLE( KIWAY_PLAYER, EDA_BASE_FRAME )
@@ -43,10 +44,10 @@ KIWAY_PLAYER::KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType
         long aStyle, const wxString& aWdoName ) :
     EDA_BASE_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aWdoName ),
     KIWAY_HOLDER( aKiway ),
-    m_modal_dismissed( 0 )
+    m_modal( false ),
+    m_modal_loop( 0 )
 {
-    DBG( printf("KIWAY_EXPRESS::wxEVENT_ID:%d\n", KIWAY_EXPRESS::wxEVENT_ID );)
-    //Connect( KIWAY_EXPRESS::wxEVENT_ID, wxKiwayExressHandler( KIWAY_PLAYER::kiway_express ) );
+    // DBG( printf("KIWAY_EXPRESS::wxEVENT_ID:%d\n", KIWAY_EXPRESS::wxEVENT_ID );)
 }
 
 
@@ -55,10 +56,10 @@ KIWAY_PLAYER::KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& a
         const wxString& aWdoName ) :
     EDA_BASE_FRAME( aParent, (FRAME_T) aId, aTitle, aPos, aSize, aStyle, aWdoName ),
     KIWAY_HOLDER( 0 ),
-    m_modal_dismissed( 0 )
+    m_modal( false ),
+    m_modal_loop( 0 )
 {
-    DBG( printf("KIWAY_EXPRESS::wxEVENT_ID:%d\n", KIWAY_EXPRESS::wxEVENT_ID );)
-    //Connect( KIWAY_EXPRESS::wxEVENT_ID, wxKiwayExressHandler( KIWAY_PLAYER::kiway_express ) );
+    // DBG( printf("KIWAY_EXPRESS::wxEVENT_ID:%d\n", KIWAY_EXPRESS::wxEVENT_ID );)
 }
 
 
@@ -73,39 +74,44 @@ void KIWAY_PLAYER::KiwayMailIn( KIWAY_EXPRESS& aEvent )
 
 bool KIWAY_PLAYER::ShowModal( wxString* aResult )
 {
+    wxASSERT_MSG( IsModal(), "ShowModal() shouldn't be called on non-modal frame" );
+
     /*
-        This function has a nice interface but an unsightly implementation.
-        Now it is encapsulated, making it easier to improve.  I am not sure
-        a wxSemaphore was needed, especially since no blocking happens.  It seems
-        like a volatile bool is sufficient.
+        This function has a nice interface but a necessarily unsightly implementation.
+        Now the implementation is encapsulated, localizing future changes.
 
         It works in tandem with DismissModal().  But only ShowModal() is in the
         vtable and therefore cross-module capable.
    */
 
-    volatile bool   dismissed = false;
+    // This is an exception safe way to zero a pointer before returning.
+    // Yes, even though DismissModal() clears this first normally, this is
+    // here in case there's an exception before the dialog is dismissed.
+    struct NULLER
+    {
+        void*&  m_what;
+        NULLER( void*& aPtr ) : m_what( aPtr ) {}
+        ~NULLER() { m_what = 0; }   // indeed, set it to NULL on destruction
+    } clear_this( (void*&) m_modal_loop );
 
-    // disable all frames except the modal one, re-enable on exit, exception safe.
+    // exception safe way to disable all frames except the modal one,
+    // re-enable on exit
     wxWindowDisabler    toggle( this );
 
-    m_modal_dismissed = &dismissed;
-
     Show( true );
-    Raise();
 
-    // Wait for the one and only active frame to call DismissModal() from
-    // some concluding event.
-    while( !dismissed )
-    {
-        wxYield();
-        wxMilliSleep( 50 );
-    }
+    wxGUIEventLoop          event_loop;
+    wxEventLoopActivator    event_loop_stacker( &event_loop );
 
-    // no longer modal, not to mention that the pointer would be invalid outside this scope.
-    m_modal_dismissed = NULL;
+    m_modal_loop = &event_loop;
+
+    event_loop.Run();
 
     if( aResult )
         *aResult = m_modal_string;
+
+    DBG(printf( "~%s: aResult:'%s'  ret:%d\n",
+            __func__, TO_UTF8( m_modal_string ), m_modal_ret_val );)
 
     return m_modal_ret_val;
 }
@@ -113,9 +119,9 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult )
 
 bool KIWAY_PLAYER::IsDismissed()
 {
-    // if already dismissed, then m_modal_dismissed may be NULL, and if not,
-    // it can still be dismissed if the bool is true.
-    bool ret = !m_modal_dismissed || *m_modal_dismissed;
+    bool ret = !m_modal_loop;
+
+    DBG(printf( "%s: ret:%d\n", __func__, ret );)
 
     return ret;
 }
@@ -126,8 +132,13 @@ void KIWAY_PLAYER::DismissModal( bool aRetVal, const wxString& aResult )
     m_modal_ret_val = aRetVal;
     m_modal_string  = aResult;
 
-    if( m_modal_dismissed )
-        *m_modal_dismissed = true;
+    if( m_modal_loop )
+    {
+        m_modal_loop->Exit();
+        m_modal_loop = 0;      // this marks it as dismissed.
+    }
+
+    Show( false );
 }
 
 
