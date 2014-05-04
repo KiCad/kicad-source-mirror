@@ -56,7 +56,7 @@
 wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedAlias,
                                                         int* aUnit, int* aConvert )
 {
-    // Close the any current non-modal Lib browser if open, and open a new one, in "modal" mode:
+    // Close any open non-modal Lib browser, and open a new one, in "modal" mode:
     LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
     if( viewlibFrame )
         viewlibFrame->Destroy();
@@ -79,13 +79,14 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedA
 
     wxString cmpname;
 
-    viewlibFrame->ShowModal( &cmpname );
+    if( viewlibFrame->ShowModal( &cmpname ) )
+    {
+        if( aUnit )
+            *aUnit = viewlibFrame->GetUnit();
 
-    if( aUnit )
-        *aUnit = viewlibFrame->GetUnit();
-
-    if( aConvert )
-        *aConvert = viewlibFrame->GetConvert();
+        if( aConvert )
+            *aConvert = viewlibFrame->GetConvert();
+    }
 
     viewlibFrame->Destroy();
 

@@ -148,10 +148,10 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     // make sure the chipnameTextCtrl is wide enough to hold any unusually long chip names:
     EnsureTextCtrlWidth( dlg->chipnameTextCtrl );
 
-    dlg->ShowModal();
+    dlg->ShowQuasiModal();
 
-    m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
+    m_canvas->MoveCursorToCrossHair();
     dlg->Destroy();
 }
 
@@ -214,7 +214,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemSelected( wxListEvent& event 
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnCancelButtonClick( wxCommandEvent& event )
 {
-    EndModal( 1 );
+    EndQuasiModal( 1 );
 }
 
 
@@ -379,7 +379,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     m_Parent->GetScreen()->TestDanglingEnds();
     m_Parent->GetCanvas()->Refresh( true );
 
-    EndModal( 0 );
+    EndQuasiModal( 0 );
 }
 
 
@@ -436,23 +436,21 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEven
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& event )
 {
-#if 1
+#if 0
    wxString datasheet_uri = fieldValueTextCtrl->GetValue();
    ::wxLaunchDefaultBrowser( datasheet_uri );
 
 #else
-    unsigned fieldNdx = getSelectedFieldNdx();
 
-/*
+    unsigned fieldNdx = getSelectedFieldNdx();
     if( fieldNdx == DATASHEET )
     {
         wxString datasheet_uri = fieldValueTextCtrl->GetValue();
         ::wxLaunchDefaultBrowser( datasheet_uri );
     }
     else if( fieldNdx == FOOTPRINT )
-*/
     {
-        // pick a footprint
+        // pick a footprint using the footprint picker.
         wxString fpid;
 
         KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
@@ -460,11 +458,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& even
         if( frame->ShowModal( &fpid ) )
         {
             printf( "%s: %s\n", __func__, TO_UTF8( fpid ) );
+            fieldValueTextCtrl->SetValue( fpid );
+
         }
 
-        frame->Show( false );       // keep the frame open, but hidden.
-
-        Raise();
+        frame->Destroy();
     }
 #endif
 
@@ -764,7 +762,16 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     fieldValueTextCtrl->SetValue( field.GetText() );
 
-    m_show_datasheet_button->Enable( fieldNdx == DATASHEET );
+    m_show_datasheet_button->Enable( fieldNdx == DATASHEET || fieldNdx == FOOTPRINT );
+
+    if( fieldNdx == DATASHEET )
+        m_show_datasheet_button->SetLabel( _( "Show in Browser" ) );
+    else if( fieldNdx == FOOTPRINT )
+        m_show_datasheet_button->SetLabel( _( "Assign Footprint" ) );
+    else
+        m_show_datasheet_button->SetLabel( wxEmptyString );
+
+    m_show_datasheet_button->Enable( fieldNdx == DATASHEET || fieldNdx == FOOTPRINT );
 
     // For power symbols, the value is NOR editable, because value and pin
     // name must be same and can be edited only in library editor
@@ -1006,5 +1013,5 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     m_Parent->OnModify();
 
     m_Cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    EndModal( 1 );
+    EndQuasiModal( 1 );
 }

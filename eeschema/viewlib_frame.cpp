@@ -103,6 +103,9 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 {
     wxASSERT( aFrameType==FRAME_SCH_VIEWER || aFrameType==FRAME_SCH_VIEWER_MODAL );
 
+    if( aFrameType == FRAME_SCH_VIEWER_MODAL )
+        SetModal( true );
+
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
     m_FrameName = GetLibViewerFrameName();

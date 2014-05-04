@@ -87,6 +87,7 @@ private:
 
 
 class KIWAY_EXPRESS;
+class wxGUIEventLoop;
 
 /**
  * Class KIWAY_PLAYER
@@ -194,7 +195,8 @@ public:
 
 protected:
 
-    bool IsModal()              { return m_modal_dismissed; }
+    bool IsModal()                      { return m_modal; }
+    void SetModal( bool IsModal )       { m_modal = IsModal; }
 
     /**
      * Function IsDismissed
@@ -216,7 +218,8 @@ protected:
     void language_change( wxCommandEvent& event );
 
     // variables for modal behavior support, only used by a few derivatives.
-    volatile bool*  m_modal_dismissed;  // points to "dismissed state", NULL means not modal
+    bool            m_modal;        // true if frame is intended to be modal, not modeless
+    wxGUIEventLoop* m_modal_loop;   // points to nested event_loop, NULL means not modal and dismissed
     wxString        m_modal_string;
     bool            m_modal_ret_val;    // true if a selection was made
 
