@@ -185,11 +185,12 @@ public:
      * event which ends the modal behavior.
      *
      * @param aResult if not NULL, indicates a place to put a resultant string.
+     * @param aResultantFocusWindow if not NULL, indicates what window to pass focus to on return.
      *
      * @return bool - true if frame implementation called KIWAY_PLAYER::DismissModal()
      *  with aRetVal of true.
      */
-    VTBL_ENTRY bool ShowModal( wxString* aResult = NULL );
+    VTBL_ENTRY bool ShowModal( wxString* aResult = NULL, wxWindow* aResultantFocusWindow = NULL );
 
     //----</Cross Module API>----------------------------------------------------
 

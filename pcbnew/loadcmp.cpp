@@ -135,7 +135,7 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 
     wxString    fpid;
 
-    viewer->ShowModal( &fpid );
+    viewer->ShowModal( &fpid, this );
 
     //DBG(printf("%s: fpid:'%s'\n", __func__, TO_UTF8( fpid ) );)
 
@@ -273,7 +273,6 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         module->SetPosition( curspos );
         module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;
-
 
         // Put it on FRONT layer,
         // (Can be stored flipped if the lib is an archive built from a board)

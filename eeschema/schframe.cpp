@@ -101,6 +101,8 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_TO_LIBVIEW, SCH_EDIT_FRAME::OnOpenLibraryViewer )
 
     EVT_TOOL( ID_TO_PCB, SCH_EDIT_FRAME::OnOpenPcbnew )
+    EVT_TOOL( ID_TO_PCB_MODULE_EDITOR, SCH_EDIT_FRAME::OnOpenPcbModuleEditor )
+
     EVT_TOOL( ID_TO_CVPCB, SCH_EDIT_FRAME::OnOpenCvpcb )
 
     EVT_TOOL( ID_SHEET_SET, EDA_DRAW_FRAME::Process_PageSettings )
@@ -790,6 +792,22 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
     else
     {
         ExecuteFile( this, PCBNEW_EXE );
+    }
+}
+
+
+void SCH_EDIT_FRAME::OnOpenPcbModuleEditor( wxCommandEvent& event )
+{
+    if( !Kiface().IsSingle() )
+    {
+        wxFileName fn = g_RootSheet->GetScreen()->GetFileName();
+
+        if( fn.IsOk() )
+        {
+            KIWAY_PLAYER* player = Kiway().Player( FRAME_PCB_MODULE_EDITOR );
+            player->Show( true );
+            player->Raise();
+        }
     }
 }
 
