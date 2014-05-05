@@ -401,9 +401,9 @@ struct hitVisitor
 {
     PNS_ITEMSET& m_items;
     const VECTOR2I& m_point;
-    PNS_NODE* m_world;
+    const PNS_NODE* m_world;
 
-    hitVisitor( PNS_ITEMSET& aTab, const VECTOR2I& aPoint, PNS_NODE* aWorld ) :
+    hitVisitor( PNS_ITEMSET& aTab, const VECTOR2I& aPoint, const PNS_NODE* aWorld ) :
         m_items( aTab ), m_point( aPoint ), m_world( aWorld ) {};
 
     bool operator()( PNS_ITEM* aItem )
@@ -423,7 +423,7 @@ struct hitVisitor
 };
 
 
-const PNS_ITEMSET PNS_NODE::HitTest( const VECTOR2I& aPoint )
+const PNS_ITEMSET PNS_NODE::HitTest( const VECTOR2I& aPoint ) const
 {
     PNS_ITEMSET items;
     // fixme: we treat a point as an infinitely small circle - this is inefficient.

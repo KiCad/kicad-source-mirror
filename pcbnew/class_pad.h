@@ -341,7 +341,7 @@ public:
      * Function GetBoundingRadius
      * returns the radius of a minimum sized circle which fully encloses this pad.
      */
-    int GetBoundingRadius()
+    int GetBoundingRadius() const
     {
         // Any member function which would affect this calculation should set
         // m_boundingRadius to -1 to re-trigger the calculation from here.
@@ -368,7 +368,7 @@ public:
 
     bool IsOnLayer( LAYER_NUM aLayer ) const;
 
-    bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition ) const;
 
     wxString GetClass() const
     {
@@ -450,7 +450,8 @@ private:
      */
     int boundingRadius() const;
 
-    int         m_boundingRadius;  ///< radius of the circle containing the pad shape
+    // Actually computed and cached on demand by the accessor
+    mutable int m_boundingRadius;  ///< radius of the circle containing the pad shape
 
     /// Pad name (4 char) or a long identifier (used in pad name
     /// comparisons because this is faster than string comparison)

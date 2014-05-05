@@ -525,13 +525,13 @@ void LIB_PIN::EnableEditMode( bool enable, bool editPinByPin )
 }
 
 
-bool LIB_PIN::HitTest( const wxPoint& aPosition )
+bool LIB_PIN::HitTest( const wxPoint& aPosition ) const
 {
     return HitTest( aPosition, 0, DefaultTransform );
 }
 
 
-bool LIB_PIN::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_PIN::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
 {
     if( aThreshold < 0 )
         aThreshold = 0;

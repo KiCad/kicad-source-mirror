@@ -99,7 +99,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_SIZE( LIB_EDIT_FRAME::OnSize )
     EVT_ACTIVATE( LIB_EDIT_FRAME::OnActivate )
 
-    /* Main horizontal toolbar. */
+    // Main horizontal toolbar.
     EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_LIB, LIB_EDIT_FRAME::OnSaveActiveLibrary )
     EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_LIBEDIT_DELETE_PART, LIB_EDIT_FRAME::DeleteOnePart )
@@ -125,12 +125,12 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectPart )
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_ALIAS, LIB_EDIT_FRAME::OnSelectAlias )
 
-    /* Right vertical toolbar. */
+    // Right vertical toolbar.
     EVT_TOOL( ID_NO_TOOL_SELECTED, LIB_EDIT_FRAME::OnSelectTool )
     EVT_TOOL_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                     LIB_EDIT_FRAME::OnSelectTool )
 
-    /* menubar commands */
+    // menubar commands
     EVT_MENU( wxID_EXIT, LIB_EDIT_FRAME::CloseWindow )
     EVT_MENU( ID_LIBEDIT_SAVE_CURRENT_LIB_AS, LIB_EDIT_FRAME::OnSaveActiveLibrary )
     EVT_MENU( ID_LIBEDIT_GEN_PNG_FILE, LIB_EDIT_FRAME::OnPlotCurrentComponent )
@@ -152,9 +152,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
                     LIB_EDIT_FRAME::Process_Config )
 
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, LIB_EDIT_FRAME::SetLanguage )
-
-    /* Context menu events and commands. */
+    // Context menu events and commands.
     EVT_MENU( ID_LIBEDIT_EDIT_PIN, LIB_EDIT_FRAME::OnEditPin )
     EVT_MENU( ID_LIBEDIT_ROTATE_ITEM, LIB_EDIT_FRAME::OnRotateItem )
 
@@ -165,7 +163,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     LIB_EDIT_FRAME::Process_Special_Functions )
 
-   /* Update user interface elements. */
+    // Update user interface elements.
     EVT_UPDATE_UI( ExportPartId, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( CreateNewLibAndSavePartId, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
@@ -193,7 +191,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, SCH_EDIT_FRAME* aParent ) :
     SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_LIB_EDITOR, _( "Library Editor" ),
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GetLibEditFrameName() )
 {
-    wxASSERT( aParent );    // LIB_EDIT_FRAME needs a parent, since it peeks up there.
+    wxASSERT( aParent );
 
     m_FrameName  = GetLibEditFrameName();
     m_showAxis   = true;            // true to draw axis
@@ -204,6 +202,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, SCH_EDIT_FRAME* aParent ) :
     m_tempCopyComponent   = NULL;
     m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
     m_editPinsPerPartOrConvert = false;
+
     // Initialize grid id to the default value 50 mils:
     m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
@@ -290,12 +289,6 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 const wxChar* LIB_EDIT_FRAME::GetLibEditFrameName()
 {
     return LIB_EDIT_FRAME_NAME;
-}
-
-
-LIB_EDIT_FRAME* LIB_EDIT_FRAME::GetActiveLibraryEditor()
-{
-    return (LIB_EDIT_FRAME*) wxWindow::FindWindowByName(GetLibEditFrameName());
 }
 
 
@@ -389,12 +382,12 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 double LIB_EDIT_FRAME::BestZoom()
 {
-/* Please, note: wxMSW before version 2.9 seems have
- * problems with zoom values < 1 ( i.e. userscale > 1) and needs to be patched:
- * edit file <wxWidgets>/src/msw/dc.cpp
- * search for line static const int VIEWPORT_EXTENT = 1000;
- * and replace by static const int VIEWPORT_EXTENT = 10000;
- */
+    /* Please, note: wxMSW before version 2.9 seems have
+     * problems with zoom values < 1 ( i.e. userscale > 1) and needs to be patched:
+     * edit file <wxWidgets>/src/msw/dc.cpp
+     * search for line static const int VIEWPORT_EXTENT = 1000;
+     * and replace by static const int VIEWPORT_EXTENT = 10000;
+     */
     int      dx, dy;
     wxSize   size;
     EDA_RECT BoundaryBox;
@@ -750,23 +743,23 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT:
-    {
-        // Delete the last created segment, while creating a polyline draw item
-        if( m_drawItem == NULL )
-            break;
+        {
+            // Delete the last created segment, while creating a polyline draw item
+            if( m_drawItem == NULL )
+                break;
 
-        m_canvas->MoveCursorToCrossHair();
-        STATUS_FLAGS oldFlags = m_drawItem->GetFlags();
-        m_drawItem->ClearFlags();
-        m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL,
-                          DefaultTransform );
-        ( (LIB_POLYLINE*) m_drawItem )->DeleteSegment( GetCrossHairPosition( true ) );
-        m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL,
-                          DefaultTransform );
-        m_drawItem->SetFlags( oldFlags );
-        m_lastDrawItem = NULL;
+            m_canvas->MoveCursorToCrossHair();
+            STATUS_FLAGS oldFlags = m_drawItem->GetFlags();
+            m_drawItem->ClearFlags();
+            m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL,
+                              DefaultTransform );
+            ( (LIB_POLYLINE*) m_drawItem )->DeleteSegment( GetCrossHairPosition( true ) );
+            m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL,
+                              DefaultTransform );
+            m_drawItem->SetFlags( oldFlags );
+            m_lastDrawItem = NULL;
+        }
         break;
-    }
 
     case ID_POPUP_LIBEDIT_DELETE_ITEM:
         if( m_drawItem )
@@ -915,17 +908,6 @@ void LIB_EDIT_FRAME::EnsureActiveLibExists()
         return;
     else
         m_library = NULL;
-}
-
-
-void LIB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
-{
-    EDA_BASE_FRAME::SetLanguage( event );
-    SCH_EDIT_FRAME *parent = (SCH_EDIT_FRAME *)GetParent();
-    // Call parent->EDA_BASE_FRAME::SetLanguage and NOT
-    // parent->SetLanguage because parent->SetLanguage call
-    // LIB_EDIT_FRAME::SetLanguage
-    parent->EDA_BASE_FRAME::SetLanguage( event );
 }
 
 

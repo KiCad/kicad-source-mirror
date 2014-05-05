@@ -237,12 +237,12 @@ public:
 
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg ) = 0;
 
-    LIB_COMPONENT* GetParent()
+    LIB_COMPONENT* GetParent() const
     {
         return (LIB_COMPONENT *)m_Parent;
     }
 
-    virtual bool HitTest( const wxPoint& aPosition )
+    virtual bool HitTest( const wxPoint& aPosition ) const
     {
         return EDA_ITEM::HitTest( aPosition );
     }
@@ -255,7 +255,7 @@ public:
      * @param aTransform The transform matrix.
      * @return True if the point \a aPosition is near this object
      */
-    virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform ) = 0;
+    virtual bool HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const = 0;
 
    /**
      * @return the boundary box for this, in library coordinates

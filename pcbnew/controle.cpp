@@ -35,6 +35,7 @@
 #include <pcbnew_id.h>
 #include <class_board.h>
 #include <class_module.h>
+#include <class_zone.h>
 
 #include <pcbnew.h>
 #include <protos.h>
@@ -160,8 +161,9 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         (*m_Collector)[i]->Show( 0, std::cout );
 #endif
 
-    /* Remove redundancies: sometime, zones are found twice,
+    /* Remove redundancies: sometime, legacy zones are found twice,
      * because zones can be filled by overlapping segments (this is a fill option)
+     * Trigger the selection of the current edge for new-style zones
      */
     time_t timestampzone = 0;
 
@@ -169,18 +171,32 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     {
         item = (*m_Collector)[ii];
 
-        if( item->Type() != PCB_ZONE_T )
-            continue;
+        switch( item->Type() )
+        {
+        case PCB_ZONE_T:
+            // Found a TYPE ZONE
+            if( item->GetTimeStamp() == timestampzone )    // Remove it, redundant, zone already found
+            {
+                m_Collector->Remove( ii );
+                ii--;
+            }
+            else
+            {
+                timestampzone = item->GetTimeStamp();
+            }
+            break;
 
-        // Found a TYPE ZONE
-        if( item->GetTimeStamp() == timestampzone )    // Remove it, redundant, zone already found
-        {
-            m_Collector->Remove( ii );
-            ii--;
-        }
-        else
-        {
-            timestampzone = item->GetTimeStamp();
+        case PCB_ZONE_AREA_T:
+            {
+                /* We need to do the selection now because the menu text
+                 * depends on it */
+                ZONE_CONTAINER *zone = static_cast<ZONE_CONTAINER*>( item );
+                zone->SetSelectedCorner( RefPos( true ) );
+            }
+            break;
+
+        default:
+            break;
         }
     }
 

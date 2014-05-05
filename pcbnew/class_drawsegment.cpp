@@ -475,7 +475,7 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 }
 
 
-bool DRAWSEGMENT::HitTest( const wxPoint& aPosition )
+bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
 {
     switch( m_Shape )
     {

@@ -48,8 +48,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     {
         m_mainToolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                           wxAUI_TB_DEFAULT_STYLE
-                                            | wxAUI_TB_OVERFLOW
-        );
+                                            | wxAUI_TB_OVERFLOW );
 
         // Set up toolbar
         m_mainToolBar->AddTool( ID_MODVIEW_SELECT_LIB, wxEmptyString,
@@ -95,9 +94,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
         m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                                 KiBitmap( zoom_fit_in_page_xpm ), msg );
 
-        // Enable this tool only if the library browser is called from
-        // a "load component" command
-        if( m_semaphore )
+        if( IsModal() )
         {
             m_mainToolBar->AddSeparator();
             m_mainToolBar->AddTool( ID_MODVIEW_FOOTPRINT_EXPORT_TO_BOARD, wxEmptyString,

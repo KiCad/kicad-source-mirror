@@ -28,6 +28,7 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
+#include <kiway.h>
 #include <confirm.h>
 #include <class_drawpanel.h>
 #include <pcbnew.h>
@@ -74,20 +75,13 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 
     if( retvalue == 2 )
     {
-        FOOTPRINT_EDIT_FRAME* editor = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor( this );
-
-        if( !editor )
-        {
-            KIFACE_I&   kf = Kiface();
-
-            editor = (FOOTPRINT_EDIT_FRAME*) kf.CreateWindow( this, FRAME_PCB_MODULE_EDITOR, &Kiway(), kf.StartFlags() );
-        }
+        FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
 
         editor->Load_Module_From_BOARD( Module );
         SetCurItem( NULL );
 
         editor->Show( true );
-        editor->Iconize( false );
+        editor->Raise();        // Iconize( false );
     }
 }
 

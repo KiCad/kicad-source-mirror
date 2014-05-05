@@ -29,6 +29,7 @@
 
 #include <fctsys.h>
 #include <pgm_base.h>
+#include <kiway.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
@@ -70,12 +71,12 @@ wxString FOOTPRINT_VIEWER_FRAME::m_selectedFootprintName;
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
-    /* Window events */
+    // Window events
     EVT_CLOSE( FOOTPRINT_VIEWER_FRAME::OnCloseWindow )
     EVT_SIZE( FOOTPRINT_VIEWER_FRAME::OnSize )
     EVT_ACTIVATE( FOOTPRINT_VIEWER_FRAME::OnActivate )
 
-    /* Toolbar events */
+    // Toolbar events
     EVT_TOOL( ID_MODVIEW_SELECT_LIB,
               FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary )
     EVT_TOOL( ID_MODVIEW_SELECT_PART,
@@ -88,7 +89,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
               FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint )
     EVT_TOOL( ID_MODVIEW_SHOW_3D_VIEW, FOOTPRINT_VIEWER_FRAME::Show3D_Frame )
 
-    /* listbox events */
+    // listbox events
     EVT_LISTBOX( ID_MODVIEW_LIB_LIST, FOOTPRINT_VIEWER_FRAME::ClickOnLibList )
     EVT_LISTBOX( ID_MODVIEW_FOOTPRINT_LIST, FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList )
     EVT_LISTBOX_DCLICK( ID_MODVIEW_FOOTPRINT_LIST, FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList )
@@ -118,14 +119,19 @@ static wxAcceleratorEntry accels[] =
 #define FOOTPRINT_VIEWER_FRAME_NAME     wxT( "ModViewFrame" )
 
 
-FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent, wxSemaphore* aSemaphore ) :
-    PCB_BASE_FRAME( aKiway, aParent, FRAME_PCB_MODULE_VIEWER, _( "Footprint Library Browser" ),
+FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType ) :
+    PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Library Browser" ),
             wxDefaultPosition, wxDefaultSize,
-            !aSemaphore ?
-                KICAD_DEFAULT_DRAWFRAME_STYLE :
-                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT,
+            aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ?
+                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT :
+                KICAD_DEFAULT_DRAWFRAME_STYLE,
             GetFootprintViewerFrameName() )
 {
+    wxASSERT( aFrameType==FRAME_PCB_MODULE_VIEWER || aFrameType==FRAME_PCB_MODULE_VIEWER_MODAL );
+
+    if( aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL )
+        SetModal( true );
+
     wxAcceleratorTable table( DIM( accels ), accels );
 
     m_FrameName  = GetFootprintViewerFrameName();
@@ -145,11 +151,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* a
     m_footprintList = new wxListBox( this, ID_MODVIEW_FOOTPRINT_LIST,
             wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL );
 
-    m_semaphore     = aSemaphore;
     m_selectedFootprintName.Empty();
-
-    if( m_semaphore )
-        SetModalMode( true );
 
     SetBoard( new BOARD() );
 
@@ -237,7 +239,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* a
     }
 
 #if 0   // no.
-
     // Set min size (overwrite params read in LoadPerspective(), if any)
     m_auimgr.GetPane( m_libList ).MinSize( minsize );
     m_auimgr.GetPane( m_footprintList ).MinSize( minsize );
@@ -271,45 +272,17 @@ const wxChar* FOOTPRINT_VIEWER_FRAME::GetFootprintViewerFrameName()
 }
 
 
-FOOTPRINT_VIEWER_FRAME* FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer( const KIWAY_PLAYER* aParent )
-{
-    wxASSERT( aParent );
-
-    // We search only within the current project, and do so by limiting
-    // the search scope to a wxWindow hierarchy subset.  Find the top most
-    // KIWAY_PLAYER which is part of this PROJECT by matching its KIWAY* to the
-    // most immediate parent's.
-
-    // NOTE: an open FOOTPRINT_VIEWER_FRAME may have either the PCB_EDIT_FRAME
-    // or the FOOTPRINT_EDIT_FRAME as parent.
-
-    KIWAY*      kiway = &aParent->Kiway();
-    wxWindow*   frame;
-
-    while( (frame = aParent->GetParent()) != NULL )
-    {
-        // will go NULL when we reach a non-KIWAY_PLAYER
-        KIWAY_PLAYER* kwp = dynamic_cast<KIWAY_PLAYER*>( frame );
-
-        if( kwp && &kwp->Kiway() == kiway )
-            aParent = kwp;
-        else
-            break;
-    }
-
-    return (FOOTPRINT_VIEWER_FRAME*) wxWindow::FindWindowByName(
-        GetFootprintViewerFrameName(), aParent );
-}
-
-
 void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    if( m_semaphore )
+    DBG(printf( "%s:\n", __func__ );)
+    if( IsModal() )
     {
-        m_semaphore->Post();
-        SetModalMode( false );
-        // This window will be destroyed by the calling function,
-        // to avoid side effects
+        // Only dismiss a modal frame once, so that the return values set by
+        // the prior DismissModal() are not bashed for ShowModal().
+        if( !IsDismissed() )
+            DismissModal( false );
+
+        // window to be destroyed by the caller of KIWAY_PLAYER::ShowModal()
     }
     else
         Destroy();
@@ -464,15 +437,23 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList( wxCommandEvent& event )
 {
-    if( m_semaphore )
+    if( IsModal() )
     {
+        // @todo(DICK)
         ExportSelectedFootprint( event );
+
         // Prevent the double click from being as a single mouse button release
         // event in the parent window which would cause the part to be parked
-        // rather than staying in mode mode.
+        // rather than staying in move mode.
         // Remember the mouse button will be released in the parent window
         // thus creating a mouse button release event which should be ignored
-        ((PCB_BASE_FRAME*)GetParent())->SkipNextLeftButtonReleaseEvent();
+        PCB_EDIT_FRAME* pcbframe = dynamic_cast<PCB_EDIT_FRAME*>( GetParent() );
+
+        // The parent may not be the board editor:
+        if( pcbframe )
+        {
+            pcbframe->SkipNextLeftButtonReleaseEvent();
+        }
     }
 }
 
@@ -482,9 +463,24 @@ void FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint( wxCommandEvent& event )
     int ii = m_footprintList->GetSelection();
 
     if( ii >= 0 )
-        m_selectedFootprintName = m_footprintList->GetString( ii );
+    {
+        wxString fp_name = m_footprintList->GetString( ii );
+
+        // @todo(DICK) assign to static now, later PROJECT retained string.
+        m_selectedFootprintName = fp_name;
+
+        FPID fpid;
+
+        fpid.SetLibNickname( GetSelectedLibrary() );
+        fpid.SetFootprintName( fp_name );
+
+        DismissModal( true, fpid.Format() );
+    }
     else
+    {
         m_selectedFootprintName.Empty();
+        DismissModal( false );
+    }
 
     Close( true );
 }
@@ -580,25 +576,25 @@ void FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
         screen->m_O_Curseur = GetCrossHairPosition();
         break;
 
-    case WXK_NUMPAD8:       /* cursor moved up */
+    case WXK_NUMPAD8:       // cursor moved up
     case WXK_UP:
         pos.y -= KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
-    case WXK_NUMPAD2:       /* cursor moved down */
+    case WXK_NUMPAD2:       // cursor moved down
     case WXK_DOWN:
         pos.y += KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
-    case WXK_NUMPAD4:       /*  cursor moved left */
+    case WXK_NUMPAD4:       //  cursor moved left
     case WXK_LEFT:
         pos.x -= KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
         break;
 
-    case WXK_NUMPAD6:      /*  cursor moved right */
+    case WXK_NUMPAD6:      //  cursor moved right
     case WXK_RIGHT:
         pos.x += KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
@@ -621,7 +617,7 @@ void FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
         }
     }
 
-    UpdateStatusBar();    /* Display new cursor coordinates */
+    UpdateStatusBar();    // Display new cursor coordinates
 }
 
 
@@ -746,11 +742,13 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary( wxCommandEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
 {
-    PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
+    // The PCB_EDIT_FRAME may not be the FOOTPRINT_VIEW_FRAME's parent,
+    // so use Kiway().Player() to fetch.
+    PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, true );
+
     wxString        libname = m_libraryName + wxT( "." ) + LegacyFootprintLibPathExtension;
     MODULE*         oldmodule = GetBoard()->m_Modules;
-    MODULE*         module = LoadModuleFromLibrary( libname, parent->FootprintLibs(),
-                                                    false );
+    MODULE*         module = LoadModuleFromLibrary( libname, parent->FootprintLibs(), false );
 
     if( module )
     {

@@ -82,7 +82,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset );
 
-    bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition ) const;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const

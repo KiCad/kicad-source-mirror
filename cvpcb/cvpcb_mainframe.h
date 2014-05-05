@@ -123,12 +123,6 @@ public:
 
     void             ChangeFocus( bool aMoveRight );
 
-    /**
-     * Function SetLanguage
-     * is called on a language menu selection.
-     */
-    void             SetLanguage( wxCommandEvent& event );
-
     void             ToFirstNA( wxCommandEvent& event );
     void             ToPreviousNA( wxCommandEvent& event );
 

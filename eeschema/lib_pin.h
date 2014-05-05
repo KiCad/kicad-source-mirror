@@ -131,9 +131,9 @@ public:
 
     bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
-    bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition ) const;
 
-    bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
+    bool HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const;
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
