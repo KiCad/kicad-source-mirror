@@ -72,7 +72,7 @@ void KIWAY_PLAYER::KiwayMailIn( KIWAY_EXPRESS& aEvent )
 }
 
 
-bool KIWAY_PLAYER::ShowModal( wxString* aResult )
+bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow )
 {
     wxASSERT_MSG( IsModal(), wxT( "ShowModal() shouldn't be called on non-modal frame" ) );
 
@@ -94,30 +94,46 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult )
         ~NULLER() { m_what = 0; }   // indeed, set it to NULL on destruction
     } clear_this( (void*&) m_modal_loop );
 
-    // exception safe way to disable all frames except the modal one,
-    // re-enables only those that were disabled on exit
-    wxWindowDisabler    toggle( this );
 
     Show( true );
+    SetFocus();
 
-    WX_EVENT_LOOP           event_loop;
+    {
+        // exception safe way to disable all frames except the modal one,
+        // re-enables only those that were disabled on exit
+        wxWindowDisabler    toggle( this );
+
+        WX_EVENT_LOOP           event_loop;
 
 #if wxCHECK_VERSION( 2, 9, 4 )  // 2.9.4 is only approximate.
-    // new code needs this, old code does it in wxEventLoop::Run() and cannot
-    // tolerate it here. Where that boundary is as a version number, I don't know.
-    // A closer look at the subversion repo for wx would tell.
-    wxEventLoopActivator    event_loop_stacker( &event_loop );
+        // new code needs this, old code does it in wxEventLoop::Run() and cannot
+        // tolerate it here. Where that boundary is as a version number, I don't know.
+        // A closer look at the subversion repo for wx would tell.
+        wxEventLoopActivator    event_loop_stacker( &event_loop );
 #endif
 
-    m_modal_loop = &event_loop;
+        m_modal_loop = &event_loop;
 
-    event_loop.Run();
+        event_loop.Run();
+
+    }   // End of scop for some variables.
+        // End nesting before setting focus below.
 
     if( aResult )
         *aResult = m_modal_string;
 
     DBG(printf( "~%s: aResult:'%s'  ret:%d\n",
             __func__, TO_UTF8( m_modal_string ), m_modal_ret_val );)
+
+    if( aResultantFocusWindow )
+    {
+        aResultantFocusWindow->Raise();
+
+        // have the final say, after wxWindowDisabler reenables my parent and
+        // the events settle down, set the focus
+        wxYield();
+        aResultantFocusWindow->SetFocus();
+    }
 
     return m_modal_ret_val;
 }
