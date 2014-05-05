@@ -45,6 +45,7 @@
 enum main_id
 {
     ID_TO_PCB = wxID_HIGHEST,
+    ID_TO_PCB_MODULE_EDITOR,
     ID_TO_CVPCB,
     ID_LOAD_PROJECT,
     ID_APPEND_PROJECT,

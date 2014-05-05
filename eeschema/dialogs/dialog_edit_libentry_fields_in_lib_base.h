@@ -11,6 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
+#include "dialog_shim.h"
 #include <wx/listctrl.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -33,7 +36,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE : public wxDialog 
+class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE : public DIALOG_SHIM
 {
 	private:
 	

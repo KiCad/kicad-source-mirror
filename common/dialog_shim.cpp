@@ -244,7 +244,11 @@ int DIALOG_SHIM::ShowQuasiModal()
     if( win )
         win->ReleaseMouse();
 
+    // Get the optimal parent
     wxWindow* parent = GetParentForModalDialog( GetParent(), GetWindowStyle() );
+
+    // Show the optimal parent
+    DBG( if( parent ) printf( "%s: optimal parent: %s\n", __func__, typeid(*parent).name() );)
 
     ENABLE_DISABLE  toggle( parent );       // quasi-modal: disable only my "optimal" parent
 
