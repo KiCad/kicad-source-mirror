@@ -65,14 +65,17 @@ static FOOTPRINT_LIST MList;
 bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 {
     MODULE* newModule;
-    PCB_BASE_FRAME* parent = (PCB_BASE_FRAME*) GetParent();
+    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
+
+    if( frame == NULL )     // happens if no board editor opened
+        return false;
 
     if( aModule == NULL )
     {
-        if( ! parent->GetBoard() || ! parent->GetBoard()->m_Modules )
+        if( ! frame->GetBoard() || ! frame->GetBoard()->m_Modules )
             return false;
 
-        aModule = SelectFootprint( parent->GetBoard() );
+        aModule = SelectFootprint( frame->GetBoard() );
     }
 
     if( aModule == NULL )
