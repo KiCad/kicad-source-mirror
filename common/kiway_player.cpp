@@ -74,7 +74,7 @@ void KIWAY_PLAYER::KiwayMailIn( KIWAY_EXPRESS& aEvent )
 
 bool KIWAY_PLAYER::ShowModal( wxString* aResult )
 {
-    wxASSERT_MSG( IsModal(), "ShowModal() shouldn't be called on non-modal frame" );
+    wxASSERT_MSG( IsModal(), wxT( "ShowModal() shouldn't be called on non-modal frame" ) );
 
     /*
         This function has a nice interface but a necessarily unsightly implementation.
@@ -95,13 +95,19 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult )
     } clear_this( (void*&) m_modal_loop );
 
     // exception safe way to disable all frames except the modal one,
-    // re-enable on exit
+    // re-enables only those that were disabled on exit
     wxWindowDisabler    toggle( this );
 
     Show( true );
 
     WX_EVENT_LOOP           event_loop;
+
+#if wxCHECK_VERSION( 2, 9, 4 )  // 2.9.4 is only approximate.
+    // new code needs this, old code does it in wxEventLoop::Run() and cannot
+    // tolerate it here. Where that boundary is as a version number, I don't know.
+    // A closer look at the subversion repo for wx would tell.
     wxEventLoopActivator    event_loop_stacker( &event_loop );
+#endif
 
     m_modal_loop = &event_loop;
 
