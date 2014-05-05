@@ -246,14 +246,20 @@ int DIALOG_SHIM::ShowQuasiModal()
 
     wxWindow* parent = GetParentForModalDialog( GetParent(), GetWindowStyle() );
 
-    ENABLE_DISABLE  toggle( parent );
+    ENABLE_DISABLE  toggle( parent );       // quasi-modal: disable only my "optimal" parent
 
     Show( true );
 
     m_qmodal_showing = true;
 
     WX_EVENT_LOOP           event_loop;
+
+#if wxCHECK_VERSION( 2, 9, 4 )  // 2.9.4 is only approximate.
+    // new code needs this, old code does it in wxEventLoop::Run() and cannot
+    // tolerate it here. Where that boundary is as a version number, I don't know.
+    // A closer look at the subversion repo for wx would tell.
     wxEventLoopActivator    event_loop_stacker( &event_loop );
+#endif
 
     m_qmodal_loop = &event_loop;
 
@@ -269,7 +275,7 @@ void DIALOG_SHIM::EndQuasiModal( int retCode )
 
     if( !IsQuasiModal() )
     {
-        wxFAIL_MSG( "either DIALOG_SHIM::EndQuasiModal called twice or ShowQuasiModal wasn't called" );
+        wxFAIL_MSG( wxT( "either DIALOG_SHIM::EndQuasiModal called twice or ShowQuasiModal wasn't called" ) );
         return;
     }
 

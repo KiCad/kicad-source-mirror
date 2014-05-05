@@ -203,7 +203,7 @@ bool TRACKS_CLEANER::clean_vias()
         // Correct via m_End defects (if any), should never happen
         if( via->GetStart() != via->GetEnd() )
         {
-            wxFAIL_MSG( "Via with mismatching ends" );
+            wxFAIL_MSG( wxT( "Via with mismatching ends" ) );
             via->SetEnd( via->GetStart() );
         }
 
