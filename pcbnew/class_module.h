@@ -324,7 +324,7 @@ public:
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
-    bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition ) const;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const

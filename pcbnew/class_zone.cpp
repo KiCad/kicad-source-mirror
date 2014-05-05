@@ -440,37 +440,42 @@ int ZONE_CONTAINER::GetThermalReliefCopperBridge( D_PAD* aPad ) const
 }
 
 
-bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition )
+bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition ) const
 {
-    if( HitTestForCorner( aPosition ) )
+    if( HitTestForCorner( aPosition ) >= 0 )
         return true;
 
-    if( HitTestForEdge( aPosition ) )
+    if( HitTestForEdge( aPosition ) >= 0 )
         return true;
 
     return false;
 }
+
+void ZONE_CONTAINER::SetSelectedCorner( const wxPoint& aPosition )
+{
+    m_CornerSelection = HitTestForCorner( aPosition );
+
+    if( m_CornerSelection < 0 )
+        m_CornerSelection = HitTestForEdge( aPosition );
+}
+
 
 // Zones outlines have no thickness, so it Hit Test functions
 // we must have a default distance between the test point
 // and a corner or a zone edge:
 #define MAX_DIST_IN_MM 0.25
 
-bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
+int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos ) const
 {
     int distmax = Millimeter2iu( MAX_DIST_IN_MM );
-    m_CornerSelection = m_Poly->HitTestForCorner( refPos, distmax );
-
-    return m_CornerSelection >= 0;
+    return m_Poly->HitTestForCorner( refPos, distmax );
 }
 
 
-bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
+int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos ) const
 {
     int distmax = Millimeter2iu( MAX_DIST_IN_MM );
-    m_CornerSelection = m_Poly->HitTestForEdge( refPos, distmax );
-
-    return m_CornerSelection >= 0;
+    return m_Poly->HitTestForEdge( refPos, distmax );
 }
 
 
@@ -700,25 +705,23 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
 }
 
 
-void ZONE_CONTAINER::MoveEdge( const wxPoint& offset )
+void ZONE_CONTAINER::MoveEdge( const wxPoint& offset, int aEdge )
 {
-    int ii = m_CornerSelection;
-
     // Move the start point of the selected edge:
-    SetCornerPosition( ii, GetCornerPosition( ii ) + offset );
+    SetCornerPosition( aEdge, GetCornerPosition( aEdge ) + offset );
 
     // Move the end point of the selected edge:
-    if( m_Poly->m_CornersList.IsEndContour( ii ) || ii == GetNumCorners() - 1 )
+    if( m_Poly->m_CornersList.IsEndContour( aEdge ) || aEdge == GetNumCorners() - 1 )
     {
-        int icont = m_Poly->GetContour( ii );
-        ii = m_Poly->GetContourStart( icont );
+        int icont = m_Poly->GetContour( aEdge );
+        aEdge = m_Poly->GetContourStart( icont );
     }
     else
     {
-        ii++;
+        aEdge++;
     }
 
-    SetCornerPosition( ii, GetCornerPosition( ii ) + offset );
+    SetCornerPosition( aEdge, GetCornerPosition( aEdge ) + offset );
 
     m_Poly->Hatch();
 }

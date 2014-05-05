@@ -52,7 +52,7 @@ public:
     int                      GetSelection();
     void                     OnSize( wxSizeEvent& event );
 
-    virtual CVPCB_MAINFRAME* GetParent();
+    virtual CVPCB_MAINFRAME* GetParent() const;
 };
 
 

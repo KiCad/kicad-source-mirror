@@ -664,7 +664,7 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
     SCH_SCREEN*     screen = (SCH_SCREEN*) aPanel->GetScreen();
     SCH_ITEM*       item = screen->GetCurItem();
-    SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
+    SCH_EDIT_FRAME* parent = (SCH_EDIT_FRAME*) aPanel->GetParent();
 
     parent->SetRepeatItem( NULL );
     screen->SetCurItem( NULL );

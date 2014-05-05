@@ -140,7 +140,7 @@ public:
             int aKindMask = PNS_ITEM::ANY );
 
     ///> Hit detection
-    const PNS_ITEMSET HitTest( const VECTOR2I& aPoint );
+    const PNS_ITEMSET HitTest( const VECTOR2I& aPoint ) const;
 
     void Add( PNS_ITEM* aItem );
     void Remove( PNS_ITEM* aItem );

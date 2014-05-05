@@ -148,7 +148,7 @@ public:
      * Function GetParent
      * @return the GERBVIEW_FRAME parent of this GERBER_IMAGE
      */
-    GERBVIEW_FRAME* GetParent()
+    GERBVIEW_FRAME* GetParent() const
     {
         return m_Parent;
     }

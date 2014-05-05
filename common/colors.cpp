@@ -122,6 +122,7 @@ EDA_COLOR_T ColorMix( EDA_COLOR_T aColor1, EDA_COLOR_T aColor2 )
     // First easy thing: a black gives always the other colour
     if( aColor1 == BLACK )
         return aColor2;
+
     if( aColor2 == BLACK)
         return aColor1;
 

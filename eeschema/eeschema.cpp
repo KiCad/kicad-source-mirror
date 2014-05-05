@@ -36,11 +36,11 @@
 #include <eda_dde.h>
 #include <wxEeschemaStruct.h>
 #include <libeditframe.h>
+#include <viewlib_frame.h>
 #include <eda_text.h>
 
 #include <general.h>
 #include <class_libentry.h>
-//#include <sch_junction.h>
 #include <hotkeys.h>
 #include <dialogs/dialog_color_config.h>
 #include <transform.h>
@@ -101,6 +101,15 @@ static struct IFACE : public KIFACE_I
             {
                 LIB_EDIT_FRAME* frame = new LIB_EDIT_FRAME( aKiway,
                                             dynamic_cast<SCH_EDIT_FRAME*>( aParent ) );
+                return frame;
+            }
+            break;
+
+
+        case FRAME_SCH_VIEWER:
+        case FRAME_SCH_VIEWER_MODAL:
+            {
+                LIB_VIEW_FRAME* frame = new LIB_VIEW_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
                 return frame;
             }
             break;

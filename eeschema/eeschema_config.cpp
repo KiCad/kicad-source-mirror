@@ -118,7 +118,10 @@ EDA_COLOR_T GetInvisibleItemColor()
 
 void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 {
-    InvokeEeschemaConfig( (SCH_EDIT_FRAME *)GetParent(), this );
+    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
+    wxASSERT( frame );
+
+    InvokeEeschemaConfig( frame, this );
 }
 
 
@@ -134,29 +137,31 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxFileName fn;
-    SCH_EDIT_FRAME* schFrame = ( SCH_EDIT_FRAME* ) GetParent();
+
+    SCH_EDIT_FRAME* schFrame = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
+    wxASSERT( schFrame );
 
     switch( id )
     {
     case ID_CONFIG_SAVE:
-        schFrame->SaveProjectSettings( false );
+        schFrame->SaveProjectSettings( true );
         break;
 
     case ID_CONFIG_READ:
-    {
-        fn = g_RootSheet->GetScreen()->GetFileName();
-        fn.SetExt( ProjectFileExtension );
+        {
+            fn = g_RootSheet->GetScreen()->GetFileName();
+            fn.SetExt( ProjectFileExtension );
 
-        wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
-                          fn.GetFullName(), ProjectFileWildcard,
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+            wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
+                              fn.GetFullName(), ProjectFileWildcard,
+                              wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-        if( dlg.ShowModal() == wxID_CANCEL )
-            break;
+            if( dlg.ShowModal() == wxID_CANCEL )
+                break;
 
-        schFrame->LoadProjectFile( dlg.GetPath(), true );
-    }
-    break;
+            schFrame->LoadProjectFile( dlg.GetPath(), true );
+        }
+        break;
 
 
     // Hotkey IDs
@@ -205,7 +210,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     switch( id )
     {
     case ID_CONFIG_SAVE:
-        SaveProjectSettings( false );
+        SaveProjectSettings( true );
         break;
 
     case ID_CONFIG_READ:
@@ -454,8 +459,8 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
     if( aAskForSave )
     {
         wxFileDialog dlg( this, _( "Save Project File" ),
-                          fn.GetPath(), fn.GetFullName(),
-                          ProjectFileWildcard, wxFD_SAVE | wxFD_CHANGE_DIR );
+                          fn.GetPath(), fn.GetFullPath(),
+                          ProjectFileWildcard, wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;

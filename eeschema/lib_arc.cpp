@@ -171,7 +171,7 @@ bool LIB_ARC::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 }
 
 
-bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
+bool LIB_ARC::HitTest( const wxPoint& aRefPoint ) const
 {
     int mindist = GetPenSize() / 2;
 
@@ -183,7 +183,7 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
 }
 
 
-bool LIB_ARC::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_ARC::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
 {
 
     if( aThreshold < 0 )

@@ -150,7 +150,8 @@ struct KIFACE
     // this interface.
 
 #define KFCTL_STANDALONE        (1<<0)  ///< Am running as a standalone Top.
-#define KFCTL_PROJECT_SUITE     (1<<1)  ///< Am running under a project mgr, possibly with others
+#define KFCTL_CPP_PROJECT_SUITE (1<<1)  ///< Am running under C++ project mgr, possibly with others
+#define KFCTL_PY_PROJECT_SUITE  (1<<2)  ///< Am running under python project mgr, possibly with others
 
 
     /**
@@ -201,7 +202,7 @@ struct KIFACE
      *  not contained in the caller's link image.
      */
     VTBL_ENTRY  wxWindow* CreateWindow( wxWindow* aParent, int aClassId,
-            KIWAY* aKIWAY, int aCtlBits ) = 0;
+            KIWAY* aKIWAY, int aCtlBits = 0 ) = 0;
 
     /**
      * Function IfaceOrAddress
@@ -249,6 +250,7 @@ struct KIFACE
  */
 class KIWAY : public wxEvtHandler
 {
+    friend class PGM_SINGLE_TOP;        // can use set_kiface()
 
 public:
     /// Known KIFACE implementations
@@ -257,16 +259,12 @@ public:
         FACE_SCH,               ///< eeschema DSO
         FACE_PCB,               ///< pcbnew DSO
         FACE_CVPCB,
-
-        /// count of those above here, which is the subset managed in a KIWAY.
-        KIWAY_FACE_COUNT,
-
-        FACE_BMP2CMP = KIWAY_FACE_COUNT,
         FACE_GERBVIEW,
         FACE_PL_EDITOR,
         FACE_PCB_CALCULATOR,
+        FACE_BMP2CMP,
 
-        FACE_COUNT
+        KIWAY_FACE_COUNT
     };
 
     /**
@@ -302,7 +300,7 @@ public:
      * @return KIWAY_PLAYER* - a valid opened KIWAY_PLAYER or NULL if there
      *  is something wrong or doCreate was false and the player has yet to be created.
      */
-    VTBL_ENTRY KIWAY_PLAYER*   Player( FRAME_T aFrameType, bool doCreate = true );
+    VTBL_ENTRY KIWAY_PLAYER* Player( FRAME_T aFrameType, bool doCreate = true );
 
     /**
      * Function PlayerClose
@@ -312,7 +310,7 @@ public:
      *
      * @return bool - true the window is closed and not vetoed, else false.
      */
-    VTBL_ENTRY bool PlayerClose( FRAME_T aFrameType,  bool doForce );
+    VTBL_ENTRY bool PlayerClose( FRAME_T aFrameType, bool doForce );
 
     /**
      * Function PlayersClose
@@ -325,7 +323,14 @@ public:
      */
     VTBL_ENTRY bool PlayersClose( bool doForce );
 
-    VTBL_ENTRY void ExpressMail( FRAME_T aDestination, MAIL_T aCommand, const std::string& aPayload, wxWindow* aSource=NULL );
+    /**
+     * Function ExpressMail
+     * send aPayload to aDestination from aSource.  Recipient receives this in its
+     * KIWAY_PLAYER::KiwayMailIn() function and can efficiently switch() based on
+     * aCommand in there.
+     */
+    VTBL_ENTRY void ExpressMail( FRAME_T aDestination, MAIL_T aCommand,
+            const std::string& aPayload, wxWindow* aSource = NULL );
 
     /**
      * Function Prj
@@ -335,10 +340,25 @@ public:
      */
     VTBL_ENTRY PROJECT&  Prj()  const;
 
-    KIWAY( PGM_BASE* aProgram, wxFrame* aTop = NULL );
+    /**
+     * Function SetLanguage
+     * changes the language and then calls ShowChangedLanguage() on all KIWAY_PLAYERs.
+     */
+    VTBL_ENTRY void SetLanguage( int aLanguage );
 
-    /// In case aTop may not be known at time of KIWAY construction:
+    KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop = NULL );
+
+    /**
+     * Function SetTop
+     * tells this KIWAY about the top most frame in the program and optionally
+     * allows it to play the role of one of the KIWAY_PLAYERs if launched from
+     * single_top.cpp.
+     *
+     * @param aTop is the top most wxFrame in the entire program.
+     */
     void SetTop( wxFrame* aTop );
+
+    void OnKiwayEnd();
 
     bool ProcessEvent( wxEvent& aEvent );   // overload virtual
 
@@ -348,12 +368,23 @@ private:
     static const wxString dso_full_path( FACE_T aFaceId );
 
     /// hooked into m_top in SetTop(), marks child frame as closed.
-    void playerDestroyHandler( wxWindowDestroyEvent& event );
+    void player_destroy_handler( wxWindowDestroyEvent& event );
+
+    bool set_kiface( FACE_T aFaceType, KIFACE* aKiface )
+    {
+        if( unsigned( aFaceType ) < unsigned( KIWAY_FACE_COUNT ) )
+        {
+            m_kiface[aFaceType] = aKiface;
+            return true;
+        }
+        return false;
+    }
 
     static KIFACE*  m_kiface[KIWAY_FACE_COUNT];
     static int      m_kiface_version[KIWAY_FACE_COUNT];
 
     PGM_BASE*       m_program;
+    int             m_ctl;
     wxFrame*        m_top;
 
     KIWAY_PLAYER*   m_player[KIWAY_PLAYER_COUNT];     // from frame_type.h

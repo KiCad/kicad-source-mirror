@@ -148,8 +148,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, PCB_EDIT_FRAME::InstallDisplayOptionsDialog )
     EVT_MENU( ID_PCB_USER_GRID_SETUP, PCB_EDIT_FRAME::Process_Special_Functions )
 
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, PCB_EDIT_FRAME::SetLanguage )
-
     // menu Postprocess
     EVT_MENU( ID_PCB_GEN_POS_MODULES_FILE, PCB_EDIT_FRAME::GenFootprintsPositionFile )
     EVT_MENU( ID_PCB_GEN_DRILL_FILE, PCB_EDIT_FRAME::InstallDrillFrame )
@@ -995,9 +993,11 @@ void PCB_EDIT_FRAME::SetVisibleAlls()
 }
 
 
-void PCB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ShowChangedLanguage()
 {
-    EDA_DRAW_FRAME::SetLanguage( event );
+    // call my base class
+    PCB_BASE_FRAME::ShowChangedLanguage();
+
     m_Layers->SetLayersManagerTabsText();
 
     wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_Layers );
@@ -1005,10 +1005,6 @@ void PCB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
     pane_info.Caption( _( "Visibles" ) );
     m_auimgr.Update();
     ReFillLayerWidget();
-
-    FOOTPRINT_EDIT_FRAME* moduleEditFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor( this );
-    if( moduleEditFrame )
-        moduleEditFrame->EDA_DRAW_FRAME::SetLanguage( event );
 }
 
 

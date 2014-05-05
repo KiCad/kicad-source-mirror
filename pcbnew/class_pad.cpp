@@ -637,7 +637,7 @@ bool D_PAD::IsOnLayer( LAYER_NUM aLayer ) const
 }
 
 
-bool D_PAD::HitTest( const wxPoint& aPosition )
+bool D_PAD::HitTest( const wxPoint& aPosition ) const
 {
     int     dx, dy;
 

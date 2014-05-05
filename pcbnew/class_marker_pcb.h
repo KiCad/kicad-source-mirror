@@ -74,7 +74,7 @@ public:
         return m_item;
     }
 
-    bool HitTest( const wxPoint& aPosition )
+    bool HitTest( const wxPoint& aPosition ) const
     {
         return HitTestMarker( aPosition );
     }

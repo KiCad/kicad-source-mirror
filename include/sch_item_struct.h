@@ -291,7 +291,10 @@ public:
     bool IsConnected( const wxPoint& aPoint ) const;
 
     /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
-    virtual bool HitTest( const wxPoint& aPosition ) { return HitTest( aPosition, 0 ); }
+    virtual bool HitTest( const wxPoint& aPosition ) const 
+    {
+        return HitTest( aPosition, 0 );
+    }
 
     /**
      * Function HitTest

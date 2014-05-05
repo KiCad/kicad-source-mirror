@@ -151,7 +151,7 @@ public:
      * Function IsVoid
      * @return true if the field value is void (no text in this field)
      */
-    bool IsVoid()
+    bool IsVoid() const
     {
         return m_Text.IsEmpty();
     }
@@ -169,9 +169,9 @@ public:
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
-    bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition ) const;
 
-    bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
+    bool HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const;
 
     void operator=( const LIB_FIELD& field )
     {
