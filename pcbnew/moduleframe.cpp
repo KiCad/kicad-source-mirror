@@ -50,6 +50,7 @@
 #include <hotkeys.h>
 #include <module_editor_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <kiway.h>
 
 
 static PCB_SCREEN* s_screenModule;      // the PCB_SCREEN used by the footprint editor
@@ -416,21 +417,21 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateLibAndModuleSelected( wxUpdateUIEvent& aEvent
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent )
 {
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
+    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
 
-    aEvent.Enable( frame->GetBoard()->m_Modules != NULL );
+    aEvent.Enable( frame && frame->GetBoard()->m_Modules != NULL );
 }
 
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent )
 {
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
+    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
 
     MODULE* module_in_edit = GetBoard()->m_Modules;
-    bool canInsert = ( module_in_edit && !module_in_edit->GetLink() );
+    bool canInsert = frame && module_in_edit && !module_in_edit->GetLink();
 
     // If the source was deleted, the module can inserted but not updated in the board.
-    if( module_in_edit && module_in_edit->GetLink() ) // this is not a new module
+    if( frame && module_in_edit && module_in_edit->GetLink() ) // this is not a new module
     {
         BOARD*  mainpcb = frame->GetBoard();
         MODULE* source_module = mainpcb->m_Modules;
@@ -451,12 +452,12 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent 
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent )
 {
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
+    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
 
     MODULE* module_in_edit = GetBoard()->m_Modules;
-    bool canReplace = ( module_in_edit && module_in_edit->GetLink() );
+    bool canReplace = frame && module_in_edit && module_in_edit->GetLink();
 
-    if( module_in_edit && module_in_edit->GetLink() ) // this is not a new module
+    if( canReplace ) // this is not a new module, but verify if the source is still on board
     {
         BOARD*  mainpcb = frame->GetBoard();
         MODULE* source_module = mainpcb->m_Modules;
