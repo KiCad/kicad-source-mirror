@@ -122,7 +122,7 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 
 public:
 
-    LIB_EDIT_FRAME( KIWAY* aKiway, SCH_EDIT_FRAME* aParent );
+    LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
     ~LIB_EDIT_FRAME();
 
