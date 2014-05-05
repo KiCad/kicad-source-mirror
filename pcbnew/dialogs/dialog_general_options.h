@@ -16,7 +16,7 @@ public:
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
 
-    PCB_EDIT_FRAME* GetParent() { return (PCB_EDIT_FRAME*) wxDialog::GetParent(); }
+    PCB_EDIT_FRAME* GetParent() const { return (PCB_EDIT_FRAME*) wxDialog::GetParent(); }
 
 private:
     void OnMiddleBtnPanEnbl( wxCommandEvent& event )

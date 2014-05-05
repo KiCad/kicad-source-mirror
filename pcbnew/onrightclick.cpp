@@ -661,14 +661,14 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
                     edge_zone->GetIsKeepout() ? _("Keepout Area") : _( "Zones" ),
                     KiBitmap( add_zone_xpm ) );
 
-        if( edge_zone->HitTestForCorner( RefPos( true ) ) )
+        if( edge_zone->HitTestForCorner( RefPos( true ) ) >= 0 )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
                          _( "Move Corner" ), KiBitmap( move_xpm ) );
             AddMenuItem( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
                          _( "Delete Corner" ), KiBitmap( delete_xpm ) );
         }
-        else if( edge_zone->HitTestForEdge( RefPos( true ) ) )
+        else if( edge_zone->HitTestForEdge( RefPos( true ) ) >= 0 )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_ADD_ZONE_CORNER,
                          _( "Create Corner" ), KiBitmap( add_corner_xpm ) );

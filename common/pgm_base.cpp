@@ -622,7 +622,7 @@ bool PGM_BASE::SetLanguage( bool first_time )
 
 void PGM_BASE::SetLanguageIdentifier( int menu_id )
 {
-    wxLogDebug( wxT( "Select language ID %d from %zd possible languages." ),
+    wxLogDebug( wxT( "Select language ID %d from %d possible languages." ),
                 menu_id, DIM( s_Languages ) );
 
     for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )

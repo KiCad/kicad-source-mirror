@@ -589,12 +589,6 @@ bool EDA_DRAW_FRAME::HandleBlockEnd( wxDC* DC )
 }
 
 
-void EDA_DRAW_FRAME::SetLanguage( wxCommandEvent& event )
-{
-    EDA_BASE_FRAME::SetLanguage( event );
-}
-
-
 void EDA_DRAW_FRAME::UpdateStatusBar()
 {
     wxString        Line;

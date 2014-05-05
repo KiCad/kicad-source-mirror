@@ -38,7 +38,6 @@
 
 class wxSashLayoutWindow;
 class wxListBox;
-class wxSemaphore;
 class CMP_LIBRARY;
 
 
@@ -48,9 +47,14 @@ class CMP_LIBRARY;
 class LIB_VIEW_FRAME : public SCH_BASE_FRAME
 {
 public:
-    LIB_VIEW_FRAME( KIWAY* aKiway, SCH_BASE_FRAME* aParent,
-        CMP_LIBRARY* aLibrary = NULL, wxSemaphore* aSemaphore = NULL,
-        long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
+
+    /**
+     * Constructor
+     * @param aFrameType must be given either FRAME_SCH_LIB_VIEWER or
+     *  FRAME_SCH_LIB_VIEWER_MODAL
+     */
+    LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent,
+            FRAME_T aFrameType, CMP_LIBRARY* aLibrary = NULL );
 
     ~LIB_VIEW_FRAME();
 
@@ -60,13 +64,6 @@ public:
      * used to get a reference to this frame, if exists
      */
     static const wxChar* GetLibViewerFrameName();
-
-    /**
-     * Function GetActiveLibraryViewer (static)
-     * @return a reference to the current opened Library viewer
-     * or NULL if no Library viewer currently opened
-     */
-    static LIB_VIEW_FRAME* GetActiveLibraryViewer( const wxWindow* aParent );
 
     void OnSize( wxSizeEvent& event );
 
@@ -109,7 +106,6 @@ public:
      * @param the alias name of the component to be selected.
      */
     void SetSelectedComponent( const wxString& aComponentName );
-    const wxString& GetSelectedComponent( void ) const { return m_exportToEeschemaCmpName; }
 
     void SetUnit( int aUnit ) { m_unit = aUnit; }
     int GetUnit( void ) { return m_unit; }
@@ -147,8 +143,6 @@ private:
     wxListBox*          m_cmpList;          // The list of components
     int                 m_cmpListWidth;     // Last width of the window
 
-    // Flags
-    wxSemaphore*        m_semaphore;        // != NULL if the frame must emulate a modal dialog
     wxString            m_configPath;       // subpath for configuration
 
     // TODO(hzeller): looks like these members were chosen to be static to survive different
@@ -156,11 +150,8 @@ private:
     // ugly hack, and should be solved differently.
     static wxString m_libraryName;
 
-    // TODO(hzeller): figure out what the difference between these is and the motivation to
-    // have this distinction. Shouldn't these essentially be the same ?
     static wxString m_entryName;
-    static wxString m_exportToEeschemaCmpName;  // When the viewer is used to select a component
-                                                // in schematic, the selected component is here
+
     static int      m_unit;
     static int      m_convert;
 

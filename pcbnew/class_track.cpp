@@ -1236,7 +1236,7 @@ bool TRACK::HitTest( const wxPoint& aPosition )
     return TestSegmentHit( aPosition, m_Start, m_End, m_Width / 2 );
 }
 
-bool VIA::HitTest( const wxPoint& aPosition )
+bool VIA::HitTest( const wxPoint& aPosition ) const
 {
     int max_dist = m_Width / 2;
 

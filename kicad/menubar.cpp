@@ -33,20 +33,20 @@
 #include <menus_helpers.h>
 #include <tree_project_frame.h>
 
-/* Menubar and toolbar event table */
+// Menubar and toolbar event table
 BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
-    /* Window events */
+    // Window events
     EVT_SIZE( KICAD_MANAGER_FRAME::OnSize )
     EVT_CLOSE( KICAD_MANAGER_FRAME::OnCloseWindow )
 
-    /* Toolbar events */
+    // Toolbar events
     EVT_TOOL( ID_NEW_PROJECT, KICAD_MANAGER_FRAME::OnLoadProject )
     EVT_TOOL( ID_NEW_PROJECT_FROM_TEMPLATE, KICAD_MANAGER_FRAME::OnLoadProject )
     EVT_TOOL( ID_LOAD_PROJECT, KICAD_MANAGER_FRAME::OnLoadProject )
     EVT_TOOL( ID_SAVE_PROJECT, KICAD_MANAGER_FRAME::OnSaveProject )
     EVT_TOOL( ID_SAVE_AND_ZIP_FILES, KICAD_MANAGER_FRAME::OnArchiveFiles )
 
-    /* Menu events */
+    // Menu events
     EVT_MENU( ID_SAVE_PROJECT, KICAD_MANAGER_FRAME::OnSaveProject )
     EVT_MENU( wxID_EXIT, KICAD_MANAGER_FRAME::OnExit )
     EVT_MENU( ID_TO_EDITOR, KICAD_MANAGER_FRAME::OnOpenTextEditor )
@@ -63,16 +63,17 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU( wxID_INDEX, KICAD_MANAGER_FRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, KICAD_MANAGER_FRAME::GetKicadAbout )
 
-    /* Range menu events */
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, KICAD_MANAGER_FRAME::SetLanguage )
+    // Range menu events
+    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, KICAD_MANAGER_FRAME::language_change )
+
     EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, KICAD_MANAGER_FRAME::OnFileHistory )
 
     // Special functions
-    #ifdef KICAD_USE_FILES_WATCHER
+#ifdef KICAD_USE_FILES_WATCHER
     EVT_MENU( ID_INIT_WATCHED_PATHS, KICAD_MANAGER_FRAME::OnChangeWatchedPaths )
-    #endif
+#endif
 
-    /* Button events */
+    // Button events
     EVT_BUTTON( ID_TO_PCB, KICAD_MANAGER_FRAME::OnRunPcbNew )
     EVT_BUTTON( ID_TO_CVPCB, KICAD_MANAGER_FRAME::OnRunCvpcb )
     EVT_BUTTON( ID_TO_EESCHEMA, KICAD_MANAGER_FRAME::OnRunEeschema )

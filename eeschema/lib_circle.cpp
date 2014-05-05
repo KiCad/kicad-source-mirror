@@ -87,7 +87,7 @@ bool LIB_CIRCLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 }
 
 
-bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
+bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef ) const
 {
     int mindist = GetPenSize() / 2;
 
@@ -99,7 +99,7 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
 }
 
 
-bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_CIRCLE::HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const
 {
     if( aThreshold < 0 )
         aThreshold = GetPenSize() / 2;

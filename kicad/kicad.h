@@ -140,6 +140,8 @@ public:
 private:
     int m_leftWinWidth;
 
+    void language_change( wxCommandEvent& event );
+
 public:
     KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
                              const wxPoint& pos, const wxSize& size );
@@ -202,7 +204,6 @@ public:
      */
     void ClearMsg();
 
-    void SetLanguage( wxCommandEvent& event );
     void OnRefresh( wxCommandEvent& event );
     void OnSelectDefaultPdfBrowser( wxCommandEvent& event );
     void OnSelectPreferredPdfBrowser( wxCommandEvent& event );

@@ -163,7 +163,7 @@ void TEXTE_MODULE::SetLocalCoord()
     RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
 }
 
-bool TEXTE_MODULE::HitTest( const wxPoint& aPosition )
+bool TEXTE_MODULE::HitTest( const wxPoint& aPosition ) const
 {
     wxPoint  rel_pos;
     EDA_RECT area = GetTextBox( -1, -1 );
@@ -455,6 +455,9 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
             case LAYER_N_FRONT:
                 aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );    // how about SILKSCREEN_N_FRONT?
                 break;
+
+            default:
+                wxFAIL_MSG( wxT( "Can't tell text layer" ) );
             }
             break;
         }

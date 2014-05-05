@@ -433,9 +433,9 @@ void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC )
     }
     else if( zone->IsDragging() )
     {
-        wxPoint offset;
-        offset = s_CornerInitialPosition - s_CursorLastPosition;
-        zone->MoveEdge( offset );
+        wxPoint offset = s_CornerInitialPosition - s_CursorLastPosition;
+        int selection = zone->GetSelectedCorner();
+        zone->MoveEdge( offset, selection );
     }
     else
     {
@@ -485,9 +485,9 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC*
     }
     else if( zone->IsDragging() )
     {
-        wxPoint offset;
-        offset = pos - s_CursorLastPosition;
-        zone->MoveEdge( offset );
+        wxPoint offset = pos - s_CursorLastPosition;
+        int selection = zone->GetSelectedCorner();
+        zone->MoveEdge( offset, selection );
         s_CursorLastPosition = pos;
     }
     else

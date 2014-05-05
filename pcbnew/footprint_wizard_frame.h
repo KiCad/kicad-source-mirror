@@ -35,41 +35,37 @@
 #include <class_footprint_wizard.h>
 class wxSashLayoutWindow;
 class wxListBox;
-class wxSemaphore;
 class wxGrid;
 class wxGridEvent;
 class FOOTPRINT_EDIT_FRAME;
 
 
 /**
- * Component library viewer main window.
+ * Class FOOTPRINT_WIZARD_FRAME
  */
 class FOOTPRINT_WIZARD_FRAME : public PCB_BASE_FRAME
 {
 private:
-    wxListBox*      m_pageList;             // < The list of pages
-    int             m_pageListWidth;        // < width of the window
-    wxGrid*         m_parameterGrid;        // < The list of parameters
-    int             m_parameterGridWidth;   // < size of the grid
+    wxListBox*      m_pageList;             ///< The list of pages
+    int             m_pageListWidth;        ///< width of the window
+    wxGrid*         m_parameterGrid;        ///< The list of parameters
+    int             m_parameterGridWidth;   ///< size of the grid
 
     // Flags
-    wxSemaphore*    m_semaphore;            // < != NULL if the frame must emulate a modal dialog
-    wxString        m_configPath;           // < subpath for configuration
-    bool            m_exportRequest;        // < true if the current footprint should be exported
+    wxString        m_configPath;           ///< subpath for configuration
 
 protected:
-    wxString        m_wizardName;           // < name of the current wizard
-    wxString        m_wizardDescription;    // < description of the wizard
-    wxString        m_wizardStatus;         // < current wizard status
+    wxString        m_wizardName;           ///< name of the current wizard
+    wxString        m_wizardDescription;    ///< description of the wizard
+    wxString        m_wizardStatus;         ///< current wizard status
 
 public:
-    FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
-        FOOTPRINT_EDIT_FRAME* parent, wxSemaphore* semaphore = NULL,
-        long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+
+    FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* parent, FRAME_T aFrameType );
 
     ~FOOTPRINT_WIZARD_FRAME();
 
-    MODULE*             GetBuiltFootprint( void );
+    MODULE*             GetBuiltFootprint();
 
 private:
 
