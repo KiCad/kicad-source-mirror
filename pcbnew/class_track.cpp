@@ -1231,7 +1231,7 @@ void VIA::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
 }
 
 
-bool TRACK::HitTest( const wxPoint& aPosition )
+bool TRACK::HitTest( const wxPoint& aPosition ) const
 {
     return TestSegmentHit( aPosition, m_Start, m_End, m_Width / 2 );
 }
