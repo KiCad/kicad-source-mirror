@@ -34,6 +34,17 @@
 # Set where the 3 source trees will go, use a full path
 WORKING_TREES=~/kicad_sources
 
+STABLE=tag:pre-kiway    # currently the best mix of features and stabilty
+TESTING=last:1          # the most recent
+
+
+# Set this to STABLE or TESTING or other know revision number:
+REVISION=$STABLE
+
+# For info on revision syntax:
+# $ bzr help revisionspec
+
+
 # CMake Options
 #OPTS="$OPTS -DBUILD_GITHUB_PLUGIN=OFF"
 
@@ -44,9 +55,6 @@ WORKING_TREES=~/kicad_sources
 # launchpad.net account.  Whereas lp:<something> requires a launchpad account.
 # https results in read only access.
 REPOS=https://code.launchpad.net
-
-# This is no longer maintained, is old
-#LEGACY_LIB_REPO=$REPOS/~dickelbeck/kicad/library-read-only
 
 # This branch is a bzr/launchpad import of the Git repository
 # at https://github.com/KiCad/kicad-library.git.
@@ -216,7 +224,7 @@ install_or_update()
         echo " source repo to local working tree."
     else
         cd kicad.bzr
-        bzr up
+        bzr up -r $REVISION
         echo " local source working tree updated."
         cd ../
     fi
