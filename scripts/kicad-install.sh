@@ -220,7 +220,7 @@ install_or_update()
 
     echo "step 3) checking out the source code from launchpad repo..."
     if [ ! -d "$WORKING_TREES/kicad.bzr" ]; then
-        bzr checkout $SRCS_REPO kicad.bzr
+        bzr checkout -r $REVISION $SRCS_REPO kicad.bzr
         echo " source repo to local working tree."
     else
         cd kicad.bzr
