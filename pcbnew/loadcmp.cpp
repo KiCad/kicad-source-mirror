@@ -315,7 +315,7 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const FPID& aFootprintId )
 MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
     throw( IO_ERROR, PARSE_ERROR )
 {
-    FP_LIB_TABLE*   fptbl = FootprintLibs();
+    FP_LIB_TABLE*   fptbl = Prj().PcbFootprintLibs();
 
     wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
 

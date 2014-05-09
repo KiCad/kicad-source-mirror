@@ -119,346 +119,6 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 }
 
 
-#if 0
-
-    /*
-
-    This code block was based on two major assumptions that are no longer true:
-    1) Footprint library basenames would remain the same.
-    (But no, basenames have been renamed in the github repo.)
-    2) *.mod files would still be around and merely reside in the FP_LIB_TABLE.
-    (But no, they have been converted to *.pretty.)
-
-    There is a newer replacement code block in the #else region.
-
-    */
-
-/**
- * Function missingLegacyLibs
- * tests the list of \a aLibNames by URI to determine if any of them are missing from
- * the #FP_LIB_TABLE.
- *
- * @note The missing legacy footprint library test is performed by using old library
- *       file path lookup method.  If the library is found, it is compared against all
- *       of the URIs in the table rather than the nickname.  This was done because the
- *       user could change the nicknames from the default table.  Using the full path
- *       is more reliable.
- *
- * @param aLibNames is the list of legacy library names.
- * @param aErrorMsg is a pointer to a wxString object to store the URIs of any missing
- *                  legacy library paths.  Can be NULL.
- * @return true if there are missing legacy libraries.  Otherwise false.
- */
-static bool missingLegacyLibs( FP_LIB_TABLE* aTbl, SEARCH_STACK& aSStack,
-        const wxArrayString& aLibNames, wxString* aErrorMsg )
-{
-    bool missing = false;
-
-    for( unsigned i = 0;  i < aLibNames.GetCount();  i++ )
-    {
-        wxFileName  fn( wxEmptyString, aLibNames[i], LegacyFootprintLibPathExtension );
-
-        wxString    legacyLibPath = aSStack.FindValidPath( fn.GetFullPath() );
-
-        /*
-        if( legacyLibPath.IsEmpty() )
-            continue;
-        */
-
-        if( !aTbl->FindRowByURI( legacyLibPath ) )
-        {
-            missing = true;
-
-            if( aErrorMsg )
-            {
-                *aErrorMsg += wxChar( '"' );
-
-                if( !legacyLibPath )
-                    *aErrorMsg += !legacyLibPath ? aLibNames[i] : legacyLibPath;
-
-                *aErrorMsg += wxT( "\"\n" );
-            }
-        }
-    }
-
-    return missing;
-}
-
-
-/**
- * Function convertFromLegacy
- * converts the footprint names in \a aNetList from the legacy format to the #FPID format.
- *
- * @param aNetList is the #NETLIST object to convert.
- * @param aLibNames is the list of legacy footprint library names from the currently loaded
- *                  project.
- * @param aReporter is the #REPORTER object to dump messages into.
- * @return true if all footprint names were successfully converted to a valid FPID.
- */
-static bool convertFromLegacy( FP_LIB_TABLE* aTbl, SEARCH_STACK& aSStack, NETLIST& aNetList,
-        const wxArrayString& aLibNames, REPORTER* aReporter = NULL ) throw( IO_ERROR )
-{
-    wxString   msg;
-    FPID       lastFPID;
-    COMPONENT* component;
-    MODULE*    module = 0;
-    bool       retv = true;
-
-    if( aNetList.IsEmpty() )
-        return true;
-
-    aNetList.SortByFPID();
-
-    wxString   libPath;
-
-    PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
-
-    for( unsigned ii = 0; ii < aNetList.GetCount(); ii++ )
-    {
-        component = aNetList.GetComponent( ii );
-
-        // The footprint hasn't been assigned yet so ignore it.
-        if( component->GetFPID().empty() )
-            continue;
-
-        if( component->GetFPID() != lastFPID )
-        {
-            module = NULL;
-
-            for( unsigned ii = 0; ii < aLibNames.GetCount(); ii++ )
-            {
-                wxFileName fn( wxEmptyString, aLibNames[ii], LegacyFootprintLibPathExtension );
-
-                libPath = aSStack.FindValidPath( fn.GetFullPath() );
-
-                if( !libPath )
-                {
-                    if( aReporter )
-                    {
-                        msg.Printf( _( "Cannot find footprint library file '%s' in any of the "
-                                       "KiCad legacy library search paths.\n" ),
-                                    GetChars( fn.GetFullPath() ) );
-                        aReporter->Report( msg );
-                    }
-
-                    retv = false;
-                    continue;
-                }
-
-                module = pi->FootprintLoad( libPath, component->GetFPID().GetFootprintName() );
-
-                if( module )
-                {
-                    lastFPID = component->GetFPID();
-                    break;
-                }
-            }
-        }
-
-        if( !module )
-        {
-            if( aReporter )
-            {
-                msg.Printf( _( "Component '%s' footprint '%s' was not found in any legacy "
-                               "library.\n" ),
-                            GetChars( component->GetReference() ),
-                            GetChars( component->GetFPID().Format() ) );
-                aReporter->Report( msg );
-            }
-
-            // Clear the footprint assignment since the old library lookup method is no
-            // longer valid.
-            FPID emptyFPID;
-
-            component->SetFPID( emptyFPID );
-            retv = false;
-            continue;
-        }
-        else
-        {
-            wxString    libNickname;
-
-            const FP_LIB_TABLE::ROW* row;
-
-            if( ( row = aTbl->FindRowByURI( libPath ) ) != NULL )
-                libNickname = row->GetNickName();
-
-            if( libNickname.IsEmpty() )
-            {
-                if( aReporter )
-                {
-                    msg.Printf( _( "Component '%s' with footprint '%s' and legacy library path '%s' "
-                                   "was not found in the footprint library table.\n" ),
-                                GetChars( component->GetReference() ),
-                                GetChars( component->GetFPID().Format() ),
-                                GetChars( libPath )
-                                );
-                    aReporter->Report( msg );
-                }
-
-                retv = false;
-            }
-            else
-            {
-                FPID newFPID = lastFPID;
-                newFPID.SetLibNickname( libNickname );
-
-                if( !newFPID.IsValid() )
-                {
-                    if( aReporter )
-                    {
-                        msg.Printf( _( "Component '%s' FPID '%s' is not valid.\n" ),
-                                    GetChars( component->GetReference() ),
-                                    GetChars( newFPID.Format() ) );
-                        aReporter->Report( msg );
-                    }
-
-                    retv = false;
-                }
-                else
-                {
-                    // The footprint name should already be set.
-                    component->SetFPID( newFPID );
-                }
-            }
-        }
-    }
-
-    return retv;
-}
-
-
-bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
-{
-    COMPONENT* component;
-    wxString   msg;
-    bool       isLegacy = true;
-
-    ReadSchematicNetlist();
-
-    if( m_ListCmp == NULL )
-        return false;
-
-    LoadProjectFile( m_NetlistFileName.GetFullPath() );
-    LoadFootprintFiles();
-    BuildFOOTPRINTS_LISTBOX();
-    BuildLIBRARY_LISTBOX();
-
-    m_ListCmp->Clear();
-    m_undefinedComponentCnt = 0;
-
-    if( m_netlist.AnyFootprintsLinked() )
-    {
-        for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
-        {
-            component = m_netlist.GetComponent( i );
-
-            if( component->GetFPID().empty() )
-                continue;
-
-            if( isLegacy )
-            {
-                if( !component->GetFPID().IsLegacy() )
-                    isLegacy = false;
-            }
-        }
-    }
-    else
-    {
-        isLegacy = false;  // None of the components have footprints assigned.
-    }
-
-    wxString missingLibs;
-
-    // Check if footprint links were generated before the footprint library table was implemented.
-    if( isLegacy )
-    {
-        if( missingLegacyLibs( FootprintLibs(), Prj().PcbSearchS(), m_ModuleLibNames, &missingLibs ) )
-        {
-            msg = wxT( "The following legacy libraries are defined in the project file "
-                       "but were not found in the footprint library table:\n\n" ) + missingLibs;
-            msg += wxT( "\nDo you want to update the footprint library table before "
-                        "attempting to update the assigned footprints?" );
-
-            if( IsOK( this, msg ) )
-            {
-                wxCommandEvent cmd;
-
-                OnEditFootprintLibraryTable( cmd );
-            }
-        }
-
-        msg = wxT( "Some or all of the assigned footprints contain legacy entries.  Would you "
-                   "like CvPcb to attempt to convert them to the new footprint library table "
-                   "format?" );
-
-        if( IsOK( this, msg ) )
-        {
-            msg.Clear();
-            WX_STRING_REPORTER reporter( &msg );
-
-            SEARCH_STACK&   search = Prj().SchSearchS();
-
-            if( !convertFromLegacy( FootprintLibs(), search, m_netlist, m_ModuleLibNames, &reporter ) )
-            {
-                HTML_MESSAGE_BOX dlg( this, wxEmptyString );
-
-                dlg.MessageSet( wxT( "The following errors occurred attempting to convert the "
-                                     "footprint assignments:\n\n" ) );
-                dlg.ListSet( msg );
-                dlg.MessageSet( wxT( "\nYou will need to reassign them manually if you want them "
-                                     "to be updated correctly the next time you import the "
-                                     "netlist in Pcbnew." ) );
-                dlg.ShowModal();
-            }
-
-            m_modified = true;
-        }
-        else
-        {
-            // Clear the legacy footprint assignments.
-            for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
-            {
-                FPID emptyFPID;
-                component = m_netlist.GetComponent( i );
-                component->SetFPID( emptyFPID );
-                m_modified = true;
-            }
-        }
-    }
-
-    for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
-    {
-        component = m_netlist.GetComponent( i );
-
-        msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
-                    GetChars( component->GetReference() ),
-                    GetChars( component->GetValue() ),
-                    GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
-
-        m_ListCmp->AppendLine( msg );
-
-        if( component->GetFPID().empty() )
-        {
-            m_undefinedComponentCnt += 1;
-            continue;
-        }
-    }
-
-    if( !m_netlist.IsEmpty() )
-        m_ListCmp->SetSelection( 0, true );
-
-    DisplayStatus();
-
-    UpdateTitle();
-
-    UpdateFileHistory( m_NetlistFileName.GetFullPath() );
-
-    return true;
-}
-
-#else   // new strategy
-
 /// Return true if the resultant FPID has a certain nickname.  The guess
 /// is only made if this footprint resides in only one library.
 /// @return int - 0 on success, 1 on not found, 2 on ambiguous i.e. multiple matches
@@ -503,7 +163,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
 {
     wxString        msg;
     bool            hasMissingNicks = false;
-    FP_LIB_TABLE*   tbl = FootprintLibs();
 
     ReadSchematicNetlist();
 
@@ -512,6 +171,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
 
     LoadProjectFile( m_NetlistFileName.GetFullPath() );
     LoadFootprintFiles();
+
     BuildFOOTPRINTS_LISTBOX();
     BuildLIBRARY_LISTBOX();
 
@@ -554,6 +214,9 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
 
                     if( component->GetFPID().IsLegacy() )
                     {
+                        // get this first here, it's possibly obsoleted if we get it too soon.
+                        FP_LIB_TABLE*   tbl = Prj().PcbFootprintLibs();
+
                         int guess = guessNickname( tbl, (FPID*) &component->GetFPID() );
 
                         switch( guess )
@@ -659,9 +322,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
 }
 
 
-#endif
-
-
 int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
 {
     wxFileName fn;
@@ -685,7 +345,7 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
             fn.SetExt( ComponentFileExtension );
 
         // Save the project specific footprint library table.
-        if( !FootprintLibs()->IsEmpty( false ) )
+        if( !Prj().PcbFootprintLibs()->IsEmpty( false ) )
         {
             wxString fp_lib_tbl = Prj().FootprintLibTblName();
 
@@ -695,7 +355,7 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
             {
                 try
                 {
-                    FootprintLibs()->Save( fp_lib_tbl );
+                    Prj().PcbFootprintLibs()->Save( fp_lib_tbl );
                 }
                 catch( const IO_ERROR& ioe )
                 {

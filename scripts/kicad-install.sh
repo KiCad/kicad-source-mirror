@@ -38,7 +38,7 @@ STABLE=tag:pre-kiway    # currently the best mix of features and stabilty
 TESTING=last:1          # the most recent
 
 
-# Set this to STABLE or TESTING or other know revision number:
+# Set this to STABLE or TESTING or other known revision number:
 REVISION=$STABLE
 
 # For info on revision syntax:
