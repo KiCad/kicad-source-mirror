@@ -122,14 +122,15 @@ if( USE_KIWAY_DLLS )
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-    install( TARGETS pcb_calculator_kiface
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
-
     if( APPLE )
-        set_target_properties( pcb_calculator PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+        # puts the *.kiface into the *.app bundle while linking
+        set_target_properties( pcb_calculator_kiface PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/pcb_calculator.app/Contents/MacOS/
+            )
+    else()
+        install( TARGETS pcb_calculator_kiface
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
             )
     endif()
 
@@ -156,13 +157,6 @@ else()
     set_source_files_properties( pcb_calculator.cpp PROPERTIES
         COMPILE_DEFINITIONS     "COMPILING_DLL"
         )
-
-    if( APPLE )
-        set_target_properties( pcb_calculator PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
-    endif()
-
     target_link_libraries( pcb_calculator
         common
         bitmaps
@@ -174,4 +168,11 @@ else()
         COMPONENT binary
         )
 
+endif()
+
+
+if( APPLE )
+    set_target_properties( pcb_calculator PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+        )
 endif()

@@ -49,7 +49,20 @@ set( PL_EDITOR_EXTRA_SRCS
 
 if( MINGW )
     # PL_EDITOR_RESOURCES variable is set by the macro.
-    mingw_resource_compiler(pl_editor)
+    mingw_resource_compiler( pl_editor )
+endif()
+
+
+if( APPLE )
+    set( PL_EDITOR_RESOURCES pl_editor.icns pl_editor_doc.icns )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pl_editor.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pl_editor_doc.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set( MACOSX_BUNDLE_ICON_FILE pl_editor.icns )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pl_editor )
 endif()
 
 
@@ -82,7 +95,6 @@ if( USE_KIWAY_DLLS )
         ${PL_EDITOR_SRCS}
         ${DIALOGS_SRCS}
         ${PL_EDITOR_EXTRA_SRCS}
-#        ${PL_EDITOR_RESOURCES}
         )
     target_link_libraries( pl_editor_kiface
         common
@@ -114,18 +126,16 @@ if( USE_KIWAY_DLLS )
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-    install( TARGETS pl_editor_kiface
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
-
     if( APPLE )
-        # copies kiface into the bundle
-        add_custom_target( _pleditor_kiface_copy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pagelayout_editor/_pl_editor.kiface "${CMAKE_BINARY_DIR}/pagelayout_editor/pl_editor.app/Contents/MacOS/"
-            DEPENDS pl_editor_kiface
-            COMMENT "Copying kiface into pleditor"
-        )
+        # puts the *.kiface into the *.app bundle while linking
+        set_target_properties( pl_editor_kiface PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/pl_editor.app/Contents/MacOS/
+            )
+    else()
+        install( TARGETS pl_editor_kiface
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
     endif()
 
 else()
@@ -137,13 +147,6 @@ else()
         ${PL_EDITOR_EXTRA_SRCS}
         ${PL_EDITOR_RESOURCES}
         )
-
-    if( APPLE )
-        set_target_properties( pl_editor PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
-    endif()
-
     target_link_libraries( pl_editor
         common
         polygon
@@ -152,28 +155,15 @@ else()
         ${wxWidgets_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         )
-
     install( TARGETS pl_editor
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-
 endif()
 
 
 if( APPLE )
-    set( PL_EDITOR_RESOURCES pl_editor.icns pl_editor_doc.icns )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pl_editor.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pl_editor_doc.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-    set( MACOSX_BUNDLE_ICON_FILE pl_editor.icns )
-    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pl_editor )
-
     set_target_properties( pl_editor PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
         )
 endif()
-
