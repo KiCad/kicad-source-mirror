@@ -100,7 +100,6 @@ if( USE_KIWAY_DLLS )
         cvpcb.cpp
         ${CVPCB_SRCS}
         ${CVPCB_DIALOGS}
-#        ${CVPCB_RESOURCES}
         )
     set_target_properties( cvpcb_kiface PROPERTIES
         OUTPUT_NAME     cvpcb
@@ -148,12 +147,6 @@ if( USE_KIWAY_DLLS )
         target_link_libraries( cvpcb_kiface rt )
     endif()
 
-    if( APPLE )
-        set_target_properties( cvpcb PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
-    endif()
-
     set_source_files_properties( cvpcb.cpp PROPERTIES
         # The KIFACE is in cvpcb.cpp, export it:
         COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
@@ -172,18 +165,16 @@ if( USE_KIWAY_DLLS )
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-    install( TARGETS cvpcb_kiface
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
-
     if( APPLE )
-        # copies kiface into the bundle
-        add_custom_target( _cvpcb_kiface_copy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/cvpcb/_cvpcb.kiface "${CMAKE_BINARY_DIR}/cvpcb/cvpcb.app/Contents/MacOS/"
-            DEPENDS cvpcb_kiface
-            COMMENT "Copying kiface into cvpcb"
-        )
+        # puts the *.kiface into the *.app bundle while linking
+        set_target_properties( cvpcb_kiface PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/cvpcb.app/Contents/MacOS/
+            )
+    else()
+        install( TARGETS cvpcb_kiface
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
     endif()
 
 else()
@@ -228,15 +219,15 @@ else()
     # Must follow github_plugin
     target_link_libraries( cvpcb ${Boost_LIBRARIES} )
 
-    if( APPLE )
-        set_target_properties( cvpcb PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
-    endif()
-
     install( TARGETS cvpcb
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
+endif()
 
+
+if( APPLE )
+    set_target_properties( cvpcb PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+        )
 endif()

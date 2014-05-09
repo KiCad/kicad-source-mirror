@@ -2,53 +2,36 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleTypeIconFile</key>
-			<string>pcbnew_doc.icns</string>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>kicad_pcb</string>
-				<string>brd</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>pcbnew board</string>
-			<key>LSHandlerRank</key>
-			<string>Owner</string>
-		</dict>
-	</array>
-	<key>CFBundleExecutable</key>
-	<string>pcbnew</string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
-	<key>CFBundleIconFile</key>
-	<string>pcbnew.icns</string>
-	<key>CFBundleIdentifier</key>
-	<string>org.kicad-eda.pcbnew</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleLongVersionString</key>
-	<string></string>
-	<key>CFBundleName</key>
-	<string>PCBNew</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string></string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string></string>
-	<key>CSResourcesFileMapped</key>
-	<true/>
-	<key>LSRequiresCarbon</key>
-	<true/>
-	<key>NSHumanReadableCopyright</key>
-	<string></string>
-        <key>NSHighResolutionCapable</key>
-        <string>True</string>
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>         <string>Editor</string>
+            <key>CFBundleTypeIconFile</key>     <string>pcbnew_doc.icns</string>
+            <key>CFBundleTypeExtensions</key>
+                <array>
+                    <string>kicad_pcb</string>
+                    <string>brd</string>
+                </array>
+
+            <key>CFBundleTypeName</key>         <string>pcbnew board</string>
+            <key>LSHandlerRank</key>            <string>Owner</string>
+        </dict>
+    </array>
+
+    <key>CFBundleExecutable</key>               <string>pcbnew</string>
+    <key>CFBundleGetInfoString</key>            <string></string>
+    <key>CFBundleIconFile</key>                 <string>pcbnew.icns</string>
+    <key>CFBundleIdentifier</key>               <string>org.kicad-eda.pcbnew</string>
+    <key>CFBundleInfoDictionaryVersion</key>    <string>6.0</string>
+    <key>CFBundleLongVersionString</key>        <string></string>
+    <key>CFBundleName</key>                     <string>PCBNew</string>
+    <key>CFBundlePackageType</key>              <string>APPL</string>
+    <key>CFBundleShortVersionString</key>       <string></string>
+    <key>CFBundleSignature</key>                <string>????</string>
+    <key>CFBundleVersion</key>                  <string></string>
+    <key>CSResourcesFileMapped</key>            <true/>
+    <key>LSRequiresCarbon</key>                 <true/>
+    <key>NSHumanReadableCopyright</key>         <string></string>
+    <key>NSHighResolutionCapable</key>          <string>True</string>
 </dict>
 </plist>
