@@ -45,7 +45,7 @@ KIWAY_PLAYER::KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType
     EDA_BASE_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aWdoName ),
     KIWAY_HOLDER( aKiway ),
     m_modal( false ),
-    m_modal_loop( 0 )
+    m_modal_loop( 0 ), m_modal_resultant_parent( 0 )
 {
     // DBG( printf("KIWAY_EXPRESS::wxEVENT_ID:%d\n", KIWAY_EXPRESS::wxEVENT_ID );)
 }
@@ -57,7 +57,7 @@ KIWAY_PLAYER::KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& a
     EDA_BASE_FRAME( aParent, (FRAME_T) aId, aTitle, aPos, aSize, aStyle, aWdoName ),
     KIWAY_HOLDER( 0 ),
     m_modal( false ),
-    m_modal_loop( 0 )
+    m_modal_loop( 0 ), m_modal_resultant_parent( 0 )
 {
     // DBG( printf("KIWAY_EXPRESS::wxEVENT_ID:%d\n", KIWAY_EXPRESS::wxEVENT_ID );)
 }
@@ -95,6 +95,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
     } clear_this( (void*&) m_modal_loop );
 
 
+    m_modal_resultant_parent = aResultantFocusWindow;
     Show( true );
     SetFocus();
 
@@ -138,6 +139,16 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
     return m_modal_ret_val;
 }
 
+bool KIWAY_PLAYER::Destroy()
+{
+    // Needed on Windows to leave the modal parent on top with focus
+#ifdef __WINDOWS__
+    if( m_modal_resultant_parent && GetParent() != m_modal_resultant_parent )
+        Reparent( m_modal_resultant_parent );
+#endif
+
+    return EDA_BASE_FRAME::Destroy();
+}
 
 bool KIWAY_PLAYER::IsDismissed()
 {

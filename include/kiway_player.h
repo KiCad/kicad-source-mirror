@@ -202,6 +202,11 @@ public:
      */
     virtual void KiwayMailIn( KIWAY_EXPRESS& aEvent );
 
+    /**
+     * Our version of Destroy() which is virtual from wxWidgets
+     */
+    bool Destroy();
+
 protected:
 
     bool IsModal()                      { return m_modal; }
@@ -229,6 +234,7 @@ protected:
     // variables for modal behavior support, only used by a few derivatives.
     bool            m_modal;        // true if frame is intended to be modal, not modeless
     WX_EVENT_LOOP*  m_modal_loop;   // points to nested event_loop, NULL means not modal and dismissed
+    wxWindow*       m_modal_resultant_parent; // the window caller in modal mode
     wxString        m_modal_string;
     bool            m_modal_ret_val;    // true if a selection was made
 
