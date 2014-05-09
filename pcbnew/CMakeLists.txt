@@ -589,17 +589,15 @@ if( USE_KIWAY_DLLS )
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-    install( TARGETS pcbnew_kiface
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
-
     if( APPLE )
-        # copies kiface into the bundle
-        add_custom_target( _pcbnew_kiface_copy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.kiface "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.app/Contents/MacOS/"
-            DEPENDS pcbnew_kiface
-            COMMENT "Copying kiface into pcbnew"
+        # puts the *.kiface into the *.app bundle while linking
+        set_target_properties( pcbnew_kiface PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.app/Contents/MacOS/
+            )
+    else()
+        install( TARGETS pcbnew_kiface
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
             )
     endif()
 
@@ -763,3 +761,4 @@ if( false )     # haven't been used in years.
         )
     target_link_libraries( layer_widget_test common ${wxWidgets_LIBRARIES} )
 endif()
+

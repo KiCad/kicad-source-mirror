@@ -81,11 +81,11 @@ endif()
 
 
 if( APPLE )
-    set(GERBVIEW_RESOURCES gerbview.icns gerbview_doc.icns)
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/gerbview.icns" PROPERTIES
+    set( GERBVIEW_RESOURCES gerbview.icns gerbview_doc.icns )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/gerbview.icns" PROPERTIES
         MACOSX_PACKAGE_LOCATION Resources
         )
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/gerbview_doc.icns" PROPERTIES
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/gerbview_doc.icns" PROPERTIES
         MACOSX_PACKAGE_LOCATION Resources
         )
     set( MACOSX_BUNDLE_ICON_FILE gerbview.icns )
@@ -120,7 +120,6 @@ if( USE_KIWAY_DLLS )
         ${GERBVIEW_SRCS}
         ${DIALOGS_SRCS}
         ${GERBVIEW_EXTRA_SRCS}
-#        ${GERBVIEW_RESOURCES}
         )
     set_target_properties( gerbview_kiface PROPERTIES
         OUTPUT_NAME     gerbview
@@ -152,18 +151,16 @@ if( USE_KIWAY_DLLS )
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-    install( TARGETS gerbview_kiface
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
-
     if( APPLE )
-        # copies kiface into the bundle
-        add_custom_target( _gerbview_kiface_copy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/gerbview/_gerbview.kiface "${CMAKE_BINARY_DIR}/gerbview/gerbview.app/Contents/MacOS/"
-            DEPENDS gerbview_kiface
-            COMMENT "Copying kiface into gerbview"
-        )
+        # puts the *.kiface into the *.app bundle while linking
+        set_target_properties( gerbview_kiface PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/gerbview.app/Contents/MacOS/
+            )
+    else()
+        install( TARGETS gerbview_kiface
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
     endif()
 
 else()
@@ -194,5 +191,3 @@ if( APPLE )
     set_target_properties( gerbview PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif()
-
-
