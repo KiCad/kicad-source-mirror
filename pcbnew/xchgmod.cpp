@@ -38,6 +38,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <project.h>
 
 #include <pcbnew.h>
 #include <dialog_exchange_modules_base.h>
@@ -492,7 +493,7 @@ void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
     wxString newname;
 
     newname = m_parent->SelectFootprint( m_parent, wxEmptyString, wxEmptyString, wxEmptyString,
-                                         m_parent->FootprintLibs() );
+                                         Prj().PcbFootprintLibs() );
 
     if( newname != wxEmptyString )
         m_NewModule->SetValue( newname );

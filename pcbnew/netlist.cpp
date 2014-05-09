@@ -172,7 +172,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     MODULE*    module = 0;
     MODULE*    fpOnBoard;
 
-    if( aNetlist.IsEmpty() || FootprintLibs()->IsEmpty() )
+    if( aNetlist.IsEmpty() || Prj().PcbFootprintLibs()->IsEmpty() )
         return;
 
     aNetlist.SortByFPID();

@@ -81,23 +81,8 @@ void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
     if( m_NetlistFileExtension.IsEmpty() )
         m_NetlistFileExtension = wxT( "net" );
 
-    // empty the table, Load() it again below.
-    FootprintLibs()->Clear();
-
-    /* this is done by ConfigLoad(), and that sets the env var too.
-    prj.SetProjectFullName( fn.GetFullPath() );
-    */
-
-    wxString projectFpLibTableFileName = prj.FootprintLibTblName();
-
-    try
-    {
-        FootprintLibs()->Load( projectFpLibTableFileName );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( this, ioe.errorText );
-    }
+    // Force it to be loaded on demand.
+    prj.ElemClear( PROJECT::ELEM_FPTBL );
 }
 
 

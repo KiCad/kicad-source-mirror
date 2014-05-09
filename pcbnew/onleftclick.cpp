@@ -37,6 +37,7 @@
 #include <class_board.h>
 #include <class_zone.h>
 #include <class_pcb_text.h>
+#include <project.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -355,7 +356,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             m_canvas->MoveCursorToCrossHair();
             DrawStruct = (BOARD_ITEM*) LoadModuleFromLibrary(
-                    wxEmptyString, FootprintLibs(), true, aDC );
+                    wxEmptyString, Prj().PcbFootprintLibs(), true, aDC );
 
             SetCurItem( DrawStruct );
 
