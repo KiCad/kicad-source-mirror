@@ -89,12 +89,6 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl=0 );   // overload KIWAY_PLAYER
 
     /**
-     * Function FootprintLibs
-     * @return the project #FP_LIB_TABLE.
-     */
-    FP_LIB_TABLE* FootprintLibs() const;
-
-    /**
      * @return a pointer on the Footprint Viewer frame, if exists, or NULL
      */
     DISPLAY_FOOTPRINTS_FRAME* GetFpViewerFrame();

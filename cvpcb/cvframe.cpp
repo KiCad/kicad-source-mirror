@@ -200,24 +200,6 @@ CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 }
 
 
-FP_LIB_TABLE* CVPCB_MAINFRAME::FootprintLibs() const
-{
-    PROJECT&        prj = Prj();
-    FP_LIB_TABLE*   tbl = dynamic_cast<FP_LIB_TABLE*>( prj.Elem( PROJECT::FPTBL ) );
-
-    if( !tbl )
-    {
-        // Stack the project specific FP_LIB_TABLE overlay on top of the global table.
-        // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
-        // stack this way, all using the same global fallback table.
-        tbl = new FP_LIB_TABLE( &GFootprintTable );
-        prj.Elem( PROJECT::FPTBL, tbl );
-    }
-
-    return tbl;
-}
-
-
 void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
@@ -493,7 +475,7 @@ void CVPCB_MAINFRAME::ConfigCvpcb( wxCommandEvent& event )
 void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 {
     bool    tableChanged = false;
-    int     r = InvokePcbLibTableEditor( this, &GFootprintTable, FootprintLibs() );
+    int     r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
 
     if( r & 1 )
     {
@@ -521,7 +503,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 
         try
         {
-            FootprintLibs()->Save( fileName );
+            Prj().PcbFootprintLibs()->Save( fileName );
             tableChanged = true;
         }
         catch( const IO_ERROR& ioe )
@@ -538,7 +520,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
     if( tableChanged )
     {
         BuildLIBRARY_LISTBOX();
-        m_footprints.ReadFootprintFiles( FootprintLibs() );
+        m_footprints.ReadFootprintFiles( Prj().PcbFootprintLibs() );
     }
 }
 
@@ -735,7 +717,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
 bool CVPCB_MAINFRAME::LoadFootprintFiles()
 {
-    FP_LIB_TABLE* fptbl = FootprintLibs();
+    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs();
 
     // Check if there are footprint libraries in the footprint library table.
     if( !fptbl || !fptbl->GetLogicalLibs().size() )
@@ -1012,11 +994,13 @@ void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
                                         wxFONTWEIGHT_NORMAL ) );
     }
 
-    if( FootprintLibs() )
+    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+
+    if( tbl )
     {
         wxArrayString libNames;
 
-        std::vector< wxString > libNickNames = FootprintLibs()->GetLogicalLibs();
+        std::vector< wxString > libNickNames = tbl->GetLogicalLibs();
 
         for( unsigned ii = 0; ii < libNickNames.size(); ii++ )
             libNames.Add( libNickNames[ii] );

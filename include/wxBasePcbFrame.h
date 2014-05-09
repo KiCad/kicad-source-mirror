@@ -103,7 +103,7 @@ protected:
      *
      * @param aFootprintId is the #FPID of component footprint to load.
      * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
-     *         libraries in the table returned from #FootprintLibs().
+     *         libraries in the table returned from #Prj().PcbFootprintLibs().
      * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
      *                 occurs while reading footprint library files.
      */
@@ -127,7 +127,7 @@ public:
      *
      * @param aFootprintId is the #FPID of component footprint to load.
      * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
-     *         libraries in table returned from #FootprintLibs().
+     *         libraries in table returned from #Prj().PcbFootprintLibs().
      */
     MODULE* LoadFootprint( const FPID& aFootprintId );
 
@@ -465,12 +465,6 @@ public:
      * @return the selected footprint name or an empty string if no selection was made.
      */
     wxString SelectFootprintFromLibBrowser();
-
-    /**
-     * Function FootprintLibs
-     * @return the project #FP_LIB_TABLE.
-     */
-    FP_LIB_TABLE* FootprintLibs() const;
 
     //  ratsnest functions
     /**

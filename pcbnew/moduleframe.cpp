@@ -274,7 +274,7 @@ wxString FOOTPRINT_EDIT_FRAME::getLibPath()
     {
         const wxString& nickname = getLibNickName();
 
-        const FP_LIB_TABLE::ROW* row = FootprintLibs()->FindRow( nickname );
+        const FP_LIB_TABLE::ROW* row = Prj().PcbFootprintLibs()->FindRow( nickname );
 
         return row->GetFullURI( true );
     }
@@ -481,7 +481,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent )
 {
-    FP_LIB_TABLE* fptbl = FootprintLibs();
+    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs();
 
     aEvent.Enable( fptbl && !fptbl->IsEmpty() );
 }
@@ -621,7 +621,7 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
     {
         try
         {
-            bool writable = FootprintLibs()->IsFootprintLibWritable( nickname );
+            bool writable = Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname );
 
             // no exception was thrown, this means libPath is valid, but it may be read only.
             title = _( "Module Editor (active library: " ) + nickname + wxT( ")" );
