@@ -25,7 +25,7 @@
 
 /**
  * @file clean.cpp
- * @brief functions to clean tracks: remove null lenght and redundant segments
+ * @brief functions to clean tracks: remove null length and redundant segments
  */
 
 
@@ -43,7 +43,7 @@
 class TRACKS_CLEANER: CONNECTIONS
 {
 private:
-    BOARD * m_Brd;
+    BOARD *m_Brd;
 
 public:
     TRACKS_CLEANER( BOARD * aPcb );
@@ -52,8 +52,8 @@ public:
      * the cleanup function.
      * return true if some item was modified
      */
-    bool CleanupBoard(PCB_EDIT_FRAME *aFrame, bool aCleanVias,
-                      bool aMergeSegments, bool aDeleteUnconnected);
+    bool CleanupBoard( PCB_EDIT_FRAME *aFrame, bool aCleanVias,
+                       bool aMergeSegments, bool aDeleteUnconnected);
 
 private:
 
@@ -64,12 +64,29 @@ private:
     bool clean_vias();
 
     /**
+     * Removes all the following THT vias on the same position of the
+     * specified one
+     */
+    bool remove_duplicates_of_via( const VIA *aVia );
+
+    /**
+     * Removes all the following duplicates tracks of the specified one
+     */
+    bool remove_duplicates_of_track( const TRACK *aTrack );
+
+    /**
      * Removes dangling tracks
      */
     bool deleteUnconnectedTracks();
 
+    /// Delete null length track segments
+    bool delete_null_segments();
+
+    /// Try to merge the segment to a following collinear one
+    bool merge_collinear_of_track( TRACK *aSegment );
+
     /**
-     * Merge colinear segments and remove null len segments
+     * Merge collinear segments and remove duplicated and null len segments
      */
     bool clean_segments();
 
@@ -193,6 +210,28 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
     }
 }
 
+bool TRACKS_CLEANER::remove_duplicates_of_via( const VIA *aVia )
+{
+    bool modified = false;
+
+    // Search and delete others vias at same location
+    VIA* next_via;
+    for( VIA* alt_via = GetFirstVia( aVia->Next() ); alt_via != NULL;
+            alt_via = next_via )
+    {
+        next_via = GetFirstVia( alt_via->Next() );
+
+        if( (alt_via->GetViaType() == VIA_THROUGH) &&
+                (alt_via->GetStart() == aVia->GetStart()) )
+        {
+            // delete via
+            alt_via->DeleteStructure();
+            modified = true;
+        }
+    }
+    return modified;
+}
+
 bool TRACKS_CLEANER::clean_vias()
 {
     bool modified = false;
@@ -211,21 +250,7 @@ bool TRACKS_CLEANER::clean_vias()
          * (yet) handle high density interconnects */
         if( via->GetViaType() != VIA_THROUGH )
         {
-            // Search and delete others vias at same location
-            VIA* next_via;
-            for( VIA* alt_via = GetFirstVia( via->Next() ); alt_via != NULL;
-                    alt_via = next_via )
-            {
-                next_via = GetFirstVia( alt_via->Next() );
-
-                if( (alt_via->GetViaType() == VIA_THROUGH) &&
-                    (alt_via->GetStart() == via->GetStart()) )
-                {
-                    // delete via
-                    alt_via->DeleteStructure();
-                    modified = true;
-                }
-            }
+            modified |= remove_duplicates_of_via( via );
 
             /* To delete through Via on THT pads at same location
              * Examine the list of connected pads:
@@ -360,16 +385,14 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
     return modified;
 }
 
-
-// Delete null length segments, and intermediate points ..
-bool TRACKS_CLEANER::clean_segments()
+// Delete null length track segments
+bool TRACKS_CLEANER::delete_null_segments()
 {
+    TRACK *nextsegment;
     bool modified = false;
-    TRACK*          segment, * nextsegment;
-    TRACK*          other;
 
     // Delete null segments
-    for( segment = m_Brd->m_Track; segment; segment = nextsegment )
+    for( TRACK *segment = m_Brd->m_Track; segment; segment = nextsegment )
     {
         nextsegment = segment->Next();
 
@@ -379,145 +402,211 @@ bool TRACKS_CLEANER::clean_segments()
             modified = true;
         }
     }
+    return modified;
+}
 
-    // Delete redundant segments, i.e. segments having the same end points
-    // and layers
-    for( segment  = m_Brd->m_Track; segment; segment = segment->Next() )
+bool TRACKS_CLEANER::remove_duplicates_of_track( const TRACK *aTrack )
+{
+    bool modified = false;
+
+    TRACK *nextsegment;
+    for( TRACK *other = aTrack->Next(); other; other = nextsegment )
     {
-        for( other = segment->Next(); other; other = nextsegment )
+        nextsegment = other->Next();
+
+        // New netcode, break out (can't be there any other)
+        if( aTrack->GetNetCode() != other->GetNetCode() )
+            break;
+
+        // Must be of the same type, on the same layer and the endpoints
+        // must be the same (maybe swapped)
+        if( (aTrack->Type() != other->Type()) &&
+            (aTrack->GetLayer() != other->GetLayer()) )
         {
-            nextsegment = other->Next();
-            bool erase = false;
-
-            if( segment->Type() != other->Type() )
-                continue;
-
-            if( segment->GetLayer() != other->GetLayer() )
-                continue;
-
-            if( segment->GetNetCode() != other->GetNetCode() )
-                break;
-
-            if( ( segment->GetStart() == other->GetStart() ) &&
-                ( segment->GetEnd() == other->GetEnd() ) )
-                erase = true;
-
-            if( ( segment->GetStart() == other->GetEnd() ) &&
-                ( segment->GetEnd() == other->GetStart() ) )
-                erase = true;
-
-            // Delete redundant point
-            if( erase )
+            if( ((aTrack->GetStart() == other->GetStart()) &&
+                 (aTrack->GetEnd() == other->GetEnd())) ||
+                ((aTrack->GetStart() == other->GetEnd()) &&
+                 (aTrack->GetEnd() == other->GetStart()))) 
             {
                 other->DeleteStructure();
                 modified = true;
             }
         }
     }
+    return modified;
+}
 
-    // merge collinear segments:
-    for( segment = m_Brd->m_Track; segment; segment = nextsegment )
+bool TRACKS_CLEANER::merge_collinear_of_track( TRACK *aSegment )
+{
+    bool merged_this = false;
+    bool flag = false; // If there are connections to this on the endpoint
+
+    // search for a possible point connected to the START point of the current segment
+    TRACK *segStart = aSegment->Next();
+    while( true )
     {
-        TRACK*  segStart;
-        TRACK*  segEnd;
-        TRACK*  segDelete;
+        segStart = aSegment->GetTrack( segStart, NULL, ENDPOINT_START );
 
-        nextsegment = segment->Next();
-
-        if( segment->Type() != PCB_TRACE_T )
-            continue;
-
-        unsigned flag = 0;
-        bool no_inc = false;
-
-        // search for a possible point connected to the START point of the current segment
-        for( segStart = segment->Next(); ; )
+        if( segStart )
         {
-            segStart = segment->GetTrack( segStart, NULL, ENDPOINT_START );
-
-            if( segStart )
-            {
-                // the two segments must have the same width
-                if( segment->GetWidth() != segStart->GetWidth() )
-                    break;
-
-                // it cannot be a via
-                if( segStart->Type() != PCB_TRACE_T )
-                    break;
-
-                // We must have only one segment connected
-                segStart->SetState( BUSY, true );
-                other = segment->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_START );
-                segStart->SetState( BUSY, false );
-
-                if( other == NULL )
-                    flag = 1;           // OK
-
+            // the two segments must have the same width
+            if( aSegment->GetWidth() != segStart->GetWidth() )
                 break;
-            }
+
+            // it cannot be a via
+            if( segStart->Type() != PCB_TRACE_T )
+                break;
+
+            // We must have only one segment connected
+            segStart->SetState( BUSY, true );
+            TRACK *other = aSegment->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_START );
+            segStart->SetState( BUSY, false );
+
+            if( other == NULL )
+                flag = true;           // OK
+
             break;
         }
+        break;
+    }
 
-        if( flag )   // We have the starting point of the segment is connected to an other segment
+    if( flag )   // We have the starting point of the segment is connected to an other segment
+    {
+        TRACK *segDelete = mergeCollinearSegmentIfPossible( aSegment, segStart, ENDPOINT_START );
+
+        if( segDelete )
         {
-            segDelete = mergeCollinearSegmentIfPossible( segment, segStart, ENDPOINT_START );
-
-            if( segDelete )
-            {
-                no_inc = 1;
-                segDelete->DeleteStructure();
-                modified = true;
-            }
+            segDelete->DeleteStructure();
+            merged_this = true;
         }
+    }
 
-        // search for a possible point connected to the END point of the current segment:
-        for( segEnd = segment->Next(); ; )
+    // Do the same with the other endpoint
+    flag = false;
+
+    // search for a possible point connected to the END point of the current segment:
+    TRACK *segEnd = aSegment->Next();
+    while( true )
+    {
+        segEnd = aSegment->GetTrack( segEnd, NULL, ENDPOINT_END );
+
+        if( segEnd )
         {
-            segEnd = segment->GetTrack( segEnd, NULL, ENDPOINT_END );
-
-            if( segEnd )
-            {
-                if( segment->GetWidth() != segEnd->GetWidth() )
-                    break;
-
-                if( segEnd->Type() != PCB_TRACE_T )
-                    break;
-
-                // We must have only one segment connected
-                segEnd->SetState( BUSY, true );
-                other = segment->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_END );
-                segEnd->SetState( BUSY, false );
-
-                if( other == NULL )
-                    flag |= 2;          // Ok
-
+            if( aSegment->GetWidth() != segEnd->GetWidth() )
                 break;
-            }
-            else
-            {
+
+            if( segEnd->Type() != PCB_TRACE_T )
                 break;
-            }
-        }
 
-        if( flag & 2 )  // We have the ending point of the segment is connected to an other segment
+            // We must have only one segment connected
+            segEnd->SetState( BUSY, true );
+            TRACK *other = aSegment->GetTrack( m_Brd->m_Track, NULL, ENDPOINT_END );
+            segEnd->SetState( BUSY, false );
+
+            if( other == NULL )
+                flag = true;        // Ok
+
+            break;
+        }
+        else
         {
-            segDelete = mergeCollinearSegmentIfPossible( segment, segEnd, ENDPOINT_END );
-
-            if( segDelete )
-            {
-                no_inc = true;
-                segDelete->DeleteStructure();
-                modified = true;
-            }
+            break;
         }
+    }
 
-        if( no_inc ) // The current segment was modified, retry to merge it
-            nextsegment = segment->Next();
+    if( flag  )  // We have the ending point of the segment is connected to an other segment
+    {
+        TRACK *segDelete = mergeCollinearSegmentIfPossible( aSegment, segEnd, ENDPOINT_END );
+
+        if( segDelete )
+        {
+            segDelete->DeleteStructure();
+            merged_this = true;
+        }
+    }
+    return merged_this;
+}
+
+// Delete null length segments, and intermediate points ..
+bool TRACKS_CLEANER::clean_segments()
+{
+    bool modified = false;
+
+    // Easy things first
+    modified |= delete_null_segments();
+
+    // Delete redundant segments, i.e. segments having the same end points
+    // and layers
+    for( TRACK *segment = m_Brd->m_Track; segment; segment = segment->Next() )
+    {
+        modified |= remove_duplicates_of_track( segment );
+    }
+
+    // merge collinear segments:
+    TRACK *nextsegment;
+    for( TRACK *segment = m_Brd->m_Track; segment; segment = nextsegment )
+    {
+        nextsegment = segment->Next();
+
+        if( segment->Type() == PCB_TRACE_T )
+        {
+            bool merged_this = merge_collinear_of_track( segment );
+            modified |= merged_this;
+
+            if( merged_this ) // The current segment was modified, retry to merge it
+                nextsegment = segment->Next();
+        }
     }
 
     return modified;
 }
 
+/* Utility: check for parallelism between two segments */
+static bool parallelism_test( int dx1, int dy1, int dx2, int dy2 )
+{
+    // The following condition tree is ugly and repetitive, but I have
+    // not a better way to express clearly the trivial cases. Hope the
+    // compiler optimize it better than always doing the product
+    // below...
+
+    // test for vertical alignment (easy to handle)
+    if( dx1 == 0 )
+    {
+        if( dx2 != 0 )
+            return false;
+        else
+            return true;
+    }
+
+    if( dx2 == 0 )
+    {
+        if( dx1 != 0 )
+            return false;
+        else
+            return true;
+    }
+
+    // test for horizontal alignment (easy to handle)
+    if( dy1 == 0 )
+    {
+        if( dy2 != 0 )
+            return false;
+        else
+            return true;
+    }
+
+    if( dy2 == 0 )
+    {
+        if( dy1 != 0 )
+            return false;
+        else
+            return true;
+    }
+
+    /* test for alignment in other cases: Do the usual cross product test 
+     * (the same as testing the slope, but without a division) */
+    return ((double)dy1 * dx2 == (double)dx1 * dy2);
+}
 
 /** Function used by clean_segments.
  *  Test if aTrackRef and aCandidate (which must have a common end) are collinear.
@@ -534,63 +623,32 @@ bool TRACKS_CLEANER::clean_segments()
 TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK* aCandidate,
                                        ENDPOINT_T aEndType )
 {
-    if( aTrackRef->GetWidth() != aCandidate->GetWidth() )
+    // First of all, they must be of the same width and must be both actual tracks
+    if( (aTrackRef->GetWidth() != aCandidate->GetWidth()) ||
+        (aTrackRef->Type() != PCB_TRACE_T) ||
+        (aCandidate->Type() != PCB_TRACE_T) )
         return NULL;
 
-    bool is_colinear = false;
+    // Trivial case: exactly the same track
+    if( ( aTrackRef->GetStart() == aCandidate->GetStart() ) &&
+        ( aTrackRef->GetEnd() == aCandidate->GetEnd() ) )
+        return aCandidate;
 
-    // Trivial case: superimposed tracks ( tracks, not vias ):
-    if( aTrackRef->Type() == PCB_TRACE_T && aCandidate->Type() == PCB_TRACE_T )
-    {
-        if( ( aTrackRef->GetStart() == aCandidate->GetStart() ) &&
-            ( aTrackRef->GetEnd() == aCandidate->GetEnd() ) )
-            return aCandidate;
+    if( ( aTrackRef->GetStart() == aCandidate->GetEnd() ) &&
+        ( aTrackRef->GetEnd() == aCandidate->GetStart() ) )
+        return aCandidate;
 
-        if( ( aTrackRef->GetStart() == aCandidate->GetEnd() ) &&
-            ( aTrackRef->GetEnd() == aCandidate->GetStart() ) )
-            return aCandidate;
-    }
-
-    int refdx = aTrackRef->GetEnd().x - aTrackRef->GetStart().x;
-    int refdy = aTrackRef->GetEnd().y - aTrackRef->GetStart().y;
-
-    int segmdx = aCandidate->GetEnd().x - aCandidate->GetStart().x;
-    int segmdy = aCandidate->GetEnd().y - aCandidate->GetStart().y;
-
-    // test for vertical alignment (easy to handle)
-    if( refdx == 0 )
-    {
-        if( segmdx != 0 )
-            return NULL;
-        else
-            is_colinear = true;
-    }
-
-    // test for horizontal alignment (easy to handle)
-    if( refdy == 0 )
-    {
-        if( segmdy != 0 )
-            return NULL;
-        else
-            is_colinear = true;
-    }
-
-    /* test if alignment in other cases
-     *  We must have refdy/refdx == segmdy/segmdx, (i.e. same slope)
-     *   or refdy * segmdx == segmdy * refdx
-     */
-    if( is_colinear == false )
-    {
-        if( ( double)refdy * segmdx != (double)refdx * segmdy )
-            return NULL;
-
-        is_colinear = true;
-    }
+    // Weed out non-parallel tracks
+    if ( !parallelism_test( aTrackRef->GetEnd().x - aTrackRef->GetStart().x,
+                aTrackRef->GetEnd().y - aTrackRef->GetStart().y,
+                aCandidate->GetEnd().x - aCandidate->GetStart().x,
+                aCandidate->GetEnd().y - aCandidate->GetStart().y ) )
+        return NULL;
 
     /* Here we have 2 aligned segments:
      * We must change the pt_ref common point only if not on a pad
      * (this function) is called when there is only 2 connected segments,
-     *and if this point is not on a pad, it can be removed and the 2 segments will be merged
+     * and if this point is not on a pad, it can be removed and the 2 segments will be merged
      */
     if( aEndType == ENDPOINT_START )
     {
