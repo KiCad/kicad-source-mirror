@@ -84,12 +84,27 @@ int GetDefaultLineThickness()
     return s_drawDefaultLineThickness;
 }
 
-void SetDefaultLineThickness( int aThickness)
+void SetDefaultLineThickness( int aThickness )
 {
     if( aThickness >=1 )
         s_drawDefaultLineThickness = aThickness;
     else
         s_drawDefaultLineThickness = 1;
+}
+
+/*
+ * Default pin length
+ */
+static int s_defaultPinLength;
+
+int GetDefaultPinLength()
+{
+    return s_defaultPinLength;
+}
+
+void SetDefaultPinLength( int aLength )
+{
+    s_defaultPinLength = aLength;
 }
 
 EDA_COLOR_T GetLayerColor( LayerNumber aLayer )
@@ -269,6 +284,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetGridSizes( grid_list, GetScreen()->GetGridId() );
     dlg.SetBusWidth( GetDefaultBusThickness() );
     dlg.SetLineWidth( GetDefaultLineThickness() );
+    dlg.SetPinLength( GetDefaultPinLength() );
     dlg.SetTextSize( GetDefaultLabelSize() );
     dlg.SetRepeatHorizontal( g_RepeatStep.x );
     dlg.SetRepeatVertical( g_RepeatStep.y );
@@ -317,6 +333,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     SetDefaultBusThickness( dlg.GetBusWidth() );
     SetDefaultLineThickness( dlg.GetLineWidth() );
+    SetDefaultPinLength( dlg.GetPinLength() );
     SetDefaultLabelSize( dlg.GetTextSize() );
     g_RepeatStep.x = dlg.GetRepeatHorizontal();
     g_RepeatStep.y = dlg.GetRepeatVertical();
@@ -477,6 +494,7 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 
 static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
 static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
+static const wxChar DefaultPinLengthEntry[] =       wxT( "DefaultPinLength" );
 static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
 static const wxChar HorzVertLinesOnlyEntry[] =      wxT( "HorizVertLinesOnly" );
 static const wxChar PreviewFramePositionXEntry[] =  wxT( "PreviewFramePositionX" );
@@ -602,6 +620,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     SetDefaultBusThickness( aCfg->Read( DefaultBusWidthEntry, 12l ) );
     SetDefaultLineThickness( aCfg->Read( DefaultDrawLineWidthEntry, 6l ) );
+    SetDefaultPinLength( aCfg->Read( DefaultPinLengthEntry, 300l ) );
     aCfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
     aCfg->Read( HorzVertLinesOnlyEntry, &m_forceHVLines, true );
 
@@ -691,6 +710,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     aCfg->Write( DefaultBusWidthEntry, (long) GetDefaultBusThickness() );
     aCfg->Write( DefaultDrawLineWidthEntry, (long) GetDefaultLineThickness() );
+    aCfg->Write( DefaultPinLengthEntry, (long) GetDefaultPinLength() );
     aCfg->Write( ShowHiddenPinsEntry, m_showAllPins );
     aCfg->Write( HorzVertLinesOnlyEntry, GetForceHVLines() );
 

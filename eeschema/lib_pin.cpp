@@ -185,7 +185,7 @@ const wxChar* MsgPinElectricType[] =
 LIB_PIN::LIB_PIN( LIB_COMPONENT* aParent ) :
     LIB_ITEM( LIB_PIN_T, aParent )
 {
-    m_length = DEFAULT_PIN_LENGTH;              // default Pin len
+    m_length = GetDefaultPinLength();           // default Pin len
     m_orientation = PIN_RIGHT;                  // Pin orient: Up, Down, Left, Right
     m_shape = NONE;                             // Pin shape, bitwise.
     m_type = PIN_UNSPECIFIED;                   // electrical type of pin

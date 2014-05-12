@@ -74,7 +74,13 @@ extern SCH_SHEET*   g_RootSheet;
  * default thickness line value (i.e. = 0 ).
  */
 int GetDefaultLineThickness();
-void SetDefaultLineThickness( int aThickness);
+void SetDefaultLineThickness( int aThickness );
+
+/**
+ * Default length for new pins in module editor
+ */
+int GetDefaultPinLength();
+void SetDefaultPinLength( int aLength );
 
 /**
  * Default line thickness used to draw/plot busses.
