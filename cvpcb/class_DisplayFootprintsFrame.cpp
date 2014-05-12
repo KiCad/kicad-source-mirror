@@ -488,7 +488,8 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
         wxLogDebug( wxT( "Load footprint <%s> from library <%s>." ),
                     fpname.c_str(), nickname.c_str()  );
 
-        footprint = FootprintLibs()->FootprintLoad( FROM_UTF8( nickname.c_str() ), FROM_UTF8( fpname.c_str() ) );
+        footprint = Prj().PcbFootprintLibs()->FootprintLoad(
+                FROM_UTF8( nickname.c_str() ), FROM_UTF8( fpname.c_str() ) );
     }
     catch( const IO_ERROR& ioe )
     {

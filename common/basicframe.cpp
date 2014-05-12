@@ -157,7 +157,7 @@ bool EDA_BASE_FRAME::Enable( bool enable )
 
 #if defined(DEBUG)
     const char* type_id = typeid( *this ).name();
-    printf( "wxFrame %s: %s\n", type_id, enable ? "enabled" : "disabled" );
+    printf( "wxFrame %-28s: %s\n", type_id, enable ? "enabled" : "disabled" );
 #endif
 
     return wxFrame::Enable( enable );

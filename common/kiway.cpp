@@ -53,7 +53,7 @@ KIWAY::KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop ):
 
 
 // Any event types derived from wxCommandEvt, like wxWindowDestroyEvent, are
-// propogated upwards to parent windows if not handled below.  Therefor the
+// propogated upwards to parent windows if not handled below.  Therefore the
 // m_top window should receive all wxWindowDestroyEvents originating from
 // KIWAY_PLAYERs.  It does anyways, but now player_destroy_handler eavesdrops
 // on that event stream looking for KIWAY_PLAYERs being closed.
@@ -67,10 +67,14 @@ void KIWAY::player_destroy_handler( wxWindowDestroyEvent& event )
         // if destroying one of our flock, then mark it as deceased.
         if( (wxWindow*) m_player[i] == w )
         {
-            DBG(printf( "%s: marking m_player[%d] as destroyed\n", __func__, i );)
+            DBG(printf( "%s: m_player[%d] destroyed: %s\n",
+                __func__, i, TO_UTF8( m_player[i]->GetName() ) );)
+
             m_player[i] = 0;
         }
     }
+
+    // event.Skip();  skip to who, the wxApp?  I'm the top window.
 }
 
 
