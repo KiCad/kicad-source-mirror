@@ -59,13 +59,22 @@ static wxPoint PinPreviousPos;
 static int     LastPinType          = PIN_INPUT;
 static int     LastPinOrient        = PIN_RIGHT;
 static int     LastPinShape         = NONE;
-static int     LastPinLength        = DEFAULT_PIN_LENGTH;
 static int     LastPinNameSize      = DEFAULT_TEXT_SIZE;
 static int     LastPinNumSize       = DEFAULT_TEXT_SIZE;
 static bool    LastPinCommonConvert = false;
 static bool    LastPinCommonUnit    = false;
 static bool    LastPinVisible       = true;
 
+// The -1 is a non-valid value to trigger delayed initialization
+static int     LastPinLength        = -1;
+
+static int GetLastPinLength()
+{
+    if( LastPinLength == -1 )
+        LastPinLength = GetDefaultPinLength();
+
+    return LastPinLength;
+}
 
 void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
 {
@@ -136,7 +145,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     pin->SetNumber( dlg.GetPadName() );
     pin->SetNumberTextSize( LastPinNumSize );
     pin->SetOrientation( LastPinOrient );
-    pin->SetLength( LastPinLength );
+    pin->SetLength( GetLastPinLength() );
     pin->SetType( LastPinType );
     pin->SetShape( LastPinShape );
     pin->SetConversion( ( LastPinCommonConvert ) ? 0 : m_convert );
@@ -389,7 +398,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
         pin->SetFlags( IS_LINKED );
 
     pin->Move( GetCrossHairPosition( true ) );
-    pin->SetLength( LastPinLength );
+    pin->SetLength( GetLastPinLength() );
     pin->SetOrientation( LastPinOrient );
     pin->SetType( LastPinType );
     pin->SetShape( LastPinShape );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,8 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
-
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -69,6 +67,9 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText5;
 		wxSpinCtrl* m_spinLineWidth;
 		wxStaticText* m_staticLineWidthUnits;
+		wxStaticText* m_staticText52;
+		wxSpinCtrl* m_spinPinLength;
+		wxStaticText* m_staticPinLengthUnits;
 		wxStaticText* m_staticText7;
 		wxSpinCtrl* m_spinTextSize;
 		wxStaticText* m_staticTextSizeUnits;

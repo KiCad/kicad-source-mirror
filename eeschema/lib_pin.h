@@ -33,7 +33,6 @@
 
 
 #define TARGET_PIN_RADIUS   12  // Circle diameter drawn at the active end of pins
-#define DEFAULT_PIN_LENGTH  300 // Default Length of a pin when it is created.
 
 // pins: special symbols sizes
 #define INVERT_PIN_RADIUS   30  // Radius of inverted pin circle.
