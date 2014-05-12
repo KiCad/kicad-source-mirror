@@ -35,7 +35,7 @@
 
 class wxConfigBase;
 class PARAM_CFG_ARRAY;
-
+class FP_LIB_TABLE;
 
 #define VTBL_ENTRY      virtual
 
@@ -49,11 +49,12 @@ class PROJECT
 {
 public:
 
-    /// Derive PROJECT elements from this, it has a virtual destructor, and
-    /// Elem*() functions can work with it.  Implementation is opaque in
-    /// class PROJECT.  If find you have to include derived class headers in this
-    /// file, you are doing something wrong.  Keep knowledge of derived classes
-    /// opaque to class PROJECT please.
+    /// A PROJECT can hold stuff it knows nothing about, in the form of
+    /// _ELEM derivatives. Derive PROJECT elements from this, it has a virtual
+    /// destructor, and Elem*() functions can work with it.  Implementation is
+    /// opaque in class PROJECT.  If find you have to include derived class headers
+    /// in this file, you are doing incompatible with the goal of this class.
+    /// Keep knowledge of derived classes opaque to class PROJECT please.
     class _ELEM
     {
     public:
@@ -62,6 +63,8 @@ public:
 
     PROJECT();
     ~PROJECT();
+
+    //-----<Cross Module API>----------------------------------------------------
 
     // VTBL_ENTRY bool MaybeLoadProjectSettings( const std::vector<wxString>& aFileSet );
 
@@ -154,18 +157,12 @@ public:
      */
     enum ELEM_T
     {
-        FPTBL,
+        ELEM_FPTBL,
 
         ELEM_COUNT
     };
 
     /**
-     * A PROJECT can hold stuff it knows nothing about, in the form of
-     * _ELEM derivatives.  This function gives access to a PROJECT::_ELEM using
-     * enum ELEM_T as an index.
-     * <p>
-     * Acts as setter iff aElem is not NULL, else getter.
-     * <p>
      * Typically wrapped somewhere else in a more meaningful function wrapper.
      * This is a cross module API, therefore the _ELEM destructor is virtual and
      * can point to a destructor function in another link image.  Be careful that
@@ -174,7 +171,47 @@ public:
      * Summary: 1) cross module API, 2) PROJECT knows nothing about _ELEM objects,
      * except how to delete them and set and get pointers to them.
      */
-    VTBL_ENTRY  _ELEM*  Elem( ELEM_T aIndex, _ELEM* aElem = NULL );
+    VTBL_ENTRY  _ELEM*  GetElem( ELEM_T aIndex );
+    VTBL_ENTRY  void    SetElem( ELEM_T aIndex, _ELEM* aElem );
+
+    /// Inline, clear the _ELEM at position aIndex
+    void ElemClear( ELEM_T aIndex )
+    {
+        _ELEM*  existing = GetElem( aIndex );
+        delete existing;        // virtual
+        SetElem( aIndex, NULL );
+    }
+
+    /**
+     * Function ElemsClear
+     * deletes all the _ELEMs and set their pointers to NULL.
+     */
+    VTBL_ENTRY void ElemsClear();
+
+    //-----</Cross Module API>---------------------------------------------------
+
+    //-----<KIFACE Specific APIs>------------------------------------------------
+
+    // These are the non-virtual DATA LOAD ON DEMAND members. They load project related
+    // data on demand, and do so typicallly into m_elems[] at a particular index using
+    // SetElem() & GetElem().  That is, they wrap SetElem() and GetElem().
+    // To get the data to reload on demand, first SetProjectFullName(),
+    // then call ElemClear() from client code.
+
+    // non-virtuals resident in PCBNEW link image(s).  By being non-virtual, these
+    // functions can get linked into the KIFACE that needs them, and only there.
+    // In fact, the other KIFACEs don't even know they exist.
+#if defined(PCBNEW) || defined(CVPCB)
+    // These are all prefaced with "Pcb"
+    FP_LIB_TABLE* PcbFootprintLibs();
+#endif
+
+
+#if defined(EESCHEMA)
+    // These are all prefaced with "Sch"
+#endif
+
+    //-----</KIFACE Specific APIs>-----------------------------------------------
 
 private:
 
@@ -215,10 +252,6 @@ private:
 //-----<possible futures>---------------------------------------------------------
 
 #if 0
-    VTBL_ENTRY int         ElemAllocNdx();
-    VTBL_ENTRY void        ElemSet( int aIndex, ELEMENT_BASE* aBlock );
-    VTBL_ENTRY ELEM_BASE*  ElemGet( int aIndex )
-
     /**
      * Function Value
      * fetches a project variable @a aVariable and returns true if that variable was

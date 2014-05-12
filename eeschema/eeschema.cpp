@@ -99,8 +99,7 @@ static struct IFACE : public KIFACE_I
 
         case FRAME_SCH_LIB_EDITOR:
             {
-                LIB_EDIT_FRAME* frame = new LIB_EDIT_FRAME( aKiway,
-                                            dynamic_cast<SCH_EDIT_FRAME*>( aParent ) );
+                LIB_EDIT_FRAME* frame = new LIB_EDIT_FRAME( aKiway, aParent );
                 return frame;
             }
             break;

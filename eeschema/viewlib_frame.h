@@ -36,7 +36,6 @@
 #include <sch_base_frame.h>
 #include <class_sch_screen.h>
 
-class wxSashLayoutWindow;
 class wxListBox;
 class CMP_LIBRARY;
 

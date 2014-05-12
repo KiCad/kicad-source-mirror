@@ -27,6 +27,7 @@
 #include "common_actions.h"
 
 #include <wxPcbStruct.h>
+#include <project.h>
 #include <id.h>
 #include <pcbnew_id.h>
 #include <confirm.h>
@@ -711,7 +712,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
             {
                 // Init the new item attributes
                 module = m_frame->LoadModuleFromLibrary( wxEmptyString,
-                                                         m_frame->FootprintLibs(),
+                                                         m_frame->Prj().PcbFootprintLibs(),
                                                          true, NULL );
                 if( module == NULL )
                     continue;

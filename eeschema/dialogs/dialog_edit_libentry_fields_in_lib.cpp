@@ -28,6 +28,7 @@
 
 #include <fctsys.h>
 #include <pgm_base.h>
+#include <kiway.h>
 #include <confirm.h>
 #include <class_drawpanel.h>
 #include <wxEeschemaStruct.h>
@@ -141,7 +142,7 @@ void LIB_EDIT_FRAME::InstallFieldsEditorDialog( wxCommandEvent& event )
 
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB dlg( this, m_component );
 
-    int abort = dlg.ShowModal();
+    int abort = dlg.ShowQuasiModal();
 
     if( abort )
         return;
@@ -211,7 +212,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnListItemSelected( wxListEvent& event 
 
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnCancelButtonClick( wxCommandEvent& event )
 {
-    EndModal( 1 );
+    EndQuasiModal( 1 );
 }
 
 
@@ -282,7 +283,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
 
     m_parent->OnModify();
 
-    EndModal( 0 );
+    EndQuasiModal( 0 );
 }
 
 
@@ -381,8 +382,28 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& e
 
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::showButtonHandler( wxCommandEvent& event )
 {
-    wxString datasheet_uri = fieldValueTextCtrl->GetValue();
-    ::wxLaunchDefaultBrowser( datasheet_uri );
+    unsigned fieldNdx = getSelectedFieldNdx();
+
+    if( fieldNdx == DATASHEET )
+    {
+        wxString datasheet_uri = fieldValueTextCtrl->GetValue();
+        ::wxLaunchDefaultBrowser( datasheet_uri );
+    }
+    else if( fieldNdx == FOOTPRINT )
+    {
+        // pick a footprint using the footprint picker.
+        wxString fpid;
+
+        KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
+
+        if( frame->ShowModal( &fpid, this ) )
+        {
+            // DBG( printf( "%s: %s\n", __func__, TO_UTF8( fpid ) ); )
+            fieldValueTextCtrl->SetValue( fpid );
+        }
+
+        frame->Destroy();
+    }
 }
 
 
@@ -652,7 +673,14 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetSize().x ) );
 
-    m_show_datasheet_button->Enable( fieldNdx == DATASHEET );
+    m_show_datasheet_button->Enable( fieldNdx == DATASHEET || fieldNdx == FOOTPRINT );
+
+    if( fieldNdx == DATASHEET )
+        m_show_datasheet_button->SetLabel( _( "Show in Browser" ) );
+    else if( fieldNdx == FOOTPRINT )
+        m_show_datasheet_button->SetLabel( _( "Assign Footprint" ) );
+    else
+        m_show_datasheet_button->SetLabel( wxEmptyString );
 
     wxPoint coord = field.GetTextPosition();
     wxPoint zero;

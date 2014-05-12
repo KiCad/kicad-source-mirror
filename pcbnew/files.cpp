@@ -173,7 +173,7 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
             Clear_Pcb( true );
 
             // Clear footprint library table for the new board.
-            FootprintLibs()->Clear();
+            Prj().PcbFootprintLibs()->Clear();
 
             wxFileName fn;
 
@@ -603,7 +603,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
             return false;
 
         // Save the project specific footprint library table.
-        if( !FootprintLibs()->IsEmpty( false ) )
+        if( !Prj().PcbFootprintLibs()->IsEmpty( false ) )
         {
             wxString fp_lib_tbl = Prj().FootprintLibTblName();
 
@@ -613,7 +613,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
             {
                 try
                 {
-                    FootprintLibs()->Save( fp_lib_tbl );
+                    Prj().PcbFootprintLibs()->Save( fp_lib_tbl );
                 }
                 catch( const IO_ERROR& ioe )
                 {

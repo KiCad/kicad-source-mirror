@@ -42,15 +42,22 @@ PROJECT::PROJECT()
     memset( m_elems, 0, sizeof(m_elems) );
 }
 
+
+void PROJECT::ElemsClear()
+{
+    // careful here, this should work, but the virtual destructor may not
+    // be in the same link image as PROJECT.
+    for( unsigned i = 0;  i<DIM(m_elems);  ++i )
+    {
+        delete m_elems[i];
+        m_elems[i] = NULL;
+    }
+}
+
+
 PROJECT::~PROJECT()
 {
-#if 1
-    // careful here, this may work, but the virtual destructor may not
-    // be in the same link image as PROJECT.
-
-    for( unsigned i = 0;  i<DIM(m_elems);  ++i )
-        delete m_elems[i];
-#endif
+    ElemsClear();
 }
 
 
@@ -145,18 +152,26 @@ RETAINED_PATH& PROJECT::RPath( RETPATH_T aIndex )
 }
 
 
-PROJECT::_ELEM* PROJECT::Elem( ELEM_T aIndex, _ELEM* aElem )
+PROJECT::_ELEM* PROJECT::GetElem( ELEM_T aIndex )
 {
-    unsigned ndx = unsigned( aIndex );
+    // This is virtual, so implement it out of line
 
-    if( ndx < DIM( m_elems ) )
+    if( unsigned( aIndex ) < DIM( m_elems ) )
     {
-        if( aElem )
-            m_elems[ndx] = aElem;
-
-        return m_elems[ndx];
+        return m_elems[aIndex];
     }
     return NULL;
+}
+
+
+void PROJECT::SetElem( ELEM_T aIndex, _ELEM* aElem )
+{
+    // This is virtual, so implement it out of line
+
+    if( unsigned( aIndex ) < DIM( m_elems ) )
+    {
+        m_elems[aIndex] = aElem;
+    }
 }
 
 
