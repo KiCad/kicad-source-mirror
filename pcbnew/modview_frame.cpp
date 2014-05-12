@@ -309,7 +309,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
 {
     m_libList->Clear();
 
-    std::vector< wxString > nicknames = FootprintLibs()->GetLogicalLibs();
+    std::vector< wxString > nicknames = Prj().PcbFootprintLibs()->GetLogicalLibs();
 
     for( unsigned ii = 0; ii < nicknames.size(); ii++ )
         m_libList->Append( nicknames[ii] );
@@ -348,7 +348,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
     FOOTPRINT_LIST fp_info_list;
 
-    fp_info_list.ReadFootprintFiles( FootprintLibs(), &m_libraryName );
+    fp_info_list.ReadFootprintFiles( Prj().PcbFootprintLibs(), &m_libraryName );
 
     if( fp_info_list.GetErrorCount() )
     {
@@ -509,7 +509,7 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
     m_selectedFootprintName.Empty();
 
     // Ensure we have the right library list:
-    std::vector< wxString > libNicknames = FootprintLibs()->GetLogicalLibs();
+    std::vector< wxString > libNicknames = Prj().PcbFootprintLibs()->GetLogicalLibs();
 
     if( libNicknames.size() == m_libList->GetCount() )
     {
@@ -742,13 +742,16 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary( wxCommandEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
 {
+#if 0 // cannot remember why this is here
     // The PCB_EDIT_FRAME may not be the FOOTPRINT_VIEW_FRAME's parent,
     // so use Kiway().Player() to fetch.
     PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, true );
+    (void*) parent;
+#endif
 
     wxString        libname = m_libraryName + wxT( "." ) + LegacyFootprintLibPathExtension;
     MODULE*         oldmodule = GetBoard()->m_Modules;
-    MODULE*         module = LoadModuleFromLibrary( libname, parent->FootprintLibs(), false );
+    MODULE*         module = LoadModuleFromLibrary( libname, Prj().PcbFootprintLibs(), false );
 
     if( module )
     {
@@ -808,7 +811,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
 
-        MODULE* footprint = FootprintLibs()->FootprintLoad( m_libraryName, m_footprintName );
+        MODULE* footprint = Prj().PcbFootprintLibs()->FootprintLoad( m_libraryName, m_footprintName );
 
         if( footprint )
             GetBoard()->Add( footprint, ADD_APPEND );

@@ -175,10 +175,15 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
 }
 
 
-FP_LIB_TABLE* PCB_BASE_FRAME::FootprintLibs() const
+FP_LIB_TABLE* PROJECT::PcbFootprintLibs()
 {
-    PROJECT&        prj = Prj();
-    FP_LIB_TABLE*   tbl = dynamic_cast<FP_LIB_TABLE*>( prj.Elem( PROJECT::FPTBL ) );
+    // This is a lazy loading function, it loads the project specific table when
+    // that table is asked for, not before.
+
+    FP_LIB_TABLE*   tbl = (FP_LIB_TABLE*) GetElem( ELEM_FPTBL );
+
+    // its gotta be NULL or a FP_LIB_TABLE, or a bug.
+    wxASSERT( !tbl || dynamic_cast<FP_LIB_TABLE*>( tbl ) );
 
     if( !tbl )
     {
@@ -187,7 +192,18 @@ FP_LIB_TABLE* PCB_BASE_FRAME::FootprintLibs() const
         // stack this way, all using the same global fallback table.
         tbl = new FP_LIB_TABLE( &GFootprintTable );
 
-        prj.Elem( PROJECT::FPTBL, tbl );
+        SetElem( ELEM_FPTBL, tbl );
+
+        wxString projectFpLibTableFileName = FootprintLibTblName();
+
+        try
+        {
+            tbl->Load( projectFpLibTableFileName );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DisplayError( NULL, ioe.errorText );
+        }
     }
 
     return tbl;

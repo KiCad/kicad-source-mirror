@@ -311,20 +311,18 @@ if( USE_KIWAY_DLLS )
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-    install( TARGETS eeschema_kiface
-        # actual filename subject to change at milestone C)
-        # modular-kicad blueprint.
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
-
     if( APPLE )
-        # copies kiface into the bundle
-        add_custom_target( _eeschema_kiface_copy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/eeschema/_eeschema.kiface "${CMAKE_BINARY_DIR}/eeschema/eeschema.app/Contents/MacOS/"
-            DEPENDS eeschema_kiface
-            COMMENT "Copying kiface into eeschema"
-        )
+        # puts the *.kiface into the *.app bundle while linking
+        set_target_properties( eeschema_kiface PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/eeschema.app/Contents/MacOS/
+            )
+    else()
+        install( TARGETS eeschema_kiface
+            # actual filename subject to change at milestone C)
+            # modular-kicad blueprint.
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
     endif()
 
 else()

@@ -137,6 +137,12 @@ FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
 }
 
 
+FP_LIB_TABLE::~FP_LIB_TABLE()
+{
+    // *fallBack is not owned here.
+}
+
+
 wxArrayString FP_LIB_TABLE::FootprintEnumerate( const wxString& aNickname )
 {
     const ROW* row = FindRow( aNickname );
@@ -514,9 +520,16 @@ std::vector<wxString> FP_LIB_TABLE::GetLogicalLibs()
 
     } while( ( cur = cur->fallBack ) != 0 );
 
+    ret.reserve( unique.size() );
+
+    // DBG(printf( "%s: count:%zd\n", __func__, unique.size() );)
+
     // return a sorted, unique set of nicknames in a std::vector<wxString> to caller
     for( std::set<wxString>::const_iterator it = unique.begin();  it!=unique.end();  ++it )
+    {
+        //DBG(printf( " %s\n", TO_UTF8( *it ) );)
         ret.push_back( *it );
+    }
 
     return ret;
 }
@@ -738,7 +751,7 @@ wxString FP_LIB_TABLE::GetGlobalTableFileName()
 void FP_LIB_TABLE::Load( const wxString& aFileName )
     throw( IO_ERROR )
 {
-    // Empty footprint library tables are valid.
+    // It's OK if footprint library tables are missing.
     if( wxFileName::IsFileReadable( aFileName ) )
     {
         FILE_LINE_READER    reader( aFileName );

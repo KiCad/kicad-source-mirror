@@ -31,7 +31,7 @@
 
 #include <fctsys.h>
 #include <pgm_base.h>
-//#include <kiface_i.h>
+#include <kiway.h>
 #include <project.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -50,7 +50,6 @@
 #include <hotkeys.h>
 #include <module_editor_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <kiway.h>
 
 
 static PCB_SCREEN* s_screenModule;      // the PCB_SCREEN used by the footprint editor
@@ -275,7 +274,7 @@ wxString FOOTPRINT_EDIT_FRAME::getLibPath()
     {
         const wxString& nickname = getLibNickName();
 
-        const FP_LIB_TABLE::ROW* row = FootprintLibs()->FindRow( nickname );
+        const FP_LIB_TABLE::ROW* row = Prj().PcbFootprintLibs()->FindRow( nickname );
 
         return row->GetFullURI( true );
     }
@@ -296,7 +295,8 @@ BOARD_DESIGN_SETTINGS& FOOTPRINT_EDIT_FRAME::GetDesignSettings() const
 {
     // get the BOARD_DESIGN_SETTINGS from the parent editor, not our BOARD.
 
-    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
+    // @todo(DICK) change the routing to some default or the board directly, parent may not exist
+    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
 
     wxASSERT( parentFrame );
 
@@ -308,7 +308,8 @@ void FOOTPRINT_EDIT_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSett
 {
     // set the BOARD_DESIGN_SETTINGS into parent editor, not our BOARD.
 
-    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
+    // @todo(DICK) change the routing to some default or the board directly, parent may not exist
+    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
 
     wxASSERT( parentFrame );
 
@@ -320,7 +321,8 @@ const PCB_PLOT_PARAMS& FOOTPRINT_EDIT_FRAME::GetPlotSettings() const
 {
     // get the settings from the parent editor, not our BOARD.
 
-    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
+    // @todo(DICK) change the routing to some default or the board directly, parent may not exist
+    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
 
     wxASSERT( parentFrame );
 
@@ -332,7 +334,8 @@ void FOOTPRINT_EDIT_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
 {
     // set the settings into parent editor, not our BOARD.
 
-    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
+    // @todo(DICK) change the routing to some default or the board directly, parent may not exist
+    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
 
     wxASSERT( parentFrame );
 
@@ -478,7 +481,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent )
 {
-    FP_LIB_TABLE* fptbl = FootprintLibs();
+    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs();
 
     aEvent.Enable( fptbl && !fptbl->IsEmpty() );
 }
@@ -618,7 +621,7 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
     {
         try
         {
-            bool writable = FootprintLibs()->IsFootprintLibWritable( nickname );
+            bool writable = Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname );
 
             // no exception was thrown, this means libPath is valid, but it may be read only.
             title = _( "Module Editor (active library: " ) + nickname + wxT( ")" );

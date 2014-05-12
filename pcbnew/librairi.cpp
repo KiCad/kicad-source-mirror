@@ -469,7 +469,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 {
     wxString    nickname = getLibNickName();
 
-    if( !FootprintLibs()->IsFootprintLibWritable( nickname ) )
+    if( !Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname ) )
     {
         wxString msg = wxString::Format(
                 _( "Library '%s' is read only" ),
@@ -481,7 +481,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
     }
 
     wxString    fpid_txt = PCB_BASE_FRAME::SelectFootprint( this, nickname,
-                        wxEmptyString, wxEmptyString, FootprintLibs() );
+                        wxEmptyString, wxEmptyString, Prj().PcbFootprintLibs() );
 
     if( !fpid_txt )
         return false;
@@ -497,7 +497,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 
     try
     {
-        FootprintLibs()->FootprintDelete( nickname, fpname );
+        Prj().PcbFootprintLibs()->FootprintDelete( nickname, fpname );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -545,22 +545,24 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aNewModulesOnly )
 
     try
     {
+        FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+
         // Delete old library if we're replacing it entirely.
         if( !aNewModulesOnly )
         {
-            FootprintLibs()->FootprintLibDelete( nickname );
-            FootprintLibs()->FootprintLibCreate( nickname );
+            tbl->FootprintLibDelete( nickname );
+            tbl->FootprintLibCreate( nickname );
 
             for( MODULE* m = GetBoard()->m_Modules;  m;  m = m->Next() )
             {
-                FootprintLibs()->FootprintSave( nickname, m, true );
+                tbl->FootprintSave( nickname, m, true );
             }
         }
         else
         {
             for( MODULE* m = GetBoard()->m_Modules;  m;  m = m->Next() )
             {
-                FootprintLibs()->FootprintSave( nickname, m, false );
+                tbl->FootprintSave( nickname, m, false );
 
                 // Check for request to stop backup (ESCAPE key actuated)
                 if( m_canvas->GetAbortRequest() )
@@ -627,7 +629,9 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
 
     try
     {
-        MODULE* m = FootprintLibs()->FootprintLoad( aLibrary, footprintName );
+        FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+
+        MODULE* m = tbl->FootprintLoad( aLibrary, footprintName );
 
         if( m )
         {
@@ -653,7 +657,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
 
         // this always overwrites any existing footprint, but should yell on its
         // own if the library or footprint is not writable.
-        FootprintLibs()->FootprintSave( aLibrary, aModule );
+        tbl->FootprintSave( aLibrary, aModule );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -738,7 +742,7 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
     headers.Add( _( "Nickname" ) );
     headers.Add( _( "Description" ) );
 
-    FP_LIB_TABLE*   fptbl = FootprintLibs();
+    FP_LIB_TABLE*   fptbl = Prj().PcbFootprintLibs();
 
     std::vector< wxArrayString > itemsToDisplay;
     std::vector< wxString >      nicknames = fptbl->GetLogicalLibs();

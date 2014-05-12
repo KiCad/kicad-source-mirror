@@ -436,13 +436,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEven
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& event )
 {
-#if 0
-   wxString datasheet_uri = fieldValueTextCtrl->GetValue();
-   ::wxLaunchDefaultBrowser( datasheet_uri );
-
-#else
-
     unsigned fieldNdx = getSelectedFieldNdx();
+
     if( fieldNdx == DATASHEET )
     {
         wxString datasheet_uri = fieldValueTextCtrl->GetValue();
@@ -455,17 +450,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& even
 
         KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
 
-        if( frame->ShowModal( &fpid ) )
+        if( frame->ShowModal( &fpid, this ) )
         {
-            printf( "%s: %s\n", __func__, TO_UTF8( fpid ) );
+            // DBG( printf( "%s: %s\n", __func__, TO_UTF8( fpid ) ); )
             fieldValueTextCtrl->SetValue( fpid );
-
         }
 
         frame->Destroy();
     }
-#endif
-
 }
 
 
@@ -770,8 +762,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
         m_show_datasheet_button->SetLabel( _( "Assign Footprint" ) );
     else
         m_show_datasheet_button->SetLabel( wxEmptyString );
-
-    m_show_datasheet_button->Enable( fieldNdx == DATASHEET || fieldNdx == FOOTPRINT );
 
     // For power symbols, the value is NOR editable, because value and pin
     // name must be same and can be edited only in library editor

@@ -102,7 +102,7 @@ enum pseudokeys {
 #define GERBVIEW_EXE        wxT( "gerbview.app/Contents/MacOS/gerbview" )
 #define BITMAPCONVERTER_EXE wxT( "bitmap2component.app/Contents/MacOS/bitmap2component" )
 #define PCB_CALCULATOR_EXE  wxT( "pcb_calculator.app/Contents/MacOS/pcb_calculator" )
-#define PL_EDITOR_EXE  wxT( "pcb_calculator.app/Contents/MacOS/pl_editor" )
+#define PL_EDITOR_EXE       wxT( "pl_editor.app/Contents/MacOS/pl_editor" )
 # endif
 #endif
 

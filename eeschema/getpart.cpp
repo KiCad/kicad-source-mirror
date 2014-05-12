@@ -79,7 +79,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedA
 
     wxString cmpname;
 
-    if( viewlibFrame->ShowModal( &cmpname ) )
+    if( viewlibFrame->ShowModal( &cmpname, this ) )
     {
         if( aUnit )
             *aUnit = viewlibFrame->GetUnit();

@@ -491,7 +491,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Clear_Pcb( true );
         SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-        LoadModuleFromLibrary( getLibNickName(), FootprintLibs(), true );
+        LoadModuleFromLibrary( getLibNickName(), Prj().PcbFootprintLibs(), true );
         redraw = true;
 
         if( GetBoard()->m_Modules )

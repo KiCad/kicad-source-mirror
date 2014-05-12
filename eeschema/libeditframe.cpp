@@ -187,7 +187,7 @@ END_EVENT_TABLE()
 
 #define LIB_EDIT_FRAME_NAME wxT( "LibeditFrame" )
 
-LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, SCH_EDIT_FRAME* aParent ) :
+LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_LIB_EDITOR, _( "Library Editor" ),
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GetLibEditFrameName() )
 {

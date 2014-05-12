@@ -135,7 +135,7 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 
     wxString    fpid;
 
-    viewer->ShowModal( &fpid );
+    viewer->ShowModal( &fpid, this );
 
     //DBG(printf("%s: fpid:'%s'\n", __func__, TO_UTF8( fpid ) );)
 
@@ -274,7 +274,6 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;
 
-
         // Put it on FRONT layer,
         // (Can be stored flipped if the lib is an archive built from a board)
         if( module->IsFlipped() )
@@ -316,7 +315,7 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const FPID& aFootprintId )
 MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
     throw( IO_ERROR, PARSE_ERROR )
 {
-    FP_LIB_TABLE*   fptbl = FootprintLibs();
+    FP_LIB_TABLE*   fptbl = Prj().PcbFootprintLibs();
 
     wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
 

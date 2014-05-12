@@ -270,6 +270,8 @@ public:
      */
     FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable = NULL );
 
+    ~FP_LIB_TABLE();
+
     /// Delete all rows.
     void Clear()
     {

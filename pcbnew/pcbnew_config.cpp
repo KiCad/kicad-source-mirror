@@ -96,7 +96,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     case ID_PCB_LIB_TABLE_EDIT:
         {
             bool tableChanged = false;
-            int r = InvokePcbLibTableEditor( this, &GFootprintTable, FootprintLibs() );
+            int r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
 
             if( r & 1 )
             {
@@ -126,7 +126,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
                 try
                 {
-                    FootprintLibs()->Save( tblName );
+                    Prj().PcbFootprintLibs()->Save( tblName );
                     tableChanged = true;
                 }
                 catch( const IO_ERROR& ioe )
@@ -259,18 +259,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     SetElementVisibility( RATSNEST_VISIBLE, showRats );
 #endif
 
-    wxString projectFpLibTableFileName = Prj().FootprintLibTblName();
-
-    FootprintLibs()->Clear();
-
-    try
-    {
-        FootprintLibs()->Load( projectFpLibTableFileName );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( this, ioe.errorText );
-    }
+    Prj().ElemClear( PROJECT::ELEM_FPTBL );      // Force it to be reloaded on demand.
 
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
