@@ -160,7 +160,8 @@ void CONTEXT_MENU::Clear()
 
 void CONTEXT_MENU::onMenuEvent( wxEvent& aEvent )
 {
-    TOOL_EVENT evt;
+    OPT_TOOL_EVENT evt;
+
     wxEventType type = aEvent.GetEventType();
 
     // When the currently chosen item in the menu is changed, an update event is issued.
@@ -182,20 +183,16 @@ void CONTEXT_MENU::onMenuEvent( wxEvent& aEvent )
         }
         else
         {
-            OPT_TOOL_EVENT custom = m_customHandler( aEvent );
+            evt = m_customHandler( aEvent );
 
-            if( custom )
-                evt = *custom;
-            else
-            {
-                // Handling non-action menu entries (e.g. items in clarification list)
+            // Handling non-action menu entries (e.g. items in clarification list)
+            if( !evt )
                 evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, aEvent.GetId() );
-            }
         }
     }
 
     // forward the action/update event to the TOOL_MANAGER
-    TOOL_MANAGER::Instance().ProcessEvent( evt );
+    TOOL_MANAGER::Instance().ProcessEvent( *evt );
 }
 
 
