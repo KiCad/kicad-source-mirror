@@ -227,6 +227,7 @@ bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambigua
     BOARD_ITEM* item;
     GENERAL_COLLECTORS_GUIDE guide = getEditFrame<PCB_EDIT_FRAME>()->GetCollectorsGuide();
     GENERAL_COLLECTOR collector;
+    const KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_LINE_T, EOT }; // preferred types
 
     collector.Collect( pcb, GENERAL_COLLECTOR::AllBoardItems,
                        wxPoint( aWhere.x, aWhere.y ), guide );
@@ -250,6 +251,14 @@ bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambigua
         {
             if( !selectable( collector[i] ) )
                 collector.Remove( i );
+        }
+
+        // Check if among the selection candidates there is only one instance of preferred type
+        if( item = prefer( collector, types ) )
+        {
+            toggleSelection( item );
+
+            return true;
         }
 
         // Let's see if there is still disambiguation in selection..
@@ -678,6 +687,38 @@ void SELECTION_TOOL::highlightNet( const VECTOR2I& aPoint )
         render->SetHighlight( enableHighlight, net );
         getView()->UpdateAllLayersColor();
     }
+}
+
+
+BOARD_ITEM* SELECTION_TOOL::prefer( GENERAL_COLLECTOR& aCollector, const KICAD_T aTypes[] ) const
+{
+    BOARD_ITEM* preferred = NULL;
+
+    int typesNr = 0;
+    while( aTypes[typesNr++] != EOT );      // count number of types, excluding the sentinel (EOT)
+
+    for( int i = 0; i < aCollector.GetCount(); ++i )
+    {
+        KICAD_T type = aCollector[i]->Type();
+
+        for( int j = 0; j < typesNr - 1; ++j )      // Check if the item's type is in our list
+        {
+            if( aTypes[j] == type )
+            {
+                if( preferred == NULL )
+                {
+                    preferred = aCollector[i];  // save the first matching item
+                    break;
+                }
+                else
+                {
+                    return NULL;  // there is more than one preferred item, so there is no clear choice
+                }
+            }
+        }
+    }
+
+    return preferred;
 }
 
 
