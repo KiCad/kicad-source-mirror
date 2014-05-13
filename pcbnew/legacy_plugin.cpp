@@ -632,7 +632,7 @@ void LEGACY_PLUGIN::loadSHEET()
 
 void LEGACY_PLUGIN::loadSETUP()
 {
-    NETCLASS*               netclass_default  = m_board->m_NetClasses.GetDefault();
+    NETCLASS*               netclass_default = m_board->GetDesignSettings().m_NetClasses.GetDefault();
     // TODO Orson: is it really necessary to first operate on a copy and then apply it?
     // would not it be better to use reference here and apply all the changes instantly?
     BOARD_DESIGN_SETTINGS   bds = m_board->GetDesignSettings();
@@ -897,7 +897,7 @@ void LEGACY_PLUGIN::loadSETUP()
             //        at all, the global defaults should go into a preferences
             //        file instead so they are there to start new board
             //        projects.
-            m_board->m_NetClasses.GetDefault()->SetParams();
+            m_board->GetDesignSettings().m_NetClasses.GetDefault()->SetParams( m_board->GetDesignSettings() );
 
             return;     // preferred exit
         }
@@ -2113,7 +2113,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
     // yet since that would bypass duplicate netclass name checking within the BOARD.
     // store it temporarily in an auto_ptr until successfully inserted into the BOARD
     // just before returning.
-    auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
+    auto_ptr<NETCLASS> nc( new NETCLASS( wxEmptyString ) );
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -2175,7 +2175,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
         else if( TESTLINE( "$EndNCLASS" ) )
         {
-            if( m_board->m_NetClasses.Add( nc.get() ) )
+            if( m_board->GetDesignSettings().m_NetClasses.Add( nc.get() ) )
             {
                 nc.release();
             }
@@ -2984,8 +2984,8 @@ void LEGACY_PLUGIN::saveSHEET( const BOARD* aBoard ) const
 
 void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 {
-    NETCLASS* netclass_default       = aBoard->m_NetClasses.GetDefault();
     const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+    NETCLASS* netclass_default       = bds.m_NetClasses.GetDefault();
 
     fprintf( m_fp, "$SETUP\n" );
 
@@ -3098,7 +3098,7 @@ void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
     }
 
     // Saved nets do not include netclass names, so save netclasses after nets.
-    saveNETCLASSES( &aBoard->m_NetClasses );
+    saveNETCLASSES( &aBoard->GetDesignSettings().m_NetClasses );
 
     // save the modules
     for( MODULE* m = aBoard->m_Modules;  m;  m = (MODULE*) m->Next() )
@@ -3119,7 +3119,7 @@ void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
             savePCB_TARGET( (PCB_TARGET*) gr );
             break;
         case PCB_DIMENSION_T:
-            saveDIMENTION( (DIMENSION*) gr );
+            saveDIMENSION( (DIMENSION*) gr );
             break;
         default:
             THROW_IO_ERROR( wxString::Format( UNKNOWN_GRAPHIC_FORMAT, gr->Type() ) );
@@ -3763,7 +3763,7 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
 }
 
 
-void LEGACY_PLUGIN::saveDIMENTION( const DIMENSION* me ) const
+void LEGACY_PLUGIN::saveDIMENSION( const DIMENSION* me ) const
 {
     // note: COTATION was the previous name of DIMENSION
     // this old keyword is used here for compatibility

@@ -70,7 +70,7 @@ public:
                 continue;
 
             wxString netClassName = ni->GetClassName();
-            NETCLASS* nc = aBoard->m_NetClasses.Find( netClassName );
+            NETCLASS* nc = aBoard->GetDesignSettings().m_NetClasses.Find( netClassName );
             int clearance = nc->GetClearance();
             m_clearanceCache[i] = clearance;
             TRACE( 1, "Add net %d netclass %s clearance %d", i % netClassName.mb_str() %

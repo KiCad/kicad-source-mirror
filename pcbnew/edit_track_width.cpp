@@ -67,7 +67,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
             if( net )
                 new_width = net->GetMicroViaSize();
             else
-                new_width = GetBoard()->GetCurrentMicroViaSize();
+                new_width = GetDesignSettings().GetCurrentMicroViaSize();
         }
     }
 

@@ -154,6 +154,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     wxPoint   shape_pos;
 
     NETCLASS* netclass = aRefSeg->GetNetClass();
+    BOARD_DESIGN_SETTINGS& dsnSettings = m_pcb->GetDesignSettings();
 
     /* In order to make some calculations more easier or faster,
      * pads and tracks coordinates will be made relative to the reference segment origin
@@ -173,7 +174,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // test if the via size is smaller than minimum
         if( refvia->GetViaType() == VIA_MICROVIA )
         {
-            if( refvia->GetWidth() < netclass->GetuViaMinDiameter() )
+            if( refvia->GetWidth() < dsnSettings.m_MicroViasMinSize )
             {
                 m_currentMarker = fillMarker( refvia, NULL,
                                               DRCE_TOO_SMALL_MICROVIA, m_currentMarker );
@@ -182,7 +183,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         }
         else
         {
-            if( refvia->GetWidth() < netclass->GetViaMinDiameter() )
+            if( refvia->GetWidth() < dsnSettings.m_ViasMinSize )
             {
                 m_currentMarker = fillMarker( refvia, NULL,
                                               DRCE_TOO_SMALL_VIA, m_currentMarker );
@@ -231,7 +232,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     }
     else    // This is a track segment
     {
-        if( aRefSeg->GetWidth() < netclass->GetTrackMinWidth() )
+        if( aRefSeg->GetWidth() < dsnSettings.m_TrackMinWidth )
         {
             m_currentMarker = fillMarker( aRefSeg, NULL,
                                           DRCE_TOO_SMALL_TRACK_WIDTH, m_currentMarker );

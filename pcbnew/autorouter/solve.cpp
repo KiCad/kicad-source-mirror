@@ -280,7 +280,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
 
     m_canvas->SetAbortRequest( false );
 
-    s_Clearance = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
+    s_Clearance = GetBoard()->GetDesignSettings().m_NetClasses.GetDefault()->GetClearance();
 
     // Prepare the undo command info
     s_ItemsListPicker.ClearListAndDeleteItems();  // Should not be necessary, but...

@@ -46,21 +46,22 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
 
     // Display current setup for tracks and vias
     BOARD*        board = m_Parent->GetBoard();
-    NETCLASSES&   netclasses = board->m_NetClasses;
-    NETINFO_ITEM* net = board->FindNet( m_Netcode );
+    BOARD_DESIGN_SETTINGS& dsnSettings = board->GetDesignSettings();
+    NETCLASSES&   netclasses = dsnSettings.m_NetClasses;
     NETCLASS*     netclass = netclasses.GetDefault();
+    NETINFO_ITEM* net = board->FindNet( m_Netcode );
 
     if( net )
     {
         m_CurrentNetName->SetLabel( net->GetNetname() );
-        m_CurrentNetclassName->SetLabel( board->GetCurrentNetClassName() );
-        netclass = netclasses.Find( board->GetCurrentNetClassName() );
+        m_CurrentNetclassName->SetLabel( dsnSettings.GetCurrentNetClassName() );
+        netclass = netclasses.Find( dsnSettings.GetCurrentNetClassName() );
     }
 
     /* Disable the option "copy current to net" if we have only default netclass values
      * i.e. when m_TrackWidthSelector and m_ViaSizeSelector are set to 0
      */
-    if( !board->GetDesignSettings().GetTrackWidthIndex() && !board->GetDesignSettings().GetViaSizeIndex() )
+    if( !dsnSettings.GetTrackWidthIndex() && !dsnSettings.GetViaSizeIndex() )
     {
         m_Net2CurrValueButton->Enable( false );
         m_OptionID = ID_NETCLASS_VALUES_TO_CURRENT_NET;
@@ -77,9 +78,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     msg = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 0, msg  );
 
-    if( board->GetDesignSettings().GetTrackWidthIndex() )
+    if( dsnSettings.GetTrackWidthIndex() )
     {
-        value = board->GetDesignSettings().GetCurrentTrackWidth();
+        value = dsnSettings.GetCurrentTrackWidth();
         msg   = StringFromValue( g_UserUnit, value, true );
     }
     else
@@ -91,9 +92,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 1, msg  );
 
-    if( board->GetDesignSettings().GetViaSizeIndex() )
+    if( dsnSettings.GetViaSizeIndex() )
     {
-        value = board->GetDesignSettings().GetCurrentViaSize();
+        value = dsnSettings.GetCurrentViaSize();
         msg   = StringFromValue( g_UserUnit, value, true );
     }
     else
@@ -103,7 +104,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     value = netclass->GetViaDrill();      // Display via drill
     msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 2, msg  );
-    value = board->GetDesignSettings().GetCurrentViaDrill();
+    value = dsnSettings.GetCurrentViaDrill();
     if( value >= 0 )
         msg = StringFromValue( g_UserUnit, value, true );
     else

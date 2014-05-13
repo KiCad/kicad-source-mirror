@@ -464,7 +464,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     wxPoint  cursorPosition = GetCrossHairPosition();
     wxString msg;
 
-    GetBoard()->SetCurrentNetClass( Track->GetNetClassName() );
+    GetDesignSettings().SetCurrentNetClass( Track->GetNetClassName() );
     updateTraceWidthSelectBox();
     updateViaSizeSelectBox();
 
@@ -834,9 +834,9 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     if( flags )     // Currently in edit, no others commands possible
         return;
 
-    if( GetBoard()->GetCurrentNetClassName() != Pad->GetNetClassName() )
+    if( GetDesignSettings().GetCurrentNetClassName() != Pad->GetNetClassName() )
     {
-        GetBoard()->SetCurrentNetClass( Pad->GetNetClassName() );
+        GetDesignSettings().SetCurrentNetClass( Pad->GetNetClassName() );
         updateTraceWidthSelectBox();
         updateViaSizeSelectBox();
     }
