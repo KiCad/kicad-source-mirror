@@ -363,19 +363,6 @@ public:
     bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
 
     /**
-     * Function Fill_Zone
-     * Calculate the zone filling
-     * The zone outline is a frontier, and can be complex (with holes)
-     * The filling starts from starting points like pads, tracks.
-     * If exists the old filling is removed
-     * @param frame = reference to the main frame
-     * @param DC = current Device Context
-     * @param verbose = true to show error messages
-     * @return error level (0 = no error)
-     */
-    int Fill_Zone( PCB_EDIT_FRAME* frame, wxDC* DC, bool verbose = true );
-
-    /**
      * Function FillZoneAreasWithSegments
      *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
      * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.

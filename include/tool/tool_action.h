@@ -30,7 +30,7 @@
 #include <cassert>
 
 #include <tool/tool_base.h>
-#include <tool/action_manager.h>
+#include <tool/tool_manager.h>
 
 /**
  * Class TOOL_ACTION
@@ -50,14 +50,14 @@ public:
             const std::string& aMenuDesc = std::string( "" ) ) :
         m_name( aName ), m_scope( aScope ), m_defaultHotKey( aDefaultHotKey ),
         m_currentHotKey( aDefaultHotKey ), m_menuItem( aMenuItem ),
-        m_menuDescription( aMenuDesc ), m_id( -1 ), m_actionMgr( NULL )
+        m_menuDescription( aMenuDesc ), m_id( -1 )
     {
+        TOOL_MANAGER::Instance().RegisterAction( this );
     }
 
     ~TOOL_ACTION()
     {
-        if( m_actionMgr )
-            m_actionMgr->UnregisterAction( this );
+        TOOL_MANAGER::Instance().UnregisterAction( this );
     }
 
     bool operator==( const TOOL_ACTION& aRhs ) const
@@ -171,6 +171,21 @@ public:
         m_menuDescription = aDescription;
     }
 
+    TOOL_ACTION_SCOPE GetScope() const
+    {
+        return m_scope;
+    }
+
+    /**
+     * Returns name of the tool associated with the action. It is basically the action name
+     * stripped of the last part (e.g. for "pcbnew.InteractiveDrawing.drawCircle" it is
+     * "pcbnew.InteractiveDrawing").
+     */
+    std::string GetToolName() const
+    {
+        return m_name.substr( 0, m_name.rfind( '.' ) );
+    }
+
 private:
     friend class ACTION_MANAGER;
 
@@ -178,12 +193,6 @@ private:
     void setId( int aId )
     {
         m_id = aId;
-    }
-
-    /// Assigns ACTION_MANAGER object that handles the TOOL_ACTION.
-    void setActionMgr( ACTION_MANAGER* aManager )
-    {
-        m_actionMgr = aManager;
     }
 
     /// Name of the action (convention is: app.[tool.]action.name)
@@ -209,9 +218,6 @@ private:
 
     /// Unique ID for fast matching. Assigned by ACTION_MANAGER.
     int m_id;
-
-    /// Action manager that handles this TOOL_ACTION.
-    ACTION_MANAGER* m_actionMgr;
 
     /// Origin of the action
 // const TOOL_BASE* m_origin;

@@ -94,7 +94,7 @@ public:
      *  first).
      * @return Number of found items.
      */
-    int Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult );
+    int Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) const;
 
     /**
      * Function SetRequired()
@@ -140,7 +140,10 @@ public:
      * Function SetPainter()
      * Sets the painter object used by the view for drawing VIEW_ITEMS.
      */
-    void SetPainter( PAINTER* aPainter );
+    void SetPainter( PAINTER* aPainter )
+    {
+        m_painter = aPainter;
+    }
 
     /**
      * Function GetPainter()
@@ -181,7 +184,10 @@ public:
      * (depending on correct GAL unit length & DPI settings).
      * @param aScale: the scalefactor
      */
-    void SetScale( double aScale );
+    void SetScale( double aScale )
+    {
+        SetScale( aScale, m_center );
+    }
 
     /**
      * Function SetScale()
@@ -227,6 +233,14 @@ public:
     VECTOR2D ToWorld( const VECTOR2D& aCoord, bool aAbsolute = true ) const;
 
     /**
+     * Function ToWorld()
+     * Converts a screen space one dimensional size to a one dimensional size in world
+     * space coordinates.
+     * @param aCoord: the size to be converted
+     */
+    double ToWorld( double aSize ) const;
+
+    /**
      * Function ToScreen()
      * Converts a world space point/vector to a point/vector in screen space coordinates.
      * @param aCoord: the point/vector to be converted
@@ -247,7 +261,7 @@ public:
      * Returns the size of the our rendering area, in pixels.
      * @return viewport screen size
      */
-    VECTOR2D GetScreenPixelSize() const;
+    const VECTOR2I& GetScreenPixelSize() const;
 
     /**
      * Function AddLayer()
@@ -279,11 +293,11 @@ public:
      */
     inline void SetLayerVisible( int aLayer, bool aVisible = true )
     {
-        if( m_layers[aLayer].enabled != aVisible )
+        if( m_layers[aLayer].visible != aVisible )
         {
             // Target has to be redrawn after changing its visibility
             MarkTargetDirty( m_layers[aLayer].target );
-            m_layers[aLayer].enabled = aVisible;
+            m_layers[aLayer].visible = aVisible;
         }
     }
 
@@ -294,7 +308,7 @@ public:
      */
     inline bool IsLayerVisible( int aLayer ) const
     {
-        return m_layers.at( aLayer ).enabled;
+        return m_layers.at( aLayer ).visible;
     }
 
     /**
@@ -403,17 +417,10 @@ public:
     void Redraw();
 
     /**
-     * Function PartialRedraw()
-     * Redraws only the parts of the view that have been affected by items
-     * for which ViewUpdate() function has been called since last redraw.
-     */
-    void PartialRedraw();
-
-    /**
      * Function RecacheAllItems()
      * Rebuilds GAL display lists.
      * @param aForceNow decides if every item should be instantly recached. Otherwise items are
-     *        going to be recached when they become visible.
+     * going to be recached when they become visible.
      */
     void RecacheAllItems( bool aForceNow = false );
 
@@ -432,7 +439,16 @@ public:
      * Returns true if any of the VIEW layers needs to be refreshened.
      * @return True in case if any of layers is marked as dirty.
      */
-    bool IsDirty() const;
+    bool IsDirty() const
+    {
+        for( int i = 0; i < TARGETS_NUMBER; ++i )
+        {
+            if( IsTargetDirty( i ) )
+                return true;
+        }
+
+        return false;
+    }
 
     /**
      * Function IsTargetDirty()
@@ -440,7 +456,12 @@ public:
      * redrawn.
      * @return True if the above condition is fulfilled.
      */
-    bool IsTargetDirty( int aTarget ) const;
+    bool IsTargetDirty( int aTarget ) const
+    {
+        wxASSERT( aTarget < TARGETS_NUMBER );
+
+        return m_dirtyTargets[aTarget];
+    }
 
     /**
      * Function MarkTargetDirty()
@@ -471,48 +492,33 @@ public:
     }
 
     /**
-     * Function SetPanBoundary()
-     * Sets limits for panning area.
-     * @param aBoundary is the box that limits panning area.
+     * Function MarkForUpdate()
+     * Adds an item to a list of items that are going to be refreshed upon the next frame rendering.
+     * @param aItem is the item to be refreshed.
      */
-    void SetPanBoundary( const BOX2I& aBoundary )
+    void MarkForUpdate( VIEW_ITEM* aItem )
     {
-        m_panBoundary = aBoundary;
+        m_needsUpdate.push_back( aItem );
     }
 
     /**
-     * Function SetScaleLimits()
-     * Sets minimum and maximum values for scale.
-     * @param aMaximum is the maximum value for scale..
-     * @param aMinimum is the minimum value for scale.
+     * Function UpdateItems()
+     * Iterates through the list of items that asked for updating and updates them.
      */
-    void SetScaleLimits( double aMaximum, double aMinimum )
-    {
-        wxASSERT_MSG( aMaximum > aMinimum, wxT( "I guess you passed parameters in wrong order" ) );
+    void UpdateItems();
 
-        m_scaleLimits = VECTOR2D( aMaximum, aMinimum );
-    }
-
-    /**
-     * Function InvalidateItem()
-     * Manages dirty flags & redraw queueing when updating an item.
-     * @param aItem is the item to be updated.
-     * @param aUpdateFlags determines the way an item is refreshed.
-     */
-    void InvalidateItem( VIEW_ITEM* aItem, int aUpdateFlags );
-
-    static const int VIEW_MAX_LAYERS = 128;      ///* maximum number of layers that may be shown
+    static const int VIEW_MAX_LAYERS = 128;      ///< maximum number of layers that may be shown
 
 private:
     struct VIEW_LAYER
     {
-        bool                    enabled;         ///* is the layer to be rendered?
-        bool                    displayOnly;     ///* is the layer display only?
-        VIEW_RTREE*             items;           ///* R-tree indexing all items on this layer.
-        int                     renderingOrder;  ///* rendering order of this layer
-        int                     id;              ///* layer ID
-        RENDER_TARGET           target;          ///* where the layer should be rendered
-        std::set<int>           requiredLayers;  ///* layers that have to be enabled to show the layer
+        bool                    visible;         ///< is the layer to be rendered?
+        bool                    displayOnly;     ///< is the layer display only?
+        VIEW_RTREE*             items;           ///< R-tree indexing all items on this layer.
+        int                     renderingOrder;  ///< rendering order of this layer
+        int                     id;              ///< layer ID
+        RENDER_TARGET           target;          ///< where the layer should be rendered
+        std::set<int>           requiredLayers;  ///< layers that have to be enabled to show the layer
     };
 
     // Convenience typedefs
@@ -532,7 +538,7 @@ private:
     ///* Redraws contents within rect aRect
     void redrawRect( const BOX2I& aRect );
 
-    inline void clearTargetDirty( int aTarget )
+    inline void markTargetClean( int aTarget )
     {
         wxASSERT( aTarget < TARGETS_NUMBER );
 
@@ -549,7 +555,7 @@ private:
      * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
      * for cached items.
      */
-    void draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate = false ) const;
+    void draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate = false );
 
     /**
      * Function draw()
@@ -559,7 +565,7 @@ private:
      * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
      * for cached items.
      */
-    void draw( VIEW_ITEM* aItem, bool aImmediate = false ) const;
+    void draw( VIEW_ITEM* aItem, bool aImmediate = false );
 
     /**
      * Function draw()
@@ -569,7 +575,7 @@ private:
      * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
      * for cached items.
      */
-    void draw( VIEW_GROUP* aGroup, bool aImmediate = false ) const;
+    void draw( VIEW_GROUP* aGroup, bool aImmediate = false );
 
     ///* Sorts m_orderedLayers when layer rendering order has changed
     void sortLayers();
@@ -577,6 +583,14 @@ private:
     ///* Clears cached GAL group numbers (*ONLY* numbers stored in VIEW_ITEMs, not group objects
     ///* used by GAL)
     void clearGroupCache();
+
+    /**
+     * Function invalidateItem()
+     * Manages dirty flags & redraw queueing when updating an item.
+     * @param aItem is the item to be updated.
+     * @param aUpdateFlags determines the way an item is refreshed.
+     */
+    void invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags );
 
     /// Updates colors that are used for an item to be drawn
     void updateItemColor( VIEW_ITEM* aItem, int aLayer );
@@ -633,11 +647,8 @@ private:
     /// Rendering order modifier for layers that are marked as top layers
     static const int TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
 
-    /// Panning boundaries
-    BOX2I m_panBoundary;
-
-    /// Zoom limits
-    VECTOR2D m_scaleLimits;
+    /// Items to be updated
+    std::vector<VIEW_ITEM*> m_needsUpdate;
 };
 } // namespace KIGFX
 

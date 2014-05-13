@@ -54,8 +54,7 @@
  * to add holes for pads and tracks and other items not in net.
  */
 
-bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb,
-                            CPOLYGONS_LIST* aCornerBuffer )
+bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST* aCornerBuffer )
 {
     if( aCornerBuffer == NULL )
         m_FilledPolysList.RemoveAllContours();
@@ -80,9 +79,11 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb,
     case ZONE_SETTINGS::SMOOTHING_CHAMFER:
         m_smoothedPoly = m_Poly->Chamfer( m_cornerRadius );
         break;
+
     case ZONE_SETTINGS::SMOOTHING_FILLET:
         m_smoothedPoly = m_Poly->Fillet( m_cornerRadius, m_ArcToSegmentsCount );
         break;
+
     default:
         m_smoothedPoly = new CPolyLine;
         m_smoothedPoly->Copy( m_Poly );
@@ -90,18 +91,16 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb,
     }
 
     if( aCornerBuffer )
-        ConvertPolysListWithHolesToOnePolygon( m_smoothedPoly->m_CornersList,
-                                               *aCornerBuffer );
+        ConvertPolysListWithHolesToOnePolygon( m_smoothedPoly->m_CornersList, *aCornerBuffer );
     else
-        ConvertPolysListWithHolesToOnePolygon( m_smoothedPoly->m_CornersList,
-                                               m_FilledPolysList );
+        ConvertPolysListWithHolesToOnePolygon( m_smoothedPoly->m_CornersList, m_FilledPolysList );
 
     /* For copper layers, we now must add holes in the Polygon list.
      * holes are pads and tracks with their clearance area
      * for non copper layers just recalculate the m_FilledPolysList
      * with m_ZoneMinThickness taken in account
      */
-    if( ! aCornerBuffer )
+    if( !aCornerBuffer )
     {
         if( IsOnCopperLayer() )
             AddClearanceAreasPolygonsToPolysList( aPcb );
@@ -124,16 +123,19 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb,
             m_FilledPolysList.RemoveAllContours();
             CopyPolygonsFromKiPolygonListToFilledPolysList( polyset_zone_solid_areas );
         }
-        if ( m_FillMode )   // if fill mode uses segments, create them:
-            FillZoneAreasWithSegments( );
+
+        if( m_FillMode )   // if fill mode uses segments, create them:
+            FillZoneAreasWithSegments();
     }
+
+    m_IsFilled = true;
 
     return 1;
 }
 
 
 // Sort function to build filled zones
-static bool SortByXValues( const int& a, const int &b)
+static bool SortByXValues( const int& a, const int &b )
 {
     return a < b;
 }
@@ -141,13 +143,11 @@ static bool SortByXValues( const int& a, const int &b)
 
 int ZONE_CONTAINER::FillZoneAreasWithSegments()
 {
-    int      ics, ice;
+    int ics, ice;
     int count = 0;
     std::vector <int> x_coordinates;
     bool error = false;
-
-    int      istart, iend;      // index of the starting and the endif corner of one filled area in m_FilledPolysList
-
+    int istart, iend; // index of the starting and the endif corner of one filled area in m_FilledPolysList
     int margin = m_ZoneMinThickness * 2 / 10;
     int minwidth = Mils2iu( 2 );
     margin = std::max ( minwidth, margin );
@@ -157,28 +157,25 @@ int ZONE_CONTAINER::FillZoneAreasWithSegments()
     // Read all filled areas in m_FilledPolysList
     m_FillSegmList.clear();
     istart = 0;
-    int end_list =  m_FilledPolysList.GetCornersCount()-1;
+    int end_list =  m_FilledPolysList.GetCornersCount() - 1;
 
     for( int ic = 0; ic <= end_list; ic++ )
     {
         CPolyPt* corner = &m_FilledPolysList[ic];
-        if ( corner->end_contour || (ic == end_list) )
+        if ( corner->end_contour || ( ic == end_list ) )
         {
             iend = ic;
             EDA_RECT rect = CalculateSubAreaBoundaryBox( istart, iend );
 
             // Calculate the y limits of the zone
-            int refy = rect.GetY();
-            int endy = rect.GetBottom();
-
-            for( ; refy < endy; refy += step )
+            for( int refy = rect.GetY(), endy = rect.GetBottom(); refy < endy; refy += step )
             {
                 // find all intersection points of an infinite line with polyline sides
                 x_coordinates.clear();
 
                 for( ics = istart, ice = iend; ics <= iend; ice = ics, ics++ )
                 {
-                    if ( m_FilledPolysList[ice].m_utility )
+                    if( m_FilledPolysList[ice].m_utility )
                         continue;
 
                     int seg_startX = m_FilledPolysList[ics].x;
@@ -203,7 +200,7 @@ int ZONE_CONTAINER::FillZoneAreasWithSegments()
                     // the segment start point:
                     seg_endX -= seg_startX;
                     seg_endY -= seg_startY;
-                    double newrefy = (double) (refy - seg_startY);
+                    double newrefy = (double) ( refy - seg_startY );
                     double intersec_x;
 
                     if ( seg_endY == 0 )    // horizontal segment on the same line: skip
@@ -217,9 +214,9 @@ int ZONE_CONTAINER::FillZoneAreasWithSegments()
                     // intersec_x = refy/slope = refy * inv_slope
                     // Note: because horizontal segments are already tested and skipped, slope
                     // exists (seg_end_y not O)
-                    double inv_slope      = (double)seg_endX / seg_endY;
+                    double inv_slope = (double) seg_endX / seg_endY;
                     intersec_x = newrefy * inv_slope;
-                    x_coordinates.push_back((int) intersec_x + seg_startX);
+                    x_coordinates.push_back( (int) intersec_x + seg_startX );
                 }
 
                 // A line scan is finished: build list of segments
@@ -239,12 +236,12 @@ int ZONE_CONTAINER::FillZoneAreasWithSegments()
                     error = true;
                 }
 
-                if ( error )
+                if( error )
                     break;
 
-                int iimax = x_coordinates.size()-1;
+                int iimax = x_coordinates.size() - 1;
 
-                for (int ii = 0; ii < iimax; ii +=2 )
+                for( int ii = 0; ii < iimax; ii +=2 )
                 {
                     wxPoint  seg_start, seg_end;
                     count++;
@@ -257,15 +254,18 @@ int ZONE_CONTAINER::FillZoneAreasWithSegments()
                 }
             }   //End examine segments in one area
 
-            if ( error )
+            if( error )
                 break;
 
             istart = iend + 1;  // istart points the first corner of the next area
         }   // End find one end of outline
 
-        if ( error )
+        if( error )
             break;
     }   // End examine all areas
+
+    if( !error )
+        m_IsFilled = true;
 
     return count;
 }

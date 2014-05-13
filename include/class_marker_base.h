@@ -13,7 +13,6 @@ class MARKER_BASE
 public:
     wxPoint               m_Pos;                 ///< position of the marker
 protected:
-    std::vector <wxPoint> m_Corners;             ///< Corner list for shape definition (a polygon)
     int                   m_MarkerType;          ///< Can be used as a flag
     EDA_COLOR_T           m_Color;               ///< color
     EDA_RECT              m_ShapeBoundingBox;    ///< Bounding box of the graphic symbol, relative

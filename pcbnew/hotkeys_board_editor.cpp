@@ -152,7 +152,6 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     cmd.SetEventObject( this );
 
     LAYER_NUM      ll;
-    unsigned int   cnt;
 
     switch( hk_id )
     {
@@ -225,54 +224,23 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_GRID_TO_FASTGRID1:
-        if( m_gridSelectBox )
-        {
-            m_gridSelectBox->SetSelection( m_FastGrid1 );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
-
+        SetFastGrid1();
         break;
 
     case HK_SWITCH_GRID_TO_FASTGRID2:
-        if( m_gridSelectBox )
-        {
-            m_gridSelectBox->SetSelection( m_FastGrid2 );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
-
+        SetFastGrid2();
         break;
 
     case HK_SWITCH_GRID_TO_NEXT:
-        if( m_gridSelectBox )
-        {
-            m_gridSelectBox->SetSelection( ( m_gridSelectBox->GetSelection() + 1 ) %
-                                           m_gridSelectBox->GetCount() );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
+        SetNextGrid();
         break;
 
     case HK_SWITCH_GRID_TO_PREVIOUS:
-        if( m_gridSelectBox )
-        {
-            cnt = m_gridSelectBox->GetSelection();
-
-            if ( cnt == 0 )
-                cnt = m_gridSelectBox->GetCount() - 1;
-            else
-                cnt--;
-
-            m_gridSelectBox->SetSelection( cnt );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
-
+        SetPrevGrid();
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
-        ll = getActiveLayer();
+        ll = GetActiveLayer();
 
         if( (ll <= LAYER_N_BACK) || (ll > LAYER_N_FRONT) )
             break;
@@ -288,7 +256,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
-        ll = getActiveLayer();
+        ll = GetActiveLayer();
 
         if( (ll < LAYER_N_BACK) || (ll >= LAYER_N_FRONT) )
             break;
@@ -395,8 +363,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_TRACK_DISPLAY_MODE:
-        DisplayOpt.DisplayPcbTrackFill ^= 1;
-        DisplayOpt.DisplayPcbTrackFill &= 1;
+        DisplayOpt.DisplayPcbTrackFill = !DisplayOpt.DisplayPcbTrackFill;
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
         m_canvas->Refresh();
         break;
@@ -406,7 +373,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_BACK_SPACE:
-        if( IsCopperLayer( getActiveLayer() ) )
+        if( IsCopperLayer( GetActiveLayer() ) )
         {
             if( !itemCurrentlyEdited )
             {
@@ -621,7 +588,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
     switch( GetToolId() )
     {
     case ID_TRACK_BUTT:
-        if( getActiveLayer() > LAYER_N_FRONT )
+        if( GetActiveLayer() > LAYER_N_FRONT )
             return false;
 
         if( ItemFree )
@@ -982,7 +949,7 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
 
 TRACK * PCB_EDIT_FRAME::OnHotkeyBeginRoute( wxDC* aDC )
 {
-    if( getActiveLayer() > LAYER_N_FRONT )
+    if( GetActiveLayer() > LAYER_N_FRONT )
         return NULL;
 
     bool itemCurrentlyEdited = (GetCurItem() && GetCurItem()->GetFlags());

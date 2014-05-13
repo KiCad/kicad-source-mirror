@@ -30,15 +30,14 @@
 #include <view/view_controls.h>
 #include <ratsnest_data.h>
 #include <confirm.h>
+
 #include <cassert>
 #include <boost/foreach.hpp>
+#include <boost/bind.hpp>
 
 #include "common_actions.h"
 #include "selection_tool.h"
 #include "edit_tool.h"
-
-using namespace KIGFX;
-using boost::optional;
 
 EDIT_TOOL::EDIT_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL )
@@ -79,16 +78,24 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can modify
     if( !makeSelection( selection ) )
-        return 0;
+    {
+        setTransitions();
 
-    VECTOR2D dragPosition;      // The last position of the cursor while dragging
+        return 0;
+    }
+
+    Activate();
+
     m_dragging = false;         // Are selected items being dragged?
     bool restore = false;       // Should items' state be restored when finishing the tool?
 
     // By default, modified items need to update their geometry
     m_updateFlag = KIGFX::VIEW_ITEM::GEOMETRY;
 
-    VIEW_CONTROLS* controls = getViewControls();
+    // Offset from the dragged item's center (anchor)
+    wxPoint offset;
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
     PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
     controls->ShowCursor( true );
     controls->SetSnapping( true );
@@ -102,6 +109,12 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
         {
             restore = true; // Cancelling the tool means that items have to be restored
             break;          // Finish
+        }
+
+        else if( evt->Action() == TA_UNDO_REDO )
+        {
+            unselect = true;
+            break;
         }
 
         // Dispatch TOOL_ACTIONs
@@ -128,30 +141,35 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 
         else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
+            VECTOR2I cursor( controls->GetCursorPosition() );
+
             if( m_dragging )
             {
+                wxPoint movement = wxPoint( cursor.x, cursor.y ) -
+                        static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition();
+
                 // Drag items to the current cursor position
-                VECTOR2D movement = ( getView()->ToWorld( controls->GetCursorPosition() ) -
-                                      dragPosition );
                 for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
                 {
                     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( i ) );
-                    item->Move( wxPoint( movement.x, movement.y ) );
+                    item->Move( movement + offset );
                 }
 
                 updateRatsnest( true );
             }
-            else
+            else    // Prepare to start dragging
             {
-                // Prepare to drag - save items, so changes can be undone
+                // Save items, so changes can be undone
                 editFrame->OnModify();
                 editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
+                offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
+                         wxPoint( cursor.x, cursor.y );
                 m_dragging = true;
             }
 
-            selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
-            dragPosition = getView()->ToWorld( controls->GetCursorPosition() );
+            selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
@@ -173,7 +191,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     }
 
     if( unselect )
-        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
 
     RN_DATA* ratsnest = getModel<BOARD>( PCB_T )->GetRatsnest();
     ratsnest->ClearSimple();
@@ -198,14 +216,18 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
     bool unselect = selection.Empty();
 
     if( !makeSelection( selection ) )
+    {
+        setTransitions();
+
         return 0;
+    }
 
     // Properties are displayed when there is only one item selected
     if( selection.Size() == 1 )
     {
         // Display properties dialog
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) );
-        VECTOR2I cursor = getView()->ToWorld( getViewControls()->GetCursorPosition() );
+        VECTOR2I cursor = getViewControls()->GetCursorPosition();
 
         // Check if user wants to edit pad or module properties
         if( item->Type() == PCB_MODULE_T )
@@ -231,9 +253,10 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
         getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
         if( unselect )
-            m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+            m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     }
 
+    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
     setTransitions();
 
     return 0;
@@ -249,7 +272,11 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
     bool unselect = selection.Empty();
 
     if( !makeSelection( selection ) )
+    {
+        setTransitions();
+
         return 0;
+    }
 
     wxPoint rotatePoint = getModificationPoint( selection );
 
@@ -269,8 +296,7 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
 
-    setTransitions();
-    updateRatsnest( true );
+    updateRatsnest( m_dragging );
 
     if( m_dragging )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -278,7 +304,10 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
         getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
     if( unselect )
-        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+    setTransitions();
 
     return 0;
 }
@@ -293,7 +322,11 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
     bool unselect = selection.Empty();
 
     if( !makeSelection( selection ) )
+    {
+        setTransitions();
+
         return 0;
+    }
 
     wxPoint flipPoint = getModificationPoint( selection );
 
@@ -313,8 +346,7 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
             item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
     }
 
-    setTransitions();
-    updateRatsnest( true );
+    updateRatsnest( m_dragging );
 
     if( m_dragging )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -322,7 +354,10 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
         getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
     if( unselect )
-        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+    setTransitions();
 
     return 0;
 }
@@ -333,18 +368,23 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
 
     if( !makeSelection( selection ) )
+    {
+        setTransitions();
+
         return 0;
+    }
 
     // Get a copy of the selected items set
     PICKED_ITEMS_LIST selectedItems = selection.items;
     PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
 
     // As we are about to remove items, they have to be removed from the selection first
-    m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
 
     // Save them
     for( unsigned int i = 0; i < selectedItems.GetCount(); ++i )
         selectedItems.SetPickedItemStatus( UR_DELETED, i );
+
     editFrame->OnModify();
     editFrame->SaveCopyInUndoList( selectedItems, UR_DELETED );
 
@@ -355,13 +395,9 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
         remove( item );
     }
 
-    // Rebuild list of pads and nets if necessary
-    BOARD* board = getModel<BOARD>( PCB_T );
-    if( !( board->m_Status_Pcb & NET_CODES_OK ) )
-        board->BuildListOfNets();
+    getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
     setTransitions();
-    board->GetRatsnest()->Recalculate();
 
     return 0;
 }
@@ -377,7 +413,7 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
         module->ClearFlags();
-        module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ), getView() ) );
+        module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, getView(), _1 ) );
 
         // Module itself is deleted after the switch scope is finished
         // list of pads is rebuild by BOARD::BuildListOfNets()
@@ -451,7 +487,7 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelec
     }
     else
     {
-        VECTOR2I cursor = getView()->ToWorld( getViewControls()->GetCursorPosition() );
+        VECTOR2I cursor = getViewControls()->GetCursorPosition();
         return wxPoint( cursor.x, cursor.y );
     }
 }
@@ -459,20 +495,8 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelec
 
 bool EDIT_TOOL::makeSelection( const SELECTION_TOOL::SELECTION& aSelection )
 {
-    if( aSelection.Empty() )
-    {
-        // Try to find an item that could be modified
-        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Single" );
+    if( aSelection.Empty() )                        // Try to find an item that could be modified
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionSingle );
 
-        if( aSelection.Empty() )
-        {
-            // This is necessary, so later the tool may be activated upon
-            // reception of the activation event
-            setTransitions();
-
-            return false;   // Still no items to work with
-        }
-    }
-
-    return true;
+    return !aSelection.Empty();
 }

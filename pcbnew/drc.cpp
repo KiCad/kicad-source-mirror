@@ -38,6 +38,8 @@
 #include <class_track.h>
 #include <class_pad.h>
 #include <class_zone.h>
+#include <class_draw_panel_gal.h>
+#include <view/view.h>
 
 #include <pcbnew.h>
 #include <drc_stuff.h>
@@ -312,6 +314,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_CLEARANCE, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -327,6 +330,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_TRACKWIDTH, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -341,6 +345,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_VIASIZE, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -355,6 +360,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_VIADRILLSIZE, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -369,6 +375,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_uVIASIZE, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -383,6 +390,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_uVIADRILLSIZE, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -447,6 +455,7 @@ void DRC::testPad2Pad()
         {
             wxASSERT( m_currentMarker );
             m_pcb->Add( m_currentMarker );
+            m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
             m_currentMarker = 0;
         }
     }
@@ -493,6 +502,7 @@ void DRC::testTracks( bool aShowProgressBar )
         {
             wxASSERT( m_currentMarker );
             m_pcb->Add( m_currentMarker );
+            m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
             m_currentMarker = 0;
         }
     }
@@ -554,6 +564,7 @@ void DRC::testZones()
             m_currentMarker = fillMarker( test_area,
                                           DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE, m_currentMarker );
             m_pcb->Add( m_currentMarker );
+            m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
             m_currentMarker = 0;
         }
     }
@@ -589,6 +600,7 @@ void DRC::testKeepoutAreas()
                     m_currentMarker = fillMarker( segm, NULL,
                                                   DRCE_TRACK_INSIDE_KEEPOUT, m_currentMarker );
                     m_pcb->Add( m_currentMarker );
+                    m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
                     m_currentMarker = 0;
                 }
             }
@@ -605,6 +617,7 @@ void DRC::testKeepoutAreas()
                     m_currentMarker = fillMarker( segm, NULL,
                                                   DRCE_VIA_INSIDE_KEEPOUT, m_currentMarker );
                     m_pcb->Add( m_currentMarker );
+                    m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
                     m_currentMarker = 0;
                 }
             }

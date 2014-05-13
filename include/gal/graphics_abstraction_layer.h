@@ -31,8 +31,6 @@
 #include <stack>
 #include <limits>
 
-#include <wx/event.h>
-
 #include <math/matrix3x3.h>
 
 #include <gal/color4d.h>
@@ -162,7 +160,7 @@ public:
     virtual bool Show( bool aShow ) = 0;
 
     /// @brief Returns GAL canvas size in pixels
-    VECTOR2D GetScreenPixelSize() const
+    const VECTOR2I& GetScreenPixelSize() const
     {
         return screenSize;
     }
@@ -222,7 +220,7 @@ public:
      *
      * @return the color for stroking the outline.
      */
-    inline COLOR4D GetStrokeColor()
+    inline const COLOR4D& GetStrokeColor() const
     {
         return strokeColor;
     }
@@ -252,7 +250,7 @@ public:
      *
      * @return the actual line width.
      */
-    inline double GetLineWidth()
+    inline double GetLineWidth() const
     {
         return lineWidth;
     }
@@ -335,7 +333,7 @@ public:
      *
      * @param aTransformation is the ransformation matrix.
      */
-    virtual void Transform( MATRIX3x3D aTransformation ) = 0;
+    virtual void Transform( const MATRIX3x3D& aTransformation ) = 0;
 
     /**
      * @brief Rotate the context.
@@ -428,9 +426,19 @@ public:
      *
      * @return the transformation matrix.
      */
-    MATRIX3x3D GetWorldScreenMatrix()
+    const MATRIX3x3D& GetWorldScreenMatrix() const
     {
         return worldScreenMatrix;
+    }
+
+    /**
+     * @brief Get the screen <-> world transformation matrix.
+     *
+     * @return the transformation matrix.
+     */
+    const MATRIX3x3D& GetScreenWorldMatrix() const
+    {
+        return screenWorldMatrix;
     }
 
     /**
@@ -487,7 +495,7 @@ public:
      *
      * @return the look at point.
      */
-    inline VECTOR2D GetLookAtPoint()
+    inline const VECTOR2D& GetLookAtPoint() const
     {
         return lookAtPoint;
     }
@@ -507,7 +515,7 @@ public:
      *
      * @return the zoom factor.
      */
-    inline double GetZoomFactor()
+    inline double GetZoomFactor() const
     {
         return zoomFactor;
     }
@@ -528,7 +536,7 @@ public:
     /**
      * @brief Returns the minimum depth in the currently used range (the top).
      */
-    inline double GetMinDepth()
+    inline double GetMinDepth() const
     {
         return depthRange.x;
     }
@@ -536,7 +544,7 @@ public:
     /**
      * @brief Returns the maximum depth in the currently used range (the bottom).
      */
-    inline double GetMaxDepth()
+    inline double GetMaxDepth() const
     {
         return depthRange.y;
     }
@@ -546,7 +554,7 @@ public:
      *
      * @return the actual world scale factor.
      */
-    inline double GetWorldScale()
+    inline double GetWorldScale() const
     {
         return worldScale;
     }
@@ -694,7 +702,7 @@ public:
      *
      * @return the grid line width
      */
-    inline double GetGridLineWidth()
+    inline double GetGridLineWidth() const
     {
         return gridLineWidth;
     }
@@ -709,19 +717,17 @@ public:
         gridLineWidth = aGridLineWidth;
     }
 
-    /// @brief Draw the grid
+    ///> @brief Draw the grid
     void DrawGrid();
-
 
     /**
      * Function GetGridPoint()
-     * For a given point it returns the nearest point belonging to the grid.
+     * For a given point it returns the nearest point belonging to the grid in world coordinates.
      *
      * @param aPoint is the point for which the grid point is searched.
-     * @return The nearest grid point.
+     * @return The nearest grid point in world coordinates.
      */
-    VECTOR2D GetGridPoint( VECTOR2D aPoint ) const;
-
+    VECTOR2D GetGridPoint( const VECTOR2D& aPoint ) const;
 
     /**
      * @brief Change the grid display style.
@@ -739,7 +745,7 @@ public:
      * @param aPoint the pointposition in screen coordinates.
      * @return the point position in world coordinates.
      */
-    inline virtual VECTOR2D ToWorld( const VECTOR2D& aPoint ) const
+    inline VECTOR2D ToWorld( const VECTOR2D& aPoint ) const
     {
         return VECTOR2D( screenWorldMatrix * aPoint );
     }
@@ -750,15 +756,15 @@ public:
      * @param aPoint the pointposition in world coordinates.
      * @return the point position in screen coordinates.
      */
-    inline virtual VECTOR2D ToScreen( const VECTOR2D& aPoint ) const
+    inline VECTOR2D ToScreen( const VECTOR2D& aPoint ) const
     {
         return VECTOR2D( worldScreenMatrix * aPoint );
     }
 
     /**
-     * @brief Enable/Disable cursor.
+     * @brief Enable/disable cursor.
      *
-     * @param aIsCursorEnabled is true if the cursor should be enabled, else false.
+     * @param aCursorEnabled is true if the cursor should be drawn, else false.
      */
     inline void SetCursorEnabled( bool aCursorEnabled )
     {
@@ -778,7 +784,7 @@ public:
     /**
      * @brief Set the cursor size.
      *
-     * @param aCursorSize is the size of the cursor.
+     * @param aCursorSize is the size of the cursor expressed in pixels.
      */
     inline void SetCursorSize( unsigned int aCursorSize )
     {
@@ -821,9 +827,11 @@ public:
     /// Depth level on which the grid is drawn
     static const int GRID_DEPTH = 1024;
 
+    static const double METRIC_UNIT_LENGTH = 1e9;
+
 protected:
     std::stack<double> depthStack;             ///< Stored depth values
-    VECTOR2D           screenSize;             ///< Screen size in screen coordinates
+    VECTOR2I           screenSize;             ///< Screen size in screen coordinates
 
     double             worldUnitLength;        ///< The unit length of the world coordinates [inch]
     double             screenDPI;              ///< The dots per inch of the screen
@@ -862,7 +870,8 @@ protected:
 
     bool               isCursorEnabled;        ///< Is the cursor enabled?
     COLOR4D            cursorColor;            ///< Cursor color
-    int                cursorSize;             ///< Size of the cursor in pixels
+    unsigned int       cursorSize;             ///< Size of the cursor in pixels
+    VECTOR2D           cursorPosition;         ///< Current cursor position (world coordinates)
 
     /// Instance of object that stores information about how to draw texts
     STROKE_FONT        strokeFont;
@@ -880,13 +889,6 @@ protected:
      * @param aEndPoint is the end point of the line.
      */
     virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
-
-    /**
-     * @brief Initialize the cursor.
-     *
-     * @param aCursorSize is the size of the cursor.
-     */
-    virtual void initCursor( int aCursorSize ) = 0;
 
     static const int MIN_DEPTH = -2048;
     static const int MAX_DEPTH = 2047;

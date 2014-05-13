@@ -79,7 +79,7 @@ public:
      * specified tool).
      * @param aEvent is the wxCommandEvent to be processed.
      */
-    virtual void DispatchWxCommand( const wxCommandEvent& aEvent );
+    virtual void DispatchWxCommand( wxCommandEvent& aEvent );
 
 private:
     ///> Number of mouse buttons that is handled in events.

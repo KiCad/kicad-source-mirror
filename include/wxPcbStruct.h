@@ -135,37 +135,9 @@ protected:
     void createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu );
 
     /**
-     * Function setActiveLayer
-     * will change the currently active layer to \a aLayer and also
-     * update the PCB_LAYER_WIDGET.
-     */
-    void setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
-
-    /**
-     * Function getActiveLayer
-     * returns the active layer
-     */
-    LAYER_NUM getActiveLayer()
-    {
-        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
-    }
-
-    /**
-     * Function setHighContrastLayer
-     * takes care of display settings for the given layer to be displayed in high contrast mode.
-     */
-    void setHighContrastLayer( LAYER_NUM aLayer );
-
-    /**
-     * Function setTopLayer
-     * moves the selected layer to the top, so it is displayed above all others.
-     */
-    void setTopLayer( LAYER_NUM aLayer );
-
-    /**
      * Function syncLayerWidgetLayer
      * updates the currently layer "selection" within the PCB_LAYER_WIDGET.
-     * The currently selected layer is defined by the return value of getActiveLayer().
+     * The currently selected layer is defined by the return value of GetActiveLayer().
      * <p>
      * This function cannot be inline without including layer_widget.h in
      * here and we do not want to do that.
@@ -225,8 +197,6 @@ public:
     bool m_show_microwave_tools;
     bool m_show_layer_manager_tools;
 
-
-public:
     virtual ~PCB_EDIT_FRAME();
 
     void OnQuit( wxCommandEvent& event );
@@ -559,6 +529,34 @@ public:
      * </p>
      */
     virtual void OnModify();
+
+    /**
+     * Function SetHighContrastLayer
+     * takes care of display settings for the given layer to be displayed in high contrast mode.
+     */
+    void SetHighContrastLayer( LAYER_NUM aLayer );
+
+    /**
+     * Function SetTopLayer
+     * moves the selected layer to the top, so it is displayed above all others.
+     */
+    void SetTopLayer( LAYER_NUM aLayer );
+
+    /**
+     * Function SetActiveLayer
+     * will change the currently active layer to \a aLayer and also
+     * update the PCB_LAYER_WIDGET.
+     */
+    void SetActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
+
+    /**
+     * Function GetActiveLayer
+     * returns the active layer
+     */
+    LAYER_NUM GetActiveLayer() const
+    {
+        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+    }
 
     /**
      * Function IsElementVisible
@@ -1479,7 +1477,7 @@ public:
 
     /**
      * Function ReadPcbNetlist
-     * reads \a aNetlistFileName and ppdates the footprints (load missing footprints and
+     * reads \a aNetlistFileName and updates the footprints (load missing footprints and
      * delete on demand extra footprints) on the board.
      * Update connectivity info, references, values and "TIME STAMP"
      *
@@ -1679,12 +1677,6 @@ public:
      * </p>
      */
     void UpdateTitle();
-
-    void SetTopLayer( LAYER_NUM aLayer )
-    {
-        setTopLayer( aLayer );
-    }
-
 
     DECLARE_EVENT_TABLE()
 };

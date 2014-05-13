@@ -58,13 +58,6 @@ public:
     void onEnter( wxMouseEvent& WXUNUSED( aEvent ) );
     void onTimer( wxTimerEvent& WXUNUSED( aEvent ) );
 
-    ///> @copydoc VIEW_CONTROLS::SetSnapping()
-    void SetSnapping( bool aEnabled )
-    {
-        VIEW_CONTROLS::SetSnapping( aEnabled );
-        updateCursor();
-    }
-
     /**
      * Function SetGrabMouse()
      * Enables/disables mouse cursor grabbing (limits the movement field only to the panel area).
@@ -88,13 +81,10 @@ public:
     }
 
     /// @copydoc VIEW_CONTROLS::GetMousePosition()
-    const VECTOR2D GetMousePosition() const;
+    VECTOR2D GetMousePosition() const;
 
     /// @copydoc VIEW_CONTROLS::GetCursorPosition()
-    const VECTOR2D GetCursorPosition() const
-    {
-        return m_cursorPosition;
-    }
+    VECTOR2D GetCursorPosition() const;
 
     /// Event that forces mouse move event in the dispatcher (eg. used in autopanning, when mouse
     /// cursor does not move in screen coordinates, but does in world coordinates)
@@ -118,12 +108,6 @@ private:
      * is in the area that causes autopanning to happen).
      */
     bool handleAutoPanning( const wxMouseEvent& aEvent );
-
-    /**
-     * Function updateCursor()
-     * Recomputes the cursor coordinates basing on the current snapping settings and mouse position.
-     */
-    void updateCursor();
 
     /// Current state of VIEW_CONTROLS
     STATE       m_state;

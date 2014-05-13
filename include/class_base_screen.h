@@ -65,7 +65,7 @@ public:
 };
 
 
-typedef std::vector< GRID_TYPE > GRIDS;
+typedef std::vector<GRID_TYPE> GRIDS;
 
 
 /**
@@ -445,11 +445,12 @@ public:
 
     /**
      * Function GetGrids().
-     * Copy the grid list to \a aList.
-     *
-     * @param aList - List to copy to.
+     * Returns the current list of grids.
      */
-    void GetGrids( GRIDS& aList );
+    const GRIDS& GetGrids() const
+    {
+        return m_grids;
+    }
 
     /**
      * Function GetClass

@@ -996,7 +996,7 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     // Just show it on common via & via holes layers
-    aLayers[0] = ITEM_GAL_LAYER( VIAS_VISIBLE );
+    aLayers[0] = ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE );
     aLayers[1] = ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE );
     aCount = 2;
 }

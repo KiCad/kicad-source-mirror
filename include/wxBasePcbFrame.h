@@ -76,8 +76,8 @@ public:
     EDA_UNITS_T m_UserGridUnit;
     wxRealPoint m_UserGridSize;
 
-    int m_FastGrid1;
-    int m_FastGrid2;
+    int m_FastGrid1;                // 1st fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
+    int m_FastGrid2;                // 2nd fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
 
     EDA_3D_FRAME* m_Draw3DFrame;
 
@@ -90,7 +90,7 @@ protected:
     /// main window.
     wxAuiToolBar*       m_auxiliaryToolBar;
 
-    TOOL_MANAGER*       m_toolManager;
+    TOOL_MANAGER&       m_toolManager;
     TOOL_DISPATCHER*    m_toolDispatcher;
 
     void updateGridSelectBox();
@@ -203,12 +203,9 @@ public:
      * Function BestZoom
      * @return the "best" zoom to show the entire board or footprint on the screen.
      */
-
     virtual double BestZoom();
 
     virtual void Show3D_Frame( wxCommandEvent& event );
-
-public:
 
     // Read/write functions:
     EDA_ITEM* ReadDrawSegmentDescr( LINE_READER* aReader );
@@ -633,6 +630,20 @@ public:
     void OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
+
+    /**
+     * Function SetFastGrid1()
+     *
+     * Switches grid settings to the 1st "fast" setting predefined by user.
+     */
+    void SetFastGrid1();
+
+    /**
+     * Function SetFastGrid2()
+     *
+     * Switches grid settings to the 1st "fast" setting predefined by user.
+     */
+    void SetFastGrid2();
 
     DECLARE_EVENT_TABLE()
 };

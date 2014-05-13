@@ -275,19 +275,19 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
     draw.SetEnd( aDim->m_featureLineDF );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( aDim->m_arrowD1O );
+    draw.SetStart( aDim->m_crossBarF );
     draw.SetEnd( aDim->m_arrowD1F );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( aDim->m_arrowD2O );
+    draw.SetStart( aDim->m_crossBarF );
     draw.SetEnd( aDim->m_arrowD2F );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( aDim->m_arrowG1O );
+    draw.SetStart( aDim->m_crossBarO );
     draw.SetEnd( aDim->m_arrowG1F );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( aDim->m_arrowG2O );
+    draw.SetStart( aDim->m_crossBarO );
     draw.SetEnd( aDim->m_arrowG2F );
     PlotDrawSegment( &draw );
 }

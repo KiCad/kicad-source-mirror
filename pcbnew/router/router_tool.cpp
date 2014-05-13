@@ -21,16 +21,19 @@
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 
-#include "class_drawpanel_gal.h"
+#include "class_draw_panel_gal.h"
 #include "class_board_item.h"
 #include "class_board.h"
 
 #include <wxPcbStruct.h>
+#include <id.h>
+#include <pcbnew_id.h>
 #include <view/view_controls.h>
 #include <pcbcommon.h>
 #include <pcb_painter.h>
 
 #include <tool/context_menu.h>
+#include <tools/common_actions.h>
 
 #include <ratsnest_data.h>
 
@@ -42,11 +45,11 @@
 using namespace KIGFX;
 using boost::optional;
 
-static TOOL_ACTION ACT_AutoEndRoute( "AutoEndRoute", AS_CONTEXT, 'F' );
-static TOOL_ACTION ACT_PlaceVia( "PlaceVia", AS_CONTEXT, 'V' );
-static TOOL_ACTION ACT_OpenRouteOptions( "OpenRouterOptions", AS_CONTEXT, 'E' );
-static TOOL_ACTION ACT_SwitchPosture( "SwitchPosture", AS_CONTEXT, '/' );
-static TOOL_ACTION ACT_EndTrack( "SwitchPosture", AS_CONTEXT, WXK_END );
+//static TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", AS_CONTEXT, 'G' );
+//static TOOL_ACTION ACT_PlaceVia( "pcbnew.InteractiveRouter.PlaceVia", AS_CONTEXT, 'V' );
+//static TOOL_ACTION ACT_OpenRouteOptions( "pcbnew.InteractiveRouter.OpenRouterOptions", AS_CONTEXT, 'T' );
+//static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", AS_CONTEXT, '/' );
+//static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_CONTEXT, WXK_END );
 
 ROUTER_TOOL::ROUTER_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveRouter" )
@@ -88,7 +91,7 @@ void ROUTER_TOOL::Reset( RESET_REASON aReason )
     if( getView() )
         m_router->SetView( getView() );
 
-    Go( &ROUTER_TOOL::Main, TOOL_EVENT( TC_COMMAND, TA_ACTION, GetName() ) );
+    Go( &ROUTER_TOOL::Main, COMMON_ACTIONS::routerActivate.MakeEvent() );
 }
 
 
@@ -281,7 +284,7 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
     else
     {
         m_endItem = NULL;
-        m_endSnapPoint = getView()->ToWorld( ctls->GetCursorPosition() );
+        m_endSnapPoint = ctls->GetCursorPosition();
         ctls->ForceCursorPosition( false );
     }
 
@@ -364,9 +367,9 @@ void ROUTER_TOOL::startRouting()
 
             m_router->Move( m_endSnapPoint, m_endItem );
         }
-        else if( evt->IsKeyUp() )
+        else if( evt->IsKeyPressed() )
         {
-            switch( evt->KeyCode() )
+            switch( std::toupper( evt->KeyCode() ) )
             {
             case 'V':
             {
@@ -430,6 +433,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
 
     // SetContextMenu ( m_menu );
     // setMsgPanel(true, 0, wxT("KiRouter"), wxT("Pick an item to start routing"));
+    getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Add tracks" ) );
 
     ctls->SetSnapping( true );
     ctls->ShowCursor( true );
@@ -463,6 +467,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     ctls->ShowCursor( false );
     ctls->ForceCursorPosition( false );
 
+    getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
     return 0;
 }
-

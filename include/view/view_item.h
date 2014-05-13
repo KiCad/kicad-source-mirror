@@ -157,12 +157,16 @@ public:
     /**
      * Enum VIEW_UPDATE_FLAGS.
      * Defines the how severely the shape/appearance of the item has been changed:
+     * - NONE: TODO
      * - APPEARANCE: shape or layer set of the item have not been affected,
      * only colors or visibility.
+     * - COLOR:
      * - GEOMETRY: shape or layer set of the item have changed, VIEW may need to reindex it.
-     * - ALL: all flags above */
+     * - LAYERS: TODO
+     * - ALL: all the flags above */
 
     enum VIEW_UPDATE_FLAGS {
+        NONE        = 0x00,     /// No updates are required
         APPEARANCE  = 0x01,     /// Visibility flag has changed
         COLOR       = 0x02,     /// Color has changed
         GEOMETRY    = 0x04,     /// Position or shape has changed
@@ -170,7 +174,8 @@ public:
         ALL         = 0xff
     };
 
-    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_groups( NULL ), m_groupsSize( 0 ) {}
+    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_requiredUpdate( ALL ),
+                  m_groups( NULL ), m_groupsSize( 0 ) {}
 
     /**
      * Destructor. For dynamic views, removes the item from the view.
@@ -179,7 +184,7 @@ public:
     {
         ViewRelease();
         delete[] m_groups;
-    };
+    }
 
     /**
      * Function Type
@@ -262,9 +267,15 @@ public:
      * For dynamic VIEWs, informs the associated VIEW that the graphical representation of
      * this item has changed. For static views calling has no effect.
      *
-     * @param aUpdateFlags: how much the object has changed
+     * @param aUpdateFlags: how much the object has changed.
      */
-    virtual void ViewUpdate( int aUpdateFlags = ALL );
+    virtual void ViewUpdate( int aUpdateFlags = ALL )
+    {
+        if( m_view && m_requiredUpdate == NONE )
+            m_view->MarkForUpdate( this );
+
+        m_requiredUpdate |= aUpdateFlags;
+    }
 
     /**
      * Function ViewRelease()
@@ -298,8 +309,9 @@ protected:
         deleteGroups();
     }
 
-    VIEW*   m_view;         ///* Current dynamic view the item is assigned to.
-    bool    m_visible;      ///* Are we visible in the current dynamic VIEW.
+    VIEW*   m_view;             ///< Current dynamic view the item is assigned to.
+    bool    m_visible;          ///< Are we visible in the current dynamic VIEW.
+    int     m_requiredUpdate;   ///< Flag required for updating
 
     ///* Helper for storing cached items group ids
     typedef std::pair<int, int> GroupPair;
@@ -373,6 +385,24 @@ protected:
 
             m_layers.set( aLayers[i] );
         }
+    }
+
+    /**
+     * Function viewRequiredUpdate()
+     * Returns current update flag for an item.
+     */
+    virtual int viewRequiredUpdate() const
+    {
+        return m_requiredUpdate;
+    }
+
+    /**
+     * Function clearUpdateFlags()
+     * Marks an item as already updated, so it is not going to be redrawn.
+     */
+    void clearUpdateFlags()
+    {
+        m_requiredUpdate = NONE;
     }
 };
 } // namespace KIGFX

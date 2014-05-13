@@ -105,7 +105,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
                previous_Route_Layer_BOTTOM_color, previous_via_color;
 
     /* get colors, and redraw bitmap button only on changes */
-    active_layer_color = GetBoard()->GetLayerColor(getActiveLayer());
+    active_layer_color = GetBoard()->GetLayerColor(GetActiveLayer());
 
     if( previous_active_layer_color != active_layer_color )
     {

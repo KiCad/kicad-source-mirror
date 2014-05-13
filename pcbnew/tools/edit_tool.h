@@ -101,7 +101,7 @@ private:
     ///> Removes and frees a single BOARD_ITEM.
     void remove( BOARD_ITEM* aItem );
 
-    ///> Sets up handlers for various events
+    ///> Sets up handlers for various events.
     void setTransitions();
 
     ///> The required update flag for modified items
@@ -114,6 +114,9 @@ private:
             m_updateFlag = aFlag;
     }
 
+    ///> Updates ratsnest for selected items.
+    ///> @param aRedraw says if selected items should be drawn using the simple mode (e.g. one line
+    ///> per item).
     void updateRatsnest( bool aRedraw );
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of

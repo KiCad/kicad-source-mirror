@@ -27,17 +27,15 @@
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tools/common_actions.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 
-#include <class_drawpanel_gal.h>
-
+#include <class_draw_panel_gal.h>
 #include <pcbnew_id.h>
 
 #include <boost/optional.hpp>
 #include <boost/foreach.hpp>
-
-using boost::optional;
 
 ///> Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
@@ -128,7 +126,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 {
     BUTTON_STATE* st = m_buttons[aIndex];
     wxEventType type = aEvent.GetEventType();
-    optional<TOOL_EVENT> evt;
+    boost::optional<TOOL_EVENT> evt;
     bool isClick = false;
 
     bool up = type == st->upEvent;
@@ -207,7 +205,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
     bool motion = false, buttonEvents = false;
-    optional<TOOL_EVENT> evt;
+    boost::optional<TOOL_EVENT> evt;
 
     int type = aEvent.GetEventType();
 
@@ -221,6 +219,9 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         // but changes in world coordinates (e.g. autopanning)
         type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
     {
+        wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
+        int mods = decodeModifiers<wxMouseEvent>( me );
+
         VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetMousePosition();
         VECTOR2D pos = getView()->ToWorld( screenPos );
 
@@ -228,6 +229,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         {
             motion = true;
             m_lastMousePos = pos;
+            m_editFrame->UpdateStatusBar();
         }
 
         for( unsigned int i = 0; i < m_buttons.size(); i++ )
@@ -235,29 +237,38 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         if( !buttonEvents && motion )
         {
-            evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_MOTION );
+            evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_MOTION, mods );
             evt->SetMousePosition( pos );
         }
     }
 
     // Keyboard handling
-    else if( type == wxEVT_KEY_UP || type == wxEVT_KEY_DOWN )
+    else if( type == wxEVT_CHAR )
     {
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
         int key = ke->GetKeyCode();
         int mods = decodeModifiers<wxKeyEvent>( ke );
 
-        if( type == wxEVT_KEY_UP )
+        if( mods & MD_CTRL )
         {
-            if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
-                evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
-            else
-                evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_UP, key | mods );
+#if !wxCHECK_VERSION( 2, 9, 0 )
+            // I really look forward to the day when we will use only one version of wxWidgets..
+            const int WXK_CONTROL_A = 1;
+            const int WXK_CONTROL_Z = 26;
+#endif
+
+            // wxWidgets have a quirk related to Ctrl+letter hot keys handled by CHAR_EVT
+            // http://docs.wxwidgets.org/trunk/classwx_key_event.html:
+            // "char events for ASCII letters in this case carry codes corresponding to the ASCII
+            // value of Ctrl-Latter, i.e. 1 for Ctrl-A, 2 for Ctrl-B and so on until 26 for Ctrl-Z."
+            if( key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
+                key += 'A' - 1;
         }
+
+        if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
+            evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
         else
-        {
-            evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_DOWN, key | mods );
-        }
+            evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_PRESSED, key | mods );
     }
 
     if( evt )
@@ -268,21 +279,29 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 }
 
 
-void TOOL_DISPATCHER::DispatchWxCommand( const wxCommandEvent& aEvent )
+void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
 {
-    bool activateTool = false;
-    std::string toolName;
+    boost::optional<TOOL_EVENT> evt;
 
-    // fixme: use TOOL_ACTIONs here
     switch( aEvent.GetId() )
     {
-    case ID_PNS_ROUTER_TOOL:
-        toolName = "pcbnew.InteractiveRouter";
-        activateTool = true;
+    case ID_ZOOM_IN:        // toolbar button "Zoom In"
+        evt = COMMON_ACTIONS::zoomInCenter.MakeEvent();
+        break;
+
+    case ID_ZOOM_OUT:       // toolbar button "Zoom In"
+        evt = COMMON_ACTIONS::zoomOutCenter.MakeEvent();
+        break;
+
+    case ID_ZOOM_PAGE:      // toolbar button "Fit on Screen"
+        evt = COMMON_ACTIONS::zoomFitScreen.MakeEvent();
+        break;
+
+    default:
+        aEvent.Skip();
         break;
     }
 
-    // do nothing if the legacy view is active
-    if( activateTool && m_editFrame->IsGalCanvasActive() )
-        m_toolMgr->InvokeTool( toolName );
+    if( evt )
+        m_toolMgr->ProcessEvent( *evt );
 }

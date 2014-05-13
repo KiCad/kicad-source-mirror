@@ -354,6 +354,18 @@ public:
     wxPoint GetGridPosition( const wxPoint& aPosition ) const;
 
     /**
+     * Function SetNextGrid()
+     * changes the grid size settings to the next one available.
+     */
+    virtual void SetNextGrid();
+
+    /**
+     * Function SetPrevGrid()
+     * changes the grid size settings to the previous one available.
+     */
+    virtual void SetPrevGrid();
+
+    /**
      * Command event handler for selecting grid sizes.
      *
      * All commands that set the grid size should eventually end up here.
@@ -409,6 +421,18 @@ public:
     void OnEraseBackground( wxEraseEvent& SizeEvent );
 
     virtual void OnZoom( wxCommandEvent& event );
+
+    /**
+     * Function SetNextZoom()
+     * changes the zoom to the next one available.
+     */
+    void SetNextZoom();
+
+    /**
+     * Function SetPrevZoom()
+     * changes the zoom to the previous one available.
+     */
+    void SetPrevZoom();
 
     /**
      * Function RedrawScreen

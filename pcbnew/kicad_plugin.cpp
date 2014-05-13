@@ -747,26 +747,26 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
                   FMT_IU( aDimension->m_crossBarF.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow1a (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowD1O.x ).c_str(),
-                  FMT_IU( aDimension->m_arrowD1O.y ).c_str(),
+                  FMT_IU( aDimension->m_crossBarF.x ).c_str(),
+                  FMT_IU( aDimension->m_crossBarF.y ).c_str(),
                   FMT_IU( aDimension->m_arrowD1F.x ).c_str(),
                   FMT_IU( aDimension->m_arrowD1F.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow1b (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowD2O.x ).c_str(),
-                  FMT_IU( aDimension->m_arrowD2O.y ).c_str(),
+                  FMT_IU( aDimension->m_crossBarF.x ).c_str(),
+                  FMT_IU( aDimension->m_crossBarF.y ).c_str(),
                   FMT_IU( aDimension->m_arrowD2F.x ).c_str(),
                   FMT_IU( aDimension->m_arrowD2F.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow2a (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowG1O.x ).c_str(),
-                  FMT_IU( aDimension->m_arrowG1O.y ).c_str(),
+                  FMT_IU( aDimension->m_crossBarO.x ).c_str(),
+                  FMT_IU( aDimension->m_crossBarO.y ).c_str(),
                   FMT_IU( aDimension->m_arrowG1F.x ).c_str(),
                   FMT_IU( aDimension->m_arrowG1F.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow2b (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowG2O.x ).c_str(),
-                  FMT_IU( aDimension->m_arrowG2O.y ).c_str(),
+                  FMT_IU( aDimension->m_crossBarO.x ).c_str(),
+                  FMT_IU( aDimension->m_crossBarO.y ).c_str(),
                   FMT_IU( aDimension->m_arrowG2F.x ).c_str(),
                   FMT_IU( aDimension->m_arrowG2F.y ).c_str() );
 

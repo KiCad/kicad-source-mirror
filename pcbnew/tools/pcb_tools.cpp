@@ -31,52 +31,62 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <pcbnew_id.h>
 
 #include "selection_tool.h"
 #include "edit_tool.h"
+#include "drawing_tool.h"
+#include "point_editor.h"
+#include "pcbnew_control.h"
 #include "common_actions.h"
 #include <router/router_tool.h>
 
 void PCB_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
-    m_toolManager = new TOOL_MANAGER;
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
+    m_toolManager = TOOL_MANAGER::Instance();
+    m_toolDispatcher = new TOOL_DISPATCHER( &m_toolManager, this );
     GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
 
-    // Register tool actions
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionSingle );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionClear );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::editActivate );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::rotate );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::flip );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::remove );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::properties );
+    // Connect handlers to toolbar buttons
+#if wxCHECK_VERSION( 3, 0, 0 )
+    Connect( wxEVT_TOOL, wxCommandEventHandler( PCB_EDIT_FRAME::onGenericCommand ), NULL, this );
+#else
+    Connect( wxEVT_COMMAND_MENU_SELECTED,
+             wxCommandEventHandler( PCB_EDIT_FRAME::onGenericCommand ), NULL, this );
+    Connect( wxEVT_COMMAND_TOOL_CLICKED,
+             wxCommandEventHandler( PCB_EDIT_FRAME::onGenericCommand ), NULL, this );
+#endif
 
     // Register tools
-    m_toolManager->RegisterTool( new SELECTION_TOOL );
-    m_toolManager->RegisterTool( new ROUTER_TOOL );
-    m_toolManager->RegisterTool( new EDIT_TOOL );
+    m_toolManager.RegisterTool( new SELECTION_TOOL );
+    m_toolManager.RegisterTool( new ROUTER_TOOL );
+    m_toolManager.RegisterTool( new EDIT_TOOL );
+    m_toolManager.RegisterTool( new DRAWING_TOOL );
+    m_toolManager.RegisterTool( new POINT_EDITOR );
+    m_toolManager.RegisterTool( new PCBNEW_CONTROL );
 
-    m_toolManager->SetEnvironment( NULL, GetGalCanvas()->GetView(),
-                                   GetGalCanvas()->GetViewControls(), this );
-    m_toolManager->ResetTools( TOOL_BASE::RUN );
+    m_toolManager.SetEnvironment( NULL, GetGalCanvas()->GetView(),
+                                  GetGalCanvas()->GetViewControls(), this );
+    m_toolManager.ResetTools( TOOL_BASE::RUN );
 
     // Run the selection tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+    m_toolManager.InvokeTool( "pcbnew.InteractiveSelection" );
 }
 
 
 void PCB_EDIT_FRAME::destroyTools()
 {
-    delete m_toolManager;
+    m_toolManager.DeleteAll();
     delete m_toolDispatcher;
 }
 
 
 void PCB_EDIT_FRAME::onGenericCommand( wxCommandEvent& aEvent )
 {
-    m_toolDispatcher->DispatchWxCommand( aEvent );
+    if( IsGalCanvasActive() )
+        m_toolDispatcher->DispatchWxCommand( aEvent );
+    else
+        aEvent.Skip();
 }

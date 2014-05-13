@@ -477,6 +477,8 @@ if( KICAD_SKIP_BOOST )
         message( FATAL_ERROR "Boost 1.54+ libraries are required." )
     endif()
 
+    add_custom_target( boost )      # it is required to meet some further dependencies
+
     message( WARNING "
 WARNING: You decided to skip building boost library.
 KiCad developers strongly advise you to build the bundled boost library, as it is known to work with KiCad.

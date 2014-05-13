@@ -68,7 +68,7 @@ bool sortDistance( const RN_NODE_PTR& aOrigin, const RN_NODE_PTR& aNode1,
 
 bool sortWeight( const RN_EDGE_PTR& aEdge1, const RN_EDGE_PTR& aEdge2 )
 {
-    return aEdge1->getWeight() < aEdge2->getWeight();
+    return aEdge1->GetWeight() < aEdge2->GetWeight();
 }
 
 
@@ -92,7 +92,7 @@ bool operator!=( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond )
 
 bool isEdgeConnectingNode( const RN_EDGE_PTR& aEdge, const RN_NODE_PTR& aNode )
 {
-    return aEdge->getSourceNode() == aNode || aEdge->getTargetNode() == aNode;
+    return aEdge->GetSourceNode() == aNode || aEdge->GetTargetNode() == aNode;
 }
 
 
@@ -125,8 +125,8 @@ std::vector<RN_EDGE_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
     {
         RN_EDGE_PTR& dt = *aEdges.begin();
 
-        int srcTag = tags[dt->getSourceNode()];
-        int trgTag = tags[dt->getTargetNode()];
+        int srcTag = tags[dt->GetSourceNode()];
+        int trgTag = tags[dt->GetTargetNode()];
 
         // Check if by adding this edge we are going to join two different forests
         if( srcTag != trgTag )
@@ -139,7 +139,7 @@ std::vector<RN_EDGE_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
             // Move nodes that were marked with old tag to the list marked with the new tag
             cycles[srcTag].splice( cycles[srcTag].end(), cycles[trgTag] );
 
-            if( dt->getWeight() == 0 )      // Skip already existing connections (weight == 0)
+            if( dt->GetWeight() == 0 )      // Skip already existing connections (weight == 0)
             {
                 mstExpectedSize--;
             }
@@ -148,9 +148,9 @@ std::vector<RN_EDGE_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
                 // Do a copy of edge, but make it RN_EDGE_MST. In contrary to RN_EDGE,
                 // RN_EDGE_MST saves both source and target node and does not require any other
                 // edges to exist for getting source/target nodes
-                RN_EDGE_MST_PTR newEdge = boost::make_shared<RN_EDGE_MST>( dt->getSourceNode(),
-                                                                           dt->getTargetNode(),
-                                                                           dt->getWeight() );
+                RN_EDGE_MST_PTR newEdge = boost::make_shared<RN_EDGE_MST>( dt->GetSourceNode(),
+                                                                           dt->GetTargetNode(),
+                                                                           dt->GetWeight() );
                 mst->push_back( newEdge );
                 ++mstSize;
             }
@@ -169,8 +169,8 @@ std::vector<RN_EDGE_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
 
 void RN_NET::validateEdge( RN_EDGE_PTR& aEdge )
 {
-    RN_NODE_PTR source = aEdge->getSourceNode();
-    RN_NODE_PTR target = aEdge->getTargetNode();
+    RN_NODE_PTR source = aEdge->GetSourceNode();
+    RN_NODE_PTR target = aEdge->GetTargetNode();
     bool valid = true;
 
     // If any of nodes belonging to the edge has the flag set,
@@ -280,13 +280,13 @@ void RN_NET::compute()
     std::partial_sort_copy( boardNodes.begin(), boardNodes.end(), nodes.begin(), nodes.end() );
 
     TRIANGULATOR triangulator;
-    triangulator.createDelaunay( nodes.begin(), nodes.end() );
-    boost::scoped_ptr<RN_LINKS::RN_EDGE_LIST> triangEdges( triangulator.getEdges() );
+    triangulator.CreateDelaunay( nodes.begin(), nodes.end() );
+    boost::scoped_ptr<RN_LINKS::RN_EDGE_LIST> triangEdges( triangulator.GetEdges() );
 
     // Compute weight/distance for edges resulting from triangulation
     RN_LINKS::RN_EDGE_LIST::iterator eit, eitEnd;
     for( eit = (*triangEdges).begin(), eitEnd = (*triangEdges).end(); eit != eitEnd; ++eit )
-        (*eit)->setWeight( getDistance( (*eit)->getSourceNode(), (*eit)->getTargetNode() ) );
+        (*eit)->SetWeight( getDistance( (*eit)->GetSourceNode(), (*eit)->GetTargetNode() ) );
 
     // Add the currently existing connections list to the results of triangulation
     std::copy( boardEdges.begin(), boardEdges.end(), std::front_inserter( *triangEdges ) );
@@ -508,8 +508,8 @@ void RN_NET::RemoveItem( const TRACK* aTrack )
         RN_EDGE_PTR& edge = m_tracks.at( aTrack );
 
         // Save nodes, so they can be cleared later
-        RN_NODE_PTR aBegin = edge->getSourceNode();
-        RN_NODE_PTR aEnd = edge->getTargetNode();
+        RN_NODE_PTR aBegin = edge->GetSourceNode();
+        RN_NODE_PTR aEnd = edge->GetTargetNode();
         m_links.RemoveConnection( edge );
 
         // Remove nodes associated with the edge. It is done in a safe way, there is a check
@@ -696,8 +696,8 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
             const TRACK* track = static_cast<const TRACK*>( aItem );
             RN_EDGE_PTR edge = m_tracks.at( track );
 
-            nodes.push_back( edge->getSourceNode() );
-            nodes.push_back( edge->getTargetNode() );
+            nodes.push_back( edge->GetSourceNode() );
+            nodes.push_back( edge->GetTargetNode() );
         }
         break;
 
@@ -982,6 +982,7 @@ void RN_DATA::ProcessBoard()
     for( int i = 0; i < m_board->GetAreaCount(); ++i )
     {
         ZONE_CONTAINER* zone = m_board->GetArea( i );
+
         netCode = zone->GetNetCode();
 
         if( netCode > 0 )
@@ -1023,7 +1024,7 @@ void RN_DATA::updateNet( int aNetCode )
 {
     assert( aNetCode < (int) m_nets.size() );
 
-    if( aNetCode < 1 )
+    if( aNetCode < 1 || aNetCode > (int) m_nets.size() )
         return;
 
     m_nets[aNetCode].ClearSimple();

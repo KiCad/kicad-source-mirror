@@ -26,6 +26,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_event.h>
 #include <tool/tool_action.h>
+#include <boost/foreach.hpp>
 #include <cassert>
 
 ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
@@ -43,7 +44,12 @@ ACTION_MANAGER::~ACTION_MANAGER()
 
 void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 {
-    assert( aAction->GetId() == -1 );    // Check if the TOOL_ACTION was not registered before
+    // Check if the TOOL_ACTION was not registered before
+    assert( aAction->GetId() == -1 );
+    // TOOL_ACTIONs are supposed to be named [appName.]toolName.actionName (with dots between)
+    // action name without specifying at least toolName is not valid
+    assert( aAction->GetName().find( '.', 0 ) != std::string::npos );
+
     assert( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
     assert( m_actionIdIndex.find( aAction->m_id ) == m_actionIdIndex.end() );
 
@@ -53,15 +59,7 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
     m_actionIdIndex[aAction->m_id] = aAction;
 
     if( aAction->HasHotKey() )
-    {
-        // Duplication of hot keys leads to unexpected behaviour
-        // The right way to change a hotkey is to use ACTION_MANAGER::ClearHotKey() first
-        assert( m_actionHotKeys.find( aAction->m_currentHotKey ) == m_actionHotKeys.end() );
-
-        m_actionHotKeys[aAction->m_currentHotKey] = aAction;
-    }
-
-    aAction->setActionMgr( this );
+        m_actionHotKeys[aAction->m_currentHotKey].push_back( aAction );
 }
 
 
@@ -71,11 +69,18 @@ void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
     m_actionIdIndex.erase( aAction->m_id );
 
     // Indicate that the ACTION_MANAGER no longer care about the object
-    aAction->setActionMgr( NULL );
     aAction->setId( -1 );
 
     if( aAction->HasHotKey() )
-        m_actionHotKeys.erase( aAction->m_currentHotKey );
+    {
+        std::list<TOOL_ACTION*>& actions = m_actionHotKeys[aAction->m_currentHotKey];
+        std::list<TOOL_ACTION*>::iterator action = std::find( actions.begin(), actions.end(), aAction );
+
+        if( action != actions.end() )
+            actions.erase( action );
+        else
+            assert( false );
+    }
 }
 
 
@@ -94,34 +99,80 @@ bool ACTION_MANAGER::RunAction( const std::string& aActionName ) const
     if( it == m_actionNameIndex.end() )
         return false; // no action with given name found
 
-    runAction( it->second );
+    RunAction( it->second );
 
     return true;
+}
+
+
+void ACTION_MANAGER::RunAction( const TOOL_ACTION* aAction ) const
+{
+    TOOL_EVENT event = aAction->MakeEvent();
+
+    m_toolMgr->ProcessEvent( event );
 }
 
 
 bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 {
-    std::map<int, TOOL_ACTION*>::const_iterator it = m_actionHotKeys.find( aHotKey );
+    int key = std::toupper( aHotKey & ~MD_MODIFIER_MASK );
+    int mod = aHotKey & MD_MODIFIER_MASK;
 
+    HOTKEY_LIST::const_iterator it = m_actionHotKeys.find( key | mod );
+
+    // If no luck, try without modifier, to handle keys that require a modifier
+    // e.g. to get ? you need to press Shift+/ without US keyboard layout
+    // Hardcoding ? as Shift+/ is a bad idea, as on another layout you may need to press a
+    // different combination
     if( it == m_actionHotKeys.end() )
-        return false; // no appropriate action found for the hotkey
+    {
+        it = m_actionHotKeys.find( key );
 
-    runAction( it->second );
+        if( it == m_actionHotKeys.end() )
+            return false; // no appropriate action found for the hotkey
+    }
+
+    const std::list<TOOL_ACTION*>& actions = it->second;
+
+    // Choose the action that has the highest priority on the active tools stack
+    // If there is none, run the global action associated with the hot key
+    int highestPriority = -1, priority = -1;
+    const TOOL_ACTION* context = NULL;  // pointer to context action of the highest priority tool
+    const TOOL_ACTION* global = NULL;   // pointer to global action, if there is no context action
+
+    BOOST_FOREACH( const TOOL_ACTION* action, actions )
+    {
+        if( action->GetScope() == AS_GLOBAL )
+        {
+            // Store the global action for the hot key in case there was no possible
+            // context actions to run
+            assert( global == NULL );       // there should be only one global action per hot key
+            global = action;
+
+            continue;
+        }
+
+        TOOL_BASE* tool = m_toolMgr->FindTool( action->GetToolName() );
+
+        if( tool )
+        {
+            priority = m_toolMgr->GetPriority( tool->GetId() );
+
+            if( priority >= 0 && priority > highestPriority )
+            {
+                highestPriority = priority;
+                context = action;
+            }
+        }
+    }
+
+    if( !global && !context )   // currently there is no valid action to run
+        return false;
+
+    if( context )
+        RunAction( context );
+    else if( global )
+        RunAction( global );
 
     return true;
-}
-
-
-void ACTION_MANAGER::ClearHotKey( int aHotKey )
-{
-    m_actionHotKeys.erase( aHotKey );
-}
-
-
-void ACTION_MANAGER::runAction( const TOOL_ACTION* aAction ) const
-{
-    TOOL_EVENT event = aAction->MakeEvent();
-
-    m_toolMgr->ProcessEvent( event );
 }

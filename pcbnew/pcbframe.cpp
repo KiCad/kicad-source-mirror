@@ -57,6 +57,7 @@
 #include <dialog_plot.h>
 #include <convert_from_iu.h>
 #include <view/view.h>
+#include <view/view_controls.h>
 #include <painter.h>
 
 #include <class_track.h>
@@ -73,7 +74,8 @@
 #include <python_scripting.h>
 #endif
 
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
+#include <boost/bind.hpp>
 
 // Keys used in read/write config
 #define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth_mm" )
@@ -127,12 +129,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
 
     // menu Config
-
-    /* Tom's hacks start */
-    EVT_MENU ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
-    EVT_TOOL ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
-    /* Tom's hacks end */
-
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, PCB_EDIT_FRAME::OnConfigurePcbOptions )
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_SAVE, PCB_EDIT_FRAME::Process_Config )
@@ -492,17 +488,14 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 {
     PCB_BASE_FRAME::SetBoard( aBoard );
 
-    if( GetGalCanvas() )
+    if( IsGalCanvasActive() )
     {
         ViewReloadBoard( aBoard );
 
         // update the tool manager with the new board and its view.
-        if( m_toolManager )
-        {
-            m_toolManager->SetEnvironment( aBoard, GetGalCanvas()->GetView(),
-                                           GetGalCanvas()->GetViewControls(), this );
-            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-        }
+        m_toolManager.SetEnvironment( aBoard, GetGalCanvas()->GetView(),
+                                      GetGalCanvas()->GetViewControls(), this );
+        m_toolManager.ResetTools( TOOL_BASE::MODEL_RELOAD );
     }
 }
 
@@ -517,51 +510,26 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
 
     // Load zones
     for( int i = 0; i < aBoard->GetAreaCount(); ++i )
-    {
         view->Add( (KIGFX::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
-    }
 
     // Load drawings
     for( BOARD_ITEM* drawing = aBoard->m_Drawings; drawing; drawing = drawing->Next() )
-    {
         view->Add( drawing );
-    }
 
     // Load tracks
     for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
-    {
         view->Add( track );
-    }
 
     // Load modules and its additional elements
     for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
     {
-        // Load module's pads
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-        {
-            view->Add( pad );
-        }
-
-        // Load module's drawing (mostly silkscreen)
-        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
-             drawing = drawing->Next() )
-        {
-            view->Add( drawing );
-        }
-
-        // Load module's texts (name and value)
-        view->Add( &module->Reference() );
-        view->Add( &module->Value() );
-
-        // Add the module itself
+        module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
         view->Add( module );
     }
 
     // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
     for( SEGZONE* zone = aBoard->m_Zone; zone; zone = zone->Next() )
-    {
         view->Add( zone );
-    }
 
     KIGFX::WORKSHEET_VIEWITEM* worksheet = aBoard->GetWorksheetViewItem();
     worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
@@ -578,7 +546,7 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     view->Add( aBoard->GetRatsnestViewItem() );
 
     // Limit panning to the size of worksheet frame
-    view->SetPanBoundary( aBoard->GetWorksheetViewItem()->ViewBBox() );
+    GetGalCanvas()->GetViewControls()->SetPanBoundary( aBoard->GetWorksheetViewItem()->ViewBBox() );
     view->RecacheAllItems( true );
 
     if( IsGalCanvasActive() )
@@ -701,16 +669,16 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
 
-    ViewReloadBoard( m_Pcb );
-
     if( aEnable )
     {
+        ViewReloadBoard( m_Pcb );
+
         // Update potential changes in the ratsnest
         m_Pcb->GetRatsnest()->Recalculate();
 
-        m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
+        m_toolManager.SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
                                        GetGalCanvas()->GetViewControls(), this );
-        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+        m_toolManager.ResetTools( TOOL_BASE::GAL_SWITCH );
     }
 }
 
@@ -722,6 +690,7 @@ void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
     switch( id )
     {
     case ID_MENU_CANVAS_DEFAULT:
+        Compile_Ratsnest( NULL, true );
         UseGalCanvas( false );
         break;
 
@@ -832,7 +801,7 @@ void PCB_EDIT_FRAME::SetGridColor(EDA_COLOR_T aColor)
 bool PCB_EDIT_FRAME::IsMicroViaAcceptable()
 {
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
-    LAYER_NUM currLayer = getActiveLayer();
+    LAYER_NUM currLayer = GetActiveLayer();
 
     if( !GetDesignSettings().m_MicroViasAllowed )
         return false;   // Obvious..
@@ -850,13 +819,13 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable()
 }
 
 
-void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
+void PCB_EDIT_FRAME::SetHighContrastLayer( LAYER_NUM aLayer )
 {
     // Set display settings for high contrast mode
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
     KIGFX::RENDER_SETTINGS* rSettings = view->GetPainter()->GetSettings();
 
-    setTopLayer( aLayer );
+    SetTopLayer( aLayer );
 
     rSettings->ClearActiveLayers();
     rSettings->SetActiveLayer( aLayer );
@@ -867,7 +836,7 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
         // fixme do not like the idea of storing the list of layers here,
         // should be done in some other way I guess..
         LAYER_NUM layers[] = {
-                GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
+                GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
                 ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
                 ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE )
@@ -893,7 +862,7 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
 }
 
 
-void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
+void PCB_EDIT_FRAME::SetTopLayer( LAYER_NUM aLayer )
 {
     // Set display settings for high contrast mode
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
@@ -907,10 +876,11 @@ void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
         // fixme do not like the idea of storing the list of layers here,
         // should be done in some other way I guess..
         LAYER_NUM layers[] = {
-                GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
+                GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
                 ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
-                ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE ), DRAW_N
+                ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE ), DRAW_N,
+                ITEM_GAL_LAYER( DRC_VISIBLE )
         };
 
         for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
@@ -935,11 +905,11 @@ void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
 }
 
 
-void PCB_EDIT_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
+void PCB_EDIT_FRAME::SetActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
 {
     ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 
-    setHighContrastLayer( aLayer );
+    SetHighContrastLayer( aLayer );
 
     if( doLayerWidgetUpdate )
         syncLayerWidgetLayer();
@@ -951,7 +921,7 @@ void PCB_EDIT_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate 
 
 void PCB_EDIT_FRAME::syncLayerWidgetLayer()
 {
-    m_Layers->SelectLayer( getActiveLayer() );
+    m_Layers->SelectLayer( GetActiveLayer() );
     m_Layers->OnLayerSelected();
 }
 
@@ -1008,6 +978,7 @@ bool PCB_EDIT_FRAME::IsElementVisible( int aElement ) const
 
 void PCB_EDIT_FRAME::SetElementVisibility( int aElement, bool aNewState )
 {
+    GetGalCanvas()->GetView()->SetLayerVisible( ITEM_GAL_LAYER( aElement ), aNewState );
     GetBoard()->SetElementVisibility( aElement, aNewState );
     m_Layers->SetRenderState( aElement, aNewState );
 }

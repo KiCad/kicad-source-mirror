@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <class_drawpanel.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <painter.h>
 
@@ -185,7 +185,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             if( IsCopperLayer( layer ) )
             {
                 bool loc_visible = visible;
-                if( force_active_layer_visible && (layer == myframe->getActiveLayer() ) )
+                if( force_active_layer_visible && (layer == myframe->GetActiveLayer() ) )
                     loc_visible = true;
 
                 cb->SetValue( loc_visible );
@@ -356,7 +356,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
 {
     // the layer change from the PCB_LAYER_WIDGET can be denied by returning
     // false from this function.
-    myframe->setActiveLayer( aLayer, false );
+    myframe->SetActiveLayer( aLayer, false );
 
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();

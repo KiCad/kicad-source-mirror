@@ -2340,7 +2340,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 arcsegcount = 32;
 
             zc->SetArcSegmentCount( arcsegcount );
-            zc->SetIsFilled( fillstate == 'S' ? true : false );
+            zc->SetIsFilled( fillstate == 'S' );
             zc->SetThermalReliefGap( thermalReliefGap );
             zc->SetThermalReliefCopperBridge( thermalReliefCopperBridge );
         }
@@ -2587,13 +2587,11 @@ void LEGACY_PLUGIN::loadDIMENSION()
             // sscanf( Line + 2, " %d %d %d %d %d %d", &Dummy, &m_arrowD1Ox, &m_arrowD1Oy, &m_arrowD1Fx, &m_arrowD1Fy, &Dummy );
 
             int ignore      = intParse( line + SZ( "S1" ), &data );
-            BIU arrowD10x   = biuParse( data, &data );
-            BIU arrowD10y   = biuParse( data, &data );
+            biuParse( data, &data );    // skipping excessive data
+            biuParse( data, &data );    // skipping excessive data
             BIU arrowD1Fx   = biuParse( data, &data );
             BIU arrowD1Fy   = biuParse( data );
 
-            dim->m_arrowD1O.x = arrowD10x;
-            dim->m_arrowD1O.y = arrowD10y;
             dim->m_arrowD1F.x = arrowD1Fx;
             dim->m_arrowD1F.y = arrowD1Fy;
             (void) ignore;
@@ -2604,13 +2602,11 @@ void LEGACY_PLUGIN::loadDIMENSION()
             // sscanf( Line + 2, " %d %d %d %d %d %d", &Dummy, &m_arrowD2Ox, &m_arrowD2Oy, &m_arrowD2Fx, &m_arrowD2Fy, &Dummy );
 
             int ignore    = intParse( line + SZ( "S2" ), &data );
-            BIU arrowD2Ox = biuParse( data, &data );
-            BIU arrowD2Oy = biuParse( data, &data );
+            biuParse( data, &data );    // skipping excessive data
+            biuParse( data, &data );    // skipping excessive data
             BIU arrowD2Fx = biuParse( data, &data );
             BIU arrowD2Fy = biuParse( data, &data );
 
-            dim->m_arrowD2O.x = arrowD2Ox;
-            dim->m_arrowD2O.y = arrowD2Oy;
             dim->m_arrowD2F.x = arrowD2Fx;
             dim->m_arrowD2F.y = arrowD2Fy;
             (void) ignore;
@@ -2620,13 +2616,11 @@ void LEGACY_PLUGIN::loadDIMENSION()
         {
             // sscanf( Line + 2, " %d %d %d %d %d %d\n", &Dummy, &m_arrowG1Ox, &m_arrowG1Oy, &m_arrowG1Fx, &m_arrowG1Fy, &Dummy );
             int ignore    = intParse( line + SZ( "S3" ), &data );
-            BIU arrowG1Ox = biuParse( data, &data );
-            BIU arrowG1Oy = biuParse( data, &data );
+            biuParse( data, &data );    // skipping excessive data
+            biuParse( data, &data );    // skipping excessive data
             BIU arrowG1Fx = biuParse( data, &data );
             BIU arrowG1Fy = biuParse( data, &data );
 
-            dim->m_arrowG1O.x = arrowG1Ox;
-            dim->m_arrowG1O.y = arrowG1Oy;
             dim->m_arrowG1F.x = arrowG1Fx;
             dim->m_arrowG1F.y = arrowG1Fy;
             (void) ignore;
@@ -2636,13 +2630,11 @@ void LEGACY_PLUGIN::loadDIMENSION()
         {
             // sscanf( Line + 2, " %d %d %d %d %d %d", &Dummy, &m_arrowG2Ox, &m_arrowG2Oy, &m_arrowG2Fx, &m_arrowG2Fy, &Dummy );
             int ignore    = intParse( line + SZ( "S4" ), &data );
-            BIU arrowG2Ox = biuParse( data, &data );
-            BIU arrowG2Oy = biuParse( data, &data );
+            biuParse( data, &data );    // skipping excessive data
+            biuParse( data, &data );    // skipping excessive data
             BIU arrowG2Fx = biuParse( data, &data );
             BIU arrowG2Fy = biuParse( data, &data );
 
-            dim->m_arrowG2O.x = arrowG2Ox;
-            dim->m_arrowG2O.y = arrowG2Oy;
             dim->m_arrowG2F.x = arrowG2Fx;
             dim->m_arrowG2F.y = arrowG2Fy;
             (void) ignore;
@@ -3805,22 +3797,22 @@ void LEGACY_PLUGIN::saveDIMENTION( const DIMENSION* me ) const
                     fmtBIU( me->GetWidth() ).c_str() );
 
     fprintf( m_fp,  "S1 %d %s %s %s\n", S_SEGMENT,
-                    fmtBIUPair( me->m_arrowD1O.x, me->m_arrowD1O.y ).c_str(),
+                    fmtBIUPair( me->m_crossBarF.x, me->m_crossBarF.y ).c_str(),
                     fmtBIUPair( me->m_arrowD1F.x, me->m_arrowD1F.y ).c_str(),
                     fmtBIU( me->GetWidth() ).c_str() );
 
     fprintf( m_fp,  "S2 %d %s %s %s\n", S_SEGMENT,
-                    fmtBIUPair( me->m_arrowD2O.x, me->m_arrowD2O.y ).c_str(),
+                    fmtBIUPair( me->m_crossBarF.x, me->m_crossBarF.y ).c_str(),
                     fmtBIUPair( me->m_arrowD2F.x, me->m_arrowD2F.y ).c_str(),
                     fmtBIU( me->GetWidth() ).c_str() );
 
     fprintf( m_fp,  "S3 %d %s %s %s\n", S_SEGMENT,
-                    fmtBIUPair( me->m_arrowG1O.x, me->m_arrowG1O.y ).c_str(),
+                    fmtBIUPair( me->m_crossBarO.x, me->m_crossBarO.y ).c_str(),
                     fmtBIUPair( me->m_arrowG1F.x, me->m_arrowG1F.y ).c_str(),
                     fmtBIU( me->GetWidth() ).c_str() );
 
     fprintf( m_fp,  "S4 %d %s %s %s\n", S_SEGMENT,
-                    fmtBIUPair( me->m_arrowG2O.x, me->m_arrowG2O.y ).c_str(),
+                    fmtBIUPair( me->m_crossBarO.x, me->m_crossBarO.y ).c_str(),
                     fmtBIUPair( me->m_arrowG2F.x, me->m_arrowG2F.y ).c_str(),
                     fmtBIU( me->GetWidth() ).c_str() );
 

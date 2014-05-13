@@ -64,36 +64,35 @@ enum TOOL_ACTIONS
     TA_MOUSE_WHEEL          = 0x0040,
     TA_MOUSE                = 0x007f,
 
-    TA_KEY_UP               = 0x0080,
-    TA_KEY_DOWN             = 0x0100,
-    TA_KEYBOARD             = TA_KEY_UP | TA_KEY_DOWN,
+    TA_KEY_PRESSED          = 0x0080,
+    TA_KEYBOARD             = TA_KEY_PRESSED,
 
     // View related events
-    TA_VIEW_REFRESH         = 0x0200,
-    TA_VIEW_ZOOM            = 0x0400,
-    TA_VIEW_PAN             = 0x0800,
-    TA_VIEW_DIRTY           = 0x1000,
-    TA_VIEW                 = 0x1e00,
+    TA_VIEW_REFRESH         = 0x0100,
+    TA_VIEW_ZOOM            = 0x0200,
+    TA_VIEW_PAN             = 0x0400,
+    TA_VIEW_DIRTY           = 0x0800,
+    TA_VIEW                 = 0x0f00,
 
-    TA_CHANGE_LAYER         = 0x2000,
+    TA_CHANGE_LAYER         = 0x1000,
 
     // Tool cancel event. Issued automagically when the user hits escape or selects End Tool from
     // the context menu.
-    TA_CANCEL_TOOL          = 0x4000,
+    TA_CANCEL_TOOL          = 0x2000,
 
     // Context menu update. Issued whenever context menu is open and the user hovers the mouse
     // over one of choices. Used in dynamic highligting in disambiguation menu
-    TA_CONTEXT_MENU_UPDATE  = 0x8000,
+    TA_CONTEXT_MENU_UPDATE  = 0x4000,
 
     // Context menu choice. Sent if the user picked something from the context menu or
     // closed it without selecting anything.
-    TA_CONTEXT_MENU_CHOICE  = 0x10000,
+    TA_CONTEXT_MENU_CHOICE  = 0x8000,
 
     // This event is sent *before* undo/redo command is performed.
-    TA_UNDO_REDO            = 0x20000,
+    TA_UNDO_REDO            = 0x10000,
 
     // Tool action (allows to control tools)
-    TA_ACTION               = 0x40000,
+    TA_ACTION               = 0x20000,
 
     TA_ANY = 0xffffffff
 };
@@ -189,7 +188,7 @@ public:
         m_scope( aScope ),
         m_mouseButtons( 0 )
     {
-        if( aCategory == TC_COMMAND )
+        if( aCategory == TC_COMMAND || aCategory == TC_MESSAGE )
             m_commandStr = aExtraParam;
     }
 
@@ -207,7 +206,7 @@ public:
 
     ///> Returns information about difference between current mouse cursor position and the place
     ///> where dragging has started.
-    const VECTOR2D Delta() const
+    const VECTOR2D& Delta() const
     {
         assert( m_category == TC_MOUSE );    // this should be used only with mouse events
         return m_mouseDelta;
@@ -277,14 +276,9 @@ public:
         return m_keyCode;
     }
 
-    bool IsKeyUp() const
+    bool IsKeyPressed() const
     {
-        return m_actions == TA_KEY_UP;
-    }
-
-    bool IsKeyDown() const
-    {
-        return m_actions == TA_KEY_DOWN;
+        return m_actions == TA_KEY_PRESSED;
     }
 
     void SetMouseDragOrigin( const VECTOR2D& aP )
@@ -317,7 +311,7 @@ public:
         if( !( m_actions & aEvent.m_actions ) )
             return false;
 
-        if( m_category == TC_COMMAND )
+        if( m_category == TC_COMMAND || m_category == TC_MESSAGE )
         {
             if( m_commandStr && aEvent.m_commandStr )
                 return *m_commandStr == *aEvent.m_commandStr;

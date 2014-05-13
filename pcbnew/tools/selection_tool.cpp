@@ -25,9 +25,10 @@
 
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
+#include <boost/bind.hpp>
 #include <cassert>
 
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_track.h>
@@ -50,7 +51,11 @@
 using boost::optional;
 
 SELECTION_TOOL::SELECTION_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_additive( false ), m_multiple( false )
+        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
+        SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" ),
+        DeselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.deselected" ),
+        ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" ),
+        m_additive( false ), m_multiple( false )
 {
     m_selArea = new SELECTION_AREA;
     m_selection.group = new KIGFX::VIEW_GROUP;
@@ -94,6 +99,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
         if( evt->IsAction( &COMMON_ACTIONS::selectionSingle ) )
         {
+            // GetMousePosition() is used, as it is independent of snapping settings
             selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
         }
 
@@ -106,10 +112,17 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         // single click? Select single object
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( !m_additive )
-                clearSelection();
+            if( evt->Modifier( MD_CTRL ) )
+            {
+                highlightNet( evt->Position() );
+            }
+            else
+            {
+                if( !m_additive )
+                    clearSelection();
 
-            selectSingle( evt->Position() );
+                selectSingle( evt->Position() );
+            }
         }
 
         // right click? if there is any object - show the context menu
@@ -128,7 +141,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             if( m_selection.Empty() )
                 selectSingle( evt->Position() );
 
-            m_toolMgr->RunAction( "pcbnew.InteractiveEdit.properties" );
+            m_toolMgr->RunAction( COMMON_ACTIONS::properties );
         }
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
@@ -136,14 +149,22 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         {
             if( m_selection.Empty() || m_additive )
             {
-                // If nothings has been selected or user wants to select more
-                // draw the selection box
-                selectMultiple();
+                if( !selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ), false ) )
+                {
+                    // If nothings has been selected or user wants to select more
+                    // draw the selection box
+                    selectMultiple();
+                }
+                else
+                {
+                    m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
+                }
             }
+
             else
             {
                 // Check if dragging has started within any of selected items bounding box
-                if( containsSelected( evt->Position() ) )
+                if( selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
                     m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
@@ -177,6 +198,10 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
     if( aItem->IsSelected() )
     {
         deselect( aItem );
+
+        // Inform other potentially interested tools
+        TOOL_EVENT deselectEvent( DeselectedEvent );
+        m_toolMgr->ProcessEvent( deselectEvent );
     }
     else
     {
@@ -185,12 +210,18 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 
         // Prevent selection of invisible or inactive items
         if( selectable( aItem ) )
+        {
             select( aItem );
+
+            // Inform other potentially interested tools
+            TOOL_EVENT selectEvent( SelectedEvent );
+            m_toolMgr->ProcessEvent( selectEvent );
+        }
     }
 }
 
 
-void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
+bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation )
 {
     BOARD* pcb = getModel<BOARD>( PCB_T );
     BOARD_ITEM* item;
@@ -205,15 +236,17 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
     case 0:
         if( !m_additive )
             clearSelection();
-        break;
+
+        return false;
 
     case 1:
         toggleSelection( collector[0] );
-        break;
+
+        return true;
 
     default:
         // Remove unselectable items
-        for( int i = collector.GetCount() - 1; i >= 0 ; --i )
+        for( int i = collector.GetCount() - 1; i >= 0; --i )
         {
             if( !selectable( collector[i] ) )
                 collector.Remove( i );
@@ -223,17 +256,25 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         if( collector.GetCount() == 1 )
         {
             toggleSelection( collector[0] );
+
+            return true;
         }
-        else if( collector.GetCount() > 1 )
+
+        else if( aAllowDisambiguation && collector.GetCount() > 1 )
         {
             item = disambiguationMenu( &collector );
 
             if( item )
+            {
                 toggleSelection( item );
-        }
 
+                return true;
+            }
+        }
         break;
     }
+
+    return false;
 }
 
 
@@ -283,12 +324,22 @@ bool SELECTION_TOOL::selectMultiple()
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
                 // Add only those items that are visible and fully within the selection box
-                if( !item->IsSelected() && selectable( item ) && selectionBox.Contains( item->ViewBBox() ) )
+                if( !item->IsSelected() && selectable( item ) &&
+                        selectionBox.Contains( item->ViewBBox() ) )
+                {
                     select( item );
+                }
             }
 
             // Do not display information about selected item,as there is more than one
             getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+
+            if( !m_selection.Empty() )
+            {
+                // Inform other potentially interested tools
+                TOOL_EVENT selectEvent( SelectedEvent );
+                m_toolMgr->ProcessEvent( selectEvent );
+            }
 
             break;  // Stop waiting for events
         }
@@ -320,6 +371,13 @@ void SELECTION_TOOL::clearSelection()
     m_selection.clear();
 
     getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+
+    // Do not show the context menu when there is nothing selected
+    SetContextMenu( &m_menu, CMENU_OFF );
+
+    // Inform other potentially interested tools
+    TOOL_EVENT clearEvent( ClearedEvent );
+    m_toolMgr->ProcessEvent( clearEvent );
 }
 
 
@@ -358,7 +416,9 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
                 current->SetBrightened();
             }
             else
+            {
                 current = NULL;
+            }
         }
         else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {
@@ -504,7 +564,7 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     if( aItem->Type() == PCB_MODULE_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
-        module->RunOnChildren( std::bind1st( std::mem_fun( &SELECTION_TOOL::selectVisually ), this ) );
+        module->RunOnChildren( boost::bind( &SELECTION_TOOL::selectVisually, this, _1 ) );
     }
 
     selectVisually( aItem );
@@ -516,6 +576,9 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     {
         // Set as the current item, so the information about selection is displayed
         getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( aItem, true );
+
+        // Now the context menu should be enabled
+        SetContextMenu( &m_menu, CMENU_BUTTON );
     }
     else if( m_selection.Size() == 2 )  // Check only for 2, so it will not be
     {                                   // called for every next selected item
@@ -532,7 +595,7 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
     if( aItem->Type() == PCB_MODULE_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
-        module->RunOnChildren( std::bind1st( std::mem_fun( &SELECTION_TOOL::deselectVisually ), this ) );
+        module->RunOnChildren( boost::bind( &SELECTION_TOOL::deselectVisually, this, _1 ) );
     }
 
     deselectVisually( aItem );
@@ -543,7 +606,14 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
 
     // If there is nothing selected, disable the context menu
     if( m_selection.Empty() )
+    {
+        SetContextMenu( &m_menu, CMENU_OFF );
         getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+    }
+
+    // Inform other potentially interested tools
+    TOOL_EVENT deselected( DeselectedEvent );
+    m_toolMgr->ProcessEvent( deselected );
 }
 
 
@@ -567,7 +637,7 @@ void SELECTION_TOOL::deselectVisually( BOARD_ITEM* aItem ) const
 }
 
 
-bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
+bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 {
     const unsigned GRIP_MARGIN = 20;
     VECTOR2D margin = getView()->ToWorld( VECTOR2D( GRIP_MARGIN, GRIP_MARGIN ), false );
@@ -584,6 +654,30 @@ bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
     }
 
     return false;
+}
+
+
+void SELECTION_TOOL::highlightNet( const VECTOR2I& aPoint )
+{
+    KIGFX::RENDER_SETTINGS* render = getView()->GetPainter()->GetSettings();
+    GENERAL_COLLECTORS_GUIDE guide = getEditFrame<PCB_EDIT_FRAME>()->GetCollectorsGuide();
+    GENERAL_COLLECTOR collector;
+    int net = -1;
+
+    // Find a connected item for which we are going to highlight a net
+    collector.Collect( getModel<BOARD>( PCB_T ), GENERAL_COLLECTOR::PadsTracksOrZones,
+                       wxPoint( aPoint.x, aPoint.y ), guide );
+    bool enableHighlight = ( collector.GetCount() > 0 );
+
+    // Obtain net code for the clicked item
+    if( enableHighlight )
+        net = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] )->GetNetCode();
+
+    if( enableHighlight != render->GetHighlight() || net != render->GetHighlightNetCode() )
+    {
+        render->SetHighlight( enableHighlight, net );
+        getView()->UpdateAllLayersColor();
+    }
 }
 
 

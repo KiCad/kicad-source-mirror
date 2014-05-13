@@ -33,6 +33,7 @@
 class COMMON_ACTIONS
 {
 public:
+    // Selection Tool
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;
 
@@ -42,6 +43,7 @@ public:
     /// Clears the current selection
     static TOOL_ACTION selectionClear;
 
+    // Edit Tool
     /// Activation of the edit tool
     static TOOL_ACTION editActivate;
 
@@ -56,4 +58,96 @@ public:
 
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
+
+    // Drawing Tool
+    /// Activation of the drawing tool (line)
+    static TOOL_ACTION drawLine;
+
+    /// Activation of the drawing tool (circle)
+    static TOOL_ACTION drawCircle;
+
+    /// Activation of the drawing tool (arc)
+    static TOOL_ACTION drawArc;
+
+    /// Activation of the drawing tool (text)
+    static TOOL_ACTION placeText;
+
+    /// Activation of the drawing tool (dimension)
+    static TOOL_ACTION drawDimension;
+
+    /// Activation of the drawing tool (drawing a ZONE)
+    static TOOL_ACTION drawZone;
+
+    /// Activation of the drawing tool (drawing a keepout area)
+    static TOOL_ACTION drawKeepout;
+
+    /// Activation of the drawing tool (placing a TARGET)
+    static TOOL_ACTION placeTarget;
+
+    /// Activation of the drawing tool (placing a MODULE)
+    static TOOL_ACTION placeModule;
+
+    // Push and Shove Router Tool
+    /// Activation of the Push and Shove router
+    static TOOL_ACTION routerActivate;
+
+    // Point Editor
+    /// Update edit points
+    static TOOL_ACTION pointEditorUpdate;
+
+    // View controls
+    static TOOL_ACTION zoomIn;
+    static TOOL_ACTION zoomOut;
+    static TOOL_ACTION zoomInCenter;
+    static TOOL_ACTION zoomOutCenter;
+    static TOOL_ACTION zoomCenter;
+    static TOOL_ACTION zoomFitScreen;
+
+    // Display modes
+    static TOOL_ACTION trackDisplayMode;
+    static TOOL_ACTION padDisplayMode;
+    static TOOL_ACTION viaDisplayMode;
+    static TOOL_ACTION highContrastMode;
+    static TOOL_ACTION highContrastInc;
+    static TOOL_ACTION highContrastDec;
+
+    // Layer control
+    static TOOL_ACTION layerTop;
+    static TOOL_ACTION layerInner1;
+    static TOOL_ACTION layerInner2;
+    static TOOL_ACTION layerInner3;
+    static TOOL_ACTION layerInner4;
+    static TOOL_ACTION layerInner5;
+    static TOOL_ACTION layerInner6;
+    static TOOL_ACTION layerBottom;
+    static TOOL_ACTION layerNext;
+    static TOOL_ACTION layerPrev;
+    static TOOL_ACTION layerAlphaInc;
+    static TOOL_ACTION layerAlphaDec;
+
+    // Grid control
+    static TOOL_ACTION gridFast1;
+    static TOOL_ACTION gridFast2;
+    static TOOL_ACTION gridNext;
+    static TOOL_ACTION gridPrev;
+
+    // Track & via size control
+    static TOOL_ACTION trackWidthInc;
+    static TOOL_ACTION trackWidthDec;
+    static TOOL_ACTION viaSizeInc;
+    static TOOL_ACTION viaSizeDec;
+
+    // Miscellaneous
+    static TOOL_ACTION resetCoords;
+    static TOOL_ACTION switchUnits;
+    static TOOL_ACTION showHelp;
+
+    /**
+     * Function TranslateLegacyId()
+     * Translates legacy tool ids to the corresponding TOOL_ACTION name.
+     * @param aId is legacy tool id to be translated.
+     * @return std::string is name of the corresponding TOOL_ACTION. It may be empty, if there is
+     * no corresponding TOOL_ACTION.
+     */
+    static std::string TranslateLegacyId( int aId );
 };

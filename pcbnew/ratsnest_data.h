@@ -50,13 +50,13 @@ class ZONE_CONTAINER;
 class CPolyPt;
 
 // Preserve KiCad coding style policy
-typedef hed::Node RN_NODE;
-typedef hed::NodePtr RN_NODE_PTR;
-typedef hed::Edge RN_EDGE;
-typedef hed::EdgePtr RN_EDGE_PTR;
-typedef hed::EdgeMST RN_EDGE_MST;
-typedef boost::shared_ptr<hed::EdgeMST> RN_EDGE_MST_PTR;
-typedef hed::Triangulation TRIANGULATOR;
+typedef hed::NODE           RN_NODE;
+typedef hed::NODE_PTR       RN_NODE_PTR;
+typedef hed::EDGE           RN_EDGE;
+typedef hed::EDGE_PTR       RN_EDGE_PTR;
+typedef hed::EDGE_MST       RN_EDGE_MST;
+typedef hed::TRIANGULATION  TRIANGULATOR;
+typedef boost::shared_ptr<hed::EDGE_MST> RN_EDGE_MST_PTR;
 
 bool operator==( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond );
 bool operator!=( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond );

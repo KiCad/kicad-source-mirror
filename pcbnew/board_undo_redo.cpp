@@ -23,9 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <boost/bind.hpp>
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <macros.h>
 
 #include <pcbnew.h>
@@ -529,7 +530,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* oldModule = static_cast<MODULE*>( item );
-                oldModule->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ), view ) );
+                oldModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             }
             ratsnest->Remove( item );
 
@@ -540,7 +541,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
-                newModule->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), view ) );
+                newModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
             }
             ratsnest->Add( item );
 
@@ -556,7 +557,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* module = static_cast<MODULE*>( item );
-                module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ), view ) );
+                module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             }
             view->Remove( item );
 
@@ -570,7 +571,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* module = static_cast<MODULE*>( item );
-                module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), view ) );
+                module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1) );
             }
             view->Add( item );
 
@@ -636,7 +637,7 @@ void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& aEvent )
 
     // Inform tools that undo command was issued
     TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
-    m_toolManager->ProcessEvent( event );
+    m_toolManager.ProcessEvent( event );
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
@@ -659,7 +660,7 @@ void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& aEvent )
 
     // Inform tools that redo command was issued
     TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
-    m_toolManager->ProcessEvent( event );
+    m_toolManager.ProcessEvent( event );
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();

@@ -246,13 +246,13 @@ void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LAYER_MSK aMask )
 
 
 #ifndef NDEBUG
-struct static_check {
-   static_check()
+struct list_size_check {
+   list_size_check()
    {
        // Int (the type used for saving visibility settings) is only 32 bits guaranteed,
        // be sure that we do not cross the limit
        assert( END_PCB_VISIBLE_LIST <= 32 );
    };
 };
-static static_check check;
+static list_size_check check;
 #endif
