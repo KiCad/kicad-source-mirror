@@ -258,6 +258,15 @@ private:
     // Index for m_TrackWidthList to select the value.
     unsigned                m_trackWidthIndex;
 
+    ///> Use custom values for track/via sizes (not specified in net class nor in the size lists).
+    bool                    m_useCustomTrackVia;
+
+    ///> Custom track width (used after UseCustomTrackViaSize( true ) was called).
+    int                     m_customTrackWidth;
+
+    ///> Custom via size (used after UseCustomTrackViaSize( true ) was called).
+    VIA_DIMENSION           m_customViaSize;
+
     /**
      * Function chainMarkedSegments
      * is used by MarkTrace() to set the BUSY flag of connected segments of the trace
@@ -303,14 +312,13 @@ public:
     // the first value is always the value of the current NetClass
     // The others values are extra values
 
-    // The first value is the current netclass via size  // TODO verify
+    // The first value is the current netclass via size
     /// Vias size and drill list
     std::vector<VIA_DIMENSION>  m_ViasDimensionsList;
 
-    // The first value is the current netclass track width  // TODO verify
+    // The first value is the current netclass track width
     /// Track width list
     std::vector<int>            m_TrackWidthList;
-
 
     BOARD();
     ~BOARD();
@@ -1074,12 +1082,36 @@ public:
     /**
      * Function GetCurrentTrackWidth
      * @return the current track width, according to the selected options
-     * ( using the default netclass value or a preset value )
+     * ( using the default netclass value or a preset/custom value )
      * the default netclass is always in m_TrackWidthList[0]
      */
     int GetCurrentTrackWidth() const
     {
-        return m_TrackWidthList[m_trackWidthIndex];
+        if( m_useCustomTrackVia )
+            return m_customTrackWidth;
+        else
+            return m_TrackWidthList[m_trackWidthIndex];
+    }
+
+    /**
+     * Function SetCustomTrackWidth
+     * Sets custom width for track (i.e. not available in netclasses or preset list). To have
+     * it returned with GetCurrentTrackWidth() you need to enable custom track & via sizes
+     * (UseCustomTrackViaSize()).
+     * @param aWidth is the new track width.
+     */
+    void SetCustomTrackWidth( int aWidth )
+    {
+        m_customTrackWidth = aWidth;
+    }
+
+    /**
+     * Function GetCustomTrackWidth
+     * @return Current custom width for a track.
+     */
+    int GetCustomTrackWidth() const
+    {
+        return m_customTrackWidth;
     }
 
     /**
@@ -1099,24 +1131,76 @@ public:
     /**
      * Function GetCurrentViaSize
      * @return the current via size, according to the selected options
-     * ( using the default netclass value or a preset value )
+     * ( using the default netclass value or a preset/custom value )
      * the default netclass is always in m_TrackWidthList[0]
      */
     int GetCurrentViaSize()
     {
-        return m_ViasDimensionsList[m_viaSizeIndex].m_Diameter;
+        if( m_useCustomTrackVia )
+            return m_customViaSize.m_Diameter;
+        else
+            return m_ViasDimensionsList[m_viaSizeIndex].m_Diameter;
     }
+
+    /**
+     * Function SetCustomViaSize
+     * Sets custom size for via diameter (i.e. not available in netclasses or preset list). To have
+     * it returned with GetCurrentViaSize() you need to enable custom track & via sizes
+     * (UseCustomTrackViaSize()).
+     * @param aSize is the new drill diameter.
+     */
+    void SetCustomViaSize( int aSize )
+    {
+        m_customViaSize.m_Diameter = aSize;
+    }
+
+    /**
+     * Function GetCustomViaSize
+     * @return Current custom size for the via diameter.
+     */
+    int GetCustomViaSize() const
+    {
+        return m_customViaSize.m_Diameter;
+    }
+
 
     /**
      * Function GetCurrentViaDrill
      * @return the current via size, according to the selected options
-     * ( using the default netclass value or a preset value )
+     * ( using the default netclass value or a preset/custom value )
      * the default netclass is always in m_TrackWidthList[0]
      */
     int GetCurrentViaDrill()
     {
-        return m_ViasDimensionsList[m_viaSizeIndex].m_Drill > 0 ?
-               m_ViasDimensionsList[m_viaSizeIndex].m_Drill : -1;
+        int drill;
+
+        if( m_useCustomTrackVia )
+            drill = m_customViaSize.m_Drill;
+        else
+            drill = m_ViasDimensionsList[m_viaSizeIndex].m_Drill;
+
+        return drill > 0 ? drill : -1;
+    }
+
+    /**
+     * Function SetCustomViaDrill
+     * Sets custom size for via drill (i.e. not available in netclasses or preset list). To have
+     * it returned with GetCurrentViaDrill() you need to enable custom track & via sizes
+     * (UseCustomTrackViaSize()).
+     * @param aDrill is the new drill size.
+     */
+    void SetCustomViaDrill( int aDrill )
+    {
+        m_customViaSize.m_Drill = aDrill;
+    }
+
+    /**
+     * Function GetCustomViaDrill
+     * @return Current custom size for the via drill.
+     */
+    int GetCustomViaDrill() const
+    {
+        return m_customViaSize.m_Drill;
     }
 
     /**
@@ -1132,6 +1216,27 @@ public:
      * that is the current netclass value
      */
     int  GetCurrentMicroViaDrill();
+
+    /**
+     * Function UseCustomTrackViaSize
+     * Enables/disables custom track/via size settings. If enabled, values set with
+     * SetCustomTrackWidth()/SetCustomViaSize()/SetCustomViaDrill() are used for newly created
+     * tracks and vias.
+     * @param aEnabled decides if custom settings should be used for new tracks/vias.
+     */
+    void UseCustomTrackViaSize( bool aEnabled )
+    {
+        m_useCustomTrackVia = aEnabled;
+    }
+
+    /**
+     * Function UseCustomTrackViaSize
+     * @return True if custom sizes of tracks & vias are enabled, false otherwise.
+     */
+    bool UseCustomTrackViaSize() const
+    {
+        return m_useCustomTrackVia;
+    }
 
     /***************************************************************************/
 

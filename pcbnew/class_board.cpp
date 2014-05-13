@@ -106,6 +106,12 @@ BOARD::BOARD() :
 
     SetCurrentNetClass( m_NetClasses.GetDefault()->GetName() );
 
+    // Set sensible initial values for custom track width & via size
+    m_useCustomTrackVia = false;
+    m_customTrackWidth = GetCurrentTrackWidth();
+    m_customViaSize.m_Diameter = GetCurrentViaSize();
+    m_customViaSize.m_Drill = GetCurrentViaDrill();
+
     // Initialize ratsnest
     m_ratsnest = new RN_DATA( this );
     m_ratsnestViewItem = new KIGFX::RATSNEST_VIEWITEM( m_ratsnest );
