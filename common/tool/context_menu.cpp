@@ -26,22 +26,48 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_interactive.h>
 #include <tool/context_menu.h>
+#include <boost/bind.hpp>
 #include <cassert>
 
 CONTEXT_MENU::CONTEXT_MENU() :
     m_titleSet( false ), m_selected( -1 ), m_tool( NULL )
 {
+    setCustomEventHandler( boost::bind( &CONTEXT_MENU::handleCustomEvent, this, _1 ) );
+
     setupEvents();
 }
 
 
 CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu ) :
-    m_titleSet( aMenu.m_titleSet ), m_selected( -1 ), m_tool( aMenu.m_tool )
+    m_titleSet( aMenu.m_titleSet ), m_selected( -1 ), m_tool( aMenu.m_tool ),
+    m_toolActions( aMenu.m_toolActions ), m_customHandler( aMenu.m_customHandler )
 {
-    setupEvents();
-
     // Copy all the menu entries
-    copyMenu( &aMenu, this );
+    for( unsigned i = 0; i < aMenu.GetMenuItemCount(); ++i )
+    {
+        wxMenuItem* item = aMenu.FindItemByPosition( i );
+
+        if( item->IsSubMenu() )
+        {
+#ifdef DEBUG
+            // Submenus of a CONTEXT_MENU are supposed to be CONTEXT_MENUs as well
+            assert( dynamic_cast<CONTEXT_MENU*>( item->GetSubMenu() ) );
+#endif
+
+            CONTEXT_MENU* menu = new CONTEXT_MENU( static_cast<const CONTEXT_MENU&>( *item->GetSubMenu() ) );
+            AppendSubMenu( menu, item->GetItemLabel(), wxEmptyString );
+        }
+        else
+        {
+            wxMenuItem* newItem = new wxMenuItem( this, item->GetId(), item->GetItemLabel(),
+                    wxEmptyString, item->GetKind() );
+
+            Append( newItem );
+            copyItem( item, newItem );
+        }
+    }
+
+    setupEvents();
 }
 
 
@@ -156,10 +182,12 @@ void CONTEXT_MENU::onMenuEvent( wxEvent& aEvent )
         }
         else
         {
-            OPT_TOOL_EVENT custom = handleCustomEvent( aEvent );
-            if(custom)
+            OPT_TOOL_EVENT custom = m_customHandler( aEvent );
+
+            if( custom )
                 evt = *custom;
-            else {
+            else
+            {
                 // Handling non-action menu entries (e.g. items in clarification list)
                 evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, aEvent.GetId() );
             }
@@ -167,47 +195,13 @@ void CONTEXT_MENU::onMenuEvent( wxEvent& aEvent )
     }
 
     // forward the action/update event to the TOOL_MANAGER
-    if( m_tool )
-        m_tool->GetManager()->ProcessEvent( evt );
-}
-
-
-void CONTEXT_MENU::copyMenu( const CONTEXT_MENU* aParent, CONTEXT_MENU* aTarget ) const
-{
-    // Copy all the menu entries
-    for( unsigned i = 0; i < aParent->GetMenuItemCount(); ++i )
-    {
-        wxMenuItem* item = aParent->FindItemByPosition( i );
-
-        if( item->IsSubMenu() )
-        {
-#ifdef DEBUG
-            // Submenus of a CONTEXT_MENU are supposed to be CONTEXT_MENUs as well
-            assert( dynamic_cast<CONTEXT_MENU*>( item->GetSubMenu() ) );
-#endif
-
-            CONTEXT_MENU* menu = new CONTEXT_MENU;
-            copyMenu( static_cast<const CONTEXT_MENU*>( item->GetSubMenu() ), menu );
-            aTarget->AppendSubMenu( menu, item->GetItemLabel(), wxT( "" ) );
-        }
-        else
-        {
-            wxMenuItem* newItem = new wxMenuItem( aTarget, item->GetId(), item->GetItemLabel(),
-                    wxEmptyString, item->GetKind() );
-
-            aTarget->Append( newItem );
-            copyItem( item, newItem );
-        }
-    }
-
-    // Copy tool actions that are available to choose from context menu
-    aTarget->m_toolActions = aParent->m_toolActions;
+    TOOL_MANAGER::Instance().ProcessEvent( evt );
 }
 
 
 void CONTEXT_MENU::copyItem( const wxMenuItem* aSource, wxMenuItem* aDest ) const
 {
-    assert( !aSource->IsSubMenu() );
+    assert( !aSource->IsSubMenu() );    // it does not transfer submenus
 
     aDest->SetKind( aSource->GetKind() );
     aDest->SetHelp( aSource->GetHelp() );
@@ -218,12 +212,4 @@ void CONTEXT_MENU::copyItem( const wxMenuItem* aSource, wxMenuItem* aDest ) cons
 
     if( aSource->GetKind() == wxITEM_NORMAL )
         aDest->SetBitmap( aSource->GetBitmap() );
-
-    if( aSource->IsSubMenu() )
-    {
-        CONTEXT_MENU* newMenu = new CONTEXT_MENU;
-
-        copyMenu( static_cast<const CONTEXT_MENU*>( aSource->GetSubMenu() ), newMenu );
-        aDest->SetSubMenu( newMenu );
-    }
 }
