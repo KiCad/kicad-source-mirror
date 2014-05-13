@@ -170,9 +170,9 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         GetBoard()->SetCurrentNetClass( g_CurrentTrackSegment->GetNetClassName() );
 
         g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
-        g_CurrentTrackSegment->SetWidth( GetBoard()->GetCurrentTrackWidth() );
+        g_CurrentTrackSegment->SetWidth( GetDesignSettings().GetCurrentTrackWidth() );
 
-        if( GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth )
+        if( GetDesignSettings().m_UseConnectedTrackWidth )
         {
             if( TrackOnStartPoint && TrackOnStartPoint->Type() == PCB_TRACE_T )
                 g_CurrentTrackSegment->SetWidth( TrackOnStartPoint->GetWidth());
@@ -282,8 +282,8 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
             newTrack->SetLayer( GetScreen()->m_Active_Layer );
 
-            if( !GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth )
-                newTrack->SetWidth( GetBoard()->GetCurrentTrackWidth() );
+            if( !GetDesignSettings().m_UseConnectedTrackWidth )
+                newTrack->SetWidth( GetDesignSettings().GetCurrentTrackWidth() );
 
             DBG( g_CurrentTrackList.VerifyListIntegrity(); );
 
@@ -691,7 +691,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
 
     // Values to Via circle
-    int boardViaRadius = frame->GetBoard()->GetCurrentViaSize()/2;
+    int boardViaRadius = frame->GetDesignSettings().GetCurrentViaSize()/2;
     int viaRadiusWithClearence = boardViaRadius+netclass->GetClearance();
     EDA_RECT* panelClipBox=aPanel->GetClipBox();
 
@@ -718,8 +718,8 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     // Set track parameters, that can be modified while creating the track
     g_CurrentTrackSegment->SetLayer( screen->m_Active_Layer );
 
-    if( !frame->GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth )
-        g_CurrentTrackSegment->SetWidth( frame->GetBoard()->GetCurrentTrackWidth() );
+    if( !frame->GetDesignSettings().m_UseConnectedTrackWidth )
+        g_CurrentTrackSegment->SetWidth( frame->GetDesignSettings().GetCurrentTrackWidth() );
 
     if( g_TwoSegmentTrackBuild )
     {
@@ -729,8 +729,8 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         {
             previous_track->SetLayer( screen->m_Active_Layer );
 
-            if( !frame->GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth )
-                previous_track->SetWidth( frame->GetBoard()->GetCurrentTrackWidth() );
+            if( !frame->GetDesignSettings().m_UseConnectedTrackWidth )
+                previous_track->SetWidth( frame->GetDesignSettings().GetCurrentTrackWidth() );
         }
     }
 

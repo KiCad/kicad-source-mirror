@@ -276,9 +276,9 @@ void DIALOG_DESIGN_RULES::InitGlobalRules()
     // Initialize Vias and Tracks sizes lists.
     // note we display only extra values, never the current netclass value.
     // (the first value in history list)
-    m_TracksWidthList = m_Parent->GetBoard()->m_TrackWidthList;
+    m_TracksWidthList = m_BrdSettings.m_TrackWidthList;
     m_TracksWidthList.erase( m_TracksWidthList.begin() );       // remove the netclass value
-    m_ViasDimensionsList = m_Parent->GetBoard()->m_ViasDimensionsList;
+    m_ViasDimensionsList = m_BrdSettings.m_ViasDimensionsList;
     m_ViasDimensionsList.erase( m_ViasDimensionsList.begin() ); // remove the netclass value
     InitDimensionsLists();
 }
@@ -634,12 +634,12 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard()
     // Sort new list by by increasing value
     sort( m_ViasDimensionsList.begin(), m_ViasDimensionsList.end() );
 
-    std::vector <int>* tlist = &m_Parent->GetBoard()->m_TrackWidthList;
+    std::vector<int>* tlist = &m_BrdSettings.m_TrackWidthList;
     tlist->erase( tlist->begin() + 1, tlist->end() );                                   // Remove old "custom" sizes
     tlist->insert( tlist->end(), m_TracksWidthList.begin(), m_TracksWidthList.end() );  //Add new "custom" sizes
 
     // Reinitialize m_ViaSizeList
-    std::vector <VIA_DIMENSION>* vialist = &m_Parent->GetBoard()->m_ViasDimensionsList;
+    std::vector<VIA_DIMENSION>* vialist = &m_BrdSettings.m_ViasDimensionsList;
     vialist->erase( vialist->begin() + 1, vialist->end() );
     vialist->insert( vialist->end(), m_ViasDimensionsList.begin(), m_ViasDimensionsList.end() );
 }

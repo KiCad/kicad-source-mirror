@@ -81,7 +81,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_PcbTextSize       = wxSize( DEFAULT_TEXT_PCB_SIZE,
                                   DEFAULT_TEXT_PCB_SIZE );  // current Pcb (not module) Text size
 
-    m_TrackMinWidth     = DMils2iu( 100 );      // track min value for width ((min copper size value
+    m_TrackMinWidth     = DMils2iu( 100 );      // track min value for width (min copper size value)
     m_ViasMinSize       = DMils2iu( 350 );      // vias (not micro vias) min diameter
     m_ViasMinDrill      = DMils2iu( 200 );      // vias (not micro vias) min drill diameter
     m_MicroViasMinSize  = DMils2iu( 200 );      // micro vias (not vias) min diameter
@@ -168,6 +168,37 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
                     DEFAULT_GR_MODULE_THICKNESS,
                     Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
                     NULL, MM_PER_IU ) );
+}
+
+
+void BOARD_DESIGN_SETTINGS::SetViaSizeIndex( unsigned aIndex )
+{
+    if( aIndex >= m_ViasDimensionsList.size() )
+        m_viaSizeIndex = m_ViasDimensionsList.size();
+    else
+        m_viaSizeIndex = aIndex;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetCurrentViaDrill() const
+{
+    int drill;
+
+    if( m_useCustomTrackVia )
+        drill = m_customViaSize.m_Drill;
+    else
+        drill = m_ViasDimensionsList[m_viaSizeIndex].m_Drill;
+
+    return drill > 0 ? drill : -1;
+}
+
+
+void BOARD_DESIGN_SETTINGS::SetTrackWidthIndex( unsigned aIndex )
+{
+    if( aIndex >= m_TrackWidthList.size() )
+        m_trackWidthIndex = m_TrackWidthList.size();
+    else
+        m_trackWidthIndex = aIndex;
 }
 
 

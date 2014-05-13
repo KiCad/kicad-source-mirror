@@ -620,9 +620,9 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
 
     m_SelTrackWidthBox->Clear();
 
-    for( unsigned ii = 0; ii < GetBoard()->m_TrackWidthList.size(); ii++ )
+    for( unsigned ii = 0; ii < GetDesignSettings().m_TrackWidthList.size(); ii++ )
     {
-        msg = _( "Track " ) + CoordinateToString( GetBoard()->m_TrackWidthList[ii], true );
+        msg = _( "Track " ) + CoordinateToString( GetDesignSettings().m_TrackWidthList[ii], true );
 
         if( ii == 0 )
             msg << _( " *" );
@@ -630,10 +630,10 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
         m_SelTrackWidthBox->Append( msg );
     }
 
-    if( GetBoard()->GetTrackWidthIndex() >= GetBoard()->m_TrackWidthList.size() )
-        GetBoard()->SetTrackWidthIndex( 0 );
+    if( GetDesignSettings().GetTrackWidthIndex() >= GetDesignSettings().m_TrackWidthList.size() )
+        GetDesignSettings().SetTrackWidthIndex( 0 );
 
-    m_SelTrackWidthBox->SetSelection( GetBoard()->GetTrackWidthIndex() );
+    m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
 }
 
 
@@ -646,14 +646,14 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
 
     m_SelViaSizeBox->Clear();
 
-    for( unsigned ii = 0; ii < GetBoard()->m_ViasDimensionsList.size(); ii++ )
+    for( unsigned ii = 0; ii < GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
     {
         msg = _( "Via " );
-        msg << CoordinateToString( GetBoard()->m_ViasDimensionsList[ii].m_Diameter, true );
+        msg << CoordinateToString( GetDesignSettings().m_ViasDimensionsList[ii].m_Diameter, true );
 
-        if( GetBoard()->m_ViasDimensionsList[ii].m_Drill )
+        if( GetDesignSettings().m_ViasDimensionsList[ii].m_Drill )
             msg  << wxT("/ ")
-                 << CoordinateToString( GetBoard()->m_ViasDimensionsList[ii].m_Drill, true );
+                 << CoordinateToString( GetDesignSettings().m_ViasDimensionsList[ii].m_Drill, true );
 
         if( ii == 0 )
             msg << _( " *" );
@@ -661,10 +661,10 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
         m_SelViaSizeBox->Append( msg );
     }
 
-    if( GetBoard()->GetViaSizeIndex() >= GetBoard()->m_ViasDimensionsList.size() )
-        GetBoard()->SetViaSizeIndex( 0 );
+    if( GetDesignSettings().GetViaSizeIndex() >= GetDesignSettings().m_ViasDimensionsList.size() )
+        GetDesignSettings().SetViaSizeIndex( 0 );
 
-    m_SelViaSizeBox->SetSelection( GetBoard()->GetViaSizeIndex() );
+    m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
 }
 
 

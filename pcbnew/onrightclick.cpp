@@ -532,7 +532,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         AddMenuItem( PopMenu, ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_THROUGH_VIA,
                      msg, KiBitmap( select_w_layer_xpm ) );
 
-        if( GetBoard()->GetDesignSettings().m_BlindBuriedViaAllowed )
+        if( GetDesignSettings().m_BlindBuriedViaAllowed )
         {
             msg = AddHotkeyName( _( "Place Blind/Buried Via" ),
                                  g_Board_Editor_Hokeys_Descr, HK_ADD_BLIND_BURIED_VIA );
@@ -957,17 +957,17 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
     if( aBoard->GetDesignSettings().m_UseConnectedTrackWidth )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
 
-    if(  aBoard->GetViaSizeIndex() != 0
-      || aBoard->GetTrackWidthIndex() != 0
+    if(  aBoard->GetDesignSettings().GetViaSizeIndex() != 0
+      || aBoard->GetDesignSettings().GetTrackWidthIndex() != 0
       || aBoard->GetDesignSettings().m_UseConnectedTrackWidth )
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES,
                                  _( "Use Netclass Values" ),
                                  _( "Use track and via sizes from their Netclass values" ),
                                  true );
 
-    for( unsigned ii = 0; ii < aBoard->m_TrackWidthList.size(); ii++ )
+    for( unsigned ii = 0; ii < aBoard->GetDesignSettings().m_TrackWidthList.size(); ii++ )
     {
-        value = StringFromValue( g_UserUnit, aBoard->m_TrackWidthList[ii], true );
+        value = StringFromValue( g_UserUnit, aBoard->GetDesignSettings().m_TrackWidthList[ii], true );
         msg.Printf( _( "Track %s" ), GetChars( value ) );
 
         if( ii == 0 )
@@ -978,15 +978,16 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 
     trackwidth_menu->AppendSeparator();
 
-    for( unsigned ii = 0; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
+    for( unsigned ii = 0; ii < aBoard->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
     {
-        value = StringFromValue( g_UserUnit, aBoard->m_ViasDimensionsList[ii].m_Diameter,
-                                       true );
+        value = StringFromValue( g_UserUnit,
+                                 aBoard->GetDesignSettings().m_ViasDimensionsList[ii].m_Diameter,
+                                 true );
         wxString drill = StringFromValue( g_UserUnit,
-                                                aBoard->m_ViasDimensionsList[ii].m_Drill,
-                                                true );
+                                          aBoard->GetDesignSettings().m_ViasDimensionsList[ii].m_Drill,
+                                          true );
 
-        if( aBoard->m_ViasDimensionsList[ii].m_Drill <= 0 )
+        if( aBoard->GetDesignSettings().m_ViasDimensionsList[ii].m_Drill <= 0 )
         {
             msg.Printf( _( "Via %s" ), GetChars( value ) );
         }

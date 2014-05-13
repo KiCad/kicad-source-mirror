@@ -809,6 +809,8 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
     NETCLASS* defaultNetclass = m_board->m_NetClasses.GetDefault();
+    // TODO Orson: is it really necessary to first operate on a copy and then apply it?
+    // would not it be better to use reference here and apply all the changes instantly?
     BOARD_DESIGN_SETTINGS designSettings = m_board->GetDesignSettings();
     ZONE_SETTINGS zoneSettings = m_board->GetZoneSettings();
 
@@ -827,7 +829,7 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_user_trace_width:
-            m_board->m_TrackWidthList.push_back( parseBoardUnits( T_user_trace_width ) );
+            designSettings.m_TrackWidthList.push_back( parseBoardUnits( T_user_trace_width ) );
             NeedRIGHT();
             break;
 
@@ -885,7 +887,7 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             {
                 int viaSize = parseBoardUnits( "user via size" );
                 int viaDrill = parseBoardUnits( "user via drill" );
-                m_board->m_ViasDimensionsList.push_back( VIA_DIMENSION( viaSize, viaDrill ) );
+                designSettings.m_ViasDimensionsList.push_back( VIA_DIMENSION( viaSize, viaDrill ) );
                 NeedRIGHT();
             }
             break;

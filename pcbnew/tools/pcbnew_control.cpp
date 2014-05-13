@@ -416,13 +416,13 @@ int PCBNEW_CONTROL::GridPrev( TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::TrackWidthInc( TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>( PCB_T );
-    int widthIndex = board->GetTrackWidthIndex() + 1;
+    int widthIndex = board->GetDesignSettings().GetTrackWidthIndex() + 1;
 
-    if( widthIndex >= (int) board->m_TrackWidthList.size() )
-        widthIndex = board->m_TrackWidthList.size() - 1;
+    if( widthIndex >= (int) board->GetDesignSettings().m_TrackWidthList.size() )
+        widthIndex = board->GetDesignSettings().m_TrackWidthList.size() - 1;
 
-    board->SetTrackWidthIndex( widthIndex );
-    board->UseCustomTrackViaSize( false );
+    board->GetDesignSettings().SetTrackWidthIndex( widthIndex );
+    board->GetDesignSettings().UseCustomTrackViaSize( false );
 
     wxUpdateUIEvent dummy;
     getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectTrackWidth( dummy );
@@ -437,13 +437,13 @@ int PCBNEW_CONTROL::TrackWidthInc( TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::TrackWidthDec( TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>( PCB_T );
-    int widthIndex = board->GetTrackWidthIndex() - 1;
+    int widthIndex = board->GetDesignSettings().GetTrackWidthIndex() - 1;
 
     if( widthIndex < 0 )
         widthIndex = 0;
 
-    board->SetTrackWidthIndex( widthIndex );
-    board->UseCustomTrackViaSize( false );
+    board->GetDesignSettings().SetTrackWidthIndex( widthIndex );
+    board->GetDesignSettings().UseCustomTrackViaSize( false );
 
     wxUpdateUIEvent dummy;
     getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectTrackWidth( dummy );
@@ -458,13 +458,13 @@ int PCBNEW_CONTROL::TrackWidthDec( TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::ViaSizeInc( TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>( PCB_T );
-    int sizeIndex = board->GetViaSizeIndex() + 1;
+    int sizeIndex = board->GetDesignSettings().GetViaSizeIndex() + 1;
 
-    if( sizeIndex >= (int) board->m_ViasDimensionsList.size() )
-        sizeIndex = board->m_ViasDimensionsList.size() - 1;
+    if( sizeIndex >= (int) board->GetDesignSettings().m_ViasDimensionsList.size() )
+        sizeIndex = board->GetDesignSettings().m_ViasDimensionsList.size() - 1;
 
-    board->SetViaSizeIndex( sizeIndex );
-    board->UseCustomTrackViaSize( false );
+    board->GetDesignSettings().SetViaSizeIndex( sizeIndex );
+    board->GetDesignSettings().UseCustomTrackViaSize( false );
 
     wxUpdateUIEvent dummy;
     getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectViaSize( dummy );
@@ -479,13 +479,13 @@ int PCBNEW_CONTROL::ViaSizeInc( TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::ViaSizeDec( TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>( PCB_T );
-    int sizeIndex = board->GetViaSizeIndex() - 1;
+    int sizeIndex = board->GetDesignSettings().GetViaSizeIndex() - 1;
 
     if( sizeIndex < 0 )
         sizeIndex = 0;
 
-    board->SetViaSizeIndex( sizeIndex );
-    board->UseCustomTrackViaSize( false );
+    board->GetDesignSettings().SetViaSizeIndex( sizeIndex );
+    board->GetDesignSettings().UseCustomTrackViaSize( false );
 
     wxUpdateUIEvent dummy;
     getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectViaSize( dummy );
