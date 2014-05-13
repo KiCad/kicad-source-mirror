@@ -231,7 +231,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
         {
             for( D_PAD* pad = static_cast<MODULE*>( item )->Pads(); pad; pad = pad->Next() )
             {
-                if( pad->ViewBBox().Contains( m_cursor ) )
+                if( pad->ViewBBox().Contains( getViewControls()->GetCursorPosition() ) )
                 {
                     // Turns out that user wants to edit a pad properties
                     item = pad;

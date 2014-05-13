@@ -101,7 +101,8 @@ private:
     ///> Offset from the dragged item's center (anchor)
     wxPoint m_offset;
 
-    ///> Last cursor position
+    ///> Last cursor position (needed for getModificationPoint() to avoid changes
+    ///> of edit reference point).
     VECTOR2I m_cursor;
 
     ///> Removes and frees a single BOARD_ITEM.
