@@ -308,8 +308,6 @@ int TOOL_MANAGER::GetPriority( int aToolId ) const
     for( std::deque<int>::const_iterator it = m_activeTools.begin(),
             itEnd = m_activeTools.end(); it != itEnd; ++it )
     {
-        std::cout << FindTool( *it )->GetName() << std::endl;
-
         if( *it == aToolId )
             return priority;
 
@@ -497,7 +495,7 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
                 st->contextMenuTrigger = CMENU_OFF;
 
             boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *st->contextMenu ) );
-            GetEditFrame()->PopupMenu( menu->GetMenu() );
+            GetEditFrame()->PopupMenu( menu.get() );
 
             // If nothing was chosen from the context menu, we must notify the tool as well
             if( menu->GetSelected() < 0 )
