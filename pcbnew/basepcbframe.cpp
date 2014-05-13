@@ -159,6 +159,9 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
             this, -1, wxPoint( 0, 0 ), m_FrameSize,
             EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) );
 
+    // GAL should not be active yet
+    GetGalCanvas()->StopDrawing();
+
     // Hide by default, it has to be explicitly shown
     GetGalCanvas()->Hide();
 

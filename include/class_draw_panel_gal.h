@@ -112,8 +112,15 @@ public:
     }
 
     /**
+     * Function StartDrawing()
+     * Begins drawing if it was stopped previously.
+     */
+    void StartDrawing();
+
+    /**
      * Function StopDrawing()
-     * Prevents the GAL canvas from further drawing till it is recreated.
+     * Prevents the GAL canvas from further drawing till it is recreated
+     * or StartDrawing() is called.
      */
     void StopDrawing();
 
