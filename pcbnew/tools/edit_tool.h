@@ -98,6 +98,12 @@ private:
     ///> Flag determining if anything is being dragged right now
     bool m_dragging;
 
+    ///> Offset from the dragged item's center (anchor)
+    wxPoint m_offset;
+
+    ///> Last cursor position
+    VECTOR2I m_cursor;
+
     ///> Removes and frees a single BOARD_ITEM.
     void remove( BOARD_ITEM* aItem );
 
