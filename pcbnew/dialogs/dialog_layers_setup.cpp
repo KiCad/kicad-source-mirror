@@ -670,11 +670,11 @@ void PCB_EDIT_FRAME::InstallDialogLayerSetup()
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxLogDebug( wxT( "Current layer selected %d." ), getActiveLayer() );
+    wxLogDebug( wxT( "Current layer selected %d." ), GetActiveLayer() );
 
     // If the current active layer was removed, find the next avaiable layer to set as the
     // active layer.
-    if( !( GetLayerMask( getActiveLayer() ) & GetBoard()->GetEnabledLayers() ) )
+    if( !( GetLayerMask( GetActiveLayer() ) & GetBoard()->GetEnabledLayers() ) )
     {
         for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
         {
@@ -685,14 +685,14 @@ void PCB_EDIT_FRAME::InstallDialogLayerSetup()
 
             if( GetLayerMask( tmp ) & GetBoard()->GetEnabledLayers() )
             {
-                wxLogDebug( wxT( "Setting current layer to  %d." ), getActiveLayer() );
-                setActiveLayer( tmp, true );
+                wxLogDebug( wxT( "Setting current layer to  %d." ), GetActiveLayer() );
+                SetActiveLayer( tmp, true );
                 break;
             }
         }
     }
     else
     {
-        setActiveLayer( getActiveLayer(), true );
+        SetActiveLayer( GetActiveLayer(), true );
     }
 }

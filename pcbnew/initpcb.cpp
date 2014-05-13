@@ -4,7 +4,7 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <pcb_painter.h>
 #include <confirm.h>
@@ -69,7 +69,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     GetBoard()->SetVisibleLayers( ALL_LAYERS );
 
     // Set currently selected layer to be shown in high contrast mode, when enabled`
-    setHighContrastLayer( GetScreen()->m_Active_Layer );
+    SetHighContrastLayer( GetScreen()->m_Active_Layer );
 
     ReFillLayerWidget();
 

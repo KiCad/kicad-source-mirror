@@ -46,7 +46,8 @@ public:
      * to an object the segment belongs to (e.g. a line chain) or references to locally stored
      * points (m_a, m_b).
      */
-    VECTOR2I& A, B;
+    VECTOR2I& A;
+    VECTOR2I& B;
 
     /** Default constructor
      * Creates an empty (0, 0) segment, locally-referenced
@@ -203,6 +204,8 @@ public:
 
     bool Collide( const SEG& aSeg, int aClearance ) const;
 
+    ecoord SquaredDistance( const SEG& aSeg ) const;
+
     /**
      * Function Distance()
      *
@@ -210,12 +213,14 @@ public:
      * @param aSeg other segment
      * @return minimum distance
      */
-
-    ecoord SquaredDistance( const SEG& aSeg ) const;
-
     int Distance( const SEG& aSeg ) const
     {
         return sqrt( SquaredDistance( aSeg ) );
+    }
+
+    ecoord SquaredDistance( const VECTOR2I& aP ) const
+    {
+        return ( NearestPoint( aP ) - aP ).SquaredEuclideanNorm();
     }
 
     /**
@@ -225,11 +230,6 @@ public:
      * @param aP the point
      * @return minimum distance
      */
-    ecoord SquaredDistance( const VECTOR2I& aP ) const
-    {
-        return ( NearestPoint( aP ) - aP ).SquaredEuclideanNorm();
-    }
-
     int Distance( const VECTOR2I& aP ) const
     {
         return sqrt( SquaredDistance( aP ) );
@@ -244,14 +244,14 @@ public:
      */
     bool Collinear( const SEG& aSeg ) const
     {
-        ecoord qa1 = A.y - B.y;
-        ecoord qb1 = B.x - A.x;
-        ecoord qc1 = -qa1 * A.x - qb1 * A.y;
-        ecoord qa2 = aSeg.A.y - aSeg.B.y;
-        ecoord qb2 = aSeg.B.x - aSeg.A.x;
-        ecoord qc2 = -qa2 * aSeg.A.x - qb2 * aSeg.A.y;
+        ecoord qa = A.y - B.y;
+        ecoord qb = B.x - A.x;
+        ecoord qc = -qa * A.x - qb * A.y;
 
-        return ( qa1 == qa2 ) && ( qb1 == qb2 ) && ( qc1 == qc2 );
+        ecoord d1 = std::abs( aSeg.A.x * qa + aSeg.A.y * qb + qc );
+        ecoord d2 = std::abs( aSeg.B.x * qa + aSeg.B.y * qb + qc );
+
+        return ( d1 <= 1 && d2 <= 1 );
     }
 
     /**

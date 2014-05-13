@@ -40,9 +40,10 @@
 #include <kicad_string.h>
 #include <pcbnew_id.h>
 #include <class_board.h>
+#include <collectors.h>
 
 #include <dialog_general_options.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <pcb_painter.h>
 #include <base_units.h>
@@ -157,7 +158,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
             static_cast<KIGFX::PCB_PAINTER*> ( GetGalCanvas()->GetView()->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
-    bool recache = false;
+    KICAD_T updateType = EOT;
 
     switch( id )
     {
@@ -192,31 +193,31 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_ZONES:
         DisplayOpt.DisplayZonesMode = 0;
-        recache = true;
+        updateType = PCB_ZONE_AREA_T;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
         DisplayOpt.DisplayZonesMode = 1;
-        recache = true;
+        updateType = PCB_ZONE_AREA_T;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
         DisplayOpt.DisplayZonesMode = 2;
-        recache = true;
+        updateType = PCB_ZONE_AREA_T;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
         m_DisplayViaFill = DisplayOpt.DisplayViaFill = !state;
-        recache = true;
+        updateType = PCB_VIA_T;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = !state;
-        recache = true;
+        updateType = PCB_TRACE_T;
         m_canvas->Refresh();
         break;
 
@@ -227,7 +228,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         // Apply new display options to the GAL canvas (this is faster than recaching)
         settings->LoadDisplayOptions( DisplayOpt );
 
-        setHighContrastLayer( getActiveLayer() );
+        SetHighContrastLayer( GetActiveLayer() );
         m_canvas->Refresh();
 
         break;
@@ -260,11 +261,18 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
     }
 
-    if( recache )
+    if( updateType != EOT )
     {
         // Apply new display options to the GAL canvas
         settings->LoadDisplayOptions( DisplayOpt );
-        GetGalCanvas()->GetView()->RecacheAllItems( true );
+
+        // Find items that require update
+        KICAD_T scanList[] = { updateType, EOT };
+        TYPE_COLLECTOR collector;
+        collector.Collect( GetBoard(), scanList );
+
+        for( int i = 0; i < collector.GetCount(); ++i )
+            collector[i]->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
 
     if( IsGalCanvasActive() )

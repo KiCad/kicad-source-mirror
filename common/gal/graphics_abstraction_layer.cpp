@@ -39,7 +39,10 @@ GAL::GAL() :
     SetIsStroke( true );
     SetFillColor( COLOR4D( 0.0, 0.0, 0.0, 0.0 ) );
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
+    SetLookAtPoint( VECTOR2D( 0, 0 ) );
     SetZoomFactor( 1.0 );
+    SetWorldUnitLength( 1.0 / METRIC_UNIT_LENGTH * 2.54 );   // 1 inch in nanometers
+    SetScreenDPI( 106 );                                     // Display resolution setting
     SetDepthRange( VECTOR2D( GAL::MIN_DEPTH, GAL::MAX_DEPTH ) );
     SetFlip( false, false );
     SetLineWidth( 1.0 );
@@ -85,7 +88,7 @@ void GAL::ComputeWorldScreenMatrix()
 
     MATRIX3x3D translation;
     translation.SetIdentity();
-    translation.SetTranslation( 0.5 * screenSize );
+    translation.SetTranslation( 0.5 * VECTOR2D( screenSize ) );
 
     MATRIX3x3D scale;
     scale.SetIdentity();
@@ -112,23 +115,23 @@ void GAL::DrawGrid()
     SetTarget( TARGET_NONCACHED );
 
     // Draw the origin marker
-    double origSize = static_cast<double>( gridOriginMarkerSize ) / worldScale;
+    double originSize = gridOriginMarkerSize / worldScale;
     SetLayerDepth( GAL::GRID_DEPTH );
     SetIsFill( false );
     SetIsStroke( true );
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     SetLineWidth( gridLineWidth / worldScale );
-    DrawLine( gridOrigin + VECTOR2D( -origSize, -origSize ),
-              gridOrigin + VECTOR2D( origSize, origSize ) );
-    DrawLine( gridOrigin + VECTOR2D( -origSize, origSize ),
-              gridOrigin + VECTOR2D( origSize, -origSize ) );
-    DrawCircle( gridOrigin, origSize * 0.7 );
+    DrawLine( gridOrigin + VECTOR2D( -originSize, -originSize ),
+              gridOrigin + VECTOR2D( originSize, originSize ) );
+    DrawLine( gridOrigin + VECTOR2D( -originSize, originSize ),
+              gridOrigin + VECTOR2D( originSize, -originSize ) );
+    DrawCircle( gridOrigin, originSize * 0.7 );
 
     // Draw the grid
     // For the drawing the start points, end points and increments have
     // to be calculated in world coordinates
     VECTOR2D    worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
-    VECTOR2D    worldEndPoint   = screenWorldMatrix * screenSize;
+    VECTOR2D    worldEndPoint   = screenWorldMatrix * VECTOR2D( screenSize );
 
     int gridScreenSizeDense  = round( gridSize.x * worldScale );
     int gridScreenSizeCoarse = round( gridSize.x * static_cast<double>( gridTick ) * worldScale );
@@ -232,12 +235,12 @@ void GAL::DrawGrid()
 }
 
 
-VECTOR2D GAL::GetGridPoint( VECTOR2D aPoint ) const
+VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 {
-    VECTOR2D pointWorld = ToWorld( aPoint );
+    VECTOR2D gridPoint;
 
-    pointWorld.x = round( pointWorld.x / gridSize.x ) * gridSize.x;
-    pointWorld.y = round( pointWorld.y / gridSize.y ) * gridSize.y;
+    gridPoint.x = round( aPoint.x / gridSize.x ) * gridSize.x;
+    gridPoint.y = round( aPoint.y / gridSize.y ) * gridSize.y;
 
-    return ToScreen( pointWorld );
+    return gridPoint;
 }

@@ -48,6 +48,7 @@ class TEXTE_PCB;
 class TEXTE_MODULE;
 class DIMENSION;
 class PCB_TARGET;
+class MARKER_PCB;
 
 namespace KIGFX
 {
@@ -96,7 +97,51 @@ public:
      * Returns the color used to draw a layer.
      * @param aLayer is the layer number.
      */
-    const COLOR4D& GetLayerColor( int aLayer ) const;
+    const COLOR4D& GetLayerColor( int aLayer ) const
+    {
+        return m_layerColors[aLayer];
+    }
+
+    /**
+     * Function SetLayerColor
+     * Changes the color used to draw a layer.
+     * @param aLayer is the layer number.
+     * @param aColor is the new color.
+     */
+    void SetLayerColor( int aLayer, const COLOR4D& aColor )
+    {
+        m_layerColors[aLayer] = aColor;
+
+        update();       // recompute other shades of the color
+    }
+
+    /**
+     * Function SetSketchMode
+     * Turns on/off sketch mode for given item layer.
+     * @param aItemLayer is the item layer that is changed.
+     * @param aEnabled decides if it is drawn in sketch mode (true for sketched mode,
+     * false for filled mode).
+     */
+    void SetSketchMode( int aItemLayer, bool aEnabled )
+    {
+        // It is supposed to work only with item layers
+        assert( aItemLayer >= ITEM_GAL_LAYER( 0 ) );
+
+        m_sketchMode[aItemLayer] = aEnabled;
+    }
+
+    /**
+     * Function GetSketchMode
+     * Returns sketch mode setting for a given item layer.
+     * @param aItemLayer is the item layer that is changed.
+     */
+    bool GetSketchMode( int aItemLayer ) const
+    {
+        // It is supposed to work only with item layers
+        assert( aItemLayer >= ITEM_GAL_LAYER( 0 ) );
+
+        return m_sketchMode[aItemLayer];
+    }
 
 protected:
     ///> @copydoc RENDER_SETTINGS::Update()
@@ -114,8 +159,8 @@ protected:
     ///> Colors for all layers (darkened)
     COLOR4D m_layerColorsDark[TOTAL_LAYER_COUNT];
 
-    ///> Flag determining if items on a given layer should be drawn as an outline or a full item
-    bool    m_sketchModeSelect[TOTAL_LAYER_COUNT];
+    ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
+    bool    m_sketchMode[TOTAL_LAYER_COUNT];
 
     ///> Flag determining if pad numbers should be visible
     bool    m_padNumbers;
@@ -169,6 +214,7 @@ protected:
     void draw( const ZONE_CONTAINER* aZone );
     void draw( const DIMENSION* aDimension, int aLayer );
     void draw( const PCB_TARGET* aTarget );
+    void draw( const MARKER_PCB* aMarker );
 };
 } // namespace KIGFX
 

@@ -114,6 +114,15 @@ public:
      */
     void AddMenuItem( const TOOL_ACTION& aAction );
 
+    ///> Event sent after an item is selected.
+    const TOOL_EVENT SelectedEvent;
+
+    ///> Event sent after an item is deselected.
+    const TOOL_EVENT DeselectedEvent;
+
+    ///> Event sent after selection is cleared.
+    const TOOL_EVENT ClearedEvent;
+
 private:
     /**
      * Function selectSingle()
@@ -121,8 +130,11 @@ private:
      * place, there is a menu displayed that allows to choose the item.
      *
      * @param aWhere is the place where the item should be selected.
+     * @param aAllowDisambiguation decides what to do in case of disambiguation. If true, then
+     * a menu is shown, otherise function finishes without selecting anything.
+     * @return True if an item was selected, false otherwise.
      */
-    void selectSingle( const VECTOR2I& aWhere );
+    bool selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
 
     /**
      * Function selectMultiple()
@@ -207,7 +219,15 @@ private:
      *
      * @return True if the given point is contained in any of selected items' bouding box.
      */
-    bool containsSelected( const VECTOR2I& aPoint ) const;
+    bool selectionContains( const VECTOR2I& aPoint ) const;
+
+    /**
+     * Function highlightNet()
+     * Looks for a BOARD_CONNECTED_ITEM in a given spot, and if one is found - it enables
+     * highlight for its net.
+     * @param aPoint is the point where an item is expected (world coordinates).
+     */
+    void highlightNet( const VECTOR2I& aPoint );
 
     /// Visual representation of selection box
     SELECTION_AREA* m_selArea;

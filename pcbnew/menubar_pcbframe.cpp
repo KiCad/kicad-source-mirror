@@ -292,13 +292,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Reset text size and width of all module fields to current defaults" ),
                  KiBitmap( reset_text_xpm ) );
 
-    editMenu->AppendSeparator();
-
-    AddMenuItem( editMenu, ID_PNS_ROUTER_TOOL,
-                 _( "Interactive router" ),
-                 _( "Interactive router push&shove tool." ),
-                 KiBitmap( ps_router_xpm ) );
-
     //----- View menu -----------------------------------------------------------
     wxMenu* viewMenu = new wxMenu;
 
@@ -344,33 +337,36 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     text = AddHotkeyName( _( "&Switch canvas to default" ), g_Pcbnew_Editor_Hokeys_Descr,
-            HK_CANVAS_DEFAULT, IS_ACCELERATOR );
+            HK_CANVAS_DEFAULT );
+
     AddMenuItem( viewMenu, ID_MENU_CANVAS_DEFAULT,
                  text, _( "Switch the canvas implementation to default" ),
-                KiBitmap( tools_xpm ) );
+                 KiBitmap( tools_xpm ) );
 
     text = AddHotkeyName( _( "&Switch canvas to OpenGL" ), g_Pcbnew_Editor_Hokeys_Descr,
-            HK_CANVAS_OPENGL, IS_ACCELERATOR );
+            HK_CANVAS_OPENGL );
+
     AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
                  text, _( "Switch the canvas implementation to OpenGL" ),
-                KiBitmap( tools_xpm ) );
+                 KiBitmap( tools_xpm ) );
 
     text = AddHotkeyName( _( "&Switch canvas to Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
-            HK_CANVAS_CAIRO, IS_ACCELERATOR );
+            HK_CANVAS_CAIRO );
+
     AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
                  text, _( "Switch the canvas implementation to Cairo" ),
-                KiBitmap( tools_xpm ) );
+                 KiBitmap( tools_xpm ) );
 
     //----- Place Menu ----------------------------------------------------------
     wxMenu* placeMenu = new wxMenu;
 
     text = AddHotkeyName( _( "&Module" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ADD_MODULE, IS_ACCELERATOR );
+                          HK_ADD_MODULE );
     AddMenuItem( placeMenu, ID_PCB_MODULE_BUTT, text,
                  _( "Add modules" ), KiBitmap( module_xpm ) );
 
     text = AddHotkeyName( _( "&Track" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ADD_NEW_TRACK, IS_ACCELERATOR );
+                          HK_ADD_NEW_TRACK );
     AddMenuItem( placeMenu, ID_TRACK_BUTT, text,
                  _( "Add tracks and vias" ), KiBitmap( add_tracks_xpm ) );
 

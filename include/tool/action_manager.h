@@ -25,6 +25,7 @@
 #ifndef ACTION_MANAGER_H_
 #define ACTION_MANAGER_H_
 
+#include <list>
 #include <map>
 #include <string>
 
@@ -82,19 +83,20 @@ public:
     bool RunAction( const std::string& aActionName ) const;
 
     /**
+     * Function RunAction()
+     * Prepares an appropriate event and sends it to the destination specified in a TOOL_ACTION
+     * object.
+     * @param aAction is the action to be run.
+     */
+    void RunAction( const TOOL_ACTION* aAction ) const;
+
+    /**
      * Function RunHotKey()
      * Runs an action associated with a hotkey (if there is one available).
      * @param aHotKey is the hotkey to be handled.
      * @return True if there was an action associated with the hotkey, false otherwise.
      */
     bool RunHotKey( int aHotKey ) const;
-
-    /**
-     * Function ClearHotKey()
-     * Removes an action associated with a hotkey.
-     * @param aHotKey is the hotkey to be cleared.
-     */
-    void ClearHotKey( int aHotKey );
 
 private:
     ///> Tool manager needed to run actions
@@ -107,15 +109,8 @@ private:
     std::map<std::string, TOOL_ACTION*> m_actionNameIndex;
 
     ///> Map for indexing actions by their hotkeys
-    std::map<int, TOOL_ACTION*> m_actionHotKeys;
-
-    /**
-     * Function runAction()
-     * Prepares an appropriate event and sends it to the destination specified in a TOOL_ACTION
-     * object.
-     * @param aAction is the action to be run.
-     */
-    void runAction( const TOOL_ACTION* aAction ) const;
+    typedef std::map<int, std::list<TOOL_ACTION*> > HOTKEY_LIST;
+    HOTKEY_LIST m_actionHotKeys;
 };
 
 #endif /* ACTION_MANAGER_H_ */

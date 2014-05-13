@@ -36,7 +36,7 @@
 #include <macros.h>
 #include <id.h>
 #include <class_drawpanel.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <class_base_screen.h>
 #include <msgpanel.h>
 #include <draw_frame.h>
@@ -48,6 +48,7 @@
 
 #include <wx/fontdlg.h>
 #include <view/view.h>
+#include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 
 /**
@@ -395,7 +396,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     if( IsGalCanvasActive() )
     {
         GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x,
-                                                      screen->GetGrid().m_Size.y ) );
+                                                         screen->GetGrid().m_Size.y ) );
         GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
@@ -529,6 +530,38 @@ wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
         pos = GetNearestGridPosition( aPosition );
 
     return pos;
+}
+
+
+void EDA_DRAW_FRAME::SetNextGrid()
+{
+    if( m_gridSelectBox )
+    {
+        m_gridSelectBox->SetSelection( ( m_gridSelectBox->GetSelection() + 1 ) %
+                                       m_gridSelectBox->GetCount() );
+
+        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
+        //        cmd.SetEventObject( this );
+        OnSelectGrid( cmd );
+    }
+}
+
+
+void EDA_DRAW_FRAME::SetPrevGrid()
+{
+    if( m_gridSelectBox )
+    {
+        int cnt = m_gridSelectBox->GetSelection();
+
+        if( --cnt < 0 )
+            cnt = m_gridSelectBox->GetCount() - 1;
+
+        m_gridSelectBox->SetSelection( cnt );
+
+        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
+        //        cmd.SetEventObject( this );
+        OnSelectGrid( cmd );
+    }
 }
 
 
@@ -1007,9 +1040,17 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 wxPoint EDA_DRAW_FRAME::GetCrossHairPosition( bool aInvertY ) const
 {
     // subject to change, borrow from old BASE_SCREEN for now.
+    if( IsGalCanvasActive() )
+    {
+        VECTOR2I cursor = GetGalCanvas()->GetViewControls()->GetCursorPosition();
 
-    BASE_SCREEN* screen = GetScreen();  // virtual call
-    return screen->getCrossHairPosition( aInvertY );
+        return wxPoint( cursor.x, cursor.y );
+    }
+    else
+    {
+        BASE_SCREEN* screen = GetScreen();  // virtual call
+        return screen->getCrossHairPosition( aInvertY );
+    }
 }
 
 

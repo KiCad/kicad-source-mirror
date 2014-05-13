@@ -44,7 +44,7 @@
 
 #include <wxPcbStruct.h>
 #include <confirm.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 
 using boost::optional;
 
@@ -104,6 +104,14 @@ TOOL_MANAGER::TOOL_MANAGER() :
 
 TOOL_MANAGER::~TOOL_MANAGER()
 {
+    DeleteAll();
+
+    delete m_actionMgr;
+}
+
+
+void TOOL_MANAGER::DeleteAll()
+{
     std::map<TOOL_BASE*, TOOL_STATE*>::iterator it, it_end;
 
     for( it = m_toolState.begin(), it_end = m_toolState.end(); it != it_end; ++it )
@@ -113,7 +121,7 @@ TOOL_MANAGER::~TOOL_MANAGER()
         delete it->first;           // delete the tool itself
     }
 
-    delete m_actionMgr;
+    m_toolState.clear();
 }
 
 
@@ -196,6 +204,12 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName )
 }
 
 
+void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction )
+{
+    m_actionMgr->RunAction( &aAction );
+}
+
+
 bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 {
     wxASSERT( aTool != NULL );
@@ -239,9 +253,15 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
         return false;
     }
 
-    // If the tool is already active, do not invoke it again
+    // If the tool is already active, bring it to the top of the active tools stack
     if( isActive( aTool ) )
+    {
+        m_activeTools.erase( std::find( m_activeTools.begin(), m_activeTools.end(),
+                                        aTool->GetId() ) );
+        m_activeTools.push_front( aTool->GetId() );
+
         return false;
+    }
 
     aTool->Reset( TOOL_INTERACTIVE::RUN );
 
@@ -278,6 +298,25 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 {
     BOOST_FOREACH( TOOL_BASE* tool, m_toolState | boost::adaptors::map_keys )
         tool->Reset( aReason );
+}
+
+
+int TOOL_MANAGER::GetPriority( int aToolId ) const
+{
+    int priority = 0;
+
+    for( std::deque<int>::const_iterator it = m_activeTools.begin(),
+            itEnd = m_activeTools.end(); it != itEnd; ++it )
+    {
+        std::cout << FindTool( *it )->GetName() << std::endl;
+
+        if( *it == aToolId )
+            return priority;
+
+        ++priority;
+    }
+
+    return -1;
 }
 
 
@@ -378,7 +417,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 
 bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
 {
-    if( aEvent.Action() == TA_KEY_UP )
+    if( aEvent.Action() == TA_KEY_PRESSED )
     {
         // Check if there is a hotkey associated
         if( m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode() ) )

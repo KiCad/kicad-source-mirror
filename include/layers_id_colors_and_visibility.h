@@ -246,6 +246,7 @@ enum PCB_VISIBLE
     PADS_HOLES_VISIBLE,
     VIAS_HOLES_VISIBLE,
 
+    DRC_VISIBLE,                ///< drc markers
     WORKSHEET,                  ///< worksheet frame
     GP_OVERLAY,                 ///< general purpose overlay
 

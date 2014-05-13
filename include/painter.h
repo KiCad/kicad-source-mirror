@@ -110,6 +110,26 @@ public:
     }
 
     /**
+     * Function GetHighlight
+     * Returns current highlight setting.
+     * @return True if highlight is enabled, false otherwise.
+     */
+    bool GetHighlight() const
+    {
+        return m_highlightEnabled;
+    }
+
+    /**
+     * Function GetHighlightNetCode
+     * Returns netcode of currently highlighted net.
+     * @return Netcode of currently highlighted net.
+     */
+    int GetHighlightNetCode() const
+    {
+        return m_highlightNetcode;
+    }
+
+    /**
      * Function SetHighlight
      * Turns on/off highlighting - it may be done for the active layer or the specified net.
      * @param aEnabled tells if highlighting should be enabled.
@@ -119,9 +139,7 @@ public:
     inline void SetHighlight( bool aEnabled, int aNetcode = -1 )
     {
         m_highlightEnabled = aEnabled;
-
-        if( aNetcode > 0 )
-            m_highlightNetcode = aNetcode;
+        m_highlightNetcode = aNetcode;
     }
 
     /**

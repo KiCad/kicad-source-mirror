@@ -1,7 +1,27 @@
-/**
- * @file dialog_global_deletion.cpp
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <boost/bind.hpp>
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
@@ -9,6 +29,7 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <pcbcommon.h>
+#include <ratsnest_data.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -39,7 +60,7 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent )
 void PCB_EDIT_FRAME::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
 {
     DIALOG_GLOBAL_DELETION dlg( this );
-    dlg.SetCurrentLayer( getActiveLayer() );
+    dlg.SetCurrentLayer( GetActiveLayer() );
 
     dlg.ShowModal();
 }
@@ -80,14 +101,15 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
     }
     else
     {
-
         if( !IsOK( this, _( "Are you sure you want to delete the selected items?" ) ) )
             return;
 
         BOARD*            pcb = m_Parent->GetBoard();
         PICKED_ITEMS_LIST pickersList;
         ITEM_PICKER       itemPicker( NULL, UR_DELETED );
-        BOARD_ITEM*       item, * nextitem;
+        BOARD_ITEM*       item;
+        BOARD_ITEM*       nextitem;
+        RN_DATA*          ratsnest = pcb->GetRatsnest();
 
         LAYER_MSK layers_filter = ALL_LAYERS;
 
@@ -101,12 +123,13 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 
             while( item != NULL )
             {
-
                 if( GetLayerMask( item->GetLayer() ) & layers_filter )
                 {
                     itemPicker.SetItem( item );
                     pickersList.PushItem( itemPicker );
                     pcb->Remove( item );
+                    item->ViewRelease();
+                    ratsnest->Remove( item );
                     gen_rastnest = true;
                 }
                 else
@@ -138,6 +161,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
                 {
                     itemPicker.SetItem( item );
                     pickersList.PushItem( itemPicker );
+                    item->ViewRelease();
                     item->UnLink();
                 }
             }
@@ -155,6 +179,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
                 {
                     itemPicker.SetItem( item );
                     pickersList.PushItem( itemPicker );
+                    item->ViewRelease();
                     item->UnLink();
                 }
             }
@@ -162,7 +187,6 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 
         if( m_DelModules->GetValue() )
         {
-
             for( item = pcb->m_Modules; item; item = nextitem )
             {
                 nextitem = item->Next();
@@ -173,6 +197,10 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
                 {
                     itemPicker.SetItem( item );
                     pickersList.PushItem( itemPicker );
+                    static_cast<MODULE*>( item )->RunOnChildren(
+                            boost::bind( &KIGFX::VIEW_ITEM::ViewRelease, _1 ) );
+                    ratsnest->Remove( item );
+                    item->ViewRelease();
                     item->UnLink();
                     gen_rastnest = true;
                 }
@@ -189,27 +217,29 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
             if( !m_TrackFilterAR->GetValue() )
                 track_mask_filter |= TRACK_AR;
 
-            TRACK * nexttrack;
+            TRACK* nexttrack;
 
             for( TRACK *track = pcb->m_Track; track != NULL; track = nexttrack )
             {
                 nexttrack = track->Next();
 
-                if( (track->GetState( TRACK_LOCKED | TRACK_AR ) & track_mask_filter) != 0 )
+                if( ( track->GetState( TRACK_LOCKED | TRACK_AR ) & track_mask_filter ) != 0 )
                     continue;
 
-                if( (track->GetState( TRACK_LOCKED | TRACK_AR ) == 0) &&
+                if( ( track->GetState( TRACK_LOCKED | TRACK_AR ) == 0 ) &&
                     !m_TrackFilterNormal->GetValue() )
                     continue;
 
-                if( (track->Type() == PCB_VIA_T)  && !m_TrackFilterVias->GetValue() )
+                if( ( track->Type() == PCB_VIA_T ) && !m_TrackFilterVias->GetValue() )
                     continue;
 
-                if( (track->GetLayerMask() & layers_filter) == 0 )
+                if( ( track->GetLayerMask() & layers_filter ) == 0 )
                     continue;
 
                 itemPicker.SetItem( track );
                 pickersList.PushItem( itemPicker );
+                track->ViewRelease();
+                ratsnest->Remove( track );
                 track->UnLink();
                 gen_rastnest = true;
             }

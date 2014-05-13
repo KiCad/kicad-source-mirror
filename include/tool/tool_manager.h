@@ -48,8 +48,19 @@ class wxWindow;
 class TOOL_MANAGER
 {
 public:
-    TOOL_MANAGER();
+    static TOOL_MANAGER& Instance()
+    {
+        static TOOL_MANAGER manager;
+
+        return manager;
+    }
+
     ~TOOL_MANAGER();
+
+    /**
+     * Deletes all the tools that were registered in the TOOL_MANAGER.
+     */
+    void DeleteAll();
 
     /**
      * Generates an unique ID from for a tool with given name.
@@ -101,12 +112,20 @@ public:
 
     /**
      * Function RunAction()
-     * Runs the specified action. The common format is "application.ToolName.Action".
+     * Runs the specified action. The common format for action names is "application.ToolName.Action".
      *
      * @param aActionName is the name of action to be invoked.
      * @return True if the action finished successfully, false otherwise.
      */
     bool RunAction( const std::string& aActionName );
+
+    /**
+     * Function RunAction()
+     * Runs the specified action.
+     *
+     * @param aAction is the action to be invoked.
+     */
+    void RunAction( const TOOL_ACTION& aAction );
 
     /**
      * Function FindTool()
@@ -168,6 +187,36 @@ public:
     }
 
     /**
+     * Returns id of the tool that is on the top of the active tools stack
+     * (was invoked the most recently).
+     * @return Id of the currently used tool.
+     */
+    int GetCurrentToolId() const
+    {
+        return m_activeTools.front();
+    }
+
+    /**
+     * Returns the tool that is on the top of the active tools stack
+     * (was invoked the most recently).
+     * @return Pointer to the currently used tool.
+     */
+    TOOL_BASE* GetCurrentTool() const
+    {
+        return FindTool( GetCurrentToolId() );
+    }
+
+    /**
+     * Returns priority of a given tool. Higher number means that the tool is closer to the
+     * beginning of the active tools queue (i.e. receives events earlier, tools with lower
+     * priority receive events later).
+     * @param aToolId is the id of queried tool.
+     * @return The priority of a given tool. If returned number is negative, then it means that
+     * the tool id is invalid or the tool is not active.
+     */
+    int GetPriority( int aToolId ) const;
+
+    /**
      * Defines a state transition - the events that cause a given handler method in the tool
      * to be called. Called by TOOL_INTERACTIVE::Go(). May be called from a coroutine context.
      */
@@ -203,6 +252,8 @@ public:
     }
 
 private:
+    TOOL_MANAGER();
+
     struct TOOL_STATE;
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
 

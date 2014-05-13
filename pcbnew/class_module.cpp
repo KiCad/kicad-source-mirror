@@ -749,20 +749,20 @@ void MODULE::ViewUpdate( int aUpdateFlags )
     if( !m_view )
         return;
 
+    // Update the module itself
+    VIEW_ITEM::ViewUpdate( aUpdateFlags );
+
     // Update pads
     for( D_PAD* pad = m_Pads.GetFirst(); pad; pad = pad->Next() )
-        m_view->InvalidateItem( pad, aUpdateFlags );
+        pad->ViewUpdate( aUpdateFlags );
 
     // Update module's drawing (mostly silkscreen)
     for( BOARD_ITEM* drawing = m_Drawings.GetFirst(); drawing; drawing = drawing->Next() )
-        m_view->InvalidateItem( drawing, aUpdateFlags );
+        drawing->ViewUpdate( aUpdateFlags );
 
     // Update module's texts
-    m_view->InvalidateItem( m_Reference, aUpdateFlags );
-    m_view->InvalidateItem( m_Value, aUpdateFlags );
-
-    // Update the module itself
-    m_view->InvalidateItem( this, aUpdateFlags );
+    m_Reference->ViewUpdate( aUpdateFlags );
+    m_Value->ViewUpdate( aUpdateFlags );
 }
 
 

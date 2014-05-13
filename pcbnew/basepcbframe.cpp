@@ -51,7 +51,7 @@
 
 #include <collectors.h>
 #include <class_drawpanel.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <math/vector2d.h>
 #include <trigo.h>
@@ -78,6 +78,7 @@ static const wxString FastGrid2Entry( wxT( "FastGrid2" ) );
 const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
 {
     ITEM_GAL_LAYER( GP_OVERLAY ),
+    ITEM_GAL_LAYER( DRC_VISIBLE ),
     NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
     DRAW_N, COMMENT_N, ECO1_N, ECO2_N, EDGE_N,
     UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31,
@@ -86,7 +87,7 @@ const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
 
     ITEM_GAL_LAYER( RATSNEST_VISIBLE ),
     ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ),
-    ITEM_GAL_LAYER( VIAS_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
+    ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
 
     NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ), SOLDERMASK_N_FRONT,
     NETNAMES_GAL_LAYER( LAYER_16_NETNAMES_VISIBLE ), LAYER_N_FRONT,
@@ -132,10 +133,10 @@ END_EVENT_TABLE()
 PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString & aFrameName ) :
-    EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
+    EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
+    m_toolManager( TOOL_MANAGER::Instance() )
 {
     m_Pcb                 = NULL;
-    m_toolManager         = NULL;
     m_toolDispatcher      = NULL;
 
     m_DisplayPadFill      = true;   // How to draw pads
@@ -156,7 +157,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     SetGalCanvas( new EDA_DRAW_PANEL_GAL(
             this, -1, wxPoint( 0, 0 ), m_FrameSize,
-            EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) );
+            EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) );
 
     // Hide by default, it has to be explicitly shown
     GetGalCanvas()->Hide();
@@ -480,7 +481,14 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
     settings->LoadDisplayOptions( DisplayOpt );
-    GetGalCanvas()->GetView()->RecacheAllItems( true );
+
+    // Update pads
+    BOARD* board = GetBoard();
+    for( MODULE* module = board->m_Modules; module; module = module->Next() )
+    {
+        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+            pad->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    }
 
     m_canvas->Refresh();
 }
@@ -641,7 +649,7 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
     // handle color changes for transitions in and out of ID_TRACK_BUTT
     if( ( GetToolId() == ID_TRACK_BUTT && aId != ID_TRACK_BUTT )
-        || ( GetToolId() != ID_TRACK_BUTT && aId== ID_TRACK_BUTT ) )
+        || ( GetToolId() != ID_TRACK_BUTT && aId == ID_TRACK_BUTT ) )
     {
         if( DisplayOpt.ContrastModeDisplay )
             redraw = true;
@@ -649,7 +657,7 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
     // must do this after the tool has been set, otherwise pad::Draw() does
     // not show proper color when DisplayOpt.ContrastModeDisplay is true.
-    if( redraw && m_canvas)
+    if( redraw && m_canvas )
         m_canvas->Refresh();
 }
 
@@ -838,6 +846,9 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     view->SetRequired( SOLDERPASTE_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
     view->SetRequired( SOLDERMASK_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
 
+    view->SetRequired( ITEM_GAL_LAYER( PAD_FR_VISIBLE ), ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
+    view->SetRequired( ITEM_GAL_LAYER( PAD_BK_VISIBLE ), ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
+
     view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
     view->SetLayerTarget( ITEM_GAL_LAYER( RATSNEST_VISIBLE ), KIGFX::TARGET_OVERLAY );
 
@@ -960,5 +971,31 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
 
         if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
             m_zoomSelectBox->SetSelection( i + 1 );
+    }
+}
+
+
+void PCB_BASE_FRAME::SetFastGrid1()
+{
+    if( m_gridSelectBox )
+    {
+        m_gridSelectBox->SetSelection( m_FastGrid1 );
+
+        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
+        cmd.SetEventObject( this );
+        OnSelectGrid( cmd );
+    }
+}
+
+
+void PCB_BASE_FRAME::SetFastGrid2()
+{
+    if( m_gridSelectBox )
+    {
+        m_gridSelectBox->SetSelection( m_FastGrid2 );
+
+        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
+        cmd.SetEventObject( this );
+        OnSelectGrid( cmd );
     }
 }

@@ -29,7 +29,7 @@
 #include <wx/colour.h>
 #include <wx/filename.h>
 
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <pcb_painter.h>
@@ -45,8 +45,6 @@
 #include <profile.h>
 #endif /* __WXDEBUG__ */
 
-#define METRIC_UNIT_LENGTH (1e9)
-
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
                                         GalType aGalType ) :
@@ -60,11 +58,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     SwitchBackend( aGalType );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
-
-    // Initial display settings
-    m_gal->SetLookAtPoint( VECTOR2D( 0, 0 ) );
-    m_gal->SetZoomFactor( 1.0 );
-    m_gal->ComputeWorldScreenMatrix();
 
     m_painter = new KIGFX::PCB_PAINTER( m_gal );
 
@@ -90,8 +83,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     Connect( wxEVT_MIDDLE_DCLICK,   wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     Connect( wxEVT_MOUSEWHEEL,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     Connect( wxEVT_CHAR_HOOK,       wxEventHandler( EDA_DRAW_PANEL_GAL::skipEvent ) );
-    Connect( wxEVT_KEY_UP,          wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_KEY_DOWN,        wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_CHAR,            wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
     Connect( KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE,
              wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
@@ -131,17 +123,22 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     {
         m_drawing = true;
 
+        m_view->UpdateItems();
         m_gal->BeginDrawing();
-        m_gal->SetBackgroundColor( KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
         m_gal->ClearScreen();
 
-        m_view->ClearTargets();
-        // Grid has to be redrawn only when the NONCACHED target is redrawn
-        if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
-            m_gal->DrawGrid();
-        m_view->Redraw();
-        m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
+        if( m_view->IsDirty() )
+        {
+            m_view->ClearTargets();
 
+            // Grid has to be redrawn only when the NONCACHED target is redrawn
+            if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+                m_gal->DrawGrid();
+
+            m_view->Redraw();
+        }
+
+        m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
         m_gal->EndDrawing();
 
         m_drawing = false;
@@ -196,13 +193,13 @@ void EDA_DRAW_PANEL_GAL::StopDrawing()
 
 void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 {
-    // Protect from refreshing during backend switch
-    m_pendingRefresh = true;
-    m_refreshTimer.Stop();
-
     // Do not do anything if the currently used GAL is correct
     if( aGalType == m_currentGal && m_gal != NULL )
         return;
+
+    // Prevent refreshing canvas during backend switch
+    m_pendingRefresh = true;
+    m_refreshTimer.Stop();
 
     delete m_gal;
 
@@ -220,21 +217,15 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
         return;
     }
 
-    m_gal->SetWorldUnitLength( 1.0 / METRIC_UNIT_LENGTH * 2.54 );   // 1 inch in nanometers
-    m_gal->SetScreenDPI( 106 );                                     // Display resolution setting
-    m_gal->ComputeWorldScreenMatrix();
-
     wxSize size = GetClientSize();
     m_gal->ResizeScreen( size.GetX(), size.GetY() );
+    m_gal->SetBackgroundColor( KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
 
     if( m_painter )
         m_painter->SetGAL( m_gal );
 
     if( m_view )
-    {
         m_view->SetGAL( m_gal );
-        m_view->RecacheAllItems( true );
-    }
 
     m_currentGal = aGalType;
     m_pendingRefresh = false;

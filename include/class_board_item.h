@@ -33,8 +33,6 @@
 
 #include <base_struct.h>
 #include <gr_basic.h>
-#include <boost/ptr_container/ptr_vector.hpp>
-#include <gr_basic.h>
 #include <layers_id_colors_and_visibility.h>
 
 /// Abbrevation for fomatting internal units to a string.

@@ -23,7 +23,7 @@
  */
 
 /**
- * @file class_drawpanel_gal.h:
+ * @file class_draw_panel_gal.h:
  * @brief EDA_DRAW_PANEL_GAL class definition.
  */
 

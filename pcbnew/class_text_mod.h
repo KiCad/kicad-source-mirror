@@ -87,11 +87,13 @@ public:
     virtual void SetPosition( const wxPoint& aPos )
     {
         m_Pos = aPos;
+        SetLocalCoord();
     }
 
     void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
+        SetLocalCoord();
     }
 
     void Rotate( const wxPoint& aRotCentre, double aAngle );
@@ -106,7 +108,7 @@ public:
     void SetVisible( bool isVisible )   { m_NoShow = !isVisible; }
     bool IsVisible() const              { return !m_NoShow; }
 
-    void SetPos0( const wxPoint& aPos ) { m_Pos0 = aPos; }
+    void SetPos0( const wxPoint& aPos ) { m_Pos0 = aPos; SetDrawCoord(); }
     const wxPoint& GetPos0() const      { return m_Pos0; }
 
     void Copy( TEXTE_MODULE* source ); // copy structure

@@ -271,9 +271,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 {
     wxArrayString units;
-    GRIDS grid_list;
-
-    GetScreen()->GetGrids( grid_list );
+    GRIDS grid_list = GetScreen()->GetGrids();
 
     DIALOG_EESCHEMA_OPTIONS dlg( this );
 

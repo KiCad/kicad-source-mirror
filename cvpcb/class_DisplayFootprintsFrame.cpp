@@ -31,7 +31,7 @@
 #include <pgm_base.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <confirm.h>
 #include <macros.h>
 #include <bitmaps.h>

@@ -145,19 +145,12 @@ public:
     /// @copydoc GAL::ClearScreen()
     virtual void ClearScreen();
 
-    // -----------------
-    // Attribute setting
-    // -----------------
-
-    /// @copydoc GAL::SetStrokeColor()
-    virtual void SetStrokeColor( const COLOR4D& aColor );
-
     // --------------
     // Transformation
     // --------------
 
     /// @copydoc GAL::Transform()
-    virtual void Transform( MATRIX3x3D aTransformation );
+    virtual void Transform( const MATRIX3x3D& aTransformation );
 
     /// @copydoc GAL::Rotate()
     virtual void Rotate( double aAngle );
@@ -299,8 +292,6 @@ private:
     bool                    isShaderInitialized;        ///< Was the shader initialized?
     bool                    isGrouping;                 ///< Was a group started?
 
-    VECTOR2D                cursorPosition;         ///< Current cursor position
-
     // Polygon tesselation
     /// The tessellator
     GLUtesselator*          tesselator;
@@ -313,7 +304,7 @@ private:
      * @param aStartPoint is the start point of the line.
      * @param aEndPoint is the end point of the line.
      */
-    inline void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+    void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /**
      * @brief Draw a semicircle. Depending on settings (isStrokeEnabled & isFilledEnabled) it runs
@@ -363,9 +354,6 @@ private:
 
     /// Initialize GLEW
     void initGlew();
-
-    /// @copydoc GAL::initCursor()
-    virtual void initCursor( int aCursorSize );
 
     /**
      * @brief Blits cursor into the current screen.

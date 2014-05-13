@@ -86,8 +86,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 #endif
 
     SetSize( aParent->GetSize() );
-    screenSize = VECTOR2D( aParent->GetSize() );
-    initCursor( 80 );
+    screenSize = VECTOR2I( aParent->GetSize() );
 
     // Grid color settings are different in Cairo and OpenGL
     SetGridColor( COLOR4D( 0.8, 0.8, 0.8, 0.1 ) );
@@ -103,6 +102,8 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     }
 
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
+
+    currentManager = &nonCachedManager;
 }
 
 
@@ -249,6 +250,8 @@ void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoin
 {
     const VECTOR2D  startEndVector = aEndPoint - aStartPoint;
     double          lineAngle = startEndVector.Angle();
+
+    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
     drawLineQuad( aStartPoint, aEndPoint );
 
@@ -467,10 +470,15 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
 
 void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
 {
+    if( aPointList.empty() )
+        return;
+
+    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
     std::deque<VECTOR2D>::const_iterator it = aPointList.begin();
 
     // Start from the second point
-    for( it++; it != aPointList.end(); it++ )
+    for( ++it; it != aPointList.end(); ++it )
     {
         const VECTOR2D startEndVector = ( *it - *( it - 1 ) );
         double lineAngle = startEndVector.Angle();
@@ -554,7 +562,7 @@ void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aContro
 
 void OPENGL_GAL::ResizeScreen( int aWidth, int aHeight )
 {
-    screenSize = VECTOR2D( aWidth, aHeight );
+    screenSize = VECTOR2I( aWidth, aHeight );
 
     // Resize framebuffers
     compositor.Resize( aWidth, aHeight );
@@ -589,16 +597,7 @@ void OPENGL_GAL::ClearScreen()
 }
 
 
-void OPENGL_GAL::SetStrokeColor( const COLOR4D& aColor )
-{
-    strokeColor = aColor;
-
-    // This is the default drawing color
-    currentManager->Color( aColor.r, aColor.g, aColor.b, aColor.a );
-}
-
-
-void OPENGL_GAL::Transform( MATRIX3x3D aTransformation )
+void OPENGL_GAL::Transform( const MATRIX3x3D& aTransformation )
 {
     GLdouble matrixData[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 
@@ -767,8 +766,8 @@ void OPENGL_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
     // Now we should only store the position of the mouse cursor
     // The real drawing routines are in blitCursor()
-    cursorPosition = VECTOR2D( aCursorPosition.x,
-                               screenSize.y - aCursorPosition.y ); // invert Y axis
+    VECTOR2D screenCursor = worldScreenMatrix * aCursorPosition;
+    cursorPosition = screenWorldMatrix * VECTOR2D( screenCursor.x, screenSize.y - screenCursor.y );
 }
 
 
@@ -778,13 +777,9 @@ void OPENGL_GAL::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
 
     // We do not need a very precise comparison here (the lineWidth is set by GAL::DrawGrid())
     if( fabs( lineWidth - 2.0 * gridLineWidth / worldScale ) < 0.1 )
-    {
         glLineWidth( 1.0 );
-    }
     else
-    {
         glLineWidth( 2.0 );
-    }
 
     glColor4d( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
 
@@ -798,8 +793,23 @@ void OPENGL_GAL::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
 }
 
 
-inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
+void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
+    /* Helper drawing:                   ____--- v3       ^
+     *                           ____---- ...   \          \
+     *                   ____----      ...       \   end    \
+     *     v1    ____----           ...    ____----          \ width
+     *       ----                ...___----        \          \
+     *       \             ___...--                 \          v
+     *        \    ____----...                ____---- v2
+     *         ----     ...           ____----
+     *  start   \    ...      ____----
+     *           \... ____----
+     *            ----
+     *            v0
+     * dots mark triangles' hypotenuses
+     */
+
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
     double   lineLength     = startEndVector.EuclideanNorm();
     double   scale          = 0.5 * lineWidth / lineLength;
@@ -857,8 +867,8 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
 
     /* Draw a triangle that contains the semicircle, then shade it to leave only
      * the semicircle. Parameters given to setShader are indices of the triangle's vertices
-     *  (if you want to understand more, check the vertex shader source [shader.vert]).
-     *  Shader uses this coordinates to determine if fragments are inside the semicircle or not.
+     * (if you want to understand more, check the vertex shader source [shader.vert]).
+     * Shader uses these coordinates to determine if fragments are inside the semicircle or not.
      *       v2
      *       /\
      *      /__\
@@ -888,9 +898,9 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
 
     /* Draw a triangle that contains the semicircle, then shade it to leave only
      * the semicircle. Parameters given to setShader are indices of the triangle's vertices
-     *  (if you want to understand more, check the vertex shader source [shader.vert]), the
-     *  radius and the line width. Shader uses this coordinates to determine if fragments are
-     *  inside the semicircle or not.
+     * (if you want to understand more, check the vertex shader source [shader.vert]), the
+     * radius and the line width. Shader uses these coordinates to determine if fragments are
+     * inside the semicircle or not.
      *       v2
      *       /\
      *      /__\
@@ -968,12 +978,6 @@ void OPENGL_GAL::initGlew()
 }
 
 
-void OPENGL_GAL::initCursor( int aCursorSize )
-{
-    cursorSize = aCursorSize;
-}
-
-
 void OPENGL_GAL::blitCursor()
 {
     if( !isCursorEnabled )
@@ -981,11 +985,9 @@ void OPENGL_GAL::blitCursor()
 
     compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
-    VECTOR2D cursorBegin  = ToWorld( cursorPosition -
-                                     VECTOR2D( cursorSize / 2, cursorSize / 2 ) );
-    VECTOR2D cursorEnd    = ToWorld( cursorPosition +
-                                     VECTOR2D( cursorSize / 2, cursorSize / 2 ) );
-    VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2.0;
+    VECTOR2D cursorBegin  = cursorPosition - cursorSize / ( 2 * worldScale );
+    VECTOR2D cursorEnd    = cursorPosition + cursorSize / ( 2 * worldScale );
+    VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2;
 
     glDisable( GL_TEXTURE_2D );
     glLineWidth( 1.0 );

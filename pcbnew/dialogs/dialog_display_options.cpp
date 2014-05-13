@@ -18,7 +18,7 @@
 #include <dialog_display_options.h>
 #include <dialog_display_options_base.h>
 
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <pcb_painter.h>
 
@@ -177,10 +177,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     settings->LoadDisplayOptions( DisplayOpt );
     view->RecacheAllItems( true );
 
-    if( m_Parent->IsGalCanvasActive() )
-        m_Parent->GetGalCanvas()->Refresh();
-    else
-        m_Parent->GetCanvas()->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 
     EndModal( 1 );
 }

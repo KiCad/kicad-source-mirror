@@ -68,8 +68,6 @@ namespace KIGFX
 // non-owning container of item candidates when searching for items on the same track.
 typedef std::vector< TRACK* >   TRACK_PTRS;
 
-#define HISTORY_MAX_COUNT       8
-
 
 /**
  * Enum LAYER_T
@@ -305,13 +303,13 @@ public:
     // the first value is always the value of the current NetClass
     // The others values are extra values
 
-    /// Vias size and drill list(max count = HISTORY_MAX_COUNT)
-    std::vector <VIA_DIMENSION> m_ViasDimensionsList;
+    // The first value is the current netclass via size  // TODO verify
+    /// Vias size and drill list
+    std::vector<VIA_DIMENSION>  m_ViasDimensionsList;
 
-    // The first value is the current netclass via size
-    // tracks widths (max count = HISTORY_MAX_COUNT)
-    // The first value is the current netclass track width
-    std::vector <int>           m_TrackWidthList;
+    // The first value is the current netclass track width  // TODO verify
+    /// Track width list
+    std::vector<int>            m_TrackWidthList;
 
 
     BOARD();

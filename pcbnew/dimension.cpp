@@ -255,16 +255,9 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
 
         aDimension = new DIMENSION( GetBoard() );
         aDimension->SetFlags( IS_NEW );
-
-        aDimension->SetLayer( getActiveLayer() );
-
-        aDimension->m_crossBarO = aDimension->m_crossBarF = pos;
-        aDimension->m_featureLineDO = aDimension->m_featureLineDF = pos;
-        aDimension->m_featureLineGO = aDimension->m_featureLineGF = pos;
-        aDimension->m_arrowG1O = aDimension->m_arrowG1F = pos;
-        aDimension->m_arrowG2O = aDimension->m_arrowG2F = pos;
-        aDimension->m_arrowD1O = aDimension->m_arrowD1F = pos;
-        aDimension->m_arrowD2O = aDimension->m_arrowD2F = pos;
+        aDimension->SetLayer( GetActiveLayer() );
+        aDimension->SetOrigin( pos );
+        aDimension->SetEnd( pos );
 
         aDimension->Text().SetSize( GetBoard()->GetDesignSettings().m_PcbTextSize );
         int width = GetBoard()->GetDesignSettings().m_PcbTextWidth;
@@ -334,24 +327,12 @@ static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     }
     else
     {
-        wxPoint delta;
-        int dx, dy;
-        double angle, depl;
-        delta = Dimension->m_featureLineDO - Dimension->m_featureLineGO;
-
         /* Calculating the direction of travel perpendicular to the selected axis. */
-        angle = atan2( delta.y, delta.x ) + (M_PI / 2);
+        double angle = Dimension->GetAngle() + (M_PI / 2);
 
-        delta = pos - Dimension->m_featureLineDO;
-        depl   = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
-        dx = KiROUND( depl * cos( angle ) );
-        dy = KiROUND( depl * sin( angle ) );
-        Dimension->m_crossBarO.x = Dimension->m_featureLineGO.x + dx;
-        Dimension->m_crossBarO.y = Dimension->m_featureLineGO.y + dy;
-        Dimension->m_crossBarF.x = Dimension->m_featureLineDO.x + dx;
-        Dimension->m_crossBarF.y = Dimension->m_featureLineDO.y + dy;
-
-        Dimension->AdjustDimensionDetails( );
+        wxPoint delta = pos - Dimension->m_featureLineDO;
+        double depl   = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
+        Dimension->SetHeight( depl );
     }
 
     Dimension->Draw( aPanel, aDC, GR_XOR );

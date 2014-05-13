@@ -45,32 +45,26 @@ VIEW::VIEW( bool aIsDynamic ) :
     m_scale( 1.0 ),
     m_painter( NULL ),
     m_gal( NULL ),
-    m_dynamic( aIsDynamic ),
-    m_scaleLimits( 15000.0, 1.0 )
+    m_dynamic( aIsDynamic )
 {
-    m_panBoundary.SetMaximum();
+    m_needsUpdate.reserve( 32768 );
 
     // Redraw everything at the beginning
-    for( int i = 0; i < TARGETS_NUMBER; ++i )
-        MarkTargetDirty( i );
+    MarkDirty();
 
     // View uses layers to display EDA_ITEMs (item may be displayed on several layers, for example
     // pad may be shown on pad, pad hole and solder paste layers). There are usual copper layers
     // (eg. F.Cu, B.Cu, internal and so on) and layers for displaying objects such as texts,
     // silkscreen, pads, vias, etc.
     for( int i = 0; i < VIEW_MAX_LAYERS; i++ )
-    {
         AddLayer( i );
-    }
 }
 
 
 VIEW::~VIEW()
 {
     BOOST_FOREACH( LAYER_MAP::value_type& l, m_layers )
-    {
         delete l.second.items;
-    }
 }
 
 
@@ -82,7 +76,7 @@ void VIEW::AddLayer( int aLayer, bool aDisplayOnly )
         m_layers[aLayer].id             = aLayer;
         m_layers[aLayer].items          = new VIEW_RTREE();
         m_layers[aLayer].renderingOrder = aLayer;
-        m_layers[aLayer].enabled        = true;
+        m_layers[aLayer].visible        = true;
         m_layers[aLayer].displayOnly    = aDisplayOnly;
         m_layers[aLayer].target         = TARGET_CACHED;
     }
@@ -98,7 +92,7 @@ void VIEW::Add( VIEW_ITEM* aItem )
     aItem->ViewGetLayers( layers, layers_count );
     aItem->saveLayers( layers, layers_count );
 
-    for( int i = 0; i < layers_count; i++ )
+    for( int i = 0; i < layers_count; ++i )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Insert( aItem );
@@ -107,6 +101,9 @@ void VIEW::Add( VIEW_ITEM* aItem )
 
     if( m_dynamic )
         aItem->viewAssign( this );
+
+    if( aItem->viewRequiredUpdate() != VIEW_ITEM::NONE )
+        MarkForUpdate( aItem );
 }
 
 
@@ -114,6 +111,15 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 {
     if( m_dynamic )
         aItem->m_view = NULL;
+
+    if( aItem->viewRequiredUpdate() != VIEW_ITEM::NONE )    // prevent from updating a removed item
+    {
+        std::vector<VIEW_ITEM*>::iterator item = std::find( m_needsUpdate.begin(),
+                                                            m_needsUpdate.end(), aItem );
+
+        if( item != m_needsUpdate.end() )
+            m_needsUpdate.erase( item );
+    }
 
     int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
     aItem->getLayers( layers, layers_count );
@@ -126,9 +132,12 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 
         // Clear the GAL cache
         int prevGroup = aItem->getGroup( layers[i] );
+
         if( prevGroup >= 0 )
             m_gal->DeleteGroup( prevGroup );
     }
+
+    aItem->deleteGroups();
 }
 
 
@@ -138,13 +147,9 @@ void VIEW::SetRequired( int aLayerId, int aRequiredId, bool aRequired )
     wxASSERT( (unsigned) aRequiredId < m_layers.size() );
 
     if( aRequired )
-    {
         m_layers[aLayerId].requiredLayers.insert( aRequiredId );
-    }
     else
-    {
         m_layers[aLayerId].requiredLayers.erase( aRequired );
-    }
 }
 
 
@@ -172,12 +177,12 @@ struct queryVisitor
 };
 
 
-int VIEW::Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult )
+int VIEW::Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) const
 {
     if( m_orderedLayers.empty() )
         return 0;
 
-    std::vector<VIEW_LAYER*>::reverse_iterator i;
+    std::vector<VIEW_LAYER*>::const_reverse_iterator i;
 
     // execute queries in reverse direction, so that items that are on the top of
     // the rendering stack are returned first.
@@ -197,31 +202,31 @@ int VIEW::Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult )
 
 VECTOR2D VIEW::ToWorld( const VECTOR2D& aCoord, bool aAbsolute ) const
 {
-    MATRIX3x3D matrix = m_gal->GetWorldScreenMatrix().Inverse();
+    const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
 
     if( aAbsolute )
-    {
         return VECTOR2D( matrix * aCoord );
-    }
     else
-    {
         return VECTOR2D( matrix.GetScale().x * aCoord.x, matrix.GetScale().y * aCoord.y );
-    }
+}
+
+
+double VIEW::ToWorld( double aSize ) const
+{
+    const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
+
+    return matrix.GetScale().x * aSize;
 }
 
 
 VECTOR2D VIEW::ToScreen( const VECTOR2D& aCoord, bool aAbsolute ) const
 {
-    MATRIX3x3D matrix = m_gal->GetWorldScreenMatrix();
+    const MATRIX3x3D& matrix = m_gal->GetWorldScreenMatrix();
 
     if( aAbsolute )
-    {
         return VECTOR2D( matrix * aCoord );
-    }
     else
-    {
         return VECTOR2D( matrix.GetScale().x * aCoord.x, matrix.GetScale().y * aCoord.y );
-    }
 }
 
 
@@ -257,12 +262,6 @@ void VIEW::SetGAL( GAL* aGal )
 }
 
 
-void VIEW::SetPainter( PAINTER* aPainter )
-{
-    m_painter = aPainter;
-}
-
-
 BOX2D VIEW::GetViewport() const
 {
     BOX2D    rect;
@@ -293,19 +292,8 @@ void VIEW::SetMirror( bool aMirrorX, bool aMirrorY )
 }
 
 
-void VIEW::SetScale( double aScale )
-{
-    SetScale( aScale, m_center );
-}
-
-
 void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
 {
-    if( aScale > m_scaleLimits.x )
-        aScale = m_scaleLimits.x;
-    else if( aScale < m_scaleLimits.y )
-        aScale = m_scaleLimits.y;
-
     VECTOR2D a = ToScreen( aAnchor );
 
     m_gal->SetZoomFactor( aScale );
@@ -324,19 +312,6 @@ void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
 void VIEW::SetCenter( const VECTOR2D& aCenter )
 {
     m_center = aCenter;
-
-    if( !m_panBoundary.Contains( aCenter ) )
-    {
-        if( aCenter.x < m_panBoundary.GetLeft() )
-            m_center.x = m_panBoundary.GetLeft();
-        else if( aCenter.x > m_panBoundary.GetRight() )
-            m_center.x = m_panBoundary.GetRight();
-
-        if( aCenter.y < m_panBoundary.GetTop() )
-            m_center.y = m_panBoundary.GetTop();
-        else if( aCenter.y > m_panBoundary.GetBottom() )
-            m_center.y = m_panBoundary.GetBottom();
-    }
 
     m_gal->SetLookAtPoint( m_center );
     m_gal->ComputeWorldScreenMatrix();
@@ -425,6 +400,7 @@ void VIEW::UpdateLayerColor( int aLayer )
 
     updateItemsColor visitor( aLayer, m_painter, m_gal );
     m_layers[aLayer].items->Query( r, visitor );
+    MarkTargetDirty( m_layers[aLayer].target );
 }
 
 
@@ -484,6 +460,7 @@ void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
 
     changeItemsDepth visitor( aLayer, aDepth, m_gal );
     m_layers[aLayer].items->Query( r, visitor );
+    MarkTargetDirty( m_layers[aLayer].target );
 }
 
 
@@ -578,8 +555,8 @@ void VIEW::UpdateAllLayersOrder()
 
 struct VIEW::drawItem
 {
-    drawItem( VIEW* aView, const VIEW_LAYER* aCurrentLayer ) :
-        currentLayer( aCurrentLayer ), view( aView )
+    drawItem( VIEW* aView, int aLayer ) :
+        view( aView ), layer( aLayer )
     {
     }
 
@@ -587,18 +564,17 @@ struct VIEW::drawItem
     {
         // Conditions that have te be fulfilled for an item to be drawn
         bool drawCondition = aItem->ViewIsVisible() &&
-                             aItem->ViewGetLOD( currentLayer->id ) < view->m_scale;
+                             aItem->ViewGetLOD( layer ) < view->m_scale;
         if( !drawCondition )
             return true;
 
-        view->draw( aItem, currentLayer->id );
+        view->draw( aItem, layer );
 
         return true;
     }
 
-    const VIEW_LAYER* currentLayer;
     VIEW* view;
-    int layersCount, layers[VIEW_MAX_LAYERS];
+    int layer, layersCount, layers[VIEW_MAX_LAYERS];
 };
 
 
@@ -606,9 +582,9 @@ void VIEW::redrawRect( const BOX2I& aRect )
 {
     BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
     {
-        if( l->enabled && IsTargetDirty( l->target ) && areRequiredLayersEnabled( l->id ) )
+        if( l->visible && IsTargetDirty( l->target ) && areRequiredLayersEnabled( l->id ) )
         {
-            drawItem drawFunc( this, l );
+            drawItem drawFunc( this, l->id );
 
             m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
@@ -618,7 +594,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
 }
 
 
-void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
+void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate )
 {
     if( IsCached( aLayer ) && !aImmediate )
     {
@@ -649,11 +625,12 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
 }
 
 
-void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate ) const
+void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate )
 {
     int layers[VIEW_MAX_LAYERS], layers_count;
 
     aItem->ViewGetLayers( layers, layers_count );
+
     // Sorting is needed for drawing order dependent GALs (like Cairo)
     SortLayers( layers, layers_count );
 
@@ -665,26 +642,12 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate ) const
 }
 
 
-void VIEW::draw( VIEW_GROUP* aGroup, bool aImmediate ) const
+void VIEW::draw( VIEW_GROUP* aGroup, bool aImmediate )
 {
     std::set<VIEW_ITEM*>::const_iterator it;
 
     for( it = aGroup->Begin(); it != aGroup->End(); ++it )
-    {
         draw( *it, aImmediate );
-    }
-}
-
-
-bool VIEW::IsDirty() const
-{
-    for( int i = 0; i < TARGETS_NUMBER; ++i )
-    {
-        if( IsTargetDirty( i ) )
-            return true;
-    }
-
-    return false;
 }
 
 
@@ -709,14 +672,14 @@ struct VIEW::recacheItem
     bool operator()( VIEW_ITEM* aItem )
     {
         // Remove previously cached group
-        int prevGroup = aItem->getGroup( layer );
+        int group = aItem->getGroup( layer );
 
-        if( prevGroup >= 0 )
-            gal->DeleteGroup( prevGroup );
+        if( group >= 0 )
+            gal->DeleteGroup( group );
 
         if( immediately )
         {
-            int group = gal->BeginGroup();
+            group = gal->BeginGroup();
             aItem->setGroup( layer, group );
 
             if( !view->m_painter->Draw( aItem, layer ) )
@@ -726,6 +689,7 @@ struct VIEW::recacheItem
         }
         else
         {
+            aItem->ViewUpdate( VIEW_ITEM::ALL );
             aItem->setGroup( layer, -1 );
         }
 
@@ -757,6 +721,7 @@ void VIEW::Clear()
     }
 
     m_gal->ClearCache();
+    m_needsUpdate.clear();
 }
 
 
@@ -783,6 +748,11 @@ void VIEW::ClearTargets()
 
 void VIEW::Redraw()
 {
+#ifdef PROFILE
+    prof_counter totalRealTime;
+    prof_start( &totalRealTime );
+#endif /* PROFILE */
+
     VECTOR2D screenSize = m_gal->GetScreenPixelSize();
     BOX2I    rect( ToWorld( VECTOR2D( 0, 0 ) ),
                    ToWorld( screenSize ) - ToWorld( VECTOR2D( 0, 0 ) ) );
@@ -791,13 +761,19 @@ void VIEW::Redraw()
     redrawRect( rect );
 
     // All targets were redrawn, so nothing is dirty
-    clearTargetDirty( TARGET_CACHED );
-    clearTargetDirty( TARGET_NONCACHED );
-    clearTargetDirty( TARGET_OVERLAY );
+    markTargetClean( TARGET_CACHED );
+    markTargetClean( TARGET_NONCACHED );
+    markTargetClean( TARGET_OVERLAY );
+
+#ifdef PROFILE
+    prof_end( &totalRealTime );
+
+    wxLogDebug( wxT( "Redraw: %.1f ms" ), totalRealTime.msecs() );
+#endif /* PROFILE */
 }
 
 
-VECTOR2D VIEW::GetScreenPixelSize() const
+const VECTOR2I& VIEW::GetScreenPixelSize() const
 {
     return m_gal->GetScreenPixelSize();
 }
@@ -812,10 +788,7 @@ struct VIEW::clearLayerCache
 
     bool operator()( VIEW_ITEM* aItem )
     {
-        if( aItem->storesGroups() )
-        {
-            aItem->deleteGroups();
-        }
+        aItem->deleteGroups();
 
         return true;
     }
@@ -839,7 +812,7 @@ void VIEW::clearGroupCache()
 }
 
 
-void VIEW::InvalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
+void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 {
     // updateLayers updates geometry too, so we do not have to update both of them at the same time
     if( aUpdateFlags & VIEW_ITEM::LAYERS )
@@ -851,24 +824,23 @@ void VIEW::InvalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
     aItem->ViewGetLayers( layers, layers_count );
 
     // Iterate through layers used by the item and recache it immediately
-    for( int i = 0; i < layers_count; i++ )
+    for( int i = 0; i < layers_count; ++i )
     {
         int layerId = layers[i];
 
-        if( aUpdateFlags & ( VIEW_ITEM::GEOMETRY | VIEW_ITEM::LAYERS ) )
+        if( IsCached( layerId ) )
         {
-            // Redraw
-            if( IsCached( layerId ) )
+            if( aUpdateFlags & ( VIEW_ITEM::GEOMETRY | VIEW_ITEM::LAYERS ) )
                 updateItemGeometry( aItem, layerId );
-        }
-        else if( aUpdateFlags & VIEW_ITEM::COLOR )
-        {
-            updateItemColor( aItem, layerId );
+            else if( aUpdateFlags & VIEW_ITEM::COLOR )
+                updateItemColor( aItem, layerId );
         }
 
         // Mark those layers as dirty, so the VIEW will be refreshed
         MarkTargetDirty( m_layers[layerId].target );
     }
+
+    aItem->clearUpdateFlags();
 }
 
 
@@ -890,6 +862,7 @@ void VIEW::sortLayers()
 void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
 {
     wxASSERT( (unsigned) aLayer < m_layers.size() );
+    wxASSERT( IsCached( aLayer ) );
 
     // Obtain the color that should be used for coloring the item on the specific layerId
     const COLOR4D color = m_painter->GetSettings()->GetColor( aItem, aLayer );
@@ -904,20 +877,25 @@ void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
 void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
 {
     wxASSERT( (unsigned) aLayer < m_layers.size() );
+    wxASSERT( IsCached( aLayer ) );
+
     VIEW_LAYER& l = m_layers.at( aLayer );
 
     m_gal->SetTarget( l.target );
     m_gal->SetLayerDepth( l.renderingOrder );
 
     // Redraw the item from scratch
-    int prevGroup = aItem->getGroup( aLayer );
+    int group = aItem->getGroup( aLayer );
 
-    if( prevGroup >= 0 )
-        m_gal->DeleteGroup( prevGroup );
+    if( group >= 0 )
+        m_gal->DeleteGroup( group );
 
-    int group = m_gal->BeginGroup();
+    group = m_gal->BeginGroup();
     aItem->setGroup( aLayer, group );
-    m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), aLayer );
+
+    if( !m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), aLayer ) );
+        aItem->ViewDraw( aLayer, m_gal ); // Alternative drawing method
+
     m_gal->EndGroup();
 }
 
@@ -928,7 +906,7 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
 
     aItem->ViewGetLayers( layers, layers_count );
 
-    for( int i = 0; i < layers_count; i++ )
+    for( int i = 0; i < layers_count; ++i )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
@@ -945,17 +923,23 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
     // Remove the item from previous layer set
     aItem->getLayers( layers, layers_count );
 
-    for( int i = 0; i < layers_count; i++ )
+    for( int i = 0; i < layers_count; ++i )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
         MarkTargetDirty( l.target );
 
-        // Redraw the item from scratch
-        int prevGroup = aItem->getGroup( layers[i] );
+        if( IsCached( l.id ) )
+        {
+            // Redraw the item from scratch
+            int prevGroup = aItem->getGroup( layers[i] );
 
-        if( prevGroup >= 0 )
-            m_gal->DeleteGroup( prevGroup );
+            if( prevGroup >= 0 )
+            {
+                m_gal->DeleteGroup( prevGroup );
+                aItem->setGroup( l.id, -1 );
+            }
+        }
     }
 
     // Add the item to new layer set
@@ -981,7 +965,7 @@ bool VIEW::areRequiredLayersEnabled( int aLayerId ) const
          it_end = m_layers.at( aLayerId ).requiredLayers.end(); it != it_end; ++it )
     {
         // That is enough if just one layer is not enabled
-        if( !m_layers.at( *it ).enabled )
+        if( !m_layers.at( *it ).visible || !areRequiredLayersEnabled( *it ) )
             return false;
     }
 
@@ -1023,13 +1007,15 @@ void VIEW::RecacheAllItems( bool aImmediately )
 }
 
 
-bool VIEW::IsTargetDirty( int aTarget ) const
+void VIEW::UpdateItems()
 {
-    wxASSERT( aTarget < TARGETS_NUMBER );
+    // Update items that need this
+    BOOST_FOREACH( VIEW_ITEM* item, m_needsUpdate )
+    {
+        assert( item->viewRequiredUpdate() != VIEW_ITEM::NONE );
 
-    // Check the target status
-    if( m_dirtyTargets[aTarget] )
-        return true;
+        invalidateItem( item, item->viewRequiredUpdate() );
+    }
 
-    return false;
+    m_needsUpdate.clear();
 }
