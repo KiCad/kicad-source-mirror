@@ -92,9 +92,6 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     // By default, modified items need to update their geometry
     m_updateFlag = KIGFX::VIEW_ITEM::GEOMETRY;
 
-    // Offset from the dragged item's center (anchor)
-    wxPoint offset;
-
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
     controls->ShowCursor( true );
@@ -141,18 +138,18 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 
         else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
-            VECTOR2I cursor( controls->GetCursorPosition() );
+            m_cursor = controls->GetCursorPosition();
 
             if( m_dragging )
             {
-                wxPoint movement = wxPoint( cursor.x, cursor.y ) -
+                wxPoint movement = wxPoint( m_cursor.x, m_cursor.y ) -
                         static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition();
 
                 // Drag items to the current cursor position
                 for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
                 {
                     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( i ) );
-                    item->Move( movement + offset );
+                    item->Move( movement + m_offset );
                 }
 
                 updateRatsnest( true );
@@ -163,8 +160,9 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
                 editFrame->OnModify();
                 editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
-                offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
-                         wxPoint( cursor.x, cursor.y );
+                // Update dragging offset (distance between cursor and the first dragged item)
+                m_offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
+                                                     wxPoint( m_cursor.x, m_cursor.y );
                 m_dragging = true;
             }
 
@@ -227,14 +225,13 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
     {
         // Display properties dialog
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) );
-        VECTOR2I cursor = getViewControls()->GetCursorPosition();
 
         // Check if user wants to edit pad or module properties
         if( item->Type() == PCB_MODULE_T )
         {
             for( D_PAD* pad = static_cast<MODULE*>( item )->Pads(); pad; pad = pad->Next() )
             {
-                if( pad->ViewBBox().Contains( cursor ) )
+                if( pad->ViewBBox().Contains( m_cursor ) )
                 {
                     // Turns out that user wants to edit a pad properties
                     item = pad;
@@ -298,6 +295,10 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 
     updateRatsnest( m_dragging );
 
+    // Update dragging offset (distance between cursor and the first dragged item)
+    m_offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
+                                         rotatePoint;
+
     if( m_dragging )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     else
@@ -347,6 +348,10 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
     }
 
     updateRatsnest( m_dragging );
+
+    // Update dragging offset (distance between cursor and the first dragged item)
+    m_offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
+                                         flipPoint;
 
     if( m_dragging )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -487,8 +492,7 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelec
     }
     else
     {
-        VECTOR2I cursor = getViewControls()->GetCursorPosition();
-        return wxPoint( cursor.x, cursor.y );
+        return wxPoint( m_cursor.x, m_cursor.y );
     }
 }
 
