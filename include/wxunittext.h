@@ -28,6 +28,11 @@
 #include <common.h>
 #include <wx/spinbutt.h>
 
+namespace boost
+{
+    template <class T>
+    class optional;
+}
 class wxTextCtrl;
 class wxSpinButton;
 class wxStaticText;
@@ -42,7 +47,7 @@ public:
      * @param aValue is the initial value for the control.
      * @param aStep is the step size when using spin buttons.
      */
-    WX_UNIT_TEXT( wxWindow* aParent, const wxString& aLabel = wxString( "Size:" ),
+    WX_UNIT_TEXT( wxWindow* aParent, const wxString& aLabel = _( "Size:" ),
                   double aValue = 0.0, double aStep = 0.1 );
 
     virtual ~WX_UNIT_TEXT();
@@ -69,13 +74,13 @@ public:
      * they are converted first).
      * @param aUnits is the wanted unit.
      */
-    virtual double GetValue( EDA_UNITS_T aUnits ) const;
+    //virtual double GetValue( EDA_UNITS_T aUnits ) const;
 
     /**
      * Function GetValue
      * Returns the current value in currently used units.
      */
-    virtual double GetValue() const;
+    virtual boost::optional<double> GetValue() const;
 
     /**
      * Function GetUnits
@@ -113,9 +118,6 @@ protected:
 
     ///> Spin down button click event handler.
     void onSpinDownEvent( wxSpinEvent& aEvent );
-
-    ///> On Enter press event handler.
-    void onEnter( wxCommandEvent& aEvent );
 
     ///> Label for the input (e.g. "Size:")
     wxStaticText*   m_inputLabel;

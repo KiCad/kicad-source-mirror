@@ -26,8 +26,12 @@
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
-#include <wx/valnum.h>
+#include <limits>
 #include <base_units.h>
+#if wxCHECK_VERSION( 2, 9, 0 )
+#include <wx/valnum.h>
+#endif
+#include <boost/optional.hpp>
 
 WX_UNIT_TEXT::WX_UNIT_TEXT( wxWindow* aParent, const wxString& aLabel, double aValue, double aStep ) :
     wxPanel( aParent, wxID_ANY ),
@@ -47,21 +51,28 @@ WX_UNIT_TEXT::WX_UNIT_TEXT( wxWindow* aParent, const wxString& aLabel, double aV
     m_inputLabel->SetMinSize( size );
     sizer->Add( m_inputLabel, 1, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 5 );
 
-    wxFloatingPointValidator<double> validator( 4, NULL, wxNUM_VAL_NO_TRAILING_ZEROES );
-    validator.SetRange( 0.0, std::numeric_limits<double>::max() );
-
     // Main input control
     m_inputValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
                                    wxTE_PROCESS_ENTER );
-    m_inputValue->SetValidator( validator );
+
     SetValue( aValue );
     sizer->Add( m_inputValue, 0, wxALIGN_CENTER_VERTICAL | wxALL );
+
+#if wxCHECK_VERSION( 2, 9, 0 )  // Sorry guys, I am tired of dealing with 2.8 compatibility
+    wxFloatingPointValidator<double> validator( 4, NULL, wxNUM_VAL_NO_TRAILING_ZEROES );
+    validator.SetRange( 0.0, std::numeric_limits<double>::max() );
+    m_inputValue->SetValidator( validator );
 
     // Spin buttons for modifying values using the mouse
     m_spinButton = new wxSpinButton( this, wxID_ANY );
     m_spinButton->SetRange( std::numeric_limits<int>::min(), std::numeric_limits<int>::max() );
+
     m_spinButton->SetCanFocus( false );
     sizer->Add( m_spinButton, 0, wxALIGN_CENTER_VERTICAL | wxALL );
+
+    Connect( wxEVT_SPIN_UP, wxSpinEventHandler( WX_UNIT_TEXT::onSpinUpEvent ), NULL, this );
+    Connect( wxEVT_SPIN_DOWN, wxSpinEventHandler( WX_UNIT_TEXT::onSpinDownEvent ), NULL, this );
+#endif
 
     sizer->AddSpacer( 5 );
 
@@ -72,10 +83,6 @@ WX_UNIT_TEXT::WX_UNIT_TEXT( wxWindow* aParent, const wxString& aLabel, double aV
 
     SetSizer( sizer );
     Layout();
-
-    Connect( wxEVT_SPIN_UP, wxSpinEventHandler( WX_UNIT_TEXT::onSpinUpEvent ), NULL, this );
-    Connect( wxEVT_SPIN_DOWN, wxSpinEventHandler( WX_UNIT_TEXT::onSpinDownEvent ), NULL, this );
-    Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( WX_UNIT_TEXT::onEnter ), NULL, this );
 }
 
 
@@ -98,49 +105,87 @@ void WX_UNIT_TEXT::SetValue( double aValue )
 
     if( aValue >= 0.0 )
     {
-        m_inputValue->SetValue( Double2Str( aValue ) );
+        m_inputValue->SetValue( wxString( Double2Str( aValue ).c_str(), wxConvUTF8 ) );
         m_inputValue->MarkDirty();
     }
 }
 
 
-double WX_UNIT_TEXT::GetValue( EDA_UNITS_T aUnit ) const
+/*boost::optional<double> WX_UNIT_TEXT::GetValue( EDA_UNITS_T aUnit ) const
 {
-    assert( false );        // TODO
+    if( aUnit == m_units )
+        return GetValue();  // no conversion needed
+
+    switch( m_units )
+    {
+    case MILLIMETRES:
+        switch( aUnit )
+        {
+        case INCHES:
+            iu = Mils2iu( GetValue() * 1000.0 );
+            break;
+
+        case UNSCALED_UNITS:
+            iu = GetValue();
+            break;
+        }
+        break;
+
+    case INCHES:
+        switch( aUnit )
+        {
+        case MILLIMETRES:
+            return Mils2mm( GetValue() * 1000.0 );
+            break;
+
+        case UNSCALED_UNITS:
+            return Mils2iu( GetValue() * 1000.0 );
+            break;
+        }
+        break;
+
+    case UNSCALED_UNITS:
+        switch( aUnit )
+        {
+        case MILLIMETRES:
+            return Iu2Mils( GetValue() ) / 1000.0;
+            break;
+
+//        case INCHES:
+//            return
+//            break;
+        }
+        break;
+    }
+
+    assert( false );        // seems that there are some conversions missing
 
     return 0.0;
-}
+}*/
 
 
-double WX_UNIT_TEXT::GetValue() const
+boost::optional<double> WX_UNIT_TEXT::GetValue() const
 {
     wxString text = m_inputValue->GetValue();
     double value;
 
     if( !text.ToDouble( &value ) )
-        value = 0.0;
+        return boost::optional<double>();
 
-    return value;
+    return boost::optional<double>( value );
 }
 
 
 void WX_UNIT_TEXT::onSpinUpEvent( wxSpinEvent& aEvent )
 {
-    SetValue( GetValue() + m_step );
+    SetValue( *GetValue() + m_step );
 }
 
 
 void WX_UNIT_TEXT::onSpinDownEvent( wxSpinEvent& aEvent )
 {
-    double newValue = GetValue() - m_step;
+    double newValue = *GetValue() - m_step;
 
     if( newValue >= 0.0 )
         SetValue( newValue );
-}
-
-
-void WX_UNIT_TEXT::onEnter( wxCommandEvent& aEvent )
-{
-    // Move focus to the next widget
-    Navigate();
 }

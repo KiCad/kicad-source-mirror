@@ -673,10 +673,13 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
     if( aEnable )
     {
         ViewReloadBoard( m_Pcb );
+        GetGalCanvas()->GetView()->RecacheAllItems();
 
         m_toolManager.SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
                                        GetGalCanvas()->GetViewControls(), this );
-        m_toolManager.ResetTools( TOOL_BASE::GAL_SWITCH );
+        m_toolManager.ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+        GetGalCanvas()->StartDrawing();
     }
 }
 

@@ -110,7 +110,7 @@ void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
     {
         int key = aAction.GetHotKey() & ~MD_MODIFIER_MASK;
         int mod = aAction.GetHotKey() & MD_MODIFIER_MASK;
-        wxAcceleratorEntryFlags flags = wxACCEL_NORMAL;
+        int flags = wxACCEL_NORMAL;
 
         switch( mod )
         {

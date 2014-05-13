@@ -67,7 +67,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 
-    Connect( wxEVT_PAINT,       wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
     Connect( wxEVT_SIZE,        wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
 
     /* Generic events for the Tool Dispatcher */
@@ -184,10 +183,21 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 }
 
 
+void EDA_DRAW_PANEL_GAL::StartDrawing()
+{
+    m_pendingRefresh = false;
+    Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
+
+    wxPaintEvent redrawEvent;
+    wxPostEvent( this, redrawEvent );
+}
+
+
 void EDA_DRAW_PANEL_GAL::StopDrawing()
 {
-    Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
+    m_pendingRefresh = true;
     m_refreshTimer.Stop();
+    Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
 }
 
 
@@ -198,8 +208,7 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
         return;
 
     // Prevent refreshing canvas during backend switch
-    m_pendingRefresh = true;
-    m_refreshTimer.Stop();
+    StopDrawing();
 
     delete m_gal;
 
@@ -228,7 +237,6 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
         m_view->SetGAL( m_gal );
 
     m_currentGal = aGalType;
-    m_pendingRefresh = false;
 }
 
 
