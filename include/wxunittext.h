@@ -136,6 +136,9 @@ protected:
 
     ///> Step size (added/subtracted difference if spin buttons are used).
     double          m_step;
+
+    ///> Default value (or non-specified)
+    static const wxString DEFAULT_VALUE;
 };
 
 #endif /* WXUNITTEXT_H_ */

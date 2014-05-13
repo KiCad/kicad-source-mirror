@@ -101,12 +101,14 @@ void WX_UNIT_TEXT::SetUnits( EDA_UNITS_T aUnits, bool aConvert )
 
 void WX_UNIT_TEXT::SetValue( double aValue )
 {
-    assert( aValue >= 0.0 );
-
     if( aValue >= 0.0 )
     {
         m_inputValue->SetValue( wxString( Double2Str( aValue ).c_str(), wxConvUTF8 ) );
         m_inputValue->MarkDirty();
+    }
+    else
+    {
+        m_inputValue->SetValue( DEFAULT_VALUE );
     }
 }
 
@@ -169,6 +171,9 @@ boost::optional<double> WX_UNIT_TEXT::GetValue() const
     wxString text = m_inputValue->GetValue();
     double value;
 
+    if( text == DEFAULT_VALUE )
+        return boost::optional<double>( -1.0 );
+
     if( !text.ToDouble( &value ) )
         return boost::optional<double>();
 
@@ -189,3 +194,6 @@ void WX_UNIT_TEXT::onSpinDownEvent( wxSpinEvent& aEvent )
     if( newValue >= 0.0 )
         SetValue( newValue );
 }
+
+
+const wxString WX_UNIT_TEXT::DEFAULT_VALUE = _( "default ");
