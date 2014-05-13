@@ -492,6 +492,11 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelec
     }
     else
     {
+        // If EDIT_TOOL is not currently active then it means that the cursor position is not
+        // updated, so we have to fetch the latest value
+        if( m_toolMgr->GetCurrentToolId() != m_toolId )
+            m_cursor = getViewControls()->GetCursorPosition();
+
         return wxPoint( m_cursor.x, m_cursor.y );
     }
 }
