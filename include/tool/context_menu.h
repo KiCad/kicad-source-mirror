@@ -28,6 +28,7 @@
 #include <wx/menu.h>
 #include <tool/tool_action.h>
 #include <map>
+#include <boost/function.hpp>
 
 class TOOL_INTERACTIVE;
 
@@ -90,28 +91,25 @@ public:
         return m_selected;
     }
 
-
 protected:
-    virtual OPT_TOOL_EVENT handleCustomEvent ( wxEvent& aEvent )
+    void setCustomEventHandler( boost::function<OPT_TOOL_EVENT(const wxEvent&)> aHandler )
+    {
+        m_customHandler = aHandler;
+    }
+
+    virtual OPT_TOOL_EVENT handleCustomEvent(const wxEvent& aEvent )
     {
         return OPT_TOOL_EVENT();
-    };
+    }
 
 private:
     /**
-     * Function copyMenu
-     * Copies recursively all entries and submenus.
-     * @param aParent is the source.
-     * @param aTarget is the destination.
-     */
-    void copyMenu( const CONTEXT_MENU* aParent, CONTEXT_MENU* aTarget ) const;
-
-    /**
      * Function copyItem
-     * Copies all properties of a menu entry.
+     * Copies all properties of a menu entry to another.
      */
     void copyItem( const wxMenuItem* aSource, wxMenuItem* aDest ) const;
 
+    ///> Initializes handlers for events.
     void setupEvents();
 
     ///> Event handler.
@@ -146,6 +144,9 @@ private:
 
     /// Associates tool actions with menu item IDs. Non-owning.
     std::map<int, const TOOL_ACTION*> m_toolActions;
+
+    /// Custom events handler, allows to translate wxEvents to TOOL_EVENTs.
+    boost::function<OPT_TOOL_EVENT(const wxEvent& aEvent)> m_customHandler;
 };
 
 #endif
