@@ -544,6 +544,7 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
 
     view->Add( worksheet );
     view->Add( aBoard->GetRatsnestViewItem() );
+    aBoard->GetRatsnest()->Recalculate();
 
     // Limit panning to the size of worksheet frame
     GetGalCanvas()->GetViewControls()->SetPanBoundary( aBoard->GetWorksheetViewItem()->ViewBBox() );
@@ -672,9 +673,6 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
     if( aEnable )
     {
         ViewReloadBoard( m_Pcb );
-
-        // Update potential changes in the ratsnest
-        m_Pcb->GetRatsnest()->Recalculate();
 
         m_toolManager.SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
                                        GetGalCanvas()->GetViewControls(), this );
