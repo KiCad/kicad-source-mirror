@@ -31,12 +31,12 @@
 #include <stdlib.h>
 
 #define ASSERT assert    // RTree uses ASSERT( condition )
-#ifndef Min
+#ifndef rMin
   #define rMin std::min
-#endif    // Min
-#ifndef Max
+#endif    // rMin
+#ifndef rMax
   #define rMax std::max
-#endif    // Max
+#endif    // rMax
 
 //
 // RTree.h
