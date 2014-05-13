@@ -119,7 +119,8 @@ void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
         case MD_SHIFT:  flags = wxACCEL_SHIFT;  break;
         }
 
-        item->SetAccel( new wxAcceleratorEntry( flags, key, id, item ) );
+        wxAcceleratorEntry accel( flags, key, id, item );
+        item->SetAccel( &accel );
     }
 
     m_menu.Append( item );
