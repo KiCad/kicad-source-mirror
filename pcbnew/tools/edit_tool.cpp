@@ -488,7 +488,7 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelec
 {
     if( aSelection.Size() == 1 )
     {
-        return static_cast<BOARD_ITEM*>( aSelection.items.GetPickedItem( 0 ) )->GetPosition();
+        return static_cast<BOARD_ITEM*>( aSelection.items.GetPickedItem( 0 ) )->GetPosition() - m_offset;
     }
     else
     {
