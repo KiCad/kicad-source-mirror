@@ -249,7 +249,10 @@ public:
      * returns a bit-mask of all the layers that are visible
      * @return int - the visible layers in bit-mapped form.
      */
-    LAYER_MSK GetVisibleLayers() const;
+    LAYER_MSK GetVisibleLayers() const
+    {
+        return m_visibleLayers;
+    }
 
     /**
      * Function SetVisibleAlls
@@ -263,7 +266,10 @@ public:
      * changes the bit-mask of visible layers
      * @param aMask = The new bit-mask of visible layers
      */
-    void SetVisibleLayers( LAYER_MSK aMask );
+    void SetVisibleLayers( LAYER_MSK aMask )
+    {
+        m_visibleLayers = aMask & m_enabledLayers & FULL_LAYERS;
+    }
 
     /**
      * Function IsLayerVisible
@@ -274,7 +280,7 @@ public:
     bool IsLayerVisible( LAYER_NUM aLayer ) const
     {
         // If a layer is disabled, it is automatically invisible
-        return m_VisibleLayers & m_EnabledLayers & GetLayerMask( aLayer );
+        return m_visibleLayers & m_enabledLayers & GetLayerMask( aLayer );
     }
 
     /**
@@ -292,7 +298,7 @@ public:
      */
     int GetVisibleElements() const
     {
-        return m_VisibleElements;
+        return m_visibleElements;
     }
 
     /**
@@ -302,7 +308,7 @@ public:
      */
     void SetVisibleElements( int aMask )
     {
-        m_VisibleElements = aMask;
+        m_visibleElements = aMask;
     }
 
     /**
@@ -317,7 +323,7 @@ public:
     {
         assert( aElementCategory >= 0 && aElementCategory < END_PCB_VISIBLE_LIST );
 
-        return ( m_VisibleElements & ( 1 << aElementCategory ) );
+        return ( m_visibleElements & ( 1 << aElementCategory ) );
     }
 
     /**
@@ -336,7 +342,7 @@ public:
      */
     inline LAYER_MSK GetEnabledLayers() const
     {
-        return m_EnabledLayers;
+        return m_enabledLayers;
     }
 
     /**
@@ -354,7 +360,7 @@ public:
      */
     bool IsLayerEnabled( LAYER_NUM aLayer ) const
     {
-        return m_EnabledLayers & GetLayerMask( aLayer );
+        return m_enabledLayers & GetLayerMask( aLayer );
     }
 
     /**
@@ -363,7 +369,7 @@ public:
      */
     int GetCopperLayerCount() const
     {
-        return m_CopperLayerCount;
+        return m_copperLayerCount;
     }
 
     /**
@@ -402,10 +408,10 @@ private:
     ///> Custom via size (used after UseCustomTrackViaSize( true ) was called).
     VIA_DIMENSION m_customViaSize;
 
-    int       m_CopperLayerCount;   ///< Number of copper layers for this design
-    LAYER_MSK m_EnabledLayers;      ///< Bit-mask for layer enabling
-    LAYER_MSK m_VisibleLayers;      ///< Bit-mask for layer visibility
-    int       m_VisibleElements;    ///< Bit-mask for element category visibility
+    int       m_copperLayerCount;   ///< Number of copper layers for this design
+    LAYER_MSK m_enabledLayers;      ///< Bit-mask for layer enabling
+    LAYER_MSK m_visibleLayers;      ///< Bit-mask for layer visibility
+    int       m_visibleElements;    ///< Bit-mask for element category visibility
     int       m_boardThickness;     ///< Board thickness for 3D viewer
 };
 
