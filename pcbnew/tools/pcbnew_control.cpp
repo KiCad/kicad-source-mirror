@@ -422,10 +422,13 @@ int PCBNEW_CONTROL::TrackWidthInc( TOOL_EVENT& aEvent )
         widthIndex = board->m_TrackWidthList.size() - 1;
 
     board->SetTrackWidthIndex( widthIndex );
+    board->UseCustomTrackViaSize( false );
 
     wxUpdateUIEvent dummy;
     getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectTrackWidth( dummy );
     setTransitions();
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
 
     return 0;
 }
@@ -440,10 +443,13 @@ int PCBNEW_CONTROL::TrackWidthDec( TOOL_EVENT& aEvent )
         widthIndex = 0;
 
     board->SetTrackWidthIndex( widthIndex );
+    board->UseCustomTrackViaSize( false );
 
     wxUpdateUIEvent dummy;
     getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectTrackWidth( dummy );
     setTransitions();
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
 
     return 0;
 }
@@ -458,10 +464,13 @@ int PCBNEW_CONTROL::ViaSizeInc( TOOL_EVENT& aEvent )
         sizeIndex = board->m_ViasDimensionsList.size() - 1;
 
     board->SetViaSizeIndex( sizeIndex );
+    board->UseCustomTrackViaSize( false );
 
     wxUpdateUIEvent dummy;
     getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectViaSize( dummy );
     setTransitions();
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
 
     return 0;
 }
@@ -476,10 +485,13 @@ int PCBNEW_CONTROL::ViaSizeDec( TOOL_EVENT& aEvent )
         sizeIndex = 0;
 
     board->SetViaSizeIndex( sizeIndex );
+    board->UseCustomTrackViaSize( false );
 
     wxUpdateUIEvent dummy;
     getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectViaSize( dummy );
     setTransitions();
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
 
     return 0;
 }

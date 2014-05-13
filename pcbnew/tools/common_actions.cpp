@@ -241,6 +241,7 @@ TOOL_ACTION COMMON_ACTIONS::viaSizeDec( "pcbnew.viaSizeDec",
         AS_GLOBAL, '\\',
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::trackViaSizeChanged( "pcbnew.trackViaSizeChanged", AS_GLOBAL, 0, "", "" );
 
 // Miscellaneous
 TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.resetCoords",
