@@ -513,8 +513,7 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
     if( m_view->IsDirty() )
     {
         PCB_EDIT_FRAME* f = static_cast<PCB_EDIT_FRAME*>( GetEditFrame() );
-        if( f->IsGalCanvasActive() )
-            f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
+        f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
     }
 
     return false;

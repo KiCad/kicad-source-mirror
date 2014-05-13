@@ -254,7 +254,8 @@ bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambigua
         }
 
         // Check if among the selection candidates there is only one instance of preferred type
-        if( item = prefer( collector, types ) )
+        item = prefer( collector, types );
+        if( item )
         {
             toggleSelection( item );
 
