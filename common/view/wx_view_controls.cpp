@@ -160,12 +160,12 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         // Set scaling speed depending on scroll wheel event interval
         if( timeDiff < 500 && timeDiff > 0 )
         {
-            zoomScale = ( aEvent.GetWheelRotation() > 0.0 ) ? 2.05 - timeDiff / 500 :
+            zoomScale = ( aEvent.GetWheelRotation() > 0 ) ? 2.05 - timeDiff / 500 :
                         1.0 / ( 2.05 - timeDiff / 500 );
         }
         else
         {
-            zoomScale = ( aEvent.GetWheelRotation() > 0.0 ) ? 1.05 : 0.95;
+            zoomScale = ( aEvent.GetWheelRotation() > 0 ) ? 1.05 : 0.95;
         }
 
         VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );

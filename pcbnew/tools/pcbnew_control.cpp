@@ -61,17 +61,14 @@ bool PCBNEW_CONTROL::Init()
 int PCBNEW_CONTROL::ZoomInOut( TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
-    KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
+    double zoomScale = 1.0;
 
     if( aEvent.IsAction( &COMMON_ACTIONS::zoomIn ) )
-        m_frame->SetPrevZoom();
+        zoomScale = 1.3;
     else if( aEvent.IsAction( &COMMON_ACTIONS::zoomOut ) )
-        m_frame->SetNextZoom();
+        zoomScale = 0.7;
 
-    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
-    double zoom = 1.0 / ( zoomFactor * m_frame->GetZoom() );
-
-    view->SetScale( zoom, getViewControls()->GetCursorPosition() );
+    view->SetScale( view->GetScale() * zoomScale, getViewControls()->GetCursorPosition() );
     setTransitions();
 
     return 0;
@@ -81,17 +78,14 @@ int PCBNEW_CONTROL::ZoomInOut( TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::ZoomInOutCenter( TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
-    KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
+    double zoomScale = 1.0;
 
-    if( aEvent.IsAction( &COMMON_ACTIONS::zoomInCenter ) )
-        m_frame->SetPrevZoom();
-    else if( aEvent.IsAction( &COMMON_ACTIONS::zoomOutCenter ) )
-        m_frame->SetNextZoom();
+    if( aEvent.IsAction( &COMMON_ACTIONS::zoomIn ) )
+        zoomScale = 1.3;
+    else if( aEvent.IsAction( &COMMON_ACTIONS::zoomOut ) )
+        zoomScale = 0.7;
 
-    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
-    double zoom = 1.0 / ( zoomFactor * m_frame->GetZoom() );
-
-    view->SetScale( zoom );
+    view->SetScale( view->GetScale() * zoomScale );
     setTransitions();
 
     return 0;
@@ -119,10 +113,6 @@ int PCBNEW_CONTROL::ZoomFitScreen( TOOL_EVENT& aEvent )
     double iuPerY = screenSize.y ? boardBBox.GetHeight() / screenSize.y : 1.0;
 
     double bestZoom = std::max( iuPerX, iuPerY );
-    // This is needed to avoid "jumpy" zooms if first hot key was used and then mouse scroll
-    // (or other way round).
-    m_frame->GetScreen()->SetZoom( bestZoom );
-
     double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
     double zoom = 1.0 / ( zoomFactor * bestZoom );
 
