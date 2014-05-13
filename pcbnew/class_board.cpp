@@ -94,8 +94,8 @@ BOARD::BOARD() :
 
     m_NetClasses.GetDefault()->SetDescription( _( "This is the default net class." ) );
 
-    m_viaSizeIndex    = 0;
-    m_trackWidthIndex = 0;
+    m_designSettings.SetViaSizeIndex( 0 );
+    m_designSettings.SetTrackWidthIndex( 0 );
 
     /*  Dick 5-Feb-2012: this seems unnecessary.  I don't believe the comment
         near line 70 of class_netclass.cpp.  I stepped through with debugger.
@@ -107,10 +107,10 @@ BOARD::BOARD() :
     SetCurrentNetClass( m_NetClasses.GetDefault()->GetName() );
 
     // Set sensible initial values for custom track width & via size
-    m_useCustomTrackVia = false;
-    m_customTrackWidth = GetCurrentTrackWidth();
-    m_customViaSize.m_Diameter = GetCurrentViaSize();
-    m_customViaSize.m_Drill = GetCurrentViaDrill();
+    m_designSettings.UseCustomTrackViaSize( false );
+    m_designSettings.SetCustomTrackWidth( m_designSettings.GetCurrentTrackWidth() );
+    m_designSettings.SetCustomViaSize( m_designSettings.GetCurrentViaSize() );
+    m_designSettings.SetCustomViaDrill( m_designSettings.GetCurrentViaDrill() );
 
     // Initialize ratsnest
     m_ratsnest = new RN_DATA( this );
@@ -331,37 +331,37 @@ bool BOARD::SetCurrentNetClass( const wxString& aNetClassName )
     m_currentNetClassName = netClass->GetName();
 
     // Initialize others values:
-    if( m_ViasDimensionsList.size() == 0 )
+    if( m_designSettings.m_ViasDimensionsList.size() == 0 )
     {
         VIA_DIMENSION viadim;
         lists_sizes_modified = true;
-        m_ViasDimensionsList.push_back( viadim );
+        m_designSettings.m_ViasDimensionsList.push_back( viadim );
     }
 
-    if( m_TrackWidthList.size() == 0 )
+    if( m_designSettings.m_TrackWidthList.size() == 0 )
     {
         lists_sizes_modified = true;
-        m_TrackWidthList.push_back( 0 );
+        m_designSettings.m_TrackWidthList.push_back( 0 );
     }
 
     /* note the m_ViasDimensionsList[0] and m_TrackWidthList[0] values
      * are always the Netclass values
      */
-    if( m_ViasDimensionsList[0].m_Diameter != netClass->GetViaDiameter() )
+    if( m_designSettings.m_ViasDimensionsList[0].m_Diameter != netClass->GetViaDiameter() )
         lists_sizes_modified = true;
 
-    m_ViasDimensionsList[0].m_Diameter = netClass->GetViaDiameter();
+    m_designSettings.m_ViasDimensionsList[0].m_Diameter = netClass->GetViaDiameter();
 
-    if( m_TrackWidthList[0] != netClass->GetTrackWidth() )
+    if( m_designSettings.m_TrackWidthList[0] != netClass->GetTrackWidth() )
         lists_sizes_modified = true;
 
-    m_TrackWidthList[0] = netClass->GetTrackWidth();
+    m_designSettings.m_TrackWidthList[0] = netClass->GetTrackWidth();
 
-    if( m_viaSizeIndex >= m_ViasDimensionsList.size() )
-        m_viaSizeIndex = m_ViasDimensionsList.size();
+    if( m_designSettings.GetViaSizeIndex() >= m_designSettings.m_ViasDimensionsList.size() )
+        m_designSettings.SetViaSizeIndex( m_designSettings.m_ViasDimensionsList.size() );
 
-    if( m_trackWidthIndex >= m_TrackWidthList.size() )
-        m_trackWidthIndex = m_TrackWidthList.size();
+    if( m_designSettings.GetTrackWidthIndex() >= m_designSettings.m_TrackWidthList.size() )
+        m_designSettings.SetTrackWidthIndex( m_designSettings.m_TrackWidthList.size() );
 
     return lists_sizes_modified;
 }
@@ -2197,24 +2197,6 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
 
     aPosition = lockPoint;
     return newTrack;
-}
-
-
-void BOARD::SetViaSizeIndex( unsigned aIndex )
-{
-    if( aIndex >= m_ViasDimensionsList.size() )
-        m_viaSizeIndex = m_ViasDimensionsList.size();
-    else
-        m_viaSizeIndex = aIndex;
-}
-
-
-void BOARD::SetTrackWidthIndex( unsigned aIndex )
-{
-    if( aIndex >= m_TrackWidthList.size() )
-        m_trackWidthIndex = m_TrackWidthList.size();
-    else
-        m_trackWidthIndex = aIndex;
 }
 
 

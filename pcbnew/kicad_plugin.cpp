@@ -551,12 +551,12 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     // Save current default track width, for compatibility with older Pcbnew version;
     m_out->Print( aNestLevel+1, "(last_trace_width %s)\n",
-                  FMTIU( aBoard->GetCurrentTrackWidth() ).c_str() );
+                  FMTIU( aBoard->GetDesignSettings().GetCurrentTrackWidth() ).c_str() );
 
     // Save custom tracks width list (the first is not saved here: this is the netclass value
-    for( unsigned ii = 1; ii < aBoard->m_TrackWidthList.size(); ii++ )
+    for( unsigned ii = 1; ii < aBoard->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         m_out->Print( aNestLevel+1, "(user_trace_width %s)\n",
-                      FMTIU( aBoard->m_TrackWidthList[ii] ).c_str() );
+                      FMTIU( aBoard->GetDesignSettings().m_TrackWidthList[ii] ).c_str() );
 
     m_out->Print( aNestLevel+1, "(trace_clearance %s)\n",
                   FMTIU( aBoard->m_NetClasses.GetDefault()->GetClearance() ).c_str() );
@@ -587,10 +587,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
-    for( unsigned ii = 1; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
+    for( unsigned ii = 1; ii < aBoard->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
         m_out->Print( aNestLevel+1, "(user_via %s %s)\n",
-                      FMTIU( aBoard->m_ViasDimensionsList[ii].m_Diameter ).c_str(),
-                      FMTIU( aBoard->m_ViasDimensionsList[ii].m_Drill ).c_str() );
+                      FMTIU( aBoard->GetDesignSettings().m_ViasDimensionsList[ii].m_Diameter ).c_str(),
+                      FMTIU( aBoard->GetDesignSettings().m_ViasDimensionsList[ii].m_Drill ).c_str() );
 
     // for old versions compatibility:
     if( aBoard->GetDesignSettings().m_BlindBuriedViaAllowed )

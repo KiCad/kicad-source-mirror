@@ -60,7 +60,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     /* Disable the option "copy current to net" if we have only default netclass values
      * i.e. when m_TrackWidthSelector and m_ViaSizeSelector are set to 0
      */
-    if( !board->GetTrackWidthIndex() && !board->GetViaSizeIndex() )
+    if( !board->GetDesignSettings().GetTrackWidthIndex() && !board->GetDesignSettings().GetViaSizeIndex() )
     {
         m_Net2CurrValueButton->Enable( false );
         m_OptionID = ID_NETCLASS_VALUES_TO_CURRENT_NET;
@@ -77,9 +77,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     msg = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 0, msg  );
 
-    if( board->GetTrackWidthIndex() )
+    if( board->GetDesignSettings().GetTrackWidthIndex() )
     {
-        value = board->GetCurrentTrackWidth();
+        value = board->GetDesignSettings().GetCurrentTrackWidth();
         msg   = StringFromValue( g_UserUnit, value, true );
     }
     else
@@ -91,9 +91,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 1, msg  );
 
-    if( board->GetViaSizeIndex() )
+    if( board->GetDesignSettings().GetViaSizeIndex() )
     {
-        value = board->GetCurrentViaSize();
+        value = board->GetDesignSettings().GetCurrentViaSize();
         msg   = StringFromValue( g_UserUnit, value, true );
     }
     else
@@ -103,7 +103,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     value = netclass->GetViaDrill();      // Display via drill
     msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 2, msg  );
-    value = board->GetCurrentViaDrill();
+    value = board->GetDesignSettings().GetCurrentViaDrill();
     if( value >= 0 )
         msg = StringFromValue( g_UserUnit, value, true );
     else
