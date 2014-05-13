@@ -128,14 +128,6 @@ private:
         m_tool = aTool;
     }
 
-    /**
-     * Function getHotKeyDescription()
-     * Returns a hot key in the string format accepted by wxMenu.
-     * @param aAction is the action with hot key to be translated..
-     * @return Hot key in the string format compatible with wxMenu.
-     */
-    std::string getHotKeyDescription( const TOOL_ACTION& aAction ) const;
-
     ///> Flag indicating that the menu title was set up.
     bool m_titleSet;
 

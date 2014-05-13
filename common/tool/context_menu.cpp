@@ -101,17 +101,28 @@ void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 {
     /// ID numbers for tool actions need to have a value higher than m_actionId
     int id = m_actionId + aAction.GetId();
-    wxString menuEntry;
+
+    wxMenuItem* item = new wxMenuItem( &m_menu, id,
+        wxString( aAction.GetMenuItem().c_str(), wxConvUTF8 ),
+        wxString( aAction.GetDescription().c_str(), wxConvUTF8 ), wxITEM_NORMAL );
 
     if( aAction.HasHotKey() )
-        menuEntry = wxString( ( aAction.GetMenuItem() + '\t' +
-                                getHotKeyDescription( aAction ) ).c_str(), wxConvUTF8 );
-    else
-        menuEntry = wxString( aAction.GetMenuItem().c_str(), wxConvUTF8 );
+    {
+        int key = aAction.GetHotKey() & ~MD_MODIFIER_MASK;
+        int mod = aAction.GetHotKey() & MD_MODIFIER_MASK;
+        wxAcceleratorEntryFlags flags = wxACCEL_NORMAL;
 
-    m_menu.Append( new wxMenuItem( &m_menu, id, menuEntry,
-                    wxString( aAction.GetDescription().c_str(), wxConvUTF8 ), wxITEM_NORMAL ) );
+        switch( mod )
+        {
+        case MD_ALT:    flags = wxACCEL_ALT;    break;
+        case MD_CTRL:   flags = wxACCEL_CTRL;   break;
+        case MD_SHIFT:  flags = wxACCEL_SHIFT;  break;
+        }
 
+        item->SetAccel( new wxAcceleratorEntry( flags, key, id, item ) );
+    }
+
+    m_menu.Append( item );
     m_toolActions[id] = &aAction;
 }
 
@@ -125,28 +136,6 @@ void CONTEXT_MENU::Clear()
         m_menu.Destroy( m_menu.FindItemByPosition( 0 ) );
 
     m_toolActions.clear();
-}
-
-
-std::string CONTEXT_MENU::getHotKeyDescription( const TOOL_ACTION& aAction ) const
-{
-    int hotkey = aAction.GetHotKey();
-
-    std::string description = "";
-
-    if( hotkey & MD_ALT )
-        description += "ALT+";
-
-    if( hotkey & MD_CTRL )
-        description += "CTRL+";
-
-    if( hotkey & MD_SHIFT )
-        description += "SHIFT+";
-
-    // TODO dispatch keys such as Fx, TAB, PG_UP/DN, HOME, END, etc.
-    description += char( hotkey & ~MD_MODIFIER_MASK );
-
-    return description;
 }
 
 
