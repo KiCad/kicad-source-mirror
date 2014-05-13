@@ -208,10 +208,6 @@ private:
     /// Number of unconnected nets in the current rats nest.
     int                     m_unconnectedNetCount;
 
-    /// Current net class name used to display netclass info.
-    /// This is also the last used netclass after starting a track.
-    wxString                m_currentNetClassName;
-
     /**
      * Function chainMarkedSegments
      * is used by MarkTrace() to set the BUSY flag of connected segments of the trace
@@ -222,10 +218,6 @@ private:
      * @param aList The track list to fill with points of flagged segments.
      */
     void chainMarkedSegments( wxPoint aPosition, LAYER_MSK aLayerMask, TRACK_PTRS* aList );
-
-    void formatNetClass( NETCLASS* aNetClass, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                         int aControlBits ) const
-        throw( IO_ERROR );
 
 public:
 
@@ -249,9 +241,6 @@ public:
 
     /// zone contour currently in progress
     ZONE_CONTAINER*             m_CurrentZoneContour;
-
-    /// List of current netclasses. There is always the default netclass.
-    NETCLASSES                  m_NetClasses;
 
     BOARD();
     ~BOARD();
@@ -743,20 +732,6 @@ public:
     void SetUnconnectedNetCount( unsigned aCount ) { m_unconnectedNetCount = aCount; }
 
     /**
-     * Function SetCurrentNetClassName
-     * sets the current net class name to \a aName.
-     *
-     * @param aName is a reference to a wxString object containing the current net class name.
-     */
-    void SetCurrentNetClassName( const wxString& aName ) { m_currentNetClassName = aName; }
-
-    /**
-     * Function GetCurrentNetClassName
-     * @return the current net class name.
-     */
-    const wxString& GetCurrentNetClassName() const { return m_currentNetClassName; }
-
-    /**
      * Function GetPadCount
      * @return the number of pads in board
      */
@@ -964,10 +939,6 @@ public:
      */
     int SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
 
-    /**************************************
-     * Functions related to NetClasses:
-     **************************************/
-
     /**
      * Function SynchronizeNetsAndNetClasses
      * copies NETCLASS info to each NET, based on NET membership in a NETCLASS.
@@ -976,42 +947,6 @@ public:
      * and add net nets in default netclass (this happens after reading a netlist)
      */
     void SynchronizeNetsAndNetClasses();
-
-    /**
-     * Function SetCurrentNetClass
-     * Must be called after a netclass selection (or after a netclass parameter change
-     * Initialize vias and tracks values displayed in comb boxes of the auxiliary toolbar
-     * and some others parameters (netclass name ....)
-     * @param aNetClassName = the new netclass name
-     * @return true if lists of tracks and vias sizes are modified
-     */
-    bool SetCurrentNetClass( const wxString& aNetClassName );
-
-    /**
-     * Function GetBiggestClearanceValue
-     * @return the biggest clearance value found in NetClasses list
-     */
-    int GetBiggestClearanceValue();
-
-    /**
-     * Function GetSmallestClearanceValue
-     * @return the smallest clearance value found in NetClasses list
-     */
-    int GetSmallestClearanceValue();
-
-    /**
-     * Function GetCurrentMicroViaSize
-     * @return the current micro via size,
-     * that is the current netclass value
-     */
-    int  GetCurrentMicroViaSize();
-
-    /**
-     * Function GetCurrentMicroViaDrill
-     * @return the current micro via drill,
-     * that is the current netclass value
-     */
-    int  GetCurrentMicroViaDrill();
 
     /***************************************************************************/
 

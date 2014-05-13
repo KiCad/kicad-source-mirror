@@ -115,11 +115,11 @@ void ROUTER_TOOL::getNetclassDimensions( int aNetCode, int& aWidth,
     if( ni )
     {
         wxString netClassName = ni->GetClassName();
-        netClass = board->m_NetClasses.Find( netClassName );
+        netClass = board->GetDesignSettings().m_NetClasses.Find( netClassName );
     }
 
     if( !netClass )
-        netClass = board->m_NetClasses.GetDefault();
+        netClass = board->GetDesignSettings().m_NetClasses.GetDefault();
 
     aWidth = netClass->GetTrackWidth();
     aViaDiameter = netClass->GetViaDiameter();

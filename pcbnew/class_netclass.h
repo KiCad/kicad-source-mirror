@@ -41,6 +41,7 @@
 
 class LINE_READER;
 class BOARD;
+class BOARD_DESIGN_SETTINGS;
 
 
 /**
@@ -53,17 +54,15 @@ class NETCLASS
 {
 private:
     // Default values used to init a NETCLASS
-    static int DEFAULT_CLEARANCE;
-    static int DEFAULT_VIA_DRILL;
-    static int DEFAULT_UVIA_DRILL;
+    const static int DEFAULT_CLEARANCE;
+    const static int DEFAULT_VIA_DRILL;
+    const static int DEFAULT_UVIA_DRILL;
 
 protected:
-
-    BOARD*      m_Parent;
     wxString    m_Name;                 ///< Name of the net class
     wxString    m_Description;          ///< what this NETCLASS is for.
 
-    typedef std::set<wxString>       STRINGSET;
+    typedef std::set<wxString> STRINGSET;
 
     STRINGSET   m_Members;              ///< names of NET members of this class
 
@@ -85,12 +84,9 @@ public:
     /**
      * Constructor
      * stuffs a NETCLASS instance with aParent, aName, and optionally the initialParameters
-     * @param aParent = the parent board
      * @param aName = the name of this new netclass
-     * @param initialParameters is a NETCLASS to copy parameters from, or if
-     *  NULL tells me to copy default settings from BOARD::m_designSettings.
      */
-    NETCLASS( BOARD* aParent, const wxString& aName, const NETCLASS* initialParameters = NULL );
+    NETCLASS( const wxString& aName );
 
     ~NETCLASS();
 
@@ -115,7 +111,6 @@ public:
         return m_Members.size();
     }
 
-
     /**
      * Function Clear
      * empties the collection of members.
@@ -124,7 +119,6 @@ public:
     {
         m_Members.clear();
     }
-
 
     /**
      * Function AddMember
@@ -169,34 +163,35 @@ public:
     void    SetClearance( int aClearance )  { m_Clearance = aClearance; }
 
     int     GetTrackWidth() const           { return m_TrackWidth; }
-    int     GetTrackMinWidth() const;
     void    SetTrackWidth( int aWidth )     { m_TrackWidth = aWidth; }
 
     int     GetViaDiameter() const          { return m_ViaDia; }
-    int     GetViaMinDiameter() const;
     void    SetViaDiameter( int aDia )      { m_ViaDia = aDia; }
 
     int     GetViaDrill() const             { return m_ViaDrill; }
-    int     GetViaMinDrill() const;
     void    SetViaDrill( int aSize )        { m_ViaDrill = aSize; }
 
     int     GetuViaDiameter() const         { return m_uViaDia; }
-    int     GetuViaMinDiameter() const;
     void    SetuViaDiameter( int aSize )    { m_uViaDia = aSize; }
 
     int     GetuViaDrill() const            { return m_uViaDrill; }
-    int     GetuViaMinDrill() const;
     void    SetuViaDrill( int aSize )       { m_uViaDrill = aSize; }
-
 
     /**
      * Function SetParams
      * will set all the parameters by copying them from \a defaults.
      * Parameters are the values like m_ViaSize, etc, but do not include m_Description.
-     * @param defaults is another NETCLASS to copy from.  If NULL, then copy
-     *  from global preferences instead.
+     * @param aDefaults is another NETCLASS object to copy from.
      */
-    void    SetParams( const NETCLASS* defaults = NULL );
+    void SetParams( const NETCLASS& aDefaults );
+
+    /**
+     * Function SetParams
+     * will set all the parameters by copying them from board design settings.
+     * @param aSettings is a BOARD_DESIGN_SETTINGS object to copy from. Clearance, via drill and
+     * microvia drill values are taken from the defaults.
+     */
+    void SetParams( const BOARD_DESIGN_SETTINGS& aSettings );
 
     /**
      * Function Format
@@ -225,9 +220,7 @@ public:
 class NETCLASSES
 {
 private:
-    BOARD*                  m_Parent;
-
-    typedef std::map<wxString, NETCLASS*>   NETCLASSMAP;
+    typedef std::map<wxString, NETCLASS*> NETCLASSMAP;
 
     /// all the NETCLASSes except the default one.
     NETCLASSMAP             m_NetClasses;
@@ -236,7 +229,7 @@ private:
     NETCLASS                m_Default;
 
 public:
-    NETCLASSES( BOARD* aParent = NULL );
+    NETCLASSES();
     ~NETCLASSES();
 
     /**
@@ -245,14 +238,13 @@ public:
      */
     void Clear();
 
-    typedef NETCLASSMAP::iterator       iterator;
+    typedef NETCLASSMAP::iterator iterator;
     iterator begin() { return m_NetClasses.begin(); }
     iterator end()   { return m_NetClasses.end(); }
 
     typedef NETCLASSMAP::const_iterator const_iterator;
     const_iterator begin() const { return m_NetClasses.begin(); }
     const_iterator end()   const { return m_NetClasses.end(); }
-
 
     /**
      * Function GetCount
@@ -263,6 +255,10 @@ public:
         return m_NetClasses.size();
     }
 
+    /**
+     * Function GetDefault
+     * @return the default net class.
+     */
     NETCLASS* GetDefault() const
     {
         return (NETCLASS*) &m_Default;

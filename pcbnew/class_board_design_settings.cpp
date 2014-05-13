@@ -102,6 +102,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
 
     // Layer thickness for 3D viewer
     m_boardThickness = Millimeter2iu( DEFAULT_BOARD_THICKNESS_MM );
+
+    m_viaSizeIndex = 0;
+    m_trackWidthIndex = 0;
 }
 
 // Add parameters to save in project config.
@@ -168,6 +171,100 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
                     DEFAULT_GR_MODULE_THICKNESS,
                     Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
                     NULL, MM_PER_IU ) );
+}
+
+
+bool BOARD_DESIGN_SETTINGS::SetCurrentNetClass( const wxString& aNetClassName )
+{
+    NETCLASS* netClass = m_NetClasses.Find( aNetClassName );
+    bool      lists_sizes_modified = false;
+
+    // if not found (should not happen) use the default
+    if( netClass == NULL )
+        netClass = m_NetClasses.GetDefault();
+
+    m_currentNetClassName = netClass->GetName();
+
+    // Initialize others values:
+    if( m_ViasDimensionsList.size() == 0 )
+    {
+        VIA_DIMENSION viadim;
+        lists_sizes_modified = true;
+        m_ViasDimensionsList.push_back( viadim );
+    }
+
+    if( m_TrackWidthList.size() == 0 )
+    {
+        lists_sizes_modified = true;
+        m_TrackWidthList.push_back( 0 );
+    }
+
+    /* note the m_ViasDimensionsList[0] and m_TrackWidthList[0] values
+     * are always the Netclass values
+     */
+    if( m_ViasDimensionsList[0].m_Diameter != netClass->GetViaDiameter() )
+        lists_sizes_modified = true;
+
+    m_ViasDimensionsList[0].m_Diameter = netClass->GetViaDiameter();
+
+    if( m_TrackWidthList[0] != netClass->GetTrackWidth() )
+        lists_sizes_modified = true;
+
+    m_TrackWidthList[0] = netClass->GetTrackWidth();
+
+    if( GetViaSizeIndex() >= m_ViasDimensionsList.size() )
+        SetViaSizeIndex( m_ViasDimensionsList.size() );
+
+    if( GetTrackWidthIndex() >= m_TrackWidthList.size() )
+        SetTrackWidthIndex( m_TrackWidthList.size() );
+
+    return lists_sizes_modified;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
+{
+    int clearance = m_NetClasses.GetDefault()->GetClearance();
+
+    //Read list of Net Classes
+    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
+    {
+        NETCLASS* netclass = nc->second;
+        clearance = std::max( clearance, netclass->GetClearance() );
+    }
+
+    return clearance;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue()
+{
+    int clearance = m_NetClasses.GetDefault()->GetClearance();
+
+    //Read list of Net Classes
+    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
+    {
+        NETCLASS* netclass = nc->second;
+        clearance = std::min( clearance, netclass->GetClearance() );
+    }
+
+    return clearance;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetCurrentMicroViaSize()
+{
+    NETCLASS* netclass = m_NetClasses.Find( m_currentNetClassName );
+
+    return netclass->GetuViaDiameter();
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetCurrentMicroViaDrill()
+{
+    NETCLASS* netclass = m_NetClasses.Find( m_currentNetClassName );
+
+    return netclass->GetuViaDrill();
 }
 
 

@@ -1133,7 +1133,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
 
         loadAllSections( doc );
 
-        BOARD_DESIGN_SETTINGS&  designSettings = m_board->GetDesignSettings();
+        BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
 
         if( m_min_trace < designSettings.m_TrackMinWidth )
             designSettings.m_TrackMinWidth = m_min_trace;
@@ -1146,7 +1146,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
 
         if( m_rules->mdWireWire )
         {
-            NETCLASS*   defaultNetclass = m_board->m_NetClasses.GetDefault();
+            NETCLASS*   defaultNetclass = designSettings.m_NetClasses.GetDefault();
             int         clearance = KiROUND( m_rules->mdWireWire );
 
             if( clearance < defaultNetclass->GetClearance() )

@@ -8,6 +8,7 @@
 #include <pcbstruct.h>      // NB_COLORS
 #include <class_pad.h>
 #include <class_track.h>
+#include <class_netclass.h>
 #include <config_params.h>
 
 /**
@@ -61,6 +62,9 @@ public:
     /// Track width list
     std::vector<int> m_TrackWidthList;
 
+    /// List of current netclasses. There is always the default netclass.
+    NETCLASSES m_NetClasses;
+
     bool    m_MicroViasAllowed;             ///< true to allow micro vias
     bool    m_BlindBuriedViaAllowed;        ///< true to allow blind/buried vias
     VIATYPE_T m_CurrentViaType;             ///< via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
@@ -96,6 +100,56 @@ public:
     D_PAD   m_Pad_Master;
 
     BOARD_DESIGN_SETTINGS();
+
+    /**
+     * Function SetCurrentNetClassName
+     * sets the current net class name to \a aName.
+     *
+     * @param aName is a reference to a wxString object containing the current net class name.
+     */
+    void SetCurrentNetClassName( const wxString& aName ) { m_currentNetClassName = aName; }
+
+    /**
+     * Function GetCurrentNetClassName
+     * @return the current net class name.
+     */
+    const wxString& GetCurrentNetClassName() const { return m_currentNetClassName; }
+
+    /**
+     * Function SetCurrentNetClass
+     * Must be called after a netclass selection (or after a netclass parameter change
+     * Initialize vias and tracks values displayed in comb boxes of the auxiliary toolbar
+     * and some others parameters (netclass name ....)
+     * @param aNetClassName = the new netclass name
+     * @return true if lists of tracks and vias sizes are modified
+     */
+    bool SetCurrentNetClass( const wxString& aNetClassName );
+
+    /**
+     * Function GetBiggestClearanceValue
+     * @return the biggest clearance value found in NetClasses list
+     */
+    int GetBiggestClearanceValue();
+
+    /**
+     * Function GetSmallestClearanceValue
+     * @return the smallest clearance value found in NetClasses list
+     */
+    int GetSmallestClearanceValue();
+
+    /**
+     * Function GetCurrentMicroViaSize
+     * @return the current micro via size,
+     * that is the current netclass value
+     */
+    int GetCurrentMicroViaSize();
+
+    /**
+     * Function GetCurrentMicroViaDrill
+     * @return the current micro via drill,
+     * that is the current netclass value
+     */
+    int GetCurrentMicroViaDrill();
 
     /**
      * Function GetTrackWidthIndex
@@ -413,6 +467,13 @@ private:
     LAYER_MSK m_visibleLayers;      ///< Bit-mask for layer visibility
     int       m_visibleElements;    ///< Bit-mask for element category visibility
     int       m_boardThickness;     ///< Board thickness for 3D viewer
+
+    /// Current net class name used to display netclass info.
+    /// This is also the last used netclass after starting a track.
+    wxString  m_currentNetClassName;
+
+    void formatNetClass( NETCLASS* aNetClass, OUTPUTFORMATTER* aFormatter, int aNestLevel,
+                         int aControlBits ) const throw( IO_ERROR );
 };
 
 #endif  // BOARD_DESIGN_SETTINGS_H_

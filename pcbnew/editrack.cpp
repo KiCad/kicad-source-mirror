@@ -167,7 +167,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         // Display info about track Net class, and init track and vias sizes:
         g_CurrentTrackSegment->SetNetCode( GetBoard()->GetHighLightNetCode() );
-        GetBoard()->SetCurrentNetClass( g_CurrentTrackSegment->GetNetClassName() );
+        GetDesignSettings().SetCurrentNetClass( g_CurrentTrackSegment->GetNetClassName() );
 
         g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
         g_CurrentTrackSegment->SetWidth( GetDesignSettings().GetCurrentTrackWidth() );
