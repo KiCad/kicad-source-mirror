@@ -62,7 +62,9 @@ void PCB_EDIT_FRAME::OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent )
     {
         bool check = ( ( ( ID_POPUP_PCB_SELECT_WIDTH1 +
                            (int) GetBoard()->GetTrackWidthIndex() ) == aEvent.GetId() ) &&
-                       !GetDesignSettings().m_UseConnectedTrackWidth );
+                       !GetDesignSettings().m_UseConnectedTrackWidth &&
+                       !GetBoard()->UseCustomTrackViaSize() );
+
         aEvent.Check( check );
     }
 }
@@ -70,7 +72,14 @@ void PCB_EDIT_FRAME::OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( GetDesignSettings().m_UseConnectedTrackWidth );
+    aEvent.Check( GetDesignSettings().m_UseConnectedTrackWidth &&
+            !GetBoard()->UseCustomTrackViaSize() );
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateSelectCustomTrackWidth( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( GetBoard()->UseCustomTrackViaSize() );
 }
 
 
@@ -87,7 +96,8 @@ void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
     {
         bool check = ( ( ( ID_POPUP_PCB_SELECT_VIASIZE1 +
                            (int) GetBoard()->GetViaSizeIndex() ) == aEvent.GetId() ) &&
-                       !GetDesignSettings().m_UseConnectedTrackWidth );
+                       !GetDesignSettings().m_UseConnectedTrackWidth &&
+                       !GetBoard()->UseCustomTrackViaSize() );
 
         aEvent.Check( check );
     }
