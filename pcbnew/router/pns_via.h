@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __PNS_VIA_H
@@ -45,16 +45,21 @@ public:
     };
 
 
-    PNS_VIA( const PNS_VIA& b ) : PNS_ITEM( VIA )
+    PNS_VIA( const PNS_VIA& b ) : 
+        PNS_ITEM( VIA )
     {
-        SetNet( b.GetNet() );
-        SetLayers( b.GetLayers() );
+        SetNet( b.Net() );
+        SetLayers( b.Layers() );
         m_pos = b.m_pos;
         m_diameter = b.m_diameter;
         m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
+        m_marker = b.m_marker;
+        m_rank = b.m_rank;
+        m_owner = b.m_owner;
+        m_drill = b.m_drill;
     }
 
-    const VECTOR2I& GetPos() const
+    const VECTOR2I& Pos() const
     {
         return m_pos;
     }
@@ -65,7 +70,7 @@ public:
         m_shape.SetCenter( aPos );
     }
 
-    int GetDiameter() const
+    int Diameter() const
     {
         return m_diameter;
     }
@@ -76,7 +81,7 @@ public:
         m_shape.SetRadius( m_diameter / 2 );
     }
 
-    int GetDrill() const
+    int Drill() const
     {
         return m_drill;
     }
@@ -92,25 +97,24 @@ public:
             bool aSolidsOnly = true,
             int aMaxIterations = 10 );
 
-    const SHAPE* GetShape() const
+    const SHAPE* Shape() const
     {
         return &m_shape;
     }
 
-    PNS_VIA* Clone() const
-    {
-        PNS_VIA* v = new PNS_VIA();
-
-        v->SetNet( GetNet() );
-        v->SetLayers( GetLayers() );
-        v->m_pos = m_pos;
-        v->m_diameter = m_diameter;
-        v->m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
-
-        return v;
-    }
+    PNS_VIA* Clone ( ) const;
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const;
+    
+    virtual VECTOR2I Anchor(int n) const 
+    {
+        return m_pos;
+    }
+
+    virtual int AnchorCount() const 
+    {
+        return 1;
+    }
 
 private:
 

@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -18,25 +18,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __PNS_UTILS_H
-#define __PNS_UTILS_H
+#include "pns_algo_base.h"
+#include "pns_router.h"
 
-#include <math/vector2d.h>
-#include <geometry/shape_line_chain.h>
-#include <geometry/shape_segment.h>
-#include <geometry/shape_rect.h>
+PNS_ROUTING_SETTINGS& PNS_ALGO_BASE::Settings() const
+{
+	return m_router->Settings();
+}
 
-#define HULL_MARGIN 10
-
-/** Various utility functions */
-
-const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize,
-        int aClearance, int aChamfer );
-
-const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg,
-    int aClearance,
-    int aWalkaroundThickness );
-
-SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg );
-
-#endif    // __PNS_UTILS_H
+PNS_LOGGER *PNS_ALGO_BASE::Logger() 
+{
+	return NULL;
+}

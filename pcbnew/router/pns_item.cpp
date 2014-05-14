@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "pns_item.h"
@@ -32,7 +32,7 @@ bool PNS_ITEM::collideSimple( const PNS_ITEM* aOther, int aClearance, bool aNeed
     if( !m_layers.Overlaps( aOther->m_layers ) )
         return false;
 
-    return GetShape()->Collide( aOther->GetShape(), aClearance );
+    return Shape()->Collide( aOther->Shape(), aClearance );
 
     // fixme: MTV
 }
@@ -50,7 +50,7 @@ bool PNS_ITEM::Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
         const PNS_LINE* line = static_cast<const PNS_LINE*>( aOther );
 
         if( line->EndsWithVia() )
-            return collideSimple( &line->GetVia(), aClearance - line->GetWidth() / 2, aNeedMTV,
+            return collideSimple( &line->Via(), aClearance - line->Width() / 2, aNeedMTV,
                     aMTV );
     }
 
@@ -58,7 +58,7 @@ bool PNS_ITEM::Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
 }
 
 
-const std::string PNS_ITEM::GetKindStr() const
+const std::string PNS_ITEM::KindStr() const
 {
     switch( m_kind )
     {
@@ -85,4 +85,5 @@ const std::string PNS_ITEM::GetKindStr() const
 
 PNS_ITEM::~PNS_ITEM()
 {
+    
 }

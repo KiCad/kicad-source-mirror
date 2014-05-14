@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __PNS_LINE_H
@@ -42,60 +42,42 @@ class PNS_VIA;
  * vias, pads, junctions between multiple traces or two traces different widths
  * and combinations of these). PNS_LINEs are NOT stored in the model (PNS_NODE).
  * Instead, they are assembled on-the-fly, based on a via/pad/segment that
- * belongs/begins them.
+ * belongs to/starts/ends them.
  *
  * PNS_LINEs can be either loose (consisting of segments that do not belong to
  * any PNS_NODE) or owned (with segments taken from a PNS_NODE) - these are
  * returned by PNS_NODE::AssembleLine and friends.
  *
- * A PNS_LINE may have a PNS_VIA attached at its and - this is used by via
+ * A PNS_LINE may have a PNS_VIA attached at its end (i.e. the last point) - this is used by via
  * dragging/force propagation stuff.
  */
+
+#define PNS_HULL_MARGIN 10
 
 class PNS_LINE : public PNS_ITEM
 {
 public:
-    typedef std::vector<PNS_SEGMENT*> LinkedSegments;
-
-    PNS_LINE() :
-        PNS_ITEM( LINE )
-    {
-        m_segmentRefs = NULL;
-        m_hasVia = false;
-        m_affectedRangeStart = -1;
-    };
-
-    PNS_LINE( int aLayer, int aWidth, const SHAPE_LINE_CHAIN& aLine ) :
-        PNS_ITEM( LINE )
-    {
-        m_line  = aLine;
-        m_width = aWidth;
-        m_segmentRefs = NULL;
-        m_hasVia = false;
-        m_affectedRangeStart = -1;
-        SetLayer( aLayer );
-    }
-
-    PNS_LINE( const PNS_LINE& aOther ) :
-        PNS_ITEM( aOther ),
-        m_line( aOther.m_line ),
-        m_width( aOther.m_width )
-    {
-        m_net = aOther.m_net;
-        m_movable = aOther.m_movable;
-        m_world = aOther.m_world;
-        m_layers = aOther.m_layers;
-        m_segmentRefs = NULL;
-        m_via = aOther.m_via;
-        m_hasVia = aOther.m_hasVia;
-        m_affectedRangeStart = -1;
-    }
+    typedef std::vector<PNS_SEGMENT*> SegmentRefs;
 
     /**
      * Constructor
-     * copies properties (net, layers from a base line), and replaces the shape
-     * by aLine
+     * Makes an empty line.
+     */
+    PNS_LINE() : PNS_ITEM (LINE)
+    {
+        m_segmentRefs = NULL;
+        m_hasVia = false;
+    }
+
+    
+    PNS_LINE( const PNS_LINE& aOther ) ;
+            
+    /**
+     * Constructor
+     * Copies properties (net, layers, etc.) from a base line and replaces the shape
+     * by another
      **/
+
     PNS_LINE( const PNS_LINE& aBase, const SHAPE_LINE_CHAIN& aLine ) :
         PNS_ITEM( aBase ),
         m_line( aLine ),
@@ -105,49 +87,101 @@ public:
         m_layers = aBase.m_layers;
         m_segmentRefs = NULL;
         m_hasVia = false;
-        m_affectedRangeStart = -1;
     }
 
-    ~PNS_LINE()
+    ~PNS_LINE();
+
+    /// @copydoc PNS_ITEM::Clone()
+    virtual PNS_LINE* Clone( ) const;
+
+    const PNS_LINE& operator= (const PNS_LINE& aOther);
+
+    ///> Assigns a shape to the line (a polyline/line chain)
+    void SetShape ( const SHAPE_LINE_CHAIN& aLine ) 
+    { 
+        m_line = aLine;
+    }
+
+    ///> Returns the shape of the line
+    const SHAPE* Shape() const 
+    { 
+        return &m_line; 
+    }
+
+    ///> Modifiable accessor to the underlying shape
+    SHAPE_LINE_CHAIN& Line() 
+    { 
+        return m_line; 
+    }
+
+    ///> Const accessor to the underlying shape
+    const SHAPE_LINE_CHAIN& CLine() const 
+    { 
+        return m_line;
+    }
+
+    ///> Returns the number of segments in the line
+    int SegmentCount() const 
     {
-        if( m_segmentRefs )
-            delete m_segmentRefs;
-    };
+        return m_line.SegmentCount(); 
+    }
 
-    virtual PNS_LINE* Clone() const;
+    ///> Returns the number of points in the line
+    int PointCount() const 
+    { 
+        return m_line.PointCount(); 
+    }
 
-    ///> clones the line without cloning the shape
-    ///> (just the properties - net, width, layers, etc.)
-    PNS_LINE* CloneProperties() const;
+    ///> Returns the aIdx-th point of the line
+    const VECTOR2I& CPoint( int aIdx ) const 
+    { 
+        return m_line.CPoint(aIdx); 
+    }
 
-    int GetLayer() const { return GetLayers().Start(); }
+    ///> Returns the aIdx-th segment of the line
+    const SEG CSegment (int aIdx ) const 
+    { 
+        return m_line.CSegment(aIdx); 
+    }
 
-    ///> Geometry accessors
-    void SetShape( const SHAPE_LINE_CHAIN& aLine ) { m_line = aLine; }
-    const SHAPE* GetShape() const { return &m_line; }
-    SHAPE_LINE_CHAIN& GetLine() { return m_line; }
-    const SHAPE_LINE_CHAIN& GetCLine() const { return m_line; }
+    ///> Sets line width
+    void SetWidth( int aWidth ) 
+    { 
+        m_width = aWidth; 
+    }
+    
+    ///> Returns line width
+    int Width() const 
+    { 
+        return m_width; 
+    }
 
-    ///> Width accessors
-    void SetWidth( int aWidth ) { m_width = aWidth; }
-    int GetWidth() const { return m_width; }
+    ///> Returns true if the line is geometrically identical as line aOther
+    bool CompareGeometry( const PNS_LINE& aOther );
 
-    ///> Links a segment from a PNS_NODE to this line, making it owned by the node
+    ///> Reverses the point/vertex order
+    void Reverse();
+
+
+    /* Linking functions */
+
+    ///> Adds a reference to a segment registered in a PNS_NODE that is a part of this line. 
     void LinkSegment( PNS_SEGMENT* aSeg )
     {
         if( !m_segmentRefs )
-            m_segmentRefs = new std::vector<PNS_SEGMENT*> ();
+            m_segmentRefs = new SegmentRefs();
 
         m_segmentRefs->push_back( aSeg );
     }
 
-    ///> Returns a list of segments from the owning node that constitute this
-    ///> line (or NULL if the line is loose)
-    LinkedSegments* GetLinkedSegments()
+    ///> Returns the list of segments from the owning node that constitute this
+    ///> line (or NULL if the line is not linked)
+    SegmentRefs* LinkedSegments()
     {
         return m_segmentRefs;
     }
 
+    ///> Checks if the segment aSeg is a part of the line.
     bool ContainsSegment( PNS_SEGMENT* aSeg ) const
     {
         if( !m_segmentRefs )
@@ -157,13 +191,23 @@ public:
                 aSeg ) != m_segmentRefs->end();
     }
 
-    ///> Returns this line, but clipped to the nearest obstacle
-    ///> along, to avoid collision.
+    ///> Erases the linking information. Used to detach the line from the owning node.
+    void ClearSegmentLinks();
+    
+    ///> Returns the number of segments that were assembled together to form this line.
+    int LinkCount() const {
+        if(!m_segmentRefs)
+            return -1;
+        return m_segmentRefs->size();
+    }
+
+    ///> Clips the line to the nearest obstacle, traversing from the line's start vertex (0).
+    ///> Returns the clipped line.
     const PNS_LINE ClipToNearestObstacle( PNS_NODE* aNode ) const;
 
-    ///> DEPRECATED optimization functions (moved to PNS_OPTIMIZER)
-    bool MergeObtuseSegments();
-    bool MergeSegments();
+    ///> Clips the line to a given range of vertices. 
+    void ClipVertexRange ( int aStart, int aEnd );
+    
 
     ///> Returns the number of corners of angles specified by mask aAngles.
     int CountCorners( int aAngles );
@@ -173,17 +217,7 @@ public:
     ///> aPrePath = path from origin to the obstacle
     ///> aWalkaroundPath = path around the obstacle
     ///> aPostPath = past from obstacle till the end
-    ///> aCW = whether to walkaround in clockwise or counter-clockwise direction.
-    void NewWalkaround( const SHAPE_LINE_CHAIN& aObstacle,
-            SHAPE_LINE_CHAIN& aPrePath,
-            SHAPE_LINE_CHAIN& aWalkaroundPath,
-            SHAPE_LINE_CHAIN& aPostPath,
-            bool aCw ) const;
-
-    void NewWalkaround( const SHAPE_LINE_CHAIN& aObstacle,
-            SHAPE_LINE_CHAIN& aPath,
-            bool aCw ) const;
-
+    ///> aCW = whether to walk around in clockwise or counter-clockwise direction.
 
     bool Walkaround( SHAPE_LINE_CHAIN obstacle,
             SHAPE_LINE_CHAIN& pre,
@@ -202,62 +236,46 @@ public:
 
     bool EndsWithVia() const { return m_hasVia; }
 
-    void AppendVia( const PNS_VIA& aVia )
-    {
-        m_hasVia = true;
-        m_via = aVia;
-        m_via.SetNet( m_net );
-    }
-
+    void AppendVia( const PNS_VIA& aVia );
     void RemoveVia() { m_hasVia = false; }
-    const PNS_VIA& GetVia() const { return m_via; }
 
-    void SetAffectedRange( int aStart, int aEnd )
-    {
-        m_affectedRangeStart = aStart;
-        m_affectedRangeEnd = aEnd;
-    }
+    const PNS_VIA& Via() const { return m_via; }
+ 
+    virtual void Mark(int aMarker);
+    virtual void Unmark ();
+    virtual int Marker() const;
+    
+    void DragSegment ( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
+    void DragCorner ( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
 
-    void ClearAffectedRange()
-    {
-        m_affectedRangeStart = -1;
-    }
-
-    bool GetAffectedRange( int& aStart, int& aEnd )
-    {
-        if( m_affectedRangeStart >= 0 )
-        {
-            aStart = m_affectedRangeStart;
-            aEnd = m_affectedRangeEnd;
-            return true;
-        }
-        else
-        {
-            aStart = 0;
-            aEnd = m_line.PointCount();
-            return false;
-        }
-    }
+    void SetRank ( int aRank );
+    int Rank() const;
+        
+    bool HasLoops() const;
 
 private:
-    bool onEdge( const SHAPE_LINE_CHAIN& obstacle, VECTOR2I p, int& ei, bool& is_vertex ) const;
-    bool walkScan( const SHAPE_LINE_CHAIN& line, const SHAPE_LINE_CHAIN& obstacle,
-            bool reverse, VECTOR2I& ip, int& index_o, int& index_l, bool& is_vertex ) const;
 
-    ///> List of semgments in a PNS_NODE (PNS_ITEM::m_owner) that constitute this line.
-    LinkedSegments* m_segmentRefs;
+    VECTOR2I snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP, int aIndex, int aThreshold) const;
+    VECTOR2I snapDraggedCorner( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP, int aIndex, int aThreshold ) const;
 
-    ///> Shape of the line
+    ///> Copies m_segmentRefs from the line aParent.
+    void copyLinks( const PNS_LINE *aParent ) ;
+    
+    ///> List of segments in the owning PNS_NODE (PNS_ITEM::m_owner) that constitute this line, or NULL
+    ///> if the line is not a part of any node.
+    SegmentRefs* m_segmentRefs;
+
+    ///> The actual shape of the line
     SHAPE_LINE_CHAIN m_line;
 
+    ///> our width
     int m_width;
 
-    ///> Via at the end and a flag indicating if it's enabled.
-    PNS_VIA m_via;
+    ///> If true, the line ends with a via
     bool m_hasVia;
 
-    int m_affectedRangeStart;
-    int m_affectedRangeEnd;
+    ///> Via at the end point, if m_hasVia == true
+    PNS_VIA m_via;
 };
 
 #endif    // __PNS_LINE_H

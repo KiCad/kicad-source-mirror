@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __PNS_OPTIMIZER_H
@@ -26,6 +26,8 @@
 
 #include <geometry/shape_index_list.h>
 #include <geometry/shape_line_chain.h>
+
+#include "range.h"
 
 class PNS_NODE;
 class PNS_LINE;
@@ -90,17 +92,17 @@ public:
     {
         MERGE_SEGMENTS  = 0x01,
         SMART_PADS      = 0x02,
-        MERGE_OBTUSE    = 0x04
+        MERGE_OBTUSE    = 0x04,
+        FANOUT_CLEANUP    = 0x08
     };
 
     PNS_OPTIMIZER( PNS_NODE* aWorld );
     ~PNS_OPTIMIZER();
 
     ///> a quick shortcut to optmize a line without creating and setting up an optimizer
-    static bool Optimize( PNS_LINE* aLine, int aEffortLevel, PNS_NODE* aWorld = NULL );
+    static bool Optimize( PNS_LINE* aLine, int aEffortLevel, PNS_NODE* aWorld);
 
-    bool Optimize( PNS_LINE* aLine, PNS_LINE* aResult = NULL,
-            int aStartVertex = 0, int aEndVertex = -1 );
+    bool Optimize( PNS_LINE* aLine, PNS_LINE* aResult = NULL );
 
     void SetWorld( PNS_NODE* aNode ) { m_world = aNode; }
     void CacheStaticItem( PNS_ITEM* aItem );
@@ -135,6 +137,7 @@ private:
     bool removeUglyCorners( PNS_LINE* aLine );
     bool runSmartPads( PNS_LINE* aLine );
     bool mergeStep( PNS_LINE* aLine, SHAPE_LINE_CHAIN& aCurrentLine, int step );
+    bool fanoutCleanup( PNS_LINE * aLine );
 
     bool checkColliding( PNS_ITEM* aItem, bool aUpdateCache = true );
     bool checkColliding( PNS_LINE* aLine, const SHAPE_LINE_CHAIN& aOptPath );

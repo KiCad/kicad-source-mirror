@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -180,6 +180,11 @@ public:
         return ( m_dir % 2 ) == 1;
     }
 
+    bool IsDefined() const 
+    {
+        return m_dir != UNDEFINED;
+    }
+
     /**
      * Function BuildInitialTrace()
      *
@@ -244,32 +249,75 @@ public:
         return aOther.m_dir != m_dir;
     }
 
+    /**
+     * Function Right()
+     *
+     * Returns the direction on the right side of this (i.e. turns right
+     * by 45 deg)
+     */
     const DIRECTION_45 Right() const
     {
         DIRECTION_45 r;
 
-        r.m_dir = (Directions) (m_dir + 1);
-
-        if( r.m_dir == NW )
-            r.m_dir = N;
+        if ( m_dir != UNDEFINED )
+            r.m_dir = static_cast<Directions>( ( m_dir + 1 ) % 8 );
 
         return r;
     }
 
-private:
-
-    template <typename T>
-    int sign( T val ) const
+    /**
+     * Function Left()
+     *
+     * Returns the direction on the left side of this (i.e. turns left
+     * by 45 deg)
+     */
+    const DIRECTION_45 Left() const
     {
-        return (T( 0 ) < val) - ( val < T( 0 ) );
+        DIRECTION_45 l;
+
+        if (m_dir == UNDEFINED)
+            return l;
+
+        if(m_dir == N)
+            l.m_dir = NW;
+        else
+            l.m_dir = static_cast<Directions> (m_dir - 1);
+        
+        return l;
     }
+
+
+
+    /**
+     * Function ToVector()
+     *
+     * Returns a unit vector corresponding to our direction.
+     */
+    const VECTOR2I ToVector() const
+    {
+        switch(m_dir)
+        {
+            case N: return VECTOR2I(0, 1);
+            case S: return VECTOR2I(0, -1);
+            case E: return VECTOR2I(1, 0);
+            case W: return VECTOR2I(-1, 0);
+            case NE: return VECTOR2I(1, 1);
+            case NW: return VECTOR2I(-1, 1);
+            case SE: return VECTOR2I(1, -1);
+            case SW: return VECTOR2I(-1, -1);
+            
+            default:
+                return VECTOR2I(0, 0);
+        }        
+    }
+
+private:
 
     /**
      * Function construct()
      * Calculates the direction from a vector. If the vector's angle is not a multiple of 45
      * degrees, the direction is rounded to the nearest octant.
-     * @param aVec our vector
-     */
+     * @param aVec our vector     */
     void construct( const VECTOR2I& aVec )
     {
         m_dir = UNDEFINED;
@@ -321,8 +369,9 @@ private:
                 m_dir = S;
         }
     }
-
-    Directions m_dir;    ///> our actual direction
+    
+    ///> our actual direction
+    Directions m_dir;    
 };
 
 #endif    // __DIRECTION_H

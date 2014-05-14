@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __PNS_SEGMENT_H
@@ -24,7 +24,7 @@
 #include <math/vector2d.h>
 
 #include <geometry/seg.h>
-#include <geometry/shape.h>
+#include <geometry/shape_segment.h>
 #include <geometry/shape_line_chain.h>
 
 #include "pns_item.h"
@@ -40,31 +40,27 @@ public:
     {};
 
     PNS_SEGMENT( const SEG& aSeg, int aNet ) :
-        PNS_ITEM( SEGMENT )
+        PNS_ITEM( SEGMENT ), m_seg(aSeg, 0)
     {
         m_net = aNet;
-        m_shape.Clear();
-        m_shape.Append( aSeg.A );
-        m_shape.Append( aSeg.B );
     };
 
     PNS_SEGMENT( const PNS_LINE& aParentLine, const SEG& aSeg ) :
-        PNS_ITEM( SEGMENT )
+        PNS_ITEM( SEGMENT ), 
+        m_seg(aSeg, aParentLine.Width())
     {
-        m_net = aParentLine.GetNet();
-        m_layers = aParentLine.GetLayers();
-        m_width = aParentLine.GetWidth();
-        m_shape.Clear();
-        m_shape.Append( aSeg.A );
-        m_shape.Append( aSeg.B );
+        m_net = aParentLine.Net();
+        m_layers = aParentLine.Layers();
+        m_marker = aParentLine.Marker();
+        m_rank = aParentLine.Rank();
     };
 
 
-    PNS_SEGMENT* Clone() const;
+    PNS_SEGMENT* Clone( ) const;
 
-    const SHAPE* GetShape() const
+    const SHAPE* Shape() const
     {
-        return static_cast<const SHAPE*>( &m_shape );
+        return static_cast<const SHAPE*>( &m_seg );
     }
 
     void SetLayer( int aLayer )
@@ -72,53 +68,59 @@ public:
         SetLayers( PNS_LAYERSET( aLayer ) );
     }
 
-    int GetLayer() const
+    int Layer() const
     {
-        return GetLayers().Start();
-    }
-
-    const SHAPE_LINE_CHAIN& GetCLine() const
-    {
-        return m_shape;
+        return Layers().Start();
     }
 
     void SetWidth( int aWidth )
     {
-        m_width = aWidth;
+        m_seg.SetWidth(aWidth);
     }
 
-    int GetWidth() const
+    int Width() const
     {
-        return m_width;
+        return m_seg.GetWidth();
     }
 
-    const SEG GetSeg() const
+    const SEG& Seg() const
     {
-        assert( m_shape.PointCount() >= 1 );
+        return m_seg.GetSeg();
+    }
 
-        if( m_shape.PointCount() == 1 )
-            return SEG( m_shape.CPoint( 0 ), m_shape.CPoint( 0 ) );
-
-        return SEG( m_shape.CPoint( 0 ), m_shape.CPoint( 1 ) );
+    const SHAPE_LINE_CHAIN CLine() const
+    {
+        return SHAPE_LINE_CHAIN( m_seg.GetSeg().A, m_seg.GetSeg().B );
     }
 
     void SetEnds( const VECTOR2I& a, const VECTOR2I& b )
     {
-        m_shape.Clear();
-        m_shape.Append( a );
-        m_shape.Append( b );
-    }
+        m_seg.SetSeg( SEG ( a, b ) );
+	}
 
     void SwapEnds()
     {
-        m_shape = m_shape.Reverse();
+        SEG tmp = m_seg.GetSeg();
+        m_seg.SetSeg( SEG (tmp.B , tmp.A ));
     }
 
     const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness ) const;
 
+    virtual VECTOR2I Anchor(int n) const 
+    {
+        if(n == 0)
+            return m_seg.GetSeg().A;
+        else
+            return m_seg.GetSeg().B;
+    }
+
+    virtual int AnchorCount() const 
+    {
+        return 2; 
+    }
+
 private:
-    SHAPE_LINE_CHAIN m_shape;
-    int m_width;
+    SHAPE_SEGMENT m_seg;
 };
 
 #endif

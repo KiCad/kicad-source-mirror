@@ -15,22 +15,28 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <wx/numdlg.h> 
 
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
+#include <boost/bind.hpp>
 
 #include "class_draw_panel_gal.h"
-#include "class_board_item.h"
 #include "class_board.h"
 
 #include <wxPcbStruct.h>
 #include <id.h>
+#include <macros.h>
 #include <pcbnew_id.h>
 #include <view/view_controls.h>
 #include <pcbcommon.h>
 #include <pcb_painter.h>
+#include <dialogs/dialog_pns_settings.h>
+#include <dialogs/dialog_track_via_size.h>
+#include <base_units.h>
 
 #include <tool/context_menu.h>
 #include <tools/common_actions.h>
@@ -45,29 +51,181 @@
 using namespace KIGFX;
 using boost::optional;
 
-//static TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", AS_CONTEXT, 'G' );
-//static TOOL_ACTION ACT_PlaceVia( "pcbnew.InteractiveRouter.PlaceVia", AS_CONTEXT, 'V' );
-//static TOOL_ACTION ACT_OpenRouteOptions( "pcbnew.InteractiveRouter.OpenRouterOptions", AS_CONTEXT, 'T' );
-//static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", AS_CONTEXT, '/' );
-//static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_CONTEXT, WXK_END );
+static TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack",
+                                 AS_CONTEXT, 'X',
+                                 "New Track", "Starts laying a new track.");
+static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack",
+                                 AS_CONTEXT, WXK_END,
+                                 "End Track", "Stops laying the current track.");
+static TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute",
+                                     AS_CONTEXT, 'F',
+                                     "Auto-end Track", "Automagically finishes currently routed track." );
+static TOOL_ACTION ACT_Drag( "pcbnew.InteractiveRouter.Drag",
+                                     AS_CONTEXT, 'G',
+                                     "Drag Track/Via", "Drags a track or a via." );
+static TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
+                                 AS_CONTEXT, 'V',
+                                 "Place Through Via", "Adds a through-hole via at the end of currently routed track." );
+static TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackWidth",
+                                      AS_CONTEXT, 'W',
+                                      "Custom Track Width", "Shows a dialog for changing the track width and via size.");
+static TOOL_ACTION ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOptions",
+                                      AS_CONTEXT, 'E',
+                                      "Routing Options...", "Shows a dialog containing router options.");
+static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture",
+                                      AS_CONTEXT, '/',
+                                      "Switch Track Posture", "Switches posture of the currenly routed track.");
 
 ROUTER_TOOL::ROUTER_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveRouter" )
 {
     m_router = NULL;
-    m_menu = new CONTEXT_MENU;
-
-    m_menu->SetTitle( wxT( "Interactive router" ) );    // fixme: not implemented yet. Sorry.
-    m_menu->Add( wxT( "Cancel" ), 1 );
-    m_menu->Add( wxT( "New track" ), 2 );
-    m_menu->Add( wxT( "End track" ), 3 );
-    m_menu->Add( wxT( "Auto-end track" ), 4 );
-    m_menu->Add( wxT( "Place via" ), 5 );
-    m_menu->Add( wxT( "Switch posture" ), 6 );
-
-    m_menu->Add( wxT( "Routing options..." ), 7 );
 }
 
+class CONTEXT_TRACK_WIDTH_MENU: public CONTEXT_MENU
+{
+public:
+    CONTEXT_TRACK_WIDTH_MENU()
+    {
+        setCustomEventHandler( boost::bind( &CONTEXT_TRACK_WIDTH_MENU::handleCustomEvent, this, _1 ) );
+    }
+
+    void SetBoard( BOARD* aBoard )
+    {
+        BOARD_DESIGN_SETTINGS &bds = aBoard->GetDesignSettings();
+        
+        wxString msg;
+        m_board = aBoard;
+        
+        Append( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, _( "Custom size" ), wxEmptyString, wxITEM_CHECK );
+
+        Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH, _( "Use the starting track width" ),
+            _( "Route using the width of the starting track." ),
+            wxITEM_CHECK );
+
+            Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES,
+                                     _( "Use netclass values" ),
+                                     _( "Use track and via sizes from the net class" ),
+                                     wxITEM_CHECK );
+
+        for( unsigned i = 0; i < bds.m_TrackWidthList.size(); i++ )
+        {
+            msg = _ ("Track ");
+            msg << StringFromValue( g_UserUnit, bds.m_TrackWidthList[i], true ); 
+          
+            if( i == 0 )
+                msg << _( " (from netclass)" );
+
+            Append( ID_POPUP_PCB_SELECT_WIDTH1 + i, msg, wxEmptyString, wxITEM_CHECK );
+        }
+
+        AppendSeparator();
+
+        for( unsigned i = 0; i < bds.m_ViasDimensionsList.size(); i++ )
+        {
+            msg = _ ("Via ");
+            msg << StringFromValue( g_UserUnit, bds.m_ViasDimensionsList[i].m_Diameter,
+                                           true );
+            wxString drill = StringFromValue( g_UserUnit,
+                                                    bds.m_ViasDimensionsList[i].m_Drill,
+                                                    true );
+
+            if( bds.m_ViasDimensionsList[i].m_Drill <= 0 )
+            {
+                msg << _ (", drill: default");
+            } else {
+                msg << _ (", drill: ") << drill;
+            }
+
+            if( i == 0 )
+                msg << _( " (from netclass)" );
+
+            Append( ID_POPUP_PCB_SELECT_VIASIZE1 + i, msg, wxEmptyString, wxITEM_CHECK );
+        }
+    }
+
+protected:
+    OPT_TOOL_EVENT handleCustomEvent( const wxEvent& aEvent )
+    {
+#if ID_POPUP_PCB_SELECT_VIASIZE1 < ID_POPUP_PCB_SELECT_WIDTH1
+#error You have changed event ids, it breaks a piece of code. Lookup this line for more details.
+// Recognising type of event (track width/via size) is based on comparison if the event id is
+// within a specific range. If ranges of event ids changes, then the following is not valid anymore.
+#endif
+        BOARD_DESIGN_SETTINGS &bds = m_board->GetDesignSettings();
+
+        int id = aEvent.GetId();
+
+        // General settings, to be modified below
+        bds.m_UseConnectedTrackWidth = false;
+        bds.UseCustomTrackViaSize( false );
+
+        if( id == ID_POPUP_PCB_SELECT_CUSTOM_WIDTH )
+        {
+            bds.UseCustomTrackViaSize( true );
+        }
+
+        else if( id == ID_POPUP_PCB_SELECT_AUTO_WIDTH )
+        {
+            bds.m_UseConnectedTrackWidth = true;
+        }
+
+        else if( id == ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES )
+        {
+            bds.SetViaSizeIndex( 0 );
+            bds.SetTrackWidthIndex( 0 );
+        }
+
+        else if( id > ID_POPUP_PCB_SELECT_VIASIZE1 )     // via size has changed
+        {
+            assert( id < ID_POPUP_PCB_SELECT_WIDTH_END_RANGE );
+
+            bds.SetViaSizeIndex( id - ID_POPUP_PCB_SELECT_VIASIZE1 );
+        }
+
+        else    // track width has changed
+        {
+            assert( id >= ID_POPUP_PCB_SELECT_WIDTH1 );
+            assert( id < ID_POPUP_PCB_SELECT_VIASIZE );
+
+            bds.SetTrackWidthIndex( id - ID_POPUP_PCB_SELECT_WIDTH1 );
+        }
+
+        return OPT_TOOL_EVENT( COMMON_ACTIONS::trackViaSizeChanged.MakeEvent() );
+    }
+
+    BOARD* m_board;
+};
+
+
+class CONTEXT_GRID_MENU: public CONTEXT_MENU {  };
+
+
+class ROUTER_TOOL_MENU: public CONTEXT_MENU {
+    
+public:
+    ROUTER_TOOL_MENU( BOARD *aBoard )
+    {
+        SetTitle( wxT( "Interactive Router" ) );
+        Add( ACT_NewTrack );
+        Add( ACT_EndTrack );
+//        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
+        Add( ACT_Drag );
+        Add( ACT_PlaceThroughVia );
+        Add( ACT_SwitchPosture );
+
+        AppendSeparator ( );
+        
+        CONTEXT_TRACK_WIDTH_MENU* trackMenu = new CONTEXT_TRACK_WIDTH_MENU;
+        trackMenu->SetBoard( aBoard );
+        AppendSubMenu( trackMenu, wxT( "Select Track Width" ) );
+
+        Add( ACT_CustomTrackWidth );
+
+        AppendSeparator ( );
+        Add( ACT_RouterOptions );
+    }
+};
 
 ROUTER_TOOL::~ROUTER_TOOL()
 {
@@ -108,6 +266,7 @@ void ROUTER_TOOL::getNetclassDimensions( int aNetCode, int& aWidth,
         int& aViaDiameter, int& aViaDrill )
 {
     BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD_DESIGN_SETTINGS &bds = board->GetDesignSettings();
 
     NETCLASS* netClass = NULL;
     NETINFO_ITEM* ni = board->FindNet( aNetCode );
@@ -115,11 +274,11 @@ void ROUTER_TOOL::getNetclassDimensions( int aNetCode, int& aWidth,
     if( ni )
     {
         wxString netClassName = ni->GetClassName();
-        netClass = board->GetDesignSettings().m_NetClasses.Find( netClassName );
+        netClass = bds.m_NetClasses.Find( netClassName );
     }
 
     if( !netClass )
-        netClass = board->GetDesignSettings().m_NetClasses.GetDefault();
+        netClass = bds.m_NetClasses.GetDefault();
 
     aWidth = netClass->GetTrackWidth();
     aViaDiameter = netClass->GetViaDiameter();
@@ -134,73 +293,66 @@ PNS_ITEM* ROUTER_TOOL::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLa
     if( aLayer > 0 )
         tl = aLayer;
 
-    PNS_ITEM* picked_seg = NULL;
-    PNS_ITEM* picked_via = NULL;
+    PNS_ITEM* prioritized[4];
+
+    for(int i = 0; i < 4; i++)
+        prioritized[i] = 0;
+    
     PNS_ITEMSET candidates = m_router->QueryHoverItems( aWhere );
 
     BOOST_FOREACH( PNS_ITEM* item, candidates.Items() )
     {
-        if( !IsCopperLayer( item->GetLayers().Start() ) )
+        if( !IsCopperLayer( item->Layers().Start() ) )
             continue;
 
-        if( item->GetParent() && !item->GetParent()->ViewIsVisible() &&
-                                 !item->GetParent()->IsSelected() )
-            continue;
+        // fixme: this causes flicker with live loop removal...
+        //if( item->Parent() && !item->Parent()->ViewIsVisible() )
+        //    continue;
 
-        if( aNet < 0 || item->GetNet() == aNet )
+        if( aNet < 0 || item->Net() == aNet )
         {
             if( item->OfKind( PNS_ITEM::VIA | PNS_ITEM::SOLID ) )
             {
-                if( item->GetLayers().Overlaps( tl ) || !picked_via )
-                    picked_via = item;
+                if( !prioritized[2] )
+                    prioritized[2] = item;
+                if( item->Layers().Overlaps( tl ))
+                    prioritized[0] = item;
             }
             else
             {
-                if( item->GetLayers().Overlaps( tl ) || !picked_seg )
-                    picked_seg = item;
+                if(  !prioritized[3] )
+                    prioritized[3] = item;
+                if (item->Layers().Overlaps( tl ))
+                    prioritized[1] = item;
             }
         }
     }
 
-    if( DisplayOpt.ContrastModeDisplay )
+    PNS_ITEM *rv = NULL;
+    for(int i = 0; i < 4; i++)
     {
-        if( picked_seg && !picked_seg->GetLayers().Overlaps( tl ) )
-            picked_seg = NULL;
+        PNS_ITEM *item = prioritized[i];
+        
+        if( DisplayOpt.ContrastModeDisplay )
+            if( item && !item->Layers().Overlaps( tl ) )
+                item = NULL;
+
+        if(item)
+        {
+            rv = item;
+            break;
+        }
     }
 
-    PNS_ITEM* rv = picked_via ? picked_via : picked_seg;
-
-    if( rv && aLayer >= 0 && !rv->GetLayers().Overlaps( aLayer ) )
+    if( rv && aLayer >= 0 && !rv->Layers().Overlaps( aLayer ) )
         rv = NULL;
 
     if( rv )
-        TRACE( 0, "%s, layer : %d, tl: %d", rv->GetKindStr().c_str() % rv->GetLayers().Start() %
+        TRACE( 0, "%s, layer : %d, tl: %d", rv->KindStr().c_str() % rv->Layers().Start() %
                 tl );
 
     return rv;
 }
-
-
-void ROUTER_TOOL::setMsgPanel( bool aEnabled, int aEntry,
-        const wxString& aUpperMessage, const wxString& aLowerMessage )
-{
-    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME> ();
-
-    if( m_panelItems.size() <= (unsigned int) aEntry )
-        m_panelItems.resize( aEntry + 1 );
-
-    m_panelItems[aEntry] = MSG_PANEL_ITEM( aUpperMessage, aLowerMessage, BLACK );
-    frame->SetMsgPanel( m_panelItems );
-}
-
-
-void ROUTER_TOOL::clearMsgPanel()
-{
-    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME> ();
-
-    frame->ClearMsgPanel();
-}
-
 
 void ROUTER_TOOL::highlightNet( bool aEnabled, int aNetcode )
 {
@@ -214,37 +366,104 @@ void ROUTER_TOOL::highlightNet( bool aEnabled, int aNetcode )
     getView()->UpdateAllLayersColor();
 }
 
+void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& evt )
+{
+#ifdef DEBUG
+    if( evt.IsKeyPressed() )
+		{
+            switch( evt.KeyCode() )
+            {
+				case 'S':
+	                TRACEn(2, "saving drag/route log...\n");
+	                m_router->DumpLog();
+	                break;
+            }
+        }
+    else 
+#endif
+    if( evt.IsAction( &ACT_RouterOptions ) )
+    {
+        DIALOG_PNS_SETTINGS settingsDlg( m_toolMgr->GetEditFrame(), m_router->Settings() );
+
+        if( settingsDlg.ShowModal() )
+            m_router->ApplySettings();
+    }
+
+    else if( evt.IsAction( &ACT_CustomTrackWidth ) )
+    {
+        DIALOG_TRACK_VIA_SIZE sizeDlg( m_toolMgr->GetEditFrame(), m_router->Settings() );
+        BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>( PCB_T )->GetDesignSettings();
+
+        sizeDlg.ShowModal();
+
+        // TODO it should be changed, router settings won't keep track & via sizes in the future
+        bds.SetCustomTrackWidth( m_router->Settings().GetTrackWidth() );
+        bds.SetCustomViaSize( m_router->Settings().GetViaDiameter() );
+        bds.SetCustomViaDrill( m_router->Settings().GetViaDrill() );
+        bds.UseCustomTrackViaSize( true );
+
+        // TODO Should be done another way, but RunAction() won't work here. As the ROUTER_TOOL
+        // did not call Wait(), it does not wait for events and therefore the sent event
+        // won't arrive here
+        TOOL_EVENT event = COMMON_ACTIONS::trackViaSizeChanged.MakeEvent();
+        handleCommonEvents( event );
+    }
+
+    else if( evt.IsAction( &COMMON_ACTIONS::trackViaSizeChanged ) )
+    {
+        BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>( PCB_T )->GetDesignSettings();
+
+        m_router->Settings().SetTrackWidth( bds.GetCurrentTrackWidth() );
+        m_router->Settings().SetViaDiameter( bds.GetCurrentViaSize() );
+        m_router->Settings().SetViaDrill( bds.GetCurrentViaDrill() );
+        m_router->ApplySettings();
+    }
+}
 
 void ROUTER_TOOL::updateStartItem( TOOL_EVENT& aEvent )
 {
     VIEW_CONTROLS* ctls = getViewControls();
     int tl = getView()->GetTopLayer();
+    VECTOR2I cp = ctls->GetCursorPosition();
     PNS_ITEM* startItem = NULL;
 
     if( aEvent.IsMotion() || aEvent.IsClick() )
     {
         VECTOR2I p = aEvent.Position();
+
         startItem = pickSingleItem( p );
 
-        if( startItem && startItem->GetNet() >= 0 )
+        bool snapEnabled = !aEvent.Modifier(MD_SHIFT);
+
+        m_router->EnableSnapping ( snapEnabled );
+
+        if(!snapEnabled && startItem && !startItem->Layers().Overlaps( tl ) )
+            startItem = NULL;
+
+        if( startItem && startItem->Net() >= 0 )
         {
             bool dummy;
-            VECTOR2I cursorPos = m_router->SnapToItem( startItem, p, dummy );
-            ctls->ForceCursorPosition( true, cursorPos );
+            VECTOR2I psnap = m_router->SnapToItem( startItem, p, dummy );
+            
+            if (snapEnabled) {
+                m_startSnapPoint = psnap;
+                ctls->ForceCursorPosition( true, psnap );
+            } else {
+                m_startSnapPoint = cp;
+                ctls->ForceCursorPosition( false );
+            }
 
-            m_startSnapPoint = cursorPos;
-
-            if( startItem->GetLayers().IsMultilayer() )
+            if( startItem->Layers().IsMultilayer() )
                 m_startLayer = tl;
             else
-                m_startLayer = startItem->GetLayers().Start();
+                m_startLayer = startItem->Layers().Start();
 
             m_startItem = startItem;
         }
         else
         {
             m_startItem = NULL;
-            m_startSnapPoint = p;
+            m_startSnapPoint = cp;
             m_startLayer = tl;
             ctls->ForceCursorPosition( false );
         }
@@ -255,13 +474,18 @@ void ROUTER_TOOL::updateStartItem( TOOL_EVENT& aEvent )
 void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
 {
     VIEW_CONTROLS* ctls = getViewControls();
-    VECTOR2I p = aEvent.Position();
+    VECTOR2I p = getView()->ToWorld( ctls->GetMousePosition() );
+    VECTOR2I cp = ctls->GetCursorPosition();
     int layer;
 
-    if( m_router->GetCurrentNet() < 0 || !m_startItem )
+    bool snapEnabled = !aEvent.Modifier(MD_SHIFT);
+
+    m_router->EnableSnapping ( snapEnabled );
+
+    if( !snapEnabled || m_router->GetCurrentNet() < 0 || !m_startItem )
     {
         m_endItem = NULL;
-        m_endSnapPoint = p;
+        m_endSnapPoint = cp;
         return;
     }
 
@@ -272,7 +496,7 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
     else
         layer = m_router->GetCurrentLayer();
 
-    PNS_ITEM* endItem = pickSingleItem( p, m_startItem->GetNet(), layer );
+    PNS_ITEM* endItem = pickSingleItem( p, m_startItem->Net(), layer );
 
     if( endItem )
     {
@@ -284,57 +508,39 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
     else
     {
         m_endItem = NULL;
-        m_endSnapPoint = ctls->GetCursorPosition();
+        m_endSnapPoint = cp;
         ctls->ForceCursorPosition( false );
     }
 
-    // Draw ratsnest for the currently routed track
-    RN_DATA* ratsnest = getModel<BOARD>( PCB_T )->GetRatsnest();
-    ratsnest->ClearSimple();
-
-    if( ( m_endItem == NULL || m_endItem == m_startItem ) && m_startItem->GetNet() > 0 )
-    {
-        // The ending node has to be first, so the line for the track is drawn first
-        ratsnest->AddSimple( m_endSnapPoint, m_startItem->GetNet() );
-
-        // Those nodes are added just to force ratsnest not to drawn
-        // lines to already routed parts of the track
-        const PICKED_ITEMS_LIST& changes = m_router->GetLastChanges();
-        for( unsigned int i = 0; i < changes.GetCount(); ++i )
-        {
-            // Block the new tracks, do not handle tracks that were moved
-            // (moved tracks are saved in the undo buffer with UR_DELETED status instead)
-            if( changes.GetPickedItemStatus( i ) == UR_NEW )
-                ratsnest->AddBlocked( static_cast<BOARD_CONNECTED_ITEM*>( changes.GetPickedItem( i ) ) );
-        }
-
-        // Also the origin of the new track should be skipped in the ratsnest shown for the routed track
-        ratsnest->AddBlocked( static_cast<BOARD_ITEM*>( m_startItem->GetParent() ) );
-    }
-
     if( m_endItem )
-        TRACE( 0, "%s, layer : %d", m_endItem->GetKindStr().c_str() %
-                m_endItem->GetLayers().Start() );
+        TRACE( 0, "%s, layer : %d", m_endItem->KindStr().c_str() %
+                m_endItem->Layers().Start() );
 }
 
 
-void ROUTER_TOOL::startRouting()
+void ROUTER_TOOL::performRouting()
 {
+    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
     bool saveUndoBuffer = true;
     VIEW_CONTROLS* ctls = getViewControls();
 
-    int width = getDefaultWidth( m_startItem ? m_startItem->GetNet() : -1 );
+    if( getModel<BOARD>( PCB_T )->GetDesignSettings().m_UseConnectedTrackWidth )
+    {
+        int width = getDefaultWidth( m_startItem ? m_startItem->Net() : -1 );
 
-    if( m_startItem && m_startItem->OfKind( PNS_ITEM::SEGMENT ) )
-        width = static_cast<PNS_SEGMENT*>( m_startItem )->GetWidth();
+        if( m_startItem && m_startItem->OfKind( PNS_ITEM::SEGMENT ) )
+            width = static_cast<PNS_SEGMENT*>( m_startItem )->Width();
 
-    m_router->SetCurrentWidth( width );
+        m_router->Settings().SetTrackWidth( width );
+    }
+
     m_router->SwitchLayer( m_startLayer );
 
-    getEditFrame<PCB_EDIT_FRAME>()->SetTopLayer( m_startLayer );
+    frame->SetActiveLayer( m_startLayer );
+    frame->GetGalCanvas()->SetFocus();
 
-    if( m_startItem && m_startItem->GetNet() >= 0 )
-        highlightNet( true, m_startItem->GetNet() );
+    if( m_startItem && m_startItem->Net() >= 0 )
+        highlightNet( true, m_startItem->Net() );
 
     ctls->ForceCursorPosition( false );
     ctls->SetAutoPan( true );
@@ -366,43 +572,37 @@ void ROUTER_TOOL::startRouting()
                 break;
 
             m_router->Move( m_endSnapPoint, m_endItem );
-        }
-        else if( evt->IsKeyPressed() )
+        } else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
-            switch( std::toupper( evt->KeyCode() ) )
-            {
-            case 'V':
-            {
-                int w, diameter, drill;
-                getNetclassDimensions( m_router->GetCurrentNet(), w, diameter, drill );
-                m_router->SetCurrentViaDiameter( diameter );
-                m_router->SetCurrentViaDrill( drill );
-                m_router->ToggleViaPlacement();
-                getEditFrame<PCB_EDIT_FRAME>()->SetTopLayer( m_router->GetCurrentLayer() );
-                m_router->Move( m_endSnapPoint, m_endItem );
-                break;
-            }
-
-            case '/':
-                m_router->FlipPosture();
-                break;
-
-            case '+':
-            case '=':
-                m_router->SwitchLayer( m_router->NextCopperLayer( true ) );
-                updateEndItem( *evt );
-                getEditFrame<PCB_EDIT_FRAME>()->SetTopLayer( m_router->GetCurrentLayer() );
-                m_router->Move( m_endSnapPoint, m_endItem );
-
-                break;
-
-            case '-':
-                m_router->SwitchLayer( m_router->NextCopperLayer( false ) );
-                getEditFrame<PCB_EDIT_FRAME>()->SetTopLayer( m_router->GetCurrentLayer() );
-                m_router->Move( m_endSnapPoint, m_endItem );
-                break;
-            }
+            m_router->ToggleViaPlacement();
+            frame->SetTopLayer( m_router->GetCurrentLayer() );
+            m_router->Move( m_endSnapPoint, m_endItem );
         }
+        else if( evt->IsAction( &ACT_SwitchPosture ) )
+        {
+            m_router->FlipPosture();
+            m_router->Move( m_endSnapPoint, m_endItem );
+        }
+        else if( evt->IsAction( &COMMON_ACTIONS::layerNext ) )
+        {
+            m_router->SwitchLayer( m_router->NextCopperLayer( true ) );
+            updateEndItem( *evt );
+            frame->SetActiveLayer( m_router->GetCurrentLayer() );
+            m_router->Move( m_endSnapPoint, m_endItem );
+        }
+        else if( evt->IsAction( &COMMON_ACTIONS::layerPrev ) )
+        {
+            m_router->SwitchLayer( m_router->NextCopperLayer( false ) );
+            frame->SetActiveLayer( m_router->GetCurrentLayer() );
+            m_router->Move( m_endSnapPoint, m_endItem );
+        }
+        else if( evt->IsAction( &ACT_EndTrack ) )
+        {
+            if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
+                break;
+        }
+    
+        handleCommonEvents(*evt);
     }
 
     m_router->StopRouting();
@@ -410,10 +610,9 @@ void ROUTER_TOOL::startRouting()
     if( saveUndoBuffer )
     {
         // Save the recent changes in the undo buffer
-        getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( m_router->GetLastChanges(),
-                                                            UR_UNSPECIFIED );
-        m_router->ClearLastChanges();
-        getEditFrame<PCB_EDIT_FRAME>()->OnModify();
+        frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
+        m_router->ClearUndoBuffer();
+        frame->OnModify();
     }
     else
     {
@@ -430,14 +629,23 @@ void ROUTER_TOOL::startRouting()
 int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
 {
     VIEW_CONTROLS* ctls = getViewControls();
+    BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
-    // SetContextMenu ( m_menu );
-    // setMsgPanel(true, 0, wxT("KiRouter"), wxT("Pick an item to start routing"));
-    getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Add tracks" ) );
+    getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Interactive Router" ) );
 
     ctls->SetSnapping( true );
     ctls->ShowCursor( true );
 
+    // Set current track widths & via size
+    m_router->Settings().SetTrackWidth( bds.GetCurrentTrackWidth() );
+    m_router->Settings().SetViaDiameter( bds.GetCurrentViaSize() );
+    m_router->Settings().SetViaDrill( bds.GetCurrentViaDrill() );
+
+    ROUTER_TOOL_MENU *ctxMenu = new ROUTER_TOOL_MENU( board );
+
+    SetContextMenu ( ctxMenu );
+ 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -453,21 +661,69 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
             m_needsSync = true;
         else if( evt->IsMotion() )
             updateStartItem( *evt );
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACT_NewTrack ) )
         {
             updateStartItem( *evt );
-            startRouting();
-        }
-    }
 
-    // clearMsgPanel();
+            if( evt->Modifier( MD_CTRL ) )
+                performDragging();
+            else
+                performRouting();
+        } else if ( evt->IsAction( &ACT_Drag ) )
+            performDragging();
+
+        handleCommonEvents(*evt);
+    }
 
     // Restore the default settings
     ctls->SetAutoPan( false );
     ctls->ShowCursor( false );
-    ctls->ForceCursorPosition( false );
-
     getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
+    delete ctxMenu;
+
     return 0;
+}
+
+
+void ROUTER_TOOL::performDragging()
+{
+    VIEW_CONTROLS* ctls = getViewControls();
+
+    bool dragStarted = m_router->StartDragging( m_startSnapPoint, m_startItem );
+    
+    if(!dragStarted)
+        return;
+
+    if( m_startItem && m_startItem->Net() >= 0 )
+        highlightNet( true, m_startItem->Net() );
+
+    ctls->ForceCursorPosition( false );
+    ctls->SetAutoPan( true );
+    
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        if( evt->IsCancel() )
+            break;
+        else if( evt->IsMotion() )
+        {
+            updateEndItem( *evt );
+            m_router->Move( m_endSnapPoint, m_endItem );
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+
+            if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
+                break;
+
+        }
+        handleCommonEvents(*evt);
+    }
+
+    if( m_router->RoutingInProgress() )
+        m_router->StopRouting();
+
+    ctls->SetAutoPan( false );
+    ctls->ForceCursorPosition( false );
+    highlightNet( false );
 }

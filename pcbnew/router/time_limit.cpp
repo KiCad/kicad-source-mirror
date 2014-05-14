@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -18,25 +18,29 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __PNS_UTILS_H
-#define __PNS_UTILS_H
+#include <wx/timer.h>
 
-#include <math/vector2d.h>
-#include <geometry/shape_line_chain.h>
-#include <geometry/shape_segment.h>
-#include <geometry/shape_rect.h>
+#include "time_limit.h"
 
-#define HULL_MARGIN 10
+TIME_LIMIT::TIME_LIMIT( int aMilliseconds ) : 
+	m_limitMs( aMilliseconds )
+	{
+		Restart();
+	};
 
-/** Various utility functions */
+TIME_LIMIT::~TIME_LIMIT () {}
 
-const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize,
-        int aClearance, int aChamfer );
+bool TIME_LIMIT::Expired() const
+{
+	return ( wxGetLocalTimeMillis().GetValue() - m_startTics ) >= m_limitMs;
+}
 
-const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg,
-    int aClearance,
-    int aWalkaroundThickness );
+void TIME_LIMIT::Restart()
+{
+	m_startTics = wxGetLocalTimeMillis().GetValue();
+}
 
-SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg );
-
-#endif    // __PNS_UTILS_H
+void TIME_LIMIT::Set ( int aMilliseconds )
+{
+	m_limitMs = aMilliseconds;
+}

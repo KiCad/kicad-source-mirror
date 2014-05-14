@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __PNS_JOINT_H
@@ -72,7 +72,7 @@ public:
         m_layers = b.m_layers;
     }
 
-    PNS_ITEM* Clone() const
+    PNS_ITEM* Clone ( ) const
     {
         assert( false );
         return NULL;
@@ -85,15 +85,15 @@ public:
         if( m_linkedItems.size() != 2 )
             return false;
 
-        if( m_linkedItems[0]->GetKind() != SEGMENT ||
-                m_linkedItems[1]->GetKind() != SEGMENT )
+        if( m_linkedItems[0]->Kind() != SEGMENT ||
+                m_linkedItems[1]->Kind() != SEGMENT )
             return false;
 
         PNS_SEGMENT* seg1 = static_cast<PNS_SEGMENT*>( m_linkedItems[0] );
         PNS_SEGMENT* seg2 = static_cast<PNS_SEGMENT*>( m_linkedItems[1] );
 
-        // joints between segments of different widths are not trivial.
-        return seg1->GetWidth() == seg2->GetWidth();
+        // joints between segments of different widths are not considered trivial.
+        return seg1->Width() == seg2->Width();
     }
 
     ///> Links the joint to a given board item (when it's added to the PNS_NODE)
@@ -131,11 +131,35 @@ public:
         return static_cast<PNS_SEGMENT*>( m_linkedItems[m_linkedItems[0] == aCurrent ? 1 : 0] );
     }
 
+    PNS_VIA *Via() 
+    {
+        for( LinkedItems::iterator i = m_linkedItems.begin();
+                                   i != m_linkedItems.end(); ++i )
+            if( (*i)->Kind() == PNS_ITEM::VIA )
+                return (PNS_VIA *)(*i);
+        return NULL;
+    }
+
     /// trivial accessors
-    const HashTag& GetTag() const { return m_tag; }
-    const VECTOR2I& GetPos() const { return m_tag.pos; }
-    int GetNet() const { return m_tag.net; }
-    LinkedItems& GetLinkList() { return m_linkedItems; };
+    const HashTag& Tag() const 
+    { 
+        return m_tag; 
+    }
+    
+    const VECTOR2I& Pos() const 
+    { 
+        return m_tag.pos; 
+    }
+    
+    int Net() const 
+    { 
+        return m_tag.net; 
+    }
+    
+    LinkedItems& LinkList() 
+    { 
+        return m_linkedItems; 
+    }
 
     ///> Returns the number of linked items of types listed in aMask.
     int LinkCount( int aMask = -1 ) const
@@ -144,7 +168,7 @@ public:
 
         for( LinkedItems::const_iterator i = m_linkedItems.begin();
                                          i != m_linkedItems.end(); ++i )
-            if( (*i)->GetKind() & aMask )
+            if( (*i)->Kind() & aMask )
                 n++;
 
         return n;
