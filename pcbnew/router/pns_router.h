@@ -172,6 +172,17 @@ public:
      */
     void ApplySettings();
 
+    /**
+     * Changes routing settings to ones passed in the parameter.
+     * @param aSettings are the new settings.
+     */
+    void LoadSettings( const PNS_ROUTING_SETTINGS& aSettings )
+    {
+        m_settings = aSettings;
+
+        ApplySettings();
+    }
+
     void EnableSnapping ( bool aEnable )
     {
         m_snappingEnabled = aEnable;

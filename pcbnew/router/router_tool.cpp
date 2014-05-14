@@ -244,6 +244,7 @@ void ROUTER_TOOL::Reset( RESET_REASON aReason )
     m_router->ClearWorld();
     m_router->SetBoard( getModel<BOARD>( PCB_T ) );
     m_router->SyncWorld();
+    m_router->LoadSettings( m_settings );
     m_needsSync = false;
 
     if( getView() )
@@ -619,6 +620,8 @@ void ROUTER_TOOL::performRouting()
         // It was interrupted by TA_UNDO_REDO event, so we have to sync the world now
         m_needsSync = true;
     }
+
+    m_settings = m_router->Settings();
 
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
