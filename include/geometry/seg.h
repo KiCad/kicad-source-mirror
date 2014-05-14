@@ -46,17 +46,14 @@ public:
      * to an object the segment belongs to (e.g. a line chain) or references to locally stored
      * points (m_a, m_b).
      */
-    VECTOR2I& A;
-    VECTOR2I& B;
+    VECTOR2I A;
+    VECTOR2I B;
 
     /** Default constructor
      * Creates an empty (0, 0) segment, locally-referenced
      */
-    SEG() : A( m_a ), B( m_b )
+    SEG() 
     {
-        A = m_a;
-        B = m_b;
-        m_is_local = true;
         m_index = -1;
     }
 
@@ -64,13 +61,10 @@ public:
      * Constructor
      * Creates a segment between (aX1, aY1) and (aX2, aY2), locally referenced
      */
-    SEG( int aX1, int aY1, int aX2, int aY2 ) : A( m_a ), B( m_b )
+    SEG( int aX1, int aY1, int aX2, int aY2 ) : 
+        A ( VECTOR2I( aX1, aY1 ) ), 
+        B ( VECTOR2I( aX2, aY2 ) )
     {
-        m_a = VECTOR2I( aX1, aY1 );
-        m_b = VECTOR2I( aX2, aY2 );
-        A = m_a;
-        B = m_b;
-        m_is_local = true;
         m_index = -1;
     }
 
@@ -78,11 +72,8 @@ public:
      * Constructor
      * Creates a segment between (aA) and (aB), locally referenced
      */
-    SEG( const VECTOR2I& aA, const VECTOR2I& aB ) : A( m_a ), B( m_b ), m_a( aA ), m_b( aB )
+    SEG( const VECTOR2I& aA, const VECTOR2I& aB ) : A( aA ), B( aB )
     {
-        A = m_a;
-        B = m_b;
-        m_is_local = true;
         m_index = -1;
     }
 
@@ -93,44 +84,24 @@ public:
      * @param aB reference to the end point in the parent shape
      * @param aIndex index of the segment within the parent shape
      */
-    SEG ( VECTOR2I& aA, VECTOR2I& aB, int aIndex ) : A( aA ), B( aB )
+    SEG ( const VECTOR2I& aA, const VECTOR2I& aB, int aIndex ) : A( aA ), B( aB )
     {
-        m_is_local = false;
         m_index = aIndex;
     }
 
     /**
      * Copy constructor
      */
-    SEG ( const SEG& aSeg ) : A( m_a ), B( m_b )
+    SEG ( const SEG& aSeg ) : A( aSeg.A ), B( aSeg.B ), m_index ( aSeg.m_index )
     {
-        if( aSeg.m_is_local )
-        {
-            m_a = aSeg.m_a;
-            m_b = aSeg.m_b;
-            A = m_a;
-            B = m_b;
-            m_is_local = true;
-            m_index = -1;
-        }
-        else
-        {
-            A = aSeg.A;
-            B = aSeg.B;
-            m_index = aSeg.m_index;
-            m_is_local = false;
-        }
     }
 
     SEG& operator=( const SEG& aSeg )
     {
         A = aSeg.A;
         B = aSeg.B;
-        m_a = aSeg.m_a;
-        m_b = aSeg.m_b;
         m_index = aSeg.m_index;
-        m_is_local = aSeg.m_is_local;
-
+    
         return *this;
     }
 
@@ -289,14 +260,8 @@ public:
 private:
     bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I &aC ) const;
 
-    ///> locally stored start/end coordinates (used when m_is_local == true)
-    VECTOR2I m_a, m_b;
-
     ///> index withing the parent shape (used when m_is_local == false)
     int m_index;
-
-    ///> locality flag
-    bool m_is_local;
 };
 
 
@@ -344,8 +309,7 @@ inline const VECTOR2I SEG::NearestPoint( const VECTOR2I& aP ) const
 
 inline std::ostream& operator<<( std::ostream& aStream, const SEG& aSeg )
 {
-    if( aSeg.m_is_local )
-        aStream << "[ local " << aSeg.A << " - " << aSeg.B << " ]";
+    aStream << "[ " << aSeg.A << " - " << aSeg.B << " ]";
 
     return aStream;
 }
