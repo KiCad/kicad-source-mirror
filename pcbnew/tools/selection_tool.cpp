@@ -147,8 +147,13 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
-            if( m_selection.Empty() || m_additive )
+            if( m_additive )
             {
+                selectMultiple();
+            }
+            else if( m_selection.Empty() )
+            {
+                // There is nothing selected, so try to select something
                 if( !selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ), false ) )
                 {
                     // If nothings has been selected or user wants to select more
