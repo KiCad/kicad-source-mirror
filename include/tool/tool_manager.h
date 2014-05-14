@@ -48,19 +48,9 @@ class wxWindow;
 class TOOL_MANAGER
 {
 public:
-    static TOOL_MANAGER& Instance()
-    {
-        static TOOL_MANAGER manager;
-
-        return manager;
-    }
+    TOOL_MANAGER();
 
     ~TOOL_MANAGER();
-
-    /**
-     * Deletes all the tools that were registered in the TOOL_MANAGER.
-     */
-    void DeleteAll();
 
     /**
      * Generates an unique ID from for a tool with given name.
@@ -251,9 +241,20 @@ public:
         m_passEvent = true;
     }
 
-private:
-    TOOL_MANAGER();
+    /**
+     * Returns list of TOOL_ACTIONs. TOOL_ACTIONs add themselves to the list upon their
+     * creation.
+     * @return List of TOOL_ACTIONs.
+     */
+    static std::list<TOOL_ACTION*>& GetActionList()
+    {
+        // TODO I am afraid this approach won't work when we reach multitab version of kicad.
+        static std::list<TOOL_ACTION*> actionList;
 
+        return actionList;
+    }
+
+private:
     struct TOOL_STATE;
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
 

@@ -73,14 +73,8 @@ CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu ) :
 
 void CONTEXT_MENU::setupEvents()
 {
-    Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CONTEXT_MENU::onMenuEvent ),
-                     NULL, this );
-    Connect( wxEVT_COMMAND_MENU_SELECTED, wxEventHandler( CONTEXT_MENU::onMenuEvent ),
-                     NULL, this );
-
-    // Workaround for the case when mouse cursor never reaches menu (it hangs up tools using menu)
-    wxMenuEvent menuEvent( wxEVT_MENU_HIGHLIGHT, -1, this );
-    AddPendingEvent( menuEvent );
+    Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CONTEXT_MENU::onMenuEvent ), NULL, this );
+    Connect( wxEVT_COMMAND_MENU_SELECTED, wxEventHandler( CONTEXT_MENU::onMenuEvent ), NULL, this );
 }
 
 
@@ -191,8 +185,11 @@ void CONTEXT_MENU::onMenuEvent( wxEvent& aEvent )
         }
     }
 
+    assert( m_tool );   // without tool & tool manager we cannot handle events
+
     // forward the action/update event to the TOOL_MANAGER
-    TOOL_MANAGER::Instance().ProcessEvent( *evt );
+    if( evt && m_tool )
+        m_tool->GetManager()->ProcessEvent( *evt );
 }
 
 

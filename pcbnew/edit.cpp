@@ -1391,15 +1391,15 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
             // Cancel the current tool
             // TODO while sending a lot of cancel events works for sure, it is not the most
             // elegant way to cancel a tool, this should be probably done another way
-            while( m_toolManager.GetCurrentTool()->GetName() != "pcbnew.InteractiveSelection" &&
+            while( m_toolManager->GetCurrentTool()->GetName() != "pcbnew.InteractiveSelection" &&
                     trials++ < MAX_TRIALS )
             {
                 TOOL_EVENT cancel( TC_ANY, TA_CANCEL_TOOL );
-                m_toolManager.ProcessEvent( cancel );
+                m_toolManager->ProcessEvent( cancel );
             }
 
             if( !actionName.empty() )
-                m_toolManager.RunAction( actionName );
+                m_toolManager->RunAction( actionName );
         }
     }
     else

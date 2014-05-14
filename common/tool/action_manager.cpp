@@ -50,6 +50,7 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
     // action name without specifying at least toolName is not valid
     assert( aAction->GetName().find( '.', 0 ) != std::string::npos );
 
+    // TOOL_ACTIONs must have unique names & ids
     assert( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
     assert( m_actionIdIndex.find( aAction->m_id ) == m_actionIdIndex.end() );
 
@@ -60,6 +61,8 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 
     if( aAction->HasHotKey() )
         m_actionHotKeys[aAction->m_currentHotKey].push_back( aAction );
+
+    aAction->setActionMgr( this );
 }
 
 
@@ -69,6 +72,7 @@ void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
     m_actionIdIndex.erase( aAction->m_id );
 
     // Indicate that the ACTION_MANAGER no longer care about the object
+    aAction->setActionMgr( NULL );
     aAction->setId( -1 );
 
     if( aAction->HasHotKey() )
