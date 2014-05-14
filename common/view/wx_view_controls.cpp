@@ -217,6 +217,11 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
     {
     case AUTO_PANNING:
     {
+#if wxCHECK_VERSION( 3, 0, 0 )
+        if( !m_parentPanel->HasFocus() )
+            break;
+#endif
+
         double borderSize = std::min( m_autoPanMargin * m_view->GetScreenPixelSize().x,
                                       m_autoPanMargin * m_view->GetScreenPixelSize().y );
 
