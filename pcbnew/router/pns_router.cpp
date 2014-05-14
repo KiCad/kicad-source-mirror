@@ -373,13 +373,9 @@ void PNS_ROUTER::ClearWorld()
     if( m_placer )
         delete m_placer;
 
-    if( m_previewItems )
-        delete m_previewItems;
-
     m_clearanceFunc = NULL;
     m_world = NULL;
     m_placer = NULL;
-    m_previewItems = NULL;
 }
 
 
