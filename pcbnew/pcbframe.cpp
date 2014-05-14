@@ -591,6 +591,7 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     m_canvas->SetAbortRequest( true );
+    GetGalCanvas()->StopDrawing();
 
     if( GetScreen()->IsModify() )
     {
@@ -613,8 +614,6 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             break;
         }
     }
-
-    GetGalCanvas()->StopDrawing();
 
     // Delete the auto save file if it exists.
     wxFileName fn = GetBoard()->GetFileName();
@@ -914,6 +913,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate 
     ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 
     SetHighContrastLayer( aLayer );
+	SetTopLayer( aLayer );
 
     if( doLayerWidgetUpdate )
         syncLayerWidgetLayer();
