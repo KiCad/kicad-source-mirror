@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __PNS_ITEMSET_H
@@ -37,10 +37,25 @@ class PNS_ITEMSET
 public:
     typedef std::vector<PNS_ITEM*> ItemVector;
 
-    PNS_ITEMSET();
+    PNS_ITEMSET( PNS_ITEM *aInitialItem = NULL );
+
+    PNS_ITEMSET (const PNS_ITEMSET &aOther )
+    {
+        m_items = aOther.m_items;
+        m_ownedItems = ItemVector();
+    }
+    
+    const PNS_ITEMSET& operator= (const PNS_ITEMSET &aOther)
+    {
+        m_items = aOther.m_items;
+        m_ownedItems = ItemVector();
+        return *this;
+    }
+
     ~PNS_ITEMSET();
 
     ItemVector& Items() { return m_items; }
+    const ItemVector& CItems() const { return m_items; } 
 
     PNS_ITEMSET& FilterLayers( int aStart, int aEnd = -1 );
     PNS_ITEMSET& FilterKinds( int aKindMask );
@@ -55,8 +70,17 @@ public:
 
     PNS_ITEM* Get( int index ) const { return m_items[index]; }
 
+    void Clear();
+
+    void AddOwned ( PNS_ITEM *aItem )
+    {
+        m_items.push_back( aItem );
+        m_ownedItems.push_back( aItem );
+    }
+    
 private:
     ItemVector m_items;
+    ItemVector m_ownedItems;
 };
 
 #endif

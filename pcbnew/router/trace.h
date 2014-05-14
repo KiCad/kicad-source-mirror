@@ -15,22 +15,21 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __TRACE_H
 #define __TRACE_H
 
-// #ifdef DEBUG
-#if 0
-
 #include <string>
 #include <iostream>
 #include <boost/format.hpp>
 
-static void _trace_print( const char* aFuncName, int level, const std::string& aMsg )
+static inline void _trace_print( const char* aFuncName, int level, const std::string& aMsg )
 {
+#ifdef DEBUG
     std::cerr << "trace[" << level << "]: " << aFuncName << ": " << aMsg << std::endl;
+#endif
 }
 
 #define TRACE( level, fmt, ... ) \
@@ -38,12 +37,5 @@ static void _trace_print( const char* aFuncName, int level, const std::string& a
 
 #define TRACEn( level, msg ) \
     _trace_print( __FUNCTION__, level, std::string( msg ) );
-
-#else
-
-#define TRACE( level, fmt, ... )
-#define TRACEn( level, msg )
-
-#endif
 
 #endif

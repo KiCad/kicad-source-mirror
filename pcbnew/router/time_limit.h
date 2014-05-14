@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -18,25 +18,27 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __PNS_UTILS_H
-#define __PNS_UTILS_H
+#ifndef __TIME_LIMIT_H
+#define __TIME_LIMIT_H
 
-#include <math/vector2d.h>
-#include <geometry/shape_line_chain.h>
-#include <geometry/shape_segment.h>
-#include <geometry/shape_rect.h>
+#include <stdint.h>
 
-#define HULL_MARGIN 10
+class TIME_LIMIT {
 
-/** Various utility functions */
+public:
+	TIME_LIMIT( int aMilliseconds =  0);
+	~TIME_LIMIT ();
 
-const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize,
-        int aClearance, int aChamfer );
+	bool Expired() const; 
+	void Restart();
 
-const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg,
-    int aClearance,
-    int aWalkaroundThickness );
+	void Set ( int aMilliseconds );
 
-SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg );
+private:
 
-#endif    // __PNS_UTILS_H
+	int m_limitMs;
+	int64_t m_startTics;
+};
+
+
+#endif

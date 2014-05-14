@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -18,25 +18,32 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __PNS_UTILS_H
-#define __PNS_UTILS_H
+#include "pns_routing_settings.h"
 
-#include <math/vector2d.h>
-#include <geometry/shape_line_chain.h>
-#include <geometry/shape_segment.h>
-#include <geometry/shape_rect.h>
+PNS_ROUTING_SETTINGS::PNS_ROUTING_SETTINGS()
+{
+    m_routingMode = RM_Walkaround;
+    m_optimizerEffort = OE_Full;
+    m_removeLoops = true;
+    m_smartPads = true;
+    m_shoveVias = true;
+    m_suggestFinish = false;
+    m_followMouse = true;
+    m_startDiagonal = false;
+    m_shoveIterationLimit = 250;
+    m_shoveTimeLimit = 1000;
+    m_walkaroundIterationLimit = 40;
+    m_jumpOverObstacles = false;
+    m_smoothDraggedSegments = true;
+    m_canViolateDRC = false;
+}
 
-#define HULL_MARGIN 10
+TIME_LIMIT PNS_ROUTING_SETTINGS::ShoveTimeLimit() const
+{
+    return TIME_LIMIT ( m_shoveTimeLimit );
+}
 
-/** Various utility functions */
-
-const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize,
-        int aClearance, int aChamfer );
-
-const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg,
-    int aClearance,
-    int aWalkaroundThickness );
-
-SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg );
-
-#endif    // __PNS_UTILS_H
+int PNS_ROUTING_SETTINGS::ShoveIterationLimit() const
+{
+    return m_shoveIterationLimit;
+}
