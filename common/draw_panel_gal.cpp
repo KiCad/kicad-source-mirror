@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2014 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -124,7 +124,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
         m_view->UpdateItems();
         m_gal->BeginDrawing();
-        m_gal->ClearScreen();
+        m_gal->ClearScreen( m_painter->GetSettings()->GetBackgroundColor() );
 
         if( m_view->IsDirty() )
         {
@@ -228,7 +228,6 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 
     wxSize size = GetClientSize();
     m_gal->ResizeScreen( size.GetX(), size.GetY() );
-    m_gal->SetBackgroundColor( KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
 
     if( m_painter )
         m_painter->SetGAL( m_gal );
