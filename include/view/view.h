@@ -507,6 +507,8 @@ public:
      */
     void UpdateItems();
 
+	const BOX2I CalculateExtents() ;
+
     static const int VIEW_MAX_LAYERS = 128;      ///< maximum number of layers that may be shown
 
 private:
@@ -534,6 +536,8 @@ private:
     struct unlinkItem;
     struct updateItemsColor;
     struct changeItemsDepth;
+    struct extentsVisitor;
+
 
     ///* Redraws contents within rect aRect
     void redrawRect( const BOX2I& aRect );
