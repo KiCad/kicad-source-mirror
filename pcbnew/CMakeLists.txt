@@ -97,6 +97,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_netlist_fbp.cpp
     dialogs/dialog_pcb_text_properties.cpp
     dialogs/dialog_pcb_text_properties_base.cpp
+    dialogs/dialog_pns_settings.cpp
+    dialogs/dialog_pns_settings_base.cpp
     dialogs/dialog_non_copper_zones_properties_base.cpp
     dialogs/dialog_pad_properties.cpp
     dialogs/dialog_pad_properties_base.cpp
@@ -115,6 +117,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_set_grid.cpp
     dialogs/dialog_set_grid_base.cpp
     dialogs/dialog_target_properties_base.cpp
+    dialogs/dialog_track_via_size.cpp
+    dialogs/dialog_track_via_size_base.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
     dialogs/dialog_footprint_wizard_list_base.cpp
