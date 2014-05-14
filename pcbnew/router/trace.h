@@ -32,10 +32,15 @@ static inline void _trace_print( const char* aFuncName, int level, const std::st
 #endif
 }
 
-#define TRACE( level, fmt, ... ) \
-    _trace_print( __FUNCTION__, level, ( boost::format( fmt ) % __VA_ARGS__ ).str() );
+#ifdef PNS_DEBUG
+    #define TRACE( level, fmt, ... ) \
+        _trace_print( __FUNCTION__, level, ( boost::format( fmt ) % __VA_ARGS__ ).str() );
 
-#define TRACEn( level, msg ) \
-    _trace_print( __FUNCTION__, level, std::string( msg ) );
+    #define TRACEn( level, msg ) \
+        _trace_print( __FUNCTION__, level, std::string( msg ) );
+#else
+    #define TRACE( ... )
+    #define TRACEn( ... )
+#endif
 
 #endif
