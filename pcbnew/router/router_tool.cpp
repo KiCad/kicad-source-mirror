@@ -633,6 +633,9 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     BOARD* board = getModel<BOARD>( PCB_T );
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
+    // Deselect all items
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+
     getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Interactive Router" ) );
 
     ctls->SetSnapping( true );
