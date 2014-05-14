@@ -589,10 +589,10 @@ void OPENGL_GAL::Flush()
 }
 
 
-void OPENGL_GAL::ClearScreen()
+void OPENGL_GAL::ClearScreen( const COLOR4D& aColor )
 {
     // Clear screen
-    glClearColor( backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a );
+    glClearColor( aColor.r, aColor.g, aColor.b, aColor.a );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
