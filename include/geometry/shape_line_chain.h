@@ -445,7 +445,7 @@ public:
 
     struct compareOriginDistance
     {
-        compareOriginDistance( VECTOR2I& aOrigin ):
+        compareOriginDistance( const VECTOR2I& aOrigin ):
             m_origin( aOrigin )
         {}
 
