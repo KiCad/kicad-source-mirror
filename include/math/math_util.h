@@ -40,6 +40,11 @@ T rescale( T aNumerator, T aValue, T aDenominator )
     return aNumerator * aValue / aDenominator;
 }
 
+template <typename T>
+int sign( T val )
+{
+    return ( T( 0 ) < val) - ( val < T( 0 ) );
+}
 
 // explicit specializations for integer types, taking care of overflow.
 template <>

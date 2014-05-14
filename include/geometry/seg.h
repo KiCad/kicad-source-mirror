@@ -244,14 +244,14 @@ public:
      */
     bool Collinear( const SEG& aSeg ) const
     {
-        ecoord qa = A.y - B.y;
-        ecoord qb = B.x - A.x;
-        ecoord qc = -qa * A.x - qb * A.y;
+        ecoord qa1 = A.y - B.y;
+        ecoord qb1 = B.x - A.x;
+        ecoord qc1 = -qa1 * A.x - qb1 * A.y;
+        ecoord qa2 = aSeg.A.y - aSeg.B.y;
+        ecoord qb2 = aSeg.B.x - aSeg.A.x;
+        ecoord qc2 = -qa2 * aSeg.A.x - qb2 * aSeg.A.y;
 
-        ecoord d1 = std::abs( aSeg.A.x * qa + aSeg.A.y * qb + qc );
-        ecoord d2 = std::abs( aSeg.B.x * qa + aSeg.B.y * qb + qc );
-
-        return ( d1 <= 1 && d2 <= 1 );
+        return ( qa1 == qa2 ) && ( qb1 == qb2 ) && ( qc1 == qc2 );
     }
 
     /**

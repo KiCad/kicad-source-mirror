@@ -53,9 +53,21 @@ public:
      * Constructor
      * Creates a rectangle defined by top-left corner aP0, width aW and height aH.
      */
-     SHAPE_RECT( const VECTOR2I& aP0, int aW, int aH ) :
+    SHAPE_RECT( const VECTOR2I& aP0, int aW, int aH ) :
         SHAPE( SH_RECT ), m_p0( aP0 ), m_w( aW ), m_h( aH )
     {}
+
+    SHAPE_RECT ( const SHAPE_RECT& aOther ) : 
+        SHAPE( SH_RECT ),
+        m_p0( aOther.m_p0 ),
+        m_w( aOther.m_w ),
+        m_h( aOther.m_h )
+    {};
+
+    SHAPE* Clone() const
+    {
+        return new SHAPE_RECT( *this );
+    }
 
     /// @copydoc SHAPE::BBox()
     const BOX2I BBox( int aClearance = 0 ) const
@@ -90,11 +102,11 @@ public:
         if( BBox( 0 ).Contains( aSeg.A ) || BBox( 0 ).Contains( aSeg.B ) )
             return true;
 
-         VECTOR2I vts[] = { VECTOR2I( m_p0.x, m_p0.y ),
-                            VECTOR2I( m_p0.x, m_p0.y + m_h ),
-                            VECTOR2I( m_p0.x + m_w, m_p0.y + m_h ),
-                            VECTOR2I( m_p0.x + m_w, m_p0.y ),
-                            VECTOR2I( m_p0.x, m_p0.y ) };
+        VECTOR2I vts[] = { VECTOR2I( m_p0.x, m_p0.y ),
+                           VECTOR2I( m_p0.x, m_p0.y + m_h ),
+                           VECTOR2I( m_p0.x + m_w, m_p0.y + m_h ),
+                           VECTOR2I( m_p0.x + m_w, m_p0.y ),
+                           VECTOR2I( m_p0.x, m_p0.y ) };
 
         for( int i = 0; i < 4; i++ )
         {
