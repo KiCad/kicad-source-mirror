@@ -495,9 +495,9 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
         ViewReloadBoard( aBoard );
 
         // update the tool manager with the new board and its view.
-        m_toolManager.SetEnvironment( aBoard, GetGalCanvas()->GetView(),
-                                      GetGalCanvas()->GetViewControls(), this );
-        m_toolManager.ResetTools( TOOL_BASE::MODEL_RELOAD );
+        m_toolManager->SetEnvironment( aBoard, GetGalCanvas()->GetView(),
+                                       GetGalCanvas()->GetViewControls(), this );
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     }
 }
 
@@ -677,9 +677,9 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
         ViewReloadBoard( m_Pcb );
         GetGalCanvas()->GetView()->RecacheAllItems();
 
-        m_toolManager.SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
+        m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
                                        GetGalCanvas()->GetViewControls(), this );
-        m_toolManager.ResetTools( TOOL_BASE::MODEL_RELOAD );
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
         GetGalCanvas()->StartDrawing();
     }

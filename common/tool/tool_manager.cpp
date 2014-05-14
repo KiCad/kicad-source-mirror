@@ -104,14 +104,6 @@ TOOL_MANAGER::TOOL_MANAGER() :
 
 TOOL_MANAGER::~TOOL_MANAGER()
 {
-    DeleteAll();
-
-    delete m_actionMgr;
-}
-
-
-void TOOL_MANAGER::DeleteAll()
-{
     std::map<TOOL_BASE*, TOOL_STATE*>::iterator it, it_end;
 
     for( it = m_toolState.begin(), it_end = m_toolState.end(); it != it_end; ++it )
@@ -122,6 +114,7 @@ void TOOL_MANAGER::DeleteAll()
     }
 
     m_toolState.clear();
+    delete m_actionMgr;
 }
 
 

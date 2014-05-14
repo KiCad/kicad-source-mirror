@@ -24,6 +24,7 @@
 
 #include <wx/wx.h>
 #include <wx/event.h>
+#include <boost/foreach.hpp>
 
 #include <wxPcbStruct.h>
 #include <wxBasePcbFrame.h>
@@ -45,8 +46,8 @@
 void PCB_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
-    m_toolManager = TOOL_MANAGER::Instance();
-    m_toolDispatcher = new TOOL_DISPATCHER( &m_toolManager, this );
+    m_toolManager = new TOOL_MANAGER;
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
     GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
 
     // Connect handlers to toolbar buttons
@@ -59,26 +60,31 @@ void PCB_EDIT_FRAME::setupTools()
              wxCommandEventHandler( PCB_EDIT_FRAME::onGenericCommand ), NULL, this );
 #endif
 
-    // Register tools
-    m_toolManager.RegisterTool( new SELECTION_TOOL );
-    m_toolManager.RegisterTool( new ROUTER_TOOL );
-    m_toolManager.RegisterTool( new EDIT_TOOL );
-    m_toolManager.RegisterTool( new DRAWING_TOOL );
-    m_toolManager.RegisterTool( new POINT_EDITOR );
-    m_toolManager.RegisterTool( new PCBNEW_CONTROL );
+    // Register actions
+    std::list<TOOL_ACTION*>& actionList = m_toolManager->GetActionList();
+    BOOST_FOREACH( TOOL_ACTION* action, actionList )
+        m_toolManager->RegisterAction( action );
 
-    m_toolManager.SetEnvironment( NULL, GetGalCanvas()->GetView(),
-                                  GetGalCanvas()->GetViewControls(), this );
-    m_toolManager.ResetTools( TOOL_BASE::RUN );
+    // Register tools
+    m_toolManager->RegisterTool( new SELECTION_TOOL );
+    m_toolManager->RegisterTool( new ROUTER_TOOL );
+    m_toolManager->RegisterTool( new EDIT_TOOL );
+    m_toolManager->RegisterTool( new DRAWING_TOOL );
+    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+
+    m_toolManager->SetEnvironment( NULL, GetGalCanvas()->GetView(),
+                                   GetGalCanvas()->GetViewControls(), this );
+    m_toolManager->ResetTools( TOOL_BASE::RUN );
 
     // Run the selection tool, it is supposed to be always active
-    m_toolManager.InvokeTool( "pcbnew.InteractiveSelection" );
+    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 }
 
 
 void PCB_EDIT_FRAME::destroyTools()
 {
-    m_toolManager.DeleteAll();
+    delete m_toolManager;
     delete m_toolDispatcher;
 }
 
