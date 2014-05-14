@@ -34,6 +34,7 @@
 #include <msgpanel.h>
 
 #include "pns_layerset.h"
+#include "pns_routing_settings.h"
 
 class PNS_ROUTER;
 class PNS_ITEM;
@@ -68,6 +69,7 @@ private:
     MSG_PANEL_ITEMS m_panelItems;
 
     PNS_ROUTER* m_router;
+    PNS_ROUTING_SETTINGS m_settings;     ///< Stores routing settings between router invocations
 
     PNS_ITEM* m_startItem;
     int m_startLayer;
