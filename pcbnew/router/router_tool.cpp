@@ -621,8 +621,6 @@ void ROUTER_TOOL::performRouting()
         m_needsSync = true;
     }
 
-    m_settings = m_router->Settings();
-
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
     highlightNet( false );
@@ -683,6 +681,8 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     ctls->ShowCursor( false );
     getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
+    // Store routing settings till the next invocation
+    m_settings = m_router->Settings();
     delete ctxMenu;
 
     return 0;
@@ -691,6 +691,8 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
 
 void ROUTER_TOOL::performDragging()
 {
+    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
+    bool saveUndoBuffer = true;
     VIEW_CONTROLS* ctls = getViewControls();
 
     bool dragStarted = m_router->StartDragging( m_startSnapPoint, m_startItem );
@@ -708,6 +710,11 @@ void ROUTER_TOOL::performDragging()
     {
         if( evt->IsCancel() )
             break;
+        else if( evt->Action() == TA_UNDO_REDO )
+        {
+            saveUndoBuffer = false;
+            break;
+        }
         else if( evt->IsMotion() )
         {
             updateEndItem( *evt );
@@ -725,6 +732,19 @@ void ROUTER_TOOL::performDragging()
 
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
+
+    if( saveUndoBuffer )
+    {
+        // Save the recent changes in the undo buffer
+        frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
+        m_router->ClearUndoBuffer();
+        frame->OnModify();
+    }
+    else
+    {
+        // It was interrupted by TA_UNDO_REDO event, so we have to sync the world now
+        m_needsSync = true;
+    }
 
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
