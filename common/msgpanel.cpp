@@ -37,8 +37,9 @@ END_EVENT_TABLE()
 
 
 EDA_MSG_PANEL::EDA_MSG_PANEL( wxWindow* aParent, int aId,
-                              const wxPoint& aPosition, const wxSize& aSize ) :
-    wxPanel( aParent, aId, aPosition, aSize )
+                              const wxPoint& aPosition, const wxSize& aSize,
+                              long style, const wxString &name ) :
+    wxPanel( aParent, aId, aPosition, aSize, style, name )
 {
     SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );

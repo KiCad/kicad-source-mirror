@@ -19,13 +19,13 @@ int KeyWordOk( const wxString& aKeyList, const wxString& aDatabase );
 /**
  * Function GetAssociatedDocument
  * open a document (file) with the suitable browser
- * @param aFrame = main frame
+ * @param aParent = main frame
  * @param aDocName = filename of file to open (Full filename or short filename)
  * if \a aDocName begins with http: or ftp: or www. the default internet browser is launched
  * @param aPaths = a wxPathList to explore.
  *              if NULL or aDocName is a full filename, aPath is not used.
 */
-bool GetAssociatedDocument( wxFrame* aFrame,
+bool GetAssociatedDocument( wxWindow* aParent,
                             const wxString& aDocName,
                             const wxPathList* aPaths = NULL );
 
