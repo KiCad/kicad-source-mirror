@@ -86,7 +86,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard,
 {
     aBoard->m_Status_Pcb &= ~CONNEXION_OK;
     aBoard->SynchronizeNetsAndNetClasses();
-    aBoard->SetCurrentNetClass( aBoard->m_NetClasses.GetDefault()->GetName() );
+    aBoard->GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );
 
 #if 0
     wxString    header;
