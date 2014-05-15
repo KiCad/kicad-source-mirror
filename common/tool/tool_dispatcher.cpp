@@ -240,6 +240,13 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
             evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_MOTION, mods );
             evt->SetMousePosition( pos );
         }
+
+#ifdef __APPLE__
+        // TODO That's a big ugly workaround, somehow DRAWPANEL_GAL loses focus
+        // after second LMB click and currently I have no means to do better debugging
+        if( type == wxEVT_LEFT_UP )
+            m_editFrame->GetGalCanvas()->SetFocus();
+#endif /* __APPLE__ */
     }
 
     // Keyboard handling
