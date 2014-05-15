@@ -808,7 +808,7 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as setup." ) );
 
     T token;
-    NETCLASS* defaultNetClass = m_board->GetDesignSettings().m_NetClasses.GetDefault();
+    NETCLASS* defaultNetClass = m_board->GetDesignSettings().GetDefault();
     // TODO Orson: is it really necessary to first operate on a copy and then apply it?
     // would not it be better to use reference here and apply all the changes instantly?
     BOARD_DESIGN_SETTINGS designSettings = m_board->GetDesignSettings();

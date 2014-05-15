@@ -678,7 +678,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     // Select default Netclass before writing file.
     // Useful to save default values in headers
-    GetDesignSettings().SetCurrentNetClass( GetDesignSettings().m_NetClasses.GetDefault()->GetName() );
+    GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );
 
     try
     {

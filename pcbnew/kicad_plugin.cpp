@@ -572,7 +572,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                       FMTIU( dsnSettings.m_TrackWidthList[ii] ).c_str() );
 
     m_out->Print( aNestLevel+1, "(trace_clearance %s)\n",
-                  FMTIU( dsnSettings.m_NetClasses.GetDefault()->GetClearance() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetClearance() ).c_str() );
 
     // ZONE_SETTINGS
     m_out->Print( aNestLevel+1, "(zone_clearance %s)\n",
@@ -590,9 +590,9 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     // Save current default via size, for compatibility with older Pcbnew version;
     m_out->Print( aNestLevel+1, "(via_size %s)\n",
-                  FMTIU( dsnSettings.m_NetClasses.GetDefault()->GetViaDiameter() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetViaDiameter() ).c_str() );
     m_out->Print( aNestLevel+1, "(via_drill %s)\n",
-                  FMTIU( dsnSettings.m_NetClasses.GetDefault()->GetViaDrill() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetViaDrill() ).c_str() );
     m_out->Print( aNestLevel+1, "(via_min_size %s)\n",
                   FMTIU( dsnSettings.m_ViasMinSize ).c_str() );
     m_out->Print( aNestLevel+1, "(via_min_drill %s)\n",
@@ -610,9 +610,9 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(blind_buried_vias_allowed yes)\n" );
 
     m_out->Print( aNestLevel+1, "(uvia_size %s)\n",
-                  FMTIU( dsnSettings.m_NetClasses.GetDefault()->GetuViaDiameter() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetuViaDiameter() ).c_str() );
     m_out->Print( aNestLevel+1, "(uvia_drill %s)\n",
-                  FMTIU( dsnSettings.m_NetClasses.GetDefault()->GetuViaDrill() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetuViaDrill() ).c_str() );
     m_out->Print( aNestLevel+1, "(uvias_allowed %s)\n",
                   ( dsnSettings.m_MicroViasAllowed ) ? "yes" : "no" );
     m_out->Print( aNestLevel+1, "(uvia_min_size %s)\n",
@@ -683,7 +683,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( 0, "\n" );
 
     // Save the default net class first.
-    NETCLASS defaultNC = *dsnSettings.m_NetClasses.GetDefault();
+    NETCLASS defaultNC = *dsnSettings.GetDefault();
     filterNetClass( *aBoard, defaultNC );       // Remove empty nets (from a copy of a netclass)
     defaultNC.Format( m_out, aNestLevel, m_ctl );
 
