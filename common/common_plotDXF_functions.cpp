@@ -326,18 +326,39 @@ void DXF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
     if( aCornerList.size() <= 1 )
         return;
 
-    MoveTo( aCornerList[0] );
-    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
-        LineTo( aCornerList[ii] );
+    // Plot outlines with lines (thickness = 0) to define the polygon
+    if( aWidth == 0 || aFill )
+    {
+        MoveTo( aCornerList[0] );
+
+        for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+            LineTo( aCornerList[ii] );
+    }
 
     // Close polygon if 'fill' requested
+    unsigned last = aCornerList.size() - 1;
+
     if( aFill )
     {
-        unsigned ii = aCornerList.size() - 1;
-        if( aCornerList[ii] != aCornerList[0] )
+        if( aCornerList[last] != aCornerList[0] )
             LineTo( aCornerList[0] );
     }
+
     PenFinish();
+
+    // if the polygon outline has thickness, plot outlines with thick segments
+    if( aWidth > 0 )
+    {
+        MoveTo( aCornerList[0] );
+
+        for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+            ThickSegment( aCornerList[ii-1], aCornerList[ii],
+                          aWidth, FILLED );
+
+        if( aCornerList[last] != aCornerList[0] )
+            ThickSegment( aCornerList[last], aCornerList[0],
+                          aWidth, FILLED );
+    }
 }
 
 

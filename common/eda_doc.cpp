@@ -59,7 +59,7 @@ static const wxFileTypeInfo EDAfallbacks[] =
 };
 
 
-bool GetAssociatedDocument( wxFrame* aFrame,
+bool GetAssociatedDocument( wxWindow* aParent,
                             const wxString& aDocName,
                             const wxPathList* aPaths)
 
@@ -122,7 +122,7 @@ bool GetAssociatedDocument( wxFrame* aFrame,
                                          fullfilename,
                                          extension,
                                          mask,
-                                         aFrame,
+                                         aParent,
                                          wxFD_OPEN,
                                          true,
                                          wxPoint( -1, -1 ) );
@@ -133,7 +133,7 @@ bool GetAssociatedDocument( wxFrame* aFrame,
     if( !wxFileExists( fullfilename ) )
     {
         msg.Printf( _( "Doc File '%s' not found" ), GetChars( aDocName ) );
-        DisplayError( aFrame, msg );
+        DisplayError( aParent, msg );
         return false;
     }
 
@@ -176,7 +176,7 @@ bool GetAssociatedDocument( wxFrame* aFrame,
     if( !success )
     {
         msg.Printf( _( "Unknown MIME type for doc file <%s>" ), GetChars( fullfilename ) );
-        DisplayError( aFrame, msg );
+        DisplayError( aParent, msg );
     }
 
     return success;
