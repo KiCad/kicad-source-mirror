@@ -144,7 +144,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
     if( netclass )
         return netclass;
     else
-        return board->GetDesignSettings().m_NetClasses.GetDefault();
+        return board->GetDesignSettings().GetDefault();
 }
 
 
@@ -158,7 +158,7 @@ wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
     else
     {
         BOARD*  board = GetBoard();
-        name = board->GetDesignSettings().m_NetClasses.GetDefault()->GetName();
+        name = NETCLASS::Default;
     }
 
     return name;

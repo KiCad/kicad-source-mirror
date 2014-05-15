@@ -632,7 +632,7 @@ void LEGACY_PLUGIN::loadSHEET()
 
 void LEGACY_PLUGIN::loadSETUP()
 {
-    NETCLASS*               netclass_default = m_board->GetDesignSettings().m_NetClasses.GetDefault();
+    NETCLASS*               netclass_default = m_board->GetDesignSettings().GetDefault();
     // TODO Orson: is it really necessary to first operate on a copy and then apply it?
     // would not it be better to use reference here and apply all the changes instantly?
     BOARD_DESIGN_SETTINGS   bds = m_board->GetDesignSettings();
@@ -897,7 +897,7 @@ void LEGACY_PLUGIN::loadSETUP()
             //        at all, the global defaults should go into a preferences
             //        file instead so they are there to start new board
             //        projects.
-            m_board->GetDesignSettings().m_NetClasses.GetDefault()->SetParams( m_board->GetDesignSettings() );
+            m_board->GetDesignSettings().GetDefault()->SetParams( m_board->GetDesignSettings() );
 
             return;     // preferred exit
         }
@@ -2985,7 +2985,7 @@ void LEGACY_PLUGIN::saveSHEET( const BOARD* aBoard ) const
 void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 {
     const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
-    NETCLASS* netclass_default       = bds.m_NetClasses.GetDefault();
+    NETCLASS* netclass_default       = bds.GetDefault();
 
     fprintf( m_fp, "$SETUP\n" );
 

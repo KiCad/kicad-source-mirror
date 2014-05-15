@@ -201,7 +201,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
     LAYER_MSK layerMask;
 
     // use the default NETCLASS?
-    NETCLASS* nc = aPcb->GetDesignSettings().m_NetClasses.GetDefault();
+    NETCLASS* nc = aPcb->GetDesignSettings().GetDefault();
 
     int       trackWidth = nc->GetTrackWidth();
     int       clearance  = nc->GetClearance();

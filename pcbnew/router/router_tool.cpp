@@ -279,7 +279,7 @@ void ROUTER_TOOL::getNetclassDimensions( int aNetCode, int& aWidth,
     }
 
     if( !netClass )
-        netClass = bds.m_NetClasses.GetDefault();
+        netClass = bds.GetDefault();
 
     aWidth = netClass->GetTrackWidth();
     aViaDiameter = netClass->GetViaDiameter();

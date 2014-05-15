@@ -102,18 +102,22 @@ public:
     BOARD_DESIGN_SETTINGS();
 
     /**
-     * Function SetCurrentNetClassName
-     * sets the current net class name to \a aName.
-     *
-     * @param aName is a reference to a wxString object containing the current net class name.
+     * Function GetDefault
+     * @return the default netclass.
      */
-    void SetCurrentNetClassName( const wxString& aName ) { m_currentNetClassName = aName; }
+    inline NETCLASS* GetDefault() const
+    {
+        return m_NetClasses.GetDefault();
+    }
 
     /**
      * Function GetCurrentNetClassName
      * @return the current net class name.
      */
-    const wxString& GetCurrentNetClassName() const { return m_currentNetClassName; }
+    const wxString& GetCurrentNetClassName() const
+    {
+        return m_currentNetClassName;
+    }
 
     /**
      * Function SetCurrentNetClass
@@ -274,8 +278,6 @@ public:
     {
         return m_customViaSize.m_Drill;
     }
-
-    // TODO microvia methods should go here
 
     /**
      * Function UseCustomTrackViaSize
