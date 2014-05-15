@@ -54,9 +54,9 @@ class NETCLASS
 {
 private:
     // Default values used to init a NETCLASS
-    const static int DEFAULT_CLEARANCE;
-    const static int DEFAULT_VIA_DRILL;
-    const static int DEFAULT_UVIA_DRILL;
+    static const int DEFAULT_CLEARANCE;
+    static const int DEFAULT_VIA_DRILL;
+    static const int DEFAULT_UVIA_DRILL;
 
 protected:
     wxString    m_Name;                 ///< Name of the net class
