@@ -101,7 +101,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
     textItem->SetBold( lastTextBold );
     textItem->SetItalic( lastTextItalic );
     textItem->SetOrientation( lastTextOrientation );
-    textItem->SetSize( wxSize( GetDefaultLabelSize(), GetDefaultLabelSize() ) );
+    textItem->SetSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
     textItem->SetFlags( IS_NEW | IS_MOVED );
 
     EditSchematicText( textItem );

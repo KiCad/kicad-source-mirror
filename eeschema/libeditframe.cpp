@@ -88,7 +88,7 @@ LIB_ITEM* LIB_EDIT_FRAME::m_lastDrawItem = NULL;
 LIB_ITEM* LIB_EDIT_FRAME::m_drawItem = NULL;
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
 wxSize LIB_EDIT_FRAME::        m_clientSize      = wxSize( -1, -1 );
-int LIB_EDIT_FRAME::           m_textSize        = DEFAULT_SIZE_TEXT;
+int LIB_EDIT_FRAME::           m_textSize        = -1;
 int LIB_EDIT_FRAME::           m_textOrientation = TEXT_ORIENT_HORIZ;
 int LIB_EDIT_FRAME::           m_drawLineWidth   = 0;
 FILL_T LIB_EDIT_FRAME::        m_drawFillStyle   = NO_FILL;
@@ -202,6 +202,10 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_tempCopyComponent   = NULL;
     m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
     m_editPinsPerPartOrConvert = false;
+
+    // Delayed initialization
+    if( m_textSize == -1 )
+        m_textSize = GetDefaultTextSize();
 
     // Initialize grid id to the default value 50 mils:
     m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;

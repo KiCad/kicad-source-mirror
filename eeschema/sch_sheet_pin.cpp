@@ -307,7 +307,7 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
     m_Text = FROM_UTF8( name );
 
     if( size == 0 )
-        size = DEFAULT_SIZE_TEXT;
+        size = GetDefaultTextSize();
 
     m_Size.x = m_Size.y = size;
 

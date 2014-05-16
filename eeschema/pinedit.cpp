@@ -59,14 +59,14 @@ static wxPoint PinPreviousPos;
 static int     LastPinType          = PIN_INPUT;
 static int     LastPinOrient        = PIN_RIGHT;
 static int     LastPinShape         = NONE;
-static int     LastPinNameSize      = DEFAULT_TEXT_SIZE;
-static int     LastPinNumSize       = DEFAULT_TEXT_SIZE;
 static bool    LastPinCommonConvert = false;
 static bool    LastPinCommonUnit    = false;
 static bool    LastPinVisible       = true;
 
 // The -1 is a non-valid value to trigger delayed initialization
 static int     LastPinLength        = -1;
+static int     LastPinNameSize      = -1;
+static int     LastPinNumSize       = -1;
 
 static int GetLastPinLength()
 {
@@ -74,6 +74,22 @@ static int GetLastPinLength()
         LastPinLength = GetDefaultPinLength();
 
     return LastPinLength;
+}
+
+static int GetLastPinNameSize()
+{
+    if( LastPinNameSize == -1 )
+        LastPinNameSize = GetDefaultTextSize();
+
+    return LastPinNameSize;
+}
+
+static int GetLastPinNumSize()
+{
+    if( LastPinNumSize == -1 )
+        LastPinNumSize = GetDefaultTextSize();
+
+    return LastPinNumSize;
 }
 
 void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
@@ -141,9 +157,9 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
 
     pin->EnableEditMode( true, m_editPinsPerPartOrConvert );
     pin->SetName( dlg.GetName() );
-    pin->SetNameTextSize( LastPinNameSize );
+    pin->SetNameTextSize( GetLastPinNameSize() );
     pin->SetNumber( dlg.GetPadName() );
-    pin->SetNumberTextSize( LastPinNumSize );
+    pin->SetNumberTextSize( GetLastPinNumSize() );
     pin->SetOrientation( LastPinOrient );
     pin->SetLength( GetLastPinLength() );
     pin->SetType( LastPinType );
@@ -402,8 +418,8 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     pin->SetOrientation( LastPinOrient );
     pin->SetType( LastPinType );
     pin->SetShape( LastPinShape );
-    pin->SetNameTextSize( LastPinNameSize );
-    pin->SetNumberTextSize( LastPinNumSize );
+    pin->SetNameTextSize( GetLastPinNameSize() );
+    pin->SetNumberTextSize( GetLastPinNumSize() );
     pin->SetConvert( LastPinCommonConvert ? 0 : m_convert );
     pin->SetUnit( LastPinCommonUnit ? 0 : m_unit );
     pin->SetVisible( LastPinVisible );

@@ -44,9 +44,19 @@
 
 
 int SCH_EDIT_FRAME::m_lastSheetPinType = NET_INPUT;
-wxSize SCH_EDIT_FRAME::m_lastSheetPinTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
+wxSize SCH_EDIT_FRAME::m_lastSheetPinTextSize( -1, -1 );
 wxPoint SCH_EDIT_FRAME::m_lastSheetPinPosition;
 
+const wxSize &SCH_EDIT_FRAME::GetLastSheetPinTextSize()
+{
+    // Delayed initialization (need the preferences to be loaded)
+    if( m_lastSheetPinTextSize.x == -1 )
+    {
+        m_lastSheetPinTextSize.x = GetDefaultTextSize();
+        m_lastSheetPinTextSize.y = GetDefaultTextSize();
+    }
+    return m_lastSheetPinTextSize;
+}
 
 int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
 {
@@ -102,7 +112,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
 
     sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), line );
     sheetPin->SetFlags( IS_NEW );
-    sheetPin->SetSize( m_lastSheetPinTextSize );
+    sheetPin->SetSize( GetLastSheetPinTextSize() );
     sheetPin->SetShape( m_lastSheetPinType );
 
     int response = EditSheetPin( sheetPin, NULL );
@@ -158,7 +168,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
 
     sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), label->GetText() );
     sheetPin->SetFlags( IS_NEW );
-    sheetPin->SetSize( m_lastSheetPinTextSize );
+    sheetPin->SetSize( GetLastSheetPinTextSize() );
     m_lastSheetPinType = label->GetShape();
     sheetPin->SetShape( label->GetShape() );
     sheetPin->SetPosition( GetCrossHairPosition() );

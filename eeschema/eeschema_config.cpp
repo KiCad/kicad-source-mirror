@@ -57,7 +57,7 @@
 
 static EDA_COLOR_T s_layerColor[NB_SCH_LAYERS];
 
-// The width to draw busses that do not have a specific width
+/// The width to draw busses that do not have a specific width
 static int s_defaultBusThickness;
 
 int GetDefaultBusThickness()
@@ -71,6 +71,19 @@ void SetDefaultBusThickness( int aThickness)
         s_defaultBusThickness = aThickness;
     else
         s_defaultBusThickness = 1;
+}
+
+/// Default size for text (not only labels)
+static int s_defaultTextSize;
+
+int GetDefaultTextSize() 
+{ 
+    return s_defaultTextSize;
+}
+
+void SetDefaultTextSize( int aTextSize ) 
+{ 
+    s_defaultTextSize = aTextSize; 
 }
 
 /*
@@ -283,7 +296,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetBusWidth( GetDefaultBusThickness() );
     dlg.SetLineWidth( GetDefaultLineThickness() );
     dlg.SetPinLength( GetDefaultPinLength() );
-    dlg.SetTextSize( GetDefaultLabelSize() );
+    dlg.SetTextSize( GetDefaultTextSize() );
     dlg.SetRepeatHorizontal( g_RepeatStep.x );
     dlg.SetRepeatVertical( g_RepeatStep.y );
     dlg.SetRepeatLabel( g_RepeatDeltaLabel );
@@ -332,7 +345,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     SetDefaultBusThickness( dlg.GetBusWidth() );
     SetDefaultLineThickness( dlg.GetLineWidth() );
     SetDefaultPinLength( dlg.GetPinLength() );
-    SetDefaultLabelSize( dlg.GetTextSize() );
+    SetDefaultTextSize( dlg.GetTextSize() );
     g_RepeatStep.x = dlg.GetRepeatHorizontal();
     g_RepeatStep.y = dlg.GetRepeatVertical();
     g_RepeatDeltaLabel = dlg.GetRepeatLabel();
@@ -404,7 +417,7 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
                                                       &g_RepeatDeltaLabel,
                                                       1, -10, +10 ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
-                                                      &m_defaultLabelSize,
+                                                      &s_defaultTextSize,
                                                       DEFAULT_SIZE_TEXT, 5,
                                                       1000 ) );
 

@@ -50,7 +50,8 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     m_pos = pos;
     m_size = wxSize( MIN_SHEET_WIDTH, MIN_SHEET_HEIGHT );
     SetTimeStamp( GetNewTimeStamp() );
-    m_sheetNameSize = m_fileNameSize = DEFAULT_TEXT_SIZE;
+    m_sheetNameSize = GetDefaultTextSize();
+    m_fileNameSize = GetDefaultTextSize();
     m_screen = NULL;
     m_name.Printf( wxT( "Sheet%8.8lX" ), m_TimeStamp );
     m_fileName.Printf( wxT( "file%8.8lX.sch" ), m_TimeStamp );
@@ -269,7 +270,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
             }
 
             if( size == 0 )
-                size = DEFAULT_SIZE_TEXT;
+                size = GetDefaultTextSize();
 
             if( fieldNdx == 0 )
             {
