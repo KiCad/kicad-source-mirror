@@ -325,25 +325,32 @@ void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
     if( aCornerList.size() <= 1 )
         return;
 
+    // Gerber format does not know filled polygons with thick outline
+    // Thereore, to plot a filled polygon with outline having a thickness,
+    // one should plot outline as thick segments
+
     SetCurrentLineWidth( aWidth );
 
     if( aFill )
+    {
         fputs( "G36*\n", outputFile );
 
-    MoveTo( aCornerList[0] );
+        MoveTo( aCornerList[0] );
 
-    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
-    {
-        LineTo( aCornerList[ii] );
-    }
+        for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+            LineTo( aCornerList[ii] );
 
-    if( aFill )
-    {
         FinishTo( aCornerList[0] );
         fputs( "G37*\n", outputFile );
     }
-    else
+
+    if( aWidth > 0 )
     {
+        MoveTo( aCornerList[0] );
+
+        for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+            LineTo( aCornerList[ii] );
+
         PenFinish();
     }
 }

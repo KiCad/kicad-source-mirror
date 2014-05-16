@@ -775,6 +775,8 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     // Save the current plot options in the board
     m_parent->SetPlotSettings( m_plotOpts );
 
+    wxBusyCursor dummy;
+
     for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
     {
         if( m_plotOpts.GetLayerSelection() & GetLayerMask( layer ) )

@@ -264,6 +264,8 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     if( aCornerList.size() <= 1 )
         return;
 
+    SetCurrentLineWidth( aWidth );
+
     MoveTo( aCornerList[0] );
 
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )

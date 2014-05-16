@@ -539,13 +539,14 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
             // Plot the current filled area and its outline
             if( GetMode() == FILLED )
             {
-                // Plot the current filled area polygon
-                if( aZone->GetFillMode() == 0 )    // We are using solid polygons
-                {                               // (if != 0: using segments )
-                    m_plotter->PlotPoly( cornerList, FILLED_SHAPE );
+                // Plot the filled area polygon.
+                // The area can be filled by segments or uses solid polygons
+                if( aZone->GetFillMode() == 0 ) // We are using solid polygons
+                {
+                    m_plotter->PlotPoly( cornerList, FILLED_SHAPE, aZone->GetMinThickness() );
                 }
-                else                            // We are using areas filled by
-                {                               // segments: plot them )
+                else    // We are using areas filled by segments: plot segments and outline
+                {
                     for( unsigned iseg = 0; iseg < aZone->FillSegments().size(); iseg++ )
                     {
                         wxPoint start = aZone->FillSegments()[iseg].m_Start;
@@ -554,11 +555,11 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
                                                  aZone->GetMinThickness(),
                                                  GetMode() );
                     }
-                }
 
-                // Plot the current filled area outline
+                // Plot the area outline only
                 if( aZone->GetMinThickness() > 0 )
                     m_plotter->PlotPoly( cornerList, NO_FILL, aZone->GetMinThickness() );
+                }
             }
             else
             {
