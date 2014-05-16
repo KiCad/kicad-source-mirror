@@ -11,6 +11,7 @@
 #include <plot_common.h>
 #include <macros.h>
 #include <kicad_string.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 /**
  * Oblique angle for DXF native text
@@ -319,35 +320,43 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int 
 
 /**
  * DXF polygon: doesn't fill it but at least it close the filled ones
+ * DXF does not know thick outline.
+ * It does not know thhick segments, therefore filled polygons with thick outline
+ * are converted to inflated polygon by aWidth/2
  */
+#include "clipper.hpp"
 void DXF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
                             FILL_T aFill, int aWidth)
 {
     if( aCornerList.size() <= 1 )
         return;
 
+    unsigned last = aCornerList.size() - 1;
+
     // Plot outlines with lines (thickness = 0) to define the polygon
-    if( aWidth == 0 || aFill )
+    if( aWidth <= 0  )
     {
         MoveTo( aCornerList[0] );
 
         for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
             LineTo( aCornerList[ii] );
+
+        // Close polygon if 'fill' requested
+        if( aFill )
+        {
+            if( aCornerList[last] != aCornerList[0] )
+                LineTo( aCornerList[0] );
+        }
+
+        PenFinish();
+
+        return;
     }
 
-    // Close polygon if 'fill' requested
-    unsigned last = aCornerList.size() - 1;
 
-    if( aFill )
-    {
-        if( aCornerList[last] != aCornerList[0] )
-            LineTo( aCornerList[0] );
-    }
-
-    PenFinish();
-
-    // if the polygon outline has thickness, plot outlines with thick segments
-    if( aWidth > 0 )
+    // if the polygon outline has thickness, and is not filled
+    // (i.e. is a polyline) plot outlines with thick segments
+    if( aWidth > 0 && !aFill )
     {
         MoveTo( aCornerList[0] );
 
@@ -355,10 +364,72 @@ void DXF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
             ThickSegment( aCornerList[ii-1], aCornerList[ii],
                           aWidth, FILLED );
 
-        if( aCornerList[last] != aCornerList[0] )
-            ThickSegment( aCornerList[last], aCornerList[0],
-                          aWidth, FILLED );
+        return;
     }
+
+    // The polygon outline has thickness, and is filled
+    // Build and plot the polygon which contains the initial
+    // polygon and its thick outline
+    CPOLYGONS_LIST  bufferOutline;
+    CPOLYGONS_LIST  bufferPolybase;
+    const int circleToSegmentsCount = 16;
+
+    // enter outline as polygon:
+    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+    {
+        TransformRoundedEndsSegmentToPolygon( bufferOutline,
+            aCornerList[ii-1], aCornerList[ii], circleToSegmentsCount, aWidth );
+    }
+
+    // enter the initial polygon:
+    for( unsigned ii = 0; ii < aCornerList.size(); ii++ )
+    {
+        CPolyPt polypoint( aCornerList[ii].x, aCornerList[ii].y );
+        bufferPolybase.Append( polypoint );
+    }
+
+    bufferPolybase.CloseLastContour();
+
+    // Merge polygons to build the polygon which contains the initial
+    // polygon and its thick outline
+    KI_POLYGON_SET  polysBase;      // Store the main outline and the final outline
+    KI_POLYGON_SET  polysOutline;   // Store the thick segments to draw the outline
+    bufferPolybase.ExportTo( polysBase );
+    bufferOutline.ExportTo( polysOutline );
+
+    polysBase += polysOutline;      // create the outline which contains thick outline
+
+    // We should have only one polygon in list, now.
+    wxASSERT( polysBase.size() == 1 );
+
+    if( polysBase.size() < 1 )      // should not happen
+        return;
+
+    KI_POLYGON poly = polysBase[0]; // Expected only one polygon here
+
+    if( poly.size() < 2 )           // should not happen
+        return;
+
+    // Now, output the final polygon to DXF file:
+    last = poly.size() - 1;
+    KI_POLY_POINT point = *(poly.begin());
+    wxPoint startPoint( point.x(), point.y() );
+    MoveTo( startPoint );
+
+    for( unsigned ii = 1; ii < poly.size(); ii++ )
+    {
+        point = *( poly.begin() + ii );
+        LineTo( wxPoint( point.x(), point.y() ) );
+    }
+
+    // Close polygon, if needed
+    point = *(poly.begin() + last);
+    wxPoint endPoint( point.x(), point.y() );
+
+    if( endPoint != startPoint )
+        LineTo( startPoint );
+
+    PenFinish();
 }
 
 
