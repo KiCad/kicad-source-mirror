@@ -32,20 +32,20 @@ class PNS_WALKAROUND : public PNS_ALGO_BASE
     static const int DefaultIterationLimit = 50;
 
 public:
-    PNS_WALKAROUND( PNS_NODE* aWorld, PNS_ROUTER *aRouter ) :
+    PNS_WALKAROUND( PNS_NODE* aWorld, PNS_ROUTER* aRouter ) :
         PNS_ALGO_BASE ( aRouter ),
         m_world( aWorld ), 
-    m_iteration_limit( DefaultIterationLimit )
+        m_iterationLimit( DefaultIterationLimit )
     {
         m_forceSingleDirection = false;
         m_forceLongerPath = false;
         m_cursorApproachMode = false;
-        m_item_mask = PNS_ITEM::ANY;
-    };
+        m_itemMask = PNS_ITEM::ANY;
+    }
 
     ~PNS_WALKAROUND() {};
 
-    enum WalkaroundStatus
+    enum WALKAROUND_STATUS
     {
         IN_PROGRESS = 0,
         DONE,
@@ -59,23 +59,23 @@ public:
 
     void SetIterationLimit( const int aIterLimit )
     {
-        m_iteration_limit = aIterLimit;
+        m_iterationLimit = aIterLimit;
     }
 
     void SetSolidsOnly( bool aSolidsOnly )
     {
-        if(aSolidsOnly)
-            m_item_mask = PNS_ITEM::SOLID;
+        if( aSolidsOnly )
+            m_itemMask = PNS_ITEM::SOLID;
         else
-            m_item_mask = PNS_ITEM::ANY;
+            m_itemMask = PNS_ITEM::ANY;
     }
 
-    void SetItemMask ( int aMask )
+    void SetItemMask( int aMask )
     {
-        m_item_mask = aMask;
+        m_itemMask = aMask;
     }
 
-    void SetSingleDirection( bool aForceSingleDirection  )
+    void SetSingleDirection( bool aForceSingleDirection )
     {
         m_forceSingleDirection = aForceSingleDirection;
         m_forceLongerPath = aForceSingleDirection;
@@ -88,29 +88,30 @@ public:
         m_cursorApproachMode = aEnabled;
     }
 
-    WalkaroundStatus Route( const PNS_LINE& aInitialPath, PNS_LINE& aWalkPath,
+    WALKAROUND_STATUS Route( const PNS_LINE& aInitialPath, PNS_LINE& aWalkPath,
             bool aOptimize = true );
 
-    virtual PNS_LOGGER *Logger() {
+    virtual PNS_LOGGER* Logger()
+    {
         return &m_logger;
     }
 
 private:
     void start( const PNS_LINE& aInitialPath );
 
-    WalkaroundStatus singleStep( PNS_LINE& aPath, bool aWindingDirection );
-    PNS_NODE::OptObstacle nearestObstacle( const PNS_LINE& aPath );
+    WALKAROUND_STATUS singleStep( PNS_LINE& aPath, bool aWindingDirection );
+    PNS_NODE::OPT_OBSTACLE nearestObstacle( const PNS_LINE& aPath );
 
     PNS_NODE* m_world;
 
     int m_recursiveBlockageCount;
     int m_iteration;
-    int m_iteration_limit;
-    int m_item_mask;
+    int m_iterationLimit;
+    int m_itemMask;
     bool m_forceSingleDirection, m_forceLongerPath;
     bool m_cursorApproachMode;
     VECTOR2I m_cursorPos;
-    PNS_NODE::OptObstacle m_currentObstacle[2];
+    PNS_NODE::OPT_OBSTACLE m_currentObstacle[2];
     bool m_recursiveCollision[2];
     PNS_LOGGER m_logger;
 };

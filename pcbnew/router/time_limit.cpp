@@ -24,23 +24,28 @@
 
 TIME_LIMIT::TIME_LIMIT( int aMilliseconds ) : 
 	m_limitMs( aMilliseconds )
-	{
-		Restart();
-	};
+{
+    Restart();
+}
 
-TIME_LIMIT::~TIME_LIMIT () {}
+
+TIME_LIMIT::~TIME_LIMIT()
+{}
+
 
 bool TIME_LIMIT::Expired() const
 {
 	return ( wxGetLocalTimeMillis().GetValue() - m_startTics ) >= m_limitMs;
 }
 
+
 void TIME_LIMIT::Restart()
 {
 	m_startTics = wxGetLocalTimeMillis().GetValue();
 }
 
-void TIME_LIMIT::Set ( int aMilliseconds )
+
+void TIME_LIMIT::Set( int aMilliseconds )
 {
 	m_limitMs = aMilliseconds;
 }

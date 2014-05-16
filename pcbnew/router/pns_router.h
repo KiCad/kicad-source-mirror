@@ -51,9 +51,10 @@ class PNS_CLEARANCE_FUNC;
 class PNS_SHOVE;
 class PNS_DRAGGER;
 
-namespace KIGFX {
-class VIEW;
-class VIEW_GROUP;
+namespace KIGFX
+{
+    class VIEW;
+    class VIEW_GROUP;
 };
 
 
@@ -62,7 +63,6 @@ class VIEW_GROUP;
  *
  * Main router class.
  */
-
 class PNS_ROUTER
 {
 private:
@@ -94,7 +94,7 @@ public:
 
     const VECTOR2I CurrentEnd() const;
 
-    int GetClearance( const PNS_ITEM* a, const PNS_ITEM* b ) const;
+    int GetClearance( const PNS_ITEM* aA, const PNS_ITEM* aB ) const;
 
     PNS_NODE* GetWorld() const
     {
@@ -114,8 +114,8 @@ public:
 
     void ToggleViaPlacement();
 
-    int GetCurrentLayer() const;// { return m_currentLayer; }
-    int GetCurrentNet() const;// { return m_currentNet; }
+    int GetCurrentLayer() const;
+    int GetCurrentNet() const;
 
     void DumpLog();
   
@@ -134,14 +134,19 @@ public:
     // typedef boost::optional<hoverItem> optHoverItem;
 
     const PNS_ITEMSET   QueryHoverItems( const VECTOR2I& aP );
-    const VECTOR2I      SnapToItem( PNS_ITEM* item, VECTOR2I aP, bool& aSplitsSegment );
+    const VECTOR2I      SnapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment );
 
     bool StartDragging( const VECTOR2I& aP, PNS_ITEM* aItem );
 
     void SetIterLimit( int aX ) { m_iterLimit = aX; }
     int GetIterLimit() const { return m_iterLimit; };
 
-    void SetShowIntermediateSteps(bool aX, int aSnapshotIter = -1 ) { m_showInterSteps = aX; m_snapshotIter = aSnapshotIter; }
+    void SetShowIntermediateSteps( bool aX, int aSnapshotIter = -1 )
+    {
+        m_showInterSteps = aX;
+        m_snapshotIter = aSnapshotIter;
+    }
+
     bool GetShowIntermediateSteps() const { return m_showInterSteps; }
     int GetShapshotIter() const { return m_snapshotIter; }
 
@@ -168,7 +173,7 @@ public:
 
     /**
      * Applies stored settings.
-     * \see Settings()
+     * @see Settings()
      */
     void ApplySettings();
 
@@ -183,30 +188,29 @@ public:
         ApplySettings();
     }
 
-    void EnableSnapping ( bool aEnable )
+    void EnableSnapping( bool aEnable )
     {
         m_snappingEnabled = aEnable;
     }
 
-    bool SnappingEnabled () const
+    bool SnappingEnabled() const
     {
         return m_snappingEnabled;
     }
 
-
 private:
-    void movePlacing  ( const VECTOR2I& aP, PNS_ITEM* aItem );
-    void moveDragging ( const VECTOR2I& aP, PNS_ITEM* aItem );
+    void movePlacing( const VECTOR2I& aP, PNS_ITEM* aItem );
+    void moveDragging( const VECTOR2I& aP, PNS_ITEM* aItem );
     
     void eraseView();
-    void updateView( PNS_NODE *aNode, PNS_ITEMSET &aCurrent ); //PNS_LINE *aCurrent = NULL );
+    void updateView( PNS_NODE* aNode, PNS_ITEMSET& aCurrent );
     
     void clearViewFlags();
 
     // optHoverItem queryHoverItemEx(const VECTOR2I& aP);
 
-    PNS_ITEM* pickSingleItem( PNS_ITEMSET& aItems ) const;                               // std::vector<PNS_ITEM*> aItems) const;
-    void splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, const VECTOR2I& aP );   // optHoverItem& aItem);
+    PNS_ITEM* pickSingleItem( PNS_ITEMSET& aItems ) const;
+    void splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, const VECTOR2I& aP );
     PNS_VIA* checkLoneVia( PNS_JOINT* aJoint ) const;
 
     PNS_ITEM* syncPad( D_PAD* aPad );
@@ -219,7 +223,7 @@ private:
 
     void highlightCurrent( bool enabled );
 
-    void markViolations( PNS_NODE *aNode, PNS_ITEMSET& aCurrent,  PNS_NODE::ItemVector& aRemoved );
+    void markViolations( PNS_NODE *aNode, PNS_ITEMSET& aCurrent,  PNS_NODE::ITEM_VECTOR& aRemoved );
     
     int m_currentLayer;
     int m_currentNet;
@@ -241,8 +245,7 @@ private:
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_GROUP* m_previewItems;
 
-
-    PNS_ITEM *m_currentEndItem;
+    PNS_ITEM* m_currentEndItem;
     
     VECTOR2I m_currentEnd;
     VECTOR2I m_currentStart;
@@ -252,7 +255,7 @@ private:
     bool m_snappingEnabled;
     bool m_violation;
 
-// optHoverItem m_startItem, m_endItem;
+    // optHoverItem m_startItem, m_endItem;
 
     PNS_ROUTING_SETTINGS m_settings;
     PNS_CLEARANCE_FUNC* m_clearanceFunc;

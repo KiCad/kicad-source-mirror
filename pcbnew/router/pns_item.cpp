@@ -50,8 +50,7 @@ bool PNS_ITEM::Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
         const PNS_LINE* line = static_cast<const PNS_LINE*>( aOther );
 
         if( line->EndsWithVia() )
-            return collideSimple( &line->Via(), aClearance - line->Width() / 2, aNeedMTV,
-                    aMTV );
+            return collideSimple( &line->Via(), aClearance - line->Width() / 2, aNeedMTV, aMTV );
     }
 
     return false;
@@ -85,5 +84,4 @@ const std::string PNS_ITEM::KindStr() const
 
 PNS_ITEM::~PNS_ITEM()
 {
-    
 }

@@ -49,7 +49,7 @@ public:
         m_pos = aSolid.m_pos;
     }
     
-    PNS_ITEM* Clone( ) const;
+    PNS_ITEM* Clone() const;
 
     const SHAPE* Shape() const { return m_shape; }
 
@@ -73,7 +73,7 @@ public:
         m_pos = aCenter;
     }
 
-    virtual VECTOR2I Anchor(int n) const 
+    virtual VECTOR2I Anchor( int aN ) const
     {
         return m_pos;
     }
@@ -82,7 +82,6 @@ public:
     {
         return 1;
     }
-
 
 private:
     VECTOR2I    m_pos;

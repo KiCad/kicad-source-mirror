@@ -25,26 +25,22 @@
 
 #include <geometry/shape_rect.h>
 
-bool PNS_VIA::PushoutForce( PNS_NODE* aNode,
-        const VECTOR2I& aDirection,
-        VECTOR2I& aForce,
-        bool aSolidsOnly,
-        int aMaxIterations )
+bool PNS_VIA::PushoutForce( PNS_NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForce,
+                            bool aSolidsOnly, int aMaxIterations )
 {
     int iter = 0;
     PNS_VIA mv( *this );
     VECTOR2I force, totalForce, force2;
 
-
     while( iter < aMaxIterations )
     {
-        
-        PNS_NODE::OptObstacle obs = aNode->CheckColliding( &mv,  aSolidsOnly ? PNS_ITEM::SOLID : PNS_ITEM::ANY );
+        PNS_NODE::OPT_OBSTACLE obs = aNode->CheckColliding( &mv,
+                aSolidsOnly ? PNS_ITEM::SOLID : PNS_ITEM::ANY );
 
         if( !obs )
             break;
 
-        int clearance = aNode->GetClearance( obs->item, &mv );
+        int clearance = aNode->GetClearance( obs->m_item, &mv );
 
         if( iter > aMaxIterations / 2 )
         {
@@ -53,13 +49,12 @@ bool PNS_VIA::PushoutForce( PNS_NODE* aNode,
             mv.SetPos( mv.Pos() + l );
         }
 
-        bool col = CollideShapes( obs->item->Shape(), mv.Shape(), clearance, true, force2 );
+        bool col = CollideShapes( obs->m_item->Shape(), mv.Shape(), clearance, true, force2 );
 
-        if(col) {
+        if( col ) {
             totalForce += force2;
             mv.SetPos( mv.Pos() + force2 );
         }
-
 
         iter++;
     }
@@ -68,18 +63,20 @@ bool PNS_VIA::PushoutForce( PNS_NODE* aNode,
         return false;
 
     aForce = totalForce;
+
     return true;
 }
 
 
 const SHAPE_LINE_CHAIN PNS_VIA::Hull( int aClearance, int aWalkaroundThickness ) const
 {
-    int cl = (aClearance + aWalkaroundThickness / 2);
+    int cl = ( aClearance + aWalkaroundThickness / 2 );
 
     return OctagonalHull( m_pos -
-            VECTOR2I( m_diameter / 2, m_diameter / 2 ), VECTOR2I( m_diameter,
-                    m_diameter ), cl + 1, (2 * cl + m_diameter) * 0.26 );
+            VECTOR2I( m_diameter / 2, m_diameter / 2 ), VECTOR2I( m_diameter, m_diameter ),
+            cl + 1, ( 2 * cl + m_diameter ) * 0.26 );
 }
+
 
 PNS_VIA* PNS_VIA::Clone ( ) const
 {

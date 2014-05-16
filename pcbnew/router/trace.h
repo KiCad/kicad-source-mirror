@@ -25,10 +25,10 @@
 #include <iostream>
 #include <boost/format.hpp>
 
-static inline void _trace_print( const char* aFuncName, int level, const std::string& aMsg )
+static inline void _trace_print( const char* aFuncName, int aLevel, const std::string& aMsg )
 {
 #ifdef DEBUG
-    std::cerr << "trace[" << level << "]: " << aFuncName << ": " << aMsg << std::endl;
+    std::cerr << "trace[" << aLevel << "]: " << aFuncName << ": " << aMsg << std::endl;
 #endif
 }
 

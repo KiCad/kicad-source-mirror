@@ -49,7 +49,6 @@ public:
     int Main( TOOL_EVENT& aEvent );
 
 private:
-
     PNS_ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1 );
 
     int getDefaultWidth( int aNetCode );
@@ -57,7 +56,7 @@ private:
     void performRouting();
     void performDragging();
     
-    void highlightNet( bool enabled, int netcode = -1 );
+    void highlightNet( bool aEnabled, int aNetcode = -1 );
 
     void updateStartItem( TOOL_EVENT& aEvent );
     void updateEndItem( TOOL_EVENT& aEvent );
@@ -77,7 +76,6 @@ private:
 
     PNS_ITEM* m_endItem;
     VECTOR2I m_endSnapPoint;
-
 
     CONTEXT_MENU* m_menu;
 

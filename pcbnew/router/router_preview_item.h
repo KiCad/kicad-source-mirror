@@ -44,13 +44,12 @@ class PNS_ROUTER;
 class ROUTER_PREVIEW_ITEM : public EDA_ITEM
 {
 public:
-    enum ItemType
+    enum ITEM_TYPE
     {
         PR_STUCK_MARKER = 0,
         PR_POINT,
         PR_SHAPE
     };
-
     
     ROUTER_PREVIEW_ITEM( const PNS_ITEM* aItem = NULL, KIGFX::VIEW_GROUP* aParent = NULL );
     ~ROUTER_PREVIEW_ITEM();
@@ -68,12 +67,12 @@ public:
         m_color = aColor;
     }
 
-    void SetClearance ( int aClearance )
+    void SetClearance( int aClearance )
     {
         m_clearance = aClearance;
     }
 
-    void Show( int a, std::ostream& b ) const {};
+    void Show( int aA, std::ostream& aB ) const {};
 
     const BOX2I ViewBBox() const;
 
@@ -85,7 +84,7 @@ public:
         aCount = 1;
     }
 
-    void drawLineChain( const SHAPE_LINE_CHAIN &l, KIGFX::GAL *aGal ) const;
+    void drawLineChain( const SHAPE_LINE_CHAIN& aL, KIGFX::GAL *aGal ) const;
 
 private:
     const KIGFX::COLOR4D assignColor( int aStyle ) const;
@@ -94,9 +93,9 @@ private:
     KIGFX::VIEW_GROUP* m_parent;
 
     PNS_ROUTER* m_router;
-    SHAPE *m_shape;
+    SHAPE* m_shape;
 
-    ItemType m_type;
+    ITEM_TYPE m_type;
     
     int m_style;
     int m_width;

@@ -21,16 +21,17 @@
 #ifndef __RANGE_H
 #define __RANGE_H
 
-template<class T> class RANGE {
-
+template<class T>
+class RANGE
+{
 	public:
-		RANGE (T aMin, T aMax) : 
-			m_min(aMin),
-			m_max(aMax),
-			m_defined(true) {}
+		RANGE( T aMin, T aMax ) :
+			m_min( aMin ),
+			m_max( aMax ),
+			m_defined( true ) {}
 
-		RANGE (): 
-			m_defined (false) {};
+		RANGE():
+			m_defined( false ) {}
 
 		T MinV() const
 		{
@@ -42,36 +43,38 @@ template<class T> class RANGE {
 			return m_max;
 		}
 
-		void Set ( T aMin, T aMax ) const
+		void Set( T aMin, T aMax ) const
 		{
 			m_max = aMax;
 			m_min = aMin;
 		}
 
-		void Grow ( T value ) 
+		void Grow( T aValue )
 		{
-			if(!m_defined)
+			if( !m_defined )
 			{
-				m_min = value;
-				m_max = value;
+				m_min = aValue;
+				m_max = aValue;
 				m_defined = true;
-			} else {
-				m_min = std::min(m_min, value);
-				m_max = std::max(m_max, value);
+			}
+			else
+			{
+				m_min = std::min( m_min, aValue );
+				m_max = std::max( m_max, aValue );
 			}
 		}
 
-		bool Inside ( const T& value ) const
+		bool Inside( const T& aValue ) const
 		{
-			if(!m_defined)
+			if( !m_defined )
 				return true;
 
-			return value >= m_min && value <= m_max;
+			return aValue >= m_min && aValue <= m_max;
 		}
 
-		bool Overlaps ( const RANGE<T> &aOther ) const
+		bool Overlaps ( const RANGE<T>& aOther ) const
 		{
-	        if(!m_defined || !aOther.m_defined)
+	        if( !m_defined || !aOther.m_defined )
 	        	return true;
 
 	        return m_max >= aOther.m_min && m_min <= aOther.m_max;
@@ -85,7 +88,6 @@ template<class T> class RANGE {
 	private:
 		T m_min, m_max;
 		bool m_defined;
-
 };
 
 #endif

@@ -33,17 +33,18 @@ class PNS_LOGGER;
  * Holds a bunch of objects commonly used by all algorithms (P&S settings, parent router instance, logging)
  **/
 
-class PNS_ALGO_BASE {
-
+class PNS_ALGO_BASE
+{
 public:
-	PNS_ALGO_BASE ( PNS_ROUTER *aRouter ):
+	PNS_ALGO_BASE( PNS_ROUTER *aRouter ) :
 		m_router ( aRouter )
-		{};
+	{}
 
 	virtual ~PNS_ALGO_BASE() {}
 
 	///> Returns the instance of our router
-	PNS_ROUTER *Router() const {
+	PNS_ROUTER* Router() const
+	{
 		return m_router;
 	}
 
@@ -51,10 +52,10 @@ public:
 	PNS_ROUTING_SETTINGS& Settings() const;
 
 	///> Returns the logger object, allowing to dump geometry to a file.
-	virtual PNS_LOGGER *Logger();
+	virtual PNS_LOGGER* Logger();
 	
 private:
-	PNS_ROUTER *m_router;
+	PNS_ROUTER* m_router;
 };
 
 #endif

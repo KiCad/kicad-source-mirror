@@ -209,12 +209,12 @@ public:
         // we are more horizontal than vertical?
         if( w > h )
         {
-            mp0 = VECTOR2I( (w - h) * sw, 0 );      // direction: E
+            mp0 = VECTOR2I( ( w - h ) * sw, 0 );    // direction: E
             mp1 = VECTOR2I( h * sw, h * sh );       // direction: NE
         }
         else
         {
-            mp0 = VECTOR2I( 0, sh * (h - w) );      // direction: N
+            mp0 = VECTOR2I( 0, sh * ( h - w ) );    // direction: N
             mp1 = VECTOR2I( sw * w, sh * w );       // direction: NE
         }
 
@@ -237,7 +237,7 @@ public:
         pl.Append( aP1 );
         pl.Simplify();
         return pl;
-    };
+    }
 
     bool operator==( const DIRECTION_45& aOther ) const
     {
@@ -275,18 +275,16 @@ public:
     {
         DIRECTION_45 l;
 
-        if (m_dir == UNDEFINED)
+        if ( m_dir == UNDEFINED )
             return l;
 
-        if(m_dir == N)
+        if( m_dir == N )
             l.m_dir = NW;
         else
-            l.m_dir = static_cast<Directions> (m_dir - 1);
+            l.m_dir = static_cast<Directions>( m_dir - 1 );
         
         return l;
     }
-
-
 
     /**
      * Function ToVector()
@@ -295,19 +293,19 @@ public:
      */
     const VECTOR2I ToVector() const
     {
-        switch(m_dir)
+        switch( m_dir )
         {
-            case N: return VECTOR2I(0, 1);
-            case S: return VECTOR2I(0, -1);
-            case E: return VECTOR2I(1, 0);
-            case W: return VECTOR2I(-1, 0);
-            case NE: return VECTOR2I(1, 1);
-            case NW: return VECTOR2I(-1, 1);
-            case SE: return VECTOR2I(1, -1);
-            case SW: return VECTOR2I(-1, -1);
+            case N: return VECTOR2I( 0, 1 );
+            case S: return VECTOR2I( 0, -1 );
+            case E: return VECTOR2I( 1, 0 );
+            case W: return VECTOR2I( -1, 0 );
+            case NE: return VECTOR2I( 1, 1 );
+            case NW: return VECTOR2I( -1, 1 );
+            case SE: return VECTOR2I( 1, -1 );
+            case SW: return VECTOR2I( -1, -1 );
             
             default:
-                return VECTOR2I(0, 0);
+                return VECTOR2I( 0, 0 );
         }        
     }
 

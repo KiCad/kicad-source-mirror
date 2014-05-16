@@ -46,7 +46,7 @@ class PNS_ROUTER_BASE;
 class PNS_LINE_PLACER : public PNS_ALGO_BASE
 {
 public:
-    PNS_LINE_PLACER( PNS_ROUTER *aRouter );
+    PNS_LINE_PLACER( PNS_ROUTER* aRouter );
     ~PNS_LINE_PLACER();
 
     /**
@@ -56,7 +56,7 @@ public:
      * (unless NULL).
      */
     void Start ( const VECTOR2I& aP, PNS_ITEM* aStartItem );
-    
+
     /**
      * Function Move()
      * 
@@ -92,14 +92,14 @@ public:
      *
      * Sets the current routing layer.
      */
-    void SetLayer ( int aLayer );
+    void SetLayer( int aLayer );
 
     /**
      * Function SetWidth()
      *
      * Sets the current track width.
      */
-    void SetWidth ( int aWidth );
+    void SetWidth( int aWidth );
 
     /**
      * Function Head()
@@ -167,7 +167,7 @@ public:
      *
      * Returns the most recent world state.
      */
-    PNS_NODE* CurrentNode(bool aLoopsRemoved = false) const;
+    PNS_NODE* CurrentNode( bool aLoopsRemoved = false ) const;
     
     /**
      * Function FlipPosture()
@@ -185,7 +185,6 @@ public:
      */
     void UpdateSizes( const PNS_ROUTING_SETTINGS& aSettings );
 
-    
 private:
     /**
      * Function route()
@@ -197,7 +196,6 @@ private:
      * @param aP ending point of current route.
      * @return true, if the routing is complete.
      */
-
     bool route( const VECTOR2I& aP );
 
     /**
@@ -214,7 +212,7 @@ private:
      *
      * Sets the board to route.
      */
-    void setWorld ( PNS_NODE *aWorld );
+    void setWorld ( PNS_NODE* aWorld );
     
     /**
      * Function startPlacement()
@@ -268,9 +266,9 @@ private:
      *
      * Helper function, checking if segments a and b form an obtuse angle
      * (in 45-degree regime).
-     * @return true, if angle (a, b) is obtuse
+     * @return true, if angle (aA, aB) is obtuse
      */
-    bool checkObtusity( const SEG& a, const SEG& b ) const;
+    bool checkObtusity( const SEG& aA, const SEG& aB ) const;
 
     /**
      * Function handleSelfIntersections()
@@ -339,16 +337,15 @@ private:
      */
     void routeStep( const VECTOR2I& aP );
 
-    ///< route step, walkaround mode
+    ///> route step, walkaround mode
     bool rhWalkOnly ( const VECTOR2I& aP, PNS_LINE& aNewHead);
 
-    ///< route step, shove mode
+    ///> route step, shove mode
     bool rhShoveOnly ( const VECTOR2I& aP, PNS_LINE& aNewHead);
 
-    ///< route step, mark obstacles mode
+    ///> route step, mark obstacles mode
     bool rhMarkObstacles ( const VECTOR2I& aP, PNS_LINE& aNewHead );
     
-
     ///> current routing direction
     DIRECTION_45 m_direction;
 
@@ -399,7 +396,6 @@ private:
     PNS_LINE m_currentTrace;
 
     PNS_MODE    m_currentMode;
-
 };
 
 #endif    // __PNS_LINE_PLACER_H
