@@ -37,24 +37,23 @@ class PNS_SEGMENT : public PNS_ITEM
 public:
     PNS_SEGMENT() :
         PNS_ITEM( SEGMENT )
-    {};
+    {}
 
     PNS_SEGMENT( const SEG& aSeg, int aNet ) :
-        PNS_ITEM( SEGMENT ), m_seg(aSeg, 0)
+        PNS_ITEM( SEGMENT ), m_seg( aSeg, 0 )
     {
         m_net = aNet;
-    };
+    }
 
     PNS_SEGMENT( const PNS_LINE& aParentLine, const SEG& aSeg ) :
         PNS_ITEM( SEGMENT ), 
-        m_seg(aSeg, aParentLine.Width())
+        m_seg( aSeg, aParentLine.Width() )
     {
         m_net = aParentLine.Net();
         m_layers = aParentLine.Layers();
         m_marker = aParentLine.Marker();
         m_rank = aParentLine.Rank();
     };
-
 
     PNS_SEGMENT* Clone( ) const;
 
@@ -101,14 +100,14 @@ public:
     void SwapEnds()
     {
         SEG tmp = m_seg.GetSeg();
-        m_seg.SetSeg( SEG (tmp.B , tmp.A ));
+        m_seg.SetSeg( SEG (tmp.B , tmp.A ) );
     }
 
     const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness ) const;
 
     virtual VECTOR2I Anchor(int n) const 
     {
-        if(n == 0)
+        if( n == 0 )
             return m_seg.GetSeg().A;
         else
             return m_seg.GetSeg().B;

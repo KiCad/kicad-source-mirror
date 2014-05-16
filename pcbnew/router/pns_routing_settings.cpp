@@ -23,7 +23,7 @@
 PNS_ROUTING_SETTINGS::PNS_ROUTING_SETTINGS()
 {
     m_routingMode = RM_Walkaround;
-    m_optimizerEffort = OE_Full;
+    m_optimizerEffort = OE_FULL;
     m_removeLoops = true;
     m_smartPads = true;
     m_shoveVias = true;
@@ -38,10 +38,12 @@ PNS_ROUTING_SETTINGS::PNS_ROUTING_SETTINGS()
     m_canViolateDRC = false;
 }
 
+
 TIME_LIMIT PNS_ROUTING_SETTINGS::ShoveTimeLimit() const
 {
     return TIME_LIMIT ( m_shoveTimeLimit );
 }
+
 
 int PNS_ROUTING_SETTINGS::ShoveIterationLimit() const
 {

@@ -36,9 +36,9 @@ enum PNS_MODE
 ///> Optimization effort
 enum PNS_OPTIMIZATION_EFFORT 
 {
-    OE_Low = 0,             
-    OE_Medium = 1,
-    OE_Full = 2
+    OE_LOW = 0,             
+    OE_MEDIUM = 1,
+    OE_FULL = 2
 };
 
 /**
@@ -91,7 +91,7 @@ public:
     ///> Returns true if follow mouse mode is active (permanently on for the moment).
     bool FollowMouse() const 
     { 
-        return m_followMouse && !(Mode() == RM_MarkObstacles); 
+        return m_followMouse && !( Mode() == RM_MarkObstacles );
     }
     
     ///> Returns true if smoothing segments durign dragging is enabled.    
@@ -120,10 +120,10 @@ public:
 
     const DIRECTION_45 InitialDirection() const
     {
-        if(m_startDiagonal)
-            return DIRECTION_45 (DIRECTION_45::NE);
+        if( m_startDiagonal )
+            return DIRECTION_45( DIRECTION_45::NE );
         else
-            return DIRECTION_45 (DIRECTION_45::N);
+            return DIRECTION_45( DIRECTION_45::N );
     }
 
     int ShoveIterationLimit() const;
@@ -133,7 +133,6 @@ public:
     TIME_LIMIT WalkaroundTimeLimit() const;
 
 private:
-
     bool m_shoveVias;
     bool m_startDiagonal;
     bool m_removeLoops;

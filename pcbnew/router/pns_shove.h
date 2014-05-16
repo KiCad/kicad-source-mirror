@@ -44,7 +44,7 @@ class PNS_SHOVE : public PNS_ALGO_BASE
 {
 public:
 
-    enum ShoveStatus
+    enum SHOVE_STATUS
     {
         SH_OK = 0,
         SH_NULL,
@@ -52,72 +52,74 @@ public:
         SH_HEAD_MODIFIED
     };
 
-    PNS_SHOVE( PNS_NODE* aWorld, PNS_ROUTER *aRouter );
+    PNS_SHOVE( PNS_NODE* aWorld, PNS_ROUTER* aRouter );
     ~PNS_SHOVE();
 
-    virtual PNS_LOGGER *Logger()
+    virtual PNS_LOGGER* Logger()
     {
         return &m_logger;
     }
 
-    ShoveStatus ShoveLines( const PNS_LINE& aCurrentHead );
-    ShoveStatus ShoveDraggingVia ( PNS_VIA *aVia, const VECTOR2I& aWhere, PNS_VIA **aNewVia );
+    SHOVE_STATUS ShoveLines( const PNS_LINE& aCurrentHead );
+    SHOVE_STATUS ShoveDraggingVia( PNS_VIA*aVia, const VECTOR2I& aWhere, PNS_VIA** aNewVia );
 
     PNS_NODE* CurrentNode();
 
     const PNS_LINE NewHead() const;
 
-    void SetInitialLine ( PNS_LINE *aInitial );
+    void SetInitialLine ( PNS_LINE* aInitial );
 
 private:
-    typedef std::vector<SHAPE_LINE_CHAIN> HullSet;
-    typedef boost::optional<PNS_LINE> OptLine;
-    typedef std::pair <PNS_LINE *, PNS_LINE *> LinePair;
-    typedef std::vector<LinePair> LinePairVec;
+    typedef std::vector<SHAPE_LINE_CHAIN> HULL_SET;
+    typedef boost::optional<PNS_LINE> OPT_LINE;
+    typedef std::pair <PNS_LINE*, PNS_LINE*> LINE_PAIR;
+    typedef std::vector<LINE_PAIR> LINE_PAIR_VEC;
 
-    struct SpringbackTag
+    struct SPRINGBACK_TAG
     {
-        int64_t length;
-        int segments;
-        VECTOR2I p;
-        PNS_NODE *node;
-        PNS_ITEMSET headItems;
-        PNS_COST_ESTIMATOR cost;
+        int64_t m_length;
+        int m_segments;
+        VECTOR2I m_p;
+        PNS_NODE* m_node;
+        PNS_ITEMSET m_headItems;
+        PNS_COST_ESTIMATOR m_cost;
     };
 
-    ShoveStatus processSingleLine(PNS_LINE *aCurrent, PNS_LINE* aObstacle, PNS_LINE *aShoved );
-    ShoveStatus processHullSet ( PNS_LINE *aCurrent, PNS_LINE *aObstacle, PNS_LINE *aShoved, const HullSet& hulls );
+    SHOVE_STATUS processSingleLine( PNS_LINE* aCurrent, PNS_LINE* aObstacle, PNS_LINE* aShoved );
+    SHOVE_STATUS processHullSet( PNS_LINE* aCurrent, PNS_LINE* aObstacle,
+                                 PNS_LINE* aShoved, const HULL_SET& hulls );
     
-    bool reduceSpringback( const PNS_ITEMSET &aHeadItems );
-    bool pushSpringback( PNS_NODE* aNode, const PNS_ITEMSET &aHeadItems, const PNS_COST_ESTIMATOR& aCost );
+    bool reduceSpringback( const PNS_ITEMSET& aHeadItems );
+    bool pushSpringback( PNS_NODE* aNode, const PNS_ITEMSET &aHeadItems,
+                         const PNS_COST_ESTIMATOR& aCost );
     
-    ShoveStatus walkaroundLoneVia ( PNS_LINE *aCurrent, PNS_LINE *aObstacle, PNS_LINE *aShoved );
-    bool checkBumpDirection ( PNS_LINE *aCurrent, PNS_LINE *aShoved ) const;
+    SHOVE_STATUS walkaroundLoneVia( PNS_LINE* aCurrent, PNS_LINE* aObstacle, PNS_LINE* aShoved );
+    bool checkBumpDirection( PNS_LINE* aCurrent, PNS_LINE* aShoved ) const;
 
-    ShoveStatus onCollidingLine( PNS_LINE *aCurrent, PNS_LINE *aObstacle );
-    ShoveStatus onCollidingSegment( PNS_LINE *aCurrent, PNS_SEGMENT *aObstacleSeg );
-    ShoveStatus onCollidingSolid( PNS_LINE *aCurrent, PNS_SOLID *aObstacleSolid );
-    ShoveStatus onCollidingVia( PNS_ITEM *aCurrent, PNS_VIA *aObstacleVia );
-    ShoveStatus onReverseCollidingVia( PNS_LINE *aCurrent, PNS_VIA *aObstacleVia );
-    ShoveStatus pushVia ( PNS_VIA *aVia, const VECTOR2I& aForce, int aCurrentRank );
+    SHOVE_STATUS onCollidingLine( PNS_LINE* aCurrent, PNS_LINE* aObstacle );
+    SHOVE_STATUS onCollidingSegment( PNS_LINE* aCurrent, PNS_SEGMENT* aObstacleSeg );
+    SHOVE_STATUS onCollidingSolid( PNS_LINE* aCurrent, PNS_SOLID* aObstacleSolid );
+    SHOVE_STATUS onCollidingVia( PNS_ITEM* aCurrent, PNS_VIA* aObstacleVia );
+    SHOVE_STATUS onReverseCollidingVia( PNS_LINE* aCurrent, PNS_VIA* aObstacleVia );
+    SHOVE_STATUS pushVia( PNS_VIA* aVia, const VECTOR2I& aForce, int aCurrentRank );
 
-    void unwindStack ( PNS_SEGMENT *seg );
-    void unwindStack ( PNS_ITEM *item );
+    void unwindStack( PNS_SEGMENT* aSeg );
+    void unwindStack( PNS_ITEM *aItem );
 
-    void runOptimizer ( PNS_NODE *node, PNS_LINE *head );
+    void runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead );
 
-    void pushLine ( PNS_LINE *l );
+    void pushLine( PNS_LINE *aL );
     void popLine(); 
 
-    const RANGE<int> findShovedVertexRange ( PNS_LINE *l );
+    const RANGE<int> findShovedVertexRange( PNS_LINE *aL );
 
-    PNS_LINE *assembleLine ( const PNS_SEGMENT *aSeg, int *aIndex = NULL );
-    PNS_LINE *cloneLine ( const PNS_LINE *aLine );
+    PNS_LINE* assembleLine( const PNS_SEGMENT* aSeg, int* aIndex = NULL );
+    PNS_LINE* cloneLine( const PNS_LINE* aLine );
 
-    ShoveStatus shoveIteration(int aIter); 
-    ShoveStatus shoveMainLoop(); 
+    SHOVE_STATUS shoveIteration( int aIter );
+    SHOVE_STATUS shoveMainLoop(); 
 
-    std::vector<SpringbackTag>  m_nodeStack;
+    std::vector<SPRINGBACK_TAG> m_nodeStack;
     std::vector<PNS_LINE*>      m_lineStack;
     std::vector<PNS_LINE*>      m_optimizerQueue;
     std::vector<PNS_ITEM*>      m_gcItems;
@@ -127,7 +129,7 @@ private:
     PNS_LINE*                   m_currentHead;
     PNS_LINE*                   m_collidingLine;
     
-    OptLine                     m_newHead;
+    OPT_LINE                     m_newHead;
 
     PNS_LOGGER                  m_logger;
     PNS_VIA*                    m_draggedVia;

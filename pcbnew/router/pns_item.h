@@ -91,7 +91,7 @@ public:
      *
      * Returns a deep copy of the item 
      */
-    virtual PNS_ITEM* Clone( ) const = 0;
+    virtual PNS_ITEM* Clone() const = 0;
 
     /*
      * Function Hull()
@@ -104,7 +104,7 @@ public:
     virtual const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const
     {
         return SHAPE_LINE_CHAIN();
-    };
+    }
 
     /**
      * Function Kind()
@@ -123,7 +123,7 @@ public:
      */
     bool OfKind( int aKindMask ) const 
     {
-        return (aKindMask & m_kind) != 0;
+        return ( aKindMask & m_kind ) != 0;
     }
 
     /**
@@ -219,7 +219,7 @@ public:
      * Returns true if the set of layers spanned by aOther overlaps our
      * layers.
      */
-    bool LayersOverlap( const PNS_ITEM *aOther ) const
+    bool LayersOverlap( const PNS_ITEM* aOther ) const
     {
         return Layers().Overlaps( aOther->Layers() );
     }
@@ -251,7 +251,6 @@ public:
      * Returns the owner of this item, or NULL if there's none.
      */
     PNS_NODE* Owner() const { return m_owner; }
-
 
     /**
      * Function Collide()
@@ -308,7 +307,7 @@ public:
         return m_marker;
     }
 
-    virtual void SetRank ( int aRank ) 
+    virtual void SetRank( int aRank )
     {
         m_rank = aRank;
     }
@@ -318,10 +317,10 @@ public:
         return m_rank;
     }
 
-    virtual VECTOR2I Anchor(int n) const 
+    virtual VECTOR2I Anchor( int n ) const
     { 
         return VECTOR2I ();
-    };
+    }
     
     virtual int AnchorCount() const 
     { 
@@ -329,15 +328,14 @@ public:
     }
 
 private:
-
     bool collideSimple( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
             VECTOR2I& aMTV ) const;
 
 protected:
     PnsKind                 m_kind;
 
-    BOARD_CONNECTED_ITEM    *m_parent;
-    PNS_NODE                *m_owner;
+    BOARD_CONNECTED_ITEM*   m_parent;
+    PNS_NODE*               m_owner;
     PNS_LAYERSET            m_layers;
 
     bool                    m_movable;

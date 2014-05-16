@@ -82,28 +82,28 @@ public:
         m_defaultClearance = 254000;    // aBoard->m_NetClasses.Find ("Default clearance")->GetClearance();
     }
 
-    int localPadClearance( const PNS_ITEM * item ) const
+    int localPadClearance( const PNS_ITEM* aItem ) const
     {
-        if(!item->Parent() || item->Parent()->Type() != PCB_PAD_T )
+        if( !aItem->Parent() || aItem->Parent()->Type() != PCB_PAD_T )
             return 0;
 
-        const D_PAD *pad = static_cast<D_PAD *>( item->Parent() );
+        const D_PAD* pad = static_cast<D_PAD*>( aItem->Parent() );
 
         return pad->GetLocalClearance();
     }
 
-    int operator()( const PNS_ITEM* a, const PNS_ITEM* b )
+    int operator()( const PNS_ITEM* aA, const PNS_ITEM* aB )
     {
-        int net_a = a->Net();
-        int cl_a = (net_a >= 0 ? m_clearanceCache[net_a] : m_defaultClearance);
-        int net_b = b->Net();
-        int cl_b = (net_b >= 0 ? m_clearanceCache[net_b] : m_defaultClearance);
+        int net_a = aA->Net();
+        int cl_a = ( net_a >= 0 ? m_clearanceCache[net_a] : m_defaultClearance );
+        int net_b = aB->Net();
+        int cl_b = ( net_b >= 0 ? m_clearanceCache[net_b] : m_defaultClearance );
 
-        int pad_a = localPadClearance( a );
-        int pad_b = localPadClearance( b );
+        int pad_a = localPadClearance( aA );
+        int pad_b = localPadClearance( aB );
 
-        cl_a = std::max(cl_a, pad_a);
-        cl_b = std::max(cl_b, pad_b);
+        cl_a = std::max( cl_a, pad_a );
+        cl_b = std::max( cl_b, pad_b );
 
         return std::max( cl_a, cl_b );
     }
@@ -113,9 +113,10 @@ private:
     int m_defaultClearance;
 };
 
+
 PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 {
-    PNS_LAYERSET layers ( 0, 15 );
+    PNS_LAYERSET layers( 0, 15 );
 
     switch( aPad->GetAttribute() )
     {
@@ -131,7 +132,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 
         for( i = FIRST_COPPER_LAYER; i <= LAST_COPPER_LAYER; i++ )
 		{
-            if( lmsk & (1 << i) )
+            if( lmsk & ( 1 << i ) )
             {
                 layers = PNS_LAYERSET( i );
                 break;
@@ -162,17 +163,16 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
     double orient = aPad->GetOrientation() / 10.0;
     bool nonOrtho = false;
 
-
     if( orient == 90.0 || orient == 270.0 )
         sz = VECTOR2I( sz.y, sz.x );
     else if( orient != 0.0 && orient != 180.0 )
     {
         // rotated pads are replaced by for the moment by circles due to my laziness ;)
-        solid->SetShape ( new SHAPE_CIRCLE (c, std::min(sz.x, sz.y) / 2 ) );
+        solid->SetShape( new SHAPE_CIRCLE( c, std::min( sz.x, sz.y ) / 2 ) );
         nonOrtho = true;
     }
 
-    if(!nonOrtho)
+    if( !nonOrtho )
     {
         switch( aPad->GetShape() )
         {
@@ -183,15 +183,17 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
         case PAD_OVAL:
             if( sz.x == sz.y )
                 solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
-            else {
+            else
+            {
                 VECTOR2I delta;
 
-                if (sz.x > sz.y)
-                    delta = VECTOR2I((sz.x - sz.y) / 2, 0);
+                if( sz.x > sz.y )
+                    delta = VECTOR2I( ( sz.x - sz.y ) / 2, 0 );
                 else 
-                    delta = VECTOR2I(0, (sz.y - sz.x) / 2);
+                    delta = VECTOR2I( 0, ( sz.y - sz.x ) / 2 );
 
-                SHAPE_SEGMENT *shape = new SHAPE_SEGMENT( c - delta,  c + delta, std::min(sz.x, sz.y) );
+                SHAPE_SEGMENT* shape = new SHAPE_SEGMENT( c - delta,  c + delta,
+                                                          std::min( sz.x, sz.y ) );
                 solid->SetShape( shape );
             }
             break;
@@ -203,6 +205,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
         default:
             TRACEn( 0, "unsupported pad shape" );
             delete solid;
+
             return NULL;
         }
     }
@@ -250,7 +253,8 @@ int PNS_ROUTER::NextCopperLayer( bool aUp )
     LAYER_MSK mask = m_board->GetEnabledLayers() & m_board->GetVisibleLayers();
     LAYER_NUM l = m_currentLayer;
 
-    do {
+    do
+    {
         l += ( aUp ? 1 : -1 );
 
         if( l > LAST_COPPER_LAYER )
@@ -261,7 +265,8 @@ int PNS_ROUTER::NextCopperLayer( bool aUp )
 
         if( mask & GetLayerMask( l ) )
             return l;
-    } while( l != m_currentLayer );
+    }
+    while( l != m_currentLayer );
 
     return l;
 }
@@ -269,7 +274,6 @@ int PNS_ROUTER::NextCopperLayer( bool aUp )
 
 void PNS_ROUTER::SyncWorld()
 {
-
     if( !m_board )
     {
         TRACEn( 0, "No board attached, aborting sync." );
@@ -379,13 +383,6 @@ void PNS_ROUTER::ClearWorld()
 }
 
 
-/*void PNS_ROUTER::SetCurrentWidth( int w )
-{
-    // fixme: change width while routing
-    m_currentWidth = w;
-}*/
-
-
 bool PNS_ROUTER::RoutingInProgress() const
 {
     return m_state != IDLE;
@@ -405,48 +402,48 @@ const PNS_ITEMSET PNS_ROUTER::QueryHoverItems( const VECTOR2I& aP )
 }
 
 
-const VECTOR2I PNS_ROUTER::SnapToItem( PNS_ITEM* item, VECTOR2I aP, bool& aSplitsSegment )
+const VECTOR2I PNS_ROUTER::SnapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment )
 {
     VECTOR2I anchor;
 
-    if( !item )
+    if( !aItem )
     {
         aSplitsSegment = false;
         return aP;
     }
 
-    switch( item->Kind() )
+    switch( aItem->Kind() )
     {
     case PNS_ITEM::SOLID:
-        anchor = static_cast<PNS_SOLID*>(item)->Pos();
+        anchor = static_cast<PNS_SOLID*>( aItem )->Pos();
         aSplitsSegment = false;
         break;
 
     case PNS_ITEM::VIA:
-        anchor = static_cast<PNS_VIA*>(item)->Pos();
+        anchor = static_cast<PNS_VIA*>( aItem )->Pos();
         aSplitsSegment = false;
         break;
 
     case PNS_ITEM::SEGMENT:
+    {
+        PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( aItem );
+        const SEG& s = seg->Seg();
+        int w = seg->Width();
+
+        aSplitsSegment = false;
+
+        if( ( aP - s.A ).EuclideanNorm() < w / 2 )
+            anchor = s.A;
+        else if( ( aP - s.B ).EuclideanNorm() < w / 2 )
+            anchor = s.B;
+        else
         {
-            PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
-            const SEG& s = seg->Seg();
-            int w = seg->Width();
-
-            aSplitsSegment = false;
-
-            if( ( aP - s.A ).EuclideanNorm() < w / 2 )
-                anchor = s.A;
-            else if( ( aP - s.B ).EuclideanNorm() < w / 2 )
-                anchor = s.B;
-            else
-            {
-                anchor = s.NearestPoint( aP );
-                aSplitsSegment = true;
-            }
-
-            break;
+            anchor = s.NearestPoint( aP );
+            aSplitsSegment = true;
         }
+
+        break;
+    }
 
     default:
         break;
@@ -455,16 +452,19 @@ const VECTOR2I PNS_ROUTER::SnapToItem( PNS_ITEM* item, VECTOR2I aP, bool& aSplit
     return anchor;
 }
 
+
 bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
-    if(!aStartItem || aStartItem->OfKind(PNS_ITEM::SOLID))
+    if( !aStartItem || aStartItem->OfKind( PNS_ITEM::SOLID ) )
         return false;
     
     m_dragger = new PNS_DRAGGER ( this );
     m_dragger->SetWorld( m_world );
+
     if( m_dragger->Start ( aP, aStartItem ) )
         m_state = DRAG_SEGMENT;
-    else {
+    else
+    {
         delete m_dragger;
         m_state = IDLE;
         return false;
@@ -476,8 +476,6 @@ bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
 bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
- 
-
     m_state = ROUTE_TRACK;
 
     m_placer = new PNS_LINE_PLACER( this );
@@ -518,11 +516,11 @@ void PNS_ROUTER::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClearance 
 {
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_previewItems );
 
-    if(aColor >= 0)
-        pitem->SetColor ( KIGFX::COLOR4D ( aColor ));
+    if( aColor >= 0 )
+        pitem->SetColor( KIGFX::COLOR4D ( aColor ) );
 
-    if(aClearance >= 0)
-        pitem->SetClearance ( aClearance );
+    if( aClearance >= 0 )
+        pitem->SetClearance( aClearance );
 
     m_previewItems->Add( pitem );
 
@@ -530,11 +528,13 @@ void PNS_ROUTER::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClearance 
     m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY | KIGFX::VIEW_ITEM::APPEARANCE );
 }
 
+
 void PNS_ROUTER::DisplayItems( const PNS_ITEMSET& aItems )
 {
-    BOOST_FOREACH(const PNS_ITEM *item, aItems.CItems())
-        DisplayItem(item);
+    BOOST_FOREACH( const PNS_ITEM *item, aItems.CItems() )
+        DisplayItem( item );
 }
+
 
 void PNS_ROUTER::DisplayDebugLine( const SHAPE_LINE_CHAIN& aLine, int aType, int aWidth )
 {
@@ -547,17 +547,16 @@ void PNS_ROUTER::DisplayDebugLine( const SHAPE_LINE_CHAIN& aLine, int aType, int
 }
 
 
-
-void PNS_ROUTER::DisplayDebugPoint( const VECTOR2I pos, int aType )
+void PNS_ROUTER::DisplayDebugPoint( const VECTOR2I aPos, int aType )
 {
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( NULL, m_previewItems );
 
-    pitem->Point( pos, aType );
+    pitem->Point( aPos, aType );
     m_previewItems->Add( pitem );
     pitem->ViewSetVisible( true );
     m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY | KIGFX::VIEW_ITEM::APPEARANCE );
-
 }
+
 
 void PNS_ROUTER::Move( const VECTOR2I& aP, PNS_ITEM* endItem )
 {
@@ -573,57 +572,62 @@ void PNS_ROUTER::Move( const VECTOR2I& aP, PNS_ITEM* endItem )
         case DRAG_SEGMENT:
             moveDragging (aP, endItem );
             break;
+
 		default:
 			break;
     }
 }
 
-void PNS_ROUTER::moveDragging( const VECTOR2I& aP, PNS_ITEM* endItem )
+
+void PNS_ROUTER::moveDragging( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 {
     eraseView();
 
     m_dragger->Drag( aP );
     PNS_ITEMSET dragged = m_dragger->Traces();
 
-    updateView ( m_dragger->CurrentNode ( ), dragged );
+    updateView ( m_dragger->CurrentNode(), dragged );
 }
 
-void PNS_ROUTER::markViolations( PNS_NODE *aNode, PNS_ITEMSET& aCurrent, PNS_NODE::ItemVector& aRemoved )
+
+void PNS_ROUTER::markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,
+                                 PNS_NODE::ITEM_VECTOR& aRemoved )
 {
-    
-    BOOST_FOREACH(PNS_ITEM *item, aCurrent.Items())
+    BOOST_FOREACH( PNS_ITEM *item, aCurrent.Items() )
     {
-        PNS_NODE::Obstacles obstacles;
+        PNS_NODE::OBSTACLES obstacles;
 
         aNode->QueryColliding( item, obstacles, PNS_ITEM::ANY );
         
-        if ( item->OfKind(PNS_ITEM::LINE ) )
+        if( item->OfKind( PNS_ITEM::LINE ) )
         {
-            PNS_LINE *l = static_cast<PNS_LINE *> (item);
-            if (l->EndsWithVia())
+            PNS_LINE *l = static_cast<PNS_LINE*>( item );
+
+            if( l->EndsWithVia() )
             {
                 PNS_VIA v ( l->Via() );
-                aNode->QueryColliding(&v , obstacles, PNS_ITEM::ANY );
+                aNode->QueryColliding( &v, obstacles, PNS_ITEM::ANY );
             }
         }
 
-        BOOST_FOREACH(PNS_OBSTACLE& obs, obstacles)
+        BOOST_FOREACH( PNS_OBSTACLE& obs, obstacles )
         {
-            int clearance = aNode->GetClearance( item, obs.item ); 
-            std::auto_ptr<PNS_ITEM> tmp ( obs.item->Clone() );
-            tmp->Mark ( MK_VIOLATION );
+            int clearance = aNode->GetClearance( item, obs.m_item ); 
+            std::auto_ptr<PNS_ITEM> tmp( obs.m_item->Clone() );
+            tmp->Mark( MK_VIOLATION );
             DisplayItem( tmp.get(), -1, clearance );
-            aRemoved.push_back(obs.item);
+            aRemoved.push_back( obs.m_item );
         }
     }
 }
 
-void PNS_ROUTER::updateView( PNS_NODE *aNode, PNS_ITEMSET& aCurrent )
+
+void PNS_ROUTER::updateView( PNS_NODE* aNode, PNS_ITEMSET& aCurrent )
 {
-    PNS_NODE::ItemVector removed, added;
-    PNS_NODE::Obstacles obstacles;
+    PNS_NODE::ITEM_VECTOR removed, added;
+    PNS_NODE::OBSTACLES obstacles;
  
-    if(!aNode)   
+    if( !aNode )
         return;
     
     if( Settings().Mode() == RM_MarkObstacles )
@@ -661,15 +665,14 @@ void PNS_ROUTER::ApplySettings()
         m_placer->Move( m_currentEnd, m_currentEndItem );
         movePlacing( m_currentEnd, m_currentEndItem );
     }
-
-    // TODO handle mode/optimization/other options change
 }
 
-void PNS_ROUTER::movePlacing( const VECTOR2I& aP, PNS_ITEM* endItem )
+
+void PNS_ROUTER::movePlacing( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 {
     eraseView();
 
-    m_placer->Move( aP, endItem );
+    m_placer->Move( aP, aEndItem );
     PNS_LINE current = m_placer->Trace();
          
     DisplayItem( &current );
@@ -681,9 +684,10 @@ void PNS_ROUTER::movePlacing( const VECTOR2I& aP, PNS_ITEM* endItem )
     updateView ( m_placer->CurrentNode ( true ), tmp );
 }
 
+
 void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
 {
-    PNS_NODE::ItemVector removed, added;
+    PNS_NODE::ITEM_VECTOR removed, added;
 
     aNode->GetUpdatedItems( removed, added );
 
@@ -706,31 +710,31 @@ void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
         switch( item->Kind() )
         {
         case PNS_ITEM::SEGMENT:
-            {
-                PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
-                TRACK* track = new TRACK( m_board );
-                const SEG& s = seg->Seg();
+        {
+            PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
+            TRACK* track = new TRACK( m_board );
+            const SEG& s = seg->Seg();
 
-                track->SetStart( wxPoint( s.A.x, s.A.y ) );
-                track->SetEnd( wxPoint( s.B.x, s.B.y ) );
-                track->SetWidth( seg->Width() );
-                track->SetLayer( seg->Layers().Start() );
-                track->SetNetCode( seg->Net() );
-                newBI = track;
-                break;
-            }
+            track->SetStart( wxPoint( s.A.x, s.A.y ) );
+            track->SetEnd( wxPoint( s.B.x, s.B.y ) );
+            track->SetWidth( seg->Width() );
+            track->SetLayer( seg->Layers().Start() );
+            track->SetNetCode( seg->Net() );
+            newBI = track;
+            break;
+        }
 
         case PNS_ITEM::VIA:
-            {
-                VIA* via_board = new VIA( m_board );
-                PNS_VIA* via = static_cast<PNS_VIA*>( item );
-                via_board->SetPosition( wxPoint( via->Pos().x, via->Pos().y ) );
-                via_board->SetWidth( via->Diameter() );
-                via_board->SetDrill( via->Drill() );
-                via_board->SetNetCode( via->Net() );
-                newBI = via_board;
-                break;
-            }
+        {
+            VIA* via_board = new VIA( m_board );
+            PNS_VIA* via = static_cast<PNS_VIA*>( item );
+            via_board->SetPosition( wxPoint( via->Pos().x, via->Pos().y ) );
+            via_board->SetWidth( via->Diameter() );
+            via_board->SetDrill( via->Drill() );
+            via_board->SetNetCode( via->Net() );
+            newBI = via_board;
+            break;
+        }
 
         default:
             break;
@@ -770,32 +774,31 @@ PNS_VIA* PNS_ROUTER::checkLoneVia( PNS_JOINT* aJoint ) const
     return NULL;
 }
 
+
 bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 {
     bool rv = false;
 
-    switch(m_state)
+    switch( m_state )
     {
         case ROUTE_TRACK:
-            rv = m_placer->FixRoute (aP, aEndItem);
+            rv = m_placer->FixRoute( aP, aEndItem );
             m_placingVia = false;
-            
             break;
+            
         case DRAG_SEGMENT:
-            rv = m_dragger->FixRoute ();
+            rv = m_dragger->FixRoute();
             break;
         
         default:
 			break;
     } 
 
-    
-    if(rv)
+    if( rv )
        StopRouting();
     
     return rv;
 }
-
 
 
 void PNS_ROUTER::StopRouting()
@@ -806,10 +809,10 @@ void PNS_ROUTER::StopRouting()
     if( !RoutingInProgress() )
         return;
 
-    if(m_placer)
+    if( m_placer )
         delete m_placer;
 
-    if(m_dragger)
+    if( m_dragger )
         delete m_dragger;
 
     m_placer = NULL;
@@ -825,7 +828,7 @@ void PNS_ROUTER::StopRouting()
 
 void PNS_ROUTER::FlipPosture()
 {
-    if(m_state == ROUTE_TRACK)
+    if( m_state == ROUTE_TRACK )
     {
         m_placer->FlipPosture();
         m_placer->Move ( m_currentEnd, m_currentEndItem );
@@ -833,22 +836,23 @@ void PNS_ROUTER::FlipPosture()
 }
 
 
-void PNS_ROUTER::SwitchLayer( int layer )
+void PNS_ROUTER::SwitchLayer( int aLayer )
 {
     switch( m_state )
     {
     case IDLE:
-        m_currentLayer = layer;
+        m_currentLayer = aLayer;
         break;
 
     case ROUTE_TRACK:
-    if( m_startsOnVia )
-    {
-        m_currentLayer = layer;
-        //m_placer->StartPlacement( m_currentStart, m_currentNet, m_currentWidth,
-        //        m_currentLayer );
-    }
-	break;
+        if( m_startsOnVia )
+        {
+            m_currentLayer = aLayer;
+            //m_placer->StartPlacement( m_currentStart, m_currentNet, m_currentWidth,
+            //        m_currentLayer );
+        }
+        break;
+
     default:
         break;
     }
@@ -864,32 +868,38 @@ void PNS_ROUTER::ToggleViaPlacement()
     }
 }
 
+
 int PNS_ROUTER::GetCurrentNet() const
 {
-    switch(m_state)
+    switch( m_state )
     {
         case ROUTE_TRACK:
             return m_placer->CurrentNet();
+
         default:
             return m_currentNet;
     }
 }
 
+
 int PNS_ROUTER::GetCurrentLayer() const
 {
-    switch(m_state)
+    switch( m_state )
     {
         case ROUTE_TRACK:
             return m_placer->CurrentLayer();
+
         default:
             return m_currentLayer;
     }
 }
-    
+
+
 void PNS_ROUTER::DumpLog()
 {
-    PNS_LOGGER *logger = NULL;
-    switch(m_state)
+    PNS_LOGGER* logger = NULL;
+
+    switch( m_state )
     {
         case DRAG_SEGMENT:
             logger = m_dragger->Logger();
@@ -899,6 +909,6 @@ void PNS_ROUTER::DumpLog()
             break;
     }   
 
-    if(logger)
+    if( logger )
         logger->Save ( "/tmp/shove.log" );
 }

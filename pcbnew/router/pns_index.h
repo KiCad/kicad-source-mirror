@@ -39,13 +39,12 @@
  * are assigned to separate R-Tree subindices depending on their type and spanned layers, reducing
  * overlap and improving search time.
  **/
-
 class PNS_INDEX
 {
 public:
-    typedef std::list<PNS_ITEM*>            NetItemsList;
-    typedef SHAPE_INDEX<PNS_ITEM*>          ItemShapeIndex;
-    typedef boost::unordered_set<PNS_ITEM*> ItemSet;
+    typedef std::list<PNS_ITEM*>            NET_ITEMS_LIST;
+    typedef SHAPE_INDEX<PNS_ITEM*>          ITEM_SHAPE_INDEX;
+    typedef boost::unordered_set<PNS_ITEM*> ITEM_SET;
 
     PNS_INDEX();
     ~PNS_INDEX();
@@ -115,7 +114,7 @@ public:
      *
      * Returns list of all items in a given net.
      */
-    NetItemsList* GetItemsForNet( int aNet );
+    NET_ITEMS_LIST* GetItemsForNet( int aNet );
  
     /**
      * Function Contains()
@@ -134,28 +133,27 @@ public:
      */
     int Size() const { return m_allItems.size(); }
 
-    ItemSet::iterator begin() { return m_allItems.begin(); }
-    ItemSet::iterator end() { return m_allItems.end(); }
+    ITEM_SET::iterator begin() { return m_allItems.begin(); }
+    ITEM_SET::iterator end() { return m_allItems.end(); }
 
 private:
     static const int    MaxSubIndices   = 64;
     static const int    SI_Multilayer   = 2;
     static const int    SI_SegDiagonal  = 0;
     static const int    SI_SegStraight  = 1;
-    static const int    SI_Traces   = 3;
-    static const int    SI_PadsTop  = 0;
-    static const int    SI_PadsBottom = 1;
+    static const int    SI_Traces       = 3;
+    static const int    SI_PadsTop      = 0;
+    static const int    SI_PadsBottom   = 1;
 
     template <class Visitor>
     int querySingle( int index, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor );
 
-    ItemShapeIndex* getSubindex( const PNS_ITEM* aItem );
+    ITEM_SHAPE_INDEX* getSubindex( const PNS_ITEM* aItem );
 
-    ItemShapeIndex* m_subIndices[MaxSubIndices];
-    std::map<int, NetItemsList> m_netMap;
-    ItemSet m_allItems;
+    ITEM_SHAPE_INDEX* m_subIndices[MaxSubIndices];
+    std::map<int, NET_ITEMS_LIST> m_netMap;
+    ITEM_SET m_allItems;
 };
-
 
 PNS_INDEX::PNS_INDEX()
 {
@@ -163,7 +161,7 @@ PNS_INDEX::PNS_INDEX()
 }
 
 
-PNS_INDEX::ItemShapeIndex* PNS_INDEX::getSubindex( const PNS_ITEM* aItem )
+PNS_INDEX::ITEM_SHAPE_INDEX* PNS_INDEX::getSubindex( const PNS_ITEM* aItem )
 {
     int idx_n = -1;
 
@@ -199,7 +197,7 @@ PNS_INDEX::ItemShapeIndex* PNS_INDEX::getSubindex( const PNS_ITEM* aItem )
     assert( idx_n >= 0 && idx_n < MaxSubIndices );
 
     if( !m_subIndices[idx_n] )
-        m_subIndices[idx_n] = new ItemShapeIndex;
+        m_subIndices[idx_n] = new ITEM_SHAPE_INDEX;
 
     return m_subIndices[idx_n];
 }
@@ -207,10 +205,8 @@ PNS_INDEX::ItemShapeIndex* PNS_INDEX::getSubindex( const PNS_ITEM* aItem )
 
 void PNS_INDEX::Add( PNS_ITEM* aItem )
 {
-    ItemShapeIndex* idx = getSubindex( aItem );
+    ITEM_SHAPE_INDEX* idx = getSubindex( aItem );
 
-
-    
     idx->Add( aItem );
     m_allItems.insert( aItem );
     int net = aItem->Net();
@@ -224,7 +220,7 @@ void PNS_INDEX::Add( PNS_ITEM* aItem )
 
 void PNS_INDEX::Remove( PNS_ITEM* aItem )
 {
-    ItemShapeIndex* idx = getSubindex( aItem );
+    ITEM_SHAPE_INDEX* idx = getSubindex( aItem );
 
     idx->Remove( aItem );
     m_allItems.erase( aItem );
@@ -303,7 +299,7 @@ void PNS_INDEX::Clear()
 {
     for( int i = 0; i < MaxSubIndices; ++i )
     {
-        ItemShapeIndex* idx = m_subIndices[i];
+        ITEM_SHAPE_INDEX* idx = m_subIndices[i];
 
         if( idx )
             delete idx;
@@ -319,7 +315,7 @@ PNS_INDEX::~PNS_INDEX()
 }
 
 
-PNS_INDEX::NetItemsList* PNS_INDEX::GetItemsForNet( int aNet )
+PNS_INDEX::NET_ITEMS_LIST* PNS_INDEX::GetItemsForNet( int aNet )
 {
     if( m_netMap.find( aNet ) == m_netMap.end() )
         return NULL;

@@ -50,17 +50,17 @@ public:
         m_start = m_end = aLayer;
     }
 
-    PNS_LAYERSET( const PNS_LAYERSET& b ) :
-        m_start( b.m_start ),
-        m_end( b.m_end )
+    PNS_LAYERSET( const PNS_LAYERSET& aB ) :
+        m_start( aB.m_start ),
+        m_end( aB.m_end )
     {}
 
     ~PNS_LAYERSET() {};
 
-    const PNS_LAYERSET& operator=( const PNS_LAYERSET& b )
+    const PNS_LAYERSET& operator=( const PNS_LAYERSET& aB )
     {
-        m_start = b.m_start;
-        m_end = b.m_end;
+        m_start = aB.m_start;
+        m_end = aB.m_end;
         return *this;
     }
 

@@ -38,23 +38,22 @@ class PNS_ROUTER;
  *
  * Calculates the cost of a given line, taking corner angles and total length into account.
  **/
-
 class PNS_COST_ESTIMATOR
 {
 public:
     PNS_COST_ESTIMATOR() :
         m_lengthCost( 0 ),
         m_cornerCost( 0 )
-    {};
+    {}
 
-    PNS_COST_ESTIMATOR( const PNS_COST_ESTIMATOR& b ) :
-        m_lengthCost( b.m_lengthCost ),
-        m_cornerCost( b.m_cornerCost )
-    {};
+    PNS_COST_ESTIMATOR( const PNS_COST_ESTIMATOR& aB ) :
+        m_lengthCost( aB.m_lengthCost ),
+        m_cornerCost( aB.m_cornerCost )
+    {}
 
     ~PNS_COST_ESTIMATOR() {};
 
-    static int CornerCost( const SEG& a, const SEG& b );
+    static int CornerCost( const SEG& aA, const SEG& aB );
     static int CornerCost( const SHAPE_LINE_CHAIN& aLine );
     static int CornerCost( const PNS_LINE& aLine );
 
@@ -63,7 +62,7 @@ public:
     void Replace( PNS_LINE& aOldLine, PNS_LINE& aNewLine );
 
     bool IsBetter( PNS_COST_ESTIMATOR& aOther, double aLengthTollerance,
-            double aCornerTollerace ) const;
+                   double aCornerTollerace ) const;
 
     double GetLengthCost() const { return m_lengthCost; }
     double GetCornerCost() const { return m_cornerCost; }
@@ -84,7 +83,6 @@ private:
  *   the procedure as long as the total cost of the line keeps decreasing
  * - "Smart Pads" - that is, rerouting pad/via exits to make them look nice (SMART_PADS).
  **/
-
 class PNS_OPTIMIZER
 {
 public:
@@ -122,14 +120,14 @@ public:
 private:
     static const int MaxCachedItems = 256;
 
-    typedef std::vector<SHAPE_LINE_CHAIN> BreakoutList;
+    typedef std::vector<SHAPE_LINE_CHAIN> BREAKOUT_LIST;
 
-    struct CacheVisitor;
+    struct CACHE_VISITOR;
 
-    struct CachedItem
+    struct CACHED_ITEM
     {
-        int hits;
-        bool isStatic;
+        int m_hits;
+        bool m_isStatic;
     };
 
     bool mergeObtuse( PNS_LINE* aLine );
@@ -142,15 +140,13 @@ private:
     bool checkColliding( PNS_ITEM* aItem, bool aUpdateCache = true );
     bool checkColliding( PNS_LINE* aLine, const SHAPE_LINE_CHAIN& aOptPath );
 
-
     void cacheAdd( PNS_ITEM* aItem, bool aIsStatic );
     void removeCachedSegments( PNS_LINE* aLine, int aStartVertex = 0, int aEndVertex = -1 );
 
-    BreakoutList circleBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
-    BreakoutList rectBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
-    BreakoutList ovalBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
-    BreakoutList computeBreakouts( int aWidth, const PNS_ITEM* aItem,
-            bool aPermitDiagonal ) const;
+    BREAKOUT_LIST circleBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
+    BREAKOUT_LIST rectBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
+    BREAKOUT_LIST ovalBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
+    BREAKOUT_LIST computeBreakouts( int aWidth, const PNS_ITEM* aItem, bool aPermitDiagonal ) const;
 
     int smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, int aEndVertex );
 
@@ -158,7 +154,7 @@ private:
 
     SHAPE_INDEX_LIST<PNS_ITEM*> m_cache;
 
-    typedef boost::unordered_map<PNS_ITEM*, CachedItem> CachedItemTags;
+    typedef boost::unordered_map<PNS_ITEM*, CACHED_ITEM> CachedItemTags;
     CachedItemTags m_cacheTags;
     PNS_NODE* m_world;
     int m_collisionKindMask;

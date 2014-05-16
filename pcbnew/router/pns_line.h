@@ -57,19 +57,18 @@ class PNS_VIA;
 class PNS_LINE : public PNS_ITEM
 {
 public:
-    typedef std::vector<PNS_SEGMENT*> SegmentRefs;
+    typedef std::vector<PNS_SEGMENT*> SEGMENT_REFS;
 
     /**
      * Constructor
      * Makes an empty line.
      */
-    PNS_LINE() : PNS_ITEM (LINE)
+    PNS_LINE() : PNS_ITEM( LINE )
     {
         m_segmentRefs = NULL;
         m_hasVia = false;
     }
 
-    
     PNS_LINE( const PNS_LINE& aOther ) ;
             
     /**
@@ -77,7 +76,6 @@ public:
      * Copies properties (net, layers, etc.) from a base line and replaces the shape
      * by another
      **/
-
     PNS_LINE( const PNS_LINE& aBase, const SHAPE_LINE_CHAIN& aLine ) :
         PNS_ITEM( aBase ),
         m_line( aLine ),
@@ -92,12 +90,12 @@ public:
     ~PNS_LINE();
 
     /// @copydoc PNS_ITEM::Clone()
-    virtual PNS_LINE* Clone( ) const;
+    virtual PNS_LINE* Clone() const;
 
-    const PNS_LINE& operator= (const PNS_LINE& aOther);
+    const PNS_LINE& operator=( const PNS_LINE& aOther );
 
     ///> Assigns a shape to the line (a polyline/line chain)
-    void SetShape ( const SHAPE_LINE_CHAIN& aLine ) 
+    void SetShape( const SHAPE_LINE_CHAIN& aLine )
     { 
         m_line = aLine;
     }
@@ -135,13 +133,13 @@ public:
     ///> Returns the aIdx-th point of the line
     const VECTOR2I& CPoint( int aIdx ) const 
     { 
-        return m_line.CPoint(aIdx); 
+        return m_line.CPoint( aIdx );
     }
 
     ///> Returns the aIdx-th segment of the line
-    const SEG CSegment (int aIdx ) const 
+    const SEG CSegment( int aIdx ) const
     { 
-        return m_line.CSegment(aIdx); 
+        return m_line.CSegment( aIdx );
     }
 
     ///> Sets line width
@@ -169,14 +167,14 @@ public:
     void LinkSegment( PNS_SEGMENT* aSeg )
     {
         if( !m_segmentRefs )
-            m_segmentRefs = new SegmentRefs();
+            m_segmentRefs = new SEGMENT_REFS();
 
         m_segmentRefs->push_back( aSeg );
     }
 
     ///> Returns the list of segments from the owning node that constitute this
     ///> line (or NULL if the line is not linked)
-    SegmentRefs* LinkedSegments()
+    SEGMENT_REFS* LinkedSegments()
     {
         return m_segmentRefs;
     }
@@ -195,9 +193,11 @@ public:
     void ClearSegmentLinks();
     
     ///> Returns the number of segments that were assembled together to form this line.
-    int LinkCount() const {
-        if(!m_segmentRefs)
+    int LinkCount() const
+    {
+        if( !m_segmentRefs )
             return -1;
+
         return m_segmentRefs->size();
     }
 
@@ -208,7 +208,6 @@ public:
     ///> Clips the line to a given range of vertices. 
     void ClipVertexRange ( int aStart, int aEnd );
     
-
     ///> Returns the number of corners of angles specified by mask aAngles.
     int CountCorners( int aAngles );
 
@@ -218,12 +217,11 @@ public:
     ///> aWalkaroundPath = path around the obstacle
     ///> aPostPath = past from obstacle till the end
     ///> aCW = whether to walk around in clockwise or counter-clockwise direction.
-
-    bool Walkaround( SHAPE_LINE_CHAIN obstacle,
-            SHAPE_LINE_CHAIN& pre,
-            SHAPE_LINE_CHAIN& walk,
-            SHAPE_LINE_CHAIN& post,
-            bool cw ) const;
+    bool Walkaround( SHAPE_LINE_CHAIN aObstacle,
+            SHAPE_LINE_CHAIN& aPre,
+            SHAPE_LINE_CHAIN& aWalk,
+            SHAPE_LINE_CHAIN& aPost,
+            bool aCw ) const;
 
     void Walkaround( const SHAPE_LINE_CHAIN& aObstacle,
             SHAPE_LINE_CHAIN& aPath,
@@ -241,29 +239,31 @@ public:
 
     const PNS_VIA& Via() const { return m_via; }
  
-    virtual void Mark(int aMarker);
+    virtual void Mark( int aMarker );
     virtual void Unmark ();
     virtual int Marker() const;
     
-    void DragSegment ( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
-    void DragCorner ( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
+    void DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
+    void DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
 
-    void SetRank ( int aRank );
+    void SetRank( int aRank );
     int Rank() const;
         
     bool HasLoops() const;
 
 private:
+    VECTOR2I snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP,
+                                      int aIndex, int aThreshold) const;
 
-    VECTOR2I snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP, int aIndex, int aThreshold) const;
-    VECTOR2I snapDraggedCorner( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP, int aIndex, int aThreshold ) const;
+    VECTOR2I snapDraggedCorner( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP,
+                                int aIndex, int aThreshold ) const;
 
     ///> Copies m_segmentRefs from the line aParent.
-    void copyLinks( const PNS_LINE *aParent ) ;
+    void copyLinks( const PNS_LINE* aParent ) ;
     
     ///> List of segments in the owning PNS_NODE (PNS_ITEM::m_owner) that constitute this line, or NULL
     ///> if the line is not a part of any node.
-    SegmentRefs* m_segmentRefs;
+    SEGMENT_REFS* m_segmentRefs;
 
     ///> The actual shape of the line
     SHAPE_LINE_CHAIN m_line;

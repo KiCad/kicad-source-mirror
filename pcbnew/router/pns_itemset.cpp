@@ -22,8 +22,7 @@
 
 #include "pns_itemset.h"
 
-
-PNS_ITEMSET::PNS_ITEMSET( PNS_ITEM *aInitialItem )
+PNS_ITEMSET::PNS_ITEMSET( PNS_ITEM* aInitialItem )
 {
     if(aInitialItem)
         m_items.push_back(aInitialItem);
@@ -38,7 +37,7 @@ PNS_ITEMSET::~PNS_ITEMSET()
 
 void PNS_ITEMSET::Clear()
 {
-    BOOST_FOREACH(PNS_ITEM *item, m_ownedItems)
+    BOOST_FOREACH(PNS_ITEM* item, m_ownedItems)
     {
         delete item;
     }
@@ -47,9 +46,10 @@ void PNS_ITEMSET::Clear()
     m_ownedItems.clear();
 }
 
+
 PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd )
 {
-    ItemVector newItems;
+    ITEM_VECTOR newItems;
     PNS_LAYERSET l;
 
     if( aEnd < 0 )
@@ -57,39 +57,44 @@ PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd )
     else
         l = PNS_LAYERSET( aStart, aEnd );
 
-    BOOST_FOREACH( PNS_ITEM * item, m_items )
+    BOOST_FOREACH( PNS_ITEM* item, m_items )
 
     if( item->Layers().Overlaps( l ) )
         newItems.push_back( item );
 
     m_items = newItems;
+
     return *this;
 }
 
 
 PNS_ITEMSET& PNS_ITEMSET::FilterKinds( int aKindMask )
 {
-    ItemVector newItems;
+    ITEM_VECTOR newItems;
 
-    BOOST_FOREACH( PNS_ITEM * item, m_items )
-
-    if( item->OfKind ( aKindMask ) )
-        newItems.push_back( item );
+    BOOST_FOREACH( PNS_ITEM* item, m_items )
+    {
+        if( item->OfKind ( aKindMask ) )
+            newItems.push_back( item );
+    }
 
     m_items = newItems;
+
     return *this;
 }
 
 
 PNS_ITEMSET& PNS_ITEMSET::FilterNet( int aNet )
 {
-    ItemVector newItems;
+    ITEM_VECTOR newItems;
 
-    BOOST_FOREACH( PNS_ITEM * item, m_items )
-
-    if( item->Net() == aNet )
-        newItems.push_back( item );
+    BOOST_FOREACH( PNS_ITEM* item, m_items )
+    {
+        if( item->Net() == aNet )
+            newItems.push_back( item );
+    }
 
     m_items = newItems;
+
     return *this;
 }

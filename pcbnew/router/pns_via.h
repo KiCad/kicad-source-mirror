@@ -32,7 +32,8 @@ class PNS_VIA : public PNS_ITEM
 {
 public:
     PNS_VIA() :
-        PNS_ITEM( VIA ) {};
+        PNS_ITEM( VIA )
+    {}
 
     PNS_VIA( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers, int aDiameter, int aNet = -1 ) :
         PNS_ITEM( VIA )
@@ -42,21 +43,21 @@ public:
         m_pos = aPos;
         m_diameter = aDiameter;
         m_shape = SHAPE_CIRCLE( aPos, aDiameter / 2 );
-    };
+    }
 
 
-    PNS_VIA( const PNS_VIA& b ) : 
+    PNS_VIA( const PNS_VIA& aB ) :
         PNS_ITEM( VIA )
     {
-        SetNet( b.Net() );
-        SetLayers( b.Layers() );
-        m_pos = b.m_pos;
-        m_diameter = b.m_diameter;
+        SetNet( aB.Net() );
+        SetLayers( aB.Layers() );
+        m_pos = aB.m_pos;
+        m_diameter = aB.m_diameter;
         m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
-        m_marker = b.m_marker;
-        m_rank = b.m_rank;
-        m_owner = b.m_owner;
-        m_drill = b.m_drill;
+        m_marker = aB.m_marker;
+        m_rank = aB.m_rank;
+        m_owner = aB.m_owner;
+        m_drill = aB.m_drill;
     }
 
     const VECTOR2I& Pos() const
@@ -106,7 +107,7 @@ public:
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const;
     
-    virtual VECTOR2I Anchor(int n) const 
+    virtual VECTOR2I Anchor( int n ) const
     {
         return m_pos;
     }
@@ -117,7 +118,6 @@ public:
     }
 
 private:
-
     int m_diameter;
     int m_drill;
     VECTOR2I m_pos;

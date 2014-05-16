@@ -24,10 +24,8 @@
 
 #include <geometry/shape_segment.h>
 
-const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0,
-        const VECTOR2I& aSize,
-        int aClearance,
-        int aChamfer )
+const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize,
+                                      int aClearance, int aChamfer )
 {
     SHAPE_LINE_CHAIN s;
 
@@ -45,9 +43,9 @@ const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0,
     return s;
 }
 
-const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg,
-    int aClearance,
-    int aWalkaroundThickness )
+
+const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
+                                     int aWalkaroundThickness )
 {
     int d = aSeg.GetWidth() / 2 + aClearance + aWalkaroundThickness / 2 + HULL_MARGIN;
     int x = (int)( 2.0 / ( 1.0 + M_SQRT2 ) * d );
@@ -81,14 +79,15 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg,
         return s;
 }
 
+
 SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg )
 {
     SHAPE_RECT r;
 
-    VECTOR2I delta ( aSeg.GetWidth() / 2, aSeg.GetWidth() / 2 );
-    VECTOR2I p0 ( aSeg.GetSeg().A - delta );
-    VECTOR2I p1 ( aSeg.GetSeg().B + delta );
+    VECTOR2I delta( aSeg.GetWidth() / 2, aSeg.GetWidth() / 2 );
+    VECTOR2I p0( aSeg.GetSeg().A - delta );
+    VECTOR2I p1( aSeg.GetSeg().B + delta );
 
-    return SHAPE_RECT ( std::min(p0.x, p1.x), std::min(p0.y, p1.y),
-                        std::abs(p1.x - p0.x), std::abs(p1.y - p0.y ));
+    return SHAPE_RECT( std::min( p0.x, p1.x ), std::min( p0.y, p1.y ),
+                       std::abs( p1.x - p0.x ), std::abs( p1.y - p0.y ) );
 }
