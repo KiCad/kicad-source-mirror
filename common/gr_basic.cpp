@@ -805,15 +805,11 @@ static void GRSPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[],
     }
     else
     {
-        wxPoint endPt = Points[n - 1];
-
-        GRSetBrush( DC, Color );
-        DC->DrawLines( n, Points );
-
-        // The last point is not drawn by DrawLine and DrawLines
-        // Add it if the polygon is not closed
-        if( endPt != Points[0] )
-            DC->DrawPoint( endPt.x, endPt.y );
+        GRMoveTo( Points[0].x, Points[0].y );
+        for( int i = 1; i < n; ++i )
+        {
+            GRLineTo( ClipBox, DC, Points[i].x, Points[i].y, width, Color );
+        }
     }
 }
 
@@ -841,16 +837,18 @@ static void GRSClosedPoly( EDA_RECT* aClipBox, wxDC* aDC,
     }
     else
     {
-        GRSetBrush( aDC, aBgColor );
-        aDC->DrawLines( aPointCount, aPoints );
+        GRMoveTo( aPoints[0].x, aPoints[0].y );
+        for( int i = 1; i < aPointCount; ++i )
+        {
+            GRLineTo( aClipBox, aDC, aPoints[i].x, aPoints[i].y, aWidth, aColor );
+        }
 
         int lastpt = aPointCount - 1;
-        /* Close the polygon. */
+
+        // Close the polygon
         if( aPoints[lastpt] != aPoints[0] )
         {
-            GRLine( aClipBox, aDC, aPoints[0].x, aPoints[0].y,
-                    aPoints[lastpt].x, aPoints[lastpt].y,
-                    aWidth, aColor );
+            GRLineTo( aClipBox, aDC, aPoints[lastpt].x, aPoints[lastpt].y, aWidth, aColor );
         }
     }
 }
