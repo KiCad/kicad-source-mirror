@@ -184,7 +184,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_showAxis = false;                 // true to show axis
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_CurrentSheet = new SCH_SHEET_PATH();
-    m_TextFieldSize = DEFAULT_SIZE_TEXT;
     m_DefaultSchematicFileName = NAMELESS_PROJECT;
     m_DefaultSchematicFileName += wxT( ".sch" );
     m_showAllPins = false;
@@ -199,7 +198,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_hasAutoSave = true;
 
     SetForceHVLines( true );
-    SetDefaultLabelSize( DEFAULT_SIZE_TEXT );
 
     CreateScreens();
 

@@ -445,7 +445,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     if( size == 0 )
-        size = DEFAULT_SIZE_TEXT;
+        size = GetDefaultTextSize();
 
     char* text = strtok( (char*) aLine, "\n\r" );
 
@@ -930,7 +930,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     if( size == 0 )
-        size = DEFAULT_SIZE_TEXT;
+        size = GetDefaultTextSize();
 
     char* text = strtok( (char*) aLine, "\n\r" );
 
@@ -1093,7 +1093,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     if( size == 0 )
-        size = DEFAULT_SIZE_TEXT;
+        size = GetDefaultTextSize();
 
     char* text = strtok( (char*) aLine, "\n\r" );
 
@@ -1524,7 +1524,7 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     if( size == 0 )
-        size = DEFAULT_SIZE_TEXT;
+        size = GetDefaultTextSize();
 
     char* text = strtok( (char*) aLine, "\n\r" );
 

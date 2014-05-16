@@ -208,8 +208,8 @@ LIB_PIN::LIB_PIN( LIB_COMPONENT* aParent ) :
     m_type = PIN_UNSPECIFIED;                   // electrical type of pin
     m_attributes = 0;                           // bit 0 != 0: pin invisible
     m_number = 0;                               // pin number (i.e. 4 ASCII chars)
-    m_numTextSize = DEFAULT_TEXT_SIZE;
-    m_nameTextSize = DEFAULT_TEXT_SIZE;         // Default size for pin name and num
+    m_numTextSize = GetDefaultTextSize();       // Default size for pin name and num
+    m_nameTextSize = GetDefaultTextSize();      
     m_width = 0;
     m_typeName = _( "Pin" );
 }

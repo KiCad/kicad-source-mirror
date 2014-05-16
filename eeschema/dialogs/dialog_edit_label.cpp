@@ -297,7 +297,7 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
 
     // Make the text size the new default size ( if it is a new text ):
     if( m_CurrentText->IsNew() )
-        m_Parent->SetDefaultLabelSize( m_CurrentText->GetSize().x );
+        SetDefaultTextSize( m_CurrentText->GetSize().x );
 
     m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
     m_Parent->GetCanvas()->MoveCursorToCrossHair();

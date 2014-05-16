@@ -67,7 +67,8 @@ LIB_FIELD::~LIB_FIELD()
 void LIB_FIELD::Init( int id )
 {
     m_id = id;
-    m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
+    m_Size.x = GetDefaultTextSize();
+    m_Size.y = GetDefaultTextSize();
     m_typeName = _( "Field" );
     m_Orient = TEXT_ORIENT_HORIZ;
     m_rotate = false;

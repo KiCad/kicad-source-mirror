@@ -60,7 +60,13 @@ enum EDA_DRAW_MODE_T {
 };
 
 
-#define DEFAULT_SIZE_TEXT 60    /* default text height (in mils or 1/1000") */
+/** This is the "default-of-the-default" hardcoded text size; individual
+ * application define their own default policy starting with this
+ * (usually with a user option or project). DO NOT change this value if
+ * you do not fully realize the effect it has on sexp serialization
+ * (text size equal to this is not explicitly wrote, so it would change
+ * subsequent reads) */
+#define DEFAULT_SIZE_TEXT 60    // default text height (in mils, i.e. 1/1000")
 #define TEXT_NO_VISIBLE   1     //< EDA_TEXT::m_Attribut(e?) visibility flag.
 #define DIM_ANCRE_TEXTE  2      // Anchor size for text
 
