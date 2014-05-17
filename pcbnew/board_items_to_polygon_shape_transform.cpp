@@ -14,6 +14,7 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <trigo.h>
+#include <class_board.h>
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_drawsegment.h>
@@ -36,6 +37,80 @@ static void addTextSegmToPoly( int x0, int y0, int xf, int yf )
     TransformRoundedEndsSegmentToPolygon( *s_cornerBuffer,
                                            wxPoint( x0, y0), wxPoint( xf, yf ),
                                            s_textCircle2SegmentCount, s_textWidth );
+}
+
+/**
+ * Function ConvertBrdLayerToPolygonalContours
+ * Build a set of polygons which are the outlines of copper items
+ * (pads, tracks, texts, zones)
+ * the holes in vias or pads are ignored
+ * Usefull to export the shape of copper layers to dxf polygons
+ * or 3D viewer
+ * the polygons are not merged.
+ * @param aLayer = A layer, like LAYER_N_BACK, etc.
+ * @param aOutlines The CPOLYGONS_LIST to fill in with main outlines.
+ * @return true if success, false if a contour is not valid
+ */
+void BOARD::ConvertBrdLayerToPolygonalContours( LAYER_NUM aLayer, CPOLYGONS_LIST& aOutlines )
+{
+    // Number of segments to convert a circle to a polygon
+    const int       segcountforcircle   = 16;
+    double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
+
+    // convert tracks and vias:
+    for( TRACK* track = m_Track; track != NULL; track = track->Next() )
+    {
+        if( !track->IsOnLayer( aLayer ) )
+            continue;
+
+        track->TransformShapeWithClearanceToPolygon( aOutlines,
+                0, segcountforcircle, correctionFactor );
+    }
+
+    // convert pads
+    for( MODULE* module = m_Modules; module != NULL; module = module->Next() )
+    {
+        module->TransformPadsShapesWithClearanceToPolygon( aLayer,
+                aOutlines, 0, segcountforcircle, correctionFactor );
+
+        // Micro-wave modules may have items on copper layers
+        module->TransformGraphicShapesWithClearanceToPolygonSet( aLayer,
+                aOutlines, 0, segcountforcircle, correctionFactor );
+    }
+
+    // convert copper zones
+    for( int ii = 0; ii < GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = GetArea( ii );
+        LAYER_NUM       zonelayer = zone->GetLayer();
+
+        if( zonelayer == aLayer )
+            zone->TransformSolidAreasShapesToPolygonSet(
+                aOutlines, segcountforcircle, correctionFactor );
+    }
+
+    // convert graphic items on copper layers (texts)
+    for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
+    {
+        if( !item->IsOnLayer( aLayer ) )
+            continue;
+
+        switch( item->Type() )
+        {
+        case PCB_LINE_T:    // should not exist on copper layers
+            ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
+                aOutlines, 0, segcountforcircle, correctionFactor );
+            break;
+
+        case PCB_TEXT_T:
+            ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet(
+                aOutlines, 0, segcountforcircle, correctionFactor );
+            break;
+
+        default:
+            break;
+        }
+    }
 }
 
 /* generate pads shapes on layer aLayer as polygons,
@@ -614,43 +689,26 @@ bool D_PAD::BuildPadDrillShapePolygon( CPOLYGONS_LIST& aCornerBuffer,
                                        int aInflateValue, int aSegmentsPerCircle ) const
 {
     wxSize drillsize = GetDrillSize();
-    bool hasHole = drillsize.x && drillsize.y;
 
-    if( ! hasHole )
+    if( !drillsize.x || !drillsize.y )
         return false;
-
-    drillsize.x += aInflateValue;
-    drillsize.y += aInflateValue;
 
     if( drillsize.x == drillsize.y )    // usual round hole
     {
         TransformCircleToPolygon( aCornerBuffer, GetPosition(),
-                                  drillsize.x /2, aSegmentsPerCircle );
+                (drillsize.x / 2) + aInflateValue, aSegmentsPerCircle );
     }
     else    // Oblong hole
     {
-        wxPoint ends_offset;
+        wxPoint start, end;
         int width;
 
-        if( drillsize.x > drillsize.y )    // Horizontal oval
-        {
-            ends_offset.x = ( drillsize.x - drillsize.y ) / 2;
-            width = drillsize.y;
-        }
-        else    // Vertical oval
-        {
-            ends_offset.y = ( drillsize.y - drillsize.x ) / 2;
-            width = drillsize.x;
-        }
+        GetOblongDrillGeometry( start, end, width );
 
-        RotatePoint( &ends_offset, GetOrientation() );
+        width += aInflateValue * 2;
 
-        wxPoint start  = GetPosition() + ends_offset;
-        wxPoint end  = GetPosition() - ends_offset;
-
-        // Prepare the shape creation
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, start, end,
-                                              aSegmentsPerCircle, width );
+        TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
+                GetPosition() + start, GetPosition() + end, aSegmentsPerCircle, width );
     }
 
     return true;

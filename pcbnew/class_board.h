@@ -686,6 +686,19 @@ public:
                                   wxString* aErrorText = NULL );
 
     /**
+     * Function ConvertBrdLayerToPolygonalContours
+     * Build a set of polygons which are the outlines of copper items
+     * (pads, tracks, vias, texts, zones)
+     * Holes in vias or pads are ignored
+     * Usefull to export the shape of copper layers to dxf polygons
+     * or 3D viewer
+     * the polygons are not merged.
+     * @param aLayer = A copper layer, like LAYER_N_BACK, etc.
+     * @param aOutlines The CPOLYGONS_LIST to fill in with items outline.
+     */
+    void ConvertBrdLayerToPolygonalContours( LAYER_NUM aLayer, CPOLYGONS_LIST& aOutlines );
+
+    /**
      * Function GetLayerName
      * returns the name of a layer given by aLayer.  Copper layers may
      * have custom names.
