@@ -310,7 +310,6 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 {
     wxPoint coord[4];
-    int     delta_cx, delta_cy;
     double  angle = m_Orient;
     int     seg_width;
 
@@ -439,27 +438,12 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             break;
 
         case PAD_DRILL_OBLONG:
-            halfsize.x = m_Drill.x >> 1;
-            halfsize.y = m_Drill.y >> 1;
-
-            if( m_Drill.x > m_Drill.y )  // horizontal
-            {
-                delta_cx = halfsize.x - halfsize.y;
-                delta_cy = 0;
-                seg_width    = m_Drill.y;
-            }
-            else                         // vertical
-            {
-                delta_cx = 0;
-                delta_cy = halfsize.y - halfsize.x;
-                seg_width    = m_Drill.x;
-            }
-
-            RotatePoint( &delta_cx, &delta_cy, angle );
-
-            GRFillCSegm( aClipBox, aDC, holepos.x + delta_cx, holepos.y + delta_cy,
-                         holepos.x - delta_cx, holepos.y - delta_cy, seg_width,
-                         hole_color );
+        {
+            wxPoint drl_start, drl_end;
+            GetOblongDrillGeometry( drl_start, drl_end, seg_width );
+            GRFilledSegment( aClipBox, aDC, holepos + drl_start,
+                             holepos + drl_end, seg_width, hole_color );
+        }
             break;
 
         default:
