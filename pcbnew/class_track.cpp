@@ -66,28 +66,6 @@ static bool ShowClearance( const TRACK* aTrack )
 }
 
 
-/*
- * return true if the dist between p1 and p2 < max_dist
- * Currently in test (currently ratsnest algos work only if p1 == p2)
- */
-inline bool IsNear( const wxPoint& p1, const wxPoint& p2, int max_dist )
-{
-#if 0   // Do not change it: does not work
-    int dist;
-    dist = abs( p1.x - p2.x ) + abs( p1.y - p2.y );
-    dist *= 7;
-    dist /= 10;
-
-    if ( dist < max_dist )
-        return true;
-#else
-    if ( p1 == p2 )
-        return true;
-#endif
-    return false;
-}
-
-
 TRACK* GetTrack( TRACK* aStartTrace, const TRACK* aEndTrace,
         const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
@@ -1303,123 +1281,77 @@ VIA* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, LAYER_MSK aLayer
 }
 
 
-TRACK* TRACK::GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, ENDPOINT_T aEndPoint )
+TRACK* TRACK::GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, ENDPOINT_T aEndPoint,
+        bool aSameNetOnly, bool aSequential )
 {
-    const int NEIGHTBOUR_COUNT_MAX = 50;
-
-    TRACK*  previousSegment;
-    TRACK*  nextSegment;
-    int     Reflayer;
-    int     ii;
-    int     max_dist;
     const wxPoint &position = GetEndPoint( aEndPoint );
+    LAYER_MSK refLayers = GetLayerMask();
+    TRACK *previousSegment;
+    TRACK *nextSegment;
 
-    Reflayer = GetLayerMask();
-
-    previousSegment = nextSegment = this;
-
-    // Local search:
-    for( ii = 0; ii < NEIGHTBOUR_COUNT_MAX; ii++ )
+    if( aSequential )
     {
-        if( (nextSegment == NULL) && (previousSegment == NULL) )
-            break;
+        // Simple sequential search: from aStartTrace forward to aEndTrace
+        previousSegment = NULL;
+        nextSegment = aStartTrace;
+    }
+    else
+    {
+        /* Local bidirectional search: from this backward to aStartTrace
+         * AND forward to aEndTrace. The idea is that nearest segments
+         * are found (on average) faster in this way. In fact same-net
+         * segments are almost guaranteed to be found faster, in a global
+         * search, since they are grouped together in the track list */
+        previousSegment = this;
+        nextSegment = this;
+    }
+
+    while( nextSegment || previousSegment )
+    {
+        // Terminate the search in the direction if the netcode mismatches
+        if( aSameNetOnly )
+        {
+            if( nextSegment && (nextSegment->GetNetCode() != GetNetCode()) )
+                nextSegment = NULL;
+            if( previousSegment && (previousSegment->GetNetCode() != GetNetCode()) )
+                previousSegment = NULL;
+        }
 
         if( nextSegment )
         {
-            if( nextSegment->GetState( BUSY | IS_DELETED ) )
-                goto suite;
-
-            if( nextSegment == this )
-                goto suite;
-
-            /* max_dist is the max distance between 2 track ends which
-             * ensure a copper continuity */
-            max_dist = ( nextSegment->m_Width + this->m_Width ) / 2;
-
-            if( IsNear( position, nextSegment->m_Start, max_dist ) )
+            if ( (nextSegment != this) && 
+                 !nextSegment->GetState( BUSY | IS_DELETED ) &&
+                 (refLayers & nextSegment->GetLayerMask()) )
             {
-                if( Reflayer & nextSegment->GetLayerMask() )
+                if( (position == nextSegment->m_Start) ||
+                    (position == nextSegment->m_End) )
                     return nextSegment;
             }
 
-            if( IsNear( position, nextSegment->m_End, max_dist ) )
-            {
-                if( Reflayer & nextSegment->GetLayerMask() )
-                    return nextSegment;
-            }
-suite:
+            // Keep looking forward
             if( nextSegment == aEndTrace )
                 nextSegment = NULL;
             else
-                nextSegment =  nextSegment->Next();
+                nextSegment = nextSegment->Next();
         }
 
+        // Same as above, looking back. During sequential search this branch is inactive
         if( previousSegment )
         {
-            if( previousSegment->GetState( BUSY | IS_DELETED ) )
-                goto suite1;
-
-            if( previousSegment == this )
-                goto suite1;
-
-            max_dist = ( previousSegment->m_Width + m_Width ) / 2;
-
-            if( IsNear( position, previousSegment->m_Start, max_dist ) )
+            if ( (previousSegment != this) &&
+                 !previousSegment->GetState( BUSY | IS_DELETED ) &&
+                 (refLayers & previousSegment->GetLayerMask()) )
             {
-                if( Reflayer & previousSegment->GetLayerMask() )
+                if( (position == previousSegment->m_Start) ||
+                    (position == previousSegment->m_End) )
                     return previousSegment;
             }
 
-            if( IsNear( position, previousSegment->m_End, max_dist ) )
-            {
-                if( Reflayer & previousSegment->GetLayerMask() )
-                    return previousSegment;
-            }
-suite1:
             if( previousSegment == aStartTrace )
                 previousSegment = NULL;
-            else if( previousSegment->Type() != PCB_T )
-                previousSegment =  previousSegment->Back();
             else
-                previousSegment = NULL;
+                previousSegment = previousSegment->Back();
         }
-    }
-
-    // General search
-    for( nextSegment = aStartTrace; nextSegment != NULL; nextSegment =  nextSegment->Next() )
-    {
-        if( nextSegment->GetState( IS_DELETED | BUSY ) )
-        {
-            if( nextSegment == aEndTrace )
-                break;
-
-            continue;
-        }
-
-        if( nextSegment == this )
-        {
-            if( nextSegment == aEndTrace )
-                break;
-
-            continue;
-        }
-
-        max_dist = ( nextSegment->m_Width + m_Width ) / 2;
-
-        if( IsNear( position, nextSegment->m_Start, max_dist ) )
-        {
-            if( Reflayer & nextSegment->GetLayerMask() )
-                return nextSegment;
-        }
-
-        if( IsNear( position, nextSegment->m_End, max_dist ) )
-        {
-            if( Reflayer & nextSegment->GetLayerMask() )
-                return nextSegment;
-        }
-
-        if( nextSegment == aEndTrace )
-            break;
     }
 
     return NULL;

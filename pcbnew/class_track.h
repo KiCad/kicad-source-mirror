@@ -261,9 +261,14 @@ public:
      * @param aEndTrace A pointer to the TRACK object to stop the search.  A NULL value
      *                  searches to the end of the list.
      * @param aEndPoint The start or end point of the segment to test against.
+     * @param aSameNetOnly if true stop searching when the netcode changes
+     * @param aSequential If true, forces a forward sequential search,
+     * which is restartable; the default search can be faster but the
+     * position of the returned track in the list is unpredictable
      * @return A TRACK object pointer if found otherwise NULL.
      */
-    TRACK* GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, ENDPOINT_T aEndPoint );
+    TRACK* GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, ENDPOINT_T aEndPoint,
+            bool aSameNetOnly, bool aSequential );
 
     /**
      * Function GetEndSegments
