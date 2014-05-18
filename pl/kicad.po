@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-18 09:16+0100\n"
-"PO-Revision-Date: 2014-05-18 09:23+0100\n"
+"POT-Creation-Date: 2014-05-18 18:05+0100\n"
+"PO-Revision-Date: 2014-05-18 18:18+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: kicad/kicad.cpp:236 kicad/prjconfig.cpp:283 eeschema/libedit.cpp:63
 #: eeschema/schframe.cpp:1092 pcbnew/moduleframe.cpp:630
-#: pcbnew/pcbframe.cpp:1066 cvpcb/cvframe.cpp:750
+#: pcbnew/pcbframe.cpp:1070 cvpcb/cvframe.cpp:750
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -1463,6 +1463,8 @@ msgstr "Usuń element"
 #: pcbnew/dialogs/dialog_display_options_base.cpp:143
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:111
 #: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:55
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:101
+#: pcbnew/dialogs/dialog_track_via_size_base.cpp:34
 #: gerbview/onrightclick.cpp:39 gerbview/onrightclick.cpp:63
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:161
 #: common/selcolor.cpp:218 common/dialogs/dialog_exit_base.cpp:69
@@ -3272,7 +3274,7 @@ msgstr "Dodaj symbol"
 msgid "Add power"
 msgstr "Dodaj port zasilania"
 
-#: eeschema/schframe.cpp:463 pcbnew/pcbframe.cpp:596
+#: eeschema/schframe.cpp:463 pcbnew/pcbframe.cpp:598
 #: pagelayout_editor/pl_editor_frame.cpp:213
 #, c-format
 msgid ""
@@ -4190,6 +4192,8 @@ msgstr "Kolor Tła"
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:107
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:67
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:54
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:97
+#: pcbnew/dialogs/dialog_track_via_size_base.cpp:31
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:157
 #: common/dialogs/dialog_get_component_base.cpp:45
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:49
@@ -4382,6 +4386,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:204
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:91
 #: pcbnew/dialogs/dialog_plot_base.cpp:83
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:26
 #: bitmap2component/bitmap2cmp_gui_base.cpp:137
 msgid "Options"
 msgstr "Opcje"
@@ -5907,6 +5912,7 @@ msgid "Black and white"
 msgstr "Czarno-biały"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
 msgid "Mode"
 msgstr "Tryb"
 
@@ -6103,37 +6109,37 @@ msgstr "Nazwa arku&sza:"
 msgid "Unique timestamp:"
 msgstr "Unikalny znacznik czasowy:"
 
-#: pcbnew/basepcbframe.cpp:502
+#: pcbnew/basepcbframe.cpp:505
 msgid "Display rectangular coordinates"
 msgstr "Pokaż współrzędne kartezyjskie"
 
-#: pcbnew/basepcbframe.cpp:503 pcbnew/tool_pcb.cpp:336
+#: pcbnew/basepcbframe.cpp:506 pcbnew/tool_pcb.cpp:336
 #: cvpcb/class_DisplayFootprintsFrame.cpp:181
 msgid "Display polar coordinates"
 msgstr "Pokaż współrzędne polarne"
 
-#: pcbnew/basepcbframe.cpp:512 pcbnew/tool_pcb.cpp:375
+#: pcbnew/basepcbframe.cpp:515 pcbnew/tool_pcb.cpp:375
 #: cvpcb/class_DisplayFootprintsFrame.cpp:198
 msgid "Show pads in outline mode"
 msgstr "Pokaż pola lutownicze jako zarys"
 
-#: pcbnew/basepcbframe.cpp:513
+#: pcbnew/basepcbframe.cpp:516
 msgid "Show pads in fill mode"
 msgstr "Pokaż pola lutownicze jako pełne"
 
-#: pcbnew/basepcbframe.cpp:911
+#: pcbnew/basepcbframe.cpp:914
 msgid "Grid:"
 msgstr "Siatka:"
 
-#: pcbnew/basepcbframe.cpp:938 common/zoom.cpp:274
+#: pcbnew/basepcbframe.cpp:941 common/zoom.cpp:274
 msgid "User Grid"
 msgstr "Siatka użytkownika"
 
-#: pcbnew/basepcbframe.cpp:955 pcbnew/dialogs/dialog_plot_base.cpp:151
+#: pcbnew/basepcbframe.cpp:958 pcbnew/dialogs/dialog_plot_base.cpp:151
 msgid "Auto"
 msgstr "Dopasuj powiększenie"
 
-#: pcbnew/basepcbframe.cpp:960
+#: pcbnew/basepcbframe.cpp:963
 msgid "Zoom "
 msgstr "Powiększenie "
 
@@ -6186,108 +6192,108 @@ msgstr "Dostawca i numer artykułu"
 msgid "This is the default net class."
 msgstr "To jest domyślna klasa połączeń."
 
-#: pcbnew/class_board.cpp:1055 pcbnew/class_module.cpp:494
+#: pcbnew/class_board.cpp:959 pcbnew/class_module.cpp:494
 #: pcbnew/class_netinfo_item.cpp:112
 #: cvpcb/dialogs/dialog_display_options_base.cpp:44
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:61
 msgid "Pads"
 msgstr "Pola lutownicze"
 
-#: pcbnew/class_board.cpp:1058 pcbnew/class_netinfo_item.cpp:132
+#: pcbnew/class_board.cpp:962 pcbnew/class_netinfo_item.cpp:132
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Przelotki"
 
-#: pcbnew/class_board.cpp:1061
+#: pcbnew/class_board.cpp:965
 msgid "trackSegm"
 msgstr "Segmenty"
 
-#: pcbnew/class_board.cpp:1064
+#: pcbnew/class_board.cpp:968
 msgid "Nodes"
 msgstr "Węzły"
 
-#: pcbnew/class_board.cpp:1067
+#: pcbnew/class_board.cpp:971
 msgid "Nets"
 msgstr "Sieci"
 
-#: pcbnew/class_board.cpp:1075
+#: pcbnew/class_board.cpp:979
 msgid "Links"
 msgstr "Łącza"
 
-#: pcbnew/class_board.cpp:1078
+#: pcbnew/class_board.cpp:982
 msgid "Connect"
 msgstr "Połączone"
 
-#: pcbnew/class_board.cpp:1081 pcbnew/dialogs/dialog_drc_base.cpp:177
+#: pcbnew/class_board.cpp:985 pcbnew/dialogs/dialog_drc_base.cpp:177
 msgid "Unconnected"
 msgstr "Niepołączone"
 
-#: pcbnew/class_board.cpp:2361
+#: pcbnew/class_board.cpp:2247
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Sprawdzam footprint komponentu z listy sieci \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2379
+#: pcbnew/class_board.cpp:2265
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Dodaję nowy komponent \"%s:%s\" o footprincie \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2389
+#: pcbnew/class_board.cpp:2275
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Nie mogę dodać nowego komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s"
 "\".\n"
 
-#: pcbnew/class_board.cpp:2422
+#: pcbnew/class_board.cpp:2308
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Zamieniam footprint komponentu \"%s:%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2434
+#: pcbnew/class_board.cpp:2320
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Nie mogę zamienić komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2468
+#: pcbnew/class_board.cpp:2354
 #, c-format
 msgid "Changing footprint \"%s:%s\" reference to \"%s\".\n"
 msgstr "Zmieniam odnośnik footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2484
+#: pcbnew/class_board.cpp:2370
 #, c-format
 msgid "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Zmieniam wartość footprintu \"%s:%s\" z \"%s\" do \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2501
+#: pcbnew/class_board.cpp:2387
 #, c-format
 msgid "Changing footprint path \"%s:%s\" to \"%s\".\n"
 msgstr "Zmieniam ścieżkę footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2527
+#: pcbnew/class_board.cpp:2413
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Kasuje nazwę sieci z komponentu \"%s:%s\" pin \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2544
+#: pcbnew/class_board.cpp:2430
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr ""
 "Zmieniam nazwę sieci komponentu \"%s:%s\" pin \"%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2593
+#: pcbnew/class_board.cpp:2479
 #, c-format
 msgid "Removing footprint \"%s:%s\".\n"
 msgstr "Usuwam footprint \"%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2631
+#: pcbnew/class_board.cpp:2517
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr "Usunięcie niepołączonej sieci \"%s\" z \"%s\" pole '%s'\n"
 
-#: pcbnew/class_board.cpp:2680
+#: pcbnew/class_board.cpp:2566
 #, c-format
 msgid "*** Error: Component '%s' pad '%s' not found in footprint '%s' ***\n"
 msgstr ""
@@ -7271,7 +7277,7 @@ msgstr "Znaleziono footprint %s, ale jest on zablokowany"
 msgid "The parent (%s) of the pad is locked"
 msgstr "Element nadrzędny (%s) dla wyprowadzenia jest zablokowany"
 
-#: pcbnew/edit.cpp:1420 pcbnew/edit.cpp:1422 pcbnew/router/router_tool.cpp:436
+#: pcbnew/edit.cpp:1420 pcbnew/edit.cpp:1422
 msgid "Add tracks"
 msgstr "Dodaj ścieżki"
 
@@ -7522,7 +7528,7 @@ msgid "Cannot convert \"%s\" to an integer"
 msgstr "Nie można dokonać konwersji \"%s\" na wartość Integer"
 
 #: pcbnew/gpcb_plugin.cpp:268 pcbnew/gpcb_plugin.cpp:889
-#: pcbnew/kicad_plugin.cpp:1695
+#: pcbnew/kicad_plugin.cpp:1712
 #, c-format
 msgid "footprint library path '%s' does not exist"
 msgstr "ścieżka do biblioteki '%s' nie istnieje"
@@ -7543,29 +7549,29 @@ msgstr "nieznany token \"%s\""
 msgid "Element token contains %d parameters."
 msgstr "Token \"Element\" zawiera %d parametrów."
 
-#: pcbnew/gpcb_plugin.cpp:957 pcbnew/kicad_plugin.cpp:1768
-#: pcbnew/kicad_plugin.cpp:1833 pcbnew/legacy_plugin.cpp:4302
-#: pcbnew/legacy_plugin.cpp:4347 pcbnew/librairi.cpp:475
+#: pcbnew/gpcb_plugin.cpp:957 pcbnew/kicad_plugin.cpp:1785
+#: pcbnew/kicad_plugin.cpp:1850 pcbnew/legacy_plugin.cpp:4307
+#: pcbnew/legacy_plugin.cpp:4352 pcbnew/librairi.cpp:475
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "Biblioteka '%s' jest oznaczona jako tylko do odczytu"
 
-#: pcbnew/gpcb_plugin.cpp:976 pcbnew/kicad_plugin.cpp:1870
+#: pcbnew/gpcb_plugin.cpp:976 pcbnew/kicad_plugin.cpp:1887
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr "użytkownik nie ma wystarczających uprawnień by usunąć folder '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:984 pcbnew/kicad_plugin.cpp:1878
+#: pcbnew/gpcb_plugin.cpp:984 pcbnew/kicad_plugin.cpp:1895
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr "folder z biblioteką '%s' zawiera niepożądane podfoldery"
 
-#: pcbnew/gpcb_plugin.cpp:1003 pcbnew/kicad_plugin.cpp:1897
+#: pcbnew/gpcb_plugin.cpp:1003 pcbnew/kicad_plugin.cpp:1914
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr "został znaleziony niepożądany plik '%s' w ścieżce bibliotek '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:1021 pcbnew/kicad_plugin.cpp:1915
+#: pcbnew/gpcb_plugin.cpp:1021 pcbnew/kicad_plugin.cpp:1932
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "biblioteka footprintów '%s' nie może zostać usunięta"
@@ -7637,7 +7643,7 @@ msgstr "Nieznana wartość PCB_FILE_T: %d"
 msgid "Cannot find component with reference \"%s\" in netlist."
 msgstr "Nie mogę odnaleźć komponentu z oznaczeniem \"%s\" na liście sieci."
 
-#: pcbnew/kicad_netlist_reader.cpp:371 pcbnew/pcb_parser.cpp:1557
+#: pcbnew/kicad_netlist_reader.cpp:371 pcbnew/pcb_parser.cpp:1559
 #, c-format
 msgid ""
 "invalid PFID in\n"
@@ -7650,63 +7656,63 @@ msgstr ""
 "linia: %d:\n"
 "przesunięcie: %d"
 
-#: pcbnew/kicad_plugin.cpp:201
+#: pcbnew/kicad_plugin.cpp:212
 #, c-format
 msgid "Cannot create footprint library path '%s'"
 msgstr "Nie można utworzyć ścieżki '%s' do biblioteki footprintów"
 
-#: pcbnew/kicad_plugin.cpp:207
+#: pcbnew/kicad_plugin.cpp:218
 #, c-format
 msgid "Footprint library path '%s' is read only"
 msgstr "Biblioteka '%s' jest oznaczona jako tylko do odczytu"
 
-#: pcbnew/kicad_plugin.cpp:237
+#: pcbnew/kicad_plugin.cpp:248
 #, c-format
 msgid "Cannot rename temporary file '%s' to footprint library file '%s'"
 msgstr ""
 "Nie mogę zmienić nazwy pliku tymczasowego '%s' na nazwę pliku biblioteki '%s'"
 
-#: pcbnew/kicad_plugin.cpp:257
+#: pcbnew/kicad_plugin.cpp:268
 #, c-format
 msgid "Footprint library path '%s' does not exist"
 msgstr "Ścieżka do biblioteki '%s' nie istnieje"
 
-#: pcbnew/kicad_plugin.cpp:305 pcbnew/legacy_plugin.cpp:4357
+#: pcbnew/kicad_plugin.cpp:316 pcbnew/legacy_plugin.cpp:4362
 #, c-format
 msgid "library '%s' has no footprint '%s' to delete"
 msgstr "biblioteka '%s' nie posiada footprintu '%s' by go usunąć"
 
-#: pcbnew/kicad_plugin.cpp:1174 pcbnew/legacy_plugin.cpp:95
+#: pcbnew/kicad_plugin.cpp:1191 pcbnew/legacy_plugin.cpp:95
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "nieznany typ pola lutowniczego: %d"
 
-#: pcbnew/kicad_plugin.cpp:1187 pcbnew/legacy_plugin.cpp:96
+#: pcbnew/kicad_plugin.cpp:1204 pcbnew/legacy_plugin.cpp:96
 #, c-format
 msgid "unknown pad attribute: %d"
 msgstr "nieznany atrybut pola lutowniczego: %d"
 
-#: pcbnew/kicad_plugin.cpp:1369
+#: pcbnew/kicad_plugin.cpp:1386
 #, c-format
 msgid "unknown via type %d"
 msgstr "nieznany typ przelotki %d"
 
-#: pcbnew/kicad_plugin.cpp:1500
+#: pcbnew/kicad_plugin.cpp:1517
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "nieznany typ zaokrągleń krawędzi strefy %d"
 
-#: pcbnew/kicad_plugin.cpp:1784
+#: pcbnew/kicad_plugin.cpp:1801
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Nazwa pliku '%s' jest niepoprawna."
 
-#: pcbnew/kicad_plugin.cpp:1790
+#: pcbnew/kicad_plugin.cpp:1807
 #, c-format
 msgid "user does not have write permission to delete file '%s' "
 msgstr "użytkownik nie ma wystarczających uprawnień do usunięcia pliku '%s'"
 
-#: pcbnew/kicad_plugin.cpp:1845
+#: pcbnew/kicad_plugin.cpp:1862
 #, c-format
 msgid "cannot overwrite library path '%s'"
 msgstr "nie mogę nadpisać biblioteki '%s'"
@@ -7779,18 +7785,18 @@ msgstr "nieznany typ grafiki: %d"
 msgid "Unknown sheet type '%s' on line:%d"
 msgstr "Nieznany typ arkusza '%s' w lini:%d"
 
-#: pcbnew/legacy_plugin.cpp:1200
+#: pcbnew/legacy_plugin.cpp:1204
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of module: '%s'"
 msgstr ""
 "Nieznany kształt pola lutowniczego '%c=0x%02x' w lini: %d footprintu: '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2185
+#: pcbnew/legacy_plugin.cpp:2189
 #, c-format
 msgid "duplicate NETCLASS name '%s'"
 msgstr "zduplikowana nazwa Klasy Sieci '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2771 pcbnew/legacy_plugin.cpp:2808
+#: pcbnew/legacy_plugin.cpp:2775 pcbnew/legacy_plugin.cpp:2812
 #, c-format
 msgid ""
 "invalid float number in file: '%s'\n"
@@ -7799,7 +7805,7 @@ msgstr ""
 "niepoprawna liczba typu float w pliku: '%s'\n"
 "linia: %d, przesunięcie: %d"
 
-#: pcbnew/legacy_plugin.cpp:2780 pcbnew/legacy_plugin.cpp:2816
+#: pcbnew/legacy_plugin.cpp:2784 pcbnew/legacy_plugin.cpp:2820
 #, c-format
 msgid ""
 "missing float number in file: '%s'\n"
@@ -7808,44 +7814,44 @@ msgstr ""
 "brak liczby typu float w pliku: '%s'\n"
 "linia: %d, przesunięcie: %d"
 
-#: pcbnew/legacy_plugin.cpp:2859
+#: pcbnew/legacy_plugin.cpp:2863
 #, c-format
 msgid "Unable to open file '%s'"
 msgstr "Nie mogę otworzyć pliku '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2884 common/richio.cpp:572
+#: pcbnew/legacy_plugin.cpp:2888 common/richio.cpp:572
 #, c-format
 msgid "error writing to file '%s'"
 msgstr "błąd zapisu do pliku '%s'"
 
-#: pcbnew/legacy_plugin.cpp:4007
+#: pcbnew/legacy_plugin.cpp:4012
 #, c-format
 msgid "File '%s' is empty or is not a legacy library"
 msgstr "Plik '%s' jest pusty lub nie jest plikiem biblioteki starszego typu"
 
-#: pcbnew/legacy_plugin.cpp:4144
+#: pcbnew/legacy_plugin.cpp:4149
 #, c-format
 msgid "Legacy library file '%s' is read only"
 msgstr ""
 "Plik biblioteki starszego typu '%s' jest oznaczony jako 'Tylko do odczytu'."
 
-#: pcbnew/legacy_plugin.cpp:4163
+#: pcbnew/legacy_plugin.cpp:4168
 #, c-format
 msgid "Unable to open or create legacy library file '%s'"
 msgstr "Nie mogę otworzyć ani utworzyć biblioteki starszego typu '%s'"
 
-#: pcbnew/legacy_plugin.cpp:4189
+#: pcbnew/legacy_plugin.cpp:4194
 #, c-format
 msgid "Unable to rename tempfile '%s' to library file '%s'"
 msgstr ""
 "Nie mogę zmienić nazwy pliku tymczasowego '%s' na nazwę pliku biblioteki '%s'"
 
-#: pcbnew/legacy_plugin.cpp:4370
+#: pcbnew/legacy_plugin.cpp:4375
 #, c-format
 msgid "library '%s' already exists, will not create a new"
 msgstr "biblioteka '%s' już istnieje, nie można stworzyć nowej"
 
-#: pcbnew/legacy_plugin.cpp:4397
+#: pcbnew/legacy_plugin.cpp:4402
 #, c-format
 msgid "library '%s' cannot be deleted"
 msgstr "biblioteka '%s' nie może zostać usunięta"
@@ -8936,7 +8942,7 @@ msgid "Library is not set, the module could not be saved."
 msgstr ""
 "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
-#: pcbnew/moduleframe.cpp:508 pcbnew/pcbframe.cpp:662
+#: pcbnew/moduleframe.cpp:508 pcbnew/pcbframe.cpp:666
 #: cvpcb/class_DisplayFootprintsFrame.cpp:436
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
@@ -9619,16 +9625,16 @@ msgstr "Użyj rozmiarów ścieżek i przelotek z ich klas połączeń"
 msgid "Track %s"
 msgstr "Ścieżka %s"
 
-#: pcbnew/onrightclick.cpp:974 pcbnew/onrightclick.cpp:999
+#: pcbnew/onrightclick.cpp:974 pcbnew/onrightclick.cpp:1000
 msgid " uses NetClass"
 msgstr " używa Klas Połączeń"
 
-#: pcbnew/onrightclick.cpp:991
+#: pcbnew/onrightclick.cpp:992
 #, c-format
 msgid "Via %s"
 msgstr "Przelotka %s"
 
-#: pcbnew/onrightclick.cpp:995
+#: pcbnew/onrightclick.cpp:996
 #, c-format
 msgid "Via %s, drill %s"
 msgstr "Przelotka %s, wiercenie %s"
@@ -9638,17 +9644,17 @@ msgstr "Przelotka %s, wiercenie %s"
 msgid "Delete Pad (module %s %s) "
 msgstr "Usuń pole lutownicze (footprint %s %s) "
 
-#: pcbnew/pcbframe.cpp:399 pcbnew/pcbframe.cpp:1005
+#: pcbnew/pcbframe.cpp:401 pcbnew/pcbframe.cpp:1009
 #: gerbview/events_called_functions.cpp:305 gerbview/gerbview_frame.cpp:140
 msgid "Visibles"
 msgstr "Widoczność"
 
-#: pcbnew/pcbframe.cpp:626
+#: pcbnew/pcbframe.cpp:630
 #, c-format
 msgid "The auto save file <%s> could not be removed!"
 msgstr "Plik automatycznej kopii zapasowej <%s> nie może zostac usunięty!"
 
-#: pcbnew/pcbframe.cpp:1070
+#: pcbnew/pcbframe.cpp:1074
 msgid " [new file]"
 msgstr " [nowy plik]"
 
@@ -9778,18 +9784,18 @@ msgstr ""
 "Warstwa '%s' w pliku <%s> w linii %d, pozycja %d, nie została zdefiniowana w "
 "sekcji warstw"
 
-#: pcbnew/pcb_parser.cpp:1148
+#: pcbnew/pcb_parser.cpp:1150
 #, c-format
 msgid "duplicate NETCLASS name '%s' in file <%s> at line %d, offset %d"
 msgstr ""
 "zduplikowana nazwa Klasy Sieci '%s' w pliku <%s> w linii %d, przesunięcie %d"
 
-#: pcbnew/pcb_parser.cpp:1791
+#: pcbnew/pcb_parser.cpp:1793
 #, c-format
 msgid "cannot handle module text type %s"
 msgstr "nie mogę obsłużyć tekstu footprintu typu %s"
 
-#: pcbnew/pcb_parser.cpp:2433
+#: pcbnew/pcb_parser.cpp:2435
 #, c-format
 msgid ""
 "There is a zone that belongs to a not existing net(%s), you should verify it."
@@ -9956,59 +9962,59 @@ msgstr "&OK"
 msgid "&Cancel"
 msgstr "&Anuluj"
 
-#: pcbnew/toolbars_update_user_interface.cpp:120
+#: pcbnew/toolbars_update_user_interface.cpp:130
 msgid "Disable design rule checking"
 msgstr "Wyłącz kontrolę reguł projektowania"
 
-#: pcbnew/toolbars_update_user_interface.cpp:121 pcbnew/tool_pcb.cpp:331
+#: pcbnew/toolbars_update_user_interface.cpp:131 pcbnew/tool_pcb.cpp:331
 msgid "Enable design rule checking"
 msgstr "Włącz kontrolę reguł projektowych PCB"
 
-#: pcbnew/toolbars_update_user_interface.cpp:129
+#: pcbnew/toolbars_update_user_interface.cpp:139
 msgid "Hide board ratsnest"
 msgstr "Ukryj połączenia wspomagające płytki"
 
-#: pcbnew/toolbars_update_user_interface.cpp:130 pcbnew/tool_pcb.cpp:350
+#: pcbnew/toolbars_update_user_interface.cpp:140 pcbnew/tool_pcb.cpp:350
 msgid "Show board ratsnest"
 msgstr "Pokaż połączenia wspomagające płytki"
 
-#: pcbnew/toolbars_update_user_interface.cpp:139
+#: pcbnew/toolbars_update_user_interface.cpp:149
 msgid "Hide module ratsnest"
 msgstr "Ukryj połączenia wspomagające footprintów"
 
-#: pcbnew/toolbars_update_user_interface.cpp:140
+#: pcbnew/toolbars_update_user_interface.cpp:150
 msgid "Show module ratsnest"
 msgstr "Pokaż połączenia wspomagające footprintów"
 
-#: pcbnew/toolbars_update_user_interface.cpp:149
+#: pcbnew/toolbars_update_user_interface.cpp:159
 msgid "Disable auto delete old track"
 msgstr "Wyłącz automatyczne usuwanie starych ścieżek"
 
-#: pcbnew/toolbars_update_user_interface.cpp:150
+#: pcbnew/toolbars_update_user_interface.cpp:160
 msgid "Enable auto delete old track"
 msgstr "Włącz automatyczne usuwanie starych ścieżek"
 
-#: pcbnew/toolbars_update_user_interface.cpp:159 pcbnew/tool_pcb.cpp:379
+#: pcbnew/toolbars_update_user_interface.cpp:169 pcbnew/tool_pcb.cpp:379
 msgid "Show vias in outline mode"
 msgstr "Pokaż przelotki jako zarys"
 
-#: pcbnew/toolbars_update_user_interface.cpp:160
+#: pcbnew/toolbars_update_user_interface.cpp:170
 msgid "Show vias in fill mode"
 msgstr "Pokaż przelotki jako pełne"
 
-#: pcbnew/toolbars_update_user_interface.cpp:169 pcbnew/tool_pcb.cpp:383
+#: pcbnew/toolbars_update_user_interface.cpp:179 pcbnew/tool_pcb.cpp:383
 msgid "Show tracks in outline mode"
 msgstr "Pokaż ścieżki jako zarys"
 
-#: pcbnew/toolbars_update_user_interface.cpp:170
+#: pcbnew/toolbars_update_user_interface.cpp:180
 msgid "Show tracks in fill mode"
 msgstr "Pokaż ścieżki jako pełne"
 
-#: pcbnew/toolbars_update_user_interface.cpp:179
+#: pcbnew/toolbars_update_user_interface.cpp:189
 msgid "Normal contrast display mode"
 msgstr "Wyświetlaj w trybie zwykłego kontrastu"
 
-#: pcbnew/toolbars_update_user_interface.cpp:180
+#: pcbnew/toolbars_update_user_interface.cpp:190
 msgid "High contrast display mode"
 msgstr "Wyświetlaj w trybie wysokiego kontrastu"
 
@@ -10218,7 +10224,7 @@ msgstr ""
 "jej szerokości,\n"
 " w przeciwnym wypadku użyj bieżących ustawień szerokości"
 
-#: pcbnew/tool_pcb.cpp:625
+#: pcbnew/tool_pcb.cpp:625 pcbnew/router/router_tool.cpp:113
 msgid "Track "
 msgstr "Ścieżka "
 
@@ -10226,7 +10232,7 @@ msgstr "Ścieżka "
 msgid " *"
 msgstr "*"
 
-#: pcbnew/tool_pcb.cpp:651
+#: pcbnew/tool_pcb.cpp:651 pcbnew/router/router_tool.cpp:126
 msgid "Via "
 msgstr "Przelotka "
 
@@ -10734,94 +10740,94 @@ msgstr "Minimalna wartość dla średnicy przelotek: <b>%s</b><br>\n"
 msgid "Minimum value for microvias diameter: <b>%s</b><br>\n"
 msgstr "Minimalna wartość dla średnicy mikroprzelotek: <b>%s</b><br>\n"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:666
+#: pcbnew/dialogs/dialog_design_rules.cpp:661
 msgid "Errors detected, Abort"
 msgstr "Wystąpiły błędy. Przerwano"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:688
+#: pcbnew/dialogs/dialog_design_rules.cpp:681
 msgid "New Net Class Name:"
 msgstr "Nowa nazwa klasy połączeń:"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:706
+#: pcbnew/dialogs/dialog_design_rules.cpp:699
 msgid "This NetClass is already existing, cannot add it; Aborted"
 msgstr ""
 "Taka klasa połączeń jest już zdefiniowana, nie można dodać takiej samej; "
 "Przerwano"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:769
+#: pcbnew/dialogs/dialog_design_rules.cpp:762
 msgid "The default Netclass cannot be removed"
 msgstr "Domyślna klasa połączeń nie może zostać usunięta"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:968
+#: pcbnew/dialogs/dialog_design_rules.cpp:961
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
 msgstr "%s: <b>Szerokość ścieżki</b> &lt; <b>Min. szerokość ścieżki</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:981
+#: pcbnew/dialogs/dialog_design_rules.cpp:974
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>"
 msgstr "%s: <b>Średnica przelotki</b> &lt; <b>Min. średnica przelotki</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:992
+#: pcbnew/dialogs/dialog_design_rules.cpp:985
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
 msgstr ""
 "%s: <b>Średnica otworu przelotki</b> &ge; <b>Średnica przelotki</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1001
+#: pcbnew/dialogs/dialog_design_rules.cpp:994
 #, c-format
 msgid "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>"
 msgstr ""
 "%s: <b>Średnica otworu przelotki</b> &lt; <b>Min. średnica otworu przelotki</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1014
+#: pcbnew/dialogs/dialog_design_rules.cpp:1007
 #, c-format
 msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
 msgstr ""
 "%s: <b>Średnica mikroprzelotki</b> &lt; <b>Min. średnica mikroprzelotki</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1025
+#: pcbnew/dialogs/dialog_design_rules.cpp:1018
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>"
 msgstr ""
 "%s: <b>Średnica otworu mikroprzelotki</b> &ge; <b>Średnica mikroprzelotki</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1034
+#: pcbnew/dialogs/dialog_design_rules.cpp:1027
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>"
 msgstr ""
 "%s: <b>Średnica otworu mikroprzelotki</b> &lt; <b>Min. średnica otworu "
 "mikroprzelotki</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1054
+#: pcbnew/dialogs/dialog_design_rules.cpp:1047
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
 msgstr ""
 "<b>Szerokość %d dodatkowej ścieżki </b>%s &lt; <b>Min. szerokość ścieżki</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1062
+#: pcbnew/dialogs/dialog_design_rules.cpp:1055
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Szerokość %d dodatkowej ścieżki </b>%s &gt; <b>1 cal!</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1086
+#: pcbnew/dialogs/dialog_design_rules.cpp:1079
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
 msgstr ""
 "<b>Rozmiar %d dodatkowej przelotki </b>%s &lt; <b>Min. rozmiar przelotki</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1095
+#: pcbnew/dialogs/dialog_design_rules.cpp:1088
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &le; <b> Drill Size</b> %s<br>"
 msgstr ""
 "<b>Rozmiar %d dodatkowej przelotki</b> %s &le; <b> Rozmiar otworu</b> %s<br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1105
+#: pcbnew/dialogs/dialog_design_rules.cpp:1098
 #, c-format
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Rozmiar %d dodatkowej przelotki </b>%s &gt; <b>1 cal!</b><br>"
@@ -10853,11 +10859,11 @@ msgid "uVia Drill"
 msgstr "Otwór mikroprzelotki"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:60
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:86
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:100
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:110
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:120
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:132
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:87
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:101
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:111
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:121
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:133
 #: common/pgm_base.cpp:104
 msgid "Default"
 msgstr "Domyślny"
@@ -12750,13 +12756,13 @@ msgstr "Filtr warstw"
 msgid "Current layer:"
 msgstr "Bieżąca warstwa:"
 
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:159
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:160
 msgid "Set current Net tracks and vias sizes and drill to the current values?"
 msgstr ""
 "Ustawić bieżące właściwości ścieżek, przelotek i otworów do właściwości z "
 "bieżących ustawień?"
 
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:170
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:171
 msgid ""
 "Set current Net tracks and vias sizes and drill to the Netclass default "
 "value?"
@@ -12764,15 +12770,15 @@ msgstr ""
 "Ustawić bieżące właściwości ścieżek, przelotek i otworów do właściwości z "
 "klas połączeń?"
 
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:179
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:180
 msgid "Set All Tracks and Vias to Netclass value"
 msgstr "Ustaw rozmiary wszystkich ścieżek i przelotek wg klas połączeń"
 
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:188
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:189
 msgid "Set All Via to Netclass value"
 msgstr "Ustaw przelotki wg klas połączeń"
 
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:197
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:198
 msgid "Set All Track to Netclass value"
 msgstr "Ustaw wszystkie ścieżki do wartości z klas połączeń"
 
@@ -14521,6 +14527,62 @@ msgstr "Zaznacz wszystkie warstwy"
 msgid "Deselect all Layers"
 msgstr "Odznacz wszystkie warstwy"
 
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
+msgid "Highlight collisions"
+msgstr "Podświetl miejsca kolizji"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
+msgid "Shove"
+msgstr "Rozsuwaj"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
+msgid "Walk around"
+msgstr "Omijaj przeszkody"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
+msgid "Figure out what's best"
+msgstr "Pokaż najlepszą opcję"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:28
+msgid "Shove vias"
+msgstr "Rozsuwaj przelotki"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
+msgid "Jump over obstacles"
+msgstr "Przeskakuj ponad przeszkodami"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
+msgid "Remove redundant tracks"
+msgstr "Usuwaj nadmiarowe ścieżki"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:37
+msgid "Automatic neckdown"
+msgstr "Automatycznie zwężaj"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:40
+msgid "Smooth dragged segments"
+msgstr "Wygładzaj przeciągane segmenty"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:43
+msgid "Allow DRC violations"
+msgstr "Zezwól na łamanie zasad DRC"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:46
+msgid "Suggest track finish"
+msgstr "Proponuj zakończenie ścieżki"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:54
+msgid "Optimizer effort"
+msgstr "Głębokość optymalizacji"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:70
+msgid "low"
+msgstr "Niska"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:79
+msgid "high"
+msgstr "Wysoka"
+
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:65
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:95
 #: gerbview/dialogs/dialog_print_using_printer.cpp:83
@@ -14796,6 +14858,22 @@ msgstr "Jeden plik z wszystkimi warstwami"
 msgid "File option:"
 msgstr "Opcje pliku:"
 
+#: pcbnew/dialogs/dialog_track_via_size.cpp:82
+msgid "Settings are incorrect"
+msgstr "Ustawienia są nieprawidłowe"
+
+#: pcbnew/dialogs/dialog_track_via_size_base.cpp:19
+msgid "Track width:"
+msgstr "Szerokość ścieżki:"
+
+#: pcbnew/dialogs/dialog_track_via_size_base.cpp:22
+msgid "Via diameter:"
+msgstr "Średnica przelotki:"
+
+#: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
+msgid "Via drill:"
+msgstr "Otwór przelotki:"
+
 #: pcbnew/exporters/export_d356.cpp:358
 msgid "IPC-D-356 Test Files (.d356)|*.d356"
 msgstr "Pliki testowe IPC-D-356 (.d356)|*.d356"
@@ -14964,11 +15042,47 @@ msgstr "Położenie rysunku DXF"
 msgid "Board layer for import:"
 msgstr "Rysunek umieszczony na warstwie:"
 
-#: pcbnew/tools/pcbnew_control.cpp:531
+#: pcbnew/router/router_tool.cpp:102
+msgid "Custom size"
+msgstr "Rozmiar użytkownika"
+
+#: pcbnew/router/router_tool.cpp:105
+msgid "Use the starting track width"
+msgstr "Użyj początkowej szerokości ścieżki"
+
+#: pcbnew/router/router_tool.cpp:106
+msgid "Route using the width of the starting track."
+msgstr "Prowadź ścieżki używając szerokości ścieżki rozpoczynającej."
+
+#: pcbnew/router/router_tool.cpp:108
+msgid "Use netclass values"
+msgstr "Użyj wartości z klas sieci"
+
+#: pcbnew/router/router_tool.cpp:109
+msgid "Use track and via sizes from the net class"
+msgstr "Użyj szerokości ścieżek i rozmiarów przelotek z ich klas połączeń"
+
+#: pcbnew/router/router_tool.cpp:117 pcbnew/router/router_tool.cpp:142
+msgid " (from netclass)"
+msgstr " (z listy sieci)"
+
+#: pcbnew/router/router_tool.cpp:134
+msgid ", drill: default"
+msgstr ", otwór: domyślny"
+
+#: pcbnew/router/router_tool.cpp:138
+msgid ", drill: "
+msgstr ", otwór:"
+
+#: pcbnew/router/router_tool.cpp:642
+msgid "Interactive Router"
+msgstr "Router Interaktywny"
+
+#: pcbnew/tools/pcbnew_control.cpp:533
 msgid "Not implemented yet."
 msgstr "Obecnie jeszcze nie działa."
 
-#: pcbnew/tools/selection_tool.cpp:400
+#: pcbnew/tools/selection_tool.cpp:415
 msgid "Clarify selection"
 msgstr "Sprecyzuj Wybór"
 
@@ -16858,6 +16972,10 @@ msgstr "Pliki komponenetów IDFv3 (*.idf)|*.idf"
 #: common/wildcards_and_files_ext.cpp:101
 msgid "Text files (*.txt)|*.txt"
 msgstr "Pliki tekstowe (*.txt)|*.txt"
+
+#: common/wxunittext.cpp:199
+msgid "default "
+msgstr "domyślny "
 
 #: common/wxwineda.cpp:61
 #, c-format
@@ -19348,6 +19466,10 @@ msgstr "Orientacja footprintów"
 msgid "Pad Properties"
 msgstr "Właściwości pola lutowniczego"
 
+#: pcbnew/dialogs/dialog_pns_settings_base.h:62
+msgid "Interactive Router settings"
+msgstr "Ustawienia interaktywnego routera"
+
 #: pcbnew/dialogs/dialog_set_grid_base.h:70
 msgid "Grid Properties"
 msgstr "Właściwości siatki"
@@ -19355,6 +19477,10 @@ msgstr "Właściwości siatki"
 #: pcbnew/dialogs/dialog_SVG_print_base.h:72
 msgid "Export SVG file"
 msgstr "Eksportuj plik SVG"
+
+#: pcbnew/dialogs/dialog_track_via_size_base.h:49
+msgid "Track width and via size"
+msgstr "Szerokości ścieżek i rozmiar przelotek"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:62
 msgid "Import DXF file"
