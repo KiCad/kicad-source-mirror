@@ -60,6 +60,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
     aGal->SetLineWidth( 1.0 );
     RENDER_SETTINGS* rs = m_view->GetPainter()->GetSettings();
     COLOR4D color = rs->GetColor( NULL, ITEM_GAL_LAYER( RATSNEST_VISIBLE ) );
+    int highlightedNet = rs->GetHighlightNetCode();
 
     for( int i = 1; i < m_data->GetNetCount(); ++i )
     {
@@ -89,7 +90,8 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
         }
 
         // Draw the "static" ratsnest
-        aGal->SetStrokeColor( color );  // using the default ratsnest color
+        if( i != highlightedNet )
+            aGal->SetStrokeColor( color );  // using the default ratsnest color for not highlighted
 
         const std::vector<RN_EDGE_PTR>* edges = net.GetUnconnected();
         if( edges == NULL )

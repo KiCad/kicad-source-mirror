@@ -275,6 +275,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
                    PCB_EDIT_FRAME::OnUpdateSelectAutoTrackWidth )
     EVT_UPDATE_UI( ID_POPUP_PCB_SELECT_AUTO_WIDTH, PCB_EDIT_FRAME::OnUpdateSelectAutoTrackWidth )
+    EVT_UPDATE_UI( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH,
+                   PCB_EDIT_FRAME::OnUpdateSelectCustomTrackWidth )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_VIA_SIZE, PCB_EDIT_FRAME::OnUpdateSelectViaSize )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_MODE_MODULE, PCB_EDIT_FRAME::OnUpdateAutoPlaceModulesMode )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_MODE_TRACKS, PCB_EDIT_FRAME::OnUpdateAutoPlaceTracksMode )
@@ -493,9 +495,9 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
         ViewReloadBoard( aBoard );
 
         // update the tool manager with the new board and its view.
-        m_toolManager.SetEnvironment( aBoard, GetGalCanvas()->GetView(),
-                                      GetGalCanvas()->GetViewControls(), this );
-        m_toolManager.ResetTools( TOOL_BASE::MODEL_RELOAD );
+        m_toolManager->SetEnvironment( aBoard, GetGalCanvas()->GetView(),
+                                       GetGalCanvas()->GetViewControls(), this );
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     }
 }
 
@@ -544,6 +546,7 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
 
     view->Add( worksheet );
     view->Add( aBoard->GetRatsnestViewItem() );
+    aBoard->GetRatsnest()->Recalculate();
 
     // Limit panning to the size of worksheet frame
     GetGalCanvas()->GetViewControls()->SetPanBoundary( aBoard->GetWorksheetViewItem()->ViewBBox() );
@@ -588,7 +591,6 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     m_canvas->SetAbortRequest( true );
-    GetGalCanvas()->StopDrawing();
 
     if( GetScreen()->IsModify() )
     {
@@ -611,6 +613,8 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             break;
         }
     }
+
+    GetGalCanvas()->StopDrawing();
 
     // Delete the auto save file if it exists.
     wxFileName fn = GetBoard()->GetFileName();
@@ -672,13 +676,13 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
     if( aEnable )
     {
         ViewReloadBoard( m_Pcb );
+        GetGalCanvas()->GetView()->RecacheAllItems();
 
-        // Update potential changes in the ratsnest
-        m_Pcb->GetRatsnest()->Recalculate();
-
-        m_toolManager.SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
+        m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
                                        GetGalCanvas()->GetViewControls(), this );
-        m_toolManager.ResetTools( TOOL_BASE::GAL_SWITCH );
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+        GetGalCanvas()->StartDrawing();
     }
 }
 

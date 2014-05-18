@@ -40,7 +40,7 @@ private:
 
     PCB_EDIT_FRAME*         m_Parent;
     BOARD*                  m_Pcb;
-    BOARD_DESIGN_SETTINGS   m_BrdSettings;
+    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
     static int              s_LastTabSelection;     ///< which tab user had open last
 

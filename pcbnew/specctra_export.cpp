@@ -1476,9 +1476,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
     //-----<rules>--------------------------------------------------------
     {
         char        rule[80];
+        NETCLASS* defaultClass = aBoard->GetDesignSettings().m_NetClasses.GetDefault();
 
-        int         defaultTrackWidth   = aBoard->m_NetClasses.GetDefault()->GetTrackWidth();
-        int         defaultClearance    = aBoard->m_NetClasses.GetDefault()->GetClearance();
+        int         defaultTrackWidth   = defaultClass->GetTrackWidth();
+        int         defaultClearance    = defaultClass->GetClearance();
 
         double      clearance = scale( defaultClearance );
 
@@ -1829,7 +1830,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
     //-----< output vias used in netclasses >-----------------------------------
     {
-        NETCLASSES& nclasses = aBoard->m_NetClasses;
+        NETCLASSES& nclasses = aBoard->GetDesignSettings().m_NetClasses;
 
         // Assume the netclass vias are all the same kind of thru, blind, or buried vias.
         // This is in lieu of either having each netclass via have its own layer pair in
@@ -2039,7 +2040,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
 
     //-----<output NETCLASSs>----------------------------------------------------
-    NETCLASSES& nclasses = aBoard->m_NetClasses;
+    NETCLASSES& nclasses = aBoard->GetDesignSettings().m_NetClasses;
 
     exportNETCLASS( nclasses.GetDefault(), aBoard );
 

@@ -137,6 +137,8 @@ public:
     static TOOL_ACTION viaSizeInc;
     static TOOL_ACTION viaSizeDec;
 
+    static TOOL_ACTION trackViaSizeChanged;   // notification
+
     // Miscellaneous
     static TOOL_ACTION resetCoords;
     static TOOL_ACTION switchUnits;

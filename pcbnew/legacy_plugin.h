@@ -261,7 +261,7 @@ protected:
     void savePCB_TEXT( const TEXTE_PCB* aText ) const;
     void savePCB_TARGET( const PCB_TARGET* aTarget ) const;
     void savePCB_LINE( const DRAWSEGMENT* aStroke ) const;
-    void saveDIMENTION( const DIMENSION* aDimension ) const;
+    void saveDIMENSION( const DIMENSION* aDimension ) const;
     void saveTRACK( const TRACK* aTrack ) const;
 
     /**

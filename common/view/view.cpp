@@ -1019,3 +1019,38 @@ void VIEW::UpdateItems()
 
     m_needsUpdate.clear();
 }
+
+struct VIEW::extentsVisitor {
+        BOX2I extents;
+        bool first;
+
+        extentsVisitor()
+        {
+            first = true;
+        }
+
+        bool operator()( VIEW_ITEM* aItem )
+        {
+            if(first)
+                extents = aItem->ViewBBox();
+            else
+                extents.Merge ( aItem->ViewBBox() );
+            return false;
+        }
+    };
+
+const BOX2I VIEW::CalculateExtents() 
+{
+  
+    extentsVisitor v;
+    BOX2I fullScene;
+    fullScene.SetMaximum();
+
+
+    BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
+    {
+        l->items->Query( fullScene, v );
+    }
+    
+    return v.extents;
+}

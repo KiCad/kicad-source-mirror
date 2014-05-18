@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __PNS_LAYERSET_H
@@ -50,17 +50,17 @@ public:
         m_start = m_end = aLayer;
     }
 
-    PNS_LAYERSET( const PNS_LAYERSET& b ) :
-        m_start( b.m_start ),
-        m_end( b.m_end )
+    PNS_LAYERSET( const PNS_LAYERSET& aB ) :
+        m_start( aB.m_start ),
+        m_end( aB.m_end )
     {}
 
     ~PNS_LAYERSET() {};
 
-    const PNS_LAYERSET& operator=( const PNS_LAYERSET& b )
+    const PNS_LAYERSET& operator=( const PNS_LAYERSET& aB )
     {
-        m_start = b.m_start;
-        m_end = b.m_end;
+        m_start = aB.m_start;
+        m_end = aB.m_end;
         return *this;
     }
 

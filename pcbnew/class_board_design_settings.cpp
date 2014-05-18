@@ -54,13 +54,13 @@
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_Pad_Master( NULL )
 {
-    m_EnabledLayers = ALL_LAYERS;               // All layers enabled at first.
+    m_enabledLayers = ALL_LAYERS;               // All layers enabled at first.
                                                 // SetCopperLayerCount() will adjust this.
 
     SetVisibleLayers( FULL_LAYERS );
 
     // set all but hidden text as visible.
-    m_VisibleElements = ~( 1 << MOD_TEXT_INVISIBLE );
+    m_visibleElements = ~( 1 << MOD_TEXT_INVISIBLE );
 
     SetCopperLayerCount( 2 );                   // Default design is a double sided board
 
@@ -81,7 +81,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_PcbTextSize       = wxSize( DEFAULT_TEXT_PCB_SIZE,
                                   DEFAULT_TEXT_PCB_SIZE );  // current Pcb (not module) Text size
 
-    m_TrackMinWidth     = DMils2iu( 100 );      // track min value for width ((min copper size value
+    m_TrackMinWidth     = DMils2iu( 100 );      // track min value for width (min copper size value)
     m_ViasMinSize       = DMils2iu( 350 );      // vias (not micro vias) min diameter
     m_ViasMinDrill      = DMils2iu( 200 );      // vias (not micro vias) min drill diameter
     m_MicroViasMinSize  = DMils2iu( 200 );      // micro vias (not vias) min diameter
@@ -102,6 +102,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
 
     // Layer thickness for 3D viewer
     m_boardThickness = Millimeter2iu( DEFAULT_BOARD_THICKNESS_MM );
+
+    m_viaSizeIndex = 0;
+    m_trackWidthIndex = 0;
 }
 
 // Add parameters to save in project config.
@@ -171,32 +174,144 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 }
 
 
-// see pcbstruct.h
-LAYER_MSK BOARD_DESIGN_SETTINGS::GetVisibleLayers() const
+bool BOARD_DESIGN_SETTINGS::SetCurrentNetClass( const wxString& aNetClassName )
 {
-    return m_VisibleLayers;
+    NETCLASS* netClass = m_NetClasses.Find( aNetClassName );
+    bool      lists_sizes_modified = false;
+
+    // if not found (should not happen) use the default
+    if( netClass == NULL )
+        netClass = m_NetClasses.GetDefault();
+
+    m_currentNetClassName = netClass->GetName();
+
+    // Initialize others values:
+    if( m_ViasDimensionsList.size() == 0 )
+    {
+        VIA_DIMENSION viadim;
+        lists_sizes_modified = true;
+        m_ViasDimensionsList.push_back( viadim );
+    }
+
+    if( m_TrackWidthList.size() == 0 )
+    {
+        lists_sizes_modified = true;
+        m_TrackWidthList.push_back( 0 );
+    }
+
+    /* note the m_ViasDimensionsList[0] and m_TrackWidthList[0] values
+     * are always the Netclass values
+     */
+    if( m_ViasDimensionsList[0].m_Diameter != netClass->GetViaDiameter() )
+        lists_sizes_modified = true;
+
+    m_ViasDimensionsList[0].m_Diameter = netClass->GetViaDiameter();
+
+    if( m_TrackWidthList[0] != netClass->GetTrackWidth() )
+        lists_sizes_modified = true;
+
+    m_TrackWidthList[0] = netClass->GetTrackWidth();
+
+    if( GetViaSizeIndex() >= m_ViasDimensionsList.size() )
+        SetViaSizeIndex( m_ViasDimensionsList.size() );
+
+    if( GetTrackWidthIndex() >= m_TrackWidthList.size() )
+        SetTrackWidthIndex( m_TrackWidthList.size() );
+
+    return lists_sizes_modified;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
+{
+    int clearance = m_NetClasses.GetDefault()->GetClearance();
+
+    //Read list of Net Classes
+    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
+    {
+        NETCLASS* netclass = nc->second;
+        clearance = std::max( clearance, netclass->GetClearance() );
+    }
+
+    return clearance;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue()
+{
+    int clearance = m_NetClasses.GetDefault()->GetClearance();
+
+    //Read list of Net Classes
+    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
+    {
+        NETCLASS* netclass = nc->second;
+        clearance = std::min( clearance, netclass->GetClearance() );
+    }
+
+    return clearance;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetCurrentMicroViaSize()
+{
+    NETCLASS* netclass = m_NetClasses.Find( m_currentNetClassName );
+
+    return netclass->GetuViaDiameter();
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetCurrentMicroViaDrill()
+{
+    NETCLASS* netclass = m_NetClasses.Find( m_currentNetClassName );
+
+    return netclass->GetuViaDrill();
+}
+
+
+void BOARD_DESIGN_SETTINGS::SetViaSizeIndex( unsigned aIndex )
+{
+    if( aIndex >= m_ViasDimensionsList.size() )
+        m_viaSizeIndex = m_ViasDimensionsList.size();
+    else
+        m_viaSizeIndex = aIndex;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetCurrentViaDrill() const
+{
+    int drill;
+
+    if( m_useCustomTrackVia )
+        drill = m_customViaSize.m_Drill;
+    else
+        drill = m_ViasDimensionsList[m_viaSizeIndex].m_Drill;
+
+    return drill > 0 ? drill : -1;
+}
+
+
+void BOARD_DESIGN_SETTINGS::SetTrackWidthIndex( unsigned aIndex )
+{
+    if( aIndex >= m_TrackWidthList.size() )
+        m_trackWidthIndex = m_TrackWidthList.size();
+    else
+        m_trackWidthIndex = aIndex;
 }
 
 
 void BOARD_DESIGN_SETTINGS::SetVisibleAlls()
 {
     SetVisibleLayers( FULL_LAYERS );
-    m_VisibleElements = -1;
-}
-
-
-void BOARD_DESIGN_SETTINGS::SetVisibleLayers( LAYER_MSK aMask )
-{
-    m_VisibleLayers = aMask & m_EnabledLayers & FULL_LAYERS;
+    m_visibleElements = -1;
 }
 
 
 void BOARD_DESIGN_SETTINGS::SetLayerVisibility( LAYER_NUM aLayer, bool aNewState )
 {
     if( aNewState && IsLayerEnabled( aLayer ) )
-        m_VisibleLayers |= GetLayerMask( aLayer );
+        m_visibleLayers |= GetLayerMask( aLayer );
     else
-        m_VisibleLayers &= ~GetLayerMask( aLayer );
+        m_visibleLayers &= ~GetLayerMask( aLayer );
 }
 
 
@@ -206,9 +321,9 @@ void BOARD_DESIGN_SETTINGS::SetElementVisibility( int aElementCategory, bool aNe
         return;
 
     if( aNewState )
-        m_VisibleElements |= 1 << aElementCategory;
+        m_visibleElements |= 1 << aElementCategory;
     else
-        m_VisibleElements &= ~( 1 << aElementCategory );
+        m_visibleElements &= ~( 1 << aElementCategory );
 }
 
 
@@ -216,17 +331,17 @@ void BOARD_DESIGN_SETTINGS::SetCopperLayerCount( int aNewLayerCount )
 {
     // if( aNewLayerCount < 2 ) aNewLayerCount = 2;
 
-    m_CopperLayerCount = aNewLayerCount;
+    m_copperLayerCount = aNewLayerCount;
 
     // ensure consistency with the m_EnabledLayers member
-    m_EnabledLayers &= ~ALL_CU_LAYERS;
-    m_EnabledLayers |= LAYER_BACK;
+    m_enabledLayers &= ~ALL_CU_LAYERS;
+    m_enabledLayers |= LAYER_BACK;
 
-    if( m_CopperLayerCount > 1 )
-        m_EnabledLayers |= LAYER_FRONT;
+    if( m_copperLayerCount > 1 )
+        m_enabledLayers |= LAYER_FRONT;
 
     for( LAYER_NUM ii = LAYER_N_2; ii < aNewLayerCount - 1; ++ii )
-        m_EnabledLayers |= GetLayerMask( ii );
+        m_enabledLayers |= GetLayerMask( ii );
 }
 
 
@@ -235,13 +350,13 @@ void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LAYER_MSK aMask )
     // Back and front layers are always enabled.
     aMask |= LAYER_BACK | LAYER_FRONT;
 
-    m_EnabledLayers = aMask;
+    m_enabledLayers = aMask;
 
     // A disabled layer cannot be visible
-    m_VisibleLayers &= aMask;
+    m_visibleLayers &= aMask;
 
     // update m_CopperLayerCount to ensure its consistency with m_EnabledLayers
-    m_CopperLayerCount = LayerMaskCountSet( aMask & ALL_CU_LAYERS);
+    m_copperLayerCount = LayerMaskCountSet( aMask & ALL_CU_LAYERS);
 }
 
 

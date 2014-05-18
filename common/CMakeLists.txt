@@ -203,6 +203,7 @@ set( COMMON_SRCS
     wildcards_and_files_ext.cpp
     worksheet.cpp
     wxwineda.cpp
+    wxunittext.cpp
     xnode.cpp
     zoom.cpp
     )

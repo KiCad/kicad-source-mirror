@@ -403,7 +403,7 @@ bool DRC::testNetClasses()
 {
     bool        ret = true;
 
-    NETCLASSES& netclasses = m_pcb->m_NetClasses;
+    NETCLASSES& netclasses = m_pcb->GetDesignSettings().m_NetClasses;
 
     wxString    msg;   // construct this only once here, not in a loop, since somewhat expensive.
 

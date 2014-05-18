@@ -111,8 +111,6 @@ public:
     /** The type of the layer */
     LAYER_T m_Type;
 
-//    int         m_Color;
-
     /**
      * Function ShowType
      * converts a LAYER_T enum to a const char*
@@ -136,52 +134,15 @@ private:
 };
 
 
-/**
- * Struct VIA_DIMENSION
- * is a small helper container to handle a stock of specific vias each with
- * unique diameter and drill sizes in the BOARD class.
- */
-struct VIA_DIMENSION
-{
-    int m_Diameter;     // <= 0 means use Netclass via diameter
-    int m_Drill;        // <= 0 means use Netclass via drill
-
-    VIA_DIMENSION()
-    {
-        m_Diameter = 0;
-        m_Drill    = 0;
-    }
-
-    VIA_DIMENSION( int aDiameter, int aDrill )
-    {
-        m_Diameter = aDiameter;
-        m_Drill    = aDrill;
-    }
-
-    bool operator == ( const VIA_DIMENSION& other ) const
-    {
-        return (m_Diameter == other.m_Diameter) && (m_Drill == other.m_Drill);
-    }
-
-    bool operator < ( const VIA_DIMENSION& other ) const
-    {
-        if( m_Diameter != other.m_Diameter )
-            return m_Diameter < other.m_Diameter;
-
-        return m_Drill < other.m_Drill;
-    }
-};
-
-
 // Helper class to handle high light nets
 class HIGH_LIGHT_INFO
 {
     friend class BOARD;
+
 protected:
     int m_netCode;           // net selected for highlight (-1 when no net selected )
     bool m_highLightOn;      // highlight active
 
-protected:
     void Clear()
     {
         m_netCode = -1;
@@ -247,17 +208,6 @@ private:
     /// Number of unconnected nets in the current rats nest.
     int                     m_unconnectedNetCount;
 
-    /// Current net class name used to display netclass info.
-    /// This is also the last used netclass after starting a track.
-    wxString                m_currentNetClassName;
-
-    /// Index for #m_ViasDimensionsList to select the current via size.
-    /// 0 is the index selection of the default value Netclass
-    unsigned                m_viaSizeIndex;
-
-    // Index for m_TrackWidthList to select the value.
-    unsigned                m_trackWidthIndex;
-
     /**
      * Function chainMarkedSegments
      * is used by MarkTrace() to set the BUSY flag of connected segments of the trace
@@ -268,10 +218,6 @@ private:
      * @param aList The track list to fill with points of flagged segments.
      */
     void chainMarkedSegments( wxPoint aPosition, LAYER_MSK aLayerMask, TRACK_PTRS* aList );
-
-    void formatNetClass( NETCLASS* aNetClass, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                         int aControlBits ) const
-        throw( IO_ERROR );
 
 public:
 
@@ -295,22 +241,6 @@ public:
 
     /// zone contour currently in progress
     ZONE_CONTAINER*             m_CurrentZoneContour;
-
-    /// List of current netclasses. There is always the default netclass.
-    NETCLASSES                  m_NetClasses;
-
-    // handling of vias and tracks size:
-    // the first value is always the value of the current NetClass
-    // The others values are extra values
-
-    // The first value is the current netclass via size  // TODO verify
-    /// Vias size and drill list
-    std::vector<VIA_DIMENSION>  m_ViasDimensionsList;
-
-    // The first value is the current netclass track width  // TODO verify
-    /// Track width list
-    std::vector<int>            m_TrackWidthList;
-
 
     BOARD();
     ~BOARD();
@@ -639,7 +569,10 @@ public:
      * Function SetDesignSettings
      * @param aDesignSettings the new BOARD_DESIGN_SETTINGS to use
      */
-    void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aDesignSettings ) {  m_designSettings = aDesignSettings; }
+    void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aDesignSettings )
+    {
+        m_designSettings = aDesignSettings;
+    }
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
@@ -684,6 +617,19 @@ public:
     bool GetBoardPolygonOutlines( CPOLYGONS_LIST& aOutlines,
                                   CPOLYGONS_LIST& aHoles,
                                   wxString* aErrorText = NULL );
+
+    /**
+     * Function ConvertBrdLayerToPolygonalContours
+     * Build a set of polygons which are the outlines of copper items
+     * (pads, tracks, vias, texts, zones)
+     * Holes in vias or pads are ignored
+     * Usefull to export the shape of copper layers to dxf polygons
+     * or 3D viewer
+     * the polygons are not merged.
+     * @param aLayer = A copper layer, like LAYER_N_BACK, etc.
+     * @param aOutlines The CPOLYGONS_LIST to fill in with items outline.
+     */
+    void ConvertBrdLayerToPolygonalContours( LAYER_NUM aLayer, CPOLYGONS_LIST& aOutlines );
 
     /**
      * Function GetLayerName
@@ -770,7 +716,6 @@ public:
         return m_FullRatsnest.size();
     }
 
-
     /**
      * Function GetNodesCount
      * @return the number of pads members of nets (i.e. with netcode > 0)
@@ -798,20 +743,6 @@ public:
      * @param aCount is the number of unconneceted nets in the current rats nest.
      */
     void SetUnconnectedNetCount( unsigned aCount ) { m_unconnectedNetCount = aCount; }
-
-    /**
-     * Function SetCurrentNetClassName
-     * sets the current net class name to \a aName.
-     *
-     * @param aName is a reference to a wxString object containing the current net class name.
-     */
-    void SetCurrentNetClassName( const wxString& aName ) { m_currentNetClassName = aName; }
-
-    /**
-     * Function GetCurrentNetClassName
-     * @return the current net class name.
-     */
-    const wxString& GetCurrentNetClassName() const { return m_currentNetClassName; }
 
     /**
      * Function GetPadCount
@@ -1021,11 +952,6 @@ public:
      */
     int SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
 
-    /**************************************/
-    /**
-    * Function relative to NetClasses: **/
-    /**************************************/
-
     /**
      * Function SynchronizeNetsAndNetClasses
      * copies NETCLASS info to each NET, based on NET membership in a NETCLASS.
@@ -1034,104 +960,6 @@ public:
      * and add net nets in default netclass (this happens after reading a netlist)
      */
     void SynchronizeNetsAndNetClasses();
-
-    /**
-     * Function SetCurrentNetClass
-     * Must be called after a netclass selection (or after a netclass parameter change
-     * Initialize vias and tracks values displayed in comb boxes of the auxiliary toolbar
-     * and some others parameters (netclass name ....)
-     * @param aNetClassName = the new netclass name
-     * @return true if lists of tracks and vias sizes are modified
-     */
-    bool SetCurrentNetClass( const wxString& aNetClassName );
-
-    /**
-     * Function GetBiggestClearanceValue
-     * @return the biggest clearance value found in NetClasses list
-     */
-    int GetBiggestClearanceValue();
-
-    /**
-     * Function GetSmallestClearanceValue
-     * @return the smallest clearance value found in NetClasses list
-     */
-    int GetSmallestClearanceValue();
-
-    /**
-     * Function GetTrackWidthIndex
-     * @return the current track width list index.
-     */
-    unsigned GetTrackWidthIndex() const { return m_trackWidthIndex; }
-
-    /**
-     * Function SetTrackWidthIndex
-     * sets the current track width list index to \a aIndex.
-     *
-     * @param aIndex is the track width list index.
-     */
-    void SetTrackWidthIndex( unsigned aIndex );
-
-    /**
-     * Function GetCurrentTrackWidth
-     * @return the current track width, according to the selected options
-     * ( using the default netclass value or a preset value )
-     * the default netclass is always in m_TrackWidthList[0]
-     */
-    int GetCurrentTrackWidth() const
-    {
-        return m_TrackWidthList[m_trackWidthIndex];
-    }
-
-    /**
-     * Function GetViaSizeIndex
-     * @return the current via size list index.
-     */
-    unsigned GetViaSizeIndex() const { return m_viaSizeIndex; }
-
-    /**
-     * Function SetViaSizeIndex
-     * sets the current via size list index to \a aIndex.
-     *
-     * @param aIndex is the via size list index.
-     */
-    void SetViaSizeIndex( unsigned aIndex );
-
-    /**
-     * Function GetCurrentViaSize
-     * @return the current via size, according to the selected options
-     * ( using the default netclass value or a preset value )
-     * the default netclass is always in m_TrackWidthList[0]
-     */
-    int GetCurrentViaSize()
-    {
-        return m_ViasDimensionsList[m_viaSizeIndex].m_Diameter;
-    }
-
-    /**
-     * Function GetCurrentViaDrill
-     * @return the current via size, according to the selected options
-     * ( using the default netclass value or a preset value )
-     * the default netclass is always in m_TrackWidthList[0]
-     */
-    int GetCurrentViaDrill()
-    {
-        return m_ViasDimensionsList[m_viaSizeIndex].m_Drill > 0 ?
-               m_ViasDimensionsList[m_viaSizeIndex].m_Drill : -1;
-    }
-
-    /**
-     * Function GetCurrentMicroViaSize
-     * @return the current micro via size,
-     * that is the current netclass value
-     */
-    int  GetCurrentMicroViaSize();
-
-    /**
-     * Function GetCurrentMicroViaDrill
-     * @return the current micro via drill,
-     * that is the current netclass value
-     */
-    int  GetCurrentMicroViaDrill();
 
     /***************************************************************************/
 

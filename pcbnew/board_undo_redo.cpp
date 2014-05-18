@@ -637,7 +637,7 @@ void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& aEvent )
 
     // Inform tools that undo command was issued
     TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
-    m_toolManager.ProcessEvent( event );
+    m_toolManager->ProcessEvent( event );
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
@@ -660,7 +660,7 @@ void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& aEvent )
 
     // Inform tools that redo command was issued
     TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
-    m_toolManager.ProcessEvent( event );
+    m_toolManager->ProcessEvent( event );
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();

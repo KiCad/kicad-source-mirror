@@ -229,6 +229,16 @@ private:
      */
     void highlightNet( const VECTOR2I& aPoint );
 
+    /**
+     * Function prefer()
+     * Checks if collector's list contains only single entry of asked types. If so, it returns it.
+     * @param aCollector is the collector that has a list of items to be queried.
+     * @param aTypes is the list of searched/preferred types.
+     * @return Pointer to the preferred item, if there is only one entry of given type or NULL
+     * if there are more entries or no entries at all.
+     */
+    BOARD_ITEM* prefer( GENERAL_COLLECTOR& aCollector, const KICAD_T aTypes[] ) const;
+
     /// Visual representation of selection box
     SELECTION_AREA* m_selArea;
 

@@ -208,11 +208,11 @@ TOOL_ACTION COMMON_ACTIONS::layerAlphaDec( "pcbnew.layerAlphaDec",
 
 // Grid control
 TOOL_ACTION COMMON_ACTIONS::gridFast1( "pcbnew.gridFast1",
-        AS_GLOBAL, (int)MD_ALT + '1',
+        AS_GLOBAL, MD_ALT + '1',
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridFast2( "pcbnew.gridFast2",
-        AS_GLOBAL, (int)MD_ALT + '2',
+        AS_GLOBAL, MD_ALT + '2',
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridNext( "pcbnew.gridNext",
@@ -220,7 +220,7 @@ TOOL_ACTION COMMON_ACTIONS::gridNext( "pcbnew.gridNext",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridPrev( "pcbnew.gridPrev",
-        AS_GLOBAL, (int)MD_CTRL + '`',
+        AS_GLOBAL, MD_CTRL + '`',
         "", "" );
 
 
@@ -241,6 +241,7 @@ TOOL_ACTION COMMON_ACTIONS::viaSizeDec( "pcbnew.viaSizeDec",
         AS_GLOBAL, '\\',
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::trackViaSizeChanged( "pcbnew.trackViaSizeChanged", AS_GLOBAL, 0, "", "" );
 
 // Miscellaneous
 TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.resetCoords",
@@ -248,7 +249,7 @@ TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.resetCoords",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::switchUnits( "pcbnew.switchUnits",
-        AS_GLOBAL, (int)MD_CTRL + 'U',
+        AS_GLOBAL, MD_CTRL + 'U',
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::showHelp( "pcbnew.showHelp",

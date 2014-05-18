@@ -43,7 +43,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     if( net )
         new_width = net->GetTrackWidth();
     else
-        new_width = GetBoard()->GetCurrentTrackWidth();
+        new_width = GetDesignSettings().GetCurrentTrackWidth();
 
     if( aTrackItem->Type() == PCB_VIA_T )
     {
@@ -58,8 +58,8 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
         }
         else
         {
-            new_width = GetBoard()->GetCurrentViaSize();
-            new_drill = GetBoard()->GetCurrentViaDrill();
+            new_width = GetDesignSettings().GetCurrentViaSize();
+            new_drill = GetDesignSettings().GetCurrentViaDrill();
         }
 
         if( via->GetViaType() == VIA_MICROVIA )
@@ -67,7 +67,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
             if( net )
                 new_width = net->GetMicroViaSize();
             else
-                new_width = GetBoard()->GetCurrentMicroViaSize();
+                new_width = GetDesignSettings().GetCurrentMicroViaSize();
         }
     }
 

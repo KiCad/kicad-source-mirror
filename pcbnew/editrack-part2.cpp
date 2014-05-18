@@ -98,7 +98,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     VIA* via = new VIA( GetBoard() );
     via->SetFlags( IS_NEW );
     via->SetViaType( GetDesignSettings().m_CurrentViaType );
-    via->SetWidth( GetBoard()->GetCurrentViaSize());
+    via->SetWidth( GetDesignSettings().GetCurrentViaSize());
     via->SetNetCode( GetBoard()->GetHighLightNetCode() );
     via->SetEnd( g_CurrentTrackSegment->GetEnd() );
     via->SetStart( g_CurrentTrackSegment->GetEnd() );
@@ -106,7 +106,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     // Usual via is from copper to component.
     // layer pair is LAYER_N_BACK and LAYER_N_FRONT.
     via->SetLayerPair( LAYER_N_BACK, LAYER_N_FRONT );
-    via->SetDrill( GetBoard()->GetCurrentViaDrill() );
+    via->SetDrill( GetDesignSettings().GetCurrentViaDrill() );
 
     LAYER_NUM first_layer = GetActiveLayer();
     LAYER_NUM last_layer;

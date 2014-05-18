@@ -133,10 +133,10 @@ END_EVENT_TABLE()
 PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString & aFrameName ) :
-    EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-    m_toolManager( TOOL_MANAGER::Instance() )
+    EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     m_Pcb                 = NULL;
+    m_toolManager         = NULL;
     m_toolDispatcher      = NULL;
 
     m_DisplayPadFill      = true;   // How to draw pads
@@ -158,6 +158,9 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     SetGalCanvas( new EDA_DRAW_PANEL_GAL(
             this, -1, wxPoint( 0, 0 ), m_FrameSize,
             EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) );
+
+    // GAL should not be active yet
+    GetGalCanvas()->StopDrawing();
 
     // Hide by default, it has to be explicitly shown
     GetGalCanvas()->Hide();
@@ -832,7 +835,7 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     }
 
     // Some more required layers settings
-    view->SetRequired( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( VIAS_VISIBLE ) );
+    view->SetRequired( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ) );
     view->SetRequired( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
     view->SetRequired( NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
 

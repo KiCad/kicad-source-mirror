@@ -280,7 +280,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
 
     m_canvas->SetAbortRequest( false );
 
-    s_Clearance = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
+    s_Clearance = GetBoard()->GetDesignSettings().GetDefault()->GetClearance();
 
     // Prepare the undo command info
     s_ItemsListPicker.ClearListAndDeleteItems();  // Should not be necessary, but...
@@ -428,7 +428,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
     result = NOSUCCESS;
 
-    marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentTrackWidth() / 2 );
+    marge = s_Clearance + ( pcbframe->GetDesignSettings().GetCurrentTrackWidth() / 2 );
 
     /* clear direction flags */
     i = RoutingMatrix.m_Nrows * RoutingMatrix.m_Ncols * sizeof(DIR_CELL);
@@ -1174,7 +1174,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
                                                 ( RoutingMatrix.m_GridRouting * col )));
         g_CurrentTrackSegment->SetEnd( g_CurrentTrackSegment->GetStart() );
 
-        g_CurrentTrackSegment->SetWidth( pcb->GetCurrentViaSize() );
+        g_CurrentTrackSegment->SetWidth( pcb->GetDesignSettings().GetCurrentViaSize() );
         newVia->SetViaType( pcb->GetDesignSettings().m_CurrentViaType );
 
         g_CurrentTrackSegment->SetNetCode( current_net_code );
@@ -1233,7 +1233,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
             }
         }
 
-        g_CurrentTrackSegment->SetWidth( pcb->GetCurrentTrackWidth() );
+        g_CurrentTrackSegment->SetWidth( pcb->GetDesignSettings().GetCurrentTrackWidth() );
 
         if( g_CurrentTrackSegment->GetStart() != g_CurrentTrackSegment->GetEnd() )
         {
@@ -1275,8 +1275,8 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
     EDA_DRAW_PANEL* panel = pcbframe->GetCanvas();
     PCB_SCREEN* screen = pcbframe->GetScreen();
 
-    marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentTrackWidth() / 2 );
-    via_marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentViaSize() / 2 );
+    marge = s_Clearance + ( pcbframe->GetDesignSettings().GetCurrentTrackWidth() / 2 );
+    via_marge = s_Clearance + ( pcbframe->GetDesignSettings().GetCurrentViaSize() / 2 );
 
     dx1 = g_CurrentTrackSegment->GetEnd().x - g_CurrentTrackSegment->GetStart().x;
     dy1 = g_CurrentTrackSegment->GetEnd().y - g_CurrentTrackSegment->GetStart().y;
