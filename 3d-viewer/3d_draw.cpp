@@ -239,7 +239,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     BOARD* pcb = GetBoard();
     bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
 
-    // Number of segments to draw a circle using segments
+    // Number of segments to convert a circle to polygon
     const int       segcountforcircle   = 16;
     double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
     const int       segcountLowQuality  = 12;   // segments to draw a circle with low quality

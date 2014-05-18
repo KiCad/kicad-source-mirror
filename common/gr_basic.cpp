@@ -848,7 +848,7 @@ static void GRSClosedPoly( EDA_RECT* aClipBox, wxDC* aDC,
         // Close the polygon
         if( aPoints[lastpt] != aPoints[0] )
         {
-            GRLineTo( aClipBox, aDC, aPoints[lastpt].x, aPoints[lastpt].y, aWidth, aColor );
+            GRLineTo( aClipBox, aDC, aPoints[0].x, aPoints[0].y, aWidth, aColor );
         }
     }
 }

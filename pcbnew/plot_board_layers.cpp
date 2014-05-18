@@ -176,10 +176,18 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
     case LAYER_N_15:
     case LAST_COPPER_LAYER:
         // Skip NPTH pads on copper layers ( only if hole size == pad size ):
-        plotOpt.SetSkipPlotNPTH_Pads( true );
         // Drill mark will be plotted,
         // if drill mark is SMALL_DRILL_SHAPE  or FULL_DRILL_SHAPE
-        PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+        if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+        {
+            plotOpt.SetSkipPlotNPTH_Pads( false );
+            PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
+        }
+        else
+        {
+            plotOpt.SetSkipPlotNPTH_Pads( true );
+            PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+        }
         break;
 
     case SOLDERMASK_N_BACK:
@@ -190,7 +198,12 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
 
         // Plot solder mask:
         if( soldermask_min_thickness == 0 )
-            PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+        {
+            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+                PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
+            else
+                PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+        }
         else
             PlotSolderMaskLayer( aBoard, aPlotter, layer_mask, plotOpt,
                                  soldermask_min_thickness );
@@ -202,12 +215,19 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
         plotOpt.SetSkipPlotNPTH_Pads( false );
         // Disable plot pad holes
         plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
-        PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+
+        if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+            PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
+        else
+            PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
         break;
 
     case SILKSCREEN_N_FRONT:
     case SILKSCREEN_N_BACK:
-        PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
+        if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+            PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
+        else
+            PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
 
         // Gerber: Subtract soldermask from silkscreen if enabled
         if( aPlotter->GetPlotterType() == PLOT_FORMAT_GERBER
@@ -443,6 +463,115 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
         itemplotter.PlotDrillMarks();
 }
+
+/* Plot outlines of copper, for copper layer
+ */
+#include "clipper.hpp"
+void PlotLayerOutlines( BOARD *aBoard, PLOTTER* aPlotter,
+                        LAYER_MSK aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt )
+{
+
+    BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
+    itemplotter.SetLayerMask( aLayerMask );
+
+    CPOLYGONS_LIST outlines;
+
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; layer++ )
+    {
+        LAYER_MSK layer_mask = GetLayerMask( layer );
+
+        if( (aLayerMask & layer_mask ) == 0 )
+            continue;
+
+        outlines.RemoveAllContours();
+        aBoard->ConvertBrdLayerToPolygonalContours( layer, outlines );
+
+        // Merge all overlapping polygons.
+        KI_POLYGON_SET kpolygons;
+        KI_POLYGON_SET ktmp;
+        outlines.ExportTo( ktmp );
+
+        kpolygons += ktmp;
+
+        // Plot outlines
+        std::vector< wxPoint > cornerList;
+
+        for( unsigned ii = 0; ii < kpolygons.size(); ii++ )
+        {
+            KI_POLYGON polygon = kpolygons[ii];
+
+            // polygon contains only one polygon, but it can have holes linked by
+            // overlapping segments.
+            // To plot clean outlines, we have to break this polygon into more polygons with
+            // no overlapping segments, using Clipper, because boost::polygon
+            // does not allow that
+            ClipperLib::Path raw_polygon;
+            ClipperLib::Paths normalized_polygons;
+
+            for( unsigned ic = 0; ic < polygon.size(); ic++ )
+            {
+                KI_POLY_POINT corner = *(polygon.begin() + ic);
+                raw_polygon.push_back( ClipperLib::IntPoint( corner.x(), corner.y() ) );
+            }
+
+            ClipperLib::SimplifyPolygon( raw_polygon, normalized_polygons );
+
+            // Now we have one or more basic polygons: plot each polygon
+            for( unsigned ii = 0; ii < normalized_polygons.size(); ii++ )
+            {
+                ClipperLib::Path& polygon = normalized_polygons[ii];
+                cornerList.clear();
+
+                for( unsigned jj = 0; jj < polygon.size(); jj++ )
+                    cornerList.push_back( wxPoint( polygon[jj].X , polygon[jj].Y ) );
+
+                // Ensure the polygon is closed
+                if( cornerList[0] != cornerList[cornerList.size()-1] )
+                    cornerList.push_back( cornerList[0] );
+
+                aPlotter->PlotPoly( cornerList, NO_FILL );
+            }
+        }
+
+        // Plot pad holes
+        if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
+        {
+            for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
+            {
+                for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+                {
+                    wxSize hole = pad->GetDrillSize();
+
+                    if( hole.x == 0 || hole.y == 0 )
+                        continue;
+
+                    if( hole.x == hole.y )
+                        aPlotter->Circle( pad->GetPosition(), hole.x, NO_FILL );
+                    else
+                    {
+                        wxPoint drl_start, drl_end;
+                        int width;
+                        pad->GetOblongDrillGeometry( drl_start, drl_end, width );
+                        aPlotter->ThickSegment( pad->GetPosition() + drl_start,
+                                pad->GetPosition() + drl_end, width, SKETCH );
+                    }
+                }
+            }
+        }
+
+        // Plot vias holes
+        for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
+        {
+            const VIA* via = dynamic_cast<const VIA*>( track );
+
+            if( via && via->IsOnLayer( layer ) )    // via holes can be not through holes
+            {
+                aPlotter->Circle( via->GetPosition(), via->GetDrillValue(), NO_FILL );
+            }
+        }
+    }
+}
+
 
 /* Plot a solder mask layer.
  * Solder mask layers have a minimum thickness value and cannot be drawn like standard layers,

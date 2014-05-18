@@ -205,6 +205,17 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
                         const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
+ * Function PlotLayerOutlines
+ * plot copper outline of a copper layer.
+ * @param aBoard = the board to plot
+ * @param aPlotter = the plotter to use
+ * @param aLayerMask = the mask to define the layers to plot
+ * @param aPlotOpt = the plot options. Has meaning for some formats only
+ */
+void PlotLayerOutlines( BOARD *aBoard, PLOTTER* aPlotter,
+                        LAYER_MSK aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt );
+
+/**
  * Function PlotSilkScreen
  * plot silkscreen layers which have specific requirements, mainly for pads.
  * Should not be used for other layers

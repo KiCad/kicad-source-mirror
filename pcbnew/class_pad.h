@@ -169,6 +169,17 @@ public:
         { m_drillShape = aDrillShape; }
     PAD_DRILL_SHAPE_T GetDrillShape() const     { return m_drillShape; }
 
+    /**
+     * Function GetOblongDrillGeometry calculates the start point, end point and width
+     * of an equivalent segment which have the same position and width as the hole
+     * Usefull to plot/draw oblong holes like segments with rounded ends
+     * used in draw and plot functions
+     * @param aStartPoint = first point of the equivalent segment, relative to the pad position.
+     * @param aEndPoint = second point of the equivalent segment, relative to the pad position.
+     * @param aWidth = width equivalent segment.
+     */
+    void GetOblongDrillGeometry( wxPoint& aStartPoint, wxPoint& aEndPoint, int& aWidth ) const;
+
     void SetLayerMask( LAYER_MSK aLayerMask )   { m_layerMask = aLayerMask; }
     LAYER_MSK GetLayerMask() const              { return m_layerMask; }
 
