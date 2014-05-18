@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,27 +15,41 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <boost/foreach.hpp>
 
 #include "pns_itemset.h"
 
-
-PNS_ITEMSET::PNS_ITEMSET()
+PNS_ITEMSET::PNS_ITEMSET( PNS_ITEM* aInitialItem )
 {
+    if(aInitialItem)
+        m_items.push_back(aInitialItem);
 }
 
 
 PNS_ITEMSET::~PNS_ITEMSET()
 {
+    Clear();
+}
+
+
+void PNS_ITEMSET::Clear()
+{
+    BOOST_FOREACH(PNS_ITEM* item, m_ownedItems)
+    {
+        delete item;
+    }
+
+    m_items.clear();
+    m_ownedItems.clear();
 }
 
 
 PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd )
 {
-    ItemVector newItems;
+    ITEM_VECTOR newItems;
     PNS_LAYERSET l;
 
     if( aEnd < 0 )
@@ -43,39 +57,44 @@ PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd )
     else
         l = PNS_LAYERSET( aStart, aEnd );
 
-    BOOST_FOREACH( PNS_ITEM * item, m_items )
+    BOOST_FOREACH( PNS_ITEM* item, m_items )
 
-    if( item->GetLayers().Overlaps( l ) )
+    if( item->Layers().Overlaps( l ) )
         newItems.push_back( item );
 
     m_items = newItems;
+
     return *this;
 }
 
 
 PNS_ITEMSET& PNS_ITEMSET::FilterKinds( int aKindMask )
 {
-    ItemVector newItems;
+    ITEM_VECTOR newItems;
 
-    BOOST_FOREACH( PNS_ITEM * item, m_items )
-
-    if( item->GetKind() & aKindMask )
-        newItems.push_back( item );
+    BOOST_FOREACH( PNS_ITEM* item, m_items )
+    {
+        if( item->OfKind ( aKindMask ) )
+            newItems.push_back( item );
+    }
 
     m_items = newItems;
+
     return *this;
 }
 
 
 PNS_ITEMSET& PNS_ITEMSET::FilterNet( int aNet )
 {
-    ItemVector newItems;
+    ITEM_VECTOR newItems;
 
-    BOOST_FOREACH( PNS_ITEM * item, m_items )
-
-    if( item->GetNet() == aNet )
-        newItems.push_back( item );
+    BOOST_FOREACH( PNS_ITEM* item, m_items )
+    {
+        if( item->Net() == aNet )
+            newItems.push_back( item );
+    }
 
     m_items = newItems;
+
     return *this;
 }

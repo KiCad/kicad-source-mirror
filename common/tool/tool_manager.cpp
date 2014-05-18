@@ -104,14 +104,6 @@ TOOL_MANAGER::TOOL_MANAGER() :
 
 TOOL_MANAGER::~TOOL_MANAGER()
 {
-    DeleteAll();
-
-    delete m_actionMgr;
-}
-
-
-void TOOL_MANAGER::DeleteAll()
-{
     std::map<TOOL_BASE*, TOOL_STATE*>::iterator it, it_end;
 
     for( it = m_toolState.begin(), it_end = m_toolState.end(); it != it_end; ++it )
@@ -122,6 +114,7 @@ void TOOL_MANAGER::DeleteAll()
     }
 
     m_toolState.clear();
+    delete m_actionMgr;
 }
 
 
@@ -308,8 +301,6 @@ int TOOL_MANAGER::GetPriority( int aToolId ) const
     for( std::deque<int>::const_iterator it = m_activeTools.begin(),
             itEnd = m_activeTools.end(); it != itEnd; ++it )
     {
-        std::cout << FindTool( *it )->GetName() << std::endl;
-
         if( *it == aToolId )
             return priority;
 
@@ -497,7 +488,7 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
                 st->contextMenuTrigger = CMENU_OFF;
 
             boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *st->contextMenu ) );
-            GetEditFrame()->PopupMenu( menu->GetMenu() );
+            GetEditFrame()->PopupMenu( menu.get() );
 
             // If nothing was chosen from the context menu, we must notify the tool as well
             if( menu->GetSelected() < 0 )
@@ -513,8 +504,7 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
     if( m_view->IsDirty() )
     {
         PCB_EDIT_FRAME* f = static_cast<PCB_EDIT_FRAME*>( GetEditFrame() );
-        if( f->IsGalCanvasActive() )
-            f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
+        f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
     }
 
     return false;

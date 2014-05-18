@@ -808,7 +808,9 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as setup." ) );
 
     T token;
-    NETCLASS* defaultNetclass = m_board->m_NetClasses.GetDefault();
+    NETCLASS* defaultNetClass = m_board->GetDesignSettings().GetDefault();
+    // TODO Orson: is it really necessary to first operate on a copy and then apply it?
+    // would not it be better to use reference here and apply all the changes instantly?
     BOARD_DESIGN_SETTINGS designSettings = m_board->GetDesignSettings();
     ZONE_SETTINGS zoneSettings = m_board->GetZoneSettings();
 
@@ -827,12 +829,12 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_user_trace_width:
-            m_board->m_TrackWidthList.push_back( parseBoardUnits( T_user_trace_width ) );
+            designSettings.m_TrackWidthList.push_back( parseBoardUnits( T_user_trace_width ) );
             NeedRIGHT();
             break;
 
         case T_trace_clearance:
-            defaultNetclass->SetClearance( parseBoardUnits( T_trace_clearance ) );
+            defaultNetClass->SetClearance( parseBoardUnits( T_trace_clearance ) );
             NeedRIGHT();
             break;
 
@@ -862,12 +864,12 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_via_size:
-            defaultNetclass->SetViaDiameter( parseBoardUnits( T_via_size ) );
+            defaultNetClass->SetViaDiameter( parseBoardUnits( T_via_size ) );
             NeedRIGHT();
             break;
 
         case T_via_drill:
-            defaultNetclass->SetViaDrill( parseBoardUnits( T_via_drill ) );
+            defaultNetClass->SetViaDrill( parseBoardUnits( T_via_drill ) );
             NeedRIGHT();
             break;
 
@@ -885,18 +887,18 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             {
                 int viaSize = parseBoardUnits( "user via size" );
                 int viaDrill = parseBoardUnits( "user via drill" );
-                m_board->m_ViasDimensionsList.push_back( VIA_DIMENSION( viaSize, viaDrill ) );
+                designSettings.m_ViasDimensionsList.push_back( VIA_DIMENSION( viaSize, viaDrill ) );
                 NeedRIGHT();
             }
             break;
 
         case T_uvia_size:
-            defaultNetclass->SetuViaDiameter( parseBoardUnits( T_uvia_size ) );
+            defaultNetClass->SetuViaDiameter( parseBoardUnits( T_uvia_size ) );
             NeedRIGHT();
             break;
 
         case T_uvia_drill:
-            defaultNetclass->SetuViaDrill( parseBoardUnits( T_uvia_drill ) );
+            defaultNetClass->SetuViaDrill( parseBoardUnits( T_uvia_drill ) );
             NeedRIGHT();
             break;
 
@@ -1046,7 +1048,7 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
     //        at all, the global defaults should go into a preferences
     //        file instead so they are there to start new board
     //        projects.
-    m_board->m_NetClasses.GetDefault()->SetParams();
+    defaultNetClass->SetParams( m_board->GetDesignSettings() );
 }
 
 
@@ -1080,7 +1082,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    std::auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
+    std::auto_ptr<NETCLASS> nc( new NETCLASS( wxEmptyString ) );
 
     // Read netclass name (can be a name or just a number like track width)
     NeedSYMBOLorNUMBER();
@@ -1133,7 +1135,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
         NeedRIGHT();
     }
 
-    if( m_board->m_NetClasses.Add( nc.get() ) )
+    if( m_board->GetDesignSettings().m_NetClasses.Add( nc.get() ) )
     {
         nc.release();
     }

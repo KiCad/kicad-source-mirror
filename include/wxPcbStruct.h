@@ -248,6 +248,7 @@ public:
     void OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectCustomTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent );
     void OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent );
     void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );

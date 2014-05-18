@@ -315,7 +315,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
     text = AddHotkeyName( _( "&Fit on Screen" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ZOOM_AUTO );
+                          HK_ZOOM_AUTO, IS_ACCELERATOR  );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT,
                  KiBitmap( zoom_fit_in_page_xpm ) );
 

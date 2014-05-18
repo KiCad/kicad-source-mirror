@@ -60,6 +60,17 @@
  */
 static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
 
+///> Removes empty nets (i.e. with node count equal zero) from net classes
+void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
+{
+    for( NETCLASS::const_iterator it = aNetClass.begin(); it != aNetClass.end(); ++it )
+    {
+        NETINFO_ITEM* netinfo = aBoard.FindNet( *it );
+
+        if( netinfo && netinfo->GetNodesCount() <= 0 ) // hopefully there are no nets with negative
+            aNetClass.Remove( it );                    // node count, but you never know..
+    }
+}
 
 /**
  * Class FP_CACHE_ITEM
@@ -483,6 +494,8 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     throw( IO_ERROR )
 {
+    const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
+
     m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel, "(general\n" );
@@ -496,7 +509,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                   FMTIU( aBoard->GetBoundingBox().GetRight() ).c_str(),
                   FMTIU( aBoard->GetBoundingBox().GetBottom() ).c_str() );
     m_out->Print( aNestLevel+1, "(thickness %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().GetBoardThickness() ).c_str() );
+                  FMTIU( dsnSettings.GetBoardThickness() ).c_str() );
 
     m_out->Print( aNestLevel+1, "(drawings %d)\n", aBoard->m_Drawings.GetCount() );
     m_out->Print( aNestLevel+1, "(tracks %d)\n", aBoard->GetNumSegmTrack() );
@@ -551,15 +564,15 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     // Save current default track width, for compatibility with older Pcbnew version;
     m_out->Print( aNestLevel+1, "(last_trace_width %s)\n",
-                  FMTIU( aBoard->GetCurrentTrackWidth() ).c_str() );
+                  FMTIU( dsnSettings.GetCurrentTrackWidth() ).c_str() );
 
     // Save custom tracks width list (the first is not saved here: this is the netclass value
-    for( unsigned ii = 1; ii < aBoard->m_TrackWidthList.size(); ii++ )
+    for( unsigned ii = 1; ii < dsnSettings.m_TrackWidthList.size(); ii++ )
         m_out->Print( aNestLevel+1, "(user_trace_width %s)\n",
-                      FMTIU( aBoard->m_TrackWidthList[ii] ).c_str() );
+                      FMTIU( dsnSettings.m_TrackWidthList[ii] ).c_str() );
 
     m_out->Print( aNestLevel+1, "(trace_clearance %s)\n",
-                  FMTIU( aBoard->m_NetClasses.GetDefault()->GetClearance() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetClearance() ).c_str() );
 
     // ZONE_SETTINGS
     m_out->Print( aNestLevel+1, "(zone_clearance %s)\n",
@@ -568,78 +581,79 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                   aBoard->GetZoneSettings().m_Zone_45_Only ? "yes" : "no" );
 
     m_out->Print( aNestLevel+1, "(trace_min %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_TrackMinWidth ).c_str() );
+                  FMTIU( dsnSettings.m_TrackMinWidth ).c_str() );
 
     m_out->Print( aNestLevel+1, "(segment_width %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_DrawSegmentWidth ).c_str() );
+                  FMTIU( dsnSettings.m_DrawSegmentWidth ).c_str() );
     m_out->Print( aNestLevel+1, "(edge_width %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_EdgeSegmentWidth ).c_str() );
+                  FMTIU( dsnSettings.m_EdgeSegmentWidth ).c_str() );
 
     // Save current default via size, for compatibility with older Pcbnew version;
     m_out->Print( aNestLevel+1, "(via_size %s)\n",
-                  FMTIU( aBoard->m_NetClasses.GetDefault()->GetViaDiameter() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetViaDiameter() ).c_str() );
     m_out->Print( aNestLevel+1, "(via_drill %s)\n",
-                  FMTIU( aBoard->m_NetClasses.GetDefault()->GetViaDrill() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetViaDrill() ).c_str() );
     m_out->Print( aNestLevel+1, "(via_min_size %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_ViasMinSize ).c_str() );
+                  FMTIU( dsnSettings.m_ViasMinSize ).c_str() );
     m_out->Print( aNestLevel+1, "(via_min_drill %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_ViasMinDrill ).c_str() );
+                  FMTIU( dsnSettings.m_ViasMinDrill ).c_str() );
 
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
-    for( unsigned ii = 1; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
+    for( unsigned ii = 1; ii < dsnSettings.m_ViasDimensionsList.size(); ii++ )
         m_out->Print( aNestLevel+1, "(user_via %s %s)\n",
-                      FMTIU( aBoard->m_ViasDimensionsList[ii].m_Diameter ).c_str(),
-                      FMTIU( aBoard->m_ViasDimensionsList[ii].m_Drill ).c_str() );
+                      FMTIU( dsnSettings.m_ViasDimensionsList[ii].m_Diameter ).c_str(),
+                      FMTIU( dsnSettings.m_ViasDimensionsList[ii].m_Drill ).c_str() );
 
     // for old versions compatibility:
-    if( aBoard->GetDesignSettings().m_BlindBuriedViaAllowed )
+    if( dsnSettings.m_BlindBuriedViaAllowed )
         m_out->Print( aNestLevel+1, "(blind_buried_vias_allowed yes)\n" );
+
     m_out->Print( aNestLevel+1, "(uvia_size %s)\n",
-                  FMTIU( aBoard->m_NetClasses.GetDefault()->GetuViaDiameter() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetuViaDiameter() ).c_str() );
     m_out->Print( aNestLevel+1, "(uvia_drill %s)\n",
-                  FMTIU( aBoard->m_NetClasses.GetDefault()->GetuViaDrill() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetuViaDrill() ).c_str() );
     m_out->Print( aNestLevel+1, "(uvias_allowed %s)\n",
-                  ( aBoard->GetDesignSettings().m_MicroViasAllowed ) ? "yes" : "no" );
+                  ( dsnSettings.m_MicroViasAllowed ) ? "yes" : "no" );
     m_out->Print( aNestLevel+1, "(uvia_min_size %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_MicroViasMinSize ).c_str() );
+                  FMTIU( dsnSettings.m_MicroViasMinSize ).c_str() );
     m_out->Print( aNestLevel+1, "(uvia_min_drill %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_MicroViasMinDrill ).c_str() );
+                  FMTIU( dsnSettings.m_MicroViasMinDrill ).c_str() );
 
     m_out->Print( aNestLevel+1, "(pcb_text_width %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_PcbTextWidth ).c_str() );
+                  FMTIU( dsnSettings.m_PcbTextWidth ).c_str() );
     m_out->Print( aNestLevel+1, "(pcb_text_size %s %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_PcbTextSize.x ).c_str(),
-                  FMTIU( aBoard->GetDesignSettings().m_PcbTextSize.y ).c_str() );
+                  FMTIU( dsnSettings.m_PcbTextSize.x ).c_str(),
+                  FMTIU( dsnSettings.m_PcbTextSize.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(mod_edge_width %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_ModuleSegmentWidth ).c_str() );
+                  FMTIU( dsnSettings.m_ModuleSegmentWidth ).c_str() );
     m_out->Print( aNestLevel+1, "(mod_text_size %s %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_ModuleTextSize.x ).c_str(),
-                  FMTIU( aBoard->GetDesignSettings().m_ModuleTextSize.y ).c_str() );
+                  FMTIU( dsnSettings.m_ModuleTextSize.x ).c_str(),
+                  FMTIU( dsnSettings.m_ModuleTextSize.y ).c_str() );
     m_out->Print( aNestLevel+1, "(mod_text_width %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_ModuleTextWidth ).c_str() );
+                  FMTIU( dsnSettings.m_ModuleTextWidth ).c_str() );
 
     m_out->Print( aNestLevel+1, "(pad_size %s %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_Pad_Master.GetSize().x ).c_str(),
-                  FMTIU( aBoard->GetDesignSettings().m_Pad_Master.GetSize().y ).c_str() );
+                  FMTIU( dsnSettings.m_Pad_Master.GetSize().x ).c_str(),
+                  FMTIU( dsnSettings.m_Pad_Master.GetSize().y ).c_str() );
     m_out->Print( aNestLevel+1, "(pad_drill %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_Pad_Master.GetDrillSize().x ).c_str() );
+                  FMTIU( dsnSettings.m_Pad_Master.GetDrillSize().x ).c_str() );
 
     m_out->Print( aNestLevel+1, "(pad_to_mask_clearance %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_SolderMaskMargin ).c_str() );
+                  FMTIU( dsnSettings.m_SolderMaskMargin ).c_str() );
 
-    if( aBoard->GetDesignSettings().m_SolderMaskMinWidth )
+    if( dsnSettings.m_SolderMaskMinWidth )
         m_out->Print( aNestLevel+1, "(solder_mask_min_width %s)\n",
-                      FMTIU( aBoard->GetDesignSettings().m_SolderMaskMinWidth ).c_str() );
+                      FMTIU( dsnSettings.m_SolderMaskMinWidth ).c_str() );
 
-    if( aBoard->GetDesignSettings().m_SolderPasteMargin != 0 )
+    if( dsnSettings.m_SolderPasteMargin != 0 )
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance %s)\n",
-                      FMTIU( aBoard->GetDesignSettings().m_SolderPasteMargin ).c_str() );
+                      FMTIU( dsnSettings.m_SolderPasteMargin ).c_str() );
 
-    if( aBoard->GetDesignSettings().m_SolderPasteMarginRatio != 0 )
+    if( dsnSettings.m_SolderPasteMarginRatio != 0 )
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %s)\n",
-                      Double2Str( aBoard->GetDesignSettings().m_SolderPasteMarginRatio ).c_str() );
+                      Double2Str( dsnSettings.m_SolderPasteMarginRatio ).c_str() );
 
     m_out->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
                   FMTIU( aBoard->GetAuxOrigin().x ).c_str(),
@@ -651,7 +665,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                       FMTIU( aBoard->GetGridOrigin().y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(visible_elements %X)\n",
-                  aBoard->GetDesignSettings().GetVisibleElements() );
+                  dsnSettings.GetVisibleElements() );
 
     aBoard->GetPlotOptions().Format( m_out, aNestLevel+1 );
 
@@ -669,15 +683,18 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( 0, "\n" );
 
     // Save the default net class first.
-    aBoard->m_NetClasses.GetDefault()->Format( m_out, aNestLevel, m_ctl );
+    NETCLASS defaultNC = *dsnSettings.GetDefault();
+    filterNetClass( *aBoard, defaultNC );       // Remove empty nets (from a copy of a netclass)
+    defaultNC.Format( m_out, aNestLevel, m_ctl );
 
     // Save the rest of the net classes alphabetically.
-    for( NETCLASSES::const_iterator it = aBoard->m_NetClasses.begin();
-         it != aBoard->m_NetClasses.end();
+    for( NETCLASSES::const_iterator it = dsnSettings.m_NetClasses.begin();
+         it != dsnSettings.m_NetClasses.end();
          ++it )
     {
-        NETCLASS* netclass = it->second;
-        netclass->Format( m_out, aNestLevel, m_ctl );
+        NETCLASS netclass = *it->second;
+        filterNetClass( *aBoard, netclass );    // Remove empty nets (from a copy of a netclass)
+        netclass.Format( m_out, aNestLevel, m_ctl );
     }
 
     // Save the modules.
@@ -707,7 +724,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     ///       will not be saved.
 
     // Save the polygon (which are the newer technology) zones.
-    for( int i=0;  i < aBoard->GetAreaCount();  ++i )
+    for( int i = 0; i < aBoard->GetAreaCount();  ++i )
         Format( aBoard->GetArea( i ), aNestLevel );
 }
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2014 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -112,8 +112,15 @@ public:
     }
 
     /**
+     * Function StartDrawing()
+     * Begins drawing if it was stopped previously.
+     */
+    void StartDrawing();
+
+    /**
      * Function StopDrawing()
-     * Prevents the GAL canvas from further drawing till it is recreated.
+     * Prevents the GAL canvas from further drawing till it is recreated
+     * or StartDrawing() is called.
      */
     void StopDrawing();
 

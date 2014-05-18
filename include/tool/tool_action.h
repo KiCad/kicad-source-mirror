@@ -52,12 +52,12 @@ public:
         m_currentHotKey( aDefaultHotKey ), m_menuItem( aMenuItem ),
         m_menuDescription( aMenuDesc ), m_id( -1 )
     {
-        TOOL_MANAGER::Instance().RegisterAction( this );
+        TOOL_MANAGER::GetActionList().push_back( this );
     }
 
     ~TOOL_ACTION()
     {
-        TOOL_MANAGER::Instance().UnregisterAction( this );
+        TOOL_MANAGER::GetActionList().remove( this );
     }
 
     bool operator==( const TOOL_ACTION& aRhs ) const
@@ -195,6 +195,12 @@ private:
         m_id = aId;
     }
 
+    /// Assigns ACTION_MANAGER object that handles the TOOL_ACTION.
+    void setActionMgr( ACTION_MANAGER* aManager )
+    {
+        m_actionMgr = aManager;
+    }
+
     /// Name of the action (convention is: app.[tool.]action.name)
     std::string m_name;
 
@@ -219,11 +225,14 @@ private:
     /// Unique ID for fast matching. Assigned by ACTION_MANAGER.
     int m_id;
 
+    /// Action manager that handles this TOOL_ACTION.
+    ACTION_MANAGER* m_actionMgr;
+
     /// Origin of the action
-// const TOOL_BASE* m_origin;
+    // const TOOL_BASE* m_origin;
 
     /// Originating UI object
-// wxWindow* m_uiOrigin;
+    // wxWindow* m_uiOrigin;
 };
 
 #endif

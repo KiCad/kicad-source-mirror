@@ -38,8 +38,19 @@ public:
         SHAPE( SH_CIRCLE ), m_radius( aRadius ), m_center( aCenter )
     {}
 
+    SHAPE_CIRCLE ( const SHAPE_CIRCLE& aOther ) : 
+        SHAPE( SH_CIRCLE ),
+        m_radius( aOther.m_radius ),
+        m_center( aOther.m_center )
+    {};
+
     ~SHAPE_CIRCLE()
     {}
+
+    SHAPE* Clone() const
+    {
+        return new SHAPE_CIRCLE( *this );
+    }
 
     const BOX2I BBox( int aClearance = 0 ) const
     {

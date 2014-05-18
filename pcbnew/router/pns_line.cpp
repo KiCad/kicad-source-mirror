@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <boost/foreach.hpp>
@@ -29,260 +29,126 @@
 #include "pns_utils.h"
 #include "pns_router.h"
 
+#include <geometry/shape_rect.h>
+
 using boost::optional;
+
+PNS_LINE::PNS_LINE( const PNS_LINE& aOther ) :
+        PNS_ITEM( aOther ),
+        m_line( aOther.m_line ),
+        m_width( aOther.m_width )
+{
+        m_net = aOther.m_net;
+        m_movable = aOther.m_movable;
+        m_layers = aOther.m_layers;
+        m_owner = aOther.m_owner;
+        m_via = aOther.m_via;
+        m_hasVia = aOther.m_hasVia;
+        m_marker = aOther.m_marker;
+        m_rank = aOther.m_rank;
+
+        copyLinks ( &aOther );
+}
+
+
+PNS_LINE::~PNS_LINE()
+{
+    if( m_segmentRefs )
+        delete m_segmentRefs;
+}
+
+
+const PNS_LINE& PNS_LINE::operator=( const PNS_LINE& aOther )
+{
+    m_line = aOther.m_line;
+    m_width = aOther.m_width;
+    m_net = aOther.m_net;
+    m_movable = aOther.m_movable;
+    m_owner = aOther.m_owner;
+    m_layers = aOther.m_layers;
+    m_via = aOther.m_via;
+    m_hasVia = aOther.m_hasVia;
+    m_marker = aOther.m_marker;
+    m_rank = aOther.m_rank;
+    
+    copyLinks ( &aOther );
+ 
+    return *this;
+}
+    
 
 PNS_LINE* PNS_LINE::Clone() const
 {
-    PNS_LINE* l = new PNS_LINE();
-
-    l->m_line = m_line;
-    l->m_width = m_width;
-    l->m_layers = m_layers;
-    l->m_net = m_net;
-    l->m_movable = m_movable;
-    l->m_segmentRefs = NULL;
-    l->m_hasVia = m_hasVia;
-    l->m_via = m_via;
+    PNS_LINE* l = new PNS_LINE( *this );
 
     return l;
 }
 
 
-PNS_LINE* PNS_LINE::CloneProperties() const
+void PNS_LINE::Mark( int aMarker )
 {
-    PNS_LINE* l = new PNS_LINE();
-
-    l->m_width  = m_width;
-    l->m_layers = m_layers;
-    l->m_net = m_net;
-    l->m_movable = m_movable;
-
-    return l;
+    m_marker = aMarker;
+    
+    if( m_segmentRefs )
+    {
+        BOOST_FOREACH( PNS_SEGMENT* s, *m_segmentRefs )
+            s->Mark( aMarker );
+    }
 }
 
 
-PNS_SEGMENT* PNS_SEGMENT::Clone() const
+void PNS_LINE::Unmark ()
+{
+    if( m_segmentRefs )
+    {
+        BOOST_FOREACH( PNS_SEGMENT* s, *m_segmentRefs )
+            s->Unmark();
+    }
+
+    m_marker = 0;
+}
+
+
+int PNS_LINE::Marker()const
+{
+    int marker = m_marker;
+
+    if( m_segmentRefs )
+    {
+        BOOST_FOREACH( PNS_SEGMENT* s, *m_segmentRefs )
+            marker |= s->Marker();
+    }
+
+    return marker;
+}
+
+
+void PNS_LINE::copyLinks( const PNS_LINE *aParent ) 
+{
+    if( aParent->m_segmentRefs == NULL )
+    {
+        m_segmentRefs = NULL;
+        return;
+    }
+    
+    m_segmentRefs = new SEGMENT_REFS();
+    *m_segmentRefs = *aParent->m_segmentRefs;
+}
+
+
+PNS_SEGMENT* PNS_SEGMENT::Clone( ) const
 {
     PNS_SEGMENT* s = new PNS_SEGMENT;
 
-    s->m_width = m_width;
+	s->m_seg = m_seg;
     s->m_net = m_net;
-    s->m_shape  = m_shape;
     s->m_layers = m_layers;
+    s->m_marker = m_marker;
+    s->m_rank = m_rank;
+    s->m_owner = m_owner;
 
-    return s;    // assert(false);
+    return s;
 }
-
-
-#if 1
-bool PNS_LINE::MergeObtuseSegments()
-{
-    int step = m_line.PointCount() - 3;
-    int iter = 0;
-
-    int segs_pre = m_line.SegmentCount();
-
-    if( step < 0 )
-        return false;
-
-    SHAPE_LINE_CHAIN current_path( m_line );
-
-    while( 1 )
-    {
-        iter++;
-        int n_segs = current_path.SegmentCount();
-        int max_step = n_segs - 2;
-
-        if( step > max_step )
-            step = max_step;
-
-        if( step < 2 )
-        {
-            m_line = current_path;
-            return current_path.SegmentCount() < segs_pre;
-        }
-
-        bool found_anything = false;
-        int n = 0;
-
-        while( n < n_segs - step )
-        {
-            const SEG s1    = current_path.CSegment( n );
-            const SEG s2    = current_path.CSegment( n + step );
-            SEG s1opt, s2opt;
-
-            if( DIRECTION_45( s1 ).IsObtuse( DIRECTION_45( s2 ) ) )
-            {
-                VECTOR2I ip = *s1.IntersectLines( s2 );
-
-                if( s1.Distance( ip ) <= 1 || s2.Distance( ip ) <= 1 )
-                {
-                    s1opt = SEG( s1.A, ip );
-                    s2opt = SEG( ip, s2.B );
-                }
-                else
-                {
-                    s1opt = SEG( s1.A, ip );
-                    s2opt = SEG( ip, s2.B );
-                }
-
-
-                if( DIRECTION_45( s1opt ).IsObtuse( DIRECTION_45( s2opt ) ) )
-                {
-                    SHAPE_LINE_CHAIN opt_path;
-                    opt_path.Append( s1opt.A );
-                    opt_path.Append( s1opt.B );
-                    opt_path.Append( s2opt.B );
-
-                    PNS_LINE opt_track( *this, opt_path );
-
-                    if( !m_world->CheckColliding( &opt_track, PNS_ITEM::ANY ) )
-                    {
-                        current_path.Replace( s1.Index() + 1, s2.Index(), ip );
-                        n_segs = current_path.SegmentCount();
-                        found_anything = true;
-                        break;
-                    }
-                }
-            }
-
-            n++;
-        }
-
-        if( !found_anything )
-        {
-            if( step <= 2 )
-            {
-                m_line = current_path;
-                return m_line.SegmentCount() < segs_pre;
-            }
-
-            step--;
-        }
-    }
-
-    return m_line.SegmentCount() < segs_pre;
-}
-
-
-bool PNS_LINE::MergeSegments()
-{
-    int step = m_line.PointCount() - 3;
-    int iter = 0;
-
-    int segs_pre = m_line.SegmentCount();
-
-    if( step < 0 )
-        return false;
-
-    SHAPE_LINE_CHAIN current_path( m_line );
-
-    while( 1 )
-    {
-        iter++;
-        int n_segs = current_path.SegmentCount();
-        int max_step = n_segs - 2;
-
-        if( step > max_step )
-            step = max_step;
-
-        if( step < 2 )
-        {
-            m_line = current_path;
-            return current_path.SegmentCount() < segs_pre;
-        }
-
-        bool found_anything = false;
-        int n = 0;
-
-        while( n < n_segs - step )
-        {
-            const SEG s1 = current_path.CSegment( n );
-            const SEG s2 = current_path.CSegment( n + step );
-            SEG s1opt, s2opt;
-
-            if( n > 0 )
-            {
-                SHAPE_LINE_CHAIN path_straight = DIRECTION_45().BuildInitialTrace( s1.A,
-                                                                                   s2.A, false );
-                SHAPE_LINE_CHAIN path_diagonal = DIRECTION_45().BuildInitialTrace( s1.A,
-                                                                                   s2.A, true );
-            }
-
-            if( DIRECTION_45( s1 ) == DIRECTION_45( s2 ) )
-            {
-                if( s1.Collinear( s2 ) )
-                {
-                    // printf("Colinear: np %d step %d n1 %d n2 %d\n", n_segs, step, n, n+step);
-
-                    SHAPE_LINE_CHAIN opt_path;
-                    opt_path.Append( s1.A );
-                    opt_path.Append( s2.B );
-
-                    PNS_LINE tmp( *this, opt_path );
-
-                    if( !m_world->CheckColliding( &tmp, PNS_ITEM::ANY ) )
-                    {
-                        current_path.Remove( s1.Index() + 1, s2.Index() );
-                        n_segs = current_path.SegmentCount();
-                        found_anything = true;
-                        break;
-                    }
-                }
-            }
-            else if( DIRECTION_45( s1 ).IsObtuse( DIRECTION_45( s2 ) ) )
-            {
-                VECTOR2I ip = *s1.IntersectLines( s2 );
-
-                if( s1.Distance( ip ) <= 1 || s2.Distance( ip ) <= 1 )
-                {
-                    s1opt = SEG( s1.A, ip );
-                    s2opt = SEG( ip, s2.B );
-                }
-                else
-                {
-                    s1opt = SEG( s1.A, ip );
-                    s2opt = SEG( ip, s2.B );
-                }
-
-
-                if( DIRECTION_45( s1opt ).IsObtuse( DIRECTION_45( s2opt ) ) )
-                {
-                    SHAPE_LINE_CHAIN opt_path;
-                    opt_path.Append( s1opt.A );
-                    opt_path.Append( s1opt.B );
-                    opt_path.Append( s2opt.B );
-
-                    PNS_LINE opt_track( *this, opt_path );
-
-                    if( !m_world->CheckColliding( &opt_track, PNS_ITEM::ANY ) )
-                    {
-                        current_path.Replace( s1.Index() + 1, s2.Index(), ip );
-                        n_segs = current_path.SegmentCount();
-                        found_anything = true;
-                        break;
-                    }
-                }
-            }
-
-            n++;
-        }
-
-        if( !found_anything )
-        {
-            if( step <= 2 )
-            {
-                m_line = current_path;
-                return m_line.SegmentCount() < segs_pre;
-            }
-
-            step--;
-        }
-    }
-
-    return m_line.SegmentCount() < segs_pre;
-}
-#endif
 
 
 int PNS_LINE::CountCorners( int aAngles )
@@ -307,337 +173,95 @@ int PNS_LINE::CountCorners( int aAngles )
 }
 
 
-// #define DUMP_TEST_CASES
-
-// fixme: damn f*****g inefficient and incredibly crappily written
-void PNS_LINE::NewWalkaround( const SHAPE_LINE_CHAIN& aObstacle,
-        SHAPE_LINE_CHAIN& aPrePath,
-        SHAPE_LINE_CHAIN& aWalkaroundPath,
-        SHAPE_LINE_CHAIN& aPostPath,
-        bool aCw ) const
-{
-    typedef SHAPE_LINE_CHAIN::INTERSECTION INTERSECTION;
-
-    SHAPE_LINE_CHAIN l_orig( m_line );
-    SHAPE_LINE_CHAIN l_hull;
-    std::vector<bool> outside, on_edge, inside;
-    SHAPE_LINE_CHAIN path;
-
-    std::vector<INTERSECTION> isects;
-
-    // don't calculate walkaround for empty lines
-    if( m_line.PointCount() < 2 )
-        return;
-
-#ifdef DUMP_TEST_CASES
-    printf( "%s\n", m_line.Format().c_str() );
-    printf( "%s\n", aObstacle.Format().c_str() );
-#endif
-
-    aObstacle.Intersect( m_line, isects );
-
-    // printf("NewWalk intersectiosn :%d\n" ,isects.size());
-    if( !aCw )
-        l_hull = aObstacle.Reverse();
-    else
-        l_hull = aObstacle;
-
-    BOOST_FOREACH( INTERSECTION isect, isects ) {
-        l_orig.Split( isect.p );
-        l_hull.Split( isect.p );
-    }
-
-
-#ifdef DUMP_TEST_CASES
-    printf( "%s\n", m_line.Format().c_str() );
-    printf( "%s\n", aObstacle.Format().c_str() );
-    printf( "%s\n", l_orig.Format().c_str() );
-    printf( "%s\n", l_hull.Format().c_str() );
-#endif
-
-
-    // printf("Pts: line %d hull %d\n", l_orig.PointCount(), l_hull.PointCount());
-
-    int first_post = -1;
-    int last_pre = -1;
-
-    for( int i = 0; i < l_orig.PointCount(); i++ )
-    {
-        int ei = l_hull.Find( l_orig.CPoint( i ) );
-        bool edge   = ei >= 0;
-        bool in     = l_hull.PointInside( l_orig.CPoint( i ) ) && !edge;
-        bool out    = !( in || edge);
-
-        outside.push_back( out );
-        on_edge.push_back( edge );
-        inside.push_back( in );
-    }
-
-    for( int i = l_orig.PointCount() - 1; i >= 1; i-- )
-        if( inside[i] && outside[i - 1] )
-        {
-            SHAPE_LINE_CHAIN::INTERSECTIONS ips;
-            l_hull.Intersect( SEG( l_orig.CPoint( i ), l_orig.CPoint( i - 1 ) ), ips );
-            l_orig.Remove( i, -1 );
-            l_orig.Append( ips[0].p );
-            break;
-        }
-        else if( inside[i] && on_edge[i - 1] )
-        {
-            l_orig.Remove( i, -1 );
-            // n = i;
-        }
-        else if( !inside[i] )
-            break;
-
-    if( !outside.size() && on_edge.size() < 2 )
-        return;
-
-    for( int i = 0; i < l_orig.PointCount(); i++ )
-    {
-        const VECTOR2I p = l_orig.Point( i );
-
-        if( outside[i] || ( on_edge[i] && i == ( l_orig.PointCount() - 1 ) ) )
-        {
-            if( last_pre < 0 )
-                aPrePath.Append( p );
-
-            path.Append( p );
-        }
-        else if( on_edge[i] )
-        {
-            int li = -1;
-
-            if( last_pre < 0 )
-            {
-                aPrePath.Append( p );
-                last_pre = path.PointCount();
-            }
-
-            if( i == l_orig.PointCount() - 1 || outside[i + 1] )
-            {
-                path.Append( p );
-            }
-            else
-            {
-                int vi2 = l_hull.Find( l_orig.CPoint( i ) );
-
-                path.Append( l_hull.CPoint( vi2 ) );
-
-                for( int j = (vi2 + 1) % l_hull.PointCount();
-                     j != vi2;
-                     j = (j + 1) % l_hull.PointCount() )
-                {
-                    path.Append( l_hull.CPoint( j ) );
-                    li = l_orig.Find( l_hull.CPoint( j ) );
-
-                    if( li >= 0 && ( li == ( l_orig.PointCount() - 1 ) ||
-                                outside[li + 1] ) )
-                        break;
-                }
-
-                if( li >= 0 )
-                {
-                    if( i >= li )
-                        break;
-                    else
-                        i = li;
-                }
-            }
-
-            first_post = path.PointCount() - 1;
-        }
-    }
-
-    if( last_pre < 0 && first_post < 0 )
-        return;
-
-    aWalkaroundPath = path.Slice( last_pre, first_post );
-
-    if( first_post >= 0 )
-        aPostPath = path.Slice( first_post, -1 );
-}
-
-
-bool PNS_LINE::onEdge( const SHAPE_LINE_CHAIN& obstacle, VECTOR2I p, int& ei,
-        bool& is_vertex ) const
-{
-    int vtx = obstacle.Find( p );
-
-    if( vtx >= 0 )
-    {
-        ei = vtx;
-        is_vertex = true;
-        return true;
-    }
-
-    for( int s = 0; s < obstacle.SegmentCount(); s++ )
-    {
-        if( obstacle.CSegment( s ).Contains( p ) )
-        {
-            ei = s;
-            is_vertex = false;
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
-bool PNS_LINE::walkScan( const SHAPE_LINE_CHAIN& aLine, const SHAPE_LINE_CHAIN& aObstacle,
-        bool aReverse, VECTOR2I& aIp, int& aIndexO, int& aIndexL, bool& aIsVertex ) const
-{
-    int sc = aLine.SegmentCount();
-
-    for( int i = 0; i < aLine.SegmentCount(); i++ )
-    {
-        printf( "check-seg rev %d %d/%d %d\n", aReverse, i, sc, sc - 1 - i );
-        SEG tmp = aLine.CSegment( aReverse ? sc - 1 - i : i );
-        SEG s( tmp.A, tmp.B );
-
-        if( aReverse )
-        {
-            s.A = tmp.B;
-            s.B = tmp.A;
-        }
-
-        if( onEdge( aObstacle, s.A, aIndexO, aIsVertex ) )
-        {
-            aIndexL = (aReverse ?  sc - 1 - i : i);
-            aIp = s.A;
-            printf( "vertex %d on-%s %d\n", aIndexL,
-                    aIsVertex ? "vertex" : "edge", aIndexO );
-            return true;
-        }
-
-        if( onEdge( aObstacle, s.B, aIndexO, aIsVertex ) )
-        {
-            aIndexL = (aReverse ?  sc - 1 - i - 1 : i + 1);
-            aIp = s.B;
-            printf( "vertex %d on-%s %d\n", aIndexL,
-                    aIsVertex ? "vertex" : "edge", aIndexO );
-            return true;
-        }
-
-        SHAPE_LINE_CHAIN::INTERSECTIONS ips;
-        int n_is = aObstacle.Intersect( s, ips );
-
-        if( n_is > 0 )
-        {
-            aIndexO = ips[0].our.Index();
-            aIndexL = aReverse ? sc - 1 - i : i;
-            printf( "segment-%d intersects edge-%d\n", aIndexL, aIndexO );
-            aIp = ips[0].p;
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
 bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
                            SHAPE_LINE_CHAIN& aWalk, SHAPE_LINE_CHAIN& aPost, bool aCw ) const
 {
-    const SHAPE_LINE_CHAIN& line = GetCLine();
+    const SHAPE_LINE_CHAIN& line ( CLine() );
     VECTOR2I ip_start;
-    int index_o_start, index_l_start;
     VECTOR2I ip_end;
-    int index_o_end, index_l_end;
-
-    bool is_vertex_start, is_vertex_end;
 
     if( line.SegmentCount() < 1 )
         return false;
 
-    if( aObstacle.PointInside( line.CPoint( 0 ) ) ||
-            aObstacle.PointInside( line.CPoint( -1 ) ) )
+    if( aObstacle.PointInside( line.CPoint( 0 ) ) || aObstacle.PointInside( line.CPoint( -1 ) ) )
         return false;
 
-// printf("forward:\n");
-    bool found = walkScan( line, aObstacle, false, ip_start, index_o_start,
-                            index_l_start, is_vertex_start );
-    // printf("reverse:\n");
-    found |= walkScan( line, aObstacle, true, ip_end, index_o_end, index_l_end, is_vertex_end );
+    SHAPE_LINE_CHAIN::INTERSECTIONS ips, ips2;
 
-    if( !found || ip_start == ip_end )
+    line.Intersect( aObstacle, ips );
+
+    int nearest_dist = INT_MAX;
+    int farthest_dist = 0;
+
+    SHAPE_LINE_CHAIN::INTERSECTION nearest, farthest;
+
+    for( int i = 0; i < (int) ips.size(); i++ )
+    {
+        const VECTOR2I p = ips[i].p;
+        int dist = line.PathLength( p );
+        
+        if( dist <= nearest_dist )
+        {
+            nearest_dist = dist;
+            nearest = ips[i];
+        }
+
+        if( dist >= farthest_dist )
+        {
+            farthest_dist = dist;
+            farthest = ips[i];
+        }
+    }
+
+    if( ips.size() <= 1 || nearest.p == farthest.p )
     {
         aPre = line;
         return true;
     }
 
-    aPre = line.Slice( 0, index_l_start );
-    aPre.Append( ip_start );
+    aPre = line.Slice( 0, nearest.our.Index() );
+    aPre.Append( nearest.p );
+    aPre.Simplify();
+    
     aWalk.Clear();
-    aWalk.Append( ip_start );
+    aWalk.SetClosed( false );
+    aWalk.Append( nearest.p );
 
-    if( aCw )
+    int i = nearest.their.Index();
+
+    assert( nearest.their.Index() >= 0 );
+    assert( farthest.their.Index() >= 0 );
+
+    assert( nearest_dist <= farthest_dist );
+
+    aObstacle.Split( nearest.p );
+    aObstacle.Split( farthest.p );
+    
+    int i_first = aObstacle.Find( nearest.p );
+    int i_last = aObstacle.Find( farthest.p );
+
+    i = i_first;
+
+    while( i != i_last )
     {
-        int is = ( index_o_start + 1 ) % aObstacle.PointCount();
-        int ie = ( is_vertex_end ? index_o_end : index_o_end + 1 ) % aObstacle.PointCount();
-
-        while( 1 )
-        {
-            printf( "is %d\n", is );
-            aWalk.Append( aObstacle.CPoint( is ) );
-
-            if( is == ie )
-                break;
-
-            is++;
-
-            if( is == aObstacle.PointCount() )
-                is = 0;
-        }
+        aWalk.Append( aObstacle.CPoint( i ) );
+        i += ( aCw ? 1 : -1 );
+        
+        if( i < 0 )
+            i = aObstacle.PointCount() - 1;
+        else if( i == aObstacle.PointCount() )
+            i = 0;
     }
-    else
-    {
-        int is = index_o_start;
-        int ie = ( is_vertex_end ? index_o_end : index_o_end ) % aObstacle.PointCount();
-
-        while( 1 )
-        {
-            printf( "is %d\n", is );
-            aWalk.Append( aObstacle.CPoint( is ) );
-
-            if( is == ie )
-                break;
-
-            is--;
-
-            if( is < 0 )
-                is = aObstacle.PointCount() - 1;
-        }
-    }
-
-    aWalk.Append( ip_end );
+    
+    aWalk.Append( farthest.p );
+    aWalk.Simplify();
 
     aPost.Clear();
-    aPost.Append( ip_end );
-    aPost.Append( line.Slice( is_vertex_end ? index_l_end : index_l_end + 1, -1 ) );
-
-    // for(int i = (index_o_start + 1) % obstacle.PointCount();
-    // i != (index_o_end + 1) % obstacle.PointCount(); i=(i+1) % obstacle.PointCount())
-    // {
-    // printf("append %d\n", i);
-    // walk.Append(obstacle.CPoint(i));
-    // }
+    aPost.Append( farthest.p );
+    aPost.Append( line.Slice( farthest.our.Index() + 1, -1 ) );
+    aPost.Simplify();
 
     return true;
-}
-
-
-void PNS_LINE::NewWalkaround( const SHAPE_LINE_CHAIN& aObstacle,
-        SHAPE_LINE_CHAIN& aPath,
-        bool aCw ) const
-{
-    SHAPE_LINE_CHAIN walk, post;
-
-    NewWalkaround( aObstacle, aPath, walk, post, aCw );
-    aPath.Append( walk );
-    aPath.Append( post );
-    aPath.Simplify();
 }
 
 
@@ -656,38 +280,7 @@ void PNS_LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle,
 
 const SHAPE_LINE_CHAIN PNS_SEGMENT::Hull( int aClearance, int aWalkaroundThickness ) const
 {
-    int d = aClearance + 10;
-    int x = (int)( 2.0 / ( 1.0 + M_SQRT2 ) * d ) + 2;
-
-    const VECTOR2I a = m_shape.CPoint( 0 );
-    const VECTOR2I b = m_shape.CPoint( 1 );
-
-    VECTOR2I dir = b - a;
-
-    VECTOR2I p0 = dir.Perpendicular().Resize( d );
-
-    VECTOR2I ds = dir.Perpendicular().Resize( x / 2 );
-    VECTOR2I pd = dir.Resize( x / 2 );
-    VECTOR2I dp = dir.Resize( d );
-
-    SHAPE_LINE_CHAIN s;
-
-    s.SetClosed( true );
-
-    s.Append( b + p0 + pd );
-    s.Append( b + dp + ds );
-    s.Append( b + dp - ds );
-    s.Append( b - p0 + pd );
-    s.Append( a - p0 - pd );
-    s.Append( a - dp - ds );
-    s.Append( a - dp + ds );
-    s.Append( a + p0 - pd );
-
-    // make sure the hull outline is always clockwise
-    if( s.CSegment( 0 ).Side( a ) < 0 )
-        return s.Reverse();
-    else
-        return s;
+   return SegmentHull ( m_seg, aClearance, aWalkaroundThickness );
 }
 
 
@@ -718,13 +311,13 @@ const PNS_LINE PNS_LINE::ClipToNearestObstacle( PNS_NODE* aNode ) const
 {
     PNS_LINE l( *this );
 
-    PNS_NODE::OptObstacle obs = aNode->NearestObstacle( &l );
+    PNS_NODE::OPT_OBSTACLE obs = aNode->NearestObstacle( &l );
 
     if( obs )
     {
         l.RemoveVia();
-        int p = l.GetLine().Split( obs->ip_first );
-        l.GetLine().Remove( p + 1, -1 );
+        int p = l.Line().Split( obs->m_ipFirst );
+        l.Line().Remove( p + 1, -1 );
     }
 
     return l;
@@ -743,4 +336,442 @@ void PNS_LINE::ShowLinks()
 
     for( int i = 0; i < (int) m_segmentRefs->size(); i++ )
         printf( "seg %d: %p\n", i, (*m_segmentRefs)[i] );
+}
+
+SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aP )
+{
+    optional<SHAPE_LINE_CHAIN> picked;
+    int i;
+
+    int d = 2;
+
+    if( aOrigin.CSegment( -1 ).Length() > 100000 * 30 ) // fixme: constant/parameter?
+        d = 1;
+
+    for( i = aOrigin.SegmentCount() - d; i >= 0; i-- )
+    {
+        DIRECTION_45 d_start ( aOrigin.CSegment( i ) );
+        VECTOR2I p_start = aOrigin.CPoint( i );
+        SHAPE_LINE_CHAIN paths[2];
+        DIRECTION_45 dirs[2];
+        DIRECTION_45 d_prev = ( i > 0 ? DIRECTION_45( aOrigin.CSegment( i - 1 ) ) : DIRECTION_45() );
+
+        for( int j = 0; j < 2; j++ )
+        {
+            paths[j] = d_start.BuildInitialTrace( p_start, aP, j );
+            dirs[j] = DIRECTION_45( paths[j].CSegment( 0 ) );
+        }
+
+        for( int j = 0; j < 2; j++ )
+        {
+            if( dirs[j] == d_start )
+            {
+                picked = paths[j];
+                break;
+            }
+        }
+
+        if( picked )
+            break;
+
+        for( int j = 0; j < 2; j++ )
+        {
+            if( dirs[j].IsObtuse( d_prev ) )
+            {
+                picked = paths[j];
+                break;
+            }
+        }
+
+        if( picked )
+            break;
+    }
+    
+    if( picked )
+    {
+        SHAPE_LINE_CHAIN path = aOrigin.Slice( 0, i );
+        path.Append( *picked );
+
+        return path;
+    }
+        
+    return DIRECTION_45().BuildInitialTrace( aOrigin.CPoint( 0 ), aP, true );
+}
+
+
+void PNS_LINE::DragCorner ( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
+{
+    SHAPE_LINE_CHAIN path;
+
+    VECTOR2I snapped = snapDraggedCorner( m_line, aP, aIndex, aSnappingThreshold );
+
+    if( aIndex == 0 )
+        path = dragCornerInternal( m_line.Reverse(), snapped ).Reverse();
+    else if ( aIndex == m_line.SegmentCount() )
+        path = dragCornerInternal( m_line, snapped );
+    else
+    {
+        // fixme: awkward behaviour for "outwards" drags
+        path = dragCornerInternal( m_line.Slice( 0, aIndex ), snapped );
+        SHAPE_LINE_CHAIN path_rev = dragCornerInternal( m_line.Slice( aIndex, -1 ).Reverse(),
+                                                        snapped ).Reverse();
+        path.Append( path_rev );
+    }
+
+    path.Simplify();
+    m_line = path;    
+}
+
+
+VECTOR2I PNS_LINE::snapDraggedCorner( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP,
+                                      int aIndex, int aThreshold ) const
+{
+    int s_start = std::max( aIndex - 2, 0 );
+    int s_end = std::min( aIndex + 2, aPath.SegmentCount() - 1 );
+
+    int i, j;
+    int best_dist = INT_MAX;
+    VECTOR2I best_snap = aP;
+
+    if( aThreshold <= 0 )
+        return aP;
+
+    for( i = s_start; i <= s_end; i++ )
+    {
+        const SEG& a = aPath.CSegment( i );
+
+        for( j = s_start; j < i; j++ )
+        {
+            const SEG& b = aPath.CSegment( j );
+
+            if( !( DIRECTION_45( a ).IsObtuse(DIRECTION_45( b ) ) ) )
+                continue;
+
+            OPT_VECTOR2I ip = a.IntersectLines(b);
+            
+            if( ip )
+            {
+                int dist = ( *ip - aP ).EuclideanNorm();
+
+                if( dist < aThreshold && dist < best_dist )
+                {
+                    best_dist = dist;
+                    best_snap = *ip;
+                }
+            }
+        }
+    }
+
+    return best_snap;
+}
+
+VECTOR2I PNS_LINE::snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP,
+                                            int aIndex, int aThreshold ) const
+{
+    VECTOR2I snap_p[2];
+    DIRECTION_45 dragDir( aPath.CSegment( aIndex ) );
+    int snap_d[2] = { -1, -1 };
+
+    if( aThreshold == 0 )
+        return aP;
+
+    if( aIndex >= 2 )
+    {
+        SEG s = aPath.CSegment( aIndex - 2 );
+
+        if( DIRECTION_45( s ) == dragDir )
+            snap_d[0] = s.LineDistance( aP );
+
+        snap_p[0] = s.A;
+    } 
+
+    if( aIndex < aPath.SegmentCount() - 2 )
+    {
+        SEG s = aPath.CSegment( aIndex + 2 );
+
+        if( DIRECTION_45( s ) == dragDir )
+            snap_d[1] = s.LineDistance(aP);
+
+        snap_p[1] = s.A;
+    } 
+
+    VECTOR2I best = aP;
+    int minDist = INT_MAX;
+
+    for( int i = 0; i < 2; i++ )
+    {
+        if( snap_d[i] >= 0 && snap_d[i] < minDist && snap_d[i] <= aThreshold )
+        {
+            minDist = snap_d[i];
+            best = snap_p[i];
+        }
+    }
+
+    return best;
+}
+
+
+void PNS_LINE::DragSegment ( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
+{
+    SHAPE_LINE_CHAIN path( m_line );
+    VECTOR2I target( aP );
+
+    SEG guideA[2], guideB[2];
+    int index = aIndex;
+
+    target = snapToNeighbourSegments( path, aP, aIndex, aSnappingThreshold );
+
+    if( index == 0 )
+    {
+        path.Insert( 0, path.CPoint( 0 ) );
+        index++;
+    }
+
+    if( index == path.SegmentCount() - 1 )
+    {
+        path.Insert( path.PointCount() - 1, path.CPoint( -1 ) );
+    }
+
+    SEG dragged = path.CSegment( index );
+    DIRECTION_45 drag_dir( dragged );
+
+    SEG s_prev = path.CSegment( index - 1 );
+    SEG s_next = path.CSegment( index + 1 );
+
+    DIRECTION_45 dir_prev( s_prev );
+    DIRECTION_45 dir_next( s_next );
+
+    if( dir_prev == drag_dir )
+    {
+        dir_prev = dir_prev.Left();
+        path.Insert( index, path.CPoint( index ) );
+        index++;
+    }
+
+    if( dir_next == drag_dir )
+    {
+        dir_next = dir_next.Right();
+        path.Insert( index + 1, path.CPoint( index + 1 ) );
+    }
+
+    s_prev = path.CSegment( index - 1 );
+    s_next = path.CSegment( index + 1 );
+    dragged = path.CSegment( index );
+
+    bool lockEndpointA = true;
+    bool lockEndpointB = true;
+    
+    if( aIndex == 0 )
+    {
+        if( !lockEndpointA )
+            guideA[0] = guideA[1] = SEG( dragged.A, dragged.A + drag_dir.Right().Right().ToVector() );
+        else
+        {
+            guideA[0] = SEG( dragged.A, dragged.A + drag_dir.Right().ToVector() );
+            guideA[1] = SEG( dragged.A, dragged.A + drag_dir.Left().ToVector() );
+        }
+    }
+    else
+    {
+        if( dir_prev.IsObtuse(drag_dir ) )
+        {
+            guideA[0] = SEG( s_prev.A, s_prev.A + drag_dir.Left().ToVector() );
+            guideA[1] = SEG( s_prev.A, s_prev.A + drag_dir.Right().ToVector() );
+        }
+        else
+            guideA[0] = guideA[1] = SEG( dragged.A, dragged.A + dir_prev.ToVector() );
+    }
+
+    if( aIndex == m_line.SegmentCount() - 1 )
+    {
+        if( !lockEndpointB )
+            guideB[0] = guideB[1] = SEG( dragged.B, dragged.B + drag_dir.Right().Right().ToVector() );
+        else
+        {
+            guideB[0] = SEG( dragged.B, dragged.B + drag_dir.Right().ToVector() );
+            guideB[1] = SEG( dragged.B, dragged.B + drag_dir.Left().ToVector() );
+        }
+    }
+    else
+    {
+        if( dir_next.IsObtuse( drag_dir ) )
+        {
+            guideB[0] = SEG( s_next.B, s_next.B + drag_dir.Left().ToVector() );
+            guideB[1] = SEG( s_next.B, s_next.B + drag_dir.Right().ToVector() );
+        }
+        else
+            guideB[0] = guideB[1] =    SEG( dragged.B, dragged.B + dir_next.ToVector() );
+    }
+
+    SEG s_current( target, target + drag_dir.ToVector() );
+
+    int best_len = INT_MAX;
+    SHAPE_LINE_CHAIN best;
+
+    for( int i = 0; i < 2; i++ )
+    {
+        for( int j = 0; j < 2; j++ )
+        {
+            OPT_VECTOR2I ip1 = s_current.IntersectLines( guideA[i] );
+            OPT_VECTOR2I ip2 = s_current.IntersectLines( guideB[j] );
+
+            SHAPE_LINE_CHAIN np;
+
+            if( !ip1 || !ip2 )
+                continue;
+
+            SEG s1( s_prev.A, *ip1 );
+            SEG s2( *ip1, *ip2 );
+            SEG s3( *ip2, s_next.B );
+
+            OPT_VECTOR2I ip;
+
+            if( ip = s1.Intersect( s_next ) )
+            {
+                np.Append ( s1.A );
+                np.Append ( *ip );
+                np.Append ( s_next.B );
+            }
+            else if( ip = s3.Intersect( s_prev ) )
+            {
+                np.Append ( s_prev.A );
+                np.Append ( *ip );
+                np.Append ( s3.B );
+            }
+            else if( ip = s1.Intersect( s3 ) )
+            {
+                np.Append( s_prev.A );
+                np.Append( *ip );
+                np.Append( s_next.B );
+            }
+            else
+            {
+                np.Append( s_prev.A );
+                np.Append( *ip1 );
+                np.Append( *ip2 );
+                np.Append( s_next.B );
+            }
+
+            if( np.Length() < best_len )
+            {
+                best_len = np.Length();
+                best = np;
+            }
+        }
+    }
+
+    if( !lockEndpointA && aIndex == 0 )
+        best.Remove( 0, 0 );
+    if( !lockEndpointB && aIndex == m_line.SegmentCount() - 1 )
+        best.Remove( -1, -1 );
+
+    if( m_line.PointCount() == 1 )
+        m_line = best;
+    else if( aIndex == 0 )
+        m_line.Replace( 0, 1, best );
+    else if( aIndex == m_line.SegmentCount() - 1 )
+        m_line.Replace( -2, -1, best );
+    else
+        m_line.Replace( aIndex, aIndex + 1, best );
+
+    m_line.Simplify();
+}
+
+
+bool PNS_LINE::CompareGeometry( const PNS_LINE& aOther ) 
+{
+    return m_line.CompareGeometry( aOther.m_line );
+}
+
+
+void PNS_LINE::Reverse()
+{
+    m_line = m_line.Reverse();
+
+    if( m_segmentRefs )
+        std::reverse( m_segmentRefs->begin(), m_segmentRefs->end() );
+}
+
+
+void PNS_LINE::AppendVia( const PNS_VIA& aVia )
+{
+    if( aVia.Pos() == m_line.CPoint( 0 ) )
+    {
+        Reverse();
+    }
+    
+    m_hasVia = true;
+    m_via = aVia;
+    m_via.SetNet( m_net );
+}
+
+
+void PNS_LINE::SetRank( int aRank )
+{
+    m_rank = aRank;
+
+    if( m_segmentRefs )
+    {
+        BOOST_FOREACH( PNS_SEGMENT* s, *m_segmentRefs )
+            s->SetRank( aRank );
+    }
+}
+
+
+int PNS_LINE::Rank() const
+{
+    int min_rank = INT_MAX;
+    int rank;
+
+    if( m_segmentRefs )
+    {
+        BOOST_FOREACH( PNS_SEGMENT *s, *m_segmentRefs )
+            min_rank = std::min( min_rank, s->Rank() );
+        rank = ( min_rank == INT_MAX ) ? -1 : min_rank;
+    }
+    else
+    {
+        rank = m_rank;
+    }
+
+    return rank;
+}
+
+
+void PNS_LINE::ClipVertexRange( int aStart, int aEnd )
+{
+    m_line = m_line.Slice( aStart, aEnd );
+        
+    if( m_segmentRefs )
+    {
+        SEGMENT_REFS* snew = new SEGMENT_REFS( m_segmentRefs->begin() + aStart,
+                                               m_segmentRefs->begin() + aEnd );
+        
+        delete m_segmentRefs;
+        m_segmentRefs = snew;
+    }
+}
+
+
+bool PNS_LINE::HasLoops() const
+{
+    for( int i = 0; i < PointCount(); i++ )
+    {
+        for( int j = 0; j < PointCount(); j++ )
+        {
+            if( ( std::abs( i - j ) > 1 ) && CPoint( i ) == CPoint( j ) )
+                return true;
+        }
+    }
+           
+    return false;
+}
+
+
+void PNS_LINE::ClearSegmentLinks()
+{
+    if( m_segmentRefs )
+        delete m_segmentRefs;
+
+    m_segmentRefs = NULL;
 }

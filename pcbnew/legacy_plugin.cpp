@@ -632,7 +632,9 @@ void LEGACY_PLUGIN::loadSHEET()
 
 void LEGACY_PLUGIN::loadSETUP()
 {
-    NETCLASS*               netclass_default  = m_board->m_NetClasses.GetDefault();
+    NETCLASS*               netclass_default = m_board->GetDesignSettings().GetDefault();
+    // TODO Orson: is it really necessary to first operate on a copy and then apply it?
+    // would not it be better to use reference here and apply all the changes instantly?
     BOARD_DESIGN_SETTINGS   bds = m_board->GetDesignSettings();
     ZONE_SETTINGS           zs  = m_board->GetZoneSettings();
     char*                   line;
@@ -692,7 +694,7 @@ void LEGACY_PLUGIN::loadSETUP()
         else if( TESTLINE( "TrackWidthList" ) )
         {
             BIU tmp = biuParse( line + SZ( "TrackWidthList" ) );
-            m_board->m_TrackWidthList.push_back( tmp );
+            bds.m_TrackWidthList.push_back( tmp );
         }
 
         else if( TESTLINE( "TrackClearence" ) )
@@ -754,7 +756,8 @@ void LEGACY_PLUGIN::loadSETUP()
             if( data )  // DRILL may not be present ?
                 drill = biuParse( data );
 
-            m_board->m_ViasDimensionsList.push_back( VIA_DIMENSION( diameter, drill ) );
+            bds.m_ViasDimensionsList.push_back( VIA_DIMENSION( diameter,
+                                                                                        drill ) );
         }
 
         else if( TESTLINE( "ViaDrill" ) )
@@ -894,7 +897,7 @@ void LEGACY_PLUGIN::loadSETUP()
             //        at all, the global defaults should go into a preferences
             //        file instead so they are there to start new board
             //        projects.
-            m_board->m_NetClasses.GetDefault()->SetParams();
+            m_board->GetDesignSettings().GetDefault()->SetParams( m_board->GetDesignSettings() );
 
             return;     // preferred exit
         }
@@ -907,23 +910,24 @@ void LEGACY_PLUGIN::loadSETUP()
      * Sort lists by by increasing value and remove duplicates
      * (the first value is not tested, because it is the netclass value
      */
-    sort( m_board->m_ViasDimensionsList.begin() + 1, m_board->m_ViasDimensionsList.end() );
-    sort( m_board->m_TrackWidthList.begin() + 1, m_board->m_TrackWidthList.end() );
+    BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
+    sort( designSettings.m_ViasDimensionsList.begin() + 1, designSettings.m_ViasDimensionsList.end() );
+    sort( designSettings.m_TrackWidthList.begin() + 1, designSettings.m_TrackWidthList.end() );
 
-    for( unsigned ii = 1; ii < m_board->m_ViasDimensionsList.size() - 1; ii++ )
+    for( unsigned ii = 1; ii < designSettings.m_ViasDimensionsList.size() - 1; ii++ )
     {
-        if( m_board->m_ViasDimensionsList[ii] == m_board->m_ViasDimensionsList[ii + 1] )
+        if( designSettings.m_ViasDimensionsList[ii] == designSettings.m_ViasDimensionsList[ii + 1] )
         {
-            m_board->m_ViasDimensionsList.erase( m_board->m_ViasDimensionsList.begin() + ii );
+            designSettings.m_ViasDimensionsList.erase( designSettings.m_ViasDimensionsList.begin() + ii );
             ii--;
         }
     }
 
-    for( unsigned ii = 1; ii < m_board->m_TrackWidthList.size() - 1; ii++ )
+    for( unsigned ii = 1; ii < designSettings.m_TrackWidthList.size() - 1; ii++ )
     {
-        if( m_board->m_TrackWidthList[ii] == m_board->m_TrackWidthList[ii + 1] )
+        if( designSettings.m_TrackWidthList[ii] == designSettings.m_TrackWidthList[ii + 1] )
         {
-            m_board->m_TrackWidthList.erase( m_board->m_TrackWidthList.begin() + ii );
+            designSettings.m_TrackWidthList.erase( designSettings.m_TrackWidthList.begin() + ii );
             ii--;
         }
     }
@@ -2109,7 +2113,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
     // yet since that would bypass duplicate netclass name checking within the BOARD.
     // store it temporarily in an auto_ptr until successfully inserted into the BOARD
     // just before returning.
-    auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
+    auto_ptr<NETCLASS> nc( new NETCLASS( wxEmptyString ) );
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -2171,7 +2175,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
         else if( TESTLINE( "$EndNCLASS" ) )
         {
-            if( m_board->m_NetClasses.Add( nc.get() ) )
+            if( m_board->GetDesignSettings().m_NetClasses.Add( nc.get() ) )
             {
                 nc.release();
             }
@@ -2980,8 +2984,8 @@ void LEGACY_PLUGIN::saveSHEET( const BOARD* aBoard ) const
 
 void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 {
-    NETCLASS* netclass_default       = aBoard->m_NetClasses.GetDefault();
     const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+    NETCLASS* netclass_default       = bds.GetDefault();
 
     fprintf( m_fp, "$SETUP\n" );
 
@@ -3005,11 +3009,12 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
     }
 
     // Save current default track width, for compatibility with older Pcbnew version;
-    fprintf( m_fp, "TrackWidth %s\n",  fmtBIU( aBoard->GetCurrentTrackWidth() ).c_str() );
+    fprintf( m_fp, "TrackWidth %s\n",
+             fmtBIU( aBoard->GetDesignSettings().GetCurrentTrackWidth() ).c_str() );
 
     // Save custom tracks width list (the first is not saved here: this is the netclass value
-    for( unsigned ii = 1; ii < aBoard->m_TrackWidthList.size(); ii++ )
-        fprintf( m_fp, "TrackWidthList %s\n", fmtBIU( aBoard->m_TrackWidthList[ii] ).c_str() );
+    for( unsigned ii = 1; ii < aBoard->GetDesignSettings().m_TrackWidthList.size(); ii++ )
+        fprintf( m_fp, "TrackWidthList %s\n", fmtBIU( aBoard->GetDesignSettings().m_TrackWidthList[ii] ).c_str() );
 
     fprintf( m_fp, "TrackClearence %s\n",  fmtBIU( netclass_default->GetClearance() ).c_str() );
 
@@ -3030,10 +3035,10 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
-    for( unsigned ii = 1; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
+    for( unsigned ii = 1; ii < aBoard->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
         fprintf( m_fp, "ViaSizeList %s %s\n",
-                 fmtBIU( aBoard->m_ViasDimensionsList[ii].m_Diameter ).c_str(),
-                 fmtBIU( aBoard->m_ViasDimensionsList[ii].m_Drill ).c_str() );
+                 fmtBIU( aBoard->GetDesignSettings().m_ViasDimensionsList[ii].m_Diameter ).c_str(),
+                 fmtBIU( aBoard->GetDesignSettings().m_ViasDimensionsList[ii].m_Drill ).c_str() );
 
     // for old versions compatibility:
     fprintf( m_fp, "MicroViaSize %s\n", fmtBIU( netclass_default->GetuViaDiameter() ).c_str() );
@@ -3093,7 +3098,7 @@ void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
     }
 
     // Saved nets do not include netclass names, so save netclasses after nets.
-    saveNETCLASSES( &aBoard->m_NetClasses );
+    saveNETCLASSES( &aBoard->GetDesignSettings().m_NetClasses );
 
     // save the modules
     for( MODULE* m = aBoard->m_Modules;  m;  m = (MODULE*) m->Next() )
@@ -3114,7 +3119,7 @@ void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
             savePCB_TARGET( (PCB_TARGET*) gr );
             break;
         case PCB_DIMENSION_T:
-            saveDIMENTION( (DIMENSION*) gr );
+            saveDIMENSION( (DIMENSION*) gr );
             break;
         default:
             THROW_IO_ERROR( wxString::Format( UNKNOWN_GRAPHIC_FORMAT, gr->Type() ) );
@@ -3758,7 +3763,7 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
 }
 
 
-void LEGACY_PLUGIN::saveDIMENTION( const DIMENSION* me ) const
+void LEGACY_PLUGIN::saveDIMENSION( const DIMENSION* me ) const
 {
     // note: COTATION was the previous name of DIMENSION
     // this old keyword is used here for compatibility

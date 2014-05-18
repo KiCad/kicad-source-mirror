@@ -215,7 +215,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     }
 
     // Calculate the elements.
-    Mself.m_Width = GetBoard()->GetCurrentTrackWidth();
+    Mself.m_Width = GetDesignSettings().GetCurrentTrackWidth();
 
     std::vector <wxPoint> buffer;
     ll = BuildCornersList_S_Shape( buffer, Mself.m_Start, Mself.m_End, Mself.lng, Mself.m_Width );
@@ -561,7 +561,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
 
         module->Pads().PushFront( pad );
 
-        int tw = GetBoard()->GetCurrentTrackWidth();
+        int tw = GetDesignSettings().GetCurrentTrackWidth();
         pad->SetSize( wxSize( tw, tw ) );
 
         pad->SetPosition( module->GetPosition() );
@@ -588,7 +588,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     int      angle     = 0;
 
     // Enter the size of the gap or stub
-    int      gap_size = GetBoard()->GetCurrentTrackWidth();
+    int      gap_size = GetDesignSettings().GetCurrentTrackWidth();
 
     switch( shape_type )
     {
@@ -1104,7 +1104,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
     gap_size = ValueFromString( g_UserUnit, msg );
 
     // Updating sizes of pads forming the gap.
-    int tw = GetBoard()->GetCurrentTrackWidth();
+    int tw = GetDesignSettings().GetCurrentTrackWidth();
     pad->SetSize( wxSize( tw, tw ) );
 
     pad->SetY0( 0 );
@@ -1118,7 +1118,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
 
     pad->SetPosition( padpos );
 
-    tw = GetBoard()->GetCurrentTrackWidth();
+    tw = GetDesignSettings().GetCurrentTrackWidth();
     next_pad->SetSize( wxSize( tw, tw ) );
 
     next_pad->SetY0( 0 );

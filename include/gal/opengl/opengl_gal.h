@@ -143,7 +143,7 @@ public:
     virtual void Flush();
 
     /// @copydoc GAL::ClearScreen()
-    virtual void ClearScreen();
+    virtual void ClearScreen( const COLOR4D& aColor );
 
     // --------------
     // Transformation

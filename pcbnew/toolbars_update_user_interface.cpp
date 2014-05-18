@@ -55,14 +55,16 @@ void PCB_EDIT_FRAME::OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent )
 {
     if( aEvent.GetId() == ID_AUX_TOOLBAR_PCB_TRACK_WIDTH )
     {
-        if( m_SelTrackWidthBox->GetSelection() != (int) GetBoard()->GetTrackWidthIndex() )
-            m_SelTrackWidthBox->SetSelection( GetBoard()->GetTrackWidthIndex() );
+        if( m_SelTrackWidthBox->GetSelection() != (int) GetDesignSettings().GetTrackWidthIndex() )
+            m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
     }
     else
     {
         bool check = ( ( ( ID_POPUP_PCB_SELECT_WIDTH1 +
-                           (int) GetBoard()->GetTrackWidthIndex() ) == aEvent.GetId() ) &&
-                       !GetDesignSettings().m_UseConnectedTrackWidth );
+                           (int) GetDesignSettings().GetTrackWidthIndex() ) == aEvent.GetId() ) &&
+                               !GetDesignSettings().m_UseConnectedTrackWidth &&
+                               !GetDesignSettings().UseCustomTrackViaSize() );
+
         aEvent.Check( check );
     }
 }
@@ -70,7 +72,14 @@ void PCB_EDIT_FRAME::OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( GetDesignSettings().m_UseConnectedTrackWidth );
+    aEvent.Check( GetDesignSettings().m_UseConnectedTrackWidth &&
+            !GetDesignSettings().UseCustomTrackViaSize() );
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateSelectCustomTrackWidth( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( GetDesignSettings().UseCustomTrackViaSize() );
 }
 
 
@@ -80,14 +89,15 @@ void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
 
     if( aEvent.GetId() == ID_AUX_TOOLBAR_PCB_VIA_SIZE )
     {
-        if( m_SelViaSizeBox->GetSelection() != (int) GetBoard()->GetViaSizeIndex() )
-            m_SelViaSizeBox->SetSelection( GetBoard()->GetViaSizeIndex() );
+        if( m_SelViaSizeBox->GetSelection() != (int) GetDesignSettings().GetViaSizeIndex() )
+            m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
     }
     else
     {
         bool check = ( ( ( ID_POPUP_PCB_SELECT_VIASIZE1 +
-                           (int) GetBoard()->GetViaSizeIndex() ) == aEvent.GetId() ) &&
-                       !GetDesignSettings().m_UseConnectedTrackWidth );
+                           (int) GetDesignSettings().GetViaSizeIndex() ) == aEvent.GetId() ) &&
+                       !GetDesignSettings().m_UseConnectedTrackWidth &&
+                       !GetDesignSettings().UseCustomTrackViaSize() );
 
         aEvent.Check( check );
     }

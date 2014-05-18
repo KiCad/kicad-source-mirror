@@ -138,7 +138,7 @@ void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
 
     EDA_RECT item_boundingbox;
     EDA_RECT zone_boundingbox  = aZone->GetBoundingBox();
-    int      biggest_clearance = aPcb->GetBiggestClearanceValue();
+    int      biggest_clearance = aPcb->GetDesignSettings().GetBiggestClearanceValue();
     biggest_clearance = std::max( biggest_clearance, zone_clearance );
     zone_boundingbox.Inflate( biggest_clearance );
 

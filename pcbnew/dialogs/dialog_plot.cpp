@@ -70,8 +70,8 @@ void DIALOG_PLOT::Init_Dialog()
 
     // The reasonable width correction value must be in a range of
     // [-(MinTrackWidth-1), +(MinClearanceValue-1)] decimils.
-    m_widthAdjustMinValue   = -(m_board->GetDesignSettings().m_TrackMinWidth - 1);
-    m_widthAdjustMaxValue   = m_board->GetSmallestClearanceValue() - 1;
+    m_widthAdjustMinValue   = -( m_board->GetDesignSettings().m_TrackMinWidth - 1 );
+    m_widthAdjustMaxValue   = m_board->GetDesignSettings().GetSmallestClearanceValue() - 1;
 
     switch( m_plotOpts.GetFormat() )
     {

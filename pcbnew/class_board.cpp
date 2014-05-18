@@ -66,8 +66,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 BOARD::BOARD() :
     BOARD_ITEM( (BOARD_ITEM*) NULL, PCB_T ),
     m_NetInfo( this ),
-    m_paper( PAGE_INFO::A4 ),
-    m_NetClasses( this )
+    m_paper( PAGE_INFO::A4 )
 {
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
@@ -92,19 +91,18 @@ BOARD::BOARD() :
             m_Layer[layer].m_Type = LT_UNDEFINED;
     }
 
-    m_NetClasses.GetDefault()->SetDescription( _( "This is the default net class." ) );
+    NETCLASS* defaultClass = m_designSettings.GetDefault();
+    defaultClass->SetDescription( _( "This is the default net class." ) );
 
-    m_viaSizeIndex    = 0;
-    m_trackWidthIndex = 0;
-
-    /*  Dick 5-Feb-2012: this seems unnecessary.  I don't believe the comment
-        near line 70 of class_netclass.cpp.  I stepped through with debugger.
-        Perhaps something else is at work, it is not a constructor race.
     // Initialize default values in default netclass.
-    */
-    m_NetClasses.GetDefault()->SetParams();
+    defaultClass->SetParams( m_designSettings );
+    m_designSettings.SetCurrentNetClass( defaultClass->GetName() );
 
-    SetCurrentNetClass( m_NetClasses.GetDefault()->GetName() );
+    // Set sensible initial values for custom track width & via size
+    m_designSettings.UseCustomTrackViaSize( false );
+    m_designSettings.SetCustomTrackWidth( m_designSettings.GetCurrentTrackWidth() );
+    m_designSettings.SetCustomViaSize( m_designSettings.GetCurrentViaSize() );
+    m_designSettings.SetCustomViaDrill( m_designSettings.GetCurrentViaDrill() );
 
     // Initialize ratsnest
     m_ratsnest = new RN_DATA( this );
@@ -310,100 +308,6 @@ void BOARD::PopHighLight()
 {
     m_highLight = m_highLightPrevious;
     m_highLightPrevious.Clear();
-}
-
-
-bool BOARD::SetCurrentNetClass( const wxString& aNetClassName )
-{
-    NETCLASS* netClass = m_NetClasses.Find( aNetClassName );
-    bool      lists_sizes_modified = false;
-
-    // if not found (should not happen) use the default
-    if( netClass == NULL )
-        netClass = m_NetClasses.GetDefault();
-
-    m_currentNetClassName = netClass->GetName();
-
-    // Initialize others values:
-    if( m_ViasDimensionsList.size() == 0 )
-    {
-        VIA_DIMENSION viadim;
-        lists_sizes_modified = true;
-        m_ViasDimensionsList.push_back( viadim );
-    }
-
-    if( m_TrackWidthList.size() == 0 )
-    {
-        lists_sizes_modified = true;
-        m_TrackWidthList.push_back( 0 );
-    }
-
-    /* note the m_ViasDimensionsList[0] and m_TrackWidthList[0] values
-     * are always the Netclass values
-     */
-    if( m_ViasDimensionsList[0].m_Diameter != netClass->GetViaDiameter() )
-        lists_sizes_modified = true;
-
-    m_ViasDimensionsList[0].m_Diameter = netClass->GetViaDiameter();
-
-    if( m_TrackWidthList[0] != netClass->GetTrackWidth() )
-        lists_sizes_modified = true;
-
-    m_TrackWidthList[0] = netClass->GetTrackWidth();
-
-    if( m_viaSizeIndex >= m_ViasDimensionsList.size() )
-        m_viaSizeIndex = m_ViasDimensionsList.size();
-
-    if( m_trackWidthIndex >= m_TrackWidthList.size() )
-        m_trackWidthIndex = m_TrackWidthList.size();
-
-    return lists_sizes_modified;
-}
-
-
-int BOARD::GetBiggestClearanceValue()
-{
-    int clearance = m_NetClasses.GetDefault()->GetClearance();
-
-    //Read list of Net Classes
-    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
-    {
-        NETCLASS* netclass = nc->second;
-        clearance = std::max( clearance, netclass->GetClearance() );
-    }
-
-    return clearance;
-}
-
-
-int BOARD::GetSmallestClearanceValue()
-{
-    int clearance = m_NetClasses.GetDefault()->GetClearance();
-
-    //Read list of Net Classes
-    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
-    {
-        NETCLASS* netclass = nc->second;
-        clearance = std::min( clearance, netclass->GetClearance() );
-    }
-
-    return clearance;
-}
-
-
-int BOARD::GetCurrentMicroViaSize()
-{
-    NETCLASS* netclass = m_NetClasses.Find( m_currentNetClassName );
-
-    return netclass->GetuViaDiameter();
-}
-
-
-int BOARD::GetCurrentMicroViaDrill()
-{
-    NETCLASS* netclass = m_NetClasses.Find( m_currentNetClassName );
-
-    return netclass->GetuViaDrill();
 }
 
 
@@ -2191,24 +2095,6 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
 
     aPosition = lockPoint;
     return newTrack;
-}
-
-
-void BOARD::SetViaSizeIndex( unsigned aIndex )
-{
-    if( aIndex >= m_ViasDimensionsList.size() )
-        m_viaSizeIndex = m_ViasDimensionsList.size();
-    else
-        m_viaSizeIndex = aIndex;
-}
-
-
-void BOARD::SetTrackWidthIndex( unsigned aIndex )
-{
-    if( aIndex >= m_TrackWidthList.size() )
-        m_trackWidthIndex = m_TrackWidthList.size();
-    else
-        m_trackWidthIndex = aIndex;
 }
 
 

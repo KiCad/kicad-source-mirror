@@ -168,8 +168,11 @@ public:
     /// @brief Force all remaining objects to be drawn.
     virtual void Flush() = 0;
 
-    /// @brief Clear the screen.
-    virtual void ClearScreen() = 0;
+    /**
+     * @brief Clear the screen.
+     * @param aColor is the color used for clearing.
+     */
+    virtual void ClearScreen( const COLOR4D& aColor ) = 0;
 
     // -----------------
     // Attribute setting
@@ -223,16 +226,6 @@ public:
     inline const COLOR4D& GetStrokeColor() const
     {
         return strokeColor;
-    }
-
-    /**
-     * @brief Set the background color.
-     *
-     * @param aColor is the color for background filling.
-     */
-    inline virtual void SetBackgroundColor( const COLOR4D& aColor )
-    {
-        backgroundColor = aColor;
     }
 
     /**
@@ -849,7 +842,6 @@ protected:
     bool               isFillEnabled;          ///< Is filling of graphic objects enabled ?
     bool               isStrokeEnabled;        ///< Are the outlines stroked ?
 
-    COLOR4D            backgroundColor;        ///< The background color
     COLOR4D            fillColor;              ///< The fill color
     COLOR4D            strokeColor;            ///< The color of the outlines
 
