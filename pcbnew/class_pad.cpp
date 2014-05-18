@@ -637,6 +637,39 @@ bool D_PAD::IsOnLayer( LAYER_NUM aLayer ) const
 }
 
 
+void D_PAD::GetOblongDrillGeometry( wxPoint& aStartPoint,
+                                    wxPoint& aEndPoint, int& aWidth ) const
+{
+    // calculates the start point, end point and width
+    // of an equivalent segment which have the same position and width as the hole
+    int delta_cx, delta_cy;
+
+    wxSize halfsize = GetDrillSize();;
+    halfsize.x /= 2;
+    halfsize.y /= 2;
+
+    if( m_Drill.x > m_Drill.y )  // horizontal
+    {
+        delta_cx = halfsize.x - halfsize.y;
+        delta_cy = 0;
+        aWidth   = m_Drill.y;
+    }
+    else                         // vertical
+    {
+        delta_cx = 0;
+        delta_cy = halfsize.y - halfsize.x;
+        aWidth   = m_Drill.x;
+    }
+
+    RotatePoint( &delta_cx, &delta_cy, m_Orient );
+
+    aStartPoint.x = delta_cx;
+    aStartPoint.y = delta_cy;
+
+    aEndPoint.x = - delta_cx;
+    aEndPoint.y = - delta_cy;
+}
+
 bool D_PAD::HitTest( const wxPoint& aPosition ) const
 {
     int     dx, dy;
