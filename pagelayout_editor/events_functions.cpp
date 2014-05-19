@@ -331,16 +331,29 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
     wxCHECK_RET( (item != NULL), wxT( "Cannot move NULL item." ) );
     wxPoint position = aPanel->GetParent()->GetCrossHairPosition()
                       - ( initialCursorPosition - initialPositionUi );
+    wxPoint previous_position;
 
     if( (item->GetFlags() & LOCATE_STARTPOINT) )
+    {
+        previous_position = item->GetStartPosUi();
         item->MoveStartPointToUi( position );
+    }
     else if( (item->GetFlags() & LOCATE_ENDPOINT) )
+    {
+        previous_position = item->GetEndPosUi();
         item->MoveEndPointToUi( position );
+    }
     else
+    {
+        previous_position = item->GetStartPosUi();
         item->MoveToUi( position );
+    }
 
-    // Draw the item item at it's new position.
-    if( aPanel )
+    // Draw the item item at it's new position, if it is modified,
+    // (does not happen each time the mouse is moved, because the
+    // item is placed on grid)
+    // to avoid useless computation time.
+    if( aPanel && ( previous_position != position ) )
         aPanel->Refresh();
 }
 

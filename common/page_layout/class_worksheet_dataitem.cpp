@@ -249,7 +249,7 @@ const wxPoint WORKSHEET_DATAITEM::GetStartPosUi( int ii ) const
 {
     DPOINT pos = GetStartPos( ii );
     pos = pos * m_WSunits2Iu;
-    return wxPoint( int(pos.x), int(pos.y) );
+    return wxPoint( KiROUND(pos.x), KiROUND(pos.y) );
 }
 
 const DPOINT WORKSHEET_DATAITEM::GetEndPos( int ii ) const
@@ -285,7 +285,7 @@ const wxPoint WORKSHEET_DATAITEM::GetEndPosUi( int ii ) const
 {
     DPOINT pos = GetEndPos( ii );
     pos = pos * m_WSunits2Iu;
-    return wxPoint( int(pos.x), int(pos.y) );
+    return wxPoint( KiROUND(pos.x), KiROUND(pos.y) );
 }
 
 

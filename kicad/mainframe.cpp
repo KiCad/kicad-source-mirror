@@ -305,18 +305,12 @@ void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )
 {
-    wxFileName fn( m_ProjectFileName );
-
-    wxString path = wxT( "\"" );
-
-    path += fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) + wxT( "\"" );
-
+    // Gerbview is called without any file to open, because we do not know
+    // the list and the name of files to open (if any...).
 #if USE_KIFACE && 0
 
-    // I cannot make sense of the fn.
-
 #else
-    Execute( this, GERBVIEW_EXE, path );
+    Execute( this, GERBVIEW_EXE, wxEmptyString );
 #endif
 }
 

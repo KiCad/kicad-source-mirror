@@ -155,10 +155,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
         if( !textModule )
             continue;
 
-        if( !GetPlotOtherText() )
-            continue;
-
-        if( !textModule->IsVisible() && !GetPlotInvisibleText() )
+        if( !textModule->IsVisible() )
             continue;
 
         textLayer = textModule->GetLayer();

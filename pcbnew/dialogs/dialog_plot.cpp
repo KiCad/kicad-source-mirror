@@ -187,7 +187,6 @@ void DIALOG_PLOT::Init_Dialog()
     // Options to plot texts on footprints
     m_plotModuleValueOpt->SetValue( m_plotOpts.GetPlotValue() );
     m_plotModuleRefOpt->SetValue( m_plotOpts.GetPlotReference() );
-    m_plotTextOther->SetValue( m_plotOpts.GetPlotOtherText() );
     m_plotInvisibleText->SetValue( m_plotOpts.GetPlotInvisibleText() );
 
     // Options to plot pads and vias holes
@@ -480,7 +479,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 
     case PLOT_FORMAT_DXF:
         m_drillShapeOpt->Enable( true );
-        m_plotModeOpt->Enable( true );
+        m_plotModeOpt->Enable( false );
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
@@ -502,7 +501,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_forcePSA4OutputOpt->Enable( false );
         m_forcePSA4OutputOpt->SetValue( false );
 
-        m_PlotOptionsSizer->Show( m_GerberOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
         break;
@@ -570,7 +569,6 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetUseAuxOrigin( m_useAuxOriginCheckBox->GetValue() );
     tempOptions.SetPlotValue( m_plotModuleValueOpt->GetValue() );
     tempOptions.SetPlotReference( m_plotModuleRefOpt->GetValue() );
-    tempOptions.SetPlotOtherText( m_plotTextOther->GetValue() );
     tempOptions.SetPlotInvisibleText( m_plotInvisibleText->GetValue() );
     tempOptions.SetScaleSelection( m_scaleOpt->GetSelection() );
     tempOptions.SetDrillMarksType( static_cast<PCB_PLOT_PARAMS::DrillMarksType>
