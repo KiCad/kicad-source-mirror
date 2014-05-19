@@ -152,9 +152,6 @@ private:
     /// Enable plotting of part values
     bool        m_plotValue;
 
-    /// Enable plotting of other fields
-    bool        m_plotOtherText;
-
     /// Force plotting of fields marked invisible
     bool        m_plotInvisibleText;
 
@@ -237,8 +234,6 @@ public:
 
     void        SetPlotInvisibleText( bool aFlag ) { m_plotInvisibleText = aFlag; }
     bool        GetPlotInvisibleText() const { return m_plotInvisibleText; }
-    void        SetPlotOtherText( bool aFlag ) { m_plotOtherText = aFlag; }
-    bool        GetPlotOtherText() const { return m_plotOtherText; }
     void        SetPlotValue( bool aFlag ) { m_plotValue = aFlag; }
     bool        GetPlotValue() const { return m_plotValue; }
     void        SetPlotReference( bool aFlag ) { m_plotReference = aFlag; }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -94,7 +94,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotPads_on_Silkscreen = new wxCheckBox( this, ID_ALLOW_PRINT_PAD_ON_SILKSCREEN, _("Plot pads on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotPads_on_Silkscreen->SetToolTip( _("Enable/disable print/plot pads on silkscreen layers\nWhen disable, pads are never potted on silkscreen layers\nWhen enable, pads are potted only if they appear on silkscreen layers") );
 	
-	bSizerPlotItems->Add( m_plotPads_on_Silkscreen, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+	bSizerPlotItems->Add( m_plotPads_on_Silkscreen, 0, wxALL, 2 );
 	
 	m_plotModuleValueOpt = new wxCheckBox( this, wxID_ANY, _("Plot module value on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPlotItems->Add( m_plotModuleValueOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
@@ -102,20 +102,15 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotModuleRefOpt = new wxCheckBox( this, ID_PRINT_REF, _("Plot module reference on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPlotItems->Add( m_plotModuleRefOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
-	m_plotTextOther = new wxCheckBox( this, wxID_ANY, _("Plot other module texts on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotTextOther->SetToolTip( _("Enable/disable print/plot module field texts on silkscreen layers") );
-	
-	bSizerPlotItems->Add( m_plotTextOther, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
-	
-	m_plotInvisibleText = new wxCheckBox( this, wxID_ANY, _("Plot invisible texts on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotInvisibleText->SetToolTip( _("Force print/plot module invisible texts on silkscreen layers") );
+	m_plotInvisibleText = new wxCheckBox( this, wxID_ANY, _("Force plot invisible values/refrences"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotInvisibleText->SetToolTip( _("Force plot invisible values and/or references") );
 	
 	bSizerPlotItems->Add( m_plotInvisibleText, 0, wxALL, 2 );
 	
 	m_plotNoViaOnMaskOpt = new wxCheckBox( this, wxID_ANY, _("Do not tent vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotNoViaOnMaskOpt->SetToolTip( _("Remove soldermask on vias.") );
 	
-	bSizerPlotItems->Add( m_plotNoViaOnMaskOpt, 0, wxALL, 2 );
+	bSizerPlotItems->Add( m_plotNoViaOnMaskOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
 	m_excludeEdgeLayerOpt = new wxCheckBox( this, wxID_ANY, _("Exclude PCB edge layer from other layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_excludeEdgeLayerOpt->SetToolTip( _("Exclude contents of the pcb edge layer from all other layers") );
@@ -123,10 +118,15 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerPlotItems->Add( m_excludeEdgeLayerOpt, 0, wxALL, 2 );
 	
 	m_plotMirrorOpt = new wxCheckBox( this, ID_MIROR_OPT, _("Mirrored plot"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerPlotItems->Add( m_plotMirrorOpt, 0, wxALL, 2 );
+	bSizerPlotItems->Add( m_plotMirrorOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
 	m_plotPSNegativeOpt = new wxCheckBox( this, wxID_ANY, _("Negative plot"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPlotItems->Add( m_plotPSNegativeOpt, 0, wxALL, 2 );
+	
+	m_useAuxOriginCheckBox = new wxCheckBox( this, wxID_ANY, _("Use auxiliary axis as origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useAuxOriginCheckBox->SetToolTip( _("Use auxiliary axis as coordinates origin in Gerber files.") );
+	
+	bSizerPlotItems->Add( m_useAuxOriginCheckBox, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
 	
 	bSizer192->Add( bSizerPlotItems, 0, wxEXPAND, 5 );
@@ -230,11 +230,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_subtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
 	
 	m_GerberOptionsSizer->Add( m_subtractMaskFromSilk, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
-	
-	m_useAuxOriginCheckBox = new wxCheckBox( this, wxID_ANY, _("Use auxiliary axis as origin"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_useAuxOriginCheckBox->SetToolTip( _("Use auxiliary axis as coordinates origin in Gerber files.") );
-	
-	m_GerberOptionsSizer->Add( m_useAuxOriginCheckBox, 0, wxALL, 2 );
 	
 	
 	m_PlotOptionsSizer->Add( m_GerberOptionsSizer, 0, wxALL|wxEXPAND, 3 );

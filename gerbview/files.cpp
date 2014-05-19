@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -184,8 +184,8 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
             if( layer == NO_AVAILABLE_LAYERS )
             {
-                wxString msg = wxT( "No more empty layers are available.  The remaining gerber " );
-                msg += wxT( "files will not be loaded." );
+                wxString msg = wxT( "No more empty available layers.\n"
+                                    "The remaining gerber files will not be loaded." );
                 wxMessageBox( msg );
                 break;
             }
@@ -266,8 +266,8 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
             if( layer == NO_AVAILABLE_LAYERS )
             {
-                wxString msg = wxT( "No more empty layers are available.  The remaining gerber " );
-                msg += wxT( "files will not be loaded." );
+                wxString msg = wxT( "No more empty available layers.\n"
+                                    "The remaining gerber files will not be loaded." );
                 wxMessageBox( msg );
                 break;
             }

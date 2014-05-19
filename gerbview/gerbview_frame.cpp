@@ -166,6 +166,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     ReFillLayerWidget();                // this is near end because contents establish size
     m_LayersManager->ReFillRender();    // Update colors in Render after the config is read
     m_auimgr.Update();
+
+    Zoom_Automatique( true );           // Gives a default zoom value
 }
 
 
