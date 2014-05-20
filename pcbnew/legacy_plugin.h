@@ -26,6 +26,7 @@
  */
 
 #include <io_mgr.h>
+#include <boost/shared_ptr.hpp>
 #include <string>
 
 
@@ -256,7 +257,7 @@ protected:
 
     void saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const;
     void saveNETCLASSES( const NETCLASSES* aNetClasses ) const;
-    void saveNETCLASS( const NETCLASS* aNetclass ) const;
+    void saveNETCLASS( const boost::shared_ptr<NETCLASS> aNetclass ) const;
 
     void savePCB_TEXT( const TEXTE_PCB* aText ) const;
     void savePCB_TARGET( const PCB_TARGET* aTarget ) const;

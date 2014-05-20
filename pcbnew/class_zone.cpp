@@ -548,7 +548,7 @@ int ZONE_CONTAINER::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
         // "zone clearance" setting in the zone properties dialog.  (At least
         // until there is a UI boolean for this.)
 
-    NETCLASS*   myClass  = GetNetClass();
+    NETCLASSPTR   myClass  = GetNetClass();
 
     if( myClass )
         myClearance = std::max( myClearance, myClass->GetClearance() );

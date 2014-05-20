@@ -105,7 +105,7 @@ public:
      * Function GetDefault
      * @return the default netclass.
      */
-    inline NETCLASS* GetDefault() const
+    inline NETCLASSPTR GetDefault() const
     {
         return m_NetClasses.GetDefault();
     }

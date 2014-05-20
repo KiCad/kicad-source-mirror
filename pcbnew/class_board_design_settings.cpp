@@ -176,8 +176,8 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 
 bool BOARD_DESIGN_SETTINGS::SetCurrentNetClass( const wxString& aNetClassName )
 {
-    NETCLASS* netClass = m_NetClasses.Find( aNetClassName );
-    bool      lists_sizes_modified = false;
+    NETCLASSPTR netClass = m_NetClasses.Find( aNetClassName );
+    bool        lists_sizes_modified = false;
 
     // if not found (should not happen) use the default
     if( netClass == NULL )
@@ -229,7 +229,7 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
     //Read list of Net Classes
     for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
     {
-        NETCLASS* netclass = nc->second;
+        NETCLASSPTR netclass = nc->second;
         clearance = std::max( clearance, netclass->GetClearance() );
     }
 
@@ -244,7 +244,7 @@ int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue()
     //Read list of Net Classes
     for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
     {
-        NETCLASS* netclass = nc->second;
+        NETCLASSPTR netclass = nc->second;
         clearance = std::min( clearance, netclass->GetClearance() );
     }
 
@@ -254,7 +254,7 @@ int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue()
 
 int BOARD_DESIGN_SETTINGS::GetCurrentMicroViaSize()
 {
-    NETCLASS* netclass = m_NetClasses.Find( m_currentNetClassName );
+    NETCLASSPTR netclass = m_NetClasses.Find( m_currentNetClassName );
 
     return netclass->GetuViaDiameter();
 }
@@ -262,7 +262,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentMicroViaSize()
 
 int BOARD_DESIGN_SETTINGS::GetCurrentMicroViaDrill()
 {
-    NETCLASS* netclass = m_NetClasses.Find( m_currentNetClassName );
+    NETCLASSPTR netclass = m_NetClasses.Find( m_currentNetClassName );
 
     return netclass->GetuViaDrill();
 }

@@ -33,6 +33,7 @@
 
 #include <set>
 #include <map>
+#include <boost/shared_ptr.hpp>
 
 #include <wx/string.h>
 
@@ -210,6 +211,7 @@ public:
 #endif
 };
 
+typedef boost::shared_ptr<NETCLASS> NETCLASSPTR;
 
 /**
  * Class NETCLASSES
@@ -220,13 +222,13 @@ public:
 class NETCLASSES
 {
 private:
-    typedef std::map<wxString, NETCLASS*> NETCLASSMAP;
+    typedef std::map<wxString, NETCLASSPTR> NETCLASSMAP;
 
     /// all the NETCLASSes except the default one.
     NETCLASSMAP             m_NetClasses;
 
     /// the default NETCLASS.
-    NETCLASS                m_Default;
+    NETCLASSPTR             m_Default;
 
 public:
     NETCLASSES();
@@ -236,7 +238,10 @@ public:
      * Function Clear
      * destroys any contained NETCLASS instances except the Default one.
      */
-    void Clear();
+    void Clear()
+    {
+        m_NetClasses.clear();
+    }
 
     typedef NETCLASSMAP::iterator iterator;
     iterator begin() { return m_NetClasses.begin(); }
@@ -259,9 +264,9 @@ public:
      * Function GetDefault
      * @return the default net class.
      */
-    NETCLASS* GetDefault() const
+    NETCLASSPTR GetDefault() const
     {
-        return (NETCLASS*) &m_Default;
+        return m_Default;
     }
 
     /**
@@ -271,24 +276,23 @@ public:
      * @return true if the name within aNetclass is unique and it could be inserted OK,
      *  else false because the name was not unique and caller still owns aNetclass.
      */
-    bool Add( NETCLASS* aNetclass );
+    bool Add( NETCLASSPTR aNetclass );
 
     /**
      * Function Remove
      * removes a NETCLASS from this container but does not destroy/delete it.
      * @param aNetName is the name of the net to delete, and it may not be NETCLASS::Default.
-     * @return NETCLASS* - the NETCLASS associated with aNetName if found and removed, else NULL.
-     * You have to delete the returned value if you intend to destroy the NETCLASS.
+     * @return NETCLASSPTR - the NETCLASS associated with aNetName if found and removed, else NULL.
      */
-    NETCLASS* Remove( const wxString& aNetName );
+    NETCLASSPTR Remove( const wxString& aNetName );
 
     /**
      * Function Find
      * searches this container for a NETCLASS given by \a aName.
      * @param aName is the name of the NETCLASS to search for.
-     * @return NETCLASS* - if found, else NULL.
+     * @return NETCLASSPTR - if found, else NULL.
      */
-    NETCLASS* Find( const wxString& aName ) const;
+    NETCLASSPTR Find( const wxString& aName ) const;
 
 };
 

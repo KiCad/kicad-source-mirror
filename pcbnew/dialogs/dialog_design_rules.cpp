@@ -46,6 +46,8 @@
 #include <wx/generic/gridctrl.h>
 #include <dialog_design_rules_aux_helper_class.h>
 
+#include <boost/make_shared.hpp>
+
 // Column labels for net lists
 #define NET_TITLE       _( "Net" )
 #define CLASS_TITLE     _( "Class" )
@@ -221,10 +223,10 @@ void DIALOG_DESIGN_RULES::InitDialogRules()
 
     // @todo go fix m_Pcb->SynchronizeNetsAndNetClasses() so that the netcode==0 is not present in the BOARD::m_NetClasses
     NETCLASSES& netclasses = m_BrdSettings->m_NetClasses;
-    NETCLASS*   netclass = netclasses.GetDefault();
+    NETCLASSPTR netclass = netclasses.GetDefault();
 
     // Initialize list of nets for Default Net Class
-    for( NETCLASS::const_iterator name = netclass->begin();  name != netclass->end();  ++name )
+    for( NETCLASS::iterator name = netclass->begin();  name != netclass->end();  ++name )
     {
         m_AllNets.push_back( NETCUP( *name, netclass->GetName() ) );
     }
@@ -446,7 +448,7 @@ void DIALOG_DESIGN_RULES::InitializeRulesSelectionBoxes()
 /* Initialize the rules list from board
  */
 
-static void class2gridRow( wxGrid* grid, int row, NETCLASS* nc )
+static void class2gridRow( wxGrid* grid, int row, NETCLASSPTR nc )
 {
     wxString msg;
 
@@ -494,14 +496,14 @@ void DIALOG_DESIGN_RULES::InitRulesList()
     int row = 1;
     for( NETCLASSES::iterator i = netclasses.begin();  i!=netclasses.end();  ++i, ++row )
     {
-        NETCLASS* netclass = i->second;
+        NETCLASSPTR netclass = i->second;
 
         class2gridRow( m_grid, row, netclass );
     }
 }
 
 
-static void gridRow2class( wxGrid* grid, int row, NETCLASS* nc )
+static void gridRow2class( wxGrid* grid, int row, NETCLASSPTR nc )
 {
 #define MYCELL( col )   \
     ValueFromString( g_UserUnit, grid->GetCellValue( row, col ) )
@@ -530,7 +532,7 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
     // Copy other NetClasses :
     for( int row = 1; row < m_grid->GetNumberRows();  ++row )
     {
-        NETCLASS* nc = new NETCLASS( m_grid->GetRowLabelValue( row ) );
+        NETCLASSPTR nc = boost::make_shared<NETCLASS>( m_grid->GetRowLabelValue( row ) );
 
         if( !m_BrdSettings->m_NetClasses.Add( nc ) )
         {
@@ -540,7 +542,7 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
             msg.Printf( wxT( "CopyRulesListToBoard(): The NetClass \"%s\" already exists. Skip" ),
                         GetChars( m_grid->GetRowLabelValue( row ) ) );
             wxMessageBox( msg );
-            delete nc;
+
             continue;
         }
 
@@ -550,7 +552,7 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
     // Now read all nets and push them in the corresponding netclass net buffer
     for( NETCUPS::const_iterator netcup = m_AllNets.begin(); netcup != m_AllNets.end(); ++netcup )
     {
-        NETCLASS* nc = netclasses.Find( netcup->clazz );
+        NETCLASSPTR nc = netclasses.Find( netcup->clazz );
         wxASSERT( nc );
         nc->Add( netcup->net );
     }

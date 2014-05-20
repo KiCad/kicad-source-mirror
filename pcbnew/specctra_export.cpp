@@ -1476,7 +1476,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
     //-----<rules>--------------------------------------------------------
     {
         char        rule[80];
-        NETCLASS* defaultClass = aBoard->GetDesignSettings().m_NetClasses.GetDefault();
+        NETCLASSPTR defaultClass = aBoard->GetDesignSettings().GetDefault();
 
         int         defaultTrackWidth   = defaultClass->GetTrackWidth();
         int         defaultClearance    = defaultClass->GetClearance();
@@ -1854,7 +1854,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         // Add the via from the Default netclass first.  The via container
         // in pcb->library preserves the sequence of addition.
 
-        NETCLASS*   netclass = nclasses.GetDefault();
+        NETCLASSPTR netclass = nclasses.GetDefault();
 
         PADSTACK*   via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
                                    m_top_via_layer, m_bot_via_layer );
@@ -2046,13 +2046,13 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
     for( NETCLASSES::iterator nc = nclasses.begin(); nc != nclasses.end(); ++nc )
     {
-        NETCLASS* netclass = nc->second;
+        NETCLASSPTR netclass = nc->second;
         exportNETCLASS( netclass, aBoard );
     }
 }
 
 
-void SPECCTRA_DB::exportNETCLASS( NETCLASS* aNetClass, BOARD* aBoard )
+void SPECCTRA_DB::exportNETCLASS( NETCLASSPTR aNetClass, BOARD* aBoard )
 {
     /*  From page 11 of specctra spec:
      *

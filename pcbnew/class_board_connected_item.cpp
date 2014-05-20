@@ -89,7 +89,7 @@ const wxString& BOARD_CONNECTED_ITEM::GetShortNetname() const
 
 int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 {
-    NETCLASS*   myclass  = GetNetClass();
+    NETCLASSPTR myclass = GetNetClass();
 
     // DO NOT use wxASSERT, because GetClearance is called inside an OnPaint event
     // and a call to wxASSERT can crash the application.
@@ -116,7 +116,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 }
 
 
-NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
+NETCLASSPTR BOARD_CONNECTED_ITEM::GetNetClass() const
 {
     // It is important that this be implemented without any sequential searching.
     // Simple array lookups should be fine, performance-wise.
@@ -128,10 +128,11 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
     if( board == NULL )     // Should not occur
     {
         DBG(printf( "%s: NULL board,type %d", __func__, Type() );)
-        return NULL;
+
+        return NETCLASSPTR();
     }
 
-    NETCLASS*       netclass = NULL;
+    NETCLASSPTR     netclass;
     NETINFO_ITEM*   net = board->FindNet( GetNetCode() );
 
     if( net )
@@ -151,15 +152,12 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
 {
     wxString    name;
-    NETCLASS*   myclass = GetNetClass();
+    NETCLASSPTR myclass = GetNetClass();
 
     if( myclass )
         name = myclass->GetName();
     else
-    {
-        BOARD*  board = GetBoard();
         name = NETCLASS::Default;
-    }
 
     return name;
 }

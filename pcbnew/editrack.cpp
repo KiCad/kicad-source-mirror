@@ -685,7 +685,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     if ( g_FirstTrackSegment == NULL )
         return;
 
-    NETCLASS* netclass = g_FirstTrackSegment->GetNetClass();
+    NETCLASSPTR netclass = g_FirstTrackSegment->GetNetClass();
 
     if( showTrackClearanceMode != DO_NOT_SHOW_CLEARANCE )
         DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;

@@ -91,7 +91,7 @@ BOARD::BOARD() :
             m_Layer[layer].m_Type = LT_UNDEFINED;
     }
 
-    NETCLASS* defaultClass = m_designSettings.GetDefault();
+    NETCLASSPTR defaultClass = m_designSettings.GetDefault();
     defaultClass->SetDescription( _( "This is the default net class." ) );
 
     // Initialize default values in default netclass.
