@@ -226,7 +226,7 @@ int VIA::GetDrillValue() const
         return m_Drill;
 
     // Use the default value from the Netclass
-    NETCLASS* netclass = GetNetClass();
+    NETCLASSPTR netclass = GetNetClass();
 
     if( GetViaType() == VIA_MICROVIA )
         return netclass->GetuViaDrill();
@@ -1008,7 +1008,7 @@ void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         }
     }
 
-    NETCLASS* netclass = GetNetClass();
+    NETCLASSPTR netclass = GetNetClass();
 
     if( netclass )
     {

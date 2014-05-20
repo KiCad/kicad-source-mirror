@@ -51,6 +51,8 @@
 #include <zones.h>
 #include <pcb_parser.h>
 
+#include <boost/make_shared.hpp>
+
 
 void PCB_PARSER::init()
 {
@@ -808,7 +810,7 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as setup." ) );
 
     T token;
-    NETCLASS* defaultNetClass = m_board->GetDesignSettings().GetDefault();
+    NETCLASSPTR defaultNetClass = m_board->GetDesignSettings().GetDefault();
     // TODO Orson: is it really necessary to first operate on a copy and then apply it?
     // would not it be better to use reference here and apply all the changes instantly?
     BOARD_DESIGN_SETTINGS designSettings = m_board->GetDesignSettings();
@@ -1082,7 +1084,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    std::auto_ptr<NETCLASS> nc( new NETCLASS( wxEmptyString ) );
+    NETCLASSPTR nc = boost::make_shared<NETCLASS>( wxEmptyString );
 
     // Read netclass name (can be a name or just a number like track width)
     NeedSYMBOLorNUMBER();
@@ -1135,11 +1137,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
         NeedRIGHT();
     }
 
-    if( m_board->GetDesignSettings().m_NetClasses.Add( nc.get() ) )
-    {
-        nc.release();
-    }
-    else
+    if( !m_board->GetDesignSettings().m_NetClasses.Add( nc ) )
     {
         // Must have been a name conflict, this is a bad board file.
         // User may have done a hand edit to the file.

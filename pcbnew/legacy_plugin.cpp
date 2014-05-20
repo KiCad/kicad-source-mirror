@@ -86,6 +86,8 @@
 #include <trigo.h>
 #include <build_version.h>
 
+#include <boost/make_shared.hpp>
+
 
 typedef LEGACY_PLUGIN::BIU      BIU;
 
@@ -632,7 +634,7 @@ void LEGACY_PLUGIN::loadSHEET()
 
 void LEGACY_PLUGIN::loadSETUP()
 {
-    NETCLASS*               netclass_default = m_board->GetDesignSettings().GetDefault();
+    NETCLASSPTR             netclass_default = m_board->GetDesignSettings().GetDefault();
     // TODO Orson: is it really necessary to first operate on a copy and then apply it?
     // would not it be better to use reference here and apply all the changes instantly?
     BOARD_DESIGN_SETTINGS   bds = m_board->GetDesignSettings();
@@ -2113,7 +2115,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
     // yet since that would bypass duplicate netclass name checking within the BOARD.
     // store it temporarily in an auto_ptr until successfully inserted into the BOARD
     // just before returning.
-    auto_ptr<NETCLASS> nc( new NETCLASS( wxEmptyString ) );
+    NETCLASSPTR nc = boost::make_shared<NETCLASS>( wxEmptyString );
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -2175,11 +2177,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
         else if( TESTLINE( "$EndNCLASS" ) )
         {
-            if( m_board->GetDesignSettings().m_NetClasses.Add( nc.get() ) )
-            {
-                nc.release();
-            }
-            else
+            if( !m_board->GetDesignSettings().m_NetClasses.Add( nc ) )
             {
                 // Must have been a name conflict, this is a bad board file.
                 // User may have done a hand edit to the file.
@@ -2985,7 +2983,7 @@ void LEGACY_PLUGIN::saveSHEET( const BOARD* aBoard ) const
 void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 {
     const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
-    NETCLASS* netclass_default       = bds.GetDefault();
+    NETCLASSPTR netclass_default     = bds.GetDefault();
 
     fprintf( m_fp, "$SETUP\n" );
 
@@ -3170,7 +3168,7 @@ void LEGACY_PLUGIN::saveNETCLASSES( const NETCLASSES* aNetClasses ) const
     // the rest will be alphabetical in the *.brd file.
     for( NETCLASSES::const_iterator it = aNetClasses->begin();  it != aNetClasses->end();  ++it )
     {
-        NETCLASS*   netclass = it->second;
+        NETCLASSPTR   netclass = it->second;
         saveNETCLASS( netclass );
     }
 
@@ -3178,7 +3176,7 @@ void LEGACY_PLUGIN::saveNETCLASSES( const NETCLASSES* aNetClasses ) const
 }
 
 
-void LEGACY_PLUGIN::saveNETCLASS( const NETCLASS* nc ) const
+void LEGACY_PLUGIN::saveNETCLASS( const NETCLASSPTR nc ) const
 {
     fprintf( m_fp, "$NCLASS\n" );
     fprintf( m_fp, "Name %s\n", EscapedUTF8( nc->GetName() ).c_str() );

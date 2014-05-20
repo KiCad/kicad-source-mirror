@@ -269,7 +269,7 @@ int& aViaDiameter, int& aViaDrill )
     BOARD* board = getModel<BOARD>( PCB_T );
     BOARD_DESIGN_SETTINGS &bds = board->GetDesignSettings();
 
-    NETCLASS* netClass = NULL;
+    NETCLASSPTR netClass;
     NETINFO_ITEM* ni = board->FindNet( aNetCode );
 
     if( ni )

@@ -295,7 +295,7 @@ void DRC::updatePointers()
 }
 
 
-bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
+bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
 {
     bool ret = true;
 
@@ -412,7 +412,7 @@ bool DRC::testNetClasses()
 
     for( NETCLASSES::const_iterator i = netclasses.begin();  i != netclasses.end();  ++i )
     {
-        NETCLASS* nc = i->second;
+        NETCLASSPTR nc = i->second;
 
         if( !doNetClass( nc, msg ) )
             ret = false;

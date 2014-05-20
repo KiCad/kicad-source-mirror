@@ -153,7 +153,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     int       net_code_ref;
     wxPoint   shape_pos;
 
-    NETCLASS* netclass = aRefSeg->GetNetClass();
+    NETCLASSPTR netclass = aRefSeg->GetNetClass();
     BOARD_DESIGN_SETTINGS& dsnSettings = m_pcb->GetDesignSettings();
 
     /* In order to make some calculations more easier or faster,

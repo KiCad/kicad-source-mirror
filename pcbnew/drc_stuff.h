@@ -29,8 +29,8 @@
 #ifndef _DRC_STUFF_H
 #define _DRC_STUFF_H
 
-
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 #define OK_DRC  0
 #define BAD_DRC 1
@@ -283,7 +283,7 @@ private:
 
     //-----<single "item" tests>-----------------------------------------
 
-    bool doNetClass( NETCLASS* aNetClass, wxString& msg );
+    bool doNetClass( boost::shared_ptr<NETCLASS> aNetClass, wxString& msg );
 
     /**
      * Function doPadToPadsDrc

@@ -48,7 +48,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     BOARD*        board = m_Parent->GetBoard();
     BOARD_DESIGN_SETTINGS& dsnSettings = board->GetDesignSettings();
     NETCLASSES&   netclasses = dsnSettings.m_NetClasses;
-    NETCLASS*     netclass = netclasses.GetDefault();
+    NETCLASSPTR   netclass = netclasses.GetDefault();
     NETINFO_ITEM* net = board->FindNet( m_Netcode );
 
     if( net )

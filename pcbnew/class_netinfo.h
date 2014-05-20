@@ -452,7 +452,7 @@ private:
     wxString  m_NetClassName;   // Net Class name. if void this is equivalent
                                 // to "default" (the first
                                 // item of the net classes list
-    NETCLASS* m_NetClass;
+    NETCLASSPTR m_NetClass;
 
     BOARD_ITEM* m_parent;       ///< The parent board item object the net belongs to.
 
@@ -474,9 +474,9 @@ public:
      * Function SetClass
      * sets \a aNetclass into this NET
      */
-    void SetClass( const NETCLASS* aNetClass )
+    void SetClass( NETCLASSPTR aNetClass )
     {
-        m_NetClass = (NETCLASS*) aNetClass;
+        m_NetClass = aNetClass;
 
         if( aNetClass )
             m_NetClassName = aNetClass->GetName();
@@ -484,7 +484,7 @@ public:
             m_NetClassName = NETCLASS::Default;
     }
 
-    NETCLASS* GetNetClass()
+    NETCLASSPTR GetNetClass()
     {
         return m_NetClass;
     }
@@ -630,7 +630,7 @@ public:
                                      // general buffer of ratsnest
         m_RatsnestEndIdx    = 0;     // Ending point of ratsnests of this net
 
-        SetClass( NULL );
+        SetClass( NETCLASSPTR() );
     }
 };
 

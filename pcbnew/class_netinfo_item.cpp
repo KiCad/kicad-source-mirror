@@ -58,7 +58,6 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int a
     m_RatsnestEndIdx   = 0;     // Ending point of ratsnests of this net
 
     m_NetClassName = NETCLASS::Default;
-    m_NetClass = NULL;
 }
 
 
