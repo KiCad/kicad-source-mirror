@@ -494,6 +494,9 @@ endif()
 # application. You can figure out what libraries you need here;
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
 
+# See line 41 of CMakeModules/FindwxWidgets.cmake
+set( wxWidgets_CONFIG_OPTIONS --static=no )
+
 # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
 # Seems no more needed on wx-3
 if( APPLE AND ( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES OR KICAD_SCRIPTING_WXPYTHON) )
