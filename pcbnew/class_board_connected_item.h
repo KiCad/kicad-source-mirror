@@ -32,8 +32,8 @@
 #define BOARD_CONNECTED_ITEM_H
 
 #include <class_board_item.h>
+#include <class_netinfo.h>
 
-class NETINFO_ITEM;
 class NETCLASS;
 class TRACK;
 class D_PAD;
@@ -77,7 +77,10 @@ public:
      * Function GetNetCode
      * @return int - the net code.
      */
-    int GetNetCode() const;
+    int GetNetCode() const
+    {
+        return m_netinfo->GetNet();
+    }
 
     /**
      * Function SetNetCode
@@ -119,13 +122,19 @@ public:
      * Function GetNetname
      * @return wxString - the full netname
      */
-    const wxString& GetNetname() const;
+    const wxString& GetNetname() const
+    {
+        return m_netinfo->GetNetname();
+    }
 
     /**
      * Function GetShortNetname
      * @return wxString - the short netname
      */
-    const wxString& GetShortNetname() const;
+    const wxString& GetShortNetname() const
+    {
+        return m_netinfo->GetShortNetname();
+    }
 
     /**
      * Function GetClearance

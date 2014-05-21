@@ -79,6 +79,26 @@ static EDA_COLOR_T   s_DC_lastbrushcolor = UNSPECIFIED_COLOR;
 static bool  s_DC_lastbrushfill  = false;
 static wxDC* s_DC_lastDC = NULL;
 
+/***
+ * Utility for the line clipping code, returns the boundary code of
+ * a point. Bit allocation is arbitrary 
+ */
+static inline int clipOutCode( const EDA_RECT *aClipBox, int x, int y )
+{
+    int code;
+    if( y < aClipBox->GetY() )
+        code = 2;
+    else if( y > aClipBox->GetBottom() )
+        code = 1;
+    else
+        code = 0;
+    if( x < aClipBox->GetX() )
+        code |= 4;
+    else if( x > aClipBox->GetRight() )
+        code |= 8;
+    return code;
+}
+
 
 /**
  * Test if any part of a line falls within the bounds of a rectangle.
@@ -93,224 +113,67 @@ static wxDC* s_DC_lastDC = NULL;
  *
  * @return - False if any part of the line lies within the rectangle.
  */
-static bool clipLine( EDA_RECT* aClipBox, int& x1, int& y1, int& x2, int& y2 )
+static bool clipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &y2 )
 {
-    if( aClipBox->Contains( x1, y1 ) && aClipBox->Contains( x2, y2 ) )
-        return false;
+    // Stock Cohen-Sutherland algorithm; check *any* CG book for details
+    int outcode1 = clipOutCode( aClipBox, x1, y1 );
+    int outcode2 = clipOutCode( aClipBox, x2, y2 );
 
-    wxRect rect = *aClipBox;
-    int    minX = rect.GetLeft();
-    int    maxX = rect.GetRight();
-    int    minY = rect.GetTop();
-    int    maxY = rect.GetBottom();
-    int    clippedX, clippedY;
-
-#if DEBUG_DUMP_CLIP_COORDS
-    int    tmpX1, tmpY1, tmpX2, tmpY2;
-    tmpX1 = x1;
-    tmpY1 = y1;
-    tmpX2 = x2;
-    tmpY2 = y2;
-#endif
-
-    if( aClipBox->Contains( x1, y1 ) )
+    while( outcode1 || outcode2 )
     {
-        if( x1 == x2 )         /* Vertical line, clip Y. */
-        {
-            if( y2 < minY )
-            {
-                y2 = minY;
-                return false;
-            }
+        // Fast reject
+        if( outcode1 & outcode2 )
+            return true;
+        
+        // Choose a side to clip
+        int thisoutcode, x, y;
+        if( outcode1 )
+            thisoutcode = outcode1;
+        else
+            thisoutcode = outcode2;
 
-            if( y2 > maxY )
-            {
-                y2 = maxY;
-                return false;
-            }
+        /* One clip round
+         * Since we use the full range of 32 bit ints, the proportion
+         * computation has to be done in 64 bits to avoid horrible
+         * results */
+        if( thisoutcode & 1 ) // Clip the bottom
+        {
+            y = aClipBox->GetBottom();
+            x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
+        } 
+        else if( thisoutcode & 2 ) // Clip the top
+        {
+            y = aClipBox->GetY();
+            x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
+        } 
+        else if( thisoutcode & 8 ) // Clip the right
+        {
+            x = aClipBox->GetRight();
+            y = y1 + (y2 - y1) * int64_t(x - x1) / (x2 - x1);
         }
-        else if( y1 == y2 )    /* Horizontal line, clip X. */
+        else // if( thisoutcode & 4), obviously, clip the left
         {
-            if( x2 < minX )
-            {
-                x2 = minX;
-                return false;
-            }
-
-            if( x2 > maxX )
-            {
-                x2 = maxX;
-                return false;
-            }
-        }
-
-        /* If we're here, it's a diagonal line. */
-
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, minX, maxY,
-                                                       &clippedX, &clippedY )       /* Left */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, maxX, minY,
-                                                         &clippedX, &clippedY )     /* Top */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, maxX, minY, maxX, maxY,
-                                                         &clippedX, &clippedY )     /* Right */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, maxY, maxX, maxY,
-                                                         &clippedX, &clippedY ) )   /* Bottom */
-        {
-            if( x2 != clippedX )
-                x2 = clippedX;
-            if( y2 != clippedY )
-                y2 = clippedY;
-            return false;
+            x = aClipBox->GetX();
+            y = y1 + (y2 - y1) * int64_t(x - x1) / (x2 - x1);
         }
 
-        /* If we're here, something has gone terribly wrong. */
-#if DEBUG_DUMP_CLIP_ERROR_COORDS
-        wxLogDebug( wxT( "Line (%d,%d):(%d,%d) in rectangle (%d,%d,%d,%d) clipped to (%d,%d,%d,%d)" ),
-                    tmpX1, tmpY1, tmpX2, tmpY2, minX, minY, maxX, maxY, x1, y1, x2, y2 );
-#endif
-        return false;
+        // Put the result back and update the boundary code
+        // No ambiguity, otherwise it would have been a fast reject
+        if( thisoutcode == outcode1 )
+        {
+            x1 = x;
+            y1 = y;
+            outcode1 = clipOutCode( aClipBox, x1, y1 );
+        }
+        else
+        {
+            x2 = x;
+            y2 = y;
+            outcode2 = clipOutCode( aClipBox, x2, y2 );
+        }
     }
-    else if( aClipBox->Contains( x2, y2 ) )
-    {
-        if( x1 == x2 )         /* Vertical line, clip Y. */
-        {
-            if( y2 < minY )
-            {
-                y2 = minY;
-                return false;
-            }
-
-            if( y2 > maxY )
-            {
-                y2 = maxY;
-                return false;
-            }
-        }
-        else if( y1 == y2 )    /* Horizontal line, clip X. */
-        {
-            if( x2 < minX )
-            {
-                x2 = minX;
-                return false;
-            }
-
-            if( x2 > maxX )
-            {
-                x2 = maxX;
-                return false;
-            }
-        }
-
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, minX, maxY,
-                                                       &clippedX, &clippedY )       /* Left */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, maxX, minY,
-                                                         &clippedX, &clippedY )     /* Top */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, maxX, minY, maxX, maxY,
-                                                         &clippedX, &clippedY )     /* Right */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, maxY, maxX, maxY,
-                                                         &clippedX, &clippedY ) )   /* Bottom */
-        {
-            if( x1 != clippedX )
-                x1 = clippedX;
-            if( y1 != clippedY )
-                y1 = clippedY;
-            return false;
-        }
-
-        /* If we're here, something has gone terribly wrong. */
-#if DEBUG_DUMP_CLIP_ERROR_COORDS
-        wxLogDebug( wxT( "Line (%d,%d):(%d,%d) in rectangle (%d,%d,%d,%d) clipped to (%d,%d,%d,%d)" ),
-                    tmpX1, tmpY1, tmpX2, tmpY2, minX, minY, maxX, maxY, x1, y1, x2, y2 );
-#endif
-        return false;
-    }
-    else
-    {
-        int* intersectX;
-        int* intersectY;
-        int  intersectX1, intersectY1, intersectX2, intersectY2;
-        bool haveFirstPoint = false;
-
-        intersectX = &intersectX1;
-        intersectY = &intersectY1;
-
-        /* Left clip rectangle line. */
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, minX, maxY,
-                                                       intersectX, intersectY ) )
-        {
-            intersectX     = &intersectX2;
-            intersectY     = &intersectY2;
-            haveFirstPoint = true;
-        }
-
-        /* Top clip rectangle line. */
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, maxX, minY,
-                                                       intersectX, intersectY ) )
-        {
-            intersectX = &intersectX2;
-            intersectY = &intersectY2;
-            if( haveFirstPoint )
-            {
-                x1 = intersectX1;
-                y1 = intersectY1;
-                x2 = intersectX2;
-                y2 = intersectY2;
-                return false;
-            }
-            haveFirstPoint = true;
-        }
-
-        /* Right clip rectangle line. */
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, maxX, minY, maxX, maxY,
-                                                       intersectX, intersectY ) )
-        {
-            intersectX = &intersectX2;
-            intersectY = &intersectY2;
-            if( haveFirstPoint )
-            {
-                x1 = intersectX1;
-                y1 = intersectY1;
-                x2 = intersectX2;
-                y2 = intersectY2;
-                return false;
-            }
-            haveFirstPoint = true;
-        }
-
-        /* Bottom clip rectangle line. */
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, maxY, maxX, maxY,
-                                                       intersectX, intersectY ) )
-        {
-            intersectX = &intersectX2;
-            intersectY = &intersectY2;
-            if( haveFirstPoint )
-            {
-                x1 = intersectX1;
-                y1 = intersectY1;
-                x2 = intersectX2;
-                y2 = intersectY2;
-                return false;
-            }
-        }
-
-        /* If we're here and only one line of the clip box has been intersected,
-         * something has gone terribly wrong. */
-#if DEBUG_DUMP_CLIP_ERROR_COORDS
-        if( haveFirstPoint )
-            wxLogDebug( wxT( "Line (%d,%d):(%d,%d) in rectangle (%d,%d,%d,%d) clipped to (%d,%d,%d,%d)" ),
-                        tmpX1, tmpY1, tmpX2, tmpY2, minX, minY, maxX, maxY, x1, y1, x2, y2 );
-#endif
-    }
-
-    /* Set this to one to verify that diagonal lines get clipped properly. */
-#if DEBUG_DUMP_CLIP_COORDS
-    if( !( x1 == x2 || y1 == y2 ) )
-        wxLogDebug( wxT( "Clipped line (%d,%d):(%d,%d) from rectangle (%d,%d,%d,%d)" ),
-                    tmpX1, tmpY1, tmpX2, tmpY2, minX, minY, maxX, maxY );
-#endif
-
-    return true;
+    return false;
 }
-
 
 static void WinClipAndDrawLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
                                 EDA_COLOR_T Color, int width = 1 )
