@@ -50,12 +50,6 @@ BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem ) 
 }
 
 
-int BOARD_CONNECTED_ITEM::GetNetCode() const
-{
-    return m_netinfo->GetNet();
-}
-
-
 void BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode )
 {
     BOARD* board = GetBoard();
@@ -72,18 +66,6 @@ void BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode )
         // There is no board that contains list of nets, the item is orphaned
         m_netinfo = &NETINFO_LIST::ORPHANED;
     }
-}
-
-
-const wxString& BOARD_CONNECTED_ITEM::GetNetname() const
-{
-    return m_netinfo->GetNetname();
-}
-
-
-const wxString& BOARD_CONNECTED_ITEM::GetShortNetname() const
-{
-    return m_netinfo->GetShortNetname();
 }
 
 
