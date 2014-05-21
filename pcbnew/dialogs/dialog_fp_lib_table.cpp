@@ -166,7 +166,9 @@ public:
 
     bool DeleteRows( size_t aPos, size_t aNumRows )
     {
-        if( aPos + aNumRows <= rows.size() )
+        // aPos may be a large positive, e.g. size_t(-1), and the sum of
+        // aPos+aNumRows may wrap here, so both ends of the range are tested.
+        if( aPos < rows.size() && aPos + aNumRows <= rows.size() )
         {
             ROWS_ITER start = rows.begin() + aPos;
             rows.erase( start, start + aNumRows );
@@ -512,10 +514,13 @@ private:
         int rowCount = m_cur_grid->GetNumberRows();
         int curRow   = getCursorRow();
 
-        m_cur_grid->DeleteRows( curRow );
+        if( curRow >= 0 )
+        {
+            m_cur_grid->DeleteRows( curRow );
 
-        if( curRow && curRow == rowCount - 1 )
-            m_cur_grid->SetGridCursor( curRow-1, getCursorCol() );
+            if( curRow && curRow == rowCount - 1 )
+                m_cur_grid->SetGridCursor( curRow-1, getCursorCol() );
+        }
     }
 
     void moveUpHandler( wxMouseEvent& event )
