@@ -100,12 +100,13 @@ void COLORS_DESIGN_SETTINGS::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor
  * @return the color for an item which is one of the item indices given
  * in pcbstruct.h, enum PCB_VISIBLE or in schematic
  */
-EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx )
+EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx ) const
 {
-    if( (unsigned) aItemIdx < DIM(m_ItemsColors) )
+    if( (unsigned) aItemIdx < DIM( m_ItemsColors ) )
     {
         return m_ItemsColors[aItemIdx];
     }
+
     return UNSPECIFIED_COLOR;
 }
 

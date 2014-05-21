@@ -26,7 +26,7 @@ public:
     EDA_COLOR_T m_ItemsColors[ITEMSCOLORSBUFFERSIZE];   ///< All others items but layers
 
 public:
-    COLORS_DESIGN_SETTINGS( );
+    COLORS_DESIGN_SETTINGS();
 
     /**
      * Function GetLayerColor
@@ -47,14 +47,14 @@ public:
      * @return the color for an item which is one of the item indices given
      * in pcbstruct.h, enum PCB_VISIBLE or in schematic
      */
-    EDA_COLOR_T GetItemColor( int aItemIdx );
+    EDA_COLOR_T GetItemColor( int aItemIdx ) const;
 
     /**
      * Function SetItemColor
      * sets the color for an item which is one of the item indices given
      * in pcbstruct.h, enum PCB_VISIBLE or in schematic
      */
-    void SetItemColor(  int aItemIdx, EDA_COLOR_T aColor );
+    void SetItemColor( int aItemIdx, EDA_COLOR_T aColor );
 
     /**
      * Function SetAllColorsAs
