@@ -58,7 +58,7 @@
 #include <convert_from_iu.h>
 #include <view/view.h>
 #include <view/view_controls.h>
-#include <painter.h>
+#include <pcb_painter.h>
 
 #include <class_track.h>
 #include <class_board.h>
@@ -547,6 +547,19 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     view->Add( worksheet );
     view->Add( aBoard->GetRatsnestViewItem() );
     aBoard->GetRatsnest()->Recalculate();
+
+    // Apply layer coloring scheme & display options
+    if( view->GetPainter() )
+    {
+        KIGFX::PCB_RENDER_SETTINGS* settings =
+                static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+
+        // Load layers' colors from PCB data
+        settings->ImportLegacyColors( m_Pcb->GetColorsSettings() );
+
+        // Load display options (such as filled/outline display of items)
+        settings->LoadDisplayOptions( DisplayOpt );
+    }
 
     // Limit panning to the size of worksheet frame
     GetGalCanvas()->GetViewControls()->SetPanBoundary( aBoard->GetWorksheetViewItem()->ViewBBox() );

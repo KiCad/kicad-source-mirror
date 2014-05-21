@@ -73,9 +73,3 @@ PAINTER::PAINTER( GAL* aGal ) :
 PAINTER::~PAINTER()
 {
 }
-
-
-void PAINTER::SetGAL( GAL* aGal )
-{
-    m_gal = aGal;
-}

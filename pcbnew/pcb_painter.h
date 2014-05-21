@@ -79,7 +79,7 @@ public:
     PCB_RENDER_SETTINGS();
 
     /// @copydoc RENDER_SETTINGS::ImportLegacyColors()
-    void ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings );
+    void ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings );
 
     /**
      * Function LoadDisplayOptions
@@ -97,7 +97,7 @@ public:
      * Returns the color used to draw a layer.
      * @param aLayer is the layer number.
      */
-    const COLOR4D& GetLayerColor( int aLayer ) const
+    inline const COLOR4D& GetLayerColor( int aLayer ) const
     {
         return m_layerColors[aLayer];
     }
@@ -108,7 +108,7 @@ public:
      * @param aLayer is the layer number.
      * @param aColor is the new color.
      */
-    void SetLayerColor( int aLayer, const COLOR4D& aColor )
+    inline void SetLayerColor( int aLayer, const COLOR4D& aColor )
     {
         m_layerColors[aLayer] = aColor;
 
@@ -122,7 +122,7 @@ public:
      * @param aEnabled decides if it is drawn in sketch mode (true for sketched mode,
      * false for filled mode).
      */
-    void SetSketchMode( int aItemLayer, bool aEnabled )
+    inline void SetSketchMode( int aItemLayer, bool aEnabled )
     {
         // It is supposed to work only with item layers
         assert( aItemLayer >= ITEM_GAL_LAYER( 0 ) );
@@ -135,7 +135,7 @@ public:
      * Returns sketch mode setting for a given item layer.
      * @param aItemLayer is the item layer that is changed.
      */
-    bool GetSketchMode( int aItemLayer ) const
+    inline bool GetSketchMode( int aItemLayer ) const
     {
         // It is supposed to work only with item layers
         assert( aItemLayer >= ITEM_GAL_LAYER( 0 ) );
@@ -148,13 +148,13 @@ protected:
     void update();
 
     ///> Colors for all layers (normal)
-    COLOR4D m_layerColors    [TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColors[TOTAL_LAYER_COUNT];
 
     ///> Colors for all layers (highlighted)
-    COLOR4D m_layerColorsHi  [TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColorsHi[TOTAL_LAYER_COUNT];
 
     ///> Colors for all layers (selected)
-    COLOR4D m_layerColorsSel [TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColorsSel[TOTAL_LAYER_COUNT];
 
     ///> Colors for all layers (darkened)
     COLOR4D m_layerColorsDark[TOTAL_LAYER_COUNT];
@@ -188,21 +188,23 @@ class PCB_PAINTER : public PAINTER
 public:
     PCB_PAINTER( GAL* aGal );
 
-    /// @copydoc PAINTER::Draw()
-    virtual bool Draw( const VIEW_ITEM*, int );
-
     /// @copydoc PAINTER::ApplySettings()
-    virtual void ApplySettings( RENDER_SETTINGS* aSettings )
+    virtual void ApplySettings( const RENDER_SETTINGS* aSettings )
     {
-        PAINTER::ApplySettings( aSettings );
-
-        // Store PCB specific render settings
-        m_pcbSettings = (PCB_RENDER_SETTINGS*) m_settings.get();
+        m_pcbSettings = *static_cast<const PCB_RENDER_SETTINGS*>( aSettings );
     }
 
+    /// @copydoc PAINTER::GetSettings()
+    virtual RENDER_SETTINGS* GetSettings()
+    {
+        return &m_pcbSettings;
+    }
+
+    /// @copydoc PAINTER::Draw()
+    virtual bool Draw( const VIEW_ITEM* aItem, int aLayer );
+
 protected:
-    /// Just a properly casted pointer to settings
-    PCB_RENDER_SETTINGS* m_pcbSettings;
+    PCB_RENDER_SETTINGS m_pcbSettings;
 
     // Drawing functions for various types of PCB-specific items
     void draw( const TRACK* aTrack, int aLayer );

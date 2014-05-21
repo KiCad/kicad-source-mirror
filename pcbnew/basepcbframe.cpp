@@ -855,19 +855,6 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
     view->SetLayerTarget( ITEM_GAL_LAYER( RATSNEST_VISIBLE ), KIGFX::TARGET_OVERLAY );
 
-    // Apply layer coloring scheme & display options
-    if( view->GetPainter() )
-    {
-        KIGFX::PCB_RENDER_SETTINGS* settings = new KIGFX::PCB_RENDER_SETTINGS();
-
-        // Load layers' colors from PCB data
-        settings->ImportLegacyColors( m_Pcb->GetColorsSettings() );
-        view->GetPainter()->ApplySettings( settings );
-
-        // Load display options (such as filled/outline display of items)
-        settings->LoadDisplayOptions( DisplayOpt );
-    }
-
     // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
     // when reading doubles in config,
     // but forget to back to current locale. So we call SetLocaleTo_Default
