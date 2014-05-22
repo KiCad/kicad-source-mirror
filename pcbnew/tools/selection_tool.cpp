@@ -451,11 +451,9 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         {
             brightBox.reset( new BRIGHT_BOX( current ) );
             getView()->Add( brightBox.get() );
+            // BRIGHT_BOX is removed from view on destruction
         }
     }
-
-    // Removes possible brighten mark
-    getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 
     return current;
 }

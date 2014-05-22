@@ -493,7 +493,7 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
             // If nothing was chosen from the context menu, we must notify the tool as well
             if( menu->GetSelected() < 0 )
             {
-                TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE );
+                TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, -1 );
                 dispatchInternal( evt );
             }
 
@@ -518,10 +518,6 @@ void TOOL_MANAGER::ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
 
     st->contextMenu = aMenu;
     st->contextMenuTrigger = aTrigger;
-
-    // the tool wants the menu immediately? Preempt it and do so :)
-    if( aTrigger == CMENU_NOW )
-        st->cofunc->Yield();
 }
 
 

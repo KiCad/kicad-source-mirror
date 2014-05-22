@@ -97,7 +97,7 @@ protected:
         m_customHandler = aHandler;
     }
 
-    virtual OPT_TOOL_EVENT handleCustomEvent(const wxEvent& aEvent )
+    virtual OPT_TOOL_EVENT handleCustomEvent( const wxEvent& aEvent )
     {
         return OPT_TOOL_EVENT();
     }
