@@ -229,6 +229,8 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
         // Check if user wants to edit pad or module properties
         if( item->Type() == PCB_MODULE_T )
         {
+            item->ClearFlags();         // Necessary for having an undo entry
+
             for( D_PAD* pad = static_cast<MODULE*>( item )->Pads(); pad; pad = pad->Next() )
             {
                 if( pad->ViewBBox().Contains( getViewControls()->GetCursorPosition() ) )
@@ -240,20 +242,34 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
             }
         }
 
-        editFrame->SaveCopyInUndoList( item, UR_CHANGED );
-        editFrame->OnModify();
+        std::vector<PICKED_ITEMS_LIST*>& undoList = editFrame->GetScreen()->m_UndoList.m_CommandsList;
+
+        // It is necessary to determine if anything has changed
+        PICKED_ITEMS_LIST* lastChange = undoList.empty() ? NULL : undoList.back();
+
+        // Display properties dialog
         editFrame->OnEditItemRequest( NULL, item );
 
-        item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        PICKED_ITEMS_LIST* currentChange = undoList.empty() ? NULL : undoList.back();
 
-        updateRatsnest( true );
-        getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
-
-        if( unselect )
+        if( lastChange != currentChange )        // Something has changed
+        {
+            // Some of properties dialogs alter pointers, so we should deselect them
             m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+
+            processChanges( currentChange );
+
+            // Seems unnecessary, as the items are removed/added to the board
+            // updateRatsnest( true );
+            // getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
+
+            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+        }
     }
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+    if( unselect )
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+
     setTransitions();
 
     return 0;
@@ -508,4 +524,41 @@ bool EDIT_TOOL::makeSelection( const SELECTION_TOOL::SELECTION& aSelection )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionSingle );
 
     return !aSelection.Empty();
+}
+
+
+void EDIT_TOOL::processChanges( const PICKED_ITEMS_LIST* aList )
+{
+    for( unsigned int i = 0; i < aList->GetCount(); ++i )
+    {
+        UNDO_REDO_T operation = aList->GetPickedItemStatus( i );
+        EDA_ITEM* updItem = aList->GetPickedItem( i );
+
+        switch( operation )
+        {
+        case UR_CHANGED:
+            updItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            break;
+
+        case UR_DELETED:
+            if( updItem->Type() == PCB_MODULE_T )
+                static_cast<MODULE*>( updItem )->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove,
+                                                                             getView(), _1 ) );
+
+            getView()->Remove( updItem );
+            break;
+
+        case UR_NEW:
+            if( updItem->Type() == PCB_MODULE_T )
+                static_cast<MODULE*>( updItem )->RunOnChildren( boost::bind( &KIGFX::VIEW::Add,
+                                                                             getView(), _1 ) );
+
+            getView()->Add( updItem );
+            break;
+
+        default:
+            assert( false );    // Not handled
+            break;
+        }
+    }
 }

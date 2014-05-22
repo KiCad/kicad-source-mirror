@@ -428,10 +428,8 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     /* place module without ratsnest refresh: this will be made later
      * when all modules are on board
      */
-    wxPoint oldpos = GetCrossHairPosition();
-    SetCrossHairPosition( aOldModule->GetPosition(), false );
     PlaceModule( aNewModule, NULL, true );
-    SetCrossHairPosition( oldpos, false );
+    aNewModule->SetPosition( aOldModule->GetPosition() );
 
     // Flip footprint if needed
     if( aOldModule->GetLayer() != aNewModule->GetLayer() )
@@ -457,9 +455,8 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     for( D_PAD* pad = aNewModule->Pads(); pad != NULL; pad = pad->Next() )
     {
         pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
-        D_PAD*  old_pad = aOldModule->Pads();
 
-        for( ; old_pad != NULL; old_pad = old_pad->Next() )
+        for( D_PAD* old_pad = aOldModule->Pads(); old_pad != NULL; old_pad = old_pad->Next() )
         {
             if( pad->PadNameEqual( old_pad ) )
                 pad->SetNetCode( old_pad->GetNetCode() );
