@@ -30,6 +30,7 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
+#include <class_draw_panel_gal.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <wxPcbStruct.h>
@@ -43,6 +44,8 @@
 #include <pcbnew.h>
 #include <dialog_exchange_modules_base.h>
 #include <wildcards_and_files_ext.h>
+
+#include <boost/bind.hpp>
 
 static bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName );
 
@@ -470,9 +473,21 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
         ITEM_PICKER picker_new( aNewModule, UR_NEW );
         aUndoPickList->PushItem( picker_old );
         aUndoPickList->PushItem( picker_new );
+
+        if( IsGalCanvasActive() )
+        {
+            KIGFX::VIEW* view = GetGalCanvas()->GetView();
+
+            aOldModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+            view->Remove( aOldModule );
+
+            aNewModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+            view->Add( aNewModule );
+        }
     }
     else
     {
+        GetGalCanvas()->GetView()->Remove( aOldModule );
         aOldModule->DeleteStructure();
     }
 

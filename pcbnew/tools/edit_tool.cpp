@@ -229,8 +229,6 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
         // Check if user wants to edit pad or module properties
         if( item->Type() == PCB_MODULE_T )
         {
-            item->ClearFlags();         // Necessary for having an undo entry
-
             for( D_PAD* pad = static_cast<MODULE*>( item )->Pads(); pad; pad = pad->Next() )
             {
                 if( pad->ViewBBox().Contains( getViewControls()->GetCursorPosition() ) )
@@ -244,6 +242,11 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 
         std::vector<PICKED_ITEMS_LIST*>& undoList = editFrame->GetScreen()->m_UndoList.m_CommandsList;
 
+        // Some of properties dialogs alter pointers, so we should deselect them
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        STATUS_FLAGS flags = item->GetFlags();
+        item->ClearFlags();
+
         // It is necessary to determine if anything has changed
         PICKED_ITEMS_LIST* lastChange = undoList.empty() ? NULL : undoList.back();
 
@@ -254,17 +257,15 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 
         if( lastChange != currentChange )        // Something has changed
         {
-            // Some of properties dialogs alter pointers, so we should deselect them
-            m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
-
             processChanges( currentChange );
 
-            // Seems unnecessary, as the items are removed/added to the board
-            // updateRatsnest( true );
-            // getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
+            updateRatsnest( true );
+            getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
             m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
         }
+
+        item->SetFlags( flags );
     }
 
     if( unselect )
@@ -554,6 +555,7 @@ void EDIT_TOOL::processChanges( const PICKED_ITEMS_LIST* aList )
                                                                              getView(), _1 ) );
 
             getView()->Add( updItem );
+            updItem->ViewUpdate();
             break;
 
         default:
