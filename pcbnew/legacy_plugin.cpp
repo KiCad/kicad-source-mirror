@@ -2054,24 +2054,21 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         else
             makeType = aStructType;
 
-        TRACK*  newTrack;   // BOARD insert this new one immediately after instantiation
+        TRACK* newTrack;
 
         switch( makeType )
         {
         default:
         case PCB_TRACE_T:
             newTrack = new TRACK( m_board );
-            m_board->m_Track.Append( newTrack );
             break;
 
         case PCB_VIA_T:
             newTrack = new VIA( m_board );
-            m_board->m_Track.Append( newTrack );
             break;
 
         case PCB_ZONE_T:     // this is now deprecated, but exist in old boards
             newTrack = new SEGZONE( m_board );
-            m_board->m_Zone.Append( (SEGZONE*) newTrack );
             break;
         }
 
@@ -2099,6 +2096,8 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         newTrack->SetNetCode( net_code );
         newTrack->SetState( flags, true );
+
+        m_board->Add( newTrack );
     }
 
     THROW_IO_ERROR( "Missing '$EndTRACK'" );
