@@ -615,6 +615,24 @@ Create additional DRC tests for improved error checking.
 **Progress:**
 - Planning
 
+## Gerber File Attributes ## {#gerber_attributes}
+**Goal:**
+
+Add file attributes to gerber files for defining layer stacks.  See
+[this](http://www.ucamco.com/files/downloads/file/5/Extending_the_Gerber_Format_with_Attributes.pdf)
+document and [this](http://www.ucamco.com/files/downloads/file/22/Kick_Starting_a_Revolution_IPC-2581_Meets_Gerber.pdf)
+document for more information.
+
+**Task:**
+- Implement gerber file attributes as an optional setting when plotting gerber
+  files.
+
+**Dependencies:**
+- None
+
+**Progress:**
+- Under investigation.
+
 
 # GerbView: Gerber File Viewer # {#gerbview}
 
