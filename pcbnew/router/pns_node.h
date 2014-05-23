@@ -380,7 +380,8 @@ private:
                      int&            aPos,
                      int             aLimit,
                      VECTOR2I*       aCorners,
-                     PNS_SEGMENT**   aSegments );
+                     PNS_SEGMENT**   aSegments,
+                     bool&           aGuardHit );
 
     ///> hash table with the joints, linking the items. Joints are hashed by
     ///> their position, layer set and net.

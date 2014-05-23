@@ -715,25 +715,34 @@ void PNS_NODE::Remove( PNS_ITEM* aItem )
 
 
 void PNS_NODE::followLine( PNS_SEGMENT* aCurrent, bool aScanDirection, int& aPos,
-        int aLimit, VECTOR2I* aCorners, PNS_SEGMENT** aSegments )
+        int aLimit, VECTOR2I* aCorners, PNS_SEGMENT** aSegments, bool& aGuardHit )
 {
     bool prevReversed = false;
 
-    for( ; ; )
+    const VECTOR2I guard = aScanDirection ? aCurrent->Seg().B : aCurrent->Seg().A;
+
+    for( int count = 0 ; ; ++count )
     {
         const VECTOR2I p =
             ( aScanDirection ^ prevReversed ) ? aCurrent->Seg().B : aCurrent->Seg().A;
         const PNS_JOINT* jt = FindJoint( p, aCurrent );
 
         assert( jt );
-        assert( aPos > 0 && aPos < aLimit );
 
         aCorners[aPos] = jt->Pos();
-        aSegments[aPos] = aCurrent;
 
+        if( count && guard == p )
+        {
+            aSegments[aPos] = NULL;
+            aGuardHit = true;
+            break;
+        }
+
+        aSegments[aPos] = aCurrent;
+        
         aPos += ( aScanDirection ? 1 : -1 );
 
-        if( !jt->IsLineCorner() )
+        if( !jt->IsLineCorner() || aPos < 0 || aPos == aLimit )
             break;
 
         aCurrent = jt->NextSegment( aCurrent );
@@ -752,6 +761,8 @@ PNS_LINE* PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex)
     PNS_SEGMENT* segs[MaxVerts + 1];
 
     PNS_LINE* pl = new PNS_LINE;
+    bool guardHit = false;
+
     int i_start = MaxVerts / 2, i_end = i_start + 1;
 
     pl->SetWidth( aSeg->Width() );
@@ -759,9 +770,11 @@ PNS_LINE* PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex)
     pl->SetNet( aSeg->Net() );
     pl->SetOwner( this );
 
-    followLine( aSeg, false, i_start, MaxVerts, corners, segs );
-    followLine( aSeg, true, i_end, MaxVerts, corners, segs );
-
+    followLine( aSeg, false, i_start, MaxVerts, corners, segs, guardHit );
+    
+    if( !guardHit )
+        followLine( aSeg, true, i_end, MaxVerts, corners, segs, guardHit );
+    
     int n = 0;
 
     PNS_SEGMENT* prev_seg = NULL;
@@ -772,7 +785,7 @@ PNS_LINE* PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex)
 
         pl->Line().Append( p );
             
-        if( prev_seg != segs[i] )
+        if( segs[i] && prev_seg != segs[i] )
         {
             pl->LinkSegment( segs[i] );
 
@@ -785,10 +798,9 @@ PNS_LINE* PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex)
         prev_seg = segs[i];
     }
 
-    
     assert( pl->SegmentCount() != 0 );
     assert( pl->SegmentCount() == (int) pl->LinkedSegments()->size() );
-
+    
     return pl;
 }
 
