@@ -3368,7 +3368,8 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
 
     fprintf( m_fp, "At %s N %08X\n", texttype, me->GetLayerMask() );
 
-    fprintf( m_fp, "Ne %d %s\n", me->GetNetCode(), EscapedUTF8( me->GetNetname() ).c_str() );
+    fprintf( m_fp, "Ne %d %s\n", m_mapping->Translate( me->GetNetCode() ),
+             EscapedUTF8( me->GetNetname() ).c_str() );
 
     fprintf( m_fp, "Po %s\n", fmtBIUPoint( me->GetPos0() ).c_str() );
 
@@ -3635,7 +3636,7 @@ void LEGACY_PLUGIN::saveTRACK( const TRACK* me ) const
                 "-1" :  fmtBIU( drill ).c_str() );
 
     fprintf(m_fp, "De %d %d %d %lX %X\n",
-            me->GetLayer(), type, me->GetNetCode(),
+            me->GetLayer(), type, m_mapping->Translate( me->GetNetCode() ),
             me->GetTimeStamp(), me->GetStatus() );
 }
 
@@ -3649,7 +3650,7 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     // just for ZONE_CONTAINER compatibility
     fprintf( m_fp,  "ZInfo %lX %d %s\n",
                     me->GetTimeStamp(),
-                    me->GetIsKeepout() ? 0 : me->GetNetCode(),
+                    me->GetIsKeepout() ? 0 : m_mapping->Translate( me->GetNetCode() ),
                     EscapedUTF8( me->GetIsKeepout() ? wxT("") : me->GetNetname() ).c_str() );
 
     // Save the outline layer info
