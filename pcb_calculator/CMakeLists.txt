@@ -134,15 +134,6 @@ if( USE_KIWAY_DLLS )
             )
     endif()
 
-    if( APPLE )
-        # copies kiface into the bundle
-        add_custom_target( _pcb_calculator_kiface_copy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pcb_calculator/_pcb_calculator.kiface "${CMAKE_BINARY_DIR}/pcb_calculator/pcb_calculator.app/Contents/MacOS/"
-            DEPENDS pcb_calculator_kiface
-            COMMENT "Copying kiface into pcb_calculator"
-        )
-    endif()
-
 else()
 
     add_executable( pcb_calculator WIN32 MACOSX_BUNDLE
