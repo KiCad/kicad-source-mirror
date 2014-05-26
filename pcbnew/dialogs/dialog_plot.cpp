@@ -46,8 +46,6 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     m_plotOpts( aParent->GetPlotSettings() )
 {
     m_config = Kiface().KifaceSettings();
-    m_brdSettings = m_board->GetDesignSettings();
-
     Init_Dialog();
 
     GetSizer()->Fit( this );
@@ -101,9 +99,9 @@ void DIALOG_PLOT::Init_Dialog()
         break;
     }
 
-    msg = StringFromValue( g_UserUnit, m_brdSettings.m_SolderMaskMargin, true );
+    msg = StringFromValue( g_UserUnit, m_board->GetDesignSettings().m_SolderMaskMargin, true );
     m_SolderMaskMarginCurrValue->SetLabel( msg );
-    msg = StringFromValue( g_UserUnit, m_brdSettings.m_SolderMaskMinWidth, true );
+    msg = StringFromValue( g_UserUnit, m_board->GetDesignSettings().m_SolderMaskMinWidth, true );
     m_SolderMaskMinWidthCurrValue->SetLabel( msg );
 
     // Set units and value for HPGL pen size (this param in in mils).
