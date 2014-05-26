@@ -164,7 +164,7 @@ public:
      * Copy all contours to a KI_POLYGON_SET
      * @param aPolygons = the KI_POLYGON_WITH_HOLES to populate
      */
-    void    ExportTo( KI_POLYGON_SET& aPolygons );
+    void    ExportTo( KI_POLYGON_SET& aPolygons ) const;
 
     /**
      * Function ExportTo
@@ -172,7 +172,7 @@ public:
      * The first contour is the main outline, others are holes
      * @param aPolygoneWithHole = the KI_POLYGON_WITH_HOLES to populate
      */
-    void    ExportTo( KI_POLYGON_WITH_HOLES& aPolygoneWithHole );
+    void    ExportTo( KI_POLYGON_WITH_HOLES& aPolygoneWithHole ) const;
 
     /**
      * Function ImportFrom

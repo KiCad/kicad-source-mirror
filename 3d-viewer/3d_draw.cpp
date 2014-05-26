@@ -240,7 +240,12 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
 
     // Number of segments to convert a circle to polygon
-    const int       segcountforcircle   = 16;
+    // Boost polygon (at least v 1.54, v1.55 and previous) in very rare cases crashes
+    // when using 16 segments to approximate a circle.
+    // So using 18 segments is a workaround to try to avoid these crashes
+    // ( We already used this trick in plot_board_layers.cpp,
+    // see PlotSolderMaskLayer() )
+    const int       segcountforcircle   = 18;
     double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
     const int       segcountLowQuality  = 12;   // segments to draw a circle with low quality
                                                 // to reduce time calculations
@@ -355,9 +360,11 @@ void EDA_3D_CANVAS::BuildBoard3DView()
                 LAYER_NUM       zonelayer = zone->GetLayer();
 
                 if( zonelayer == layer )
+                {
                     zone->TransformSolidAreasShapesToPolygonSet(
                         hightQualityMode ? bufferPolys : bufferZonesPolys,
                         segcountLowQuality, correctionFactorLQ );
+                }
             }
         }
 

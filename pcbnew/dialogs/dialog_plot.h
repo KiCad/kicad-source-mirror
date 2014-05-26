@@ -41,8 +41,7 @@ public:
 private:
     PCB_EDIT_FRAME*     m_parent;
     BOARD*              m_board;
-    BOARD_DESIGN_SETTINGS  m_brdSettings;
-    wxConfigBase*          m_config;
+    wxConfigBase*       m_config;
     std::vector<LAYER_NUM> m_layerList;                // List to hold CheckListBox layer numbers
     double              m_XScaleAdjust;             // X scale factor adjust to compensate
                                                     // plotter X scaling error
