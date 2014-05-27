@@ -79,7 +79,11 @@ static void set_lib_env_var( const wxString& aAbsoluteArgv0 )
 #include <kiface_i.h>
 KIFACE_I& Kiface()
 {
-    wxASSERT( 0 );  // should never be called, only reference is from EDA_BASE_FRAME::config();
+    // This function should never be called.  It is only referenced from
+    // EDA_BASE_FRAME::config() and this is only provided to satisfy the linker,
+    // not to be actually called.
+    wxLogFatalError( wxT( "Unexpected call to Kiface() in kicad/kicad.cpp" ) );
+
     return (KIFACE_I&) *(KIFACE_I*) 0;
 }
 
