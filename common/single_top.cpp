@@ -84,41 +84,6 @@ static void set_lib_env_var( const wxString& aAbsoluteArgv0 )
 }
 
 
-// POLICY CHOICE 1: return the full path of the DSO to load from single_top.
-static const wxString dso_full_path( const wxString& aAbsoluteArgv0 )
-{
-    // Prefix basename with ${KIFACE_PREFIX} and change extension to ${KIFACE_SUFFIX}
-
-    // POLICY CHOICE 1: Keep same path, and therefore installer must put the kiface DSO
-    // in same dir as top process module.  Obviously alternatives are possible
-    // and that is why this is a separate function.  One alternative would be to use
-    // a portion of CMAKE_INSTALL_PREFIX and navigate to a "lib" dir, but that
-    // would require a recompile any time you chose to install into a different place.
-
-    // It is my decision to treat _eeschema.kiface and _pcbnew.kiface as "executables",
-    // not "libraries" in this regard, since most all program functionality lives
-    // in them. They are basically spin-offs from what was once a top process module.
-    // That may not make linux package maintainers happy, but that is not my job.
-    // Get over it.  KiCad is not a trivial suite, and multiple platforms come
-    // into play, not merely linux.  For starters they will use extension ".kiface",
-    // but later in time morph to ".so".  They are not purely libraries, else they
-    // would begin with "lib" in basename.  Like I said, get over it, we're serving
-    // too many masters here: python, windows, linux, OSX, multiple versions of wx...
-
-    wxFileName  fn( aAbsoluteArgv0 );
-    wxString    basename( KIFACE_PREFIX );  // start with special prefix
-
-    basename += fn.GetName();               // add argv[0]'s basename
-    fn.SetName( basename );
-
-    // Here a "suffix" == an extension with a preceding '.',
-    // so skip the preceding '.' to get an extension
-    fn.SetExt( KIFACE_SUFFIX + 1 );         // + 1 => &KIFACE_SUFFIX[1]
-
-    return fn.GetFullPath();
-}
-
-
 // Only a single KIWAY is supported in this single_top top level component,
 // which is dedicated to loading only a single DSO.
 KIWAY    Kiway( &Pgm(), KFCTL_STANDALONE );
