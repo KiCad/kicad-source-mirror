@@ -105,7 +105,7 @@ public:
         return &m_shape;
     }
 
-    PNS_VIA* Clone ( ) const;
+    PNS_VIA* Clone() const;
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const;
     
