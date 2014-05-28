@@ -98,7 +98,9 @@ int main( int argc, char **argv )
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> width) && width >= 0.001 )
+
+        tstr >> width;
+        if( !tstr.fail() && width >= 0.001 )
             ok = true;
     }
 
@@ -112,7 +114,9 @@ int main( int argc, char **argv )
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> length) && length > 0.0 )
+
+        tstr >> length;
+        if( !tstr.fail() && length > 0.0 )
             ok = true;
     }
 
@@ -126,7 +130,9 @@ int main( int argc, char **argv )
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> height) && height >= 0.001 )
+
+        tstr >> height;
+        if( !tstr.fail() && height >= 0.001 )
             ok = true;
     }
 
@@ -140,7 +146,9 @@ int main( int argc, char **argv )
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> chamfer) && chamfer >= 0.0 )
+
+        tstr >> chamfer;
+        if( !tstr.fail() && chamfer >= 0.0 )
         {
             if( chamfer > width / 3.0 || chamfer > length / 3.0 )
                 cout << "* WARNING: chamfer must be <= MIN( width, length )/3\n";
@@ -182,7 +190,9 @@ int main( int argc, char **argv )
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> wireDia) && wireDia >= 0.001 )
+
+        tstr >> wireDia;
+        if( !tstr.fail() && wireDia >= 0.001 )
         {
             if( wireDia >= length )
                 cout << "* WARNING: wire diameter must be < length\n";
@@ -201,7 +211,9 @@ int main( int argc, char **argv )
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> pitch) && pitch >= 0.001 )
+
+        tstr >> pitch;
+        if( !tstr.fail() && pitch >= 0.001 )
         {
             if( pitch <= ( length + wireDia ) / 2.0 )
                 cout << "* WARNING: pitch must be > (length + wireDia)/2\n";
