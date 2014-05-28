@@ -232,6 +232,7 @@ PNS_ITEM* PNS_ROUTER::syncVia( VIA* aVia )
             aVia->GetPosition(),
             PNS_LAYERSET( 0, 15 ),
             aVia->GetWidth(),
+            aVia->GetDrillValue(),
             aVia->GetNetCode() );
 
     v->SetDrill ( aVia->GetDrill() );
