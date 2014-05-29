@@ -54,7 +54,7 @@ static void addTextSegmToPoly( int x0, int y0, int xf, int yf )
 void BOARD::ConvertBrdLayerToPolygonalContours( LAYER_NUM aLayer, CPOLYGONS_LIST& aOutlines )
 {
     // Number of segments to convert a circle to a polygon
-    const int       segcountforcircle   = 16;
+    const int       segcountforcircle   = 18;
     double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
 
     // convert tracks and vias:

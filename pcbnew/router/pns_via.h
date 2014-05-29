@@ -108,13 +108,13 @@ public:
     PNS_VIA* Clone() const;
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const;
-    
+
     virtual VECTOR2I Anchor( int n ) const
     {
         return m_pos;
     }
 
-    virtual int AnchorCount() const 
+    virtual int AnchorCount() const
     {
         return 1;
     }

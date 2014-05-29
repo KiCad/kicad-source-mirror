@@ -19,8 +19,8 @@
 
 
 // Default marquer shape:
-const int M_SHAPE_SCALE = 6;     // default scaling factor for MarkerShapeCorners coordinates
-const int CORNERS_COUNT = 8;
+const int      M_SHAPE_SCALE = 6;     // default scaling factor for MarkerShapeCorners coordinates
+const unsigned CORNERS_COUNT = 8;
 /* corners of the default shape
  * actual coordinates are these values * .m_ScalingFactor
 */
