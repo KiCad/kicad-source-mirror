@@ -199,9 +199,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      */
     MODULE dummymodule( aPcb );    // Creates a dummy parent
     D_PAD dummypad( &dummymodule );
-    D_PAD* nextpad;
+
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
+        D_PAD* nextpad;
+
         for( D_PAD* pad = module->Pads(); pad != NULL; pad = nextpad )
         {
             nextpad = pad->Next();  // pad pointer can be modified by next code, so
@@ -228,7 +230,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 pad = &dummypad;
             }
 
-            if( pad->GetNetCode() != GetNetCode() )
+            // Note: netcode <=0 means not connected item
+            if( ( pad->GetNetCode() != GetNetCode() ) || ( pad->GetNetCode() <= 0 ) )
             {
                 item_clearance   = pad->GetClearance() + margin;
                 item_boundingbox = pad->GetBoundingBox();
@@ -246,14 +249,15 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 continue;
             }
 
-            int gap = zone_clearance;
-
             if( ( GetPadConnection( pad ) == PAD_NOT_IN_ZONE )
-                || ( GetNetCode() == 0 ) || ( pad->GetShape() == PAD_TRAPEZOID ) )
+                || ( pad->GetShape() == PAD_TRAPEZOID ) )
 
             // PAD_TRAPEZOID shapes are not in zones because they are used in microwave apps
             // and i think it is good that shapes are not changed by thermal pads or others
             {
+                int gap = zone_clearance;
+                int thermalGap = GetThermalReliefGap( pad );
+                gap = std::max( gap, thermalGap );
                 item_boundingbox = pad->GetBoundingBox();
 
                 if( item_boundingbox.Intersects( zone_boundingbox ) )

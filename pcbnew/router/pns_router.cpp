@@ -131,13 +131,13 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
         int i;
 
         for( i = FIRST_COPPER_LAYER; i <= LAST_COPPER_LAYER; i++ )
-		{
+        {
             if( lmsk & ( 1 << i ) )
             {
                 layers = PNS_LAYERSET( i );
                 break;
             }
-		}
+        }
         break;
     }
 
@@ -189,7 +189,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 
                 if( sz.x > sz.y )
                     delta = VECTOR2I( ( sz.x - sz.y ) / 2, 0 );
-                else 
+                else
                     delta = VECTOR2I( 0, ( sz.y - sz.x ) / 2 );
 
                 SHAPE_SEGMENT* shape = new SHAPE_SEGMENT( c - delta,  c + delta,
@@ -284,11 +284,11 @@ void PNS_ROUTER::SyncWorld()
     ClearWorld();
 
     int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
-    
+
     m_clearanceFunc = new PCBNEW_CLEARANCE_FUNC( m_board );
     m_world = new PNS_NODE();
     m_world->SetClearanceFunctor( m_clearanceFunc );
-    m_world->SetMaxClearance( 4 * worstClearance );   
+    m_world->SetMaxClearance( 4 * worstClearance );
 
     for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
     {
@@ -462,7 +462,7 @@ bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
     if( !aStartItem || aStartItem->OfKind( PNS_ITEM::SOLID ) )
         return false;
-    
+
     m_dragger = new PNS_DRAGGER ( this );
     m_dragger->SetWorld( m_world );
 
@@ -474,7 +474,7 @@ bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
         m_state = IDLE;
         return false;
     }
-    
+
     return true;
 }
 
@@ -489,7 +489,7 @@ bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     m_placer->Start( aP, aStartItem );
     m_currentEnd = aP;
     m_currentEndItem = NULL;
-    
+
     return true;
 }
 
@@ -603,7 +603,7 @@ void PNS_ROUTER::markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,
         PNS_NODE::OBSTACLES obstacles;
 
         aNode->QueryColliding( item, obstacles, PNS_ITEM::ANY );
-        
+
         if( item->OfKind( PNS_ITEM::LINE ) )
         {
             PNS_LINE *l = static_cast<PNS_LINE*>( item );
@@ -617,7 +617,7 @@ void PNS_ROUTER::markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,
 
         BOOST_FOREACH( PNS_OBSTACLE& obs, obstacles )
         {
-            int clearance = aNode->GetClearance( item, obs.m_item ); 
+            int clearance = aNode->GetClearance( item, obs.m_item );
             std::auto_ptr<PNS_ITEM> tmp( obs.m_item->Clone() );
             tmp->Mark( MK_VIOLATION );
             DisplayItem( tmp.get(), -1, clearance );
@@ -631,13 +631,13 @@ void PNS_ROUTER::updateView( PNS_NODE* aNode, PNS_ITEMSET& aCurrent )
 {
     PNS_NODE::ITEM_VECTOR removed, added;
     PNS_NODE::OBSTACLES obstacles;
- 
+
     if( !aNode )
         return;
-    
+
     if( Settings().Mode() == RM_MarkObstacles )
         markViolations(aNode, aCurrent, removed);
-    
+
     aNode->GetUpdatedItems( removed, added );
 
     BOOST_FOREACH( PNS_ITEM* item, added )
@@ -679,7 +679,7 @@ void PNS_ROUTER::movePlacing( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 
     m_placer->Move( aP, aEndItem );
     PNS_LINE current = m_placer->Trace();
-         
+
     DisplayItem( &current );
 
     if( current.EndsWithVia() )
@@ -790,18 +790,18 @@ bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
             rv = m_placer->FixRoute( aP, aEndItem );
             m_placingVia = false;
             break;
-            
+
         case DRAG_SEGMENT:
             rv = m_dragger->FixRoute();
             break;
-        
+
         default:
-			break;
-    } 
+            break;
+    }
 
     if( rv )
        StopRouting();
-    
+
     return rv;
 }
 
@@ -909,10 +909,10 @@ void PNS_ROUTER::DumpLog()
         case DRAG_SEGMENT:
             logger = m_dragger->Logger();
             break;
-    
+
         default:
             break;
-    }   
+    }
 
     if( logger )
         logger->Save ( "/tmp/shove.log" );
