@@ -451,7 +451,7 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     if( KICAD_BUILD_DYNAMIC AND APPLE )
         add_custom_target( osx_fix_bundles ALL DEPENDS cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
-        add_custom_command(TARGET osx_fix_bundles POST_BUILD COMMAND scripts/osx_fixbundle.sh COMMENT "Migrating dylibs to bundles")
+        add_custom_command(TARGET osx_fix_bundles POST_BUILD COMMAND ${PROJECT_SOURCE_DIR}/scripts/osx_fixbundle.sh ${PROJECT_SOURCE_DIR} COMMENT "Migrating dylibs to bundles")
     endif()
 
 endif( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC)
