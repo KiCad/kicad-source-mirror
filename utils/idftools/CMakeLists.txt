@@ -18,14 +18,7 @@ add_executable( idf2vrml idf2vrml.cpp )
 
 target_link_libraries( dxf2idf lib_dxf idf3 ${wxWidgets_LIBRARIES} )
 
-if( WIN32 )
-    set ( LIB_GLU glu32 )
-else()
-    set ( LIB_GLU GLU )
-endif()
-
-target_link_libraries( idf2vrml idf3 ${LIB_GLU} ${wxWidgets_LIBRARIES} )
-
+target_link_libraries( idf2vrml idf3 ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )
 
 install( TARGETS idfcyl idfrect dxf2idf idf2vrml
     DESTINATION ${KICAD_BIN}

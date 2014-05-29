@@ -40,8 +40,6 @@
 #include <cmath>
 #include <vrml_layer.h>
 
-#include <wx/glcanvas.h>    // CALLBACK definition, needed on Windows
-
 #ifndef CALLBACK
 #define CALLBACK
 #endif
