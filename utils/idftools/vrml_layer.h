@@ -32,8 +32,12 @@
  *  PCB for VRML output.
  */
 
-#ifndef VRML_BOARD_H
-#define VRML_BOARD_H
+#ifndef VRML_LAYER_H
+#define VRML_LAYER_H
+
+
+#include <wx/glcanvas.h>    // CALLBACK definition, needed on Windows
+                            // alse needed on OSX to define __DARWIN__
 
 #ifdef __WXMAC__
 #  ifdef __DARWIN__
@@ -426,4 +430,4 @@ public:
     const std::string& GetError( void );
 };
 
-#endif    // VRML_BOARD_H
+#endif    // VRML_LAYER_H
