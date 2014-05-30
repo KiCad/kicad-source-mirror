@@ -48,18 +48,19 @@ class DIALOG_PNS_SETTINGS_BASE : public wxDialog
 		wxSlider* m_effort;
 		wxStaticText* m_lowLabel;
 		wxStaticText* m_highLabel;
-		wxButton* m_ok;
-		wxButton* m_cancel;
+		wxStdDialogButtonSizer* m_stdButtons;
+		wxButton* m_stdButtonsOK;
+		wxButton* m_stdButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Interactive Router settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 289,504 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Interactive Router settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 313,528 ), long style = wxDEFAULT_DIALOG_STYLE ); 
 		~DIALOG_PNS_SETTINGS_BASE();
 	
 };
