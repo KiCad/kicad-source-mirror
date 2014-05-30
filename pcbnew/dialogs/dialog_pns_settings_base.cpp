@@ -89,20 +89,16 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bEffort->Add( bSlider, 1, wxEXPAND, 5 );
 	
 	
-	bOptions->Add( bEffort, 1, wxALL|wxEXPAND, 5 );
+	bOptions->Add( bEffort, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* bButtons;
-	bButtons = new wxBoxSizer( wxHORIZONTAL );
+	m_stdButtons = new wxStdDialogButtonSizer();
+	m_stdButtonsOK = new wxButton( this, wxID_OK );
+	m_stdButtons->AddButton( m_stdButtonsOK );
+	m_stdButtonsCancel = new wxButton( this, wxID_CANCEL );
+	m_stdButtons->AddButton( m_stdButtonsCancel );
+	m_stdButtons->Realize();
 	
-	m_ok = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ok->SetDefault(); 
-	bButtons->Add( m_ok, 1, wxALL, 5 );
-	
-	m_cancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtons->Add( m_cancel, 1, wxALL, 5 );
-	
-	
-	bOptions->Add( bButtons, 1, wxEXPAND, 5 );
+	bOptions->Add( m_stdButtons, 1, wxEXPAND, 5 );
 	
 	
 	bMainSizer->Add( bOptions, 1, wxEXPAND, 5 );
@@ -113,15 +109,15 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PNS_SETTINGS_BASE::OnClose ) );
-	m_ok->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::OnOkClick ), NULL, this );
-	m_cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::OnCancelClick ), NULL, this );
+	m_stdButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::OnCancelClick ), NULL, this );
+	m_stdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::OnOkClick ), NULL, this );
 }
 
 DIALOG_PNS_SETTINGS_BASE::~DIALOG_PNS_SETTINGS_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PNS_SETTINGS_BASE::OnClose ) );
-	m_ok->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::OnOkClick ), NULL, this );
-	m_cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::OnCancelClick ), NULL, this );
+	m_stdButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::OnCancelClick ), NULL, this );
+	m_stdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::OnOkClick ), NULL, this );
 	
 }
