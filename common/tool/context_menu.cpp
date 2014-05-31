@@ -193,6 +193,23 @@ void CONTEXT_MENU::onMenuEvent( wxEvent& aEvent )
 }
 
 
+void CONTEXT_MENU::setTool( TOOL_INTERACTIVE* aTool )
+{
+    m_tool = aTool;
+
+    for( unsigned i = 0; i < GetMenuItemCount(); ++i )
+    {
+        wxMenuItem* item = FindItemByPosition( i );
+
+        if( item->IsSubMenu() )
+        {
+            CONTEXT_MENU* menu = static_cast<CONTEXT_MENU*>( item->GetSubMenu() );
+            menu->setTool( aTool );
+        }
+    }
+}
+
+
 void CONTEXT_MENU::copyItem( const wxMenuItem* aSource, wxMenuItem* aDest ) const
 {
     assert( !aSource->IsSubMenu() );    // it does not transfer submenus
