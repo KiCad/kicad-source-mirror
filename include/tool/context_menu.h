@@ -115,17 +115,12 @@ private:
     ///> Event handler.
     void onMenuEvent( wxEvent& aEvent );
 
-    friend class TOOL_INTERACTIVE;
-
     /**
      * Function setTool()
      * Sets a tool that is the creator of the menu.
      * @param aTool is the tool that created the menu.
      */
-    void setTool( TOOL_INTERACTIVE* aTool )
-    {
-        m_tool = aTool;
-    }
+    void setTool( TOOL_INTERACTIVE* aTool );
 
     ///> Flag indicating that the menu title was set up.
     bool m_titleSet;
@@ -147,6 +142,8 @@ private:
 
     /// Custom events handler, allows to translate wxEvents to TOOL_EVENTs.
     boost::function<OPT_TOOL_EVENT(const wxEvent& aEvent)> m_customHandler;
+
+    friend class TOOL_INTERACTIVE;
 };
 
 #endif
