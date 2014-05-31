@@ -264,7 +264,7 @@ int ROUTER_TOOL::getDefaultWidth( int aNetCode )
 
 
 void ROUTER_TOOL::getNetclassDimensions( int aNetCode, int& aWidth,
-int& aViaDiameter, int& aViaDrill )
+                                         int& aViaDiameter, int& aViaDrill )
 {
     BOARD* board = getModel<BOARD>( PCB_T );
     BOARD_DESIGN_SETTINGS &bds = board->GetDesignSettings();
