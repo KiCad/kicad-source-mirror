@@ -402,7 +402,7 @@ bool PNS_LINE_PLACER::handleViaPlacement( PNS_LINE& aHead )
 }
 
 
-bool PNS_LINE_PLACER::rhWalkOnly ( const VECTOR2I& aP, PNS_LINE& aNewHead )
+bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
 {
     SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace( m_p_start, aP );
     PNS_LINE initTrack( m_head, line ), walkFull;
@@ -829,9 +829,9 @@ void PNS_LINE_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     if( !current.PointCount() )
         m_currentEnd = m_p_start;
     else
-        m_currentEnd = current.CLine().CPoint(-1);
+        m_currentEnd = current.CLine().CPoint( -1 );
 
-    PNS_NODE *latestNode = m_currentNode;
+    PNS_NODE* latestNode = m_currentNode;
     m_lastNode = latestNode->Branch();
     
     if( eiDepth >= 0 && aEndItem && latestNode->Depth() > eiDepth &&

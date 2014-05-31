@@ -235,7 +235,6 @@ PNS_ITEM* PNS_ROUTER::syncVia( VIA* aVia )
             aVia->GetDrillValue(),
             aVia->GetNetCode() );
 
-    v->SetDrill ( aVia->GetDrill() );
     v->SetParent( aVia );
 
     return v;
@@ -463,7 +462,7 @@ bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     if( !aStartItem || aStartItem->OfKind( PNS_ITEM::SOLID ) )
         return false;
 
-    m_dragger = new PNS_DRAGGER ( this );
+    m_dragger = new PNS_DRAGGER( this );
     m_dragger->SetWorld( m_world );
 
     if( m_dragger->Start ( aP, aStartItem ) )
@@ -485,7 +484,7 @@ bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
     m_placer = new PNS_LINE_PLACER( this );
     m_placer->SetLayer( m_currentLayer );
-    m_placer->SetWidth ( m_settings.GetTrackWidth() );
+    m_placer->SetWidth( m_settings.GetTrackWidth() );
     m_placer->Start( aP, aStartItem );
     m_currentEnd = aP;
     m_currentEndItem = NULL;
@@ -575,7 +574,7 @@ void PNS_ROUTER::Move( const VECTOR2I& aP, PNS_ITEM* endItem )
             break;
 
         case DRAG_SEGMENT:
-            moveDragging (aP, endItem );
+            moveDragging( aP, endItem );
             break;
 
 		default:
@@ -598,7 +597,7 @@ void PNS_ROUTER::moveDragging( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 void PNS_ROUTER::markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,
                                  PNS_NODE::ITEM_VECTOR& aRemoved )
 {
-    BOOST_FOREACH( PNS_ITEM *item, aCurrent.Items() )
+    BOOST_FOREACH( PNS_ITEM* item, aCurrent.Items() )
     {
         PNS_NODE::OBSTACLES obstacles;
 
@@ -606,11 +605,11 @@ void PNS_ROUTER::markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,
 
         if( item->OfKind( PNS_ITEM::LINE ) )
         {
-            PNS_LINE *l = static_cast<PNS_LINE*>( item );
+            PNS_LINE* l = static_cast<PNS_LINE*>( item );
 
             if( l->EndsWithVia() )
             {
-                PNS_VIA v ( l->Via() );
+                PNS_VIA v( l->Via() );
                 aNode->QueryColliding( &v, obstacles, PNS_ITEM::ANY );
             }
         }
@@ -685,8 +684,8 @@ void PNS_ROUTER::movePlacing( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     if( current.EndsWithVia() )
         DisplayItem( &current.Via() );
 
-    PNS_ITEMSET tmp ( &current );
-    updateView ( m_placer->CurrentNode ( true ), tmp );
+    PNS_ITEMSET tmp( &current );
+    updateView( m_placer->CurrentNode( true ), tmp );
 }
 
 
@@ -836,7 +835,7 @@ void PNS_ROUTER::FlipPosture()
     if( m_state == ROUTE_TRACK )
     {
         m_placer->FlipPosture();
-        m_placer->Move ( m_currentEnd, m_currentEndItem );
+        m_placer->Move( m_currentEnd, m_currentEndItem );
     }
 }
 
@@ -915,5 +914,5 @@ void PNS_ROUTER::DumpLog()
     }
 
     if( logger )
-        logger->Save ( "/tmp/shove.log" );
+        logger->Save( "/tmp/shove.log" );
 }
