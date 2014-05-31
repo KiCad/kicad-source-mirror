@@ -134,8 +134,8 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     if( aEvent.ControlDown() || aEvent.ShiftDown() )
     {
         // Scrolling
-        VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize() *
-                             ( (double) aEvent.GetWheelRotation() * wheelPanSpeed ), false );
+        VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) *
+                             ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
         double   scrollSpeed;
 
         if( abs( scrollVec.x ) > abs( scrollVec.y ) )
