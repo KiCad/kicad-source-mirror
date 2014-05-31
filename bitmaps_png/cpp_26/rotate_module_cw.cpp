@@ -88,6 +88,6 @@ static const unsigned char png[] = {
  0x33, 0x99, 0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 };
 
-const BITMAP_OPAQUE rotate_module_pos_xpm[1] = {{ png, sizeof( png ), "rotate_module_pos_xpm" }};
+const BITMAP_OPAQUE rotate_module_cw_xpm[1] = {{ png, sizeof( png ), "rotate_module_cw_xpm" }};
 
 //EOF
