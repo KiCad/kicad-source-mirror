@@ -74,11 +74,11 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
     // Default colors for specific layers
     m_layerColors[ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE )]             = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( PADS_HOLES_VISIBLE )]             = COLOR4D( 0.0, 0.5, 0.5, 0.8 );
-    m_layerColors[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )]            = COLOR4D( 0.7, 0.7, 0.7, 0.8 );
-    m_layerColors[ITEM_GAL_LAYER( PADS_VISIBLE )]                   = COLOR4D( 0.7, 0.7, 0.7, 0.8 );
-    m_layerColors[NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE )]      = COLOR4D( 0.8, 0.8, 0.8, 0.8 );
-    m_layerColors[NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.8 );
-    m_layerColors[NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.8 );
+    m_layerColors[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )]            = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
+    m_layerColors[ITEM_GAL_LAYER( PADS_VISIBLE )]                   = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
+    m_layerColors[NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE )]      = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[ITEM_GAL_LAYER( RATSNEST_VISIBLE )]               = COLOR4D( 0.4, 0.4, 0.4, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( WORKSHEET )]                      = COLOR4D( 0.5, 0.0, 0.0, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( DRC_VISIBLE )]                    = COLOR4D( 1.0, 0.0, 0.0, 0.8 );
