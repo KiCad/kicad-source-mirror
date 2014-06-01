@@ -3,10 +3,6 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
-#include <class_draw_panel_gal.h>
-#include <view/view.h>
-#include <pcb_painter.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
 
@@ -21,19 +17,16 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     if( GetBoard() == NULL )
         return false;
 
-    if( aQuery )
+    if( aQuery && GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
-        if( GetBoard()->m_Drawings || GetBoard()->m_Modules
-            || GetBoard()->m_Track || GetBoard()->m_Zone )
-        {
-            if( !IsOK( this,
-                       _( "Current Board will be lost and this operation cannot be undone. Continue ?" ) ) )
-                return false;
-        }
+        if( !IsOK( this,
+                   _( "Current Board will be lost and this operation cannot be undone. Continue ?" ) ) )
+            return false;
     }
 
     // Clear undo and redo lists because we want a full deletion
     GetScreen()->ClearUndoRedoList();
+    GetScreen()->ClrModify();
 
     // Items visibility flags will be set becuse a new board will be created.
     // Grid and ratsnest can be left to their previous state
@@ -84,14 +77,11 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     if( GetBoard() == NULL )
         return false;
 
-    if( aQuery && GetScreen()->IsModify() )
+    if( aQuery && GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
-        if( GetBoard()->m_Modules )
-        {
-            if( !IsOK( this,
-                       _( "Current Footprint will be lost and this operation cannot be undone. Continue ?" ) ) )
-                return false;
-        }
+        if( !IsOK( this,
+                   _( "Current Footprint will be lost and this operation cannot be undone. Continue ?" ) ) )
+            return false;
     }
 
     // Clear undo and redo lists

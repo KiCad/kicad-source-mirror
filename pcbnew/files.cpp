@@ -170,7 +170,8 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 
     case ID_NEW_BOARD:
         {
-            Clear_Pcb( true );
+            if( ! Clear_Pcb( true ) )
+                break;
 
             // Clear footprint library table for the new board.
             Prj().PcbFootprintLibs()->Clear();
