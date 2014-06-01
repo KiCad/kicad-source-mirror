@@ -59,9 +59,12 @@ static inline wxString FROM_UTF8( const char* cstring )
 // minimum drill diameters / slot widths to be represented in the IDF output
 #define IDF_MIN_DIA_MM ( 0.001 )
 #define IDF_MIN_DIA_THOU ( 0.00039 )
+#define IDF_MIN_DIA_TNM ( 100 )
 
-// conversion between mm and thou
-#define IDF_MM_TO_THOU 0.0254
+// conversion from thou to mm
+#define IDF_THOU_TO_MM 0.0254
+// conversion from TNM to mm
+#define IDF_TNM_TO_MM 0.00001
 
 namespace IDF3
 {
@@ -166,6 +169,7 @@ std::string GetPlacementString( IDF3::IDF_PLACEMENT aPlacement );
  */
 std::string GetLayerString( IDF3::IDF_LAYER aLayer );
 
+std::string GetOwnerString( IDF3::KEY_OWNER aOwner );
 }
 
 #endif // IDF_HELPERS_H

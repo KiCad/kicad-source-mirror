@@ -91,7 +91,9 @@ class IDF3_BOARD;
  */
 class BOARD_OUTLINE
 {
+friend class IDF3_BOARD;
 protected:
+    std::string                 errormsg;
     std::list< IDF_OUTLINE* >   outlines;
     IDF3::KEY_OWNER             owner;      // indicates the owner of this outline (MCAD, ECAD, UNOWNED)
     IDF3::OUTLINE_TYPE          outlineType;// type of IDF outline
@@ -102,15 +104,48 @@ protected:
     double                      thickness;  // Board/Extrude Thickness or Height (IDF spec)
 
     // Read outline data from a BOARD or LIBRARY file's outline section
-    bool readOutlines( std::ifstream& aBoardFile );
+    void readOutlines( std::ifstream& aBoardFile, IDF3::IDF_VERSION aIdfVersion );
     // Write comments to a BOARD or LIBRARY file (must not be within a SECTION as per IDFv3 spec)
     bool writeComments( std::ofstream& aBoardFile );
     // Write the outline owner to a BOARD file
     bool writeOwner( std::ofstream& aBoardFile );
     // Write the data of a single outline object
-    bool writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutline, size_t aIndex );
+    void writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutline, size_t aIndex );
     // Iterate through the outlines and write out all data
-    bool writeOutlines( std::ofstream& aBoardFile );  // write outline data (no headers)
+    void writeOutlines( std::ofstream& aBoardFile );  // write outline data (no headers)
+    // Clear internal list of outlines
+    void clearOutlines( void );
+    /**
+     * Function SetParent
+     * sets the parent IDF_BOARD object
+     */
+    void setParent( IDF3_BOARD* aParent );
+
+    // Shadow routines used by friends to bypass ownership checks
+    bool addOutline( IDF_OUTLINE* aOutline );
+    virtual bool setThickness( double aThickness );
+    virtual void clear( void );
+
+    /**
+     * Function readData
+     * reads data from a .BOARD_OUTLINE section
+     * In case of an unrecoverable error an exception is thrown. On a successful
+     * return the file pointer will be at the line following .END_BOARD_OUTLINE
+     *
+     * @param aBoardFile is an IDFv3 file opened for reading
+     * @param aHeader is the ".BOARD_OUTLINE" header line as read by FetchIDFLine
+     */
+    virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
+                           IDF3::IDF_VERSION aIdfVersion );
+
+    /**
+     * Function writeData
+     * writes the comments and .BOARD_OUTLINE section to an IDFv3 file.
+     * Throws exceptions.
+     *
+     * @param aBoardFile is an IDFv3 file opened for writing
+     */
+    virtual void writeData( std::ofstream& aBoardFile );
 
 public:
     BOARD_OUTLINE();
@@ -123,7 +158,7 @@ public:
      *
      * @param aUnit is the native unit (UNIT_MM or UNIT_THOU)
      */
-    virtual void SetUnit( IDF3::IDF_UNIT aUnit );
+    virtual bool SetUnit( IDF3::IDF_UNIT aUnit );
 
     /**
      * Function GetUnit
@@ -148,45 +183,18 @@ public:
     virtual double GetThickness( void );
 
     /**
-     * Function ReadData
-     * reads data from a .BOARD_OUTLINE section
-     *
-     * @param aBoardFile is an IDFv3 file opened for reading
-     * @param aHeader is the ".BOARD_OUTLINE" header line as read by FetchIDFLine
-     *
-     * @return bool: true if the BOARD_OUTLINE section was successfully read, otherwise
-     * false. In case of an unrecoverable error an exception is thrown. On a successful
-     * return the file pointer will be at the line following .END_BOARD_OUTLINE
-     */
-    virtual bool ReadData( std::ifstream& aBoardFile, const std::string& aHeader );
-
-    /**
-     * Function WriteData
-     * writes the comments and .BOARD_OUTLINE section to an IDFv3 file
-     *
-     * @param aBoardFile is an IDFv3 file opened for writing
-     *
-     * @return bool: true if the data had been successfully written, otherwise false.
-     */
-    virtual bool WriteData( std::ofstream& aBoardFile );
-
-    /**
      * Function Clear
-     * frees memory and reinitializes all internal data except for the parent pointer
+     * frees memory and reinitializes all internal data except for the parent pointer.
+     *
+     * @return bool: true if OK, false on ownership violations
      */
-    virtual void Clear( void );
+    virtual bool Clear( void );
 
     /**
      * Function GetOutlineType
      * returns the type of outline according to the IDFv3 classification
      */
     IDF3::OUTLINE_TYPE GetOutlineType( void );
-
-    /**
-     * Function SetParent
-     * sets the parent IDF_BOARD object
-     */
-    void SetParent( IDF3_BOARD* aParent );
 
     /**
      * Function GetParent
@@ -202,10 +210,7 @@ public:
      * @param aOutline is a valid IDF outline
      *
      * @return bool: true if the outline was added; false if the outline
-     * already existed. If the outline cannot be added due to a violation
-     * of the IDF specification (multiple outlines for anything other than
-     * a BOARD_OUTLINE, or the ownership rules are violated) an exception is
-     * thrown.
+     * already existed or an ownership violation occurs.
      */
     bool AddOutline( IDF_OUTLINE* aOutline );
 
@@ -221,8 +226,7 @@ public:
      * @param aOutline is a pointer to the outline to remove from the list
      *
      * @return bool: true if the outline was found and removed; false if
-     * the outline was not found. If an ownership violation occurs an
-     * exception is thrown.
+     * the outline was not found or an ownership violation occurs.
      */
     bool DelOutline( IDF_OUTLINE* aOutline );
 
@@ -237,8 +241,8 @@ public:
      * @param aIndex is an index to the outline to delete
      *
      * @return bool: true if the outline was found and deleted; false if
-     * the outline was not found. If an ownership violation or indexation
-     * error occurs an exception is thrown.
+     * the outline was not found or an ownership violation or indexation
+     * error occurs.
      */
     bool DelOutline( size_t aIndex );
 
@@ -259,8 +263,9 @@ public:
     /**
      * Function GetOutline
      * returns a pointer to the outline as specified by aIndex.
-     * If the index is out of bounds an error is thrown. It is the
-     * responsibility of the user to observe IDF ownership rules.
+     * If the index is out of bounds NULL is returned and the
+     * error message is set. It is the responsibility of the
+     * user to observe IDF ownership rules.
      */
     IDF_OUTLINE* GetOutline( size_t aIndex );
 
@@ -331,6 +336,11 @@ public:
      * deletes all comments
      */
     void  ClearComments( void );
+
+    const std::string& GetError( void )
+    {
+        return errormsg;
+    }
 };
 
 
@@ -340,19 +350,41 @@ public:
  */
 class OTHER_OUTLINE : public BOARD_OUTLINE
 {
+friend class IDF3_BOARD;
 private:
     std::string uniqueID;   // Outline Identifier (IDF spec)
     IDF3::IDF_LAYER side;   // Board Side [TOP/BOTTOM ONLY] (IDF spec)
 
+    /**
+     * Function readData
+     * reads an OTHER_OUTLINE data from an IDFv3 file.
+     * If an unrecoverable error occurs an exception is thrown.
+     *
+     * @param aBoardFile is an IDFv3 file open for reading
+     * @param aHeader is the .OTHER_OUTLINE header as read via FetchIDFLine
+     */
+    virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
+                           IDF3::IDF_VERSION aIdfVersion );
+
+    /**
+     * Function writeData
+     * writes the OTHER_OUTLINE data to an open IDFv3 file
+     *
+     * @param aBoardFile is an IDFv3 file open for writing
+     *
+     * @return bool: true if the data was successfully written, otherwise false.
+     */
+    virtual void writeData( std::ofstream& aBoardFile );
+
 public:
-    OTHER_OUTLINE();
+    OTHER_OUTLINE( IDF3_BOARD* aParent );
 
     /**
      * Function SetOutlineIdentifier
      * sets the Outline Identifier string of this OTHER_OUTLINE object
      * as per IDFv3 spec.
      */
-    virtual void SetOutlineIdentifier( const std::string aUniqueID );
+    virtual bool SetOutlineIdentifier( const std::string aUniqueID );
 
     /**
      * Function GetOutlineIdentifier
@@ -364,8 +396,8 @@ public:
      * Function SetSide
      * sets the side which this outline is applicable to (TOP, BOTTOM).
      *
-     * @return bool: true if the side was set, false if the side is invalid.
-     * An exception is thrown if there is a violation of IDF ownership rules.
+     * @return bool: true if the side was set, false if the side is invalid
+     * or there is a violation of IDF ownership rules.
      */
     virtual bool SetSide( IDF3::IDF_LAYER aSide );
 
@@ -376,32 +408,10 @@ public:
     virtual IDF3::IDF_LAYER GetSide( void );
 
     /**
-     * Function ReadData
-     * reads an OTHER_OUTLINE data from an IDFv3 file.
-     *
-     * @param aBoardFile is an IDFv3 file open for reading
-     * @param aHeader is the .OTHER_OUTLINE header as read via FetchIDFLine
-     *
-     * @return bool: true if data was read, otherwise false. If an unrecoverable
-     * error occurs an exception is thrown.
-     */
-    virtual bool ReadData( std::ifstream& aBoardFile, const std::string& aHeader );
-
-    /**
-     * Function WriteData
-     * writes the OTHER_OUTLINE data to an open IDFv3 file
-     *
-     * @param aBoardFile is an IDFv3 file open for writing
-     *
-     * @return bool: true if the data was successfully written, otherwise false.
-     */
-    virtual bool WriteData( std::ofstream& aBoardFile );
-
-    /**
      * Function Clear
      * deletes internal data except for the parent object
      */
-    virtual void Clear( void );
+    virtual bool Clear( void );
 };
 
 
@@ -411,20 +421,38 @@ public:
  */
 class ROUTE_OUTLINE : public BOARD_OUTLINE
 {
+friend class IDF3_BOARD;
+private:
+    /**
+     * Function readData
+     * reads ROUTE_OUTLINE data from an IDFv3 file
+     * If an unrecoverable error occurs an exception is thrown.
+     *
+     * @param aBoardFile is an open IDFv3 board file
+     * @param aHeader is the .ROUTE_OUTLINE header as returned by FetchIDFLine
+     */
+    virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
+                           IDF3::IDF_VERSION aIdfVersion );
+
+    /**
+     * Function writeData
+     * writes the ROUTE_OUTLINE data to an open IDFv3 file
+     */
+    virtual void writeData( std::ofstream& aBoardFile );
+
 protected:
     IDF3::IDF_LAYER layers; // Routing layers (IDF spec)
 
 public:
-    ROUTE_OUTLINE();
+    ROUTE_OUTLINE( IDF3_BOARD* aParent );
 
     /**
      * Function SetLayers
      * sets the layer or group of layers this outline is applicable to.
-     * This function is subject to IDF ownership rules. An exception is
-     * thrown if an invalid layer is provided or an IDF ownership violation
-     * occurs.
+     * This function is subject to IDF ownership rules; true is returned
+     * on success, otherwise false is returned and the error message is set.
      */
-    virtual void SetLayers( IDF3::IDF_LAYER aLayer );
+    virtual bool SetLayers( IDF3::IDF_LAYER aLayer );
 
     /**
      * Function GetLayers
@@ -433,28 +461,10 @@ public:
     virtual IDF3::IDF_LAYER GetLayers( void );
 
     /**
-     * Function ReadData
-     * reads ROUTE_OUTLINE data from an IDFv3 file
-     *
-     * @param aBoardFile is an open IDFv3 board file
-     * @param aHeader is the .ROUTE_OUTLINE header as returned by FetchIDFLine
-     *
-     * @return bool: true if data was read, otherwise false. If unrecoverable
-     * errors occur an exception is thrown.
-     */
-    virtual bool ReadData( std::ifstream& aBoardFile, const std::string& aHeader );
-
-    /**
-     * Function WriteData
-     * writes the ROUTE_OUTLINE data to an open IDFv3 file
-     */
-    virtual bool WriteData( std::ofstream& aBoardFile );
-
-    /**
      * Function Clear
      * deletes internal data except for the parent object
      */
-    virtual void Clear( void );
+    virtual bool Clear( void );
 };
 
 /**
@@ -463,20 +473,43 @@ public:
  */
 class PLACE_OUTLINE : public BOARD_OUTLINE
 {
+friend class IDF3_BOARD;
+private:
+    /**
+     * Function readData
+     * reads PLACE_OUTLINE data from an open IDFv3 file.
+     * If an unrecoverable error occurs an exception is thrown.
+     *
+     * @param aBoardFile is an IDFv3 file opened for reading
+     * @param aHeader is the .PLACE_OUTLINE header as returned by FetchIDFLine
+     */
+    virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
+                           IDF3::IDF_VERSION aIdfVersion );
+
+    /**
+     * Function writeData
+     * writes the PLACE_OUTLINE data to an open IDFv3 file
+     *
+     * @param aBoardFile is an IDFv3 file opened for writing
+     *
+     * @return bool: true if the data was successfully written, otherwise false
+     */
+    virtual void writeData( std::ofstream& aBoardFile );
+
 protected:
     IDF3::IDF_LAYER side;   // Board Side [TOP/BOTTOM/BOTH ONLY] (IDF spec)
     double height;          // Max Height (IDF spec)
 
 public:
-    PLACE_OUTLINE();
+    PLACE_OUTLINE( IDF3_BOARD* aParent );
 
     /**
      * Function SetSide
-     * sets the side (TOP, BOTTOM, BOTH) which this outline applies to,
-     * subject to IDF ownership rules. An exception is thrown if there is
-     * an ownership violation or an invalid layer is passed.
+     * sets the side (TOP, BOTTOM, BOTH) which this outline applies to.
+     * This function is subject to IDF ownership rules; true is returned
+     * on success, otherwise false is returned and the error message is set.
      */
-    virtual void SetSide( IDF3::IDF_LAYER aSide );
+    virtual bool SetSide( IDF3::IDF_LAYER aSide );
 
     /**
      * Function GetSide
@@ -486,11 +519,11 @@ public:
 
     /**
      * Function SetMaxHeight
-     * sets the maximum height of a component within this outline,
-     * subject to IDF ownership rules. An exception is thrown if
-     * there is an ownership violation or aHeight is negative.
+     * sets the maximum height of a component within this outline.
+     * This function is subject to IDF ownership rules; true is returned
+     * on success, otherwise false is returned and the error message is set.
      */
-    virtual void SetMaxHeight( double aHeight );
+    virtual bool SetMaxHeight( double aHeight );
 
     /**
      * Function GetMaxHeight
@@ -499,32 +532,10 @@ public:
     virtual double GetMaxHeight( void );
 
     /**
-     * Function ReadData
-     * reads PLACE_OUTLINE data from an open IDFv3 file.
-     *
-     * @param aBoardFile is an IDFv3 file opened for reading
-     * @param aHeader is the .PLACE_OUTLINE header as returned by FetchIDFLine
-     *
-     * @return bool: true if data was read, otherwise false. If there are
-     * unrecoverable errors an exception is thrown.
-     */
-    virtual bool ReadData( std::ifstream& aBoardFile, const std::string& aHeader );
-
-    /**
-     * Function WriteData
-     * writes the PLACE_OUTLINE data to an open IDFv3 file
-     *
-     * @param aBoardFile is an IDFv3 file opened for writing
-     *
-     * @return bool: true if the data was successfully written, otherwise false
-     */
-    virtual bool WriteData( std::ofstream& aBoardFile );
-
-    /**
      * Function Clear
      * deletes all internal data
      */
-    virtual void Clear( void );
+    virtual bool Clear( void );
 };
 
 
@@ -535,7 +546,7 @@ public:
 class ROUTE_KO_OUTLINE : public ROUTE_OUTLINE
 {
 public:
-    ROUTE_KO_OUTLINE();
+    ROUTE_KO_OUTLINE( IDF3_BOARD* aParent );
 };
 
 /**
@@ -547,7 +558,7 @@ public:
 class VIA_KO_OUTLINE : public OTHER_OUTLINE
 {
 public:
-    VIA_KO_OUTLINE();
+    VIA_KO_OUTLINE( IDF3_BOARD* aParent );
 };
 
 
@@ -559,7 +570,7 @@ public:
 class PLACE_KO_OUTLINE : public PLACE_OUTLINE
 {
 public:
-    PLACE_KO_OUTLINE();
+    PLACE_KO_OUTLINE( IDF3_BOARD* aParent );
 };
 
 /**
@@ -569,20 +580,42 @@ public:
  */
 class GROUP_OUTLINE : public BOARD_OUTLINE
 {
+friend class IDF3_BOARD;
 private:
     IDF3::IDF_LAYER side;   // Board Side [TOP/BOTTOM/BOTH ONLY] (IDF spec)
     std::string groupName;  // non-unique string
 
+    /**
+     * Function readData
+     * reads GROUP_OUTLINE data from an open IDFv3 file
+     * If an unrecoverable error occurs an exception is thrown.
+     *
+     * @param aBoardFile is an open IDFv3 file
+     * @param aHeader is the .PLACE_REGION header as returned by FetchIDFLine
+     */
+    virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
+                           IDF3::IDF_VERSION aIdfVersion );
+
+    /**
+     * Function writeData
+     * writes the data to a .PLACE_REGION section of an IDFv3 file
+     *
+     * @param aBoardFile is an IDFv3 file open for writing
+     *
+     * @return bool: true if the data is successfully written, otherwise false
+     */
+    virtual void writeData( std::ofstream& aBoardFile );
+
 public:
-    GROUP_OUTLINE();
+    GROUP_OUTLINE( IDF3_BOARD* aParent );
 
     /**
      * Function SetSide
-     * sets the side which this outline applies to (TOP, BOTTOM, BOTH),
-     * subject to IDF ownership rules. If an ownership violation occurs
-     * or an invalid side is specified, an exception is thrown.
+     * sets the side which this outline applies to (TOP, BOTTOM, BOTH).
+     * This function is subject to IDF ownership rules; true is returned
+     * on success, otherwise false is returned and the error message is set.
      */
-    virtual void SetSide( IDF3::IDF_LAYER aSide );
+    virtual bool SetSide( IDF3::IDF_LAYER aSide );
 
     /**
      * Function GetSide
@@ -593,10 +626,10 @@ public:
     /**
      * Function SetGroupName
      * sets the name of the group, subject to IDF ownership rules.
-     * An empty name or an ownership violation results in a thrown
-     * exception.
+     * This function is subject to IDF ownership rules; true is returned
+     * on success, otherwise false is returned and the error message is set.
      */
-    virtual void SetGroupName( std::string aGroupName );
+    virtual bool SetGroupName( std::string aGroupName );
 
     /**
      * Function GetGroupName
@@ -605,32 +638,10 @@ public:
     virtual const std::string& GetGroupName( void );
 
     /**
-     * Function ReadData
-     * reads GROUP_OUTLINE data from an open IDFv3 file
-     *
-     * @param aBoardFile is an open IDFv3 file
-     * @param aHeader is the .PLACE_REGION header as returned by FetchIDFLine
-     *
-     * @return bool: true if data was read, otherwise false. If an unrecoverable
-     * error occurs an exception is thrown.
-     */
-    virtual bool ReadData( std::ifstream& aBoardFile, const std::string& aHeader );
-
-    /**
-     * Function WriteData
-     * writes the data to a .PLACE_REGION section of an IDFv3 file
-     *
-     * @param aBoardFile is an IDFv3 file open for writing
-     *
-     * @return bool: true if the data is successfully written, otherwise false
-     */
-    virtual bool WriteData( std::ofstream& aBoardFile );
-
-    /**
      * Function Clear
      * deletes internal data, subject to IDF ownership rules
      */
-    virtual void Clear( void );
+    virtual bool Clear( void );
 };
 
 
@@ -640,6 +651,8 @@ public:
  */
 class IDF3_COMP_OUTLINE : public BOARD_OUTLINE
 {
+friend class IDF3_BOARD;
+friend class IDF3_COMP_OUTLINE_DATA;
 private:
     std::string     uid;        // unique ID
     std::string     geometry;   // geometry name (IDF)
@@ -649,46 +662,65 @@ private:
 
     std::map< std::string, std::string >    props;      // properties list
 
-    bool readProperties( std::ifstream& aLibFile );
+    void readProperties( std::ifstream& aLibFile );
     bool writeProperties( std::ofstream& aLibFile );
 
-public:
-    IDF3_COMP_OUTLINE();
-
     /**
-     * Function ReadData
+     * Function readData
      * reads a component outline from an open IDFv3 file
+     * If an unrecoverable error occurs, an exception is thrown.
      *
      * @param aLibFile is an open IDFv3 Library file
      * @param aHeader is the .ELECTRICAL or .MECHANICAL header as returned by FetchIDFLine
-     *
-     * @return bool: true if data was read, otherwise false. If unrecoverable errors
-     * occur, an exception is thrown.
      */
-    virtual bool ReadData( std::ifstream& aLibFile, const std::string& aHeader );
+    virtual void readData( std::ifstream& aLibFile, const std::string& aHeader,
+                           IDF3::IDF_VERSION aIdfVersion );
 
     /**
-     * Function WriteData
+     * Function writeData
      * writes comments and component outline data to an IDFv3 Library file
      *
      * @param aLibFile is an IDFv3 library file open for writing
      *
      * @return bool: true if the data was successfully written, otherwise false
      */
-    virtual bool WriteData( std::ofstream& aLibFile );
+    virtual void writeData( std::ofstream& aLibFile );
+
+    /**
+     * Function incrementRef
+     * increments the internal reference counter to keep track of the number of
+     * components referring to this outline.
+     *
+     * @return int: the number of current references to this component outline
+     */
+    int incrementRef( void );
+
+    /**
+     * Function decrementRef
+     * decrements the internal reference counter to keep track of the number of
+     * components referring to this outline.
+     *
+     * @return int: the number of remaining references or -1 if there were no
+     * references when the function was invoked, in which case the error message
+     * is also set.
+     */
+    int decrementRef( void );
+
+public:
+    IDF3_COMP_OUTLINE( IDF3_BOARD* aParent );
 
     /**
      * Function Clear
      * deletes internal outline data
      */
-    virtual void Clear( void );
+    virtual bool Clear( void );
 
     /**
      * Function SetComponentClass
-     * sets the type of component outline (.ELECTRICAL or .MECHANICAL)
-     * If the specified class is invalid an exception is thrown.
+     * sets the type of component outline (.ELECTRICAL or .MECHANICAL).
+     * Returns true on success, otherwise false and the error message is set
      */
-    void SetComponentClass( IDF3::COMP_TYPE aCompClass );
+    bool SetComponentClass( IDF3::COMP_TYPE aCompClass );
 
     /**
      * Function GetComponentClass
@@ -726,20 +758,6 @@ public:
      * this is equal to GEOM_NAME + "_" + PART_NAME
      */
     const std::string& GetUID( void );
-
-    /**
-     * Function IncrementRef
-     * increments the internal reference counter to keep track of the number of
-     * components referring to this outline.
-     */
-    int IncrementRef( void );
-
-    /**
-     * Function DecrementRef
-     * decrements the internal reference counter to keep track of the number of
-     * components referring to this outline.
-     */
-    int DecrementRef( void );
 
     /**
      * Function CreateDefaultOutline

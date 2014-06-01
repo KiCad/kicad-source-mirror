@@ -31,6 +31,7 @@
  *  would be more likely if we used a 1:1 scale.
  */
 
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -45,6 +46,7 @@
 #include <vector>
 #include <cstdlib>
 #include <cstring>
+#include <algorithm>
 #include <libgen.h>
 #include <unistd.h>
 
@@ -111,6 +113,7 @@ VRML_COLOR colors[NCOLORS] = { \
 bool WriteHeader( IDF3_BOARD& board, std::ofstream& file );
 bool MakeBoard( IDF3_BOARD& board, std::ofstream& file );
 bool MakeComponents( IDF3_BOARD& board, std::ofstream& file, bool compact );
+bool MakeOtherOutlines( IDF3_BOARD& board, std::ofstream& file );
 bool PopulateVRML( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* items, bool bottom,
                    double scale, double dX = 0.0, double dY = 0.0, double angle = 0.0 );
 bool AddSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg );
@@ -124,11 +127,18 @@ VRML_IDS* GetColor( std::map<std::string, VRML_IDS*>& cmap,
 
 void PrintUsage( void )
 {
-    cout << "-\nUsage: idf2vrml -f input_file.emn -s scale_factor -k\n";
-    cout << "flags: -k: produce KiCad-firendly VRML output; default is compact VRML\n-\n";
+    cout << "-\nUsage: idf2vrml -f input_file.emn -s scale_factor {-k} {-d} {-z} {-m}\n";
+    cout << "flags:\n";
+    cout << "       -k: produce KiCad-friendly VRML output; default is compact VRML\n";
+    cout << "       -d: suppress substitution of default outlines\n";
+    cout << "       -z: suppress rendering of zero-height outlines\n";
+    cout << "       -m: print object mapping to stdout for debugging purposes\n";
     cout << "example to produce a model for use by KiCad: idf2vrml -f input.emn -s 0.3937008 -k\n\n";
     return;
 }
+
+bool nozeroheights;
+bool showObjectMapping;
 
 int main( int argc, char **argv )
 {
@@ -148,9 +158,13 @@ int main( int argc, char **argv )
     std::string inputFilename;
     double scaleFactor = 1.0;
     bool   compact = true;
+    bool   nooutlinesubs = false;
     int    ichar;
 
-    while( ( ichar = getopt( argc, argv, ":f:s:k" ) ) != -1 )
+    nozeroheights = false;
+    showObjectMapping = false;
+
+    while( ( ichar = getopt( argc, argv, ":f:s:kdzm" ) ) != -1 )
     {
         switch( ichar )
         {
@@ -184,6 +198,18 @@ int main( int argc, char **argv )
             compact = false;
             break;
 
+        case 'd':
+            nooutlinesubs = true;
+            break;
+
+        case 'z':
+            nozeroheights = true;
+            break;
+
+        case 'm':
+            showObjectMapping = true;
+            break;
+
         case ':':
             cerr << "* Missing parameter to option '-" << ((char) optopt) << "'\n";
             PrintUsage();
@@ -215,10 +241,11 @@ int main( int argc, char **argv )
 
     cout << "** Reading file: " << inputFilename << "\n";
 
-    if( !pcb.ReadFile( FROM_UTF8( inputFilename.c_str() ) ) )
+    if( !pcb.ReadFile( FROM_UTF8( inputFilename.c_str() ), nooutlinesubs ) )
     {
-        CLEANUP;
-        cerr << "* Could not read file: " << inputFilename << "\n";
+        cerr << "** Failed to read IDF data:\n";
+        cerr << pcb.GetError() << "\n\n";
+
         return -1;
     }
 
@@ -260,6 +287,9 @@ int main( int argc, char **argv )
 
     // STEP 2: Render the components
     MakeComponents( pcb, ofile, compact );
+
+    // STEP 3: Render the OTHER outlines
+    MakeOtherOutlines( pcb, ofile );
 
     ofile << "]\n}\n";
     ofile.close();
@@ -328,7 +358,7 @@ bool MakeBoard( IDF3_BOARD& board, std::ofstream& file )
 
     vpcb.EnsureWinding( 0, false );
 
-    int nvcont = vpcb.GetNContours();
+    int nvcont = vpcb.GetNContours() - 1;
 
     while( nvcont > 0 )
         vpcb.EnsureWinding( nvcont--, true );
@@ -553,13 +583,10 @@ bool WriteTriangles( std::ofstream& file, VRML_IDS* vID, VRML_LAYER* layer, bool
     file << "coord Coordinate {\n";
     file << "point [\n";
 
-    // XXX: TODO: check return values of Write() routines; they may fail
-    // even though the stream is good (bad internal data)
-
     // Coordinates (vertices)
     if( plane )
     {
-        if( ! layer->WriteVertices( top_z, file, precision ) )
+        if( !layer->WriteVertices( top_z, file, precision ) )
         {
             cerr << "* errors writing planar vertices to " << vID->objectName << "\n";
             cerr << "** " << layer->GetError() << "\n";
@@ -567,7 +594,7 @@ bool WriteTriangles( std::ofstream& file, VRML_IDS* vID, VRML_LAYER* layer, bool
     }
     else
     {
-        if( ! layer->Write3DVertices( top_z, bottom_z, file, precision ) )
+        if( !layer->Write3DVertices( top_z, bottom_z, file, precision ) )
         {
             cerr << "* errors writing 3D vertices to " << vID->objectName << "\n";
             cerr << "** " << layer->GetError() << "\n";
@@ -717,6 +744,7 @@ bool MakeComponents( IDF3_BOARD& board, std::ofstream& file, bool compact )
 
     std::map< std::string, VRML_IDS*> cmap;  // map colors by outline UID
     VRML_IDS* vcp;
+    IDF3_COMP_OUTLINE* pout;
 
     while( sc != ec )
     {
@@ -732,12 +760,28 @@ bool MakeComponents( IDF3_BOARD& board, std::ofstream& file, bool compact )
 
         while( so != eo )
         {
+            if( (*so)->GetOutline()->GetThickness() < 0.00000001 && nozeroheights )
+            {
+                vpcb.Clear();
+                ++so;
+                continue;
+            }
+
             (*so)->GetOffsets( tX, tY, tZ, tA );
             tX += vX;
             tY += vY;
             tA += vA;
 
-            vcp = GetColor( cmap, cidx, ((IDF3_COMP_OUTLINE*)((*so)->GetOutline()))->GetUID() );
+            if( ( pout = (IDF3_COMP_OUTLINE*)((*so)->GetOutline()) ) )
+            {
+                vcp = GetColor( cmap, cidx, pout->GetUID() );
+            }
+            else
+            {
+                vpcb.Clear();
+                ++so;
+                continue;
+            }
 
             if( !compact )
             {
@@ -764,6 +808,12 @@ bool MakeComponents( IDF3_BOARD& board, std::ofstream& file, bool compact )
             if( !compact || !vcp->used )
             {
                 vpcb.EnsureWinding( 0, false );
+
+                int nvcont = vpcb.GetNContours() - 1;
+
+                while( nvcont > 0 )
+                    vpcb.EnsureWinding( nvcont--, true );
+
                 vpcb.Tesselate( NULL );
             }
 
@@ -791,6 +841,10 @@ bool MakeComponents( IDF3_BOARD& board, std::ofstream& file, bool compact )
 
             vcp = GetColor( cmap, cidx, ((IDF3_COMP_OUTLINE*)((*so)->GetOutline()))->GetUID() );
             vcp->bottom = bottom;
+
+            // note: this can happen because IDF allows some negative heights/thicknesses
+            if( bot > top )
+                std::swap( bot, top );
 
             WriteTriangles( file, vcp, &vpcb, false,
                             false, top, bot, board.GetUserPrecision(), compact );
@@ -828,7 +882,8 @@ VRML_IDS* GetColor( std::map<std::string, VRML_IDS*>& cmap, int& index, const st
         ostr << "OBJECTn" << refnum++;
         id->objectName = ostr.str();
 
-        cout << "* " << ostr.str() << " = '" << uid << "'\n";
+        if( showObjectMapping )
+            cout << "* " << ostr.str() << " = '" << uid << "'\n";
 
         cmap.insert( std::pair<std::string, VRML_IDS*>(uid, id) );
 
@@ -839,4 +894,94 @@ VRML_IDS* GetColor( std::map<std::string, VRML_IDS*>& cmap, int& index, const st
     }
 
     return cit->second;
+}
+
+
+bool MakeOtherOutlines( IDF3_BOARD& board, std::ofstream& file )
+{
+    int cidx = 2;   // color index; start at 2 since 0,1 are special (board, NOGEOM_NOPART)
+
+    VRML_LAYER vpcb;
+
+    double scale = board.GetUserScale();
+    double thick = board.GetBoardThickness() / 2.0;
+
+    // set the arc parameters according to output scale
+    int tI;
+    double tMin, tMax;
+    vpcb.GetArcParams( tI, tMin, tMax );
+    vpcb.SetArcParams( tI, tMin * scale, tMax * scale );
+
+    // Add the component outlines
+    const std::map< std::string, OTHER_OUTLINE* >*const comp = board.GetOtherOutlines();
+    std::map< std::string, OTHER_OUTLINE* >::const_iterator sc = comp->begin();
+    std::map< std::string, OTHER_OUTLINE* >::const_iterator ec = comp->end();
+
+    double top, bot;
+    bool   bottom;
+    int nvcont;
+
+    std::map< std::string, VRML_IDS*> cmap;  // map colors by outline UID
+    VRML_IDS* vcp;
+    OTHER_OUTLINE* pout;
+
+    while( sc != ec )
+    {
+        pout = sc->second;
+
+        if( pout->GetSide() == IDF3::LYR_BOTTOM )
+            bottom = true;
+        else
+            bottom = false;
+
+        if( pout->GetThickness() < 0.00000001 && nozeroheights )
+        {
+            vpcb.Clear();
+            ++sc;
+            continue;
+        }
+
+        vcp = GetColor( cmap, cidx, pout->GetOutlineIdentifier() );
+
+        if( !PopulateVRML( vpcb, pout->GetOutlines(), bottom,
+            board.GetUserScale(), 0, 0, 0 ) )
+        {
+            return false;
+        }
+
+        vpcb.EnsureWinding( 0, false );
+
+        nvcont = vpcb.GetNContours() - 1;
+
+        while( nvcont > 0 )
+            vpcb.EnsureWinding( nvcont--, true );
+
+        vpcb.Tesselate( NULL );
+
+        if( bottom )
+        {
+            top = -thick;
+            bot = ( top - pout->GetThickness() ) * scale;
+            top *= scale;
+        }
+        else
+        {
+            bot = thick;
+            top = (bot + pout->GetThickness() ) * scale;
+            bot *= scale;
+        }
+
+        // note: this can happen because IDF allows some negative heights/thicknesses
+        if( bot > top )
+            std::swap( bot, top );
+
+        vcp->bottom = bottom;
+        WriteTriangles( file, vcp, &vpcb, false,
+                        false, top, bot, board.GetUserPrecision(), false );
+
+        vpcb.Clear();
+        ++sc;
+    }
+
+    return true;
 }
