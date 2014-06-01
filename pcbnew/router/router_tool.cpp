@@ -659,6 +659,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
         if( m_needsSync )
         {
             m_router->SyncWorld();
+            m_router->SetView( getView() );
             m_needsSync = false;
         }
 
