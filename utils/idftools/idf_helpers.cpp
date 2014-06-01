@@ -229,8 +229,13 @@ bool IDF3::WriteLayersText( std::ofstream& aBoardFile, IDF3::IDF_LAYER aLayer )
             break;
 
         default:
-            ERROR_IDF << "Invalid IDF layer" << aLayer << "\n";
-            return false;
+            do{
+                std::ostringstream ostr;
+                ostr << "invalid IDF layer: " << aLayer;
+
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+            } while( 0 );
+
             break;
     }
 
@@ -290,6 +295,29 @@ std::string IDF3::GetLayerString( IDF3::IDF_LAYER aLayer )
 
     std::ostringstream ostr;
     ostr << "[INVALID LAYER VALUE]:" << aLayer;
+
+    return ostr.str();
+}
+
+std::string IDF3::GetOwnerString( IDF3::KEY_OWNER aOwner )
+{
+    switch( aOwner )
+    {
+        case IDF3::UNOWNED:
+            return "UNOWNED";
+
+        case IDF3::MCAD:
+            return "MCAD";
+
+        case IDF3::ECAD:
+            return "ECAD";
+
+        default:
+            break;
+    }
+
+    ostringstream ostr;
+    ostr << "UNKNOWN: " << aOwner;
 
     return ostr.str();
 }

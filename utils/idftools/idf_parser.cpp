@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -64,7 +65,7 @@ IDF3_COMP_OUTLINE_DATA::IDF3_COMP_OUTLINE_DATA( IDF3_COMPONENT* aParent,
     aoff = 0.0;
 
     if( aOutline )
-        aOutline->IncrementRef();
+        aOutline->incrementRef();
 
     return;
 }
@@ -86,19 +87,69 @@ IDF3_COMP_OUTLINE_DATA::IDF3_COMP_OUTLINE_DATA( IDF3_COMPONENT* aParent,
 IDF3_COMP_OUTLINE_DATA::~IDF3_COMP_OUTLINE_DATA()
 {
     if( outline )
-        outline->DecrementRef();
+        outline->decrementRef();
 
     return;
 }
 
-void IDF3_COMP_OUTLINE_DATA::SetOffsets( double aXoff, double aYoff,
+#ifndef DISABLE_IDF_OWNERSHIP
+bool IDF3_COMP_OUTLINE_DATA::checkOwnership( int aSourceLine, const char* aSourceFunc )
+{
+    if( !parent )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << aSourceLine << ":" << aSourceFunc << "():\n";
+        ostr << "* BUG: IDF3_COMP_OUTLINE_DATA::parent not set; cannot enforce ownership rules\n";
+        errormsg = ostr.str();
+
+        return false;
+    }
+
+    IDF3::IDF_PLACEMENT placement = parent->GetPlacement();
+    IDF3::CAD_TYPE parentCAD = parent->GetCadType();
+
+    if( placement == PS_PLACED || placement == PS_UNPLACED )
+        return true;
+
+    if( placement == PS_MCAD && parentCAD == CAD_MECH )
+        return true;
+
+    if( placement == PS_ECAD && parentCAD == CAD_ELEC )
+        return true;
+
+    do
+    {
+        ostringstream ostr;
+        ostr << "* " << __FILE__ << ":" << aSourceLine << ":" << aSourceFunc << "():\n";
+        ostr << "* ownership violation; CAD type is ";
+
+        if( parentCAD == CAD_MECH )
+            ostr << "MCAD ";
+        else
+            ostr << "ECAD ";
+
+        ostr << "while outline owner is " << GetPlacementString( placement ) << "\n";
+        errormsg = ostr.str();
+
+    } while( 0 );
+
+    return false;
+}
+#endif
+
+bool IDF3_COMP_OUTLINE_DATA::SetOffsets( double aXoff, double aYoff,
                                          double aZoff, double aAngleOff )
 {
+#ifndef DISABLE_IDF_OWNERSHIP
+    if( !checkOwnership( __LINE__, __FUNCTION__ ) )
+        return false;
+#endif
+
     xoff = aXoff;
     yoff = aYoff;
     zoff = aZoff;
     aoff = aAngleOff;
-    return;
+    return true;
 }
 
 void IDF3_COMP_OUTLINE_DATA::GetOffsets( double& aXoff, double& aYoff,
@@ -117,29 +168,34 @@ void IDF3_COMP_OUTLINE_DATA::SetParent( IDF3_COMPONENT* aParent )
     parent = aParent;
 }
 
-void IDF3_COMP_OUTLINE_DATA::SetOutline( IDF3_COMP_OUTLINE* aOutline )
+bool IDF3_COMP_OUTLINE_DATA::SetOutline( IDF3_COMP_OUTLINE* aOutline )
 {
+#ifndef DISABLE_IDF_OWNERSHIP
+    if( !checkOwnership( __LINE__, __FUNCTION__ ) )
+        return false;
+#endif
+
     if( outline )
-        outline->DecrementRef();
+        outline->decrementRef();
 
     outline = aOutline;
 
     if( outline )
-        outline->IncrementRef();
+        outline->incrementRef();
 
-    return;
+    return true;
 }
 
-bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
-                                            IDF3::FILE_STATE& aBoardState, IDF3_BOARD *aBoard )
+
+bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::ifstream &aBoardFile,
+                                            IDF3::FILE_STATE& aBoardState,
+                                            IDF3_BOARD *aBoard,
+                                            IDF3::IDF_VERSION aIdfVersion,
+                                            bool aNoSubstituteOutlines )
 {
     if( !aBoard )
-    {
-        ERROR_IDF;
-        cerr << "BUG: invoked with no reference to the parent IDF_BOARD\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "\n* BUG: invoked with no reference to the parent IDF_BOARD" ) );
 
     // clear out data possibly left over from previous use of the object
     outline = NULL;
@@ -161,19 +217,25 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
 
     if( ( !aBoardFile.good() && !aBoardFile.eof() ) || iline.empty() )
     {
-        ERROR_IDF;
-        cerr << "problems reading PLACEMENT SECTION\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: could not read PLACEMENT section\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     if( isComment )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: comment within a section (PLACEMENT)\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: comment within PLACEMENT section\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     idx = 0;
@@ -181,7 +243,6 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
 
     if( !quoted && CompareToken( ".END_PLACEMENT", token ) )
     {
-        errno = 0;
         aBoardState = IDF3::FILE_PLACEMENT;
         return false;
     }
@@ -190,11 +251,14 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: no PART NAME in PLACEMENT RECORD2\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: no PART NAME in PLACEMENT RECORD2\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     std::string npart = token;
@@ -202,12 +266,14 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: no REFDES in PLACEMENT RECORD2\n";
-        cerr << "* Line: '" << iline << "'\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: no REFDES in PLACEMENT RECORD2\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     if( CompareToken( "NOREFDES", token ) )
@@ -223,27 +289,36 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
     }
     else if( CompareToken( "BOARD", token ) )
     {
-        ERROR_IDF;
-        cerr << "unsupported feature\n";
-        cerr << "* RefDes is 'BOARD', indicating this is a PANEL FILE (not supported)\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "UNSUPPORTED FEATURE\n";
+        ostr << "* RefDes is 'BOARD', indicating this is a PANEL FILE (not supported)\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
     else if( CompareToken( "PANEL", token ) )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: RefDes in PLACEMENT RECORD2 is 'PANEL'\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: RefDes in PLACEMENT RECORD2 is 'PANEL'\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
     else if( token.empty() )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: empty RefDes string in PLACEMENT RECORD2\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: empty RefDes string in PLACEMENT RECORD2\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
     else
     {
@@ -251,24 +326,31 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
         refdes = token;
     }
 
-    // RECORD 3: X, Y, Z, ROT, SIDE (top/bot), PLACEMENT (placed, unplaced, mcad, ecad)
+    // V2: RECORD 3: X, Y, ROT, SIDE (top/bot), PLACEMENT (fixed, placed, unplaced)
+    // V3: RECORD 3: X, Y, Z, ROT, SIDE (top/bot), PLACEMENT (placed, unplaced, mcad, ecad)
     while( !FetchIDFLine( aBoardFile, iline, isComment, pos ) && aBoardFile.good() );
 
     if( !aBoardFile.good() )
     {
-        ERROR_IDF;
-        cerr << "problems reading PLACEMENT SECTION, RECORD 3\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* problems reading PLACEMENT SECTION, RECORD 3\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     if( isComment )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: comment within a section (PLACEMENT)\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: comment within PLACEMENT section\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     idx = 0;
@@ -276,11 +358,14 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
 
     if( quoted )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: X value must not be in quotes (PLACEMENT RECORD 3)\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: X value must not be in quotes (PLACEMENT RECORD 3)\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     istringstream istr;
@@ -289,20 +374,26 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
     istr >> xoff;
     if( istr.fail() )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: X value is not numeric (PLACEMENT RECORD 3)\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: X value is not numeric (PLACEMENT RECORD 3)\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: no Y value in PLACEMENT RECORD 3\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: no Y value (PLACEMENT RECORD 3)\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     istr.clear();
@@ -311,42 +402,57 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
     istr >> yoff;
     if( istr.fail() )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: Y value is not numeric (PLACEMENT RECORD 3)\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: Y value is not numeric (PLACEMENT RECORD 3)\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+    }
+
+    if( aIdfVersion > IDF_V2 )
+    {
+        if( !GetIDFString( iline, token, quoted, idx ) )
+        {
+            ostringstream ostr;
+
+            ostr << "invalid IDFv3 file\n";
+            ostr << "* violation: no Z value (PLACEMENT RECORD 3)\n";
+            ostr << "* line: '" << iline << "'\n";
+            ostr << "* file position: " << pos;
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        }
+
+        istr.clear();
+        istr.str( token );
+
+        istr >> zoff;
+        if( istr.fail() )
+        {
+            ostringstream ostr;
+
+            ostr << "invalid IDFv3 file\n";
+            ostr << "* violation: Z value is not numeric (PLACEMENT RECORD 3)\n";
+            ostr << "* line: '" << iline << "'\n";
+            ostr << "* file position: " << pos;
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        }
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: no Z value in PLACEMENT RECORD 3\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        ostringstream ostr;
 
-    istr.clear();
-    istr.str( token );
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: no rotation value (PLACEMENT RECORD 3)\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
 
-    istr >> zoff;
-    if( istr.fail() )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: Z value is not numeric (PLACEMENT RECORD 3)\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
-
-    if( !GetIDFString( iline, token, quoted, idx ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: no rotation value in PLACEMENT RECORD 3\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     istr.clear();
@@ -355,20 +461,26 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
     istr >> aoff;
     if( istr.fail() )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: rotation value is not numeric (PLACEMENT RECORD 3)\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: rotation value is not numeric (PLACEMENT RECORD 3)\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: no SIDE value in PLACEMENT RECORD 3\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: no SIDE value (PLACEMENT RECORD 3)\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     if( CompareToken( "TOP", token ) )
@@ -381,21 +493,27 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
     }
     else
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: SIDE value in PLACEMENT RECORD 3 is invalid ('";
-        cerr << token << "')\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: invalid SIDE value in PLACEMENT RECORD 3 ('";
+        ostr << token << "'); must be one of TOP/BOTTOM\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: no PLACEMENT value in PLACEMENT RECORD 3\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: no PLACEMENT value in PLACEMENT RECORD 3\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     if( CompareToken( "PLACED", token ) )
@@ -406,27 +524,37 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
     {
         placement = IDF3::PS_UNPLACED;
     }
-    else if( CompareToken( "MCAD", token ) )
+    else if( aIdfVersion > IDF_V2 && CompareToken( "MCAD", token ) )
     {
         placement = IDF3::PS_MCAD;
     }
-    else if( CompareToken( "ECAD", token ) )
+    else if( aIdfVersion > IDF_V2 && CompareToken( "ECAD", token ) )
     {
         placement = IDF3::PS_ECAD;
     }
+    else if( aIdfVersion < IDF_V3 && CompareToken( "FIXED", token ) )
+    {
+        if( aBoard->GetCadType() == CAD_ELEC )
+            placement = IDF3::PS_MCAD;
+        else
+            placement = IDF3::PS_ECAD;
+    }
     else
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: PLACEMENT value in PLACEMENT RECORD 3 is invalid ('";
-        cerr << token << "')\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* violation: invalid PLACEMENT value ('";
+        ostr << token << "') in PLACEMENT RECORD 3\n";
+        ostr << "* line: '" << iline << "'\n";
+        ostr << "* file position: " << pos;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     outline = aBoard->GetComponentOutline( uid );
 
-    if( outline == NULL )
+    if( outline == NULL && !aNoSubstituteOutlines )
     {
         ERROR_IDF << "MISSING OUTLINE\n";
         cerr << "* GeomName( " << ngeom << " ), PartName( " << npart << " )\n";
@@ -434,18 +562,15 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
         outline = aBoard->GetInvalidOutline( ngeom, npart );
 
         if( outline == NULL )
-        {
-            ERROR_IDF << "cannot create outline object\n";
-            aBoardState = IDF3::FILE_INVALID;
-            return false;
-        }
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                              "\n* missing outline: cannot create default" ) );
     }
 
     if( aBoard->GetUnit() == IDF3::UNIT_THOU )
     {
-        xoff *= IDF_MM_TO_THOU;
-        yoff *= IDF_MM_TO_THOU;
-        zoff *= IDF_MM_TO_THOU;
+        xoff *= IDF_THOU_TO_MM;
+        yoff *= IDF_THOU_TO_MM;
+        zoff *= IDF_THOU_TO_MM;
     }
 
     parent = aBoard->FindComponent( refdes );
@@ -456,10 +581,10 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
 
         if( cp == NULL )
         {
-            ERROR_IDF << "cannot create component object\n";
-            aBoardState = IDF3::FILE_INVALID;
             outline = NULL;
-            return false;
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                              "cannot create component object" ) );
         }
 
         cp->SetRefDes( refdes );
@@ -483,12 +608,17 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
         {
             if( side != tL )
             {
-                ERROR_IDF << "inconsistent PLACEMENT data\n";
-                cerr << "* SIDE value has changed from " << GetLayerString( tL );
-                cerr << " to " << GetLayerString( side ) << "\n";
-                aBoardState = IDF3::FILE_INVALID;
                 outline = NULL;
-                return false;
+                ostringstream ostr;
+
+                ostr << "invalid IDF file\n";
+                ostr << "* violation: inconsistent PLACEMENT data; ";
+                ostr << "* SIDE value has changed from " << GetLayerString( tL );
+                ostr << " to " << GetLayerString( side ) << "\n";
+                ostr << "* line: '" << iline << "'\n";
+                ostr << "* file position: " << pos;
+
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
             }
 
             xoff -= tX;
@@ -507,13 +637,18 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
 
         if( placement != parent->GetPlacement() )
         {
-            ERROR_IDF << "inconsistent PLACEMENT data\n";
-            cerr << "* placement value has changed from " << GetPlacementString( parent->GetPlacement() );
-            cerr << " to " << GetPlacementString( placement ) << "\n";
-            cerr << "* line: '" << iline << "'\n";
-            aBoardState = IDF3::FILE_INVALID;
             outline = NULL;
-            return false;
+            ostringstream ostr;
+
+            ostr << "invalid IDF file\n";
+            ostr << "* violation: inconsistent PLACEMENT data; ";
+            ostr << "* PLACEMENT value has changed from ";
+            ostr << GetPlacementString( parent->GetPlacement() );
+            ostr << " to " << GetPlacementString( placement ) << "\n";
+            ostr << "* line: '" << iline << "'\n";
+            ostr << "* file position: " << pos;
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
 
     }
@@ -521,34 +656,33 @@ bool IDF3_COMP_OUTLINE_DATA::ReadPlaceData( std::ifstream &aBoardFile,
     // copy internal data to a new object and push it into the component's outline list
     IDF3_COMP_OUTLINE_DATA* cdp = new IDF3_COMP_OUTLINE_DATA;
     *cdp = *this;
-    outline->IncrementRef();
+    if( outline ) outline->incrementRef();
     outline = NULL;
 
     if( !parent->AddOutlineData( cdp ) )
     {
-        ERROR_IDF << "could not add outline data object\n";
-        aBoardState = IDF3::FILE_INVALID;
         delete cdp;
-        return false;
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "could not add outline data object" ) );
     }
 
     return true;
-}
+}   // IDF3_COMP_OUTLINE_DATA::readPlaceData
 
-bool IDF3_COMP_OUTLINE_DATA::WritePlaceData( std::ofstream& aBoardFile,
+
+void IDF3_COMP_OUTLINE_DATA::writePlaceData( std::ofstream& aBoardFile,
                                              double aXpos, double aYpos, double aAngle,
                                              const std::string aRefDes,
                                              IDF3::IDF_PLACEMENT aPlacement,
                                              IDF3::IDF_LAYER aSide )
 {
     if( outline == NULL )
-        return true;
+        return;
 
     if( outline->GetUID().empty() )
-    {
-        ERROR_IDF << "invalid GEOM/PART names\n";
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "empty GEOM and PART names" ) );
 
     if( aPlacement == PS_INVALID )
     {
@@ -558,8 +692,11 @@ bool IDF3_COMP_OUTLINE_DATA::WritePlaceData( std::ofstream& aBoardFile,
 
     if( aSide != LYR_TOP && aSide != LYR_BOTTOM )
     {
-        ERROR_IDF << "invalid side (" << aSide << "); must be TOP or BOTTOM\n";
-        return false;
+        ostringstream ostr;
+        ostr << "\n* invalid side (" << GetLayerString( aSide ) << "); ";
+        ostr << "must be TOP or BOTTOM\n";
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     // calculate the final position based on layer
@@ -602,8 +739,8 @@ bool IDF3_COMP_OUTLINE_DATA::WritePlaceData( std::ofstream& aBoardFile,
     }
     else
     {
-        aBoardFile << setiosflags(ios::fixed) << setprecision(1) << (xpos / IDF_MM_TO_THOU) << " "
-        << (ypos / IDF_MM_TO_THOU) << " "  << (zoff / IDF_MM_TO_THOU) << " "
+        aBoardFile << setiosflags(ios::fixed) << setprecision(1) << (xpos / IDF_THOU_TO_MM) << " "
+        << (ypos / IDF_THOU_TO_MM) << " "  << (zoff / IDF_THOU_TO_MM) << " "
         << setprecision(3) << ang << " ";
     }
 
@@ -628,7 +765,7 @@ bool IDF3_COMP_OUTLINE_DATA::WritePlaceData( std::ofstream& aBoardFile,
             break;
     }
 
-    return !aBoardFile.fail();
+    return;
 }
 
 
@@ -638,19 +775,6 @@ bool IDF3_COMP_OUTLINE_DATA::WritePlaceData( std::ofstream& aBoardFile,
  * This represents a component and its associated
  * IDF outlines and ancillary data (position, etc)
  */
-IDF3_COMPONENT::IDF3_COMPONENT()
-{
-    xpos   = 0.0;
-    ypos   = 0.0;
-    angle  = 0.0;
-    parent = NULL;
-
-    hasPosition = false;
-    placement   = PS_INVALID;
-    layer       = LYR_INVALID;
-    return;
-}
-
 IDF3_COMPONENT::IDF3_COMPONENT( IDF3_BOARD* aParent )
 {
     xpos   = 0.0;
@@ -692,6 +816,73 @@ IDF3_COMPONENT::~IDF3_COMPONENT()
     return;
 }
 
+#ifndef DISABLE_IDF_OWNERSHIP
+bool IDF3_COMPONENT::checkOwnership( int aSourceLine, const char* aSourceFunc )
+{
+    if( !parent )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << aSourceLine << ":" << aSourceFunc << "():\n";
+        ostr << "\n* BUG: parent not set";
+        errormsg = ostr.str();
+
+        return false;
+    }
+
+    IDF3::CAD_TYPE pcad = parent->GetCadType();
+
+    switch( placement )
+    {
+        case PS_UNPLACED:
+        case PS_PLACED:
+        case PS_INVALID:
+            break;
+
+        case PS_MCAD:
+
+            if( pcad != CAD_MECH )
+            {
+                ostringstream ostr;
+                ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+                ostr << "\n* ownership violation; internal CAD type (MCAD) conflicts with PLACEMENT (";
+                ostr << GetPlacementString( placement ) << ")";
+                errormsg = ostr.str();
+
+                return false;
+            }
+            break;
+
+        case PS_ECAD:
+
+            if( pcad != CAD_ELEC )
+            {
+                ostringstream ostr;
+                ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+                ostr << "\n* ownership violation; internal CAD type (MCAD) conflicts with PLACEMENT (";
+                ostr << GetPlacementString( placement ) << ")";
+                errormsg = ostr.str();
+
+                return false;
+            }
+            break;
+
+        default:
+            do{
+                ostringstream ostr;
+                ostr << "\n* BUG: unhandled internal placement value (" << placement << ")";
+                errormsg = ostr.str();
+
+                return false;
+            } while( 0 );
+
+            break;
+    }
+
+    return true;
+}
+#endif
+
+
 void IDF3_COMPONENT::SetParent( IDF3_BOARD* aParent )
 {
     parent = aParent;
@@ -714,25 +905,36 @@ IDF3::IDF_UNIT IDF3_COMPONENT::GetUnit( void )
     return UNIT_INVALID;
 }
 
-
 bool IDF3_COMPONENT::SetRefDes( const std::string& aRefDes )
 {
+#ifndef DISABLE_IDF_OWNERSHIP
+    if( !checkOwnership( __LINE__, __FUNCTION__ ) )
+        return false;
+#endif
+
     if( aRefDes.empty() )
     {
-        ERROR_IDF << "invalid RefDes (empty)\n";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): invalid RefDes (empty)";
+        errormsg = ostr.str();
+
         return false;
     }
 
     if( CompareToken( "PANEL", aRefDes ) )
     {
-        ERROR_IDF;
-        cerr << "\n*BUG: PANEL is a reserved designator and may not be used by components\n";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr <<  "* BUG: PANEL is a reserved designator and may not be used by components";
+        errormsg = ostr.str();
+
         return false;
     }
 
     refdes = aRefDes;
     return true;
 }
+
 
 const std::string& IDF3_COMPONENT::GetRefDes( void )
 {
@@ -755,6 +957,7 @@ IDF_DRILL_DATA* IDF3_COMPONENT::AddDrill( double aDia, double aXpos, double aYpo
     return dp;
 }
 
+
 IDF_DRILL_DATA* IDF3_COMPONENT::AddDrill( IDF_DRILL_DATA* aDrilledHole )
 {
     if( !aDrilledHole )
@@ -763,14 +966,14 @@ IDF_DRILL_DATA* IDF3_COMPONENT::AddDrill( IDF_DRILL_DATA* aDrilledHole )
     if( CompareToken( "PANEL", refdes ) )
     {
         ERROR_IDF;
-        cerr << "\n*BUG: PANEL drills not supported\n";
+        cerr << "\n* BUG: PANEL drills not supported at component level\n";
         return NULL;
     }
 
     if( refdes.compare( aDrilledHole->GetDrillRefDes() ) )
     {
         ERROR_IDF;
-        cerr << "\n*BUG: pushing an incorrect REFDES ('" << aDrilledHole->GetDrillRefDes();
+        cerr << "\n* BUG: pushing an incorrect REFDES ('" << aDrilledHole->GetDrillRefDes();
         cerr << "') to component ('" << refdes << "')\n";
         return NULL;
     }
@@ -783,10 +986,15 @@ IDF_DRILL_DATA* IDF3_COMPONENT::AddDrill( IDF_DRILL_DATA* aDrilledHole )
 
 bool IDF3_COMPONENT::DelDrill( double aDia, double aXpos, double aYpos )
 {
+#ifndef DISABLE_IDF_OWNERSHIP
+    if( !checkOwnership( __LINE__, __FUNCTION__ ) )
+        return false;
+#endif
+
+    errormsg.clear();
+
     if( drills.empty() )
         return false;
-
-    // XXX - throw on ownership violation
 
     bool val = false;
 
@@ -810,12 +1018,18 @@ bool IDF3_COMPONENT::DelDrill( double aDia, double aXpos, double aYpos )
     return val;
 }
 
+
 bool IDF3_COMPONENT::DelDrill( IDF_DRILL_DATA* aDrill )
 {
+#ifndef DISABLE_IDF_OWNERSHIP
+    if( !checkOwnership( __LINE__, __FUNCTION__ ) )
+        return false;
+#endif
+
+    errormsg.clear();
+
     if( drills.empty() )
         return false;
-
-    // XXX - throw on ownership violation
 
     list< IDF_DRILL_DATA* >::iterator itS = drills.begin();
     list< IDF_DRILL_DATA* >::iterator itE = drills.end();
@@ -842,7 +1056,14 @@ const std::list< IDF_DRILL_DATA* >*const IDF3_COMPONENT::GetDrills( void )
 bool IDF3_COMPONENT::AddOutlineData( IDF3_COMP_OUTLINE_DATA* aComponentOutline )
 {
     if( aComponentOutline == NULL )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): invalid aComponentOutline (NULL)";
+        errormsg = ostr.str();
+
         return false;
+    }
+
 
     components.push_back( aComponentOutline );
 
@@ -851,8 +1072,30 @@ bool IDF3_COMPONENT::AddOutlineData( IDF3_COMP_OUTLINE_DATA* aComponentOutline )
 
 bool IDF3_COMPONENT::DeleteOutlineData( IDF3_COMP_OUTLINE_DATA* aComponentOutline )
 {
-    if( components.empty() || aComponentOutline == NULL )
+#ifndef DISABLE_IDF_OWNERSHIP
+    if( !checkOwnership( __LINE__, __FUNCTION__ ) )
         return false;
+#endif
+
+    if( components.empty() )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): component list is empty";
+        errormsg = ostr.str();
+
+        return false;
+    }
+
+    if( aComponentOutline == NULL )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): invalid aComponentOutline (NULL)";
+        errormsg = ostr.str();
+
+        return false;
+    }
+
+    errormsg.clear();
 
     std::list< IDF3_COMP_OUTLINE_DATA* >::iterator itS = components.begin();
     std::list< IDF3_COMP_OUTLINE_DATA* >::iterator itE = components.end();
@@ -874,8 +1117,20 @@ bool IDF3_COMPONENT::DeleteOutlineData( IDF3_COMP_OUTLINE_DATA* aComponentOutlin
 
 bool IDF3_COMPONENT::DeleteOutlineData( size_t aIndex )
 {
-    if( aIndex >= components.size() )
+#ifndef DISABLE_IDF_OWNERSHIP
+    if( !checkOwnership( __LINE__, __FUNCTION__ ) )
         return false;
+#endif
+
+    if( aIndex >= components.size() )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "* aIndex (" << aIndex << ") out of range; list size is " << components.size();
+        errormsg = ostr.str();
+
+        return false;
+    }
 
     std::list< IDF3_COMP_OUTLINE_DATA* >::iterator itS = components.begin();
     std::list< IDF3_COMP_OUTLINE_DATA* >::iterator itE = components.end();
@@ -910,6 +1165,8 @@ const std::list< IDF3_COMP_OUTLINE_DATA* >*const IDF3_COMPONENT::GetOutlinesData
 bool IDF3_COMPONENT::GetPosition( double& aXpos, double& aYpos, double& aAngle,
                                   IDF3::IDF_LAYER& aLayer )
 {
+    errormsg.clear();
+
     if( !hasPosition )
     {
         aXpos = 0.0;
@@ -928,6 +1185,13 @@ bool IDF3_COMPONENT::GetPosition( double& aXpos, double& aYpos, double& aAngle,
 
 bool IDF3_COMPONENT::SetPosition( double aXpos, double aYpos, double aAngle, IDF3::IDF_LAYER aLayer )
 {
+#ifndef DISABLE_IDF_OWNERSHIP
+    if( !checkOwnership( __LINE__, __FUNCTION__ ) )
+        return false;
+#endif
+
+    errormsg.clear();
+
     switch( aLayer )
     {
         case LYR_TOP:
@@ -935,8 +1199,14 @@ bool IDF3_COMPONENT::SetPosition( double aXpos, double aYpos, double aAngle, IDF
             break;
 
         default:
-            ERROR_IDF << "invalid side (must be TOP or BOTTOM only): " << aLayer << "\n";
-            return false;
+            do{
+                ostringstream ostr;
+                ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+                ostr << "\n* invalid side (must be TOP or BOTTOM only): " << GetLayerString( aLayer );
+                errormsg = ostr.str();
+
+                return false;
+            } while( 0 );
             break;
     }
 
@@ -958,17 +1228,29 @@ IDF3::IDF_PLACEMENT IDF3_COMPONENT::GetPlacement( void )
 }
 
 
-void IDF3_COMPONENT::SetPlacement( IDF3::IDF_PLACEMENT aPlacementValue )
+bool IDF3_COMPONENT::SetPlacement( IDF3::IDF_PLACEMENT aPlacementValue )
 {
-    // XXX - throw on ownership violation or invalid placement value
     if( aPlacementValue < PS_UNPLACED || aPlacementValue >= PS_INVALID )
-        return;
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "\n* invalid PLACEMENT value (" << aPlacementValue << ")";
+        errormsg = ostr.str();
+
+        return false;
+    }
+
+#ifndef DISABLE_IDF_OWNERSHIP
+    if( !checkOwnership( __LINE__, __FUNCTION__ ) )
+        return false;
+#endif
 
     placement = aPlacementValue;
-    return;
+
+    return true;
 }
 
-bool IDF3_COMPONENT::WriteDrillData( std::ofstream& aBoardFile )
+bool IDF3_COMPONENT::writeDrillData( std::ofstream& aBoardFile )
 {
     if( drills.empty() )
         return true;
@@ -978,16 +1260,15 @@ bool IDF3_COMPONENT::WriteDrillData( std::ofstream& aBoardFile )
 
     while( itS != itE )
     {
-        if( !(*itS)->Write( aBoardFile, GetUnit() ) )
-            return false;
-
+        (*itS)->write( aBoardFile, GetUnit() );
         ++itS;
     }
 
     return true;
 }
 
-bool IDF3_COMPONENT::WritePlaceData( std::ofstream& aBoardFile )
+
+bool IDF3_COMPONENT::writePlaceData( std::ofstream& aBoardFile )
 {
     if( components.empty() )
         return true;
@@ -997,9 +1278,7 @@ bool IDF3_COMPONENT::WritePlaceData( std::ofstream& aBoardFile )
 
     while( itS != itE )
     {
-        if( !(*itS)->WritePlaceData( aBoardFile, xpos, ypos, angle, refdes, placement, layer ) )
-            return false;
-
+        (*itS)->writePlaceData( aBoardFile, xpos, ypos, angle, refdes, placement, layer );
         ++itS;
     }
 
@@ -1009,6 +1288,7 @@ bool IDF3_COMPONENT::WritePlaceData( std::ofstream& aBoardFile )
 
 IDF3_BOARD::IDF3_BOARD( IDF3::CAD_TYPE aCadType )
 {
+    idfVer         = IDF_V3;
     state          = FILE_START;
     cadType        = aCadType;
     userPrec       = 5;
@@ -1021,8 +1301,8 @@ IDF3_BOARD::IDF3_BOARD( IDF3::CAD_TYPE aCadType )
     // unlike other outlines which are created as necessary,
     // the board outline always exists and its parent must
     // be set here
-    olnBoard.SetParent( this );
-    olnBoard.SetThickness( 1.6 );
+    olnBoard.setParent( this );
+    olnBoard.setThickness( 1.6 );
 
     return;
 }
@@ -1033,6 +1313,51 @@ IDF3_BOARD::~IDF3_BOARD()
 
     return;
 }
+
+#ifndef DISABLE_IDF_OWNERSHIP
+bool IDF3_BOARD::checkComponentOwnership( int aSourceLine, const char* aSourceFunc,
+                                          IDF3_COMPONENT* aComponent )
+{
+    if( !aComponent )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << aSourceLine << ":" << aSourceFunc;
+        ostr << "(): Invalid component pointer (NULL)";
+        errormsg = ostr.str();
+
+        return false;
+    }
+
+    IDF3::IDF_PLACEMENT place = aComponent->GetPlacement();
+
+    if( place == PS_PLACED || place == PS_UNPLACED )
+        return true;
+
+    if( place == PS_MCAD && cadType == CAD_MECH )
+        return true;
+
+    if( place == PS_ECAD && cadType == CAD_ELEC )
+        return true;
+
+    do
+    {
+        ostringstream ostr;
+        ostr << "* " << __FILE__ << ":" << aSourceLine << ":" << aSourceFunc << "():\n";
+        ostr << "* ownership violation; CAD type is ";
+
+        if( cadType == CAD_MECH )
+            ostr << "MCAD ";
+        else
+            ostr << "ECAD ";
+
+        ostr << "while outline owner is " << GetPlacementString( place ) << "\n";
+        errormsg = ostr.str();
+
+    } while( 0 );
+
+    return false;
+}
+#endif
 
 IDF3::CAD_TYPE IDF3_BOARD::GetCadType( void )
 {
@@ -1059,9 +1384,22 @@ bool IDF3_BOARD::setUnit( IDF3::IDF_UNIT aUnit, bool convert )
         unit = aUnit;
         break;
 
+    case UNIT_TNM:
+        ERROR_IDF << "\n* TNM unit is not supported; defaulting to mm\n";
+        unit = UNIT_MM;
+        break;
+
     default:
-        ERROR_IDF << "invalid board unit\n";
-        return false;
+        do
+        {
+            ostringstream ostr;
+            ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+            ostr << "* invalid board unit (" << aUnit << ")";
+            errormsg = ostr.str();
+
+            return false;
+        } while( 0 );
+
         break;
     }
 
@@ -1190,11 +1528,21 @@ bool IDF3_BOARD::SetBoardThickness( double aBoardThickness )
 {
     if( aBoardThickness <= 0.0 )
     {
-        ERROR_IDF << "board thickness must be > 0\n";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): ";
+        ostr << "board thickness (" << aBoardThickness << ") must be > 0";
+        errormsg = ostr.str();
+
         return false;
     }
 
-    return olnBoard.SetThickness( aBoardThickness );
+    if(! olnBoard.SetThickness( aBoardThickness ) )
+    {
+        errormsg = olnBoard.GetError();
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -1205,77 +1553,57 @@ double IDF3_BOARD::GetBoardThickness( void )
 
 
 // read the DRILLED HOLES section
-bool IDF3_BOARD::readBrdDrills( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState )
+void IDF3_BOARD::readBrdDrills( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState )
 {
     IDF_DRILL_DATA drill;
 
-    while( drill.Read( aBoardFile, unit, aBoardState ) )
+    while( drill.read( aBoardFile, unit, aBoardState, idfVer ) )
     {
-        if( CompareToken( "PANEL", drill.GetDrillRefDes() ) )
-        {
-            ERROR_IDF;
-            cerr << "\n[INFO]: Dropping unsupported drill refdes: 'PANEL' (not supported)\n";
-            continue;
-        }
-
         IDF_DRILL_DATA *dp = new IDF_DRILL_DATA;
         *dp = drill;
+
         if( AddDrill( dp ) == NULL )
         {
             delete dp;
-            ERROR_IDF;
-            cerr << "\n* BUG: could not add drill data; cannot continue reading the file\n";
-            aBoardState = FILE_INVALID;
-            return false;
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                              "\n* BUG: could not add drill data; cannot continue reading the file" ) );
         }
     }
 
-    if( errno == 0 && aBoardState != IDF3::FILE_INVALID )
-        return true;
-
-    return false;
-
+    return;
 }
 
 
 // read the NOTES section
-bool IDF3_BOARD::readBrdNotes( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState )
+void IDF3_BOARD::readBrdNotes( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState )
 {
     IDF_NOTE note;
 
-    while( note.ReadNote( aBoardFile, aBoardState, unit ) )
+    while( note.readNote( aBoardFile, aBoardState, unit ) )
     {
         IDF_NOTE *np = new IDF_NOTE;
         *np = note;
         notes.push_back( np );
     }
 
-    if( errno == 0 && aBoardState != IDF3::FILE_INVALID )
-        return true;
-
-    return false;
+    return;
 }
 
 
 // read the component placement section
-bool IDF3_BOARD::readBrdPlacement( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState )
+void IDF3_BOARD::readBrdPlacement( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState, bool aNoSubstituteOutlines )
 {
     IDF3_COMP_OUTLINE_DATA oldata;
 
-    while( oldata.ReadPlaceData( aBoardFile, aBoardState, this ) );
+    while( oldata.readPlaceData( aBoardFile, aBoardState, this, idfVer, aNoSubstituteOutlines ) );
 
-    if( errno == 0 && aBoardState != IDF3::FILE_INVALID )
-        return true;
-
-    ERROR_IDF << "problems reading board PLACEMENT section\n";
-
-    return false;
-
+    return;
 }
 
 
 // read the board HEADER
-bool IDF3_BOARD::readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState )
+void IDF3_BOARD::readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState )
 {
     std::string iline;      // the input line
     bool isComment;         // true if a line just read in is a comment line
@@ -1288,30 +1616,19 @@ bool IDF3_BOARD::readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBo
     while( !FetchIDFLine( aBoardFile, iline, isComment, pos ) && aBoardFile.good() );
 
     if( !aBoardFile.good() )
-    {
-        ERROR_IDF;
-        cerr << "problems reading board header\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "problems reading board header" ) );
 
     if( isComment )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: first line must be .HEADER\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification: first line must be .HEADER\n" ) );
 
     if( !CompareToken( ".HEADER", iline ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: first line must be .HEADER and have no quotes or trailing text\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification:\n"
+                          "* first line must be .HEADER and have no quotes or trailing text" ) );
 
     // RECORD 2:
     //      File Type [str]: BOARD_FILE (PANEL_FILE not supported)
@@ -1322,109 +1639,83 @@ bool IDF3_BOARD::readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBo
     while( !FetchIDFLine( aBoardFile, iline, isComment, pos ) && aBoardFile.good() );
 
     if( !aBoardFile.good() )
-    {
-        ERROR_IDF;
-        cerr << "problems reading board header, RECORD 2\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "problems reading board header, RECORD 2" ) );
 
     if( isComment )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: comment within .HEADER section\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification: comment within .HEADER section" ) );
 
     idx = 0;
     GetIDFString( iline, token, quoted, idx );
 
     if( quoted )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: File Type in HEADER section must not be in quotes\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification:\n"
+                          "* File Type in HEADER section must not be in quotes" ) );
 
     if( !CompareToken( "BOARD_FILE", token ) )
     {
         ERROR_IDF;
 
         if( CompareToken( "PANEL_FILE", token ) )
-        {
-            cerr << "not a board file\n";
-            cerr << "* PANEL_FILE is not supported (expecting BOARD_FILE)\n";
-            aBoardState = IDF3::FILE_INVALID;
-            return false;
-        }
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                              "not a board file\n"
+                              "* PANEL_FILE is not supported (expecting BOARD_FILE)" ) );
         else
-        {
-            cerr << "invalid IDFv3 file\n";
-            cerr << "* Expecting string: BOARD_FILE\n";
-            aBoardState = IDF3::FILE_INVALID;
-            return false;
-        }
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                              "invalid IDF file\n"
+                              "* Expecting string: BOARD_FILE" ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification for HEADER section, RECORD 2: no FIELD 2\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification: HEADER section, RECORD 2: no FIELD 2" ) );
 
     if( quoted )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: IDF Version must not be in quotes\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification: IDF Version must not be in quotes" ) );
 
-    if( token.compare( "3.0" ) && token.compare( "3." ) && token.compare( "3" ) )
+    if( !token.compare( "3.0" ) || !token.compare( "3." ) || !token.compare( "3" ) )
+        idfVer = IDF_V3;
+    else if( !token.compare( "2.0" ) || !token.compare( "2." ) || !token.compare( "2" ) )
+        idfVer = IDF_V2;
+    else
     {
-        ERROR_IDF;
-        cerr << "unsupported IDF version\n";
-        cerr << "* Expecting version to be one of '3.0', '3.', or '3' (value: '" << token << "')\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "unsupported IDF version\n";
+        ostr << "* Expecting version to be a variant of '3.0', '2.0' (value: '" << token << "')\n";
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification for HEADER section, RECORD 2, FIELD 3: no Source System string\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification:\n"
+                          "* HEADER section, RECORD 2, FIELD 3: no Source System string" ) );
+
     brdSource = token;
 
     if( !GetIDFString( iline, token, quoted, idx ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification for HEADER section, RECORD 2, FIELD 4: no Date string\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification:\n"
+                          "* HEADER section, RECORD 2, FIELD 4: no Date string" ) );
+
     brdDate = token;
 
     if( !GetIDFString( iline, token, quoted, idx ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification for HEADER section, RECORD 2, FIELD 5: no Board File Version number\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification:\n"
+                          "* HEADER section, RECORD 2, FIELD 5: no Board File Version number" ) );
+
     std::istringstream istr;
     istr.str( token );
 
@@ -1438,13 +1729,10 @@ bool IDF3_BOARD::readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBo
     }
 
     if( quoted )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: HEADER section, RECORD 2, FIELD 5: Board File Version must not be in quotes\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification:\n"
+                          "* HEADER section, RECORD 2, FIELD 5: Board File Version must not be in quotes" ) );
 
     // RECORD 3:
     //      Board Name [str]: stored
@@ -1452,21 +1740,13 @@ bool IDF3_BOARD::readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBo
     while( !FetchIDFLine( aBoardFile, iline, isComment, pos ) && aBoardFile.good() );
 
     if( !aBoardFile.good() )
-    {
-        ERROR_IDF;
-        cerr << "problems reading board header, RECORD 2\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "\n* problems reading board header, RECORD 2" ) );
 
     if( isComment )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: comment within .HEADER section\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification: comment within .HEADER section" ) );
 
     idx = 0;
     GetIDFString( iline, token, quoted, idx );
@@ -1474,22 +1754,16 @@ bool IDF3_BOARD::readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBo
     boardName = token;
 
     if( !GetIDFString( iline, token, quoted, idx ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification for HEADER section, RECORD 3, FIELD 1: no Board Name\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification:\n"
+                          "* HEADER section, RECORD 3, FIELD 1: no Board Name" ) );
 
     if( quoted )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: HEADER section, RECORD 3, FIELD 2: UNIT may not be in quotes\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification:\n"
+                          "* HEADER section, RECORD 3, FIELD 2: UNIT may not be in quotes" ) );
 
     if( CompareToken( "MM", token ) )
     {
@@ -1499,13 +1773,18 @@ bool IDF3_BOARD::readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBo
     {
         unit = IDF3::UNIT_THOU;
     }
+    else if( ( idfVer == IDF_V2 ) && CompareToken( "TNM", token ) )
+    {
+        unit = IDF3::UNIT_TNM;
+    }
     else
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* HEADER section, RECORD 3, FIELD 2: expecting MM or THOU (got '" << token << "')\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* HEADER section, RECORD 3, FIELD 2: expecting MM or THOU (got '" << token << "')\n";
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     olnBoard.SetUnit( unit );
@@ -1515,38 +1794,33 @@ bool IDF3_BOARD::readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBo
     while( !FetchIDFLine( aBoardFile, iline, isComment, pos ) && aBoardFile.good() );
 
     if( ( !aBoardFile.good() && !aBoardFile.eof() ) || iline.empty() )
-    {
-        ERROR_IDF;
-        cerr << "problems reading board header, RECORD 4\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "problems reading board header, RECORD 4" ) );
 
     if( isComment )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: comment within .HEADER section\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF file\n"
+                          "* Violation of specification: comment within .HEADER section\n" ) );
 
     if( !CompareToken( ".END_HEADER", iline ) )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 file\n";
-        cerr << "* Violation of specification: expected .END_HEADER (got '" << iline << "')\n";
-        aBoardState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "invalid IDF file\n";
+        ostr << "* Violation of specification: expected .END_HEADER\n";
+        ostr << "* line: '" << iline << "'";
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     aBoardState = IDF3::FILE_HEADER;
-    return true;
+    return;
 }
 
 
 // read individual board sections; pay attention to IDFv3 section specifications
-bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState )
+void IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState,
+                                 bool aNoSubstituteOutlines )
 {
     std::list< std::string > comments;  // comments associated with a section
 
@@ -1562,7 +1836,7 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
     //      .PLACE_KEEPOUT
     //      .PLACE_REGION
     //      .DRILLED_HOLES
-    //      .NOTES (NOT YET SUPPORTED: NOTES SECTION WILL BE SKIPPED FOR NOW)
+    //      .NOTES
     //      .PLACEMENT
     std::string iline;      // the input line
     bool isComment;         // true if a line just read in is a comment line
@@ -1578,12 +1852,15 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
         if( !aBoardFile.good() )
         {
             if( aBoardFile.eof() && aBoardState >= IDF3::FILE_HEADER && aBoardState < IDF3::FILE_INVALID )
-                return true;
+            {
+                if( !comments.empty() )
+                    ERROR_IDF << "[warning]: trailing comments in IDF file (comments will be lost)\n";
 
-            ERROR_IDF;
-            cerr << "problems reading board section\n";
-            aBoardState = IDF3::FILE_INVALID;
-            return false;
+                return;
+            }
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                              "problems reading board section" ) );
         }
 
         if( isComment )
@@ -1593,41 +1870,31 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
         }
 
         // This must be a header
-        if( !GetIDFString( iline, token, quoted, idx ) )
-        {
-            ERROR_IDF;
-            cerr << "problems reading board section\n";
-            aBoardState = IDF3::FILE_INVALID;
-            return false;
-        }
+        GetIDFString( iline, token, quoted, idx );
 
         if( quoted )
         {
-            ERROR_IDF;
-            cerr << "invalid IDFv3 file\n";
-            cerr << "* Violation of specification: quoted string where SECTION HEADER expected\n";
-            aBoardState = IDF3::FILE_INVALID;
-            return false;
+            ostringstream ostr;
+
+            ostr << "invalid IDF file\n";
+            ostr << "* Violation of specification: quoted string where SECTION HEADER expected\n";
+            ostr << "* line: '" << iline << "'";
+            ostr << "* position: " << pos;
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
 
         if( CompareToken( ".BOARD_OUTLINE", token ) )
         {
             if( aBoardState != IDF3::FILE_HEADER )
             {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                cerr << "* Violation of specification: no HEADER section\n";
                 aBoardState = IDF3::FILE_INVALID;
-                return false;
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDF file\n"
+                                  "* Violation of specification: no HEADER section" ) );
             }
 
-            if( !olnBoard.ReadData( aBoardFile, iline ) )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                aBoardState = IDF3::FILE_INVALID;
-                return false;
-            }
+            olnBoard.readData( aBoardFile, iline, idfVer );
 
             if( !comments.empty() )
             {
@@ -1642,47 +1909,28 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
             }
 
             aBoardState = IDF3::FILE_OUTLINE;
-            return true;
+            return;
         }
 
         if( CompareToken( ".PANEL_OUTLINE", token ) )
-        {
-            ERROR_IDF;
-            cerr << "PANEL_OUTLINE not supported\n";
-            aBoardState = IDF3::FILE_INVALID;
-            return false;
-        }
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                              "PANEL_OUTLINE not supported" ) );
 
         if( CompareToken( ".OTHER_OUTLINE", token ) )
         {
             if( aBoardState != IDF3::FILE_OUTLINE )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                cerr << "* Violation of specification: expecting .BOARD_OUTLINE, have .OTHER_OUTLINE\n";
-                aBoardState = IDF3::FILE_INVALID;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDF file\n"
+                                  "* Violation of specification: expecting .BOARD_OUTLINE, have .OTHER_OUTLINE" ) );
 
-            OTHER_OUTLINE* op = new OTHER_OUTLINE;
+            OTHER_OUTLINE* op = new OTHER_OUTLINE( this );
 
             if( op == NULL )
-            {
-                ERROR_IDF;
-                cerr << "could not create OTHER_OUTLINE object\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "could not create OTHER_OUTLINE object" ) );
 
             op->SetUnit( unit );
-
-            if( !op->ReadData( aBoardFile, iline ) )
-            {
-                ERROR_IDF;
-                cerr << "problems reading the OTHER_OUTLINE section\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+            op->readData( aBoardFile, iline, idfVer );
 
             if( !comments.empty() )
             {
@@ -1698,47 +1946,36 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
 
             if( olnOther.insert( pair<string, OTHER_OUTLINE*>(op->GetOutlineIdentifier(), op) ).second == false )
             {
-                ERROR_IDF;
-                cerr << "* Violation of specification. Non-unique ID in OTHER_OUTLINE '";
-                cerr << op->GetOutlineIdentifier() << "'\n";
                 delete op;
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
+
+                ostringstream ostr;
+                ostr << "invalid IDF file\n";
+                ostr << "* Violation of specification. Non-unique ID in OTHER_OUTLINE '";
+                ostr << op->GetOutlineIdentifier() << "'\n";
+                ostr << "* line: '" << iline << "'\n";
+                ostr << "* pos: " << pos;
+
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
             }
 
-            return true;
+            return;
         }
 
         if( CompareToken( ".ROUTE_OUTLINE", token ) )
         {
             if( aBoardState != IDF3::FILE_OUTLINE )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                cerr << "* Violation of specification: expecting .BOARD_OUTLINE, have .ROUTE_OUTLINE\n";
-                aBoardState = IDF3::FILE_INVALID;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDF file\n"
+                                  "* Violation of specification: expecting .BOARD_OUTLINE, have .ROUTE_OUTLINE" ) );
 
-            ROUTE_OUTLINE* op = new ROUTE_OUTLINE;
+            ROUTE_OUTLINE* op = new ROUTE_OUTLINE( this );
 
             if( op == NULL )
-            {
-                ERROR_IDF;
-                cerr << "could not create ROUTE_OUTLINE object\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "could not create ROUTE_OUTLINE object" ) );
 
             op->SetUnit( unit );
-
-            if( !op->ReadData( aBoardFile, iline ) )
-            {
-                ERROR_IDF;
-                cerr << "problems reading the ROUTE_OUTLINE section\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+            op->readData( aBoardFile, iline, idfVer );
 
             if( !comments.empty() )
             {
@@ -1754,39 +1991,24 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
 
             olnRoute.push_back( op );
 
-            return true;
+            return;
         }
 
         if( CompareToken( ".PLACE_OUTLINE", token ) )
         {
             if( aBoardState != IDF3::FILE_OUTLINE )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                cerr << "* Violation of specification: expecting .BOARD_OUTLINE, have .PLACE_OUTLINE\n";
-                aBoardState = IDF3::FILE_INVALID;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDF file\n"
+                                  "* Violation of specification: expecting .BOARD_OUTLINE, have .PLACE_OUTLINE" ) );
 
-            PLACE_OUTLINE* op = new PLACE_OUTLINE;
+            PLACE_OUTLINE* op = new PLACE_OUTLINE( this );
 
             if( op == NULL )
-            {
-                ERROR_IDF;
-                cerr << "could not create PLACE_OUTLINE object\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "could not create PLACE_OUTLINE object" ) );
 
             op->SetUnit( unit );
-
-            if( !op->ReadData( aBoardFile, iline ) )
-            {
-                ERROR_IDF;
-                cerr << "problems reading the PLACE_OUTLINE section\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+            op->readData( aBoardFile, iline, idfVer );
 
             if( !comments.empty() )
             {
@@ -1802,39 +2024,24 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
 
             olnPlace.push_back( op );
 
-            return true;
+            return;
         }
 
         if( CompareToken( ".ROUTE_KEEPOUT", token ) )
         {
             if( aBoardState != IDF3::FILE_OUTLINE )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                cerr << "* Violation of specification: expecting .BOARD_OUTLINE, have .ROUTE_KEEPOUT\n";
-                aBoardState = IDF3::FILE_INVALID;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDF file\n"
+                                  "* Violation of specification: expecting .BOARD_OUTLINE, have .ROUTE_KEEPOUT" ) );
 
-            ROUTE_KO_OUTLINE* op = new ROUTE_KO_OUTLINE;
+            ROUTE_KO_OUTLINE* op = new ROUTE_KO_OUTLINE( this );
 
             if( op == NULL )
-            {
-                ERROR_IDF;
-                cerr << "could not create ROUTE_KEEPOUT object\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "could not create ROUTE_KEEPOUT object" ) );
 
             op->SetUnit( unit );
-
-            if( !op->ReadData( aBoardFile, iline ) )
-            {
-                ERROR_IDF;
-                cerr << "problems reading the ROUTE_KEEPOUT section\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+            op->readData( aBoardFile, iline, idfVer );
 
             if( !comments.empty() )
             {
@@ -1850,39 +2057,24 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
 
             olnRouteKeepout.push_back( op );
 
-            return true;
+            return;
         }
 
         if( CompareToken( ".VIA_KEEPOUT", token ) )
         {
             if( aBoardState != IDF3::FILE_OUTLINE )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                cerr << "* Violation of specification: expecting .BOARD_OUTLINE, have .VIA_KEEPOUT\n";
-                aBoardState = IDF3::FILE_INVALID;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDF file\n"
+                                  "* Violation of specification: expecting .BOARD_OUTLINE, have .VIA_KEEPOUT" ) );
 
-            VIA_KO_OUTLINE* op = new VIA_KO_OUTLINE;
+            VIA_KO_OUTLINE* op = new VIA_KO_OUTLINE( this );
 
             if( op == NULL )
-            {
-                ERROR_IDF;
-                cerr << "could not create VIA_KEEPOUT object\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "could not create VIA_KEEPOUT object" ) );
 
             op->SetUnit( unit );
-
-            if( !op->ReadData( aBoardFile, iline ) )
-            {
-                ERROR_IDF;
-                cerr << "problems reading the VIA_KEEPOUT section\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+            op->readData( aBoardFile, iline, idfVer );
 
             if( !comments.empty() )
             {
@@ -1898,39 +2090,24 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
 
             olnViaKeepout.push_back( op );
 
-            return true;
+            return;
         }
 
         if( CompareToken( ".PLACE_KEEPOUT", token ) )
         {
             if( aBoardState != IDF3::FILE_OUTLINE )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                cerr << "* Violation of specification: expecting .BOARD_OUTLINE, have .PLACE_KEEPOUT\n";
-                aBoardState = IDF3::FILE_INVALID;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDF file\n"
+                                  "* Violation of specification: expecting .BOARD_OUTLINE, have .PLACE_KEEPOUT" ) );
 
-            PLACE_KO_OUTLINE* op = new PLACE_KO_OUTLINE;
+            PLACE_KO_OUTLINE* op = new PLACE_KO_OUTLINE( this );
 
             if( op == NULL )
-            {
-                ERROR_IDF;
-                cerr << "could not create PLACE_KEEPOUT object\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "could not create PLACE_KEEPOUT object" ) );
 
             op->SetUnit( unit );
-
-            if( !op->ReadData( aBoardFile, iline ) )
-            {
-                ERROR_IDF;
-                cerr << "problems reading the PLACE_KEEPOUT section\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+            op->readData( aBoardFile, iline, idfVer );
 
             if( !comments.empty() )
             {
@@ -1946,39 +2123,24 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
 
             olnPlaceKeepout.push_back( op );
 
-            return true;
+            return;
         }
 
         if( CompareToken( ".PLACE_REGION", token ) )
         {
             if( aBoardState != IDF3::FILE_OUTLINE )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                cerr << "* Violation of specification: expecting .BOARD_OUTLINE, have .PLACE_REGION\n";
-                aBoardState = IDF3::FILE_INVALID;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDF file\n"
+                                  "* Violation of specification: expecting .BOARD_OUTLINE, have .PLACE_REGION" ) );
 
-            GROUP_OUTLINE* op = new GROUP_OUTLINE;
+            GROUP_OUTLINE* op = new GROUP_OUTLINE( this );
 
             if( op == NULL )
-            {
-                ERROR_IDF;
-                cerr << "could not create PLACE_REGION object\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "could not create PLACE_REGION object" ) );
 
             op->SetUnit( unit );
-
-            if( !op->ReadData( aBoardFile, iline ) )
-            {
-                ERROR_IDF;
-                cerr << "problems reading the PLACE_REGION section\n";
-                aBoardState = IDF3::FILE_ERROR;
-                return false;
-            }
+            op->readData( aBoardFile, iline, idfVer );
 
             if( !comments.empty() )
             {
@@ -1994,28 +2156,17 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
 
             olnGroup.insert( pair<string, GROUP_OUTLINE*>(op->GetGroupName(), op) );
 
-            return true;
+            return;
         }
 
         if( CompareToken( ".DRILLED_HOLES", token ) )
         {
             if( aBoardState != IDF3::FILE_OUTLINE )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                cerr << "* Violation of specification: expecting .BOARD_OUTLINE, have .DRILLED_HOLES\n";
-                aBoardState = IDF3::FILE_INVALID;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDF file\n"
+                                  "* Violation of specification: expecting .BOARD_OUTLINE, have .DRILLED_HOLES" ) );
 
-            if( !readBrdDrills( aBoardFile, aBoardState ) )
-            {
-                if( !aBoardFile.good() || aBoardState == IDF3::FILE_INVALID )
-                {
-                    ERROR_IDF << "could not read board DRILLED HOLES section\n";
-                    return false;
-                }
-            }
+            readBrdDrills( aBoardFile, aBoardState );
 
             if( !comments.empty() )
             {
@@ -2029,28 +2180,22 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
                 }
             }
 
-            return true;
+            return;
         }
 
         if( CompareToken( ".NOTES", token ) )
         {
             if( aBoardState != IDF3::FILE_OUTLINE )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                cerr << "* Violation of specification: expecting .BOARD_OUTLINE, have .NOTES\n";
-                aBoardState = IDF3::FILE_INVALID;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDF file\n"
+                                  "* Violation of specification: expecting .BOARD_OUTLINE, have .NOTES" ) );
 
-            if( !readBrdNotes( aBoardFile, aBoardState ) )
-            {
-                if( !aBoardFile.good() || aBoardState == IDF3::FILE_INVALID )
-                {
-                    ERROR_IDF << "could not read board NOTES section\n";
-                    return false;
-                }
-            }
+            if( idfVer < IDF_V3 )
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDFv2 file\n"
+                                  "* Violation of specification: NOTES section not in specification" ) );
+
+            readBrdNotes( aBoardFile, aBoardState );
 
             if( !comments.empty() )
             {
@@ -2064,28 +2209,17 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
                 }
             }
 
-            return true;
+            return;
         }
 
         if( CompareToken( ".PLACEMENT", token ) )
         {
             if( aBoardState != IDF3::FILE_OUTLINE )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 file\n";
-                cerr << "* Violation of specification: expecting .BOARD_OUTLINE, have .PLACEMENT\n";
-                aBoardState = IDF3::FILE_INVALID;
-                return false;
-            }
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                  "invalid IDF file\n"
+                                  "* Violation of specification: expecting .BOARD_OUTLINE, have .PLACEMENT" ) );
 
-            if( !readBrdPlacement( aBoardFile, aBoardState ) )
-            {
-                if( !aBoardFile.good() || aBoardState == IDF3::FILE_INVALID )
-                {
-                    ERROR_IDF << "could not read board PLACEMENT section\n";
-                    return false;
-                }
-            }
+            readBrdPlacement( aBoardFile, aBoardState, aNoSubstituteOutlines );
 
             if( !comments.empty() )
             {
@@ -2099,129 +2233,122 @@ bool IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
                 }
             }
 
-            return true;
+            return;
         }
     }   // while( aBoardFile.good()
 
-    if( !aBoardFile.good() )
-    {
-        if( !aBoardFile.eof() || aBoardState < IDF3::FILE_OUTLINE || aBoardState >= IDF3::FILE_INVALID )
-        {
-            ERROR_IDF;
-            cerr << "problems reading board section\n";
-            aBoardState = IDF3::FILE_INVALID;
-            return false;
-        }
-    }
-
-    return true;
+    return;
 }   // readBrdSection()
 
 
 // read the board file data
-bool IDF3_BOARD::readBoardFile( const std::string& aFileName )
+void IDF3_BOARD::readBoardFile( const std::string& aFileName, bool aNoSubstituteOutlines )
 {
     std::ifstream brd;
 
-    brd.open( aFileName.c_str(), std::ios_base::in );
+    brd.exceptions ( std::ifstream::badbit );
 
-    if( !brd.is_open() )
+    try
     {
-        ERROR_IDF;
-        cerr << "could not open file: '" << aFileName << "'\n";
-        return false;
-    }
+        brd.open( aFileName.c_str(), std::ios_base::in );
 
-    std::string iline;      // the input line
-    bool isComment;         // true if a line just read in is a comment line
-    std::streampos pos;
-    IDF3::FILE_STATE state = IDF3::FILE_START;
-
-    // note: as per IDFv3 specification:
-    //      "The Header section must be the first section in the file, the second
-    //       section must be the Outline section, and the last section must be the
-    //       Placement section. All other sections may be in any order."
-
-    // further notes: Except for the HEADER section, sections may be preceeded by
-    // comment lines which will be copied back out on write(). No comments may
-    // be associated with the board file itself since the only logical location
-    // for unambiguous association is at the end of the file, which is inconvenient
-    // for large files.
-
-    if( !readBrdHeader( brd, state ) )
-    {
-        ERROR_IDF;
-        cerr << "could not find a valid header\n";
-        brd.close();
-        return false;
-    }
-
-    // read the various sections
-    while( readBrdSection( brd, state ) && state != IDF3::FILE_PLACEMENT && !brd.eof() );
-
-    if( state == IDF3::FILE_INVALID )
-    {
-        brd.close();
-        ERROR_IDF;
-        cerr << "problems reading file: '" << aFileName << "'\n";
-        return false;
-    }
-
-    if( !brd.good() )
-    {
-        // check if we have valid data
-        if( brd.eof() && state >= IDF3::FILE_OUTLINE && state < IDF3::FILE_INVALID )
+        if( !brd.is_open() )
         {
-            brd.close();
-            return true;
+            ostringstream ostr;
+            ostr << "\n* could not open file: '" << aFileName << "'";
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
 
-        brd.close();
-        ERROR_IDF;
-        cerr << "problems reading file: '" << aFileName << "'\n";
-        return false;
-    }
+        std::string iline;      // the input line
+        bool isComment;         // true if a line just read in is a comment line
+        std::streampos pos;
+        IDF3::FILE_STATE state = IDF3::FILE_START;
 
-    if( brd.good() && state == IDF3::FILE_PLACEMENT )
-    {
-        // read in any trailing lines and report on ignored comments (minor fault)
-        // and any non-comment item (non-compliance with IDFv3)
-        while( brd.good() )
+        // note: as per IDFv3 specification:
+        //      "The Header section must be the first section in the file, the second
+        //       section must be the Outline section, and the last section must be the
+        //       Placement section. All other sections may be in any order."
+
+        // further notes: Except for the HEADER section, sections may be preceeded by
+        // comment lines which will be copied back out on write(). No comments may
+        // be associated with the board file itself since the only logical location
+        // for unambiguous association is at the end of the file, which is inconvenient
+        // for large files.
+
+        readBrdHeader( brd, state );
+
+        // read the various sections
+        while( state != IDF3::FILE_PLACEMENT && brd.good() )
+            readBrdSection( brd, state, aNoSubstituteOutlines );
+
+        if( !brd.good() )
         {
-            while( !FetchIDFLine( brd, iline, isComment, pos ) && brd.good() );
-
-            // normally this is a fault but we have all the data in accordance with specs
-            if( ( !brd.good() && !brd.eof() ) || iline.empty() )
-                break;
-
-            if( isComment )
+            // check if we have valid data
+            if( brd.eof() && state >= IDF3::FILE_OUTLINE && state < IDF3::FILE_INVALID )
             {
-                ERROR_IDF << "[warning]: trailing comments after PLACEMENT\n";
-            }
-            else
-            {
-                ERROR_IDF << "invalid IDF3 file\n";
-                cerr << "* Violation of specification: non-comment lines after PLACEMENT section\n";
-                Clear();
                 brd.close();
-                return false;
+                return;
+            }
+
+            brd.close();
+
+            ostringstream ostr;
+            ostr << "\n* empty IDF file: '" << aFileName << "'";
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        }
+
+        if( brd.good() && state == IDF3::FILE_PLACEMENT )
+        {
+            // read in any trailing lines and report on ignored comments (minor fault)
+            // and any non-comment item (non-compliance with IDFv3)
+            while( brd.good() )
+            {
+                while( !FetchIDFLine( brd, iline, isComment, pos ) && brd.good() );
+
+                // normally this is a fault but we have all the data in accordance with specs
+                if( ( !brd.good() && !brd.eof() ) || iline.empty() )
+                    break;
+
+                if( isComment )
+                {
+                    ERROR_IDF << "[warning]: trailing comments after PLACEMENT\n";
+                }
+                else
+                {
+                    ostringstream ostr;
+                    ostr << "\n* problems reading file: '" << aFileName << "'";
+
+                    throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                                      "invalid IDF file\n"
+                                      "* Violation of specification: non-comment lines after PLACEMENT section" ) );
+                }
             }
         }
+    }
+    catch( std::exception& e )
+    {
+        brd.exceptions ( std::ios_base::goodbit );
+
+        if( brd.is_open() )
+            brd.close();
+
+        throw;
     }
 
     brd.close();
-    return true;
+    return;
 } // readBoardFile()
 
 
 // read the library sections (outlines)
-bool IDF3_BOARD::readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibState, IDF3_BOARD* aBoard )
+void IDF3_BOARD::readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibState, IDF3_BOARD* aBoard )
 {
     if( aBoard == NULL )
     {
-        ERROR_IDF << "BUG: invoked with NULL reference aBoard\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "\n* BUG: invoked with NULL reference aBoard" ) );
     }
 
     std::list< std::string > comments;  // comments associated with a section
@@ -2233,23 +2360,23 @@ bool IDF3_BOARD::readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLib
     int idx = 0;
     bool quoted = false;
     std::string token;
-    IDF3_COMP_OUTLINE *pout = new IDF3_COMP_OUTLINE;
+    IDF3_COMP_OUTLINE *pout = new IDF3_COMP_OUTLINE( this );
+
+    if( !pout )
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "\n* memory allocation failure" ) );
 
     while( aLibFile.good() )
     {
         while( !FetchIDFLine( aLibFile, iline, isComment, pos ) && aLibFile.good() );
 
         if( !aLibFile.good() && !aLibFile.eof() )
-        {
-            ERROR_IDF;
-            cerr << "problems reading library section\n";
-            aLibState = IDF3::FILE_INVALID;
-            return false;
-        }
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                              "problems reading library section" ) );
 
         // no data was read; this only happens at eof()
         if( iline.empty() )
-            return true;
+            return;
 
         if( isComment )
         {
@@ -2258,32 +2385,22 @@ bool IDF3_BOARD::readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLib
         }
 
         // This must be a header
-        if( !GetIDFString( iline, token, quoted, idx ) )
-        {
-            ERROR_IDF;
-            cerr << "problems reading library section\n";
-            aLibState = IDF3::FILE_INVALID;
-            return false;
-        }
+        GetIDFString( iline, token, quoted, idx );
 
         if( quoted )
         {
-            ERROR_IDF;
-            cerr << "invalid IDFv3 library\n";
-            cerr << "* Violation of specification: quoted string where .ELECTRICAL or .MECHANICAL expected\n";
-            aLibState = IDF3::FILE_INVALID;
-            return false;
+            ostringstream ostr;
+            ostr << "invalid IDF library\n";
+            ostr << "* Violation of specification: quoted string where .ELECTRICAL or .MECHANICAL expected\n";
+            ostr << "* line: '" << iline << "'\n";
+            ostr << "* pos: " << pos;
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
 
         if( CompareToken( ".ELECTRICAL", token ) || CompareToken( ".MECHANICAL", token ) )
         {
-            if( !pout->ReadData( aLibFile, token ) )
-            {
-                ERROR_IDF;
-                cerr << "invalid IDFv3 library [faulty section]\n";
-                aLibState = IDF3::FILE_INVALID;
-                return false;
-            }
+            pout->readData( aLibFile, token, idfVer );
 
             if( !comments.empty() )
             {
@@ -2305,33 +2422,42 @@ bool IDF3_BOARD::readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLib
             }
             else
             {
-                ERROR_IDF;
-                cerr << "duplicate Component Outline: '" << pout->GetUID() << "'\n";
                 delete pout;
+
+                ostringstream ostr;
+                ostr << "invalid IDF library\n";
+                ostr << "duplicate Component Outline: '" << pout->GetUID() << "'\n";
+                ostr << "* Violation of specification: multiple outlines have the same GEOM and PART name\n";
+                ostr << "* line: '" << iline << "'\n";
+                ostr << "* pos: " << pos;
+
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
             }
 
-            return true;
+            return;
         }
         else
         {
-            ERROR_IDF;
-            cerr << "invalid IDFv3 library\n";
-            cerr << "* Expecting .ELECTRICAL or .MECHANICAL, got '" << token << "'\n";
-            aLibState = IDF3::FILE_INVALID;
-            return false;
-        }
+            ostringstream ostr;
+            ostr << "invalid IDF library\n";
+            ostr << "* Expecting .ELECTRICAL or .MECHANICAL, got '" << token << "'\n";
+            ostr << "* line: '" << iline << "'\n";
+            ostr << "* pos: " << pos;
 
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        }
     }
 
-    ERROR_IDF;
-    cerr << "problems reading library section\n";
-    aLibState = IDF3::FILE_INVALID;
-    return false;
+    if( !aLibFile.eof() )
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "problems reading IDF library file" ) );
+
+    return;
 }
 
 
 // read the library HEADER
-bool IDF3_BOARD::readLibHeader( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibState )
+void IDF3_BOARD::readLibHeader( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibState )
 {
     std::string iline;      // the input line
     bool isComment;         // true if a line just read in is a comment line
@@ -2344,30 +2470,20 @@ bool IDF3_BOARD::readLibHeader( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibS
     while( !FetchIDFLine( aLibFile, iline, isComment, pos ) && aLibFile.good() );
 
     if( !aLibFile.good() )
-    {
-        ERROR_IDF;
-        cerr << "problems reading library header\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* premature end of file (no HEADER)" ) );
 
     if( isComment )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Violation of specification: first line must be .HEADER\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* Violation of specification: first line must be .HEADER" ) );
 
     if( !CompareToken( ".HEADER", iline ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Violation of specification: first line must be .HEADER and have no quotes or trailing text\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* Violation of specification:\n"
+                          "* first line must be .HEADER and have no quotes or trailing text" ) );
 
     // RECORD 2:
     //      File Type [str]: LIBRARY_FILE
@@ -2378,99 +2494,79 @@ bool IDF3_BOARD::readLibHeader( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibS
     while( !FetchIDFLine( aLibFile, iline, isComment, pos ) && aLibFile.good() );
 
     if( !aLibFile.good() )
-    {
-        ERROR_IDF;
-        cerr << "problems reading library header, RECORD 2\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* premature end of HEADER" ) );
 
     if( isComment )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Violation of specification: comment within .HEADER section\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* Violation of specification: comment within .HEADER section" ) );
 
     idx = 0;
     GetIDFString( iline, token, quoted, idx );
 
     if( quoted )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Violation of specification: File Type in HEADER section must not be in quotes\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* Violation of specification:\n"
+                          "* file Type in HEADER section must not be in quotes" ) );
 
     if( !CompareToken( "LIBRARY_FILE", token ) )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Expecting string: LIBRARY_FILE (got '" << token << "')\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+        ostr << "invalid IDF library\n";
+        ostr << "* Expecting string: LIBRARY_FILE (got '" << token << "')\n";
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Violation of specification for HEADER section, RECORD 2: no FIELD 2\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* Violation of specification: HEADER section, RECORD 2: no FIELD 2" ) );
 
     if( quoted )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Violation of specification: IDF Version must not be in quotes\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* Violation of specification: IDF Version must not be in quotes" ) );
 
-    if( token.compare( "3.0" ) && token.compare( "3." ) && token.compare( "3" ) )
+    if( !token.compare( "3.0" ) || !token.compare( "3." ) || !token.compare( "3" ) )
+        idfVer = IDF_V3;
+    else if( !token.compare( "2.0" ) || !token.compare( "2." ) || !token.compare( "2" ) )
+        idfVer = IDF_V2;
+    else
     {
-        ERROR_IDF;
-        cerr << "unsupported IDF library version\n";
-        cerr << "* Expecting version to be one of '3.0', '3.', or '3' (value: '" << token << "')\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+
+        ostr << "unsupported IDF version\n";
+        ostr << "* Expecting version to be a variant of '3.0', '2.0' (value: '" << token << "')\n";
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Violation of specification for HEADER section, RECORD 2, FIELD 3: no Source System string\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* Violation of specification:\n"
+                          "* HEADER section, RECORD 2, FIELD 3: no Source System string" ) );
+
     libSource = token;
 
-
     if( !GetIDFString( iline, token, quoted, idx ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Violation of specification for HEADER section, RECORD 2, FIELD 4: no Date string\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* Violation of specification:\n"
+                          "* HEADER section, RECORD 2, FIELD 4: no Date string" ) );
+
     libDate = token;
 
     if( !GetIDFString( iline, token, quoted, idx ) )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Violation of specification for HEADER section, RECORD 2, FIELD 5: no Board File Version number\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* Violation of specification:\n"
+                          "* HEADER section, RECORD 2, FIELD 5: no Board File Version number" ) );
+
     std::istringstream istr;
     istr.str( token );
 
@@ -2484,90 +2580,71 @@ bool IDF3_BOARD::readLibHeader( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibS
     }
 
     if( quoted )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Violation of specification: HEADER section, RECORD 2, FIELD 5: Library File Version must not be in quotes\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* Violation of specification:\n"
+                          "* HEADER section, RECORD 2, FIELD 5: Library File Version must not be in quotes" ) );
 
     // RECORD 3:
     //      .END_HEADER
     while( !FetchIDFLine( aLibFile, iline, isComment, pos ) && aLibFile.good() );
 
     if( ( !aLibFile.good() && !aLibFile.eof() ) || iline.empty() )
-    {
-        ERROR_IDF;
-        cerr << "problems reading library header, RECORD 3\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "problems reading library header, RECORD 3" ) );
 
     if( isComment )
-    {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 library\n";
-        cerr << "* Violation of specification: comment within .HEADER section\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
-    }
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid IDF library file\n"
+                          "* Violation of specification: comment within .HEADER section" ) );
 
     if( !CompareToken( ".END_HEADER", iline ) )
     {
-        ERROR_IDF;
-        cerr << "invalid IDFv3 header\n";
-        cerr << "* Violation of specification: expected .END_HEADER (got '" << iline << "')\n";
-        aLibState = IDF3::FILE_INVALID;
-        return false;
+        ostringstream ostr;
+        ostr << "invalid IDF header\n";
+        ostr << "* Violation of specification: expected .END_HEADER (got '" << iline << "')\n";
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
     aLibState = IDF3::FILE_HEADER;
-    return true;
+    return;
 }
 
 
 // read the library file data
-bool IDF3_BOARD::readLibFile( const std::string& aFileName )
+void IDF3_BOARD::readLibFile( const std::string& aFileName )
 {
     std::ifstream lib;
 
-    lib.open( aFileName.c_str(), std::ios_base::in );
+    lib.exceptions ( std::ifstream::badbit );
 
-    if( !lib.is_open() )
+    try
     {
-        ERROR_IDF;
-        cerr << "could not open file: '" << aFileName << "'\n";
-        return false;
+        lib.open( aFileName.c_str(), std::ios_base::in );
+
+        IDF3::FILE_STATE state = IDF3::FILE_START;
+
+        readLibHeader( lib, state );
+
+        while( lib.good() ) readLibSection( lib, state, this );
     }
-
-    IDF3::FILE_STATE state = IDF3::FILE_START;
-
-    if( !readLibHeader( lib, state ) )
+    catch( std::exception& e )
     {
-        ERROR_IDF;
-        cerr << "[IDF library] could not find a valid header\n";
-        lib.close();
-        return false;
-    }
+        lib.exceptions ( std::ios_base::goodbit );
 
-    // read the library sections
-    while( readLibSection( lib, state, this ) && lib.good() );
+        if( lib.is_open() )
+            lib.close();
 
-    if( state <= IDF3::FILE_START || state >= IDF3::FILE_INVALID )
-    {
-        lib.close();
-        ERROR_IDF;
-        cerr << "problems reading file: '" << aFileName << "'\n";
-        return false;
+        throw;
     }
 
     lib.close();
-    return true;
+    return;
 }
 
 
-bool IDF3_BOARD::ReadFile( const wxString& aFullFileName )
+bool IDF3_BOARD::ReadFile( const wxString& aFullFileName, bool aNoSubstituteOutlines )
 {
     // 1. Check that the file extension is 'emn'
     // 2. Check if a file with extension 'emp' exists and read it
@@ -2583,334 +2660,370 @@ bool IDF3_BOARD::ReadFile( const wxString& aFullFileName )
 
     std::string bfname = TO_UTF8( aFullFileName );
 
-    if( !brdname.IsOk() )
+    try
     {
-        ERROR_IDF;
-        cerr << "invalid file name: '" << bfname << "'\n";
-        return false;
-    }
-
-    if( !brdname.IsOk() )
-    {
-        ERROR_IDF;
-        cerr << "invalid file name: '" << bfname << "'\n";
-        return false;
-    }
-
-    if( !brdname.FileExists() )
-    {
-        ERROR_IDF;
-        cerr << "no such file: '" << bfname  << "'\n";
-        return false;
-    }
-
-    if( !brdname.IsFileReadable() )
-    {
-        ERROR_IDF;
-        cerr << "cannot read file: '" << bfname << "'\n";
-        return false;
-    }
-
-    bfname = TO_UTF8( brdname.GetFullPath() );
-    std::string lfname = TO_UTF8( libname.GetFullPath() );
-
-    if( !libname.FileExists() )
-    {
-        ERROR_IDF;
-        cerr << "no associated library file (*.emp)\n";
-    }
-    else if( !libname.IsFileReadable() )
-    {
-        ERROR_IDF;
-        cerr << "cannot read library file: '" << lfname << "'\n";
-    }
-    else
-    {
-        // read the library file before proceeding
-        if( !readLibFile( lfname ) )
+        if( !brdname.IsOk() )
         {
-            ERROR_IDF;
-            cerr << "problems reading library file: '" << lfname << "'\n";
-            return false;
-        }
-    }
+            ostringstream ostr;
+            ostr << "\n* invalid file name: '" << bfname << "'";
 
-    // read the board file
-    if( !readBoardFile( bfname ) )
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        }
+
+        if( !brdname.FileExists() )
+        {
+            ostringstream ostr;
+            ostr << "\n* no such file: '" << bfname << "'";
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        }
+
+        if( !brdname.IsFileReadable() )
+        {
+            ostringstream ostr;
+            ostr << "\n* cannot read file: '" << bfname << "'";
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        }
+
+        bfname = TO_UTF8( brdname.GetFullPath() );
+        std::string lfname = TO_UTF8( libname.GetFullPath() );
+
+        if( !libname.FileExists() )
+        {
+            // NOTE: Since this is a common case we simply proceed
+            // with the assumption that there is no library file;
+            // however we print a message to inform the user.
+            ERROR_IDF;
+            cerr << "no associated library file (*.emp)\n";
+        }
+        else if( !libname.IsFileReadable() )
+        {
+            ostringstream ostr;
+            ostr << "\n* cannot read library file: '" << lfname << "'";
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        }
+        else
+        {
+            // read the library file before proceeding
+            readLibFile( lfname );
+        }
+
+        // read the board file
+        readBoardFile( bfname, aNoSubstituteOutlines );
+    }
+    catch( std::exception& e )
     {
         Clear();
-        ERROR_IDF;
-        cerr << "problems reading board file: '" << lfname << "'\n";
+        errormsg = e.what();
+
         return false;
     }
 
     return true;
 }
 
+
 // write the library file data
 bool IDF3_BOARD::writeLibFile( const std::string& aFileName )
 {
     std::ofstream lib;
+    lib.exceptions( std::ofstream::failbit );
 
-    lib.open( aFileName.c_str(), std::ios_base::out );
-
-    if( !lib.is_open() )
+    try
     {
-        ERROR_IDF;
-        cerr << "could not open library file: '" << aFileName << "'\n";
-        return false;
+        lib.open( aFileName.c_str(), std::ios_base::out );
+
+        wxDateTime tdate( time( NULL ) );
+
+        if( idfSource.empty() )
+            idfSource = "KiCad-IDF Framework";
+
+        ostringstream fileDate;
+        fileDate << setfill( '0' ) << setw(4) << tdate.GetYear();
+        fileDate << "/" << setw(2) << tdate.GetMonth() << "/" << tdate.GetDay();
+        fileDate << "." << tdate.GetHour() << ":" << tdate.GetMinute() << ":" << tdate.GetSecond();
+        libDate = fileDate.str();
+
+        lib << ".HEADER\n";
+        lib << "LIBRARY_FILE 3.0 \"Created by " << idfSource;
+        lib << "\" " << libDate << " " << (++libFileVersion) << "\n";
+        lib << ".END_HEADER\n\n";
+
+        std::map< std::string, IDF3_COMP_OUTLINE*>::iterator its = compOutlines.begin();
+        std::map< std::string, IDF3_COMP_OUTLINE*>::iterator ite = compOutlines.end();
+
+        while( its != ite )
+        {
+            its->second->writeData( lib );
+            ++its;
+        }
+
     }
-
-    wxDateTime tdate( time( NULL ) );
-
-    if( idfSource.empty() )
-        idfSource = "KiCad-IDF Framework";
-
-    ostringstream fileDate;
-    fileDate << setfill( '0' ) << setw(4) << tdate.GetYear();
-    fileDate << "/" << setw(2) << tdate.GetMonth() << "/" << tdate.GetDay();
-    fileDate << "." << tdate.GetHour() << ":" << tdate.GetMinute() << ":" << tdate.GetSecond();
-    libDate = fileDate.str();
-
-    lib << ".HEADER\n";
-    lib << "LIBRARY_FILE 3.0 \"Created by " << idfSource;
-    lib << "\" " << libDate << " " << (++libFileVersion) << "\n";
-    lib << ".END_HEADER\n\n";
-
-    std::map< std::string, IDF3_COMP_OUTLINE*>::iterator its = compOutlines.begin();
-    std::map< std::string, IDF3_COMP_OUTLINE*>::iterator ite = compOutlines.end();
-
-    while( its != ite )
+    catch( std::exception& e )
     {
-        its->second->WriteData( lib );
-        ++its;
-    }
+        lib.exceptions( std::ios_base::goodbit );
 
-    bool ok = !lib.fail();
+        if( lib.is_open() )
+            lib.close();
+
+        throw;
+    }
 
     lib.close();
 
-    return ok;
+    return true;
 }
 
 // write the board file data
-bool IDF3_BOARD::writeBoardFile( const std::string& aFileName )
+void IDF3_BOARD::writeBoardFile( const std::string& aFileName )
 {
     std::ofstream brd;
+    brd.exceptions( std::ofstream::failbit );
 
-    brd.open( aFileName.c_str(), std::ios_base::out );
-
-    if( !brd.is_open() )
+    try
     {
-        ERROR_IDF;
-        cerr << "could not open board file: '" << aFileName << "'\n";
-        return false;
+        brd.open( aFileName.c_str(), std::ios_base::out );
+
+        wxDateTime tdate( time( NULL ) );
+
+        if( idfSource.empty() )
+            idfSource = "KiCad-IDF Framework";
+
+        ostringstream fileDate;
+        fileDate << setfill( '0' ) << setw(4) << tdate.GetYear();
+        fileDate << "/" << setw(2) << tdate.GetMonth() << "/" << tdate.GetDay();
+        fileDate << "." << tdate.GetHour() << ":" << tdate.GetMinute() << ":" << tdate.GetSecond();
+        brdDate = fileDate.str();
+
+        brd << ".HEADER\n";
+        brd << "BOARD_FILE 3.0 \"Created by " << idfSource;
+        brd << "\" " << brdDate << " " << (++brdFileVersion) << "\n";
+
+        if( boardName.empty() )
+            brd << "\"BOARD WITH NO NAME\" ";
+        else
+            brd << "\"" << boardName << "\" ";
+
+        brd << setw(1) << setfill( ' ' );
+
+        if( unit == IDF3::UNIT_MM )
+            brd << "MM\n";
+        else
+            brd << "THOU\n";
+
+        brd << ".END_HEADER\n\n";
+
+        // write the BOARD_OUTLINE
+        olnBoard.writeData( brd );
+
+        // OTHER outlines
+        do
+        {
+            std::map<std::string, OTHER_OUTLINE*>::iterator its = olnOther.begin();
+            std::map<std::string, OTHER_OUTLINE*>::iterator ite = olnOther.end();
+
+            while(its != ite )
+            {
+                its->second->writeData( brd );
+                ++its;
+            }
+
+        } while( 0 );
+
+        // ROUTE outlines
+        do
+        {
+            std::list<ROUTE_OUTLINE*>::iterator its = olnRoute.begin();
+            std::list<ROUTE_OUTLINE*>::iterator ite = olnRoute.end();
+
+            while( its != ite )
+            {
+                (*its)->writeData( brd );
+                ++its;
+            }
+
+        } while( 0 );
+
+        // PLACEMENT outlines
+        do
+        {
+            std::list<PLACE_OUTLINE*>::iterator its = olnPlace.begin();
+            std::list<PLACE_OUTLINE*>::iterator ite = olnPlace.end();
+
+            while( its != ite )
+            {
+                (*its)->writeData( brd );
+                ++its;
+            }
+
+        } while( 0 );
+
+        // ROUTE KEEPOUT outlines
+        do
+        {
+            std::list<ROUTE_KO_OUTLINE*>::iterator its = olnRouteKeepout.begin();
+            std::list<ROUTE_KO_OUTLINE*>::iterator ite = olnRouteKeepout.end();
+
+            while( its != ite )
+            {
+                (*its)->writeData( brd );
+                ++its;
+            }
+
+        } while( 0 );
+
+        // VIA KEEPOUT outlines
+        do
+        {
+            std::list<VIA_KO_OUTLINE*>::iterator its = olnViaKeepout.begin();
+            std::list<VIA_KO_OUTLINE*>::iterator ite = olnViaKeepout.end();
+
+            while( its != ite )
+            {
+                (*its)->writeData( brd );
+                ++its;
+            }
+
+        } while( 0 );
+
+        // PLACE KEEPOUT outlines
+        do
+        {
+            std::list<PLACE_KO_OUTLINE*>::iterator its = olnPlaceKeepout.begin();
+            std::list<PLACE_KO_OUTLINE*>::iterator ite = olnPlaceKeepout.end();
+
+            while( its != ite )
+            {
+                (*its)->writeData( brd );
+                ++its;
+            }
+
+        } while( 0 );
+
+        // PLACEMENT GROUP outlines
+        do
+        {
+            std::map<std::string, GROUP_OUTLINE*>::iterator its = olnGroup.begin();
+            std::map<std::string, GROUP_OUTLINE*>::iterator ite = olnGroup.end();
+
+            while( its != ite )
+            {
+                its->second->writeData( brd );
+                ++its;
+            }
+
+        } while( 0 );
+
+        // Drilled holes
+        do
+        {
+            std::list<std::string>::iterator itds = drillComments.begin();
+            std::list<std::string>::iterator itde = drillComments.end();
+
+            while( itds != itde )
+            {
+                brd << "# " << *itds << "\n";
+                ++itds;
+            }
+
+            brd << ".DRILLED_HOLES\n";
+
+            std::list<IDF_DRILL_DATA*>::iterator itbs = board_drills.begin();
+            std::list<IDF_DRILL_DATA*>::iterator itbe = board_drills.end();
+
+            while( itbs != itbe )
+            {
+                (*itbs)->write( brd, unit );
+                ++itbs;
+            }
+
+            std::map< std::string, IDF3_COMPONENT*>::iterator itcs = components.begin();
+            std::map< std::string, IDF3_COMPONENT*>::iterator itce = components.end();
+
+            while( itcs != itce )
+            {
+                itcs->second->writeDrillData( brd );
+                ++itcs;
+            }
+
+            brd << ".END_DRILLED_HOLES\n\n";
+        } while( 0 );
+
+        // Notes
+        if( !notes.empty() )
+        {
+            std::list<std::string>::iterator itncs = noteComments.begin();
+            std::list<std::string>::iterator itnce = noteComments.end();
+
+            while( itncs != itnce )
+            {
+                brd << "# " << *itncs << "\n";
+                ++itncs;
+            }
+
+            brd << ".NOTES\n";
+
+            std::list<IDF_NOTE*>::iterator itns = notes.begin();
+            std::list<IDF_NOTE*>::iterator itne = notes.end();
+
+            while( itns != itne )
+            {
+                (*itns)->writeNote( brd, unit );
+                ++itns;
+            }
+
+            brd << ".END_NOTES\n\n";
+
+        }
+
+        // Placement
+        if( !components.empty() )
+        {
+            std::list<std::string>::iterator itpcs = placeComments.begin();
+            std::list<std::string>::iterator itpce = placeComments.end();
+
+            while( itpcs != itpce )
+            {
+                brd << "# " << *itpcs << "\n";
+                ++itpcs;
+            }
+
+            std::map< std::string, IDF3_COMPONENT*>::iterator itcs = components.begin();
+            std::map< std::string, IDF3_COMPONENT*>::iterator itce = components.end();
+
+            brd << ".PLACEMENT\n";
+
+            while( itcs != itce )
+            {
+                itcs->second->writePlaceData( brd );
+                ++itcs;
+            }
+
+            brd << ".END_PLACEMENT\n";
+        }
+
+    }
+    catch( std::exception& e )
+    {
+        brd.exceptions( std::ios_base::goodbit );
+
+        if( brd.is_open() )
+            brd.close();
+
+        throw;
     }
 
-    wxDateTime tdate( time( NULL ) );
-
-    if( idfSource.empty() )
-        idfSource = "KiCad-IDF Framework";
-
-    ostringstream fileDate;
-    fileDate << setfill( '0' ) << setw(4) << tdate.GetYear();
-    fileDate << "/" << setw(2) << tdate.GetMonth() << "/" << tdate.GetDay();
-    fileDate << "." << tdate.GetHour() << ":" << tdate.GetMinute() << ":" << tdate.GetSecond();
-    brdDate = fileDate.str();
-
-    brd << ".HEADER\n";
-    brd << "BOARD_FILE 3.0 \"Created by " << idfSource;
-    brd << "\" " << brdDate << " " << (++brdFileVersion) << "\n";
-
-    if( boardName.empty() )
-        brd << "\"BOARD WITH NO NAME\" ";
-    else
-        brd << "\"" << boardName << "\" ";
-
-    brd << setw(1) << setfill( ' ' );
-
-    if( unit == IDF3::UNIT_MM )
-        brd << "MM\n";
-    else
-        brd << "THOU\n";
-
-    brd << ".END_HEADER\n\n";
-
-    // write the BOARD_OUTLINE
-    if( !olnBoard.WriteData( brd ) )
-    {
-        ERROR_IDF << "problems writing BOARD OUTLINE\n";
-        brd.close();
-        return false;
-    }
-
-    // OTHER outlines
-    do
-    {
-        std::map<std::string, OTHER_OUTLINE*>::iterator its = olnOther.begin();
-        std::map<std::string, OTHER_OUTLINE*>::iterator ite = olnOther.end();
-
-        while( (its != ite) && its->second->WriteData( brd ) ) ++its;
-
-    } while( 0 );
-
-    // ROUTE outlines
-    do
-    {
-        std::list<ROUTE_OUTLINE*>::iterator its = olnRoute.begin();
-        std::list<ROUTE_OUTLINE*>::iterator ite = olnRoute.end();
-
-        while( (its != ite) && (*its)->WriteData( brd ) ) ++its;
-
-    } while( 0 );
-
-    // PLACEMENT outlines
-    do
-    {
-        std::list<PLACE_OUTLINE*>::iterator its = olnPlace.begin();
-        std::list<PLACE_OUTLINE*>::iterator ite = olnPlace.end();
-
-        while( (its != ite) && (*its)->WriteData( brd ) ) ++its;
-
-    } while( 0 );
-
-    // ROUTE KEEPOUT outlines
-    do
-    {
-        std::list<ROUTE_KO_OUTLINE*>::iterator its = olnRouteKeepout.begin();
-        std::list<ROUTE_KO_OUTLINE*>::iterator ite = olnRouteKeepout.end();
-
-        while( (its != ite) && (*its)->WriteData( brd ) ) ++its;
-
-    } while( 0 );
-
-    // VIA KEEPOUT outlines
-    do
-    {
-        std::list<VIA_KO_OUTLINE*>::iterator its = olnViaKeepout.begin();
-        std::list<VIA_KO_OUTLINE*>::iterator ite = olnViaKeepout.end();
-
-        while( (its != ite) && (*its)->WriteData( brd ) ) ++its;
-
-    } while( 0 );
-
-    // PLACE KEEPOUT outlines
-    do
-    {
-        std::list<PLACE_KO_OUTLINE*>::iterator its = olnPlaceKeepout.begin();
-        std::list<PLACE_KO_OUTLINE*>::iterator ite = olnPlaceKeepout.end();
-
-        while( (its != ite) && (*its)->WriteData( brd ) ) ++its;
-
-    } while( 0 );
-
-    // PLACEMENT GROUP outlines
-    do
-    {
-        std::map<std::string, GROUP_OUTLINE*>::iterator its = olnGroup.begin();
-        std::map<std::string, GROUP_OUTLINE*>::iterator ite = olnGroup.end();
-
-        while( (its != ite) && its->second->WriteData( brd ) ) ++its;
-
-    } while( 0 );
-
-    // Drilled holes
-    do
-    {
-        std::list<std::string>::iterator itds = drillComments.begin();
-        std::list<std::string>::iterator itde = drillComments.end();
-
-        while( itds != itde )
-        {
-            brd << "# " << *itds << "\n";
-            ++itds;
-        }
-
-        brd << ".DRILLED_HOLES\n";
-
-        std::list<IDF_DRILL_DATA*>::iterator itbs = board_drills.begin();
-        std::list<IDF_DRILL_DATA*>::iterator itbe = board_drills.end();
-
-        while( itbs != itbe )
-        {
-            (*itbs)->Write( brd, unit );
-            ++itbs;
-        }
-
-        std::map< std::string, IDF3_COMPONENT*>::iterator itcs = components.begin();
-        std::map< std::string, IDF3_COMPONENT*>::iterator itce = components.end();
-
-        while( itcs != itce )
-        {
-            itcs->second->WriteDrillData( brd );
-            ++itcs;
-        }
-
-        brd << ".END_DRILLED_HOLES\n\n";
-    } while( 0 );
-
-    // Notes
-    if( !notes.empty() )
-    {
-        std::list<std::string>::iterator itncs = noteComments.begin();
-        std::list<std::string>::iterator itnce = noteComments.end();
-
-        while( itncs != itnce )
-        {
-            brd << "# " << *itncs << "\n";
-            ++itncs;
-        }
-
-        brd << ".NOTES\n";
-
-        std::list<IDF_NOTE*>::iterator itns = notes.begin();
-        std::list<IDF_NOTE*>::iterator itne = notes.end();
-
-        while( itns != itne )
-        {
-            (*itns)->WriteNote( brd, unit );
-            ++itns;
-        }
-
-        brd << ".END_NOTES\n\n";
-
-    }
-
-    // Placement
-    if( !components.empty() )
-    {
-        std::list<std::string>::iterator itpcs = placeComments.begin();
-        std::list<std::string>::iterator itpce = placeComments.end();
-
-        while( itpcs != itpce )
-        {
-            brd << "# " << *itpcs << "\n";
-            ++itpcs;
-        }
-
-        std::map< std::string, IDF3_COMPONENT*>::iterator itcs = components.begin();
-        std::map< std::string, IDF3_COMPONENT*>::iterator itce = components.end();
-
-        brd << ".PLACEMENT\n";
-
-        while( itcs != itce )
-        {
-            itcs->second->WritePlaceData( brd );
-            ++itcs;
-        }
-
-        brd << ".END_PLACEMENT\n";
-    }
-
-    bool ok = !brd.fail();
     brd.close();
 
-    return ok;
+    return;
 }
+
 
 bool IDF3_BOARD::WriteFile( const wxString& aFullFileName, bool aUnitMM, bool aForceUnitFlag )
 {
-    if( aUnitMM == IDF3::UNIT_MM )
+    if( aUnitMM != IDF3::UNIT_THOU )
         setUnit( IDF3::UNIT_MM, aForceUnitFlag );
     else
         setUnit( IDF3::UNIT_THOU, aForceUnitFlag );
@@ -2929,46 +3042,45 @@ bool IDF3_BOARD::WriteFile( const wxString& aFullFileName, bool aUnitMM, bool aF
 
     std::string bfname = TO_UTF8( aFullFileName );
 
-    if( !brdname.IsOk() )
+    try
     {
-        ERROR_IDF;
-        cerr << "invalid file name: '" << bfname << "'\n";
-        errno = EINVAL;
-        return false;
+        if( !brdname.IsOk() )
+        {
+            ostringstream ostr;
+            ostr << "\n* invalid file name: '" << bfname << "'";
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        }
+
+        if( brdname.FileExists() && !brdname.IsFileWritable() )
+        {
+            ostringstream ostr;
+            ostr << "cannot overwrite existing board file\n";
+            ostr << "* filename: '" << bfname << "'";
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        }
+
+        bfname = TO_UTF8( brdname.GetFullPath() );
+        std::string lfname = TO_UTF8( libname.GetFullPath() );
+
+        if( libname.FileExists() && !libname.IsFileWritable() )
+        {
+            ostringstream ostr;
+            ostr << "cannot overwrite existing library file\n";
+            ostr << "* filename: '" << lfname << "'";
+
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        }
+
+        writeLibFile( lfname );
+        writeBoardFile( bfname );
+
     }
-
-    if( brdname.FileExists() && !brdname.IsFileWritable() )
+    catch( std::exception& e )
     {
-        ERROR_IDF;
-        cerr << "cannot overwrite existing board file\n";
-        cerr << "* Filename: '" << bfname << "'\n";
-        errno = EACCES;
-        return false;
-    }
+        errormsg = e.what();
 
-    bfname = TO_UTF8( brdname.GetFullPath() );
-    std::string lfname = TO_UTF8( libname.GetFullPath() );
-
-    if( libname.FileExists() && !libname.IsFileWritable() )
-    {
-        ERROR_IDF;
-        cerr << "cannot overwrite existing library file\n";
-        cerr << "* Filename: '" << lfname << "'\n";
-        errno = EACCES;
-        return false;
-    }
-
-    if( !writeLibFile( lfname ) )
-    {
-        ERROR_IDF;
-        cerr << "problems writing library file: '" << lfname << "'\n";
-        return false;
-    }
-
-    if( !writeBoardFile( bfname ) )
-    {
-        ERROR_IDF;
-        cerr << "problems writing board file: '" << bfname << "'\n";
         return false;
     }
 
@@ -3016,7 +3128,14 @@ int   IDF3_BOARD::GetBoardVersion( void )
 bool  IDF3_BOARD::SetBoardVersion( int aVersion )
 {
     if( aVersion < 0 )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "*  board version (" << aVersion << ") must be > 0";
+        errormsg = ostr.str();
+
         return false;
+    }
 
     brdFileVersion = aVersion;
 
@@ -3033,7 +3152,14 @@ int   IDF3_BOARD::GetLibraryVersion( void )
 bool  IDF3_BOARD::SetLibraryVersion( int aVersion )
 {
     if( aVersion < 0 )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "* library version (" << aVersion << ") must be > 0";
+        errormsg = ostr.str();
+
         return false;
+    }
 
     libFileVersion = aVersion;
 
@@ -3049,9 +3175,13 @@ double IDF3_BOARD::GetUserScale( void )
 
 bool IDF3_BOARD::SetUserScale( double aScaleFactor )
 {
-    if( aScaleFactor <= 0.0 )
+    if( aScaleFactor == 0.0 )
     {
-        ERROR_IDF << "user scale factor must be > 0\n";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "* BUG: user scale factor must not be 0";
+        errormsg = ostr.str();
+
         return false;
     }
 
@@ -3066,8 +3196,15 @@ int IDF3_BOARD::GetUserPrecision( void )
 
 bool IDF3_BOARD::SetUserPrecision( int aPrecision )
 {
-    if( aPrecision < 0 || aPrecision > 8 )
+    if( aPrecision < 1 || aPrecision > 8 )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "* precision value (" << aPrecision << ") must be 1..8";
+        errormsg = ostr.str();
+
         return false;
+    }
 
     userPrec = aPrecision;
     return true;
@@ -3092,19 +3229,38 @@ void IDF3_BOARD::SetUserOffset( double aXoff, double aYoff )
 
 bool IDF3_BOARD::AddBoardOutline( IDF_OUTLINE* aOutline )
 {
-    return olnBoard.AddOutline( aOutline );
+    if( !olnBoard.AddOutline( aOutline ) )
+    {
+        errormsg = olnBoard.GetError();
+
+        return false;
+    }
+
+    return true;
 }
 
 
 bool IDF3_BOARD::DelBoardOutline( IDF_OUTLINE* aOutline )
 {
-    return olnBoard.DelOutline( aOutline );
+    if( !olnBoard.DelOutline( aOutline ) )
+    {
+        errormsg = olnBoard.GetError();
+        return false;
+    }
+
+    return true;
 }
 
 
 bool IDF3_BOARD::DelBoardOutline( size_t aIndex )
 {
-    return olnBoard.DelOutline( aIndex );
+    if( !olnBoard.DelOutline( aIndex ) )
+    {
+        errormsg = olnBoard.GetError();
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -3145,14 +3301,10 @@ IDF_DRILL_DATA* IDF3_BOARD::AddDrill( IDF_DRILL_DATA* aDrilledHole )
     if( !aDrilledHole )
         return NULL;
 
-    if( CompareToken( "PANEL", aDrilledHole->GetDrillRefDes() ) )
-    {
-        ERROR_IDF;
-        cerr << "\n*BUG: PANEL drilled holes are not supported\n";
-        return NULL;
-    }
-
-    if( CompareToken( "BOARD", aDrilledHole->GetDrillRefDes() ) )
+    // note: PANEL drills are essentially BOARD drills which
+    // the panel requires to be present
+    if( CompareToken( "BOARD", aDrilledHole->GetDrillRefDes() )
+        || CompareToken( "PANEL", aDrilledHole->GetDrillRefDes() ) )
     {
         board_drills.push_back( aDrilledHole );
         return aDrilledHole;
@@ -3164,6 +3316,8 @@ IDF_DRILL_DATA* IDF3_BOARD::AddDrill( IDF_DRILL_DATA* aDrilledHole )
 
 bool IDF3_BOARD::DelBoardDrill( double aDia, double aXpos, double aYpos )
 {
+    errormsg.clear();
+
     std::list<IDF_DRILL_DATA*>::iterator sp = board_drills.begin();
     std::list<IDF_DRILL_DATA*>::iterator ep = board_drills.end();
     bool rval = false;
@@ -3172,11 +3326,62 @@ bool IDF3_BOARD::DelBoardDrill( double aDia, double aXpos, double aYpos )
     {
         if( (*sp)->Matches( aDia, aXpos, aYpos ) )
         {
+#ifndef DISABLE_IDF_OWNERSHIP
+            IDF3::KEY_OWNER keyo = (*sp)->GetDrillOwner();
+
+            if( keyo == UNOWNED || ( keyo == MCAD && cadType == CAD_MECH )
+                || ( keyo == ECAD && cadType == CAD_ELEC ) )
+            {
+                rval = true;
+                delete *sp;
+                sp = board_drills.erase( sp );
+                continue;
+            }
+            else
+            {
+                ostringstream ostr;
+                ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+                ostr << "* ownership violation; drill owner (";
+
+                switch( keyo )
+                {
+                case UNOWNED:
+                    ostr << "UNOWNED";
+                    break;
+
+                case ECAD:
+                    ostr << "ECAD";
+                    break;
+
+                case MCAD:
+                    ostr << "MCAD";
+                    break;
+
+                default:
+                    ostr << "invalid: " << keyo;
+                    break;
+                }
+
+                ostr << ") may not be modified by ";
+
+                if( cadType == CAD_MECH )
+                    ostr << "MCAD";
+                else
+                    ostr << "ECAD";
+
+                errormsg = ostr.str();
+
+                ++sp;
+                continue;
+            }
+#else
             rval = true;
             delete *sp;
             sp = board_drills.erase( sp );
             continue;
+#endif
         }
+
         ++sp;
     }
 
@@ -3186,11 +3391,29 @@ bool IDF3_BOARD::DelBoardDrill( double aDia, double aXpos, double aYpos )
 
 // a slot is a deficient representation of a kicad slotted hole;
 // it is usually associated with a component but IDFv3 does not
-// provide for such an association.
+// provide for such an association. Note: this mechanism must bypass
+// the BOARD_OUTLINE ownership rules
 bool IDF3_BOARD::AddSlot( double aWidth, double aLength, double aOrientation, double aX, double aY )
 {
     if( aWidth < IDF_MIN_DIA_MM )
-        return true;
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "* slot width (" << aWidth << ") must be >= " << IDF_MIN_DIA_MM;
+        errormsg = ostr.str();
+
+        return false;
+    }
+
+    if( aLength < IDF_MIN_DIA_MM )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "* slot length (" << aLength << ") must be >= " << IDF_MIN_DIA_MM;
+        errormsg = ostr.str();
+
+        return false;
+    }
 
     IDF_POINT c[2];     // centers
     IDF_POINT pt[4];
@@ -3201,8 +3424,11 @@ bool IDF3_BOARD::AddSlot( double aWidth, double aLength, double aOrientation, do
 
     if( aLength == aWidth )
     {
-        ERROR_IDF;
-        cerr << "length == width (" << aWidth << ")\n";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "* slot length must not equal width";
+        errormsg = ostr.str();
+
         return false;
     }
 
@@ -3237,8 +3463,11 @@ bool IDF3_BOARD::AddSlot( double aWidth, double aLength, double aOrientation, do
 
     if( outline == NULL )
     {
-        ERROR_IDF;
-        cerr << "could not create an outline object\n";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "* could not create an outline object";
+        errormsg = ostr.str();
+
         return false;
     }
 
@@ -3255,7 +3484,13 @@ bool IDF3_BOARD::AddSlot( double aWidth, double aLength, double aOrientation, do
     seg = new IDF_SEGMENT( c[0], pt[3], -180.0, true );
     outline->push( seg );
 
-    return AddBoardOutline( outline );
+    if( !olnBoard.addOutline( outline ) )
+    {
+        errormsg = olnBoard.GetError();
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -3287,8 +3522,11 @@ IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( double aDia, double aXpos, double aYpo
 
     if( CompareToken( "PANEL", refdes ) )
     {
-        ERROR_IDF;
-        cerr << "PANEL data not supported\n";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "* PANEL data not supported";
+        errormsg = ostr.str();
+
         return NULL;
     }
 
@@ -3301,8 +3539,11 @@ IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( double aDia, double aXpos, double aYpo
 
         if( comp == NULL )
         {
-            ERROR_IDF;
-            cerr << "could not create new component object\n";
+            ostringstream ostr;
+            ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+            ostr << "* could not create new component object";
+            errormsg = ostr.str();
+
             return NULL;
         }
 
@@ -3312,19 +3553,36 @@ IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( double aDia, double aXpos, double aYpo
     }
 
     // add the drill
-    return ref->second->AddDrill( aDia, aXpos, aYpos, aPlating, aHoleType, aOwner );
+    IDF_DRILL_DATA* dp = ref->second->AddDrill( aDia, aXpos, aYpos, aPlating, aHoleType, aOwner );
+
+    if( !dp )
+    {
+        errormsg = ref->second->GetError();
+        return NULL;
+    }
+
+    return dp;
 }
 
 
 IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( IDF_DRILL_DATA* aDrilledHole )
 {
     if( !aDrilledHole )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): NULL pointer";
+        errormsg = ostr.str();
+
         return NULL;
+    }
 
     if( CompareToken( "PANEL", aDrilledHole->GetDrillRefDes() ) )
     {
-        ERROR_IDF;
-        cerr << "PANEL data not supported\n";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+        ostr << "* PANEL data not supported";
+        errormsg = ostr.str();
+
         return NULL;
     }
 
@@ -3337,8 +3595,11 @@ IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( IDF_DRILL_DATA* aDrilledHole )
 
         if( comp == NULL )
         {
-            ERROR_IDF;
-            cerr << "could not create new component object\n";
+            ostringstream ostr;
+            ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+            ostr << "* could not create new component object";
+            errormsg = ostr.str();
+
             return NULL;
         }
 
@@ -3347,19 +3608,34 @@ IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( IDF_DRILL_DATA* aDrilledHole )
         ref = components.insert( std::pair< std::string, IDF3_COMPONENT*> ( comp->GetRefDes(), comp ) ).first;
     }
 
-    // add the drill
-    return ref->second->AddDrill( aDrilledHole );
+    IDF_DRILL_DATA* dp = ref->second->AddDrill( aDrilledHole );
+
+    if( !dp )
+    {
+        errormsg = ref->second->GetError();
+        return NULL;
+    }
+
+    return dp;
 }
 
 
 bool IDF3_BOARD::delCompDrill( double aDia, double aXpos, double aYpos, std::string aRefDes )
 {
+    errormsg.clear();
+
     std::map<std::string, IDF3_COMPONENT*>::iterator ref = components.find( aRefDes );
 
     if( ref == components.end() )
         return false;
 
-    return ref->second->DelDrill( aDia, aXpos, aYpos );
+    if( !ref->second->DelDrill( aDia, aXpos, aYpos ) )
+    {
+        errormsg = ref->second->GetError();
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -3367,14 +3643,22 @@ bool IDF3_BOARD::AddComponent( IDF3_COMPONENT* aComponent )
 {
     if( !aComponent )
     {
-        ERROR_IDF << "Invalid component pointer (NULL)\n";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__;
+        ostr << "(): Invalid component pointer (NULL)";
+        errormsg = ostr.str();
+
         return false;
     }
 
     if( components.insert( std::pair<std::string, IDF3_COMPONENT*>
         ( aComponent->GetRefDes(), aComponent ) ).second == false )
     {
-        ERROR_IDF << "Duplicate RefDes ('" << aComponent->GetRefDes() << "')\n";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
+        ostr << "* duplicate RefDes ('" << aComponent->GetRefDes() << "')";
+        errormsg = ostr.str();
+
         return false;
     }
 
@@ -3384,11 +3668,12 @@ bool IDF3_BOARD::AddComponent( IDF3_COMPONENT* aComponent )
 
 bool IDF3_BOARD::DelComponent( IDF3_COMPONENT* aComponent )
 {
-    if( !aComponent )
-    {
-        ERROR_IDF << "Invalid component pointer (NULL)\n";
+    errormsg.clear();
+
+#ifndef DISABLE_IDF_OWNERSHIP
+    if( !checkComponentOwnership( __LINE__, __FUNCTION__, aComponent ) )
         return false;
-    }
+#endif
 
     std::map<std::string, IDF3_COMPONENT*>::iterator it =
         components.find( aComponent->GetRefDes() );
@@ -3407,19 +3692,27 @@ bool IDF3_BOARD::DelComponent( size_t aIndex )
 {
     if( aIndex >= components.size() )
     {
-        ERROR_IDF << "index (" << aIndex << ") >= components size ("
-            << components.size() << ")\n";
-            return false;
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
+        ostr << "* aIndex (" << aIndex << ") out of range (" << components.size() << ")";
+        errormsg = ostr.str();
+
+        return false;
     }
 
     std::map<std::string, IDF3_COMPONENT*>::iterator it = components.begin();
 
     while( aIndex-- > 0 ) ++it;
 
+#ifndef DISABLE_IDF_OWNERSHIP
+    if( !checkComponentOwnership( __LINE__, __FUNCTION__, it->second ) )
+        return false;
+#endif
+
     delete it->second;
     components.erase( it );
 
-    return false;
+    return true;
 }
 
 
@@ -3462,14 +3755,17 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const std::string aGeomName,
 
     std::string fname = TO_UTF8( aFullFileName );
 
-    cp = new IDF3_COMP_OUTLINE;
+    cp = new IDF3_COMP_OUTLINE( this );
 
     if( cp == NULL )
     {
-        ERROR_IDF;
-        cerr << "failed to create outline with UID '" << aGeomName << "_";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
+        cerr << "* failed to create outline with UID '" << aGeomName << "_";
         cerr << aPartName << "'\n";
-        cerr << "* filename: '" << fname << "'\n";
+        cerr << "* filename: '" << fname << "'";
+        errormsg = ostr.str();
+
         return NULL;
     }
 
@@ -3477,89 +3773,97 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const std::string aGeomName,
 
     if( !idflib.IsOk() )
     {
-        ERROR_IDF;
-        cerr << "invalid file name: '" << fname << "'\n";
         delete cp;
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
+        cerr << "* invalid file name: '" << fname << "'";
+        errormsg = ostr.str();
+
         return NULL;
     }
 
     if( !idflib.FileExists() )
     {
-        ERROR_IDF;
-        cerr << "no such file: '" << fname  << "'\n";
         delete cp;
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
+        cerr << "* no such file: '" << fname  << "'";
+        errormsg = ostr.str();
+
         return NULL;
     }
 
     if( !idflib.IsFileReadable() )
     {
-        ERROR_IDF;
-        cerr << "cannot read file: '" << fname << "'\n";
         delete cp;
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
+        cerr << "* cannot read file: '" << fname << "'";
+        errormsg = ostr.str();
+
         return NULL;
     }
 
     std::ifstream model;
+    model.exceptions ( std::ifstream::badbit );
 
-    model.open( fname.c_str(), std::ios_base::in );
-
-    if( !model.is_open() )
+    try
     {
-        ERROR_IDF;
-        cerr << "could not open file: '" << fname << "'\n";
-        delete cp;
-        return NULL;
-    }
+        model.open( fname.c_str(), std::ios_base::in );
 
-    std::string iline;      // the input line
-    bool isComment;         // true if a line just read in is a comment line
-    std::streampos pos;
 
-    while( true )
-    {
-        while( !FetchIDFLine( model, iline, isComment, pos ) && model.good() );
+        std::string iline;      // the input line
+        bool isComment;         // true if a line just read in is a comment line
+        std::streampos pos;
 
-        if( !model.good() )
+
+        while( true )
         {
-            ERROR_IDF;
-            cerr << "problems reading file: '" << fname << "'\n";
-            delete cp;
-            model.close();
-            return NULL;
-        }
+            while( !FetchIDFLine( model, iline, isComment, pos ) && model.good() );
 
-        // accept comment lines, .ELECTRICAL, or .MECHANICAL only
-        if( isComment )
-        {
-            cp->AddComment( iline );
-            continue;
-        }
-
-        if( CompareToken( ".ELECTRICAL", iline ) || CompareToken( ".MECHANICAL", iline ) )
-        {
-            if( !cp->ReadData( model, iline ) )
+            if( !model.good() )
             {
-                ERROR_IDF;
-                cerr << "problems reading file: '" << fname << "'\n";
-                delete cp;
-                model.close();
-                return NULL;
+                ostringstream ostr;
+                ostr << "\n* problems reading file: '" << fname << "'";
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+            }
+
+            // accept comment lines, .ELECTRICAL, or .MECHANICAL only
+            if( isComment )
+            {
+                cp->AddComment( iline );
+                continue;
+            }
+
+            if( CompareToken( ".ELECTRICAL", iline ) || CompareToken( ".MECHANICAL", iline ) )
+            {
+                cp->readData( model, iline, idfVer );
+                break;
             }
             else
             {
-                break;
+                ostringstream ostr;
+                ostr << "faulty IDF component definition\n";
+                ostr << "* Expecting .ELECTRICAL or .MECHANICAL, got '" << iline << "'\n";
+                cerr << "* File: '" << fname << "'\n";
+
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
             }
-        }
-        else
-        {
-            ERROR_IDF << "faulty IDF component definition\n";
-            cerr << "* Expecting .ELECTRICAL or .MECHANICAL, got '" << iline << "'\n";
-            cerr << "* File: '" << fname << "'\n";
-            delete cp;
+        }   // while( true )
+    }
+    catch( std::exception& e )
+    {
+        delete cp;
+
+        model.exceptions ( std::ios_base::goodbit );
+
+        if( model.is_open() )
             model.close();
-            return NULL;
-        }
-    }   // while( true )
+
+        errormsg = e.what();
+
+        return NULL;
+    }
 
     model.close();
 
@@ -3602,11 +3906,15 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetInvalidOutline( const std::string& aGeomName, 
     if( cp != NULL )
         return cp;
 
-    cp = new IDF3_COMP_OUTLINE;
+    cp = new IDF3_COMP_OUTLINE( this );
 
     if( cp == NULL )
     {
-        ERROR_IDF << "could not create new outline\n";
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): ";
+        cerr << "could not create new outline";
+        errormsg = ostr.str();
+
         return NULL;
     }
 
@@ -3807,7 +4115,7 @@ void IDF3_BOARD::Clear( void )
     } while(0);
 
     boardName.clear();
-    olnBoard.SetThickness( thickness );
+    olnBoard.setThickness( thickness );
 
     state     = FILE_START;
     unit      = UNIT_MM;
@@ -3816,4 +4124,11 @@ void IDF3_BOARD::Clear( void )
     userYoff  = 0.0;
 
     return;
+}
+
+
+const std::map<std::string, OTHER_OUTLINE*>*const
+IDF3_BOARD::GetOtherOutlines( void )
+{
+    return &olnOther;
 }

@@ -87,6 +87,16 @@ namespace IDF3 {
     };
 
     /**
+     * ENUM IDF_VERSION
+     * represents the supported IDF versions (3.0 and 2.0  ONLY)
+     */
+    enum IDF_VERSION
+    {
+        IDF_V2 = 0,     // version 2 has read support only; files written as IDFv3
+        IDF_V3          // version 3 has full read/write support
+    };
+
+    /**
      * ENUM KEY_OWNER
      * represents the type of CAD which has ownership an object
      */
@@ -194,6 +204,7 @@ namespace IDF3 {
     {
         UNIT_MM = 0,        //< Units in the file are in millimeters
         UNIT_THOU,          //< Units in the file are in mils (aka thou)
+        UNIT_TNM,           //< Deprecated Ten Nanometer Units from IDFv2
         UNIT_INVALID
     };
 
@@ -261,6 +272,7 @@ namespace IDF3 {
  */
 class IDF_NOTE
 {
+friend class IDF3_BOARD;
 private:
     std::string text;   // note text as per IDFv3
     double xpos;        // text X position as per IDFv3
@@ -268,11 +280,8 @@ private:
     double height;      // text height as per IDFv3
     double length;      // text length as per IDFv3
 
-public:
-    IDF_NOTE();
-
     /**
-     * Function ReadNote
+     * Function readNote
      * reads a note entry from an IDFv3 file
      *
      * @param aBoardFile is an open BOARD file; the file position must be set to the start of a NOTE entry
@@ -282,10 +291,10 @@ public:
      * @return bool: true if a note item was read, false otherwise. In case of unrecoverable errors
      * an exception is thrown
      */
-    bool ReadNote( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState, IDF3::IDF_UNIT aBoardUnit );
+    bool readNote( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState, IDF3::IDF_UNIT aBoardUnit );
 
     /**
-     * Function WriteNote
+     * Function writeNote
      * writes a note entry to an IDFv3 file
      *
      * @param aBoardFile is an open BOARD file; the file position must be within a NOTE section
@@ -294,7 +303,10 @@ public:
      * @return bool: true if the item was successfully written, false otherwise. In case of
      * unrecoverable errors an exception is thrown
      */
-    bool WriteNote( std::ofstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit );
+    bool writeNote( std::ofstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit );
+
+public:
+    IDF_NOTE();
 
     /**
      * Function SetText
@@ -341,6 +353,8 @@ public:
  */
 class IDF_DRILL_DATA
 {
+friend class IDF3_BOARD;
+friend class IDF3_COMPONENT;
 private:
     double dia;
     double x;
@@ -352,11 +366,35 @@ private:
     std::string holetype;
     IDF3::KEY_OWNER owner;
 
+    /**
+     * Function read
+     * read a drill entry from an IDFv3 file
+     *
+     * @param aBoardFile is an open IDFv3 file; the file position must be within the DRILLED_HOLES section
+     * @param aBoardUnit is the board file's native unit (MM or THOU)
+     * @param aBoardState is the state value of the parser
+     *
+     * @return bool: true if data was successfully read, otherwise false. In case of an
+     * unrecoverable error an exception is thrown
+     */
+    bool read( std::ifstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit, IDF3::FILE_STATE aBoardState,
+               IDF3::IDF_VERSION aIdfVersion );
+
+    /**
+     * Function write
+     * writes a single line representing a hole within a .DRILLED_HOLES section
+     * In case of an unrecoverable error an exception is thrown.
+     *
+     * @param aBoardFile is an open BOARD file
+     * @param aBoardUnit is the native unit of the output file
+     */
+    void write( std::ofstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit );
+
 public:
     /**
      * Constructor IDF_DRILL_DATA
      * creates an empty drill entry which can be populated by the
-     * Read() function
+     * read() function
      */
     IDF_DRILL_DATA();
 
@@ -392,36 +430,10 @@ public:
     bool Matches( double aDrillDia, double aPosX, double aPosY );
 
     /**
-     * Function Read
-     * read a drill entry from an IDFv3 file
-     *
-     * @param aBoardFile is an open IDFv3 file; the file position must be within the DRILLED_HOLES section
-     * @param aBoardUnit is the board file's native unit (MM or THOU)
-     * @param aBoardState is the state value of the parser
-     *
-     * @return bool: true if data was successfully read, otherwise false. In case of an
-     * unrecoverable error an exception is thrown
-     */
-    bool Read( std::ifstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit, IDF3::FILE_STATE aBoardState );
-
-    /**
-     * Function Write
-     * writes a single line representing a hole within a .DRILLED_HOLES section
-     *
-     * @param aBoardFile is an open BOARD file
-     * @param aBoardUnit is the native unit of the output file
-     *
-     * @return bool: true if the data was successfully written, otherwise false. In case of
-     * an unrecoverable error an exception is thrown
-     */
-    bool Write( std::ofstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit );
-
-    /**
      * Function GettDrillDia
      * returns the drill diameter in mm
      */
     double GetDrillDia();
-
 
     /**
      * Function GettDrillXPos
@@ -455,6 +467,11 @@ public:
      * PIN, VIA, MTG, TOOL, or a user-specified string
      */
     const std::string& GetDrillHoleType();
+
+    IDF3::KEY_OWNER GetDrillOwner( void )
+    {
+        return owner;
+    }
 };
 
 

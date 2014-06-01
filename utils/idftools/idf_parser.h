@@ -21,27 +21,36 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-// NOTE:
-// 1. Due to the complexity of objects and the risk of accumulated
-// position errors, CAD packages should only delete or add complete
-// components. If a component being added already exists, it is
-// replaced by the new component IF and only if the CAD type is
-// permitted to make such changes.
-//
-// 2. Internally all units shall be in mm and by default we shall
-// write files with mm units. The internal flags mm/thou shall only
-// be used to translate data being read from or written to files.
-// This avoids the painful management of a mixture of mm and thou.
-// The API shall require all dimensions in mm; for people using any
-// other unit, it is their responsibility to perform the conversion
-// to mm. Conversion back to thou may incur small rounding errors.
+/*
+ * NOTE:
+ *
+ *  Rules to ensure friendly use within a DLL:
+ *
+ *  1. all functions which throw exceptions must not be publicly available;
+ *  they must become FRIEND functions instead.
+ *
+ *  2. All objects with PRIVATE functions which throw exceptions when
+ *  invoked by a PUBLIC function must indicate success or failure
+ *  and make the exception information available via a GetError()
+ *  routine.
+ *
+ *  General notes:
+ *
+ *  1. Due to the complexity of objects and the risk of accumulated
+ *  position errors, CAD packages should only delete or add complete
+ *  components. If a component being added already exists, it is
+ *  replaced by the new component IF and only if the CAD type is
+ *  permitted to make such changes.
+ *
+ *  2. Internally all units shall be in mm and by default we shall
+ *  write files with mm units. The internal flags mm/thou shall only
+ *  be used to translate data being read from or written to files.
+ *  This avoids the painful management of a mixture of mm and thou.
+ *  The API shall require all dimensions in mm; for people using any
+ *  other unit, it is their responsibility to perform the conversion
+ *  to mm. Conversion back to thou may incur small rounding errors.
+ */
 
-// BUGS:
-// 1. IDF compliance: On DELETE operations, ensure that the CAD
-//    has permission to make these deletions. This is no small task;
-//    however this compliance task can be deferred since it is not
-//    essential to the immediate needs of KiCad which are IDF
-//    export and IDF->VRML conversion
 
 #ifndef IDF_PARSER_H
 #define IDF_PARSER_H
@@ -52,14 +61,57 @@ class IDF3_COMPONENT;
 
 class IDF3_COMP_OUTLINE_DATA
 {
+friend class IDF3_BOARD;
+friend class IDF3_COMPONENT;
 private:
     double xoff;    // X offset from KiCad or X placement from IDF file
     double yoff;    // Y offset from KiCad or Y placement from IDF file
     double zoff;    // height offset (specified in IDFv3 spec, corresponds to KiCad Z offset)
     double aoff;    // angular offset from KiCad or Rotation Angle from IDF file
+    std::string errormsg;
 
     IDF3_COMP_OUTLINE* outline; // component outline to use
     IDF3_COMPONENT* parent;     // associated component
+
+#ifndef DISABLE_IDF_OWNERSHIP
+    bool checkOwnership( int aSourceLine, const char* aSourceFunc );
+#endif
+
+    /**
+     * Function readPlaceData
+     * reads placement data from an open IDFv3 file
+     *
+     * @param aBoardFile is the open IDFv3 file
+     * @param aBoardState is the internal status flag of the IDF parser
+     * @param aIdfVersion is the version of the file currently being parsed
+     * @param aBoard is the IDF3_BOARD object which will store the data
+     *
+     * @return bool: true if placement data was successfully read. false if
+     * no placement data was read; this may happen if the end of the placement
+     * data was encountered or an error occurred. if an error occurred then
+     * an exception is thrown.
+     */
+    bool readPlaceData( std::ifstream &aBoardFile, IDF3::FILE_STATE& aBoardState,
+                        IDF3_BOARD *aBoard, IDF3::IDF_VERSION aIdfVersion,
+                        bool aNoSubstituteOutlines );
+
+    /**
+     * Function writePlaceData
+     * writes RECORD 2 and RECORD 3 of a PLACEMENT section as per IDFv3 specification
+     *
+     * @param aBoardFile is the open IDFv3 file
+     * @param aXpos is the X location of the parent component
+     * @param aYpos is the Y location of the parent component
+     * @param aAngle is the rotation of the parent component
+     * @param aRefDes is the reference designator of the parent component
+     * @param aPlacement is the IDF Placement Status of the parent component
+     * @param aSide is the IDF Layer Designator (TOP or BOTTOM)
+     *
+     * @return bool: true if data was successfully written, otherwise false
+     */
+    void writePlaceData( std::ofstream& aBoardFile, double aXpos, double aYpos, double aAngle,
+                         const std::string aRefDes, IDF3::IDF_PLACEMENT aPlacement,
+                         IDF3::IDF_LAYER aSide );
 
 public:
     /**
@@ -102,8 +154,11 @@ public:
      * @param aYoff is the Y offset of this outline in relation to its parent
      * @param aZoff is the board offset of this outline as per IDFv3 specification
      * @param aAoff is the rotational offset of this outline in relation to its parent
+     *
+     * @return bool: true if the operation succeeded, false if an ownership
+     * violation occurred
      */
-    void SetOffsets( double aXoff, double aYoff, double aZoff, double aAngleOff );
+    bool SetOffsets( double aXoff, double aYoff, double aZoff, double aAngleOff );
 
     /**
      * Function GetOffsets
@@ -129,8 +184,11 @@ public:
      * sets the outline whose position is managed by this object
      *
      * @param aOutline is the outline for this component
+     *
+     * @return bool: true if the operation succeeded, false if an ownership
+     * violation occurred
      */
-    void SetOutline( IDF3_COMP_OUTLINE* aOutline );
+    bool SetOutline( IDF3_COMP_OUTLINE* aOutline );
 
     /**
      * Function GetOutline
@@ -143,44 +201,16 @@ public:
         return outline;
     }
 
-    /**
-     * Function ReadPlaceData
-     * reads placement data from an open IDFv3 file
-     *
-     * @param aBoardFile is the open IDFv3 file
-     * @param aBoardState is the internal status flag of the IDF parser
-     * @param aBoard is the IDF3_BOARD object which will store the data
-     *
-     * @return bool: true if placement data was successfully read. false if
-     * no placement data was read; this may happen if the end of the placement
-     * data was encountered or an error occurred. if an error occurred then
-     * aBoardState is set to IDF3::FILE_INVALID or IDF3::FILE_ERROR.
-     */
-    bool ReadPlaceData( std::ifstream &aBoardFile, IDF3::FILE_STATE& aBoardState,
-                        IDF3_BOARD *aBoard );
-
-    /**
-     * Function WritePlaceData
-     * writes RECORD 2 and RECORD 3 of a PLACEMENT section as per IDFv3 specification
-     *
-     * @param aBoardFile is the open IDFv3 file
-     * @param aXpos is the X location of the parent component
-     * @param aYpos is the Y location of the parent component
-     * @param aAngle is the rotation of the parent component
-     * @param aRefDes is the reference designator of the parent component
-     * @param aPlacement is the IDF Placement Status of the parent component
-     * @param aSide is the IDF Layer Designator (TOP or BOTTOM)
-     *
-     * @return bool: true if data was successfully written, otherwise false
-     */
-    bool WritePlaceData( std::ofstream& aBoardFile, double aXpos, double aYpos, double aAngle,
-                         const std::string aRefDes, IDF3::IDF_PLACEMENT aPlacement,
-                         IDF3::IDF_LAYER aSide );
+    const std::string& GetError( void )
+    {
+        return errormsg;
+    }
 };
 
 
 class IDF3_COMPONENT
 {
+friend class IDF3_BOARD;
 private:
     std::list< IDF3_COMP_OUTLINE_DATA* > components;
     std::list< IDF_DRILL_DATA* > drills;
@@ -193,14 +223,33 @@ private:
     bool                hasPosition;    ///< True after SetPosition is called once
     std::string         refdes;         ///< Reference Description (MUST BE UNIQUE)
     IDF3_BOARD*         parent;
+    std::string         errormsg;
+
+    /**
+     * Function WriteDrillData
+     * writes the internal drill data to an IDFv3 .DRILLED_HOLES section
+     *
+     * @param aBoardFile is an IDFv3 file opened for writing
+     *
+     * @return bool: true if the operation succeeded, otherwise false
+     */
+    bool writeDrillData( std::ofstream& aBoardFile );
+
+    /**
+     * Function WritePlaceData
+     * writes the component placement data to an IDFv3 .PLACEMENT section
+     *
+     * @param aBoardFile is an IDFv3 file opened for writing
+     *
+     * @return bool: true if the operation succeeded, otherwise false
+     */
+    bool writePlaceData( std::ofstream& aBoardFile );
+
+#ifndef DISABLE_IDF_OWNERSHIP
+    bool checkOwnership( int aSourceLine, const char* aSourceFunc );
+#endif
 
 public:
-    /**
-     * Constructor
-     * sets internal parameters to default values
-     */
-    IDF3_COMPONENT();
-
     /**
      * Constructor
      * sets the parent object and initializes other internal parameters to default values
@@ -399,33 +448,22 @@ public:
      * sets the placement value of the component subject to ownership rules.
      * An exception is thrown if aPlacementValue is invalid or an ownership
      * violation occurs.
+     *
+     * @return bool: true if the operation succeeded, otherwise false and the
+     * error message is set.
      */
-    void SetPlacement( IDF3::IDF_PLACEMENT aPlacementValue );
+    bool SetPlacement( IDF3::IDF_PLACEMENT aPlacementValue );
 
-    /**
-     * Function WriteDrillData
-     * writes the internal drill data to an IDFv3 .DRILLED_HOLES section
-     *
-     * @param aBoardFile is an IDFv3 file opened for writing
-     *
-     * @return bool: true if the operation succeeded, otherwise false
-     */
-    bool WriteDrillData( std::ofstream& aBoardFile );
-
-    /**
-     * Function WritePlaceData
-     * writes the component placement data to an IDFv3 .PLACEMENT section
-     *
-     * @param aBoardFile is an IDFv3 file opened for writing
-     *
-     * @return bool: true if the operation succeeded, otherwise false
-     */
-    bool WritePlaceData( std::ofstream& aBoardFile );
+    const std::string& GetError( void )
+    {
+        return errormsg;
+    }
 };
 
 class IDF3_BOARD
 {
 private:
+    std::string errormsg;                                       // string for passing error messages to user
     std::list< IDF_NOTE* >     notes;                           // IDF notes
     std::list< std::string >   noteComments;                    // comment list for NOTES section
     std::list< std::string >   drillComments;                   // comment list for DRILL section
@@ -437,6 +475,7 @@ private:
     IDF3::FILE_STATE state;
     IDF3::CAD_TYPE   cadType;
     IDF3::IDF_UNIT   unit;
+    IDF3::IDF_VERSION   idfVer;                                 // IDF version of Board or Library
 
     std::string idfSource;  // SOURCE string to use when writing BOARD and LIBRARY headers
     std::string brdSource;  // SOURCE string as retrieved from a BOARD file
@@ -483,30 +522,39 @@ private:
     bool delCompDrill( double aDia, double aXpos, double aYpos, std::string aRefDes );
 
     // read the DRILLED HOLES section
-    bool readBrdDrills( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState );
+    void readBrdDrills( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState );
     // read the NOTES section
-    bool readBrdNotes( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState );
+    void readBrdNotes( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState );
     // read the component placement section
-    bool readBrdPlacement( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState );
+    void readBrdPlacement( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState,
+                           bool aNoSubstituteOutlines );
     // read the board HEADER
-    bool readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState );
+    void readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState );
     // read individual board sections; pay attention to IDFv3 section specifications
-    bool readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState );
+    // exception thrown on unrecoverable errors. state flag set to FILE_PLACEMENT
+    // upon reading the PLACEMENT file; according to IDFv3 this is the final section
+    void readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState,
+                         bool aNoSubstituteOutlines );
     // read the board file data
-    bool readBoardFile( const std::string& aFileName );
+    void readBoardFile( const std::string& aFileName, bool aNoSubstituteOutlines );
 
     // write the board file data
-    bool writeBoardFile( const std::string& aFileName );
+    void writeBoardFile( const std::string& aFileName );
 
     // read the library sections (outlines)
-    bool readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibState, IDF3_BOARD* aBoard );
+    void readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibState, IDF3_BOARD* aBoard );
     // read the library HEADER
-    bool readLibHeader( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibState );
+    void readLibHeader( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibState );
     // read the library file data
-    bool readLibFile( const std::string& aFileName );
+    void readLibFile( const std::string& aFileName );
 
     // write the library file data
     bool writeLibFile( const std::string& aFileName );
+
+#ifndef DISABLE_IDF_OWNERSHIP
+    bool checkComponentOwnership( int aSourceLine, const char* aSourceFunc,
+                                  IDF3_COMPONENT* aComponent );
+#endif
 
 public:
     IDF3_BOARD( IDF3::CAD_TYPE aCadType );
@@ -527,7 +575,7 @@ public:
     bool SetBoardThickness( double aBoardThickness );
     double GetBoardThickness( void );
 
-    bool ReadFile( const wxString& aFullFileName );
+    bool ReadFile( const wxString& aFullFileName, bool aNoSubstituteOutlines = false );
     bool WriteFile( const wxString& aFullFileName, bool aUnitMM = true, bool aForceUnitFlag = false );
 
     const std::string& GetIDFSource( void );
@@ -557,7 +605,13 @@ public:
     BOARD_OUTLINE* GetBoardOutline( void );
     const std::list< IDF_OUTLINE* >*const GetBoardOutlines( void );
 
+    // Operations for OTHER OUTLINES
+    const std::map<std::string, OTHER_OUTLINE*>*const GetOtherOutlines( void );
+
     /// XXX - TO BE IMPLEMENTED
+    //
+    // SetBoardOutlineOwner()
+    //
     // AddDrillComment
     // AddPlacementComment
     // GetDrillComments()
@@ -568,7 +622,7 @@ public:
     // GetNoteComments
     // AddNote
     //
-    // const std::map<std::string, OTHER_OUTLINE*>*const GetOtherOutlines()
+    // [IMPLEMENTED] const std::map<std::string, OTHER_OUTLINE*>*const GetOtherOutlines( void )
     // size_t GetOtherOutlinesSize()
     // OTHER_OUTLINE* AddOtherOutline( OTHER_OUTLINE* aOtherOutline )
     // bool DelOtherOutline( int aIndex )
@@ -652,6 +706,12 @@ public:
 
     // clears all data
     void Clear( void );
+
+    // return error string
+    const std::string& GetError( void )
+    {
+        return errormsg;
+    }
 };
 
 #endif // IDF_PARSER_H
