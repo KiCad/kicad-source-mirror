@@ -978,10 +978,11 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 
     formatLayer( aModule );
 
+    m_out->Print( 0, " (tedit %lX)", aModule->GetLastEditTime() );
+
     if( !( m_ctl & CTL_OMIT_TSTAMPS ) )
     {
-        m_out->Print( 0, " (tedit %lX) (tstamp %lX)\n",
-                       aModule->GetLastEditTime(), aModule->GetTimeStamp() );
+        m_out->Print( 0, " (tstamp %lX)\n", aModule->GetTimeStamp() );
     }
     else
         m_out->Print( 0, "\n" );
