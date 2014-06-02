@@ -605,7 +605,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     m_canvas->SetAbortRequest( true );
 
-    if( GetScreen()->IsModify() )
+    if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
         wxString msg;
         msg.Printf( _("Save the changes in\n<%s>\nbefore closing?"),
