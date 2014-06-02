@@ -254,6 +254,7 @@ public:
     NETINFO_ITEM* GetNetItem( int aNetCode ) const
     {
         NETCODES_MAP::const_iterator result = m_netCodes.find( aNetCode );
+
         if( result != m_netCodes.end() )
             return (*result).second;
 
@@ -268,6 +269,7 @@ public:
     NETINFO_ITEM* GetNetItem( const wxString& aNetName ) const
     {
         NETNAMES_MAP::const_iterator result = m_netNames.find( aNetName );
+
         if( result != m_netNames.end() )
             return (*result).second;
 
@@ -283,7 +285,8 @@ public:
 
     /**
      * Function Append
-     * adds \a aNewElement to the end of the list.
+     * adds \a aNewElement to the end of the list. Negative net code means it is going to be
+     * auto-assigned.
      */
     void AppendNet( NETINFO_ITEM* aNewElement );
 
@@ -421,7 +424,7 @@ private:
      * Function getFreeNetCode
      * returns the first available net code that is not used by any other net.
      */
-    int getFreeNetCode() const;
+    int getFreeNetCode();
 
     BOARD* m_Parent;
 
@@ -430,6 +433,8 @@ private:
 
     std::vector<D_PAD*> m_PadsFullList;         ///< contains all pads, sorted by pad's netname.
                                                 ///< can be used in ratsnest calculations.
+
+    int m_newNetCode;                           ///< possible value for new net code assignment
 };
 
 

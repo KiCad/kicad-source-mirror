@@ -504,6 +504,11 @@ void PCB_PARSER::parseGeneralSection() throw( IO_ERROR, PARSE_ERROR )
             NeedRIGHT();
             break;
 
+        case T_nets:
+            m_netCodes.resize( parseInt( "nets number" ) );
+            NeedRIGHT();
+            break;
+
         case T_no_connects:
             m_board->SetUnconnectedNetCount( parseInt( "no connect count" ) );
             NeedRIGHT();
@@ -1059,7 +1064,7 @@ void PCB_PARSER::parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR )
     wxCHECK_RET( CurTok() == T_net,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as net." ) );
 
-    int number = parseInt( "net number" );
+    int netCode = parseInt( "net number" );
 
     NeedSYMBOLorNUMBER();
     wxString name = FromUTF8();
@@ -1069,10 +1074,13 @@ void PCB_PARSER::parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR )
     // net 0 should be already in list, so store this net
     // if it is not the net 0, or if the net 0 does not exists.
     // (TODO: a better test.)
-    if( number > 0 || m_board->FindNet( 0 ) == NULL )
+    if( netCode > 0 || m_board->FindNet( 0 ) == NULL )
     {
-        NETINFO_ITEM* net = new NETINFO_ITEM( m_board, name, number );
+        NETINFO_ITEM* net = new NETINFO_ITEM( m_board, name, netCode );
         m_board->AppendNet( net );
+
+        // Store the new code mapping
+        m_netCodes[netCode] = net->GetNet();
     }
 }
 
@@ -2193,7 +2201,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            pad->SetNetCode( parseInt( "net number" ) );
+            pad->SetNetCode( m_netCodes[parseInt( "net number" )] );
             NeedSYMBOLorNUMBER();
             assert( FromUTF8() == m_board->FindNet( pad->GetNetCode() )->GetNetname() );
             NeedRIGHT();
@@ -2291,7 +2299,7 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            track->SetNetCode( parseInt( "net number" ) );
+            track->SetNetCode( m_netCodes[parseInt( "net number" )] );
             break;
 
         case T_tstamp:
@@ -2369,7 +2377,7 @@ VIA* PCB_PARSER::parseVIA() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            via->SetNetCode( parseInt( "net number" ) );
+            via->SetNetCode( m_netCodes[parseInt( "net number" )] );
             NeedRIGHT();
             break;
 
@@ -2421,7 +2429,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             // Init the net code only, not the netname, to be sure
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
-            zone->SetNetCode( parseInt( "net number" ) );
+            zone->SetNetCode( m_netCodes[parseInt( "net number" )] );
             NeedRIGHT();
             break;
 

@@ -993,6 +993,9 @@ void RN_DATA::ProcessBoard()
 
 void RN_DATA::Recalculate( int aNet )
 {
+    if( m_board->GetNetCount() > m_nets.size() )
+        m_nets.resize( m_board->GetNetCount() );
+
     if( aNet < 0 )              // Recompute everything
     {
         unsigned int i, netCount;
