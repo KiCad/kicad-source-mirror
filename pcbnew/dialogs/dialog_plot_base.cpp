@@ -347,7 +347,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	sbSizerMsg = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Messages:") ), wxVERTICAL );
 	
 	m_messagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	m_messagesBox->SetMaxLength( 0 ); 
 	m_messagesBox->SetMinSize( wxSize( -1,70 ) );
 	
 	sbSizerMsg->Add( m_messagesBox, 1, wxEXPAND, 5 );

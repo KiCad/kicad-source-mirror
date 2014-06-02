@@ -624,7 +624,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
 #ifdef USE_WX_OVERLAY
     // If dragged not draw in OnPaint otherwise remains impressed in wxOverlay
-    if( (m_Flags && IS_DRAGGED) && aDC->IsKindOf(wxCLASSINFO(wxPaintDC)))
+    if( (m_Flags & IS_DRAGGED) && aDC->IsKindOf(wxCLASSINFO(wxPaintDC)))
       return;
 #endif
 
@@ -691,7 +691,7 @@ void SEGZONE::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
 #ifdef USE_WX_OVERLAY
     // If dragged not draw in OnPaint otherwise remains impressed in wxOverlay
-    if( (m_Flags && IS_DRAGGED) && aDC->IsKindOf(wxCLASSINFO(wxPaintDC)))
+    if( (m_Flags & IS_DRAGGED) && aDC->IsKindOf(wxCLASSINFO(wxPaintDC)))
       return;
 #endif
 
@@ -1319,7 +1319,7 @@ TRACK* TRACK::GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, ENDPOINT_T aEndPoi
 
         if( nextSegment )
         {
-            if ( (nextSegment != this) && 
+            if ( (nextSegment != this) &&
                  !nextSegment->GetState( BUSY | IS_DELETED ) &&
                  (refLayers & nextSegment->GetLayerMask()) )
             {
