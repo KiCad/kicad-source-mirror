@@ -292,8 +292,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             if( ! Clear_Pcb( true ) )
                 break;
 
-            GetScreen()->ClearUndoRedoList();
-            SetCurItem( NULL );
             SetCrossHairPosition( wxPoint( 0, 0 ) );
 
             MODULE* module = Create_1_Module( wxEmptyString );
@@ -312,6 +310,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
                 Zoom_Automatique( false );
             }
+
+            GetScreen()->ClrModify();
         }
         break;
 
@@ -337,8 +337,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
                 Clear_Pcb( false );
 
-                GetScreen()->ClearUndoRedoList();
-                SetCurItem( NULL );
                 SetCrossHairPosition( wxPoint( 0, 0 ) );
 
                 //  Add the new object to board
@@ -357,6 +355,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
                 if( m_Draw3DFrame )
                     m_Draw3DFrame->NewDisplay();
+
+                GetScreen()->ClrModify();
             }
 
             wizard->Destroy();
@@ -463,8 +463,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( ! Clear_Pcb( true ) )
             break;                  // //this command is aborted
 
-        GetScreen()->ClearUndoRedoList();
-        SetCurItem( NULL );
         SetCrossHairPosition( wxPoint( 0, 0 ) );
         Import_Module();
         redraw = true;
@@ -537,6 +535,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( m_Draw3DFrame )
             m_Draw3DFrame->NewDisplay();
+
+        GetScreen()->ClrModify();
 
         break;
 
