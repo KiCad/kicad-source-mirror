@@ -795,6 +795,11 @@ public:
      */
     NETINFO_ITEM* FindNet( const wxString& aNetname ) const;
 
+    /**
+     * Function AppendNet
+     * adds a new net description item to the current board.
+     * @param aNewNet is the new description item.
+     */
     void AppendNet( NETINFO_ITEM* aNewNet )
     {
         m_NetInfo.AppendNet( aNewNet );

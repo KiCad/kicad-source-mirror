@@ -45,6 +45,8 @@ NETINFO_LIST::NETINFO_LIST( BOARD* aParent ) : m_Parent( aParent )
 {
     // Make sure that the unconnected net has number 0
     AppendNet( new NETINFO_ITEM( aParent, wxEmptyString, 0 ) );
+
+    m_newNetCode = 0;
 }
 
 
@@ -63,14 +65,27 @@ void NETINFO_LIST::clear()
     m_PadsFullList.clear();
     m_netNames.clear();
     m_netCodes.clear();
+    m_newNetCode = 0;
 }
 
 
 void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 {
+    // if there is a net with such name then just assign the correct number
+    NETINFO_ITEM* sameName = GetNetItem( aNewElement->GetNetname() );
+
+    if( sameName != NULL )
+    {
+        aNewElement->m_NetCode = sameName->GetNet();
+
+        return;
+    }
+    // be sure that net codes are consecutive
     // negative net code means that it has to be auto assigned
-    if( aNewElement->m_NetCode < 0 )
-        const_cast<int&>( aNewElement->m_NetCode ) = getFreeNetCode();
+    else if( ( aNewElement->m_NetCode != (int) m_netCodes.size() ) || ( aNewElement->m_NetCode < 0 ) )
+    {
+        aNewElement->m_NetCode = getFreeNetCode();
+    }
 
     // net names & codes are supposed to be unique
     assert( GetNetItem( aNewElement->GetNetname() ) == NULL );
@@ -201,10 +216,8 @@ void NETINFO_LIST::buildPadsFullList()
 }
 
 
-int NETINFO_LIST::getFreeNetCode() const
+int NETINFO_LIST::getFreeNetCode()
 {
-    static int m_newNetCode = 0;
-
     do {
         if( m_newNetCode < 0 )
             m_newNetCode = 0;

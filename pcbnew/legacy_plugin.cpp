@@ -502,13 +502,12 @@ void LEGACY_PLUGIN::loadGENERAL()
         else if( TESTLINE( "Nmodule" ) )
         {
             NbMod = intParse( line + SZ( "Nmodule" ) );
-        }
+        }*/
 
         else if( TESTLINE( "Nnets" ) )
         {
-            NbNets = intParse( line + SZ( "Nnets" ) );
+            m_netCodes.resize( intParse( line + SZ( "Nnets" ) ) );
         }
-        */
 
         else if( TESTLINE( "$EndGENERAL" ) )
             return;     // preferred exit
@@ -1305,13 +1304,15 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             char    buf[1024];  // can be fairly long
             int     netcode = intParse( line + SZ( "Ne" ), &data );
 
-            pad->SetNetCode( netcode );
+            // Store the new code mapping
+            pad->SetNetCode( m_netCodes[netcode] );
 
             // read Netname
             ReadDelimitedText( buf, data, sizeof(buf) );
 #ifndef NDEBUG
             if( m_board )
-                assert( m_board->FindNet( netcode )->GetNetname() == FROM_UTF8( StrPurge( buf ) ) );
+                assert( m_board->FindNet( m_netCodes[netcode] )->GetNetname() ==
+                        FROM_UTF8( StrPurge( buf ) ) );
 #endif /* NDEBUG */
         }
 
@@ -1822,6 +1823,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
 
     NETINFO_ITEM*   net = NULL;
     char*           line;
+    int             netCode;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -1831,7 +1833,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
         {
             // e.g. "Na 58 "/cpu.sch/PAD7"\r\n"
 
-            int netCode = intParse( line + SZ( "Na" ), &data );
+            netCode = intParse( line + SZ( "Na" ), &data );
 
             ReadDelimitedText( buf, data, sizeof(buf) );
             net = new NETINFO_ITEM( m_board, FROM_UTF8( buf ), netCode );
@@ -1842,9 +1844,15 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
             // net 0 should be already in list, so store this net
             // if it is not the net 0, or if the net 0 does not exists.
             if( net != NULL && ( net->GetNet() > 0 || m_board->FindNet( 0 ) == NULL ) )
+            {
                 m_board->AppendNet( net );
+                m_netCodes[netCode] = net->GetNet();
+            }
             else
+            {
                 delete net;
+            }
+
             return;     // preferred exit
         }
     }
@@ -2094,7 +2102,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
                 via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
         }
 
-        newTrack->SetNetCode( net_code );
+        newTrack->SetNetCode( m_netCodes[net_code] );
         newTrack->SetState( flags, true );
 
         m_board->Add( newTrack );
@@ -2242,7 +2250,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // Init the net code only, not the netname, to be sure
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
-            zc->BOARD_CONNECTED_ITEM::SetNetCode( netcode );
+            zc->BOARD_CONNECTED_ITEM::SetNetCode( m_netCodes[netcode] );
         }
 
         else if( TESTLINE( "ZLayer" ) )     // layer found
