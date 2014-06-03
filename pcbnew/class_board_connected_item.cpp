@@ -34,6 +34,8 @@
 #include <class_board.h>
 #include <class_board_item.h>
 
+#include <ratsnest_data.h>
+
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype ), m_netinfo( &NETINFO_LIST::ORPHANED ),
     m_Subnet( 0 ), m_ZoneSubnet( 0 )
@@ -53,18 +55,29 @@ BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem ) 
 void BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode )
 {
     BOARD* board = GetBoard();
+    NETINFO_ITEM* oldNetInfo = m_netinfo;
+    NETINFO_ITEM* newNetInfo;
+
     if( board )
     {
-        m_netinfo = board->FindNet( aNetCode );
+        newNetInfo = board->FindNet( aNetCode );
 
         // The requested net does not exist, mark it as unconnected
-        if( m_netinfo == NULL )
-            m_netinfo = board->FindNet( NETINFO_LIST::UNCONNECTED );
+        if( newNetInfo == NULL )
+            newNetInfo = board->FindNet( NETINFO_LIST::UNCONNECTED );
     }
     else
     {
         // There is no board that contains list of nets, the item is orphaned
-        m_netinfo = &NETINFO_LIST::ORPHANED;
+        newNetInfo = &NETINFO_LIST::ORPHANED;
+    }
+
+    // Update ratsnest, if necessary
+    if( oldNetInfo != newNetInfo && board )
+    {
+        board->GetRatsnest()->Remove( this );
+        m_netinfo = newNetInfo;
+        board->GetRatsnest()->Add( this );
     }
 }
 
