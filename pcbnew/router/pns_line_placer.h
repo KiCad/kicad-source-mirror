@@ -252,7 +252,7 @@ private:
      * and redundant vertexes. If a simplification bhas been found, replaces the 
      * old line with the simplified one in aNode.
      */
-    void simplifyNewLine ( PNS_NODE *aNode, PNS_SEGMENT *aLatest );
+    void simplifyNewLine( PNS_NODE *aNode, PNS_SEGMENT *aLatest );
 
     /**
      * Function handleViaPlacement()
@@ -338,13 +338,13 @@ private:
     void routeStep( const VECTOR2I& aP );
 
     ///> route step, walkaround mode
-    bool rhWalkOnly ( const VECTOR2I& aP, PNS_LINE& aNewHead);
+    bool rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead);
 
     ///> route step, shove mode
-    bool rhShoveOnly ( const VECTOR2I& aP, PNS_LINE& aNewHead);
+    bool rhShoveOnly( const VECTOR2I& aP, PNS_LINE& aNewHead);
 
     ///> route step, mark obstacles mode
-    bool rhMarkObstacles ( const VECTOR2I& aP, PNS_LINE& aNewHead );
+    bool rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead );
     
     ///> current routing direction
     DIRECTION_45 m_direction;
@@ -386,7 +386,9 @@ private:
     ///> current via drill
     int m_viaDrill;
 
+    ///> current track width
     int m_currentWidth;
+
     int m_currentNet;
     int m_currentLayer;
 
@@ -395,7 +397,7 @@ private:
     VECTOR2I m_originalStart, m_currentEnd, m_currentStart;
     PNS_LINE m_currentTrace;
 
-    PNS_MODE    m_currentMode;
+    PNS_MODE m_currentMode;
 };
 
 #endif    // __PNS_LINE_PLACER_H

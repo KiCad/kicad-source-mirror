@@ -274,6 +274,8 @@ void BOARD_DESIGN_SETTINGS::SetViaSizeIndex( unsigned aIndex )
         m_viaSizeIndex = m_ViasDimensionsList.size();
     else
         m_viaSizeIndex = aIndex;
+
+    m_useCustomTrackVia = false;
 }
 
 
@@ -296,6 +298,8 @@ void BOARD_DESIGN_SETTINGS::SetTrackWidthIndex( unsigned aIndex )
         m_trackWidthIndex = m_TrackWidthList.size();
     else
         m_trackWidthIndex = aIndex;
+
+    m_useCustomTrackVia = false;
 }
 
 

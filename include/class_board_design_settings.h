@@ -114,9 +114,27 @@ public:
      * Function GetCurrentNetClassName
      * @return the current net class name.
      */
-    const wxString& GetCurrentNetClassName() const
+    inline const wxString& GetCurrentNetClassName() const
     {
         return m_currentNetClassName;
+    }
+
+    /**
+     * Function UseNetClassTrack
+     * returns true if netclass values should be used to obtain appropriate track width.
+     */
+    inline bool UseNetClassTrack() const
+    {
+        return ( m_trackWidthIndex == 0 && !m_useCustomTrackVia );
+    }
+
+    /**
+     * Function UseNetClassVia
+     * returns true if netclass values should be used to obtain appropriate via size.
+     */
+    inline bool UseNetClassVia() const
+    {
+        return ( m_viaSizeIndex == 0 && !m_useCustomTrackVia );
     }
 
     /**
@@ -159,7 +177,7 @@ public:
      * Function GetTrackWidthIndex
      * @return the current track width list index.
      */
-    unsigned GetTrackWidthIndex() const { return m_trackWidthIndex; }
+    inline unsigned GetTrackWidthIndex() const { return m_trackWidthIndex; }
 
     /**
      * Function SetTrackWidthIndex
@@ -175,7 +193,7 @@ public:
      * ( using the default netclass value or a preset/custom value )
      * the default netclass is always in m_TrackWidthList[0]
      */
-    int GetCurrentTrackWidth() const
+    inline int GetCurrentTrackWidth() const
     {
         return m_useCustomTrackVia ? m_customTrackWidth : m_TrackWidthList[m_trackWidthIndex];
     }
@@ -187,7 +205,7 @@ public:
      * (UseCustomTrackViaSize()).
      * @param aWidth is the new track width.
      */
-    void SetCustomTrackWidth( int aWidth )
+    inline void SetCustomTrackWidth( int aWidth )
     {
         m_customTrackWidth = aWidth;
     }
@@ -196,7 +214,7 @@ public:
      * Function GetCustomTrackWidth
      * @return Current custom width for a track.
      */
-    int GetCustomTrackWidth() const
+    inline int GetCustomTrackWidth() const
     {
         return m_customTrackWidth;
     }
@@ -205,7 +223,10 @@ public:
      * Function GetViaSizeIndex
      * @return the current via size list index.
      */
-    unsigned GetViaSizeIndex() const { return m_viaSizeIndex; }
+    inline unsigned GetViaSizeIndex() const
+    {
+        return m_viaSizeIndex;
+    }
 
     /**
      * Function SetViaSizeIndex
@@ -221,7 +242,7 @@ public:
      * ( using the default netclass value or a preset/custom value )
      * the default netclass is always in m_TrackWidthList[0]
      */
-    int GetCurrentViaSize() const
+    inline int GetCurrentViaSize() const
     {
         if( m_useCustomTrackVia )
             return m_customViaSize.m_Diameter;
@@ -236,7 +257,7 @@ public:
      * (UseCustomTrackViaSize()).
      * @param aSize is the new drill diameter.
      */
-    void SetCustomViaSize( int aSize )
+    inline void SetCustomViaSize( int aSize )
     {
         m_customViaSize.m_Diameter = aSize;
     }
@@ -245,7 +266,7 @@ public:
      * Function GetCustomViaSize
      * @return Current custom size for the via diameter.
      */
-    int GetCustomViaSize() const
+    inline int GetCustomViaSize() const
     {
         return m_customViaSize.m_Diameter;
     }
@@ -265,7 +286,7 @@ public:
      * (UseCustomTrackViaSize()).
      * @param aDrill is the new drill size.
      */
-    void SetCustomViaDrill( int aDrill )
+    inline void SetCustomViaDrill( int aDrill )
     {
         m_customViaSize.m_Drill = aDrill;
     }
@@ -274,7 +295,7 @@ public:
      * Function GetCustomViaDrill
      * @return Current custom size for the via drill.
      */
-    int GetCustomViaDrill() const
+    inline int GetCustomViaDrill() const
     {
         return m_customViaSize.m_Drill;
     }
@@ -286,7 +307,7 @@ public:
      * tracks and vias.
      * @param aEnabled decides if custom settings should be used for new tracks/vias.
      */
-    void UseCustomTrackViaSize( bool aEnabled )
+    inline void UseCustomTrackViaSize( bool aEnabled )
     {
         m_useCustomTrackVia = aEnabled;
     }
@@ -295,7 +316,7 @@ public:
      * Function UseCustomTrackViaSize
      * @return True if custom sizes of tracks & vias are enabled, false otherwise.
      */
-    bool UseCustomTrackViaSize() const
+    inline bool UseCustomTrackViaSize() const
     {
         return m_useCustomTrackVia;
     }
@@ -305,7 +326,7 @@ public:
      * returns a bit-mask of all the layers that are visible
      * @return int - the visible layers in bit-mapped form.
      */
-    LAYER_MSK GetVisibleLayers() const
+    inline LAYER_MSK GetVisibleLayers() const
     {
         return m_visibleLayers;
     }
@@ -322,7 +343,7 @@ public:
      * changes the bit-mask of visible layers
      * @param aMask = The new bit-mask of visible layers
      */
-    void SetVisibleLayers( LAYER_MSK aMask )
+    inline void SetVisibleLayers( LAYER_MSK aMask )
     {
         m_visibleLayers = aMask & m_enabledLayers & FULL_LAYERS;
     }
@@ -333,7 +354,7 @@ public:
      * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool IsLayerVisible( LAYER_NUM aLayer ) const
+    inline bool IsLayerVisible( LAYER_NUM aLayer ) const
     {
         // If a layer is disabled, it is automatically invisible
         return m_visibleLayers & m_enabledLayers & GetLayerMask( aLayer );
@@ -352,7 +373,7 @@ public:
      * returns a bit-mask of all the element categories that are visible
      * @return int - the visible element categories in bit-mapped form.
      */
-    int GetVisibleElements() const
+    inline int GetVisibleElements() const
     {
         return m_visibleElements;
     }
@@ -362,7 +383,7 @@ public:
      * changes the bit-mask of visible element categories
      * @param aMask = The new bit-mask of visible element categories
      */
-    void SetVisibleElements( int aMask )
+    inline void SetVisibleElements( int aMask )
     {
         m_visibleElements = aMask;
     }
@@ -375,7 +396,7 @@ public:
      * @return bool - true if the element is visible.
      * @see enum PCB_VISIBLE
      */
-    bool IsElementVisible( int aElementCategory ) const
+    inline bool IsElementVisible( int aElementCategory ) const
     {
         assert( aElementCategory >= 0 && aElementCategory < END_PCB_VISIBLE_LIST );
 
@@ -414,7 +435,7 @@ public:
      * @param aLayer = The of the layer to be tested
      * @return bool - true if the layer is enabled
      */
-    bool IsLayerEnabled( LAYER_NUM aLayer ) const
+    inline bool IsLayerEnabled( LAYER_NUM aLayer ) const
     {
         return m_enabledLayers & GetLayerMask( aLayer );
     }
@@ -423,7 +444,7 @@ public:
      * Function GetCopperLayerCount
      * @return int - the number of neabled copper layers
      */
-    int GetCopperLayerCount() const
+    inline int GetCopperLayerCount() const
     {
         return m_copperLayerCount;
     }
@@ -443,8 +464,8 @@ public:
      */
     void AppendConfigs( PARAM_CFG_ARRAY* aResult );
 
-    int GetBoardThickness() const { return m_boardThickness; }
-    void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
+    inline int GetBoardThickness() const { return m_boardThickness; }
+    inline void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
 
 private:
     /// Index for #m_ViasDimensionsList to select the current via size.

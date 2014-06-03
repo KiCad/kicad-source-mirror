@@ -764,12 +764,6 @@ void PNS_LINE_PLACER::SetLayer(int aLayer)
 }
 
 
-void PNS_LINE_PLACER::SetWidth(int aWidth)
-{
-    m_currentWidth = aWidth;
-}
-
-
 void PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
     VECTOR2I p( aP );
@@ -995,6 +989,7 @@ void PNS_LINE_PLACER::UpdateSizes( const PNS_ROUTING_SETTINGS& aSettings )
     m_head.SetWidth( trackWidth );
     m_tail.SetWidth( trackWidth );
 
+    m_currentWidth = trackWidth;
     m_viaDiameter = aSettings.GetViaDiameter();
     m_viaDrill = aSettings.GetViaDrill();
 }
