@@ -484,7 +484,30 @@ bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
     m_placer = new PNS_LINE_PLACER( this );
     m_placer->SetLayer( m_currentLayer );
-    m_placer->SetWidth( m_settings.GetTrackWidth() );
+
+    const BOARD_DESIGN_SETTINGS& dsnSettings = m_board->GetDesignSettings();
+
+    if( dsnSettings.UseNetClassTrack() && aStartItem != NULL ) // netclass value
+    {
+        m_settings.SetTrackWidth( aStartItem->Parent()->GetNetClass()->GetTrackWidth() );
+    }
+    else
+    {
+        m_settings.SetTrackWidth( dsnSettings.GetCurrentTrackWidth() );
+    }
+
+    if( dsnSettings.UseNetClassVia() && aStartItem != NULL )   // netclass value
+    {
+        m_settings.SetViaDiameter( aStartItem->Parent()->GetNetClass()->GetViaDiameter() );
+        m_settings.SetViaDrill( aStartItem->Parent()->GetNetClass()->GetViaDrill() );
+    }
+    else
+    {
+        m_settings.SetViaDiameter( dsnSettings.GetCurrentViaSize() );
+        m_settings.SetViaDrill( dsnSettings.GetCurrentViaDrill() );
+    }
+
+    m_placer->UpdateSizes( m_settings );
     m_placer->Start( aP, aStartItem );
     m_currentEnd = aP;
     m_currentEndItem = NULL;
