@@ -507,8 +507,9 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
     // Add template fieldnames:
     // Now copy in the template fields, in the order that they are present in the
     // template field editor UI.
-    const TEMPLATE_FIELDNAMES& tfnames =
-        ((SCH_EDIT_FRAME*)m_parent->GetParent())->GetTemplateFieldNames();
+    SCH_EDIT_FRAME* editor = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, true );
+
+    const TEMPLATE_FIELDNAMES& tfnames = editor->GetTemplateFieldNames();
 
     for( TEMPLATE_FIELDNAMES::const_iterator it = tfnames.begin();  it!=tfnames.end();  ++it )
     {
