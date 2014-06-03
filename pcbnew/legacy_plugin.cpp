@@ -1305,13 +1305,13 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             int     netcode = intParse( line + SZ( "Ne" ), &data );
 
             // Store the new code mapping
-            pad->SetNetCode( m_netCodes[netcode] );
+            pad->SetNetCode( getNetCode( netcode ) );
 
             // read Netname
             ReadDelimitedText( buf, data, sizeof(buf) );
 #ifndef NDEBUG
             if( m_board )
-                assert( m_board->FindNet( m_netCodes[netcode] )->GetNetname() ==
+                assert( m_board->FindNet( getNetCode( netcode ) )->GetNetname() ==
                         FROM_UTF8( StrPurge( buf ) ) );
 #endif /* NDEBUG */
         }
@@ -2102,7 +2102,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
                 via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
         }
 
-        newTrack->SetNetCode( m_netCodes[net_code] );
+        newTrack->SetNetCode( getNetCode( net_code ) );
         newTrack->SetState( flags, true );
 
         m_board->Add( newTrack );
@@ -2250,7 +2250,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // Init the net code only, not the netname, to be sure
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
-            zc->BOARD_CONNECTED_ITEM::SetNetCode( m_netCodes[netcode] );
+            zc->BOARD_CONNECTED_ITEM::SetNetCode( getNetCode( netcode ) );
         }
 
         else if( TESTLINE( "ZLayer" ) )     // layer found

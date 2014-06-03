@@ -69,6 +69,16 @@ class PCB_PARSER : public PCB_LEXER
     LAYER_MSK_MAP       m_layerMasks;       ///< map layer names to their masks
     std::vector<int>    m_netCodes;         ///< net codes mapping for boards being loaded
 
+    ///> Converts net code using the mapping table if available,
+    ///> otherwise returns unchanged net code
+    inline int getNetCode( int aNetCode )
+    {
+        if( aNetCode < (int) m_netCodes.size() )
+            return m_netCodes[aNetCode];
+
+        return aNetCode;
+    }
+
     /**
      * Function init
      * clears and re-establishes m_layerMap with the default layer names.
