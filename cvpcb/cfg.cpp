@@ -50,16 +50,10 @@ PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters()
     m_projectFileParams.push_back( new PARAM_CFG_BASE( GROUP_PCB_LIBS, PARAM_COMMAND_ERASE ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST(
-        wxT( "LibName" ), &m_ModuleLibNames, GROUP_PCB_LIBS ) );
-
-    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST(
         wxT( "EquName" ), &m_AliasLibNames, GROUP_CVP_EQU ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING(
         wxT( "NetIExt" ), &m_NetlistFileExtension ) );
-
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME(
-        wxT( "LibDir" ), &m_UserLibraryPath, GROUP_PCB_LIBS ) );
 
     return m_projectFileParams;
 }
@@ -81,7 +75,7 @@ void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
     if( m_NetlistFileExtension.IsEmpty() )
         m_NetlistFileExtension = wxT( "net" );
 
-    // Force it to be loaded on demand.
+    // Force FP_LIB_TABLE to be loaded on demand.
     prj.ElemClear( PROJECT::ELEM_FPTBL );
 }
 

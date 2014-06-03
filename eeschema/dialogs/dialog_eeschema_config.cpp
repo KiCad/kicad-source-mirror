@@ -57,8 +57,7 @@ private:
     SCH_EDIT_FRAME* m_Parent;
     bool            m_LibListChanged;
     bool            m_LibPathChanged;
-    wxString        m_UserLibDirBufferImg;      // Copy of original g_UserLibDirBuffer
-
+    wxString        m_UserLibDirBufferImg;
 
     // event handlers, overiding the fbp handlers
     void Init();

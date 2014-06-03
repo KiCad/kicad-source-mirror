@@ -67,7 +67,6 @@ public:
     wxFileName                m_NetlistFileName;
     wxArrayString             m_ModuleLibNames;
     wxArrayString             m_AliasLibNames;
-    wxString                  m_UserLibraryPath;
     wxString                  m_NetlistFileExtension;
     wxString                  m_DocModulesFileName;
     FOOTPRINT_LIST            m_footprints;

@@ -301,8 +301,6 @@ PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
     pca.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
                                           &BASE_SCREEN::m_PageLayoutDescrFileName ) );
 
-    pca.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ), &g_UserLibDirBuffer, GROUP_PCB_LIBS ) );
-
     pca.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ), &m_lastNetListRead ) );
 
     pca.push_back( new PARAM_CFG_BOOL( wxT( "UseCmpFile" ), &m_useCmpFileForFpNames, true ) );

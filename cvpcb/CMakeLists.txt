@@ -21,11 +21,6 @@ include_directories(
 
 
 set( CVPCB_DIALOGS
-
-    # These 2 still use search paths, which don't exist in footprint land.
-#    dialogs/dialog_cvpcb_config.cpp
-#    dialogs/dialog_cvpcb_config_fbp.cpp
-
     dialogs/dialog_display_options.cpp
     dialogs/dialog_display_options_base.cpp
     ../pcbnew/dialogs/dialog_fp_lib_table.cpp
