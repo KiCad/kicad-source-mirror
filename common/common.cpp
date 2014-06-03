@@ -59,7 +59,6 @@
  */
 
 bool           g_ShowPageLimits = true;
-wxString       g_UserLibDirBuffer;
 
 EDA_UNITS_T    g_UserUnit;
 EDA_COLOR_T    g_GhostColor;

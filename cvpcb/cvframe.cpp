@@ -45,7 +45,6 @@
 #include <cvpcb.h>
 #include <cvstruct.h>
 #include <invoke_pcb_dialog.h>
-#include <dialog_cvpcb_config.h>
 #include <class_DisplayFootprintsFrame.h>
 #include <cvpcb_id.h>
 

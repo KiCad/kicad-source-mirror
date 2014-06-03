@@ -384,9 +384,6 @@ private:
     void    setMargins();
 };
 
-/// Default user lib path can be left void, if the standard lib path is used
-extern wxString     g_UserLibDirBuffer;
-
 extern bool         g_ShowPageLimits;       ///< true to display the page limits
 
 extern EDA_UNITS_T  g_UserUnit;     ///< display units
