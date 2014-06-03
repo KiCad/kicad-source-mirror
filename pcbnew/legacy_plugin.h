@@ -139,6 +139,16 @@ protected:
     double  diskToBiu;              ///< convert from disk engineering units to BIUs
                                     ///< with this scale factor
 
+    ///> Converts net code using the mapping table if available,
+    ///> otherwise returns unchanged net code
+    inline int getNetCode( int aNetCode )
+    {
+        if( aNetCode < (int) m_netCodes.size() )
+            return m_netCodes[aNetCode];
+
+        return aNetCode;
+    }
+
     /**
      * Function biuParse
      * parses an ASCII decimal floating point value and scales it into a BIU

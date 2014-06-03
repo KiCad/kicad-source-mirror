@@ -2201,7 +2201,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            pad->SetNetCode( m_netCodes[parseInt( "net number" )] );
+            pad->SetNetCode( getNetCode( parseInt( "net number" ) ) );
             NeedSYMBOLorNUMBER();
             assert( FromUTF8() == m_board->FindNet( pad->GetNetCode() )->GetNetname() );
             NeedRIGHT();
@@ -2299,7 +2299,7 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            track->SetNetCode( m_netCodes[parseInt( "net number" )] );
+            track->SetNetCode( getNetCode( parseInt( "net number" ) ) );
             break;
 
         case T_tstamp:
@@ -2377,7 +2377,7 @@ VIA* PCB_PARSER::parseVIA() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            via->SetNetCode( m_netCodes[parseInt( "net number" )] );
+            via->SetNetCode( getNetCode( parseInt( "net number" ) ) );
             NeedRIGHT();
             break;
 
@@ -2429,7 +2429,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             // Init the net code only, not the netname, to be sure
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
-            zone->SetNetCode( m_netCodes[parseInt( "net number" )] );
+            zone->SetNetCode( getNetCode( parseInt( "net number" ) ) );
             NeedRIGHT();
             break;
 
