@@ -841,8 +841,7 @@ void RN_DATA::Add( const BOARD_ITEM* aItem )
         if( net < 1 )           // do not process unconnected items
             return;
 
-        // Autoresize
-        if( net >= (int) m_nets.size() )
+        if( net >= (int) m_nets.size() )            // Autoresize
             m_nets.resize( net + 1 );
     }
     else if( aItem->Type() == PCB_MODULE_T )
@@ -851,11 +850,11 @@ void RN_DATA::Add( const BOARD_ITEM* aItem )
         for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
         {
             net = pad->GetNetCode();
+
             if( net < 1 )       // do not process unconnected items
                 continue;
 
-            // Autoresize
-            if( net >= (int) m_nets.size() )
+            if( net >= (int) m_nets.size() )        // Autoresize
                 m_nets.resize( net + 1 );
 
             m_nets[net].AddItem( pad );
@@ -897,8 +896,19 @@ void RN_DATA::Remove( const BOARD_ITEM* aItem )
     if( aItem->IsConnected() )
     {
         net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
+
         if( net < 1 )           // do not process unconnected items
             return;
+
+#ifdef NDEBUG
+        if( net >= (int) m_nets.size() )        // Autoresize
+        {
+            m_nets.resize( net + 1 );
+
+            return;     // if it was resized, then surely the item had not been added before
+        }
+#endif
+        assert( net < (int) m_nets.size() );
     }
     else if( aItem->Type() == PCB_MODULE_T )
     {
@@ -906,8 +916,19 @@ void RN_DATA::Remove( const BOARD_ITEM* aItem )
         for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
         {
             net = pad->GetNetCode();
+
             if( net < 1 )       // do not process unconnected items
                 continue;
+
+#ifdef NDEBUG
+            if( net >= (int) m_nets.size() )    // Autoresize
+            {
+                m_nets.resize( net + 1 );
+
+                return;     // if it was resized, then surely the item had not been added before
+            }
+#endif
+            assert( net < (int) m_nets.size() );
 
             m_nets[net].RemoveItem( pad );
         }
@@ -993,14 +1014,14 @@ void RN_DATA::ProcessBoard()
 
 void RN_DATA::Recalculate( int aNet )
 {
-    if( m_board->GetNetCount() > m_nets.size() )
-        m_nets.resize( m_board->GetNetCount() );
+    unsigned int netCount = m_board->GetNetCount();
+
+    if( netCount > m_nets.size() )
+        m_nets.resize( netCount );
 
     if( aNet < 0 )              // Recompute everything
     {
-        unsigned int i, netCount;
-        netCount = m_board->GetNetCount();
-
+        unsigned int i;
 #ifdef USE_OPENMP
         #pragma omp parallel shared(netCount) private(i)
         {

@@ -44,6 +44,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <ratsnest_data.h>
 #include <pcbnew.h>
 #include <io_mgr.h>
 
@@ -121,7 +122,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
     {
         module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
-        GetGalCanvas()->GetView()->Add( module );
+        view->Add( module );
     }
 
     if( aDeleteUnconnectedTracks && GetBoard()->m_Track )
@@ -131,7 +132,11 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     }
 
     // Rebuild the board connectivity:
-    Compile_Ratsnest( NULL, true );
+    if( IsGalCanvasActive() )
+        GetBoard()->GetRatsnest()->Recalculate();
+    else
+        Compile_Ratsnest( NULL, true );
+
     SetMsgPanel( GetBoard() );
     m_canvas->Refresh();
 }
