@@ -95,9 +95,9 @@ wxString LIBRARY_LISTBOX::OnGetItemText( long item, long column ) const
 }
 
 
-void LIBRARY_LISTBOX::SetSelection( unsigned index, bool State )
+void LIBRARY_LISTBOX::SetSelection( int index, bool State )
 {
-    if( (int) index >= GetCount() )
+    if( index >= GetCount() )
         index = GetCount() - 1;
 
     if( (index >= 0)  && (GetCount() > 0) )
