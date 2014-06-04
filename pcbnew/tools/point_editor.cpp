@@ -212,7 +212,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
 
-        m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_toolMgr->GetView()->GetGAL() );
+        m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
         if( !m_editPoints )
         {
             setTransitions();

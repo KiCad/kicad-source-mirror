@@ -79,6 +79,7 @@ public:
     int GridFast2( TOOL_EVENT& aEvent );
     int GridNext( TOOL_EVENT& aEvent );
     int GridPrev( TOOL_EVENT& aEvent );
+    int GridSetOrigin( TOOL_EVENT& aEvent );
 
     // Track & via size control
     int TrackWidthInc( TOOL_EVENT& aEvent );
