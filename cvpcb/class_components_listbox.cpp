@@ -71,7 +71,7 @@ void COMPONENTS_LISTBOX::SetString( unsigned linecount, const wxString& text )
     if( linecount >= m_ComponentList.Count() )
         linecount = m_ComponentList.Count() - 1;
 
-    if( linecount >= 0 )
+    if( m_ComponentList.Count() > 0 )
         m_ComponentList[linecount] = text;
 }
 
@@ -89,9 +89,9 @@ wxString COMPONENTS_LISTBOX::OnGetItemText( long item, long column ) const
 }
 
 
-void COMPONENTS_LISTBOX::SetSelection( unsigned index, bool State )
+void COMPONENTS_LISTBOX::SetSelection( int index, bool State )
 {
-    if( (int) index >= GetCount() )
+    if( index >= GetCount() )
         index = GetCount() - 1;
 
     if( (index >= 0) && (GetCount() > 0) )
@@ -164,7 +164,7 @@ void COMPONENTS_LISTBOX::OnChar( wxKeyEvent& event )
 
         if( key == start_char )
         {
-            SetSelection( ii, true );   // Ensure visible
+            SetSelection( (int) ii, true );   // Ensure visible
             break;
         }
     }

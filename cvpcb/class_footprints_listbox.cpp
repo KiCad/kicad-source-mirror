@@ -101,9 +101,9 @@ wxString FOOTPRINTS_LISTBOX::OnGetItemText( long item, long column ) const
 }
 
 
-void FOOTPRINTS_LISTBOX::SetSelection( unsigned index, bool State )
+void FOOTPRINTS_LISTBOX::SetSelection( int index, bool State )
 {
-    if( (int) index >= GetCount() )
+    if( index >= GetCount() )
         index = GetCount() - 1;
 
     if( (index >= 0)  && (GetCount() > 0) )
