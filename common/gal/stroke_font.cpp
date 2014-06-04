@@ -268,7 +268,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
             // If it is a double tilda, just process the second one
         }
 
-        unsigned dd = *chIt - ' ';
+        int dd = *chIt - ' ';
 
         if( dd >= m_glyphBoundingBoxes.size() || dd < 0 )
             dd = '?' - ' ';
@@ -336,7 +336,7 @@ VECTOR2D STROKE_FONT::computeTextSize( const UTF8& aText ) const
         }
 
         // Index in the bounding boxes table
-        unsigned dd = *it - ' ';
+        int dd = *it - ' ';
 
         if( dd >= m_glyphBoundingBoxes.size() || dd < 0 )
             dd = '?' - ' ';

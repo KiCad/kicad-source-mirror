@@ -1488,8 +1488,8 @@ bool IDF3_BOARD::setUnit( IDF3::IDF_UNIT aUnit, bool convert )
 
     do
     {
-        std::map<std::string, GROUP_OUTLINE*>::iterator its = olnGroup.begin();
-        std::map<std::string, GROUP_OUTLINE*>::iterator ite = olnGroup.end();
+        std::multimap<std::string, GROUP_OUTLINE*>::iterator its = olnGroup.begin();
+        std::multimap<std::string, GROUP_OUTLINE*>::iterator ite = olnGroup.end();
 
         while( its != ite )
         {
@@ -2905,8 +2905,8 @@ void IDF3_BOARD::writeBoardFile( const std::string& aFileName )
         // PLACEMENT GROUP outlines
         do
         {
-            std::map<std::string, GROUP_OUTLINE*>::iterator its = olnGroup.begin();
-            std::map<std::string, GROUP_OUTLINE*>::iterator ite = olnGroup.end();
+            std::multimap<std::string, GROUP_OUTLINE*>::iterator its = olnGroup.begin();
+            std::multimap<std::string, GROUP_OUTLINE*>::iterator ite = olnGroup.end();
 
             while( its != ite )
             {
@@ -4102,8 +4102,8 @@ void IDF3_BOARD::Clear( void )
     // delete PLACEMENT GROUP outlines
     do
     {
-        std::map<std::string, GROUP_OUTLINE*>::iterator os = olnGroup.begin();
-        std::map<std::string, GROUP_OUTLINE*>::iterator oe = olnGroup.end();
+        std::multimap<std::string, GROUP_OUTLINE*>::iterator os = olnGroup.begin();
+        std::multimap<std::string, GROUP_OUTLINE*>::iterator oe = olnGroup.end();
 
         while( os != oe )
         {

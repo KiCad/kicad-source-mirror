@@ -77,7 +77,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	sOptionsSizer->Add( m_Invisible, 0, wxALL, 5 );
 	
 	
-	bBottomtBoxSizer->Add( sOptionsSizer, 1, wxALL|wxEXPAND, 5 );
+	bBottomtBoxSizer->Add( sOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_TextShapeOptChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
 	int m_TextShapeOptNChoices = sizeof( m_TextShapeOptChoices ) / sizeof( wxString );
