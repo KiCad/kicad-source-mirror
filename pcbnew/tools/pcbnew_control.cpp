@@ -412,6 +412,39 @@ int PCBNEW_CONTROL::GridPrev( TOOL_EVENT& aEvent )
 }
 
 
+int PCBNEW_CONTROL::GridSetOrigin( TOOL_EVENT& aEvent )
+{
+    Activate();
+    getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL,
+                                               _( "Adjust grid origin" ) );
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+    controls->SetAutoPan( true );
+
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        if( evt->IsClick( BUT_LEFT ) )
+        {
+            getView()->GetGAL()->SetGridOrigin( controls->GetCursorPosition() );
+            getView()->MarkDirty();
+        }
+
+        else if( evt->IsCancel() )
+            break;
+    }
+
+    controls->SetAutoPan( false );
+    controls->SetSnapping( false );
+    controls->ShowCursor( false );
+    setTransitions();
+    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
+    return 0;
+}
+
+
 // Track & via size control
 int PCBNEW_CONTROL::TrackWidthInc( TOOL_EVENT& aEvent )
 {
@@ -574,6 +607,7 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::GridFast2,          COMMON_ACTIONS::gridFast2.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridNext,           COMMON_ACTIONS::gridNext.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridPrev,           COMMON_ACTIONS::gridPrev.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GridSetOrigin,      COMMON_ACTIONS::gridSetOrigin.MakeEvent() );
 
     // Track & via size control
     Go( &PCBNEW_CONTROL::TrackWidthInc,      COMMON_ACTIONS::trackWidthInc.MakeEvent() );

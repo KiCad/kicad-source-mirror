@@ -223,6 +223,10 @@ TOOL_ACTION COMMON_ACTIONS::gridPrev( "pcbnew.gridPrev",
         AS_GLOBAL, MD_CTRL + int( '`' ),
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::gridSetOrigin( "pcbnew.gridSetOrigin",
+        AS_GLOBAL, 0,
+        "", "" );
+
 
 // Track & via size control
 TOOL_ACTION COMMON_ACTIONS::trackWidthInc( "pcbnew.trackWidthInc",
@@ -241,7 +245,9 @@ TOOL_ACTION COMMON_ACTIONS::viaSizeDec( "pcbnew.viaSizeDec",
         AS_GLOBAL, '\\',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::trackViaSizeChanged( "pcbnew.trackViaSizeChanged", AS_GLOBAL, 0, "", "" );
+TOOL_ACTION COMMON_ACTIONS::trackViaSizeChanged( "pcbnew.trackViaSizeChanged",
+        AS_GLOBAL, 0,
+        "", "" );
 
 // Miscellaneous
 TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.resetCoords",
@@ -290,6 +296,9 @@ std::string COMMON_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_PCB_MIRE_BUTT:
         return COMMON_ACTIONS::placeTarget.GetName();
+
+    case ID_PCB_PLACE_GRID_COORD_BUTT:
+        return COMMON_ACTIONS::gridSetOrigin.GetName();
     }
 
     return "";
