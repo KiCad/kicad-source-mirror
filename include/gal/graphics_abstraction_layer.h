@@ -853,6 +853,7 @@ protected:
     GRID_STYLE         gridStyle;              ///< Grid display style
     VECTOR2D           gridSize;               ///< The grid size
     VECTOR2D           gridOrigin;             ///< The grid origin
+    VECTOR2D           gridOffset;             ///< The grid offset to compensate cursor position
     COLOR4D            gridColor;              ///< Color of the grid
     int                gridTick;               ///< Every tick line gets the double width
     double             gridLineWidth;          ///< Line width of the grid
@@ -860,6 +861,7 @@ protected:
                                                ///< below which the grid is not drawn
     int                gridOriginMarkerSize;   ///< Grid origin indicator size (pixels)
 
+    // Cursor settings
     bool               isCursorEnabled;        ///< Is the cursor enabled?
     COLOR4D            cursorColor;            ///< Cursor color
     unsigned int       cursorSize;             ///< Size of the cursor in pixels

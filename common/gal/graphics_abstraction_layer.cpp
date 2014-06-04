@@ -130,8 +130,11 @@ void GAL::DrawGrid()
     // Draw the grid
     // For the drawing the start points, end points and increments have
     // to be calculated in world coordinates
-    VECTOR2D    worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
-    VECTOR2D    worldEndPoint   = screenWorldMatrix * VECTOR2D( screenSize );
+    gridOffset = VECTOR2D( (long) gridOrigin.x % (long) gridSize.x,
+                           (long) gridOrigin.y % (long) gridSize.y );
+
+    VECTOR2D worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
+    VECTOR2D worldEndPoint   = screenWorldMatrix * VECTOR2D( screenSize );
 
     int gridScreenSizeDense  = round( gridSize.x * worldScale );
     int gridScreenSizeCoarse = round( gridSize.x * static_cast<double>( gridTick ) * worldScale );
@@ -144,20 +147,19 @@ void GAL::DrawGrid()
     if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) > gridDrawThreshold )
     {
         // Compute grid variables
-        int gridStartX = round( worldStartPoint.x / gridSize.x );
-        int gridEndX = round( worldEndPoint.x / gridSize.x );
-        int gridStartY = round( worldStartPoint.y / gridSize.y );
-        int gridEndY = round( worldEndPoint.y / gridSize.y );
+        int gridStartX  = round( worldStartPoint.x / gridSize.x );
+        int gridEndX    = round( worldEndPoint.x / gridSize.x );
+        int gridStartY  = round( worldStartPoint.y / gridSize.y );
+        int gridEndY    = round( worldEndPoint.y / gridSize.y );
 
-        // Swap the coordinates, if they have not the right order
-        SWAP( gridEndX, <, gridStartX );
-        SWAP( gridEndY, <, gridStartY );
+        assert( gridEndX >= gridStartX );
+        assert( gridEndY >= gridStartY );
 
         // Correct the index, else some lines are not correctly painted
-        gridStartX  -= 1;
-        gridStartY  -= 1;
-        gridEndX    += 1;
-        gridEndY    += 1;
+        gridStartX  -= ( gridOrigin.x / gridSize.x ) + 1;
+        gridStartY  -= ( gridOrigin.y / gridSize.y ) + 1;
+        gridEndX    += ( gridOrigin.x / gridSize.x ) + 1;
+        gridEndY    += ( gridOrigin.y / gridSize.y ) + 1;
 
         // Draw the grid behind all other layers
         SetLayerDepth( depthRange.y * 0.75 );
@@ -169,6 +171,8 @@ void GAL::DrawGrid()
             SetStrokeColor( gridColor );
 
             // Now draw the grid, every coarse grid line gets the double width
+
+            // Vertical lines
             for( int j = gridStartY; j < gridEndY; j += 1 )
             {
                 if( j % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
@@ -179,11 +183,12 @@ void GAL::DrawGrid()
                 if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
                     || gridScreenSizeDense > gridDrawThreshold )
                 {
-                    drawGridLine( VECTOR2D( gridStartX * gridSize.x, j * gridSize.y ),
-                                  VECTOR2D( gridEndX * gridSize.x,   j * gridSize.y ) );
+                    drawGridLine( VECTOR2D( gridStartX * gridSize.x, j * gridSize.y + gridOrigin.y ),
+                                  VECTOR2D( gridEndX * gridSize.x,   j * gridSize.y + gridOrigin.y ) );
                 }
             }
 
+            // Horizontal lines
             for( int i = gridStartX; i < gridEndX; i += 1 )
             {
                 if( i % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
@@ -194,8 +199,8 @@ void GAL::DrawGrid()
                 if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
                     || gridScreenSizeDense > gridDrawThreshold )
                 {
-                    drawGridLine( VECTOR2D( i * gridSize.x, gridStartY * gridSize.y ),
-                                  VECTOR2D( i * gridSize.x, gridEndY * gridSize.y ) );
+                    drawGridLine( VECTOR2D( i * gridSize.x + gridOrigin.x, gridStartY * gridSize.y ),
+                                  VECTOR2D( i * gridSize.x + gridOrigin.x, gridEndY * gridSize.y ) );
                 }
             }
         }
@@ -223,10 +228,10 @@ void GAL::DrawGrid()
                     if( tickX || tickY || gridScreenSizeDense > gridDrawThreshold )
                     {
                         double radius = ( tickX && tickY ) ? doubleMarker : marker;
-                        DrawRectangle( VECTOR2D( i * gridSize.x - radius,
-                                                 j * gridSize.y - radius ),
-                                       VECTOR2D( i * gridSize.x + radius,
-                                                 j * gridSize.y + radius ) );
+                        DrawRectangle( VECTOR2D( i * gridSize.x - radius + gridOrigin.x,
+                                                 j * gridSize.y - radius + gridOrigin.y ),
+                                       VECTOR2D( i * gridSize.x + radius + gridOrigin.x,
+                                                 j * gridSize.y + radius + gridOrigin.y ) );
                     }
                 }
             }
@@ -237,10 +242,6 @@ void GAL::DrawGrid()
 
 VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 {
-    VECTOR2D gridPoint;
-
-    gridPoint.x = round( aPoint.x / gridSize.x ) * gridSize.x;
-    gridPoint.y = round( aPoint.y / gridSize.y ) * gridSize.y;
-
-    return gridPoint;
+    return VECTOR2D( round( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
+                     round( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
 }
