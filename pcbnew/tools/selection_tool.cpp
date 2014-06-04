@@ -658,7 +658,7 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     // Check if the point is located within any of the currently selected items bounding boxes
     for( unsigned int i = 0; i < m_selection.items.GetCount(); ++i )
     {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_selection.items.GetPickedItem( i ) );
+        BOARD_ITEM* item = m_selection.Item<BOARD_ITEM>( i );
         BOX2I itemBox = item->ViewBBox();
         itemBox.Inflate( margin.x, margin.y );    // Give some margin for gripping an item
 

@@ -385,7 +385,7 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
 #endif
     if( aEvent.IsAction( &ACT_RouterOptions ) )
     {
-        DIALOG_PNS_SETTINGS settingsDlg( m_toolMgr->GetEditFrame(), m_router->Settings() );
+        DIALOG_PNS_SETTINGS settingsDlg( getEditFrame<PCB_EDIT_FRAME>(), m_router->Settings() );
 
         if( settingsDlg.ShowModal() )
             m_router->ApplySettings();
@@ -393,7 +393,7 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
 
     else if( aEvent.IsAction( &ACT_CustomTrackWidth ) )
     {
-        DIALOG_TRACK_VIA_SIZE sizeDlg( m_toolMgr->GetEditFrame(), m_router->Settings() );
+        DIALOG_TRACK_VIA_SIZE sizeDlg( getEditFrame<PCB_EDIT_FRAME>(), m_router->Settings() );
         BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>( PCB_T )->GetDesignSettings();
 
         sizeDlg.ShowModal();

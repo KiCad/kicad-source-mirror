@@ -78,6 +78,13 @@ public:
             return items.GetCount();
         }
 
+        /// Alias to make code shorter and clearer
+        template <typename T>
+        T* Item( unsigned int aIndex ) const
+        {
+            return static_cast<T*>( items.GetPickedItem( aIndex ) );
+        }
+
     private:
         /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
         /// change properties of selected items (e.g. selection flag).
