@@ -820,7 +820,7 @@ public:
     /// Depth level on which the grid is drawn
     static const int GRID_DEPTH = 1024;
 
-    static const double METRIC_UNIT_LENGTH = 1e9;
+    static const double METRIC_UNIT_LENGTH;
 
 protected:
     std::stack<double> depthStack;             ///< Stored depth values

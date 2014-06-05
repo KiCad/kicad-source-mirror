@@ -31,6 +31,10 @@
 
 using namespace KIGFX;
 
+
+const double GAL::METRIC_UNIT_LENGTH = 1e9;
+
+
 GAL::GAL() :
     strokeFont( this )
 {

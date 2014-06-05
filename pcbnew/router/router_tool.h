@@ -77,8 +77,6 @@ private:
     PNS_ITEM* m_endItem;
     VECTOR2I m_endSnapPoint;
 
-    CONTEXT_MENU* m_menu;
-
     ///> Flag marking that the router's world needs syncing.
     bool m_needsSync;
 };

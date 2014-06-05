@@ -35,6 +35,10 @@
 
 using namespace KIGFX;
 
+
+const float CAIRO_GAL::LAYER_ALPHA = 0.8;
+
+
 CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
         wxEvtHandler* aPaintListener, const wxString& aName ) :
     wxWindow( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxEXPAND, aName )

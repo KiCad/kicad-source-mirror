@@ -626,19 +626,19 @@ void PNS_LINE::DragSegment ( const VECTOR2I& aP, int aIndex, int aSnappingThresh
 
             OPT_VECTOR2I ip;
 
-            if( ip = s1.Intersect( s_next ) )
+            if( (ip = s1.Intersect( s_next )) )
             {
                 np.Append ( s1.A );
                 np.Append ( *ip );
                 np.Append ( s_next.B );
             }
-            else if( ip = s3.Intersect( s_prev ) )
+            else if( (ip = s3.Intersect( s_prev )) )
             {
                 np.Append ( s_prev.A );
                 np.Append ( *ip );
                 np.Append ( s3.B );
             }
-            else if( ip = s1.Intersect( s3 ) )
+            else if( (ip = s1.Intersect( s3 )) )
             {
                 np.Append( s_prev.A );
                 np.Append( *ip );

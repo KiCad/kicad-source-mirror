@@ -389,7 +389,7 @@ private:
     static const cairo_format_t GAL_FORMAT = CAIRO_FORMAT_RGB24;
 
     ///> Opacity of a single layer
-    static const float LAYER_ALPHA = 0.8;
+    static const float LAYER_ALPHA;
 };
 } // namespace KIGFX
 
