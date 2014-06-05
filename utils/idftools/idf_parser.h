@@ -463,6 +463,8 @@ public:
 class IDF3_BOARD
 {
 private:
+    std::map< std::string, std::string > uidFileList;           // map of files opened and UIDs
+    std::list< std::string > uidLibList;                        // list of UIDs read from a library file
     std::string errormsg;                                       // string for passing error messages to user
     std::list< IDF_NOTE* >     notes;                           // IDF notes
     std::list< std::string >   noteComments;                    // comment list for NOTES section
@@ -476,6 +478,8 @@ private:
     IDF3::CAD_TYPE   cadType;
     IDF3::IDF_UNIT   unit;
     IDF3::IDF_VERSION   idfVer;                                 // IDF version of Board or Library
+    int iRefDes;                                                // counter for automatically numbered NOREFDES items
+    std::string sRefDes;
 
     std::string idfSource;  // SOURCE string to use when writing BOARD and LIBRARY headers
     std::string brdSource;  // SOURCE string as retrieved from a BOARD file
@@ -568,6 +572,8 @@ public:
     // Internally all data is represented in mm and the
     // end user must use only mm in the API.
     IDF3::IDF_UNIT GetUnit( void );
+
+    const std::string& GetNewRefDes( void );
 
     void SetBoardName( std::string aBoardName );
     const std::string& GetBoardName( void );
@@ -692,9 +698,7 @@ public:
 
     // returns a pointer to a component outline object or NULL
     // if the object doesn't exist
-    IDF3_COMP_OUTLINE* GetComponentOutline( const std::string aGeomName,
-                                            const std::string aPartName,
-                                            wxString aFullFileName );
+    IDF3_COMP_OUTLINE* GetComponentOutline( wxString aFullFileName );
 
     // returns a pointer to the component outline object with the
     // unique ID aComponentID

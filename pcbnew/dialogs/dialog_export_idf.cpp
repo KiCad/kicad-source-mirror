@@ -36,7 +36,7 @@
 #define OPTKEY_IDF_THOU wxT( "IDFExportThou" )
 
 
-bool Export_IDF3( BOARD *aPcb, const wxString & aFullFileName, double aUseThou );
+bool Export_IDF3( BOARD *aPcb, const wxString & aFullFileName, bool aUseThou );
 
 
 class DIALOG_EXPORT_IDF3: public DIALOG_EXPORT_IDF3_BASE
