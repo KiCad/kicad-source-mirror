@@ -626,20 +626,16 @@ bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
  */
 void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 {
-    #define MIN_GRID_SIZE 25
-    int      dup_error;
-    int      offgrid_error;
-    LIB_PIN* Pin;
-    LIB_PINS PinList;
-    wxString msg;
-    wxString aux_msg;
-
     if( m_component == NULL )
         return;
 
-    m_component->GetPins( PinList );
+    const int MIN_GRID_SIZE = 25;
 
-    if( PinList.size() == 0 )
+    LIB_PINS pinList;
+
+    m_component->GetPins( pinList );
+
+    if( pinList.size() == 0 )
     {
         DisplayInfoMessage( this, _( "No pins!" ) );
         return;
@@ -647,48 +643,49 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 
     // Sort pins by pin num, so 2 duplicate pins
     // (pins with the same number) will be consecutive in list
-    sort( PinList.begin(), PinList.end(), sort_by_pin_number );
+    sort( pinList.begin(), pinList.end(), sort_by_pin_number );
 
     // Test for duplicates:
-    dup_error = 0;
     DIALOG_DISPLAY_HTML_TEXT_BASE error_display( this, wxID_ANY,
                                                  _( "Marker Information" ),
                                                  wxDefaultPosition,
                                                  wxSize( 750, 600 ) );
 
-    for( unsigned ii = 1; ii < PinList.size(); ii++ )
+    int dup_error = 0;
+
+    for( unsigned ii = 1; ii < pinList.size(); ii++ )
     {
         wxString stringPinNum, stringCurrPinNum;
 
-        LIB_PIN* curr_pin = PinList[ii];
-        Pin = PinList[ii - 1];
+        LIB_PIN* curr_pin = pinList[ii];
+        LIB_PIN* pin      = pinList[ii - 1];
 
-        if( Pin->GetNumber() != curr_pin->GetNumber()
-            || Pin->GetConvert() != curr_pin->GetConvert()
-            || Pin->GetUnit() != curr_pin->GetUnit() )
+        if( pin->GetNumber() != curr_pin->GetNumber()
+            || pin->GetConvert() != curr_pin->GetConvert()
+            || pin->GetUnit() != curr_pin->GetUnit() )
             continue;
 
         dup_error++;
-        Pin->PinStringNum( stringPinNum );
+        pin->PinStringNum( stringPinNum );
 
         /* TODO I dare someone to find a way to make happy translators on
            this thing! Lorenzo */
         curr_pin->PinStringNum( stringCurrPinNum );
-        msg.Printf( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, \
+
+        wxString msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, \
 %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
                     GetChars( stringCurrPinNum ),
                     GetChars( curr_pin->GetName() ),
                     curr_pin->GetPosition().x / 1000.0,
                     -curr_pin->GetPosition().y / 1000.0,
                     GetChars( stringPinNum ),
-                    GetChars( Pin->GetName() ),
-                    Pin->GetPosition().x / 1000.0,
-                    -Pin->GetPosition().y / 1000.0 );
+                    GetChars( pin->GetName() ),
+                    pin->GetPosition().x / 1000.0,
+                    -pin->GetPosition().y / 1000.0 );
 
         if( m_component->GetPartCount() > 1 )
         {
-            aux_msg.Printf( _( " in part %c" ), 'A' + curr_pin->GetUnit() );
-            msg += aux_msg;
+            msg += wxString::Format( _( " in part %c" ), 'A' + curr_pin->GetUnit() - 1 );
         }
 
         if( m_showDeMorgan )
@@ -700,46 +697,47 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
         }
 
         msg += wxT( ".<br>" );
+
         error_display.m_htmlWindow->AppendToPage( msg );
     }
 
     // Test for off grid pins:
-    offgrid_error = 0;
+    int offgrid_error = 0;
 
-    for( unsigned ii = 0; ii < PinList.size(); ii++ )
+    for( unsigned ii = 0; ii < pinList.size(); ii++ )
     {
-        Pin = PinList[ii];
+        LIB_PIN* pin = pinList[ii];
 
-        if( ( (Pin->GetPosition().x % MIN_GRID_SIZE) == 0 ) &&
-            ( (Pin->GetPosition().y % MIN_GRID_SIZE) == 0 ) )
+        if( ( (pin->GetPosition().x % MIN_GRID_SIZE) == 0 ) &&
+            ( (pin->GetPosition().y % MIN_GRID_SIZE) == 0 ) )
             continue;
 
-        // A pin is found here off grid
+        // "pin" is off grid here.
         offgrid_error++;
         wxString stringPinNum;
-        Pin->PinStringNum( stringPinNum );
+        pin->PinStringNum( stringPinNum );
 
-        msg.Printf( _( "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>" ),
+        wxString msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>" ),
                     GetChars( stringPinNum ),
-                    GetChars( Pin->GetName() ),
-                    Pin->GetPosition().x / 1000.0,
-                    -Pin->GetPosition().y / 1000.0 );
+                    GetChars( pin->GetName() ),
+                    pin->GetPosition().x / 1000.0,
+                    -pin->GetPosition().y / 1000.0 );
 
         if( m_component->GetPartCount() > 1 )
         {
-            aux_msg.Printf( _( " in part %c" ), 'A' + Pin->GetUnit() );
-            msg += aux_msg;
+            msg += wxString::Format( _( " in part %c" ), 'A' + pin->GetUnit() - 1 );
         }
 
         if( m_showDeMorgan )
         {
-            if( Pin->GetConvert() )
+            if( pin->GetConvert() )
                 msg += _( "  of converted" );
             else
                 msg += _( "  of normal" );
         }
 
         msg += wxT( ".<br>" );
+
         error_display.m_htmlWindow->AppendToPage( msg );
     }
 

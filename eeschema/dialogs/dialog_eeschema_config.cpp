@@ -205,7 +205,7 @@ void DIALOG_EESCHEMA_CONFIG::OnCancelClick( wxCommandEvent& event )
     // Recreate the user lib path
     if( m_LibPathChanged )
     {
-        for( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii++ )
+        for( unsigned ii = 0; ii < m_listUserPaths->GetCount(); ii++ )
             lib_search.RemovePaths( m_listUserPaths->GetString(ii) );
 
         lib_search.AddPaths( m_Parent->GetUserLibraryPath(), 1 );
