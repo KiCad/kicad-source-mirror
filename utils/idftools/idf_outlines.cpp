@@ -693,6 +693,10 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
     std::list<IDF_SEGMENT*>::iterator bo;
     std::list<IDF_SEGMENT*>::iterator eo;
 
+    if( !aOutline )
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "\n* BUG: NULL outline pointer" ) );
+
     if( aOutline->size() == 1 )
     {
         if( !aOutline->front()->IsCircle() )

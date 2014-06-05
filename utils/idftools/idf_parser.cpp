@@ -36,6 +36,48 @@
 using namespace std;
 using namespace IDF3;
 
+
+static bool MatchCompOutline( IDF3_COMP_OUTLINE* aOutlineA, IDF3_COMP_OUTLINE* aOutlineB )
+{
+    if( aOutlineA->GetComponentClass() != aOutlineB->GetComponentClass() )
+        return false;
+
+    if( aOutlineA->OutlinesSize() != aOutlineB->OutlinesSize() )
+        return false;
+
+    // are both outlines empty?
+    if( aOutlineA->OutlinesSize() == 0 )
+        return true;
+
+    IDF_OUTLINE* opA = aOutlineA->GetOutline( 0 );
+    IDF_OUTLINE* opB = aOutlineB->GetOutline( 0 );
+
+    if( opA->size() != opB->size() )
+        return false;
+
+    if( opA->size() == 0 )
+        return true;
+
+    std::list<IDF_SEGMENT*>::iterator olAs = opA->begin();
+    std::list<IDF_SEGMENT*>::iterator olAe = opA->end();
+    std::list<IDF_SEGMENT*>::iterator olBs = opB->begin();
+
+    while( olAs != olAe )
+    {
+        if( !(*olAs)->MatchesStart( (*olBs)->startPoint ) )
+            return false;
+
+        if( !(*olAs)->MatchesEnd( (*olBs)->endPoint ) )
+            return false;
+
+        ++olAs;
+        ++olBs;
+    }
+
+    return true;
+}
+
+
 /*
  * CLASS: IDF3_COMP_OUTLINE_DATA
  * This represents the outline placement
@@ -285,7 +327,7 @@ bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::ifstream &aBoardFile,
         // component is given a unique RefDes. This class of defect
         // is one reason IDF does not work well in faithfully
         // conveying information between ECAD and MCAD.
-        refdes = token;
+        refdes = aBoard->GetNewRefDes();
     }
     else if( CompareToken( "BOARD", token ) )
     {
@@ -1297,6 +1339,7 @@ IDF3_BOARD::IDF3_BOARD( IDF3::CAD_TYPE aCadType )
     userYoff       = 0.0;
     brdFileVersion = 0;
     libFileVersion = 0;
+    iRefDes        = 0;
 
     // unlike other outlines which are created as necessary,
     // the board outline always exists and its parent must
@@ -1313,6 +1356,18 @@ IDF3_BOARD::~IDF3_BOARD()
 
     return;
 }
+
+
+const std::string& IDF3_BOARD::GetNewRefDes( void )
+{
+    ostringstream ostr;
+    ostr << "NOREFDESn" << iRefDes++;
+
+    sRefDes = ostr.str();
+
+    return sRefDes;
+}
+
 
 #ifndef DISABLE_IDF_OWNERSHIP
 bool IDF3_BOARD::checkComponentOwnership( int aSourceLine, const char* aSourceFunc,
@@ -2422,7 +2477,12 @@ void IDF3_BOARD::readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLib
             }
             else
             {
-                delete pout;
+                if( MatchCompOutline( pout, cop ) )
+                {
+                    delete pout;
+                    // everything is fine; the outlines are genuine duplicates
+                    return;
+                }
 
                 ostringstream ostr;
                 ostr << "invalid IDF library\n";
@@ -3131,7 +3191,7 @@ bool  IDF3_BOARD::SetBoardVersion( int aVersion )
     {
         ostringstream ostr;
         ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
-        ostr << "*  board version (" << aVersion << ") must be > 0";
+        ostr << "*  board version (" << aVersion << ") must be >= 0";
         errormsg = ostr.str();
 
         return false;
@@ -3155,7 +3215,7 @@ bool  IDF3_BOARD::SetLibraryVersion( int aVersion )
     {
         ostringstream ostr;
         ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
-        ostr << "* library version (" << aVersion << ") must be > 0";
+        ostr << "* library version (" << aVersion << ") must be >= 0";
         errormsg = ostr.str();
 
         return false;
@@ -3741,39 +3801,13 @@ IDF3_COMPONENT* IDF3_BOARD::FindComponent( std::string aRefDes )
 
 // returns a pointer to a component outline object or NULL
 // if the object doesn't exist
-IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const std::string aGeomName,
-                                                    const std::string aPartName,
-                                                    wxString aFullFileName )
+IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( wxString aFullFileName )
 {
-    std::ostringstream ostr;
-    ostr << aGeomName << "_" << aPartName;
-
-    IDF3_COMP_OUTLINE* cp = GetComponentOutline( ostr.str() );
-
-    if( cp != NULL )
-        return cp;
-
     std::string fname = TO_UTF8( aFullFileName );
-
-    cp = new IDF3_COMP_OUTLINE( this );
-
-    if( cp == NULL )
-    {
-        ostringstream ostr;
-        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
-        cerr << "* failed to create outline with UID '" << aGeomName << "_";
-        cerr << aPartName << "'\n";
-        cerr << "* filename: '" << fname << "'";
-        errormsg = ostr.str();
-
-        return NULL;
-    }
-
     wxFileName idflib( aFullFileName );
 
     if( !idflib.IsOk() )
     {
-        delete cp;
         ostringstream ostr;
         ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
         cerr << "* invalid file name: '" << fname << "'";
@@ -3784,7 +3818,6 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const std::string aGeomName,
 
     if( !idflib.FileExists() )
     {
-        delete cp;
         ostringstream ostr;
         ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
         cerr << "* no such file: '" << fname  << "'";
@@ -3795,10 +3828,27 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const std::string aGeomName,
 
     if( !idflib.IsFileReadable() )
     {
-        delete cp;
         ostringstream ostr;
         ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
         cerr << "* cannot read file: '" << fname << "'";
+        errormsg = ostr.str();
+
+        return NULL;
+    }
+
+    std::map< std::string, std::string >::iterator itm = uidFileList.find( fname );
+
+    if( itm != uidFileList.end() )
+        return GetComponentOutline( itm->second );
+
+    IDF3_COMP_OUTLINE* cp = new IDF3_COMP_OUTLINE( this );
+
+    if( cp == NULL )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
+        cerr << "* failed to create outline\n";
+        cerr << "* filename: '" << fname << "'";
         errormsg = ostr.str();
 
         return NULL;
@@ -3867,7 +3917,92 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const std::string aGeomName,
 
     model.close();
 
-    return cp;
+    // check the unique ID against the list from library components
+    std::list< std::string >::iterator lsts = uidLibList.begin();
+    std::list< std::string >::iterator lste = uidLibList.end();
+    std::string uid = cp->GetUID();
+    IDF3_COMP_OUTLINE* oldp = NULL;
+
+    while( lsts != lste )
+    {
+        if( ! lsts->compare( uid ) )
+        {
+            oldp = GetComponentOutline( uid );
+
+            if( MatchCompOutline( cp, oldp ) )
+            {
+                // everything is fine; the outlines are genuine duplicates; delete the copy
+                delete cp;
+                // make sure we can find the item via its filename
+                uidFileList.insert( std::pair< std::string, std::string>( fname, uid ) );
+                // return the pointer to the original
+                return oldp;
+            }
+            else
+            {
+                delete cp;
+                ostringstream ostr;
+                ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+                ostr << "* duplicate UID for different Component Outlines: '" << uid << "'\n";
+                ostr << "* original loaded from library, duplicate in current file\n";
+                ostr << "* file: '" << fname << "'";
+
+                errormsg = ostr.str();
+                return NULL;
+            }
+        }
+
+        ++lsts;
+    }
+
+    // if we got this far then any duplicates are from files previously read
+    oldp = GetComponentOutline( uid );
+
+    if( oldp == NULL )
+    {
+        // everything is fine, there are no existing entries
+        uidFileList.insert( std::pair< std::string, std::string>( fname, uid ) );
+        compOutlines.insert( pair<const std::string, IDF3_COMP_OUTLINE*>( uid, cp ) );
+
+        return cp;
+    }
+
+    if( MatchCompOutline( cp, oldp ) )
+    {
+        // everything is fine; the outlines are genuine duplicates; delete the copy
+        delete cp;
+        // make sure we can find the item via its other filename
+        uidFileList.insert( std::pair< std::string, std::string>( fname, uid ) );
+        // return the pointer to the original
+        return oldp;
+    }
+
+    delete cp;
+
+    // determine the file name of the first instance
+    std::map< std::string, std::string >::iterator ufls = uidFileList.begin();
+    std::map< std::string, std::string >::iterator ufle = uidFileList.end();
+    std::string oldfname;
+
+    while( ufls != ufle )
+    {
+        if( ! ufls->second.compare( uid ) )
+        {
+            oldfname = ufls->first;
+            break;
+        }
+
+        ++ufls;
+    }
+
+    ostringstream ostr;
+    ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+    ostr << "* duplicate UID for different Component Outlines: '" << uid << "'\n";
+    ostr << "* original file: '" << oldfname << "'\n";
+    ostr << "* this file: '" << fname << "'";
+
+    errormsg = ostr.str();
+    return NULL;
 }
 
 
@@ -3940,8 +4075,12 @@ void IDF3_BOARD::Clear( void )
     libSource.clear();
     brdDate.clear();
     libDate.clear();
+    uidFileList.clear();
+    uidLibList.clear();
     brdFileVersion = 0;
     libFileVersion = 0;
+    iRefDes = 0;
+    sRefDes.clear();
 
     // delete comment lists
     noteComments.clear();

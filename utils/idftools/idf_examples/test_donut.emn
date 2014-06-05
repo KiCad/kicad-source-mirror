@@ -1,0 +1,45 @@
+.HEADER
+BOARD_FILE 3.0 "Created by some software" 2014/02/01.15:09:15 1
+"test_donut" MM
+.END_HEADER
+
+# The board outline is a simple square with a small hole in it
+.BOARD_OUTLINE ECAD
+1.60000
+0 -100 100 0
+0 -100 -100 0
+0 100 -100 0
+0 100 100 0
+0 -100 100 0
+1 0 0 0
+1 5 0 360
+.END_BOARD_OUTLINE
+
+# This OTHER OUTLINE is a square toroid
+.OTHER_OUTLINE UNOWNED
+MY_DONUT 30 TOP
+0 0 0 0
+0 75 0 360
+1 0 0 0
+1 30 0 360
+.END_OTHER_OUTLINE
+
+# This OTHER OUTLINE is a square with a hole
+.OTHER_OUTLINE UNOWNED
+MY_NOT_DONUT 2 BOTTOM
+0 -50 50 0
+0 -50 -50 0
+0 50 -50 0
+0 50 50 0
+0 -50 50 0
+1 0 0 0
+1 10 0 360
+2 0 50 0
+2 0 75 360
+3 50 0 0
+3 75 0 360
+4 0 -50 0
+4 0 -75 360
+5 -50 0 0
+5 -75 0 360
+.END_OTHER_OUTLINE

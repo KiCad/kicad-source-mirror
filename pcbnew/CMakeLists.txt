@@ -36,6 +36,7 @@ include_directories(
     ./exporters
     ../lib_dxf
     ./import_dxf
+    ../utils/idftools
     ${INC_AFTER}
     )
 
@@ -136,8 +137,6 @@ set( PCBNEW_EXPORTERS
     exporters/export_gencad.cpp
     exporters/export_idf.cpp
     exporters/export_vrml.cpp
-    exporters/idf_common.cpp
-    exporters/idf.cpp
     exporters/gen_drill_report_files.cpp
     exporters/gen_modules_placefile.cpp
     exporters/gendrill_Excellon_writer.cpp
@@ -385,6 +384,7 @@ if( KICAD_SCRIPTING_MODULES )
         common
         pcad2kicadpcb
         lib_dxf
+        idf3
         ${GITHUB_PLUGIN_LIBRARIES}
         polygon
         bitmaps
@@ -565,6 +565,7 @@ if( USE_KIWAY_DLLS )
         bitmaps
         gal
         lib_dxf
+        idf3
         ${GITHUB_PLUGIN_LIBRARIES}
         ${wxWidgets_LIBRARIES}
         ${OPENGL_LIBRARIES}
@@ -633,6 +634,7 @@ else()  # milestone A) kills this off:
         bitmaps
         gal
         lib_dxf
+        idf3
         ${GITHUB_PLUGIN_LIBRARIES}
         ${wxWidgets_LIBRARIES}
         ${OPENGL_LIBRARIES}

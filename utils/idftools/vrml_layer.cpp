@@ -23,17 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/*
- * NOTES ON OUTPUT PRECISION:
- *
- * If we use %.6f then we have no need for special unit dependent formatting:
- *
- *  inch: .0254 microns
- *  mm:   0.001 microns
- *  m:    1 micron
- *
- */
-
 #include <sstream>
 #include <string>
 #include <iomanip>
