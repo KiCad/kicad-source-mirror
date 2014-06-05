@@ -63,6 +63,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     NETLIST         netlist;
     NETLIST_READER* netlistReader;
     KIGFX::VIEW*    view = GetGalCanvas()->GetView();
+    BOARD*          board = GetBoard();
 
     netlist.SetIsDryRun( aIsDryRun );
     netlist.SetFindByTimeStamp( aSelectByTimeStamp );
@@ -100,7 +101,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     if( !netlist.IsDryRun() )
     {
         // Remove old modules
-        for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
+        for( MODULE* module = board->m_Modules; module; module = module->Next() )
         {
             module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             view->Remove( module );
@@ -108,7 +109,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     }
 
     netlist.SortByReference();
-    GetBoard()->ReplaceNetlist( netlist, aDeleteSinglePadNets, aReporter );
+    board->ReplaceNetlist( netlist, aDeleteSinglePadNets, aReporter );
 
     // If it was a dry run, nothing has changed so we're done.
     if( netlist.IsDryRun() )
@@ -119,13 +120,14 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     SetCurItem( NULL );
 
     // Reload modules
-    for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
+    for( MODULE* module = board->m_Modules; module; module = module->Next() )
     {
         module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
         view->Add( module );
+        module->ViewUpdate();
     }
 
-    if( aDeleteUnconnectedTracks && GetBoard()->m_Track )
+    if( aDeleteUnconnectedTracks && board->m_Track )
     {
         // Remove erroneous tracks.  This should probably pushed down to the #BOARD object.
         RemoveMisConnectedTracks();
@@ -133,11 +135,11 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
 
     // Rebuild the board connectivity:
     if( IsGalCanvasActive() )
-        GetBoard()->GetRatsnest()->Recalculate();
+        board->GetRatsnest()->ProcessBoard();
     else
         Compile_Ratsnest( NULL, true );
 
-    SetMsgPanel( GetBoard() );
+    SetMsgPanel( board );
     m_canvas->Refresh();
 }
 

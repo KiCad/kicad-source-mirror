@@ -463,7 +463,7 @@ public:
     void RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction );
 
     /// @copydoc VIEW_ITEM::ViewUpdate()
-    void ViewUpdate( int aUpdateFlags );
+    void ViewUpdate( int aUpdateFlags = KIGFX::VIEW_ITEM::ALL );
 
     /**
      * Function CopyNetlistSettings
