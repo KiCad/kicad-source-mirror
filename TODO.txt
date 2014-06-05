@@ -69,6 +69,5 @@ Dick's Final TODO List:
     https://blueprints.launchpad.net/kicad/+spec/modular-kicad
 
     Issues as a result of minimal testing:
-        If eeschema launched from C++ project manager does not find all libraries,
-        then the dialog showing the names of missing libraries is not visible,
-        probably because the wxFrame parent is not yet visible.
+        If eeschema launched from C++ project manager and does not find all libraries,
+        then the dialog showing the names of missing libraries is shown twice.

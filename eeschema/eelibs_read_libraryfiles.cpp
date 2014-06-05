@@ -100,7 +100,9 @@ void SCH_EDIT_FRAME::LoadLibraries()
     // Print the libraries not found
     if( !libraries_not_found.IsEmpty() )
     {
+        // parent of this dialog cannot be NULL since that breaks the Kiway() chain.
         HTML_MESSAGE_BOX dialog( this, _("Files not found") );
+
         dialog.MessageSet( _( "The following libraries could not be found:" ) );
         dialog.ListSet( libraries_not_found );
         libraries_not_found.empty();
