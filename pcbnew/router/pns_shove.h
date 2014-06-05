@@ -126,8 +126,6 @@ private:
 
     PNS_NODE*                   m_root;
     PNS_NODE*                   m_currentNode;
-    PNS_LINE*                   m_currentHead;
-    PNS_LINE*                   m_collidingLine;
     
     OPT_LINE                     m_newHead;
 

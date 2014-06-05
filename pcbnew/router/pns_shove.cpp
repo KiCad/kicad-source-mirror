@@ -560,7 +560,6 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingVia (PNS_ITEM* aCurrent, PNS_VIA* 
 {
     int clearance = m_currentNode->GetClearance( aCurrent, aObstacleVia ) ;
     LINE_PAIR_VEC draggedLines;
-    VECTOR2I p0( aObstacleVia->Pos() );
     bool colLine = false, colVia = false;
     PNS_LINE *currentLine = NULL;
     VECTOR2I mtvLine, mtvVia, mtv, mtvSolid;

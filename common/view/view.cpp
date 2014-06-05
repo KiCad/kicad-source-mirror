@@ -893,7 +893,7 @@ void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
     group = m_gal->BeginGroup();
     aItem->setGroup( aLayer, group );
 
-    if( !m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), aLayer ) );
+    if( !m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), aLayer ) )
         aItem->ViewDraw( aLayer, m_gal ); // Alternative drawing method
 
     m_gal->EndGroup();

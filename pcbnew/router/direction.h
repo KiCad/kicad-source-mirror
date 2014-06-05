@@ -331,13 +331,15 @@ private:
         if( mag < 0.0 )
             mag += 360.0;
 
-        m_dir = (Directions)( ( mag + 22.5 ) / 45.0 );
+        int dir = ( mag + 22.5 ) / 45.0;
 
-        if( m_dir >= 8 )
-            m_dir = (Directions)( m_dir - 8 );
+        if( dir >= 8 )
+            dir = dir - 8;
 
-        if( m_dir < 0 )
-            m_dir = (Directions)( m_dir + 8 );
+        if( dir < 0 )
+            dir = dir + 8;
+            
+        m_dir = (Directions) dir;
 
         return;
 
