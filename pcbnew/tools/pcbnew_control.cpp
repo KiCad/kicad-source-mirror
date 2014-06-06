@@ -106,7 +106,7 @@ int PCBNEW_CONTROL::ZoomFitScreen( TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
-    BOX2I boardBBox  = getModel<BOARD>( PCB_T )->ViewBBox();
+    BOX2I boardBBox = getModel<BOARD>()->ViewBBox();
     VECTOR2I screenSize = gal->GetScreenPixelSize();
 
     double iuPerX = screenSize.x ? boardBBox.GetWidth() / screenSize.x : 1.0;
@@ -136,7 +136,7 @@ int PCBNEW_CONTROL::TrackDisplayMode( TOOL_EVENT& aEvent )
     m_frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     settings->LoadDisplayOptions( DisplayOpt );
 
-    BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD* board = getModel<BOARD>();
     for( TRACK* track = board->m_Track; track; track = track->Next() )
         track->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
@@ -168,7 +168,7 @@ int PCBNEW_CONTROL::ViaDisplayMode( TOOL_EVENT& aEvent )
     m_frame->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     settings->LoadDisplayOptions( DisplayOpt );
 
-    BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD* board = getModel<BOARD>();
     for( TRACK* track = board->m_Track; track; track = track->Next() )
     {
         if( track->Type() == PCB_VIA_T )
@@ -448,7 +448,7 @@ int PCBNEW_CONTROL::GridSetOrigin( TOOL_EVENT& aEvent )
 // Track & via size control
 int PCBNEW_CONTROL::TrackWidthInc( TOOL_EVENT& aEvent )
 {
-    BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD* board = getModel<BOARD>();
     int widthIndex = board->GetDesignSettings().GetTrackWidthIndex() + 1;
 
     if( widthIndex >= (int) board->GetDesignSettings().m_TrackWidthList.size() )
@@ -469,7 +469,7 @@ int PCBNEW_CONTROL::TrackWidthInc( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::TrackWidthDec( TOOL_EVENT& aEvent )
 {
-    BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD* board = getModel<BOARD>();
     int widthIndex = board->GetDesignSettings().GetTrackWidthIndex() - 1;
 
     if( widthIndex < 0 )
@@ -490,7 +490,7 @@ int PCBNEW_CONTROL::TrackWidthDec( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ViaSizeInc( TOOL_EVENT& aEvent )
 {
-    BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD* board = getModel<BOARD>();
     int sizeIndex = board->GetDesignSettings().GetViaSizeIndex() + 1;
 
     if( sizeIndex >= (int) board->GetDesignSettings().m_ViasDimensionsList.size() )
@@ -511,7 +511,7 @@ int PCBNEW_CONTROL::ViaSizeInc( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ViaSizeDec( TOOL_EVENT& aEvent )
 {
-    BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD* board = getModel<BOARD>();
     int sizeIndex = board->GetDesignSettings().GetViaSizeIndex() - 1;
 
     if( sizeIndex < 0 )

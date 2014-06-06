@@ -62,7 +62,7 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     // Init variables used by every drawing tool
     m_view = getView();
     m_controls = getViewControls();
-    m_board = getModel<BOARD>( PCB_T );
+    m_board = getModel<BOARD>();
     m_frame = getEditFrame<PCB_EDIT_FRAME>();
 
     setTransitions();

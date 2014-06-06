@@ -241,7 +241,7 @@ void ROUTER_TOOL::Reset( RESET_REASON aReason )
 
     TRACEn( 0, "Reset" );
     m_router->ClearWorld();
-    m_router->SetBoard( getModel<BOARD>( PCB_T ) );
+    m_router->SetBoard( getModel<BOARD>() );
     m_router->SyncWorld();
     m_router->LoadSettings( m_settings );
     m_needsSync = false;
@@ -266,7 +266,7 @@ int ROUTER_TOOL::getDefaultWidth( int aNetCode )
 void ROUTER_TOOL::getNetclassDimensions( int aNetCode, int& aWidth,
                                          int& aViaDiameter, int& aViaDrill )
 {
-    BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD* board = getModel<BOARD>();
     BOARD_DESIGN_SETTINGS &bds = board->GetDesignSettings();
 
     NETCLASSPTR netClass;
@@ -394,7 +394,7 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &ACT_CustomTrackWidth ) )
     {
         DIALOG_TRACK_VIA_SIZE sizeDlg( getEditFrame<PCB_EDIT_FRAME>(), m_router->Settings() );
-        BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>( PCB_T )->GetDesignSettings();
+        BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>()->GetDesignSettings();
 
         sizeDlg.ShowModal();
 
@@ -413,7 +413,7 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
 
     else if( aEvent.IsAction( &COMMON_ACTIONS::trackViaSizeChanged ) )
     {
-        BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>( PCB_T )->GetDesignSettings();
+        BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>()->GetDesignSettings();
 
         m_router->Settings().SetTrackWidth( bds.GetCurrentTrackWidth() );
         m_router->Settings().SetViaDiameter( bds.GetCurrentViaSize() );
@@ -526,7 +526,7 @@ void ROUTER_TOOL::performRouting()
     bool saveUndoBuffer = true;
     VIEW_CONTROLS* ctls = getViewControls();
 
-    if( getModel<BOARD>( PCB_T )->GetDesignSettings().m_UseConnectedTrackWidth )
+    if( getModel<BOARD>()->GetDesignSettings().m_UseConnectedTrackWidth )
     {
         int width = getDefaultWidth( m_startItem ? m_startItem->Net() : -1 );
 
@@ -632,7 +632,7 @@ void ROUTER_TOOL::performRouting()
 int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
 {
     VIEW_CONTROLS* ctls = getViewControls();
-    BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD* board = getModel<BOARD>();
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
     // Deselect all items
