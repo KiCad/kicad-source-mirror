@@ -252,7 +252,6 @@ class SELECT_COPPER_LAYERS_PAIR_DIALOG: public PCB_LAYER_SELECTOR,
                                         public DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 {
 private:
-    BOARD* m_brd;
     LAYER_NUM m_frontLayer;
     LAYER_NUM m_backLayer;
     int m_leftRowSelected;
