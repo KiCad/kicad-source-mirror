@@ -483,7 +483,8 @@ void LEGACY_PLUGIN::loadGENERAL()
             m_board->SetBoundingBox( bbbox );
         }
 
-        /* Read the number of segments of type DRAW, TRACK, ZONE
+        /* This is no more usefull, so this info is no more parsed
+        // Read the number of segments of type DRAW, TRACK, ZONE
         else if( TESTLINE( "Ndraw" ) )
         {
             NbDraw = intParse( line + SZ( "Ndraw" ) );
@@ -507,6 +508,11 @@ void LEGACY_PLUGIN::loadGENERAL()
         else if( TESTLINE( "Nnets" ) )
         {
             m_netCodes.resize( intParse( line + SZ( "Nnets" ) ) );
+        }
+
+        else if( TESTLINE( "Nn" ) )     // id "Nnets" for old .brd files
+        {
+            m_netCodes.resize( intParse( line + SZ( "Nn" ) ) );
         }
 
         else if( TESTLINE( "$EndGENERAL" ) )
@@ -1823,7 +1829,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
 
     NETINFO_ITEM*   net = NULL;
     char*           line;
-    int             netCode;
+    int             netCode = 0;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -1846,6 +1852,11 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
             if( net != NULL && ( net->GetNet() > 0 || m_board->FindNet( 0 ) == NULL ) )
             {
                 m_board->AppendNet( net );
+
+                // Be sure we have room to store the net in m_netCodes
+                if( (int)m_netCodes.size() <= netCode )
+                    m_netCodes.resize( netCode+1 );
+
                 m_netCodes[netCode] = net->GetNet();
             }
             else
