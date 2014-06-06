@@ -721,7 +721,7 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
             newSegment->SetStart( wxPoint( nearestPoint.x, nearestPoint.y ) );
             newSegment->SetEnd( wxPoint( seg.B.x, seg.B.y ) );
 
-            getModel<BOARD>( PCB_T )->Add( newSegment );
+            getModel<BOARD>()->Add( newSegment );
             getView()->Add( newSegment );
         }
     }

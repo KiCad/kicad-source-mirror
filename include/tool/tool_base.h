@@ -185,7 +185,7 @@ protected:
      * Returns the model object if it matches the requested type.
      */
     template <typename T>
-    T* getModel( KICAD_T aModelType ) const
+    T* getModel() const
     {
         EDA_ITEM* m = getModelInt();
 

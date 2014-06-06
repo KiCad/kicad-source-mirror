@@ -188,7 +188,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     if( unselect )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
 
-    RN_DATA* ratsnest = getModel<BOARD>( PCB_T )->GetRatsnest();
+    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
     ratsnest->ClearSimple();
     ratsnest->Recalculate();
 
@@ -257,7 +257,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
             processChanges( currentChange );
 
             updateRatsnest( true );
-            getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
+            getModel<BOARD>()->GetRatsnest()->Recalculate();
 
             m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
         }
@@ -312,7 +312,7 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
     if( m_dragging )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     else
-        getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
+        getModel<BOARD>()->GetRatsnest()->Recalculate();
 
     if( unselect )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
@@ -362,7 +362,7 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
     if( m_dragging )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     else
-        getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
+        getModel<BOARD>()->GetRatsnest()->Recalculate();
 
     if( unselect )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
@@ -403,7 +403,7 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
     for( unsigned int i = 0; i < selectedItems.GetCount(); ++i )
         remove( static_cast<BOARD_ITEM*>( selectedItems.GetPickedItem( i ) ) );
 
-    getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
+    getModel<BOARD>()->GetRatsnest()->Recalculate();
 
     setTransitions();
 
@@ -413,7 +413,7 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
 
 void EDIT_TOOL::remove( BOARD_ITEM* aItem )
 {
-    BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD* board = getModel<BOARD>();
 
     switch( aItem->Type() )
     {
@@ -472,7 +472,7 @@ void EDIT_TOOL::setTransitions()
 void EDIT_TOOL::updateRatsnest( bool aRedraw )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    RN_DATA* ratsnest = getModel<BOARD>( PCB_T )->GetRatsnest();
+    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
     ratsnest->ClearSimple();
     for( unsigned int i = 0; i < selection.items.GetCount(); ++i )

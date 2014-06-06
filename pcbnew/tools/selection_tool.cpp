@@ -228,7 +228,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 
 bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation )
 {
-    BOARD* pcb = getModel<BOARD>( PCB_T );
+    BOARD* pcb = getModel<BOARD>();
     BOARD_ITEM* item;
     GENERAL_COLLECTORS_GUIDE guide = getEditFrame<PCB_EDIT_FRAME>()->GetCollectorsGuide();
     GENERAL_COLLECTOR collector;
@@ -524,7 +524,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
             return false;
     }
 
-    BOARD* board = getModel<BOARD>( PCB_T );
+    BOARD* board = getModel<BOARD>();
 
     switch( aItem->Type() )
     {
@@ -678,7 +678,7 @@ void SELECTION_TOOL::highlightNet( const VECTOR2I& aPoint )
     int net = -1;
 
     // Find a connected item for which we are going to highlight a net
-    collector.Collect( getModel<BOARD>( PCB_T ), GENERAL_COLLECTOR::PadsTracksOrZones,
+    collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::PadsTracksOrZones,
                        wxPoint( aPoint.x, aPoint.y ), guide );
     bool enableHighlight = ( collector.GetCount() > 0 );
 
