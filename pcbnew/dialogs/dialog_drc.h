@@ -118,10 +118,8 @@ private:
 
     void OnPopupMenu( wxCommandEvent& event );
 
-
     DRC*                m_tester;
     PCB_EDIT_FRAME*     m_Parent;
-    int                 m_UnconnectedCount;
 };
 
 #endif  // _DIALOG_DRC_H_
