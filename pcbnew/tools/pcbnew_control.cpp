@@ -301,8 +301,19 @@ int PCBNEW_CONTROL::LayerNext( TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     LAYER_NUM layer = editFrame->GetActiveLayer();
-    layer = ( layer + 1 ) % ( LAST_COPPER_LAYER + 1 );
-    assert( IsCopperLayer( layer ) );
+
+    if( ( layer < FIRST_COPPER_LAYER ) || ( layer >= LAST_COPPER_LAYER ) )
+    {
+        setTransitions();
+        return 0;
+    }
+
+    if( getModel<BOARD>()->GetCopperLayerCount() < 2 ) // Single layer
+        layer = LAYER_N_BACK;
+    else if( layer >= getModel<BOARD>()->GetCopperLayerCount() - 2 )
+        layer = LAYER_N_FRONT;
+    else
+        ++layer;
 
     editFrame->SwitchLayer( NULL, layer );
     editFrame->GetGalCanvas()->SetFocus();
@@ -317,8 +328,18 @@ int PCBNEW_CONTROL::LayerPrev( TOOL_EVENT& aEvent )
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     LAYER_NUM layer = editFrame->GetActiveLayer();
 
-    if( --layer < 0 )
-        layer = LAST_COPPER_LAYER;
+    if( ( layer <= FIRST_COPPER_LAYER ) || ( layer > LAST_COPPER_LAYER ) )
+    {
+        setTransitions();
+        return 0;
+    }
+
+    if( getModel<BOARD>()->GetCopperLayerCount() < 2 ) // Single layer
+        layer = LAYER_N_BACK;
+    else if( layer == LAYER_N_FRONT )
+        layer = std::max( LAYER_N_BACK, FIRST_COPPER_LAYER + getModel<BOARD>()->GetCopperLayerCount() - 2 );
+    else
+        --layer;
 
     assert( IsCopperLayer( layer ) );
     editFrame->SwitchLayer( NULL, layer );
