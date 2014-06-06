@@ -171,7 +171,8 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
 
         for( BOARD_ITEM *item = module->GraphicalItems(); item; item = item->Next() )
         {
-            aEdge = dynamic_cast<EDGE_MODULE*>( item );
+            aEdge = dyn_cast<EDGE_MODULE*>( item );
+
             if( aEdge )
                 aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
         }
@@ -218,7 +219,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
         for( BOARD_ITEM *item = module->GraphicalItems() ; item != NULL;
                 item = item->Next() )
         {
-            aEdge = dynamic_cast<EDGE_MODULE*>( item );
+            aEdge = dyn_cast<EDGE_MODULE*>( item );
 
             if( aEdge && (aEdge->GetLayer() != new_layer) )
             {

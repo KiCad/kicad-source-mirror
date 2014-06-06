@@ -146,18 +146,18 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions )
 const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
     int netCode = -1;
+    const EDA_ITEM* item = static_cast<const EDA_ITEM*>( aItem );
 
-    if( aItem )
+    if( item )
     {
-        if( static_cast<const EDA_ITEM*>( aItem )->IsSelected() )
+        if( item->IsSelected() )
         {
             return m_layerColorsSel[aLayer];
         }
 
         // Try to obtain the netcode for the item
-        const BOARD_CONNECTED_ITEM* item = dynamic_cast<const BOARD_CONNECTED_ITEM*>( aItem );
-        if( item )
-            netCode = item->GetNetCode();
+        if( const BOARD_CONNECTED_ITEM* conItem = dyn_cast<const BOARD_CONNECTED_ITEM*> ( item ) )
+            netCode = conItem->GetNetCode();
     }
 
     // Return grayish color for non-highlighted layers in the high contrast mode
@@ -200,49 +200,51 @@ PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
 
 bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
+    const EDA_ITEM* item = static_cast<const EDA_ITEM*>( aItem );
+
     // the "cast" applied in here clarifies which overloaded draw() is called
-    switch( aItem->Type() )
+    switch( item->Type() )
     {
     case PCB_ZONE_T:
     case PCB_TRACE_T:
-        draw( (const TRACK*) aItem, aLayer );
+        draw( (const TRACK*) item, aLayer );
         break;
 
     case PCB_VIA_T:
-        draw( (const VIA*) aItem, aLayer );
+        draw( (const VIA*) item, aLayer );
         break;
 
     case PCB_PAD_T:
-        draw( (const D_PAD*) aItem, aLayer );
+        draw( (const D_PAD*) item, aLayer );
         break;
 
     case PCB_LINE_T:
     case PCB_MODULE_EDGE_T:
-        draw( (DRAWSEGMENT*) aItem );
+        draw( (DRAWSEGMENT*) item );
         break;
 
     case PCB_TEXT_T:
-        draw( (TEXTE_PCB*) aItem, aLayer );
+        draw( (TEXTE_PCB*) item, aLayer );
         break;
 
     case PCB_MODULE_TEXT_T:
-        draw( (TEXTE_MODULE*) aItem, aLayer );
+        draw( (TEXTE_MODULE*) item, aLayer );
         break;
 
     case PCB_ZONE_AREA_T:
-        draw( (ZONE_CONTAINER*) aItem );
+        draw( (ZONE_CONTAINER*) item );
         break;
 
     case PCB_DIMENSION_T:
-        draw( (DIMENSION*) aItem, aLayer );
+        draw( (DIMENSION*) item, aLayer );
         break;
 
     case PCB_TARGET_T:
-        draw( (PCB_TARGET*) aItem );
+        draw( (PCB_TARGET*) item );
         break;
 
     case PCB_MARKER_T:
-        draw( (MARKER_PCB*) aItem );
+        draw( (MARKER_PCB*) item );
         break;
 
     default:

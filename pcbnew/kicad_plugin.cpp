@@ -1671,7 +1671,7 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPER
     m_parser->SetLineReader( &reader );
     m_parser->SetBoard( aAppendToMe );
 
-    BOARD* board = dynamic_cast<BOARD*>( m_parser->Parse() );
+    BOARD* board = dyn_cast<BOARD*>( m_parser->Parse() );
     wxASSERT( board );
 
     // Give the filename to the board if it's new

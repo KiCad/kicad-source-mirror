@@ -249,7 +249,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 
             f.ReadAll( &fcontents );
 
-            module = dynamic_cast<MODULE*>( pcb_io.Parse( fcontents ) );
+            module = dyn_cast<MODULE*>( pcb_io.Parse( fcontents ) );
 
             if( !module )
             {

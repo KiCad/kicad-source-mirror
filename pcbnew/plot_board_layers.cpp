@@ -377,7 +377,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // plot them on solder mask
     for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
     {
-        const VIA* Via = dynamic_cast<const VIA*>( track );
+        const VIA* Via = dyn_cast<const VIA*>( track );
 
         if( !Via )
             continue;
@@ -562,7 +562,7 @@ void PlotLayerOutlines( BOARD *aBoard, PLOTTER* aPlotter,
         // Plot vias holes
         for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
         {
-            const VIA* via = dynamic_cast<const VIA*>( track );
+            const VIA* via = dyn_cast<const VIA*>( track );
 
             if( via && via->IsOnLayer( layer ) )    // via holes can be not through holes
             {
@@ -663,7 +663,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
         int via_margin = via_clearance + inflate;
         for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
         {
-            const VIA* via = dynamic_cast<const VIA*>( track );
+            const VIA* via = dyn_cast<const VIA*>( track );
 
             if( !via )
                 continue;

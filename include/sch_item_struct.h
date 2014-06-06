@@ -34,6 +34,8 @@
 #include <class_base_screen.h>
 #include <general.h>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+ 
 class SCH_ITEM;
 class SCH_SHEET_PATH;
 class LINE_READER;

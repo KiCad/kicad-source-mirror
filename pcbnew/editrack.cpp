@@ -62,7 +62,7 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Panel->GetParent();
     BOARD* pcb = frame->GetBoard();
-    TRACK* track = dynamic_cast<TRACK*>( frame->GetCurItem() );
+	TRACK* track = dyn_cast<TRACK*>( frame->GetCurItem() );
 
     if( track )
     {

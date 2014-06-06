@@ -284,7 +284,7 @@ const ZONE_CONTAINER* TRACKS_CLEANER::zoneForTrackEndpoint( const TRACK *aTrack,
 {
     // Vias are special cased, since they get a layer range, not a single one
     LAYER_NUM top_layer, bottom_layer;
-    const VIA *via = dynamic_cast<const VIA*>( aTrack );
+	const VIA* via = dyn_cast<const VIA*>( aTrack );
 
     if( via )
         via->LayerPair( &top_layer, &bottom_layer );
@@ -318,7 +318,8 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK *aTrack, ENDPOINT_T aEndPo
         /* If a via is connected to this end, test if this via has a second item connected.
          * If not, remove the current segment (the via would then become
          * unconnected and remove on the following pass) */
-        VIA* via = dynamic_cast<VIA*>( other );
+		VIA* via = dyn_cast<VIA*>( other );
+
         if( via )
         {
             // search for another segment following the via

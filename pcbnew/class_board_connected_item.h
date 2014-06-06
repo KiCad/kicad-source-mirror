@@ -58,6 +58,21 @@ public:
 
     BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem );
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        switch( aItem->Type() )
+        {
+        case PCB_PAD_T: 
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
+        case PCB_ZONE_AREA_T:
+            return true;
+
+        default:
+            return false;
+        }
+    }
+
     ///> @copydoc BOARD_ITEM::IsConnected()
     bool IsConnected() const
     {

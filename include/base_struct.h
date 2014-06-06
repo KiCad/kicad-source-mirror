@@ -32,12 +32,12 @@
 #ifndef BASE_STRUCT_H_
 #define BASE_STRUCT_H_
 
+#include <core/typeinfo.h>
+
 #include <colors.h>
 #include <bitmaps.h>
 #include <richio.h>
 #include <view/view_item.h>
-
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #if defined(DEBUG)
 #include <iostream>         // needed for Show()
@@ -369,8 +369,17 @@ public:
     EDA_ITEM( const EDA_ITEM& base );
     virtual ~EDA_ITEM() { };
 
-    /// @copydoc VIEW_ITEM::Type()
-    KICAD_T Type()  const { return m_StructType; }
+    /**
+     * Function Type()
+     *
+     * returns the type of object.  This attribute should never be changed
+     * after a constructor sets it, so there is no public "setter" method.
+     * @return KICAD_T - the type of object.
+     */
+    inline KICAD_T Type() const
+    {
+        return m_StructType;
+    }
 
     void SetTimeStamp( time_t aNewTimeStamp ) { m_TimeStamp = aNewTimeStamp; }
     time_t GetTimeStamp() const { return m_TimeStamp; }
