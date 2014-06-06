@@ -54,6 +54,11 @@ public:
     /// skip the linked list stuff, and parent
     const EDGE_MODULE& operator = ( const EDGE_MODULE& rhs );
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return PCB_MODULE_EDGE_T == aItem->Type();
+    }
+
     void Copy( EDGE_MODULE* source );           // copy structure
 
     void SetStart0( const wxPoint& aPoint )     { m_Start0 = aPoint; }

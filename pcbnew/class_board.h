@@ -220,6 +220,10 @@ private:
     void chainMarkedSegments( wxPoint aPosition, LAYER_MSK aLayerMask, TRACK_PTRS* aList );
 
 public:
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return PCB_T == aItem->Type();
+    }
 
     void SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
 

@@ -151,7 +151,8 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     for( BOARD_ITEM *item = aModule->GraphicalItems().GetFirst();
          item != NULL; item = item->Next() )
     {
-        textModule = dynamic_cast<TEXTE_MODULE*>( item );
+        textModule = dyn_cast<TEXTE_MODULE*>( item );
+
         if( !textModule )
             continue;
 
@@ -350,7 +351,7 @@ void BRDITEMS_PLOTTER::Plot_Edges_Modules()
     {
         for( BOARD_ITEM* item = module->GraphicalItems().GetFirst(); item; item = item->Next() )
         {
-            EDGE_MODULE *edge = dynamic_cast<EDGE_MODULE*>( item );
+            EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( item );
 
             if( !edge || (( GetLayerMask( edge->GetLayer() ) & m_layerMask ) == 0) )
                 continue;
@@ -682,7 +683,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
 
     for( TRACK *pts = m_board->m_Track; pts != NULL; pts = pts->Next() )
     {
-        const VIA *via = dynamic_cast<const VIA*>( pts );
+        const VIA* via = dyn_cast<const VIA*>( pts );
 
         if( via )
             plotOneDrillMark( PAD_DRILL_CIRCLE, via->GetStart(),

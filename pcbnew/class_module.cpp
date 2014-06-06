@@ -424,7 +424,8 @@ EDA_RECT MODULE::GetFootprintRect() const
 
     for( const BOARD_ITEM* item = m_Drawings.GetFirst(); item; item = item->Next() )
     {
-        const EDGE_MODULE *edge = dynamic_cast<const EDGE_MODULE*>( item );
+		const EDGE_MODULE* edge = dyn_cast<const EDGE_MODULE*>( item );
+
         if( edge )
             area.Merge( edge->GetBoundingBox() );
     }
