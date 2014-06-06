@@ -11,7 +11,6 @@
 class DIALOG_FOOTPRINT_WIZARD_LIST: public DIALOG_FOOTPRINT_WIZARD_LIST_BASE
 {
 private:
-    wxDialog * m_Parent;
     FOOTPRINT_WIZARD *m_FootprintWizard;
 
 public:
