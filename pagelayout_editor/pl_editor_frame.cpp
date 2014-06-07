@@ -171,6 +171,16 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer( 10 ) );
 
     m_auimgr.Update();
+
+    // Initialize the current page layout
+    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+#if 0       //start with empty layout
+    pglayout.AllowVoidList( true );
+    pglayout.ClearList();
+#else       // start with the default Kicad layout
+    pglayout.SetPageLayout();
+#endif
+    OnNewPageLayout();
 }
 
 
@@ -744,5 +754,6 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
     GetScreen()->ClrModify();
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
     RebuildDesignTree();
+    Zoom_Automatique( true );
     m_canvas->Refresh();
 }

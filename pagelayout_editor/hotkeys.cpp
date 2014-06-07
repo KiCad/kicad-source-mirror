@@ -76,7 +76,7 @@ static EDA_HOTKEY    HkMoveStartPoint( wxT( "Move Start Point" ), HK_MOVE_START_
                                        ID_POPUP_ITEM_MOVE_START_POINT );
 static EDA_HOTKEY    HkMoveEndPoint( wxT( "Move End Point" ), HK_MOVE_END_POINT, 'E',
                                      ID_POPUP_ITEM_MOVE_END_POINT );
-static EDA_HOTKEY    HkDeleteItem( wxT( "Move Item" ), HK_DELETE_ITEM, WXK_DELETE,
+static EDA_HOTKEY    HkDeleteItem( wxT( "Delete Item" ), HK_DELETE_ITEM, WXK_DELETE,
                                    ID_POPUP_ITEM_DELETE );
 
 // Undo Redo

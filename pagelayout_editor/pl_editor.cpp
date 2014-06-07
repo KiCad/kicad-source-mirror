@@ -65,13 +65,6 @@ static struct IFACE : public KIFACE_I
         case FRAME_PL_EDITOR:
             {
                 PL_EDITOR_FRAME* frame = new PL_EDITOR_FRAME( aKiway, aParent );
-
-                /* Is this really needed since at this point there is no open file?
-                frame->Zoom_Automatique( true );        // Zoom fit in frame
-
-                if so, why is the constructor not doing it?
-                */
-
                 return frame;
             }
             break;
