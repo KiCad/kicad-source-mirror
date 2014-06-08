@@ -2382,7 +2382,7 @@ void IDF3_BOARD::readBoardFile( const std::string& aFileName, bool aNoSubstitute
             }
         }
     }
-    catch( std::exception& e )
+    catch( const std::exception& e )
     {
         brd.exceptions ( std::ios_base::goodbit );
 
@@ -2689,7 +2689,7 @@ void IDF3_BOARD::readLibFile( const std::string& aFileName )
 
         while( lib.good() ) readLibSection( lib, state, this );
     }
-    catch( std::exception& e )
+    catch( const std::exception& e )
     {
         lib.exceptions ( std::ios_base::goodbit );
 
@@ -2773,7 +2773,7 @@ bool IDF3_BOARD::ReadFile( const wxString& aFullFileName, bool aNoSubstituteOutl
         // read the board file
         readBoardFile( bfname, aNoSubstituteOutlines );
     }
-    catch( std::exception& e )
+    catch( const std::exception& e )
     {
         Clear();
         errormsg = e.what();
@@ -2821,7 +2821,7 @@ bool IDF3_BOARD::writeLibFile( const std::string& aFileName )
         }
 
     }
-    catch( std::exception& e )
+    catch( const std::exception& e )
     {
         lib.exceptions( std::ios_base::goodbit );
 
@@ -3065,7 +3065,7 @@ void IDF3_BOARD::writeBoardFile( const std::string& aFileName )
         }
 
     }
-    catch( std::exception& e )
+    catch( const std::exception& e )
     {
         brd.exceptions( std::ios_base::goodbit );
 
@@ -3137,7 +3137,7 @@ bool IDF3_BOARD::WriteFile( const wxString& aFullFileName, bool aUnitMM, bool aF
         writeBoardFile( bfname );
 
     }
-    catch( std::exception& e )
+    catch( const std::exception& e )
     {
         errormsg = e.what();
 
@@ -3901,7 +3901,7 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( wxString aFullFileName )
             }
         }   // while( true )
     }
-    catch( std::exception& e )
+    catch( const std::exception& e )
     {
         delete cp;
 

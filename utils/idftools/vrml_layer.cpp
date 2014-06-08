@@ -230,8 +230,7 @@ void VRML_LAYER::Clear( void )
         contours.pop_back();
     }
 
-    while( !areas.empty() )
-        areas.pop_back();
+    areas.clear();
 
     for( i = vertices.size(); i > 0; --i )
     {
@@ -254,8 +253,7 @@ void VRML_LAYER::clearTmp( void )
     ord = 0;
     glcmd = 0;
 
-    while( !triplets.empty() )
-        triplets.pop_back();
+    triplets.clear();
 
     for( i = outline.size(); i > 0; --i )
     {
@@ -263,8 +261,7 @@ void VRML_LAYER::clearTmp( void )
         outline.pop_back();
     }
 
-    for( i = ordmap.size(); i > 0; --i )
-        ordmap.pop_back();
+    ordmap.clear();
 
     for( i = extra_verts.size(); i > 0; --i )
     {
@@ -274,8 +271,7 @@ void VRML_LAYER::clearTmp( void )
 
     // note: unlike outline and extra_verts,
     // vlist is not responsible for memory management
-    for( i = vlist.size(); i > 0; --i )
-        vlist.pop_back();
+    vlist.clear();
 
     // go through the vertex list and reset ephemeral parameters
     for( i = 0; i < vertices.size(); ++i )
@@ -743,6 +739,7 @@ bool VRML_LAYER::Tesselate( VRML_LAYER* holes )
     // open the polygon
     gluTessBeginPolygon( tess, this );
 
+    // add solid outlines
     pushVertices( false );
 
     // close the polygon
@@ -751,8 +748,10 @@ bool VRML_LAYER::Tesselate( VRML_LAYER* holes )
     if( Fault )
         return false;
 
-    // push the (solid) outline to the tesselator
-    if( !pushOutline( holes ) )
+    // at this point we have a solid outline; add it to the tesselator
+    gluTessBeginPolygon( tess, this );
+
+    if( !pushOutline( NULL ) )
         return false;
 
     // add the holes contained by this object
@@ -772,14 +771,14 @@ bool VRML_LAYER::Tesselate( VRML_LAYER* holes )
 
     // erase the previous outline data and vertex order
     // but preserve the extra vertices
-    for( int i = outline.size(); i > 0; --i )
+    while( !outline.empty() )
     {
         delete outline.back();
         outline.pop_back();
     }
 
-    for( unsigned int i = ordmap.size(); i > 0; --i )
-        ordmap.pop_back();
+    ordmap.clear();
+    ord = 0;
 
     // go through the vertex lists and reset ephemeral parameters
     for( unsigned int i = 0; i < vertices.size(); ++i )
@@ -792,13 +791,15 @@ bool VRML_LAYER::Tesselate( VRML_LAYER* holes )
         extra_verts[i]->o = -1;
     }
 
-    ord = 0;
-
-    // close the polygon; we now have all the data necessary for the tesselation
+    // close the polygon; this creates the outline points
+    // and the point ordering list 'ordmap'
     gluTessEndPolygon( tess );
 
-    // request a tesselated surface
+    // repeat the last operation but request a tesselated surface
+    // rather than an outline; this creates the triangles list.
     gluTessProperty( tess, GLU_TESS_BOUNDARY_ONLY, GL_FALSE );
+
+    gluTessBeginPolygon( tess, this );
 
     if( !pushOutline( holes ) )
         return false;
@@ -820,8 +821,6 @@ bool VRML_LAYER::pushOutline( VRML_LAYER* holes )
         error = "pushOutline() failed: no vertices to push";
         return false;
     }
-
-    gluTessBeginPolygon( tess, this );
 
     std::list<std::list<int>*>::const_iterator obeg = outline.begin();
     std::list<std::list<int>*>::const_iterator oend = outline.end();
@@ -851,6 +850,7 @@ bool VRML_LAYER::pushOutline( VRML_LAYER* holes )
 
             if( pi < 0 || (unsigned int) pi > ordmap.size() )
             {
+                gluTessEndContour( tess );
                 error = "pushOutline():BUG: *outline.begin() is not a valid index to ordmap";
                 return false;
             }
@@ -862,6 +862,7 @@ bool VRML_LAYER::pushOutline( VRML_LAYER* holes )
 
             if( !vp )
             {
+                gluTessEndContour( tess );
                 error = "pushOutline():: BUG: ordmap[n] is not a valid index to vertices[]";
                 return false;
             }
@@ -1194,9 +1195,9 @@ bool VRML_LAYER::addTriplet( VERTEX_3D* p0, VERTEX_3D* p1, VERTEX_3D* p2 )
     double  dy0 = p1->y - p0->y;
     double  dy1 = p2->y - p0->y;
 
-    // this number is chosen because we shall only write 6 decimal places
-    // on the VRML output
-    double err = 0.000001;
+    // this number is chosen because we shall only write 9 decimal places
+    // at most on the VRML output
+    double err = 0.000000001;
 
     // test if the triangles are degenerate (parallel sides)
 
