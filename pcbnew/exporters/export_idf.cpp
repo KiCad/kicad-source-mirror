@@ -568,7 +568,7 @@ bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName, bool aUseThou )
 
         ok = false;
     }
-    catch( std::exception& e )
+    catch( const std::exception& e )
     {
         wxString msg;
         msg << _( "IDF Export Failed:\n" ) << FROM_UTF8( e.what() );

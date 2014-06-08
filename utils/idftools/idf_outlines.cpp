@@ -775,7 +775,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                 aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
                 << aOutline->front()->startPoint.x << " "
                 << aOutline->front()->startPoint.y << " "
-                << setprecision(5) << -aOutline->front()->angle << "\n";
+                << setprecision(2) << -aOutline->front()->angle << "\n";
             }
         }
         else
@@ -799,7 +799,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                 aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
                 << (aOutline->front()->startPoint.x / IDF_THOU_TO_MM) << " "
                 << (aOutline->front()->startPoint.y / IDF_THOU_TO_MM) << " "
-                << setprecision(5) << -aOutline->front()->angle << "\n";
+                << setprecision(2) << -aOutline->front()->angle << "\n";
             }
         }
 
@@ -819,7 +819,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                     aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
                     << (*bo)->startPoint.x << " "
                     << (*bo)->startPoint.y << " "
-                    << setprecision(5) << -(*bo)->angle << "\n";
+                    << setprecision(2) << -(*bo)->angle << "\n";
                 }
             }
             else
@@ -835,7 +835,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                     aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
                     << ((*bo)->startPoint.x / IDF_THOU_TO_MM) << " "
                     << ((*bo)->startPoint.y / IDF_THOU_TO_MM) << " "
-                    << setprecision(5) << -(*bo)->angle << "\n";
+                    << setprecision(2) << -(*bo)->angle << "\n";
                 }
             }
 
@@ -869,7 +869,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                 aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
                 << (*bo)->endPoint.x << " "
                 << (*bo)->endPoint.y << " "
-                << setprecision(5) << (*bo)->angle << "\n";
+                << setprecision(2) << (*bo)->angle << "\n";
             }
         }
         else
@@ -893,7 +893,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                 aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
                 << ((*bo)->endPoint.x / IDF_THOU_TO_MM) << " "
                 << ((*bo)->endPoint.y / IDF_THOU_TO_MM) << " "
-                << setprecision(5) << (*bo)->angle << "\n";
+                << setprecision(2) << (*bo)->angle << "\n";
             }
         }
 
@@ -915,7 +915,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                     aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
                     << (*bo)->endPoint.x << " "
                     << (*bo)->endPoint.y << " "
-                    << setprecision(5) << (*bo)->angle << "\n";
+                    << setprecision(2) << (*bo)->angle << "\n";
                 }
             }
             else
@@ -931,7 +931,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                     aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
                     << ((*bo)->endPoint.x / IDF_THOU_TO_MM) << " "
                     << ((*bo)->endPoint.y / IDF_THOU_TO_MM) << " "
-                    << setprecision(5) << (*bo)->angle << "\n";
+                    << setprecision(2) << (*bo)->angle << "\n";
                 }
             }
 
@@ -1281,7 +1281,7 @@ bool BOARD_OUTLINE::addOutline( IDF_OUTLINE* aOutline )
         outlines.push_back( aOutline );
 
     }
-    catch( std::exception& e )
+    catch( const std::exception& e )
     {
         errormsg = e.what();
 
