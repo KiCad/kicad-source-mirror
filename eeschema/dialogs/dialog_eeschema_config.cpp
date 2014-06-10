@@ -321,8 +321,12 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 
     wxString libpath = m_DefaultLibraryPathslistBox->GetStringSelection();
 
-    if( libpath.IsEmpty() )
-        libpath = prj.RPath(PROJECT::SCH_LIB).LastVisitedPath( search );
+    if( !libpath )
+    {
+        libpath = prj.GetRString( PROJECT::SCH_LIB_PATH );
+        if( !libpath )
+            libpath = search.LastVisitedPath();
+    }
 
     wxFileDialog filesDialog( this, _( "Library files:" ), libpath,
                               wxEmptyString, SchematicLibraryFileWildcard,
@@ -340,7 +344,7 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         fn = filenames[jj];
 
         if( jj == 0 )
-            prj.RPath(PROJECT::SCH_LIB).SaveLastVisitedPath( fn.GetPath() );
+            prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
         /* If the library path is already in the library search paths
          * list, just add the library name to the list.  Otherwise, add
@@ -376,12 +380,14 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 }
 
 
-
 void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
 {
     PROJECT&        prj = Prj();
     SEARCH_STACK&   search = Prj().SchSearchS();
-    wxString        path = prj.RPath(PROJECT::SCH_LIB).LastVisitedPath( search );
+    wxString        path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+
+    if( !path )
+        path = search.LastVisitedPath();
 
     bool select = EDA_DirectorySelector( _( "Default Path for Libraries" ),
                                          path, wxDD_DEFAULT_STYLE,
@@ -439,7 +445,7 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
         DisplayError( this, _("Path already in use") );
     }
 
-    prj.RPath(PROJECT::SCH_LIB).SaveLastVisitedPath( path );
+    prj.SetRString( PROJECT::SCH_LIB_PATH, path );
 }
 
 

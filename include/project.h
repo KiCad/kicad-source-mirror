@@ -137,19 +137,32 @@ public:
     VTBL_ENTRY  wxString GetModuleLibraryNickname()     { return m_module_library_nickname; }
     VTBL_ENTRY  void SetModuleLibraryNickname( const wxString& aNickName ) {  m_module_library_nickname = aNickName; }
 
-    /// Retain a number of paths for user convienience, enumerated here:
-    enum RETPATH_T
+    /// Retain a number of project specific wxStrings, enumerated here:
+    enum RSTRING_T
     {
-        DOC,
-        SCH_LIB,
-        PCB_LIB,
-        VIEWER_3D,
+        DOC_PATH,
+        SCH_LIB_PATH,
+        PCB_LIB_NICKNAME,
+        VIEWER_3D_PATH,
 
-        RPATH_COUNT
+        RSTRING_COUNT
     };
 
-    /// Give acess to a RETAINED_PATH using enum RETPATH_T
-    VTBL_ENTRY  RETAINED_PATH& RPath( RETPATH_T aPath );
+    /**
+     * Function GetRString
+     * returns a "retained string", which is any session and project specific string
+     * identified in enum RSTRING_T.  Retained strings are not written to disk, and
+     * are therefore good only for the current session.
+     */
+    VTBL_ENTRY  const wxString& GetRString( RSTRING_T aStringId );
+
+    /**
+     * Function SetRString
+     * stores a "retained string", which is any session and project specific string
+     * identified in enum RSTRING_T.  Retained strings are not written to disk, and
+     * are therefore good only for the current session.
+     */
+    VTBL_ENTRY  void SetRString( RSTRING_T aStringId, const wxString& aString );
 
     /**
      * Enum ELEM_T
@@ -241,8 +254,8 @@ private:
 
     wxString        m_module_library_nickname;  ///< @todo move this into m_rpaths[]
 
-    /// @see this::RPath() and enum RETPATH_T.
-    RETAINED_PATH   m_rpaths[RPATH_COUNT];
+    /// @see this::SetRString(), GetRString(), and enum RSTRING_T.
+    wxString        m_rstrings[RSTRING_COUNT];
 
     /// @see this::Elem() and enum ELEM_T.
     _ELEM*          m_elems[ELEM_COUNT];

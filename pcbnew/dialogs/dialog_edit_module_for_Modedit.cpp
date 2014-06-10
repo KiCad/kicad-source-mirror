@@ -303,7 +303,11 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
     }
 
     if( !fullpath )
-        fullpath = prj.RPath(PROJECT::VIEWER_3D).LastVisitedPath( search, LIB3D_PATH );
+    {
+        fullpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
+        if( !fullpath )
+            fullpath = search.LastVisitedPath( LIB3D_PATH );
+    }
 
 #ifdef __WINDOWS__
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
@@ -330,7 +334,7 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
 
     wxFileName fn = fullfilename;
 
-    prj.RPath(PROJECT::VIEWER_3D).SaveLastVisitedPath( fn.GetPath() );
+    prj.SetRString( PROJECT::VIEWER_3D_PATH, fn.GetPath() );
 
     /* If the file path is already in the library search paths
      * list, just add the library name to the list.  Otherwise, add

@@ -69,5 +69,9 @@ Dick's Final TODO List:
     https://blueprints.launchpad.net/kicad/+spec/modular-kicad
 
     Issues as a result of minimal testing:
-        If eeschema launched from C++ project manager and does not find all libraries,
+    *   If eeschema launched from C++ project manager and does not find all libraries,
         then the dialog showing the names of missing libraries is shown twice.
+
+    *   Clear all/some? retained strings on project change.
+    *   Clear the FP_LIB_TABLE when the last KIWAY_PLAYER using it is closed.
+

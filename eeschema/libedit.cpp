@@ -308,7 +308,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
-    if( m_library == NULL )
+    if( !m_library )
     {
         DisplayError( this, _( "No library specified." ) );
         return false;
@@ -326,7 +326,9 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
         SEARCH_STACK&   search = prj.SchSearchS();
 
         // Get a new name for the library
-        wxString default_path = prj.RPath(PROJECT::SCH_LIB).LastVisitedPath( search );
+        wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+        if( !default_path )
+            default_path = search.LastVisitedPath();
 
         wxFileDialog dlg( this, _( "Component Library Name:" ), default_path,
                           wxEmptyString, SchematicLibraryFileExtension,
@@ -342,7 +344,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
         if( fn.GetExt().IsEmpty() )
             fn.SetExt( SchematicLibraryFileExtension );
 
-        prj.RPath(PROJECT::SCH_LIB).SaveLastVisitedPath( fn.GetPath() );
+        prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
     }
     else
     {

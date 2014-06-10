@@ -60,7 +60,9 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
     m_canvas->SetIgnoreMouseEvents( true );
 
-    wxString default_path = prj.RPath(PROJECT::SCH_LIB).LastVisitedPath( search );
+    wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+    if( !default_path )
+        default_path = search.LastVisitedPath();
 
     wxFileDialog dlg( this, _( "Import Symbol Drawings" ), default_path,
                       wxEmptyString, SchematicSymbolFileWildcard,
@@ -75,7 +77,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
     wxFileName fn = dlg.GetPath();
 
-    prj.RPath(PROJECT::SCH_LIB).SaveLastVisitedPath( fn.GetPath() );
+    prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
     Lib = new CMP_LIBRARY( LIBRARY_TYPE_SYMBOL, fn );
 
@@ -143,7 +145,9 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     if( m_component->GetDrawItemList().empty() )
         return;
 
-    wxString default_path = prj.RPath(PROJECT::SCH_LIB).LastVisitedPath( search );
+    wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+    if( !default_path )
+        default_path = search.LastVisitedPath();
 
     wxFileDialog dlg( this, _( "Export Symbol Drawings" ), default_path,
                       m_component->GetName(), SchematicSymbolFileWildcard,
@@ -159,7 +163,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     if( fn.GetExt().IsEmpty() )
         fn.SetExt( SchematicSymbolFileExtension );
 
-    prj.RPath(PROJECT::SCH_LIB).SaveLastVisitedPath( fn.GetPath() );
+    prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
     msg.Printf( _( "Saving symbol in '%s'" ), GetChars( fn.GetPath() ) );
     SetStatusText( msg );
