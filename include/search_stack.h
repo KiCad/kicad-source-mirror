@@ -57,38 +57,19 @@ public:
      * ";" on windows, or ":" | ";" on unix.
      */
     void RemovePaths( const wxString& aPaths );
-};
-
-
-/**
- * Class RETAINED_PATH
- * is a glamorous way to save a path you might need in the future.
- * It is simply a container for the two functions, if you can figure them out.
- * This whole concept is awkward, and the two function might have better been
- * non-member functions, simply globals.
- */
-class RETAINED_PATH
-{
-public:
 
     /**
      * Function LastVisitedPath
-     * returns the last visited directory, or aSubPathToSearch is empty, the first
-     * path in lib path list ( but not the CWD ).
+     * is a quirky function inherited from old code that seems to serve particular
+     * needs in the UI.  It returns what is called the last visited directory, or
+     * if aSubPathToSearch is empty, the first path in this SEARCH_STACK
+     * ( but not the CWD ).
+     *
      * @todo add more here if you can figure it out.
      *
-     * @param aSearchStack gives the set of directories to consider.
-     * @param aSubPathToSearch  is the preferred sub path to search in path list
+     * @param aSubPathToSearch is the preferred sub path to search in path list
      */
-    wxString LastVisitedPath( const SEARCH_STACK& aSStack,
-                const wxString& aSubPathToSearch = wxEmptyString );
-
-    void SaveLastVisitedPath( const wxString& aPath );
-
-    void Clear();
-
-private:
-    wxString            m_retained_path;
+    const wxString LastVisitedPath( const wxString& aSubPathToSearch = wxEmptyString );
 };
 
 #endif  // SEARCH_STACK_H_

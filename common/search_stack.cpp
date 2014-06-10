@@ -104,42 +104,33 @@ void SEARCH_STACK::AddPaths( const wxString& aPaths, int aIndex )
 }
 
 
-void RETAINED_PATH::Clear()
+const wxString SEARCH_STACK::LastVisitedPath( const wxString& aSubPathToSearch )
 {
-    m_retained_path.Clear();
-}
-
-
-wxString RETAINED_PATH::LastVisitedPath( const SEARCH_STACK& aSStack, const wxString& aSubPathToSearch )
-{
-    if( !!m_retained_path )
-        return m_retained_path;
-
     wxString path;
 
     // Initialize default path to the main default lib path
-    // this is the second path in list (the first is the project path)
-    unsigned pcount = aSStack.GetCount();
+    // this is the second path in list (the first is the project path).
+    unsigned pcount = GetCount();
 
     if( pcount )
     {
         unsigned ipath = 0;
 
-        if( aSStack[0] == wxGetCwd() )
+        if( (*this)[0] == wxGetCwd() )
             ipath = 1;
 
         // First choice of path:
         if( ipath < pcount )
-            path = aSStack[ipath];
+            path = (*this)[ipath];
 
-        // Search a sub path matching aSubPathToSearch
-        if( !aSubPathToSearch.IsEmpty() )
+        // Search a sub path matching this SEARCH_PATH
+        if( !IsEmpty() )
         {
             for( ; ipath < pcount; ipath++ )
             {
-                if( aSStack[ipath].Contains( aSubPathToSearch ) )
+                if( (*this)[ipath].Contains( aSubPathToSearch ) )
                 {
-                    path = aSStack[ipath];
+                    path = (*this)[ipath];
                     break;
                 }
             }
@@ -150,12 +141,6 @@ wxString RETAINED_PATH::LastVisitedPath( const SEARCH_STACK& aSStack, const wxSt
         path = wxGetCwd();
 
     return path;
-}
-
-
-void RETAINED_PATH::SaveLastVisitedPath( const wxString& aPath )
-{
-    m_retained_path = aPath;
 }
 
 

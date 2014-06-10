@@ -439,8 +439,11 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
     PROJECT&        prj = Prj();
     SEARCH_STACK&   search = prj.SchSearchS();
 
-    wxString    docpath = prj.RPath(PROJECT::DOC).LastVisitedPath( search, wxT( "doc" ) );
     wxString    mask = wxT( "*" );
+    wxString    docpath = prj.GetRString( PROJECT::DOC_PATH );
+
+    if( !docpath )
+        docpath = search.LastVisitedPath( wxT( "doc" ) );
 
     wxString    fullFileName = EDA_FileSelector( _( "Doc Files" ),
                                      docpath,
@@ -463,7 +466,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
      */
     wxFileName fn = fullFileName;
 
-    prj.RPath(PROJECT::DOC).SaveLastVisitedPath( fn.GetPath() );
+    prj.SetRString( PROJECT::DOC_PATH, fn.GetPath() );
 
     wxString filename = search.FilenameWithRelativePathInSearchList( fullFileName );
 

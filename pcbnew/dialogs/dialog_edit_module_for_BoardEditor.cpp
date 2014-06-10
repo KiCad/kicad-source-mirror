@@ -440,7 +440,11 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
     }
 
     if( !fullpath )
-        fullpath = prj.RPath(PROJECT::VIEWER_3D).LastVisitedPath( search, LIB3D_PATH );
+    {
+        fullpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
+        if( !fullpath )
+            fullpath = search.LastVisitedPath( LIB3D_PATH );
+    }
 
 #ifdef __WINDOWS__
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
@@ -469,7 +473,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
 
     wxFileName fn = fullfilename;
 
-    prj.RPath(PROJECT::VIEWER_3D).SaveLastVisitedPath( fn.GetPath() );
+    prj.SetRString( PROJECT::VIEWER_3D_PATH, fn.GetPath() );
 
     /* If the file path is already in the library search paths
      * list, just add the library name to the list.  Otherwise, add
@@ -482,7 +486,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
 
     wxFileName aux = shortfilename;
     if( aux.IsAbsolute() )
-    {   
+    {
         // Absolute path, ask if the user wants a relative one
         int diag = wxMessageBox(
             _( "Use a relative path?" ),
@@ -490,7 +494,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
             wxYES_NO | wxICON_QUESTION, this );
 
         if( diag == wxYES )
-        {   
+        {
             // Make it relative
             aux.MakeRelativeTo( wxT(".") );
             shortfilename = aux.GetPathWithSep() + aux.GetFullName();

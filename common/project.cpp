@@ -133,17 +133,32 @@ const wxString PROJECT::FootprintLibTblName() const
 }
 
 
-RETAINED_PATH& PROJECT::RPath( RETPATH_T aIndex )
+void PROJECT::SetRString( RSTRING_T aIndex, const wxString& aString )
 {
     unsigned ndx = unsigned( aIndex );
 
-    if( ndx < DIM( m_rpaths ) )
+    if( ndx < DIM( m_rstrings ) )
     {
-        return m_rpaths[ndx];
+        m_rstrings[ndx] = aString;
     }
     else
     {
-        static RETAINED_PATH no_cookie_for_you;
+        wxASSERT( 0 );      // bad index
+    }
+}
+
+
+const wxString& PROJECT::GetRString( RSTRING_T aIndex )
+{
+    unsigned ndx = unsigned( aIndex );
+
+    if( ndx < DIM( m_rstrings ) )
+    {
+        return m_rstrings[ndx];
+    }
+    else
+    {
+        static wxString no_cookie_for_you;
 
         wxASSERT( 0 );      // bad index
 
