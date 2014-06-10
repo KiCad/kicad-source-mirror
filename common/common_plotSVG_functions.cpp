@@ -346,7 +346,7 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
     DPOINT  centre_dev  = userToDeviceCoordinates( centre );
     double  radius_dev  = userToDeviceSize( radius );
 
-    if( m_yaxisReversed )   // Should be always the case
+    if( !m_yaxisReversed )   // Should be never the case
     {
         double tmp  = StAngle;
         StAngle     = -EndAngle;
