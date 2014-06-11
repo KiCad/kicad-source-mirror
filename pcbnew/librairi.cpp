@@ -467,7 +467,7 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 
 bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 {
-    wxString    nickname = getLibNickName();
+    wxString    nickname = GetCurrentLib();
 
     if( !Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname ) )
     {

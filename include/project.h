@@ -134,9 +134,6 @@ public:
     /// Accessor for Eeschema search stack.
     VTBL_ENTRY SEARCH_STACK&  SchSearchS()      { return m_sch_search; }
 
-    VTBL_ENTRY  wxString GetModuleLibraryNickname()     { return m_module_library_nickname; }
-    VTBL_ENTRY  void SetModuleLibraryNickname( const wxString& aNickName ) {  m_module_library_nickname = aNickName; }
-
     /// Retain a number of project specific wxStrings, enumerated here:
     enum RSTRING_T
     {
@@ -144,6 +141,7 @@ public:
         SCH_LIB_PATH,
         PCB_LIB_NICKNAME,
         VIEWER_3D_PATH,
+        PCB_FOOTPRINT,
 
         RSTRING_COUNT
     };
@@ -251,8 +249,6 @@ private:
 
     wxFileName      m_project_name;         ///< <fullpath>/<basename>.pro
     wxString        m_pro_date_and_time;
-
-    wxString        m_module_library_nickname;  ///< @todo move this into m_rpaths[]
 
     /// @see this::SetRString(), GetRString(), and enum RSTRING_T.
     wxString        m_rstrings[RSTRING_COUNT];
