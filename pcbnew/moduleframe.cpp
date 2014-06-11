@@ -269,10 +269,11 @@ void FOOTPRINT_EDIT_FRAME::retainLastFootprint()
 
     if( module )
     {
-        pcb_io.Format( GetBoard()->m_Modules );
+        pcb_io.Format( module );
 
         wxString pretty = FROM_UTF8( pcb_io.GetStringOutput( true ).c_str() );
 
+        // save the footprint in the RSTRING facility.
         Prj().SetRString( PROJECT::PCB_FOOTPRINT, pretty );
     }
 }
@@ -303,9 +304,20 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
         }
 
         if( module )
-            GetBoard()->Add( module );      // assumes BOARD is empty.
+        {
+            // assumes BOARD is empty.
+            wxASSERT( GetBoard()->m_Modules == NULL );
+
+            // no idea, its monkey see monkey do.  I would encapsulate this into
+            // a member function if its actually necessary.
+            module->SetParent( GetBoard() );
+            module->SetLink( 0 );
+
+            GetBoard()->Add( module );
+        }
     }
 }
+
 
 const wxChar* FOOTPRINT_EDIT_FRAME::GetFootprintEditorFrameName()
 {
