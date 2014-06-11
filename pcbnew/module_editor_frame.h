@@ -245,8 +245,8 @@ public:
                                      UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
-    wxString GetCurrentLib() const { return getLibNickName(); };
-
+    /// Return the current library nickname.
+    const wxString GetCurrentLib() const;
 
     // Footprint edition
     void RemoveStruct( EDA_ITEM* Item );
@@ -380,7 +380,7 @@ public:
      * Install a dialog to edit a graphic item of a footprint body.
      * @param aItem = a pointer to the graphic item to edit
      */
-    void InstallFootprintBodyItemPropertiesDlg(EDGE_MODULE * aItem);
+    void InstallFootprintBodyItemPropertiesDlg( EDGE_MODULE* aItem );
 
     /**
      * Function DlgGlobalChange_PadSettings
@@ -397,7 +397,7 @@ public:
      */
     bool DeleteModuleFromCurrentLibrary();
 
-    virtual EDA_COLOR_T GetGridColor( void ) const;
+    virtual EDA_COLOR_T GetGridColor() const;
 
     DECLARE_EVENT_TABLE()
 
@@ -429,15 +429,11 @@ protected:
      */
     void updateTitle();
 
-    /// The library nickName is a short string, for now the same as the library path
-    /// but without path and without extension.  After library table support it becomes
-    /// a lookup key.
-    const wxString getLibNickName() const;
-    void setLibNickName( const wxString& aNickname );
-
-
     /// The libPath is not publicly visible, grab it from the FP_LIB_TABLE if we must.
-    wxString getLibPath();
+    const wxString getLibPath();
+
+    void restoreLastFootprint();
+    void retainLastFootprint();
 };
 
 #endif      // MODULE_EDITOR_FRAME_H_

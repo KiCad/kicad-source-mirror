@@ -30,6 +30,7 @@
  */
 
 #include <fctsys.h>
+#include <kiface_i.h>
 #include <help_common_strings.h>
 #include <dialog_helpers.h>
 #include <class_layer_box_selector.h>
@@ -218,10 +219,14 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
                                       wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiBitmap( new_pcb_xpm ),
-                            _( "New board" ) );
-    m_mainToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiBitmap( open_brd_file_xpm ),
-                            _( "Open existing board" ) );
+    if( Kiface().IsSingle() )
+    {
+        m_mainToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiBitmap( new_pcb_xpm ),
+                                _( "New board" ) );
+        m_mainToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiBitmap( open_brd_file_xpm ),
+                                _( "Open existing board" ) );
+    }
+
     m_mainToolBar->AddTool( ID_SAVE_BOARD, wxEmptyString, KiBitmap( save_xpm ),
                             _( "Save board" ) );
 
@@ -501,29 +506,29 @@ void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
     m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_SELF_CMD, wxEmptyString,
                                  KiBitmap( mw_add_line_xpm ),
                                  _( "Create line of specified length for microwave applications" ),
-				 wxITEM_CHECK );
+                                 wxITEM_CHECK );
 
     m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_GAP_CMD, wxEmptyString,
                                  KiBitmap( mw_add_gap_xpm ),
                                  _( "Create gap of specified length for microwave applications" ),
-				 wxITEM_CHECK );
+                                 wxITEM_CHECK );
 
     m_microWaveToolBar->AddSeparator();
 
     m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_CMD, wxEmptyString,
                                  KiBitmap( mw_add_stub_xpm ),
                                  _( "Create stub of specified length for microwave applications" ),
-				 wxITEM_CHECK );
+                                 wxITEM_CHECK );
 
     m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_ARC_CMD, wxEmptyString,
                                  KiBitmap( mw_add_stub_arc_xpm ),
                                  _( "Create stub (arc) of specified length for microwave applications" ),
-				 wxITEM_CHECK );
+                                 wxITEM_CHECK );
 
     m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD, wxEmptyString,
                                  KiBitmap( mw_add_shape_xpm ),
                                  _( "Create a polynomial shape for microwave applications" ),
-				 wxITEM_CHECK );
+                                 wxITEM_CHECK );
 
     m_microWaveToolBar->Realize();
 }

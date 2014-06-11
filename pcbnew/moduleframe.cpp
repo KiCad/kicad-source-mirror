@@ -33,6 +33,7 @@
 #include <pgm_base.h>
 #include <kiway.h>
 #include <project.h>
+#include <kicad_plugin.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
@@ -168,6 +169,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetBoard( new BOARD() );
 
+    // restore the last footprint from the project, if any
+    restoreLastFootprint();
+
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();
 
@@ -177,7 +181,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     LoadSettings( config() );
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
+    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
 
     // In modedit, set the default paper size to A4:
     // this should be OK for all footprint to plot/print
@@ -230,26 +234,16 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 {
+    // save the footprint in the PROJECT
+    retainLastFootprint();
 }
 
 
-const wxString FOOTPRINT_EDIT_FRAME::getLibNickName() const
-{
-    return Prj().GetModuleLibraryNickname();
-}
-
-
-void FOOTPRINT_EDIT_FRAME::setLibNickName( const wxString& aNickname )
-{
-    Prj().SetModuleLibraryNickname( aNickname );
-}
-
-
-wxString FOOTPRINT_EDIT_FRAME::getLibPath()
+const wxString FOOTPRINT_EDIT_FRAME::getLibPath()
 {
     try
     {
-        const wxString& nickname = getLibNickName();
+        const wxString& nickname = GetCurrentLib();
 
         const FP_LIB_TABLE::ROW* row = Prj().PcbFootprintLibs()->FindRow( nickname );
 
@@ -261,6 +255,57 @@ wxString FOOTPRINT_EDIT_FRAME::getLibPath()
     }
 }
 
+
+const wxString FOOTPRINT_EDIT_FRAME::GetCurrentLib() const
+{
+    return Prj().GetRString( PROJECT::PCB_LIB_NICKNAME );
+};
+
+
+void FOOTPRINT_EDIT_FRAME::retainLastFootprint()
+{
+    PCB_IO  pcb_io;
+    MODULE* module = GetBoard()->m_Modules;
+
+    if( module )
+    {
+        pcb_io.Format( GetBoard()->m_Modules );
+
+        wxString pretty = FROM_UTF8( pcb_io.GetStringOutput( true ).c_str() );
+
+        Prj().SetRString( PROJECT::PCB_FOOTPRINT, pretty );
+    }
+}
+
+
+void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
+{
+    wxString pretty = Prj().GetRString( PROJECT::PCB_FOOTPRINT );
+
+    if( !!pretty )
+    {
+        PCB_IO  pcb_io;
+        MODULE* module = NULL;
+
+        try
+        {
+            module = (MODULE*) pcb_io.Parse( pretty );
+        }
+        catch( const PARSE_ERROR& pe )
+        {
+            // unlikely to be a problem, since we produced the pretty string.
+            wxLogError( wxT( "PARSE_ERROR" ) );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            // unlikely to be a problem, since we produced the pretty string.
+            wxLogError( wxT( "IO_ERROR" ) );
+        }
+
+        if( module )
+            GetBoard()->Add( module );      // assumes BOARD is empty.
+    }
+}
 
 const wxChar* FOOTPRINT_EDIT_FRAME::GetFootprintEditorFrameName()
 {
@@ -334,9 +379,9 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         case wxID_YES:
             // code from FOOTPRINT_EDIT_FRAME::Process_Special_Functions,
             // at case ID_MODEDIT_SAVE_LIBMODULE
-            if( GetBoard()->m_Modules && getLibNickName().size() )
+            if( GetBoard()->m_Modules && GetCurrentLib().size() )
             {
-                if( Save_Module_In_Library( getLibNickName(), GetBoard()->m_Modules, true, true ) )
+                if( Save_Module_In_Library( GetCurrentLib(), GetBoard()->m_Modules, true, true ) )
                 {
                     // save was correct
                     GetScreen()->ClrModify();
@@ -587,7 +632,7 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
     wxString title   = _( "Module Editor " );
 
-    wxString nickname = getLibNickName();
+    wxString nickname = GetCurrentLib();
 
     if( !nickname )
     {

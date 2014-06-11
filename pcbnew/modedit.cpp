@@ -251,11 +251,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_SELECT_CURRENT_LIB:
         {
-            wxString library = SelectLibrary( getLibNickName() );
+            wxString library = SelectLibrary( GetCurrentLib() );
 
             if( library.size() )
             {
-                setLibNickName( library );
+                Prj().SetRString( PROJECT::PCB_LIB_NICKNAME, library );
                 updateTitle();
             }
         }
@@ -364,9 +364,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SAVE_LIBMODULE:
-        if( GetBoard()->m_Modules && getLibNickName().size() )
+        if( GetBoard()->m_Modules && GetCurrentLib().size() )
         {
-            Save_Module_In_Library( getLibNickName(), GetBoard()->m_Modules, true, true );
+            Save_Module_In_Library( GetCurrentLib(), GetBoard()->m_Modules, true, true );
             GetScreen()->ClrModify();
         }
         break;
@@ -506,7 +506,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-        LoadModuleFromLibrary( getLibNickName(), Prj().PcbFootprintLibs(), true );
+        LoadModuleFromLibrary( GetCurrentLib(), Prj().PcbFootprintLibs(), true );
         redraw = true;
 
         if( GetBoard()->m_Modules )
