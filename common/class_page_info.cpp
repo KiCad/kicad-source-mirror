@@ -38,21 +38,22 @@
 
 
 // Standard paper sizes nicknames.
-const wxString PAGE_INFO::A4( wxT( "A4" ) );
-const wxString PAGE_INFO::A3( wxT( "A3" ) );
-const wxString PAGE_INFO::A2( wxT( "A2" ) );
-const wxString PAGE_INFO::A1( wxT( "A1" ) );
-const wxString PAGE_INFO::A0( wxT( "A0" ) );
-const wxString PAGE_INFO::A( wxT( "A" ) );
-const wxString PAGE_INFO::B( wxT( "B" ) );
-const wxString PAGE_INFO::C( wxT( "C" ) );
-const wxString PAGE_INFO::D( wxT( "D" ) );
-const wxString PAGE_INFO::E( wxT( "E" ) );
-const wxString PAGE_INFO::GERBER( wxT( "GERBER" ) );
-const wxString PAGE_INFO::USLetter( wxT( "USLetter" ) );
-const wxString PAGE_INFO::USLegal( wxT( "USLegal" ) );
-const wxString PAGE_INFO::USLedger( wxT( "USLedger" ) );
-const wxString PAGE_INFO::Custom( wxT( "User" ) );
+const wxChar PAGE_INFO::A4[] = wxT( "A4" );
+const wxChar PAGE_INFO::A3[] = wxT( "A3" );
+const wxChar PAGE_INFO::A2[] = wxT( "A2" );
+const wxChar PAGE_INFO::A1[] = wxT( "A1" );
+const wxChar PAGE_INFO::A0[] = wxT( "A0" );
+const wxChar PAGE_INFO::A[]  = wxT( "A" );
+const wxChar PAGE_INFO::B[]  = wxT( "B" ) ;
+const wxChar PAGE_INFO::C[]  = wxT( "C" );
+const wxChar PAGE_INFO::D[]  = wxT( "D" );
+const wxChar PAGE_INFO::E[]  = wxT( "E" );
+
+const wxChar PAGE_INFO::GERBER[]   = wxT( "GERBER" );
+const wxChar PAGE_INFO::USLetter[] = wxT( "USLetter" );
+const wxChar PAGE_INFO::USLegal[]  = wxT( "USLegal" );
+const wxChar PAGE_INFO::USLedger[] = wxT( "USLedger" );
+const wxChar PAGE_INFO::Custom[]   = wxT( "User" );
 
 
 // Standard page sizes in mils, all constants

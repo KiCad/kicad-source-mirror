@@ -201,21 +201,22 @@ public:
     // paper size names which are part of the public API, pass to SetType() or
     // above constructor.
 
-    static const wxString A4;
-    static const wxString A3;
-    static const wxString A2;
-    static const wxString A1;
-    static const wxString A0;
-    static const wxString A;
-    static const wxString B;
-    static const wxString C;
-    static const wxString D;
-    static const wxString E;
-    static const wxString GERBER;
-    static const wxString USLetter;
-    static const wxString USLegal;
-    static const wxString USLedger;
-    static const wxString Custom;     ///< "User" defined page type
+    // these were once wxStrings, but it caused static construction sequence problems:
+    static const wxChar A4[];
+    static const wxChar A3[];
+    static const wxChar A2[];
+    static const wxChar A1[];
+    static const wxChar A0[];
+    static const wxChar A[];
+    static const wxChar B[];
+    static const wxChar C[];
+    static const wxChar D[];
+    static const wxChar E[];
+    static const wxChar GERBER[];
+    static const wxChar USLetter[];
+    static const wxChar USLegal[];
+    static const wxChar USLedger[];
+    static const wxChar Custom[];     ///< "User" defined page type
 
 
     /**
