@@ -52,10 +52,6 @@
 #include <wildcards_and_files_ext.h>
 
 
-static PCB_SCREEN* s_screenModule;      // the PCB_SCREEN used by the footprint editor
-
-BOARD* FOOTPRINT_EDIT_FRAME::s_Pcb;
-
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
                     PCB_BASE_FRAME::ProcessItemSelection )
@@ -170,32 +166,22 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Show a title (frame title + footprint name):
     updateTitle();
 
-    if( !s_Pcb )
-    {
-        s_Pcb = new BOARD();
+    SetBoard( new BOARD() );
 
-        // Ensure all layers and items are visible:
-        s_Pcb->SetVisibleAlls();
-    }
+    // Ensure all layers and items are visible:
+    GetBoard()->SetVisibleAlls();
 
-    SetBoard( s_Pcb );
-
-    if( !s_screenModule )
-        s_screenModule = new PCB_SCREEN( GetPageSettings().GetSizeIU() );
-
-    SetScreen( s_screenModule );
+    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
 
     GetScreen()->SetCurItem( NULL );
     LoadSettings( config() );
-
-    GetBoard()->SetVisibleAlls();
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     // In modedit, set the default paper size to A4:
     // this should be OK for all footprint to plot/print
-    SetPageSettings( PAGE_INFO::A4 );
+    SetPageSettings( PAGE_INFO( PAGE_INFO::A4 ) );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateMenuBar();
@@ -244,15 +230,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 {
-    // When user reopens the Footprint editor, user would like to find the last edited item.
-    // Do not delete PCB_SCREEN (by the destructor of EDA_DRAW_FRAME)
-    SetScreen( NULL );
-
-    // Do not allow PCB_BASE_FRAME::~PCB_BASE_FRAME()
-    // to delete our precious BOARD, which is also in static FOOTPRINT_EDIT_FRAME::s_Pcb.
-    // That function, PCB_BASE_FRAME::~PCB_BASE_FRAME(), runs immediately next
-    // as we return from here.
-    m_Pcb = 0;
 }
 
 

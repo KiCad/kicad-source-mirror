@@ -406,7 +406,6 @@ protected:
     /// protected so only friend PCB::IFACE::CreateWindow() can act as sole factory.
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
-    static BOARD*   s_Pcb;      ///< retain board across invocations of module editor
 
     /**
      * Function GetComponentFromUndoList

@@ -436,6 +436,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 // and connexions are kept)
                 // and the source_module (old module) is deleted
                 PICKED_ITEMS_LIST pickList;
+
                 pcbframe->Exchange_Module( source_module, newmodule, &pickList );
                 newmodule->SetTimeStamp( module_in_edit->GetLink() );
 
@@ -445,6 +446,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             else        // This is an insert command
             {
                 wxPoint cursor_pos = pcbframe->GetCrossHairPosition();
+
                 pcbframe->SetCrossHairPosition( wxPoint( 0, 0 ) );
                 pcbframe->PlaceModule( newmodule, NULL );
                 pcbframe->SetCrossHairPosition( cursor_pos );
@@ -551,7 +553,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetBoard()->m_Modules )
         {
             SetCurItem( GetBoard()->m_Modules );
+
             DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()-> GetCurItem() );
+
             int ret = dialog.ShowModal();
             GetScreen()->GetCurItem()->ClearFlags();
 
