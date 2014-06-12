@@ -105,6 +105,9 @@ protected:
     wxOverlay       m_overlay;
 #endif
 
+    /// One-shot to avoid a recursive mouse event during hotkey movement
+    bool            m_movingCursorWithKeyboard;
+
     void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
     /**
@@ -116,6 +119,17 @@ protected:
      */
     virtual void unitsChangeRefresh();
 
+    /**
+     * Function GeneralControlKeyMovement
+     * Handle the common part of GeneralControl dedicated to global
+     * cursor keys (i.e. cursor movement by keyboard) */
+    void GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool aSnapToGrid );
+
+    /* Function RefreshCrosshair
+     * Move and refresh the crosshair after movement; also call the
+     * mouse capture function, if active.
+     */
+    void RefreshCrossHair( const wxPoint &aOldPos, const wxPoint &aEvtPos, wxDC* aDC );
 public:
     EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
                     FRAME_T aFrameType,

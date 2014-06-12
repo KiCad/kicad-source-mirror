@@ -546,9 +546,12 @@ void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 
 void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
-    wxRealPoint gridSize;
-    wxPoint     oldpos;
-    wxPoint     pos = aPosition;
+    // Filter out the 'fake' mouse motion after a keyboard movement
+    if( !aHotKey && m_movingCursorWithKeyboard )
+    {
+        m_movingCursorWithKeyboard = false;
+        return;
+    }
 
     // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
     // for next cursor position
@@ -558,69 +561,12 @@ void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
     if( !aHotKey && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_CONTROL ) )
         snapToGrid = false;
 
-    if( snapToGrid )
-        pos = GetNearestGridPosition( pos );
-
-    oldpos = GetCrossHairPosition();
-    gridSize = GetScreen()->GetGridSize();
-
-    switch( aHotKey )
-    {
-    case WXK_NUMPAD8:
-    case WXK_UP:
-        pos.y -= KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD2:
-    case WXK_DOWN:
-        pos.y += KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD4:
-    case WXK_LEFT:
-        pos.x -= KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD6:
-    case WXK_RIGHT:
-        pos.x += KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    default:
-        break;
-    }
+    wxPoint oldpos = GetCrossHairPosition();
+    wxPoint pos = aPosition;
+    GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
 
     SetCrossHairPosition( pos, snapToGrid );
-
-    if( oldpos != GetCrossHairPosition() )
-    {
-        pos = GetCrossHairPosition();
-        SetCrossHairPosition( oldpos, false );
-        m_canvas->CrossHairOff( aDC );
-        SetCrossHairPosition( pos, snapToGrid );
-        m_canvas->CrossHairOn( aDC );
-
-        if( m_canvas->IsMouseCaptured() )
-        {
-#ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( m_overlay, (wxWindowDC*)aDC );
-            oDC.Clear();
-            m_canvas->CallMouseCapture( aDC, aPosition, false );
-#else
-            m_canvas->CallMouseCapture( aDC, aPosition, true );
-#endif
-        }
-#ifdef USE_WX_OVERLAY
-        else
-        {
-            m_overlay.Reset();
-        }
-#endif
-    }
+    RefreshCrossHair( oldpos, aPosition, aDC );
 
     if( aHotKey )
     {
