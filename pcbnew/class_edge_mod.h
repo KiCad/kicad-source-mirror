@@ -56,7 +56,7 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return PCB_MODULE_EDGE_T == aItem->Type();
+        return aItem && PCB_MODULE_EDGE_T == aItem->Type();
     }
 
     void Copy( EDGE_MODULE* source );           // copy structure

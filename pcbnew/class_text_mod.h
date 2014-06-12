@@ -68,7 +68,7 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return PCB_MODULE_TEXT_T == aItem->Type();
+        return aItem && PCB_MODULE_TEXT_T == aItem->Type();
     }
 
 

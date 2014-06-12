@@ -60,9 +60,12 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
+        if( aItem == NULL )
+            return false;
+
         switch( aItem->Type() )
         {
-        case PCB_PAD_T: 
+        case PCB_PAD_T:
         case PCB_TRACE_T:
         case PCB_VIA_T:
         case PCB_ZONE_AREA_T:
