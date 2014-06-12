@@ -150,11 +150,11 @@ struct remove_pointer<T*>
 template <class T, class I>
 bool IsA(const I *aObject)
 {
-    return remove_pointer<T>::type::ClassOf(aObject);
+    return aObject && remove_pointer<T>::type::ClassOf(aObject);
 }
 
 template <class T, class I>
-bool IsA(const I& aObject) 
+bool IsA(const I& aObject)
 {
     return remove_pointer<T>::type::ClassOf(&aObject);
 }

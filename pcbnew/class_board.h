@@ -222,7 +222,7 @@ private:
 public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return PCB_T == aItem->Type();
+        return aItem && PCB_T == aItem->Type();
     }
 
     void SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
