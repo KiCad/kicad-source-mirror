@@ -157,7 +157,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
         void*   addr = NULL;
 
-        if( !dso.Load( dname, wxDL_VERBATIM | wxDL_NOW ) )
+        if( !dso.Load( dname, wxDL_VERBATIM | wxDL_NOW | wxDL_GLOBAL ) )
         {
             // Failure: error reporting UI was done via wxLogSysError().
             // No further reporting required here.
