@@ -533,17 +533,19 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
-    wxRealPoint gridSize;
-    wxPoint     oldpos;
-    PCB_SCREEN* screen = GetScreen();
-    wxPoint     pos = aPosition;
+    // Filter out the 'fake' mouse motion after a keyboard movement
+    if( !aHotKey && m_movingCursorWithKeyboard )
+    {
+        m_movingCursorWithKeyboard = false;
+        return;
+    }
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    pos = GetNearestGridPosition( pos );
-    oldpos = GetCrossHairPosition();
-    gridSize = screen->GetGridSize();
+    wxPoint oldpos = GetCrossHairPosition();
+    wxPoint pos = aPosition;
+    GeneralControlKeyMovement( aHotKey, &pos, true );
 
     switch( aHotKey )
     {
@@ -573,49 +575,12 @@ void FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
         break;
 
     case ' ':
-        screen->m_O_Curseur = GetCrossHairPosition();
-        break;
-
-    case WXK_NUMPAD8:       // cursor moved up
-    case WXK_UP:
-        pos.y -= KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD2:       // cursor moved down
-    case WXK_DOWN:
-        pos.y += KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD4:       //  cursor moved left
-    case WXK_LEFT:
-        pos.x -= KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD6:      //  cursor moved right
-    case WXK_RIGHT:
-        pos.x += KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
+        GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
     }
 
     SetCrossHairPosition( pos );
-
-    if( oldpos != GetCrossHairPosition() )
-    {
-        pos = GetCrossHairPosition();
-        SetCrossHairPosition( oldpos );
-        m_canvas->CrossHairOff( aDC );
-        SetCrossHairPosition( pos );
-        m_canvas->CrossHairOn( aDC );
-
-        if( m_canvas->IsMouseCaptured() )
-        {
-            m_canvas->CallMouseCapture( aDC, aPosition, 0 );
-        }
-    }
+    RefreshCrossHair( oldpos, aPosition, aDC );
 
     UpdateStatusBar();    // Display new cursor coordinates
 }
