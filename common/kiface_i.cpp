@@ -123,10 +123,13 @@ bool KIFACE_I::start_common( int aCtlBits )
 
 void KIFACE_I::end_common()
 {
-    /* Save common preferences; the background still uses the old legacy
-     * color numbers, not the new names */
-    m_bm.m_config->Write( showPageLimitsKey, g_ShowPageLimits );
-    m_bm.m_config->Write( backgroundColorKey, int( g_DrawBgColor ) );
+    if( m_bm.m_config )
+    {
+        // Save common preferences; the background still uses the old legacy
+        // color numbers, not the new names
+        m_bm.m_config->Write( showPageLimitsKey, g_ShowPageLimits );
+        m_bm.m_config->Write( backgroundColorKey, int( g_DrawBgColor ) );
+    }
 
     m_bm.End();
 }

@@ -108,9 +108,9 @@ public:
     const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
     const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME
 
-    PL_EDITOR_SCREEN* GetScreen()
+    PL_EDITOR_SCREEN* GetScreen() const                         // overload EDA_DRAW_FRAME
     {
-        return (PL_EDITOR_SCREEN*) m_canvas->GetScreen();
+        return (PL_EDITOR_SCREEN*) EDA_DRAW_FRAME::GetScreen();
     }
 
     const wxPoint& GetAuxOrigin() const                         // overload EDA_DRAW_FRAME
