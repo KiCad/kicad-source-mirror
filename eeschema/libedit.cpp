@@ -281,6 +281,15 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     RedrawComponent( DC, wxPoint( 0, 0 ) );
 
+#ifdef USE_WX_OVERLAY
+    if( IsShown() )
+    {
+        m_overlay.Reset();
+        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)DC );
+        overlaydc.Clear();
+    }
+#endif
+
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
