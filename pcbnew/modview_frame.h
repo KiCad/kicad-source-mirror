@@ -59,15 +59,6 @@ public:
      */
     static const wxChar* GetFootprintViewerFrameName();
 
-    wxString& GetSelectedFootprint( void ) const { return m_selectedFootprintName; }
-    const wxString GetSelectedLibraryFullName();
-
-    /**
-     * Function GetSelectedLibrary
-     * @return the selected library name from the #FP_LIB_TABLE.
-     */
-    const wxString& GetSelectedLibrary() { return m_libraryName; }
-
     virtual EDA_COLOR_T GetGridColor() const;
 
     /**
@@ -86,10 +77,11 @@ private:
 
     wxString            m_configPath;            // subpath for configuration
 
-    static wxString     m_libraryName;           // Current selected library
-    static wxString     m_footprintName;         // Current selected footprint
-    static wxString     m_selectedFootprintName; // When the viewer is used to select a footprint
+    const wxString      getCurNickname();
+    void                setCurNickname( const wxString& aNickname );
 
+    const wxString      getCurFootprintName();
+    void                setCurFootprintName( const wxString& aName );
 
     void OnSize( wxSizeEvent& event );
 
@@ -122,8 +114,6 @@ private:
 
     void LoadSettings( wxConfigBase* aCfg );    // override virtual
     void SaveSettings( wxConfigBase* aCfg );    // override virtual
-
-    wxString& GetFootprintName( void ) const { return m_footprintName; }
 
     /**
      * Function OnActivate

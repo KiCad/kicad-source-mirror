@@ -334,7 +334,6 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
     wxString        fpname;
     wxString        msg;
     wxArrayString   libraries;
-    FP_LIB_TABLE    libTable;
 
     std::vector< wxArrayString > rows;
 
