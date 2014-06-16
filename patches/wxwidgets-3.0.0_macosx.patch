@@ -1,7 +1,7 @@
 === modified file 'Makefile.in'
---- Makefile.in	2014-01-26 11:10:36 +0000
-+++ Makefile.in	2014-01-26 11:15:53 +0000
-@@ -14601,7 +14601,7 @@
+--- Makefile.in	2014-06-08 14:30:42 +0000
++++ Makefile.in	2014-06-08 14:30:57 +0000
+@@ -14619,7 +14619,7 @@
  	monodll_carbon_frame.o \
  	monodll_carbon_mdi.o \
  	monodll_carbon_metafile.o \
@@ -10,7 +10,7 @@
  	monodll_carbon_popupwin.o \
  	monodll_carbon_renderer.o \
  	monodll_carbon_settings.o \
-@@ -14748,7 +14748,7 @@
+@@ -14766,7 +14766,7 @@
  	monolib_carbon_frame.o \
  	monolib_carbon_mdi.o \
  	monolib_carbon_metafile.o \
@@ -19,7 +19,7 @@
  	monolib_carbon_popupwin.o \
  	monolib_carbon_renderer.o \
  	monolib_carbon_settings.o \
-@@ -14895,7 +14895,7 @@
+@@ -14913,7 +14913,7 @@
  	coredll_carbon_frame.o \
  	coredll_carbon_mdi.o \
  	coredll_carbon_metafile.o \
@@ -28,7 +28,7 @@
  	coredll_carbon_popupwin.o \
  	coredll_carbon_renderer.o \
  	coredll_carbon_settings.o \
-@@ -15027,7 +15027,7 @@
+@@ -15045,7 +15045,7 @@
  	corelib_carbon_frame.o \
  	corelib_carbon_mdi.o \
  	corelib_carbon_metafile.o \
@@ -37,7 +37,7 @@
  	corelib_carbon_popupwin.o \
  	corelib_carbon_renderer.o \
  	corelib_carbon_settings.o \
-@@ -17774,6 +17774,9 @@
+@@ -17792,6 +17792,9 @@
  monodll_osx_cocoa_notebook.o: $(srcdir)/src/osx/cocoa/notebook.mm $(MONODLL_ODEP)
  	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/notebook.mm
  
@@ -47,7 +47,7 @@
  monodll_osx_cocoa_radiobut.o: $(srcdir)/src/osx/cocoa/radiobut.mm $(MONODLL_ODEP)
  	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/radiobut.mm
  
-@@ -23642,6 +23645,9 @@
+@@ -23666,6 +23669,9 @@
  monolib_osx_cocoa_notebook.o: $(srcdir)/src/osx/cocoa/notebook.mm $(MONOLIB_ODEP)
  	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/notebook.mm
  
@@ -57,7 +57,7 @@
  monolib_osx_cocoa_radiobut.o: $(srcdir)/src/osx/cocoa/radiobut.mm $(MONOLIB_ODEP)
  	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/radiobut.mm
  
-@@ -33584,8 +33590,8 @@
+@@ -33620,8 +33626,8 @@
  @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_carbon_overlay.o: $(srcdir)/src/osx/carbon/overlay.cpp $(COREDLL_ODEP)
  @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/overlay.cpp
  
@@ -68,7 +68,7 @@
  
  @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_carbon_overlay.o: $(srcdir)/src/osx/carbon/overlay.cpp $(COREDLL_ODEP)
  @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/overlay.cpp
-@@ -37961,8 +37967,8 @@
+@@ -38003,8 +38009,8 @@
  @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_carbon_overlay.o: $(srcdir)/src/osx/carbon/overlay.cpp $(CORELIB_ODEP)
  @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/overlay.cpp
  
@@ -80,9 +80,29 @@
  @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_carbon_overlay.o: $(srcdir)/src/osx/carbon/overlay.cpp $(CORELIB_ODEP)
  @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/overlay.cpp
 
+=== modified file 'include/wx/osx/cocoa/private/overlay.h'
+--- include/wx/osx/cocoa/private/overlay.h	2014-06-08 14:30:42 +0000
++++ include/wx/osx/cocoa/private/overlay.h	2014-06-11 12:07:05 +0000
+@@ -41,15 +41,8 @@
+     void CreateOverlayWindow();
+ 
+     WXWindow m_overlayWindow;
+-    WXWindow m_overlayParentWindow;
+-    CGContextRef m_overlayContext ;
+     // we store the window in case we would have to issue a Refresh()
+     wxWindow* m_window ;
+-
+-    int m_x ;
+-    int m_y ;
+-    int m_width ;
+-    int m_height ;
+ } ;
+ 
+ #endif // _WX_MAC_CARBON_PRIVATE_OVERLAY_H_
+
 === modified file 'include/wx/overlay.h'
---- include/wx/overlay.h	2014-01-26 11:10:36 +0000
-+++ include/wx/overlay.h	2014-01-26 11:10:44 +0000
+--- include/wx/overlay.h	2014-06-08 14:30:42 +0000
++++ include/wx/overlay.h	2014-06-08 14:30:57 +0000
 @@ -13,7 +13,7 @@
  
  #include "wx/defs.h"
@@ -94,8 +114,8 @@
      #define wxHAS_NATIVE_OVERLAY 1
 
 === modified file 'include/wx/private/overlay.h'
---- include/wx/private/overlay.h	2014-01-26 11:10:36 +0000
-+++ include/wx/private/overlay.h	2014-01-26 11:10:44 +0000
+--- include/wx/private/overlay.h	2014-06-08 14:30:42 +0000
++++ include/wx/private/overlay.h	2014-06-08 14:30:57 +0000
 @@ -16,7 +16,11 @@
  #ifdef wxHAS_NATIVE_OVERLAY
  
@@ -110,8 +130,8 @@
  #else
 
 === modified file 'src/osx/cocoa/overlay.mm'
---- src/osx/cocoa/overlay.mm	2014-01-26 11:10:36 +0000
-+++ src/osx/cocoa/overlay.mm	2014-01-26 11:10:44 +0000
+--- src/osx/cocoa/overlay.mm	2014-06-08 14:30:42 +0000
++++ src/osx/cocoa/overlay.mm	2014-06-11 12:06:53 +0000
 @@ -34,6 +34,7 @@
  #include "wx/private/overlay.h"
  
@@ -120,7 +140,15 @@
  
  // ============================================================================
  // implementation
-@@ -58,48 +59,6 @@
+@@ -42,7 +43,6 @@
+ wxOverlayImpl::wxOverlayImpl()
+ {
+     m_window = NULL ;
+-    m_overlayContext = NULL ;
+     m_overlayWindow = NULL ;
+ }
+ 
+@@ -58,48 +58,6 @@
  
  void wxOverlayImpl::CreateOverlayWindow()
  {
@@ -169,7 +197,7 @@
  }
  
  void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
-@@ -107,84 +66,50 @@
+@@ -107,84 +65,49 @@
      wxASSERT_MSG( !IsOk() , _("You cannot Init an overlay twice") );
  
      m_window = dc->GetWindow();
@@ -211,6 +239,8 @@
 +	m_overlayWindow = m_window->MacGetTopLevelWindowRef();
 +	
 +	NSRect box = [m_overlayWindow frame];
++	box.origin.x = 0;
++	box.origin.y = 0;
 +	
 +	if( [m_overlayWindow isVisible] ) 	
 +	{
@@ -228,7 +258,6 @@
 -        win_impl->SetGraphicsContext( wxGraphicsContext::CreateFromNative( m_overlayContext ) );
 -        dc->SetClippingRegion( m_x , m_y , m_width , m_height ) ;
 -    }
-+
  }
  
  void wxOverlayImpl::EndDrawing( wxDC* dc)
@@ -241,11 +270,13 @@
 -    CGContextFlush( m_overlayContext );
  }
  
- void wxOverlayImpl::Clear(wxDC* WXUNUSED(dc))
+-void wxOverlayImpl::Clear(wxDC* WXUNUSED(dc))
++void wxOverlayImpl::Clear( wxDC* WXUNUSED(dc) )
  {
      wxASSERT_MSG( IsOk() , _("You cannot Clear an overlay that is not inited") );
 -    CGRect box  = CGRectMake( m_x - 1, m_y - 1 , m_width + 2 , m_height + 2 );
 -    CGContextClearRect( m_overlayContext, box );
++    
 +	if( [m_overlayWindow isVisible] ) 
 +	{
 +		[m_overlayWindow restoreCachedImage];
@@ -256,11 +287,10 @@
  void wxOverlayImpl::Reset()
  {
 -    if ( m_overlayContext )
-+    if ( m_overlayContext)
-     {
-         m_overlayContext = NULL ;
-     }
- 
+-    {
+-        m_overlayContext = NULL ;
+-    }
+-
      // todo : don't dispose, only hide and reposition on next run
 -    if (m_overlayWindow)
 +    if (m_overlayWindow &&  [m_overlayWindow isVisible])
@@ -269,6 +299,8 @@
 -        [m_overlayWindow release];
 -        m_overlayWindow = NULL ;
 +		NSRect box = [m_overlayWindow frame];
++		box.origin.x = 0;
++		box.origin.y = 0;
 +		
 +		[m_overlayWindow discardCachedImage];
 +		[m_overlayWindow cacheImageInRect:box];

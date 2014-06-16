@@ -112,6 +112,15 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawWorkSheet( DC, screen, 0, IU_PER_MILS, wxEmptyString );
 
+#ifdef USE_WX_OVERLAY
+    if( IsShown() )
+    {
+        m_overlay.Reset();
+        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)DC );
+        overlaydc.Clear();
+    }
+#endif
+
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 

@@ -534,6 +534,15 @@ void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
 
     DrawWorkSheet( aDC, GetScreen(), 0, IU_PER_MILS, GetCurrFileName() );
 
+#ifdef USE_WX_OVERLAY
+    if( IsShown() )
+    {
+        m_overlay.Reset();
+        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)aDC );
+        overlaydc.Clear();
+    }
+#endif
+
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
 
