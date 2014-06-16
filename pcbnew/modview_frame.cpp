@@ -55,19 +55,9 @@
 #include <pcbnew_config.h>
 
 
-#define NEXT_PART      1
-#define NEW_PART       0
-#define PREVIOUS_PART -1
-
-
-/**
- * Save previous component library viewer state.
- */
-wxString FOOTPRINT_VIEWER_FRAME::m_libraryName;
-wxString FOOTPRINT_VIEWER_FRAME::m_footprintName;
-
-/// When the viewer is used to select a component in schematic, the selected component is here.
-wxString FOOTPRINT_VIEWER_FRAME::m_selectedFootprintName;
+#define NEXT_PART       1
+#define NEW_PART        0
+#define PREVIOUS_PART   -1
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
@@ -151,8 +141,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_footprintList = new wxListBox( this, ID_MODVIEW_FOOTPRINT_LIST,
             wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL );
 
-    m_selectedFootprintName.Empty();
-
     SetBoard( new BOARD() );
 
     // Ensure all layers and items are visible:
@@ -173,12 +161,12 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     UpdateTitle();
 
     // If a footprint was previously loaded, reload it
-    if( !m_libraryName.IsEmpty() && !m_footprintName.IsEmpty() )
+    if( getCurNickname().size() && getCurFootprintName().size() )
     {
         FPID id;
 
-        id.SetLibNickname( m_libraryName );
-        id.SetFootprintName( m_footprintName );
+        id.SetLibNickname( getCurNickname() );
+        id.SetFootprintName( getCurFootprintName() );
         GetBoard()->Add( loadFootprint( id ) );
     }
 
@@ -315,7 +303,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
         m_libList->Append( nicknames[ii] );
 
     // Search for a previous selection:
-    int index =  m_libList->FindString( m_libraryName );
+    int index =  m_libList->FindString( getCurNickname() );
 
     if( index != wxNOT_FOUND )
     {
@@ -325,8 +313,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
     {
         // If not found, clear current library selection because it can be
         // deleted after a configuration change.
-        m_libraryName = wxEmptyString;
-        m_footprintName = wxEmptyString;
+        setCurNickname( wxEmptyString );
+        setCurFootprintName( wxEmptyString );
     }
 
     ReCreateFootprintList();
@@ -340,15 +328,17 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 {
     m_footprintList->Clear();
 
-    if( m_libraryName.IsEmpty() )
+    if( !getCurNickname() )
     {
-        m_footprintName = wxEmptyString;
+        setCurFootprintName( wxEmptyString );
         return;
     }
 
     FOOTPRINT_LIST fp_info_list;
 
-    fp_info_list.ReadFootprintFiles( Prj().PcbFootprintLibs(), &m_libraryName );
+    wxString nickname = getCurNickname();
+
+    fp_info_list.ReadFootprintFiles( Prj().PcbFootprintLibs(), !nickname ? NULL : &nickname );
 
     if( fp_info_list.GetErrorCount() )
     {
@@ -361,10 +351,10 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
         m_footprintList->Append( footprint.GetFootprintName() );
     }
 
-    int index = m_footprintList->FindString( m_footprintName );
+    int index = m_footprintList->FindString( getCurFootprintName() );
 
     if( index == wxNOT_FOUND )
-        m_footprintName = wxEmptyString;
+        setCurFootprintName( wxEmptyString );
     else
         m_footprintList->SetSelection( index, true );
 }
@@ -379,10 +369,10 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& event )
 
     wxString name = m_libList->GetString( ii );
 
-    if( m_libraryName == name )
+    if( getCurNickname() == name )
         return;
 
-    m_libraryName = name;
+    setCurNickname( name );
 
     ReCreateFootprintList();
     UpdateTitle();
@@ -402,17 +392,18 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
 
     wxString name = m_footprintList->GetString( ii );
 
-    if( m_footprintName.CmpNoCase( name ) != 0 )
+    if( getCurFootprintName().CmpNoCase( name ) != 0 )
     {
-        m_footprintName = name;
+        setCurFootprintName( name );
+
         SetCurItem( NULL );
 
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
 
         FPID id;
-        id.SetLibNickname( m_libraryName );
-        id.SetFootprintName( m_footprintName );
+        id.SetLibNickname( getCurNickname() );
+        id.SetFootprintName( getCurFootprintName() );
 
         try
         {
@@ -420,10 +411,12 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         }
         catch( const IO_ERROR& ioe )
         {
-            wxString msg;
-            msg.Printf( _( "Could not load footprint \"%s\" from library \"%s\".\n\n"
-                           "Error %s." ), GetChars( m_footprintName ), GetChars( m_libraryName ),
+            wxString msg = wxString::Format(
+                        _( "Could not load footprint \"%s\" from library \"%s\".\n\nError %s." ),
+                        GetChars( getCurFootprintName() ),
+                        GetChars( getCurNickname() ),
                         GetChars( ioe.errorText ) );
+
             DisplayError( this, msg );
         }
 
@@ -466,19 +459,15 @@ void FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint( wxCommandEvent& event )
     {
         wxString fp_name = m_footprintList->GetString( ii );
 
-        // @todo(DICK) assign to static now, later PROJECT retained string.
-        m_selectedFootprintName = fp_name;
-
         FPID fpid;
 
-        fpid.SetLibNickname( GetSelectedLibrary() );
+        fpid.SetLibNickname( getCurNickname() );
         fpid.SetFootprintName( fp_name );
 
         DismissModal( true, fpid.Format() );
     }
     else
     {
-        m_selectedFootprintName.Empty();
         DismissModal( false );
     }
 
@@ -498,6 +487,30 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
+const wxString FOOTPRINT_VIEWER_FRAME::getCurNickname()
+{
+    return Prj().GetRString( PROJECT::PCB_FOOTPRINT_VIEWER_NICKNAME );
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::setCurNickname( const wxString& aNickname )
+{
+    Prj().SetRString( PROJECT::PCB_FOOTPRINT_VIEWER_NICKNAME, aNickname );
+}
+
+
+const wxString FOOTPRINT_VIEWER_FRAME::getCurFootprintName()
+{
+    return Prj().GetRString( PROJECT::PCB_FOOTPRINT_VIEWER_FPNAME );
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::setCurFootprintName( const wxString& aName )
+{
+    Prj().SetRString( PROJECT::PCB_FOOTPRINT_VIEWER_FPNAME, aName );
+}
+
+
 void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
 {
     EDA_DRAW_FRAME::OnActivate( event );
@@ -505,8 +518,6 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
     // Ensure we do not have old selection:
     if( ! m_FrameIsActive )
         return;
-
-    m_selectedFootprintName.Empty();
 
     // Ensure we have the right library list:
     std::vector< wxString > libNicknames = Prj().PcbFootprintLibs()->GetLogicalLibs();
@@ -615,8 +626,10 @@ void FOOTPRINT_VIEWER_FRAME::Update3D_Frame( bool aForceReloadFootprint )
     if( m_Draw3DFrame == NULL )
         return;
 
-    wxString frm3Dtitle;
-    frm3Dtitle.Printf( _( "ModView: 3D Viewer [%s]" ), GetChars( m_footprintName ) );
+    wxString frm3Dtitle = wxString::Format(
+                _( "ModView: 3D Viewer [%s]" ),
+                GetChars( getCurFootprintName() ) );
+
     m_Draw3DFrame->SetTitle( frm3Dtitle );
 
     if( aForceReloadFootprint )
@@ -675,8 +688,8 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
     msg = _( "Library Browser" );
     msg << wxT( " [" );
 
-    if( ! m_libraryName.IsEmpty() )
-        msg << m_libraryName;
+    if( getCurNickname().size() )
+        msg << getCurNickname();
     else
         msg += _( "no library selected" );
 
@@ -688,16 +701,16 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
 
 void FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary( wxCommandEvent& event )
 {
-    wxString selection = SelectLibrary( m_libraryName );
+    wxString selection = SelectLibrary( getCurNickname() );
 
-    if( !!selection && selection != m_libraryName )
+    if( !!selection && selection != getCurNickname() )
     {
-        m_libraryName = selection;
+        setCurNickname( selection );
 
         UpdateTitle();
         ReCreateFootprintList();
 
-        int id = m_libList->FindString( m_libraryName );
+        int id = m_libList->FindString( getCurNickname() );
 
         if( id >= 0 )
             m_libList->SetSelection( id );
@@ -714,9 +727,9 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
     (void*) parent;
 #endif
 
-    wxString        libname = m_libraryName + wxT( "." ) + LegacyFootprintLibPathExtension;
+    wxString        nickname = getCurNickname();
     MODULE*         oldmodule = GetBoard()->m_Modules;
-    MODULE*         module = LoadModuleFromLibrary( libname, Prj().PcbFootprintLibs(), false );
+    MODULE*         module = LoadModuleFromLibrary( nickname, Prj().PcbFootprintLibs(), false );
 
     if( module )
     {
@@ -729,31 +742,37 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
             delete oldmodule;
         }
 
-        m_footprintName = FROM_UTF8( module->GetFPID().GetFootprintName().c_str() );
+        setCurFootprintName( module->GetFPID().GetFootprintName() );
+
+        wxString nickname = module->GetFPID().GetLibNickname();
+
+        if( !getCurNickname() && nickname.size() )
+        {
+            // Set the listbox
+            int index =  m_libList->FindString( nickname );
+            if( index != wxNOT_FOUND )
+                m_libList->SetSelection( index, true );
+
+            setCurNickname( nickname );
+        }
+
         module->ClearFlags();
         SetCurItem( NULL );
 
         Zoom_Automatique( false );
         m_canvas->Refresh();
         Update3D_Frame();
-        m_footprintList->SetStringSelection( m_footprintName );
+        m_footprintList->SetStringSelection( getCurFootprintName() );
    }
-}
-
-
-const wxString FOOTPRINT_VIEWER_FRAME::GetSelectedLibraryFullName( void )
-{
-    wxString fullname = m_libraryName + wxT( "." ) + LegacyFootprintLibPathExtension;
-    return fullname;
 }
 
 
 void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
 {
-    if( !m_libraryName )
+    if( !getCurNickname() )
         return;
 
-    int selection = m_footprintList->FindString( m_footprintName );
+    int selection = m_footprintList->FindString( getCurFootprintName() );
 
     if( aMode == NEXT_PART )
     {
@@ -770,13 +789,14 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
     if( selection != wxNOT_FOUND )
     {
         m_footprintList->SetSelection( selection );
-        m_footprintName = m_footprintList->GetString( selection );
+        setCurFootprintName( m_footprintList->GetString( selection ) );
         SetCurItem( NULL );
 
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
 
-        MODULE* footprint = Prj().PcbFootprintLibs()->FootprintLoad( m_libraryName, m_footprintName );
+        MODULE* footprint = Prj().PcbFootprintLibs()->FootprintLoad(
+                                getCurNickname(), getCurFootprintName() );
 
         if( footprint )
             GetBoard()->Add( footprint, ADD_APPEND );
