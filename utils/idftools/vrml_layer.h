@@ -70,6 +70,7 @@ struct VERTEX_3D
     double  y;
     int i;          // vertex index
     int o;          // vertex order
+    bool pth;       // true for plate-through hole
 };
 
 struct TRIPLET_3D
@@ -93,12 +94,18 @@ private:
     double minSegLength;                    // min. segment length
     double maxSegLength;                    // max. segment length
 
+    // Vertex offsets to work around a suspected GLU tesselator bug
+    double offsetX;
+    double offsetY;
+
     bool    fix;                            // when true, no more vertices may be added by the user
     int     idx;                            // vertex index (number of contained vertices)
     int     ord;                            // vertex order (number of ordered vertices)
     unsigned int idxout;                    // outline index to first point in 3D outline
     std::vector<VERTEX_3D*> vertices;       // vertices of all contours
     std::vector<std::list<int>*> contours;  // lists of vertices for each contour
+    std::vector<bool>pth;                   // indicates whether a 'contour' is a PTH or not
+    std::vector<bool>solid;                 // indicates whether a 'contour' is a solid or a hole
     std::vector< double > areas;            // area of the contours (positive if winding is CCW)
     std::list<TRIPLET_3D> triplets;         // output facet triplet list (triplet of ORDER values)
     std::list<std::list<int>*> outline;     // indices for outline outputs (index by ORDER values)
@@ -135,6 +142,9 @@ private:
 
     // calculate number of sides on an arc (angle is in radians)
     int calcNSides( double aRadius, double aAngle );
+
+    // returns the number of solid or hole contours
+    int checkNContours( bool holes );
 
 public:
     /// set to true when a fault is encountered during tesselation
@@ -191,9 +201,11 @@ public:
      * Function NewContour
      * creates a new list of vertices and returns an index to the list
      *
+     * @param aPlatedHole is true if the new contour will represent a plated hole
+     *
      * @return int: index to the list or -1 if the operation failed
      */
-    int NewContour( void );
+    int NewContour( bool aPlatedHole = false );
 
     /**
      * Function AddVertex
@@ -231,7 +243,8 @@ public:
      *
      * @return bool: true if the new contour was successfully created
      */
-    bool AppendCircle( double aXpos, double aYpos, double aRadius, int aContourID, bool aHoleFlag = false );
+    bool AppendCircle( double aXpos, double aYpos, double aRadius,
+                       int aContourID, bool aHoleFlag = false );
 
     /**
      * Function AddCircle
@@ -241,10 +254,12 @@ public:
      * @param aYpos is the Y coordinate of the hole center
      * @param aRadius is the radius of the hole
      * @param aHoleFlag determines if the contour to be created is a cutout
+     * @param aPlatedHole is true if this is a plated hole
      *
      * @return bool: true if the new contour was successfully created
      */
-    bool AddCircle( double aXpos, double aYpos, double aRadius, bool aHoleFlag = false );
+    bool AddCircle( double aXpos, double aYpos, double aRadius,
+                    bool aHoleFlag = false, bool aPlatedHole = false );
 
     /**
      * Function AddSlot
@@ -256,11 +271,12 @@ public:
      * @param aSlotWidth is the width of the slot along the minor axis
      * @param aAngle (degrees) is the orientation of the slot
      * @param aHoleFlag determines whether the slot is a hole or a solid
+     * @param aPlatedHole is true if this is a plated slot
      *
      * @return bool: true if the slot was successfully created
      */
     bool AddSlot( double aCenterX, double aCenterY, double aSlotLength, double aSlotWidth,
-            double aAngle, bool aHoleFlag = false );
+                  double aAngle, bool aHoleFlag = false, bool aPlatedHole = false );
 
     /**
      * Function AppendArc
@@ -289,11 +305,14 @@ public:
      * @param aArcWidth is the width of the arc
      * @param aAngle is the included angle (degrees)
      * @param aHoleFlag determines whether the arc is to be a hole or a solid
+     * @param aPlatedHole is true if this is a plated slotted arc
      *
      * @return bool: true if the feature was successfully created
      */
-    bool AddArc( double aCenterX, double aCenterY, double aStartX, double aStartY,
-            double aArcWidth, double aAngle, bool aHoleFlag = false );
+    bool AddArc( double aCenterX, double aCenterY,
+                 double aStartX, double aStartY,
+                 double aArcWidth, double aAngle,
+                 bool aHoleFlag = false, bool aPlatedHole = false );
 
     /**
      * Function Tesselate
@@ -301,11 +320,12 @@ public:
      * vertex sets required to render the surface.
      *
      * @param holes  is an optional pointer to cutouts to be imposed on the
-     * surface.
+     *               surface.
+     * @param aHolesOnly is true if the outline contains only holes
      *
      * @return bool: true if the operation succeeded
      */
-    bool Tesselate( VRML_LAYER* holes = NULL );
+    bool Tesselate( VRML_LAYER* holes = NULL, bool aHolesOnly = false );
 
     /**
      * Function WriteVertices
@@ -351,19 +371,26 @@ public:
      * writes out the vertex sets required to render an extruded solid
      *
      * @param aOutFile is the file to write to
+     * @param aIncludePlatedHoles is true if holes marked as plated should
+     *        be rendered. Default is false since the user will usually
+     *        render these holes in a different color
      *
      * @return bool: true if the operation succeeded
      */
-    bool Write3DIndices( std::ofstream& aOutFile );
+    bool Write3DIndices( std::ofstream& aOutFile, bool aIncludePlatedHoles = false );
 
     /**
      * Function AddExtraVertex
-     * adds an extra vertex as required by the GLU tesselator
+     * adds an extra vertex as required by the GLU tesselator.
+     *
+     * @param aXpos is the X coordinate of the newly created point
+     * @param aYpos is the Y coordinate of the newly created point
+     * @param aPlatedHole is true if this point is part of a plated hole
      *
      * @return VERTEX_3D*: is the new vertex or NULL if a vertex
      * could not be created.
      */
-    VERTEX_3D* AddExtraVertex( double aXpos, double aYpos );
+    VERTEX_3D* AddExtraVertex( double aXpos, double aYpos, bool aPlatedHole );
 
     /**
      * Function glStart
@@ -429,6 +456,8 @@ public:
      * Returns the error message related to the last failed operation
      */
     const std::string& GetError( void );
+
+    void SetVertexOffsets( double aXoffset, double aYoffset );
 };
 
 #endif    // VRML_LAYER_H
