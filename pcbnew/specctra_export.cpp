@@ -1556,6 +1556,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             if( item->GetIsKeepout() )
                 continue;
 
+            // Currently, we export only copper layers
+            if( ! IsCopperLayer( item->GetLayer() ) )
+                continue;
+
             COPPER_PLANE*   plane = new COPPER_PLANE( pcb->structure );
 
             pcb->structure->planes.push_back( plane );
