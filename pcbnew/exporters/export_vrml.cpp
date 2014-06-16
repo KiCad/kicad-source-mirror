@@ -25,37 +25,6 @@
  */
 
 
-/*
- * NOTE:
- * 1. for improved looks, create a DRILL layer for PTH drills.
- *      To render the improved board, render the vertical outline only
- *      for the board (no added drill holes), then render the
- *      outline only for PTH, and finally render the top and bottom
- *      of the board. NOTE: if we don't want extra eye-candy then
- *      we must maintain the current board export.
- *      Additional bits needed for improved eyecandy:
- *      + CalcOutline: calculates only the outline of a VRML_LAYER or
- *          a VERTICAL_HOLES
- *      + WriteVerticalIndices: writes the indices of only the vertical
- *          facets of a VRML_LAYER or a VRML_HOLES.
- *      + WriteVerticalVertices: writes only the outline vertices to
- *          form vertical walls; applies to VRML_LAYER and VRML_HOLES
- *
- * 2. How can we suppress fiducials such as those in the corners of the pic-programmer demo?
- *
- */
-
-/*
- * KNOWN BUGS:
- * 1. silk outlines are sometimes mangled; this is somehow due to
- *    many overlapping segments. This does not happen in 3Dviewer
- *    so it is worth inspecting that code to see what is different.
- *
- *    These artefacts can be suppressed for exploratory purposes by
- *    removing the line width parameter from the length calculation in
- *    export_vrml_line()
- */
-
 #include <fctsys.h>
 #include <kicad_string.h>
 #include <wxPcbStruct.h>
@@ -88,7 +57,7 @@
 #define MIN_VRML_LINEWIDTH 0.12
 
 // offset for art layers, mm (silk, paste, etc)
-#define  ART_OFFSET 0.02
+#define  ART_OFFSET 0.025
 
 /* helper function:
  * some characters cannot be used in names,
@@ -183,6 +152,7 @@ public:
     VRML_LAYER  bot_silk;
     VRML_LAYER  top_tin;
     VRML_LAYER  bot_tin;
+    VRML_LAYER  plated_holes;
 
     double scale;           // board internal units to output scaling
     double minLineWidth;    // minimum width of a VRML line segment
@@ -229,8 +199,18 @@ public:
 
     void SetOffset( double aXoff, double aYoff )
     {
-        tx  = aXoff;
-        ty  = aYoff;
+        tx = aXoff;
+        ty = -aYoff;
+
+        holes.SetVertexOffsets( aXoff, aYoff );
+        board.SetVertexOffsets( aXoff, aYoff );
+        top_copper.SetVertexOffsets( aXoff, aYoff );
+        bot_copper.SetVertexOffsets( aXoff, aYoff );
+        top_silk.SetVertexOffsets( aXoff, aYoff );
+        bot_silk.SetVertexOffsets( aXoff, aYoff );
+        top_tin.SetVertexOffsets( aXoff, aYoff );
+        bot_tin.SetVertexOffsets( aXoff, aYoff );
+        plated_holes.SetVertexOffsets( aXoff, aYoff );
     }
 
     double GetLayerZ( LAYER_NUM aLayer )
@@ -278,6 +258,7 @@ public:
         bot_silk.SetArcParams( iMaxSeg, smin, smax );
         top_tin.SetArcParams( iMaxSeg, smin, smax );
         bot_tin.SetArcParams( iMaxSeg, smin, smax );
+        plated_holes.SetArcParams( iMaxSeg, smin, smax );
 
         return true;
     }
@@ -455,6 +436,16 @@ static void write_layers( MODEL_VRML& aModel, std::ofstream& output_file, BOARD*
                         - Millimeter2iu( ART_OFFSET / 2.0 ) * aModel.scale,
                         0, aModel.precision );
 
+    // VRML_LAYER PTH;
+    aModel.plated_holes.Tesselate( NULL, true );
+    write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_TIN ),
+                        &aModel.plated_holes, false, false,
+                        aModel.GetLayerZ( LAST_COPPER_LAYER )
+                        + Millimeter2iu( ART_OFFSET / 2.0 ) * aModel.scale,
+                        aModel.GetLayerZ( FIRST_COPPER_LAYER )
+                        - Millimeter2iu( ART_OFFSET / 2.0 ) * aModel.scale,
+                        aModel.precision );
+
     // VRML_LAYER top_silk;
     aModel.top_silk.Tesselate( &aModel.holes );
     write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_SILK ),
@@ -588,10 +579,10 @@ static void export_vrml_drawsegment( MODEL_VRML& aModel, DRAWSEGMENT* drawseg )
 {
     LAYER_NUM layer = drawseg->GetLayer();
     double  w   = drawseg->GetWidth() * aModel.scale;
-    double  x   = drawseg->GetStart().x * aModel.scale + aModel.tx;
-    double  y   = drawseg->GetStart().y * aModel.scale + aModel.ty;
-    double  xf  = drawseg->GetEnd().x * aModel.scale + aModel.tx;
-    double  yf  = drawseg->GetEnd().y * aModel.scale + aModel.ty;
+    double  x   = drawseg->GetStart().x * aModel.scale;
+    double  y   = drawseg->GetStart().y * aModel.scale;
+    double  xf  = drawseg->GetEnd().x * aModel.scale;
+    double  yf  = drawseg->GetEnd().y * aModel.scale;
 
     // Items on the edge layer are handled elsewhere; just return
     if( layer == EDGE_N )
@@ -626,12 +617,10 @@ static void vrml_text_callback( int x0, int y0, int xf, int yf )
     LAYER_NUM s_text_layer = model_vrml->s_text_layer;
     int s_text_width = model_vrml->s_text_width;
     double  scale = model_vrml->scale;
-    double  tx  = model_vrml->tx;
-    double  ty  = model_vrml->ty;
 
     export_vrml_line( *model_vrml, s_text_layer,
-            x0 * scale + tx, y0 * scale + ty,
-            xf * scale + tx, yf * scale + ty,
+            x0 * scale, y0 * scale,
+            xf * scale, yf * scale,
             s_text_width * scale );
 }
 
@@ -729,8 +718,6 @@ static void export_vrml_board( MODEL_VRML& aModel, BOARD* pcb )
     }
 
     double  scale = aModel.scale;
-    double  dx  = aModel.tx;
-    double  dy  = aModel.ty;
 
     int i = 0;
     int seg;
@@ -756,8 +743,8 @@ static void export_vrml_board( MODEL_VRML& aModel, BOARD* pcb )
             if( bufferPcbOutlines[i].end_contour )
                 break;
 
-            aModel.board.AddVertex( seg, bufferPcbOutlines[i].x * scale + dx,
-                    -(bufferPcbOutlines[i].y * scale + dy) );
+            aModel.board.AddVertex( seg, bufferPcbOutlines[i].x * scale,
+                    -(bufferPcbOutlines[i].y * scale ) );
 
             ++i;
         }
@@ -788,8 +775,8 @@ static void export_vrml_board( MODEL_VRML& aModel, BOARD* pcb )
             if( allLayerHoles[i].end_contour )
                 break;
 
-            aModel.holes.AddVertex( seg, allLayerHoles[i].x * scale + dx,
-                                    -(allLayerHoles[i].y * scale + dy) );
+            aModel.holes.AddVertex( seg, allLayerHoles[i].x * scale,
+                                    -(allLayerHoles[i].y * scale ) );
 
             ++i;
         }
@@ -849,8 +836,8 @@ static void export_vrml_via( MODEL_VRML& aModel, BOARD* pcb, const VIA* via )
 
     hole = via->GetDrillValue() * aModel.scale / 2.0;
     r   = via->GetWidth() * aModel.scale / 2.0;
-    x   = via->GetStart().x * aModel.scale + aModel.tx;
-    y   = via->GetStart().y * aModel.scale + aModel.ty;
+    x   = via->GetStart().x * aModel.scale;
+    y   = via->GetStart().y * aModel.scale;
     via->LayerPair( &top_layer, &bottom_layer );
 
     // do not render a buried via
@@ -873,10 +860,10 @@ static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
         else if( track->GetLayer() == FIRST_COPPER_LAYER
                  || track->GetLayer() == LAST_COPPER_LAYER )
             export_vrml_line( aModel, track->GetLayer(),
-                    track->GetStart().x * aModel.scale + aModel.tx,
-                    track->GetStart().y * aModel.scale + aModel.ty,
-                    track->GetEnd().x * aModel.scale + aModel.tx,
-                    track->GetEnd().y * aModel.scale + aModel.ty,
+                    track->GetStart().x * aModel.scale,
+                    track->GetStart().y * aModel.scale,
+                    track->GetEnd().x * aModel.scale,
+                    track->GetEnd().y * aModel.scale,
                     track->GetWidth() * aModel.scale );
     }
 }
@@ -886,9 +873,6 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
 {
 
     double scale = aModel.scale;
-    double dx = aModel.tx;
-    double dy = aModel.ty;
-
     double x, y;
 
     for( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
@@ -920,8 +904,8 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
 
             while( i < nvert )
             {
-                x = poly.GetX(i) * scale + dx;
-                y = -(poly.GetY(i) * scale + dy);
+                x = poly.GetX(i) * scale;
+                y = -(poly.GetY(i) * scale);
 
                 if( poly.IsEndContour(i) )
                     break;
@@ -971,10 +955,10 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
                                      double aOrientation )
 {
     LAYER_NUM layer = aOutline->GetLayer();
-    double  x   = aOutline->GetStart().x * aModel.scale + aModel.tx;
-    double  y   = aOutline->GetStart().y * aModel.scale + aModel.ty;
-    double  xf  = aOutline->GetEnd().x * aModel.scale + aModel.tx;
-    double  yf  = aOutline->GetEnd().y * aModel.scale + aModel.ty;
+    double  x   = aOutline->GetStart().x * aModel.scale;
+    double  y   = aOutline->GetStart().y * aModel.scale;
+    double  xf  = aOutline->GetEnd().x * aModel.scale;
+    double  yf  = aOutline->GetEnd().y * aModel.scale;
     double  w   = aOutline->GetWidth() * aModel.scale;
 
     switch( aOutline->GetShape() )
@@ -1015,8 +999,8 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
                 corner.x += aOutline->GetPosition().x;
                 corner.y += aOutline->GetPosition().y;
 
-                x = corner.x * aModel.scale + aModel.tx;
-                y = - ( corner.y * aModel.scale + aModel.ty );
+                x = corner.x * aModel.scale;
+                y = - ( corner.y * aModel.scale );
 
                 if( !vl->AddVertex( seg, x, y ) )
                     throw( std::runtime_error( vl->GetError() ) );
@@ -1037,8 +1021,8 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
 {
     // The (maybe offset) pad position
     wxPoint pad_pos = aPad->ShapePos();
-    double  pad_x   = pad_pos.x * aModel.scale + aModel.tx;
-    double  pad_y   = pad_pos.y * aModel.scale + aModel.ty;
+    double  pad_x   = pad_pos.x * aModel.scale;
+    double  pad_y   = pad_pos.y * aModel.scale;
     wxSize  pad_delta = aPad->GetDelta();
 
     double  pad_dx  = pad_delta.x * aModel.scale / 2.0;
@@ -1121,22 +1105,36 @@ static void export_vrml_pad( MODEL_VRML& aModel, BOARD* pcb, D_PAD* aPad )
     double  hole_drill_w    = (double) aPad->GetDrillSize().x * aModel.scale / 2.0;
     double  hole_drill_h    = (double) aPad->GetDrillSize().y * aModel.scale / 2.0;
     double  hole_drill = std::min( hole_drill_w, hole_drill_h );
-    double  hole_x  = aPad->GetPosition().x * aModel.scale + aModel.tx;
-    double  hole_y  = aPad->GetPosition().y * aModel.scale + aModel.ty;
+    double  hole_x  = aPad->GetPosition().x * aModel.scale;
+    double  hole_y  = aPad->GetPosition().y * aModel.scale;
 
     // Export the hole on the edge layer
     if( hole_drill > 0 )
     {
+        bool pth = false;
+
+        if( aPad->GetAttribute() != PAD_HOLE_NOT_PLATED )
+            pth = true;
+
         if( aPad->GetDrillShape() == PAD_DRILL_OBLONG )
         {
             // Oblong hole (slot)
             aModel.holes.AddSlot( hole_x, -hole_y, hole_drill_w * 2.0, hole_drill_h * 2.0,
-                    aPad->GetOrientation()/10.0, true );
+                    aPad->GetOrientation()/10.0, true, pth );
+
+            if( pth )
+                aModel.plated_holes.AddSlot( hole_x, -hole_y,
+                                             hole_drill_w * 2.0, hole_drill_h * 2.0,
+                                             aPad->GetOrientation()/10.0, true, false );
         }
         else
         {
             // Drill a round hole
-            aModel.holes.AddCircle( hole_x, -hole_y, hole_drill, true );
+            aModel.holes.AddCircle( hole_x, -hole_y, hole_drill, true, pth );
+
+            if( pth )
+                aModel.plated_holes.AddCircle( hole_x, -hole_y, hole_drill, true, false );
+
         }
     }
 
@@ -1390,7 +1388,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName,
         EDA_RECT bbbox = pcb->ComputeBoundingBox();
 
         model3d.SetOffset( -model3d.scale * bbbox.Centre().x,
-                           -model3d.scale * bbbox.Centre().y );
+                           model3d.scale * bbbox.Centre().y );
 
         output_file << "  children [\n";
 
