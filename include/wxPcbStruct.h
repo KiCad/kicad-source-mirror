@@ -105,9 +105,7 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 protected:
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
-    // Panel used to let user talk with internal scripting
-    wxWindow* m_pythonPanel;
-    bool m_pythonPanelHidden;
+    bool m_pythonPanelShow;                   ///< Visibility flag for Python Console
 #endif
 
     PCB_LAYER_WIDGET* m_Layers;
@@ -1524,7 +1522,9 @@ public:
      * Function ScriptingConsoleEnableDisable
      * enables or disabled the scripting console
      */
-    void ScriptingConsoleEnableDisable( wxCommandEvent& event );
+    void ScriptingConsoleEnableDisable( wxCommandEvent& aEvent );
+
+    void OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent );
 
     void OnSelectAutoPlaceMode( wxCommandEvent& aEvent );
 
