@@ -72,6 +72,8 @@
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
+// The name of the pane info handling the python console:
+#define PYTHONCONSOLE_STRID   wxT( "PythonPanel" )
 #endif
 
 #include <class_draw_panel_gal.h>
@@ -203,6 +205,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, PCB_EDIT_FRAME::Access_to_External_Tool )
 #ifdef KICAD_SCRIPTING_WXPYTHON
     EVT_TOOL( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, PCB_EDIT_FRAME::ScriptingConsoleEnableDisable )
+    EVT_UPDATE_UI( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
+                   PCB_EDIT_FRAME::OnUpdateScriptingConsoleState )
 #endif
     // Option toolbar
     EVT_TOOL( ID_TB_OPTIONS_DRC_OFF,
@@ -316,12 +320,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
     m_useCmpFileForFpNames = true;
+#if defined(KICAD_SCRIPTING_WXPYTHON)
+    m_pythonPanel = NULL;
+    m_pythonPanelShow = false;
+#endif
 
     m_rotationAngle = 900;
-
-#ifdef KICAD_SCRIPTING_WXPYTHON
-    m_pythonPanel = NULL;
-#endif
 
     for ( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
@@ -415,7 +419,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     if( m_microWaveToolBar )    // The auxiliary vertical right toolbar (currently microwave tools)
         m_auimgr.AddPane( m_microWaveToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_microWaveToolBar" ) ).Right().Layer( 1 ).Position(1).Hide() );
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_microWaveToolBar" ) ).
+                          Right().Layer( 1 ).Position(1).Hide() );
 
     if( m_drawToolBar )    // The main right vertical toolbar
         m_auimgr.AddPane( m_drawToolBar,
@@ -444,23 +449,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     if( m_messagePanel )
         m_auimgr.AddPane( m_messagePanel,
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
-
-
-#if defined(KICAD_SCRIPTING_WXPYTHON)
-    // Add the scripting panel
-    EDA_PANEINFO  pythonAuiInfo;
-    pythonAuiInfo.ScriptingToolbarPane();
-    pythonAuiInfo.Caption( wxT( "Python Scripting" ) );
-    pythonAuiInfo.MinSize( wxSize( 200, 100 ) );
-    pythonAuiInfo.BestSize( wxSize( GetClientSize().x/2, 200 ) );
-    pythonAuiInfo.Hide();
-
-    m_pythonPanel = CreatePythonShellWindow( this );
-    m_auimgr.AddPane( m_pythonPanel,
-                      pythonAuiInfo.Name( wxT( "PythonPanel" ) ).Bottom().Layer(9) );
-
-    m_pythonPanelHidden = true;
-#endif
 
     ReFillLayerWidget();        // this is near end because contents establish size
 
@@ -1093,19 +1081,38 @@ void PCB_EDIT_FRAME::UpdateTitle()
 #if defined(KICAD_SCRIPTING_WXPYTHON)
 void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
 {
-    if ( m_pythonPanelHidden )
+    if( m_pythonPanel == NULL )
     {
-        m_auimgr.GetPane( m_pythonPanel ).Show();
-        m_pythonPanelHidden = false;
+        // Add the scripting panel
+        EDA_PANEINFO  pythonAuiPane;
+        pythonAuiPane.ScriptingToolbarPane();
+        pythonAuiPane.Caption( wxT( "Python Scripting" ) );
+        pythonAuiPane.MinSize( 300, 150 );
+        pythonAuiPane.BestSize( 600, 200 );
+
+    #if 1   // Set to 0 to use the old behavior (dockable Python console)
+        // The console is not dockable. Reasons:
+        // * When docked there is an issue with accelerator keys used in the main menu:
+        //   these keys are not sent to the console, even if it has the focus
+        // * The console is more easy to move, resize, ... if it is not dockable
+        pythonAuiPane.Dockable( false ).Float();
+
+        // Gives a reasonnable position to the console
+        wxPoint pos = m_canvas->GetScreenPosition();
+        pythonAuiPane.FloatingPosition( pos.x + 10, pos.y + 10 );
+        pythonAuiPane.FloatingSize( 600, 200 );
+    #else
+        pythonAuiPane.LeftDockable( false ).RightDockable( false );
+    #endif
+        m_pythonPanel = CreatePythonShellWindow( this );
+        m_auimgr.AddPane( m_pythonPanel,
+                          pythonAuiPane.Name( PYTHONCONSOLE_STRID ).Bottom().Layer(9) );
     }
-    else
-    {
-        m_auimgr.GetPane( m_pythonPanel ).Hide();
-        m_pythonPanelHidden = true;
-    }
+
+    m_pythonPanelShow = ! m_pythonPanelShow;
+    m_auimgr.GetPane( PYTHONCONSOLE_STRID ).Show( m_pythonPanelShow );
 
     m_auimgr.Update();
-
 }
 #endif
 
