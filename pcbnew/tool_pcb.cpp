@@ -307,16 +307,16 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
                             KiBitmap( web_support_xpm ),
                             _( "Fast access to the Web Based FreeROUTE advanced router" ) );
 
-    m_mainToolBar->AddSeparator();
-
     // Access to the scripting console
 #ifdef KICAD_SCRIPTING_WXPYTHON
+    m_mainToolBar->AddSeparator();
+
     m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,
                             KiBitmap( py_script_xpm ),
-                            _( "Show/Hide the Scripting console" ) );
-
-    m_mainToolBar->AddSeparator();
+                            _( "Show/Hide the Python Scripting console" ),
+                            wxITEM_CHECK );
 #endif
+
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
 }
