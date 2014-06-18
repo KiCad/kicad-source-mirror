@@ -534,8 +534,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     AddMenuItem( toolsMenu, ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
                  _( "&Scripting Console" ),
-                 _( "Show/Hide the Scripting console" ),
-                 KiBitmap( book_xpm ) );
+                 _( "Show/Hide the Python Scripting console" ),
+                 KiBitmap( py_script_xpm ) );
 #endif
 
     wxMenu* designRulesMenu = new wxMenu;

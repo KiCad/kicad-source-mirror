@@ -109,6 +109,12 @@ void PCB_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
     m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
 }
 
+#ifdef KICAD_SCRIPTING_WXPYTHON
+void PCB_EDIT_FRAME::OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( m_pythonPanelShow );
+}
+#endif
 
 void PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
 {
