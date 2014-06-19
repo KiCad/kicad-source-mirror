@@ -282,7 +282,12 @@ public:
      */
     virtual void SetTextMode( PlotTextMode mode )
     {
-    // NOP for most plotters
+        // NOP for most plotters
+    }
+
+    virtual void SetLayerAttribFunction( const wxString& function )
+    {
+        // NOP for most plotters
     }
 
 protected:
@@ -769,6 +774,7 @@ public:
         workFile  = 0;
         finalFile = 0;
         currentAperture = apertures.end();
+        attribFunction = wxEmptyString;
     }
 
     virtual PlotFormat GetPlotterType() const
@@ -813,6 +819,11 @@ public:
 
     virtual void SetLayerPolarity( bool aPositive );
 
+    virtual void SetLayerAttribFunction( const wxString& function )
+    {
+        attribFunction = function;
+    }
+
 protected:
     void selectAperture( const wxSize& size, APERTURE::APERTURE_TYPE type );
     void emitDcode( const DPOINT& pt, int dcode );
@@ -828,6 +839,8 @@ protected:
 
     std::vector<APERTURE>           apertures;
     std::vector<APERTURE>::iterator currentAperture;
+
+    wxString attribFunction; /* the layer "function", it is linked with the layer id */
 };
 
 

@@ -877,6 +877,7 @@ static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter,
  * (or has a problem)
  */
 PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
+                         int aLayer,
                          const wxString& aFullFileName,
                          const wxString& aSheetDesc )
 {
@@ -938,6 +939,10 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
 
     if( plotter->OpenFile( aFullFileName ) )
     {
+        // For the Gerber "file function" attribute, set the layer number
+        if( plotter->GetPlotterType() == PLOT_FORMAT_GERBER && plotOpts.GetUseGerberAttributes() )
+            plotter->SetLayerAttribFunction( GetGerberFileFunction( aBoard, aLayer ) );
+
         plotter->StartPlot();
 
         // Plot the frame reference if requested
@@ -949,7 +954,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
                            aSheetDesc, aBoard->GetFileName() );
 
             if( aPlotOpts->GetMirror() )
-            initializePlotter( plotter, aBoard, aPlotOpts );
+                initializePlotter( plotter, aBoard, aPlotOpts );
         }
 
         /* When plotting a negative board: draw a black rectangle

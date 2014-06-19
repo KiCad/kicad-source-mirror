@@ -79,6 +79,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_layerSelection       = LAYER_BACK | LAYER_FRONT
         | SILKSCREEN_LAYER_FRONT | SILKSCREEN_LAYER_BACK;
     m_useGerberExtensions  = true;
+    m_useGerberAttributes  = false;
     m_excludeEdgeLayer     = true;
     m_lineWidth            = g_DrawDefaultLineThickness;
     m_plotFrameRef         = false;
@@ -129,6 +130,8 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        long(m_layerSelection) );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
                        m_useGerberExtensions ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ),
+                       m_useGerberAttributes ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_excludeedgelayer ),
                        m_excludeEdgeLayer ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %f)\n", getTokenName( T_linewidth ),
@@ -193,6 +196,8 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
     if( m_layerSelection != aPcbPlotParams.m_layerSelection )
         return false;
     if( m_useGerberExtensions != aPcbPlotParams.m_useGerberExtensions )
+        return false;
+    if( m_useGerberAttributes != aPcbPlotParams.m_useGerberAttributes )
         return false;
     if( m_excludeEdgeLayer != aPcbPlotParams.m_excludeEdgeLayer )
         return false;
@@ -328,6 +333,9 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
         case T_usegerberextensions:
             aPcbPlotParams->m_useGerberExtensions = parseBool();
+            break;
+        case T_usegerberattributes:
+            aPcbPlotParams->m_useGerberAttributes = parseBool();
             break;
         case T_psa4output:
             aPcbPlotParams->m_A4Output = parseBool();

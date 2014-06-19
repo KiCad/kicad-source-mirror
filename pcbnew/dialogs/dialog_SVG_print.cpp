@@ -334,7 +334,9 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
 
     LOCALE_IO    toggle;
     SVG_PLOTTER* plotter = (SVG_PLOTTER*) StartPlotBoard( m_board,
-                                                          &m_plotOpts, aFullFileName,
+                                                          &m_plotOpts,
+                                                          UNDEFINED_LAYER,
+                                                          aFullFileName,
                                                           wxEmptyString );
 
     if( plotter )

@@ -131,6 +131,9 @@ private:
      * appending a suffix to the board name */
     bool        m_useGerberExtensions;
 
+    /// Include attributes from the Gerber X2 format (chapter 5 in revision J1)
+    bool        m_useGerberAttributes;
+
     /// Plot gerbers using auxiliary (drill) origin instead of page coordinates
     bool        m_useAuxOrigin;
 
@@ -256,6 +259,9 @@ public:
 
     void        SetOutputDirectory( wxString aDir ) { m_outputDirectory = aDir; };
     wxString    GetOutputDirectory() const { return m_outputDirectory; };
+
+    void        SetUseGerberAttributes( bool aUse ) { m_useGerberAttributes = aUse; };
+    bool        GetUseGerberAttributes() const { return m_useGerberAttributes; };
 
     void        SetUseGerberExtensions( bool aUse ) { m_useGerberExtensions = aUse; };
     bool        GetUseGerberExtensions() const { return m_useGerberExtensions; };

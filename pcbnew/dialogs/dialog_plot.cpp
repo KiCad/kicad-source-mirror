@@ -171,6 +171,9 @@ void DIALOG_PLOT::Init_Dialog()
     // Option for using proper Gerber extensions
     m_useGerberExtensions->SetValue( m_plotOpts.GetUseGerberExtensions() );
 
+    // Option for including Gerber attributes (from Gerber X2 format) in the output
+    m_useGerberAttributes->SetValue( m_plotOpts.GetUseGerberAttributes() );
+
     // Option for excluding contents of "Edges Pcb" layer
     m_excludeEdgeLayerOpt->SetValue( m_plotOpts.GetExcludeEdgeLayer() );
 
@@ -379,6 +382,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_subtractMaskFromSilk->SetValue( false );
         m_useGerberExtensions->Enable( false );
         m_useGerberExtensions->SetValue( false );
+        m_useGerberAttributes->Enable( false );
+        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
@@ -407,6 +412,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_subtractMaskFromSilk->SetValue( false );
         m_useGerberExtensions->Enable( false );
         m_useGerberExtensions->SetValue( false );
+        m_useGerberAttributes->Enable( false );
+        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( true );
         m_fineAdjustXscaleOpt->Enable( true );
         m_fineAdjustYscaleOpt->Enable( true );
@@ -433,6 +440,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( true );
         m_useGerberExtensions->Enable( true );
+        m_useGerberAttributes->Enable( true );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
@@ -462,6 +470,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_subtractMaskFromSilk->SetValue( false );
         m_useGerberExtensions->Enable( false );
         m_useGerberExtensions->SetValue( false );
+        m_useGerberAttributes->Enable( false );
+        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( true );
         m_fineAdjustXscaleOpt->Enable( false );
         m_fineAdjustYscaleOpt->Enable( false );
@@ -489,6 +499,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_subtractMaskFromSilk->SetValue( false );
         m_useGerberExtensions->Enable( false );
         m_useGerberExtensions->SetValue( false );
+        m_useGerberAttributes->Enable( false );
+        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
@@ -667,6 +679,8 @@ void DIALOG_PLOT::applyPlotSettings()
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
 
+    tempOptions.SetUseGerberAttributes( m_useGerberAttributes->GetValue() );
+
     tempOptions.SetFormat( GetPlotFormat() );
 
     long            selectedLayers = 0;
@@ -794,7 +808,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             LOCALE_IO toggle;
             BOARD *board = m_parent->GetBoard();
             PLOTTER *plotter = StartPlotBoard( board, &m_plotOpts,
-                                               fn.GetFullPath(),
+                                               layer, fn.GetFullPath(),
                                                wxEmptyString );
 
             // Print diags in messages box:

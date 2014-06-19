@@ -67,6 +67,12 @@ bool GERBER_PLOTTER::StartPlot()
     if( outputFile == NULL )
         return false;
 
+    if( !attribFunction.IsEmpty() )
+    {
+        fputs( "%TF.GerberVersion,J1*%\n", outputFile );
+        fprintf( outputFile, "%%TF.FileFunction,%s*%%\n", TO_UTF8( attribFunction ) );
+    }
+
     /* Set coordinate format to 3.4 absolute, leading zero omitted */
     fputs( "%FSLAX34Y34*%\n", outputFile );
     fputs( "G04 Gerber Fmt 3.4, Leading zero omitted, Abs format*\n", outputFile );
