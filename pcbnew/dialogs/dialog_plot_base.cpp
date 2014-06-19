@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Feb 26 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -225,6 +225,11 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_useGerberExtensions->SetToolTip( _("Use proper Gerber extensions - .GBL, .GTL, etc...") );
 	
 	m_GerberOptionsSizer->Add( m_useGerberExtensions, 0, wxLEFT|wxRIGHT|wxTOP, 2 );
+	
+	m_useGerberAttributes = new wxCheckBox( this, wxID_ANY, _("Include extended attributes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useGerberAttributes->SetToolTip( _("Include extended attributes for non-image data in the Gerber file") );
+	
+	m_GerberOptionsSizer->Add( m_useGerberAttributes, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
 	m_subtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_subtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );

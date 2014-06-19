@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Feb 26 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -89,6 +89,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxStaticText* m_SolderMaskMinWidthCurrValue;
 		wxStaticBoxSizer* m_GerberOptionsSizer;
 		wxCheckBox* m_useGerberExtensions;
+		wxCheckBox* m_useGerberAttributes;
 		wxCheckBox* m_subtractMaskFromSilk;
 		wxStaticBoxSizer* m_HPGLOptionsSizer;
 		wxStaticText* m_textPenSize;
