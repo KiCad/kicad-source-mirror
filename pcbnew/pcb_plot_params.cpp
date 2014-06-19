@@ -130,8 +130,11 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        long(m_layerSelection) );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
                        m_useGerberExtensions ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ),
-                       m_useGerberAttributes ? trueStr : falseStr );
+
+    if( m_useGerberAttributes )  // save this option only if active,
+                                // to avoid incompatibility with older Pcbnew version
+        aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ), trueStr );
+
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_excludeedgelayer ),
                        m_excludeEdgeLayer ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %f)\n", getTokenName( T_linewidth ),
