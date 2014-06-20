@@ -1085,7 +1085,7 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
     {
         // Add the scripting panel
         EDA_PANEINFO  pythonAuiPane;
-        pythonAuiPane.ScriptingToolbarPane();
+        pythonAuiPane.ScriptingConsolePane();
         pythonAuiPane.Caption( wxT( "Python Scripting" ) );
         pythonAuiPane.MinSize( 300, 150 );
 
