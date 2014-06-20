@@ -56,7 +56,10 @@ protected:
                                             // 0 is for the grid corresponding to
                                             // a wxCommand ID = ID_POPUP_GRID_LEVEL_1000.
     bool        m_DrawGrid;                 // hide/Show grid
+    bool        m_showPageLimits;           ///< true to display the page limits
     EDA_COLOR_T m_GridColor;                // Grid color
+    EDA_COLOR_T m_drawBgColor;              ///< the background color of the draw canvas
+                                            ///< BLACK for Pcbnew, BLACK or WHITE for eeschema
 
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
@@ -235,6 +238,10 @@ public:
     virtual const TITLE_BLOCK& GetTitleBlock() const = 0;
     virtual void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) = 0;
 
+    // the background color of the draw canvas:
+    EDA_COLOR_T GetDrawBgColor() const { return m_drawBgColor; }
+    void SetDrawBgColor( EDA_COLOR_T aColor) { m_drawBgColor= aColor ; }
+
     int GetCursorShape() const { return m_cursorShape; }
 
     void SetCursorShape( int aCursorShape ) { m_cursorShape = aCursorShape; }
@@ -242,6 +249,8 @@ public:
     bool GetShowBorderAndTitleBlock() const { return m_showBorderAndTitleBlock; }
 
     void SetShowBorderAndTitleBlock( bool aShow ) { m_showBorderAndTitleBlock = aShow; }
+    bool ShowPageLimits() const { return m_showPageLimits; }
+    void SetShowPageLimits( bool aShow ) { m_showPageLimits = aShow; }
 
     EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
 

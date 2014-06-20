@@ -385,8 +385,6 @@ private:
     void    setMargins();
 };
 
-extern bool         g_ShowPageLimits;       ///< true to display the page limits
-
 extern EDA_UNITS_T  g_UserUnit;     ///< display units
 
 /// Draw color for moving objects.

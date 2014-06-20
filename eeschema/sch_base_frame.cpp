@@ -28,7 +28,6 @@
 #include <base_units.h>
 #include <kiway.h>
 
-
 SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
         FRAME_T aWindowType, const wxString& aTitle,
         const wxPoint& aPosition, const wxSize& aSize, long aStyle,
@@ -36,6 +35,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
     EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition,
             aSize, aStyle, aFrameName )
 {
+    SetDrawBgColor( WHITE );  // the background color of the draw canvas, BLACK or WHITE
 }
 
 

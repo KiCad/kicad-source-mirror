@@ -840,7 +840,7 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                 {
                     blackpenstate = GetGRForceBlackPenState();
                     GRForceBlackPen( false );
-                    color = g_DrawBgColor;
+                    color = WHITE;
                 }
                 else
                 {

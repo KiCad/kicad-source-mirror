@@ -302,7 +302,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     if( drillShapeOpt != PRINT_PARAMETERS::NO_DRILL_SHAPE )
     {
         TRACK * track = Pcb->m_Track;
-        EDA_COLOR_T color = g_DrawBgColor;
+        EDA_COLOR_T color = GetDrawBgColor();
         bool blackpenstate = GetGRForceBlackPenState();
         GRForceBlackPen( false );
         GRSetDrawMode( aDC, GR_COPY );

@@ -1,10 +1,35 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_general_options.cpp
-// Author:      jean-pierre Charras
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file pcbnew/dialogs/dialog_general_options.cpp
+ */
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /* functions relatives to the dialog opened from the main menu :
-    Prefernces/display
+    Preferences/display
 */
+
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -84,7 +109,7 @@ void DIALOG_DISPLAY_OPTIONS::init()
     else
         m_OptDisplayVias->SetSelection( 0 );
 
-    m_Show_Page_Limits->SetSelection( g_ShowPageLimits ? 0 : 1 );
+    m_Show_Page_Limits->SetSelection( m_Parent->ShowPageLimits() ? 0 : 1 );
 
     m_OptDisplayViaHole->SetSelection( DisplayOpt.m_DisplayViaMode );
     m_OptDisplayModTexts->SetSelection( DisplayOpt.DisplayModText );
@@ -108,9 +133,9 @@ void DIALOG_DISPLAY_OPTIONS::OnCancelClick( wxCommandEvent& event )
 void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
 {
     if ( m_Show_Page_Limits->GetSelection() == 0 )
-        g_ShowPageLimits = true;
+        m_Parent->SetShowPageLimits( true );
     else
-        g_ShowPageLimits = false;
+        m_Parent->SetShowPageLimits( false );
 
     if ( m_OptDisplayTracks->GetSelection() == 1 )
         DisplayOpt.DisplayPcbTrackFill = true;

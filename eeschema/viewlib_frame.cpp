@@ -496,12 +496,20 @@ void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
 #define LIBLIST_WIDTH_KEY wxT( "ViewLiblistWidth" )
 #define CMPLIST_WIDTH_KEY wxT( "ViewCmplistWidth" )
 
+// Currently, the library viewer has no dialog to change the background color
+// of the draw canvas. Therefore the background color is here just
+// in case of this option is added to some library viewer config dialog
+#define LIBVIEW_BGCOLOR   wxT( "LibviewBgColor" )
+
 
 void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
     wxConfigPathChanger cpc( aCfg, m_configPath );
+
+    EDA_COLOR_T itmp = ColorByName( aCfg->Read( LIBVIEW_BGCOLOR, wxT( "WHITE" ) ) );
+    SetDrawBgColor( itmp );
 
     aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 100 );
     aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 100 );
@@ -529,6 +537,7 @@ void LIB_VIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     m_cmpListWidth = m_cmpList->GetSize().x;
     aCfg->Write( CMPLIST_WIDTH_KEY, m_cmpListWidth );
+    aCfg->Write( LIBVIEW_BGCOLOR, ColorGetName( GetDrawBgColor() ) );
 }
 
 

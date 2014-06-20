@@ -416,7 +416,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         {
             blackpenstate = GetGRForceBlackPenState();
             GRForceBlackPen( false );
-            aDrawInfo.m_HoleColor = g_DrawBgColor;
+            aDrawInfo.m_HoleColor = WHITE;
         }
 
         if( aDrawInfo.m_DrawMode != GR_XOR )

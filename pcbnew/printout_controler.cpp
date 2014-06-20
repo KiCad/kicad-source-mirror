@@ -299,9 +299,9 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     panel->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( MAX_VALUE, MAX_VALUE ) ) );
 
     screen->m_IsPrinting = true;
-    EDA_COLOR_T bg_color = g_DrawBgColor;
+    EDA_COLOR_T bg_color = m_Parent->GetDrawBgColor();
 
-    // Print frame reference, if reqquested, before
+    // Print frame reference, if requested, before
     if( m_PrintParams.m_Print_Black_and_White )
         GRForceBlackPen( true );
 
@@ -351,7 +351,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
                 devLeft, devTop, devRight, devBottom );
 #endif
 
-    g_DrawBgColor = WHITE;
+    m_Parent->SetDrawBgColor( WHITE );
 
     /* when printing in color mode, we use the graphic OR mode that gives the same look as
      * the screen but because the background is white when printing, we must use a trick:
@@ -380,7 +380,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror,
                          &m_PrintParams );
 
-    g_DrawBgColor = bg_color;
+    m_Parent->SetDrawBgColor( bg_color );
     screen->m_IsPrinting = false;
     panel->SetClipBox( tmp );
     GRForceBlackPen( false );

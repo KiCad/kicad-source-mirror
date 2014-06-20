@@ -103,7 +103,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_scrollIncrementX = std::min( size.x / 8, 10 );
     m_scrollIncrementY = std::min( size.y / 8, 10 );
 
-    SetBackgroundColour( MakeColour( g_DrawBgColor ) );
+    SetBackgroundColour( MakeColour( parent->GetDrawBgColor() ) );
 
 #if KICAD_USE_BUFFERED_DC || KICAD_USE_BUFFERED_PAINTDC
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
@@ -528,9 +528,11 @@ void EDA_DRAW_PANEL::EraseScreen( wxDC* DC )
 {
     GRSetDrawMode( DC, GR_COPY );
 
+    EDA_COLOR_T bgColor = GetParent()->GetDrawBgColor();
+
     GRSFilledRect( NULL, DC, m_ClipBox.GetX(), m_ClipBox.GetY(),
                    m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
-                   0, g_DrawBgColor, g_DrawBgColor );
+                   0, bgColor, bgColor );
 
     // Set to one (1) to draw bounding box validate bounding box calculation.
 #if DEBUG_SHOW_CLIP_RECT
@@ -583,10 +585,12 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
     if( Screen == NULL )
         return;
 
-    if( ( g_DrawBgColor != WHITE ) && ( g_DrawBgColor != BLACK ) )
-        g_DrawBgColor = BLACK;
+    EDA_COLOR_T bgColor = GetParent()->GetDrawBgColor();
 
-    if( g_DrawBgColor == WHITE )
+    if( ( bgColor != WHITE ) && ( bgColor != BLACK ) )
+        bgColor = BLACK;
+
+    if( bgColor == WHITE )
     {
         g_XorMode    = GR_NXOR;
         g_GhostColor = BLACK;
@@ -599,7 +603,7 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
 
     GRResetPenAndBrush( DC );
 
-    DC->SetBackground( g_DrawBgColor == BLACK ? *wxBLACK_BRUSH : *wxWHITE_BRUSH );
+    DC->SetBackground( bgColor == BLACK ? *wxBLACK_BRUSH : *wxWHITE_BRUSH );
     DC->SetBackgroundMode( wxSOLID );
 
     if( erasebg )

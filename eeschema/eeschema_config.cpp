@@ -76,14 +76,14 @@ void SetDefaultBusThickness( int aThickness)
 /// Default size for text (not only labels)
 static int s_defaultTextSize;
 
-int GetDefaultTextSize() 
-{ 
+int GetDefaultTextSize()
+{
     return s_defaultTextSize;
 }
 
-void SetDefaultTextSize( int aTextSize ) 
-{ 
-    s_defaultTextSize = aTextSize; 
+void SetDefaultTextSize( int aTextSize )
+{
+    s_defaultTextSize = aTextSize;
 }
 
 /*
@@ -311,7 +311,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetMiddleButtonPanLimited( m_canvas->GetMiddleButtonPanLimited() );
     dlg.SetEnableAutoPan( m_canvas->GetEnableAutoPan() );
     dlg.SetEnableHVBusOrientation( GetForceHVLines() );
-    dlg.SetShowPageLimits( g_ShowPageLimits );
+    dlg.SetShowPageLimits( m_showPageLimits );
     dlg.Layout();
     dlg.Fit();
     dlg.SetMinSize( dlg.GetSize() );
@@ -357,7 +357,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     m_canvas->SetMiddleButtonPanLimited( dlg.GetMiddleButtonPanLimited() );
     m_canvas->SetEnableAutoPan( dlg.GetEnableAutoPan() );
     SetForceHVLines( dlg.GetEnableHVBusOrientation() );
-    g_ShowPageLimits = dlg.GetShowPageLimits();
+    m_showPageLimits = dlg.GetShowPageLimits();
 
     wxString templateFieldName;
 
@@ -534,8 +534,14 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
     if( !m_configSettings.empty() )
         return m_configSettings;
 
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ShowPageLimits" ),
+                                                    &m_showPageLimits, true ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
                                                    (int*)&g_UserUnit, MILLIMETRES ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "SchEditorBgColor" ),
+                                                        &m_drawBgColor,
+                                                        WHITE ) );
+
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorWireEx" ),
                                                         &s_layerColor[LAYER_WIRE],
                                                         GREEN ) );

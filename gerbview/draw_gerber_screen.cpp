@@ -138,6 +138,8 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                        const wxPoint& aOffset, bool aPrintBlackAndWhite )
 {
+    GERBVIEW_FRAME* gerbFrame = (GERBVIEW_FRAME*) aPanel->GetParent();
+
     // Because Images can be negative (i.e with background filled in color) items are drawn
     // graphic layer per graphic layer, after the background is filled
     // to a temporary bitmap
@@ -145,15 +147,13 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     // If aDrawMode = UNSPECIFIED_DRAWMODE, items are drawn to the main screen, and therefore
     // artifacts can happen with negative items or negative images
 
-    wxColour bgColor = MakeColour( g_DrawBgColor );
+    wxColour bgColor = MakeColour( gerbFrame->GetDrawBgColor() );
 
 #if wxCHECK_VERSION( 3, 0, 0 )
     wxBrush  bgBrush( bgColor, wxBRUSHSTYLE_SOLID );
 #else
     wxBrush  bgBrush( bgColor, wxSOLID );
 #endif
-
-    GERBVIEW_FRAME* gerbFrame = (GERBVIEW_FRAME*) aPanel->GetParent();
 
     int      bitmapWidth, bitmapHeight;
     wxDC*    plotDC = aDC;
@@ -236,7 +236,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
         // Force black and white draw mode on request:
         if( aPrintBlackAndWhite )
-            gerbFrame->SetLayerColor( layer, g_DrawBgColor == BLACK ? WHITE : BLACK );
+            gerbFrame->SetLayerColor( layer, gerbFrame->GetDrawBgColor() == BLACK ? WHITE : BLACK );
 
         if( useBufferBitmap )
         {
