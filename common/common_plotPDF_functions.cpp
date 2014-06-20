@@ -723,7 +723,7 @@ bool PDF_PLOTTER::EndPlot()
              "<< /Size %lu /Root %d 0 R /Info %d 0 R >>\n"
              "startxref\n"
              "%ld\n" // The offset we saved before
-             "%%EOF\n",
+             "%%%%EOF\n",
              (unsigned long) xrefTable.size(), catalogHandle, infoDictHandle, xref_start );
 
     fclose( outputFile );
