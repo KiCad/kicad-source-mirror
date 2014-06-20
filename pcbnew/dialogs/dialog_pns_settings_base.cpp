@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 30 2013)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -19,29 +19,29 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxString m_modeChoices[] = { _("Highlight collisions"), _("Shove"), _("Walk around"), _("Figure out what's best") };
 	int m_modeNChoices = sizeof( m_modeChoices ) / sizeof( wxString );
 	m_mode = new wxRadioBox( this, wxID_ANY, _("Mode"), wxDefaultPosition, wxDefaultSize, m_modeNChoices, m_modeChoices, 1, wxRA_SPECIFY_COLS );
-	m_mode->SetSelection( 1 );
-	bMainSizer->Add( m_mode, 0, wxALL, 5 );
+	m_mode->SetSelection( 0 );
+	bMainSizer->Add( m_mode, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* bOptions;
 	bOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
 	
 	m_shoveVias = new wxCheckBox( this, wxID_ANY, _("Shove vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptions->Add( m_shoveVias, 0, wxALL, 5 );
+	bOptions->Add( m_shoveVias, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_backPressure = new wxCheckBox( this, wxID_ANY, _("Jump over obstacles"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptions->Add( m_backPressure, 0, wxALL, 5 );
+	bOptions->Add( m_backPressure, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_removeLoops = new wxCheckBox( this, wxID_ANY, _("Remove redundant tracks"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptions->Add( m_removeLoops, 0, wxALL, 5 );
+	bOptions->Add( m_removeLoops, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_autoNeckdown = new wxCheckBox( this, wxID_ANY, _("Automatic neckdown"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptions->Add( m_autoNeckdown, 0, wxALL, 5 );
+	bOptions->Add( m_autoNeckdown, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_smoothDragged = new wxCheckBox( this, wxID_ANY, _("Smooth dragged segments"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptions->Add( m_smoothDragged, 0, wxALL, 5 );
+	bOptions->Add( m_smoothDragged, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_violateDrc = new wxCheckBox( this, wxID_ANY, _("Allow DRC violations"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptions->Add( m_violateDrc, 0, wxALL, 5 );
+	bOptions->Add( m_violateDrc, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_suggestEnding = new wxCheckBox( this, wxID_ANY, _("Suggest track finish"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_suggestEnding->Enable( false );
@@ -89,7 +89,10 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bEffort->Add( bSlider, 1, wxEXPAND, 5 );
 	
 	
-	bOptions->Add( bEffort, 1, wxEXPAND, 5 );
+	bOptions->Add( bEffort, 0, wxEXPAND, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bOptions->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );
@@ -98,10 +101,10 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_stdButtons->AddButton( m_stdButtonsCancel );
 	m_stdButtons->Realize();
 	
-	bOptions->Add( m_stdButtons, 1, wxEXPAND, 5 );
+	bOptions->Add( m_stdButtons, 0, wxEXPAND, 5 );
 	
 	
-	bMainSizer->Add( bOptions, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bOptions, 1, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

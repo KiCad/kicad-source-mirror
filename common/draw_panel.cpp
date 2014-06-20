@@ -114,7 +114,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_ClipBox.SetY( 0 );
     m_canStartBlock = -1;       // Command block can start if >= 0
     m_abortRequest = false;
-    m_enableMiddleButtonPan = false;
+    m_enableMiddleButtonPan = true;
     m_enableZoomNoCenter = false;
     m_panScrollbarLimits = false;
     m_enableAutoPan = true;
