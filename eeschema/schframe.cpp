@@ -191,6 +191,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_previewSize = wxDefaultSize;
     m_printMonochrome = true;
     m_printSheetReference = true;
+    SetShowPageLimits( true );
     m_HotkeysZoomAndGridList = s_Schematic_Hokeys_Descr;
     m_dlgFindReplace = NULL;
     m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );

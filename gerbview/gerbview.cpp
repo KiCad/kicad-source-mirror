@@ -44,7 +44,6 @@
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
-extern EDA_COLOR_T g_DrawBgColor;
 int g_Default_GERBER_Format;
 
 
@@ -145,8 +144,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips
     ReadHotkeyConfig( wxT("GerberFrame"), s_Gerbview_Hokeys_Descr );
-
-    g_DrawBgColor = BLACK;
 
     return true;
 }

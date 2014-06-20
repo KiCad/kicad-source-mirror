@@ -240,25 +240,6 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     // was: wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
     Prj().ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_PCB, GetProjectFileParameters(), false );
 
-    // Dick 5-Feb-2012: I don't agree with this, the BOARD contents should dictate
-    // what is visible or not, even initially.  And since PCB_EDIT_FRAME projects settings
-    // have no control over what is visible (see PCB_EDIT_FRAME::GetProjectFileParameters())
-    // this is recklessly turning on things the user may not want to see.
-#if 0
-
-    /* Reset the items visibility flag when loading a new configuration because it could
-     * create SERIOUS mistakes for the user if board items are not visible after loading
-     * a board.  Grid and ratsnest can be left to their previous state.
-     */
-    bool showGrid = IsElementVisible( GRID_VISIBLE );
-    bool showRats = IsElementVisible( RATSNEST_VISIBLE );
-
-    SetVisibleAlls();
-
-    SetElementVisibility( GRID_VISIBLE, showGrid );
-    SetElementVisibility( RATSNEST_VISIBLE, showRats );
-#endif
-
     Prj().ElemClear( PROJECT::ELEM_FPTBL );      // Force it to be reloaded on demand.
 
     // Load the page layout decr file, from the filename stored in
@@ -315,6 +296,8 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
     if( !m_configSettings.empty() )
         return m_configSettings;
 
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ShowPageLimits" ),
+                                                    &m_showPageLimits, true ) );
     // Units used in dialogs and toolbars
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
                                                    (int*)&g_UserUnit, MILLIMETRES ) );

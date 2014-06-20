@@ -9,7 +9,7 @@
 
 #include <dialog_lib_edit_pin.h>
 
-DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin ) :
+DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( EDA_DRAW_FRAME* parent, LIB_PIN* aPin ) :
     DIALOG_LIB_EDIT_PIN_BASE( parent )
 {
     // Creates a dummy pin to show on a panel, inside this dialog:
@@ -20,7 +20,7 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin ) :
     m_dummyPin->SetParent( NULL );
     m_dummyPin->ClearFlags();
 
-    m_panelShowPin->SetBackgroundColour( MakeColour( g_DrawBgColor ) );
+    m_panelShowPin->SetBackgroundColour( MakeColour( parent->GetDrawBgColor() ) );
 
     // Set tab order
     m_textPadName->MoveAfterInTabOrder(m_textPinName);

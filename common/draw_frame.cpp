@@ -117,6 +117,9 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_LastGridSizeId      = 0;
     m_DrawGrid            = true;       // hide/Show grid. default = show
     m_GridColor           = DARKGRAY;   // Grid color
+    m_showPageLimits      = false;
+    m_drawBgColor         = BLACK;      // the background color of the draw canvas:
+                                        // BLACK for Pcbnew, BLACK or WHITeEfor eeschema
     m_snapToGrid          = true;
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
     m_movingCursorWithKeyboard = false;

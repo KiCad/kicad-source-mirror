@@ -31,12 +31,6 @@
 #include <pgm_base.h>
 
 #include <common.h>
-#include <gr_basic.h>
-
-
-static const wxChar showPageLimitsKey[]  = wxT( "ShowPageLimits" );
-static const wxChar backgroundColorKey[] = wxT( "BackgroundColor" );
-
 
 /// Initialize aDst SEARCH_STACK with KIFACE (DSO) specific settings.
 /// A non-member function so it an be moved easily, plus it's nobody's business.
@@ -97,24 +91,7 @@ static void setSearchPaths( SEARCH_STACK* aDst, KIWAY::FACE_T aId )
 bool KIFACE_I::start_common( int aCtlBits )
 {
     m_start_flags = aCtlBits;
-
     m_bm.Init();
-
-    m_bm.m_config->Read( showPageLimitsKey, &g_ShowPageLimits );
-
-    // FIXME OSX Mountain Lion (10.8)
-    // Seems that Read doesn't found anything and ColorFromInt
-    // Asserts - I'm unable to reproduce on 10.7
-
-    int draw_bg_color = BLACK;      // Default for all apps but Eeschema
-
-    if( m_id == KIWAY::FACE_SCH )
-        draw_bg_color = WHITE;      // Default for Eeschema
-
-    m_bm.m_config->Read( backgroundColorKey, &draw_bg_color );
-
-    g_DrawBgColor = ColorFromInt( draw_bg_color );
-
     setSearchPaths( &m_bm.m_search, m_id );
 
     return true;
@@ -123,14 +100,6 @@ bool KIFACE_I::start_common( int aCtlBits )
 
 void KIFACE_I::end_common()
 {
-    if( m_bm.m_config )
-    {
-        // Save common preferences; the background still uses the old legacy
-        // color numbers, not the new names
-        m_bm.m_config->Write( showPageLimitsKey, g_ShowPageLimits );
-        m_bm.m_config->Write( backgroundColorKey, int( g_DrawBgColor ) );
-    }
-
     m_bm.End();
 }
 

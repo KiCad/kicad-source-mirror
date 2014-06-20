@@ -83,12 +83,12 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
     wxSize  pageSize = pageInfo.GetSizeMils();
 
     // if not printing, draw the page limits:
-    if( !aScreen->m_IsPrinting && g_ShowPageLimits )
+    if( !aScreen->m_IsPrinting && m_showPageLimits )
     {
         GRSetDrawMode( aDC, GR_COPY );
         GRRect( m_canvas->GetClipBox(), aDC, 0, 0,
                 pageSize.x * aScalar, pageSize.y * aScalar, aLineWidth,
-                g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
+                m_drawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
     }
 
     TITLE_BLOCK t_block = GetTitleBlock();

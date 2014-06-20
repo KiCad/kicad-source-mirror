@@ -295,6 +295,7 @@ const wxChar* LIB_EDIT_FRAME::GetLibEditFrameName()
     return LIB_EDIT_FRAME_NAME;
 }
 
+static const wxChar drawBgColorKey[] = wxT( "LibeditBgColor" );
 
 void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
@@ -311,6 +312,9 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
     wxConfigPathChanger cpc( aCfg, m_configPath );
+
+    EDA_COLOR_T itmp = ColorByName( aCfg->Read( drawBgColorKey, wxT("WHITE") ) );
+    SetDrawBgColor( itmp );
 
     m_lastLibExportPath = aCfg->Read( lastLibExportPathEntry, ::wxGetCwd() );
     m_lastLibImportPath = aCfg->Read( lastLibImportPathEntry, ::wxGetCwd() );
@@ -335,6 +339,7 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     wxConfigPathChanger cpc( aCfg, m_configPath );
 
+    aCfg->Write( drawBgColorKey, ColorGetName( GetDrawBgColor() ) );
     aCfg->Write( lastLibExportPathEntry, m_lastLibExportPath );
     aCfg->Write( lastLibImportPathEntry, m_lastLibImportPath );
 }

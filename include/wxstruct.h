@@ -486,10 +486,11 @@ public:
     }
 
     /**
-     * Function ScriptingToolbarPane
-     * Change *this to a scripting toolbar for KiCad.
+     * Function ScriptingConsolePane
+     * Change *this to a python scripting console pane for KiCad.
+     * Used in Pcbnew
      */
-    EDA_PANEINFO& ScriptingToolbarPane()
+    EDA_PANEINFO& ScriptingConsolePane()
     {
         CloseButton( false );
         Floatable( true );

@@ -436,8 +436,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
         SetFootprintLibTablePath();
     */
 
-    g_DrawBgColor = BLACK;
-
     try
     {
         // The global table is not related to a specific project.  All projects

@@ -656,7 +656,7 @@ EDA_COLOR_T GERBVIEW_FRAME::GetNegativeItemsColor() const
     if( IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) )
         return GetVisibleElementColor( NEGATIVE_OBJECTS_VISIBLE );
     else
-        return g_DrawBgColor;
+        return GetDrawBgColor();
 }
 
 
