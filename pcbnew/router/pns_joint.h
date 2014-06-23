@@ -112,7 +112,7 @@ public:
         LINKED_ITEMS::iterator f = std::find( m_linkedItems.begin(), m_linkedItems.end(), aItem );
 
         if( f != m_linkedItems.end() )
-            m_linkedItems.erase( f );
+            f = m_linkedItems.erase( f );
 
         return m_linkedItems.size() == 0;
     }

@@ -1216,12 +1216,19 @@ int PNS_NODE::FindByMarker( int aMarker, PNS_ITEMSET& aItems )
 
 int PNS_NODE::RemoveByMarker( int aMarker )
 {
+    std::list<PNS_ITEM*> garbage;
+
     for( PNS_INDEX::ITEM_SET::iterator i = m_index->begin(); i != m_index->end(); ++i )
     {
         if ( (*i)->Marker() & aMarker )
         {
-            Remove( *i );
+            garbage.push_back( *i );
         }
+    }
+
+    for( std::list<PNS_ITEM*>::const_iterator i = garbage.begin(), end = garbage.end(); i != end; ++i )
+	{
+        Remove( *i );
     }
 
     return 0;
