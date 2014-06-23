@@ -98,6 +98,9 @@ private:
     ///> Flag determining if anything is being dragged right now
     bool m_dragging;
 
+    ///> Offset from the dragged item's center (anchor)
+    wxPoint m_offset;
+
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).
     VECTOR2I m_cursor;
