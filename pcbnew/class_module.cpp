@@ -595,7 +595,7 @@ D_PAD* MODULE::GetPad( const wxPoint& aPosition, LSET aLayerMask )
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         // ... and on the correct layer.
-        if( ( pad->GetLayerSet() & aLayerMask ) == 0 )
+        if( !( pad->GetLayerSet() & aLayerMask ).any() )
             continue;
 
         if( pad->HitTest( aPosition ) )
