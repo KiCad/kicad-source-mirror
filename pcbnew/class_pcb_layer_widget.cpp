@@ -168,7 +168,8 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         for( int row = rowCount-1; row>=0; --row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
-            LAYER_NUM layer = getDecodedId( cb->GetId() );
+            LAYER_ID    layer = (LAYER_ID) getDecodedId( cb->GetId() );
+
             if( IsCopperLayer( layer ) )
             {
                 lastCu = row;
@@ -180,11 +181,12 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         for( int row=0;  row<rowCount;  ++row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
-            LAYER_NUM layer = getDecodedId( cb->GetId() );
+            LAYER_ID    layer = (LAYER_ID) getDecodedId( cb->GetId() );
 
             if( IsCopperLayer( layer ) )
             {
                 bool loc_visible = visible;
+
                 if( force_active_layer_visible && (layer == myframe->GetActiveLayer() ) )
                     loc_visible = true;
 
@@ -221,14 +223,16 @@ void PCB_LAYER_WIDGET::ReFillRender()
     for( unsigned row=0;  row<DIM(s_render_rows);  ++row )
     {
         LAYER_WIDGET::ROW renderRow = s_render_rows[row];
-        renderRow.tooltip = wxGetTranslation( s_render_rows[row].tooltip);
-        renderRow.rowName = wxGetTranslation( s_render_rows[row].rowName);
+
+        renderRow.tooltip = wxGetTranslation( s_render_rows[row].tooltip );
+        renderRow.rowName = wxGetTranslation( s_render_rows[row].rowName );
 
         if( renderRow.color != -1 )       // does this row show a color?
         {
             // this window frame must have an established BOARD, i.e. after SetBoard()
             renderRow.color = board->GetVisibleElementColor( renderRow.id );
         }
+
         renderRow.state = board->IsElementVisible( renderRow.id );
 
         AppendRenderRow( renderRow );
@@ -262,7 +266,7 @@ void PCB_LAYER_WIDGET::SyncLayerVisibilities()
 
         wxWindow* w = getLayerComp( row, 0 );
 
-        LAYER_NUM layerId = getDecodedId( w->GetId() );
+        LAYER_ID layerId = (LAYER_ID) getDecodedId( w->GetId() );
 
         // this does not fire a UI event
         SetLayerVisible( layerId, board->IsLayerVisible( layerId ) );
@@ -273,35 +277,35 @@ void PCB_LAYER_WIDGET::SyncLayerVisibilities()
 void PCB_LAYER_WIDGET::ReFill()
 {
     BOARD*  brd = myframe->GetBoard();
-    int     enabledLayers = brd->GetEnabledLayers();
+    LSET    enabled = brd->GetEnabledLayers();
 
     ClearLayerRows();
 
+    wxString dsc;
+
     // show all coppers first, with front on top, back on bottom, then technical layers
-    for( LAYER_NUM layer = LAYER_N_FRONT; layer >= FIRST_LAYER; --layer )
+    for( LSEQ cu_stack = enabled.CuStack(); cu_stack; ++cu_stack )
     {
-        if( enabledLayers & GetLayerMask( layer ) )
+        LAYER_ID layer = *cu_stack;
+
+        switch( layer )
         {
-            wxString dsc;
-            switch( layer )
-            {
-            case LAYER_N_FRONT:
-                dsc = _("Front copper layer");
-                break;
+        case F_Cu:
+            dsc = _("Front copper layer");
+            break;
 
-            case LAYER_N_BACK:
-                dsc = _("Back copper layer");
-                break;
+        case B_Cu:
+            dsc = _("Back copper layer");
+            break;
 
-            default:
-                dsc = _("Inner copper layer");
-                break;
-            }
-
-            AppendLayerRow( LAYER_WIDGET::ROW(
-                brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ),
-                dsc, true ) );
+        default:
+            dsc = _("Inner copper layer");
+            break;
         }
+
+        AppendLayerRow( LAYER_WIDGET::ROW(
+            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ),
+            dsc, true ) );
     }
 
 
@@ -309,34 +313,35 @@ void PCB_LAYER_WIDGET::ReFill()
     // Because they are static, wxGetTranslation must be explicitely
     // called for tooltips.
     static const struct {
-        LAYER_NUM   layerId;
+        LAYER_ID    layerId;
         wxString    tooltip;
-    } techLayerSeq[] = {
-        { ADHESIVE_N_FRONT,     _( "Adhesive on board's front" )    },
-        { ADHESIVE_N_BACK,      _( "Adhesive on board's back" )     },
-        { SOLDERPASTE_N_FRONT,  _( "Solder paste on board's front" )},
-        { SOLDERPASTE_N_BACK,   _( "Solder paste on board's back" ) },
-        { SILKSCREEN_N_FRONT,   _( "Silkscreen on board's front" )  },
-        { SILKSCREEN_N_BACK,    _( "Silkscreen on board's back" )   },
-        { SOLDERMASK_N_FRONT,   _( "Solder mask on board's front" ) },
-        { SOLDERMASK_N_BACK,    _( "Solder mask on board's back" )  },
-        { DRAW_N,               _( "Explanatory drawings" )         },
-        { COMMENT_N,            _( "Explanatory comments" )         },
-        { ECO1_N,               _( "User defined meaning" )         },
-        { ECO2_N,               _( "User defined meaning" )         },
-        { EDGE_N,               _( "Board's perimeter definition" ) },
+    } non_cu_seq[] = {
+        { F_Adhes,          _( "Adhesive on board's front" ) },
+        { B_Adhes,          _( "Adhesive on board's back" ) },
+        { F_Paste,          _( "Solder paste on board's front" )  },
+        { B_Paste,          _( "Solder paste on board's back" ) },
+        { F_SilkS,          _( "Silkscreen on board's front" ) },
+        { B_SilkS,          _( "Silkscreen on board's back" )  },
+        { F_Mask,           _( "Solder mask on board's front" ) },
+        { B_Mask,           _( "Solder mask on board's back" )  },
+        { Dwgs_User,        _( "Explanatory drawings" )      },
+        { Cmts_User,        _( "Explanatory comments" )         },
+        { Eco1_User,        _( "User defined meaning" )         },
+        { Eco2_User,        _( "User defined meaning" )         },
+        { Edge_Cuts,        _( "Board's perimeter definition" ) },
+        { Margin,           _( "Board's edge setback outline" ) },
     };
 
-    for( unsigned i=0;  i<DIM(techLayerSeq);  ++i )
+    for( unsigned i=0;  i<DIM(non_cu_seq);  ++i )
     {
-        LAYER_NUM layer = techLayerSeq[i].layerId;
+        LAYER_ID layer = non_cu_seq[i].layerId;
 
-        if( !(enabledLayers & GetLayerMask( layer )) )
+        if( !enabled[layer] )
             continue;
 
         AppendLayerRow( LAYER_WIDGET::ROW(
             brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ),
-            wxGetTranslation( techLayerSeq[i].tooltip ), true ) );
+            wxGetTranslation( non_cu_seq[i].tooltip ), true ) );
     }
 
     installRightLayerClickHandler();
@@ -344,9 +349,9 @@ void PCB_LAYER_WIDGET::ReFill()
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
 
-void PCB_LAYER_WIDGET::OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor )
+void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
 {
-    myframe->GetBoard()->SetLayerColor( aLayer, aColor );
+    myframe->GetBoard()->SetLayerColor( (LAYER_ID) aLayer, aColor );
     myframe->ReCreateLayerBox( false );
 
     if( myframe->IsGalCanvasActive() )
@@ -360,11 +365,11 @@ void PCB_LAYER_WIDGET::OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor 
 }
 
 
-bool PCB_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
+bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
 {
     // the layer change from the PCB_LAYER_WIDGET can be denied by returning
     // false from this function.
-    myframe->SetActiveLayer( aLayer, false );
+    myframe->SetActiveLayer( (LAYER_ID) aLayer, false );
 
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();
@@ -390,16 +395,13 @@ bool  PCB_LAYER_WIDGET::OnLayerSelected()
 }
 
 
-void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal )
+void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
 {
     BOARD* brd = myframe->GetBoard();
 
-    LAYER_MSK visibleLayers = brd->GetVisibleLayers();
+    LSET visibleLayers = brd->GetVisibleLayers();
 
-    if( isVisible )
-        visibleLayers |= GetLayerMask( aLayer );
-    else
-        visibleLayers &= ~GetLayerMask( aLayer );
+    visibleLayers.set( aLayer, isVisible );
 
     brd->SetVisibleLayers( visibleLayers );
 
@@ -425,9 +427,11 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, EDA_COLOR_T aColor )
 void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 {
     BOARD*  brd = myframe->GetBoard();
+
     brd->SetElementVisibility( aId, isEnabled );
 
     EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
+
     if( galCanvas )
     {
         if( aId == GRID_VISIBLE )

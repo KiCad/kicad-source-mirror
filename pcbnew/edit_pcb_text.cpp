@@ -202,13 +202,15 @@ TEXTE_PCB* PCB_EDIT_FRAME::CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText )
     {
         GetBoard()->Add( textePcb );
         textePcb->SetFlags( IS_NEW );
-        LAYER_NUM layer = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+
+        LAYER_ID layer = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+
         textePcb->SetLayer( layer );
 
         // Set the mirrored option for layers on the BACK side of the board
-        if( layer == LAYER_N_BACK || layer == SILKSCREEN_N_BACK ||
-            layer == SOLDERPASTE_N_BACK || layer == SOLDERMASK_N_BACK ||
-            layer == ADHESIVE_N_BACK
+        if( layer == B_Cu || layer == B_SilkS ||
+            layer == B_Paste || layer == B_Mask ||
+            layer == B_Adhes
             )
             textePcb->SetMirrored( true );
 

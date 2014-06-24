@@ -63,7 +63,7 @@ private:
 public:
     bool IsMirrored() { return m_Print_Mirror->IsChecked(); }
     bool PrintUsingSinglePage() { return true; }
-    int SetLayerMaskFromListSelection();
+    int SetLayerSetFromListSelection();
 };
 
 
@@ -136,7 +136,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     // Create layer list
     for( LAYER_NUM ii = FIRST_LAYER; ii < layer_max; ++ii )
     {
-        LAYER_MSK mask = GetLayerMask( ii );
+        LSET mask = GetLayerSet( ii );
         msg = _( "Layer" );
         msg << wxT( " " ) << ii + 1;
         m_BoxSelectLayer[ii] = new wxCheckBox( this, -1, msg );
@@ -183,7 +183,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
             {
                 m_BoxSelectLayer[layer]->SetValue( option );
                 if( option )
-                    s_SelectedLayers |= GetLayerMask( layer );
+                    s_SelectedLayers |= GetLayerSet( layer );
             }
         }
     }
@@ -215,7 +215,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 }
 
 /**************************************************************/
-int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
+int DIALOG_PRINT_USING_PRINTER::SetLayerSetFromListSelection()
 /**************************************************************/
 {
     int page_count = 0;
@@ -225,7 +225,7 @@ int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
         if( m_BoxSelectLayer[ii]->IsChecked() )
         {
             page_count++;
-            s_Parameters.m_PrintMaskLayer |= GetLayerMask( ii );
+            s_Parameters.m_PrintMaskLayer |= GetLayerSet( ii );
         }
     }
 
@@ -271,7 +271,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
     // because these objects create artefact when they are printed on an existing image.
     s_Parameters.m_OptionPrintPage = false;
 
-    SetLayerMaskFromListSelection();
+    SetLayerSetFromListSelection();
 
     int idx = m_ScaleOption->GetSelection();
     s_Parameters.m_PrintScale =  s_ScaleList[idx];
@@ -342,7 +342,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
         return;
     }
 
-    SetLayerMaskFromListSelection();
+    SetLayerSetFromListSelection();
 
     // If no layer selected, we have no plot. prompt user if it happens
     // because he could think there is a bug in Pcbnew:

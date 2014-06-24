@@ -551,7 +551,7 @@ void GERBVIEW_FRAME::SetVisibleAlls()
  * Returns a bit-mask of all the layers that are visible
  * @return int - the visible layers in bit-mapped form.
  */
-LAYER_MSK GERBVIEW_FRAME::GetVisibleLayers() const
+LSET GERBVIEW_FRAME::GetVisibleLayers() const
 {
     return FULL_LAYERS;    // TODO
 }
@@ -563,7 +563,7 @@ LAYER_MSK GERBVIEW_FRAME::GetVisibleLayers() const
  * changes the bit-mask of visible layers
  * @param aLayerMask = The new bit-mask of visible layers
  */
-void GERBVIEW_FRAME::SetVisibleLayers( LAYER_MSK aLayerMask )
+void GERBVIEW_FRAME::SetVisibleLayers( LSET aLayerMask )
 {
     GetGerberLayout()->SetVisibleLayers( aLayerMask );
 }

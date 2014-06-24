@@ -89,7 +89,7 @@ void CONNECTIONS::SearchConnectionsPadsToIntersectingPads()
             if( pad == candidate_pad )
                 continue;
 
-            if( (pad->GetLayerMask() & candidate_pad->GetLayerMask()) == 0 )
+            if( (pad->GetLayerSet() & candidate_pad->GetLayerSet()) == 0 )
                 continue;
             if( pad->HitTest( item->GetPoint() ) )
             {
@@ -122,7 +122,7 @@ void CONNECTIONS::SearchTracksConnectedToPads( bool add_to_padlist, bool add_to_
         {
             CONNECTED_POINT* cp_item = candidates[jj];
 
-            if( (pad->GetLayerMask() & cp_item->GetTrack()->GetLayerMask()) == 0 )
+            if( (pad->GetLayerSet() & cp_item->GetTrack()->GetLayerSet()) == 0 )
                 continue;
 
             if( pad->HitTest( cp_item->GetPoint() ) )
@@ -296,7 +296,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
     int count = 0;
     m_connected.clear();
 
-    LAYER_MSK layerMask = aTrack->GetLayerMask();
+    LSET layerMask = aTrack->GetLayerSet();
 
     // Search for connections to starting point:
 #define USE_EXTENDED_SEARCH
@@ -318,7 +318,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
                     continue;
                 if( m_candidates[ii].GetPoint() != position )
                     break;
-                if( m_candidates[ii].GetTrack()->GetLayerMask() & layerMask )
+                if( m_candidates[ii].GetTrack()->GetLayerSet() & layerMask )
                     m_connected.push_back( m_candidates[ii].GetTrack() );
             }
             // search before:
@@ -328,7 +328,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
                     continue;
                 if( m_candidates[ii].GetPoint() != position )
                     break;
-                if( m_candidates[ii].GetTrack()->GetLayerMask() & layerMask )
+                if( m_candidates[ii].GetTrack()->GetLayerSet() & layerMask )
                     m_connected.push_back( m_candidates[ii].GetTrack() );
             }
         }
@@ -339,7 +339,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
         {
             TRACK * ctrack = tracks_candidates[ii]->GetTrack();
 
-            if( ( ctrack->GetLayerMask() & layerMask ) == 0 )
+            if( ( ctrack->GetLayerSet() & layerMask ) == 0 )
                 continue;
 
             if( ctrack == aTrack )

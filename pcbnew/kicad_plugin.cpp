@@ -481,7 +481,7 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 {
     if( m_ctl & CTL_STD_LAYER_NAMES )
     {
-        LAYER_NUM layer = aItem->GetLayer();
+        LAYER_ID layer = aItem->GetLayer();
 
         // English layer names should never need quoting.
         m_out->Print( 0, " (layer %s)", TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
@@ -525,9 +525,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel, "(layers\n" );
 
     // Save only the used copper layers from front to back.
+#if 0   // was:
     for( LAYER_NUM layer = LAST_COPPER_LAYER; layer >= FIRST_COPPER_LAYER; --layer)
     {
-        LAYER_MSK mask = GetLayerMask( layer );
+        LSET mask = GetLayerSet( layer );
         if( mask & aBoard->GetEnabledLayers() )
         {
             m_out->Print( aNestLevel+1, "(%d %s %s", layer,
@@ -540,8 +541,27 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
             m_out->Print( 0, ")\n" );
         }
     }
+#else
+    LSET visible_layers = aBoard->GetVisibleLayers();
+
+    for( LSEQ cu = aBoard->GetEnabledLayers().CuStack();  cu;  ++cu )
+    {
+        LAYER_ID layer = *cu;
+
+        m_out->Print( aNestLevel+1, "(%d %s %s", layer,
+                      m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str(),
+                      LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
+
+        if( !visible_layers[layer] )
+            m_out->Print( 0, " hide" );
+
+        m_out->Print( 0, ")\n" );
+    }
+#endif
+
 
     // Save used non-copper layers in the order they are defined.
+#if 0 // was:
     for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER; ++layer)
     {
         LAYER_MSK mask = GetLayerMask( layer );
@@ -556,6 +576,38 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
             m_out->Print( 0, ")\n" );
         }
     }
+#else
+    // desired sequence for non Cu BOARD layers.
+    static const LAYER_ID non_cu[] = {
+        B_Adhes,        // 32
+        F_Adhes,
+        B_Paste,
+        F_Paste,
+        B_SilkS,
+        F_SilkS,
+        B_Mask,
+        F_Mask,
+        Dwgs_User,
+        Cmts_User,
+        Eco1_User,
+        Eco2_User,
+        Edge_Cuts,
+        Margin,
+    };
+
+    for( LSEQ seq = aBoard->GetEnabledLayers().Seq( non_cu, DIM( non_cu ) );  seq;  ++seq )
+    {
+        LAYER_ID layer = *seq;
+
+        m_out->Print( aNestLevel+1, "(%d %s user", layer,
+                      m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str() );
+
+        if( !visible_layers[layer] )
+            m_out->Print( 0, " hide" );
+
+        m_out->Print( 0, ")\n" );
+    }
+#endif
 
     m_out->Print( aNestLevel, ")\n\n" );
 
@@ -1098,7 +1150,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 }
 
 
-void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
+void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
     throw( IO_ERROR )
 {
     std::string  output;
@@ -1108,46 +1160,67 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
 
     output += "(layers";
 
-    LAYER_MSK cuMask = ALL_CU_LAYERS;
+    static const LSET cu_all( LSET::AllCuMask() );
+    static const LSET fr_bk( 2, B_Cu,       F_Cu );
+    static const LSET adhes( 2, B_Adhes,    F_Adhes );
+    static const LSET paste( 2, B_Paste,    F_Paste );
+    static const LSET silks( 2, B_SilkS,    F_SilkS );
+    static const LSET mask(  2, B_Mask,     F_Mask );
+    static const LSET crt_yd(2, B_CrtYd,    F_CrtYd );
+    static const LSET fab(   2, B_Fab,      F_Fab );
+
+    LSET cu_mask = cu_all;
 
     if( m_board )
-        cuMask &= m_board->GetEnabledLayers();
+        cu_mask &= m_board->GetEnabledLayers();
 
     // output copper layers first, then non copper
 
-    if( ( aLayerMask & cuMask ) == cuMask )
+    if( ( aLayerMask & cu_mask ) == cu_mask )
     {
         output += " *.Cu";
-        aLayerMask &= ~ALL_CU_LAYERS;       // clear bits, so they are not output again below
+        aLayerMask &= ~cu_all;          // clear bits, so they are not output again below
     }
-    else if( ( aLayerMask & cuMask ) == (LAYER_BACK | LAYER_FRONT) )
+    else if( ( aLayerMask & cu_mask ) == fr_bk )
     {
         output += " F&B.Cu";
-        aLayerMask &= ~(LAYER_BACK | LAYER_FRONT);
+        aLayerMask &= ~fr_bk;
     }
 
-    if( ( aLayerMask & (ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT)) == (ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT) )
+    if( ( aLayerMask & adhes ) == adhes )
     {
         output += " *.Adhes";
-        aLayerMask &= ~(ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT);
+        aLayerMask &= ~adhes;
     }
 
-    if( ( aLayerMask & (SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT)) == (SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT) )
+    if( ( aLayerMask & paste ) == paste )
     {
         output += " *.Paste";
-        aLayerMask &= ~(SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT);
+        aLayerMask &= ~paste;
     }
 
-    if( ( aLayerMask & (SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT)) == (SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT) )
+    if( ( aLayerMask & silks ) == silks )
     {
         output += " *.SilkS";
-        aLayerMask &= ~(SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT);
+        aLayerMask &= ~silks;
     }
 
-    if( ( aLayerMask & (SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT)) == (SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT) )
+    if( ( aLayerMask & mask ) == mask )
     {
         output += " *.Mask";
-        aLayerMask &= ~(SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT);
+        aLayerMask &= ~mask;
+    }
+
+    if( ( aLayerMask & crt_yd ) == crt_yd )
+    {
+        output += " *.CrtYd";
+        aLayerMask &= ~crt_yd;
+    }
+
+    if( ( aLayerMask & fab ) == fab )
+    {
+        output += " *.Fab";
+        aLayerMask &= ~fab;
     }
 
     // output any individual layers not handled in wildcard combos above
@@ -1157,15 +1230,15 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
 
     wxString layerName;
 
-    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
+    for( LAYER_NUM layer = 0; layer < LAYER_ID_COUNT; ++layer )
     {
-        if( aLayerMask & GetLayerMask( layer ) )
+        if( aLayerMask[layer] )
         {
             if( m_board && !( m_ctl & CTL_STD_LAYER_NAMES ) )
-                layerName = m_board->GetLayerName( layer );
+                layerName = m_board->GetLayerName( LAYER_ID( layer ) );
 
             else    // I am being called from FootprintSave()
-                layerName = BOARD::GetStandardLayerName( layer );
+                layerName = BOARD::GetStandardLayerName( LAYER_ID( layer ) );
 
             output += ' ';
             output += m_out->Quotew( layerName );
@@ -1243,7 +1316,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, ")" );
     }
 
-    formatLayers( aPad->GetLayerMask(), 0 );
+    formatLayers( aPad->GetLayerSet(), 0 );
 
     std::string output;
 
@@ -1358,10 +1431,10 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 {
     if( aTrack->Type() == PCB_VIA_T )
     {
-        LAYER_NUM layer1, layer2;
+        LAYER_ID  layer1, layer2;
 
-        const VIA* via = static_cast<const VIA*>(aTrack);
-        BOARD*  board = (BOARD*) via->GetParent();
+        const VIA*  via = static_cast<const VIA*>(aTrack);
+        BOARD*      board = (BOARD*) via->GetParent();
 
         wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText() +
                      wxT( " has no parent." ) );
@@ -1828,7 +1901,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     module->SetParent( 0 );
     module->SetOrientation( 0 );
 
-    if( module->GetLayer() != LAYER_N_FRONT )
+    if( module->GetLayer() != F_Cu )
         module->Flip( module->GetPosition() );
 
     wxLogTrace( traceFootprintLibrary, wxT( "Creating s-expression footprint file: %s." ),

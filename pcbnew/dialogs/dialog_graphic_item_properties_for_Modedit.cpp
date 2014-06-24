@@ -81,10 +81,8 @@ void FOOTPRINT_EDIT_FRAME::InstallFootprintBodyItemPropertiesDlg(EDGE_MODULE * a
     m_canvas->SetIgnoreMouseEvents( false );
 }
 
+
 void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
-/* Initialize messages and values in text control,
- * according to the item parameters values
-*/
 {
     SetFocus();
     m_StandardButtonsSizerOK->SetDefault();
@@ -105,6 +103,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
     {
         if( texts_unit[ii] == NULL )
             break;
+
         texts_unit[ii]->SetLabel( GetAbbreviatedUnitsLabel() );
     }
 
@@ -156,14 +155,15 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
 
     // Configure the layers list selector
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetLayerMask( INTERNAL_CU_LAYERS|EDGE_LAYER );
+    m_LayerSelectionCtrl->SetLayerSet( LSET::InternalCuMask().set( Edge_Cuts ) );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
+
     if( m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() ) < 0 )
     {
-        wxMessageBox( _("This item has an illegal layer id.\n"
-                        "Now, forced on the front silk screen layer. Please, fix it") );
-        m_LayerSelectionCtrl->SetLayerSelection( SILKSCREEN_N_FRONT );
+        wxMessageBox( _( "This item has an illegal layer id.\n"
+                        "Now, forced on the front silk screen layer. Please, fix it" ) );
+        m_LayerSelectionCtrl->SetLayerSelection( F_SilkS );
     }
 }
 
@@ -220,7 +220,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     m_brdSettings.m_ModuleSegmentWidth = thickness;
     m_parent->SetDesignSettings( m_brdSettings );
 
-    m_item->SetLayer( layer );
+    m_item->SetLayer( LAYER_ID( layer ) );
 
     if( m_item->GetShape() == S_ARC )
     {

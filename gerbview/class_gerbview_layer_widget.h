@@ -91,9 +91,9 @@ public:
     void ReFillRender();
 
     //-----<implement LAYER_WIDGET abstract callback functions>-----------
-    void OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor );
-    bool OnLayerSelect( LAYER_NUM aLayer );
-    void OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal );
+    void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor );
+    bool OnLayerSelect( int aLayer );
+    void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
     void OnRenderColorChange( int aId, EDA_COLOR_T aColor );
     void OnRenderEnable( int aId, bool isEnabled );
     /**

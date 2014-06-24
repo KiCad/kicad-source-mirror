@@ -505,7 +505,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             }
 
             EDGE_MODULE* drawSeg = new EDGE_MODULE( module.get() );
-            drawSeg->SetLayer( SILKSCREEN_N_FRONT );
+            drawSeg->SetLayer( F_SilkS );
             drawSeg->SetShape( S_SEGMENT );
             drawSeg->SetStart0( wxPoint( parseInt( parameters[2], conv_unit ),
                                          parseInt( parameters[3], conv_unit ) ) );
@@ -529,7 +529,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
 
             // Pcbnew does know ellipse so we must have Width = Height
             EDGE_MODULE* drawSeg = new EDGE_MODULE( module.get() );
-            drawSeg->SetLayer( SILKSCREEN_N_FRONT );
+            drawSeg->SetLayer( F_SilkS );
             drawSeg->SetShape( S_ARC );
             module->GraphicalItems().PushBack( drawSeg );
 
@@ -580,12 +580,16 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             }
 
             D_PAD* pad = new D_PAD( module.get() );
+
+            static const LSET pad_front( 3, F_Cu, F_Mask, F_Paste );
+            static const LSET pad_back(  3, B_Cu, B_Mask, B_Paste );
+
             pad->SetShape( PAD_RECT );
             pad->SetAttribute( PAD_SMD );
-            pad->SetLayerMask( LAYER_FRONT | SOLDERMASK_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT );
+            pad->SetLayerSet( pad_front );
 
             if( testFlags( parameters[paramCnt-2], 0x0080, wxT( "onsolder" ) ) )
-                pad->SetLayerMask( LAYER_BACK | SOLDERMASK_LAYER_BACK | SOLDERPASTE_LAYER_BACK );
+                pad->SetLayerSet( pad_back );
 
             // Read pad number:
             if( paramCnt > 10 )
@@ -653,11 +657,12 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             }
 
             D_PAD* pad = new D_PAD( module.get() );
+
             pad->SetShape( PAD_ROUND );
-            pad->SetLayerMask( ALL_CU_LAYERS |
-                               SILKSCREEN_LAYER_FRONT |
-                               SOLDERMASK_LAYER_FRONT |
-                               SOLDERMASK_LAYER_BACK );
+
+            static const LSET pad_set = LSET::AllCuMask() | LSET( 3, F_SilkS, F_Mask, B_Mask );
+
+            pad->SetLayerSet( pad_set );
 
             if( testFlags( parameters[paramCnt-2], 0x0100, wxT( "square" ) ) )
                 pad->SetShape( PAD_RECT );

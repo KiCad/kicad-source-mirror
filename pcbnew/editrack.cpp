@@ -62,7 +62,7 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Panel->GetParent();
     BOARD* pcb = frame->GetBoard();
-	TRACK* track = dyn_cast<TRACK*>( frame->GetCurItem() );
+    TRACK* track = dyn_cast<TRACK*>( frame->GetCurItem() );
 
     if( track )
     {
@@ -98,10 +98,11 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
  */
 TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 {
-    TRACK*      TrackOnStartPoint = NULL;
-    LAYER_MSK   layerMask = GetLayerMask( GetScreen()->m_Active_Layer );
-    BOARD_CONNECTED_ITEM* LockPoint;
-    wxPoint     pos = GetCrossHairPosition();
+    TRACK*  trackOnStartPoint = NULL;
+    LSET    layerMask( GetScreen()->m_Active_Layer );
+    wxPoint pos = GetCrossHairPosition();
+
+    BOARD_CONNECTED_ITEM* lockPoint;
 
     if( aTrack == NULL )  // Starting a new track segment
     {
@@ -122,14 +123,14 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         GetBoard()->SetHighLightNet( 0 );
 
         // Search for a starting point of the new track, a track or pad
-        LockPoint = GetBoard()->GetLockPoint( pos, layerMask );
+        lockPoint = GetBoard()->GetLockPoint( pos, layerMask );
 
         D_PAD* pad = NULL;
-        if( LockPoint ) // An item (pad or track) is found
+        if( lockPoint ) // An item (pad or track) is found
         {
-            if( LockPoint->Type() == PCB_PAD_T )
+            if( lockPoint->Type() == PCB_PAD_T )
             {
-                pad = (D_PAD*) LockPoint;
+                pad = (D_PAD*) lockPoint;
 
                 // A pad is found: put the starting point on pad center
                 pos = pad->GetPosition();
@@ -137,9 +138,9 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             }
             else // A track segment is found
             {
-                TrackOnStartPoint    = (TRACK*) LockPoint;
-                GetBoard()->SetHighLightNet( TrackOnStartPoint->GetNetCode() );
-                GetBoard()->CreateLockPoint( pos, TrackOnStartPoint, &s_ItemsListPicker );
+                trackOnStartPoint    = (TRACK*) lockPoint;
+                GetBoard()->SetHighLightNet( trackOnStartPoint->GetNetCode() );
+                GetBoard()->CreateLockPoint( pos, trackOnStartPoint, &s_ItemsListPicker );
             }
         }
         else
@@ -158,7 +159,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         DBG( g_CurrentTrackList.VerifyListIntegrity() );
 
-        BuildAirWiresTargetsList( LockPoint, wxPoint( 0, 0 ), true );
+        BuildAirWiresTargetsList( lockPoint, wxPoint( 0, 0 ), true );
 
         DBG( g_CurrentTrackList.VerifyListIntegrity() );
 
@@ -174,8 +175,8 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         if( GetDesignSettings().m_UseConnectedTrackWidth )
         {
-            if( TrackOnStartPoint && TrackOnStartPoint->Type() == PCB_TRACE_T )
-                g_CurrentTrackSegment->SetWidth( TrackOnStartPoint->GetWidth());
+            if( trackOnStartPoint && trackOnStartPoint->Type() == PCB_TRACE_T )
+                g_CurrentTrackSegment->SetWidth( trackOnStartPoint->GetWidth());
         }
 
         g_CurrentTrackSegment->SetStart( pos );
@@ -414,7 +415,7 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
 
 bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
 {
-    LAYER_MSK layerMask = GetLayerMask( GetScreen()->m_Active_Layer );
+    LSET layerMask( GetScreen()->m_Active_Layer );
 
     if( aTrack == NULL )
         return false;
@@ -451,20 +452,20 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
      * This helps to reduce the computing time */
 
     // Attaching the end point of the new track to a pad or a track
-    BOARD_CONNECTED_ITEM* LockPoint = GetBoard()->GetLockPoint( pos, layerMask );
+    BOARD_CONNECTED_ITEM* lockPoint = GetBoard()->GetLockPoint( pos, layerMask );
 
-    if( LockPoint )
+    if( lockPoint )
     {
-        if( LockPoint->Type() ==  PCB_PAD_T )     // End of track is on a pad.
+        if( lockPoint->Type() ==  PCB_PAD_T )     // End of track is on a pad.
         {
-            EnsureEndTrackOnPad( (D_PAD*) LockPoint );
+            EnsureEndTrackOnPad( (D_PAD*) lockPoint );
         }
         else        // If end point of is on a different track,
                     // creates a lock point if not exists
         {
              // Creates a lock point, if not already exists:
             wxPoint hp = g_CurrentTrackSegment->GetEnd();
-            LockPoint = GetBoard()->CreateLockPoint( hp, (TRACK*) LockPoint, &s_ItemsListPicker );
+            lockPoint = GetBoard()->CreateLockPoint( hp, (TRACK*) lockPoint, &s_ItemsListPicker );
             g_CurrentTrackSegment->SetEnd(hp);
         }
     }
@@ -1009,7 +1010,7 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
     TRACK*      firsttrack = track;
     TRACK*      oldtrack;
 
-    BOARD_CONNECTED_ITEM* LockPoint = track->start;
+    BOARD_CONNECTED_ITEM* lockPoint = track->start;
 
     while( track != NULL )
     {
@@ -1047,9 +1048,9 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
         oldtrack->SetStatus( 0 );
     }
 
-    firsttrack->start = LockPoint;
+    firsttrack->start = lockPoint;
 
-    if( LockPoint && LockPoint->Type()==PCB_PAD_T )
+    if( lockPoint && lockPoint->Type()==PCB_PAD_T )
         firsttrack->SetState( BEGIN_ONPAD, true );
 
     track = firsttrack;
@@ -1057,16 +1058,16 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
     while( track != NULL )
     {
         TRACK* next_track = track->Next();
-        LockPoint = pcb->GetPad( track, ENDPOINT_END );
+        lockPoint = pcb->GetPad( track, ENDPOINT_END );
 
-        if( LockPoint )
+        if( lockPoint )
         {
-            track->end = LockPoint;
+            track->end = lockPoint;
             track->SetState( END_ONPAD, true );
 
             if( next_track )
             {
-                next_track->start = LockPoint;
+                next_track->start = lockPoint;
                 next_track->SetState( BEGIN_ONPAD, true );
             }
         }

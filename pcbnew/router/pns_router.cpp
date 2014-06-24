@@ -126,20 +126,19 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 
     case PAD_SMD:
     case PAD_CONN:
-    {
-        LAYER_MSK lmsk = aPad->GetLayerMask();
-        int i;
-
-        for( i = FIRST_COPPER_LAYER; i <= LAST_COPPER_LAYER; i++ )
         {
-            if( lmsk & ( 1 << i ) )
+            LSET lmsk = aPad->GetLayerSet();
+
+            for( int i = 0; i < MAX_CU_LAYERS; i++ )
             {
-                layers = PNS_LAYERSET( i );
-                break;
+                if( lmsk[i] )
+                {
+                    layers = PNS_LAYERSET( i );
+                    break;
+                }
             }
         }
         break;
-    }
 
     default:
         TRACE( 0, "unsupported pad type 0x%x", aPad->GetAttribute() );
@@ -250,20 +249,20 @@ void PNS_ROUTER::SetBoard( BOARD* aBoard )
 
 int PNS_ROUTER::NextCopperLayer( bool aUp )
 {
-    LAYER_MSK mask = m_board->GetEnabledLayers() & m_board->GetVisibleLayers();
-    LAYER_NUM l = m_currentLayer;
+    LSET        mask = m_board->GetEnabledLayers() & m_board->GetVisibleLayers();
+    LAYER_NUM   l = m_currentLayer;
 
     do
     {
         l += ( aUp ? 1 : -1 );
 
-        if( l > LAST_COPPER_LAYER )
-            l = FIRST_COPPER_LAYER;
+        if( l >= MAX_CU_LAYERS )
+            l = 0;
 
-        if( l < FIRST_COPPER_LAYER )
-            l = LAST_COPPER_LAYER;
+        if( l < 0 )
+            l = MAX_CU_LAYERS-1;
 
-        if( mask & GetLayerMask( l ) )
+        if( mask[l] )
             return l;
     }
     while( l != m_currentLayer );
@@ -525,7 +524,7 @@ const VECTOR2I PNS_ROUTER::CurrentEnd() const
 void PNS_ROUTER::eraseView()
 {
     BOOST_FOREACH( BOARD_ITEM* item, m_hiddenItems )
-	{
+    {
         item->ViewSetVisible( true );
     }
 
@@ -600,8 +599,8 @@ void PNS_ROUTER::Move( const VECTOR2I& aP, PNS_ITEM* endItem )
             moveDragging( aP, endItem );
             break;
 
-		default:
-			break;
+        default:
+            break;
     }
 }
 
@@ -745,7 +744,7 @@ void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
             track->SetStart( wxPoint( s.A.x, s.A.y ) );
             track->SetEnd( wxPoint( s.B.x, s.B.y ) );
             track->SetWidth( seg->Width() );
-            track->SetLayer( seg->Layers().Start() );
+            track->SetLayer( (LAYER_ID) seg->Layers().Start() );
             track->SetNetCode( seg->Net() );
             newBI = track;
             break;

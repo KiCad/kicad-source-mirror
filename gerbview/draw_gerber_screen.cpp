@@ -42,11 +42,11 @@
 #include <printout_controler.h>
 
 
-void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
+void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
                                 bool aPrintMirrorMode, void* aData )
 {
     // Save current draw options, because print mode has specific options:
-    LAYER_MSK visiblemask = GetVisibleLayers();
+    LSET visiblemask = GetVisibleLayers();
     GBR_DISPLAY_OPTIONS imgDisplayOptions = m_DisplayOptions;
 
     // Set draw options for printing:

@@ -44,67 +44,42 @@
 #include <macros.h>
 
 
-wxString GetGerberExtension( LAYER_NUM layer )
+const wxString GetGerberExtension( LAYER_NUM aLayer )
 {
-    switch( layer )
+    if( IsCopperLayer( aLayer ) )
     {
-    case LAYER_N_FRONT:
-        return wxString( wxT( "gtl" ) );
+        if( aLayer == F_Cu )
+            return wxT( "gtl" );
+        else if( aLayer == B_Cu )
+            return wxT( "gbl" );
+        else
+        {
+            return wxT( "gbr" );
+        }
+    }
+    else
+    {
+        switch( aLayer )
+        {
+        case B_Adhes:       return wxT( "gba" );
+        case F_Adhes:       return wxT( "gta" );
 
-    case LAYER_N_2:
-    case LAYER_N_3:
-    case LAYER_N_4:
-    case LAYER_N_5:
-    case LAYER_N_6:
-    case LAYER_N_7:
-    case LAYER_N_8:
-    case LAYER_N_9:
-    case LAYER_N_10:
-    case LAYER_N_11:
-    case LAYER_N_12:
-    case LAYER_N_13:
-    case LAYER_N_14:
-    case LAYER_N_15:
+        case B_Paste:       return wxT( "gbp" );
+        case F_Paste:       return wxT( "gtp" );
 
-        // TODO: see if we use .gbr or a layer identifier (gb1 .. gbnn ?)
-        // according to the new internal layers designation
-        // (1 is the first internal layer from the front layer)
-        return wxString( wxT( "gbr" ) );
+        case B_SilkS:       return wxT( "gbo" );
+        case F_SilkS:       return wxT( "gto" );
 
-    case LAYER_N_BACK:
-        return wxString( wxT( "gbl" ) );
+        case B_Mask:        return wxT( "gbs" );
+        case F_Mask:        return wxT( "gts" );
 
-    case ADHESIVE_N_BACK:
-        return wxString( wxT( "gba" ) );
-
-    case ADHESIVE_N_FRONT:
-        return wxString( wxT( "gta" ) );
-
-    case SOLDERPASTE_N_BACK:
-        return wxString( wxT( "gbp" ) );
-
-    case SOLDERPASTE_N_FRONT:
-        return wxString( wxT( "gtp" ) );
-
-    case SILKSCREEN_N_BACK:
-        return wxString( wxT( "gbo" ) );
-
-    case SILKSCREEN_N_FRONT:
-        return wxString( wxT( "gto" ) );
-
-    case SOLDERMASK_N_BACK:
-        return wxString( wxT( "gbs" ) );
-
-    case SOLDERMASK_N_FRONT:
-        return wxString( wxT( "gts" ) );
-
-    case DRAW_N:
-    case COMMENT_N:
-    case ECO1_N:
-    case ECO2_N:
-    case EDGE_N:
-    default:
-        return wxString( wxT( "gbr" ) );
+        case Dwgs_User:
+        case Cmts_User:
+        case Eco1_User:
+        case Eco2_User:
+        case Edge_Cuts:
+        default:            return wxT( "gbr" );
+        }
     }
 }
 

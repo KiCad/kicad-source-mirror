@@ -27,7 +27,7 @@ private:
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;
     wxPoint                 m_originAxisPosition;
-    LAYER_MSK               m_printLayersMask; // When printing: the list of layers to print
+    LSET               m_printLayersMask; // When printing: the list of layers to print
 public:
 
     DLIST<GERBER_DRAW_ITEM> m_Drawings;     // linked list of Gerber Items
@@ -93,7 +93,7 @@ public:
      * changes the bit-mask of visible layers
      * @param aLayerMask = The new bit-mask of visible layers
      */
-    void    SetVisibleLayers( LAYER_MSK aLayerMask )
+    void    SetVisibleLayers( LSET aLayerMask )
     {
         m_printLayersMask = aLayerMask;
     }

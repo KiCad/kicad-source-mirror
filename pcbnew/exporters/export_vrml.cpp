@@ -166,12 +166,11 @@ enum VRML_COLOR_INDEX
 class MODEL_VRML
 {
 private:
+    double      layer_z[LAYER_ID_COUNT];
+    VRML_COLOR  colors[VRML_COLOR_LAST];
 
-    double layer_z[NB_LAYERS];
-    VRML_COLOR colors[VRML_COLOR_LAST];
-
-    int iMaxSeg;                    // max. sides to a small circle
-    double arcMinLen, arcMaxLen;    // min and max lengths of an arc chord
+    int         iMaxSeg;                    // max. sides to a small circle
+    double      arcMinLen, arcMaxLen;    // min and max lengths of an arc chord
 
 public:
 
@@ -198,7 +197,7 @@ public:
 
     MODEL_VRML()
     {
-        for( int i = 0; i < NB_LAYERS; ++i )
+        for( unsigned i = 0; i < DIM( layer_z );  ++i )
             layer_z[i] = 0;
 
         holes.GetArcParams( iMaxSeg, arcMinLen, arcMaxLen );
@@ -235,7 +234,7 @@ public:
 
     double GetLayerZ( LAYER_NUM aLayer )
     {
-        if( aLayer >= NB_LAYERS )
+        if( unsigned( aLayer ) >= DIM( layer_z ) )
             return 0;
 
         return layer_z[ aLayer ];
@@ -294,19 +293,19 @@ static bool GetLayer( MODEL_VRML& aModel, LAYER_NUM layer, VRML_LAYER** vlayer )
 {
     switch( layer )
     {
-    case FIRST_COPPER_LAYER:
+    case B_Cu:
         *vlayer = &aModel.bot_copper;
         break;
 
-    case LAST_COPPER_LAYER:
+    case F_Cu:
         *vlayer = &aModel.top_copper;
         break;
 
-    case SILKSCREEN_N_BACK:
+    case B_SilkS:
         *vlayer = &aModel.bot_silk;
         break;
 
-    case SILKSCREEN_N_FRONT:
+    case F_SilkS:
         *vlayer = &aModel.top_silk;
         break;
 
@@ -431,13 +430,13 @@ static void write_layers( MODEL_VRML& aModel, std::ofstream& output_file, BOARD*
     aModel.top_copper.Tesselate( &aModel.holes );
     write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_TRACK ),
             &aModel.top_copper, true, true,
-            aModel.GetLayerZ( LAST_COPPER_LAYER ), 0, aModel.precision );
+            aModel.GetLayerZ( F_Cu ), 0, aModel.precision );
 
     // VRML_LAYER top_tin;
     aModel.top_tin.Tesselate( &aModel.holes );
     write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_TIN ),
             &aModel.top_tin, true, true,
-            aModel.GetLayerZ( LAST_COPPER_LAYER )
+            aModel.GetLayerZ( F_Cu )
             + Millimeter2iu( ART_OFFSET / 2.0 ) * aModel.scale,
             0, aModel.precision );
 
@@ -445,13 +444,13 @@ static void write_layers( MODEL_VRML& aModel, std::ofstream& output_file, BOARD*
     aModel.bot_copper.Tesselate( &aModel.holes );
     write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_TRACK ),
             &aModel.bot_copper, true, false,
-            aModel.GetLayerZ( FIRST_COPPER_LAYER ), 0, aModel.precision );
+            aModel.GetLayerZ( B_Cu ), 0, aModel.precision );
 
     // VRML_LAYER bot_tin;
     aModel.bot_tin.Tesselate( &aModel.holes );
     write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_TIN ),
                         &aModel.bot_tin, true, false,
-                        aModel.GetLayerZ( FIRST_COPPER_LAYER )
+                        aModel.GetLayerZ( B_Cu )
                         - Millimeter2iu( ART_OFFSET / 2.0 ) * aModel.scale,
                         0, aModel.precision );
 
@@ -459,13 +458,13 @@ static void write_layers( MODEL_VRML& aModel, std::ofstream& output_file, BOARD*
     aModel.top_silk.Tesselate( &aModel.holes );
     write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_SILK ),
             &aModel.top_silk, true, true,
-            aModel.GetLayerZ( SILKSCREEN_N_FRONT ), 0, aModel.precision );
+            aModel.GetLayerZ( F_SilkS ), 0, aModel.precision );
 
     // VRML_LAYER bot_silk;
     aModel.bot_silk.Tesselate( &aModel.holes );
     write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_SILK ),
             &aModel.bot_silk, true, false,
-            aModel.GetLayerZ( SILKSCREEN_N_BACK ), 0, aModel.precision );
+            aModel.GetLayerZ( B_SilkS ), 0, aModel.precision );
 }
 
 
@@ -478,8 +477,10 @@ static void compute_layer_Zs( MODEL_VRML& aModel, BOARD* pcb )
     double half_thickness = aModel.board_thickness / 2;
 
     // Compute each layer's Z value, more or less like the 3d view
-    for( LAYER_NUM i = FIRST_LAYER; i <= LAYER_N_FRONT; ++i )
+    for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
     {
+        LAYER_ID i = *seq;
+
         if( i < copper_layers )
             aModel.SetLayerZ( i, aModel.board_thickness * i / (copper_layers - 1) - half_thickness );
         else
@@ -489,19 +490,19 @@ static void compute_layer_Zs( MODEL_VRML& aModel, BOARD* pcb )
     /* To avoid rounding interference, we apply an epsilon to each
      * successive layer */
     double epsilon_z = Millimeter2iu( ART_OFFSET ) * aModel.scale;
-    aModel.SetLayerZ( SOLDERPASTE_N_BACK, -half_thickness - epsilon_z * 4 );
-    aModel.SetLayerZ( ADHESIVE_N_BACK, -half_thickness - epsilon_z * 3 );
-    aModel.SetLayerZ( SILKSCREEN_N_BACK, -half_thickness - epsilon_z * 2 );
-    aModel.SetLayerZ( SOLDERMASK_N_BACK, -half_thickness - epsilon_z );
-    aModel.SetLayerZ( SOLDERMASK_N_FRONT, half_thickness + epsilon_z );
-    aModel.SetLayerZ( SILKSCREEN_N_FRONT, half_thickness + epsilon_z * 2 );
-    aModel.SetLayerZ( ADHESIVE_N_FRONT, half_thickness + epsilon_z * 3 );
-    aModel.SetLayerZ( SOLDERPASTE_N_FRONT, half_thickness + epsilon_z * 4 );
-    aModel.SetLayerZ( DRAW_N, half_thickness + epsilon_z * 5 );
-    aModel.SetLayerZ( COMMENT_N, half_thickness + epsilon_z * 6 );
-    aModel.SetLayerZ( ECO1_N, half_thickness + epsilon_z * 7 );
-    aModel.SetLayerZ( ECO2_N, half_thickness + epsilon_z * 8 );
-    aModel.SetLayerZ( EDGE_N, 0 );
+    aModel.SetLayerZ( B_Paste, -half_thickness - epsilon_z * 4 );
+    aModel.SetLayerZ( B_Adhes, -half_thickness - epsilon_z * 3 );
+    aModel.SetLayerZ( B_SilkS, -half_thickness - epsilon_z * 2 );
+    aModel.SetLayerZ( B_Mask, -half_thickness - epsilon_z );
+    aModel.SetLayerZ( F_Mask, half_thickness + epsilon_z );
+    aModel.SetLayerZ( F_SilkS, half_thickness + epsilon_z * 2 );
+    aModel.SetLayerZ( F_Adhes, half_thickness + epsilon_z * 3 );
+    aModel.SetLayerZ( F_Paste, half_thickness + epsilon_z * 4 );
+    aModel.SetLayerZ( Dwgs_User, half_thickness + epsilon_z * 5 );
+    aModel.SetLayerZ( Cmts_User, half_thickness + epsilon_z * 6 );
+    aModel.SetLayerZ( Eco1_User, half_thickness + epsilon_z * 7 );
+    aModel.SetLayerZ( Eco2_User, half_thickness + epsilon_z * 8 );
+    aModel.SetLayerZ( Edge_Cuts, 0 );
 }
 
 
@@ -594,7 +595,7 @@ static void export_vrml_drawsegment( MODEL_VRML& aModel, DRAWSEGMENT* drawseg )
     double  yf  = drawseg->GetEnd().y * aModel.scale + aModel.ty;
 
     // Items on the edge layer are handled elsewhere; just return
-    if( layer == EDGE_N )
+    if( layer == Edge_Cuts )
         return;
 
     switch( drawseg->GetShape() )
@@ -685,10 +686,9 @@ static void export_vrml_drawings( MODEL_VRML& aModel, BOARD* pcb )
     // draw graphic items
     for( EDA_ITEM* drawing = pcb->m_Drawings; drawing != 0; drawing = drawing->Next() )
     {
-        LAYER_NUM layer = ( (DRAWSEGMENT*) drawing )->GetLayer();
+        LAYER_ID layer = ( (DRAWSEGMENT*) drawing )->GetLayer();
 
-        if( layer != FIRST_COPPER_LAYER && layer != LAST_COPPER_LAYER
-            && layer != SILKSCREEN_N_BACK && layer != SILKSCREEN_N_FRONT )
+        if( layer != F_Cu && layer != B_Cu && layer != B_SilkS && layer != F_SilkS )
             continue;
 
         switch( drawing->Type() )
@@ -805,11 +805,11 @@ static void export_round_padstack( MODEL_VRML& aModel, BOARD* pcb,
         LAYER_NUM bottom_layer, LAYER_NUM top_layer,
         double hole )
 {
-    LAYER_NUM layer = top_layer;
-    bool thru = true;
+    LAYER_NUM   layer = top_layer;
+    bool        thru = true;
 
     // if not a thru hole do not put a hole in the board
-    if( top_layer != LAST_COPPER_LAYER || bottom_layer != FIRST_COPPER_LAYER )
+    if( top_layer != F_Cu || bottom_layer != B_Cu )
         thru = false;
 
     if( thru && hole > 0 )
@@ -817,7 +817,7 @@ static void export_round_padstack( MODEL_VRML& aModel, BOARD* pcb,
 
     while( 1 )
     {
-        if( layer == FIRST_COPPER_LAYER )
+        if( layer == B_Cu )
         {
             aModel.bot_copper.AddCircle( x, -y, r );
 
@@ -825,7 +825,7 @@ static void export_round_padstack( MODEL_VRML& aModel, BOARD* pcb,
                     aModel.bot_copper.AddCircle( x, -y, hole, true );
 
         }
-        else if( layer == LAST_COPPER_LAYER )
+        else if( layer == F_Cu )
         {
             aModel.top_copper.AddCircle( x, -y, r );
 
@@ -844,8 +844,8 @@ static void export_round_padstack( MODEL_VRML& aModel, BOARD* pcb,
 
 static void export_vrml_via( MODEL_VRML& aModel, BOARD* pcb, const VIA* via )
 {
-    double x, y, r, hole;
-    LAYER_NUM top_layer, bottom_layer;
+    double      x, y, r, hole;
+    LAYER_ID    top_layer, bottom_layer;
 
     hole = via->GetDrillValue() * aModel.scale / 2.0;
     r   = via->GetWidth() * aModel.scale / 2.0;
@@ -854,7 +854,7 @@ static void export_vrml_via( MODEL_VRML& aModel, BOARD* pcb, const VIA* via )
     via->LayerPair( &top_layer, &bottom_layer );
 
     // do not render a buried via
-    if( top_layer != LAST_COPPER_LAYER && bottom_layer != FIRST_COPPER_LAYER )
+    if( top_layer != F_Cu && bottom_layer != B_Cu )
         return;
 
     // Export the via padstack
@@ -864,14 +864,13 @@ static void export_vrml_via( MODEL_VRML& aModel, BOARD* pcb, const VIA* via )
 
 static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
 {
-    for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
+    for( TRACK* track = pcb->m_Track; track; track = track->Next() )
     {
         if( track->Type() == PCB_VIA_T )
         {
             export_vrml_via( aModel, pcb, (const VIA*) track );
         }
-        else if( track->GetLayer() == FIRST_COPPER_LAYER
-                 || track->GetLayer() == LAST_COPPER_LAYER )
+        else if( track->GetLayer() == B_Cu || track->GetLayer() == F_Cu )
             export_vrml_line( aModel, track->GetLayer(),
                     track->GetStart().x * aModel.scale + aModel.tx,
                     track->GetStart().y * aModel.scale + aModel.ty,
@@ -1141,14 +1140,14 @@ static void export_vrml_pad( MODEL_VRML& aModel, BOARD* pcb, D_PAD* aPad )
     }
 
     // The pad proper, on the selected layers
-    LAYER_MSK layer_mask = aPad->GetLayerMask();
+    LSET layer_mask = aPad->GetLayerSet();
 
-    if( layer_mask & LAYER_BACK )
+    if( layer_mask[B_Cu] )
     {
         export_vrml_padshape( aModel, &aModel.bot_tin, aPad );
     }
 
-    if( layer_mask & LAYER_FRONT )
+    if( layer_mask[F_Cu] )
     {
         export_vrml_padshape( aModel, &aModel.top_tin, aPad );
     }
@@ -1209,7 +1208,7 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
         export_vrml_text_module( &aModule->Value() );
 
     // Export module edges
-    for( EDA_ITEM* item = aModule->GraphicalItems(); item != NULL; item = item->Next() )
+    for( EDA_ITEM* item = aModule->GraphicalItems(); item; item = item->Next() )
     {
         switch( item->Type() )
         {
@@ -1231,7 +1230,7 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
     for( D_PAD* pad = aModule->Pads(); pad; pad = pad->Next() )
         export_vrml_pad( aModel, aPcb, pad );
 
-    bool isFlipped = aModule->GetLayer() == LAYER_N_BACK;
+    bool isFlipped = aModule->GetLayer() == B_Cu;
 
     // Export the object VRML model(s)
     for( S3D_MASTER* vrmlm = aModule->Models();  vrmlm;  vrmlm = vrmlm->Next() )

@@ -23,7 +23,7 @@
 
 #include <layers_id_colors_and_visibility.h>
 #include <map>
- 
+
 #include <boost/foreach.hpp>
 #include <boost/range/adaptor/map.hpp>
 
@@ -49,14 +49,14 @@ public:
     PNS_INDEX();
     ~PNS_INDEX();
 
-    /** 
+    /**
      * Function Add()
      *
      * Adds item to the spatial index.
      */
     void Add( PNS_ITEM* aItem );
-    
-    /** 
+
+    /**
      * Function Remove()
      *
      * Removes an item from the spatial index.
@@ -70,7 +70,7 @@ public:
      */
     void Replace( PNS_ITEM* aOldItem, PNS_ITEM* aNewItem );
 
-    /** 
+    /**
      * Function Query()
      *
      * Searches items in the index that are in proximity of aItem.
@@ -86,7 +86,7 @@ public:
     template<class Visitor>
     int Query( const PNS_ITEM* aItem, int aMinDistance, Visitor& aVisitor );
 
-    /** 
+    /**
      * Function Query()
      *
      * Searches items in the index that are in proximity of aShape.
@@ -115,7 +115,7 @@ public:
      * Returns list of all items in a given net.
      */
     NET_ITEMS_LIST* GetItemsForNet( int aNet );
- 
+
     /**
      * Function Contains()
      *
@@ -128,7 +128,7 @@ public:
 
     /**
      * Function Size()
-     * 
+     *
      * Returns number of items stored in the index.
      */
     int Size() const { return m_allItems.size(); }
@@ -177,13 +177,12 @@ PNS_INDEX::ITEM_SHAPE_INDEX* PNS_INDEX::getSubindex( const PNS_ITEM* aItem )
         {
             if( l.IsMultilayer() )
                 idx_n = SI_Multilayer;
-            else if( l.Start() == LAYER_N_BACK) // fixme: use kicad layer codes
+            else if( l.Start() == B_Cu ) // fixme: use kicad layer codes
                 idx_n = SI_PadsTop;
-            else if( l.Start() == LAYER_N_FRONT )
+            else if( l.Start() == F_Cu )
                 idx_n = SI_PadsBottom;
-
-            break;
         }
+        break;
 
     case PNS_ITEM::SEGMENT:
     case PNS_ITEM::LINE:
@@ -271,9 +270,9 @@ int PNS_INDEX::Query( const PNS_ITEM* aItem, int aMinDistance, Visitor& aVisitor
     {
         int l = layers.Start();
 
-        if( l == LAYER_N_BACK )
+        if( l == B_Cu )
             total += querySingle( SI_PadsTop, shape, aMinDistance, aVisitor );
-        else if( l == LAYER_N_FRONT )
+        else if( l == F_Cu )
             total += querySingle( SI_PadsBottom, shape, aMinDistance, aVisitor );
 
         total += querySingle(  SI_Traces + 2 * l + SI_SegStraight, shape, aMinDistance, aVisitor );

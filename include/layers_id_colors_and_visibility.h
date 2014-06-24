@@ -27,189 +27,335 @@
  * @brief Board layer functions and definitions.
  */
 
-#ifndef _LAYERS_ID_AND_VISIBILITY_H_
-#define _LAYERS_ID_AND_VISIBILITY_H_
+#ifndef LAYERS_ID_AND_VISIBILITY_H_
+#define LAYERS_ID_AND_VISIBILITY_H_
+
+#include <stdint.h>
+#include <vector>
+#include <bitset>
+#include <wx/string.h>
+#include <macros.h>
 
 class BOARD;
 
-/* NOTE: the idea here is to have LAYER_NUM and LAYER_MSK as abstract
- * type as possible (even if they're currently implemented as int and
- * unsigned int, respectively). In this way it would be reasonably easy
- * to overcome the current 32 layer limit. For example switching to a 64
- * bit mask or even some kind of bit array */
-
-/* Layer identification (layer number) */
-typedef int LAYER_NUM;
-#define UNDEFINED_LAYER         -1
-#define FIRST_LAYER             0
-#define FIRST_COPPER_LAYER      0
-#define LAYER_N_BACK            0
-#define LAYER_N_2               1
-#define LAYER_N_3               2
-#define LAYER_N_4               3
-#define LAYER_N_5               4
-#define LAYER_N_6               5
-#define LAYER_N_7               6
-#define LAYER_N_8               7
-#define LAYER_N_9               8
-#define LAYER_N_10              9
-#define LAYER_N_11              10
-#define LAYER_N_12              11
-#define LAYER_N_13              12
-#define LAYER_N_14              13
-#define LAYER_N_15              14
-#define LAYER_N_FRONT           15
-#define LAST_COPPER_LAYER       LAYER_N_FRONT
-#define NB_COPPER_LAYERS        (LAST_COPPER_LAYER - FIRST_COPPER_LAYER + 1)
-
-#define FIRST_NON_COPPER_LAYER  16
-#define FIRST_TECHNICAL_LAYER   16
-#define FIRST_USER_LAYER        24
-#define ADHESIVE_N_BACK         16
-#define ADHESIVE_N_FRONT        17
-#define SOLDERPASTE_N_BACK      18
-#define SOLDERPASTE_N_FRONT     19
-#define SILKSCREEN_N_BACK       20
-#define SILKSCREEN_N_FRONT      21
-#define SOLDERMASK_N_BACK       22
-#define SOLDERMASK_N_FRONT      23
-#define DRAW_N                  24
-#define COMMENT_N               25
-#define ECO1_N                  26
-#define ECO2_N                  27
-#define EDGE_N                  28
-#define LAST_NON_COPPER_LAYER   28
-#define LAST_TECHNICAL_LAYER    23
-#define LAST_USER_LAYER   27
-#define NB_PCB_LAYERS           (LAST_NON_COPPER_LAYER + 1)
-#define UNUSED_LAYER_29         29
-#define UNUSED_LAYER_30         30
-#define UNUSED_LAYER_31         31
-#define NB_GERBER_LAYERS        32
-#define NB_LAYERS               32
-#define UNSELECTED_LAYER        32
-
-// Masks to identify a layer by a bit map
-typedef unsigned LAYER_MSK;
-#define LAYER_BACK              (1 << LAYER_N_BACK)     ///< bit mask for copper layer
-#define LAYER_2                 (1 << LAYER_N_2)        ///< bit mask for layer 2
-#define LAYER_3                 (1 << LAYER_N_3)        ///< bit mask for layer 3
-#define LAYER_4                 (1 << LAYER_N_4)        ///< bit mask for layer 4
-#define LAYER_5                 (1 << LAYER_N_5)        ///< bit mask for layer 5
-#define LAYER_6                 (1 << LAYER_N_6)        ///< bit mask for layer 6
-#define LAYER_7                 (1 << LAYER_N_7)        ///< bit mask for layer 7
-#define LAYER_8                 (1 << LAYER_N_8)        ///< bit mask for layer 8
-#define LAYER_9                 (1 << LAYER_N_9)        ///< bit mask for layer 9
-#define LAYER_10                (1 << LAYER_N_10)       ///< bit mask for layer 10
-#define LAYER_11                (1 << LAYER_N_11)       ///< bit mask for layer 11
-#define LAYER_12                (1 << LAYER_N_12)       ///< bit mask for layer 12
-#define LAYER_13                (1 << LAYER_N_13)       ///< bit mask for layer 13
-#define LAYER_14                (1 << LAYER_N_14)       ///< bit mask for layer 14
-#define LAYER_15                (1 << LAYER_N_15)       ///< bit mask for layer 15
-#define LAYER_FRONT             (1 << LAYER_N_FRONT)    ///< bit mask for component layer
-#define ADHESIVE_LAYER_BACK     (1 << ADHESIVE_N_BACK)
-#define ADHESIVE_LAYER_FRONT    (1 << ADHESIVE_N_FRONT)
-#define SOLDERPASTE_LAYER_BACK  (1 << SOLDERPASTE_N_BACK)
-#define SOLDERPASTE_LAYER_FRONT (1 << SOLDERPASTE_N_FRONT)
-#define SILKSCREEN_LAYER_BACK   (1 << SILKSCREEN_N_BACK)
-#define SILKSCREEN_LAYER_FRONT  (1 << SILKSCREEN_N_FRONT)
-#define SOLDERMASK_LAYER_BACK   (1 << SOLDERMASK_N_BACK)
-#define SOLDERMASK_LAYER_FRONT  (1 << SOLDERMASK_N_FRONT)
-#define DRAW_LAYER              (1 << DRAW_N)
-#define COMMENT_LAYER           (1 << COMMENT_N)
-#define ECO1_LAYER              (1 << ECO1_N)
-#define ECO2_LAYER              (1 << ECO2_N)
-#define EDGE_LAYER              (1 << EDGE_N)
-
-//      extra bits              0xE0000000
-
-// Helpful global layer masks:
-// ALL_AUX_LAYERS layers are technical layers, ALL_NO_CU_LAYERS has user
-// and edge layers too!
-#define ALL_LAYERS              0x1FFFFFFF              // Pcbnew used 29 layers
-#define FULL_LAYERS             0xFFFFFFFF              // Gerbview used 32 layers
-#define ALL_NO_CU_LAYERS        0x1FFF0000
-#define ALL_CU_LAYERS           0x0000FFFF
-#define INTERNAL_CU_LAYERS      0x00007FFE
-#define EXTERNAL_CU_LAYERS      0x00008001
-#define FRONT_TECH_LAYERS       (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT \
-                               | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT)
-#define BACK_TECH_LAYERS        (SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK \
-                               | ADHESIVE_LAYER_BACK | SOLDERPASTE_LAYER_BACK)
-#define ALL_TECH_LAYERS         (FRONT_TECH_LAYERS | BACK_TECH_LAYERS)
-#define BACK_LAYERS            (LAYER_BACK | BACK_TECH_LAYERS)
-#define FRONT_LAYERS           (LAYER_FRONT | FRONT_TECH_LAYERS)
-
-#define ALL_USER_LAYERS         (DRAW_LAYER | COMMENT_LAYER |\
-                                 ECO1_LAYER | ECO2_LAYER )
-
-#define NO_LAYERS               0x00000000
 
 /**
- * @return a one bit layer mask from a layer number
- * @param aLayerNumber = the layer number to convert (0 .. LAYERS-1)
+ * Type LAYER_NUM
+ * can be replaced with int and removed.  Until then, it is something you can increment,
+ * and its meaning is only advisory but can extend beyond PCB layers into view layers
+ * and gerber layers.
  */
-inline LAYER_MSK GetLayerMask( LAYER_NUM aLayerNumber )
-{
-    return 1 << aLayerNumber;
-}
+typedef int     LAYER_NUM;
+
 
 /**
- * @return bool if aLayerNumber is a layer contained in aMask
- * @param aMask = a layer mask
- * @param aLayerNumber is the layer id to test
+ * Enum LAYER_ID
+ * is the set of PCB layers.  It has nothing to do with gerbers or view layers.
+ * One of these cannot be "incremented".
  */
-inline bool IsLayerInList( LAYER_MSK aMask, LAYER_NUM aLayerNumber )
+enum LAYER_ID
+#if __cplusplus >= 201103L
+    : unsigned char
+#endif
 {
-    return (aMask & GetLayerMask( aLayerNumber )) != 0;
-}
+    F_Cu,           // 0
+    In1_Cu,
+    In2_Cu,
+    In3_Cu,
+    In4_Cu,
+    In5_Cu,
+    In6_Cu,
+    In7_Cu,
+    In8_Cu,
+    In9_Cu,
+    In10_Cu,
+    In11_Cu,
+    In12_Cu,
+    In13_Cu,
+    In14_Cu,
+    In15_Cu,
+    In16_Cu,
+    In17_Cu,
+    In18_Cu,
+    In19_Cu,
+    In20_Cu,
+    In21_Cu,
+    In22_Cu,
+    In23_Cu,
+    In24_Cu,
+    In25_Cu,
+    In26_Cu,
+    In27_Cu,
+    In28_Cu,
+    In29_Cu,
+    In30_Cu,
+    B_Cu,           // 31
+
+    B_Adhes,        // 32
+    F_Adhes,
+    B_Paste,
+    F_Paste,
+    B_SilkS,
+    F_SilkS,
+    B_Mask,
+    F_Mask,
+    Dwgs_User,
+    Cmts_User,
+    Eco1_User,
+    Eco2_User,
+    Edge_Cuts,
+    Margin,
+
+    F_CrtYd,        // CrtYd & Body are footprint only
+    B_CrtYd,
+    F_Fab,
+    B_Fab,
+
+    LAYER_ID_COUNT
+};
+
+
+#define UNDEFINED_LAYER     LAYER_ID(-1)
+#define UNSELECTED_LAYER    LAYER_ID(-2)
+
+#define MAX_CU_LAYERS       (B_Cu - F_Cu + 1)
+
+/* These were moved to legacy_plugin.cpp, please don't ever use them
+   outside there.  Now with the advent of class LSEQ, we don't iterate over
+   LAYER_ID any more, so therefore FIRST_COPPER_LAYER and LAST_COPPER_LAYER are
+   dead concepts.  They in fact failed to do what they were intended to do because
+   they implied a particular sequence which in and of itself was subject to change
+   and actually did when we flipped the pretty and *.kicad_pcb copper layer stack.
+   LSEQ is the way to go, use it.  It gives a level of manipulation between
+   LAYER_ID and iteration.
+#define FIRST_COPPER_LAYER      brain dead
+#define LAST_COPPER_LAYER       brain dead
+#define FIRST_LAYER             brain dead
+#define NB_LAYERS               use LAYER_ID_COUNT instead
+#define NB_COPPER_LAYERS        was always a max, not a number, use MAX_CU_COUNT now.
+*/
+
+
+/// A sequence of layers, a sequence provides a certain order.
+typedef std::vector<LAYER_ID>   BASE_SEQ;
+
+
+/**
+ * Class LSEQ
+ * is a sequence (and therefore also a set) of LAYER_IDs.  A sequence provides
+ * a certain order.
+ * <p>
+ * It can also be used as an iterator:
+ * <code>
+ *
+ *      for( LSEQ cu_stack = aSet.CuStack();  cu_stack;  ++cu_stack )
+ *          layer_id = *cu_stack;
+ *
+ * </code>
+ */
+class LSEQ : public BASE_SEQ
+{
+    unsigned   m_index;
+
+public:
+
+    LSEQ() :
+        m_index( 0 )
+    {}
+
+    template <class InputIterator>
+    LSEQ( InputIterator start, InputIterator end ) :
+        BASE_SEQ( start, end ),
+        m_index( 0 )
+    {}
+
+    void Rewind()           { m_index = 0; }
+
+    void operator ++ ()     { ++m_index; }  // returns nothing, used in simple statements only.
+
+    void operator ++ (int)  { ++m_index; }
+
+    operator bool ()        { return m_index < size(); }
+
+    LAYER_ID operator * () const
+    {
+        return at( m_index );       // throws std::out_of_range
+    }
+};
+
+
+typedef std::bitset<LAYER_ID_COUNT>     BASE_SET;
+
+
+/**
+ * Class LSET
+ * is a set of LAYER_IDs.  It can be converted to numerous purpose LSEQs using
+ * the various member functions, most of which are based on Seq(). The advantage
+ * of converting to LSEQ using purposeful code, is it removes any dependency
+ * on order/sequence inherent in this set.
+ */
+class LSET : public BASE_SET
+{
+public:
+
+    LSET() :
+        BASE_SET()
+    {}
+
+    LSET( const BASE_SET& aOther ) :
+        BASE_SET( aOther )
+    {
+    }
+
+    /**
+     * Constructor LSET( LAYER_ID )
+     * takes a LAYER_ID and sets that bit.
+     */
+    LSET( int aLayer )
+    {
+        set( aLayer );
+    }
+
+    /**
+     * Constructor LSET( const LAYER_ID* aArray, unsigned aCount )
+     * works well with an arry or LSEQ.
+     */
+    LSET( const LAYER_ID* aArray, unsigned aCount );
+
+    /**
+     * Constructor LSET( int, ...)
+     * takes a variable number of LAYER_IDs in the argument list to construct
+     * the set.
+     * @param aIdCount is the number of LAYER_IDs which follow.
+     */
+    LSET( size_t aIdCount, ... );
+
+    /**
+     * Function Name
+     * returns the fixed name association with aLayerId.
+     */
+    static const wxChar* Name( LAYER_ID aLayerId );
+
+    /**
+     * Function InternalCuMask()
+     * returns a complete set of internal copper layers, which is all Cu layers
+     * except F_Cu and B_Cu.
+     */
+    static LSET InternalCuMask();
+
+    /**
+     * Function AllCuMask
+     * returns a mask holding the requested number of Cu LAYER_IDs.
+     */
+    static LSET AllCuMask( int aCuLayerCount = MAX_CU_LAYERS );
+
+    /**
+     * Function AllNonCuMask
+     * returns a mask holding all layer minus CU layers.
+     */
+    static LSET AllNonCuMask();
+
+    static LSET AllLayersMask();
+
+    static LSET FrontTechMask();
+    static LSET BackTechMask();
+    static LSET AllTechMask();
+
+    static LSET FrontMask();
+
+    static LSET BackMask();
+
+    static LSET UserMask();
+
+
+    /**
+     * Function CuStack
+     * returns a sequence of copper layers in starting from the front/top
+     * and extending to the back/bottom.  This specific sequence is depended upon
+     * in numerous places.
+     */
+    LSEQ CuStack() const;
+
+    /**
+     * Function Technicals
+     * returns a sequence of technical layers.  A sequence provides a certain
+     * order.
+     * @param aSubToOmit is the subset of the techical layers to omit, defaults to none.
+     */
+    LSEQ Technicals( LSET aSubToOmit = LSET() ) const;
+
+    /// *_User layers.
+    LSEQ Users() const;
+
+    LSEQ UIOrder() const;
+
+    /**
+     * Function Seq
+     * returns an LSEQ from the union of this LSET and a desired sequence.  The LSEQ
+     * element will be in the same sequence as aWishListSequence if they are present.
+     * @param aWishListSequence establishes the order of the returned LSEQ, and the LSEQ will only
+     * contiain LAYER_IDs which are present in this set.
+     * @param aCount is the length of aWishListSequence array.
+     */
+    LSEQ Seq( const LAYER_ID* aWishListSequence, unsigned aCount ) const;
+
+    /**
+     * Function Seq
+     * returns a LSEQ from this LSET in ascending LAYER_ID order.  Each LSEQ
+     * element will be in the same sequence as in LAYER_ID and only present
+     * in the resultant LSEQ if present in this set.  Therefore the sequence is
+     * subject to change, use it only when enumeration and not order is important.
+     */
+    LSEQ Seq() const;
+
+    /**
+     * Function SVG
+     * returns the sequence used to output an SVG plot.
+    LSEQ SVG() const;
+     put this in the needed source file using Seq() there.
+    */
+
+    /**
+     * Function FmtHex
+     * returns a hex string showing contents of this LSEQ.
+     */
+    std::string FmtHex() const;
+
+    /**
+     * Function ParseHex
+     * understands the output of FmtHex() and replaces this set's values
+     * with those given in the input string.  Parsing stops at the first
+     * non hex ASCII byte, except that marker bytes output from FmtHex are
+     * not terminators.
+     * @return int - number of bytes consumed
+     */
+    int ParseHex( const char* aStart, int aCount );
+
+    /**
+     * Function FmtBin
+     * returns a binary string showing contents of this LSEQ.
+     */
+    std::string FmtBin() const;
+
+    /**
+     * Find the first set LAYER_ID. Returns UNDEFINED_LAYER if more
+     * than one is set or UNSELECTED_LAYER if none is set.
+     */
+    LAYER_ID ExtractLayer();
+
+private:
+};
+
 
 /**
  * @return bool if 2 layer masks have a comman layer
  * @param aMask1 = a layer mask
  * @param aMask2 = an other layer mask
  */
-inline bool IsLayerMasksIntersect( LAYER_MSK aMask1, LAYER_MSK aMask2 )
+inline bool IsLayerMasksIntersect( LSET aMask1, LSET aMask2 )
 {
-    return (aMask1 & aMask2) != 0;
+    return (aMask1 & aMask2).any();
 }
-
-/**
- * Count the number of set layers in the mask
- */
-inline int LayerMaskCountSet( LAYER_MSK aMask )
-{
-    int count = 0;
-
-    for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
-    {
-        if( aMask & GetLayerMask( i ) )
-            ++count;
-    }
-    return count;
-}
-
-
-// layers order in dialogs (plot, print and toolbars)
-// in same order than in setup layers dialog
-// (Front or Top to Back or Bottom)
-#define DECLARE_LAYERS_ORDER_LIST(list) const LAYER_NUM list[NB_LAYERS] =\
-{   LAYER_N_FRONT,\
-    LAYER_N_15, LAYER_N_14, LAYER_N_13, LAYER_N_12,\
-    LAYER_N_11, LAYER_N_10, LAYER_N_9, LAYER_N_8,\
-    LAYER_N_7, LAYER_N_6, LAYER_N_5, LAYER_N_4,\
-    LAYER_N_3, LAYER_N_2,\
-    LAYER_N_BACK,\
-    ADHESIVE_N_FRONT , ADHESIVE_N_BACK,\
-    SOLDERPASTE_N_FRONT, SOLDERPASTE_N_BACK,\
-    SILKSCREEN_N_FRONT, SILKSCREEN_N_BACK,\
-    SOLDERMASK_N_FRONT, SOLDERMASK_N_BACK,\
-    DRAW_N,\
-    COMMENT_N,\
-    ECO1_N, ECO2_N,\
-    EDGE_N,\
-    UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31\
-};
 
 
 /**
@@ -253,12 +399,15 @@ enum PCB_VISIBLE
     END_PCB_VISIBLE_LIST        // sentinel
 };
 
+
 /**
  * Enum NETNAMES_VISIBLE
  * is a set of layers specific for displaying net names.
  * Their visiblity is not supposed to be saved in a board file,
  * they are only to be used by the GAL.
  */
+#if 0
+// was:
 enum NETNAMES_VISIBLE
 {
     LAYER_1_NETNAMES_VISIBLE,   // bottom layer
@@ -284,26 +433,37 @@ enum NETNAMES_VISIBLE
 
     END_NETNAMES_VISIBLE_LIST   // sentinel
 };
+#else
+enum NETNAMES_VISIBLE
+{
+    PAD_FR_NETNAMES_VISIBLE = B_Cu+1,
+    PAD_BK_NETNAMES_VISIBLE,
+    PADS_NETNAMES_VISIBLE,
+
+    END_NETNAMES_VISIBLE_LIST   // sentinel
+};
+#endif
+
 
 /// macro for obtaining layer number for specific item (eg. pad or text)
-#define ITEM_GAL_LAYER(layer)       (NB_LAYERS + layer)
+#define ITEM_GAL_LAYER(layer)       (LAYER_ID_COUNT + layer)
 
-#define NETNAMES_GAL_LAYER(layer)   (NB_LAYERS + END_PCB_VISIBLE_LIST + layer )
+#define NETNAMES_GAL_LAYER(layer)   (LAYER_ID_COUNT + END_PCB_VISIBLE_LIST + layer )
 
-/// number of *all* layers including PCB and item layers
-#define TOTAL_LAYER_COUNT	        (NB_LAYERS + END_PCB_VISIBLE_LIST + END_NETNAMES_VISIBLE_LIST)
+/// number of *all* GAL layers including PCB and item layers
+#define TOTAL_LAYER_COUNT	        (LAYER_ID_COUNT + END_PCB_VISIBLE_LIST + END_NETNAMES_VISIBLE_LIST)
 
 /**
  * Function IsValidLayer
  * tests whether a given integer is a valid layer index, i.e. can
- * be safely put in a LAYER_NUM
- * @param aLayerIndex = Layer index to test. It can be an int, so its
+ * be safely put in a LAYER_ID
+ * @param aLayerId = Layer index to test. It can be an int, so its
  * useful during I/O
  * @return true if aLayerIndex is a valid layer index
  */
-inline bool IsValidLayer( int aLayerIndex )
+inline bool IsValidLayer( LAYER_NUM aLayerId )
 {
-    return aLayerIndex >= FIRST_LAYER && aLayerIndex < NB_LAYERS;
+    return unsigned( aLayerId ) < LAYER_ID_COUNT;
 }
 
 /**
@@ -314,41 +474,40 @@ inline bool IsValidLayer( int aLayerIndex )
  */
 inline bool IsPcbLayer( LAYER_NUM aLayer )
 {
-    return aLayer >= FIRST_LAYER && aLayer < NB_PCB_LAYERS;
+    return aLayer >= F_Cu && aLayer < LAYER_ID_COUNT;
 }
 
 /**
  * Function IsCopperLayer
  * tests whether a layer is a copper layer
- * @param aLayer = Layer  to test
+ * @param aLayerId = Layer  to test
  * @return true if aLayer is a valid copper layer
  */
-inline bool IsCopperLayer( LAYER_NUM aLayer )
+inline bool IsCopperLayer( LAYER_NUM aLayerId )
 {
-    return aLayer >= FIRST_COPPER_LAYER
-        && aLayer <= LAST_COPPER_LAYER;
+    return aLayerId >= F_Cu && aLayerId <= B_Cu;
 }
 
 /**
  * Function IsNonCopperLayer
  * tests whether a layer is a non copper layer
- * @param aLayer = Layer to test
+ * @param aLayerId = Layer to test
  * @return true if aLayer is a non copper layer
  */
-inline bool IsNonCopperLayer( LAYER_NUM aLayer )
+inline bool IsNonCopperLayer( LAYER_NUM aLayerId )
 {
-    return aLayer >= FIRST_NON_COPPER_LAYER && aLayer <= LAST_NON_COPPER_LAYER;
+    return aLayerId > B_Cu && aLayerId <= LAYER_ID_COUNT;
 }
 
 /**
  * Function IsUserLayer
  * tests whether a layer is a non copper and a non tech layer
- * @param aLayer = Layer to test
+ * @param aLayerId = Layer to test
  * @return true if aLayer is a user layer
  */
-inline bool IsUserLayer( LAYER_NUM aLayer )
+inline bool IsUserLayer( LAYER_ID aLayerId )
 {
-    return aLayer >= FIRST_USER_LAYER && aLayer <= LAST_USER_LAYER;
+    return aLayerId >= Dwgs_User && aLayerId <= Eco2_User;
 }
 
 /* IMPORTANT: If a layer is not a front layer not necessarily is true
@@ -364,26 +523,48 @@ inline bool IsUserLayer( LAYER_NUM aLayer )
 /**
  * Layer classification: check if it's a front layer
  */
-inline bool IsFrontLayer( LAYER_NUM aLayer )
+inline bool IsFrontLayer( LAYER_ID aLayerId )
 {
-    return ( aLayer == LAYER_N_FRONT ||
-             aLayer == ADHESIVE_N_FRONT ||
-             aLayer == SOLDERPASTE_N_FRONT ||
-             aLayer == SILKSCREEN_N_FRONT ||
-             aLayer == SOLDERPASTE_N_FRONT );
+    switch( aLayerId )
+    {
+    case F_Cu:
+    case F_Adhes:
+    case F_Paste:
+    case F_SilkS:
+    case F_Mask:
+    case F_CrtYd:
+    case F_Fab:
+        return true;
+    default:
+        ;
+    }
+
+    return false;
 }
+
 
 /**
  * Layer classification: check if it's a back layer
  */
-inline bool IsBackLayer( LAYER_NUM aLayer )
+inline bool IsBackLayer( LAYER_ID aLayerId )
 {
-    return ( aLayer == LAYER_N_BACK ||
-             aLayer == ADHESIVE_N_BACK ||
-             aLayer == SOLDERPASTE_N_BACK ||
-             aLayer == SILKSCREEN_N_BACK ||
-             aLayer == SOLDERPASTE_N_BACK );
+    switch( aLayerId )
+    {
+    case B_Cu:
+    case B_Adhes:
+    case B_Paste:
+    case B_SilkS:
+    case B_Mask:
+    case B_CrtYd:
+    case B_Fab:
+        return true;
+    default:
+        ;
+    }
+
+    return false;
 }
+
 
 /**
  * Function FlippedLayerNumber
@@ -391,31 +572,25 @@ inline bool IsBackLayer( LAYER_NUM aLayer )
  * some (not all) layers: external copper, Mask, Paste, and solder
  * are swapped between front and back sides
  */
-LAYER_NUM FlipLayer( LAYER_NUM oldlayer );
+LAYER_ID FlipLayer( LAYER_ID oldlayer );
 
 /**
  * Calculate the mask layer when flipping a footprint
  * BACK and FRONT copper layers, mask, paste, solder layers are swapped
  */
-LAYER_MSK FlipLayerMask( LAYER_MSK aMask );
-
-/**
- * Extract the set layer from a mask. Returns UNDEFINED_LAYER if more
- * than one is set or UNSELECTED_LAYER if none is
- */
-LAYER_NUM ExtractLayer( LAYER_MSK aMask );
+LSET FlipLayerMask( LSET aMask );
 
 /**
  * Return a string (to be shown to the user) describing a layer mask.
  * Useful for showing where is a pad, track, entity, etc.
  * The BOARD is needed because layer names are (somewhat) customizable
  */
-wxString LayerMaskDescribe( const BOARD *aBoard, LAYER_MSK aMask );
+wxString LayerMaskDescribe( const BOARD* aBoard, LSET aMask );
 
 /**
  * Returns a netname layer corresponding to the given layer.
  */
-inline LAYER_NUM GetNetnameLayer( LAYER_NUM aLayer )
+inline int GetNetnameLayer( int aLayer )
 {
     if( IsCopperLayer( aLayer ) )
         return NETNAMES_GAL_LAYER( aLayer );
@@ -427,7 +602,7 @@ inline LAYER_NUM GetNetnameLayer( LAYER_NUM aLayer )
         return NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
 
     // Fallback
-    return COMMENT_N;
+    return Cmts_User;
 }
 
 /**
@@ -438,8 +613,8 @@ inline LAYER_NUM GetNetnameLayer( LAYER_NUM aLayer )
  */
 inline bool IsNetnameLayer( LAYER_NUM aLayer )
 {
-    return aLayer >= NETNAMES_GAL_LAYER( LAYER_1_NETNAMES_VISIBLE ) &&
+    return aLayer >= NETNAMES_GAL_LAYER( F_Cu ) &&
            aLayer < NETNAMES_GAL_LAYER( END_NETNAMES_VISIBLE_LIST );
 }
 
-#endif // _LAYERS_ID_AND_VISIBILITY_H_
+#endif // LAYERS_ID_AND_VISIBILITY_H_

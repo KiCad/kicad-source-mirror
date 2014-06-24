@@ -134,7 +134,7 @@ public:
      */
     void SetLayer( LAYER_NUM aLayer )  { m_Layer = aLayer; }
 
-    LAYER_MSK GetLayerMask()
+    LSET GetLayerMask()
     {
         return ::GetLayerMask( m_Layer );
     }

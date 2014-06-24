@@ -1293,12 +1293,19 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
     for( EITER it = cu.begin();  it != cu.end();  ++it,  ++ki_layer_count )
     {
         if( ki_layer_count == 0 )
-            m_cu_map[it->number] = LAYER_N_FRONT;
+            m_cu_map[it->number] = F_Cu;
         else if( ki_layer_count == int( cu.size()-1 ) )
-            m_cu_map[it->number] = LAYER_N_BACK;
+            m_cu_map[it->number] = B_Cu;
         else
+        {
             // some eagle boards do not have contiguous layer number sequences.
+
+#if 0   // pre LAYER_ID & LSET:
             m_cu_map[it->number] = cu.size() - 1 - ki_layer_count;
+#else
+            m_cu_map[it->number] = ki_layer_count;
+#endif
+        }
     }
 
 #if 0 && defined(DEBUG)
@@ -1316,7 +1323,7 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 
         for( EITER it = cu.begin();  it != cu.end();  ++it )
         {
-            LAYER_NUM layer = kicad_layer( it->number );
+            LAYER_ID layer =  kicad_layer( it->number );
 
             // these function provide their own protection against UNDEFINED_LAYER:
             m_board->SetLayerName( layer, FROM_UTF8( it->name.c_str() ) );
@@ -1340,7 +1347,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             m_xpath->push( "wire" );
 
             EWIRE       w( gr->second );
-            LAYER_NUM   layer = kicad_layer( w.layer );
+            LAYER_ID    layer = kicad_layer( w.layer );
 
             if( layer != UNDEFINED_LAYER )
             {
@@ -1368,7 +1375,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             m_xpath->push( "text" );
 
             ETEXT       t( gr->second );
-            LAYER_NUM   layer = kicad_layer( t.layer );
+            LAYER_ID    layer = kicad_layer( t.layer );
 
             if( layer != UNDEFINED_LAYER )
             {
@@ -1459,7 +1466,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             m_xpath->push( "circle" );
 
             ECIRCLE     c( gr->second );
-            LAYER_NUM   layer = kicad_layer( c.layer );
+            LAYER_ID    layer = kicad_layer( c.layer );
 
             if( layer != UNDEFINED_LAYER )       // unsupported layer
             {
@@ -1483,7 +1490,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             m_xpath->push( "rectangle" );
 
             ERECT       r( gr->second );
-            LAYER_NUM   layer = kicad_layer( r.layer );
+            LAYER_ID    layer = kicad_layer( r.layer );
 
             if( IsCopperLayer( layer ) )
             {
@@ -1550,7 +1557,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             pad->SetDrillSize( sz );
             pad->SetSize( sz );
 
-            pad->SetLayerMask( ALL_CU_LAYERS /* | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT */ );
+            pad->SetLayerSet( LSET::AllCuMask() );
             m_xpath->pop();
         }
 
@@ -1923,7 +1930,7 @@ MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const string& aPkgName ) con
 void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
 {
     EWIRE       w( aTree );
-    LAYER_NUM   layer = kicad_layer( w.layer );
+    LAYER_ID    layer = kicad_layer( w.layer );
 
     if( IsNonCopperLayer( layer ) )     // only valid non-copper wires, skip copper package wires
     {
@@ -1966,7 +1973,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
 
     pad->SetDrillSize( wxSize( kicad( e.drill ), kicad( e.drill ) ) );
 
-    pad->SetLayerMask( ALL_CU_LAYERS | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT );
+    pad->SetLayerSet( LSET::AllCuMask().set( B_Mask ).set( F_Mask ) );
 
     if( e.shape )
     {
@@ -2030,11 +2037,11 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 {
     ETEXT       t( aTree );
-    LAYER_NUM   layer = kicad_layer( t.layer );
+    LAYER_ID    layer = kicad_layer( t.layer );
 
     if( layer == UNDEFINED_LAYER )
     {
-        layer = COMMENT_N;
+        layer = Cmts_User;
     }
 
     TEXTE_MODULE* txt;
@@ -2138,7 +2145,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
 {
     ERECT       r( aTree );
-    LAYER_NUM   layer = kicad_layer( r.layer );
+    LAYER_ID    layer = kicad_layer( r.layer );
 
     if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
@@ -2171,7 +2178,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 {
     EPOLYGON    p( aTree );
-    LAYER_NUM   layer = kicad_layer( p.layer );
+    LAYER_ID    layer = kicad_layer( p.layer );
 
     if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
@@ -2183,12 +2190,12 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
         /*
         switch( layer )
         {
-        case ECO1_N:    layer = SILKSCREEN_N_FRONT; break;
-        case ECO2_N:    layer = SILKSCREEN_N_BACK;  break;
+        case Eco1_User:    layer = F_SilkS; break;
+        case Eco2_User:    layer = B_SilkS;  break;
 
         // all MODULE templates (created from eagle packages) are on front layer
         // until cloned.
-        case COMMENT_N: layer = SILKSCREEN_N_FRONT; break;
+        case Cmts_User: layer = F_SilkS; break;
         }
         */
 
@@ -2220,19 +2227,19 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packageCircle( MODULE* aModule, CPTREE& aTree ) const
 {
     ECIRCLE         e( aTree );
-    LAYER_NUM       layer = kicad_layer( e.layer );
+    LAYER_ID        layer = kicad_layer( e.layer );
     EDGE_MODULE*    gr = new EDGE_MODULE( aModule, S_CIRCLE );
 
     aModule->GraphicalItems().PushBack( gr );
 
     gr->SetWidth( kicad( e.width ) );
 
-    switch( layer )
+    switch( (int) layer )
     {
-    case UNDEFINED_LAYER:   layer = COMMENT_N;          break;
+    case UNDEFINED_LAYER:   layer = Cmts_User;          break;
     /*
-    case ECO1_N:            layer = SILKSCREEN_N_FRONT; break;
-    case ECO2_N:            layer = SILKSCREEN_N_BACK;  break;
+    case Eco1_User:            layer = F_SilkS; break;
+    case Eco2_User:            layer = B_SilkS;  break;
     */
     default:
                             break;
@@ -2272,14 +2279,14 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE& aTree ) const
     pad->SetDrillSize( sz );
     pad->SetSize( sz );
 
-    pad->SetLayerMask( ALL_CU_LAYERS /* | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT */ );
+    pad->SetLayerSet( LSET::AllCuMask() /* | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT */ );
 }
 
 
 void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
 {
     ESMD        e( aTree );
-    LAYER_NUM   layer = kicad_layer( e.layer );
+    LAYER_ID    layer = kicad_layer( e.layer );
 
     if( !IsCopperLayer( layer ) )
     {
@@ -2308,10 +2315,13 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
 
     pad->SetLayer( layer );
 
-    if( layer == LAYER_N_FRONT )
-        pad->SetLayerMask( LAYER_FRONT | SOLDERPASTE_LAYER_FRONT | SOLDERMASK_LAYER_FRONT );
-    else if( layer == LAYER_N_BACK )
-        pad->SetLayerMask( LAYER_BACK | SOLDERPASTE_LAYER_BACK | SOLDERMASK_LAYER_BACK );
+    static const LSET front( 3, F_Cu, F_Paste, F_Mask );
+    static const LSET back(  3, B_Cu, B_Paste, B_Mask );
+
+    if( layer == F_Cu )
+        pad->SetLayerSet( front );
+    else if( layer == B_Cu )
+        pad->SetLayerSet( back );
 
     // Optional according to DTD
     if( e.roundness )    // set set shape to PAD_RECT above, in case roundness is not present
@@ -2372,7 +2382,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
             {
                 m_xpath->push( "wire" );
                 EWIRE   w( it->second );
-                LAYER_NUM layer = kicad_layer( w.layer );
+                LAYER_ID  layer = kicad_layer( w.layer );
 
                 if( IsCopperLayer( layer ) )
                 {
@@ -2406,8 +2416,8 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 m_xpath->push( "via" );
                 EVIA    v( it->second );
 
-                LAYER_NUM layer_front_most = kicad_layer( v.layer_front_most );
-                LAYER_NUM layer_back_most  = kicad_layer( v.layer_back_most );
+                LAYER_ID  layer_front_most = kicad_layer( v.layer_front_most );
+                LAYER_ID  layer_back_most  = kicad_layer( v.layer_back_most );
 
                 if( IsCopperLayer( layer_front_most ) &&
                     IsCopperLayer( layer_back_most ) )
@@ -2440,9 +2450,9 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     if( drillz < m_min_via_hole )
                         m_min_via_hole = drillz;
 
-                    if( layer_front_most == LAYER_N_FRONT && layer_back_most == LAYER_N_BACK )
+                    if( layer_front_most == F_Cu && layer_back_most == B_Cu )
                         via->SetViaType( VIA_THROUGH );
-                    else if( layer_front_most == LAYER_N_FRONT || layer_back_most == LAYER_N_BACK )
+                    else if( layer_front_most == F_Cu || layer_back_most == B_Cu )
                         via->SetViaType( VIA_MICROVIA );
                     else
                         via->SetViaType( VIA_BLIND_BURIED );
@@ -2484,7 +2494,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 m_xpath->push( "polygon" );
 
                 EPOLYGON    p( it->second );
-                LAYER_NUM   layer = kicad_layer( p.layer );
+                LAYER_ID    layer = kicad_layer( p.layer );
 
                 if( IsCopperLayer( layer ) )
                 {
@@ -2563,7 +2573,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 }
 
 
-int EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
+LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 {
     /* will assume this is a valid mapping for all eagle boards until I get paid more:
 
@@ -2637,26 +2647,26 @@ int EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
     // eagle copper layer:
     if( aEagleLayer >= 1 && aEagleLayer < int( DIM( m_cu_map ) ) )
     {
-        return m_cu_map[aEagleLayer];
+        kiLayer = m_cu_map[aEagleLayer];
     }
 
     else
     {
 /*
 #define FIRST_NON_COPPER_LAYER  16
-#define ADHESIVE_N_BACK         16
-#define ADHESIVE_N_FRONT        17
-#define SOLDERPASTE_N_BACK      18
-#define SOLDERPASTE_N_FRONT     19
-#define SILKSCREEN_N_BACK       20
-#define SILKSCREEN_N_FRONT      21
-#define SOLDERMASK_N_BACK       22
-#define SOLDERMASK_N_FRONT      23
-#define DRAW_N                  24
-#define COMMENT_N               25
-#define ECO1_N                  26
-#define ECO2_N                  27
-#define EDGE_N                  28
+#define B_Adhes         16
+#define F_Adhes        17
+#define B_Paste      18
+#define F_Paste     19
+#define B_SilkS       20
+#define F_SilkS      21
+#define B_Mask       22
+#define F_Mask      23
+#define Dwgs_User                  24
+#define Cmts_User               25
+#define Eco1_User                  26
+#define Eco2_User                  27
+#define Edge_Cuts                  28
 #define LAST_NON_COPPER_LAYER   28
 #define UNUSED_LAYER_29         29
 #define UNUSED_LAYER_30         30
@@ -2665,40 +2675,40 @@ int EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         // translate non-copper eagle layer to pcbnew layer
         switch( aEagleLayer )
         {
-        case 20:    kiLayer = EDGE_N;               break;  // eagle says "Dimension" layer, but it's for board perimeter
-        case 21:    kiLayer = SILKSCREEN_N_FRONT;   break;
-        case 22:    kiLayer = SILKSCREEN_N_BACK;    break;
-        case 25:    kiLayer = SILKSCREEN_N_FRONT;   break;
-        case 26:    kiLayer = SILKSCREEN_N_BACK;    break;
-        case 27:    kiLayer = SILKSCREEN_N_FRONT;   break;
-        case 28:    kiLayer = SILKSCREEN_N_BACK;    break;
-        case 29:    kiLayer = SOLDERMASK_N_FRONT;   break;
-        case 30:    kiLayer = SOLDERMASK_N_BACK;    break;
-        case 31:    kiLayer = SOLDERPASTE_N_FRONT;  break;
-        case 32:    kiLayer = SOLDERPASTE_N_BACK;   break;
-        case 33:    kiLayer = SOLDERMASK_N_FRONT;   break;
-        case 34:    kiLayer = SOLDERMASK_N_BACK;    break;
-        case 35:    kiLayer = ADHESIVE_N_FRONT;     break;
-        case 36:    kiLayer = ADHESIVE_N_BACK;      break;
-        case 49:    kiLayer = COMMENT_N;            break;
-        case 50:    kiLayer = COMMENT_N;            break;
+        case 20:    kiLayer = Edge_Cuts;        break;  // eagle says "Dimension" layer, but it's for board perimeter
+        case 21:    kiLayer = F_SilkS;          break;
+        case 22:    kiLayer = B_SilkS;          break;
+        case 25:    kiLayer = F_SilkS;          break;
+        case 26:    kiLayer = B_SilkS;          break;
+        case 27:    kiLayer = F_SilkS;          break;
+        case 28:    kiLayer = B_SilkS;          break;
+        case 29:    kiLayer = F_Mask;           break;
+        case 30:    kiLayer = B_Mask;           break;
+        case 31:    kiLayer = F_Paste;          break;
+        case 32:    kiLayer = B_Paste;          break;
+        case 33:    kiLayer = F_Mask;           break;
+        case 34:    kiLayer = B_Mask;           break;
+        case 35:    kiLayer = F_Adhes;          break;
+        case 36:    kiLayer = B_Adhes;          break;
+        case 49:    kiLayer = Cmts_User;        break;
+        case 50:    kiLayer = Cmts_User;        break;
 
         // Packages show the future chip pins on SMD parts using layer 51.
         // This is an area slightly smaller than the PAD/SMD copper area.
         // Carry those visual aids into the MODULE on the drawing layer, not silkscreen.
-        case 51:    kiLayer = DRAW_N;               break;
-        case 52:    kiLayer = DRAW_N;               break;
+        case 51:    kiLayer = Dwgs_User;        break;
+        case 52:    kiLayer = Dwgs_User;        break;
 
-        case 95:    kiLayer = ECO1_N;               break;
-        case 96:    kiLayer = ECO2_N;               break;
+        case 95:    kiLayer = Eco1_User;        break;
+        case 96:    kiLayer = Eco2_User;        break;
         default:
             // some layers do not map to KiCad
             // DBG( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
-            kiLayer = UNDEFINED_LAYER;              break;
+            kiLayer = UNDEFINED_LAYER;          break;
         }
     }
 
-    return kiLayer;
+    return LAYER_ID( kiLayer );
 }
 
 

@@ -219,7 +219,7 @@ int PCBNEW_CONTROL::HighContrastDec( TOOL_EVENT& aEvent )
 // Layer control
 int PCBNEW_CONTROL::LayerTop( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, LAYER_N_FRONT );
+    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, F_Cu );
     getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -229,7 +229,7 @@ int PCBNEW_CONTROL::LayerTop( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner1( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, LAYER_N_2 );
+    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In1_Cu );
     getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -239,7 +239,7 @@ int PCBNEW_CONTROL::LayerInner1( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner2( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, LAYER_N_3 );
+    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In2_Cu );
     getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -249,7 +249,7 @@ int PCBNEW_CONTROL::LayerInner2( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner3( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, LAYER_N_4 );
+    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In3_Cu );
     getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -259,7 +259,7 @@ int PCBNEW_CONTROL::LayerInner3( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner4( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, LAYER_N_5 );
+    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In4_Cu );
     getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -269,7 +269,7 @@ int PCBNEW_CONTROL::LayerInner4( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner5( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, LAYER_N_6 );
+    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In5_Cu );
     getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -279,7 +279,7 @@ int PCBNEW_CONTROL::LayerInner5( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner6( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, LAYER_N_7 );
+    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In6_Cu );
     getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -289,7 +289,7 @@ int PCBNEW_CONTROL::LayerInner6( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerBottom( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SetActiveLayer( LAYER_N_BACK, true );
+    getEditFrame<PCB_EDIT_FRAME>()->SetActiveLayer( B_Cu, true );
     getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -300,22 +300,22 @@ int PCBNEW_CONTROL::LayerBottom( TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::LayerNext( TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-    LAYER_NUM layer = editFrame->GetActiveLayer();
+    LAYER_NUM       layer = editFrame->GetActiveLayer();
 
-    if( ( layer < FIRST_COPPER_LAYER ) || ( layer >= LAST_COPPER_LAYER ) )
+    if( layer < F_Cu || layer >= B_Cu )
     {
         setTransitions();
         return 0;
     }
 
     if( getModel<BOARD>()->GetCopperLayerCount() < 2 ) // Single layer
-        layer = LAYER_N_BACK;
+        layer = B_Cu;
     else if( layer >= getModel<BOARD>()->GetCopperLayerCount() - 2 )
-        layer = LAYER_N_FRONT;
+        layer = B_Cu;
     else
         ++layer;
 
-    editFrame->SwitchLayer( NULL, layer );
+    editFrame->SwitchLayer( NULL, LAYER_ID( layer ) );
     editFrame->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -326,23 +326,23 @@ int PCBNEW_CONTROL::LayerNext( TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::LayerPrev( TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-    LAYER_NUM layer = editFrame->GetActiveLayer();
+    LAYER_NUM       layer = editFrame->GetActiveLayer();
 
-    if( ( layer <= FIRST_COPPER_LAYER ) || ( layer > LAST_COPPER_LAYER ) )
+    if( layer <= F_Cu || layer > B_Cu )
     {
         setTransitions();
         return 0;
     }
 
     if( getModel<BOARD>()->GetCopperLayerCount() < 2 ) // Single layer
-        layer = LAYER_N_BACK;
-    else if( layer == LAYER_N_FRONT )
-        layer = std::max( LAYER_N_BACK, FIRST_COPPER_LAYER + getModel<BOARD>()->GetCopperLayerCount() - 2 );
+        layer = B_Cu;
+    else if( layer == B_Cu )
+        layer = std::max( int( F_Cu ), getModel<BOARD>()->GetCopperLayerCount() - 2 );
     else
         --layer;
 
     assert( IsCopperLayer( layer ) );
-    editFrame->SwitchLayer( NULL, layer );
+    editFrame->SwitchLayer( NULL, LAYER_ID( layer ) );
     editFrame->GetGalCanvas()->SetFocus();
     setTransitions();
 

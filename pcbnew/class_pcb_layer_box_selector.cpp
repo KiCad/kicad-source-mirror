@@ -40,6 +40,28 @@
 
 #include <class_pcb_layer_box_selector.h>
 
+
+#define DECLARE_LAYERS_HOTKEY(list) int list[] = \
+        { \
+            HK_SWITCH_LAYER_TO_COPPER,   \
+            HK_SWITCH_LAYER_TO_INNER1,   \
+            HK_SWITCH_LAYER_TO_INNER2,   \
+            HK_SWITCH_LAYER_TO_INNER3,   \
+            HK_SWITCH_LAYER_TO_INNER4,   \
+            HK_SWITCH_LAYER_TO_INNER5,   \
+            HK_SWITCH_LAYER_TO_INNER6,   \
+            HK_SWITCH_LAYER_TO_INNER7,   \
+            HK_SWITCH_LAYER_TO_INNER8,   \
+            HK_SWITCH_LAYER_TO_INNER9,   \
+            HK_SWITCH_LAYER_TO_INNER10,  \
+            HK_SWITCH_LAYER_TO_INNER11,  \
+            HK_SWITCH_LAYER_TO_INNER12,  \
+            HK_SWITCH_LAYER_TO_INNER13,  \
+            HK_SWITCH_LAYER_TO_INNER14,  \
+            HK_SWITCH_LAYER_TO_COMPONENT \
+        };
+
+
 // class to display a layer list in a wxBitmapComboBox.
 
 // Reload the Layers
@@ -47,38 +69,35 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
 {
     Clear();
 
-    static DECLARE_LAYERS_ORDER_LIST( layertranscode );
-    static DECLARE_LAYERS_HOTKEY( layerhk );
+    static const DECLARE_LAYERS_HOTKEY( layerhk );
 
     // Tray to fix a minimum width fot the BitmapComboBox
     int minwidth = 80, h;
+
     wxClientDC dc( GetParent() );   // The DC for "this" is not always initialized
 
     #define BM_SIZE 14
-    for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
+
+    LSET show = getEnabledLayers() & ~m_layerMaskDisable;
+
+    for( LSEQ seq = show.UIOrder();  seq;  ++seq )
     {
+        LAYER_ID   layerid = *seq;
+
         wxBitmap   layerbmp( BM_SIZE, BM_SIZE );
-        wxString   layername;
-        LAYER_NUM  layerid = i;
-
-        if( m_layerorder )
-            layerid = layertranscode[i];
-
-        if( ! IsLayerEnabled( layerid ) )
-            continue;
-
-        if( ( m_layerMaskDisable & GetLayerMask( layerid ) ) )
-            continue;
 
         SetBitmapLayer( layerbmp, layerid );
 
-        layername = GetLayerName( layerid );
+        wxString layername = GetLayerName( layerid );
 
-        if( m_layerhotkeys && m_hotkeys != NULL )
+        if( m_layerhotkeys && m_hotkeys && layerid < DIM(layerhk) )
+        {
             layername = AddHotkeyName( layername, m_hotkeys,
                                        layerhk[layerid], IS_COMMENT );
+        }
 
         Append( layername, layerbmp, (void*)(intptr_t) layerid );
+
         int w;
         dc.GetTextExtent ( layername, &w, &h );
         minwidth = std::max( minwidth, w );
@@ -96,27 +115,38 @@ bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( LAYER_NUM aLayer ) const
     BOARD* board = m_boardFrame->GetBoard();
     wxASSERT( board != NULL );
 
-    return board->IsLayerEnabled( aLayer );
+    return board->IsLayerEnabled( (LAYER_ID) aLayer );
+}
+
+
+LSET PCB_LAYER_BOX_SELECTOR::getEnabledLayers() const
+{
+    wxASSERT( m_boardFrame != NULL );
+    BOARD* board = m_boardFrame->GetBoard();
+    wxASSERT( board != NULL );
+
+    return board->GetEnabledLayers();
 }
 
 
 // Returns a color index from the layer id
 EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
 {
-    wxASSERT( m_boardFrame != NULL );
+    wxASSERT( m_boardFrame );
     BOARD* board = m_boardFrame->GetBoard();
-    wxASSERT( board != NULL );
+    wxASSERT( board );
 
-    return board->GetLayerColor( aLayer );
+    return board->GetLayerColor( (LAYER_ID) aLayer );
 }
 
 
 // Returns the name of the layer id
 wxString PCB_LAYER_BOX_SELECTOR::GetLayerName( LAYER_NUM aLayer ) const
 {
-    wxASSERT( m_boardFrame != NULL );
+    wxASSERT( m_boardFrame );
     BOARD* board = m_boardFrame->GetBoard();
-    wxASSERT( board != NULL );
+    wxASSERT( board );
 
-    return board->GetLayerName( aLayer );
+    return board->GetLayerName( (LAYER_ID) aLayer );
 }
+
