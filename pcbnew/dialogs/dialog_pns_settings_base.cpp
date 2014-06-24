@@ -11,7 +11,7 @@
 
 DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetSizeHints( wxSize( 280,380 ), wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
@@ -91,8 +91,8 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	
 	bOptions->Add( bEffort, 0, wxEXPAND, 5 );
 	
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bOptions->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	bMainSizer->Add( bOptions, 1, wxEXPAND|wxALL, 5 );
 	
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );
@@ -101,10 +101,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_stdButtons->AddButton( m_stdButtonsCancel );
 	m_stdButtons->Realize();
 	
-	bOptions->Add( m_stdButtons, 0, wxEXPAND, 5 );
-	
-	
-	bMainSizer->Add( bOptions, 1, wxEXPAND|wxALL, 5 );
+	bMainSizer->Add( m_stdButtons, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

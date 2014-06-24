@@ -123,9 +123,9 @@ private:
     virtual void addCircle(const DRW_Circle& data );
     virtual void addArc(const DRW_Arc& data );
     virtual void addEllipse(const DRW_Ellipse& data ){}
-    virtual void addLWPolyline(const DRW_LWPolyline& data ){}
+    virtual void addLWPolyline(const DRW_LWPolyline& data );
     virtual void addText(const DRW_Text& data );
-    virtual void addPolyline(const DRW_Polyline& data ){}
+    virtual void addPolyline(const DRW_Polyline& data );
     virtual void addSpline(const DRW_Spline* data ){}
     virtual void addKnot(const DRW_Entity&) {}
     virtual void addInsert(const DRW_Insert& data ){}

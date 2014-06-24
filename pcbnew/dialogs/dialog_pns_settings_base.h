@@ -24,9 +24,8 @@ class DIALOG_SHIM;
 #include <wx/stattext.h>
 #include <wx/slider.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
-#include <wx/button.h>
 #include <wx/statbox.h>
+#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -52,7 +51,6 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 		wxSlider* m_effort;
 		wxStaticText* m_lowLabel;
 		wxStaticText* m_highLabel;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
@@ -65,7 +63,7 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Interactive Router settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 277,404 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Interactive Router settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 298,410 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PNS_SETTINGS_BASE();
 	
 };

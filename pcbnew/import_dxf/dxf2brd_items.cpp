@@ -134,6 +134,66 @@ void DXF2BRD_CONVERTER::addLine( const DRW_Line& data )
     appendToBoard( segm );
 }
 
+void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& data )
+{
+    // Currently, Pcbnew does not know polylines, for boards.
+    // So we have to convert a polyline to a set of segments.
+    // Obviously, the z coordinate is ignored
+
+    wxPoint startpoint;
+    for( unsigned ii = 0; ii < data.vertlist.size(); ii++ )
+    {
+        DRW_Vertex* vertex = data.vertlist[ii];
+
+        if( ii == 0 )
+        {
+            startpoint.x = mapX( vertex->basePoint.x );
+            startpoint.y = mapY( vertex->basePoint.y );
+            continue;
+        }
+
+        DRAWSEGMENT*    segm = new DRAWSEGMENT( m_brd );
+        segm->SetLayer( m_brdLayer );
+        segm->SetStart( startpoint );
+        wxPoint endpoint( mapX( vertex->basePoint.x ), mapY( vertex->basePoint.y ) );
+        segm->SetEnd( endpoint );
+        segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness
+                                : data.thickness ) );
+        appendToBoard( segm );
+        startpoint = endpoint;
+    }
+}
+
+void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& data )
+{
+    // Currently, Pcbnew does not know polylines, for boards.
+    // So we have to convert a polyline to a set of segments.
+    // The import is a simplified import: the width of segment is
+    // (obviously contant and is the width of the DRW_LWPolyline.
+    // the variable width of each vertex (when exists) is not used.
+    wxPoint startpoint;
+    for( unsigned ii = 0; ii < data.vertlist.size(); ii++ )
+    {
+        DRW_Vertex2D* vertex = data.vertlist[ii];
+
+        if( ii == 0 )
+        {
+            startpoint.x = mapX( vertex->x );
+            startpoint.y = mapY( vertex->y );
+            continue;
+        }
+
+        DRAWSEGMENT*    segm = new DRAWSEGMENT( m_brd );
+        segm->SetLayer( m_brdLayer );
+        segm->SetStart( startpoint );
+        wxPoint endpoint( mapX( vertex->x ), mapY( vertex->y ) );
+        segm->SetEnd( endpoint );
+        segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness
+                                : data.thickness ) );
+        appendToBoard( segm );
+        startpoint = endpoint;
+    }
+}
 
 /*
  * Import Circle entities.
