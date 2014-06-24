@@ -676,7 +676,9 @@ bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
 
 bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit )
 {
-    LAYER_MSK layerMask = aRefPad->GetLayerMask() & ALL_CU_LAYERS;
+    const static LSET all_cu = LSET::AllCuMask();
+
+    LSET layerMask = aRefPad->GetLayerSet() & all_cu;
 
     /* used to test DRC pad to holes: this dummy pad has the size and shape of the hole
      * to test pad to pad hole DRC, using the pad to pad DRC test function.
@@ -684,11 +686,11 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
      * A pad must have a parent because some functions expect a non null parent
      * to find the parent board, and some other data
      */
-    MODULE dummymodule( m_pcb );    // Creates a dummy parent
-    D_PAD dummypad( &dummymodule );
+    MODULE  dummymodule( m_pcb );    // Creates a dummy parent
+    D_PAD   dummypad( &dummymodule );
 
     // Ensure the hole is on all copper layers
-    dummypad.SetLayerMask( ALL_CU_LAYERS | dummypad.GetLayerMask() );
+    dummypad.SetLayerSet( all_cu | dummypad.GetLayerSet() );
 
     // Use the minimal local clearance value for the dummy pad.
     // The clearance of the active pad will be used as minimum distance to a hole
@@ -710,7 +712,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
         // No problem if pads are on different copper layers,
         // but their hole (if any ) can create DRC error because they are on all
         // copper layers, so we test them
-        if( ( pad->GetLayerMask() & layerMask ) == 0 )
+        if( ( pad->GetLayerSet() & layerMask ) == 0 )
         {
             // if holes are in the same location and have the same size and shape,
             // this can be accepted

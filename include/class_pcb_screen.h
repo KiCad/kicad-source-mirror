@@ -17,9 +17,9 @@ class UNDO_REDO_CONTAINER;
 class PCB_SCREEN : public BASE_SCREEN
 {
 public:
-    LAYER_NUM m_Active_Layer;
-    LAYER_NUM m_Route_Layer_TOP;
-    LAYER_NUM m_Route_Layer_BOTTOM;
+    LAYER_ID m_Active_Layer;
+    LAYER_ID m_Route_Layer_TOP;
+    LAYER_ID m_Route_Layer_BOTTOM;
 
 public:
 

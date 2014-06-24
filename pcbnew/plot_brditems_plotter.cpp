@@ -57,7 +57,7 @@
 
 EDA_COLOR_T BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 {
-    EDA_COLOR_T color = m_board->GetLayerColor( aLayer );
+    EDA_COLOR_T color = m_board->GetLayerColor( (LAYER_ID) aLayer );
     if (color == WHITE)
         color = LIGHTGRAY;
     return color;
@@ -110,10 +110,10 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     TEXTE_MODULE* textModule = &aModule->Reference();
     LAYER_NUM     textLayer = textModule->GetLayer();
 
-    if( textLayer >= NB_LAYERS )
+    if( textLayer >= LAYER_ID_COUNT )       // how will this ever be true?
         return false;
 
-    if( ( GetLayerMask( textLayer ) & m_layerMask ) == 0 )
+    if( !m_layerMask[textLayer] )
         trace_ref = false;
 
     if( !textModule->IsVisible() && !GetPlotInvisibleText() )
@@ -122,10 +122,10 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     textModule = &aModule->Value();
     textLayer = textModule->GetLayer();
 
-    if( textLayer > NB_LAYERS )
+    if( textLayer > LAYER_ID_COUNT )        // how will this ever be true?
         return false;
 
-    if( ( GetLayerMask( textLayer ) & m_layerMask ) == 0 )
+    if( !m_layerMask[textLayer] )
         trace_val = false;
 
     if( !textModule->IsVisible() && !GetPlotInvisibleText() )
@@ -148,8 +148,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
             PlotTextModule( &aModule->Value(), GetValueColor() );
     }
 
-    for( BOARD_ITEM *item = aModule->GraphicalItems().GetFirst();
-         item != NULL; item = item->Next() )
+    for( BOARD_ITEM *item = aModule->GraphicalItems().GetFirst(); item; item = item->Next() )
     {
         textModule = dyn_cast<TEXTE_MODULE*>( item );
 
@@ -161,10 +160,10 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
 
         textLayer = textModule->GetLayer();
 
-        if( textLayer >= NB_LAYERS )
+        if( textLayer >= LAYER_ID_COUNT )
             return false;
 
-        if( !( GetLayerMask( textLayer ) & m_layerMask ) )
+        if( !m_layerMask[textLayer] )
             continue;
 
         PlotTextModule( textModule, getColor( textLayer ) );
@@ -246,7 +245,7 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, EDA_COLOR_T aColo
 
 void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
 {
-    if( (GetLayerMask( aDim->GetLayer() ) & m_layerMask) == 0 )
+    if( !m_layerMask[aDim->GetLayer()] )
         return;
 
     DRAWSEGMENT draw;
@@ -255,6 +254,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
     draw.SetLayer( aDim->GetLayer() );
 
     EDA_COLOR_T color = aDim->GetBoard()->GetLayerColor( aDim->GetLayer() );
+
     // Set plot color (change WHITE to LIGHTGRAY because
     // the white items are not seen on a white paper or screen
     m_plotter->SetColor( color != WHITE ? color : LIGHTGRAY);
@@ -295,7 +295,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
 {
     int     dx1, dx2, dy1, dy2, radius;
 
-    if( (GetLayerMask( aMire->GetLayer() ) & m_layerMask) == 0 )
+    if( !m_layerMask[aMire->GetLayer()] )
         return;
 
     m_plotter->SetColor( getColor( aMire->GetLayer() ) );
@@ -353,7 +353,7 @@ void BRDITEMS_PLOTTER::Plot_Edges_Modules()
         {
             EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( item );
 
-            if( !edge || (( GetLayerMask( edge->GetLayer() ) & m_layerMask ) == 0) )
+            if( !edge || !m_layerMask[edge->GetLayer()] )
                 continue;
 
             Plot_1_EdgeModule( edge );
@@ -447,7 +447,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     if( pt_texte->GetText().IsEmpty() )
         return;
 
-    if( ( GetLayerMask( pt_texte->GetLayer() ) & m_layerMask ) == 0 )
+    if( !m_layerMask[pt_texte->GetLayer()] )
         return;
 
     m_plotter->SetColor( getColor( pt_texte->GetLayer() ) );
@@ -575,13 +575,13 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
 
 /* Plot items type DRAWSEGMENT on layers allowed by aLayerMask
  */
-void BRDITEMS_PLOTTER::PlotDrawSegment(  DRAWSEGMENT* aSeg )
+void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 {
     int     thickness;
     int     radius = 0;
     double  StAngle = 0, EndAngle = 0;
 
-    if( (GetLayerMask( aSeg->GetLayer() ) & m_layerMask) == 0 )
+    if( !m_layerMask[aSeg->GetLayer()] )
         return;
 
     if( GetMode() == LINE )

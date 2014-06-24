@@ -57,7 +57,7 @@ EDGE_MODULE::EDGE_MODULE( MODULE* parent, STROKE_T aShape ) :
 {
     m_Shape = aShape;
     m_Angle = 0;
-    m_Layer = SILKSCREEN_N_FRONT;
+    m_Layer = F_SilkS;
 }
 
 
@@ -149,7 +149,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     GRSetDrawMode( DC, draw_mode );
     typeaff = frame->m_DisplayModEdge;
 
-    if( m_Layer <= LAST_COPPER_LAYER )
+    if( IsCopperLayer( m_Layer ) )
     {
         typeaff = frame->m_DisplayPcbTrackFill;
 

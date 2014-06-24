@@ -169,7 +169,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     int     rowCount;
     int     menuId = event.GetId();
     bool    visible = (menuId == ID_SHOW_ALL_LAYERS) ? true : false;;
-    LAYER_MSK visibleLayers = NO_LAYERS;
+    LSET visibleLayers = NO_LAYERS;
     bool force_active_layer_visible;
 
     m_alwaysShowActiveLayer = ( menuId == ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE );
@@ -195,9 +195,9 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             cb->SetValue( loc_visible );
 
             if( loc_visible )
-                visibleLayers |= GetLayerMask( row );
+                visibleLayers |= GetLayerSet( row );
             else
-                visibleLayers &= ~GetLayerMask( row );
+                visibleLayers &= ~GetLayerSet( row );
         }
 
         myframe->SetVisibleLayers( visibleLayers );
@@ -237,7 +237,7 @@ void GERBER_LAYER_WIDGET::ReFill()
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
 
-void GERBER_LAYER_WIDGET::OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor )
+void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
 {
     myframe->SetLayerColor( aLayer, aColor );
     myframe->m_SelLayerBox->ResyncBitmapOnly();
@@ -263,12 +263,12 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
 
 void GERBER_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal )
 {
-    LAYER_MSK visibleLayers = myframe->GetVisibleLayers();
+    LSET visibleLayers = myframe->GetVisibleLayers();
 
     if( isVisible )
-        visibleLayers |= GetLayerMask( aLayer );
+        visibleLayers |= GetLayerSet( aLayer );
     else
-        visibleLayers &= ~GetLayerMask( aLayer );
+        visibleLayers &= ~GetLayerSet( aLayer );
 
     myframe->SetVisibleLayers( visibleLayers );
 

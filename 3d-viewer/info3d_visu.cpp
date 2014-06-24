@@ -132,53 +132,52 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
     // Fill remaining unused copper layers and front layer zpos
     // with m_EpoxyThickness
     // Solder mask and Solder paste have the same Z position
-    for( ; layer <= LAST_COPPER_LAYER; layer++ )
+    for( ; layer < MAX_CU_LAYERS; layer++ )
     {
         m_LayerZcoord[layer] = m_EpoxyThickness;
     }
 
     // calculate z position for each non copper layer
-    for( int layer_id = FIRST_NON_COPPER_LAYER; layer_id < NB_PCB_LAYERS; layer_id++ )
+    for( int layer_id = MAX_CU_LAYERS; layer_id < LAYER_ID_COUNT; layer_id++ )
     {
         double zpos;
 
         switch( layer_id )
         {
-        case ADHESIVE_N_BACK:
+        case B_Adhes:
             zpos = zpos_copper_back - 3 * zpos_offset;
             break;
 
-        case ADHESIVE_N_FRONT:
+        case F_Adhes:
             zpos = zpos_copper_front + 3 * zpos_offset;
             break;
 
-        case SOLDERPASTE_N_BACK:
+        case B_Paste:
             zpos = zpos_copper_back - 1 * zpos_offset;
             break;
 
-        case SOLDERPASTE_N_FRONT:
+        case F_Paste:
             zpos = zpos_copper_front + 1 * zpos_offset;
             break;
 
-        case SOLDERMASK_N_BACK:
+        case B_Mask:
             zpos = zpos_copper_back - 1 * zpos_offset;
             break;
 
-        case SOLDERMASK_N_FRONT:
+        case F_Mask:
             zpos = zpos_copper_front + 1 * zpos_offset;
             break;
 
-        case SILKSCREEN_N_BACK:
+        case B_SilkS:
             zpos = zpos_copper_back - 2 * zpos_offset;
             break;
 
-        case SILKSCREEN_N_FRONT:
+        case F_SilkS:
             zpos = zpos_copper_front + 2 * zpos_offset;
             break;
 
         default:
-            zpos = zpos_copper_front +
-                   (layer_id - FIRST_NON_COPPER_LAYER + 4) * zpos_offset;
+            zpos = zpos_copper_front + (layer_id - MAX_CU_LAYERS + 4) * zpos_offset;
             break;
         }
 
@@ -196,8 +195,8 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
 double INFO3D_VISU::GetModulesZcoord3DIU( bool aIsFlipped )
 {
     if(  aIsFlipped )
-        return m_LayerZcoord[LAYER_N_BACK] - ( m_CopperThickness / 2 );
+        return m_LayerZcoord[B_Cu] - ( m_CopperThickness / 2 );
     else
-        return m_LayerZcoord[LAYER_N_FRONT] + ( m_CopperThickness / 2 );
+        return m_LayerZcoord[F_Cu] + ( m_CopperThickness / 2 );
 }
 

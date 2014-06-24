@@ -57,7 +57,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_initial_comments( 0 )
 {
     m_Attributs    = MOD_DEFAULT;
-    m_Layer        = LAYER_N_FRONT;
+    m_Layer        = F_Cu;
     m_Orient       = 0;
     m_ModuleStatus = 0;
     flag = 0;
@@ -424,7 +424,7 @@ EDA_RECT MODULE::GetFootprintRect() const
 
     for( const BOARD_ITEM* item = m_Drawings.GetFirst(); item; item = item->Next() )
     {
-		const EDGE_MODULE* edge = dyn_cast<const EDGE_MODULE*>( item );
+        const EDGE_MODULE* edge = dyn_cast<const EDGE_MODULE*>( item );
 
         if( edge )
             area.Merge( edge->GetBoundingBox() );
@@ -590,12 +590,12 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 }
 
 
-D_PAD* MODULE::GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask )
+D_PAD* MODULE::GetPad( const wxPoint& aPosition, LSET aLayerMask )
 {
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         // ... and on the correct layer.
-        if( ( pad->GetLayerMask() & aLayerMask ) == 0 )
+        if( ( pad->GetLayerSet() & aLayerMask ) == 0 )
             continue;
 
         if( pad->HitTest( aPosition ) )

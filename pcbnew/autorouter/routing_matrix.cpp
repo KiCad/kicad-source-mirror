@@ -115,7 +115,7 @@ int MATRIX_ROUTING_HEAD::InitRoutingMatrix()
         m_DistSide[side]  = NULL;
         m_DirSide[side]   = NULL;
 
-        /* allocate matrix & initialize everything to empty */
+        // allocate matrix & initialize everything to empty
         m_BoardSide[side] = (MATRIX_CELL*) operator new( ii * sizeof(MATRIX_CELL) );
         memset( m_BoardSide[side], 0, ii * sizeof(MATRIX_CELL) );
 
@@ -196,16 +196,16 @@ void MATRIX_ROUTING_HEAD::UnInitRoutingMatrix()
  */
 void PlaceCells( BOARD* aPcb, int net_code, int flag )
 {
-    int       ux0 = 0, uy0 = 0, ux1, uy1, dx, dy;
-    int       marge, via_marge;
-    LAYER_MSK layerMask;
+    int     ux0 = 0, uy0 = 0, ux1, uy1, dx, dy;
+    int     marge, via_marge;
+    LSET    layerMask;
 
     // use the default NETCLASS?
     NETCLASSPTR nc = aPcb->GetDesignSettings().GetDefault();
 
-    int       trackWidth = nc->GetTrackWidth();
-    int       clearance  = nc->GetClearance();
-    int       viaSize    = nc->GetViaDiameter();
+    int     trackWidth = nc->GetTrackWidth();
+    int     clearance  = nc->GetClearance();
+    int     viaSize    = nc->GetViaDiameter();
 
     marge     = clearance + (trackWidth / 2);
     via_marge = clearance + (viaSize / 2);
@@ -237,7 +237,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
                 EDGE_MODULE* edge = (EDGE_MODULE*) item;
                 EDGE_MODULE tmpEdge( *edge );
 
-                if( tmpEdge.GetLayer() == EDGE_N )
+                if( tmpEdge.GetLayer() == Edge_Cuts )
                     tmpEdge.SetLayer( UNDEFINED_LAYER );
 
                 TraceSegmentPcb( &tmpEdge, HOLE, marge, WRITE_CELL );
@@ -257,66 +257,65 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
         switch( item->Type() )
         {
         case PCB_LINE_T:
-        {
-            DRAWSEGMENT* DrawSegm;
-
-            int          type_cell = HOLE;
-            DrawSegm = (DRAWSEGMENT*) item;
-            DRAWSEGMENT tmpSegm( DrawSegm );
-
-            if( DrawSegm->GetLayer() == EDGE_N )
             {
-                tmpSegm.SetLayer( UNDEFINED_LAYER );
-                type_cell |= CELL_is_EDGE;
-            }
+                DRAWSEGMENT* DrawSegm;
 
-            TraceSegmentPcb( &tmpSegm, type_cell, marge, WRITE_CELL );
-        }
-        break;
+                int          type_cell = HOLE;
+                DrawSegm = (DRAWSEGMENT*) item;
+                DRAWSEGMENT tmpSegm( DrawSegm );
+
+                if( DrawSegm->GetLayer() == Edge_Cuts )
+                {
+                    tmpSegm.SetLayer( UNDEFINED_LAYER );
+                    type_cell |= CELL_is_EDGE;
+                }
+
+                TraceSegmentPcb( &tmpSegm, type_cell, marge, WRITE_CELL );
+            }
+            break;
 
         case PCB_TEXT_T:
-        {
-            TEXTE_PCB* PtText;
-            PtText = (TEXTE_PCB*) item;
+            {
+                TEXTE_PCB* PtText = (TEXTE_PCB*) item;
 
-            if( PtText->GetText().Length() == 0 )
-                break;
+                if( PtText->GetText().Length() == 0 )
+                    break;
 
-            EDA_RECT textbox = PtText->GetTextBox( -1 );
-            ux0 = textbox.GetX();
-            uy0 = textbox.GetY();
-            dx  = textbox.GetWidth();
-            dy  = textbox.GetHeight();
+                EDA_RECT textbox = PtText->GetTextBox( -1 );
+                ux0 = textbox.GetX();
+                uy0 = textbox.GetY();
+                dx  = textbox.GetWidth();
+                dy  = textbox.GetHeight();
 
-            /* Put bounding box (rectangle) on matrix */
-            dx /= 2;
-            dy /= 2;
+                // Put bounding box (rectangle) on matrix
+                dx /= 2;
+                dy /= 2;
 
-            ux1 = ux0 + dx;
-            uy1 = uy0 + dy;
+                ux1 = ux0 + dx;
+                uy1 = uy0 + dy;
 
-            ux0 -= dx;
-            uy0 -= dy;
+                ux0 -= dx;
+                uy0 -= dy;
 
-            layerMask = GetLayerMask( PtText->GetLayer() );
+                layerMask = LSET( PtText->GetLayer() );
 
-            TraceFilledRectangle( ux0 - marge, uy0 - marge, ux1 + marge,
-                                  uy1 + marge, PtText->GetOrientation(),
-                                  layerMask, HOLE, WRITE_CELL );
+                TraceFilledRectangle( ux0 - marge, uy0 - marge, ux1 + marge,
+                                      uy1 + marge, PtText->GetOrientation(),
+                                      layerMask, HOLE, WRITE_CELL );
 
-            TraceFilledRectangle( ux0 - via_marge, uy0 - via_marge,
-                                  ux1 + via_marge, uy1 + via_marge,
-                                  PtText->GetOrientation(),
-                                  layerMask, VIA_IMPOSSIBLE, WRITE_OR_CELL );
-        }
-        break;
+                TraceFilledRectangle( ux0 - via_marge, uy0 - via_marge,
+                                      ux1 + via_marge, uy1 + via_marge,
+                                      PtText->GetOrientation(),
+                                      layerMask, VIA_IMPOSSIBLE, WRITE_OR_CELL );
+            }
+            break;
 
         default:
             break;
         }
     }
 
-    /* Put tracks and vias on matrix */
+    // Put tracks and vias on matrix
     for( TRACK* track = aPcb->m_Track; track; track = track->Next() )
     {
         if( net_code == track->GetNetCode() )
@@ -337,7 +336,7 @@ int Build_Work( BOARD* Pcb )
     int             demi_pas = RoutingMatrix.m_GridRouting / 2;
     wxString        msg;
 
-    InitWork(); /* clear work list */
+    InitWork(); // clear work list
     int cellCount = 0;
 
     for( unsigned ii = 0; ii < Pcb->GetRatsnestsCount(); ii++ )
@@ -509,8 +508,8 @@ void MATRIX_ROUTING_HEAD::AddCell( int aRow, int aCol, int aSide, MATRIX_CELL x 
 }
 
 
-/* fetch distance cell */
-DIST_CELL MATRIX_ROUTING_HEAD::GetDist( int aRow, int aCol, int aSide ) /* fetch distance cell */
+// fetch distance cell
+DIST_CELL MATRIX_ROUTING_HEAD::GetDist( int aRow, int aCol, int aSide ) // fetch distance cell
 {
     DIST_CELL* p;
 
@@ -519,7 +518,7 @@ DIST_CELL MATRIX_ROUTING_HEAD::GetDist( int aRow, int aCol, int aSide ) /* fetch
 }
 
 
-/* store distance cell */
+// store distance cell
 void MATRIX_ROUTING_HEAD::SetDist( int aRow, int aCol, int aSide, DIST_CELL x )
 {
     DIST_CELL* p;
@@ -529,7 +528,7 @@ void MATRIX_ROUTING_HEAD::SetDist( int aRow, int aCol, int aSide, DIST_CELL x )
 }
 
 
-/* fetch direction cell */
+// fetch direction cell
 int MATRIX_ROUTING_HEAD::GetDir( int aRow, int aCol, int aSide )
 {
     DIR_CELL* p;
@@ -539,7 +538,7 @@ int MATRIX_ROUTING_HEAD::GetDir( int aRow, int aCol, int aSide )
 }
 
 
-/* store direction cell */
+// store direction cell
 void MATRIX_ROUTING_HEAD::SetDir( int aRow, int aCol, int aSide, int x )
 {
     DIR_CELL* p;

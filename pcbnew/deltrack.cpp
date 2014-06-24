@@ -54,7 +54,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
     {
         if( g_CurrentTrackList.GetCount() > 0 )
         {
-            LAYER_NUM previous_layer = GetActiveLayer();
+            LAYER_ID previous_layer = GetActiveLayer();
 
             DBG( g_CurrentTrackList.VerifyListIntegrity(); )
 

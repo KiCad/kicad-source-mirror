@@ -496,7 +496,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     // Display units
 }
 
-void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
+void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
                            bool aPrintMirrorMode, void * aData )
 {
     GetScreen()-> m_ScreenNumber = GetPageNumberOption() ? 1 : 2;

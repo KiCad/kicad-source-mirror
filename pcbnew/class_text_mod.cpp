@@ -62,7 +62,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     // Set text tickness to a default value
     m_Thickness = Millimeter2iu( 0.15 );
 
-    SetLayer( SILKSCREEN_N_FRONT );
+    SetLayer( F_SilkS );
 
     if( module && ( module->Type() == PCB_MODULE_T ) )
     {
@@ -70,12 +70,12 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
 
         if( IsBackLayer( module->GetLayer() ) )
         {
-            SetLayer( SILKSCREEN_N_BACK );
+            SetLayer( B_SilkS );
             m_Mirror = true;
         }
         else
         {
-            SetLayer( SILKSCREEN_N_FRONT );
+            SetLayer( F_SilkS );
             m_Mirror = false;
         }
     }
@@ -224,13 +224,13 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     // Determine the element color or suppress it element if hidden
     switch( module->GetLayer() )
     {
-    case LAYER_N_BACK:
+    case B_Cu:
         if( !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE ) )
             return;
         color = brd->GetVisibleElementColor( MOD_TEXT_BK_VISIBLE );
         break;
 
-    case LAYER_N_FRONT:
+    case F_Cu:
         if( !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ) )
             return;
         color = brd->GetVisibleElementColor( MOD_TEXT_FR_VISIBLE );
@@ -448,12 +448,12 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
         default:
             switch( GetParent()->GetLayer() )
             {
-            case LAYER_N_BACK:
-                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE );    // how about SILKSCREEN_N_BACK?
+            case B_Cu:
+                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE );    // how about B_SilkS?
                 break;
 
-            case LAYER_N_FRONT:
-                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );    // how about SILKSCREEN_N_FRONT?
+            case F_Cu:
+                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );    // how about F_SilkS?
                 break;
 
             default:

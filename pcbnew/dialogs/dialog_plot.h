@@ -42,7 +42,7 @@ private:
     PCB_EDIT_FRAME*     m_parent;
     BOARD*              m_board;
     wxConfigBase*       m_config;
-    std::vector<LAYER_NUM> m_layerList;                // List to hold CheckListBox layer numbers
+    LSEQ                m_layerList;                // List to hold CheckListBox layer numbers
     double              m_XScaleAdjust;             // X scale factor adjust to compensate
                                                     // plotter X scaling error
     double              m_YScaleAdjust;             // X scale factor adjust to compensate

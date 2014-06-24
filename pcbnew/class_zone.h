@@ -181,9 +181,9 @@ public:
      * Function IsOnCopperLayer
      * @return true if this zone is on a copper layer, false if on a technical layer
      */
-    bool IsOnCopperLayer( void ) const
+    bool IsOnCopperLayer() const
     {
-        return ( GetLayer() < FIRST_NON_COPPER_LAYER ) ? true : false;
+        return  LSET::AllNonCuMask()[GetLayer()];
     }
 
     /// How to fill areas: 0 = use filled polygons, 1 => fill with segments.

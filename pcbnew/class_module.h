@@ -189,7 +189,7 @@ public:
      * function IsFlipped
      * @return true if the module is flipped, i.e. on the back side of the board
      */
-    bool IsFlipped() const {return GetLayer() == LAYER_N_BACK; }
+    bool IsFlipped() const {return GetLayer() == B_Cu; }
 
 // m_ModuleStatus bits:
 #define MODULE_is_LOCKED    0x01        ///< module LOCKED: no autoplace allowed
@@ -282,7 +282,7 @@ public:
      *  the radius of circle approximated by segments is
      *  initial radius * aCorrectionFactor
      */
-    void TransformPadsShapesWithClearanceToPolygon( LAYER_NUM aLayer,
+    void TransformPadsShapesWithClearanceToPolygon( LAYER_ID aLayer,
                             CPOLYGONS_LIST& aCornerBuffer,
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
@@ -306,12 +306,11 @@ public:
      *  initial radius * aCorrectionFactor
      */
     void TransformGraphicShapesWithClearanceToPolygonSet(
-                            LAYER_NUM aLayer,
+                            LAYER_ID aLayer,
                             CPOLYGONS_LIST& aCornerBuffer,
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
                             double          aCorrectionFactor );
-
 
     /**
      * Function DrawEdgesOnly
@@ -400,7 +399,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a D_PAD object if found otherwise NULL.
      */
-    D_PAD* GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask = ALL_LAYERS );
+    D_PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask = LSET::AllLayersMask() );
 
     enum INCLUDE_NPTH_T
     {

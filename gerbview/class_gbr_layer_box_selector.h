@@ -9,14 +9,12 @@ class GBR_LAYER_BOX_SELECTOR : public LAYER_BOX_SELECTOR
 {
 public:
     GBR_LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
-                        const wxPoint& pos = wxDefaultPosition,
-                        const wxSize& size = wxDefaultSize,
-                        int n = 0, const wxString choices[] = NULL )
-        :LAYER_BOX_SELECTOR( parent, id, pos, size, n, choices )
-        {
-            m_layerhotkeys = false;
-            m_layerorder = false;
-        }
+            const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+            int n = 0, const wxString choices[] = NULL ) :
+        LAYER_BOX_SELECTOR( parent, id, pos, size, n, choices )
+    {
+        m_layerhotkeys = false;
+    }
 
     // Reload the Layers names and bitmaps
     // Virtual function

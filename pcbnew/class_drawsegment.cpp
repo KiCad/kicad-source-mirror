@@ -185,7 +185,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
     if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) &&  DisplayOpt.ContrastModeDisplay )
     {
-        if( !IsOnLayer( curr_layer ) && !IsOnLayer( EDGE_N ) )
+        if( !IsOnLayer( curr_layer ) && !IsOnLayer( Edge_Cuts ) )
             ColorTurnToDarkDarkGray( &color );
     }
 

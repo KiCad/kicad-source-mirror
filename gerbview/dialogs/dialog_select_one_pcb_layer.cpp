@@ -189,7 +189,7 @@ const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber )
     // Use a switch to explicitly show the mapping more clearly
     switch( aLayerNumber )
     {
-    case LAYER_N_FRONT:         txt = wxT( "F.Cu" );            break;
+    case F_Cu:         txt = wxT( "F.Cu" );            break;
     case LAYER_N_2:             txt = wxT( "Inner1.Cu" );       break;
     case LAYER_N_3:             txt = wxT( "Inner2.Cu" );       break;
     case LAYER_N_4:             txt = wxT( "Inner3.Cu" );       break;
@@ -204,20 +204,20 @@ const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber )
     case LAYER_N_13:            txt = wxT( "Inner12.Cu" );      break;
     case LAYER_N_14:            txt = wxT( "Inner13.Cu" );      break;
     case LAYER_N_15:            txt = wxT( "Inner14.Cu" );      break;
-    case LAYER_N_BACK:          txt = wxT( "B.Cu" );            break;
-    case ADHESIVE_N_BACK:       txt = wxT( "B.Adhes" );         break;
-    case ADHESIVE_N_FRONT:      txt = wxT( "F.Adhes" );         break;
-    case SOLDERPASTE_N_BACK:    txt = wxT( "B.Paste" );         break;
-    case SOLDERPASTE_N_FRONT:   txt = wxT( "F.Paste" );         break;
-    case SILKSCREEN_N_BACK:     txt = wxT( "B.SilkS" );         break;
-    case SILKSCREEN_N_FRONT:    txt = wxT( "F.SilkS" );         break;
-    case SOLDERMASK_N_BACK:     txt = wxT( "B.Mask" );          break;
-    case SOLDERMASK_N_FRONT:    txt = wxT( "F.Mask" );          break;
-    case DRAW_N:                txt = wxT( "Dwgs.User" );       break;
-    case COMMENT_N:             txt = wxT( "Cmts.User" );       break;
-    case ECO1_N:                txt = wxT( "Eco1.User" );       break;
-    case ECO2_N:                txt = wxT( "Eco2.User" );       break;
-    case EDGE_N:                txt = wxT( "Edge.Cuts" );       break;
+    case B_Cu:          txt = wxT( "B.Cu" );            break;
+    case B_Adhes:       txt = wxT( "B.Adhes" );         break;
+    case F_Adhes:      txt = wxT( "F.Adhes" );         break;
+    case B_Paste:    txt = wxT( "B.Paste" );         break;
+    case F_Paste:   txt = wxT( "F.Paste" );         break;
+    case B_SilkS:     txt = wxT( "B.SilkS" );         break;
+    case F_SilkS:    txt = wxT( "F.SilkS" );         break;
+    case B_Mask:     txt = wxT( "B.Mask" );          break;
+    case F_Mask:    txt = wxT( "F.Mask" );          break;
+    case Dwgs_User:                txt = wxT( "Dwgs.User" );       break;
+    case Cmts_User:             txt = wxT( "Cmts.User" );       break;
+    case Eco1_User:                txt = wxT( "Eco1.User" );       break;
+    case Eco2_User:                txt = wxT( "Eco2.User" );       break;
+    case Edge_Cuts:                txt = wxT( "Edge.Cuts" );       break;
     default:                    txt = wxT( "BAD_INDEX" );       break;
     }
 

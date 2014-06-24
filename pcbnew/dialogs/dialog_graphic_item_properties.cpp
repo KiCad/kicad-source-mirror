@@ -170,7 +170,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
 
     int thickness;
 
-    if( m_Item->GetLayer() == EDGE_N )
+    if( m_Item->GetLayer() == Edge_Cuts )
         thickness =  m_brdSettings.m_EdgeSegmentWidth;
     else
         thickness =  m_brdSettings.m_DrawSegmentWidth;
@@ -179,7 +179,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
 
     // Configure the layers list selector
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetLayerMask( ALL_CU_LAYERS );
+    m_LayerSelectionCtrl->SetLayerSet( LSET::AllCuMask() );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
 
@@ -187,7 +187,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
     {
         wxMessageBox( _( "This item has an illegal layer id.\n"
                          "Now, forced on the drawings layer. Please, fix it" ) );
-        m_LayerSelectionCtrl->SetLayerSelection( DRAW_N );
+        m_LayerSelectionCtrl->SetLayerSelection( Dwgs_User );
     }
 }
 
@@ -196,7 +196,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnLayerChoice( wxCommandEvent& event )
 {
     int thickness;
 
-    if( m_LayerSelectionCtrl->GetLayerSelection() == EDGE_N )
+    if( m_LayerSelectionCtrl->GetLayerSelection() == Edge_Cuts )
         thickness =  m_brdSettings.m_EdgeSegmentWidth;
     else
         thickness =  m_brdSettings.m_DrawSegmentWidth;
@@ -232,9 +232,9 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     msg = m_DefaultThicknessCtrl->GetValue();
     int thickness = ValueFromString( g_UserUnit, msg );
 
-    m_Item->SetLayer( m_LayerSelectionCtrl->GetLayerSelection() );
+    m_Item->SetLayer( (LAYER_ID) m_LayerSelectionCtrl->GetLayerSelection() );
 
-    if( m_Item->GetLayer() == EDGE_N )
+    if( m_Item->GetLayer() == Edge_Cuts )
          m_brdSettings.m_EdgeSegmentWidth = thickness;
     else
          m_brdSettings.m_DrawSegmentWidth = thickness;

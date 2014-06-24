@@ -64,24 +64,26 @@
 #include <tool/tool_dispatcher.h>
 
 // Configuration entry names.
-static const wxString UserGridSizeXEntry( wxT( "PcbUserGrid_X" ) );
-static const wxString UserGridSizeYEntry( wxT( "PcbUserGrid_Y" ) );
-static const wxString UserGridUnitsEntry( wxT( "PcbUserGrid_Unit" ) );
-static const wxString DisplayPadFillEntry( wxT( "DiPadFi" ) );
-static const wxString DisplayViaFillEntry( wxT( "DiViaFi" ) );
-static const wxString DisplayPadNumberEntry( wxT( "DiPadNu" ) );
-static const wxString DisplayModuleEdgeEntry( wxT( "DiModEd" ) );
-static const wxString DisplayModuleTextEntry( wxT( "DiModTx" ) );
-static const wxString FastGrid1Entry( wxT( "FastGrid1" ) );
-static const wxString FastGrid2Entry( wxT( "FastGrid2" ) );
+static const wxChar UserGridSizeXEntry[] = wxT( "PcbUserGrid_X" );
+static const wxChar UserGridSizeYEntry[] = wxT( "PcbUserGrid_Y" );
+static const wxChar UserGridUnitsEntry[] = wxT( "PcbUserGrid_Unit" );
+static const wxChar DisplayPadFillEntry[] = wxT( "DiPadFi" );
+static const wxChar DisplayViaFillEntry[] = wxT( "DiViaFi" );
+static const wxChar DisplayPadNumberEntry[] = wxT( "DiPadNu" );
+static const wxChar DisplayModuleEdgeEntry[] = wxT( "DiModEd" );
+static const wxChar DisplayModuleTextEntry[] = wxT( "DiModTx" );
+static const wxChar FastGrid1Entry[] = wxT( "FastGrid1" );
+static const wxChar FastGrid2Entry[] = wxT( "FastGrid2" );
 
 const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
 {
     ITEM_GAL_LAYER( GP_OVERLAY ),
     ITEM_GAL_LAYER( DRC_VISIBLE ),
     NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
-    DRAW_N, COMMENT_N, ECO1_N, ECO2_N, EDGE_N,
-    UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31,
+    Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts,
+
+    // UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31,
+
     ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ),
     ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE), ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ),
 
@@ -89,9 +91,11 @@ const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
     ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ),
     ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
 
-    NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ), SOLDERMASK_N_FRONT,
-    NETNAMES_GAL_LAYER( LAYER_16_NETNAMES_VISIBLE ), LAYER_N_FRONT,
-    SILKSCREEN_N_FRONT, SOLDERPASTE_N_FRONT, ADHESIVE_N_FRONT,
+    NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ), F_Mask,
+    NETNAMES_GAL_LAYER( F_Cu ), F_Cu,
+    F_SilkS, F_Paste, F_Adhes,
+
+#if 0   // was:
     NETNAMES_GAL_LAYER( LAYER_15_NETNAMES_VISIBLE ), LAYER_N_15,
     NETNAMES_GAL_LAYER( LAYER_14_NETNAMES_VISIBLE ), LAYER_N_14,
     NETNAMES_GAL_LAYER( LAYER_13_NETNAMES_VISIBLE ), LAYER_N_13,
@@ -106,13 +110,47 @@ const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
     NETNAMES_GAL_LAYER( LAYER_4_NETNAMES_VISIBLE ), LAYER_N_4,
     NETNAMES_GAL_LAYER( LAYER_3_NETNAMES_VISIBLE ), LAYER_N_3,
     NETNAMES_GAL_LAYER( LAYER_2_NETNAMES_VISIBLE ), LAYER_N_2,
-    NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ), SOLDERMASK_N_BACK,
-    NETNAMES_GAL_LAYER( LAYER_1_NETNAMES_VISIBLE ), LAYER_N_BACK,
+#else
 
-    ADHESIVE_N_BACK, SOLDERPASTE_N_BACK, SILKSCREEN_N_BACK,
+    NETNAMES_GAL_LAYER( In1_Cu ),   In1_Cu,
+    NETNAMES_GAL_LAYER( In2_Cu ),   In2_Cu,
+    NETNAMES_GAL_LAYER( In3_Cu ),   In3_Cu,
+    NETNAMES_GAL_LAYER( In4_Cu ),   In4_Cu,
+    NETNAMES_GAL_LAYER( In5_Cu ),   In5_Cu,
+    NETNAMES_GAL_LAYER( In6_Cu ),   In6_Cu,
+    NETNAMES_GAL_LAYER( In7_Cu ),   In7_Cu,
+    NETNAMES_GAL_LAYER( In8_Cu ),   In8_Cu,
+    NETNAMES_GAL_LAYER( In9_Cu ),   In9_Cu,
+    NETNAMES_GAL_LAYER( In10_Cu ),  In10_Cu,
+    NETNAMES_GAL_LAYER( In11_Cu ),  In11_Cu,
+    NETNAMES_GAL_LAYER( In12_Cu ),  In12_Cu,
+    NETNAMES_GAL_LAYER( In13_Cu ),  In13_Cu,
+    NETNAMES_GAL_LAYER( In14_Cu ),  In14_Cu,
+    NETNAMES_GAL_LAYER( In15_Cu ),  In15_Cu,
+    NETNAMES_GAL_LAYER( In16_Cu ),  In16_Cu,
+    NETNAMES_GAL_LAYER( In17_Cu ),  In17_Cu,
+    NETNAMES_GAL_LAYER( In18_Cu ),  In18_Cu,
+    NETNAMES_GAL_LAYER( In19_Cu ),  In19_Cu,
+    NETNAMES_GAL_LAYER( In20_Cu ),  In20_Cu,
+    NETNAMES_GAL_LAYER( In21_Cu ),  In21_Cu,
+    NETNAMES_GAL_LAYER( In22_Cu ),  In22_Cu,
+    NETNAMES_GAL_LAYER( In23_Cu ),  In23_Cu,
+    NETNAMES_GAL_LAYER( In24_Cu ),  In24_Cu,
+    NETNAMES_GAL_LAYER( In25_Cu ),  In25_Cu,
+    NETNAMES_GAL_LAYER( In26_Cu ),  In26_Cu,
+    NETNAMES_GAL_LAYER( In27_Cu ),  In27_Cu,
+    NETNAMES_GAL_LAYER( In28_Cu ),  In28_Cu,
+    NETNAMES_GAL_LAYER( In29_Cu ),  In29_Cu,
+    NETNAMES_GAL_LAYER( In30_Cu ),  In30_Cu,
+#endif
+    NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ), B_Mask,
+    NETNAMES_GAL_LAYER( B_Cu ), B_Cu,
+
+    B_Adhes, B_Paste, B_SilkS,
     ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ),
     ITEM_GAL_LAYER( WORKSHEET )
 };
+
 
 BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
@@ -417,9 +455,9 @@ void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 
 
 // Note: virtual, overridden in PCB_EDIT_FRAME;
-void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
+void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
 {
-    LAYER_NUM preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
+    LAYER_ID preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
 
     // Check if the specified layer matches the present layer
     if( layer == preslayer )
@@ -434,7 +472,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
         // selection of any other copper layer is disregarded).
         if( m_Pcb->GetCopperLayerCount() < 2 )
         {
-            if( layer != LAYER_N_BACK )
+            if( layer != B_Cu )
             {
                 return;
             }
@@ -446,7 +484,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
         // layers are also capable of being selected.
         else
         {
-            if( ( layer != LAYER_N_BACK ) && ( layer != LAYER_N_FRONT )
+            if( ( layer != B_Cu ) && ( layer != F_Cu )
                 && ( layer >= m_Pcb->GetCopperLayerCount() - 1 ) )
             {
                 return;
@@ -813,7 +851,7 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
 
     // Set rendering order and properties of layers
-    for( LAYER_NUM i = 0; (unsigned) i < sizeof(GAL_LAYER_ORDER) / sizeof(LAYER_NUM); ++i )
+    for( LAYER_NUM i = 0;  i < (int) DIM(GAL_LAYER_ORDER);  ++i )
     {
         LAYER_NUM layer = GAL_LAYER_ORDER[i];
         wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
@@ -840,14 +878,14 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     view->SetRequired( NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
 
     view->SetRequired( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-    view->SetRequired( ADHESIVE_N_FRONT, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-    view->SetRequired( SOLDERPASTE_N_FRONT, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-    view->SetRequired( SOLDERMASK_N_FRONT, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    view->SetRequired( F_Adhes, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    view->SetRequired( F_Paste, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    view->SetRequired( F_Mask, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
 
     view->SetRequired( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-    view->SetRequired( ADHESIVE_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-    view->SetRequired( SOLDERPASTE_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-    view->SetRequired( SOLDERMASK_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    view->SetRequired( B_Adhes, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    view->SetRequired( B_Paste, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    view->SetRequired( B_Mask, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
 
     view->SetRequired( ITEM_GAL_LAYER( PAD_FR_VISIBLE ), ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
     view->SetRequired( ITEM_GAL_LAYER( PAD_BK_VISIBLE ), ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );

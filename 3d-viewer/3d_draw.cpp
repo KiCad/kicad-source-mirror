@@ -55,11 +55,11 @@ extern void     CheckGLError();
 /* Helper function
  * returns true if aLayer should be displayed, false otherwise
  */
-static bool     Is3DLayerEnabled( LAYER_NUM aLayer );
+static bool     Is3DLayerEnabled( LAYER_ID aLayer );
 
 /* returns the Z orientation parameter 1.0 or -1.0 for aLayer
  * Z orientation is 1.0 for all layers but "back" layers:
- *  LAYER_N_BACK , ADHESIVE_N_BACK, SOLDERPASTE_N_BACK ), SILKSCREEN_N_BACK
+ *  B_Cu , B_Adhes, B_Paste ), B_SilkS
  * used to calculate the Z orientation parameter for glNormal3f
  */
 static GLfloat  Get3DLayer_Z_Orientation( LAYER_NUM aLayer );
@@ -205,18 +205,18 @@ static inline void SetGLTechLayersColor( LAYER_NUM aLayer )
     {
         switch( aLayer )
         {
-        case SOLDERPASTE_N_BACK:
-        case SOLDERPASTE_N_FRONT:
+        case B_Paste:
+        case F_Paste:
             SetGLColor( DARKGRAY, 0.7 );
             break;
 
-        case SILKSCREEN_N_BACK:
-        case SILKSCREEN_N_FRONT:
+        case B_SilkS:
+        case F_SilkS:
             SetGLColor( LIGHTGRAY, 0.9 );
             break;
 
-        case SOLDERMASK_N_BACK:
-        case SOLDERMASK_N_FRONT:
+        case B_Mask:
+        case F_Mask:
             SetGLEpoxyColor( 0.7 );
             break;
 
@@ -278,12 +278,21 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     bool            throughHolesListBuilt = false;  // flag to build the through hole polygon list only once
     bool            hightQualityMode = false;
 
-    for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER;
-         ++layer )
+    LSET            cu_set = LSET::AllCuMask( g_Parm_3D_Visu.m_CopperLayersCount );
+
+#if 1
+    LAYER_ID        cu_seq[MAX_CU_LAYERS];          // preferred sequence, could have called CuStack()
+                                                    // but I assume that's backwards
+
+    for( unsigned i=0; i<DIM(cu_seq); ++i )
+        cu_seq[i] = LAYER_ID( B_Cu - i );
+
+    for( LSEQ cu = cu_set.Seq( cu_seq, DIM(cu_seq) );  cu;  ++cu )
+#else
+    for( LSEQ cu = cu_set.CuStack();  cu;  ++cu )
+#endif
     {
-        if( layer != LAST_COPPER_LAYER
-            && layer >= g_Parm_3D_Visu.m_CopperLayersCount )
-            continue;
+        LAYER_ID layer = *cu;
 
         // Skip non enabled layers in normal mode,
         // and internal layers in realistic mode
@@ -295,7 +304,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         currLayerHoles.RemoveAllContours();
 
         // Draw tracks:
-        for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
+        for( TRACK* track = pcb->m_Track;  track;  track = track->Next() )
         {
             if( !track->IsOnLayer( layer ) )
                 continue;
@@ -325,7 +334,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         }
 
         // draw pads
-        for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
+        for( MODULE* module = pcb->m_Modules;  module;  module = module->Next() )
         {
             module->TransformPadsShapesWithClearanceToPolygon( layer,
                                                                bufferPolys,
@@ -345,7 +354,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             {
                 D_PAD* pad = module->Pads();
 
-                for( ; pad != NULL; pad = pad->Next() )
+                for( ; pad; pad = pad->Next() )
                     pad->BuildPadDrillShapePolygon( allLayerHoles, 0,
                                                     segcountLowQuality );
             }
@@ -439,7 +448,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     }
 
     // Draw vias holes (vertical cylinders)
-    for( const TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
+    for( const TRACK* track = pcb->m_Track;  track;  track = track->Next() )
     {
         const VIA *via = dynamic_cast<const VIA*>(track);
 
@@ -448,9 +457,9 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     }
 
     // Draw pads holes (vertical cylinders)
-    for( const MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
+    for( const MODULE* module = pcb->m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
+        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
             Draw3DPadHole( pad );
     }
 
@@ -459,12 +468,14 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         ( realistic_mode || g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY ) ) )
     {
         int copper_thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
+
         // a small offset between substrate and external copper layer to avoid artifacts
         // when drawing copper items on board
         int epsilon = Millimeter2iu( 0.01 );
-        int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
-        int board_thickness = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_FRONT )
-                            - g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
+        int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( B_Cu );
+        int board_thickness = g_Parm_3D_Visu.GetLayerZcoordBIU( F_Cu )
+                            - g_Parm_3D_Visu.GetLayerZcoordBIU( B_Cu );
+
         // items on copper layers and having a thickness = copper_thickness
         // are drawn from zpos - copper_thickness/2 to zpos + copper_thickness
         // therefore substrate position is copper_thickness/2 to
@@ -476,11 +487,11 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             SetGLEpoxyColor();
         else
         {
-            EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( EDGE_N );
+            EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( Edge_Cuts );
             SetGLColor( color, 0.7 );
         }
 
-        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( LAYER_N_FRONT ) );
+        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( F_Cu ) );
         KI_POLYGON_SET  currLayerPolyset;
         KI_POLYGON_SET  polysetHoles;
 
@@ -515,6 +526,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
                                                 // to reduce time calculations
                                                 // for holes and items which do not need
                                                 // a fine representation
+
     double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2) );
 
     CPOLYGONS_LIST  bufferPolys;
@@ -537,7 +549,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
 
     // Add via holes
-    for( VIA* via = GetFirstVia( pcb->m_Track ); via != NULL;
+    for( VIA* via = GetFirstVia( pcb->m_Track ); via;
             via = GetFirstVia( via->Next() ) )
     {
         VIATYPE_T viatype = via->GetViaType();
@@ -551,12 +563,12 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     }
 
     // draw pads holes
-    for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
+    for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
     {
         // Add pad hole, if any
         D_PAD* pad = module->Pads();
 
-        for( ; pad != NULL; pad = pad->Next() )
+        for( ; pad; pad = pad->Next() )
             pad->BuildPadDrillShapePolygon( allLayerHoles, 0,
                                                 segcountLowQuality );
     }
@@ -566,9 +578,21 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     KI_POLYGON_SET  brdpolysetHoles;
     allLayerHoles.ExportTo( brdpolysetHoles );
 
-    for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER;
-         ++layer )
+    static const LAYER_ID sequence[] = {
+        B_Adhes,
+        F_Adhes,
+        B_Paste,
+        F_Paste,
+        B_SilkS,
+        F_SilkS,
+        B_Mask,
+        F_Mask,
+    };
+
+    for( LSEQ seq = pcb->GetEnabledLayers().Seq( sequence, DIM( sequence ) );  seq;  ++seq )
     {
+        LAYER_ID layer = *seq;
+
         // Skip user layers, which are not drawn here
         if( IsUserLayer( layer) )
             continue;
@@ -576,7 +600,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
         if( !Is3DLayerEnabled( layer ) )
             continue;
 
-        if( layer == EDGE_N && g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY )  )
+        if( layer == Edge_Cuts && g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY )  )
             continue;
 
         bufferPolys.RemoveAllContours();
@@ -603,14 +627,14 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
             }
         }
 
-        for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
+        for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
         {
-            if( layer == SILKSCREEN_N_FRONT || layer == SILKSCREEN_N_BACK )
+            if( layer == F_SilkS || layer == B_SilkS )
             {
                 D_PAD*  pad = module->Pads();
                 int     linewidth = g_DrawDefaultLineThickness;
 
-                for( ; pad != NULL; pad = pad->Next() )
+                for( ; pad; pad = pad->Next() )
                 {
                     if( !pad->IsOnLayer( layer ) )
                         continue;
@@ -651,7 +675,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
 
         // Solder mask layers are "negative" layers.
         // Shapes should be removed from the full board area.
-        if( layer == SOLDERMASK_N_BACK || layer == SOLDERMASK_N_FRONT )
+        if( layer == B_Mask || layer == F_Mask )
         {
             bufferPcbOutlines.ExportTo( currLayerPolyset );
             bufferPolys.Append( allLayerHoles );
@@ -659,8 +683,8 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
             currLayerPolyset -= polyset;
         }
         // Remove holes from Solder paste layers and siklscreen
-        else if( layer == SOLDERPASTE_N_BACK || layer == SOLDERPASTE_N_FRONT
-                 || layer == SILKSCREEN_N_BACK || layer == SILKSCREEN_N_FRONT  )
+        else if( layer == B_Paste || layer == F_Paste
+                 || layer == B_SilkS || layer == F_SilkS  )
         {
             bufferPolys.ExportTo( currLayerPolyset );
             currLayerPolyset -= brdpolysetHoles;
@@ -674,11 +698,11 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
         int         thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
         int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
 
-        if( layer == EDGE_N )
+        if( layer == Edge_Cuts )
         {
-            thickness = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_FRONT )
-                        - g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
-            zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK )
+            thickness = g_Parm_3D_Visu.GetLayerZcoordBIU( F_Cu )
+                        - g_Parm_3D_Visu.GetLayerZcoordBIU( B_Cu );
+            zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( B_Cu )
                    + (thickness / 2);
         }
         else
@@ -703,6 +727,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     }
 }
 
+
 /**
  * Function BuildBoard3DAuxLayers
  * Called by CreateDrawGL_List()
@@ -713,13 +738,25 @@ void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
 {
     const int   segcountforcircle   = 16;
     double      correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
-    BOARD* pcb = GetBoard();
+    BOARD*      pcb = GetBoard();
+
     CPOLYGONS_LIST  bufferPolys;
+
     bufferPolys.reserve( 5000 );    // Reserve for items not on board
 
-    for( LAYER_NUM layer = FIRST_USER_LAYER; layer <= LAST_USER_LAYER;
-         ++layer )
+    static const LAYER_ID sequence[] = {
+        Dwgs_User,
+        Cmts_User,
+        Eco1_User,
+        Eco2_User,
+        Edge_Cuts,
+        Margin
+    };
+
+    for( LSEQ aux( sequence, sequence+DIM(sequence) );  aux;  ++aux )
     {
+        LAYER_ID layer = *aux;
+
         if( !Is3DLayerEnabled( layer ) )
             continue;
 
@@ -747,7 +784,7 @@ void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
             }
         }
 
-        for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
+        for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
         {
             module->TransformPadsShapesWithClearanceToPolygon( layer,
                                                                bufferPolys,
@@ -1067,7 +1104,7 @@ void EDA_3D_CANVAS::Draw3DGrid( double aGriSizeMM )
 
 void EDA_3D_CANVAS::Draw3DViaHole( const VIA* aVia )
 {
-    LAYER_NUM   top_layer, bottom_layer;
+    LAYER_ID    top_layer, bottom_layer;
     int         inner_radius    = aVia->GetDrillValue() / 2;
     int         thickness       = g_Parm_3D_Visu.GetCopperThicknessBIU();
 
@@ -1115,7 +1152,7 @@ void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
         glRotatef( 180.0, 0.0, 0.0, 1.0 );
     }
 
-    for( ; shape3D != NULL; shape3D = shape3D->Next() )
+    for( ; shape3D; shape3D = shape3D->Next() )
     {
         shape3D->SetLoadNonTransparentObjects( aAllowNonTransparentObjects );
         shape3D->SetLoadTransparentObjects( aAllowTransparentObjects );
@@ -1141,15 +1178,15 @@ void EDA_3D_CANVAS::Draw3DPadHole( const D_PAD* aPad )
     // Store here the points to approximate hole by segments
     CPOLYGONS_LIST  holecornersBuffer;
     int             thickness   = g_Parm_3D_Visu.GetCopperThicknessBIU();
-    int             height      = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_FRONT ) -
-                                  g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
+    int             height      = g_Parm_3D_Visu.GetLayerZcoordBIU( F_Cu ) -
+                                  g_Parm_3D_Visu.GetLayerZcoordBIU( B_Cu );
 
     if( g_Parm_3D_Visu.IsRealisticMode() )
         SetGLCopperColor();
     else
         SetGLColor( DARKGRAY );
 
-    int holeZpoz    = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK ) + thickness / 2;
+    int holeZpoz    = g_Parm_3D_Visu.GetLayerZcoordBIU( B_Cu ) + thickness / 2;
     int holeHeight  = height - thickness;
 
     if( drillsize.x == drillsize.y )    // usual round hole
@@ -1187,7 +1224,7 @@ void EDA_3D_CANVAS::Draw3DPadHole( const D_PAD* aPad )
 }
 
 
-bool Is3DLayerEnabled( LAYER_NUM aLayer )
+static bool Is3DLayerEnabled( LAYER_ID aLayer )
 {
     DISPLAY3D_FLG flg;
     bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
@@ -1196,44 +1233,44 @@ bool Is3DLayerEnabled( LAYER_NUM aLayer )
     // check the flags
     switch( aLayer )
     {
-    case ADHESIVE_N_BACK:
-    case ADHESIVE_N_FRONT:
+    case B_Adhes:
+    case F_Adhes:
         flg = FL_ADHESIVE;
         break;
 
-    case SOLDERPASTE_N_BACK:
-    case SOLDERPASTE_N_FRONT:
+    case B_Paste:
+    case F_Paste:
         flg = FL_SOLDERPASTE;
         break;
 
-    case SILKSCREEN_N_BACK:
-    case SILKSCREEN_N_FRONT:
+    case B_SilkS:
+    case F_SilkS:
         flg = FL_SILKSCREEN;
         break;
 
-    case SOLDERMASK_N_BACK:
-    case SOLDERMASK_N_FRONT:
+    case B_Mask:
+    case F_Mask:
         flg = FL_SOLDERMASK;
         break;
 
-    case DRAW_N:
-    case COMMENT_N:
+    case Dwgs_User:
+    case Cmts_User:
         if( realistic_mode )
             return false;
 
         flg = FL_COMMENTS;
         break;
 
-    case ECO1_N:
-    case ECO2_N:
+    case Eco1_User:
+    case Eco2_User:
         if( realistic_mode )
             return false;
 
         flg = FL_ECO;
         break;
 
-    case LAYER_N_BACK:
-    case LAYER_N_FRONT:
+    case B_Cu:
+    case F_Cu:
         return g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( aLayer )
                || realistic_mode;
         break;
@@ -1256,11 +1293,11 @@ GLfloat Get3DLayer_Z_Orientation( LAYER_NUM aLayer )
 {
     double nZ = 1.0;
 
-    if( ( aLayer == LAYER_N_BACK )
-        || ( aLayer == ADHESIVE_N_BACK )
-        || ( aLayer == SOLDERPASTE_N_BACK )
-        || ( aLayer == SILKSCREEN_N_BACK )
-        || ( aLayer == SOLDERMASK_N_BACK ) )
+    if( ( aLayer == B_Cu )
+        || ( aLayer == B_Adhes )
+        || ( aLayer == B_Paste )
+        || ( aLayer == B_SilkS )
+        || ( aLayer == B_Mask ) )
         nZ = -1.0;
 
     return nZ;

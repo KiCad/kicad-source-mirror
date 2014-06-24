@@ -107,18 +107,15 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     if( !frontVisible && !backVisible )
         return;
 
-    /* If pad are only on front side (no layer on back side)
-     * and if hide front side pads is enabled, do not draw
-     */
-    if( !frontVisible && ( (m_layerMask & BACK_LAYERS) == 0 ) )
+    // If pad is only on front side (no layer on back side)
+    // and if hide front side pads is enabled, do not draw
+    if( !frontVisible && !( m_layerMask & LSET::BackMask() ).any() )
         return;
 
-    /* If pad are only on back side (no layer on front side)
-     * and if hide back side pads is enabled, do not draw
-     */
-    if( !backVisible && ( (m_layerMask & FRONT_LAYERS) == 0 ) )
+    // If pad is only on back side (no layer on front side)
+    // and if hide back side pads is enabled, do not draw
+    if( !backVisible && !( m_layerMask & LSET::FrontMask() ).any() )
         return;
-
 
     PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
     PCB_SCREEN*     screen = frame->GetScreen();
@@ -129,12 +126,12 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         drawInfo.m_ShowPadFilled = false;
 
     EDA_COLOR_T color = BLACK;
-    if( m_layerMask & LAYER_FRONT )
+    if( ( m_layerMask & LSET::FrontMask() ).any() )
     {
         color = brd->GetVisibleElementColor( PAD_FR_VISIBLE );
     }
 
-    if( m_layerMask & LAYER_BACK )
+    if( ( m_layerMask & LSET::BackMask() ).any() )
     {
         color = ColorMix( color, brd->GetVisibleElementColor( PAD_BK_VISIBLE ) );
     }
@@ -142,12 +139,14 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     if( color == BLACK ) // Not on a visible copper layer (i.e. still nothing to show)
     {
         // If the pad is on only one tech layer, use the layer color else use DARKGRAY
-        LAYER_MSK mask_non_copper_layers = m_layerMask & ~ALL_CU_LAYERS;
+        LSET mask_non_copper_layers = m_layerMask & ~LSET::AllCuMask();
+
 #ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
         mask_non_copper_layers &= brd->GetVisibleLayers();
 #endif
-        LAYER_NUM pad_layer = ExtractLayer( mask_non_copper_layers );
-        switch( pad_layer )
+        LAYER_ID pad_layer = mask_non_copper_layers.ExtractLayer();
+
+        switch( (int) pad_layer )
         {
         case UNDEFINED_LAYER:   // More than one layer
             color = DARKGRAY;
@@ -172,14 +171,16 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         // when routing tracks
         if( frame && frame->GetToolId() == ID_TRACK_BUTT )
         {
-            LAYER_NUM routeTop = screen->m_Route_Layer_TOP;
-            LAYER_NUM routeBot = screen->m_Route_Layer_BOTTOM;
+            LAYER_ID routeTop = screen->m_Route_Layer_TOP;
+            LAYER_ID routeBot = screen->m_Route_Layer_BOTTOM;
 
             // if routing between copper and component layers,
             // or the current layer is one of said 2 external copper layers,
             // then highlight only the current layer.
-            if( ( ::GetLayerMask( routeTop ) | ::GetLayerMask( routeBot ) ) == ( LAYER_BACK | LAYER_FRONT )
-               || ( ::GetLayerMask( screen->m_Active_Layer ) & ( LAYER_BACK | LAYER_FRONT ) ) )
+            if( ( screen->m_Active_Layer == F_Cu || screen->m_Active_Layer == B_Cu ) ||
+                ( routeTop==F_Cu && routeBot==B_Cu ) ||
+                ( routeTop==B_Cu && routeBot==F_Cu )
+                )
             {
                 if( !IsOnLayer( screen->m_Active_Layer ) )
                     ColorTurnToDarkDarkGray( &color );
@@ -208,13 +209,13 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     {
         switch( showActualMaskSize )
         {
-        case SOLDERMASK_N_BACK:
-        case SOLDERMASK_N_FRONT:
+        case B_Mask:
+        case F_Mask:
             mask_margin.x = mask_margin.y = GetSolderMaskMargin();
             break;
 
-        case SOLDERPASTE_N_BACK:
-        case SOLDERPASTE_N_FRONT:
+        case B_Paste:
+        case F_Paste:
             mask_margin = GetSolderPasteMargin();
             break;
 
@@ -239,13 +240,13 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
             // layer shows the pad size with the mask clearance
             switch( screen->m_Active_Layer )
             {
-            case SOLDERMASK_N_BACK:
-            case SOLDERMASK_N_FRONT:
+            case B_Mask:
+            case F_Mask:
                 mask_margin.x = mask_margin.y = GetSolderMaskMargin();
                 break;
 
-            case SOLDERPASTE_N_BACK:
-            case SOLDERPASTE_N_FRONT:
+            case B_Paste:
+            case F_Paste:
                 mask_margin = GetSolderPasteMargin();
                 break;
 
@@ -265,7 +266,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 
     bool DisplayIsol = DisplayOpt.DisplayPadIsol;
 
-    if( ( m_layerMask & ALL_CU_LAYERS ) == 0 )
+    if( !( m_layerMask & LSET::AllCuMask() ).any() )
         DisplayIsol = false;
 
     if( ( GetAttribute() == PAD_HOLE_NOT_PLATED ) &&
@@ -462,11 +463,11 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         int dx0 = std::min( halfsize.x, halfsize.y );
         EDA_COLOR_T nc_color = BLUE;
 
-        if( m_layerMask & LAYER_FRONT )    /* Draw \ */
+        if( m_layerMask[F_Cu] )    /* Draw \ */
             GRLine( aClipBox, aDC, holepos.x - dx0, holepos.y - dx0,
                     holepos.x + dx0, holepos.y + dx0, 0, nc_color );
 
-        if( m_layerMask & LAYER_BACK )     // Draw /
+        if( m_layerMask[B_Cu] )     // Draw /
             GRLine( aClipBox, aDC, holepos.x + dx0, holepos.y - dx0,
                     holepos.x - dx0, holepos.y + dx0, 0, nc_color );
     }

@@ -606,16 +606,16 @@ public:
      * @param aDlgPosition = position of dialog ( defualt = centered)
      * @return the selected layer id
      */
-    LAYER_NUM SelectLayer( LAYER_NUM aDefaultLayer,
-                           LAYER_MSK aNotAllowedLayersMask = 0,
-                           wxPoint aDlgPosition = wxDefaultPosition );
+    LAYER_ID SelectLayer( LAYER_ID aDefaultLayer,
+                          LSET aNotAllowedLayersMask = 0,
+                          wxPoint aDlgPosition = wxDefaultPosition );
 
     /* Display a list of two copper layers to choose a pair of copper layers
      * the layer pair is used to fast switch between copper layers when placing vias
      */
     void SelectCopperLayerPair();
 
-    virtual void SwitchLayer( wxDC* DC, LAYER_NUM layer );
+    virtual void SwitchLayer( wxDC* DC, LAYER_ID layer );
 
     void LoadSettings( wxConfigBase* aCfg );    // override virtual
     void SaveSettings( wxConfigBase* aCfg );    // override virtual

@@ -128,7 +128,7 @@ void LAYERS_MAP_DIALOG::initDialog()
 
         if( (pcb_layer_num == m_exportBoardCopperLayersCount - 1)
            && (m_exportBoardCopperLayersCount > 1) )
-            pcb_layer_num = LAYER_N_FRONT;
+            pcb_layer_num = F_Cu;
 
         m_buttonTable[m_itemsCount] = ii;
         m_layersLookUpTable[ii]  = pcb_layer_num;
@@ -288,7 +288,7 @@ void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
     {
         if( (layer == m_exportBoardCopperLayersCount - 1)
            && (m_exportBoardCopperLayersCount > 1) )
-            layer = LAYER_N_FRONT;
+            layer = F_Cu;
         m_layersLookUpTable[ii] = layer;
         msg = GetPCBDefaultLayerName( layer );
         m_layersList[ii]->SetLabel( msg );
@@ -362,7 +362,7 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
 
     LAYER_NUM jj = m_layersLookUpTable[m_buttonTable[ii]];
     if( !IsValidLayer( jj ) )
-        jj = LAYER_N_BACK;  // (Defaults to "Copper" layer.)
+        jj = B_Cu;  // (Defaults to "Copper" layer.)
 
     jj = m_Parent->SelectPCBLayer( jj, m_exportBoardCopperLayersCount, true );
 
@@ -408,7 +408,7 @@ void LAYERS_MAP_DIALOG::OnOkClick( wxCommandEvent& event )
     int inner_layer_max = 0;
     for( LAYER_NUM ii = FIRST_LAYER; ii < NB_GERBER_LAYERS; ++ii )
     {
-            if( m_layersLookUpTable[ii] < LAYER_N_FRONT )
+            if( m_layersLookUpTable[ii] < F_Cu )
             {
                 if( m_layersLookUpTable[ii ] > inner_layer_max )
                     inner_layer_max = m_layersLookUpTable[ii];

@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <wx/numdlg.h> 
+#include <wx/numdlg.h>
 
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
@@ -95,10 +95,10 @@ public:
     void SetBoard( BOARD* aBoard )
     {
         BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
-        
+
         wxString msg;
         m_board = aBoard;
-        
+
         Append( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, _( "Custom size" ),
                 wxEmptyString, wxITEM_CHECK );
 
@@ -111,8 +111,8 @@ public:
         for( unsigned i = 0; i < bds.m_TrackWidthList.size(); i++ )
         {
             msg = _( "Track ");
-            msg << StringFromValue( g_UserUnit, bds.m_TrackWidthList[i], true ); 
-          
+            msg << StringFromValue( g_UserUnit, bds.m_TrackWidthList[i], true );
+
             if( i == 0 )
                 msg << _( " (from netclass)" );
 
@@ -213,7 +213,7 @@ public:
         Add( ACT_SwitchPosture );
 
         AppendSeparator ( );
-        
+
         CONTEXT_TRACK_WIDTH_MENU* trackMenu = new CONTEXT_TRACK_WIDTH_MENU;
         trackMenu->SetBoard( aBoard );
         AppendSubMenu( trackMenu, wxT( "Select Track Width" ) );
@@ -298,7 +298,7 @@ PNS_ITEM* ROUTER_TOOL::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLa
 
     for(int i = 0; i < 4; i++)
         prioritized[i] = 0;
-    
+
     PNS_ITEMSET candidates = m_router->QueryHoverItems( aWhere );
 
     BOOST_FOREACH( PNS_ITEM* item, candidates.Items() )
@@ -333,7 +333,7 @@ PNS_ITEM* ROUTER_TOOL::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLa
     for( int i = 0; i < 4; i++ )
     {
         PNS_ITEM* item = prioritized[i];
-        
+
         if( DisplayOpt.ContrastModeDisplay )
             if( item && !item->Layers().Overlaps( tl ) )
                 item = NULL;
@@ -381,7 +381,7 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
                 break;
         }
     }
-    else 
+    else
 #endif
     if( aEvent.IsAction( &ACT_RouterOptions ) )
     {
@@ -444,7 +444,7 @@ void ROUTER_TOOL::updateStartItem( TOOL_EVENT& aEvent )
         {
             bool dummy;
             VECTOR2I psnap = m_router->SnapToItem( startItem, p, dummy );
-            
+
             if( snapEnabled )
             {
                 m_startSnapPoint = psnap;
@@ -538,7 +538,7 @@ void ROUTER_TOOL::performRouting()
 
     m_router->SwitchLayer( m_startLayer );
 
-    frame->SetActiveLayer( m_startLayer );
+    frame->SetActiveLayer( (LAYER_ID) m_startLayer );
     frame->GetGalCanvas()->SetFocus();
 
     if( m_startItem && m_startItem->Net() >= 0 )
@@ -578,7 +578,7 @@ void ROUTER_TOOL::performRouting()
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
             m_router->ToggleViaPlacement();
-            frame->SetTopLayer( m_router->GetCurrentLayer() );
+            frame->SetTopLayer( (LAYER_ID) m_router->GetCurrentLayer() );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
@@ -590,13 +590,13 @@ void ROUTER_TOOL::performRouting()
         {
             m_router->SwitchLayer( m_router->NextCopperLayer( true ) );
             updateEndItem( *evt );
-            frame->SetActiveLayer( m_router->GetCurrentLayer() );
+            frame->SetActiveLayer( (LAYER_ID) m_router->GetCurrentLayer() );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsAction( &COMMON_ACTIONS::layerPrev ) )
         {
             m_router->SwitchLayer( m_router->NextCopperLayer( false ) );
-            frame->SetActiveLayer( m_router->GetCurrentLayer() );
+            frame->SetActiveLayer( (LAYER_ID) m_router->GetCurrentLayer() );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsAction( &ACT_EndTrack ) )
@@ -604,7 +604,7 @@ void ROUTER_TOOL::performRouting()
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
         }
-    
+
         handleCommonEvents(*evt);
     }
 
@@ -652,7 +652,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     ROUTER_TOOL_MENU *ctxMenu = new ROUTER_TOOL_MENU( board );
 
     SetContextMenu ( ctxMenu );
- 
+
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -703,7 +703,7 @@ void ROUTER_TOOL::performDragging()
     VIEW_CONTROLS* ctls = getViewControls();
 
     bool dragStarted = m_router->StartDragging( m_startSnapPoint, m_startItem );
-    
+
     if( !dragStarted )
         return;
 
@@ -712,7 +712,7 @@ void ROUTER_TOOL::performDragging()
 
     ctls->ForceCursorPosition( false );
     ctls->SetAutoPan( true );
-    
+
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         if( evt->IsCancel() )

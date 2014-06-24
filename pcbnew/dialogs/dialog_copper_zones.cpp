@@ -71,7 +71,8 @@ private:
                                             ///< true = pad count sort.
 
     long            m_NetFiltering;
-    std::vector<LAYER_NUM> m_LayerId;       ///< Handle the real layer number from layer
+
+    std::vector<LAYER_ID> m_LayerId;        ///< Handle the real layer number from layer
                                             ///< name position in m_LayerSelectionCtrl
 
     static wxString m_netNameShowFilter;    ///< the filter to show nets (default * "*").
@@ -247,28 +248,29 @@ void DIALOG_COPPER_ZONE::initDialog()
     wxListItem column0;
     column0.SetId( 0 );
     m_LayerSelectionCtrl->InsertColumn( 0, column0 );
-    // Build copper layer list and append to layer widget
-    int layerCount = board->GetCopperLayerCount();
+
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
+
     int ctrlWidth = 0;  // Min width for m_LayerSelectionCtrl to show the layers names
-    for( LAYER_NUM ii = FIRST_LAYER; ii < layerCount; ++ii )
+
+    LSET cu_set = LSET::AllCuMask( board->GetCopperLayerCount() );
+
+    for( LSEQ cu_stack = cu_set.UIOrder();  cu_stack;  ++cu_stack )
     {
-        LAYER_NUM layerNumber = LAYER_N_BACK;
+        LAYER_ID layer = *cu_stack;
 
-        if( layerCount <= 1 || ii < layerCount - 1 )
-            layerNumber = ii;
-        else if( ii == layerCount - 1 )
-            layerNumber = LAYER_N_FRONT;
+        m_LayerId.push_back( layer );
 
-        m_LayerId.insert( m_LayerId.begin(), layerNumber );
+        msg = board->GetLayerName( layer ).Trim();
 
-        msg = board->GetLayerName( layerNumber ).Trim();
-        EDA_COLOR_T layerColor = board->GetLayerColor( layerNumber );
+        EDA_COLOR_T layerColor = board->GetLayerColor( layer );
+
         imageList->Add( makeLayerBitmap( layerColor ) );
-        int itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, ii );
 
-        if( m_settings.m_CurrentZone_Layer == layerNumber )
+        int itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, layer );
+
+        if( m_settings.m_CurrentZone_Layer == layer )
             m_LayerSelectionCtrl->Select( itemIndex );
 
         wxSize tsize( GetTextSize( msg, m_LayerSelectionCtrl ) );
@@ -281,8 +283,10 @@ void DIALOG_COPPER_ZONE::initDialog()
     // wxWidgets 2.9 ( column witdth too large)
     ctrlWidth += LAYER_BITMAP_SIZE_X + 16;      // Add bitmap width + margin between bitmap and text
     m_LayerSelectionCtrl->SetColumnWidth( 0, ctrlWidth );
+
     ctrlWidth += 4;     // add small margin between text and window borders
-    m_LayerSelectionCtrl->SetMinSize( wxSize(ctrlWidth, -1));
+
+    m_LayerSelectionCtrl->SetMinSize( wxSize( ctrlWidth, -1 ) );
 
     wxString netNameDoNotShowFilter = wxT( "Net-*" );
     if( m_Config )
@@ -464,7 +468,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         return false;
     }
 
-    m_settings.m_CurrentZone_Layer = m_LayerId[ii];
+    m_settings.m_CurrentZone_Layer = (LAYER_ID) m_LayerId[ii];
 
     // Get the net name selection for this zone
     ii = m_ListNetNameSelection->GetSelection();

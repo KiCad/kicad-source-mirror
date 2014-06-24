@@ -125,7 +125,7 @@ private:
     bool        m_excludeEdgeLayer;
 
     /// Set of layers to plot
-    LAYER_MSK   m_layerSelection;
+    LSET        m_layerSelection;
 
     /** When plotting gerbers use a conventional set of extensions instead of
      * appending a suffix to the board name */
@@ -263,9 +263,8 @@ public:
     void        SetSubtractMaskFromSilk( bool aSubtract ) { m_subtractMaskFromSilk = aSubtract; };
     bool        GetSubtractMaskFromSilk() const { return m_subtractMaskFromSilk; };
 
-    void        SetLayerSelection( long aSelection )
-                    { m_layerSelection = aSelection; };
-    long        GetLayerSelection() const { return m_layerSelection; };
+    void        SetLayerSelection( LSET aSelection )    { m_layerSelection = aSelection; };
+    LSET        GetLayerSelection() const               { return m_layerSelection; };
 
     void        SetUseAuxOrigin( bool aAux ) { m_useAuxOrigin = aAux; };
     bool        GetUseAuxOrigin() const { return m_useAuxOrigin; };

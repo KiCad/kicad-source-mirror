@@ -308,7 +308,7 @@ public:
      * Returns a bit-mask of all the layers that are visible
      * @return int - the visible layers in bit-mapped form.
      */
-    LAYER_MSK GetVisibleLayers() const;
+    LSET GetVisibleLayers() const;
 
     /**
      * Function SetVisibleLayers
@@ -316,7 +316,7 @@ public:
      * changes the bit-mask of visible layers
      * @param aLayerMask = The new bit-mask of visible layers
      */
-    void    SetVisibleLayers( LAYER_MSK aLayerMask );
+    void    SetVisibleLayers( LSET aLayerMask );
 
     /**
      * Function IsLayerVisible
@@ -667,7 +667,7 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void    PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer, bool aPrintMirrorMode,
+    virtual void    PrintPage( wxDC* aDC, LSET aPrintMasklayer, bool aPrintMirrorMode,
                                void* aData = NULL );
 
     /**

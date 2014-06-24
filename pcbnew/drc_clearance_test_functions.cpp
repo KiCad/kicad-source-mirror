@@ -145,11 +145,12 @@ bool trapezoid2pointDRC( wxPoint aTref[4], wxPoint aPcompare, int aDist )
     return true;
 }
 
+
 bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 {
     TRACK*    track;
     wxPoint   delta;           // lenght on X and Y axis of segments
-    LAYER_MSK layerMask;
+    LSET layerMask;
     int       net_code_ref;
     wxPoint   shape_pos;
 
@@ -164,7 +165,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     m_segmEnd   = delta = aRefSeg->GetEnd() - origin;
     m_segmAngle = 0;
 
-    layerMask    = aRefSeg->GetLayerMask();
+    layerMask    = aRefSeg->GetLayerSet();
     net_code_ref = aRefSeg->GetNetCode();
 
     // Phase 0 : Test vias
@@ -206,21 +207,29 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // and **only one layer** can be drilled
         if( refvia->GetViaType() == VIA_MICROVIA )
         {
-            LAYER_NUM layer1, layer2;
-            bool err = true;
+            LAYER_ID    layer1, layer2;
+            bool        err = true;
 
             refvia->LayerPair( &layer1, &layer2 );
 
             if( layer1 > layer2 )
                 EXCHG( layer1, layer2 );
 
+#if 0   // was:
             // test:
-            if( layer1 == LAYER_N_BACK && layer2 == LAYER_N_2 )
+            if( layer1 == B_Cu && layer2 == LAYER_N_2 )
                 err = false;
 
             if( layer1 == (m_pcb->GetDesignSettings().GetCopperLayerCount() - 2 )
-                && layer2 == LAYER_N_FRONT )
+                && layer2 == F_Cu )
                 err = false;
+#else
+            if( layer2 == B_Cu && layer1 == m_pcb->GetDesignSettings().GetCopperLayerCount() - 2 )
+                err = false;
+
+            else if( layer1 == F_Cu  &&  layer2 == In1_Cu  )
+                err = false;
+#endif
 
             if( err )
             {
@@ -266,10 +275,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
      * A pad must have a parent because some functions expect a non null parent
      * to find the parent board, and some other data
      */
-    MODULE dummymodule( m_pcb );    // Creates a dummy parent
-    D_PAD dummypad( &dummymodule );
+    MODULE  dummymodule( m_pcb );    // Creates a dummy parent
+    D_PAD   dummypad( &dummymodule );
 
-    dummypad.SetLayerMask( ALL_CU_LAYERS );     // Ensure the hole is on all layers
+    dummypad.SetLayerSet( LSET::AllCuMask() );     // Ensure the hole is on all layers
 
     // Compute the min distance to pads
     if( testPads )
@@ -282,7 +291,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
              * But if a drill hole exists	(a pad on a single layer can have a hole!)
              * we must test the hole
              */
-            if( (pad->GetLayerMask() & layerMask ) == 0 )
+            if( !( pad->GetLayerSet() & layerMask ).any() )
             {
                 /* We must test the pad hole. In order to use the function
                  * checkClearanceSegmToPad(),a pseudo pad is used, with a shape and a
@@ -345,7 +354,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             continue;
 
         // No problem if segment are on different layers :
-        if( ( layerMask & track->GetLayerMask() ) == 0 )
+        if( ( layerMask & track->GetLayerSet() ) == 0 )
             continue;
 
         // the minimum distance = clearance plus half the reference track

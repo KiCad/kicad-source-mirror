@@ -95,7 +95,7 @@ public:
         m_Text.SetSize( aTextSize );
     }
 
-    void SetLayer( LAYER_NUM aLayer );
+    void SetLayer( LAYER_ID aLayer );
 
     void SetShape( int aShape )         { m_Shape = aShape; }
     int GetShape() const { return m_Shape; }

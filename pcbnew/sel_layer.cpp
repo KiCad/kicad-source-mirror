@@ -42,35 +42,36 @@
  */
 class PCB_LAYER_SELECTOR: public LAYER_SELECTOR
 {
-    BOARD * m_brd;
-
 public:
-    PCB_LAYER_SELECTOR( BOARD* aBrd ):LAYER_SELECTOR()
+    PCB_LAYER_SELECTOR( BOARD* aBrd ) :
+        LAYER_SELECTOR()
     {
         m_brd = aBrd;
     }
 
 protected:
+    BOARD*  m_brd;
+
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
     bool IsLayerEnabled( LAYER_NUM aLayer ) const
     {
-        return m_brd->IsLayerEnabled( aLayer );
+        return m_brd->IsLayerEnabled( LAYER_ID( aLayer ) );
     }
 
     // Returns a color index from the layer id
     // Virtual function
     EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const
     {
-        return m_brd->GetLayerColor( aLayer );
+        return m_brd->GetLayerColor( LAYER_ID( aLayer ) );
     }
 
     // Returns the name of the layer id
-    // Virtual function
-    wxString GetLayerName( LAYER_NUM aLayer ) const
+    wxString GetLayerName( LAYER_NUM aLayer ) const      // overrides LAYER_SELECTOR
     {
-        return m_brd->GetLayerName( aLayer );
+        return m_brd->GetLayerName( LAYER_ID( aLayer ) );
     }
 };
+
 
 /*
  * This class display a pcb layers list in a dialog,
@@ -79,74 +80,69 @@ protected:
 class PCB_ONE_LAYER_SELECTOR : public PCB_LAYER_SELECTOR,
                                public DIALOG_LAYER_SELECTION_BASE
 {
-    LAYER_NUM m_layerSelected;
-    LAYER_MSK m_notAllowedLayersMask;
-    std::vector<LAYER_NUM> m_layersIdLeftColumn;
-    std::vector<LAYER_NUM> m_layersIdRightColumn;
+    LAYER_ID    m_layerSelected;
+    LSET        m_notAllowedLayersMask;
+
+    std::vector<LAYER_ID> m_layersIdLeftColumn;
+    std::vector<LAYER_ID> m_layersIdRightColumn;
 
 public:
     PCB_ONE_LAYER_SELECTOR( wxWindow* aParent, BOARD * aBrd,
-                        LAYER_NUM aDefaultLayer,
-                        LAYER_MSK aNotAllowedLayersMask );
+                        LAYER_ID aDefaultLayer,
+                        LSET aNotAllowedLayersMask );
 
-    LAYER_NUM GetLayerSelection() { return m_layerSelected; }
+    LAYER_NUM GetLayerSelection()   { return m_layerSelected; }
 
 private:
     // Event handlers
     void OnLeftGridCellClick( wxGridEvent& event );
     void OnRightGridCellClick( wxGridEvent& event );
 
-    void BuildList();
+    void buildList();
 };
 
+
 PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( wxWindow* aParent,
-                    BOARD * aBrd,
-                    LAYER_NUM aDefaultLayer,
-                    LAYER_MSK aNotAllowedLayersMask )
+        BOARD* aBrd, LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask )
     : PCB_LAYER_SELECTOR( aBrd ), DIALOG_LAYER_SELECTION_BASE( aParent )
 {
-    m_layerSelected = (int) aDefaultLayer;
+    m_layerSelected = aDefaultLayer;
     m_notAllowedLayersMask = aNotAllowedLayersMask;
-    BuildList();
+    buildList();
     Layout();
-    GetSizer()->SetSizeHints(this);
+    GetSizer()->SetSizeHints( this );
     SetFocus();
 }
 
+
 // Build the layers list
 // Column position by function:
-#define SELECT_COLNUM 0
-#define COLOR_COLNUM 1
-#define LAYERNAME_COLNUM 2
-static DECLARE_LAYERS_ORDER_LIST( layertranscode );
+#define SELECT_COLNUM       0
+#define COLOR_COLNUM        1
+#define LAYERNAME_COLNUM    2
 
-void PCB_ONE_LAYER_SELECTOR::BuildList()
+void PCB_ONE_LAYER_SELECTOR::buildList()
 {
     // Hide layerid column which is used only to know the layer id
     // not to be shown in dialogs
     m_leftGridLayers->SetColSize( COLOR_COLNUM, 20 );
     m_rightGridLayers->SetColSize( COLOR_COLNUM, 20 );
 
-    int left_row = 0;
-    int right_row = 0;
-    wxString   layername;
-    for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
+    int         left_row = 0;
+    int         right_row = 0;
+    wxString    layername;
+
+    for( LSEQ ui_seq = m_brd->GetEnabledLayers().UIOrder();  ui_seq;  ++ui_seq )
     {
-        LAYER_NUM  layerid = i;
+        LAYER_ID  layerid = *ui_seq;
 
-        if( m_layerorder )
-            layerid = layertranscode[i];
-
-        if( ! IsLayerEnabled( layerid ) )
-            continue;
-
-        if( (m_notAllowedLayersMask & GetLayerMask( layerid )) != 0 )
+        if( m_notAllowedLayersMask[layerid] )
             continue;
 
         wxColour color = MakeColour( GetLayerColor( layerid ) );
         layername = GetLayerName( layerid );
 
-        if( layerid <= LAST_COPPER_LAYER )
+        if( IsCopperLayer( layerid ) )
         {
             if( left_row )
                 m_leftGridLayers->AppendRows( 1 );
@@ -205,12 +201,14 @@ void PCB_ONE_LAYER_SELECTOR::BuildList()
     m_rightGridLayers->AutoSizeColumn(SELECT_COLNUM);
 }
 
+
 void PCB_ONE_LAYER_SELECTOR::OnLeftGridCellClick( wxGridEvent& event )
 {
     m_layerSelected = m_layersIdLeftColumn[ event.GetRow() ];
     m_leftGridLayers->SetGridCursor( event.GetRow(), LAYERNAME_COLNUM );
     EndModal( 1 );
 }
+
 
 void PCB_ONE_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
 {
@@ -219,18 +217,12 @@ void PCB_ONE_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
     EndModal( 2 );
 }
 
-/** Install the dialog box for layer selection
- * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
- * @param aNotAllowedLayers = a layer mask for not allowed layers
- *                            (= 0 to show all layers in use)
- * @return the selected layer id
- */
-LAYER_NUM PCB_BASE_FRAME::SelectLayer( LAYER_NUM  aDefaultLayer,
-                                       LAYER_MSK aNotAllowedLayersMask,
-                                       wxPoint aDlgPosition )
+
+LAYER_ID PCB_BASE_FRAME::SelectLayer( LAYER_ID aDefaultLayer,
+        LSET aNotAllowedLayersMask, wxPoint aDlgPosition )
 {
-    PCB_ONE_LAYER_SELECTOR dlg( this, GetBoard(),
-                                aDefaultLayer, aNotAllowedLayersMask );
+    PCB_ONE_LAYER_SELECTOR dlg( this, GetBoard(), aDefaultLayer, aNotAllowedLayersMask );
+
     if( aDlgPosition != wxDefaultPosition )
     {
         wxSize dlgSize = dlg.GetSize();
@@ -238,31 +230,35 @@ LAYER_NUM PCB_BASE_FRAME::SelectLayer( LAYER_NUM  aDefaultLayer,
         aDlgPosition.y -= dlgSize.y/2;
         dlg.SetPosition( aDlgPosition );
     }
+
     dlg.ShowModal();
-    LAYER_NUM layer = dlg.GetLayerSelection();
+
+    LAYER_ID layer = (LAYER_ID) dlg.GetLayerSelection();
     return layer;
 }
 
 
-/*
- * This class display a double pcb copper layers list in a dialog,
+/**
+ * Class SELECT_COPPER_LAYERS_PAIR_DIALOG
+ * displays a double pcb copper layers list in a dialog,
  * to select a layer pair from these lists
  */
 class SELECT_COPPER_LAYERS_PAIR_DIALOG: public PCB_LAYER_SELECTOR,
                                         public DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 {
 private:
-    LAYER_NUM m_frontLayer;
-    LAYER_NUM m_backLayer;
-    int m_leftRowSelected;
-    int m_rightRowSelected;
-    std::vector<LAYER_NUM> m_layersId;
+    LAYER_ID    m_frontLayer;
+    LAYER_ID    m_backLayer;
+    int         m_leftRowSelected;
+    int         m_rightRowSelected;
+
+    std::vector<LAYER_ID> m_layersId;
 
 public:
-    SELECT_COPPER_LAYERS_PAIR_DIALOG( wxWindow* aParent, BOARD * aPcb,
-                                      LAYER_NUM aFrontLayer, LAYER_NUM aBackLayer );
+    SELECT_COPPER_LAYERS_PAIR_DIALOG( wxWindow* aParent, BOARD* aPcb,
+                                      LAYER_ID aFrontLayer, LAYER_ID aBackLayer );
 
-    void GetLayerPair( LAYER_NUM& aFrontLayer, LAYER_NUM& aBackLayer )
+    void GetLayerPair( LAYER_ID& aFrontLayer, LAYER_ID& aBackLayer )
     {
         aFrontLayer = m_frontLayer;
         aBackLayer = m_backLayer;
@@ -282,16 +278,15 @@ private:
         EndModal( wxID_CANCEL );
     }
 
-    void BuildList();
+    void buildList();
     void SetGridCursor( wxGrid* aGrid, int aRow, bool aEnable );
 };
 
-/* Display a list of two copper layers to choose a pair of copper layers
- * the layer pair is used to fast switch between copper layers when placing vias
- */
+
 void PCB_BASE_FRAME::SelectCopperLayerPair()
 {
     PCB_SCREEN* screen = GetScreen();
+
     SELECT_COPPER_LAYERS_PAIR_DIALOG dlg( this, GetBoard(),
                                          screen->m_Route_Layer_TOP,
                                          screen->m_Route_Layer_BOTTOM );
@@ -310,9 +305,9 @@ void PCB_BASE_FRAME::SelectCopperLayerPair()
     m_canvas->MoveCursorToCrossHair();
 }
 
-SELECT_COPPER_LAYERS_PAIR_DIALOG::
-    SELECT_COPPER_LAYERS_PAIR_DIALOG( wxWindow* aParent, BOARD * aPcb,
-                                      LAYER_NUM aFrontLayer, LAYER_NUM aBackLayer) :
+
+SELECT_COPPER_LAYERS_PAIR_DIALOG::SELECT_COPPER_LAYERS_PAIR_DIALOG(
+        wxWindow* aParent, BOARD * aPcb, LAYER_ID aFrontLayer, LAYER_ID aBackLayer) :
     PCB_LAYER_SELECTOR( aPcb ),
     DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE( aParent )
 {
@@ -320,45 +315,39 @@ SELECT_COPPER_LAYERS_PAIR_DIALOG::
     m_backLayer = aBackLayer;
     m_leftRowSelected = 0;
     m_rightRowSelected = 0;
-    BuildList();
+    buildList();
     SetFocus();
     GetSizer()->SetSizeHints( this );
     Center();
 }
 
-void SELECT_COPPER_LAYERS_PAIR_DIALOG::BuildList()
+
+void SELECT_COPPER_LAYERS_PAIR_DIALOG::buildList()
 {
     m_leftGridLayers->SetColSize( COLOR_COLNUM, 20 );
     m_rightGridLayers->SetColSize( COLOR_COLNUM, 20 );
 
     // Select a not show cell, to avoid a wrong cell selection for user
 
-    int row = 0;
-    wxString   layername;
+    int         row = 0;
+    wxString    layername;
 
-    for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
+    for( LSEQ ui_seq = m_brd->GetEnabledLayers().UIOrder();  ui_seq;  ++ui_seq )
     {
-        LAYER_NUM  layerid = i;
+        LAYER_ID  layerid = *ui_seq;
 
-        if( m_layerorder )
-            layerid = layertranscode[i];
-
-        if( ! IsLayerEnabled( layerid ) )
-            continue;
-
-        if( layerid > LAST_COPPER_LAYER )
-            continue;
+        if( !IsCopperLayer( layerid ) )
+            break;
 
         wxColour color = MakeColour( GetLayerColor( layerid ) );
+
         layername = GetLayerName( layerid );
 
         if( row )
             m_leftGridLayers->AppendRows( 1 );
 
-        m_leftGridLayers->SetCellBackgroundColour ( row, COLOR_COLNUM,
-                                                    color );
-        m_leftGridLayers->SetCellValue( row, LAYERNAME_COLNUM,
-                                        layername );
+        m_leftGridLayers->SetCellBackgroundColour( row, COLOR_COLNUM, color );
+        m_leftGridLayers->SetCellValue( row, LAYERNAME_COLNUM, layername );
         m_layersId.push_back( layerid );
 
         if( m_frontLayer == layerid )
@@ -389,12 +378,13 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::BuildList()
     m_rightGridLayers->AutoSizeColumn(SELECT_COLNUM);
 }
 
+
 void SELECT_COPPER_LAYERS_PAIR_DIALOG::SetGridCursor( wxGrid* aGrid, int aRow,
                                                       bool aEnable )
 {
     if( aEnable )
     {
-        LAYER_NUM  layerid = m_layersId[aRow];
+        LAYER_ID  layerid = m_layersId[aRow];
         wxColour color = MakeColour( GetLayerColor( layerid ) );
         aGrid->SetCellValue( aRow, SELECT_COLNUM, wxT("X") );
         aGrid->SetCellBackgroundColour( aRow, SELECT_COLNUM, color );
@@ -409,10 +399,11 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::SetGridCursor( wxGrid* aGrid, int aRow,
     }
 }
 
+
 void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnLeftGridCellClick( wxGridEvent& event )
 {
-    int row = event.GetRow();
-    LAYER_NUM layer = m_layersId[row];
+    int         row = event.GetRow();
+    LAYER_ID    layer = m_layersId[row];
 
     if( m_frontLayer == layer )
         return;
@@ -423,12 +414,13 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnLeftGridCellClick( wxGridEvent& event )
     SetGridCursor( m_leftGridLayers, m_leftRowSelected, true );
 }
 
+
 void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnRightGridCellClick( wxGridEvent& event )
 {
-    int row = event.GetRow();
-    LAYER_NUM layer = m_layersId[row];
+    int         row = event.GetRow();
+    LAYER_ID    layer = m_layersId[row];
 
-    if(  m_backLayer == layer )
+    if( m_backLayer == layer )
         return;
 
     SetGridCursor( m_rightGridLayers, m_rightRowSelected, false );
