@@ -183,7 +183,7 @@ public:
      */
     bool IsOnCopperLayer() const
     {
-        return  LSET::AllNonCuMask()[GetLayer()];
+        return  IsCopperLayer( GetLayer() );
     }
 
     /// How to fill areas: 0 = use filled polygons, 1 => fill with segments.
