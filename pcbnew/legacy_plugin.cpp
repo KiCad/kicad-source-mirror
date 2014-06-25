@@ -98,7 +98,7 @@ typedef LEGACY_PLUGIN::BIU      BIU;
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
 
 
-typedef unsigned                LAYER_MASK;
+typedef unsigned                LEG_MASK;
 
 #define FIRST_LAYER             0
 #define FIRST_COPPER_LAYER      0
@@ -255,7 +255,7 @@ static inline char* ReadLine( LINE_READER* rdr, const char* caller )
 
 /* corrected old junk, element 14 was wrong.  can delete.
 // Look up Table for conversion copper layer count -> general copper layer mask:
-static const LAYER_MASK all_cu_mask[] = {
+static const LEG_MASK all_cu_mask[] = {
     0x0001, 0x8001, 0x8003, 0x8007,
     0x800F, 0x801F, 0x803F, 0x807F,
     0x80FF, 0x81FF, 0x83FF, 0x87FF,
@@ -313,7 +313,7 @@ static EDA_TEXT_VJUSTIFY_T vertJustify( const char* vertical )
 
 
 /// Count the number of set layers in the mask
-inline int layerMaskCountSet( LAYER_MASK aMask )
+inline int layerMaskCountSet( LEG_MASK aMask )
 {
     int count = 0;
 
@@ -338,6 +338,8 @@ LAYER_ID LEGACY_PLUGIN::leg_layer2new( int cu_count, LAYER_NUM aLayerNum )
     {
         if( old == LAYER_N_FRONT )
             newid = F_Cu;
+        else if( old == LAYER_N_BACK )
+            newid = B_Cu;
         else
         {
             newid = cu_count - 1 - old;
@@ -375,6 +377,13 @@ LAYER_ID LEGACY_PLUGIN::leg_layer2new( int cu_count, LAYER_NUM aLayerNum )
 LSET LEGACY_PLUGIN::leg_mask2new( int cu_count, unsigned aMask )
 {
     LSET    ret;
+
+    if( ( aMask & ALL_CU_LAYERS ) == ALL_CU_LAYERS )
+    {
+        ret = LSET::AllCuMask();
+
+        aMask &= ~ALL_CU_LAYERS;
+    }
 
     for( int i=0;  i<NB_PCB_LAYERS && aMask;  ++i, aMask >>= 1 )
     {
@@ -601,6 +610,7 @@ void LEGACY_PLUGIN::loadGENERAL()
 {
     char*   line;
     char*   saveptr;
+    bool    saw_LayerCount = false;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -617,22 +627,42 @@ void LEGACY_PLUGIN::loadGENERAL()
             }
         }
 
+        else if( TESTLINE( "LayerCount" ) )
+        {
+            int tmp = intParse( line + SZ( "LayerCount" ) );
+            m_board->SetCopperLayerCount( tmp );
+
+            // This has to be set early so that leg_layer2new() works OK, and
+            // that means before parsing "EnabledLayers" and "VisibleLayers".
+            m_cu_count = tmp;
+
+            saw_LayerCount = true;
+        }
+
         else if( TESTLINE( "EnabledLayers" ) )
         {
-            LAYER_MASK enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
+            if( !saw_LayerCount )
+                THROW_IO_ERROR( "Missing '$GENERAL's LayerCount" );
+
+            LEG_MASK enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
 
             LSET new_mask = leg_mask2new( m_cu_count, enabledLayers );
 
-            // layer usage
+            //DBG( printf( "EnabledLayers: %s\n", new_mask.FmtHex().c_str() );)
+
             m_board->SetEnabledLayers( new_mask );
 
             // layer visibility equals layer usage, unless overridden later via "VisibleLayers"
+            // Must call SetEnabledLayers() before calling SetVisibleLayers().
             m_board->SetVisibleLayers( new_mask );
         }
 
         else if( TESTLINE( "VisibleLayers" ) )
         {
-            LAYER_MASK visibleLayers = hexParse( line + SZ( "VisibleLayers" ) );
+            if( !saw_LayerCount )
+                THROW_IO_ERROR( "Missing '$GENERAL's LayerCount" );
+
+            LEG_MASK visibleLayers = hexParse( line + SZ( "VisibleLayers" ) );
 
             LSET new_mask = leg_mask2new( m_cu_count, visibleLayers );
 
@@ -641,11 +671,16 @@ void LEGACY_PLUGIN::loadGENERAL()
 
         else if( TESTLINE( "Ly" ) )    // Old format for Layer count
         {
-            LAYER_MASK layer_mask  = hexParse( line + SZ( "Ly" ) );
+            if( !saw_LayerCount )
+            {
+                LEG_MASK layer_mask  = hexParse( line + SZ( "Ly" ) );
 
-            m_cu_count = layerMaskCountSet( layer_mask & ALL_CU_LAYERS );
+                m_cu_count = layerMaskCountSet( layer_mask & ALL_CU_LAYERS );
 
-            m_board->SetCopperLayerCount( m_cu_count );
+                m_board->SetCopperLayerCount( m_cu_count );
+
+                saw_LayerCount = true;
+            }
         }
 
         else if( TESTLINE( "BoardThickness" ) )
@@ -867,18 +902,38 @@ void LEGACY_PLUGIN::loadSETUP()
             bds.m_AuxOrigin = wxPoint( gx, gy );
         }
 
+        /* Done from $General above's "LayerCount"
         else if( TESTLINE( "Layers" ) )
         {
             int tmp = intParse( line + SZ( "Layers" ) );
             m_board->SetCopperLayerCount( tmp );
+
+            m_cu_count = tmp;
         }
+        */
 
         else if( TESTSUBSTR( "Layer[" ) )
         {
             // eg: "Layer[n]  <a_Layer_name_with_no_spaces> <LAYER_T>"
 
             LAYER_NUM   layer_num = layerParse( line + SZ( "Layer[" ), &data );
-            LAYER_ID    layer_id  = leg_layer2new( m_cu_count,  layer_num );
+            LAYER_ID    layer_id  = leg_layer2new( m_cu_count, layer_num );
+
+            /*
+            switch( layer_num )
+            {
+            case LAYER_N_BACK:
+                layer_id = B_Cu;
+                break;
+
+            case LAYER_N_FRONT:
+                layer_id = F_Cu;
+                break;
+
+            default:
+                layer_id = LAYER_ID( layer_num );
+            }
+            */
 
             data = strtok_r( (char*) data+1, delims, &saveptr );    // +1 for ']'
             if( data )
@@ -1496,7 +1551,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             data = strtok_r( NULL, delims, &saveptr );  // skip BufCar
             data = strtok_r( NULL, delims, &saveptr );
 
-            LAYER_MASK layer_mask = hexParse( data );
+            LEG_MASK layer_mask = hexParse( data );
 
             pad->SetLayerSet( leg_mask2new( m_cu_count, layer_mask ) );
             pad->SetAttribute( attribute );

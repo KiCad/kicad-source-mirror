@@ -106,15 +106,13 @@ struct LAYER
     }
     */
 
-    /** The name of the layer, there should be no spaces in this name. */
-    UTF8    m_name;
+    wxString    m_name;         ///< The name of the layer, there should be no spaces in this name.
 
-    /** The type of the layer */
-    LAYER_T m_type;
+    LAYER_T     m_type;         ///< The type of the layer
 
-    bool    m_visible;
+    bool        m_visible;
 
-    int     m_number;
+    int         m_number;
 
     /**
      * Function ShowType

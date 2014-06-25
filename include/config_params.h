@@ -89,13 +89,14 @@ enum paramcfg_id {
 class PARAM_CFG_BASE
 {
 public:
-    const wxChar* m_Ident;  ///<  Keyword in config data
-    paramcfg_id   m_Type;   ///<  Type of parameter
-    const wxChar* m_Group;  ///<  Group name (this is like a path in the config data)
-    bool          m_Setup;  ///<  Install or Project based parameter, true == install
+    wxString    m_Ident;  ///<  Keyword in config data
+    paramcfg_id m_Type;   ///<  Type of parameter
+    wxString    m_Group;  ///<  Group name (this is like a path in the config data)
+    bool        m_Setup;  ///<  Install or Project based parameter, true == install
 
 public:
-    PARAM_CFG_BASE( const wxChar* ident, const paramcfg_id type, const wxChar* group = NULL );
+    PARAM_CFG_BASE( const wxString& ident, const paramcfg_id type,
+                const wxChar* group = NULL );
     virtual ~PARAM_CFG_BASE() {}
 
     /**
@@ -126,12 +127,12 @@ public:
     int  m_Default;     ///<  The default value of the parameter
 
 public:
-    PARAM_CFG_INT( const wxChar* ident, int* ptparam,
+    PARAM_CFG_INT( const wxString& ident, int* ptparam,
                        int default_val = 0,
                        int min = std::numeric_limits<int>::min(),
                        int max = std::numeric_limits<int>::max(),
                        const wxChar* group = NULL );
-    PARAM_CFG_INT( bool Insetup, const wxChar* ident, int* ptparam,
+    PARAM_CFG_INT( bool Insetup, const wxString& ident, int* ptparam,
                    int default_val = 0,
                    int min = std::numeric_limits<int>::min(),
                    int max = std::numeric_limits<int>::max(),
@@ -154,13 +155,13 @@ public:
     double  m_BIU_to_cfgunit;   ///<  the factor to convert the saved value in internal value
 
 public:
-    PARAM_CFG_INT_WITH_SCALE( const wxChar* ident, int* ptparam,
+    PARAM_CFG_INT_WITH_SCALE( const wxString& ident, int* ptparam,
                        int default_val = 0,
                        int min = std::numeric_limits<int>::min(),
                        int max = std::numeric_limits<int>::max(),
                        const wxChar* group = NULL,
                        double aBiu2cfgunit = 1.0);
-    PARAM_CFG_INT_WITH_SCALE( bool Insetup, const wxChar* ident, int* ptparam,
+    PARAM_CFG_INT_WITH_SCALE( bool Insetup, const wxString& ident, int* ptparam,
                    int default_val = 0,
                    int min = std::numeric_limits<int>::min(),
                    int max = std::numeric_limits<int>::max(),
@@ -183,9 +184,9 @@ public:
     EDA_COLOR_T  m_Default;     ///<  The default value of the parameter
 
 public:
-    PARAM_CFG_SETCOLOR( const wxChar* ident, EDA_COLOR_T* ptparam,
+    PARAM_CFG_SETCOLOR( const wxString& ident, EDA_COLOR_T* ptparam,
                         EDA_COLOR_T default_val, const wxChar* group = NULL );
-    PARAM_CFG_SETCOLOR( bool Insetup, const wxChar* ident, EDA_COLOR_T* ptparam,
+    PARAM_CFG_SETCOLOR( bool Insetup, const wxString& ident, EDA_COLOR_T* ptparam,
                         EDA_COLOR_T default_val, const wxChar* group = NULL );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const;
@@ -205,10 +206,10 @@ public:
     double  m_Min, m_Max;   ///<  Minimum and maximum values of the param type
 
 public:
-    PARAM_CFG_DOUBLE( const wxChar* ident, double* ptparam,
+    PARAM_CFG_DOUBLE( const wxString& ident, double* ptparam,
                           double default_val = 0.0, double min = 0.0, double max = 10000.0,
                           const wxChar* group = NULL );
-    PARAM_CFG_DOUBLE( bool Insetup, const wxChar* ident, double* ptparam,
+    PARAM_CFG_DOUBLE( bool Insetup, const wxString& ident, double* ptparam,
                       double default_val = 0.0, double min = 0.0, double max = 10000.0,
                       const wxChar* group = NULL );
 
@@ -228,9 +229,9 @@ public:
     int   m_Default;        ///<  The default value of the parameter
 
 public:
-    PARAM_CFG_BOOL( const wxChar* ident, bool* ptparam,
+    PARAM_CFG_BOOL( const wxString& ident, bool* ptparam,
                         int default_val = false, const wxChar* group = NULL );
-    PARAM_CFG_BOOL( bool Insetup, const wxChar* ident, bool* ptparam,
+    PARAM_CFG_BOOL( bool Insetup, const wxString& ident, bool* ptparam,
                     int default_val = false, const wxChar* group = NULL );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const;
@@ -242,19 +243,20 @@ public:
  * Configuration parameter - wxString Class
  *
  */
-class PARAM_CFG_WXSTRING     : public PARAM_CFG_BASE
+class PARAM_CFG_WXSTRING : public PARAM_CFG_BASE
 {
 public:
     wxString* m_Pt_param;       ///<  Pointer to the parameter value
     wxString  m_default;        ///<  The default value of the parameter
 
 public:
-    PARAM_CFG_WXSTRING( const wxChar* ident, wxString* ptparam, const wxChar* group = NULL );
+    PARAM_CFG_WXSTRING( const wxString& ident, wxString* ptparam, const wxChar* group = NULL );
+
     PARAM_CFG_WXSTRING( bool            Insetup,
-                        const wxChar*   ident,
+                        const wxString& ident,
                         wxString*       ptparam,
                         const wxString& default_val = wxEmptyString,
-                        const wxChar*   group = NULL );
+                        const wxChar* group = NULL );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const;
     virtual void SaveParam( wxConfigBase* aConfig ) const;
@@ -273,7 +275,8 @@ public:
     wxString* m_Pt_param;    ///<  Pointer to the parameter value
 
 public:
-    PARAM_CFG_FILENAME( const wxChar* ident, wxString* ptparam, const wxChar* group = NULL );
+    PARAM_CFG_FILENAME( const wxString& ident, wxString* ptparam,
+            const wxChar* group = NULL );
     virtual void ReadParam( wxConfigBase* aConfig ) const;
     virtual void SaveParam( wxConfigBase* aConfig ) const;
 };

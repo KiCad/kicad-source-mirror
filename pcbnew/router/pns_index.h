@@ -137,7 +137,7 @@ public:
     ITEM_SET::iterator end() { return m_allItems.end(); }
 
 private:
-    static const int    MaxSubIndices   = 64;
+    static const int    MaxSubIndices   = 128;
     static const int    SI_Multilayer   = 2;
     static const int    SI_SegDiagonal  = 0;
     static const int    SI_SegStraight  = 1;
