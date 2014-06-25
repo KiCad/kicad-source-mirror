@@ -317,7 +317,7 @@ inline int layerMaskCountSet( LEG_MASK aMask )
 {
     int count = 0;
 
-    for( int i = 0; i < NB_PCB_LAYERS && aMask; ++i, aMask >>= 1 )
+    for( int i = 0;  aMask;  ++i, aMask >>= 1 )
     {
         if( aMask & 1 )
             ++count;
@@ -334,7 +334,7 @@ LAYER_ID LEGACY_PLUGIN::leg_layer2new( int cu_count, LAYER_NUM aLayerNum )
 
     // this is a speed critical function, be careful.
 
-    if( old <= LAYER_N_FRONT )
+    if( unsigned( old ) <= unsigned( LAYER_N_FRONT ) )
     {
         if( old == LAYER_N_FRONT )
             newid = F_Cu;
@@ -385,7 +385,7 @@ LSET LEGACY_PLUGIN::leg_mask2new( int cu_count, unsigned aMask )
         aMask &= ~ALL_CU_LAYERS;
     }
 
-    for( int i=0;  i<NB_PCB_LAYERS && aMask;  ++i, aMask >>= 1 )
+    for( int i=0;  aMask;  ++i, aMask >>= 1 )
     {
         if( aMask & 1 )
             ret.set( leg_layer2new( cu_count, i ) );

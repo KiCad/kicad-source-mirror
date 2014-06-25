@@ -1,8 +1,33 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2014 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
+
+#include <stdarg.h>
+#include <assert.h>
 
 #include <layers_id_colors_and_visibility.h>
 #include <class_board.h>
-
 
 
 LSET::LSET( const LAYER_ID* aArray, unsigned aCount )
@@ -11,8 +36,6 @@ LSET::LSET( const LAYER_ID* aArray, unsigned aCount )
         set( aArray[i] );
 }
 
-#include <stdarg.h>
-#include <assert.h>
 
 LSET::LSET( size_t aIdCount, ... )
 {
@@ -224,7 +247,7 @@ std::string LSET::FmtHex() const
 
     for( int nibble=0;  nibble<nibble_count;  ++nibble )
     {
-        int ndx = 0;
+        unsigned ndx = 0;
 
         // test 4 consecutive bits and set ndx to 0-15:
         for( int nibble_bit=0;  nibble_bit<4;  ++nibble_bit )
@@ -236,7 +259,7 @@ std::string LSET::FmtHex() const
         if( nibble && !( nibble % 8 ) )
             ret += '_';
 
-        assert( unsigned( ndx ) < DIM( hex ) );
+        assert( ndx < DIM( hex ) );
 
         ret += hex[ndx];
     }
@@ -270,6 +293,8 @@ int LSET::ParseHex( const char* aStart, int aCount )
             nibble = cc - '0';
         else if( cc >= 'a' && cc <= 'f' )
             nibble = cc - 'a' + 10;
+        else if( cc >= 'A' && cc <= 'F' )
+            nibble = cc - 'A' + 10;
         else
             break;
 
@@ -300,7 +325,7 @@ LSEQ LSET::Seq( const LAYER_ID* aWishListSequence, unsigned aCount ) const
 {
     LSEQ ret;
 
-#if defined(DEBUG)
+#if defined(DEBUG) && 0
     LSET    dup_detector;
 
     for( unsigned i=0; i<aCount;  ++i )
@@ -594,30 +619,6 @@ LSET LSET::BackMask()
 }
 
 
-#if 0
-// layers order in dialogs (plot, print and toolbars)
-// in same order than in setup layers dialog
-// (Front or Top to Back or Bottom)
-#define DECLARE_LAYERS_ORDER_LIST(list) const LAYER_ID list[] = {\
-    F_Cu,\
-    LAYER_N_15, LAYER_N_14, LAYER_N_13, LAYER_N_12,\
-    LAYER_N_11, LAYER_N_10, LAYER_N_9, LAYER_N_8,\
-    LAYER_N_7, LAYER_N_6, LAYER_N_5, LAYER_N_4,\
-    LAYER_N_3, LAYER_N_2,\
-    B_Cu,\
-    F_Adhes , B_Adhes,\
-    F_Paste, B_Paste,\
-    F_SilkS, B_SilkS,\
-    F_Mask, B_Mask,\
-    Dwgs_User,\
-    Cmts_User,\
-    Eco1_User, Eco2_User,\
-    Edge_Cuts,\
-    UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31\
-};
-#endif
-
-
 LSEQ LSET::UIOrder() const
 {
     LAYER_ID order[Margin+1];
@@ -631,4 +632,3 @@ LSEQ LSET::UIOrder() const
 
     return Seq( order, DIM( order ) );
 }
-
