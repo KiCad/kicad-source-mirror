@@ -75,7 +75,8 @@ void CONNECTIONS::SearchConnectionsPadsToIntersectingPads()
 
     for( unsigned ii = 0; ii < m_sortedPads.size(); ii++ )
     {
-        D_PAD * pad = m_sortedPads[ii];
+        D_PAD* pad = m_sortedPads[ii];
+
         pad->m_PadsConnected.clear();
         candidates.clear();
 
@@ -84,12 +85,14 @@ void CONNECTIONS::SearchConnectionsPadsToIntersectingPads()
         // add pads to pad.m_PadsConnected, if they are connected
         for( unsigned jj = 0; jj < candidates.size(); jj++ )
         {
-            CONNECTED_POINT * item = candidates[jj];
-            D_PAD * candidate_pad = item->GetPad();
+            CONNECTED_POINT* item = candidates[jj];
+
+            D_PAD* candidate_pad = item->GetPad();
+
             if( pad == candidate_pad )
                 continue;
 
-            if( (pad->GetLayerSet() & candidate_pad->GetLayerSet()) == 0 )
+            if( !( pad->GetLayerSet() & candidate_pad->GetLayerSet() ).any() )
                 continue;
             if( pad->HitTest( item->GetPoint() ) )
             {
@@ -122,7 +125,7 @@ void CONNECTIONS::SearchTracksConnectedToPads( bool add_to_padlist, bool add_to_
         {
             CONNECTED_POINT* cp_item = candidates[jj];
 
-            if( (pad->GetLayerSet() & cp_item->GetTrack()->GetLayerSet()) == 0 )
+            if( !( pad->GetLayerSet() & cp_item->GetTrack()->GetLayerSet() ).any() )
                 continue;
 
             if( pad->HitTest( cp_item->GetPoint() ) )
@@ -339,7 +342,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
         {
             TRACK * ctrack = tracks_candidates[ii]->GetTrack();
 
-            if( ( ctrack->GetLayerSet() & layerMask ) == 0 )
+            if( !( ctrack->GetLayerSet() & layerMask ).any() )
                 continue;
 
             if( ctrack == aTrack )

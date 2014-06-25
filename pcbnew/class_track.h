@@ -281,7 +281,7 @@ public:
         return wxT( "TRACK" );
     }
 
-     /**
+    /**
      * Function GetClearance
      * returns the clearance in internal units.  If \a aItem is not NULL then the
      * returned clearance is the greater of this object's clearance and

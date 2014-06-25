@@ -2356,7 +2356,6 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         newTrack->SetEnd( wxPoint( end_x, end_y ) );
 
         newTrack->SetWidth( width );
-        newTrack->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
 
         if( makeType == PCB_VIA_T )     // Ensure layers are OK when possible:
         {
@@ -2370,6 +2369,17 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
             if( via->GetViaType() == VIA_THROUGH )
                 via->SetLayerPair( F_Cu, B_Cu );
+            else
+            {
+                LAYER_ID  back  = leg_layer2new( m_cu_count, (layer_num >> 4) & 0xf );
+                LAYER_ID  front = leg_layer2new( m_cu_count, layer_num & 0xf );
+
+                via->SetLayerPair( front, back );
+            }
+        }
+        else
+        {
+            newTrack->SetLayer( leg_layer2new( m_cu_count, layer_num ) );
         }
 
         newTrack->SetNetCode( getNetCode( net_code ) );

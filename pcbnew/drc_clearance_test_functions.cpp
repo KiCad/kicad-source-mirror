@@ -354,7 +354,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             continue;
 
         // No problem if segment are on different layers :
-        if( ( layerMask & track->GetLayerSet() ) == 0 )
+        if( !( layerMask & track->GetLayerSet() ).any() )
             continue;
 
         // the minimum distance = clearance plus half the reference track

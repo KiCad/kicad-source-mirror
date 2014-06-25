@@ -398,6 +398,8 @@ LSET VIA::GetLayerSet() const
 
     LSET layermask;
 
+    wxASSERT( top_layer <= bottom_layer );
+
     // LAYER_IDs are numbered from front to back, this is top to bottom.
     for( LAYER_NUM id = top_layer;  id <= bottom_layer;  ++id )
     {
@@ -422,7 +424,7 @@ void VIA::SetLayerPair( LAYER_ID aTopLayer, LAYER_ID aBottomLayer )
         aBottomLayer = B_Cu;
     }
 
-    if( aBottomLayer > aTopLayer )
+    if( aBottomLayer < aTopLayer )
         EXCHG( aBottomLayer, aTopLayer );
 
     m_Layer = aTopLayer;
@@ -432,15 +434,15 @@ void VIA::SetLayerPair( LAYER_ID aTopLayer, LAYER_ID aBottomLayer )
 
 void VIA::LayerPair( LAYER_ID* top_layer, LAYER_ID* bottom_layer ) const
 {
-    LAYER_ID b_layer = B_Cu;
     LAYER_ID t_layer = F_Cu;
+    LAYER_ID b_layer = B_Cu;
 
     if( GetViaType() != VIA_THROUGH )
     {
         b_layer = m_BottomLayer;
         t_layer = m_Layer;
 
-        if( b_layer > t_layer )
+        if( b_layer < t_layer )
             EXCHG( b_layer, t_layer );
     }
 
@@ -615,6 +617,7 @@ void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
     }
 }
 
+
 void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                   const wxPoint& aOffset )
 {
@@ -678,6 +681,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     DrawShortNetname( panel, aDC, aDrawMode, color );
 }
+
 
 void SEGZONE::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                     const wxPoint& aOffset )

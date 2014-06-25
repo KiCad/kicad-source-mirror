@@ -345,7 +345,7 @@ void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LSET aLay
         if( track->GetNetCode() != aNetCode )   // not the same netcode: all candidates tested
             break;
 
-        if( ( aLayerMask & track->GetLayerSet() ) == 0 )
+        if( !( aLayerMask & track->GetLayerSet() ).any() )
             continue;                       // Cannot be connected, not on the same layer
 
         if( track->IsDragging() )
