@@ -47,7 +47,7 @@ void wxConfigSaveParams( wxConfigBase* aCfg,
 
     BOOST_FOREACH( const PARAM_CFG_BASE& param, aList )
     {
-        if( param.m_Group )
+        if( !!param.m_Group )
             aCfg->SetPath( param.m_Group );
         else
             aCfg->SetPath( aGroup );
@@ -57,7 +57,7 @@ void wxConfigSaveParams( wxConfigBase* aCfg,
 
         if( param.m_Type == PARAM_COMMAND_ERASE )       // Erase all data
         {
-            if( param.m_Ident )
+            if( !!param.m_Ident )
                 aCfg->DeleteGroup( param.m_Ident );
         }
         else
@@ -75,7 +75,7 @@ void wxConfigLoadParams( wxConfigBase* aCfg,
 
     BOOST_FOREACH( const PARAM_CFG_BASE& param, aList )
     {
-        if( param.m_Group )
+        if( !!param.m_Group )
             aCfg->SetPath( param.m_Group );
         else
             aCfg->SetPath( aGroup );
@@ -99,7 +99,7 @@ void wxConfigSaveSetups( wxConfigBase* aCfg, const PARAM_CFG_ARRAY& aList )
 
         if( param.m_Type == PARAM_COMMAND_ERASE )       // Erase all data
         {
-            if( param.m_Ident )
+            if( !!param.m_Ident )
                 aCfg->DeleteGroup( param.m_Ident );
         }
         else
@@ -137,7 +137,7 @@ void ConfigBaseWriteDouble( wxConfigBase* aConfig, const wxString& aKey, double 
 }
 
 
-PARAM_CFG_BASE::PARAM_CFG_BASE( const wxChar* ident, const paramcfg_id type,
+PARAM_CFG_BASE::PARAM_CFG_BASE( const wxString& ident, const paramcfg_id type,
                                 const wxChar* group )
 {
     m_Ident = ident;
@@ -147,7 +147,7 @@ PARAM_CFG_BASE::PARAM_CFG_BASE( const wxChar* ident, const paramcfg_id type,
 }
 
 
-PARAM_CFG_INT::PARAM_CFG_INT( const wxChar* ident, int* ptparam,
+PARAM_CFG_INT::PARAM_CFG_INT( const wxString& ident, int* ptparam,
                               int default_val, int min, int max,
                               const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_INT, group )
@@ -159,7 +159,7 @@ PARAM_CFG_INT::PARAM_CFG_INT( const wxChar* ident, int* ptparam,
 }
 
 
-PARAM_CFG_INT::PARAM_CFG_INT( bool Insetup, const wxChar* ident, int* ptparam,
+PARAM_CFG_INT::PARAM_CFG_INT( bool Insetup, const wxString& ident, int* ptparam,
                               int default_val, int min, int max,
                               const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_INT, group )
@@ -195,7 +195,7 @@ void PARAM_CFG_INT::SaveParam( wxConfigBase* aConfig ) const
 }
 
 
-PARAM_CFG_INT_WITH_SCALE::PARAM_CFG_INT_WITH_SCALE( const wxChar* ident, int* ptparam,
+PARAM_CFG_INT_WITH_SCALE::PARAM_CFG_INT_WITH_SCALE( const wxString& ident, int* ptparam,
                               int default_val, int min, int max,
                               const wxChar* group, double aBiu2cfgunit ) :
     PARAM_CFG_INT( ident, ptparam, default_val, min, max, group )
@@ -206,7 +206,7 @@ PARAM_CFG_INT_WITH_SCALE::PARAM_CFG_INT_WITH_SCALE( const wxChar* ident, int* pt
 
 
 PARAM_CFG_INT_WITH_SCALE::PARAM_CFG_INT_WITH_SCALE( bool Insetup,
-                              const wxChar* ident, int* ptparam,
+                              const wxString& ident, int* ptparam,
                               int default_val, int min, int max,
                               const wxChar* group, double aBiu2cfgunit ) :
     PARAM_CFG_INT( Insetup, ident, ptparam, default_val, min, max, group )
@@ -246,7 +246,7 @@ void PARAM_CFG_INT_WITH_SCALE::SaveParam( wxConfigBase* aConfig ) const
 }
 
 
-PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( const wxChar* ident, EDA_COLOR_T* ptparam,
+PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( const wxString& ident, EDA_COLOR_T* ptparam,
                                         EDA_COLOR_T default_val,
                                         const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_SETCOLOR, group )
@@ -257,7 +257,7 @@ PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( const wxChar* ident, EDA_COLOR_T* ptpara
 
 
 PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool          Insetup,
-                                        const wxChar* ident,
+                                        const wxString& ident,
                                         EDA_COLOR_T*  ptparam,
                                         EDA_COLOR_T   default_val,
                                         const wxChar* group ) :
@@ -291,7 +291,7 @@ void PARAM_CFG_SETCOLOR::SaveParam( wxConfigBase* aConfig ) const
 }
 
 
-PARAM_CFG_DOUBLE::PARAM_CFG_DOUBLE( const wxChar* ident, double* ptparam,
+PARAM_CFG_DOUBLE::PARAM_CFG_DOUBLE( const wxString& ident, double* ptparam,
                                     double default_val, double min, double max,
                                     const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_DOUBLE, group )
@@ -304,7 +304,7 @@ PARAM_CFG_DOUBLE::PARAM_CFG_DOUBLE( const wxChar* ident, double* ptparam,
 
 
 PARAM_CFG_DOUBLE::PARAM_CFG_DOUBLE( bool          Insetup,
-                                    const wxChar* ident,
+                                    const wxString& ident,
                                     double*       ptparam,
                                     double        default_val,
                                     double        min,
@@ -348,7 +348,7 @@ void PARAM_CFG_DOUBLE::SaveParam( wxConfigBase* aConfig ) const
 }
 
 
-PARAM_CFG_BOOL::PARAM_CFG_BOOL( const wxChar* ident, bool* ptparam,
+PARAM_CFG_BOOL::PARAM_CFG_BOOL( const wxString& ident, bool* ptparam,
                                 int default_val, const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_BOOL, group )
 {
@@ -358,7 +358,7 @@ PARAM_CFG_BOOL::PARAM_CFG_BOOL( const wxChar* ident, bool* ptparam,
 
 
 PARAM_CFG_BOOL::PARAM_CFG_BOOL( bool          Insetup,
-                                const wxChar* ident,
+                                const wxString& ident,
                                 bool*         ptparam,
                                 int           default_val,
                                 const wxChar* group ) :
@@ -390,7 +390,7 @@ void PARAM_CFG_BOOL::SaveParam( wxConfigBase* aConfig ) const
 }
 
 
-PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( const wxChar* ident,
+PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( const wxString& ident,
                                         wxString*     ptparam,
                                         const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_WXSTRING, group )
@@ -399,7 +399,7 @@ PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( const wxChar* ident,
 }
 
 
-PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxChar* ident,
+PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxString& ident,
                                         wxString* ptparam,
                                         const wxString& default_val,
                                         const wxChar* group ) :
@@ -407,7 +407,7 @@ PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxChar* ident,
 {
     m_Pt_param = ptparam;
     m_Setup    = Insetup;
-    m_default = default_val;
+    m_default  = default_val;
 }
 
 
@@ -429,7 +429,7 @@ void PARAM_CFG_WXSTRING::SaveParam( wxConfigBase* aConfig ) const
 }
 
 
-PARAM_CFG_FILENAME::PARAM_CFG_FILENAME( const wxChar* ident,
+PARAM_CFG_FILENAME::PARAM_CFG_FILENAME( const wxString& ident,
                                         wxString*     ptparam,
                                         const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_FILENAME, group )

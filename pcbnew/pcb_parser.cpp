@@ -743,7 +743,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
         {
             cu.push_back( layer );
 
-            DBG( printf( "cop m_visible:%s\n", cu.back().m_visible ? "true" : "false" );)
+            //DBG( printf( "cop m_visible:%s\n", cu.back().m_visible ? "true" : "false" );)
         }
         else    // all non-copper are fixed names, simply look up LAYER_ID.
         {
@@ -773,8 +773,10 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 
                     m_board->SetLayer( LAYER_ID( it->m_number ), *it );
 
-                    m_layerIndices[ it->m_name ] = LAYER_ID( it->m_number );
-                    m_layerMasks[   it->m_name ] = LSET( it->m_number );
+                    UTF8 name = it->m_name;
+
+                    m_layerIndices[ name ] = LAYER_ID( it->m_number );
+                    m_layerMasks[   name ] = LSET( it->m_number );
                 }
 
                 copperLayerCount = cu.size();
@@ -782,12 +784,12 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
                 cu.clear();     // this marks the list as "one time processed".
             }
 
-            LAYER_ID_MAP::const_iterator it = m_layerIndices.find( layer.m_name );
+            LAYER_ID_MAP::const_iterator it = m_layerIndices.find( UTF8( layer.m_name ) );
 
             if( it == m_layerIndices.end() )
             {
                 wxString error = wxString::Format(
-                    _( "Layer '%s' in file <%s> at line %d, is not in fixed layer hash" ),
+                    _( "Layer '%s' in file '%s' at line %d, is not in fixed layer hash" ),
                     GetChars( layer.m_name ),
                     GetChars( CurSource() ),
                     CurLineNumber(),
@@ -804,7 +806,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
             if( layer.m_visible )
                 visibleLayers.set( layer.m_number );
 
-            DBG( printf( "aux m_visible:%s\n", layer.m_visible ? "true" : "false" );)
+            //DBG( printf( "aux m_visible:%s\n", layer.m_visible ? "true" : "false" );)
 
             m_board->SetLayer( LAYER_ID( layer.m_number ), layer );
         }
