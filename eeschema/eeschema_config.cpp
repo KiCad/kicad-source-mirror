@@ -404,8 +404,13 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
                                                                &m_componentLibFiles,
                                                                GROUP_SCH_LIBS ) );
+
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
                                                          &m_netListFormat) );
+    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "SpiceForceRefPrefix" ),
+                                                    &m_spiceNetlistAddReferencePrefix, false ) );
+    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "SpiceUseNetNumbers" ),
+                                                    &m_spiceNetlistUseNetcodeAsNetname, false ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "RptD_X" ),
                                                       &g_RepeatStep.x,

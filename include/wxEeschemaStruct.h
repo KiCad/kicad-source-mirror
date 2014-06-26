@@ -156,7 +156,10 @@ private:
     wxString    m_netListFormat;
 
     /// Add X prefix to component references when generating spice net lists.
-    bool        m_addReferencPrefix;
+    bool        m_spiceNetlistAddReferencePrefix;
+
+    /// Use netcodes (net number) as net names when generating spice net lists.
+    bool        m_spiceNetlistUseNetcodeAsNetname;
 
     wxString    m_userLibraryPath;
 
@@ -218,9 +221,13 @@ public:
 
     void SetNetListFormatName( const wxString& aFormat ) { m_netListFormat = aFormat; }
 
-    bool GetAddReferencePrefix() const { return m_addReferencPrefix; }
+    bool GetSpiceAddReferencePrefix() const { return m_spiceNetlistAddReferencePrefix; }
 
-    void SetAddReferencePrefix( bool aEnable ) { m_addReferencPrefix = aEnable; }
+    void SetSpiceAddReferencePrefix( bool aEnable ) { m_spiceNetlistAddReferencePrefix = aEnable; }
+
+    bool GetSpiceUseNetcodeAsNetname() const { return m_spiceNetlistUseNetcodeAsNetname; }
+
+    void SetSpiceUseNetcodeAsNetname( bool aEnable ) { m_spiceNetlistUseNetcodeAsNetname = aEnable; }
 
     wxString GetUserLibraryPath() const { return m_userLibraryPath; }
 
