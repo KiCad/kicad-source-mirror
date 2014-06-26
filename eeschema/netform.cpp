@@ -119,9 +119,10 @@ class NETLIST_EXPORT_TOOL
      * <li> "netname" for global net (like gnd, vcc ..
      * <li> "/path/netname" for the usual nets
      * </ul>
+     * if aUseNetcodeAsNetName is true, the net name is just the net code (SPICE only)
      */
     static void sprintPinNetName( wxString& aResult, const wxString& aNetNameFormat,
-                                  NETLIST_OBJECT* aPin );
+                                  NETLIST_OBJECT* aPin, bool aUseNetcodeAsNetName = false );
 
     /**
      * Function findNextComponentAndCreatePinList
@@ -303,8 +304,10 @@ public:
      * @param f = the file to write to
      * @param aUsePrefix = true, adds an 'X' prefix to any reference designator starting with "U" or "IC",
      *                     false to leave reference designator unchanged.
+     * @param aUseNetcodeAsNetName = true to use numbers (net codes) as net names.
+     *                                false to use net names from schematic.
      */
-    bool WriteNetListPspice( FILE* f, bool aUsePrefix );
+    bool WriteNetListPspice( FILE* f, bool aUsePrefix, bool aUseNetcodeAsNetName );
 
     /**
      * Function MakeCommandLine
@@ -415,7 +418,8 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
         break;
 
     case NET_TYPE_SPICE:
-        ret = helper.WriteNetListPspice( f, aNetlistOptions & NET_USE_X_PREFIX );
+        ret = helper.WriteNetListPspice( f, aNetlistOptions & NET_USE_X_PREFIX,
+                                         aNetlistOptions & NET_USE_NETCODES_AS_NETNAMES );
         fclose( f );
         break;
 
@@ -468,7 +472,8 @@ static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 )
 
 
 void NETLIST_EXPORT_TOOL::sprintPinNetName( wxString& aResult,
-                                    const wxString& aNetNameFormat, NETLIST_OBJECT* aPin )
+                                    const wxString& aNetNameFormat, NETLIST_OBJECT* aPin,
+                                    bool aUseNetcodeAsNetName )
 {
     int netcode = aPin->GetNet();
 
@@ -479,10 +484,17 @@ void NETLIST_EXPORT_TOOL::sprintPinNetName( wxString& aResult,
 
     if( netcode != 0 && aPin->GetConnectionType() == PAD_CONNECT )
     {
+        if( aUseNetcodeAsNetName )
+        {
+            aResult.Printf( wxT("%d"), netcode );
+        }
+        else
+        {
         aResult = aPin->GetNetName();
 
         if( aResult.IsEmpty() )     // No net name: give a name from net code
             aResult.Printf( aNetNameFormat.GetData(), netcode );
+        }
     }
 }
 
@@ -1073,7 +1085,7 @@ bool NETLIST_EXPORT_TOOL::WriteGENERICNetList( const wxString& aOutFileName )
 }
 
 
-bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool aUsePrefix )
+bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool aUsePrefix, bool aUseNetcodeAsNetName )
 {
     int                 ret = 0;
     int                 nbitems;
@@ -1285,7 +1297,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool aUsePrefix )
                 if( !pin )
                     continue;
 
-                sprintPinNetName( netName , wxT( "N-%.6d" ), pin );
+                sprintPinNetName( netName , wxT( "N-%.6d" ), pin, aUseNetcodeAsNetName );
 
                 //Replace parenthesis with underscore to prevent parse issues with Simulators:
                 netName.Replace(wxT("("),wxT("_"));
