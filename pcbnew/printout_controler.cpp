@@ -89,6 +89,7 @@ BOARD_PRINTOUT_CONTROLLER::BOARD_PRINTOUT_CONTROLLER( const PRINT_PARAMETERS& aP
 
 bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
 {
+#ifdef PCBNEW
     LSET lset = m_PrintParams.m_PrintMaskLayer;
 
     // compute layer mask from page number if we want one page per layer
@@ -106,15 +107,18 @@ bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
     if( !m_PrintParams.m_PrintMaskLayer.any() )
         return false;
 
-#ifdef PCBNEW
     // In Pcbnew we can want the layer EDGE always printed
     if( m_PrintParams.m_Flags == 1 )
         m_PrintParams.m_PrintMaskLayer.set( Edge_Cuts );
-#endif
 
     DrawPage();
 
     m_PrintParams.m_PrintMaskLayer = lset;
+#else   // GERBVIEW
+    // in gerbview, draw layers are printed on separate pages
+    m_PrintParams.m_Flags = aPage-1;    // = gerber draw layer id
+    DrawPage();
+#endif
 
     return true;
 }

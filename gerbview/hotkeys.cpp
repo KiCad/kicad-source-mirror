@@ -8,6 +8,7 @@
 #include <id.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_drawpanel.h>
 #include <hotkeys.h>
 

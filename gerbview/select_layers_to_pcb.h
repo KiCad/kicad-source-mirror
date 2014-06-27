@@ -6,24 +6,23 @@
 #define _SELECT_LAYERS_TO_PCB_H_
 
 #include <dialogs/dialog_layers_select_to_pcb_base.h>
-#include <layers_id_colors_and_visibility.h>
 
 /*
  * This dialog shows the gerber files loaded, and allows user to choose
- * equivalence tbetween gerber layers and pcb layers
+ * equivalence between gerber layers and pcb layers
  */
 class LAYERS_MAP_DIALOG : public LAYERS_MAP_DIALOG_BASE
 {
 private:
     GERBVIEW_FRAME* m_Parent;
-    int m_itemsCount;
+    int m_gerberActiveLayersCount;                  // Number of initialized gerber layers
     static int m_exportBoardCopperLayersCount;
     wxFlexGridSizer* m_flexRightColumnBoxSizer;     // An extra wxFlexGridSizer used
                                                     // when we have more than 16 gerber files loaded
-    LAYER_NUM m_layersLookUpTable[NB_GERBER_LAYERS]; // Indexes Gerber layers to PCB file layers
+    LAYER_NUM m_layersLookUpTable[GERBER_DRAWLAYERS_COUNT]; // Indexes Gerber layers to PCB file layers
                                                     // the last value in table is the number of copper layers
-    int    m_buttonTable[int(NB_GERBER_LAYERS)+1];       // Indexes buttons to Gerber layers
-    wxStaticText* m_layersList[int(NB_GERBER_LAYERS)+1]; // Indexes text strings to buttons
+    int    m_buttonTable[int(GERBER_DRAWLAYERS_COUNT)+1];       // Indexes buttons to Gerber layers
+    wxStaticText* m_layersList[int(GERBER_DRAWLAYERS_COUNT)+1]; // Indexes text strings to buttons
 
 public: LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent );
     ~LAYERS_MAP_DIALOG() {};

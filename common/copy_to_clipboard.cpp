@@ -109,7 +109,8 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
         dc.SetClippingRegion( DrawArea );
     }
 
-    aFrame->PrintPage( &dc, FULL_LAYERS, false );
+    const LSET allLayersMask = LSET().set();
+    aFrame->PrintPage( &dc, allLayersMask, false );
     screen->m_IsPrinting = false;
     aFrame->GetCanvas()->SetClipBox( tmp );
     wxMetafile* mf = dc.Close();
