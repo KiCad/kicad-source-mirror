@@ -30,6 +30,7 @@
 #include <common.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <trigo.h>
 #include <macros.h>
 #include <class_gerber_draw_item.h>
@@ -107,7 +108,7 @@
 void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                                  APERTURE_T        aAperture,
                                  int               Dcode_index,
-                                 LAYER_NUM         aLayer,
+                                 int         aLayer,
                                  const wxPoint&    aPos,
                                  wxSize            aSize,
                                  bool              aLayerNegative )
@@ -159,7 +160,7 @@ void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  */
 void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               int               Dcode_index,
-                              LAYER_NUM         aLayer,
+                              int         aLayer,
                               const wxPoint&    aStart,
                               const wxPoint&    aEnd,
                               wxSize            aPenSize,
@@ -208,7 +209,7 @@ void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  *                      false when arc is inside one quadrant
  * @param aLayerNegative = true if the current layer is negative
  */
-static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, LAYER_NUM aLayer,
+static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aLayer,
                              const wxPoint& aStart, const wxPoint& aEnd,
                              const wxPoint& aRelCenter, wxSize aPenSize,
                              bool aClockwise, bool aMultiquadrant,
@@ -344,10 +345,11 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
      * so we muse create a dummy track and use its geometric parameters
      */
     static GERBER_DRAW_ITEM dummyGbrItem( NULL, NULL );
+    static const int drawlayer = 0;
 
     aGbrItem->SetLayerPolarity( aLayerNegative );
 
-    fillArcGBRITEM(  &dummyGbrItem, 0, FIRST_LAYER,
+    fillArcGBRITEM(  &dummyGbrItem, 0, drawlayer,
                      aStart, aEnd, rel_center, wxSize(0, 0),
                      aClockwise, aMultiquadrant, aLayerNegative );
 
@@ -568,7 +570,7 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
     GERBER_DRAW_ITEM* gbritem;
     GBR_LAYOUT*       layout = m_Parent->GetGerberLayout();
 
-    LAYER_NUM activeLayer = m_Parent->getActiveLayer();
+    int activeLayer = m_Parent->getActiveLayer();
 
     int      dcode = 0;
     D_CODE*  tool  = NULL;

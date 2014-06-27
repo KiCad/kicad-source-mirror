@@ -375,6 +375,7 @@ bool BOARD::SetLayerName( LAYER_ID aLayer, const wxString& aLayerName )
 
             // veto changing the name if it exists elsewhere.
             if( id != aLayer && nameTemp == m_Layer[id].m_name )
+//            if( id != aLayer && nameTemp == wxString( m_Layer[id].m_name ) )
                 return false;
         }
 #endif

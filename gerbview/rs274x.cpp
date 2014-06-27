@@ -12,6 +12,7 @@
 
 extern int ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
+extern bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file );
 
 
 #define CODE( x, y ) ( ( (x) << 8 ) + (y) )
