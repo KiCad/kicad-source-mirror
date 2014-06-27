@@ -34,6 +34,7 @@
 #include <macros.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_GERBER.h>
 
 

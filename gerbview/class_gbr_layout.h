@@ -11,6 +11,7 @@
 
 #include <class_colors_design_settings.h>
 #include <common.h>                         // PAGE_INFO
+#include <gerbview.h>                       // GERBER_DRAWLAYERS_COUNT
 #include <class_title_block.h>
 #include <class_gerber_draw_item.h>
 
@@ -23,11 +24,11 @@
 class GBR_LAYOUT
 {
 private:
-    EDA_RECT                m_BoundingBox;
-    PAGE_INFO               m_paper;
-    TITLE_BLOCK             m_titles;
-    wxPoint                 m_originAxisPosition;
-    LSET               m_printLayersMask; // When printing: the list of layers to print
+    EDA_RECT            m_BoundingBox;
+    PAGE_INFO           m_paper;
+    TITLE_BLOCK         m_titles;
+    wxPoint             m_originAxisPosition;
+    std::bitset <GERBER_DRAWLAYERS_COUNT> m_printLayersMask; // When printing: the list of layers to print
 public:
 
     DLIST<GERBER_DRAW_ITEM> m_Drawings;     // linked list of Gerber Items
@@ -87,24 +88,35 @@ public:
     void    Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                   GR_DRAWMODE aDrawMode, const wxPoint& aOffset,
                   bool aPrintBlackAndWhite = false );
-
     /**
-     * Function SetVisibleLayers
-     * changes the bit-mask of visible layers
-     * @param aLayerMask = The new bit-mask of visible layers
+     * Function SetPrintableLayers
+     * changes the list of printable layers
+     * @param aLayerMask = The new bit-mask of printable layers
      */
-    void    SetVisibleLayers( LSET aLayerMask )
+    void    SetPrintableLayers( const std::bitset <GERBER_DRAWLAYERS_COUNT>& aLayerMask  )
     {
         m_printLayersMask = aLayerMask;
     }
 
     /**
-     * Function IsLayerVisible
+     * Function GetPrintableLayers
+     * @return the bit-mask of printable layers
+     */
+    std::bitset <GERBER_DRAWLAYERS_COUNT> GetPrintableLayers()
+    {
+        return m_printLayersMask;
+    }
+
+     /**
+     * Function IsLayerPrintable
      * tests whether a given layer is visible
      * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool    IsLayerVisible( LAYER_NUM aLayer ) const;
+    bool    IsLayerPrintable( int aLayer ) const
+    {
+        return m_printLayersMask[ aLayer ];
+    }
 
 #if defined(DEBUG)
     void    Show( int nestLevel, std::ostream& os ) const;  // overload
