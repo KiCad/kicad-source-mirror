@@ -32,6 +32,7 @@
 #include <confirm.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 #include <class_gerbview_layer_widget.h>
@@ -39,7 +40,7 @@
 
 bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 {
-    LAYER_NUM layer;
+    int layer;
 
     if( GetGerberLayout() == NULL )
         return false;
@@ -52,7 +53,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 
     GetGerberLayout()->m_Drawings.DeleteAll();
 
-    for( layer = FIRST_LAYER; layer < NB_GERBER_LAYERS; ++layer )
+    for( layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
         if( g_GERBER_List[layer] )
         {
@@ -65,7 +66,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 
     SetScreen( new GBR_SCREEN( GetPageSettings().GetSizeIU() ) );
 
-    setActiveLayer( FIRST_LAYER );
+    setActiveLayer( 0 );
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
     return true;
@@ -74,7 +75,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 
 void GERBVIEW_FRAME::Erase_Current_Layer( bool query )
 {
-    LAYER_NUM layer = getActiveLayer();
+    int layer = getActiveLayer();
     wxString msg;
 
     msg.Printf( _( "Clear layer %d?" ), layer + 1 );

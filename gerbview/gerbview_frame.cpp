@@ -27,7 +27,6 @@
  */
 
 #include <fctsys.h>
-//#include <pgm_base.h>
 #include <kiface_i.h>
 #include <wxstruct.h>
 #include <class_drawpanel.h>
@@ -40,6 +39,7 @@
 #include <msgpanel.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
 #include <pcbplot.h>
 #include <gerbview_id.h>
@@ -92,7 +92,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     SetLayout( new GBR_LAYOUT() );
 
-    SetVisibleLayers( FULL_LAYERS );     // All 32 layers visible.
+    SetVisibleLayers( -1 );         // All draw layers visible.
 
     SetScreen( new GBR_SCREEN( GetGerberLayout()->GetPageSettings().GetSizeIU() ) );
 
@@ -167,6 +167,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_LayersManager->ReFillRender();    // Update colors in Render after the config is read
     m_auimgr.Update();
 
+    setActiveLayer( 0, true );
     Zoom_Automatique( true );           // Gives a default zoom value
 }
 
@@ -184,9 +185,9 @@ void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
-    const unsigned limit = std::min( unsigned( aFileSet.size() ), unsigned( NB_GERBER_LAYERS ) );
+    const unsigned limit = std::min( unsigned( aFileSet.size() ), unsigned( GERBER_DRAWLAYERS_COUNT ) );
 
-    LAYER_NUM layer = FIRST_LAYER;
+    int layer = 0;
 
     for( unsigned i=0;  i<limit;  ++i, ++layer )
     {
@@ -338,11 +339,11 @@ void GERBVIEW_FRAME::SetElementVisibility( GERBER_VISIBLE_ID aItemIdVisible,
 }
 
 
-LAYER_NUM GERBVIEW_FRAME::getNextAvailableLayer( LAYER_NUM aLayer ) const
+int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 {
-    LAYER_NUM layer = aLayer;
+    int layer = aLayer;
 
-    for( LAYER_NUM i = FIRST_LAYER; i < NB_GERBER_LAYERS; ++i )
+    for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; ++i )
     {
         GERBER_IMAGE* gerber = g_GERBER_List[ layer ];
 
@@ -351,8 +352,8 @@ LAYER_NUM GERBVIEW_FRAME::getNextAvailableLayer( LAYER_NUM aLayer ) const
 
         ++layer;
 
-        if( layer >= NB_GERBER_LAYERS )
-            layer = FIRST_LAYER;
+        if( layer >= GERBER_DRAWLAYERS_COUNT )
+            layer = 0;
     }
 
     return NO_AVAILABLE_LAYERS;
@@ -398,9 +399,9 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     wxArrayString   list;
     double          scale = g_UserUnit == INCHES ? IU_PER_MILS * 1000 :
                             IU_PER_MM;
-    LAYER_NUM       curr_layer = getActiveLayer();
+    int       curr_layer = getActiveLayer();
 
-    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
+    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
         GERBER_IMAGE* gerber = g_GERBER_List[layer];
 
@@ -551,9 +552,9 @@ void GERBVIEW_FRAME::SetVisibleAlls()
  * Returns a bit-mask of all the layers that are visible
  * @return int - the visible layers in bit-mapped form.
  */
-LSET GERBVIEW_FRAME::GetVisibleLayers() const
+long GERBVIEW_FRAME::GetVisibleLayers() const
 {
-    return FULL_LAYERS;    // TODO
+    return -1;    // TODO
 }
 
 
@@ -563,9 +564,9 @@ LSET GERBVIEW_FRAME::GetVisibleLayers() const
  * changes the bit-mask of visible layers
  * @param aLayerMask = The new bit-mask of visible layers
  */
-void GERBVIEW_FRAME::SetVisibleLayers( LSET aLayerMask )
+void GERBVIEW_FRAME::SetVisibleLayers( long aLayerMask )
 {
-    GetGerberLayout()->SetVisibleLayers( aLayerMask );
+//    GetGerberLayout()->SetVisibleLayers( aLayerMask );
 }
 
 
@@ -575,12 +576,12 @@ void GERBVIEW_FRAME::SetVisibleLayers( LSET aLayerMask )
  * @param aLayer = The layer to be tested
  * @return bool - true if the layer is visible.
  */
-bool GERBVIEW_FRAME::IsLayerVisible( LAYER_NUM aLayer ) const
+bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 {
     if( ! m_DisplayOptions.m_IsPrinting )
         return m_LayersManager->IsLayerVisible( aLayer );
     else
-        return GetGerberLayout()->IsLayerVisible( aLayer );
+        return GetGerberLayout()->IsLayerPrintable( aLayer );
 }
 
 
@@ -664,7 +665,7 @@ EDA_COLOR_T GERBVIEW_FRAME::GetNegativeItemsColor() const
  * Function GetLayerColor
  * gets a layer color for any valid layer.
  */
-EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( LAYER_NUM aLayer ) const
+EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 {
     return m_colorsSettings->GetLayerColor( aLayer );
 }
@@ -674,7 +675,7 @@ EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( LAYER_NUM aLayer ) const
  * Function SetLayerColor
  * changes a layer color for any valid layer.
  */
-void GERBVIEW_FRAME::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
+void GERBVIEW_FRAME::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
 {
     m_colorsSettings->SetLayerColor( aLayer, aColor );
 }
@@ -684,7 +685,7 @@ void GERBVIEW_FRAME::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
  * Function getActiveLayer
  * returns the active layer
  */
-LAYER_NUM GERBVIEW_FRAME::getActiveLayer()
+int GERBVIEW_FRAME::getActiveLayer()
 {
     return ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer;
 }
@@ -695,7 +696,7 @@ LAYER_NUM GERBVIEW_FRAME::getActiveLayer()
  * will change the currently active layer to \a aLayer and also
  * update the PCB_LAYER_WIDGET.
  */
-void GERBVIEW_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
+void GERBVIEW_FRAME::setActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 {
     ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 

@@ -8,7 +8,7 @@
 #include <select_layers_to_pcb.h>
 
 // Exported function
-const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber );
+const wxString GetPCBDefaultLayerName( int aLayerNumber );
 
 
 enum layer_sel_id {
@@ -23,11 +23,11 @@ class SELECT_LAYER_DIALOG : public wxDialog
 private:
     GERBVIEW_FRAME* m_Parent;
     wxRadioBox*     m_LayerList;
-    LAYER_NUM m_LayerId[int(NB_LAYERS) + 1]; // One extra element for "(Deselect)" radiobutton
+    int m_LayerId[int(GERBER_DRAWLAYERS_COUNT) + 1]; // One extra element for "(Deselect)" radiobutton
 
 public:
     // Constructor and destructor
-    SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, LAYER_NUM aDefaultLayer,
+    SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, int aDefaultLayer,
                          int aCopperLayerCount, bool aShowDeselectOption );
     ~SELECT_LAYER_DIALOG() { };
 
@@ -47,10 +47,10 @@ END_EVENT_TABLE()
 
 
 /** Install the dialog box for layer selection
- * @param aDefaultLayer = Preselection (NB_LAYERS for "(Deselect)" layer)
+ * @param aDefaultLayer = Preselection (GERBER_DRAWLAYERS_COUNT for "(Deselect)" layer)
  * @param aCopperLayerCount = number of copper layers
  * @param aShowDeselectOption = display a "(Deselect)" radiobutton (when set to true)
- * @return new layer value (NB_LAYERS when "(Deselect)" radiobutton selected),
+ * @return new layer value (GERBER_DRAWLAYERS_COUNT when "(Deselect)" radiobutton selected),
  *                         or -1 if canceled
  *
  * Providing the option to also display a "(Deselect)" radiobutton makes the
@@ -61,10 +61,10 @@ END_EVENT_TABLE()
  * different radiobutton is clicked on) prior to then clicking on the "Deselect"
  * button provided within the "Layer selection:" dialog box).
  */
-LAYER_NUM GERBVIEW_FRAME::SelectPCBLayer( LAYER_NUM aDefaultLayer, int aCopperLayerCount,
+int GERBVIEW_FRAME::SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount,
                                           bool aShowDeselectOption )
 {
-    LAYER_NUM layer;
+    int layer;
     SELECT_LAYER_DIALOG* frame = new SELECT_LAYER_DIALOG( this, aDefaultLayer,
                                                           aCopperLayerCount,
                                                           aShowDeselectOption );
@@ -82,14 +82,17 @@ LAYER_NUM GERBVIEW_FRAME::SelectPCBLayer( LAYER_NUM aDefaultLayer, int aCopperLa
  * to the right of that radiobox.
  */
 SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
-                                          LAYER_NUM aDefaultLayer, int aCopperLayerCount,
+                                          int aDefaultLayer, int aCopperLayerCount,
                                           bool aShowDeselectOption ) :
     wxDialog( parent, -1, _( "Select Layer:" ), wxPoint( -1, -1 ),
               wxSize( 470, 250 ),
               wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
+    #define NB_PCB_LAYERS 64
+    #define FIRST_COPPER_LAYER 0
+    #define LAST_COPPER_LAYER 31
     wxButton* Button;
-    LAYER_NUM ii;
+    int ii;
     wxString  LayerList[NB_PCB_LAYERS + 1]; // One extra element for "(Deselect)"
                                         // radiobutton
     int       LayerCount, LayerSelect = -1;
@@ -98,9 +101,10 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
 
     // Build the layer list; first build copper layers list
     LayerCount = 0;
-    for( ii = FIRST_COPPER_LAYER; ii < NB_COPPER_LAYERS; ++ii )
+
+    for( ii = FIRST_COPPER_LAYER; ii <= LAST_COPPER_LAYER; ++ii )
     {
-        m_LayerId[ii] = FIRST_LAYER;
+        m_LayerId[ii] = 0;
 
         if( ii == FIRST_COPPER_LAYER || ii == LAST_COPPER_LAYER || ii < aCopperLayerCount-1 )
         {
@@ -113,10 +117,11 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
             LayerCount++;
         }
     }
+
     // Build the layer list; build non copper layers list
     for( ; ii < NB_PCB_LAYERS; ++ii )
     {
-        m_LayerId[ii] = FIRST_LAYER;
+        m_LayerId[ii] = 0;
 
         LayerList[LayerCount] = GetPCBDefaultLayerName( ii );
 
@@ -182,7 +187,7 @@ void SELECT_LAYER_DIALOG::OnCancelClick( wxCommandEvent& event )
     EndModal( -1 );
 }
 
-const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber )
+const wxString GetPCBDefaultLayerName( int aLayerNumber )
 {
     const wxChar* txt;
 
@@ -190,20 +195,20 @@ const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber )
     switch( aLayerNumber )
     {
     case F_Cu:         txt = wxT( "F.Cu" );            break;
-    case LAYER_N_2:             txt = wxT( "Inner1.Cu" );       break;
-    case LAYER_N_3:             txt = wxT( "Inner2.Cu" );       break;
-    case LAYER_N_4:             txt = wxT( "Inner3.Cu" );       break;
-    case LAYER_N_5:             txt = wxT( "Inner4.Cu" );       break;
-    case LAYER_N_6:             txt = wxT( "Inner5.Cu" );       break;
-    case LAYER_N_7:             txt = wxT( "Inner6.Cu" );       break;
-    case LAYER_N_8:             txt = wxT( "Inner7.Cu" );       break;
-    case LAYER_N_9:             txt = wxT( "Inner8.Cu" );       break;
-    case LAYER_N_10:            txt = wxT( "Inner9.Cu" );       break;
-    case LAYER_N_11:            txt = wxT( "Inner10.Cu" );      break;
-    case LAYER_N_12:            txt = wxT( "Inner11.Cu" );      break;
-    case LAYER_N_13:            txt = wxT( "Inner12.Cu" );      break;
-    case LAYER_N_14:            txt = wxT( "Inner13.Cu" );      break;
-    case LAYER_N_15:            txt = wxT( "Inner14.Cu" );      break;
+    case In1_Cu:       txt = wxT( "In1.Cu" );       break;
+    case In2_Cu:       txt = wxT( "In2.Cu" );       break;
+    case In3_Cu:             txt = wxT( "In3.Cu" );       break;
+    case In4_Cu:             txt = wxT( "In4.Cu" );       break;
+    case In5_Cu:             txt = wxT( "In5.Cu" );       break;
+    case In6_Cu:             txt = wxT( "In6.Cu" );       break;
+    case In7_Cu:             txt = wxT( "In7.Cu" );       break;
+    case In8_Cu:             txt = wxT( "In8.Cu" );       break;
+    case In9_Cu:            txt = wxT( "In9.Cu" );       break;
+    case In10_Cu:            txt = wxT( "In10.Cu" );      break;
+    case In11_Cu:            txt = wxT( "In11.Cu" );      break;
+    case In12_Cu:            txt = wxT( "In12.Cu" );      break;
+    case In13_Cu:            txt = wxT( "In13.Cu" );      break;
+    case In14_Cu:            txt = wxT( "In14.Cu" );      break;
     case B_Cu:          txt = wxT( "B.Cu" );            break;
     case B_Adhes:       txt = wxT( "B.Adhes" );         break;
     case F_Adhes:      txt = wxT( "F.Adhes" );         break;

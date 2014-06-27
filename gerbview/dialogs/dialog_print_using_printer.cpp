@@ -6,7 +6,7 @@
 #define wxTEST_POSTSCRIPT_IN_MSW 1
 
 #include <fctsys.h>
-//#include <pgm_base.h>
+
 #include <kiface_i.h>
 #include <common.h>
 #include <class_drawpanel.h>
@@ -16,9 +16,9 @@
 #include <printout_controler.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <pcbplot.h>
 
-static long   s_SelectedLayers;
 static double s_ScaleList[] =
 { 0, 0.5, 0.7, 0.999, 1.0, 1.4, 2.0, 3.0, 4.0 };
 
@@ -27,8 +27,8 @@ static double s_ScaleList[] =
 #define MAX_SCALE 100.0
 
 // static print data and page setup data, to remember settings during the session
-static wxPrintData* g_PrintData;
-static wxPageSetupDialogData* g_pageSetupData = (wxPageSetupDialogData*) NULL;
+static wxPrintData* s_printData;
+static wxPageSetupDialogData* s_pageSetupData = (wxPageSetupDialogData*) NULL;
 
 // Variables locales
 static PRINT_PARAMETERS  s_Parameters;
@@ -41,8 +41,8 @@ class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
 {
 private:
     GERBVIEW_FRAME* m_Parent;
-    wxConfigBase*         m_Config;
-    wxCheckBox*       m_BoxSelectLayer[32];
+    wxConfigBase*   m_Config;
+    wxCheckBox*     m_BoxSelectLayer[32];
 
 public:
     DIALOG_PRINT_USING_PRINTER( GERBVIEW_FRAME* parent );
@@ -63,7 +63,10 @@ private:
 public:
     bool IsMirrored() { return m_Print_Mirror->IsChecked(); }
     bool PrintUsingSinglePage() { return true; }
-    int SetLayerSetFromListSelection();
+    int  SetLayerSetFromListSelection();
+    // Prepare print parameters. return true if OK,
+    // false if there is an issue (mainly no printable layers)
+    bool PreparePrintPrms();
 };
 
 
@@ -75,17 +78,17 @@ void GERBVIEW_FRAME::ToPrinter( wxCommandEvent& event )
  * Display the print dialog
  */
 {
-    if( g_PrintData == NULL )  // First print
-        g_PrintData = new wxPrintData();
+    if( s_printData == NULL )  // First print
+        s_printData = new wxPrintData();
 
-    if( !g_PrintData->Ok() )
+    if( !s_printData->Ok() )
     {
         DisplayError( this, _( "Error Init Printer info" ) );
         return;
     }
 
-    g_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );
-    g_PrintData->SetOrientation( GetPageSettings().IsPortrait() ?
+    s_printData->SetQuality( wxPRINT_QUALITY_HIGH );
+    s_printData->SetOrientation( GetPageSettings().IsPortrait() ?
                                  wxPORTRAIT : wxLANDSCAPE );
 
     DIALOG_PRINT_USING_PRINTER* frame = new DIALOG_PRINT_USING_PRINTER( this );
@@ -118,31 +121,29 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 /************************************************************************/
 {
     SetFocus();
-    LAYER_NUM layer_max = NB_GERBER_LAYERS;
     wxString msg;
 
-    if( g_pageSetupData == NULL )
+    if( s_pageSetupData == NULL )
     {
-        g_pageSetupData = new wxPageSetupDialogData;
+        s_pageSetupData = new wxPageSetupDialogData;
         // Set initial page margins.
-        // Margins are already set in Pcbnew, so we can use 0
-        g_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
-        g_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
+        // Margins are already set in Gerbview, so we can use 0
+        s_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
+        s_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
     }
 
-    s_Parameters.m_PageSetupData = g_pageSetupData;
+    s_Parameters.m_PageSetupData = s_pageSetupData;
 
-    layer_max = NB_LAYERS;
     // Create layer list
-    for( LAYER_NUM ii = FIRST_LAYER; ii < layer_max; ++ii )
+    for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
-        LSET mask = GetLayerSet( ii );
         msg = _( "Layer" );
         msg << wxT( " " ) << ii + 1;
         m_BoxSelectLayer[ii] = new wxCheckBox( this, -1, msg );
 
-        if( mask & s_SelectedLayers )
-            m_BoxSelectLayer[ii]->SetValue( true );
+        if( g_GERBER_List[ii] == NULL )     // Nothing loaded on this draw layer
+            m_BoxSelectLayer[ii]->Enable( false );
+
         if( ii < 16 )
             m_leftLayersBoxSizer->Add( m_BoxSelectLayer[ii],
                                          wxGROW | wxLEFT | wxRIGHT | wxTOP );
@@ -170,21 +171,14 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
             s_Parameters.m_YScaleAdjust > MAX_SCALE )
             s_Parameters.m_XScaleAdjust = s_Parameters.m_YScaleAdjust = 1.0;
 
-        s_SelectedLayers = 0;
-        for( LAYER_NUM layer = FIRST_LAYER; layer < layer_max; ++layer )
+        for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
         {
             wxString layerKey;
             bool     option;
 
             layerKey.Printf( OPTKEY_LAYERBASE, layer );
-
-            option = false;
-            if( m_Config->Read( layerKey, &option ) )
-            {
-                m_BoxSelectLayer[layer]->SetValue( option );
-                if( option )
-                    s_SelectedLayers |= GetLayerSet( layer );
-            }
+            m_Config->Read( layerKey, &option, false );
+            m_BoxSelectLayer[layer]->SetValue( option );
         }
     }
 
@@ -214,30 +208,29 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
         m_FineAdjustYscaleOpt->Enable(enable);
 }
 
-/**************************************************************/
 int DIALOG_PRINT_USING_PRINTER::SetLayerSetFromListSelection()
-/**************************************************************/
 {
     int page_count = 0;
-    s_Parameters.m_PrintMaskLayer = NO_LAYERS;
-    for( LAYER_NUM ii = FIRST_LAYER; ii < NB_GERBER_LAYERS; ++ii )
+    std::bitset <GERBER_DRAWLAYERS_COUNT> layerMask;
+    for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
-        if( m_BoxSelectLayer[ii]->IsChecked() )
+        if( m_BoxSelectLayer[ii]->IsChecked() && m_BoxSelectLayer[ii]->IsEnabled() )
         {
             page_count++;
-            s_Parameters.m_PrintMaskLayer |= GetLayerSet( ii );
+            layerMask[ii] = true;
         }
+        else
+            layerMask[ii] = false;
     }
 
+    m_Parent->GetGerberLayout()->SetPrintableLayers( layerMask );
     s_Parameters.m_PageCount = page_count;
 
     return page_count;
 }
 
 
-/********************************************************************/
 void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
-/********************************************************************/
 {
     SetPrintParameters();
 
@@ -249,19 +242,18 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         m_Config->Write( OPTKEY_PRINT_PAGE_FRAME, s_Parameters.m_Print_Sheet_Ref);
         m_Config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White);
         wxString layerKey;
-        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_GERBER_LAYERS; ++layer )
+        for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
         {
             layerKey.Printf( OPTKEY_LAYERBASE, layer );
             m_Config->Write( layerKey, m_BoxSelectLayer[layer]->IsChecked() );
         }
     }
+
     EndModal( 0 );
 }
 
 
-/******************************************************************/
 void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
-/******************************************************************/
 {
     s_Parameters.m_PrintMirror = m_Print_Mirror->GetValue();
     s_Parameters.m_Print_Black_and_White =
@@ -303,52 +295,49 @@ void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )
         m_FineAdjustYscaleOpt->Enable(enable);
 }
 
-/**********************************************************/
+// Open a dialog box for printer setup (printer options, page size ...)
 void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
-/**********************************************************/
-
-/* Open a dialog box for printer setup (printer options, page size ...)
- */
 {
-    *g_pageSetupData = *g_PrintData;
+    *s_pageSetupData = *s_printData;
 
-    wxPageSetupDialog pageSetupDialog(this, g_pageSetupData);
+    wxPageSetupDialog pageSetupDialog(this, s_pageSetupData);
     pageSetupDialog.ShowModal();
 
-    (*g_PrintData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
-    (*g_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
+    (*s_printData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
+    (*s_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
-
-/************************************************************/
-void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
-/************************************************************/
-
-/* Open and display a previewer frame for printing
- */
+bool DIALOG_PRINT_USING_PRINTER::PreparePrintPrms()
 {
     SetPrintParameters( );
+
+    // If no layer selected, we have no plot. prompt user if it happens
+    // because he could think there is a bug in Pcbnew:
+    if( m_Parent->GetGerberLayout()->GetPrintableLayers().none() )
+    {
+        DisplayError( this, _( "No layer selected" ) );
+        return false;
+    }
+
+    return true;
+}
+
+// Open and display a previewer frame for printing
+void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
+{
+    if( !PreparePrintPrms() )
+        return;
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Print Preview" );
     wxPrintPreview* preview =
         new wxPrintPreview( new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_Parent, title ),
                             new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_Parent, title ),
-                            g_PrintData );
+                            s_printData );
 
     if( preview == NULL )
     {
         DisplayError( this, wxT( "OnPrintPreview() problem" ) );
-        return;
-    }
-
-    SetLayerSetFromListSelection();
-
-    // If no layer selected, we have no plot. prompt user if it happens
-    // because he could think there is a bug in Pcbnew:
-    if( s_Parameters.m_PrintMaskLayer == 0 )
-    {
-        DisplayError( this, _( "No layer selected" ) );
         return;
     }
 
@@ -365,29 +354,16 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 }
 
 
-/***************************************************************************/
 void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
-/***************************************************************************/
-
-/* Called on activate Print button
- */
 {
-    SetPrintParameters( );
-
-    // If no layer selected, we have no plot. prompt user if it happens
-    // because he could think there is a bug in Pcbnew:
-    if( s_Parameters.m_PrintMaskLayer == 0 )
-    {
-        DisplayError( this, _( "No layer selected" ) );
+    if( !PreparePrintPrms() )
         return;
-    }
 
-    wxPrintDialogData printDialogData( *g_PrintData );
+    wxPrintDialogData printDialogData( *s_printData );
 
-    wxPrinter         printer( &printDialogData );
-
-    wxString          title = _( "Print" );
-    BOARD_PRINTOUT_CONTROLLER      printout( s_Parameters, m_Parent, title );
+    wxPrinter printer( &printDialogData );
+    wxString title = _( "Print" );
+    BOARD_PRINTOUT_CONTROLLER printout( s_Parameters, m_Parent, title );
 
 #if !defined(__WINDOWS__) && !wxCHECK_VERSION(2,9,0)
     wxDC*             dc = printout.GetDC();
@@ -402,7 +378,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     }
     else
     {
-        *g_PrintData = printer.GetPrintDialogData().GetPrintData();
+        *s_printData = printer.GetPrintDialogData().GetPrintData();
     }
 }
 

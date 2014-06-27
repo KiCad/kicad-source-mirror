@@ -11,6 +11,7 @@
 #include <gestfich.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <kicad_device_context.h>
 #include <gerbview_id.h>
 #include <class_GERBER.h>
@@ -226,7 +227,7 @@ void GERBVIEW_FRAME::OnSelectActiveDCode( wxCommandEvent& event )
 
 void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
 {
-    LAYER_NUM layer = getActiveLayer();
+    int layer = getActiveLayer();
 
     setActiveLayer( event.GetSelection() );
 
@@ -240,7 +241,7 @@ void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
 
 void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
 {
-    LAYER_NUM     layer = getActiveLayer();
+    int     layer = getActiveLayer();
     GERBER_IMAGE* gerber_layer = g_GERBER_List[layer];
 
     if( gerber_layer )

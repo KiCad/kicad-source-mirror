@@ -35,6 +35,7 @@
 #include <gr_basic.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
 
 #include <wx/debug.h>
