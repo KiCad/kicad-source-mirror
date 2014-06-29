@@ -536,6 +536,7 @@ void DRC::testUnconnected()
         D_PAD*    padEnd   = rat.m_PadEnd;
 
         msg = padStart->GetSelectMenuText() + wxT( " net " ) + padStart->GetNetname();
+
         DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_PADS,
                                           msg,
                                           padEnd->GetSelectMenuText(),

@@ -85,12 +85,25 @@ void PCB_PARSER::init()
 
     for( int i=1; i<=14; ++i )
     {
-        char    tmp[60];
+        std::string key = StrPrintf( "Inner%d", i );
 
-        sprintf( tmp, "Inner%d", i );
-
-        m_layerMasks[ tmp ] = LSET( In15_Cu - i );
+        m_layerMasks[ key ] = LSET( LAYER_ID( In15_Cu - i ) );
     }
+
+#if defined(DEBUG) && 0
+    printf( "m_layerMasks:\n" );
+    for( LSET_MAP::const_iterator it = m_layerMasks.begin();  it != m_layerMasks.end();  ++it )
+    {
+        printf( " [%s] == 0x%s\n",  it->first.c_str(), it->second.FmtHex().c_str() );
+    }
+
+    printf( "m_layerIndices:\n" );
+    for( LAYER_ID_MAP::const_iterator it = m_layerIndices.begin();  it != m_layerIndices.end();  ++it )
+    {
+        printf( " [%s] == %d\n",  it->first.c_str(), it->second );
+    }
+#endif
+
 }
 
 
@@ -776,7 +789,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
                     UTF8 name = it->m_name;
 
                     m_layerIndices[ name ] = LAYER_ID( it->m_number );
-                    m_layerMasks[   name ] = LSET( it->m_number );
+                    m_layerMasks[   name ] = LSET( LAYER_ID( it->m_number ) );
                 }
 
                 copperLayerCount = cu.size();
@@ -1783,55 +1796,55 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
             break;
 
         case T_fp_text:
-        {
-            TEXTE_MODULE* text = parseTEXTE_MODULE();
-            text->SetParent( module.get() );
-            double orientation = text->GetOrientation();
-            orientation -= module->GetOrientation();
-            text->SetOrientation( orientation );
-            text->SetDrawCoord();
-
-            switch( text->GetType() )
             {
-            case TEXTE_MODULE::TEXT_is_REFERENCE:
-                module->Reference() = *text;
-                delete text;
-                break;
+                TEXTE_MODULE* text = parseTEXTE_MODULE();
+                text->SetParent( module.get() );
+                double orientation = text->GetOrientation();
+                orientation -= module->GetOrientation();
+                text->SetOrientation( orientation );
+                text->SetDrawCoord();
 
-            case TEXTE_MODULE::TEXT_is_VALUE:
-                module->Value() = *text;
-                delete text;
-                break;
+                switch( text->GetType() )
+                {
+                case TEXTE_MODULE::TEXT_is_REFERENCE:
+                    module->Reference() = *text;
+                    delete text;
+                    break;
 
-            default:
-                module->GraphicalItems().PushBack( text );
+                case TEXTE_MODULE::TEXT_is_VALUE:
+                    module->Value() = *text;
+                    delete text;
+                    break;
+
+                default:
+                    module->GraphicalItems().PushBack( text );
+                }
             }
-
             break;
-        }
 
         case T_fp_arc:
         case T_fp_circle:
         case T_fp_curve:
         case T_fp_line:
         case T_fp_poly:
-        {
-            EDGE_MODULE* em = parseEDGE_MODULE();
-            em->SetParent( module.get() );
-            em->SetDrawCoord();
-            module->GraphicalItems().PushBack( em );
+            {
+                EDGE_MODULE* em = parseEDGE_MODULE();
+                em->SetParent( module.get() );
+                em->SetDrawCoord();
+                module->GraphicalItems().PushBack( em );
+            }
             break;
-        }
 
         case T_pad:
-        {
-            D_PAD* pad = parseD_PAD( module.get() );
-            wxPoint pt = pad->GetPos0();
-            RotatePoint( &pt, module->GetOrientation() );
-            pad->SetPosition( pt + module->GetPosition() );
-            module->AddPad( pad );
+            {
+                D_PAD*  pad = parseD_PAD( module.get() );
+                wxPoint pt = pad->GetPos0();
+
+                RotatePoint( &pt, module->GetOrientation() );
+                pad->SetPosition( pt + module->GetPosition() );
+                module->AddPad( pad );
+            }
             break;
-        }
 
         case T_model:
             module->Add3DModel( parse3DModel() );
@@ -2110,8 +2123,9 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
     wxCHECK_MSG( CurTok() == T_pad, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as D_PAD." ) );
 
-    wxSize sz;
+    wxSize  sz;
     wxPoint pt;
+
     std::auto_ptr< D_PAD > pad( new D_PAD( aParent ) );
 
     NeedSYMBOLorNUMBER();
@@ -2208,72 +2222,72 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_rect_delta:
-        {
-            wxSize delta;
-            delta.SetWidth( parseBoardUnits( "rectangle delta width" ) );
-            delta.SetHeight( parseBoardUnits( "rectangle delta height" ) );
-            pad->SetDelta( delta );
-            NeedRIGHT();
+            {
+                wxSize delta;
+                delta.SetWidth( parseBoardUnits( "rectangle delta width" ) );
+                delta.SetHeight( parseBoardUnits( "rectangle delta height" ) );
+                pad->SetDelta( delta );
+                NeedRIGHT();
+            }
             break;
-        }
 
         case T_drill:
-        {
-            bool haveWidth = false;
-            wxSize drillSize = pad->GetDrillSize();
-
-            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
-                if( token == T_LEFT )
-                    token = NextTok();
+                bool    haveWidth = false;
+                wxSize  drillSize = pad->GetDrillSize();
 
-                switch( token )
+                for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
                 {
-                case T_oval:
-                    pad->SetDrillShape( PAD_DRILL_OBLONG );
-                    break;
+                    if( token == T_LEFT )
+                        token = NextTok();
 
-                case T_NUMBER:
-                {
-                    if( !haveWidth )
+                    switch( token )
                     {
-                        drillSize.SetWidth( parseBoardUnits() );
+                    case T_oval:
+                        pad->SetDrillShape( PAD_DRILL_OBLONG );
+                        break;
 
-                        // If height is not defined the width and height are the same.
-                        drillSize.SetHeight( drillSize.GetWidth() );
-                        haveWidth = true;
-                    }
-                    else
-                    {
-                        drillSize.SetHeight( parseBoardUnits() );
-                    }
+                    case T_NUMBER:
+                        {
+                            if( !haveWidth )
+                            {
+                                drillSize.SetWidth( parseBoardUnits() );
 
-                    break;
+                                // If height is not defined the width and height are the same.
+                                drillSize.SetHeight( drillSize.GetWidth() );
+                                haveWidth = true;
+                            }
+                            else
+                            {
+                                drillSize.SetHeight( parseBoardUnits() );
+                            }
+
+                        }
+                        break;
+
+                    case T_offset:
+                        pt.x = parseBoardUnits( "drill offset x" );
+                        pt.y = parseBoardUnits( "drill offset y" );
+                        pad->SetOffset( pt );
+                        NeedRIGHT();
+                        break;
+
+                    default:
+                        Expecting( "oval, size, or offset" );
+                    }
                 }
 
-                case T_offset:
-                    pt.x = parseBoardUnits( "drill offset x" );
-                    pt.y = parseBoardUnits( "drill offset y" );
-                    pad->SetOffset( pt );
-                    NeedRIGHT();
-                    break;
+                // This fixes a bug caused by setting the default D_PAD drill size to a value
+                // other than 0 used to fix a bunch of debug assertions even though it is defined
+                // as a through hole pad.  Wouldn't a though hole pad with no drill be a surface
+                // mount pad (or a conn pad which is a smd pad with no solder paste)?
+                if( ( pad->GetAttribute() != PAD_SMD ) && ( pad->GetAttribute() != PAD_CONN ) )
+                    pad->SetDrillSize( drillSize );
+                else
+                    pad->SetDrillSize( wxSize( 0, 0 ) );
 
-                default:
-                    Expecting( "oval, size, or offset" );
-                }
             }
-
-            // This fixes a bug caused by setting the default D_PAD drill size to a value
-            // other than 0 used to fix a bunch of debug assertions even though it is defined
-            // as a through hole pad.  Wouldn't a though hole pad with no drill be a surface
-            // mount pad (or a conn pad which is a smd pad with no solder paste)?
-            if( ( pad->GetAttribute() != PAD_SMD ) && ( pad->GetAttribute() != PAD_CONN ) )
-                pad->SetDrillSize( drillSize );
-            else
-                pad->SetDrillSize( wxSize( 0, 0 ) );
-
             break;
-        }
 
         case T_layers:
             {

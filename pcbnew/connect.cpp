@@ -303,6 +303,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
 
     // Search for connections to starting point:
 #define USE_EXTENDED_SEARCH
+
 #ifdef USE_EXTENDED_SEARCH
     int dist_max = aTrack->GetWidth() / 2;
     static std::vector<CONNECTED_POINT*> tracks_candidates;
@@ -312,26 +313,28 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
     {
 #ifndef USE_EXTENDED_SEARCH
         int idx = searchEntryPointInCandidatesList( position );
-        if ( idx >= 0 )
+
+        if( idx >= 0 )
         {
             // search after:
-            for ( unsigned ii = idx; ii < m_candidates.size(); ii ++ )
+            for( unsigned ii = idx; ii < m_candidates.size(); ii ++ )
             {
                 if( m_candidates[ii].GetTrack() == aTrack )
                     continue;
                 if( m_candidates[ii].GetPoint() != position )
                     break;
-                if( m_candidates[ii].GetTrack()->GetLayerSet() & layerMask )
+                if( ( m_candidates[ii].GetTrack()->GetLayerSet() & layerMask ).any() )
                     m_connected.push_back( m_candidates[ii].GetTrack() );
             }
+
             // search before:
-            for ( int ii = idx-1; ii >= 0; ii -- )
+            for( int ii = idx-1; ii >= 0; ii -- )
             {
                 if( m_candidates[ii].GetTrack() == aTrack )
                     continue;
                 if( m_candidates[ii].GetPoint() != position )
                     break;
-                if( m_candidates[ii].GetTrack()->GetLayerSet() & layerMask )
+                if( ( m_candidates[ii].GetTrack()->GetLayerSet() & layerMask ).any() )
                     m_connected.push_back( m_candidates[ii].GetTrack() );
             }
         }
@@ -370,7 +373,8 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
     return count;
 }
 
-int CONNECTIONS::searchEntryPointInCandidatesList( const wxPoint & aPoint)
+
+int CONNECTIONS::searchEntryPointInCandidatesList( const wxPoint& aPoint )
 {
     // Search the aPoint coordinates in m_Candidates
     // m_Candidates is sorted by X then Y values, and a fast binary search is used
@@ -379,15 +383,18 @@ int CONNECTIONS::searchEntryPointInCandidatesList( const wxPoint & aPoint)
     int delta = m_candidates.size();
 
     int idx = 0;        // Starting index is the beginning of list
+
     while( delta )
     {
         // Calculate half size of remaining interval to test.
         // Ensure the computed value is not truncated (too small)
-        if( (delta & 1) && ( delta > 1 ) )
+        if( ( delta & 1 ) && ( delta > 1 ) )
             delta++;
+
         delta /= 2;
 
-        CONNECTED_POINT & candidate = m_candidates[idx];
+        CONNECTED_POINT& candidate = m_candidates[idx];
+
         if( candidate.GetPoint() == aPoint )   // candidate found
         {
             return idx;
@@ -607,6 +614,7 @@ void CONNECTIONS::Propagate_SubNets()
         for( unsigned ii = 0; ii < curr_track->m_TracksConnected.size(); ii++ )
         {
             BOARD_CONNECTED_ITEM* track = curr_track->m_TracksConnected[ii];
+
             if( curr_track->GetSubNet() )   // The current track is already a cluster member
             {
                 // The other track is already a cluster member, so we can merge the 2 clusters
@@ -616,8 +624,8 @@ void CONNECTIONS::Propagate_SubNets()
                 }
                 else
                 {
-                    /* The other track is not yet attached to a cluster , so we can add this
-                     * other track to the cluster */
+                    // The other track is not yet attached to a cluster , so we can add this
+                    // other track to the cluster
                     track->SetSubNet( curr_track->GetSubNet() );
                 }
             }
@@ -631,8 +639,8 @@ void CONNECTIONS::Propagate_SubNets()
                 }
                 else
                 {
-                    /* it is connected to an other segment not in a cluster, so we must
-                     * create a new cluster (only with the 2 track segments) */
+                    // it is connected to an other segment not in a cluster, so we must
+                    // create a new cluster (only with the 2 track segments)
                     sub_netcode++;
                     curr_track->SetSubNet( sub_netcode );
                     track->SetSubNet( curr_track->GetSubNet() );
@@ -648,10 +656,12 @@ void CONNECTIONS::Propagate_SubNets()
     // sub_netcodes to intersecting pads
     for( unsigned ii = 0; ii < m_sortedPads.size(); ii++ )
     {
-        D_PAD * curr_pad = m_sortedPads[ii];
+        D_PAD* curr_pad = m_sortedPads[ii];
+
         for( unsigned jj = 0; jj < curr_pad->m_PadsConnected.size(); jj++ )
         {
-            D_PAD * pad = curr_pad->m_PadsConnected[jj];
+            D_PAD* pad = curr_pad->m_PadsConnected[jj];
+
             if( curr_pad->GetSubNet() )   // the current pad is already attached to a cluster
             {
                 if( pad->GetSubNet() > 0 )
@@ -660,8 +670,10 @@ void CONNECTIONS::Propagate_SubNets()
                     // Store the initial subnets, which will be modified by Merge_PadsSubNets
                     int subnet1 = pad->GetSubNet();
                     int subnet2 = curr_pad->GetSubNet();
+
                     // merge subnets of pads only, even those not connected by tracks
                     Merge_PadsSubNets( subnet1, subnet2 );
+
                     // merge subnets of tracks (and pads, which are already merged)
                     Merge_SubNets( subnet1, subnet2 );
                 }
@@ -716,12 +728,15 @@ void PCB_BASE_FRAME::TestConnections()
     // note some nets can have no tracks, and pads intersecting
     // so Build_CurrNet_SubNets_Connections must be called for each net
     CONNECTIONS connections( m_Pcb );
+
     int last_net_tested = 0;
     int current_net_code = 0;
+
     for( TRACK* track = m_Pcb->m_Track; track; )
     {
         // At this point, track is the first track of a given net
         current_net_code = track->GetNetCode();
+
         // Get last track of the current net
         TRACK* lastTrack = track->GetEndNetCode( current_net_code );
 
@@ -780,6 +795,7 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
     if( m_Pcb->m_Track )
     {
         CONNECTIONS connections( m_Pcb );
+
         TRACK* firstTrack;
         TRACK* lastTrack = NULL;
         firstTrack = m_Pcb->m_Track.GetFirst()->GetStartNetCode( aNetCode );
@@ -887,8 +903,10 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         for( curr_track = m_Pcb->m_Track; curr_track; curr_track = curr_track->Next() )
         {
             int netcode = curr_track->GetNetCode();
+
             if( netcode == 0 )
-            {   // try to find a connected item having a netcode
+            {
+                // try to find a connected item having a netcode
                 for( unsigned kk = 0; kk < curr_track->m_TracksConnected.size(); kk++ )
                 {
                     int altnetcode = curr_track->m_TracksConnected[kk]->GetNetCode();
@@ -901,8 +919,10 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
                     }
                 }
             }
+
             if( netcode )    // this track has a netcode
-            {   // propagate this netcode to connected tracks having no netcode
+            {
+                // propagate this netcode to connected tracks having no netcode
                 for( unsigned kk = 0; kk < curr_track->m_TracksConnected.size(); kk++ )
                 {
                     int altnetcode = curr_track->m_TracksConnected[kk]->GetNetCode();

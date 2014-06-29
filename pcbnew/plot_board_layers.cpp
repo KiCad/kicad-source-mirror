@@ -154,7 +154,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
 
     // Specify that the contents of the "Edges Pcb" layer are to be plotted
     // in addition to the contents of the currently specified layer.
-    LSET    layer_mask( aLayer );
+    LSET    layer_mask( ToLAYER_ID( aLayer ) );
 
     if( !aPlotOpt.GetExcludeEdgeLayer() )
         layer_mask.set( Edge_Cuts );
