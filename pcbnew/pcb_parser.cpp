@@ -734,6 +734,7 @@ void PCB_PARSER::parseLayer( LAYER* aLayer ) throw( IO_ERROR, PARSE_ERROR )
 }
 
 
+
 void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 {
     wxCHECK_RET( CurTok() == T_layers,
@@ -752,50 +753,55 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 
         parseLayer( &layer );
 
-        if( layer.m_type != LT_UNDEFINED )     // it's a copper layer
-        {
-            cu.push_back( layer );
+        if( layer.m_type == LT_UNDEFINED )     // it's a non-copper layer
+            break;
 
-            //DBG( printf( "cop m_visible:%s\n", cu.back().m_visible ? "true" : "false" );)
+        cu.push_back( layer );      // it's copper
+    }
+
+    // All Cu layers are parsed, but not the non-cu layers here.
+
+    // The original *.kicad_pcb file format and the inverted
+    // Cu stack format both have all the Cu layers first, so use this
+    // trick to handle either. The layer number in the (layers ..)
+    // s-expression element are ignored.
+    if( cu.size() )
+    {
+        // Rework the layer numbers, which changed when the Cu stack
+        // was flipped.  So we instead use position in the list.
+        cu[cu.size()-1].m_number = B_Cu;
+
+        for( unsigned i=0; i < cu.size()-1; ++i )
+        {
+            cu[i].m_number = i;
         }
-        else    // all non-copper are fixed names, simply look up LAYER_ID.
+
+        for( std::vector<LAYER>::const_iterator it = cu.begin(); it<cu.end();  ++it )
         {
-            // This is an edge triggered one shot if( test ) that happens on
-            // the first non copper layer, which follow all the Cu layers.
-            // This is the feature that the original *.kicad_pcb file format and
-            // the inverted Cu stack format had in common and is therefore a trick
-            // used to handle either.  The layer number in the (layers ..)
-            // s-expression element are ignored.
-            if( cu.size() )
-            {
-                // Rework the layer numbers, which changed when the Cu stack
-                // was flipped.  So we instead use position in the list.
-                cu[cu.size()-1].m_number = B_Cu;
+            enabledLayers.set( it->m_number );
 
-                for( unsigned i=0; i < cu.size()-1; ++i )
-                {
-                    cu[i].m_number = i;
-                }
+            if( it->m_visible )
+                visibleLayers.set( it->m_number );
 
-                for( std::vector<LAYER>::const_iterator it = cu.begin(); it<cu.end();  ++it )
-                {
-                    enabledLayers.set( it->m_number );
+            m_board->SetLayer( LAYER_ID( it->m_number ), *it );
 
-                    if( it->m_visible )
-                        visibleLayers.set( it->m_number );
+            UTF8 name = it->m_name;
 
-                    m_board->SetLayer( LAYER_ID( it->m_number ), *it );
+            m_layerIndices[ name ] = LAYER_ID( it->m_number );
+            m_layerMasks[   name ] = LSET( LAYER_ID( it->m_number ) );
+        }
 
-                    UTF8 name = it->m_name;
+        copperLayerCount = cu.size();
+    }
 
-                    m_layerIndices[ name ] = LAYER_ID( it->m_number );
-                    m_layerMasks[   name ] = LSET( LAYER_ID( it->m_number ) );
-                }
+    if( token != T_RIGHT )
+    {
+        // read any non-copper layers
+        for( token = NextTok(); token != T_RIGHT;  token = NextTok() )
+        {
+            LAYER   layer;
 
-                copperLayerCount = cu.size();
-
-                cu.clear();     // this marks the list as "one time processed".
-            }
+            parseLayer( &layer );
 
             LAYER_ID_MAP::const_iterator it = m_layerIndices.find( UTF8( layer.m_name ) );
 
