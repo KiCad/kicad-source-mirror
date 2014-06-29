@@ -84,6 +84,9 @@ PL_EDITOR_SCREEN::PL_EDITOR_SCREEN( const wxSize& aPageSizeIU ) :
     for( unsigned i = 0; i < DIM( pl_editorGridList );  ++i )
         AddGrid( pl_editorGridList[i] );
 
+    // pl_editor uses the same frame position as schematic and board editors
+    m_Center = false;
+
     // Set the working grid size to a reasonable value
     SetGrid( MM_GRID( 1.0 ) );
 
