@@ -124,7 +124,7 @@ void DXF2BRD_CONVERTER::addLine( const DRW_Line& data )
 {
     DRAWSEGMENT*    segm = new DRAWSEGMENT( m_brd );
 
-    segm->SetLayer( (LAYER_ID) m_brdLayer );
+    segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
 
     wxPoint         start( mapX( data.basePoint.x ), mapY( data.basePoint.y ) );
 
@@ -146,7 +146,7 @@ void DXF2BRD_CONVERTER::addCircle( const DRW_Circle& data )
 {
     DRAWSEGMENT* segm = new DRAWSEGMENT( m_brd );
 
-    segm->SetLayer( (LAYER_ID) m_brdLayer );
+    segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
     segm->SetShape( S_CIRCLE );
     wxPoint center( mapX( data.basePoint.x ), mapY( data.basePoint.y ) );
     segm->SetCenter( center );
@@ -166,7 +166,7 @@ void DXF2BRD_CONVERTER::addArc( const DRW_Arc& data )
 {
     DRAWSEGMENT* segm = new DRAWSEGMENT( m_brd );
 
-    segm->SetLayer( (LAYER_ID) m_brdLayer );
+    segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
     segm->SetShape( S_ARC );
 
     // Init arc centre:
@@ -203,7 +203,7 @@ void DXF2BRD_CONVERTER::addArc( const DRW_Arc& data )
 void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
 {
     TEXTE_PCB*  pcb_text = new TEXTE_PCB( m_brd );
-    pcb_text->SetLayer( (LAYER_ID) m_brdLayer );
+    pcb_text->SetLayer( ToLAYER_ID( m_brdLayer ) );
 
     wxPoint refPoint( mapX(data.basePoint.x), mapY(data.basePoint.y) );
     wxPoint secPoint( mapX(data.secPoint.x), mapY(data.secPoint.y) );
@@ -331,7 +331,7 @@ void DXF2BRD_CONVERTER::addMText( const DRW_MText& data )
     }
 
     TEXTE_PCB*  pcb_text = new TEXTE_PCB( m_brd );
-    pcb_text->SetLayer( (LAYER_ID) m_brdLayer );
+    pcb_text->SetLayer( ToLAYER_ID( m_brdLayer ) );
 
     wxPoint     textpos( mapX( data.basePoint.x ), mapY( data.basePoint.y ) );
     pcb_text->SetTextPosition( textpos );

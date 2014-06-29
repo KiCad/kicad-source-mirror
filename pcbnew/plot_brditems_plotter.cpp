@@ -57,7 +57,7 @@
 
 EDA_COLOR_T BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 {
-    EDA_COLOR_T color = m_board->GetLayerColor( (LAYER_ID) aLayer );
+    EDA_COLOR_T color = m_board->GetLayerColor( ToLAYER_ID( aLayer ) );
     if (color == WHITE)
         color = LIGHTGRAY;
     return color;

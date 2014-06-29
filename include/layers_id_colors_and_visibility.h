@@ -198,6 +198,10 @@ class LSET : public BASE_SET
 {
 public:
 
+    /**
+     * Constructor LSET()
+     * creates an empty (cleared) set.
+     */
     LSET() :
         BASE_SET()
     {}
@@ -209,9 +213,21 @@ public:
 
     /**
      * Constructor LSET( LAYER_ID )
-     * takes a LAYER_ID and sets that bit.
+     * takes a LAYER_ID and sets that bit.  This makes the following code into
+     * a bug typically:
+     *
+     * <code>   LSET s = 0;  </code>
+     *
+     * since that will call this constructor and set bit zero, probably not what was
+     * intended. Use
+     *
+     * <code>
+     *    LSET s;
+     * </code>
+     *
+     * for an empty set.
      */
-    LSET( int aLayer )
+    LSET( LAYER_ID aLayer )     // LAYER_ID deliberately exludes int and relatives
     {
         set( aLayer );
     }
@@ -225,7 +241,7 @@ public:
     /**
      * Constructor LSET( int, ...)
      * takes a variable number of LAYER_IDs in the argument list to construct
-     * the set.
+     * the set.  Typically used only in static construction.
      * @param aIdCount is the number of LAYER_IDs which follow.
      */
     LSET( size_t aIdCount, ... );
@@ -341,22 +357,11 @@ public:
      * Find the first set LAYER_ID. Returns UNDEFINED_LAYER if more
      * than one is set or UNSELECTED_LAYER if none is set.
      */
-    LAYER_ID ExtractLayer();
+    LAYER_ID ExtractLayer() const;
 
 private:
 
 };
-
-
-/**
- * @return bool if 2 layer masks have a comman layer
- * @param aMask1 = a layer mask
- * @param aMask2 = an other layer mask
- */
-inline bool IsLayerMasksIntersect( LSET aMask1, LSET aMask2 )
-{
-    return (aMask1 & aMask2).any();
-}
 
 
 /**
@@ -617,5 +622,8 @@ inline bool IsNetnameLayer( LAYER_NUM aLayer )
     return aLayer >= NETNAMES_GAL_LAYER( F_Cu ) &&
            aLayer < NETNAMES_GAL_LAYER( END_NETNAMES_VISIBLE_LIST );
 }
+
+
+LAYER_ID ToLAYER_ID( int aLayer );
 
 #endif // LAYERS_ID_AND_VISIBILITY_H_

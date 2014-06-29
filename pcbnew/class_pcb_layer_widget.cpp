@@ -168,7 +168,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         for( int row = rowCount-1; row>=0; --row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
-            LAYER_ID    layer = (LAYER_ID) getDecodedId( cb->GetId() );
+            LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
 
             if( IsCopperLayer( layer ) )
             {
@@ -181,7 +181,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         for( int row=0;  row<rowCount;  ++row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
-            LAYER_ID    layer = (LAYER_ID) getDecodedId( cb->GetId() );
+            LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
 
             if( IsCopperLayer( layer ) )
             {
@@ -266,7 +266,7 @@ void PCB_LAYER_WIDGET::SyncLayerVisibilities()
 
         wxWindow* w = getLayerComp( row, 0 );
 
-        LAYER_ID layerId = (LAYER_ID) getDecodedId( w->GetId() );
+        LAYER_ID layerId = ToLAYER_ID( getDecodedId( w->GetId() ) );
 
         // this does not fire a UI event
         SetLayerVisible( layerId, board->IsLayerVisible( layerId ) );
@@ -351,7 +351,7 @@ void PCB_LAYER_WIDGET::ReFill()
 
 void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
 {
-    myframe->GetBoard()->SetLayerColor( (LAYER_ID) aLayer, aColor );
+    myframe->GetBoard()->SetLayerColor( ToLAYER_ID( aLayer ), aColor );
     myframe->ReCreateLayerBox( false );
 
     if( myframe->IsGalCanvasActive() )
@@ -369,7 +369,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
 {
     // the layer change from the PCB_LAYER_WIDGET can be denied by returning
     // false from this function.
-    myframe->SetActiveLayer( (LAYER_ID) aLayer, false );
+    myframe->SetActiveLayer( ToLAYER_ID( aLayer ), false );
 
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();

@@ -286,6 +286,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
         m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
         m_SelLayerBox->SetBoardFrame( this );
     }
+
     ReCreateLayerBox( false );
     m_mainToolBar->AddControl( m_SelLayerBox );
 

@@ -32,7 +32,6 @@ public:
         LAYER_BOX_SELECTOR( parent, id, pos, size, n, choices )
     {
         m_boardFrame = NULL;
-        m_layerMaskDisable = 0;
     }
 
     // Accessors

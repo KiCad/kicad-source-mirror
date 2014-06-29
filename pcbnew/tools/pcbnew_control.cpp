@@ -315,7 +315,7 @@ int PCBNEW_CONTROL::LayerNext( TOOL_EVENT& aEvent )
     else
         ++layer;
 
-    editFrame->SwitchLayer( NULL, LAYER_ID( layer ) );
+    editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
     editFrame->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -342,7 +342,7 @@ int PCBNEW_CONTROL::LayerPrev( TOOL_EVENT& aEvent )
         --layer;
 
     assert( IsCopperLayer( layer ) );
-    editFrame->SwitchLayer( NULL, LAYER_ID( layer ) );
+    editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
     editFrame->GetGalCanvas()->SetFocus();
     setTransitions();
 

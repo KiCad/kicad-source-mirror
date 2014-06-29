@@ -126,7 +126,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
         case VIA_MICROVIA:  // from external to the near neighbor inner layer
             {
-                LAYER_ID last_inner_layer = (LAYER_ID) ( GetBoard()->GetCopperLayerCount() - 2 );
+                LAYER_ID last_inner_layer = ToLAYER_ID( ( GetBoard()->GetCopperLayerCount() - 2 ) );
 
                 if( first_layer == B_Cu )
                     last_layer = last_inner_layer;

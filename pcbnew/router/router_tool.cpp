@@ -538,7 +538,7 @@ void ROUTER_TOOL::performRouting()
 
     m_router->SwitchLayer( m_startLayer );
 
-    frame->SetActiveLayer( (LAYER_ID) m_startLayer );
+    frame->SetActiveLayer( ToLAYER_ID( m_startLayer ) );
     frame->GetGalCanvas()->SetFocus();
 
     if( m_startItem && m_startItem->Net() >= 0 )
@@ -578,7 +578,7 @@ void ROUTER_TOOL::performRouting()
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
             m_router->ToggleViaPlacement();
-            frame->SetTopLayer( (LAYER_ID) m_router->GetCurrentLayer() );
+            frame->SetTopLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
@@ -590,13 +590,13 @@ void ROUTER_TOOL::performRouting()
         {
             m_router->SwitchLayer( m_router->NextCopperLayer( true ) );
             updateEndItem( *evt );
-            frame->SetActiveLayer( (LAYER_ID) m_router->GetCurrentLayer() );
+            frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsAction( &COMMON_ACTIONS::layerPrev ) )
         {
             m_router->SwitchLayer( m_router->NextCopperLayer( false ) );
-            frame->SetActiveLayer( (LAYER_ID) m_router->GetCurrentLayer() );
+            frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsAction( &ACT_EndTrack ) )

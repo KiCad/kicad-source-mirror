@@ -523,11 +523,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_ZONE_DUPLICATE:
-    {
-        ZONE_CONTAINER* zone = (ZONE_CONTAINER*) GetCurItem();
-        duplicateZone( &dc, zone );
-    }
-    break;
+        {
+            ZONE_CONTAINER* zone = (ZONE_CONTAINER*) GetCurItem();
+            duplicateZone( &dc, zone );
+        }
+        break;
 
     case ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE:
         m_canvas->MoveCursorToCrossHair();
@@ -559,60 +559,60 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_MOVE_ZONE_CORNER:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), false );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), false );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Drag_Outline_Edge( &dc, zone_cont, zone_cont->GetSelectedCorner() );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Drag_Outline_Edge( &dc, zone_cont, zone_cont->GetSelectedCorner() );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_MOVE_ZONE_OUTLINES:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Outlines( &dc, zone_cont );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Outlines( &dc, zone_cont );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_ADD_ZONE_CORNER:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        wxPoint         pos = GetCrossHairPosition();
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            wxPoint         pos = GetCrossHairPosition();
 
-        /* add corner between zone_cont->m_CornerSelection
-         * and zone_cont->m_CornerSelection+1
-         * and start move the new corner
-         */
-        zone_cont->Draw( m_canvas, &dc, GR_XOR );
-        zone_cont->Outline()->InsertCorner( zone_cont->GetSelectedCorner(), pos.x, pos.y );
-        zone_cont->SetSelectedCorner( zone_cont->GetSelectedCorner() + 1 );
-        zone_cont->Draw( m_canvas, &dc, GR_XOR );
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), true );
+            /* add corner between zone_cont->m_CornerSelection
+             * and zone_cont->m_CornerSelection+1
+             * and start move the new corner
+             */
+            zone_cont->Draw( m_canvas, &dc, GR_XOR );
+            zone_cont->Outline()->InsertCorner( zone_cont->GetSelectedCorner(), pos.x, pos.y );
+            zone_cont->SetSelectedCorner( zone_cont->GetSelectedCorner() + 1 );
+            zone_cont->Draw( m_canvas, &dc, GR_XOR );
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), true );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
     case ID_POPUP_PCB_PLACE_ZONE_CORNER:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        End_Move_Zone_Corner_Or_Outlines( &dc, zone_cont );
-        m_canvas->SetAutoPanRequest( false );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            End_Move_Zone_Corner_Or_Outlines( &dc, zone_cont );
+            m_canvas->SetAutoPanRequest( false );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         m_canvas->MoveCursorToCrossHair();
@@ -1007,7 +1007,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
-        SetActiveLayer( (LAYER_ID) m_SelLayerBox->GetLayerSelection() );
+        SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 
         if( DisplayOpt.ContrastModeDisplay )
             m_canvas->Refresh( true );

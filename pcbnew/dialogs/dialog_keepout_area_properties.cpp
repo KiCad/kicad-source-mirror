@@ -222,7 +222,7 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
         return false;
     }
 
-    m_zonesettings.m_CurrentZone_Layer = (LAYER_ID) m_layerId[ii];
+    m_zonesettings.m_CurrentZone_Layer = ToLAYER_ID( m_layerId[ii] );
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
     case 0:

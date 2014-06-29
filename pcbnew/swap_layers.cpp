@@ -171,7 +171,7 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, LAYER_ID* aArray
         /* Provide a text string to identify this layer (with trailing spaces
          * within that string being purged).
          */
-        label = new wxStaticText( this, wxID_STATIC, board->GetLayerName( LAYER_ID( layer ) ),
+        label = new wxStaticText( this, wxID_STATIC, board->GetLayerName( ToLAYER_ID( layer ) ),
                                   wxDefaultPosition, wxDefaultSize,
                                   wxALIGN_RIGHT );
 
@@ -212,7 +212,7 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, LAYER_ID* aArray
 
             for( unsigned jj = 1;  jj < DIM( layer_list ); ++jj )
             {
-                text->SetLabel( board->GetLayerName( LAYER_ID( jj ) ) );
+                text->SetLabel( board->GetLayerName( ToLAYER_ID( jj ) ) );
 
                 if( goodSize.x < text->GetSize().x )
                     goodSize.x = text->GetSize().x;
@@ -292,7 +292,7 @@ void SWAP_LAYERS_DIALOG::Sel_Layer( wxCommandEvent& event )
 
     LSET notallowed_mask = IsCopperLayer( ii ) ? LSET::AllNonCuMask() : LSET::AllCuMask();
 
-    layer = m_Parent->SelectLayer( layer == NO_CHANGE ? LAYER_ID( ii ): layer, notallowed_mask );
+    layer = m_Parent->SelectLayer( layer == NO_CHANGE ? ToLAYER_ID( ii ): layer, notallowed_mask );
 
     if( !IsValidLayer( layer ) )
         return;

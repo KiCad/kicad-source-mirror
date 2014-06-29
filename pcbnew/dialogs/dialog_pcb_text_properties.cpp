@@ -250,7 +250,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     }
 
     // Set the layer on which the PCB text is laying
-    m_SelectedPCBText->SetLayer( (LAYER_ID) m_LayerSelectionCtrl->GetLayerSelection() );
+    m_SelectedPCBText->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
 
     // Set whether the PCB text is mirrored (faced down from layer face perspective)
     m_SelectedPCBText->SetMirrored( m_DisplayCtrl->GetSelection() == 1 );

@@ -744,7 +744,7 @@ void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
             track->SetStart( wxPoint( s.A.x, s.A.y ) );
             track->SetEnd( wxPoint( s.B.x, s.B.y ) );
             track->SetWidth( seg->Width() );
-            track->SetLayer( (LAYER_ID) seg->Layers().Start() );
+            track->SetLayer( ToLAYER_ID( seg->Layers().Start() ) );
             track->SetNetCode( seg->Net() );
             newBI = track;
             break;

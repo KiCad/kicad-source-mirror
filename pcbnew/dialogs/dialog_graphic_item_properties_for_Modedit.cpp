@@ -220,7 +220,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     m_brdSettings.m_ModuleSegmentWidth = thickness;
     m_parent->SetDesignSettings( m_brdSettings );
 
-    m_item->SetLayer( LAYER_ID( layer ) );
+    m_item->SetLayer( ToLAYER_ID( layer ) );
 
     if( m_item->GetShape() == S_ARC )
     {

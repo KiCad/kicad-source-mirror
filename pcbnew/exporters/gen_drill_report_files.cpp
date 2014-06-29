@@ -321,8 +321,8 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
                 fputs( "Drill report for buried and blind vias :\n\n", m_file );
 
             sprintf( line, "Drill report for holes from layer %s to layer %s :\n",
-                     TO_UTF8( m_pcb->GetLayerName( (LAYER_ID) layer1 ) ),
-                     TO_UTF8( m_pcb->GetLayerName( (LAYER_ID) layer2 ) ) );
+                     TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( layer1 ) ) ),
+                     TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( layer2 ) ) ) );
         }
 
         fputs( line, m_file );

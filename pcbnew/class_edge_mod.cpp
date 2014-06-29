@@ -111,18 +111,17 @@ void EDGE_MODULE::SetDrawCoord()
 void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                         const wxPoint& offset )
 {
-    int             ux0, uy0, dx, dy, radius, StAngle, EndAngle;
-    int             type_trace;
-    int             typeaff;
-    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    PCB_BASE_FRAME* frame;
+    int         ux0, uy0, dx, dy, radius, StAngle, EndAngle;
+    int         type_trace;
+    int         typeaff;
+    LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+
     MODULE* module = (MODULE*) m_Parent;
 
-    if( module == NULL )
+    if( !module )
         return;
 
-
-    BOARD * brd = GetBoard( );
+    BOARD* brd = GetBoard( );
 
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
@@ -135,8 +134,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
             ColorTurnToDarkDarkGray( &color );
     }
 
-
-    frame = (PCB_BASE_FRAME*) panel->GetParent();
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
 
     type_trace = m_Shape;
 
