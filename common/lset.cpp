@@ -30,14 +30,16 @@
 #include <class_board.h>
 
 
-LSET::LSET( const LAYER_ID* aArray, unsigned aCount )
+LSET::LSET( const LAYER_ID* aArray, unsigned aCount ) :
+    BASE_SET()
 {
     for( unsigned i=0; i<aCount; ++i )
         set( aArray[i] );
 }
 
 
-LSET::LSET( unsigned aIdCount, LAYER_ID aFirst, ... )
+LSET::LSET( unsigned aIdCount, LAYER_ID aFirst, ... ) :
+    BASE_SET()
 {
     // The constructor, without the mandatory aFirst argument, could have been confused
     // by the compiler with the LSET( LAYER_ID ).  With aFirst, that ambiguity is not

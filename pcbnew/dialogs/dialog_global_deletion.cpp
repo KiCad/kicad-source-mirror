@@ -114,7 +114,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         LSET layers_filter = LSET().set();
 
         if( m_rbLayersOption->GetSelection() != 0 )     // Use current layer only
-            layers_filter = LSET( m_currentLayer );
+            layers_filter = LSET( ToLAYER_ID( m_currentLayer ) );
 
         if( m_DelZones->GetValue() )
         {

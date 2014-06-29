@@ -241,7 +241,8 @@ public:
      *
      * for an empty set.
      */
-    LSET( LAYER_ID aLayer )     // LAYER_ID deliberately exludes int and relatives
+    LSET( LAYER_ID aLayer ) :    // LAYER_ID deliberately exludes int and relatives
+        BASE_SET()
     {
         set( aLayer );
     }
@@ -379,6 +380,11 @@ public:
 
 private:
 
+    /// Take this off the market, it may not be used because of LSET( LAYER_ID ).
+    LSET( unsigned long __val )
+    {
+        // not usable, it's private.
+    }
 };
 
 

@@ -120,34 +120,34 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     // Adjust the actual via layer pair
     switch( via->GetViaType() )
     {
-        case VIA_BLIND_BURIED:
+    case VIA_BLIND_BURIED:
+        via->SetLayerPair( first_layer, last_layer );
+        break;
+
+    case VIA_MICROVIA:  // from external to the near neighbor inner layer
+        {
+            LAYER_ID last_inner_layer = ToLAYER_ID( ( GetBoard()->GetCopperLayerCount() - 2 ) );
+
+            if( first_layer == B_Cu )
+                last_layer = last_inner_layer;
+            else if( first_layer == F_Cu )
+                last_layer = In1_Cu;
+            else if( first_layer == last_inner_layer )
+                last_layer = B_Cu;
+            else if( first_layer == In1_Cu )
+                last_layer = F_Cu;
+
+            // else error: will be removed later
             via->SetLayerPair( first_layer, last_layer );
-            break;
-
-        case VIA_MICROVIA:  // from external to the near neighbor inner layer
             {
-                LAYER_ID last_inner_layer = ToLAYER_ID( ( GetBoard()->GetCopperLayerCount() - 2 ) );
-
-                if( first_layer == B_Cu )
-                    last_layer = last_inner_layer;
-                else if( first_layer == F_Cu )
-                    last_layer = In1_Cu;
-                else if( first_layer == last_inner_layer )
-                    last_layer = B_Cu;
-                else if( first_layer == In1_Cu )
-                    last_layer = F_Cu;
-
-                // else error: will be removed later
-                via->SetLayerPair( first_layer, last_layer );
-                {
-                    NETINFO_ITEM* net = via->GetNet();
-                    via->SetWidth( net->GetMicroViaSize() );
-                }
+                NETINFO_ITEM* net = via->GetNet();
+                via->SetWidth( net->GetMicroViaSize() );
             }
-            break;
+        }
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 
     if( g_Drc_On && BAD_DRC == m_drc->Drc( via, GetBoard()->m_Track ) )
@@ -311,4 +311,3 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
             GetBoard()->m_FullRatsnest[ii].m_Status &= ~CH_VISIBLE;
     }
 }
-

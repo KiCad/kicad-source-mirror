@@ -370,7 +370,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
         for( int i = 0;  i<LAYER_ID_COUNT;  ++i )
         {
             wxString vn = wxString::Format(
-                            wxT( "ColorPCBLayer:%s" ),
+                            wxT( "ColorPCBLayer_%s" ),
                             LSET::Name( LAYER_ID( i ) ) );
 
             m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, vn, LOC_COLOR( i ), cds.m_LayersColors[i] ) );
