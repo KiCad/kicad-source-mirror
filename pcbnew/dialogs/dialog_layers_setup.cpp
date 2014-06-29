@@ -80,6 +80,7 @@ static LSEQ dlg_layers()
         F_Mask,
         F_Cu,
 
+        In1_Cu,
         In2_Cu,
         In3_Cu,
         In4_Cu,
@@ -360,14 +361,19 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( wxTopLevelWindow* aParent, BOARD* aBoa
 
 void DIALOG_LAYERS_SETUP::showCopperChoice( int copperCount )
 {
-    static const int copperCounts[] = { 2,4,6,8,10,12,14,16 };
+    if( copperCount > MAX_CU_LAYERS )
+        copperCount = MAX_CU_LAYERS;
 
-    for( unsigned i = 0;  i<sizeof(copperCounts);  ++i )
+    if( copperCount < 2 )
+        copperCount = 2;
+
+    for( int lyrCnt = 2; lyrCnt <= MAX_CU_LAYERS; lyrCnt += 2 )
     {
         // note this will change a one layer board to 2:
-        if( copperCount <= copperCounts[i] )
+        if( copperCount <= lyrCnt )
         {
-            m_CopperLayersChoice->SetSelection(i);
+            int idx = lyrCnt/2 - 1;
+            m_CopperLayersChoice->SetSelection(idx);
             break;
         }
     }

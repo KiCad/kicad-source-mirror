@@ -81,7 +81,6 @@ public:
     {
         m_plotter = aPlotter;
         m_board = aBoard;
-        m_layerMask = 0;
     }
 
     /**

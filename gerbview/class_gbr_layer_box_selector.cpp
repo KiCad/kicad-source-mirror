@@ -49,7 +49,7 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
             continue;
 
         // Prepare Bitmap
-        SetBitmapLayer( layerbmp, ToLAYER_ID( layerid ) );
+        SetBitmapLayer( layerbmp, layerid );
 
         layername = GetLayerName( layerid );
 

@@ -149,7 +149,11 @@ typedef std::vector<LAYER_ID>   BASE_SEQ;
  * <code>
  *
  *      for( LSEQ cu_stack = aSet.CuStack();  cu_stack;  ++cu_stack )
+ *      {
  *          layer_id = *cu_stack;
+ *          :
+ *          things to do with layer_id;
+ *      }
  *
  * </code>
  */
@@ -198,13 +202,24 @@ class LSET : public BASE_SET
 {
 public:
 
+    // The constructor flavors are carefully chosen to prevent LSET( int ) from compiling.
+    // That excludes  "LSET s = 0;" and excludes "LSET s = -1;", etc.
+    // LSET s = 0;  needs to be removed from the code, this accomplishes that.
+    // Remember LSET( LAYER_ID(0) ) sets bit 0, so "LSET s = 0;" is illegal
+    // to prevent that surprize.  Therefore LSET's constructor suite is significantly
+    // different than the base class from which it is derived.
+
+    // Other member functions (non-constructor functions) are identical to the base
+    // class's and therefore are re-used from the base class.
+
     /**
      * Constructor LSET()
      * creates an empty (cleared) set.
      */
     LSET() :
-        BASE_SET()
-    {}
+        BASE_SET()  // all bits are set to zero in BASE_SET()
+    {
+    }
 
     LSET( const BASE_SET& aOther ) :
         BASE_SET( aOther )
@@ -214,12 +229,11 @@ public:
     /**
      * Constructor LSET( LAYER_ID )
      * takes a LAYER_ID and sets that bit.  This makes the following code into
-     * a bug typically:
+     * a bug:
      *
      * <code>   LSET s = 0;  </code>
      *
-     * since that will call this constructor and set bit zero, probably not what was
-     * intended. Use
+     * Instead use:
      *
      * <code>
      *    LSET s;
@@ -239,12 +253,16 @@ public:
     LSET( const LAYER_ID* aArray, unsigned aCount );
 
     /**
-     * Constructor LSET( int, ...)
-     * takes a variable number of LAYER_IDs in the argument list to construct
-     * the set.  Typically used only in static construction.
+     * Constructor LSET( unsigned, LAYER_ID, ...)
+     * takes one or more LAYER_IDs in the argument list to construct
+     * the set.  Typically only used in static construction.
+     *
      * @param aIdCount is the number of LAYER_IDs which follow.
+     * @param aFirst is the first included in @a aIdCount and must always be present, and can
+     *  be followed by any number of additional LAYER_IDs so long as @a aIdCount accurately
+     *  reflects the count.
      */
-    LSET( size_t aIdCount, ... );
+    LSET( unsigned aIdCount, LAYER_ID aFirst, ... );  // args chosen to prevent LSET( int ) from compiling
 
     /**
      * Function Name

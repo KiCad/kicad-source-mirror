@@ -35,12 +35,12 @@ public:
     // Virtual function pure because GerbView uses its own functions in a derived class
     virtual bool IsLayerEnabled( LAYER_NUM aLayer ) const = 0;
 
-    bool SetLayersOrdered(bool value);
-    bool SetLayersHotkeys(bool value);
+    bool SetLayersOrdered( bool value );
+    bool SetLayersHotkeys( bool value );
 
 protected:
    // Fills the layer bitmap aLayerbmp with the layer color
-    void SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_ID aLayer );
+    void SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer );
 };
 
 

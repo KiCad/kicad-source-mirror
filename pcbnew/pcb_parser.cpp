@@ -67,7 +67,7 @@ void PCB_PARSER::init()
         std::string untranslated = TO_UTF8( wxString( LSET::Name( LAYER_ID( layer ) ) ) );
 
         m_layerIndices[ untranslated ] = LAYER_ID( layer );
-        m_layerMasks[ untranslated ]   = LSET( layer );
+        m_layerMasks[ untranslated ]   = LSET( LAYER_ID( layer ) );
     }
 
     m_layerMasks[ "*.Cu" ]      = LSET::AllCuMask();

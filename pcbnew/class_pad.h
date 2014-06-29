@@ -363,7 +363,6 @@ public:
     int GetSubRatsnest() const                  { return m_SubRatsnest; }
     void SetSubRatsnest( int aSubRatsnest )     { m_SubRatsnest = aSubRatsnest; }
 
-
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     bool IsOnLayer( LAYER_ID aLayer ) const

@@ -394,7 +394,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;2&quot; &quot;4&quot; &quot;6&quot; &quot;8&quot; &quot;10&quot; &quot;12&quot; &quot;14&quot; &quot;16&quot; &quot;18&quot; &quot;20&quot; &quot;22&quot; &quot;24&quot; &quot;26&quot; &quot;27&quot; &quot;28&quot; &quot;30&quot; &quot;32&quot;</property>
+                                        <property name="choices">&quot;2&quot; &quot;4&quot; &quot;6&quot; &quot;8&quot; &quot;10&quot; &quot;12&quot; &quot;14&quot; &quot;16&quot; &quot;18&quot; &quot;20&quot; &quot;22&quot; &quot;24&quot; &quot;26&quot; &quot;28&quot; &quot;30&quot; &quot;32&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
