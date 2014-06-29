@@ -37,24 +37,34 @@ LSET::LSET( const LAYER_ID* aArray, unsigned aCount )
 }
 
 
-LSET::LSET( size_t aIdCount, ... )
+LSET::LSET( unsigned aIdCount, LAYER_ID aFirst, ... )
 {
-    va_list ap;
+    // The constructor, without the mandatory aFirst argument, could have been confused
+    // by the compiler with the LSET( LAYER_ID ).  With aFirst, that ambiguity is not
+    // present.  Therefore aIdCount must always be >=1.
+    wxASSERT_MSG( aIdCount > 0, wxT( "aIdCount must be >= 1" ) );
 
-    va_start( ap, aIdCount );
+    set( aFirst );
 
-    for( size_t i=0;  i<aIdCount;  ++i )
+    if( --aIdCount )
     {
-        LAYER_ID id = (LAYER_ID) va_arg( ap, int );
+        va_list ap;
 
-        // printf( "%s: id:%d LAYER_ID_COUNT:%d\n", __func__, id, LAYER_ID_COUNT );
+        va_start( ap, aFirst );
 
-        assert( unsigned( id ) < LAYER_ID_COUNT );
+        for( unsigned i=0;  i<aIdCount;  ++i )
+        {
+            LAYER_ID id = (LAYER_ID) va_arg( ap, int );
 
-        set( id );
+            // printf( "%s: id:%d LAYER_ID_COUNT:%d\n", __func__, id, LAYER_ID_COUNT );
+
+            assert( unsigned( id ) < LAYER_ID_COUNT );
+
+            set( id );
+        }
+
+        va_end( ap );
     }
-
-    va_end( ap );
 }
 
 
@@ -633,4 +643,10 @@ LSEQ LSET::UIOrder() const
     return Seq( order, DIM( order ) );
 }
 
-LAYER_ID ToLAYER_ID( int aLayer );
+
+LAYER_ID ToLAYER_ID( int aLayer )
+{
+    wxASSERT( unsigned( aLayer ) < LAYER_ID_COUNT );
+    return LAYER_ID( aLayer );
+}
+

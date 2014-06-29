@@ -268,7 +268,8 @@ void DIALOG_COPPER_ZONE::initDialog()
 
         imageList->Add( makeLayerBitmap( layerColor ) );
 
-        int itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, layer );
+        int itemIndex = m_LayerSelectionCtrl->InsertItem(
+                m_LayerSelectionCtrl->GetItemCount(), msg, layer );
 
         if( m_settings.m_CurrentZone_Layer == layer )
             m_LayerSelectionCtrl->Select( itemIndex );

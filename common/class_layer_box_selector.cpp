@@ -25,7 +25,7 @@ bool LAYER_SELECTOR::SetLayersHotkeys( bool value )
 }
 
 
-void LAYER_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_ID aLayer )
+void LAYER_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer )
 {
     wxMemoryDC bmpDC;
     wxBrush    brush;
@@ -120,7 +120,7 @@ void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
     for( LAYER_NUM i = 0; i < elements; ++i )
     {
         wxBitmap layerbmp( 14, 14 );
-        SetBitmapLayer( layerbmp, ToLAYER_ID( i ) );
+        SetBitmapLayer( layerbmp, i );
     }
 }
 

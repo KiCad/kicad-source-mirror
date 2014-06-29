@@ -607,7 +607,7 @@ public:
      * @return the selected layer id
      */
     LAYER_ID SelectLayer( LAYER_ID aDefaultLayer,
-                          LSET aNotAllowedLayersMask = 0,
+                          LSET aNotAllowedLayersMask = LSET(),
                           wxPoint aDlgPosition = wxDefaultPosition );
 
     /* Display a list of two copper layers to choose a pair of copper layers

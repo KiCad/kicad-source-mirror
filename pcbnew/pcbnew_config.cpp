@@ -366,9 +366,12 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                        &DisplayOpt.DisplayZonesMode, 0, 0, 2 ) );
 
         // layer colors:
+        wxASSERT( DIM( cds.m_LayersColors ) == LAYER_ID_COUNT );
         for( int i = 0;  i<LAYER_ID_COUNT;  ++i )
         {
-            wxString vn = wxString::Format( wxT( "ColorLayer%dEx" ), i );
+            wxString vn = wxString::Format(
+                            wxT( "ColorPCBLayer:%s" ),
+                            LSET::Name( LAYER_ID( i ) ) );
 
             m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, vn, LOC_COLOR( i ), cds.m_LayersColors[i] ) );
         }
