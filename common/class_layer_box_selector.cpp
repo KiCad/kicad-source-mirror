@@ -120,7 +120,7 @@ void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
     for( LAYER_NUM i = 0; i < elements; ++i )
     {
         wxBitmap layerbmp( 14, 14 );
-        SetBitmapLayer( layerbmp, LAYER_ID( i ) );
+        SetBitmapLayer( layerbmp, ToLAYER_ID( i ) );
     }
 }
 

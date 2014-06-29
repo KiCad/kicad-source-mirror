@@ -468,7 +468,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         return false;
     }
 
-    m_settings.m_CurrentZone_Layer = (LAYER_ID) m_LayerId[ii];
+    m_settings.m_CurrentZone_Layer = ToLAYER_ID( m_LayerId[ii] );
 
     // Get the net name selection for this zone
     ii = m_ListNetNameSelection->GetSelection();

@@ -232,7 +232,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     msg = m_DefaultThicknessCtrl->GetValue();
     int thickness = ValueFromString( g_UserUnit, msg );
 
-    m_Item->SetLayer( (LAYER_ID) m_LayerSelectionCtrl->GetLayerSelection() );
+    m_Item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
 
     if( m_Item->GetLayer() == Edge_Cuts )
          m_brdSettings.m_EdgeSegmentWidth = thickness;

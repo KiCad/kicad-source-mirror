@@ -967,7 +967,7 @@ void PCB_EDIT_FRAME::syncLayerVisibilities()
 
     for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )
     {
-        view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( LAYER_ID( i ) ) );
+        view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( i ) );
     }
 
     // Enable some layers that are GAL specific

@@ -40,26 +40,34 @@
 
 #include <class_pcb_layer_box_selector.h>
 
+// translate aLayer to its hotkey
+static int layer2hotkey_id( LAYER_ID aLayer )
+{
+    switch( aLayer )
+    {
+    case F_Cu:      return HK_SWITCH_LAYER_TO_COMPONENT;
 
-#define DECLARE_LAYERS_HOTKEY(list) int list[] = \
-        { \
-            HK_SWITCH_LAYER_TO_COPPER,   \
-            HK_SWITCH_LAYER_TO_INNER1,   \
-            HK_SWITCH_LAYER_TO_INNER2,   \
-            HK_SWITCH_LAYER_TO_INNER3,   \
-            HK_SWITCH_LAYER_TO_INNER4,   \
-            HK_SWITCH_LAYER_TO_INNER5,   \
-            HK_SWITCH_LAYER_TO_INNER6,   \
-            HK_SWITCH_LAYER_TO_INNER7,   \
-            HK_SWITCH_LAYER_TO_INNER8,   \
-            HK_SWITCH_LAYER_TO_INNER9,   \
-            HK_SWITCH_LAYER_TO_INNER10,  \
-            HK_SWITCH_LAYER_TO_INNER11,  \
-            HK_SWITCH_LAYER_TO_INNER12,  \
-            HK_SWITCH_LAYER_TO_INNER13,  \
-            HK_SWITCH_LAYER_TO_INNER14,  \
-            HK_SWITCH_LAYER_TO_COMPONENT \
-        };
+    case B_Cu:      return HK_SWITCH_LAYER_TO_COPPER;
+
+    case In1_Cu:    return HK_SWITCH_LAYER_TO_INNER1;
+    case In2_Cu:    return HK_SWITCH_LAYER_TO_INNER2;
+    case In3_Cu:    return HK_SWITCH_LAYER_TO_INNER3;
+    case In4_Cu:    return HK_SWITCH_LAYER_TO_INNER4;
+    case In5_Cu:    return HK_SWITCH_LAYER_TO_INNER5;
+    case In6_Cu:    return HK_SWITCH_LAYER_TO_INNER6;
+    case In7_Cu:    return HK_SWITCH_LAYER_TO_INNER7;
+    case In8_Cu:    return HK_SWITCH_LAYER_TO_INNER8;
+    case In9_Cu:    return HK_SWITCH_LAYER_TO_INNER9;
+    case In10_Cu:   return HK_SWITCH_LAYER_TO_INNER10;
+    case In11_Cu:   return HK_SWITCH_LAYER_TO_INNER11;
+    case In12_Cu:   return HK_SWITCH_LAYER_TO_INNER12;
+    case In13_Cu:   return HK_SWITCH_LAYER_TO_INNER13;
+    case In14_Cu:   return HK_SWITCH_LAYER_TO_INNER14;
+
+    default:
+        return -1;
+    }
+}
 
 
 // class to display a layer list in a wxBitmapComboBox.
@@ -69,14 +77,12 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
 {
     Clear();
 
-    static const DECLARE_LAYERS_HOTKEY( layerhk );
-
     // Tray to fix a minimum width fot the BitmapComboBox
-    int minwidth = 80, h;
+    int minwidth = 80;
 
     wxClientDC dc( GetParent() );   // The DC for "this" is not always initialized
 
-    #define BM_SIZE 14
+    const int BM_SIZE = 14;
 
     LSET show = getEnabledLayers() & ~m_layerMaskDisable;
 
@@ -90,16 +96,20 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
 
         wxString layername = GetLayerName( layerid );
 
-        if( m_layerhotkeys && m_hotkeys && layerid < DIM(layerhk) )
+        if( m_layerhotkeys && m_hotkeys )
         {
-            layername = AddHotkeyName( layername, m_hotkeys,
-                                       layerhk[layerid], IS_COMMENT );
+            int id = layer2hotkey_id( layerid );
+
+            if( id != -1 )
+                layername = AddHotkeyName( layername, m_hotkeys, id, IS_COMMENT );
         }
 
         Append( layername, layerbmp, (void*)(intptr_t) layerid );
 
-        int w;
+        int w, h;
+
         dc.GetTextExtent ( layername, &w, &h );
+
         minwidth = std::max( minwidth, w );
     }
 
@@ -115,7 +125,7 @@ bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( LAYER_NUM aLayer ) const
     BOARD* board = m_boardFrame->GetBoard();
     wxASSERT( board != NULL );
 
-    return board->IsLayerEnabled( (LAYER_ID) aLayer );
+    return board->IsLayerEnabled( ToLAYER_ID( aLayer ) );
 }
 
 
@@ -136,7 +146,7 @@ EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
     BOARD* board = m_boardFrame->GetBoard();
     wxASSERT( board );
 
-    return board->GetLayerColor( (LAYER_ID) aLayer );
+    return board->GetLayerColor( ToLAYER_ID( aLayer ) );
 }
 
 
@@ -147,6 +157,6 @@ wxString PCB_LAYER_BOX_SELECTOR::GetLayerName( LAYER_NUM aLayer ) const
     BOARD* board = m_boardFrame->GetBoard();
     wxASSERT( board );
 
-    return board->GetLayerName( (LAYER_ID) aLayer );
+    return board->GetLayerName( ToLAYER_ID( aLayer ) );
 }
 

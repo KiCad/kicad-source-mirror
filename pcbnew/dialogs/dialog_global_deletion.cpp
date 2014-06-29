@@ -69,7 +69,7 @@ void PCB_EDIT_FRAME::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
 void DIALOG_GLOBAL_DELETION::SetCurrentLayer( LAYER_NUM aLayer )
 {
     m_currentLayer = aLayer;
-    m_textCtrlCurrLayer->SetValue( m_Parent->GetBoard()->GetLayerName( LAYER_ID( aLayer ) ) );
+    m_textCtrlCurrLayer->SetValue( m_Parent->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) ) );
 }
 
 

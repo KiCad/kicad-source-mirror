@@ -285,7 +285,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
                                                     // but I assume that's backwards
 
     for( unsigned i=0; i<DIM(cu_seq); ++i )
-        cu_seq[i] = LAYER_ID( B_Cu - i );
+        cu_seq[i] = ToLAYER_ID( B_Cu - i );
 
     for( LSEQ cu = cu_set.Seq( cu_seq, DIM(cu_seq) );  cu;  ++cu )
 #else

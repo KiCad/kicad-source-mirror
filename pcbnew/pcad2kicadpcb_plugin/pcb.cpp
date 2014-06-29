@@ -517,7 +517,7 @@ void PCB::MapLayer( XNODE* aNode )
 #if 0 // was:
             KiCadLayer = FIRST_COPPER_LAYER + m_layersStackup.GetCount() - 1 - layernum;
 #else
-            KiCadLayer = LAYER_ID( layernum );
+            KiCadLayer = ToLAYER_ID( layernum );
 #endif
     }
 

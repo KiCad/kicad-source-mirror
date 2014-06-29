@@ -62,13 +62,13 @@ protected:
     // Virtual function
     EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const
     {
-        return m_brd->GetLayerColor( LAYER_ID( aLayer ) );
+        return m_brd->GetLayerColor( ToLAYER_ID( aLayer ) );
     }
 
     // Returns the name of the layer id
     wxString GetLayerName( LAYER_NUM aLayer ) const      // overrides LAYER_SELECTOR
     {
-        return m_brd->GetLayerName( LAYER_ID( aLayer ) );
+        return m_brd->GetLayerName( ToLAYER_ID( aLayer ) );
     }
 };
 
@@ -233,7 +233,7 @@ LAYER_ID PCB_BASE_FRAME::SelectLayer( LAYER_ID aDefaultLayer,
 
     dlg.ShowModal();
 
-    LAYER_ID layer = (LAYER_ID) dlg.GetLayerSelection();
+    LAYER_ID layer = ToLAYER_ID( dlg.GetLayerSelection() );
     return layer;
 }
 

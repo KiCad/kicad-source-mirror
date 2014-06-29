@@ -83,7 +83,7 @@ BOARD::BOARD() :
 
     for( LAYER_NUM layer = 0; layer < LAYER_ID_COUNT; ++layer )
     {
-        m_Layer[layer].m_name = GetStandardLayerName( LAYER_ID( layer ) );
+        m_Layer[layer].m_name = GetStandardLayerName( ToLAYER_ID( layer ) );
 
         if( IsCopperLayer( layer ) )
             m_Layer[layer].m_type = LT_SIGNAL;

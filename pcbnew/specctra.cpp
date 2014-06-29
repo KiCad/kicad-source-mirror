@@ -93,7 +93,7 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
         kicadLayer2pcb[kilayer] = pcbNdx;
 
         // save the specctra layer name in SPECCTRA_DB::layerIds for later.
-        layerIds.push_back( TO_UTF8( aBoard->GetLayerName( LAYER_ID( kilayer ) ) ) );
+        layerIds.push_back( TO_UTF8( aBoard->GetLayerName( ToLAYER_ID( kilayer ) ) ) );
     }
 #else
 
@@ -110,14 +110,13 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
     for( unsigned i = 0;  i < pcbLayer2kicad.size();  ++i )
     {
         if( i < layerCount-1 )
-            pcbLayer2kicad[i] = LAYER_ID( i );
+            pcbLayer2kicad[i] = ToLAYER_ID( i );
         else
             pcbLayer2kicad[i] = B_Cu;
 
         // save the specctra layer name in SPECCTRA_DB::layerIds for later.
-        layerIds.push_back( TO_UTF8( aBoard->GetLayerName( LAYER_ID( i ) ) ) );
+        layerIds.push_back( TO_UTF8( aBoard->GetLayerName( ToLAYER_ID( i ) ) ) );
     }
-
 
 #endif
 }

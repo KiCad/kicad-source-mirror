@@ -2708,7 +2708,7 @@ LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         }
     }
 
-    return LAYER_ID( kiLayer );
+    return ToLAYER_ID( kiLayer );
 }
 
 

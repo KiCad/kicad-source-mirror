@@ -208,7 +208,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 
     CurrentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
 
-    CurrentDimension->SetLayer( (LAYER_ID) m_SelLayerBox->GetLayerSelection() );
+    CurrentDimension->SetLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 #ifndef USE_WX_OVERLAY
     if( m_DC )     // Display new text
     {

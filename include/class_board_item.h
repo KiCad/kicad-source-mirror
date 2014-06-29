@@ -156,7 +156,7 @@ public:
      * @param aLayer The layer to test for.
      * @return bool - true if on given layer, else false.
      */
-    virtual bool IsOnLayer( LAYER_NUM aLayer ) const
+    virtual bool IsOnLayer( LAYER_ID aLayer ) const
     {
         return m_Layer == aLayer;
     }

@@ -469,7 +469,7 @@ LSET FlipLayerMask( LSET aMask )
 }
 
 
-LAYER_ID LSET::ExtractLayer()
+LAYER_ID LSET::ExtractLayer() const
 {
     unsigned set_count = count();
 
@@ -632,3 +632,5 @@ LSEQ LSET::UIOrder() const
 
     return Seq( order, DIM( order ) );
 }
+
+LAYER_ID ToLAYER_ID( int aLayer );

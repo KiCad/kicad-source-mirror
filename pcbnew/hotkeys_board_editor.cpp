@@ -248,11 +248,11 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( ll == F_Cu )
             ll = B_Cu;
         else if( ll == B_Cu )
-            ll = (LAYER_ID) GetBoard()->GetCopperLayerCount() - 2;
+            ll = ToLAYER_ID( GetBoard()->GetCopperLayerCount() - 2 );
         else
             ll = ll - 1;
 
-        SwitchLayer( aDC, (LAYER_ID) ll );
+        SwitchLayer( aDC, ToLAYER_ID( ll ) );
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
@@ -266,7 +266,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         else if( ++ll >= GetBoard()->GetCopperLayerCount() - 1 )
             ll = B_Cu;
 
-        SwitchLayer( aDC, (LAYER_ID) ll );
+        SwitchLayer( aDC, ToLAYER_ID( ll ) );
         break;
 
     case HK_SWITCH_LAYER_TO_COMPONENT:

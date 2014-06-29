@@ -145,7 +145,8 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     }
 
     save_opt = DisplayOpt;
-    LAYER_NUM activeLayer = GetScreen()->m_Active_Layer;
+
+    LAYER_ID activeLayer = GetScreen()->m_Active_Layer;
 
     DisplayOpt.ContrastModeDisplay = false;
     DisplayOpt.DisplayPadFill = true;
@@ -333,15 +334,16 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     m_canvas->SetPrintMirrored( false );
 
     DisplayOpt = save_opt;
-    GetScreen()->m_Active_Layer = LAYER_ID( activeLayer );
+    GetScreen()->m_Active_Layer = activeLayer;
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
     m_DisplayModEdge = DisplayOpt.DisplayModEdge;
     m_DisplayModText = DisplayOpt.DisplayModText;
-    GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, nctmp);
-    GetBoard()->SetElementVisibility(ANCHOR_VISIBLE, anchorsTmp);
+
+    GetBoard()->SetElementVisibility( NO_CONNECTS_VISIBLE, nctmp );
+    GetBoard()->SetElementVisibility( ANCHOR_VISIBLE, anchorsTmp );
 }
 
 
