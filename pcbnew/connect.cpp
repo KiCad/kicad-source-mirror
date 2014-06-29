@@ -245,12 +245,13 @@ static bool sortConnectedPointByXthenYCoordinates( const CONNECTED_POINT & aRef,
     return aRef.GetPoint().x < aTst.GetPoint().x;
 }
 
-void CONNECTIONS::BuildTracksCandidatesList( TRACK * aBegin, TRACK * aEnd)
+void CONNECTIONS::BuildTracksCandidatesList( TRACK* aBegin, TRACK* aEnd)
 {
     m_candidates.clear();
     m_firstTrack = m_lastTrack = aBegin;
 
     unsigned ii = 0;
+
     // Count candidates ( i.e. end points )
     for( const TRACK* track = aBegin; track; track = track->Next() )
     {
@@ -260,14 +261,17 @@ void CONNECTIONS::BuildTracksCandidatesList( TRACK * aBegin, TRACK * aEnd)
             ii += 2;
 
         m_lastTrack = track;
+
         if( track == aEnd )
             break;
     }
+
     // Build candidate list
     m_candidates.reserve( ii );
     for( TRACK* track = aBegin; track; track = track->Next() )
     {
-        CONNECTED_POINT candidate( track, track->GetStart());
+        CONNECTED_POINT candidate( track, track->GetStart() );
+
         m_candidates.push_back( candidate );
         if( track->Type() != PCB_VIA_T )
         {
@@ -285,6 +289,7 @@ void CONNECTIONS::BuildTracksCandidatesList( TRACK * aBegin, TRACK * aEnd)
     sort( m_candidates.begin(), m_candidates.end(), sortConnectedPointByXthenYCoordinates );
 }
 
+
 /* Populates .m_connected with tracks/vias connected to aTrack
  * param aTrack = track or via to use as reference
  * For calculation time reason, an exhaustive search cannot be made
@@ -294,7 +299,7 @@ void CONNECTIONS::BuildTracksCandidatesList( TRACK * aBegin, TRACK * aEnd)
  * because with this constraint we can make a fast search in track list
  * m_candidates is expected to be populated by the track candidates ends list
  */
-int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
+int CONNECTIONS::SearchConnectedTracks( const TRACK* aTrack )
 {
     int count = 0;
     m_connected.clear();
@@ -308,7 +313,9 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
     int dist_max = aTrack->GetWidth() / 2;
     static std::vector<CONNECTED_POINT*> tracks_candidates;
 #endif
+
     wxPoint position = aTrack->GetStart();
+
     for( int kk = 0; kk < 2; kk++ )
     {
 #ifndef USE_EXTENDED_SEARCH
@@ -321,8 +328,10 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
             {
                 if( m_candidates[ii].GetTrack() == aTrack )
                     continue;
+
                 if( m_candidates[ii].GetPoint() != position )
                     break;
+
                 if( ( m_candidates[ii].GetTrack()->GetLayerSet() & layerMask ).any() )
                     m_connected.push_back( m_candidates[ii].GetTrack() );
             }
@@ -332,18 +341,23 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
             {
                 if( m_candidates[ii].GetTrack() == aTrack )
                     continue;
+
                 if( m_candidates[ii].GetPoint() != position )
                     break;
+
                 if( ( m_candidates[ii].GetTrack()->GetLayerSet() & layerMask ).any() )
                     m_connected.push_back( m_candidates[ii].GetTrack() );
             }
         }
 #else
+
         tracks_candidates.clear();
+
         CollectItemsNearTo( tracks_candidates, position, dist_max );
-        for ( unsigned ii = 0; ii < tracks_candidates.size(); ii ++ )
+
+        for( unsigned ii = 0; ii < tracks_candidates.size(); ii++ )
         {
-            TRACK * ctrack = tracks_candidates[ii]->GetTrack();
+            TRACK* ctrack = tracks_candidates[ii]->GetTrack();
 
             if( !( ctrack->GetLayerSet() & layerMask ).any() )
                 continue;
@@ -354,6 +368,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
             // We have a good candidate: calculate the actual distance
             // between ends, which should be <= dist max.
             wxPoint delta = tracks_candidates[ii]->GetPoint() - position;
+
             int dist = KiROUND( EuclideanNorm( delta ) );
 
             if( dist > dist_max )
