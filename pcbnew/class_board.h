@@ -89,11 +89,18 @@ enum LAYER_T
  */
 struct LAYER
 {
-    LAYER() :
-        m_type( LT_SIGNAL ),
-        m_visible( true ),
-        m_number( 0 )
-    {}
+    LAYER()
+    {
+        clear();
+    }
+
+    void clear()
+    {
+        m_type    = LT_SIGNAL;
+        m_visible = true;
+        m_number  = 0;
+        m_name.clear();
+    }
 
     /*
     LAYER( const wxString& aName = wxEmptyString,
