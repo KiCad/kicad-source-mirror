@@ -790,6 +790,7 @@ static bool sort_by_distance( const wxPoint& ref, const wxPoint& compare )
 
     return lengthref < lengthcmp;
 }
+
 static bool sort_by_point( const wxPoint& ref, const wxPoint& compare )
 {
     if( ref.x == compare.x )
