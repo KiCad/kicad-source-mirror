@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="11" />
+    <FileVersion major="1" minor="13" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -2833,6 +2833,10 @@
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
                                                         <property name="tooltip">Include extended attributes for non-image data in the Gerber file</property>
+                                                        <property name="validator_data_type"></property>
+                                                        <property name="validator_style">wxFILTER_NONE</property>
+                                                        <property name="validator_type">wxDefaultValidator</property>
+                                                        <property name="validator_variable"></property>
                                                         <property name="window_extra_style"></property>
                                                         <property name="window_name"></property>
                                                         <property name="window_style"></property>
@@ -4069,7 +4073,7 @@
                                         <property name="maxlength"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">-1,70</property>
+                                        <property name="minimum_size">-1,150</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_messagesBox</property>
                                         <property name="pane_border">1</property>
