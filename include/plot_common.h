@@ -314,13 +314,13 @@ protected:
     /// Plot scale - chosen by the user (even implicitly with 'fit in a4')
     double        plotScale;
 
-    /* Device scale (how many IUs in a decimil - always); it's a double
+    /* Caller scale (how many IUs in a decimil - always); it's a double
      * because in eeschema there are 0.1 IUs in a decimil (eeschema
      * always works in mils internally) while pcbnew can work in decimil
      * or nanometers, so this value would be >= 1 */
     double        m_IUsPerDecimil;
 
-    /// Device scale (from IUs to device units - usually decimils)
+    /// Device scale (from IUs to plotter device units - usually decimils)
     double        iuPerDeviceUnit;
 
     /// Plot offset (in IUs)
@@ -774,7 +774,6 @@ public:
         workFile  = 0;
         finalFile = 0;
         currentAperture = apertures.end();
-        attribFunction = wxEmptyString;
     }
 
     virtual PlotFormat GetPlotterType() const
@@ -784,7 +783,7 @@ public:
 
     static wxString GetDefaultFileExtension()
     {
-        return wxString( wxT( "pho" ) );
+        return wxString( wxT( "gbr" ) );
     }
 
     virtual bool StartPlot();
@@ -821,7 +820,7 @@ public:
 
     virtual void SetLayerAttribFunction( const wxString& function )
     {
-        attribFunction = function;
+        m_attribFunction = function;
     }
 
 protected:
@@ -840,7 +839,11 @@ protected:
     std::vector<APERTURE>           apertures;
     std::vector<APERTURE>::iterator currentAperture;
 
-    wxString attribFunction; /* the layer "function", it is linked with the layer id */
+    wxString m_attribFunction;  // the layer "function", in GERBER X2 extention
+                                // it is linked with the layer id
+    bool     m_gerberUnitInch;  // true if the gerber units are inches, false for mm
+    int      m_gerberUnitFmt;   // number of digits in mantissa.
+                                // usually 6 in Inches and 5 or 6  in mm
 };
 
 

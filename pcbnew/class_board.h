@@ -1220,7 +1220,11 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a D_PAD object if found or NULL if not found.
      */
-    D_PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask = LSET().set() );
+    D_PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask );
+    D_PAD* GetPad( const wxPoint& aPosition )
+    {
+        return GetPad( aPosition, LSET().set() );
+    }
 
     /**
      * Function GetPad

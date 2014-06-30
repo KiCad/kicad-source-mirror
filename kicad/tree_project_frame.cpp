@@ -69,7 +69,7 @@ static const wxChar* s_allowedExtensionsToList[] =
     wxT( "^[^$].*\\.kicad_wks$" ),  // S format kicad page layout descr files
     wxT( "^.*\\.net$" ),
     wxT( "^.*\\.txt$" ),
-    wxT( "^.*\\.pho$" ),            // Gerber file (Kicad extension)
+    wxT( "^.*\\.pho$" ),            // Gerber file (Old Kicad extension)
     wxT( "^.*\\.gbr$" ),            // Gerber file
     wxT( "^.*\\.gb[alops]$" ),      // Gerber back (or bottom) layer file
     wxT( "^.*\\.gt[alops]$" ),      // Gerber front (or top) layer file
