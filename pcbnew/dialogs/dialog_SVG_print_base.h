@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -61,6 +61,7 @@ class DIALOG_SVG_PRINT_base : public DIALOG_SHIM
 		wxTextCtrl* m_messagesBox;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonPlot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCloseClick( wxCommandEvent& event ) { event.Skip(); }
@@ -68,7 +69,7 @@ class DIALOG_SVG_PRINT_base : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export SVG file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 507,420 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export SVG file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 507,451 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SVG_PRINT_base();
 	
 };

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="13" />
+    <FileVersion major="1" minor="11" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -44,7 +44,7 @@
             <property name="minimum_size">-1,350</property>
             <property name="name">DIALOG_SVG_PRINT_base</property>
             <property name="pos"></property>
-            <property name="size">507,420</property>
+            <property name="size">507,451</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Export SVG file</property>
@@ -61,7 +61,7 @@
             <event name="OnAuiPaneRestore"></event>
             <event name="OnAuiRender"></event>
             <event name="OnChar"></event>
-            <event name="OnClose"></event>
+            <event name="OnClose">OnCloseWindow</event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
             <event name="OnHibernate"></event>
@@ -1358,10 +1358,10 @@
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
                         <property name="maximum_size"></property>
-                        <property name="maxlength">0</property>
+                        <property name="maxlength"></property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
-                        <property name="minimum_size">-1,100</property>
+                        <property name="minimum_size">-1,150</property>
                         <property name="moveable">1</property>
                         <property name="name">m_messagesBox</property>
                         <property name="pane_border">1</property>
@@ -1373,7 +1373,7 @@
                         <property name="resize">Resizable</property>
                         <property name="show">1</property>
                         <property name="size"></property>
-                        <property name="style">wxTE_MULTILINE</property>
+                        <property name="style">wxTE_MULTILINE|wxTE_READONLY</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>
                         <property name="tooltip"></property>
