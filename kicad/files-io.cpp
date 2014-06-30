@@ -133,7 +133,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     /* List of file extensions to save. */
     static const wxChar* extentionList[] = {
         wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.mod" ), wxT( "*.cmp" ),
-        wxT( "*.brd" ), wxT( "*.kicad_pcb" ),
+        wxT( "*.brd" ), wxT( "*.kicad_pcb" ), wxT( "*.gbr" ),
         wxT( "*.net" ), wxT( "*.pro" ), wxT( "*.pho" ), wxT( "*.py" ),
         wxT( "*.pdf" ), wxT( "*.txt" ), wxT( "*.dcm" ), wxT( "*.kicad_wks" ),
         NULL

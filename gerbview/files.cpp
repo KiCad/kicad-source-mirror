@@ -109,15 +109,17 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     {
         /* Standard gerber filetypes
          * (See http://en.wikipedia.org/wiki/Gerber_File)
-         * the .pho extension is the default used in Pcbnew
+         * the .gbr (.pho in legacy files) extension is the default used in Pcbnew
          * However there are a lot of other extensions used for gerber files
          * Because the first letter is usually g, we accept g* as extension
          * (Mainly internal copper layers do not have specific extention,
          *  and filenames are like *.g1, *.g2 *.gb1 ...).
+         * Now (2014) Ucamco (the company which manager the Gerber format) encourage
+         * use of .gbr only and the Gerber X2 file format.
          */
         filetypes = _( "Gerber files (.g* .lgr .pho)" );
         filetypes << wxT("|");
-        filetypes += wxT("*.g*;*.G*;*.lgr;*.LGR;*.pho;*.PHO" );
+        filetypes += wxT("*.g*;*.G*;*.pho;*.PHO" );
         filetypes << wxT("|");
 
         /* Special gerber filetypes */

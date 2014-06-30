@@ -12,14 +12,21 @@
  * in Eeschema, Pcbnew and GerbView
  */
 
-/* Initial colors values: optimized for Pcbnew, but are also Ok for Eeschema
+/* Initial colors values: optimized for Pcbnew 64 layers.
+ * The table is not actually used by Eeschema.
  * these values are superseded by config reading
  */
 static const EDA_COLOR_T default_layer_color[] = {
-    GREEN,        BLUE,         LIGHTGRAY, BROWN,
-    RED,          MAGENTA,      LIGHTGRAY, MAGENTA,
-    DARKGRAY,     BLUE,         GREEN,     CYAN,
-    LIGHTRED,     LIGHTMAGENTA, YELLOW,    RED,
+    RED,            YELLOW,         LIGHTMAGENTA,   LIGHTRED,
+    CYAN,           GREEN,          BLUE,           DARKGRAY,
+    MAGENTA,        LIGHTGRAY,      MAGENTA,        RED,
+    BROWN,          LIGHTGRAY,      BLUE,           GREEN,
+
+    RED,            YELLOW,         LIGHTMAGENTA,   LIGHTRED,
+    CYAN,           GREEN,          BLUE,           DARKGRAY,
+    MAGENTA,        LIGHTGRAY,      MAGENTA,        RED,
+    BROWN,          LIGHTGRAY,      BLUE,           GREEN,
+
     BLUE,         MAGENTA,
     LIGHTCYAN,    RED,
     MAGENTA,      CYAN,
