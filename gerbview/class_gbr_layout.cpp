@@ -14,22 +14,14 @@ GBR_LAYOUT::GBR_LAYOUT()
 {
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
     SetPageSettings( pageInfo );
-    m_printLayersMask = FULL_LAYERS;
+
+// no    m_printLayersMask = -1;
+    m_printLayersMask.set();
 }
 
 
 GBR_LAYOUT::~GBR_LAYOUT()
 {
-}
-
-/* Function IsLayerVisible
- * tests whether a given layer is visible
- * param aLayer = The layer to be tested
- * return bool - true if the layer is visible.
- */
-bool GBR_LAYOUT::IsLayerVisible( LAYER_NUM aLayer ) const
-{
-    return m_printLayersMask & GetLayerMask( aLayer );
 }
 
 

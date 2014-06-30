@@ -376,7 +376,7 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone )
         return;
     }
 
-    LAYER_NUM layer = aZone->GetLayer();
+    LAYER_ID layer = aZone->GetLayer();
 
     if( DC )
     {
@@ -745,7 +745,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
     m_canvas->SetMouseCapture( NULL, NULL );
 
     // Undraw old drawings, because they can have important changes
-    LAYER_NUM layer = zone->GetLayer();
+    LAYER_ID layer = zone->GetLayer();
     GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_XOR, layer );
     GetBoard()->RedrawFilledAreas( m_canvas, DC, GR_XOR, layer );
 
@@ -865,7 +865,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
         zoneInfo << *aZone;
         edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
     }
-    else if( aZone->GetLayer() < FIRST_NON_COPPER_LAYER )
+    else if( IsCopperLayer( aZone->GetLayer() ) )
     {
         // edit a zone on a copper layer
 

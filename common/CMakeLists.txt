@@ -250,6 +250,7 @@ set( PCB_COMMON_SRCS
     eda_text.cpp
     class_page_info.cpp
     pcbcommon.cpp
+    lset.cpp
     footprint_info.cpp
     ../pcbnew/basepcbframe.cpp
     ../pcbnew/class_board.cpp

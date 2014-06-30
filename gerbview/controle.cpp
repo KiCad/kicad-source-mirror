@@ -30,6 +30,7 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <gerbview.h>
+#include <gerbview_frame.h>
 
 
 void GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )

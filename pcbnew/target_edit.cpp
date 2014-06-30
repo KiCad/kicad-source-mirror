@@ -209,7 +209,7 @@ PCB_TARGET* PCB_EDIT_FRAME::CreateTarget( wxDC* DC )
 
     GetBoard()->Add( target );
 
-    target->SetLayer( EDGE_N );
+    target->SetLayer( Edge_Cuts );
     target->SetWidth( GetDesignSettings().m_EdgeSegmentWidth );
     target->SetSize( MireDefaultSize );
     target->SetPosition( GetCrossHairPosition() );

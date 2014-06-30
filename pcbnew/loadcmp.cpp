@@ -108,7 +108,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     // Put it on FRONT layer,
     // because this is the default in ModEdit, and in libs
-    if( newModule->GetLayer() != LAYER_N_FRONT )
+    if( newModule->GetLayer() != F_Cu )
         newModule->Flip( newModule->GetPosition() );
 
     // Put it in orientation 0,

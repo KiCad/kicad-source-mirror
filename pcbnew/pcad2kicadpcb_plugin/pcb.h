@@ -53,7 +53,7 @@ public:
     PCB( BOARD* aBoard );
     ~PCB();
 
-    LAYER_NUM       GetKiCadLayer( int aPCadLayer );
+    LAYER_ID        GetKiCadLayer( int aPCadLayer );
     LAYER_TYPE_T    GetLayerType( int aPCadLayer );
     wxString        GetLayerNetNameRef( int aPCadLayer );
     int             GetNewTimestamp();

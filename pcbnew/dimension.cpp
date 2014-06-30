@@ -135,7 +135,7 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
 
     // Configure the layers list selector
     m_SelLayerBox->SetLayersHotkeys( false );
-    m_SelLayerBox->SetLayerMask( ALL_CU_LAYERS | EDGE_LAYER );
+    m_SelLayerBox->SetLayerSet( LSET::AllCuMask().set( Edge_Cuts ) );
     m_SelLayerBox->SetBoardFrame( m_Parent );
     m_SelLayerBox->Resync();
 
@@ -143,7 +143,7 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
     {
         wxMessageBox( _("This item has an illegal layer id.\n"
                         "Now, forced on the drawings layer. Please, fix it") );
-        m_SelLayerBox->SetLayerSelection( DRAW_N );
+        m_SelLayerBox->SetLayerSelection( Dwgs_User );
     }
 
     GetSizer()->Fit( this );
@@ -165,7 +165,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
     {
         CurrentDimension->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
     }
-#endif 
+#endif
 
     m_Parent->SaveCopyInUndoList(CurrentDimension, UR_CHANGED);
 
@@ -208,7 +208,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 
     CurrentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
 
-    CurrentDimension->SetLayer( m_SelLayerBox->GetLayerSelection() );
+    CurrentDimension->SetLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 #ifndef USE_WX_OVERLAY
     if( m_DC )     // Display new text
     {

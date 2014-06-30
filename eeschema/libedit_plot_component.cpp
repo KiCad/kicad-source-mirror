@@ -183,7 +183,7 @@ void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
     delete plotter;
 }
 
-void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMask, bool aPrintMirrorMode, void* aData)
+void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData)
 {
     if( ! m_component )
         return;

@@ -78,11 +78,43 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_ThermalGap          = 0;                // Use parent setting by default
 
     // Set layers mask to default for a standard thru hole pad.
-    m_layerMask           = PAD_STANDARD_DEFAULT_LAYERS;
+    m_layerMask           = StandardMask();
 
     SetSubRatsnest( 0 );                       // used in ratsnest calculations
 
     m_boundingRadius      = -1;
+}
+
+
+LSET D_PAD::StandardMask()
+{
+    static LSET saved = LSET::AllCuMask() | LSET( 3, F_SilkS, B_Mask, F_Mask );
+    return saved;
+}
+
+
+LSET D_PAD::ConnMask()
+{
+    // was: #define PAD_CONN_DEFAULT_LAYERS LAYER_FRONT | SOLDERPASTE_LAYER_FRONT | SOLDERMASK_LAYER_FRONT
+    static LSET saved( 3, F_Cu, F_Paste, F_Mask );
+    return saved;
+}
+
+
+LSET D_PAD::SMDMask()
+{
+    // was: #define PAD_SMD_DEFAULT_LAYERS LAYER_FRONT | SOLDERMASK_LAYER_FRONT
+    static LSET saved( 2, F_Cu, F_Mask );
+    return saved;
+}
+
+
+LSET D_PAD::UnplatedHoleMask()
+{
+    // was #define PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS ALL_CU_LAYERS |
+    // SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT
+    static LSET saved = LSET::AllCuMask() | LSET( 3, F_SilkS, B_Mask, F_Mask );
+    return saved;
 }
 
 
@@ -231,7 +263,7 @@ void D_PAD::Flip( const wxPoint& aCentre )
     SetOrientation( -GetOrientation() );
 
     // flip pads layers
-    SetLayerMask( FlipLayerMask( m_layerMask ) );
+    SetLayerSet( FlipLayerMask( m_layerMask ) );
 
     // m_boundingRadius = -1;  the shape has not been changed
 }
@@ -630,13 +662,6 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 }
 
 
-// see class_pad.h
-bool D_PAD::IsOnLayer( LAYER_NUM aLayer ) const
-{
-    return ::GetLayerMask( aLayer ) & m_layerMask;
-}
-
-
 void D_PAD::GetOblongDrillGeometry( wxPoint& aStartPoint,
                                     wxPoint& aEndPoint, int& aWidth ) const
 {
@@ -773,10 +798,21 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 
     // Dick: specctra_export needs this
     // Lorenzo: gencad also needs it to implement padstacks!
-    if( ( diff = padref->m_layerMask - padcmp->m_layerMask ) != 0 )
-        return diff;
+
+#if __cplusplus >= 201103L
+    long long d = padref->m_layerMask.to_ullong() - padcmp->m_layerMask.to_ullong();
+    if( d < 0 )
+        return -1;
+    else if( d > 0 )
+        return 1;
 
     return 0;
+#else
+    // these strings are not typically constructed, since we don't get here often.
+    std::string s1 = padref->m_layerMask.to_string();
+    std::string s2 = padcmp->m_layerMask.to_string();
+    return s1.compare( s2 );
+#endif
 }
 
 
@@ -861,40 +897,40 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     if( m_Attribute == PAD_STANDARD || m_Attribute == PAD_HOLE_NOT_PLATED )
         aLayers[aCount++] = ITEM_GAL_LAYER( PADS_HOLES_VISIBLE );
 
-    if( IsOnLayer( LAYER_N_FRONT ) && IsOnLayer( LAYER_N_BACK ) )
+    if( IsOnLayer( F_Cu ) && IsOnLayer( B_Cu ) )
     {
         // Multi layer pad
         aLayers[aCount++] = ITEM_GAL_LAYER( PADS_VISIBLE );
         aLayers[aCount++] = NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE );
     }
-    else if( IsOnLayer( LAYER_N_FRONT ) )
+    else if( IsOnLayer( F_Cu ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
         aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
     }
-    else if( IsOnLayer( LAYER_N_BACK ) )
+    else if( IsOnLayer( B_Cu ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
         aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
     }
 
-    if( IsOnLayer( SOLDERMASK_N_FRONT ) )
-        aLayers[aCount++] = SOLDERMASK_N_FRONT;
+    if( IsOnLayer( F_Mask ) )
+        aLayers[aCount++] = F_Mask;
 
-    if( IsOnLayer( SOLDERMASK_N_BACK ) )
-        aLayers[aCount++] = SOLDERMASK_N_BACK;
+    if( IsOnLayer( B_Mask ) )
+        aLayers[aCount++] = B_Mask;
 
-    if( IsOnLayer( SOLDERPASTE_N_FRONT ) )
-        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
+    if( IsOnLayer( F_Paste ) )
+        aLayers[aCount++] = F_Paste;
 
-    if( IsOnLayer( SOLDERPASTE_N_BACK ) )
-        aLayers[aCount++] = SOLDERPASTE_N_BACK;
+    if( IsOnLayer( B_Paste ) )
+        aLayers[aCount++] = B_Paste;
 
-    if( IsOnLayer( ADHESIVE_N_BACK ) )
-        aLayers[aCount++] = ADHESIVE_N_BACK;
+    if( IsOnLayer( B_Adhes ) )
+        aLayers[aCount++] = B_Adhes;
 
-    if( IsOnLayer( ADHESIVE_N_FRONT ) )
-        aLayers[aCount++] = ADHESIVE_N_FRONT;
+    if( IsOnLayer( F_Adhes ) )
+        aLayers[aCount++] = F_Adhes;
 
 #ifdef __WXDEBUG__
     if( aCount == 0 )    // Should not occur

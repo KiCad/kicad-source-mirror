@@ -42,7 +42,7 @@ enum LAYER_TYPE_T
 
 typedef struct _TLAYER
 {
-    LAYER_NUM     KiCadLayer;
+    LAYER_ID      KiCadLayer;
     LAYER_TYPE_T  layerType;
     wxString      netNameRef;
 } TLAYER;
@@ -53,7 +53,7 @@ namespace PCAD2KICAD
     class PCB_CALLBACKS
     {
     public:
-        virtual LAYER_NUM     GetKiCadLayer( int aPCadLayer ) = 0;
+        virtual LAYER_ID      GetKiCadLayer( int aPCadLayer ) = 0;
         virtual LAYER_TYPE_T  GetLayerType( int aPCadLayer ) = 0;
         virtual wxString      GetLayerNetNameRef( int aPCadLayer ) = 0;
         virtual int           GetNewTimestamp() = 0;

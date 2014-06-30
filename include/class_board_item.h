@@ -76,12 +76,12 @@ class BOARD_ITEM : public EDA_ITEM
     void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
 
 protected:
-    LAYER_NUM m_Layer;
+    LAYER_ID    m_Layer;
 
 public:
 
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
-        EDA_ITEM( aParent, idtype ), m_Layer( FIRST_LAYER )
+        EDA_ITEM( aParent, idtype ), m_Layer( F_Cu )
     {
     }
 
@@ -114,7 +114,7 @@ public:
      * Function GetLayer
      * returns the layer this item is on.
      */
-    LAYER_NUM GetLayer() const { return m_Layer; }
+    LAYER_ID GetLayer() const { return m_Layer; }
 
     /**
      * Function SetLayer
@@ -123,7 +123,7 @@ public:
      * is virtual because some items (in fact: class DIMENSION)
      * have a slightly different initialization
      */
-    virtual void SetLayer( LAYER_NUM aLayer )
+    virtual void SetLayer( LAYER_ID aLayer )
     {
         // trap any invalid layers, then go find the caller and fix it.
         // wxASSERT( unsigned( aLayer ) < unsigned( NB_PCB_LAYERS ) );
@@ -156,7 +156,7 @@ public:
      * @param aLayer The layer to test for.
      * @return bool - true if on given layer, else false.
      */
-    virtual bool IsOnLayer( LAYER_NUM aLayer ) const
+    virtual bool IsOnLayer( LAYER_ID aLayer ) const
     {
         return m_Layer == aLayer;
     }

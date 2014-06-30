@@ -18,9 +18,6 @@ class TRACK;
 class BOARD;
 class DISPLAY_OPTIONS;
 
-/// Look up Table for conversion copper layer count -> general copper layer mask:
-extern LAYER_MSK g_TabAllCopperLayerMask[NB_COPPER_LAYERS];
-
 extern DISPLAY_OPTIONS DisplayOpt;
 
 extern int g_CurrentVersionPCB;

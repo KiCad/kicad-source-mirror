@@ -36,21 +36,21 @@
 #include <base_units.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <colors_selection.h>
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 #include <printout_controler.h>
 
 
-void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
+void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
                                 bool aPrintMirrorMode, void* aData )
 {
     // Save current draw options, because print mode has specific options:
-    LAYER_MSK visiblemask = GetVisibleLayers();
     GBR_DISPLAY_OPTIONS imgDisplayOptions = m_DisplayOptions;
+    std::bitset <GERBER_DRAWLAYERS_COUNT> printLayersMask = GetGerberLayout()->GetPrintableLayers();
 
     // Set draw options for printing:
-    SetVisibleLayers( aPrintMasklayer );
     m_DisplayOptions.m_DisplayFlashedItemsFill = true;
     m_DisplayOptions.m_DisplayLinesFill = true;
     m_DisplayOptions.m_DisplayPolygonsFill = true;
@@ -58,7 +58,10 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
     m_DisplayOptions.m_IsPrinting = true;
 
     PRINT_PARAMETERS* printParameters = (PRINT_PARAMETERS*)aData;
-
+    std::bitset <GERBER_DRAWLAYERS_COUNT> printCurrLayerMask;
+    printCurrLayerMask.reset();
+    printCurrLayerMask.set(printParameters->m_Flags);   // m_Flags contains the draw layer number
+    GetGerberLayout()->SetPrintableLayers( printCurrLayerMask );
     m_canvas->SetPrintMirrored( aPrintMirrorMode );
     bool printBlackAndWhite = printParameters && printParameters->m_Print_Black_and_White;
 
@@ -68,7 +71,7 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
     m_canvas->SetPrintMirrored( false );
 
     // Restore draw options:
-    SetVisibleLayers( visiblemask );
+    GetGerberLayout()->SetPrintableLayers( printLayersMask );
     m_DisplayOptions = imgDisplayOptions;
 }
 
@@ -211,14 +214,14 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     bool end = false;
 
-    for( LAYER_NUM layer = FIRST_LAYER; !end; ++layer )
+    for( int layer = 0; !end; ++layer )
     {
-        LAYER_NUM active_layer = gerbFrame->getActiveLayer();
+        int active_layer = gerbFrame->getActiveLayer();
 
         if( layer == active_layer ) // active layer will be drawn after other layers
             continue;
 
-        if( layer == NB_GERBER_LAYERS )   // last loop: draw active layer
+        if( layer == GERBER_DRAWLAYERS_COUNT )   // last loop: draw active layer
         {
             end   = true;
             layer = active_layer;

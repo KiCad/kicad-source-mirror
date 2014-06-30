@@ -22,7 +22,7 @@ CPolyLine::CPolyLine()
 {
     m_hatchStyle = NO_HATCH;
     m_hatchPitch = 0;
-    m_layer      = LAYER_N_FRONT;
+    m_layer      = F_Cu;
     m_utility    = 0;
 }
 

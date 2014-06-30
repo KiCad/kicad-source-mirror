@@ -62,7 +62,7 @@
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int         id = event.GetId();
-    LAYER_NUM itmp;
+
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     MODULE* module;
 
@@ -420,10 +420,13 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA )
             {
                 m_canvas->SetIgnoreMouseEvents( true );
+
                 wxPoint dlgPosition;
+
                 wxGetMousePosition( &dlgPosition.x, &dlgPosition.y );
-                LAYER_NUM layer = SelectLayer( GetActiveLayer(), ALL_NO_CU_LAYERS,
-                                               dlgPosition );
+
+                LAYER_ID layer = SelectLayer( GetActiveLayer(), LSET::AllNonCuMask(), dlgPosition );
+
                 m_canvas->SetIgnoreMouseEvents( false );
                 m_canvas->MoveCursorToCrossHair();
 
@@ -520,11 +523,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_ZONE_DUPLICATE:
-    {
-        ZONE_CONTAINER* zone = (ZONE_CONTAINER*) GetCurItem();
-        duplicateZone( &dc, zone );
-    }
-    break;
+        {
+            ZONE_CONTAINER* zone = (ZONE_CONTAINER*) GetCurItem();
+            duplicateZone( &dc, zone );
+        }
+        break;
 
     case ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE:
         m_canvas->MoveCursorToCrossHair();
@@ -556,60 +559,60 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_MOVE_ZONE_CORNER:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), false );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), false );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Drag_Outline_Edge( &dc, zone_cont, zone_cont->GetSelectedCorner() );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Drag_Outline_Edge( &dc, zone_cont, zone_cont->GetSelectedCorner() );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_MOVE_ZONE_OUTLINES:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Outlines( &dc, zone_cont );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Outlines( &dc, zone_cont );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_ADD_ZONE_CORNER:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        wxPoint         pos = GetCrossHairPosition();
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            wxPoint         pos = GetCrossHairPosition();
 
-        /* add corner between zone_cont->m_CornerSelection
-         * and zone_cont->m_CornerSelection+1
-         * and start move the new corner
-         */
-        zone_cont->Draw( m_canvas, &dc, GR_XOR );
-        zone_cont->Outline()->InsertCorner( zone_cont->GetSelectedCorner(), pos.x, pos.y );
-        zone_cont->SetSelectedCorner( zone_cont->GetSelectedCorner() + 1 );
-        zone_cont->Draw( m_canvas, &dc, GR_XOR );
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), true );
+            /* add corner between zone_cont->m_CornerSelection
+             * and zone_cont->m_CornerSelection+1
+             * and start move the new corner
+             */
+            zone_cont->Draw( m_canvas, &dc, GR_XOR );
+            zone_cont->Outline()->InsertCorner( zone_cont->GetSelectedCorner(), pos.x, pos.y );
+            zone_cont->SetSelectedCorner( zone_cont->GetSelectedCorner() + 1 );
+            zone_cont->Draw( m_canvas, &dc, GR_XOR );
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), true );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
     case ID_POPUP_PCB_PLACE_ZONE_CORNER:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        End_Move_Zone_Corner_Or_Outlines( &dc, zone_cont );
-        m_canvas->SetAutoPanRequest( false );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            End_Move_Zone_Corner_Or_Outlines( &dc, zone_cont );
+            m_canvas->SetAutoPanRequest( false );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         m_canvas->MoveCursorToCrossHair();
@@ -956,20 +959,22 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER:
-        itmp = SelectLayer( GetActiveLayer() );
-
-        if( itmp >= 0 )
         {
-            // if user changed colors and we are in high contrast mode, then redraw
-            // because the PAD_SMD pads may change color.
-            if( DisplayOpt.ContrastModeDisplay && GetActiveLayer() != itmp )
-            {
-                m_canvas->Refresh();
-            }
-            SetActiveLayer( itmp );
-        }
+            LAYER_ID itmp = SelectLayer( GetActiveLayer() );
 
-        m_canvas->MoveCursorToCrossHair();
+            if( itmp >= 0 )
+            {
+                // if user changed colors and we are in high contrast mode, then redraw
+                // because the PAD_SMD pads may change color.
+                if( DisplayOpt.ContrastModeDisplay && GetActiveLayer() != itmp )
+                {
+                    m_canvas->Refresh();
+                }
+                SetActiveLayer( itmp );
+            }
+
+            m_canvas->MoveCursorToCrossHair();
+        }
         break;
 
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
@@ -977,20 +982,23 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
-        itmp = SelectLayer( GetActiveLayer(), ALL_CU_LAYERS );
+        {
+            LAYER_ID itmp = SelectLayer( GetActiveLayer(), LSET::AllCuMask() );
 
-        if( itmp >= 0 )
-            SetActiveLayer( itmp );
+            if( itmp >= 0 )
+                SetActiveLayer( itmp );
 
-        m_canvas->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
+        }
         break;
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
-        itmp = SelectLayer( GetActiveLayer(), ALL_NO_CU_LAYERS );
+        {
+            LAYER_ID itmp = SelectLayer( GetActiveLayer(), LSET::AllNonCuMask() );
 
-        if( itmp >= 0 )
-            SetActiveLayer( itmp );
-
+            if( itmp >= 0 )
+                SetActiveLayer( itmp );
+        }
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
@@ -999,11 +1007,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
-        SetActiveLayer( m_SelLayerBox->GetLayerSelection() );
+        SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 
         if( DisplayOpt.ContrastModeDisplay )
             m_canvas->Refresh( true );
-
         break;
 
     case ID_POPUP_PCB_EDIT_TEXTEPCB:
@@ -1300,9 +1307,9 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 }
 
 
-void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
+void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
 {
-    LAYER_NUM curLayer = GetActiveLayer();
+    LAYER_ID curLayer = GetActiveLayer();
 
     // Check if the specified layer matches the present layer
     if( layer == curLayer )
@@ -1317,7 +1324,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
         // selection of any other copper layer is disregarded).
         if( GetBoard()->GetCopperLayerCount() < 2 )
         {
-            if( layer != LAYER_N_BACK )
+            if( layer != B_Cu )
                 return;
         }
         // If more than one copper layer is enabled, the "Copper"
@@ -1326,17 +1333,16 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
         // layers are also capable of being selected.
         else
         {
-            if( ( layer != LAYER_N_BACK ) && ( layer != LAYER_N_FRONT )
-               && ( layer >= GetBoard()->GetCopperLayerCount() - 1 ) )
+            if( layer != B_Cu  &&  layer != F_Cu  && layer >= GetBoard()->GetCopperLayerCount() - 1 )
                 return;
         }
 
         EDA_ITEM* current = GetScreen()->GetCurItem();
 
         // See if we are drawing a segment; if so, add a via?
-        if( GetToolId() == ID_TRACK_BUTT && current != NULL )
+        if( GetToolId() == ID_TRACK_BUTT && current )
         {
-            if( current->Type() == PCB_TRACE_T && ( current->IsNew() ) )
+            if( current->Type() == PCB_TRACE_T && current->IsNew() )
             {
                 // Want to set the routing layers so that it switches properly -
                 // see the implementation of Other_Layer_Route - the working

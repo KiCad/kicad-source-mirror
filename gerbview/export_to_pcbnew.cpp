@@ -7,13 +7,13 @@
 
 #include <fctsys.h>
 #include <common.h>
-// #include <class_drawpanel.h>
 #include <confirm.h>
 #include <macros.h>
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <trigo.h>
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
 #include <select_layers_to_pcb.h>
 #include <build_version.h>
@@ -123,7 +123,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
     int layercount = 0;
 
     // Count the Gerber layers which are actually currently used
-    for( LAYER_NUM ii = FIRST_LAYER; ii < NB_GERBER_LAYERS; ++ii )
+    for( LAYER_NUM ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
         if( g_GERBER_List[ii] != NULL )
             layercount++;
@@ -190,16 +190,17 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* LayerLookUpTable, int aCopperLay
     // create an image of gerber data
     // First: non copper layers:
     GERBER_DRAW_ITEM* gerb_item = m_gerbview_frame->GetItemsList();
+    int pcbCopperLayerMax = 31;
 
     for( ; gerb_item; gerb_item = gerb_item->Next() )
     {
-        LAYER_NUM layer = gerb_item->GetLayer();
+        int layer = gerb_item->GetLayer();
         LAYER_NUM pcb_layer_number = LayerLookUpTable[layer];
 
         if( !IsPcbLayer( pcb_layer_number ) )
             continue;
 
-        if( pcb_layer_number > LAST_COPPER_LAYER )
+        if( pcb_layer_number > pcbCopperLayerMax )
             export_non_copper_item( gerb_item, pcb_layer_number );
     }
 
@@ -209,10 +210,10 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* LayerLookUpTable, int aCopperLay
 
     for( ; gerb_item; gerb_item = gerb_item->Next() )
     {
-        LAYER_NUM layer = gerb_item->GetLayer();
+        int layer = gerb_item->GetLayer();
         LAYER_NUM pcb_layer_number = LayerLookUpTable[layer];
 
-        if( pcb_layer_number < 0 || pcb_layer_number > LAST_COPPER_LAYER )
+        if( pcb_layer_number < 0 || pcb_layer_number > pcbCopperLayerMax )
             continue;
 
         else
@@ -398,13 +399,7 @@ void GBR_TO_PCB_EXPORTER::writePcbHeader()
 
     // Write copper layer count
     fprintf( m_fp, "LayerCount %d\n", m_pcbCopperLayersCount );
-    // Write enabled layer mask:
-    int lmask = ALL_NO_CU_LAYERS | EXTERNAL_CU_LAYERS;
 
-    for( int ii = 0; ii < m_pcbCopperLayersCount - 2; ii++ )
-        lmask |= 2 << ii;
-
-    fprintf( m_fp, "EnabledLayers %08X\n", lmask );
     fprintf( m_fp, "$EndGENERAL\n\n" );
 
     // Creates void setup

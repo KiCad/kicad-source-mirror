@@ -27,7 +27,7 @@
 
 /// Flag used in locate routines (from which endpoint work)
 enum ENDPOINT_T {
-    ENDPOINT_START = 0,             
+    ENDPOINT_START = 0,
     ENDPOINT_END = 1
 };
 
@@ -39,7 +39,7 @@ enum ENDPOINT_T {
 #define TEXTS_MAX_WIDTH DMils2iu( 5000 )    ///< Maximum text width in Pcbnew units value (0.5 inches)
 
 
-/* Flag to force the SKETCH mode to display items (.m_Flags member) */
+// Flag to force the SKETCH mode to display items (.m_Flags member)
 #define FORCE_SKETCH ( IS_DRAGGED | IN_EDIT )
 
 /* Name of the document footprint list
@@ -50,26 +50,26 @@ enum ENDPOINT_T {
  */
 extern wxString g_DocModulesFileName;
 
-/* variables */
-extern bool g_Drc_On;
-extern bool g_AutoDeleteOldTrack;
-extern bool g_Show_Module_Ratsnest;
-extern bool g_Raccord_45_Auto;
-extern bool        g_Track_45_Only_Allowed;
-extern bool        g_Alternate_Track_Posture;
-extern bool        g_Segments_45_Only;
+// variables
+extern bool     g_Drc_On;
+extern bool     g_AutoDeleteOldTrack;
+extern bool     g_Show_Module_Ratsnest;
+extern bool     g_Raccord_45_Auto;
+extern bool     g_Track_45_Only_Allowed;
+extern bool     g_Alternate_Track_Posture;
+extern bool     g_Segments_45_Only;
 
-/* Layer pair for auto routing and switch layers by hotkey */
-extern LAYER_NUM   g_Route_Layer_TOP;
-extern LAYER_NUM   g_Route_Layer_BOTTOM;
+// Layer pair for auto routing and switch layers by hotkey
+extern LAYER_ID g_Route_Layer_TOP;
+extern LAYER_ID g_Route_Layer_BOTTOM;
 
-extern int         g_MaxLinksShowed;        // Max count links showed in routing
-extern bool        g_TwoSegmentTrackBuild;
+extern int      g_MaxLinksShowed;        // Max count links showed in routing
+extern bool     g_TwoSegmentTrackBuild;
 
-extern int         g_MagneticPadOption;
-extern int         g_MagneticTrackOption;
+extern int      g_MagneticPadOption;
+extern int      g_MagneticTrackOption;
 
-extern wxPoint     g_Offset_Module;         /* Offset trace when moving footprint. */
+extern wxPoint  g_Offset_Module;         // Offset trace when moving footprint.
 
 enum MagneticPadOptionValues {
     no_effect,
@@ -78,4 +78,4 @@ enum MagneticPadOptionValues {
 };
 
 
-#endif /* PCBNEW_H */
+#endif // PCBNEW_H

@@ -8,6 +8,7 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_GERBER.h>
 
 #include <html_messagebox.h>
@@ -25,7 +26,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
 
     wxString msg;
     char*    text;
-    LAYER_NUM layer;         // current layer used in GerbView
+    int layer;         // current layer used in GerbView
 
     layer = getActiveLayer();
 

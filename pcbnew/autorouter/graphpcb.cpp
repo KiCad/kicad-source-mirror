@@ -59,7 +59,7 @@ static void DrawSegmentQcq( int ux0, int uy0,
                             int op_logic );
 
 static void TraceFilledCircle( int    cx, int cy, int radius,
-                               LAYER_MSK aLayerMask,
+                               LSET aLayerMask,
                                int    color,
                                int    op_logic );
 
@@ -96,7 +96,7 @@ void PlacePad( D_PAD* aPad, int color, int marge, int op_logic )
     if( aPad->GetShape() == PAD_CIRCLE )
     {
         TraceFilledCircle( shape_pos.x, shape_pos.y, dx,
-                           aPad->GetLayerMask(), color, op_logic );
+                           aPad->GetLayerSet(), color, op_logic );
         return;
     }
 
@@ -120,14 +120,14 @@ void PlacePad( D_PAD* aPad, int color, int marge, int op_logic )
 
         TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy,
                               shape_pos.x + dx, shape_pos.y + dy,
-                              aPad->GetLayerMask(), color, op_logic );
+                              aPad->GetLayerSet(), color, op_logic );
     }
     else
     {
         TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy,
                               shape_pos.x + dx, shape_pos.y + dy,
                               aPad->GetOrientation(),
-                              aPad->GetLayerMask(), color, op_logic );
+                              aPad->GetLayerSet(), color, op_logic );
     }
 }
 
@@ -140,10 +140,8 @@ void PlacePad( D_PAD* aPad, int color, int marge, int op_logic )
  * color: mask write in cells
  * op_logic: type of writing in the cell (WRITE, OR)
  */
-void TraceFilledCircle( int    cx, int cy, int radius,
-                        LAYER_MSK aLayerMask,
-                        int    color,
-                        int    op_logic )
+void TraceFilledCircle( int cx, int cy, int radius,
+        LSET aLayerMask,  int color,  int op_logic )
 {
     int   row, col;
     int   ux0, uy0, ux1, uy1;
@@ -153,10 +151,10 @@ void TraceFilledCircle( int    cx, int cy, int radius,
     int   tstwrite = 0;
     int   distmin;
 
-    if( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) )
+    if( aLayerMask[g_Route_Layer_BOTTOM] )
         trace = 1;       // Trace on BOTTOM
 
-    if( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) )
+    if( aLayerMask[g_Route_Layer_TOP] )
         if( RoutingMatrix.m_RoutingLayersCount > 1 )
             trace |= 2;  // Trace on TOP
 
@@ -297,23 +295,23 @@ void TraceSegmentPcb( TRACK* aTrack, int color, int marge, int op_logic )
     // Test if VIA (filled circle need to be drawn)
     if( aTrack->Type() == PCB_VIA_T )
     {
-        LAYER_MSK layer_mask = NO_LAYERS;
+        LSET layer_mask;
 
         if( aTrack->IsOnLayer( g_Route_Layer_BOTTOM ) )
-            layer_mask = GetLayerMask( g_Route_Layer_BOTTOM );
+            layer_mask.set( g_Route_Layer_BOTTOM );
 
         if( aTrack->IsOnLayer( g_Route_Layer_TOP ) )
         {
-            if( layer_mask == 0 )
-                layer_mask = GetLayerMask( g_Route_Layer_TOP );
+            if( !layer_mask.any() )
+                layer_mask = LSET( g_Route_Layer_TOP );
             else
-                layer_mask = FULL_LAYERS;
+                layer_mask.set();
         }
 
         if( color == VIA_IMPOSSIBLE )
-            layer_mask = FULL_LAYERS;
+            layer_mask.set();
 
-        if( layer_mask )
+        if( layer_mask.any() )
             TraceFilledCircle( aTrack->GetStart().x, aTrack->GetStart().y,
                                half_width, layer_mask, color, op_logic );
     }
@@ -326,7 +324,7 @@ void TraceSegmentPcb( TRACK* aTrack, int color, int marge, int op_logic )
         int uy1 = aTrack->GetEnd().y - RoutingMatrix.GetBrdCoordOrigin().y;
 
         // Ordinary track
-        LAYER_NUM layer = aTrack->GetLayer();
+        LAYER_ID layer = aTrack->GetLayer();
 
         if( color == VIA_IMPOSSIBLE )
             layer = UNDEFINED_LAYER;
@@ -478,17 +476,16 @@ void TracePcbLine( int x0, int y0, int x1, int y1, LAYER_NUM layer, int color, i
 
 
 void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
-                           int aLayerMask, int color, int op_logic )
+                           LSET aLayerMask, int color, int op_logic )
 {
     int  row, col;
     int  row_min, row_max, col_min, col_max;
     int  trace = 0;
 
-    if( ( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) ) )
+    if( aLayerMask[g_Route_Layer_BOTTOM] )
         trace = 1;     // Trace on BOTTOM
 
-    if( ( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) ) &&
-        RoutingMatrix.m_RoutingLayersCount > 1 )
+    if( aLayerMask[g_Route_Layer_TOP] && RoutingMatrix.m_RoutingLayersCount > 1 )
         trace |= 2;    // Trace on TOP
 
     if( trace == 0 )
@@ -541,7 +538,7 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
 
 
 void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
-                           double angle, LAYER_MSK aLayerMask, int color, int op_logic )
+                           double angle, LSET aLayerMask, int color, int op_logic )
 {
     int  row, col;
     int  cx, cy;    // Center of rectangle
@@ -550,10 +547,10 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
     int  rotrow, rotcol;
     int  trace = 0;
 
-    if( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) )
+    if( aLayerMask[g_Route_Layer_BOTTOM] )
         trace = 1;     // Trace on BOTTOM
 
-    if( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) )
+    if( aLayerMask[g_Route_Layer_TOP] )
     {
         if( RoutingMatrix.m_RoutingLayersCount > 1 )
             trace |= 2;  // Trace on TOP

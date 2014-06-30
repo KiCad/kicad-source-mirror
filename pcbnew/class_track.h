@@ -74,8 +74,8 @@ enum VIATYPE_T
  *                   layer mask.
  * @return A TRACK object pointer if found otherwise NULL.
  */
-extern TRACK* GetTrack( TRACK* aStartTrace, const TRACK* aEndTrace,
-        const wxPoint& aPosition, LAYER_MSK aLayerMask );
+TRACK* GetTrack( TRACK* aStartTrace, const TRACK* aEndTrace,
+        const wxPoint& aPosition, LSET aLayerMask );
 
 class TRACK : public BOARD_CONNECTED_ITEM
 {
@@ -188,7 +188,7 @@ public:
      * TRACK segment or VIA physically resides.
      * @return int - a layer mask, see pcbstruct.h's LAYER_BACK, etc.
      */
-    virtual LAYER_MSK GetLayerMask() const;
+    virtual LSET GetLayerSet() const;
 
     /**
      * Function IsPointOnEnds
@@ -232,7 +232,7 @@ public:
      * @param aLayer The layer to match, pass -1 for a don't care.
      * @return A pointer to a VIA object if found, else NULL.
      */
-    VIA* GetVia( const wxPoint& aPosition, LAYER_NUM aLayer = UNDEFINED_LAYER );
+    VIA* GetVia( const wxPoint& aPosition, LAYER_ID aLayer = UNDEFINED_LAYER );
 
     /**
      * Function GetVia
@@ -244,7 +244,7 @@ public:
      * @param aLayerMask The layers to match, pass -1 for a don't care.
      * @return A pointer to a VIA object if found, else NULL.
      */
-    VIA* GetVia( TRACK* aEndTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask );
+    VIA* GetVia( TRACK* aEndTrace, const wxPoint& aPosition, LSET aLayerMask );
 
     /**
      * Function GetTrack
@@ -281,7 +281,7 @@ public:
         return wxT( "TRACK" );
     }
 
-     /**
+    /**
      * Function GetClearance
      * returns the clearance in internal units.  If \a aItem is not NULL then the
      * returned clearance is the greater of this object's clearance and
@@ -390,9 +390,9 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
-    bool IsOnLayer( LAYER_NUM aLayer ) const;
+    bool IsOnLayer( LAYER_ID aLayer ) const;
 
-    virtual LAYER_MSK GetLayerMask() const;
+    virtual LSET GetLayerSet() const;
 
     /**
      * Function SetLayerPair
@@ -401,7 +401,7 @@ public:
      * @param top_layer = first layer connected by the via
      * @param bottom_layer = last layer connected by the via
      */
-    void SetLayerPair( LAYER_NUM aTopLayer, LAYER_NUM aBottomLayer );
+    void SetLayerPair( LAYER_ID aTopLayer, LAYER_ID aBottomLayer );
 
     /**
      * Function LayerPair
@@ -410,7 +410,7 @@ public:
      *  @param top_layer = pointer to the first layer (can be null)
      *  @param bottom_layer = pointer to the last layer (can be null)
      */
-    void LayerPair( LAYER_NUM* top_layer, LAYER_NUM* bottom_layer ) const;
+    void LayerPair( LAYER_ID* top_layer, LAYER_ID* bottom_layer ) const;
 
     const wxPoint& GetPosition() const  {  return m_Start; }       // was overload
     void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }    // was overload
@@ -481,15 +481,16 @@ protected:
 
 private:
     /// The bottom layer of the via (the top layer is in m_Layer)
-    LAYER_NUM m_BottomLayer;
+    LAYER_ID  m_BottomLayer;
 
     VIATYPE_T m_ViaType;        // Type of via
 
     int       m_Drill;          // for vias: via drill (- 1 for default value)
 };
 
+
 /// Scan a track list for the first VIA o NULL if not found (or NULL passed)
-inline VIA *GetFirstVia( TRACK *aTrk, const TRACK *aStopPoint = NULL )
+inline VIA* GetFirstVia( TRACK* aTrk, const TRACK* aStopPoint = NULL )
 {
     while( aTrk && (aTrk != aStopPoint) && (aTrk->Type() != PCB_VIA_T) )
         aTrk = aTrk->Next();
@@ -501,4 +502,4 @@ inline VIA *GetFirstVia( TRACK *aTrk, const TRACK *aStopPoint = NULL )
         return NULL;
 }
 
-#endif /* CLASS_TRACK_H */
+#endif // CLASS_TRACK_H

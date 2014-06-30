@@ -94,7 +94,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
     DRAWSEGMENT* arc = NULL;
     DRAWSEGMENT helperLine;
     helperLine.SetShape( S_SEGMENT );
-    helperLine.SetLayer( DRAW_N );
+    helperLine.SetLayer( Dwgs_User );
     helperLine.SetWidth( 1 );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
@@ -163,71 +163,71 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
             switch( step )
             {
             case SET_ORIGIN:
-            {
-                LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
-
-                if( IsCopperLayer( layer ) )
                 {
-                    DisplayInfoMessage( NULL, _( "Graphic not allowed on Copper layers" ) );
-                    --step;
+                    LAYER_ID layer = m_frame->GetScreen()->m_Active_Layer;
+
+                    if( IsCopperLayer( layer ) )
+                    {
+                        DisplayInfoMessage( NULL, _( "Graphic not allowed on Copper layers" ) );
+                        --step;
+                    }
+                    else
+                    {
+                        // Init the new item attributes
+                        arc = new DRAWSEGMENT( m_board );
+                        arc->SetShape( S_ARC );
+                        arc->SetAngle( 0.0 );
+                        arc->SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
+                        arc->SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
+                        arc->SetLayer( layer );
+
+                        helperLine.SetStart( arc->GetCenter() );
+                        helperLine.SetEnd( arc->GetCenter() );
+
+                        preview.Add( arc );
+                        preview.Add( &helperLine );
+
+                        m_controls->SetAutoPan( true );
+                    }
                 }
-                else
-                {
-                    // Init the new item attributes
-                    arc = new DRAWSEGMENT( m_board );
-                    arc->SetShape( S_ARC );
-                    arc->SetAngle( 0.0 );
-                    arc->SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
-                    arc->SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
-                    arc->SetLayer( layer );
-
-                    helperLine.SetStart( arc->GetCenter() );
-                    helperLine.SetEnd( arc->GetCenter() );
-
-                    preview.Add( arc );
-                    preview.Add( &helperLine );
-
-                    m_controls->SetAutoPan( true );
-                }
-            }
-            break;
+                break;
 
             case SET_END:
-            {
-                if( wxPoint( cursorPos.x, cursorPos.y ) != arc->GetCenter() )
                 {
-                    VECTOR2D startLine( arc->GetArcStart() - arc->GetCenter() );
-                    startAngle = startLine.Angle();
-                    arc->SetArcStart( wxPoint( cursorPos.x, cursorPos.y ) );
-                }
-                else
-                    --step;     // one another chance to draw a proper arc
+                    if( wxPoint( cursorPos.x, cursorPos.y ) != arc->GetCenter() )
+                    {
+                        VECTOR2D startLine( arc->GetArcStart() - arc->GetCenter() );
+                        startAngle = startLine.Angle();
+                        arc->SetArcStart( wxPoint( cursorPos.x, cursorPos.y ) );
+                    }
+                    else
+                        --step;     // one another chance to draw a proper arc
 
-            }
-            break;
+                }
+                break;
 
             case SET_ANGLE:
-            {
-                if( wxPoint( cursorPos.x, cursorPos.y ) != arc->GetArcStart() )
                 {
-                    assert( arc->GetAngle() != 0 );
-                    assert( arc->GetArcStart() != arc->GetArcEnd() );
-                    assert( arc->GetWidth() > 0 );
+                    if( wxPoint( cursorPos.x, cursorPos.y ) != arc->GetArcStart() )
+                    {
+                        assert( arc->GetAngle() != 0 );
+                        assert( arc->GetArcStart() != arc->GetArcEnd() );
+                        assert( arc->GetWidth() > 0 );
 
-                    m_view->Add( arc );
-                    m_board->Add( arc );
-                    arc->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                        m_view->Add( arc );
+                        m_board->Add( arc );
+                        arc->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
-                    m_frame->OnModify();
-                    m_frame->SaveCopyInUndoList( arc, UR_NEW );
+                        m_frame->OnModify();
+                        m_frame->SaveCopyInUndoList( arc, UR_NEW );
 
-                    preview.Remove( arc );
-                    preview.Remove( &helperLine );
+                        preview.Remove( arc );
+                        preview.Remove( &helperLine );
+                    }
+                    else
+                        --step;     // one another chance to draw a proper arc
                 }
-                else
-                    --step;     // one another chance to draw a proper arc
-            }
-            break;
+                break;
             }
 
             if( ++step == FINISHED )
@@ -446,39 +446,39 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
             switch( step )
             {
             case SET_ORIGIN:
-            {
-                LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
-
-                if( IsCopperLayer( layer ) || layer == EDGE_N )
                 {
-                    DisplayInfoMessage( NULL, _( "Dimension not allowed on Copper or Edge Cut layers" ) );
-                    --step;
+                    LAYER_ID layer = m_frame->GetScreen()->m_Active_Layer;
+
+                    if( IsCopperLayer( layer ) || layer == Edge_Cuts )
+                    {
+                        DisplayInfoMessage( NULL, _( "Dimension not allowed on Copper or Edge Cut layers" ) );
+                        --step;
+                    }
+                    else
+                    {
+                        // Init the new item attributes
+                        dimension = new DIMENSION( m_board );
+                        dimension->SetLayer( layer );
+                        dimension->SetOrigin( wxPoint( cursorPos.x, cursorPos.y ) );
+                        dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                        dimension->Text().SetSize( m_board->GetDesignSettings().m_PcbTextSize );
+
+                        width = m_board->GetDesignSettings().m_PcbTextWidth;
+                        maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetSize() );
+
+                        if( width > maxThickness )
+                            width = maxThickness;
+
+                        dimension->Text().SetThickness( width );
+                        dimension->SetWidth( width );
+                        dimension->AdjustDimensionDetails();
+
+                        preview.Add( dimension );
+
+                        m_controls->SetAutoPan( true );
+                    }
                 }
-                else
-                {
-                    // Init the new item attributes
-                    dimension = new DIMENSION( m_board );
-                    dimension->SetLayer( layer );
-                    dimension->SetOrigin( wxPoint( cursorPos.x, cursorPos.y ) );
-                    dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-                    dimension->Text().SetSize( m_board->GetDesignSettings().m_PcbTextSize );
-
-                    width = m_board->GetDesignSettings().m_PcbTextWidth;
-                    maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetSize() );
-
-                    if( width > maxThickness )
-                        width = maxThickness;
-
-                    dimension->Text().SetThickness( width );
-                    dimension->SetWidth( width );
-                    dimension->AdjustDimensionDetails();
-
-                    preview.Add( dimension );
-
-                    m_controls->SetAutoPan( true );
-                }
-            }
-            break;
+                break;
 
             case SET_END:
                 dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
@@ -489,23 +489,23 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
                 break;
 
             case SET_HEIGHT:
-            {
-                if( wxPoint( cursorPos.x, cursorPos.y ) != dimension->GetPosition() )
                 {
-                    assert( dimension->GetOrigin() != dimension->GetEnd() );
-                    assert( dimension->GetWidth() > 0 );
+                    if( wxPoint( cursorPos.x, cursorPos.y ) != dimension->GetPosition() )
+                    {
+                        assert( dimension->GetOrigin() != dimension->GetEnd() );
+                        assert( dimension->GetWidth() > 0 );
 
-                    m_view->Add( dimension );
-                    m_board->Add( dimension );
-                    dimension->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                        m_view->Add( dimension );
+                        m_board->Add( dimension );
+                        dimension->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
-                    m_frame->OnModify();
-                    m_frame->SaveCopyInUndoList( dimension, UR_NEW );
+                        m_frame->OnModify();
+                        m_frame->SaveCopyInUndoList( dimension, UR_NEW );
 
-                    preview.Remove( dimension );
+                        preview.Remove( dimension );
+                    }
                 }
-            }
-            break;
+                break;
             }
 
             if( ++step == FINISHED )
@@ -577,7 +577,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
     PCB_TARGET* target = new PCB_TARGET( m_board );
 
     // Init the new item attributes
-    target->SetLayer( EDGE_N );
+    target->SetLayer( Edge_Cuts );
     target->SetWidth( m_board->GetDesignSettings().m_EdgeSegmentWidth );
     target->SetSize( Millimeter2iu( 5 ) );
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
@@ -840,7 +840,7 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
         {
             if( !graphic )
             {
-                LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
+                LAYER_ID layer = m_frame->GetScreen()->m_Active_Layer;
 
                 if( IsCopperLayer( layer ) )
                 {

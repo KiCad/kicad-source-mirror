@@ -529,20 +529,21 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     switch( aItem->Type() )
     {
     case PCB_VIA_T:
-    {
-        // For vias it is enough if only one of layers is visible
-        LAYER_NUM top, bottom;
-        static_cast<const VIA*>( aItem )->LayerPair( &top, &bottom );
+        {
+            // For vias it is enough if only one of layers is visible
+            LAYER_ID top, bottom;
 
-        return board->IsLayerVisible( top ) || board->IsLayerVisible( bottom );
-    }
-    break;
+            static_cast<const VIA*>( aItem )->LayerPair( &top, &bottom );
+
+            return board->IsLayerVisible( top ) || board->IsLayerVisible( bottom );
+        }
+        break;
 
     case PCB_MODULE_T:
-        if( aItem->IsOnLayer( LAYER_N_FRONT ) && board->IsElementVisible( MOD_FR_VISIBLE ) )
+        if( aItem->IsOnLayer( F_Cu ) && board->IsElementVisible( MOD_FR_VISIBLE ) )
             return true;
 
-        if( aItem->IsOnLayer( LAYER_N_BACK ) && board->IsElementVisible( MOD_BK_VISIBLE ) )
+        if( aItem->IsOnLayer( B_Cu ) && board->IsElementVisible( MOD_BK_VISIBLE ) )
             return true;
 
         return false;
