@@ -29,10 +29,13 @@ void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     m_gerberUnitInch = false;    // Currently fixed, but could be an option
 
     // number of digits after the point (number of digits of the mantissa
-    // Be carefull: the coordinates are stored in an integer
-    // so 6 digits (inches) or 5 digits (mm) is the best value
-    // to avoid truncations and overflow
-    m_gerberUnitFmt = m_gerberUnitInch ? 6 : 5;
+    // Be carefull: the Gerber coordinates are stored in an integer
+    // so 6 digits (inches) or 5 digits (mm) is a good value
+    // To avoid overflow, 7 digits (inches) or 6 digits is a max.
+    // with lower values than 6 digits (inches) or 5 digits (mm),
+    // Creating self-intersecting polygons from non-intersecting polygons
+    // happen easily.
+    m_gerberUnitFmt = m_gerberUnitInch ? 7 : 6;
 
     m_IUsPerDecimil = aIusPerDecimil;
     iuPerDeviceUnit = pow( 10.0, m_gerberUnitFmt ) / ( aIusPerDecimil * 10000.0 );

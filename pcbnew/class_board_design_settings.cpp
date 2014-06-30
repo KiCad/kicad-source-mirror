@@ -56,14 +56,14 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
 {
     LSET    all_set = LSET().set();
 
-    m_enabledLayers = all_set;               // All layers enabled at first.
-                                                // SetCopperLayerCount() will adjust this.
+    m_enabledLayers = all_set;              // All layers enabled at first.
+                                            // SetCopperLayerCount() will adjust this.
     SetVisibleLayers( all_set );
 
     // set all but hidden text as visible.
     m_visibleElements = ~( 1 << MOD_TEXT_INVISIBLE );
 
-    SetCopperLayerCount( 2 );                   // Default design is a double sided board
+    SetCopperLayerCount( 2 );               // Default design is a double sided board
 
     // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA).
     m_CurrentViaType = VIA_THROUGH;
@@ -350,7 +350,9 @@ void BOARD_DESIGN_SETTINGS::SetCopperLayerCount( int aNewLayerCount )
     for( LAYER_NUM ii = LAYER_N_2; ii < aNewLayerCount - 1; ++ii )
         m_enabledLayers |= GetLayerSet( ii );
 #else
-    m_enabledLayers = LSET::AllCuMask( aNewLayerCount );
+    // Update only enabled copper layers mask
+    m_enabledLayers &= ~LSET::AllCuMask();
+    m_enabledLayers |= LSET::AllCuMask( aNewLayerCount );
 #endif
 }
 
