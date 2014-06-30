@@ -703,6 +703,8 @@ void PCB_PARSER::parseLayer( LAYER* aLayer ) throw( IO_ERROR, PARSE_ERROR )
     std::string type;
     bool        isVisible = true;
 
+    aLayer->clear();
+
     if( CurTok() != T_LEFT )
         Expecting( T_LEFT );
 
@@ -744,13 +746,12 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
     LSET    visibleLayers;
     LSET    enabledLayers;
     int     copperLayerCount = 0;
+    LAYER   layer;
 
     std::vector<LAYER>  cu;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
-        LAYER   layer;
-
         parseLayer( &layer );
 
         if( layer.m_type == LT_UNDEFINED )     // it's a non-copper layer
@@ -794,41 +795,41 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
         copperLayerCount = cu.size();
     }
 
-    if( token != T_RIGHT )
+    // process non-copper layers
+    while( token != T_RIGHT )
     {
-        // read any non-copper layers
-        for( token = NextTok(); token != T_RIGHT;  token = NextTok() )
+        LAYER_ID_MAP::const_iterator it = m_layerIndices.find( UTF8( layer.m_name ) );
+
+        if( it == m_layerIndices.end() )
         {
-            LAYER   layer;
+            wxString error = wxString::Format(
+                _( "Layer '%s' in file '%s' at line %d, is not in fixed layer hash" ),
+                GetChars( layer.m_name ),
+                GetChars( CurSource() ),
+                CurLineNumber(),
+                CurOffset()
+                );
 
-            parseLayer( &layer );
-
-            LAYER_ID_MAP::const_iterator it = m_layerIndices.find( UTF8( layer.m_name ) );
-
-            if( it == m_layerIndices.end() )
-            {
-                wxString error = wxString::Format(
-                    _( "Layer '%s' in file '%s' at line %d, is not in fixed layer hash" ),
-                    GetChars( layer.m_name ),
-                    GetChars( CurSource() ),
-                    CurLineNumber(),
-                    CurOffset()
-                    );
-
-                THROW_IO_ERROR( error );
-            }
-
-            layer.m_number = it->second;
-
-            enabledLayers.set( layer.m_number );
-
-            if( layer.m_visible )
-                visibleLayers.set( layer.m_number );
-
-            //DBG( printf( "aux m_visible:%s\n", layer.m_visible ? "true" : "false" );)
-
-            m_board->SetLayer( LAYER_ID( layer.m_number ), layer );
+            THROW_IO_ERROR( error );
         }
+
+        layer.m_number = it->second;
+
+        enabledLayers.set( layer.m_number );
+
+        if( layer.m_visible )
+            visibleLayers.set( layer.m_number );
+
+        // DBG( printf( "aux m_visible:%s\n", layer.m_visible ? "true" : "false" );)
+
+        m_board->SetLayer( it->second, layer );
+
+        token = NextTok();
+
+        if( token != T_LEFT )
+            break;
+
+        parseLayer( &layer );
     }
 
     // We need at least 2 copper layers and there must be an even number of them.
