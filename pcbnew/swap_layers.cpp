@@ -18,20 +18,22 @@
 #include <wx/statline.h>
 
 
-#define LAYER_NO_CHANGE NB_LAYERS
-static LAYER_NUM New_Layer[NB_PCB_LAYERS];
-wxStaticText* layer_list[NB_PCB_LAYERS];
+#define NO_CHANGE     LAYER_ID(-3)
 
 
 enum swap_layer_id {
     ID_WINEDA_SWAPLAYERFRAME = 1800,
     ID_BUTTON_0,
-    ID_TEXT_0 = ID_BUTTON_0 + NB_PCB_LAYERS
+    ID_TEXT_0 = ID_BUTTON_0 + LAYER_ID_COUNT
 };
 
 
 class SWAP_LAYERS_DIALOG : public DIALOG_SHIM
 {
+public:
+    SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, LAYER_ID* aArray );
+    // ~SWAP_LAYERS_DIALOG() { };
+
 private:
     PCB_BASE_FRAME*         m_Parent;
     wxBoxSizer*             OuterBoxSizer;
@@ -43,12 +45,9 @@ private:
     wxStaticLine*           Line;
     wxStdDialogButtonSizer* StdDialogButtonSizer;
 
-public:
+    LAYER_ID*               m_callers_nlayers;          // DIM() is LAYER_ID_COUNT
+    wxStaticText*           layer_list[LAYER_ID_COUNT];
 
-    SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent );
-    ~SWAP_LAYERS_DIALOG() { };
-
-private:
     void Sel_Layer( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
@@ -58,18 +57,22 @@ private:
 
 
 BEGIN_EVENT_TABLE( SWAP_LAYERS_DIALOG, wxDialog )
-    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + NB_PCB_LAYERS - 1,
-                       wxEVT_COMMAND_BUTTON_CLICKED,
-                       SWAP_LAYERS_DIALOG::Sel_Layer )
+    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + LAYER_ID_COUNT - 1,
+                       wxEVT_COMMAND_BUTTON_CLICKED, SWAP_LAYERS_DIALOG::Sel_Layer )
+
     EVT_BUTTON( wxID_OK, SWAP_LAYERS_DIALOG::OnOkClick )
+
     EVT_BUTTON( wxID_CANCEL, SWAP_LAYERS_DIALOG::OnCancelClick )
 END_EVENT_TABLE()
 
 
-SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent ) :
+SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, LAYER_ID* aArray ) :
     DIALOG_SHIM( parent, -1, _( "Swap Layers:" ), wxPoint( -1, -1 ),
-                 wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+                 wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+    m_callers_nlayers( aArray )
 {
+    memset( layer_list, 0, sizeof( layer_list ) );
+
     BOARD* board = parent->GetBoard();
 
     OuterBoxSizer = NULL;
@@ -113,10 +116,10 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent ) :
     MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     OuterBoxSizer->Add( MainBoxSizer, 1, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
-    for( LAYER_NUM ii = FIRST_LAYER; ii < NB_PCB_LAYERS; ++ii )
+    for( unsigned layer = 0; layer < DIM( layer_list );  ++layer )
     {
         // Provide a vertical line to separate the two FlexGrid sizers
-        if( ii == 16 )
+        if( layer == 32 )
         {
             Line = new wxStaticLine( this,
                                      -1,
@@ -127,7 +130,7 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent ) :
         }
 
         // Provide a separate FlexGrid sizer for every sixteen sets of controls
-        if( ii % 16 == 0 )
+        if( layer % 16 == 0 )
         {
             /* Each layer has an associated static text string (to identify
              * that layer), a button (for invoking a child dialog box to
@@ -168,16 +171,17 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent ) :
         /* Provide a text string to identify this layer (with trailing spaces
          * within that string being purged).
          */
-        label = new wxStaticText( this, wxID_STATIC, board->GetLayerName( ii ),
+        label = new wxStaticText( this, wxID_STATIC, board->GetLayerName( ToLAYER_ID( layer ) ),
                                   wxDefaultPosition, wxDefaultSize,
                                   wxALIGN_RIGHT );
+
         FlexColumnBoxSizer->Add( label, 0,
                                  wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL |
                                  wxLEFT | wxBOTTOM,
                                  5 );
 
         // Provide a button for this layer (which will invoke a child dialog box)
-        item_ID = ID_BUTTON_0 + ii;
+        item_ID = ID_BUTTON_0 + layer;
 
         Button = new wxButton( this, item_ID, wxT( "..." ), wxDefaultPosition,
                                wxSize( w, h ), 0 );
@@ -191,7 +195,7 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent ) :
          * foreground color of the text to blue (which also indicates that the
          * layer is currently unmapped to any other layer).
          */
-        item_ID = ID_TEXT_0 + ii;
+        item_ID = ID_TEXT_0 + layer;
 
         /* When the first of these text strings is being added, determine
          * what size is necessary to to be able to display the longest
@@ -200,15 +204,15 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent ) :
          * size is not this size, strings can be truncated after
          * some other layer is selected.)
          */
-        if( ii == 0 )
+        if( layer == 0 )
         {
-            text = new wxStaticText( this, item_ID, board->GetLayerName( FIRST_LAYER ),
+            text = new wxStaticText( this, item_ID, board->GetLayerName( LAYER_ID( 0 ) ),
                                      wxDefaultPosition, wxDefaultSize, 0 );
             goodSize = text->GetSize();
 
-            for( LAYER_NUM jj = LAYER_N_2; jj < NB_PCB_LAYERS; ++jj )
+            for( unsigned jj = 1;  jj < DIM( layer_list ); ++jj )
             {
-                text->SetLabel( board->GetLayerName( jj ) );
+                text->SetLabel( board->GetLayerName( ToLAYER_ID( jj ) ) );
 
                 if( goodSize.x < text->GetSize().x )
                     goodSize.x = text->GetSize().x;
@@ -229,19 +233,19 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent ) :
         FlexColumnBoxSizer->Add( text, 1,
                                  wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
                                  wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-        layer_list[ii] = text;
+        layer_list[layer] = text;
     }
 
     /* Provide spacers to occupy otherwise blank cells within the second
      * FlexGrid sizer. (Becuse there are three columns, three spacers
      * are thus required for each unused row.)
-     */
     for( int ii = 3 * NB_PCB_LAYERS; ii < 96; ii++ )
     {
         FlexColumnBoxSizer->Add( 5, h, 0, wxALIGN_CENTER_HORIZONTAL |
                                  wxALIGN_CENTER_VERTICAL | wxLEFT |
                                  wxRIGHT | wxBOTTOM, 5 );
     }
+     */
 
     // Provide a line to separate the controls which have been provided so far
     // from the OK and Cancel buttons (which will be provided after this line)
@@ -279,29 +283,25 @@ void SWAP_LAYERS_DIALOG::Sel_Layer( wxCommandEvent& event )
 
     ii = event.GetId();
 
-    if( ii < ID_BUTTON_0 || ii >= ID_BUTTON_0 + NB_PCB_LAYERS )
+    if( ii < ID_BUTTON_0 || ii >= ID_BUTTON_0 + LAYER_ID_COUNT )
         return;
 
     ii = event.GetId() - ID_BUTTON_0;
 
-    LAYER_NUM layer = New_Layer[ii];
+    LAYER_ID layer = m_callers_nlayers[ii];
 
-    if( (layer < 0) || (layer > NB_PCB_LAYERS) )
-        layer = LAYER_NO_CHANGE; // (Defaults to "No Change".)
+    LSET notallowed_mask = IsCopperLayer( ii ) ? LSET::AllNonCuMask() : LSET::AllCuMask();
 
-    LAYER_MSK notallowed_mask = ii < NB_COPPER_LAYERS ?
-                                ALL_NO_CU_LAYERS : ALL_CU_LAYERS;
-    layer = m_Parent->SelectLayer( layer == LAYER_NO_CHANGE ? ii : layer,
-                                   notallowed_mask );
+    layer = m_Parent->SelectLayer( layer == NO_CHANGE ? ToLAYER_ID( ii ): layer, notallowed_mask );
 
     if( !IsValidLayer( layer ) )
         return;
 
-    if( layer != New_Layer[ii] )
+    if( layer != m_callers_nlayers[ii] )
     {
-        New_Layer[ii] = layer;
+        m_callers_nlayers[ii] = layer;
 
-        if( layer >= LAYER_NO_CHANGE || layer == ii )
+        if( layer == NO_CHANGE || layer == ii )
         {
             layer_list[ii]->SetLabel( _( "No Change" ) );
 
@@ -335,80 +335,71 @@ void SWAP_LAYERS_DIALOG::OnOkClick( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
 {
-    int          ii, jj;
-    TRACK*       pt_segm;
-    DRAWSEGMENT* pt_drawsegm;
-    EDA_ITEM*    PtStruct;
+    LAYER_ID    new_layer[LAYER_ID_COUNT];
 
-    /* Init default values */
-    for( ii = FIRST_LAYER; ii < NB_PCB_LAYERS; ii++ )
-        New_Layer[ii] = LAYER_NO_CHANGE;
+    for( unsigned i = 0; i < DIM( new_layer );  ++i )
+        new_layer[i] = NO_CHANGE;
 
-    SWAP_LAYERS_DIALOG dlg( this );
+    SWAP_LAYERS_DIALOG dlg( this, new_layer );
 
-    ii = dlg.ShowModal();
+    if( dlg.ShowModal() != 1 )
+        return;     // (Canceled dialog box returns -1 instead)
 
-    if( ii != 1 )
-        return; // (Canceled dialog box returns -1 instead)
-
-    /* Change traces. */
-    pt_segm = GetBoard()->m_Track;
-
-    for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
+    // Change traces.
+    for( TRACK* segm = GetBoard()->m_Track;  segm;  segm = segm->Next() )
     {
         OnModify();
 
-        if( pt_segm->Type() == PCB_VIA_T )
+        if( segm->Type() == PCB_VIA_T )
         {
-            VIA* Via = (VIA*) pt_segm;
+            VIA* via = (VIA*) segm;
 
-            if( Via->GetViaType() == VIA_THROUGH )
+            if( via->GetViaType() == VIA_THROUGH )
                 continue;
 
-            LAYER_NUM top_layer, bottom_layer;
+            LAYER_ID top_layer, bottom_layer;
 
-            Via->LayerPair( &top_layer, &bottom_layer );
+            via->LayerPair( &top_layer, &bottom_layer );
 
-            if(  New_Layer[bottom_layer] >= 0 && New_Layer[bottom_layer] < LAYER_NO_CHANGE )
-                bottom_layer = New_Layer[bottom_layer];
+            if( new_layer[bottom_layer] != NO_CHANGE )
+                bottom_layer = new_layer[bottom_layer];
 
-            if( New_Layer[top_layer] >= 0 && New_Layer[top_layer] < LAYER_NO_CHANGE )
-                top_layer = New_Layer[top_layer];
+            if( new_layer[top_layer] != NO_CHANGE )
+                top_layer = new_layer[top_layer];
 
-            Via->SetLayerPair( top_layer, bottom_layer );
+            via->SetLayerPair( top_layer, bottom_layer );
         }
         else
         {
-            jj = pt_segm->GetLayer();
+            int jj = segm->GetLayer();
 
-            if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )
-                pt_segm->SetLayer( New_Layer[jj] );
+            if( new_layer[jj] != NO_CHANGE )
+                segm->SetLayer( new_layer[jj] );
         }
     }
 
-    /* Change zones. */
-    for( pt_segm = GetBoard()->m_Zone;  pt_segm;  pt_segm = pt_segm->Next() )
+    // Change zones.
+    for( TRACK* segm = GetBoard()->m_Zone;  segm;  segm = segm->Next() )
     {
         OnModify();
-        jj = pt_segm->GetLayer();
+        int jj = segm->GetLayer();
 
-        if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )
-            pt_segm->SetLayer( New_Layer[jj] );
+        if( new_layer[jj] != NO_CHANGE )
+            segm->SetLayer( new_layer[jj] );
     }
 
-    /* Change other segments. */
-    PtStruct = GetBoard()->m_Drawings;
-
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    // Change other segments.
+    for( EDA_ITEM* item = GetBoard()->m_Drawings; item; item = item->Next() )
     {
-        if( PtStruct->Type() == PCB_LINE_T )
+        if( item->Type() == PCB_LINE_T )
         {
             OnModify();
-            pt_drawsegm = (DRAWSEGMENT*) PtStruct;
-            jj = pt_drawsegm->GetLayer();
 
-            if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )
-                pt_drawsegm->SetLayer( New_Layer[jj] );
+            DRAWSEGMENT* drawsegm = (DRAWSEGMENT*) item;
+            int jj = drawsegm->GetLayer();
+
+            if( new_layer[jj] != NO_CHANGE )
+                drawsegm->SetLayer( new_layer[jj] );
         }
     }
 

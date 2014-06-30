@@ -296,7 +296,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
     if( Module == NULL )
         return;
 
-    if( ( Module->GetLayer() != LAYER_N_FRONT ) && ( Module->GetLayer() != LAYER_N_BACK ) )
+    if( ( Module->GetLayer() != F_Cu ) && ( Module->GetLayer() != B_Cu ) )
         return;
 
     OnModify();

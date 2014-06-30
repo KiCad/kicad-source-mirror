@@ -54,6 +54,8 @@ class wxString;
 // represent maximum information hiding.
 class PCB_EDIT_FRAME;
 class FP_LIB_TABLE;
+class BOARD;
+class PCB_PLOT_PARAMS;
 
 
 /**
@@ -87,5 +89,13 @@ void InvokePluginOptionsEditor( wxTopLevelWindow* aCaller, const wxString& aNick
  */
 bool InvokeDXFDialogImport( PCB_EDIT_FRAME* aCaller );
 
+/**
+ * Function InvokeLayerSetup
+ * shows the layer setup dialog
+ * @return bool - true if user pressed OK (did not abort), else false.
+ */
+bool InvokeLayerSetup( wxTopLevelWindow* aCaller, BOARD* aBoard );
+
+bool InvokeSVGPrint( wxTopLevelWindow* aCaller, BOARD* aBoard, PCB_PLOT_PARAMS* aSettings );
 
 #endif  // INVOKE_A_DIALOG_H_

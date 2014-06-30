@@ -381,7 +381,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
 void PCB_EDIT_FRAME::Block_SelectItems()
 {
-    LAYER_MSK layerMask;
+    LSET layerMask;
     bool selectOnlyComplete = GetScreen()->m_BlockLocate.GetWidth() > 0 ;
 
     GetScreen()->m_BlockLocate.Normalize();
@@ -392,9 +392,9 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     // Add modules
     if( blockIncludeModules )
     {
-        for( MODULE* module = m_Pcb->m_Modules; module != NULL; module = module->Next() )
+        for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
         {
-            LAYER_NUM layer = module->GetLayer();
+            LAYER_ID layer = module->GetLayer();
 
             if( module->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete )
                 && ( !module->IsLocked() || blockIncludeLockedModules ) )
@@ -418,7 +418,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
                 if( blockIncludeItemsOnInvisibleLayers
                   || m_Pcb->IsLayerVisible( track->GetLayer() ) )
                 {
-                    picker.SetItem ( track );
+                    picker.SetItem( track );
                     itemsList->PushItem( picker );
                 }
             }
@@ -426,13 +426,13 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     }
 
     // Add graphic items
-    layerMask = EDGE_LAYER;
+    layerMask = LSET( Edge_Cuts );
 
     if( blockIncludeItemsOnTechLayers )
-        layerMask = ALL_LAYERS;
+        layerMask.set();
 
     if( !blockIncludeBoardOutlineLayer )
-        layerMask &= ~EDGE_LAYER;
+        layerMask.set( Edge_Cuts, false );
 
     for( BOARD_ITEM* PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
@@ -444,7 +444,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         switch( PtStruct->Type() )
         {
         case PCB_LINE_T:
-            if( (GetLayerMask( PtStruct->GetLayer() ) & layerMask) == 0  )
+            if( !layerMask[PtStruct->GetLayer()] )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
@@ -464,7 +464,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             break;
 
         case PCB_TARGET_T:
-            if( ( GetLayerMask( PtStruct->GetLayer() ) & layerMask ) == 0  )
+            if( !layerMask[PtStruct->GetLayer()] )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
@@ -474,7 +474,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             break;
 
         case PCB_DIMENSION_T:
-            if( ( GetLayerMask( PtStruct->GetLayer() ) & layerMask ) == 0 )
+            if( !layerMask[PtStruct->GetLayer()] )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )

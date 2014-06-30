@@ -7,8 +7,6 @@
 #define _COLORS_DESIGN_SETTING_H
 #include <layers_id_colors_and_visibility.h>
 
-#define LAYERSCOLORSBUFFERSIZE NB_LAYERS
-#define ITEMSCOLORSBUFFERSIZE 32
 
 /**
  * Class COLORS_DESIGN_SETTINGS
@@ -20,10 +18,10 @@ public:
     // Color options for screen display of the Printed Board and schematic:
 
     // Common to Eeschema, Pcbnew, GerbView
-    EDA_COLOR_T m_LayersColors[LAYERSCOLORSBUFFERSIZE]; ///< Layer colors (tracks and graphic items)
+    EDA_COLOR_T m_LayersColors[LAYER_ID_COUNT];     ///< Layer colors (tracks and graphic items)
 
     // Common to Eeschema, Pcbnew
-    EDA_COLOR_T m_ItemsColors[ITEMSCOLORSBUFFERSIZE];   ///< All others items but layers
+    EDA_COLOR_T m_ItemsColors[32];                  ///< All others items but layers
 
 public:
     COLORS_DESIGN_SETTINGS();

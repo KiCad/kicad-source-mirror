@@ -39,7 +39,8 @@ public:
     int  m_ZoneClearance;               ///< Clearance value
     int  m_ZoneMinThickness;            ///< Min thickness value in filled areas
     int  m_NetcodeSelection;            ///< Net code selection for the current zone
-    LAYER_NUM  m_CurrentZone_Layer;     ///< Layer used to create the current zone
+
+    LAYER_ID    m_CurrentZone_Layer;    ///< Layer used to create the current zone
 
     /// Option to show the zone area (outlines only, short hatches or full hatches
     int  m_Zone_HatchingStyle;

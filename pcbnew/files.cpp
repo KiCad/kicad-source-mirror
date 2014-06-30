@@ -556,8 +556,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     if( aFileName == wxEmptyString )
     {
         wxString    wildcard;
-        wildcard << wxGetTranslation( PcbFileWildcard ) << wxChar( '|' ) <<
-                    wxGetTranslation( LegacyPcbFileWildcard );
+        wildcard << wxGetTranslation( PcbFileWildcard )
+                        // << wxChar( '|' ) << wxGetTranslation( LegacyPcbFileWildcard )
+                        ;
 
         isSaveAs = true;
         pcbFileName = GetBoard()->GetFileName();
@@ -583,9 +584,13 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         if( dlg.ShowModal() != wxID_OK )
             return false;
 
+#if 0   // no more LEGACY_PLUGIN::Save()
         int filterNdx = dlg.GetFilterIndex();
 
         pluginType = ( filterNdx == 1 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
+#else
+        pluginType = IO_MGR::KICAD;
+#endif
 
         // Note: on Linux wxFileDialog is not reliable for noticing a changed filename.
         // We probably need to file a bug report or implement our own derivation.

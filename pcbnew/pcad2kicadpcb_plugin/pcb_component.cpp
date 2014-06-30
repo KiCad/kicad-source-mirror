@@ -43,7 +43,7 @@ PCB_COMPONENT::PCB_COMPONENT( PCB_CALLBACKS*    aCallbacks,
     m_tag       = 0;
     m_objType   = wxT( '?' );
     m_PCadLayer     = 0;
-    m_KiCadLayer    = LAYER_N_FRONT; // It *has* to be somewhere...
+    m_KiCadLayer    = F_Cu; // It *has* to be somewhere...
     m_timestamp     = 0;
     m_positionX     = 0;
     m_positionY     = 0;

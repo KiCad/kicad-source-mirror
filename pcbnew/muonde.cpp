@@ -265,7 +265,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
 
     pad->SetSize( wxSize( Mself.m_Width, Mself.m_Width ) );
 
-    pad->SetLayerMask( GetLayerMask( module->GetLayer() ) );
+    pad->SetLayerSet( LSET( module->GetLayer() ) );
     pad->SetAttribute( PAD_SMD );
     pad->SetShape( PAD_CIRCLE );
 
@@ -567,7 +567,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
         pad->SetPosition( module->GetPosition() );
         pad->SetShape( PAD_RECT );
         pad->SetAttribute( PAD_SMD );
-        pad->SetLayerMask( LAYER_FRONT );
+        pad->SetLayerSet( F_Cu );
 
         Line.Printf( wxT( "%d" ), pad_num );
         pad->SetPadName( Line );
@@ -692,7 +692,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         module->GraphicalItems().PushFront( edge );
 
         edge->SetShape( S_POLYGON );
-        edge->SetLayer( LAYER_N_FRONT );
+        edge->SetLayer( F_Cu );
 
         int numPoints = angle / 50 + 3;     // Note: angles are in 0.1 degrees
         std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
@@ -992,7 +992,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     module->GraphicalItems().PushFront( edge );
 
     edge->SetShape( S_POLYGON );
-    edge->SetLayer( LAYER_N_FRONT );
+    edge->SetLayer( F_Cu );
 
     std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
     polyPoints.reserve( 2 * PolyEdges.size() + 2 );

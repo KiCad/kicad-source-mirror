@@ -52,13 +52,13 @@
 #include <hotkeys.h>
 #include <pcbnew_config.h>
 #include <module_editor_frame.h>
-#include <dialog_SVG_print.h>
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
 #include <convert_from_iu.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
+#include <invoke_pcb_dialog.h>
 
 #include <class_track.h>
 #include <class_board.h>
@@ -806,7 +806,7 @@ void PCB_EDIT_FRAME::SetGridColor(EDA_COLOR_T aColor)
 bool PCB_EDIT_FRAME::IsMicroViaAcceptable()
 {
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
-    LAYER_NUM currLayer = GetActiveLayer();
+    LAYER_ID currLayer = GetActiveLayer();
 
     if( !GetDesignSettings().m_MicroViasAllowed )
         return false;   // Obvious..
@@ -814,17 +814,17 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable()
     if( copperlayercnt < 4 )
         return false;   // Only on multilayer boards..
 
-    if( ( currLayer == LAYER_N_BACK )
-       || ( currLayer == LAYER_N_FRONT )
+    if( ( currLayer == B_Cu )
+       || ( currLayer == F_Cu )
        || ( currLayer == copperlayercnt - 2 )
-       || ( currLayer == LAYER_N_2 ) )
+       || ( currLayer == In1_Cu ) )
         return true;
 
     return false;
 }
 
 
-void PCB_EDIT_FRAME::SetHighContrastLayer( LAYER_NUM aLayer )
+void PCB_EDIT_FRAME::SetHighContrastLayer( LAYER_ID aLayer )
 {
     // Set display settings for high contrast mode
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
@@ -847,16 +847,16 @@ void PCB_EDIT_FRAME::SetHighContrastLayer( LAYER_NUM aLayer )
                 ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE )
         };
 
-        for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
+        for( unsigned i = 0; i < DIM( layers ); ++i )
             rSettings->SetActiveLayer( layers[i] );
 
         // Pads should be shown too
-        if( aLayer == FIRST_COPPER_LAYER )
+        if( aLayer == B_Cu )
         {
             rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
             rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
         }
-        else if( aLayer == LAST_COPPER_LAYER )
+        else if( aLayer == F_Cu )
         {
             rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
             rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
@@ -867,7 +867,7 @@ void PCB_EDIT_FRAME::SetHighContrastLayer( LAYER_NUM aLayer )
 }
 
 
-void PCB_EDIT_FRAME::SetTopLayer( LAYER_NUM aLayer )
+void PCB_EDIT_FRAME::SetTopLayer( LAYER_ID aLayer )
 {
     // Set display settings for high contrast mode
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
@@ -884,22 +884,22 @@ void PCB_EDIT_FRAME::SetTopLayer( LAYER_NUM aLayer )
                 GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
                 ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
-                ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE ), DRAW_N,
+                ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE ), Dwgs_User,
                 ITEM_GAL_LAYER( DRC_VISIBLE )
         };
 
-        for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
+        for( unsigned i = 0; i < DIM( layers ); ++i )
         {
             view->SetTopLayer( layers[i] );
         }
 
         // Pads should be shown too
-        if( aLayer == FIRST_COPPER_LAYER )
+        if( aLayer == B_Cu )
         {
             view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
             view->SetTopLayer( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
         }
-        else if( aLayer == LAST_COPPER_LAYER )
+        else if( aLayer == F_Cu )
         {
             view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
             view->SetTopLayer( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
@@ -910,7 +910,7 @@ void PCB_EDIT_FRAME::SetTopLayer( LAYER_NUM aLayer )
 }
 
 
-void PCB_EDIT_FRAME::SetActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
+void PCB_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer, bool doLayerWidgetUpdate )
 {
     ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 
@@ -944,13 +944,13 @@ void PCB_EDIT_FRAME::syncLayerVisibilities()
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
 
     // Load layer & elements visibility settings
-    for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
+    for( LAYER_NUM i = 0; i < LAYER_ID_COUNT; ++i )
     {
-        view->SetLayerVisible( i, m_Pcb->IsLayerVisible( i ) );
+        view->SetLayerVisible( i, m_Pcb->IsLayerVisible( LAYER_ID( i ) ) );
 
         // Synchronize netname layers as well
         if( IsCopperLayer( i ) )
-            view->SetLayerVisible( GetNetnameLayer( i ), m_Pcb->IsLayerVisible( i ) );
+            view->SetLayerVisible( GetNetnameLayer( i ), m_Pcb->IsLayerVisible( LAYER_ID( i ) ) );
     }
 
     for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )
@@ -1052,9 +1052,18 @@ void PCB_EDIT_FRAME::OnModify( )
 
 void PCB_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
 {
-    DIALOG_SVG_PRINT frame( this );
+    PCB_PLOT_PARAMS  tmp = GetPlotSettings();
 
-    frame.ShowModal();
+    // we don't want dialogs knowing about complex wxFrame functions so
+    // pass everything the dialog needs without reference to *this frame's class.
+    if( InvokeSVGPrint( this, GetBoard(), &tmp ) )
+    {
+        if( tmp != GetPlotSettings() )
+        {
+            SetPlotSettings( tmp );
+            OnModify();
+        }
+    }
 }
 
 

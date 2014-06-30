@@ -36,8 +36,10 @@ class NETINFO_MAPPING;
 
 
 /// Current s-expression file format version.  2 was the last legacy format version.
-#define SEXPR_BOARD_FILE_VERSION    3
 
+//#define SEXPR_BOARD_FILE_VERSION    3     // first s-expression format, used legacy cu stack
+#define SEXPR_BOARD_FILE_VERSION    4       // reversed cu stack, changed Inner* to In* in reverse order
+                                            // went to 32 Cu layers from 16.
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)
@@ -215,7 +217,7 @@ private:
 
     void formatLayer( const BOARD_ITEM* aItem ) const;
 
-    void formatLayers( LAYER_MSK aLayerMask, int aNestLevel = 0 ) const
+    void formatLayers( LSET aLayerMask, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 };
 

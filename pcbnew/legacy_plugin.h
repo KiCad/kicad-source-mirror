@@ -28,7 +28,7 @@
 #include <io_mgr.h>
 #include <boost/shared_ptr.hpp>
 #include <string>
-
+#include <layers_id_colors_and_visibility.h>
 
 #define FOOTPRINT_LIBRARY_HEADER       "PCBNEW-LibModule-V1"
 #define FOOTPRINT_LIBRARY_HEADER_CNT   18
@@ -61,8 +61,9 @@ struct LP_CACHE;
  */
 class LEGACY_PLUGIN : public PLUGIN
 {
-public:
+    friend struct LP_CACHE;
 
+public:
 
     //-----<PLUGIN IMPLEMENTATION>----------------------------------------------
 
@@ -78,19 +79,20 @@ public:
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties = NULL );
 
+    /* we let go of "save" support when the number of CU layers were expanded from 16 to 32.
     void Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties = NULL );
+
+    void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
+                                    const PROPERTIES* aProperties = NULL );
+    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = NULL );
+
+    void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
+    */
 
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL);
 
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                     const PROPERTIES* aProperties = NULL );
-
-    void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
-                                    const PROPERTIES* aProperties = NULL );
-
-    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = NULL );
-
-    void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
 
     bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
 
@@ -106,13 +108,14 @@ public:
     void SetReader( LINE_READER* aReader )      { m_reader = aReader; }
     void SetFilePtr( FILE* aFile )              { m_fp = aFile; }
 
-    void    LoadMODULE( MODULE* aModule );
-    void    SaveMODULE( const MODULE* aModule ) const;
     void    SaveModule3D( const MODULE* aModule ) const;
-    void    SaveBOARD( const BOARD* aBoard ) const;
 
+    static LAYER_ID leg_layer2new( int cu_count, LAYER_NUM aLayerNum );
+    static LSET     leg_mask2new( int cu_count, unsigned aMask );
 
 protected:
+
+    int             m_cu_count;
 
     wxString        m_error;        ///< for throwing exceptions
     BOARD*          m_board;        ///< which BOARD, no ownership here
@@ -200,6 +203,7 @@ protected:
     void loadNETINFO_ITEM();
     void loadPCB_TEXT();
     void loadNETCLASS();
+    void loadMODULE( MODULE* aModule );
 
     /**
      * Function loadTrackList
@@ -218,7 +222,7 @@ protected:
 
 
     //-----<save functions>-----------------------------------------------------
-
+#if 0
     /**
      * Function writeError
      * returns an error message wxString containing the filename being
@@ -275,6 +279,7 @@ protected:
     void savePCB_LINE( const DRAWSEGMENT* aStroke ) const;
     void saveDIMENSION( const DIMENSION* aDimension ) const;
     void saveTRACK( const TRACK* aTrack ) const;
+    void saveBOARD( const BOARD* aBoard ) const;
 
     /**
      * Function saveZONE_CONTAINER
@@ -283,11 +288,10 @@ protected:
     void saveZONE_CONTAINER( const ZONE_CONTAINER* aZone ) const;
 
     //-----</save functions>----------------------------------------------------
+#endif
 
     /// we only cache one footprint library for now, this determines which one.
     void cacheLib( const wxString& aLibraryPath );
-
-    friend struct LP_CACHE;
 };
 
 #endif  // LEGACY_PLUGIN_H_

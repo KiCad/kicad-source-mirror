@@ -420,14 +420,14 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 
     switch( aFill )
     {
-        case NO_FILL:
-            fprintf( outputFile, "<polyline fill=\"none;\"\n" );
-            break;
+    case NO_FILL:
+        fprintf( outputFile, "<polyline fill=\"none;\"\n" );
+        break;
 
-        case FILLED_WITH_BG_BODYCOLOR:
-        case FILLED_SHAPE:
-            fprintf( outputFile, "<polyline style=\"fill-rule:evenodd;\"\n" );
-            break;
+    case FILLED_WITH_BG_BODYCOLOR:
+    case FILLED_SHAPE:
+        fprintf( outputFile, "<polyline style=\"fill-rule:evenodd;\"\n" );
+        break;
     }
 
     DPOINT pos = userToDeviceCoordinates( aCornerList[0] );

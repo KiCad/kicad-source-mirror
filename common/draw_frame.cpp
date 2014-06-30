@@ -331,7 +331,7 @@ void EDA_DRAW_FRAME::ToolOnRightClick( wxCommandEvent& event )
 }
 
 
-void EDA_DRAW_FRAME::PrintPage( wxDC* aDC,LAYER_MSK aPrintMask, bool aPrintMirrorMode, void* aData )
+void EDA_DRAW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData )
 {
     wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error") );
 }

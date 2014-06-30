@@ -98,6 +98,109 @@ typedef LEGACY_PLUGIN::BIU      BIU;
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
 
 
+typedef unsigned                LEG_MASK;
+
+#define FIRST_LAYER             0
+#define FIRST_COPPER_LAYER      0
+#define LAYER_N_BACK            0
+#define LAYER_N_2               1
+#define LAYER_N_3               2
+#define LAYER_N_4               3
+#define LAYER_N_5               4
+#define LAYER_N_6               5
+#define LAYER_N_7               6
+#define LAYER_N_8               7
+#define LAYER_N_9               8
+#define LAYER_N_10              9
+#define LAYER_N_11              10
+#define LAYER_N_12              11
+#define LAYER_N_13              12
+#define LAYER_N_14              13
+#define LAYER_N_15              14
+#define LAYER_N_FRONT           15
+#define LAST_COPPER_LAYER       LAYER_N_FRONT
+#define NB_COPPER_LAYERS        (LAST_COPPER_LAYER - FIRST_COPPER_LAYER + 1)
+
+#define FIRST_NON_COPPER_LAYER  16
+#define FIRST_TECHNICAL_LAYER   16
+#define FIRST_USER_LAYER        24
+#define ADHESIVE_N_BACK         16
+#define ADHESIVE_N_FRONT        17
+#define SOLDERPASTE_N_BACK      18
+#define SOLDERPASTE_N_FRONT     19
+#define SILKSCREEN_N_BACK       20
+#define SILKSCREEN_N_FRONT      21
+#define SOLDERMASK_N_BACK       22
+#define SOLDERMASK_N_FRONT      23
+#define DRAW_N                  24
+#define COMMENT_N               25
+#define ECO1_N                  26
+#define ECO2_N                  27
+#define EDGE_N                  28
+#define LAST_NON_COPPER_LAYER   28
+#define LAST_TECHNICAL_LAYER    23
+#define LAST_USER_LAYER         27
+#define NB_PCB_LAYERS           (LAST_NON_COPPER_LAYER + 1)
+#define UNUSED_LAYER_29         29
+#define UNUSED_LAYER_30         30
+#define UNUSED_LAYER_31         31
+#define NB_GERBER_LAYERS        32
+#define NB_LAYERS               32
+
+// Masks to identify a layer by a bit map
+typedef unsigned LAYER_MSK;
+#define LAYER_BACK              (1 << LAYER_N_BACK)     ///< bit mask for copper layer
+#define LAYER_2                 (1 << LAYER_N_2)        ///< bit mask for layer 2
+#define LAYER_3                 (1 << LAYER_N_3)        ///< bit mask for layer 3
+#define LAYER_4                 (1 << LAYER_N_4)        ///< bit mask for layer 4
+#define LAYER_5                 (1 << LAYER_N_5)        ///< bit mask for layer 5
+#define LAYER_6                 (1 << LAYER_N_6)        ///< bit mask for layer 6
+#define LAYER_7                 (1 << LAYER_N_7)        ///< bit mask for layer 7
+#define LAYER_8                 (1 << LAYER_N_8)        ///< bit mask for layer 8
+#define LAYER_9                 (1 << LAYER_N_9)        ///< bit mask for layer 9
+#define LAYER_10                (1 << LAYER_N_10)       ///< bit mask for layer 10
+#define LAYER_11                (1 << LAYER_N_11)       ///< bit mask for layer 11
+#define LAYER_12                (1 << LAYER_N_12)       ///< bit mask for layer 12
+#define LAYER_13                (1 << LAYER_N_13)       ///< bit mask for layer 13
+#define LAYER_14                (1 << LAYER_N_14)       ///< bit mask for layer 14
+#define LAYER_15                (1 << LAYER_N_15)       ///< bit mask for layer 15
+#define LAYER_FRONT             (1 << LAYER_N_FRONT)    ///< bit mask for component layer
+#define ADHESIVE_LAYER_BACK     (1 << ADHESIVE_N_BACK)
+#define ADHESIVE_LAYER_FRONT    (1 << ADHESIVE_N_FRONT)
+#define SOLDERPASTE_LAYER_BACK  (1 << SOLDERPASTE_N_BACK)
+#define SOLDERPASTE_LAYER_FRONT (1 << SOLDERPASTE_N_FRONT)
+#define SILKSCREEN_LAYER_BACK   (1 << SILKSCREEN_N_BACK)
+#define SILKSCREEN_LAYER_FRONT  (1 << SILKSCREEN_N_FRONT)
+#define SOLDERMASK_LAYER_BACK   (1 << SOLDERMASK_N_BACK)
+#define SOLDERMASK_LAYER_FRONT  (1 << SOLDERMASK_N_FRONT)
+#define DRAW_LAYER              (1 << DRAW_N)
+#define COMMENT_LAYER           (1 << COMMENT_N)
+#define ECO1_LAYER              (1 << ECO1_N)
+#define ECO2_LAYER              (1 << ECO2_N)
+#define EDGE_LAYER              (1 << EDGE_N)
+
+//      extra bits              0xE0000000
+
+// Helpful global layer masks:
+// ALL_AUX_LAYERS layers are technical layers, ALL_NO_CU_LAYERS has user
+// and edge layers too!
+#define ALL_LAYERS              0x1FFFFFFF              // Pcbnew used 29 layers
+#define FULL_LAYERS             0xFFFFFFFF              // Gerbview used 32 layers
+#define ALL_NO_CU_LAYERS        0x1FFF0000
+#define ALL_CU_LAYERS           0x0000FFFF
+#define INTERNAL_CU_LAYERS      0x00007FFE
+#define EXTERNAL_CU_LAYERS      0x00008001
+#define FRONT_TECH_LAYERS       (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT \
+                                    | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT)
+#define BACK_TECH_LAYERS        (SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK \
+                                    | ADHESIVE_LAYER_BACK | SOLDERPASTE_LAYER_BACK)
+#define ALL_TECH_LAYERS         (FRONT_TECH_LAYERS | BACK_TECH_LAYERS)
+#define BACK_LAYERS             (LAYER_BACK | BACK_TECH_LAYERS)
+#define FRONT_LAYERS            (LAYER_FRONT | FRONT_TECH_LAYERS)
+
+#define ALL_USER_LAYERS         (DRAW_LAYER | COMMENT_LAYER | ECO1_LAYER | ECO2_LAYER )
+
+#define NO_LAYERS               0x00000000
 
 
 // Old internal units definition (UI = decimil)
@@ -112,6 +215,7 @@ static const char delims[] = " \t\r\n";
 
 static bool inline isSpace( int c ) { return strchr( delims, c ) != 0; }
 
+#define MASK(x)             (1<<(x))
 
 //-----<BOARD Load Functions>---------------------------------------------------
 
@@ -147,6 +251,17 @@ static inline char* ReadLine( LINE_READER* rdr, const char* caller )
 }
 #define READLINE( rdr )     ReadLine( rdr, __FUNCTION__ )
 #endif
+
+
+/* corrected old junk, element 14 was wrong.  can delete.
+// Look up Table for conversion copper layer count -> general copper layer mask:
+static const LEG_MASK all_cu_mask[] = {
+    0x0001, 0x8001, 0x8003, 0x8007,
+    0x800F, 0x801F, 0x803F, 0x807F,
+    0x80FF, 0x81FF, 0x83FF, 0x87FF,
+    0x8FFF, 0x9FFF, 0xBFFF, 0xFFFF
+};
+*/
 
 
 using namespace std;    // auto_ptr
@@ -194,6 +309,89 @@ static EDA_TEXT_VJUSTIFY_T vertJustify( const char* vertical )
     if( !strcmp( "B", vertical ) )
         return GR_TEXT_VJUSTIFY_BOTTOM;
     return GR_TEXT_VJUSTIFY_CENTER;
+}
+
+
+/// Count the number of set layers in the mask
+inline int layerMaskCountSet( LEG_MASK aMask )
+{
+    int count = 0;
+
+    for( int i = 0;  aMask;  ++i, aMask >>= 1 )
+    {
+        if( aMask & 1 )
+            ++count;
+    }
+
+    return count;
+}
+
+
+LAYER_ID LEGACY_PLUGIN::leg_layer2new( int cu_count, LAYER_NUM aLayerNum )
+{
+    int         newid;
+    unsigned    old = aLayerNum;
+
+    // this is a speed critical function, be careful.
+
+    if( unsigned( old ) <= unsigned( LAYER_N_FRONT ) )
+    {
+        if( old == LAYER_N_FRONT )
+            newid = F_Cu;
+        else if( old == LAYER_N_BACK )
+            newid = B_Cu;
+        else
+        {
+            newid = cu_count - 1 - old;
+
+            wxASSERT( newid >= 0 );
+        }
+    }
+    else
+    {
+        switch( old )
+        {
+        case ADHESIVE_N_BACK:       newid = B_Adhes;    break;
+        case ADHESIVE_N_FRONT:      newid = F_Adhes;    break;
+        case SOLDERPASTE_N_BACK:    newid = B_Paste;    break;
+        case SOLDERPASTE_N_FRONT:   newid = F_Paste;    break;
+        case SILKSCREEN_N_BACK:     newid = B_SilkS;    break;
+        case SILKSCREEN_N_FRONT:    newid = F_SilkS;    break;
+        case SOLDERMASK_N_BACK:     newid = B_Mask;     break;
+        case SOLDERMASK_N_FRONT:    newid = F_Mask;     break;
+        case DRAW_N:                newid = Dwgs_User;  break;
+        case COMMENT_N:             newid = Cmts_User;  break;
+        case ECO1_N:                newid = Eco1_User;  break;
+        case ECO2_N:                newid = Eco2_User;  break;
+        case EDGE_N:                newid = Edge_Cuts;  break;
+        default:
+            wxASSERT( 0 );
+            newid = 0;
+        }
+    }
+
+    return LAYER_ID( newid );
+}
+
+
+LSET LEGACY_PLUGIN::leg_mask2new( int cu_count, unsigned aMask )
+{
+    LSET    ret;
+
+    if( ( aMask & ALL_CU_LAYERS ) == ALL_CU_LAYERS )
+    {
+        ret = LSET::AllCuMask();
+
+        aMask &= ~ALL_CU_LAYERS;
+    }
+
+    for( int i=0;  aMask;  ++i, aMask >>= 1 )
+    {
+        if( aMask & 1 )
+            ret.set( leg_layer2new( cu_count, i ) );
+    }
+
+    return ret;
 }
 
 
@@ -292,7 +490,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
             module->SetFPID( fpid );
 
-            LoadMODULE( module.get() );
+            loadMODULE( module.get() );
             m_board->Add( module.release(), ADD_APPEND );
         }
 
@@ -412,6 +610,7 @@ void LEGACY_PLUGIN::loadGENERAL()
 {
     char*   line;
     char*   saveptr;
+    bool    saw_LayerCount = false;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -428,28 +627,60 @@ void LEGACY_PLUGIN::loadGENERAL()
             }
         }
 
+        else if( TESTLINE( "LayerCount" ) )
+        {
+            int tmp = intParse( line + SZ( "LayerCount" ) );
+            m_board->SetCopperLayerCount( tmp );
+
+            // This has to be set early so that leg_layer2new() works OK, and
+            // that means before parsing "EnabledLayers" and "VisibleLayers".
+            m_cu_count = tmp;
+
+            saw_LayerCount = true;
+        }
+
         else if( TESTLINE( "EnabledLayers" ) )
         {
-            LAYER_MSK enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
+            if( !saw_LayerCount )
+                THROW_IO_ERROR( "Missing '$GENERAL's LayerCount" );
 
-            // layer usage
-            m_board->SetEnabledLayers( enabledLayers );
+            LEG_MASK enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
+
+            LSET new_mask = leg_mask2new( m_cu_count, enabledLayers );
+
+            //DBG( printf( "EnabledLayers: %s\n", new_mask.FmtHex().c_str() );)
+
+            m_board->SetEnabledLayers( new_mask );
 
             // layer visibility equals layer usage, unless overridden later via "VisibleLayers"
-            m_board->SetVisibleLayers( enabledLayers );
+            // Must call SetEnabledLayers() before calling SetVisibleLayers().
+            m_board->SetVisibleLayers( new_mask );
         }
 
         else if( TESTLINE( "VisibleLayers" ) )
         {
-            LAYER_MSK visibleLayers = hexParse( line + SZ( "VisibleLayers" ) );
-            m_board->SetVisibleLayers( visibleLayers );
+            if( !saw_LayerCount )
+                THROW_IO_ERROR( "Missing '$GENERAL's LayerCount" );
+
+            LEG_MASK visibleLayers = hexParse( line + SZ( "VisibleLayers" ) );
+
+            LSET new_mask = leg_mask2new( m_cu_count, visibleLayers );
+
+            m_board->SetVisibleLayers( new_mask );
         }
 
         else if( TESTLINE( "Ly" ) )    // Old format for Layer count
         {
-            LAYER_MSK layer_mask  = hexParse( line + SZ( "Ly" ) );
+            if( !saw_LayerCount )
+            {
+                LEG_MASK layer_mask  = hexParse( line + SZ( "Ly" ) );
 
-            m_board->SetCopperLayerCount( LayerMaskCountSet( layer_mask & ALL_CU_LAYERS ) );
+                m_cu_count = layerMaskCountSet( layer_mask & ALL_CU_LAYERS );
+
+                m_board->SetCopperLayerCount( m_cu_count );
+
+                saw_LayerCount = true;
+            }
         }
 
         else if( TESTLINE( "BoardThickness" ) )
@@ -671,29 +902,50 @@ void LEGACY_PLUGIN::loadSETUP()
             bds.m_AuxOrigin = wxPoint( gx, gy );
         }
 
+        /* Done from $General above's "LayerCount"
         else if( TESTLINE( "Layers" ) )
         {
             int tmp = intParse( line + SZ( "Layers" ) );
             m_board->SetCopperLayerCount( tmp );
+
+            m_cu_count = tmp;
         }
+        */
 
         else if( TESTSUBSTR( "Layer[" ) )
         {
             // eg: "Layer[n]  <a_Layer_name_with_no_spaces> <LAYER_T>"
 
-            LAYER_NUM layer = layerParse( line + SZ( "Layer[" ), &data );
+            LAYER_NUM   layer_num = layerParse( line + SZ( "Layer[" ), &data );
+            LAYER_ID    layer_id  = leg_layer2new( m_cu_count, layer_num );
+
+            /*
+            switch( layer_num )
+            {
+            case LAYER_N_BACK:
+                layer_id = B_Cu;
+                break;
+
+            case LAYER_N_FRONT:
+                layer_id = F_Cu;
+                break;
+
+            default:
+                layer_id = LAYER_ID( layer_num );
+            }
+            */
 
             data = strtok_r( (char*) data+1, delims, &saveptr );    // +1 for ']'
             if( data )
             {
                 wxString layerName = FROM_UTF8( data );
-                m_board->SetLayerName( layer, layerName );
+                m_board->SetLayerName( layer_id, layerName );
 
                 data = strtok_r( NULL, delims, &saveptr );
                 if( data )  // optional in old board files
                 {
                     LAYER_T type = LAYER::ParseType( data );
-                    m_board->SetLayerType( layer, type );
+                    m_board->SetLayerType( layer_id, type );
                 }
             }
         }
@@ -941,7 +1193,7 @@ void LEGACY_PLUGIN::loadSETUP()
 }
 
 
-void LEGACY_PLUGIN::LoadMODULE( MODULE* aModule )
+void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
 {
     char*   line;
     char*   saveptr;
@@ -999,7 +1251,9 @@ void LEGACY_PLUGIN::LoadMODULE( MODULE* aModule )
             BIU pos_x  = biuParse( line + SZ( "Po" ), &data );
             BIU pos_y  = biuParse( data, &data );
             int orient = intParse( data, &data );
-            LAYER_NUM layer = layerParse( data, &data );
+
+            LAYER_NUM layer_num = layerParse( data, &data );
+            LAYER_ID  layer_id  = leg_layer2new( m_cu_count,  layer_num );
 
             long edittime  = hexParse( data, &data );
             time_t timestamp = hexParse( data, &data );
@@ -1015,7 +1269,7 @@ void LEGACY_PLUGIN::LoadMODULE( MODULE* aModule )
                 aModule->SetIsPlaced( true );
 
             aModule->SetPosition( wxPoint( pos_x, pos_y ) );
-            aModule->SetLayer( layer );
+            aModule->SetLayer( layer_id );
             aModule->SetOrientation( orient );
             aModule->SetTimeStamp( timestamp );
             aModule->SetLastEditTime( edittime );
@@ -1297,9 +1551,9 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             data = strtok_r( NULL, delims, &saveptr );  // skip BufCar
             data = strtok_r( NULL, delims, &saveptr );
 
-            LAYER_MSK layer_mask = hexParse( data );
+            LEG_MASK layer_mask = hexParse( data );
 
-            pad->SetLayerMask( layer_mask );
+            pad->SetLayerSet( leg_mask2new( m_cu_count, layer_mask ) );
             pad->SetAttribute( attribute );
         }
 
@@ -1428,8 +1682,8 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
     const char* data;
 
     // common to all cases, and we have to check their values uniformly at end
-    BIU     width = 1;
-    LAYER_NUM layer = FIRST_NON_COPPER_LAYER;
+    BIU         width = 1;
+    LAYER_NUM   layer = FIRST_NON_COPPER_LAYER;
 
     switch( shape )
     {
@@ -1537,7 +1791,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
         layer = SILKSCREEN_N_FRONT;
 
     dwg->SetWidth( width );
-    dwg->SetLayer( layer );
+    dwg->SetLayer( leg_layer2new( m_cu_count,  layer ) );
 
     EDGE_MODULE* em = dwg.release();
 
@@ -1597,7 +1851,9 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     char*   mirror  = strtok_r( (char*) data, delims, &saveptr );
     char*   hide    = strtok_r( NULL, delims, &saveptr );
     char*   tmp     = strtok_r( NULL, delims, &saveptr );
-    LAYER_NUM layer = tmp ? layerParse( tmp ) : SILKSCREEN_N_FRONT;
+
+    LAYER_NUM layer_num = tmp ? layerParse( tmp ) : SILKSCREEN_N_FRONT;
+
     char*   italic  = strtok_r( NULL, delims, &saveptr );
 
     char*   hjust   = strtok_r( (char*) txt_end, delims, &saveptr );
@@ -1639,16 +1895,16 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     if( vjust )
         aText->SetVertJustify( vertJustify( vjust ) );
 
-    if( layer < FIRST_LAYER )
-        layer = FIRST_LAYER;
-    else if( layer > LAST_NON_COPPER_LAYER )
-        layer = LAST_NON_COPPER_LAYER;
-    else if( layer == LAYER_N_BACK )
-        layer = SILKSCREEN_N_BACK;
-    else if( layer == LAYER_N_FRONT )
-        layer = SILKSCREEN_N_FRONT;
+    if( layer_num < FIRST_LAYER )
+        layer_num = FIRST_LAYER;
+    else if( layer_num > LAST_NON_COPPER_LAYER )
+        layer_num = LAST_NON_COPPER_LAYER;
+    else if( layer_num == LAYER_N_BACK )
+        layer_num = SILKSCREEN_N_BACK;
+    else if( layer_num == LAYER_N_FRONT )
+        layer_num = SILKSCREEN_N_FRONT;
 
-    aText->SetLayer( layer );
+    aText->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
 
     // Calculate the actual position.
     aText->SetDrawCoord();
@@ -1767,7 +2023,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     else if( layer > LAST_NON_COPPER_LAYER )
                         layer = LAST_NON_COPPER_LAYER;
 
-                    dseg->SetLayer( layer );
+                    dseg->SetLayer( leg_layer2new( m_cu_count,  layer ) );
                     break;
                 case 1:
                     int mtype;
@@ -1962,7 +2218,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             // e.g. "De 21 1 0 Normal C\r\n"
             // sscanf( line + 2, " %d %d %lX %s %c\n", &m_Layer, &normal_display, &m_TimeStamp, style, &hJustify );
 
-            LAYER_NUM layer     = layerParse( line + SZ( "De" ), &data );
+            LAYER_NUM layer_num = layerParse( line + SZ( "De" ), &data );
             int     notMirrored = intParse( data, &data );
             time_t  timestamp   = hexParse( data, &data );
             char*   style       = strtok_r( (char*) data, delims, &saveptr );
@@ -1984,12 +2240,12 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             if( vJustify )
                 pcbtxt->SetVertJustify( vertJustify( vJustify ) );
 
-            if( layer < FIRST_COPPER_LAYER )
-                layer = FIRST_COPPER_LAYER;
-            else if( layer > LAST_NON_COPPER_LAYER )
-                layer = LAST_NON_COPPER_LAYER;
+            if( layer_num < FIRST_COPPER_LAYER )
+                layer_num = FIRST_COPPER_LAYER;
+            else if( layer_num > LAST_NON_COPPER_LAYER )
+                layer_num = LAST_NON_COPPER_LAYER;
 
-            pcbtxt->SetLayer( layer );
+            pcbtxt->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
         }
 
         else if( TESTLINE( "$EndTEXTPCB" ) )
@@ -2059,13 +2315,16 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         int         makeType;
         time_t      timeStamp;
-        int         layer, type, net_code, flags_int;
+        LAYER_NUM   layer_num;
+        int         type, net_code, flags_int;
 
         // parse the 2nd line to determine the type of object
         // e.g. "De 15 1 7 0 0"   for a via
-        sscanf( line + SZ( "De" ), " %d %d %d %lX %X", &layer, &type, &net_code,
+        sscanf( line + SZ( "De" ), " %d %d %d %lX %X", &layer_num, &type, &net_code,
                 &timeStamp, &flags_int );
+
         STATUS_FLAGS flags;
+
         flags = static_cast<STATUS_FLAGS>( flags_int );
 
         if( aStructType==PCB_TRACE_T && type==1 )
@@ -2097,7 +2356,6 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         newTrack->SetEnd( wxPoint( end_x, end_y ) );
 
         newTrack->SetWidth( width );
-        newTrack->SetLayer( layer );
 
         if( makeType == PCB_VIA_T )     // Ensure layers are OK when possible:
         {
@@ -2110,7 +2368,18 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
                 via->SetDrill( drill );
 
             if( via->GetViaType() == VIA_THROUGH )
-                via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
+                via->SetLayerPair( F_Cu, B_Cu );
+            else
+            {
+                LAYER_ID  back  = leg_layer2new( m_cu_count, (layer_num >> 4) & 0xf );
+                LAYER_ID  front = leg_layer2new( m_cu_count, layer_num & 0xf );
+
+                via->SetLayerPair( front, back );
+            }
+        }
+        else
+        {
+            newTrack->SetLayer( leg_layer2new( m_cu_count, layer_num ) );
         }
 
         newTrack->SetNetCode( getNetCode( net_code ) );
@@ -2266,8 +2535,8 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
         else if( TESTLINE( "ZLayer" ) )     // layer found
         {
-            LAYER_NUM layer = layerParse( line + SZ( "ZLayer" ) );
-            zc->SetLayer( layer );
+            LAYER_NUM layer_num = layerParse( line + SZ( "ZLayer" ) );
+            zc->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
         }
 
         else if( TESTLINE( "ZAux" ) )       // aux info found
@@ -2500,7 +2769,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
         else if( TESTLINE( "Ge" ) )
         {
-            LAYER_NUM layer;
+            LAYER_NUM layer_num;
             time_t  timestamp;
             int     shape;
             int     ilayer;
@@ -2508,12 +2777,13 @@ void LEGACY_PLUGIN::loadDIMENSION()
             sscanf( line + SZ( "Ge" ), " %d %d %lX", &shape, &ilayer, &timestamp );
 
             if( ilayer < FIRST_NON_COPPER_LAYER )
-                layer = FIRST_NON_COPPER_LAYER;
+                layer_num = FIRST_NON_COPPER_LAYER;
             else if( ilayer > LAST_NON_COPPER_LAYER )
-                layer = LAST_NON_COPPER_LAYER;
-            else layer = ilayer;
+                layer_num = LAST_NON_COPPER_LAYER;
+            else
+                layer_num = ilayer;
 
-            dim->SetLayer( layer );
+            dim->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
             dim->SetTimeStamp( timestamp );
             dim->SetShape( shape );
         }
@@ -2683,20 +2953,23 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
             // sscanf( Line + 2, " %X %d %d %d %d %d %lX", &m_Shape, &m_Layer, &m_Pos.x, &m_Pos.y, &m_Size, &m_Width, &m_TimeStamp );
 
             int shape = intParse( line + SZ( "Po" ), &data );
-            LAYER_NUM layer = layerParse( data, &data );
+
+            LAYER_NUM layer_num = layerParse( data, &data );
+
             BIU pos_x = biuParse( data, &data );
             BIU pos_y = biuParse( data, &data );
             BIU size  = biuParse( data, &data );
             BIU width = biuParse( data, &data );
             time_t timestamp = hexParse( data );
 
-            if( layer < FIRST_NON_COPPER_LAYER )
-                layer = FIRST_NON_COPPER_LAYER;
+            if( layer_num < FIRST_NON_COPPER_LAYER )
+                layer_num = FIRST_NON_COPPER_LAYER;
 
-            else if( layer > LAST_NON_COPPER_LAYER )
-                layer = LAST_NON_COPPER_LAYER;
+            else if( layer_num > LAST_NON_COPPER_LAYER )
+                layer_num = LAST_NON_COPPER_LAYER;
 
-            PCB_TARGET* t = new PCB_TARGET( m_board, shape, layer, wxPoint( pos_x, pos_y ), size, width );
+            PCB_TARGET* t = new PCB_TARGET( m_board, shape, leg_layer2new( m_cu_count,  layer_num ),
+                                    wxPoint( pos_x, pos_y ), size, width );
             m_board->Add( t, ADD_APPEND );
 
             t->SetTimeStamp( timestamp );
@@ -2704,77 +2977,6 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
     }
 
     THROW_IO_ERROR( "Missing '$EndDIMENSION'" );
-}
-
-
-#define SPBUFZ  50      // wire all usages of this together.
-
-int LEGACY_PLUGIN::biuSprintf( char* buf, BIU aValue ) const
-{
-    double  engUnits = biuToDisk * aValue;
-    int     len;
-
-    if( engUnits != 0.0 && fabsl( engUnits ) <= 0.0001 )
-    {
-        len = snprintf( buf, SPBUFZ, "%.10f", engUnits );
-
-        while( --len > 0 && buf[len] == '0' )
-            buf[len] = '\0';
-
-        ++len;
-    }
-    else
-    {
-        // The %.10g is about optimal since we are dealing with a bounded
-        // range on aValue, and we can be sure that there will never
-        // be a reason to have more than 6 digits to the right of the
-        // decimal point because we are converting from integer
-        // (signed whole numbers) nanometers to mm.  A value of
-        // 0.000001 is one nanometer, the smallest positive nonzero value
-        // that we can ever have here.  If you ever see a board file with
-        // more digits to the right of the decimal point than 6, this is a
-        // possibly a bug in a formatting string nearby.
-        len = snprintf( buf, SPBUFZ, "%.10g", engUnits );
-    }
-    return len;
-}
-
-
-std::string LEGACY_PLUGIN::fmtBIU( BIU aValue ) const
-{
-    char    temp[SPBUFZ];
-
-    int len = biuSprintf( temp, aValue );
-
-    return std::string( temp, len );
-}
-
-
-std::string LEGACY_PLUGIN::fmtDEG( double aAngle ) const
-{
-    char    temp[50];
-
-    // @todo a hook site to convert from tenths degrees to degrees for BOARD_FORMAT_VERSION 2.
-
-    // MINGW: snprintf() comes from gcc folks, sprintf() comes from Microsoft.
-    int len = snprintf( temp, sizeof( temp ), "%.10g", aAngle );
-
-    return std::string( temp, len );
-}
-
-
-std::string LEGACY_PLUGIN::fmtBIUPair( BIU first, BIU second ) const
-{
-    char    temp[2*SPBUFZ+2];
-    char*   cp = temp;
-
-    cp += biuSprintf( cp, first );
-
-    *cp++ = ' ';
-
-    cp += biuSprintf( cp, second );
-
-    return std::string( temp, cp - temp );
 }
 
 
@@ -2848,6 +3050,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
 void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
 {
+    m_cu_count = 16;
     m_board = NULL;
     m_props = aProperties;
 
@@ -2865,7 +3068,127 @@ void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
 }
 
 
+void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
+{
+    for( S3D_MASTER* t3D = me->Models();  t3D;  t3D = t3D->Next() )
+    {
+        if( !t3D->GetShape3DName().IsEmpty() )
+        {
+            fprintf( m_fp, "$SHAPE3D\n" );
+
+            fprintf( m_fp, "Na %s\n", EscapedUTF8( t3D->GetShape3DName() ).c_str() );
+
+            fprintf(m_fp,
+#if defined(DEBUG)
+                    // use old formats for testing, just to verify compatibility
+                    // using "diff", then switch to more concise form for release builds.
+                    "Sc %lf %lf %lf\n",
+#else
+                    "Sc %.10g %.10g %.10g\n",
+#endif
+                    t3D->m_MatScale.x,
+                    t3D->m_MatScale.y,
+                    t3D->m_MatScale.z );
+
+            fprintf(m_fp,
+#if defined(DEBUG)
+                    "Of %lf %lf %lf\n",
+#else
+                    "Of %.10g %.10g %.10g\n",
+#endif
+                    t3D->m_MatPosition.x,
+                    t3D->m_MatPosition.y,
+                    t3D->m_MatPosition.z );
+
+            fprintf(m_fp,
+#if defined(DEBUG)
+                    "Ro %lf %lf %lf\n",
+#else
+                    "Ro %.10g %.10g %.10g\n",
+#endif
+                    t3D->m_MatRotation.x,
+                    t3D->m_MatRotation.y,
+                    t3D->m_MatRotation.z );
+
+            fprintf( m_fp, "$EndSHAPE3D\n" );
+        }
+    }
+}
+
+
+#if 0
+
 //-----<BOARD Save Functions>---------------------------------------------------
+
+#define SPBUFZ  50      // wire all usages of this together.
+
+int LEGACY_PLUGIN::biuSprintf( char* buf, BIU aValue ) const
+{
+    double  engUnits = biuToDisk * aValue;
+    int     len;
+
+    if( engUnits != 0.0 && fabsl( engUnits ) <= 0.0001 )
+    {
+        len = snprintf( buf, SPBUFZ, "%.10f", engUnits );
+
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        ++len;
+    }
+    else
+    {
+        // The %.10g is about optimal since we are dealing with a bounded
+        // range on aValue, and we can be sure that there will never
+        // be a reason to have more than 6 digits to the right of the
+        // decimal point because we are converting from integer
+        // (signed whole numbers) nanometers to mm.  A value of
+        // 0.000001 is one nanometer, the smallest positive nonzero value
+        // that we can ever have here.  If you ever see a board file with
+        // more digits to the right of the decimal point than 6, this is a
+        // possibly a bug in a formatting string nearby.
+        len = snprintf( buf, SPBUFZ, "%.10g", engUnits );
+    }
+    return len;
+}
+
+
+std::string LEGACY_PLUGIN::fmtBIU( BIU aValue ) const
+{
+    char    temp[SPBUFZ];
+
+    int len = biuSprintf( temp, aValue );
+
+    return std::string( temp, len );
+}
+
+
+std::string LEGACY_PLUGIN::fmtDEG( double aAngle ) const
+{
+    char    temp[50];
+
+    // @todo a hook site to convert from tenths degrees to degrees for BOARD_FORMAT_VERSION 2.
+
+    // MINGW: snprintf() comes from gcc folks, sprintf() comes from Microsoft.
+    int len = snprintf( temp, sizeof( temp ), "%.10g", aAngle );
+
+    return std::string( temp, len );
+}
+
+
+std::string LEGACY_PLUGIN::fmtBIUPair( BIU first, BIU second ) const
+{
+    char    temp[2*SPBUFZ+2];
+    char*   cp = temp;
+
+    cp += biuSprintf( cp, first );
+
+    *cp++ = ' ';
+
+    cp += biuSprintf( cp, second );
+
+    return std::string( temp, cp - temp );
+}
 
 void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
 {
@@ -2912,6 +3235,9 @@ do { \
     } \
 } while(0)
 
+
+// With the advent of the LSET expansion it was agreed to abort the legacy save since
+// we'd have to expand the old format in order to suppor the new LAYER_IDs.
 
 void LEGACY_PLUGIN::SaveBOARD( const BOARD* aBoard ) const
 {
@@ -3016,7 +3342,7 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 
     for( LAYER_NUM layer = FIRST_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
     {
-        if( layerMask & GetLayerMask( layer ) )
+        if( layerMask & MASK( layer ) )
         {
             fprintf( m_fp, "Layer[%d] %s %s\n", layer,
                      TO_UTF8( aBoard->GetLayerName( layer ) ),
@@ -3118,7 +3444,7 @@ void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
 
     // save the modules
     for( MODULE* m = aBoard->m_Modules;  m;  m = (MODULE*) m->Next() )
-        SaveMODULE( m );
+        saveMODULE( m );
 
     // save the graphics owned by the board (not owned by a module)
     for( BOARD_ITEM* gr = aBoard->m_Drawings;  gr;  gr = gr->Next() )
@@ -3385,7 +3711,7 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
         THROW_IO_ERROR( wxString::Format( UNKNOWN_PAD_ATTRIBUTE, me->GetAttribute() ) );
     }
 
-    fprintf( m_fp, "At %s N %08X\n", texttype, me->GetLayerMask() );
+    fprintf( m_fp, "At %s N %08X\n", texttype, me->GetLayerSet() );
 
     fprintf( m_fp, "Ne %d %s\n", m_mapping->Translate( me->GetNetCode() ),
              EscapedUTF8( me->GetNetname() ).c_str() );
@@ -3423,7 +3749,7 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
 }
 
 
-void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
+void LEGACY_PLUGIN::saveMODULE( const MODULE* me ) const
 {
     char        statusTxt[3];
     double      orient = me->GetOrientation();
@@ -3524,54 +3850,6 @@ void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
     fprintf( m_fp, "$EndMODULE %s\n", me->GetFPID().GetFootprintName().c_str() );
 
     CHECK_WRITE_ERROR();
-}
-
-
-void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
-{
-    for( S3D_MASTER* t3D = me->Models();  t3D;  t3D = t3D->Next() )
-    {
-        if( !t3D->GetShape3DName().IsEmpty() )
-        {
-            fprintf( m_fp, "$SHAPE3D\n" );
-
-            fprintf( m_fp, "Na %s\n", EscapedUTF8( t3D->GetShape3DName() ).c_str() );
-
-            fprintf(m_fp,
-#if defined(DEBUG)
-                    // use old formats for testing, just to verify compatibility
-                    // using "diff", then switch to more concise form for release builds.
-                    "Sc %lf %lf %lf\n",
-#else
-                    "Sc %.10g %.10g %.10g\n",
-#endif
-                    t3D->m_MatScale.x,
-                    t3D->m_MatScale.y,
-                    t3D->m_MatScale.z );
-
-            fprintf(m_fp,
-#if defined(DEBUG)
-                    "Of %lf %lf %lf\n",
-#else
-                    "Of %.10g %.10g %.10g\n",
-#endif
-                    t3D->m_MatPosition.x,
-                    t3D->m_MatPosition.y,
-                    t3D->m_MatPosition.z );
-
-            fprintf(m_fp,
-#if defined(DEBUG)
-                    "Ro %lf %lf %lf\n",
-#else
-                    "Ro %.10g %.10g %.10g\n",
-#endif
-                    t3D->m_MatRotation.x,
-                    t3D->m_MatRotation.y,
-                    t3D->m_MatRotation.z );
-
-            fprintf( m_fp, "$EndSHAPE3D\n" );
-        }
-    }
 }
 
 
@@ -3891,6 +4169,8 @@ void LEGACY_PLUGIN::savePCB_TEXT( const TEXTE_PCB* me ) const
     fprintf( m_fp, "$EndTEXTPCB\n" );
 }
 
+#endif  // NO LEGACY_PLUGIN::Save()
+
 
 //-----<FOOTPRINT LIBRARY FUNCTIONS>--------------------------------------------
 
@@ -3925,7 +4205,7 @@ typedef MODULE_MAP::const_iterator              MODULE_CITER;
  */
 struct LP_CACHE
 {
-    LEGACY_PLUGIN*  m_owner;        // my owner, I need its LEGACY_PLUGIN::LoadMODULE()
+    LEGACY_PLUGIN*  m_owner;        // my owner, I need its LEGACY_PLUGIN::loadMODULE()
     wxString        m_lib_path;
     wxDateTime      m_mod_time;
     MODULE_MAP      m_modules;      // map or tuple of footprint_name vs. MODULE*
@@ -4091,7 +4371,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
             }
 #endif
 
-            m_owner->LoadMODULE( module.get() );
+            m_owner->loadMODULE( module.get() );
 
             MODULE* m = module.release();   // exceptions after this are not expected.
 
@@ -4158,6 +4438,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
 }
 
 
+#if 0
 void LP_CACHE::Save()
 {
     if( !m_writable )
@@ -4242,10 +4523,10 @@ void LP_CACHE::SaveModules( FILE* aFile )
 
     for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
     {
-        m_owner->SaveMODULE( it->second );
+        m_owner->saveMODULE( it->second );
     }
 }
-
+#endif
 
 void LEGACY_PLUGIN::cacheLib( const wxString& aLibraryPath )
 {
@@ -4310,6 +4591,8 @@ MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 }
 
 
+#if 0   // omit FootprintSave()
+
 void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath,
         const MODULE* aFootprint, const PROPERTIES* aProperties )
 {
@@ -4346,7 +4629,7 @@ void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath,
 
     my_module->SetOrientation( 0 );
 
-    if( my_module->GetLayer() != LAYER_N_FRONT )
+    if( my_module->GetLayer() != F_Cu )
         my_module->Flip( my_module->GetPosition() );
 
     mods.insert( footprintName, my_module );
@@ -4403,6 +4686,8 @@ void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROP
     m_cache->Load();    // update m_writable and m_mod_time
 }
 
+#endif  // omit FootprintSave()
+
 
 bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
@@ -4432,6 +4717,9 @@ bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROP
 
 bool LEGACY_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 {
+#if 0   // no support for 32 Cu layers in legacy format
+    return false;
+#else
     LOCALE_IO   toggle;
 
     init( NULL );
@@ -4439,10 +4727,12 @@ bool LEGACY_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
     cacheLib( aLibraryPath );
 
     return m_cache->m_writable;
+#endif
 }
 
 
 LEGACY_PLUGIN::LEGACY_PLUGIN() :
+    m_cu_count( 16 ),               // for FootprintLoad()
     m_board( 0 ),
     m_props( 0 ),
     m_reader( 0 ),

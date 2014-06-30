@@ -33,6 +33,7 @@
 #include <gestfich.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <class_gerbview_layer_widget.h>
 #include <wildcards_and_files_ext.h>
@@ -163,7 +164,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     }
 
     // Read gerber files: each file is loaded on a new GerbView layer
-    LAYER_NUM layer = getActiveLayer();
+    int layer = getActiveLayer();
 
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {
@@ -244,7 +245,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
     }
 
     // Read gerber files: each file is loaded on a new GerbView layer
-    LAYER_NUM layer = getActiveLayer();
+    int layer = getActiveLayer();
 
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {

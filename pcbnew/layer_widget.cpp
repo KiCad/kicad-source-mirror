@@ -881,7 +881,7 @@ class MYFRAME : public wxFrame
         {
         }
 
-        void OnLayerColorChange( LAYER aLayer, EDA_COLOR_T aColor )
+        void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
         {
             printf( "OnLayerColorChange( aLayer:%d, aColor:%d )\n", aLayer, aColor );
 

@@ -58,18 +58,18 @@
  * unless the minimum thickness is 0.
  */
 static void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
-                                 LAYER_MSK aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
+                                 LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
                                  int aMinThickness );
 
 /* Creates the plot for silkscreen layers
  * Silkscreen layers have specific requirement for pads (not filled) and texts
  * (with option to remove them from some copper areas (pads...)
  */
-void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
+void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                      const PCB_PLOT_PARAMS& aPlotOpt )
 {
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
-    itemplotter.SetLayerMask( aLayerMask );
+    itemplotter.SetLayerSet( aLayerMask );
 
     // Plot edge layer and graphic items
     itemplotter.PlotBoardGraphicItems();
@@ -78,29 +78,31 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
     itemplotter.Plot_Edges_Modules();
 
     // Plot pads (creates pads outlines, for pads on silkscreen layers)
-    int layersmask_plotpads = aLayerMask;
+    LSET layersmask_plotpads = aLayerMask;
+
     // Calculate the mask layers of allowed layers for pads
 
     if( !aPlotOpt.GetPlotPadsOnSilkLayer() )       // Do not plot pads on silk screen layers
-        layersmask_plotpads &= ~(SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT );
+        layersmask_plotpads.set( B_SilkS, false ).set( F_SilkS, false );
 
-    if( layersmask_plotpads )
+    if( layersmask_plotpads.any() )
     {
         for( MODULE* Module = aBoard->m_Modules; Module; Module = Module->Next() )
         {
-            for( D_PAD * pad = Module->Pads(); pad != NULL; pad = pad->Next() )
+            for( D_PAD * pad = Module->Pads(); pad; pad = pad->Next() )
             {
                 // See if the pad is on this layer
-                LAYER_MSK masklayer = pad->GetLayerMask();
-                if( (masklayer & layersmask_plotpads) == 0 )
+                LSET masklayer = pad->GetLayerSet();
+                if( !( masklayer & layersmask_plotpads ).any() )
                     continue;
 
-                EDA_COLOR_T color = ColorFromInt(0);
-                if( (layersmask_plotpads & SILKSCREEN_LAYER_BACK) )
-                   color = aBoard->GetLayerColor( SILKSCREEN_N_BACK );
+                EDA_COLOR_T color = ColorFromInt( 0 );
 
-                if((layersmask_plotpads & SILKSCREEN_LAYER_FRONT ) )
-                    color = ColorFromInt( color | aBoard->GetLayerColor( SILKSCREEN_N_FRONT ) );
+                if( layersmask_plotpads[B_SilkS] )
+                   color = aBoard->GetLayerColor( B_SilkS );
+
+                if( layersmask_plotpads[F_SilkS] )
+                    color = ColorFromInt( color | aBoard->GetLayerColor( F_SilkS ) );
 
                 itemplotter.PlotPad( pad, color, LINE );
             }
@@ -122,7 +124,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
     {
         ZONE_CONTAINER* edge_zone = aBoard->GetArea( ii );
 
-        if( ( GetLayerMask( edge_zone->GetLayer() ) & aLayerMask ) == 0 )
+        if( !aLayerMask[ edge_zone->GetLayer() ] )
             continue;
 
         itemplotter.PlotFilledAreas( edge_zone );
@@ -130,9 +132,9 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
 
     // Plot segments used to fill zone areas (outdated, but here for old boards
     // compatibility):
-    for( SEGZONE* seg = aBoard->m_Zone; seg != NULL; seg = seg->Next() )
+    for( SEGZONE* seg = aBoard->m_Zone; seg; seg = seg->Next() )
     {
-        if( ( GetLayerMask( seg->GetLayer() ) & aLayerMask ) == 0 )
+        if( !aLayerMask[ seg->GetLayer() ] )
             continue;
 
         aPlotter->ThickSegment( seg->GetStart(), seg->GetEnd(), seg->GetWidth(),
@@ -152,29 +154,13 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
 
     // Specify that the contents of the "Edges Pcb" layer are to be plotted
     // in addition to the contents of the currently specified layer.
-    LAYER_MSK layer_mask = GetLayerMask( aLayer );
+    LSET    layer_mask( ToLAYER_ID( aLayer ) );
 
     if( !aPlotOpt.GetExcludeEdgeLayer() )
-        layer_mask |= EDGE_LAYER;
+        layer_mask.set( Edge_Cuts );
 
-    switch( aLayer )
+    if( IsCopperLayer( aLayer ) )
     {
-    case FIRST_COPPER_LAYER:
-    case LAYER_N_2:
-    case LAYER_N_3:
-    case LAYER_N_4:
-    case LAYER_N_5:
-    case LAYER_N_6:
-    case LAYER_N_7:
-    case LAYER_N_8:
-    case LAYER_N_9:
-    case LAYER_N_10:
-    case LAYER_N_11:
-    case LAYER_N_12:
-    case LAYER_N_13:
-    case LAYER_N_14:
-    case LAYER_N_15:
-    case LAST_COPPER_LAYER:
         // Skip NPTH pads on copper layers ( only if hole size == pad size ):
         // Drill mark will be plotted,
         // if drill mark is SMALL_DRILL_SHAPE  or FULL_DRILL_SHAPE
@@ -188,68 +174,74 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
             plotOpt.SetSkipPlotNPTH_Pads( true );
             PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
         }
-        break;
-
-    case SOLDERMASK_N_BACK:
-    case SOLDERMASK_N_FRONT:
-        plotOpt.SetSkipPlotNPTH_Pads( false );
-        // Disable plot pad holes
-        plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
-
-        // Plot solder mask:
-        if( soldermask_min_thickness == 0 )
+    }
+    else
+    {
+        switch( aLayer )
         {
+        case B_Mask:
+        case F_Mask:
+            plotOpt.SetSkipPlotNPTH_Pads( false );
+            // Disable plot pad holes
+            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+
+            // Plot solder mask:
+            if( soldermask_min_thickness == 0 )
+            {
+                if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+                    PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
+                else
+                    PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+            }
+            else
+                PlotSolderMaskLayer( aBoard, aPlotter, layer_mask, plotOpt,
+                                     soldermask_min_thickness );
+
+            break;
+
+        case B_Paste:
+        case F_Paste:
+            plotOpt.SetSkipPlotNPTH_Pads( false );
+            // Disable plot pad holes
+            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+
             if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
-        }
-        else
-            PlotSolderMaskLayer( aBoard, aPlotter, layer_mask, plotOpt,
-                                 soldermask_min_thickness );
+            break;
 
-        break;
-
-    case SOLDERPASTE_N_BACK:
-    case SOLDERPASTE_N_FRONT:
-        plotOpt.SetSkipPlotNPTH_Pads( false );
-        // Disable plot pad holes
-        plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
-
-        if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
-            PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
-        else
-            PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
-        break;
-
-    case SILKSCREEN_N_FRONT:
-    case SILKSCREEN_N_BACK:
-        if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
-            PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
-        else
-            PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
-
-        // Gerber: Subtract soldermask from silkscreen if enabled
-        if( aPlotter->GetPlotterType() == PLOT_FORMAT_GERBER
-            && plotOpt.GetSubtractMaskFromSilk() )
-        {
-            if( aLayer == SILKSCREEN_N_FRONT )
-                layer_mask = GetLayerMask( SOLDERMASK_N_FRONT );
+        case F_SilkS:
+        case B_SilkS:
+            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+                PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
-                layer_mask = GetLayerMask( SOLDERMASK_N_BACK );
+                PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
 
-            // Create the mask to subtract by creating a negative layer polarity
-            aPlotter->SetLayerPolarity( false );
-            // Disable plot pad holes
-            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
-            // Plot the mask
-            PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+            // Gerber: Subtract soldermask from silkscreen if enabled
+            if( aPlotter->GetPlotterType() == PLOT_FORMAT_GERBER
+                && plotOpt.GetSubtractMaskFromSilk() )
+            {
+                if( aLayer == F_SilkS )
+                    layer_mask = LSET( F_Mask );
+                else
+                    layer_mask = LSET( B_Mask );
+
+                // Create the mask to subtract by creating a negative layer polarity
+                aPlotter->SetLayerPolarity( false );
+
+                // Disable plot pad holes
+                plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+
+                // Plot the mask
+                PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+            }
+            break;
+
+        default:
+            PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
+            break;
         }
-        break;
-
-    default:
-        PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
-        break;
     }
 }
 
@@ -258,11 +250,11 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
  * Silk screen layers are not plotted here.
  */
 void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
-                        LAYER_MSK aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt )
+                        LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt )
 {
-
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
-    itemplotter.SetLayerMask( aLayerMask );
+
+    itemplotter.SetLayerSet( aLayerMask );
 
     EDA_DRAW_MODE_T plotMode = aPlotOpt.GetMode();
 
@@ -286,7 +278,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     {
         for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item->Next() )
         {
-            if( ! (aLayerMask & GetLayerMask( item->GetLayer() ) ) )
+            if( !aLayerMask[ item->GetLayer() ] )
                 continue;
 
             switch( item->Type() )
@@ -306,32 +298,45 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     {
         for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
         {
-            if( (pad->GetLayerMask() & aLayerMask) == 0 )
+            if( (pad->GetLayerSet() & aLayerMask) == 0 )
                 continue;
 
             wxSize margin;
             double width_adj = 0;
 
-            if( aLayerMask & ALL_CU_LAYERS )
+            if( ( aLayerMask & LSET::AllCuMask() ).any() )
                 width_adj =  itemplotter.getFineWidthAdj();
 
+#if 0   // was:
             switch( aLayerMask &
                    ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
                      SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT ) )
             {
             case SOLDERMASK_LAYER_FRONT:
             case SOLDERMASK_LAYER_BACK:
-                margin.x = margin.y = pad->GetSolderMaskMargin();
                 break;
 
             case SOLDERPASTE_LAYER_FRONT:
             case SOLDERPASTE_LAYER_BACK:
-                margin = pad->GetSolderPasteMargin();
                 break;
 
             default:
                 break;
             }
+#else
+            static const LSET speed( 4, B_Mask, F_Mask, B_Paste, F_Paste );
+
+            LSET anded = ( speed & aLayerMask );
+
+            if( anded == LSET( F_Mask ) || anded == LSET( B_Mask ) )
+            {
+                margin.x = margin.y = pad->GetSolderMaskMargin();
+            }
+            else if( anded == LSET( F_Paste ) || anded == LSET( B_Paste ) )
+            {
+                margin = pad->GetSolderPasteMargin();
+            }
+#endif
 
             wxSize padPlotsSize;
             padPlotsSize.x = pad->GetSize().x + ( 2 * margin.x ) + width_adj;
@@ -343,10 +348,10 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
             EDA_COLOR_T color = BLACK;
 
-            if( (pad->GetLayerMask() & LAYER_BACK) )
+            if( pad->GetLayerSet()[B_Cu] )
                color = aBoard->GetVisibleElementColor( PAD_BK_VISIBLE );
 
-            if((pad->GetLayerMask() & LAYER_FRONT ) )
+            if( pad->GetLayerSet()[F_Cu] )
                 color = ColorFromInt( color | aBoard->GetVisibleElementColor( PAD_FR_VISIBLE ) );
 
             // Temporary set the pad size to the required plot size:
@@ -385,18 +390,18 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         // vias are not plotted if not on selected layer, but if layer
         // is SOLDERMASK_LAYER_BACK or SOLDERMASK_LAYER_FRONT,vias are drawn,
         // only if they are on the corresponding external copper layer
-        int via_mask_layer = Via->GetLayerMask();
+        LSET via_mask_layer = Via->GetLayerSet();
 
         if( aPlotOpt.GetPlotViaOnMaskLayer() )
         {
-            if( via_mask_layer & LAYER_BACK )
-                via_mask_layer |= SOLDERMASK_LAYER_BACK;
+            if( via_mask_layer[B_Cu] )
+                via_mask_layer.set( B_Mask );
 
-            if( via_mask_layer & LAYER_FRONT )
-                via_mask_layer |= SOLDERMASK_LAYER_FRONT;
+            if( via_mask_layer[F_Cu] )
+                via_mask_layer.set( F_Mask );
         }
 
-        if( ( via_mask_layer & aLayerMask ) == 0 )
+        if( !( via_mask_layer & aLayerMask ).any() )
             continue;
 
         int via_margin = 0;
@@ -404,10 +409,10 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
         // If the current layer is a solder mask, use the global mask
         // clearance for vias
-        if( ( aLayerMask & ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT ) ) )
+        if( aLayerMask[B_Mask] || aLayerMask[F_Mask] )
             via_margin = aBoard->GetDesignSettings().m_SolderMaskMargin;
 
-        if( aLayerMask & ALL_CU_LAYERS )
+        if( ( aLayerMask & LSET::AllCuMask() ).any() )
             width_adj = itemplotter.getFineWidthAdj();
 
         int diameter = Via->GetWidth() + 2 * via_margin + width_adj;
@@ -429,7 +434,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( track->Type() == PCB_VIA_T )
             continue;
 
-        if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
+        if( !aLayerMask[track->GetLayer()] )
             continue;
 
         int width = track->GetWidth() + itemplotter.getFineWidthAdj();
@@ -440,7 +445,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // Plot zones (outdated, for old boards compatibility):
     for( TRACK* track = aBoard->m_Zone; track; track = track->Next() )
     {
-        if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
+        if( !aLayerMask[track->GetLayer()] )
             continue;
 
         int width = track->GetWidth() + itemplotter.getFineWidthAdj();
@@ -453,7 +458,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     {
         ZONE_CONTAINER* zone = aBoard->GetArea( ii );
 
-        if( ( GetLayerMask(zone->GetLayer() )  & aLayerMask ) == 0 )
+        if( !aLayerMask[zone->GetLayer()] )
             continue;
 
         itemplotter.PlotFilledAreas( zone );
@@ -464,24 +469,81 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         itemplotter.PlotDrillMarks();
 }
 
+
+// Seems like we want to plot from back to front?
+static const LAYER_ID plot_seq[] = {
+
+    B_Adhes,        // 32
+    F_Adhes,
+    B_Paste,
+    F_Paste,
+    B_SilkS,
+    B_Mask,
+    F_Mask,
+    Dwgs_User,
+    Cmts_User,
+    Eco1_User,
+    Eco2_User,
+    Edge_Cuts,
+    Margin,
+
+    F_CrtYd,        // CrtYd & Body are footprint only
+    B_CrtYd,
+    F_Fab,
+    B_Fab,
+
+    B_Cu,
+    In30_Cu,
+    In29_Cu,
+    In28_Cu,
+    In27_Cu,
+    In26_Cu,
+    In25_Cu,
+    In24_Cu,
+    In23_Cu,
+    In22_Cu,
+    In21_Cu,
+    In20_Cu,
+    In19_Cu,
+    In18_Cu,
+    In17_Cu,
+    In16_Cu,
+    In15_Cu,
+    In14_Cu,
+    In13_Cu,
+    In12_Cu,
+    In11_Cu,
+    In10_Cu,
+    In9_Cu,
+    In8_Cu,
+    In7_Cu,
+    In6_Cu,
+    In5_Cu,
+    In4_Cu,
+    In3_Cu,
+    In2_Cu,
+    In1_Cu,
+    F_Cu,
+
+    F_SilkS,
+};
+
+
 /* Plot outlines of copper, for copper layer
  */
 #include "clipper.hpp"
 void PlotLayerOutlines( BOARD *aBoard, PLOTTER* aPlotter,
-                        LAYER_MSK aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt )
+                        LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt )
 {
 
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
-    itemplotter.SetLayerMask( aLayerMask );
+    itemplotter.SetLayerSet( aLayerMask );
 
     CPOLYGONS_LIST outlines;
 
-    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; layer++ )
+    for( LSEQ seq = aLayerMask.Seq( plot_seq, DIM( plot_seq ) );  seq;  ++seq )
     {
-        LAYER_MSK layer_mask = GetLayerMask( layer );
-
-        if( (aLayerMask & layer_mask ) == 0 )
-            continue;
+        LAYER_ID layer = *seq;
 
         outlines.RemoveAllContours();
         aBoard->ConvertBrdLayerToPolygonalContours( layer, outlines );
@@ -592,15 +654,14 @@ void PlotLayerOutlines( BOARD *aBoard, PLOTTER* aPlotter,
  * (shapes will be better, and calculations faster)
  */
 void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
-                          LAYER_MSK aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
+                          LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
                           int aMinThickness )
 {
-    LAYER_NUM layer = ( aLayerMask & SOLDERMASK_LAYER_BACK ) ?
-                 SOLDERMASK_N_BACK : SOLDERMASK_N_FRONT;
-    int inflate = aMinThickness/2;
+    LAYER_ID    layer = aLayerMask[B_Mask] ? B_Mask : F_Mask;
+    int         inflate = aMinThickness/2;
 
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
-    itemplotter.SetLayerMask( aLayerMask );
+    itemplotter.SetLayerSet( aLayerMask );
 
      // Plot edge layer and graphic items
     itemplotter.PlotBoardGraphicItems();
@@ -661,6 +722,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
         // use the global mask clearance for vias
         int via_clearance = aBoard->GetDesignSettings().m_SolderMaskMargin;
         int via_margin = via_clearance + inflate;
+
         for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
         {
             const VIA* via = dyn_cast<const VIA*>( track );
@@ -670,15 +732,15 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
             // vias are plotted only if they are on the corresponding
             // external copper layer
-            LAYER_MSK via_mask_layer = via->GetLayerMask();
+            LSET via_set = via->GetLayerSet();
 
-            if( via_mask_layer & LAYER_BACK )
-                via_mask_layer |= SOLDERMASK_LAYER_BACK;
+            if( via_set[B_Cu] )
+                via_set.set( B_Mask );
 
-            if( via_mask_layer & LAYER_FRONT )
-                via_mask_layer |= SOLDERMASK_LAYER_FRONT;
+            if( via_set[F_Cu] )
+                via_set.set( F_Mask );
 
-            if( ( via_mask_layer & aLayerMask ) == 0 )
+            if( !( via_set & aLayerMask ).any() )
                 continue;
 
             via->TransformShapeWithClearanceToPolygon( bufferPolys, via_margin,
