@@ -105,7 +105,9 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
     {
         LAYER_ID layer = *seq;
 
-        wxString msg = m_Parent->GetBoard()->GetLayerName( layer ).Trim();
+        wxString msg = m_Parent->GetBoard()->GetLayerName( layer );
+
+        msg.Trim();
 
         m_LayerSelectionCtrl->InsertItems( 1, &msg, ii );
 

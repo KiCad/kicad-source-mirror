@@ -262,7 +262,9 @@ void DIALOG_COPPER_ZONE::initDialog()
 
         m_LayerId.push_back( layer );
 
-        msg = board->GetLayerName( layer ).Trim();
+        msg = board->GetLayerName( layer );
+
+        msg.Trim();
 
         EDA_COLOR_T layerColor = board->GetLayerColor( layer );
 
