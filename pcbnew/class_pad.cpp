@@ -93,17 +93,17 @@ LSET D_PAD::StandardMask()
 }
 
 
-LSET D_PAD::ConnMask()
+LSET D_PAD::SMDMask()
 {
-    // was: #define PAD_CONN_DEFAULT_LAYERS LAYER_FRONT | SOLDERPASTE_LAYER_FRONT | SOLDERMASK_LAYER_FRONT
+    // was: #define PAD_SMD_DEFAULT_LAYERS LAYER_FRONT | SOLDERPASTE_LAYER_FRONT | SOLDERMASK_LAYER_FRONT
     static LSET saved( 3, F_Cu, F_Paste, F_Mask );
     return saved;
 }
 
 
-LSET D_PAD::SMDMask()
+LSET D_PAD::ConnMask()
 {
-    // was: #define PAD_SMD_DEFAULT_LAYERS LAYER_FRONT | SOLDERMASK_LAYER_FRONT
+    // was: #define PAD_CONN_DEFAULT_LAYERS LAYER_FRONT | SOLDERMASK_LAYER_FRONT
     static LSET saved( 2, F_Cu, F_Mask );
     return saved;
 }
@@ -348,22 +348,6 @@ const wxString D_PAD::GetPadName() const
 
 void D_PAD::StringPadName( wxString& text ) const
 {
-#if 0   // m_Padname is not ASCII and not UTF8, it is LATIN1 basically, whatever
-        // 8 bit font is supported in KiCad plotting and drawing.
-
-    // Return pad name as wxString, assume it starts as a non-terminated
-    // utf8 character sequence
-
-    char    temp[sizeof(m_Padname)+1];      // a place to terminate with '\0'
-
-    strncpy( temp, m_Padname, sizeof(m_Padname) );
-
-    temp[sizeof(m_Padname)] = 0;
-
-    text = FROM_UTF8( temp );
-
-#else
-
     text.Empty();
 
     for( int ii = 0;  ii < PADNAMEZ && m_Padname[ii];  ii++ )
@@ -371,7 +355,6 @@ void D_PAD::StringPadName( wxString& text ) const
         // m_Padname is 8 bit KiCad font junk, do not sign extend
         text.Append( (unsigned char) m_Padname[ii] );
     }
-#endif
 }
 
 

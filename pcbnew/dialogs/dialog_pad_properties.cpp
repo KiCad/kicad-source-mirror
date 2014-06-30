@@ -72,11 +72,11 @@ static const LSET std_pad_layers[] = {
     // PAD_STANDARD:
     D_PAD::StandardMask(),
 
-    // PAD_CONN:
-    D_PAD::ConnMask(),
-
     // PAD_SMD:
     D_PAD::SMDMask(),
+
+    // PAD_CONN:
+    D_PAD::ConnMask(),
 
     // PAD_HOLE_NOT_PLATED:
     D_PAD::UnplatedHoleMask()
