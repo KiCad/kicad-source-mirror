@@ -15,8 +15,7 @@
 /* Initial colors values: optimized for Pcbnew, but are also Ok for Eeschema
  * these values are superseded by config reading
  */
-static const EDA_COLOR_T default_layer_color[LAYERSCOLORSBUFFERSIZE] =
-{
+static const EDA_COLOR_T default_layer_color[] = {
     GREEN,        BLUE,         LIGHTGRAY, BROWN,
     RED,          MAGENTA,      LIGHTGRAY, MAGENTA,
     DARKGRAY,     BLUE,         GREEN,     CYAN,
@@ -34,8 +33,8 @@ static const EDA_COLOR_T default_layer_color[LAYERSCOLORSBUFFERSIZE] =
     DARKGRAY
 };
 
-static const EDA_COLOR_T default_items_color[LAYERSCOLORSBUFFERSIZE] =
-{
+
+static const EDA_COLOR_T default_items_color[] = {
     LIGHTGRAY, // unused
     CYAN,      // VIA_MICROVIA_VISIBLE
     BROWN,     // VIA_BBLIND_VISIBLE
@@ -56,13 +55,24 @@ static const EDA_COLOR_T default_items_color[LAYERSCOLORSBUFFERSIZE] =
     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY
 };
 
+
 COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS()
 {
-    for( unsigned ii = 0; ii < DIM(m_LayersColors); ii++ )
-        m_LayersColors[ii] = default_layer_color[ii];
+    for( unsigned src = 0, dst = 0; dst < DIM(m_LayersColors); ++dst )
+    {
+        m_LayersColors[dst] = default_layer_color[src++];
 
-    for( unsigned ii = 0; ii < DIM(m_ItemsColors); ii++ )
-        m_ItemsColors[ii] = default_items_color[ii];
+        if( src >= DIM( default_layer_color ) )
+            src = 0;        // wrap the source.
+    }
+
+    for( unsigned src = 0, dst = 0; dst < DIM(m_ItemsColors);  ++dst )
+    {
+        m_ItemsColors[dst] = default_items_color[src++];
+
+        if( src >= DIM( default_items_color ) )
+            src = 0;
+    }
 }
 
 

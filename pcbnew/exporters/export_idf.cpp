@@ -67,7 +67,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
     // Retrieve segments and arcs from the board
     for( BOARD_ITEM* item = aPcb->m_Drawings; item; item = item->Next() )
     {
-        if( item->Type() != PCB_LINE_T || item->GetLayer() != EDGE_N )
+        if( item->Type() != PCB_LINE_T || item->GetLayer() != Edge_Cuts )
             continue;
 
         graphic = (DRAWSEGMENT*) item;
@@ -250,7 +250,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
     // for( EDA_ITEM* item = aModule->GraphicalItems();  item != NULL;  item = item->Next() )
     // {
     // if( ( item->Type() != PCB_MODULE_EDGE_T )
-    // || (item->GetLayer() != EDGE_N ) ) continue;
+    // || (item->GetLayer() != Edge_Cuts ) ) continue;
     // code to export cutouts
     // }
 
@@ -378,7 +378,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
         double locz = modfile->m_MatPosition.z;
         double lrot = modfile->m_MatRotation.z;
 
-        bool top = ( aModule->GetLayer() == LAYER_N_BACK ) ? false : true;
+        bool top = ( aModule->GetLayer() == B_Cu ) ? false : true;
 
         if( top )
         {
@@ -481,7 +481,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
                         ostr << "TOP";
                     else
                         ostr << "BOTTOM";
-                    
+
                     throw( std::runtime_error( ostr.str() ) );
                 }
             }

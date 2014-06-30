@@ -33,6 +33,7 @@
 #include <common.h>
 #include <macros.h>
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <bitmaps.h>
 #include <gerbview_id.h>
 #include <hotkeys.h>
@@ -292,7 +293,7 @@ void GERBVIEW_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
 
 void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 {
-    LAYER_NUM layer = getActiveLayer();
+    int layer = getActiveLayer();
     GERBER_IMAGE* gerber = g_GERBER_List[layer];
     int selected = ( gerber ) ? gerber->m_Selected_Tool : 0;
 

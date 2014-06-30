@@ -39,11 +39,11 @@
 #include <dialog_global_deletion.h>
 
 
-DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent )
-    : DIALOG_GLOBAL_DELETION_BASE( parent )
+DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent ) :
+    DIALOG_GLOBAL_DELETION_BASE( parent )
 {
     m_Parent = parent;
-    m_currentLayer = FIRST_LAYER;
+    m_currentLayer = F_Cu;
     m_TrackFilterAR->Enable( m_DelTracks->GetValue() );
     m_TrackFilterLocked->Enable( m_DelTracks->GetValue() );
     m_TrackFilterNormal->Enable( m_DelTracks->GetValue() );
@@ -69,7 +69,7 @@ void PCB_EDIT_FRAME::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
 void DIALOG_GLOBAL_DELETION::SetCurrentLayer( LAYER_NUM aLayer )
 {
     m_currentLayer = aLayer;
-    m_textCtrlCurrLayer->SetValue( m_Parent->GetBoard()->GetLayerName( aLayer ) );
+    m_textCtrlCurrLayer->SetValue( m_Parent->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) ) );
 }
 
 
@@ -111,19 +111,19 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         BOARD_ITEM*       nextitem;
         RN_DATA*          ratsnest = pcb->GetRatsnest();
 
-        LAYER_MSK layers_filter = ALL_LAYERS;
+        LSET layers_filter = LSET().set();
 
         if( m_rbLayersOption->GetSelection() != 0 )     // Use current layer only
-            layers_filter = GetLayerMask( m_currentLayer );
+            layers_filter = LSET( ToLAYER_ID( m_currentLayer ) );
 
         if( m_DelZones->GetValue() )
         {
             int area_index = 0;
             item = pcb->GetArea( area_index );
 
-            while( item != NULL )
+            while( item )
             {
-                if( GetLayerMask( item->GetLayer() ) & layers_filter )
+                if( layers_filter[item->GetLayer()] )
                 {
                     itemPicker.SetItem( item );
                     pickersList.PushItem( itemPicker );
@@ -143,21 +143,21 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 
         if( m_DelDrawings->GetValue() || m_DelBoardEdges->GetValue() )
         {
-            LAYER_MSK masque_layer = NO_LAYERS;
+            LSET masque_layer;
 
             if( m_DelDrawings->GetValue() )
-                 masque_layer = (~EDGE_LAYER) & ALL_NO_CU_LAYERS;
+                 masque_layer = LSET::AllNonCuMask().set( Edge_Cuts, false );
 
             if( m_DelBoardEdges->GetValue() )
-                 masque_layer |= EDGE_LAYER;
+                 masque_layer.set( Edge_Cuts );
 
             masque_layer &= layers_filter;
 
-            for( item = pcb->m_Drawings; item != NULL; item = nextitem )
+            for( item = pcb->m_Drawings; item; item = nextitem )
             {
                 nextitem = item->Next();
 
-                if( ( item->Type() == PCB_LINE_T ) && ( GetLayerMask( item->GetLayer() ) & masque_layer) )
+                if( item->Type() == PCB_LINE_T  &&  masque_layer[item->GetLayer()] )
                 {
                     itemPicker.SetItem( item );
                     pickersList.PushItem( itemPicker );
@@ -169,13 +169,13 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 
         if( m_DelTexts->GetValue() )
         {
-            LAYER_MSK del_text_layers = ALL_LAYERS & layers_filter;
+            LSET del_text_layers = layers_filter;
 
-            for( item = pcb->m_Drawings; item != NULL; item = nextitem )
+            for( item = pcb->m_Drawings; item; item = nextitem )
             {
                 nextitem = item->Next();
 
-                if( ( item->Type() == PCB_TEXT_T ) && ( GetLayerMask( item->GetLayer() ) & del_text_layers ) )
+                if( item->Type() == PCB_TEXT_T  &&  del_text_layers[item->GetLayer()] )
                 {
                     itemPicker.SetItem( item );
                     pickersList.PushItem( itemPicker );
@@ -191,7 +191,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
             {
                 nextitem = item->Next();
 
-                if( ( GetLayerMask( item->GetLayer() ) & layers_filter ) &&
+                if( layers_filter[item->GetLayer()] &&
                     ( ( m_ModuleFilterNormal->GetValue() && !item->IsLocked() ) ||
                       ( m_ModuleFilterLocked->GetValue() && item->IsLocked() ) ) )
                 {
@@ -219,7 +219,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 
             TRACK* nexttrack;
 
-            for( TRACK *track = pcb->m_Track; track != NULL; track = nexttrack )
+            for( TRACK *track = pcb->m_Track; track; track = nexttrack )
             {
                 nexttrack = track->Next();
 
@@ -233,7 +233,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
                 if( ( track->Type() == PCB_VIA_T ) && !m_TrackFilterVias->GetValue() )
                     continue;
 
-                if( ( track->GetLayerMask() & layers_filter ) == 0 )
+                if( ( track->GetLayerSet() & layers_filter ) == 0 )
                     continue;
 
                 itemPicker.SetItem( track );

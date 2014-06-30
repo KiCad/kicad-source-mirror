@@ -121,7 +121,7 @@ void MIN_SPAN_TREE::updateDistances( int target )
 
 void MIN_SPAN_TREE::BuildTree()
 {
-    /* Add the first node to the tree */
+    // Add the first node to the tree
     inTree[0] = 1;
     updateDistances( 0 );
 
@@ -129,6 +129,7 @@ void MIN_SPAN_TREE::BuildTree()
     {
         // Find the node with the smallest distance to the tree
         int min = -1;
+
         for( int ii = 0; ii < m_Size; ++ii )
         {
             if( !inTree[ii] )

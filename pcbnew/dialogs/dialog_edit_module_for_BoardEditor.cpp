@@ -96,7 +96,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     m_YPosUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
     m_LayerCtrl->SetSelection(
-         (m_CurrentModule->GetLayer() == LAYER_N_BACK) ? 1 : 0 );
+         (m_CurrentModule->GetLayer() == B_Cu) ? 1 : 0 );
 
     bool select = false;
     switch( int( m_CurrentModule->GetOrientation() ) )
@@ -619,10 +619,10 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     bool change_layer = false;
     if( m_LayerCtrl->GetSelection() == 0 )     // layer req = COMPONENT
     {
-        if( m_CurrentModule->GetLayer() == LAYER_N_BACK )
+        if( m_CurrentModule->GetLayer() == B_Cu )
             change_layer = true;
     }
-    else if( m_CurrentModule->GetLayer() == LAYER_N_FRONT )
+    else if( m_CurrentModule->GetLayer() == F_Cu )
         change_layer = true;
 
     if( change_layer )

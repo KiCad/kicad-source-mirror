@@ -263,7 +263,7 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void    PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
+    virtual void    PrintPage( wxDC* aDC, LSET aPrintMasklayer,
                                bool aPrintMirrorMode, void * aData );
 
     void OnFileHistory( wxCommandEvent& event );

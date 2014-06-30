@@ -192,15 +192,15 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
 {
     // note: if aEdge == NULL, all outline segments will be modified
 
-    MODULE* module    = GetBoard()->m_Modules;
-    LAYER_NUM layer = SILKSCREEN_N_FRONT;
-    bool modified = false;
+    MODULE*     module = GetBoard()->m_Modules;
+    LAYER_ID    layer = F_SilkS;
+    bool        modified = false;
 
     if( aEdge )
         layer = aEdge->GetLayer();
 
     // Ask for the new layer
-    LAYER_NUM new_layer = SelectLayer(layer, EDGE_LAYER );
+    LAYER_ID new_layer = SelectLayer( layer, Edge_Cuts );
 
     if( layer < 0 )
         return;
@@ -214,7 +214,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
             return;
     }
 
-    if( aEdge == NULL )
+    if( !aEdge )
     {
         for( BOARD_ITEM *item = module->GraphicalItems() ; item != NULL;
                 item = item->Next() )
@@ -350,9 +350,9 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
 
         // The default layer for an edge is the corresponding silk layer
         if( module->IsFlipped() )
-            aEdge->SetLayer( SILKSCREEN_N_BACK );
+            aEdge->SetLayer( B_SilkS );
         else
-            aEdge->SetLayer( SILKSCREEN_N_FRONT );
+            aEdge->SetLayer( F_SilkS );
 
         // Initialize the starting point of the new segment or arc
         aEdge->SetStart( GetCrossHairPosition() );

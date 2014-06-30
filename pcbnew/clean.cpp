@@ -226,7 +226,7 @@ bool TRACKS_CLEANER::remove_duplicates_of_via( const VIA *aVia )
                 (alt_via->GetStart() == aVia->GetStart()) )
         {
             // delete via
-			m_Brd->GetRatsnest()->Remove( alt_via );
+            m_Brd->GetRatsnest()->Remove( alt_via );
             alt_via->ViewRelease();
             alt_via->DeleteStructure();
             modified = true;
@@ -262,7 +262,9 @@ bool TRACKS_CLEANER::clean_vias()
             {
                 const D_PAD *pad = via->m_PadsConnected[ii];
 
-                if( (pad->GetLayerMask() & ALL_CU_LAYERS) == ALL_CU_LAYERS )
+                const LSET all_cu = LSET::AllCuMask();
+
+                if( (pad->GetLayerSet() & all_cu) == all_cu )
                 {
                     // redundant: delete the via
                     m_Brd->GetRatsnest()->Remove( via );
@@ -283,8 +285,8 @@ const ZONE_CONTAINER* TRACKS_CLEANER::zoneForTrackEndpoint( const TRACK *aTrack,
         ENDPOINT_T aEndPoint )
 {
     // Vias are special cased, since they get a layer range, not a single one
-    LAYER_NUM top_layer, bottom_layer;
-	const VIA* via = dyn_cast<const VIA*>( aTrack );
+    LAYER_ID    top_layer, bottom_layer;
+    const VIA*  via = dyn_cast<const VIA*>( aTrack );
 
     if( via )
         via->LayerPair( &top_layer, &bottom_layer );
@@ -318,7 +320,7 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK *aTrack, ENDPOINT_T aEndPo
         /* If a via is connected to this end, test if this via has a second item connected.
          * If not, remove the current segment (the via would then become
          * unconnected and remove on the following pass) */
-		VIA* via = dyn_cast<VIA*>( other );
+        VIA* via = dyn_cast<VIA*>( other );
 
         if( via )
         {
@@ -436,10 +438,10 @@ bool TRACKS_CLEANER::remove_duplicates_of_track( const TRACK *aTrack )
             if( ((aTrack->GetStart() == other->GetStart()) &&
                  (aTrack->GetEnd() == other->GetEnd())) ||
                 ((aTrack->GetStart() == other->GetEnd()) &&
-                 (aTrack->GetEnd() == other->GetStart()))) 
+                 (aTrack->GetEnd() == other->GetStart())))
             {
-	            m_Brd->GetRatsnest()->Remove( other );
-				other->ViewRelease();
+                m_Brd->GetRatsnest()->Remove( other );
+                other->ViewRelease();
                 other->DeleteStructure();
                 modified = true;
             }
@@ -466,7 +468,7 @@ bool TRACKS_CLEANER::merge_collinear_of_track( TRACK *aSegment )
             {
                 // the two segments must have the same width and the other
                 // cannot be a via
-                if( (aSegment->GetWidth() == other->GetWidth()) && 
+                if( (aSegment->GetWidth() == other->GetWidth()) &&
                         (other->Type() == PCB_TRACE_T) )
                 {
                     // There can be only one segment connected
@@ -551,7 +553,7 @@ static bool parallelism_test( int dx1, int dy1, int dx2, int dy2 )
     if( dy2 == 0 )
         return dy1 == 0;
 
-    /* test for alignment in other cases: Do the usual cross product test 
+    /* test for alignment in other cases: Do the usual cross product test
      * (the same as testing the slope, but without a division) */
     return ((double)dy1 * dx2 == (double)dx1 * dy2);
 }

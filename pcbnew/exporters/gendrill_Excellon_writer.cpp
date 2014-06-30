@@ -453,8 +453,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
     // build hole list for vias
     if( ! aGenerateNPTH_list )  // vias are always plated !
     {
-        for( VIA* via = GetFirstVia( m_pcb->m_Track ); via;
-                via = GetFirstVia( via->Next() ) )
+        for( VIA* via = GetFirstVia( m_pcb->m_Track ); via; via = GetFirstVia( via->Next() ) )
         {
             hole_value = via->GetDrillValue();
 
@@ -468,6 +467,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
 
             new_hole.m_Hole_Shape = 0;              // hole shape: round
             new_hole.m_Hole_Pos = via->GetStart();
+
             via->LayerPair( &new_hole.m_Hole_Top_Layer, &new_hole.m_Hole_Bottom_Layer );
 
             // LayerPair return params with m_Hole_Bottom_Layer < m_Hole_Top_Layer
@@ -477,8 +477,8 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
             if( (new_hole.m_Hole_Top_Layer < aLastLayer) && (aLastLayer >= 0) )
                 continue;
 
-            if( aExcludeThroughHoles  && (new_hole.m_Hole_Bottom_Layer == LAYER_N_BACK)
-               && (new_hole.m_Hole_Top_Layer == LAYER_N_FRONT) )
+            if( aExcludeThroughHoles  && (new_hole.m_Hole_Bottom_Layer == B_Cu)
+               && (new_hole.m_Hole_Top_Layer == F_Cu) )
                 continue;
 
             m_holeListBuffer.push_back( new_hole );
@@ -514,8 +514,8 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
 
                 new_hole.m_Hole_Size         = pad->GetDrillSize();
                 new_hole.m_Hole_Pos          = pad->GetPosition();               // hole position
-                new_hole.m_Hole_Bottom_Layer = LAYER_N_BACK;
-                new_hole.m_Hole_Top_Layer    = LAYER_N_FRONT;// pad holes are through holes
+                new_hole.m_Hole_Bottom_Layer = B_Cu;
+                new_hole.m_Hole_Top_Layer    = F_Cu;// pad holes are through holes
                 m_holeListBuffer.push_back( new_hole );
             }
         }

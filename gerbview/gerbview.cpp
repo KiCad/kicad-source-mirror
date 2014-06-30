@@ -36,6 +36,7 @@
 #include <gerbview.h>
 #include <gerbview_id.h>
 #include <hotkeys.h>
+#include <gerbview_frame.h>
 
 #include <build_version.h>
 

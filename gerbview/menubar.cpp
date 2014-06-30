@@ -32,6 +32,7 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <hotkeys.h>
 #include <menus_helpers.h>

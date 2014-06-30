@@ -53,13 +53,13 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     GetBoard()->ResetHighLight();
 
     // Enable all layers (SetCopperLayerCount() will adjust the copper layers enabled)
-    GetBoard()->SetEnabledLayers( ALL_LAYERS );
+    GetBoard()->SetEnabledLayers( LSET().set() );
 
     // Default copper layers count set to 2: double layer board
     GetBoard()->SetCopperLayerCount( 2 );
 
     // Update display
-    GetBoard()->SetVisibleLayers( ALL_LAYERS );
+    GetBoard()->SetVisibleLayers( LSET().set() );
 
     // Set currently selected layer to be shown in high contrast mode, when enabled`
     SetHighContrastLayer( GetScreen()->m_Active_Layer );

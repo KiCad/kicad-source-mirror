@@ -283,8 +283,8 @@ public:
      * @param aPrintMirrorMode = true to plot mirrored
      * @param aData = a pointer on an auxiliary data (NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, LAYER_MSK aPrintMaskLayer, bool aPrintMirrorMode,
-                            void * aData = NULL );
+    virtual void PrintPage( wxDC* aDC, LSET aPrintMaskLayer, bool aPrintMirrorMode,
+                            void* aData = NULL );
 
     void GetKicadAbout( wxCommandEvent& event );
 
@@ -535,26 +535,26 @@ public:
      * Function SetHighContrastLayer
      * takes care of display settings for the given layer to be displayed in high contrast mode.
      */
-    void SetHighContrastLayer( LAYER_NUM aLayer );
+    void SetHighContrastLayer( LAYER_ID aLayer );
 
     /**
      * Function SetTopLayer
      * moves the selected layer to the top, so it is displayed above all others.
      */
-    void SetTopLayer( LAYER_NUM aLayer );
+    void SetTopLayer( LAYER_ID aLayer );
 
     /**
      * Function SetActiveLayer
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    void SetActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
+    void SetActiveLayer( LAYER_ID aLayer, bool doLayerWidgetUpdate = true );
 
     /**
      * Function GetActiveLayer
      * returns the active layer
      */
-    LAYER_NUM GetActiveLayer() const
+    LAYER_ID GetActiveLayer() const
     {
         return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
     }
@@ -783,8 +783,6 @@ public:
     void OnConfigurePcbOptions( wxCommandEvent& aEvent );
     void InstallDisplayOptionsDialog( wxCommandEvent& aEvent );
     void InstallPcbGlobalDeleteFrame( const wxPoint& pos );
-
-    void InstallDialogLayerSetup();
 
     /**
      * Function GenFootprintsPositionFile
@@ -1263,7 +1261,7 @@ public:
     bool MergeCollinearTracks( TRACK* track, wxDC* DC, int end );
 
     void Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
-    void SwitchLayer( wxDC* DC, LAYER_NUM layer );
+    void SwitchLayer( wxDC* DC, LAYER_ID layer );
 
     /**
      * Function Add45DegreeSegment
@@ -1463,7 +1461,7 @@ public:
     DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T shape, wxDC* DC );
     void End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void Delete_Drawings_All_Layer( LAYER_NUM aLayer );
+    void Delete_Drawings_All_Layer( LAYER_ID aLayer );
 
     // Dimension handling:
     void ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* aDC );

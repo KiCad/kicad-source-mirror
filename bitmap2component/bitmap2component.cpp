@@ -355,7 +355,7 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
 
     case PCBNEW_LEGACY_EMP:
     {
-        LAYER_NUM layer = SILKSCREEN_N_FRONT;
+        LAYER_NUM layer = F_SilkS;
         int width = 1;
         fprintf( m_Outfile, "DP %d %d %d %d %d %d %d\n",
                  0, 0, 0, 0,

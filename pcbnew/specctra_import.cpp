@@ -266,7 +266,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
         via->SetDrill( drillDiam );
         via->SetViaType( VIA_THROUGH );
         via->SetWidth( viaDiam );
-        via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
+        via->SetLayerPair( F_Cu, B_Cu );
     }
     else if( shapeCount == copperLayerCount )
     {
@@ -284,7 +284,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
         via->SetDrill( drillDiam );
         via->SetViaType( VIA_THROUGH );
         via->SetWidth( viaDiam );
-        via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
+        via->SetLayerPair( F_Cu, B_Cu );
     }
     else    // VIA_MICROVIA or VIA_BLIND_BURIED
     {
@@ -333,8 +333,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 
         via->SetWidth( viaDiam );
 
-        LAYER_NUM topLayer = pcbLayer2kicad[topLayerNdx];
-        LAYER_NUM botLayer = pcbLayer2kicad[botLayerNdx];
+        LAYER_ID topLayer = pcbLayer2kicad[topLayerNdx];
+        LAYER_ID botLayer = pcbLayer2kicad[botLayerNdx];
 
         via->SetLayerPair( topLayer, botLayer );
     }
@@ -410,7 +410,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                     // convert from degrees to tenths of degrees used in KiCad.
                     int orientation = KiROUND( place->rotation * 10.0 );
 
-                    if( module->GetLayer() != LAYER_N_FRONT )
+                    if( module->GetLayer() != F_Cu )
                     {
                         // module is on copper layer (back)
                         module->Flip( module->GetPosition() );
@@ -422,7 +422,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                 {
                     int orientation = KiROUND( (place->rotation + 180.0) * 10.0 );
 
-                    if( module->GetLayer() != LAYER_N_BACK )
+                    if( module->GetLayer() != B_Cu )
                     {
                         // module is on component layer (front)
                         module->Flip( module->GetPosition() );

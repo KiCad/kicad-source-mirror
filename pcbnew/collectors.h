@@ -71,13 +71,13 @@ public:
      * Function IsLayerLocked
      * @return bool - true if the given layer is locked, else false.
      */
-    virtual     bool IsLayerLocked( LAYER_NUM layer ) const = 0;
+    virtual     bool IsLayerLocked( LAYER_ID layer ) const = 0;
 
     /**
      * Function IsLayerVisible
      * @return bool - true if the given layer is visible, else false.
      */
-    virtual     bool IsLayerVisible( LAYER_NUM layer ) const = 0;
+    virtual     bool IsLayerVisible( LAYER_ID layer ) const = 0;
 
     /**
      * Function IgnoreLockedLayers
@@ -95,7 +95,7 @@ public:
      * Function GetPreferredLayer
      * @return int - the preferred layer for HitTest()ing.
      */
-    virtual     LAYER_NUM GetPreferredLayer() const = 0;
+    virtual     LAYER_ID GetPreferredLayer() const = 0;
 
     /**
      * Function IgnorePreferredLayer
@@ -206,7 +206,7 @@ public:
  * Philosophy: this class knows nothing of the context in which a BOARD is used
  * and that means it knows nothing about which layers are visible or current,
  * but can handle those concerns by the SetPreferredLayer() function and the
- * SetLayerMask() function.
+ * SetLayerSet() function.
  */
 class GENERAL_COLLECTOR : public COLLECTOR
 {
@@ -376,13 +376,13 @@ private:
     // the storage architecture here is not important, since this is only
     // a carrier object and its functions are what is used, and data only indirectly.
 
-    LAYER_NUM m_PreferredLayer;
+    LAYER_ID m_PreferredLayer;
     bool    m_IgnorePreferredLayer;
 
-    LAYER_MSK m_LayerLocked;                  ///< bit-mapped layer locked bits
+    LSET    m_LayerLocked;                  ///< bit-mapped layer locked bits
     bool    m_IgnoreLockedLayers;
 
-    LAYER_MSK m_LayerVisible;                 ///< bit-mapped layer visible bits
+    LSET    m_LayerVisible;                 ///< bit-mapped layer visible bits
     bool    m_IgnoreNonVisibleLayers;
 
     bool    m_IgnoreLockedItems;
@@ -407,11 +407,10 @@ public:
      * @param aVisibleLayerMask = current visible layers (bit mask)
      * @param aPreferredLayer = the layer to search first
      */
-    GENERAL_COLLECTORS_GUIDE( LAYER_MSK aVisibleLayerMask, LAYER_NUM aPreferredLayer )
+    GENERAL_COLLECTORS_GUIDE( LSET aVisibleLayerMask, LAYER_ID aPreferredLayer )
     {
-        m_PreferredLayer            = LAYER_N_FRONT;
+        m_PreferredLayer            = aPreferredLayer;
         m_IgnorePreferredLayer      = false;
-        m_LayerLocked               = NO_LAYERS;
         m_LayerVisible              = aVisibleLayerMask;
         m_IgnoreLockedLayers        = true;
         m_IgnoreNonVisibleLayers    = true;
@@ -422,8 +421,6 @@ public:
 #else
         m_IncludeSecondary          = true;
 #endif
-
-        m_PreferredLayer            = aPreferredLayer;
 
         m_IgnoreMTextsMarkedNoShow  = true; // g_ModuleTextNOVColor;
         m_IgnoreMTextsOnCopper      = true;
@@ -443,59 +440,52 @@ public:
      * Function IsLayerLocked
      * @return bool - true if the given layer is locked, else false.
      */
-    bool IsLayerLocked( LAYER_NUM aLayer ) const  
-    {  
-        return GetLayerMask( aLayer ) & m_LayerLocked; 
-    }
-    void SetLayerLocked( LAYER_NUM aLayer, bool isLocked )
+    bool IsLayerLocked( LAYER_ID aLayerId ) const
     {
-        if( isLocked )
-            m_LayerLocked |= GetLayerMask( aLayer );
-        else
-            m_LayerLocked &= ~GetLayerMask( aLayer );
+        return m_LayerLocked[aLayerId];
     }
 
+    void SetLayerLocked( LAYER_ID aLayerId, bool isLocked )
+    {
+        m_LayerLocked.set( aLayerId, isLocked );
+    }
 
     /**
      * Function IsLayerVisible
      * @return bool - true if the given layer is visible, else false.
      */
-    bool IsLayerVisible( LAYER_NUM aLayer ) const 
-    { 
-        return GetLayerMask( aLayer ) & m_LayerVisible; 
-    }
-    void SetLayerVisible( LAYER_NUM aLayer, bool isVisible )
+    bool IsLayerVisible( LAYER_ID aLayerId ) const
     {
-        if( isVisible )
-            m_LayerVisible |= GetLayerMask( aLayer );
-        else
-            m_LayerVisible &= ~GetLayerMask( aLayer );
+        return m_LayerVisible[aLayerId];
     }
-    void SetLayerVisibleBits( LAYER_MSK aLayerBits ) { m_LayerVisible = aLayerBits; }
-
+    void SetLayerVisible( LAYER_ID aLayerId, bool isVisible )
+    {
+        m_LayerVisible.set( aLayerId, isVisible );
+    }
+    void SetLayerVisibleBits( LSET aLayerBits ) { m_LayerVisible = aLayerBits; }
 
     /**
      * Function IgnoreLockedLayers
      * @return bool - true if should ignore locked layers, else false.
      */
-    bool IgnoreLockedLayers() const { return m_IgnoreLockedLayers; }
-    void SetIgnoreLockedLayers( bool ignore ) { m_IgnoreLockedLayers = ignore; }
+    bool IgnoreLockedLayers() const                 { return m_IgnoreLockedLayers; }
+    void SetIgnoreLockedLayers( bool ignore )       { m_IgnoreLockedLayers = ignore; }
 
 
     /**
      * Function IgnoredNonVisibleLayers
      * @return bool - true if should ignore non-visible layers, else false.
      */
-    bool IgnoreNonVisibleLayers() const { return m_IgnoreNonVisibleLayers; }
-    void SetIgnoreNonVisibleLayers( bool ignore ) { m_IgnoreLockedLayers = ignore; }
+    bool IgnoreNonVisibleLayers() const             { return m_IgnoreNonVisibleLayers; }
+    void SetIgnoreNonVisibleLayers( bool ignore )   { m_IgnoreLockedLayers = ignore; }
 
 
     /**
      * Function GetPreferredLayer
      * @return int - the preferred layer for HitTest()ing.
      */
-    LAYER_NUM GetPreferredLayer() const { return m_PreferredLayer; }
-    void SetPreferredLayer( LAYER_NUM aLayer )  { m_PreferredLayer = aLayer; }
+    LAYER_ID GetPreferredLayer() const             { return m_PreferredLayer; }
+    void SetPreferredLayer( LAYER_ID aLayer )      { m_PreferredLayer = aLayer; }
 
 
     /**
@@ -503,16 +493,16 @@ public:
      * provides wildcard behavior regarding the preferred layer.
      * @return bool - true if should ignore preferred layer, else false.
      */
-    bool IgnorePreferredLayer() const { return  m_IgnorePreferredLayer; }
-    void SetIgnorePreferredLayer( bool ignore )  { m_IgnorePreferredLayer = ignore; }
+    bool IgnorePreferredLayer() const               { return  m_IgnorePreferredLayer; }
+    void SetIgnorePreferredLayer( bool ignore )     { m_IgnorePreferredLayer = ignore; }
 
 
     /**
      * Function IgnoreLockedItems
      * @return bool - true if should ignore locked items, else false.
      */
-    bool IgnoreLockedItems() const  { return m_IgnoreLockedItems; }
-    void SetIgnoreLockedItems( bool ignore ) { m_IgnoreLockedItems = ignore; }
+    bool IgnoreLockedItems() const                  { return m_IgnoreLockedItems; }
+    void SetIgnoreLockedItems( bool ignore )        { m_IgnoreLockedItems = ignore; }
 
 
     /**

@@ -38,18 +38,18 @@
 ZONE_SETTINGS::ZONE_SETTINGS()
 {
     m_ZonePriority = 0;
-    m_FillMode = 0;                                            // Mode for filling zone : 1 use segments, 0 use polygons
+    m_FillMode = 0;                                             // Mode for filling zone : 1 use segments, 0 use polygons
     // Clearance value
     m_ZoneClearance      = Mils2iu( ZONE_CLEARANCE_MIL );
     // Min thickness value in filled areas (this is the minimum width of copper to fill solid areas) :
     m_ZoneMinThickness   = Mils2iu( ZONE_THICKNESS_MIL );
-    m_NetcodeSelection   = 0;                                  // Net code selection for the current zone
-    m_CurrentZone_Layer  = FIRST_LAYER;                        // Layer used to create the current zone
-    m_Zone_HatchingStyle = CPolyLine::DIAGONAL_EDGE;           // Option to show the zone area (outlines only, short hatches or full hatches
+    m_NetcodeSelection   = 0;                                   // Net code selection for the current zone
+    m_CurrentZone_Layer  = F_Cu;                                // Layer used to create the current zone
+    m_Zone_HatchingStyle = CPolyLine::DIAGONAL_EDGE;            // Option to show the zone area (outlines only, short hatches or full hatches
 
-    m_ArcToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;  // Option to select number of segments to approximate a circle
-                                                               // ARC_APPROX_SEGMENTS_COUNT_LOW_DEF
-                                                               // or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF segments
+    m_ArcToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;   // Option to select number of segments to approximate a circle
+                                                                // ARC_APPROX_SEGMENTS_COUNT_LOW_DEF
+                                                                // or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF segments
 
     // thickness of the gap in thermal reliefs:
     m_ThermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );

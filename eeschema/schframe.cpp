@@ -934,7 +934,7 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMask, bool aPrintMirrorMode,
+void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode,
                                 void* aData )
 {
     GetScreen()->Draw( m_canvas, aDC, GR_DEFAULT_DRAWMODE );
