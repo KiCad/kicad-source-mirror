@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
  *
@@ -106,7 +107,7 @@ enum LAYER_ID
     Edge_Cuts,
     Margin,
 
-    F_CrtYd,        // CrtYd & Body are footprint only
+    F_CrtYd,        // CrtYd & Fab are footprint only
     B_CrtYd,
     F_Fab,
     B_Fab,

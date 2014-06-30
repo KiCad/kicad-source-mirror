@@ -644,7 +644,7 @@ public:
      * @return wxString -   the layer name, which for copper layers may
      *                      be custom, else standard.
      */
-    wxString GetLayerName( LAYER_ID aLayer ) const;
+    const wxString GetLayerName( LAYER_ID aLayer ) const;
 
     /**
      * Function SetLayerName

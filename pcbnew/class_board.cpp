@@ -323,11 +323,8 @@ bool BOARD::SetLayer( LAYER_ID aIndex, const LAYER& aLayer )
 }
 
 
-wxString BOARD::GetLayerName( LAYER_ID aLayer ) const
+const wxString BOARD::GetLayerName( LAYER_ID aLayer ) const
 {
-    if( !IsPcbLayer( aLayer ) )
-        return wxEmptyString;
-
     // All layer names are stored in the BOARD.
     if( IsLayerEnabled( aLayer ) )
     {

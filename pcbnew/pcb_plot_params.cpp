@@ -129,13 +129,10 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(%s 0x%s)\n", getTokenName( T_layerselection ),
                        m_layerSelection.FmtHex().c_str() );
 
-   aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
-                       m_useGerberExtensions ? trueStr : falseStr );
-
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
                        m_useGerberExtensions ? trueStr : falseStr );
 
-   if( m_useGerberAttributes )  // save this option only if active,
+    if( m_useGerberAttributes )  // save this option only if active,
                                 // to avoid incompatibility with older Pcbnew version
         aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ), trueStr );
 
@@ -153,10 +150,12 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_useAuxOrigin ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpennumber ),
                        m_HPGLPenNum );
-//  Obsolete parameter, pen speed is no more managed, because hpgl format
-// is now an export format, and for this, pen speed has no meaning
-//    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpenspeed ),
-//                       m_HPGLPenSpeed );
+
+    //  Obsolete parameter, pen speed is no more managed, because hpgl format
+    // is now an export format, and for this, pen speed has no meaning
+    //    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpenspeed ),
+    //                       m_HPGLPenSpeed );
+
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpenspeed ),
                        m_HPGLPenSpeed );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpendiameter ),
