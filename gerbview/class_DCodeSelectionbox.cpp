@@ -7,6 +7,7 @@
 #include <wxstruct.h>
 #include <class_drawpanel.h>
 #include <gerbview.h>
+#include <dcode.h>
 
 #include <class_DCodeSelectionbox.h>
 

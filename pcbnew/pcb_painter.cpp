@@ -61,7 +61,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 
 void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings )
 {
-    for( int i = 0; i < NB_LAYERS; i++ )
+    for( int i = 0; i < LAYER_ID_COUNT; i++ )
     {
         m_layerColors[i] = m_legacyColorMap[aSettings->GetLayerColor( i )];
     }
@@ -84,8 +84,10 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
     m_layerColors[ITEM_GAL_LAYER( DRC_VISIBLE )]                    = COLOR4D( 1.0, 0.0, 0.0, 0.8 );
 
     // Netnames for copper layers
-    for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
+    for( LSEQ cu = LSET::AllCuMask().CuStack();  cu;  ++cu )
     {
+        LAYER_ID layer = *cu;
+
         m_layerColors[GetNetnameLayer( layer )] = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
     }
 
@@ -500,7 +502,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         size  = VECTOR2D( aPad->GetDrillSize() ) / 2.0;
         shape = aPad->GetDrillShape() == PAD_DRILL_OBLONG ? PAD_OVAL : PAD_CIRCLE;
     }
-    else if( aLayer == SOLDERMASK_N_FRONT || aLayer == SOLDERMASK_N_BACK )
+    else if( aLayer == F_Mask || aLayer == B_Mask )
     {
         // Drawing soldermask
         int soldermaskMargin = aPad->GetSolderMaskMargin();
@@ -510,7 +512,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                           aPad->GetSize().y / 2.0 + soldermaskMargin );
         shape = aPad->GetShape();
     }
-    else if( aLayer == SOLDERPASTE_N_FRONT || aLayer == SOLDERPASTE_N_BACK )
+    else if( aLayer == F_Paste || aLayer == B_Paste )
     {
         // Drawing solderpaste
         int solderpasteMargin = aPad->GetLocalSolderPasteMargin();

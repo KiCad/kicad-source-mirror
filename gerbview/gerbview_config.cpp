@@ -38,13 +38,12 @@
 #include <colors_selection.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <hotkeys.h>
 #include <dialog_hotkeys_editor.h>
 
 
 #define GROUP wxT("/gerbview")
-
-#define INSETUP true
 
 
 void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )

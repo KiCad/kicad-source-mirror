@@ -359,7 +359,7 @@ static bool isRoundKeepout( D_PAD* aPad )
         if( aPad->GetDrillSize().x >= aPad->GetSize().x )
             return true;
 
-        if( (aPad->GetLayerMask() & ALL_CU_LAYERS) == 0 )
+        if( !( aPad->GetLayerSet() & LSET::AllCuMask() ).any() )
             return true;
     }
 
@@ -393,11 +393,13 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
     PADSTACK*   padstack = new PADSTACK();
 
     int         reportedLayers = 0;         // how many in reported padstack
-    const char* layerName[NB_COPPER_LAYERS];
+    const char* layerName[MAX_CU_LAYERS];
 
     uniqifier = '[';
 
-    bool onAllCopperLayers = ( (aPad->GetLayerMask() & ALL_CU_LAYERS) == ALL_CU_LAYERS );
+    static const LSET all_cu = LSET::AllCuMask();
+
+    bool onAllCopperLayers = ( (aPad->GetLayerSet() & all_cu) == all_cu );
 
     if( onAllCopperLayers )
         uniqifier += 'A'; // A for all layers
@@ -405,7 +407,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
     const int copperCount = aBoard->GetCopperLayerCount();
     for( int layer=0; layer<copperCount; ++layer )
     {
-        LAYER_NUM kilayer = pcbLayer2kicad[layer];
+        LAYER_ID kilayer = pcbLayer2kicad[layer];
 
         if( onAllCopperLayers || aPad->IsOnLayer( kilayer ) )
         {
@@ -836,8 +838,8 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
 
 PADSTACK* SPECCTRA_DB::makeVia( const ::VIA* aVia )
 {
-    LAYER_NUM topLayerNum;
-    LAYER_NUM botLayerNum;
+    LAYER_ID    topLayerNum;
+    LAYER_ID    botLayerNum;
 
     aVia->LayerPair( &topLayerNum, &botLayerNum );
 
@@ -890,7 +892,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
     const int   STEPS = 36;     // for a segmentation of an arc of 360 degrees
 
     // Get all the DRAWSEGMENTS and module graphics into 'items',
-    // then keep only those on layer == EDGE_N.
+    // then keep only those on layer == Edge_Cuts.
 
     static const KICAD_T  scan_graphics[] = { PCB_LINE_T, PCB_MODULE_EDGE_T, EOT };
 
@@ -898,11 +900,11 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 
     for( int i = 0; i<items.GetCount(); )
     {
-        if( items[i]->GetLayer() != EDGE_N )
+        if( items[i]->GetLayer() != Edge_Cuts )
         {
             items.Remove( i );
         }
-        else    // remove graphics not on EDGE_N layer
+        else    // remove graphics not on Edge_Cuts layer
         {
             DBG( items[i]->Show( 0, std::cout );)
             ++i;
@@ -2137,7 +2139,7 @@ void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
         module->SetFlag( 0 );
-        if( module->GetLayer() == LAYER_N_BACK )
+        if( module->GetLayer() == B_Cu )
         {
             module->Flip( module->GetPosition() );
             module->SetFlag( 1 );

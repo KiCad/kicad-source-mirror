@@ -173,7 +173,8 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     int l_trace;
     int mode;
     int radius;
-    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+
+    LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     EDA_COLOR_T color;
 
     BOARD * brd =  GetBoard( );
@@ -185,13 +186,12 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
     if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) &&  DisplayOpt.ContrastModeDisplay )
     {
-        if( !IsOnLayer( curr_layer ) && !IsOnLayer( EDGE_N ) )
+        if( !IsOnLayer( curr_layer ) && !IsOnLayer( Edge_Cuts ) )
             ColorTurnToDarkDarkGray( &color );
     }
 
-
     GRSetDrawMode( DC, draw_mode );
-    l_trace = m_Width >> 1;  /* half trace width */
+    l_trace = m_Width >> 1;         // half trace width
 
     // Line start point or Circle and Arc center
     ux0 = m_Start.x + aOffset.x;
@@ -246,7 +246,6 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
             if( StAngle < EndAngle )
                 EXCHG( StAngle, EndAngle );
         }
-
 
         if( mode == LINE )
             GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle, radius, color );
@@ -612,4 +611,3 @@ EDA_ITEM* DRAWSEGMENT::Clone() const
 {
     return new DRAWSEGMENT( *this );
 }
-

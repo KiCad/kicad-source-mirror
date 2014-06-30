@@ -37,7 +37,6 @@
 #include <gerbview.h>
 #include <class_gbr_layout.h>
 #include <class_gbr_screen.h>
-#include <layers_id_colors_and_visibility.h>
 
 #define NO_AVAILABLE_LAYERS UNDEFINED_LAYER
 
@@ -167,7 +166,7 @@ public:
      * different radiobutton is clicked on) prior to then clicking on the "Deselect"
      * button provided within the "Layer selection:" dialog box).
      */
-    LAYER_NUM SelectPCBLayer( LAYER_NUM aDefaultLayer, int aOpperLayerCount, bool aNullLayer = false );
+    int SelectPCBLayer( int aDefaultLayer, int aOpperLayerCount, bool aNullLayer = false );
 
 protected:
     GERBER_LAYER_WIDGET*    m_LayersManager;
@@ -306,9 +305,9 @@ public:
      * Function GetVisibleLayers
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * Returns a bit-mask of all the layers that are visible
-     * @return int - the visible layers in bit-mapped form.
+     * @return long - the visible layers in bit-mapped form.
      */
-    LAYER_MSK GetVisibleLayers() const;
+    long GetVisibleLayers() const;
 
     /**
      * Function SetVisibleLayers
@@ -316,7 +315,7 @@ public:
      * changes the bit-mask of visible layers
      * @param aLayerMask = The new bit-mask of visible layers
      */
-    void    SetVisibleLayers( LAYER_MSK aLayerMask );
+    void    SetVisibleLayers( long aLayerMask );
 
     /**
      * Function IsLayerVisible
@@ -324,7 +323,7 @@ public:
      * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool    IsLayerVisible( LAYER_NUM aLayer ) const;
+    bool    IsLayerVisible( int aLayer ) const;
 
     /**
      * Function GetVisibleElementColor
@@ -338,13 +337,13 @@ public:
      * Function GetLayerColor
      * gets a layer color for any valid layer.
      */
-    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const;
+    EDA_COLOR_T GetLayerColor( int aLayer ) const;
 
     /**
      * Function SetLayerColor
      * changes a layer color for any valid layer.
      */
-    void    SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor );
+    void    SetLayerColor( int aLayer, EDA_COLOR_T aColor );
 
     /**
      * Function GetNegativeItemsColor
@@ -396,13 +395,13 @@ public:
      * will change the currently active layer to \a aLayer and also
      * update the GERBER_LAYER_WIDGET.
      */
-    void    setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
+    void    setActiveLayer( int aLayer, bool doLayerWidgetUpdate = true );
 
     /**
      * Function getActiveLayer
      * returns the active layer
      */
-    LAYER_NUM getActiveLayer();
+    int getActiveLayer();
 
     /**
      * Function getNextAvailableLayer
@@ -411,7 +410,7 @@ public:
      * @param aLayer The first layer to search.
      * @return The first empty layer found or NO_AVAILABLE_LAYERS.
      */
-    LAYER_NUM getNextAvailableLayer( LAYER_NUM aLayer = FIRST_LAYER ) const;
+    int getNextAvailableLayer( int aLayer = 0 ) const;
 
     bool hasAvailableLayers() const
     {
@@ -667,7 +666,7 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void    PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer, bool aPrintMirrorMode,
+    virtual void    PrintPage( wxDC* aDC, LSET aPrintMasklayer, bool aPrintMirrorMode,
                                void* aData = NULL );
 
     /**

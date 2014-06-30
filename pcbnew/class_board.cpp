@@ -81,14 +81,14 @@ BOARD::BOARD() :
 
     BuildListOfNets();                      // prepare pad and netlist containers.
 
-    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
+    for( LAYER_NUM layer = 0; layer < LAYER_ID_COUNT; ++layer )
     {
-        m_Layer[layer].m_Name = GetStandardLayerName( layer );
+        m_Layer[layer].m_name = GetStandardLayerName( ToLAYER_ID( layer ) );
 
-        if( layer <= LAST_COPPER_LAYER )
-            m_Layer[layer].m_Type = LT_SIGNAL;
+        if( IsCopperLayer( layer ) )
+            m_Layer[layer].m_type = LT_SIGNAL;
         else
-            m_Layer[layer].m_Type = LT_UNDEFINED;
+            m_Layer[layer].m_type = LT_UNDEFINED;
     }
 
     NETCLASSPTR defaultClass = m_designSettings.GetDefault();
@@ -188,14 +188,14 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
 }
 
 
-void BOARD::chainMarkedSegments( wxPoint aPosition, LAYER_MSK aLayerMask, TRACK_PTRS* aList )
+void BOARD::chainMarkedSegments( wxPoint aPosition, LSET aLayerMask, TRACK_PTRS* aList )
 {
-    TRACK* segment;             // The current segment being analyzed.
-    TRACK* via;                 // The via identified, eventually destroy
-    TRACK* candidate;           // The end segment to destroy (or NULL = segment)
-    int NbSegm;
+    TRACK*  segment;            // The current segment being analyzed.
+    TRACK*  via;                // The via identified, eventually destroy
+    TRACK*  candidate;          // The end segment to destroy (or NULL = segment)
+    int     NbSegm;
 
-    if( m_Track == NULL )
+    if( !m_Track )
         return;
 
     /* Set the BUSY flag of all connected segments, first search starting at
@@ -227,7 +227,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, LAYER_MSK aLayerMask, TRACK_
 
         if( via )
         {
-            aLayerMask = via->GetLayerMask();
+            aLayerMask = via->GetLayerSet();
 
             aList->push_back( via );
         }
@@ -273,7 +273,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, LAYER_MSK aLayerMask, TRACK_
              * candidate:
              * we must analyze connections to its other end
              */
-            aLayerMask = candidate->GetLayerMask();
+            aLayerMask = candidate->GetLayerSet();
 
             if( aPosition == candidate->GetStart() )
             {
@@ -311,9 +311,9 @@ void BOARD::PopHighLight()
 }
 
 
-bool BOARD::SetLayer( LAYER_NUM aIndex, const LAYER& aLayer )
+bool BOARD::SetLayer( LAYER_ID aIndex, const LAYER& aLayer )
 {
-    if( aIndex < NB_COPPER_LAYERS )
+    if( unsigned( aIndex ) < DIM( m_Layer ) )
     {
         m_Layer[ aIndex ] = aLayer;
         return true;
@@ -323,7 +323,7 @@ bool BOARD::SetLayer( LAYER_NUM aIndex, const LAYER& aLayer )
 }
 
 
-wxString BOARD::GetLayerName( LAYER_NUM aLayer ) const
+wxString BOARD::GetLayerName( LAYER_ID aLayer ) const
 {
     if( !IsPcbLayer( aLayer ) )
         return wxEmptyString;
@@ -336,60 +336,14 @@ wxString BOARD::GetLayerName( LAYER_NUM aLayer ) const
         // For copper layers, return the actual copper layer name,
         // otherwise return the Standard English layer name.
         if( IsCopperLayer( aLayer ) )
-            return m_Layer[aLayer].m_Name;
+            return m_Layer[aLayer].m_name;
     }
 
     return GetStandardLayerName( aLayer );
 }
 
 
-wxString BOARD::GetStandardLayerName( LAYER_NUM aLayerNumber )
-{
-    const wxChar* txt;
-
-    // These are only default layer names.  For Pcbnew the copper names
-    // may be over-ridden in the BOARD (*.brd) file.
-
-    // Use a switch to explicitly show the mapping more clearly
-    switch( aLayerNumber )
-    {
-    case LAYER_N_FRONT:         txt = wxT( "F.Cu" );            break;
-    case LAYER_N_2:             txt = wxT( "Inner1.Cu" );       break;
-    case LAYER_N_3:             txt = wxT( "Inner2.Cu" );       break;
-    case LAYER_N_4:             txt = wxT( "Inner3.Cu" );       break;
-    case LAYER_N_5:             txt = wxT( "Inner4.Cu" );       break;
-    case LAYER_N_6:             txt = wxT( "Inner5.Cu" );       break;
-    case LAYER_N_7:             txt = wxT( "Inner6.Cu" );       break;
-    case LAYER_N_8:             txt = wxT( "Inner7.Cu" );       break;
-    case LAYER_N_9:             txt = wxT( "Inner8.Cu" );       break;
-    case LAYER_N_10:            txt = wxT( "Inner9.Cu" );       break;
-    case LAYER_N_11:            txt = wxT( "Inner10.Cu" );      break;
-    case LAYER_N_12:            txt = wxT( "Inner11.Cu" );      break;
-    case LAYER_N_13:            txt = wxT( "Inner12.Cu" );      break;
-    case LAYER_N_14:            txt = wxT( "Inner13.Cu" );      break;
-    case LAYER_N_15:            txt = wxT( "Inner14.Cu" );      break;
-    case LAYER_N_BACK:          txt = wxT( "B.Cu" );            break;
-    case ADHESIVE_N_BACK:       txt = wxT( "B.Adhes" );         break;
-    case ADHESIVE_N_FRONT:      txt = wxT( "F.Adhes" );         break;
-    case SOLDERPASTE_N_BACK:    txt = wxT( "B.Paste" );         break;
-    case SOLDERPASTE_N_FRONT:   txt = wxT( "F.Paste" );         break;
-    case SILKSCREEN_N_BACK:     txt = wxT( "B.SilkS" );         break;
-    case SILKSCREEN_N_FRONT:    txt = wxT( "F.SilkS" );         break;
-    case SOLDERMASK_N_BACK:     txt = wxT( "B.Mask" );          break;
-    case SOLDERMASK_N_FRONT:    txt = wxT( "F.Mask" );          break;
-    case DRAW_N:                txt = wxT( "Dwgs.User" );       break;
-    case COMMENT_N:             txt = wxT( "Cmts.User" );       break;
-    case ECO1_N:                txt = wxT( "Eco1.User" );       break;
-    case ECO2_N:                txt = wxT( "Eco2.User" );       break;
-    case EDGE_N:                txt = wxT( "Edge.Cuts" );       break;
-    default:                    txt = wxT( "BAD_INDEX" );       break;
-    }
-
-    return txt;     // wxString constructed once here
-}
-
-
-bool BOARD::SetLayerName( LAYER_NUM aLayer, const wxString& aLayerName )
+bool BOARD::SetLayerName( LAYER_ID aLayer, const wxString& aLayerName )
 {
     if( !IsCopperLayer( aLayer ) )
         return false;
@@ -401,20 +355,32 @@ bool BOARD::SetLayerName( LAYER_NUM aLayer, const wxString& aLayerName )
     if( aLayerName.Find( wxChar( '"' ) ) != wxNOT_FOUND )
         return false;
 
-    wxString NameTemp = aLayerName;
+    wxString nameTemp = aLayerName;
 
     // replace any spaces with underscores before we do any comparing
-    NameTemp.Replace( wxT( " " ), wxT( "_" ) );
+    nameTemp.Replace( wxT( " " ), wxT( "_" ) );
 
     if( IsLayerEnabled( aLayer ) )
     {
+#if 0
         for( LAYER_NUM i = FIRST_COPPER_LAYER; i < NB_COPPER_LAYERS; ++i )
         {
-            if( i != aLayer && IsLayerEnabled( i ) && NameTemp == m_Layer[i].m_Name )
+            if( i != aLayer && IsLayerEnabled( i ) && nameTemp == m_Layer[i].m_Name )
                 return false;
         }
+#else
+        for( LSEQ cu = GetEnabledLayers().CuStack();  cu;  ++cu )
+        {
+            LAYER_ID id = *cu;
 
-        m_Layer[aLayer].m_Name = NameTemp;
+            // veto changing the name if it exists elsewhere.
+            if( id != aLayer && nameTemp == m_Layer[id].m_name )
+//            if( id != aLayer && nameTemp == wxString( m_Layer[id].m_name ) )
+                return false;
+        }
+#endif
+
+        m_Layer[aLayer].m_name = nameTemp;
 
         return true;
     }
@@ -423,7 +389,7 @@ bool BOARD::SetLayerName( LAYER_NUM aLayer, const wxString& aLayerName )
 }
 
 
-LAYER_T BOARD::GetLayerType( LAYER_NUM aLayer ) const
+LAYER_T BOARD::GetLayerType( LAYER_ID aLayer ) const
 {
     if( !IsCopperLayer( aLayer ) )
         return LT_SIGNAL;
@@ -431,13 +397,13 @@ LAYER_T BOARD::GetLayerType( LAYER_NUM aLayer ) const
     //@@IMB: The original test was broken due to the discontinuity
     // in the layer sequence.
     if( IsLayerEnabled( aLayer ) )
-        return m_Layer[aLayer].m_Type;
+        return m_Layer[aLayer].m_type;
 
     return LT_SIGNAL;
 }
 
 
-bool BOARD::SetLayerType( LAYER_NUM aLayer, LAYER_T aLayerType )
+bool BOARD::SetLayerType( LAYER_ID aLayer, LAYER_T aLayerType )
 {
     if( !IsCopperLayer( aLayer ) )
         return false;
@@ -446,7 +412,7 @@ bool BOARD::SetLayerType( LAYER_NUM aLayer, LAYER_T aLayerType )
     // in the layer sequence.
     if( IsLayerEnabled( aLayer ) )
     {
-        m_Layer[aLayer].m_Type = aLayerType;
+        m_Layer[aLayer].m_type = aLayerType;
         return true;
     }
 
@@ -509,25 +475,25 @@ void BOARD::SetCopperLayerCount( int aCount )
 }
 
 
-LAYER_MSK BOARD::GetEnabledLayers() const
+LSET BOARD::GetEnabledLayers() const
 {
     return m_designSettings.GetEnabledLayers();
 }
 
 
-LAYER_MSK BOARD::GetVisibleLayers() const
+LSET BOARD::GetVisibleLayers() const
 {
     return m_designSettings.GetVisibleLayers();
 }
 
 
-void BOARD::SetEnabledLayers( LAYER_MSK aLayerMask )
+void BOARD::SetEnabledLayers( LSET aLayerMask )
 {
     m_designSettings.SetEnabledLayers( aLayerMask );
 }
 
 
-void BOARD::SetVisibleLayers( LAYER_MSK aLayerMask )
+void BOARD::SetVisibleLayers( LSET aLayerMask )
 {
     m_designSettings.SetVisibleLayers( aLayerMask );
 }
@@ -548,7 +514,7 @@ void BOARD::SetVisibleElements( int aMask )
 
 void BOARD::SetVisibleAlls()
 {
-    SetVisibleLayers( FULL_LAYERS );
+    SetVisibleLayers( LSET().set() );
 
     // Call SetElementVisibility for each item,
     // to ensure specific calculations that can be needed by some items
@@ -652,26 +618,26 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, EDA_COLOR_T aColor )
 }
 
 
-void BOARD::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
+void BOARD::SetLayerColor( LAYER_ID aLayer, EDA_COLOR_T aColor )
 {
     GetColorsSettings()->SetLayerColor( aLayer, aColor );
 }
 
 
-EDA_COLOR_T BOARD::GetLayerColor( LAYER_NUM aLayer ) const
+EDA_COLOR_T BOARD::GetLayerColor( LAYER_ID aLayer ) const
 {
     return GetColorsSettings()->GetLayerColor( aLayer );
 }
 
 
-bool BOARD::IsModuleLayerVisible( LAYER_NUM layer )
+bool BOARD::IsModuleLayerVisible( LAYER_ID layer )
 {
     switch( layer )
     {
-    case LAYER_N_FRONT:
+    case F_Cu:
         return IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) );
 
-    case LAYER_N_BACK:
+    case B_Cu:
         return IsElementVisible( PCB_VISIBLE(MOD_BK_VISIBLE) );
 
     default:
@@ -873,7 +839,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
     // Check segments, dimensions, texts, and fiducials
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
-        if( aBoardEdgesOnly && (item->Type() != PCB_LINE_T || item->GetLayer() != EDGE_N ) )
+        if( aBoardEdgesOnly && (item->Type() != PCB_LINE_T || item->GetLayer() != Edge_Cuts ) )
             continue;
 
         if( !hasItems )
@@ -1198,7 +1164,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
  *               D_PAD*  pad = (D_PAD*) item;
  *               if( pad->HitTest( refPos ) )
  *               {
- *                   if( layer_mask & pad->GetLayerMask() )
+ *                   if( layer_mask & pad->GetLayerSet() )
  *                   {
  *                       found = item;
  *                       return SEARCH_QUIT;
@@ -1367,7 +1333,7 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 }
 
 
-void BOARD::RedrawAreasOutlines( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, LAYER_NUM aLayer )
+void BOARD::RedrawAreasOutlines( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, LAYER_ID aLayer )
 {
     if( !aDC )
         return;
@@ -1382,7 +1348,7 @@ void BOARD::RedrawAreasOutlines( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE a
 }
 
 
-void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, LAYER_NUM aLayer )
+void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, LAYER_ID aLayer )
 {
     if( !aDC )
         return;
@@ -1398,9 +1364,7 @@ void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDr
 
 
 ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
-                                                LAYER_NUM      aStartLayer,
-                                                LAYER_NUM      aEndLayer,
-                                                int aNetCode )
+    LAYER_ID aStartLayer, LAYER_ID aEndLayer,  int aNetCode )
 {
     if( aEndLayer < 0 )
         aEndLayer = aStartLayer;
@@ -1413,7 +1377,7 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
         ZONE_CONTAINER* area  = m_ZoneDescriptorList[ia];
         LAYER_NUM       layer = area->GetLayer();
 
-        if( (layer < aStartLayer) || (layer > aEndLayer) )
+        if( layer < aStartLayer || layer > aEndLayer )
             continue;
 
         // In locate functions we must skip tagged items with BUSY flag set.
@@ -1431,32 +1395,34 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
 }
 
 
-int BOARD::SetAreasNetCodesFromNetNames( void )
+int BOARD::SetAreasNetCodesFromNetNames()
 {
     int error_count = 0;
 
     for( int ii = 0; ii < GetAreaCount(); ii++ )
     {
-        if( !GetArea( ii )->IsOnCopperLayer() )
+        ZONE_CONTAINER* it = GetArea( ii );
+
+        if( !it->IsOnCopperLayer() )
         {
-            GetArea( ii )->SetNetCode( NETINFO_LIST::UNCONNECTED );
+            it->SetNetCode( NETINFO_LIST::UNCONNECTED );
             continue;
         }
 
-        if( GetArea( ii )->GetNetCode() != 0 )      // i.e. if this zone is connected to a net
+        if( it->GetNetCode() != 0 )      // i.e. if this zone is connected to a net
         {
-            const NETINFO_ITEM* net = GetArea( ii )->GetNet();
+            const NETINFO_ITEM* net = it->GetNet();
 
             if( net )
             {
-                GetArea( ii )->SetNetCode( net->GetNet() );
+                it->SetNetCode( net->GetNet() );
             }
             else
             {
                 error_count++;
 
                 // keep Net Name and set m_NetCode to -1 : error flag.
-                GetArea( ii )->SetNetCode( -1 );
+                it->SetNetCode( -1 );
             }
         }
     }
@@ -1465,7 +1431,7 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
 }
 
 
-VIA* BOARD::GetViaByPosition( const wxPoint& aPosition, LAYER_NUM aLayer) const
+VIA* BOARD::GetViaByPosition( const wxPoint& aPosition, LAYER_ID aLayer) const
 {
     for( VIA *via = GetFirstVia( m_Track); via; via = GetFirstVia( via->Next() ) )
     {
@@ -1479,42 +1445,42 @@ VIA* BOARD::GetViaByPosition( const wxPoint& aPosition, LAYER_NUM aLayer) const
 }
 
 
-D_PAD* BOARD::GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask )
+D_PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerMask )
 {
-    D_PAD* pad = NULL;
+    if( !aLayerMask.any() )
+        aLayerMask = LSET::AllCuMask();
 
-    for( MODULE* module = m_Modules;  module && ( pad == NULL );  module = module->Next() )
+    for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
-        if( aLayerMask )
-            pad = module->GetPad( aPosition, aLayerMask );
-        else
-            pad = module->GetPad( aPosition, ALL_LAYERS );
+        D_PAD* pad = module->GetPad( aPosition, aLayerMask );
+
+        if( pad )
+            return pad;
     }
 
-    return pad;
+    return NULL;
 }
 
 
 D_PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
 {
-    D_PAD*  pad = NULL;
-    const wxPoint &aPosition = aTrace->GetEndPoint( aEndPoint );
+    const wxPoint& aPosition = aTrace->GetEndPoint( aEndPoint );
 
-    LAYER_MSK aLayerMask = GetLayerMask( aTrace->GetLayer() );
+    LSET aLayerMask( aTrace->GetLayer() );
 
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
-        pad = module->GetPad( aPosition, aLayerMask );
+        D_PAD*  pad = module->GetPad( aPosition, aLayerMask );
 
-        if( pad != NULL )
-            break;
+        if( pad )
+            return pad;
     }
 
-    return pad;
+    return NULL;
 }
 
 
-D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LAYER_MSK aLayerMask )
+D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerMask )
 {
     for( unsigned i=0; i<GetPadCount();  ++i )
     {
@@ -1523,8 +1489,8 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LAYER_MSK aLayerMask )
         if( pad->GetPosition() != aPosition )
             continue;
 
-        /* Pad found, it must be on the correct layer */
-        if( pad->GetLayerMask() & aLayerMask )
+        // Pad found, it must be on the correct layer
+        if( ( pad->GetLayerSet() & aLayerMask ).any() )
             return pad;
     }
 
@@ -1532,7 +1498,7 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LAYER_MSK aLayerMask )
 }
 
 
-D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, LAYER_MSK aLayerMask )
+D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, LSET aLayerMask )
 {
     // Search the aPoint coordinates in aPadList
     // aPadList is sorted by X then Y values, and a fast binary search is used
@@ -1556,7 +1522,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, L
         if( pad->GetPosition() == aPosition )       // candidate found
         {
             // The pad must match the layer mask:
-            if( aLayerMask & pad->GetLayerMask())
+            if( ( aLayerMask & pad->GetLayerSet() ).any() )
                 return pad;
 
             // More than one pad can be at aPosition
@@ -1570,7 +1536,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, L
                 if( pad->GetPosition() != aPosition )
                     break;
 
-                if( (aLayerMask & pad->GetLayerMask()) != 0 )
+                if( (aLayerMask & pad->GetLayerSet()) != 0 )
                     return pad;
             }
             // search previous
@@ -1581,7 +1547,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, L
                 if( pad->GetPosition() != aPosition )
                     break;
 
-                if( (aLayerMask & pad->GetLayerMask()) != 0 )
+                if( (aLayerMask & pad->GetLayerSet()) != 0 )
                     return pad;
             }
 
@@ -1661,11 +1627,11 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNe
 
 
 TRACK* BOARD::GetTrack( TRACK* aTrace, const wxPoint& aPosition,
-        LAYER_MSK aLayerMask ) const
+        LSET aLayerMask ) const
 {
     for( TRACK* track = aTrace; track; track = track->Next() )
     {
-        LAYER_NUM layer = track->GetLayer();
+        LAYER_ID layer = track->GetLayer();
 
         if( track->GetState( BUSY | IS_DELETED ) )
             continue;
@@ -1680,8 +1646,8 @@ TRACK* BOARD::GetTrack( TRACK* aTrace, const wxPoint& aPosition,
         }
         else
         {
-            if( (GetLayerMask( layer ) & aLayerMask) == 0 )
-                continue;   /* Segments on different layers. */
+            if( !aLayerMask[layer] )
+                continue;   // Segments on different layers.
 
             if( track->HitTest( aPosition ) )
                 return track;
@@ -1714,9 +1680,9 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
     for( TRACK* track = m_Track; track; track = track->Next() )
         track->SetState( BUSY, false );
 
-    /* Set flags of the initial track segment */
+    // Set flags of the initial track segment
     aTrace->SetState( BUSY, true );
-    LAYER_MSK layerMask = aTrace->GetLayerMask();
+    LSET layerMask = aTrace->GetLayerSet();
 
     trackList.push_back( aTrace );
 
@@ -1752,13 +1718,13 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
 
         if( Segm1 ) // search for others segments connected to the initial segment start point
         {
-            layerMask = Segm1->GetLayerMask();
+            layerMask = Segm1->GetLayerSet();
             chainMarkedSegments( aTrace->GetStart(), layerMask, &trackList );
         }
 
         if( Segm2 ) // search for others segments connected to the initial segment end point
         {
-            layerMask = Segm2->GetLayerMask();
+            layerMask = Segm2->GetLayerSet();
             chainMarkedSegments( aTrace->GetStart(), layerMask, &trackList );
         }
     }
@@ -1785,7 +1751,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
 
         via->SetState( BUSY, true );  // Try to flag it. the flag will be cleared later if needed
 
-        layerMask = via->GetLayerMask();
+        layerMask = via->GetLayerSet();
 
         TRACK* track = ::GetTrack( m_Track, NULL, via->GetStart(), layerMask );
 
@@ -1932,7 +1898,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
 }
 
 
-MODULE* BOARD::GetFootprint( const wxPoint& aPosition, LAYER_NUM aActiveLayer,
+MODULE* BOARD::GetFootprint( const wxPoint& aPosition, LAYER_ID aActiveLayer,
                              bool aVisibleOnly, bool aIgnoreLocked )
 {
     MODULE* pt_module;
@@ -1952,12 +1918,13 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, LAYER_NUM aActiveLayer,
         if( aIgnoreLocked && pt_module->IsLocked() )
             continue;
 
-        LAYER_NUM layer = pt_module->GetLayer();
+        LAYER_ID layer = pt_module->GetLayer();
 
         // Filter non visible modules if requested
-        if( (!aVisibleOnly) || IsModuleLayerVisible( layer ) )
+        if( !aVisibleOnly || IsModuleLayerVisible( layer ) )
         {
             EDA_RECT bb = pt_module->GetFootprintRect();
+
             int offx = bb.GetX() + bb.GetWidth() / 2;
             int offy = bb.GetY() + bb.GetHeight() / 2;
 
@@ -2000,7 +1967,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, LAYER_NUM aActiveLayer,
 }
 
 
-BOARD_CONNECTED_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, LAYER_MSK aLayerMask )
+BOARD_CONNECTED_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, LSET aLayerMask )
 {
     for( MODULE* module = m_Modules; module; module = module->Next() )
     {
@@ -2010,7 +1977,7 @@ BOARD_CONNECTED_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, LAYER_MSK a
             return pad;
     }
 
-    /* No pad has been located so check for a segment of the trace. */
+    // No pad has been located so check for a segment of the trace.
     TRACK* segment = ::GetTrack( m_Track, NULL, aPosition, aLayerMask );
 
     if( segment == NULL )
@@ -2030,7 +1997,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     if( aSegment->GetStart() == aPosition || aSegment->GetEnd() == aPosition )
         return NULL;
 
-    /* A via is a good lock point */
+    // A via is a good lock point
     if( aSegment->Type() == PCB_VIA_T )
     {
         aPosition = aSegment->GetStart();
@@ -2046,7 +2013,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     // lockPoint must be on aSegment:
     // Ensure lockPoint.y/lockPoint.y = delta.y/delta.x
     if( delta.x == 0 )
-        lockPoint.x = 0;         /* horizontal segment*/
+        lockPoint.x = 0;         // horizontal segment
     else
         lockPoint.y = KiROUND( ( (double)lockPoint.x * delta.y ) / delta.x );
 
@@ -2099,7 +2066,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
 
 
 ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
-                                LAYER_NUM aLayer, wxPoint aStartPointPosition, int aHatch )
+                                LAYER_ID aLayer, wxPoint aStartPointPosition, int aHatch )
 {
     ZONE_CONTAINER* new_area = InsertArea( aNetcode,
                                            m_ZoneDescriptorList.size( ) - 1,
@@ -2134,7 +2101,7 @@ void BOARD::RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to
 }
 
 
-ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, LAYER_NUM layer, int x, int y, int hatch )
+ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, LAYER_ID layer, int x, int y, int hatch )
 {
     ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
 

@@ -156,8 +156,8 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
 
     if( doPad )
     {
-        LAYER_MSK layer_mask = GetLayerMask( screen->m_Active_Layer );
-        D_PAD* pad = m_Pcb->GetPad( pos, layer_mask );
+        LSET    layer_mask( screen->m_Active_Layer );
+        D_PAD*  pad = m_Pcb->GetPad( pos, layer_mask );
 
         if( pad )
         {
@@ -172,11 +172,11 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
     // after pads, only track & via tests remain, skip them if not desired
     if( doTrack )
     {
-        LAYER_NUM layer = screen->m_Active_Layer;
+        LAYER_ID layer = screen->m_Active_Layer;
 
         for( TRACK* via = m_Pcb->m_Track;
-             via && (via = via->GetVia( *curpos, layer )) != NULL;
-             via = via->Next() )
+                via && (via = via->GetVia( *curpos, layer )) != NULL;
+                via = via->Next() )
         {
             if( via != currTrack )   // a via cannot influence itself
             {
@@ -191,7 +191,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
 
         if( !currTrack )
         {
-            LAYER_MSK layer_mask = GetLayerMask( layer );
+            LSET layer_mask( layer );
 
             TRACK* track = m_Pcb->GetTrack( m_Pcb->m_Track, pos, layer_mask );
 

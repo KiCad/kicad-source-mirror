@@ -55,7 +55,7 @@ DXF2BRD_CONVERTER::DXF2BRD_CONVERTER() : DRW_Interface()
     m_brd       = NULL;
     m_version   = 0;
     m_defaultThickness = 0.1;
-    m_brdLayer = DRAW_N;
+    m_brdLayer = Dwgs_User;
 }
 
 
@@ -124,13 +124,17 @@ void DXF2BRD_CONVERTER::addLine( const DRW_Line& data )
 {
     DRAWSEGMENT*    segm = new DRAWSEGMENT( m_brd );
 
-    segm->SetLayer( m_brdLayer );
+    segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
+
     wxPoint         start( mapX( data.basePoint.x ), mapY( data.basePoint.y ) );
+
     segm->SetStart( start );
+
     wxPoint         end( mapX( data.secPoint.x ), mapY( data.secPoint.y ) );
+
     segm->SetEnd( end );
-    segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness
-                            : data.thickness ) );
+
+    segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness : data.thickness ) );
     appendToBoard( segm );
 }
 
@@ -141,6 +145,7 @@ void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& data )
     // Obviously, the z coordinate is ignored
 
     wxPoint startpoint;
+
     for( unsigned ii = 0; ii < data.vertlist.size(); ii++ )
     {
         DRW_Vertex* vertex = data.vertlist[ii];
@@ -153,7 +158,8 @@ void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& data )
         }
 
         DRAWSEGMENT*    segm = new DRAWSEGMENT( m_brd );
-        segm->SetLayer( m_brdLayer );
+
+        segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
         segm->SetStart( startpoint );
         wxPoint endpoint( mapX( vertex->basePoint.x ), mapY( vertex->basePoint.y ) );
         segm->SetEnd( endpoint );
@@ -172,6 +178,7 @@ void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& data )
     // (obviously contant and is the width of the DRW_LWPolyline.
     // the variable width of each vertex (when exists) is not used.
     wxPoint startpoint;
+
     for( unsigned ii = 0; ii < data.vertlist.size(); ii++ )
     {
         DRW_Vertex2D* vertex = data.vertlist[ii];
@@ -184,7 +191,8 @@ void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& data )
         }
 
         DRAWSEGMENT*    segm = new DRAWSEGMENT( m_brd );
-        segm->SetLayer( m_brdLayer );
+
+        segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
         segm->SetStart( startpoint );
         wxPoint endpoint( mapX( vertex->x ), mapY( vertex->y ) );
         segm->SetEnd( endpoint );
@@ -202,7 +210,7 @@ void DXF2BRD_CONVERTER::addCircle( const DRW_Circle& data )
 {
     DRAWSEGMENT* segm = new DRAWSEGMENT( m_brd );
 
-    segm->SetLayer( m_brdLayer );
+    segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
     segm->SetShape( S_CIRCLE );
     wxPoint center( mapX( data.basePoint.x ), mapY( data.basePoint.y ) );
     segm->SetCenter( center );
@@ -222,7 +230,7 @@ void DXF2BRD_CONVERTER::addArc( const DRW_Arc& data )
 {
     DRAWSEGMENT* segm = new DRAWSEGMENT( m_brd );
 
-    segm->SetLayer( m_brdLayer );
+    segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
     segm->SetShape( S_ARC );
 
     // Init arc centre:
@@ -259,7 +267,7 @@ void DXF2BRD_CONVERTER::addArc( const DRW_Arc& data )
 void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
 {
     TEXTE_PCB*  pcb_text = new TEXTE_PCB( m_brd );
-    pcb_text->SetLayer( m_brdLayer );
+    pcb_text->SetLayer( ToLAYER_ID( m_brdLayer ) );
 
     wxPoint refPoint( mapX(data.basePoint.x), mapY(data.basePoint.y) );
     wxPoint secPoint( mapX(data.secPoint.x), mapY(data.secPoint.y) );
@@ -387,7 +395,8 @@ void DXF2BRD_CONVERTER::addMText( const DRW_MText& data )
     }
 
     TEXTE_PCB*  pcb_text = new TEXTE_PCB( m_brd );
-    pcb_text->SetLayer( m_brdLayer );
+    pcb_text->SetLayer( ToLAYER_ID( m_brdLayer ) );
+
     wxPoint     textpos( mapX( data.basePoint.x ), mapY( data.basePoint.y ) );
     pcb_text->SetTextPosition( textpos );
     pcb_text->SetOrientation( data.angle * 10 );

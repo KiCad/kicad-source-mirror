@@ -38,6 +38,7 @@
 #include <base_units.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 

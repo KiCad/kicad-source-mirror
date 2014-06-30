@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -61,10 +61,9 @@ class DIALOG_SVG_PRINT_base : public DIALOG_SHIM
 		wxTextCtrl* m_messagesBox;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonPlot( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonCloseClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

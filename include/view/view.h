@@ -507,7 +507,7 @@ public:
      */
     void UpdateItems();
 
-	const BOX2I CalculateExtents() ;
+    const BOX2I CalculateExtents() ;
 
     static const int VIEW_MAX_LAYERS = 128;      ///< maximum number of layers that may be shown
 

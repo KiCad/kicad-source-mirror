@@ -361,8 +361,8 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
     bool       hasBuriedVias = false;  /* If true, drill files are created
                                         * layer pair by layer pair for
                                         * buried vias */
-    int        layer1 = LAYER_N_BACK;
-    int        layer2 = LAYER_N_FRONT;
+    int        layer1 = B_Cu;
+    int        layer2 = F_Cu;
     bool       gen_through_holes = true;
     bool       gen_NPTH_holes    = false;
 
@@ -400,12 +400,12 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
             }
             else if( !gen_through_holes )
             {
-                if( layer1 == LAYER_N_BACK )
+                if( layer1 == B_Cu )
                     layer_extend << wxT( "-back" );
                 else
                     layer_extend << wxT( "-inner" ) << layer1;
 
-                if( layer2 == LAYER_N_FRONT )
+                if( layer2 == F_Cu )
                     layer_extend << wxT( "-front" );
                 else
                     layer_extend << wxT( "-inner" ) << layer2;
@@ -472,10 +472,10 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
                 layer2 = layer1 + 1;    // prepare generation of first layer pair
             else
             {
-                if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
+                if( layer2 >= F_Cu )    // no more layer pair to consider
                 {
-                    layer1 = LAYER_N_BACK;
-                    layer2 = LAYER_N_FRONT;
+                    layer1 = B_Cu;
+                    layer2 = F_Cu;
                     gen_NPTH_holes = true;
                     continue;
                 }
@@ -484,7 +484,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
                 layer2++;                      // use next layer pair
 
                 if( layer2 == m_parent->GetBoard()->GetCopperLayerCount() - 1 )
-                    layer2 = LAYER_N_FRONT;         // the last layer is always the
+                    layer2 = F_Cu;         // the last layer is always the
                                                     // Front layer
             }
 

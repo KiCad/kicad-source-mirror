@@ -128,8 +128,9 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
 
     // Configure the layers list selector
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
+
     // A text has no sense on edge cut layer
-    m_LayerSelectionCtrl->SetLayerMask( EDGE_LAYER );
+    m_LayerSelectionCtrl->SetLayerSet( Edge_Cuts );
     m_LayerSelectionCtrl->SetBoardFrame( m_Parent );
     m_LayerSelectionCtrl->Resync();
     m_LayerSelectionCtrl->SetLayerSelection( m_SelectedPCBText->GetLayer() );
@@ -249,7 +250,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     }
 
     // Set the layer on which the PCB text is laying
-    m_SelectedPCBText->SetLayer( m_LayerSelectionCtrl->GetLayerSelection() );
+    m_SelectedPCBText->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
 
     // Set whether the PCB text is mirrored (faced down from layer face perspective)
     m_SelectedPCBText->SetMirrored( m_DisplayCtrl->GetSelection() == 1 );

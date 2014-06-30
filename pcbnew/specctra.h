@@ -3620,7 +3620,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     std::vector<int> kicadLayer2pcb;
 
     /// maps PCB layer number to BOARD layer numbers
-    std::vector<LAYER_NUM> pcbLayer2kicad;
+    std::vector<LAYER_ID>   pcbLayer2kicad;
 
     /// used during FromSESSION() only, memory for it is not owned here.
     UNIT_RES*       routeResolution;

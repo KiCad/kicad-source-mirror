@@ -65,7 +65,7 @@ PRINT_PARAMETERS::PRINT_PARAMETERS()
     m_XScaleAdjust          = 1.0;
     m_YScaleAdjust          = 1.0;
     m_Print_Sheet_Ref       = false;
-    m_PrintMaskLayer        = FULL_LAYERS;
+    m_PrintMaskLayer.set();
     m_PrintMirror           = false;
     m_Print_Black_and_White = true;
     m_OptionPrintPage       = 1;
@@ -90,45 +90,35 @@ BOARD_PRINTOUT_CONTROLLER::BOARD_PRINTOUT_CONTROLLER( const PRINT_PARAMETERS& aP
 bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
 {
 #ifdef PCBNEW
-    LAYER_NUM layers_count = NB_PCB_LAYERS;
-#else
-    LAYER_NUM layers_count = NB_LAYERS;
-#endif
-
-    LAYER_MSK mask_layer = m_PrintParams.m_PrintMaskLayer;
+    LSET lset = m_PrintParams.m_PrintMaskLayer;
 
     // compute layer mask from page number if we want one page per layer
     if( m_PrintParams.m_OptionPrintPage == 0 )  // One page per layer
     {
-        int jj;
-        LAYER_NUM ii;
+        // This sequence is TBD, call a different
+        // sequencer if needed, such as Seq().  Could not find documentation on
+        // page order.
+        LSEQ seq = lset.UIOrder();
 
-        for( ii = FIRST_LAYER, jj = 0; ii < layers_count; ++ii )
-        {
-            LAYER_MSK mask = GetLayerMask( ii );
-            if( mask_layer & mask )
-                jj++;
-
-            if( jj == aPage )
-            {
-                m_PrintParams.m_PrintMaskLayer = mask;
-                break;
-            }
-        }
+        if( unsigned( aPage ) < seq.size() )
+            m_PrintParams.m_PrintMaskLayer = LSET( seq[aPage] );
     }
 
-    if( m_PrintParams.m_PrintMaskLayer == 0 )
+    if( !m_PrintParams.m_PrintMaskLayer.any() )
         return false;
 
-#ifdef PCBNEW
     // In Pcbnew we can want the layer EDGE always printed
     if( m_PrintParams.m_Flags == 1 )
-        m_PrintParams.m_PrintMaskLayer |= EDGE_LAYER;
-#endif
+        m_PrintParams.m_PrintMaskLayer.set( Edge_Cuts );
 
     DrawPage();
 
-    m_PrintParams.m_PrintMaskLayer = mask_layer;
+    m_PrintParams.m_PrintMaskLayer = lset;
+#else   // GERBVIEW
+    // in gerbview, draw layers are printed on separate pages
+    m_PrintParams.m_Flags = aPage-1;    // = gerber draw layer id
+    DrawPage();
+#endif
 
     return true;
 }

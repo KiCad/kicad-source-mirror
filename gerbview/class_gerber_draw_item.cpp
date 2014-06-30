@@ -36,6 +36,7 @@
 #include <msgpanel.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 
@@ -44,7 +45,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_IMAGE* aGerberpa
     EDA_ITEM( (EDA_ITEM*)aParent, TYPE_GERBER_DRAW_ITEM )
 {
     m_imageParams = aGerberparams;
-    m_Layer         = FIRST_LAYER;
+    m_Layer         = 0;
     m_Shape         = GBR_SEGMENT;
     m_Flashed       = false;
     m_DCode         = 0;

@@ -60,6 +60,8 @@ PCBNew
 *)  Paste (module ...) from clipboard into module editor.
 
 
+
+
 Dick's Final TODO List:
 ======================
 *)  Get licensing cleaned up.
@@ -75,3 +77,5 @@ Dick's Final TODO List:
     *   Clear all/some? retained strings on project change.
     *   Clear the FP_LIB_TABLE when the last KIWAY_PLAYER using it is closed.
 
+
+Fix export gencad

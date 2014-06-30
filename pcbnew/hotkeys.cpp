@@ -37,10 +37,12 @@ static EDA_HOTKEY HkMouseLeftClick( wxT( "Mouse Left Click" ),
 static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left DClick" ),
                                      HK_LEFT_DCLICK, WXK_END, 0 );
 
-static EDA_HOTKEY HkSwitch2CopperLayer( wxT( "Switch to Copper layer" ),
+static EDA_HOTKEY HkSwitch2CopperLayer( wxT( "Switch to Copper (B.Cu) layer" ),
                                         HK_SWITCH_LAYER_TO_COPPER, WXK_PAGEDOWN );
-static EDA_HOTKEY HkSwitch2ComponentLayer( wxT( "Switch to Component layer" ),
+
+static EDA_HOTKEY HkSwitch2ComponentLayer( wxT( "Switch to Component (F.Cu) layer" ),
                                            HK_SWITCH_LAYER_TO_COMPONENT, WXK_PAGEUP );
+
 static EDA_HOTKEY HkSwitch2InnerLayer1( wxT( "Switch to Inner layer 1" ),
                                         HK_SWITCH_LAYER_TO_INNER1, WXK_F5 );
 static EDA_HOTKEY HkSwitch2InnerLayer2( wxT( "Switch to Inner layer 2" ),
