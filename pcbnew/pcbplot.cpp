@@ -90,87 +90,83 @@ wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer )
 
     switch( aLayer )
     {
-    case LAYER_N_BACK:
-        attrib = wxString::Format( wxT( "Copper,L%d" ), aBoard->GetCopperLayerCount() );
-        break;
-
-    case LAYER_N_2:
-    case LAYER_N_3:
-    case LAYER_N_4:
-    case LAYER_N_5:
-    case LAYER_N_6:
-    case LAYER_N_7:
-    case LAYER_N_8:
-    case LAYER_N_9:
-    case LAYER_N_10:
-    case LAYER_N_11:
-    case LAYER_N_12:
-    case LAYER_N_13:
-    case LAYER_N_14:
-    case LAYER_N_15:
-        // LAYER_N_2 is the first inner layer counting from the bottom; this
-        // must be converted to a 1-based number starting from the top
-        attrib = wxString::Format( wxT( "Copper,L%d" ),
-                                   aBoard->GetCopperLayerCount() - ( aLayer - LAYER_N_2 + 1 ) );
-        break;
-
-    case LAYER_N_FRONT:
-        attrib = wxString( wxT( "Copper,L1" ) );
-        break;
-
-    case ADHESIVE_N_FRONT:
+    case F_Adhes:
         attrib = wxString( wxT( "Glue,Top" ) );
         break;
 
-    case ADHESIVE_N_BACK:
+    case B_Adhes:
         attrib = wxString( wxT( "Glue,Bot" ) );
         break;
 
-    case SILKSCREEN_N_FRONT:
+    case F_SilkS:
         attrib = wxString( wxT( "Legend,Top" ) );
         break;
 
-    case SILKSCREEN_N_BACK:
+    case B_SilkS:
         attrib = wxString( wxT( "Legend,Bot" ) );
         break;
 
-    case SOLDERMASK_N_FRONT:
+    case F_Mask:
         attrib = wxString( wxT( "Soldermask,Top" ) );
         break;
 
-    case SOLDERMASK_N_BACK:
+    case B_Mask:
         attrib = wxString( wxT( "Soldermask,Bot" ) );
         break;
 
-    case SOLDERPASTE_N_FRONT:
+    case F_Paste:
         attrib = wxString( wxT( "Paste,Top" ) );
         break;
 
-    case SOLDERPASTE_N_BACK:
+    case B_Paste:
         attrib = wxString( wxT( "Paste,Bot" ) );
         break;
 
-    case EDGE_N:
+    case Edge_Cuts:
         attrib = wxString( wxT( "Profile" ) );
         break;
 
-    case DRAW_N:
+    case Dwgs_User:
         attrib = wxString( wxT( "Drawing" ) );
         break;
 
-    case COMMENT_N:
+    case Cmts_User:
         attrib = wxString( wxT( "Other,Comment" ) );
         break;
 
-    case ECO1_N:
-    case ECO2_N:
-        attrib = wxString::Format( wxT( "Other,ECO%d" ), aLayer - ECO1_N + 1 );
+    case Eco1_User:
+    case Eco2_User:
+        attrib = wxString::Format( wxT( "Other,ECO%d" ), aLayer - Eco1_User + 1 );
+        break;
+
+    case F_Cu:
+        attrib = wxString( wxT( "Copper,L1" ) );
+        break;
+
+    case B_Cu:
+        attrib = wxString::Format( wxT( "Copper,L%d" ), aBoard->GetCopperLayerCount() );
+        break;
+
+    default:
+        if( IsCopperLayer( aLayer ) )
+        {
+#if 0   // was:
+            // LAYER_N_2 is the first inner layer counting from the bottom; this
+            // must be converted to a 1-based number starting from the top
+            attrib = wxString::Format( wxT( "Copper,L%d" ),
+                                       aBoard->GetCopperLayerCount() - ( aLayer - LAYER_N_2 + 1 ) );
+#else
+            attrib = wxString::Format( wxT( "Copper,L%d" ), aLayer );
+#endif
+        }
         break;
     }
 
     // Add the signal type of the layer, if relevant
-    if( FIRST_COPPER_LAYER <= aLayer && aLayer <= LAST_COPPER_LAYER ) {
-        LAYER_T type = aBoard->GetLayerType( aLayer );
+    if( IsCopperLayer( aLayer ) )
+    {
+        LAYER_T type = aBoard->GetLayerType( ToLAYER_ID( aLayer ) );
+
         switch( type )
         {
         case LT_SIGNAL:
@@ -189,6 +185,7 @@ wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer )
 
     return attrib;
 }
+
 
 void BuildPlotFileName( wxFileName*     aFilename,
                         const wxString& aOutputDir,

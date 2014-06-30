@@ -145,6 +145,7 @@ void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& data )
     // Obviously, the z coordinate is ignored
 
     wxPoint startpoint;
+
     for( unsigned ii = 0; ii < data.vertlist.size(); ii++ )
     {
         DRW_Vertex* vertex = data.vertlist[ii];
@@ -157,7 +158,8 @@ void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& data )
         }
 
         DRAWSEGMENT*    segm = new DRAWSEGMENT( m_brd );
-        segm->SetLayer( m_brdLayer );
+
+        segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
         segm->SetStart( startpoint );
         wxPoint endpoint( mapX( vertex->basePoint.x ), mapY( vertex->basePoint.y ) );
         segm->SetEnd( endpoint );
@@ -176,6 +178,7 @@ void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& data )
     // (obviously contant and is the width of the DRW_LWPolyline.
     // the variable width of each vertex (when exists) is not used.
     wxPoint startpoint;
+
     for( unsigned ii = 0; ii < data.vertlist.size(); ii++ )
     {
         DRW_Vertex2D* vertex = data.vertlist[ii];
@@ -188,7 +191,8 @@ void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& data )
         }
 
         DRAWSEGMENT*    segm = new DRAWSEGMENT( m_brd );
-        segm->SetLayer( m_brdLayer );
+
+        segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
         segm->SetStart( startpoint );
         wxPoint endpoint( mapX( vertex->x ), mapY( vertex->y ) );
         segm->SetEnd( endpoint );

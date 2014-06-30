@@ -255,6 +255,9 @@ static double MapYTo( int aY )
 /* Driver function: processing starts here */
 void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 {
+
+#if 0   // working on this 30-Jun-14, not ready yet, failed the initial testing.
+
     wxFileName  fn = GetBoard()->GetFileName();
     FILE*       file;
 
@@ -344,6 +347,8 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
             module->SetFlag( 0 );
         }
     }
+#endif
+
 }
 
 
