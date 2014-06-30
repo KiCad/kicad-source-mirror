@@ -439,9 +439,9 @@ static void write_layers( MODEL_VRML& aModel, std::ofstream& output_file, BOARD*
     aModel.plated_holes.Tesselate( NULL, true );
     write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_TIN ),
                         &aModel.plated_holes, false, false,
-                        aModel.GetLayerZ( LAST_COPPER_LAYER )
+                        aModel.GetLayerZ( F_Cu )
                         + Millimeter2iu( ART_OFFSET / 2.0 ) * aModel.scale,
-                        aModel.GetLayerZ( FIRST_COPPER_LAYER )
+                        aModel.GetLayerZ( B_Cu )
                         - Millimeter2iu( ART_OFFSET / 2.0 ) * aModel.scale,
                         aModel.precision );
 

@@ -320,18 +320,6 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
                     );
         }
 
-        wxFileName fn(boardFilename);
-        BuildPlotFileName( &fn, outputDir.GetPath(), suffix, SVGFileExtension );
-
-        if( m_PrintBoardEdgesCtrl->IsChecked() )
-            m_printMaskLayer |= EDGE_LAYER;
-
-        if( CreateSVGFile( fn.GetFullPath() ) )
-            msg.Printf( _( "Plot: %s OK\n" ), GetChars( fn.GetFullPath() ) );
-        else    // Error
-            msg.Printf( _( "** Unable to create %s **\n" ), GetChars( fn.GetFullPath() ) );
-        m_messagesBox->AppendText( msg );
-
         if( aOnlyOneFile )
             break;
     }
@@ -378,9 +366,9 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
     }
 
     LOCALE_IO    toggle;
+
     SVG_PLOTTER* plotter = (SVG_PLOTTER*) StartPlotBoard( m_board,
-                                                          &plot_opts, aFullFileName,
-                                                          wxEmptyString );
+                     &plot_opts, UNDEFINED_LAYER, aFullFileName, wxEmptyString );
 
     if( plotter )
     {

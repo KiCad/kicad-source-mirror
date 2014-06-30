@@ -797,7 +797,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         LOCALE_IO toggle;
 
         BOARD*      board = m_parent->GetBoard();
-        PLOTTER*    plotter = StartPlotBoard( board, &m_plotOpts, fn.GetFullPath(), wxEmptyString );
+        PLOTTER*    plotter = StartPlotBoard( board, &m_plotOpts, layer, fn.GetFullPath(), wxEmptyString );
 
         // Print diags in messages box:
         wxString msg;
