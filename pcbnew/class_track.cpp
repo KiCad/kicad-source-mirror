@@ -377,7 +377,9 @@ bool VIA::IsOnLayer( LAYER_ID layer_number ) const
 
     LayerPair( &top_layer, &bottom_layer );
 
-    if( bottom_layer <= layer_number && layer_number <= top_layer )
+    wxASSERT( top_layer <= bottom_layer );
+
+    if( top_layer <= layer_number && layer_number <= bottom_layer )
         return true;
     else
         return false;

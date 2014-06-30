@@ -861,22 +861,19 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
  */
 void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 {
-    TRACK*              curr_track;
-
     // Build the net info list
     GetBoard()->BuildListOfNets();
 
     // Reset variables and flags used in computation
-    curr_track = m_Pcb->m_Track;
-    for( ; curr_track != NULL; curr_track = curr_track->Next() )
+    for( TRACK* t = m_Pcb->m_Track;  t;  t = t->Next() )
     {
-        curr_track->m_TracksConnected.clear();
-        curr_track->m_PadsConnected.clear();
-        curr_track->start = NULL;
-        curr_track->end = NULL;
-        curr_track->SetState( BUSY | IN_EDIT | BEGIN_ONPAD | END_ONPAD, false );
-        curr_track->SetZoneSubNet( 0 );
-        curr_track->SetNetCode( NETINFO_LIST::UNCONNECTED );
+        t->m_TracksConnected.clear();
+        t->m_PadsConnected.clear();
+        t->start = NULL;
+        t->end = NULL;
+        t->SetState( BUSY | IN_EDIT | BEGIN_ONPAD | END_ONPAD, false );
+        t->SetZoneSubNet( 0 );
+        t->SetNetCode( NETINFO_LIST::UNCONNECTED );
     }
 
     // If no pad, reset pointers and netcode, and do nothing else
@@ -890,21 +887,19 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     // First pass: build connections between track segments and pads.
     connections.SearchTracksConnectedToPads();
 
-    /* For tracks connected to at least one pad,
-     * set the track net code to the pad netcode
-     */
-    curr_track = m_Pcb->m_Track;
-    for( ; curr_track != NULL; curr_track = curr_track->Next() )
+    // For tracks connected to at least one pad,
+    // set the track net code to the pad netcode
+    for( TRACK* t = m_Pcb->m_Track;  t;  t = t->Next() )
     {
-        if( curr_track->m_PadsConnected.size() )
-            curr_track->SetNetCode( curr_track->m_PadsConnected[0]->GetNetCode() );
+        if( t->m_PadsConnected.size() )
+            t->SetNetCode( t->m_PadsConnected[0]->GetNetCode() );
     }
 
     // Pass 2: build connections between track ends
-    for( curr_track = m_Pcb->m_Track; curr_track != NULL; curr_track = curr_track->Next() )
+    for( TRACK* t = m_Pcb->m_Track;  t;  t = t->Next() )
     {
-        connections.SearchConnectedTracks( curr_track );
-        connections.GetConnectedTracks( curr_track );
+        connections.SearchConnectedTracks( t );
+        connections.GetConnectedTracks( t );
     }
 
     // Propagate net codes from a segment to other connected segments
@@ -915,21 +910,21 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     {
         new_pass_request = false;
 
-        for( curr_track = m_Pcb->m_Track; curr_track; curr_track = curr_track->Next() )
+        for( TRACK* t = m_Pcb->m_Track;  t;  t = t->Next() )
         {
-            int netcode = curr_track->GetNetCode();
+            int netcode = t->GetNetCode();
 
             if( netcode == 0 )
             {
                 // try to find a connected item having a netcode
-                for( unsigned kk = 0; kk < curr_track->m_TracksConnected.size(); kk++ )
+                for( unsigned kk = 0; kk < t->m_TracksConnected.size(); kk++ )
                 {
-                    int altnetcode = curr_track->m_TracksConnected[kk]->GetNetCode();
+                    int altnetcode = t->m_TracksConnected[kk]->GetNetCode();
                     if( altnetcode )
                     {
                         new_pass_request = true;
                         netcode = altnetcode;
-                        curr_track->SetNetCode(netcode);
+                        t->SetNetCode(netcode);
                         break;
                     }
                 }
@@ -938,12 +933,12 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
             if( netcode )    // this track has a netcode
             {
                 // propagate this netcode to connected tracks having no netcode
-                for( unsigned kk = 0; kk < curr_track->m_TracksConnected.size(); kk++ )
+                for( unsigned kk = 0; kk < t->m_TracksConnected.size(); kk++ )
                 {
-                    int altnetcode = curr_track->m_TracksConnected[kk]->GetNetCode();
+                    int altnetcode = t->m_TracksConnected[kk]->GetNetCode();
                     if( altnetcode == 0 )
                     {
-                        curr_track->m_TracksConnected[kk]->SetNetCode(netcode);
+                        t->m_TracksConnected[kk]->SetNetCode(netcode);
                         new_pass_request = true;
                     }
                 }

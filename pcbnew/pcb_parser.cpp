@@ -2734,68 +2734,65 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_polygon:
-        {
-            std::vector< wxPoint > corners;
-
-            NeedLEFT();
-            token = NextTok();
-
-            if( token != T_pts )
-                Expecting( T_pts );
-
-            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
-                corners.push_back( parseXY() );
-            }
+                std::vector< wxPoint > corners;
 
-            NeedRIGHT();
-            zone->AddPolygon( corners );
-        }
-
-            break;
-
-        case T_filled_polygon:
-        {
-            // "(filled_polygon (pts"
-            NeedLEFT();
-            token = NextTok();
-
-            if( token != T_pts )
-                Expecting( T_pts );
-
-            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
-            {
-                pts.Append( CPolyPt( parseXY() ) );
-            }
-
-            NeedRIGHT();
-            pts.CloseLastContour();
-        }
-
-            break;
-
-        case T_fill_segments:
-        {
-            std::vector< SEGMENT > segs;
-
-            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
-            {
-                if( token != T_LEFT )
-                    Expecting( T_LEFT );
-
+                NeedLEFT();
                 token = NextTok();
 
                 if( token != T_pts )
                     Expecting( T_pts );
 
-                SEGMENT segment( parseXY(), parseXY() );
+                for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+                {
+                    corners.push_back( parseXY() );
+                }
+
                 NeedRIGHT();
-                segs.push_back( segment );
+                zone->AddPolygon( corners );
             }
+            break;
 
-            zone->AddFillSegments( segs );
-        }
+        case T_filled_polygon:
+            {
+                // "(filled_polygon (pts"
+                NeedLEFT();
+                token = NextTok();
 
+                if( token != T_pts )
+                    Expecting( T_pts );
+
+                for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+                {
+                    pts.Append( CPolyPt( parseXY() ) );
+                }
+
+                NeedRIGHT();
+                pts.CloseLastContour();
+            }
+            break;
+
+        case T_fill_segments:
+            {
+                std::vector< SEGMENT > segs;
+
+                for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+                {
+                    if( token != T_LEFT )
+                        Expecting( T_LEFT );
+
+                    token = NextTok();
+
+                    if( token != T_pts )
+                        Expecting( T_pts );
+
+                    SEGMENT segment( parseXY(), parseXY() );
+                    NeedRIGHT();
+                    segs.push_back( segment );
+                }
+
+                zone->AddFillSegments( segs );
+            }
             break;
 
         default:

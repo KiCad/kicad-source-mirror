@@ -1401,26 +1401,28 @@ int BOARD::SetAreasNetCodesFromNetNames()
 
     for( int ii = 0; ii < GetAreaCount(); ii++ )
     {
-        if( !GetArea( ii )->IsOnCopperLayer() )
+        ZONE_CONTAINER* it = GetArea( ii );
+
+        if( !it->IsOnCopperLayer() )
         {
-            GetArea( ii )->SetNetCode( NETINFO_LIST::UNCONNECTED );
+            it->SetNetCode( NETINFO_LIST::UNCONNECTED );
             continue;
         }
 
-        if( GetArea( ii )->GetNetCode() != 0 )      // i.e. if this zone is connected to a net
+        if( it->GetNetCode() != 0 )      // i.e. if this zone is connected to a net
         {
-            const NETINFO_ITEM* net = GetArea( ii )->GetNet();
+            const NETINFO_ITEM* net = it->GetNet();
 
             if( net )
             {
-                GetArea( ii )->SetNetCode( net->GetNet() );
+                it->SetNetCode( net->GetNet() );
             }
             else
             {
                 error_count++;
 
                 // keep Net Name and set m_NetCode to -1 : error flag.
-                GetArea( ii )->SetNetCode( -1 );
+                it->SetNetCode( -1 );
             }
         }
     }
