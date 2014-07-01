@@ -135,29 +135,22 @@ wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer )
         break;
 
     case Eco1_User:
-    case Eco2_User:
-        attrib = wxString::Format( wxT( "Other,ECO%d" ), aLayer - Eco1_User + 1 );
+        attrib = wxString( wxT( "Other,ECO1" ) );
         break;
 
-    case F_Cu:
-        attrib = wxString( wxT( "Copper,L1" ) );
+    case Eco2_User:
+        attrib = wxString( wxT( "Other,ECO2" ) );
         break;
 
     case B_Cu:
         attrib = wxString::Format( wxT( "Copper,L%d" ), aBoard->GetCopperLayerCount() );
         break;
 
+    case F_Cu:
     default:
         if( IsCopperLayer( aLayer ) )
         {
-#if 0   // was:
-            // LAYER_N_2 is the first inner layer counting from the bottom; this
-            // must be converted to a 1-based number starting from the top
-            attrib = wxString::Format( wxT( "Copper,L%d" ),
-                                       aBoard->GetCopperLayerCount() - ( aLayer - LAYER_N_2 + 1 ) );
-#else
-            attrib = wxString::Format( wxT( "Copper,L%d" ), aLayer );
-#endif
+            attrib = wxString::Format( wxT( "Copper,L%d" ), aLayer+1 );
         }
         break;
     }

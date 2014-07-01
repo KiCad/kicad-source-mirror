@@ -104,7 +104,7 @@ bool GERBER_PLOTTER::StartPlot()
              m_gerberUnitInch ? "inch" : "mm" );
 
     wxString Title = creator + wxT( " " ) + GetBuildVersion();
-    fprintf( outputFile, "G04 (created by %s) date %s*\n",
+    fprintf( outputFile, "G04 Created by KiCad (%s) date %s*\n",
              TO_UTF8( Title ), TO_UTF8( DateAndTime() ) );
 
     /* Mass parameter: unit = INCHES/MM */
