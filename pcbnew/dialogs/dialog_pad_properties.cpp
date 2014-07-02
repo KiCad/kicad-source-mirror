@@ -76,7 +76,7 @@ static const LSET std_pad_layers[] = {
     D_PAD::SMDMask(),
 
     // PAD_CONN:
-    D_PAD::ConnMask(),
+    D_PAD::ConnSMDMask(),
 
     // PAD_HOLE_NOT_PLATED:
     D_PAD::UnplatedHoleMask()

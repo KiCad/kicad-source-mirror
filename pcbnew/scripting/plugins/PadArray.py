@@ -17,7 +17,7 @@ class PadMaker:
         pad.SetShape(shape)
 
         pad.SetAttribute(pcbnew.PAD_STANDARD)
-        pad.SetLayerMask(pcbnew.PAD_STANDARD_DEFAULT_LAYERS)
+        pad.SetLayerSet(pad.StandardMask())
         pad.SetDrillSize(pcbnew.wxSize(drill, drill))
 
         return pad
@@ -29,7 +29,7 @@ class PadMaker:
         pad.SetShape(shape)
 
         pad.SetAttribute(pcbnew.PAD_SMD)
-        pad.SetLayerMask(pcbnew.PAD_SMD_DEFAULT_LAYERS)
+        pad.SetLayerSet(pad.SMDMask())
 
         return pad
 
@@ -44,19 +44,6 @@ class PadArray:
 
     def SetFirstPadInArray(self, fpNum):
         self.firstPad = fpNum
-
-    # HACK! pad should one day have its own clone method
-    def ClonePad(self):
-
-        pad = pcbnew.D_PAD(self.pad.GetParent())
-
-        pad.SetSize(self.pad.GetSize())
-        pad.SetShape(self.pad.GetShape())
-        pad.SetAttribute(self.pad.GetAttribute())
-        pad.SetLayerMask(self.pad.GetLayerMask())
-        pad.SetDrillSize(self.pad.GetDrillSize())
-
-        return pad
 
     def AddPad(self, pad):
         self.pad.GetParent().Add(pad)
@@ -100,9 +87,8 @@ class PadGridArray(PadArray):
 
                 pos = pcbnew.wxPoint(posX, posY)
 
-                # THIS DOESN'T WORK yet!
-                #pad = self.pad.Clone()
-                pad = self.ClonePad()
+                # create a new pad with same characteristics
+                pad = self.pad.Duplicate()
 
                 pad.SetPos0(pos)
                 pad.SetPosition(pos)

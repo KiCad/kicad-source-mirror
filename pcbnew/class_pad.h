@@ -88,10 +88,11 @@ public:
     /* Default layers used for pads, according to the pad type.
      * this is default values only, they can be changed for a given pad
      */
-    static LSET StandardMask();
-    static LSET ConnMask();
-    static LSET SMDMask();
-    static LSET UnplatedHoleMask();
+    static LSET StandardMask();     ///< layer set for a through hole pad
+    static LSET SMDMask();          ///< layer set for a SMD pad on Front layer
+    static LSET ConnSMDMask();      ///< layer set for a SMD pad on Front layer
+                                    ///< used for edge board connectors
+    static LSET UnplatedHoleMask(); ///< layer set for a mechanical unplated through hole pad
 
     void Copy( D_PAD* source );
 
@@ -418,6 +419,16 @@ public:
     void AppendConfigs( PARAM_CFG_ARRAY* aResult );
 
     EDA_ITEM* Clone() const;
+
+    /**
+     * same as Clone, but returns a D_PAD item.
+     * Useful mainly for pythons scripts, because Clone (virtual function)
+     * returns an EDA_ITEM.
+     */
+    D_PAD* Duplicate() const
+    {
+        return (D_PAD*) Clone();
+    }
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const;

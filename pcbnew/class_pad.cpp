@@ -95,15 +95,13 @@ LSET D_PAD::StandardMask()
 
 LSET D_PAD::SMDMask()
 {
-    // was: #define PAD_SMD_DEFAULT_LAYERS LAYER_FRONT | SOLDERPASTE_LAYER_FRONT | SOLDERMASK_LAYER_FRONT
     static LSET saved( 3, F_Cu, F_Paste, F_Mask );
     return saved;
 }
 
 
-LSET D_PAD::ConnMask()
+LSET D_PAD::ConnSMDMask()
 {
-    // was: #define PAD_CONN_DEFAULT_LAYERS LAYER_FRONT | SOLDERMASK_LAYER_FRONT
     static LSET saved( 2, F_Cu, F_Mask );
     return saved;
 }
