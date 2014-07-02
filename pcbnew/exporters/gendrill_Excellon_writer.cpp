@@ -457,7 +457,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
         {
             hole_value = via->GetDrillValue();
 
-            if( hole_value == 0 )
+            if( hole_value == 0 )   // Should not occur.
                 continue;
 
             new_hole.m_Tool_Reference = -1;         // Flag value for Not initialized
@@ -470,11 +470,12 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
 
             via->LayerPair( &new_hole.m_Hole_Top_Layer, &new_hole.m_Hole_Bottom_Layer );
 
-            // LayerPair return params with m_Hole_Bottom_Layer < m_Hole_Top_Layer
-            if( (new_hole.m_Hole_Bottom_Layer > aFirstLayer) && (aFirstLayer >= 0) )
+            // LayerPair return params with m_Hole_Bottom_Layer > m_Hole_Top_Layer
+            // (remember top layer = 0 and bottom layer = 31 for through hole vias)
+            if( (new_hole.m_Hole_Top_Layer < aFirstLayer) && (aFirstLayer >= 0) )
                 continue;
 
-            if( (new_hole.m_Hole_Top_Layer < aLastLayer) && (aLastLayer >= 0) )
+            if( (new_hole.m_Hole_Bottom_Layer > aLastLayer) && (aLastLayer >= 0) )
                 continue;
 
             if( aExcludeThroughHoles  && (new_hole.m_Hole_Bottom_Layer == B_Cu)
