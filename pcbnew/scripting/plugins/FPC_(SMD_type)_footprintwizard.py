@@ -30,7 +30,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
             pad.SetSize(size)
             pad.SetShape(PAD_RECT)
             pad.SetAttribute(PAD_SMD)
-            pad.SetLayerMask(PAD_SMD_DEFAULT_LAYERS)
+            pad.SetLayerSet( pad.StandardMask() )
             pad.SetPos0(pos)
             pad.SetPosition(pos)
             pad.SetPadName(name)
@@ -126,7 +126,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         xstart = - pad_pitch*0.5-offsetX
         xend = pad_pitch * pads + xstart;
         outline.SetStartEnd( wxPoint(xstart, posy), wxPoint( xend, posy) )
-        outline.SetLayer(SILKSCREEN_N_FRONT)    #default: not needed
+        outline.SetLayer(F_SilkS)               #default: not needed
         outline.SetShape(S_SEGMENT)
         module.Add(outline)
 

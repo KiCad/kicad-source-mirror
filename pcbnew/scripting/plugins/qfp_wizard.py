@@ -27,6 +27,7 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
     def CheckParameters(self):
 
         self.CheckParamPositiveInt("Pads", "*n", is_multiple_of = 4)
+        self.CheckParamBool("Pads", "*oval")
 
     def GetReference(self):
         return "QFP %d" % self.parameters["Pads"]["*n"]
@@ -46,8 +47,10 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
 
         row_len = (pads_per_row - 1) * pad_pitch
 
-        h_pad = PA.PadMaker(self.module).SMDPad(pad_width, pad_length, shape = pcbnew.PAD_OVAL)
-        v_pad = PA.PadMaker(self.module).SMDPad(pad_length, pad_width, shape = pcbnew.PAD_OVAL)
+        pad_shape = pcbnew.PAD_OVAL if pads["*oval"] else pcbnew.PAD_RECT
+
+        h_pad = PA.PadMaker(self.module).SMDPad(pad_width, pad_length, shape = pad_shape)
+        v_pad = PA.PadMaker(self.module).SMDPad(pad_length, pad_width, shape = pad_shape)
 
         #left row
         pin1Pos = pcbnew.wxPoint(-h_pitch / 2, -row_len / 2)

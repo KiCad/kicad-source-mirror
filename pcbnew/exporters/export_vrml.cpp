@@ -473,9 +473,9 @@ static void compute_layer_Zs( MODEL_VRML& aModel, BOARD* pcb )
         LAYER_ID i = *seq;
 
         if( i < copper_layers )
-            aModel.SetLayerZ( i, aModel.board_thickness * i / (copper_layers - 1) - half_thickness );
+            aModel.SetLayerZ( i,  half_thickness - aModel.board_thickness * i / (copper_layers - 1) );
         else
-            aModel.SetLayerZ( i, half_thickness );  // component layer
+            aModel.SetLayerZ( i, - half_thickness );  // bottom layer
     }
 
     /* To avoid rounding interference, we apply an epsilon to each
