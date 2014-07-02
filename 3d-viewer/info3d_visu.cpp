@@ -115,29 +115,32 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
 
     // Init  Z position of each layer
     // calculate z position for each copper layer
+    // Z = 0 is the z position of the back (bottom) layer (layer id = 31)
+    // Z = m_EpoxyThickness is the z position of the front (top) layer (layer id = 0)
+    // all unused copper layer z position are set to 0
     int layer;
     int copper_layers_cnt = m_CopperLayersCount;
 
     for( layer = 0; layer < copper_layers_cnt; layer++ )
     {
         m_LayerZcoord[layer] =
-            m_EpoxyThickness * layer / (copper_layers_cnt - 1);
+            m_EpoxyThickness - (m_EpoxyThickness * layer / (copper_layers_cnt - 1));
     }
 
     #define layerThicknessMargin 1.1
     double zpos_offset = m_NonCopperLayerThickness * layerThicknessMargin;
-    double  zpos_copper_back    = m_LayerZcoord[0] - layerThicknessMargin*m_CopperThickness/2;
+    double  zpos_copper_back    = - layerThicknessMargin*m_CopperThickness/2;
     double  zpos_copper_front   = m_EpoxyThickness + layerThicknessMargin*m_CopperThickness/2;
 
-    // Fill remaining unused copper layers and front layer zpos
-    // with m_EpoxyThickness
-    // Solder mask and Solder paste have the same Z position
+    // Fill remaining unused copper layers and back layer zpos
+    // with 0
     for( ; layer < MAX_CU_LAYERS; layer++ )
     {
-        m_LayerZcoord[layer] = m_EpoxyThickness;
+        m_LayerZcoord[layer] = 0;
     }
 
     // calculate z position for each non copper layer
+    // Solder mask and Solder paste have the same Z position
     for( int layer_id = MAX_CU_LAYERS; layer_id < LAYER_ID_COUNT; layer_id++ )
     {
         double zpos;
