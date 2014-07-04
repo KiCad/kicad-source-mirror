@@ -353,6 +353,8 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
         if( token == T_pcbplotparams )
             continue;
 
+        bool skip_right = false;
+
         switch( token )
         {
         case T_layerselection:
@@ -502,10 +504,13 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         default:
-            skipCurrent();
+            skipCurrent();      // skip unknown or outdated plot parameter
+            skip_right = true;  // the closing right token is already read.
             break;
         }
-        NeedRIGHT();
+
+        if( ! skip_right )
+            NeedRIGHT();
     }
 }
 
