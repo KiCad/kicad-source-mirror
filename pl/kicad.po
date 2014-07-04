@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-03 19:09+0100\n"
-"PO-Revision-Date: 2014-07-03 19:19+0100\n"
+"POT-Creation-Date: 2014-07-04 12:16+0100\n"
+"PO-Revision-Date: 2014-07-04 12:27+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -6803,15 +6803,15 @@ msgstr "Pokaż"
 
 #: pcbnew/class_pcb_layer_widget.cpp:294
 msgid "Front copper layer"
-msgstr "Górna strona ścieżek"
+msgstr "Górna warstwa ścieżek"
 
 #: pcbnew/class_pcb_layer_widget.cpp:298
 msgid "Back copper layer"
-msgstr "Dolna strona ścieżek"
+msgstr "Dolna warstwa ścieżek"
 
 #: pcbnew/class_pcb_layer_widget.cpp:302
 msgid "Inner copper layer"
-msgstr "Wewnętrzna strona ścieżek"
+msgstr "Wewnętrzna warstwa ścieżek"
 
 #: pcbnew/class_pcb_layer_widget.cpp:319
 msgid "Adhesive on board's front"
@@ -6823,11 +6823,11 @@ msgstr "Warstwa kleju na warstwie dolnej"
 
 #: pcbnew/class_pcb_layer_widget.cpp:321
 msgid "Solder paste on board's front"
-msgstr "Pasty lutowniczej na warstwie górnej"
+msgstr "Pasta lutownicza na warstwie górnej"
 
 #: pcbnew/class_pcb_layer_widget.cpp:322
 msgid "Solder paste on board's back"
-msgstr "Pasty lutowniczej na warstwie dolnej"
+msgstr "Pasta lutownicza na warstwie dolnej"
 
 #: pcbnew/class_pcb_layer_widget.cpp:323
 msgid "Silkscreen on board's front"
@@ -6843,15 +6843,15 @@ msgstr "Maska lutownicza na warstwie górnej"
 
 #: pcbnew/class_pcb_layer_widget.cpp:326
 msgid "Solder mask on board's back"
-msgstr "Maska lutowniczna na warstwie dolnej"
+msgstr "Maska lutownicza na warstwie dolnej"
 
 #: pcbnew/class_pcb_layer_widget.cpp:327
 msgid "Explanatory drawings"
-msgstr "Rysunkowa dodatkowa"
+msgstr "Rysunki objaśniające"
 
 #: pcbnew/class_pcb_layer_widget.cpp:328
 msgid "Explanatory comments"
-msgstr "Komentarzy"
+msgstr "Komentarze objaśniające"
 
 #: pcbnew/class_pcb_layer_widget.cpp:329 pcbnew/class_pcb_layer_widget.cpp:330
 msgid "User defined meaning"
@@ -6859,11 +6859,27 @@ msgstr "Znaczenie zdefiniowane przez użytkownika"
 
 #: pcbnew/class_pcb_layer_widget.cpp:331
 msgid "Board's perimeter definition"
-msgstr "Rysunkowa z obrzeżem płytki"
+msgstr "Definicja obrzeża płytki"
 
 #: pcbnew/class_pcb_layer_widget.cpp:332
 msgid "Board's edge setback outline"
 msgstr "Zewnętrzny kształt kompletnej płytki"
+
+#: pcbnew/class_pcb_layer_widget.cpp:333
+msgid "Footprint courtyards on board's front"
+msgstr "Obszar zajęty przez footprint na warstwie górnej"
+
+#: pcbnew/class_pcb_layer_widget.cpp:334
+msgid "Footprint courtyards on board's back"
+msgstr "Obszar zajęty przez footprint na warstwie dolnej"
+
+#: pcbnew/class_pcb_layer_widget.cpp:335
+msgid "Footprint assembly on board's front"
+msgstr "Informacje montażowe footprintu na warstwie górnej"
+
+#: pcbnew/class_pcb_layer_widget.cpp:336
+msgid "Footprint assembly on board's back"
+msgstr "Informacje montażowe footprintu na warstwie dolnej"
 
 #: pcbnew/class_pcb_text.cpp:135
 msgid "Dimension"
@@ -7713,7 +7729,7 @@ msgstr ""
 "Kliknij lewym by zaznaczyć, środkowym by zmienić kolor, prawym by wywołać "
 "menu"
 
-#: pcbnew/layer_widget.cpp:442
+#: pcbnew/layer_widget.cpp:434
 msgid "Enable this for visibility"
 msgstr "Włącz by była widoczna"
 
