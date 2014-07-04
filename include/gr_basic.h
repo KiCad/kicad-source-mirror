@@ -88,9 +88,6 @@ typedef int wxPenStyle;
 
 
 extern GR_DRAWMODE g_XorMode;
-extern EDA_COLOR_T g_DrawBgColor;
-
-
 
 typedef enum {
     /* Line styles for Get/SetLineStyle. */

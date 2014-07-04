@@ -47,9 +47,6 @@ static const bool NOT_FILLED = false;
 // For draw mode = XOR GR_XOR or GR_NXOR by background color
 GR_DRAWMODE g_XorMode = GR_NXOR;
 
-// Background color of the design frame
-EDA_COLOR_T g_DrawBgColor = WHITE;
-
 
 static void ClipAndDrawPoly( EDA_RECT * ClipBox, wxDC * DC, wxPoint Points[],
                              int n );
@@ -81,7 +78,7 @@ static wxDC* s_DC_lastDC = NULL;
 
 /***
  * Utility for the line clipping code, returns the boundary code of
- * a point. Bit allocation is arbitrary 
+ * a point. Bit allocation is arbitrary
  */
 static inline int clipOutCode( const EDA_RECT *aClipBox, int x, int y )
 {
@@ -124,7 +121,7 @@ static bool clipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &
         // Fast reject
         if( outcode1 & outcode2 )
             return true;
-        
+
         // Choose a side to clip
         int thisoutcode, x, y;
         if( outcode1 )
@@ -140,12 +137,12 @@ static bool clipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &
         {
             y = aClipBox->GetBottom();
             x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
-        } 
+        }
         else if( thisoutcode & 2 ) // Clip the top
         {
             y = aClipBox->GetY();
             x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
-        } 
+        }
         else if( thisoutcode & 8 ) // Clip the right
         {
             x = aClipBox->GetRight();
