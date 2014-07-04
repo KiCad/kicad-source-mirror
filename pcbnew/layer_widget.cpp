@@ -418,24 +418,24 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     sbm->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, sbm, 0, flags );
 
-    // column 1
-    col = 1;
+    // column 1 (COLUMN_COLORBM)
+    col = COLUMN_COLORBM;
     wxBitmapButton* bmb = makeColorButton( m_LayerScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
     bmb->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
     bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
     bmb->SetToolTip( _("Left click to select, middle click for color change, right click for menu" ) );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
-    // column 2
-    col = 2;
+    // column 2 (COLUMN_COLOR_LYR_CB)
+    col = COLUMN_COLOR_LYR_CB;
     wxCheckBox* cb = new wxCheckBox( m_LayerScrolledWindow, encodeId( col, aSpec.id ), wxEmptyString );
     cb->SetValue( aSpec.state );
     cb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( LAYER_WIDGET::OnLayerCheckBox ), NULL, this );
     cb->SetToolTip( _( "Enable this for visibility" ) );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, cb, 0, flags );
 
-    // column 3
-    col = 3;
+    // column 3 (COLUMN_COLOR_LYRNAME)
+    col = COLUMN_COLOR_LYRNAME;
     wxStaticText* st = new wxStaticText( m_LayerScrolledWindow, encodeId( col, aSpec.id ), aSpec.rowName );
     shrinkFont( st, m_PointSize );
     st->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
@@ -726,7 +726,7 @@ void LAYER_WIDGET::SetLayerVisible( LAYER_NUM aLayer, bool isVisible )
     int row = findLayerRow( aLayer );
     if( row >= 0 )
     {
-        wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
+        wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 2 );
         wxASSERT( cb );
         cb->SetValue( isVisible );      // does not fire an event
     }
@@ -738,7 +738,7 @@ bool LAYER_WIDGET::IsLayerVisible( LAYER_NUM aLayer )
     int row = findLayerRow( aLayer );
     if( row >= 0 )
     {
-        wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
+        wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
         wxASSERT( cb );
         return cb->GetValue();
     }
