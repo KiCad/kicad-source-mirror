@@ -153,7 +153,7 @@ void VIEW::SetRequired( int aLayerId, int aRequiredId, bool aRequired )
 }
 
 
-// stupid C++... python lamda would do this in one line
+// stupid C++... python lambda would do this in one line
 template <class Container>
 struct queryVisitor
 {

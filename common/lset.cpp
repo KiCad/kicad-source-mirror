@@ -633,7 +633,7 @@ LSET LSET::BackMask()
 
 LSEQ LSET::UIOrder() const
 {
-    LAYER_ID order[Margin+1];
+    LAYER_ID order[LAYER_ID_COUNT];
 
     // Assmuming that the LAYER_ID order is according to preferred UI order, as of
     // today this is true.  When that becomes not true, its easy to change the order
