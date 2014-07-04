@@ -330,6 +330,10 @@ void PCB_LAYER_WIDGET::ReFill()
         { Eco2_User,        _( "User defined meaning" )         },
         { Edge_Cuts,        _( "Board's perimeter definition" ) },
         { Margin,           _( "Board's edge setback outline" ) },
+        { F_CrtYd,          _( "Footprint courtyards on board's front" ) },
+        { B_CrtYd,          _( "Footprint courtyards on board's back" ) },
+        { F_Fab,            _( "Footprint assembly on board's front" ) },
+        { B_Fab,            _( "Footprint assembly on board's back" ) }
     };
 
     for( unsigned i=0;  i<DIM(non_cu_seq);  ++i )
