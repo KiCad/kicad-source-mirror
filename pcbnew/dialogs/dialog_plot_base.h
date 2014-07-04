@@ -27,6 +27,7 @@ class DIALOG_SHIM;
 #include <wx/checklst.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
+#include <wx/radiobox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -91,6 +92,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_useGerberExtensions;
 		wxCheckBox* m_useGerberAttributes;
 		wxCheckBox* m_subtractMaskFromSilk;
+		wxRadioBox* m_rbGerberFormat;
 		wxStaticBoxSizer* m_HPGLOptionsSizer;
 		wxStaticText* m_textPenSize;
 		wxTextCtrl* m_HPGLPenSizeOpt;

@@ -15,6 +15,22 @@
 
 #include <build_version.h>
 
+GERBER_PLOTTER::GERBER_PLOTTER()
+{
+    workFile  = 0;
+    finalFile = 0;
+    currentAperture = apertures.end();
+
+    // number of digits after the point (number of digits of the mantissa
+    // Be carefull: the Gerber coordinates are stored in an integer
+    // so 6 digits (inches) or 5 digits (mm) is a good value
+    // To avoid overflow, 7 digits (inches) or 6 digits is a max.
+    // with lower values than 6 digits (inches) or 5 digits (mm),
+    // Creating self-intersecting polygons from non-intersecting polygons
+    // happen easily.
+    m_gerberUnitInch = false;
+    m_gerberUnitFmt = 6;
+}
 
 void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 				  double aScale, bool aMirror )
@@ -26,40 +42,37 @@ void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     wxASSERT( aScale == 1 );    // aScale parameter is not used in Gerber
     plotScale = 1;              // Plot scale is *always* 1.0
 
-    m_gerberUnitInch = false;    // Currently fixed, but could be an option
-
-    // number of digits after the point (number of digits of the mantissa
-    // Be carefull: the Gerber coordinates are stored in an integer
-    // so 6 digits (inches) or 5 digits (mm) is a good value
-    // To avoid overflow, 7 digits (inches) or 6 digits is a max.
-    // with lower values than 6 digits (inches) or 5 digits (mm),
-    // Creating self-intersecting polygons from non-intersecting polygons
-    // happen easily.
-    m_gerberUnitFmt = m_gerberUnitInch ? 7 : 6;
-
     m_IUsPerDecimil = aIusPerDecimil;
-    iuPerDeviceUnit = pow( 10.0, m_gerberUnitFmt ) / ( aIusPerDecimil * 10000.0 );
 
-    if( ! m_gerberUnitInch )
-        iuPerDeviceUnit *= 25.4;     // gerber output in mm
-
-    /* We don't handle the filmbox, and it's more useful to keep the
-     * origin at the origin */
+    // We don't handle the filmbox, and it's more useful to keep the
+    // origin at the origin
     paperSize.x = 0;
     paperSize.y = 0;
     SetDefaultLineWidth( 100 * aIusPerDecimil ); // Arbitrary default
 }
 
+void GERBER_PLOTTER::SetGerberCoordinatesFormat( int aResolution, bool aUseInches )
+{
+    m_gerberUnitInch = aUseInches;
+    m_gerberUnitFmt = aResolution;
+
+    iuPerDeviceUnit = pow( 10.0, m_gerberUnitFmt ) / ( m_IUsPerDecimil * 10000.0 );
+
+    if( ! m_gerberUnitInch )
+        iuPerDeviceUnit *= 25.4;     // gerber output in mm
+}
+
+
 /**
  * Emit a D-Code record, using proper conversions
  * to format a leading zero omitted gerber coordinate
- * (for 4 decimal positions, see header generation in start_plot
+ * (for n decimal positions, see header generation in start_plot
  */
 void GERBER_PLOTTER::emitDcode( const DPOINT& pt, int dcode )
 {
 
     fprintf( outputFile, "X%dY%dD%02d*\n",
-	    int( pt.x ), int( pt.y ), dcode );
+	    KiROUND( pt.x ), KiROUND( pt.y ), dcode );
 }
 
 /**
@@ -357,16 +370,16 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAn
 
 /**
  * Gerber polygon: they can (and *should*) be filled with the
- * appropriate G36/G37 sequence (raster fills are deprecated)
+ * appropriate G36/G37 sequence
  */
-void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
+void GERBER_PLOTTER:: PlotPoly( const std::vector< wxPoint >& aCornerList,
                                FILL_T aFill, int aWidth )
 {
     if( aCornerList.size() <= 1 )
         return;
 
     // Gerber format does not know filled polygons with thick outline
-    // Thereore, to plot a filled polygon with outline having a thickness,
+    // Therefore, to plot a filled polygon with outline having a thickness,
     // one should plot outline as thick segments
 
     SetCurrentLineWidth( aWidth );

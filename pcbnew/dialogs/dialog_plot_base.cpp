@@ -219,22 +219,36 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_PlotOptionsSizer->Add( sbSizerSoldMaskLayerOpt, 1, wxEXPAND, 5 );
 	
-	m_GerberOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Gerber Options") ), wxVERTICAL );
+	m_GerberOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Gerber Options") ), wxHORIZONTAL );
+	
+	wxBoxSizer* bSizerGbrOpt;
+	bSizerGbrOpt = new wxBoxSizer( wxVERTICAL );
 	
 	m_useGerberExtensions = new wxCheckBox( this, wxID_ANY, _("Use proper filename extensions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_useGerberExtensions->SetToolTip( _("Use proper Gerber extensions - .GBL, .GTL, etc...") );
 	
-	m_GerberOptionsSizer->Add( m_useGerberExtensions, 0, wxLEFT|wxRIGHT|wxTOP, 2 );
+	bSizerGbrOpt->Add( m_useGerberExtensions, 0, wxALL, 2 );
 	
 	m_useGerberAttributes = new wxCheckBox( this, wxID_ANY, _("Include extended attributes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_useGerberAttributes->SetToolTip( _("Include extended attributes for non-image data in the Gerber file") );
 	
-	m_GerberOptionsSizer->Add( m_useGerberAttributes, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+	bSizerGbrOpt->Add( m_useGerberAttributes, 0, wxALL, 2 );
 	
 	m_subtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_subtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
 	
-	m_GerberOptionsSizer->Add( m_subtractMaskFromSilk, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+	bSizerGbrOpt->Add( m_subtractMaskFromSilk, 0, wxALL, 2 );
+	
+	
+	m_GerberOptionsSizer->Add( bSizerGbrOpt, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
+	wxString m_rbGerberFormatChoices[] = { _("4.5 (unit  mm)"), _("4.6 (unit mm)") };
+	int m_rbGerberFormatNChoices = sizeof( m_rbGerberFormatChoices ) / sizeof( wxString );
+	m_rbGerberFormat = new wxRadioBox( this, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_rbGerberFormatNChoices, m_rbGerberFormatChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbGerberFormat->SetSelection( 1 );
+	m_rbGerberFormat->SetToolTip( _("Precision of coordinates in Gerber files/\nUse the highter value if possible.") );
+	
+	m_GerberOptionsSizer->Add( m_rbGerberFormat, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	m_PlotOptionsSizer->Add( m_GerberOptionsSizer, 0, wxALL|wxEXPAND, 3 );

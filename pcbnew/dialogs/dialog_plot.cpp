@@ -167,6 +167,9 @@ void DIALOG_PLOT::Init_Dialog()
     // Option for including Gerber attributes (from Gerber X2 format) in the output
     m_useGerberAttributes->SetValue( m_plotOpts.GetUseGerberAttributes() );
 
+    // Gerber precision for coordinates
+    m_rbGerberFormat->SetSelection( m_plotOpts.GetGerberPrecision() == 5 ? 0 : 1 );
+
     // Option for excluding contents of "Edges Pcb" layer
     m_excludeEdgeLayerOpt->SetValue( m_plotOpts.GetExcludeEdgeLayer() );
 
@@ -668,11 +671,11 @@ void DIALOG_PLOT::applyPlotSettings()
     ConfigBaseWriteDouble( m_config, CONFIG_PS_FINEWIDTH_ADJ,
                            (double)m_PSWidthAdjust / IU_PER_MM );
 
-    tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
-
-    tempOptions.SetUseGerberAttributes( m_useGerberAttributes->GetValue() );
-
     tempOptions.SetFormat( GetPlotFormat() );
+
+    tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
+    tempOptions.SetUseGerberAttributes( m_useGerberAttributes->GetValue() );
+    tempOptions.SetGerberPrecision( m_rbGerberFormat->GetSelection() == 0 ? 5 : 6 );
 
     LSET selectedLayers;
 
