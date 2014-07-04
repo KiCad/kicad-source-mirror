@@ -100,8 +100,9 @@ bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
         // page order.
         LSEQ seq = lset.UIOrder();
 
-        if( unsigned( aPage ) < seq.size() )
-            m_PrintParams.m_PrintMaskLayer = LSET( seq[aPage] );
+        // aPage starts at 1, not 0
+        if( unsigned( aPage-1 ) < seq.size() )
+            m_PrintParams.m_PrintMaskLayer = LSET( seq[aPage-1] );
     }
 
     if( !m_PrintParams.m_PrintMaskLayer.any() )

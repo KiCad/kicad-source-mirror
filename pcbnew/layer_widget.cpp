@@ -726,7 +726,7 @@ void LAYER_WIDGET::SetLayerVisible( LAYER_NUM aLayer, bool isVisible )
     int row = findLayerRow( aLayer );
     if( row >= 0 )
     {
-        wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 2 );
+        wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
         wxASSERT( cb );
         cb->SetValue( isVisible );      // does not fire an event
     }

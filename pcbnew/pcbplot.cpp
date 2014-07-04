@@ -123,7 +123,10 @@ wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer )
         break;
 
     case Edge_Cuts:
-        attrib = wxString( wxT( "Profile" ) );
+        // Board outline.
+        // Can be "Profile,NP" (Not Plated: usual) or "Profile,P"
+        // This last is the exception (Plated)
+        attrib = wxString( wxT( "Profile,NP" ) );
         break;
 
     case Dwgs_User:

@@ -1,6 +1,7 @@
 drillshape
 excludeedgelayer
 false
+gerberprecision
 hpglpendiameter
 hpglpennumber
 hpglpenoverlay
@@ -15,7 +16,6 @@ padsonsilk
 pcbplotparams
 plotframeref
 plotinvisibletext
-plotothertext
 plotreference
 plotvalue
 psa4output

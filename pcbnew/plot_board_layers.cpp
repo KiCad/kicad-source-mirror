@@ -886,6 +886,10 @@ static void initializePlotter( PLOTTER *aPlotter, BOARD * aBoard,
 
     aPlotter->SetViewport( offset, IU_PER_DECIMILS, compound_scale,
                            aPlotOpts->GetMirror() );
+
+    // has meaning only for gerber plotter. Must be called only after SetViewport
+    aPlotter->SetGerberCoordinatesFormat( aPlotOpts->GetGerberPrecision() );
+
     aPlotter->SetDefaultLineWidth( aPlotOpts->GetLineWidth() );
     aPlotter->SetCreator( wxT( "PCBNEW" ) );
     aPlotter->SetColorMode( false );        // default is plot in Black and White.

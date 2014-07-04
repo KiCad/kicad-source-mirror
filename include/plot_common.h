@@ -282,12 +282,17 @@ public:
      */
     virtual void SetTextMode( PlotTextMode mode )
     {
-        // NOP for most plotters
+        // NOP for most plotters.
     }
 
     virtual void SetLayerAttribFunction( const wxString& function )
     {
-        // NOP for most plotters
+        // NOP for most plotters. Only for Gerber plotter
+    }
+
+    virtual void SetGerberCoordinatesFormat( int aResolution, bool aUseInches = false )
+    {
+        // NOP for most plotters. Only for Gerber plotter
     }
 
 protected:
@@ -769,12 +774,7 @@ struct APERTURE
 class GERBER_PLOTTER : public PLOTTER
 {
 public:
-    GERBER_PLOTTER()
-    {
-        workFile  = 0;
-        finalFile = 0;
-        currentAperture = apertures.end();
-    }
+    GERBER_PLOTTER();
 
     virtual PlotFormat GetPlotterType() const
     {
@@ -794,6 +794,7 @@ public:
     // RS274X has no dashing, nor colours
     virtual void SetDash( bool dashed ) {};
     virtual void SetColor( EDA_COLOR_T color ) {};
+    // Currently, aScale and aMirror are not used in gerber plotter
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                           double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
@@ -822,6 +823,18 @@ public:
     {
         m_attribFunction = function;
     }
+
+    /**
+     * Function SetGerberCoordinatesFormat
+     * selection of Gerber units and resolution (number of digits in mantissa)
+     * @param aResolution = number of digits in mantissa of coordinate
+     *                      use 5 or 6 for mm and 6 or 7 for inches
+     *                      do not use value > 6 (mm) or > 7 (in) to avoid overflow
+     * @param aUseInches = true to use inches, false to use mm (default)
+     *
+     * Should be called only after SetViewport() is called
+     */
+    virtual void SetGerberCoordinatesFormat( int aResolution, bool aUseInches = false );
 
 protected:
     void selectAperture( const wxSize& size, APERTURE::APERTURE_TYPE type );

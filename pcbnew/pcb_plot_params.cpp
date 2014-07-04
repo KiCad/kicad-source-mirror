@@ -49,6 +49,10 @@
  */
 int g_DrawDefaultLineThickness = PLOT_LINEWIDTH_DEFAULT;
 
+// default trailing digits in Gerber coordinates, when units are mm
+// This is also the max usable precision (i.e. internal Pcbnew Units)
+static const int gbrDefaultPrecision = 6;
+
 
 using namespace PCBPLOTPARAMS_T;
 
@@ -79,6 +83,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS() :
 {
     m_useGerberExtensions  = true;
     m_useGerberAttributes  = false;
+    m_gerberPrecision      = gbrDefaultPrecision;
     m_excludeEdgeLayer     = true;
     m_lineWidth            = g_DrawDefaultLineThickness;
     m_plotFrameRef         = false;
@@ -116,6 +121,17 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS() :
     m_skipNPTH_Pads        = false;
 }
 
+void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )
+{
+    // Currently geber files use mm.
+    // accepted precision is only 6 (max value, this is the resolution of Pcbnew)
+    // or 5, min value for professional boards, when 6 creates problems
+    // to board makers.
+
+    m_gerberPrecision = aPrecision == gbrDefaultPrecision-1 ? gbrDefaultPrecision-1 :
+                                      gbrDefaultPrecision;
+}
+
 
 // PLEASE NOTE: only plot dialog options are processed
 void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
@@ -132,9 +148,14 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
                        m_useGerberExtensions ? trueStr : falseStr );
 
-    if( m_useGerberAttributes )  // save this option only if active,
+    if( m_useGerberAttributes ) // save this option only if active,
                                 // to avoid incompatibility with older Pcbnew version
         aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ), trueStr );
+
+    if( m_gerberPrecision != gbrDefaultPrecision ) // save this option only if it is not the default value,
+                                                   // to avoid incompatibility with older Pcbnew version
+        aFormatter->Print( aNestLevel+1, "(%s %d)\n",
+                           getTokenName( T_gerberprecision ), m_gerberPrecision );
 
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_excludeedgelayer ),
                        m_excludeEdgeLayer ? trueStr : falseStr );
@@ -204,6 +225,8 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
     if( m_useGerberExtensions != aPcbPlotParams.m_useGerberExtensions )
         return false;
     if( m_useGerberAttributes != aPcbPlotParams.m_useGerberAttributes )
+        return false;
+    if( m_gerberPrecision != aPcbPlotParams.m_gerberPrecision )
         return false;
     if( m_excludeEdgeLayer != aPcbPlotParams.m_excludeEdgeLayer )
         return false;
@@ -371,6 +394,11 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             aPcbPlotParams->m_useGerberAttributes = parseBool();
             break;
 
+        case T_gerberprecision:
+            aPcbPlotParams->m_gerberPrecision =
+                parseInt( gbrDefaultPrecision-1, gbrDefaultPrecision);
+            break;
+
         case T_psa4output:
             aPcbPlotParams->m_A4Output = parseBool();
             break;
@@ -438,10 +466,6 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             aPcbPlotParams->m_plotValue = parseBool();
             break;
 
-        case T_plotothertext:   // no more in use: keep for compatibility
-            parseBool();    // skip param value
-            break;
-
         case T_plotinvisibletext:
             aPcbPlotParams->m_plotInvisibleText = parseBool();
             break;
@@ -478,7 +502,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         default:
-            Unexpected( CurText() );
+            skipCurrent();
             break;
         }
         NeedRIGHT();
@@ -525,4 +549,24 @@ double PCB_PLOT_PARAMS_PARSER::parseDouble()
     double val = strtod( CurText(), NULL );
 
     return val;
+}
+
+void PCB_PLOT_PARAMS_PARSER::skipCurrent() throw( IO_ERROR, PARSE_ERROR )
+{
+    int curr_level = 0;
+    T token;
+
+    while( ( token = NextTok() ) != T_EOF )
+    {
+        if( token == T_LEFT )
+            curr_level--;
+
+        if( token == T_RIGHT )
+        {
+            curr_level++;
+
+            if( curr_level > 0 )
+                return;
+        }
+    }
 }
