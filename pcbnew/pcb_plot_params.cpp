@@ -81,7 +81,7 @@ static bool setInt( int* aInt, int aValue, int aMin, int aMax )
 PCB_PLOT_PARAMS::PCB_PLOT_PARAMS() :
     m_layerSelection( 4, B_Cu, F_Cu, F_SilkS, B_SilkS )
 {
-    m_useGerberExtensions  = true;
+    m_useGerberExtensions  = false;
     m_useGerberAttributes  = false;
     m_gerberPrecision      = gbrDefaultPrecision;
     m_excludeEdgeLayer     = true;

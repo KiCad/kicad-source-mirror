@@ -93,7 +93,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
         drawmode = GR_OR;
 
     // Draw footprints, this is done at last in order to print the pad holes in
-    // white (or g_DrawBgColor) after the tracks and zones
+    // white after the tracks and zones
     int tmp = D_PAD::m_PadSketchModePenSize;
     D_PAD::m_PadSketchModePenSize = defaultPenSize;
 
@@ -283,7 +283,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     }
 
     // Draw footprints, this is done at last in order to print the pad holes in
-    // white (or g_DrawBgColor) after the tracks and zones
+    // white after the tracks and zones
     int tmp = D_PAD::m_PadSketchModePenSize;
     D_PAD::m_PadSketchModePenSize = defaultPenSize;
 
@@ -299,7 +299,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     if( drillShapeOpt != PRINT_PARAMETERS::NO_DRILL_SHAPE )
     {
         TRACK*      track = Pcb->m_Track;
-        EDA_COLOR_T color = g_DrawBgColor;
+        EDA_COLOR_T color = WHITE;
 
         bool blackpenstate = GetGRForceBlackPenState();
 
