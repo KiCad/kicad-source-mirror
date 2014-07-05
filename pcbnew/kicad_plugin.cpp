@@ -593,6 +593,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
         Eco2_User,
         Edge_Cuts,
         Margin,
+        B_CrtYd,
+        F_CrtYd,
+        B_Fab,
+        F_Fab,
     };
 
     for( LSEQ seq = aBoard->GetEnabledLayers().Seq( non_cu, DIM( non_cu ) );  seq;  ++seq )

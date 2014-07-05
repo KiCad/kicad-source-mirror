@@ -94,12 +94,16 @@ enum LAYER_ID
 
     B_Adhes,        // 32
     F_Adhes,
+
     B_Paste,
     F_Paste,
+
     B_SilkS,
     F_SilkS,
+
     B_Mask,
     F_Mask,
+
     Dwgs_User,
     Cmts_User,
     Eco1_User,
@@ -107,10 +111,11 @@ enum LAYER_ID
     Edge_Cuts,
     Margin,
 
-    F_CrtYd,        // CrtYd & Fab are footprint only
     B_CrtYd,
-    F_Fab,
+    F_CrtYd,
+
     B_Fab,
+    F_Fab,
 
     LAYER_ID_COUNT
 };
