@@ -60,9 +60,9 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
 
 public:
     bool                      m_KeepCvpcbOpen;
-    FOOTPRINTS_LISTBOX*       m_FootprintList;
-    LIBRARY_LISTBOX*          m_LibraryList;
-    COMPONENTS_LISTBOX*       m_ListCmp;
+    FOOTPRINTS_LISTBOX*       m_footprintListBox;
+    LIBRARY_LISTBOX*          m_libListBox;
+    COMPONENTS_LISTBOX*       m_compListBox;
     wxAuiToolBar*             m_mainToolBar;
     wxFileName                m_NetlistFileName;
     wxArrayString             m_ModuleLibNames;

@@ -481,7 +481,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
     CVPCB_MAINFRAME* parentframe = (CVPCB_MAINFRAME *) GetParent();
 
-    wxString footprintName = parentframe->m_FootprintList->GetSelectedFootprint();
+    wxString footprintName = parentframe->m_footprintListBox->GetSelectedFootprint();
 
     if( !footprintName.IsEmpty() )
     {

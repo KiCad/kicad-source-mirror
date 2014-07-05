@@ -155,7 +155,6 @@ protected:
         return false;
     }
 
-
 #endif
 
 public:

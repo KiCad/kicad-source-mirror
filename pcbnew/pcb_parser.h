@@ -62,8 +62,8 @@ struct LAYER;
  */
 class PCB_PARSER : public PCB_LEXER
 {
-    typedef boost::unordered_map< std::string, LAYER_ID > LAYER_ID_MAP;
-    typedef boost::unordered_map< std::string, LSET > LSET_MAP;
+    typedef boost::unordered_map< std::string, LAYER_ID >   LAYER_ID_MAP;
+    typedef boost::unordered_map< std::string, LSET >       LSET_MAP;
 
     BOARD*              m_board;
     LAYER_ID_MAP        m_layerIndices;     ///< map layer name to it's index

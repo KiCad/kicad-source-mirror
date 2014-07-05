@@ -432,8 +432,9 @@ public:
      * Constructor WXINPUTSTREAM_LINE_READER
      *
      * @param aStream A pointer to a wxInputStream object to read.
+     * @param aSource The name of the stream source, for error reporting purposes.
      */
-    INPUTSTREAM_LINE_READER( wxInputStream* aStream );
+    INPUTSTREAM_LINE_READER( wxInputStream* aStream, const wxString& aSource );
 
     char* ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
 };
