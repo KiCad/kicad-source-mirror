@@ -77,6 +77,7 @@ void PCB_PARSER::init()
     m_layerMasks[ "*.Mask" ]    = LSET( 2, B_Mask,  F_Mask );
     m_layerMasks[ "*.SilkS" ]   = LSET( 2, B_SilkS, F_SilkS );
     m_layerMasks[ "*.Fab" ]     = LSET( 2, B_Fab,   F_Fab );
+    m_layerMasks[ "*.CrtYd" ]   = LSET( 2, B_CrtYd, F_CrtYd );
 
     // This is for the first pretty format, which had Inner1_Cu-Inner14_Cu with the numbering
     // sequence reversed from the In1_Cu-In30_Cu version 2 pretty numbering scheme.
