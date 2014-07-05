@@ -108,9 +108,9 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
 {
     m_FrameName             = CVPCB_MAINFRAME_NAME;
-    m_ListCmp               = NULL;
-    m_FootprintList         = NULL;
-    m_LibraryList           = NULL;
+    m_compListBox           = NULL;
+    m_footprintListBox      = NULL;
+    m_libListBox            = NULL;
     m_mainToolBar           = NULL;
     m_modified              = false;
     m_isEESchemaNetlist     = false;
@@ -175,18 +175,18 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_auimgr.AddPane( m_mainToolBar,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top() );
 
-    if( m_ListCmp )
-        m_auimgr.AddPane( m_ListCmp,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_ListCmp" ) ).CentrePane() );
+    if( m_compListBox )
+        m_auimgr.AddPane( m_compListBox,
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_compListBox" ) ).CentrePane() );
 
-    if( m_LibraryList)
-        m_auimgr.AddPane( m_LibraryList,
-                          wxAuiPaneInfo( info ).Name( wxT( "m_LibraryList" ) ).
+    if( m_libListBox)
+        m_auimgr.AddPane( m_libListBox,
+                          wxAuiPaneInfo( info ).Name( wxT( "m_libListBox" ) ).
                           Left().BestSize( (int) ( m_FrameSize.x * 0.20 ), m_FrameSize.y ) );
 
-    if( m_FootprintList )
-        m_auimgr.AddPane( m_FootprintList,
-                          wxAuiPaneInfo( info ).Name( wxT( "m_FootprintList" ) ).
+    if( m_footprintListBox )
+        m_auimgr.AddPane( m_footprintListBox,
+                          wxAuiPaneInfo( info ).Name( wxT( "m_footprintListBox" ) ).
                           Right().BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
 
     m_auimgr.Update();
@@ -302,21 +302,21 @@ void CVPCB_MAINFRAME::ChangeFocus( bool aMoveRight )
 
     if( aMoveRight )
     {
-        if( hasFocus == m_LibraryList )
-            m_ListCmp->SetFocus();
-        else if( hasFocus == m_ListCmp )
-            m_FootprintList->SetFocus();
-        else if( hasFocus == m_FootprintList )
-            m_LibraryList->SetFocus();
+        if( hasFocus == m_libListBox )
+            m_compListBox->SetFocus();
+        else if( hasFocus == m_compListBox )
+            m_footprintListBox->SetFocus();
+        else if( hasFocus == m_footprintListBox )
+            m_libListBox->SetFocus();
     }
     else
     {
-        if( hasFocus == m_LibraryList )
-            m_FootprintList->SetFocus();
-        else if( hasFocus == m_ListCmp )
-            m_LibraryList->SetFocus();
-        else if( hasFocus == m_FootprintList )
-            m_ListCmp->SetFocus();
+        if( hasFocus == m_libListBox )
+            m_footprintListBox->SetFocus();
+        else if( hasFocus == m_compListBox )
+            m_libListBox->SetFocus();
+        else if( hasFocus == m_footprintListBox )
+            m_compListBox->SetFocus();
     }
 }
 
@@ -326,7 +326,7 @@ void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
     if( m_netlist.IsEmpty() )
         return;
 
-    long selection = m_ListCmp->GetFirstSelected();
+    long selection = m_compListBox->GetFirstSelected();
 
     if( selection < 0 )
         selection = -1;     // We will start to 0 for the first search , if no item selected
@@ -335,8 +335,8 @@ void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
     {
         if( m_netlist.GetComponent( jj )->GetFPID().empty() )
         {
-            m_ListCmp->SetSelection( wxNOT_FOUND, false );  // Remove all selections
-            m_ListCmp->SetSelection( jj );
+            m_compListBox->SetSelection( wxNOT_FOUND, false );  // Remove all selections
+            m_compListBox->SetSelection( jj );
             SendMessageToEESCHEMA();
             return;
         }
@@ -349,20 +349,20 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
     if( m_netlist.IsEmpty() )
         return;
 
-    int selection = m_ListCmp->GetFirstSelected();
+    int selection = m_compListBox->GetFirstSelected();
 
     if( selection < 0 )
-        selection = m_ListCmp->GetCount();
+        selection = m_compListBox->GetCount();
     else
-        while( m_ListCmp->GetNextSelected( selection ) >= 0 )
-            selection =  m_ListCmp->GetNextSelected( selection );
+        while( m_compListBox->GetNextSelected( selection ) >= 0 )
+            selection =  m_compListBox->GetNextSelected( selection );
 
     for( int kk = selection-1; kk >= 0; kk-- )
     {
         if( m_netlist.GetComponent( kk )->GetFPID().empty() )
         {
-            m_ListCmp->SetSelection( wxNOT_FOUND, false );  // Remove all selections
-            m_ListCmp->SetSelection( kk );
+            m_compListBox->SetSelection( wxNOT_FOUND, false );  // Remove all selections
+            m_compListBox->SetSelection( kk );
             SendMessageToEESCHEMA();
             return;
         }
@@ -392,7 +392,7 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
     if( IsOK( this, _( "Delete selections" ) ) )
     {
         m_skipComponentSelect = true;
-        m_ListCmp->SetSelection( 0 );
+        m_compListBox->SetSelection( 0 );
 
         for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
         {
@@ -403,7 +403,7 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
         }
 
         m_skipComponentSelect = false;
-        m_ListCmp->SetSelection( 0 );
+        m_compListBox->SetSelection( 0 );
         m_undefinedComponentCnt = m_netlist.GetCount();
     }
 
@@ -562,8 +562,8 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
         filter |= FOOTPRINTS_LISTBOX::BY_LIBRARY;
 
     component = GetSelectedComponent();
-    libraryName = m_LibraryList->GetSelectedLibrary();
-    m_FootprintList->SetFootprints( m_footprints, libraryName, component, filter );
+    libraryName = m_libListBox->GetSelectedLibrary();
+    m_footprintListBox->SetFootprints( m_footprints, libraryName, component, filter );
 
     // Tell AuiMgr that objects are changed !
     if( m_auimgr.GetManagedWindow() )   // Be sure Aui Manager is initialized
@@ -578,23 +578,23 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     // but only if the selection is made from the component list or the library list.
     // If the selection is made from the footprint list, do not change the current
     // selected footprint.
-    if( FindFocus() == m_ListCmp || FindFocus() == m_LibraryList )
+    if( FindFocus() == m_compListBox || FindFocus() == m_libListBox )
     {
         wxString module = FROM_UTF8( component->GetFPID().Format().c_str() );
 
         bool found = false;
 
-        for( int ii = 0; ii < m_FootprintList->GetCount(); ii++ )
+        for( int ii = 0; ii < m_footprintListBox->GetCount(); ii++ )
         {
             wxString footprintName;
-            wxString msg = m_FootprintList->OnGetItemText( ii, 0 );
+            wxString msg = m_footprintListBox->OnGetItemText( ii, 0 );
             msg.Trim( true );
             msg.Trim( false );
             footprintName = msg.AfterFirst( wxChar( ' ' ) );
 
             if( module.Cmp( footprintName ) == 0 )
             {
-                m_FootprintList->SetSelection( ii, true );
+                m_footprintListBox->SetSelection( ii, true );
                 found = true;
                 break;
             }
@@ -602,10 +602,10 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 
         if( !found )
         {
-            int ii = m_FootprintList->GetSelection();
+            int ii = m_footprintListBox->GetSelection();
 
             if ( ii >= 0 )
-                m_FootprintList->SetSelection( ii, false );
+                m_footprintListBox->SetSelection( ii, false );
 
             if( GetFpViewerFrame() )
             {
@@ -638,7 +638,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
     wxString   msg;
     COMPONENT* component;
 
-    if( wxWindow::FindFocus() == m_ListCmp || wxWindow::FindFocus() == m_LibraryList )
+    if( wxWindow::FindFocus() == m_compListBox || wxWindow::FindFocus() == m_libListBox )
     {
         msg.Printf( _( "Components: %d, unassigned: %d" ), (int) m_netlist.GetCount(),
                     m_undefinedComponentCnt );
@@ -665,7 +665,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
     }
     else
     {
-        wxString footprintName = m_FootprintList->GetSelectedFootprint();
+        wxString footprintName = m_footprintListBox->GetSelectedFootprint();
 
         FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( footprintName );
 
@@ -681,7 +681,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
     msg.Empty();
 
-    if( m_FootprintList )
+    if( m_footprintListBox )
     {
         if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
             msg = _( "key words" );
@@ -707,7 +707,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
         else
             msg = _( "Filtered by " ) + msg;
 
-        msg << wxT( ": " ) << m_FootprintList->GetCount();
+        msg << wxT( ": " ) << m_footprintListBox->GetCount();
 
         SetStatusText( msg, 2 );
     }
@@ -762,7 +762,7 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA()
     if( m_netlist.IsEmpty() )
         return;
 
-    int selection = m_ListCmp->GetSelection();
+    int selection = m_compListBox->GetSelection();
 
     if ( selection < 0 )
         selection = 0;
@@ -914,17 +914,17 @@ void CVPCB_MAINFRAME::BuildFOOTPRINTS_LISTBOX()
 {
     wxFont   guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 
-    if( m_FootprintList == NULL )
+    if( m_footprintListBox == NULL )
     {
-        m_FootprintList = new FOOTPRINTS_LISTBOX( this, ID_CVPCB_FOOTPRINT_LIST,
+        m_footprintListBox = new FOOTPRINTS_LISTBOX( this, ID_CVPCB_FOOTPRINT_LIST,
                                                   wxDefaultPosition, wxDefaultSize );
-        m_FootprintList->SetFont( wxFont( guiFont.GetPointSize(),
+        m_footprintListBox->SetFont( wxFont( guiFont.GetPointSize(),
                                           wxFONTFAMILY_MODERN,
                                           wxFONTSTYLE_NORMAL,
                                           wxFONTWEIGHT_NORMAL ) );
     }
 
-    m_FootprintList->SetFootprints( m_footprints, wxEmptyString, NULL,
+    m_footprintListBox->SetFootprints( m_footprints, wxEmptyString, NULL,
                                     FOOTPRINTS_LISTBOX::UNFILTERED );
     DisplayStatus();
 }
@@ -936,34 +936,34 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
     COMPONENT*  component;
     wxFont      guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 
-    if( m_ListCmp == NULL )
+    if( m_compListBox == NULL )
     {
-        m_ListCmp = new COMPONENTS_LISTBOX( this, ID_CVPCB_COMPONENT_LIST,
+        m_compListBox = new COMPONENTS_LISTBOX( this, ID_CVPCB_COMPONENT_LIST,
                                             wxDefaultPosition, wxDefaultSize );
-        m_ListCmp->SetFont( wxFont( guiFont.GetPointSize(),
+        m_compListBox->SetFont( wxFont( guiFont.GetPointSize(),
                                     wxFONTFAMILY_MODERN,
                                     wxFONTSTYLE_NORMAL,
                                     wxFONTWEIGHT_NORMAL ) );
     }
 
-    m_ListCmp->m_ComponentList.Clear();
+    m_compListBox->m_ComponentList.Clear();
 
     for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
     {
         component = m_netlist.GetComponent( i );
 
-        msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
+        msg.Printf( CMP_FORMAT, m_compListBox->GetCount() + 1,
                     GetChars( component->GetReference() ),
                     GetChars( component->GetValue() ),
                     GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
-        m_ListCmp->m_ComponentList.Add( msg );
+        m_compListBox->m_ComponentList.Add( msg );
     }
 
-    if( m_ListCmp->m_ComponentList.Count() )
+    if( m_compListBox->m_ComponentList.Count() )
     {
-        m_ListCmp->SetItemCount( m_ListCmp->m_ComponentList.Count() );
-        m_ListCmp->SetSelection( 0, true );
-        m_ListCmp->RefreshItems( 0L, m_ListCmp->m_ComponentList.Count()-1 );
+        m_compListBox->SetItemCount( m_compListBox->m_ComponentList.Count() );
+        m_compListBox->SetSelection( 0, true );
+        m_compListBox->RefreshItems( 0L, m_compListBox->m_ComponentList.Count()-1 );
 
 #if defined (__WXGTK__ )
         // @bug On GTK and wxWidgets 2.8.x, this will assert in debug builds because the
@@ -971,9 +971,9 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
         //      ellipsizing long strings down to a few characters.  It still doesn't set
         //      the scroll bars correctly (too short) but it's better than any of the
         //      other alternatives.  If someone knows how to fix this, please do.
-        m_ListCmp->SetColumnWidth( -1, wxLIST_AUTOSIZE );
+        m_compListBox->SetColumnWidth( -1, wxLIST_AUTOSIZE );
 #else
-        m_ListCmp->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+        m_compListBox->SetColumnWidth( 0, wxLIST_AUTOSIZE );
 #endif
     }
 }
@@ -983,11 +983,11 @@ void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
 {
     wxFont   guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 
-    if( m_LibraryList == NULL )
+    if( m_libListBox == NULL )
     {
-        m_LibraryList = new LIBRARY_LISTBOX( this, ID_CVPCB_LIBRARY_LIST,
+        m_libListBox = new LIBRARY_LISTBOX( this, ID_CVPCB_LIBRARY_LIST,
                                              wxDefaultPosition, wxDefaultSize );
-        m_LibraryList->SetFont( wxFont( guiFont.GetPointSize(),
+        m_libListBox->SetFont( wxFont( guiFont.GetPointSize(),
                                         wxFONTFAMILY_MODERN,
                                         wxFONTSTYLE_NORMAL,
                                         wxFONTWEIGHT_NORMAL ) );
@@ -1004,14 +1004,14 @@ void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
         for( unsigned ii = 0; ii < libNickNames.size(); ii++ )
             libNames.Add( libNickNames[ii] );
 
-        m_LibraryList->SetLibraryList( libNames );
+        m_libListBox->SetLibraryList( libNames );
     }
 }
 
 
 COMPONENT* CVPCB_MAINFRAME::GetSelectedComponent()
 {
-    int selection = m_ListCmp->GetSelection();
+    int selection = m_compListBox->GetSelection();
 
     if( selection >= 0 && selection < (int) m_netlist.GetCount() )
         return m_netlist.GetComponent( selection );

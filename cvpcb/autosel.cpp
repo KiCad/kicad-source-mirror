@@ -25,7 +25,7 @@
  * @file autosel.cpp
  */
 
-/* Routines for automatic selection of modules. */
+// Routines for automatic selection of modules.
 
 #include <fctsys.h>
 #include <common.h>
@@ -40,7 +40,10 @@
 #include <cvpcb_mainframe.h>
 #include <cvstruct.h>
 
-#define QUOTE '\''
+#define QUOTE   '\''
+
+#define FMT_TITLE_LIB_LOAD_ERROR    _( "Library Load Error" )
+
 
 class FOOTPRINT_ALIAS
 {
@@ -93,7 +96,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
     if( m_netlist.IsEmpty() )
         return;
 
-    /* Find equivalents in all available files. */
+    // Find equivalents in all available files.
     for( ii = 0; ii < m_AliasLibNames.GetCount(); ii++ )
     {
         fn = m_AliasLibNames[ii];
@@ -107,6 +110,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
         {
             fn.SetExt( fn.GetExt() + wxT( "." ) + FootprintAliasFileExtension );
         }
+
         tmp = search.FindValidPath( fn.GetFullPath() );
 
         if( !tmp )
@@ -114,7 +118,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
             msg.Printf( _( "Footprint alias library file '%s' could not be found in the "
                            "default search paths." ),
                         GetChars( fn.GetFullName() ) );
-            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
+            wxMessageBox( msg, FMT_TITLE_LIB_LOAD_ERROR, wxOK | wxICON_ERROR );
             continue;
         }
 
@@ -122,8 +126,8 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 
         if( file == NULL )
         {
-            msg.Printf( _( "Error opening alias library <%s>." ), GetChars( tmp ) );
-            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
+            msg.Printf( _( "Error opening alias library '%s'." ), GetChars( tmp ) );
+            wxMessageBox( msg, FMT_TITLE_LIB_LOAD_ERROR, wxOK | wxICON_ERROR );
             continue;
         }
 
@@ -153,7 +157,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
         fclose( file );
     }
 
-    /* Display the number of footprint aliases.  */
+    // Display the number of footprint aliases.
     msg.Printf( _( "%d footprint aliases found." ), aliases.size() );
     SetStatusText( msg, 0 );
 
@@ -165,7 +169,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
         component = m_netlist.GetComponent( kk );
 
         bool found = false;
-        m_ListCmp->SetSelection( ii++, true );
+        m_compListBox->SetSelection( ii++, true );
 
         if( !component->GetFPID().empty() )
             continue;
@@ -176,8 +180,8 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
             if( alias.m_Name.CmpNoCase( component->GetValue() ) != 0 )
                 continue;
 
-            /* filter alias so one can use multiple aliases (for polar and nonpolar caps for
-             * example) */
+            // filter alias so one can use multiple aliases (for polar and
+            // nonpolar caps for example)
             const FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( alias.m_FootprintName );
 
             if( module )
@@ -207,11 +211,11 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 
         }
 
-        /* obviously the last chance: there's only one filter matching one footprint */
+        // obviously the last chance: there's only one filter matching one footprint
         if( !found && 1 == component->GetFootprintFilters().GetCount() )
         {
-            /* we do not need to analyse wildcards: single footprint do not contain them */
-            /* and if there are wildcards it just will not match any */
+            // we do not need to analyse wildcards: single footprint do not
+            // contain them and if there are wildcards it just will not match any
             const FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( component->GetFootprintFilters()[0] );
 
             if( module )

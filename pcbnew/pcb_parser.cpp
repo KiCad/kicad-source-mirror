@@ -79,14 +79,15 @@ void PCB_PARSER::init()
     m_layerMasks[ "*.Fab" ]     = LSET( 2, B_Fab,   F_Fab );
     m_layerMasks[ "*.CrtYd" ]   = LSET( 2, B_CrtYd, F_CrtYd );
 
-    // This is for the first pretty format, which had Inner1_Cu-Inner14_Cu with the numbering
-    // sequence reversed from the In1_Cu-In30_Cu version 2 pretty numbering scheme.
-    // Version 2 brought in an additional 16 Cu layers and flipped the cu stack but
+    // This is for the first pretty & *.kicad_pcb formats, which had
+    // Inner1_Cu - Inner14_Cu with the numbering sequence
+    // reversed from the subsequent format's In1_Cu - In30_Cu numbering scheme.
+    // The newer format brought in an additional 16 Cu layers and flipped the cu stack but
     // kept the gap between one of the outside layers and the last cu internal.
 
     for( int i=1; i<=14; ++i )
     {
-        std::string key = StrPrintf( "Inner%d", i );
+        std::string key = StrPrintf( "Inner%d.Cu", i );
 
         m_layerMasks[ key ] = LSET( LAYER_ID( In15_Cu - i ) );
     }
@@ -867,9 +868,14 @@ T PCB_PARSER::lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR )
         }
 #endif
 
-        wxString error = wxString::Format(
-            _( "Layer '%s' in file <%s> at line %d, position %d, was not defined in the layers section" ),
-            GetChars( FROM_UTF8( CurText() ) ), GetChars( CurSource() ),
+        wxString error = wxString::Format( _(
+                "Layer '%s' in file\n"
+                "'%s'\n"
+                "at line %d, position %d\n"
+                "was not defined in the layers section"
+                ),
+            GetChars( FROM_UTF8( CurText() ) ),
+            GetChars( CurSource() ),
             CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
