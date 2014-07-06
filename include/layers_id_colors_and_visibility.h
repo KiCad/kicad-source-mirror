@@ -92,7 +92,7 @@ enum LAYER_ID
     In30_Cu,
     B_Cu,           // 31
 
-    B_Adhes,        // 32
+    B_Adhes,
     F_Adhes,
 
     B_Paste,
