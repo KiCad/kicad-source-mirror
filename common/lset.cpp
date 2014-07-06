@@ -129,10 +129,10 @@ const wxChar* LSET::Name( LAYER_ID aLayerId )
     case Margin:            txt = wxT( "Margin" );          break;
 
     // Footprint
-    case F_CrtYd:           txt = wxT( "F_CrtYd" );         break;
-    case B_CrtYd:           txt = wxT( "B_CrtYd" );         break;
-    case F_Fab:             txt = wxT( "F_Fab" );           break;
-    case B_Fab:             txt = wxT( "B_Fab" );           break;
+    case F_CrtYd:           txt = wxT( "F.CrtYd" );         break;
+    case B_CrtYd:           txt = wxT( "B.CrtYd" );         break;
+    case F_Fab:             txt = wxT( "F.Fab" );           break;
+    case B_Fab:             txt = wxT( "B.Fab" );           break;
 
     default:
         wxASSERT_MSG( 0, wxT( "aLayerId out of range" ) );
