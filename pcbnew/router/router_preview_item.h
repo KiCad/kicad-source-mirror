@@ -84,7 +84,7 @@ public:
         aCount = 1;
     }
 
-    void drawLineChain( const SHAPE_LINE_CHAIN& aL, KIGFX::GAL *aGal ) const;
+    void drawLineChain( const SHAPE_LINE_CHAIN& aL, KIGFX::GAL* aGal ) const;
 
 private:
     const KIGFX::COLOR4D assignColor( int aStyle ) const;
@@ -105,7 +105,7 @@ private:
 
     // fixme: shouldn't this go to VIEW?
     static const int ClearanceOverlayDepth = -2000;
-    static const int BaseOverlayDepth = -2020;
+    static const int BaseOverlayDepth = -2010;
     static const int ViaOverlayDepth = -2046;
 
     double m_depth;

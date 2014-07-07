@@ -116,12 +116,12 @@ private:
 
 PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 {
-    PNS_LAYERSET layers( 0, 15 );
+    PNS_LAYERSET layers( 0, MAX_CU_LAYERS - 1 );
 
     switch( aPad->GetAttribute() )
     {
     case PAD_STANDARD:
-        layers = PNS_LAYERSET( 0, 15 );
+        layers = PNS_LAYERSET( 0, MAX_CU_LAYERS - 1 ); // TODO necessary? it is already initialized
         break;
 
     case PAD_SMD:
@@ -191,7 +191,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
                 else
                     delta = VECTOR2I( 0, ( sz.y - sz.x ) / 2 );
 
-                SHAPE_SEGMENT* shape = new SHAPE_SEGMENT( c - delta,  c + delta,
+                SHAPE_SEGMENT* shape = new SHAPE_SEGMENT( c - delta, c + delta,
                                                           std::min( sz.x, sz.y ) );
                 solid->SetShape( shape );
             }
@@ -229,7 +229,7 @@ PNS_ITEM* PNS_ROUTER::syncVia( VIA* aVia )
 {
     PNS_VIA* v = new PNS_VIA(
             aVia->GetPosition(),
-            PNS_LAYERSET( 0, 15 ),
+            PNS_LAYERSET( 0, MAX_CU_LAYERS - 1 ),
             aVia->GetWidth(),
             aVia->GetDrillValue(),
             aVia->GetNetCode() );
@@ -260,7 +260,7 @@ int PNS_ROUTER::NextCopperLayer( bool aUp )
             l = 0;
 
         if( l < 0 )
-            l = MAX_CU_LAYERS-1;
+            l = MAX_CU_LAYERS - 1;
 
         if( mask[l] )
             return l;

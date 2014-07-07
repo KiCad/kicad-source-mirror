@@ -108,7 +108,7 @@ public:
     ///> Shortcut for comparisons/overlap tests
     static PNS_LAYERSET All()
     {
-        return PNS_LAYERSET( 0, 256 );
+        return PNS_LAYERSET( 0, 64 );
     }
 
 private:
