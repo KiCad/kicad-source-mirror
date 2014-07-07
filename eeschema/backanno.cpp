@@ -98,11 +98,10 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
                 }
 
                 // DBG( printf("%s: ref:%s  fpid:%s\n", __func__, TO_UTF8( refs[ii].GetRef() ), TO_UTF8( footprint ) );)
-
-                fpfield->SetText( footprint );
-
                 if( oldfp != footprint )
                     isChanged = true;
+
+                fpfield->SetText( footprint );
             }
         }
     }
