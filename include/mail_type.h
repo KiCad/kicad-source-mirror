@@ -10,7 +10,9 @@
  */
 enum MAIL_T
 {
-    MAIL_CROSS_PROBE,       ///< PCB<->SCH, CVPCB->SCH cross-probing.
+    MAIL_CROSS_PROBE,               ///< PCB<->SCH, CVPCB->SCH cross-probing.
+    MAIL_BACKANNOTATE_FOOTPRINTS,   ///< CVPCB->SCH footprint stuffing at cvpcb termination
+
 };
 
 #endif  // MAIL_TYPE_H_

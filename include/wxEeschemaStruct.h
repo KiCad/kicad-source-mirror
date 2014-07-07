@@ -202,6 +202,8 @@ protected:
 
     void updateFindReplaceView( wxFindDialogEvent& aEvent );
 
+    void backAnnotateFootprints( const std::string& aChangedSetOfReferences ) throw( IO_ERROR );
+
 public:
     SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SCH_EDIT_FRAME();
@@ -709,7 +711,7 @@ public:
      * @param aFieldsVisibleAttributeState = footprint field flag visible new state
      * @return bool = true if success.
      */
-    bool ProcessCmpToFootprintLinkFile( wxString& aFullFilename,
+    bool ProcessCmpToFootprintLinkFile( const wxString& aFullFilename,
                                         bool aForceFieldsVisibleAttribute,
                                         bool aFieldsVisibleAttributeState );
 

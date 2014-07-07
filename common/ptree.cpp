@@ -83,7 +83,11 @@ inline void scanAtom( PTREE* aTree, DSNLEXER* aLexer )
 
     //D(printf( "%s: '%s'\n", __func__, key );)
 
+#if 0
     aTree->push_back( PTREE::value_type( key, PTREE() ) );
+#else
+    aTree->put_value( key );
+#endif
 }
 
 
@@ -190,7 +194,7 @@ static void formatNode( OUTPUTFORMATTER* out, int aNestLevel, int aCtl,
 
         out->Print( aNestLevel, "(%s%s", out->Quotes( aKey ).c_str(), ctl & CTL_OMIT_NL ? "" : "\n" );
 
-        if( aTree.data().size() )   // only xml typically uses "data()", not sexpr.
+        if( aTree.data().size() )
         {
             out->Print( 0, " %s%s",
                 out->Quotes( aTree.data() ).c_str(),

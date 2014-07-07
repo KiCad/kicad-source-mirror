@@ -68,16 +68,7 @@ public:
         return m_pinName < aNet.m_pinName;
     }
 
-#if defined(DEBUG)
-    /**
-     * Function Show
-     * is used to output the object tree, currently for debugging only.
-     * @param aNestLevel An aid to prettier tree indenting, and is the level
-     *                   of nesting of this object within the overall tree.
-     * @param aReporter A reference to a #REPORTER object to output to.
-     */
-    virtual void Show( int aNestLevel, REPORTER& aReporter );
-#endif
+    int Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl );
 };
 
 
@@ -192,16 +183,7 @@ public:
 
     bool FootprintChanged() const { return m_footprintChanged; }
 
-#if defined(DEBUG)
-    /**
-     * Function Show
-     * is used to output the object tree, currently for debugging only.
-     * @param aNestLevel An aid to prettier tree indenting, and is the level
-     *                   of nesting of this object within the overall tree.
-     * @param aReporter A reference to a #REPORTER object to output to.
-     */
-    virtual void Show( int aNestLevel, REPORTER& aReporter );
-#endif
+    void Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl );
 };
 
 
@@ -348,16 +330,18 @@ public:
      */
     bool AnyFootprintsChanged() const;
 
-#if defined(DEBUG)
-    /**
-     * Function Show
-     * is used to output the object tree, currently for debugging only.
-     * @param aNestLevel An aid to prettier tree indenting, and is the level
-     *                   of nesting of this object within the overall tree.
-     * @param aReporter A reference to a #REPORTER object to output to.
-     */
-    virtual void Show( int aNestLevel, REPORTER& aReporter );
-#endif
+    void Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl = 0 );
+
+#define CTL_OMIT_EXTRA      (1<<0)
+#define CTL_OMIT_NETS       (1<<1)
+#define CTL_OMIT_FILTERS    (1<<2)
+
+#define CTL_FOR_BACKANNO    (CTL_OMIT_NETS | CTL_OMIT_FILTERS | CTL_OMIT_EXTRA)
+
+    void FormatBackAnnotation( OUTPUTFORMATTER* aOut )
+    {
+        Format( aOut, 0, CTL_FOR_BACKANNO );
+    }
 };
 
 

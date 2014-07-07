@@ -227,7 +227,8 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     // many many others.
-
+    default:
+        ;
     }
 }
 
