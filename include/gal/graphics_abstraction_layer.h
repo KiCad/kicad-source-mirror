@@ -255,6 +255,9 @@ public:
      */
     inline virtual void SetLayerDepth( double aLayerDepth )
     {
+        assert( aLayerDepth <= depthRange.y );
+        assert( aLayerDepth >= depthRange.x );
+
         layerDepth = aLayerDepth;
     }
 

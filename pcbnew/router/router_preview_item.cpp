@@ -41,7 +41,7 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS_ITEM* aItem, VIEW_GROUP* aPa
     
     m_shape = NULL;
     m_clearance = -1;
-    m_originLayer = m_layer = ITEM_GAL_LAYER ( GP_OVERLAY );
+    m_originLayer = m_layer = ITEM_GAL_LAYER( GP_OVERLAY );
 
     if( aItem )
         Update( aItem );
@@ -59,7 +59,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS_ITEM* aItem )
 
     assert( m_originLayer >= 0 );
 
-    m_layer = m_originLayer;    
+    m_layer = m_originLayer;
     m_color = getLayerColor( m_originLayer );
     m_color.a = 0.8;
     m_depth = BaseOverlayDepth - aItem->Layers().Start();
@@ -70,7 +70,6 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS_ITEM* aItem )
     case PNS_ITEM::LINE:
         m_type  = PR_SHAPE;
         m_width = ( (PNS_LINE*) aItem )->Width();
-
         break;
 
     case PNS_ITEM::SEGMENT:
@@ -174,7 +173,7 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
                 if( m_clearance > 0 )
                 {
                     aGal->SetLayerDepth( ClearanceOverlayDepth );
-                    aGal->SetStrokeColor( COLOR4D( DARKDARKGRAY ));
+                    aGal->SetStrokeColor( COLOR4D( DARKDARKGRAY ) );
                     aGal->SetLineWidth( m_width + 2 * m_clearance );
                     aGal->DrawLine( s->GetSeg().A, s->GetSeg().B );
                 }

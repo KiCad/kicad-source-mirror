@@ -138,7 +138,7 @@ enum LAYER_ID
 #define LAST_COPPER_LAYER       brain dead
 #define FIRST_LAYER             brain dead
 #define NB_LAYERS               use LAYER_ID_COUNT instead
-#define NB_COPPER_LAYERS        was always a max, not a number, use MAX_CU_COUNT now.
+#define NB_COPPER_LAYERS        was always a max, not a number, use MAX_CU_LAYERS now.
 */
 
 
