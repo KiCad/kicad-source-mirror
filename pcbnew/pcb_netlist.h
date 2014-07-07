@@ -330,7 +330,7 @@ public:
      */
     bool AnyFootprintsChanged() const;
 
-    void Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl = 0 );
+    void Format( const char* aDocName, OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl = 0 );
 
 #define CTL_OMIT_EXTRA      (1<<0)
 #define CTL_OMIT_NETS       (1<<1)
@@ -340,7 +340,7 @@ public:
 
     void FormatBackAnnotation( OUTPUTFORMATTER* aOut )
     {
-        Format( aOut, 0, CTL_FOR_BACKANNO );
+        Format( "back_annotation", aOut, 0, CTL_FOR_BACKANNO );
     }
 };
 
