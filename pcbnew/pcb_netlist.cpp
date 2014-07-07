@@ -137,11 +137,11 @@ void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 }
 
 
-void NETLIST::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
+void NETLIST::Format( const char* aDocName, OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 {
     int nl = aNestLevel;
 
-    aOut->Print( nl, "(back_annotation\n" );
+    aOut->Print( nl, "(%s\n", aDocName );
 
     for( unsigned i = 0;  i < m_components.size();  i++ )
     {
