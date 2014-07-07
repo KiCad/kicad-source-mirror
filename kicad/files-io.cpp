@@ -41,8 +41,8 @@
 
 #include <kicad.h>
 
-static const wxString ZipFileExtension( wxT( "zip" ) );
-static const wxString ZipFileWildcard( wxT( "Zip file (*.zip) | *.zip" ) );
+#define     ZipFileExtension        wxT( "zip" )
+#define     ZipFileWildcard         wxT( "Zip file (*.zip) | *.zip" )
 
 
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
@@ -53,14 +53,17 @@ void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
     if( fn != wxEmptyString )
     {
         wxCommandEvent cmd( 0, wxID_ANY );
-        m_ProjectFileName = fn;
+
+        SetProjectFileName( fn );
         OnLoadProject( cmd );
     }
 }
 
+
 void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 {
-    wxFileName fn = m_ProjectFileName;
+    wxFileName fn = GetProjectFileName();
+
     fn.SetExt( ZipFileExtension );
 
     wxFileDialog dlg( this, _( "Unzip Project" ), fn.GetPath(),
@@ -70,8 +73,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString msg;
-    msg.Printf( _("\nOpen <%s>\n" ), GetChars( dlg.GetPath() ) );
+    wxString msg = wxString::Format( _("\nOpen <%s>\n" ), GetChars( dlg.GetPath() ) );
     PrintMsg( msg );
 
     wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(),
@@ -85,6 +87,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     PrintMsg( msg );
 
     wxFileSystem zipfilesys;
+
     zipfilesys.AddHandler( new wxZipFSHandler );
     zipfilesys.ChangePathTo( dlg.GetPath() + wxT( "#zip:" ) );
 
@@ -94,7 +97,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     while( !localfilename.IsEmpty() )
     {
         zipfile = zipfilesys.OpenFile( localfilename );
-        if( zipfile == NULL )
+        if( !zipfile )
         {
             DisplayError( this, wxT( "Zip file read error" ) );
             break;
@@ -139,7 +142,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     };
 
     wxString    msg;
-    wxFileName  fileName = m_ProjectFileName;
+    wxFileName  fileName = GetProjectFileName();
     wxString    oldPath = wxGetCwd();
 
     fileName.SetExt( wxT( "zip" ) );

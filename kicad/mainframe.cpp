@@ -41,7 +41,6 @@
 #include <wildcards_and_files_ext.h>
 #include <menus_helpers.h>
 
-#define USE_KIFACE              1
 
 #define TreeFrameWidthEntry     wxT( "LeftWinWidth" )
 
@@ -125,6 +124,35 @@ wxConfigBase* KICAD_MANAGER_FRAME::config()
     return ret;
 }
 
+void KICAD_MANAGER_FRAME::SetProjectFileName( const wxString& aFullProjectProFileName )
+{
+    m_project_file_name = aFullProjectProFileName;
+
+    wxASSERT( m_project_file_name.IsAbsolute() );
+}
+
+
+const wxString KICAD_MANAGER_FRAME::GetProjectFileName()
+{
+    return m_project_file_name.GetFullPath();
+}
+
+
+const wxString KICAD_MANAGER_FRAME::SchFileName()
+{
+   wxFileName   fn( GetProjectFileName(), SchematicFileExtension );
+
+   return fn.GetFullName();
+}
+
+
+const wxString KICAD_MANAGER_FRAME::PcbFileName()
+{
+   wxFileName   fn( GetProjectFileName(), PcbFileExtension );
+
+   return fn.GetFullName();
+}
+
 
 const SEARCH_STACK& KICAD_MANAGER_FRAME::sys_search()
 {
@@ -159,7 +187,7 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     {
         int px, py;
 
-        UpdateFileHistory( m_ProjectFileName.GetFullPath(), &Pgm().GetFileHistory() );
+        UpdateFileHistory( GetProjectFileName(), &Pgm().GetFileHistory() );
 
         if( !IsIconized() )   // save main frame position and size
         {
@@ -238,16 +266,14 @@ void KICAD_MANAGER_FRAME::OnRunPageLayoutEditor( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
 {
-    wxFileName  legacy_board( m_ProjectFileName );
-    wxFileName  kicad_board( m_ProjectFileName );
+    wxFileName  kicad_board( PcbFileName() );
 
+    wxFileName  legacy_board( GetProjectFileName() );
     legacy_board.SetExt( LegacyPcbFileExtension );
-    kicad_board.SetExt( KiCadPcbFileExtension );
 
     wxFileName& board = ( !legacy_board.FileExists() || kicad_board.FileExists() ) ?
                             kicad_board : legacy_board;
 
-#if USE_KIFACE
     KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB, false );
     if( !frame )
     {
@@ -256,19 +282,15 @@ void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
         frame->Show( true );
     }
     frame->Raise();
-#else
-    Execute( this, PCBNEW_EXE, QuoteFullPath( board ) );
-#endif
 }
 
 
 void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
 {
-    wxFileName fn( m_ProjectFileName );
+    wxFileName fn( m_project_file_name );
 
     fn.SetExt( NetlistFileExtension );
 
-#if USE_KIFACE
     KIWAY_PLAYER* frame = Kiway.Player( FRAME_CVPCB, false );
     if( !frame )
     {
@@ -277,19 +299,15 @@ void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
         frame->Show( true );
     }
     frame->Raise();
-#else
-    Execute( this, CVPCB_EXE, QuoteFullPath( fn ) );
-#endif
 }
 
 
 void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 {
-    wxFileName fn( m_ProjectFileName );
+    wxFileName fn( m_project_file_name );
 
     fn.SetExt( SchematicFileExtension );
 
-#if USE_KIFACE
     KIWAY_PLAYER* frame = Kiway.Player( FRAME_SCH, false );
     if( !frame )
     {
@@ -298,20 +316,14 @@ void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
         frame->Show( true );
     }
     frame->Raise();
-#else
-    Execute( this, EESCHEMA_EXE, QuoteFullPath( fn ) );
-#endif
 }
+
 
 void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )
 {
     // Gerbview is called without any file to open, because we do not know
     // the list and the name of files to open (if any...).
-#if USE_KIFACE && 0
-
-#else
     Execute( this, GERBVIEW_EXE, wxEmptyString );
-#endif
 }
 
 
@@ -392,7 +404,7 @@ void KICAD_MANAGER_FRAME::PrintPrjInfo()
     wxString msg = wxString::Format( _(
             "Working dir: %s\nProject: %s\n" ),
             GetChars( wxGetCwd() ),
-            GetChars( m_ProjectFileName.GetFullPath() )
+            GetChars( GetProjectFileName() )
             );
     PrintMsg( msg );
 }

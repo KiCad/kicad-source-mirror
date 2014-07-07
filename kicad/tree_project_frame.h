@@ -58,7 +58,12 @@ private:
 public:
     TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent );
     ~TREE_PROJECT_FRAME();
+
+    /**
+     * Create or modify the tree showing project file names
+     */
     void ReCreateTreePrj();
+
 #ifdef KICAD_USE_FILES_WATCHER
     /**
      * Reinit the watched paths
@@ -162,8 +167,8 @@ private:
                                                           bool aRecurse = true );
 
     /**
-     * function findSubdirTreeItem
-     * Search for the item in tree project which is the
+     * Function findSubdirTreeItem
+     * searches for the item in tree project which is the
      * node of the subdirectory aSubDir
      * @param aSubDir = the directory to find in tree
      * @return the opaque reference to the tree item.

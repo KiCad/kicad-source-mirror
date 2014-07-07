@@ -58,7 +58,7 @@ int main( int argc, char** argv )
 
     static const KEYWORD empty_keywords[1] = {};
 
-    DSNLEXER   lexer( empty_keywords, 0, fp, wxString( FROM_UTF8( argv[1] ) ) );
+    DSNLEXER   lexer( empty_keywords, 0, fp, FROM_UTF8( argv[1] ) );
 
     try
     {

@@ -174,7 +174,7 @@ public:
               FILE* aFile, const wxString& aFileName );
 
     /**
-     * Constructor ( std::string&*, const wxString& )
+     * Constructor ( const KEYWORD*, unsigned, const std::string&, const wxString& )
      * intializes a DSN lexer and prepares to read from @a aSExpression.
      *
      * @param aKeywordTable is an array of KEYWORDS holding \a aKeywordCount.  This
@@ -185,6 +185,16 @@ public:
      */
     DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
               const std::string& aSExpression, const wxString& aSource = wxEmptyString );
+
+    /**
+     * Constructor ( const std::string&, const wxString& )
+     * intializes a DSN lexer and prepares to read from @a aSExpression.  Use this
+     * one without a keyword table with the DOM parser in ptree.h.
+     *
+     * @param aSExpression is text to feed through a STRING_LINE_READER
+     * @param aSource is a description of aSExpression, used for error reporting.
+     */
+    DSNLEXER( const std::string& aSExpression, const wxString& aSource = wxEmptyString );
 
     /**
      * Constructor ( LINE_READER* )
