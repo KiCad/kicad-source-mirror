@@ -130,19 +130,17 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 {
-    /* List of file extensions to save. */
+    // List of file extensions to save.
     static const wxChar* extentionList[] = {
         wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.mod" ), wxT( "*.cmp" ),
         wxT( "*.brd" ), wxT( "*.kicad_pcb" ), wxT( "*.gbr" ),
         wxT( "*.net" ), wxT( "*.pro" ), wxT( "*.pho" ), wxT( "*.py" ),
         wxT( "*.pdf" ), wxT( "*.txt" ), wxT( "*.dcm" ), wxT( "*.kicad_wks" ),
-        NULL
     };
 
-    wxString msg;
-    size_t i;
-    wxFileName fileName = m_ProjectFileName;
-    wxString oldPath = wxGetCwd();
+    wxString    msg;
+    wxFileName  fileName = m_ProjectFileName;
+    wxString    oldPath = wxGetCwd();
 
     fileName.SetExt( wxT( "zip" ) );
 
@@ -152,7 +150,6 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
-
 
     wxFileName zip = dlg.GetPath();
 
@@ -172,17 +169,21 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     // Build list of filenames to put in zip archive
     wxString currFilename;
     int zipBytesCnt = 0;    // Size of the zip file
-    for( i = 0; extentionList[i] != 0; i++ )
+
+    for( unsigned i = 0;  i<DIM( extentionList ); i++ )
     {
         bool cont = dir.GetFirst( &currFilename, extentionList[i] );
 
         while( cont )
         {
             wxFileSystem fsfile;
+
             msg.Printf(_( "Archive file <%s>" ), GetChars( currFilename ) );
             PrintMsg( msg );
+
             // Read input file and put it in zip file:
-            wxFSFile * infile = fsfile.OpenFile(currFilename);
+            wxFSFile* infile = fsfile.OpenFile(currFilename);
+
             if( infile )
             {
                 zipstream.PutNextEntry( currFilename, infile->GetModificationTime() );

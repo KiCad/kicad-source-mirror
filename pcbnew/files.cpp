@@ -608,6 +608,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
                                             GetChars( pcbFileName.GetFullPath() ) )) )
             return false;
 
+#if 0   //  RHH 6-Jul-14: I see no plausible reason to do this.  We did not auto generate the
+        // footprint table.  And the dialog which does suppport editing does the saving.
+
         // Save the project specific footprint library table.
         if( !Prj().PcbFootprintLibs()->IsEmpty( false ) )
         {
@@ -633,6 +636,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
                 }
             }
         }
+#endif
+
     }
     else
     {
@@ -640,7 +645,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
         if( pcbFileName.GetExt() == LegacyPcbFileExtension )
             pluginType = IO_MGR::LEGACY;
-        else
         {
             pluginType = IO_MGR::KICAD;
             pcbFileName.SetExt( KiCadPcbFileExtension );

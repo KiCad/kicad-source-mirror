@@ -39,9 +39,6 @@ class OUTPUTFORMATTER;
 class MODULE;
 class FP_LIB_TABLE_LEXER;
 class FPID;
-class NETLIST;
-class REPORTER;
-class SEARCH_STACK;
 
 /**
  * Class FP_LIB_TABLE

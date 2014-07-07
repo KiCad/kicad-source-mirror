@@ -196,8 +196,20 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         ExecuteRemoteCommand( payload.c_str() );
         break;
 
+    case MAIL_BACKANNOTATE_FOOTPRINTS:
+        try
+        {
+            backAnnotateFootprints( payload );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DBG( printf( "%s: ioe:%s\n", __func__, TO_UTF8( ioe.errorText ) );)
+        }
+        break;
+
     // many many others.
 
     }
 }
+
 

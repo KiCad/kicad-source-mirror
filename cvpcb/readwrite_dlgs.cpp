@@ -28,6 +28,7 @@
  */
 
 #include <fctsys.h>
+#include <kiway.h>
 #include <common.h>
 #include <confirm.h>
 #include <build_version.h>
@@ -343,6 +344,11 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
         if( !fn.HasExt() )
             fn.SetExt( ComponentFileExtension );
 
+#if 0   // RHH 6-Jul-14: We did not auto generate the
+        // footprint table.  And the dialog which does suppport editing does the saving.
+        // Besides, this is not the place to do this, it belies the name of this
+        // function.
+
         // Save the project specific footprint library table.
         if( !Prj().PcbFootprintLibs()->IsEmpty( false ) )
         {
@@ -368,6 +374,8 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
                 }
             }
         }
+#endif
+
     }
 
     if( !IsWritable( fn.GetFullPath() ) )
@@ -380,6 +388,16 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
     }
 
     wxString msg = wxString::Format( _("File %s saved"), GetChars( fn.GetFullPath() ) );
+
+    // Perhaps this replaces all of the above someday.
+    {
+        STRING_FORMATTER sf;
+
+        m_netlist.FormatBackAnnotation( &sf );
+
+        Kiway().ExpressMail( FRAME_SCH, MAIL_BACKANNOTATE_FOOTPRINTS, sf.GetString() );
+    }
+
     SetStatusText( msg );
     return 1;
 }
