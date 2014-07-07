@@ -189,17 +189,13 @@ private:
      * @param aText is the text to be checked.
      * @return unsigned - The number of lines in aText.
      */
-    unsigned linesCount( const UTF8& aText ) const
+    inline unsigned linesCount( const UTF8& aText ) const
     {
-        unsigned lines = 1;
-
-        for( UTF8::const_iterator it = aText.begin(), itEnd = aText.end(); it != itEnd; ++it )
-        {
-            if( *it == '\n' )
-                ++lines;
-        }
-
-        return lines;
+        if( aText.empty() )
+            return 0;   // std::count does not work well with empty strings
+        else
+            // aText.end() - 1 is to skip a newline character that is potentially at the end
+            return std::count( aText.begin(), aText.end() - 1, '\n' ) + 1;
     }
 
     ///> Factor that determines relative height of overbar.
@@ -208,7 +204,7 @@ private:
     ///> Factor that determines relative line width for bold text.
     static const double BOLD_FACTOR;
 
-    ///> Scale factor for the glyph
+    ///> Scale factor for a glyph
     static const double HERSHEY_SCALE;
 };
 } // namespace KIGFX
