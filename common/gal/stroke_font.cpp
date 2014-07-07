@@ -40,7 +40,8 @@ STROKE_FONT::STROKE_FONT( GAL* aGal ) :
     m_gal( aGal ),
     m_bold( false ),
     m_italic( false ),
-    m_mirrored( false )
+    m_mirrored( false ),
+    m_overbar( false )
 {
     // Default values
     m_glyphSize = VECTOR2D( 10.0, 10.0 );
@@ -149,6 +150,9 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLY
 
 void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle )
 {
+    if( aText.empty() )
+        return;
+
     // Context needs to be saved before any transformations
     m_gal->Save();
 
