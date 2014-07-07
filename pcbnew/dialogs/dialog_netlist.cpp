@@ -432,7 +432,6 @@ bool DIALOG_NETLIST::verifyFootprints( const wxString&         aNetlistFilename,
         return false;
     }
 
-
 #if defined( DEBUG )
     {
         m_MessageWindow->Clear();
@@ -440,7 +439,7 @@ bool DIALOG_NETLIST::verifyFootprints( const wxString&         aNetlistFilename,
 
         STRING_FORMATTER sf;
 
-        netlist.Format( &sf, 0 );
+        netlist.Format( "netlist_stuff", &sf, 0 );
 
         rpt.Report( FROM_UTF8( sf.GetString().c_str() ) );
     }
