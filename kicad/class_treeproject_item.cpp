@@ -51,12 +51,11 @@ TREEPROJECT_ITEM::TREEPROJECT_ITEM( enum TreeFileType type, const wxString& data
     m_Type = type;
     m_parent = parent;
     m_FileName = data;
-    m_IsRootFile    = false;    // true only for the root item of the tree (the project name)
-    m_WasPopulated  = false;
+    m_IsRootFile   = false;    // true only for the root item of the tree (the project name)
+    m_IsPopulated  = false;
 }
 
 
-// Set the state used in the icon list
 void TREEPROJECT_ITEM::SetState( int state )
 {
     wxImageList* imglist = m_parent->GetImageList();
@@ -71,8 +70,7 @@ void TREEPROJECT_ITEM::SetState( int state )
 }
 
 
-/* Get the directory containing the file */
-wxString TREEPROJECT_ITEM::GetDir() const
+const wxString TREEPROJECT_ITEM::GetDir() const
 {
     if( TREE_DIRECTORY == m_Type )
         return m_FileName;
@@ -84,7 +82,6 @@ wxString TREEPROJECT_ITEM::GetDir() const
 }
 
 
-/* rename the file checking if extension change occurs */
 bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 {
     // this is broken & unsafe to use on linux.
@@ -145,14 +142,13 @@ type.\n Do you want to continue ?"                                              
 }
 
 
-/*******************************************/
 bool TREEPROJECT_ITEM::Delete( bool check )
-/*******************************************/
-/* delete a file */
 {
-    wxString        msg;
+    wxString    msg = wxString::Format( _(
+                    "Do you really want to delete '%s'" ),
+                    GetChars( GetFileName() )
+                    );
 
-    msg.Printf( _( "Do you really want to delete <%s>" ), GetChars( GetFileName() ) );
     wxMessageDialog dialog( m_parent, msg,
                             _( "Delete File" ), wxYES_NO | wxICON_QUESTION );
 
@@ -184,16 +180,15 @@ bool TREEPROJECT_ITEM::Delete( bool check )
 }
 
 
-// Called under item activation
 void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
 {
     wxString        sep = wxFileName().GetPathSeparator();
-    wxString        FullFileName = GetFileName();
+    wxString        fullFileName = GetFileName();
     wxTreeItemId    id = GetId();
 
     KICAD_MANAGER_FRAME* mainFrame = (KICAD_MANAGER_FRAME*) Pgm().App().GetTopWindow();
 
-    AddDelimiterString( FullFileName );
+    AddDelimiterString( fullFileName );
 
     switch( GetType() )
     {
@@ -205,24 +200,29 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         break;
 
     case TREE_SCHEMA:
-        mainFrame->Execute( m_parent, EESCHEMA_EXE, FullFileName );
+        mainFrame->Execute( m_parent, EESCHEMA_EXE, fullFileName );
         break;
 
     case TREE_LEGACY_PCB:
     case TREE_SEXP_PCB:
-        mainFrame->Execute( m_parent, PCBNEW_EXE, FullFileName );
+        {
+            DBG( printf( "%s: %s\n", __func__, TO_UTF8( fullFileName ) ); )
+
+
+            mainFrame->Execute( m_parent, PCBNEW_EXE, fullFileName );
+        }
         break;
 
     case TREE_GERBER:
-        mainFrame->Execute( m_parent, GERBVIEW_EXE, FullFileName );
+        mainFrame->Execute( m_parent, GERBVIEW_EXE, fullFileName );
         break;
 
     case TREE_PDF:
-        OpenPDF( FullFileName );
+        OpenPDF( fullFileName );
         break;
 
     case TREE_NET:
-        mainFrame->Execute( m_parent, CVPCB_EXE, FullFileName );
+        mainFrame->Execute( m_parent, CVPCB_EXE, fullFileName );
         break;
 
     case TREE_TXT:
@@ -230,18 +230,16 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
             wxString editorname = Pgm().GetEditorName();
 
             if( !editorname.IsEmpty() )
-                mainFrame->Execute( m_parent, editorname, FullFileName );
-
-            break;
+                mainFrame->Execute( m_parent, editorname, fullFileName );
         }
+        break;
 
     case TREE_PAGE_LAYOUT_DESCR:
-        mainFrame->Execute( m_parent, PL_EDITOR_EXE, FullFileName );
+        mainFrame->Execute( m_parent, PL_EDITOR_EXE, fullFileName );
         break;
 
     default:
-        OpenFile( FullFileName );
+        OpenFile( fullFileName );
         break;
     }
-
 }

@@ -56,54 +56,60 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
 
     sheets.GetComponents( refs, false );
 
-    static const KEYWORD empty_keywords[1] = {};
-
-    DSNLEXER    lexer( empty_keywords, 0, aChangedSetOfReferences, FROM_UTF8( __func__ ) );
+    DSNLEXER    lexer( aChangedSetOfReferences, FROM_UTF8( __func__ ) );
     PTREE       doc;
 
-    Scan( &doc, &lexer );
+    try
+    {
+        Scan( &doc, &lexer );
 
 #if defined(DEBUG) && 0
-    STRING_FORMATTER sf;
-    Format( &sf, 0, 0, doc );
-    printf( "%s: '%s'\n", __func__, sf.GetString().c_str() );
+        STRING_FORMATTER sf;
+        Format( &sf, 0, 0, doc );
+        printf( "%s: '%s'\n", __func__, sf.GetString().c_str() );
 #endif
 
-    CPTREE& back_anno = doc.get_child( "back_annotation" );
+        CPTREE& back_anno = doc.get_child( "back_annotation" );
 
-    for( PTREE::const_iterator ref = back_anno.begin();  ref != back_anno.end();  ++ref )
-    {
-        wxASSERT( ref->first == "ref" );
-
-        wxString reference = (UTF8&) ref->second.data();
-        wxString footprint = (UTF8)  ref->second.get<std::string>( "fpid" );
-
-        // DBG( printf( "%s: ref:%s  fpid:%s\n", __func__, TO_UTF8( reference ), TO_UTF8( footprint ) ); )
-
-        // Search the component in the flat list
-        for( unsigned ii = 0;  ii < refs.GetCount();  ++ii )
+        for( PTREE::const_iterator ref = back_anno.begin();  ref != back_anno.end();  ++ref )
         {
-            if( Cmp_KEEPCASE( reference, refs[ii].GetRef() ) == 0 )
+            wxASSERT( ref->first == "ref" );
+
+            wxString reference = (UTF8&) ref->second.front().first;
+            wxString footprint = (UTF8&) ref->second.get_child( "fpid" ).front().first;
+
+            DBG( printf( "%s: ref:%s  fpid:%s\n", __func__, TO_UTF8( reference ), TO_UTF8( footprint ) ); )
+
+            // Search the component in the flat list
+            for( unsigned ii = 0;  ii < refs.GetCount();  ++ii )
             {
-                // We have found a candidate.
-                // Note: it can be not unique (multiple parts per package)
-                // So we *do not* stop the search here
-                SCH_COMPONENT*  component = refs[ii].GetComponent();
-                SCH_FIELD*      fpfield   = component->GetField( FOOTPRINT );
-                const wxString& oldfp = fpfield->GetText();
-
-                if( !oldfp && fpfield->IsVisible() )
+                if( Cmp_KEEPCASE( reference, refs[ii].GetRef() ) == 0 )
                 {
-                    fpfield->SetVisible( false );
+                    // We have found a candidate.
+                    // Note: it can be not unique (multiple parts per package)
+                    // So we *do not* stop the search here
+                    SCH_COMPONENT*  component = refs[ii].GetComponent();
+                    SCH_FIELD*      fpfield   = component->GetField( FOOTPRINT );
+                    const wxString& oldfp = fpfield->GetText();
+
+                    if( !oldfp && fpfield->IsVisible() )
+                    {
+                        fpfield->SetVisible( false );
+                    }
+
+                    // DBG( printf("%s: ref:%s  fpid:%s\n", __func__, TO_UTF8( refs[ii].GetRef() ), TO_UTF8( footprint ) );)
+                    if( oldfp != footprint )
+                        isChanged = true;
+
+                    fpfield->SetText( footprint );
                 }
-
-                // DBG( printf("%s: ref:%s  fpid:%s\n", __func__, TO_UTF8( refs[ii].GetRef() ), TO_UTF8( footprint ) );)
-                if( oldfp != footprint )
-                    isChanged = true;
-
-                fpfield->SetText( footprint );
             }
         }
+    }
+    catch( const PTREE_ERROR& ex )
+    {
+        // remap the exception to something the caller is likely to understand.
+        THROW_IO_ERROR( ex.what() );
     }
 
     if( isChanged )
