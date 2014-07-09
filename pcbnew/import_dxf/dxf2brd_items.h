@@ -28,6 +28,7 @@
 
 #include "drw_interface.h"
 #include "wx/wx.h"
+#include <list>
 
 class BOARD;
 class BOARD_ITEM;
@@ -41,8 +42,7 @@ class BOARD_ITEM;
 class DXF2BRD_CONVERTER : public DRW_Interface
 {
 private:
-    std::vector<BOARD_ITEM*> m_newItemsList;    // The list of new items added to the board
-    BOARD* m_brd;
+    std::list<BOARD_ITEM*> m_newItemsList;    // The list of new items added to the board
     double m_xOffset;       // X coord offset for conversion (in mm)
     double m_yOffset;       // Y coord offset for conversion (in mm)
     double m_defaultThickness;  // default line thickness for conversion (in mm)
@@ -82,14 +82,13 @@ public:
      * with this filter.
      *
      * @param aFile = the full filename.
-     * @param aBoard = where to store the graphical items and text
      */
-    bool ImportDxfFile( const wxString& aFile, BOARD* aBoard );
+    bool ImportDxfFile( const wxString& aFile );
 
     /**
      * @return the list of new BOARD_ITEM
      */
-    std::vector<BOARD_ITEM*>& GetItemsList()
+    const std::list<BOARD_ITEM*>& GetItemsList() const
     {
         return m_newItemsList;
     }
@@ -99,11 +98,6 @@ private:
     int mapX( double aDxfCoordX );
     int mapY( double aDxfCoordY );
     int mapDim( double aDxfValue );
-
-    // Add aItem the the board
-    // this item is also added to the list of new items
-    // (for undo command for instance)
-    void appendToBoard( BOARD_ITEM* aItem );
 
     // Methods from DRW_CreationInterface:
     // They are "call back" fonctions, called when the corresponding object

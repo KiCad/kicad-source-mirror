@@ -52,7 +52,6 @@ DXF2BRD_CONVERTER::DXF2BRD_CONVERTER() : DRW_Interface()
     m_xOffset   = 0.0;      // X coord offset for conversion (in mm)
     m_yOffset   = 0.0;      // Y coord offset for conversion (in mm)
     m_Dfx2mm    = 1.0;      // The scale factor to convert DXF units to mm
-    m_brd       = NULL;
     m_version   = 0;
     m_defaultThickness = 0.1;
     m_brdLayer = Dwgs_User;
@@ -83,23 +82,14 @@ int DXF2BRD_CONVERTER::mapDim( double aDxfValue )
 }
 
 
-bool DXF2BRD_CONVERTER::ImportDxfFile( const wxString& aFile, BOARD* aBoard )
+bool DXF2BRD_CONVERTER::ImportDxfFile( const wxString& aFile )
 {
-    m_brd = aBoard;
-
     dxfRW* dxf = new dxfRW( aFile.ToUTF8() );
     bool success = dxf->read( this, true );
 
     delete dxf;
 
     return success;
-}
-
-
-void DXF2BRD_CONVERTER::appendToBoard( BOARD_ITEM* aItem )
-{
-    m_brd->Add( aItem );
-    m_newItemsList.push_back( aItem );
 }
 
 
@@ -121,7 +111,7 @@ void DXF2BRD_CONVERTER::addLayer( const DRW_Layer& aData )
  */
 void DXF2BRD_CONVERTER::addLine( const DRW_Line& aData )
 {
-    DRAWSEGMENT* segm = new DRAWSEGMENT( m_brd );
+    DRAWSEGMENT* segm = new DRAWSEGMENT;
 
     segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
     wxPoint start( mapX( aData.basePoint.x ), mapY( aData.basePoint.y ) );
@@ -129,7 +119,7 @@ void DXF2BRD_CONVERTER::addLine( const DRW_Line& aData )
     wxPoint end( mapX( aData.secPoint.x ), mapY( aData.secPoint.y ) );
     segm->SetEnd( end );
     segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness : aData.thickness ) );
-    appendToBoard( segm );
+    m_newItemsList.push_back( segm );
 }
 
 void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& aData )
@@ -151,7 +141,7 @@ void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& aData )
             continue;
         }
 
-        DRAWSEGMENT*    segm = new DRAWSEGMENT( m_brd );
+        DRAWSEGMENT*    segm = new DRAWSEGMENT( NULL );
 
         segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
         segm->SetStart( startpoint );
@@ -159,7 +149,7 @@ void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& aData )
         segm->SetEnd( endpoint );
         segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness
                                 : aData.thickness ) );
-        appendToBoard( segm );
+        m_newItemsList.push_back( segm );
         startpoint = endpoint;
     }
 }
@@ -184,7 +174,7 @@ void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& aData )
             continue;
         }
 
-        DRAWSEGMENT*    segm = new DRAWSEGMENT( m_brd );
+        DRAWSEGMENT*    segm = new DRAWSEGMENT( NULL );
 
         segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
         segm->SetStart( startpoint );
@@ -192,7 +182,7 @@ void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& aData )
         segm->SetEnd( endpoint );
         segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness
                                 : aData.thickness ) );
-        appendToBoard( segm );
+        m_newItemsList.push_back( segm );
         startpoint = endpoint;
     }
 }
@@ -202,7 +192,7 @@ void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& aData )
  */
 void DXF2BRD_CONVERTER::addCircle( const DRW_Circle& aData )
 {
-    DRAWSEGMENT* segm = new DRAWSEGMENT( m_brd );
+    DRAWSEGMENT* segm = new DRAWSEGMENT;
 
     segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
     segm->SetShape( S_CIRCLE );
@@ -211,7 +201,7 @@ void DXF2BRD_CONVERTER::addCircle( const DRW_Circle& aData )
     wxPoint circle_start( mapX( aData.basePoint.x + aData.radious ), mapY( aData.basePoint.y ) );
     segm->SetArcStart( circle_start );
     segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness : aData.thickness ) );
-    appendToBoard( segm );
+    m_newItemsList.push_back( segm );
 }
 
 
@@ -220,7 +210,7 @@ void DXF2BRD_CONVERTER::addCircle( const DRW_Circle& aData )
  */
 void DXF2BRD_CONVERTER::addArc( const DRW_Arc& data )
 {
-    DRAWSEGMENT* segm = new DRAWSEGMENT( m_brd );
+    DRAWSEGMENT* segm = new DRAWSEGMENT;
 
     segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
     segm->SetShape( S_ARC );
@@ -249,7 +239,7 @@ void DXF2BRD_CONVERTER::addArc( const DRW_Arc& data )
     segm->SetAngle( angle );
 
     segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness : data.thickness ) );
-    appendToBoard( segm );
+    m_newItemsList.push_back( segm );
 }
 
 /**
@@ -257,7 +247,7 @@ void DXF2BRD_CONVERTER::addArc( const DRW_Arc& data )
  */
 void DXF2BRD_CONVERTER::addText( const DRW_Text& aData )
 {
-    TEXTE_PCB* pcb_text = new TEXTE_PCB( m_brd );
+    TEXTE_PCB* pcb_text = new TEXTE_PCB( NULL );
     pcb_text->SetLayer( ToLAYER_ID( m_brdLayer ) );
 
     wxPoint refPoint( mapX( aData.basePoint.x ), mapY( aData.basePoint.y ) );
@@ -347,7 +337,7 @@ void DXF2BRD_CONVERTER::addText( const DRW_Text& aData )
     pcb_text->SetThickness( mapDim( aData.thickness == 0 ? m_defaultThickness : aData.thickness ) );
     pcb_text->SetText( text );
 
-    appendToBoard( pcb_text );
+    m_newItemsList.push_back( pcb_text );
 }
 
 
@@ -384,7 +374,7 @@ void DXF2BRD_CONVERTER::addMText( const DRW_MText& aData )
         text    = tmp;
     }
 
-    TEXTE_PCB*  pcb_text = new TEXTE_PCB( m_brd );
+    TEXTE_PCB*  pcb_text = new TEXTE_PCB( NULL );
     pcb_text->SetLayer( ToLAYER_ID( m_brdLayer ) );
     wxPoint     textpos( mapX( aData.basePoint.x ), mapY( aData.basePoint.y ) );
     pcb_text->SetTextPosition( textpos );
@@ -446,7 +436,7 @@ void DXF2BRD_CONVERTER::addMText( const DRW_MText& aData )
     }
 #endif
 
-    appendToBoard( pcb_text );
+    m_newItemsList.push_back( pcb_text );
 }
 
 

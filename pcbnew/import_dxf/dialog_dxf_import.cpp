@@ -34,6 +34,8 @@
 #include <convert_from_iu.h>
 #include <dialog_dxf_import_base.h>
 #include <class_pcb_layer_box_selector.h>
+#include <class_draw_panel_gal.h>
+#include <class_board.h>
 
 
 // Keys to store setup in config
@@ -43,20 +45,29 @@
 
 class DIALOG_DXF_IMPORT : public DIALOG_DXF_IMPORT_BASE
 {
-private:
-    PCB_EDIT_FRAME * m_parent;
-    wxConfigBase*        m_config;               // Current config
-
-    static wxString m_dxfFilename;
-    static int m_offsetSelection;
-    static LAYER_NUM m_layer;
-
 public:
-
-    DIALOG_DXF_IMPORT( PCB_EDIT_FRAME* aParent );
+    DIALOG_DXF_IMPORT( PCB_BASE_FRAME* aParent );
     ~DIALOG_DXF_IMPORT();
 
+    /**
+     * Function GetImportedItems()
+     *
+     * Returns a list of items imported from a DXF file.
+     */
+    const std::list<BOARD_ITEM*>& GetImportedItems() const
+    {
+        return m_dxfImporter.GetItemsList();
+    }
+
 private:
+    PCB_BASE_FRAME*      m_parent;
+    wxConfigBase*        m_config;               // Current config
+    DXF2BRD_CONVERTER    m_dxfImporter;
+
+    static wxString      m_dxfFilename;
+    static int           m_offsetSelection;
+    static LAYER_NUM     m_layer;
+
     // Virtual event handlers
     void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
     void OnOKClick( wxCommandEvent& event );
@@ -70,8 +81,8 @@ int DIALOG_DXF_IMPORT::m_offsetSelection = 4;
 LAYER_NUM DIALOG_DXF_IMPORT::m_layer = Dwgs_User;
 
 
-DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_EDIT_FRAME* aParent ) :
-    DIALOG_DXF_IMPORT_BASE(  aParent )
+DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_BASE_FRAME* aParent )
+    : DIALOG_DXF_IMPORT_BASE( aParent )
 {
     m_parent = aParent;
     m_config = Kiface().KifaceSettings();
@@ -130,7 +141,7 @@ void DIALOG_DXF_IMPORT::OnBrowseDxfFiles( wxCommandEvent& event )
     wxFileDialog dlg( m_parent,
                       wxT( "Open File" ),
                       path, m_dxfFilename,
-                      wxT( "dxf Files (*.dxf)|*.dxf|*.DXF" ),
+                      wxT( "dxf Files (*.dxf)|*.dxf" ),
                       wxFD_OPEN|wxFD_FILE_MUST_EXIST );
     dlg.ShowModal();
 
@@ -142,6 +153,7 @@ void DIALOG_DXF_IMPORT::OnBrowseDxfFiles( wxCommandEvent& event )
     m_dxfFilename = fileName;
     m_textCtrlFileName->SetValue( fileName );
 }
+
 
 void DIALOG_DXF_IMPORT::OnOKClick( wxCommandEvent& event )
 {
@@ -173,41 +185,50 @@ void DIALOG_DXF_IMPORT::OnOKClick( wxCommandEvent& event )
             break;
     }
 
-    BOARD * brd = m_parent->GetBoard();
-    DXF2BRD_CONVERTER dxf_importer;
-
     // Set coordinates offset for import (offset is given in mm)
-    dxf_importer.SetOffset( offsetX, offsetY );
+    m_dxfImporter.SetOffset( offsetX, offsetY );
     m_layer = m_SelLayerBox->GetLayerSelection();
-    dxf_importer.SetBrdLayer( m_layer );
+    m_dxfImporter.SetBrdLayer( m_layer );
 
     // Read dxf file:
-    dxf_importer.ImportDxfFile( m_dxfFilename, brd );
-
-    // Prepare the undo list
-    std::vector<BOARD_ITEM*>& list = dxf_importer.GetItemsList();
-    PICKED_ITEMS_LIST picklist;
-
-    // Build the undo list
-    for( unsigned ii = 0; ii < list.size(); ii++ )
-    {
-        ITEM_PICKER itemWrapper( list[ii], UR_NEW );
-        picklist.PushItem( itemWrapper );
-    }
-
-    m_parent->SaveCopyInUndoList( picklist, UR_NEW, wxPoint(0,0) );
+    m_dxfImporter.ImportDxfFile( m_dxfFilename );
 
     EndModal( wxID_OK );
 }
 
 
-bool InvokeDXFDialogImport( PCB_EDIT_FRAME* aCaller )
+bool InvokeDXFDialogImport( PCB_BASE_FRAME* aCaller )
 {
     DIALOG_DXF_IMPORT dlg( aCaller );
-    bool success = dlg.ShowModal() == wxID_OK;
+    bool success = ( dlg.ShowModal() == wxID_OK );
 
     if( success )
+    {
+        // Prepare the undo list
+        const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
+        PICKED_ITEMS_LIST picklist;
+
+        BOARD* board = aCaller->GetBoard();
+        KIGFX::VIEW* view = aCaller->GetGalCanvas()->GetView();
+
+        // Build the undo list & add items to the current view
+        std::list<BOARD_ITEM*>::const_iterator it, itEnd;
+        for( it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
+        {
+            BOARD_ITEM* item = *it;
+
+            board->Add( item );
+
+            ITEM_PICKER itemWrapper( item, UR_NEW );
+            picklist.PushItem( itemWrapper );
+
+            if( aCaller->IsGalCanvasActive() )
+                view->Add( item );
+        }
+
+        aCaller->SaveCopyInUndoList( picklist, UR_NEW, wxPoint( 0, 0 ) );
         aCaller->OnModify();
+    }
 
     return success;
 }
