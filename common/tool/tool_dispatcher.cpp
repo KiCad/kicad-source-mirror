@@ -88,8 +88,8 @@ struct TOOL_DISPATCHER::BUTTON_STATE
 };
 
 
-TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditFrame ) :
-    m_toolMgr( aToolMgr ), m_editFrame( aEditFrame )
+TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr ) :
+    m_toolMgr( aToolMgr )
 {
     m_buttons.push_back( new BUTTON_STATE( BUT_LEFT, wxEVT_LEFT_DOWN,
                          wxEVT_LEFT_UP, wxEVT_LEFT_DCLICK ) );
@@ -118,7 +118,7 @@ void TOOL_DISPATCHER::ResetState()
 
 KIGFX::VIEW* TOOL_DISPATCHER::getView()
 {
-    return m_editFrame->GetGalCanvas()->GetView();
+    return static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->GetGalCanvas()->GetView();
 }
 
 
@@ -229,7 +229,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         {
             motion = true;
             m_lastMousePos = pos;
-            m_editFrame->UpdateStatusBar();
+            static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->UpdateStatusBar();
         }
 
         for( unsigned int i = 0; i < m_buttons.size(); i++ )
@@ -245,7 +245,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         // TODO That's a big ugly workaround, somehow DRAWPANEL_GAL loses focus
         // after second LMB click and currently I have no means to do better debugging
         if( type == wxEVT_LEFT_UP )
-            m_editFrame->GetGalCanvas()->SetFocus();
+            static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->GetGalCanvas()->SetFocus();
 #endif /* __APPLE__ */
     }
 

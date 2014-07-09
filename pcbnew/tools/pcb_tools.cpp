@@ -47,7 +47,7 @@ void PCB_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
     GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
 
     // Connect handlers to toolbar buttons
