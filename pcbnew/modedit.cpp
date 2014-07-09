@@ -935,8 +935,7 @@ void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
     if( aEnable )
     {
         SetBoard( m_Pcb );
-
-        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+        updateView();
         GetGalCanvas()->StartDrawing();
     }
 }

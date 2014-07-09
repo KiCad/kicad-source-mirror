@@ -439,6 +439,9 @@ protected:
      */
     void updateTitle();
 
+    /// Reloads displayed items and sets view.
+    void updateView();
+
     /// The libPath is not publicly visible, grab it from the FP_LIB_TABLE if we must.
     const wxString getLibPath();
 
