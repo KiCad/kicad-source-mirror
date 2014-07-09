@@ -137,7 +137,7 @@ int MODULE_TOOLS::PlacePad( TOOL_EVENT& aEvent )
     preview.Add( pad );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -205,6 +205,7 @@ int MODULE_TOOLS::PlacePad( TOOL_EVENT& aEvent )
             // Start placing next pad
             pad = new D_PAD( module );
             m_frame->Import_Pad_Settings( pad, false );
+            pad->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             preview.Add( pad );
         }
     }
