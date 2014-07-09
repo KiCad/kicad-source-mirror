@@ -234,7 +234,7 @@ bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambigua
     const KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_LINE_T, EOT }; // preferred types
 
     if( m_editModules )
-        collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::ModulesAndTheirItems,
+        collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::ModuleItems,
                            wxPoint( aWhere.x, aWhere.y ), guide );
     else
         collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::AllBoardItems,
