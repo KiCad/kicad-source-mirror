@@ -25,6 +25,8 @@
 
 #include <map>
 #include <deque>
+#include <stack>
+#include <algorithm>
 
 #include <boost/foreach.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -51,6 +53,32 @@ using boost::optional;
 /// Struct describing the current execution state of a TOOL
 struct TOOL_MANAGER::TOOL_STATE
 {
+    TOOL_STATE( TOOL_BASE* aTool ) :
+        theTool( aTool )
+    {
+        clear();
+    }
+
+    TOOL_STATE( const TOOL_STATE& aState )
+    {
+        theTool = aState.theTool;
+        idle = aState.idle;
+        pendingWait = aState.pendingWait;
+        pendingContextMenu = aState.pendingContextMenu;
+        contextMenu = aState.contextMenu;
+        contextMenuTrigger = aState.contextMenuTrigger;
+        cofunc = aState.cofunc;
+        wakeupEvent = aState.wakeupEvent;
+        waitEvents = aState.waitEvents;
+        transitions = aState.transitions;
+        // do not copy stateStack
+    }
+
+    ~TOOL_STATE()
+    {
+        assert( stateStack.empty() );
+    }
+
     /// The tool itself
     TOOL_BASE* theTool;
 
@@ -83,6 +111,21 @@ struct TOOL_MANAGER::TOOL_STATE
     /// upon the event reception
     std::vector<TRANSITION> transitions;
 
+    void operator=( const TOOL_STATE& aState )
+    {
+        theTool = aState.theTool;
+        idle = aState.idle;
+        pendingWait = aState.pendingWait;
+        pendingContextMenu = aState.pendingContextMenu;
+        contextMenu = aState.contextMenu;
+        contextMenuTrigger = aState.contextMenuTrigger;
+        cofunc = aState.cofunc;
+        wakeupEvent = aState.wakeupEvent;
+        waitEvents = aState.waitEvents;
+        transitions = aState.transitions;
+        // do not copy stateStack
+    }
+
     bool operator==( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
     {
         return aRhs.theTool == this->theTool;
@@ -91,6 +134,48 @@ struct TOOL_MANAGER::TOOL_STATE
     bool operator!=( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
     {
         return aRhs.theTool != this->theTool;
+    }
+
+    void Push()
+    {
+        stateStack.push( *this );
+
+        clear();
+    }
+
+    bool Pop()
+    {
+        delete cofunc;
+
+        if( !stateStack.empty() )
+        {
+            *this = stateStack.top();
+            stateStack.pop();
+
+            return true;
+        }
+        else
+        {
+            cofunc = NULL;
+
+            return false;
+        }
+    }
+
+private:
+    ///> Stack preserving previous states of a TOOL.
+    std::stack<TOOL_STATE> stateStack;
+
+    ///> Restores the initial state.
+    void clear()
+    {
+        idle = true;
+        pendingWait = false;
+        pendingContextMenu = false;
+        cofunc = NULL;
+        contextMenu = NULL;
+        contextMenuTrigger = CMENU_OFF;
+        transitions.clear();
     }
 };
 
@@ -118,7 +203,6 @@ TOOL_MANAGER::~TOOL_MANAGER()
         delete it->first;           // delete the tool itself
     }
 
-    m_toolState.clear();
     delete m_actionMgr;
 }
 
@@ -132,13 +216,7 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
     wxASSERT_MSG( m_toolTypes.find( typeid( *aTool ).name() ) == m_toolTypes.end(),
             wxT( "Adding two tools of the same type may result in unexpected behaviour.") );
 
-    TOOL_STATE* st = new TOOL_STATE;
-
-    st->theTool = aTool;
-    st->pendingWait = false;
-    st->pendingContextMenu = false;
-    st->cofunc = NULL;
-    st->contextMenuTrigger = CMENU_OFF;
+    TOOL_STATE* st = new TOOL_STATE( aTool );
 
     m_toolState[aTool] = st;
     m_toolNameIndex[aTool->GetName()] = st;
@@ -379,35 +457,31 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 
     BOOST_FOREACH( TOOL_STATE* st, m_toolState | boost::adaptors::map_values )
     {
-        // the tool scheduled next state(s) by calling Go()
-        if( !st->pendingWait )
+        // no state handler in progress - check if there are any transitions (defined by
+        // Go() method that match the event.
+        if( !st->pendingWait && !st->transitions.empty() )
         {
-            // no state handler in progress - check if there are any transitions (defined by
-            // Go() method that match the event.
-            if( st->transitions.size() )
+            BOOST_FOREACH( TRANSITION& tr, st->transitions )
             {
-                BOOST_FOREACH( TRANSITION& tr, st->transitions )
+                if( tr.first.Matches( aEvent ) )
                 {
-                    if( tr.first.Matches( aEvent ) )
-                    {
-                        // as the state changes, the transition table has to be set up again
-                        st->transitions.clear();
+                    // no tool context allocated yet? Create one.
+                    if( st->cofunc )
+                        st->Push();
 
-                        // no tool context allocated yet? Create one.
-                        if( !st->cofunc )
-                            st->cofunc = new COROUTINE<int, TOOL_EVENT&>( tr.second );
-                        else
-                            st->cofunc->SetEntry( tr.second );
+                    // as the state changes, the transition table has to be set up again
+                    st->transitions.clear();
 
-                        // got match? Run the handler.
-                        st->cofunc->Call( aEvent );
+                    st->cofunc = new COROUTINE<int, TOOL_EVENT&>( tr.second );
 
-                        if( !st->cofunc->Running() )
-                            finishTool( st ); // The couroutine has finished immediately?
+                    // got match? Run the handler.
+                    st->cofunc->Call( aEvent );
 
-                        // there is no point in further checking, as transitions got cleared
-                        break;
-                    }
+                    if( !st->cofunc->Running() )
+                        finishTool( st ); // The couroutine has finished immediately?
+
+                    // there is no point in further checking, as transitions got cleared
+                    break;
                 }
             }
         }
@@ -451,20 +525,15 @@ bool TOOL_MANAGER::dispatchActivation( TOOL_EVENT& aEvent )
 
 void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
-    std::deque<TOOL_ID>::iterator it, itEnd;
-
-    // Find the tool and deactivate it
-    for( it = m_activeTools.begin(), itEnd = m_activeTools.end(); it != itEnd; ++it )
+    if( !aState->Pop() )        // if there are no other contexts saved on the stack
     {
-        if( aState == m_toolIdIndex[*it] )
-        {
-            m_activeTools.erase( it );
-            break;
-        }
-    }
+        // find the tool and deactivate it
+        std::deque<TOOL_ID>::iterator tool = std::find( m_activeTools.begin(), m_activeTools.end(),
+                                                        aState->theTool->GetId() );
 
-    delete aState->cofunc;
-    aState->cofunc = NULL;
+        if( tool != m_activeTools.end() )
+            m_activeTools.erase( tool );
+    }
 }
 
 
