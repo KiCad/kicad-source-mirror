@@ -189,18 +189,6 @@ public:
 private:
     friend class ACTION_MANAGER;
 
-    /// Assigns an unique identifier. It is given by an instance of ACTION_MANAGER.
-    void setId( int aId )
-    {
-        m_id = aId;
-    }
-
-    /// Assigns ACTION_MANAGER object that handles the TOOL_ACTION.
-    void setActionMgr( ACTION_MANAGER* aManager )
-    {
-        m_actionMgr = aManager;
-    }
-
     /// Name of the action (convention is: app.[tool.]action.name)
     std::string m_name;
 
@@ -224,9 +212,6 @@ private:
 
     /// Unique ID for fast matching. Assigned by ACTION_MANAGER.
     int m_id;
-
-    /// Action manager that handles this TOOL_ACTION.
-    ACTION_MANAGER* m_actionMgr;
 
     /// Origin of the action
     // const TOOL_BASE* m_origin;

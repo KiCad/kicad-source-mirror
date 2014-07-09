@@ -44,8 +44,6 @@ ACTION_MANAGER::~ACTION_MANAGER()
 
 void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 {
-    // Check if the TOOL_ACTION was not registered before
-    assert( aAction->GetId() == -1 );
     // TOOL_ACTIONs are supposed to be named [appName.]toolName.actionName (with dots between)
     // action name without specifying at least toolName is not valid
     assert( aAction->GetName().find( '.', 0 ) != std::string::npos );
@@ -54,15 +52,14 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
     assert( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
     assert( m_actionIdIndex.find( aAction->m_id ) == m_actionIdIndex.end() );
 
-    aAction->setId( MakeActionId( aAction->m_name ) );
+    if( aAction->m_id == -1 )
+        aAction->m_id = MakeActionId( aAction->m_name );
 
     m_actionNameIndex[aAction->m_name] = aAction;
     m_actionIdIndex[aAction->m_id] = aAction;
 
     if( aAction->HasHotKey() )
         m_actionHotKeys[aAction->m_currentHotKey].push_back( aAction );
-
-    aAction->setActionMgr( this );
 }
 
 
@@ -70,10 +67,6 @@ void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 {
     m_actionNameIndex.erase( aAction->m_name );
     m_actionIdIndex.erase( aAction->m_id );
-
-    // Indicate that the ACTION_MANAGER no longer care about the object
-    aAction->setActionMgr( NULL );
-    aAction->setId( -1 );
 
     if( aAction->HasHotKey() )
     {
