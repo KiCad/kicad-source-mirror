@@ -182,9 +182,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     updateTitle();
 
     // Create GAL canvas
-    EDA_DRAW_FRAME* drawFrame = static_cast<EDA_DRAW_FRAME*>( aParent );
+    PCB_BASE_FRAME* parentFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            drawFrame->GetGalCanvas()->GetBackend() );
+                                                            parentFrame->GetGalCanvas()->GetBackend() );
     SetGalCanvas( drawPanel );
 
     SetBoard( new BOARD() );
@@ -252,7 +252,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Add the layer manager ( most right side of pcbframe )
     m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 2 ) );
     // Layers manager is visible and served only in GAL canvas mode.
-    m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( drawFrame->IsGalCanvasActive() );
+    m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( parentFrame->IsGalCanvasActive() );
 
     // The left vertical toolbar (fast acces to display options)
     m_auimgr.AddPane( m_optionsToolBar,
@@ -272,7 +272,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                                    drawPanel->GetViewControls(), this );
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
-    if( drawFrame->IsGalCanvasActive() )
+    if( parentFrame->IsGalCanvasActive() )
     {
         drawPanel->SetEventDispatcher( m_toolDispatcher );
 
