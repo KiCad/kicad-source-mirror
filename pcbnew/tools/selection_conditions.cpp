@@ -78,6 +78,9 @@ bool SELECTION_CONDITIONS::hasTypeFunc( const SELECTION& aSelection, KICAD_T aTy
 
 bool SELECTION_CONDITIONS::onlyTypeFunc( const SELECTION& aSelection, KICAD_T aType )
 {
+    if( aSelection.Empty() )
+        return false;
+
     for( int i = 0; i < aSelection.Size(); ++i )
     {
         if( aSelection.Item<EDA_ITEM>( i )->Type() != aType )
