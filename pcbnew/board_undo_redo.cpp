@@ -630,7 +630,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 }
 
 
-void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& aEvent )
+void PCB_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
@@ -653,7 +653,7 @@ void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& aEvent )
 }
 
 
-void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& aEvent )
+void PCB_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;

@@ -66,7 +66,7 @@ void FOOTPRINT_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLi
 }
 
 
-void FOOTPRINT_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
 {
     if( GetScreen()->GetRedoCommandCount() <= 0 )
         return;
@@ -107,7 +107,7 @@ void FOOTPRINT_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& aEvent )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;

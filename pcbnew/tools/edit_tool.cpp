@@ -189,7 +189,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     {
         // Modifications have to be rollbacked, so restore the previous state of items
         wxCommandEvent dummy;
-        editFrame->GetBoardFromUndoList( dummy );
+        editFrame->RestoreCopyFromUndoList( dummy );
     }
     else
     {

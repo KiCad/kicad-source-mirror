@@ -418,41 +418,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
         // Item found
         SetCurItem( item );
-
-        switch( item->Type() )
-        {
-        case PCB_PAD_T:
-            InstallPadOptionsFrame( (D_PAD*) item );
-            m_canvas->MoveCursorToCrossHair();
-            break;
-
-        case PCB_MODULE_T:
-            {
-            DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) item );
-            int ret = dialog.ShowModal();
-            GetScreen()->GetCurItem()->ClearFlags();
-            m_canvas->MoveCursorToCrossHair();
-
-            if( ret > 0 )
-                m_canvas->Refresh();
-            }
-            break;
-
-        case PCB_MODULE_TEXT_T:
-            InstallTextModOptionsFrame( (TEXTE_MODULE*) item, DC );
-            m_canvas->MoveCursorToCrossHair();
-            break;
-
-        case  PCB_MODULE_EDGE_T :
-            m_canvas->MoveCursorToCrossHair();
-            InstallFootprintBodyItemPropertiesDlg( (EDGE_MODULE*) item );
-            m_canvas->Refresh();
-            break;
-
-        default:
-            break;
-        }
-
+        OnEditItemRequest( DC, item );
         break;      // end case 0
 
     case ID_PCB_ADD_LINE_BUTT:
@@ -466,6 +432,44 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
         break;
     }
+
+    default:
+        break;
+    }
+}
+
+
+void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
+{
+    switch( aItem->Type() )
+    {
+    case PCB_PAD_T:
+        InstallPadOptionsFrame( (D_PAD*) aItem );
+        m_canvas->MoveCursorToCrossHair();
+        break;
+
+    case PCB_MODULE_T:
+        {
+        DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) aItem );
+        int ret = dialog.ShowModal();
+        GetScreen()->GetCurItem()->ClearFlags();
+        m_canvas->MoveCursorToCrossHair();
+
+        if( ret > 0 )
+            m_canvas->Refresh();
+        }
+        break;
+
+    case PCB_MODULE_TEXT_T:
+        InstallTextModOptionsFrame( (TEXTE_MODULE*) aItem, aDC );
+        m_canvas->MoveCursorToCrossHair();
+        break;
+
+    case PCB_MODULE_EDGE_T :
+        m_canvas->MoveCursorToCrossHair();
+        InstallFootprintBodyItemPropertiesDlg( (EDGE_MODULE*) aItem );
+        m_canvas->Refresh();
+        break;
 
     default:
         break;
