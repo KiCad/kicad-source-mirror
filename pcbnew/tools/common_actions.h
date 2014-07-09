@@ -62,11 +62,6 @@ public:
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
 
-    /// Copying pad to clipboard
-    static TOOL_ACTION copyItems;
-
-    /// Pasting a pad from clipboard
-    static TOOL_ACTION pasteItems;
 
     // Drawing Tool
     /// Activation of the drawing tool (line)
@@ -95,9 +90,6 @@ public:
 
     /// Activation of the drawing tool (placing a MODULE)
     static TOOL_ACTION placeModule;
-
-    /// Activation of the drawing tool (placing a PAD)
-    static TOOL_ACTION placePad;
 
     /// Activation of the drawing tool (placing a drawing from DXF file)
     static TOOL_ACTION placeDXF;
@@ -179,6 +171,18 @@ public:
     static TOOL_ACTION viaSizeDec;
 
     static TOOL_ACTION trackViaSizeChanged;   // notification
+
+
+    // Module editor tools
+    /// Activation of the drawing tool (placing a PAD)
+    static TOOL_ACTION placePad;
+
+    /// Copying module items to clipboard
+    static TOOL_ACTION copyItems;
+
+    /// Pasting module items from clipboard
+    static TOOL_ACTION pasteItems;
+
 
     // Miscellaneous
     static TOOL_ACTION resetCoords;

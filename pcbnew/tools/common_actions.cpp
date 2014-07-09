@@ -59,14 +59,6 @@ TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, 'E',
         "Properties...", "Displays properties window" );
 
-TOOL_ACTION COMMON_ACTIONS::copyItems( "pcbnew.InteractiveEdit.copyItems",
-        AS_GLOBAL, MD_CTRL + int( 'C' ),
-        "Copy items", "Copy items", AF_ACTIVATE );
-
-TOOL_ACTION COMMON_ACTIONS::pasteItems( "pcbnew.InteractiveEdit.pasteItems",
-        AS_GLOBAL, MD_CTRL + int( 'V' ),
-        "Paste items", "Paste items", AF_ACTIVATE );
-
 
 // Drawing tool actions
 TOOL_ACTION COMMON_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
@@ -104,10 +96,6 @@ TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.InteractiveDrawing.placeTarget"
 TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.InteractiveDrawing.placeModule",
         AS_GLOBAL, 'O',
         "Add modules", "Add modules", AF_ACTIVATE );
-
-TOOL_ACTION COMMON_ACTIONS::placePad( "pcbnew.InteractiveDrawing.placePad",
-        AS_GLOBAL, 0,
-        "Add pads", "Add pads", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeDXF( "pcbnew.InteractiveDrawing.placeDXF",
         AS_GLOBAL, 0,
@@ -274,6 +262,20 @@ TOOL_ACTION COMMON_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
 TOOL_ACTION COMMON_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",
         AS_GLOBAL, 0,
         "", "" );
+
+
+// Module editor tools
+TOOL_ACTION COMMON_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
+        AS_GLOBAL, 0,
+        "Add pads", "Add pads", AF_ACTIVATE );
+
+TOOL_ACTION COMMON_ACTIONS::copyItems( "pcbnew.ModuleEditor.copyItems",
+        AS_GLOBAL, MD_CTRL + int( 'C' ),
+        "Copy items", "Copy items", AF_ACTIVATE );
+
+TOOL_ACTION COMMON_ACTIONS::pasteItems( "pcbnew.ModuleEditor.pasteItems",
+        AS_GLOBAL, MD_CTRL + int( 'V' ),
+        "Paste items", "Paste items", AF_ACTIVATE );
 
 
 // Miscellaneous
