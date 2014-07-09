@@ -464,6 +464,9 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
             case TEXTE_MODULE::TEXT_is_VALUE:
                 DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete VALUE!" ) );
                 return;
+
+            default:    // suppress warnings
+                break;
             }
         }
     }

@@ -91,9 +91,31 @@ public:
      * Function Add
      * adds the given item to this MODULE and takes ownership of its memory.
      * @param aBoardItem The item to add to this board.
-     * @param doInsert If true, then insert, else append
-     *  void    Add( BOARD_ITEM* aBoardItem, bool doInsert = true );
+     * @param doAppend If true, then append, else insert.
      */
+    void Add( BOARD_ITEM* aBoardItem, bool doAppend = true );
+
+    /**
+     * Function Delete
+     * removes the given single item from this MODULE and deletes its memory.
+     * @param aBoardItem The item to remove from this module and delete
+     */
+    void Delete( BOARD_ITEM* aBoardItem )
+    {
+        // developers should run DEBUG versions and fix such calls with NULL
+        wxASSERT( aBoardItem );
+
+        if( aBoardItem )
+            delete Remove( aBoardItem );
+    }
+
+    /**
+     * Function Remove
+     * removes \a aBoardItem from this MODULE and returns it to caller without deleting it.
+     * @param aBoardItem The item to remove from this module.
+     * @return BOARD_ITEM* \a aBoardItem which was passed in.
+     */
+    BOARD_ITEM* Remove( BOARD_ITEM* aBoardItem );
 
     /**
      * Function CalculateBoundingBox
@@ -435,14 +457,6 @@ public:
      * @param a3DModel A pointer to a #S3D_MASTER to add to the list.
      */
     void Add3DModel( S3D_MASTER* a3DModel );
-
-    /**
-     * Function AddPad
-     * adds \a aPad to the end of the pad list.
-     *
-     * @param aPad A pointer to a #D_PAD to add to the list.
-     */
-    void AddPad( D_PAD* aPad );
 
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                          const KICAD_T scanTypes[] );
