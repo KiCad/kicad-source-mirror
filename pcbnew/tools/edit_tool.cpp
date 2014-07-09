@@ -65,6 +65,9 @@ bool EDIT_TOOL::Init()
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::properties, SELECTION_CONDITIONS::NotEmpty );
 
+    m_offset.x = 0;
+    m_offset.y = 0;
+
     setTransitions();
 
     return true;
@@ -186,6 +189,8 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     }
 
     m_dragging = false;
+    m_offset.x = 0;
+    m_offset.y = 0;
 
     if( restore )
     {
