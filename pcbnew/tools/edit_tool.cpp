@@ -48,7 +48,7 @@ EDIT_TOOL::EDIT_TOOL() :
 bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
-    m_selectionTool = static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveSelection" ) );
+    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
     if( !m_selectionTool )
     {
@@ -198,7 +198,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     }
 
     if( unselect )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_selectionTool->ClearSelection();
 
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
     ratsnest->ClearSimple();
@@ -252,7 +252,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
         std::vector<PICKED_ITEMS_LIST*>& undoList = editFrame->GetScreen()->m_UndoList.m_CommandsList;
 
         // Some of properties dialogs alter pointers, so we should deselect them
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_selectionTool->ClearSelection();
         STATUS_FLAGS flags = item->GetFlags();
         item->ClearFlags();
 
@@ -279,7 +279,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
     }
 
     if( unselect )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_selectionTool->ClearSelection();
 
     setTransitions();
 
@@ -332,7 +332,7 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
         getModel<BOARD>()->GetRatsnest()->Recalculate();
 
     if( unselect )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_selectionTool->ClearSelection();
 
     m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
     setTransitions();
@@ -386,7 +386,7 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
         getModel<BOARD>()->GetRatsnest()->Recalculate();
 
     if( unselect )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_selectionTool->ClearSelection();
 
     m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
     setTransitions();
@@ -411,7 +411,7 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
 
     // As we are about to remove items, they have to be removed from the selection first
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_selectionTool->ClearSelection();
 
     // Save them
     for( unsigned int i = 0; i < selectedItems.GetCount(); ++i )
@@ -529,7 +529,7 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelec
 bool EDIT_TOOL::makeSelection( const SELECTION_TOOL::SELECTION& aSelection )
 {
     if( aSelection.Empty() )                        // Try to find an item that could be modified
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionSingle );
+        m_selectionTool->SelectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
 
     return !aSelection.Empty();
 }
