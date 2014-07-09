@@ -83,13 +83,16 @@ int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
         MODULE* module = m_board->m_Modules;
         EDGE_MODULE* line = new EDGE_MODULE( module );
 
-        while( drawSegment( S_SEGMENT, line ) )
+        while( drawSegment( S_SEGMENT, reinterpret_cast<DRAWSEGMENT*&>( line ) ) )
         {
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
-            line->SetLocalCoord();
-            line->SetParent( module );
-            module->GraphicalItems().PushFront( line );
+            if( line )
+            {
+                m_frame->OnModify();
+                m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+                line->SetLocalCoord();
+                line->SetParent( module );
+                module->GraphicalItems().PushFront( line );
+            }
 
             line = new EDGE_MODULE( module );
         }
@@ -102,9 +105,12 @@ int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
 
         while( drawSegment( S_SEGMENT, line ) )
         {
-            m_board->Add( line );
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( line, UR_NEW );
+            if( line )
+            {
+                m_board->Add( line );
+                m_frame->OnModify();
+                m_frame->SaveCopyInUndoList( line, UR_NEW );
+            }
 
             line = new DRAWSEGMENT;
         }
@@ -126,13 +132,16 @@ int DRAWING_TOOL::DrawCircle( TOOL_EVENT& aEvent )
         MODULE* module = m_board->m_Modules;
         EDGE_MODULE* circle = new EDGE_MODULE( module );
 
-        while( drawSegment( S_CIRCLE, circle ) )
+        while( drawSegment( S_CIRCLE, reinterpret_cast<DRAWSEGMENT*&>( circle ) ) )
         {
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
-            circle->SetLocalCoord();
-            circle->SetParent( module );
-            module->GraphicalItems().PushFront( circle );
+            if( circle )
+            {
+                m_frame->OnModify();
+                m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+                circle->SetLocalCoord();
+                circle->SetParent( module );
+                module->GraphicalItems().PushFront( circle );
+            }
 
             circle = new EDGE_MODULE( module );
         }
@@ -145,9 +154,12 @@ int DRAWING_TOOL::DrawCircle( TOOL_EVENT& aEvent )
 
         while( drawSegment( S_CIRCLE, circle ) )
         {
-            m_board->Add( circle );
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( circle, UR_NEW );
+            if( circle )
+            {
+                m_board->Add( circle );
+                m_frame->OnModify();
+                m_frame->SaveCopyInUndoList( circle, UR_NEW );
+            }
 
             circle = new DRAWSEGMENT;
         }
@@ -169,13 +181,16 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
         MODULE* module = m_board->m_Modules;
         EDGE_MODULE* arc = new EDGE_MODULE( module );
 
-        while( drawArc( arc ) )
+        while( drawArc( reinterpret_cast<DRAWSEGMENT*&>( arc ) ) )
         {
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
-            arc->SetLocalCoord();
-            arc->SetParent( module );
-            module->GraphicalItems().PushFront( arc );
+            if( arc )
+            {
+                m_frame->OnModify();
+                m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+                arc->SetLocalCoord();
+                arc->SetParent( module );
+                module->GraphicalItems().PushFront( arc );
+            }
 
             arc = new EDGE_MODULE( module );
         }
@@ -188,9 +203,12 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 
         while( drawArc( arc ) )
         {
-            m_board->Add( arc );
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( arc, UR_NEW );
+            if( arc )
+            {
+                m_board->Add( arc );
+                m_frame->OnModify();
+                m_frame->SaveCopyInUndoList( arc, UR_NEW );
+            }
 
             arc = new DRAWSEGMENT;
         }
@@ -939,7 +957,7 @@ int DRAWING_TOOL::SetAnchor( TOOL_EVENT& aEvent )
 }
 
 
-bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT* aGraphic )
+bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic )
 {
     // Only two shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
@@ -989,6 +1007,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT* aGraphic )
             preview.Clear();
             updatePreview = true;
             delete aGraphic;
+            aGraphic = NULL;
             break;
         }
 
@@ -1049,7 +1068,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT* aGraphic )
                 else                            // User has clicked twice in the same spot
                 {                               // a clear sign that the current drawing is finished
                     delete aGraphic;            // but only if at least one graphic was created
-                    started = false;            // otherwise - force user to draw more or cancel
+                    aGraphic = NULL;            // otherwise - force user to draw more or cancel
+                    started = false;
                 }
 
                 preview.Clear();
@@ -1081,7 +1101,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT* aGraphic )
 }
 
 
-bool DRAWING_TOOL::drawArc( DRAWSEGMENT* aGraphic )
+bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
 {
     bool clockwise = true;      // drawing direction of the arc
     double startAngle = 0.0f;   // angle of the first arc line
@@ -1121,6 +1141,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT* aGraphic )
             preview.Clear();
             preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             delete aGraphic;
+            aGraphic = NULL;
             break;
         }
 
