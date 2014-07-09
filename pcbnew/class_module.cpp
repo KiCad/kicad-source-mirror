@@ -448,8 +448,12 @@ const EDA_RECT MODULE::GetBoundingBox() const
     // Add the Clearance shape size: (shape around the pads when the
     // clearance is shown.  Not optimized, but the draw cost is small
     // (perhaps smaller than optimization).
-    int biggest_clearance = GetBoard()->GetDesignSettings().GetBiggestClearanceValue();
-    area.Inflate( biggest_clearance );
+    BOARD* board = GetBoard();
+    if( board )
+    {
+        int biggest_clearance = board->GetDesignSettings().GetBiggestClearanceValue();
+        area.Inflate( biggest_clearance );
+    }
 
     return area;
 }

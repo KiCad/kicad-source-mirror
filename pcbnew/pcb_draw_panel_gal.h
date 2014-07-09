@@ -32,6 +32,7 @@ namespace KIGFX
     class WORKSHEET_VIEWITEM;
     class RATSNEST_VIEWITEM;
 }
+class COLORS_DESIGN_SETTINGS;
 
 class PCB_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
 {
@@ -55,6 +56,13 @@ public:
      *        The object is then owned by PCB_DRAW_PANEL_GAL.
      */
     void SetWorksheet( KIGFX::WORKSHEET_VIEWITEM* aWorksheet );
+
+    /**
+     * Function UseColorScheme
+     * Applies layer color settings.
+     * @param aSettings are the new settings.
+     */
+    void UseColorScheme( const COLORS_DESIGN_SETTINGS* aSettings );
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
     virtual void SetHighContrastLayer( LAYER_ID aLayer );
