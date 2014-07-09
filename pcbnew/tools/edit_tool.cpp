@@ -24,12 +24,15 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <class_edge_mod.h>
 #include <class_zone.h>
 #include <wxPcbStruct.h>
+
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <ratsnest_data.h>
 #include <confirm.h>
+#include <kicad_plugin.h>
 
 #include <cassert>
 #include <boost/foreach.hpp>
@@ -428,6 +431,177 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
 }
 
 
+int EDIT_TOOL::CopyItems( TOOL_EVENT& aEvent )
+{
+    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    PCB_IO io( CTL_FOR_CLIPBOARD );
+
+    if( !m_editModules || !makeSelection( selection ) )
+    {
+        setTransitions();
+
+        return 0;
+    }
+
+    // Create a temporary module that contains selected items to ease serialization
+    MODULE module( getModel<BOARD>() );
+
+    for( int i = 0; i < selection.Size(); ++i )
+    {
+        BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( selection.Item<BOARD_ITEM>( i )->Clone() );
+
+        // Do not add reference/value - convert them to the common type
+        if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )
+            text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+
+        module.Add( clone );
+    }
+
+    io.Format( &module, 0 );
+    std::string data = io.GetStringOutput( true );
+    m_toolMgr->SaveClipboard( data );
+
+    setTransitions();
+
+    return 0;
+}
+
+
+int EDIT_TOOL::PasteItems( TOOL_EVENT& aEvent )
+{
+    if( !m_editModules )
+    {
+        setTransitions();
+
+        return 0;
+    }
+
+    // Parse clipboard
+    PCB_IO io( CTL_FOR_CLIPBOARD );
+    MODULE* currentModule = getModel<BOARD>()->m_Modules;
+    MODULE* pastedModule = NULL;
+
+    try
+    {
+        BOARD_ITEM* item = io.Parse( m_toolMgr->GetClipboard() );
+        assert( item->Type() == PCB_MODULE_T );
+        pastedModule = dyn_cast<MODULE*>( item );
+    }
+    catch( ... )
+    {
+        setTransitions();
+
+        return 0;
+    }
+
+    // Placement tool part
+    KIGFX::VIEW* view = getView();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    BOARD* board = getModel<BOARD>();
+    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( view );
+    pastedModule->SetParent( board );
+    pastedModule->RunOnChildren( boost::bind( &KIGFX::VIEW_GROUP::Add, boost::ref( preview ), _1 ) );
+    preview.Add( pastedModule );
+    view->Add( &preview );
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        cursorPos = controls->GetCursorPosition();
+
+        if( evt->IsMotion() )
+        {
+            pastedModule->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            preview.ViewUpdate();
+        }
+
+        else if( evt->Category() == TC_COMMAND )
+        {
+            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            {
+                pastedModule->Rotate( pastedModule->GetPosition(), frame->GetRotationAngle() );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+            {
+                pastedModule->Flip( pastedModule->GetPosition() );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+            else if( evt->IsCancel() || evt->IsActivate() )
+            {
+                preview.Clear();
+                break;
+            }
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            frame->OnModify();
+            frame->SaveCopyInUndoList( currentModule, UR_MODEDIT );
+
+            board->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
+            currentModule->SetLastEditTime();
+
+            // MODULE::RunOnChildren is infeasible here: we need to create copies of items, do not
+            // directly modify them
+
+            for( D_PAD* pad = pastedModule->Pads(); pad; pad = pad->Next() )
+            {
+                D_PAD* clone = static_cast<D_PAD*>( pad->Clone() );
+                currentModule->Add( clone );
+                clone->SetLocalCoord();
+                view->Add( clone );
+            }
+
+            for( BOARD_ITEM* drawing = pastedModule->GraphicalItems();
+                    drawing; drawing = drawing->Next() )
+            {
+                BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( drawing->Clone() );
+
+                if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )
+                {
+                    // Do not add reference/value - convert them to the common type
+                    text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+                    currentModule->Add( clone );
+                    text->SetLocalCoord();
+                }
+                else if( EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( clone ) )
+                {
+                    currentModule->Add( clone );
+                    edge->SetLocalCoord();
+                }
+
+                view->Add( clone );
+            }
+
+            preview.Clear();
+
+            break;
+        }
+    }
+
+    delete pastedModule;
+    controls->ShowCursor( false );
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
+    view->Remove( &preview );
+
+    setTransitions();
+
+    return 0;
+}
+
+
 void EDIT_TOOL::remove( BOARD_ITEM* aItem )
 {
     BOARD* board = getModel<BOARD>();
@@ -515,6 +689,8 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Flip,       COMMON_ACTIONS::flip.MakeEvent() );
     Go( &EDIT_TOOL::Remove,     COMMON_ACTIONS::remove.MakeEvent() );
     Go( &EDIT_TOOL::Properties, COMMON_ACTIONS::properties.MakeEvent() );
+    Go( &EDIT_TOOL::CopyItems,  COMMON_ACTIONS::copyItems.MakeEvent() );
+    Go( &EDIT_TOOL::PasteItems, COMMON_ACTIONS::pasteItems.MakeEvent() );
 }
 
 

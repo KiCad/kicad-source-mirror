@@ -92,7 +92,22 @@ public:
     int Remove( TOOL_EVENT& aEvent );
 
     /**
+     * Function CopyItems()
+     *
+     * Copies selected items to the clipboard. Works only in "edit modules" mode.
+     */
+    int CopyItems( TOOL_EVENT& aEvent );
+
+    /**
+     * Function PastePad()
+     *
+     * Pastes items from the clipboard. Works only in "edit modules" mode.
+     */
+    int PasteItems( TOOL_EVENT& aEvent );
+
+    /**
      * Function EditModules()
+     *
      * Toggles edit module mode. When enabled, one may select parts of modules individually
      * (graphics, pads, etc.), so they can be modified.
      * @param aEnabled decides if the mode should be enabled.

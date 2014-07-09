@@ -62,6 +62,12 @@ public:
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
 
+    /// Copying pad to clipboard
+    static TOOL_ACTION copyItems;
+
+    /// Pasting a pad from clipboard
+    static TOOL_ACTION pasteItems;
+
     // Drawing Tool
     /// Activation of the drawing tool (line)
     static TOOL_ACTION drawLine;
