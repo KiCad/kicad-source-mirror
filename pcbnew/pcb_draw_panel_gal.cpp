@@ -29,6 +29,7 @@
 #include <worksheet_viewitem.h>
 #include <ratsnest_viewitem.h>
 
+#include <class_colors_design_settings.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
@@ -210,8 +211,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
     m_ratsnest = new KIGFX::RATSNEST_VIEWITEM( aBoard->GetRatsnest() );
     m_view->Add( m_ratsnest );
 
-    // Load layer color setup from PCB data
-    static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() )->ImportLegacyColors( aBoard->GetColorsSettings() );
+    UseColorScheme( aBoard->GetColorsSettings() );
 
     m_view->RecacheAllItems( true );
 }
@@ -230,6 +230,14 @@ void PCB_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WORKSHEET_VIEWITEM* aWorksheet )
 
     // Limit panning to the size of worksheet frame
     m_viewControls->SetPanBoundary( aWorksheet->ViewBBox() );
+}
+
+
+void PCB_DRAW_PANEL_GAL::UseColorScheme( const COLORS_DESIGN_SETTINGS* aSettings )
+{
+    KIGFX::PCB_RENDER_SETTINGS* rs;
+    rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
+    rs->ImportLegacyColors( aSettings );
 }
 
 

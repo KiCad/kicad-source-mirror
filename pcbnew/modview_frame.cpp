@@ -32,6 +32,7 @@
 #include <kiway.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
+#include <pcb_draw_panel_gal.h>
 #include <wxPcbStruct.h>
 #include <3d_viewer.h>
 #include <pcbcommon.h>
@@ -53,6 +54,8 @@
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <pcbnew_config.h>
+
+#include <boost/bind.hpp>
 
 
 #define NEXT_PART       1
@@ -141,7 +144,14 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_footprintList = new wxListBox( this, ID_MODVIEW_FOOTPRINT_LIST,
             wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL );
 
+    // Create GAL canvas
+    EDA_DRAW_FRAME* drawFrame = static_cast<EDA_DRAW_FRAME*>( aParent );
+    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                            drawFrame->GetGalCanvas()->GetBackend() );
+    SetGalCanvas( drawPanel );
+
     SetBoard( new BOARD() );
+    drawPanel->DisplayBoard( m_Pcb );
 
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();
@@ -207,6 +217,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // Manage the draw panel, right pane.
     m_auimgr.AddPane( m_canvas,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+    m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
+                      wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
 
     // Manage the message panel, bottom pane.
     m_auimgr.AddPane( m_messagePanel,
@@ -244,6 +256,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 #endif
 
     Show( true );
+
+    UseGalCanvas( drawFrame->IsGalCanvasActive() );
 }
 
 
@@ -421,6 +435,22 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         }
 
         UpdateTitle();
+
+        if( IsGalCanvasActive() )
+        {
+            KIGFX::VIEW* view = GetGalCanvas()->GetView();
+            view->Clear();
+
+            // Load modules and its additional elements
+            for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
+            {
+                module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                view->Add( module );
+            }
+
+//            view->Add( loadFootprint( id ) );
+        }
+
         Zoom_Automatique( false );
         m_canvas->Refresh();
         Update3D_Frame();
@@ -826,4 +856,17 @@ void FOOTPRINT_VIEWER_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     if( module )
         SetMsgPanel( module );
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::UseGalCanvas( bool aEnable )
+{
+    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    if( aEnable )
+    {
+        SetBoard( m_Pcb );
+
+        GetGalCanvas()->StartDrawing();
+    }
 }
