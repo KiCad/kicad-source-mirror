@@ -91,6 +91,7 @@ public:
     int ResetCoords( TOOL_EVENT& aEvent );
     int SwitchUnits( TOOL_EVENT& aEvent );
     int ShowHelp( TOOL_EVENT& aEvent );
+    int ToBeDone( TOOL_EVENT& aEvent );
 
 private:
     ///> Sets up handlers for various events.

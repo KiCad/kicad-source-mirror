@@ -506,6 +506,15 @@ int PCBNEW_CONTROL::ShowHelp( TOOL_EVENT& aEvent )
 }
 
 
+int PCBNEW_CONTROL::ToBeDone( TOOL_EVENT& aEvent )
+{
+    DisplayInfoMessage( m_frame, _( "Not implemented yet." ) );
+    setTransitions();
+
+    return 0;
+}
+
+
 void PCBNEW_CONTROL::setTransitions()
 {
     // View controls
@@ -549,4 +558,5 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::ResetCoords,        COMMON_ACTIONS::resetCoords.MakeEvent() );
     Go( &PCBNEW_CONTROL::SwitchUnits,        COMMON_ACTIONS::switchUnits.MakeEvent() );
     Go( &PCBNEW_CONTROL::ShowHelp,           COMMON_ACTIONS::showHelp.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ToBeDone,           COMMON_ACTIONS::toBeDone.MakeEvent() );
 }
