@@ -34,6 +34,7 @@
 #include <boost/range/adaptor/map.hpp>
 
 #include <wx/event.h>
+#include <wx/clipbrd.h>
 
 #include <view/view.h>
 
@@ -595,6 +596,41 @@ void TOOL_MANAGER::ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
 
     st->contextMenu = aMenu;
     st->contextMenuTrigger = aTrigger;
+}
+
+
+bool TOOL_MANAGER::SaveClipboard( const std::string& aText )
+{
+    if( wxTheClipboard->Open() )
+    {
+        wxTheClipboard->SetData( new wxTextDataObject( aText ) );
+        wxTheClipboard->Close();
+
+        return true;
+    }
+
+    return false;
+}
+
+
+std::string TOOL_MANAGER::GetClipboard() const
+{
+    std::string result;
+
+    if( wxTheClipboard->Open() )
+    {
+        if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+        {
+            wxTextDataObject data;
+            wxTheClipboard->GetData( data );
+
+            result = data.GetText().mb_str();
+        }
+
+        wxTheClipboard->Close();
+    }
+
+    return result;
 }
 
 
