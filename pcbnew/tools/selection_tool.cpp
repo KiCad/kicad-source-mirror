@@ -76,7 +76,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         m_selection.clear();
     else
         // Restore previous properties of selected items and remove them from containers
-        ClearSelection();
+        clearSelection();
 
     m_frame = getEditFrame<PCB_BASE_FRAME>();
 
@@ -84,8 +84,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
     getView()->Remove( m_selection.group );
     getView()->Add( m_selection.group );
 
-    // The tool launches upon reception of action event ("pcbnew.InteractiveSelection")
-    Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
+    setTransitions();
 }
 
 
@@ -98,13 +97,8 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         // become the new selection (discarding previously selected items)
         m_additive = evt->Modifier( MD_SHIFT );
 
-        if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO )
-        {
-            ClearSelection();
-        }
-
         // single click? Select single object
-        else if( evt->IsClick( BUT_LEFT ) )
+        if( evt->IsClick( BUT_LEFT ) )
         {
             if( evt->Modifier( MD_CTRL ) )
             {
@@ -113,9 +107,9 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             else
             {
                 if( !m_additive )
-                    ClearSelection();
+                    clearSelection();
 
-                SelectSingle( evt->Position() );
+                selectSingle( evt->Position() );
             }
         }
 
@@ -123,7 +117,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             if( m_selection.Empty() )
-                SelectSingle( evt->Position() );
+                selectSingle( evt->Position() );
 
             if( !m_selection.Empty() )
                 SetContextMenu( &m_menu, CMENU_NOW );
@@ -133,7 +127,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
             if( m_selection.Empty() )
-                SelectSingle( evt->Position() );
+                selectSingle( evt->Position() );
 
             m_toolMgr->RunAction( COMMON_ACTIONS::properties );
         }
@@ -148,7 +142,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             else if( m_selection.Empty() )
             {
                 // There is nothing selected, so try to select something
-                if( !SelectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ), false ) )
+                if( !selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ), false ) )
                 {
                     // If nothings has been selected or user wants to select more
                     // draw the selection box
@@ -171,9 +165,21 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
                 else
                 {
                     // No -> clear the selection list
-                    ClearSelection();
+                    clearSelection();
                 }
             }
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::selectionSingle ) )
+        {
+            // GetMousePosition() is used, as it is independent of snapping settings
+            selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+        }
+
+        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO ||
+                 evt->IsAction( &COMMON_ACTIONS::selectionClear ) )
+        {
+            clearSelection();
         }
     }
 
@@ -184,7 +190,43 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 }
 
 
-bool SELECTION_TOOL::SelectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation )
+void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
+{
+    assert( aAction.GetId() > 0 );    // Check if the action was registered before in ACTION_MANAGER
+
+    m_menu.Add( aAction );
+}
+
+
+void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
+{
+    if( aItem->IsSelected() )
+    {
+        deselect( aItem );
+
+        // Inform other potentially interested tools
+        TOOL_EVENT deselectEvent( DeselectedEvent );
+        m_toolMgr->ProcessEvent( deselectEvent );
+    }
+    else
+    {
+        if( !m_additive )
+            clearSelection();
+
+        // Prevent selection of invisible or inactive items
+        if( selectable( aItem ) )
+        {
+            select( aItem );
+
+            // Inform other potentially interested tools
+            TOOL_EVENT selectEvent( SelectedEvent );
+            m_toolMgr->ProcessEvent( selectEvent );
+        }
+    }
+}
+
+
+bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation )
 {
     BOARD_ITEM* item;
     GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
@@ -202,7 +244,7 @@ bool SELECTION_TOOL::SelectSingle( const VECTOR2I& aWhere, bool aAllowDisambigua
     {
     case 0:
         if( !m_additive )
-            ClearSelection();
+            clearSelection();
 
         return false;
 
@@ -254,70 +296,6 @@ bool SELECTION_TOOL::SelectSingle( const VECTOR2I& aWhere, bool aAllowDisambigua
 }
 
 
-void SELECTION_TOOL::ClearSelection()
-{
-    if( m_selection.Empty() )
-        return;
-
-    KIGFX::VIEW_GROUP::const_iter it, it_end;
-
-    // Restore the initial properties
-    for( it = m_selection.group->Begin(), it_end = m_selection.group->End(); it != it_end; ++it )
-    {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
-
-        item->ViewSetVisible( true );
-        item->ClearSelected();
-    }
-    m_selection.clear();
-
-    m_frame->SetCurItem( NULL );
-
-    // Do not show the context menu when there is nothing selected
-    SetContextMenu( &m_menu, CMENU_OFF );
-
-    // Inform other potentially interested tools
-    TOOL_EVENT clearEvent( ClearedEvent );
-    m_toolMgr->ProcessEvent( clearEvent );
-}
-
-
-void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
-{
-    assert( aAction.GetId() > 0 );    // Check if the action was registered before in ACTION_MANAGER
-
-    m_menu.Add( aAction );
-}
-
-
-void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
-{
-    if( aItem->IsSelected() )
-    {
-        deselect( aItem );
-
-        // Inform other potentially interested tools
-        TOOL_EVENT deselectEvent( DeselectedEvent );
-        m_toolMgr->ProcessEvent( deselectEvent );
-    }
-    else
-    {
-        if( !m_additive )
-            ClearSelection();
-
-        // Prevent selection of invisible or inactive items
-        if( selectable( aItem ) )
-        {
-            select( aItem );
-
-            // Inform other potentially interested tools
-            TOOL_EVENT selectEvent( SelectedEvent );
-            m_toolMgr->ProcessEvent( selectEvent );
-        }
-    }
-}
-
-
 bool SELECTION_TOOL::selectMultiple()
 {
     bool cancelled = false;     // Was the tool cancelled while it was running?
@@ -338,7 +316,7 @@ bool SELECTION_TOOL::selectMultiple()
         if( evt->IsDrag( BUT_LEFT ) )
         {
             if( !m_additive )
-                ClearSelection();
+                clearSelection();
 
             // Start drawing a selection box
             m_selArea->SetOrigin( evt->DragOrigin() );
@@ -390,6 +368,60 @@ bool SELECTION_TOOL::selectMultiple()
     getViewControls()->SetAutoPan( false );
 
     return cancelled;
+}
+
+
+void SELECTION_TOOL::setTransitions()
+{
+    Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &SELECTION_TOOL::SingleSelection, COMMON_ACTIONS::selectionSingle.MakeEvent() );
+    Go( &SELECTION_TOOL::ClearSelection, COMMON_ACTIONS::selectionClear.MakeEvent() );
+}
+
+
+int SELECTION_TOOL::SingleSelection( TOOL_EVENT& aEvent )
+{
+    selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+    setTransitions();
+
+    return 0;
+}
+
+int SELECTION_TOOL::ClearSelection( TOOL_EVENT& aEvent )
+{
+    clearSelection();
+    setTransitions();
+
+    return 0;
+}
+
+void SELECTION_TOOL::clearSelection()
+{
+    if( m_selection.Empty() )
+        return;
+
+    KIGFX::VIEW_GROUP::const_iter it, it_end;
+
+    // Restore the initial properties
+    for( it = m_selection.group->Begin(), it_end = m_selection.group->End(); it != it_end; ++it )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
+
+        item->ViewSetVisible( true );
+        item->ClearSelected();
+    }
+    m_selection.clear();
+
+    getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+
+    // Do not show the context menu when there is nothing selected
+    SetContextMenu( &m_menu, CMENU_OFF );
+
+    // Inform other potentially interested tools
+    TOOL_EVENT clearEvent( ClearedEvent );
+    m_toolMgr->ProcessEvent( clearEvent );
+
+    return;
 }
 
 

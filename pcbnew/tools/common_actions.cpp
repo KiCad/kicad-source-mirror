@@ -31,17 +31,22 @@
 TOOL_ACTION COMMON_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
+TOOL_ACTION COMMON_ACTIONS::selectionSingle( "pcbnew.InteractiveSelection.Single",
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+
+TOOL_ACTION COMMON_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
 // Edit tool actions
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 'M',
         "Move", "Moves the selected item(s)" );
 
-TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.rotate",
+TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveEdit.rotate",
         AS_GLOBAL, 'R',
         "Rotate", "Rotates selected item(s)" );
 
-TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.flip",
+TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         AS_GLOBAL, 'F',
         "Flip", "Flips selected item(s)" );
 

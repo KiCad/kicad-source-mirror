@@ -40,7 +40,6 @@
 
 #include <tool/context_menu.h>
 #include <tools/common_actions.h>
-#include <tools/selection_tool.h>
 
 #include <ratsnest_data.h>
 
@@ -637,7 +636,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
     // Deselect all items
-    m_toolMgr->GetTool<SELECTION_TOOL>()->ClearSelection();
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
 
     getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL,
                                                _( "Interactive Router" ) );
