@@ -147,6 +147,7 @@ public:
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
+    void onEvent( wxEvent& aEvent );
     void onEnter( wxEvent& aEvent );
     void onRefreshTimer( wxTimerEvent& aEvent );
 
