@@ -32,6 +32,8 @@
 
 #include <kicad_plugin.h>
 #include <pcbnew_id.h>
+#include <collectors.h>
+#include <confirm.h>
 
 #include <wxPcbStruct.h>
 #include <class_board.h>
@@ -39,6 +41,7 @@
 #include <class_edge_mod.h>
 
 #include <boost/bind.hpp>
+#include <boost/foreach.hpp>
 
 MODULE_TOOLS::MODULE_TOOLS() :
     TOOL_INTERACTIVE( "pcbnew.ModuleEditor" )
@@ -58,6 +61,17 @@ void MODULE_TOOLS::Reset( RESET_REASON aReason )
 
 bool MODULE_TOOLS::Init()
 {
+    // Find the selection tool, so they can cooperate
+    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+    if( !selectionTool )
+    {
+        DisplayError( NULL, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
+        return false;
+    }
+
+    selectionTool->AddMenuItem( COMMON_ACTIONS::enumeratePads );
+
     setTransitions();
 
     return true;
@@ -199,6 +213,107 @@ int MODULE_TOOLS::PlacePad( TOOL_EVENT& aEvent )
 
     setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
+    return 0;
+}
+
+
+int MODULE_TOOLS::EnumeratePads( TOOL_EVENT& aEvent )
+{
+    std::list<D_PAD*> pads;
+    std::set<D_PAD*> allPads;
+    MODULE* module = m_board->m_Modules;
+
+    GENERAL_COLLECTOR collector;
+    const KICAD_T types[] = { PCB_PAD_T, EOT };
+
+    GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
+    guide.SetIgnoreMTextsMarkedNoShow( true );
+    guide.SetIgnoreMTextsOnCopper( true );
+    guide.SetIgnoreMTextsOnCmp( true );
+    guide.SetIgnoreModulesOnCu( true );
+    guide.SetIgnoreModulesOnCmp( true );
+    guide.SetIgnoreModulesVals( true );
+    guide.SetIgnoreModulesRefs( true );
+
+    // Create a set containing all pads (to avoid double adding to a list);
+    for( D_PAD* p = module->Pads(); p; p = p->Next() )
+        allPads.insert( p );
+
+    // TODO display settings window
+    int padNumber = 1;
+    wxString padPrefix = "";
+
+    m_frame->DisplayToolMsg( _( "Hold left mouse button and move cursor over pads to enumerate them" ) );
+
+    Activate();
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_controls->ShowCursor( true );
+
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
+        {
+            // Add pads to the list according to the selection order
+            VECTOR2I cursorPos = m_controls->GetCursorPosition();
+
+            collector.Empty();
+            collector.Collect( m_board, types, wxPoint( cursorPos.x, cursorPos.y ), guide );
+
+            for( int i = 0; i < collector.GetCount(); ++i )
+            {
+                if( collector[i]->Type() == PCB_PAD_T )
+                {
+                    D_PAD* pad = static_cast<D_PAD*>( collector[i] );
+
+                    std::set<D_PAD*>::iterator it = allPads.find( pad );
+
+                    // Add the pad to the list, if it was not selected previously..
+                    if( it != allPads.end() )
+                    {
+                        allPads.erase( it );
+                        pads.push_back( pad );
+                        pad->SetSelected();
+                    }
+
+                    // ..or remove it from the list if it was clicked
+                    else if( evt->IsClick( BUT_LEFT ) )
+                    {
+                        allPads.insert( pad );
+                        pads.remove( pad );
+                        pad->ClearSelected();
+                    }
+                }
+            }
+        }
+
+        else if( ( evt->IsKeyPressed() && evt->KeyCode() == WXK_RETURN ) ||
+                   evt->IsDblClick( BUT_LEFT ) )
+        {
+            // Accept changes
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+
+            BOOST_FOREACH( D_PAD* pad, pads )
+                pad->SetPadName( wxString::Format( "%s%d", padPrefix, padNumber++ ) );
+
+            break;
+        }
+
+        else if( evt->IsCancel() || evt->IsActivate() )
+        {
+            break;
+        }
+    }
+
+    BOOST_FOREACH( D_PAD* pad, pads )
+        pad->ClearSelected();
+
+    m_frame->DisplayToolMsg( wxEmptyString );
+    m_controls->ShowCursor( false );
+
+    setTransitions();
 
     return 0;
 }
@@ -411,6 +526,7 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
 void MODULE_TOOLS::setTransitions()
 {
     Go( &MODULE_TOOLS::PlacePad,        COMMON_ACTIONS::placePad.MakeEvent() );
+    Go( &MODULE_TOOLS::EnumeratePads,   COMMON_ACTIONS::enumeratePads.MakeEvent() );
     Go( &MODULE_TOOLS::CopyItems,       COMMON_ACTIONS::copyItems.MakeEvent() );
     Go( &MODULE_TOOLS::PasteItems,      COMMON_ACTIONS::pasteItems.MakeEvent() );
 }
