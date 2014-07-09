@@ -54,7 +54,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
         SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" ),
         DeselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.deselected" ),
         ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" ),
-        m_additive( false ), m_multiple( false )
+        m_additive( false ), m_multiple( false ), m_editModules( false )
 {
     m_selArea = new SELECTION_AREA;
     m_selection.group = new KIGFX::VIEW_GROUP;
@@ -189,8 +189,12 @@ bool SELECTION_TOOL::SelectSingle( const VECTOR2I& aWhere, bool aAllowDisambigua
     GENERAL_COLLECTOR collector;
     const KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_LINE_T, EOT }; // preferred types
 
-    collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::AllBoardItems,
-                       wxPoint( aWhere.x, aWhere.y ), guide );
+    if( m_editModules )
+        collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::ModulesAndTheirItems,
+                           wxPoint( aWhere.x, aWhere.y ), guide );
+    else
+        collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::AllBoardItems,
+                           wxPoint( aWhere.x, aWhere.y ), guide );
 
     switch( collector.GetCount() )
     {
@@ -532,23 +536,25 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 
     case PCB_MODULE_T:
         if( aItem->IsOnLayer( F_Cu ) && board->IsElementVisible( MOD_FR_VISIBLE ) )
-            return true;
+            return !m_editModules;
 
         if( aItem->IsOnLayer( B_Cu ) && board->IsElementVisible( MOD_BK_VISIBLE ) )
-            return true;
+            return !m_editModules;
 
         return false;
 
         break;
 
     case PCB_MODULE_TEXT_T:
-        if( m_multiple )
+        if( m_multiple && !m_editModules )
             return false;
         break;
 
     // These are not selectable
     case PCB_MODULE_EDGE_T:
     case PCB_PAD_T:
+        return m_editModules;
+
     case NOT_USED:
     case TYPE_NOT_INIT:
         return false;

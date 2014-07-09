@@ -139,6 +139,17 @@ public:
      */
     void AddMenuItem( const TOOL_ACTION& aAction );
 
+    /**
+     * Function EditModules()
+     * Toggles edit module mode. When enabled, one may select parts of modules individually
+     * (graphics, pads, etc.), so they can be modified.
+     * @param aEnabled decides if the mode should be enabled.
+     */
+    void EditModules( bool aEnabled )
+    {
+        m_editModules = aEnabled;
+    }
+
     ///> Event sent after an item is selected.
     const TOOL_EVENT SelectedEvent;
 
@@ -260,6 +271,9 @@ private:
 
     /// Right click popup menu
     CONTEXT_MENU m_menu;
+
+    /// Edit module mode flag
+    bool m_editModules;
 };
 
 #endif

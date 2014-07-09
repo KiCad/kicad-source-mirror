@@ -399,7 +399,7 @@ public:
     virtual EDA_COLOR_T GetGridColor() const;
 
     ///> @copydoc PCB_BASE_FRAME::SetActiveLayer()
-    void SetActiveLayer( LAYER_NUM aLayer );
+    void SetActiveLayer( LAYER_ID aLayer );
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     virtual void UseGalCanvas( bool aEnable );
