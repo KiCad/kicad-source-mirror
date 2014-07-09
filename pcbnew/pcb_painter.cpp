@@ -79,6 +79,7 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
     m_layerColors[NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE )]      = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[ITEM_GAL_LAYER( ANCHOR_VISIBLE )]                 = COLOR4D( 0.3, 0.3, 1.0, 0.9 );
     m_layerColors[ITEM_GAL_LAYER( RATSNEST_VISIBLE )]               = COLOR4D( 0.4, 0.4, 0.4, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( WORKSHEET )]                      = COLOR4D( 0.5, 0.0, 0.0, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( DRC_VISIBLE )]                    = COLOR4D( 1.0, 0.0, 0.0, 0.8 );
@@ -233,6 +234,10 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( (TEXTE_MODULE*) item, aLayer );
         break;
 
+    case PCB_MODULE_T:
+        draw( (MODULE*) item );
+        break;
+
     case PCB_ZONE_AREA_T:
         draw( (ZONE_CONTAINER*) item );
         break;
@@ -284,7 +289,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
 
             // Set a proper color for the label
             const COLOR4D& color = m_pcbSettings.GetColor( aTrack, aTrack->GetLayer() );
-            COLOR4D labelColor = m_pcbSettings.GetColor( NULL, aLayer );
+            const COLOR4D labelColor = m_pcbSettings.GetColor( NULL, aLayer );
 
             if( color.GetBrightness() > 0.5 )
                 m_gal->SetStrokeColor( labelColor.Inverted() );
@@ -421,7 +426,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
             // Set a proper color for the label
             const COLOR4D& color  = m_pcbSettings.GetColor( aPad, aPad->GetLayer() );
-            COLOR4D labelColor = m_pcbSettings.GetColor( NULL, aLayer );
+            const COLOR4D labelColor = m_pcbSettings.GetColor( NULL, aLayer );
 
             if( color.GetBrightness() > 0.5 )
                 m_gal->SetStrokeColor( labelColor.Inverted() );
@@ -723,6 +728,23 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     m_gal->SetLineWidth( aText->GetThickness() );
     m_gal->SetTextAttributes( aText );
     m_gal->StrokeText( aText->GetText(), position, orientation );
+}
+
+
+void PCB_PAINTER::draw( const MODULE* aModule )
+{
+    const COLOR4D color = m_pcbSettings.GetColor( aModule, ITEM_GAL_LAYER( ANCHOR_VISIBLE ) );
+
+    // Draw anchor
+    m_gal->SetStrokeColor( color );
+    m_gal->SetLineWidth( 1.0 );
+
+    // Keep the size constant, not related to the scale
+    double anchorSize = 5.0 / m_gal->GetWorldScale();
+
+    VECTOR2D center = aModule->GetPosition();
+    m_gal->DrawLine( center - VECTOR2D( anchorSize, 0 ), center + VECTOR2D( anchorSize, 0 ) );
+    m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
 }
 
 

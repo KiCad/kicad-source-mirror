@@ -213,6 +213,7 @@ protected:
     void draw( const DRAWSEGMENT* aSegment );
     void draw( const TEXTE_PCB* aText, int aLayer );
     void draw( const TEXTE_MODULE* aText, int aLayer );
+    void draw( const MODULE* aModule );
     void draw( const ZONE_CONTAINER* aZone );
     void draw( const DIMENSION* aDimension, int aLayer );
     void draw( const PCB_TARGET* aTarget );

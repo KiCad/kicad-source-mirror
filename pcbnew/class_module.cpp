@@ -830,6 +830,21 @@ void MODULE::ViewUpdate( int aUpdateFlags )
 }
 
 
+void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount = 1;
+    aLayers[0] = ITEM_GAL_LAYER( ANCHOR_VISIBLE );
+}
+
+
+unsigned int MODULE::ViewGetLOD( int aLayer ) const
+{
+    // Currently there is only one layer, so there is nothing to check
+//    if( aLayer == ITEM_GAL_LAYER( ANCHOR_VISIBLE ) )
+        return 30;
+}
+
+
 /* Test for validity of the name in a library of the footprint
  * ( no spaces, dir separators ... )
  * return true if the given name is valid

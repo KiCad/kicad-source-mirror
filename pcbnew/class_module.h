@@ -483,6 +483,12 @@ public:
     /// @copydoc VIEW_ITEM::ViewUpdate()
     void ViewUpdate( int aUpdateFlags = KIGFX::VIEW_ITEM::ALL );
 
+    /// @copydoc VIEW_ITEM::ViewGetLayers()
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+
+    /// @copydoc VIEW_ITEM::ViewGetLOD()
+    virtual unsigned int ViewGetLOD( int aLayer ) const;
+
     /**
      * Function CopyNetlistSettings
      * copies the netlist settings to \a aModule.
