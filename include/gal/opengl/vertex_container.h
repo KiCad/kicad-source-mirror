@@ -163,7 +163,7 @@ protected:
      * returns size of the reserved memory space.
      * @return Size of the reserved memory space (expressed as a number of vertices).
      */
-    unsigned int reservedSpace()
+    inline unsigned int reservedSpace()
     {
         return m_currentSize - m_freeSpace;
     }
