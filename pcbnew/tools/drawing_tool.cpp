@@ -41,7 +41,7 @@
 #include <router/direction.h>
 
 #include <class_board.h>
-#include <class_drawsegment.h>
+#include <class_edge_mod.h>
 #include <class_pcb_text.h>
 #include <class_dimension.h>
 #include <class_mire.h>
@@ -73,13 +73,38 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
 
 int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_PCB_ADD_LINE_BUTT, wxCURSOR_PENCIL, _( "Add graphic line" ) );
-
-    DRAWSEGMENT* line = new DRAWSEGMENT;
-
-    while( drawSegment( S_SEGMENT, line ) )
+    if( m_editModules )
     {
-        line = new DRAWSEGMENT;
+        m_frame->SetToolID( ID_MODEDIT_LINE_TOOL, wxCURSOR_PENCIL, _( "Add graphic line" ) );
+
+        MODULE* module = m_frame->GetBoard()->m_Modules;
+        EDGE_MODULE* line = new EDGE_MODULE( module );
+
+        while( drawSegment( S_SEGMENT, line ) )
+        {
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+            line->SetLocalCoord();
+            line->SetParent( module );
+            module->GraphicalItems().PushFront( line );
+
+            line = new EDGE_MODULE( module );
+        }
+    }
+    else
+    {
+        m_frame->SetToolID( ID_PCB_ADD_LINE_BUTT, wxCURSOR_PENCIL, _( "Add graphic line" ) );
+
+        DRAWSEGMENT* line = new DRAWSEGMENT;
+
+        while( drawSegment( S_SEGMENT, line ) )
+        {
+            m_board->Add( line );
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( line, UR_NEW );
+
+            line = new DRAWSEGMENT;
+        }
     }
 
     setTransitions();
@@ -91,13 +116,38 @@ int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawCircle( TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_PCB_CIRCLE_BUTT, wxCURSOR_PENCIL, _( "Add graphic circle" ) );
-
-    DRAWSEGMENT* circle = new DRAWSEGMENT;
-
-    while( drawSegment( S_CIRCLE, circle ) )
+    if( m_editModules )
     {
-        circle = new DRAWSEGMENT;
+        m_frame->SetToolID( ID_MODEDIT_CIRCLE_TOOL, wxCURSOR_PENCIL, _( "Add graphic circle" ) );
+
+        MODULE* module = m_frame->GetBoard()->m_Modules;
+        EDGE_MODULE* circle = new EDGE_MODULE( module );
+
+        while( drawSegment( S_CIRCLE, circle ) )
+        {
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+            circle->SetLocalCoord();
+            circle->SetParent( module );
+            module->GraphicalItems().PushFront( circle );
+
+            circle = new EDGE_MODULE( module );
+        }
+    }
+    else
+    {
+        m_frame->SetToolID( ID_PCB_CIRCLE_BUTT, wxCURSOR_PENCIL, _( "Add graphic circle" ) );
+
+        DRAWSEGMENT* circle = new DRAWSEGMENT;
+
+        while( drawSegment( S_CIRCLE, circle ) )
+        {
+            m_board->Add( circle );
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( circle, UR_NEW );
+
+            circle = new DRAWSEGMENT;
+        }
     }
 
     setTransitions();
@@ -109,13 +159,38 @@ int DRAWING_TOOL::DrawCircle( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_PCB_ARC_BUTT, wxCURSOR_PENCIL, _( "Add graphic arc" ) );
-
-    DRAWSEGMENT* arc = new DRAWSEGMENT;
-
-    while( drawArc( arc ) )
+    if( m_editModules )
     {
-        arc = new DRAWSEGMENT;
+        m_frame->SetToolID( ID_MODEDIT_ARC_TOOL, wxCURSOR_PENCIL, _( "Add graphic arc" ) );
+
+        MODULE* module = m_frame->GetBoard()->m_Modules;
+        EDGE_MODULE* arc = new EDGE_MODULE( module );
+
+        while( drawArc( arc ) )
+        {
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+            arc->SetLocalCoord();
+            arc->SetParent( module );
+            module->GraphicalItems().PushFront( arc );
+
+            arc = new EDGE_MODULE( module );
+        }
+    }
+    else
+    {
+        m_frame->SetToolID( ID_PCB_ARC_BUTT, wxCURSOR_PENCIL, _( "Add graphic arc" ) );
+
+        DRAWSEGMENT* arc = new DRAWSEGMENT;
+
+        while( drawArc( arc ) )
+        {
+            m_board->Add( arc );
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( arc, UR_NEW );
+
+            arc = new DRAWSEGMENT;
+        }
     }
 
     setTransitions();
@@ -624,11 +699,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT* aGraphic )
                     assert( aGraphic->GetWidth() > 0 );
 
                     m_view->Add( aGraphic );
-                    m_board->Add( aGraphic );
                     aGraphic->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-
-                    m_frame->OnModify();
-                    m_frame->SaveCopyInUndoList( aGraphic, UR_NEW );
                 }
                 else                            // User has clicked twice in the same spot
                 {                               // a clear sign that the current drawing is finished
@@ -785,11 +856,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT* aGraphic )
                     assert( aGraphic->GetWidth() > 0 );
 
                     m_view->Add( aGraphic );
-                    m_board->Add( aGraphic );
                     aGraphic->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-
-                    m_frame->OnModify();
-                    m_frame->SaveCopyInUndoList( aGraphic, UR_NEW );
 
                     preview.Remove( aGraphic );
                     preview.Remove( &helperLine );
