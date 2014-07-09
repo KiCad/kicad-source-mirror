@@ -51,7 +51,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     wxWindow( aParentWindow, aWindowId, aPosition, aSize )
 {
     m_gal        = NULL;
-    m_currentGal = GAL_TYPE_NONE;
+    m_backend    = GAL_TYPE_NONE;
     m_view       = NULL;
     m_painter    = NULL;
     m_eventDispatcher = NULL;
@@ -92,8 +92,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_pendingRefresh = false;
     m_drawing = false;
     Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
-
-    this->SetFocus();
 }
 
 
@@ -204,7 +202,7 @@ void EDA_DRAW_PANEL_GAL::StopDrawing()
 void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 {
     // Do not do anything if the currently used GAL is correct
-    if( aGalType == m_currentGal && m_gal != NULL )
+    if( aGalType == m_backend && m_gal != NULL )
         return;
 
     // Prevent refreshing canvas during backend switch
@@ -235,7 +233,7 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
     if( m_view )
         m_view->SetGAL( m_gal );
 
-    m_currentGal = aGalType;
+    m_backend = aGalType;
 }
 
 
@@ -244,7 +242,6 @@ void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
     if( !m_eventDispatcher )
     {
         aEvent.Skip();
-        return;
     }
     else
     {
