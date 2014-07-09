@@ -917,6 +917,8 @@ int DRAWING_TOOL::SetAnchor( TOOL_EVENT& aEvent )
             wxPoint moveVector = module->GetPosition() - wxPoint( cursorPos.x, cursorPos.y );
             module->MoveAnchorPosition( moveVector );
 
+            module->ViewUpdate();
+
             // Usually, we do not need to change twice the anchor position,
             // so deselect the active tool
             break;
