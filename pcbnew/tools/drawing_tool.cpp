@@ -23,6 +23,8 @@
  */
 
 #include <boost/bind.hpp>
+#include <cstdio>
+
 #include "drawing_tool.h"
 #include "common_actions.h"
 
@@ -579,6 +581,110 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
         {
             module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
+
+    setTransitions();
+    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
+    return 0;
+}
+
+
+int DRAWING_TOOL::PlacePad( TOOL_EVENT& aEvent )
+{
+    assert( m_editModules );
+
+    m_frame->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
+
+    MODULE* module = m_board->m_Modules;
+    assert( module );
+
+    D_PAD* pad = new D_PAD( module );
+    m_frame->Import_Pad_Settings( pad, false );     // use the global settings for pad
+
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+    pad->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( m_view );
+    preview.Add( pad );
+    m_view->Add( &preview );
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        cursorPos = m_controls->GetCursorPosition();
+
+        if( evt->IsMotion() )
+        {
+            pad->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            preview.ViewUpdate();
+        }
+
+        else if( evt->Category() == TC_COMMAND )
+        {
+            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            {
+                pad->Rotate( pad->GetPosition(), m_frame->GetRotationAngle() );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+            {
+                pad->Flip( pad->GetPosition() );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+            else if( evt->IsCancel() || evt->IsActivate() )
+            {
+                preview.Clear();
+                delete pad;
+                break;
+            }
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+
+            m_board->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
+            module->SetLastEditTime();
+            module->Pads().PushBack( pad );
+
+            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+
+            // Set the relative pad position
+            // ( pad position for module orient, 0, and relative to the module position)
+            pad->SetLocalCoord();
+
+            /* NPTH pads take empty pad number (since they can't be connected),
+             * other pads get incremented from the last one edited */
+            wxString padName;
+
+            if( pad->GetAttribute() != PAD_HOLE_NOT_PLATED )
+                padName = getNextPadName();
+
+            pad->SetPadName( padName );
+
+            // Handle the view aspect
+            preview.Remove( pad );
+            m_view->Add( pad );
+
+            // Start placing next pad
+            pad = new D_PAD( module );
+            m_frame->Import_Pad_Settings( pad, false );
+            preview.Add( pad );
         }
     }
 
@@ -1369,6 +1475,53 @@ void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) 
 }
 
 
+bool isNotDigit( char aChar )
+{
+    return ( aChar < '0' || aChar > '9' );
+}
+
+
+wxString DRAWING_TOOL::getNextPadName() const
+{
+    std::set<int> usedNumbers;
+
+    // Find the first, not used pad number
+    for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
+    {
+        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+        {
+            wxString padName = pad->GetPadName();
+            int padNumber = 0;
+            int base = 1;
+
+            // Trim and extract the trailing numeric part
+            while( padName.Len() && padName.Last() >= '0' && padName.Last() <= '9' )
+            {
+                padNumber += ( padName.Last() - '0' ) * base;
+                padName.RemoveLast();
+                base *= 10;
+            }
+
+            usedNumbers.insert( padNumber );
+        }
+    }
+
+    int candidate = *usedNumbers.begin();
+
+    // Look for a gap in pad numbering
+    for( std::set<int>::iterator it = usedNumbers.begin(),
+            itEnd = usedNumbers.end(); it != itEnd; ++it )
+    {
+        if( *it - candidate > 1 )
+            break;
+
+        candidate = *it;
+    }
+
+    return wxString::Format( wxT( "%i" ), ++candidate );
+}
+
+
 void DRAWING_TOOL::setTransitions()
 {
     Go( &DRAWING_TOOL::DrawLine,         COMMON_ACTIONS::drawLine.MakeEvent() );
@@ -1380,4 +1533,5 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::PlaceText,        COMMON_ACTIONS::placeText.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTarget,      COMMON_ACTIONS::placeTarget.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceModule,      COMMON_ACTIONS::placeModule.MakeEvent() );
+    Go( &DRAWING_TOOL::PlacePad,         COMMON_ACTIONS::placePad.MakeEvent() );
 }

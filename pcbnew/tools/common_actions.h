@@ -90,6 +90,9 @@ public:
     /// Activation of the drawing tool (placing a MODULE)
     static TOOL_ACTION placeModule;
 
+    /// Activation of the drawing tool (placing a PAD)
+    static TOOL_ACTION placePad;
+
     // Push and Shove Router Tool
     /// Activation of the Push and Shove router
     static TOOL_ACTION routerActivate;
