@@ -177,6 +177,9 @@ public:
     /// Activation of the drawing tool (placing a PAD)
     static TOOL_ACTION placePad;
 
+    /// Tool for quick pad enumeration
+    static TOOL_ACTION enumeratePads;
+
     /// Copying module items to clipboard
     static TOOL_ACTION copyItems;
 

@@ -269,6 +269,10 @@ TOOL_ACTION COMMON_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
         AS_GLOBAL, 0,
         "Add pads", "Add pads", AF_ACTIVATE );
 
+TOOL_ACTION COMMON_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
+        AS_GLOBAL, 0,
+        "Enumerate pads", "Enumerate pads", AF_ACTIVATE );
+
 TOOL_ACTION COMMON_ACTIONS::copyItems( "pcbnew.ModuleEditor.copyItems",
         AS_GLOBAL, MD_CTRL + int( 'C' ),
         "Copy items", "Copy items", AF_ACTIVATE );

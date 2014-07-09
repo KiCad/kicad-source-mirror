@@ -58,6 +58,12 @@ public:
     int PlacePad( TOOL_EVENT& aEvent );
 
     /**
+     * Function EnumeratePads()
+     * Tool for quick pad enumeration.
+     */
+    int EnumeratePads( TOOL_EVENT& aEvent );
+
+    /**
      * Function CopyItems()
      *
      * Copies selected items to the clipboard. Works only in "edit modules" mode.
