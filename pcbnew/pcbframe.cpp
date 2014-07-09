@@ -813,29 +813,7 @@ void PCB_EDIT_FRAME::syncRenderStates()
 void PCB_EDIT_FRAME::syncLayerVisibilities()
 {
     m_Layers->SyncLayerVisibilities();
-
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-
-    // Load layer & elements visibility settings
-    for( LAYER_NUM i = 0; i < LAYER_ID_COUNT; ++i )
-    {
-        view->SetLayerVisible( i, m_Pcb->IsLayerVisible( LAYER_ID( i ) ) );
-
-        // Synchronize netname layers as well
-        if( IsCopperLayer( i ) )
-            view->SetLayerVisible( GetNetnameLayer( i ), m_Pcb->IsLayerVisible( LAYER_ID( i ) ) );
-    }
-
-    for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )
-    {
-        view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( i ) );
-    }
-
-    // Enable some layers that are GAL specific
-    view->SetLayerVisible( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), true );
-    view->SetLayerVisible( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), true );
-    view->SetLayerVisible( ITEM_GAL_LAYER( WORKSHEET ), true );
-    view->SetLayerVisible( ITEM_GAL_LAYER( GP_OVERLAY ), true );
+    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
 }
 
 

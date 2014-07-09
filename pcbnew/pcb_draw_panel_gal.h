@@ -70,6 +70,13 @@ public:
     ///> @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer()
     virtual void SetTopLayer( LAYER_ID aLayer );
 
+    /**
+     * Function SyncLayersVisibility
+     * Updates "visibility" property of each layer of a given BOARD.
+     * @param aBoard contains layers visibility settings to be applied.
+     */
+    void SyncLayersVisibility( const BOARD* aBoard );
+
 protected:
     ///> Currently used worksheet
     KIGFX::WORKSHEET_VIEWITEM* m_worksheet;

@@ -321,3 +321,28 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( LAYER_ID aLayer )
 
     m_view->UpdateAllLayersOrder();
 }
+
+
+void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
+{
+    // Load layer & elements visibility settings
+    for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
+    {
+        m_view->SetLayerVisible( i, aBoard->IsLayerVisible( i ) );
+
+        // Synchronize netname layers as well
+        if( IsCopperLayer( i ) )
+            m_view->SetLayerVisible( GetNetnameLayer( i ), aBoard->IsLayerVisible( i ) );
+    }
+
+    for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )
+    {
+        m_view->SetLayerVisible( ITEM_GAL_LAYER( i ), aBoard->IsElementVisible( i ) );
+    }
+
+    // Enable some layers that are GAL specific
+    m_view->SetLayerVisible( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), true );
+    m_view->SetLayerVisible( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), true );
+    m_view->SetLayerVisible( ITEM_GAL_LAYER( WORKSHEET ), true );
+    m_view->SetLayerVisible( ITEM_GAL_LAYER( GP_OVERLAY ), true );
+}
