@@ -105,6 +105,9 @@ public:
     /// Update edit points
     static TOOL_ACTION pointEditorUpdate;
 
+    /// Break outline (insert additional points to an edge)
+    static TOOL_ACTION pointEditorBreakOutline;
+
     // Placement tool
     /// Align items to the top edge of selection bounding box
     static TOOL_ACTION alignTop;
