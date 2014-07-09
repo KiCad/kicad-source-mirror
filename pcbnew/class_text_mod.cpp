@@ -129,7 +129,7 @@ int TEXTE_MODULE::GetLength() const
     return m_Text.Len();
 }
 
-// Update draw coordinates
+
 void TEXTE_MODULE::SetDrawCoord()
 {
     MODULE* module = (MODULE*) m_Parent;
@@ -146,8 +146,6 @@ void TEXTE_MODULE::SetDrawCoord()
 }
 
 
-// Update "local" coordinates (coordinates relatives to the footprint
-//  anchor point)
 void TEXTE_MODULE::SetLocalCoord()
 {
     MODULE* module = (MODULE*) m_Parent;
@@ -162,6 +160,7 @@ void TEXTE_MODULE::SetLocalCoord()
     double angle = module->GetOrientation();
     RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
 }
+
 
 bool TEXTE_MODULE::HitTest( const wxPoint& aPosition ) const
 {

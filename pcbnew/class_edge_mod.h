@@ -61,12 +61,23 @@ public:
 
     void Copy( EDGE_MODULE* source );           // copy structure
 
+    void Move( const wxPoint& aMoveVector )
+    {
+        m_Start += aMoveVector;
+        m_End   += aMoveVector;
+        SetLocalCoord();
+    }
+
     void SetStart0( const wxPoint& aPoint )     { m_Start0 = aPoint; }
     const wxPoint& GetStart0() const            { return m_Start0; }
 
     void SetEnd0( const wxPoint& aPoint )       { m_End0 = aPoint; }
     const wxPoint& GetEnd0() const              { return m_End0; }
 
+    ///> Set relative coordinates.
+    void SetLocalCoord();
+
+    ///> Set absolute coordinates.
     void SetDrawCoord();
 
     /* drawing functions */

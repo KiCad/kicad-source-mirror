@@ -228,6 +228,38 @@ const EDA_RECT D_PAD::GetBoundingBox() const
 }
 
 
+void D_PAD::SetDrawCoord()
+{
+    MODULE* module = (MODULE*) m_Parent;
+
+    m_Pos = m_Pos0;
+
+    if( module == NULL )
+        return;
+
+    double angle = module->GetOrientation();
+
+    RotatePoint( &m_Pos.x, &m_Pos.y, angle );
+    m_Pos += module->GetPosition();
+}
+
+
+void D_PAD::SetLocalCoord()
+{
+    MODULE* module = (MODULE*) m_Parent;
+
+    if( module == NULL )
+    {
+        m_Pos0 = m_Pos;
+        return;
+    }
+
+    m_Pos0 = m_Pos - module->GetPosition();
+    double angle = module->GetOrientation();
+    RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
+}
+
+
 void D_PAD::SetAttribute( PAD_ATTR_T aAttribute )
 {
     m_Attribute = aAttribute;

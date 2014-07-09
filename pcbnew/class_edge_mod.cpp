@@ -90,6 +90,25 @@ void EDGE_MODULE::Copy( EDGE_MODULE* source )
 }
 
 
+void EDGE_MODULE::SetLocalCoord()
+{
+    MODULE* module = (MODULE*) m_Parent;
+
+    if( module == NULL )
+    {
+        m_Start0 = m_Start;
+        m_End0 = m_End;
+        return;
+    }
+
+    m_Start0 = m_Start - module->GetPosition();
+    m_End0 = m_End - module->GetPosition();
+    double angle = module->GetOrientation();
+    RotatePoint( &m_Start0.x, &m_Start0.y, -angle );
+    RotatePoint( &m_End0.x, &m_End0.y, -angle );
+}
+
+
 void EDGE_MODULE::SetDrawCoord()
 {
     MODULE* module = (MODULE*) m_Parent;
