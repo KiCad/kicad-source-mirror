@@ -63,7 +63,7 @@ bool PLACEMENT_TOOL::Init()
     menu->AppendSeparator();
     menu->Add( COMMON_ACTIONS::distributeHorizontally );
     menu->Add( COMMON_ACTIONS::distributeVertically );
-    m_selectionTool->AddSubMenu( menu, wxString( "Align/distribute" ),
+    m_selectionTool->AddSubMenu( menu, _( "Align/distribute" ),
                                  SELECTION_CONDITIONS::MoreThan( 1 ) );
 
     setTransitions();
