@@ -76,6 +76,8 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
 
 int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
 {
+    boost::optional<VECTOR2D> startingPoint;
+
     if( m_editModules )
     {
         m_frame->SetToolID( ID_MODEDIT_LINE_TOOL, wxCURSOR_PENCIL, _( "Add graphic line" ) );
@@ -83,7 +85,7 @@ int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
         MODULE* module = m_board->m_Modules;
         EDGE_MODULE* line = new EDGE_MODULE( module );
 
-        while( drawSegment( S_SEGMENT, reinterpret_cast<DRAWSEGMENT*&>( line ) ) )
+        while( drawSegment( S_SEGMENT, reinterpret_cast<DRAWSEGMENT*&>( line ), startingPoint  ) )
         {
             if( line )
             {
@@ -92,6 +94,11 @@ int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
                 line->SetLocalCoord();
                 line->SetParent( module );
                 module->GraphicalItems().PushFront( line );
+                startingPoint = line->GetEnd();
+            }
+            else
+            {
+                startingPoint = boost::none;
             }
 
             line = new EDGE_MODULE( module );
@@ -103,13 +110,18 @@ int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
 
         DRAWSEGMENT* line = new DRAWSEGMENT;
 
-        while( drawSegment( S_SEGMENT, line ) )
+        while( drawSegment( S_SEGMENT, line, startingPoint ) )
         {
             if( line )
             {
                 m_board->Add( line );
                 m_frame->OnModify();
                 m_frame->SaveCopyInUndoList( line, UR_NEW );
+                startingPoint = line->GetEnd();
+            }
+            else
+            {
+                startingPoint = boost::none;
             }
 
             line = new DRAWSEGMENT;
@@ -853,7 +865,8 @@ int DRAWING_TOOL::SetAnchor( TOOL_EVENT& aEvent )
 }
 
 
-bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic )
+bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
+                                boost::optional<VECTOR2D> aStartingPoint )
 {
     // Only two shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
@@ -872,12 +885,33 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic )
 
     bool direction45 = false;       // 45 degrees only mode
     bool started = false;
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+
+    if( aStartingPoint )
+    {
+        LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
+
+        // Init the new item attributes
+        aGraphic->SetShape( (STROKE_T) aShape );
+        aGraphic->SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
+        aGraphic->SetStart( wxPoint( aStartingPoint->x, aStartingPoint->y ) );
+        aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+        aGraphic->SetLayer( layer );
+
+        if( aShape == S_SEGMENT )
+            line45 = *aGraphic; // used only for direction 45 mode with lines
+
+        preview.Add( aGraphic );
+        m_controls->SetAutoPan( true );
+
+        started = true;
+    }
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         bool updatePreview = false;            // should preview be updated
-        VECTOR2I cursorPos = m_controls->GetCursorPosition();
+        cursorPos = m_controls->GetCursorPosition();
 
         // Enable 45 degrees lines only mode by holding control
         if( direction45 != evt->Modifier( MD_CTRL ) && started && aShape == S_SEGMENT )
@@ -940,10 +974,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic )
                     aGraphic->SetLayer( layer );
 
                     if( aShape == S_SEGMENT )
-                    {
                         line45 = *aGraphic; // used only for direction 45 mode with lines
-                        line45.SetLayer( layer );
-                    }
 
                     preview.Add( aGraphic );
                     m_controls->SetAutoPan( true );
@@ -965,7 +996,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic )
                 {                               // a clear sign that the current drawing is finished
                     delete aGraphic;            // but only if at least one graphic was created
                     aGraphic = NULL;            // otherwise - force user to draw more or cancel
-                    started = false;
                 }
 
                 preview.Clear();

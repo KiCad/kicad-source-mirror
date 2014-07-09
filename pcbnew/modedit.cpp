@@ -295,7 +295,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_NEW_MODULE:
         {
-            if( ! Clear_Pcb( true ) )
+            if( !Clear_Pcb( true ) )
                 break;
 
             SetCrossHairPosition( wxPoint( 0, 0 ) );
@@ -316,6 +316,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
                 Zoom_Automatique( false );
             }
+
+            if( IsGalCanvasActive() )
+                updateView();
 
             GetScreen()->ClrModify();
         }

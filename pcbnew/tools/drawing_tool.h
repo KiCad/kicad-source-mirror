@@ -26,6 +26,7 @@
 #define __DRAWING_TOOL_H
 
 #include <tool/tool_interactive.h>
+#include <boost/optional.hpp>
 
 namespace KIGFX
 {
@@ -150,7 +151,8 @@ private:
     ///> be already created. The tool deletes the object if it is not added to a BOARD.
     ///> @return False if the tool was cancelled before the origin was set or origin and end are
     ///> the same point.
-    bool drawSegment( int aShape, DRAWSEGMENT*& aGraphic );
+    bool drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
+                      boost::optional<VECTOR2D> aStartingPoint = boost::none );
 
     ///> Starts drawing an arc.
     ///> @param aGraphic is an object that is going to be used by the tool for drawing. It has to
