@@ -212,7 +212,7 @@ private:
      *
      * Sets the board to route.
      */
-    void setWorld ( PNS_NODE* aWorld );
+    void setWorld( PNS_NODE* aWorld );
     
     /**
      * Function startPlacement()
