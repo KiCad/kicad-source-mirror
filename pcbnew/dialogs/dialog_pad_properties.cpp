@@ -117,6 +117,8 @@ private:
 
     bool padValuesOK();       ///< test if all values are acceptable for the pad
 
+    void redraw();
+
     /**
      * Function setPadLayersList
      * updates the CheckBox states in pad layers list,
@@ -173,6 +175,21 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
         m_dummyPad->Copy( aPad );
     else    // We are editing a "master" pad, i.e. a pad used to create new pads
         m_dummyPad->Copy( m_padMaster );
+
+    if( m_parent->IsGalCanvasActive() )
+    {
+        m_panelShowPadGal->UseColorScheme( m_board->GetColorsSettings() );
+        m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
+        m_panelShowPad->Hide();
+        m_panelShowPadGal->Show();
+        m_panelShowPadGal->GetView()->Add( m_dummyPad );
+        m_panelShowPadGal->StartDrawing();
+    }
+    else
+    {
+        m_panelShowPad->Show();
+        m_panelShowPadGal->Hide();
+    }
 
     initValues();
 
@@ -537,7 +554,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     }
 
     transferDataToPad( m_dummyPad );
-    m_panelShowPad->Refresh();
+    redraw();
 }
 
 
@@ -566,7 +583,7 @@ void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
     }
 
     transferDataToPad( m_dummyPad );
-    m_panelShowPad->Refresh();
+    redraw();
 }
 
 
@@ -599,7 +616,7 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
     m_PadOrientCtrl->SetValue( msg );
 
     transferDataToPad( m_dummyPad );
-    m_panelShowPad->Refresh();
+    redraw();
 }
 
 
@@ -667,7 +684,7 @@ void DIALOG_PAD_PROPERTIES::setPadLayersList( LSET layer_mask )
 void DIALOG_PAD_PROPERTIES::OnSetLayers( wxCommandEvent& event )
 {
     transferDataToPad( m_dummyPad );
-    m_panelShowPad->Refresh();
+    redraw();
 }
 
 
@@ -755,6 +772,29 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
 
     return error_msgs.GetCount() == 0;
+}
+
+
+void DIALOG_PAD_PROPERTIES::redraw()
+{
+    if( m_parent->IsGalCanvasActive() )
+    {
+        m_dummyPad->ViewUpdate();
+
+        BOX2I bbox = m_dummyPad->ViewBBox();
+
+        // Autozoom
+        m_panelShowPadGal->GetView()->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
+
+        // Add a margin
+        m_panelShowPadGal->GetView()->SetScale( m_panelShowPadGal->GetView()->GetScale() * 0.7 );
+
+        m_panelShowPadGal->Refresh();
+    }
+    else
+    {
+        m_panelShowPad->Refresh();
+    }
 }
 
 
@@ -1132,7 +1172,7 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
     if( m_canUpdate )
     {
         transferDataToPad( m_dummyPad );
-        m_panelShowPad->Refresh();
+        redraw();
     }
 }
 
