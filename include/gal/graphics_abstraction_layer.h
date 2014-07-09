@@ -631,6 +631,9 @@ public:
     inline void SetGridOrigin( const VECTOR2D& aGridOrigin )
     {
         gridOrigin = aGridOrigin;
+
+        gridOffset = VECTOR2D( (long) gridOrigin.x % (long) gridSize.x,
+                               (long) gridOrigin.y % (long) gridSize.y );
     }
 
     /**
@@ -661,6 +664,9 @@ public:
     inline void SetGridSize( const VECTOR2D& aGridSize )
     {
         gridSize = aGridSize;
+
+        gridOffset = VECTOR2D( (long) gridOrigin.x % (long) gridSize.x,
+                               (long) gridOrigin.y % (long) gridSize.y );
     }
 
     /**

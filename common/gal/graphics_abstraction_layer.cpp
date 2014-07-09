@@ -134,9 +134,6 @@ void GAL::DrawGrid()
     // Draw the grid
     // For the drawing the start points, end points and increments have
     // to be calculated in world coordinates
-    gridOffset = VECTOR2D( (long) gridOrigin.x % (long) gridSize.x,
-                           (long) gridOrigin.y % (long) gridSize.y );
-
     VECTOR2D worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
     VECTOR2D worldEndPoint   = screenWorldMatrix * VECTOR2D( screenSize );
 
