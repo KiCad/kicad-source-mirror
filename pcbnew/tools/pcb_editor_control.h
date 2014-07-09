@@ -30,9 +30,9 @@
 class PCB_EDIT_FRAME;
 
 /**
- * Class PCBNEW_CONTROL
+ * Class PCB_EDITOR_CONTROL
  *
- * Handles hot keys that are not accepted by any other tool.
+ * Handles actions specific to the board editor in pcbnew.
  */
 class PCB_EDITOR_CONTROL : public TOOL_INTERACTIVE
 {
@@ -50,6 +50,11 @@ public:
     int TrackWidthDec( TOOL_EVENT& aEvent );
     int ViaSizeInc( TOOL_EVENT& aEvent );
     int ViaSizeDec( TOOL_EVENT& aEvent );
+
+    // Zone actions
+    int ZoneFill( TOOL_EVENT& aEvent );
+    int ZoneFillAll( TOOL_EVENT& aEvent );
+    int ZoneUnfill( TOOL_EVENT& aEvent );
 
 private:
     ///> Sets up handlers for various events.
