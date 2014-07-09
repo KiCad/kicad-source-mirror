@@ -541,6 +541,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_Draw3DFrame->NewDisplay();
 
         GetScreen()->ClrModify();
+        updateView();
 
         break;
 
