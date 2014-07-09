@@ -759,7 +759,8 @@ void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
             via_board->SetWidth( via->Diameter() );
             via_board->SetDrill( via->Drill() );
             via_board->SetNetCode( via->Net() );
-            via_board->SetLayerPair( m_settings.GetLayerTop(), m_settings.GetLayerBottom() );
+            via_board->SetLayerPair( ToLAYER_ID( m_settings.GetLayerTop() ),
+                                     ToLAYER_ID( m_settings.GetLayerBottom() ) );
             newBI = via_board;
             break;
         }

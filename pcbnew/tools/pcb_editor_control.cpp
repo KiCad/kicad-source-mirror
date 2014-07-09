@@ -25,9 +25,25 @@
 #include "pcb_editor_control.h"
 #include "common_actions.h"
 
+#include "selection_tool.h"
+
 #include <wxPcbStruct.h>
 #include <class_board.h>
+#include <class_zone.h>
 #include <class_draw_panel_gal.h>
+
+
+class ZONE_CONTEXT_MENU : public CONTEXT_MENU
+{
+public:
+    ZONE_CONTEXT_MENU()
+    {
+        Add( COMMON_ACTIONS::zoneFill );
+        Add( COMMON_ACTIONS::zoneFillAll );
+        Add( COMMON_ACTIONS::zoneUnfill );
+    }
+};
+
 
 PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
     TOOL_INTERACTIVE( "pcbnew.EditorControl" )
@@ -43,6 +59,14 @@ void PCB_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 
 bool PCB_EDITOR_CONTROL::Init()
 {
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+    if( selTool )
+    {
+        selTool->AddSubMenu( new ZONE_CONTEXT_MENU, wxT( "Zones" ),
+                             SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) );
+    }
+
     setTransitions();
 
     return true;
@@ -134,6 +158,67 @@ int PCB_EDITOR_CONTROL::ViaSizeDec( TOOL_EVENT& aEvent )
 }
 
 
+// Zone actions
+int PCB_EDITOR_CONTROL::ZoneFill( TOOL_EVENT& aEvent )
+{
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
+
+    for( int i = 0; i < selection.Size(); ++i )
+    {
+        assert( selection.Item<BOARD_ITEM>( i )->Type() == PCB_ZONE_AREA_T );
+
+        ZONE_CONTAINER* zone = selection.Item<ZONE_CONTAINER>( i );
+        m_frame->Fill_Zone( zone );
+        zone->SetIsFilled( true );
+        zone->ViewUpdate();
+    }
+
+    setTransitions();
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::ZoneFillAll( TOOL_EVENT& aEvent )
+{
+    BOARD* board = getModel<BOARD>();
+
+    for( int i = 0; i < board->GetAreaCount(); ++i )
+    {
+        ZONE_CONTAINER* zone = board->GetArea( i );
+        m_frame->Fill_Zone( zone );
+        zone->SetIsFilled( true );
+        zone->ViewUpdate();
+    }
+
+    setTransitions();
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::ZoneUnfill( TOOL_EVENT& aEvent )
+{
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
+
+    for( int i = 0; i < selection.Size(); ++i )
+    {
+        assert( selection.Item<BOARD_ITEM>( i )->Type() == PCB_ZONE_AREA_T );
+
+        ZONE_CONTAINER* zone = selection.Item<ZONE_CONTAINER>( i );
+        zone->SetIsFilled( false );
+        zone->ClearFilledPolysList();
+        zone->ViewUpdate();
+    }
+
+    setTransitions();
+
+    return 0;
+}
+
+
 void PCB_EDITOR_CONTROL::setTransitions()
 {
     // Track & via size control
@@ -141,4 +226,9 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::TrackWidthDec,      COMMON_ACTIONS::trackWidthDec.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ViaSizeInc,         COMMON_ACTIONS::viaSizeInc.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ViaSizeDec,         COMMON_ACTIONS::viaSizeDec.MakeEvent() );
+
+    // Zone actions
+    Go( &PCB_EDITOR_CONTROL::ZoneFill,           COMMON_ACTIONS::zoneFill.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ZoneFillAll,        COMMON_ACTIONS::zoneFillAll.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ZoneUnfill,         COMMON_ACTIONS::zoneUnfill.MakeEvent() );
 }

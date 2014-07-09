@@ -62,7 +62,6 @@ public:
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
 
-
     // Drawing Tool
     /// Activation of the drawing tool (line)
     static TOOL_ACTION drawLine;
@@ -177,6 +176,10 @@ public:
 
     static TOOL_ACTION trackViaSizeChanged;   // notification
 
+    // Zone actions
+    static TOOL_ACTION zoneFill;
+    static TOOL_ACTION zoneFillAll;
+    static TOOL_ACTION zoneUnfill;
 
     // Module editor tools
     /// Activation of the drawing tool (placing a PAD)
@@ -196,7 +199,6 @@ public:
 
     /// Display module texts as outlines
     static TOOL_ACTION moduleTextOutlines;
-
 
     // Miscellaneous
     static TOOL_ACTION resetCoords;

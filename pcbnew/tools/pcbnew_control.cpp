@@ -40,6 +40,7 @@
 #include <view/view_controls.h>
 #include <pcb_painter.h>
 
+
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
     TOOL_INTERACTIVE( "pcbnew.Control" )
 {

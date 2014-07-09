@@ -32,7 +32,7 @@ class PCB_BASE_FRAME;
 /**
  * Class PCBNEW_CONTROL
  *
- * Handles hot keys that are not accepted by any other tool.
+ * Handles actions that are shared between different frames in pcbnew.
  */
 
 class PCBNEW_CONTROL : public TOOL_INTERACTIVE
@@ -74,12 +74,6 @@ public:
     int GridNext( TOOL_EVENT& aEvent );
     int GridPrev( TOOL_EVENT& aEvent );
     int GridSetOrigin( TOOL_EVENT& aEvent );
-
-    // Track & via size control
-    int TrackWidthInc( TOOL_EVENT& aEvent );
-    int TrackWidthDec( TOOL_EVENT& aEvent );
-    int ViaSizeInc( TOOL_EVENT& aEvent );
-    int ViaSizeDec( TOOL_EVENT& aEvent );
 
     // Miscellaneous
     int ResetCoords( TOOL_EVENT& aEvent );

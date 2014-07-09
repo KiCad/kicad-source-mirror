@@ -212,8 +212,8 @@ public:
         Add( ACT_PlaceThroughVia );
         Add( ACT_SwitchPosture );
 
-        AppendSeparator ( );
-
+        AppendSeparator();
+        
         CONTEXT_TRACK_WIDTH_MENU* trackMenu = new CONTEXT_TRACK_WIDTH_MENU;
         trackMenu->SetBoard( aBoard );
         AppendSubMenu( trackMenu, wxT( "Select Track Width" ) );
@@ -567,7 +567,7 @@ void ROUTER_TOOL::performRouting()
                 break;
 
             // Synchronize the indicated layer
-            frame->SetActiveLayer( m_router->GetCurrentLayer() );
+            frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
 
             m_router->Move( m_endSnapPoint, m_endItem );
         }

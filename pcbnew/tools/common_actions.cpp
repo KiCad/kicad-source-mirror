@@ -109,6 +109,7 @@ TOOL_ACTION COMMON_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
         "Place the footprint anchor", "Place the footprint anchor",
         AF_ACTIVATE );
 
+
 // View Controls
 TOOL_ACTION COMMON_ACTIONS::zoomIn( "pcbnew.Control.zoomIn",
         AS_GLOBAL, WXK_F1,
@@ -269,6 +270,20 @@ TOOL_ACTION COMMON_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
 TOOL_ACTION COMMON_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",
         AS_GLOBAL, 0,
         "", "", AF_NOTIFY );
+
+
+// Zone actions
+TOOL_ACTION COMMON_ACTIONS::zoneFill( "pcbnew.EditorControl.zoneFill",
+        AS_GLOBAL, 0,
+        "Fill", "Fill zone(s)" );
+
+TOOL_ACTION COMMON_ACTIONS::zoneFillAll( "pcbnew.EditorControl.zoneFillAll",
+        AS_GLOBAL, 0,
+        "Fill all", "Fill all zones" );
+
+TOOL_ACTION COMMON_ACTIONS::zoneUnfill( "pcbnew.EditorControl.zoneUnfill",
+        AS_GLOBAL, 0,
+        "Unfill", "Unfill zone(s)" );
 
 
 // Module editor tools
