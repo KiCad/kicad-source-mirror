@@ -109,7 +109,7 @@ TOOL_MANAGER::TOOL_MANAGER() :
 
 TOOL_MANAGER::~TOOL_MANAGER()
 {
-    std::map<TOOL_BASE*, TOOL_STATE*>::iterator it, it_end;
+    boost::unordered_map<TOOL_BASE*, TOOL_STATE*>::iterator it, it_end;
 
     for( it = m_toolState.begin(), it_end = m_toolState.end(); it != it_end; ++it )
     {
@@ -129,6 +129,8 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
             wxT( "Adding two tools with the same name may result in unexpected behaviour.") );
     wxASSERT_MSG( m_toolIdIndex.find( aTool->GetId() ) == m_toolIdIndex.end(),
             wxT( "Adding two tools with the same ID may result in unexpected behaviour.") );
+    wxASSERT_MSG( m_toolTypes.find( typeid( *aTool ).name() ) == m_toolTypes.end(),
+            wxT( "Adding two tools of the same type may result in unexpected behaviour.") );
 
     TOOL_STATE* st = new TOOL_STATE;
 
@@ -141,6 +143,7 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
     m_toolState[aTool] = st;
     m_toolNameIndex[aTool->GetName()] = st;
     m_toolIdIndex[aTool->GetId()] = st;
+    m_toolTypes[typeid( *aTool ).name()] = st->theTool;
 
     aTool->m_toolMgr = this;
 
@@ -155,6 +158,7 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
         m_toolState.erase( aTool );
         m_toolNameIndex.erase( aTool->GetName() );
         m_toolIdIndex.erase( aTool->GetId() );
+        m_toolTypes.erase( typeid( *aTool ).name() );
 
         delete st;
         delete aTool;
@@ -272,7 +276,7 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 
 TOOL_BASE* TOOL_MANAGER::FindTool( int aId ) const
 {
-    std::map<TOOL_ID, TOOL_STATE*>::const_iterator it = m_toolIdIndex.find( aId );
+    boost::unordered_map<TOOL_ID, TOOL_STATE*>::const_iterator it = m_toolIdIndex.find( aId );
 
     if( it != m_toolIdIndex.end() )
         return it->second->theTool;
@@ -283,7 +287,7 @@ TOOL_BASE* TOOL_MANAGER::FindTool( int aId ) const
 
 TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
 {
-    std::map<std::string, TOOL_STATE*>::const_iterator it = m_toolNameIndex.find( aName );
+    boost::unordered_map<std::string, TOOL_STATE*>::const_iterator it = m_toolNameIndex.find( aName );
 
     if( it != m_toolNameIndex.end() )
         return it->second->theTool;
