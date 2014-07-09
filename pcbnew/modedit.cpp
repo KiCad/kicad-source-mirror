@@ -29,6 +29,7 @@
 #include <kiface_i.h>
 #include <kiway.h>
 #include <class_drawpanel.h>
+#include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <pgm_base.h>
@@ -914,3 +915,15 @@ EDA_COLOR_T FOOTPRINT_EDIT_FRAME::GetGridColor() const
     return g_ColorsSettings.GetItemColor( GRID_VISIBLE );
 }
 
+
+void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
+{
+    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    if( aEnable )
+    {
+        SetBoard( m_Pcb );
+
+        GetGalCanvas()->StartDrawing();
+    }
+}

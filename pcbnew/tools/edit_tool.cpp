@@ -545,6 +545,7 @@ void EDIT_TOOL::processChanges( const PICKED_ITEMS_LIST* aList )
         switch( operation )
         {
         case UR_CHANGED:
+        case UR_MODEDIT:
             updItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
 

@@ -35,6 +35,7 @@
 #include <project.h>
 #include <kicad_plugin.h>
 #include <class_drawpanel.h>
+#include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
@@ -51,6 +52,15 @@
 #include <hotkeys.h>
 #include <module_editor_frame.h>
 #include <wildcards_and_files_ext.h>
+
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include "tools/selection_tool.h"
+#include "tools/edit_tool.h"
+#include "tools/drawing_tool.h"
+#include "tools/point_editor.h"
+#include "tools/pcbnew_control.h"
+#include "tools/common_actions.h"
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
@@ -167,6 +177,12 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Show a title (frame title + footprint name):
     updateTitle();
 
+    // Create GAL canvas
+    EDA_DRAW_FRAME* drawFrame = static_cast<EDA_DRAW_FRAME*>( aParent );
+    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                            drawFrame->GetGalCanvas()->GetBackend() );
+    SetGalCanvas( drawPanel );
+
     SetBoard( new BOARD() );
 
     // restore the last footprint from the project, if any
@@ -224,11 +240,37 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( m_canvas,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+    m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
+                      wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
 
     m_auimgr.AddPane( m_messagePanel,
                       wxAuiPaneInfo( mesg_pane ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     m_auimgr.Update();
+
+    if( drawFrame->IsGalCanvasActive() )
+    {
+        drawPanel->DisplayBoard( GetBoard() );
+
+        // Create the manager and dispatcher & route draw panel events to the dispatcher
+        m_toolManager = new TOOL_MANAGER;
+        m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
+                                       drawPanel->GetViewControls(), this );
+        m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+        drawPanel->SetEventDispatcher( m_toolDispatcher );
+
+        m_toolManager->RegisterTool( new SELECTION_TOOL );
+        m_toolManager->RegisterTool( new EDIT_TOOL );
+        m_toolManager->RegisterTool( new DRAWING_TOOL );
+        m_toolManager->RegisterTool( new POINT_EDITOR );
+        m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+        m_toolManager->ResetTools( TOOL_BASE::RUN );
+
+        // Run the selection tool, it is supposed to be always active
+        m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+
+        UseGalCanvas( true );
+    }
 }
 
 
