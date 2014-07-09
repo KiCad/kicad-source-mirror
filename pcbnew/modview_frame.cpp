@@ -168,11 +168,11 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     ReCreateLibraryList();
     UpdateTitle();
 
-    EDA_DRAW_FRAME* drawFrame = static_cast<EDA_DRAW_FRAME*>( aParent );
+    PCB_BASE_FRAME* parentFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
 
     // Create GAL canvas
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            drawFrame->GetGalCanvas()->GetBackend() );
+                                                            parentFrame->GetGalCanvas()->GetBackend() );
     SetGalCanvas( drawPanel );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
@@ -193,8 +193,10 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
         id.SetLibNickname( getCurNickname() );
         id.SetFootprintName( getCurFootprintName() );
         GetBoard()->Add( loadFootprint( id ) );
-        drawPanel->DisplayBoard( m_Pcb );
     }
+
+    drawPanel->DisplayBoard( m_Pcb );
+    updateView();
 
     if( m_canvas )
         m_canvas->SetAcceleratorTable( table );
@@ -273,7 +275,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     Show( true );
 
-    UseGalCanvas( drawFrame->IsGalCanvasActive() );
+    UseGalCanvas( parentFrame->IsGalCanvasActive() );
 }
 
 
