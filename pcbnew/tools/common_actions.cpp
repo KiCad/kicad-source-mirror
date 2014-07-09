@@ -101,6 +101,11 @@ TOOL_ACTION COMMON_ACTIONS::placePad( "pcbnew.InteractiveDrawing.placePad",
         AS_GLOBAL, 0,
         "Add pads", "Add pads", AF_ACTIVATE );
 
+TOOL_ACTION COMMON_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
+        AS_GLOBAL, 0,
+        "Place the footprint anchor", "Place the footprint anchor",
+        AF_ACTIVATE );
+
 // View Controls
 TOOL_ACTION COMMON_ACTIONS::zoomIn( "pcbnew.Control.zoomIn",
         AS_GLOBAL, WXK_F1,
@@ -313,6 +318,9 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
     case ID_MODEDIT_PAD_TOOL:
         return COMMON_ACTIONS::placePad.MakeEvent();
 
+    case ID_MODEDIT_ANCHOR_TOOL:
+        return COMMON_ACTIONS::setAnchor.MakeEvent();
+
     case ID_PCB_PLACE_GRID_COORD_BUTT:
     case ID_MODEDIT_PLACE_GRID_COORD:
         return COMMON_ACTIONS::gridSetOrigin.MakeEvent();
@@ -336,7 +344,6 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
     case ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR:
     case ID_MICROWAVE_V_TOOLBAR:
     case ID_MODEDIT_DELETE_TOOL:
-    case ID_MODEDIT_ANCHOR_TOOL:
         return COMMON_ACTIONS::toBeDone.MakeEvent();
     }
 

@@ -127,6 +127,12 @@ public:
     int PlacePad( TOOL_EVENT& aEvent );
 
     /**
+     * Function SetAnchor()
+     * Places the footprint anchor (only in module editor).
+     */
+    int SetAnchor( TOOL_EVENT& aEvent );
+
+    /**
      * Function EditModules()
      * Toggles edit module mode. When enabled, one may select parts of modules individually
      * (graphics, pads, etc.), so they can be modified.

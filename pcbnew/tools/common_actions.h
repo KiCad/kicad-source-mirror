@@ -93,6 +93,9 @@ public:
     /// Activation of the drawing tool (placing a PAD)
     static TOOL_ACTION placePad;
 
+    /// Activation of the drawing tool (placing the footprint anchor)
+    static TOOL_ACTION setAnchor;
+
     // Push and Shove Router Tool
     /// Activation of the Push and Shove router
     static TOOL_ACTION routerActivate;

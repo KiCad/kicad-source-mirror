@@ -452,7 +452,7 @@ int PCBNEW_CONTROL::GridSetOrigin( TOOL_EVENT& aEvent )
             getView()->MarkDirty();
         }
 
-        else if( evt->IsCancel() )
+        else if( evt->IsCancel() || evt->IsActivate() )
             break;
     }
 
