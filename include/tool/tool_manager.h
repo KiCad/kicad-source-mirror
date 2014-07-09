@@ -258,6 +258,19 @@ public:
     }
 
     /**
+     * Stores an information to the system clipboard.
+     * @param aText is the information to be stored.
+     * @return False if error occured.
+     */
+    bool SaveClipboard( const std::string& aText );
+
+    /**
+     * Returns the information currently stored in the system clipboard. If data stored in the
+     * clipboard is in non-text format, empty string is returned.
+     */
+    std::string GetClipboard() const;
+
+    /**
      * Returns list of TOOL_ACTIONs. TOOL_ACTIONs add themselves to the list upon their
      * creation.
      * @return List of TOOL_ACTIONs.
