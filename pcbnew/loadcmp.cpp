@@ -49,6 +49,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <io_mgr.h>
+#include <tool/tool_manager.h>
 
 #include <pcbnew.h>
 #include <module_editor_frame.h>
@@ -126,6 +127,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
         m_Pcb->ComputeBoundingBox( false );
         EDA_RECT boardBbox = m_Pcb->GetBoundingBox();
         GetGalCanvas()->GetView()->SetViewport( BOX2D( boardBbox.GetOrigin(), boardBbox.GetSize() ) );
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     }
 
     return true;
