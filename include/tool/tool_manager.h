@@ -384,9 +384,6 @@ private:
 
     /// Flag saying if the currently processed event should be passed to other tools.
     bool m_passEvent;
-
-    /// Pointer to the tool on the top of the active tools stack.
-    TOOL_STATE* m_currentTool;
 };
 
 #endif

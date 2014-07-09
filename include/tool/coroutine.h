@@ -56,11 +56,10 @@ template <class ReturnType, class ArgType>
 class COROUTINE
 {
 public:
-    COROUTINE()
+    COROUTINE() :
+        m_saved( NULL ), m_self( NULL ), m_stack( NULL ), m_stackSize( c_defaultStackSize ),
+        m_running( false )
     {
-        m_stackSize = c_defaultStackSize;
-        m_stack = NULL;
-        m_saved = NULL;
     }
 
     /**
@@ -69,7 +68,8 @@ public:
      */
     template <class T>
     COROUTINE( T* object, ReturnType(T::* ptr)( ArgType ) ) :
-        m_func( object, ptr ), m_saved( NULL ), m_stack( NULL ), m_stackSize( c_defaultStackSize )
+        m_func( object, ptr ), m_self( NULL ), m_saved( NULL ), m_stack( NULL ),
+        m_stackSize( c_defaultStackSize ), m_running( false )
     {
     }
 
@@ -78,8 +78,10 @@ public:
      * Creates a coroutine from a delegate object
      */
     COROUTINE( DELEGATE<ReturnType, ArgType> aEntry ) :
-        m_func( aEntry ), m_saved( NULL ), m_stack( NULL ), m_stackSize( c_defaultStackSize )
-    {};
+        m_func( aEntry ), m_saved( NULL ), m_self( NULL ), m_stack( NULL ),
+        m_stackSize( c_defaultStackSize ), m_running( false )
+    {
+    }
 
     ~COROUTINE()
     {
@@ -137,6 +139,12 @@ public:
 
         // align to 16 bytes
         void* sp = (void*) ( ( ( (ptrdiff_t) m_stack ) + m_stackSize - 0xf ) & ( ~0x0f ) );
+
+        // correct the stack size
+        m_stackSize -= ( (size_t) m_stack + m_stackSize - (size_t) sp );
+
+        assert( m_self == NULL );
+        assert( m_saved == NULL );
 
         m_args = &aArgs;
         m_self = boost::context::make_fcontext( sp, m_stackSize, callerStub );
