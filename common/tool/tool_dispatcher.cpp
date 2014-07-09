@@ -281,8 +281,6 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     if( evt )
         m_toolMgr->ProcessEvent( *evt );
 
-    static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->GetGalCanvas()->Refresh();
-
     // pass the event to the GUI, it might still be interested in it
     aEvent.Skip();
 }

@@ -73,6 +73,20 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
 
+    const wxEventType events[] =
+    {
+        wxEVT_LEFT_UP, wxEVT_LEFT_DOWN, wxEVT_LEFT_DCLICK,
+        wxEVT_RIGHT_UP, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_DCLICK,
+        wxEVT_MIDDLE_UP, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_DCLICK,
+        wxEVT_MOTION, wxEVT_MOUSEWHEEL, wxEVT_CHAR, KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE
+    };
+
+    BOOST_FOREACH( wxEventType eventType, events )
+    {
+        Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ),
+                 NULL, m_eventDispatcher );
+    }
+
     // Set up timer that prevents too frequent redraw commands
     m_refreshTimer.SetOwner( this );
     m_pendingRefresh = false;
@@ -171,46 +185,43 @@ void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
 {
     m_eventDispatcher = aEventDispatcher;
 
-    const wxEventType events[] =
-    {
-        wxEVT_LEFT_UP, wxEVT_LEFT_DOWN, wxEVT_LEFT_DCLICK,
-        wxEVT_RIGHT_UP, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_DCLICK,
-        wxEVT_MIDDLE_UP, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_DCLICK,
-        wxEVT_MOTION, wxEVT_MOUSEWHEEL, wxEVT_CHAR, KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE
-    };
-
-    const wxEventType commands[] =
-    {
 #if wxCHECK_VERSION( 3, 0, 0 )
-        wxEVT_TOOL
-#else
-        wxEVT_COMMAND_MENU_SELECTED, wxEVT_COMMAND_TOOL_CLICKED
-#endif
-    };
-
     if( m_eventDispatcher )
     {
-        BOOST_FOREACH( wxEventType eventType, events )
-            Connect( eventType, wxEventHandler( TOOL_DISPATCHER::DispatchWxEvent ),
-                     NULL, m_eventDispatcher );
-
-        BOOST_FOREACH( wxEventType eventType, commands )
-            m_parent->Connect( eventType,
-                               wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                               NULL, m_eventDispatcher );
+        m_parent->Connect( wxEVT_TOOL,
+                           wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                           NULL, m_eventDispatcher );
     }
     else
     {
         // While loops are used to be sure, that we are removing all event handlers
-        BOOST_FOREACH( wxEventType eventType, events )
-            while( Disconnect( eventType, wxEventHandler( TOOL_DISPATCHER::DispatchWxEvent ),
-                     NULL, m_eventDispatcher ) );
-
-        BOOST_FOREACH( wxEventType eventType, commands )
-            while( m_parent->Disconnect( eventType,
-                               wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                               NULL, m_eventDispatcher ) );
+        while( m_parent->Disconnect( wxEVT_TOOL,
+                                     wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                                     NULL, m_eventDispatcher ) );
     }
+#else
+    if( m_eventDispatcher )
+    {
+        m_parent->Connect( wxEVT_COMMAND_MENU_SELECTED,
+                           wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                           NULL, m_eventDispatcher );
+
+        m_parent->Connect( wxEVT_COMMAND_TOOL_CLICKED,
+                           wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                           NULL, m_eventDispatcher );
+    }
+    else
+    {
+        // While loops are used to be sure, that we are removing all event handlers
+        while( m_parent->Disconnect( wxEVT_COMMAND_MENU_SELECTED,
+                                     wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                                     NULL, m_eventDispatcher ) );
+
+        while( m_parent->Disconnect( wxEVT_COMMAND_TOOL_CLICKED,
+                                     wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                                     NULL, m_eventDispatcher ) );
+    }
+#endif
 }
 
 
@@ -289,6 +300,17 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
         m_view->SetGAL( m_gal );
 
     m_backend = aGalType;
+}
+
+
+void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
+{
+    if( !m_eventDispatcher )
+        aEvent.Skip();
+    else
+        m_eventDispatcher->DispatchWxEvent( aEvent );
+
+    Refresh();
 }
 
 
