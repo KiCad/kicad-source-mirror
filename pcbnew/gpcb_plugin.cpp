@@ -637,7 +637,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
                     pad->SetShape( PAD_OVAL );
             }
 
-            module->AddPad( pad );
+            module->Add( pad );
             continue;
         }
 
@@ -701,7 +701,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             if( pad->GetShape() == PAD_ROUND  &&  pad->GetSize().x != pad->GetSize().y )
                 pad->SetShape( PAD_OVAL );
 
-            module->AddPad( pad );
+            module->Add( pad );
             continue;
         }
     }

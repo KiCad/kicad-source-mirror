@@ -1856,7 +1856,7 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
 
                 RotatePoint( &pt, module->GetOrientation() );
                 pad->SetPosition( pt + module->GetPosition() );
-                module->AddPad( pad );
+                module->Add( pad );
             }
             break;
 
