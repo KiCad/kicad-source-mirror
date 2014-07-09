@@ -38,7 +38,6 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <router/direction.h>
-#include "selection_tool.h"
 
 #include <class_board.h>
 #include <class_drawsegment.h>
@@ -103,7 +102,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->GetTool<SELECTION_TOOL>()->ClearSelection();
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -289,7 +288,7 @@ int DRAWING_TOOL::PlaceTextModule( TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->GetTool<SELECTION_TOOL>()->ClearSelection();
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
@@ -394,7 +393,7 @@ int DRAWING_TOOL::PlaceTextPcb( TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->GetTool<SELECTION_TOOL>()->ClearSelection();
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
@@ -500,7 +499,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->GetTool<SELECTION_TOOL>()->ClearSelection();
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -696,7 +695,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
     m_view->Add( &preview );
     preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
-    m_toolMgr->GetTool<SELECTION_TOOL>()->ClearSelection();
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
 
@@ -771,7 +770,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->GetTool<SELECTION_TOOL>()->ClearSelection();
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
@@ -882,7 +881,7 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->GetTool<SELECTION_TOOL>()->ClearSelection();
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -1058,7 +1057,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->GetTool<SELECTION_TOOL>()->ClearSelection();
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 

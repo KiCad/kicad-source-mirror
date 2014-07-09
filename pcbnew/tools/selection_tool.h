@@ -48,7 +48,7 @@ class VIEW_GROUP;
  * - pick single objects (click LMB)
  * - add objects to existing selection (Shift+LMB)
  * - draw selection box (drag LMB)
- * - handles MODULEs properly (ie. selects either MODULE or its PADs, TEXTs, etc.)
+ * - handles MODULEs properly (i.e. selects either MODULE or its PADs, TEXTs, etc.)
  * - takes into account high-contrast & layer visibility settings
  * - invokes InteractiveEdit tool when user starts to drag selected items
  */
@@ -115,24 +115,6 @@ public:
     }
 
     /**
-     * Function SelectSingle()
-     * Selects an item pointed by the parameter aWhere. If there is more than one item at that
-     * place, there is a menu displayed that allows to choose the item.
-     *
-     * @param aWhere is the place where the item should be selected.
-     * @param aAllowDisambiguation decides what to do in case of disambiguation. If true, then
-     * a menu is shown, otherise function finishes without selecting anything.
-     * @return True if an item was selected, false otherwise.
-     */
-    bool SelectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
-
-    /**
-     * Function ClearSelection()
-     * Clears the current selection.
-     */
-    void ClearSelection();
-
-    /**
      * Function AddMenuItem()
      *
      * Adds a menu entry to run a TOOL_ACTION on selected items.
@@ -160,7 +142,25 @@ public:
     ///> Event sent after selection is cleared.
     const TOOL_EVENT ClearedEvent;
 
+    ///> Select single item event handler.
+    int SingleSelection( TOOL_EVENT& aEvent );
+
+    ///> Clear current selection event handler.
+    int ClearSelection( TOOL_EVENT& aEvent );
+
 private:
+    /**
+     * Function selectSingle()
+     * Selects an item pointed by the parameter aWhere. If there is more than one item at that
+     * place, there is a menu displayed that allows to choose the item.
+     *
+     * @param aWhere is the place where the item should be selected.
+     * @param aAllowDisambiguation decides what to do in case of disambiguation. If true, then
+     * a menu is shown, otherise function finishes without selecting anything.
+     * @return True if an item was selected, false otherwise.
+     */
+    bool selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
+
     /**
      * Function selectMultiple()
      * Handles drawing a selection box that allows to select many items at the same time.
@@ -168,6 +168,15 @@ private:
      * @return true if the function was cancelled (i.e. CancelEvent was received).
      */
     bool selectMultiple();
+
+    ///> Sets up handlers for various events.
+    void setTransitions();
+
+    /**
+     * Function ClearSelection()
+     * Clears the current selection.
+     */
+    void clearSelection();
 
     /**
      * Function disambiguationMenu()
