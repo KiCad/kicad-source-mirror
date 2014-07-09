@@ -151,7 +151,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     SetGalCanvas( drawPanel );
 
     SetBoard( new BOARD() );
-    drawPanel->DisplayBoard( m_Pcb );
 
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();
@@ -178,6 +177,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
         id.SetLibNickname( getCurNickname() );
         id.SetFootprintName( getCurFootprintName() );
         GetBoard()->Add( loadFootprint( id ) );
+        drawPanel->DisplayBoard( m_Pcb );
     }
 
     if( m_canvas )
@@ -438,17 +438,13 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
 
         if( IsGalCanvasActive() )
         {
-            KIGFX::VIEW* view = GetGalCanvas()->GetView();
-            view->Clear();
+            static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( m_Pcb );
 
-            // Load modules and its additional elements
-            for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
-            {
-                module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
-                view->Add( module );
-            }
-
-//            view->Add( loadFootprint( id ) );
+            // Autozoom
+            m_Pcb->ComputeBoundingBox( false );
+            EDA_RECT boardBbox = m_Pcb->GetBoundingBox();
+            GetGalCanvas()->GetView()->SetViewport( BOX2D( boardBbox.GetOrigin(),
+                                                           boardBbox.GetSize() ) );
         }
 
         Zoom_Automatique( false );
@@ -864,9 +860,5 @@ void FOOTPRINT_VIEWER_FRAME::UseGalCanvas( bool aEnable )
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
 
     if( aEnable )
-    {
-        SetBoard( m_Pcb );
-
         GetGalCanvas()->StartDrawing();
-    }
 }
