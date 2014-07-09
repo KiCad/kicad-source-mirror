@@ -30,6 +30,7 @@
 
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <ratsnest_data.h>
 #include <confirm.h>
 
@@ -175,9 +176,11 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
                 }
                 else
                 {
+                    const VECTOR2D& dragOrigin = getView()->GetGAL()->GetGridPoint( evt->DragOrigin() );
+
                     // Update dragging offset (distance between cursor and the first dragged item)
                     m_offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
-                                                         wxPoint( m_cursor.x, m_cursor.y );
+                                                         wxPoint( dragOrigin.x, dragOrigin.y );
                 }
 
                 m_dragging = true;
