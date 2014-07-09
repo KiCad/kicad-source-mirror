@@ -532,9 +532,7 @@ void ROUTER_TOOL::performRouting()
     }
 
     m_router->SwitchLayer( m_startLayer );
-
     frame->SetActiveLayer( ToLAYER_ID( m_startLayer ) );
-    frame->GetGalCanvas()->SetFocus();
 
     if( m_startItem && m_startItem->Net() >= 0 )
         highlightNet( true, m_startItem->Net() );
