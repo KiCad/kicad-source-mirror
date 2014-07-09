@@ -33,7 +33,7 @@ namespace KIGFX
     class VIEW_CONTROLS;
 }
 class BOARD;
-class PCB_BASE_FRAME;
+class PCB_EDIT_FRAME;
 class DRAWSEGMENT;
 
 /**
@@ -160,7 +160,7 @@ private:
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;
-    PCB_BASE_FRAME* m_frame;
+    PCB_EDIT_FRAME* m_frame;
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP = 100000;

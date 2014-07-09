@@ -32,6 +32,7 @@
 #include <id.h>
 #include <pcbnew_id.h>
 #include <confirm.h>
+#include <dialog_edit_module_text.h>
 
 #include <view/view_group.h>
 #include <view/view_controls.h>
@@ -64,7 +65,7 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_view = getView();
     m_controls = getViewControls();
     m_board = getModel<BOARD>();
-    m_frame = getEditFrame<PCB_BASE_FRAME>();
+    m_frame = getEditFrame<PCB_EDIT_FRAME>();
 
     setTransitions();
 }
@@ -126,7 +127,9 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::PlaceTextModule( TOOL_EVENT& aEvent )
 {
-    TEXTE_MODULE* text = NULL;
+    TEXTE_MODULE* text = new TEXTE_MODULE( NULL );
+    const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
+    MODULE* module = m_frame->GetBoard()->m_Modules;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -139,6 +142,7 @@ int DRAWING_TOOL::PlaceTextModule( TOOL_EVENT& aEvent )
 
     Activate();
     m_frame->SetToolID( ID_PCB_ADD_TEXT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
+    bool placing = false;
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -147,28 +151,26 @@ int DRAWING_TOOL::PlaceTextModule( TOOL_EVENT& aEvent )
 
         if( evt->IsCancel() || evt->IsActivate() )
         {
-            if( text )
-            {
-                // Delete the old text and have another try
-                m_board->Delete( text );        // it was already added by CreateTextPcb()
-                text = NULL;
+            preview.Clear();
+            preview.ViewUpdate();
+            m_controls->ShowCursor( true );
 
-                preview.Clear();
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-                m_controls->ShowCursor( true );
+            if( !placing || evt->IsActivate() )
+            {
+                delete text;
+                break;
             }
             else
-                break;
-
-            if( evt->IsActivate() )  // now finish unconditionally
-                break;
+            {
+                placing = false;  // start from the beginning
+            }
         }
 
         else if( text && evt->Category() == TC_COMMAND )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                text->Rotate( text->GetPosition(), 900.0 /*m_frame->GetRotationAngle()*/ ); // FIXME
+                text->Rotate( text->GetPosition(), m_frame->GetRotationAngle() );
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
@@ -180,15 +182,21 @@ int DRAWING_TOOL::PlaceTextModule( TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( !text )
+            if( !placing )
             {
-                // Init the new item attributes
-                text = m_frame->CreateTextModule( m_frame->GetBoard()->m_Modules, NULL );
+                text->SetSize( dsnSettings.m_ModuleTextSize );
+                text->SetThickness( dsnSettings.m_ModuleTextWidth );
+                text->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
-                if( text == NULL )
+                DialogEditModuleText textDialog( m_frame, text, NULL );
+                placing = textDialog.ShowModal() && ( text->GetText().Length() > 0 );
+
+                if( !placing )
                     continue;
 
                 m_controls->ShowCursor( false );
+                text->SetParent( module );   // it has to set after the settings dialog
+                                             // otherwise the dialog stores it in undo buffer
                 preview.Add( text );
             }
             else
@@ -196,18 +204,23 @@ int DRAWING_TOOL::PlaceTextModule( TOOL_EVENT& aEvent )
                 assert( text->GetText().Length() > 0 );
                 assert( text->GetSize().x > 0 && text->GetSize().y > 0 );
 
+                text->SetLocalCoord();
                 text->ClearFlags();
+
+                // Module has to be saved before any modification is made
+                m_frame->SaveCopyInUndoList( m_frame->GetBoard()->m_Modules, UR_MODEDIT );
+                module->GraphicalItems().PushFront( text );
+
                 m_view->Add( text );
-                // m_board->Add( text );        // it is already added by CreateTextePcb()
                 text->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
                 m_frame->OnModify();
-                m_frame->SaveCopyInUndoList( text, UR_NEW );
 
                 preview.Remove( text );
                 m_controls->ShowCursor( true );
 
-                text = NULL;
+                text = new TEXTE_MODULE( NULL );
+                placing = false;
             }
         }
 
@@ -276,7 +289,7 @@ int DRAWING_TOOL::PlaceTextPcb( TOOL_EVENT& aEvent )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                text->Rotate( text->GetPosition(), /*m_frame->GetRotationAngle()*/ 900.0 ); // FIXME
+                text->Rotate( text->GetPosition(), m_frame->GetRotationAngle() );
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
