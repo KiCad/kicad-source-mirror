@@ -45,6 +45,7 @@
 #include <class_module.h>
 #include <class_edge_mod.h>
 
+#include <ratsnest_data.h>
 #include <pcbnew.h>
 #include <protos.h>
 #include <pcbnew_id.h>
@@ -58,6 +59,8 @@
 #include <menus_helpers.h>
 #include <footprint_wizard_frame.h>
 #include <pcbnew_config.h>
+
+#include <boost/bind.hpp>
 
 
 // Functions defined in block_module_editor, but used here
@@ -452,15 +455,31 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
                 pcbframe->SetCrossHairPosition( wxPoint( 0, 0 ) );
                 pcbframe->PlaceModule( newmodule, NULL );
+                newmodule->SetPosition( wxPoint( 0, 0 ) );
                 pcbframe->SetCrossHairPosition( cursor_pos );
                 newmodule->SetTimeStamp( GetNewTimeStamp() );
                 pcbframe->SaveCopyInUndoList( newmodule, UR_NEW );
+
+                if( IsGalCanvasActive() )
+                {
+                    KIGFX::VIEW* view = pcbframe->GetGalCanvas()->GetView();
+
+                    newmodule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                    view->Add( newmodule );
+                }
             }
 
             newmodule->ClearFlags();
             GetScreen()->ClrModify();
             pcbframe->SetCurItem( NULL );
             mainpcb->m_Status_Pcb = 0;
+
+            if( IsGalCanvasActive() )
+            {
+                RN_DATA* ratsnest = pcbframe->GetBoard()->GetRatsnest();
+                ratsnest->Update( newmodule );
+                ratsnest->Recalculate();
+            }
         }
         break;
 
