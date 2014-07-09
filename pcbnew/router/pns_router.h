@@ -107,7 +107,7 @@ public:
     void DisplayItems( const PNS_ITEMSET& aItems );
     
     void DisplayDebugLine( const SHAPE_LINE_CHAIN& aLine, int aType = 0, int aWidth = 0 );
-    void DisplayDebugPoint( const VECTOR2I aPos, int aType = 0);
+    void DisplayDebugPoint( const VECTOR2I aPos, int aType = 0 );
     void DisplayDebugBox( const BOX2I& aBox, int aType = 0, int aWidth = 0 );
 
     void SwitchLayer( int layer );
@@ -223,7 +223,7 @@ private:
 
     void highlightCurrent( bool enabled );
 
-    void markViolations( PNS_NODE *aNode, PNS_ITEMSET& aCurrent,  PNS_NODE::ITEM_VECTOR& aRemoved );
+    void markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,  PNS_NODE::ITEM_VECTOR& aRemoved );
     
     int m_currentLayer;
     int m_currentNet;

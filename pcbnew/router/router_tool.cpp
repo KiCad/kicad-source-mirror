@@ -478,7 +478,7 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
     int layer;
     bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
 
-    m_router->EnableSnapping ( snapEnabled );
+    m_router->EnableSnapping( snapEnabled );
 
     if( !snapEnabled || m_router->GetCurrentNet() < 0 || !m_startItem )
     {
@@ -566,39 +566,36 @@ void ROUTER_TOOL::performRouting()
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
 
+            // Synchronize the indicated layer
+            frame->SetActiveLayer( m_router->GetCurrentLayer() );
+
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
+            m_router->Settings().SetLayerPair( frame->GetScreen()->m_Route_Layer_TOP,
+                                               frame->GetScreen()->m_Route_Layer_BOTTOM );
             m_router->ToggleViaPlacement();
-            frame->GetGalCanvas()->SetTopLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
-            m_router->Move( m_endSnapPoint, m_endItem );
+            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {
             m_router->FlipPosture();
-            m_router->Move( m_endSnapPoint, m_endItem );
+            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
-        else if( evt->IsAction( &COMMON_ACTIONS::layerNext ) )
+        else if( evt->IsAction( &COMMON_ACTIONS::layerChanged ) )
         {
-            m_router->SwitchLayer( m_router->NextCopperLayer( true ) );
             updateEndItem( *evt );
-            frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
-            m_router->Move( m_endSnapPoint, m_endItem );
-        }
-        else if( evt->IsAction( &COMMON_ACTIONS::layerPrev ) )
-        {
-            m_router->SwitchLayer( m_router->NextCopperLayer( false ) );
-            frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
-            m_router->Move( m_endSnapPoint, m_endItem );
+            m_router->SwitchLayer( frame->GetActiveLayer() );
+            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
         else if( evt->IsAction( &ACT_EndTrack ) )
         {
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
         }
-
-        handleCommonEvents(*evt);
+    
+        handleCommonEvents( *evt );
     }
 
     m_router->StopRouting();
@@ -642,7 +639,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     m_router->Settings().SetViaDiameter( bds.GetCurrentViaSize() );
     m_router->Settings().SetViaDrill( bds.GetCurrentViaDrill() );
 
-    ROUTER_TOOL_MENU *ctxMenu = new ROUTER_TOOL_MENU( board );
+    ROUTER_TOOL_MENU* ctxMenu = new ROUTER_TOOL_MENU( board );
 
     SetContextMenu ( ctxMenu );
 
