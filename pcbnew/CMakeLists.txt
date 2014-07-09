@@ -59,6 +59,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_edit_module_for_Modedit.cpp
     dialogs/dialog_edit_module_text.cpp
     dialogs/dialog_edit_module_text_base.cpp
+    dialogs/dialog_enum_pads.cpp
+    dialogs/dialog_enum_pads_base.cpp
     dialogs/dialog_exchange_modules_base.cpp
     dialogs/dialog_export_idf.cpp
     dialogs/dialog_export_idf_base.cpp

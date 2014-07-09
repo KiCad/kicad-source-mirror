@@ -34,6 +34,7 @@
 #include <pcbnew_id.h>
 #include <collectors.h>
 #include <confirm.h>
+#include <dialogs/dialog_enum_pads.h>
 
 #include <wxPcbStruct.h>
 #include <class_board.h>
@@ -42,6 +43,7 @@
 
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <wx/defs.h>
 
 MODULE_TOOLS::MODULE_TOOLS() :
     TOOL_INTERACTIVE( "pcbnew.ModuleEditor" )
@@ -240,9 +242,17 @@ int MODULE_TOOLS::EnumeratePads( TOOL_EVENT& aEvent )
     for( D_PAD* p = module->Pads(); p; p = p->Next() )
         allPads.insert( p );
 
-    // TODO display settings window
-    int padNumber = 1;
-    wxString padPrefix = "";
+    DIALOG_ENUM_PADS settingsDlg( m_frame );
+
+    if( settingsDlg.ShowModal() == wxID_CANCEL )
+    {
+        setTransitions();
+
+        return 0;
+    }
+
+    int padNumber = settingsDlg.GetStartNumber();
+    wxString padPrefix = settingsDlg.GetPrefix();
 
     m_frame->DisplayToolMsg( _( "Hold left mouse button and move cursor over pads to enumerate them" ) );
 
