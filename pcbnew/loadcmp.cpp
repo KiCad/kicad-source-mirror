@@ -107,6 +107,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
     PlaceModule( newModule, NULL );
+    newModule->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
 
     // Put it on FRONT layer,
     // because this is the default in ModEdit, and in libs
