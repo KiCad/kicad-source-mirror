@@ -198,6 +198,12 @@ void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
 }
 
 
+void SELECTION_TOOL::AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel )
+{
+    m_menu.AppendSubMenu( aMenu, aLabel );
+}
+
+
 void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 {
     if( aItem->IsSelected() )

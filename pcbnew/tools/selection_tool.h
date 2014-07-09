@@ -123,6 +123,15 @@ public:
     void AddMenuItem( const TOOL_ACTION& aAction );
 
     /**
+     * Function AddSubMenu()
+     *
+     * Adds a submenu to the selection tool right-click context menu.
+     * @param aMenu is the submenu to be added.
+     * @param aLabel is the label of added submenu.
+     */
+    void AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel );
+
+    /**
      * Function EditModules()
      * Toggles edit module mode. When enabled, one may select parts of modules individually
      * (graphics, pads, etc.), so they can be modified.

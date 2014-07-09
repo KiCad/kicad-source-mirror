@@ -54,7 +54,16 @@ bool PLACEMENT_TOOL::Init()
         return false;
     }
 
-    // TODO create a context menu and add it to the selection tool
+    // Create a context menu and make it available through selection tool
+    CONTEXT_MENU* menu = new CONTEXT_MENU;
+    menu->Add( COMMON_ACTIONS::alignTop );
+    menu->Add( COMMON_ACTIONS::alignBottom );
+    menu->Add( COMMON_ACTIONS::alignLeft );
+    menu->Add( COMMON_ACTIONS::alignRight );
+    menu->AppendSeparator();
+    menu->Add( COMMON_ACTIONS::distributeHorizontally );
+    menu->Add( COMMON_ACTIONS::distributeVertically );
+    m_selectionTool->AddSubMenu( menu, wxString( "Placement" ) );
 
     setTransitions();
 
