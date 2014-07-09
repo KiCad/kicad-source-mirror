@@ -67,7 +67,11 @@ TOOL_ACTION COMMON_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
         AS_GLOBAL, 0,
         "Draw an arc", "Draw an arc" );
 
-TOOL_ACTION COMMON_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
+TOOL_ACTION COMMON_ACTIONS::placeTextModule( "pcbnew.InteractiveDrawing.textPcb",
+        AS_GLOBAL, 0,
+        "Add a text", "Add a text" );
+
+TOOL_ACTION COMMON_ACTIONS::placeTextPcb( "pcbnew.InteractiveDrawing.textModule",
         AS_GLOBAL, 0,
         "Add a text", "Add a text" );
 
@@ -284,7 +288,10 @@ std::string COMMON_ACTIONS::TranslateLegacyId( int aId )
         return COMMON_ACTIONS::drawArc.GetName();
 
     case ID_PCB_ADD_TEXT_BUTT:
-        return COMMON_ACTIONS::placeText.GetName();
+        return COMMON_ACTIONS::placeTextPcb.GetName();
+
+    case ID_MODEDIT_TEXT_TOOL:
+        return COMMON_ACTIONS::placeTextModule.GetName();
 
     case ID_PCB_DIMENSION_BUTT:
         return COMMON_ACTIONS::drawDimension.GetName();

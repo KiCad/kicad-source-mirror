@@ -33,7 +33,7 @@ namespace KIGFX
     class VIEW_CONTROLS;
 }
 class BOARD;
-class PCB_EDIT_FRAME;
+class PCB_BASE_FRAME;
 class DRAWSEGMENT;
 
 /**
@@ -76,11 +76,18 @@ public:
     int DrawArc( TOOL_EVENT& aEvent );
 
     /**
-     * Function DrawText()
+     * Function PlaceTextModule()
      * Displays a dialog that allows to input text and its settings and then lets the user decide
-     * where to place the text.
+     * where to place the text in module editor.
      */
-    int PlaceText( TOOL_EVENT& aEvent );
+    int PlaceTextModule( TOOL_EVENT& aEvent );
+
+    /**
+     * Function PlaceTextPcb()
+     * Displays a dialog that allows to input text and its settings and then lets the user decide
+     * where to place the text in board editor.
+     */
+    int PlaceTextPcb( TOOL_EVENT& aEvent );
 
     /**
      * Function DrawDimension()
@@ -143,7 +150,7 @@ private:
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;
-    PCB_EDIT_FRAME* m_frame;
+    PCB_BASE_FRAME* m_frame;
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP = 100000;

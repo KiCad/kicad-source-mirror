@@ -65,7 +65,7 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_view = getView();
     m_controls = getViewControls();
     m_board = getModel<BOARD>();
-    m_frame = getEditFrame<PCB_EDIT_FRAME>();
+    m_frame = getEditFrame<PCB_BASE_FRAME>();
 
     setTransitions();
 }
@@ -281,7 +281,112 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::PlaceText( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::PlaceTextModule( TOOL_EVENT& aEvent )
+{
+    TEXTE_MODULE* text = NULL;
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( m_view );
+    m_view->Add( &preview );
+
+    m_toolMgr->GetTool<SELECTION_TOOL>()->ClearSelection();
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+    m_controls->SetAutoPan( true );
+
+    Activate();
+    m_frame->SetToolID( ID_PCB_ADD_TEXT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        VECTOR2I cursorPos = m_controls->GetCursorPosition();
+
+        if( evt->IsCancel() )
+        {
+            if( text )
+            {
+                // Delete the old text and have another try
+                m_board->Delete( text );        // it was already added by CreateTextPcb()
+                text = NULL;
+
+                preview.Clear();
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_controls->ShowCursor( true );
+            }
+            else
+                break;
+        }
+
+        else if( text && evt->Category() == TC_COMMAND )
+        {
+            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            {
+                text->Rotate( text->GetPosition(), 900.0 /*m_frame->GetRotationAngle()*/ ); // FIXME
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+            {
+                text->Flip( text->GetPosition() );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !text )
+            {
+                // Init the new item attributes
+                text = m_frame->CreateTextModule( m_frame->GetBoard()->m_Modules, NULL );
+
+                if( text == NULL )
+                    continue;
+
+                m_controls->ShowCursor( false );
+                preview.Add( text );
+            }
+            else
+            {
+                assert( text->GetText().Length() > 0 );
+                assert( text->GetSize().x > 0 && text->GetSize().y > 0 );
+
+                text->ClearFlags();
+                m_view->Add( text );
+                // m_board->Add( text );        // it is already added by CreateTextePcb()
+                text->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+                m_frame->OnModify();
+                m_frame->SaveCopyInUndoList( text, UR_NEW );
+
+                preview.Remove( text );
+                m_controls->ShowCursor( true );
+
+                text = NULL;
+            }
+        }
+
+        else if( text && evt->IsMotion() )
+        {
+            text->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+
+            // Show a preview of the item
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
+
+    setTransitions();
+    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
+    return 0;
+}
+
+
+int DRAWING_TOOL::PlaceTextPcb( TOOL_EVENT& aEvent )
 {
     TEXTE_PCB* text = NULL;
 
@@ -322,7 +427,7 @@ int DRAWING_TOOL::PlaceText( TOOL_EVENT& aEvent )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                text->Rotate( text->GetPosition(), m_frame->GetRotationAngle() );
+                text->Rotate( text->GetPosition(), /*m_frame->GetRotationAngle()*/ 900.0 ); // FIXME
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
@@ -337,7 +442,7 @@ int DRAWING_TOOL::PlaceText( TOOL_EVENT& aEvent )
             if( !text )
             {
                 // Init the new item attributes
-                text = m_frame->CreateTextePcb( NULL );
+                text = static_cast<PCB_EDIT_FRAME*>( m_frame )->CreateTextePcb( NULL );
 
                 if( text == NULL )
                     continue;
@@ -698,7 +803,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                module->Rotate( module->GetPosition(), m_frame->GetRotationAngle() );
+                module->Rotate( module->GetPosition(), /*m_frame->GetRotationAngle()*/ 900.0 );
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
@@ -1029,7 +1134,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     m_view->Add( zone );
 
                     if( !aKeepout )
-                        m_frame->Fill_Zone( zone );
+                        static_cast<PCB_EDIT_FRAME*>( m_frame )->Fill_Zone( zone );
 
                     zone->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
@@ -1179,7 +1284,8 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawDimension,   COMMON_ACTIONS::drawDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,        COMMON_ACTIONS::drawZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawKeepout,     COMMON_ACTIONS::drawKeepout.MakeEvent() );
-    Go( &DRAWING_TOOL::PlaceText,       COMMON_ACTIONS::placeText.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceTextPcb,    COMMON_ACTIONS::placeTextPcb.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceTextModule, COMMON_ACTIONS::placeTextModule.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTarget,     COMMON_ACTIONS::placeTarget.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceModule,     COMMON_ACTIONS::placeModule.MakeEvent() );
 }

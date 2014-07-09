@@ -31,6 +31,7 @@
 #include <tool/context_menu.h>
 #include <class_undoredo_container.h>
 
+class PCB_BASE_FRAME;
 class SELECTION_AREA;
 class BOARD_ITEM;
 class GENERAL_COLLECTOR;
@@ -256,6 +257,9 @@ private:
      * if there are more entries or no entries at all.
      */
     BOARD_ITEM* prefer( GENERAL_COLLECTOR& aCollector, const KICAD_T aTypes[] ) const;
+
+    /// Pointer to the parent frame.
+    PCB_BASE_FRAME* m_frame;
 
     /// Visual representation of selection box
     SELECTION_AREA* m_selArea;

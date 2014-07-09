@@ -78,6 +78,8 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         // Restore previous properties of selected items and remove them from containers
         ClearSelection();
 
+    m_frame = getEditFrame<PCB_BASE_FRAME>();
+
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
     getView()->Add( m_selection.group );
@@ -185,7 +187,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 bool SELECTION_TOOL::SelectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation )
 {
     BOARD_ITEM* item;
-    GENERAL_COLLECTORS_GUIDE guide = getEditFrame<PCB_EDIT_FRAME>()->GetCollectorsGuide();
+    GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
     GENERAL_COLLECTOR collector;
     const KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_LINE_T, EOT }; // preferred types
 
@@ -269,7 +271,7 @@ void SELECTION_TOOL::ClearSelection()
     }
     m_selection.clear();
 
-    getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+    m_frame->SetCurItem( NULL );
 
     // Do not show the context menu when there is nothing selected
     SetContextMenu( &m_menu, CMENU_OFF );
@@ -370,7 +372,7 @@ bool SELECTION_TOOL::selectMultiple()
             }
 
             // Do not display information about selected item,as there is more than one
-            getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+            m_frame->SetCurItem( NULL );
 
             if( !m_selection.Empty() )
             {
@@ -586,7 +588,7 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     if( m_selection.Size() == 1 )
     {
         // Set as the current item, so the information about selection is displayed
-        getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( aItem, true );
+        m_frame->SetCurItem( aItem, true );
 
         // Now the context menu should be enabled
         SetContextMenu( &m_menu, CMENU_BUTTON );
@@ -594,7 +596,7 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     else if( m_selection.Size() == 2 )  // Check only for 2, so it will not be
     {                                   // called for every next selected item
         // If multiple items are selected, do not show the information about the selected item
-        getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL, true );
+        m_frame->SetCurItem( NULL, true );
     }
 }
 
@@ -619,7 +621,7 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
     if( m_selection.Empty() )
     {
         SetContextMenu( &m_menu, CMENU_OFF );
-        getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+        m_frame->SetCurItem( NULL );
     }
 
     // Inform other potentially interested tools
@@ -671,7 +673,7 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 void SELECTION_TOOL::highlightNet( const VECTOR2I& aPoint )
 {
     KIGFX::RENDER_SETTINGS* render = getView()->GetPainter()->GetSettings();
-    GENERAL_COLLECTORS_GUIDE guide = getEditFrame<PCB_EDIT_FRAME>()->GetCollectorsGuide();
+    GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
     GENERAL_COLLECTOR collector;
     int net = -1;
 

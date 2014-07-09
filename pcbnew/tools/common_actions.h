@@ -64,7 +64,8 @@ public:
     static TOOL_ACTION drawArc;
 
     /// Activation of the drawing tool (text)
-    static TOOL_ACTION placeText;
+    static TOOL_ACTION placeTextPcb;
+    static TOOL_ACTION placeTextModule;
 
     /// Activation of the drawing tool (dimension)
     static TOOL_ACTION drawDimension;
