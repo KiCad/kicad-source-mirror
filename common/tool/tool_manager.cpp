@@ -137,6 +137,11 @@ struct TOOL_MANAGER::TOOL_STATE
         return aRhs.theTool != this->theTool;
     }
 
+    /**
+     * Function Push()
+     * Stores the current state of the tool on stack. Stacks are stored internally and are not
+     * shared between different TOOL_STATE objects.
+     */
     void Push()
     {
         stateStack.push( *this );
@@ -144,6 +149,12 @@ struct TOOL_MANAGER::TOOL_STATE
         clear();
     }
 
+    /**
+     * Function Pop()
+     * Restores state of the tool from stack. Stacks are stored internally and are not
+     * shared between different TOOL_STATE objects.
+     * @return True if state was restored, false if the stack was empty.
+     */
     bool Pop()
     {
         delete cofunc;
@@ -603,7 +614,7 @@ bool TOOL_MANAGER::SaveClipboard( const std::string& aText )
 {
     if( wxTheClipboard->Open() )
     {
-        wxTheClipboard->SetData( new wxTextDataObject( aText ) );
+        wxTheClipboard->SetData( new wxTextDataObject( wxString( aText.c_str(), wxConvUTF8 ) ) );
         wxTheClipboard->Close();
 
         return true;

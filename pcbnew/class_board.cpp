@@ -688,10 +688,12 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         m_Status_Pcb = 0;
         break;
 
+    case PCB_MODULE_EDGE_T:
+        assert( false );        // TODO Orson: I am just checking if it is supposed to be here
+
     case PCB_DIMENSION_T:
     case PCB_LINE_T:
     case PCB_TEXT_T:
-    case PCB_MODULE_EDGE_T:
     case PCB_TARGET_T:
         if( aControl & ADD_APPEND )
             m_Drawings.PushBack( aBoardItem );

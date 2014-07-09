@@ -483,7 +483,7 @@ int EDIT_TOOL::PasteItems( TOOL_EVENT& aEvent )
 
     try
     {
-        BOARD_ITEM* item = io.Parse( m_toolMgr->GetClipboard() );
+        BOARD_ITEM* item = io.Parse( wxString( m_toolMgr->GetClipboard().c_str(), wxConvUTF8 ) );
         assert( item->Type() == PCB_MODULE_T );
         pastedModule = dyn_cast<MODULE*>( item );
     }
