@@ -326,13 +326,13 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( LAYER_ID aLayer )
 void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
 {
     // Load layer & elements visibility settings
-    for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
+    for( LAYER_NUM i = 0; i < LAYER_ID_COUNT; ++i )
     {
-        m_view->SetLayerVisible( i, aBoard->IsLayerVisible( i ) );
+        m_view->SetLayerVisible( i, aBoard->IsLayerVisible( LAYER_ID( i ) ) );
 
         // Synchronize netname layers as well
         if( IsCopperLayer( i ) )
-            m_view->SetLayerVisible( GetNetnameLayer( i ), aBoard->IsLayerVisible( i ) );
+            m_view->SetLayerVisible( GetNetnameLayer( i ), aBoard->IsLayerVisible( LAYER_ID( i ) ) );
     }
 
     for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )

@@ -783,14 +783,13 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable()
 }
 
 
-void PCB_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer, bool doLayerWidgetUpdate )
+void PCB_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
 {
-    ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
+    PCB_BASE_FRAME::SetActiveLayer( aLayer );
 
     GetGalCanvas()->SetHighContrastLayer( aLayer );
 
-    if( doLayerWidgetUpdate )
-        syncLayerWidgetLayer();
+    syncLayerWidgetLayer();
 
     if( IsGalCanvasActive() )
         GetGalCanvas()->Refresh();

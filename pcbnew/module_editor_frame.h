@@ -217,7 +217,6 @@ public:
     BOARD_ITEM* ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 
     /* Undo and redo functions */
-public:
 
     /**
      * Function SaveCopyInUndoList.

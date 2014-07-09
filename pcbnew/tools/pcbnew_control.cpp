@@ -289,7 +289,7 @@ int PCBNEW_CONTROL::LayerInner6( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerBottom( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SetActiveLayer( B_Cu, true );
+    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, B_Cu );
     getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -311,7 +311,7 @@ int PCBNEW_CONTROL::LayerNext( TOOL_EVENT& aEvent )
     if( getModel<BOARD>()->GetCopperLayerCount() < 2 ) // Single layer
         layer = B_Cu;
     else if( layer >= getModel<BOARD>()->GetCopperLayerCount() - 2 )
-        layer = B_Cu;
+        layer = F_Cu;
     else
         ++layer;
 
