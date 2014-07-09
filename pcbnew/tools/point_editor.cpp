@@ -40,6 +40,7 @@
 #include <class_dimension.h>
 #include <class_zone.h>
 #include <class_board.h>
+#include <class_module.h>
 
 // Few constants to avoid using bare numbers for point indices
 enum SEG_POINTS
@@ -710,8 +711,14 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
 
     else if( item->Type() == PCB_LINE_T || item->Type() == PCB_MODULE_EDGE_T )
     {
+        bool moduleEdge = item->Type() == PCB_MODULE_EDGE_T;
+
         getEditFrame<PCB_BASE_FRAME>()->OnModify();
-        getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
+
+        if( moduleEdge )
+            getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( getModel<BOARD>()->m_Modules, UR_MODEDIT );
+        else
+            getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
         DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
 
@@ -724,12 +731,34 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
             segment->SetEnd( wxPoint( nearestPoint.x, nearestPoint.y ) );
 
             // and add another one starting from the break point
-            DRAWSEGMENT* newSegment = new DRAWSEGMENT( *segment );
+            DRAWSEGMENT* newSegment;
+
+            if( moduleEdge )
+            {
+                EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( segment );
+                assert( segment->GetParent()->Type() == PCB_MODULE_T );
+                newSegment = new EDGE_MODULE( *edge );
+                edge->SetLocalCoord();
+            }
+            else
+            {
+                newSegment = new DRAWSEGMENT( *segment );
+            }
+
             newSegment->ClearSelected();
             newSegment->SetStart( wxPoint( nearestPoint.x, nearestPoint.y ) );
             newSegment->SetEnd( wxPoint( seg.B.x, seg.B.y ) );
 
-            getModel<BOARD>()->Add( newSegment );
+            if( moduleEdge )
+            {
+                static_cast<EDGE_MODULE*>( newSegment )->SetLocalCoord();
+                getModel<BOARD>()->m_Modules->Add( newSegment );
+            }
+            else
+            {
+                getModel<BOARD>()->Add( newSegment );
+            }
+
             getView()->Add( newSegment );
         }
     }
