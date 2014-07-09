@@ -144,6 +144,9 @@ public:
     static TOOL_ACTION trackDisplayMode;
     static TOOL_ACTION padDisplayMode;
     static TOOL_ACTION viaDisplayMode;
+    static TOOL_ACTION zoneDisplayEnable;
+    static TOOL_ACTION zoneDisplayDisable;
+    static TOOL_ACTION zoneDisplayOutlines;
     static TOOL_ACTION highContrastMode;
     static TOOL_ACTION highContrastInc;
     static TOOL_ACTION highContrastDec;

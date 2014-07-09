@@ -56,6 +56,7 @@ public:
     int TrackDisplayMode( TOOL_EVENT& aEvent );
     int PadDisplayMode( TOOL_EVENT& aEvent );
     int ViaDisplayMode( TOOL_EVENT& aEvent );
+    int ZoneDisplayMode( TOOL_EVENT& aEvent );
     int HighContrastMode( TOOL_EVENT& aEvent );
     int HighContrastInc( TOOL_EVENT& aEvent );
     int HighContrastDec( TOOL_EVENT& aEvent );

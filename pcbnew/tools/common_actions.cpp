@@ -157,6 +157,18 @@ TOOL_ACTION COMMON_ACTIONS::viaDisplayMode( "pcbnew.Control.viaDisplayMode",
         AS_GLOBAL, 'L',     // TODO temporarily, find a better hot key
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::zoneDisplayEnable( "pcbnew.Control.zoneDisplayEnable",
+        AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION COMMON_ACTIONS::zoneDisplayDisable( "pcbnew.Control.zoneDisplayDisable",
+        AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION COMMON_ACTIONS::zoneDisplayOutlines( "pcbnew.Control.zoneDisplayOutlines",
+        AS_GLOBAL, 0,
+        "", "" );
+
 TOOL_ACTION COMMON_ACTIONS::highContrastMode( "pcbnew.Control.highContrastMode",
         AS_GLOBAL, 'H',
         "", "" );
@@ -381,6 +393,29 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
     case ID_ZOOM_PAGE:      // toolbar button "Fit on Screen"
         return COMMON_ACTIONS::zoomFitScreen.MakeEvent();
 
+    case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
+        return COMMON_ACTIONS::trackDisplayMode.MakeEvent();
+
+    case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
+        return COMMON_ACTIONS::padDisplayMode.MakeEvent();
+
+    case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
+        return COMMON_ACTIONS::viaDisplayMode.MakeEvent();
+
+    case ID_TB_OPTIONS_SHOW_ZONES:
+        return COMMON_ACTIONS::zoneDisplayEnable.MakeEvent();
+
+    case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
+        return COMMON_ACTIONS::zoneDisplayDisable.MakeEvent();
+
+    case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
+        return COMMON_ACTIONS::zoneDisplayOutlines.MakeEvent();
+
+    case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
+        return COMMON_ACTIONS::highContrastMode.MakeEvent();
+
+    case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
+    case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
     case ID_PCB_DELETE_ITEM_BUTT:
     case ID_PCB_HIGHLIGHT_BUTT:
     case ID_PCB_SHOW_1_RATSNEST_BUTT:

@@ -28,7 +28,9 @@
 #include <pcbnew_id.h>
 #include <wxPcbStruct.h>
 #include <class_board.h>
+#include <class_module.h>
 #include <class_track.h>
+#include <class_zone.h>
 #include <class_draw_panel_gal.h>
 #include <class_pcb_screen.h>
 #include <pcbcommon.h>
@@ -129,17 +131,20 @@ int PCBNEW_CONTROL::TrackDisplayMode( TOOL_EVENT& aEvent )
     KIGFX::PCB_PAINTER* painter =
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
 
     // Apply new display options to the GAL canvas
     DisplayOpt.DisplayPcbTrackFill = !DisplayOpt.DisplayPcbTrackFill;
     m_frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     settings->LoadDisplayOptions( DisplayOpt );
 
-    BOARD* board = getModel<BOARD>();
-    for( TRACK* track = board->m_Track; track; track = track->Next() )
-        track->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    for( TRACK* track = getModel<BOARD>()->m_Track; track; track = track->Next() )
+    {
+        if( track->Type() == PCB_TRACE_T )
+            track->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    }
 
+    m_frame->GetGalCanvas()->Refresh();
     setTransitions();
 
     return 0;
@@ -148,8 +153,23 @@ int PCBNEW_CONTROL::TrackDisplayMode( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::PadDisplayMode( TOOL_EVENT& aEvent )
 {
-    wxCommandEvent dummy;
-    m_frame->OnTogglePadDrawMode( dummy );
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+
+    // Apply new display options to the GAL canvas
+    DisplayOpt.DisplayPadFill = !DisplayOpt.DisplayPadFill;
+    m_frame->m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+    settings->LoadDisplayOptions( DisplayOpt );
+
+    for( MODULE* module = getModel<BOARD>()->m_Modules; module; module = module->Next() )
+    {
+        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+            pad->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    }
+
+    m_frame->GetGalCanvas()->Refresh();
     setTransitions();
 
     return 0;
@@ -161,20 +181,50 @@ int PCBNEW_CONTROL::ViaDisplayMode( TOOL_EVENT& aEvent )
     KIGFX::PCB_PAINTER* painter =
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
 
     // Apply new display options to the GAL canvas
     DisplayOpt.DisplayViaFill = !DisplayOpt.DisplayViaFill;
     m_frame->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     settings->LoadDisplayOptions( DisplayOpt );
 
-    BOARD* board = getModel<BOARD>();
-    for( TRACK* track = board->m_Track; track; track = track->Next() )
+    for( TRACK* track = getModel<BOARD>()->m_Track; track; track = track->Next() )
     {
         if( track->Type() == PCB_VIA_T )
             track->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
 
+    m_frame->GetGalCanvas()->Refresh();
+    setTransitions();
+
+    return 0;
+}
+
+
+int PCBNEW_CONTROL::ZoneDisplayMode( TOOL_EVENT& aEvent )
+{
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+
+    // Apply new display options to the GAL canvas
+    if( aEvent.IsAction( &COMMON_ACTIONS::zoneDisplayEnable ) )
+        DisplayOpt.DisplayZonesMode = 0;
+    else if( aEvent.IsAction( &COMMON_ACTIONS::zoneDisplayDisable ) )
+        DisplayOpt.DisplayZonesMode = 1;
+    else if( aEvent.IsAction( &COMMON_ACTIONS::zoneDisplayOutlines ) )
+        DisplayOpt.DisplayZonesMode = 2;
+    else
+        assert( false );
+
+    settings->LoadDisplayOptions( DisplayOpt );
+
+    BOARD* board = getModel<BOARD>();
+    for( int i = 0; i < board->GetAreaCount(); ++i )
+        board->GetArea( i )->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+    m_frame->GetGalCanvas()->Refresh();
     setTransitions();
 
     return 0;
@@ -529,6 +579,9 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::TrackDisplayMode,   COMMON_ACTIONS::trackDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::PadDisplayMode,     COMMON_ACTIONS::padDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ViaDisplayMode,     COMMON_ACTIONS::viaDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,    COMMON_ACTIONS::zoneDisplayEnable.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,    COMMON_ACTIONS::zoneDisplayDisable.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,    COMMON_ACTIONS::zoneDisplayOutlines.MakeEvent() );
     Go( &PCBNEW_CONTROL::HighContrastMode,   COMMON_ACTIONS::highContrastMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::HighContrastInc,    COMMON_ACTIONS::highContrastInc.MakeEvent() );
     Go( &PCBNEW_CONTROL::HighContrastDec,    COMMON_ACTIONS::highContrastDec.MakeEvent() );
