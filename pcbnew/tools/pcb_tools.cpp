@@ -29,7 +29,6 @@
 #include <tool/tool_dispatcher.h>
 
 #include <class_draw_panel_gal.h>
-//#include <pcbnew_id.h>
 
 #include "selection_tool.h"
 #include "edit_tool.h"
