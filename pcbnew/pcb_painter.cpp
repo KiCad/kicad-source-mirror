@@ -50,7 +50,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_displayZoneMode = DZ_SHOW_FILLED;
 
     // By default everything should be displayed as filled
-    for( unsigned int i = 0; i < END_PCB_VISIBLE_LIST; ++i )
+    for( unsigned int i = 0; i < TOTAL_LAYER_COUNT; ++i )
     {
         m_sketchMode[i] = false;
     }
@@ -102,9 +102,9 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions )
     m_padNumbers        = aOptions.DisplayPadNum;
 
     // Whether to draw tracks, vias & pads filled or as outlines
-    m_sketchMode[PADS_VISIBLE]        = !aOptions.DisplayPadFill;
-    m_sketchMode[VIA_THROUGH_VISIBLE] = !aOptions.DisplayViaFill;
-    m_sketchMode[TRACKS_VISIBLE]      = !aOptions.DisplayPcbTrackFill;
+    m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )]        = !aOptions.DisplayPadFill;
+    m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )] = !aOptions.DisplayViaFill;
+    m_sketchMode[ITEM_GAL_LAYER( TRACKS_VISIBLE )]      = !aOptions.DisplayPcbTrackFill;
 
     switch( aOptions.DisplayNetNamesMode )
     {
@@ -313,7 +313,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
         m_gal->SetStrokeColor( color );
         m_gal->SetIsStroke( true );
 
-        if( m_pcbSettings.m_sketchMode[TRACKS_VISIBLE] )
+        if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( TRACKS_VISIBLE )] )
         {
             // Outline mode
             m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
@@ -350,7 +350,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
     const COLOR4D& color  = m_pcbSettings.GetColor( aVia, aLayer );
 
-    if( m_pcbSettings.m_sketchMode[VIA_THROUGH_VISIBLE] )
+    if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )] )
     {
         // Outline mode
         m_gal->SetIsFill( false );
@@ -481,7 +481,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
     // Pad drawing
     const COLOR4D& color = m_pcbSettings.GetColor( aPad, aLayer );
-    if( m_pcbSettings.m_sketchMode[PADS_VISIBLE] )
+    if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
     {
         // Outline mode
         m_gal->SetIsFill( false );
@@ -544,7 +544,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m = ( size.y - size.x );
             n = size.x;
 
-            if( m_pcbSettings.m_sketchMode[PADS_VISIBLE] )
+            if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
             {
                 // Outline mode
                 m_gal->DrawArc( VECTOR2D( 0, -m ), n, -M_PI, 0 );
@@ -565,7 +565,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m = ( size.x - size.y );
             n = size.y;
 
-            if( m_pcbSettings.m_sketchMode[PADS_VISIBLE] )
+            if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
             {
                 // Outline mode
                 m_gal->DrawArc( VECTOR2D( -m, 0 ), n, M_PI / 2, 3 * M_PI / 2 );
