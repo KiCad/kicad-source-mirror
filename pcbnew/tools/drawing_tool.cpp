@@ -27,6 +27,7 @@
 #include "common_actions.h"
 
 #include <wxPcbStruct.h>
+#include <class_draw_panel_gal.h>
 #include <project.h>
 #include <id.h>
 #include <pcbnew_id.h>
@@ -1085,7 +1086,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     // Apply the selected settings
                     zone = new ZONE_CONTAINER( m_board );
                     zoneInfo.ExportSetting( *zone );
-                    m_frame->SetTopLayer( zoneInfo.m_CurrentZone_Layer );
+                    m_frame->GetGalCanvas()->SetTopLayer( zoneInfo.m_CurrentZone_Layer );
 
                     // Add the first point
                     zone->Outline()->Start( zoneInfo.m_CurrentZone_Layer,

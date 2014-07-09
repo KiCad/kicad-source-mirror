@@ -106,11 +106,6 @@ BOARD::BOARD() :
 
     // Initialize ratsnest
     m_ratsnest = new RN_DATA( this );
-    m_ratsnestViewItem = new KIGFX::RATSNEST_VIEWITEM( m_ratsnest );
-
-    // Initialize view item for displaying worksheet frame
-    m_worksheetViewItem = new KIGFX::WORKSHEET_VIEWITEM( &m_paper, &m_titles );
-    m_worksheetViewItem->SetFileName( std::string( m_fileName.mb_str() ) );
 }
 
 
@@ -122,8 +117,6 @@ BOARD::~BOARD()
         Delete( area_to_remove );
     }
 
-    delete m_worksheetViewItem;
-    delete m_ratsnestViewItem;
     delete m_ratsnest;
 
     m_FullRatsnest.clear();

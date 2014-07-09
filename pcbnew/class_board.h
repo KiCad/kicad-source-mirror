@@ -198,8 +198,6 @@ private:
     EDA_RECT                m_BoundingBox;
     NETINFO_LIST            m_NetInfo;              ///< net info list (name, design constraints ..
     RN_DATA*                m_ratsnest;
-    KIGFX::RATSNEST_VIEWITEM* m_ratsnestViewItem;   ///< VIEW_ITEM that draws ratsnest
-    KIGFX::WORKSHEET_VIEWITEM* m_worksheetViewItem; ///< VIEW_ITEM that draws worksheet frame
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
     ZONE_SETTINGS           m_zoneSettings;
@@ -311,24 +309,6 @@ public:
     RN_DATA* GetRatsnest() const
     {
         return m_ratsnest;
-    }
-
-    /**
-     * Function GetRatsnestViewItem()
-     * returns VIEW_ITEM responsible for drawing the ratsnest for the board.
-     */
-    KIGFX::RATSNEST_VIEWITEM* GetRatsnestViewItem() const
-    {
-        return m_ratsnestViewItem;
-    }
-
-    /**
-     * Function GetWorksheetViewItem()
-     * returns VIEW_ITEM responsible for drawing the worksheet frame.
-     */
-    KIGFX::WORKSHEET_VIEWITEM* GetWorksheetViewItem() const
-    {
-        return m_worksheetViewItem;
     }
 
     /**

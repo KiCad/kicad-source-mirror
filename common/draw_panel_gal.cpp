@@ -199,6 +199,28 @@ void EDA_DRAW_PANEL_GAL::StopDrawing()
 }
 
 
+void EDA_DRAW_PANEL_GAL::SetHighContrastLayer( LAYER_NUM aLayer )
+{
+    // Set display settings for high contrast mode
+    KIGFX::RENDER_SETTINGS* rSettings = m_view->GetPainter()->GetSettings();
+
+    SetTopLayer( aLayer );
+
+    rSettings->ClearActiveLayers();
+    rSettings->SetActiveLayer( aLayer );
+
+    m_view->UpdateAllLayersColor();
+}
+
+
+void EDA_DRAW_PANEL_GAL::SetTopLayer( LAYER_NUM aLayer )
+{
+    m_view->ClearTopLayers();
+    m_view->SetTopLayer( aLayer );
+    m_view->UpdateAllLayersOrder();
+}
+
+
 void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 {
     // Do not do anything if the currently used GAL is correct
