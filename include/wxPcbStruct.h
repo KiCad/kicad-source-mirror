@@ -30,7 +30,7 @@
 #define  WXPCB_STRUCT_H_
 
 
-#include <wxBasePcbFrame.h>
+#include <pcb_base_edit_frame.h>
 #include <config_params.h>
 #include <class_macros_record.h>
 #include <class_undoredo_container.h>
@@ -73,7 +73,7 @@ namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
  *
  * See also class PCB_BASE_FRAME(): Basic class for Pcbnew and GerbView.
  */
-class PCB_EDIT_FRAME : public PCB_BASE_FRAME
+class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 {
     friend class PCB::IFACE;
     friend class PCB_LAYER_WIDGET;
@@ -659,22 +659,22 @@ public:
                                  bool               aRebuildRatsnet = true );
 
     /**
-     * Function GetBoardFromRedoList
+     * Function RestoreCopyFromRedoList
      *  Redo the last edition:
      *  - Save the current board in Undo list
      *  - Get an old version of the board from Redo list
      *  @return none
      */
-    void GetBoardFromRedoList( wxCommandEvent& aEvent );
+    void RestoreCopyFromRedoList( wxCommandEvent& aEvent );
 
     /**
-     * Function GetBoardFromUndoList
+     * Function RestoreCopyFromUndoList
      *  Undo the last edition:
      *  - Save the current board in Redo list
      *  - Get an old version of the board from Undo list
      *  @return none
      */
-    void GetBoardFromUndoList( wxCommandEvent& aEvent );
+    void RestoreCopyFromUndoList( wxCommandEvent& aEvent );
 
     /* Block operations: */
 

@@ -187,8 +187,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( wxID_CUT, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_COPY, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_PASTE, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_UNDO, PCB_EDIT_FRAME::GetBoardFromUndoList )
-    EVT_TOOL( wxID_REDO, PCB_EDIT_FRAME::GetBoardFromRedoList )
+    EVT_TOOL( wxID_UNDO, PCB_EDIT_FRAME::RestoreCopyFromUndoList )
+    EVT_TOOL( wxID_REDO, PCB_EDIT_FRAME::RestoreCopyFromRedoList )
     EVT_TOOL( wxID_PRINT, PCB_EDIT_FRAME::ToPrinter )
     EVT_TOOL( ID_GEN_PLOT_SVG, PCB_EDIT_FRAME::SVG_Print )
     EVT_TOOL( ID_GEN_PLOT, PCB_EDIT_FRAME::Process_Special_Functions )
@@ -304,7 +304,7 @@ END_EVENT_TABLE()
 #define PCB_EDIT_FRAME_NAME wxT( "PcbFrame" )
 
 PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    PCB_BASE_FRAME( aKiway, aParent, FRAME_PCB, wxT( "Pcbnew" ), wxDefaultPosition,
+    PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB, wxT( "Pcbnew" ), wxDefaultPosition,
         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PCB_EDIT_FRAME_NAME )
 {
     m_FrameName = PCB_EDIT_FRAME_NAME;

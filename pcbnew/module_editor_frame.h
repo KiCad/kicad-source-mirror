@@ -30,6 +30,7 @@
 #define MODULE_EDITOR_FRAME_H_
 
 #include <wxBasePcbFrame.h>
+#include <pcb_base_edit_frame.h>
 #include <io_mgr.h>
 
 
@@ -38,7 +39,7 @@ class FP_LIB_TABLE;
 namespace PCB { struct IFACE; }     // A KIFACE_I coded in pcbnew.c
 
 
-class FOOTPRINT_EDIT_FRAME : public PCB_BASE_FRAME
+class FOOTPRINT_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 {
     friend struct PCB::IFACE;
 
@@ -148,6 +149,9 @@ public:
     void OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent );
 
+    ///> @copydoc PCB_BASE_EDIT_FRAME::OnEditItemRequest()
+    void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem );
+
     /**
      * Function LoadModuleFromBoard
      * called from the main toolbar to load a footprint from board mainly to edit it.
@@ -243,6 +247,22 @@ public:
     virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                                      UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
+
+    /**
+     * Function RestoreCopyFromUndoList
+     * performs an undo operation on the last edition:
+     *  - Place the current edited library component in Redo list
+     *  - Get old version of the current edited library component
+     */
+    void RestoreCopyFromUndoList( wxCommandEvent& aEvent );
+
+    /**
+     * Function RestoreCopyFromRedoList
+     * performs a redo operation on the the last edition:
+     *  - Place the current edited library component in undo list
+     *  - Get old version of the current edited library component
+     */
+    void RestoreCopyFromRedoList( wxCommandEvent& aEvent );
 
     /// Return the current library nickname.
     const wxString GetCurrentLib() const;
@@ -412,22 +432,6 @@ protected:
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
     PCB_LAYER_WIDGET* m_Layers;
-
-    /**
-     * Function GetComponentFromUndoList
-     * performs an undo operation on the last edition:
-     *  - Place the current edited library component in Redo list
-     *  - Get old version of the current edited library component
-     */
-    void GetComponentFromUndoList( wxCommandEvent& aEvent );
-
-    /**
-     * Function GetComponentFromRedoList
-     * performs a redo operation on the the last edition:
-     *  - Place the current edited library component in undo list
-     *  - Get old version of the current edited library component
-     */
-    void GetComponentFromRedoList( wxCommandEvent& aEvent );
 
     /**
      * Function UpdateTitle

@@ -309,7 +309,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                 if( modified )      // Restore the last change
                 {
                     wxCommandEvent dummy;
-                    editFrame->GetBoardFromUndoList( dummy );
+                    editFrame->RestoreCopyFromUndoList( dummy );
 
                     updatePoints();
                     modified = false;
