@@ -278,8 +278,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_toolManager->RegisterTool( new DRAWING_TOOL );
         m_toolManager->RegisterTool( new POINT_EDITOR );
         m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+
         m_toolManager->GetTool<SELECTION_TOOL>()->EditModules( true );
+        m_toolManager->GetTool<EDIT_TOOL>()->EditModules( true );
         m_toolManager->GetTool<DRAWING_TOOL>()->EditModules( true );
+
         m_toolManager->ResetTools( TOOL_BASE::RUN );
         m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
