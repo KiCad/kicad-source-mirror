@@ -203,7 +203,7 @@ public:
      * @param param = parameters to be passed to the executable.
      */
     void Execute( wxWindow* frame, const wxString& execFile,
-                  const wxString& param = wxEmptyString );
+                  wxString param = wxEmptyString );
 
     class TERMINATE_HANDLER : public wxProcess
     {
@@ -233,6 +233,17 @@ public:
     // read only accessors
     const wxString SchFileName();
     const wxString PcbFileName();
+    const wxString PcbLegacyFileName();
+
+    void ReCreateTreePrj();
+
+    /// Call this only for a PCB associated with the current project.  That is,
+    /// it must have the same path and name as the project *.pro file.
+    void RunPcbNew( const wxString& aProjectBoardFileName );
+
+    /// Call this only for a SCH associated with the current project.  That is,
+    /// it must have the same path and name as the project *.pro file.
+    void RunEeschema( const wxString& aProjectSchematicFileName );
 
     DECLARE_EVENT_TABLE()
 
@@ -248,7 +259,7 @@ private:
     LAUNCHER_PANEL*     m_Launcher;
     wxTextCtrl*         m_MessagesBox;
     wxAuiToolBar*       m_VToolBar;             // Vertical toolbar (not used)
-    wxFileName          m_project_file_name;
+    wxString            m_project_file_name;
 
     int m_leftWinWidth;
 
