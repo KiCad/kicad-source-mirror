@@ -122,9 +122,15 @@ public:
 
     /**
      * Function PlacePad()
-     * Places a pad in the module editor.
+     * Places a pad in module editor.
      */
     int PlacePad( TOOL_EVENT& aEvent );
+
+    /**
+     * Function PlaceDXF()
+     * Places a drawing imported from a DXF file in module editor.
+     */
+    int PlaceDXF( TOOL_EVENT& aEvent );
 
     /**
      * Function SetAnchor()

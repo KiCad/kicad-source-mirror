@@ -109,6 +109,10 @@ TOOL_ACTION COMMON_ACTIONS::placePad( "pcbnew.InteractiveDrawing.placePad",
         AS_GLOBAL, 0,
         "Add pads", "Add pads", AF_ACTIVATE );
 
+TOOL_ACTION COMMON_ACTIONS::placeDXF( "pcbnew.InteractiveDrawing.placeDXF",
+        AS_GLOBAL, 0,
+        "", "", AF_ACTIVATE );
+
 TOOL_ACTION COMMON_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
         AS_GLOBAL, 0,
         "Place the footprint anchor", "Place the footprint anchor",
@@ -357,6 +361,9 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_MODEDIT_PAD_TOOL:
         return COMMON_ACTIONS::placePad.MakeEvent();
+
+    case ID_GEN_IMPORT_DXF_FILE:
+        return COMMON_ACTIONS::placeDXF.MakeEvent();
 
     case ID_MODEDIT_ANCHOR_TOOL:
         return COMMON_ACTIONS::setAnchor.MakeEvent();

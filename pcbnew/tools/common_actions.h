@@ -99,6 +99,9 @@ public:
     /// Activation of the drawing tool (placing a PAD)
     static TOOL_ACTION placePad;
 
+    /// Activation of the drawing tool (placing a drawing from DXF file)
+    static TOOL_ACTION placeDXF;
+
     /// Activation of the drawing tool (placing the footprint anchor)
     static TOOL_ACTION setAnchor;
 
