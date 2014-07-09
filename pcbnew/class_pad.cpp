@@ -255,8 +255,7 @@ void D_PAD::SetLocalCoord()
     }
 
     m_Pos0 = m_Pos - module->GetPosition();
-    double angle = module->GetOrientation();
-    RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
+    RotatePoint( &m_Pos0.x, &m_Pos0.y, -module->GetOrientation() );
 }
 
 
