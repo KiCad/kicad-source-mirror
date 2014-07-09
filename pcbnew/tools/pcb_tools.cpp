@@ -36,6 +36,7 @@
 #include "point_editor.h"
 #include "pcbnew_control.h"
 #include "pcb_editor_control.h"
+#include "placement_tool.h"
 #include "common_actions.h"
 #include <router/router_tool.h>
 
@@ -55,6 +56,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new POINT_EDITOR );
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
     m_toolManager->RegisterTool( new PCB_EDITOR_CONTROL );
+    m_toolManager->RegisterTool( new PLACEMENT_TOOL );
     m_toolManager->ResetTools( TOOL_BASE::RUN );
 
     // Run the selection tool, it is supposed to be always active

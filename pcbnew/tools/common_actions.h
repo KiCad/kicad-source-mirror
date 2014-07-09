@@ -110,6 +110,25 @@ public:
     /// Update edit points
     static TOOL_ACTION pointEditorUpdate;
 
+    // Placement tool
+    /// Align items to the top edge of selection bounding box
+    static TOOL_ACTION alignTop;
+
+    /// Align items to the bottom edge of selection bounding box
+    static TOOL_ACTION alignBottom;
+
+    /// Align items to the left edge of selection bounding box
+    static TOOL_ACTION alignLeft;
+
+    /// Align items to the right edge of selection bounding box
+    static TOOL_ACTION alignRight;
+
+    /// Distributes items evenly along the horizontal axis
+    static TOOL_ACTION distributeHorizontally;
+
+    /// Distributes items evenly along the vertical axis
+    static TOOL_ACTION distributeVertically;
+
     // View controls
     static TOOL_ACTION zoomIn;
     static TOOL_ACTION zoomOut;
