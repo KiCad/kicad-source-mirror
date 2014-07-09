@@ -125,7 +125,7 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
     delete m_Collector;
 
-    delete m_Pcb;       // is already NULL for FOOTPRINT_EDIT_FRAME
+    delete m_Pcb;
     delete GetGalCanvas();
 }
 
