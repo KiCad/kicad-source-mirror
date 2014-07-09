@@ -130,8 +130,18 @@ public:
 private:
     ///> Starts drawing a selected shape (i.e. DRAWSEGMENT).
     ///> @param aShape is the type of created shape (@see STROKE_T).
-    ///> @param aContinous decides if there is only one or multiple shapes to draw.
-    int drawSegment( int aShape, bool aContinous );
+    ///> @param aGraphic is an object that is going to be used by the tool for drawing. It has to
+    ///> be already created. The tool deletes the object if it is not added to a BOARD.
+    ///> @return False if the tool was cancelled before the origin was set or origin and end are
+    ///> the same point.
+    bool drawSegment( int aShape, DRAWSEGMENT* aGraphic );
+
+    ///> Starts drawing an arc.
+    ///> @param aGraphic is an object that is going to be used by the tool for drawing. It has to
+    ///> be already created. The tool deletes the object if it is not added to a BOARD.
+    ///> @return False if the tool was cancelled before the origin was set or origin and end are
+    ///> the same point.
+    bool drawArc( DRAWSEGMENT* aGraphic );
 
     ///> Draws a polygon, that is added as a zone or a keepout area.
     ///> @param aKeepout decides if the drawn polygon is a zone or a keepout area.
