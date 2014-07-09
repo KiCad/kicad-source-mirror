@@ -73,11 +73,7 @@ TOOL_ACTION COMMON_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
         AS_GLOBAL, 0,
         "Draw an arc", "Draw an arc", AF_ACTIVATE );
 
-TOOL_ACTION COMMON_ACTIONS::placeTextModule( "pcbnew.InteractiveDrawing.textPcb",
-        AS_GLOBAL, 0,
-        "Add a text", "Add a text", AF_ACTIVATE );
-
-TOOL_ACTION COMMON_ACTIONS::placeTextPcb( "pcbnew.InteractiveDrawing.textModule",
+TOOL_ACTION COMMON_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
         AS_GLOBAL, 0,
         "Add a text", "Add a text", AF_ACTIVATE );
 
@@ -299,10 +295,8 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
         return COMMON_ACTIONS::drawArc.MakeEvent();
 
     case ID_PCB_ADD_TEXT_BUTT:
-        return COMMON_ACTIONS::placeTextPcb.MakeEvent();
-
     case ID_MODEDIT_TEXT_TOOL:
-        return COMMON_ACTIONS::placeTextModule.MakeEvent();
+        return COMMON_ACTIONS::placeText.MakeEvent();
 
     case ID_PCB_DIMENSION_BUTT:
         return COMMON_ACTIONS::drawDimension.MakeEvent();
