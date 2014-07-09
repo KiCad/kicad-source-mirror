@@ -81,7 +81,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     Connect( wxEVT_MIDDLE_DOWN,     wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     Connect( wxEVT_MIDDLE_DCLICK,   wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     Connect( wxEVT_MOUSEWHEEL,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_CHAR_HOOK,       wxEventHandler( EDA_DRAW_PANEL_GAL::skipEvent ) );
     Connect( wxEVT_CHAR,            wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
     Connect( KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE,
@@ -158,7 +157,7 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
 }
 
 
-void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
+void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
     if( m_pendingRefresh )
         return;
@@ -278,11 +277,4 @@ void EDA_DRAW_PANEL_GAL::onEnter( wxEvent& aEvent )
 {
     // Getting focus is necessary in order to receive key events properly
     SetFocus();
-}
-
-
-void EDA_DRAW_PANEL_GAL::skipEvent( wxEvent& aEvent )
-{
-    // This is necessary for CHAR_HOOK event to generate KEY_UP and KEY_DOWN events
-    aEvent.Skip();
 }

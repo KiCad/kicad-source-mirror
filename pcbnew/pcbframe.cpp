@@ -334,12 +334,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetGalCanvas( new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                           PCB_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) );
 
-    // GAL should not be active yet
-    GetGalCanvas()->StopDrawing();
-
-    // Hide by default, it has to be explicitly shown
-    GetGalCanvas()->Hide();
-
     SetBoard( new BOARD() );
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
