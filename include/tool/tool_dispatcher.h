@@ -56,7 +56,7 @@ public:
      * @param aToolMgr: tool manager instance the events will be sent to
      * @param aEditFrame: the frame wx events come from
      */
-    TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditFrame );
+    TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr );
     virtual ~TOOL_DISPATCHER();
 
     /**
@@ -128,9 +128,6 @@ private:
 
     ///> Instance of tool manager that cooperates with the dispatcher.
     TOOL_MANAGER* m_toolMgr;
-
-    ///> Instance of wxFrame that is the source of UI events.
-    PCB_BASE_FRAME* m_editFrame;
 };
 
 #endif
