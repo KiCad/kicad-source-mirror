@@ -149,6 +149,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_footprintList = new wxListBox( this, ID_MODVIEW_FOOTPRINT_LIST,
             wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL );
 
+    SetBoard( new BOARD() );
+
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
