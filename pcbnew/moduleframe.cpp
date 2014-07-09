@@ -271,11 +271,12 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     drawPanel->SetEventDispatcher( m_toolDispatcher );
 
     m_toolManager->RegisterTool( new SELECTION_TOOL );
-    m_toolManager->GetTool<SELECTION_TOOL>()->EditModules( true );
     m_toolManager->RegisterTool( new EDIT_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
     m_toolManager->RegisterTool( new POINT_EDITOR );
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+    m_toolManager->GetTool<SELECTION_TOOL>()->EditModules( true );
+    m_toolManager->GetTool<DRAWING_TOOL>()->EditModules( true );
     m_toolManager->ResetTools( TOOL_BASE::RUN );
 
     // Run the selection tool, it is supposed to be always active

@@ -286,12 +286,15 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
         return COMMON_ACTIONS::drawKeepout.MakeEvent();
 
     case ID_PCB_ADD_LINE_BUTT:
+    case ID_MODEDIT_LINE_TOOL:
         return COMMON_ACTIONS::drawLine.MakeEvent();
 
     case ID_PCB_CIRCLE_BUTT:
+    case ID_MODEDIT_CIRCLE_TOOL:
         return COMMON_ACTIONS::drawCircle.MakeEvent();
 
     case ID_PCB_ARC_BUTT:
+    case ID_MODEDIT_ARC_TOOL:
         return COMMON_ACTIONS::drawArc.MakeEvent();
 
     case ID_PCB_ADD_TEXT_BUTT:
@@ -305,6 +308,7 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
         return COMMON_ACTIONS::placeTarget.MakeEvent();
 
     case ID_PCB_PLACE_GRID_COORD_BUTT:
+    case ID_MODEDIT_PLACE_GRID_COORD:
         return COMMON_ACTIONS::gridSetOrigin.MakeEvent();
 
     case ID_ZOOM_IN:        // toolbar button "Zoom In"
@@ -325,6 +329,9 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
     case ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR:
     case ID_MICROWAVE_V_TOOLBAR:
+    case ID_MODEDIT_PAD_TOOL:
+    case ID_MODEDIT_DELETE_TOOL:
+    case ID_MODEDIT_ANCHOR_TOOL:
         return COMMON_ACTIONS::toBeDone.MakeEvent();
     }
 
