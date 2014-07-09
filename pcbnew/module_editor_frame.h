@@ -161,7 +161,7 @@ public:
      * and prepare, if needed the refresh of the 3D frame showing the footprint
      * do not forget to call the basic OnModify function to update auxiliary info
      */
-    virtual void OnModify( );
+    virtual void OnModify();
 
     /**
      * Function ToPrinter
