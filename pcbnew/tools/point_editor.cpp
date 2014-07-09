@@ -36,7 +36,7 @@
 #include "point_editor.h"
 
 #include <wxPcbStruct.h>
-#include <class_drawsegment.h>
+#include <class_edge_mod.h>
 #include <class_dimension.h>
 #include <class_zone.h>
 #include <class_board.h>
@@ -77,6 +77,7 @@ public:
         switch( aItem->Type() )
         {
             case PCB_LINE_T:
+            case PCB_MODULE_EDGE_T:
             {
                 const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( aItem );
 
@@ -354,6 +355,7 @@ void POINT_EDITOR::updateItem() const
     switch( item->Type() )
     {
     case PCB_LINE_T:
+    case PCB_MODULE_EDGE_T:
     {
         DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
         switch( segment->GetShape() )
@@ -427,6 +429,10 @@ void POINT_EDITOR::updateItem() const
         default:        // suppress warnings
             break;
         }
+
+        // Update relative coordinates for module edges
+        if( EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( item ) )
+            edge->SetLocalCoord();
 
         break;
     }
@@ -521,6 +527,7 @@ void POINT_EDITOR::updatePoints() const
     switch( item->Type() )
     {
     case PCB_LINE_T:
+    case PCB_MODULE_EDGE_T:
     {
         const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
         {
@@ -610,6 +617,7 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
     switch( item->Type() )
     {
     case PCB_LINE_T:
+    case PCB_MODULE_EDGE_T:
     {
         const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
         {
@@ -700,7 +708,7 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
         outline->InsertCorner( nearestIdx, nearestPoint.x, nearestPoint.y );
     }
 
-    else if( item->Type() == PCB_LINE_T )
+    else if( item->Type() == PCB_LINE_T || item->Type() == PCB_MODULE_EDGE_T )
     {
         getEditFrame<PCB_BASE_FRAME>()->OnModify();
         getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
