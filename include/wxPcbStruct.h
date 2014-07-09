@@ -87,9 +87,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     wxAuiToolBar* m_microWaveToolBar;
 
-    /// User defined rotation angle (in tenths of a degree).
-    int             m_rotationAngle;
-
     /**
      * Function loadFootprints
      * loads the footprints for each #COMPONENT in \a aNetlist from the list of libraries.
@@ -314,9 +311,6 @@ public:
      * @param aColor = the new color of the grid
      */
     virtual void SetGridColor(EDA_COLOR_T aColor);
-
-    int GetRotationAngle() const { return m_rotationAngle; }
-    void SetRotationAngle( int aRotationAngle );
 
     // Configurations:
     void Process_Config( wxCommandEvent& event );
