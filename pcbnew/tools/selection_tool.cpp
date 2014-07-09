@@ -25,9 +25,7 @@
 
 #include <boost/foreach.hpp>
 #include <boost/bind.hpp>
-#include <cassert>
 
-#include <class_draw_panel_gal.h>
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_track.h>
@@ -35,6 +33,9 @@
 
 #include <wxPcbStruct.h>
 #include <collectors.h>
+#include <confirm.h>
+
+#include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
 #include <painter.h>
@@ -52,7 +53,8 @@ SELECTION_TOOL::SELECTION_TOOL() :
         SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" ),
         DeselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.deselected" ),
         ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" ),
-        m_frame( NULL ), m_additive( false ), m_multiple( false ), m_editModules( false )
+        m_frame( NULL ), m_additive( false ), m_multiple( false ),
+        m_editModules( false ), m_locked( true )
 {
     m_selArea = new SELECTION_AREA;
     m_selection.group = new KIGFX::VIEW_GROUP;
@@ -77,6 +79,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         clearSelection();
 
     m_frame = getEditFrame<PCB_BASE_FRAME>();
+    m_locked = true;
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
@@ -384,6 +387,48 @@ void SELECTION_TOOL::setTransitions()
 }
 
 
+bool SELECTION_TOOL::CheckLock()
+{
+    if( !m_locked )
+        return false;
+
+    bool containsLocked = false;
+
+    // Check if the selection contains locked items
+    for( int i = 0; i < m_selection.Size(); ++i )
+    {
+        BOARD_ITEM* item = m_selection.Item<BOARD_ITEM>( i );
+
+        switch( item->Type() )
+        {
+        case PCB_MODULE_T:
+            if( static_cast<MODULE*>( item )->IsLocked() )
+                containsLocked = true;
+            break;
+
+        case PCB_MODULE_EDGE_T:
+        case PCB_MODULE_TEXT_T:
+            if( static_cast<MODULE*>( item->GetParent() )->IsLocked() )
+                containsLocked = true;
+            break;
+
+        default:    // suppress warnings
+            break;
+        }
+    }
+
+    if( containsLocked &&
+        !IsOK( m_frame, _( "Selection contains locked items. Do you want to continue?" ) ) )
+    {
+        return true;
+    }
+
+    m_locked = false;
+
+    return false;
+}
+
+
 int SELECTION_TOOL::SingleSelection( TOOL_EVENT& aEvent )
 {
     selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
@@ -419,7 +464,8 @@ void SELECTION_TOOL::clearSelection()
     }
     m_selection.clear();
 
-    getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+    m_frame->SetCurItem( NULL );
+    m_locked = true;
 
     // Inform other potentially interested tools
     TOOL_EVENT clearEvent( ClearedEvent );
@@ -650,7 +696,10 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
         m_selection.items.RemovePicker( itemIdx );
 
     if( m_selection.Empty() )
+    {
         m_frame->SetCurItem( NULL );
+        m_locked = true;
+    }
 
     // Inform other potentially interested tools
     TOOL_EVENT deselected( DeselectedEvent );
@@ -772,7 +821,7 @@ void SELECTION_TOOL::generateMenu()
     }
 
     if( m_menuCopy.GetMenuItemCount() > 0 )
-    SetContextMenu( &m_menuCopy, CMENU_NOW );
+        SetContextMenu( &m_menuCopy, CMENU_NOW );
 }
 
 
