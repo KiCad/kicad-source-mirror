@@ -114,11 +114,10 @@ public:
      * Function SetEventDispatcher()
      * Sets a dispatcher that processes events and forwards them to tools.
      * @param aEventDispatcher is the object that will be used for dispatching events.
+     * DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event
+     * handlers from the DRAW_PANEL_GAL and parent frame.
      */
-    void SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
-    {
-        m_eventDispatcher = aEventDispatcher;
-    }
+    void SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher );
 
     /**
      * Function StartDrawing()
@@ -148,11 +147,13 @@ public:
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
-    void onEvent( wxEvent& aEvent );
     void onEnter( wxEvent& aEvent );
-    void onRefreshTimer ( wxTimerEvent& aEvent );
+    void onRefreshTimer( wxTimerEvent& aEvent );
 
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
+
+    /// Pointer to the parent window
+    wxWindow*               m_parent;
 
     /// Last timestamp when the panel was refreshed
     wxLongLong               m_lastRefresh;
