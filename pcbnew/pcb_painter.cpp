@@ -627,6 +627,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 {
     const COLOR4D& color = m_pcbSettings.GetColor( aSegment, aSegment->GetLayer() );
 
+    m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
 
@@ -634,14 +635,11 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
     {
         // Outline mode
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetIsFill( false );
     }
     else
     {
         // Filled mode
         m_gal->SetLineWidth( aSegment->GetWidth() );
-        m_gal->SetFillColor( color );
-        m_gal->SetIsFill( true );
     }
 
     switch( aSegment->GetShape() )
@@ -725,16 +723,15 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     {
         // Outline mode
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetIsFill( false );
     }
     else
     {
         // Filled mode
         m_gal->SetLineWidth( aText->GetThickness() );
-        m_gal->SetFillColor( color );
-        m_gal->SetIsFill( true );
     }
 
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
     m_gal->StrokeText( aText->GetText(), position, orientation );
@@ -754,16 +751,15 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     {
         // Outline mode
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetIsFill( false );
     }
     else
     {
         // Filled mode
         m_gal->SetLineWidth( aText->GetThickness() );
-        m_gal->SetFillColor( color );
-        m_gal->SetIsFill( true );
     }
 
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
     m_gal->StrokeText( aText->GetText(), position, orientation );
