@@ -47,8 +47,6 @@
 #include "bright_box.h"
 #include "common_actions.h"
 
-using boost::optional;
-
 SELECTION_TOOL::SELECTION_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
         SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" ),
@@ -393,6 +391,7 @@ int SELECTION_TOOL::SingleSelection( TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 int SELECTION_TOOL::ClearSelection( TOOL_EVENT& aEvent )
 {
     clearSelection();
@@ -400,6 +399,7 @@ int SELECTION_TOOL::ClearSelection( TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 
 void SELECTION_TOOL::clearSelection()
 {
@@ -472,7 +472,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         }
         else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {
-            optional<int> id = evt->GetCommandId();
+            boost::optional<int> id = evt->GetCommandId();
 
             // User has selected an item, so this one will be returned
             if( id && ( *id >= 0 ) )
