@@ -398,6 +398,9 @@ public:
 
     virtual EDA_COLOR_T GetGridColor() const;
 
+    ///> @copydoc PCB_BASE_FRAME::SetActiveLayer()
+    void SetActiveLayer( LAYER_NUM aLayer );
+
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     virtual void UseGalCanvas( bool aEnable );
 
@@ -408,6 +411,7 @@ protected:
     /// protected so only friend PCB::IFACE::CreateWindow() can act as sole factory.
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
+    PCB_LAYER_WIDGET* m_Layers;
 
     /**
      * Function GetComponentFromUndoList

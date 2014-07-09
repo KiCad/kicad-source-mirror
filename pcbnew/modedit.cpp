@@ -916,6 +916,17 @@ EDA_COLOR_T FOOTPRINT_EDIT_FRAME::GetGridColor() const
 }
 
 
+void FOOTPRINT_EDIT_FRAME::SetActiveLayer( LAYER_NUM aLayer )
+{
+    PCB_BASE_FRAME::SetActiveLayer( aLayer );
+
+    GetGalCanvas()->SetHighContrastLayer( aLayer );
+
+    if( IsGalCanvasActive() )
+        GetGalCanvas()->Refresh();
+}
+
+
 void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
