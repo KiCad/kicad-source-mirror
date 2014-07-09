@@ -121,6 +121,12 @@ public:
     int PlaceModule( TOOL_EVENT& aEvent );
 
     /**
+     * Function PlacePad()
+     * Places a pad in the module editor.
+     */
+    int PlacePad( TOOL_EVENT& aEvent );
+
+    /**
      * Function EditModules()
      * Toggles edit module mode. When enabled, one may select parts of modules individually
      * (graphics, pads, etc.), so they can be modified.
@@ -173,6 +179,12 @@ private:
      * @param aHelper is a helper line that shows the next possible segment.
      */
     void make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) const;
+
+    /**
+     * Function getNextPadName()
+     * Compute the 'next' pad number for autoincrement.
+     * */
+    wxString getNextPadName() const;
 
     ///> Sets up handlers for various events.
     void setTransitions();

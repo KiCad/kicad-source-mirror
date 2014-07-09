@@ -97,6 +97,9 @@ TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.InteractiveDrawing.placeModule"
         AS_GLOBAL, 'O',
         "Add modules", "Add modules", AF_ACTIVATE );
 
+TOOL_ACTION COMMON_ACTIONS::placePad( "pcbnew.InteractiveDrawing.placePad",
+        AS_GLOBAL, 0,
+        "Add pads", "Add pads", AF_ACTIVATE );
 
 // View Controls
 TOOL_ACTION COMMON_ACTIONS::zoomIn( "pcbnew.Control.zoomIn",
@@ -307,6 +310,9 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
     case ID_PCB_MIRE_BUTT:
         return COMMON_ACTIONS::placeTarget.MakeEvent();
 
+    case ID_MODEDIT_PAD_TOOL:
+        return COMMON_ACTIONS::placePad.MakeEvent();
+
     case ID_PCB_PLACE_GRID_COORD_BUTT:
     case ID_MODEDIT_PLACE_GRID_COORD:
         return COMMON_ACTIONS::gridSetOrigin.MakeEvent();
@@ -329,7 +335,6 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
     case ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR:
     case ID_MICROWAVE_V_TOOLBAR:
-    case ID_MODEDIT_PAD_TOOL:
     case ID_MODEDIT_DELETE_TOOL:
     case ID_MODEDIT_ANCHOR_TOOL:
         return COMMON_ACTIONS::toBeDone.MakeEvent();
