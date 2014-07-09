@@ -1213,7 +1213,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_GEN_IMPORT_DXF_FILE:
-        InvokeDXFDialogImport( this );
+        InvokeDXFDialogBoardImport( this );
         m_canvas->Refresh();
         break;
 

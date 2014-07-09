@@ -39,6 +39,7 @@
 #include <kicad_device_context.h>
 #include <macros.h>
 #include <pcbcommon.h>
+#include <invoke_pcb_dialog.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -775,6 +776,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         GetScreen()->m_BlockLocate.SetCommand( BLOCK_MIRROR_X );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
+        break;
+
+    case ID_GEN_IMPORT_DXF_FILE:
+        InvokeDXFDialogModuleImport( this, GetBoard()->m_Modules );
+        m_canvas->Refresh();
         break;
 
     default:

@@ -35,7 +35,12 @@
 #include <dialog_dxf_import_base.h>
 #include <class_pcb_layer_box_selector.h>
 #include <class_draw_panel_gal.h>
+
 #include <class_board.h>
+#include <class_module.h>
+#include <class_edge_mod.h>
+#include <class_text_mod.h>
+#include <class_pcb_text.h>
 
 
 // Keys to store setup in config
@@ -197,7 +202,7 @@ void DIALOG_DXF_IMPORT::OnOKClick( wxCommandEvent& event )
 }
 
 
-bool InvokeDXFDialogImport( PCB_BASE_FRAME* aCaller )
+bool InvokeDXFDialogBoardImport( PCB_BASE_FRAME* aCaller )
 {
     DIALOG_DXF_IMPORT dlg( aCaller );
     bool success = ( dlg.ShowModal() == wxID_OK );
@@ -216,7 +221,6 @@ bool InvokeDXFDialogImport( PCB_BASE_FRAME* aCaller )
         for( it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
         {
             BOARD_ITEM* item = *it;
-
             board->Add( item );
 
             ITEM_PICKER itemWrapper( item, UR_NEW );
@@ -228,6 +232,68 @@ bool InvokeDXFDialogImport( PCB_BASE_FRAME* aCaller )
 
         aCaller->SaveCopyInUndoList( picklist, UR_NEW, wxPoint( 0, 0 ) );
         aCaller->OnModify();
+    }
+
+    return success;
+}
+
+
+bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
+{
+    DIALOG_DXF_IMPORT dlg( aCaller );
+    bool success = ( dlg.ShowModal() == wxID_OK );
+
+    if( success )
+    {
+        // Prepare the undo list
+        const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
+        PICKED_ITEMS_LIST picklist;
+
+        MODULE* module = aCaller->GetBoard()->m_Modules;
+        KIGFX::VIEW* view = aCaller->GetGalCanvas()->GetView();
+
+        aCaller->SaveCopyInUndoList( module, UR_MODEDIT );
+        aCaller->OnModify();
+
+        // Build the undo list & add items to the current view
+        std::list<BOARD_ITEM*>::const_iterator it, itEnd;
+        for( it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
+        {
+            BOARD_ITEM* item = *it;
+            BOARD_ITEM* converted = NULL;
+
+            // Modules use different types for the same things,
+            // so we need to convert imported items to appropriate classes.
+            switch( item->Type() )
+            {
+            case PCB_LINE_T:
+            {
+                converted = new EDGE_MODULE( module );
+                *static_cast<DRAWSEGMENT*>( converted ) = *static_cast<DRAWSEGMENT*>( item );
+                module->Add( converted );
+                static_cast<EDGE_MODULE*>( converted )->SetLocalCoord();
+                delete item;
+                break;
+            }
+
+            case PCB_TEXT_T:
+            {
+                converted = new TEXTE_MODULE( module );
+                *static_cast<TEXTE_PCB*>( converted ) = *static_cast<TEXTE_PCB*>( item );
+                module->Add( module );
+                static_cast<TEXTE_MODULE*>( converted )->SetLocalCoord();
+                delete item;
+                break;
+            }
+
+            default:
+                assert( false );    // there is a type that is currently not handled here
+                break;
+            }
+
+            if( aCaller->IsGalCanvasActive() )
+                view->Add( converted );
+        }
     }
 
     return success;

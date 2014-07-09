@@ -50,6 +50,7 @@ class wxSize;
 class wxString;
 
 class BOARD;
+class MODULE;
 
 // Often this is not used in the prototypes, since wxFrame is good enough and would
 // represent maximum information hiding.
@@ -88,7 +89,16 @@ void InvokePluginOptionsEditor( wxTopLevelWindow* aCaller, const wxString& aNick
  * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
  * @return true if the import was made.
  */
-bool InvokeDXFDialogImport( PCB_BASE_FRAME* aCaller );
+bool InvokeDXFDialogBoardImport( PCB_BASE_FRAME* aCaller );
+
+/**
+ * Function InvokeDXFDialogModuleImport
+ * shows the modal DIALOG_DXF_IMPORT for importing a DXF file.to a module.
+ *
+ * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ * @return true if the import was made.
+ */
+bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule );
 
 /**
  * Function InvokeLayerSetup
