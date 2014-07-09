@@ -269,46 +269,55 @@ TOOL_ACTION COMMON_ACTIONS::showHelp( "pcbnew.Control.showHelp",
         "", "" );
 
 
-std::string COMMON_ACTIONS::TranslateLegacyId( int aId )
+boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )
     {
     case ID_PCB_MODULE_BUTT:
-        return COMMON_ACTIONS::placeModule.GetName();
+        return COMMON_ACTIONS::placeModule.MakeEvent();
 
     case ID_TRACK_BUTT:
-        return COMMON_ACTIONS::routerActivate.GetName();
+        return COMMON_ACTIONS::routerActivate.MakeEvent();
 
     case ID_PCB_ZONES_BUTT:
-        return COMMON_ACTIONS::drawZone.GetName();
+        return COMMON_ACTIONS::drawZone.MakeEvent();
 
     case ID_PCB_KEEPOUT_AREA_BUTT:
-        return COMMON_ACTIONS::drawKeepout.GetName();
+        return COMMON_ACTIONS::drawKeepout.MakeEvent();
 
     case ID_PCB_ADD_LINE_BUTT:
-        return COMMON_ACTIONS::drawLine.GetName();
+        return COMMON_ACTIONS::drawLine.MakeEvent();
 
     case ID_PCB_CIRCLE_BUTT:
-        return COMMON_ACTIONS::drawCircle.GetName();
+        return COMMON_ACTIONS::drawCircle.MakeEvent();
 
     case ID_PCB_ARC_BUTT:
-        return COMMON_ACTIONS::drawArc.GetName();
+        return COMMON_ACTIONS::drawArc.MakeEvent();
 
     case ID_PCB_ADD_TEXT_BUTT:
-        return COMMON_ACTIONS::placeTextPcb.GetName();
+        return COMMON_ACTIONS::placeTextPcb.MakeEvent();
 
     case ID_MODEDIT_TEXT_TOOL:
-        return COMMON_ACTIONS::placeTextModule.GetName();
+        return COMMON_ACTIONS::placeTextModule.MakeEvent();
 
     case ID_PCB_DIMENSION_BUTT:
-        return COMMON_ACTIONS::drawDimension.GetName();
+        return COMMON_ACTIONS::drawDimension.MakeEvent();
 
     case ID_PCB_MIRE_BUTT:
-        return COMMON_ACTIONS::placeTarget.GetName();
+        return COMMON_ACTIONS::placeTarget.MakeEvent();
 
     case ID_PCB_PLACE_GRID_COORD_BUTT:
-        return COMMON_ACTIONS::gridSetOrigin.GetName();
+        return COMMON_ACTIONS::gridSetOrigin.MakeEvent();
+
+    case ID_ZOOM_IN:        // toolbar button "Zoom In"
+        return COMMON_ACTIONS::zoomInCenter.MakeEvent();
+
+    case ID_ZOOM_OUT:       // toolbar button "Zoom In"
+        return COMMON_ACTIONS::zoomOutCenter.MakeEvent();
+
+    case ID_ZOOM_PAGE:      // toolbar button "Fit on Screen"
+        return COMMON_ACTIONS::zoomFitScreen.MakeEvent();
     }
 
-    return "";
+    return boost::optional<TOOL_EVENT>();
 }
