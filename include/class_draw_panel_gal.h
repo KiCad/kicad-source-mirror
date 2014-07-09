@@ -108,7 +108,7 @@ public:
     }
 
     /// @copydoc wxWindow::Refresh()
-    void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
+    void Refresh( bool aEraseBackground = true, const wxRect* aRect = NULL );
 
     /**
      * Function SetEventDispatcher()
@@ -151,7 +151,6 @@ protected:
     void onEvent( wxEvent& aEvent );
     void onEnter( wxEvent& aEvent );
     void onRefreshTimer ( wxTimerEvent& aEvent );
-    void skipEvent( wxEvent& aEvent );
 
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
 
