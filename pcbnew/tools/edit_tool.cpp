@@ -453,7 +453,7 @@ int EDIT_TOOL::CopyItems( TOOL_EVENT& aEvent )
     frame->DisplayToolMsg( _( "Select reference point" ) );
 
     bool cancelled = false;
-    VECTOR2I cursorPos;
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -490,8 +490,10 @@ int EDIT_TOOL::CopyItems( TOOL_EVENT& aEvent )
             module.Add( clone );
         }
 
-        // Set the new relative internal local coordinates of footprint items
-        wxPoint moveVector = module.GetPosition() - wxPoint( cursorPos.x, cursorPos.y );
+        // Set the new relative internal local coordinates of copied items
+        MODULE* editedModule = getModel<BOARD>()->m_Modules;
+        wxPoint moveVector = module.GetPosition() + editedModule->GetPosition() -
+                             wxPoint( cursorPos.x, cursorPos.y );
         module.MoveAnchorPosition( moveVector );
 
         io.Format( &module, 0 );
@@ -499,7 +501,7 @@ int EDIT_TOOL::CopyItems( TOOL_EVENT& aEvent )
         m_toolMgr->SaveClipboard( data );
     }
 
-    frame->DisplayToolMsg( wxString::Format( _( "Copied %d items" ), selection.Size() ) );
+    frame->DisplayToolMsg( wxString::Format( _( "Copied %d item(s)" ), selection.Size() ) );
     controls->SetSnapping( false );
     controls->ShowCursor( false );
     controls->SetAutoPan( false );
