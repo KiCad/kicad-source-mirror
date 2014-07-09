@@ -264,7 +264,7 @@ TOOL_ACTION COMMON_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
 
 TOOL_ACTION COMMON_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",
         AS_GLOBAL, 0,
-        "", "" );
+        "", "", AF_NOTIFY );
 
 
 // Module editor tools

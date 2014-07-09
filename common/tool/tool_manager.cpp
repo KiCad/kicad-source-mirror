@@ -448,8 +448,8 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
         {
             if( st->waitEvents.Matches( aEvent ) )
             {
-                // By default, already processed events are not passed further
-                m_passEvent = false;
+                // By default, only messages are passed further
+                m_passEvent = ( aEvent.m_category == TC_MESSAGE );
 
                 // got matching event? clear wait list and wake up the coroutine
                 st->wakeupEvent = aEvent;
