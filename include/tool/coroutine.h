@@ -115,7 +115,7 @@ public:
     }
 
     /**
-     *  <F11>* Function SetEntry()
+     * Function SetEntry()
      *
      * Defines the entry point for the coroutine, if not set in the constructor.
      */

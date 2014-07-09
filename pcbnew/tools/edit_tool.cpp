@@ -219,9 +219,6 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
 
-    // Shall the selection be cleared at the end?
-    bool unselect = selection.Empty();
-
     if( !makeSelection( selection ) )
     {
         setTransitions();
@@ -238,9 +235,11 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
         // Check if user wants to edit pad or module properties
         if( item->Type() == PCB_MODULE_T )
         {
+            VECTOR2D cursor = getViewControls()->GetCursorPosition();
+
             for( D_PAD* pad = static_cast<MODULE*>( item )->Pads(); pad; pad = pad->Next() )
             {
-                if( pad->ViewBBox().Contains( getViewControls()->GetCursorPosition() ) )
+                if( pad->ViewBBox().Contains( cursor ) )
                 {
                     // Turns out that user wants to edit a pad properties
                     item = pad;
@@ -277,9 +276,6 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 
         item->SetFlags( flags );
     }
-
-    if( unselect )
-        m_selectionTool->ClearSelection();
 
     setTransitions();
 

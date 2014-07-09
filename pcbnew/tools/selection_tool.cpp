@@ -24,7 +24,6 @@
  */
 
 #include <boost/foreach.hpp>
-#include <boost/optional.hpp>
 #include <boost/bind.hpp>
 #include <cassert>
 

@@ -419,7 +419,7 @@ protected:
      *  - Place the current edited library component in Redo list
      *  - Get old version of the current edited library component
      */
-    void GetComponentFromUndoList( wxCommandEvent& event );
+    void GetComponentFromUndoList( wxCommandEvent& aEvent );
 
     /**
      * Function GetComponentFromRedoList
@@ -427,7 +427,7 @@ protected:
      *  - Place the current edited library component in undo list
      *  - Get old version of the current edited library component
      */
-    void GetComponentFromRedoList( wxCommandEvent& event );
+    void GetComponentFromRedoList( wxCommandEvent& aEvent );
 
     /**
      * Function UpdateTitle
