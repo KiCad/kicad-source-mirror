@@ -261,6 +261,10 @@ TOOL_ACTION COMMON_ACTIONS::showHelp( "pcbnew.Control.showHelp",
         AS_GLOBAL, '?',
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
+        AS_GLOBAL, 0,           // dialog saying it is not implemented yet
+        "", "" );               // so users are aware of that
+
 TOOL_ACTION COMMON_ACTIONS::routerActivate( "pcbnew.InteractiveRouter",
         AS_GLOBAL, 'X',
         "Run push & shove router", "Run push & shove router", AF_ACTIVATE );
@@ -317,6 +321,17 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_ZOOM_PAGE:      // toolbar button "Fit on Screen"
         return COMMON_ACTIONS::zoomFitScreen.MakeEvent();
+
+    case ID_PCB_DELETE_ITEM_BUTT:
+    case ID_PCB_HIGHLIGHT_BUTT:
+    case ID_PCB_SHOW_1_RATSNEST_BUTT:
+    case ID_PCB_PLACE_OFFSET_COORD_BUTT:
+    case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
+    case ID_TB_OPTIONS_SELECT_CURSOR:
+    case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
+    case ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR:
+    case ID_MICROWAVE_V_TOOLBAR:
+        return COMMON_ACTIONS::toBeDone.MakeEvent();
     }
 
     return boost::optional<TOOL_EVENT>();
