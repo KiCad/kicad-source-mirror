@@ -28,7 +28,7 @@
 
 #include <deque>
 #include <typeinfo>
-#include <boost/unordered_map.hpp>
+#include <map>
 
 #include <math/vector2d.h>
 
@@ -143,7 +143,7 @@ public:
     template<typename T>
     T* GetTool()
     {
-        boost::unordered_map<const char*, TOOL_BASE*>::iterator tool = m_toolTypes.find( typeid( T ).name() );
+        std::map<const char*, TOOL_BASE*>::iterator tool = m_toolTypes.find( typeid( T ).name() );
 
         if( tool != m_toolTypes.end() )
             return static_cast<T*>( tool->second );
@@ -360,16 +360,16 @@ private:
     bool isActive( TOOL_BASE* aTool );
 
     /// Index of registered tools current states, associated by tools' objects.
-    boost::unordered_map<TOOL_BASE*, TOOL_STATE*> m_toolState;
+    std::map<TOOL_BASE*, TOOL_STATE*> m_toolState;
 
     /// Index of the registered tools current states, associated by tools' names.
-    boost::unordered_map<std::string, TOOL_STATE*> m_toolNameIndex;
+    std::map<std::string, TOOL_STATE*> m_toolNameIndex;
 
     /// Index of the registered tools to easily lookup by their type.
-    boost::unordered_map<const char*, TOOL_BASE*> m_toolTypes;
+    std::map<const char*, TOOL_BASE*> m_toolTypes;
 
     /// Index of the registered tools current states, associated by tools' ID numbers.
-    boost::unordered_map<TOOL_ID, TOOL_STATE*> m_toolIdIndex;
+    std::map<TOOL_ID, TOOL_STATE*> m_toolIdIndex;
 
     /// Stack of the active tools
     std::deque<TOOL_ID> m_activeTools;
