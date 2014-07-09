@@ -284,6 +284,14 @@ TOOL_ACTION COMMON_ACTIONS::pasteItems( "pcbnew.ModuleEditor.pasteItems",
         AS_GLOBAL, MD_CTRL + int( 'V' ),
         "Paste items", "Paste items", AF_ACTIVATE );
 
+TOOL_ACTION COMMON_ACTIONS::moduleEdgeOutlines( "pcbnew.ModuleEditor.graphicOutlines",
+        AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION COMMON_ACTIONS::moduleTextOutlines( "pcbnew.ModuleEditor.textOutlines",
+       AS_GLOBAL, 0,
+       "", "" );
+
 
 // Miscellaneous
 TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
@@ -425,14 +433,18 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
         return COMMON_ACTIONS::zoneDisplayOutlines.MakeEvent();
 
+    case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
+        return COMMON_ACTIONS::moduleEdgeOutlines.MakeEvent();
+
+    case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
+        return COMMON_ACTIONS::moduleTextOutlines.MakeEvent();
+
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         return COMMON_ACTIONS::highContrastMode.MakeEvent();
 
     case ID_TB_OPTIONS_SELECT_CURSOR:
         return COMMON_ACTIONS::switchCursor.MakeEvent();
 
-    case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
-    case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
     case ID_PCB_DELETE_ITEM_BUTT:
     case ID_PCB_HIGHLIGHT_BUTT:
     case ID_PCB_SHOW_1_RATSNEST_BUTT:

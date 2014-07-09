@@ -29,6 +29,7 @@
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
+#include <pcb_painter.h>
 
 #include <kicad_plugin.h>
 #include <pcbnew_id.h>
@@ -531,10 +532,86 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
 }
 
 
+int MODULE_TOOLS::ModuleTextOutlines( TOOL_EVENT& aEvent )
+{
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+
+    const LAYER_NUM layers[] = { ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ),
+                                 ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ),
+                                 ITEM_GAL_LAYER( MOD_TEXT_INVISIBLE ),
+                                 ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE ),
+                                 ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ) };
+
+    bool enable = !settings->GetSketchMode( layers[0] );
+
+    BOOST_FOREACH( LAYER_NUM layer, layers )
+        settings->SetSketchMode( layer, enable );
+
+    for( MODULE* module = getModel<BOARD>()->m_Modules; module; module = module->Next() )
+    {
+        for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item ->Next() )
+        {
+            if( item->Type() == PCB_MODULE_TEXT_T )
+                item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        module->Reference().ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        module->Value().ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    }
+
+    m_frame->GetGalCanvas()->Refresh();
+    setTransitions();
+
+    return 0;
+}
+
+
+int MODULE_TOOLS::ModuleEdgeOutlines( TOOL_EVENT& aEvent )
+{
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+
+    const LAYER_NUM layers[] = { ADHESIVE_N_FRONT, ADHESIVE_N_BACK,\
+            SOLDERPASTE_N_FRONT, SOLDERPASTE_N_BACK,\
+            SILKSCREEN_N_FRONT, SILKSCREEN_N_BACK,\
+            SOLDERMASK_N_FRONT, SOLDERMASK_N_BACK,\
+            DRAW_N,\
+            COMMENT_N,\
+            ECO1_N, ECO2_N,\
+            EDGE_N };
+
+    bool enable = !settings->GetSketchMode( layers[0] );
+
+    BOOST_FOREACH( LAYER_NUM layer, layers )
+        settings->SetSketchMode( layer, enable );
+
+    for( MODULE* module = getModel<BOARD>()->m_Modules; module; module = module->Next() )
+    {
+        for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item ->Next() )
+        {
+            if( item->Type() == PCB_MODULE_EDGE_T )
+                item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    m_frame->GetGalCanvas()->Refresh();
+    setTransitions();
+
+    return 0;
+}
+
+
 void MODULE_TOOLS::setTransitions()
 {
-    Go( &MODULE_TOOLS::PlacePad,        COMMON_ACTIONS::placePad.MakeEvent() );
-    Go( &MODULE_TOOLS::EnumeratePads,   COMMON_ACTIONS::enumeratePads.MakeEvent() );
-    Go( &MODULE_TOOLS::CopyItems,       COMMON_ACTIONS::copyItems.MakeEvent() );
-    Go( &MODULE_TOOLS::PasteItems,      COMMON_ACTIONS::pasteItems.MakeEvent() );
+    Go( &MODULE_TOOLS::PlacePad,            COMMON_ACTIONS::placePad.MakeEvent() );
+    Go( &MODULE_TOOLS::EnumeratePads,       COMMON_ACTIONS::enumeratePads.MakeEvent() );
+    Go( &MODULE_TOOLS::CopyItems,           COMMON_ACTIONS::copyItems.MakeEvent() );
+    Go( &MODULE_TOOLS::PasteItems,          COMMON_ACTIONS::pasteItems.MakeEvent() );
+    Go( &MODULE_TOOLS::ModuleTextOutlines,  COMMON_ACTIONS::moduleTextOutlines.MakeEvent() );
+    Go( &MODULE_TOOLS::ModuleEdgeOutlines,  COMMON_ACTIONS::moduleEdgeOutlines.MakeEvent() );
 }

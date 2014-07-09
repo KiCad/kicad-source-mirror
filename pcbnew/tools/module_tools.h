@@ -77,6 +77,20 @@ public:
      */
     int PasteItems( TOOL_EVENT& aEvent );
 
+    /**
+     * Function ModuleTextOutlines()
+     *
+     * Toggles display mode for module texts (outline/filled).
+     */
+    int ModuleTextOutlines( TOOL_EVENT& aEvent );
+
+    /**
+     * Function ModuleEdgeOutlines()
+     *
+     * Toggles display mode for module edges (outline/filled).
+     */
+    int ModuleEdgeOutlines( TOOL_EVENT& aEvent );
+
 private:
     ///> Sets up handlers for various events.
     void setTransitions();

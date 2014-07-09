@@ -223,7 +223,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
     case PCB_LINE_T:
     case PCB_MODULE_EDGE_T:
-        draw( (DRAWSEGMENT*) item );
+        draw( (DRAWSEGMENT*) item, aLayer );
         break;
 
     case PCB_TEXT_T:
@@ -325,6 +325,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             m_gal->SetFillColor( color );
             m_gal->SetIsFill( true );
         }
+
         m_gal->DrawSegment( start, end, width );
     }
 }
@@ -622,14 +623,26 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
+void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 {
     const COLOR4D& color = m_pcbSettings.GetColor( aSegment, aSegment->GetLayer() );
 
-    m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
-    m_gal->SetLineWidth( aSegment->GetWidth() );
+
+    if( m_pcbSettings.m_sketchMode[aLayer] )
+    {
+        // Outline mode
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->SetIsFill( false );
+    }
+    else
+    {
+        // Filled mode
+        m_gal->SetLineWidth( aSegment->GetWidth() );
+        m_gal->SetFillColor( color );
+        m_gal->SetIsFill( true );
+    }
 
     switch( aSegment->GetShape() )
     {
@@ -704,12 +717,25 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     if( aText->GetText().Length() == 0 )
         return;
 
-    const COLOR4D& strokeColor = m_pcbSettings.GetColor( aText, aText->GetLayer() );
+    const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
     VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
     double   orientation = aText->GetOrientation() * M_PI / 1800.0;
 
-    m_gal->SetStrokeColor( strokeColor );
-    m_gal->SetLineWidth( aText->GetThickness() );
+    if( m_pcbSettings.m_sketchMode[aLayer] )
+    {
+        // Outline mode
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->SetIsFill( false );
+    }
+    else
+    {
+        // Filled mode
+        m_gal->SetLineWidth( aText->GetThickness() );
+        m_gal->SetFillColor( color );
+        m_gal->SetIsFill( true );
+    }
+
+    m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
     m_gal->StrokeText( aText->GetText(), position, orientation );
 }
@@ -720,12 +746,25 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     if( aText->GetLength() == 0 )
         return;
 
-    const COLOR4D& strokeColor = m_pcbSettings.GetColor( aText, aLayer );
+    const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
     VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
     double   orientation = aText->GetDrawRotation() * M_PI / 1800.0;
 
-    m_gal->SetStrokeColor( strokeColor );
-    m_gal->SetLineWidth( aText->GetThickness() );
+    if( m_pcbSettings.m_sketchMode[aLayer] )
+    {
+        // Outline mode
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->SetIsFill( false );
+    }
+    else
+    {
+        // Filled mode
+        m_gal->SetLineWidth( aText->GetThickness() );
+        m_gal->SetFillColor( color );
+        m_gal->SetIsFill( true );
+    }
+
+    m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
     m_gal->StrokeText( aText->GetText(), position, orientation );
 }
