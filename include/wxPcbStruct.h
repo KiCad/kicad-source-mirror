@@ -117,9 +117,8 @@ protected:
     bool              m_useCmpFileForFpNames;   ///< is true, use the .cmp file from CvPcb, else use the netlist
                                                 // to know the footprint name of components.
 
-    // Functions that handle the Tool Framework (de)initalization
+    // The Tool Framework initalization
     void setupTools();
-    void destroyTools();
 
     // we'll use lower case function names for private member functions.
     void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );

@@ -587,6 +587,15 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
 }
 
 
+LAYER_WIDGET::~LAYER_WIDGET()
+{
+    delete m_BlankBitmap;
+    delete m_BlankAlternateBitmap;
+    delete m_RightArrowBitmap;
+    delete m_RightArrowAlternateBitmap;
+}
+
+
 wxSize LAYER_WIDGET::GetBestSize() const
 {
     // size of m_LayerScrolledWindow --------------

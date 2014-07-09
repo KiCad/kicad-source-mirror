@@ -227,6 +227,8 @@ public:
         wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
 
+    virtual ~LAYER_WIDGET();
+
     /**
      * Function GetBestSize
      * returns the preferred minimum size, taking into consideration the

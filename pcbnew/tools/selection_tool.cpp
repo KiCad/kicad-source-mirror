@@ -54,7 +54,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
         SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" ),
         DeselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.deselected" ),
         ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" ),
-        m_additive( false ), m_multiple( false ), m_editModules( false )
+        m_frame( NULL ), m_additive( false ), m_multiple( false ), m_editModules( false )
 {
     m_selArea = new SELECTION_AREA;
     m_selection.group = new KIGFX::VIEW_GROUP;

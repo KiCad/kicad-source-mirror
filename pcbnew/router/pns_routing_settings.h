@@ -21,8 +21,9 @@
 #ifndef __PNS_ROUTING_SETTINGS
 #define __PNS_ROUTING_SETTINGS
 
-#include "direction.h"
 #include "time_limit.h"
+
+class DIRECTION_45;
  
 ///> Routing modes
 enum PNS_MODE
@@ -118,13 +119,7 @@ public:
     void SetViaDrill( int aDrill ) { m_viaDrill = aDrill; }
     int GetViaDrill() const { return m_viaDrill; }
 
-    const DIRECTION_45 InitialDirection() const
-    {
-        if( m_startDiagonal )
-            return DIRECTION_45( DIRECTION_45::NE );
-        else
-            return DIRECTION_45( DIRECTION_45::N );
-    }
+    const DIRECTION_45 InitialDirection() const;
 
     int ShoveIterationLimit() const;
     TIME_LIMIT ShoveTimeLimit() const;

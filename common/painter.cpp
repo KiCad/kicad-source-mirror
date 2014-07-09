@@ -38,6 +38,7 @@ RENDER_SETTINGS::RENDER_SETTINGS()
     m_highlightEnabled      = false;
     m_hiContrastEnabled     = false;
     m_hiContrastFactor      = 0.2;
+    m_highlightNetcode      = -1;
     m_outlineWidth          = 1;
     m_worksheetLineWidth    = 100000;
 
