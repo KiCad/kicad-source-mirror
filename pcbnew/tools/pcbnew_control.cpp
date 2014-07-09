@@ -80,9 +80,9 @@ int PCBNEW_CONTROL::ZoomInOutCenter( TOOL_EVENT& aEvent )
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     double zoomScale = 1.0;
 
-    if( aEvent.IsAction( &COMMON_ACTIONS::zoomIn ) )
+    if( aEvent.IsAction( &COMMON_ACTIONS::zoomInCenter ) )
         zoomScale = 1.3;
-    else if( aEvent.IsAction( &COMMON_ACTIONS::zoomOut ) )
+    else if( aEvent.IsAction( &COMMON_ACTIONS::zoomOutCenter ) )
         zoomScale = 0.7;
 
     view->SetScale( view->GetScale() * zoomScale );
