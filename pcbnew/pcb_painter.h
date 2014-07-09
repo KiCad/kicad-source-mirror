@@ -124,9 +124,6 @@ public:
      */
     inline void SetSketchMode( int aItemLayer, bool aEnabled )
     {
-        // It is supposed to work only with item layers
-        assert( aItemLayer >= ITEM_GAL_LAYER( 0 ) );
-
         m_sketchMode[aItemLayer] = aEnabled;
     }
 
@@ -137,9 +134,6 @@ public:
      */
     inline bool GetSketchMode( int aItemLayer ) const
     {
-        // It is supposed to work only with item layers
-        assert( aItemLayer >= ITEM_GAL_LAYER( 0 ) );
-
         return m_sketchMode[aItemLayer];
     }
 
@@ -210,7 +204,7 @@ protected:
     void draw( const TRACK* aTrack, int aLayer );
     void draw( const VIA* aVia, int aLayer );
     void draw( const D_PAD* aPad, int aLayer );
-    void draw( const DRAWSEGMENT* aSegment );
+    void draw( const DRAWSEGMENT* aSegment, int aLayer );
     void draw( const TEXTE_PCB* aText, int aLayer );
     void draw( const TEXTE_MODULE* aText, int aLayer );
     void draw( const MODULE* aModule );

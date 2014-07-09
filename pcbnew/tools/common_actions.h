@@ -186,6 +186,12 @@ public:
     /// Pasting module items from clipboard
     static TOOL_ACTION pasteItems;
 
+    /// Display module edges as outlines
+    static TOOL_ACTION moduleEdgeOutlines;
+
+    /// Display module texts as outlines
+    static TOOL_ACTION moduleTextOutlines;
+
 
     // Miscellaneous
     static TOOL_ACTION resetCoords;
