@@ -36,7 +36,8 @@ public:
     PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
                 long aStyle, const wxString& aFrameName ) :
-    PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
+    PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
+    m_rotationAngle( 900 )
     {}
 
     virtual ~PCB_BASE_EDIT_FRAME() {};
@@ -64,6 +65,13 @@ public:
      *  - Get an old version of the data from Undo list
      */
     virtual void RestoreCopyFromUndoList( wxCommandEvent& aEvent ) = 0;
+
+    int GetRotationAngle() const { return m_rotationAngle; }
+    void SetRotationAngle( int aRotationAngle );
+
+protected:
+    /// User defined rotation angle (in tenths of a degree).
+    int m_rotationAngle;
 };
 
 #endif

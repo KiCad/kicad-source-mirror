@@ -1021,13 +1021,3 @@ void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 
     dlg.ShowModal();
 }
-
-
-void PCB_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
-{
-    wxCHECK2_MSG( aRotationAngle > 0 && aRotationAngle <= 900, aRotationAngle = 900,
-                  wxT( "Invalid rotation angle, defaulting to 90." ) );
-
-    m_rotationAngle = aRotationAngle;
-}
-

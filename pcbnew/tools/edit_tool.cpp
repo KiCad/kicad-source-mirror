@@ -286,7 +286,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
@@ -310,7 +310,7 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
     {
         BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
 
-        item->Rotate( rotatePoint, 900.0 /*m_frame->GetRotationAngle()*/ );
+        item->Rotate( rotatePoint, editFrame->GetRotationAngle() );
 
         if( !m_dragging )
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
