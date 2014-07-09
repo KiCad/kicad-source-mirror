@@ -495,15 +495,7 @@ bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
     {
         // Check if there is a hotkey associated
         if( m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode() ) )
-            return false;                       // hotkey event was handled so it does not go any further
-    }
-    else if( aEvent.Action() == TA_ACTIVATE )
-    {
-        // Check if the tool name conforms to the the used tool name format
-        assert( std::count( aEvent.m_commandStr->begin(), aEvent.m_commandStr->end(), '.' ) == 1 );
-
-        dispatchActivation( aEvent );
-        // do not return false, as the event has to go on to the destined tool
+            return false;                 // hotkey event was handled so it does not go any further
     }
 
     return true;
@@ -512,41 +504,23 @@ bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
 
 bool TOOL_MANAGER::dispatchActivation( TOOL_EVENT& aEvent )
 {
-    std::map<std::string, TOOL_STATE*>::iterator tool = m_toolNameIndex.find( *aEvent.m_commandStr );
-
-    if( tool != m_toolNameIndex.end() )
+    if( aEvent.IsActivate() )
     {
-        runTool( tool->second->theTool );
-        return true;
+        std::map<std::string, TOOL_STATE*>::iterator tool = m_toolNameIndex.find( *aEvent.m_commandStr );
+
+        if( tool != m_toolNameIndex.end() )
+        {
+            runTool( tool->second->theTool );
+            return true;
+        }
     }
 
     return false;
 }
 
 
-void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
+void TOOL_MANAGER::dispatchContextMenu( TOOL_EVENT& aEvent )
 {
-    if( !aState->Pop() )        // if there are no other contexts saved on the stack
-    {
-        // find the tool and deactivate it
-        std::deque<TOOL_ID>::iterator tool = std::find( m_activeTools.begin(), m_activeTools.end(),
-                                                        aState->theTool->GetId() );
-
-        if( tool != m_activeTools.end() )
-            m_activeTools.erase( tool );
-    }
-}
-
-
-bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
-{
-    // Early dispatch of events destined for the TOOL_MANAGER
-    if( !dispatchStandardEvents( aEvent ) )
-        return false;
-
-    dispatchInternal( aEvent );
-
-    // popup menu handling
     BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
     {
         TOOL_STATE* st = m_toolIdIndex[toolId];
@@ -577,6 +551,32 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
             break;
         }
     }
+}
+
+
+void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
+{
+    if( !aState->Pop() )        // if there are no other contexts saved on the stack
+    {
+        // find the tool and deactivate it
+        std::deque<TOOL_ID>::iterator tool = std::find( m_activeTools.begin(), m_activeTools.end(),
+                                                        aState->theTool->GetId() );
+
+        if( tool != m_activeTools.end() )
+            m_activeTools.erase( tool );
+    }
+}
+
+
+bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
+{
+    // Early dispatch of events destined for the TOOL_MANAGER
+    if( !dispatchStandardEvents( aEvent ) )
+        return false;
+
+    dispatchInternal( aEvent );
+    dispatchActivation( aEvent );
+    dispatchContextMenu( aEvent );
 
     if( m_view->IsDirty() )
     {
