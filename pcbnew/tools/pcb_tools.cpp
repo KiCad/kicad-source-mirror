@@ -60,11 +60,6 @@ void PCB_EDIT_FRAME::setupTools()
              wxCommandEventHandler( PCB_EDIT_FRAME::onGenericCommand ), NULL, this );
 #endif
 
-    // Register actions
-    std::list<TOOL_ACTION*>& actionList = m_toolManager->GetActionList();
-    BOOST_FOREACH( TOOL_ACTION* action, actionList )
-        m_toolManager->RegisterAction( action );
-
     // Register tools
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new ROUTER_TOOL );
