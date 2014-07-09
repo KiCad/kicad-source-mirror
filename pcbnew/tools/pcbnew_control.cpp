@@ -46,7 +46,7 @@ PCBNEW_CONTROL::PCBNEW_CONTROL() :
 
 void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
 {
-    m_frame = getEditFrame<PCB_EDIT_FRAME>();
+    m_frame = getEditFrame<PCB_BASE_FRAME>();
 }
 
 
@@ -149,7 +149,7 @@ int PCBNEW_CONTROL::TrackDisplayMode( TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::PadDisplayMode( TOOL_EVENT& aEvent )
 {
     wxCommandEvent dummy;
-    getEditFrame<PCB_EDIT_FRAME>()->OnTogglePadDrawMode( dummy );
+    m_frame->OnTogglePadDrawMode( dummy );
     setTransitions();
 
     return 0;
@@ -219,8 +219,8 @@ int PCBNEW_CONTROL::HighContrastDec( TOOL_EVENT& aEvent )
 // Layer control
 int PCBNEW_CONTROL::LayerTop( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, F_Cu );
-    getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
+    m_frame->SwitchLayer( NULL, F_Cu );
+    m_frame->GetGalCanvas()->SetFocus();
     setTransitions();
 
     return 0;
@@ -229,8 +229,8 @@ int PCBNEW_CONTROL::LayerTop( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner1( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In1_Cu );
-    getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
+    m_frame->SwitchLayer( NULL, In1_Cu );
+    m_frame->GetGalCanvas()->SetFocus();
     setTransitions();
 
     return 0;
@@ -239,8 +239,8 @@ int PCBNEW_CONTROL::LayerInner1( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner2( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In2_Cu );
-    getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
+    m_frame->SwitchLayer( NULL, In2_Cu );
+    m_frame->GetGalCanvas()->SetFocus();
     setTransitions();
 
     return 0;
@@ -249,8 +249,8 @@ int PCBNEW_CONTROL::LayerInner2( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner3( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In3_Cu );
-    getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
+    m_frame->SwitchLayer( NULL, In3_Cu );
+    m_frame->GetGalCanvas()->SetFocus();
     setTransitions();
 
     return 0;
@@ -259,8 +259,8 @@ int PCBNEW_CONTROL::LayerInner3( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner4( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In4_Cu );
-    getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
+    m_frame->SwitchLayer( NULL, In4_Cu );
+    m_frame->GetGalCanvas()->SetFocus();
     setTransitions();
 
     return 0;
@@ -269,8 +269,8 @@ int PCBNEW_CONTROL::LayerInner4( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner5( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In5_Cu );
-    getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
+    m_frame->SwitchLayer( NULL, In5_Cu );
+    m_frame->GetGalCanvas()->SetFocus();
     setTransitions();
 
     return 0;
@@ -279,8 +279,8 @@ int PCBNEW_CONTROL::LayerInner5( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerInner6( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, In6_Cu );
-    getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
+    m_frame->SwitchLayer( NULL, In6_Cu );
+    m_frame->GetGalCanvas()->SetFocus();
     setTransitions();
 
     return 0;
@@ -289,8 +289,8 @@ int PCBNEW_CONTROL::LayerInner6( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerBottom( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SwitchLayer( NULL, B_Cu );
-    getEditFrame<PCB_EDIT_FRAME>()->GetGalCanvas()->SetFocus();
+    m_frame->SetActiveLayer( B_Cu );
+    m_frame->GetGalCanvas()->SetFocus();
     setTransitions();
 
     return 0;
@@ -299,8 +299,8 @@ int PCBNEW_CONTROL::LayerBottom( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerNext( TOOL_EVENT& aEvent )
 {
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-    LAYER_NUM       layer = editFrame->GetActiveLayer();
+    PCB_BASE_FRAME* editFrame = m_frame;
+    LAYER_NUM layer = editFrame->GetActiveLayer();
 
     if( layer < F_Cu || layer >= B_Cu )
     {
@@ -325,8 +325,8 @@ int PCBNEW_CONTROL::LayerNext( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerPrev( TOOL_EVENT& aEvent )
 {
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-    LAYER_NUM       layer = editFrame->GetActiveLayer();
+    PCB_BASE_FRAME* editFrame = m_frame;
+    LAYER_NUM layer = editFrame->GetActiveLayer();
 
     if( layer <= F_Cu || layer > B_Cu )
     {
@@ -399,7 +399,7 @@ int PCBNEW_CONTROL::LayerAlphaDec( TOOL_EVENT& aEvent )
 // Grid control
 int PCBNEW_CONTROL::GridFast1( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SetFastGrid1();
+    m_frame->SetFastGrid1();
     setTransitions();
 
     return 0;
@@ -408,7 +408,7 @@ int PCBNEW_CONTROL::GridFast1( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::GridFast2( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SetFastGrid2();
+    m_frame->SetFastGrid2();
     setTransitions();
 
     return 0;
@@ -417,7 +417,7 @@ int PCBNEW_CONTROL::GridFast2( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::GridNext( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SetNextGrid();
+    m_frame->SetNextGrid();
     setTransitions();
 
     return 0;
@@ -426,7 +426,7 @@ int PCBNEW_CONTROL::GridNext( TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::GridPrev( TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->SetPrevGrid();
+    m_frame->SetPrevGrid();
     setTransitions();
 
     return 0;
@@ -436,7 +436,7 @@ int PCBNEW_CONTROL::GridPrev( TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::GridSetOrigin( TOOL_EVENT& aEvent )
 {
     Activate();
-    getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL,
+    m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL,
                                                _( "Adjust grid origin" ) );
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -461,91 +461,6 @@ int PCBNEW_CONTROL::GridSetOrigin( TOOL_EVENT& aEvent )
     controls->ShowCursor( false );
     setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
-
-    return 0;
-}
-
-
-// Track & via size control
-int PCBNEW_CONTROL::TrackWidthInc( TOOL_EVENT& aEvent )
-{
-    BOARD* board = getModel<BOARD>();
-    int widthIndex = board->GetDesignSettings().GetTrackWidthIndex() + 1;
-
-    if( widthIndex >= (int) board->GetDesignSettings().m_TrackWidthList.size() )
-        widthIndex = board->GetDesignSettings().m_TrackWidthList.size() - 1;
-
-    board->GetDesignSettings().SetTrackWidthIndex( widthIndex );
-    board->GetDesignSettings().UseCustomTrackViaSize( false );
-
-    wxUpdateUIEvent dummy;
-    getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectTrackWidth( dummy );
-    setTransitions();
-
-    m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::TrackWidthDec( TOOL_EVENT& aEvent )
-{
-    BOARD* board = getModel<BOARD>();
-    int widthIndex = board->GetDesignSettings().GetTrackWidthIndex() - 1;
-
-    if( widthIndex < 0 )
-        widthIndex = 0;
-
-    board->GetDesignSettings().SetTrackWidthIndex( widthIndex );
-    board->GetDesignSettings().UseCustomTrackViaSize( false );
-
-    wxUpdateUIEvent dummy;
-    getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectTrackWidth( dummy );
-    setTransitions();
-
-    m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::ViaSizeInc( TOOL_EVENT& aEvent )
-{
-    BOARD* board = getModel<BOARD>();
-    int sizeIndex = board->GetDesignSettings().GetViaSizeIndex() + 1;
-
-    if( sizeIndex >= (int) board->GetDesignSettings().m_ViasDimensionsList.size() )
-        sizeIndex = board->GetDesignSettings().m_ViasDimensionsList.size() - 1;
-
-    board->GetDesignSettings().SetViaSizeIndex( sizeIndex );
-    board->GetDesignSettings().UseCustomTrackViaSize( false );
-
-    wxUpdateUIEvent dummy;
-    getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectViaSize( dummy );
-    setTransitions();
-
-    m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::ViaSizeDec( TOOL_EVENT& aEvent )
-{
-    BOARD* board = getModel<BOARD>();
-    int sizeIndex = board->GetDesignSettings().GetViaSizeIndex() - 1;
-
-    if( sizeIndex < 0 )
-        sizeIndex = 0;
-
-    board->GetDesignSettings().SetViaSizeIndex( sizeIndex );
-    board->GetDesignSettings().UseCustomTrackViaSize( false );
-
-    wxUpdateUIEvent dummy;
-    getEditFrame<PCB_EDIT_FRAME>()->OnUpdateSelectViaSize( dummy );
-    setTransitions();
-
-    m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
 
     return 0;
 }
@@ -629,12 +544,6 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::GridNext,           COMMON_ACTIONS::gridNext.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridPrev,           COMMON_ACTIONS::gridPrev.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridSetOrigin,      COMMON_ACTIONS::gridSetOrigin.MakeEvent() );
-
-    // Track & via size control
-    Go( &PCBNEW_CONTROL::TrackWidthInc,      COMMON_ACTIONS::trackWidthInc.MakeEvent() );
-    Go( &PCBNEW_CONTROL::TrackWidthDec,      COMMON_ACTIONS::trackWidthDec.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ViaSizeInc,         COMMON_ACTIONS::viaSizeInc.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ViaSizeDec,         COMMON_ACTIONS::viaSizeDec.MakeEvent() );
 
     // Miscellaneous
     Go( &PCBNEW_CONTROL::ResetCoords,        COMMON_ACTIONS::resetCoords.MakeEvent() );

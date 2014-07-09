@@ -262,6 +262,7 @@ set( PCBNEW_CLASS_SRCS
     tools/drawing_tool.cpp
     tools/edit_tool.cpp
     tools/pcbnew_control.cpp
+    tools/pcb_editor_control.cpp
     tools/pcb_tools.cpp
     tools/common_actions.cpp
     )
