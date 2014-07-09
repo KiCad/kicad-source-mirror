@@ -30,6 +30,7 @@ class DIALOG_SHIM;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/notebook.h>
+#include <pcb_draw_panel_gal.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -143,6 +144,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ThermalGapUnits;
 		wxStaticText* m_staticTextWarning;
 		wxPanel* m_panelShowPad;
+		PCB_DRAW_PANEL_GAL* m_panelShowPadGal;
 		wxStaticText* m_staticTextWarningPadFlipped;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;

@@ -536,6 +536,9 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	bSizerDisplayPad->Add( m_panelShowPad, 4, wxRIGHT|wxTOP|wxEXPAND, 5 );
 	
+	m_panelShowPadGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+	bSizerDisplayPad->Add( m_panelShowPadGal, 4, wxEXPAND|wxRIGHT|wxTOP, 5 );
+	
 	
 	bSizerUpper->Add( bSizerDisplayPad, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	

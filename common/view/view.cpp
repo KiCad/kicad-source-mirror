@@ -272,9 +272,12 @@ BOX2D VIEW::GetViewport() const
 }
 
 
-void VIEW::SetViewport( const BOX2D& aViewport, bool aKeepAspect )
+void VIEW::SetViewport( const BOX2D& aViewport )
 {
     VECTOR2D ssize  = ToWorld( m_gal->GetScreenPixelSize(), false );
+
+    wxASSERT( ssize.x > 0 && ssize.y > 0 );
+
     VECTOR2D centre = aViewport.Centre();
     VECTOR2D vsize  = aViewport.GetSize();
     double   zoom   = 1.0 / std::max( fabs( vsize.x / ssize.x ), fabs( vsize.y / ssize.y ) );
