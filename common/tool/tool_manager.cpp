@@ -294,7 +294,7 @@ bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 {
     wxASSERT( aTool != NULL );
 
-    TOOL_EVENT evt( TC_COMMAND, TA_ACTION, aTool->GetName() );
+    TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, aTool->GetName() );
     ProcessEvent( evt );
 
     return true;
@@ -497,8 +497,11 @@ bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
         if( m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode() ) )
             return false;                       // hotkey event was handled so it does not go any further
     }
-    else if( aEvent.Category() == TC_COMMAND )  // it may be a tool activation event
+    else if( aEvent.Action() == TA_ACTIVATE )
     {
+        // Check if the tool name conforms to the the used tool name format
+        assert( std::count( aEvent.m_commandStr->begin(), aEvent.m_commandStr->end(), '.' ) == 1 );
+
         dispatchActivation( aEvent );
         // do not return false, as the event has to go on to the destined tool
     }
@@ -509,14 +512,12 @@ bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
 
 bool TOOL_MANAGER::dispatchActivation( TOOL_EVENT& aEvent )
 {
-    // Look for the tool that has the same name as parameter in the processed command TOOL_EVENT
-    BOOST_FOREACH( TOOL_STATE* st, m_toolState | boost::adaptors::map_values )
+    std::map<std::string, TOOL_STATE*>::iterator tool = m_toolNameIndex.find( *aEvent.m_commandStr );
+
+    if( tool != m_toolNameIndex.end() )
     {
-        if( st->theTool->GetName() == aEvent.m_commandStr )
-        {
-            runTool( st->theTool );
-            return true;
-        }
+        runTool( tool->second->theTool );
+        return true;
     }
 
     return false;

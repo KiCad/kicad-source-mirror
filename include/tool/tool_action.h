@@ -132,7 +132,6 @@ public:
      * Checks if the action has a hot key assigned.
      *
      * @return True if there is a hot key assigned, false otherwise.
-     *
      */
     bool HasHotKey() const
     {
@@ -141,14 +140,17 @@ public:
 
     /**
      * Function MakeEvent()
-     * Returns the event associated with the action (ie. the event that will be sent after
+     * Returns the event associated with the action (i.e. the event that will be sent after
      * activating the action).
      *
      * @return The event associated with the action.
      */
     TOOL_EVENT MakeEvent() const
     {
-        return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
+        if( IsActivation() )
+            return TOOL_EVENT( TC_COMMAND, TA_ACTIVATE, m_name, m_scope );
+        else
+            return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
     }
 
     const std::string& GetMenuItem() const
@@ -181,9 +183,15 @@ public:
      * stripped of the last part (e.g. for "pcbnew.InteractiveDrawing.drawCircle" it is
      * "pcbnew.InteractiveDrawing").
      */
-    std::string GetToolName() const
+    std::string GetToolName() const;
+
+    /**
+     * Returns true if the action is intended to activate a tool.
+     */
+    bool IsActivation() const
     {
-        return m_name.substr( 0, m_name.rfind( '.' ) );
+        // Tool activation events are of format appName.toolName
+        return std::count( m_name.begin(), m_name.end(), '.' ) == 1;
     }
 
 private:

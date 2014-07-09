@@ -92,6 +92,7 @@ const std::string TOOL_EVENT::Format() const
         { TA_CONTEXT_MENU_CHOICE,   "context-menu-choice" },
         { TA_UNDO_REDO,             "undo-redo"           },
         { TA_ACTION,                "action"              },
+        { TA_ACTIVATE,              "activate"            },
         { 0,                        ""                    }
     };
 
