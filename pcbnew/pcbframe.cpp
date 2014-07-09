@@ -489,12 +489,15 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
     if( IsGalCanvasActive() )
     {
-        static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( aBoard );
+        PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+
+        drawPanel->DisplayBoard( aBoard );
         aBoard->GetRatsnest()->Recalculate();
 
         // Prepare worksheet template
-        KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM( &aBoard->GetPageSettings(),
-                                                                              &aBoard->GetTitleBlock() );
+        KIGFX::WORKSHEET_VIEWITEM* worksheet;
+        worksheet = new KIGFX::WORKSHEET_VIEWITEM( &aBoard->GetPageSettings(),
+                                                   &aBoard->GetTitleBlock() );
         worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
 
         BASE_SCREEN* screen = GetScreen();
@@ -506,13 +509,13 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
         }
 
         // PCB_DRAW_PANEL_GAL takes ownership of the worksheet
-        static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SetWorksheet( worksheet );
+        drawPanel->SetWorksheet( worksheet );
 
         // update the tool manager with the new board and its view.
         if( m_toolManager )
         {
-            m_toolManager->SetEnvironment( aBoard, GetGalCanvas()->GetView(),
-                                           GetGalCanvas()->GetViewControls(), this );
+            m_toolManager->SetEnvironment( aBoard, drawPanel->GetView(),
+                                           drawPanel->GetViewControls(), this );
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
         }
     }
@@ -638,7 +641,7 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
     if( aEnable )
     {
         SetBoard( m_Pcb );
-
+        GetGalCanvas()->GetView()->RecacheAllItems( true );
         GetGalCanvas()->StartDrawing();
     }
 }
