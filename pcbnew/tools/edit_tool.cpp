@@ -73,7 +73,7 @@ bool EDIT_TOOL::Init()
 
 int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
@@ -218,7 +218,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     if( !makeSelection( selection ) )
@@ -287,7 +287,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     // Shall the selection be cleared at the end?
@@ -341,7 +341,7 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     // Shall the selection be cleared at the end?
@@ -395,7 +395,7 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( !makeSelection( selection ) )
     {
@@ -522,7 +522,7 @@ void EDIT_TOOL::setTransitions()
 
 void EDIT_TOOL::updateRatsnest( bool aRedraw )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
     ratsnest->ClearSimple();
@@ -538,7 +538,7 @@ void EDIT_TOOL::updateRatsnest( bool aRedraw )
 }
 
 
-wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelection )
+wxPoint EDIT_TOOL::getModificationPoint( const SELECTION& aSelection )
 {
     if( aSelection.Size() == 1 )
     {
@@ -556,7 +556,7 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelec
 }
 
 
-bool EDIT_TOOL::makeSelection( const SELECTION_TOOL::SELECTION& aSelection )
+bool EDIT_TOOL::makeSelection( const SELECTION& aSelection )
 {
     if( aSelection.Empty() )                        // Try to find an item that could be modified
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionSingle );

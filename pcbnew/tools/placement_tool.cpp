@@ -73,7 +73,7 @@ bool PLACEMENT_TOOL::Init()
 
 int PLACEMENT_TOOL::AlignTop( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() > 1 )
     {
@@ -116,7 +116,7 @@ int PLACEMENT_TOOL::AlignTop( TOOL_EVENT& aEvent )
 
 int PLACEMENT_TOOL::AlignBottom( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() > 1 )
     {
@@ -159,7 +159,7 @@ int PLACEMENT_TOOL::AlignBottom( TOOL_EVENT& aEvent )
 
 int PLACEMENT_TOOL::AlignLeft( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() > 1 )
     {
@@ -202,7 +202,7 @@ int PLACEMENT_TOOL::AlignLeft( TOOL_EVENT& aEvent )
 
 int PLACEMENT_TOOL::AlignRight( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() > 1 )
     {
@@ -257,7 +257,7 @@ static bool compareY( const BOARD_ITEM* aA, const BOARD_ITEM* aB )
 
 int PLACEMENT_TOOL::DistributeHorizontally( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() > 1 )
     {
@@ -306,7 +306,7 @@ int PLACEMENT_TOOL::DistributeHorizontally( TOOL_EVENT& aEvent )
 
 int PLACEMENT_TOOL::DistributeVertically( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() > 1 )
     {

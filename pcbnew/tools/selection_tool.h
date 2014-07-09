@@ -41,6 +41,41 @@ namespace KIGFX
 class VIEW_GROUP;
 }
 
+struct SELECTION
+{
+    /// Set of selected items
+    PICKED_ITEMS_LIST items;
+
+    /// VIEW_GROUP that holds currently selected items
+    KIGFX::VIEW_GROUP* group;
+
+    /// Checks if there is anything selected
+    bool Empty() const
+    {
+        return ( items.GetCount() == 0 );
+    }
+
+    /// Returns the number of selected parts
+    int Size() const
+    {
+        return items.GetCount();
+    }
+
+    /// Alias to make code shorter and clearer
+    template <typename T>
+    T* Item( unsigned int aIndex ) const
+    {
+        return static_cast<T*>( items.GetPickedItem( aIndex ) );
+    }
+
+private:
+    /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
+    /// change properties of selected items (e.g. selection flag).
+    void clear();
+
+    friend class SELECTION_TOOL;
+};
+
 /**
  * Class SELECTION_TOOL
  *
@@ -52,47 +87,11 @@ class VIEW_GROUP;
  * - takes into account high-contrast & layer visibility settings
  * - invokes InteractiveEdit tool when user starts to drag selected items
  */
-
 class SELECTION_TOOL : public TOOL_INTERACTIVE
 {
 public:
     SELECTION_TOOL();
     ~SELECTION_TOOL();
-
-    struct SELECTION
-    {
-        /// Set of selected items
-        PICKED_ITEMS_LIST items;
-
-        /// VIEW_GROUP that holds currently selected items
-        KIGFX::VIEW_GROUP* group;
-
-        /// Checks if there is anything selected
-        bool Empty() const
-        {
-            return ( items.GetCount() == 0 );
-        }
-
-        /// Returns the number of selected parts
-        int Size() const
-        {
-            return items.GetCount();
-        }
-
-        /// Alias to make code shorter and clearer
-        template <typename T>
-        T* Item( unsigned int aIndex ) const
-        {
-            return static_cast<T*>( items.GetPickedItem( aIndex ) );
-        }
-
-    private:
-        /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
-        /// change properties of selected items (e.g. selection flag).
-        void clear();
-
-        friend class SELECTION_TOOL;
-    };
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason );

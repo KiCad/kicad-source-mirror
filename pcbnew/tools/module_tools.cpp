@@ -329,7 +329,7 @@ int MODULE_TOOLS::EnumeratePads( TOOL_EVENT& aEvent )
 
 int MODULE_TOOLS::CopyItems( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    const SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
     Activate();
 

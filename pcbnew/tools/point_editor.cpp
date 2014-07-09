@@ -203,7 +203,7 @@ bool POINT_EDITOR::Init()
 
 int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() == 1 )
     {
@@ -666,7 +666,7 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
 {
     EDA_ITEM* item = m_editPoints->GetParent();
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( item->Type() == PCB_ZONE_AREA_T )
     {
