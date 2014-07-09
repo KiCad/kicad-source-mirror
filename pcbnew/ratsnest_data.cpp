@@ -1009,6 +1009,8 @@ void RN_DATA::ProcessBoard()
         if( netCode > 0 )
             m_nets[netCode].AddItem( zone );
     }
+
+    Recalculate();
 }
 
 
