@@ -618,12 +618,16 @@ int EDIT_TOOL::PasteItems( TOOL_EVENT& aEvent )
                 {
                     // Do not add reference/value - convert them to the common type
                     text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
-                    currentModule->Add( clone );
+                    currentModule->Add( text );
                     text->SetLocalCoord();
+
+                    // Whyyyyyyyyyyyyyyyyyyyyyy?! All other items conform to rotation performed
+                    // on its parent module, but texts are so independent..
+                    text->Rotate( text->GetPosition(), pastedModule->GetOrientation() );
                 }
                 else if( EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( clone ) )
                 {
-                    currentModule->Add( clone );
+                    currentModule->Add( edge );
                     edge->SetLocalCoord();
                 }
 
