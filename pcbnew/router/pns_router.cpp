@@ -612,7 +612,7 @@ void PNS_ROUTER::moveDragging( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     m_dragger->Drag( aP );
     PNS_ITEMSET dragged = m_dragger->Traces();
 
-    updateView ( m_dragger->CurrentNode(), dragged );
+    updateView( m_dragger->CurrentNode(), dragged );
 }
 
 
