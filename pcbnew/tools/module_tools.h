@@ -22,22 +22,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_EDITOR_CONTROL_H
-#define PCB_EDITOR_CONTROL_H
+#ifndef MODULE_TOOLS_H
+#define MODULE_TOOLS_H
 
 #include <tool/tool_interactive.h>
 
+namespace KIGFX
+{
+    class VIEW;
+    class VIEW_CONTROLS;
+}
+class BOARD;
 class PCB_EDIT_FRAME;
 
 /**
- * Class PCBNEW_CONTROL
+ * Class MODULE_TOOLS
  *
- * Handles hot keys that are not accepted by any other tool.
+ * Module editor specific tools.
  */
-class PCB_EDITOR_CONTROL : public TOOL_INTERACTIVE
+class MODULE_TOOLS : public TOOL_INTERACTIVE
 {
 public:
-    PCB_EDITOR_CONTROL();
+    MODULE_TOOLS();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason );
@@ -45,17 +51,33 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init();
 
-    // Track & via size control
-    int TrackWidthInc( TOOL_EVENT& aEvent );
-    int TrackWidthDec( TOOL_EVENT& aEvent );
-    int ViaSizeInc( TOOL_EVENT& aEvent );
-    int ViaSizeDec( TOOL_EVENT& aEvent );
+    /**
+     * Function PlacePad()
+     * Places a pad in module editor.
+     */
+    int PlacePad( TOOL_EVENT& aEvent );
+
+    /**
+     * Function CopyItems()
+     *
+     * Copies selected items to the clipboard. Works only in "edit modules" mode.
+     */
+    int CopyItems( TOOL_EVENT& aEvent );
+
+    /**
+     * Function PastePad()
+     *
+     * Pastes items from the clipboard. Works only in "edit modules" mode.
+     */
+    int PasteItems( TOOL_EVENT& aEvent );
 
 private:
     ///> Sets up handlers for various events.
     void setTransitions();
 
-    ///> Pointer to the currently used edit frame.
+    KIGFX::VIEW* m_view;
+    KIGFX::VIEW_CONTROLS* m_controls;
+    BOARD* m_board;
     PCB_EDIT_FRAME* m_frame;
 };
 

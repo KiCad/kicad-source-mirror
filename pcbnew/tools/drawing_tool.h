@@ -121,12 +121,6 @@ public:
     int PlaceModule( TOOL_EVENT& aEvent );
 
     /**
-     * Function PlacePad()
-     * Places a pad in module editor.
-     */
-    int PlacePad( TOOL_EVENT& aEvent );
-
-    /**
      * Function PlaceDXF()
      * Places a drawing imported from a DXF file in module editor.
      */
@@ -191,12 +185,6 @@ private:
      * @param aHelper is a helper line that shows the next possible segment.
      */
     void make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) const;
-
-    /**
-     * Function getNextPadName()
-     * Compute the 'next' pad number for autoincrement.
-     * */
-    wxString getNextPadName() const;
 
     ///> Sets up handlers for various events.
     void setTransitions();
