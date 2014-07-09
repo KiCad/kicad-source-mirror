@@ -114,6 +114,24 @@ public:
     }
 
     /**
+     * Function SelectSingle()
+     * Selects an item pointed by the parameter aWhere. If there is more than one item at that
+     * place, there is a menu displayed that allows to choose the item.
+     *
+     * @param aWhere is the place where the item should be selected.
+     * @param aAllowDisambiguation decides what to do in case of disambiguation. If true, then
+     * a menu is shown, otherise function finishes without selecting anything.
+     * @return True if an item was selected, false otherwise.
+     */
+    bool SelectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
+
+    /**
+     * Function ClearSelection()
+     * Clears the current selection.
+     */
+    void ClearSelection();
+
+    /**
      * Function AddMenuItem()
      *
      * Adds a menu entry to run a TOOL_ACTION on selected items.
@@ -132,30 +150,12 @@ public:
 
 private:
     /**
-     * Function selectSingle()
-     * Selects an item pointed by the parameter aWhere. If there is more than one item at that
-     * place, there is a menu displayed that allows to choose the item.
-     *
-     * @param aWhere is the place where the item should be selected.
-     * @param aAllowDisambiguation decides what to do in case of disambiguation. If true, then
-     * a menu is shown, otherise function finishes without selecting anything.
-     * @return True if an item was selected, false otherwise.
-     */
-    bool selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
-
-    /**
      * Function selectMultiple()
      * Handles drawing a selection box that allows to select many items at the same time.
      *
-     * @return true if the function was cancelled (ie. CancelEvent was received).
+     * @return true if the function was cancelled (i.e. CancelEvent was received).
      */
     bool selectMultiple();
-
-    /**
-     * Function ClearSelection()
-     * Clears the current selection.
-     */
-    void clearSelection();
 
     /**
      * Function disambiguationMenu()

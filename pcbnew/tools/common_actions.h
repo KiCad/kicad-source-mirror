@@ -37,12 +37,6 @@ public:
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;
 
-    /// Select a single item under the cursor position
-    static TOOL_ACTION selectionSingle;
-
-    /// Clears the current selection
-    static TOOL_ACTION selectionClear;
-
     // Edit Tool
     /// Activation of the edit tool
     static TOOL_ACTION editActivate;
