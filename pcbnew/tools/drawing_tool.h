@@ -76,18 +76,11 @@ public:
     int DrawArc( TOOL_EVENT& aEvent );
 
     /**
-     * Function PlaceTextModule()
+     * Function PlaceText()
      * Displays a dialog that allows to input text and its settings and then lets the user decide
-     * where to place the text in module editor.
+     * where to place the text in editor.
      */
-    int PlaceTextModule( TOOL_EVENT& aEvent );
-
-    /**
-     * Function PlaceTextPcb()
-     * Displays a dialog that allows to input text and its settings and then lets the user decide
-     * where to place the text in board editor.
-     */
-    int PlaceTextPcb( TOOL_EVENT& aEvent );
+    int PlaceText( TOOL_EVENT& aEvent );
 
     /**
      * Function DrawDimension()
@@ -127,6 +120,17 @@ public:
      */
     int PlaceModule( TOOL_EVENT& aEvent );
 
+    /**
+     * Function EditModules()
+     * Toggles edit module mode. When enabled, one may select parts of modules individually
+     * (graphics, pads, etc.), so they can be modified.
+     * @param aEnabled decides if the mode should be enabled.
+     */
+    void EditModules( bool aEnabled )
+    {
+        m_editModules = aEnabled;
+    }
+
 private:
     ///> Starts drawing a selected shape (i.e. DRAWSEGMENT).
     ///> @param aShape is the type of created shape (@see STROKE_T).
@@ -147,6 +151,20 @@ private:
     ///> @param aKeepout decides if the drawn polygon is a zone or a keepout area.
     int drawZone( bool aKeepout );
 
+    /**
+     * Function placeTextModule()
+     * Displays a dialog that allows to input text and its settings and then lets the user decide
+     * where to place the text in module .
+     */
+    int placeTextModule();
+
+    /**
+     * Function placeTextPcb()
+     * Displays a dialog that allows to input text and its settings and then lets the user decide
+     * where to place the text in board editor.
+     */
+    int placeTextPcb();
+
     ///> Forces a DRAWSEGMENT to be drawn at multiple of 45 degrees. The origin
     ///> stays the same, the end of the aSegment is modified according to the
     ///> current cursor position.
@@ -161,6 +179,9 @@ private:
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;
     PCB_EDIT_FRAME* m_frame;
+
+    /// Edit module mode flag
+    bool m_editModules;
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP = 100000;
