@@ -59,6 +59,14 @@ TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, 'E',
         "Properties...", "Displays properties window" );
 
+TOOL_ACTION COMMON_ACTIONS::copyItems( "pcbnew.InteractiveEdit.copyItems",
+        AS_GLOBAL, MD_CTRL + int( 'C' ),
+        "Copy items", "Copy items", AF_ACTIVATE );
+
+TOOL_ACTION COMMON_ACTIONS::pasteItems( "pcbnew.InteractiveEdit.pasteItems",
+        AS_GLOBAL, MD_CTRL + int( 'V' ),
+        "Paste items", "Paste items", AF_ACTIVATE );
+
 
 // Drawing tool actions
 TOOL_ACTION COMMON_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
