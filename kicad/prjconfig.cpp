@@ -182,14 +182,13 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 {
     wxString    title;
 
-    // this is still a mess, will work on it tomorrow.
+    // this is still a pr, will work on it tomorrow.
 
     ClearMsg();
 
     if( event.GetId() != wxID_ANY )
     {
-        int         style;
-
+        int  style;
         bool newProject = ( event.GetId() == ID_NEW_PROJECT ) ||
                           ( event.GetId() == ID_NEW_PROJECT_FROM_TEMPLATE );
 
@@ -212,6 +211,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
             return;
 
         wxFileName pro( dlg.GetPath() );
+
         pro.SetExt( ProjectFileExtension );
 
         if( newProject )
@@ -248,40 +248,40 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
             }
         }
 
-        SetProjectFileName( pro.GetFullName() );
+        SetProjectFileName( pro.GetFullPath() );
     }
 
-    wxLogDebug( wxT( "Loading KiCad project file: " ) + GetProjectFileName() );
-
-    // Check if project file exists and if it is not noname.pro
-    wxString filename = GetProjectFileName();
+    wxString prj_filename = GetProjectFileName();
 
     wxString nameless_prj = NAMELESS_PROJECT  wxT( ".pro" );
 
-    if( !wxFileExists( GetProjectFileName() ) && !filename.IsSameAs( nameless_prj ) )
+    // Check if project file exists and if it is not noname.pro
+    if( !wxFileExists( prj_filename ) && !prj_filename.IsSameAs( nameless_prj ) )
     {
         wxString msg = wxString::Format(
                 _( "KiCad project file '%s' not found" ),
-                GetChars( GetProjectFileName() ) );
+                GetChars( prj_filename ) );
 
         DisplayError( this, msg );
         return;
     }
 
-    wxSetWorkingDirectory( wxFileName( GetProjectFileName() ).GetPath() );
+    wxSetWorkingDirectory( wxFileName( prj_filename ).GetPath() );
 
     // was wxGetApp().ReadProjectConfig( m_ProjectFileName.GetFullPath(),
     //                              GeneralGroupName, s_KicadManagerParams, false );
-    Prj().ConfigLoad( Pgm().SysSearch(), GetProjectFileName(),
+    Prj().ConfigLoad( Pgm().SysSearch(), prj_filename,
             GeneralGroupName, s_KicadManagerParams, false );
 
-    title = wxT( "KiCad " ) + GetBuildVersion() +  wxT( ' ' ) +  GetProjectFileName();
+    title = wxT( "KiCad " ) + GetBuildVersion() +  wxT( ' ' ) + prj_filename;
 
-    if( !wxIsWritable( GetProjectFileName() ) )
+    if( !wxFileName( prj_filename ).IsDirWritable() )
         title += _( " [Read Only]" );
 
     SetTitle( title );
-    UpdateFileHistory( GetProjectFileName(), &Pgm().GetFileHistory() );
+
+    if( !prj_filename.IsSameAs( nameless_prj ) )
+        UpdateFileHistory( prj_filename, &Pgm().GetFileHistory() );
 
     m_LeftWin->ReCreateTreePrj();
 

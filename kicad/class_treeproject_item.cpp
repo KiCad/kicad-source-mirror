@@ -48,11 +48,12 @@ TREEPROJECT_ITEM::TREEPROJECT_ITEM( enum TreeFileType type, const wxString& data
                                     wxTreeCtrl* parent ) :
     wxTreeItemData()
 {
-    m_Type = type;
     m_parent = parent;
-    m_FileName = data;
-    m_IsRootFile   = false;    // true only for the root item of the tree (the project name)
-    m_IsPopulated  = false;
+
+    SetType( type );
+    SetFileName( data );
+    SetRootFile( false );    // true only for the root item of the tree (the project name)
+    SetPopulated( false );
 }
 
 
@@ -73,12 +74,9 @@ void TREEPROJECT_ITEM::SetState( int state )
 const wxString TREEPROJECT_ITEM::GetDir() const
 {
     if( TREE_DIRECTORY == m_Type )
-        return m_FileName;
+        return GetFileName();
 
-    wxFileName filename = wxFileName( m_FileName );
-
-    wxString dir = filename.GetPath();
-    return dir;
+    return wxFileName( GetFileName() ).GetPath();
 }
 
 
@@ -100,7 +98,7 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
     else
         newFile = name;
 
-    if( newFile == m_FileName )
+    if( newFile == GetFileName() )
         return false;
 
     wxString    ext = TREE_PROJECT_FRAME::GetFileExt( GetType() );
@@ -123,10 +121,10 @@ type.\n Do you want to continue ?"                                              
 #if ( ( wxMAJOR_VERSION < 2 ) || ( ( wxMAJOR_VERSION == 2 ) \
     && ( wxMINOR_VERSION < 7 )  ) )
 
-    if( !wxRenameFile( m_FileName, newFile ) )
+    if( !wxRenameFile( GetFileName(), newFile ) )
 #else
 
-    if( !wxRenameFile( m_FileName, newFile, false ) )
+    if( !wxRenameFile( GetFileName(), newFile, false ) )
 #endif
     {
         wxMessageDialog( m_parent, _( "Unable to rename file ... " ),
@@ -156,18 +154,18 @@ bool TREEPROJECT_ITEM::Delete( bool check )
     {
         bool success;
 
-        if( !wxDirExists( m_FileName ) )
-            success = wxRemoveFile( m_FileName );
+        if( !wxDirExists( GetFileName() ) )
+            success = wxRemoveFile( GetFileName() );
         else
         {
             wxArrayString filelist;
 
-            wxDir::GetAllFiles( m_FileName, &filelist );
+            wxDir::GetAllFiles( GetFileName(), &filelist );
 
             for( unsigned int i = 0; i < filelist.Count(); i++ )
                 wxRemoveFile( filelist[i] );
 
-            success = wxRmdir( m_FileName );
+            success = wxRmdir( GetFileName() );
         }
 
         if( success )
@@ -188,8 +186,6 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
 
     KICAD_MANAGER_FRAME* mainFrame = (KICAD_MANAGER_FRAME*) Pgm().App().GetTopWindow();
 
-    AddDelimiterString( fullFileName );
-
     switch( GetType() )
     {
     case TREE_PROJECT:
@@ -200,16 +196,41 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         break;
 
     case TREE_SCHEMA:
-        mainFrame->Execute( m_parent, EESCHEMA_EXE, fullFileName );
+        {
+            wxFileName  ffn( fullFileName );
+            wxFileName  pro( mainFrame->GetProjectFileName() );
+
+            // compare all but the extension:
+            if( pro.GetPath()==ffn.GetPath() && pro.GetName()==ffn.GetName() )
+            {
+                // the project's schematic is opened using the *.kiface as part of this process.
+                mainFrame->RunEeschema( fullFileName );
+            }
+            else
+            {
+                // schematics not part of the project are opened in a separate process.
+                mainFrame->Execute( m_parent, EESCHEMA_EXE, fullFileName );
+            }
+        }
         break;
 
     case TREE_LEGACY_PCB:
     case TREE_SEXP_PCB:
         {
-            DBG( printf( "%s: %s\n", __func__, TO_UTF8( fullFileName ) ); )
+            wxFileName  ffn( fullFileName );
+            wxFileName  pro( mainFrame->GetProjectFileName() );
 
-
-            mainFrame->Execute( m_parent, PCBNEW_EXE, fullFileName );
+            // compare all but the extension:
+            if( pro.GetPath()==ffn.GetPath() && pro.GetName()==ffn.GetName() )
+            {
+                // the project's BOARD is opened using the *.kiface as part of this process.
+                mainFrame->RunPcbNew( fullFileName );
+            }
+            else
+            {
+                // boards not part of the project are opened in a separate process.
+                mainFrame->Execute( m_parent, PCBNEW_EXE, fullFileName );
+            }
         }
         break;
 
@@ -218,6 +239,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         break;
 
     case TREE_PDF:
+        AddDelimiterString( fullFileName );
         OpenPDF( fullFileName );
         break;
 
@@ -239,6 +261,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         break;
 
     default:
+        AddDelimiterString( fullFileName );
         OpenFile( fullFileName );
         break;
     }

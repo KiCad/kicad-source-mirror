@@ -50,7 +50,7 @@ void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
     wxString fn = GetFileFromHistory( event.GetId(),
                     _( "KiCad project file" ), &Pgm().GetFileHistory() );
 
-    if( fn != wxEmptyString )
+    if( fn.size() )
     {
         wxCommandEvent cmd( 0, wxID_ANY );
 
@@ -73,7 +73,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString msg = wxString::Format( _("\nOpen <%s>\n" ), GetChars( dlg.GetPath() ) );
+    wxString msg = wxString::Format( _("\nOpen '%s'\n" ), GetChars( dlg.GetPath() ) );
     PrintMsg( msg );
 
     wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(),
@@ -83,7 +83,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
         return;
 
     wxSetWorkingDirectory( dirDlg.GetPath() );
-    msg.Printf( _( "Unzipping project in <%s>\n" ), GetChars( dirDlg.GetPath() ) );
+    msg.Printf( _( "Unzipping project in '%s'\n" ), GetChars( dirDlg.GetPath() ) );
     PrintMsg( msg );
 
     wxFileSystem zipfilesys;

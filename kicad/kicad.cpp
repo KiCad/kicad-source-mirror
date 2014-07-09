@@ -214,37 +214,17 @@ void PGM_KICAD::OnPgmExit()
 
 void PGM_KICAD::MacOpenFile( const wxString& aFileName )
 {
-#if 0   // I'm tired, need a rest.
+#if defined(__WXMAC__)
 
-    KICAD_MANAGER_FRAME* frame = (KICAD_MANAGER_FRAME*) GetTopWindow();
+    KICAD_MANAGER_FRAME* frame = (KICAD_MANAGER_FRAME*) App().GetTopWindow();
 
-    frame->SetProjectFile( aFileName );
-
-    wxFileName fn = aFileName;
-
-    if( !fn.FileExists() && m_fileHistory.GetCount() )
-    {
-        m_fileHistory.RemoveFileFromHistory( 0 );
-        return;
-    }
+    frame->SetProjectFileName( aFileName );
 
     wxCommandEvent loadEvent;
 
     loadEvent.SetId( wxID_ANY );
 
     frame->OnLoadProject( loadEvent );
-
-    wxString title = GetTitle() + wxT( " " ) + GetBuildVersion() +
-                     wxT( " " ) + frame->GetProjectFileName();
-
-    if( !fn.IsDirWritable() )
-        title += _( " [Read Only]" );
-
-    frame->SetTitle( title );
-
-    frame->m_LeftWin->ReCreateTreePrj();
-
-    frame->PrintPrjInfo();
 #endif
 }
 

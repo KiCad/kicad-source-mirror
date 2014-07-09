@@ -618,7 +618,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 {
     int                 tree_id;
     TREEPROJECT_ITEM*   tree_data;
-    wxString            FullFileName;
+    wxString            fullFileName;
     wxTreeItemId        curr_item = Event.GetItem();
 
     // Ensure item is selected (Under Windows right click does not select the item)
@@ -630,7 +630,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
         return;
 
     tree_id = tree_data->GetType();
-    FullFileName = tree_data->GetFileName();
+    fullFileName = tree_data->GetFileName();
 
     wxMenu popupMenu;
 
@@ -684,12 +684,12 @@ void TREE_PROJECT_FRAME::OnOpenSelectedFileWithTextEditor( wxCommandEvent& event
     if( tree_data->GetType() == TREE_DIRECTORY )
         return;
 
-    wxString    FullFileName = tree_data->GetFileName();
-    AddDelimiterString( FullFileName );
+    wxString    fullFileName = tree_data->GetFileName();
+    AddDelimiterString( fullFileName );
     wxString    editorname = Pgm().GetEditorName();
 
     if( !editorname.IsEmpty() )
-        ExecuteFile( this, editorname, FullFileName );
+        ExecuteFile( this, editorname, fullFileName );
 }
 
 
@@ -736,8 +736,6 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
 
 void TREE_PROJECT_FRAME::OnSelect( wxTreeEvent& Event )
 {
-    wxString            FullFileName;
-
     TREEPROJECT_ITEM*   tree_data = GetSelectedData();
 
     if( !tree_data )
@@ -749,8 +747,6 @@ void TREE_PROJECT_FRAME::OnSelect( wxTreeEvent& Event )
 
 void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
 {
-    wxString            FullFileName;
-
     wxTreeItemId        itemId      = Event.GetItem();
     TREEPROJECT_ITEM*   tree_data   = GetItemIdData( itemId );
 
