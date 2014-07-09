@@ -98,6 +98,7 @@ public:
         }
     };
 
+    static const wxEventType EVT_LAYER_COLOR_CHANGE;
 
 protected:
 

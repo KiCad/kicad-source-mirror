@@ -81,7 +81,7 @@ const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
 };
 
 
-PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize ) :
+PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize ) :
     LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
     myframe( aParent )
 {
@@ -213,7 +213,7 @@ void PCB_LAYER_WIDGET::SetLayersManagerTabsText()
 
 void PCB_LAYER_WIDGET::ReFillRender()
 {
-    BOARD*  board = myframe->GetBoard();
+    BOARD* board = myframe->GetBoard();
     ClearRenderRows();
 
     // Add "Render" tab rows to LAYER_WIDGET, after setting color and checkbox state.
@@ -356,7 +356,6 @@ void PCB_LAYER_WIDGET::ReFill()
 void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
 {
     myframe->GetBoard()->SetLayerColor( ToLAYER_ID( aLayer ), aColor );
-    myframe->ReCreateLayerBox( false );
 
     if( myframe->IsGalCanvasActive() )
     {
