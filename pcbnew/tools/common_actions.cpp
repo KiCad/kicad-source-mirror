@@ -29,7 +29,7 @@
 
 // Selection tool actions
 TOOL_ACTION COMMON_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0, "", "", AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION COMMON_ACTIONS::selectionSingle( "pcbnew.InteractiveSelection.Single",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
@@ -41,7 +41,7 @@ TOOL_ACTION COMMON_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
 // Edit tool actions
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 'M',
-        "Move", "Moves the selected item(s)" );
+        "Move", "Moves the selected item(s)", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveEdit.rotate",
         AS_GLOBAL, 'R',
@@ -63,50 +63,43 @@ TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
 // Drawing tool actions
 TOOL_ACTION COMMON_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
         AS_GLOBAL, 0,
-        "Draw a line", "Draw a line" );
+        "Draw a line", "Draw a line", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
         AS_GLOBAL, 0,
-        "Draw a circle", "Draw a circle" );
+        "Draw a circle", "Draw a circle", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
         AS_GLOBAL, 0,
-        "Draw an arc", "Draw an arc" );
+        "Draw an arc", "Draw an arc", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeTextModule( "pcbnew.InteractiveDrawing.textPcb",
         AS_GLOBAL, 0,
-        "Add a text", "Add a text" );
+        "Add a text", "Add a text", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeTextPcb( "pcbnew.InteractiveDrawing.textModule",
         AS_GLOBAL, 0,
-        "Add a text", "Add a text" );
+        "Add a text", "Add a text", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
         AS_GLOBAL, 0,
-        "Add a dimension", "Add a dimension" );
+        "Add a dimension", "Add a dimension", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
         AS_GLOBAL, 0,
-        "Add a filled zone", "Add a filled zone" );
+        "Add a filled zone", "Add a filled zone", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawKeepout( "pcbnew.InteractiveDrawing.keepout",
         AS_GLOBAL, 0,
-        "Add a keepout area", "Add a keepout area" );
+        "Add a keepout area", "Add a keepout area", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.InteractiveDrawing.placeTarget",
         AS_GLOBAL, 0,
-        "Add layer alignment target", "Add layer alignment target" );
+        "Add layer alignment target", "Add layer alignment target", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.InteractiveDrawing.placeModule",
         AS_GLOBAL, 'O',
-        "Add modules", "Add modules" );
-
-TOOL_ACTION COMMON_ACTIONS::routerActivate( "pcbnew.InteractiveRouter",
-        AS_GLOBAL, 'X',
-        "Run push & shove router", "Run push & shove router" );
-
-TOOL_ACTION COMMON_ACTIONS::pointEditorUpdate( "pcbnew.PointEditor.update",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        "Add modules", "Add modules", AF_ACTIVATE );
 
 
 // View Controls
@@ -267,6 +260,13 @@ TOOL_ACTION COMMON_ACTIONS::switchUnits( "pcbnew.Control.switchUnits",
 TOOL_ACTION COMMON_ACTIONS::showHelp( "pcbnew.Control.showHelp",
         AS_GLOBAL, '?',
         "", "" );
+
+TOOL_ACTION COMMON_ACTIONS::routerActivate( "pcbnew.InteractiveRouter",
+        AS_GLOBAL, 'X',
+        "Run push & shove router", "Run push & shove router", AF_ACTIVATE );
+
+TOOL_ACTION COMMON_ACTIONS::pointEditorUpdate( "pcbnew.PointEditor.update",
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
 
 boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )

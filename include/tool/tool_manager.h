@@ -274,6 +274,10 @@ private:
     struct TOOL_STATE;
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
 
+    /**
+     * Function dispatchInternal
+     * Passes an event at first to the active tools, then to all others.
+     */
     void dispatchInternal( TOOL_EVENT& aEvent );
 
     /**
@@ -291,6 +295,12 @@ private:
      * @return True if a tool was invoked, false otherwise.
      */
     bool dispatchActivation( TOOL_EVENT& aEvent );
+
+    /**
+     * Function dispatchContextMenu()
+     * Handles context menu related events.
+     */
+    void dispatchContextMenu( TOOL_EVENT& aEvent );
 
     /**
      * Function invokeTool()

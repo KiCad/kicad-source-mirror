@@ -123,7 +123,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
     {
         cursorPos = m_controls->GetCursorPosition();
 
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
         {
             if( step != SET_ORIGIN )    // start from the beginning
             {
@@ -134,6 +134,9 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
                 step = SET_ORIGIN;
             }
             else
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
                 break;
         }
 
@@ -301,7 +304,7 @@ int DRAWING_TOOL::PlaceTextModule( TOOL_EVENT& aEvent )
     {
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
         {
             if( text )
             {
@@ -314,6 +317,9 @@ int DRAWING_TOOL::PlaceTextModule( TOOL_EVENT& aEvent )
                 m_controls->ShowCursor( true );
             }
             else
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
                 break;
         }
 
@@ -406,7 +412,7 @@ int DRAWING_TOOL::PlaceTextPcb( TOOL_EVENT& aEvent )
     {
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
         {
             if( text )
             {
@@ -419,6 +425,9 @@ int DRAWING_TOOL::PlaceTextPcb( TOOL_EVENT& aEvent )
                 m_controls->ShowCursor( true );
             }
             else
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
                 break;
         }
 
@@ -520,7 +529,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
     {
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
         {
             if( step != SET_ORIGIN )    // start from the beginning
             {
@@ -531,6 +540,9 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
                 step = SET_ORIGIN;
             }
             else
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
                 break;
         }
 
@@ -707,7 +719,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
     {
         cursorPos = m_controls->GetCursorPosition();
 
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
             break;
 
         else if( evt->IsKeyPressed() )
@@ -783,7 +795,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
     {
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
         {
             if( module )
             {
@@ -795,6 +807,9 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
                 m_controls->ShowCursor( true );
             }
             else
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
                 break;
         }
 
@@ -915,7 +930,7 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
             updatePreview = true;
         }
 
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
         {
             if( !graphic )
                 break;
@@ -927,6 +942,9 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
             graphic = NULL;
 
             m_controls->SetAutoPan( false );
+
+            if( evt->IsActivate() )  // now finish unconditionally
+                break;
         }
 
         else if( graphic && evt->IsKeyPressed() )
@@ -1093,7 +1111,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
             updatePreview = true;
         }
 
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
         {
             if( numPoints > 0 )         // cancel the current zone
             {
@@ -1113,6 +1131,9 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                 numPoints = 0;
             }
             else                        // there is no zone currently drawn - just stop the tool
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
                 break;
         }
 

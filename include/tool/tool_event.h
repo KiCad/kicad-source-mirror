@@ -126,6 +126,13 @@ enum TOOL_ACTION_SCOPE
     AS_GLOBAL        ///> Global action (toolbar/main menu event, global shortcut)
 };
 
+/// Flags for tool actions
+enum TOOL_ACTION_FLAGS
+{
+    AF_NONE     = 0,
+    AF_ACTIVATE = 1  ///> Action activates a tool
+};
+
 /// Defines when a context menu is opened.
 enum CONTEXT_MENU_TRIGGER
 {
@@ -268,6 +275,11 @@ public:
         return m_actions == TA_CANCEL_TOOL;
     }
 
+    bool IsActivate() const
+    {
+        return m_actions == TA_ACTIVATE;
+    }
+
     ///> Returns information about key modifiers state (Ctrl, Alt, etc.)
     int Modifier( int aMask = MD_MODIFIER_MASK ) const
     {
@@ -334,9 +346,14 @@ public:
      */
     bool IsAction( const TOOL_ACTION* aAction ) const;
 
-    boost::optional<int> GetCommandId()
+    boost::optional<int> GetCommandId() const
     {
         return m_commandId;
+    }
+
+    boost::optional<std::string> GetCommandStr() const
+    {
+        return m_commandStr;
     }
 
 private:

@@ -480,8 +480,7 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
     VECTOR2I p = getView()->ToWorld( ctls->GetMousePosition() );
     VECTOR2I cp = ctls->GetCursorPosition();
     int layer;
-
-    bool snapEnabled = !aEvent.Modifier(MD_SHIFT);
+    bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
 
     m_router->EnableSnapping ( snapEnabled );
 
@@ -554,7 +553,7 @@ void ROUTER_TOOL::performRouting()
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
             break;
         else if( evt->Action() == TA_UNDO_REDO )
         {
@@ -663,7 +662,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
             m_needsSync = false;
         }
 
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
             break; // Finish
         else if( evt->Action() == TA_UNDO_REDO )
             m_needsSync = true;
@@ -677,10 +676,11 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
                 performDragging();
             else
                 performRouting();
-        } else if ( evt->IsAction( &ACT_Drag ) )
+        }
+        else if ( evt->IsAction( &ACT_Drag ) )
             performDragging();
 
-        handleCommonEvents(*evt);
+        handleCommonEvents( *evt );
     }
 
     // Restore the default settings
@@ -715,7 +715,7 @@ void ROUTER_TOOL::performDragging()
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
             break;
         else if( evt->Action() == TA_UNDO_REDO )
         {

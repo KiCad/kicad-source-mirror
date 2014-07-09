@@ -29,7 +29,6 @@
 #include <string>
 #include <cassert>
 
-#include <tool/tool_base.h>
 #include <tool/tool_manager.h>
 
 /**
@@ -47,10 +46,10 @@ class TOOL_ACTION
 public:
     TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope = AS_CONTEXT,
             int aDefaultHotKey = 0, const std::string& aMenuItem = std::string( "" ),
-            const std::string& aMenuDesc = std::string( "" ) ) :
+            const std::string& aMenuDesc = std::string( "" ), TOOL_ACTION_FLAGS aFlags = AF_NONE ) :
         m_name( aName ), m_scope( aScope ), m_defaultHotKey( aDefaultHotKey ),
         m_currentHotKey( aDefaultHotKey ), m_menuItem( aMenuItem ),
-        m_menuDescription( aMenuDesc ), m_id( -1 )
+        m_menuDescription( aMenuDesc ), m_id( -1 ), m_flags( aFlags )
     {
         TOOL_MANAGER::GetActionList().push_back( this );
     }
@@ -190,8 +189,7 @@ public:
      */
     bool IsActivation() const
     {
-        // Tool activation events are of format appName.toolName
-        return std::count( m_name.begin(), m_name.end(), '.' ) == 1;
+        return m_flags & AF_ACTIVATE;
     }
 
 private:
@@ -200,7 +198,7 @@ private:
     /// Name of the action (convention is: app.[tool.]action.name)
     std::string m_name;
 
-    /// Scope of the action (ie. the event that is issued after activation).
+    /// Scope of the action (i.e. the event that is issued after activation).
     TOOL_ACTION_SCOPE m_scope;
 
     /// Default hot key that activates the action.
@@ -220,6 +218,9 @@ private:
 
     /// Unique ID for fast matching. Assigned by ACTION_MANAGER.
     int m_id;
+
+    /// Action flags
+    TOOL_ACTION_FLAGS m_flags;
 
     /// Origin of the action
     // const TOOL_BASE* m_origin;
