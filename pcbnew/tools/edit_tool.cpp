@@ -253,7 +253,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
         std::vector<PICKED_ITEMS_LIST*>& undoList = editFrame->GetScreen()->m_UndoList.m_CommandsList;
 
         // Some of properties dialogs alter pointers, so we should deselect them
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
         STATUS_FLAGS flags = item->GetFlags();
         item->ClearFlags();
 
