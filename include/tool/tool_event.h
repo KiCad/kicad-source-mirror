@@ -328,10 +328,10 @@ public:
 
         if( m_category == TC_COMMAND || m_category == TC_MESSAGE )
         {
-            if( m_commandStr && aEvent.m_commandStr )
+            if( (bool) m_commandStr && (bool) aEvent.m_commandStr )
                 return *m_commandStr == *aEvent.m_commandStr;
 
-            if( m_commandId && aEvent.m_commandId )
+            if( (bool) m_commandId && (bool) aEvent.m_commandId )
                 return *m_commandId == *aEvent.m_commandId;
         }
 

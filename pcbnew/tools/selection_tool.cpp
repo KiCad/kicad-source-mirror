@@ -117,8 +117,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             if( m_selection.Empty() )
                 selectSingle( evt->Position() );
 
-            if( !m_selection.Empty() )
-                SetContextMenu( &m_menu, CMENU_NOW );
+            generateMenu();
         }
 
         // double click? Display the properties window
@@ -188,17 +187,19 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
+void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition )
 {
     assert( aAction.GetId() > 0 );    // Check if the action was registered before in ACTION_MANAGER
 
     m_menu.Add( aAction );
+    m_menuConditions.push_back( aCondition );
 }
 
 
-void SELECTION_TOOL::AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel )
+void SELECTION_TOOL::AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel, const SELECTION_CONDITION& aCondition )
 {
     m_menu.AppendSubMenu( aMenu, aLabel );
+    m_menuConditions.push_back( aCondition );
 }
 
 
@@ -420,9 +421,6 @@ void SELECTION_TOOL::clearSelection()
 
     getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
 
-    // Do not show the context menu when there is nothing selected
-    SetContextMenu( &m_menu, CMENU_OFF );
-
     // Inform other potentially interested tools
     TOOL_EVENT clearEvent( ClearedEvent );
     m_toolMgr->ProcessEvent( clearEvent );
@@ -622,14 +620,10 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     ITEM_PICKER picker( aItem );
     m_selection.items.PushItem( picker );
 
-    // It is enough to do it only for the first selected item
     if( m_selection.Size() == 1 )
     {
         // Set as the current item, so the information about selection is displayed
         m_frame->SetCurItem( aItem, true );
-
-        // Now the context menu should be enabled
-        SetContextMenu( &m_menu, CMENU_BUTTON );
     }
     else if( m_selection.Size() == 2 )  // Check only for 2, so it will not be
     {                                   // called for every next selected item
@@ -655,12 +649,8 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
     if( itemIdx >= 0 )
         m_selection.items.RemovePicker( itemIdx );
 
-    // If there is nothing selected, disable the context menu
     if( m_selection.Empty() )
-    {
-        SetContextMenu( &m_menu, CMENU_OFF );
         m_frame->SetCurItem( NULL );
-    }
 
     // Inform other potentially interested tools
     TOOL_EVENT deselected( DeselectedEvent );
@@ -761,6 +751,28 @@ BOARD_ITEM* SELECTION_TOOL::prefer( GENERAL_COLLECTOR& aCollector, const KICAD_T
     }
 
     return preferred;
+}
+
+
+void SELECTION_TOOL::generateMenu()
+{
+    // Create a copy of the master context menu
+    m_menuCopy = m_menu;
+
+    assert( m_menuCopy.GetMenuItemCount() == m_menuConditions.size() );
+
+    // Filter out entries that does not apply to the current selection
+    for( int i = m_menuCopy.GetMenuItemCount() - 1; i >= 0; --i )
+    {
+        if( !m_menuConditions[i]( m_selection ) )
+        {
+            wxMenuItem* item = m_menuCopy.FindItemByPosition( i );
+            m_menuCopy.Destroy( item );
+        }
+    }
+
+    if( m_menuCopy.GetMenuItemCount() > 0 )
+    SetContextMenu( &m_menuCopy, CMENU_NOW );
 }
 
 

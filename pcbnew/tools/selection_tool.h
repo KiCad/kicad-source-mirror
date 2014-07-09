@@ -31,6 +31,8 @@
 #include <tool/context_menu.h>
 #include <class_undoredo_container.h>
 
+#include "selection_conditions.h"
+
 class PCB_BASE_FRAME;
 class SELECTION_AREA;
 class BOARD_ITEM;
@@ -118,8 +120,10 @@ public:
      *
      * Adds a menu entry to run a TOOL_ACTION on selected items.
      * @param aAction is a menu entry to be added.
+     * @param aCondition is a condition that has to be fulfilled to enable the menu entry.
      */
-    void AddMenuItem( const TOOL_ACTION& aAction );
+    void AddMenuItem( const TOOL_ACTION& aAction,
+                      const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways );
 
     /**
      * Function AddSubMenu()
@@ -127,11 +131,14 @@ public:
      * Adds a submenu to the selection tool right-click context menu.
      * @param aMenu is the submenu to be added.
      * @param aLabel is the label of added submenu.
+     * @param aCondition is a condition that has to be fulfilled to enable the submenu entry.
      */
-    void AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel );
+    void AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel,
+                     const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways );
 
     /**
      * Function EditModules()
+     *
      * Toggles edit module mode. When enabled, one may select parts of modules individually
      * (graphics, pads, etc.), so they can be modified.
      * @param aEnabled decides if the mode should be enabled.
@@ -275,26 +282,39 @@ private:
      */
     BOARD_ITEM* prefer( GENERAL_COLLECTOR& aCollector, const KICAD_T aTypes[] ) const;
 
+    /**
+     * Function generateMenu()
+     * Creates a copy of context menu that is filtered by menu conditions and displayed to
+     * the user.
+     */
+    void generateMenu();
+
     /// Pointer to the parent frame.
     PCB_BASE_FRAME* m_frame;
 
-    /// Visual representation of selection box
+    /// Visual representation of selection box.
     SELECTION_AREA* m_selArea;
 
-    /// Current state of selection
+    /// Current state of selection.
     SELECTION m_selection;
 
-    /// Flag saying if items should be added to the current selection or rather replace it
+    /// Flag saying if items should be added to the current selection or rather replace it.
     bool m_additive;
 
-    /// Flag saying if multiple selection mode is active
+    /// Flag saying if multiple selection mode is active.
     bool m_multiple;
 
-    /// Right click popup menu
+    /// Right click popup menu (master instance).
     CONTEXT_MENU m_menu;
 
-    /// Edit module mode flag
+    /// Copy of the context menu that is filtered by menu conditions and displayed to the user.
+    CONTEXT_MENU m_menuCopy;
+
+    /// Edit module mode flag.
     bool m_editModules;
+
+    /// Conditions for specific context menu entries.
+    std::deque<SELECTION_CONDITION> m_menuConditions;
 };
 
 #endif

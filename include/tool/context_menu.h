@@ -47,7 +47,9 @@ public:
     ///> Copy constructor
     CONTEXT_MENU( const CONTEXT_MENU& aMenu );
 
-    virtual ~CONTEXT_MENU() {};
+    CONTEXT_MENU& operator=( const CONTEXT_MENU& aMenu );
+
+    virtual ~CONTEXT_MENU() {}
 
     /**
      * Function SetTitle()
@@ -73,7 +75,6 @@ public:
      * @param aAction is the action to be added to menu entry.
      */
     void Add( const TOOL_ACTION& aAction );
-
 
     /**
      * Function Clear()

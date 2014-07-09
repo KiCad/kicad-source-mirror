@@ -59,11 +59,11 @@ bool EDIT_TOOL::Init()
     }
 
     // Add context menu entries that are displayed when selection tool is active
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::editActivate );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::rotate );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::flip );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::remove );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::properties );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::editActivate, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::rotate, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::properties, SELECTION_CONDITIONS::NotEmpty );
 
     setTransitions();
 
