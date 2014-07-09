@@ -251,7 +251,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -450,7 +450,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
     m_view->Add( &preview );
     preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
 
@@ -525,7 +525,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
@@ -703,7 +703,7 @@ int DRAWING_TOOL::PlaceDXF( TOOL_EVENT& aEvent )
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( *preview.Begin() );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -877,7 +877,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -1042,7 +1042,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -1212,7 +1212,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -1421,7 +1421,7 @@ int DRAWING_TOOL::placeTextModule()
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
@@ -1539,7 +1539,7 @@ int DRAWING_TOOL::placeTextPcb()
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );

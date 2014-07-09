@@ -626,7 +626,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
     // Deselect all items
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL,
                                                _( "Interactive Router" ) );

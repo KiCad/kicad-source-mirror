@@ -181,7 +181,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             }
 
             selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
@@ -205,7 +205,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     }
 
     if( unselect )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
     ratsnest->ClearSimple();
@@ -278,7 +278,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
             getModel<BOARD>()->GetRatsnest()->Recalculate();
             item->ViewUpdate();
 
-            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
         }
 
         item->SetFlags( flags );
@@ -335,9 +335,9 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
         getModel<BOARD>()->GetRatsnest()->Recalculate();
 
     if( unselect )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
     setTransitions();
 
     return 0;
@@ -389,9 +389,9 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
         getModel<BOARD>()->GetRatsnest()->Recalculate();
 
     if( unselect )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
     setTransitions();
 
     return 0;
@@ -414,7 +414,7 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     // As we are about to remove items, they have to be removed from the selection first
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     // Save them
     for( unsigned int i = 0; i < selectedItems.GetCount(); ++i )

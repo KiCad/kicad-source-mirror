@@ -258,7 +258,7 @@ int MODULE_TOOLS::EnumeratePads( TOOL_EVENT& aEvent )
 
     Activate();
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
 
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -433,7 +433,7 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
     preview.Add( pastedModule );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
