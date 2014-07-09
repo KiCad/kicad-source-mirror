@@ -35,6 +35,7 @@
 #include <pcbnew_id.h>
 #include <confirm.h>
 #include <dialog_edit_module_text.h>
+#include <import_dxf/dialog_dxf_import.h>
 
 #include <view/view_group.h>
 #include <view/view_controls.h>
@@ -695,6 +696,196 @@ int DRAWING_TOOL::PlacePad( TOOL_EVENT& aEvent )
 
     setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
+    return 0;
+}
+
+
+int DRAWING_TOOL::PlaceDXF( TOOL_EVENT& aEvent )
+{
+    DIALOG_DXF_IMPORT dlg( m_frame );
+    int dlgResult = dlg.ShowModal();
+
+    const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
+    MODULE* module = m_board->m_Modules;
+
+    if( dlgResult != wxID_OK || module == NULL || list.empty() )
+    {
+        setTransitions();
+
+        return 0;
+    }
+
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I delta = cursorPos - (*list.begin())->GetPosition();
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( m_view );
+
+    // Build the undo list & add items to the current view
+    std::list<BOARD_ITEM*>::const_iterator it, itEnd;
+    for( it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
+    {
+        BOARD_ITEM* item = *it;
+        BOARD_ITEM* converted = NULL;
+
+        // Modules use different types for the same things,
+        // so we need to convert imported items to appropriate classes.
+        switch( item->Type() )
+        {
+        case PCB_LINE_T:
+        {
+            if( m_editModules )
+            {
+                converted = new EDGE_MODULE( module );
+                *static_cast<DRAWSEGMENT*>( converted ) = *static_cast<DRAWSEGMENT*>( item );
+                converted->Move( wxPoint( delta.x, delta.y ) );
+                preview.Add( converted );
+                delete item;
+            }
+            else
+            {
+                preview.Add( item );
+            }
+
+            break;
+        }
+
+        case PCB_TEXT_T:
+        {
+            if( m_editModules )
+            {
+                converted = new TEXTE_MODULE( module );
+                *static_cast<TEXTE_PCB*>( converted ) = *static_cast<TEXTE_PCB*>( item );
+                converted->Move( wxPoint( delta.x, delta.y ) );
+                preview.Add( converted );
+                delete item;
+            }
+            else
+            {
+                preview.Add( item );
+            }
+            break;
+        }
+
+        default:
+            assert( false );    // there is a type that is currently not handled here
+            break;
+        }
+    }
+
+    BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( *preview.Begin() );
+    m_view->Add( &preview );
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        cursorPos = m_controls->GetCursorPosition();
+
+        if( evt->IsMotion() )
+        {
+            delta = cursorPos - firstItem->GetPosition();
+
+            for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
+                static_cast<BOARD_ITEM*>( *it )->Move( wxPoint( delta.x, delta.y ) );
+
+            preview.ViewUpdate();
+        }
+
+        else if( evt->Category() == TC_COMMAND )
+        {
+            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            {
+                for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
+                    static_cast<BOARD_ITEM*>( *it )->Rotate( wxPoint( cursorPos.x, cursorPos.y ),
+                                                             m_frame->GetRotationAngle() );
+
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+            {
+                for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
+                    static_cast<BOARD_ITEM*>( *it )->Flip( wxPoint( cursorPos.x, cursorPos.y ) );
+
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+            else if( evt->IsCancel() || evt->IsActivate() )
+            {
+                preview.FreeItems();
+                break;
+            }
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            // Place the drawing
+
+            if( m_editModules )
+            {
+                m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+                module->SetLastEditTime();
+
+                for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
+                {
+                    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
+                    module->Add( item );
+
+                    switch( item->Type() )
+                    {
+                    case PCB_MODULE_TEXT_T:
+                        static_cast<TEXTE_MODULE*>( item )->SetLocalCoord();
+                        break;
+
+                    case PCB_MODULE_EDGE_T:
+                        static_cast<EDGE_MODULE*>( item )->SetLocalCoord();
+                        break;
+
+                    default:
+                        assert( false );
+                        break;
+                    }
+
+                    m_view->Add( item );
+                }
+            }
+            else
+            {
+                PICKED_ITEMS_LIST picklist;
+
+                for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
+                {
+                    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
+                    m_board->Add( item );
+
+                    ITEM_PICKER itemWrapper( item, UR_NEW );
+                    picklist.PushItem( itemWrapper );
+
+                    m_view->Add( item );
+                }
+
+                m_frame->SaveCopyInUndoList( picklist, UR_NEW );
+            }
+
+            m_frame->OnModify();
+
+            break;
+        }
+    }
+
+    preview.Clear();
+
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
+
+    setTransitions();
 
     return 0;
 }
@@ -1580,5 +1771,6 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::PlaceTarget,      COMMON_ACTIONS::placeTarget.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceModule,      COMMON_ACTIONS::placeModule.MakeEvent() );
     Go( &DRAWING_TOOL::PlacePad,         COMMON_ACTIONS::placePad.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceDXF,         COMMON_ACTIONS::placeDXF.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor,        COMMON_ACTIONS::setAnchor.MakeEvent() );
 }
