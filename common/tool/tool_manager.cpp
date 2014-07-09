@@ -37,6 +37,7 @@
 #include <wx/clipbrd.h>
 
 #include <view/view.h>
+#include <view/view_controls.h>
 
 #include <tool/tool_base.h>
 #include <tool/tool_interactive.h>
@@ -577,6 +578,10 @@ void TOOL_MANAGER::dispatchContextMenu( TOOL_EVENT& aEvent )
             if( st->contextMenuTrigger == CMENU_NOW )
                 st->contextMenuTrigger = CMENU_OFF;
 
+            // Temporarily store the cursor position, so the tools could execute actions
+            // using the point where the user has invoked a context menu
+            m_viewControls->ForceCursorPosition( true, m_viewControls->GetCursorPosition() );
+
             boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *st->contextMenu ) );
             GetEditFrame()->PopupMenu( menu.get() );
 
@@ -586,6 +591,8 @@ void TOOL_MANAGER::dispatchContextMenu( TOOL_EVENT& aEvent )
                 TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, -1 );
                 dispatchInternal( evt );
             }
+
+            m_viewControls->ForceCursorPosition( false );
 
             break;
         }
