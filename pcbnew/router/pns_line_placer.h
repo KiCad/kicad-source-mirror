@@ -55,7 +55,7 @@ public:
      * Starts routing a single track at point aP, taking item aStartItem as anchor
      * (unless NULL).
      */
-    void Start ( const VECTOR2I& aP, PNS_ITEM* aStartItem );
+    void Start( const VECTOR2I& aP, PNS_ITEM* aStartItem );
 
     /**
      * Function Move()

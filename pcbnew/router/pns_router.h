@@ -234,7 +234,7 @@ private:
     PNS_NODE* m_world;
     PNS_NODE* m_lastNode;
     PNS_LINE_PLACER* m_placer;
-    PNS_DRAGGER *m_dragger;
+    PNS_DRAGGER* m_dragger;
     PNS_LINE* m_draggedLine;
     PNS_SHOVE* m_shove;
     int m_draggedSegmentIndex;
