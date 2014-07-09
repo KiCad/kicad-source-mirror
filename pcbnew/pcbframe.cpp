@@ -294,6 +294,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
                          PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle )
     EVT_UPDATE_UI_RANGE( ID_PCB_MUWAVE_START_CMD, ID_PCB_MUWAVE_END_CMD,
                          PCB_EDIT_FRAME::OnUpdateMuWaveToolbar )
+
+    EVT_COMMAND( wxID_ANY, LAYER_WIDGET::EVT_LAYER_COLOR_CHANGE, PCB_EDIT_FRAME::OnLayerColorChange )
 END_EVENT_TABLE()
 
 
@@ -1004,6 +1006,12 @@ void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )
         }
         break;
     }
+}
+
+
+void PCB_EDIT_FRAME::OnLayerColorChange( wxCommandEvent& aEvent )
+{
+    ReCreateLayerBox();
 }
 
 
