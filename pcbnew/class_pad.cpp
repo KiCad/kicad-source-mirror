@@ -829,6 +829,13 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 }
 
 
+void D_PAD::Rotate( const wxPoint& aRotCentre, double aAngle )
+{
+    RotatePoint( &m_Pos, aRotCentre, aAngle );
+    m_Orient += aAngle;
+}
+
+
 wxString D_PAD::ShowPadShape() const
 {
     switch( GetShape() )
