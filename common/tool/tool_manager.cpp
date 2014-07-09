@@ -109,7 +109,7 @@ TOOL_MANAGER::TOOL_MANAGER() :
 
 TOOL_MANAGER::~TOOL_MANAGER()
 {
-    boost::unordered_map<TOOL_BASE*, TOOL_STATE*>::iterator it, it_end;
+    std::map<TOOL_BASE*, TOOL_STATE*>::iterator it, it_end;
 
     for( it = m_toolState.begin(), it_end = m_toolState.end(); it != it_end; ++it )
     {
@@ -276,7 +276,7 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 
 TOOL_BASE* TOOL_MANAGER::FindTool( int aId ) const
 {
-    boost::unordered_map<TOOL_ID, TOOL_STATE*>::const_iterator it = m_toolIdIndex.find( aId );
+    std::map<TOOL_ID, TOOL_STATE*>::const_iterator it = m_toolIdIndex.find( aId );
 
     if( it != m_toolIdIndex.end() )
         return it->second->theTool;
@@ -287,7 +287,7 @@ TOOL_BASE* TOOL_MANAGER::FindTool( int aId ) const
 
 TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
 {
-    boost::unordered_map<std::string, TOOL_STATE*>::const_iterator it = m_toolNameIndex.find( aName );
+    std::map<std::string, TOOL_STATE*>::const_iterator it = m_toolNameIndex.find( aName );
 
     if( it != m_toolNameIndex.end() )
         return it->second->theTool;
