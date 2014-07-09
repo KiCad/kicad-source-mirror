@@ -434,7 +434,6 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
 int EDIT_TOOL::CopyItems( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    PCB_IO io( CTL_FOR_CLIPBOARD );
 
     if( !m_editModules || !makeSelection( selection ) )
     {
@@ -443,23 +442,67 @@ int EDIT_TOOL::CopyItems( TOOL_EVENT& aEvent )
         return 0;
     }
 
-    // Create a temporary module that contains selected items to ease serialization
-    MODULE module( getModel<BOARD>() );
+    Activate();
 
-    for( int i = 0; i < selection.Size(); ++i )
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    controls->SetSnapping( true );
+    controls->ShowCursor( true );
+    controls->SetAutoPan( true );
+
+    PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
+    frame->DisplayToolMsg( _( "Select reference point" ) );
+
+    bool cancelled = false;
+    VECTOR2I cursorPos;
+
+    while( OPT_TOOL_EVENT evt = Wait() )
     {
-        BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( selection.Item<BOARD_ITEM>( i )->Clone() );
-
-        // Do not add reference/value - convert them to the common type
-        if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )
-            text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
-
-        module.Add( clone );
+        if( evt->IsMotion() )
+        {
+            cursorPos = getViewControls()->GetCursorPosition();
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            break;
+        }
+        else if( evt->IsCancel() || evt->IsActivate() )
+        {
+            cancelled = true;
+            break;
+        }
     }
 
-    io.Format( &module, 0 );
-    std::string data = io.GetStringOutput( true );
-    m_toolMgr->SaveClipboard( data );
+    if( !cancelled )
+    {
+        PCB_IO io( CTL_FOR_CLIPBOARD );
+
+        // Create a temporary module that contains selected items to ease serialization
+        MODULE module( getModel<BOARD>() );
+
+        for( int i = 0; i < selection.Size(); ++i )
+        {
+            BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( selection.Item<BOARD_ITEM>( i )->Clone() );
+
+            // Do not add reference/value - convert them to the common type
+            if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )
+                text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+
+            module.Add( clone );
+        }
+
+        // Set the new relative internal local coordinates of footprint items
+        wxPoint moveVector = module.GetPosition() - wxPoint( cursorPos.x, cursorPos.y );
+        module.MoveAnchorPosition( moveVector );
+
+        io.Format( &module, 0 );
+        std::string data = io.GetStringOutput( true );
+        m_toolMgr->SaveClipboard( data );
+    }
+
+    frame->DisplayToolMsg( wxString::Format( _( "Copied %d items" ), selection.Size() ) );
+    controls->SetSnapping( false );
+    controls->ShowCursor( false );
+    controls->SetAutoPan( false );
 
     setTransitions();
 
@@ -504,6 +547,7 @@ int EDIT_TOOL::PasteItems( TOOL_EVENT& aEvent )
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( view );
     pastedModule->SetParent( board );
+    pastedModule->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
     pastedModule->RunOnChildren( boost::bind( &KIGFX::VIEW_GROUP::Add, boost::ref( preview ), _1 ) );
     preview.Add( pastedModule );
     view->Add( &preview );
@@ -511,6 +555,7 @@ int EDIT_TOOL::PasteItems( TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     controls->ShowCursor( true );
     controls->SetSnapping( true );
+    controls->SetAutoPan( true );
 
     Activate();
 
@@ -558,6 +603,7 @@ int EDIT_TOOL::PasteItems( TOOL_EVENT& aEvent )
             for( D_PAD* pad = pastedModule->Pads(); pad; pad = pad->Next() )
             {
                 D_PAD* clone = static_cast<D_PAD*>( pad->Clone() );
+
                 currentModule->Add( clone );
                 clone->SetLocalCoord();
                 view->Add( clone );
