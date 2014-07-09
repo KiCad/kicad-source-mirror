@@ -784,11 +784,21 @@ public:
     }
 
     /**
+     * @brief Returns the cursor size.
+     *
+     * @return The current cursor size (in pixels).
+     */
+    inline unsigned int GetCursorSize() const
+    {
+        return cursorSize;
+    }
+
+    /**
      * @brief Set the cursor size.
      *
      * @param aCursorSize is the size of the cursor expressed in pixels.
      */
-    inline void SetCursorSize( unsigned int aCursorSize )
+    virtual inline void SetCursorSize( unsigned int aCursorSize )
     {
         cursorSize = aCursorSize;
     }
