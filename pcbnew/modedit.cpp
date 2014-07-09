@@ -916,7 +916,7 @@ EDA_COLOR_T FOOTPRINT_EDIT_FRAME::GetGridColor() const
 }
 
 
-void FOOTPRINT_EDIT_FRAME::SetActiveLayer( LAYER_NUM aLayer )
+void FOOTPRINT_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
 {
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
 

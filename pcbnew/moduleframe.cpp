@@ -271,6 +271,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     drawPanel->SetEventDispatcher( m_toolDispatcher );
 
     m_toolManager->RegisterTool( new SELECTION_TOOL );
+    m_toolManager->GetTool<SELECTION_TOOL>()->EditModules( true );
     m_toolManager->RegisterTool( new EDIT_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
     m_toolManager->RegisterTool( new POINT_EDITOR );
