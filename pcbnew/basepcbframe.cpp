@@ -125,6 +125,9 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
     delete m_Collector;
 
+    delete m_toolManager;
+    delete m_toolDispatcher;
+
     delete m_Pcb;
     delete GetGalCanvas();
 }

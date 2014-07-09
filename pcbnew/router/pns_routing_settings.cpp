@@ -19,6 +19,7 @@
  */
 
 #include "pns_routing_settings.h"
+#include "direction.h"
 
 PNS_ROUTING_SETTINGS::PNS_ROUTING_SETTINGS()
 {
@@ -36,6 +37,15 @@ PNS_ROUTING_SETTINGS::PNS_ROUTING_SETTINGS()
     m_jumpOverObstacles = false;
     m_smoothDraggedSegments = true;
     m_canViolateDRC = false;
+}
+
+
+const DIRECTION_45 PNS_ROUTING_SETTINGS::InitialDirection() const
+{
+    if( m_startDiagonal )
+        return DIRECTION_45( DIRECTION_45::NE );
+    else
+        return DIRECTION_45( DIRECTION_45::N );
 }
 
 
