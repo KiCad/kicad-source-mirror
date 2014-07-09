@@ -532,18 +532,6 @@ public:
     virtual void OnModify();
 
     /**
-     * Function SetHighContrastLayer
-     * takes care of display settings for the given layer to be displayed in high contrast mode.
-     */
-    void SetHighContrastLayer( LAYER_ID aLayer );
-
-    /**
-     * Function SetTopLayer
-     * moves the selected layer to the top, so it is displayed above all others.
-     */
-    void SetTopLayer( LAYER_ID aLayer );
-
-    /**
      * Function SetActiveLayer
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
@@ -889,12 +877,6 @@ public:
 
     /// @copydoc PCB_BASE_FRAME::SetBoard()
     void SetBoard( BOARD* aBoard );
-
-    /**
-    * Function ViewReloadBoard
-    * adds all items from the current board to the VIEW, so they can be displayed by GAL.
-    */
-    void ViewReloadBoard( const BOARD* aBoard ) const;
 
     // Drc control
 

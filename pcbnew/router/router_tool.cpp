@@ -578,7 +578,7 @@ void ROUTER_TOOL::performRouting()
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
             m_router->ToggleViaPlacement();
-            frame->SetTopLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
+            frame->GetGalCanvas()->SetTopLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsAction( &ACT_SwitchPosture ) )

@@ -190,7 +190,7 @@ int PCBNEW_CONTROL::HighContrastMode( TOOL_EVENT& aEvent )
 
     DisplayOpt.ContrastModeDisplay = !DisplayOpt.ContrastModeDisplay;
     settings->LoadDisplayOptions( DisplayOpt );
-    m_frame->SetHighContrastLayer( m_frame->GetActiveLayer() );
+    m_frame->GetGalCanvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
 
     setTransitions();
 

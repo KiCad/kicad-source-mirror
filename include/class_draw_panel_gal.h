@@ -30,9 +30,9 @@
 #ifndef  PANELGAL_WXSTRUCT_H
 #define  PANELGAL_WXSTRUCT_H
 
-#include <wx/wx.h>
 #include <wx/window.h>
-
+#include <wx/timer.h>
+#include <layers_id_colors_and_visibility.h>
 #include <math/vector2d.h>
 
 class BOARD;
@@ -132,6 +132,18 @@ public:
      * or StartDrawing() is called.
      */
     void StopDrawing();
+
+    /**
+     * Function SetHighContrastLayer
+     * Takes care of display settings for the given layer to be displayed in high contrast mode.
+     */
+    virtual void SetHighContrastLayer( LAYER_NUM aLayer );
+
+    /**
+     * Function SetTopLayer
+     * Moves the selected layer to the top, so it is displayed above all others.
+     */
+    virtual void SetTopLayer( LAYER_NUM aLayer );
 
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
