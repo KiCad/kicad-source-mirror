@@ -373,7 +373,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
 {
     // the layer change from the PCB_LAYER_WIDGET can be denied by returning
     // false from this function.
-    myframe->SetActiveLayer( ToLAYER_ID( aLayer ), false );
+    myframe->SetActiveLayer( ToLAYER_ID( aLayer ) );
 
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();

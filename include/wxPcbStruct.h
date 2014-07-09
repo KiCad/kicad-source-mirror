@@ -536,16 +536,7 @@ public:
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    void SetActiveLayer( LAYER_ID aLayer, bool doLayerWidgetUpdate = true );
-
-    /**
-     * Function GetActiveLayer
-     * returns the active layer
-     */
-    LAYER_ID GetActiveLayer() const
-    {
-        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
-    }
+    virtual void SetActiveLayer( LAYER_ID aLayer );
 
     /**
      * Function IsElementVisible

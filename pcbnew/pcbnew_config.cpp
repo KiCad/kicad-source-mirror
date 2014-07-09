@@ -99,7 +99,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             if( !GetBoard()->GetEnabledLayers()[ cur_layer ] )
                 cur_layer = F_Cu;
 
-            SetActiveLayer( cur_layer, true );
+            SetActiveLayer( cur_layer );
 
             OnModify();
             ReCreateLayerBox();
