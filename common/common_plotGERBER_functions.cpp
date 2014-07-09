@@ -356,14 +356,17 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAn
     DPOINT devEnd = userToDeviceCoordinates( end );
     DPOINT devCenter = userToDeviceCoordinates( aCenter )
         - userToDeviceCoordinates( start );
+
     fprintf( outputFile, "G75*\n" ); // Multiquadrant mode
 
     if( aStAngle < aEndAngle )
         fprintf( outputFile, "G03" );
     else
         fprintf( outputFile, "G02" );
-    fprintf( outputFile, "X%dY%dI%dJ%dD01*\n", int( devEnd.x ), int( devEnd.y ),
-             int( devCenter.x ), int( devCenter.y ) );
+
+    fprintf( outputFile, "X%dY%dI%dJ%dD01*\n",
+             KiROUND( devEnd.x ), KiROUND( devEnd.y ),
+             KiROUND( devCenter.x ), KiROUND( devCenter.y ) );
     fprintf( outputFile, "G74*\nG01*\n" ); // Back to single quadrant and linear interp.
 }
 
