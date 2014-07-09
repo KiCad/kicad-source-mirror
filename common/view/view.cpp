@@ -1027,7 +1027,7 @@ struct VIEW::extentsVisitor {
 
         bool operator()( VIEW_ITEM* aItem )
         {
-            if(first)
+            if( first )
                 extents = aItem->ViewBBox();
             else
                 extents.Merge ( aItem->ViewBBox() );

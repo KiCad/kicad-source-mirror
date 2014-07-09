@@ -31,7 +31,8 @@
 #include <gal/opengl/cached_container.h>
 #include <gal/opengl/noncached_container.h>
 #include <gal/opengl/shader.h>
-#include <wx/log.h>
+#include <cstdlib>
+#include <cstring>
 
 using namespace KIGFX;
 
@@ -45,9 +46,11 @@ VERTEX_CONTAINER* VERTEX_CONTAINER::MakeContainer( bool aCached )
 
 
 VERTEX_CONTAINER::VERTEX_CONTAINER( unsigned int aSize ) :
-    m_freeSpace( aSize ), m_currentSize( aSize ), m_initialSize( aSize ), m_failed( false )
+    m_freeSpace( aSize ), m_currentSize( aSize ), m_initialSize( aSize ),
+    m_failed( false ), m_dirty( true )
 {
     m_vertices = static_cast<VERTEX*>( malloc( aSize * sizeof( VERTEX ) ) );
+    memset( m_vertices, 0x00, aSize * sizeof( VERTEX ) );
 }
 
 

@@ -45,6 +45,8 @@ void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 
 const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
 
+wxGLContext* OPENGL_GAL::glContext = NULL;
+
 OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                         wxEvtHandler* aPaintListener, const wxString& aName ) :
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
@@ -54,7 +56,9 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     overlayManager( false )
 {
     // Create the OpenGL-Context
-    glContext       = new wxGLContext( this );
+    if( glContext == NULL )
+        glContext = new wxGLContext( this );
+
     parentWindow    = aParent;
     mouseListener   = aMouseListener;
     paintListener   = aPaintListener;
@@ -113,8 +117,6 @@ OPENGL_GAL::~OPENGL_GAL()
 
     gluDeleteTess( tesselator );
     ClearCache();
-
-    delete glContext;
 }
 
 
@@ -122,23 +124,22 @@ void OPENGL_GAL::BeginDrawing()
 {
     SetCurrent( *glContext );
 
-    clientDC = new wxClientDC( this );
+    clientDC = new wxPaintDC( this );
 
     // Initialize GLEW, FBOs & VBOs
     if( !isGlewInitialized )
         initGlew();
 
+    // Set up the view port
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    glViewport( 0, 0, (GLsizei) screenSize.x, (GLsizei) screenSize.y );
+
+    // Create the screen transformation
+    glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y, -depthRange.x, -depthRange.y );
+
     if( !isFramebufferInitialized )
     {
-        // Set up the view port
-        glMatrixMode( GL_PROJECTION );
-        glLoadIdentity();
-        glViewport( 0, 0, (GLsizei) screenSize.x, (GLsizei) screenSize.y );
-
-        // Create the screen transformation
-        glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y,
-                -depthRange.x, -depthRange.y );
-
         // Prepare rendering target buffers
         compositor.Initialize();
         mainBuffer = compositor.CreateBuffer();
@@ -967,7 +968,7 @@ void OPENGL_GAL::initGlew()
         exit( 1 );
     }
 
-    // Vertex buffer have to be supported
+    // Vertex buffer has to be supported
     if( !GLEW_ARB_vertex_buffer_object )
     {
         DisplayError( parentWindow, wxT( "Vertex buffer objects are not supported!" ) );
