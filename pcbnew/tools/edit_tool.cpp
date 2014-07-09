@@ -40,7 +40,7 @@
 #include "edit_tool.h"
 
 EDIT_TOOL::EDIT_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL )
+    TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ), m_editModules( false )
 {
 }
 
@@ -448,11 +448,40 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
     }
     break;
 
-    // These are not supposed to be removed
-    case PCB_PAD_T:
+    // Default removal procedure
     case PCB_MODULE_TEXT_T:
+    {
+        if( m_editModules )
+        {
+            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( aItem );
+
+            switch( text->GetType() )
+            {
+            case TEXTE_MODULE::TEXT_is_REFERENCE:
+                DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete REFERENCE!" ) );
+                return;
+
+            case TEXTE_MODULE::TEXT_is_VALUE:
+                DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete VALUE!" ) );
+                return;
+            }
+        }
+    }
+    /* no break */
+
+    case PCB_PAD_T:
     case PCB_MODULE_EDGE_T:
+        if( m_editModules )
+        {
+            MODULE* module = static_cast<MODULE*>( aItem->GetParent() );
+            module->SetLastEditTime();
+
+            board->m_Status_Pcb = 0; // it is done in the legacy view
+            aItem->DeleteStructure();
+        }
+
         return;
+        break;
 
     case PCB_LINE_T:                // a segment not on copper layers
     case PCB_TEXT_T:                // a text on a layer
