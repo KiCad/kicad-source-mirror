@@ -50,6 +50,7 @@
 #include <module_editor_frame.h>
 #include <modview_frame.h>
 #include <collectors.h>
+#include <tool/tool_manager.h>
 
 #include <dialog_edit_module_for_Modedit.h>
 #include <wildcards_and_files_ext.h>
@@ -935,6 +936,7 @@ void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
     {
         SetBoard( m_Pcb );
 
+        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
         GetGalCanvas()->StartDrawing();
     }
 }
