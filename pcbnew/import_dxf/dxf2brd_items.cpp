@@ -67,13 +67,13 @@ DXF2BRD_CONVERTER::~DXF2BRD_CONVERTER()
 // coordinate conversions from dxf to internal units
 int DXF2BRD_CONVERTER::mapX( double aDxfCoordX )
 {
-    return Millimeter2iu( m_xOffset + (aDxfCoordX * m_Dfx2mm) );
+    return Millimeter2iu( m_xOffset + ( aDxfCoordX * m_Dfx2mm ) );
 }
 
 
 int DXF2BRD_CONVERTER::mapY( double aDxfCoordY )
 {
-    return Millimeter2iu( m_yOffset - (aDxfCoordY * m_Dfx2mm) );
+    return Millimeter2iu( m_yOffset - ( aDxfCoordY * m_Dfx2mm ) );
 }
 
 
@@ -95,23 +95,22 @@ bool DXF2BRD_CONVERTER::ImportDxfFile( const wxString& aFile, BOARD* aBoard )
     return success;
 }
 
-// Add aItem the the board
-// this item is also added to the list of new items
-// (for undo command for instance)
-void DXF2BRD_CONVERTER::appendToBoard( BOARD_ITEM * aItem )
+
+void DXF2BRD_CONVERTER::appendToBoard( BOARD_ITEM* aItem )
 {
     m_brd->Add( aItem );
     m_newItemsList.push_back( aItem );
 }
 
+
 /*
  * Implementation of the method which handles layers.
  */
-void DXF2BRD_CONVERTER::addLayer( const DRW_Layer& data )
+void DXF2BRD_CONVERTER::addLayer( const DRW_Layer& aData )
 {
     // Not yet useful in Pcbnew.
 #if 0
-    wxString name = wxString::FromUTF8( data.name.c_str() );
+    wxString name = wxString::FromUTF8( aData.name.c_str() );
     wxLogMessage( name );
 #endif
 }
@@ -120,25 +119,20 @@ void DXF2BRD_CONVERTER::addLayer( const DRW_Layer& data )
 /*
  * Import line entities.
  */
-void DXF2BRD_CONVERTER::addLine( const DRW_Line& data )
+void DXF2BRD_CONVERTER::addLine( const DRW_Line& aData )
 {
-    DRAWSEGMENT*    segm = new DRAWSEGMENT( m_brd );
+    DRAWSEGMENT* segm = new DRAWSEGMENT( m_brd );
 
     segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
-
-    wxPoint         start( mapX( data.basePoint.x ), mapY( data.basePoint.y ) );
-
+    wxPoint start( mapX( aData.basePoint.x ), mapY( aData.basePoint.y ) );
     segm->SetStart( start );
-
-    wxPoint         end( mapX( data.secPoint.x ), mapY( data.secPoint.y ) );
-
+    wxPoint end( mapX( aData.secPoint.x ), mapY( aData.secPoint.y ) );
     segm->SetEnd( end );
-
-    segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness : data.thickness ) );
+    segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness : aData.thickness ) );
     appendToBoard( segm );
 }
 
-void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& data )
+void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& aData )
 {
     // Currently, Pcbnew does not know polylines, for boards.
     // So we have to convert a polyline to a set of segments.
@@ -146,9 +140,9 @@ void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& data )
 
     wxPoint startpoint;
 
-    for( unsigned ii = 0; ii < data.vertlist.size(); ii++ )
+    for( unsigned ii = 0; ii < aData.vertlist.size(); ii++ )
     {
-        DRW_Vertex* vertex = data.vertlist[ii];
+        DRW_Vertex* vertex = aData.vertlist[ii];
 
         if( ii == 0 )
         {
@@ -163,14 +157,14 @@ void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& data )
         segm->SetStart( startpoint );
         wxPoint endpoint( mapX( vertex->basePoint.x ), mapY( vertex->basePoint.y ) );
         segm->SetEnd( endpoint );
-        segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness
-                                : data.thickness ) );
+        segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness
+                                : aData.thickness ) );
         appendToBoard( segm );
         startpoint = endpoint;
     }
 }
 
-void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& data )
+void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& aData )
 {
     // Currently, Pcbnew does not know polylines, for boards.
     // So we have to convert a polyline to a set of segments.
@@ -179,9 +173,9 @@ void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& data )
     // the variable width of each vertex (when exists) is not used.
     wxPoint startpoint;
 
-    for( unsigned ii = 0; ii < data.vertlist.size(); ii++ )
+    for( unsigned ii = 0; ii < aData.vertlist.size(); ii++ )
     {
-        DRW_Vertex2D* vertex = data.vertlist[ii];
+        DRW_Vertex2D* vertex = aData.vertlist[ii];
 
         if( ii == 0 )
         {
@@ -196,8 +190,8 @@ void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& data )
         segm->SetStart( startpoint );
         wxPoint endpoint( mapX( vertex->x ), mapY( vertex->y ) );
         segm->SetEnd( endpoint );
-        segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness
-                                : data.thickness ) );
+        segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness
+                                : aData.thickness ) );
         appendToBoard( segm );
         startpoint = endpoint;
     }
@@ -206,19 +200,17 @@ void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& data )
 /*
  * Import Circle entities.
  */
-void DXF2BRD_CONVERTER::addCircle( const DRW_Circle& data )
+void DXF2BRD_CONVERTER::addCircle( const DRW_Circle& aData )
 {
     DRAWSEGMENT* segm = new DRAWSEGMENT( m_brd );
 
     segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
     segm->SetShape( S_CIRCLE );
-    wxPoint center( mapX( data.basePoint.x ), mapY( data.basePoint.y ) );
+    wxPoint center( mapX( aData.basePoint.x ), mapY( aData.basePoint.y ) );
     segm->SetCenter( center );
-    wxPoint circle_start( mapX( data.basePoint.x + data.radious ),
-                          mapY( data.basePoint.y ) );
+    wxPoint circle_start( mapX( aData.basePoint.x + aData.radious ), mapY( aData.basePoint.y ) );
     segm->SetArcStart( circle_start );
-    segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness
-                            : data.thickness ) );
+    segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness : aData.thickness ) );
     appendToBoard( segm );
 }
 
@@ -256,25 +248,24 @@ void DXF2BRD_CONVERTER::addArc( const DRW_Arc& data )
 
     segm->SetAngle( angle );
 
-    segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness
-                            : data.thickness ) );
+    segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness : data.thickness ) );
     appendToBoard( segm );
 }
 
 /**
  * Import texts (TEXT).
  */
-void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
+void DXF2BRD_CONVERTER::addText( const DRW_Text& aData )
 {
-    TEXTE_PCB*  pcb_text = new TEXTE_PCB( m_brd );
+    TEXTE_PCB* pcb_text = new TEXTE_PCB( m_brd );
     pcb_text->SetLayer( ToLAYER_ID( m_brdLayer ) );
 
-    wxPoint refPoint( mapX(data.basePoint.x), mapY(data.basePoint.y) );
-    wxPoint secPoint( mapX(data.secPoint.x), mapY(data.secPoint.y) );
+    wxPoint refPoint( mapX( aData.basePoint.x ), mapY( aData.basePoint.y ) );
+    wxPoint secPoint( mapX( aData.secPoint.x ), mapY( aData.secPoint.y ) );
 
-    if (data.alignV !=0 || data.alignH !=0 ||data.alignH ==DRW_Text::HMiddle)
+    if( aData.alignV != 0 || aData.alignH != 0 || aData.alignH == DRW_Text::HMiddle )
     {
-        if (data.alignH !=DRW_Text::HAligned && data.alignH !=DRW_Text::HFit)
+        if( aData.alignH != DRW_Text::HAligned && aData.alignH != DRW_Text::HFit )
         {
             wxPoint tmp = secPoint;
             secPoint = refPoint;
@@ -282,7 +273,7 @@ void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
         }
     }
 
-    switch( data.alignV )
+    switch( aData.alignV )
     {
         case DRW_Text::VBaseLine:
             pcb_text->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
@@ -301,7 +292,7 @@ void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
             break;
     }
 
-    switch( data.alignH )
+    switch( aData.alignH )
     {
         case DRW_Text::HLeft:
             pcb_text->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
@@ -332,13 +323,13 @@ void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
     }
 
 #if 0
-    wxString sty = wxString::FromUTF8(data.style.c_str());
+    wxString sty = wxString::FromUTF8(aData.style.c_str());
     sty=sty.ToLower();
 
-    if (data.textgen==2)
+    if (aData.textgen==2)
     {
         // Text dir = left to right;
-    } else if (data.textgen==4)
+    } else if (aData.textgen==4)
     {
         / Text dir = top to bottom;
     } else
@@ -346,15 +337,14 @@ void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
     }
 #endif
 
-    wxString    text = toNativeString( wxString::FromUTF8( data.text.c_str() ) );
+    wxString text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
 
     pcb_text->SetTextPosition( refPoint );
-    pcb_text->SetOrientation( data.angle * 10 );
+    pcb_text->SetOrientation( aData.angle * 10 );
     // The 0.8 factor gives a better height/width ratio with our font
-    pcb_text->SetWidth( mapDim( data.height * 0.8 ) );
-    pcb_text->SetHeight( mapDim( data.height ) );
-    pcb_text->SetThickness( mapDim( data.thickness == 0 ? m_defaultThickness
-                                    : data.thickness ) );
+    pcb_text->SetWidth( mapDim( aData.height * 0.8 ) );
+    pcb_text->SetHeight( mapDim( aData.height ) );
+    pcb_text->SetThickness( mapDim( aData.thickness == 0 ? m_defaultThickness : aData.thickness ) );
     pcb_text->SetText( text );
 
     appendToBoard( pcb_text );
@@ -364,9 +354,9 @@ void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
 /**
  * Import multi line texts (MTEXT).
  */
-void DXF2BRD_CONVERTER::addMText( const DRW_MText& data )
+void DXF2BRD_CONVERTER::addMText( const DRW_MText& aData )
 {
-    wxString    text = toNativeString( wxString::FromUTF8( data.text.c_str() ) );
+    wxString    text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
     wxString    attrib, tmp;
 
     /* Some texts start by '\' and have formating chars (font name, font option...)
@@ -396,23 +386,21 @@ void DXF2BRD_CONVERTER::addMText( const DRW_MText& data )
 
     TEXTE_PCB*  pcb_text = new TEXTE_PCB( m_brd );
     pcb_text->SetLayer( ToLAYER_ID( m_brdLayer ) );
-
-    wxPoint     textpos( mapX( data.basePoint.x ), mapY( data.basePoint.y ) );
+    wxPoint     textpos( mapX( aData.basePoint.x ), mapY( aData.basePoint.y ) );
     pcb_text->SetTextPosition( textpos );
-    pcb_text->SetOrientation( data.angle * 10 );
+    pcb_text->SetOrientation( aData.angle * 10 );
     // The 0.8 factor gives a better height/width ratio with our font
-    pcb_text->SetWidth( mapDim( data.height * 0.8 ) );
-    pcb_text->SetHeight( mapDim( data.height ) );
-    pcb_text->SetThickness( mapDim( data.thickness == 0 ? m_defaultThickness
-                                    : data.thickness ) );
+    pcb_text->SetWidth( mapDim( aData.height * 0.8 ) );
+    pcb_text->SetHeight( mapDim( aData.height ) );
+    pcb_text->SetThickness( mapDim( aData.thickness == 0 ? m_defaultThickness : aData.thickness ) );
     pcb_text->SetText( text );
 
     // Initialize text justifications:
-    if( data.textgen <= 3 )
+    if( aData.textgen <= 3 )
     {
         pcb_text->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
     }
-    else if( data.textgen <= 6 )
+    else if( aData.textgen <= 6 )
     {
         pcb_text->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
     }
@@ -421,11 +409,11 @@ void DXF2BRD_CONVERTER::addMText( const DRW_MText& data )
         pcb_text->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
     }
 
-    if( data.textgen % 3 == 1 )
+    if( aData.textgen % 3 == 1 )
     {
         pcb_text->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
     }
-    else if( data.textgen % 3 == 2 )
+    else if( aData.textgen % 3 == 2 )
     {
         pcb_text->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
     }
@@ -448,7 +436,7 @@ void DXF2BRD_CONVERTER::addMText( const DRW_MText& data )
         // use ByStyle;
     }
 
-    if( data.alignV==1 )
+    if( aData.alignV==1 )
     {
         // use AtLeast;
     }
@@ -490,24 +478,24 @@ void DXF2BRD_CONVERTER::addHeader( const DRW_Header* data )
  * - %%%d for a degree sign
  * - %%%p for a plus/minus sign
  */
-wxString DXF2BRD_CONVERTER::toDxfString( const wxString& str )
+wxString DXF2BRD_CONVERTER::toDxfString( const wxString& aStr )
 {
     wxString    res;
     int         j = 0;
 
-    for( unsigned i = 0; i<str.length(); ++i )
+    for( unsigned i = 0; i<aStr.length(); ++i )
     {
-        int c = str[i];
+        int c = aStr[i];
 
-        if( c>175 || c<11 )
+        if( c > 175 || c < 11 )
         {
-            res.append( str.Mid( j, i - j ) );
+            res.append( aStr.Mid( j, i - j ) );
             j = i;
 
             switch( c )
             {
             case 0x0A:
-                res += wxT("\\P");
+                res += wxT( "\\P" );
                 break;
 
                 // diameter:
@@ -517,17 +505,17 @@ wxString DXF2BRD_CONVERTER::toDxfString( const wxString& str )
 #else
             case 0x2205:
 #endif
-                res += wxT("%%C");
+                res += wxT( "%%C" );
                 break;
 
             // degree:
             case 0x00B0:
-                res += wxT("%%D");
+                res += wxT( "%%D" );
                 break;
 
             // plus/minus
             case 0x00B1:
-                res += wxT("%%P");
+                res += wxT( "%%P" );
                 break;
 
             default:
@@ -539,7 +527,7 @@ wxString DXF2BRD_CONVERTER::toDxfString( const wxString& str )
         }
     }
 
-    res.append( str.Mid( j ) );
+    res.append( aStr.Mid( j ) );
     return res;
 }
 
@@ -547,26 +535,26 @@ wxString DXF2BRD_CONVERTER::toDxfString( const wxString& str )
 /**
  * Converts a DXF encoded string into a native Unicode string.
  */
-wxString DXF2BRD_CONVERTER::toNativeString( const wxString& data )
+wxString DXF2BRD_CONVERTER::toNativeString( const wxString& aData )
 {
     wxString    res;
 
     // Ignore font tags:
     int         j = 0;
 
-    for( unsigned i = 0; i<data.length(); ++i )
+    for( unsigned i = 0; i < aData.length(); ++i )
     {
-        if( data[ i ] == 0x7B )                                     // is '{' ?
+        if( aData[ i ] == 0x7B )                                     // is '{' ?
         {
-            if( data[ i + 1 ] == 0x5c && data[ i + 2 ] == 0x66 )    // is "\f" ?
+            if( aData[ i + 1 ] == 0x5c && aData[ i + 2 ] == 0x66 )    // is "\f" ?
             {
                 // found font tag, append parsed part
-                res.append( data.Mid( j, i - j ) );
+                res.append( aData.Mid( j, i - j ) );
 
                 // skip to ';'
-                for( unsigned k = i + 3; k < data.length(); ++k )
+                for( unsigned k = i + 3; k < aData.length(); ++k )
                 {
-                    if( data[ k ] == 0x3B )
+                    if( aData[ k ] == 0x3B )
                     {
                         i = j = ++k;
                         break;
@@ -574,11 +562,11 @@ wxString DXF2BRD_CONVERTER::toNativeString( const wxString& data )
                 }
 
                 // add to '}'
-                for( unsigned k = i; k<data.length(); ++k )
+                for( unsigned k = i; k < aData.length(); ++k )
                 {
-                    if( data[ k ] == 0x7D )
+                    if( aData[ k ] == 0x7D )
                     {
-                        res.append( data.Mid( i, k - i ) );
+                        res.append( aData.Mid( i, k - i ) );
                         i = j = ++k;
                         break;
                     }
@@ -587,7 +575,7 @@ wxString DXF2BRD_CONVERTER::toNativeString( const wxString& data )
         }
     }
 
-    res.append( data.Mid( j ) );
+    res.append( aData.Mid( j ) );
 
 #if 1
     wxRegEx regexp;
@@ -621,7 +609,7 @@ wxString DXF2BRD_CONVERTER::toNativeString( const wxString& data )
 }
 
 
-void DXF2BRD_CONVERTER::addTextStyle( const DRW_Textstyle& data )
+void DXF2BRD_CONVERTER::addTextStyle( const DRW_Textstyle& aData )
 {
     // TODO
 }
