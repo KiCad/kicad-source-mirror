@@ -55,6 +55,11 @@
 #include <wildcards_and_files_ext.h>
 #include <pcbnew_config.h>
 
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include "tools/pcbnew_control.h"
+#include "tools/common_actions.h"
+
 #include <boost/bind.hpp>
 
 
@@ -144,14 +149,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_footprintList = new wxListBox( this, ID_MODVIEW_FOOTPRINT_LIST,
             wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL );
 
-    // Create GAL canvas
-    EDA_DRAW_FRAME* drawFrame = static_cast<EDA_DRAW_FRAME*>( aParent );
-    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            drawFrame->GetGalCanvas()->GetBackend() );
-    SetGalCanvas( drawPanel );
-
-    SetBoard( new BOARD() );
-
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
@@ -168,6 +165,23 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     ReCreateLibraryList();
     UpdateTitle();
+
+    EDA_DRAW_FRAME* drawFrame = static_cast<EDA_DRAW_FRAME*>( aParent );
+
+    // Create GAL canvas
+    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                            drawFrame->GetGalCanvas()->GetBackend() );
+    SetGalCanvas( drawPanel );
+
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
+                                   drawPanel->GetViewControls(), this );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+    drawPanel->SetEventDispatcher( m_toolDispatcher );
+
+    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+    m_toolManager->ResetTools( TOOL_BASE::RUN );
 
     // If a footprint was previously loaded, reload it
     if( getCurNickname().size() && getCurFootprintName().size() )
@@ -277,6 +291,10 @@ const wxChar* FOOTPRINT_VIEWER_FRAME::GetFootprintViewerFrameName()
 void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     DBG(printf( "%s:\n", __func__ );)
+
+    if( IsGalCanvasActive() )
+        GetGalCanvas()->StopDrawing();
+
     if( IsModal() )
     {
         // Only dismiss a modal frame once, so that the return values set by
