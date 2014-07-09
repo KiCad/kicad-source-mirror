@@ -195,6 +195,9 @@ bool POINT_EDITOR::Init()
         return false;
     }
 
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::pointEditorBreakOutline,
+                                  POINT_EDITOR::breakOutlineCondition );
+
     setTransitions();
 
     return true;
@@ -259,9 +262,10 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                 m_dragPoint = point;
             }
 
-            else if( evt->IsDblClick( BUT_LEFT ) )
+            else if( evt->IsAction( &COMMON_ACTIONS::pointEditorBreakOutline ) )
             {
                 breakOutline( controls->GetCursorPosition() );
+                updatePoints();
             }
 
             else if( evt->IsDrag( BUT_LEFT ) && m_dragPoint )
@@ -446,8 +450,9 @@ void POINT_EDITOR::updateItem() const
 
         for( int i = 0; i < outline->GetCornersCount(); ++i )
         {
-            outline->SetX( i, m_editPoints->Point( i ).GetPosition().x );
-            outline->SetY( i, m_editPoints->Point( i ).GetPosition().y );
+            VECTOR2I point = m_editPoints->Point( i ).GetPosition();
+            outline->SetX( i, point.x );
+            outline->SetY( i, point.y );
         }
 
         break;
@@ -521,7 +526,7 @@ void POINT_EDITOR::finishItem() const
 }
 
 
-void POINT_EDITOR::updatePoints() const
+void POINT_EDITOR::updatePoints()
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
@@ -563,8 +568,17 @@ void POINT_EDITOR::updatePoints() const
         const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( item );
         const CPolyLine* outline = zone->Outline();
 
-        for( int i = 0; i < outline->GetCornersCount(); ++i )
-            m_editPoints->Point( i ).SetPosition( outline->GetPos( i ) );
+        if( m_editPoints->PointsSize() != (unsigned) outline->GetCornersCount() )
+        {
+            getView()->Remove( m_editPoints.get() );
+            m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
+            getView()->Add( m_editPoints.get() );
+        }
+        else
+        {
+            for( int i = 0; i < outline->GetCornersCount(); ++i )
+                m_editPoints->Point( i ).SetPosition( outline->GetPos( i ) );
+        }
 
         break;
     }
@@ -762,4 +776,25 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
             getView()->Add( newSegment );
         }
     }
+}
+
+
+void POINT_EDITOR::setTransitions()
+{
+    Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->SelectedEvent );
+    Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->DeselectedEvent );
+}
+
+
+bool POINT_EDITOR::breakOutlineCondition( const SELECTION& aSelection )
+{
+    if( aSelection.Size() != 1 )
+        return false;
+
+    BOARD_ITEM* item = aSelection.Item<BOARD_ITEM>( 0 );
+
+    // Works only for zones and line segments
+    return item->Type() == PCB_ZONE_AREA_T ||
+           ( ( item->Type() == PCB_LINE_T || item->Type() == PCB_MODULE_EDGE_T ) &&
+               static_cast<DRAWSEGMENT*>( item )->GetShape() == S_SEGMENT );
 }
