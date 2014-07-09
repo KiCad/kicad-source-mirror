@@ -210,22 +210,20 @@ int MODULE_TOOLS::CopyItems( TOOL_EVENT& aEvent )
 
     Activate();
 
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    controls->SetSnapping( true );
-    controls->ShowCursor( true );
-    controls->SetAutoPan( true );
+    m_controls->SetSnapping( true );
+    m_controls->ShowCursor( true );
+    m_controls->SetAutoPan( true );
 
-    PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
-    frame->DisplayToolMsg( _( "Select reference point" ) );
+    m_frame->DisplayToolMsg( _( "Select reference point" ) );
 
     bool cancelled = false;
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         if( evt->IsMotion() )
         {
-            cursorPos = getViewControls()->GetCursorPosition();
+            cursorPos = m_controls->GetCursorPosition();
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -243,7 +241,7 @@ int MODULE_TOOLS::CopyItems( TOOL_EVENT& aEvent )
         PCB_IO io( CTL_FOR_CLIPBOARD );
 
         // Create a temporary module that contains selected items to ease serialization
-        MODULE module( getModel<BOARD>() );
+        MODULE module( m_board );
 
         for( int i = 0; i < selection.Size(); ++i )
         {
@@ -257,7 +255,7 @@ int MODULE_TOOLS::CopyItems( TOOL_EVENT& aEvent )
         }
 
         // Set the new relative internal local coordinates of copied items
-        MODULE* editedModule = getModel<BOARD>()->m_Modules;
+        MODULE* editedModule = m_board->m_Modules;
         wxPoint moveVector = module.GetPosition() + editedModule->GetPosition() -
                              wxPoint( cursorPos.x, cursorPos.y );
         module.MoveAnchorPosition( moveVector );
@@ -267,10 +265,10 @@ int MODULE_TOOLS::CopyItems( TOOL_EVENT& aEvent )
         m_toolMgr->SaveClipboard( data );
     }
 
-    frame->DisplayToolMsg( wxString::Format( _( "Copied %d item(s)" ), selection.Size() ) );
-    controls->SetSnapping( false );
-    controls->ShowCursor( false );
-    controls->SetAutoPan( false );
+    m_frame->DisplayToolMsg( wxString::Format( _( "Copied %d item(s)" ), selection.Size() ) );
+    m_controls->SetSnapping( false );
+    m_controls->ShowCursor( false );
+    m_controls->SetAutoPan( false );
 
     setTransitions();
 
@@ -282,7 +280,7 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
 {
     // Parse clipboard
     PCB_IO io( CTL_FOR_CLIPBOARD );
-    MODULE* currentModule = getModel<BOARD>()->m_Modules;
+    MODULE* currentModule = m_board->m_Modules;
     MODULE* pastedModule = NULL;
 
     try
@@ -300,31 +298,27 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
     }
 
     // Placement tool part
-    KIGFX::VIEW* view = getView();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    BOARD* board = getModel<BOARD>();
-    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view );
-    pastedModule->SetParent( board );
+    KIGFX::VIEW_GROUP preview( m_view );
+    pastedModule->SetParent( m_board );
     pastedModule->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
     pastedModule->RunOnChildren( boost::bind( &KIGFX::VIEW_GROUP::Add, boost::ref( preview ), _1 ) );
     preview.Add( pastedModule );
-    view->Add( &preview );
+    m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
-    controls->ShowCursor( true );
-    controls->SetSnapping( true );
-    controls->SetAutoPan( true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+    m_controls->SetAutoPan( true );
 
     Activate();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = controls->GetCursorPosition();
+        cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsMotion() )
         {
@@ -336,7 +330,7 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                pastedModule->Rotate( pastedModule->GetPosition(), frame->GetRotationAngle() );
+                pastedModule->Rotate( pastedModule->GetPosition(), m_frame->GetRotationAngle() );
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
@@ -353,10 +347,10 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            frame->OnModify();
-            frame->SaveCopyInUndoList( currentModule, UR_MODEDIT );
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( currentModule, UR_MODEDIT );
 
-            board->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
+            m_board->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
             currentModule->SetLastEditTime();
 
             // MODULE::RunOnChildren is infeasible here: we need to create copies of items, do not
@@ -368,7 +362,7 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
 
                 currentModule->Add( clone );
                 clone->SetLocalCoord();
-                view->Add( clone );
+                m_view->Add( clone );
             }
 
             for( BOARD_ITEM* drawing = pastedModule->GraphicalItems();
@@ -393,7 +387,7 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
                     edge->SetLocalCoord();
                 }
 
-                view->Add( clone );
+                m_view->Add( clone );
             }
 
             preview.Clear();
@@ -403,10 +397,10 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
     }
 
     delete pastedModule;
-    controls->ShowCursor( false );
-    controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-    view->Remove( &preview );
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
 
     setTransitions();
 
