@@ -157,6 +157,8 @@ public:
     static TOOL_ACTION layerAlphaInc;
     static TOOL_ACTION layerAlphaDec;
 
+    static TOOL_ACTION layerChanged;        // notification
+
     // Grid control
     static TOOL_ACTION gridFast1;
     static TOOL_ACTION gridFast2;

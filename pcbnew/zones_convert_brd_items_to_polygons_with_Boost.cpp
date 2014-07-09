@@ -303,7 +303,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     {
         for( BOARD_ITEM* item = module->GraphicalItems();  item;  item = item->Next() )
         {
-            if( !item->IsOnLayer( GetLayer() ) && !item->IsOnLayer( EDGE_N ) )
+            if( !item->IsOnLayer( GetLayer() ) && !item->IsOnLayer( Edge_Cuts ) )
                 continue;
 
             if( item->Type() != PCB_MODULE_EDGE_T )

@@ -62,14 +62,7 @@ public:
     int HighContrastDec( TOOL_EVENT& aEvent );
 
     // Layer control
-    int LayerTop( TOOL_EVENT& aEvent );
-    int LayerInner1( TOOL_EVENT& aEvent );
-    int LayerInner2( TOOL_EVENT& aEvent );
-    int LayerInner3( TOOL_EVENT& aEvent );
-    int LayerInner4( TOOL_EVENT& aEvent );
-    int LayerInner5( TOOL_EVENT& aEvent );
-    int LayerInner6( TOOL_EVENT& aEvent );
-    int LayerBottom( TOOL_EVENT& aEvent );
+    int LayerSwitch( TOOL_EVENT& aEvent );
     int LayerNext( TOOL_EVENT& aEvent );
     int LayerPrev( TOOL_EVENT& aEvent );
     int LayerAlphaInc( TOOL_EVENT& aEvent );

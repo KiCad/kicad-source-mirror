@@ -222,6 +222,10 @@ TOOL_ACTION COMMON_ACTIONS::layerAlphaDec( "pcbnew.Control.layerAlphaDec",
         AS_GLOBAL, '{',
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
+        AS_GLOBAL, 0,
+        "", "", AF_NOTIFY );
+
 
 // Grid control
 TOOL_ACTION COMMON_ACTIONS::gridFast1( "pcbnew.Control.gridFast1",

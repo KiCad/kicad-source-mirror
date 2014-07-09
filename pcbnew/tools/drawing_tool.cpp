@@ -889,7 +889,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
     if( aStartingPoint )
     {
-        LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
+        LAYER_ID layer = m_frame->GetScreen()->m_Active_Layer;
 
         // Init the new item attributes
         aGraphic->SetShape( (STROKE_T) aShape );

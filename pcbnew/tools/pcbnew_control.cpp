@@ -279,79 +279,25 @@ int PCBNEW_CONTROL::HighContrastDec( TOOL_EVENT& aEvent )
 
 
 // Layer control
-int PCBNEW_CONTROL::LayerTop( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::LayerSwitch( TOOL_EVENT& aEvent )
 {
-    m_frame->SwitchLayer( NULL, F_Cu );
-    m_frame->GetGalCanvas()->SetFocus();
-    setTransitions();
+    if( aEvent.IsAction( &COMMON_ACTIONS::layerTop ) )
+        m_frame->SwitchLayer( NULL, F_Cu );
+    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner1 ) )
+        m_frame->SwitchLayer( NULL, In1_Cu );
+    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner2 ) )
+        m_frame->SwitchLayer( NULL, In2_Cu );
+    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner3 ) )
+        m_frame->SwitchLayer( NULL, In3_Cu );
+    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner4 ) )
+        m_frame->SwitchLayer( NULL, In4_Cu );
+    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner5 ) )
+        m_frame->SwitchLayer( NULL, In5_Cu );
+    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner6 ) )
+        m_frame->SwitchLayer( NULL, In6_Cu );
+    else if( aEvent.IsAction( &COMMON_ACTIONS::layerBottom ) )
+        m_frame->SwitchLayer( NULL, B_Cu );
 
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::LayerInner1( TOOL_EVENT& aEvent )
-{
-    m_frame->SwitchLayer( NULL, In1_Cu );
-    m_frame->GetGalCanvas()->SetFocus();
-    setTransitions();
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::LayerInner2( TOOL_EVENT& aEvent )
-{
-    m_frame->SwitchLayer( NULL, In2_Cu );
-    m_frame->GetGalCanvas()->SetFocus();
-    setTransitions();
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::LayerInner3( TOOL_EVENT& aEvent )
-{
-    m_frame->SwitchLayer( NULL, In3_Cu );
-    m_frame->GetGalCanvas()->SetFocus();
-    setTransitions();
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::LayerInner4( TOOL_EVENT& aEvent )
-{
-    m_frame->SwitchLayer( NULL, In4_Cu );
-    m_frame->GetGalCanvas()->SetFocus();
-    setTransitions();
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::LayerInner5( TOOL_EVENT& aEvent )
-{
-    m_frame->SwitchLayer( NULL, In5_Cu );
-    m_frame->GetGalCanvas()->SetFocus();
-    setTransitions();
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::LayerInner6( TOOL_EVENT& aEvent )
-{
-    m_frame->SwitchLayer( NULL, In6_Cu );
-    m_frame->GetGalCanvas()->SetFocus();
-    setTransitions();
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::LayerBottom( TOOL_EVENT& aEvent )
-{
-    m_frame->SetActiveLayer( B_Cu );
     m_frame->GetGalCanvas()->SetFocus();
     setTransitions();
 
@@ -364,15 +310,17 @@ int PCBNEW_CONTROL::LayerNext( TOOL_EVENT& aEvent )
     PCB_BASE_FRAME* editFrame = m_frame;
     LAYER_NUM layer = editFrame->GetActiveLayer();
 
-    if( layer < F_Cu || layer >= B_Cu )
+    if( layer < F_Cu || layer > B_Cu )
     {
         setTransitions();
         return 0;
     }
 
-    if( getModel<BOARD>()->GetCopperLayerCount() < 2 ) // Single layer
+    int layerCount = getModel<BOARD>()->GetCopperLayerCount();
+
+    if( layer == layerCount - 2 || layerCount < 2 )
         layer = B_Cu;
-    else if( layer >= getModel<BOARD>()->GetCopperLayerCount() - 2 )
+    else if( layer == B_Cu )
         layer = F_Cu;
     else
         ++layer;
@@ -390,16 +338,18 @@ int PCBNEW_CONTROL::LayerPrev( TOOL_EVENT& aEvent )
     PCB_BASE_FRAME* editFrame = m_frame;
     LAYER_NUM layer = editFrame->GetActiveLayer();
 
-    if( layer <= F_Cu || layer > B_Cu )
+    if( layer < F_Cu || layer > B_Cu )
     {
         setTransitions();
         return 0;
     }
 
-    if( getModel<BOARD>()->GetCopperLayerCount() < 2 ) // Single layer
+    int layerCount = getModel<BOARD>()->GetCopperLayerCount();
+
+    if( layer == F_Cu || layerCount < 2 )
         layer = B_Cu;
     else if( layer == B_Cu )
-        layer = std::max( int( F_Cu ), getModel<BOARD>()->GetCopperLayerCount() - 2 );
+        layer = layerCount - 2;
     else
         --layer;
 
@@ -617,14 +567,14 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::HighContrastDec,    COMMON_ACTIONS::highContrastDec.MakeEvent() );
 
     // Layer control
-    Go( &PCBNEW_CONTROL::LayerTop,           COMMON_ACTIONS::layerTop.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerInner1,        COMMON_ACTIONS::layerInner1.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerInner2,        COMMON_ACTIONS::layerInner2.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerInner3,        COMMON_ACTIONS::layerInner3.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerInner4,        COMMON_ACTIONS::layerInner4.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerInner5,        COMMON_ACTIONS::layerInner5.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerInner6,        COMMON_ACTIONS::layerInner6.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerBottom,        COMMON_ACTIONS::layerBottom.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,        COMMON_ACTIONS::layerTop.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,        COMMON_ACTIONS::layerInner1.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,        COMMON_ACTIONS::layerInner2.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,        COMMON_ACTIONS::layerInner3.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,        COMMON_ACTIONS::layerInner4.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,        COMMON_ACTIONS::layerInner5.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,        COMMON_ACTIONS::layerInner6.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,        COMMON_ACTIONS::layerBottom.MakeEvent() );
     Go( &PCBNEW_CONTROL::LayerNext,          COMMON_ACTIONS::layerNext.MakeEvent() );
     Go( &PCBNEW_CONTROL::LayerPrev,          COMMON_ACTIONS::layerPrev.MakeEvent() );
     Go( &PCBNEW_CONTROL::LayerAlphaInc,      COMMON_ACTIONS::layerAlphaInc.MakeEvent() );

@@ -576,14 +576,9 @@ int MODULE_TOOLS::ModuleEdgeOutlines( TOOL_EVENT& aEvent )
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
 
-    const LAYER_NUM layers[] = { ADHESIVE_N_FRONT, ADHESIVE_N_BACK,\
-            SOLDERPASTE_N_FRONT, SOLDERPASTE_N_BACK,\
-            SILKSCREEN_N_FRONT, SILKSCREEN_N_BACK,\
-            SOLDERMASK_N_FRONT, SOLDERMASK_N_BACK,\
-            DRAW_N,\
-            COMMENT_N,\
-            ECO1_N, ECO2_N,\
-            EDGE_N };
+    const LAYER_ID layers[] = { F_Adhes, B_Adhes, F_Paste, B_Paste,
+            F_SilkS, B_SilkS, F_Mask, B_Mask,
+            Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts };
 
     bool enable = !settings->GetSketchMode( layers[0] );
 

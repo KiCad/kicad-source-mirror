@@ -828,7 +828,10 @@ void PCB_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
     syncLayerWidgetLayer();
 
     if( IsGalCanvasActive() )
+    {
+        m_toolManager->RunAction( COMMON_ACTIONS::layerChanged );       // notify other tools
         GetGalCanvas()->Refresh();
+    }
 }
 
 
