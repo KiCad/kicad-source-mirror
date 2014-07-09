@@ -69,6 +69,8 @@ public:
      */
     void ReCreateLibraryList();
 
+    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
+    virtual void UseGalCanvas( bool aEnable );
 
 private:
 
@@ -170,8 +172,7 @@ private:
     void SaveCopyInUndoList( BOARD_ITEM*, UNDO_REDO_T, const wxPoint& ) {}
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO_T, const wxPoint &) {}
 
-    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    virtual void UseGalCanvas( bool aEnable );
+    void redrawGal();
 
     DECLARE_EVENT_TABLE()
 };
