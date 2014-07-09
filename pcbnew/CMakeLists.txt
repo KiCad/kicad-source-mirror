@@ -265,6 +265,7 @@ set( PCBNEW_CLASS_SRCS
     tools/pcbnew_control.cpp
     tools/pcb_editor_control.cpp
     tools/pcb_tools.cpp
+    tools/placement_tool.cpp
     tools/common_actions.cpp
     )
 

@@ -285,6 +285,38 @@ TOOL_ACTION COMMON_ACTIONS::pointEditorUpdate( "pcbnew.PointEditor.update",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
 
+// Placement tool
+TOOL_ACTION COMMON_ACTIONS::alignTop( "pcbnew.Place.alignTop",
+        AS_GLOBAL, 0,
+        "Align items to the top",
+        "Aligns selected items to the top edge" );
+
+TOOL_ACTION COMMON_ACTIONS::alignBottom( "pcbnew.Place.alignBottom",
+        AS_GLOBAL, 0,
+        "Align items to the bottom",
+        "Aligns selected items to the bottom edge" );
+
+TOOL_ACTION COMMON_ACTIONS::alignLeft( "pcbnew.Place.alignLeft",
+        AS_GLOBAL, 0,
+        "Align items to the left",
+        "Aligns selected items to the top left" );
+
+TOOL_ACTION COMMON_ACTIONS::alignRight( "pcbnew.Place.alignRight",
+        AS_GLOBAL, 0,
+        "Align items to the right",
+        "Aligns selected items to the right edge" );
+
+TOOL_ACTION COMMON_ACTIONS::distributeHorizontally( "pcbnew.Place.distributeHorizontally",
+        AS_GLOBAL, 0,
+        "Distribute horizontally",
+        "Distributes selected items along the horizontal axis" );
+
+TOOL_ACTION COMMON_ACTIONS::distributeVertically( "pcbnew.Place.distributeVertically",
+        AS_GLOBAL, 0,
+        "Distribure vertically",
+        "Distributes selected items along the vertical axis" );
+
+
 boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )
