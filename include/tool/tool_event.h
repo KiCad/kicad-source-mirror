@@ -318,9 +318,6 @@ public:
 
             if( m_commandId && aEvent.m_commandId )
                 return *m_commandId == *aEvent.m_commandId;
-
-            // Command-type event has to contain either id or string
-            assert( false );
         }
 
         return true;
@@ -495,7 +492,6 @@ inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& aEventA, const TOOL_E
 
     return l;
 }
-
 
 inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& aEvent,
                                          const TOOL_EVENT_LIST& aEventList )

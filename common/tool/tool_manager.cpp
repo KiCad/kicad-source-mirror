@@ -470,8 +470,6 @@ void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
 bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 {
-// wxLogDebug( "event: %s", aEvent.Format().c_str() );
-
     // Early dispatch of events destined for the TOOL_MANAGER
     if( !dispatchStandardEvents( aEvent ) )
         return false;
