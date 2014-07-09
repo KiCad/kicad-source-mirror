@@ -172,7 +172,7 @@ private:
     void SaveCopyInUndoList( BOARD_ITEM*, UNDO_REDO_T, const wxPoint& ) {}
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO_T, const wxPoint &) {}
 
-    void redrawGal();
+    void updateView();
 
     DECLARE_EVENT_TABLE()
 };

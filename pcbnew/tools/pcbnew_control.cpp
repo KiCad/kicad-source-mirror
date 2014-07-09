@@ -109,17 +109,29 @@ int PCBNEW_CONTROL::ZoomFitScreen( TOOL_EVENT& aEvent )
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
     BOX2I boardBBox = getModel<BOARD>()->ViewBBox();
-    VECTOR2I screenSize = gal->GetScreenPixelSize();
 
-    double iuPerX = screenSize.x ? boardBBox.GetWidth() / screenSize.x : 1.0;
-    double iuPerY = screenSize.y ? boardBBox.GetHeight() / screenSize.y : 1.0;
+    if( boardBBox.GetSize().x == 0 || boardBBox.GetSize().y == 0 )
+    {
+        // Empty view
+        view->SetScale( 100000.0 );
+        view->SetCenter( VECTOR2D( 0, 0 ) );
+    }
+    else
+    {
+        // Autozoom to board
+        VECTOR2I screenSize = gal->GetScreenPixelSize();
 
-    double bestZoom = std::max( iuPerX, iuPerY );
-    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
-    double zoom = 1.0 / ( zoomFactor * bestZoom );
+        double iuPerX = screenSize.x ? boardBBox.GetWidth() / screenSize.x : 1.0;
+        double iuPerY = screenSize.y ? boardBBox.GetHeight() / screenSize.y : 1.0;
 
-    view->SetScale( zoom );
-    view->SetCenter( boardBBox.Centre() );
+        double bestZoom = std::max( iuPerX, iuPerY );
+        double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+        double zoom = 1.0 / ( zoomFactor * bestZoom );
+
+        view->SetScale( zoom );
+        view->SetCenter( boardBBox.Centre() );
+    }
+
     setTransitions();
 
     return 0;
