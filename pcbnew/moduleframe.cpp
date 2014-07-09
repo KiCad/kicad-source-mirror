@@ -263,27 +263,24 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_messagePanel,
                       wxAuiPaneInfo( mesg_pane ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
-    if( drawFrame->IsGalCanvasActive() )
-    {
-        // Create the manager and dispatcher & route draw panel events to the dispatcher
-        m_toolManager = new TOOL_MANAGER;
-        m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
-                                       drawPanel->GetViewControls(), this );
-        m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
-        drawPanel->SetEventDispatcher( m_toolDispatcher );
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
+                                   drawPanel->GetViewControls(), this );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+    drawPanel->SetEventDispatcher( m_toolDispatcher );
 
-        m_toolManager->RegisterTool( new SELECTION_TOOL );
-        m_toolManager->RegisterTool( new EDIT_TOOL );
-        m_toolManager->RegisterTool( new DRAWING_TOOL );
-        m_toolManager->RegisterTool( new POINT_EDITOR );
-        m_toolManager->RegisterTool( new PCBNEW_CONTROL );
-        m_toolManager->ResetTools( TOOL_BASE::RUN );
+    m_toolManager->RegisterTool( new SELECTION_TOOL );
+    m_toolManager->RegisterTool( new EDIT_TOOL );
+    m_toolManager->RegisterTool( new DRAWING_TOOL );
+    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+    m_toolManager->ResetTools( TOOL_BASE::RUN );
 
-        // Run the selection tool, it is supposed to be always active
-        m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+    // Run the selection tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
-        UseGalCanvas( true );
-    }
+    UseGalCanvas( drawFrame->IsGalCanvasActive() );
 
     m_Layers->ReFill();
     m_Layers->ReFillRender();
