@@ -56,6 +56,7 @@
 #include <dialog_get_component.h>
 #include <modview_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <class_pcb_layer_widget.h>
 
 
 static void DisplayCmpDoc( wxString& Name );

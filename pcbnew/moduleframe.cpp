@@ -52,6 +52,7 @@
 #include <hotkeys.h>
 #include <module_editor_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <class_pcb_layer_widget.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -191,6 +192,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();
 
+    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), font.GetPointSize() );
+
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
 
     GetScreen()->SetCurItem( NULL );
@@ -224,6 +228,14 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     EDA_PANEINFO mesg_pane;
     mesg_pane.MessageToolbarPane();
 
+    // Create a wxAuiPaneInfo for the Layers Manager, not derived from the template.
+    // LAYER_WIDGET is floatable, but initially docked at far right
+    EDA_PANEINFO   lyrs;
+    lyrs.LayersToolbarPane();
+    lyrs.MinSize( m_Layers->GetBestSize() );    // updated in ReFillLayerWidget
+    lyrs.BestSize( m_Layers->GetBestSize() );
+    lyrs.Caption( _( "Visibles" ) );
+
     m_auimgr.AddPane( m_mainToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top(). Row( 0 ) );
 
@@ -233,6 +245,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // The main right vertical toolbar
     m_auimgr.AddPane( m_drawToolBar,
                       wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Layer(1) );
+
+    // Add the layer manager ( most right side of pcbframe )
+    m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 2 ) );
+    // Layers manager is visible and served only in GAL canvas mode.
+    m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( drawFrame->IsGalCanvasActive() );
 
     // The left vertical toolbar (fast acces to display options)
     m_auimgr.AddPane( m_optionsToolBar,
@@ -246,12 +263,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_messagePanel,
                       wxAuiPaneInfo( mesg_pane ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
-    m_auimgr.Update();
-
     if( drawFrame->IsGalCanvasActive() )
     {
-        drawPanel->DisplayBoard( GetBoard() );
-
         // Create the manager and dispatcher & route draw panel events to the dispatcher
         m_toolManager = new TOOL_MANAGER;
         m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
@@ -271,6 +284,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
         UseGalCanvas( true );
     }
+
+    m_Layers->ReFill();
+    m_Layers->ReFillRender();
+
+    m_auimgr.Update();
 }
 
 
@@ -278,6 +296,8 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 {
     // save the footprint in the PROJECT
     retainLastFootprint();
+
+    delete m_Layers;
 }
 
 
