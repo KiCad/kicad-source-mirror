@@ -270,6 +270,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 
             updateRatsnest( true );
             getModel<BOARD>()->GetRatsnest()->Recalculate();
+            item->ViewUpdate();
 
             m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
         }
