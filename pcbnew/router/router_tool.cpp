@@ -220,7 +220,7 @@ public:
 
         Add( ACT_CustomTrackWidth );
 
-        AppendSeparator ( );
+        AppendSeparator();
         Add( ACT_RouterOptions );
     }
 };
