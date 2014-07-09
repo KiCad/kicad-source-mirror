@@ -268,21 +268,23 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
                                    drawPanel->GetViewControls(), this );
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
-    drawPanel->SetEventDispatcher( m_toolDispatcher );
 
-    m_toolManager->RegisterTool( new SELECTION_TOOL );
-    m_toolManager->RegisterTool( new EDIT_TOOL );
-    m_toolManager->RegisterTool( new DRAWING_TOOL );
-    m_toolManager->RegisterTool( new POINT_EDITOR );
-    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
-    m_toolManager->GetTool<SELECTION_TOOL>()->EditModules( true );
-    m_toolManager->GetTool<DRAWING_TOOL>()->EditModules( true );
-    m_toolManager->ResetTools( TOOL_BASE::RUN );
+    if( drawFrame->IsGalCanvasActive() )
+    {
+        drawPanel->SetEventDispatcher( m_toolDispatcher );
 
-    // Run the selection tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+        m_toolManager->RegisterTool( new SELECTION_TOOL );
+        m_toolManager->RegisterTool( new EDIT_TOOL );
+        m_toolManager->RegisterTool( new DRAWING_TOOL );
+        m_toolManager->RegisterTool( new POINT_EDITOR );
+        m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+        m_toolManager->GetTool<SELECTION_TOOL>()->EditModules( true );
+        m_toolManager->GetTool<DRAWING_TOOL>()->EditModules( true );
+        m_toolManager->ResetTools( TOOL_BASE::RUN );
+        m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
-    UseGalCanvas( drawFrame->IsGalCanvasActive() );
+        UseGalCanvas( true );
+    }
 
     m_Layers->ReFill();
     m_Layers->ReFillRender();
