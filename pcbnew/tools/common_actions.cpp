@@ -37,6 +37,7 @@ TOOL_ACTION COMMON_ACTIONS::selectionSingle( "pcbnew.InteractiveSelection.Single
 TOOL_ACTION COMMON_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
+
 // Edit tool actions
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 'M',
@@ -109,160 +110,161 @@ TOOL_ACTION COMMON_ACTIONS::pointEditorUpdate( "pcbnew.PointEditor.update",
 
 
 // View Controls
-TOOL_ACTION COMMON_ACTIONS::zoomIn( "pcbnew.zoomIn",
+TOOL_ACTION COMMON_ACTIONS::zoomIn( "pcbnew.Control.zoomIn",
         AS_GLOBAL, WXK_F1,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomOut( "pcbnew.zoomOut",
+TOOL_ACTION COMMON_ACTIONS::zoomOut( "pcbnew.Control.zoomOut",
         AS_GLOBAL, WXK_F2,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomInCenter( "pcbnew.zoomInCenter",
+TOOL_ACTION COMMON_ACTIONS::zoomInCenter( "pcbnew.Control.zoomInCenter",
         AS_GLOBAL, 0,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomOutCenter( "pcbnew.zoomOutCenter",
+TOOL_ACTION COMMON_ACTIONS::zoomOutCenter( "pcbnew.Control.zoomOutCenter",
         AS_GLOBAL, 0,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomCenter( "pcbnew.zoomCenter",
+TOOL_ACTION COMMON_ACTIONS::zoomCenter( "pcbnew.Control.zoomCenter",
         AS_GLOBAL, WXK_F4,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomFitScreen( "pcbnew.zoomFitScreen",
+TOOL_ACTION COMMON_ACTIONS::zoomFitScreen( "pcbnew.Control.zoomFitScreen",
         AS_GLOBAL, WXK_HOME,
         "", "" );
 
 
 // Display modes
-TOOL_ACTION COMMON_ACTIONS::trackDisplayMode( "pcbnew.trackDisplayMode",
+TOOL_ACTION COMMON_ACTIONS::trackDisplayMode( "pcbnew.Control.trackDisplayMode",
         AS_GLOBAL, 'K',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::padDisplayMode( "pcbnew.padDisplayMode",
+TOOL_ACTION COMMON_ACTIONS::padDisplayMode( "pcbnew.Control.padDisplayMode",
         AS_GLOBAL, 'J',     // TODO temporarily, find a better hot key
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::viaDisplayMode( "pcbnew.viaDisplayMode",
+TOOL_ACTION COMMON_ACTIONS::viaDisplayMode( "pcbnew.Control.viaDisplayMode",
         AS_GLOBAL, 'L',     // TODO temporarily, find a better hot key
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::highContrastMode( "pcbnew.highContrastMode",
+TOOL_ACTION COMMON_ACTIONS::highContrastMode( "pcbnew.Control.highContrastMode",
         AS_GLOBAL, 'H',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::highContrastInc( "pcbnew.highContrastInc",
+TOOL_ACTION COMMON_ACTIONS::highContrastInc( "pcbnew.Control.highContrastInc",
         AS_GLOBAL, '>',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::highContrastDec( "pcbnew.highContrastDec",
+TOOL_ACTION COMMON_ACTIONS::highContrastDec( "pcbnew.Control.highContrastDec",
         AS_GLOBAL, '<',
         "", "" );
 
 
 // Layer control
-TOOL_ACTION COMMON_ACTIONS::layerTop( "pcbnew.layerTop",
+TOOL_ACTION COMMON_ACTIONS::layerTop( "pcbnew.Control.layerTop",
         AS_GLOBAL, WXK_PAGEUP,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::layerInner1( "pcbnew.layerInner1",
+TOOL_ACTION COMMON_ACTIONS::layerInner1( "pcbnew.Control.layerInner1",
         AS_GLOBAL, WXK_F5,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::layerInner2( "pcbnew.layerInner2",
+TOOL_ACTION COMMON_ACTIONS::layerInner2( "pcbnew.Control.layerInner2",
         AS_GLOBAL, WXK_F6,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::layerInner3( "pcbnew.layerInner3",
+TOOL_ACTION COMMON_ACTIONS::layerInner3( "pcbnew.Control.layerInner3",
         AS_GLOBAL, WXK_F7,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::layerInner4( "pcbnew.layerInner4",
+TOOL_ACTION COMMON_ACTIONS::layerInner4( "pcbnew.Control.layerInner4",
         AS_GLOBAL, WXK_F8,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::layerInner5( "pcbnew.layerInner5",
+TOOL_ACTION COMMON_ACTIONS::layerInner5( "pcbnew.Control.layerInner5",
         AS_GLOBAL, WXK_F9,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::layerInner6( "pcbnew.layerInner6",
+TOOL_ACTION COMMON_ACTIONS::layerInner6( "pcbnew.Control.layerInner6",
         AS_GLOBAL, WXK_F10,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::layerBottom( "pcbnew.layerBottom",
+TOOL_ACTION COMMON_ACTIONS::layerBottom( "pcbnew.Control.layerBottom",
         AS_GLOBAL, WXK_PAGEDOWN,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::layerNext( "pcbnew.layerNext",
+TOOL_ACTION COMMON_ACTIONS::layerNext( "pcbnew.Control.layerNext",
         AS_GLOBAL, '=',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::layerPrev( "pcbnew.layerPrev",
+TOOL_ACTION COMMON_ACTIONS::layerPrev( "pcbnew.Control.layerPrev",
         AS_GLOBAL, '-',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::layerAlphaInc( "pcbnew.layerAlphaInc",
+TOOL_ACTION COMMON_ACTIONS::layerAlphaInc( "pcbnew.Control.layerAlphaInc",
         AS_GLOBAL, '}',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::layerAlphaDec( "pcbnew.layerAlphaDec",
+TOOL_ACTION COMMON_ACTIONS::layerAlphaDec( "pcbnew.Control.layerAlphaDec",
         AS_GLOBAL, '{',
         "", "" );
 
 
 // Grid control
-TOOL_ACTION COMMON_ACTIONS::gridFast1( "pcbnew.gridFast1",
+TOOL_ACTION COMMON_ACTIONS::gridFast1( "pcbnew.Control.gridFast1",
         AS_GLOBAL, MD_ALT + int( '1' ),
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridFast2( "pcbnew.gridFast2",
+TOOL_ACTION COMMON_ACTIONS::gridFast2( "pcbnew.Control.gridFast2",
         AS_GLOBAL, MD_ALT + int( '2' ),
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridNext( "pcbnew.gridNext",
+TOOL_ACTION COMMON_ACTIONS::gridNext( "pcbnew.Control.gridNext",
         AS_GLOBAL, '`',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridPrev( "pcbnew.gridPrev",
+TOOL_ACTION COMMON_ACTIONS::gridPrev( "pcbnew.Control.gridPrev",
         AS_GLOBAL, MD_CTRL + int( '`' ),
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridSetOrigin( "pcbnew.gridSetOrigin",
+TOOL_ACTION COMMON_ACTIONS::gridSetOrigin( "pcbnew.Control.gridSetOrigin",
         AS_GLOBAL, 0,
         "", "" );
 
 
 // Track & via size control
-TOOL_ACTION COMMON_ACTIONS::trackWidthInc( "pcbnew.trackWidthInc",
+TOOL_ACTION COMMON_ACTIONS::trackWidthInc( "pcbnew.EditorControl.trackWidthInc",
         AS_GLOBAL, '[',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::trackWidthDec( "pcbnew.trackWidthDec",
+TOOL_ACTION COMMON_ACTIONS::trackWidthDec( "pcbnew.EditorControl.trackWidthDec",
         AS_GLOBAL, ']',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::viaSizeInc( "pcbnew.viaSizeInc",
+TOOL_ACTION COMMON_ACTIONS::viaSizeInc( "pcbnew.EditorControl.viaSizeInc",
         AS_GLOBAL, '\'',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::viaSizeDec( "pcbnew.viaSizeDec",
+TOOL_ACTION COMMON_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
         AS_GLOBAL, '\\',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::trackViaSizeChanged( "pcbnew.trackViaSizeChanged",
+TOOL_ACTION COMMON_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",
         AS_GLOBAL, 0,
         "", "" );
 
+
 // Miscellaneous
-TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.resetCoords",
+TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
         AS_GLOBAL, ' ',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::switchUnits( "pcbnew.switchUnits",
+TOOL_ACTION COMMON_ACTIONS::switchUnits( "pcbnew.Control.switchUnits",
         AS_GLOBAL, MD_CTRL + int( 'U' ),
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::showHelp( "pcbnew.showHelp",
+TOOL_ACTION COMMON_ACTIONS::showHelp( "pcbnew.Control.showHelp",
         AS_GLOBAL, '?',
         "", "" );
 
