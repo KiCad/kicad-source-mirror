@@ -116,7 +116,7 @@ public:
 
     /**
      * Function PlaceModule()
-     * Displays a dialog to selected a module to be added and then allows user to set its position.
+     * Displays a dialog to select a module to be added and allows the user to set its position.
      */
     int PlaceModule( TOOL_EVENT& aEvent );
 
@@ -165,11 +165,13 @@ private:
      */
     int placeTextPcb();
 
-    ///> Forces a DRAWSEGMENT to be drawn at multiple of 45 degrees. The origin
-    ///> stays the same, the end of the aSegment is modified according to the
-    ///> current cursor position.
-    ///> @param aSegment is the segment that is currently drawn.
-    ///> @param aHelper is a helper line that shows the next possible segment.
+    /**
+     * Function make45DegLine()
+     * Forces a DRAWSEGMENT to be drawn at multiple of 45 degrees. The origin stays the same,
+     * the end of the aSegment is modified according to the current cursor position.
+     * @param aSegment is the segment that is currently drawn.
+     * @param aHelper is a helper line that shows the next possible segment.
+     */
     void make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) const;
 
     ///> Sets up handlers for various events.

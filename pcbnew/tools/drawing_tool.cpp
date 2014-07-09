@@ -77,7 +77,7 @@ int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
     {
         m_frame->SetToolID( ID_MODEDIT_LINE_TOOL, wxCURSOR_PENCIL, _( "Add graphic line" ) );
 
-        MODULE* module = m_frame->GetBoard()->m_Modules;
+        MODULE* module = m_board->m_Modules;
         EDGE_MODULE* line = new EDGE_MODULE( module );
 
         while( drawSegment( S_SEGMENT, line ) )
@@ -120,7 +120,7 @@ int DRAWING_TOOL::DrawCircle( TOOL_EVENT& aEvent )
     {
         m_frame->SetToolID( ID_MODEDIT_CIRCLE_TOOL, wxCURSOR_PENCIL, _( "Add graphic circle" ) );
 
-        MODULE* module = m_frame->GetBoard()->m_Modules;
+        MODULE* module = m_board->m_Modules;
         EDGE_MODULE* circle = new EDGE_MODULE( module );
 
         while( drawSegment( S_CIRCLE, circle ) )
@@ -163,7 +163,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
     {
         m_frame->SetToolID( ID_MODEDIT_ARC_TOOL, wxCURSOR_PENCIL, _( "Add graphic arc" ) );
 
-        MODULE* module = m_frame->GetBoard()->m_Modules;
+        MODULE* module = m_board->m_Modules;
         EDGE_MODULE* arc = new EDGE_MODULE( module );
 
         while( drawArc( arc ) )
@@ -527,7 +527,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                module->Rotate( module->GetPosition(), /*m_frame->GetRotationAngle()*/ 900.0 );
+                module->Rotate( module->GetPosition(), m_frame->GetRotationAngle() );
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
@@ -1123,7 +1123,7 @@ int DRAWING_TOOL::placeTextModule()
 {
     TEXTE_MODULE* text = new TEXTE_MODULE( NULL );
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    MODULE* module = m_frame->GetBoard()->m_Modules;
+    MODULE* module = m_board->m_Modules;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -1202,7 +1202,7 @@ int DRAWING_TOOL::placeTextModule()
                 text->ClearFlags();
 
                 // Module has to be saved before any modification is made
-                m_frame->SaveCopyInUndoList( m_frame->GetBoard()->m_Modules, UR_MODEDIT );
+                m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
                 module->GraphicalItems().PushFront( text );
 
                 m_view->Add( text );
