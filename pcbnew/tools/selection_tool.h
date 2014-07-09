@@ -148,6 +148,15 @@ public:
         m_editModules = aEnabled;
     }
 
+    ///> Checks if the user has agreed to modify locked items for the given selection.
+    bool CheckLock();
+
+    ///> Select single item event handler.
+    int SingleSelection( TOOL_EVENT& aEvent );
+
+    ///> Clear current selection event handler.
+    int ClearSelection( TOOL_EVENT& aEvent );
+
     ///> Event sent after an item is selected.
     const TOOL_EVENT SelectedEvent;
 
@@ -156,12 +165,6 @@ public:
 
     ///> Event sent after selection is cleared.
     const TOOL_EVENT ClearedEvent;
-
-    ///> Select single item event handler.
-    int SingleSelection( TOOL_EVENT& aEvent );
-
-    ///> Clear current selection event handler.
-    int ClearSelection( TOOL_EVENT& aEvent );
 
 private:
     /**
@@ -312,6 +315,9 @@ private:
 
     /// Edit module mode flag.
     bool m_editModules;
+
+    /// Can other tools modify locked items.
+    bool m_locked;
 
     /// Conditions for specific context menu entries.
     std::deque<SELECTION_CONDITION> m_menuConditions;

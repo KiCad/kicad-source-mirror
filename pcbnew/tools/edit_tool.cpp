@@ -158,6 +158,9 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             }
             else    // Prepare to start dragging
             {
+                if( m_selectionTool->CheckLock() )
+                    break;
+
                 // Save items, so changes can be undone
                 editFrame->OnModify();
                 editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
@@ -298,7 +301,7 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !makeSelection( selection ) )
+    if( !makeSelection( selection ) || m_selectionTool->CheckLock() )
     {
         setTransitions();
 
@@ -352,7 +355,7 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !makeSelection( selection ) )
+    if( !makeSelection( selection ) || m_selectionTool->CheckLock() )
     {
         setTransitions();
 
@@ -402,7 +405,7 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( !makeSelection( selection ) )
+    if( !makeSelection( selection ) || m_selectionTool->CheckLock() )
     {
         setTransitions();
 
