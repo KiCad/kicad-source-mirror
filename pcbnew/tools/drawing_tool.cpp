@@ -700,6 +700,52 @@ int DRAWING_TOOL::PlacePad( TOOL_EVENT& aEvent )
 }
 
 
+int DRAWING_TOOL::SetAnchor( TOOL_EVENT& aEvent )
+{
+    assert( m_editModules );
+
+    Activate();
+    m_frame->SetToolID( ID_MODEDIT_ANCHOR_TOOL, wxCURSOR_PENCIL,
+                        _( "Place the footprint anchor" ) );
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+    controls->SetAutoPan( true );
+
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        if( evt->IsClick( BUT_LEFT ) )
+        {
+            MODULE* module = m_board->m_Modules;
+
+            m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+
+            // set the new relative internal local coordinates of footprint items
+            VECTOR2I cursorPos = controls->GetCursorPosition();
+            wxPoint moveVector = module->GetPosition() - wxPoint( cursorPos.x, cursorPos.y );
+            module->MoveAnchorPosition( moveVector );
+
+            // Usually, we do not need to change twice the anchor position,
+            // so deselect the active tool
+            break;
+        }
+
+        else if( evt->IsCancel() || evt->IsActivate() )
+            break;
+    }
+
+    controls->SetAutoPan( false );
+    controls->SetSnapping( false );
+    controls->ShowCursor( false );
+
+    setTransitions();
+    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
+    return 0;
+}
+
+
 bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT* aGraphic )
 {
     // Only two shapes are currently supported
@@ -1534,4 +1580,5 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::PlaceTarget,      COMMON_ACTIONS::placeTarget.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceModule,      COMMON_ACTIONS::placeModule.MakeEvent() );
     Go( &DRAWING_TOOL::PlacePad,         COMMON_ACTIONS::placePad.MakeEvent() );
+    Go( &DRAWING_TOOL::SetAnchor,        COMMON_ACTIONS::setAnchor.MakeEvent() );
 }
