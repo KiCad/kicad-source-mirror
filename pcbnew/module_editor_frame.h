@@ -399,6 +399,9 @@ public:
 
     virtual EDA_COLOR_T GetGridColor() const;
 
+    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
+    virtual void UseGalCanvas( bool aEnable );
+
     DECLARE_EVENT_TABLE()
 
 protected:

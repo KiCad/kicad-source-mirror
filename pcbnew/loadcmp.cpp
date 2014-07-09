@@ -30,6 +30,7 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
+#include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <eda_doc.h>
 #include <kicad_string.h>
@@ -116,6 +117,15 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     Rotate_Module( NULL, newModule, 0, false );
     GetScreen()->ClrModify();
     Zoom_Automatique( false );
+
+    if( IsGalCanvasActive() )
+    {
+        static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
+
+        m_Pcb->ComputeBoundingBox( false );
+        EDA_RECT boardBbox = m_Pcb->GetBoundingBox();
+        GetGalCanvas()->GetView()->SetViewport( BOX2D( boardBbox.GetOrigin(), boardBbox.GetSize() ) );
+    }
 
     return true;
 }
