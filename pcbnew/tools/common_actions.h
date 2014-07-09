@@ -23,6 +23,9 @@
  */
 
 #include <tool/tool_action.h>
+#include <boost/optional.hpp>
+
+class TOOL_EVENT;
 
 /**
  * Class COMMON_ACTIONS
@@ -153,5 +156,5 @@ public:
      * @return std::string is name of the corresponding TOOL_ACTION. It may be empty, if there is
      * no corresponding TOOL_ACTION.
      */
-    static std::string TranslateLegacyId( int aId );
+    static boost::optional<TOOL_EVENT> TranslateLegacyId( int aId );
 };

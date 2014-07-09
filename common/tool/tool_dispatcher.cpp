@@ -288,27 +288,10 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
 void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
 {
-    boost::optional<TOOL_EVENT> evt;
-
-    switch( aEvent.GetId() )
-    {
-    case ID_ZOOM_IN:        // toolbar button "Zoom In"
-        evt = COMMON_ACTIONS::zoomInCenter.MakeEvent();
-        break;
-
-    case ID_ZOOM_OUT:       // toolbar button "Zoom In"
-        evt = COMMON_ACTIONS::zoomOutCenter.MakeEvent();
-        break;
-
-    case ID_ZOOM_PAGE:      // toolbar button "Fit on Screen"
-        evt = COMMON_ACTIONS::zoomFitScreen.MakeEvent();
-        break;
-
-    default:
-        aEvent.Skip();
-        break;
-    }
+    boost::optional<TOOL_EVENT> evt = COMMON_ACTIONS::TranslateLegacyId( aEvent.GetId() );
 
     if( evt )
         m_toolMgr->ProcessEvent( *evt );
+    else
+        aEvent.Skip();
 }

@@ -1385,125 +1385,99 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     if( GetToolId() == id )
         return;
 
-    if( IsGalCanvasActive() )
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
+
+    // Stop the current command and deselect the current tool.
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+
+    switch( id )
     {
-        std::string actionName = COMMON_ACTIONS::TranslateLegacyId( id );
+    case ID_NO_TOOL_SELECTED:
+        SetToolID( id, m_canvas->GetDefaultCursor(), wxEmptyString );
+        break;
 
-        if( !actionName.empty() || id == ID_NO_TOOL_SELECTED )
+    case ID_TRACK_BUTT:
+        if( g_Drc_On )
+            SetToolID( id, wxCURSOR_PENCIL, _( "Add tracks" ) );
+        else
+            SetToolID( id, wxCURSOR_QUESTION_ARROW, _( "Add tracks" ) );
+
+        if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         {
-            const int MAX_TRIALS = 10;
-            int trials = 0;
-
-            // Cancel the current tool
-            // TODO while sending a lot of cancel events works for sure, it is not the most
-            // elegant way to cancel a tool, this should be probably done another way
-            while( m_toolManager->GetCurrentTool()->GetName() != "pcbnew.InteractiveSelection" &&
-                    trials++ < MAX_TRIALS )
-            {
-                TOOL_EVENT cancel( TC_ANY, TA_CANCEL_TOOL );
-                m_toolManager->ProcessEvent( cancel );
-            }
-
-            if( !actionName.empty() )
-                m_toolManager->RunAction( actionName );
+            Compile_Ratsnest( &dc, true );
         }
-    }
-    else
-    {
-        INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
-        // Stop the current command and deselect the current tool.
-        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+        break;
 
-        switch( id )
-        {
-        case ID_NO_TOOL_SELECTED:
-            SetToolID( id, m_canvas->GetDefaultCursor(), wxEmptyString );
-            break;
+    case ID_PCB_MODULE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add module" ) );
+        break;
 
-        case ID_TRACK_BUTT:
-            if( g_Drc_On )
-                SetToolID( id, wxCURSOR_PENCIL, _( "Add tracks" ) );
-            else
-                SetToolID( id, wxCURSOR_QUESTION_ARROW, _( "Add tracks" ) );
+    case ID_PCB_ZONES_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add zones" ) );
 
-            if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
-            {
-                Compile_Ratsnest( &dc, true );
-            }
+        if( DisplayOpt.DisplayZonesMode != 0 )
+            DisplayInfoMessage( this, _( "Warning: zone display is OFF!!!" ) );
 
-            break;
+        if( !GetBoard()->IsHighLightNetON() && (GetBoard()->GetHighLightNetCode() > 0 ) )
+            HighLight( &dc );
 
-        case ID_PCB_MODULE_BUTT:
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add module" ) );
-            break;
+        break;
 
-        case ID_PCB_ZONES_BUTT:
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add zones" ) );
+    case ID_PCB_KEEPOUT_AREA_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add keepout" ) );
+        break;
 
-            if( DisplayOpt.DisplayZonesMode != 0 )
-                DisplayInfoMessage( this, _( "Warning: zone display is OFF!!!" ) );
+    case ID_PCB_MIRE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
+        break;
 
-            if( !GetBoard()->IsHighLightNetON() && (GetBoard()->GetHighLightNetCode() > 0 ) )
-                HighLight( &dc );
+    case ID_PCB_PLACE_OFFSET_COORD_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Adjust zero" ) );
+        break;
 
-            break;
+    case ID_PCB_PLACE_GRID_COORD_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
+        break;
 
-        case ID_PCB_KEEPOUT_AREA_BUTT:
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add keepout" ) );
-            break;
+    case ID_PCB_ADD_LINE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic line" ) );
+        break;
 
-        case ID_PCB_MIRE_BUTT:
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
-            break;
+    case ID_PCB_ARC_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic arc" ) );
+        break;
 
-        case ID_PCB_PLACE_OFFSET_COORD_BUTT:
-            SetToolID( id, wxCURSOR_PENCIL, _( "Adjust zero" ) );
-            break;
+    case ID_PCB_CIRCLE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic circle" ) );
+        break;
 
-        case ID_PCB_PLACE_GRID_COORD_BUTT:
-            SetToolID( id, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
-            break;
+    case ID_PCB_ADD_TEXT_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add text" ) );
+        break;
 
-        case ID_PCB_ADD_LINE_BUTT:
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic line" ) );
-            break;
+    case ID_COMPONENT_BUTT:
+        SetToolID( id, wxCURSOR_HAND, _( "Add module" ) );
+        break;
 
-        case ID_PCB_ARC_BUTT:
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic arc" ) );
-            break;
+    case ID_PCB_DIMENSION_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add dimension" ) );
+        break;
 
-        case ID_PCB_CIRCLE_BUTT:
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic circle" ) );
-            break;
+    case ID_PCB_DELETE_ITEM_BUTT:
+        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
+        break;
 
-        case ID_PCB_ADD_TEXT_BUTT:
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add text" ) );
-            break;
+    case ID_PCB_HIGHLIGHT_BUTT:
+        SetToolID( id, wxCURSOR_HAND, _( "Highlight net" ) );
+        break;
 
-        case ID_COMPONENT_BUTT:
-            SetToolID( id, wxCURSOR_HAND, _( "Add module" ) );
-            break;
+    case ID_PCB_SHOW_1_RATSNEST_BUTT:
+        SetToolID( id, wxCURSOR_HAND, _( "Select rats nest" ) );
 
-        case ID_PCB_DIMENSION_BUTT:
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add dimension" ) );
-            break;
+        if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
+            Compile_Ratsnest( &dc, true );
 
-        case ID_PCB_DELETE_ITEM_BUTT:
-            SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
-            break;
-
-        case ID_PCB_HIGHLIGHT_BUTT:
-            SetToolID( id, wxCURSOR_HAND, _( "Highlight net" ) );
-            break;
-
-        case ID_PCB_SHOW_1_RATSNEST_BUTT:
-            SetToolID( id, wxCURSOR_HAND, _( "Select rats nest" ) );
-
-            if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
-                Compile_Ratsnest( &dc, true );
-
-            break;
-        }
+        break;
     }
 }
