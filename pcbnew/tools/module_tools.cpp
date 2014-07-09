@@ -233,12 +233,10 @@ int MODULE_TOOLS::EnumeratePads( TOOL_EVENT& aEvent )
     guide.SetIgnoreMTextsMarkedNoShow( true );
     guide.SetIgnoreMTextsOnCopper( true );
     guide.SetIgnoreMTextsOnCmp( true );
-    guide.SetIgnoreModulesOnCu( true );
-    guide.SetIgnoreModulesOnCmp( true );
     guide.SetIgnoreModulesVals( true );
     guide.SetIgnoreModulesRefs( true );
 
-    // Create a set containing all pads (to avoid double adding to a list);
+    // Create a set containing all pads (to avoid double adding to a list)
     for( D_PAD* p = module->Pads(); p; p = p->Next() )
         allPads.insert( p );
 
