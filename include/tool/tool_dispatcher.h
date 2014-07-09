@@ -26,7 +26,7 @@
 #define __TOOL_DISPATCHER_H
 
 #include <vector>
-
+#include <wx/event.h>
 #include <tool/tool_event.h>
 
 class TOOL_MANAGER;
@@ -47,7 +47,7 @@ class VIEW;
  * - issues TOOL_EVENTS to the tool manager
  */
 
-class TOOL_DISPATCHER
+class TOOL_DISPATCHER : public wxEvtHandler
 {
 public:
     /**

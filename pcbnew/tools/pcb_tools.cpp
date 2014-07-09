@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
-#include <wx/event.h>
-#include <boost/foreach.hpp>
-
 #include <wxPcbStruct.h>
 #include <wxBasePcbFrame.h>
 
@@ -33,7 +29,7 @@
 #include <tool/tool_dispatcher.h>
 
 #include <class_draw_panel_gal.h>
-#include <pcbnew_id.h>
+//#include <pcbnew_id.h>
 
 #include "selection_tool.h"
 #include "edit_tool.h"
@@ -47,18 +43,9 @@ void PCB_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( NULL, GetGalCanvas()->GetView(),
+                                   GetGalCanvas()->GetViewControls(), this );
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
-    GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
-
-    // Connect handlers to toolbar buttons
-#if wxCHECK_VERSION( 3, 0, 0 )
-    Connect( wxEVT_TOOL, wxCommandEventHandler( PCB_EDIT_FRAME::onGenericCommand ), NULL, this );
-#else
-    Connect( wxEVT_COMMAND_MENU_SELECTED,
-             wxCommandEventHandler( PCB_EDIT_FRAME::onGenericCommand ), NULL, this );
-    Connect( wxEVT_COMMAND_TOOL_CLICKED,
-             wxCommandEventHandler( PCB_EDIT_FRAME::onGenericCommand ), NULL, this );
-#endif
 
     // Register tools
     m_toolManager->RegisterTool( new SELECTION_TOOL );
@@ -67,9 +54,6 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new DRAWING_TOOL );
     m_toolManager->RegisterTool( new POINT_EDITOR );
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
-
-    m_toolManager->SetEnvironment( NULL, GetGalCanvas()->GetView(),
-                                   GetGalCanvas()->GetViewControls(), this );
     m_toolManager->ResetTools( TOOL_BASE::RUN );
 
     // Run the selection tool, it is supposed to be always active
@@ -81,13 +65,4 @@ void PCB_EDIT_FRAME::destroyTools()
 {
     delete m_toolManager;
     delete m_toolDispatcher;
-}
-
-
-void PCB_EDIT_FRAME::onGenericCommand( wxCommandEvent& aEvent )
-{
-    if( IsGalCanvasActive() )
-        m_toolDispatcher->DispatchWxCommand( aEvent );
-    else
-        aEvent.Skip();
 }

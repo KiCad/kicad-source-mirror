@@ -636,7 +636,13 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
     {
         SetBoard( m_Pcb );
         GetGalCanvas()->GetView()->RecacheAllItems( true );
+        GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
         GetGalCanvas()->StartDrawing();
+    }
+    else
+    {
+        // Redirect all events to the legacy canvas
+        GetGalCanvas()->SetEventDispatcher( NULL );
     }
 }
 
