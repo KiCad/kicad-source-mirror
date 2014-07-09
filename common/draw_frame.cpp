@@ -1033,10 +1033,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show( aEnable );
     m_auimgr.Update();
 
-    SetGalCanvasActive( aEnable );
-
-    if( aEnable )
-        GetGalCanvas()->SetFocus();
+    m_galCanvasActive = aEnable;
 }
 
 //-----< BASE_SCREEN API moved here >--------------------------------------------

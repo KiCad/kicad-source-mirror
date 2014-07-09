@@ -69,6 +69,15 @@ public:
     void SwitchBackend( GalType aGalType );
 
     /**
+     * Function GetBackend
+     * Returns the type of backend currently used by GAL canvas.
+     */
+    inline GalType GetBackend() const
+    {
+        return m_backend;
+    }
+
+    /**
      * Function GetGAL()
      * Returns a pointer to the GAL instance used in the panel.
      * @return The instance of GAL.
@@ -159,7 +168,7 @@ protected:
     KIGFX::WX_VIEW_CONTROLS* m_viewControls;
 
     /// Currently used GAL
-    GalType                  m_currentGal;
+    GalType                  m_backend;
 
     /// Processes and forwards events to tools
     TOOL_DISPATCHER*         m_eventDispatcher;
