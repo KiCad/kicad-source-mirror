@@ -400,6 +400,7 @@ public:
         SetLocalCoord();
     }
 
+    void Rotate( const wxPoint& aRotCentre, double aAngle );
 
     wxString GetSelectMenuText() const;
 
