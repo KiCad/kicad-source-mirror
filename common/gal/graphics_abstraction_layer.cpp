@@ -157,10 +157,10 @@ void GAL::DrawGrid()
         assert( gridEndY >= gridStartY );
 
         // Correct the index, else some lines are not correctly painted
-        gridStartX  -= ( gridOrigin.x / gridSize.x ) + 1;
-        gridStartY  -= ( gridOrigin.y / gridSize.y ) + 1;
-        gridEndX    += ( gridOrigin.x / gridSize.x ) + 1;
-        gridEndY    += ( gridOrigin.y / gridSize.y ) + 1;
+        gridStartX -= abs( gridOrigin.x / gridSize.x ) + 1;
+        gridStartY -= abs( gridOrigin.y / gridSize.y ) + 1;
+        gridEndX += abs( gridOrigin.x / gridSize.x ) + 1;
+        gridEndY += abs( gridOrigin.y / gridSize.y ) + 1;
 
         // Draw the grid behind all other layers
         SetLayerDepth( depthRange.y * 0.75 );
