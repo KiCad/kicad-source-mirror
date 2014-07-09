@@ -356,6 +356,15 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
 }
 
 
+void FOOTPRINT_VIEWER_FRAME::UseGalCanvas( bool aEnable )
+{
+    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    if( aEnable )
+        GetGalCanvas()->StartDrawing();
+}
+
+
 void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 {
     m_footprintList->Clear();
@@ -455,15 +464,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         UpdateTitle();
 
         if( IsGalCanvasActive() )
-        {
-            static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( m_Pcb );
-
-            // Autozoom
-            m_Pcb->ComputeBoundingBox( false );
-            EDA_RECT boardBbox = m_Pcb->GetBoundingBox();
-            GetGalCanvas()->GetView()->SetViewport( BOX2D( boardBbox.GetOrigin(),
-                                                           boardBbox.GetSize() ) );
-        }
+            redrawGal();
 
         Zoom_Automatique( false );
         m_canvas->Refresh();
@@ -846,7 +847,11 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
             GetBoard()->Add( footprint, ADD_APPEND );
 
         Update3D_Frame();
+
+        if( IsGalCanvasActive() )
+            redrawGal();
     }
+
 
     UpdateTitle();
     Zoom_Automatique( false );
@@ -873,10 +878,12 @@ void FOOTPRINT_VIEWER_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::UseGalCanvas( bool aEnable )
+void FOOTPRINT_VIEWER_FRAME::redrawGal()
 {
-    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( m_Pcb );
 
-    if( aEnable )
-        GetGalCanvas()->StartDrawing();
+    // Autozoom
+    m_Pcb->ComputeBoundingBox( false );
+    EDA_RECT boardBbox = m_Pcb->GetBoundingBox();
+    GetGalCanvas()->GetView()->SetViewport( BOX2D( boardBbox.GetOrigin(), boardBbox.GetSize() ) );
 }
