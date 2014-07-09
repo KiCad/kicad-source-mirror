@@ -696,24 +696,6 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
 void FOOTPRINT_EDIT_FRAME::updateView()
 {
     static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
-
-    m_Pcb->ComputeBoundingBox( false );
-    EDA_RECT boardBbox = m_Pcb->GetBoundingBox();
-    BOX2D bbox;
-
-    if( boardBbox.GetSize().x > 0 && boardBbox.GetSize().y > 0 )
-    {
-        bbox.SetOrigin( VECTOR2D( boardBbox.GetOrigin() ) );
-        bbox.SetSize( VECTOR2D( boardBbox.GetSize() ) );
-    }
-    else
-    {
-        // Default empty view
-        bbox.SetOrigin( VECTOR2D( -1000, -1000 ) );
-        bbox.SetSize( VECTOR2D( 2000, 2000 ) );
-    }
-
-    GetGalCanvas()->GetView()->SetViewport( bbox );
-
+    m_toolManager->RunAction( COMMON_ACTIONS::zoomFitScreen );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 }

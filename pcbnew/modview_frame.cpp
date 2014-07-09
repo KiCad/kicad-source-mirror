@@ -466,7 +466,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         UpdateTitle();
 
         if( IsGalCanvasActive() )
-            redrawGal();
+            updateView();
 
         Zoom_Automatique( false );
         m_canvas->Refresh();
@@ -851,7 +851,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         Update3D_Frame();
 
         if( IsGalCanvasActive() )
-            redrawGal();
+            updateView();
     }
 
 
@@ -880,12 +880,26 @@ void FOOTPRINT_VIEWER_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::redrawGal()
+void FOOTPRINT_VIEWER_FRAME::updateView()
 {
-    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( m_Pcb );
+    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
 
-    // Autozoom
     m_Pcb->ComputeBoundingBox( false );
     EDA_RECT boardBbox = m_Pcb->GetBoundingBox();
-    GetGalCanvas()->GetView()->SetViewport( BOX2D( boardBbox.GetOrigin(), boardBbox.GetSize() ) );
+    BOX2D bbox;
+
+    // Autozoom
+    if( boardBbox.GetSize().x > 0 && boardBbox.GetSize().y > 0 )
+    {
+        bbox.SetOrigin( VECTOR2D( boardBbox.GetOrigin() ) );
+        bbox.SetSize( VECTOR2D( boardBbox.GetSize() ) );
+    }
+    else
+    {
+        // Default empty view
+        bbox.SetOrigin( VECTOR2D( -1000, -1000 ) );
+        bbox.SetSize( VECTOR2D( 2000, 2000 ) );
+    }
+
+    GetGalCanvas()->GetView()->SetViewport( bbox );
 }
