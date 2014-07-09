@@ -89,24 +89,14 @@ int ACTION_MANAGER::MakeActionId( const std::string& aActionName )
 }
 
 
-bool ACTION_MANAGER::RunAction( const std::string& aActionName ) const
+TOOL_ACTION* ACTION_MANAGER::FindAction( const std::string& aActionName ) const
 {
     std::map<std::string, TOOL_ACTION*>::const_iterator it = m_actionNameIndex.find( aActionName );
 
-    if( it == m_actionNameIndex.end() )
-        return false; // no action with given name found
+    if( it != m_actionNameIndex.end() )
+        return it->second;
 
-    RunAction( it->second );
-
-    return true;
-}
-
-
-void ACTION_MANAGER::RunAction( const TOOL_ACTION* aAction ) const
-{
-    TOOL_EVENT event = aAction->MakeEvent();
-
-    m_toolMgr->ProcessEvent( event );
+    return NULL;
 }
 
 
@@ -153,6 +143,8 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 
         if( tool )
         {
+            // Choose the action that goes to the tool with highest priority
+            // (i.e. is on the top of active tools stack)
             priority = m_toolMgr->GetPriority( tool->GetId() );
 
             if( priority >= 0 && priority > highestPriority )
@@ -163,13 +155,16 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
         }
     }
 
-    if( !global && !context )   // currently there is no valid action to run
-        return false;
-
     if( context )
-        RunAction( context );
+    {
+        m_toolMgr->RunAction( *context, true );
+        return true;
+    }
     else if( global )
-        RunAction( global );
+    {
+        m_toolMgr->RunAction( *global, true );
+        return true;
+    }
 
-    return true;
+    return false;
 }

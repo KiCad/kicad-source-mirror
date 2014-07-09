@@ -404,11 +404,7 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
         bds.SetCustomViaDrill( m_router->Settings().GetViaDrill() );
         bds.UseCustomTrackViaSize( true );
 
-        // TODO Should be done another way, but RunAction() won't work here. As the ROUTER_TOOL
-        // did not call Wait(), it does not wait for events and therefore the sent event
-        // won't arrive here
-        TOOL_EVENT event = COMMON_ACTIONS::trackViaSizeChanged.MakeEvent();
-        handleCommonEvents( event );
+        m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
     }
 
     else if( aEvent.IsAction( &COMMON_ACTIONS::trackViaSizeChanged ) )
