@@ -290,15 +290,40 @@ void TOOL_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 }
 
 
-bool TOOL_MANAGER::RunAction( const std::string& aActionName )
+bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow )
 {
-    return m_actionMgr->RunAction( aActionName );
+    TOOL_ACTION* action = m_actionMgr->FindAction( aActionName );
+
+    if( action )
+    {
+        if( aNow )
+        {
+            TOOL_EVENT event = action->MakeEvent();
+            ProcessEvent( event );
+        }
+        else
+        {
+            PostEvent( action->MakeEvent() );
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 
-void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction )
+void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow )
 {
-    m_actionMgr->RunAction( &aAction );
+    if( aNow )
+    {
+        TOOL_EVENT event = aAction.MakeEvent();
+        ProcessEvent( event );
+    }
+    else
+    {
+        PostEvent( aAction.MakeEvent() );
+    }
 }
 
 
@@ -424,6 +449,8 @@ optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 {
     TOOL_STATE* st = m_toolState[aTool];
 
+    assert( !st->pendingWait ); // everything collapses on two Yield() in a row
+
     // indicate to the manager that we are going to sleep and we shall be
     // woken up when an event matching aConditions arrive
     st->pendingWait = true;
@@ -477,7 +504,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
             {
                 if( tr.first.Matches( aEvent ) )
                 {
-                    // no tool context allocated yet? Create one.
+                    // if there is already a context, then store it
                     if( st->cofunc )
                         st->Push();
 
@@ -589,6 +616,14 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
     dispatchInternal( aEvent );
     dispatchActivation( aEvent );
     dispatchContextMenu( aEvent );
+
+    // Dispatch queue
+    while( !m_eventQueue.empty() )
+    {
+        TOOL_EVENT event = m_eventQueue.front();
+        m_eventQueue.pop_front();
+        ProcessEvent( event );
+    }
 
     if( m_view->IsDirty() )
     {

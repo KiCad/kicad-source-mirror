@@ -106,17 +106,21 @@ public:
      * Runs the specified action. The common format for action names is "application.ToolName.Action".
      *
      * @param aActionName is the name of action to be invoked.
-     * @return True if the action finished successfully, false otherwise.
+     * @param aNow decides if the action has to be run immediately or after the current coroutine
+     * is preemptied.
+     * @return False if the action was not found.
      */
-    bool RunAction( const std::string& aActionName );
+    bool RunAction( const std::string& aActionName, bool aNow = false );
 
     /**
      * Function RunAction()
      * Runs the specified action.
      *
      * @param aAction is the action to be invoked.
+     * @param aNow decides if the action has to be run immediately or after the current coroutine
+     * is preemptied.
      */
-    void RunAction( const TOOL_ACTION& aAction );
+    void RunAction( const TOOL_ACTION& aAction, bool aNow = false );
 
     /**
      * Function FindTool()
@@ -158,10 +162,19 @@ public:
     void ResetTools( TOOL_BASE::RESET_REASON aReason );
 
     /**
-     * Takes an event from the TOOL_DISPATCHER and propagates it to
-     * tools that requested events of matching type(s)
+     * Propagates an event to tools that requested events of matching type(s).
+     * @param aEvent is the event to be processed.
      */
     bool ProcessEvent( TOOL_EVENT& aEvent );
+
+    /**
+     * Puts an event to the event queue to be processed at the end of event processing cycle.
+     * @param aEvent is the event to be put into the queue.
+     */
+    inline void PostEvent( const TOOL_EVENT& aEvent )
+    {
+        m_eventQueue.push_back( aEvent );
+    }
 
     /**
      * Sets the work environment (model, view, view controls and the parent window).
@@ -177,17 +190,17 @@ public:
         return m_view;
     }
 
-    KIGFX::VIEW_CONTROLS* GetViewControls() const
+    inline KIGFX::VIEW_CONTROLS* GetViewControls() const
     {
         return m_viewControls;
     }
 
-    EDA_ITEM* GetModel() const
+    inline EDA_ITEM* GetModel() const
     {
         return m_model;
     }
 
-    wxWindow* GetEditFrame() const
+    inline wxWindow* GetEditFrame() const
     {
         return m_editFrame;
     }
@@ -197,7 +210,7 @@ public:
      * (was invoked the most recently).
      * @return Id of the currently used tool.
      */
-    int GetCurrentToolId() const
+    inline int GetCurrentToolId() const
     {
         return m_activeTools.front();
     }
@@ -207,7 +220,7 @@ public:
      * (was invoked the most recently).
      * @return Pointer to the currently used tool.
      */
-    TOOL_BASE* GetCurrentTool() const
+    inline TOOL_BASE* GetCurrentTool() const
     {
         return FindTool( GetCurrentToolId() );
     }
@@ -404,6 +417,9 @@ private:
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_viewControls;
     wxWindow* m_editFrame;
+
+    /// Queue that stores events to be processed at the end of the event processing cycle.
+    std::list<TOOL_EVENT> m_eventQueue;
 
     /// Flag saying if the currently processed event should be passed to other tools.
     bool m_passEvent;

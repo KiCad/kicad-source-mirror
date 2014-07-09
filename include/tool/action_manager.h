@@ -75,20 +75,12 @@ public:
     static int MakeActionId( const std::string& aActionName );
 
     /**
-     * Function RunAction()
-     * Runs an action with a given name (if there is one available).
-     * @param aActionName is the name of action to be run.
-     * @return True if there was an action associated with the name, false otherwise.
+     * Function FindAction()
+     * Finds an action with a given name (if there is one available).
+     * @param aActionName is the searched action.
+     * @return Pointer to a TOOL_ACTION object or NULL if there is no such action.
      */
-    bool RunAction( const std::string& aActionName ) const;
-
-    /**
-     * Function RunAction()
-     * Prepares an appropriate event and sends it to the destination specified in a TOOL_ACTION
-     * object.
-     * @param aAction is the action to be run.
-     */
-    void RunAction( const TOOL_ACTION* aAction ) const;
+    TOOL_ACTION* FindAction( const std::string& aActionName ) const;
 
     /**
      * Function RunHotKey()
