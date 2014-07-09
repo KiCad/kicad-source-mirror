@@ -541,6 +541,24 @@ int PCBNEW_CONTROL::ResetCoords( TOOL_EVENT& aEvent )
 }
 
 
+int PCBNEW_CONTROL::SwitchCursor( TOOL_EVENT& aEvent )
+{
+    const unsigned int BIG_CURSOR = 4000;
+    const unsigned int SMALL_CURSOR = 80;
+
+    KIGFX::GAL* gal = getEditFrame<PCB_BASE_FRAME>()->GetGalCanvas()->GetGAL();
+
+    if( gal->GetCursorSize() == BIG_CURSOR )
+        gal->SetCursorSize( SMALL_CURSOR );
+    else
+        gal->SetCursorSize( BIG_CURSOR );
+
+    setTransitions();
+
+    return 0;
+}
+
+
 int PCBNEW_CONTROL::SwitchUnits( TOOL_EVENT& aEvent )
 {
     // TODO should not it be refactored to pcb_frame member function?
@@ -621,6 +639,7 @@ void PCBNEW_CONTROL::setTransitions()
 
     // Miscellaneous
     Go( &PCBNEW_CONTROL::ResetCoords,        COMMON_ACTIONS::resetCoords.MakeEvent() );
+    Go( &PCBNEW_CONTROL::SwitchCursor,       COMMON_ACTIONS::switchCursor.MakeEvent() );
     Go( &PCBNEW_CONTROL::SwitchUnits,        COMMON_ACTIONS::switchUnits.MakeEvent() );
     Go( &PCBNEW_CONTROL::ShowHelp,           COMMON_ACTIONS::showHelp.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToBeDone,           COMMON_ACTIONS::toBeDone.MakeEvent() );

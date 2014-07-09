@@ -75,6 +75,9 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     SetSize( aParent->GetSize() );
     screenSize = VECTOR2I( aParent->GetSize() );
+
+    cursorPixels = NULL;
+    cursorPixelsSaved = NULL;
     initCursor();
 
     // Grid color settings are different in Cairo and OpenGL
@@ -808,6 +811,13 @@ void CAIRO_GAL::ClearTarget( RENDER_TARGET aTarget )
 }
 
 
+void CAIRO_GAL::SetCursorSize( unsigned int aCursorSize )
+{
+    GAL::SetCursorSize( aCursorSize );
+    initCursor();
+}
+
+
 void CAIRO_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
     // Now we should only store the position of the mouse cursor
@@ -890,6 +900,12 @@ void CAIRO_GAL::skipMouseEvent( wxMouseEvent& aEvent )
 
 void CAIRO_GAL::initCursor()
 {
+    if( cursorPixels )
+        delete cursorPixels;
+
+    if( cursorPixelsSaved )
+        delete cursorPixelsSaved;
+
     cursorPixels      = new wxBitmap( cursorSize, cursorSize );
     cursorPixelsSaved = new wxBitmap( cursorSize, cursorSize );
 

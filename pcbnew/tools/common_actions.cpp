@@ -29,13 +29,16 @@
 
 // Selection tool actions
 TOOL_ACTION COMMON_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
-        AS_GLOBAL, 0, "", "", AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0,
+        "", "", AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION COMMON_ACTIONS::selectionSingle( "pcbnew.InteractiveSelection.Single",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION COMMON_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
 
 
 // Edit tool actions
@@ -287,6 +290,10 @@ TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
         AS_GLOBAL, ' ',
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::switchCursor( "pcbnew.Control.switchCursor",
+        AS_GLOBAL, 0,
+        "", "" );
+
 TOOL_ACTION COMMON_ACTIONS::switchUnits( "pcbnew.Control.switchUnits",
         AS_GLOBAL, MD_CTRL + int( 'U' ),
         "", "" );
@@ -304,7 +311,8 @@ TOOL_ACTION COMMON_ACTIONS::routerActivate( "pcbnew.InteractiveRouter",
         "Run push & shove router", "Run push & shove router", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::pointEditorUpdate( "pcbnew.PointEditor.update",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
 
 
 // Placement tool
@@ -420,6 +428,9 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         return COMMON_ACTIONS::highContrastMode.MakeEvent();
 
+    case ID_TB_OPTIONS_SELECT_CURSOR:
+        return COMMON_ACTIONS::switchCursor.MakeEvent();
+
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
     case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
     case ID_PCB_DELETE_ITEM_BUTT:
@@ -427,7 +438,6 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
     case ID_PCB_SHOW_1_RATSNEST_BUTT:
     case ID_PCB_PLACE_OFFSET_COORD_BUTT:
     case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
-    case ID_TB_OPTIONS_SELECT_CURSOR:
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
     case ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR:
     case ID_MICROWAVE_V_TOOLBAR:

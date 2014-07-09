@@ -229,6 +229,9 @@ public:
     // Cursor
     // -------
 
+    /// @copydoc GAL::SetCursorSize()
+    virtual void SetCursorSize( unsigned int aCursorSize );
+
     /// @copydoc GAL::DrawCursor()
     virtual void DrawCursor( const VECTOR2D& aCursorPosition );
 
