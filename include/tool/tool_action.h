@@ -148,6 +148,8 @@ public:
     {
         if( IsActivation() )
             return TOOL_EVENT( TC_COMMAND, TA_ACTIVATE, m_name, m_scope );
+        else if( IsNotification() )
+            return TOOL_EVENT( TC_MESSAGE, TA_ANY, m_name, m_scope );
         else
             return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
     }
@@ -190,6 +192,14 @@ public:
     bool IsActivation() const
     {
         return m_flags & AF_ACTIVATE;
+    }
+
+    /**
+     * Returns true if the action is a notification.
+     */
+    bool IsNotification() const
+    {
+        return m_flags & AF_NOTIFY;
     }
 
 private:

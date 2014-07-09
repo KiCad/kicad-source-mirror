@@ -130,7 +130,8 @@ enum TOOL_ACTION_SCOPE
 enum TOOL_ACTION_FLAGS
 {
     AF_NONE     = 0,
-    AF_ACTIVATE = 1  ///> Action activates a tool
+    AF_ACTIVATE = 1,    ///> Action activates a tool
+    AF_NOTIFY   = 2     ///> Action is a notification (it is by default passed to all tools)
 };
 
 /// Defines when a context menu is opened.
