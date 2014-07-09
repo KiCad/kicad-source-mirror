@@ -209,7 +209,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 
         KIGFX::VIEW_CONTROLS* controls = getViewControls();
         KIGFX::VIEW* view = getView();
-        PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+        PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
 
         m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
@@ -661,8 +661,8 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
 
     if( item->Type() == PCB_ZONE_AREA_T )
     {
-        getEditFrame<PCB_EDIT_FRAME>()->OnModify();
-        getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
+        getEditFrame<PCB_BASE_FRAME>()->OnModify();
+        getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
         CPolyLine* outline = zone->Outline();
@@ -702,8 +702,8 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
 
     else if( item->Type() == PCB_LINE_T )
     {
-        getEditFrame<PCB_EDIT_FRAME>()->OnModify();
-        getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
+        getEditFrame<PCB_BASE_FRAME>()->OnModify();
+        getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
         DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
 

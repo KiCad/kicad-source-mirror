@@ -93,7 +93,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     m_updateFlag = KIGFX::VIEW_ITEM::GEOMETRY;
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     controls->ShowCursor( true );
     controls->SetSnapping( true );
     controls->SetAutoPan( true );
@@ -217,7 +217,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     if( !makeSelection( selection ) )
     {
@@ -286,7 +286,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
@@ -310,7 +310,7 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
     {
         BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
 
-        item->Rotate( rotatePoint, editFrame->GetRotationAngle() );
+        item->Rotate( rotatePoint, 900.0 /*m_frame->GetRotationAngle()*/ );
 
         if( !m_dragging )
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -340,7 +340,7 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
@@ -404,7 +404,7 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
 
     // Get a copy of the selected items set
     PICKED_ITEMS_LIST selectedItems = selection.items;
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     // As we are about to remove items, they have to be removed from the selection first
     m_selectionTool->ClearSelection();
