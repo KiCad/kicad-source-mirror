@@ -764,7 +764,7 @@ BOARD_ITEM* SELECTION_TOOL::prefer( GENERAL_COLLECTOR& aCollector, const KICAD_T
 }
 
 
-void SELECTION_TOOL::SELECTION::clear()
+void SELECTION::clear()
 {
     items.ClearItemsList();
     group->Clear();
