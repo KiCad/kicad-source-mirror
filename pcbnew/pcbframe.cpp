@@ -550,7 +550,6 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     }
 
     // Limit panning to the size of worksheet frame
-    GetGalCanvas()->GetViewControls()->SetPanBoundary( aBoard->GetWorksheetViewItem()->ViewBBox() );
     view->RecacheAllItems( true );
 
     if( IsGalCanvasActive() )
