@@ -274,6 +274,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     PlaceModule( module, NULL );
     GetBoard()->m_Status_Pcb = 0;
     GetBoard()->BuildListOfNets();
+    updateView();
 
     return module;
 }

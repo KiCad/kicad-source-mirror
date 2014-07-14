@@ -91,6 +91,18 @@ public:
      */
     int Remove( TOOL_EVENT& aEvent );
 
+    /**
+     * Function EditModules()
+     *
+     * Toggles edit module mode. When enabled, one may select parts of modules individually
+     * (graphics, pads, etc.), so they can be modified.
+     * @param aEnabled decides if the mode should be enabled.
+     */
+    void EditModules( bool aEnabled )
+    {
+        m_editModules = aEnabled;
+    }
+
 private:
     ///> Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
@@ -104,6 +116,9 @@ private:
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).
     VECTOR2I m_cursor;
+
+    /// Edit module mode flag
+    bool m_editModules;
 
     ///> Removes and frees a single BOARD_ITEM.
     void remove( BOARD_ITEM* aItem );
@@ -128,11 +143,11 @@ private:
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
-    wxPoint getModificationPoint( const SELECTION_TOOL::SELECTION& aSelection );
+    wxPoint getModificationPoint( const SELECTION& aSelection );
 
     ///> If there are no items currently selected, it tries to choose the item that is under
     ///> the cursor or displays a disambiguation menu if there are multpile items.
-    bool makeSelection( const SELECTION_TOOL::SELECTION& aSelection );
+    bool makeSelection( const SELECTION& aSelection );
 
     ///> Updates view with the changes in the list.
     void processChanges( const PICKED_ITEMS_LIST* aList );

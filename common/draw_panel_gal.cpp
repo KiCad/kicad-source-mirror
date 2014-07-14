@@ -41,6 +41,8 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 
+#include <boost/foreach.hpp>
+
 #ifdef __WXDEBUG__
 #include <profile.h>
 #endif /* __WXDEBUG__ */
@@ -50,8 +52,9 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
                                         GalType aGalType ) :
     wxWindow( aParentWindow, aWindowId, aPosition, aSize )
 {
+    m_parent     = aParentWindow;
     m_gal        = NULL;
-    m_currentGal = GAL_TYPE_NONE;
+    m_backend    = GAL_TYPE_NONE;
     m_view       = NULL;
     m_painter    = NULL;
     m_eventDispatcher = NULL;
@@ -67,33 +70,28 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 
-    Connect( wxEVT_SIZE,        wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
+    Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
+    Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
 
-    /* Generic events for the Tool Dispatcher */
-    Connect( wxEVT_MOTION,          wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_LEFT_UP,         wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_LEFT_DOWN,       wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_LEFT_DCLICK,     wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_RIGHT_UP,        wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_RIGHT_DOWN,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_RIGHT_DCLICK,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_MIDDLE_UP,       wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_MIDDLE_DOWN,     wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_MIDDLE_DCLICK,   wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_MOUSEWHEEL,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_CHAR_HOOK,       wxEventHandler( EDA_DRAW_PANEL_GAL::skipEvent ) );
-    Connect( wxEVT_CHAR,            wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_ENTER_WINDOW,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
-    Connect( KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE,
-             wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    const wxEventType events[] =
+    {
+        wxEVT_LEFT_UP, wxEVT_LEFT_DOWN, wxEVT_LEFT_DCLICK,
+        wxEVT_RIGHT_UP, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_DCLICK,
+        wxEVT_MIDDLE_UP, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_DCLICK,
+        wxEVT_MOTION, wxEVT_MOUSEWHEEL, wxEVT_CHAR, KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE
+    };
+
+    BOOST_FOREACH( wxEventType eventType, events )
+    {
+        Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ),
+                 NULL, m_eventDispatcher );
+    }
 
     // Set up timer that prevents too frequent redraw commands
     m_refreshTimer.SetOwner( this );
     m_pendingRefresh = false;
     m_drawing = false;
     Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
-
-    this->SetFocus();
 }
 
 
@@ -160,7 +158,7 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
 }
 
 
-void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
+void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
     if( m_pendingRefresh )
         return;
@@ -183,6 +181,50 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 }
 
 
+void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
+{
+    m_eventDispatcher = aEventDispatcher;
+
+#if wxCHECK_VERSION( 3, 0, 0 )
+    if( m_eventDispatcher )
+    {
+        m_parent->Connect( wxEVT_TOOL,
+                           wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                           NULL, m_eventDispatcher );
+    }
+    else
+    {
+        // While loops are used to be sure, that we are removing all event handlers
+        while( m_parent->Disconnect( wxEVT_TOOL,
+                                     wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                                     NULL, m_eventDispatcher ) );
+    }
+#else
+    if( m_eventDispatcher )
+    {
+        m_parent->Connect( wxEVT_COMMAND_MENU_SELECTED,
+                           wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                           NULL, m_eventDispatcher );
+
+        m_parent->Connect( wxEVT_COMMAND_TOOL_CLICKED,
+                           wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                           NULL, m_eventDispatcher );
+    }
+    else
+    {
+        // While loops are used to be sure, that we are removing all event handlers
+        while( m_parent->Disconnect( wxEVT_COMMAND_MENU_SELECTED,
+                                     wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                                     NULL, m_eventDispatcher ) );
+
+        while( m_parent->Disconnect( wxEVT_COMMAND_TOOL_CLICKED,
+                                     wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                                     NULL, m_eventDispatcher ) );
+    }
+#endif
+}
+
+
 void EDA_DRAW_PANEL_GAL::StartDrawing()
 {
     m_pendingRefresh = false;
@@ -201,10 +243,32 @@ void EDA_DRAW_PANEL_GAL::StopDrawing()
 }
 
 
+void EDA_DRAW_PANEL_GAL::SetHighContrastLayer( LAYER_NUM aLayer )
+{
+    // Set display settings for high contrast mode
+    KIGFX::RENDER_SETTINGS* rSettings = m_view->GetPainter()->GetSettings();
+
+    SetTopLayer( aLayer );
+
+    rSettings->ClearActiveLayers();
+    rSettings->SetActiveLayer( aLayer );
+
+    m_view->UpdateAllLayersColor();
+}
+
+
+void EDA_DRAW_PANEL_GAL::SetTopLayer( LAYER_NUM aLayer )
+{
+    m_view->ClearTopLayers();
+    m_view->SetTopLayer( aLayer );
+    m_view->UpdateAllLayersOrder();
+}
+
+
 void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 {
     // Do not do anything if the currently used GAL is correct
-    if( aGalType == m_currentGal && m_gal != NULL )
+    if( aGalType == m_backend && m_gal != NULL )
         return;
 
     // Prevent refreshing canvas during backend switch
@@ -235,21 +299,16 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
     if( m_view )
         m_view->SetGAL( m_gal );
 
-    m_currentGal = aGalType;
+    m_backend = aGalType;
 }
 
 
 void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
 {
     if( !m_eventDispatcher )
-    {
         aEvent.Skip();
-        return;
-    }
     else
-    {
         m_eventDispatcher->DispatchWxEvent( aEvent );
-    }
 
     Refresh();
 }
@@ -259,11 +318,4 @@ void EDA_DRAW_PANEL_GAL::onEnter( wxEvent& aEvent )
 {
     // Getting focus is necessary in order to receive key events properly
     SetFocus();
-}
-
-
-void EDA_DRAW_PANEL_GAL::skipEvent( wxEvent& aEvent )
-{
-    // This is necessary for CHAR_HOOK event to generate KEY_UP and KEY_DOWN events
-    aEvent.Skip();
 }

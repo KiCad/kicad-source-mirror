@@ -159,9 +159,8 @@ public:
      * Function SetViewport()
      * Sets the visible area of the VIEW.
      * @param aViewport: desired visible area, in world space coordinates.
-     * @param aKeepProportions: when true, the X/Y size proportions are kept.
      */
-    void SetViewport( const BOX2D& aViewport, bool aKeepProportions = true );
+    void SetViewport( const BOX2D& aViewport );
 
     /**
      * Function GetViewport()
@@ -201,7 +200,7 @@ public:
      * Function GetScale()
      * @return Current scalefactor of this VIEW
      */
-    double  GetScale() const
+    double GetScale() const
     {
         return m_scale;
     }

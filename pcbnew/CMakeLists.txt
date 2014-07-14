@@ -59,6 +59,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_edit_module_for_Modedit.cpp
     dialogs/dialog_edit_module_text.cpp
     dialogs/dialog_edit_module_text_base.cpp
+    dialogs/dialog_enum_pads.cpp
+    dialogs/dialog_enum_pads_base.cpp
     dialogs/dialog_exchange_modules_base.cpp
     dialogs/dialog_export_idf.cpp
     dialogs/dialog_export_idf_base.cpp
@@ -160,6 +162,7 @@ set( PCBNEW_CLASS_SRCS
     tool_modview.cpp
     modview_frame.cpp
     pcbframe.cpp
+    pcb_base_edit_frame.cpp
     attribut.cpp
     board_items_to_polygon_shape_transform.cpp
     board_undo_redo.cpp
@@ -221,6 +224,7 @@ set( PCBNEW_CLASS_SRCS
     pad_edition_functions.cpp
     pcbnew_config.cpp
     pcbplot.cpp
+    pcb_draw_panel_gal.cpp
     plot_board_layers.cpp
     plot_brditems_plotter.cpp
     print_board_functions.cpp
@@ -254,6 +258,7 @@ set( PCBNEW_CLASS_SRCS
 
     tools/selection_tool.cpp
     tools/selection_area.cpp
+    tools/selection_conditions.cpp
     tools/bright_box.cpp
     tools/edit_points.cpp
     tools/edit_constraints.cpp
@@ -261,7 +266,9 @@ set( PCBNEW_CLASS_SRCS
     tools/drawing_tool.cpp
     tools/edit_tool.cpp
     tools/pcbnew_control.cpp
-    tools/pcb_tools.cpp
+    tools/pcb_editor_control.cpp
+    tools/module_tools.cpp
+    tools/placement_tool.cpp
     tools/common_actions.cpp
     )
 

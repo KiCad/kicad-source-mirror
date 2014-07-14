@@ -71,7 +71,6 @@ public:
         return aItem && PCB_MODULE_TEXT_T == aItem->Type();
     }
 
-
     virtual const wxPoint& GetPosition() const
     {
         return m_Pos;
@@ -117,9 +116,11 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const;
 
-    void SetDrawCoord();        // Set absolute coordinates.
+    ///> Set absolute coordinates.
+    void SetDrawCoord();
 
-    void SetLocalCoord();       // Set relative coordinates.
+    ///> Set relative coordinates.
+    void SetLocalCoord();
 
     /* drawing functions */
     void Draw( EDA_DRAW_PANEL* panel,

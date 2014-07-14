@@ -29,7 +29,6 @@
 #include <string>
 #include <cassert>
 
-#include <tool/tool_base.h>
 #include <tool/tool_manager.h>
 
 /**
@@ -47,10 +46,10 @@ class TOOL_ACTION
 public:
     TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope = AS_CONTEXT,
             int aDefaultHotKey = 0, const std::string& aMenuItem = std::string( "" ),
-            const std::string& aMenuDesc = std::string( "" ) ) :
+            const std::string& aMenuDesc = std::string( "" ), TOOL_ACTION_FLAGS aFlags = AF_NONE ) :
         m_name( aName ), m_scope( aScope ), m_defaultHotKey( aDefaultHotKey ),
         m_currentHotKey( aDefaultHotKey ), m_menuItem( aMenuItem ),
-        m_menuDescription( aMenuDesc ), m_id( -1 )
+        m_menuDescription( aMenuDesc ), m_id( -1 ), m_flags( aFlags )
     {
         TOOL_MANAGER::GetActionList().push_back( this );
     }
@@ -132,7 +131,6 @@ public:
      * Checks if the action has a hot key assigned.
      *
      * @return True if there is a hot key assigned, false otherwise.
-     *
      */
     bool HasHotKey() const
     {
@@ -141,14 +139,19 @@ public:
 
     /**
      * Function MakeEvent()
-     * Returns the event associated with the action (ie. the event that will be sent after
+     * Returns the event associated with the action (i.e. the event that will be sent after
      * activating the action).
      *
      * @return The event associated with the action.
      */
     TOOL_EVENT MakeEvent() const
     {
-        return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
+        if( IsActivation() )
+            return TOOL_EVENT( TC_COMMAND, TA_ACTIVATE, m_name, m_scope );
+        else if( IsNotification() )
+            return TOOL_EVENT( TC_MESSAGE, TA_ANY, m_name, m_scope );
+        else
+            return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
     }
 
     const std::string& GetMenuItem() const
@@ -181,30 +184,31 @@ public:
      * stripped of the last part (e.g. for "pcbnew.InteractiveDrawing.drawCircle" it is
      * "pcbnew.InteractiveDrawing").
      */
-    std::string GetToolName() const
+    std::string GetToolName() const;
+
+    /**
+     * Returns true if the action is intended to activate a tool.
+     */
+    bool IsActivation() const
     {
-        return m_name.substr( 0, m_name.rfind( '.' ) );
+        return m_flags & AF_ACTIVATE;
+    }
+
+    /**
+     * Returns true if the action is a notification.
+     */
+    bool IsNotification() const
+    {
+        return m_flags & AF_NOTIFY;
     }
 
 private:
     friend class ACTION_MANAGER;
 
-    /// Assigns an unique identifier. It is given by an instance of ACTION_MANAGER.
-    void setId( int aId )
-    {
-        m_id = aId;
-    }
-
-    /// Assigns ACTION_MANAGER object that handles the TOOL_ACTION.
-    void setActionMgr( ACTION_MANAGER* aManager )
-    {
-        m_actionMgr = aManager;
-    }
-
     /// Name of the action (convention is: app.[tool.]action.name)
     std::string m_name;
 
-    /// Scope of the action (ie. the event that is issued after activation).
+    /// Scope of the action (i.e. the event that is issued after activation).
     TOOL_ACTION_SCOPE m_scope;
 
     /// Default hot key that activates the action.
@@ -225,8 +229,8 @@ private:
     /// Unique ID for fast matching. Assigned by ACTION_MANAGER.
     int m_id;
 
-    /// Action manager that handles this TOOL_ACTION.
-    ACTION_MANAGER* m_actionMgr;
+    /// Action flags
+    TOOL_ACTION_FLAGS m_flags;
 
     /// Origin of the action
     // const TOOL_BASE* m_origin;

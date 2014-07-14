@@ -80,18 +80,17 @@ protected:
         GLuint attachmentPoint;              ///< Point to which an image from texture is attached
     } OPENGL_BUFFER;
 
-    bool                        m_initialized;            ///< Initialization status flag
-    unsigned int                m_current;                ///< Currently used buffer handle
-    GLuint                      m_framebuffer;            ///< Main FBO handle
-    GLuint                      m_depthBuffer;            ///< Depth buffer handle
-    unsigned int                m_maxBuffers;             ///< Maximal amount of buffers
+    bool            m_initialized;            ///< Initialization status flag
+    unsigned int    m_current;                ///< Currently used buffer handle
+    GLuint          m_framebuffer;            ///< Main FBO handle
+    GLuint          m_depthBuffer;            ///< Depth buffer handle
     typedef std::deque<OPENGL_BUFFER> OPENGL_BUFFERS;
 
     /// Stores information about initialized buffers
-    OPENGL_BUFFERS              m_buffers;
+    OPENGL_BUFFERS  m_buffers;
 
     /// Store the currently used FBO name in case there was more than one compositor used
-    static GLuint               m_currentFbo;
+    GLuint          m_currentFbo;
 
     /**
      * Function clean()
@@ -100,7 +99,7 @@ protected:
     void clean();
 
     /// Returns number of used buffers
-    unsigned int usedBuffers()
+    inline unsigned int usedBuffers()
     {
         return m_buffers.size();
     }

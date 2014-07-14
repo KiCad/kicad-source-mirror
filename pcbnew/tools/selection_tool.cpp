@@ -24,11 +24,8 @@
  */
 
 #include <boost/foreach.hpp>
-#include <boost/optional.hpp>
 #include <boost/bind.hpp>
-#include <cassert>
 
-#include <class_draw_panel_gal.h>
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_track.h>
@@ -36,6 +33,9 @@
 
 #include <wxPcbStruct.h>
 #include <collectors.h>
+#include <confirm.h>
+
+#include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
 #include <painter.h>
@@ -48,14 +48,13 @@
 #include "bright_box.h"
 #include "common_actions.h"
 
-using boost::optional;
-
 SELECTION_TOOL::SELECTION_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
         SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" ),
         DeselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.deselected" ),
         ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" ),
-        m_additive( false ), m_multiple( false )
+        m_frame( NULL ), m_additive( false ), m_multiple( false ),
+        m_editModules( false ), m_locked( true )
 {
     m_selArea = new SELECTION_AREA;
     m_selection.group = new KIGFX::VIEW_GROUP;
@@ -79,12 +78,14 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         // Restore previous properties of selected items and remove them from containers
         clearSelection();
 
+    m_frame = getEditFrame<PCB_BASE_FRAME>();
+    m_locked = true;
+
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
     getView()->Add( m_selection.group );
 
-    // The tool launches upon reception of action event ("pcbnew.InteractiveSelection")
-    Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
+    setTransitions();
 }
 
 
@@ -97,20 +98,8 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         // become the new selection (discarding previously selected items)
         m_additive = evt->Modifier( MD_SHIFT );
 
-        if( evt->IsAction( &COMMON_ACTIONS::selectionSingle ) )
-        {
-            // GetMousePosition() is used, as it is independent of snapping settings
-            selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
-        }
-
-        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO ||
-                 evt->IsAction( &COMMON_ACTIONS::selectionClear ) )
-        {
-            clearSelection();
-        }
-
         // single click? Select single object
-        else if( evt->IsClick( BUT_LEFT ) )
+        if( evt->IsClick( BUT_LEFT ) )
         {
             if( evt->Modifier( MD_CTRL ) )
             {
@@ -131,8 +120,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             if( m_selection.Empty() )
                 selectSingle( evt->Position() );
 
-            if( !m_selection.Empty() )
-                SetContextMenu( &m_menu, CMENU_NOW );
+            generateMenu();
         }
 
         // double click? Display the properties window
@@ -181,6 +169,18 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
                 }
             }
         }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::selectionSingle ) )
+        {
+            // GetMousePosition() is used, as it is independent of snapping settings
+            selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+        }
+
+        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO ||
+                 evt->IsAction( &COMMON_ACTIONS::selectionClear ) )
+        {
+            clearSelection();
+        }
     }
 
     // This tool is supposed to be active forever
@@ -190,11 +190,19 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
+void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition )
 {
     assert( aAction.GetId() > 0 );    // Check if the action was registered before in ACTION_MANAGER
 
     m_menu.Add( aAction );
+    m_menuConditions.push_back( aCondition );
+}
+
+
+void SELECTION_TOOL::AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel, const SELECTION_CONDITION& aCondition )
+{
+    m_menu.AppendSubMenu( aMenu, aLabel );
+    m_menuConditions.push_back( aCondition );
 }
 
 
@@ -228,14 +236,19 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 
 bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation )
 {
-    BOARD* pcb = getModel<BOARD>();
     BOARD_ITEM* item;
-    GENERAL_COLLECTORS_GUIDE guide = getEditFrame<PCB_EDIT_FRAME>()->GetCollectorsGuide();
+    GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
     GENERAL_COLLECTOR collector;
-    const KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_LINE_T, EOT }; // preferred types
 
-    collector.Collect( pcb, GENERAL_COLLECTOR::AllBoardItems,
-                       wxPoint( aWhere.x, aWhere.y ), guide );
+    // Preferred types (they have the priority when if they are covered by a bigger item)
+    const KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_LINE_T, PCB_MODULE_TEXT_T, EOT };
+
+    if( m_editModules )
+        collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::ModuleItems,
+                           wxPoint( aWhere.x, aWhere.y ), guide );
+    else
+        collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::AllBoardItems,
+                           wxPoint( aWhere.x, aWhere.y ), guide );
 
     switch( collector.GetCount() )
     {
@@ -347,7 +360,7 @@ bool SELECTION_TOOL::selectMultiple()
             }
 
             // Do not display information about selected item,as there is more than one
-            getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+            m_frame->SetCurItem( NULL );
 
             if( !m_selection.Empty() )
             {
@@ -368,6 +381,74 @@ bool SELECTION_TOOL::selectMultiple()
 }
 
 
+void SELECTION_TOOL::setTransitions()
+{
+    Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &SELECTION_TOOL::SingleSelection, COMMON_ACTIONS::selectionSingle.MakeEvent() );
+    Go( &SELECTION_TOOL::ClearSelection, COMMON_ACTIONS::selectionClear.MakeEvent() );
+}
+
+
+bool SELECTION_TOOL::CheckLock()
+{
+    if( !m_locked )
+        return false;
+
+    bool containsLocked = false;
+
+    // Check if the selection contains locked items
+    for( int i = 0; i < m_selection.Size(); ++i )
+    {
+        BOARD_ITEM* item = m_selection.Item<BOARD_ITEM>( i );
+
+        switch( item->Type() )
+        {
+        case PCB_MODULE_T:
+            if( static_cast<MODULE*>( item )->IsLocked() )
+                containsLocked = true;
+            break;
+
+        case PCB_MODULE_EDGE_T:
+        case PCB_MODULE_TEXT_T:
+            if( static_cast<MODULE*>( item->GetParent() )->IsLocked() )
+                containsLocked = true;
+            break;
+
+        default:    // suppress warnings
+            break;
+        }
+    }
+
+    if( containsLocked &&
+        !IsOK( m_frame, _( "Selection contains locked items. Do you want to continue?" ) ) )
+    {
+        return true;
+    }
+
+    m_locked = false;
+
+    return false;
+}
+
+
+int SELECTION_TOOL::SingleSelection( TOOL_EVENT& aEvent )
+{
+    selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+    setTransitions();
+
+    return 0;
+}
+
+
+int SELECTION_TOOL::ClearSelection( TOOL_EVENT& aEvent )
+{
+    clearSelection();
+    setTransitions();
+
+    return 0;
+}
+
+
 void SELECTION_TOOL::clearSelection()
 {
     if( m_selection.Empty() )
@@ -385,14 +466,14 @@ void SELECTION_TOOL::clearSelection()
     }
     m_selection.clear();
 
-    getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
-
-    // Do not show the context menu when there is nothing selected
-    SetContextMenu( &m_menu, CMENU_OFF );
+    m_frame->SetCurItem( NULL );
+    m_locked = true;
 
     // Inform other potentially interested tools
     TOOL_EVENT clearEvent( ClearedEvent );
     m_toolMgr->ProcessEvent( clearEvent );
+
+    return;
 }
 
 
@@ -437,7 +518,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         }
         else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {
-            optional<int> id = evt->GetCommandId();
+            boost::optional<int> id = evt->GetCommandId();
 
             // User has selected an item, so this one will be returned
             if( id && ( *id >= 0 ) )
@@ -541,23 +622,25 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 
     case PCB_MODULE_T:
         if( aItem->IsOnLayer( F_Cu ) && board->IsElementVisible( MOD_FR_VISIBLE ) )
-            return true;
+            return !m_editModules;
 
         if( aItem->IsOnLayer( B_Cu ) && board->IsElementVisible( MOD_BK_VISIBLE ) )
-            return true;
+            return !m_editModules;
 
         return false;
 
         break;
 
     case PCB_MODULE_TEXT_T:
-        if( m_multiple )
+        if( m_multiple && !m_editModules )
             return false;
         break;
 
     // These are not selectable
     case PCB_MODULE_EDGE_T:
     case PCB_PAD_T:
+        return m_editModules;
+
     case NOT_USED:
     case TYPE_NOT_INIT:
         return false;
@@ -585,19 +668,15 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     ITEM_PICKER picker( aItem );
     m_selection.items.PushItem( picker );
 
-    // It is enough to do it only for the first selected item
     if( m_selection.Size() == 1 )
     {
         // Set as the current item, so the information about selection is displayed
-        getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( aItem, true );
-
-        // Now the context menu should be enabled
-        SetContextMenu( &m_menu, CMENU_BUTTON );
+        m_frame->SetCurItem( aItem, true );
     }
     else if( m_selection.Size() == 2 )  // Check only for 2, so it will not be
     {                                   // called for every next selected item
         // If multiple items are selected, do not show the information about the selected item
-        getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL, true );
+        m_frame->SetCurItem( NULL, true );
     }
 }
 
@@ -618,11 +697,10 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
     if( itemIdx >= 0 )
         m_selection.items.RemovePicker( itemIdx );
 
-    // If there is nothing selected, disable the context menu
     if( m_selection.Empty() )
     {
-        SetContextMenu( &m_menu, CMENU_OFF );
-        getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+        m_frame->SetCurItem( NULL );
+        m_locked = true;
     }
 
     // Inform other potentially interested tools
@@ -674,7 +752,7 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 void SELECTION_TOOL::highlightNet( const VECTOR2I& aPoint )
 {
     KIGFX::RENDER_SETTINGS* render = getView()->GetPainter()->GetSettings();
-    GENERAL_COLLECTORS_GUIDE guide = getEditFrame<PCB_EDIT_FRAME>()->GetCollectorsGuide();
+    GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
     GENERAL_COLLECTOR collector;
     int net = -1;
 
@@ -727,7 +805,29 @@ BOARD_ITEM* SELECTION_TOOL::prefer( GENERAL_COLLECTOR& aCollector, const KICAD_T
 }
 
 
-void SELECTION_TOOL::SELECTION::clear()
+void SELECTION_TOOL::generateMenu()
+{
+    // Create a copy of the master context menu
+    m_menuCopy = m_menu;
+
+    assert( m_menuCopy.GetMenuItemCount() == m_menuConditions.size() );
+
+    // Filter out entries that does not apply to the current selection
+    for( int i = m_menuCopy.GetMenuItemCount() - 1; i >= 0; --i )
+    {
+        if( !m_menuConditions[i]( m_selection ) )
+        {
+            wxMenuItem* item = m_menuCopy.FindItemByPosition( i );
+            m_menuCopy.Destroy( item );
+        }
+    }
+
+    if( m_menuCopy.GetMenuItemCount() > 0 )
+        SetContextMenu( &m_menuCopy, CMENU_NOW );
+}
+
+
+void SELECTION::clear()
 {
     items.ClearItemsList();
     group->Clear();

@@ -675,7 +675,6 @@ public:
      * @return True for GAL-based canvas, false for standard canvas.
      */
     bool IsGalCanvasActive() const          { return m_galCanvasActive; }
-    void SetGalCanvasActive( bool aState )  { m_galCanvasActive = aState; }
 
     /**
      * Function GetGalCanvas

@@ -30,6 +30,7 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
+#include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <eda_doc.h>
 #include <kicad_string.h>
@@ -55,6 +56,7 @@
 #include <dialog_get_component.h>
 #include <modview_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <class_pcb_layer_widget.h>
 
 
 static void DisplayCmpDoc( wxString& Name );
@@ -105,6 +107,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
     PlaceModule( newModule, NULL );
+    newModule->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
 
     // Put it on FRONT layer,
     // because this is the default in ModEdit, and in libs
@@ -116,6 +119,9 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     Rotate_Module( NULL, newModule, 0, false );
     GetScreen()->ClrModify();
     Zoom_Automatique( false );
+
+    if( IsGalCanvasActive() )
+        updateView();
 
     return true;
 }

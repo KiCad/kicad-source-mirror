@@ -37,21 +37,11 @@
 #include <gal/opengl/noncached_container.h>
 #include <gal/opengl/opengl_compositor.h>
 
-#include <wx/wx.h>
 #include <wx/glcanvas.h>
 
-#include <cmath>
-#include <iterator>
-#include <vector>
-#include <algorithm>
-#include <memory>
 #include <map>
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/shared_array.hpp>
-
-#include <stdlib.h>
-#include <iostream>
-#include <fstream>
 
 #ifndef CALLBACK
 #define CALLBACK
@@ -262,8 +252,8 @@ private:
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
 
-    wxClientDC*             clientDC;               ///< Drawing context
-    wxGLContext*            glContext;              ///< OpenGL context of wxWidgets
+    wxPaintDC*              clientDC;               ///< Drawing context
+    static wxGLContext*     glContext;              ///< OpenGL context of wxWidgets
     wxWindow*               parentWindow;           ///< Parent window
     wxEvtHandler*           mouseListener;
     wxEvtHandler*           paintListener;

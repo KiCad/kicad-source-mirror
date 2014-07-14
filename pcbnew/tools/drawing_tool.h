@@ -26,6 +26,7 @@
 #define __DRAWING_TOOL_H
 
 #include <tool/tool_interactive.h>
+#include <boost/optional.hpp>
 
 namespace KIGFX
 {
@@ -76,9 +77,9 @@ public:
     int DrawArc( TOOL_EVENT& aEvent );
 
     /**
-     * Function DrawText()
+     * Function PlaceText()
      * Displays a dialog that allows to input text and its settings and then lets the user decide
-     * where to place the text.
+     * where to place the text in editor.
      */
     int PlaceText( TOOL_EVENT& aEvent );
 
@@ -116,25 +117,75 @@ public:
 
     /**
      * Function PlaceModule()
-     * Displays a dialog to selected a module to be added and then allows user to set its position.
+     * Displays a dialog to select a module to be added and allows the user to set its position.
      */
     int PlaceModule( TOOL_EVENT& aEvent );
+
+    /**
+     * Function PlaceDXF()
+     * Places a drawing imported from a DXF file in module editor.
+     */
+    int PlaceDXF( TOOL_EVENT& aEvent );
+
+    /**
+     * Function SetAnchor()
+     * Places the footprint anchor (only in module editor).
+     */
+    int SetAnchor( TOOL_EVENT& aEvent );
+
+    /**
+     * Function EditModules()
+     * Toggles edit module mode. When enabled, one may select parts of modules individually
+     * (graphics, pads, etc.), so they can be modified.
+     * @param aEnabled decides if the mode should be enabled.
+     */
+    void EditModules( bool aEnabled )
+    {
+        m_editModules = aEnabled;
+    }
 
 private:
     ///> Starts drawing a selected shape (i.e. DRAWSEGMENT).
     ///> @param aShape is the type of created shape (@see STROKE_T).
-    ///> @param aContinous decides if there is only one or multiple shapes to draw.
-    int drawSegment( int aShape, bool aContinous );
+    ///> @param aGraphic is an object that is going to be used by the tool for drawing. It has to
+    ///> be already created. The tool deletes the object if it is not added to a BOARD.
+    ///> @return False if the tool was cancelled before the origin was set or origin and end are
+    ///> the same point.
+    bool drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
+                      boost::optional<VECTOR2D> aStartingPoint = boost::none );
+
+    ///> Starts drawing an arc.
+    ///> @param aGraphic is an object that is going to be used by the tool for drawing. It has to
+    ///> be already created. The tool deletes the object if it is not added to a BOARD.
+    ///> @return False if the tool was cancelled before the origin was set or origin and end are
+    ///> the same point.
+    bool drawArc( DRAWSEGMENT*& aGraphic );
 
     ///> Draws a polygon, that is added as a zone or a keepout area.
     ///> @param aKeepout decides if the drawn polygon is a zone or a keepout area.
     int drawZone( bool aKeepout );
 
-    ///> Forces a DRAWSEGMENT to be drawn at multiple of 45 degrees. The origin
-    ///> stays the same, the end of the aSegment is modified according to the
-    ///> current cursor position.
-    ///> @param aSegment is the segment that is currently drawn.
-    ///> @param aHelper is a helper line that shows the next possible segment.
+    /**
+     * Function placeTextModule()
+     * Displays a dialog that allows to input text and its settings and then lets the user decide
+     * where to place the text in module .
+     */
+    int placeTextModule();
+
+    /**
+     * Function placeTextPcb()
+     * Displays a dialog that allows to input text and its settings and then lets the user decide
+     * where to place the text in board editor.
+     */
+    int placeTextPcb();
+
+    /**
+     * Function make45DegLine()
+     * Forces a DRAWSEGMENT to be drawn at multiple of 45 degrees. The origin stays the same,
+     * the end of the aSegment is modified according to the current cursor position.
+     * @param aSegment is the segment that is currently drawn.
+     * @param aHelper is a helper line that shows the next possible segment.
+     */
     void make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) const;
 
     ///> Sets up handlers for various events.
@@ -144,6 +195,9 @@ private:
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;
     PCB_EDIT_FRAME* m_frame;
+
+    /// Edit module mode flag
+    bool m_editModules;
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP = 100000;

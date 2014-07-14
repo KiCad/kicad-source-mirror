@@ -25,6 +25,8 @@
 
 #include <map>
 #include <deque>
+#include <stack>
+#include <algorithm>
 
 #include <boost/foreach.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -32,8 +34,10 @@
 #include <boost/range/adaptor/map.hpp>
 
 #include <wx/event.h>
+#include <wx/clipbrd.h>
 
 #include <view/view.h>
+#include <view/view_controls.h>
 
 #include <tool/tool_base.h>
 #include <tool/tool_interactive.h>
@@ -51,6 +55,32 @@ using boost::optional;
 /// Struct describing the current execution state of a TOOL
 struct TOOL_MANAGER::TOOL_STATE
 {
+    TOOL_STATE( TOOL_BASE* aTool ) :
+        theTool( aTool )
+    {
+        clear();
+    }
+
+    TOOL_STATE( const TOOL_STATE& aState )
+    {
+        theTool = aState.theTool;
+        idle = aState.idle;
+        pendingWait = aState.pendingWait;
+        pendingContextMenu = aState.pendingContextMenu;
+        contextMenu = aState.contextMenu;
+        contextMenuTrigger = aState.contextMenuTrigger;
+        cofunc = aState.cofunc;
+        wakeupEvent = aState.wakeupEvent;
+        waitEvents = aState.waitEvents;
+        transitions = aState.transitions;
+        // do not copy stateStack
+    }
+
+    ~TOOL_STATE()
+    {
+        assert( stateStack.empty() );
+    }
+
     /// The tool itself
     TOOL_BASE* theTool;
 
@@ -83,6 +113,21 @@ struct TOOL_MANAGER::TOOL_STATE
     /// upon the event reception
     std::vector<TRANSITION> transitions;
 
+    void operator=( const TOOL_STATE& aState )
+    {
+        theTool = aState.theTool;
+        idle = aState.idle;
+        pendingWait = aState.pendingWait;
+        pendingContextMenu = aState.pendingContextMenu;
+        contextMenu = aState.contextMenu;
+        contextMenuTrigger = aState.contextMenuTrigger;
+        cofunc = aState.cofunc;
+        wakeupEvent = aState.wakeupEvent;
+        waitEvents = aState.waitEvents;
+        transitions = aState.transitions;
+        // do not copy stateStack
+    }
+
     bool operator==( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
     {
         return aRhs.theTool == this->theTool;
@@ -92,6 +137,59 @@ struct TOOL_MANAGER::TOOL_STATE
     {
         return aRhs.theTool != this->theTool;
     }
+
+    /**
+     * Function Push()
+     * Stores the current state of the tool on stack. Stacks are stored internally and are not
+     * shared between different TOOL_STATE objects.
+     */
+    void Push()
+    {
+        stateStack.push( *this );
+
+        clear();
+    }
+
+    /**
+     * Function Pop()
+     * Restores state of the tool from stack. Stacks are stored internally and are not
+     * shared between different TOOL_STATE objects.
+     * @return True if state was restored, false if the stack was empty.
+     */
+    bool Pop()
+    {
+        delete cofunc;
+
+        if( !stateStack.empty() )
+        {
+            *this = stateStack.top();
+            stateStack.pop();
+
+            return true;
+        }
+        else
+        {
+            cofunc = NULL;
+
+            return false;
+        }
+    }
+
+private:
+    ///> Stack preserving previous states of a TOOL.
+    std::stack<TOOL_STATE> stateStack;
+
+    ///> Restores the initial state.
+    void clear()
+    {
+        idle = true;
+        pendingWait = false;
+        pendingContextMenu = false;
+        cofunc = NULL;
+        contextMenu = NULL;
+        contextMenuTrigger = CMENU_OFF;
+        transitions.clear();
+    }
 };
 
 
@@ -99,6 +197,11 @@ TOOL_MANAGER::TOOL_MANAGER() :
     m_model( NULL ), m_view( NULL ), m_viewControls( NULL ), m_editFrame( NULL )
 {
     m_actionMgr = new ACTION_MANAGER( this );
+
+    // Register known actions
+    std::list<TOOL_ACTION*>& actionList = GetActionList();
+    BOOST_FOREACH( TOOL_ACTION* action, actionList )
+        RegisterAction( action );
 }
 
 
@@ -113,7 +216,6 @@ TOOL_MANAGER::~TOOL_MANAGER()
         delete it->first;           // delete the tool itself
     }
 
-    m_toolState.clear();
     delete m_actionMgr;
 }
 
@@ -124,18 +226,15 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
             wxT( "Adding two tools with the same name may result in unexpected behaviour.") );
     wxASSERT_MSG( m_toolIdIndex.find( aTool->GetId() ) == m_toolIdIndex.end(),
             wxT( "Adding two tools with the same ID may result in unexpected behaviour.") );
+    wxASSERT_MSG( m_toolTypes.find( typeid( *aTool ).name() ) == m_toolTypes.end(),
+            wxT( "Adding two tools of the same type may result in unexpected behaviour.") );
 
-    TOOL_STATE* st = new TOOL_STATE;
-
-    st->theTool = aTool;
-    st->pendingWait = false;
-    st->pendingContextMenu = false;
-    st->cofunc = NULL;
-    st->contextMenuTrigger = CMENU_OFF;
+    TOOL_STATE* st = new TOOL_STATE( aTool );
 
     m_toolState[aTool] = st;
     m_toolNameIndex[aTool->GetName()] = st;
     m_toolIdIndex[aTool->GetId()] = st;
+    m_toolTypes[typeid( *aTool ).name()] = st->theTool;
 
     aTool->m_toolMgr = this;
 
@@ -150,6 +249,7 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
         m_toolState.erase( aTool );
         m_toolNameIndex.erase( aTool->GetName() );
         m_toolIdIndex.erase( aTool->GetId() );
+        m_toolTypes.erase( typeid( *aTool ).name() );
 
         delete st;
         delete aTool;
@@ -191,15 +291,40 @@ void TOOL_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 }
 
 
-bool TOOL_MANAGER::RunAction( const std::string& aActionName )
+bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow )
 {
-    return m_actionMgr->RunAction( aActionName );
+    TOOL_ACTION* action = m_actionMgr->FindAction( aActionName );
+
+    if( action )
+    {
+        if( aNow )
+        {
+            TOOL_EVENT event = action->MakeEvent();
+            ProcessEvent( event );
+        }
+        else
+        {
+            PostEvent( action->MakeEvent() );
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 
-void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction )
+void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow )
 {
-    m_actionMgr->RunAction( &aAction );
+    if( aNow )
+    {
+        TOOL_EVENT event = aAction.MakeEvent();
+        ProcessEvent( event );
+    }
+    else
+    {
+        PostEvent( aAction.MakeEvent() );
+    }
 }
 
 
@@ -207,7 +332,7 @@ bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 {
     wxASSERT( aTool != NULL );
 
-    TOOL_EVENT evt( TC_COMMAND, TA_ACTION, aTool->GetName() );
+    TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, aTool->GetName() );
     ProcessEvent( evt );
 
     return true;
@@ -325,6 +450,8 @@ optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 {
     TOOL_STATE* st = m_toolState[aTool];
 
+    assert( !st->pendingWait ); // everything collapses on two Yield() in a row
+
     // indicate to the manager that we are going to sleep and we shall be
     // woken up when an event matching aConditions arrive
     st->pendingWait = true;
@@ -349,8 +476,8 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
         {
             if( st->waitEvents.Matches( aEvent ) )
             {
-                // By default, already processed events are not passed further
-                m_passEvent = false;
+                // By default, only messages are passed further
+                m_passEvent = ( aEvent.m_category == TC_MESSAGE );
 
                 // got matching event? clear wait list and wake up the coroutine
                 st->wakeupEvent = aEvent;
@@ -370,35 +497,31 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 
     BOOST_FOREACH( TOOL_STATE* st, m_toolState | boost::adaptors::map_values )
     {
-        // the tool scheduled next state(s) by calling Go()
-        if( !st->pendingWait )
+        // no state handler in progress - check if there are any transitions (defined by
+        // Go() method that match the event.
+        if( !st->pendingWait && !st->transitions.empty() )
         {
-            // no state handler in progress - check if there are any transitions (defined by
-            // Go() method that match the event.
-            if( st->transitions.size() )
+            BOOST_FOREACH( TRANSITION& tr, st->transitions )
             {
-                BOOST_FOREACH( TRANSITION& tr, st->transitions )
+                if( tr.first.Matches( aEvent ) )
                 {
-                    if( tr.first.Matches( aEvent ) )
-                    {
-                        // as the state changes, the transition table has to be set up again
-                        st->transitions.clear();
+                    // if there is already a context, then store it
+                    if( st->cofunc )
+                        st->Push();
 
-                        // no tool context allocated yet? Create one.
-                        if( !st->cofunc )
-                            st->cofunc = new COROUTINE<int, TOOL_EVENT&>( tr.second );
-                        else
-                            st->cofunc->SetEntry( tr.second );
+                    // as the state changes, the transition table has to be set up again
+                    st->transitions.clear();
 
-                        // got match? Run the handler.
-                        st->cofunc->Call( aEvent );
+                    st->cofunc = new COROUTINE<int, TOOL_EVENT&>( tr.second );
 
-                        if( !st->cofunc->Running() )
-                            finishTool( st ); // The couroutine has finished immediately?
+                    // got match? Run the handler.
+                    st->cofunc->Call( aEvent );
 
-                        // there is no point in further checking, as transitions got cleared
-                        break;
-                    }
+                    if( !st->cofunc->Running() )
+                        finishTool( st ); // The couroutine has finished immediately?
+
+                    // there is no point in further checking, as transitions got cleared
+                    break;
                 }
             }
         }
@@ -412,12 +535,7 @@ bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
     {
         // Check if there is a hotkey associated
         if( m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode() ) )
-            return false;                       // hotkey event was handled so it does not go any further
-    }
-    else if( aEvent.Category() == TC_COMMAND )  // it may be a tool activation event
-    {
-        dispatchActivation( aEvent );
-        // do not return false, as the event has to go on to the destined tool
+            return false;                 // hotkey event was handled so it does not go any further
     }
 
     return true;
@@ -426,12 +544,13 @@ bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
 
 bool TOOL_MANAGER::dispatchActivation( TOOL_EVENT& aEvent )
 {
-    // Look for the tool that has the same name as parameter in the processed command TOOL_EVENT
-    BOOST_FOREACH( TOOL_STATE* st, m_toolState | boost::adaptors::map_values )
+    if( aEvent.IsActivate() )
     {
-        if( st->theTool->GetName() == aEvent.m_commandStr )
+        std::map<std::string, TOOL_STATE*>::iterator tool = m_toolNameIndex.find( *aEvent.m_commandStr );
+
+        if( tool != m_toolNameIndex.end() )
         {
-            runTool( st->theTool );
+            runTool( tool->second->theTool );
             return true;
         }
     }
@@ -440,36 +559,8 @@ bool TOOL_MANAGER::dispatchActivation( TOOL_EVENT& aEvent )
 }
 
 
-void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
+void TOOL_MANAGER::dispatchContextMenu( TOOL_EVENT& aEvent )
 {
-    std::deque<TOOL_ID>::iterator it, itEnd;
-
-    // Find the tool and deactivate it
-    for( it = m_activeTools.begin(), itEnd = m_activeTools.end(); it != itEnd; ++it )
-    {
-        if( aState == m_toolIdIndex[*it] )
-        {
-            m_activeTools.erase( it );
-            break;
-        }
-    }
-
-    delete aState->cofunc;
-    aState->cofunc = NULL;
-}
-
-
-bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
-{
-// wxLogDebug( "event: %s", aEvent.Format().c_str() );
-
-    // Early dispatch of events destined for the TOOL_MANAGER
-    if( !dispatchStandardEvents( aEvent ) )
-        return false;
-
-    dispatchInternal( aEvent );
-
-    // popup menu handling
     BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
     {
         TOOL_STATE* st = m_toolIdIndex[toolId];
@@ -487,6 +578,10 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
             if( st->contextMenuTrigger == CMENU_NOW )
                 st->contextMenuTrigger = CMENU_OFF;
 
+            // Temporarily store the cursor position, so the tools could execute actions
+            // using the point where the user has invoked a context menu
+            m_viewControls->ForceCursorPosition( true, m_viewControls->GetCursorPosition() );
+
             boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *st->contextMenu ) );
             GetEditFrame()->PopupMenu( menu.get() );
 
@@ -497,8 +592,44 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
                 dispatchInternal( evt );
             }
 
+            m_viewControls->ForceCursorPosition( false );
+
             break;
         }
+    }
+}
+
+
+void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
+{
+    if( !aState->Pop() )        // if there are no other contexts saved on the stack
+    {
+        // find the tool and deactivate it
+        std::deque<TOOL_ID>::iterator tool = std::find( m_activeTools.begin(), m_activeTools.end(),
+                                                        aState->theTool->GetId() );
+
+        if( tool != m_activeTools.end() )
+            m_activeTools.erase( tool );
+    }
+}
+
+
+bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
+{
+    // Early dispatch of events destined for the TOOL_MANAGER
+    if( !dispatchStandardEvents( aEvent ) )
+        return false;
+
+    dispatchInternal( aEvent );
+    dispatchActivation( aEvent );
+    dispatchContextMenu( aEvent );
+
+    // Dispatch queue
+    while( !m_eventQueue.empty() )
+    {
+        TOOL_EVENT event = m_eventQueue.front();
+        m_eventQueue.pop_front();
+        ProcessEvent( event );
     }
 
     if( m_view->IsDirty() )
@@ -518,6 +649,41 @@ void TOOL_MANAGER::ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
 
     st->contextMenu = aMenu;
     st->contextMenuTrigger = aTrigger;
+}
+
+
+bool TOOL_MANAGER::SaveClipboard( const std::string& aText )
+{
+    if( wxTheClipboard->Open() )
+    {
+        wxTheClipboard->SetData( new wxTextDataObject( wxString( aText.c_str(), wxConvUTF8 ) ) );
+        wxTheClipboard->Close();
+
+        return true;
+    }
+
+    return false;
+}
+
+
+std::string TOOL_MANAGER::GetClipboard() const
+{
+    std::string result;
+
+    if( wxTheClipboard->Open() )
+    {
+        if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+        {
+            wxTextDataObject data;
+            wxTheClipboard->GetData( data );
+
+            result = data.GetText().mb_str();
+        }
+
+        wxTheClipboard->Close();
+    }
+
+    return result;
 }
 
 

@@ -44,8 +44,6 @@ ACTION_MANAGER::~ACTION_MANAGER()
 
 void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 {
-    // Check if the TOOL_ACTION was not registered before
-    assert( aAction->GetId() == -1 );
     // TOOL_ACTIONs are supposed to be named [appName.]toolName.actionName (with dots between)
     // action name without specifying at least toolName is not valid
     assert( aAction->GetName().find( '.', 0 ) != std::string::npos );
@@ -54,15 +52,14 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
     assert( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
     assert( m_actionIdIndex.find( aAction->m_id ) == m_actionIdIndex.end() );
 
-    aAction->setId( MakeActionId( aAction->m_name ) );
+    if( aAction->m_id == -1 )
+        aAction->m_id = MakeActionId( aAction->m_name );
 
     m_actionNameIndex[aAction->m_name] = aAction;
     m_actionIdIndex[aAction->m_id] = aAction;
 
     if( aAction->HasHotKey() )
         m_actionHotKeys[aAction->m_currentHotKey].push_back( aAction );
-
-    aAction->setActionMgr( this );
 }
 
 
@@ -70,10 +67,6 @@ void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 {
     m_actionNameIndex.erase( aAction->m_name );
     m_actionIdIndex.erase( aAction->m_id );
-
-    // Indicate that the ACTION_MANAGER no longer care about the object
-    aAction->setActionMgr( NULL );
-    aAction->setId( -1 );
 
     if( aAction->HasHotKey() )
     {
@@ -96,24 +89,14 @@ int ACTION_MANAGER::MakeActionId( const std::string& aActionName )
 }
 
 
-bool ACTION_MANAGER::RunAction( const std::string& aActionName ) const
+TOOL_ACTION* ACTION_MANAGER::FindAction( const std::string& aActionName ) const
 {
     std::map<std::string, TOOL_ACTION*>::const_iterator it = m_actionNameIndex.find( aActionName );
 
-    if( it == m_actionNameIndex.end() )
-        return false; // no action with given name found
+    if( it != m_actionNameIndex.end() )
+        return it->second;
 
-    RunAction( it->second );
-
-    return true;
-}
-
-
-void ACTION_MANAGER::RunAction( const TOOL_ACTION* aAction ) const
-{
-    TOOL_EVENT event = aAction->MakeEvent();
-
-    m_toolMgr->ProcessEvent( event );
+    return NULL;
 }
 
 
@@ -160,6 +143,8 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 
         if( tool )
         {
+            // Choose the action that goes to the tool with highest priority
+            // (i.e. is on the top of active tools stack)
             priority = m_toolMgr->GetPriority( tool->GetId() );
 
             if( priority >= 0 && priority > highestPriority )
@@ -170,13 +155,16 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
         }
     }
 
-    if( !global && !context )   // currently there is no valid action to run
-        return false;
-
     if( context )
-        RunAction( context );
+    {
+        m_toolMgr->RunAction( *context, true );
+        return true;
+    }
     else if( global )
-        RunAction( global );
+    {
+        m_toolMgr->RunAction( *global, true );
+        return true;
+    }
 
-    return true;
+    return false;
 }

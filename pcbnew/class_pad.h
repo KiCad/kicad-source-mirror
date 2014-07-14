@@ -153,7 +153,7 @@ public:
      * Function GetOrientation
      * returns the rotation angle of the pad in tenths of degrees, but soon degrees.
      */
-    double  GetOrientation() const { return m_Orient; }
+    double GetOrientation() const { return m_Orient; }
 
     void SetDrillShape( PAD_DRILL_SHAPE_T aDrillShape )
         { m_drillShape = aDrillShape; }
@@ -381,6 +381,12 @@ public:
     // Virtual function:
     const EDA_RECT GetBoundingBox() const;
 
+    ///> Set absolute coordinates.
+    void SetDrawCoord();
+
+    ///> Set relative coordinates.
+    void SetLocalCoord();
+
     /**
      * Function Compare
      * compares two pads and return 0 if they are equal.
@@ -391,8 +397,10 @@ public:
     void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
+        SetLocalCoord();
     }
 
+    void Rotate( const wxPoint& aRotCentre, double aAngle );
 
     wxString GetSelectMenuText() const;
 

@@ -44,6 +44,8 @@
 #define BUTT_SIZE_Y             18
 #define BUTT_VOID               4
 
+const wxEventType LAYER_WIDGET::EVT_LAYER_COLOR_CHANGE = wxNewEventType();
+
 /* XPM
  * This bitmap is used for not selected layers
  */
@@ -294,6 +296,10 @@ void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& event )
 
         // tell the client code.
         OnLayerColorChange( layer, newColor );
+
+        // notify others
+        wxCommandEvent event( EVT_LAYER_COLOR_CHANGE );
+        wxPostEvent( this, event );
     }
 
     passOnFocus();
@@ -578,6 +584,15 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
         wxNotebookEventHandler( LAYER_WIDGET::OnTabChange ), NULL, this );
 
     Layout();
+}
+
+
+LAYER_WIDGET::~LAYER_WIDGET()
+{
+    delete m_BlankBitmap;
+    delete m_BlankAlternateBitmap;
+    delete m_RightArrowBitmap;
+    delete m_RightArrowAlternateBitmap;
 }
 
 

@@ -47,6 +47,10 @@ public:
     ///> Copy constructor
     CONTEXT_MENU( const CONTEXT_MENU& aMenu );
 
+    CONTEXT_MENU& operator=( const CONTEXT_MENU& aMenu );
+
+    virtual ~CONTEXT_MENU() {}
+
     /**
      * Function SetTitle()
      * Sets title for the context menu. The title is shown as a text label shown on the top of
@@ -71,7 +75,6 @@ public:
      * @param aAction is the action to be added to menu entry.
      */
     void Add( const TOOL_ACTION& aAction );
-
 
     /**
      * Function Clear()

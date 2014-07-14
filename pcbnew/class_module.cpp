@@ -295,6 +295,72 @@ void MODULE::Copy( MODULE* aModule )
 }
 
 
+void MODULE::Add( BOARD_ITEM* aBoardItem, bool doAppend )
+{
+    switch( aBoardItem->Type() )
+    {
+    case PCB_MODULE_TEXT_T:
+        // Only common texts can be added this way. Reference and value are not hold in the DLIST.
+        assert( static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS );
+        /* no break */
+
+    case PCB_MODULE_EDGE_T:
+        if( doAppend )
+            m_Drawings.PushBack( static_cast<BOARD_ITEM*>( aBoardItem ) );
+        else
+            m_Drawings.PushFront( static_cast<BOARD_ITEM*>( aBoardItem ) );
+        break;
+
+    case PCB_PAD_T:
+        if( doAppend )
+            m_Pads.PushBack( static_cast<D_PAD*>( aBoardItem ) );
+        else
+            m_Pads.PushFront( static_cast<D_PAD*>( aBoardItem ) );
+        break;
+
+    default:
+        {
+            wxString msg;
+            msg.Printf( wxT( "MODULE::Add() needs work: BOARD_ITEM type (%d) not handled" ),
+                        aBoardItem->Type() );
+            wxFAIL_MSG( msg );
+
+            return;
+        }
+    }
+
+    aBoardItem->SetParent( this );
+}
+
+
+BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
+{
+    switch( aBoardItem->Type() )
+    {
+    case PCB_MODULE_TEXT_T:
+        // Only common texts can be added this way. Reference and value are not hold in the DLIST.
+        assert( static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS );
+        /* no break */
+
+    case PCB_MODULE_EDGE_T:
+        return m_Drawings.Remove( static_cast<BOARD_ITEM*>( aBoardItem ) );
+
+    case PCB_PAD_T:
+        return m_Pads.Remove( static_cast<D_PAD*>( aBoardItem ) );
+
+    default:
+        {
+            wxString msg;
+            msg.Printf( wxT( "MODULE::Remove() needs work: BOARD_ITEM type (%d) not handled" ),
+                        aBoardItem->Type() );
+            wxFAIL_MSG( msg );
+        }
+    }
+
+    return NULL;
+}
+
+
 void MODULE::CopyNetlistSettings( MODULE* aModule )
 {
     // Don't do anything foolish like trying to copy to yourself.
@@ -448,8 +514,12 @@ const EDA_RECT MODULE::GetBoundingBox() const
     // Add the Clearance shape size: (shape around the pads when the
     // clearance is shown.  Not optimized, but the draw cost is small
     // (perhaps smaller than optimization).
-    int biggest_clearance = GetBoard()->GetDesignSettings().GetBiggestClearanceValue();
-    area.Inflate( biggest_clearance );
+    BOARD* board = GetBoard();
+    if( board )
+    {
+        int biggest_clearance = board->GetDesignSettings().GetBiggestClearanceValue();
+        area.Inflate( biggest_clearance );
+    }
 
     return area;
 }
@@ -632,13 +702,6 @@ void MODULE::Add3DModel( S3D_MASTER* a3DModel )
 }
 
 
-void MODULE::AddPad( D_PAD* aPad )
-{
-    aPad->SetParent( this );
-    m_Pads.PushBack( aPad );
-}
-
-
 // see class_module.h
 SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
                              const KICAD_T scanTypes[] )
@@ -734,10 +797,10 @@ EDA_ITEM* MODULE::Clone() const
 
 void MODULE::RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction )
 {
-    for( D_PAD* pad = m_Pads.GetFirst(); pad; pad = pad->Next() )
+    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
         aFunction( static_cast<BOARD_ITEM*>( pad ) );
 
-    for( BOARD_ITEM* drawing = m_Drawings.GetFirst(); drawing; drawing = drawing->Next() )
+    for( BOARD_ITEM* drawing = m_Drawings; drawing; drawing = drawing->Next() )
         aFunction( drawing );
 
     aFunction( static_cast<BOARD_ITEM*>( m_Reference ) );
@@ -764,6 +827,21 @@ void MODULE::ViewUpdate( int aUpdateFlags )
     // Update module's texts
     m_Reference->ViewUpdate( aUpdateFlags );
     m_Value->ViewUpdate( aUpdateFlags );
+}
+
+
+void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount = 1;
+    aLayers[0] = ITEM_GAL_LAYER( ANCHOR_VISIBLE );
+}
+
+
+unsigned int MODULE::ViewGetLOD( int aLayer ) const
+{
+    // Currently there is only one layer, so there is nothing to check
+//    if( aLayer == ITEM_GAL_LAYER( ANCHOR_VISIBLE ) )
+        return 30;
 }
 
 

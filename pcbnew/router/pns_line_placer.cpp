@@ -758,9 +758,12 @@ void PNS_LINE_PLACER::splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, co
 }
 
 
-void PNS_LINE_PLACER::SetLayer(int aLayer)
+void PNS_LINE_PLACER::SetLayer( int aLayer )
 {
     m_currentLayer = aLayer;
+
+    m_head.SetLayer( aLayer );
+    m_tail.SetLayer( aLayer );
 }
 
 
@@ -790,12 +793,12 @@ void PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     m_currentEnd = p;
     m_currentNet = net;
 
-    PNS_NODE *rootNode = Router()->GetWorld()->Branch();
+    PNS_NODE* rootNode = Router()->GetWorld()->Branch();
 
     if( splitSeg )
         splitAdjacentSegments( rootNode, aStartItem, p );
     
-    setWorld ( rootNode );
+    setWorld( rootNode );
     setInitialDirection( Settings().InitialDirection() );
     startPlacement( p, m_currentNet, m_currentWidth, m_currentLayer );
 }
@@ -848,7 +851,7 @@ bool PNS_LINE_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     
     PNS_LINE pl = Trace();
 
-    if (m_currentMode == RM_MarkObstacles && 
+    if( m_currentMode == RM_MarkObstacles &&
         !Settings().CanViolateDRC() &&
         m_world->CheckColliding( &pl ) )
             return false;
@@ -889,9 +892,9 @@ bool PNS_LINE_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
         m_lastNode->Add( pl.Via().Clone() );
 
     if( realEnd )
-        simplifyNewLine ( m_lastNode, lastSeg );
+        simplifyNewLine( m_lastNode, lastSeg );
  
-    Router()->CommitRouting ( m_lastNode );
+    Router()->CommitRouting( m_lastNode );
     
     m_lastNode = NULL;
 
@@ -901,9 +904,18 @@ bool PNS_LINE_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
         VECTOR2I p_start = m_placingVia ? p_last : p_pre_last;
 
         if( m_placingVia )
-            m_currentLayer = Router()->NextCopperLayer( true );
+        {
+            int layerTop = Router()->Settings().GetLayerTop();
+            int layerBottom = Router()->Settings().GetLayerBottom();
 
-        setWorld ( Router()->GetWorld()->Branch() );
+            // Change the current layer to the other side of the board
+            if( m_currentLayer == layerTop )
+                m_currentLayer = layerBottom;
+            else
+                m_currentLayer = layerTop;
+        }
+
+        setWorld( Router()->GetWorld()->Branch() );
         startPlacement( p_start, m_head.Net(), m_head.Width(), m_currentLayer );
 
         m_startsOnVia = m_placingVia;

@@ -228,6 +228,7 @@ set( COMMON_SRCS
 
     math/math_util.cpp
 
+    tool/tool_action.cpp
     tool/tool_base.cpp
     tool/tool_manager.cpp
     tool/tool_dispatcher.cpp

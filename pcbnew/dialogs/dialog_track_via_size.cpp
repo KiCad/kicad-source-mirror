@@ -26,6 +26,7 @@
 #include <router/pns_routing_settings.h>
 #include <base_units.h>
 #include <confirm.h>
+#include <boost/optional.hpp>
 
 DIALOG_TRACK_VIA_SIZE::DIALOG_TRACK_VIA_SIZE( wxWindow* aParent, PNS_ROUTING_SETTINGS& aSettings ) :
     DIALOG_TRACK_VIA_SIZE_BASE( aParent ),

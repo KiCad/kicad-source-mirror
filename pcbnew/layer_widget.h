@@ -98,6 +98,7 @@ public:
         }
     };
 
+    static const wxEventType EVT_LAYER_COLOR_CHANGE;
 
 protected:
 
@@ -225,6 +226,8 @@ public:
     LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPointSize = -1,
         wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
+
+    virtual ~LAYER_WIDGET();
 
     /**
      * Function GetBestSize

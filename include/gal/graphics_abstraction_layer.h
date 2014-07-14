@@ -631,6 +631,9 @@ public:
     inline void SetGridOrigin( const VECTOR2D& aGridOrigin )
     {
         gridOrigin = aGridOrigin;
+
+        gridOffset = VECTOR2D( (long) gridOrigin.x % (long) gridSize.x,
+                               (long) gridOrigin.y % (long) gridSize.y );
     }
 
     /**
@@ -661,6 +664,9 @@ public:
     inline void SetGridSize( const VECTOR2D& aGridSize )
     {
         gridSize = aGridSize;
+
+        gridOffset = VECTOR2D( (long) gridOrigin.x % (long) gridSize.x,
+                               (long) gridOrigin.y % (long) gridSize.y );
     }
 
     /**
@@ -778,11 +784,21 @@ public:
     }
 
     /**
+     * @brief Returns the cursor size.
+     *
+     * @return The current cursor size (in pixels).
+     */
+    inline unsigned int GetCursorSize() const
+    {
+        return cursorSize;
+    }
+
+    /**
      * @brief Set the cursor size.
      *
      * @param aCursorSize is the size of the cursor expressed in pixels.
      */
-    inline void SetCursorSize( unsigned int aCursorSize )
+    virtual inline void SetCursorSize( unsigned int aCursorSize )
     {
         cursorSize = aCursorSize;
     }
