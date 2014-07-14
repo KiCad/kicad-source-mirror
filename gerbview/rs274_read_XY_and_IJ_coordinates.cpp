@@ -19,7 +19,7 @@
 // depending on the gerber file format
 // this scale list assumes gerber units are imperial.
 // for metric gerber units, the imperial to metric conversion is made in read functions
-#define SCALE_LIST_SIZE 10
+#define SCALE_LIST_SIZE 9
 static double scale_list[SCALE_LIST_SIZE] =
 {
     1000.0 * IU_PER_MILS,   // x.1 format (certainly useless)
@@ -28,9 +28,9 @@ static double scale_list[SCALE_LIST_SIZE] =
     1.0 * IU_PER_MILS,      // x.4 format
     0.1 * IU_PER_MILS,      // x.5 format
     0.01 * IU_PER_MILS,     // x.6 format
-    0.0001 * IU_PER_MILS,   // x.7 format
+    0.001 * IU_PER_MILS,     // x.7 format  (currently the max allowed precision)
+    0.0001 * IU_PER_MILS,   // provided, but not used
     0.00001 * IU_PER_MILS,  // provided, but not used
-    0.000001 * IU_PER_MILS
 };
 
 /*

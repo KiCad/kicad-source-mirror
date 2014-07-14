@@ -630,8 +630,8 @@ public:
     void                Liste_D_Codes();
 
     // PCB handling
-    bool                Clear_Pcb( bool query );
-    void                Erase_Current_Layer( bool query );
+    bool                Clear_DrawLayers( bool query );
+    void                Erase_Current_DrawLayer( bool query );
 
     // Conversion function
     void                ExportDataInPcbnewFormat( wxCommandEvent& event );

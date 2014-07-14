@@ -50,12 +50,13 @@ set( GERBVIEW_SRCS
     gerbview_config.cpp
     gerbview_frame.cpp
     hotkeys.cpp
-    initpcb.cpp
+    init_gbr_drawlayers.cpp
     locate.cpp
     menubar.cpp
     onleftclick.cpp
     onrightclick.cpp
     pcbplot.cpp
+    printout_control.cpp
     readgerb.cpp
     rs274_read_XY_and_IJ_coordinates.cpp
     rs274d.cpp
@@ -71,7 +72,6 @@ set( GERBVIEW_EXTRA_SRCS
     ../common/class_layer_box_selector.cpp
     ../common/class_page_info.cpp
     ../pcbnew/layer_widget.cpp
-    ../pcbnew/printout_controler.cpp
 )
 
 if( MINGW )
