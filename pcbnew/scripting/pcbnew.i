@@ -47,6 +47,11 @@
 
 %rename(AddNative) *::Add;
 
+// fix method names conflicts
+%rename(AddChild) MODULE::Add;
+%rename(RemoveChild) MODULE::Remove;
+%rename(DeleteChild) MODULE::Delete;
+
 %exception {
     try{
         $action
