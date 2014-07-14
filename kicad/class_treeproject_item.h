@@ -27,11 +27,7 @@ public:
     void SetType( TreeFileType aType )          { m_Type = aType; }
 
     const wxString& GetFileName() const         { return m_file_name; }
-    void SetFileName( const wxString& name )
-    {
-        m_file_name = name;
-        // DBG(printf("%s: '%s'\n", __func__, TO_UTF8( name ) );)
-    }
+    void SetFileName( const wxString& name )    { m_file_name = name; }
 
     bool IsRootFile() const                     { return m_IsRootFile; }
     void SetRootFile( bool aValue )             { m_IsRootFile = aValue; }
