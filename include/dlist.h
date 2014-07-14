@@ -143,6 +143,8 @@ class DLIST : public DHEAD
 {
 public:
 
+// Without the following ifdef, SWIG appends methods from the templated class
+#ifndef SWIG
     /**
      * operator T*
      * is a casting operator that returns \a GetFirst(), a T*
@@ -154,6 +156,7 @@ public:
      * is a dereferencing operator that returns \a GetFirst(), a T*
      */
     T* operator -> () const { return GetFirst(); }
+#endif /* SWIG */
 
     /**
      * Function GetFirst
