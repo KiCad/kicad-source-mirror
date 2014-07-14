@@ -229,9 +229,6 @@ void PCB_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WORKSHEET_VIEWITEM* aWorksheet )
 
     m_worksheet = aWorksheet;
     m_view->Add( m_worksheet );
-
-    // Limit panning to the size of worksheet frame
-    m_viewControls->SetPanBoundary( aWorksheet->ViewBBox() );
 }
 
 
