@@ -29,6 +29,7 @@
 #include <kiface_i.h>
 #include <kiway.h>
 #include <class_drawpanel.h>
+#include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <pgm_base.h>
@@ -38,23 +39,28 @@
 #include <kicad_device_context.h>
 #include <macros.h>
 #include <pcbcommon.h>
+#include <invoke_pcb_dialog.h>
 
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
 
+#include <ratsnest_data.h>
 #include <pcbnew.h>
 #include <protos.h>
 #include <pcbnew_id.h>
 #include <module_editor_frame.h>
 #include <modview_frame.h>
 #include <collectors.h>
+#include <tool/tool_manager.h>
 
 #include <dialog_edit_module_for_Modedit.h>
 #include <wildcards_and_files_ext.h>
 #include <menus_helpers.h>
 #include <footprint_wizard_frame.h>
 #include <pcbnew_config.h>
+
+#include <boost/bind.hpp>
 
 
 // Functions defined in block_module_editor, but used here
@@ -289,7 +295,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_NEW_MODULE:
         {
-            if( ! Clear_Pcb( true ) )
+            if( !Clear_Pcb( true ) )
                 break;
 
             SetCrossHairPosition( wxPoint( 0, 0 ) );
@@ -310,6 +316,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
                 Zoom_Automatique( false );
             }
+
+            if( IsGalCanvasActive() )
+                updateView();
 
             GetScreen()->ClrModify();
         }
@@ -449,15 +458,31 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
                 pcbframe->SetCrossHairPosition( wxPoint( 0, 0 ) );
                 pcbframe->PlaceModule( newmodule, NULL );
+                newmodule->SetPosition( wxPoint( 0, 0 ) );
                 pcbframe->SetCrossHairPosition( cursor_pos );
                 newmodule->SetTimeStamp( GetNewTimeStamp() );
                 pcbframe->SaveCopyInUndoList( newmodule, UR_NEW );
+
+                if( IsGalCanvasActive() )
+                {
+                    KIGFX::VIEW* view = pcbframe->GetGalCanvas()->GetView();
+
+                    newmodule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                    view->Add( newmodule );
+                }
             }
 
             newmodule->ClearFlags();
             GetScreen()->ClrModify();
             pcbframe->SetCurItem( NULL );
             mainpcb->m_Status_Pcb = 0;
+
+            if( IsGalCanvasActive() )
+            {
+                RN_DATA* ratsnest = pcbframe->GetBoard()->GetRatsnest();
+                ratsnest->Update( newmodule );
+                ratsnest->Recalculate();
+            }
         }
         break;
 
@@ -539,6 +564,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_Draw3DFrame->NewDisplay();
 
         GetScreen()->ClrModify();
+        updateView();
 
         break;
 
@@ -774,6 +800,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         HandleBlockEnd( &dc );
         break;
 
+    case ID_GEN_IMPORT_DXF_FILE:
+        InvokeDXFDialogModuleImport( this, GetBoard()->m_Modules );
+        m_canvas->Refresh();
+        break;
+
     default:
         DisplayError( this,
                       wxT( "FOOTPRINT_EDIT_FRAME::Process_Special_Functions error" ) );
@@ -914,3 +945,26 @@ EDA_COLOR_T FOOTPRINT_EDIT_FRAME::GetGridColor() const
     return g_ColorsSettings.GetItemColor( GRID_VISIBLE );
 }
 
+
+void FOOTPRINT_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
+{
+    PCB_BASE_FRAME::SetActiveLayer( aLayer );
+
+    GetGalCanvas()->SetHighContrastLayer( aLayer );
+
+    if( IsGalCanvasActive() )
+        GetGalCanvas()->Refresh();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
+{
+    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    if( aEnable )
+    {
+        SetBoard( m_Pcb );
+        updateView();
+        GetGalCanvas()->StartDrawing();
+    }
+}

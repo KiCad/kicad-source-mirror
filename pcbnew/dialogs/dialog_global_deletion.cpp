@@ -254,6 +254,9 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         if( gen_rastnest )
             m_Parent->Compile_Ratsnest( NULL, true );
 
+        if( m_Parent->IsGalCanvasActive() )
+            pcb->GetRatsnest()->Recalculate();
+
     }
 
     m_Parent->GetCanvas()->Refresh();

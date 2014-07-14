@@ -35,6 +35,7 @@
 #include <project.h>
 #include <kicad_plugin.h>
 #include <class_drawpanel.h>
+#include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
@@ -51,6 +52,18 @@
 #include <hotkeys.h>
 #include <module_editor_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <class_pcb_layer_widget.h>
+
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include "tools/selection_tool.h"
+#include "tools/edit_tool.h"
+#include "tools/drawing_tool.h"
+#include "tools/point_editor.h"
+#include "tools/pcbnew_control.h"
+#include "tools/module_tools.h"
+#include "tools/placement_tool.h"
+#include "tools/common_actions.h"
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
@@ -80,6 +93,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
               FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_SHEET_SET, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_GEN_IMPORT_DXF_FILE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_PRINT, FOOTPRINT_EDIT_FRAME::ToPrinter )
     EVT_TOOL( ID_MODEDIT_LOAD_MODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_CHECK, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
@@ -88,8 +102,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_MODEDIT_INSERT_MODULE_IN_BOARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_EDIT_MODULE_PROPERTIES, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_UNDO, FOOTPRINT_EDIT_FRAME::GetComponentFromUndoList )
-    EVT_TOOL( wxID_REDO, FOOTPRINT_EDIT_FRAME::GetComponentFromRedoList )
+    EVT_TOOL( wxID_UNDO, FOOTPRINT_EDIT_FRAME::RestoreCopyFromUndoList )
+    EVT_TOOL( wxID_REDO, FOOTPRINT_EDIT_FRAME::RestoreCopyFromRedoList )
 
     // Vertical tool bar button click event handler.
     EVT_TOOL( ID_NO_TOOL_SELECTED, FOOTPRINT_EDIT_FRAME::OnVerticalToolbar )
@@ -149,9 +163,9 @@ END_EVENT_TABLE()
 #define FOOTPRINT_EDIT_FRAME_NAME wxT( "ModEditFrame" )
 
 FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    PCB_BASE_FRAME( aKiway, aParent, FRAME_PCB_MODULE_EDITOR, wxEmptyString,
-                    wxDefaultPosition, wxDefaultSize,
-                    KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
+    PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_MODULE_EDITOR, wxEmptyString,
+                         wxDefaultPosition, wxDefaultSize,
+                         KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
 {
     m_FrameName = GetFootprintEditorFrameName();
     m_showBorderAndTitleBlock = false;   // true to show the frame references
@@ -167,6 +181,12 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Show a title (frame title + footprint name):
     updateTitle();
 
+    // Create GAL canvas
+    PCB_BASE_FRAME* parentFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
+    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                            parentFrame->GetGalCanvas()->GetBackend() );
+    SetGalCanvas( drawPanel );
+
     SetBoard( new BOARD() );
 
     // restore the last footprint from the project, if any
@@ -174,6 +194,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();
+
+    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), font.GetPointSize() );
 
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
 
@@ -208,6 +231,14 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     EDA_PANEINFO mesg_pane;
     mesg_pane.MessageToolbarPane();
 
+    // Create a wxAuiPaneInfo for the Layers Manager, not derived from the template.
+    // LAYER_WIDGET is floatable, but initially docked at far right
+    EDA_PANEINFO   lyrs;
+    lyrs.LayersToolbarPane();
+    lyrs.MinSize( m_Layers->GetBestSize() );    // updated in ReFillLayerWidget
+    lyrs.BestSize( m_Layers->GetBestSize() );
+    lyrs.Caption( _( "Visibles" ) );
+
     m_auimgr.AddPane( m_mainToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top(). Row( 0 ) );
 
@@ -218,15 +249,53 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_drawToolBar,
                       wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Layer(1) );
 
+    // Add the layer manager ( most right side of pcbframe )
+    m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 2 ) );
+    // Layers manager is visible and served only in GAL canvas mode.
+    m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( parentFrame->IsGalCanvasActive() );
+
     // The left vertical toolbar (fast acces to display options)
     m_auimgr.AddPane( m_optionsToolBar,
                       wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ). Left().Layer(1) );
 
     m_auimgr.AddPane( m_canvas,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+    m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
+                      wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
 
     m_auimgr.AddPane( m_messagePanel,
                       wxAuiPaneInfo( mesg_pane ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
+
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
+                                   drawPanel->GetViewControls(), this );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+
+    if( parentFrame->IsGalCanvasActive() )
+    {
+        drawPanel->SetEventDispatcher( m_toolDispatcher );
+
+        m_toolManager->RegisterTool( new SELECTION_TOOL );
+        m_toolManager->RegisterTool( new EDIT_TOOL );
+        m_toolManager->RegisterTool( new DRAWING_TOOL );
+        m_toolManager->RegisterTool( new POINT_EDITOR );
+        m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+        m_toolManager->RegisterTool( new MODULE_TOOLS );
+        m_toolManager->RegisterTool( new PLACEMENT_TOOL );
+
+        m_toolManager->GetTool<SELECTION_TOOL>()->EditModules( true );
+        m_toolManager->GetTool<EDIT_TOOL>()->EditModules( true );
+        m_toolManager->GetTool<DRAWING_TOOL>()->EditModules( true );
+
+        m_toolManager->ResetTools( TOOL_BASE::RUN );
+        m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+
+        UseGalCanvas( true );
+    }
+
+    m_Layers->ReFill();
+    m_Layers->ReFillRender();
 
     m_auimgr.Update();
 }
@@ -236,6 +305,8 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 {
     // save the footprint in the PROJECT
     retainLastFootprint();
+
+    delete m_Layers;
 }
 
 
@@ -619,4 +690,12 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
     }
 
     SetTitle( title );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::updateView()
+{
+    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
+    m_toolManager->RunAction( COMMON_ACTIONS::zoomFitScreen );
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 }

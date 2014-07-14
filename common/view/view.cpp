@@ -252,9 +252,7 @@ void VIEW::SetGAL( GAL* aGal )
     clearGroupCache();
 
     // every target has to be refreshed
-    MarkTargetDirty( TARGET_CACHED );
-    MarkTargetDirty( TARGET_NONCACHED );
-    MarkTargetDirty( TARGET_OVERLAY );
+    MarkDirty();
 
     // force the new GAL to display the current viewport.
     SetCenter( m_center );
@@ -274,12 +272,15 @@ BOX2D VIEW::GetViewport() const
 }
 
 
-void VIEW::SetViewport( const BOX2D& aViewport, bool aKeepAspect )
+void VIEW::SetViewport( const BOX2D& aViewport )
 {
     VECTOR2D ssize  = ToWorld( m_gal->GetScreenPixelSize(), false );
+
+    wxASSERT( ssize.x > 0 && ssize.y > 0 );
+
     VECTOR2D centre = aViewport.Centre();
     VECTOR2D vsize  = aViewport.GetSize();
-    double   zoom   = 1.0 / std::min( fabs( vsize.x / ssize.x ), fabs( vsize.y / ssize.y ) );
+    double   zoom   = 1.0 / std::max( fabs( vsize.x / ssize.x ), fabs( vsize.y / ssize.y ) );
 
     SetCenter( centre );
     SetScale( GetScale() * zoom );
@@ -305,7 +306,7 @@ void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
     m_scale = aScale;
 
     // Redraw everything after the viewport has changed
-    MarkTargetDirty( TARGET_CACHED );
+    MarkDirty();
 }
 
 
@@ -317,7 +318,7 @@ void VIEW::SetCenter( const VECTOR2D& aCenter )
     m_gal->ComputeWorldScreenMatrix();
 
     // Redraw everything after the viewport has changed
-    MarkTargetDirty( TARGET_CACHED );
+    MarkDirty();
 }
 
 
@@ -574,7 +575,7 @@ struct VIEW::drawItem
     }
 
     VIEW* view;
-    int layer, layersCount, layers[VIEW_MAX_LAYERS];
+    int layer, layers[VIEW_MAX_LAYERS];
 };
 
 
@@ -734,9 +735,7 @@ void VIEW::ClearTargets()
         m_gal->ClearTarget( TARGET_NONCACHED );
         m_gal->ClearTarget( TARGET_CACHED );
 
-        MarkTargetDirty( TARGET_NONCACHED );
-        MarkTargetDirty( TARGET_CACHED );
-        MarkTargetDirty( TARGET_OVERLAY );
+        MarkDirty();
     }
 
     if( IsTargetDirty( TARGET_OVERLAY ) )
@@ -855,7 +854,7 @@ void VIEW::sortLayers()
 
     sort( m_orderedLayers.begin(), m_orderedLayers.end(), compareRenderingOrder );
 
-    MarkTargetDirty( TARGET_CACHED );
+    MarkDirty();
 }
 
 
@@ -1020,32 +1019,33 @@ void VIEW::UpdateItems()
     m_needsUpdate.clear();
 }
 
-struct VIEW::extentsVisitor {
-        BOX2I extents;
-        bool first;
 
-        extentsVisitor()
-        {
-            first = true;
-        }
+struct VIEW::extentsVisitor
+{
+    BOX2I extents;
+    bool first;
 
-        bool operator()( VIEW_ITEM* aItem )
-        {
-            if(first)
-                extents = aItem->ViewBBox();
-            else
-                extents.Merge ( aItem->ViewBBox() );
-            return false;
-        }
-    };
+    extentsVisitor()
+    {
+        first = true;
+    }
+
+    bool operator()( VIEW_ITEM* aItem )
+    {
+        if( first )
+            extents = aItem->ViewBBox();
+        else
+            extents.Merge ( aItem->ViewBBox() );
+        return false;
+    }
+};
+
 
 const BOX2I VIEW::CalculateExtents() 
 {
-  
     extentsVisitor v;
     BOX2I fullScene;
     fullScene.SetMaximum();
-
 
     BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
     {

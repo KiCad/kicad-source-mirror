@@ -31,6 +31,9 @@
 #include <tool/context_menu.h>
 #include <class_undoredo_container.h>
 
+#include "selection_conditions.h"
+
+class PCB_BASE_FRAME;
 class SELECTION_AREA;
 class BOARD_ITEM;
 class GENERAL_COLLECTOR;
@@ -40,6 +43,41 @@ namespace KIGFX
 class VIEW_GROUP;
 }
 
+struct SELECTION
+{
+    /// Set of selected items
+    PICKED_ITEMS_LIST items;
+
+    /// VIEW_GROUP that holds currently selected items
+    KIGFX::VIEW_GROUP* group;
+
+    /// Checks if there is anything selected
+    bool Empty() const
+    {
+        return ( items.GetCount() == 0 );
+    }
+
+    /// Returns the number of selected parts
+    int Size() const
+    {
+        return items.GetCount();
+    }
+
+    /// Alias to make code shorter and clearer
+    template <typename T>
+    T* Item( unsigned int aIndex ) const
+    {
+        return static_cast<T*>( items.GetPickedItem( aIndex ) );
+    }
+
+private:
+    /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
+    /// change properties of selected items (e.g. selection flag).
+    void clear();
+
+    friend class SELECTION_TOOL;
+};
+
 /**
  * Class SELECTION_TOOL
  *
@@ -47,51 +85,15 @@ class VIEW_GROUP;
  * - pick single objects (click LMB)
  * - add objects to existing selection (Shift+LMB)
  * - draw selection box (drag LMB)
- * - handles MODULEs properly (ie. selects either MODULE or its PADs, TEXTs, etc.)
+ * - handles MODULEs properly (i.e. selects either MODULE or its PADs, TEXTs, etc.)
  * - takes into account high-contrast & layer visibility settings
  * - invokes InteractiveEdit tool when user starts to drag selected items
  */
-
 class SELECTION_TOOL : public TOOL_INTERACTIVE
 {
 public:
     SELECTION_TOOL();
     ~SELECTION_TOOL();
-
-    struct SELECTION
-    {
-        /// Set of selected items
-        PICKED_ITEMS_LIST items;
-
-        /// VIEW_GROUP that holds currently selected items
-        KIGFX::VIEW_GROUP* group;
-
-        /// Checks if there is anything selected
-        bool Empty() const
-        {
-            return ( items.GetCount() == 0 );
-        }
-
-        /// Returns the number of selected parts
-        int Size() const
-        {
-            return items.GetCount();
-        }
-
-        /// Alias to make code shorter and clearer
-        template <typename T>
-        T* Item( unsigned int aIndex ) const
-        {
-            return static_cast<T*>( items.GetPickedItem( aIndex ) );
-        }
-
-    private:
-        /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
-        /// change properties of selected items (e.g. selection flag).
-        void clear();
-
-        friend class SELECTION_TOOL;
-    };
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason );
@@ -118,8 +120,42 @@ public:
      *
      * Adds a menu entry to run a TOOL_ACTION on selected items.
      * @param aAction is a menu entry to be added.
+     * @param aCondition is a condition that has to be fulfilled to enable the menu entry.
      */
-    void AddMenuItem( const TOOL_ACTION& aAction );
+    void AddMenuItem( const TOOL_ACTION& aAction,
+                      const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways );
+
+    /**
+     * Function AddSubMenu()
+     *
+     * Adds a submenu to the selection tool right-click context menu.
+     * @param aMenu is the submenu to be added.
+     * @param aLabel is the label of added submenu.
+     * @param aCondition is a condition that has to be fulfilled to enable the submenu entry.
+     */
+    void AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel,
+                     const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways );
+
+    /**
+     * Function EditModules()
+     *
+     * Toggles edit module mode. When enabled, one may select parts of modules individually
+     * (graphics, pads, etc.), so they can be modified.
+     * @param aEnabled decides if the mode should be enabled.
+     */
+    void EditModules( bool aEnabled )
+    {
+        m_editModules = aEnabled;
+    }
+
+    ///> Checks if the user has agreed to modify locked items for the given selection.
+    bool CheckLock();
+
+    ///> Select single item event handler.
+    int SingleSelection( TOOL_EVENT& aEvent );
+
+    ///> Clear current selection event handler.
+    int ClearSelection( TOOL_EVENT& aEvent );
 
     ///> Event sent after an item is selected.
     const TOOL_EVENT SelectedEvent;
@@ -147,9 +183,12 @@ private:
      * Function selectMultiple()
      * Handles drawing a selection box that allows to select many items at the same time.
      *
-     * @return true if the function was cancelled (ie. CancelEvent was received).
+     * @return true if the function was cancelled (i.e. CancelEvent was received).
      */
     bool selectMultiple();
+
+    ///> Sets up handlers for various events.
+    void setTransitions();
 
     /**
      * Function ClearSelection()
@@ -246,20 +285,42 @@ private:
      */
     BOARD_ITEM* prefer( GENERAL_COLLECTOR& aCollector, const KICAD_T aTypes[] ) const;
 
-    /// Visual representation of selection box
+    /**
+     * Function generateMenu()
+     * Creates a copy of context menu that is filtered by menu conditions and displayed to
+     * the user.
+     */
+    void generateMenu();
+
+    /// Pointer to the parent frame.
+    PCB_BASE_FRAME* m_frame;
+
+    /// Visual representation of selection box.
     SELECTION_AREA* m_selArea;
 
-    /// Current state of selection
+    /// Current state of selection.
     SELECTION m_selection;
 
-    /// Flag saying if items should be added to the current selection or rather replace it
+    /// Flag saying if items should be added to the current selection or rather replace it.
     bool m_additive;
 
-    /// Flag saying if multiple selection mode is active
+    /// Flag saying if multiple selection mode is active.
     bool m_multiple;
 
-    /// Right click popup menu
+    /// Right click popup menu (master instance).
     CONTEXT_MENU m_menu;
+
+    /// Copy of the context menu that is filtered by menu conditions and displayed to the user.
+    CONTEXT_MENU m_menuCopy;
+
+    /// Edit module mode flag.
+    bool m_editModules;
+
+    /// Can other tools modify locked items.
+    bool m_locked;
+
+    /// Conditions for specific context menu entries.
+    std::deque<SELECTION_CONDITION> m_menuConditions;
 };
 
 #endif

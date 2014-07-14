@@ -305,7 +305,7 @@ void RN_NET::clearNode( const RN_NODE_PTR& aNode )
 
     // Remove all ratsnest edges for associated with the node
     newEnd = std::remove_if( m_rnEdges->begin(), m_rnEdges->end(),
-                             boost::bind( isEdgeConnectingNode, _1, aNode ) );
+                             boost::bind( isEdgeConnectingNode, _1, boost::ref( aNode ) ) );
 
     m_rnEdges->resize( std::distance( m_rnEdges->begin(), newEnd ) );
 }
@@ -629,7 +629,7 @@ std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode, int aN
         closest.push_back( node );
 
     // Sort by the distance from aNode
-    closest.sort( boost::bind( sortDistance, aNode, _1, _2 ) );
+    closest.sort( boost::bind( sortDistance, boost::ref( aNode ), _1, _2 ) );
 
     // Remove the first node (==aNode), as it is surely located within the smallest distance
     closest.pop_front();
@@ -653,7 +653,7 @@ std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode,
         closest.push_back( node );
 
     // Sort by the distance from aNode
-    closest.sort( boost::bind( sortDistance, aNode, _1, _2 ) );
+    closest.sort( boost::bind( sortDistance, boost::ref( aNode ), _1, _2 ) );
 
     // Remove the first node (==aNode), as it is surely located within the smallest distance
     closest.pop_front();
@@ -1009,6 +1009,8 @@ void RN_DATA::ProcessBoard()
         if( netCode > 0 )
             m_nets[netCode].AddItem( zone );
     }
+
+    Recalculate();
 }
 
 

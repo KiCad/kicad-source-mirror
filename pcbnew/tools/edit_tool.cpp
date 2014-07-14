@@ -24,10 +24,13 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <class_edge_mod.h>
 #include <class_zone.h>
 #include <wxPcbStruct.h>
+
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <ratsnest_data.h>
 #include <confirm.h>
 
@@ -40,7 +43,7 @@
 #include "edit_tool.h"
 
 EDIT_TOOL::EDIT_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL )
+    TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ), m_editModules( false )
 {
 }
 
@@ -57,11 +60,14 @@ bool EDIT_TOOL::Init()
     }
 
     // Add context menu entries that are displayed when selection tool is active
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::editActivate );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::rotate );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::flip );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::remove );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::properties );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::editActivate, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::rotate, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::properties, SELECTION_CONDITIONS::NotEmpty );
+
+    m_offset.x = 0;
+    m_offset.y = 0;
 
     setTransitions();
 
@@ -71,7 +77,7 @@ bool EDIT_TOOL::Init()
 
 int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
@@ -93,7 +99,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     m_updateFlag = KIGFX::VIEW_ITEM::GEOMETRY;
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     controls->ShowCursor( true );
     controls->SetSnapping( true );
     controls->SetAutoPan( true );
@@ -153,6 +159,9 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             }
             else    // Prepare to start dragging
             {
+                if( m_selectionTool->CheckLock() )
+                    break;
+
                 // Save items, so changes can be undone
                 editFrame->OnModify();
                 editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
@@ -167,16 +176,18 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
                 }
                 else
                 {
+                    const VECTOR2D& dragOrigin = getView()->GetGAL()->GetGridPoint( evt->DragOrigin() );
+
                     // Update dragging offset (distance between cursor and the first dragged item)
                     m_offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
-                                                         wxPoint( m_cursor.x, m_cursor.y );
+                                                         wxPoint( dragOrigin.x, dragOrigin.y );
                 }
 
                 m_dragging = true;
             }
 
             selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
@@ -184,12 +195,14 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     }
 
     m_dragging = false;
+    m_offset.x = 0;
+    m_offset.y = 0;
 
     if( restore )
     {
         // Modifications have to be rollbacked, so restore the previous state of items
         wxCommandEvent dummy;
-        editFrame->GetBoardFromUndoList( dummy );
+        editFrame->RestoreCopyFromUndoList( dummy );
     }
     else
     {
@@ -198,7 +211,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     }
 
     if( unselect )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
     ratsnest->ClearSimple();
@@ -216,11 +229,8 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-
-    // Shall the selection be cleared at the end?
-    bool unselect = selection.Empty();
+    const SELECTION& selection = m_selectionTool->GetSelection();
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     if( !makeSelection( selection ) )
     {
@@ -238,9 +248,11 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
         // Check if user wants to edit pad or module properties
         if( item->Type() == PCB_MODULE_T )
         {
+            VECTOR2D cursor = getViewControls()->GetCursorPosition();
+
             for( D_PAD* pad = static_cast<MODULE*>( item )->Pads(); pad; pad = pad->Next() )
             {
-                if( pad->ViewBBox().Contains( getViewControls()->GetCursorPosition() ) )
+                if( pad->ViewBBox().Contains( cursor ) )
                 {
                     // Turns out that user wants to edit a pad properties
                     item = pad;
@@ -252,7 +264,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
         std::vector<PICKED_ITEMS_LIST*>& undoList = editFrame->GetScreen()->m_UndoList.m_CommandsList;
 
         // Some of properties dialogs alter pointers, so we should deselect them
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
         STATUS_FLAGS flags = item->GetFlags();
         item->ClearFlags();
 
@@ -270,15 +282,13 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 
             updateRatsnest( true );
             getModel<BOARD>()->GetRatsnest()->Recalculate();
+            item->ViewUpdate();
 
-            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
         }
 
         item->SetFlags( flags );
     }
-
-    if( unselect )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
 
     setTransitions();
 
@@ -288,13 +298,13 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    const SELECTION& selection = m_selectionTool->GetSelection();
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !makeSelection( selection ) )
+    if( !makeSelection( selection ) || m_selectionTool->CheckLock() )
     {
         setTransitions();
 
@@ -331,9 +341,9 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
         getModel<BOARD>()->GetRatsnest()->Recalculate();
 
     if( unselect )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
     setTransitions();
 
     return 0;
@@ -342,13 +352,13 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    const SELECTION& selection = m_selectionTool->GetSelection();
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !makeSelection( selection ) )
+    if( !makeSelection( selection ) || m_selectionTool->CheckLock() )
     {
         setTransitions();
 
@@ -385,9 +395,9 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
         getModel<BOARD>()->GetRatsnest()->Recalculate();
 
     if( unselect )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
     setTransitions();
 
     return 0;
@@ -396,9 +406,9 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( !makeSelection( selection ) )
+    if( !makeSelection( selection ) || m_selectionTool->CheckLock() )
     {
         setTransitions();
 
@@ -407,10 +417,10 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
 
     // Get a copy of the selected items set
     PICKED_ITEMS_LIST selectedItems = selection.items;
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     // As we are about to remove items, they have to be removed from the selection first
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     // Save them
     for( unsigned int i = 0; i < selectedItems.GetCount(); ++i )
@@ -451,11 +461,43 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
     }
     break;
 
-    // These are not supposed to be removed
-    case PCB_PAD_T:
+    // Default removal procedure
     case PCB_MODULE_TEXT_T:
+    {
+        if( m_editModules )
+        {
+            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( aItem );
+
+            switch( text->GetType() )
+            {
+            case TEXTE_MODULE::TEXT_is_REFERENCE:
+                DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete REFERENCE!" ) );
+                return;
+
+            case TEXTE_MODULE::TEXT_is_VALUE:
+                DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete VALUE!" ) );
+                return;
+
+            default:    // suppress warnings
+                break;
+            }
+        }
+    }
+    /* no break */
+
+    case PCB_PAD_T:
     case PCB_MODULE_EDGE_T:
+        if( m_editModules )
+        {
+            MODULE* module = static_cast<MODULE*>( aItem->GetParent() );
+            module->SetLastEditTime();
+
+            board->m_Status_Pcb = 0; // it is done in the legacy view
+            aItem->DeleteStructure();
+        }
+
         return;
+        break;
 
     case PCB_LINE_T:                // a segment not on copper layers
     case PCB_TEXT_T:                // a text on a layer
@@ -491,7 +533,7 @@ void EDIT_TOOL::setTransitions()
 
 void EDIT_TOOL::updateRatsnest( bool aRedraw )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
     ratsnest->ClearSimple();
@@ -507,7 +549,7 @@ void EDIT_TOOL::updateRatsnest( bool aRedraw )
 }
 
 
-wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelection )
+wxPoint EDIT_TOOL::getModificationPoint( const SELECTION& aSelection )
 {
     if( aSelection.Size() == 1 )
     {
@@ -525,10 +567,10 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelec
 }
 
 
-bool EDIT_TOOL::makeSelection( const SELECTION_TOOL::SELECTION& aSelection )
+bool EDIT_TOOL::makeSelection( const SELECTION& aSelection )
 {
     if( aSelection.Empty() )                        // Try to find an item that could be modified
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionSingle );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionSingle, true );
 
     return !aSelection.Empty();
 }
@@ -544,6 +586,7 @@ void EDIT_TOOL::processChanges( const PICKED_ITEMS_LIST* aList )
         switch( operation )
         {
         case UR_CHANGED:
+        case UR_MODEDIT:
             updItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
 

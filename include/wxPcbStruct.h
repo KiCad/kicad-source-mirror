@@ -30,7 +30,7 @@
 #define  WXPCB_STRUCT_H_
 
 
-#include <wxBasePcbFrame.h>
+#include <pcb_base_edit_frame.h>
 #include <config_params.h>
 #include <class_macros_record.h>
 #include <class_undoredo_container.h>
@@ -73,7 +73,7 @@ namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
  *
  * See also class PCB_BASE_FRAME(): Basic class for Pcbnew and GerbView.
  */
-class PCB_EDIT_FRAME : public PCB_BASE_FRAME
+class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 {
     friend class PCB::IFACE;
     friend class PCB_LAYER_WIDGET;
@@ -86,9 +86,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     wxAuiToolBar* m_microWaveToolBar;
-
-    /// User defined rotation angle (in tenths of a degree).
-    int             m_rotationAngle;
 
     /**
      * Function loadFootprints
@@ -120,9 +117,8 @@ protected:
     bool              m_useCmpFileForFpNames;   ///< is true, use the .cmp file from CvPcb, else use the netlist
                                                 // to know the footprint name of components.
 
+    // The Tool Framework initalization
     void setupTools();
-    void destroyTools();
-    void onGenericCommand( wxCommandEvent& aEvent );
 
     // we'll use lower case function names for private member functions.
     void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
@@ -252,6 +248,7 @@ public:
     void OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent );
     void OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent );
     void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
+    void OnLayerColorChange( wxCommandEvent& aEvent );
 
     /**
      * Function RecordMacros.
@@ -313,9 +310,6 @@ public:
      * @param aColor = the new color of the grid
      */
     virtual void SetGridColor(EDA_COLOR_T aColor);
-
-    int GetRotationAngle() const { return m_rotationAngle; }
-    void SetRotationAngle( int aRotationAngle );
 
     // Configurations:
     void Process_Config( wxCommandEvent& event );
@@ -532,32 +526,11 @@ public:
     virtual void OnModify();
 
     /**
-     * Function SetHighContrastLayer
-     * takes care of display settings for the given layer to be displayed in high contrast mode.
-     */
-    void SetHighContrastLayer( LAYER_ID aLayer );
-
-    /**
-     * Function SetTopLayer
-     * moves the selected layer to the top, so it is displayed above all others.
-     */
-    void SetTopLayer( LAYER_ID aLayer );
-
-    /**
      * Function SetActiveLayer
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    void SetActiveLayer( LAYER_ID aLayer, bool doLayerWidgetUpdate = true );
-
-    /**
-     * Function GetActiveLayer
-     * returns the active layer
-     */
-    LAYER_ID GetActiveLayer() const
-    {
-        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
-    }
+    virtual void SetActiveLayer( LAYER_ID aLayer );
 
     /**
      * Function IsElementVisible
@@ -679,22 +652,22 @@ public:
                                  bool               aRebuildRatsnet = true );
 
     /**
-     * Function GetBoardFromRedoList
+     * Function RestoreCopyFromRedoList
      *  Redo the last edition:
      *  - Save the current board in Undo list
      *  - Get an old version of the board from Redo list
      *  @return none
      */
-    void GetBoardFromRedoList( wxCommandEvent& aEvent );
+    void RestoreCopyFromRedoList( wxCommandEvent& aEvent );
 
     /**
-     * Function GetBoardFromUndoList
+     * Function RestoreCopyFromUndoList
      *  Undo the last edition:
      *  - Save the current board in Redo list
      *  - Get an old version of the board from Undo list
      *  @return none
      */
-    void GetBoardFromUndoList( wxCommandEvent& aEvent );
+    void RestoreCopyFromUndoList( wxCommandEvent& aEvent );
 
     /* Block operations: */
 
@@ -889,12 +862,6 @@ public:
 
     /// @copydoc PCB_BASE_FRAME::SetBoard()
     void SetBoard( BOARD* aBoard );
-
-    /**
-    * Function ViewReloadBoard
-    * adds all items from the current board to the VIEW, so they can be displayed by GAL.
-    */
-    void ViewReloadBoard( const BOARD* aBoard ) const;
 
     // Drc control
 

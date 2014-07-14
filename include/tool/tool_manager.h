@@ -26,8 +26,9 @@
 #ifndef __TOOL_MANAGER_H
 #define __TOOL_MANAGER_H
 
-#include <map>
 #include <deque>
+#include <typeinfo>
+#include <map>
 
 #include <math/vector2d.h>
 
@@ -105,17 +106,21 @@ public:
      * Runs the specified action. The common format for action names is "application.ToolName.Action".
      *
      * @param aActionName is the name of action to be invoked.
-     * @return True if the action finished successfully, false otherwise.
+     * @param aNow decides if the action has to be run immediately or after the current coroutine
+     * is preemptied.
+     * @return False if the action was not found.
      */
-    bool RunAction( const std::string& aActionName );
+    bool RunAction( const std::string& aActionName, bool aNow = false );
 
     /**
      * Function RunAction()
      * Runs the specified action.
      *
      * @param aAction is the action to be invoked.
+     * @param aNow decides if the action has to be run immediately or after the current coroutine
+     * is preemptied.
      */
-    void RunAction( const TOOL_ACTION& aAction );
+    void RunAction( const TOOL_ACTION& aAction, bool aNow = false );
 
     /**
      * Function FindTool()
@@ -135,6 +140,21 @@ public:
      */
     TOOL_BASE* FindTool( const std::string& aName ) const;
 
+    /*
+     * Function GetTool()
+     * Returns the tool of given type or NULL if there is no such tool registered.
+     */
+    template<typename T>
+    T* GetTool()
+    {
+        std::map<const char*, TOOL_BASE*>::iterator tool = m_toolTypes.find( typeid( T ).name() );
+
+        if( tool != m_toolTypes.end() )
+            return static_cast<T*>( tool->second );
+
+        return NULL;
+    }
+
     /**
      * Function ResetTools()
      * Resets all tools (i.e. calls their Reset() method).
@@ -142,10 +162,19 @@ public:
     void ResetTools( TOOL_BASE::RESET_REASON aReason );
 
     /**
-     * Takes an event from the TOOL_DISPATCHER and propagates it to
-     * tools that requested events of matching type(s)
+     * Propagates an event to tools that requested events of matching type(s).
+     * @param aEvent is the event to be processed.
      */
     bool ProcessEvent( TOOL_EVENT& aEvent );
+
+    /**
+     * Puts an event to the event queue to be processed at the end of event processing cycle.
+     * @param aEvent is the event to be put into the queue.
+     */
+    inline void PostEvent( const TOOL_EVENT& aEvent )
+    {
+        m_eventQueue.push_back( aEvent );
+    }
 
     /**
      * Sets the work environment (model, view, view controls and the parent window).
@@ -161,17 +190,17 @@ public:
         return m_view;
     }
 
-    KIGFX::VIEW_CONTROLS* GetViewControls() const
+    inline KIGFX::VIEW_CONTROLS* GetViewControls() const
     {
         return m_viewControls;
     }
 
-    EDA_ITEM* GetModel() const
+    inline EDA_ITEM* GetModel() const
     {
         return m_model;
     }
 
-    wxWindow* GetEditFrame() const
+    inline wxWindow* GetEditFrame() const
     {
         return m_editFrame;
     }
@@ -181,7 +210,7 @@ public:
      * (was invoked the most recently).
      * @return Id of the currently used tool.
      */
-    int GetCurrentToolId() const
+    inline int GetCurrentToolId() const
     {
         return m_activeTools.front();
     }
@@ -191,7 +220,7 @@ public:
      * (was invoked the most recently).
      * @return Pointer to the currently used tool.
      */
-    TOOL_BASE* GetCurrentTool() const
+    inline TOOL_BASE* GetCurrentTool() const
     {
         return FindTool( GetCurrentToolId() );
     }
@@ -242,6 +271,19 @@ public:
     }
 
     /**
+     * Stores an information to the system clipboard.
+     * @param aText is the information to be stored.
+     * @return False if error occured.
+     */
+    bool SaveClipboard( const std::string& aText );
+
+    /**
+     * Returns the information currently stored in the system clipboard. If data stored in the
+     * clipboard is in non-text format, empty string is returned.
+     */
+    std::string GetClipboard() const;
+
+    /**
      * Returns list of TOOL_ACTIONs. TOOL_ACTIONs add themselves to the list upon their
      * creation.
      * @return List of TOOL_ACTIONs.
@@ -258,6 +300,10 @@ private:
     struct TOOL_STATE;
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
 
+    /**
+     * Function dispatchInternal
+     * Passes an event at first to the active tools, then to all others.
+     */
     void dispatchInternal( TOOL_EVENT& aEvent );
 
     /**
@@ -275,6 +321,12 @@ private:
      * @return True if a tool was invoked, false otherwise.
      */
     bool dispatchActivation( TOOL_EVENT& aEvent );
+
+    /**
+     * Function dispatchContextMenu()
+     * Handles context menu related events.
+     */
+    void dispatchContextMenu( TOOL_EVENT& aEvent );
 
     /**
      * Function invokeTool()
@@ -349,6 +401,9 @@ private:
     /// Index of the registered tools current states, associated by tools' names.
     std::map<std::string, TOOL_STATE*> m_toolNameIndex;
 
+    /// Index of the registered tools to easily lookup by their type.
+    std::map<const char*, TOOL_BASE*> m_toolTypes;
+
     /// Index of the registered tools current states, associated by tools' ID numbers.
     std::map<TOOL_ID, TOOL_STATE*> m_toolIdIndex;
 
@@ -363,11 +418,11 @@ private:
     KIGFX::VIEW_CONTROLS* m_viewControls;
     wxWindow* m_editFrame;
 
+    /// Queue that stores events to be processed at the end of the event processing cycle.
+    std::list<TOOL_EVENT> m_eventQueue;
+
     /// Flag saying if the currently processed event should be passed to other tools.
     bool m_passEvent;
-
-    /// Pointer to the tool on the top of the active tools stack.
-    TOOL_STATE* m_currentTool;
 };
 
 #endif

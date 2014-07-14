@@ -81,7 +81,7 @@ private:
     void finishItem() const;
 
     ///> Updates edit points with item's points.
-    void updatePoints() const;
+    void updatePoints();
 
     ///> Returns true if aPoint is the currently modified point.
     inline bool isModified( const EDIT_POINT& aPoint ) const
@@ -95,15 +95,14 @@ private:
     ///> Returns a point that should be used as a constrainer for 45 degrees mode.
     EDIT_POINT get45DegConstrainer() const;
 
-    ///> Adds a new edit point on a zone outline.
+    ///> Adds a new edit point on a zone outline/line.
     void breakOutline( const VECTOR2I& aBreakPoint );
 
     ///> Sets up handlers for various events.
-    void setTransitions()
-    {
-        Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->SelectedEvent );
-        Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->DeselectedEvent );
-    }
+    void setTransitions();
+
+    ///> Condition to display "Create corner" context menu entry.
+    static bool breakOutlineCondition( const SELECTION& aSelection );
 };
 
 #endif

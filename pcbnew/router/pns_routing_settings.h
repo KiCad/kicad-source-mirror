@@ -21,8 +21,9 @@
 #ifndef __PNS_ROUTING_SETTINGS
 #define __PNS_ROUTING_SETTINGS
 
-#include "direction.h"
 #include "time_limit.h"
+
+class DIRECTION_45;
  
 ///> Routing modes
 enum PNS_MODE
@@ -118,19 +119,30 @@ public:
     void SetViaDrill( int aDrill ) { m_viaDrill = aDrill; }
     int GetViaDrill() const { return m_viaDrill; }
 
-    const DIRECTION_45 InitialDirection() const
-    {
-        if( m_startDiagonal )
-            return DIRECTION_45( DIRECTION_45::NE );
-        else
-            return DIRECTION_45( DIRECTION_45::N );
-    }
+    const DIRECTION_45 InitialDirection() const;
 
     int ShoveIterationLimit() const;
     TIME_LIMIT ShoveTimeLimit() const;
 
     int WalkaroundIterationLimit() const { return m_walkaroundIterationLimit; };
     TIME_LIMIT WalkaroundTimeLimit() const;
+
+    void SetLayerPair( int aLayer1, int aLayer2 )
+    {
+        if( aLayer1 > aLayer2 )
+        {
+            m_layerTop = aLayer1;
+            m_layerBottom = aLayer2;
+        }
+        else
+        {
+            m_layerBottom = aLayer1;
+            m_layerTop = aLayer2;
+        }
+    }
+
+    int GetLayerTop() const { return m_layerTop; }
+    int GetLayerBottom() const { return m_layerBottom; }
 
 private:
     bool m_shoveVias;
@@ -155,6 +167,10 @@ private:
     int m_shoveIterationLimit;
     TIME_LIMIT m_shoveTimeLimit;
     TIME_LIMIT m_walkaroundTimeLimit;
+
+    // Routing layers pair
+    int m_layerTop;
+    int m_layerBottom;
 };
 
 #endif

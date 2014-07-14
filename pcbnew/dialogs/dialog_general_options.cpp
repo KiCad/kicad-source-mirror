@@ -154,11 +154,6 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
     bool state = event.IsChecked();
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*> ( GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
-    KICAD_T updateType = EOT;
 
     switch( id )
     {
@@ -193,44 +188,33 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_ZONES:
         DisplayOpt.DisplayZonesMode = 0;
-        updateType = PCB_ZONE_AREA_T;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
         DisplayOpt.DisplayZonesMode = 1;
-        updateType = PCB_ZONE_AREA_T;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
         DisplayOpt.DisplayZonesMode = 2;
-        updateType = PCB_ZONE_AREA_T;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
         m_DisplayViaFill = DisplayOpt.DisplayViaFill = !state;
-        updateType = PCB_VIA_T;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = !state;
-        updateType = PCB_TRACE_T;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
     {
         DisplayOpt.ContrastModeDisplay = state;
-
-        // Apply new display options to the GAL canvas (this is faster than recaching)
-        settings->LoadDisplayOptions( DisplayOpt );
-
-        SetHighContrastLayer( GetActiveLayer() );
         m_canvas->Refresh();
-
         break;
     }
 
@@ -260,21 +244,4 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
                       wxT( "PCB_EDIT_FRAME::OnSelectOptionToolbar error \n (event not handled!)" ) );
         break;
     }
-
-    if( updateType != EOT )
-    {
-        // Apply new display options to the GAL canvas
-        settings->LoadDisplayOptions( DisplayOpt );
-
-        // Find items that require update
-        KICAD_T scanList[] = { updateType, EOT };
-        TYPE_COLLECTOR collector;
-        collector.Collect( GetBoard(), scanList );
-
-        for( int i = 0; i < collector.GetCount(); ++i )
-            collector[i]->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-    }
-
-    if( IsGalCanvasActive() )
-        GetGalCanvas()->Refresh();
 }

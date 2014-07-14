@@ -22,18 +22,13 @@
 #ifndef __ROUTER_TOOL_H
 #define __ROUTER_TOOL_H
 
-#include <set>
-#include <boost/shared_ptr.hpp>
-
 #include <import_export.h>
 
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
 
-#include <wxstruct.h>
 #include <msgpanel.h>
 
-#include "pns_layerset.h"
 #include "pns_routing_settings.h"
 
 class PNS_ROUTER;

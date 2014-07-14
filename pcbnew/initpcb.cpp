@@ -61,9 +61,6 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     // Update display
     GetBoard()->SetVisibleLayers( LSET().set() );
 
-    // Set currently selected layer to be shown in high contrast mode, when enabled`
-    SetHighContrastLayer( GetScreen()->m_Active_Layer );
-
     ReFillLayerWidget();
 
     Zoom_Automatique( false );

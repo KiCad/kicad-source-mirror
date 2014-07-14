@@ -30,9 +30,9 @@
 #ifndef  PANELGAL_WXSTRUCT_H
 #define  PANELGAL_WXSTRUCT_H
 
-#include <wx/wx.h>
 #include <wx/window.h>
-
+#include <wx/timer.h>
+#include <layers_id_colors_and_visibility.h>
 #include <math/vector2d.h>
 
 class BOARD;
@@ -69,6 +69,15 @@ public:
     void SwitchBackend( GalType aGalType );
 
     /**
+     * Function GetBackend
+     * Returns the type of backend currently used by GAL canvas.
+     */
+    inline GalType GetBackend() const
+    {
+        return m_backend;
+    }
+
+    /**
      * Function GetGAL()
      * Returns a pointer to the GAL instance used in the panel.
      * @return The instance of GAL.
@@ -99,17 +108,16 @@ public:
     }
 
     /// @copydoc wxWindow::Refresh()
-    void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
+    void Refresh( bool aEraseBackground = true, const wxRect* aRect = NULL );
 
     /**
      * Function SetEventDispatcher()
      * Sets a dispatcher that processes events and forwards them to tools.
      * @param aEventDispatcher is the object that will be used for dispatching events.
+     * DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event
+     * handlers from the DRAW_PANEL_GAL and parent frame.
      */
-    void SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
-    {
-        m_eventDispatcher = aEventDispatcher;
-    }
+    void SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher );
 
     /**
      * Function StartDrawing()
@@ -124,15 +132,29 @@ public:
      */
     void StopDrawing();
 
+    /**
+     * Function SetHighContrastLayer
+     * Takes care of display settings for the given layer to be displayed in high contrast mode.
+     */
+    virtual void SetHighContrastLayer( LAYER_NUM aLayer );
+
+    /**
+     * Function SetTopLayer
+     * Moves the selected layer to the top, so it is displayed above all others.
+     */
+    virtual void SetTopLayer( LAYER_NUM aLayer );
+
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
     void onEvent( wxEvent& aEvent );
     void onEnter( wxEvent& aEvent );
-    void onRefreshTimer ( wxTimerEvent& aEvent );
-    void skipEvent( wxEvent& aEvent );
+    void onRefreshTimer( wxTimerEvent& aEvent );
 
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
+
+    /// Pointer to the parent window
+    wxWindow*               m_parent;
 
     /// Last timestamp when the panel was refreshed
     wxLongLong               m_lastRefresh;
@@ -159,7 +181,7 @@ protected:
     KIGFX::WX_VIEW_CONTROLS* m_viewControls;
 
     /// Currently used GAL
-    GalType                  m_currentGal;
+    GalType                  m_backend;
 
     /// Processes and forwards events to tools
     TOOL_DISPATCHER*         m_eventDispatcher;

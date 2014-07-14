@@ -323,6 +323,7 @@ PNS_ROUTER::PNS_ROUTER()
 
     m_currentLayer = 1;
     m_placingVia = false;
+    m_startsOnVia = false;
     m_currentNet = -1;
     m_state = IDLE;
     m_world = NULL;
@@ -612,7 +613,7 @@ void PNS_ROUTER::moveDragging( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     m_dragger->Drag( aP );
     PNS_ITEMSET dragged = m_dragger->Traces();
 
-    updateView ( m_dragger->CurrentNode(), dragged );
+    updateView( m_dragger->CurrentNode(), dragged );
 }
 
 
@@ -758,6 +759,8 @@ void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
             via_board->SetWidth( via->Diameter() );
             via_board->SetDrill( via->Drill() );
             via_board->SetNetCode( via->Net() );
+            via_board->SetLayerPair( ToLAYER_ID( m_settings.GetLayerTop() ),
+                                     ToLAYER_ID( m_settings.GetLayerBottom() ) );
             newBI = via_board;
             break;
         }
@@ -809,6 +812,7 @@ bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     {
         case ROUTE_TRACK:
             rv = m_placer->FixRoute( aP, aEndItem );
+            m_startsOnVia = m_placingVia;
             m_placingVia = false;
             break;
 
@@ -874,8 +878,7 @@ void PNS_ROUTER::SwitchLayer( int aLayer )
         if( m_startsOnVia )
         {
             m_currentLayer = aLayer;
-            //m_placer->StartPlacement( m_currentStart, m_currentNet, m_currentWidth,
-            //        m_currentLayer );
+            m_placer->SetLayer( aLayer );
         }
         break;
 

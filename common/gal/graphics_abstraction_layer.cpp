@@ -134,9 +134,6 @@ void GAL::DrawGrid()
     // Draw the grid
     // For the drawing the start points, end points and increments have
     // to be calculated in world coordinates
-    gridOffset = VECTOR2D( (long) gridOrigin.x % (long) gridSize.x,
-                           (long) gridOrigin.y % (long) gridSize.y );
-
     VECTOR2D worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
     VECTOR2D worldEndPoint   = screenWorldMatrix * VECTOR2D( screenSize );
 
@@ -160,10 +157,10 @@ void GAL::DrawGrid()
         assert( gridEndY >= gridStartY );
 
         // Correct the index, else some lines are not correctly painted
-        gridStartX  -= ( gridOrigin.x / gridSize.x ) + 1;
-        gridStartY  -= ( gridOrigin.y / gridSize.y ) + 1;
-        gridEndX    += ( gridOrigin.x / gridSize.x ) + 1;
-        gridEndY    += ( gridOrigin.y / gridSize.y ) + 1;
+        gridStartX -= abs( gridOrigin.x / gridSize.x ) + 1;
+        gridStartY -= abs( gridOrigin.y / gridSize.y ) + 1;
+        gridEndX += abs( gridOrigin.x / gridSize.x ) + 1;
+        gridEndY += abs( gridOrigin.y / gridSize.y ) + 1;
 
         // Draw the grid behind all other layers
         SetLayerDepth( depthRange.y * 0.75 );

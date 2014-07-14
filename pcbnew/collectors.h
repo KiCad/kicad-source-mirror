@@ -262,7 +262,7 @@ public:
     /**
      * A scan list for only MODULEs
      */
-    static const KICAD_T ModuleItems[];
+    static const KICAD_T Modules[];
 
 
     /**
@@ -280,6 +280,12 @@ public:
      * A scan list for MODULEs and their items (for Modedit)
      */
     static const KICAD_T ModulesAndTheirItems[];
+
+
+    /**
+     * A scan list for primary module items.
+     */
+    static const KICAD_T ModuleItems[];
 
 
     /**

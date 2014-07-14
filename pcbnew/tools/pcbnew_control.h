@@ -27,12 +27,12 @@
 
 #include <tool/tool_interactive.h>
 
-class PCB_EDIT_FRAME;
+class PCB_BASE_FRAME;
 
 /**
  * Class PCBNEW_CONTROL
  *
- * Handles hot keys that are not accepted by any other tool.
+ * Handles actions that are shared between different frames in pcbnew.
  */
 
 class PCBNEW_CONTROL : public TOOL_INTERACTIVE
@@ -56,19 +56,13 @@ public:
     int TrackDisplayMode( TOOL_EVENT& aEvent );
     int PadDisplayMode( TOOL_EVENT& aEvent );
     int ViaDisplayMode( TOOL_EVENT& aEvent );
+    int ZoneDisplayMode( TOOL_EVENT& aEvent );
     int HighContrastMode( TOOL_EVENT& aEvent );
     int HighContrastInc( TOOL_EVENT& aEvent );
     int HighContrastDec( TOOL_EVENT& aEvent );
 
     // Layer control
-    int LayerTop( TOOL_EVENT& aEvent );
-    int LayerInner1( TOOL_EVENT& aEvent );
-    int LayerInner2( TOOL_EVENT& aEvent );
-    int LayerInner3( TOOL_EVENT& aEvent );
-    int LayerInner4( TOOL_EVENT& aEvent );
-    int LayerInner5( TOOL_EVENT& aEvent );
-    int LayerInner6( TOOL_EVENT& aEvent );
-    int LayerBottom( TOOL_EVENT& aEvent );
+    int LayerSwitch( TOOL_EVENT& aEvent );
     int LayerNext( TOOL_EVENT& aEvent );
     int LayerPrev( TOOL_EVENT& aEvent );
     int LayerAlphaInc( TOOL_EVENT& aEvent );
@@ -81,23 +75,19 @@ public:
     int GridPrev( TOOL_EVENT& aEvent );
     int GridSetOrigin( TOOL_EVENT& aEvent );
 
-    // Track & via size control
-    int TrackWidthInc( TOOL_EVENT& aEvent );
-    int TrackWidthDec( TOOL_EVENT& aEvent );
-    int ViaSizeInc( TOOL_EVENT& aEvent );
-    int ViaSizeDec( TOOL_EVENT& aEvent );
-
     // Miscellaneous
     int ResetCoords( TOOL_EVENT& aEvent );
+    int SwitchCursor( TOOL_EVENT& aEvent );
     int SwitchUnits( TOOL_EVENT& aEvent );
     int ShowHelp( TOOL_EVENT& aEvent );
+    int ToBeDone( TOOL_EVENT& aEvent );
 
 private:
     ///> Sets up handlers for various events.
     void setTransitions();
 
     ///> Pointerto the currently used edit frame.
-    PCB_EDIT_FRAME* m_frame;
+    PCB_BASE_FRAME* m_frame;
 };
 
 #endif

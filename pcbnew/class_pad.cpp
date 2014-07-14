@@ -228,6 +228,37 @@ const EDA_RECT D_PAD::GetBoundingBox() const
 }
 
 
+void D_PAD::SetDrawCoord()
+{
+    MODULE* module = (MODULE*) m_Parent;
+
+    m_Pos = m_Pos0;
+
+    if( module == NULL )
+        return;
+
+    double angle = module->GetOrientation();
+
+    RotatePoint( &m_Pos.x, &m_Pos.y, angle );
+    m_Pos += module->GetPosition();
+}
+
+
+void D_PAD::SetLocalCoord()
+{
+    MODULE* module = (MODULE*) m_Parent;
+
+    if( module == NULL )
+    {
+        m_Pos0 = m_Pos;
+        return;
+    }
+
+    m_Pos0 = m_Pos - module->GetPosition();
+    RotatePoint( &m_Pos0.x, &m_Pos0.y, -module->GetOrientation() );
+}
+
+
 void D_PAD::SetAttribute( PAD_ATTR_T aAttribute )
 {
     m_Attribute = aAttribute;
@@ -797,6 +828,13 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 }
 
 
+void D_PAD::Rotate( const wxPoint& aRotCentre, double aAngle )
+{
+    RotatePoint( &m_Pos, aRotCentre, aAngle );
+    m_Orient += aAngle;
+}
+
+
 wxString D_PAD::ShowPadShape() const
 {
     switch( GetShape() )
@@ -924,7 +962,7 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 
 unsigned int D_PAD::ViewGetLOD( int aLayer ) const
 {
-    // Netnames and soldermasks will be shown only if zoom is appropriate
+    // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
     {
         return ( 100000000 / std::max( m_Size.x, m_Size.y ) );

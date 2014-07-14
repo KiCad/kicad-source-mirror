@@ -32,6 +32,7 @@
 #include <kiway.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
+#include <pcb_draw_panel_gal.h>
 #include <wxPcbStruct.h>
 #include <3d_viewer.h>
 #include <pcbcommon.h>
@@ -53,6 +54,13 @@
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <pcbnew_config.h>
+
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include "tools/pcbnew_control.h"
+#include "tools/common_actions.h"
+
+#include <boost/bind.hpp>
 
 
 #define NEXT_PART       1
@@ -160,6 +168,23 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     ReCreateLibraryList();
     UpdateTitle();
 
+    PCB_BASE_FRAME* parentFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
+
+    // Create GAL canvas
+    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                            parentFrame->GetGalCanvas()->GetBackend() );
+    SetGalCanvas( drawPanel );
+
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
+                                   drawPanel->GetViewControls(), this );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+    drawPanel->SetEventDispatcher( m_toolDispatcher );
+
+    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+    m_toolManager->ResetTools( TOOL_BASE::RUN );
+
     // If a footprint was previously loaded, reload it
     if( getCurNickname().size() && getCurFootprintName().size() )
     {
@@ -169,6 +194,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
         id.SetFootprintName( getCurFootprintName() );
         GetBoard()->Add( loadFootprint( id ) );
     }
+
+    drawPanel->DisplayBoard( m_Pcb );
+    updateView();
 
     if( m_canvas )
         m_canvas->SetAcceleratorTable( table );
@@ -207,6 +235,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // Manage the draw panel, right pane.
     m_auimgr.AddPane( m_canvas,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+    m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
+                      wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
 
     // Manage the message panel, bottom pane.
     m_auimgr.AddPane( m_messagePanel,
@@ -244,6 +274,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 #endif
 
     Show( true );
+
+    UseGalCanvas( parentFrame->IsGalCanvasActive() );
 }
 
 
@@ -263,6 +295,10 @@ const wxChar* FOOTPRINT_VIEWER_FRAME::GetFootprintViewerFrameName()
 void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     DBG(printf( "%s:\n", __func__ );)
+
+    if( IsGalCanvasActive() )
+        GetGalCanvas()->StopDrawing();
+
     if( IsModal() )
     {
         // Only dismiss a modal frame once, so that the return values set by
@@ -321,6 +357,15 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
     ReCreateHToolbar();
 
     m_canvas->Refresh();
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::UseGalCanvas( bool aEnable )
+{
+    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    if( aEnable )
+        GetGalCanvas()->StartDrawing();
 }
 
 
@@ -421,6 +466,10 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         }
 
         UpdateTitle();
+
+        if( IsGalCanvasActive() )
+            updateView();
+
         Zoom_Automatique( false );
         m_canvas->Refresh();
         Update3D_Frame();
@@ -802,7 +851,11 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
             GetBoard()->Add( footprint, ADD_APPEND );
 
         Update3D_Frame();
+
+        if( IsGalCanvasActive() )
+            updateView();
     }
+
 
     UpdateTitle();
     Zoom_Automatique( false );
@@ -826,4 +879,29 @@ void FOOTPRINT_VIEWER_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     if( module )
         SetMsgPanel( module );
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::updateView()
+{
+    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
+
+    m_Pcb->ComputeBoundingBox( false );
+    EDA_RECT boardBbox = m_Pcb->GetBoundingBox();
+    BOX2D bbox;
+
+    // Autozoom
+    if( boardBbox.GetSize().x > 0 && boardBbox.GetSize().y > 0 )
+    {
+        bbox.SetOrigin( VECTOR2D( boardBbox.GetOrigin() ) );
+        bbox.SetSize( VECTOR2D( boardBbox.GetSize() ) );
+    }
+    else
+    {
+        // Default empty view
+        bbox.SetOrigin( VECTOR2D( -1000, -1000 ) );
+        bbox.SetSize( VECTOR2D( 2000, 2000 ) );
+    }
+
+    GetGalCanvas()->GetView()->SetViewport( bbox );
 }

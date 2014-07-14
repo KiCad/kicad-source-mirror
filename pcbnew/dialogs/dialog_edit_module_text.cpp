@@ -44,32 +44,10 @@
 #include <class_module.h>
 #include <class_text_mod.h>
 
-#include <dialog_edit_module_text_base.h>
+#include <dialog_edit_module_text.h>
 
 
 extern wxPoint MoveVector;  // Move vector for move edge, imported from edtxtmod.cpp
-
-
-/*************** **************/
-/* class DialogEditModuleText */
-/*************** **************/
-class DialogEditModuleText : public DialogEditModuleText_base
-{
-private:
-    PCB_BASE_FRAME* m_parent;
-    wxDC* m_dc;
-    MODULE* m_module;
-    TEXTE_MODULE* m_currentText;
-
-public:
-    DialogEditModuleText( PCB_BASE_FRAME* aParent, TEXTE_MODULE* aTextMod, wxDC* aDC );
-    ~DialogEditModuleText() {};
-
-private:
-    void initDlg( );
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
-};
 
 
 void PCB_BASE_FRAME::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC )

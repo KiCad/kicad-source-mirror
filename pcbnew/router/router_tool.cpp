@@ -212,15 +212,15 @@ public:
         Add( ACT_PlaceThroughVia );
         Add( ACT_SwitchPosture );
 
-        AppendSeparator ( );
-
+        AppendSeparator();
+        
         CONTEXT_TRACK_WIDTH_MENU* trackMenu = new CONTEXT_TRACK_WIDTH_MENU;
         trackMenu->SetBoard( aBoard );
         AppendSubMenu( trackMenu, wxT( "Select Track Width" ) );
 
         Add( ACT_CustomTrackWidth );
 
-        AppendSeparator ( );
+        AppendSeparator();
         Add( ACT_RouterOptions );
     }
 };
@@ -404,11 +404,7 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
         bds.SetCustomViaDrill( m_router->Settings().GetViaDrill() );
         bds.UseCustomTrackViaSize( true );
 
-        // TODO Should be done another way, but RunAction() won't work here. As the ROUTER_TOOL
-        // did not call Wait(), it does not wait for events and therefore the sent event
-        // won't arrive here
-        TOOL_EVENT event = COMMON_ACTIONS::trackViaSizeChanged.MakeEvent();
-        handleCommonEvents( event );
+        m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
     }
 
     else if( aEvent.IsAction( &COMMON_ACTIONS::trackViaSizeChanged ) )
@@ -480,10 +476,9 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
     VECTOR2I p = getView()->ToWorld( ctls->GetMousePosition() );
     VECTOR2I cp = ctls->GetCursorPosition();
     int layer;
+    bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
 
-    bool snapEnabled = !aEvent.Modifier(MD_SHIFT);
-
-    m_router->EnableSnapping ( snapEnabled );
+    m_router->EnableSnapping( snapEnabled );
 
     if( !snapEnabled || m_router->GetCurrentNet() < 0 || !m_startItem )
     {
@@ -537,9 +532,7 @@ void ROUTER_TOOL::performRouting()
     }
 
     m_router->SwitchLayer( m_startLayer );
-
     frame->SetActiveLayer( ToLAYER_ID( m_startLayer ) );
-    frame->GetGalCanvas()->SetFocus();
 
     if( m_startItem && m_startItem->Net() >= 0 )
         highlightNet( true, m_startItem->Net() );
@@ -554,7 +547,7 @@ void ROUTER_TOOL::performRouting()
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
             break;
         else if( evt->Action() == TA_UNDO_REDO )
         {
@@ -573,39 +566,36 @@ void ROUTER_TOOL::performRouting()
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
 
+            // Synchronize the indicated layer
+            frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
+
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
+            m_router->Settings().SetLayerPair( frame->GetScreen()->m_Route_Layer_TOP,
+                                               frame->GetScreen()->m_Route_Layer_BOTTOM );
             m_router->ToggleViaPlacement();
-            frame->SetTopLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
-            m_router->Move( m_endSnapPoint, m_endItem );
+            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {
             m_router->FlipPosture();
-            m_router->Move( m_endSnapPoint, m_endItem );
+            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
-        else if( evt->IsAction( &COMMON_ACTIONS::layerNext ) )
+        else if( evt->IsAction( &COMMON_ACTIONS::layerChanged ) )
         {
-            m_router->SwitchLayer( m_router->NextCopperLayer( true ) );
             updateEndItem( *evt );
-            frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
-            m_router->Move( m_endSnapPoint, m_endItem );
-        }
-        else if( evt->IsAction( &COMMON_ACTIONS::layerPrev ) )
-        {
-            m_router->SwitchLayer( m_router->NextCopperLayer( false ) );
-            frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
-            m_router->Move( m_endSnapPoint, m_endItem );
+            m_router->SwitchLayer( frame->GetActiveLayer() );
+            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
         else if( evt->IsAction( &ACT_EndTrack ) )
         {
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
         }
-
-        handleCommonEvents(*evt);
+    
+        handleCommonEvents( *evt );
     }
 
     m_router->StopRouting();
@@ -636,7 +626,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
     // Deselect all items
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL,
                                                _( "Interactive Router" ) );
@@ -649,7 +639,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     m_router->Settings().SetViaDiameter( bds.GetCurrentViaSize() );
     m_router->Settings().SetViaDrill( bds.GetCurrentViaDrill() );
 
-    ROUTER_TOOL_MENU *ctxMenu = new ROUTER_TOOL_MENU( board );
+    ROUTER_TOOL_MENU* ctxMenu = new ROUTER_TOOL_MENU( board );
 
     SetContextMenu ( ctxMenu );
 
@@ -663,7 +653,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
             m_needsSync = false;
         }
 
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
             break; // Finish
         else if( evt->Action() == TA_UNDO_REDO )
             m_needsSync = true;
@@ -677,10 +667,11 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
                 performDragging();
             else
                 performRouting();
-        } else if ( evt->IsAction( &ACT_Drag ) )
+        }
+        else if ( evt->IsAction( &ACT_Drag ) )
             performDragging();
 
-        handleCommonEvents(*evt);
+        handleCommonEvents( *evt );
     }
 
     // Restore the default settings
@@ -715,7 +706,7 @@ void ROUTER_TOOL::performDragging()
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
             break;
         else if( evt->Action() == TA_UNDO_REDO )
         {

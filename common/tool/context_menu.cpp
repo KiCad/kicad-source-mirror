@@ -71,6 +71,47 @@ CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu ) :
 }
 
 
+CONTEXT_MENU& CONTEXT_MENU::operator=( const CONTEXT_MENU& aMenu )
+{
+    Clear();
+
+    m_titleSet = aMenu.m_titleSet;
+    m_selected = aMenu.m_selected;
+    m_tool = aMenu.m_tool;
+    m_toolActions = aMenu.m_toolActions;
+    m_customHandler = aMenu.m_customHandler;
+
+    // Copy all the menu entries
+    for( unsigned i = 0; i < aMenu.GetMenuItemCount(); ++i )
+    {
+        wxMenuItem* item = aMenu.FindItemByPosition( i );
+
+        if( item->IsSubMenu() )
+        {
+#ifdef DEBUG
+            // Submenus of a CONTEXT_MENU are supposed to be CONTEXT_MENUs as well
+            assert( dynamic_cast<CONTEXT_MENU*>( item->GetSubMenu() ) );
+#endif
+
+            CONTEXT_MENU* menu = new CONTEXT_MENU( static_cast<const CONTEXT_MENU&>( *item->GetSubMenu() ) );
+            AppendSubMenu( menu, item->GetItemLabel(), wxEmptyString );
+        }
+        else
+        {
+            wxMenuItem* newItem = new wxMenuItem( this, item->GetId(), item->GetItemLabel(),
+                    wxEmptyString, item->GetKind() );
+
+            Append( newItem );
+            copyItem( item, newItem );
+        }
+    }
+
+    setupEvents();
+
+    return *this;
+}
+
+
 void CONTEXT_MENU::setupEvents()
 {
     Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CONTEXT_MENU::onMenuEvent ), NULL, this );
@@ -144,11 +185,12 @@ void CONTEXT_MENU::Clear()
 {
     m_titleSet = false;
 
-    // Remove all the entries from context menu
-    for( unsigned i = 0; i < GetMenuItemCount(); ++i )
-        Destroy( FindItemByPosition( 0 ) );
-
+    GetMenuItems().DeleteContents( true );
+    GetMenuItems().Clear();
     m_toolActions.clear();
+    GetMenuItems().DeleteContents( false ); // restore the default so destructor does not go wild
+
+    assert( GetMenuItemCount() == 0 );
 }
 
 

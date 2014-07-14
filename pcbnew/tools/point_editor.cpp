@@ -36,10 +36,11 @@
 #include "point_editor.h"
 
 #include <wxPcbStruct.h>
-#include <class_drawsegment.h>
+#include <class_edge_mod.h>
 #include <class_dimension.h>
 #include <class_zone.h>
 #include <class_board.h>
+#include <class_module.h>
 
 // Few constants to avoid using bare numbers for point indices
 enum SEG_POINTS
@@ -77,6 +78,7 @@ public:
         switch( aItem->Type() )
         {
             case PCB_LINE_T:
+            case PCB_MODULE_EDGE_T:
             {
                 const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( aItem );
 
@@ -193,6 +195,9 @@ bool POINT_EDITOR::Init()
         return false;
     }
 
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::pointEditorBreakOutline,
+                                  POINT_EDITOR::breakOutlineCondition );
+
     setTransitions();
 
     return true;
@@ -201,7 +206,7 @@ bool POINT_EDITOR::Init()
 
 int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() == 1 )
     {
@@ -209,7 +214,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 
         KIGFX::VIEW_CONTROLS* controls = getViewControls();
         KIGFX::VIEW* view = getView();
-        PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+        PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
 
         m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
@@ -257,9 +262,10 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                 m_dragPoint = point;
             }
 
-            else if( evt->IsDblClick( BUT_LEFT ) )
+            else if( evt->IsAction( &COMMON_ACTIONS::pointEditorBreakOutline ) )
             {
                 breakOutline( controls->GetCursorPosition() );
+                updatePoints();
             }
 
             else if( evt->IsDrag( BUT_LEFT ) && m_dragPoint )
@@ -309,7 +315,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                 if( modified )      // Restore the last change
                 {
                     wxCommandEvent dummy;
-                    editFrame->GetBoardFromUndoList( dummy );
+                    editFrame->RestoreCopyFromUndoList( dummy );
 
                     updatePoints();
                     modified = false;
@@ -354,6 +360,7 @@ void POINT_EDITOR::updateItem() const
     switch( item->Type() )
     {
     case PCB_LINE_T:
+    case PCB_MODULE_EDGE_T:
     {
         DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
         switch( segment->GetShape() )
@@ -428,6 +435,10 @@ void POINT_EDITOR::updateItem() const
             break;
         }
 
+        // Update relative coordinates for module edges
+        if( EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( item ) )
+            edge->SetLocalCoord();
+
         break;
     }
 
@@ -439,8 +450,9 @@ void POINT_EDITOR::updateItem() const
 
         for( int i = 0; i < outline->GetCornersCount(); ++i )
         {
-            outline->SetX( i, m_editPoints->Point( i ).GetPosition().x );
-            outline->SetY( i, m_editPoints->Point( i ).GetPosition().y );
+            VECTOR2I point = m_editPoints->Point( i ).GetPosition();
+            outline->SetX( i, point.x );
+            outline->SetY( i, point.y );
         }
 
         break;
@@ -514,13 +526,14 @@ void POINT_EDITOR::finishItem() const
 }
 
 
-void POINT_EDITOR::updatePoints() const
+void POINT_EDITOR::updatePoints()
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
     switch( item->Type() )
     {
     case PCB_LINE_T:
+    case PCB_MODULE_EDGE_T:
     {
         const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
         {
@@ -555,8 +568,17 @@ void POINT_EDITOR::updatePoints() const
         const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( item );
         const CPolyLine* outline = zone->Outline();
 
-        for( int i = 0; i < outline->GetCornersCount(); ++i )
-            m_editPoints->Point( i ).SetPosition( outline->GetPos( i ) );
+        if( m_editPoints->PointsSize() != (unsigned) outline->GetCornersCount() )
+        {
+            getView()->Remove( m_editPoints.get() );
+            m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
+            getView()->Add( m_editPoints.get() );
+        }
+        else
+        {
+            for( int i = 0; i < outline->GetCornersCount(); ++i )
+                m_editPoints->Point( i ).SetPosition( outline->GetPos( i ) );
+        }
 
         break;
     }
@@ -610,6 +632,7 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
     switch( item->Type() )
     {
     case PCB_LINE_T:
+    case PCB_MODULE_EDGE_T:
     {
         const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
         {
@@ -657,12 +680,12 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
 {
     EDA_ITEM* item = m_editPoints->GetParent();
-    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( item->Type() == PCB_ZONE_AREA_T )
     {
-        getEditFrame<PCB_EDIT_FRAME>()->OnModify();
-        getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
+        getEditFrame<PCB_BASE_FRAME>()->OnModify();
+        getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
         CPolyLine* outline = zone->Outline();
@@ -700,10 +723,16 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
         outline->InsertCorner( nearestIdx, nearestPoint.x, nearestPoint.y );
     }
 
-    else if( item->Type() == PCB_LINE_T )
+    else if( item->Type() == PCB_LINE_T || item->Type() == PCB_MODULE_EDGE_T )
     {
-        getEditFrame<PCB_EDIT_FRAME>()->OnModify();
-        getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
+        bool moduleEdge = item->Type() == PCB_MODULE_EDGE_T;
+
+        getEditFrame<PCB_BASE_FRAME>()->OnModify();
+
+        if( moduleEdge )
+            getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( getModel<BOARD>()->m_Modules, UR_MODEDIT );
+        else
+            getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
         DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
 
@@ -716,13 +745,56 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
             segment->SetEnd( wxPoint( nearestPoint.x, nearestPoint.y ) );
 
             // and add another one starting from the break point
-            DRAWSEGMENT* newSegment = new DRAWSEGMENT( *segment );
+            DRAWSEGMENT* newSegment;
+
+            if( moduleEdge )
+            {
+                EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( segment );
+                assert( segment->GetParent()->Type() == PCB_MODULE_T );
+                newSegment = new EDGE_MODULE( *edge );
+                edge->SetLocalCoord();
+            }
+            else
+            {
+                newSegment = new DRAWSEGMENT( *segment );
+            }
+
             newSegment->ClearSelected();
             newSegment->SetStart( wxPoint( nearestPoint.x, nearestPoint.y ) );
             newSegment->SetEnd( wxPoint( seg.B.x, seg.B.y ) );
 
-            getModel<BOARD>()->Add( newSegment );
+            if( moduleEdge )
+            {
+                static_cast<EDGE_MODULE*>( newSegment )->SetLocalCoord();
+                getModel<BOARD>()->m_Modules->Add( newSegment );
+            }
+            else
+            {
+                getModel<BOARD>()->Add( newSegment );
+            }
+
             getView()->Add( newSegment );
         }
     }
+}
+
+
+void POINT_EDITOR::setTransitions()
+{
+    Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->SelectedEvent );
+    Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->DeselectedEvent );
+}
+
+
+bool POINT_EDITOR::breakOutlineCondition( const SELECTION& aSelection )
+{
+    if( aSelection.Size() != 1 )
+        return false;
+
+    BOARD_ITEM* item = aSelection.Item<BOARD_ITEM>( 0 );
+
+    // Works only for zones and line segments
+    return item->Type() == PCB_ZONE_AREA_T ||
+           ( ( item->Type() == PCB_LINE_T || item->Type() == PCB_MODULE_EDGE_T ) &&
+               static_cast<DRAWSEGMENT*>( item )->GetShape() == S_SEGMENT );
 }
