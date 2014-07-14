@@ -359,17 +359,19 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
     }
 
     LAYER_NUM jj = m_layersLookUpTable[m_buttonTable[ii]];
-    if( !IsValidLayer( jj ) )
+
+    if( jj != UNSELECTED_LAYER && !IsValidLayer( jj ) )
         jj = B_Cu;  // (Defaults to "Copper" layer.)
 
     jj = m_Parent->SelectPCBLayer( jj, m_exportBoardCopperLayersCount, true );
 
-    if( !IsValidLayer( jj ) )
+    if( jj != UNSELECTED_LAYER && !IsValidLayer( jj ) )
         return;
 
     if( jj != m_layersLookUpTable[m_buttonTable[ii]] )
     {
         m_layersLookUpTable[m_buttonTable[ii]] = jj;
+
         if( jj == UNSELECTED_LAYER )
         {
             m_layersList[ii]->SetLabel( _( "Do not export" ) );

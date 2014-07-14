@@ -23,7 +23,7 @@
  */
 
 /**
- * @file gerbview/initpcb.cpp
+ * @file init_gbr_drawlayers.cpp
  */
 
 #include <fctsys.h>
@@ -38,7 +38,7 @@
 #include <class_gerbview_layer_widget.h>
 #include <class_gbr_layout.h>
 
-bool GERBVIEW_FRAME::Clear_Pcb( bool query )
+bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
 {
     int layer;
 
@@ -73,7 +73,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 }
 
 
-void GERBVIEW_FRAME::Erase_Current_Layer( bool query )
+void GERBVIEW_FRAME::Erase_Current_DrawLayer( bool query )
 {
     int layer = getActiveLayer();
     wxString msg;

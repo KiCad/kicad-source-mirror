@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
  */
 
 /**
- * @file printout_controler.cpp
+ * @file printout_controller.cpp
  * @brief Board print handler implementation file.
  */
 
@@ -37,18 +37,14 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <base_units.h>
-#include <wxBasePcbFrame.h>
-#include <class_board.h>
-#include <pcbnew.h>
+#include <wxstruct.h>
+#include <class_base_screen.h>
+#include <layers_id_colors_and_visibility.h>
+
+#include <gerbview_frame.h>
 
 #include <printout_controler.h>
 
-
-/**
- * Definition for enabling and disabling print controller trace output.  See the
- * wxWidgets documentation on using the WXTRACE environment variable.
- */
-static const wxString tracePrinting( wxT( "KicadPrinting" ) );
 
 
 PRINT_PARAMETERS::PRINT_PARAMETERS()
@@ -83,31 +79,10 @@ BOARD_PRINTOUT_CONTROLLER::BOARD_PRINTOUT_CONTROLLER( const PRINT_PARAMETERS& aP
 
 bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
 {
-    LSET lset = m_PrintParams.m_PrintMaskLayer;
-
-    // compute layer mask from page number if we want one page per layer
-    if( m_PrintParams.m_OptionPrintPage == 0 )  // One page per layer
-    {
-        // This sequence is TBD, call a different
-        // sequencer if needed, such as Seq().  Could not find documentation on
-        // page order.
-        LSEQ seq = lset.UIOrder();
-
-        // aPage starts at 1, not 0
-        if( unsigned( aPage-1 ) < seq.size() )
-            m_PrintParams.m_PrintMaskLayer = LSET( seq[aPage-1] );
-    }
-
-    if( !m_PrintParams.m_PrintMaskLayer.any() )
-        return false;
-
-    // In Pcbnew we can want the layer EDGE always printed
-    if( m_PrintParams.m_Flags == 1 )
-        m_PrintParams.m_PrintMaskLayer.set( Edge_Cuts );
-
+    // in gerbview, draw layers are always printed on separate pages
+    // because handling negative objects when using only one page is tricky
+    m_PrintParams.m_Flags = aPage-1;    // = gerber draw layer id
     DrawPage();
-
-    m_PrintParams.m_PrintMaskLayer = lset;
 
     return true;
 }
@@ -142,18 +117,13 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
 
     wxBusyCursor  dummy;
 
-    BOARD * brd = ((PCB_BASE_FRAME*) m_Parent)->GetBoard();
-    boardBoundingBox = brd->ComputeBoundingBox();
-    wxString titleblockFilename = brd->GetFileName();
+    boardBoundingBox = ((GERBVIEW_FRAME*) m_Parent)->GetGerberLayoutBoundingBox();
+    wxString titleblockFilename;    // TODO see if we uses the gerber file name
 
     // Use the page size as the drawing area when the board is shown or the user scale
     // is less than 1.
     if( m_PrintParams.PrintBorderAndTitleBlock() )
         boardBoundingBox = EDA_RECT( wxPoint( 0, 0 ), pageSizeIU );
-
-    wxLogTrace( tracePrinting, wxT( "Drawing bounding box:                 x=%d, y=%d, w=%d, h=%d" ),
-                boardBoundingBox.GetX(), boardBoundingBox.GetY(),
-                boardBoundingBox.GetWidth(), boardBoundingBox.GetHeight() );
 
     // Compute the PCB size in internal units
     userscale = m_PrintParams.m_PrintScale;
@@ -181,9 +151,6 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
 
     if( m_PrintParams.m_PageSetupData )
     {
-        wxLogTrace( tracePrinting, wxT( "Fit size to page margins:         x=%d, y=%d" ),
-                    scaledPageSize.x, scaledPageSize.y );
-
         // Always scale to the size of the paper.
         FitThisSizeToPageMargins( scaledPageSize, *m_PrintParams.m_PageSetupData );
     }
@@ -219,26 +186,13 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     // Get the final size of the DC in pixels
     wxSize       PlotAreaSizeInPixels;
     dc->GetSize( &PlotAreaSizeInPixels.x, &PlotAreaSizeInPixels.y );
-    wxLogTrace( tracePrinting, wxT( "Plot area in pixels:              x=%d, y=%d" ),
-                PlotAreaSizeInPixels.x, PlotAreaSizeInPixels.y );
+
     double scalex, scaley;
     dc->GetUserScale( &scalex, &scaley );
-    wxLogTrace( tracePrinting, wxT( "DC user scale:                    x=%g, y=%g" ),
-                scalex, scaley );
 
     wxSize PlotAreaSizeInUserUnits;
     PlotAreaSizeInUserUnits.x = KiROUND( PlotAreaSizeInPixels.x / scalex );
     PlotAreaSizeInUserUnits.y = KiROUND( PlotAreaSizeInPixels.y / scaley );
-    wxLogTrace( tracePrinting, wxT( "Scaled plot area in user units:   x=%d, y=%d" ),
-                PlotAreaSizeInUserUnits.x, PlotAreaSizeInUserUnits.y );
-
-    // In module editor, the module is located at 0,0 but for printing
-    // it is moved to pageSizeIU.x/2, pageSizeIU.y/2.
-    // So the equivalent board must be moved to the center of the page:
-    if( m_Parent->IsType( FRAME_PCB_MODULE_EDITOR ) )
-    {
-        boardBoundingBox.Move( wxPoint( pageSizeIU.x/2, pageSizeIU.y/2 ) );
-    }
 
     // In some cases the plot origin is the centre of the board outline rather than the center
     // of the selected paper size.
@@ -273,7 +227,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     screen->m_IsPrinting = true;
     EDA_COLOR_T bg_color = m_Parent->GetDrawBgColor();
 
-    // Print frame reference, if requested, before
+    // Print frame reference, if requested, before printing draw layers
     if( m_PrintParams.m_Print_Black_and_White )
         GRForceBlackPen( true );
 
@@ -294,54 +248,18 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
         x_dc_offset = KiROUND( x_dc_offset  * userscale );
         dc->SetDeviceOrigin( x_dc_offset, 0 );
 
-        wxLogTrace( tracePrinting, wxT( "Device origin:                    x=%d, y=%d" ),
-                    x_dc_offset, 0 );
-
         panel->SetClipBox( EDA_RECT( wxPoint( -MAX_VALUE/2, -MAX_VALUE/2 ),
                                      panel->GetClipBox()->GetSize() ) );
     }
 
     // screen->m_DrawOrg = offset;
     dc->SetLogicalOrigin( offset.x, offset.y );
-
-    wxLogTrace( tracePrinting, wxT( "Logical origin:                   x=%d, y=%d" ),
-                offset.x, offset.y );
-
-#if defined(wxUSE_LOG_TRACE) && defined( DEBUG )
-    wxRect paperRect = GetPaperRectPixels();
-    wxLogTrace( tracePrinting, wxT( "Paper rectangle:                  left=%d, top=%d, "
-                                    "right=%d, bottom=%d" ),
-                paperRect.GetLeft(), paperRect.GetTop(), paperRect.GetRight(),
-                paperRect.GetBottom() );
-
-    int devLeft = dc->LogicalToDeviceX( drawRect.GetX() );
-    int devTop = dc->LogicalToDeviceY( drawRect.GetY() );
-    int devRight = dc->LogicalToDeviceX( drawRect.GetRight() );
-    int devBottom = dc->LogicalToDeviceY( drawRect.GetBottom() );
-    wxLogTrace( tracePrinting, wxT( "Final device rectangle:           left=%d, top=%d, "
-                                    "right=%d, bottom=%d\n" ),
-                devLeft, devTop, devRight, devBottom );
-#endif
-
     m_Parent->SetDrawBgColor( WHITE );
 
-    /* when printing in color mode, we use the graphic OR mode that gives the same look as
-     * the screen but because the background is white when printing, we must use a trick:
-     * In order to plot on a white background in OR mode we must:
-     * 1 - Plot all items in black, this creates a local black background
-     * 2 - Plot in OR mode on black "local" background
-     */
-    if( !m_PrintParams.m_Print_Black_and_White )
-    {
-        // Creates a "local" black background
-        GRForceBlackPen( true );
-        m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer,
-                             printMirror, &m_PrintParams );
-        GRForceBlackPen( false );
-    }
-    else
-        GRForceBlackPen( true );
-
+    // Never force black pen to print draw layers
+    // because negative objects need a white pen, not a black pen
+    // B&W mode is handled in print page function
+    GRForceBlackPen( false );
 
     m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror,
                          &m_PrintParams );
@@ -349,5 +267,4 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     m_Parent->SetDrawBgColor( bg_color );
     screen->m_IsPrinting = false;
     panel->SetClipBox( tmp );
-    GRForceBlackPen( false );
 }

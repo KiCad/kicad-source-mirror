@@ -164,7 +164,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_GERBVIEW_GLOBAL_DELETE:
-        Erase_Current_Layer( true );
+        Erase_Current_DrawLayer( true );
         ClearMsgPanel();
         break;
 

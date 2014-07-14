@@ -138,6 +138,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     lyrs.MinSize( m_LayersManager->GetBestSize() );
     lyrs.BestSize( m_LayersManager->GetBestSize() );
     lyrs.Caption( _( "Visibles" ) );
+    lyrs.TopDockable( false ).BottomDockable( false );
 
 
     if( m_mainToolBar )
