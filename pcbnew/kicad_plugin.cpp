@@ -63,12 +63,14 @@ static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
 ///> Removes empty nets (i.e. with node count equal zero) from net classes
 void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
 {
-    for( NETCLASS::const_iterator it = aNetClass.begin(); it != aNetClass.end(); ++it )
+    for( NETCLASS::const_iterator it = aNetClass.begin(); it != aNetClass.end(); )
     {
         NETINFO_ITEM* netinfo = aBoard.FindNet( *it );
 
         if( netinfo && netinfo->GetNodesCount() <= 0 ) // hopefully there are no nets with negative
-            aNetClass.Remove( it );                    // node count, but you never know..
+            aNetClass.Remove( it++ );                  // node count, but you never know..
+        else
+        	++it;
     }
 }
 
