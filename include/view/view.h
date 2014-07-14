@@ -508,7 +508,7 @@ public:
 
     const BOX2I CalculateExtents() ;
 
-    static const int VIEW_MAX_LAYERS = 128;      ///< maximum number of layers that may be shown
+    static const int VIEW_MAX_LAYERS = 256;      ///< maximum number of layers that may be shown
 
 private:
     struct VIEW_LAYER

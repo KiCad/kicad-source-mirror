@@ -136,13 +136,13 @@ public:
      * Function SetHighContrastLayer
      * Takes care of display settings for the given layer to be displayed in high contrast mode.
      */
-    virtual void SetHighContrastLayer( LAYER_NUM aLayer );
+    virtual void SetHighContrastLayer( LAYER_ID aLayer );
 
     /**
      * Function SetTopLayer
      * Moves the selected layer to the top, so it is displayed above all others.
      */
-    virtual void SetTopLayer( LAYER_NUM aLayer );
+    virtual void SetTopLayer( LAYER_ID aLayer );
 
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
