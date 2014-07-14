@@ -19,25 +19,24 @@
 // depending on the gerber file format
 // this scale list assumes gerber units are imperial.
 // for metric gerber units, the imperial to metric conversion is made in read functions
-static double scale_list[10] =
+#define SCALE_LIST_SIZE 10
+static double scale_list[SCALE_LIST_SIZE] =
 {
-    1000.0 * IU_PER_MILS,
-    100.0 * IU_PER_MILS,
-    10.0 * IU_PER_MILS,
-    1.0 * IU_PER_MILS,
-    0.1 * IU_PER_MILS,
-    0.01 * IU_PER_MILS,
-    0.001 * IU_PER_MILS,
-    0.0001 * IU_PER_MILS,
-    0.00001 * IU_PER_MILS,
+    1000.0 * IU_PER_MILS,   // x.1 format (certainly useless)
+    100.0 * IU_PER_MILS,    // x.2 format (certainly useless)
+    10.0 * IU_PER_MILS,     // x.3 format
+    1.0 * IU_PER_MILS,      // x.4 format
+    0.1 * IU_PER_MILS,      // x.5 format
+    0.01 * IU_PER_MILS,     // x.6 format
+    0.0001 * IU_PER_MILS,   // x.7 format
+    0.00001 * IU_PER_MILS,  // provided, but not used
     0.000001 * IU_PER_MILS
 };
 
-
-/**
+/*
  * Function scale
- * converts a distance given in floating point to our internal units
- * (deci-mils or nano units)
+ * converts a coordinate given in floating point to Gerbvies internal units
+ * (currently = 10 nanometers)
  */
 int scaletoIU( double aCoord, bool isMetric )
 {
@@ -78,6 +77,7 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
             Text++;
             text     = line;
             nbdigits = 0;
+
             while( IsNumber( *Text ) )
             {
                 if( *Text == '.' )  // Force decimat format if reading a floating point number
@@ -90,6 +90,7 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
             }
 
             *text = 0;
+
             if( is_float )
             {
                 // When X or Y values are float numbers, they are given in mm or inches
@@ -101,6 +102,7 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
             else
             {
                 int fmt_scale = (type_coord == 'X') ? m_FmtScale.x : m_FmtScale.y;
+
                 if( m_NoTrailingZeros )
                 {
                     int min_digit =
@@ -113,6 +115,7 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
 
                     *text = 0;
                 }
+
                 current_coord = atoi( line );
                 double real_scale = scale_list[fmt_scale];
 
@@ -177,6 +180,7 @@ wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
                 // count digits only (sign and decimal point are not counted)
                 if( (*Text >= '0') && (*Text <='9') )
                     nbdigits++;
+
                 *(text++) = *(Text++);
             }
 
@@ -193,6 +197,7 @@ wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
             {
                 int fmt_scale =
                     (type_coord == 'I') ? m_FmtScale.x : m_FmtScale.y;
+
                 if( m_NoTrailingZeros )
                 {
                     int min_digit =
@@ -205,20 +210,21 @@ wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
 
                     *text = 0;
                 }
+
                 current_coord = atoi( line );
 
-                if( fmt_scale < 0 || fmt_scale > 9 )
-                    fmt_scale = 4;      // select scale 1.0
-
                 double real_scale = scale_list[fmt_scale];
+
                 if( m_GerbMetric )
                     real_scale = real_scale / 25.4;
+
                 current_coord = KiROUND( current_coord * real_scale );
             }
             if( type_coord == 'I' )
                 pos.x = current_coord;
             else if( type_coord == 'J' )
                 pos.y = current_coord;
+
             continue;
         }
         else
@@ -246,8 +252,10 @@ int ReadInt( char*& text, bool aSkipSeparator = true )
     int ret = (int) strtol( text, &text, 10 );
 
     if( *text == ',' || isspace( *text ) )
+    {
         if( aSkipSeparator )
             ++text;
+    }
 
     return ret;
 }
@@ -267,8 +275,10 @@ double ReadDouble( char*& text, bool aSkipSeparator = true )
     double ret = strtod( text, &text );
 
     if( *text == ',' || isspace( *text ) )
+    {
         if( aSkipSeparator )
             ++text;
+    }
 
     return ret;
 }
