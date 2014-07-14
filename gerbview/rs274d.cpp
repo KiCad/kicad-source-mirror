@@ -222,7 +222,6 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
     aGbrItem->m_Size  = aPenSize;
     aGbrItem->m_Flashed = false;
 
-
     if( aMultiquadrant )
         center = aStart + aRelCenter;
     else

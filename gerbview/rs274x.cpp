@@ -235,15 +235,16 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 if( code == 'X' )
                 {
                     x_fmt_known = true;
-                    // number of digits after the decimal point (0 to 6 allowed)
+                    // number of digits after the decimal point (0 to 7 allowed)
                     m_FmtScale.x = *text - '0';
                     m_FmtLen.x   = ctmp + m_FmtScale.x;
 
-                    // m_FmtScale is 0 to 6
+                    // m_FmtScale is 0 to 7
+                    // (Old Gerber specification was 0 to 6)
                     if( m_FmtScale.x < 0 )
                         m_FmtScale.x = 0;
-                    if( m_FmtScale.x > 6 )
-                        m_FmtScale.x = 6;
+                    if( m_FmtScale.x > 7 )
+                        m_FmtScale.x = 7;
                 }
                 else
                 {
@@ -252,8 +253,8 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                     m_FmtLen.y   = ctmp + m_FmtScale.y;
                     if( m_FmtScale.y < 0 )
                         m_FmtScale.y = 0;
-                    if( m_FmtScale.y > 6 )
-                        m_FmtScale.y = 6;
+                    if( m_FmtScale.y > 7 )
+                        m_FmtScale.y = 7;
                 }
                 text++;
             }
