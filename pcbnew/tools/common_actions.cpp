@@ -313,6 +313,10 @@ TOOL_ACTION COMMON_ACTIONS::moduleTextOutlines( "pcbnew.ModuleEditor.textOutline
 
 
 // Miscellaneous
+TOOL_ACTION COMMON_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
+        AS_GLOBAL, ' ',
+        "", "", AF_ACTIVATE );
+
 TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
         AS_GLOBAL, ' ',
         "", "" );
@@ -469,6 +473,9 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_TB_OPTIONS_SELECT_CURSOR:
         return COMMON_ACTIONS::switchCursor.MakeEvent();
+
+    case ID_NO_TOOL_SELECTED:
+        return COMMON_ACTIONS::selectionTool.MakeEvent();
 
     case ID_PCB_DELETE_ITEM_BUTT:
     case ID_PCB_HIGHLIGHT_BUTT:
