@@ -85,6 +85,30 @@ struct TOOL_DISPATCHER::BUTTON_STATE
         dragging = false;
         pressed = false;
     }
+
+    ///> Checks the current state of the button.
+    bool GetState() const
+    {
+        wxMouseState mouseState = wxGetMouseState();
+
+        switch( button )
+        {
+        case BUT_LEFT:
+            return mouseState.LeftIsDown();
+
+        case BUT_MIDDLE:
+            return mouseState.MiddleIsDown();
+
+        case BUT_RIGHT:
+            return mouseState.RightIsDown();
+
+        default:
+            assert( false );
+            break;
+        }
+
+        return false;
+    }
 };
 
 
@@ -129,9 +153,21 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
     boost::optional<TOOL_EVENT> evt;
     bool isClick = false;
 
-    bool up = type == st->upEvent;
-    bool down = type == st->downEvent;
+//    bool up = type == st->upEvent;
+//    bool down = type == st->downEvent;
+    bool up = false, down = false;
     bool dblClick = type == st->dblClickEvent;
+    bool state = st->GetState();
+
+    if( !dblClick )
+    {
+        // Sometimes the dispatcher does not receive mouse button up event, so it stays
+        // in the dragging mode even if the mouse button is not held anymore
+        if( st->pressed && !state )
+            up = true;
+        else if( !st->pressed && state )
+            down = true;
+    }
 
     int mods = decodeModifiers<wxMouseEvent>( static_cast<wxMouseEvent*>( &aEvent ) );
     int args = st->button | mods;
