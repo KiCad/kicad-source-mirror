@@ -133,6 +133,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     EDA_PANEINFO    mesg;
     mesg.MessageToolbarPane();
 
+    // Create a wxAuiPaneInfo for the Layers Manager, not derived from the template.
+    // the Layers Manager is floatable, but initially docked at far right
     EDA_PANEINFO    lyrs;
     lyrs.LayersToolbarPane();
     lyrs.MinSize( m_LayersManager->GetBestSize() );

@@ -102,6 +102,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_pcb_text_properties_base.cpp
     dialogs/dialog_pns_settings.cpp
     dialogs/dialog_pns_settings_base.cpp
+    dialogs/dialog_non_copper_zones_properties.cpp
     dialogs/dialog_non_copper_zones_properties_base.cpp
     dialogs/dialog_pad_properties.cpp
     dialogs/dialog_pad_properties_base.cpp
@@ -250,7 +251,6 @@ set( PCBNEW_CLASS_SRCS
     zones_by_polygon_fill_functions.cpp
     zone_filling_algorithm.cpp
     zones_functions_for_undo_redo.cpp
-    zones_non_copper_type_functions.cpp
     zones_polygons_insulated_copper_islands.cpp
     zones_polygons_test_connections.cpp
     zones_test_and_combine_areas.cpp
