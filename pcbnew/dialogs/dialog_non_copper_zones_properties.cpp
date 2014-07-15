@@ -38,6 +38,8 @@
 #include <pcbnew.h>
 #include <zones.h>
 
+#include <wx/imaglist.h>    // needed for wx/listctrl.h, in wxGTK 2.8.12
+
 #include <dialog_non_copper_zones_properties_base.h>
 
 #define LAYER_BITMAP_SIZE_X     20
