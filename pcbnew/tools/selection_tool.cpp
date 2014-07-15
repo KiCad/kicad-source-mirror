@@ -391,7 +391,7 @@ void SELECTION_TOOL::setTransitions()
 
 bool SELECTION_TOOL::CheckLock()
 {
-    if( !m_locked )
+    if( !m_locked || m_editModules )
         return false;
 
     bool containsLocked = false;
