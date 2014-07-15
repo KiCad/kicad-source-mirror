@@ -176,11 +176,16 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    const VECTOR2D& dragOrigin = getView()->GetGAL()->GetGridPoint( evt->DragOrigin() );
+                    VECTOR2D origin;
+
+                    if( evt->IsDrag( BUT_LEFT ) )
+                        origin = getView()->GetGAL()->GetGridPoint( evt->DragOrigin() );
+                    else
+                        origin = getViewControls()->GetCursorPosition();
 
                     // Update dragging offset (distance between cursor and the first dragged item)
                     m_offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
-                                                         wxPoint( dragOrigin.x, dragOrigin.y );
+                                                         wxPoint( origin.x, origin.y );
                 }
 
                 m_dragging = true;
