@@ -201,6 +201,7 @@ public:
     static TOOL_ACTION moduleTextOutlines;
 
     // Miscellaneous
+    static TOOL_ACTION selectionTool;
     static TOOL_ACTION resetCoords;
     static TOOL_ACTION switchCursor;
     static TOOL_ACTION switchUnits;
