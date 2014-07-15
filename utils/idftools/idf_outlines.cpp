@@ -1362,7 +1362,6 @@ bool BOARD_OUTLINE::DelOutline( IDF_OUTLINE* aOutline )
 bool BOARD_OUTLINE::DelOutline( size_t aIndex )
 {
     std::list< IDF_OUTLINE* >::iterator itS = outlines.begin();
-    std::list< IDF_OUTLINE* >::iterator itE = outlines.end();
 
     if( outlines.empty() )
     {
