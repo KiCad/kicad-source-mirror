@@ -253,10 +253,11 @@ void DIALOG_COPPER_ZONE::initDialog()
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
 
     int ctrlWidth = 0;  // Min width for m_LayerSelectionCtrl to show the layers names
+    int imgIdx = 0;
 
     LSET cu_set = LSET::AllCuMask( board->GetCopperLayerCount() );
 
-    for( LSEQ cu_stack = cu_set.UIOrder();  cu_stack;  ++cu_stack )
+    for( LSEQ cu_stack = cu_set.UIOrder();  cu_stack;  ++cu_stack, imgIdx++ )
     {
         LAYER_ID layer = *cu_stack;
 
@@ -271,7 +272,7 @@ void DIALOG_COPPER_ZONE::initDialog()
         imageList->Add( makeLayerBitmap( layerColor ) );
 
         int itemIndex = m_LayerSelectionCtrl->InsertItem(
-                m_LayerSelectionCtrl->GetItemCount(), msg, layer );
+                m_LayerSelectionCtrl->GetItemCount(), msg, imgIdx );
 
         if( m_settings.m_CurrentZone_Layer == layer )
             m_LayerSelectionCtrl->Select( itemIndex );
