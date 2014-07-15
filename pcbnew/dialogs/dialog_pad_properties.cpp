@@ -130,6 +130,7 @@ private:
     bool transferDataToPad( D_PAD* aPad );
 
     // event handlers:
+    void OnResize( wxSizeEvent& event );
 
     void OnPadShapeSelection( wxCommandEvent& event );
     void OnDrillShapeSelected( wxCommandEvent& event );
@@ -180,10 +181,15 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     {
         m_panelShowPadGal->UseColorScheme( m_board->GetColorsSettings() );
         m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
-        m_panelShowPad->Hide();
+#if !wxCHECK_VERSION( 3, 0, 0 )
+        m_panelShowPadGal->SetSize( m_panelShowPad->GetSize() );
+#endif
         m_panelShowPadGal->Show();
+        m_panelShowPad->Hide();
         m_panelShowPadGal->GetView()->Add( m_dummyPad );
         m_panelShowPadGal->StartDrawing();
+
+        Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PAD_PROPERTIES::OnResize ) );
     }
     else
     {
@@ -513,6 +519,13 @@ void DIALOG_PAD_PROPERTIES::initValues()
     setPadLayersList( m_dummyPad->GetLayerSet() );
     OnDrillShapeSelected( cmd_event );
     OnPadShapeSelection( cmd_event );
+}
+
+
+void DIALOG_PAD_PROPERTIES::OnResize( wxSizeEvent& event )
+{
+    redraw();
+    event.Skip();
 }
 
 
