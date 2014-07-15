@@ -932,7 +932,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             updatePreview = true;
         }
 
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( evt->IsCancel() || evt->IsActivate() || evt->IsAction( &COMMON_ACTIONS::layerChanged ) )
         {
             preview.Clear();
             updatePreview = true;
