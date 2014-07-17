@@ -114,6 +114,10 @@ detect_pretty_repos()
         | sed -r  's:.+ "KiCad/(.+)",:\1:'`
 
     #echo "PRETTY_REPOS:$PRETTY_REPOS"
+
+    PRETTY_REPOS=`echo $PRETTY_REPOS | tr " " "\n" | sort`
+
+    #echo "PRETTY_REPOS sorted:$PRETTY_REPOS"
 }
 
 
@@ -226,9 +230,13 @@ if [ $# -eq 1 -a "$1" == "--list-libraries" ]; then
     detect_pretty_repos
 
     # add the "schematic parts & 3D model" kicad-library to total
-    for repo in kicad-library $PRETTY_REPOS; do
+    for repo in $PRETTY_REPOS; do
         echo "$repo"
     done
+
+    echo
+    echo "and the special 'kicad-library' which holds 3D stuff and schematic parts"
+
     exit
 fi
 
