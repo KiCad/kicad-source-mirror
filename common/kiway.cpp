@@ -74,7 +74,7 @@ void KIWAY::player_destroy_handler( wxWindowDestroyEvent& event )
         }
     }
 
-    // event.Skip();  skip to who, the wxApp?  I'm the top window.
+    event.Skip();  // skip to who, the wxApp?  I'm the top window.
 }
 
 
