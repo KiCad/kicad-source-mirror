@@ -252,7 +252,7 @@ private:
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
 
-    wxPaintDC*              clientDC;               ///< Drawing context
+    wxClientDC*             clientDC;               ///< Drawing context
     static wxGLContext*     glContext;              ///< OpenGL context of wxWidgets
     wxWindow*               parentWindow;           ///< Parent window
     wxEvtHandler*           mouseListener;
