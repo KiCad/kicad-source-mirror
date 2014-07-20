@@ -471,14 +471,15 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
             via->LayerPair( &new_hole.m_Hole_Top_Layer, &new_hole.m_Hole_Bottom_Layer );
 
             // LayerPair return params with m_Hole_Bottom_Layer > m_Hole_Top_Layer
-            // (remember top layer = 0 and bottom layer = 31 for through hole vias)
-            if( (new_hole.m_Hole_Top_Layer < aFirstLayer) && (aFirstLayer >= 0) )
-                continue;
+            // Remember: top layer = 0 and bottom layer = 31 for through hole vias
+            // the via should be at least from aFirstLayer to aLastLayer
+            if( (new_hole.m_Hole_Top_Layer > aFirstLayer) && (aFirstLayer >= 0) )
+                continue;   // via above the first layer
 
-            if( (new_hole.m_Hole_Bottom_Layer > aLastLayer) && (aLastLayer >= 0) )
-                continue;
+            if( (new_hole.m_Hole_Bottom_Layer < aLastLayer) && (aLastLayer >= 0) )
+                continue;   // via below the last layer
 
-            if( aExcludeThroughHoles  && (new_hole.m_Hole_Bottom_Layer == B_Cu)
+            if( aExcludeThroughHoles && (new_hole.m_Hole_Bottom_Layer == B_Cu)
                && (new_hole.m_Hole_Top_Layer == F_Cu) )
                 continue;
 
@@ -494,7 +495,9 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
             // Read and analyse pads
             for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
             {
-                if( ! aGenerateNPTH_list && pad->GetAttribute() == PAD_HOLE_NOT_PLATED && ! aMergePTHNPTH )
+                if( ! aGenerateNPTH_list &&
+                    pad->GetAttribute() == PAD_HOLE_NOT_PLATED &&
+                    ! aMergePTHNPTH )
                     continue;
 
                 if( aGenerateNPTH_list && pad->GetAttribute() != PAD_HOLE_NOT_PLATED )
