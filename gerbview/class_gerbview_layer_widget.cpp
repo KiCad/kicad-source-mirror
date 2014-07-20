@@ -186,7 +186,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         rowCount = GetLayerRowCount();
         for( int row=0; row < rowCount; ++row )
         {
-            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
+            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
             int layer = getDecodedId( cb->GetId() );
             bool loc_visible = visible;
 
@@ -317,7 +317,7 @@ void GERBER_LAYER_WIDGET::UpdateLayerIcons()
     int row_count = GetLayerRowCount();
     for( int row = 0; row < row_count ; row++ )
     {
-        wxStaticBitmap* bm = (wxStaticBitmap*) getLayerComp( row, 0 );
+        wxStaticBitmap* bm = (wxStaticBitmap*) getLayerComp( row, COLUMN_ICON_ACTIVE );
         if( bm == NULL)
             continue;
 

@@ -167,7 +167,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         rowCount = GetLayerRowCount();
         for( int row = rowCount-1; row>=0; --row )
         {
-            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
+            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
             LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
 
             if( IsCopperLayer( layer ) )
@@ -180,7 +180,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         // Enable/disable the copper layers visibility:
         for( int row=0;  row<rowCount;  ++row )
         {
-            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
+            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
             LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
 
             if( IsCopperLayer( layer ) )
@@ -264,7 +264,7 @@ void PCB_LAYER_WIDGET::SyncLayerVisibilities()
         // this utilizes more implementation knowledge than ideal, eventually
         // add member ROW getRow() or similar to base LAYER_WIDGET.
 
-        wxWindow* w = getLayerComp( row, 0 );
+        wxWindow* w = getLayerComp( row, COLUMN_ICON_ACTIVE );
 
         LAYER_ID layerId = ToLAYER_ID( getDecodedId( w->GetId() ) );
 
