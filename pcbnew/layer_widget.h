@@ -47,6 +47,7 @@
 #define LYR_COLUMN_COUNT        4           ///< Layer tab column count
 #define RND_COLUMN_COUNT        2           ///< Rendering tab column count
 
+#define COLUMN_ICON_ACTIVE 0
 #define COLUMN_COLORBM 1
 #define COLUMN_COLOR_LYR_CB 2
 #define COLUMN_COLOR_LYRNAME 3
