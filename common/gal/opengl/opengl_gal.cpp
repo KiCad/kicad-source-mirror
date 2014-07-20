@@ -124,7 +124,7 @@ void OPENGL_GAL::BeginDrawing()
 {
     SetCurrent( *glContext );
 
-    clientDC = new wxPaintDC( this );
+    clientDC = new wxClientDC( this );
 
     // Initialize GLEW, FBOs & VBOs
     if( !isGlewInitialized )
