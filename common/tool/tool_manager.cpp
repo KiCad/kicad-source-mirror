@@ -145,7 +145,7 @@ struct TOOL_MANAGER::TOOL_STATE
      */
     void Push()
     {
-        stateStack.push( *this );
+        stateStack.push( new TOOL_STATE( *this ) );
 
         clear();
     }
@@ -162,7 +162,8 @@ struct TOOL_MANAGER::TOOL_STATE
 
         if( !stateStack.empty() )
         {
-            *this = stateStack.top();
+            *this = *stateStack.top();
+            delete stateStack.top();
             stateStack.pop();
 
             return true;
@@ -177,7 +178,7 @@ struct TOOL_MANAGER::TOOL_STATE
 
 private:
     ///> Stack preserving previous states of a TOOL.
-    std::stack<TOOL_STATE> stateStack;
+    std::stack<TOOL_STATE*> stateStack;
 
     ///> Restores the initial state.
     void clear()
