@@ -1061,7 +1061,7 @@
     (pad 8 thru_hole circle (at 1.397 -1.27 90) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 1 /pic_programmer/CTS))
     (pad 9 thru_hole circle (at 4.191 -1.27 90) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS))
-    (model Conn_DBxx/db9_female_pin90deg.wrl
+    (model conn_DBxx/db9_female_pin90deg.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -1137,7 +1137,7 @@
       (net 3 GND))
     (pad 2 thru_hole circle (at 2.54 0 90) (size 2.54 2.54) (drill 1.524) (layers *.Cu *.Mask F.SilkS)
       (net 16 "Net-(D1-Pad1)"))
-    (model Device/bornier_2.wrl
+    (model device/bornier_2.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
