@@ -44,8 +44,8 @@
             <property name="minimum_size">280,480</property>
             <property name="name">DIALOG_PNS_SETTINGS_BASE</property>
             <property name="pos"></property>
-            <property name="size">-1,-1</property>
-            <property name="style">wxDEFAULT_DIALOG_STYLE</property>
+            <property name="size">286,480</property>
+            <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Interactive Router settings</property>
             <property name="tooltip"></property>
@@ -88,7 +88,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="0">
+            <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bMainSizer</property>
                 <property name="orient">wxVERTICAL</property>
