@@ -32,6 +32,7 @@
 #include <kiface_i.h>
 #include <project.h>
 #include <class_drawpanel.h>
+#include <class_draw_panel_gal.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <xnode.h>
@@ -47,6 +48,7 @@
 #include <worksheet_shape_builder.h>
 
 #include <class_board.h>
+#include <class_module.h>
 #include <pcbplot.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -166,7 +168,14 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     case ID_PCB_MASK_CLEARANCE:
         {
             DIALOG_PADS_MASK_CLEARANCE dlg( this );
-            dlg.ShowModal();
+
+            if( dlg.ShowModal() == 1 && IsGalCanvasActive() )
+            {
+                for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
+                    module->ViewUpdate();
+
+                GetGalCanvas()->Refresh();
+            }
         }
         break;
 
