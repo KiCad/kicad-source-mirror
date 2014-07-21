@@ -71,6 +71,7 @@ enum DISPLAY3D_FLG {
     FL_USE_COPPER_THICKNESS,
     FL_SHOW_BOARD_BODY,
     FL_USE_REALISTIC_MODE,
+    FL_USE_MAXQUALITY_IN_REALISTIC_MODE,
     FL_LAST
 };
 
@@ -95,10 +96,10 @@ public:
     double  m_CurrentZpos;                          // temporary storage of current value of Z position,
                                                     // used in some calculation
 private:
-    double  m_LayerZcoord[LAYER_ID_COUNT];          // Z position of each layer (normalized)
-    double  m_CopperThickness;                      // Copper thickness (normalized)
-    double  m_EpoxyThickness;                       // Epoxy thickness (normalized)
-    double  m_NonCopperLayerThickness;              // Non copper layers thickness
+    double  m_layerZcoord[LAYER_ID_COUNT];          // Z position of each layer (normalized)
+    double  m_copperThickness;                      // Copper thickness (normalized)
+    double  m_epoxyThickness;                       // Epoxy thickness (normalized)
+    double  m_nonCopperLayerThickness;              // Non copper layers thickness
     bool    m_drawFlags[FL_LAST];                   // Enable/disable flags (see DISPLAY3D_FLG list)
 
 public: INFO3D_VISU();
@@ -133,7 +134,7 @@ public: INFO3D_VISU();
      */
     int GetLayerZcoordBIU( int aLayerId )
     {
-        return KiROUND( m_LayerZcoord[aLayerId] / m_BiuTo3Dunits );
+        return KiROUND( m_layerZcoord[aLayerId] / m_BiuTo3Dunits );
     }
 
     /**
@@ -147,11 +148,10 @@ public: INFO3D_VISU();
      */
     int GetCopperThicknessBIU() const
     {
-        bool use_thickness = GetFlag( FL_USE_COPPER_THICKNESS )
-//                                    || GetFlag( FL_USE_REALISTIC_MODE )
-                                    ;
+        bool use_thickness = GetFlag( FL_USE_COPPER_THICKNESS );
+
         return use_thickness ?
-            KiROUND( m_CopperThickness / m_BiuTo3Dunits )
+            KiROUND( m_copperThickness / m_BiuTo3Dunits )
             : 0;
     }
 
@@ -161,7 +161,7 @@ public: INFO3D_VISU();
      */
     int GetEpoxyThicknessBIU() const
     {
-        return KiROUND( m_EpoxyThickness / m_BiuTo3Dunits );
+        return KiROUND( m_epoxyThickness / m_BiuTo3Dunits );
     }
 
     /**
@@ -177,7 +177,7 @@ public: INFO3D_VISU();
 //                                    || GetFlag( FL_USE_REALISTIC_MODE )
                                     ;
         return  use_thickness ?
-            KiROUND( m_NonCopperLayerThickness / m_BiuTo3Dunits )
+            KiROUND( m_nonCopperLayerThickness / m_BiuTo3Dunits )
             : 0;
     }
 
@@ -197,6 +197,7 @@ public: INFO3D_VISU();
     }
 
     bool IsRealisticMode() { return GetFlag( FL_USE_REALISTIC_MODE ); }
+    bool HightQualityMode() { return GetFlag( FL_USE_MAXQUALITY_IN_REALISTIC_MODE ); }
 };
 
 extern INFO3D_VISU g_Parm_3D_Visu;

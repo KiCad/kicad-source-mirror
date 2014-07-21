@@ -45,6 +45,7 @@ static const wxChar keyBgColor_Red[] =          wxT( "BgColor_Red" );
 static const wxChar keyBgColor_Green[] =        wxT( "BgColor_Green" );
 static const wxChar keyBgColor_Blue[] =         wxT( "BgColor_Blue" );
 static const wxChar keyShowRealisticMode[] =    wxT( "ShowRealisticMode" );
+static const wxChar keyUseHQinRealisticMode[] = wxT( "UseHQinRealisticMode" );
 static const wxChar keyShowAxis[] =             wxT( "ShowAxis" );
 static const wxChar keyShowGrid[] =             wxT( "ShowGrid3D" );
 static const wxChar keyShowGridSize[] =         wxT( "Grid3DSize" );
@@ -159,6 +160,9 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( keyShowRealisticMode, &tmp, false );
     prms.SetFlag( FL_USE_REALISTIC_MODE, tmp );
 
+    aCfg->Read( keyUseHQinRealisticMode, &tmp, false );
+    prms.SetFlag( FL_USE_MAXQUALITY_IN_REALISTIC_MODE, tmp );
+
     aCfg->Read( keyShowAxis, &tmp, true );
     prms.SetFlag( FL_AXIS, tmp );
 
@@ -210,6 +214,7 @@ void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( keyBgColor_Green, g_Parm_3D_Visu.m_BgColor.m_Green );
     aCfg->Write( keyBgColor_Blue, g_Parm_3D_Visu.m_BgColor.m_Blue );
     aCfg->Write( keyShowRealisticMode, prms.GetFlag( FL_USE_REALISTIC_MODE )  );
+    aCfg->Write( keyUseHQinRealisticMode, prms.GetFlag( FL_USE_MAXQUALITY_IN_REALISTIC_MODE )  );
     aCfg->Write( keyShowAxis, prms.GetFlag( FL_AXIS )  );
     aCfg->Write( keyShowGrid, prms.GetFlag( FL_GRID )  );
     aCfg->Write( keyShowGridSize, prms.m_3D_Grid  );
@@ -360,6 +365,11 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU3D_REALISTIC_MODE:
         g_Parm_3D_Visu.SetFlag( FL_USE_REALISTIC_MODE, isChecked );
+        NewDisplay();
+        return;
+
+    case ID_MENU3D_MAX_QUALITY_FOR_REALISTIC_MODE:
+        g_Parm_3D_Visu.SetFlag( FL_USE_MAXQUALITY_IN_REALISTIC_MODE, isChecked );
         NewDisplay();
         return;
 
