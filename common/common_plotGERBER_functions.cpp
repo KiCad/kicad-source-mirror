@@ -43,6 +43,9 @@ void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     plotScale = 1;              // Plot scale is *always* 1.0
 
     m_IUsPerDecimil = aIusPerDecimil;
+    // gives now a default value to iuPerDeviceUnit (because the units of the caller is now known)
+    // which could be modified later by calling SetGerberCoordinatesFormat()
+    iuPerDeviceUnit = pow( 10.0, m_gerberUnitFmt ) / ( m_IUsPerDecimil * 10000.0 );
 
     // We don't handle the filmbox, and it's more useful to keep the
     // origin at the origin
