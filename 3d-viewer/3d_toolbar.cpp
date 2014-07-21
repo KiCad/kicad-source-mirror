@@ -153,14 +153,22 @@ void EDA_3D_FRAME::CreateMenuBar()
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
 
     AddMenuItem( prefsMenu, ID_MENU3D_REALISTIC_MODE,
-           _( "Realistic Mode" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
+                 _( "Realistic Mode" ),
+                 KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( prefsMenu, ID_MENU3D_MAX_QUALITY_FOR_REALISTIC_MODE,
+                 _( "Max Quality in Realistic Mode" ),
+                 _( "When using max quality, holes are removed from copper zones, "
+                    "but the calculation time is longer" ),
+                 KiBitmap( green_xpm ), wxITEM_CHECK );
+
     prefsMenu->AppendSeparator();
 
     AddMenuItem( prefsMenu, ID_MENU3D_BGCOLOR_SELECTION,
-                 _( "Choose background color" ), KiBitmap( palette_xpm ) );
+                _( "Choose Background Color" ), KiBitmap( palette_xpm ) );
 
     AddMenuItem( prefsMenu, ID_MENU3D_AXIS_ONOFF,
-            _( "Show 3D &Axis" ), KiBitmap( axis3d_front_xpm ), wxITEM_CHECK );
+                 _( "Show 3D &Axis" ), KiBitmap( axis3d_front_xpm ), wxITEM_CHECK );
 
     // Creates grid menu
     wxMenu * gridlistMenu = new wxMenu;
@@ -231,40 +239,43 @@ void EDA_3D_FRAME::SetMenuBarOptionsState()
     wxMenuItem* item;
     // Set the state of toggle menus according to the current display options
     item = menuBar->FindItem( ID_MENU3D_REALISTIC_MODE );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_USE_REALISTIC_MODE ) );
+    item->Check( g_Parm_3D_Visu.IsRealisticMode() );
+
+    item = menuBar->FindItem( ID_MENU3D_MAX_QUALITY_FOR_REALISTIC_MODE );
+    item->Check( g_Parm_3D_Visu.HightQualityMode() );
 
     item = menuBar->FindItem( ID_MENU3D_SHOW_BOARD_BODY );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY ) );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY ) );
 
     item = menuBar->FindItem( ID_MENU3D_USE_COPPER_THICKNESS );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_USE_COPPER_THICKNESS ) );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_USE_COPPER_THICKNESS ) );
 
     item = menuBar->FindItem( ID_MENU3D_MODULE_ONOFF );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_MODULE ) );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_MODULE ) );
 
     item = menuBar->FindItem( ID_MENU3D_ZONE_ONOFF );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_ZONE ) );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_ZONE ) );
 
     item = menuBar->FindItem( ID_MENU3D_AXIS_ONOFF );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_AXIS ) );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_AXIS ) );
 
     item = menuBar->FindItem( ID_MENU3D_ADHESIVE_ONOFF );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_ADHESIVE ) );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_ADHESIVE ) );
 
     item = menuBar->FindItem( ID_MENU3D_SILKSCREEN_ONOFF );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_SILKSCREEN ) );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_SILKSCREEN ) );
 
     item = menuBar->FindItem( ID_MENU3D_SOLDER_MASK_ONOFF );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_SOLDERMASK ) );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_SOLDERMASK ) );
 
     item = menuBar->FindItem( ID_MENU3D_SOLDER_PASTE_ONOFF );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_SOLDERPASTE ) );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_SOLDERPASTE ) );
 
     item = menuBar->FindItem( ID_MENU3D_COMMENTS_ONOFF );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_COMMENTS ) );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_COMMENTS ) );
 
     item = menuBar->FindItem( ID_MENU3D_ECO_ONOFF );
-    item->Check(g_Parm_3D_Visu.GetFlag( FL_ECO ));
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_ECO ));
 }
 
 void EDA_3D_FRAME::SetToolbars()

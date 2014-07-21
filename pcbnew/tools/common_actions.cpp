@@ -208,7 +208,7 @@ TOOL_ACTION COMMON_ACTIONS::layerBottom( "pcbnew.Control.layerBottom",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::layerNext( "pcbnew.Control.layerNext",
-        AS_GLOBAL, '=',
+        AS_GLOBAL, '+',
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::layerPrev( "pcbnew.Control.layerPrev",

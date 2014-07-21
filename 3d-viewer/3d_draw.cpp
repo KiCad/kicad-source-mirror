@@ -188,11 +188,20 @@ static inline void SetGLCopperColor()
     glColor4f( 255.0*lum, 223.0*lum, 0.0*lum, 1.0 );
 }
 
-// Helper function: initialize the color to draw the epoxy layers
-// ( body board and solder mask layers) in realistic mode.
+// Helper function: initialize the color to draw the epoxy
+// body board in realistic mode.
 static inline void SetGLEpoxyColor( double aTransparency = 1.0 )
 {
     // Generates an epoxy color, near board color
+    const double lum = 0.2/255.0;
+    glColor4f( 255.0*lum, 218.0*lum, 110.0*lum, aTransparency );
+}
+
+// Helper function: initialize the color to draw the
+// solder mask layers in realistic mode.
+static inline void SetGLSolderMaskColor( double aTransparency = 1.0 )
+{
+    // Generates a solder mask color
     const double lum = 0.2/255.0;
     glColor4f( 100.0*lum, 255.0*lum, 180.0*lum, aTransparency );
 }
@@ -217,7 +226,7 @@ static inline void SetGLTechLayersColor( LAYER_NUM aLayer )
 
         case B_Mask:
         case F_Mask:
-            SetGLEpoxyColor( 0.7 );
+            SetGLSolderMaskColor( 0.7 );
             break;
 
         default:
@@ -237,6 +246,12 @@ static inline void SetGLTechLayersColor( LAYER_NUM aLayer )
 void EDA_3D_CANVAS::BuildBoard3DView()
 {
     BOARD* pcb = GetBoard();
+
+    // If hightQualityMode is true, holes are correctly removed from copper zones areas.
+    // If hightQualityMode is false, holes are not removed from copper zones areas,
+    // but the calculation time is twice shorter.
+    bool hightQualityMode = g_Parm_3D_Visu.HightQualityMode();
+
     bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
 
     // Number of segments to convert a circle to polygon
@@ -276,7 +291,6 @@ void EDA_3D_CANVAS::BuildBoard3DView()
 
     CPOLYGONS_LIST  currLayerHoles;                 // Contains holes for the current layer
     bool            throughHolesListBuilt = false;  // flag to build the through hole polygon list only once
-    bool            hightQualityMode = false;
 
     LSET            cu_set = LSET::AllCuMask( g_Parm_3D_Visu.m_CopperLayersCount );
 
@@ -520,7 +534,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     BOARD* pcb = GetBoard();
 
     // Number of segments to draw a circle using segments
-    const int       segcountforcircle   = 16;
+    const int       segcountforcircle   = 18;
     double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
     const int       segcountLowQuality  = 12;   // segments to draw a circle with low quality
                                                 // to reduce time calculations
@@ -736,7 +750,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
  */
 void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
 {
-    const int   segcountforcircle   = 16;
+    const int   segcountforcircle   = 18;
     double      correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
     BOARD*      pcb = GetBoard();
 
