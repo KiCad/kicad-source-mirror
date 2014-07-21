@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-15 20:46+0100\n"
-"PO-Revision-Date: 2014-07-15 20:49+0100\n"
+"POT-Creation-Date: 2014-07-21 20:21+0100\n"
+"PO-Revision-Date: 2014-07-21 20:31+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -800,11 +800,11 @@ msgid "The following libraries could not be found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
 #: eeschema/eeschema_config.cpp:183 eeschema/eeschema_config.cpp:249
-#: pcbnew/pcbnew_config.cpp:193
+#: pcbnew/pcbnew_config.cpp:202
 msgid "Read Project File"
 msgstr "Odczytaj plik projektu"
 
-#: eeschema/eeschema_config.cpp:496 pcbnew/pcbnew_config.cpp:278
+#: eeschema/eeschema_config.cpp:496 pcbnew/pcbnew_config.cpp:287
 #: cvpcb/cfg.cpp:91
 msgid "Save Project File"
 msgstr "Zapisz plik projektu"
@@ -1007,7 +1007,7 @@ msgstr "Zapisz i Załaduj"
 msgid "Load Without Saving"
 msgstr "Załaduj bez zapisu"
 
-#: eeschema/files-io.cpp:303 pcbnew/files.cpp:336 common/single_top.cpp:277
+#: eeschema/files-io.cpp:303 pcbnew/files.cpp:336 common/single_top.cpp:276
 msgid "This file is already open."
 msgstr "Ten plik jest już otwarty."
 
@@ -1413,7 +1413,7 @@ msgid "Set pin options"
 msgstr "Ustaw opcje pinu"
 
 #: eeschema/libeditframe.cpp:1054 eeschema/schedit.cpp:539
-#: pcbnew/edit.cpp:1455 pcbnew/modedit.cpp:908
+#: pcbnew/edit.cpp:1455 pcbnew/modedit.cpp:909
 #: pcbnew/tools/drawing_tool.cpp:1430 pcbnew/tools/drawing_tool.cpp:1548
 msgid "Add text"
 msgstr "Dodaj tekst"
@@ -1422,15 +1422,15 @@ msgstr "Dodaj tekst"
 msgid "Add rectangle"
 msgstr "Dodaj prostokąt"
 
-#: eeschema/libeditframe.cpp:1062 pcbnew/modedit.cpp:904
+#: eeschema/libeditframe.cpp:1062 pcbnew/modedit.cpp:905
 msgid "Add circle"
 msgstr "Dodaj okrąg"
 
-#: eeschema/libeditframe.cpp:1066 pcbnew/modedit.cpp:900
+#: eeschema/libeditframe.cpp:1066 pcbnew/modedit.cpp:901
 msgid "Add arc"
 msgstr "Dodaj łuk"
 
-#: eeschema/libeditframe.cpp:1070 pcbnew/modedit.cpp:896
+#: eeschema/libeditframe.cpp:1070 pcbnew/modedit.cpp:897
 msgid "Add line"
 msgstr "Dodaj linię"
 
@@ -1447,7 +1447,7 @@ msgid "Export"
 msgstr "Eksportuj"
 
 #: eeschema/libeditframe.cpp:1096 eeschema/schedit.cpp:575
-#: pcbnew/edit.cpp:1467 pcbnew/modedit.cpp:933
+#: pcbnew/edit.cpp:1467 pcbnew/modedit.cpp:934
 #: eeschema/help_common_strings.h:24
 msgid "Delete item"
 msgstr "Usuń element"
@@ -8200,7 +8200,7 @@ msgstr "Pokaż płytkę w przeglądarce 3D"
 msgid "&Pad"
 msgstr "&Pole lutownicze"
 
-#: pcbnew/menubar_modedit.cpp:237 pcbnew/modedit.cpp:922
+#: pcbnew/menubar_modedit.cpp:237 pcbnew/modedit.cpp:923
 msgid "Add pad"
 msgstr "Dodaj pole lutownicze"
 
@@ -8643,12 +8643,12 @@ msgstr "Ukryj menadżera warstw"
 msgid "Show La&yers Manager"
 msgstr "Pokaż menadżera warstw"
 
-#: pcbnew/menubar_pcbframe.cpp:433 pcbnew/pcbnew_config.cpp:88
+#: pcbnew/menubar_pcbframe.cpp:433 pcbnew/pcbnew_config.cpp:90
 #: pcbnew/dialogs/dialog_general_options.cpp:228
 msgid "Hide Microwave Toolbar"
 msgstr "Schowaj pasek narzędzi mikrofalowych"
 
-#: pcbnew/menubar_pcbframe.cpp:433 pcbnew/pcbnew_config.cpp:88
+#: pcbnew/menubar_pcbframe.cpp:433 pcbnew/pcbnew_config.cpp:90
 #: pcbnew/dialogs/dialog_general_options.cpp:228
 msgid "Show Microwave Toolbar"
 msgstr "Pokaż pasek narzędzi mikrofalowych"
@@ -8837,15 +8837,15 @@ msgstr ""
 "\n"
 "Nie mogę wstawić tego footprintu"
 
-#: pcbnew/modedit.cpp:912
+#: pcbnew/modedit.cpp:913
 msgid "Place anchor"
 msgstr "Dodaj zakotwiczenie"
 
-#: pcbnew/modedit.cpp:916
+#: pcbnew/modedit.cpp:917
 msgid "Set grid origin"
 msgstr "Ustaw punkt bazowy siatki"
 
-#: pcbnew/modedit.cpp:926 pcbnew/tool_modedit.cpp:144
+#: pcbnew/modedit.cpp:927 pcbnew/tool_modedit.cpp:144
 msgid "Pad settings"
 msgstr "Właściwości pól lutowniczych"
 
@@ -9682,19 +9682,19 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbnew_config.cpp:78 pcbnew/dialogs/dialog_general_options.cpp:239
+#: pcbnew/pcbnew_config.cpp:80 pcbnew/dialogs/dialog_general_options.cpp:239
 #: gerbview/events_called_functions.cpp:369 gerbview/menubar.cpp:155
 #: gerbview/menubar.cpp:157 gerbview/options.cpp:64
 msgid "Hide &Layers Manager"
 msgstr "Ukryj menadżera warstw"
 
-#: pcbnew/pcbnew_config.cpp:78 pcbnew/dialogs/dialog_general_options.cpp:239
+#: pcbnew/pcbnew_config.cpp:80 pcbnew/dialogs/dialog_general_options.cpp:239
 #: gerbview/events_called_functions.cpp:369 gerbview/menubar.cpp:157
 #: gerbview/options.cpp:64
 msgid "Show &Layers Manager"
 msgstr "Pokaż menadżera warstw"
 
-#: pcbnew/pcbnew_config.cpp:127
+#: pcbnew/pcbnew_config.cpp:129
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -9705,12 +9705,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbnew_config.cpp:131 pcbnew/pcbnew_config.cpp:153
+#: pcbnew/pcbnew_config.cpp:133 pcbnew/pcbnew_config.cpp:155
 #: cvpcb/cvframe.cpp:495 cvpcb/cvframe.cpp:515
 msgid "File Save Error"
 msgstr "Błąd zapisu pliku"
 
-#: pcbnew/pcbnew_config.cpp:149
+#: pcbnew/pcbnew_config.cpp:151
 #, c-format
 msgid ""
 "Error occurred saving project specific footprint library table:\n"
@@ -9721,17 +9721,17 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbnew_config.cpp:203 pcbnew/pcbnew_config.cpp:475
+#: pcbnew/pcbnew_config.cpp:212 pcbnew/pcbnew_config.cpp:484
 #: gerbview/excellon_read_drill_file.cpp:185
 #, c-format
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
 
-#: pcbnew/pcbnew_config.cpp:417
+#: pcbnew/pcbnew_config.cpp:426
 msgid "Save Macros File"
 msgstr "Zapisz plik makr"
 
-#: pcbnew/pcbnew_config.cpp:465
+#: pcbnew/pcbnew_config.cpp:474
 msgid "Read Macros File"
 msgstr "Odczytaj plik makr"
 
@@ -12252,39 +12252,39 @@ msgstr ""
 "Nie można utworzyć ścieżki względnej. Wolumin docelowy jest różny od tego "
 "gdzie znajduje się plik z płytką!"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:431
-#: pcbnew/dialogs/dialog_gendrill.cpp:533
-#: pcbnew/dialogs/dialog_gendrill.cpp:601
+#: pcbnew/dialogs/dialog_gendrill.cpp:433
+#: pcbnew/dialogs/dialog_gendrill.cpp:534
+#: pcbnew/dialogs/dialog_gendrill.cpp:602
 #: pcbnew/dialogs/dialog_SVG_print.cpp:319
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Nie mogę utworzyć %s ** \n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:438
-#: pcbnew/dialogs/dialog_gendrill.cpp:607
+#: pcbnew/dialogs/dialog_gendrill.cpp:440
+#: pcbnew/dialogs/dialog_gendrill.cpp:608
 #: pcbnew/dialogs/dialog_SVG_print.cpp:313
 #, c-format
 msgid "Plot: %s OK\n"
 msgstr "Rysunek: %s OK\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:513
+#: pcbnew/dialogs/dialog_gendrill.cpp:514
 msgid "Save Drill Report File"
 msgstr "Zapisz plik raportu wierceń"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:538
+#: pcbnew/dialogs/dialog_gendrill.cpp:539
 #, c-format
 msgid "Report file %s created\n"
 msgstr "Plik raportu %s został utworzony\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:556
+#: pcbnew/dialogs/dialog_gendrill.cpp:557
 msgid "HPGL plot files (.plt)|*.plt"
 msgstr "Pliki rysunków HPGL (.plt)|*.plt"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:566
+#: pcbnew/dialogs/dialog_gendrill.cpp:567
 msgid "Gerber files (.pho)|*.pho"
 msgstr "Pliki Gerber (.pho)|*.pho"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:571
+#: pcbnew/dialogs/dialog_gendrill.cpp:572
 msgid "DXF files (.dxf)|*.dxf"
 msgstr "Pliki AutoCAD DXF (.dxf)|*.dxf"
 
@@ -14642,11 +14642,11 @@ msgstr "4.6 (w mm)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:249
 msgid ""
-"Precision of coordinates in Gerber files/\n"
+"Precision of coordinates in Gerber files.\n"
 "Use the highter value if possible."
 msgstr ""
-"Precyzja koordynatów w plikach Gerber/\n"
-"Użyj większej precyzji jeśli to możliwe."
+"Precyzja koordynatów w plikach Gerber.\n"
+"Użyj wyższej precyzji jeśli to możliwe."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:264
 msgid "Pen size"
@@ -16367,7 +16367,7 @@ msgstr "Nie można skopiować obrazu do schowka"
 msgid "Can't save file"
 msgstr "Nie mogę zapisać pliku"
 
-#: 3d-viewer/3d_draw.cpp:269 3d-viewer/3d_draw.cpp:544
+#: 3d-viewer/3d_draw.cpp:284 3d-viewer/3d_draw.cpp:558
 msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
@@ -16452,74 +16452,86 @@ msgid "Realistic Mode"
 msgstr "Tryb realistyczny"
 
 #: 3d-viewer/3d_toolbar.cpp:160
-msgid "Choose background color"
+msgid "Max Quality in Realistic Mode"
+msgstr "Maksymalna jakość w trybie realistycznym"
+
+#: 3d-viewer/3d_toolbar.cpp:161
+msgid ""
+"When using max quality, holes are removed from copper zones, but the "
+"calculation time is longer"
+msgstr ""
+"Gdy używany jest tryb maksymalnej jakości, wyświetlane są również otwory na "
+"strefach wypełnień, jednakże czas kalkulacji obrazu staje się dłuższy."
+
+#: 3d-viewer/3d_toolbar.cpp:168
+msgid "Choose Background Color"
 msgstr "Wybierz kolor tła"
 
-#: 3d-viewer/3d_toolbar.cpp:163
+#: 3d-viewer/3d_toolbar.cpp:171
 msgid "Show 3D &Axis"
 msgstr "Pok&aż osie 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:168
+#: 3d-viewer/3d_toolbar.cpp:176
 msgid "3D Grid"
 msgstr "Trójwymiarowa siatka"
 
-#: 3d-viewer/3d_toolbar.cpp:169
+#: 3d-viewer/3d_toolbar.cpp:177
 msgid "No 3D Grid"
 msgstr "Brak siatki"
 
-#: 3d-viewer/3d_toolbar.cpp:170
+#: 3d-viewer/3d_toolbar.cpp:178
 msgid "3D Grid 10 mm"
 msgstr "Siatka 10mm"
 
-#: 3d-viewer/3d_toolbar.cpp:171
+#: 3d-viewer/3d_toolbar.cpp:179
 msgid "3D Grid 5 mm"
 msgstr "Siatka 5mm"
 
-#: 3d-viewer/3d_toolbar.cpp:172
+#: 3d-viewer/3d_toolbar.cpp:180
 msgid "3D Grid 2.5 mm"
 msgstr "Siatka 2.5mm"
 
-#: 3d-viewer/3d_toolbar.cpp:173
+#: 3d-viewer/3d_toolbar.cpp:181
 msgid "3D Grid 1 mm"
 msgstr "Siatka 1mm"
 
-#: 3d-viewer/3d_toolbar.cpp:189
+#: 3d-viewer/3d_toolbar.cpp:197
 msgid "Show Board Body"
 msgstr "Pokaż ciało płytki"
 
-#: 3d-viewer/3d_toolbar.cpp:192
+#: 3d-viewer/3d_toolbar.cpp:200
 msgid "Show Copper Thickness"
 msgstr "Pokazuj grubość miedzi"
 
-#: 3d-viewer/3d_toolbar.cpp:195
+#: 3d-viewer/3d_toolbar.cpp:203
 msgid "Show 3D F&ootprints"
 msgstr "Pokaż &obudowy 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:198
+#: 3d-viewer/3d_toolbar.cpp:206
 msgid "Show Zone &Filling"
 msgstr "Pokaż stre&fy wypełnień"
 
-#: 3d-viewer/3d_toolbar.cpp:203
+#: 3d-viewer/3d_toolbar.cpp:211
 msgid "Show &Adhesive Layers"
 msgstr "Pokaż w&arstwy kleju"
 
-#: 3d-viewer/3d_toolbar.cpp:206
+#: 3d-viewer/3d_toolbar.cpp:214
 msgid "Show &Silkscreen Layer"
 msgstr "Pokaż warstwy &opisowe"
 
-#: 3d-viewer/3d_toolbar.cpp:209
+#: 3d-viewer/3d_toolbar.cpp:217
 msgid "Show Solder &Mask Layers"
 msgstr "Pokaż warstwy z solder&maską"
 
-#: 3d-viewer/3d_toolbar.cpp:212
+#: 3d-viewer/3d_toolbar.cpp:220
 msgid "Show Solder &Paste Layers"
 msgstr "Pokaż warstwy do nakładania &pasty"
 
-#: 3d-viewer/3d_toolbar.cpp:215
+#: 3d-viewer/3d_toolbar.cpp:223
 msgid "Show &Comments and Drawings Layer"
 msgstr "Pokaż warstwę &komentarzy"
 
-#: 3d-viewer/3d_toolbar.cpp:218
+#: 3d-viewer/3d_toolbar.cpp:226
 msgid "Show &Eco Layers"
 msgstr "Pokaż warstwy &ECO"
 
