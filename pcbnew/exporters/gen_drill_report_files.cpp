@@ -78,6 +78,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         offset  = GetOffset();
         plotter = new GERBER_PLOTTER();
         plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+        plotter->SetGerberCoordinatesFormat( 5 );   // format x.5 unit = mm
         break;
 
     case PLOT_FORMAT_HPGL:    // Scale for HPGL format.
