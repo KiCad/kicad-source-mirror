@@ -276,7 +276,12 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
 
         module->SetFlags( IS_NEW );
         module->SetLink( 0 );
-        module->SetPosition( curspos );
+
+        if( IsGalCanvasActive() )
+            module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
+        else
+            module->SetPosition( curspos );
+
         module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;
 
