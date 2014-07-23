@@ -279,7 +279,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
     if( !EnsureOutputDirectory( &outputDir, boardFilename, &reporter ) )
     {
         wxString msg = wxString::Format(
-                _( "Could not write plot files to folder \"%s\"." ),
+                _( "Could not write plot files to folder '%s'." ),
                 GetChars( outputDir.GetPath() )
                 );
         DisplayError( this, msg );
@@ -302,7 +302,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
 
         BuildPlotFileName( &fn, outputDir.GetPath(), suffix, SVGFileExtension );
 
-        m_printMaskLayer = aOnlyOneFile ? LSET( layer ) : all_selected;
+        m_printMaskLayer = aOnlyOneFile ? all_selected : LSET( layer );
 
         if( m_PrintBoardEdgesCtrl->IsChecked() )
             m_printMaskLayer.set( Edge_Cuts );
@@ -310,13 +310,13 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
         if( CreateSVGFile( fn.GetFullPath() ) )
         {
             m_messagesBox->AppendText(
-                    wxString::Format( _( "Plot: %s OK\n" ), GetChars( fn.GetFullPath() ) )
+                    wxString::Format( _( "Plot: '%s' OK\n" ), GetChars( fn.GetFullPath() ) )
                     );
         }
         else    // Error
         {
             m_messagesBox->AppendText(
-                    wxString::Format( _( "** Unable to create %s **\n" ), GetChars( fn.GetFullPath() ) )
+                    wxString::Format( _( "** Unable to create '%s'**\n" ), GetChars( fn.GetFullPath() ) )
                     );
         }
 
