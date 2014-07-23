@@ -413,6 +413,7 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
     {
         KIGFX::VIEW* view = galCanvas->GetView();
         view->SetLayerVisible( aLayer, isVisible );
+        view->RecacheAllItems( true );
     }
 
     if( isFinal )

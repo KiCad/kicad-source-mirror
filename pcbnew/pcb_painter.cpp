@@ -336,6 +336,11 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     VECTOR2D center( aVia->GetStart() );
     double   radius;
 
+    // Only draw the via if at least one of the layers it crosses is being displayed
+    BOARD*  brd =  aVia->GetBoard( );
+    if( !( brd->GetVisibleLayers() & aVia->GetLayerSet() ).any() )
+        return;
+
     // Choose drawing settings depending on if we are drawing via's pad or hole
     if( aLayer == ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ) )
     {
