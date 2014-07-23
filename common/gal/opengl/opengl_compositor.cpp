@@ -98,7 +98,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 
     if( usedBuffers() >= maxBuffers )
     {
-        DisplayError( NULL, _( "Cannot create more framebuffers. OpenGL rendering "
+        DisplayError( NULL, wxT( "Cannot create more framebuffers. OpenGL rendering "
                         "backend requires at least 3 framebuffers. You may try to update/change "
                         "your graphic drivers." ) );
         return 0;    // Unfortunately we have no more free buffers left
@@ -133,38 +133,38 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
         switch( status )
         {
         case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-            DisplayError( NULL, _( "Cannot create the framebuffer." ) );
+            DisplayError( NULL,wxT( "Cannot create the framebuffer." ) );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-            DisplayError( NULL, _( "The framebuffer attachment points are incomplete." ) );
+            DisplayError( NULL, wxT( "The framebuffer attachment points are incomplete." ) );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-            DisplayError( NULL, _( "The framebuffer does not have at least "
+            DisplayError( NULL, wxT( "The framebuffer does not have at least "
                                    "one image attached to it." ) );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-            DisplayError( NULL, _( "The framebuffer read buffer is incomplete." ) );
+            DisplayError( NULL, wxT( "The framebuffer read buffer is incomplete." ) );
             break;
 
         case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-            DisplayError( NULL, _( "The combination of internal formats of the attached images "
+            DisplayError( NULL, wxT( "The combination of internal formats of the attached images "
                                    "violates an implementation-dependent set of restrictions." ) );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
-            DisplayError( NULL, _( "GL_RENDERBUFFER_SAMPLES is not the same "
+            DisplayError( NULL, wxT( "GL_RENDERBUFFER_SAMPLES is not the same "
                                    "for all attached renderbuffers" ) );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
-            DisplayError( NULL, _( "Framebuffer incomplete layer targets errors." ) );
+            DisplayError( NULL, wxT( "Framebuffer incomplete layer targets errors." ) );
             break;
 
         default:
-            DisplayError( NULL, _( "Cannot create the framebuffer." ) );
+            DisplayError( NULL, wxT( "Cannot create the framebuffer." ) );
             break;
         }
 
