@@ -109,7 +109,9 @@ int PCBNEW_CONTROL::ZoomFitScreen( TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
-    BOX2I boardBBox = getModel<BOARD>()->ViewBBox();
+    BOARD* board = getModel<BOARD>();
+    board->ComputeBoundingBox();
+    BOX2I boardBBox = board->ViewBBox();
 
     if( boardBBox.GetSize().x == 0 || boardBBox.GetSize().y == 0 )
     {

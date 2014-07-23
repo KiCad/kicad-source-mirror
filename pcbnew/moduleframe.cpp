@@ -696,6 +696,6 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
 void FOOTPRINT_EDIT_FRAME::updateView()
 {
     static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
-    m_toolManager->RunAction( COMMON_ACTIONS::zoomFitScreen );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    m_toolManager->RunAction( COMMON_ACTIONS::zoomFitScreen, true );
 }
