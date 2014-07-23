@@ -230,7 +230,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerGbrOpt->Add( m_useGerberExtensions, 0, wxALL, 2 );
 	
 	m_useGerberAttributes = new wxCheckBox( this, wxID_ANY, _("Include extended attributes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_useGerberAttributes->SetToolTip( _("Include extended attributes for non-image data in the Gerber file") );
+	m_useGerberAttributes->SetToolTip( _("Include extended attributes (X2 Gerber files format) in the Gerber file") );
 	
 	bSizerGbrOpt->Add( m_useGerberAttributes, 0, wxALL, 2 );
 	
