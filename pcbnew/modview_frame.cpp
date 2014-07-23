@@ -884,24 +884,10 @@ void FOOTPRINT_VIEWER_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
 void FOOTPRINT_VIEWER_FRAME::updateView()
 {
-    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
-
-    m_Pcb->ComputeBoundingBox( false );
-    EDA_RECT boardBbox = m_Pcb->GetBoundingBox();
-    BOX2D bbox;
-
-    // Autozoom
-    if( boardBbox.GetSize().x > 0 && boardBbox.GetSize().y > 0 )
+    if( IsGalCanvasActive() )
     {
-        bbox.SetOrigin( VECTOR2D( boardBbox.GetOrigin() ) );
-        bbox.SetSize( VECTOR2D( boardBbox.GetSize() ) );
+        static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+        m_toolManager->RunAction( COMMON_ACTIONS::zoomFitScreen, true );
     }
-    else
-    {
-        // Default empty view
-        bbox.SetOrigin( VECTOR2D( -1000, -1000 ) );
-        bbox.SetSize( VECTOR2D( 2000, 2000 ) );
-    }
-
-    GetGalCanvas()->GetView()->SetViewport( bbox );
 }

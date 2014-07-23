@@ -55,8 +55,8 @@ void CAIRO_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
 {
     clean();
 
-    assert( m_width > 0 );
-    assert( m_height > 0 );
+    assert( aWidth > 0 );
+    assert( aHeight > 0 );
 
     m_width  = aWidth;
     m_height = aHeight;
