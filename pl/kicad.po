@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-21 20:21+0100\n"
-"PO-Revision-Date: 2014-07-21 20:31+0100\n"
+"POT-Creation-Date: 2014-07-23 19:37+0100\n"
+"PO-Revision-Date: 2014-07-23 19:47+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -714,7 +714,7 @@ msgid "Component"
 msgstr "Symbol"
 
 #: eeschema/database.cpp:118 eeschema/sch_component.cpp:1475
-#: pcbnew/librairi.cpp:77 pcbnew/loadcmp.cpp:416
+#: pcbnew/loadcmp.cpp:421
 msgid "Library"
 msgstr "Biblioteka"
 
@@ -1274,8 +1274,8 @@ msgstr "Symbol zasilania"
 #: eeschema/libedit.cpp:510 eeschema/lib_draw_item.cpp:64
 #: eeschema/lib_pin.cpp:1935 eeschema/sch_text.cpp:794
 #: pcbnew/class_drawsegment.cpp:323 pcbnew/class_marker_pcb.cpp:97
-#: pcbnew/class_text_mod.cpp:352 pcbnew/class_track.cpp:1104
-#: pcbnew/class_track.cpp:1131 pcbnew/class_track.cpp:1180
+#: pcbnew/class_text_mod.cpp:352 pcbnew/class_track.cpp:1103
+#: pcbnew/class_track.cpp:1130 pcbnew/class_track.cpp:1179
 #: pcbnew/class_zone.cpp:605 pcbnew/dialogs/dialog_layers_setup.cpp:346
 #: gerbview/class_gerber_draw_item.cpp:548
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
@@ -1288,7 +1288,7 @@ msgstr "Typ"
 #: eeschema/viewlibs.cpp:310
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
-#: pcbnew/librairi.cpp:743
+#: pcbnew/librairi.cpp:770
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:37
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:207
 #: common/dialog_about/AboutDialog_main.cpp:127
@@ -3532,7 +3532,7 @@ msgstr "Etykieta Hierarchiczna %s"
 msgid "No component libraries are loaded."
 msgstr "Nie są załadowane żadne biblioteki."
 
-#: eeschema/selpart.cpp:42 pcbnew/librairi.cpp:80
+#: eeschema/selpart.cpp:42 pcbnew/librairi.cpp:81
 msgid "Select Library"
 msgstr "Wybór biblioteki"
 
@@ -4055,7 +4055,7 @@ msgstr "Dostępne wtyczki:"
 #: eeschema/dialogs/dialog_bom_base.cpp:45
 #: eeschema/dialogs/dialog_netlist_base.cpp:113
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:28
-#: pcbnew/librairi.cpp:595 pcbnew/modules.cpp:68
+#: pcbnew/librairi.cpp:622 pcbnew/modules.cpp:68
 #: common/dialogs/dialog_get_component_base.cpp:22
 msgid "Name:"
 msgstr "Nazwa:"
@@ -6320,7 +6320,7 @@ msgstr "Segment"
 #: pcbnew/class_drawsegment.cpp:354 pcbnew/class_module.cpp:553
 #: pcbnew/class_pad.cpp:626 pcbnew/class_pcb_layer_widget.cpp:209
 #: pcbnew/class_pcb_text.cpp:139 pcbnew/class_text_mod.cpp:362
-#: pcbnew/class_track.cpp:1114 pcbnew/class_track.cpp:1141
+#: pcbnew/class_track.cpp:1113 pcbnew/class_track.cpp:1140
 #: pcbnew/class_zone.cpp:657 pcbnew/layer_widget.cpp:545
 #: gerbview/class_gerbview_layer_widget.cpp:88
 #: gerbview/dialogs/dialog_print_using_printer.cpp:140
@@ -6329,7 +6329,7 @@ msgid "Layer"
 msgstr "Warstwy sygnałowe"
 
 #: pcbnew/class_drawsegment.cpp:356 pcbnew/class_edge_mod.cpp:294
-#: pcbnew/class_track.cpp:1119 pcbnew/class_track.cpp:1146
+#: pcbnew/class_track.cpp:1118 pcbnew/class_track.cpp:1145
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:327
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
 msgid "Width"
@@ -6463,7 +6463,7 @@ msgstr "Elementy graficzne"
 
 #: pcbnew/class_edge_mod.cpp:285 pcbnew/class_module.cpp:601
 #: pcbnew/class_pad.cpp:610 pcbnew/class_text_mod.cpp:346
-#: pcbnew/loadcmp.cpp:415 pcbnew/loadcmp.cpp:479
+#: pcbnew/loadcmp.cpp:420 pcbnew/loadcmp.cpp:484
 msgid "Module"
 msgstr "Footprint"
 
@@ -6569,7 +6569,7 @@ msgstr "Długość Sieci:"
 msgid "On Board"
 msgstr "Na płytce"
 
-#: pcbnew/class_netinfo_item.cpp:143 pcbnew/class_track.cpp:1015
+#: pcbnew/class_netinfo_item.cpp:143 pcbnew/class_track.cpp:1014
 msgid "In Package"
 msgstr "Wewnątrz obudowy"
 
@@ -6589,7 +6589,7 @@ msgstr "Rozmiar poziomy"
 msgid "V Size"
 msgstr "Rozmiar pionowy"
 
-#: pcbnew/class_pad.cpp:641 pcbnew/class_track.cpp:1208
+#: pcbnew/class_pad.cpp:641 pcbnew/class_track.cpp:1207
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:278
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid "Drill"
@@ -6646,7 +6646,7 @@ msgstr "Pad na %s z %s"
 msgid "Pad %s on %s of %s"
 msgstr "Pad %s na %s z %s"
 
-#: pcbnew/class_pcb_layer_widget.cpp:61 pcbnew/class_track.cpp:1176
+#: pcbnew/class_pcb_layer_widget.cpp:61 pcbnew/class_track.cpp:1175
 msgid "Through Via"
 msgstr "Przelotka na wylot"
 
@@ -6662,7 +6662,7 @@ msgstr "Przelotka ślepa/zagrzebana"
 msgid "Show blind or buried vias"
 msgstr "Pokaż przelotki ślepe lub zagrzebane"
 
-#: pcbnew/class_pcb_layer_widget.cpp:63 pcbnew/class_track.cpp:1166
+#: pcbnew/class_pcb_layer_widget.cpp:63 pcbnew/class_track.cpp:1165
 msgid "Micro Via"
 msgstr "Mikroprzelotka"
 
@@ -6954,87 +6954,87 @@ msgstr "Mikroprzelotka %s, sieć [%s] (%d) na warstwach %s/%s"
 msgid "Via %s net [%s] (%d) on layers %s/%s"
 msgstr "Przelotka %s sieć [%s] (%d) na warstwach %s/%s"
 
-#: pcbnew/class_track.cpp:1007 pcbnew/editrack.cpp:815
+#: pcbnew/class_track.cpp:1006 pcbnew/editrack.cpp:815
 msgid "Track Len"
 msgstr "Długość ścieżki"
 
-#: pcbnew/class_track.cpp:1012 pcbnew/editrack.cpp:819
+#: pcbnew/class_track.cpp:1011 pcbnew/editrack.cpp:819
 msgid "Full Len"
 msgstr "Pełna długość"
 
-#: pcbnew/class_track.cpp:1023
+#: pcbnew/class_track.cpp:1022
 msgid "NC Name"
 msgstr "Nazwa sieci dla NC"
 
-#: pcbnew/class_track.cpp:1024
+#: pcbnew/class_track.cpp:1023
 msgid "NC Clearance"
 msgstr "Prześwit dla NC"
 
-#: pcbnew/class_track.cpp:1027
+#: pcbnew/class_track.cpp:1026
 msgid "NC Width"
 msgstr "Szerokość dla NC"
 
-#: pcbnew/class_track.cpp:1030
+#: pcbnew/class_track.cpp:1029
 msgid "NC Via Size"
 msgstr "Rozmiar przelotki dla NC"
 
-#: pcbnew/class_track.cpp:1033
+#: pcbnew/class_track.cpp:1032
 msgid "NC Via Drill"
 msgstr "Otwór przelotki dla NC"
 
-#: pcbnew/class_track.cpp:1053 pcbnew/class_zone.cpp:640
+#: pcbnew/class_track.cpp:1052 pcbnew/class_zone.cpp:640
 #: pcbnew/zones_by_polygon_fill_functions.cpp:111
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:46
 msgid "NetName"
 msgstr "Nazwa sieci"
 
-#: pcbnew/class_track.cpp:1057 pcbnew/class_zone.cpp:645
+#: pcbnew/class_track.cpp:1056 pcbnew/class_zone.cpp:645
 msgid "NetCode"
 msgstr "Kod sieci"
 
-#: pcbnew/class_track.cpp:1096
+#: pcbnew/class_track.cpp:1095
 msgid "Status"
 msgstr "Status"
 
-#: pcbnew/class_track.cpp:1104
+#: pcbnew/class_track.cpp:1103
 msgid "Track"
 msgstr "Ścieżka"
 
-#: pcbnew/class_track.cpp:1123 pcbnew/class_track.cpp:1150
+#: pcbnew/class_track.cpp:1122 pcbnew/class_track.cpp:1149
 msgid "Segment Length"
 msgstr "Długość segmentu"
 
-#: pcbnew/class_track.cpp:1131
+#: pcbnew/class_track.cpp:1130
 msgid "Zone "
 msgstr "Strefa "
 
-#: pcbnew/class_track.cpp:1171
+#: pcbnew/class_track.cpp:1170
 msgid "Blind/Buried Via"
 msgstr "Przelotka ślepa/zagrzebana"
 
-#: pcbnew/class_track.cpp:1195 pcbnew/dialogs/dialog_layers_setup_base.cpp:60
+#: pcbnew/class_track.cpp:1194 pcbnew/dialogs/dialog_layers_setup_base.cpp:60
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_plot_base.cpp:71
 msgid "Layers"
 msgstr "Warstwy"
 
-#: pcbnew/class_track.cpp:1201
+#: pcbnew/class_track.cpp:1200
 msgid "Diam"
 msgstr "Średnica"
 
-#: pcbnew/class_track.cpp:1212
+#: pcbnew/class_track.cpp:1211
 msgid "(Specific)"
 msgstr "(Określona)"
 
-#: pcbnew/class_track.cpp:1214
+#: pcbnew/class_track.cpp:1213
 msgid "(Default)"
 msgstr "(Domyślny)"
 
-#: pcbnew/class_track.cpp:1523
+#: pcbnew/class_track.cpp:1522
 msgid "Not found"
 msgstr "Nie znaleziono"
 
-#: pcbnew/class_track.cpp:1531
+#: pcbnew/class_track.cpp:1530
 #, c-format
 msgid "Track %s, net [%s] (%d) on layer %s, length: %s"
 msgstr "Ścieżka %s, sieć [%s] (%d) na warstwie %s, długość: %s"
@@ -7311,7 +7311,7 @@ msgstr "Dodaj element pozycjonujący warstwy"
 msgid "Adjust zero"
 msgstr "Ustaw zero"
 
-#: pcbnew/edit.cpp:1439 pcbnew/tools/pcbnew_control.cpp:451
+#: pcbnew/edit.cpp:1439 pcbnew/tools/pcbnew_control.cpp:453
 msgid "Adjust grid origin"
 msgstr "Dostosuj punkt bazowy siatki"
 
@@ -7559,7 +7559,7 @@ msgstr "Token \"Element\" zawiera %d parametrów."
 
 #: pcbnew/gpcb_plugin.cpp:962 pcbnew/kicad_plugin.cpp:1865
 #: pcbnew/kicad_plugin.cpp:1930 pcbnew/legacy_plugin.cpp:4607
-#: pcbnew/legacy_plugin.cpp:4652 pcbnew/librairi.cpp:476
+#: pcbnew/legacy_plugin.cpp:4652 pcbnew/librairi.cpp:491
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "Biblioteka '%s' jest oznaczona jako tylko do odczytu"
@@ -7864,44 +7864,45 @@ msgstr "biblioteka '%s' już istnieje, nie można stworzyć nowej"
 msgid "library '%s' cannot be deleted"
 msgstr "biblioteka '%s' nie może zostać usunięta"
 
-#: pcbnew/librairi.cpp:58
+#: pcbnew/librairi.cpp:60
 #, c-format
 msgid "Library '%s' exists, OK to replace ?"
 msgstr "Biblioteka '%s' już istnieje. Czy mam ją zastąpić?"
 
-#: pcbnew/librairi.cpp:59
-msgid "Create New Library"
-msgstr "Utwórz nową bibliotekę"
+#: pcbnew/librairi.cpp:61
+msgid "Create New Library Folder (the .pretty folder is the library)"
+msgstr ""
+"Tworzenie nowego folderu bibliotecznego (folder .pretty jest taką biblioteką)"
 
-#: pcbnew/librairi.cpp:60
+#: pcbnew/librairi.cpp:62
 #, c-format
 msgid "OK to delete module %s in library '%s'"
 msgstr "Czy usunąć footprint %s z biblioteki '%s'?"
 
-#: pcbnew/librairi.cpp:61
+#: pcbnew/librairi.cpp:63
 msgid "Import Footprint"
 msgstr "Importuj footprint"
 
-#: pcbnew/librairi.cpp:62
+#: pcbnew/librairi.cpp:64
 #, c-format
 msgid "File '%s' not found"
 msgstr "Nie znaleziono pliku '%s'"
 
-#: pcbnew/librairi.cpp:63
+#: pcbnew/librairi.cpp:65
 msgid "Not a footprint file"
 msgstr "To nie jest plik z footprintem"
 
-#: pcbnew/librairi.cpp:64
+#: pcbnew/librairi.cpp:66
 #, c-format
 msgid "Unable to find or load footprint %s from lib path '%s'"
 msgstr "Nie mogę znaleźć lub załadować footprintu %s ze ścieżki bibliotek '%s'"
 
-#: pcbnew/librairi.cpp:65
+#: pcbnew/librairi.cpp:67
 #, c-format
 msgid "Unable to find or load footprint from path '%s'"
 msgstr "Nie mogę znaleźć lub załadować footprintu ze ścieżki '%s'"
 
-#: pcbnew/librairi.cpp:66
+#: pcbnew/librairi.cpp:68
 #, c-format
 msgid ""
 "The footprint library '%s' could not be found in any of the search paths."
@@ -7909,59 +7910,82 @@ msgstr ""
 "Nie można odnaleźć biblioteki footprintów '%s' w żadnej ze ścieżek "
 "wyszukiwania."
 
-#: pcbnew/librairi.cpp:67
+#: pcbnew/librairi.cpp:69
 #, c-format
 msgid "Library '%s' is read only, not writable"
 msgstr "Biblioteka '%s' jest oznaczona jako 'Tylko do odczytu'"
 
-#: pcbnew/librairi.cpp:69
+#: pcbnew/librairi.cpp:71
 msgid "Export Footprint"
 msgstr "Eksportuj footprint"
 
-#: pcbnew/librairi.cpp:70
+#: pcbnew/librairi.cpp:72
 msgid "Save Footprint"
 msgstr "Zapisz footprint"
 
-#: pcbnew/librairi.cpp:71
+#: pcbnew/librairi.cpp:73
 msgid "Enter footprint name:"
 msgstr "Wpisz nazwę footprintu:"
 
-#: pcbnew/librairi.cpp:72
+#: pcbnew/librairi.cpp:74
 #, c-format
 msgid "Footprint exported to file '%s'"
 msgstr "Footprint wyeksportowano do pliku '%s'"
 
-#: pcbnew/librairi.cpp:73
+#: pcbnew/librairi.cpp:75
 #, c-format
 msgid "Footprint %s deleted from library '%s'"
 msgstr "Footprint %s usunięty z biblioteki '%s'"
 
-#: pcbnew/librairi.cpp:74
+#: pcbnew/librairi.cpp:76
 msgid "New Footprint"
 msgstr "Nowy footprint"
 
-#: pcbnew/librairi.cpp:76
+#: pcbnew/librairi.cpp:78
 msgid "No footprints to archive!"
 msgstr "Brak footprintów do archiwizacji!"
 
-#: pcbnew/librairi.cpp:78
+#: pcbnew/librairi.cpp:79
 #, c-format
 msgid "Footprint %s already exists in library '%s'"
 msgstr "Footprint %s już istnieje w bibliotece '%s'"
 
-#: pcbnew/librairi.cpp:79
+#: pcbnew/librairi.cpp:80
 msgid "No footprint name defined."
 msgstr "Nie zdefiniowana nazwa footprintu."
 
-#: pcbnew/librairi.cpp:83
-msgid "KiCad foot print export files (*.emp)|*.emp"
-msgstr "Pliki eksportowe footprintów programu KiCad (*.emp)|*.emp"
-
 #: pcbnew/librairi.cpp:84
+msgid ""
+"Writing/modifying legacy libraries (.mod files) is not allowed\n"
+"Please save the current library to the new .pretty format\n"
+"and update your footprint lib table\n"
+"to save your footprint (a .kicad_mod file) in the .pretty library folder"
+msgstr ""
+"Zapisywanie/modyfikacje bibliotek starszego typu (pliki .mod) nie jest "
+"dostępne\n"
+"Proszę zapisać bieżącą bibliotekę w nowszym formacie .pretty\n"
+"oraz zaktualizować swoją tabelę bibliotek\n"
+"by zapisać footprint (plik .kicad_mod) w katalogu biblioteki .pretty"
+
+#: pcbnew/librairi.cpp:90
+msgid ""
+"Modifying legacy libraries (.mod files) is not allowed\n"
+"Please save the current library under the new .pretty format\n"
+"before deleting a footprint"
+msgstr ""
+"Modyfikacja plików bibliotek starszego typu (pliki .mod) nie jest dostępna\n"
+"Proszę zapisać bieżącą bibliotekę w nowym formacie .pretty\n"
+"przed usunięciem footprintu."
+
+#: pcbnew/librairi.cpp:94
+msgid "Legacy foot print export files (*.emp)|*.emp"
+msgstr "Pliki eksportu footprintów programu KiCad (*.emp)|*.emp"
+
+#: pcbnew/librairi.cpp:95
 msgid "GPcb foot print files (*)|*"
 msgstr "Pliki footprintów GPcb (*)|*"
 
-#: pcbnew/librairi.cpp:610
+#: pcbnew/librairi.cpp:637
 #, c-format
 msgid ""
 "Error:\n"
@@ -7972,17 +7996,17 @@ msgstr ""
 "Znaleziono jeden z nieprawidłowych znaków '%s'\n"
 "w '%s'"
 
-#: pcbnew/librairi.cpp:671
+#: pcbnew/librairi.cpp:698
 #, c-format
 msgid "Component [%s] replaced in '%s'"
 msgstr "Symbol [%s] zastąpiony przez '%s'"
 
-#: pcbnew/librairi.cpp:672
+#: pcbnew/librairi.cpp:699
 #, c-format
 msgid "Component [%s] added in  '%s'"
 msgstr "Symbol [%s] dodany do '%s'"
 
-#: pcbnew/librairi.cpp:742 pcbnew/dialogs/dialog_fp_lib_table.cpp:201
+#: pcbnew/librairi.cpp:769 pcbnew/dialogs/dialog_fp_lib_table.cpp:201
 msgid "Nickname"
 msgstr "Nazwa skrótowa"
 
@@ -7990,7 +8014,7 @@ msgstr "Nazwa skrótowa"
 msgid "Load Module"
 msgstr "Załaduj footprint"
 
-#: pcbnew/loadcmp.cpp:365
+#: pcbnew/loadcmp.cpp:370
 #, c-format
 msgid ""
 "No footprints could be read from library file(s):\n"
@@ -8005,20 +8029,20 @@ msgstr ""
 "w dowolnej ze ścieżek przeszukiwań. Sprawdź czy konfiguracja jest poprawna "
 "by program mógł wyszukiwać biblioteki footprintów."
 
-#: pcbnew/loadcmp.cpp:418 pcbnew/loadcmp.cpp:475
+#: pcbnew/loadcmp.cpp:423 pcbnew/loadcmp.cpp:480
 #, c-format
 msgid "Modules [%d items]"
 msgstr "Footprinty [%d pozycji]"
 
-#: pcbnew/loadcmp.cpp:435
+#: pcbnew/loadcmp.cpp:440
 msgid "No footprint found."
 msgstr "Nie znaleziono footprintów."
 
-#: pcbnew/loadcmp.cpp:458 cvpcb/cvframe.cpp:674
+#: pcbnew/loadcmp.cpp:463 cvpcb/cvframe.cpp:674
 msgid "Description: "
 msgstr "Opis:"
 
-#: pcbnew/loadcmp.cpp:459
+#: pcbnew/loadcmp.cpp:464
 msgid ""
 "\n"
 "Key words: "
@@ -8026,7 +8050,7 @@ msgstr ""
 "\n"
 "Słowa kluczowe:"
 
-#: pcbnew/loadcmp.cpp:546
+#: pcbnew/loadcmp.cpp:551
 #, c-format
 msgid "Footprint library '%s' saved as '%s'."
 msgstr "Bibliotekę '%s' zapisano jako '%s'."
@@ -12255,14 +12279,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:433
 #: pcbnew/dialogs/dialog_gendrill.cpp:534
 #: pcbnew/dialogs/dialog_gendrill.cpp:602
-#: pcbnew/dialogs/dialog_SVG_print.cpp:319
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Nie mogę utworzyć %s ** \n"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:440
 #: pcbnew/dialogs/dialog_gendrill.cpp:608
-#: pcbnew/dialogs/dialog_SVG_print.cpp:313
 #, c-format
 msgid "Plot: %s OK\n"
 msgstr "Rysunek: %s OK\n"
@@ -14425,7 +14447,7 @@ msgstr ""
 "Prawidłowa wartość korekcji musi zawierać się w granicach\n"
 "[%+f; %+f] (%s) dla bieżących reguł projektowych!\n"
 
-#: pcbnew/dialogs/dialog_plot.cpp:720 pcbnew/dialogs/dialog_SVG_print.cpp:282
+#: pcbnew/dialogs/dialog_plot.cpp:720
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
 msgstr "Nie mogę zapisać plików z rysunkami w folderze \"%s\"."
@@ -14621,8 +14643,9 @@ msgid "Include extended attributes"
 msgstr "Dołącz atrybuty z listy rozszerzonej"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:233
-msgid "Include extended attributes for non-image data in the Gerber file"
-msgstr "Używa nowych poleceń z listy rozszerzonych atrybutów w plikach Gerber."
+msgid "Include extended attributes (X2 Gerber files format) in the Gerber file"
+msgstr ""
+"Użyj rozszerzonych atrybutów (pliki w formacie X2 Gerber) w pliku Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
 msgid "Subtract soldermask from silkscreen"
@@ -14973,6 +14996,18 @@ msgstr "Pojedyncza strona"
 msgid "Page Print"
 msgstr "Wydruk strony"
 
+#: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:19
+msgid ""
+"The footprint library is a folder with a name ending by .pretty\n"
+"Footprints are .kicad_mod files inside this folder."
+msgstr ""
+"Biblioteka fooprintów jest folderem z nazwą zakończoną przez .pretty\n"
+"Footprinty to pliki .kicad_mod wewnątrz tego folderu."
+
+#: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:30
+msgid "Library (.pretty folder)"
+msgstr "Biblioteka (folder .pretty)"
+
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:23
 msgid "User Defined Grid"
 msgstr "Siatka użytkownika"
@@ -15000,6 +15035,21 @@ msgstr "Siatka 1:"
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:120
 msgid "Grid 2:"
 msgstr "Siatka 2:"
+
+#: pcbnew/dialogs/dialog_SVG_print.cpp:282
+#, c-format
+msgid "Could not write plot files to folder '%s'."
+msgstr "Nie mogę zapisać plików z rysunkami w folderze '%s'."
+
+#: pcbnew/dialogs/dialog_SVG_print.cpp:313
+#, c-format
+msgid "Plot: '%s' OK\n"
+msgstr "Rysunek: '%s' OK\n"
+
+#: pcbnew/dialogs/dialog_SVG_print.cpp:319
+#, c-format
+msgid "** Unable to create '%s'**\n"
+msgstr "** Nie mogę utworzyć '%s' ** \n"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:28
 msgid ""
@@ -15313,7 +15363,7 @@ msgstr "Skopiowano pozycji: %d"
 msgid "Invalid clipboard contents"
 msgstr "Niepoprawna zawartość schowka"
 
-#: pcbnew/tools/pcbnew_control.cpp:531 pcbnew/tools/pcbnew_control.cpp:540
+#: pcbnew/tools/pcbnew_control.cpp:533 pcbnew/tools/pcbnew_control.cpp:542
 msgid "Not implemented yet."
 msgstr "Obecnie jeszcze nie działa."
 
@@ -17598,53 +17648,6 @@ msgstr "Informacja o kompilacji"
 msgid "Lib Version Info"
 msgstr "Informacja o wersji biblioteki"
 
-#: common/gal/opengl/opengl_compositor.cpp:101
-msgid ""
-"Cannot create more framebuffers. OpenGL rendering backend requires at least "
-"3 framebuffers. You may try to update/change your graphic drivers."
-msgstr ""
-"Nie można utworzyć więcej buforów ramki. Rendering OpenGL wymaga "
-"przynajmniej 3 buforów.\n"
-"Można spróbować uaktualnić/zmienić sterowniki graficzne by rozwiązać ten "
-"problem."
-
-#: common/gal/opengl/opengl_compositor.cpp:136
-#: common/gal/opengl/opengl_compositor.cpp:167
-msgid "Cannot create the framebuffer."
-msgstr "Nie mogę utworzyć bufora ramki."
-
-#: common/gal/opengl/opengl_compositor.cpp:140
-msgid "The framebuffer attachment points are incomplete."
-msgstr "Punkty zaczepienia bufora ramki są niekompletne."
-
-#: common/gal/opengl/opengl_compositor.cpp:144
-msgid "The framebuffer does not have at least one image attached to it."
-msgstr ""
-"Bufor ramki nie posiada przynajmniej jednego zaczepionego do niego obrazu."
-
-#: common/gal/opengl/opengl_compositor.cpp:149
-msgid "The framebuffer read buffer is incomplete."
-msgstr "Bufor odczytu bufora ramki jest niekompletny."
-
-#: common/gal/opengl/opengl_compositor.cpp:153
-msgid ""
-"The combination of internal formats of the attached images violates an "
-"implementation-dependent set of restrictions."
-msgstr ""
-"Kombinacja wewnętrznych formatów załączonych obrazów narusza zestaw "
-"restrykcji zależnch od ich implementacji."
-
-#: common/gal/opengl/opengl_compositor.cpp:158
-msgid "GL_RENDERBUFFER_SAMPLES is not the same for all attached renderbuffers"
-msgstr ""
-"GL_RENDERBUFFER_SAMPLES nie jest taki sam dla wszystkich zaczepionych "
-"buforów renderingu "
-
-#: common/gal/opengl/opengl_compositor.cpp:163
-msgid "Framebuffer incomplete layer targets errors."
-msgstr ""
-"Błędy bufora ramki w związku z niekompletnymi danymi o docelowej warstwie."
-
 #: common/page_layout/page_layout_reader.cpp:818
 #, c-format
 msgid "The file <%s> was not fully read"
@@ -19732,6 +19735,10 @@ msgstr "Właściwości pola lutowniczego"
 msgid "Interactive Router settings"
 msgstr "Ustawienia interaktywnego routera"
 
+#: pcbnew/dialogs/dialog_select_pretty_lib_base.h:53
+msgid "Select Footprint Library Folder"
+msgstr "Wybierz folder biblioteki footprintów"
+
 #: pcbnew/dialogs/dialog_set_grid_base.h:70
 msgid "Grid Properties"
 msgstr "Właściwości siatki"
@@ -19808,6 +19815,48 @@ msgstr "Kalkulator PCB"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nowy element"
+
+#~ msgid "Create New Library"
+#~ msgstr "Utwórz nową bibliotekę"
+
+#~ msgid ""
+#~ "Cannot create more framebuffers. OpenGL rendering backend requires at "
+#~ "least 3 framebuffers. You may try to update/change your graphic drivers."
+#~ msgstr ""
+#~ "Nie można utworzyć więcej buforów ramki. Rendering OpenGL wymaga "
+#~ "przynajmniej 3 buforów.\n"
+#~ "Można spróbować uaktualnić/zmienić sterowniki graficzne by rozwiązać ten "
+#~ "problem."
+
+#~ msgid "Cannot create the framebuffer."
+#~ msgstr "Nie mogę utworzyć bufora ramki."
+
+#~ msgid "The framebuffer attachment points are incomplete."
+#~ msgstr "Punkty zaczepienia bufora ramki są niekompletne."
+
+#~ msgid "The framebuffer does not have at least one image attached to it."
+#~ msgstr ""
+#~ "Bufor ramki nie posiada przynajmniej jednego zaczepionego do niego obrazu."
+
+#~ msgid "The framebuffer read buffer is incomplete."
+#~ msgstr "Bufor odczytu bufora ramki jest niekompletny."
+
+#~ msgid ""
+#~ "The combination of internal formats of the attached images violates an "
+#~ "implementation-dependent set of restrictions."
+#~ msgstr ""
+#~ "Kombinacja wewnętrznych formatów załączonych obrazów narusza zestaw "
+#~ "restrykcji zależnch od ich implementacji."
+
+#~ msgid ""
+#~ "GL_RENDERBUFFER_SAMPLES is not the same for all attached renderbuffers"
+#~ msgstr ""
+#~ "GL_RENDERBUFFER_SAMPLES nie jest taki sam dla wszystkich zaczepionych "
+#~ "buforów renderingu "
+
+#~ msgid "Framebuffer incomplete layer targets errors."
+#~ msgstr ""
+#~ "Błędy bufora ramki w związku z niekompletnymi danymi o docelowej warstwie."
 
 #~ msgid "(Deselect)"
 #~ msgstr "(Odznacz)"
