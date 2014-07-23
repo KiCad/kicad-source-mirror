@@ -118,6 +118,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_mask_clearance_base.cpp
     dialogs/dialog_SVG_print.cpp
     dialogs/dialog_SVG_print_base.cpp
+    dialogs/dialog_select_pretty_lib.cpp
+    dialogs/dialog_select_pretty_lib_base.cpp
     dialogs/dialog_set_grid.cpp
     dialogs/dialog_set_grid_base.cpp
     dialogs/dialog_target_properties_base.cpp

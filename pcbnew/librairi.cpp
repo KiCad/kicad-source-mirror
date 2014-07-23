@@ -52,11 +52,13 @@
 #include <kicad_plugin.h>
 #include <legacy_plugin.h>
 
+#include <dialog_select_pretty_lib.h>
+
 
 // unique, "file local" translations:
 
 #define FMT_OK_OVERWRITE    _( "Library '%s' exists, OK to replace ?" )
-#define FMT_CREATE_LIB      _( "Create New Library" )
+#define FMT_CREATE_LIB      _( "Create New Library Folder (the .pretty Library is the folder)" )
 #define FMT_OK_DELETE       _( "OK to delete module %s in library '%s'" )
 #define FMT_IMPORT_MODULE   _( "Import Footprint" )
 #define FMT_FILE_NOT_FOUND  _( "File '%s' not found" )
@@ -74,21 +76,26 @@
 #define FMT_MOD_CREATE      _( "New Footprint" )
 
 #define FMT_NO_MODULES      _( "No footprints to archive!" )
-#define FMT_LIBRARY         _( "Library" )                                      // window title
 #define FMT_MOD_EXISTS      _( "Footprint %s already exists in library '%s'" )
 #define FMT_NO_REF_ABORTED  _( "No footprint name defined." )
 #define FMT_SELECT_LIB      _( "Select Library" )
 
+static const wxString INFO_LEGACY_LIB_WARN_EDIT(
+        _(  "Writing/modifying legacy libraries (.mod files) is not allowed\n"\
+            "Please save the current library to the new .pretty format\n"\
+            "and update your footprint lib table\n"\
+            "to save your footprint (a .kicad_mod file) in the .pretty library folder" ) );
 
-static const wxString ModExportFileWildcard( _( "KiCad foot print export files (*.emp)|*.emp" ) );
+static const wxString INFO_LEGACY_LIB_WARN_DELETE(
+        _(  "Modifying legacy libraries (.mod files) is not allowed\n"\
+            "Please save the current library under the new .pretty format\n"\
+            "before deleting a footprint" ) );
+
+static const wxString ModLegacyExportFileWildcard( _( "Legacy foot print export files (*.emp)|*.emp" ) );
 static const wxString ModImportFileWildcard( _( "GPcb foot print files (*)|*" ) );
 
 
-#define BACKUP_EXT                 wxT( "bak" )
-#define FILETMP_EXT                wxT( "$$$" )
 #define EXPORT_IMPORT_LASTPATH_KEY wxT( "import_last_path" )
-
-const wxString        ModExportFileExtension( wxT( "emp" ) );
 
 
 MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
@@ -107,7 +114,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     wxString wildCard;
 
     wildCard << wxGetTranslation( KiCadFootprintLibFileWildcard ) << wxChar( '|' )
-             << wxGetTranslation( ModExportFileWildcard ) << wxChar( '|' )
+             << wxGetTranslation( ModLegacyExportFileWildcard ) << wxChar( '|' )
              << wxGetTranslation( ModImportFileWildcard ) << wxChar( '|' )
              << wxGetTranslation( GedaPcbFootprintLibFileWildcard );
 
@@ -349,12 +356,18 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     DisplayInfoMessage( this, msg );
 }
 
-
 bool FOOTPRINT_EDIT_FRAME::SaveCurrentModule( const wxString* aLibPath )
 {
     wxString            libPath = aLibPath ? *aLibPath : getLibPath();
 
     IO_MGR::PCB_FILE_T  piType = IO_MGR::GuessPluginTypeFromLibPath( libPath );
+
+    // Legacy libraries are readable, but writing legacy format is not allowed
+    if( piType == IO_MGR::LEGACY )
+    {
+        DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_EDIT );
+        return false;
+    }
 
     try
     {
@@ -370,7 +383,6 @@ bool FOOTPRINT_EDIT_FRAME::SaveCurrentModule( const wxString* aLibPath )
     return true;
 }
 
-
 wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 {
     wxFileName      fn;
@@ -383,19 +395,14 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
         fn.SetPath( path );
     }
 
-    wxString    wildcard;
+    // Kicad cannot write legacy format libraries, only .pretty new format
+    // because the legacy format cannot handle current features.
+    // The lib is actually a directory
+    wxString wildcard = wxGetTranslation( KiCadFootprintLibPathWildcard );
 
-//    wildcard << wxGetTranslation( LegacyFootprintLibPathWildcard ) << wxChar( '|' )
-//             << wxGetTranslation( KiCadFootprintLibPathWildcard );
-    wildcard << wxGetTranslation( KiCadFootprintLibPathWildcard ) << wxChar( '|' )
-             << wxGetTranslation( LegacyFootprintLibPathWildcard );
-
-    // prompt user for libPath and PLUGIN (library) type
-    wxFileDialog dlg( this, FMT_CREATE_LIB, fn.GetPath(), wxEmptyString,
-                      wildcard, wxFD_SAVE
-                      // | wxFD_OVERWRITE_PROMPT overwrite is tested below
-                      // after file extension has been added.
-                      );
+    // prompt user for libPath
+//    wxDirDialog dlg( this, FMT_CREATE_LIB, fn.GetPath(), wxDD_DEFAULT_STYLE  );
+    DIALOG_SELECT_PRETTY_LIB dlg( this );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return wxEmptyString;
@@ -408,17 +415,10 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
     }
 
     // wildcard's filter index has legacy in position 0.
-    IO_MGR::PCB_FILE_T  piType = ( dlg.GetFilterIndex() == 1 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
+    IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD;
 
     // wxFileDialog does not supply nor enforce the file extension, add it here.
-    if( piType == IO_MGR::LEGACY )
-    {
-        fn.SetExt( LegacyFootprintLibPathExtension );
-    }
-    else
-    {
-        fn.SetExt( KiCadFootprintLibPathExtension );
-    }
+    fn.SetExt( KiCadFootprintLibPathExtension );
 
     wxString libPath = fn.GetFullPath();
 
@@ -473,6 +473,17 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 {
     wxString    nickname = GetCurrentLib();
+
+    // Legacy libraries are readable, but modifying legacy format is not allowed
+    // So prompt the user if he try to delete a footprint from a legacy lib
+    wxString    libfullname = Prj().PcbFootprintLibs()->FindRow(nickname)->GetFullURI();
+    IO_MGR::PCB_FILE_T  piType = IO_MGR::GuessPluginTypeFromLibPath( libfullname );
+
+    if( piType == IO_MGR::LEGACY )
+    {
+        DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_DELETE );
+        return false;
+    }
 
     if( !Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname ) )
     {
@@ -590,6 +601,18 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
         return false;
 
     SetMsgPanel( aModule );
+
+
+    // Legacy libraries are readable, but modifying legacy format is not allowed
+    // So prompt the user if he try to add/replace a footprint in a legacy lib
+    wxString    libfullname = Prj().PcbFootprintLibs()->FindRow( aLibrary )->GetFullURI();
+    IO_MGR::PCB_FILE_T  piType = IO_MGR::GuessPluginTypeFromLibPath( libfullname );
+
+    if( piType == IO_MGR::LEGACY )
+    {
+        DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_EDIT );
+        return false;
+    }
 
     // Ask what to use as the footprint name in the library
     wxString footprintName = aModule->GetFPID().GetFootprintName();
