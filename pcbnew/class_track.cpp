@@ -393,17 +393,12 @@ LSET VIA::GetLayerSet() const
 
     // VIA_BLIND_BURIED or VIA_MICRVIA:
 
-    LAYER_ID bottom_layer, top_layer;
-
-    // LayerPair() knows how layers are stored
-    LayerPair( &top_layer, &bottom_layer );
-
     LSET layermask;
 
-    wxASSERT( top_layer <= bottom_layer );
+    wxASSERT( m_Layer <= m_BottomLayer );
 
     // LAYER_IDs are numbered from front to back, this is top to bottom.
-    for( LAYER_NUM id = top_layer;  id <= bottom_layer;  ++id )
+    for( LAYER_NUM id = m_Layer;  id <= m_BottomLayer;  ++id )
     {
         layermask.set( id );
     }
@@ -780,11 +775,15 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    BOARD * brd =  GetBoard( );
-    EDA_COLOR_T color = brd->GetVisibleElementColor(VIAS_VISIBLE + GetViaType());
+    BOARD * brd =  GetBoard();
+    EDA_COLOR_T color = brd->GetVisibleElementColor( VIAS_VISIBLE + GetViaType() );
 
     if( brd->IsElementVisible( PCB_VISIBLE(VIAS_VISIBLE + GetViaType()) ) == false
         && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
+        return;
+
+    // Only draw the via if at least one of the layers it crosses is being displayed
+    if( !( brd->GetVisibleLayers() & GetLayerSet() ).any() )
         return;
 
     if( DisplayOpt.ContrastModeDisplay )
