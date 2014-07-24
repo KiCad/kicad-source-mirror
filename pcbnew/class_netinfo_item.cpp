@@ -84,8 +84,8 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     wxString  txt;
     MODULE*   module;
     D_PAD*    pad;
-    double    lengthnet = 0;        // This  is the lenght of tracks on pcb
-    double    lengthPadToDie = 0;   // this is the lenght of internal ICs connections
+    double    lengthnet = 0.0;      // This  is the lenght of tracks on pcb
+    double    lengthPadToDie = 0.0; // this is the lenght of internal ICs connections
 
     aList.push_back( MSG_PANEL_ITEM( _( "Net Name" ), GetNetname(), RED ) );
 
@@ -131,15 +131,15 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Vias" ), txt, BLUE ) );
 
     // Displays the full net length (tracks on pcb + internal ICs connections ):
-    txt = ::CoordinateToString( lengthnet + lengthPadToDie );
+    txt = ::LengthDoubleToString( lengthnet + lengthPadToDie );
     aList.push_back( MSG_PANEL_ITEM( _( "Net Length:" ), txt, RED ) );
 
     // Displays the net length of tracks only:
-    txt = ::CoordinateToString( lengthnet );
+    txt = ::LengthDoubleToString( lengthnet );
     aList.push_back( MSG_PANEL_ITEM( _( "On Board" ), txt, RED ) );
 
     // Displays the net length of internal ICs connections (wires inside ICs):
-    txt = ::CoordinateToString( lengthPadToDie );
+    txt = ::LengthDoubleToString( lengthPadToDie );
     aList.push_back( MSG_PANEL_ITEM( _( "In Package" ), txt, RED ) );
 }
 
