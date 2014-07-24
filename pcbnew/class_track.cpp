@@ -1002,7 +1002,7 @@ void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         double trackLen = 0;
         double lenPadToDie = 0;
         board->MarkTrace( this, NULL, &trackLen, &lenPadToDie, false );
-        msg = ::CoordinateToString( trackLen );
+        msg = ::LengthDoubleToString( trackLen );
         aList.push_back( MSG_PANEL_ITEM( _( "Track Len" ), msg, DARKCYAN ) );
 
         if( lenPadToDie != 0 )

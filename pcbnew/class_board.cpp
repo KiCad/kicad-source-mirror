@@ -1878,10 +1878,10 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
     }
 
     if( aTraceLength )
-        *aTraceLength = KiROUND( full_len );
+        *aTraceLength = full_len;
 
     if( aPadToDieLength )
-        *aPadToDieLength = KiROUND( lenPadToDie );
+        *aPadToDieLength = lenPadToDie;
 
     if( aCount )
         *aCount = NbSegmBusy;
