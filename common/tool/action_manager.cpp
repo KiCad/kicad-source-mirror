@@ -58,6 +58,15 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
     m_actionNameIndex[aAction->m_name] = aAction;
     m_actionIdIndex[aAction->m_id] = aAction;
 
+#ifndef NDEBUG
+    // Check if there are two global actions assigned to the same hotkey
+    if( aAction->GetScope() == AS_GLOBAL )
+    {
+        BOOST_FOREACH( const TOOL_ACTION* action, m_actionHotKeys[aAction->m_currentHotKey] )
+            assert( action->GetScope() != AS_GLOBAL );
+    }
+#endif /* not NDEBUG */
+
     if( aAction->HasHotKey() )
         m_actionHotKeys[aAction->m_currentHotKey].push_back( aAction );
 }

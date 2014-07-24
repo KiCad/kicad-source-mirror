@@ -314,7 +314,7 @@ TOOL_ACTION COMMON_ACTIONS::moduleTextOutlines( "pcbnew.ModuleEditor.textOutline
 
 // Miscellaneous
 TOOL_ACTION COMMON_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
-        AS_GLOBAL, ' ',
+        AS_GLOBAL, 0,
         "", "", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
