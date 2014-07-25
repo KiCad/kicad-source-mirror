@@ -89,6 +89,7 @@ static const wxString INFO_LEGACY_LIB_WARN_EDIT(
 static const wxString INFO_LEGACY_LIB_WARN_DELETE(
         _(  "Modifying legacy libraries (.mod files) is not allowed\n"\
             "Please save the current library under the new .pretty format\n"\
+            "and update your footprint lib table\n"\
             "before deleting a footprint" ) );
 
 static const wxString ModLegacyExportFileWildcard( _( "Legacy foot print export files (*.emp)|*.emp" ) );

@@ -79,6 +79,8 @@ void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     // The CTM is set to 1 user unit per decimil
     iuPerDeviceUnit = 1.0 / aIusPerDecimil;
 
+    SetDefaultLineWidth( 100 / iuPerDeviceUnit );  // arbitrary default
+
     /* The paper size in this engined is handled page by page
        Look in the StartPage function */
 }
@@ -511,7 +513,6 @@ void PDF_PLOTTER::StartPage()
     paperSize = pageInfo.GetSizeMils();
     paperSize.x *= 10.0 / iuPerDeviceUnit;
     paperSize.y *= 10.0 / iuPerDeviceUnit;
-    SetDefaultLineWidth( 100 / iuPerDeviceUnit );  // arbitrary default
 
     // Open the content stream; the page object will go later
     pageStreamHandle = startPdfStream();
