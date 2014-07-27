@@ -91,6 +91,7 @@ PNS_VIA* PNS_VIA::Clone ( ) const
     v->m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
     v->m_rank = m_rank;
     v->m_marker = m_marker;
+    v->m_viaType = m_viaType;
 
     return v;
 }

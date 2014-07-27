@@ -24,6 +24,8 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_circle.h>
 
+#include "../class_track.h"
+
 #include "pns_item.h"
 
 class PNS_NODE;
@@ -36,7 +38,7 @@ public:
     {}
 
     PNS_VIA( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers,
-             int aDiameter, int aDrill, int aNet = -1 ) :
+             int aDiameter, int aDrill, int aNet = -1, VIATYPE_T aViaType = VIA_THROUGH ) :
         PNS_ITEM( VIA )
     {
         SetNet( aNet );
@@ -45,6 +47,7 @@ public:
         m_diameter = aDiameter;
         m_drill = aDrill;
         m_shape = SHAPE_CIRCLE( aPos, aDiameter / 2 );
+        m_viaType = aViaType;
     }
 
 
@@ -60,6 +63,7 @@ public:
         m_rank = aB.m_rank;
         m_owner = aB.m_owner;
         m_drill = aB.m_drill;
+        m_viaType = aB.m_viaType;
     }
 
     const VECTOR2I& Pos() const
@@ -71,6 +75,16 @@ public:
     {
         m_pos = aPos;
         m_shape.SetCenter( aPos );
+    }
+
+    VIATYPE_T ViaType() const
+    {
+        return m_viaType;
+    }
+
+    void SetViaType(VIATYPE_T aViaType)
+    {
+        m_viaType = aViaType;
     }
 
     int Diameter() const
@@ -124,6 +138,7 @@ private:
     int m_drill;
     VECTOR2I m_pos;
     SHAPE_CIRCLE m_shape;
+    VIATYPE_T m_viaType;
 };
 
 #endif
