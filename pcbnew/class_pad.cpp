@@ -965,6 +965,11 @@ unsigned int D_PAD::ViewGetLOD( int aLayer ) const
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
     {
+        // Pad sizes can be zero briefly when someone is typing a number like "0.5" in the pad properties dialog.
+        // Fail gracefully if this happens.
+        if( (m_Size.x == 0) && (m_Size.y == 0) )
+            return UINT_MAX;
+
         return ( 100000000 / std::max( m_Size.x, m_Size.y ) );
     }
 
