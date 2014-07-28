@@ -358,7 +358,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     msg.Printf( _( "Ready\nWorking dir: '%s'\n" ), GetChars( wxGetCwd() ) );
     PrintMsg( msg );
 
-    LoadProjectFile( wxEmptyString, false );
+    LoadProjectFile( wxEmptyString, true );
 
     // Clear (if needed) the current active library in libedit because it could be
     // removed from memory

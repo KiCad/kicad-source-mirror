@@ -95,7 +95,7 @@ void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
     int nl = aNestLevel;
 
     aOut->Print( nl, "(ref %s ",      aOut->Quotew( m_reference ).c_str() );
-    aOut->Print( 0, "(fpid %s)\n",    m_fpid.Format().c_str() );
+    aOut->Print( 0, "(fpid %s)\n",    aOut->Quotew( m_fpid.Format() ).c_str() );
 
     if( ! ( aCtl & CTL_OMIT_EXTRA ) )
     {

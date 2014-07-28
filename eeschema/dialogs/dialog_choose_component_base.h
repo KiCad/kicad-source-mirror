@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 22 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -10,6 +10,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 class DIALOG_SHIM;
 
 #include "dialog_shim.h"
@@ -42,9 +43,9 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 		wxTreeCtrl* m_libraryComponentTree;
 		wxPanel* m_componentView;
 		wxTextCtrl* m_componentDetails;
-		wxStdDialogButtonSizer* m_button;
-		wxButton* m_buttonOK;
-		wxButton* m_buttonCancel;
+		wxStdDialogButtonSizer* m_stdButtons;
+		wxButton* m_stdButtonsOK;
+		wxButton* m_stdButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInterceptSearchBoxKey( wxKeyEvent& event ) { event.Skip(); }

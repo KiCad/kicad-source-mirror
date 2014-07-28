@@ -394,7 +394,7 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
         STRING_FORMATTER sf;
 
         m_netlist.FormatBackAnnotation( &sf );
-
+wxMessageBox(sf.GetString());
         Kiway().ExpressMail( FRAME_SCH, MAIL_BACKANNOTATE_FOOTPRINTS, sf.GetString() );
     }
 
