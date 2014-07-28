@@ -796,13 +796,16 @@ void DIALOG_PAD_PROPERTIES::redraw()
 
         BOX2I bbox = m_dummyPad->ViewBBox();
 
-        // Autozoom
-        m_panelShowPadGal->GetView()->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
+        if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
+        {
+            // Autozoom
+            m_panelShowPadGal->GetView()->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
 
-        // Add a margin
-        m_panelShowPadGal->GetView()->SetScale( m_panelShowPadGal->GetView()->GetScale() * 0.7 );
+            // Add a margin
+            m_panelShowPadGal->GetView()->SetScale( m_panelShowPadGal->GetView()->GetScale() * 0.7 );
 
-        m_panelShowPadGal->Refresh();
+            m_panelShowPadGal->Refresh();
+        }
     }
     else
     {
