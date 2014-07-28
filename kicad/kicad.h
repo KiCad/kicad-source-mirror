@@ -259,7 +259,6 @@ private:
     LAUNCHER_PANEL*     m_Launcher;
     wxTextCtrl*         m_MessagesBox;
     wxAuiToolBar*       m_VToolBar;             // Vertical toolbar (not used)
-    wxString            m_project_file_name;
 
     int m_leftWinWidth;
 
