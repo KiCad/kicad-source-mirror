@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 22 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -13,60 +13,54 @@ DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wx
 {
 	this->SetSizeHints( wxSize( 450,100 ), wxDefaultSize );
 	
-	wxBoxSizer* bSizer1;
-	bSizer1 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerMain;
+	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* bSearchSizer;
 	bSearchSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_searchLabel = new wxStaticText( this, wxID_ANY, wxT("Search"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_searchLabel = new wxStaticText( this, wxID_ANY, _("Filter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_searchLabel->Wrap( -1 );
-	bSearchSizer->Add( m_searchLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSearchSizer->Add( m_searchLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_searchBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	bSearchSizer->Add( m_searchBox, 1, wxALL, 5 );
+	bSearchSizer->Add( m_searchBox, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bSizer1->Add( bSearchSizer, 0, wxEXPAND, 5 );
+	bSizerMain->Add( bSearchSizer, 0, wxEXPAND, 5 );
 	
 	m_libraryComponentTree = new wxTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE|wxTR_HIDE_ROOT );
 	m_libraryComponentTree->SetMinSize( wxSize( -1,50 ) );
 	
-	bSizer1->Add( m_libraryComponentTree, 1, wxALL|wxEXPAND, 5 );
+	bSizerMain->Add( m_libraryComponentTree, 1, wxALL|wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerView;
+	bSizerView = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_componentView = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER );
 	m_componentView->SetMinSize( wxSize( 150,150 ) );
 	
-	bSizer3->Add( m_componentView, 4, wxEXPAND | wxALL, 5 );
+	bSizerView->Add( m_componentView, 4, wxEXPAND | wxALL, 5 );
 	
 	m_componentDetails = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxTE_MULTILINE );
 	m_componentDetails->SetMinSize( wxSize( -1,100 ) );
 	
-	bSizer3->Add( m_componentDetails, 3, wxALL|wxEXPAND, 5 );
+	bSizerView->Add( m_componentDetails, 3, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer1->Add( bSizer3, 1, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerView, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxVERTICAL );
+	m_stdButtons = new wxStdDialogButtonSizer();
+	m_stdButtonsOK = new wxButton( this, wxID_OK );
+	m_stdButtons->AddButton( m_stdButtonsOK );
+	m_stdButtonsCancel = new wxButton( this, wxID_CANCEL );
+	m_stdButtons->AddButton( m_stdButtonsCancel );
+	m_stdButtons->Realize();
 	
-	m_button = new wxStdDialogButtonSizer();
-	m_buttonOK = new wxButton( this, wxID_OK );
-	m_button->AddButton( m_buttonOK );
-	m_buttonCancel = new wxButton( this, wxID_CANCEL );
-	m_button->AddButton( m_buttonCancel );
-	m_button->Realize();
-	
-	bSizer5->Add( m_button, 0, wxALL|wxEXPAND, 5 );
+	bSizerMain->Add( m_stdButtons, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer1->Add( bSizer5, 0, wxALIGN_RIGHT, 5 );
-	
-	
-	this->SetSizer( bSizer1 );
+	this->SetSizer( bSizerMain );
 	this->Layout();
 	
 	this->Centre( wxBOTH );

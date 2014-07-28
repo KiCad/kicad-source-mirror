@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="11" />
+    <FileVersion major="1" minor="13" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -14,7 +14,7 @@
         <property name="file">dialog_choose_component_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="internationalize">0</property>
+        <property name="internationalize">1</property>
         <property name="name">dialog_choose_component_base</property>
         <property name="namespace"></property>
         <property name="path">.</property>
@@ -90,7 +90,7 @@
             <event name="OnUpdateUI"></event>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
-                <property name="name">bSizer1</property>
+                <property name="name">bSizerMain</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="0">
@@ -104,7 +104,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticText" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -134,7 +134,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Search</property>
+                                <property name="label">Filter:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -187,7 +187,7 @@
                         </object>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">1</property>
                             <object class="wxTextCtrl" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -386,7 +386,7 @@
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
-                        <property name="name">bSizer3</property>
+                        <property name="name">bSizerView</property>
                         <property name="orient">wxHORIZONTAL</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
@@ -562,41 +562,30 @@
                         </object>
                     </object>
                 </object>
-                <object class="sizeritem" expanded="1">
+                <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_RIGHT</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxBoxSizer" expanded="1">
+                    <object class="wxStdDialogButtonSizer" expanded="0">
+                        <property name="Apply">0</property>
+                        <property name="Cancel">1</property>
+                        <property name="ContextHelp">0</property>
+                        <property name="Help">0</property>
+                        <property name="No">0</property>
+                        <property name="OK">1</property>
+                        <property name="Save">0</property>
+                        <property name="Yes">0</property>
                         <property name="minimum_size"></property>
-                        <property name="name">bSizer5</property>
-                        <property name="orient">wxVERTICAL</property>
-                        <property name="permission">none</property>
-                        <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxALL|wxEXPAND</property>
-                            <property name="proportion">0</property>
-                            <object class="wxStdDialogButtonSizer" expanded="0">
-                                <property name="Apply">0</property>
-                                <property name="Cancel">1</property>
-                                <property name="ContextHelp">0</property>
-                                <property name="Help">0</property>
-                                <property name="No">0</property>
-                                <property name="OK">1</property>
-                                <property name="Save">0</property>
-                                <property name="Yes">0</property>
-                                <property name="minimum_size"></property>
-                                <property name="name">m_button</property>
-                                <property name="permission">protected</property>
-                                <event name="OnApplyButtonClick"></event>
-                                <event name="OnCancelButtonClick"></event>
-                                <event name="OnContextHelpButtonClick"></event>
-                                <event name="OnHelpButtonClick"></event>
-                                <event name="OnNoButtonClick"></event>
-                                <event name="OnOKButtonClick"></event>
-                                <event name="OnSaveButtonClick"></event>
-                                <event name="OnYesButtonClick"></event>
-                            </object>
-                        </object>
+                        <property name="name">m_stdButtons</property>
+                        <property name="permission">protected</property>
+                        <event name="OnApplyButtonClick"></event>
+                        <event name="OnCancelButtonClick"></event>
+                        <event name="OnContextHelpButtonClick"></event>
+                        <event name="OnHelpButtonClick"></event>
+                        <event name="OnNoButtonClick"></event>
+                        <event name="OnOKButtonClick"></event>
+                        <event name="OnSaveButtonClick"></event>
+                        <event name="OnYesButtonClick"></event>
                     </object>
                 </object>
             </object>

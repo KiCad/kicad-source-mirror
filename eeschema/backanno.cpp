@@ -70,13 +70,23 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
 #endif
 
         CPTREE& back_anno = doc.get_child( "back_annotation" );
+        wxString footprint;
 
         for( PTREE::const_iterator ref = back_anno.begin();  ref != back_anno.end();  ++ref )
         {
             wxASSERT( ref->first == "ref" );
 
             wxString reference = (UTF8&) ref->second.front().first;
-            wxString footprint = (UTF8&) ref->second.get_child( "fpid" ).front().first;
+
+            // Ensure the "fpid" node contains a footprint name,
+            // and get it if exists
+            if( ref->second.get_child( "fpid" ).size() )
+            {
+                wxString tmp = (UTF8&) ref->second.get_child( "fpid" ).front().first;
+                footprint = tmp;
+            }
+            else
+                footprint.Empty();
 
             DBG( printf( "%s: ref:%s  fpid:%s\n", __func__, TO_UTF8( reference ), TO_UTF8( footprint ) ); )
 
