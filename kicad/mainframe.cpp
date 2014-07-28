@@ -127,16 +127,19 @@ wxConfigBase* KICAD_MANAGER_FRAME::config()
 
 void KICAD_MANAGER_FRAME::SetProjectFileName( const wxString& aFullProjectProFileName )
 {
-    m_project_file_name = aFullProjectProFileName;
+    // ensure file name is absolute:
+    wxFileName fn( aFullProjectProFileName );
 
-    wxASSERT( wxFileName( m_project_file_name ).IsAbsolute() ||
-              wxFileName( m_project_file_name ).GetName() == NAMELESS_PROJECT  wxT( ".pro" ) );
+    if( !fn.IsAbsolute() )
+        fn.MakeAbsolute();
+
+    Prj().SetProjectFullName( fn.GetFullPath() );
 }
 
 
 const wxString KICAD_MANAGER_FRAME::GetProjectFileName()
 {
-    return m_project_file_name;
+    return  Prj().GetProjectFullName();
 }
 
 
@@ -287,7 +290,7 @@ void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName
 
 void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 {
-    wxFileName fn( m_project_file_name );
+    wxFileName fn( GetProjectFileName() );
 
     fn.SetExt( SchematicFileExtension );
 
@@ -339,7 +342,7 @@ void KICAD_MANAGER_FRAME::OnRunPageLayoutEditor( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
 {
-    wxFileName fn( m_project_file_name );
+    wxFileName fn( GetProjectFileName() );
 
     fn.SetExt( NetlistFileExtension );
 
