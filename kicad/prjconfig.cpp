@@ -182,8 +182,6 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 {
     wxString    title;
 
-    // this is still a pr, will work on it tomorrow.
-
     ClearMsg();
 
     if( event.GetId() != wxID_ANY )
@@ -210,7 +208,12 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
         if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
+        DBG( printf( "%s: wxFileDialog::GetPath=%s\n", __func__, TO_UTF8( dlg.GetPath() ) );)
+
         wxFileName pro( dlg.GetPath() );
+
+        if( !pro.IsAbsolute() )
+            pro.MakeAbsolute();
 
         pro.SetExt( ProjectFileExtension );
 
