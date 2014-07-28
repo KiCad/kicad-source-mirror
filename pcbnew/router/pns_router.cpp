@@ -227,12 +227,15 @@ PNS_ITEM* PNS_ROUTER::syncTrack( TRACK* aTrack )
 
 PNS_ITEM* PNS_ROUTER::syncVia( VIA* aVia )
 {
+    LAYER_ID top, bottom;
+    aVia->LayerPair( &top, &bottom );
     PNS_VIA* v = new PNS_VIA(
             aVia->GetPosition(),
-            PNS_LAYERSET( 0, MAX_CU_LAYERS - 1 ),
+            PNS_LAYERSET( top, bottom ),
             aVia->GetWidth(),
             aVia->GetDrillValue(),
-            aVia->GetNetCode() );
+            aVia->GetNetCode(),
+            aVia->GetViaType() );
 
     v->SetParent( aVia );
 
@@ -759,8 +762,9 @@ void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
             via_board->SetWidth( via->Diameter() );
             via_board->SetDrill( via->Drill() );
             via_board->SetNetCode( via->Net() );
-            via_board->SetLayerPair( ToLAYER_ID( m_settings.GetLayerTop() ),
-                                     ToLAYER_ID( m_settings.GetLayerBottom() ) );
+            via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
+            via_board->SetLayerPair( ToLAYER_ID( via->Layers().Start() ),
+                                     ToLAYER_ID( via->Layers().End() ) );
             newBI = via_board;
             break;
         }
