@@ -71,6 +71,10 @@ void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
         msg = _( "Block Drag" );
         break;
 
+    case BLOCK_DRAG_ITEM:     // Drag
+        msg = _( "Drag item" );
+        break;
+
     case BLOCK_COPY:     // Copy
         msg = _( "Block Copy" );
         break;

@@ -146,14 +146,17 @@ wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer )
         break;
 
     case B_Cu:
-        attrib = wxString::Format( wxT( "Copper,L%d" ), aBoard->GetCopperLayerCount() );
+        attrib = wxString::Format( wxT( "Copper,L%d,Bot" ), aBoard->GetCopperLayerCount() );
         break;
 
     case F_Cu:
+        attrib = wxString::Format( wxT( "Copper,L1,Top" ) );
+        break;
+
     default:
         if( IsCopperLayer( aLayer ) )
         {
-            attrib = wxString::Format( wxT( "Copper,L%d" ), aLayer+1 );
+            attrib = wxString::Format( wxT( "Copper,L%d,Inr" ), aLayer+1 );
         }
         break;
     }

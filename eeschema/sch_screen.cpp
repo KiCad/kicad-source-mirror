@@ -759,8 +759,6 @@ void SCH_SCREEN::GetHierarchicalItems( EDA_ITEMS& aItems )
 
 void SCH_SCREEN::SelectBlockItems()
 {
-    SCH_ITEM*          item;
-
     PICKED_ITEMS_LIST* pickedlist = &m_BlockLocate.GetItems();
 
     if( pickedlist->GetCount() == 0 )
@@ -770,7 +768,7 @@ void SCH_SCREEN::SelectBlockItems()
 
     for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
     {
-        item = (SCH_ITEM*) pickedlist->GetPickedItem( ii );
+        SCH_ITEM* item = (SCH_ITEM*) pickedlist->GetPickedItem( ii );
         item->SetFlags( SELECTED );
     }
 
@@ -781,18 +779,17 @@ void SCH_SCREEN::SelectBlockItems()
     // be sure end lines that are on the block limits are seen inside this block
     m_BlockLocate.Inflate( 1 );
     unsigned last_select_id = pickedlist->GetCount();
-    unsigned ii = 0;
 
-    for( ; ii < last_select_id; ii++ )
+    for( unsigned ii = 0; ii < last_select_id; ii++ )
     {
-        item = (SCH_ITEM*)pickedlist->GetPickedItem( ii );
+        SCH_ITEM* item = (SCH_ITEM*)pickedlist->GetPickedItem( ii );
         item->SetFlags( IS_DRAGGED );
 
         if( item->Type() == SCH_LINE_T )
         {
             item->IsSelectStateChanged( m_BlockLocate );
 
-            if( ( item->GetFlags() & SELECTED ) == 0 )
+            if( !item->IsSelected() )
             {   // This is a special case:
                 // this selected wire has no ends in block.
                 // But it was selected (because it intersects the selecting area),
@@ -814,8 +811,8 @@ void SCH_SCREEN::SelectBlockItems()
 
             item->GetConnectionPoints( connections );
 
-            for( size_t i = 0; i < connections.size(); i++ )
-                addConnectedItemsToBlock( connections[i] );
+            for( size_t jj = 0; jj < connections.size(); jj++ )
+                addConnectedItemsToBlock( connections[jj] );
         }
     }
 
