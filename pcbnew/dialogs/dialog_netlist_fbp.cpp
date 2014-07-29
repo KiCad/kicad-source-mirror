@@ -159,7 +159,6 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	bSizerNetlistFilename = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_NetlistFilenameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_NetlistFilenameCtrl->SetMaxLength( 0 ); 
 	bSizerNetlistFilename->Add( m_NetlistFilenameCtrl, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonBrowse = new wxButton( this, ID_OPEN_NELIST, _("Browse"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );

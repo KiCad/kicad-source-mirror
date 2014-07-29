@@ -133,8 +133,9 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     switch( block->GetCommand() )
     {
-    case BLOCK_DRAG:        /* Drag */
-    case BLOCK_MOVE:        /* Move */
+    case BLOCK_DRAG:        // Drag from mouse
+    case BLOCK_DRAG_ITEM:   // Drag from a component selection and drag command
+    case BLOCK_MOVE:
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
@@ -238,19 +239,24 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             break;
 
         case BLOCK_DRAG:
+        case BLOCK_DRAG_ITEM:   // Drag from a drag command
             GetScreen()->BreakSegmentsOnJunctions();
             // fall through
 
         case BLOCK_MOVE:
         case BLOCK_COPY:
-            if( GetScreen()->GetCurItem() != NULL )
+            if( block->GetCommand() == BLOCK_DRAG_ITEM &&
+                GetScreen()->GetCurItem() != NULL )
             {
+                // This is a drag command, not a mouse block command
+                // Only this item is put in list
                 ITEM_PICKER picker;
                 picker.SetItem( GetScreen()->GetCurItem() );
                 block->PushItem( picker );
             }
             else
             {
+                // Collect all items in the locate block
                 GetScreen()->UpdatePickList();
             }
             // fall through

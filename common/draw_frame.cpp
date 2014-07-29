@@ -717,17 +717,18 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
     case BLOCK_IDLE:
         break;
 
-    case BLOCK_MOVE:                /* Move */
-    case BLOCK_DRAG:                /* Drag */
-    case BLOCK_COPY:                /* Copy */
-    case BLOCK_DELETE:              /* Delete */
-    case BLOCK_SAVE:                /* Save */
-    case BLOCK_ROTATE:              /* Rotate 90 deg */
-    case BLOCK_FLIP:                /* Flip */
-    case BLOCK_ZOOM:                /* Window Zoom */
+    case BLOCK_MOVE:                // Move
+    case BLOCK_DRAG:                // Drag (block defined)
+    case BLOCK_DRAG_ITEM:           // Drag from a drag item command
+    case BLOCK_COPY:                // Copy
+    case BLOCK_DELETE:              // Delete
+    case BLOCK_SAVE:                // Save
+    case BLOCK_ROTATE:              // Rotate 90 deg
+    case BLOCK_FLIP:                // Flip
+    case BLOCK_ZOOM:                // Window Zoom
     case BLOCK_MIRROR_X:
-    case BLOCK_MIRROR_Y:            /* mirror */
-    case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
+    case BLOCK_MIRROR_Y:            // mirror
+    case BLOCK_PRESELECT_MOVE:      // Move with preselection list
         Block->InitData( m_canvas, aPosition );
         break;
 
@@ -736,7 +737,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
         Block->SetLastCursorPosition( wxPoint( 0, 0 ) );
         InitBlockPasteInfos();
 
-        if( Block->GetCount() == 0 )      /* No data to paste */
+        if( Block->GetCount() == 0 )      // No data to paste
         {
             DisplayError( this, wxT( "No Block to paste" ), 20 );
             GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
@@ -771,10 +772,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
 }
 
 
-// See comment in classpcb.cpp near line 66
-//static const double MAX_AXIS = 1518500251;
-
-// However I am not seeing a problem with this size yet:
+// I am not seeing a problem with this size yet:
 static const double MAX_AXIS = INT_MAX - 100;
 
 #define VIRT_MIN    (-MAX_AXIS/2.0)     ///< min X or Y coordinate in virtual space
