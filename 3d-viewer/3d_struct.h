@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2014 Mario Luzeiro <mrluzeiro@gmail.com>
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
@@ -32,8 +33,9 @@
 
 #include <common.h>
 #include <base_struct.h>
-
-
+#include <3d_material.h>
+#include <gal/opengl/glm/glm.hpp>
+ 
 /* 3D modeling units -> PCB units conversion scale:
  * 1 "3D model unit" wings3d = 1 unit = 2.54 mm = 0.1 inch = 100 mils
  */
@@ -44,48 +46,7 @@ class S3D_MASTER;
 class STRUCT_3D_SHAPE;
 
 /*  S3D_VERTEX manages a 3D coordinate (3 float numbers: x,y,z coordinates)*/
-class S3D_VERTEX
-{
-public:
-    double x, y, z;
-
-public:
-    S3D_VERTEX()
-    {
-        x = y = z = 0.0;
-    }
-
-    S3D_VERTEX( double px, double py, double pz)
-    {
-        x = px;
-        y = py;
-        z = pz;
-    }
-};
-
-class S3D_MATERIAL : public EDA_ITEM       /* openGL "material" data*/
-{
-public:
-    wxString   m_Name;
-    S3D_VERTEX m_DiffuseColor;
-    S3D_VERTEX m_EmissiveColor;
-    S3D_VERTEX m_SpecularColor;
-    float      m_AmbientIntensity;
-    float      m_Transparency;
-    float      m_Shininess;
-
-public:
-    S3D_MATERIAL( S3D_MASTER* father, const wxString& name );
-
-    S3D_MATERIAL* Next() const { return (S3D_MATERIAL*) Pnext; }
-    S3D_MATERIAL* Back() const { return (S3D_MATERIAL*) Pback; }
-
-    void SetMaterial();
-
-#if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
-#endif
-};
+#define S3D_VERTEX glm::vec3
 
 
 /* Master structure for a 3D item description */
@@ -106,6 +67,14 @@ public:
         FILE3D_UNKNOWN
     };
 
+    // Check defaults in S3D_MASTER
+    bool        m_use_modelfile_diffuseColor;
+    bool        m_use_modelfile_emissiveColor;
+    bool        m_use_modelfile_specularColor;
+    bool        m_use_modelfile_ambientIntensity;
+    bool        m_use_modelfile_transparency;
+    bool        m_use_modelfile_shininess;
+
 private:
     wxString    m_Shape3DName;  /* 3D shape name in 3D library */
     FILE3D_TYPE m_ShapeType;
@@ -113,6 +82,8 @@ private:
                                             // last material in use
     bool        m_loadTransparentObjects;
     bool        m_loadNonTransparentObjects;
+
+
 
 public:
     S3D_MASTER( EDA_ITEM* aParent );

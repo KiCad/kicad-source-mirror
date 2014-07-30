@@ -281,11 +281,13 @@ public:
      * @param glcanvas = the openGL canvas
      * @param  aAllowNonTransparentObjects = true to load non transparent objects
      * @param  aAllowTransparentObjects = true to load non transparent objects
+     * @param  aSideToLoad = false will load not fliped, true will load fliped objects
      * in openGL, transparent objects should be drawn *after* non transparent objects
      */
     void ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
                                         bool aAllowNonTransparentObjects,
-                                        bool aAllowTransparentObjects );
+                                        bool aAllowTransparentObjects,
+                                        bool aSideToLoad );
 
     /**
      * function TransformPadsShapesWithClearanceToPolygon
