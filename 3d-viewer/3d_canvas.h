@@ -43,8 +43,7 @@
 #endif
 
 #include <3d_struct.h>
-#include <convert_basic_shapes_to_polygon.h>
- 
+
 class BOARD_DESIGN_SETTINGS;
 class EDA_3D_FRAME;
 
@@ -91,8 +90,9 @@ private:
     GLuint          m_text_fake_shadow_back;
     GLuint          m_text_fake_shadow_board;
 
-    void Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture, GLuint aTexture_size, bool aDraw_body, int aBlurPasses );
-    
+    void Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
+            GLuint aTexture_size, bool aDraw_body, int aBlurPasses );
+
 public:
     EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList = 0 );
     ~EDA_3D_CANVAS();
@@ -107,7 +107,7 @@ public:
      * @param aGlList = the list to clear.
      * if 0 (default) all lists are cleared
      */
-    void   ClearLists( GLuint aGlList = 0 );
+    void   ClearLists( int aGlList = 0 );
 
     // Event functions:
     void   OnPaint( wxPaintEvent& event );
@@ -154,7 +154,7 @@ public:
     /**
      * Function BuildTechLayers3DView
      * Called by CreateDrawGL_List()
-     * Populates the OpenGL GL_ID_BOARD draw list with items on tech layers
+     * Populates the OpenGL GL_ID_TECH_LAYERS draw list with items on tech layers
      */
     void   BuildTechLayers3DView();
 

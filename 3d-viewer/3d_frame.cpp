@@ -411,7 +411,7 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU3D_SOLDER_MASK_ONOFF:
         g_Parm_3D_Visu.SetFlag( FL_SOLDERMASK, isChecked );
-       NewDisplay(GL_ID_TECH_LAYERS);
+        NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_SOLDER_PASTE_ONOFF:
@@ -486,7 +486,7 @@ void EDA_3D_FRAME::On3DGridSelection( wxCommandEvent& event )
 }
 
 
-void EDA_3D_FRAME::NewDisplay( GLuint aGlList )
+void EDA_3D_FRAME::NewDisplay( int aGlList )
 {
     m_reloadRequest = false;
 

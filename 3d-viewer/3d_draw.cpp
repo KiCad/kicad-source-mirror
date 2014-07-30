@@ -253,7 +253,8 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, aTexture_size, aTexture_size, 0, GL_RGBA, GL_UNSIGNED_BYTE, depthbufferRGBA );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, aTexture_size, aTexture_size, 0,
+                  GL_RGBA, GL_UNSIGNED_BYTE, depthbufferRGBA );
 
     glFlush();
     glFinish();
@@ -364,7 +365,8 @@ void EDA_3D_CANVAS::Redraw()
 
     InitGL();
 
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) && g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.HightQualityMode() )
+    if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) && g_Parm_3D_Visu.IsRealisticMode() &&
+        g_Parm_3D_Visu.HightQualityMode() )
     {
         GenerateFakeShadowsTextures ();
     }
@@ -926,8 +928,8 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
         // Merge polygons, remove holes
         currLayerPolyset -= polysetHoles;
 
-        int         thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
-        int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
+        int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
+        int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
 
         if( realistic_mode )
         {
