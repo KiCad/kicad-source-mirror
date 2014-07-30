@@ -95,6 +95,9 @@ public:
                                                     // to scale 3D units between -1.0 and +1.0
     double  m_CurrentZpos;                          // temporary storage of current value of Z position,
                                                     // used in some calculation
+
+    double zpos_offset;
+    
 private:
     double  m_layerZcoord[LAYER_ID_COUNT];          // Z position of each layer (normalized)
     double  m_copperThickness;                      // Copper thickness (normalized)

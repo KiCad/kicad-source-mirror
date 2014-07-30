@@ -107,7 +107,8 @@ EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
     ReCreateMainToolbar();
 
     // Make a EDA_3D_CANVAS
-    int attrs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
+    int attrs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16,
+                    WX_GL_STENCIL_SIZE, 1, 0 };
     m_canvas = new EDA_3D_CANVAS( this, attrs );
 
     m_auimgr.SetManagedWindow( this );

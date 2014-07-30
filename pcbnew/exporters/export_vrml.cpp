@@ -1325,7 +1325,7 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
                 try
                 {
                     aOutputFile << "  children [\n ";
-                    aOutputFile << TO_UTF8( parser->VRML_representation() ) << " ]\n";
+                    aOutputFile << TO_UTF8( parser->VRML2_representation() ) << " ]\n";
                     aOutputFile << "  }\n";
                 }
                 catch( const std::exception& e )

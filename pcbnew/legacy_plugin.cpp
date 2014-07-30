@@ -1936,7 +1936,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
 
         else if( TESTLINE( "Sc" ) )     // Scale
         {
-            sscanf( line + SZ( "Sc" ), "%lf %lf %lf\n",
+            sscanf( line + SZ( "Sc" ), "%f %f %f\n",
                     &t3D->m_MatScale.x,
                     &t3D->m_MatScale.y,
                     &t3D->m_MatScale.z );
@@ -1944,7 +1944,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
 
         else if( TESTLINE( "Of" ) )     // Offset
         {
-            sscanf( line + SZ( "Of" ), "%lf %lf %lf\n",
+            sscanf( line + SZ( "Of" ), "%f %f %f\n",
                     &t3D->m_MatPosition.x,
                     &t3D->m_MatPosition.y,
                     &t3D->m_MatPosition.z );
@@ -1952,7 +1952,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
 
         else if( TESTLINE( "Ro" ) )     // Rotation
         {
-            sscanf( line + SZ( "Ro" ), "%lf %lf %lf\n",
+            sscanf( line + SZ( "Ro" ), "%f %f %f\n",
                     &t3D->m_MatRotation.x,
                     &t3D->m_MatRotation.y,
                     &t3D->m_MatRotation.z );
