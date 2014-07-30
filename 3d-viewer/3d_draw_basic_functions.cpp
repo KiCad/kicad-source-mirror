@@ -33,10 +33,7 @@
 #include <3d_viewer.h>
 #include <info3d_visu.h>
 #include <3d_draw_basic_functions.h>
-
-// Imported function:
-extern void TransfertToGLlist( std::vector<S3D_VERTEX>& aVertices, double aBiuTo3DUnits );
-extern void CheckGLError();
+#include <modelparsers.h>
 
 // Number of segments to approximate a circle by segments
 #define SEGM_PER_CIRCLE 16
@@ -62,6 +59,7 @@ static inline void SetNormalZneg()
     glNormal3f( 0.0, 0.0, -1.0 );
 }
 
+void TransfertToGLlist( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
 
 /* Draw3D_VerticalPolygonalCylinder is a helper function.
  *
@@ -132,6 +130,15 @@ void SetGLColor( EDA_COLOR_T color, double alpha )
     glColor4f( red, green, blue, alpha );
 }
 
+static float m_texture_scale;
+
+void SetGLTexture( GLuint text_id, float scale )
+{
+    glEnable( GL_TEXTURE_2D );
+    glBindTexture( GL_TEXTURE_2D, text_id );
+    m_texture_scale = scale;
+}
+
 
 /* draw all solid polygons found in aPolysList
  * aZpos = z position in board internal units
@@ -152,9 +159,9 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
     gluTessCallback( tess, GLU_TESS_VERTEX, ( void (CALLBACK*) () )tessCPolyPt2Vertex );
 
     GLdouble    v_data[3];
-    double      zpos = ( aZpos + (aThickness / 2) ) * aBiuTo3DUnits;
+    double      zpos = ( aZpos + (aThickness / 2.0) ) * aBiuTo3DUnits;
     g_Parm_3D_Visu.m_CurrentZpos = zpos;
-    v_data[2] = aZpos + (aThickness / 2);
+    v_data[2] = aZpos + (aThickness / 2.0);
 
     // Set normal to toward positive Z axis, for a solid object only (to draw the top side)
     if( aThickness )
@@ -198,7 +205,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
             break;
 
         // Prepare the bottom side of solid areas
-        zpos = ( aZpos - (aThickness / 2) ) * aBiuTo3DUnits;
+        zpos = ( aZpos - (aThickness / 2.0) ) * aBiuTo3DUnits;
         g_Parm_3D_Visu.m_CurrentZpos = zpos;
         v_data[2] = zpos;
         // Now;, set normal to toward negative Z axis, for the solid object bottom side
@@ -211,7 +218,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
         return;
 
     // Build the 3D data : vertical side
-    Draw3D_VerticalPolygonalCylinder( polylist, aThickness, aZpos - (aThickness / 2), false, aBiuTo3DUnits );
+    Draw3D_VerticalPolygonalCylinder( polylist, aThickness, aZpos - (aThickness / 2.0), false, aBiuTo3DUnits );
 }
 
 
@@ -399,6 +406,12 @@ void CALLBACK tessCPolyPt2Vertex( const GLvoid* data )
 {
     // cast back to double type
     const CPolyPt* ptr = (const CPolyPt*) data;
+
+    if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.HightQualityMode() )
+    {
+        glTexCoord2f( ptr->x* g_Parm_3D_Visu.m_BiuTo3Dunits * m_texture_scale,
+                    -ptr->y * g_Parm_3D_Visu.m_BiuTo3Dunits * m_texture_scale);
+    }
 
     glVertex3d( ptr->x * g_Parm_3D_Visu.m_BiuTo3Dunits,
                 -ptr->y * g_Parm_3D_Visu.m_BiuTo3Dunits,

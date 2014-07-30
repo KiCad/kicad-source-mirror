@@ -16,17 +16,23 @@
 
 #include <gestfich.h>
 
+#ifdef __WINDOWS__
+#include <GL/glew.h>        // must be included before gl.h
+#endif
+
 #include <3d_viewer.h>
 #include <3d_canvas.h>
 #include <info3d_visu.h>
 #include <trackball.h>
 #include <3d_viewer_id.h>
 
+#include <textures/text_silk.c>
+#include <textures/text_pcb.c>
 
 // -----------------
 // helper function (from wxWidgets, opengl/cube.cpp sample
 // -----------------
-void CheckGLError()
+void CheckGLError(const char *aFileName, int aLineNumber)
 {
     GLenum errLast = GL_NO_ERROR;
 
@@ -47,7 +53,7 @@ void CheckGLError()
 
         errLast = err;
 
-        wxLogError(wxT("OpenGL error %d"), err);
+        wxLogError( wxT( "OpenGL error %d\nAt: %s, line: %d" ), err, aFileName, aLineNumber );
     }
 }
 
@@ -78,6 +84,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
                 wxFULL_REPAINT_ON_RESIZE )
 {
     m_init   = false;
+    m_shadow_init = false;
 
     // Clear all gl list identifiers:
     for( int ii = GL_ID_BEGIN; ii < GL_ID_END; ii++ )
@@ -490,15 +497,46 @@ void EDA_3D_CANVAS::OnEraseBackground( wxEraseEvent& event )
     // Do nothing, to avoid flashing.
 }
 
+typedef struct s_sImage
+{
+  unsigned int   width;
+  unsigned int   height;
+  unsigned int   bytes_per_pixel; /* 2:RGB16, 3:RGB, 4:RGBA */
+  unsigned char  pixel_data[64 * 64 * 4 + 1];
+}tsImage;
+
+
+GLuint load_and_generate_texture( tsImage *image )
+{
+
+    GLuint texture;
+    glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+    glPixelStorei (GL_PACK_ALIGNMENT, 1);
+
+    glGenTextures( 1, &texture );
+    glBindTexture( GL_TEXTURE_2D, texture );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, image->width, image->height, GL_RGBA, GL_UNSIGNED_BYTE, image->pixel_data );
+
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    return texture;
+}
 
 /* Initialize broad parameters for OpenGL */
 void EDA_3D_CANVAS::InitGL()
 {
-    wxSize size = GetClientSize();
-
     if( !m_init )
     {
         m_init = true;
+
+
+        m_text_pcb = load_and_generate_texture( (tsImage *)&text_pcb  );
+        m_text_silk = load_and_generate_texture( (tsImage *)&text_silk );
+
         g_Parm_3D_Visu.m_Zoom = 1.0;
         m_ZBottom = 1.0;
         m_ZTop = 10.0;
@@ -513,7 +551,7 @@ void EDA_3D_CANVAS::InitGL()
         glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
         // speedups
-        glEnable( GL_DITHER );
+        //glEnable( GL_DITHER );
         glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_DONT_CARE );
         glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
         glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
@@ -521,52 +559,7 @@ void EDA_3D_CANVAS::InitGL()
         // Initialize alpha blending function.
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-}
-
-    // set viewing projection
-
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-
-#define MAX_VIEW_ANGLE 160.0 / 45.0
-    if( g_Parm_3D_Visu.m_Zoom > MAX_VIEW_ANGLE )
-        g_Parm_3D_Visu.m_Zoom = MAX_VIEW_ANGLE;
-
-     if( Parent()->ModeIsOrtho() )
-     {
-         // OrthoReductionFactor is chosen so as to provide roughly the same size as
-         // Perspective View
-         const double orthoReductionFactor = 400 / g_Parm_3D_Visu.m_Zoom;
-
-         // Initialize Projection Matrix for Ortographic View
-         glOrtho( -size.x / orthoReductionFactor, size.x / orthoReductionFactor,
-                  -size.y / orthoReductionFactor, size.y / orthoReductionFactor, 1, 10 );
-     }
-     else
-     {
-         // Ratio width / height of the window display
-         double ratio_HV = (double) size.x / size.y;
-
-         // Initialize Projection Matrix for Perspective View
-         gluPerspective( 45.0 * g_Parm_3D_Visu.m_Zoom, ratio_HV, 1, 10 );
-     }
-
-
-    // position viewer
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-    glTranslatef( 0.0F, 0.0F, -( m_ZBottom + m_ZTop) / 2 );
-
-    // clear color and depth buffers
-    glClearColor( g_Parm_3D_Visu.m_BgColor.m_Red,
-                  g_Parm_3D_Visu.m_BgColor.m_Green,
-                  g_Parm_3D_Visu.m_BgColor.m_Blue, 1 );
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    // Setup light sources:
-    SetLights();
-
-    CheckGLError();
+    }
 }
 
 
@@ -578,16 +571,19 @@ void EDA_3D_CANVAS::SetLights()
 
     /* set viewing projection */
     light_color[3] = 1.0;
-    GLfloat Z_axis_pos[4]    = { 0.0, 0.0, 3.0, 0.0 };
-    GLfloat lowZ_axis_pos[4] = { 0.0, 0.0, -3.0, 0.5 };
+    GLfloat Z_axis_pos[4]    = { 0.0, 0.0, 30.0, 0.0 };
+    GLfloat lowZ_axis_pos[4] = { 0.0, 0.0, -30.0, 0.5 };
 
     /* activate light */
     light = 1.0;
     light_color[0] = light_color[1] = light_color[2] = light;
     glLightfv( GL_LIGHT0, GL_POSITION, Z_axis_pos );
     glLightfv( GL_LIGHT0, GL_DIFFUSE, light_color );
-    light = 0.3;
-    light_color[0] = light_color[1] = light_color[2] = light;
+
+    light_color[0] = 0.3;
+    light_color[1] = 0.3;
+    light_color[2] = 0.4;
+
     glLightfv( GL_LIGHT1, GL_POSITION, lowZ_axis_pos );
     glLightfv( GL_LIGHT1, GL_DIFFUSE, light_color );
     glEnable( GL_LIGHT0 );      // White spot on Z axis
@@ -653,7 +649,6 @@ void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
     glReadPixels( viewport.originx, viewport.originy,
                   viewport.x, viewport.y,
                   GL_ALPHA, GL_UNSIGNED_BYTE, alphabuffer );
-
 
     image.SetData( pixelbuffer );
     image.SetAlpha( alphabuffer );
