@@ -29,6 +29,7 @@
 #include <fctsys.h>
 
 #include <3d_viewer.h>
+#include <3d_struct.h>
 
 
 bool S3D_MASTER::IsOpenGlAllowed()

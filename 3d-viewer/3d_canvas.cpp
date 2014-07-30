@@ -105,7 +105,7 @@ EDA_3D_CANVAS::~EDA_3D_CANVAS()
 }
 
 
-void EDA_3D_CANVAS::ClearLists( GLuint aGlList )
+void EDA_3D_CANVAS::ClearLists( int aGlList )
 {
     if( aGlList )
     {

@@ -37,20 +37,6 @@
 #endif
 
 #include <wx/glcanvas.h>
-
-#ifdef __WXMAC__
-#  ifdef __DARWIN__
-#    include <OpenGL/glu.h>
-#  else
-#    include <glu.h>
-#  endif
-#else
-#  include <GL/glu.h>
-#endif
-
-
-#define KISYS3DMOD "KISYS3DMOD"
-
 #include <3d_struct.h>
 
 #define KISYS3DMOD "KISYS3DMOD"
@@ -103,7 +89,7 @@ public:
      * @param aGlList = the list to rebuild.
      * if 0 (default) all lists are rebuilt
      */
-    void NewDisplay( GLuint aGlList = 0 );
+    void NewDisplay( int aGlList = 0 );
 
     void SetDefaultFileName(const wxString &aFn) { m_defaultFileName = aFn; }
     const wxString &GetDefaultFileName() const { return m_defaultFileName; }

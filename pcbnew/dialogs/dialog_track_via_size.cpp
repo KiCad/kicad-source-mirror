@@ -38,6 +38,7 @@ DIALOG_TRACK_VIA_SIZE::DIALOG_TRACK_VIA_SIZE( wxWindow* aParent, PNS_ROUTING_SET
     m_viaDrill->SetValue( To_User_Unit( m_viaDrill->GetUnits(), m_settings.GetViaDrill() ) );
 
     m_trackWidth->SetFocus();
+    GetSizer()->SetSizeHints( this );
 
     // Pressing ENTER when any of the text input fields is active applies changes
     #if wxCHECK_VERSION( 3, 0, 0 )
