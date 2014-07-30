@@ -43,10 +43,11 @@
 #endif
 
 #include <3d_struct.h>
-
+#include <convert_basic_shapes_to_polygon.h>
+ 
 class BOARD_DESIGN_SETTINGS;
 class EDA_3D_FRAME;
-class S3D_VERTEX;
+
 class VIA;
 class D_PAD;
 
@@ -61,8 +62,14 @@ enum GL_LIST_ID
     GL_ID_BOARD,                // List id for copper layers
     GL_ID_TECH_LAYERS,          // List id for non copper layers (masks...)
     GL_ID_AUX_LAYERS,           // List id for user layers (draw, eco, comment)
-    GL_ID_3DSHAPES_SOLID,       // List id for 3D shapes, non transparent entities
-    GL_ID_3DSHAPES_TRANSP,      // List id for 3D shapes, transparent entities
+    GL_ID_3DSHAPES_SOLID_FRONT, // List id for 3D shapes, non transparent entities
+    GL_ID_3DSHAPES_TRANSP_FRONT,// List id for 3D shapes, transparent entities
+    GL_ID_3DSHAPES_SOLID_BACK, // List id for 3D shapes, non transparent entities
+    GL_ID_3DSHAPES_TRANSP_BACK,// List id for 3D shapes, transparent entities
+    GL_ID_SHADOW_FRONT,
+    GL_ID_SHADOW_BACK,
+    GL_ID_SHADOW_BOARD,
+    GL_ID_BODY,                // Body only list
     GL_ID_END
 };
 
@@ -76,6 +83,16 @@ private:
     double          m_ZBottom;          // position of the back layer
     double          m_ZTop;             // position of the front layer
 
+    GLuint          m_text_pcb;
+    GLuint          m_text_silk;
+
+    bool            m_shadow_init;
+    GLuint          m_text_fake_shadow_front;
+    GLuint          m_text_fake_shadow_back;
+    GLuint          m_text_fake_shadow_board;
+
+    void Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture, GLuint aTexture_size, bool aDraw_body, int aBlurPasses );
+    
 public:
     EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList = 0 );
     ~EDA_3D_CANVAS();
@@ -122,6 +139,9 @@ public:
         m_draw3dOffset.x = aPosX;
         m_draw3dOffset.y = aPosY;
     }
+    void SetGLTechLayersColor( LAYER_NUM aLayer );
+    void SetGLCopperColor();
+    void SetGLEpoxyColor( double aTransparency = 1.0 );
 
     /**
      * Function BuildBoard3DView
@@ -129,7 +149,7 @@ public:
      * Populates the OpenGL GL_ID_BOARD draw list with board items only on copper layers.
      * 3D footprint shapes, tech layers and aux layers are not on this list
      */
-    void   BuildBoard3DView();
+    void   BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList);
 
     /**
      * Function BuildTechLayers3DView
@@ -137,6 +157,12 @@ public:
      * Populates the OpenGL GL_ID_BOARD draw list with items on tech layers
      */
     void   BuildTechLayers3DView();
+
+    /**
+     * Function BuildShadowList
+     * Called by CreateDrawGL_List()
+     */
+     void BuildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint aBoardList );
 
     /**
      * Function BuildFootprintShape3DList
@@ -148,7 +174,8 @@ public:
      * which need to be drawn after all other items
      */
     void   BuildFootprintShape3DList( GLuint aOpaqueList,
-                                      GLuint aTransparentList);
+                                      GLuint aTransparentList,
+                                      bool aSideToLoad );
     /**
      * Function BuildBoard3DAuxLayers
      * Called by CreateDrawGL_List()
@@ -163,7 +190,11 @@ public:
     void   Draw3DViaHole( const VIA * aVia );
     void   Draw3DPadHole( const D_PAD * aPad );
 
+    void   GenerateFakeShadowsTextures();
+
     DECLARE_EVENT_TABLE()
 };
+
+void CheckGLError(const char *aFileName, int aLineNumber);
 
 #endif  /*  _3D_CANVAS_H_ */

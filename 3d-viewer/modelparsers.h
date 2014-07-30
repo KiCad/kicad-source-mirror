@@ -32,13 +32,9 @@
 #include <map>
 #include <vector>
 #include <wx/string.h>
-
+#include <3d_mesh_model.h>
 
 class S3D_MASTER;
-class S3D_VERTEX;
-
-extern void TransfertToGLlist( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
-
 class S3D_MODEL_PARSER;
 class X3D_MODEL_PARSER;
 
@@ -118,13 +114,17 @@ public:
     static void GetNodeProperties( wxXmlNode* aNode, PROPERTY_MAP& aProps );
 
     /**
-     * Return string representing x3d file in vrml format
+     * Return string representing x3d file in vrml2 format
      * Function Load must be called before this function, otherwise empty
      * data set is returned.
      */
-    wxString VRML_representation();
+    wxString VRML2_representation();
 
 private:
+    wxString m_Filename;
+    S3D_MESH *m_model;
+    std::vector<S3D_MESH *> childs;
+
     std::vector< wxString > vrml_materials;
     std::vector< wxString > vrml_points;
     std::vector< wxString > vrml_coord_indexes;
@@ -137,8 +137,97 @@ private:
     void rotate( S3D_VERTEX& aCoordinate, S3D_VERTEX& aRotAxis, double angle );
 };
 
+
+
 /**
- * class WRL_MODEL_PARSER
+ * class VRML2_MODEL_PARSER
+ * Parses
+ */
+class VRML2_MODEL_PARSER: public S3D_MODEL_PARSER
+{
+public:
+    VRML2_MODEL_PARSER( S3D_MASTER* aMaster );
+    ~VRML2_MODEL_PARSER();
+    void Load( const wxString aFilename );
+
+    /**
+     * Return string representing VRML2 file in vrml2 format
+     * Function Load must be called before this function, otherwise empty
+     * data set is returned.
+     */
+    wxString VRML2_representation();
+
+private:
+    int read_Transform();
+    int read_DEF();
+    int read_Shape();
+    int read_Appearance();
+    int read_material();
+    int read_Material();
+    int read_IndexedFaceSet();
+    int read_Coordinate();
+    int read_Normal();
+    int read_Color();
+    int read_coordIndex();
+    int read_colorIndex();
+
+    bool m_normalPerVertex;
+    bool colorPerVertex;
+    S3D_MESH *m_model;
+    std::vector<S3D_MESH *> childs;
+    FILE *m_file;
+    S3D_MATERIAL *m_Materials;
+    wxString m_Filename;
+};
+
+
+/**
+ * class VRML1_MODEL_PARSER
+ * Parses
+ */
+class VRML1_MODEL_PARSER: public S3D_MODEL_PARSER
+{
+public:
+    VRML1_MODEL_PARSER( S3D_MASTER* aMaster );
+    ~VRML1_MODEL_PARSER();
+    void Load( const wxString aFilename );
+
+    /**
+     * Return string representing VRML2 file in vrml2 format
+     * Function Load must be called before this function, otherwise empty
+     * data set is returned.
+     */
+    wxString VRML2_representation();
+
+private:
+    int read_separator();
+    int readMaterial();
+    int readCoordinate3();
+    int readIndexedFaceSet();
+
+    int readMaterial_ambientColor();
+    int readMaterial_diffuseColor();
+    int readMaterial_emissiveColor();
+    int readMaterial_specularColor();
+    int readMaterial_shininess();
+    int readMaterial_transparency();
+
+    int readCoordinate3_point();
+
+    int readIndexedFaceSet_coordIndex();
+    int readIndexedFaceSet_materialIndex();
+
+    bool m_normalPerVertex;
+    bool colorPerVertex;
+    S3D_MESH *m_model;
+    std::vector<S3D_MESH *> childs;
+    S3D_MATERIAL *m_Materials;
+    FILE *m_file;
+    wxString m_Filename;
+};
+
+/**
+ * class VRML_MODEL_PARSER
  * Parses
  */
 class VRML_MODEL_PARSER: public S3D_MODEL_PARSER
@@ -149,45 +238,9 @@ public:
     void Load( const wxString aFilename );
 
 private:
-    /**
-     * Function ReadMaterial
-     * read the description of a 3D material definition in the form:
-     * DEF yellow material Material (
-     * DiffuseColor 1.00000 1.00000 0.00000e 0
-     * EmissiveColor 0.00000e 0 0.00000e 0 0.00000e 0
-     * SpecularColor 1.00000 1.00000 1.00000
-     * AmbientIntensity 1.00000
-     * Transparency 0.00000e 0
-     * Shininess 1.00000
-     *)
-     * Or type:
-     * USE yellow material
-     */
-    int readMaterial( FILE* file, int* LineNum );
-    int readChildren( FILE* file, int* LineNum );
-    int readShape( FILE* file, int* LineNum );
-    int readAppearance( FILE* file, int* LineNum );
-    int readGeometry( FILE* file, int* LineNum );
-
-    /**
-     * Function ReadCoordList
-     * reads 3D coordinate lists like:
-     *      coord Coordinate { point [
-     *        -5.24489 6.57640e-3 -9.42129e-2,
-     *        -5.11821 6.57421e-3 0.542654,
-     *        -3.45868 0.256565 1.32000 ] }
-     *  or:
-     *  normal Normal { vector [
-     *        0.995171 -6.08102e-6 9.81541e-2,
-     *        0.923880 -4.09802e-6 0.382683,
-     *        0.707107 -9.38186e-7 0.707107]
-     *      }
-     *
-     *  text_buffer contains the first line of this node :
-     *     "coord Coordinate { point ["
-     */
-    void readCoordsList( FILE* file, char* text_buffer, std::vector< double >& aList,
-                         int* LineNum );
+    VRML1_MODEL_PARSER *vrml1_parser;
+    VRML2_MODEL_PARSER *vrml2_parser;
 };
+
 
 #endif // MODELPARSERS_H

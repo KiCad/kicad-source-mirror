@@ -144,6 +144,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         break;
 
     case BLOCK_DRAG:        // Drag
+    case BLOCK_DRAG_ITEM:   // Drag a given item (not used here)
     case BLOCK_MOVE:        // Move
     case BLOCK_COPY:        // Copy
         itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );

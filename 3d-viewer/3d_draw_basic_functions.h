@@ -126,4 +126,12 @@ void    Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
 void SetGLColor( EDA_COLOR_T aColor, double aTransparency = 1.0 );
 
 
+/**
+ * Set a texture id and a scale to apply when rendering the polygons
+ * @param text_id = texture ID created by glGenTextures
+ * @param scale = scale to apply to texture coords
+ */
+void SetGLTexture( GLuint text_id, float scale );
+
+
 #endif      // _3D_DRAW_BASIC_FUNCTIONS_H_

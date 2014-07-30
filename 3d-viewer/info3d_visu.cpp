@@ -85,13 +85,14 @@ INFO3D_VISU::~INFO3D_VISU()
  */
 void INFO3D_VISU::InitSettings( BOARD* aBoard )
 {
-    EDA_RECT bbbox = aBoard->ComputeBoundingBox( false );
+    EDA_RECT bbbox = aBoard->ComputeBoundingBox( true );
 
     if( bbbox.GetWidth() == 0 && bbbox.GetHeight() == 0 )
     {
         bbbox.SetWidth( Millimeter2iu( 100 ) );
         bbbox.SetHeight( Millimeter2iu( 100 ) );
     }
+
 
     m_BoardSettings = &aBoard->GetDesignSettings();
 
@@ -199,8 +200,8 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
 double INFO3D_VISU::GetModulesZcoord3DIU( bool aIsFlipped )
 {
     if(  aIsFlipped )
-        return m_layerZcoord[B_Cu] - ( m_copperThickness / 2 );
+        return m_layerZcoord[B_Paste] - ( m_copperThickness / 2 ); //B_Cu NOTE: in order to display modules in top of Paste and near the shadow
     else
-        return m_layerZcoord[F_Cu] + ( m_copperThickness / 2 );
+        return m_layerZcoord[F_Paste] + ( m_copperThickness / 2 ); //F_Cu
 }
 
