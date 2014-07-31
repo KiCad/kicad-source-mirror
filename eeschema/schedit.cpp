@@ -974,34 +974,34 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
 
     switch( item->Type() )
     {
-        case SCH_BUS_BUS_ENTRY_T:
-        case SCH_BUS_WIRE_ENTRY_T:
-        case SCH_LINE_T:
-        case SCH_JUNCTION_T:
-        case SCH_COMPONENT_T:
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIERARCHICAL_LABEL_T:
-        case SCH_SHEET_T:
-            m_canvas->MoveCursorToCrossHair();
+    case SCH_BUS_BUS_ENTRY_T:
+    case SCH_BUS_WIRE_ENTRY_T:
+    case SCH_LINE_T:
+    case SCH_JUNCTION_T:
+    case SCH_COMPONENT_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_SHEET_T:
+        m_canvas->MoveCursorToCrossHair();
 
-            if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
-            {
-                INSTALL_UNBUFFERED_DC( dc, m_canvas );
+        if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
+        {
+            INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
-                if( !HandleBlockBegin( &dc, dragType, GetCrossHairPosition() ) )
-                    break;
+            if( !HandleBlockBegin( &dc, dragType, GetCrossHairPosition() ) )
+                break;
 
-                // Give a non null size to the search block:
-                screen->m_BlockLocate.Inflate( 1 );
-                HandleBlockEnd( &dc );
-            }
+            // Give a non null size to the search block:
+            screen->m_BlockLocate.Inflate( 1 );
+            HandleBlockEnd( &dc );
+        }
 
-            break;
+        break;
 
-        default:
-            wxFAIL_MSG( wxString::Format( wxT( "Cannot drag schematic item type %s." ),
-                                          GetChars( item->GetClass() ) ) );
+    default:
+        wxFAIL_MSG( wxString::Format( wxT( "Cannot drag schematic item type %s." ),
+                                      GetChars( item->GetClass() ) ) );
     }
 }
 
