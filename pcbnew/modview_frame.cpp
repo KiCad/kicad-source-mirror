@@ -713,8 +713,8 @@ void FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList( wxCommandEvent& event )
         break;
 
     default:
-        wxFAIL_MSG( wxT( "FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList error: id = " ) +
-                    event.GetId() );
+        wxString id = wxString::Format(wxT("%i"),event.GetId());
+        wxFAIL_MSG( wxT( "FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList error: id = " ) + id );
     }
 }
 

@@ -60,11 +60,13 @@ int LIBRARY_LISTBOX::GetCount()
 
 void LIBRARY_LISTBOX::SetString( unsigned linecount, const wxString& text )
 {
-    if( linecount >= m_libraryList.Count() )
-        linecount = m_libraryList.Count() - 1;
-
-    if( linecount >= 0 )
+    unsigned count = m_libraryList.Count();
+    if( count > 0 )
+    {
+        if( linecount >= count )
+            linecount = count - 1;
         m_libraryList[linecount] = text;
+    }
 }
 
 
