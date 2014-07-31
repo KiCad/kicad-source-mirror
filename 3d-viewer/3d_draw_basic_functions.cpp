@@ -51,12 +51,12 @@ static void CALLBACK    tessCPolyPt2Vertex( const GLvoid* data );
 // 2 helper functions to set the current normal vector for gle items
 static inline void SetNormalZpos()
 {
-    glNormal3f( 0.0, 0.0, 1.0 );
+    //glNormal3f( 0.0, 0.0, 1.0 );
 }
 
 static inline void SetNormalZneg()
 {
-    glNormal3f( 0.0, 0.0, -1.0 );
+    //glNormal3f( 0.0, 0.0, -1.0 );
 }
 
 void TransfertToGLlist( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
@@ -185,6 +185,10 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
                 startContour = 0;
             }
 
+            // https://www.opengl.org/sdk/docs/man2/xhtml/gluTessNormal.xml
+            gluTessNormal( tess, 0.0, 0.0, 0.0 );
+
+
             v_data[0]   = polylist.GetX( ii ) * aBiuTo3DUnits;
             v_data[1]   = -polylist.GetY( ii ) * aBiuTo3DUnits;
             // gluTessVertex store pointers on data, not data, so do not store
@@ -192,6 +196,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
             // but send pointer on each CPolyPt value in polylist
             // before calling gluDeleteTess
             gluTessVertex( tess, v_data, &polylist[ii] );
+
 
             if( polylist.IsEndContour( ii ) )
             {
@@ -215,7 +220,9 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
     gluDeleteTess( tess );
 
     if( aThickness == 0 )
+    {
         return;
+    }
 
     // Build the 3D data : vertical side
     Draw3D_VerticalPolygonalCylinder( polylist, aThickness, aZpos - (aThickness / 2.0), false, aBiuTo3DUnits );

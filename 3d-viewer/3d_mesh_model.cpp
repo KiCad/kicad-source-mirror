@@ -57,6 +57,8 @@ S3D_MESH::~S3D_MESH()
 
 void S3D_MESH::openGL_RenderAllChilds()
 {
+    //DBG( printf( "openGL_RenderAllChilds") );
+
     glPushMatrix();
     glTranslatef( m_translation.x, m_translation.y, m_translation.z );
     glRotatef( m_rotation[3], m_rotation[0], m_rotation[1], m_rotation[2] );
@@ -76,12 +78,13 @@ void S3D_MESH::openGL_RenderAllChilds()
     SetOpenGlDefaultMaterial();
 
     glPopMatrix();
+
 }
 
 
 void S3D_MESH::openGL_Render()
 {
-    //DBG( printf( "      render\n" ) );
+    //DBG( printf( "openGL_Render" ) );
 
     if( m_Materials )
     {
@@ -90,6 +93,7 @@ void S3D_MESH::openGL_Render()
 
     if( m_CoordIndex.size() == 0)
     {
+
         return;
     }
 
@@ -134,7 +138,7 @@ void S3D_MESH::openGL_Render()
         {
             for(unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
             {
-                glm::vec3 normal = m_PerVertexNormalsNormalized[m_CoordIndex[idx][ii]];
+                glm::vec3 normal = m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]];
                 glNormal3fv( &normal.x );
 
                 glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
@@ -176,6 +180,8 @@ void S3D_MESH::openGL_Render()
 
 void S3D_MESH::calcPointNormalized ()
 {
+    //DBG( printf( "calcPointNormalized\n" ) );
+
     if( isPointNormalizedComputed == true )
     {
         return;
@@ -221,8 +227,11 @@ bool IsClockwise(glm::vec3 v0, glm::vec3 v1, glm::vec3 v2)
 
 void S3D_MESH::calcPerFaceNormals ()
 {
+    //DBG( printf( "calcPerFaceNormals" ) );
+
     if( isPerFaceNormalsComputed == true )
     {
+
         return;
     }
     isPerFaceNormalsComputed = true;
@@ -230,6 +239,7 @@ void S3D_MESH::calcPerFaceNormals ()
 
     if( m_PerVertexNormalsNormalized.size() > 0 )
     {
+
         return;
     }
 
@@ -317,12 +327,15 @@ void S3D_MESH::calcPerFaceNormals ()
         }
         
     }
+
 }
 
 // http://www.bytehazard.com/code/vertnorm.html
 // http://www.emeyex.com/site/tuts/VertexNormals.pdf
 void S3D_MESH::calcPerPointNormals ()
 {
+    //DBG( printf( "calcPerPointNormals" ) );
+
     if( isPerPointNormalsComputed == true )
     {
         return;

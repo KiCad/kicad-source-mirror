@@ -69,18 +69,23 @@ void X3D_MODEL_PARSER::Load( const wxString aFilename )
     glShadeModel(GL_SMOOTH);
     glEnable(GL_NORMALIZE);
 
-    glm::vec3 matScale(GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y, GetMaster()->m_MatScale.z );
-    glm::vec3 matRot(GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y, GetMaster()->m_MatRotation.z );
-    glm::vec3 matPos(GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y, GetMaster()->m_MatPosition.z );
+    float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
+    glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
 
+    glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y, GetMaster()->m_MatScale.z );
+    glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y, GetMaster()->m_MatRotation.z );
+    glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y, GetMaster()->m_MatPosition.z );
+    
+
+#define SCALE_3D_CONV ((IU_PER_MILS * 1000.0f) / UNITS3D_TO_UNITSPCB)
 
     //glPushMatrix();
-    glTranslatef( matPos.x, matPos.y, matPos.z);
+    glTranslatef( matPos.x * SCALE_3D_CONV, matPos.y * SCALE_3D_CONV, matPos.z * SCALE_3D_CONV );
 
-    glRotatef( matRot.z, 0.0f, 0.0f, 1.0f);
-    glRotatef( matRot.y, 0.0f, 1.0f, 0.0f);
-    glRotatef( matRot.x, 1.0f, 0.0f, 0.0f);
-
+    glRotatef(-matRot.z, 0.0f, 0.0f, 1.0f );
+    glRotatef(-matRot.y, 0.0f, 1.0f, 0.0f );
+    glRotatef(-matRot.x, 1.0f, 0.0f, 0.0f );
+    
     glScalef( matScale.x, matScale.y, matScale.z );
 
     // Switch the locale to standard C (needed to print floating point numbers)
@@ -501,9 +506,6 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
         point.z += translation.z;
 
         //triplets.push_back(point);
-
-        double vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
-        point *= vrmlunits_to_3Dunits;
 
         m_model->m_Point.push_back( point );
 

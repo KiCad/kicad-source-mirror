@@ -68,6 +68,9 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
     glShadeModel( GL_SMOOTH );
     glEnable( GL_NORMALIZE );
 
+    float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
+    glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
+
     glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y, GetMaster()->m_MatScale.z );
     glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y, GetMaster()->m_MatRotation.z );
     glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y, GetMaster()->m_MatPosition.z );
@@ -78,14 +81,11 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
     //glPushMatrix();
     glTranslatef( matPos.x * SCALE_3D_CONV, matPos.y * SCALE_3D_CONV, matPos.z * SCALE_3D_CONV );
 
-    glRotatef( matRot.z, 0.0f, 0.0f, 1.0f );
-    glRotatef( matRot.y, 0.0f, 1.0f, 0.0f );
-    glRotatef( matRot.x, 1.0f, 0.0f, 0.0f );
+    glRotatef(-matRot.z, 0.0f, 0.0f, 1.0f );
+    glRotatef(-matRot.y, 0.0f, 1.0f, 0.0f );
+    glRotatef(-matRot.x, 1.0f, 0.0f, 0.0f );
     
     glScalef( matScale.x, matScale.y, matScale.z );    
-    
-    float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
-    glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
     SetLocaleTo_C_standard();

@@ -70,6 +70,9 @@ void VRML2_MODEL_PARSER::Load( const wxString aFilename )
     glShadeModel(GL_SMOOTH);
     glEnable(GL_NORMALIZE);
 
+    float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
+    glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
+
     glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y, GetMaster()->m_MatScale.z );
     glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y, GetMaster()->m_MatRotation.z );
     glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y, GetMaster()->m_MatPosition.z );
@@ -80,14 +83,11 @@ void VRML2_MODEL_PARSER::Load( const wxString aFilename )
     //glPushMatrix();
     glTranslatef( matPos.x * SCALE_3D_CONV, matPos.y * SCALE_3D_CONV, matPos.z * SCALE_3D_CONV );
 
-    glRotatef( matRot.z, 0.0f, 0.0f, 1.0f );
-    glRotatef( matRot.y, 0.0f, 1.0f, 0.0f );
-    glRotatef( matRot.x, 1.0f, 0.0f, 0.0f );
+    glRotatef(-matRot.z, 0.0f, 0.0f, 1.0f );
+    glRotatef(-matRot.y, 0.0f, 1.0f, 0.0f );
+    glRotatef(-matRot.x, 1.0f, 0.0f, 0.0f );
     
     glScalef( matScale.x, matScale.y, matScale.z );
-    
-    float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
-    glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
     SetLocaleTo_C_standard();
@@ -546,12 +546,10 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
             read_Coordinate();
         } else if( strcmp( text, "Normal" ) == 0 )
         {
-            //read_Normal();
-            read_NotImplemented( m_file, '}' );
+            read_Normal();
         } else if( strcmp( text, "normalIndex" ) == 0 )
         {
-            //DBG( printf( "    normalIndex NotImplemented\n" ) );
-            read_NotImplemented( m_file, ']' );
+            read_NormalIndex();
         } else if( strcmp( text, "Color" ) == 0 )
         {
             read_Color();
@@ -601,6 +599,38 @@ int VRML2_MODEL_PARSER::read_colorIndex()
     }
 
     //DBG( printf( "    m_MaterialIndex.size: %ld\n", m_model->m_MaterialIndex.size() ) );    
+
+    return 0;
+}
+
+
+int VRML2_MODEL_PARSER::read_NormalIndex()
+{
+    //DBG( printf( "    read_NormalIndex\n" ) );
+
+    m_model->m_NormalIndex.clear();
+
+    glm::ivec3 coord;
+
+    int dummy; // should be -1
+
+    std::vector<int> coord_list;
+    coord_list.clear();
+    while( fscanf (m_file, "%d, ", &dummy ) == 1 )
+    {
+        if( dummy == -1 )
+        {
+            m_model->m_NormalIndex.push_back( coord_list );
+            //DBG( printf( " size: %lu ", coord_list.size()) );
+            coord_list.clear();
+        } else
+        {
+            coord_list.push_back( dummy );
+            //DBG( printf( "%d ", dummy) );
+        }
+    }
+
+    //DBG( printf( "    m_NormalIndex.size: %ld\n", m_model->m_NormalIndex.size() ) );    
 
     return 0;
 }
