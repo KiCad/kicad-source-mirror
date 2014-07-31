@@ -66,6 +66,7 @@ public:
     // Point and index list
     std::vector< glm::vec3 > m_Point;
     std::vector< std::vector<int> > m_CoordIndex;
+    std::vector< std::vector<int> > m_NormalIndex;
     std::vector< glm::vec3 > m_PerFaceNormalsNormalized;
     std::vector< glm::vec3 > m_PerVertexNormalsNormalized;
 

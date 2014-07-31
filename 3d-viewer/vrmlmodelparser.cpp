@@ -64,7 +64,7 @@ void VRML_MODEL_PARSER::Load( const wxString aFilename )
     char       line[12];
     FILE*      file;
 
-    // DBG( printf( "Load %s\n", static_cast<const char*>(aFilename.mb_str()) ) );
+    //DBG( printf( "Load %s", static_cast<const char*>(aFilename.mb_str()) ) );
 
     file = wxFopen( aFilename, wxT( "rt" ) );
 
@@ -86,7 +86,7 @@ void VRML_MODEL_PARSER::Load( const wxString aFilename )
     {
         //DBG( printf( "About to parser a #VRML V2.0 file\n" ) );
         vrml2_parser->Load( aFilename );
-
+        
         return;
     }
     else if( stricmp( line, "#VRML V1.0" ) == 0)

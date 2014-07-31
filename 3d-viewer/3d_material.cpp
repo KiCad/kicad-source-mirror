@@ -54,10 +54,10 @@ S3D_MATERIAL::S3D_MATERIAL( S3D_MASTER* father, const wxString& name ) :
 
 void SetOpenGlDefaultMaterial()
 {
-    glm::vec4 ambient( 0.2, 0.2, 0.2, 1.0 );
+    glm::vec4 ambient( 0.15, 0.15, 0.15, 1.0 );
     glm::vec4 specular( 0.1, 0.1, 0.1, 1.0 );
     glm::vec4 emissive( 0.1, 0.1, 0.1, 1.0 );
-    GLint shininess_value = 100;
+    GLint shininess_value = 80;
 
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     //glColor4f( 1.0, 1.0, 1.0, 1.0 );

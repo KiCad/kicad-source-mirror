@@ -424,7 +424,7 @@ void EDA_3D_CANVAS::Redraw()
 
          // Initialize Projection Matrix for Ortographic View
          glOrtho( -size.x / orthoReductionFactor, size.x / orthoReductionFactor,
-                  -size.y / orthoReductionFactor, size.y / orthoReductionFactor, 1, 100 );
+                  -size.y / orthoReductionFactor, size.y / orthoReductionFactor, 1, 10 );
      }
      else
      {
@@ -432,7 +432,7 @@ void EDA_3D_CANVAS::Redraw()
          double ratio_HV = (double) size.x / size.y;
 
          // Initialize Projection Matrix for Perspective View
-         gluPerspective( 45.0 * g_Parm_3D_Visu.m_Zoom, ratio_HV, 1, 100 );
+         gluPerspective( 45.0 * g_Parm_3D_Visu.m_Zoom, ratio_HV, 1, 10 );
      }
 
     // position viewer
@@ -979,7 +979,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
 
     if( g_Parm_3D_Visu.IsRealisticMode() )
     {
-        SetGLEpoxyColor( 0.9 );
+        SetGLEpoxyColor( 1.0 );
         if( g_Parm_3D_Visu.HightQualityMode() )
         {
             SetGLTexture( m_text_pcb, 35.0f );
@@ -1400,7 +1400,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
         m_glLists[GL_ID_BOARD] = glGenLists( 1 );
         m_glLists[GL_ID_BODY] = glGenLists( 1 );
         BuildBoard3DView(m_glLists[GL_ID_BOARD], m_glLists[GL_ID_BODY]);
-
+        CheckGLError( __FILE__, __LINE__ );
     }
 
     if( ! m_glLists[GL_ID_TECH_LAYERS] )
@@ -1409,6 +1409,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
         glNewList( m_glLists[GL_ID_TECH_LAYERS], GL_COMPILE );
         BuildTechLayers3DView();
         glEndList();
+        CheckGLError( __FILE__, __LINE__ );
     }
 
     if( ! m_glLists[GL_ID_AUX_LAYERS] )
@@ -1417,8 +1418,8 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
         glNewList( m_glLists[GL_ID_AUX_LAYERS], GL_COMPILE );
         BuildBoard3DAuxLayers();
         glEndList();
+        CheckGLError( __FILE__, __LINE__ );
     }
-
 
     // draw modules 3D shapes
     if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] && g_Parm_3D_Visu.GetFlag( FL_MODULE ) )
@@ -1434,14 +1435,16 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
         BuildFootprintShape3DList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT],
                                    m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT], false );
 
+        CheckGLError( __FILE__, __LINE__ );
+
         m_glLists[GL_ID_SHADOW_FRONT] = glGenLists( 1 );
         m_glLists[GL_ID_SHADOW_BACK]  = glGenLists( 1 );
         m_glLists[GL_ID_SHADOW_BOARD] = glGenLists( 1 );
         BuildShadowList(m_glLists[GL_ID_SHADOW_FRONT], m_glLists[GL_ID_SHADOW_BACK], m_glLists[GL_ID_SHADOW_BOARD]);
-    }
 
-    // Test for errors
-    CheckGLError( __FILE__, __LINE__ );
+        CheckGLError( __FILE__, __LINE__ );
+    }
+    
 
 #ifdef PRINT_CALCULATION_TIME
     unsigned    endtime = GetRunningMicroSecs();

@@ -167,6 +167,7 @@ private:
     int read_IndexedFaceSet();
     int read_Coordinate();
     int read_Normal();
+    int read_NormalIndex();
     int read_Color();
     int read_coordIndex();
     int read_colorIndex();
