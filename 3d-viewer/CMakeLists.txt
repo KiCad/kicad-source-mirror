@@ -5,6 +5,7 @@ include_directories(
     textures
     ../pcbnew
     ../polygon
+    ${GLEW_INCLUDE_DIR}
     ${INC_AFTER}
     )
 
