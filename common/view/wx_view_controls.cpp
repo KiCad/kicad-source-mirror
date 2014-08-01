@@ -240,7 +240,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 #if wxCHECK_VERSION( 3, 0, 0 )
         moveEvent.SetControlDown( wxGetKeyState( WXK_CONTROL ) );
         moveEvent.SetShiftDown( wxGetKeyState( WXK_SHIFT ) );
-        moveEvent.SetAltDown( wxGetKeyState( WXK_ALT) );
+        moveEvent.SetAltDown( wxGetKeyState( WXK_ALT ) );
 #else
         // wx <3.0 do not have accessors, but the fields are exposed
         moveEvent.m_controlDown = wxGetKeyState( WXK_CONTROL );
