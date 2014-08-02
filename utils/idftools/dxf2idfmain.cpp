@@ -123,7 +123,8 @@ int main( int argc, char **argv )
         tstr.clear();
         tstr.str( line );
 
-        if( (tstr >> height ) && height > 0.001 )
+        tstr >> height;
+        if( !tstr.fail() && height > 0.001 )
             ok = true;
     }
 

@@ -53,7 +53,7 @@ void DIALOG_EDIT_ONE_FIELD::initDlg_base()
     m_CommonConvert->Show(false);
     m_CommonUnit->Show(false);
 
-    msg = ReturnStringFromValue( g_UserUnit, m_textsize );
+    msg = StringFromValue( g_UserUnit, m_textsize );
     m_TextSize->SetValue( msg );
 
     if( m_textorient == TEXT_ORIENT_VERT )
@@ -132,7 +132,7 @@ void DIALOG_EDIT_ONE_FIELD::TransfertDataToField()
 {
     m_textorient = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
     wxString msg = m_TextSize->GetValue();
-    m_textsize = ReturnValueFromString( g_UserUnit, msg );
+    m_textsize = ValueFromString( g_UserUnit, msg );
 
     switch( m_TextHJustificationOpt->GetSelection() )
     {

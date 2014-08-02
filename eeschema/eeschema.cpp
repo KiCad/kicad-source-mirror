@@ -29,39 +29,92 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
 #include <gestfich.h>
 #include <eda_dde.h>
 #include <wxEeschemaStruct.h>
+#include <libeditframe.h>
+#include <viewlib_frame.h>
 #include <eda_text.h>
 
 #include <general.h>
 #include <class_libentry.h>
-//#include <sch_junction.h>
 #include <hotkeys.h>
 #include <dialogs/dialog_color_config.h>
 #include <transform.h>
 #include <wildcards_and_files_ext.h>
 
-#include <wx/snglinst.h>
-
-
-#if defined( USE_KIWAY_DLLS )
-
 #include <kiway.h>
-#include <import_export.h>
 
-static struct SCH_FACE : public KIFACE
+
+// Global variables
+wxSize  g_RepeatStep;
+int     g_RepeatDeltaLabel;
+int     g_DefaultBusWidth;
+SCH_SHEET*  g_RootSheet = NULL;
+
+TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
+
+
+namespace SCH {
+
+static struct IFACE : public KIFACE_I
 {
-    wxWindow* CreateWindow( int aClassId, KIWAY* aKIWAY, int aCtlBits = 0 )
+    // Of course all are virtual overloads, implementations of the KIFACE.
+
+    IFACE( const char* aName, KIWAY::FACE_T aType ) :
+        KIFACE_I( aName, aType )
+    {}
+
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
+
+    void OnKifaceEnd( PGM_BASE* aProgram )
+    {
+        end_common();
+    }
+
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {
         switch( aClassId )
         {
+        case FRAME_SCH:
+            {
+                SCH_EDIT_FRAME* frame = new SCH_EDIT_FRAME( aKiway, aParent );
+
+                frame->Zoom_Automatique( true );
+
+                // Read a default config file in case no project given on command line.
+                frame->LoadProjectFile( wxEmptyString, true );
+
+                if( Kiface().IsSingle() )
+                {
+                    // only run this under single_top, not under a project manager.
+                    CreateServer( frame, KICAD_SCH_PORT_SERVICE_NUMBER );
+                }
+                return frame;
+            }
+            break;
+
+        case FRAME_SCH_LIB_EDITOR:
+            {
+                LIB_EDIT_FRAME* frame = new LIB_EDIT_FRAME( aKiway, aParent );
+                return frame;
+            }
+            break;
+
+
+        case FRAME_SCH_VIEWER:
+        case FRAME_SCH_VIEWER_MODAL:
+            {
+                LIB_VIEW_FRAME* frame = new LIB_VIEW_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
+                return frame;
+            }
+            break;
+
         default:
-            return new SCH_EDIT_FRAME( NULL, wxT( "Eeschema" ),
-                wxPoint( 0, 0 ), wxSize( 600, 400 ) );
+            return NULL;
         }
     }
 
@@ -81,139 +134,51 @@ static struct SCH_FACE : public KIFACE
         return NULL;
     }
 
-} kiface;
+} kiface( "eeschema", KIWAY::FACE_SCH );
 
-static EDA_APP* process;
+} // namespace
+
+using namespace SCH;
+
+static PGM_BASE* process;
+
+
+KIFACE_I& Kiface() { return kiface; }
+
 
 // KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.
 // KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
-MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, wxApp* aProcess )
+MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKiwayVersion, PGM_BASE* aProgram )
 {
-    process = (EDA_APP*) aProcess;
+    process = (PGM_BASE*) aProgram;
     return &kiface;
 }
 
 
-EDA_APP& wxGetApp()
+PGM_BASE& Pgm()
 {
     wxASSERT( process );    // KIFACE_GETTER has already been called.
     return *process;
 }
 
-#else
 
-// Create a new application object: this macro will allow wxWindows to create
-// the application object during program execution (it's better than using a
-// static object for many reasons) and also declares the accessor function
-// wxGetApp() which will return the reference of the right type (i.e. MyApp and
-// not wxApp)
-IMPLEMENT_APP( EDA_APP )
-
-#endif
-
-
-// Global variables
-wxSize  g_RepeatStep;
-int     g_RepeatDeltaLabel;
-int     g_DefaultBusWidth;
-SCH_SHEET*  g_RootSheet = NULL;
-
-TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
-
-
-/************************************/
-/* Called to initialize the program */
-/************************************/
-
-/* MacOSX: Needed for file association
- * http://wiki.wxwidgets.org/WxMac-specific_topics
- */
-void EDA_APP::MacOpenFile( const wxString& aFileName )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
-    wxFileName      filename = aFileName;
-    SCH_EDIT_FRAME* frame = ((SCH_EDIT_FRAME*) GetTopWindow());
+    // This is process level, not project level, initialization of the DSO.
 
-    if( !frame )
-        return;
+    // Do nothing in here pertinent to a project!
 
-    if( !filename.FileExists() )
-        return;
-
-    frame->LoadOneEEProject( aFileName, false );
-}
-
-
-bool EDA_APP::OnInit()
-{
-    wxFileName      filename;
-    SCH_EDIT_FRAME* frame = NULL;
-    bool fileReady = false;
-
-    InitEDA_Appl( wxT( "Eeschema" ), APP_EESCHEMA_T );
-
-    if( argc > 1 )
-        filename = argv[1];
-
-    if( filename.IsOk() )
-    {
-        if( filename.GetExt() != SchematicFileExtension )
-            filename.SetExt( SchematicFileExtension );
-
-        if( !wxGetApp().LockFile( filename.GetFullPath() ) )
-        {
-            DisplayError( NULL, _( "This file is already open." ) );
-            return false;
-        }
-
-        fileReady = true;
-    }
-
-    if( m_Checker && m_Checker->IsAnotherRunning() )
-    {
-        if( !IsOK( NULL, _( "Eeschema is already running, Continue?" ) ) )
-            return false;
-    }
+    start_common( aCtlBits );
 
     // Give a default colour for all layers
     // (actual color will be initialized by config)
     for( int ii = 0; ii < NB_SCH_LAYERS; ii++ )
         SetLayerColor( DARKGRAY, ii );
 
-    // read current setup and reopen last directory if no filename to open in
-    // command line
-    bool reopenLastUsedDirectory = argc == 1;
-    GetSettings( reopenLastUsedDirectory );
-
-   /* Must be called before creating the main frame in order to
-    * display the real hotkeys in menus or tool tips */
+    // Must be called before creating the main frame in order to
+    // display the real hotkeys in menus or tool tips
     ReadHotkeyConfig( wxT("SchematicFrame"), s_Eeschema_Hokeys_Descr );
-
-    // Create main frame (schematic frame) :
-    frame = new SCH_EDIT_FRAME( NULL, wxT( "Eeschema" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
-
-    SetTopWindow( frame );
-    frame->Show( true );
-
-    CreateServer( frame, KICAD_SCH_PORT_SERVICE_NUMBER );
-
-    frame->Zoom_Automatique( true );
-
-    // Load file specified in the command line:
-    if( fileReady )
-    {
-        if( !filename.GetPath().IsEmpty() )
-            // wxSetWorkingDirectory does not like empty paths
-            wxSetWorkingDirectory( filename.GetPath() );
-
-        if( frame->LoadOneEEProject( filename.GetFullName(), false ) )
-            frame->GetCanvas()->Refresh( true );
-    }
-    else
-    {
-        // Read a default config file if no file to load.
-        frame->LoadProjectFile( wxEmptyString, true );
-        frame->GetCanvas()->Refresh( true );
-    }
 
     return true;
 }
+

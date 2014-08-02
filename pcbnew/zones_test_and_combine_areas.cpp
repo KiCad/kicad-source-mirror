@@ -59,7 +59,7 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
     if( bCheckAllAreas )
     {
         modified = true;
-        CombineAllAreasInNet( aModifiedZonesList, modified_area->GetNet(), true );
+        CombineAllAreasInNet( aModifiedZonesList, modified_area->GetNetCode(), true );
     }
 
     if( !IsCopperLayer( layer ) )       // Refill non copper zones on this layer
@@ -98,7 +98,7 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
     {
         ZONE_CONTAINER* curr_area = m_ZoneDescriptorList[ia1];
 
-        if( curr_area->GetNet() != aNetCode )
+        if( curr_area->GetNetCode() != aNetCode )
             continue;
 
         // legal polygon
@@ -109,7 +109,7 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
         {
             ZONE_CONTAINER* area2 = m_ZoneDescriptorList[ia2];
 
-            if( area2->GetNet() != aNetCode )
+            if( area2->GetNetCode() != aNetCode )
                 continue;
 
             if( curr_area->GetPriority() != area2->GetPriority() )
@@ -158,7 +158,7 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
     {
         ZONE_CONTAINER* area2 = m_ZoneDescriptorList[ia2];
 
-        if( area_to_test->GetNet() != area2->GetNet() )
+        if( area_to_test->GetNetCode() != area2->GetNetCode() )
             continue;
 
         if( area_to_test == area2 )
@@ -390,7 +390,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                 continue;
 
             // Test for same net
-            if( Area_Ref->GetNet() == area_to_test->GetNet() && Area_Ref->GetNet() >= 0 )
+            if( Area_Ref->GetNetCode() == area_to_test->GetNetCode() && Area_Ref->GetNetCode() >= 0 )
                 continue;
 
             // test for different priorities
@@ -586,7 +586,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
             continue;
 
         // Test for same net
-        if( ( aArea->GetNet() == area_to_test->GetNet() ) && (aArea->GetNet() >= 0) )
+        if( ( aArea->GetNetCode() == area_to_test->GetNetCode() ) && (aArea->GetNetCode() >= 0) )
             continue;
 
         // test for same priority

@@ -169,12 +169,12 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
     {
         aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->GraphicalItems();
 
-        for( ; aEdge != NULL; aEdge = aEdge->Next() )
+        for( BOARD_ITEM *item = module->GraphicalItems(); item; item = item->Next() )
         {
-            if( aEdge->Type() != PCB_MODULE_EDGE_T )
-                continue;
+            aEdge = dyn_cast<EDGE_MODULE*>( item );
 
-            aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
+            if( aEdge )
+                aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
         }
     }
     else
@@ -192,15 +192,15 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
 {
     // note: if aEdge == NULL, all outline segments will be modified
 
-    MODULE* module    = GetBoard()->m_Modules;
-    LAYER_NUM layer = SILKSCREEN_N_FRONT;
-    bool modified = false;
+    MODULE*     module = GetBoard()->m_Modules;
+    LAYER_ID    layer = F_SilkS;
+    bool        modified = false;
 
     if( aEdge )
         layer = aEdge->GetLayer();
 
     // Ask for the new layer
-    LAYER_NUM new_layer = SelectLayer(layer, EDGE_LAYER );
+    LAYER_ID new_layer = SelectLayer( layer, Edge_Cuts );
 
     if( layer < 0 )
         return;
@@ -214,16 +214,14 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
             return;
     }
 
-    if( aEdge == NULL )
+    if( !aEdge )
     {
-        aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->GraphicalItems();
-
-        for( ; aEdge != NULL; aEdge = aEdge->Next() )
+        for( BOARD_ITEM *item = module->GraphicalItems() ; item != NULL;
+                item = item->Next() )
         {
-            if( aEdge->Type() != PCB_MODULE_EDGE_T )
-                continue;
+            aEdge = dyn_cast<EDGE_MODULE*>( item );
 
-            if( aEdge->GetLayer() != new_layer )
+            if( aEdge && (aEdge->GetLayer() != new_layer) )
             {
                 if( ! modified )    // save only once
                     SaveCopyInUndoList( module, UR_MODEDIT );
@@ -251,14 +249,14 @@ void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
 {
     wxString buffer;
 
-    buffer = ReturnStringFromValue( g_UserUnit, GetDesignSettings().m_ModuleSegmentWidth );
+    buffer = StringFromValue( g_UserUnit, GetDesignSettings().m_ModuleSegmentWidth );
     wxTextEntryDialog dlg( this, _( "New Width:" ), _( "Edge Width" ), buffer );
 
     if( dlg.ShowModal() != wxID_OK )
         return; // canceled by user
 
     buffer = dlg.GetValue( );
-    GetDesignSettings().m_ModuleSegmentWidth = ReturnValueFromString( g_UserUnit, buffer );
+    GetDesignSettings().m_ModuleSegmentWidth = ValueFromString( g_UserUnit, buffer );
 
     if( aEdge )
     {
@@ -352,9 +350,9 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
 
         // The default layer for an edge is the corresponding silk layer
         if( module->IsFlipped() )
-            aEdge->SetLayer( SILKSCREEN_N_BACK );
+            aEdge->SetLayer( B_SilkS );
         else
-            aEdge->SetLayer( SILKSCREEN_N_FRONT );
+            aEdge->SetLayer( F_SilkS );
 
         // Initialize the starting point of the new segment or arc
         aEdge->SetStart( GetCrossHairPosition() );

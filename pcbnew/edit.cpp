@@ -30,7 +30,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <eda_doc.h>
@@ -54,11 +55,14 @@
 #include <dialog_global_edit_tracks_and_vias.h>
 #include <invoke_pcb_dialog.h>
 
+#include <tool/tool_manager.h>
+#include <tools/common_actions.h>
+
 // Handles the selection of command events.
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int         id = event.GetId();
-    LAYER_NUM itmp;
+
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     MODULE* module;
 
@@ -189,43 +193,49 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_OPEN_MODULE_EDITOR:
         {
-            FOOTPRINT_EDIT_FRAME* editorFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+            FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, false );
 
-            if( editorFrame == NULL )
+            if( !editor )
             {
-                editorFrame = new FOOTPRINT_EDIT_FRAME( this, m_footprintLibTable );
-                editorFrame->Show( true );
-                editorFrame->Zoom_Automatique( false );
+                editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
+
+                editor->Show( true );
+                editor->Zoom_Automatique( false );
             }
             else
             {
-                if( editorFrame->IsIconized() )
-                     editorFrame->Iconize( false );
+                /* not needed on linux, other platforms need this?
+                if( editor->IsIconized() )
+                     editor->Iconize( false );
+                */
 
-                editorFrame->Raise();
+                editor->Raise();
 
                 // Raising the window does not set the focus on Linux.  This should work on
                 // any platform.
-                if( wxWindow::FindFocus() != editorFrame )
-                    editorFrame->SetFocus();
+                if( wxWindow::FindFocus() != editor )
+                    editor->SetFocus();
             }
         }
         break;
 
     case ID_OPEN_MODULE_VIEWER:
         {
-            FOOTPRINT_VIEWER_FRAME * viewer =
-                    FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
-            if( viewer == NULL )
+            FOOTPRINT_VIEWER_FRAME* viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
+
+            if( !viewer )
             {
-                viewer = new FOOTPRINT_VIEWER_FRAME( this, m_footprintLibTable, NULL );
+                viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, true );
+
                 viewer->Show( true );
                 viewer->Zoom_Automatique( false );
             }
             else
             {
+                /* not needed on linux, other platforms need this?
                 if( viewer->IsIconized() )
                      viewer->Iconize( false );
+                */
 
                 viewer->Raise();
 
@@ -328,7 +338,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( type == PCB_TRACE_T || type == PCB_VIA_T )
         {
             BOARD_CONNECTED_ITEM*item = (BOARD_CONNECTED_ITEM*) GetCurItem();
-            DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( this, item->GetNet() );
+            DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( this, item->GetNetCode() );
             dlg.ShowModal();
         }
 
@@ -387,30 +397,42 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         else
         {
-            int v_type = GetDesignSettings().m_CurrentViaType;
-            if( id == ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA ||
-                id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA )
-                GetDesignSettings().m_CurrentViaType = VIA_BLIND_BURIED;
-            else if( id == ID_POPUP_PCB_PLACE_MICROVIA )
-                GetDesignSettings().m_CurrentViaType = VIA_MICROVIA;
-            else
-                GetDesignSettings().m_CurrentViaType = VIA_THROUGH;
+            BOARD_DESIGN_SETTINGS &settings = GetDesignSettings();
+            VIATYPE_T v_type = settings.m_CurrentViaType;
+            switch( id )
+            {
+            case ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA:
+            case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA:
+                settings.m_CurrentViaType = VIA_BLIND_BURIED;
+                break;
+
+            case ID_POPUP_PCB_PLACE_MICROVIA:
+                settings.m_CurrentViaType = VIA_MICROVIA;
+                break;
+
+            default:
+                settings.m_CurrentViaType = VIA_THROUGH;
+                break;
+            }
 
             // place via and switch layer.
             if( id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_THROUGH_VIA ||
                 id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA )
             {
                 m_canvas->SetIgnoreMouseEvents( true );
+
                 wxPoint dlgPosition;
+
                 wxGetMousePosition( &dlgPosition.x, &dlgPosition.y );
-                LAYER_NUM layer = SelectLayer( getActiveLayer(), ALL_NO_CU_LAYERS,
-                                               dlgPosition );
+
+                LAYER_ID layer = SelectLayer( GetActiveLayer(), LSET::AllNonCuMask(), dlgPosition );
+
                 m_canvas->SetIgnoreMouseEvents( false );
                 m_canvas->MoveCursorToCrossHair();
 
-                if( getActiveLayer() != layer )
+                if( GetActiveLayer() != layer )
                 {
-                    GetScreen()->m_Route_Layer_TOP    = getActiveLayer();
+                    GetScreen()->m_Route_Layer_TOP    = GetActiveLayer();
                     GetScreen()->m_Route_Layer_BOTTOM = layer;
                     Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
                 }
@@ -419,7 +441,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             else
                 Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
 
-            GetDesignSettings().m_CurrentViaType = v_type;
+            settings.m_CurrentViaType = v_type;
 
             if( DisplayOpt.ContrastModeDisplay )
                 m_canvas->Refresh();
@@ -468,11 +490,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_LOCK_ON_NET:
-        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->GetNet(), true );
+        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->GetNetCode(), true );
         break;
 
     case ID_POPUP_PCB_LOCK_OFF_NET:
-        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->GetNet(), false );
+        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->GetNetCode(), false );
         break;
 
     case ID_POPUP_PCB_SETFLAGS_TRACK_MNU:
@@ -486,7 +508,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         {
             SEGZONE* zsegm   = (SEGZONE*) GetCurItem();
-            int      netcode = zsegm->GetNet();
+            int      netcode = zsegm->GetNetCode();
             Delete_OldZone_Fill( zsegm );
             SetCurItem( NULL );
             TestNetConnection( NULL, netcode );
@@ -501,11 +523,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_ZONE_DUPLICATE:
-    {
-        ZONE_CONTAINER* zone = (ZONE_CONTAINER*) GetCurItem();
-        duplicateZone( &dc, zone );
-    }
-    break;
+        {
+            ZONE_CONTAINER* zone = (ZONE_CONTAINER*) GetCurItem();
+            duplicateZone( &dc, zone );
+        }
+        break;
 
     case ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE:
         m_canvas->MoveCursorToCrossHair();
@@ -523,7 +545,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_DELETE_ZONE_CUTOUT:
         m_canvas->MoveCursorToCrossHair();
         {
-            int netcode = ( (ZONE_CONTAINER*) GetCurItem() )->GetNet();
+            int netcode = ( (ZONE_CONTAINER*) GetCurItem() )->GetNetCode();
             Delete_Zone_Contour( &dc, (ZONE_CONTAINER*) GetCurItem() );
             SetCurItem( NULL );
             TestNetConnection( NULL, netcode );
@@ -537,60 +559,60 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_MOVE_ZONE_CORNER:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), false );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), false );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Drag_Outline_Edge( &dc, zone_cont, zone_cont->GetSelectedCorner() );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Drag_Outline_Edge( &dc, zone_cont, zone_cont->GetSelectedCorner() );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_MOVE_ZONE_OUTLINES:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Outlines( &dc, zone_cont );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Outlines( &dc, zone_cont );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_ADD_ZONE_CORNER:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        wxPoint         pos = GetCrossHairPosition();
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            wxPoint         pos = GetCrossHairPosition();
 
-        /* add corner between zone_cont->m_CornerSelection
-         * and zone_cont->m_CornerSelection+1
-         * and start move the new corner
-         */
-        zone_cont->Draw( m_canvas, &dc, GR_XOR );
-        zone_cont->Outline()->InsertCorner( zone_cont->GetSelectedCorner(), pos.x, pos.y );
-        zone_cont->SetSelectedCorner( zone_cont->GetSelectedCorner() + 1 );
-        zone_cont->Draw( m_canvas, &dc, GR_XOR );
-        m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), true );
+            /* add corner between zone_cont->m_CornerSelection
+             * and zone_cont->m_CornerSelection+1
+             * and start move the new corner
+             */
+            zone_cont->Draw( m_canvas, &dc, GR_XOR );
+            zone_cont->Outline()->InsertCorner( zone_cont->GetSelectedCorner(), pos.x, pos.y );
+            zone_cont->SetSelectedCorner( zone_cont->GetSelectedCorner() + 1 );
+            zone_cont->Draw( m_canvas, &dc, GR_XOR );
+            m_canvas->SetAutoPanRequest( true );
+            Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), true );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
     case ID_POPUP_PCB_PLACE_ZONE_CORNER:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        End_Move_Zone_Corner_Or_Outlines( &dc, zone_cont );
-        m_canvas->SetAutoPanRequest( false );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+            End_Move_Zone_Corner_Or_Outlines( &dc, zone_cont );
+            m_canvas->SetAutoPanRequest( false );
+        }
         break;
-    }
 
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         m_canvas->MoveCursorToCrossHair();
@@ -604,7 +626,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             ZONE_CONTAINER* zone_container = (ZONE_CONTAINER*) GetCurItem();
             zone_container->UnFill();
-            TestNetConnection( NULL, zone_container->GetNet() );
+            TestNetConnection( NULL, zone_container->GetNetCode() );
             OnModify();
             SetMsgPanel( GetBoard() );
             m_canvas->Refresh();
@@ -633,7 +655,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_FILL_ZONE:
         m_canvas->MoveCursorToCrossHair();
         Fill_Zone( (ZONE_CONTAINER*) GetCurItem() );
-        TestNetConnection( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNet() );
+        TestNetConnection( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNetCode() );
         SetMsgPanel( GetBoard() );
         m_canvas->Refresh();
         break;
@@ -832,16 +854,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         {
-            FOOTPRINT_EDIT_FRAME* editorFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+            FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
 
-            if( editorFrame == NULL )
-                editorFrame = new FOOTPRINT_EDIT_FRAME( this, m_footprintLibTable );
-
-            editorFrame->Load_Module_From_BOARD( (MODULE*)GetCurItem() );
+            editor->Load_Module_From_BOARD( (MODULE*)GetCurItem() );
             SetCurItem( NULL );     // the current module could be deleted by
 
-            editorFrame->Show( true );
-            editorFrame->Iconize( false );
+            editor->Show( true );
+
+            editor->Raise();        // Iconize( false );
         }
         m_canvas->MoveCursorToCrossHair();
         break;
@@ -939,20 +959,22 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER:
-        itmp = SelectLayer( getActiveLayer() );
-
-        if( itmp >= 0 )
         {
-            // if user changed colors and we are in high contrast mode, then redraw
-            // because the PAD_SMD pads may change color.
-            if( DisplayOpt.ContrastModeDisplay && getActiveLayer() != itmp )
-            {
-                m_canvas->Refresh();
-            }
-            setActiveLayer( itmp );
-        }
+            LAYER_ID itmp = SelectLayer( GetActiveLayer() );
 
-        m_canvas->MoveCursorToCrossHair();
+            if( itmp >= 0 )
+            {
+                // if user changed colors and we are in high contrast mode, then redraw
+                // because the PAD_SMD pads may change color.
+                if( DisplayOpt.ContrastModeDisplay && GetActiveLayer() != itmp )
+                {
+                    m_canvas->Refresh();
+                }
+                SetActiveLayer( itmp );
+            }
+
+            m_canvas->MoveCursorToCrossHair();
+        }
         break;
 
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
@@ -960,20 +982,23 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
-        itmp = SelectLayer( getActiveLayer(), ALL_CU_LAYERS );
+        {
+            LAYER_ID itmp = SelectLayer( GetActiveLayer(), LSET::AllCuMask() );
 
-        if( itmp >= 0 )
-            setActiveLayer( itmp );
+            if( itmp >= 0 )
+                SetActiveLayer( itmp );
 
-        m_canvas->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
+        }
         break;
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
-        itmp = SelectLayer( getActiveLayer(), ALL_NO_CU_LAYERS );
+        {
+            LAYER_ID itmp = SelectLayer( GetActiveLayer(), LSET::AllNonCuMask() );
 
-        if( itmp >= 0 )
-            setActiveLayer( itmp );
-
+            if( itmp >= 0 )
+                SetActiveLayer( itmp );
+        }
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
@@ -982,11 +1007,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
-        setActiveLayer( m_SelLayerBox->GetLayerSelection() );
+        SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 
         if( DisplayOpt.ContrastModeDisplay )
             m_canvas->Refresh( true );
-
         break;
 
     case ID_POPUP_PCB_EDIT_TEXTEPCB:
@@ -1156,7 +1180,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             newtrack->Draw( m_canvas, &dc, GR_XOR );
 
             // compute the new ratsnest, because connectivity could change
-            TestNetConnection( &dc, track->GetNet() );
+            TestNetConnection( &dc, track->GetNetCode() );
         }
         break;
 
@@ -1174,9 +1198,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC:
         {
-            wxConfig* cfg = wxGetApp().GetCommonSettings();
+            wxConfigBase* cfg = Pgm().CommonSettings();
             cfg->Read( wxT( "module_doc_file" ), g_DocModulesFileName );
-            GetAssociatedDocument( this, g_DocModulesFileName, &wxGetApp().GetLibraryPathList() );
+            GetAssociatedDocument( this, g_DocModulesFileName, &Kiface().KifaceSearch() );
         }
         break;
 
@@ -1189,14 +1213,13 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_GEN_IMPORT_DXF_FILE:
-        InvokeDXFDialogImport( this );
+        InvokeDXFDialogBoardImport( this );
         m_canvas->Refresh();
         break;
 
     default:
         wxString msg;
-        msg.Printf( wxT( "PCB_EDIT_FRAME::Process_Special_Functions() unknown event id %d" ),
-                    id );
+        msg.Printf( wxT( "PCB_EDIT_FRAME::Process_Special_Functions() unknown event id %d" ), id );
         DisplayError( this, msg );
         break;
     }
@@ -1248,7 +1271,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
     case PCB_ZONE_AREA_T:
         {
             SetCurItem( NULL );
-            int netcode = ( (ZONE_CONTAINER*) Item )->GetNet();
+            int netcode = ( (ZONE_CONTAINER*) Item )->GetNetCode();
             Delete_Zone_Contour( DC, (ZONE_CONTAINER*) Item );
             TestNetConnection( NULL, netcode );
             SetMsgPanel( GetBoard() );
@@ -1283,9 +1306,9 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 }
 
 
-void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
+void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
 {
-    LAYER_NUM curLayer = getActiveLayer();
+    LAYER_ID curLayer = GetActiveLayer();
 
     // Check if the specified layer matches the present layer
     if( layer == curLayer )
@@ -1300,7 +1323,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
         // selection of any other copper layer is disregarded).
         if( GetBoard()->GetCopperLayerCount() < 2 )
         {
-            if( layer != LAYER_N_BACK )
+            if( layer != B_Cu )
                 return;
         }
         // If more than one copper layer is enabled, the "Copper"
@@ -1309,17 +1332,16 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
         // layers are also capable of being selected.
         else
         {
-            if( ( layer != LAYER_N_BACK ) && ( layer != LAYER_N_FRONT )
-               && ( layer >= GetBoard()->GetCopperLayerCount() - 1 ) )
+            if( layer != B_Cu  &&  layer != F_Cu  && layer >= GetBoard()->GetCopperLayerCount() - 1 )
                 return;
         }
 
         EDA_ITEM* current = GetScreen()->GetCurItem();
 
         // See if we are drawing a segment; if so, add a via?
-        if( GetToolId() == ID_TRACK_BUTT && current != NULL )
+        if( GetToolId() == ID_TRACK_BUTT && current )
         {
-            if( current->Type() == PCB_TRACE_T && ( current->IsNew() ) )
+            if( current->Type() == PCB_TRACE_T && current->IsNew() )
             {
                 // Want to set the routing layers so that it switches properly -
                 // see the implementation of Other_Layer_Route - the working
@@ -1327,7 +1349,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
                 GetScreen()->m_Route_Layer_TOP    = curLayer;
                 GetScreen()->m_Route_Layer_BOTTOM = layer;
 
-                setActiveLayer( curLayer );
+                SetActiveLayer( curLayer );
 
                 if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
                 {
@@ -1348,7 +1370,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
     // and a non-copper layer, or vice-versa?
     // ...
 
-    setActiveLayer( layer );
+    SetActiveLayer( layer );
 
     if( DisplayOpt.ContrastModeDisplay )
         m_canvas->Refresh();

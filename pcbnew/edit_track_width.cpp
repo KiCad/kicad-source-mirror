@@ -36,19 +36,21 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     NETINFO_ITEM* net = NULL;
 
     if( aUseNetclassValue )
-        net = GetBoard()->FindNet( aTrackItem->GetNet() );
+        net = aTrackItem->GetNet();
 
     initial_width = aTrackItem->GetWidth();
 
     if( net )
         new_width = net->GetTrackWidth();
     else
-        new_width = GetBoard()->GetCurrentTrackWidth();
+        new_width = GetDesignSettings().GetCurrentTrackWidth();
 
     if( aTrackItem->Type() == PCB_VIA_T )
     {
-        if( !aTrackItem->IsDrillDefault() )
-            initial_drill = aTrackItem->GetDrillValue();
+        const VIA *via = static_cast<const VIA *>( aTrackItem );
+
+        if( !via->IsDrillDefault() )
+            initial_drill = via->GetDrillValue();
 
         if( net )
         {
@@ -56,16 +58,16 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
         }
         else
         {
-            new_width = GetBoard()->GetCurrentViaSize();
-            new_drill = GetBoard()->GetCurrentViaDrill();
+            new_width = GetDesignSettings().GetCurrentViaSize();
+            new_drill = GetDesignSettings().GetCurrentViaDrill();
         }
 
-        if( aTrackItem->GetShape() == VIA_MICROVIA )
+        if( via->GetViaType() == VIA_MICROVIA )
         {
             if( net )
                 new_width = net->GetMicroViaSize();
             else
-                new_width = GetBoard()->GetCurrentMicroViaSize();
+                new_width = GetDesignSettings().GetCurrentMicroViaSize();
         }
     }
 
@@ -107,10 +109,11 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
             if( aTrackItem->Type() == PCB_VIA_T )
             {
                 // Set new drill value. Note: currently microvias have only a default drill value
+                VIA *via = static_cast<VIA *>( aTrackItem );
                 if( new_drill > 0 )
-                    aTrackItem->SetDrill( new_drill );
+                    via->SetDrill( new_drill );
                 else
-                    aTrackItem->SetDrillDefault();
+                    via->SetDrillDefault();
             }
         }
     }
@@ -224,7 +227,7 @@ bool PCB_EDIT_FRAME::Change_Net_Tracks_And_Vias_Sizes( int aNetcode, bool aUseNe
 
     for( pt_segm = GetBoard()->m_Track; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
-        if( aNetcode != pt_segm->GetNet() )         // not in net
+        if( aNetcode != pt_segm->GetNetCode() )         // not in net
             continue;
 
         // we have found a item member of the net

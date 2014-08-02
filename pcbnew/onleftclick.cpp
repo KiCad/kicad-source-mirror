@@ -37,6 +37,7 @@
 #include <class_board.h>
 #include <class_zone.h>
 #include <class_pcb_text.h>
+#include <project.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -160,7 +161,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         case PCB_TRACE_T:
         case PCB_VIA_T:
         case PCB_PAD_T:
-            GetBoard()->SetCurrentNetClass(
+            GetDesignSettings().SetCurrentNetClass(
                 ((BOARD_CONNECTED_ITEM*)DrawStruct)->GetNetClassName() );
             updateTraceWidthSelectBox();
             updateViaSizeSelectBox();
@@ -243,7 +244,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             if( GetToolId() == ID_PCB_ARC_BUTT )
                 shape = S_ARC;
 
-            if( IsCopperLayer( getActiveLayer() ) )
+            if( IsCopperLayer( GetActiveLayer() ) )
             {
                 DisplayError( this, _( "Graphic not allowed on Copper layers" ) );
                 break;
@@ -267,7 +268,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_TRACK_BUTT:
-        if( !IsCopperLayer( getActiveLayer() ) )
+        if( !IsCopperLayer( GetActiveLayer() ) )
         {
             DisplayError( this, _( "Tracks on Copper layers only " ) );
             break;
@@ -325,7 +326,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_ADD_TEXT_BUTT:
-        if( IsLayerInList( EDGE_LAYER, getActiveLayer() ) )
+        if( Edge_Cuts == GetActiveLayer() )
         {
             DisplayError( this,
                           _( "Texts not allowed on Edge Cut layer" ) );
@@ -354,8 +355,9 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
             m_canvas->MoveCursorToCrossHair();
-            DrawStruct = (BOARD_ITEM*) LoadModuleFromLibrary( wxEmptyString, m_footprintLibTable,
-                                                              true, aDC );
+            DrawStruct = (BOARD_ITEM*) LoadModuleFromLibrary(
+                    wxEmptyString, Prj().PcbFootprintLibs(), true, aDC );
+
             SetCurItem( DrawStruct );
 
             if( DrawStruct )
@@ -374,14 +376,13 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_DIMENSION_BUTT:
-        if( IsLayerInList( EDGE_LAYER|ALL_CU_LAYERS, getActiveLayer() ) )
+        if( IsCopperLayer( GetActiveLayer() ) || GetActiveLayer() == Edge_Cuts )
         {
-            DisplayError( this,
-                          _( "Dimension not allowed on Copper or Edge Cut layers" ) );
+            DisplayError( this, _( "Dimension not allowed on Copper or Edge Cut layers" ) );
             break;
         }
 
-        if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
+        if( !DrawStruct || !DrawStruct->GetFlags() )
         {
             DrawStruct = (BOARD_ITEM*) EditDimension( NULL, aDC );
             SetCurItem( DrawStruct );

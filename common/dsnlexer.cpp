@@ -36,6 +36,8 @@
 
 //#define STANDALONE  1       // enable this for stand alone testing.
 
+#define FMT_CLIPBOARD       _( "clipboard" )
+
 
 //-----<DSNLEXER>-------------------------------------------------------------
 
@@ -89,7 +91,7 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
     keywordCount( aKeywordCount )
 {
     STRING_LINE_READER* stringReader = new STRING_LINE_READER( aClipboardTxt, aSource.IsEmpty() ?
-                                        wxString( _( "clipboard" ) ) : aSource );
+                                        wxString( FMT_CLIPBOARD ) : aSource );
     PushReader( stringReader );
     init();
 }
@@ -103,6 +105,20 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
 {
     if( aLineReader )
         PushReader( aLineReader );
+    init();
+}
+
+
+static const KEYWORD empty_keywords[1] = {};
+
+DSNLEXER::DSNLEXER( const std::string& aSExpression, const wxString& aSource ) :
+    iOwnReaders( true ),
+    keywords( empty_keywords ),
+    keywordCount( 0 )
+{
+    STRING_LINE_READER* stringReader = new STRING_LINE_READER( aSExpression, aSource.IsEmpty() ?
+                                        wxString( FMT_CLIPBOARD ) : aSource );
+    PushReader( stringReader );
     init();
 }
 

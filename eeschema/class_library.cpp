@@ -731,7 +731,7 @@ bool CMP_LIBRARY::Save( OUTPUTFORMATTER& aFormatter )
 
         aFormatter.Print( 0, "#\n#End Library\n" );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         success = false;
     }
@@ -756,7 +756,7 @@ bool CMP_LIBRARY::SaveDocs( OUTPUTFORMATTER& aFormatter )
 
         aFormatter.Print( 0, "#\n#End Doc Library\n" );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         success = false;
     }

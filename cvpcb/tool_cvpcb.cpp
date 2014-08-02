@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
 #include <common.h>
 
 #include <bitmaps.h>
@@ -41,7 +41,7 @@
 
 void CVPCB_MAINFRAME::ReCreateHToolbar()
 {
-    wxConfig* config = wxGetApp().GetSettings();
+    wxConfigBase* config = Kiface().KifaceSettings();
 
     if( m_mainToolBar != NULL )
         return;

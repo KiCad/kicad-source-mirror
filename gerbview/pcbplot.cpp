@@ -6,6 +6,7 @@
 #include <common.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <pcbplot.h>
 
 /** TODO */

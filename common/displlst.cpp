@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <macros.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <kicad_string.h>
 #include <dialog_helpers.h>
 

@@ -97,20 +97,20 @@ void DIALOG_GRAPHIC_ITEMS_OPTIONS::initValues()
 
 void DIALOG_GRAPHIC_ITEMS_OPTIONS::OnOkClick( wxCommandEvent& event )
 {
-    m_brdSettings.m_DrawSegmentWidth = ReturnValueFromTextCtrl( *m_OptPcbSegmWidth );
-    m_brdSettings.m_EdgeSegmentWidth = ReturnValueFromTextCtrl( *m_OptPcbEdgesWidth );
-    m_brdSettings.m_PcbTextWidth = ReturnValueFromTextCtrl( *m_OptPcbTextWidth );
-    m_brdSettings.m_PcbTextSize.y = ReturnValueFromTextCtrl( *m_OptPcbTextVSize );
-    m_brdSettings.m_PcbTextSize.x = ReturnValueFromTextCtrl( *m_OptPcbTextHSize );
+    m_brdSettings.m_DrawSegmentWidth = ValueFromTextCtrl( *m_OptPcbSegmWidth );
+    m_brdSettings.m_EdgeSegmentWidth = ValueFromTextCtrl( *m_OptPcbEdgesWidth );
+    m_brdSettings.m_PcbTextWidth = ValueFromTextCtrl( *m_OptPcbTextWidth );
+    m_brdSettings.m_PcbTextSize.y = ValueFromTextCtrl( *m_OptPcbTextVSize );
+    m_brdSettings.m_PcbTextSize.x = ValueFromTextCtrl( *m_OptPcbTextHSize );
 
     m_parent->GetBoard()->SetDesignSettings( m_brdSettings );
 
-    m_brdSettings.m_ModuleSegmentWidth = ReturnValueFromTextCtrl( *m_OptModuleEdgesWidth );
-    m_brdSettings.m_ModuleTextWidth = ReturnValueFromTextCtrl( *m_OptModuleTextWidth );
-    m_brdSettings.m_ModuleTextSize.y = ReturnValueFromTextCtrl( *m_OptModuleTextVSize );
-    m_brdSettings.m_ModuleTextSize.x = ReturnValueFromTextCtrl( *m_OptModuleTextHSize );
+    m_brdSettings.m_ModuleSegmentWidth = ValueFromTextCtrl( *m_OptModuleEdgesWidth );
+    m_brdSettings.m_ModuleTextWidth = ValueFromTextCtrl( *m_OptModuleTextWidth );
+    m_brdSettings.m_ModuleTextSize.y = ValueFromTextCtrl( *m_OptModuleTextVSize );
+    m_brdSettings.m_ModuleTextSize.x = ValueFromTextCtrl( *m_OptModuleTextHSize );
 
-    g_DrawDefaultLineThickness = ReturnValueFromTextCtrl( *m_DefaultPenSizeCtrl );
+    g_DrawDefaultLineThickness = ValueFromTextCtrl( *m_DefaultPenSizeCtrl );
 
     if( g_DrawDefaultLineThickness < 0 )
         g_DrawDefaultLineThickness = 0;

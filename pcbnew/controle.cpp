@@ -35,6 +35,7 @@
 #include <pcbnew_id.h>
 #include <class_board.h>
 #include <class_module.h>
+#include <class_zone.h>
 
 #include <pcbnew.h>
 #include <protos.h>
@@ -118,7 +119,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     else if( GetToolId() == ID_NO_TOOL_SELECTED )
     {
         if( m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_MODULE ) )
-            scanList = GENERAL_COLLECTOR::ModuleItems;
+            scanList = GENERAL_COLLECTOR::Modules;
         else
             scanList = (DisplayOpt.DisplayZonesMode == 0) ?
                        GENERAL_COLLECTOR::AllBoardItems :
@@ -137,7 +138,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             break;
 
         case ID_PCB_MODULE_BUTT:
-            scanList = GENERAL_COLLECTOR::ModuleItems;
+            scanList = GENERAL_COLLECTOR::Modules;
             break;
 
         case ID_PCB_ZONES_BUTT:
@@ -160,8 +161,9 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         (*m_Collector)[i]->Show( 0, std::cout );
 #endif
 
-    /* Remove redundancies: sometime, zones are found twice,
+    /* Remove redundancies: sometime, legacy zones are found twice,
      * because zones can be filled by overlapping segments (this is a fill option)
+     * Trigger the selection of the current edge for new-style zones
      */
     time_t timestampzone = 0;
 
@@ -169,18 +171,32 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     {
         item = (*m_Collector)[ii];
 
-        if( item->Type() != PCB_ZONE_T )
-            continue;
+        switch( item->Type() )
+        {
+        case PCB_ZONE_T:
+            // Found a TYPE ZONE
+            if( item->GetTimeStamp() == timestampzone )    // Remove it, redundant, zone already found
+            {
+                m_Collector->Remove( ii );
+                ii--;
+            }
+            else
+            {
+                timestampzone = item->GetTimeStamp();
+            }
+            break;
 
-        // Found a TYPE ZONE
-        if( item->GetTimeStamp() == timestampzone )    // Remove it, redundant, zone already found
-        {
-            m_Collector->Remove( ii );
-            ii--;
-        }
-        else
-        {
-            timestampzone = item->GetTimeStamp();
+        case PCB_ZONE_AREA_T:
+            {
+                /* We need to do the selection now because the menu text
+                 * depends on it */
+                ZONE_CONTAINER *zone = static_cast<ZONE_CONTAINER*>( item );
+                zone->SetSelectedCorner( RefPos( true ) );
+            }
+            break;
+
+        default:
+            break;
         }
     }
 
@@ -268,9 +284,12 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
 void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
-    wxRealPoint gridSize;
-    wxPoint     oldpos;
-    wxPoint     pos = aPosition;
+    // Filter out the 'fake' mouse motion after a keyboard movement
+    if( !aHotKey && m_movingCursorWithKeyboard )
+    {
+        m_movingCursorWithKeyboard = false;
+        return;
+    }
 
     // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
     // for next cursor position
@@ -279,42 +298,9 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     if( !aHotKey && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_CONTROL ) )
         snapToGrid = false;
 
-    if( snapToGrid )
-        pos = GetNearestGridPosition( pos );
-
-    oldpos = GetCrossHairPosition();
-
-    gridSize = GetScreen()->GetGridSize();
-
-    switch( aHotKey )
-    {
-    case WXK_NUMPAD8:
-    case WXK_UP:
-        pos.y -= KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD2:
-    case WXK_DOWN:
-        pos.y += KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD4:
-    case WXK_LEFT:
-        pos.x -= KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD6:
-    case WXK_RIGHT:
-        pos.x += KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    default:
-        break;
-    }
+    wxPoint oldpos = GetCrossHairPosition();
+    wxPoint pos = aPosition;
+    GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
 
     // Put cursor in new position, according to the zoom keys (if any).
     SetCrossHairPosition( pos, snapToGrid );
@@ -331,6 +317,7 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     wxPoint curs_pos = pos;
 
+    wxRealPoint gridSize = GetScreen()->GetGridSize();
     wxSize igridsize;
     igridsize.x = KiROUND( gridSize.x );
     igridsize.y = KiROUND( gridSize.y );
@@ -352,32 +339,7 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         }
     }
 
-
-    if( oldpos != GetCrossHairPosition() )
-    {
-        pos = GetCrossHairPosition();
-        SetCrossHairPosition( oldpos, false );
-        m_canvas->CrossHairOff( aDC );
-        SetCrossHairPosition( pos, false );
-        m_canvas->CrossHairOn( aDC );
-
-        if( m_canvas->IsMouseCaptured() )
-        {
-#ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( m_overlay, (wxWindowDC*)aDC );
-            oDC.Clear();
-            m_canvas->CallMouseCapture( aDC, aPosition, false );
-#else
-            m_canvas->CallMouseCapture( aDC, aPosition, true );
-#endif
-        }
-#ifdef USE_WX_OVERLAY
-        else
-        {
-            m_overlay.Reset();
-        }
-#endif
-    }
+    RefreshCrossHair( oldpos, aPosition, aDC );
 
     if( aHotKey )
     {

@@ -26,7 +26,7 @@
  */
 
 #include <wxPcbStruct.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
 #include <pcbnew.h>
 #include <class_board.h>
 
@@ -36,14 +36,14 @@
 #define OPTKEY_IDF_THOU wxT( "IDFExportThou" )
 
 
-bool Export_IDF3( BOARD *aPcb, const wxString & aFullFileName, double aUseThou );
+bool Export_IDF3( BOARD *aPcb, const wxString & aFullFileName, bool aUseThou );
 
 
 class DIALOG_EXPORT_IDF3: public DIALOG_EXPORT_IDF3_BASE
 {
 private:
     PCB_EDIT_FRAME* m_parent;
-    wxConfig* m_config;
+    wxConfigBase* m_config;
     bool m_idfThouOpt;  // remember last preference for units in THOU
 
     void OnCancelClick( wxCommandEvent& event )
@@ -60,7 +60,7 @@ public:
             DIALOG_EXPORT_IDF3_BASE( parent )
     {
         m_parent = parent;
-        m_config = wxGetApp().GetSettings();
+        m_config = Kiface().KifaceSettings();
         SetFocus();
         m_idfThouOpt = false;
         m_config->Read( OPTKEY_IDF_THOU, &m_idfThouOpt );

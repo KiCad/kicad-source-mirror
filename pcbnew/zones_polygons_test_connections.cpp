@@ -50,11 +50,11 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );
 // zone size = size of the m_FilledPolysList buffer
 bool sort_areas( const ZONE_CONTAINER* ref, const ZONE_CONTAINER* tst )
 {
-    if( ref->GetNet() == tst->GetNet() )
+    if( ref->GetNetCode() == tst->GetNetCode() )
         return ref->GetFilledPolysList().GetCornersCount() <
                tst->GetFilledPolysList().GetCornersCount();
     else
-        return ref->GetNet() < tst->GetNet();
+        return ref->GetNetCode() < tst->GetNetCode();
 }
 
 /**
@@ -71,15 +71,15 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
     // clear .m_ZoneSubnet parameter for pads
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
-            if( (aNetcode < 0) || ( aNetcode == pad->GetNet() ) )
+        for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
+            if( aNetcode < 0 || aNetcode == pad->GetNetCode() )
                 pad->SetZoneSubNet( 0 );
     }
 
     // clear .m_ZoneSubnet parameter for tracks and vias
     for( TRACK* track = m_Track;  track;  track = track->Next() )
     {
-        if( (aNetcode < 0) || ( aNetcode == track->GetNet() ) )
+        if( aNetcode < 0 || aNetcode == track->GetNetCode() )
             track->SetZoneSubNet( 0 );
     }
 
@@ -88,40 +88,50 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 
     // Build zones candidates list
     std::vector<ZONE_CONTAINER*> zones_candidates;
+
+    zones_candidates.reserve( GetAreaCount() );
+
     for( int index = 0; index < GetAreaCount(); index++ )
     {
-        ZONE_CONTAINER* curr_zone = GetArea( index );
-        if( !curr_zone->IsOnCopperLayer() )
+        ZONE_CONTAINER* zone = GetArea( index );
+
+        if( !zone->IsOnCopperLayer() )
             continue;
-        if( (aNetcode >= 0) && ( aNetcode != curr_zone->GetNet() ) )
+
+        if( aNetcode >= 0 &&  aNetcode != zone->GetNetCode() )
             continue;
-        if( curr_zone->GetFilledPolysList().GetCornersCount() == 0 )
+
+        if( zone->GetFilledPolysList().GetCornersCount() == 0 )
             continue;
-        zones_candidates.push_back(curr_zone);
+
+        zones_candidates.push_back( zone );
     }
+
     // sort them by netcode then vertices count.
     // For a given net, examine the smaller zones first slightly speed up calculation
     // (25% faster)
     // this is only noticeable with very large boards and depends on board zones topology
     // This is due to the fact some items are connected by small zones ares,
     // before examining large zones areas and these items are not tested after a connection is found
-    sort(zones_candidates.begin(), zones_candidates.end(), sort_areas );
+    sort( zones_candidates.begin(), zones_candidates.end(), sort_areas );
 
     int oldnetcode = -1;
     for( unsigned idx = 0; idx < zones_candidates.size(); idx++ )
     {
-        ZONE_CONTAINER* curr_zone = zones_candidates[idx];
+        ZONE_CONTAINER* zone = zones_candidates[idx];
 
-        int netcode = curr_zone->GetNet();
+        int netcode = zone->GetNetCode();
 
         // Build a list of candidates connected to the net:
         // At this point, layers are not considered, because areas on different layers can
         // be connected by a via or a pad.
         // (because zones are sorted by netcode, there is made only once per net)
         NETINFO_ITEM* net = FindNet( netcode );
+
         wxASSERT( net );
         if( net == NULL )
             continue;
+
         if( oldnetcode != netcode )
         {
             oldnetcode = netcode;
@@ -129,38 +139,43 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 
             // Build the list of pads candidates connected to the net:
             candidates.reserve( net->m_PadInNetList.size() );
+
             for( unsigned ii = 0; ii < net->m_PadInNetList.size(); ii++ )
                 candidates.push_back( net->m_PadInNetList[ii] );
 
             // Build the list of track candidates connected to the net:
             TRACK* track = m_Track.GetFirst()->GetStartNetCode( netcode );
+
             for( ; track; track = track->Next() )
             {
-                if( track->GetNet() != netcode )
+                if( track->GetNetCode() != netcode )
                     break;
+
                 candidates.push_back( track );
             }
         }
 
         // test if a candidate is inside a filled area of this zone
         unsigned indexstart = 0, indexend;
-        const CPOLYGONS_LIST& polysList = curr_zone->GetFilledPolysList();
+        const CPOLYGONS_LIST& polysList = zone->GetFilledPolysList();
+
         for( indexend = 0; indexend < polysList.GetCornersCount(); indexend++ )
         {
             // end of a filled sub-area found
             if( polysList.IsEndContour( indexend ) )
             {
                 subnet++;
-                EDA_RECT bbox = curr_zone->CalculateSubAreaBoundaryBox( indexstart, indexend );
+                EDA_RECT bbox = zone->CalculateSubAreaBoundaryBox( indexstart, indexend );
 
                 for( unsigned ic = 0; ic < candidates.size(); ic++ )
-                { // test if this area is connected to a board item:
+                {
+                    // test if this area is connected to a board item:
                     BOARD_CONNECTED_ITEM* item = candidates[ic];
 
                     if( item->GetZoneSubNet() == subnet )   // Already merged
                         continue;
 
-                   if( !item->IsOnLayer( curr_zone->GetLayer() ) )
+                   if( !item->IsOnLayer( zone->GetLayer() ) )
                         continue;
 
                     wxPoint pos1, pos2;
@@ -171,16 +186,19 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                         // the pad position, because the zones are connected
                         // to the center of the shape, not the pad position
                         // (this is important for pads with thermal relief)
-                        pos1 = pos2 = ( (D_PAD*) item )->ReturnShapePos();
+                        pos1 = pos2 = ( (D_PAD*) item )->ShapePos();
                     }
                     else if( item->Type() == PCB_VIA_T )
                     {
-                        pos1 = pos2 = ( (SEGVIA*) item )->GetStart();
+                        const VIA *via = static_cast<const VIA*>( item );
+                        pos1 = via->GetStart();
+                        pos2 = pos1;
                     }
                     else if( item->Type() == PCB_TRACE_T )
                     {
-                        pos1 = ( (TRACK*) item )->GetStart();
-                        pos2 = ( (TRACK*) item )->GetEnd();
+                        const TRACK *trk = static_cast<const TRACK*>( item );
+                        pos1 = trk->GetStart();
+                        pos2 = trk->GetEnd();
                     }
                     else
                     {
@@ -233,7 +251,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                 // End test candidates for the current filled area
                 indexstart = indexend + 1;  // prepare test next area, starting at indexend+1
                                             // (if exists).  End read one area in
-                                            // curr_zone->m_FilledPolysList
+                                            // zone->m_FilledPolysList
             }
         } // End read all segments in zone
     } // End read all zones candidates
@@ -250,15 +268,15 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb )
 {
     for( int index = 0; index < aPcb->GetAreaCount(); index++ )
     {
-        ZONE_CONTAINER* curr_zone = aPcb->GetArea( index );
+        ZONE_CONTAINER* zone = aPcb->GetArea( index );
 
-        if ( ! curr_zone->IsOnCopperLayer() )
+        if ( ! zone->IsOnCopperLayer() )
             continue;
 
-        if ( curr_zone->GetNet() <= 0 )
+        if ( zone->GetNetCode() <= 0 )
             continue;
 
-        Merge_SubNets_Connected_By_CopperAreas( aPcb, curr_zone->GetNet() );
+        Merge_SubNets_Connected_By_CopperAreas( aPcb, zone->GetNetCode() );
     }
 }
 
@@ -282,9 +300,9 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
 
     for( int index = 0; index < aPcb->GetAreaCount(); index++ )
     {
-        ZONE_CONTAINER* curr_zone = aPcb->GetArea( index );
+        ZONE_CONTAINER* zone = aPcb->GetArea( index );
 
-        if( aNetcode == curr_zone->GetNet() )
+        if( aNetcode == zone->GetNetCode() )
         {
             found = true;
             break;
@@ -311,7 +329,7 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
     track = aPcb->m_Track.GetFirst()->GetStartNetCode( aNetcode );
     for( ; track; track = track->Next() )
     {
-        if( track->GetNet() != aNetcode )
+        if( track->GetNetCode() != aNetcode )
             break;
         Candidates.push_back( track );
     }

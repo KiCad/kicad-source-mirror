@@ -59,52 +59,9 @@
  */
 
 bool           g_ShowPageLimits = true;
-wxString       g_UserLibDirBuffer;
 
 EDA_UNITS_T    g_UserUnit;
 EDA_COLOR_T    g_GhostColor;
-
-
-/**
- * The predefined colors used in KiCad.
- * Please: if you change a value, remember these values are carefully chosen
- * to have good results in Pcbnew, that uses the ORed value of basic colors
- * when displaying superimposed objects
- * This list must have exactly NBCOLORS items
- */
-const StructColors g_ColorRefs[NBCOLORS] =
-{
-    { 0,    0,   0,   BLACK,         wxT( "Black" ),     DARKDARKGRAY      },
-    { 72,   72,  72,  DARKDARKGRAY,  wxT( "Gray 1" ),    DARKGRAY          },
-    { 132,  132, 132, DARKGRAY,      wxT( "Gray 2" ),    LIGHTGRAY         },
-    { 194,  194, 194, LIGHTGRAY,     wxT( "Gray 3" ),    WHITE             },
-    { 255,  255, 255, WHITE,         wxT( "White" ),     WHITE             },
-    { 194,  255, 255, LIGHTYELLOW,   wxT( "L.Yellow" ),  WHITE             },
-    { 72,   0,   0,   DARKBLUE,      wxT( "Blue 1" ),    BLUE              },
-    { 0,    72,  0,   DARKGREEN,     wxT( "Green 1" ),   GREEN             },
-    { 72,   72,  0,   DARKCYAN,      wxT( "Cyan 1" ),    CYAN              },
-    { 0,    0,   72,  DARKRED,       wxT( "Red 1" ),     RED               },
-    { 72,   0,   72,  DARKMAGENTA,   wxT( "Magenta 1" ), MAGENTA           },
-    { 0,    72,  72,  DARKBROWN,     wxT( "Brown 1" ),   BROWN             },
-    { 132,  0,   0,   BLUE,          wxT( "Blue 2" ),    LIGHTBLUE         },
-    { 0,    132, 0,   GREEN,         wxT( "Green 2" ),   LIGHTGREEN        },
-    { 132,  132, 0,   CYAN,          wxT( "Cyan 2" ),    LIGHTCYAN         },
-    { 0,    0,   132, RED,           wxT( "Red 2" ),     LIGHTRED          },
-    { 132,  0,   132, MAGENTA,       wxT( "Magenta 2" ), LIGHTMAGENTA      },
-    { 0,    132, 132, BROWN,         wxT( "Brown 2" ),   YELLOW            },
-    { 194,  0,   0,   LIGHTBLUE,     wxT( "Blue 3" ),    PUREBLUE,         },
-    { 0,    194, 0,   LIGHTGREEN,    wxT( "Green 3" ),   PUREGREEN         },
-    { 194,  194, 0,   LIGHTCYAN,     wxT( "Cyan 3" ),    PURECYAN          },
-    { 0,    0,   194, LIGHTRED,      wxT( "Red 3" ),     PURERED           },
-    { 194,  0,   194, LIGHTMAGENTA,  wxT( "Magenta 3" ), PUREMAGENTA       },
-    { 0,    194, 194, YELLOW,        wxT( "Yellow 3" ),  PUREYELLOW        },
-    { 255,  0,   0,   PUREBLUE,      wxT( "Blue 4" ),    WHITE             },
-    { 0,    255, 0,   PUREGREEN,     wxT( "Green 4" ),   WHITE             },
-    { 255,  255, 0,   PURECYAN,      wxT( "Cyan 4" ),    WHITE             },
-    { 0,    0,   255, PURERED,       wxT( "Red 4" ),     WHITE             },
-    { 255,  0,   255, PUREMAGENTA,   wxT( "Magenta 4" ), WHITE             },
-    { 0,    255, 255, PUREYELLOW,    wxT( "Yellow 4" ),  WHITE             },
-};
 
 
 /**

@@ -35,8 +35,9 @@
 
 using namespace KIGFX;
 
-///> Opacity of a single layer
-const float LAYER_ALPHA = 0.8;
+
+const float CAIRO_GAL::LAYER_ALPHA = 0.8;
+
 
 CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
         wxEvtHandler* aPaintListener, const wxString& aName ) :
@@ -57,26 +58,35 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     Connect( wxEVT_PAINT,       wxPaintEventHandler( CAIRO_GAL::onPaint ) );
 
     // Mouse events are skipped to the parent
-    Connect( wxEVT_MOTION,      wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
-    Connect( wxEVT_LEFT_DOWN,   wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
-    Connect( wxEVT_LEFT_UP,     wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
-    Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
-    Connect( wxEVT_MIDDLE_UP,   wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
-    Connect( wxEVT_RIGHT_DOWN,  wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
-    Connect( wxEVT_RIGHT_UP,    wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MOTION,          wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEFT_DOWN,       wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEFT_UP,         wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEFT_DCLICK,     wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MIDDLE_DOWN,     wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MIDDLE_UP,       wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MIDDLE_DCLICK,   wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_RIGHT_DOWN,      wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_RIGHT_UP,        wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_RIGHT_DCLICK,    wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MOUSEWHEEL,      wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
 #if defined _WIN32 || defined _WIN64
-    Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_ENTER_WINDOW,    wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
 #endif
 
     SetSize( aParent->GetSize() );
-    screenSize = VECTOR2D( aParent->GetSize() );
-    initCursor( 20 );
+    screenSize = VECTOR2I( aParent->GetSize() );
+
+    cursorPixels = NULL;
+    cursorPixelsSaved = NULL;
+    initCursor();
 
     // Grid color settings are different in Cairo and OpenGL
     SetGridColor( COLOR4D( 0.1, 0.1, 0.1, 0.8 ) );
 
     // Allocate memory for pixel storage
     allocateBitmaps();
+
+    initSurface();
 }
 
 
@@ -135,7 +145,7 @@ void CAIRO_GAL::EndDrawing()
         *wxOutputPtr++ = value & 0xff;            // Blue pixel
     }
 
-    wxImage      img( (int) screenSize.x, (int) screenSize.y, (unsigned char*) wxOutput, true );
+    wxImage      img( screenSize.x, screenSize.y, (unsigned char*) wxOutput, true );
     wxBitmap     bmp( img );
     wxClientDC   client_dc( this );
     wxBufferedDC dc;
@@ -280,7 +290,7 @@ void CAIRO_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControl
 
 void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
 {
-    screenSize = VECTOR2D( aWidth, aHeight );
+    screenSize = VECTOR2I( aWidth, aHeight );
 
     // Recreate the bitmaps
     deleteBitmaps();
@@ -312,10 +322,10 @@ void CAIRO_GAL::Flush()
 }
 
 
-void CAIRO_GAL::ClearScreen()
+void CAIRO_GAL::ClearScreen( const COLOR4D& aColor )
 {
-    cairo_set_source_rgb( currentContext,
-                          backgroundColor.r, backgroundColor.g, backgroundColor.b );
+    backgroundColor = aColor;
+    cairo_set_source_rgb( currentContext, aColor.r, aColor.g, aColor.b );
     cairo_rectangle( currentContext, 0.0, 0.0, screenSize.x, screenSize.y );
     cairo_fill( currentContext );
 }
@@ -427,7 +437,7 @@ void CAIRO_GAL::SetLayerDepth( double aLayerDepth )
 }
 
 
-void CAIRO_GAL::Transform( MATRIX3x3D aTransformation )
+void CAIRO_GAL::Transform( const MATRIX3x3D& aTransformation )
 {
     cairo_matrix_t cairoTransformation;
 
@@ -801,6 +811,13 @@ void CAIRO_GAL::ClearTarget( RENDER_TARGET aTarget )
 }
 
 
+void CAIRO_GAL::SetCursorSize( unsigned int aCursorSize )
+{
+    GAL::SetCursorSize( aCursorSize );
+    initCursor();
+}
+
+
 void CAIRO_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
     // Now we should only store the position of the mouse cursor
@@ -881,11 +898,16 @@ void CAIRO_GAL::skipMouseEvent( wxMouseEvent& aEvent )
 }
 
 
-void CAIRO_GAL::initCursor( int aCursorSize )
+void CAIRO_GAL::initCursor()
 {
-    cursorPixels      = new wxBitmap( aCursorSize, aCursorSize );
-    cursorPixelsSaved = new wxBitmap( aCursorSize, aCursorSize );
-    cursorSize        = aCursorSize;
+    if( cursorPixels )
+        delete cursorPixels;
+
+    if( cursorPixelsSaved )
+        delete cursorPixelsSaved;
+
+    cursorPixels      = new wxBitmap( cursorSize, cursorSize );
+    cursorPixelsSaved = new wxBitmap( cursorSize, cursorSize );
 
     wxMemoryDC cursorShape( *cursorPixels );
 
@@ -896,8 +918,8 @@ void CAIRO_GAL::initCursor( int aCursorSize )
     cursorShape.SetPen( pen );
     cursorShape.Clear();
 
-    cursorShape.DrawLine( 0, aCursorSize / 2, aCursorSize, aCursorSize / 2 );
-    cursorShape.DrawLine( aCursorSize / 2, 0, aCursorSize / 2, aCursorSize );
+    cursorShape.DrawLine( 0, cursorSize / 2, cursorSize, cursorSize / 2 );
+    cursorShape.DrawLine( cursorSize / 2, 0, cursorSize / 2, cursorSize );
 }
 
 
@@ -921,14 +943,15 @@ void CAIRO_GAL::blitCursor( wxBufferedDC& clientDC )
     }
 
     // Store pixels that are going to be overpainted
-    cursorSave.Blit( 0, 0, cursorSize, cursorSize, &clientDC, cursorPosition.x, cursorPosition.y );
+    VECTOR2D cursorScreen = ToScreen( cursorPosition ) - cursorSize / 2;
+    cursorSave.Blit( 0, 0, cursorSize, cursorSize, &clientDC, cursorScreen.x, cursorScreen.y );
 
     // Draw the cursor
-    clientDC.Blit( cursorPosition.x, cursorPosition.y, cursorSize, cursorSize,
+    clientDC.Blit( cursorScreen.x, cursorScreen.y, cursorSize, cursorSize,
                    &cursorShape, 0, 0, wxOR );
 
-    savedCursorPosition.x = (wxCoord) cursorPosition.x;
-    savedCursorPosition.y = (wxCoord) cursorPosition.y;
+    savedCursorPosition.x = (wxCoord) cursorScreen.x;
+    savedCursorPosition.y = (wxCoord) cursorScreen.y;
 }
 
 
@@ -954,7 +977,8 @@ void CAIRO_GAL::deleteBitmaps()
 
 void CAIRO_GAL::initSurface()
 {
-    wxASSERT( !isInitialized );
+    if( isInitialized )
+        return;
 
     // Create the Cairo surface
     surface = cairo_image_surface_create_for_data( (unsigned char*) bitmapBuffer, GAL_FORMAT,
@@ -969,7 +993,7 @@ void CAIRO_GAL::initSurface()
     cairo_set_antialias( context, CAIRO_ANTIALIAS_SUBPIXEL );
 
     // Clear the screen
-    ClearScreen();
+    ClearScreen( backgroundColor );
 
     // Compute the world <-> screen transformations
     ComputeWorldScreenMatrix();

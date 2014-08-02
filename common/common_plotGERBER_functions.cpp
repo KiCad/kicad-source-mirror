@@ -15,6 +15,22 @@
 
 #include <build_version.h>
 
+GERBER_PLOTTER::GERBER_PLOTTER()
+{
+    workFile  = 0;
+    finalFile = 0;
+    currentAperture = apertures.end();
+
+    // number of digits after the point (number of digits of the mantissa
+    // Be carefull: the Gerber coordinates are stored in an integer
+    // so 6 digits (inches) or 5 digits (mm) is a good value
+    // To avoid overflow, 7 digits (inches) or 6 digits is a max.
+    // with lower values than 6 digits (inches) or 5 digits (mm),
+    // Creating self-intersecting polygons from non-intersecting polygons
+    // happen easily.
+    m_gerberUnitInch = false;
+    m_gerberUnitFmt = 6;
+}
 
 void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 				  double aScale, bool aMirror )
@@ -23,27 +39,43 @@ void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     wxASSERT( aMirror == false );
     m_plotMirror = false;
     plotOffset = aOffset;
-    wxASSERT( aScale == 1 );
-    plotScale = 1;
+    wxASSERT( aScale == 1 );    // aScale parameter is not used in Gerber
+    plotScale = 1;              // Plot scale is *always* 1.0
+
     m_IUsPerDecimil = aIusPerDecimil;
-    iuPerDeviceUnit = 1.0 / aIusPerDecimil;
-    /* We don't handle the filmbox, and it's more useful to keep the
-     * origin at the origin */
+    // gives now a default value to iuPerDeviceUnit (because the units of the caller is now known)
+    // which could be modified later by calling SetGerberCoordinatesFormat()
+    iuPerDeviceUnit = pow( 10.0, m_gerberUnitFmt ) / ( m_IUsPerDecimil * 10000.0 );
+
+    // We don't handle the filmbox, and it's more useful to keep the
+    // origin at the origin
     paperSize.x = 0;
     paperSize.y = 0;
     SetDefaultLineWidth( 100 * aIusPerDecimil ); // Arbitrary default
 }
 
+void GERBER_PLOTTER::SetGerberCoordinatesFormat( int aResolution, bool aUseInches )
+{
+    m_gerberUnitInch = aUseInches;
+    m_gerberUnitFmt = aResolution;
+
+    iuPerDeviceUnit = pow( 10.0, m_gerberUnitFmt ) / ( m_IUsPerDecimil * 10000.0 );
+
+    if( ! m_gerberUnitInch )
+        iuPerDeviceUnit *= 25.4;     // gerber output in mm
+}
+
+
 /**
  * Emit a D-Code record, using proper conversions
  * to format a leading zero omitted gerber coordinate
- * (for 4 decimal positions, see header generation in start_plot
+ * (for n decimal positions, see header generation in start_plot
  */
 void GERBER_PLOTTER::emitDcode( const DPOINT& pt, int dcode )
 {
 
     fprintf( outputFile, "X%dY%dD%02d*\n",
-	    int( pt.x ), int( pt.y ), dcode );
+	    KiROUND( pt.x ), KiROUND( pt.y ), dcode );
 }
 
 /**
@@ -67,19 +99,38 @@ bool GERBER_PLOTTER::StartPlot()
     if( outputFile == NULL )
         return false;
 
-    /* Set coordinate format to 3.4 absolute, leading zero omitted */
-    fputs( "%FSLAX34Y34*%\n", outputFile );
-    fputs( "G04 Gerber Fmt 3.4, Leading zero omitted, Abs format*\n", outputFile );
+    if( ! m_attribFunction.IsEmpty() )
+    {
+        fprintf( outputFile, "%%TF.FileFunction,%s*%%\n",
+                 TO_UTF8( m_attribFunction ) );
+    }
+
+    // Set coordinate format to 3.6 or 4.5 absolute, leading zero omitted
+    // the number of digits for the integer part of coordintes is needed
+    // in gerber format, but is not very important when omitting leading zeros
+    // It is fixed here to 3 (inch) or 4 (mm), but is not actually used
+    int leadingDigitCount = m_gerberUnitInch ? 3 : 4;
+
+    fprintf( outputFile, "%%FSLAX%d%dY%d%d*%%\n",
+             leadingDigitCount, m_gerberUnitFmt,
+             leadingDigitCount, m_gerberUnitFmt );
+    fprintf( outputFile,
+             "G04 Gerber Fmt %d.%d, Leading zero omitted, Abs format (unit %s)*\n",
+             leadingDigitCount, m_gerberUnitFmt,
+             m_gerberUnitInch ? "inch" : "mm" );
 
     wxString Title = creator + wxT( " " ) + GetBuildVersion();
-    fprintf( outputFile, "G04 (created by %s) date %s*\n",
+    fprintf( outputFile, "G04 Created by KiCad (%s) date %s*\n",
              TO_UTF8( Title ), TO_UTF8( DateAndTime() ) );
 
-    /* Mass parameter: unit = INCHES */
-    fputs( "%MOIN*%\n", outputFile );
+    /* Mass parameter: unit = INCHES/MM */
+    if( m_gerberUnitInch )
+        fputs( "%MOIN*%\n", outputFile );
+    else
+        fputs( "%MOMM*%\n", outputFile );
 
-    /* Specify linear interpol (G01), unit = INCH (G70), abs format (G90) */
-    fputs( "G01*\nG70*\nG90*\n", outputFile );
+    /* Specify linear interpol (G01) */
+    fputs( "G01*\n", outputFile );
     fputs( "G04 APERTURE LIST*\n", outputFile );
     /* Select the default aperture */
     SetCurrentLineWidth( -1 );
@@ -185,7 +236,7 @@ void GERBER_PLOTTER::selectAperture( const wxSize&           size,
     {
         // Pick an existing aperture or create a new one
         currentAperture = getAperture( size, type );
-        fprintf( outputFile, "G54D%d*\n", currentAperture->DCode );
+        fprintf( outputFile, "D%d*\n", currentAperture->DCode );
     }
 }
 
@@ -202,8 +253,13 @@ void GERBER_PLOTTER::writeApertureList()
     for( std::vector<APERTURE>::iterator tool = apertures.begin();
          tool != apertures.end(); tool++ )
     {
-        const double fscale = 0.0001f * plotScale
-				* iuPerDeviceUnit ;
+        // apertude sizes are in inch or mm, regardless the
+        // coordinates format
+        double fscale = 0.0001 * plotScale / m_IUsPerDecimil; // inches
+
+        if(! m_gerberUnitInch )
+            fscale *= 25.4;     // size in mm
+
         char* text = cbuf + sprintf( cbuf, "%%ADD%d", tool->DCode );
 
         /* Please note: the Gerber specs for mass parameters say that
@@ -303,47 +359,57 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAn
     DPOINT devEnd = userToDeviceCoordinates( end );
     DPOINT devCenter = userToDeviceCoordinates( aCenter )
         - userToDeviceCoordinates( start );
+
     fprintf( outputFile, "G75*\n" ); // Multiquadrant mode
 
     if( aStAngle < aEndAngle )
         fprintf( outputFile, "G03" );
     else
         fprintf( outputFile, "G02" );
-    fprintf( outputFile, "X%dY%dI%dJ%dD01*\n", int( devEnd.x ), int( devEnd.y ),
-             int( devCenter.x ), int( devCenter.y ) );
+
+    fprintf( outputFile, "X%dY%dI%dJ%dD01*\n",
+             KiROUND( devEnd.x ), KiROUND( devEnd.y ),
+             KiROUND( devCenter.x ), KiROUND( devCenter.y ) );
     fprintf( outputFile, "G74*\nG01*\n" ); // Back to single quadrant and linear interp.
 }
 
 
 /**
  * Gerber polygon: they can (and *should*) be filled with the
- * appropriate G36/G37 sequence (raster fills are deprecated)
+ * appropriate G36/G37 sequence
  */
-void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
+void GERBER_PLOTTER:: PlotPoly( const std::vector< wxPoint >& aCornerList,
                                FILL_T aFill, int aWidth )
 {
     if( aCornerList.size() <= 1 )
         return;
 
+    // Gerber format does not know filled polygons with thick outline
+    // Therefore, to plot a filled polygon with outline having a thickness,
+    // one should plot outline as thick segments
+
     SetCurrentLineWidth( aWidth );
 
     if( aFill )
+    {
         fputs( "G36*\n", outputFile );
 
-    MoveTo( aCornerList[0] );
+        MoveTo( aCornerList[0] );
 
-    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
-    {
-        LineTo( aCornerList[ii] );
-    }
+        for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+            LineTo( aCornerList[ii] );
 
-    if( aFill )
-    {
         FinishTo( aCornerList[0] );
         fputs( "G37*\n", outputFile );
     }
-    else
+
+    if( aWidth > 0 )
     {
+        MoveTo( aCornerList[0] );
+
+        for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+            LineTo( aCornerList[ii] );
+
         PenFinish();
     }
 }

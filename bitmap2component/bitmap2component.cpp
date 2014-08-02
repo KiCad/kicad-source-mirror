@@ -138,11 +138,11 @@ BITMAPCONV_INFO::BITMAPCONV_INFO()
 }
 
 
-int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile, int aFormat )
+int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
+                      int aFormat, int aDpi_X, int aDpi_Y )
 {
     potrace_param_t* param;
     potrace_state_t* st;
-
 
     // set tracing parameters, starting from defaults
     param = potrace_param_default();
@@ -171,8 +171,8 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile, int aFo
     {
     case 4:
         info.m_Format = KICAD_LOGO;
-        info.m_ScaleX = 1e3 * 25.4 / 300;       // the conversion scale from PPI to micro
-        info.m_ScaleY = info.m_ScaleX;          // Y axis is top to bottom
+        info.m_ScaleX = 1e3 * 25.4 / aDpi_X;       // the conversion scale from PPI to micro
+        info.m_ScaleY = 1e3 * 25.4 / aDpi_Y;       // Y axis is top to bottom
         info.CreateOutputFile();
         break;
 
@@ -186,22 +186,22 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile, int aFo
 
     case 2:
         info.m_Format = EESCHEMA_FMT;
-        info.m_ScaleX = 1000.0 / 300;       // the conversion scale from PPI to UI
-        info.m_ScaleY = -info.m_ScaleX;     // Y axis is bottom to Top for components in libs
+        info.m_ScaleX = 1000.0 / aDpi_X;       // the conversion scale from PPI to UI
+        info.m_ScaleY = -1000.0 / aDpi_Y;      // Y axis is bottom to Top for components in libs
         info.CreateOutputFile();
         break;
 
     case 1:
         info.m_Format = PCBNEW_KICAD_MOD;
-        info.m_ScaleX = 1e6 * 25.4 / 300;       // the conversion scale from PPI to UI
-        info.m_ScaleY = info.m_ScaleX;          // Y axis is top to bottom in modedit
+        info.m_ScaleX = 1e6 * 25.4 / aDpi_X;       // the conversion scale from PPI to UI
+        info.m_ScaleY = 1e6 * 25.4 / aDpi_Y;       // Y axis is top to bottom in modedit
         info.CreateOutputFile();
         break;
 
     case 0:
         info.m_Format = PCBNEW_LEGACY_EMP;
-        info.m_ScaleX = 10000.0 / 300;          // the conversion scale
-        info.m_ScaleY = info.m_ScaleX;          // Y axis is top to bottom in modedit
+        info.m_ScaleX = 10000.0 / aDpi_X;          // the conversion scale
+        info.m_ScaleY = 10000.0 / aDpi_Y;          // Y axis is top to bottom in modedit
         info.CreateOutputFile();
         break;
 
@@ -355,7 +355,7 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
 
     case PCBNEW_LEGACY_EMP:
     {
-        LAYER_NUM layer = SILKSCREEN_N_FRONT;
+        LAYER_NUM layer = F_SilkS;
         int width = 1;
         fprintf( m_Outfile, "DP %d %d %d %d %d %d %d\n",
                  0, 0, 0, 0,

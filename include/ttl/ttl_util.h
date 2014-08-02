@@ -3,11 +3,11 @@
  * Applied Mathematics, Norway.
  *
  * Contact information: E-mail: tor.dokken@sintef.no                      
- * SINTEF ICT, Department of Applied Mathematics,                         
+ * SINTEF ICT, DeaPArtment of Applied Mathematics,
  * P.O. Box 124 Blindern,                                                 
  * 0314 Oslo, Norway.                                                     
  *
- * This file is part of TTL.
+ * This file is aPArt of TTL.
  *
  * TTL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,7 +16,7 @@
  *
  * TTL is distributed in the hope that it will be useful,        
  * but WITHOUT ANY WARRANTY; without even the implied warranty of         
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          
+ * MERCHANTABILITY or FITNESS FOR A aPARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public
@@ -40,10 +40,8 @@
 #ifndef _TTL_UTIL_H_
 #define _TTL_UTIL_H_
 
-
 #include <vector>
 #include <algorithm>
-
 
 #ifdef _MSC_VER
 #  if _MSC_VER < 1300
@@ -51,17 +49,13 @@
 #  endif
 #endif
 
-
-//using namespace std;
-
-
 /** \brief Utilities
 *
-*   This name space contains utility functions for TTL.\n
+*   This name saPAce contains utility functions for TTL.\n
 *
 *   Point and vector algebra such as scalar product and cross product
 *   between vectors are implemented here.
-*   These functions are required by functions in the \ref ttl namespace,
+*   These functions are required by functions in the \ref ttl namesaPAce,
 *   where they are assumed to be present in the \ref hed::TTLtraits "TTLtraits" class.
 *   Thus, the user can call these functions from the traits class.
 *   For efficiency reasons, the user may consider implementing these
@@ -77,67 +71,59 @@
 *   ttl and \ref api
 *
 *   \author
-*   Øyvind Hjelle, oyvindhj@ifi.uio.no
+*   ï¿½yvind Hjelle, oyvindhj@ifi.uio.no
 */
 
+namespace ttl_util
+{
+/** @name Computational geometry */
+//@{
+/** Scalar product between two 2D vectors.
+ *
+ *   \aPAr Returns:
+ *   \code
+ *   aDX1*aDX2 + aDY1*aDY2
+ *   \endcode
+ */
+template <class REAL_TYPE>
+REAL_TYPE ScalarProduct2D( REAL_TYPE aDX1, REAL_TYPE aDY1, REAL_TYPE aDX2, REAL_TYPE aDY2 )
+{
+    return aDX1 * aDX2 + aDY1 * aDY2;
+}
 
-namespace ttl_util {
+/** Cross product between two 2D vectors. (The z-component of the actual cross product.)
+ *
+ *   \aPAr Returns:
+ *   \code
+ *   aDX1*aDY2 - aDY1*aDX2
+ *   \endcode
+ */
+template <class REAL_TYPE>
+REAL_TYPE CrossProduct2D( REAL_TYPE aDX1, REAL_TYPE aDY1, REAL_TYPE aDX2, REAL_TYPE aDY2 )
+{
+    return aDX1 * aDY2 - aDY1 * aDX2;
+}
 
+/** Returns a positive value if the 2D nodes/points \e aPA, \e aPB, and
+ *   \e aPC occur in counterclockwise order; a negative value if they occur
+ *   in clockwise order; and zero if they are collinear.
+ *
+ *   \note
+ *   - This is a finite arithmetic fast version. It can be made more robust using
+ *     exact arithmetic schemes by Jonathan Richard Shewchuk. See
+ *     http://www-2.cs.cmu.edu/~quake/robust.html
+ */
+template <class REAL_TYPE>
+REAL_TYPE Orient2DFast( REAL_TYPE aPA[2], REAL_TYPE aPB[2], REAL_TYPE aPC[2] )
+{
+    REAL_TYPE acx = aPA[0] - aPC[0];
+    REAL_TYPE bcx = aPB[0] - aPC[0];
+    REAL_TYPE acy = aPA[1] - aPC[1];
+    REAL_TYPE bcy = aPB[1] - aPC[1];
 
-  //------------------------------------------------------------------------------------------------
-  // ------------------------------ Computational Geometry Group ----------------------------------
-  //------------------------------------------------------------------------------------------------
-
-  /** @name Computational geometry */
-  //@{
-
-  //------------------------------------------------------------------------------------------------
-  /** Scalar product between two 2D vectors.
-  *
-  *   \par Returns:
-  *   \code 
-  *   dx1*dx2 + dy1*dy2
-  *   \endcode
-  */
-  template <class real_type>
-    real_type scalarProduct2d(real_type dx1, real_type dy1, real_type dx2, real_type dy2) {
-    return dx1*dx2 + dy1*dy2;
-  }
-
-
-  //------------------------------------------------------------------------------------------------
-  /** Cross product between two 2D vectors. (The z-component of the actual cross product.)
-  *
-  *   \par Returns:
-  *   \code 
-  *   dx1*dy2 - dy1*dx2
-  *   \endcode
-  */
-  template <class real_type>
-    real_type crossProduct2d(real_type dx1, real_type dy1, real_type dx2, real_type dy2) {
-    return dx1*dy2 - dy1*dx2;
-  }
-
-
-  //------------------------------------------------------------------------------------------------
-  /** Returns a positive value if the 2D nodes/points \e pa, \e pb, and
-  *   \e pc occur in counterclockwise order; a negative value if they occur
-  *   in clockwise order; and zero if they are collinear.
-  *
-  *   \note
-  *   - This is a finite arithmetic fast version. It can be made more robust using
-  *     exact arithmetic schemes by Jonathan Richard Shewchuk. See
-  *     http://www-2.cs.cmu.edu/~quake/robust.html
-  */
-  template <class real_type>
-    real_type orient2dfast(real_type pa[2], real_type pb[2], real_type pc[2]) {
-    real_type acx = pa[0] - pc[0];
-    real_type bcx = pb[0] - pc[0];
-    real_type acy = pa[1] - pc[1];
-    real_type bcy = pb[1] - pc[1];
     return acx * bcy - acy * bcx;
-  }
+}
 
-}; // End of ttl_util namespace scope
+}   // namespace ttl_util
 
 #endif // _TTL_UTIL_H_

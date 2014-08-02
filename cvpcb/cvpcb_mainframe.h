@@ -35,7 +35,7 @@
 #include <footprint_info.h>
 
 #include <wxBasePcbFrame.h>
-#include <param_config.h>
+#include <config_params.h>
 
 
 /*  Forward declarations of all top-level window classes. */
@@ -47,33 +47,26 @@ class DISPLAY_FOOTPRINTS_FRAME;
 class COMPONENT;
 class FP_LIB_TABLE;
 
+namespace CV { struct IFACE; }
 
 /**
  * The CvPcb application main window.
  */
-class CVPCB_MAINFRAME : public EDA_BASE_FRAME
+class CVPCB_MAINFRAME : public KIWAY_PLAYER
 {
+    friend struct CV::IFACE;
+
     wxArrayString             m_footprintListEntries;
-
-    /// The global footprint library table.
-    FP_LIB_TABLE*             m_globalFootprintTable;
-
-    /// The project footprint library table.  This is a combination of the project
-    /// footprint library table and the global footprint table.  This is the one to
-    /// use when finding a #MODULE.
-    FP_LIB_TABLE*             m_footprintLibTable;
 
 public:
     bool                      m_KeepCvpcbOpen;
-    FOOTPRINTS_LISTBOX*       m_FootprintList;
-    LIBRARY_LISTBOX*          m_LibraryList;
-    COMPONENTS_LISTBOX*       m_ListCmp;
-    DISPLAY_FOOTPRINTS_FRAME* m_DisplayFootprintFrame;
+    FOOTPRINTS_LISTBOX*       m_footprintListBox;
+    LIBRARY_LISTBOX*          m_libListBox;
+    COMPONENTS_LISTBOX*       m_compListBox;
     wxAuiToolBar*             m_mainToolBar;
     wxFileName                m_NetlistFileName;
     wxArrayString             m_ModuleLibNames;
     wxArrayString             m_AliasLibNames;
-    wxString                  m_UserLibraryPath;
     wxString                  m_NetlistFileExtension;
     wxString                  m_DocModulesFileName;
     FOOTPRINT_LIST            m_footprints;
@@ -87,9 +80,17 @@ protected:
                                                 // (in automatic selection/deletion of associations)
     PARAM_CFG_ARRAY m_projectFileParams;
 
+    CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent );
+
 public:
-    CVPCB_MAINFRAME( const wxString& title, long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
     ~CVPCB_MAINFRAME();
+
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl=0 );   // overload KIWAY_PLAYER
+
+    /**
+     * @return a pointer on the Footprint Viewer frame, if exists, or NULL
+     */
+    DISPLAY_FOOTPRINTS_FRAME* GetFpViewerFrame();
 
     /**
      * Function OnSelectComponent
@@ -114,12 +115,6 @@ public:
     virtual void     ReCreateMenuBar();
 
     void             ChangeFocus( bool aMoveRight );
-
-    /**
-     * Function SetLanguage
-     * is called on a language menu selection.
-     */
-    void             SetLanguage( wxCommandEvent& event );
 
     void             ToFirstNA( wxCommandEvent& event );
     void             ToPreviousNA( wxCommandEvent& event );
@@ -226,23 +221,9 @@ public:
      */
     void             LoadProjectFile( const wxString& aFileName );
 
-    /**
-     * Function LoadSettings
-     * loads the CvPcb main frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get loaded.
-     */
-    virtual void     LoadSettings();
+    void LoadSettings( wxConfigBase* aCfg );    // override virtual
 
-    /**
-     * Function SaveSettings
-     * save the CvPcb frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get saved.
-     */
-    virtual void     SaveSettings();
+    void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
     /**
      * Function DisplayStatus

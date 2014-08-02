@@ -116,6 +116,8 @@ public:
     ~SHAPE_LINE_CHAIN()
     {}
 
+    SHAPE* Clone() const;
+
     /**
      * Function Clear()
      * Removes all points from the line chain.
@@ -366,6 +368,11 @@ public:
         }
     }
 
+    void Insert( int aVertex, const VECTOR2I& aP )
+    {
+        m_points.insert( m_points.begin() + aVertex, aP );
+    }
+
     /**
      * Function Replace()
      *
@@ -415,7 +422,16 @@ public:
      * @param aP the point to be looked for
      * @return index of the correspoinding point in the line chain or negative when not found.
      */
-    int Find ( const VECTOR2I& aP ) const;
+    int Find( const VECTOR2I& aP ) const;
+
+    /**
+     * Function FindSegment()
+     *
+     * Searches for segment containing point aP.
+     * @param aP the point to be looked for
+     * @return index of the correspoinding segment in the line chain or negative when not found.
+     */
+    int FindSegment( const VECTOR2I& aP ) const;
 
     /**
      * Function Slice()
@@ -429,7 +445,7 @@ public:
 
     struct compareOriginDistance
     {
-        compareOriginDistance( VECTOR2I& aOrigin ):
+        compareOriginDistance( const VECTOR2I& aOrigin ):
             m_origin( aOrigin )
         {}
 
@@ -440,6 +456,8 @@ public:
 
         VECTOR2I m_origin;
     };
+
+    bool Intersects( const SHAPE_LINE_CHAIN& aChain ) const;
 
     /**
      * Function Intersect()
@@ -532,6 +550,8 @@ public:
 
         return false;
     }
+
+    bool CompareGeometry( const SHAPE_LINE_CHAIN & aOther ) const;
 
 private:
     /// array of vertices

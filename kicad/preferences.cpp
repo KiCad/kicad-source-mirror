@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_kicad.h>
 #include <confirm.h>
 #include <gestfich.h>
 
@@ -39,38 +39,31 @@
 
 void KICAD_MANAGER_FRAME::OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event )
 {
-    event.Check( wxGetApp().UseSystemPdfBrowser() );
+    event.Check( Pgm().UseSystemPdfBrowser() );
 }
 
 
 void KICAD_MANAGER_FRAME::OnSelectDefaultPdfBrowser( wxCommandEvent& event )
 {
-    wxGetApp().ForceSystemPdfBrowser( true );
-    wxGetApp().WritePdfBrowserInfos();
+    Pgm().ForceSystemPdfBrowser( true );
+    Pgm().WritePdfBrowserInfos();
 }
 
 
 void KICAD_MANAGER_FRAME::OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event )
 {
-    event.Check( !wxGetApp().UseSystemPdfBrowser() );
+    event.Check( !Pgm().UseSystemPdfBrowser() );
 }
 
 
 void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
 {
-    wxGetApp().ForceSystemPdfBrowser( false );
+    bool select = event.GetId() == ID_SELECT_PREFERED_PDF_BROWSER_NAME;
 
-    bool selectName = event.GetId() == ID_SELECT_PREFERED_PDF_BROWSER_NAME;
-    if( wxGetApp().GetPdfBrowserFileName().IsEmpty() && !selectName )
+    if( !Pgm().GetPdfBrowserName() && !select )
     {
         DisplayError( this,
                       _( "You must choose a PDF viewer before using this option." ) );
-    }
-
-    if( !wxGetApp().GetPdfBrowserFileName().IsEmpty() && !selectName )
-    {
-        wxGetApp().WritePdfBrowserInfos();
-        return;
     }
 
     wxString mask( wxT( "*" ) );
@@ -81,8 +74,8 @@ void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
 
     wxString wildcard = _( "Executable files (" ) + mask + wxT( ")|" ) + mask;
 
-    wxGetApp().ReadPdfBrowserInfos();
-    wxFileName fn = wxGetApp().GetPdfBrowserFileName();
+    Pgm().ReadPdfBrowserInfos();
+    wxFileName fn = Pgm().GetPdfBrowserName();
 
     wxFileDialog dlg( this, _( "Select Preferred Pdf Browser" ), fn.GetPath(),
                       fn.GetFullPath(), wildcard,
@@ -91,12 +84,7 @@ void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxGetApp().SetPdfBrowserFileName( dlg.GetPath() );
-    wxGetApp().WritePdfBrowserInfos();
+    Pgm().SetPdfBrowserName( dlg.GetPath() );
+    Pgm().WritePdfBrowserInfos();
 }
 
-
-void KICAD_MANAGER_FRAME::SetLanguage( wxCommandEvent& event )
-{
-    EDA_BASE_FRAME::SetLanguage( event );
-}

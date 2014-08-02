@@ -34,14 +34,35 @@
 # Set where the 3 source trees will go, use a full path
 WORKING_TREES=~/kicad_sources
 
+STABLE=tag:pre-kiway    # currently the best mix of features and stabilty
+TESTING=last:1          # the most recent
+
+
+# Set this to STABLE or TESTING or other known revision number:
+REVISION=$STABLE
+
+# For info on revision syntax:
+# $ bzr help revisionspec
+
+
 # CMake Options
-OPTS="$OPTS -DCMAKE_BUILD_TYPE=Release"
-OPTS="$OPTS -DBUILD_GITHUB_PLUGIN=ON"
+OPTS="$OPTS -DBUILD_GITHUB_PLUGIN=ON"       # needed by $STABLE revision
 
 # Python scripting, uncomment to enable
 #OPTS="$OPTS -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_MODULES=ON -DKICAD_SCRIPTING_WXPYTHON=ON"
 
-LIB_REPO=~kicad-product-committers/kicad/library
+# Use https under bazaar to retrieve repos because this does not require a
+# launchpad.net account.  Whereas lp:<something> requires a launchpad account.
+# https results in read only access.
+REPOS=https://code.launchpad.net
+
+# This branch is a bzr/launchpad import of the Git repository
+# at https://github.com/KiCad/kicad-library.git.
+# It has schematic parts and 3D models in it.
+LIBS_REPO=$REPOS/~kicad-product-committers/kicad/library
+
+SRCS_REPO=$REPOS/~kicad-product-committers/kicad/product
+DOCS_REPO=$REPOS/~kicad-developers/kicad/doc
 
 
 usage()
@@ -112,7 +133,10 @@ install_prerequisites()
     fi
 
     # ensure bzr name and email are set.  No message since bzr prints an excellent diagnostic.
-    bzr whoami || exit 2
+    bzr whoami || {
+        echo "WARNING: You have not set bzr whoami, so I will set a dummy."
+        export BZR_EMAIL="Kicad Build <nobody@foo>"
+    }
 }
 
 
@@ -196,17 +220,18 @@ install_or_update()
 
     echo "step 3) checking out the source code from launchpad repo..."
     if [ ! -d "$WORKING_TREES/kicad.bzr" ]; then
-        bzr checkout lp:kicad kicad.bzr
+        bzr checkout -r $REVISION $SRCS_REPO kicad.bzr
         echo " source repo to local working tree."
     else
         cd kicad.bzr
-        bzr up
+        bzr up -r $REVISION
         echo " local source working tree updated."
         cd ../
     fi
 
+    echo "step 4) checking out the schematic parts and 3D library repo."
     if [ ! -d "$WORKING_TREES/kicad-lib.bzr" ]; then
-        bzr checkout "lp:$LIB_REPO" kicad-lib.bzr
+        bzr checkout $LIBS_REPO kicad-lib.bzr
         echo ' kicad-lib checked out.'
     else
         cd kicad-lib.bzr
@@ -217,7 +242,7 @@ install_or_update()
 
     echo "step 5) checking out the documentation from launchpad repo..."
     if [ ! -d "$WORKING_TREES/kicad-doc.bzr" ]; then
-        bzr checkout lp:~kicad-developers/kicad/doc kicad-doc.bzr
+        bzr checkout $DOCS_REPO kicad-doc.bzr
         echo " docs checked out."
     else
         cd kicad-doc.bzr
@@ -256,10 +281,12 @@ install_or_update()
     echo " kicad-lib.bzr installed."
 
 
-    echo "step 9) as non-root, install user configuration files..."
+    echo "step 9) as non-root, install global fp-lib-table if none already installed..."
     # install ~/fp-lib-table
-    make  install_github_fp-lib-table
-    echo " kicad user-configuration files installed."
+    if [ ! -e ~/fp-lib-table ]; then
+        make  install_github_fp-lib-table
+        echo " global fp-lib-table installed."
+    fi
 
 
     echo "step 10) installing documentation..."

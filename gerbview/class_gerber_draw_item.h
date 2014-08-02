@@ -90,7 +90,7 @@ public:
                                              * redundancy for these parameters
                                              */
 private:
-    LAYER_NUM m_Layer;
+    int m_Layer;
 
     // These values are used to draw this item, according to gerber layers parameters
     // Because they can change inside a gerber image, they are stored here
@@ -116,14 +116,14 @@ public:
      */
     GERBER_DRAW_ITEM* Copy() const;
 
-    GERBER_DRAW_ITEM* Next() const { return (GERBER_DRAW_ITEM*) Pnext; }
-    GERBER_DRAW_ITEM* Back() const { return (GERBER_DRAW_ITEM*) Pback; }
+    GERBER_DRAW_ITEM* Next() const { return static_cast<GERBER_DRAW_ITEM*>( Pnext ); }
+    GERBER_DRAW_ITEM* Back() const { return static_cast<GERBER_DRAW_ITEM*>( Pback ); }
 
     /**
      * Function GetLayer
      * returns the layer this item is on.
      */
-    LAYER_NUM GetLayer() const { return m_Layer; }
+    int GetLayer() const { return m_Layer; }
 
     /**
      * Function SetLayer
@@ -132,12 +132,7 @@ public:
      * is virtual because some items (in fact: class DIMENSION)
      * have a slightly different initialization
      */
-    void SetLayer( LAYER_NUM aLayer )  { m_Layer = aLayer; }
-
-    LAYER_MSK GetLayerMask()
-    {
-        return ::GetLayerMask( m_Layer );
-    }
+    void SetLayer( int aLayer )  { m_Layer = aLayer; }
 
     bool GetLayerPolarity()
     {
@@ -209,7 +204,7 @@ public:
      * @param aABPosition = position in A,B plotter axis
      * @return const wxPoint - The given position in X,Y axis.
      */
-    wxPoint GetXYPosition( const wxPoint& aABPosition );
+    wxPoint GetXYPosition( const wxPoint& aABPosition ) const;
 
     /**
      * Function GetDcodeDescr
@@ -255,7 +250,7 @@ public:
      * @param aRefPos a wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTest( const wxPoint& aRefPos );
+    bool HitTest( const wxPoint& aRefPos ) const;
 
     /**
      * Function HitTest (overloaded)
@@ -264,7 +259,7 @@ public:
      * @param aRefArea a wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTest( EDA_RECT& aRefArea );
+    bool HitTest( const EDA_RECT& aRefArea ) const;
 
     /**
      * Function GetClass

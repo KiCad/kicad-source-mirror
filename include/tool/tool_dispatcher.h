@@ -26,7 +26,7 @@
 #define __TOOL_DISPATCHER_H
 
 #include <vector>
-
+#include <wx/event.h>
 #include <tool/tool_event.h>
 
 class TOOL_MANAGER;
@@ -47,7 +47,7 @@ class VIEW;
  * - issues TOOL_EVENTS to the tool manager
  */
 
-class TOOL_DISPATCHER
+class TOOL_DISPATCHER : public wxEvtHandler
 {
 public:
     /**
@@ -56,7 +56,7 @@ public:
      * @param aToolMgr: tool manager instance the events will be sent to
      * @param aEditFrame: the frame wx events come from
      */
-    TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditFrame );
+    TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr );
     virtual ~TOOL_DISPATCHER();
 
     /**
@@ -79,7 +79,7 @@ public:
      * specified tool).
      * @param aEvent is the wxCommandEvent to be processed.
      */
-    virtual void DispatchWxCommand( const wxCommandEvent& aEvent );
+    virtual void DispatchWxCommand( wxCommandEvent& aEvent );
 
 private:
     ///> Number of mouse buttons that is handled in events.
@@ -128,9 +128,6 @@ private:
 
     ///> Instance of tool manager that cooperates with the dispatcher.
     TOOL_MANAGER* m_toolMgr;
-
-    ///> Instance of wxFrame that is the source of UI events.
-    PCB_BASE_FRAME* m_editFrame;
 };
 
 #endif

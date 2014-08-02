@@ -88,8 +88,6 @@ typedef int wxPenStyle;
 
 
 extern GR_DRAWMODE g_XorMode;
-extern EDA_COLOR_T g_DrawBgColor;
-
 
 typedef enum {
     /* Line styles for Get/SetLineStyle. */
@@ -260,7 +258,7 @@ void GRSFilledRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1,
 void GRLineArray(  EDA_RECT* aClipBox, wxDC* aDC,std::vector<wxPoint>& aLines,
                    int aWidth, EDA_COLOR_T aColor );
 
-void GRDrawAnchor( EDA_RECT* aClipBox, wxDC *aDC, int x, int y, int aSize, 
+void GRDrawAnchor( EDA_RECT* aClipBox, wxDC *aDC, int x, int y, int aSize,
                    EDA_COLOR_T aColor );
 
 #endif      /* define GR_BASIC */

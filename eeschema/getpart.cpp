@@ -29,7 +29,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiway.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -38,7 +39,6 @@
 #include <msgpanel.h>
 
 #include <general.h>
-#include <protos.h>
 #include <class_library.h>
 #include <sch_component.h>
 #include <libeditframe.h>
@@ -55,17 +55,14 @@
 wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedAlias,
                                                         int* aUnit, int* aConvert )
 {
-    wxSemaphore semaphore( 0, 1 );
-    wxString cmpname;
-
-    // Close the current Lib browser, if open, and open a new one, in "modal" mode:
-    LIB_VIEW_FRAME * viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer();;
+    // Close any open non-modal Lib browser, and open a new one, in "modal" mode:
+    LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
     if( viewlibFrame )
         viewlibFrame->Destroy();
 
-    viewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore,
-                                       KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
-    if ( aPreselectedAlias )
+    viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, true );
+
+    if( aPreselectedAlias )
     {
         viewlibFrame->SetSelectedLibrary( aPreselectedAlias->GetLibraryName() );
         viewlibFrame->SetSelectedComponent( aPreselectedAlias->GetName() );
@@ -79,26 +76,22 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedA
 
     viewlibFrame->Refresh();
 
-    // Show the library viewer frame until it is closed
-    // Wait for viewer closing event:
-    while( semaphore.TryWait() == wxSEMA_BUSY )
+    wxString cmpname;
+
+    if( viewlibFrame->ShowModal( &cmpname, this ) )
     {
-        wxYield();
-        wxMilliSleep( 50 );
+        if( aUnit )
+            *aUnit = viewlibFrame->GetUnit();
+
+        if( aConvert )
+            *aConvert = viewlibFrame->GetConvert();
     }
-
-    cmpname = viewlibFrame->GetSelectedComponent();
-
-    if( aUnit )
-        *aUnit = viewlibFrame->GetUnit();
-
-    if( aConvert )
-        *aConvert = viewlibFrame->GetConvert();
 
     viewlibFrame->Destroy();
 
     return cmpname;
 }
+
 
 wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
                                                      wxArrayString&  aHistoryList,

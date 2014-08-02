@@ -103,7 +103,7 @@ void PCB_EDIT_FRAME::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
     {
         for( ; Track != NULL; Track = Track->Next() )
         {
-            if( net_code == Track->GetNet() )
+            if( net_code == Track->GetNetCode() )
                 break;
         }
     }
@@ -112,7 +112,7 @@ void PCB_EDIT_FRAME::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
 
     while( Track )                  /* Flag change */
     {
-        if( (net_code >= 0 ) && (net_code != Track->GetNet()) )
+        if( ( net_code >= 0 ) && ( net_code != Track->GetNetCode() ) )
             break;
 
         OnModify();

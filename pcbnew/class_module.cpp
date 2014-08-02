@@ -57,7 +57,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_initial_comments( 0 )
 {
     m_Attributs    = MOD_DEFAULT;
-    m_Layer        = LAYER_N_FRONT;
+    m_Layer        = F_Cu;
     m_Orient       = 0;
     m_ModuleStatus = 0;
     flag = 0;
@@ -295,6 +295,72 @@ void MODULE::Copy( MODULE* aModule )
 }
 
 
+void MODULE::Add( BOARD_ITEM* aBoardItem, bool doAppend )
+{
+    switch( aBoardItem->Type() )
+    {
+    case PCB_MODULE_TEXT_T:
+        // Only common texts can be added this way. Reference and value are not hold in the DLIST.
+        assert( static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS );
+        /* no break */
+
+    case PCB_MODULE_EDGE_T:
+        if( doAppend )
+            m_Drawings.PushBack( static_cast<BOARD_ITEM*>( aBoardItem ) );
+        else
+            m_Drawings.PushFront( static_cast<BOARD_ITEM*>( aBoardItem ) );
+        break;
+
+    case PCB_PAD_T:
+        if( doAppend )
+            m_Pads.PushBack( static_cast<D_PAD*>( aBoardItem ) );
+        else
+            m_Pads.PushFront( static_cast<D_PAD*>( aBoardItem ) );
+        break;
+
+    default:
+        {
+            wxString msg;
+            msg.Printf( wxT( "MODULE::Add() needs work: BOARD_ITEM type (%d) not handled" ),
+                        aBoardItem->Type() );
+            wxFAIL_MSG( msg );
+
+            return;
+        }
+    }
+
+    aBoardItem->SetParent( this );
+}
+
+
+BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
+{
+    switch( aBoardItem->Type() )
+    {
+    case PCB_MODULE_TEXT_T:
+        // Only common texts can be added this way. Reference and value are not hold in the DLIST.
+        assert( static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS );
+        /* no break */
+
+    case PCB_MODULE_EDGE_T:
+        return m_Drawings.Remove( static_cast<BOARD_ITEM*>( aBoardItem ) );
+
+    case PCB_PAD_T:
+        return m_Pads.Remove( static_cast<D_PAD*>( aBoardItem ) );
+
+    default:
+        {
+            wxString msg;
+            msg.Printf( wxT( "MODULE::Remove() needs work: BOARD_ITEM type (%d) not handled" ),
+                        aBoardItem->Type() );
+            wxFAIL_MSG( msg );
+        }
+    }
+
+    return NULL;
+}
+
+
 void MODULE::CopyNetlistSettings( MODULE* aModule )
 {
     // Don't do anything foolish like trying to copy to yourself.
@@ -422,9 +488,13 @@ EDA_RECT MODULE::GetFootprintRect() const
     area.SetEnd( m_Pos );
     area.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the area
 
-    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge; edge = edge->Next() )
-        if( edge->Type() == PCB_MODULE_EDGE_T )
+    for( const BOARD_ITEM* item = m_Drawings.GetFirst(); item; item = item->Next() )
+    {
+        const EDGE_MODULE* edge = dyn_cast<const EDGE_MODULE*>( item );
+
+        if( edge )
             area.Merge( edge->GetBoundingBox() );
+    }
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
         area.Merge( pad->GetBoundingBox() );
@@ -444,8 +514,12 @@ const EDA_RECT MODULE::GetBoundingBox() const
     // Add the Clearance shape size: (shape around the pads when the
     // clearance is shown.  Not optimized, but the draw cost is small
     // (perhaps smaller than optimization).
-    int biggest_clearance = GetBoard()->GetBiggestClearanceValue();
-    area.Inflate( biggest_clearance );
+    BOARD* board = GetBoard();
+    if( board )
+    {
+        int biggest_clearance = board->GetDesignSettings().GetBiggestClearanceValue();
+        area.Inflate( biggest_clearance );
+    }
 
     return area;
 }
@@ -546,7 +620,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 }
 
 
-bool MODULE::HitTest( const wxPoint& aPosition )
+bool MODULE::HitTest( const wxPoint& aPosition ) const
 {
     if( m_BoundaryBox.Contains( aPosition ) )
         return true;
@@ -573,7 +647,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        pad->ReturnStringPadName( buf );
+        pad->StringPadName( buf );
 #if 1
         if( buf.CmpNoCase( aPadName ) == 0 )    // why case insensitive?
 #else
@@ -586,12 +660,12 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 }
 
 
-D_PAD* MODULE::GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask )
+D_PAD* MODULE::GetPad( const wxPoint& aPosition, LSET aLayerMask )
 {
-    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         // ... and on the correct layer.
-        if( ( pad->GetLayerMask() & aLayerMask ) == 0 )
+        if( !( pad->GetLayerSet() & aLayerMask ).any() )
             continue;
 
         if( pad->HitTest( aPosition ) )
@@ -625,13 +699,6 @@ void MODULE::Add3DModel( S3D_MASTER* a3DModel )
 {
     a3DModel->SetParent( this );
     m_3D_Drawings.PushBack( a3DModel );
-}
-
-
-void MODULE::AddPad( D_PAD* aPad )
-{
-    aPad->SetParent( this );
-    m_Pads.PushBack( aPad );
 }
 
 
@@ -728,6 +795,56 @@ EDA_ITEM* MODULE::Clone() const
 }
 
 
+void MODULE::RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction )
+{
+    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+        aFunction( static_cast<BOARD_ITEM*>( pad ) );
+
+    for( BOARD_ITEM* drawing = m_Drawings; drawing; drawing = drawing->Next() )
+        aFunction( drawing );
+
+    aFunction( static_cast<BOARD_ITEM*>( m_Reference ) );
+    aFunction( static_cast<BOARD_ITEM*>( m_Value ) );
+}
+
+
+void MODULE::ViewUpdate( int aUpdateFlags )
+{
+    if( !m_view )
+        return;
+
+    // Update the module itself
+    VIEW_ITEM::ViewUpdate( aUpdateFlags );
+
+    // Update pads
+    for( D_PAD* pad = m_Pads.GetFirst(); pad; pad = pad->Next() )
+        pad->ViewUpdate( aUpdateFlags );
+
+    // Update module's drawing (mostly silkscreen)
+    for( BOARD_ITEM* drawing = m_Drawings.GetFirst(); drawing; drawing = drawing->Next() )
+        drawing->ViewUpdate( aUpdateFlags );
+
+    // Update module's texts
+    m_Reference->ViewUpdate( aUpdateFlags );
+    m_Value->ViewUpdate( aUpdateFlags );
+}
+
+
+void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount = 1;
+    aLayers[0] = ITEM_GAL_LAYER( ANCHOR_VISIBLE );
+}
+
+
+unsigned int MODULE::ViewGetLOD( int aLayer ) const
+{
+    // Currently there is only one layer, so there is nothing to check
+//    if( aLayer == ITEM_GAL_LAYER( ANCHOR_VISIBLE ) )
+        return 30;
+}
+
+
 /* Test for validity of the name in a library of the footprint
  * ( no spaces, dir separators ... )
  * return true if the given name is valid
@@ -735,7 +852,7 @@ EDA_ITEM* MODULE::Clone() const
  */
 bool MODULE::IsLibNameValid( const wxString & aName )
 {
-    const wxChar * invalids = ReturnStringLibNameInvalidChars( false );
+    const wxChar * invalids = StringLibNameInvalidChars( false );
 
     if( aName.find_first_of( invalids ) != std::string::npos )
         return false;
@@ -751,7 +868,7 @@ bool MODULE::IsLibNameValid( const wxString & aName )
  * return a constant string giving the list of invalid chars in lib name
  * static function
  */
-const wxChar* MODULE::ReturnStringLibNameInvalidChars( bool aUserReadable )
+const wxChar* MODULE::StringLibNameInvalidChars( bool aUserReadable )
 {
     static const wxChar invalidChars[] = wxT("%$\t \"\\/");
     static const wxChar invalidCharsReadable[] = wxT("% $ 'tab' 'space' \\ \" /");
@@ -857,7 +974,7 @@ void MODULE::Flip( const wxPoint& aCentre )
         case PCB_MODULE_TEXT_T:
             text = (TEXTE_MODULE*) item;
             text->m_Pos.y -= m_Pos.y;
-            NEGATE( text->m_Pos0.y );
+            NEGATE( text->m_Pos.y );
             text->m_Pos.y += m_Pos.y;
             NEGATE( text->m_Pos0.y );
             NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );

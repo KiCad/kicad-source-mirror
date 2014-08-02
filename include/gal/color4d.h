@@ -136,7 +136,7 @@ public:
      * Function Brightened
      * Returns a color that is brighter by a given factor, without modifying object.
      * @param aFactor Specifies how bright the color should become (valid values: 0.0 .. 1.0).
-     * @return COLOR4D Highlightedd color.
+     * @return COLOR4D Highlighted color.
      */
     COLOR4D Brightened( double aFactor ) const
     {

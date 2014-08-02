@@ -30,6 +30,7 @@
  */
 
 #include <fctsys.h>
+#include <kiface_i.h>
 #include <help_common_strings.h>
 #include <dialog_helpers.h>
 #include <class_layer_box_selector.h>
@@ -105,7 +106,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
                previous_Route_Layer_BOTTOM_color, previous_via_color;
 
     /* get colors, and redraw bitmap button only on changes */
-    active_layer_color = GetBoard()->GetLayerColor(getActiveLayer());
+    active_layer_color = GetBoard()->GetLayerColor(GetActiveLayer());
 
     if( previous_active_layer_color != active_layer_color )
     {
@@ -218,10 +219,14 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
                                       wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiBitmap( new_pcb_xpm ),
-                            _( "New board" ) );
-    m_mainToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiBitmap( open_brd_file_xpm ),
-                            _( "Open existing board" ) );
+    if( Kiface().IsSingle() )
+    {
+        m_mainToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiBitmap( new_pcb_xpm ),
+                                _( "New board" ) );
+        m_mainToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiBitmap( open_brd_file_xpm ),
+                                _( "Open existing board" ) );
+    }
+
     m_mainToolBar->AddTool( ID_SAVE_BOARD, wxEmptyString, KiBitmap( save_xpm ),
                             _( "Save board" ) );
 
@@ -281,6 +286,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
         m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
         m_SelLayerBox->SetBoardFrame( this );
     }
+
     ReCreateLayerBox( false );
     m_mainToolBar->AddControl( m_SelLayerBox );
 
@@ -302,16 +308,16 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
                             KiBitmap( web_support_xpm ),
                             _( "Fast access to the Web Based FreeROUTE advanced router" ) );
 
-    m_mainToolBar->AddSeparator();
-
     // Access to the scripting console
 #ifdef KICAD_SCRIPTING_WXPYTHON
+    m_mainToolBar->AddSeparator();
+
     m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,
                             KiBitmap( py_script_xpm ),
-                            _( "Show/Hide the Scripting console" ) );
-
-    m_mainToolBar->AddSeparator();
+                            _( "Show/Hide the Python Scripting console" ),
+                            wxITEM_CHECK );
 #endif
+
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
 }
@@ -501,29 +507,29 @@ void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
     m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_SELF_CMD, wxEmptyString,
                                  KiBitmap( mw_add_line_xpm ),
                                  _( "Create line of specified length for microwave applications" ),
-				 wxITEM_CHECK );
+                                 wxITEM_CHECK );
 
     m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_GAP_CMD, wxEmptyString,
                                  KiBitmap( mw_add_gap_xpm ),
                                  _( "Create gap of specified length for microwave applications" ),
-				 wxITEM_CHECK );
+                                 wxITEM_CHECK );
 
     m_microWaveToolBar->AddSeparator();
 
     m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_CMD, wxEmptyString,
                                  KiBitmap( mw_add_stub_xpm ),
                                  _( "Create stub of specified length for microwave applications" ),
-				 wxITEM_CHECK );
+                                 wxITEM_CHECK );
 
     m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_ARC_CMD, wxEmptyString,
                                  KiBitmap( mw_add_stub_arc_xpm ),
                                  _( "Create stub (arc) of specified length for microwave applications" ),
-				 wxITEM_CHECK );
+                                 wxITEM_CHECK );
 
     m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD, wxEmptyString,
                                  KiBitmap( mw_add_shape_xpm ),
                                  _( "Create a polynomial shape for microwave applications" ),
-				 wxITEM_CHECK );
+                                 wxITEM_CHECK );
 
     m_microWaveToolBar->Realize();
 }
@@ -620,9 +626,9 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
 
     m_SelTrackWidthBox->Clear();
 
-    for( unsigned ii = 0; ii < GetBoard()->m_TrackWidthList.size(); ii++ )
+    for( unsigned ii = 0; ii < GetDesignSettings().m_TrackWidthList.size(); ii++ )
     {
-        msg = _( "Track " ) + CoordinateToString( GetBoard()->m_TrackWidthList[ii], true );
+        msg = _( "Track " ) + CoordinateToString( GetDesignSettings().m_TrackWidthList[ii], true );
 
         if( ii == 0 )
             msg << _( " *" );
@@ -630,10 +636,10 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
         m_SelTrackWidthBox->Append( msg );
     }
 
-    if( GetBoard()->GetTrackWidthIndex() >= GetBoard()->m_TrackWidthList.size() )
-        GetBoard()->SetTrackWidthIndex( 0 );
+    if( GetDesignSettings().GetTrackWidthIndex() >= GetDesignSettings().m_TrackWidthList.size() )
+        GetDesignSettings().SetTrackWidthIndex( 0 );
 
-    m_SelTrackWidthBox->SetSelection( GetBoard()->GetTrackWidthIndex() );
+    m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
 }
 
 
@@ -646,14 +652,14 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
 
     m_SelViaSizeBox->Clear();
 
-    for( unsigned ii = 0; ii < GetBoard()->m_ViasDimensionsList.size(); ii++ )
+    for( unsigned ii = 0; ii < GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
     {
         msg = _( "Via " );
-        msg << CoordinateToString( GetBoard()->m_ViasDimensionsList[ii].m_Diameter, true );
+        msg << CoordinateToString( GetDesignSettings().m_ViasDimensionsList[ii].m_Diameter, true );
 
-        if( GetBoard()->m_ViasDimensionsList[ii].m_Drill )
+        if( GetDesignSettings().m_ViasDimensionsList[ii].m_Drill )
             msg  << wxT("/ ")
-                 << CoordinateToString( GetBoard()->m_ViasDimensionsList[ii].m_Drill, true );
+                 << CoordinateToString( GetDesignSettings().m_ViasDimensionsList[ii].m_Drill, true );
 
         if( ii == 0 )
             msg << _( " *" );
@@ -661,10 +667,10 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
         m_SelViaSizeBox->Append( msg );
     }
 
-    if( GetBoard()->GetViaSizeIndex() >= GetBoard()->m_ViasDimensionsList.size() )
-        GetBoard()->SetViaSizeIndex( 0 );
+    if( GetDesignSettings().GetViaSizeIndex() >= GetDesignSettings().m_ViasDimensionsList.size() )
+        GetDesignSettings().SetViaSizeIndex( 0 );
 
-    m_SelViaSizeBox->SetSelection( GetBoard()->GetViaSizeIndex() );
+    m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
 }
 
 

@@ -4,7 +4,7 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <class_drawpanel.h>
 
 #include <general.h>
@@ -232,7 +232,7 @@ void DIALOG_COLOR_CONFIG::CreateControls()
     m_SelBgColor = new wxRadioBox( this, wxID_ANY, _( "Background Color" ),
                                    wxDefaultPosition, wxDefaultSize,
                                    m_SelBgColorStrings, 1, wxRA_SPECIFY_COLS );
-    m_SelBgColor->SetSelection( ( g_DrawBgColor == BLACK ) ? 1 : 0 );
+    m_SelBgColor->SetSelection( ( m_parent->GetDrawBgColor() == BLACK ) ? 1 : 0 );
     m_columnBoxSizer->Add( m_SelBgColor, 1, wxGROW | wxRIGHT | wxTOP | wxBOTTOM, 5 );
 
     // Provide a line to separate all of the controls added so far from the
@@ -318,9 +318,9 @@ bool DIALOG_COLOR_CONFIG::UpdateColorsSettings()
 {
     // Update color of background
     if( m_SelBgColor->GetSelection() == 0 )
-        g_DrawBgColor = WHITE;
+        m_parent->SetDrawBgColor( WHITE );
     else
-        g_DrawBgColor = BLACK;
+        m_parent->SetDrawBgColor( BLACK );
 
     bool warning = false;
 
@@ -328,13 +328,13 @@ bool DIALOG_COLOR_CONFIG::UpdateColorsSettings()
     {
         SetLayerColor( currentColors[ ii ], ii );
 
-        if( g_DrawBgColor == GetLayerColor( ii ) )
+        if(  m_parent->GetDrawBgColor() == GetLayerColor( ii ) )
             warning = true;
     }
 
     m_parent->SetGridColor( GetLayerColor( LAYER_GRID ) );
 
-    if( g_DrawBgColor == GetLayerColor( LAYER_GRID ) )
+    if( m_parent->GetDrawBgColor() == GetLayerColor( LAYER_GRID ) )
         warning = true;
 
     return warning;

@@ -20,8 +20,9 @@ function fixbundle() {
     exec="$1"
     bzroot="$2"
     execpath="$3"
+    binary="$4"
   
-    LIBRARIES="`otool -L ${execpath}${exec}.app/Contents/MacOS/${exec} | cut -d' ' -f1`"
+    LIBRARIES="`otool -L ${binary} | cut -d' ' -f1`"
     
     for library in $LIBRARIES; do
         
@@ -35,7 +36,7 @@ function fixbundle() {
                     resolvelink "$library" "`dirname $library`" "${execpath}/${exec}.app/Contents/Frameworks"
                 fi
             fi
-            install_name_tool -change $library @executable_path/../Frameworks/`basename $library` ${execpath}${exec}.app/Contents/MacOS/${exec}
+            install_name_tool -change $library @executable_path/../Frameworks/`basename $library` ${binary}
         fi
     done
 
@@ -122,5 +123,7 @@ for executable in $EXECUTABLES;
 do
    myexecpath="`dirname ${executable}`/"
    myexec="`basename ${executable}|sed -e 's/\.app//'`"
-   fixbundle "${myexec}" "`pwd`" "${myexecpath}"
+
+   fixbundle "${myexec}" "$1" "${myexecpath}" "${myexecpath}${myexec}.app/Contents/MacOS/${myexec}"
+   fixbundle "${myexec}" "$1" "${myexecpath}" "${myexecpath}${myexec}.app/Contents/MacOS/_${myexec}.kiface"
 done

@@ -43,7 +43,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 
@@ -67,7 +67,7 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     if( GetLayer() != aZoneToCompare.GetLayer() )
         return false;
 
-    if( m_Netname != aZoneToCompare.m_Netname )
+    if( GetNetCode() != aZoneToCompare.GetNetCode() )
         return false;
 
     if( GetPriority() != aZoneToCompare.GetPriority() )
@@ -146,7 +146,7 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
         if( zone == NULL )      // End of list
             break;
 
-        if( aNetCode >= 0 && aNetCode != zone->GetNet() )
+        if( aNetCode >= 0 && aNetCode != zone->GetNetCode() )
             continue;
 
         if( aLayer >= 0 && aLayer != zone->GetLayer() )

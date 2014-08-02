@@ -36,6 +36,7 @@
 #include <msgpanel.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 
@@ -44,7 +45,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_IMAGE* aGerberpa
     EDA_ITEM( (EDA_ITEM*)aParent, TYPE_GERBER_DRAW_ITEM )
 {
     m_imageParams = aGerberparams;
-    m_Layer         = FIRST_LAYER;
+    m_Layer         = 0;
     m_Shape         = GBR_SEGMENT;
     m_Flashed       = false;
     m_DCode         = 0;
@@ -131,7 +132,7 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
 }
 
 
-wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition )
+wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition ) const
 {
     // do the inverse transform made by GetABPosition
     wxPoint xyPos = aABPosition;
@@ -577,7 +578,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 }
 
 
-bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos )
+bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
 {
     // calculate aRefPos in XY gerber axis:
     wxPoint ref_pos = GetXYPosition( aRefPos );
@@ -592,7 +593,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos )
 }
 
 
-bool GERBER_DRAW_ITEM::HitTest( EDA_RECT& aRefArea )
+bool GERBER_DRAW_ITEM::HitTest( const EDA_RECT& aRefArea ) const
 {
     wxPoint pos = GetABPosition( m_Start );
 

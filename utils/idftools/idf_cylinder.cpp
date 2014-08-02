@@ -149,7 +149,9 @@ int main( int argc, char **argv )
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> dia) && dia > 0.0 )
+
+        tstr >> dia;
+        if( !tstr.fail() && dia > 0.0 )
             ok = true;
     }
 
@@ -163,7 +165,9 @@ int main( int argc, char **argv )
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> length) && length > 0.0 )
+
+        tstr >> length;
+        if( !tstr.fail() && length > 0.0 )
             ok = true;
     }
 
@@ -177,7 +181,9 @@ int main( int argc, char **argv )
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> extraZ) && extraZ >= 0.0 )
+
+        tstr >> extraZ;
+        if( !tstr.fail() && extraZ >= 0.0 )
             ok = true;
     }
 
@@ -191,7 +197,9 @@ int main( int argc, char **argv )
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> wireDia) && wireDia > 0.0 )
+
+        tstr >> wireDia;
+        if( !tstr.fail() && wireDia > 0.0 )
         {
             if( wireDia < dia )
                 ok = true;
@@ -236,7 +244,9 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> pitch) && pitch > 0.0 )
+
+        tstr >> pitch;
+        if( !tstr.fail() && pitch > 0.0 )
         {
             if( (pitch - wireDia) <= (dia / 2.0) )
             {
@@ -436,7 +446,9 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> pitch) && pitch > 0.0 )
+
+        tstr >> pitch;
+        if( !tstr.fail() && pitch > 0.0 )
         {
             if( axial )
             {
@@ -477,7 +489,9 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> lead) && lead > 0.0 )
+
+        tstr >> lead;
+        if( !tstr.fail() && lead > 0.0 )
         {
             if( lead < wireDia )
                 cout << "* WARNING: lead length must be >= wireDia\n";

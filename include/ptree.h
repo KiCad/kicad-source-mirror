@@ -52,9 +52,9 @@ makes it easy to extract a subset of a ptree.
 #include <richio.h>
 #include <dsnlexer.h>
 
-typedef boost::property_tree::ptree     PTREE;
-typedef const PTREE                     CPTREE;
-
+typedef boost::property_tree::ptree         PTREE;
+typedef const PTREE                         CPTREE;
+typedef boost::property_tree::ptree_error   PTREE_ERROR;
 
 /**
  * Function Scan
@@ -78,7 +78,7 @@ typedef const PTREE                     CPTREE;
  *     PTREE   doc;
  *     Scan( &doc, &lexer );
  * }
- * catch( IO_ERROR ioe )
+ * catch( const IO_ERROR& ioe )
  * {
  *     fprintf( stderr, "%s\n", TO_UTF8( ioe.errorText ) );
  * }

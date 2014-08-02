@@ -45,16 +45,15 @@ class LIB_ALIAS;
 class LIB_FIELD;
 class DIALOG_LIB_EDIT_TEXT;
 
-
 /**
  * The component library editor main window.
  */
 class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 {
-    LIB_COMPONENT* m_tempCopyComponent;  ///< Temporary copy of current component during edit.
-    LIB_COLLECTOR m_collectedItems;      // Used for hit testing.
-    wxComboBox* m_partSelectBox;         // a Box to select a part to edit (if any)
-    wxComboBox* m_aliasSelectBox;        // a box to select the alias to edit (if any)
+    LIB_COMPONENT*  m_tempCopyComponent;    ///< Temporary copy of current component during edit.
+    LIB_COLLECTOR   m_collectedItems;       ///< Used for hit testing.
+    wxComboBox*     m_partSelectBox;        ///< a Box to select a part to edit (if any)
+    wxComboBox*     m_aliasSelectBox;       ///< a box to select the alias to edit (if any)
 
     wxString m_configPath;
     wxString m_lastLibImportPath;
@@ -122,9 +121,8 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     LIB_ITEM* locateItem( const wxPoint& aPosition, const KICAD_T aFilterList[] );
 
 public:
-    LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent, const wxString& aTitle,
-                    const wxPoint& aPosition, const wxSize& aSize,
-                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
+
+    LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
     ~LIB_EDIT_FRAME();
 
@@ -135,13 +133,6 @@ public:
      */
     static const wxChar* GetLibEditFrameName();
 
-    /**
-     * Function GetActiveLibraryEditor (static)
-     * @return a reference to the current opened Library editor
-     * or NULL if no Library editor currently opened
-     */
-    static LIB_EDIT_FRAME* GetActiveLibraryEditor();
-
     void ReCreateMenuBar();
 
     /**
@@ -150,12 +141,6 @@ public:
      * (for instance after loading a schematic project)
      */
     static void EnsureActiveLibExists();
-
-    /**
-     * Function SetLanguage
-     * is called on a language menu selection
-     */
-    void SetLanguage( wxCommandEvent& event );
 
     void InstallConfigFrame( wxCommandEvent& event );
     void InstallDimensionsDialog( wxCommandEvent& event );
@@ -294,23 +279,9 @@ public:
 
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
-    /**
-     * Function LoadSettings
-     * loads the library editor frame specific configuration settings.
-     *
-     * Don't forget to call this method from any derived classes or the settings will not
-     * get loaded.
-     */
-    void LoadSettings();
+    void LoadSettings( wxConfigBase* aCfg );
 
-    /**
-     * Function SaveSettings
-     * saves the library editor frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the settings will
-     * not get saved.
-     */
-    void SaveSettings();
+    void SaveSettings( wxConfigBase* aCfg );
 
     /**
      * Function CloseWindow
@@ -575,11 +546,11 @@ public:
     /* Block commands: */
 
     /**
-     * Function ReturnBlockCommand
+     * Function BlockCommand
      * returns the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
      * the \a aKey (ALT, SHIFT ALT ..)
      */
-    virtual int ReturnBlockCommand( int aKey );
+    virtual int BlockCommand( int aKey );
 
     /**
      * Function HandleBlockPlace
@@ -637,7 +608,7 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, LAYER_MSK aPrintMask,
+    virtual void PrintPage( wxDC* aDC, LSET aPrintMask,
                             bool aPrintMirrorMode, void* aData = NULL );
 
     /**

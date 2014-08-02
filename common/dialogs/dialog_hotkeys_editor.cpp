@@ -28,7 +28,7 @@
 #include <algorithm>
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <common.h>
 
 #include <dialog_hotkeys_editor.h>
@@ -175,7 +175,7 @@ void HOTKEYS_EDITOR_DIALOG::OnClickOnCell( wxGridEvent& event )
 /** OnRightClickOnCell
  * If a cell is selected, display a list of keys for selection
  * The list is restricted to keys that cannot be entered:
- * tab, home ... because these keys have special functions in dialogs
+ * tab, home, return ... because these keys have special functions in dialogs
  */
 void HOTKEYS_EDITOR_DIALOG::OnRightClickOnCell( wxGridEvent& event )
 {
@@ -186,8 +186,8 @@ void HOTKEYS_EDITOR_DIALOG::OnRightClickOnCell( wxGridEvent& event )
         return;
 
     // Do not translate these key names. They are internally used.
-    //ee hotkeys_basic.cpp
-    #define C_COUNT 8
+    // See hotkeys_basic.cpp
+    #define C_COUNT 9
     wxString choices[C_COUNT] =
     {
         wxT("End")
@@ -198,11 +198,12 @@ void HOTKEYS_EDITOR_DIALOG::OnRightClickOnCell( wxGridEvent& event )
         wxT("Space"),
         wxT("Ctrl+Space"),
         wxT("Alt+Space"),
+        wxT("Return")
     };
 
     wxString keyname = wxGetSingleChoice( _( "Special keys only. For others keys, use keyboard" ),
                                           _( "Select a key" ), C_COUNT, choices, this );
-    int key = ReturnKeyCodeFromKeyName( keyname );
+    int key = KeyCodeFromKeyName( keyname );
 
     if( key == 0 )
         return;
@@ -251,7 +252,7 @@ void HOTKEYS_EDITOR_DIALOG::OnKeyPressed( wxKeyEvent& event )
 #endif
             // See if this key code is handled in hotkeys names list
             bool exists;
-            ReturnKeyNameFromKeyCode( key, &exists );
+            KeyNameFromKeyCode( key, &exists );
 
             if( !exists )   // not handled, see hotkeys_basic.cpp
             {

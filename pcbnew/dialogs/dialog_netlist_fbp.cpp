@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -159,7 +159,6 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	bSizerNetlistFilename = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_NetlistFilenameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_NetlistFilenameCtrl->SetMaxLength( 0 ); 
 	bSizerNetlistFilename->Add( m_NetlistFilenameCtrl, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonBrowse = new wxButton( this, ID_OPEN_NELIST, _("Browse"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -173,7 +172,6 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	bLowerSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_MessageWindow = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CHARWRAP|wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP );
-	m_MessageWindow->SetMaxLength( 0 ); 
 	m_MessageWindow->SetMinSize( wxSize( 300,150 ) );
 	
 	bLowerSizer->Add( m_MessageWindow, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );

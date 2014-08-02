@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,132 +15,46 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "pns_via.h"
 #include "pns_node.h"
 #include "pns_utils.h"
+#include "pns_router.h"
 
 #include <geometry/shape_rect.h>
 
-static bool Circle2Circle( VECTOR2I p1, VECTOR2I p2, int r1, int r2, VECTOR2I& force )
-{
-    int mindist = r1 + r2;
-    VECTOR2I delta = p2 - p1;
-    int dist = delta.EuclideanNorm();
-
-    if( dist >= mindist )
-        return false;
-
-    force = delta.Resize( abs( mindist - dist ) + 1 );
-    return true;
-};
-
-static bool Rect2Circle( VECTOR2I rp0, VECTOR2I rsize, VECTOR2I cc, int cr, VECTOR2I& force )
-{
-    VECTOR2I vts[] =
-    {
-        VECTOR2I( rp0.x,           rp0.y ),
-        VECTOR2I( rp0.x,           rp0.y + rsize.y ),
-        VECTOR2I( rp0.x + rsize.x, rp0.y + rsize.y ),
-        VECTOR2I( rp0.x + rsize.x, rp0.y ),
-        VECTOR2I( rp0.x,           rp0.y )
-    };
-
-    int dist = INT_MAX;
-    VECTOR2I nearest;
-
-    for( int i = 0; i < 4; i++ )
-    {
-        SEG s( vts[i], vts[i + 1] );
-
-        VECTOR2I pn = s.NearestPoint( cc );
-
-        int d = (pn - cc).EuclideanNorm();
-
-        if( d < dist )
-        {
-            nearest = pn;
-            dist = d;
-        }
-    }
-
-    bool inside = cc.x >= rp0.x && cc.x <= (rp0.x + rsize.x)
-                  && cc.y >= rp0.y && cc.y <= (rp0.y + rsize.y);
-
-    VECTOR2I delta = cc - nearest;
-
-    if( dist >= cr && !inside )
-        return false;
-
-    if( inside )
-        force = -delta.Resize( abs( cr + dist ) + 1 );
-    else
-        force = delta.Resize( abs( cr - dist ) + 1 );
-
-    return true;
-};
-
-
-static bool ShPushoutForce( const SHAPE* shape, VECTOR2I p, int r, VECTOR2I& force, int clearance )
-{
-    switch( shape->Type() )
-    {
-    case SH_CIRCLE:
-        {
-            const SHAPE_CIRCLE* cir = static_cast<const SHAPE_CIRCLE*>(shape);
-            return Circle2Circle( cir->GetCenter(), p, cir->GetRadius(), r + clearance + 1, force );
-        }
-
-    case SH_RECT:
-        {
-            const SHAPE_RECT* rect = static_cast<const SHAPE_RECT*>(shape);
-            return Rect2Circle( rect->GetPosition(), rect->GetSize(), p, r + clearance + 1, force );
-        }
-
-    default:
-        return false;
-    }
-
-    return false;
-}
-
-
-bool PNS_VIA::PushoutForce( PNS_NODE* aNode,
-        const VECTOR2I& aDirection,
-        VECTOR2I& aForce,
-        bool aSolidsOnly,
-        int aMaxIterations )
+bool PNS_VIA::PushoutForce( PNS_NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForce,
+                            bool aSolidsOnly, int aMaxIterations )
 {
     int iter = 0;
     PNS_VIA mv( *this );
-    VECTOR2I force, totalForce;
+    VECTOR2I force, totalForce, force2;
 
     while( iter < aMaxIterations )
     {
-        PNS_NODE::OptObstacle obs = aNode->CheckColliding( &mv,
+        PNS_NODE::OPT_OBSTACLE obs = aNode->CheckColliding( &mv,
                 aSolidsOnly ? PNS_ITEM::SOLID : PNS_ITEM::ANY );
 
         if( !obs )
             break;
 
-        int clearance = aNode->GetClearance( obs->item, &mv );
+        int clearance = aNode->GetClearance( obs->m_item, &mv );
 
-        if( iter > 10 )
+        if( iter > aMaxIterations / 2 )
         {
-            VECTOR2I l = -aDirection.Resize( m_diameter / 4 );
+            VECTOR2I l = aDirection.Resize( m_diameter / 2 );
             totalForce += l;
-            mv.SetPos( mv.GetPos() + l );
+            mv.SetPos( mv.Pos() + l );
         }
 
-        if( ShPushoutForce( obs->item->GetShape(), mv.GetPos(), mv.GetDiameter() / 2, force,
-                    clearance ) )
-        {
-            totalForce += force;
-            mv.SetPos( mv.GetPos() + force );
-        }
+        bool col = CollideShapes( obs->m_item->Shape(), mv.Shape(), clearance, true, force2 );
 
+        if( col ) {
+            totalForce += force2;
+            mv.SetPos( mv.Pos() + force2 );
+        }
 
         iter++;
     }
@@ -149,13 +63,35 @@ bool PNS_VIA::PushoutForce( PNS_NODE* aNode,
         return false;
 
     aForce = totalForce;
+
     return true;
 }
 
 
 const SHAPE_LINE_CHAIN PNS_VIA::Hull( int aClearance, int aWalkaroundThickness ) const
 {
+    int cl = ( aClearance + aWalkaroundThickness / 2 );
+
     return OctagonalHull( m_pos -
-            VECTOR2I( m_diameter / 2, m_diameter / 2 ), VECTOR2I( m_diameter,
-                    m_diameter ), aClearance + 1, (2 * aClearance + m_diameter) * 0.26 );
+            VECTOR2I( m_diameter / 2, m_diameter / 2 ), VECTOR2I( m_diameter, m_diameter ),
+            cl + 1, ( 2 * cl + m_diameter ) * 0.26 );
+}
+
+
+PNS_VIA* PNS_VIA::Clone ( ) const
+{
+    PNS_VIA* v = new PNS_VIA();
+
+    v->SetNet( Net() );
+    v->SetLayers( Layers() );
+    v->m_pos = m_pos;
+    v->m_diameter = m_diameter;
+    v->m_drill = m_drill;
+    v->m_owner = NULL;
+    v->m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
+    v->m_rank = m_rank;
+    v->m_marker = m_marker;
+    v->m_viaType = m_viaType;
+
+    return v;
 }

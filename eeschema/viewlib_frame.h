@@ -36,9 +36,7 @@
 #include <sch_base_frame.h>
 #include <class_sch_screen.h>
 
-class wxSashLayoutWindow;
 class wxListBox;
-class wxSemaphore;
 class CMP_LIBRARY;
 
 
@@ -48,9 +46,14 @@ class CMP_LIBRARY;
 class LIB_VIEW_FRAME : public SCH_BASE_FRAME
 {
 public:
-    LIB_VIEW_FRAME( SCH_BASE_FRAME* aParent, CMP_LIBRARY* aLibrary = NULL,
-                    wxSemaphore* aSemaphore = NULL,
-                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
+
+    /**
+     * Constructor
+     * @param aFrameType must be given either FRAME_SCH_LIB_VIEWER or
+     *  FRAME_SCH_LIB_VIEWER_MODAL
+     */
+    LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent,
+            FRAME_T aFrameType, CMP_LIBRARY* aLibrary = NULL );
 
     ~LIB_VIEW_FRAME();
 
@@ -60,13 +63,6 @@ public:
      * used to get a reference to this frame, if exists
      */
     static const wxChar* GetLibViewerFrameName();
-
-    /**
-     * Function GetActiveLibraryViewer (static)
-     * @return a reference to the current opened Library viewer
-     * or NULL if no Library viewer currently opened
-     */
-    static LIB_VIEW_FRAME* GetActiveLibraryViewer();
 
     void OnSize( wxSizeEvent& event );
 
@@ -93,23 +89,8 @@ public:
 
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
-    /**
-     * Function LoadSettings
-     * loads the library viewer frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get loaded.
-     */
-    void LoadSettings();
-
-    /**
-     * Function SaveSettings
-     * save library viewer frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get saved.
-     */
-    void SaveSettings();
+    void LoadSettings( wxConfigBase* aCfg );
+    void SaveSettings( wxConfigBase* aCfg );
 
     /**
      * Set the selected library in the library window.
@@ -124,7 +105,6 @@ public:
      * @param the alias name of the component to be selected.
      */
     void SetSelectedComponent( const wxString& aComponentName );
-    const wxString& GetSelectedComponent( void ) const { return m_exportToEeschemaCmpName; }
 
     void SetUnit( int aUnit ) { m_unit = aUnit; }
     int GetUnit( void ) { return m_unit; }
@@ -162,8 +142,6 @@ private:
     wxListBox*          m_cmpList;          // The list of components
     int                 m_cmpListWidth;     // Last width of the window
 
-    // Flags
-    wxSemaphore*        m_semaphore;        // != NULL if the frame must emulate a modal dialog
     wxString            m_configPath;       // subpath for configuration
 
     // TODO(hzeller): looks like these members were chosen to be static to survive different
@@ -171,11 +149,8 @@ private:
     // ugly hack, and should be solved differently.
     static wxString m_libraryName;
 
-    // TODO(hzeller): figure out what the difference between these is and the motivation to
-    // have this distinction. Shouldn't these essentially be the same ?
     static wxString m_entryName;
-    static wxString m_exportToEeschemaCmpName;  // When the viewer is used to select a component
-                                                // in schematic, the selected component is here
+
     static int      m_unit;
     static int      m_convert;
 

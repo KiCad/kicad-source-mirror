@@ -29,15 +29,15 @@
 
 #include <fctsys.h>
 
-#include <appl_wxstruct.h>
-
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
 #include <hotkeys.h>
 #include <menus_helpers.h>
 
 
-void PL_EDITOR_FRAME::ReCreateMenuBar( void )
+void PL_EDITOR_FRAME::ReCreateMenuBar()
 {
     // Create and try to get the current menubar
     wxMenuBar* menuBar = GetMenuBar();
@@ -74,11 +74,13 @@ void PL_EDITOR_FRAME::ReCreateMenuBar( void )
     // Add this menu to list menu managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
     if( openRecentMenu )
-        wxGetApp().GetFileHistory().RemoveMenu( openRecentMenu );
+        Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
 
     openRecentMenu = new wxMenu();
-    wxGetApp().GetFileHistory().UseMenu( openRecentMenu );
-    wxGetApp().GetFileHistory().AddFilesToMenu();
+
+    Kiface().GetFileHistory().UseMenu( openRecentMenu );
+    Kiface().GetFileHistory().AddFilesToMenu();
+
     AddMenuItem( fileMenu, openRecentMenu,
                  wxID_ANY, _( "Open &Recent Page Layout File" ),
                  wxEmptyString, KiBitmap(  pagelayout_recent_xpm ) );
@@ -115,7 +117,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar( void )
 
     AddMenuItem( preferencesMenu,
                  ID_MENU_SWITCH_BGCOLOR,
-                 g_DrawBgColor == WHITE ?
+                 GetDrawBgColor() == WHITE ?
                  _( "&BackGround Black" ) : _( "&BackGround White" ),
                  wxEmptyString, KiBitmap( palette_xpm ) );
 
@@ -132,7 +134,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar( void )
                  KiBitmap( editor_xpm ) );
 
     // Language submenu
-    wxGetApp().AddMenuLanguageList( preferencesMenu );
+    Pgm().AddMenuLanguageList( preferencesMenu );
 
     // Hotkey submenu
     AddHotkeyConfigMenu( preferencesMenu );

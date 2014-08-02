@@ -43,7 +43,7 @@
 template <class T>
 static const SHAPE* shapeFunctor( T aItem )
 {
-    return aItem->GetShape();
+    return aItem->Shape();
 }
 
 

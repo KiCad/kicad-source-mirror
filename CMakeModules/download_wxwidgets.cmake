@@ -33,11 +33,13 @@ set( LIBWX_ROOT "${PROJECT_SOURCE_DIR}/libwx_root" )
 
 #-----</configure>---------------------------------------------------------------
 
-find_package( BZip2 REQUIRED )
+if( NOT BZIP2_FOUND )
+    find_package( BZip2 REQUIRED )
+endif()
 
 set( PREFIX ${DOWNLOAD_DIR}/libwx )
 
-if (APPLE) 
+if (APPLE)
     if( CMAKE_OSX_ARCHITECTURES )
         STRING(REGEX REPLACE " -arch " "," LIBWX_ARCHITECTURES ${CMAKE_OSX_ARCHITECTURES})
         SET( LIBWX_ARCHITECTURES --enable-universal_binary=${LIBWX_ARCHITECTURES})
@@ -80,7 +82,7 @@ ExternalProject_Add( libwx
 #SET directories
 set(wxWidgets_BIN_DIR           ${LIBWX_ROOT}/bin)
 set(wxWidgets_CONFIG_EXECUTABLE ${LIBWX_ROOT}/bin/wx-config)
-set(wxWidgets_INCLUDE_DIRS      ${LIBWX_ROOT}/include) 
+set(wxWidgets_INCLUDE_DIRS      ${LIBWX_ROOT}/include)
 set(wxWidgets_LIBRARY_DIRS      ${LIBWX_ROOT}/lib)
 
 
@@ -110,7 +112,7 @@ ExternalProject_Add_Step( libwx bzr_init_libwx
 ######
 
 ExternalProject_Add_Step( libwx libwx_recursive_message
-    COMMAND cmake . 
+    COMMAND cmake .
     COMMENT "*** RERUN CMAKE - wxWidgets built, now reissue a cmake to build Kicad"
     DEPENDEES install
     )

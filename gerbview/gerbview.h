@@ -8,9 +8,6 @@
 #include <vector>
 #include <set>
 
-#include <dcode.h>
-#include <class_gerber_draw_item.h>
-#include <class_aperture_macro.h>
 
 #define CURSEUR_ON_GRILLE  0
 #define CURSEUR_OFF_GRILLE 1
@@ -32,6 +29,8 @@ extern const wxChar* g_GerberPageSizeList[8];
 #define GERB_STOP_DRAW   2      // Extinguish light (lift pen)
 #define GERB_FLASH       3      // Flash
 
+// number fo draw layers in Gerbview
+#define GERBER_DRAWLAYERS_COUNT 32
 
 /**
  * Enum GERBER_VISIBLE_ID
@@ -46,9 +45,6 @@ enum GERBER_VISIBLE_ID
                                 // instaed of background color, to make them visible
     END_GERBER_VISIBLE_LIST     // sentinel
 };
-
-extern const wxString GerbviewProjectFileExt;
-extern const wxString GerbviewProjectFileWildcard;
 
 // Interpolation type
 enum Gerb_Interpolation
@@ -93,13 +89,6 @@ enum Gerb_Analyse_Cmd
     ENTER_RS274X_CMD
 };
 
-
-/**************/
-/* rs274x.cpp */
-/**************/
-bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file );
-extern GERBER_IMAGE* g_GERBER_List[32];
-
-#include <gerbview_frame.h>
+extern GERBER_IMAGE* g_GERBER_List[GERBER_DRAWLAYERS_COUNT];
 
 #endif  // ifndef GERBVIEW_H

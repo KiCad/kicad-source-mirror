@@ -27,13 +27,15 @@
  */
 
 #include <fctsys.h>
+#include <macros.h>
+#include <fp_lib_table.h>
 #include <gr_basic.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
 #include <wxstruct.h>
 #include <confirm.h>
 #include <gestfich.h>
 
-#include <3d_viewer.h>
 #include <cvpcb.h>
 #include <zones.h>
 #include <cvpcb_mainframe.h>
@@ -54,14 +56,14 @@ const wxString FootprintAliasFileExtension( wxT( "equ" ) );
 // Wildcard for schematic retroannotation (import footprint names in schematic):
 const wxString FootprintAliasFileWildcard( _( "KiCad footprint alias files (*.equ)|*.equ" ) );
 
-const wxString titleLibLoadError( _( "Library Load Error" ) );
 
+#if 0   // add this logic to OpenProjectFiles()
 
 /*
  * MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void EDA_APP::MacOpenFile( const wxString& aFileName )
+void PGM_BASE::MacOpenFile( const wxString& aFileName )
 {
     wxFileName  filename = aFileName;
     wxString    oldPath;
@@ -75,76 +77,256 @@ void EDA_APP::MacOpenFile( const wxString& aFileName )
         oldPath = frame->m_NetlistFileName.GetPath();
 
     // Update the library search path list.
-    if( wxGetApp().GetLibraryPathList().Index( oldPath ) != wxNOT_FOUND )
-        wxGetApp().GetLibraryPathList().Remove( oldPath );
+    if( Pgm().GetLibraryPathList().Index( oldPath ) != wxNOT_FOUND )
+        Pgm().GetLibraryPathList().Remove( oldPath );
 
-    wxGetApp().GetLibraryPathList().Insert( filename.GetPath(), 0 );
+    Pgm().GetLibraryPathList().Insert( filename.GetPath(), 0 );
 
     frame->m_NetlistFileName = filename;
     frame->ReadNetListAndLinkFiles();
 }
+#endif
 
 
-// Create a new application object
-IMPLEMENT_APP( EDA_APP )
+namespace CV {
 
-
-/************************************/
-/* Called to initialize the program */
-/************************************/
-
-bool EDA_APP::OnInit()
+static struct IFACE : public KIFACE_I
 {
-    wxFileName       filename;
-    wxString         message;
-    CVPCB_MAINFRAME* frame = NULL;
+    // Of course all are virtual overloads, implementations of the KIFACE.
 
-    InitEDA_Appl( wxT( "CvPcb" ), APP_CVPCB_T );
+    IFACE( const char* aName, KIWAY::FACE_T aType ) :
+        KIFACE_I( aName, aType )
+    {}
 
-    SetFootprintLibTablePath();
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
+
+    void OnKifaceEnd();
+
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
+    {
+        switch( aClassId )
+        {
+        case FRAME_CVPCB:
+            {
+                CVPCB_MAINFRAME* frame = new CVPCB_MAINFRAME( aKiway, aParent );
+                return frame;
+            }
+            break;
+
+        default:
+            ;
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Function IfaceOrAddress
+     * return a pointer to the requested object.  The safest way to use this
+     * is to retrieve a pointer to a static instance of an interface, similar to
+     * how the KIFACE interface is exported.  But if you know what you are doing
+     * use it to retrieve anything you want.
+     *
+     * @param aDataId identifies which object you want the address of.
+     *
+     * @return void* - and must be cast into the know type.
+     */
+    void* IfaceOrAddress( int aDataId )
+    {
+        return NULL;
+    }
+
+} kiface( "cvpcb", KIWAY::FACE_CVPCB );
+
+} // namespace
+
+using namespace CV;
+
+
+static PGM_BASE* process;
+
+
+KIFACE_I& Kiface() { return kiface; }
+
+
+// KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.
+// KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
+MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram )
+{
+    process = (PGM_BASE*) aProgram;
+    return &kiface;
+}
+
+
+PGM_BASE& Pgm()
+{
+    wxASSERT( process );    // KIFACE_GETTER has already been called.
+    return *process;
+}
+
+
+/**
+ * Function set3DShapesPath
+ * attempts to set the environment variable given by aKiSys3Dmod to a valid path.
+ * (typically "KISYS3DMOD" )
+ * If the environment variable is already set,
+ * then it left as is to respect the wishes of the user.
+ *
+ * The path is determined by attempting to find the path modules/packages3d
+ * files in kicad tree.
+ * This may or may not be the best path but it provides the best solution for
+ * backwards compatibility with the previous 3D shapes search path implementation.
+ *
+ * @note This must be called after #SetBinDir() is called at least on Windows.
+ * Otherwise, the kicad path is not known (Windows specific)
+ *
+ * @param aKiSys3Dmod = the value of environment variable, typically "KISYS3DMOD"
+ * @return false if the aKiSys3Dmod path is not valid.
+ */
+static bool set3DShapesPath( const wxString& aKiSys3Dmod )
+{
+    wxString    path;
+
+    // Set the KISYS3DMOD environment variable for the current process,
+    // if it is not already defined in the user's environment and valid.
+    if( wxGetEnv( aKiSys3Dmod, &path ) && wxFileName::DirExists( path ) )
+        return true;
+
+    // Attempt to determine where the 3D shape libraries were installed using the
+    // legacy path:
+    // on Unix: /usr/local/kicad/share/modules/packages3d
+    // or  /usr/share/kicad/modules/packages3d
+    // On Windows: bin../share/modules/packages3d
+    wxString relpath( wxT( "modules/packages3d" ) );
+
+// Apple MacOSx
+#ifdef __WXMAC__
+    path = wxT("/Library/Application Support/kicad/modules/packages3d/");
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+    path = wxString( wxGetenv( wxT( "HOME" ) ) ) + wxT("/Library/Application Support/kicad/modules/packages3d/");
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+#elif defined(__UNIX__)     // Linux and non-Apple Unix
+    // Try the home directory:
+    path.Empty();
+    wxGetEnv( wxT("HOME"), &path );
+    path += wxT("/kicad/share/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+    // Try the standard install path:
+    path = wxT("/usr/local/kicad/share/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+    // Try the official distrib standard install path:
+    path = wxT("/usr/share/kicad/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+#else   // Windows
+    // On Windows, the install path is given by the path of executables
+    wxFileName fn;
+    fn.AssignDir( Pgm().GetExecutablePath() );
+    fn.RemoveLastDir();
+    path = fn.GetPathWithSep() + wxT("share/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+#endif
+
+    return false;
+}
+
+
+//!!!!!!!!!!!!!!! This code is obsolete because of the merge into pcbnew, don't bother with it.
+
+FP_LIB_TABLE GFootprintTable;
+
+
+// A short lived implementation.  cvpcb will get combine into pcbnew shortly, so
+// we skip setting KISYSMOD here for now.  User should set the environment
+// variable.
+
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
+{
+    // This is process level, not project level, initialization of the DSO.
+
+    // Do nothing in here pertinent to a project!
+
+    start_common( aCtlBits );
 
     // Set 3D shape path from environment variable KISYS3DMOD
-    Set3DShapesPath( wxT(KISYS3DMOD) );
+    set3DShapesPath( wxT("KISYS3DMOD") );
 
-    if( m_Checker && m_Checker->IsAnotherRunning() )
+    /*  Now that there are no *.mod files in the standard library, this function
+        has no utility.  User should simply set the variable manually.
+        Looking for *.mod files which do not exist is fruitless.
+
+    // SetFootprintLibTablePath();
+    */
+
+    try
     {
-        if( !IsOK( NULL, _( "CvPcb is already running, Continue?" ) ) )
-            return false;
-    }
+        // The global table is not related to a specific project.  All projects
+        // will use the same global table.  So the KIFACE::OnKifaceStart() contract
+        // of avoiding anything project specific is not violated here.
 
-    if( argc > 1 )
-    {
-        filename = argv[1];
-        wxSetWorkingDirectory( filename.GetPath() );
-    }
-
-    // read current setup and reopen last directory if no filename to open in command line
-    bool reopenLastUsedDirectory = argc == 1;
-    GetSettings( reopenLastUsedDirectory );
-
-    g_DrawBgColor = BLACK;
-
-    wxString Title = GetTitle() + wxT( " " ) + GetBuildVersion();
-    frame = new CVPCB_MAINFRAME( Title );
-
-    // Show the frame
-    SetTopWindow( frame );
-    frame->Show( true );
-    frame->m_NetlistFileExtension = wxT( "net" );
-
-    if( filename.IsOk() && filename.FileExists() )
-    {
-        frame->m_NetlistFileName = filename;
-        frame->LoadProjectFile( filename.GetFullPath() );
-
-        if( frame->ReadNetListAndLinkFiles() )
+        if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
         {
-            frame->m_NetlistFileExtension = filename.GetExt();
-            return true;
+            DisplayInfoMessage( NULL, wxT(
+                "You have run CvPcb for the first time using the "
+                "new footprint library table method for finding "
+                "footprints.  CvPcb has either copied the default "
+                "table or created an empty table in your home "
+                "folder.  You must first configure the library "
+                "table to include all footprint libraries not "
+                "included with KiCad.  See the \"Footprint Library "
+                "Table\" section of the CvPcb documentation for "
+                "more information." ) );
         }
     }
-
-    frame->UpdateTitle();
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg = wxString::Format( _(
+            "An error occurred attempting to load the global footprint library "
+            "table:\n\n%s" ),
+            GetChars( ioe.errorText )
+            );
+        DisplayError( NULL, msg );
+        return false;
+    }
 
     return true;
+}
+
+void IFACE::OnKifaceEnd()
+{
+    end_common();
 }

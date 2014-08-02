@@ -27,7 +27,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gr_basic.h>
 #include <macros.h>
 #include <trigo.h>
@@ -182,17 +182,34 @@ const wxChar* MsgPinElectricType[] =
 };
 
 
+/// Utility for getting the size of the 'internal' pin decorators (as a radius)
+// i.e. the clock symbols (falling clock is actually external but is of
+// the same kind)
+
+static int InternalPinDecoSize( const LIB_PIN &aPin )
+{
+    return aPin.GetNameTextSize() / 2;
+}
+
+/// Utility for getting the size of the 'external' pin decorators (as a radius)
+// i.e. the negation circle, the polarity 'slopes' and the nonlogic
+// marker
+static int ExternalPinDecoSize( const LIB_PIN &aPin )
+{
+    return aPin.GetNumberTextSize() / 2;
+}
+
 LIB_PIN::LIB_PIN( LIB_COMPONENT* aParent ) :
     LIB_ITEM( LIB_PIN_T, aParent )
 {
-    m_length = DEFAULT_PIN_LENGTH;              // default Pin len
+    m_length = GetDefaultPinLength();           // default Pin len
     m_orientation = PIN_RIGHT;                  // Pin orient: Up, Down, Left, Right
     m_shape = NONE;                             // Pin shape, bitwise.
     m_type = PIN_UNSPECIFIED;                   // electrical type of pin
     m_attributes = 0;                           // bit 0 != 0: pin invisible
     m_number = 0;                               // pin number (i.e. 4 ASCII chars)
-    m_numTextSize = DEFAULT_TEXT_SIZE;
-    m_nameTextSize = DEFAULT_TEXT_SIZE;         // Default size for pin name and num
+    m_numTextSize = GetDefaultTextSize();       // Default size for pin name and num
+    m_nameTextSize = GetDefaultTextSize();      
     m_width = 0;
     m_typeName = _( "Pin" );
 }
@@ -525,13 +542,13 @@ void LIB_PIN::EnableEditMode( bool enable, bool editPinByPin )
 }
 
 
-bool LIB_PIN::HitTest( const wxPoint& aPosition )
+bool LIB_PIN::HitTest( const wxPoint& aPosition ) const
 {
     return HitTest( aPosition, 0, DefaultTransform );
 }
 
 
-bool LIB_PIN::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_PIN::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
 {
     if( aThreshold < 0 )
         aThreshold = 0;
@@ -602,7 +619,7 @@ bool LIB_PIN::Save( OUTPUTFORMATTER& aFormatter )
         break;
     }
 
-    ReturnPinStringNum( StringPinNum );
+    PinStringNum( StringPinNum );
 
     if( StringPinNum.IsEmpty() )
         StringPinNum = wxT( "~" );
@@ -810,7 +827,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
         if( aPanel && aPanel->GetParent() )
             frame = (EDA_DRAW_FRAME*)aPanel->GetParent();
 
-        if( frame && frame->IsType( SCHEMATIC_FRAME_TYPE ) &&
+        if( frame && frame->IsType( FRAME_SCH ) &&
             ! ((SCH_EDIT_FRAME*)frame)->GetShowAllPins() )
             return;
 
@@ -824,7 +841,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
         DrawPinText = false;
 
     /* Calculate pin orient taking in account the component orientation. */
-    int     orient = ReturnPinDrawOrient( aTransform );
+    int     orient = PinDrawOrient( aTransform );
 
     /* Calculate the pin position */
     wxPoint pos1 = aTransform.TransformCoordinate( m_position ) + aOffset;
@@ -907,32 +924,52 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
 
     if( m_shape & INVERT )
     {
-        GRCircle( clipbox, aDC, MapX1 * INVERT_PIN_RADIUS + x1,
-                  MapY1 * INVERT_PIN_RADIUS + y1,
-                  INVERT_PIN_RADIUS, width, color );
+        const int radius = ExternalPinDecoSize( *this );
+        GRCircle( clipbox, aDC, MapX1 * radius + x1,
+                  MapY1 * radius + y1,
+                  radius, width, color );
 
-        GRMoveTo( MapX1 * INVERT_PIN_RADIUS * 2 + x1,
-                  MapY1 * INVERT_PIN_RADIUS * 2 + y1 );
+        GRMoveTo( MapX1 * radius * 2 + x1,
+                  MapY1 * radius * 2 + y1 );
         GRLineTo( clipbox, aDC, posX, posY, width, color );
     }
     else if( m_shape & CLOCK_FALL ) /* an alternative for Inverted Clock */
     {
-        GRMoveTo( x1 + MapY1 * CLOCK_PIN_DIM,
-                  y1 - MapX1 * CLOCK_PIN_DIM );
-        GRLineTo( clipbox,
-                  aDC,
-                  x1 + MapX1 * CLOCK_PIN_DIM,
-                  y1 + MapY1 * CLOCK_PIN_DIM,
-                  width,
-                  color );
-        GRLineTo( clipbox,
-                  aDC,
-                  x1 - MapY1 * CLOCK_PIN_DIM,
-                  y1 + MapX1 * CLOCK_PIN_DIM,
-                  width,
-                  color );
-        GRMoveTo( MapX1 * CLOCK_PIN_DIM + x1,
-                  MapY1 * CLOCK_PIN_DIM + y1 );
+        const int clock_size = InternalPinDecoSize( *this );
+        if( MapY1 == 0 ) /* MapX1 = +- 1 */
+        {
+            GRMoveTo( x1, y1 + clock_size );
+            GRLineTo( clipbox,
+                      aDC,
+                      x1 + MapX1 * clock_size * 2,
+                      y1,
+                      width,
+                      color );
+            GRLineTo( clipbox,
+                      aDC,
+                      x1,
+                      y1 - clock_size,
+                      width,
+                      color );
+        }
+        else    /* MapX1 = 0 */
+        {
+            GRMoveTo( x1 + clock_size, y1 );
+            GRLineTo( clipbox,
+                      aDC,
+                      x1,
+                      y1 + MapY1 * clock_size * 2,
+                      width,
+                      color );
+            GRLineTo( clipbox,
+                      aDC,
+                      x1 - clock_size,
+                      y1,
+                      width,
+                      color );
+        }
+        GRMoveTo( MapX1 * clock_size * 2 + x1,
+                  MapY1 * clock_size * 2 + y1 );
         GRLineTo( clipbox, aDC, posX, posY, width, color );
     }
     else
@@ -943,34 +980,35 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
 
     if( m_shape & CLOCK )
     {
+        const int clock_size = InternalPinDecoSize( *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
-            GRMoveTo( x1, y1 + CLOCK_PIN_DIM );
+            GRMoveTo( x1, y1 + clock_size );
             GRLineTo( clipbox,
                       aDC,
-                      x1 - MapX1 * CLOCK_PIN_DIM,
+                      x1 - MapX1 * clock_size * 2,
                       y1,
                       width,
                       color );
             GRLineTo( clipbox,
                       aDC,
                       x1,
-                      y1 - CLOCK_PIN_DIM,
+                      y1 - clock_size,
                       width,
                       color );
         }
         else    /* MapX1 = 0 */
         {
-            GRMoveTo( x1 + CLOCK_PIN_DIM, y1 );
+            GRMoveTo( x1 + clock_size, y1 );
             GRLineTo( clipbox,
                       aDC,
                       x1,
-                      y1 - MapY1 * CLOCK_PIN_DIM,
+                      y1 - MapY1 * clock_size * 2,
                       width,
                       color );
             GRLineTo( clipbox,
                       aDC,
-                      x1 - CLOCK_PIN_DIM,
+                      x1 - clock_size,
                       y1,
                       width,
                       color );
@@ -979,22 +1017,23 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
 
     if( m_shape & LOWLEVEL_IN )     /* IEEE symbol "Active Low Input" */
     {
+        const int symbol_size = ExternalPinDecoSize( *this );
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
         {
-            GRMoveTo( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 );
+            GRMoveTo( x1 + MapX1 * symbol_size * 2, y1 );
             GRLineTo( clipbox,
                       aDC,
-                      x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
-                      y1 - IEEE_SYMBOL_PIN_DIM,
+                      x1 + MapX1 * symbol_size * 2,
+                      y1 - symbol_size * 2,
                       width,
                       color );
             GRLineTo( clipbox, aDC, x1, y1, width, color );
         }
         else    /* MapX1 = 0 */
         {
-            GRMoveTo( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 );
-            GRLineTo( clipbox, aDC, x1 - IEEE_SYMBOL_PIN_DIM,
-                      y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2, width, color );
+            GRMoveTo( x1, y1 + MapY1 * symbol_size * 2 );
+            GRLineTo( clipbox, aDC, x1 - symbol_size * 2,
+                      y1 + MapY1 * symbol_size * 2, width, color );
             GRLineTo( clipbox, aDC, x1, y1, width, color );
         }
     }
@@ -1002,43 +1041,45 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
 
     if( m_shape & LOWLEVEL_OUT )    /* IEEE symbol "Active Low Output" */
     {
+        const int symbol_size = ExternalPinDecoSize( *this );
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
         {
-            GRMoveTo( x1, y1 - IEEE_SYMBOL_PIN_DIM );
+            GRMoveTo( x1, y1 - symbol_size * 2 );
             GRLineTo( clipbox,
                       aDC,
-                      x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
+                      x1 + MapX1 * symbol_size * 2,
                       y1,
                       width,
                       color );
         }
         else    /* MapX1 = 0 */
         {
-            GRMoveTo( x1 - IEEE_SYMBOL_PIN_DIM, y1 );
+            GRMoveTo( x1 - symbol_size * 2, y1 );
             GRLineTo( clipbox,
                       aDC,
                       x1,
-                      y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2,
+                      y1 + MapY1 * symbol_size * 2,
                       width,
                       color );
         }
     }
     else if( m_shape & NONLOGIC ) /* NonLogic pin symbol */
     {
-        GRMoveTo( x1 - (MapX1 + MapY1) * NONLOGIC_PIN_DIM,
-                  y1 - (MapY1 - MapX1) * NONLOGIC_PIN_DIM );
+        const int symbol_size = ExternalPinDecoSize( *this );
+        GRMoveTo( x1 - (MapX1 + MapY1) * symbol_size,
+                  y1 - (MapY1 - MapX1) * symbol_size );
         GRLineTo( clipbox,
                   aDC,
-                  x1 + (MapX1 + MapY1) * NONLOGIC_PIN_DIM,
-                  y1 + (MapY1 - MapX1) * NONLOGIC_PIN_DIM,
+                  x1 + (MapX1 + MapY1) * symbol_size,
+                  y1 + (MapY1 - MapX1) * symbol_size,
                   width,
                   color );
-        GRMoveTo( x1 - (MapX1 - MapY1) * NONLOGIC_PIN_DIM,
-                  y1 - (MapY1 + MapX1) * NONLOGIC_PIN_DIM );
+        GRMoveTo( x1 - (MapX1 - MapY1) * symbol_size,
+                  y1 - (MapY1 + MapX1) * symbol_size );
         GRLineTo( clipbox,
                   aDC,
-                  x1 + (MapX1 - MapY1) * NONLOGIC_PIN_DIM,
-                  y1 + (MapY1 + MapX1) * NONLOGIC_PIN_DIM,
+                  x1 + (MapX1 - MapY1) * symbol_size,
+                  y1 + (MapY1 + MapX1) * symbol_size,
                   width,
                   color );
     }
@@ -1102,7 +1143,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                                 GetLayerColor( LAYER_PINNUM ) : Color );
 
     /* Create the pin num string */
-    ReturnPinStringNum( StringPinNum );
+    PinStringNum( StringPinNum );
 
     x1 = pin_pos.x;
     y1 = pin_pos.y;
@@ -1310,14 +1351,35 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
 
     if( m_shape & INVERT )
     {
-        aPlotter->Circle( wxPoint( MapX1 * INVERT_PIN_RADIUS + x1,
-                                   MapY1 * INVERT_PIN_RADIUS + y1 ),
-                          INVERT_PIN_RADIUS * 2, // diameter
+        const int radius = ExternalPinDecoSize( *this );
+        aPlotter->Circle( wxPoint( MapX1 * radius + x1,
+                                   MapY1 * radius + y1 ),
+                          radius * 2, // diameter
                           NO_FILL,               // fill option
                           GetPenSize() );       // width
 
-        aPlotter->MoveTo( wxPoint( MapX1 * INVERT_PIN_RADIUS * 2 + x1,
-                                    MapY1 * INVERT_PIN_RADIUS * 2 + y1 ) );
+        aPlotter->MoveTo( wxPoint( MapX1 * radius * 2 + x1,
+                                    MapY1 * radius * 2 + y1 ) );
+        aPlotter->FinishTo( aPosition );
+    }
+    else if( m_shape & CLOCK_FALL )
+    {
+        const int clock_size = InternalPinDecoSize( *this );
+        if( MapY1 == 0 ) /* MapX1 = +- 1 */
+        {
+            aPlotter->MoveTo( wxPoint( x1, y1 + clock_size ) );
+            aPlotter->LineTo( wxPoint( x1 + MapX1 * clock_size * 2, y1 ) );
+            aPlotter->FinishTo( wxPoint( x1, y1 - clock_size ) );
+        }
+        else    /* MapX1 = 0 */
+        {
+            aPlotter->MoveTo( wxPoint( x1 + clock_size, y1 ) );
+            aPlotter->LineTo( wxPoint( x1, y1 + MapY1 * clock_size * 2 ) );
+            aPlotter->FinishTo( wxPoint( x1 - clock_size, y1 ) );
+        }
+
+        aPlotter->MoveTo( wxPoint( MapX1 * clock_size * 2 + x1,
+                                    MapY1 * clock_size * 2 + y1 ) );
         aPlotter->FinishTo( aPosition );
     }
     else
@@ -1328,34 +1390,36 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
 
     if( m_shape & CLOCK )
     {
+        const int clock_size = InternalPinDecoSize( *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
-            aPlotter->MoveTo( wxPoint( x1, y1 + CLOCK_PIN_DIM ) );
-            aPlotter->LineTo( wxPoint( x1 - MapX1 * CLOCK_PIN_DIM, y1 ) );
-            aPlotter->FinishTo( wxPoint( x1, y1 - CLOCK_PIN_DIM ) );
+            aPlotter->MoveTo( wxPoint( x1, y1 + clock_size ) );
+            aPlotter->LineTo( wxPoint( x1 - MapX1 * clock_size * 2, y1 ) );
+            aPlotter->FinishTo( wxPoint( x1, y1 - clock_size ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->MoveTo( wxPoint( x1 + CLOCK_PIN_DIM, y1 ) );
-            aPlotter->LineTo( wxPoint( x1, y1 - MapY1 * CLOCK_PIN_DIM ) );
-            aPlotter->FinishTo( wxPoint( x1 - CLOCK_PIN_DIM, y1 ) );
+            aPlotter->MoveTo( wxPoint( x1 + clock_size, y1 ) );
+            aPlotter->LineTo( wxPoint( x1, y1 - MapY1 * clock_size * 2 ) );
+            aPlotter->FinishTo( wxPoint( x1 - clock_size, y1 ) );
         }
     }
 
     if( m_shape & LOWLEVEL_IN )   /* IEEE symbol "Active Low Input" */
     {
+        const int symbol_size = ExternalPinDecoSize( *this );
         if( MapY1 == 0 )        /* MapX1 = +- 1 */
         {
-            aPlotter->MoveTo( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 ) );
-            aPlotter->LineTo( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
-                                        y1 - IEEE_SYMBOL_PIN_DIM ) );
+            aPlotter->MoveTo( wxPoint( x1 + MapX1 * symbol_size * 2, y1 ) );
+            aPlotter->LineTo( wxPoint( x1 + MapX1 * symbol_size * 2,
+                                        y1 - symbol_size * 2 ) );
             aPlotter->FinishTo( wxPoint( x1, y1 ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->MoveTo( wxPoint( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
-            aPlotter->LineTo( wxPoint( x1 - IEEE_SYMBOL_PIN_DIM,
-                                        y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
+            aPlotter->MoveTo( wxPoint( x1, y1 + MapY1 * symbol_size * 2 ) );
+            aPlotter->LineTo( wxPoint( x1 - symbol_size * 2,
+                                        y1 + MapY1 * symbol_size * 2 ) );
             aPlotter->FinishTo( wxPoint( x1, y1 ) );
         }
     }
@@ -1363,16 +1427,38 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
 
     if( m_shape & LOWLEVEL_OUT )  /* IEEE symbol "Active Low Output" */
     {
+        const int symbol_size = ExternalPinDecoSize( *this );
         if( MapY1 == 0 )        /* MapX1 = +- 1 */
         {
-            aPlotter->MoveTo( wxPoint( x1, y1 - IEEE_SYMBOL_PIN_DIM ) );
-            aPlotter->FinishTo( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 ) );
+            aPlotter->MoveTo( wxPoint( x1, y1 - symbol_size * 2 ) );
+            aPlotter->FinishTo( wxPoint( x1 + MapX1 * symbol_size * 2, y1 ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->MoveTo( wxPoint( x1 - IEEE_SYMBOL_PIN_DIM, y1 ) );
-            aPlotter->FinishTo( wxPoint( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
+            aPlotter->MoveTo( wxPoint( x1 - symbol_size * 2, y1 ) );
+            aPlotter->FinishTo( wxPoint( x1, y1 + MapY1 * symbol_size * 2 ) );
         }
+    }
+    else if( m_shape & NONLOGIC ) /* NonLogic pin symbol */
+    {
+        const int symbol_size = ExternalPinDecoSize( *this );
+        aPlotter->MoveTo( wxPoint( x1 - (MapX1 + MapY1) * symbol_size,
+                    y1 - (MapY1 - MapX1) * symbol_size ) );
+        aPlotter->FinishTo( wxPoint( x1 + (MapX1 + MapY1) * symbol_size,
+                    y1 + (MapY1 - MapX1) * symbol_size ) );
+        aPlotter->MoveTo( wxPoint( x1 - (MapX1 - MapY1) * symbol_size,
+                    y1 - (MapY1 + MapX1) * symbol_size ) );
+        aPlotter->FinishTo( wxPoint( x1 + (MapX1 - MapY1) * symbol_size,
+                  y1 + (MapY1 + MapX1) * symbol_size ) );
+    }
+    if( m_type == PIN_NC )   // Draw a N.C. symbol
+    {
+        const int ex1 = aPosition.x;
+        const int ey1 = aPosition.y;
+        aPlotter->MoveTo( wxPoint( ex1 - NCSYMB_PIN_DIM, ey1 - NCSYMB_PIN_DIM ) );
+        aPlotter->FinishTo( wxPoint( ex1 + NCSYMB_PIN_DIM, ey1 + NCSYMB_PIN_DIM ) );
+        aPlotter->MoveTo( wxPoint( ex1 + NCSYMB_PIN_DIM, ey1 - NCSYMB_PIN_DIM ) );
+        aPlotter->FinishTo( wxPoint( ex1 - NCSYMB_PIN_DIM, ey1 + NCSYMB_PIN_DIM ) );
     }
 }
 
@@ -1396,7 +1482,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
     NumColor  = GetLayerColor( LAYER_PINNUM );
 
     /* Create the pin num string */
-    ReturnPinStringNum( StringPinNum );
+    PinStringNum( StringPinNum );
     x1 = pin_pos.x;
     y1 = pin_pos.y;
 
@@ -1565,7 +1651,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
 }
 
 
-wxPoint LIB_PIN::ReturnPinEndPoint() const
+wxPoint LIB_PIN::PinEndPoint() const
 {
     wxPoint pos = m_position;
 
@@ -1592,7 +1678,7 @@ wxPoint LIB_PIN::ReturnPinEndPoint() const
 }
 
 
-int LIB_PIN::ReturnPinDrawOrient( const TRANSFORM& aTransform ) const
+int LIB_PIN::PinDrawOrient( const TRANSFORM& aTransform ) const
 {
     int     orient;
     wxPoint end;   // position of pin end starting at 0,0 according to its orientation, length = 1
@@ -1637,13 +1723,13 @@ int LIB_PIN::ReturnPinDrawOrient( const TRANSFORM& aTransform ) const
 }
 
 
-void LIB_PIN::ReturnPinStringNum( wxString& aStringBuffer ) const
+void LIB_PIN::PinStringNum( wxString& aStringBuffer ) const
 {
-    aStringBuffer = ReturnPinStringNum( m_number );
+    aStringBuffer = PinStringNum( m_number );
 }
 
 
-wxString LIB_PIN::ReturnPinStringNum( long aPinNum )
+wxString LIB_PIN::PinStringNum( long aPinNum )
 {
     char ascii_buf[5];
 
@@ -1714,7 +1800,7 @@ void LIB_PIN::SetOffset( const wxPoint& aOffset )
 
 bool LIB_PIN::Inside( EDA_RECT& rect ) const
 {
-    wxPoint end = ReturnPinEndPoint();
+    wxPoint end = PinEndPoint();
 
     return rect.Contains( m_position.x, -m_position.y ) || rect.Contains( end.x, -end.y );
 }
@@ -1809,7 +1895,7 @@ void LIB_PIN::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     if( ! IsVisible() )
         return;
 
-    int     orient = ReturnPinDrawOrient( aTransform );
+    int     orient = PinDrawOrient( aTransform );
 
     wxPoint pos = aTransform.TransformCoordinate( m_position ) + offset;
 
@@ -1842,7 +1928,7 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     if( m_number == 0 )
         Text = wxT( "?" );
     else
-        ReturnPinStringNum( Text );
+        PinStringNum( Text );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Number" ), Text, DARKCYAN ) );
 
@@ -1860,7 +1946,7 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), Text, DARKGREEN ) );
 
     // Display pin length
-    Text = ReturnStringFromValue( g_UserUnit, m_length, true );
+    Text = StringFromValue( g_UserUnit, m_length, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Length" ), Text, MAGENTA ) );
 
     Text = wxGetTranslation( pin_orientation_names[ GetOrientationCodeIndex( m_orientation ) ] );
@@ -1897,7 +1983,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox() const
     int numberTextHeight  = showNum ? KiROUND( m_numTextSize * 1.1 ) : 0;
 
     if( m_shape & INVERT )
-        minsizeV = std::max( TARGET_PIN_RADIUS, INVERT_PIN_RADIUS );
+        minsizeV = std::max( TARGET_PIN_RADIUS, ExternalPinDecoSize( *this ) );
 
     // calculate top left corner position
     // for the default pin orientation (PIN_RIGHT)
@@ -1937,7 +2023,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox() const
     }
 
     // Now, calculate boundary box corners position for the actual pin orientation
-    int orient = ReturnPinDrawOrient( DefaultTransform );
+    int orient = PinDrawOrient( DefaultTransform );
 
     /* Calculate the pin position */
     switch( orient )

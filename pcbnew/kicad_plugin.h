@@ -32,18 +32,22 @@ class BOARD;
 class BOARD_ITEM;
 class FP_CACHE;
 class PCB_PARSER;
+class NETINFO_MAPPING;
 
 
 /// Current s-expression file format version.  2 was the last legacy format version.
-#define SEXPR_BOARD_FILE_VERSION    3
 
+//#define SEXPR_BOARD_FILE_VERSION    3     // first s-expression format, used legacy cu stack
+#define SEXPR_BOARD_FILE_VERSION    4       // reversed cu stack, changed Inner* to In* in reverse order
+                                            // went to 32 Cu layers from 16.
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
-#define CTL_OMIT_NETS               (1 << 1)
-#define CTL_OMIT_TSTAMPS            (1 << 2)
+#define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)
+#define CTL_OMIT_TSTAMPS            (1 << 2)    ///< Omit component time stamp (useless in library)
 #define CTL_OMIT_INITIAL_COMMENTS   (1 << 3)    ///< omit MODULE initial comments
-#define CTL_OMIT_PATH               (1 << 4)
-#define CTL_OMIT_AT                 (1 << 5)
+#define CTL_OMIT_PATH               (1 << 4)    ///< Omit component sheet time stamp (useless in library)
+#define CTL_OMIT_AT                 (1 << 5)    ///< Omit position and rotation
+                                                // (always saved with potion 0,0 and rotation = 0 in library)
 
 
 // common combinations of the above:
@@ -122,9 +126,7 @@ public:
 
     //-----</PLUGIN API>--------------------------------------------------------
 
-    PCB_IO();
-
-    PCB_IO( int aControlFlags );
+    PCB_IO( int aControlFlags = CTL_FOR_BOARD );
 
     ~PCB_IO();
 
@@ -171,6 +173,8 @@ protected:
     OUTPUTFORMATTER*    m_out;      ///< output any Format()s to this, no ownership
     int                 m_ctl;
     PCB_PARSER*         m_parser;
+    NETINFO_MAPPING*    m_mapping;  ///< mapping for net codes, so only not empty net codes
+                                    ///< are stored with consecutive integers as net codes
 
     /// we only cache one footprint library, this determines which one.
     void cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName = wxEmptyString );
@@ -213,7 +217,7 @@ private:
 
     void formatLayer( const BOARD_ITEM* aItem ) const;
 
-    void formatLayers( LAYER_MSK aLayerMask, int aNestLevel = 0 ) const
+    void formatLayers( LSET aLayerMask, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 };
 

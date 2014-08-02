@@ -156,12 +156,12 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
 
     if( doPad )
     {
-        LAYER_MSK layer_mask = GetLayerMask( screen->m_Active_Layer );
-        D_PAD* pad = m_Pcb->GetPad( pos, layer_mask );
+        LSET    layer_mask( screen->m_Active_Layer );
+        D_PAD*  pad = m_Pcb->GetPad( pos, layer_mask );
 
         if( pad )
         {
-            if( doCheckNet && currTrack && currTrack->GetNet() != pad->GetNet() )
+            if( doCheckNet && currTrack && currTrack->GetNetCode() != pad->GetNetCode() )
                 return false;
 
             *curpos = pad->GetPosition();
@@ -172,15 +172,15 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
     // after pads, only track & via tests remain, skip them if not desired
     if( doTrack )
     {
-        LAYER_NUM layer = screen->m_Active_Layer;
+        LAYER_ID layer = screen->m_Active_Layer;
 
         for( TRACK* via = m_Pcb->m_Track;
-             via && (via = via->GetVia( *curpos, layer )) != NULL;
-             via = via->Next() )
+                via && (via = via->GetVia( *curpos, layer )) != NULL;
+                via = via->Next() )
         {
             if( via != currTrack )   // a via cannot influence itself
             {
-                if( !doCheckNet || !currTrack || currTrack->GetNet() == via->GetNet() )
+                if( !doCheckNet || !currTrack || currTrack->GetNetCode() == via->GetNetCode() )
                 {
                     *curpos = via->GetStart();
                     // D(printf("via hit\n");)
@@ -191,9 +191,9 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
 
         if( !currTrack )
         {
-            LAYER_MSK layer_mask = GetLayerMask( layer );
+            LSET layer_mask( layer );
 
-            TRACK* track = m_Pcb->GetTrace( m_Pcb->m_Track, pos, layer_mask );
+            TRACK* track = m_Pcb->GetTrack( m_Pcb->m_Track, pos, layer_mask );
 
             if( !track || track->Type() != PCB_TRACE_T )
             {
@@ -223,7 +223,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
             if( track->Type() != PCB_TRACE_T )
                 continue;
 
-            if( doCheckNet && currTrack && currTrack->GetNet() != track->GetNet() )
+            if( doCheckNet && currTrack && currTrack->GetNetCode() != track->GetNetCode() )
                 continue;
 
             if( m_Pcb->IsLayerVisible( track->GetLayer() ) == false )

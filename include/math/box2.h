@@ -28,23 +28,8 @@
 #define __BOX2_H
 
 #include <math/vector2d.h>
+#include <limits>
 
-
-template <class Vec>
-class BOX2_TRAITS
-{
-};
-
-template <>
-class BOX2_TRAITS<VECTOR2I>
-{
-public:
-    enum
-    {
-        c_max_size = INT_MAX - 1,
-        c_min_coord_value = INT_MIN / 2 + 1
-    };
-};
 
 /**
  * Class BOX2
@@ -59,8 +44,9 @@ private:
     Vec m_Size;     // Rectangle Size
 
 public:
-    typedef typename Vec::coord_type    coord_type;
-    typedef typename Vec::extended_type ecoord_type;
+    typedef typename Vec::coord_type                 coord_type;
+    typedef typename Vec::extended_type              ecoord_type;
+    typedef typename std::numeric_limits<coord_type> coord_limits;
 
     BOX2() {};
 
@@ -73,8 +59,8 @@ public:
 
     void SetMaximum()
     {
-        m_Pos.x  = m_Pos.y = BOX2_TRAITS<Vec>().c_min_coord_value;
-        m_Size.x = m_Size.y = BOX2_TRAITS<Vec>().c_max_size;
+        m_Pos.x  = m_Pos.y = coord_limits::min() / 2 + coord_limits::epsilon();
+        m_Size.x = m_Size.y = coord_limits::max() - coord_limits::epsilon();
     }
 
     Vec Centre() const

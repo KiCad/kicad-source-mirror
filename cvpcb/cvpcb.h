@@ -21,6 +21,5 @@ extern const wxString RetroFileExtension;
 
 extern const wxString FootprintAliasFileWildcard;
 
-extern const wxString titleLibLoadError;
 
 #endif /* __CVPCB_H__ */

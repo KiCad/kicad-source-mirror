@@ -55,8 +55,12 @@
  *  and see this list for some ascii keys (space ...)
  */
 
-/* local variables */
-/* Hotkey list: */
+// Hotkey list:
+
+// mouse click command:
+static EDA_HOTKEY HkMouseLeftClick( wxT( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN, 0 );
+static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left DClick" ), HK_LEFT_DCLICK, WXK_END, 0 );
+
 static EDA_HOTKEY    HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
                                         HK_RESET_LOCAL_COORD, ' ' );
 static EDA_HOTKEY    HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME, ID_ZOOM_PAGE );
@@ -67,11 +71,12 @@ static EDA_HOTKEY    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2, ID_POPUP
 static EDA_HOTKEY    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1, ID_POPUP_ZOOM_IN );
 static EDA_HOTKEY    HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
 static EDA_HOTKEY    HkMoveItem( wxT( "Move Item" ), HK_MOVE_ITEM, 'M', ID_POPUP_ITEM_MOVE );
+static EDA_HOTKEY    HkPlaceItem( wxT( "Place Item" ), HK_PLACE_ITEM, 'P', ID_POPUP_ITEM_PLACE );
 static EDA_HOTKEY    HkMoveStartPoint( wxT( "Move Start Point" ), HK_MOVE_START_POINT, 'S',
                                        ID_POPUP_ITEM_MOVE_START_POINT );
 static EDA_HOTKEY    HkMoveEndPoint( wxT( "Move End Point" ), HK_MOVE_END_POINT, 'E',
                                      ID_POPUP_ITEM_MOVE_END_POINT );
-static EDA_HOTKEY    HkDeleteItem( wxT( "Move Item" ), HK_DELETE_ITEM, WXK_DELETE,
+static EDA_HOTKEY    HkDeleteItem( wxT( "Delete Item" ), HK_DELETE_ITEM, WXK_DELETE,
                                    ID_POPUP_ITEM_DELETE );
 
 // Undo Redo
@@ -85,13 +90,17 @@ EDA_HOTKEY* s_Common_Hotkey_List[] =
     &HkZoomIn,    &HkZoomOut,      &HkZoomRedraw, &HkZoomCenter,
     &HkZoomAuto,  &HkResetLocalCoord,
     &HkUndo, &HkRedo,
+    &HkMouseLeftClick,
+    &HkMouseLeftDClick,
     NULL
 };
 
 EDA_HOTKEY* s_PlEditor_Hotkey_List[] =
 {
     &HkMoveItem,    &HkMoveStartPoint,
-    &HkMoveEndPoint, &HkDeleteItem,
+    &HkMoveEndPoint,
+    &HkPlaceItem,
+    &HkDeleteItem,
     NULL
 };
 
@@ -141,6 +150,15 @@ void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
     {
     case HK_NOT_FOUND:
         return;
+
+    case HK_LEFT_CLICK:
+        OnLeftClick( aDC, aPosition );
+        break;
+
+    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
+        OnLeftClick( aDC, aPosition );
+        OnLeftDClick( aDC, aPosition );
+        break;
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, s_PlEditor_Hokeys_Descr );
@@ -206,6 +224,14 @@ void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
 
         cmd.SetId( HK_Descr->m_IdMenuEvent );
         GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_PLACE_ITEM:
+        if( busy )
+        {
+            cmd.SetId( HK_Descr->m_IdMenuEvent );
+            GetEventHandler()->ProcessEvent( cmd );
+        }
         break;
 
     default:

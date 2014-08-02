@@ -57,7 +57,7 @@
 
 EDA_COLOR_T BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 {
-    EDA_COLOR_T color = m_board->GetLayerColor( aLayer );
+    EDA_COLOR_T color = m_board->GetLayerColor( ToLAYER_ID( aLayer ) );
     if (color == WHITE)
         color = LIGHTGRAY;
     return color;
@@ -66,7 +66,7 @@ EDA_COLOR_T BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 
 void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, EDA_COLOR_T aColor, EDA_DRAW_MODE_T aPlotMode )
 {
-    wxPoint shape_pos = aPad->ReturnShapePos();
+    wxPoint shape_pos = aPad->ShapePos();
 
     // Set plot color (change WHITE to LIGHTGRAY because
     // the white items are not seen on a white paper or screen
@@ -110,10 +110,10 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     TEXTE_MODULE* textModule = &aModule->Reference();
     LAYER_NUM     textLayer = textModule->GetLayer();
 
-    if( textLayer >= NB_LAYERS )
+    if( textLayer >= LAYER_ID_COUNT )       // how will this ever be true?
         return false;
 
-    if( ( GetLayerMask( textLayer ) & m_layerMask ) == 0 )
+    if( !m_layerMask[textLayer] )
         trace_ref = false;
 
     if( !textModule->IsVisible() && !GetPlotInvisibleText() )
@@ -122,10 +122,10 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     textModule = &aModule->Value();
     textLayer = textModule->GetLayer();
 
-    if( textLayer > NB_LAYERS )
+    if( textLayer > LAYER_ID_COUNT )        // how will this ever be true?
         return false;
 
-    if( ( GetLayerMask( textLayer ) & m_layerMask ) == 0 )
+    if( !m_layerMask[textLayer] )
         trace_val = false;
 
     if( !textModule->IsVisible() && !GetPlotInvisibleText() )
@@ -148,24 +148,22 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
             PlotTextModule( &aModule->Value(), GetValueColor() );
     }
 
-    for( textModule = (TEXTE_MODULE*) aModule->GraphicalItems().GetFirst();
-         textModule != NULL; textModule = textModule->Next() )
+    for( BOARD_ITEM *item = aModule->GraphicalItems().GetFirst(); item; item = item->Next() )
     {
-        if( textModule->Type() != PCB_MODULE_TEXT_T )
+        textModule = dyn_cast<TEXTE_MODULE*>( item );
+
+        if( !textModule )
             continue;
 
-        if( !GetPlotOtherText() )
-            continue;
-
-        if( !textModule->IsVisible() && !GetPlotInvisibleText() )
+        if( !textModule->IsVisible() )
             continue;
 
         textLayer = textModule->GetLayer();
 
-        if( textLayer >= NB_LAYERS )
+        if( textLayer >= LAYER_ID_COUNT )
             return false;
 
-        if( !( GetLayerMask( textLayer ) & m_layerMask ) )
+        if( !m_layerMask[textLayer] )
             continue;
 
         PlotTextModule( textModule, getColor( textLayer ) );
@@ -247,7 +245,7 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, EDA_COLOR_T aColo
 
 void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
 {
-    if( (GetLayerMask( aDim->GetLayer() ) & m_layerMask) == 0 )
+    if( !m_layerMask[aDim->GetLayer()] )
         return;
 
     DRAWSEGMENT draw;
@@ -256,6 +254,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
     draw.SetLayer( aDim->GetLayer() );
 
     EDA_COLOR_T color = aDim->GetBoard()->GetLayerColor( aDim->GetLayer() );
+
     // Set plot color (change WHITE to LIGHTGRAY because
     // the white items are not seen on a white paper or screen
     m_plotter->SetColor( color != WHITE ? color : LIGHTGRAY);
@@ -274,19 +273,19 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
     draw.SetEnd( aDim->m_featureLineDF );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( aDim->m_arrowD1O );
+    draw.SetStart( aDim->m_crossBarF );
     draw.SetEnd( aDim->m_arrowD1F );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( aDim->m_arrowD2O );
+    draw.SetStart( aDim->m_crossBarF );
     draw.SetEnd( aDim->m_arrowD2F );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( aDim->m_arrowG1O );
+    draw.SetStart( aDim->m_crossBarO );
     draw.SetEnd( aDim->m_arrowG1F );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( aDim->m_arrowG2O );
+    draw.SetStart( aDim->m_crossBarO );
     draw.SetEnd( aDim->m_arrowG2F );
     PlotDrawSegment( &draw );
 }
@@ -296,7 +295,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
 {
     int     dx1, dx2, dy1, dy2, radius;
 
-    if( (GetLayerMask( aMire->GetLayer() ) & m_layerMask) == 0 )
+    if( !m_layerMask[aMire->GetLayer()] )
         return;
 
     m_plotter->SetColor( getColor( aMire->GetLayer() ) );
@@ -350,13 +349,11 @@ void BRDITEMS_PLOTTER::Plot_Edges_Modules()
 {
     for( MODULE* module = m_board->m_Modules;  module;  module = module->Next() )
     {
-        for( EDGE_MODULE* edge = (EDGE_MODULE*) module->GraphicalItems().GetFirst();
-             edge; edge = edge->Next() )
+        for( BOARD_ITEM* item = module->GraphicalItems().GetFirst(); item; item = item->Next() )
         {
-            if( edge->Type() != PCB_MODULE_EDGE_T )
-                continue;
+            EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( item );
 
-            if( ( GetLayerMask( edge->GetLayer() ) & m_layerMask ) == 0 )
+            if( !edge || !m_layerMask[edge->GetLayer()] )
                 continue;
 
             Plot_1_EdgeModule( edge );
@@ -397,16 +394,10 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
     case S_ARC:
     {
         radius = KiROUND( GetLineLength( end, pos ) );
-
         double startAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
-
         double endAngle = startAngle + aEdge->GetAngle();
 
-        if ( ( GetFormat() == PLOT_FORMAT_DXF ) &&
-             ( m_layerMask & ( SILKSCREEN_LAYER_BACK | DRAW_LAYER | COMMENT_LAYER ) ) )
-            m_plotter->ThickArc( pos, -startAngle, -endAngle, radius, thickness, GetMode() );
-        else
-            m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetMode() );
+        m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetMode() );
     }
     break;
 
@@ -456,7 +447,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     if( pt_texte->GetText().IsEmpty() )
         return;
 
-    if( ( GetLayerMask( pt_texte->GetLayer() ) & m_layerMask ) == 0 )
+    if( !m_layerMask[pt_texte->GetLayer()] )
         return;
 
     m_plotter->SetColor( getColor( pt_texte->GetLayer() ) );
@@ -540,13 +531,14 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
             // Plot the current filled area and its outline
             if( GetMode() == FILLED )
             {
-                // Plot the current filled area polygon
-                if( aZone->GetFillMode() == 0 )    // We are using solid polygons
-                {                               // (if != 0: using segments )
-                    m_plotter->PlotPoly( cornerList, FILLED_SHAPE );
+                // Plot the filled area polygon.
+                // The area can be filled by segments or uses solid polygons
+                if( aZone->GetFillMode() == 0 ) // We are using solid polygons
+                {
+                    m_plotter->PlotPoly( cornerList, FILLED_SHAPE, aZone->GetMinThickness() );
                 }
-                else                            // We are using areas filled by
-                {                               // segments: plot them )
+                else    // We are using areas filled by segments: plot segments and outline
+                {
                     for( unsigned iseg = 0; iseg < aZone->FillSegments().size(); iseg++ )
                     {
                         wxPoint start = aZone->FillSegments()[iseg].m_Start;
@@ -555,11 +547,11 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
                                                  aZone->GetMinThickness(),
                                                  GetMode() );
                     }
-                }
 
-                // Plot the current filled area outline
+                // Plot the area outline only
                 if( aZone->GetMinThickness() > 0 )
                     m_plotter->PlotPoly( cornerList, NO_FILL, aZone->GetMinThickness() );
+                }
             }
             else
             {
@@ -583,13 +575,13 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
 
 /* Plot items type DRAWSEGMENT on layers allowed by aLayerMask
  */
-void BRDITEMS_PLOTTER::PlotDrawSegment(  DRAWSEGMENT* aSeg )
+void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 {
     int     thickness;
     int     radius = 0;
     double  StAngle = 0, EndAngle = 0;
 
-    if( (GetLayerMask( aSeg->GetLayer() ) & m_layerMask) == 0 )
+    if( !m_layerMask[aSeg->GetLayer()] )
         return;
 
     if( GetMode() == LINE )
@@ -685,11 +677,12 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
 
     for( TRACK *pts = m_board->m_Track; pts != NULL; pts = pts->Next() )
     {
-        if( pts->Type() != PCB_VIA_T )
-            continue;
+        const VIA* via = dyn_cast<const VIA*>( pts );
 
-        plotOneDrillMark( PAD_DRILL_CIRCLE,  pts->GetStart(), wxSize( pts->GetDrillValue(), 0 ),
-                          wxSize( pts->GetWidth(), 0 ), 0, small_drill );
+        if( via )
+            plotOneDrillMark( PAD_DRILL_CIRCLE, via->GetStart(),
+                    wxSize( via->GetDrillValue(), 0 ),
+                    wxSize( via->GetWidth(), 0 ), 0, small_drill );
     }
 
     for( MODULE *Module = m_board->m_Modules; Module != NULL; Module = Module->Next() )

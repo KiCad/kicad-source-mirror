@@ -98,7 +98,7 @@ public:
             m_fileout = new FILE_OUTPUTFORMATTER( aFilename );
             m_out = m_fileout;
         }
-        catch( IO_ERROR ioe )
+        catch( const IO_ERROR& ioe )
         {
             wxMessageBox( ioe.errorText, _("Error writing page layout descr file" ) );
         }
@@ -125,7 +125,7 @@ public:
             m_writer = new STRING_FORMATTER();
             m_out = m_writer;
         }
-        catch( IO_ERROR ioe )
+        catch( const IO_ERROR& ioe )
         {
             wxMessageBox( ioe.errorText, _("Error writing page layout descr file" ) );
         }

@@ -24,7 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <class_sch_screen.h>
 
 class PAGE_INFO;
@@ -46,8 +46,8 @@ class LIB_ALIAS;
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
 public:
-    SCH_BASE_FRAME( wxWindow* aParent,
-                    ID_DRAWFRAME_TYPE aWindowType,
+    SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
+                    FRAME_T aWindowType,
                     const wxString& aTitle,
                     const wxPoint& aPosition, const wxSize& aSize,
                     long aStyle, const wxString & aFrameName );

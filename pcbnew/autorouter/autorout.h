@@ -38,6 +38,7 @@
 
 
 class BOARD;
+class DRAWSEGMENT;
 
 
 #define TOP     0
@@ -195,6 +196,7 @@ void PlacePad( D_PAD* pt_pad, int type, int marge, int op_logic );
 
 /* Draws a segment of track on the board. */
 void TraceSegmentPcb( TRACK* pt_segm, int type, int marge, int op_logic );
+void TraceSegmentPcb( DRAWSEGMENT* pt_segm, int type, int marge, int op_logic );
 
 /* Uses the color value of all cells included in the board
  * coord of the rectangle ux0, uy0 (top right corner)
@@ -204,12 +206,12 @@ void TraceSegmentPcb( TRACK* pt_segm, int type, int marge, int op_logic );
  * op_logic = WRITE_CELL, WRITE_OR_CELL, WRITE_XOR_CELL, WRITE_AND_CELL
  */
 void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
-                           int side, int color, int op_logic);
+                           LSET side, int color, int op_logic);
 
 
 /* Same as above, but the rectangle is inclined angle angle. */
 void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
-                           double angle, LAYER_MSK masque_layer,
+                           double angle, LSET masque_layer,
                            int color, int op_logic );
 
 /* QUEUE.CPP */

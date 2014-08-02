@@ -282,7 +282,17 @@ public:
      */
     virtual void SetTextMode( PlotTextMode mode )
     {
-    // NOP for most plotters
+        // NOP for most plotters.
+    }
+
+    virtual void SetLayerAttribFunction( const wxString& function )
+    {
+        // NOP for most plotters. Only for Gerber plotter
+    }
+
+    virtual void SetGerberCoordinatesFormat( int aResolution, bool aUseInches = false )
+    {
+        // NOP for most plotters. Only for Gerber plotter
     }
 
 protected:
@@ -309,13 +319,13 @@ protected:
     /// Plot scale - chosen by the user (even implicitly with 'fit in a4')
     double        plotScale;
 
-    /* Device scale (how many IUs in a decimil - always); it's a double
+    /* Caller scale (how many IUs in a decimil - always); it's a double
      * because in eeschema there are 0.1 IUs in a decimil (eeschema
      * always works in mils internally) while pcbnew can work in decimil
      * or nanometers, so this value would be >= 1 */
     double        m_IUsPerDecimil;
 
-    /// Device scale (from IUs to device units - usually decimils)
+    /// Device scale (from IUs to plotter device units - usually decimils)
     double        iuPerDeviceUnit;
 
     /// Plot offset (in IUs)
@@ -568,7 +578,8 @@ public:
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                        int                         aWidth,
                        bool                        aItalic,
-                       bool                        aBold );
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false );
 protected:
     virtual void emitSetRGBColor( double r, double g, double b );
 };
@@ -633,7 +644,8 @@ public:
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                        int                         aWidth,
                        bool                        aItalic,
-                       bool                        aBold );
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false );
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
                             double aScaleFactor );
@@ -702,7 +714,8 @@ public:
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                        int                         aWidth,
                        bool                        aItalic,
-                       bool                        aBold );
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false );
 
 protected:
     FILL_T m_fillMode;              // true if the current contour
@@ -761,12 +774,7 @@ struct APERTURE
 class GERBER_PLOTTER : public PLOTTER
 {
 public:
-    GERBER_PLOTTER()
-    {
-        workFile  = 0;
-        finalFile = 0;
-        currentAperture = apertures.end();
-    }
+    GERBER_PLOTTER();
 
     virtual PlotFormat GetPlotterType() const
     {
@@ -775,7 +783,7 @@ public:
 
     static wxString GetDefaultFileExtension()
     {
-        return wxString( wxT( "pho" ) );
+        return wxString( wxT( "gbr" ) );
     }
 
     virtual bool StartPlot();
@@ -786,6 +794,7 @@ public:
     // RS274X has no dashing, nor colours
     virtual void SetDash( bool dashed ) {};
     virtual void SetColor( EDA_COLOR_T color ) {};
+    // Currently, aScale and aMirror are not used in gerber plotter
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                           double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
@@ -810,6 +819,23 @@ public:
 
     virtual void SetLayerPolarity( bool aPositive );
 
+    virtual void SetLayerAttribFunction( const wxString& function )
+    {
+        m_attribFunction = function;
+    }
+
+    /**
+     * Function SetGerberCoordinatesFormat
+     * selection of Gerber units and resolution (number of digits in mantissa)
+     * @param aResolution = number of digits in mantissa of coordinate
+     *                      use 5 or 6 for mm and 6 or 7 for inches
+     *                      do not use value > 6 (mm) or > 7 (in) to avoid overflow
+     * @param aUseInches = true to use inches, false to use mm (default)
+     *
+     * Should be called only after SetViewport() is called
+     */
+    virtual void SetGerberCoordinatesFormat( int aResolution, bool aUseInches = false );
+
 protected:
     void selectAperture( const wxSize& size, APERTURE::APERTURE_TYPE type );
     void emitDcode( const DPOINT& pt, int dcode );
@@ -825,6 +851,12 @@ protected:
 
     std::vector<APERTURE>           apertures;
     std::vector<APERTURE>::iterator currentAperture;
+
+    wxString m_attribFunction;  // the layer "function", in GERBER X2 extention
+                                // it is linked with the layer id
+    bool     m_gerberUnitInch;  // true if the gerber units are inches, false for mm
+    int      m_gerberUnitFmt;   // number of digits in mantissa.
+                                // usually 6 in Inches and 5 or 6  in mm
 };
 
 
@@ -904,7 +936,8 @@ public:
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                        int                         aWidth,
                        bool                        aItalic,
-                       bool                        aBold );
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false );
 
 protected:
     bool textAsLines;

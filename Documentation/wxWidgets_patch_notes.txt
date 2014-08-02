@@ -5,8 +5,7 @@ Last Revised: 28-Feb-2010
 Kicad needs wxWidgets, the multi platform G.U.I.
 Known problems:
 wxMSW:
-*DO NOT* use wxMSW.2.8.1
-in fact: use wxWidgets >= 2.9.3
+use *only* wxWidgets >= 3.0
 
 wxGTK
 Use wxWidgets 2.8.10 or later
@@ -21,15 +20,6 @@ So use a very recent version (>= 2.8.10 (that also solve other bugs)
 wxWidgets patch:
 
 
-wxMSW, version 2.8.x
-Some zoom values smaller than 3 to 5 create artifacts on screen, mainly values < 1.
-(corresponding to draw scale factor > 1 )
-
-See http://trac.wxwidgets.org/ticket/9554 (and 11669).
-
-This is fixed in version 2.9.3
-
-
 wxWidgets 2.9.1 (all platforms)
 Has a problem when using the built in string to double conversion:
 In countries using a comm instead of a point as floating number separator
@@ -41,7 +31,7 @@ Use a version >= 2.9.3
 
 
 *************************************************************************************
-wxGTK version: All
+wxGTK version: All before wxWidgets 3.0
 *************************************************************************************
 Patch for printing wide traces that were shown with missing rounded end caps.
 Without this patch, printing boards and schematics under Linux, and perhaps OSX
@@ -56,4 +46,11 @@ Add after this line:
     PsPrint("%%BeginSetup\n");
     PsPrint( "1 setlinecap\n" );
     PsPrint("%%EndSetup\n");
+
+
+Known bug on Windows:
+Postscript printers print tracks like tin line.
+It happens only for PS drivers, and PDF printer.
+Other drivers (PCL for instance) work fine,
+so it is unlikely a bug inside Kicad/wxWidgets
 

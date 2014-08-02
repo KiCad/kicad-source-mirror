@@ -46,7 +46,7 @@
             <property name="pos"></property>
             <property name="size">-1,-1</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU</property>
-            <property name="subclass"></property>
+            <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Field Properties</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>

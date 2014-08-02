@@ -27,7 +27,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
 #include <wxstruct.h>
 #include <class_drawpanel.h>
 #include <build_version.h>
@@ -39,6 +39,7 @@
 #include <msgpanel.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
 #include <pcbplot.h>
 #include <gerbview_id.h>
@@ -63,11 +64,9 @@ static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBloc
 
 #define GERBVIEW_FRAME_NAME wxT( "GerberFrame" )
 
-GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
-                                const wxPoint& aPosition, const wxSize& aSize,
-                                long aStyle ) :
-    EDA_DRAW_FRAME( aParent, GERBER_FRAME_TYPE, aTitle, aPosition, aSize,
-                    aStyle, GERBVIEW_FRAME_NAME )
+GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
+    EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ),
+        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME )
 {
     m_colorsSettings = &g_ColorsSettings;
     m_gerberLayout = NULL;
@@ -93,7 +92,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
 
     SetLayout( new GBR_LAYOUT() );
 
-    SetVisibleLayers( FULL_LAYERS );     // All 32 layers visible.
+    SetVisibleLayers( -1 );         // All draw layers visible.
 
     SetScreen( new GBR_SCREEN( GetGerberLayout()->GetPageSettings().GetSizeIU() ) );
 
@@ -109,7 +108,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
-    LoadSettings();
+    LoadSettings( config() );
+
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     if( m_LastGridSizeId < 0 )
@@ -133,11 +133,14 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
     EDA_PANEINFO    mesg;
     mesg.MessageToolbarPane();
 
+    // Create a wxAuiPaneInfo for the Layers Manager, not derived from the template.
+    // the Layers Manager is floatable, but initially docked at far right
     EDA_PANEINFO    lyrs;
     lyrs.LayersToolbarPane();
     lyrs.MinSize( m_LayersManager->GetBestSize() );
     lyrs.BestSize( m_LayersManager->GetBestSize() );
     lyrs.Caption( _( "Visibles" ) );
+    lyrs.TopDockable( false ).BottomDockable( false );
 
 
     if( m_mainToolBar )
@@ -166,18 +169,40 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
     ReFillLayerWidget();                // this is near end because contents establish size
     m_LayersManager->ReFillRender();    // Update colors in Render after the config is read
     m_auimgr.Update();
+
+    setActiveLayer( 0, true );
+    Zoom_Automatique( true );           // Gives a default zoom value
 }
 
 
 GERBVIEW_FRAME::~GERBVIEW_FRAME()
 {
-    wxGetApp().SaveCurrentSetupValues( m_configSettings );
 }
 
 
 void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     Destroy();
+}
+
+
+bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
+{
+    const unsigned limit = std::min( unsigned( aFileSet.size() ), unsigned( GERBER_DRAWLAYERS_COUNT ) );
+
+    int layer = 0;
+
+    for( unsigned i=0;  i<limit;  ++i, ++layer )
+    {
+        setActiveLayer( layer );
+        LoadGerberFiles( aFileSet[i] );
+    }
+
+    Zoom_Automatique( true );        // Zoom fit in frame
+
+    UpdateTitleAndInfo();
+
+    return true;
 }
 
 
@@ -202,26 +227,22 @@ double GERBVIEW_FRAME::BestZoom()
 }
 
 
-void GERBVIEW_FRAME::LoadSettings()
+void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxConfig* config = wxGetApp().GetSettings();
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    if( config == NULL )
-        return;
-
-    EDA_DRAW_FRAME::LoadSettings();
-
-    wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
+    // was: wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
+    wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
 
-    config->Read( cfgShowBorderAndTitleBlock, &m_showBorderAndTitleBlock, false );
+    aCfg->Read( cfgShowBorderAndTitleBlock, &m_showBorderAndTitleBlock, false );
 
     if( m_showBorderAndTitleBlock )
     {
         wxString pageType;
 
-        config->Read( cfgShowPageSizeOption, &pageType, wxT( "GERBER" ) );
+        aCfg->Read( cfgShowPageSizeOption, &pageType, wxT( "GERBER" ) );
 
         pageInfo.SetType( pageType );
     }
@@ -231,16 +252,16 @@ void GERBVIEW_FRAME::LoadSettings()
     GetScreen()->InitDataPoints( pageInfo.GetSizeIU() );
 
     bool tmp;
-    config->Read( cfgShowDCodes, &tmp, true );
+    aCfg->Read( cfgShowDCodes, &tmp, true );
     SetElementVisibility( DCODES_VISIBLE, tmp );
-    config->Read( cfgShowNegativeObjects, &tmp, false );
+    aCfg->Read( cfgShowNegativeObjects, &tmp, false );
     SetElementVisibility( NEGATIVE_OBJECTS_VISIBLE, tmp );
 
     // because we have 2 file historues, we must read this one
     // using a specific path
-    config->SetPath( wxT( "drl_files" ) );
-    m_drillFileHistory.Load( *config );
-    config->SetPath( wxT( ".." ) );
+    aCfg->SetPath( wxT( "drl_files" ) );
+    m_drillFileHistory.Load( *aCfg );
+    aCfg->SetPath( wxT( ".." ) );
 
     // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
     // when reading doubles in config,
@@ -249,29 +270,25 @@ void GERBVIEW_FRAME::LoadSettings()
 }
 
 
-void GERBVIEW_FRAME::SaveSettings()
+void GERBVIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxConfig* config = wxGetApp().GetSettings();
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    if( config == NULL )
-        return;
+    // was: wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
+    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 
-    EDA_DRAW_FRAME::SaveSettings();
-
-    wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
-
-    config->Write( cfgShowPageSizeOption, GetPageSettings().GetType() );
-    config->Write( cfgShowBorderAndTitleBlock, m_showBorderAndTitleBlock );
-    config->Write( cfgShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
-    config->Write( cfgShowNegativeObjects,
+    aCfg->Write( cfgShowPageSizeOption, GetPageSettings().GetType() );
+    aCfg->Write( cfgShowBorderAndTitleBlock, m_showBorderAndTitleBlock );
+    aCfg->Write( cfgShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
+    aCfg->Write( cfgShowNegativeObjects,
                    IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) );
 
     // Save the drill file history list.
     // Because we have 2 file histories, we must save this one
     // in a specific path
-    config->SetPath( wxT( "drl_files" ) );
-    m_drillFileHistory.Save( *config );
-    config->SetPath( wxT( ".." ) );
+    aCfg->SetPath( wxT( "drl_files" ) );
+    m_drillFileHistory.Save( *aCfg );
+    aCfg->SetPath( wxT( ".." ) );
 }
 
 
@@ -325,11 +342,11 @@ void GERBVIEW_FRAME::SetElementVisibility( GERBER_VISIBLE_ID aItemIdVisible,
 }
 
 
-LAYER_NUM GERBVIEW_FRAME::getNextAvailableLayer( LAYER_NUM aLayer ) const
+int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 {
-    LAYER_NUM layer = aLayer;
+    int layer = aLayer;
 
-    for( LAYER_NUM i = FIRST_LAYER; i < NB_GERBER_LAYERS; ++i )
+    for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; ++i )
     {
         GERBER_IMAGE* gerber = g_GERBER_List[ layer ];
 
@@ -338,8 +355,8 @@ LAYER_NUM GERBVIEW_FRAME::getNextAvailableLayer( LAYER_NUM aLayer ) const
 
         ++layer;
 
-        if( layer >= NB_GERBER_LAYERS )
-            layer = FIRST_LAYER;
+        if( layer >= GERBER_DRAWLAYERS_COUNT )
+            layer = 0;
     }
 
     return NO_AVAILABLE_LAYERS;
@@ -385,16 +402,16 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     wxArrayString   list;
     double          scale = g_UserUnit == INCHES ? IU_PER_MILS * 1000 :
                             IU_PER_MM;
-    LAYER_NUM       curr_layer = getActiveLayer();
+    int       curr_layer = getActiveLayer();
 
-    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
+    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
         GERBER_IMAGE* gerber = g_GERBER_List[layer];
 
         if( gerber == NULL )
             continue;
 
-        if( gerber->ReturnUsedDcodeNumber() == 0 )
+        if( gerber->UsedDcodeNumber() == 0 )
             continue;
 
         if( layer == curr_layer )
@@ -538,9 +555,9 @@ void GERBVIEW_FRAME::SetVisibleAlls()
  * Returns a bit-mask of all the layers that are visible
  * @return int - the visible layers in bit-mapped form.
  */
-LAYER_MSK GERBVIEW_FRAME::GetVisibleLayers() const
+long GERBVIEW_FRAME::GetVisibleLayers() const
 {
-    return FULL_LAYERS;    // TODO
+    return -1;    // TODO
 }
 
 
@@ -550,9 +567,9 @@ LAYER_MSK GERBVIEW_FRAME::GetVisibleLayers() const
  * changes the bit-mask of visible layers
  * @param aLayerMask = The new bit-mask of visible layers
  */
-void GERBVIEW_FRAME::SetVisibleLayers( LAYER_MSK aLayerMask )
+void GERBVIEW_FRAME::SetVisibleLayers( long aLayerMask )
 {
-    GetGerberLayout()->SetVisibleLayers( aLayerMask );
+//    GetGerberLayout()->SetVisibleLayers( aLayerMask );
 }
 
 
@@ -562,12 +579,12 @@ void GERBVIEW_FRAME::SetVisibleLayers( LAYER_MSK aLayerMask )
  * @param aLayer = The layer to be tested
  * @return bool - true if the layer is visible.
  */
-bool GERBVIEW_FRAME::IsLayerVisible( LAYER_NUM aLayer ) const
+bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 {
     if( ! m_DisplayOptions.m_IsPrinting )
         return m_LayersManager->IsLayerVisible( aLayer );
     else
-        return GetGerberLayout()->IsLayerVisible( aLayer );
+        return GetGerberLayout()->IsLayerPrintable( aLayer );
 }
 
 
@@ -643,7 +660,7 @@ EDA_COLOR_T GERBVIEW_FRAME::GetNegativeItemsColor() const
     if( IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) )
         return GetVisibleElementColor( NEGATIVE_OBJECTS_VISIBLE );
     else
-        return g_DrawBgColor;
+        return GetDrawBgColor();
 }
 
 
@@ -651,7 +668,7 @@ EDA_COLOR_T GERBVIEW_FRAME::GetNegativeItemsColor() const
  * Function GetLayerColor
  * gets a layer color for any valid layer.
  */
-EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( LAYER_NUM aLayer ) const
+EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 {
     return m_colorsSettings->GetLayerColor( aLayer );
 }
@@ -661,7 +678,7 @@ EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( LAYER_NUM aLayer ) const
  * Function SetLayerColor
  * changes a layer color for any valid layer.
  */
-void GERBVIEW_FRAME::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
+void GERBVIEW_FRAME::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
 {
     m_colorsSettings->SetLayerColor( aLayer, aColor );
 }
@@ -671,7 +688,7 @@ void GERBVIEW_FRAME::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
  * Function getActiveLayer
  * returns the active layer
  */
-LAYER_NUM GERBVIEW_FRAME::getActiveLayer()
+int GERBVIEW_FRAME::getActiveLayer()
 {
     return ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer;
 }
@@ -682,7 +699,7 @@ LAYER_NUM GERBVIEW_FRAME::getActiveLayer()
  * will change the currently active layer to \a aLayer and also
  * update the PCB_LAYER_WIDGET.
  */
-void GERBVIEW_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
+void GERBVIEW_FRAME::setActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 {
     ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 

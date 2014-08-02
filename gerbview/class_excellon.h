@@ -76,7 +76,7 @@ private:
     excellon_state m_State;         // state of excellon file analysis
     bool           m_SlotOn;        // true during an oval driil definition
 
-public: EXCELLON_IMAGE( GERBVIEW_FRAME* aParent, LAYER_NUM layer ) :
+public: EXCELLON_IMAGE( GERBVIEW_FRAME* aParent, int layer ) :
         GERBER_IMAGE( aParent, layer )
     {
         m_State  = READ_HEADER_STATE;
@@ -101,9 +101,9 @@ private:
     bool Execute_EXCELLON_G_Command( char*& text );
     bool Execute_Drill_Command( char*& text );
 
-    int ReturnTCodeNumber( char*& Text )
+    int TCodeNumber( char*& Text )
     {
-        return ReturnDCodeNumber( Text );
+        return DCodeNumber( Text );
     }
 
 

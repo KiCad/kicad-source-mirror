@@ -53,7 +53,6 @@
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     BOARD_CONNECTED_ITEM( aBoard, PCB_ZONE_AREA_T )
 {
-    SetNet( -1 );                               // Net number for fast comparisons
     m_CornerSelection = -1;
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = 0;                             // How to fill areas: 0 = use filled polygons, != 0 fill with segments
@@ -75,7 +74,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     BOARD_CONNECTED_ITEM( aZone )
 {
     // Should the copy be on the same net?
-    SetNet( aZone.GetNet() );
+    SetNetCode( aZone.GetNetCode() );
     m_Poly = new CPolyLine( *aZone.m_Poly );
 
     // For corner moving, corner index to drag, or -1 if no selection
@@ -138,41 +137,16 @@ const wxPoint& ZONE_CONTAINER::GetPosition() const
 }
 
 
-void ZONE_CONTAINER::SetNet( int aNetCode )
-{
-    BOARD_CONNECTED_ITEM::SetNet( aNetCode );
-
-    if( aNetCode < 0 )
-        return;
-
-    BOARD* board = GetBoard();
-
-    if( board )
-    {
-        NETINFO_ITEM* net = board->FindNet( aNetCode );
-
-        if( net )
-            m_Netname = net->GetNetname();
-        else
-            m_Netname.Empty();
-    }
-    else
-    {
-        m_Netname.Empty();
-    }
-}
-
-
 void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMode,
                            const wxPoint& offset )
 {
-    if( DC == NULL )
+    if( !DC )
         return;
 
-    wxPoint seg_start, seg_end;
-    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    wxPoint     seg_start, seg_end;
+    LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    BOARD*      brd   = GetBoard();
 
-    BOARD*  brd   = GetBoard();
     EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
 
     if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
@@ -253,8 +227,8 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
     if( m_FilledPolysList.GetCornersCount() == 0 )  // Nothing to draw
         return;
 
-    BOARD* brd = GetBoard();
-    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    BOARD*      brd = GetBoard();
+    LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
 
     if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
@@ -392,11 +366,11 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
     bool    is_close_segment = false;
     wxPoint seg_start, seg_end;
 
-    if( DC == NULL )
+    if( !DC )
         return;
 
-    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    BOARD* brd   = GetBoard();
+    LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    BOARD*      brd   = GetBoard();
     EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
 
     if( DisplayOpt.ContrastModeDisplay )
@@ -466,37 +440,42 @@ int ZONE_CONTAINER::GetThermalReliefCopperBridge( D_PAD* aPad ) const
 }
 
 
-bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition )
+bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition ) const
 {
-    if( HitTestForCorner( aPosition ) )
+    if( HitTestForCorner( aPosition ) >= 0 )
         return true;
 
-    if( HitTestForEdge( aPosition ) )
+    if( HitTestForEdge( aPosition ) >= 0 )
         return true;
 
     return false;
 }
+
+void ZONE_CONTAINER::SetSelectedCorner( const wxPoint& aPosition )
+{
+    m_CornerSelection = HitTestForCorner( aPosition );
+
+    if( m_CornerSelection < 0 )
+        m_CornerSelection = HitTestForEdge( aPosition );
+}
+
 
 // Zones outlines have no thickness, so it Hit Test functions
 // we must have a default distance between the test point
 // and a corner or a zone edge:
 #define MAX_DIST_IN_MM 0.25
 
-bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
+int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos ) const
 {
     int distmax = Millimeter2iu( MAX_DIST_IN_MM );
-    m_CornerSelection = m_Poly->HitTestForCorner( refPos, distmax );
-
-    return m_CornerSelection >= 0;
+    return m_Poly->HitTestForCorner( refPos, distmax );
 }
 
 
-bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
+int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos ) const
 {
     int distmax = Millimeter2iu( MAX_DIST_IN_MM );
-    m_CornerSelection = m_Poly->HitTestForEdge( refPos, distmax );
-
-    return m_CornerSelection >= 0;
+    return m_Poly->HitTestForEdge( refPos, distmax );
 }
 
 
@@ -569,7 +548,7 @@ int ZONE_CONTAINER::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
         // "zone clearance" setting in the zone properties dialog.  (At least
         // until there is a UI boolean for this.)
 
-    NETCLASS*   myClass  = GetNetClass();
+    NETCLASSPTR   myClass  = GetNetClass();
 
     if( myClass )
         myClearance = std::max( myClearance, myClass->GetClearance() );
@@ -614,10 +593,6 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
-    BOARD*   board = (BOARD*) m_Parent;
-
-    wxASSERT( board );
-
     msg = _( "Zone Outline" );
 
     // Display Cutout instead of Outline for holes inside a zone
@@ -646,9 +621,9 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     }
     else if( IsOnCopperLayer() )
     {
-        if( GetNet() >= 0 )
+        if( GetNetCode() >= 0 )
         {
-            NETINFO_ITEM* equipot = board->FindNet( GetNet() );
+            NETINFO_ITEM* equipot = GetNet();
 
             if( equipot )
                 msg = equipot->GetNetname();
@@ -658,7 +633,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         else // a netcode < 0 is an error
         {
             msg = wxT( " [" );
-            msg << m_Netname + wxT( "]" );
+            msg << GetNetname() + wxT( "]" );
             msg << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
 
@@ -666,7 +641,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
 #if 1
         // Display net code : (useful in test or debug)
-        msg.Printf( wxT( "%d" ), GetNet() );
+        msg.Printf( wxT( "%d" ), GetNetCode() );
         aList.push_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
 #endif
 
@@ -730,25 +705,23 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
 }
 
 
-void ZONE_CONTAINER::MoveEdge( const wxPoint& offset )
+void ZONE_CONTAINER::MoveEdge( const wxPoint& offset, int aEdge )
 {
-    int ii = m_CornerSelection;
-
     // Move the start point of the selected edge:
-    SetCornerPosition( ii, GetCornerPosition( ii ) + offset );
+    SetCornerPosition( aEdge, GetCornerPosition( aEdge ) + offset );
 
     // Move the end point of the selected edge:
-    if( m_Poly->m_CornersList.IsEndContour( ii ) || ii == GetNumCorners() - 1 )
+    if( m_Poly->m_CornersList.IsEndContour( aEdge ) || aEdge == GetNumCorners() - 1 )
     {
-        int icont = m_Poly->GetContour( ii );
-        ii = m_Poly->GetContourStart( icont );
+        int icont = m_Poly->GetContour( aEdge );
+        aEdge = m_Poly->GetContourStart( icont );
     }
     else
     {
-        ii++;
+        aEdge++;
     }
 
-    SetCornerPosition( ii, GetCornerPosition( ii ) + offset );
+    SetCornerPosition( aEdge, GetCornerPosition( aEdge ) + offset );
 
     m_Poly->Hatch();
 }
@@ -827,7 +800,7 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
 {
     m_Parent = src->m_Parent;
     m_Layer  = src->m_Layer;
-    SetNet( src->GetNet() );
+    SetNetCode( src->GetNetCode() );
     SetTimeStamp( src->m_TimeStamp );
     m_Poly->RemoveAllContours();
     m_Poly->Copy( src->m_Poly );                // copy outlines
@@ -846,20 +819,6 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_FilledPolysList.Append( src->m_FilledPolysList );
     m_FillSegmList.clear();
     m_FillSegmList = src->m_FillSegmList;
-}
-
-
-bool ZONE_CONTAINER::SetNetNameFromNetCode( void )
-{
-    NETINFO_ITEM* net;
-
-    if( m_Parent && ( net = ( (BOARD*) m_Parent )->FindNet( GetNet() ) ) )
-    {
-        m_Netname = net->GetNetname();
-        return true;
-    }
-
-    return false;
 }
 
 
@@ -909,11 +868,11 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     // Display net name for copper zones
     if( !GetIsKeepout() )
     {
-        if( GetNet() >= 0 )
+        if( GetNetCode() >= 0 )
         {
             if( board )
             {
-                net = board->FindNet( GetNet() );
+                net = GetNet();
 
                 if( net )
                 {
@@ -928,7 +887,7 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
         else
         {   // A netcode < 0 is an error:
             // Netname not found or area not initialised
-            text << wxT( " [" ) << m_Netname << wxT( "]" );
+            text << wxT( " [" ) << GetNetname() << wxT( "]" );
             text << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
     }

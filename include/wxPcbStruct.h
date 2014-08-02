@@ -30,8 +30,8 @@
 #define  WXPCB_STRUCT_H_
 
 
-#include <wxBasePcbFrame.h>
-#include <param_config.h>
+#include <pcb_base_edit_frame.h>
+#include <config_params.h>
 #include <class_macros_record.h>
 #include <class_undoredo_container.h>
 #include <zones.h>
@@ -44,7 +44,7 @@ class TEXTE_PCB;
 class MODULE;
 class TRACK;
 class SEGZONE;
-class SEGVIA;
+class VIA;
 class D_PAD;
 class TEXTE_MODULE;
 class PCB_TARGET;
@@ -61,18 +61,21 @@ class BOARD_ITEM;
 class PCB_LAYER_BOX_SELECTOR;
 class NETLIST;
 class REPORTER;
-class PARSE_ERROR;
-class IO_ERROR;
+struct PARSE_ERROR;
+struct IO_ERROR;
 class FP_LIB_TABLE;
 
+namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
+
 /**
- * class PCB_EDIT_FRAME
- * the main frame for Pcbnew
+ * Class PCB_EDIT_FRAME
+ * is the main frame for Pcbnew.
  *
  * See also class PCB_BASE_FRAME(): Basic class for Pcbnew and GerbView.
  */
-class PCB_EDIT_FRAME : public PCB_BASE_FRAME
+class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 {
+    friend class PCB::IFACE;
     friend class PCB_LAYER_WIDGET;
 
     void updateTraceWidthSelectBox();
@@ -83,12 +86,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     wxAuiToolBar* m_microWaveToolBar;
-
-    /// The global footprint library table.
-    FP_LIB_TABLE* m_globalFootprintTable;
-
-    /// User defined rotation angle (in tenths of a degree).
-    int             m_rotationAngle;
 
     /**
      * Function loadFootprints
@@ -107,7 +104,7 @@ protected:
 #ifdef KICAD_SCRIPTING_WXPYTHON
     // Panel used to let user talk with internal scripting
     wxWindow* m_pythonPanel;
-    bool m_pythonPanelHidden;
+    bool m_pythonPanelShow;                   ///< Visibility flag for Python Console
 #endif
 
     PCB_LAYER_WIDGET* m_Layers;
@@ -120,9 +117,8 @@ protected:
     bool              m_useCmpFileForFpNames;   ///< is true, use the .cmp file from CvPcb, else use the netlist
                                                 // to know the footprint name of components.
 
+    // The Tool Framework initalization
     void setupTools();
-    void destroyTools();
-    void onGenericCommand( wxCommandEvent& aEvent );
 
     // we'll use lower case function names for private member functions.
     void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
@@ -135,37 +131,9 @@ protected:
     void createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu );
 
     /**
-     * Function setActiveLayer
-     * will change the currently active layer to \a aLayer and also
-     * update the PCB_LAYER_WIDGET.
-     */
-    void setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
-
-    /**
-     * Function getActiveLayer
-     * returns the active layer
-     */
-    LAYER_NUM getActiveLayer()
-    {
-        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
-    }
-
-    /**
-     * Function setHighContrastLayer
-     * takes care of display settings for the given layer to be displayed in high contrast mode.
-     */
-    void setHighContrastLayer( LAYER_NUM aLayer );
-
-    /**
-     * Function setTopLayer
-     * moves the selected layer to the top, so it is displayed above all others.
-     */
-    void setTopLayer( LAYER_NUM aLayer );
-
-    /**
      * Function syncLayerWidgetLayer
      * updates the currently layer "selection" within the PCB_LAYER_WIDGET.
-     * The currently selected layer is defined by the return value of getActiveLayer().
+     * The currently selected layer is defined by the return value of GetActiveLayer().
      * <p>
      * This function cannot be inline without including layer_widget.h in
      * here and we do not want to do that.
@@ -214,6 +182,9 @@ protected:
      */
     void duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone );
 
+    // protected so that PCB::IFACE::CreateWindow() is the only factory.
+    PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
+
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
     wxComboBox* m_SelTrackWidthBox;     // a combo box to display and select current track width
@@ -221,12 +192,6 @@ public:
 
     bool m_show_microwave_tools;
     bool m_show_layer_manager_tools;
-
-
-public:
-    PCB_EDIT_FRAME( wxWindow* father, const wxString& title,
-                    const wxPoint& pos, const wxSize& size,
-                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     virtual ~PCB_EDIT_FRAME();
 
@@ -239,6 +204,8 @@ public:
      * @param cmdline = received command from socket
      */
     virtual void ExecuteRemoteCommand( const char* cmdline );
+
+    void KiwayMailIn( KIWAY_EXPRESS& aEvent );      // virtual overload from KIWAY_PLAYER
 
     /**
      * Function ToPlotter
@@ -277,9 +244,11 @@ public:
     void OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectCustomTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent );
     void OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent );
     void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
+    void OnLayerColorChange( wxCommandEvent& aEvent );
 
     /**
      * Function RecordMacros.
@@ -311,8 +280,8 @@ public:
      * @param aPrintMirrorMode = true to plot mirrored
      * @param aData = a pointer on an auxiliary data (NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, LAYER_MSK aPrintMaskLayer, bool aPrintMirrorMode,
-                            void * aData = NULL );
+    virtual void PrintPage( wxDC* aDC, LSET aPrintMaskLayer, bool aPrintMirrorMode,
+                            void* aData = NULL );
 
     void GetKicadAbout( wxCommandEvent& event );
 
@@ -341,9 +310,6 @@ public:
      * @param aColor = the new color of the grid
      */
     virtual void SetGridColor(EDA_COLOR_T aColor);
-
-    int GetRotationAngle() const { return m_rotationAngle; }
-    void SetRotationAngle( int aRotationAngle );
 
     // Configurations:
     void Process_Config( wxCommandEvent& event );
@@ -398,29 +364,9 @@ public:
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings();
 
-    /**
-     * Function LoadSettings
-     * loads applications settings specific to Pcbnew.
-     *
-     * This overrides the base class PCB_BASE_FRAME::LoadSettings() to
-     * handle settings specific common to the PCB layout application.  It
-     * calls down to the base class to load settings common to all PCB type
-     * drawing frames.  Please put your application settings for Pcbnew here
-     * to avoid having application settings loaded all over the place.
-     */
-    virtual void LoadSettings();
+    void LoadSettings( wxConfigBase* aCfg );    // override virtual
 
-    /**
-     * Function SaveSettings
-     * saves applications settings common to Pcbnew.
-     *
-     * This overrides the base class PCB_BASE_FRAME::SaveSettings() to
-     * save settings specific to the PCB layout application main window.  It
-     * calls down to the base class to save settings common to all PCB type
-     * drawing frames.  Please put your application settings for Pcbnew here
-     * to avoid having application settings saved all over the place.
-     */
-    virtual void SaveSettings();
+    void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
     /**
      * Get the last net list read with the net list dialog box.
@@ -580,6 +526,13 @@ public:
     virtual void OnModify();
 
     /**
+     * Function SetActiveLayer
+     * will change the currently active layer to \a aLayer and also
+     * update the PCB_LAYER_WIDGET.
+     */
+    virtual void SetActiveLayer( LAYER_ID aLayer );
+
+    /**
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
      * inline function.
@@ -680,7 +633,7 @@ public:
      * @param aTransformPoint = the reference point of the transformation, for
      *                          commands like move
      */
-    virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+    virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                                      UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
@@ -699,34 +652,34 @@ public:
                                  bool               aRebuildRatsnet = true );
 
     /**
-     * Function GetBoardFromRedoList
+     * Function RestoreCopyFromRedoList
      *  Redo the last edition:
      *  - Save the current board in Undo list
      *  - Get an old version of the board from Redo list
      *  @return none
      */
-    void GetBoardFromRedoList( wxCommandEvent& event );
+    void RestoreCopyFromRedoList( wxCommandEvent& aEvent );
 
     /**
-     * Function GetBoardFromUndoList
+     * Function RestoreCopyFromUndoList
      *  Undo the last edition:
      *  - Save the current board in Redo list
      *  - Get an old version of the board from Undo list
      *  @return none
      */
-    void GetBoardFromUndoList( wxCommandEvent& event );
+    void RestoreCopyFromUndoList( wxCommandEvent& aEvent );
 
     /* Block operations: */
 
     /**
-     * Function ReturnBlockCommand
+     * Function BlockCommand
      * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
      * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
      * block command is started by dragging the mouse.
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int ReturnBlockCommand( int aKey );
+    virtual int BlockCommand( int aKey );
 
     /**
      * Function HandleBlockPlace()
@@ -804,8 +757,6 @@ public:
     void InstallDisplayOptionsDialog( wxCommandEvent& aEvent );
     void InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 
-    void InstallDialogLayerSetup();
-
     /**
      * Function GenFootprintsPositionFile
      * Calls DoGenFootprintsPositionFile to create a footprint position file
@@ -859,20 +810,20 @@ public:
     void Files_io( wxCommandEvent& event );
 
     /**
-     * Function LoadOnePcbFile
-     * loads a KiCad board (.brd) from \a aFileName.
+     * Function OpenProjectFiles    (was LoadOnePcbFile)
+     * loads a KiCad board (.kicad_pcb) from \a aFileName.
      *
-     *  @param aFileName - File name including path. If empty, a file dialog will
-     *                     be displayed.
-     *  @param aAppend - Append board file aFileName to the currently loaded file if true.
-     *                   Default = false.
-     *  @param aForceFileDialog - Display the file open dialog even if aFullFileName is
-     *                            valid if true; Default = false.
+     * @param aFileSet - hold the BOARD file to load, a vector of one element.
      *
-     *  @return False if file load fails or is canceled by the user, otherwise true.
-     */
+     * @param aCtl      - KICTL_ bits, one to indicate that an append of the board file
+     *                      aFileName to the currently loaded file is desired.
+     *                    @see #KIWAY_PLAYER for bit defines.
+     *
+     * @return bool - false if file load fails, otherwise true.
     bool LoadOnePcbFile( const wxString& aFileName, bool aAppend = false,
                          bool aForceFileDialog = false );
+     */
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 );
 
     /**
      * Function ReadPcbFile
@@ -911,12 +862,6 @@ public:
 
     /// @copydoc PCB_BASE_FRAME::SetBoard()
     void SetBoard( BOARD* aBoard );
-
-    /**
-    * Function ViewReloadBoard
-    * adds all items from the current board to the VIEW, so they can be displayed by GAL.
-    */
-    void ViewReloadBoard( const BOARD* aBoard ) const;
 
     // Drc control
 
@@ -993,11 +938,19 @@ public:
 
     /**
      * Function ExporttoSPECCTRA
-     * will export the current BOARD to a specctra dsn file.  See
-     * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
-     * specification.
+     * Ask for a filename and call ExportSpecctraFile to export the current BOARD
+     * to a specctra dsn file.
      */
     void ExportToSpecctra( wxCommandEvent& event );
+
+    /**
+     * Function ExportSpecctraFile
+     * will export the current BOARD to a specctra dsn file.
+     * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
+     * specification.
+     * @return true if OK
+     */
+    bool ExportSpecctraFile( const wxString& aFullFilename );
 
     /**
      * Function ImportSpecctraSession
@@ -1275,7 +1228,7 @@ public:
     bool MergeCollinearTracks( TRACK* track, wxDC* DC, int end );
 
     void Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
-    void SwitchLayer( wxDC* DC, LAYER_NUM layer );
+    void SwitchLayer( wxDC* DC, LAYER_ID layer );
 
     /**
      * Function Add45DegreeSegment
@@ -1475,7 +1428,7 @@ public:
     DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T shape, wxDC* DC );
     void End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void Delete_Drawings_All_Layer( LAYER_NUM aLayer );
+    void Delete_Drawings_All_Layer( LAYER_ID aLayer );
 
     // Dimension handling:
     void ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* aDC );
@@ -1490,7 +1443,7 @@ public:
 
     /**
      * Function ReadPcbNetlist
-     * reads \a aNetlistFileName and ppdates the footprints (load missing footprints and
+     * reads \a aNetlistFileName and updates the footprints (load missing footprints and
      * delete on demand extra footprints) on the board.
      * Update connectivity info, references, values and "TIME STAMP"
      *
@@ -1536,7 +1489,9 @@ public:
      * Function ScriptingConsoleEnableDisable
      * enables or disabled the scripting console
      */
-    void ScriptingConsoleEnableDisable( wxCommandEvent& event );
+    void ScriptingConsoleEnableDisable( wxCommandEvent& aEvent );
+
+    void OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent );
 
     void OnSelectAutoPlaceMode( wxCommandEvent& aEvent );
 
@@ -1677,11 +1632,7 @@ public:
      */
     MODULE* Genere_Self( wxDC* DC );
 
-    /**
-     * Function SetLanguage
-     * called on a language menu selection
-     */
-    virtual void SetLanguage( wxCommandEvent& event );
+    void ShowChangedLanguage();         // override EDA_BASE_FRAME virtual
 
     /**
      * Function UpdateTitle
@@ -1695,14 +1646,22 @@ public:
      */
     void UpdateTitle();
 
-    void SetTopLayer( LAYER_NUM aLayer )
-    {
-        setTopLayer( aLayer );
-    }
-
-
     DECLARE_EVENT_TABLE()
 };
+
+
+/**
+ * Function AskBoardFileName
+ * puts up a wxFileDialog asking for a BOARD filename to open.
+ *
+ * @param aParent is a wxFrame passed to wxFileDialog.
+ * @param aCtl is where to put the OpenProjectFiles() control bits.
+ *
+ * @param aFileName on entry is a probable choice, on return is the chosen filename.
+ *
+ * @return bool - true if chosen, else false if user aborted.
+ */
+bool AskBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName );
 
 
 #endif  // WXPCB_STRUCT_H_

@@ -32,7 +32,7 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <wxEeschemaStruct.h>
 
 #include <netlist.h>
@@ -119,9 +119,10 @@ class NETLIST_EXPORT_TOOL
      * <li> "netname" for global net (like gnd, vcc ..
      * <li> "/path/netname" for the usual nets
      * </ul>
+     * if aUseNetcodeAsNetName is true, the net name is just the net code (SPICE only)
      */
     static void sprintPinNetName( wxString& aResult, const wxString& aNetNameFormat,
-                                  NETLIST_OBJECT* aPin );
+                                  NETLIST_OBJECT* aPin, bool aUseNetcodeAsNetName = false );
 
     /**
      * Function findNextComponentAndCreatePinList
@@ -303,8 +304,10 @@ public:
      * @param f = the file to write to
      * @param aUsePrefix = true, adds an 'X' prefix to any reference designator starting with "U" or "IC",
      *                     false to leave reference designator unchanged.
+     * @param aUseNetcodeAsNetName = true to use numbers (net codes) as net names.
+     *                                false to use net names from schematic.
      */
-    bool WriteNetListPspice( FILE* f, bool aUsePrefix );
+    bool WriteNetListPspice( FILE* f, bool aUsePrefix, bool aUseNetcodeAsNetName );
 
     /**
      * Function MakeCommandLine
@@ -415,7 +418,8 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
         break;
 
     case NET_TYPE_SPICE:
-        ret = helper.WriteNetListPspice( f, aNetlistOptions & NET_USE_X_PREFIX );
+        ret = helper.WriteNetListPspice( f, aNetlistOptions & NET_USE_X_PREFIX,
+                                         aNetlistOptions & NET_USE_NETCODES_AS_NETNAMES );
         fclose( f );
         break;
 
@@ -468,7 +472,8 @@ static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 )
 
 
 void NETLIST_EXPORT_TOOL::sprintPinNetName( wxString& aResult,
-                                    const wxString& aNetNameFormat, NETLIST_OBJECT* aPin )
+                                    const wxString& aNetNameFormat, NETLIST_OBJECT* aPin,
+                                    bool aUseNetcodeAsNetName )
 {
     int netcode = aPin->GetNet();
 
@@ -479,10 +484,17 @@ void NETLIST_EXPORT_TOOL::sprintPinNetName( wxString& aResult,
 
     if( netcode != 0 && aPin->GetConnectionType() == PAD_CONNECT )
     {
+        if( aUseNetcodeAsNetName )
+        {
+            aResult.Printf( wxT("%d"), netcode );
+        }
+        else
+        {
         aResult = aPin->GetNetName();
 
         if( aResult.IsEmpty() )     // No net name: give a name from net code
             aResult.Printf( aNetNameFormat.GetData(), netcode );
+        }
     }
 }
 
@@ -644,8 +656,7 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
     xdesign->AddChild( node( wxT( "date" ), DateAndTime() ) );
 
     // which Eeschema tool
-    xdesign->AddChild( node( wxT( "tool" ), wxGetApp().GetAppName() + wxChar(' ') +
-                             GetBuildVersion() ) );
+    xdesign->AddChild( node( wxT( "tool" ), wxT( "Eeschema " ) + GetBuildVersion() ) );
 
     /*  @todo might do a list of schematic pages
 
@@ -1050,7 +1061,7 @@ bool NETLIST_EXPORT_TOOL::WriteKiCadNetList( const wxString& aOutFileName )
 
         xroot->Format( &formatter, 0 );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( NULL, ioe.errorText );
         return false;
@@ -1074,7 +1085,7 @@ bool NETLIST_EXPORT_TOOL::WriteGENERICNetList( const wxString& aOutFileName )
 }
 
 
-bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool aUsePrefix )
+bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool aUsePrefix, bool aUseNetcodeAsNetName )
 {
     int                 ret = 0;
     int                 nbitems;
@@ -1286,7 +1297,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool aUsePrefix )
                 if( !pin )
                     continue;
 
-                sprintPinNetName( netName , wxT( "N-%.6d" ), pin );
+                sprintPinNetName( netName , wxT( "N-%.6d" ), pin, aUseNetcodeAsNetName );
 
                 //Replace parenthesis with underscore to prevent parse issues with Simulators:
                 netName.Replace(wxT("("),wxT("_"));
@@ -1727,13 +1738,13 @@ bool NETLIST_EXPORT_TOOL::WriteNetListCADSTAR( FILE* f )
     wxString footprint;
     SCH_SHEET_PATH* sheet;
     EDA_ITEM* DrawList;
-    SCH_COMPONENT* Component;
-    wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+    SCH_COMPONENT* component;
+    wxString title = wxT( "Eeschema " ) + GetBuildVersion();
 
     ret |= fprintf( f, "%sHEA\n", TO_UTF8( StartLine ) );
     ret |= fprintf( f, "%sTIM %s\n", TO_UTF8( StartLine ), TO_UTF8( DateAndTime() ) );
     ret |= fprintf( f, "%sAPP ", TO_UTF8( StartLine ) );
-    ret |= fprintf( f, "\"%s\"\n", TO_UTF8( Title ) );
+    ret |= fprintf( f, "\"%s\"\n", TO_UTF8( title ) );
     ret |= fprintf( f, "\n" );
 
     // Prepare list of nets generation
@@ -1749,27 +1760,27 @@ bool NETLIST_EXPORT_TOOL::WriteNetListCADSTAR( FILE* f )
     {
         for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
         {
-            DrawList = Component = findNextComponentAndCreatePinList( DrawList, sheet );
+            DrawList = component = findNextComponentAndCreatePinList( DrawList, sheet );
 
-            if( Component == NULL )
+            if( component == NULL )
                 break;
 
             /*
             doing nothing with footprint
-            if( !Component->GetField( FOOTPRINT )->IsVoid() )
+            if( !component->GetField( FOOTPRINT )->IsVoid() )
             {
-                footprint = Component->GetField( FOOTPRINT )->m_Text;
+                footprint = component->GetField( FOOTPRINT )->m_Text;
                 footprint.Replace( wxT( " " ), wxT( "_" ) );
             }
             else
                 footprint = wxT( "$noname" );
             */
 
-            msg = Component->GetRef( sheet );
+            msg = component->GetRef( sheet );
             ret |= fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
             ret |= fprintf( f, "%s", TO_UTF8( msg ) );
 
-            msg = Component->GetField( VALUE )->GetText();
+            msg = component->GetField( VALUE )->GetText();
             msg.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( f, "     \"%s\"", TO_UTF8( msg ) );
             ret |= fprintf( f, "\n" );
@@ -1836,18 +1847,18 @@ bool NETLIST_EXPORT_TOOL::writeListOfNetsCADSTAR( FILE* f )
         switch( print_ter )
         {
         case 0:
-        {
-            char buf[5];
-            wxString str_pinnum;
-            strncpy( buf, (char*) &nitem->m_PinNum, 4 );
-            buf[4]     = 0;
-            str_pinnum = FROM_UTF8( buf );
-            InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
-                                   GetChars( InitNetDesc ),
-                                   GetChars( refstr ),
-                                   GetChars( str_pinnum ),
-                                   GetChars( netcodeName ) );
-        }
+            {
+                char buf[5];
+                wxString str_pinnum;
+                strncpy( buf, (char*) &nitem->m_PinNum, 4 );
+                buf[4]     = 0;
+                str_pinnum = FROM_UTF8( buf );
+                InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
+                                       GetChars( InitNetDesc ),
+                                       GetChars( refstr ),
+                                       GetChars( str_pinnum ),
+                                       GetChars( netcodeName ) );
+            }
             print_ter++;
             break;
 

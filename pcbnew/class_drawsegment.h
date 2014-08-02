@@ -30,11 +30,11 @@
 #ifndef CLASS_DRAWSEGMENT_H_
 #define CLASS_DRAWSEGMENT_H_
 
-
 #include <class_board_item.h>
 #include <PolyLine.h>
 #include <math_for_graphics.h>
 #include <trigo.h>
+#include <common.h>
 
 
 class LINE_READER;
@@ -68,9 +68,6 @@ public:
 
     /// skip the linked list stuff, and parent
     const DRAWSEGMENT& operator = ( const DRAWSEGMENT& rhs );
-
-    DRAWSEGMENT* Next() const { return (DRAWSEGMENT*) Pnext; }
-    DRAWSEGMENT* Back() const { return (DRAWSEGMENT*) Pback; }
 
     void SetWidth( int aWidth )             { m_Width = aWidth; }
     int GetWidth() const                    { return m_Width; }
@@ -126,9 +123,9 @@ public:
 
     /**
      * function GetArcAngleStart()
-     * @return the angle of the stating point of this arc, between 0 and 3600 in 0.1 deg
+     * @return the angle of the starting point of this arc, between 0 and 3600 in 0.1 deg
      */
-    const double GetArcAngleStart() const;
+    double GetArcAngleStart() const;
 
     /**
      * Function GetRadius
@@ -182,7 +179,7 @@ public:
 
     virtual const EDA_RECT GetBoundingBox() const;
 
-    virtual bool HitTest( const wxPoint& aPosition );
+    virtual bool HitTest( const wxPoint& aPosition ) const;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const

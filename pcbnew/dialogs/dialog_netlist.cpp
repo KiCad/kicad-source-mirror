@@ -27,7 +27,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <project.h>
+#include <kiface_i.h>
 #include <confirm.h>
 #include <macros.h>
 #include <dialog_helpers.h>
@@ -86,7 +87,10 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     {
         wxFileName fn = GetBoard()->GetFileName();
         fn.SetExt( ProjectFileExtension );
-        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+
+        // was: wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+        Prj().ConfigSave( Kiface().KifaceSearch(), fn.GetFullPath(),
+                GROUP_PCB, GetProjectFileParameters() );
     }
 }
 
@@ -97,7 +101,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
 {
     m_parent = aParent;
     m_dc = aDC;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
     m_silentMode = m_config->Read( NETLIST_SILENTMODE_KEY, 0l );
     m_reportAll = m_config->Read( NETLIST_FULLMESSAGES_KEY, 1l );
     bool tmp = m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l );
@@ -421,18 +425,24 @@ bool DIALOG_NETLIST::verifyFootprints( const wxString&         aNetlistFilename,
         std::auto_ptr< NETLIST_READER > nlr( netlistReader );
         netlistReader->LoadNetlist();
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         msg.Printf( _( "Error loading netlist file:\n%s" ), ioe.errorText.GetData() );
         wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
         return false;
     }
 
-
 #if defined( DEBUG )
-    m_MessageWindow->Clear();
-    WX_TEXT_CTRL_REPORTER rpt( m_MessageWindow );
-    netlist.Show( 0, rpt );
+    {
+        m_MessageWindow->Clear();
+        WX_TEXT_CTRL_REPORTER rpt( m_MessageWindow );
+
+        STRING_FORMATTER sf;
+
+        netlist.Format( "netlist_stuff", &sf, 0 );
+
+        rpt.Report( FROM_UTF8( sf.GetString().c_str() ) );
+    }
 #endif
 
     BOARD* pcb = m_parent->GetBoard();

@@ -40,111 +40,152 @@
 #ifndef _HALF_EDGE_DART_
 #define _HALF_EDGE_DART_
 
-
 #include <ttl/halfedge/hetriang.h>
 
+namespace hed
+{
+/**
+ * \class Dart
+ * \brief \b %Dart class for the half-edge data structure.
+ *
+ * See \ref api for a detailed description of how the member functions
+ * should be implemented.
+ */
+class DART
+{
+    EDGE_PTR m_edge;
 
-namespace hed {
+    /// Dart direction: true if dart is counterclockwise in face
+    bool m_dir;
 
-
-  //------------------------------------------------------------------------------------------------
-  // Dart class for the half-edge data structure
-  //------------------------------------------------------------------------------------------------
-
-  /** \class Dart
-  *   \brief \b %Dart class for the half-edge data structure.
-  *
-  *   See \ref api for a detailed description of how the member functions
-  *   should be implemented.
-  */
-
-  class Dart {
-
-    EdgePtr edge_;
-    bool dir_; // true if dart is counterclockwise in face
-
-  public:
+public:
     /// Default constructor
-    Dart() { dir_ = true; }
+    DART()
+    {
+        m_dir = true;
+    }
 
     /// Constructor
-    Dart(const EdgePtr& edge, bool dir = true) { edge_ = edge; dir_ = dir; }
+    DART( const EDGE_PTR& aEdge, bool aDir = true )
+    {
+        m_edge = aEdge;
+        m_dir = aDir;
+    }
 
     /// Copy constructor
-    Dart(const Dart& dart) { edge_ = dart.edge_; dir_ = dart.dir_; }
+    DART( const DART& aDart )
+    {
+        m_edge = aDart.m_edge;
+        m_dir  = aDart.m_dir;
+    }
 
     /// Destructor
-    ~Dart() {}
+    ~DART()
+    {
+    }
 
     /// Assignment operator
-    Dart& operator = (const Dart& dart) {
-      if (this == &dart)
+    DART& operator=( const DART& aDart )
+    {
+        if( this == &aDart )
+            return *this;
+
+        m_edge = aDart.m_edge;
+        m_dir = aDart.m_dir;
+
         return *this;
-      edge_ = dart.edge_;
-      dir_  = dart.dir_;
-      return *this;
     }
 
     /// Comparing dart objects
-    bool operator==(const Dart& dart) const {
-      if (dart.edge_ == edge_ && dart.dir_ == dir_)
-        return true;
-      return false;
+    bool operator==( const DART& aDart ) const
+    {
+        return ( aDart.m_edge == m_edge && aDart.m_dir == m_dir );
     }
 
     /// Comparing dart objects
-    bool operator!=(const Dart& dart) const {
-      return !(dart==*this);
+    bool operator!=( const DART& aDart ) const
+    {
+        return !( aDart == *this );
     }
 
     /// Maps the dart to a different node
-    Dart& alpha0() { dir_ = !dir_; return *this; }
+    DART& Alpha0()
+    {
+        m_dir = !m_dir;
+        return *this;
+    }
 
     /// Maps the dart to a different edge
-    Dart& alpha1() {
-      if (dir_) {
-        edge_ = edge_->getNextEdgeInFace()->getNextEdgeInFace();
-        dir_ = false;
-      }
-      else {
-        edge_ = edge_->getNextEdgeInFace();
-        dir_ = true;
-      }
-      return *this;
+    DART& Alpha1()
+    {
+        if( m_dir )
+        {
+            m_edge = m_edge->GetNextEdgeInFace()->GetNextEdgeInFace();
+            m_dir = false;
+        }
+        else
+        {
+            m_edge = m_edge->GetNextEdgeInFace();
+            m_dir = true;
+        }
+
+        return *this;
     }
 
     /// Maps the dart to a different triangle. \b Note: the dart is not changed if it is at the boundary!
-    Dart& alpha2() {
-      if (edge_->getTwinEdge()) {
-        edge_ = edge_->getTwinEdge();
-        dir_ = !dir_;
-      }
-      // else, the dart is at the boundary and should not be changed
-      return *this;
+    DART& Alpha2()
+    {
+        if( m_edge->GetTwinEdge() )
+        {
+            m_edge = m_edge->GetTwinEdge();
+            m_dir = !m_dir;
+        }
+
+        // else, the dart is at the boundary and should not be changed
+        return *this;
     }
-
-
-    // Utilities not required by TTL
-    // -----------------------------
 
     /** @name Utilities not required by TTL */
     //@{
+    void Init( const EDGE_PTR& aEdge, bool aDir = true )
+    {
+        m_edge = aEdge;
+        m_dir = aDir;
+    }
 
-    void init(const EdgePtr& edge, bool dir = true) { edge_ = edge; dir_ = dir; }
+    double X() const
+    {
+        return GetNode()->GetX();
+    }
 
-    double x() const { return getNode()->GetX(); } // x-coordinate of source node
-    double y() const { return getNode()->GetY(); } // y-coordinate of source node
+    double Y() const
+    {
+        return GetNode()->GetY();
+    }
 
-    bool isCounterClockWise() const { return dir_; }
+    bool IsCCW() const
+    {
+        return m_dir;
+    }
 
-    const NodePtr& getNode() const { return dir_ ? edge_->getSourceNode() : edge_->getTargetNode(); }
-    const NodePtr& getOppositeNode() const { return dir_ ? edge_->getTargetNode() : edge_->getSourceNode(); }
-    EdgePtr& getEdge() { return edge_; }
+    const NODE_PTR& GetNode() const
+    {
+        return m_dir ? m_edge->GetSourceNode() : m_edge->GetTargetNode();
+    }
+
+    const NODE_PTR& GetOppositeNode() const
+    {
+        return m_dir ? m_edge->GetTargetNode() : m_edge->GetSourceNode();
+    }
+
+    EDGE_PTR& GetEdge()
+    {
+        return m_edge;
+    }
 
     //@} // End of Utilities not required by TTL
+};
 
-  };
-
-}; // End of hed namespace
+} // End of hed namespace
 
 #endif

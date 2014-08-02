@@ -186,13 +186,13 @@ void PLEDITOR_PRINTOUT::DrawPage( int aPageNum )
     GRForceBlackPen( true );
     screen->m_IsPrinting = true;
 
-    EDA_COLOR_T bg_color = g_DrawBgColor;
-    g_DrawBgColor = WHITE;
+    EDA_COLOR_T bg_color = m_parent->GetDrawBgColor();
+    m_parent->SetDrawBgColor( WHITE );
 
     screen->m_ScreenNumber = aPageNum;
     m_parent->DrawWorkSheet( dc, screen, 0, IU_PER_MILS, wxEmptyString );
 
-    g_DrawBgColor = bg_color;
+    m_parent->SetDrawBgColor( bg_color );
     screen->m_IsPrinting = false;
     panel->SetClipBox( oldClipBox );
 

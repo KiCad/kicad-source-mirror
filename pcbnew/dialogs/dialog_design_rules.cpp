@@ -46,6 +46,8 @@
 #include <wx/generic/gridctrl.h>
 #include <dialog_design_rules_aux_helper_class.h>
 
+#include <boost/make_shared.hpp>
+
 // Column labels for net lists
 #define NET_TITLE       _( "Net" )
 #define CLASS_TITLE     _( "Class" )
@@ -190,15 +192,15 @@ void DIALOG_DESIGN_RULES::PrintCurrentSettings()
     m_MessagesList->AppendToPage( _( "<b>Current general settings:</b><br>" ) );
 
     // Display min values:
-    value = ReturnStringFromValue( g_UserUnit, m_BrdSettings.m_TrackMinWidth, true );
+    value = StringFromValue( g_UserUnit, m_BrdSettings->m_TrackMinWidth, true );
     msg.Printf( _( "Minimum value for tracks width: <b>%s</b><br>\n" ), GetChars( value ) );
     m_MessagesList->AppendToPage( msg );
 
-    value = ReturnStringFromValue( g_UserUnit, m_BrdSettings.m_ViasMinSize, true );
+    value = StringFromValue( g_UserUnit, m_BrdSettings->m_ViasMinSize, true );
     msg.Printf( _( "Minimum value for vias diameter: <b>%s</b><br>\n" ), GetChars( value ) );
     m_MessagesList->AppendToPage( msg );
 
-    value = ReturnStringFromValue( g_UserUnit, m_BrdSettings.m_MicroViasMinSize, true );
+    value = StringFromValue( g_UserUnit, m_BrdSettings->m_MicroViasMinSize, true );
     msg.Printf( _( "Minimum value for microvias diameter: <b>%s</b><br>\n" ), GetChars( value ) );
     m_MessagesList->AppendToPage( msg );
 }
@@ -212,7 +214,7 @@ void DIALOG_DESIGN_RULES::InitDialogRules()
     SetReturnCode( 0 );
 
     m_Pcb = m_Parent->GetBoard();
-    m_BrdSettings = m_Pcb->GetDesignSettings();
+    m_BrdSettings = &m_Pcb->GetDesignSettings();
 
     // Initialize the Rules List
     InitRulesList();
@@ -220,16 +222,11 @@ void DIALOG_DESIGN_RULES::InitDialogRules()
     // copy all NETs into m_AllNets by adding them as NETCUPs.
 
     // @todo go fix m_Pcb->SynchronizeNetsAndNetClasses() so that the netcode==0 is not present in the BOARD::m_NetClasses
-
-
-    NETCLASS*   netclass;
-
-    NETCLASSES& netclasses = m_Pcb->m_NetClasses;
-
-    netclass = netclasses.GetDefault();
+    NETCLASSES& netclasses = m_BrdSettings->m_NetClasses;
+    NETCLASSPTR netclass = netclasses.GetDefault();
 
     // Initialize list of nets for Default Net Class
-    for( NETCLASS::const_iterator name = netclass->begin();  name != netclass->end();  ++name )
+    for( NETCLASS::iterator name = netclass->begin();  name != netclass->end();  ++name )
     {
         m_AllNets.push_back( NETCUP( *name, netclass->GetName() ) );
     }
@@ -262,23 +259,23 @@ void DIALOG_DESIGN_RULES::InitGlobalRules()
     AddUnitSymbol( *m_MicroViaMinDrillTitle );
     AddUnitSymbol( *m_TrackMinWidthTitle );
 
-    PutValueInLocalUnits( *m_SetViasMinSizeCtrl, m_BrdSettings.m_ViasMinSize );
-    PutValueInLocalUnits( *m_SetViasMinDrillCtrl, m_BrdSettings.m_ViasMinDrill );
+    PutValueInLocalUnits( *m_SetViasMinSizeCtrl, m_BrdSettings->m_ViasMinSize );
+    PutValueInLocalUnits( *m_SetViasMinDrillCtrl, m_BrdSettings->m_ViasMinDrill );
 
-    if(  m_BrdSettings.m_BlindBuriedViaAllowed )
+    if( m_BrdSettings->m_BlindBuriedViaAllowed )
         m_OptViaType->SetSelection( 1 );
 
-    m_AllowMicroViaCtrl->SetSelection(  m_BrdSettings.m_MicroViasAllowed ? 1 : 0 );
-    PutValueInLocalUnits( *m_SetMicroViasMinSizeCtrl, m_BrdSettings.m_MicroViasMinSize );
-    PutValueInLocalUnits( *m_SetMicroViasMinDrillCtrl, m_BrdSettings.m_MicroViasMinDrill );
-    PutValueInLocalUnits( *m_SetTrackMinWidthCtrl, m_BrdSettings.m_TrackMinWidth );
+    m_AllowMicroViaCtrl->SetSelection( m_BrdSettings->m_MicroViasAllowed ? 1 : 0 );
+    PutValueInLocalUnits( *m_SetMicroViasMinSizeCtrl, m_BrdSettings->m_MicroViasMinSize );
+    PutValueInLocalUnits( *m_SetMicroViasMinDrillCtrl, m_BrdSettings->m_MicroViasMinDrill );
+    PutValueInLocalUnits( *m_SetTrackMinWidthCtrl, m_BrdSettings->m_TrackMinWidth );
 
     // Initialize Vias and Tracks sizes lists.
     // note we display only extra values, never the current netclass value.
     // (the first value in history list)
-    m_TracksWidthList = m_Parent->GetBoard()->m_TrackWidthList;
+    m_TracksWidthList = m_BrdSettings->m_TrackWidthList;
     m_TracksWidthList.erase( m_TracksWidthList.begin() );       // remove the netclass value
-    m_ViasDimensionsList = m_Parent->GetBoard()->m_ViasDimensionsList;
+    m_ViasDimensionsList = m_BrdSettings->m_ViasDimensionsList;
     m_ViasDimensionsList.erase( m_ViasDimensionsList.begin() ); // remove the netclass value
     InitDimensionsLists();
 }
@@ -312,17 +309,17 @@ void DIALOG_DESIGN_RULES::InitDimensionsLists()
 
     for( unsigned ii = 0; ii < m_TracksWidthList.size(); ii++ )
     {
-        msg = ReturnStringFromValue( g_UserUnit, m_TracksWidthList[ii], false );
+        msg = StringFromValue( g_UserUnit, m_TracksWidthList[ii], false );
         m_gridTrackWidthList->SetCellValue( ii, 0, msg  );
     }
 
     for( unsigned ii = 0; ii < m_ViasDimensionsList.size(); ii++ )
     {
-        msg = ReturnStringFromValue( g_UserUnit, m_ViasDimensionsList[ii].m_Diameter, false );
+        msg = StringFromValue( g_UserUnit, m_ViasDimensionsList[ii].m_Diameter, false );
         m_gridViaSizeList->SetCellValue( ii, 0, msg );
         if( m_ViasDimensionsList[ii].m_Drill > 0 )
         {
-            msg = ReturnStringFromValue( g_UserUnit, m_ViasDimensionsList[ii].m_Drill, false );
+            msg = StringFromValue( g_UserUnit, m_ViasDimensionsList[ii].m_Drill, false );
             m_gridViaSizeList->SetCellValue( ii, 1, msg );
         }
     }
@@ -451,29 +448,29 @@ void DIALOG_DESIGN_RULES::InitializeRulesSelectionBoxes()
 /* Initialize the rules list from board
  */
 
-static void class2gridRow( wxGrid* grid, int row, NETCLASS* nc )
+static void class2gridRow( wxGrid* grid, int row, NETCLASSPTR nc )
 {
     wxString msg;
 
     // label is netclass name
     grid->SetRowLabelValue( row, nc->GetName() );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetClearance() );
+    msg = StringFromValue( g_UserUnit, nc->GetClearance() );
     grid->SetCellValue( row, GRID_CLEARANCE, msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetTrackWidth() );
+    msg = StringFromValue( g_UserUnit, nc->GetTrackWidth() );
     grid->SetCellValue( row, GRID_TRACKSIZE, msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetViaDiameter() );
+    msg = StringFromValue( g_UserUnit, nc->GetViaDiameter() );
     grid->SetCellValue( row, GRID_VIASIZE, msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetViaDrill() );
+    msg = StringFromValue( g_UserUnit, nc->GetViaDrill() );
     grid->SetCellValue( row, GRID_VIADRILL, msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetuViaDiameter() );
+    msg = StringFromValue( g_UserUnit, nc->GetuViaDiameter() );
     grid->SetCellValue( row, GRID_uVIASIZE, msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetuViaDrill() );
+    msg = StringFromValue( g_UserUnit, nc->GetuViaDrill() );
     grid->SetCellValue( row, GRID_uVIADRILL, msg );
 }
 
@@ -484,7 +481,7 @@ static void class2gridRow( wxGrid* grid, int row, NETCLASS* nc )
  */
 void DIALOG_DESIGN_RULES::InitRulesList()
 {
-    NETCLASSES& netclasses = m_Pcb->m_NetClasses;
+    NETCLASSES& netclasses = m_BrdSettings->m_NetClasses;
 
     // the +1 is for the Default NETCLASS.
     if( netclasses.GetCount() + 1 > (unsigned) m_grid->GetNumberRows() )
@@ -499,17 +496,17 @@ void DIALOG_DESIGN_RULES::InitRulesList()
     int row = 1;
     for( NETCLASSES::iterator i = netclasses.begin();  i!=netclasses.end();  ++i, ++row )
     {
-        NETCLASS* netclass = i->second;
+        NETCLASSPTR netclass = i->second;
 
         class2gridRow( m_grid, row, netclass );
     }
 }
 
 
-static void gridRow2class( wxGrid* grid, int row, NETCLASS* nc )
+static void gridRow2class( wxGrid* grid, int row, NETCLASSPTR nc )
 {
 #define MYCELL( col )   \
-    ReturnValueFromString( g_UserUnit, grid->GetCellValue( row, col ) )
+    ValueFromString( g_UserUnit, grid->GetCellValue( row, col ) )
 
     nc->SetClearance( MYCELL( GRID_CLEARANCE ) );
     nc->SetTrackWidth( MYCELL( GRID_TRACKSIZE ) );
@@ -524,7 +521,7 @@ static void gridRow2class( wxGrid* grid, int row, NETCLASS* nc )
  */
 void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 {
-    NETCLASSES& netclasses = m_Pcb->m_NetClasses;
+    NETCLASSES& netclasses = m_BrdSettings->m_NetClasses;
 
     // Remove all netclasses from board. We'll copy new list after
     netclasses.Clear();
@@ -535,9 +532,9 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
     // Copy other NetClasses :
     for( int row = 1; row < m_grid->GetNumberRows();  ++row )
     {
-        NETCLASS* nc = new NETCLASS( m_Pcb, m_grid->GetRowLabelValue( row ) );
+        NETCLASSPTR nc = boost::make_shared<NETCLASS>( m_grid->GetRowLabelValue( row ) );
 
-        if( !m_Pcb->m_NetClasses.Add( nc ) )
+        if( !m_BrdSettings->m_NetClasses.Add( nc ) )
         {
             // this netclass cannot be added because an other netclass with the same name exists
             // Should not occur because OnAddNetclassClick() tests for existing NetClass names
@@ -545,7 +542,7 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
             msg.Printf( wxT( "CopyRulesListToBoard(): The NetClass \"%s\" already exists. Skip" ),
                         GetChars( m_grid->GetRowLabelValue( row ) ) );
             wxMessageBox( msg );
-            delete nc;
+
             continue;
         }
 
@@ -555,7 +552,7 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
     // Now read all nets and push them in the corresponding netclass net buffer
     for( NETCUPS::const_iterator netcup = m_AllNets.begin(); netcup != m_AllNets.end(); ++netcup )
     {
-        NETCLASS* nc = netclasses.Find( netcup->clazz );
+        NETCLASSPTR nc = netclasses.Find( netcup->clazz );
         wxASSERT( nc );
         nc->Add( netcup->net );
     }
@@ -568,20 +565,20 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 void DIALOG_DESIGN_RULES::CopyGlobalRulesToBoard()
 /*************************************************/
 {
-    m_BrdSettings.m_BlindBuriedViaAllowed = m_OptViaType->GetSelection() > 0;
+    m_BrdSettings->m_BlindBuriedViaAllowed = m_OptViaType->GetSelection() > 0;
 
     // Update vias minimum values for DRC
-    m_BrdSettings.m_ViasMinSize = ReturnValueFromTextCtrl( *m_SetViasMinSizeCtrl );
-    m_BrdSettings.m_ViasMinDrill = ReturnValueFromTextCtrl( *m_SetViasMinDrillCtrl );
+    m_BrdSettings->m_ViasMinSize = ValueFromTextCtrl( *m_SetViasMinSizeCtrl );
+    m_BrdSettings->m_ViasMinDrill = ValueFromTextCtrl( *m_SetViasMinDrillCtrl );
 
-    m_BrdSettings.m_MicroViasAllowed = m_AllowMicroViaCtrl->GetSelection() == 1;
+    m_BrdSettings->m_MicroViasAllowed = m_AllowMicroViaCtrl->GetSelection() == 1;
 
     // Update microvias minimum values for DRC
-    m_BrdSettings.m_MicroViasMinSize = ReturnValueFromTextCtrl( *m_SetMicroViasMinSizeCtrl );
-    m_BrdSettings.m_MicroViasMinDrill = ReturnValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl );
+    m_BrdSettings->m_MicroViasMinSize = ValueFromTextCtrl( *m_SetMicroViasMinSizeCtrl );
+    m_BrdSettings->m_MicroViasMinDrill = ValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl );
 
     // Update tracks minimum values for DRC
-    m_BrdSettings.m_TrackMinWidth = ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl );
+    m_BrdSettings->m_TrackMinWidth = ValueFromTextCtrl( *m_SetTrackMinWidthCtrl );
 }
 
 
@@ -600,7 +597,7 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard()
         if( msg.IsEmpty() )
             continue;
 
-        int value = ReturnValueFromString( g_UserUnit, msg );
+        int value = ValueFromString( g_UserUnit, msg );
         m_TracksWidthList.push_back( value );
     }
 
@@ -617,14 +614,14 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard()
         if( msg.IsEmpty() )
             continue;
 
-        int           value = ReturnValueFromString( g_UserUnit, msg );
+        int           value = ValueFromString( g_UserUnit, msg );
         VIA_DIMENSION via_dim;
         via_dim.m_Diameter = value;
         msg = m_gridViaSizeList->GetCellValue( row, 1 );
 
         if( !msg.IsEmpty() )
         {
-            value = ReturnValueFromString( g_UserUnit, msg );
+            value = ValueFromString( g_UserUnit, msg );
             via_dim.m_Drill = value;
         }
 
@@ -634,12 +631,12 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard()
     // Sort new list by by increasing value
     sort( m_ViasDimensionsList.begin(), m_ViasDimensionsList.end() );
 
-    std::vector <int>* tlist = &m_Parent->GetBoard()->m_TrackWidthList;
+    std::vector<int>* tlist = &m_BrdSettings->m_TrackWidthList;
     tlist->erase( tlist->begin() + 1, tlist->end() );                                   // Remove old "custom" sizes
     tlist->insert( tlist->end(), m_TracksWidthList.begin(), m_TracksWidthList.end() );  //Add new "custom" sizes
 
     // Reinitialize m_ViaSizeList
-    std::vector <VIA_DIMENSION>* vialist = &m_Parent->GetBoard()->m_ViasDimensionsList;
+    std::vector<VIA_DIMENSION>* vialist = &m_BrdSettings->m_ViasDimensionsList;
     vialist->erase( vialist->begin() + 1, vialist->end() );
     vialist->insert( vialist->end(), m_ViasDimensionsList.begin(), m_ViasDimensionsList.end() );
 }
@@ -671,11 +668,9 @@ void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
     CopyGlobalRulesToBoard();
     CopyDimensionsListsToBoard();
 
-    m_Pcb->SetDesignSettings( m_BrdSettings );
-
     EndModal( wxID_OK );
 
-    m_Pcb->SetCurrentNetClass( NETCLASS::Default );
+    m_BrdSettings->SetCurrentNetClass( NETCLASS::Default );
 }
 
 
@@ -755,7 +750,7 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
     for( unsigned ii = 0; ii < select.GetCount(); ii++ )
     {
         int grid_row = select[ii];
-        if(  grid_row != 0 )   // Do not remove the default class
+        if( grid_row != 0 )   // Do not remove the default class
         {
             wxString classname = m_grid->GetRowLabelValue( grid_row );
             m_grid->DeleteRows( grid_row );
@@ -949,18 +944,18 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
 
     wxString msg;
 
-    int      minViaDia = ReturnValueFromTextCtrl( *m_SetViasMinSizeCtrl );
-    int      minViaDrill = ReturnValueFromTextCtrl( *m_SetViasMinDrillCtrl );
-    int      minUViaDia = ReturnValueFromTextCtrl( *m_SetMicroViasMinSizeCtrl );
-    int      minUViaDrill = ReturnValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl );
-    int      minTrackWidth = ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl );
+    int      minViaDia = ValueFromTextCtrl( *m_SetViasMinSizeCtrl );
+    int      minViaDrill = ValueFromTextCtrl( *m_SetViasMinDrillCtrl );
+    int      minUViaDia = ValueFromTextCtrl( *m_SetMicroViasMinSizeCtrl );
+    int      minUViaDrill = ValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl );
+    int      minTrackWidth = ValueFromTextCtrl( *m_SetTrackMinWidthCtrl );
     int      maxval = 1000 * IU_PER_MILS;   // a max value for tracks and vias sizes (1 inch)
 
 
 
     for( int row = 0; row < m_grid->GetNumberRows(); row++ )
     {
-        int tracksize = ReturnValueFromString( g_UserUnit,
+        int tracksize = ValueFromString( g_UserUnit,
                                                m_grid->GetCellValue( row, GRID_TRACKSIZE ) );
         if( tracksize < minTrackWidth )
         {
@@ -972,7 +967,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         }
 
         // Test vias
-        int viadia = ReturnValueFromString( g_UserUnit,
+        int viadia = ValueFromString( g_UserUnit,
                                             m_grid->GetCellValue( row, GRID_VIASIZE ) );
 
         if( viadia < minViaDia )
@@ -984,7 +979,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
             m_MessagesList->AppendToPage( msg );
         }
 
-        int viadrill = ReturnValueFromString( g_UserUnit,
+        int viadrill = ValueFromString( g_UserUnit,
                                               m_grid->GetCellValue( row, GRID_VIADRILL ) );
         if( viadrill >= viadia )
         {
@@ -1005,7 +1000,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         }
 
         // Test Micro vias
-        int muviadia = ReturnValueFromString( g_UserUnit,
+        int muviadia = ValueFromString( g_UserUnit,
                                               m_grid->GetCellValue( row, GRID_uVIASIZE ) );
 
         if( muviadia < minUViaDia )
@@ -1017,7 +1012,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
             m_MessagesList->AppendToPage( msg );
         }
 
-        int muviadrill = ReturnValueFromString( g_UserUnit,
+        int muviadrill = ValueFromString( g_UserUnit,
                                                 m_grid->GetCellValue( row, GRID_uVIADRILL ) );
         if( muviadrill >= muviadia )
         {
@@ -1046,7 +1041,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         if( tvalue.IsEmpty() )
             continue;
 
-        int tracksize = ReturnValueFromString( g_UserUnit, tvalue );
+        int tracksize = ValueFromString( g_UserUnit, tvalue );
 
         if( tracksize < minTrackWidth )
         {
@@ -1073,12 +1068,12 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         if( tvalue.IsEmpty() )
             continue;
 
-        int viadia = ReturnValueFromString( g_UserUnit, tvalue );
+        int viadia = ValueFromString( g_UserUnit, tvalue );
         int viadrill = 0;
         wxString drlvalue = m_gridViaSizeList->GetCellValue( row, 1 );
 
         if( !drlvalue.IsEmpty() )
-            viadrill = ReturnValueFromString( g_UserUnit, drlvalue );
+            viadrill = ValueFromString( g_UserUnit, drlvalue );
 
         if( viadia < minViaDia )
         {

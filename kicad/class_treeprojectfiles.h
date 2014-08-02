@@ -17,7 +17,7 @@ private:
 
 public:
 
-    TREE_PROJECT_FRAME* GetParent()
+    TREE_PROJECT_FRAME* GetParent() const
     {
         return m_Parent;
     }

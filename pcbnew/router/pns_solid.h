@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __PNS_SOLID_H
@@ -32,15 +32,26 @@
 class PNS_SOLID : public PNS_ITEM
 {
 public:
-    PNS_SOLID() : PNS_ITEM( SOLID )
+    PNS_SOLID() : PNS_ITEM( SOLID ), m_shape( NULL )
     {
         m_movable = false;
-        m_shape = NULL;
     }
 
+    ~PNS_SOLID()
+    {
+        delete m_shape;
+    }
+
+    PNS_SOLID( const PNS_SOLID& aSolid ) :
+        PNS_ITEM ( aSolid )
+    {
+        m_shape = aSolid.m_shape->Clone();
+        m_pos = aSolid.m_pos;
+    }
+    
     PNS_ITEM* Clone() const;
 
-    const SHAPE* GetShape() const { return m_shape; }
+    const SHAPE* Shape() const { return m_shape; }
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const;
 
@@ -52,18 +63,28 @@ public:
         m_shape = shape;
     }
 
-    const VECTOR2I& GetCenter() const
+    const VECTOR2I& Pos() const
     {
-        return m_center;
+        return m_pos;
     }
 
-    void SetCenter( const VECTOR2I& aCenter )
+    void SetPos( const VECTOR2I& aCenter )
     {
-        m_center = aCenter;
+        m_pos = aCenter;
+    }
+
+    virtual VECTOR2I Anchor( int aN ) const
+    {
+        return m_pos;
+    }
+
+    virtual int AnchorCount() const 
+    {
+        return 1;
     }
 
 private:
-    VECTOR2I    m_center;
+    VECTOR2I    m_pos;
     SHAPE*      m_shape;
 };
 

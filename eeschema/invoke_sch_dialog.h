@@ -75,5 +75,6 @@ int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller );
 #define NET_PLUGIN_CHANGE   1
 int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller );
 
+int InvokeEeschemaConfig( SCH_EDIT_FRAME* aEditFrame, wxFrame* aParent );
 
 #endif  // INVOKE_SCH_DIALOG_H_

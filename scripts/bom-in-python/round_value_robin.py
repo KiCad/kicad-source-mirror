@@ -30,7 +30,7 @@ def checkvalue(self):
         if v.isdigit():
             i = int(v)
             if (i > 1000000):
-                i = i / 100000
+                i = i / 1000000
                 v = str(i) + "M"
             if (i > 1000):
                 i = i / 1000

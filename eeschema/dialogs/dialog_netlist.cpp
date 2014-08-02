@@ -39,8 +39,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
-#include <confirm.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <gestfich.h>
 #include <wxEeschemaStruct.h>
 
@@ -78,6 +78,7 @@ public:
     NETLIST_TYPE_ID   m_IdNetType;
     wxCheckBox*       m_IsCurrentFormat;
     wxCheckBox*       m_AddSubPrefix;
+    wxCheckBox*       m_SpiceUseNetcodeAsNetname;
     wxTextCtrl*       m_CommandStringCtrl;
     wxTextCtrl*       m_TitleStringCtrl;
     wxButton*         m_ButtonCancel;
@@ -123,7 +124,7 @@ public:
     NETLIST_PAGE_DIALOG* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
 
 private:
-    wxConfig* m_config;
+    wxConfigBase* m_config;
 
 public:
 
@@ -143,7 +144,6 @@ private:
     void    OnCancelClick( wxCommandEvent& event );
     void    OnNetlistTypeSelection( wxNotebookEvent& event );
     void    SelectDefaultNetlistType( wxCommandEvent& event );
-    void    EnableSubcircuitPrefix( wxCommandEvent& event );
 
     /**
      * Function OnAddPlugin
@@ -169,17 +169,17 @@ private:
     }
 
     /**
-     * Function ReturnUserNetlistTypeName
+     * Function UserNetlistTypeName
      * to retrieve user netlist type names
      * @param first_item = true: return first name of the list, false = return next
      * @return a wxString : name of the type netlist or empty string
      * this function must be called first with "first_item" = true
      * and after with "first_item" = false to get all the other existing netlist names
      */
-    const wxString ReturnUserNetlistTypeName( bool first_item );
+    const wxString UserNetlistTypeName( bool first_item );
 
     /**
-     * Function ReturnFilenamePrms
+     * Function FilenamePrms
      * returns the filename extension and the wildcard string for this curr
      * or a void name if there is no default name
      * @param aNetTypeId = the netlist type ( NET_TYPE_PCBNEW ... )
@@ -187,7 +187,7 @@ private:
      * @param aWildCard =  reference to a wxString to return the default wildcard.
      * @return true for known netlist type, false for custom formats
      */
-    bool ReturnFilenamePrms( NETLIST_TYPE_ID aNetTypeId,
+    bool FilenamePrms( NETLIST_TYPE_ID aNetTypeId,
                              wxString * aExt, wxString * aWildCard );
 
     DECLARE_EVENT_TABLE()
@@ -231,11 +231,10 @@ enum id_netlist {
     ID_CREATE_NETLIST = ID_END_EESCHEMA_ID_LIST + 1,
     ID_CURRENT_FORMAT_IS_DEFAULT,
     ID_RUN_SIMULATOR,
-    ID_ADD_SUBCIRCUIT_PREFIX
+    ID_ADD_SUBCIRCUIT_PREFIX,
+    ID_USE_NETCODE_AS_NETNAME
 };
 
-//Imported function:
-int TestDuplicateSheetNames( bool aCreateMarker );
 
 // ID for configuration:
 #define CUSTOM_NETLIST_TITLE   wxT( "CustomNetlistTitle" )
@@ -251,8 +250,6 @@ BEGIN_EVENT_TABLE( NETLIST_DIALOG, NETLIST_DIALOG_BASE )
     EVT_BUTTON( ID_CREATE_NETLIST, NETLIST_DIALOG::GenNetlist )
     EVT_CHECKBOX( ID_CURRENT_FORMAT_IS_DEFAULT,
                   NETLIST_DIALOG::SelectDefaultNetlistType )
-    EVT_CHECKBOX( ID_ADD_SUBCIRCUIT_PREFIX,
-                  NETLIST_DIALOG::EnableSubcircuitPrefix )
     EVT_BUTTON( ID_RUN_SIMULATOR, NETLIST_DIALOG::RunSimulator )
 END_EVENT_TABLE()
 
@@ -270,6 +267,7 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     m_TitleStringCtrl   = NULL;
     m_IsCurrentFormat   = NULL;
     m_AddSubPrefix = NULL;
+    m_SpiceUseNetcodeAsNetname = NULL;
     m_ButtonCancel = NULL;
     m_NetOption = NULL;
 
@@ -347,7 +345,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     NETLIST_DIALOG_BASE( parent )
 {
     m_Parent = parent;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
 
     long tmp;
     m_config->Read( NETLIST_USE_DEFAULT_NETNAME, &tmp, 0l );
@@ -388,7 +386,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
 }
 
 
-const wxString NETLIST_DIALOG::ReturnUserNetlistTypeName( bool first_item )
+const wxString NETLIST_DIALOG::UserNetlistTypeName( bool first_item )
 {
     static int index;
     wxString   name, msg;
@@ -416,11 +414,15 @@ void NETLIST_DIALOG::InstallPageSpice()
     page = m_PanelNetType[PANELSPICE] =
         new NETLIST_PAGE_DIALOG( m_NoteBook, title, NET_TYPE_SPICE );
 
-
     page->m_AddSubPrefix = new wxCheckBox( page, ID_ADD_SUBCIRCUIT_PREFIX,
                                            _( "Prefix references 'U' and 'IC' with 'X'" ) );
-    page->m_AddSubPrefix->SetValue( m_Parent->GetAddReferencePrefix() );
+    page->m_AddSubPrefix->SetValue( m_Parent->GetSpiceAddReferencePrefix() );
     page->m_LeftBoxSizer->Add( page->m_AddSubPrefix, 0, wxGROW | wxALL, 5 );
+
+    page->m_SpiceUseNetcodeAsNetname = new wxCheckBox( page, ID_USE_NETCODE_AS_NETNAME,
+                                           _( "Use net number as net name" ) );
+    page->m_SpiceUseNetcodeAsNetname->SetValue( m_Parent->GetSpiceUseNetcodeAsNetname() );
+    page->m_LeftBoxSizer->Add( page->m_SpiceUseNetcodeAsNetname, 0, wxGROW | wxALL, 5 );
 
     page->m_LowBoxSizer->Add( new wxStaticText( page, -1, _( "Simulator command:" ) ), 0,
                               wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
@@ -448,7 +450,7 @@ void NETLIST_DIALOG::InstallCustomPages()
 
     for( ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
     {
-        title = ReturnUserNetlistTypeName( ii == 0 ? true : false );
+        title = UserNetlistTypeName( ii == 0 ? true : false );
 
         if( title.IsEmpty() )
             break; // No more panel to install
@@ -532,7 +534,7 @@ void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
     m_cbUseDefaultNetlistName->Enable( currPage->m_IdNetType < NET_TYPE_CUSTOM1 );
 
     wxString fileExt;
-    if( ReturnFilenamePrms( currPage->m_IdNetType, &fileExt, NULL ) )
+    if( FilenamePrms( currPage->m_IdNetType, &fileExt, NULL ) )
     {
         wxFileName fn = g_RootSheet->GetScreen()->GetFileName();
         fn.SetExt( fileExt );
@@ -543,24 +545,12 @@ void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
 }
 
 
-void NETLIST_DIALOG::EnableSubcircuitPrefix( wxCommandEvent& event )
-{
-
-    NETLIST_PAGE_DIALOG* currPage;
-
-    currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
-
-    if( currPage == NULL || currPage->m_AddSubPrefix == NULL )
-        return;
-
-    m_Parent->SetAddReferencePrefix( currPage->m_AddSubPrefix->IsChecked() );
-}
-
-
 void NETLIST_DIALOG::NetlistUpdateOpt()
 {
     int ii;
 
+    m_Parent->SetSpiceAddReferencePrefix( m_PanelNetType[PANELSPICE]->m_AddSubPrefix->IsChecked() );
+    m_Parent->SetSpiceUseNetcodeAsNetname( m_PanelNetType[PANELSPICE]->m_SpiceUseNetcodeAsNetname->IsChecked() );
     m_Parent->SetSimulatorCommand( m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue() );
     m_Parent->SetNetListFormatName( wxEmptyString );
 
@@ -591,7 +581,7 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
 
     // Calculate the netlist filename
     fn = g_RootSheet->GetScreen()->GetFileName();
-    ReturnFilenamePrms( currPage->m_IdNetType, &fileExt, &fileWildcard );
+    FilenamePrms( currPage->m_IdNetType, &fileExt, &fileWildcard );
 
     // Set some parameters
     switch( currPage->m_IdNetType )
@@ -600,6 +590,9 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
         // Set spice netlist options:
         if( currPage->m_AddSubPrefix->GetValue() )
             netlist_opt |= NET_USE_X_PREFIX;
+
+        if( currPage->m_SpiceUseNetcodeAsNetname->GetValue() )
+            netlist_opt |= NET_USE_NETCODES_AS_NETNAMES;
         break;
 
     case NET_TYPE_CADSTAR:
@@ -653,7 +646,7 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
 }
 
 
-bool NETLIST_DIALOG::ReturnFilenamePrms( NETLIST_TYPE_ID aNetTypeId,
+bool NETLIST_DIALOG::FilenamePrms( NETLIST_TYPE_ID aNetTypeId,
                                          wxString * aExt, wxString * aWildCard )
 {
     wxString fileExt;
@@ -694,46 +687,6 @@ bool NETLIST_DIALOG::ReturnFilenamePrms( NETLIST_TYPE_ID aNetTypeId,
 }
 
 
-bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
-                                    unsigned aNetlistOptions )
-{
-    SCH_SHEET_LIST sheets;
-    sheets.AnnotatePowerSymbols();
-
-    // Performs some controls:
-    if( CheckAnnotate( NULL, 0 ) )
-    {
-        if( !IsOK( NULL, _( "Some items are not annotated\n\
-Do you want to annotate schematic?" ) ) )
-            return false;
-
-        // Schematic must be annotated: call Annotate dialog:
-        wxCommandEvent event;
-        OnAnnotate( event );
-
-        if( CheckAnnotate( NULL, 0 ) )
-            return false;
-    }
-
-    // Test duplicate sheet names:
-    if( TestDuplicateSheetNames( false ) > 0 )
-    {
-        if( !IsOK( NULL, _( "Error: duplicate sheet names. Continue?" ) ) )
-            return false;
-    }
-
-    // Cleanup the entire hierarchy
-    SCH_SCREENS screens;
-    screens.SchematicCleanUp();
-
-    NETLIST_OBJECT_LIST * connectedItemsList = BuildNetListBase();
-    bool success = WriteNetListFile( connectedItemsList, aFormat,
-                                     aFullFileName, aNetlistOptions );
-
-    return success;
-}
-
-
 void NETLIST_DIALOG::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( wxID_CANCEL );
@@ -744,6 +697,8 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
 {
     wxFileName fn;
     wxString   ExecFile, CommandLine;
+
+    NetlistUpdateOpt();
 
     wxString tmp = m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue();
     tmp.Trim( false );
@@ -765,6 +720,9 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
 
     if( currPage->m_AddSubPrefix && currPage->m_AddSubPrefix->GetValue() )
         netlist_opt |= NET_USE_X_PREFIX;
+
+    if( currPage->m_SpiceUseNetcodeAsNetname && currPage->m_SpiceUseNetcodeAsNetname->GetValue() )
+        netlist_opt |= NET_USE_NETCODES_AS_NETNAMES;
 
     if( ! m_Parent->CreateNetlist( currPage->m_IdNetType, fn.GetFullPath(),
                                    netlist_opt ) )
@@ -913,7 +871,7 @@ void NETLIST_DIALOG_ADD_PLUGIN::OnBrowsePlugins( wxCommandEvent& event )
     wxString FullFileName, Mask, Path;
 
     Mask = wxT( "*" );
-    Path = wxGetApp().GetExecutablePath();
+    Path = Pgm().GetExecutablePath();
     FullFileName = EDA_FileSelector( _( "Plugin files:" ),
                                      Path,
                                      FullFileName,

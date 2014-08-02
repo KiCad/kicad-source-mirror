@@ -30,6 +30,7 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
+#include <class_draw_panel_gal.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <wxPcbStruct.h>
@@ -38,10 +39,13 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <project.h>
 
 #include <pcbnew.h>
 #include <dialog_exchange_modules_base.h>
 #include <wildcards_and_files_ext.h>
+
+#include <boost/bind.hpp>
 
 static bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName );
 
@@ -427,10 +431,8 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     /* place module without ratsnest refresh: this will be made later
      * when all modules are on board
      */
-    wxPoint oldpos = GetCrossHairPosition();
-    SetCrossHairPosition( aOldModule->GetPosition(), false );
     PlaceModule( aNewModule, NULL, true );
-    SetCrossHairPosition( oldpos, false );
+    aNewModule->SetPosition( aOldModule->GetPosition() );
 
     // Flip footprint if needed
     if( aOldModule->GetLayer() != aNewModule->GetLayer() )
@@ -455,17 +457,12 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     // Update pad netnames ( when possible)
     for( D_PAD* pad = aNewModule->Pads(); pad != NULL; pad = pad->Next() )
     {
-        pad->SetNetname( wxEmptyString );
-        pad->SetNet( 0 );
-        D_PAD*  old_pad = aOldModule->Pads();
+        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
-        for( ; old_pad != NULL; old_pad = old_pad->Next() )
+        for( D_PAD* old_pad = aOldModule->Pads(); old_pad != NULL; old_pad = old_pad->Next() )
         {
             if( pad->PadNameEqual( old_pad ) )
-            {
-                pad->SetNetname( old_pad->GetNetname() );
-                pad->SetNet( old_pad->GetNet() );
-            }
+                pad->SetNetCode( old_pad->GetNetCode() );
         }
     }
 
@@ -476,9 +473,21 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
         ITEM_PICKER picker_new( aNewModule, UR_NEW );
         aUndoPickList->PushItem( picker_old );
         aUndoPickList->PushItem( picker_new );
+
+        if( IsGalCanvasActive() )
+        {
+            KIGFX::VIEW* view = GetGalCanvas()->GetView();
+
+            aOldModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+            view->Remove( aOldModule );
+
+            aNewModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+            view->Add( aNewModule );
+        }
     }
     else
     {
+        GetGalCanvas()->GetView()->Remove( aOldModule );
         aOldModule->DeleteStructure();
     }
 
@@ -496,7 +505,7 @@ void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
     wxString newname;
 
     newname = m_parent->SelectFootprint( m_parent, wxEmptyString, wxEmptyString, wxEmptyString,
-                                         m_parent->GetFootprintLibraryTable() );
+                                         Prj().PcbFootprintLibs() );
 
     if( newname != wxEmptyString )
         m_NewModule->SetValue( newname );

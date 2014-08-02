@@ -41,7 +41,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
                                      bool aErase );
 
 
-int LIB_EDIT_FRAME::ReturnBlockCommand( int key )
+int LIB_EDIT_FRAME::BlockCommand( int key )
 {
     int cmd = BLOCK_IDLE;
 
@@ -109,9 +109,10 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
         break;
 
-    case BLOCK_DRAG:        /* Drag */
-    case BLOCK_MOVE:        /* Move */
-    case BLOCK_COPY:        /* Copy */
+    case BLOCK_DRAG:
+    case BLOCK_DRAG_ITEM:
+    case BLOCK_MOVE:
+    case BLOCK_COPY:
         if ( m_component )
             ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
                                                   m_unit, m_convert,
@@ -132,7 +133,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         }
         break;
 
-    case BLOCK_PRESELECT_MOVE:     /* Move with preselection list*/
+    case BLOCK_PRESELECT_MOVE:     // Move with preselection list
         nextCmd = true;
         m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
         GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
@@ -232,8 +233,9 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case  BLOCK_IDLE:
         break;
 
-    case BLOCK_DRAG:                /* Drag */
-    case BLOCK_MOVE:                /* Move */
+    case BLOCK_DRAG:
+    case BLOCK_DRAG_ITEM:
+    case BLOCK_MOVE:
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         GetScreen()->m_BlockLocate.ClearItemsList();
 
@@ -321,7 +323,7 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     wxPoint move_offset;
     block = &screen->m_BlockLocate;
 
-    LIB_EDIT_FRAME* parent = ( LIB_EDIT_FRAME* ) aPanel->GetParent();
+    LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) aPanel->GetParent();
     wxASSERT( parent != NULL );
 
     LIB_COMPONENT* component = parent->GetComponent();

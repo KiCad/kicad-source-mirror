@@ -86,7 +86,7 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
 };
 
 
-const KICAD_T GENERAL_COLLECTOR::ModuleItems[] = {
+const KICAD_T GENERAL_COLLECTOR::Modules[] = {
     PCB_MODULE_T,
     EOT
 };
@@ -118,11 +118,20 @@ const KICAD_T GENERAL_COLLECTOR::ModulesAndTheirItems[] = {
 };
 
 
+const KICAD_T GENERAL_COLLECTOR::ModuleItems[] = {
+    PCB_MODULE_TEXT_T,
+    PCB_MODULE_EDGE_T,
+    PCB_PAD_T,
+    EOT
+};
+
+
 const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
     PCB_TRACE_T,
     PCB_VIA_T,
     EOT
 };
+
 
 const KICAD_T GENERAL_COLLECTOR::Zones[] = {
     PCB_ZONE_AREA_T,
@@ -149,7 +158,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     MODULE*     module = NULL;
     D_PAD*      pad    = NULL;
     bool        pad_through = false;
-    SEGVIA*     via    = NULL;
+    VIA*        via    = NULL;
     MARKER_PCB* marker = NULL;
 
 #if 0   // debugging
@@ -252,7 +261,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         break;
 
     case PCB_VIA_T:     // vias are on many layers, so layer test is specific
-        via = (SEGVIA*) item;
+        via = (VIA*) item;
         break;
 
     case PCB_TRACE_T:
@@ -284,10 +293,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
         if( module )
         {
-            if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==LAYER_N_BACK )
+            if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==B_Cu )
                 goto exit;
 
-            if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==LAYER_N_FRONT )
+            if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==F_Cu )
                 goto exit;
 
             if( m_Guide->IgnoreModulesVals() && item == &module->Value() )
@@ -314,10 +323,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
     if( module )    // true from case PCB_PAD_T, PCB_MODULE_TEXT_T, or PCB_MODULE_T
     {
-        if( m_Guide->IgnoreModulesOnCu() && module->GetLayer()==LAYER_N_BACK )
+        if( m_Guide->IgnoreModulesOnCu() && module->GetLayer()==B_Cu )
             goto exit;
 
-        if( m_Guide->IgnoreModulesOnCmp() && module->GetLayer()==LAYER_N_FRONT )
+        if( m_Guide->IgnoreModulesOnCmp() && module->GetLayer()==F_Cu )
             goto exit;
     }
 
@@ -331,10 +340,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
         if( ! pad_through )
         {
-            if( m_Guide->IgnorePadsOnFront() && pad->IsOnLayer(LAYER_N_FRONT ) )
+            if( m_Guide->IgnorePadsOnFront() && pad->IsOnLayer(F_Cu ) )
                 goto exit;
 
-            if( m_Guide->IgnorePadsOnBack() && pad->IsOnLayer(LAYER_N_BACK ) )
+            if( m_Guide->IgnorePadsOnBack() && pad->IsOnLayer(B_Cu ) )
                 goto exit;
         }
     }
@@ -350,7 +359,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
     if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) || m_Guide->IgnorePreferredLayer() )
     {
-        LAYER_NUM layer = item->GetLayer();
+        LAYER_ID layer = item->GetLayer();
 
         // Modules and their subcomponents: text and pads are not sensitive to the layer
         // visibility controls.  They all have their own separate visibility controls
@@ -378,7 +387,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         // no effect on other criteria, since there is a separate "ignore" control for
         // those in the COLLECTORS_GUIDE
 
-        LAYER_NUM layer = item->GetLayer();
+        LAYER_ID layer = item->GetLayer();
 
         // Modules and their subcomponents: text and pads are not sensitive to the layer
         // visibility controls.  They all have their own separate visibility controls

@@ -3,7 +3,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <common.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -14,23 +14,25 @@
 #include <macros.h>
 
 
-void EDA_APP::ReadPdfBrowserInfos()
+void PGM_BASE::ReadPdfBrowserInfos()
 {
-    wxASSERT( m_commonSettings != NULL );
+    wxASSERT( m_common_settings );
 
-    m_PdfBrowser = m_commonSettings->Read( wxT( "PdfBrowserName" ), wxEmptyString );
+    wxString browser = m_common_settings->Read( wxT( "PdfBrowserName" ), wxEmptyString );
+    SetPdfBrowserName( browser );
+
     int tmp;
-    m_commonSettings->Read( wxT( "UseSystemBrowser" ), &tmp, 0 );
-    m_useSystemPdfBrowser = tmp != 0;
+    m_common_settings->Read( wxT( "UseSystemBrowser" ), &tmp, 0 );
+    m_use_system_pdf_browser = bool( tmp );
 }
 
 
-void EDA_APP::WritePdfBrowserInfos()
+void PGM_BASE::WritePdfBrowserInfos()
 {
-    wxASSERT( m_commonSettings != NULL );
+    wxASSERT( m_common_settings );
 
-    m_commonSettings->Write( wxT( "PdfBrowserName" ), m_PdfBrowser );
-    m_commonSettings->Write( wxT( "UseSystemBrowser" ), m_useSystemPdfBrowser );
+    m_common_settings->Write( wxT( "PdfBrowserName" ), GetPdfBrowserName() );
+    m_common_settings->Write( wxT( "UseSystemBrowser" ), m_use_system_pdf_browser );
 }
 
 
@@ -57,20 +59,24 @@ static const wxFileTypeInfo EDAfallbacks[] =
 };
 
 
-bool GetAssociatedDocument( wxFrame* aFrame,
+bool GetAssociatedDocument( wxWindow* aParent,
                             const wxString& aDocName,
                             const wxPathList* aPaths)
 
 {
-    wxString docname, fullfilename, file_ext;
+    wxString docname, fullfilename;
     wxString msg;
     wxString command;
     bool     success = false;
 
     // Is an internet url
-    static const wxString url_header[3] = { wxT( "http:" ), wxT( "ftp:" ), wxT( "www." ) };
+    static const wxChar* url_header[3] = {
+        wxT( "http:" ),
+        wxT( "ftp:" ),
+        wxT( "www." )
+    };
 
-    for( int ii = 0; ii < 3; ii++ )
+    for( unsigned ii = 0; ii < DIM(url_header); ii++ )
     {
         if( aDocName.First( url_header[ii] ) == 0 )   //. seems an internet url
         {
@@ -116,7 +122,7 @@ bool GetAssociatedDocument( wxFrame* aFrame,
                                          fullfilename,
                                          extension,
                                          mask,
-                                         aFrame,
+                                         aParent,
                                          wxFD_OPEN,
                                          true,
                                          wxPoint( -1, -1 ) );
@@ -126,13 +132,14 @@ bool GetAssociatedDocument( wxFrame* aFrame,
 
     if( !wxFileExists( fullfilename ) )
     {
-        msg.Printf( _( "Doc File <%s> not found" ), GetChars( aDocName ) );
-        DisplayError( aFrame, msg );
+        msg.Printf( _( "Doc File '%s' not found" ), GetChars( aDocName ) );
+        DisplayError( aParent, msg );
         return false;
     }
 
-    wxFileName CurrentFileName( fullfilename );
-    file_ext = CurrentFileName.GetExt();
+    wxFileName currentFileName( fullfilename );
+
+    wxString file_ext = currentFileName.GetExt();
 
     if( file_ext == wxT( "pdf" ) )
     {
@@ -169,7 +176,7 @@ bool GetAssociatedDocument( wxFrame* aFrame,
     if( !success )
     {
         msg.Printf( _( "Unknown MIME type for doc file <%s>" ), GetChars( fullfilename ) );
-        DisplayError( aFrame, msg );
+        DisplayError( aParent, msg );
     }
 
     return success;

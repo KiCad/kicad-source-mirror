@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <worksheet_shape_builder.h>
@@ -40,27 +40,105 @@
 #include <wx/file.h>
 #include <wx/snglinst.h>
 
-extern EDA_COLOR_T g_DrawBgColor;
 
+namespace PGE {
 
-IMPLEMENT_APP( EDA_APP )
-
-/* MacOSX: Needed for file association
- * http://wiki.wxwidgets.org/WxMac-specific_topics
- */
-void EDA_APP::MacOpenFile( const wxString& aFileName )
+static struct IFACE : public KIFACE_I
 {
-    PL_EDITOR_FRAME*    frame = ((PL_EDITOR_FRAME*)GetTopWindow());
-    wxFileName          filename = aFileName;
+    // Of course all are virtual overloads, implementations of the KIFACE.
 
-    if( !filename.FileExists() )
-        return;
+    IFACE( const char* aName, KIWAY::FACE_T aType ) :
+        KIFACE_I( aName, aType )
+    {}
 
-    frame->LoadPageLayoutDescrFile( aFileName );
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
+
+    void OnKifaceEnd();
+
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
+    {
+        switch( aClassId )
+        {
+        case FRAME_PL_EDITOR:
+            {
+                PL_EDITOR_FRAME* frame = new PL_EDITOR_FRAME( aKiway, aParent );
+                return frame;
+            }
+            break;
+
+        default:
+            ;
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Function IfaceOrAddress
+     * return a pointer to the requested object.  The safest way to use this
+     * is to retrieve a pointer to a static instance of an interface, similar to
+     * how the KIFACE interface is exported.  But if you know what you are doing
+     * use it to retrieve anything you want.
+     *
+     * @param aDataId identifies which object you want the address of.
+     *
+     * @return void* - and must be cast into the know type.
+     */
+    void* IfaceOrAddress( int aDataId )
+    {
+        return NULL;
+    }
+
+} kiface( "pl_editor", KIWAY::FACE_PL_EDITOR );
+
+} // namespace
+
+using namespace PGE;
+
+static PGM_BASE* process;
+
+KIFACE_I& Kiface() { return kiface; }
+
+
+// KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.
+// KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
+MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKiwayVersion, PGM_BASE* aProgram )
+{
+    process = (PGM_BASE*) aProgram;
+    return &kiface;
 }
 
 
-bool EDA_APP::OnInit()
+PGM_BASE& Pgm()
+{
+    wxASSERT( process );    // KIFACE_GETTER has already been called.
+    return *process;
+}
+
+
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
+{
+    start_common( aCtlBits );
+
+    // Must be called before creating the main frame in order to
+    // display the real hotkeys in menus or tool tips
+    ReadHotkeyConfig( wxT("PlEditorFrame"), s_PlEditor_Hokeys_Descr );
+
+    g_UserUnit = MILLIMETRES;
+
+    return true;
+}
+
+
+void IFACE::OnKifaceEnd()
+{
+    end_common();
+}
+
+
+#if 0
+bool MYFACE::OnKifaceStart( PGM_BASE* aProgram )
+
 {
     wxFileName          fn;
 
@@ -73,8 +151,6 @@ bool EDA_APP::OnInit()
     }
 
     g_UserUnit = MILLIMETRES;
-    g_DrawBgColor = WHITE;
-    g_ShowPageLimits = true;
 
     // read current setup and reopen last directory if no filename to open in
     // command line
@@ -127,3 +203,4 @@ bool EDA_APP::OnInit()
 
     return true;
 }
+#endif

@@ -33,11 +33,11 @@
 #include <fctsys.h>
 #include <id.h>
 #include <class_drawpanel.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
 #include <class_base_screen.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <kicad_device_context.h>
 #include <hotkeys_basic.h>
 #include <menus_helpers.h>
@@ -194,21 +194,19 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
             RedrawScreen( center, true );
     }
 
-    if( IsGalCanvasActive() )
-    {
-        // Apply computed view settings to GAL
-        KIGFX::VIEW* view = GetGalCanvas()->GetView();
-        KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
-
-        double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
-        double zoom = 1.0 / ( zoomFactor * GetZoom() );
-
-        view->SetScale( zoom );
-        view->SetCenter( VECTOR2D( center ) );
-        GetGalCanvas()->Refresh();
-    }
-
     UpdateStatusBar();
+}
+
+
+void EDA_DRAW_FRAME::SetNextZoom()
+{
+    GetScreen()->SetNextZoom();
+}
+
+
+void EDA_DRAW_FRAME::SetPrevZoom()
+{
+    GetScreen()->SetPreviousZoom();
 }
 
 

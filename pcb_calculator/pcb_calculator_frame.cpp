@@ -52,21 +52,23 @@
 // extention of pcb_calculator data filename:
 const wxString DataFileNameExt( wxT("pcbcalc") );
 
-PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( wxWindow* parent ) :
-    PCB_CALCULATOR_FRAME_BASE( parent )
+PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+    PCB_CALCULATOR_FRAME_BASE( aParent )
 {
+    SetKiway( this, aKiway );
+
     m_currTransLine     = NULL;
-    m_currTransLineType = default_type;
+    m_currTransLineType = DEFAULT_TYPE;
     m_currAttenuator    = NULL;
     m_RegulatorListChanged = false;
     m_Config = new wxConfig();
 
     // Populate transline list ordered like in dialog menu list
-    transline_type_id tltype_list[8] =
+    const static TRANSLINE_TYPE_ID tltype_list[8] =
     {
-        microstrip_type,    cpw_type,  grounded_cpw_type,
-        rectwaveguide_type, coax_type, c_microstrip_type,
-        stripline_type,     twistedpair_type
+        MICROSTRIP_TYPE,    CPW_TYPE,  GROUNDED_CPW_TYPE,
+        RECTWAVEGUIDE_TYPE, COAX_TYPE, C_MICROSTRIP_TYPE,
+        STRIPLINE_TYPE,     TWISTEDPAIR_TYPE
     };
 
     for( int ii = 0; ii < 8; ii++ )
@@ -132,6 +134,7 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
     this->Freeze();
 }
 
+
 void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
 {
     if( m_RegulatorListChanged )
@@ -175,8 +178,8 @@ void PCB_CALCULATOR_FRAME::ReadConfig()
     m_Config->Read( KEYWORD_FRAME_POSY, &m_FramePos.y, -1 );
     m_Config->Read( KEYWORD_FRAME_SIZEX, &m_FrameSize.x, -1 );
     m_Config->Read( KEYWORD_FRAME_SIZEY, &m_FrameSize.y, -1 );
-    m_Config->Read( KEYWORD_TRANSLINE_SELECTION, &ltmp, (long) default_type );
-    m_currTransLineType = (enum transline_type_id) ltmp;
+    m_Config->Read( KEYWORD_TRANSLINE_SELECTION, &ltmp, (long) DEFAULT_TYPE );
+    m_currTransLineType = (enum TRANSLINE_TYPE_ID) ltmp;
     m_Config->Read( KEYWORD_PAGE_SELECTION, &ltmp, 0 );
     m_Notebook->ChangeSelection( ltmp );
     m_Config->Read( KEYWORD_COLORCODE_SELECTION, &ltmp, 1 );

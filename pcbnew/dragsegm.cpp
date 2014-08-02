@@ -335,17 +335,17 @@ void AddSegmentToDragList( int flag, TRACK* aTrack )
 }
 
 
-void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LAYER_MSK aLayerMask,
+void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LSET aLayerMask,
                                   int aNetCode, int aMaxDist )
 {
     TRACK* track = aPcb->m_Track->GetStartNetCode( aNetCode );
 
     for( ; track; track = track->Next() )
     {
-        if( track->GetNet() != aNetCode )   // not the same netcodenet code: all candidates tested
+        if( track->GetNetCode() != aNetCode )   // not the same netcode: all candidates tested
             break;
 
-        if( ( aLayerMask & track->GetLayerMask() ) == 0 )
+        if( !( aLayerMask & track->GetLayerSet() ).any() )
             continue;                       // Cannot be connected, not on the same layer
 
         if( track->IsDragging() )
@@ -394,7 +394,7 @@ void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LAYER_MSK
             // If a connected via is found at location aRefPos,
             // collect also tracks connected by this via.
             if( track->Type() == PCB_VIA_T )
-                Collect_TrackSegmentsToDrag( aPcb, aRefPos, track->GetLayerMask(),
+                Collect_TrackSegmentsToDrag( aPcb, aRefPos, track->GetLayerSet(),
                                              aNetCode, track->GetWidth() / 2 );
         }
     }

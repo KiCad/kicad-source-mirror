@@ -111,7 +111,7 @@ public:
 
     void SetStatus( UNDO_REDO_T aStatus ) { m_undoRedoStatus = aStatus; }
 
-    UNDO_REDO_T GetStatus() { return m_undoRedoStatus; }
+    UNDO_REDO_T GetStatus() const { return m_undoRedoStatus; }
 
     void SetFlags( STATUS_FLAGS aFlags ) { m_pickerFlags = aFlags; }
 
@@ -148,7 +148,7 @@ public:
      * pushes \a aItem to the top of the list
      * @param aItem Picker to push on to the list.
      */
-    void PushItem( ITEM_PICKER& aItem );
+    void PushItem( const ITEM_PICKER& aItem );
 
     /**
      * Function PopItem
@@ -160,7 +160,14 @@ public:
      * Function IsItemInList
      * @return True if \a aItem is found in the pick list.
      */
-    bool ContainsItem( EDA_ITEM* aItem ) const;
+    bool ContainsItem( const EDA_ITEM* aItem ) const;
+
+    /**
+     * Function FindItem
+     * @return Index of the searched item. If the item is not stored in the list, negative value
+     * is returned.
+     */
+    int FindItem( const EDA_ITEM* aItem ) const;
 
     /**
      * Function ClearItemsList
@@ -201,21 +208,21 @@ public:
      * if this picker does not exist, a picker is returned,
      * with its members set to 0 or NULL
      */
-    ITEM_PICKER GetItemWrapper( unsigned int aIdx );
+    ITEM_PICKER GetItemWrapper( unsigned int aIdx ) const;
 
     /**
      * Function GetPickedItem
      * @return A pointer to the picked item
      * @param aIdx Index of the picked item in the picked list
      */
-    EDA_ITEM* GetPickedItem( unsigned int aIdx );
+    EDA_ITEM* GetPickedItem( unsigned int aIdx ) const;
 
     /**
      * Function GetPickedItemLink
      * @return link of the picked item, or null if does not exist
      * @param aIdx Index of the picked item in the picked list
      */
-    EDA_ITEM* GetPickedItemLink( unsigned int aIdx );
+    EDA_ITEM* GetPickedItemLink( unsigned int aIdx ) const;
 
     /**
      * Function GetPickedItemStatus
@@ -223,7 +230,7 @@ public:
      *          or UR_UNSPECIFIED if does not exist
      * @param aIdx Index of the picked item in the picked list
      */
-    UNDO_REDO_T GetPickedItemStatus( unsigned int aIdx );
+    UNDO_REDO_T GetPickedItemStatus( unsigned int aIdx ) const;
 
     /**
      * Function GetPickerFlags
@@ -231,7 +238,7 @@ public:
      * @param aIdx Index of the picker in the picked list
      * @return The value stored in the picker, if the picker exists, or 0 if does not exist
      */
-    STATUS_FLAGS GetPickerFlags( unsigned aIdx );
+    STATUS_FLAGS GetPickerFlags( unsigned aIdx ) const;
 
     /**
      * Function SetPickedItem

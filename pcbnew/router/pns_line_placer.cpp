@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,11 +15,13 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
+
+#include <colors.h>
 
 #include "trace.h"
 
@@ -28,21 +30,21 @@
 #include "pns_walkaround.h"
 #include "pns_shove.h"
 #include "pns_utils.h"
+#include "pns_router.h"
+
+#include <class_board_item.h>
 
 using boost::optional;
 
-PNS_LINE_PLACER::PNS_LINE_PLACER( PNS_NODE* aWorld )
+PNS_LINE_PLACER::PNS_LINE_PLACER( PNS_ROUTER* aRouter ) :
+    PNS_ALGO_BASE ( aRouter )
 {
-    m_initial_direction = DIRECTION_45( DIRECTION_45::N );
-    m_follow_mouse = false;
-    m_smoothing_step = 100000;
-    m_smooth_mouse = false;
+    m_initial_direction = DIRECTION_45::N;
     m_iteration = 0;
-    m_world = aWorld;
-    m_mode  = RM_Smart;
-    m_follow_mouse = true;
+    m_world = NULL;
     m_shove = NULL;
-};
+    m_currentNode = NULL;
+}
 
 
 PNS_LINE_PLACER::~PNS_LINE_PLACER()
@@ -52,18 +54,24 @@ PNS_LINE_PLACER::~PNS_LINE_PLACER()
 }
 
 
-void PNS_LINE_PLACER::ApplySettings( const PNS_ROUTING_SETTINGS& aSettings )
+void PNS_LINE_PLACER::setWorld ( PNS_NODE* aWorld )
 {
-    m_follow_mouse = aSettings.m_followMouse;
-    m_mode = aSettings.m_routingMode;
-    m_walkaroundIterationLimit = aSettings.m_walkaroundIterationLimit;
-    m_smartPads = aSettings.m_smartPads;
+    m_world = aWorld;
 }
 
 
-void PNS_LINE_PLACER::StartPlacement( const VECTOR2I& aStart, int aNet,
-        int aWidth, int aLayer )
+void PNS_LINE_PLACER::AddVia( bool aEnabled, int aDiameter, int aDrill )
 {
+    m_viaDiameter = aDiameter;
+    m_viaDrill = aDrill;
+    m_placingVia = aEnabled;
+}
+
+
+void PNS_LINE_PLACER::startPlacement( const VECTOR2I& aStart, int aNet, int aWidth, int aLayer )
+{
+    assert( m_world != NULL );
+    
     m_direction = m_initial_direction;
     TRACE( 1, "world %p, intitial-direction %s layer %d\n",
             m_world % m_direction.Format().c_str() % aLayer );
@@ -71,36 +79,46 @@ void PNS_LINE_PLACER::StartPlacement( const VECTOR2I& aStart, int aNet,
     m_tail.SetNet( aNet );
     m_head.SetWidth( aWidth );
     m_tail.SetWidth( aWidth );
-    m_head.GetLine().Clear();
-    m_tail.GetLine().Clear();
+    m_head.Line().Clear();
+    m_tail.Line().Clear();
     m_head.SetLayer( aLayer );
     m_tail.SetLayer( aLayer );
     m_iteration = 0;
     m_p_start = aStart;
-    m_currentNode = m_world->Branch();
-    m_head.SetWorld( m_currentNode );
-    m_tail.SetWorld( m_currentNode );
-    // if(m_shove)
-    // delete m_shove;
-    m_shove = new PNS_SHOVE( m_currentNode );
+
+    m_lastNode = NULL;    
+    m_currentNode = m_world;
+    
+    m_currentMode = Settings().Mode();
+
+    if( m_shove )
+        delete m_shove;
+    
+    m_shove = NULL;
+
+    if( m_currentMode == RM_Shove || m_currentMode == RM_Smart )
+    {
+        m_shove = new PNS_SHOVE( m_world->Branch(), Router() );
+    }
+    
     m_placingVia = false;
 }
 
 
-void PNS_LINE_PLACER::SetInitialDirection( const DIRECTION_45& aDirection )
+void PNS_LINE_PLACER::setInitialDirection( const DIRECTION_45& aDirection )
 {
     m_initial_direction = aDirection;
 
-    if( m_tail.GetCLine().SegmentCount() == 0 )
-        m_direction = aDirection;
+    if( m_tail.SegmentCount() == 0 )
+            m_direction = aDirection;
 }
 
 
 bool PNS_LINE_PLACER::handleSelfIntersections()
 {
     SHAPE_LINE_CHAIN::INTERSECTIONS ips;
-    SHAPE_LINE_CHAIN& head = m_head.GetLine();
-    SHAPE_LINE_CHAIN& tail = m_tail.GetLine();
+    SHAPE_LINE_CHAIN& head = m_head.Line();
+    SHAPE_LINE_CHAIN& tail = m_tail.Line();
 
     // if there is no tail, there is nothing to intersect with
     if( tail.PointCount() < 2 )
@@ -138,6 +156,7 @@ bool PNS_LINE_PLACER::handleSelfIntersections()
         m_direction = m_initial_direction;
         tail.Clear();
         head.Clear();
+
         return true;
     }
     else
@@ -157,8 +176,11 @@ bool PNS_LINE_PLACER::handleSelfIntersections()
 
 bool PNS_LINE_PLACER::handlePullback()
 {
-    SHAPE_LINE_CHAIN& head = m_head.GetLine();
-    SHAPE_LINE_CHAIN& tail = m_tail.GetLine();
+    SHAPE_LINE_CHAIN& head = m_head.Line();
+    SHAPE_LINE_CHAIN& tail = m_tail.Line();
+
+    if( head.PointCount() < 2 )
+        return false;
 
     int n = tail.PointCount();
 
@@ -171,8 +193,8 @@ bool PNS_LINE_PLACER::handlePullback()
         return true;
     }
 
-    DIRECTION_45 first_head( head.Segment( 0 ) );
-    DIRECTION_45 last_tail( tail.Segment( -1 ) );
+    DIRECTION_45 first_head( head.CSegment( 0 ) );
+    DIRECTION_45 last_tail( tail.CSegment( -1 ) );
     DIRECTION_45::AngleType angle = first_head.Angle( last_tail );
 
     // case 1: we have a defined routing direction, and the currently computed
@@ -182,7 +204,7 @@ bool PNS_LINE_PLACER::handlePullback()
     // case 2: regardless of the current routing direction, if the tail/head
     // extremities form an acute or right angle, reduce the tail by one segment
     // (and hope that further iterations) will result with a cleaner trace
-    bool pullback_2 = (angle == DIRECTION_45::ANG_RIGHT || angle == DIRECTION_45::ANG_ACUTE);
+    bool pullback_2 = ( angle == DIRECTION_45::ANG_RIGHT || angle == DIRECTION_45::ANG_ACUTE );
 
     if( pullback_1 || pullback_2 )
     {
@@ -213,10 +235,13 @@ bool PNS_LINE_PLACER::handlePullback()
 
 bool PNS_LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
 {
-    SHAPE_LINE_CHAIN& head = m_head.GetLine();
-    SHAPE_LINE_CHAIN& tail = m_tail.GetLine();
+    SHAPE_LINE_CHAIN& head = m_head.Line();
+    SHAPE_LINE_CHAIN& tail = m_tail.Line();
 
     int n = tail.SegmentCount();
+
+    if( head.SegmentCount() < 1 )
+        return false;
 
     // Don't attempt this for too short tails
     if( n < 2 )
@@ -229,7 +254,7 @@ bool PNS_LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
     VECTOR2I new_start;
     int reduce_index = -1;
 
-    DIRECTION_45 head_dir( head.Segment( 0 ) );
+    DIRECTION_45 head_dir( head.CSegment( 0 ) );
 
     for( int i = tail.SegmentCount() - 1; i >= 0; i-- )
     {
@@ -245,7 +270,7 @@ bool PNS_LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
         if( m_currentNode->CheckColliding( &tmp, PNS_ITEM::ANY ) )
             break;
 
-        if( DIRECTION_45( replacement.Segment( 0 ) ) == dir )
+        if( DIRECTION_45( replacement.CSegment( 0 ) ) == dir )
         {
             new_start = s.A;
             new_direction = dir;
@@ -272,10 +297,10 @@ bool PNS_LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
 }
 
 
-bool PNS_LINE_PLACER::checkObtusity( const SEG& a, const SEG& b ) const
+bool PNS_LINE_PLACER::checkObtusity( const SEG& aA, const SEG& aB ) const
 {
-    const DIRECTION_45 dir_a( a );
-    const DIRECTION_45 dir_b( b );
+    const DIRECTION_45 dir_a( aA );
+    const DIRECTION_45 dir_b( aB );
 
     return dir_a.IsObtuse( dir_b ) || dir_a == dir_b;
 }
@@ -283,8 +308,8 @@ bool PNS_LINE_PLACER::checkObtusity( const SEG& a, const SEG& b ) const
 
 bool PNS_LINE_PLACER::mergeHead()
 {
-    SHAPE_LINE_CHAIN& head = m_head.GetLine();
-    SHAPE_LINE_CHAIN& tail = m_tail.GetLine();
+    SHAPE_LINE_CHAIN& head = m_head.Line();
+    SHAPE_LINE_CHAIN& tail = m_tail.Line();
 
     const int ForbiddenAngles = DIRECTION_45::ANG_ACUTE |
                                 DIRECTION_45::ANG_HALF_FULL |
@@ -354,21 +379,22 @@ bool PNS_LINE_PLACER::handleViaPlacement( PNS_LINE& aHead )
     if( !m_placingVia )
         return true;
 
-    PNS_LAYERSET allLayers( 0, 15 );
-    PNS_VIA v( aHead.GetCLine().CPoint( -1 ), allLayers, m_viaDiameter, aHead.GetNet() );
-    v.SetDrill( m_viaDrill );
+    PNS_LAYERSET allLayers( 0, MAX_CU_LAYERS - 1 );
+    PNS_VIA v( aHead.CPoint( -1 ), allLayers, m_viaDiameter, m_viaDrill, aHead.Net() );
 
     VECTOR2I force;
-    VECTOR2I lead = aHead.GetCLine().CPoint( -1 ) - aHead.GetCLine().CPoint( 0 );
+    VECTOR2I lead = aHead.CPoint( -1 ) - aHead.CPoint( 0 );
 
-    if( v.PushoutForce( m_shove->GetCurrentNode(), lead, force, true, 20 ) )
+    bool solidsOnly = ( m_currentMode != RM_Walkaround );
+
+    if( v.PushoutForce( m_currentNode, lead, force, solidsOnly, 40 ) )
     {
         SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace(
-                aHead.GetCLine().CPoint( 0 ),
-                aHead.GetCLine().CPoint( -1 ) + force );
+                aHead.CPoint( 0 ),
+                aHead.CPoint( -1 ) + force );
         aHead = PNS_LINE( aHead, line );
 
-        v.SetPos( v.GetPos() + force );
+        v.SetPos( v.Pos() + force );
         return true;
     }
 
@@ -376,157 +402,204 @@ bool PNS_LINE_PLACER::handleViaPlacement( PNS_LINE& aHead )
 }
 
 
-bool PNS_LINE_PLACER::routeHead( const VECTOR2I& aP, PNS_LINE& aNewHead,
-        bool aCwWalkaround )
+bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
 {
-    // STAGE 1: route a simple two-segment trace between m_p_start and aP...
     SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace( m_p_start, aP );
+    PNS_LINE initTrack( m_head, line ), walkFull;
+    int effort = 0;
+    bool viaOk = handleViaPlacement( initTrack );
+    bool rv = true;
 
-    PNS_LINE initTrack( m_head, line );
-    PNS_LINE walkFull, walkSolids;
+    PNS_WALKAROUND walkaround( m_currentNode, Router() );
 
-    if( m_mode == RM_Ignore )
+    walkaround.SetSolidsOnly( false );
+    walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
+    
+    PNS_WALKAROUND::WALKAROUND_STATUS wf = walkaround.Route( initTrack, walkFull, false );
+
+    switch( Settings().OptimizerEffort() )
     {
-        aNewHead = initTrack;
-        return true;
+        case OE_LOW: 
+            effort = 0;
+            break;
+
+        case OE_MEDIUM:
+        case OE_FULL:
+            effort = PNS_OPTIMIZER::MERGE_SEGMENTS;
+            break;
     }
+
+    if( Settings().SmartPads() )
+        effort |= PNS_OPTIMIZER::SMART_PADS;
+
+    if( wf == PNS_WALKAROUND::STUCK )
+    {
+        walkFull = walkFull.ClipToNearestObstacle( m_currentNode );
+        rv = true;
+    }
+    else if( m_placingVia && viaOk )
+    {
+        PNS_LAYERSET allLayers( 0, MAX_CU_LAYERS - 1 );
+        PNS_VIA v1( walkFull.CPoint( -1 ), allLayers, m_viaDiameter, m_viaDrill );
+        walkFull.AppendVia( v1 );
+    }
+
+    PNS_OPTIMIZER::Optimize( &walkFull, effort, m_currentNode );
+
+    if( m_currentNode->CheckColliding( &walkFull ) )
+    {
+        TRACEn(0, "strange, walk line colliding\n");
+    }
+
+    m_head = walkFull;
+    aNewHead = walkFull;
+    
+    return rv;
+}
+
+
+bool PNS_LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead )
+{
+    m_head.SetShape( m_direction.BuildInitialTrace( m_p_start, aP ) );
+    
+    if( m_placingVia )
+    {
+        PNS_LAYERSET allLayers( 0, MAX_CU_LAYERS - 1 );
+        PNS_VIA v1( m_head.CPoint( -1 ), allLayers, m_viaDiameter, m_viaDrill );
+        m_head.AppendVia( v1 );
+    }
+
+    aNewHead = m_head;
+    
+    return m_currentNode->CheckColliding( &m_head );
+}
+
+
+bool PNS_LINE_PLACER::rhShoveOnly ( const VECTOR2I& aP, PNS_LINE& aNewHead )
+{
+    SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace( m_p_start, aP );
+    PNS_LINE initTrack( m_head, line );
+    PNS_LINE walkSolids, l2;
 
     handleViaPlacement( initTrack );
 
-    m_currentNode = m_shove->GetCurrentNode();
-
+    m_currentNode = m_shove->CurrentNode();
     PNS_OPTIMIZER optimizer( m_currentNode );
-    PNS_WALKAROUND walkaround( m_currentNode );
 
-    walkaround.SetSolidsOnly( false );
-    walkaround.SetIterationLimit( m_mode == RM_Walkaround ? 8 : 5 );
-    // walkaround.SetApproachCursor(true, aP);
+    PNS_WALKAROUND walkaround( m_currentNode, Router() );
 
-    PNS_WALKAROUND::WalkaroundStatus wf = walkaround.Route( initTrack, walkFull );
-
-#if 0
-
-    if( m_mode == RM_Walkaround )
-    {
-        // walkaround.
-// PNSDisplayDebugLine (walkFull.GetCLine(), 4);
-
-        if( wf == PNS_WALKAROUND::STUCK )
-        {
-            aNewHead = m_head;
-            aNewHead.SetShape( walkFull.GetCLine() );
-            aNewHead = aNewHead.ClipToNearestObstacle( m_currentNode );
-            return false;
-        }
-
-        aNewHead = m_head;
-        aNewHead.SetShape( walkFull.GetCLine() );
-
-// printf("nh w %d l %d\n", aNewHead.GetWidth(), aNewHead.GetLayers().Start());
-        return true;
-    }
-
-#endif
-
-    PNS_COST_ESTIMATOR cost_walk, cost_orig;
-
-    walkaround.SetApproachCursor( false, aP );
     walkaround.SetSolidsOnly( true );
     walkaround.SetIterationLimit( 10 );
-    PNS_WALKAROUND::WalkaroundStatus stat_solids = walkaround.Route( initTrack, walkSolids );
+    PNS_WALKAROUND::WALKAROUND_STATUS stat_solids = walkaround.Route( initTrack, walkSolids );
 
     optimizer.SetEffortLevel( PNS_OPTIMIZER::MERGE_SEGMENTS );
-    optimizer.SetCollisionMask( PNS_ITEM::SOLID );
+    optimizer.SetCollisionMask ( PNS_ITEM::SOLID );
     optimizer.Optimize( &walkSolids );
-    #if 0
-    optimizer.SetCollisionMask( -1 );
-    optimizer.Optimize( &walkFull );
-    #endif
-    cost_orig.Add( initTrack );
-    cost_walk.Add( walkFull );
 
-    if( m_mode == RM_Smart || m_mode == RM_Shove )
+    if( stat_solids == PNS_WALKAROUND::DONE )
+        l2 = walkSolids;
+    else
+        l2 = initTrack.ClipToNearestObstacle( m_shove->CurrentNode() );
+
+    PNS_LINE l( m_tail );
+    l.Line().Append( l2.CLine() );
+    l.Line().Simplify();
+
+    if( m_placingVia )
     {
-        PNS_LINE l2;
+        PNS_LAYERSET allLayers( 0, MAX_CU_LAYERS - 1 );
+        PNS_VIA v1( l.CPoint( -1 ), allLayers, m_viaDiameter, m_viaDrill );
+        PNS_VIA v2( l2.CPoint( -1 ), allLayers, m_viaDiameter, m_viaDrill );
 
-        bool walk_better = cost_orig.IsBetter( cost_walk, 1.5, 10.0 );
-        walk_better = false;
-
-#if 0
-        printf( "RtTrk width %d %d %d", initTrack.GetWidth(),
-                walkFull.GetWidth(), walkSolids.GetWidth() );
-        printf( "init-coll %d\n", m_currentNode->CheckColliding( &initTrack ) ? 1 : 0 );
-        printf( "total cost: walk cor %.0f len %.0f orig cor %.0f len %.0f walk-better %d\n",
-                cost_walk.GetCornerCost(), cost_walk.GetLengthCost(),
-                cost_orig.GetCornerCost(), cost_orig.GetLengthCost(),
-                walk_better );
-#endif
-
-        if( m_mode == RM_Smart && wf == PNS_WALKAROUND::DONE && walk_better
-            && walkFull.GetCLine().CPoint( -1 ) == initTrack.GetCLine().CPoint( -1 ) )
-            l2 = walkFull;
-        else if( stat_solids == PNS_WALKAROUND::DONE )
-            l2 = walkSolids;
-        else
-            l2 = initTrack.ClipToNearestObstacle( m_shove->GetCurrentNode() );
-
-        PNS_LINE l( m_tail );
-        l.GetLine().Append( l2.GetCLine() );
-        l.GetLine().Simplify();
-
-        if( m_placingVia )
-        {
-            PNS_LAYERSET allLayers( 0, 15 );
-            PNS_VIA v1( l.GetCLine().CPoint( -1 ), allLayers, m_viaDiameter );
-            PNS_VIA v2( l2.GetCLine().CPoint( -1 ), allLayers, m_viaDiameter );
-            v1.SetDrill( m_viaDrill );
-            v2.SetDrill( m_viaDrill );
-
-            l.AppendVia( v1 );
-            l2.AppendVia( v2 );
-        }
-
-        PNS_SHOVE::ShoveStatus status = m_shove->ShoveLines( &l );
-        m_currentNode = m_shove->GetCurrentNode();
-
-        if( status == PNS_SHOVE::SH_OK )
-        {
-            optimizer.SetWorld( m_currentNode );
-            optimizer.ClearCache();
-            optimizer.SetEffortLevel( PNS_OPTIMIZER::MERGE_OBTUSE | PNS_OPTIMIZER::SMART_PADS );
-            optimizer.SetCollisionMask( -1 );
-            optimizer.Optimize( &l2 );
-
-            aNewHead = l2;
-
-            return true;
-        }
-        else
-        {
-            walkaround.SetWorld( m_currentNode );
-            walkaround.SetSolidsOnly( false );
-            walkaround.SetIterationLimit( 10 );
-            walkaround.SetApproachCursor( true, aP );
-            walkaround.Route( initTrack, l2 );
-            aNewHead = l2.ClipToNearestObstacle( m_shove->GetCurrentNode() );
-            // aNewHead = l2;
-
-            return false;
-        }
+        l.AppendVia( v1 );
+        l2.AppendVia( v2 );
     }
 
+    l.Line().Simplify(); 
+
+    // in certain, uncommon cases there may be loops in the head+tail, In such case, we don't shove to avoid
+    // screwing up the database.
+    if( l.HasLoops() )
+    {
+        aNewHead = m_head;
+        return false;        
+    }
+    
+    PNS_SHOVE::SHOVE_STATUS status = m_shove->ShoveLines( l );
+
+    m_currentNode = m_shove->CurrentNode();
+
+    if( status == PNS_SHOVE::SH_OK )
+    {
+        optimizer.SetWorld( m_currentNode );
+        optimizer.SetEffortLevel( PNS_OPTIMIZER::MERGE_OBTUSE | PNS_OPTIMIZER::SMART_PADS );
+        optimizer.SetCollisionMask( PNS_ITEM::ANY );
+        optimizer.Optimize( &l2 );
+
+        aNewHead = l2;
+
+        return true;
+    }
+    else
+    {
+        walkaround.SetWorld( m_currentNode );
+        walkaround.SetSolidsOnly( false );
+        walkaround.SetIterationLimit( 10 );
+        walkaround.SetApproachCursor( true, aP );
+        walkaround.Route( initTrack, l2 );
+        aNewHead = l2.ClipToNearestObstacle( m_shove->CurrentNode() );
+
+        return false;
+    }
+
+    return false;
+}
+
+
+bool PNS_LINE_PLACER::routeHead( const VECTOR2I& aP, PNS_LINE& aNewHead )
+{
+    switch( m_currentMode )
+    {
+        case RM_MarkObstacles:
+            return rhMarkObstacles( aP, aNewHead );
+        case RM_Walkaround:
+            return rhWalkOnly ( aP, aNewHead );
+        case RM_Shove:
+            return rhShoveOnly ( aP, aNewHead );
+        default:
+            break;
+    }
+ 
     return false;
 }
 
 
 bool PNS_LINE_PLACER::optimizeTailHeadTransition()
 {
-    SHAPE_LINE_CHAIN& head = m_head.GetLine();
-    SHAPE_LINE_CHAIN& tail = m_tail.GetLine();
+    PNS_LINE tmp = Trace();
 
-    const int TailLookbackSegments = 5;
+    if( PNS_OPTIMIZER::Optimize( &tmp, PNS_OPTIMIZER::FANOUT_CLEANUP, m_currentNode ) )
+    {
+        if( tmp.SegmentCount() < 1 )
+            return false;
 
-    int threshold = std::min( tail.PointCount(), TailLookbackSegments + 1 );
+        m_head = tmp;        
+        m_p_start = tmp.CLine().CPoint( 0 );
+        m_direction = DIRECTION_45( tmp.CSegment( 0 ) );
+        m_tail.Line().Clear();
+
+        return true;
+    }
+    
+    SHAPE_LINE_CHAIN& head = m_head.Line();
+    SHAPE_LINE_CHAIN& tail = m_tail.Line();
+
+    int tailLookbackSegments = 3;
+
+    //if(m_currentMode() == RM_Walkaround)
+    //    tailLookbackSegments = 10000;
+
+    int threshold = std::min( tail.PointCount(), tailLookbackSegments + 1 );
 
     if( tail.SegmentCount() < 3 )
         return false;
@@ -534,8 +607,9 @@ bool PNS_LINE_PLACER::optimizeTailHeadTransition()
     // assemble TailLookbackSegments tail segments with the current head
     SHAPE_LINE_CHAIN opt_line = tail.Slice( -threshold, -1 );
 
-    opt_line.Append( head );
-// opt_line.Simplify();
+    int end = std::min(2, head.PointCount() - 1 );
+
+    opt_line.Append( head.Slice( 0, end ) );
 
     PNS_LINE new_head( m_tail, opt_line );
 
@@ -543,20 +617,18 @@ bool PNS_LINE_PLACER::optimizeTailHeadTransition()
     // If so, replace the (threshold) last tail points and the head with
     // the optimized line
 
-    // if(PNS_OPTIMIZER::Optimize(&new_head, PNS_OPTIMIZER::MERGE_SEGMENTS))
-
-    if( new_head.MergeSegments() )
+    if( PNS_OPTIMIZER::Optimize( &new_head, PNS_OPTIMIZER::MERGE_OBTUSE, m_currentNode ) )
     {
         PNS_LINE tmp( m_tail, opt_line );
 
         TRACE( 0, "Placer: optimize tail-head [%d]", threshold );
 
         head.Clear();
-        tail.Replace( -threshold, -1, new_head.GetCLine() );
+        tail.Replace( -threshold, -1, new_head.CLine() );
         tail.Simplify();
 
-        m_p_start = new_head.GetCLine().CPoint( -1 );
-        m_direction = DIRECTION_45( new_head.GetCLine().CSegment( -1 ) );
+        m_p_start = new_head.CLine().CPoint( -1 );
+        m_direction = DIRECTION_45( new_head.CSegment( -1 ) );
 
         return true;
     }
@@ -574,26 +646,24 @@ void PNS_LINE_PLACER::routeStep( const VECTOR2I& aP )
 
     PNS_LINE new_head;
 
-    m_follow_mouse = true;
-
     TRACE( 2, "INIT-DIR: %s head: %d, tail: %d segs\n",
-            m_initial_direction.Format().c_str() % m_head.GetCLine().SegmentCount() %
-            m_tail.GetCLine().SegmentCount() );
+            m_initial_direction.Format().c_str() % m_head.SegmentCount() %
+            m_tail.SegmentCount() );
 
     for( i = 0; i < n_iter; i++ )
     {
-        if( !go_back && m_follow_mouse )
+        if( !go_back && Settings().FollowMouse() )
             reduceTail( aP );
 
         go_back = false;
 
-        if( !routeHead( aP, new_head, true ) )
+        if( !routeHead( aP, new_head ) )
             fail = true;
 
         if( !new_head.Is45Degree() )
             fail = true;
 
-        if( !m_follow_mouse )
+        if( !Settings().FollowMouse() )
             return;
 
         m_head = new_head;
@@ -613,46 +683,36 @@ void PNS_LINE_PLACER::routeStep( const VECTOR2I& aP )
 
     if( !fail )
     {
-        if( optimizeTailHeadTransition() )
-            return;
+       if( optimizeTailHeadTransition() )
+          return;
 
         mergeHead();
     }
 }
 
 
-bool PNS_LINE_PLACER::Route( const VECTOR2I& aP )
+bool PNS_LINE_PLACER::route( const VECTOR2I& aP )
 {
-    if( m_smooth_mouse )
-    {
-        VECTOR2I p_cur = m_p_start;
-        VECTOR2I step = (aP - m_p_start).Resize( m_smoothing_step );
-
-        do
-        {
-            if( (p_cur - aP).EuclideanNorm() <= m_smoothing_step )
-                p_cur = aP;
-            else
-                p_cur += step;
-
-            routeStep( p_cur );
-        } while( p_cur != aP );
-    }
-    else
-        routeStep( aP );
-
+    routeStep( aP );
     return CurrentEnd() == aP;
 }
 
 
-const PNS_LINE PNS_LINE_PLACER::GetTrace() const
+const PNS_LINE PNS_LINE_PLACER::Trace() const
 {
     PNS_LINE tmp( m_head );
 
-    tmp.SetShape( m_tail.GetCLine() );
-    tmp.GetLine().Append( m_head.GetCLine() );
-    tmp.GetLine().Simplify();
+    tmp.SetShape( m_tail.CLine() );
+    tmp.Line().Append( m_head.CLine() );
+    tmp.Line().Simplify();
     return tmp;
+}
+
+
+const PNS_ITEMSET PNS_LINE_PLACER::Traces() 
+{
+    m_currentTrace = Trace(); 
+    return PNS_ITEMSET( &m_currentTrace );
 }
 
 
@@ -663,14 +723,314 @@ void PNS_LINE_PLACER::FlipPosture()
 }
 
 
-void PNS_LINE_PLACER::GetUpdatedItems( PNS_NODE::ItemVector& aRemoved,
-        PNS_NODE::ItemVector& aAdded )
+PNS_NODE* PNS_LINE_PLACER::CurrentNode( bool aLoopsRemoved ) const
 {
-    return m_shove->GetCurrentNode()->GetUpdatedItems( aRemoved, aAdded );
+    if( aLoopsRemoved && m_lastNode )
+        return m_lastNode;
+
+    return m_currentNode;
 }
 
 
-PNS_NODE* PNS_LINE_PLACER::GetCurrentNode() const
+void PNS_LINE_PLACER::splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, const VECTOR2I& aP )
 {
-    return m_shove->GetCurrentNode();
+    if( aSeg && aSeg->OfKind( PNS_ITEM::SEGMENT ) )
+    {
+        PNS_JOINT *jt = aNode->FindJoint( aP, aSeg );
+
+        if( jt && jt->LinkCount() >= 1 )
+            return;
+
+        PNS_SEGMENT* s_old = static_cast<PNS_SEGMENT*>( aSeg );
+        
+        PNS_SEGMENT* s_new[2];
+
+        s_new[0] = s_old->Clone();
+        s_new[1] = s_old->Clone();
+
+        s_new[0]->SetEnds( s_old->Seg().A, aP );
+        s_new[1]->SetEnds( aP, s_old->Seg().B );
+
+        aNode->Remove( s_old );
+        aNode->Add( s_new[0], true );
+        aNode->Add( s_new[1], true );
+    }
+}
+
+
+void PNS_LINE_PLACER::SetLayer( int aLayer )
+{
+    m_currentLayer = aLayer;
+
+    m_head.SetLayer( aLayer );
+    m_tail.SetLayer( aLayer );
+}
+
+
+void PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
+{
+    VECTOR2I p( aP );
+
+    static int unknowNetIdx = 0;    // -10000;
+    int net = -1;
+
+    m_lastNode = NULL;
+    m_placingVia = false;
+    m_startsOnVia = false;
+    
+    bool splitSeg = false;
+
+    if( Router()->SnappingEnabled() )
+        p = Router()->SnapToItem( aStartItem, aP, splitSeg );
+    
+    if( !aStartItem || aStartItem->Net() < 0 )
+        net = unknowNetIdx--;
+    else
+        net = aStartItem->Net();
+
+    m_currentStart  = p;
+    m_originalStart = p;
+    m_currentEnd = p;
+    m_currentNet = net;
+
+    PNS_NODE* rootNode = Router()->GetWorld()->Branch();
+
+    if( splitSeg )
+        splitAdjacentSegments( rootNode, aStartItem, p );
+    
+    setWorld( rootNode );
+    setInitialDirection( Settings().InitialDirection() );
+    startPlacement( p, m_currentNet, m_currentWidth, m_currentLayer );
+}
+
+
+void PNS_LINE_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
+{
+    PNS_LINE current;
+    VECTOR2I p = aP;
+    int eiDepth = -1;
+    
+    if( aEndItem && aEndItem->Owner() )
+        eiDepth = aEndItem->Owner()->Depth();
+    
+    if( m_lastNode )
+    {
+        delete m_lastNode;
+        m_lastNode = NULL;
+    }
+    
+    route( p );
+
+    current = Trace();
+    
+    if( !current.PointCount() )
+        m_currentEnd = m_p_start;
+    else
+        m_currentEnd = current.CLine().CPoint( -1 );
+
+    PNS_NODE* latestNode = m_currentNode;
+    m_lastNode = latestNode->Branch();
+    
+    if( eiDepth >= 0 && aEndItem && latestNode->Depth() > eiDepth &&
+            current.SegmentCount() && current.CPoint( -1 ) == aP )
+    {
+        splitAdjacentSegments( m_lastNode, aEndItem, current.CPoint( -1 ) );
+
+        if( Settings().RemoveLoops() )
+            removeLoops( m_lastNode, &current );       
+    }
+
+    updateLeadingRatLine();
+}
+
+
+bool PNS_LINE_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
+{
+    bool realEnd = false;
+    int lastV;
+    
+    PNS_LINE pl = Trace();
+
+    if( m_currentMode == RM_MarkObstacles &&
+        !Settings().CanViolateDRC() &&
+        m_world->CheckColliding( &pl ) )
+            return false;
+
+    const SHAPE_LINE_CHAIN& l = pl.CLine();
+
+    if( !l.SegmentCount() )
+        return true;
+
+    VECTOR2I p_pre_last = l.CPoint( -1 );
+    const VECTOR2I p_last = l.CPoint( -1 );
+    DIRECTION_45 d_last( l.CSegment( -1 ) );
+
+    if( l.PointCount() > 2 )
+        p_pre_last = l.CPoint( -2 );
+
+    if( aEndItem && m_currentNet >= 0 && m_currentNet == aEndItem->Net() )
+        realEnd = true;
+
+    if( realEnd || m_placingVia )
+        lastV = l.SegmentCount();
+    else
+        lastV = std::max( 1, l.SegmentCount() - 1 );
+
+    PNS_SEGMENT* lastSeg = NULL;
+
+    for( int i = 0; i < lastV; i++ )
+    {
+        const SEG& s = pl.CSegment( i );
+        PNS_SEGMENT* seg = new PNS_SEGMENT( s, m_currentNet );
+        seg->SetWidth( pl.Width() );
+        seg->SetLayer( m_currentLayer );
+        m_lastNode->Add( seg );
+        lastSeg = seg;
+    }
+
+    if( pl.EndsWithVia() )
+        m_lastNode->Add( pl.Via().Clone() );
+
+    if( realEnd )
+        simplifyNewLine( m_lastNode, lastSeg );
+ 
+    Router()->CommitRouting( m_lastNode );
+    
+    m_lastNode = NULL;
+
+    if( !realEnd )
+    {
+        setInitialDirection( d_last );
+        VECTOR2I p_start = m_placingVia ? p_last : p_pre_last;
+
+        if( m_placingVia )
+        {
+            int layerTop = Router()->Settings().GetLayerTop();
+            int layerBottom = Router()->Settings().GetLayerBottom();
+
+            // Change the current layer to the other side of the board
+            if( m_currentLayer == layerTop )
+                m_currentLayer = layerBottom;
+            else
+                m_currentLayer = layerTop;
+        }
+
+        setWorld( Router()->GetWorld()->Branch() );
+        startPlacement( p_start, m_head.Net(), m_head.Width(), m_currentLayer );
+
+        m_startsOnVia = m_placingVia;
+        m_placingVia = false;
+    }
+
+    return realEnd;
+}
+
+
+void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE* aLatest )
+{
+    if( !aLatest->SegmentCount() )
+        return;
+
+    aNode->Add( aLatest, true );
+    
+    for( int s = 0; s < aLatest->SegmentCount(); s++ )
+    {
+        PNS_SEGMENT *seg = ( *aLatest->LinkedSegments() )[s];
+        PNS_LINE* ourLine = aNode->AssembleLine( seg );
+        PNS_JOINT a, b;
+        std::vector<PNS_LINE*> lines;
+
+        aNode->FindLineEnds( ourLine, a, b );
+
+        if( a == b )
+        {
+            aNode->FindLineEnds( aLatest, a, b);
+        }
+        
+        aNode->FindLinesBetweenJoints( a, b, lines );
+
+        int removedCount = 0;
+        int total = 0;
+
+        BOOST_FOREACH( PNS_LINE* line, lines )
+        {
+            total++;
+
+            if( !( line->ContainsSegment( seg ) ) && line->SegmentCount() )
+            {
+                Router()->DisplayDebugLine ( line->CLine(), -1, 10000 );
+
+                for( int i = 0; i < line->PointCount(); i++ )
+                    Router()->DisplayDebugPoint( line->CPoint( i ), -1 );
+
+                aNode->Remove( line );
+                removedCount ++;
+            }
+        }
+
+        TRACE( 0, "total segs removed: %d/%d\n", removedCount % total );
+
+        delete ourLine;
+    }
+    
+    aNode->Remove( aLatest );
+}
+
+
+void PNS_LINE_PLACER::simplifyNewLine( PNS_NODE* aNode, PNS_SEGMENT* aLatest )
+{
+    PNS_LINE* l = aNode->AssembleLine( aLatest );
+    SHAPE_LINE_CHAIN simplified ( l->CLine() );
+
+    simplified.Simplify();
+
+    if( simplified.PointCount() != l->PointCount() )
+    {
+        std::auto_ptr<PNS_LINE> lnew ( l->Clone() );
+        aNode -> Remove(l);
+        lnew->SetShape(simplified);
+        aNode -> Add( lnew.get() );
+    }
+}
+
+
+void PNS_LINE_PLACER::UpdateSizes( const PNS_ROUTING_SETTINGS& aSettings )
+{
+    int trackWidth = aSettings.GetTrackWidth();
+
+    m_head.SetWidth( trackWidth );
+    m_tail.SetWidth( trackWidth );
+
+    m_currentWidth = trackWidth;
+    m_viaDiameter = aSettings.GetViaDiameter();
+    m_viaDrill = aSettings.GetViaDrill();
+}
+
+
+void PNS_LINE_PLACER::updateLeadingRatLine()
+{
+    PNS_LINE current = Trace();
+    
+    if( !current.PointCount() )
+        return;
+
+    std::auto_ptr<PNS_NODE> tmpNode ( m_lastNode->Branch() );
+    tmpNode->Add( &current );
+
+    PNS_JOINT *jt = tmpNode->FindJoint( current.CPoint( -1 ),
+                                        current.Layers().Start(), current.Net() );
+
+    if( !jt )
+        return;
+    
+    int anchor;
+    PNS_ITEM *it = tmpNode->NearestUnconnectedItem( jt, &anchor );
+
+    if( it )
+    {
+        SHAPE_LINE_CHAIN lc;
+        lc.Append ( current.CPoint( -1 ) );
+        lc.Append ( it->Anchor( anchor ) );
+        Router()->DisplayDebugLine( lc, 5, 10000 );
+    }
 }

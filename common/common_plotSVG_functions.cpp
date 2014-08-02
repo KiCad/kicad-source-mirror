@@ -346,7 +346,7 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
     DPOINT  centre_dev  = userToDeviceCoordinates( centre );
     double  radius_dev  = userToDeviceSize( radius );
 
-    if( m_yaxisReversed )   // Should be always the case
+    if( !m_yaxisReversed )   // Should be never the case
     {
         double tmp  = StAngle;
         StAngle     = -EndAngle;
@@ -420,14 +420,14 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 
     switch( aFill )
     {
-        case NO_FILL:
-            fprintf( outputFile, "<polyline fill=\"none;\"\n" );
-            break;
+    case NO_FILL:
+        fprintf( outputFile, "<polyline fill=\"none;\"\n" );
+        break;
 
-        case FILLED_WITH_BG_BODYCOLOR:
-        case FILLED_SHAPE:
-            fprintf( outputFile, "<polyline style=\"fill-rule:evenodd;\"\n" );
-            break;
+    case FILLED_WITH_BG_BODYCOLOR:
+    case FILLED_SHAPE:
+        fprintf( outputFile, "<polyline style=\"fill-rule:evenodd;\"\n" );
+        break;
     }
 
     DPOINT pos = userToDeviceCoordinates( aCornerList[0] );
@@ -478,6 +478,15 @@ void SVG_PLOTTER::PenTo( const wxPoint& pos, char plume )
     if( penState == 'Z' )    // here plume = 'D' or 'U'
     {
         DPOINT pos_dev = userToDeviceCoordinates( pos );
+
+        // Ensure we do not use a fill mode when moving tne pen,
+        // in SVG mode (i;e. we are plotting only basic lines, not a filled area
+        if( m_fillMode != NO_FILL )
+        {
+            setFillMode( NO_FILL );
+            setSVGPlotStyle();
+        }
+
         fprintf( outputFile, "<path d=\"M%d %d\n",
                  (int) pos_dev.x, (int) pos_dev.y );
     }
@@ -572,7 +581,8 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
                         enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                         int                         aWidth,
                         bool                        aItalic,
-                        bool                        aBold )
+                        bool                        aBold,
+                        bool                        aMultilineAllowed )
 {
     setFillMode( NO_FILL );
     SetColor( aColor );
@@ -581,5 +591,5 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
     // TODO: see if the postscript native text code can be used in SVG plotter
 
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                   aWidth, aItalic, aBold );
+                   aWidth, aItalic, aBold, aMultilineAllowed );
 }

@@ -25,7 +25,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <appl_wxstruct.h>
+
+#include <kiface_i.h>
 #include <plot_common.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
@@ -44,9 +45,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     m_board( aParent->GetBoard() ),
     m_plotOpts( aParent->GetPlotSettings() )
 {
-    m_config = wxGetApp().GetSettings();
-    m_brdSettings = m_board->GetDesignSettings();
-
+    m_config = Kiface().KifaceSettings();
     Init_Dialog();
 
     GetSizer()->Fit( this );
@@ -69,8 +68,8 @@ void DIALOG_PLOT::Init_Dialog()
 
     // The reasonable width correction value must be in a range of
     // [-(MinTrackWidth-1), +(MinClearanceValue-1)] decimils.
-    m_widthAdjustMinValue   = -(m_board->GetDesignSettings().m_TrackMinWidth - 1);
-    m_widthAdjustMaxValue   = m_board->GetSmallestClearanceValue() - 1;
+    m_widthAdjustMinValue   = -( m_board->GetDesignSettings().m_TrackMinWidth - 1 );
+    m_widthAdjustMaxValue   = m_board->GetDesignSettings().GetSmallestClearanceValue() - 1;
 
     switch( m_plotOpts.GetFormat() )
     {
@@ -100,25 +99,25 @@ void DIALOG_PLOT::Init_Dialog()
         break;
     }
 
-    msg = ReturnStringFromValue( g_UserUnit, m_brdSettings.m_SolderMaskMargin, true );
+    msg = StringFromValue( g_UserUnit, m_board->GetDesignSettings().m_SolderMaskMargin, true );
     m_SolderMaskMarginCurrValue->SetLabel( msg );
-    msg = ReturnStringFromValue( g_UserUnit, m_brdSettings.m_SolderMaskMinWidth, true );
+    msg = StringFromValue( g_UserUnit, m_board->GetDesignSettings().m_SolderMaskMinWidth, true );
     m_SolderMaskMinWidthCurrValue->SetLabel( msg );
 
     // Set units and value for HPGL pen size (this param in in mils).
     AddUnitSymbol( *m_textPenSize, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit,
+    msg = StringFromValue( g_UserUnit,
                                  m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
     m_HPGLPenSizeOpt->AppendText( msg );
 
     // Set units and value for HPGL pen overlay (this param in in mils).
     AddUnitSymbol( *m_textPenOvr, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit,
+    msg = StringFromValue( g_UserUnit,
                                  m_plotOpts.GetHPGLPenOverlay() * IU_PER_MILS );
     m_HPGLPenOverlayOpt->AppendText( msg );
 
     AddUnitSymbol( *m_textDefaultPenSize, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetLineWidth() );
+    msg = StringFromValue( g_UserUnit, m_plotOpts.GetLineWidth() );
     m_linesWidth->AppendText( msg );
 
     // Set units for PS global width correction.
@@ -147,30 +146,29 @@ void DIALOG_PLOT::Init_Dialog()
     m_plotPSNegativeOpt->SetValue( m_plotOpts.GetNegative() );
     m_forcePSA4OutputOpt->SetValue( m_plotOpts.GetA4Output() );
 
-    // List layers in same order than in setup layers dialog
-    // (Front or Top to Back or Bottom)
-    DECLARE_LAYERS_ORDER_LIST( layersOrder );
-    int layerIndex, checkIndex;
-    LAYER_NUM layer;
+    // Could devote a PlotOrder() function in place of UIOrder().
+    m_layerList = m_board->GetEnabledLayers().UIOrder();
 
-    for( layerIndex = 0; layerIndex < NB_LAYERS; layerIndex++ )
+    for( LSEQ seq = m_layerList;  seq;  ++seq )
     {
-        layer = layersOrder[layerIndex];
-
-        wxASSERT( layer < NB_LAYERS );
-
-        if( !m_board->IsLayerEnabled( layer ) )
-            continue;
+        LAYER_ID layer = *seq;
 
         m_layerList.push_back( layer );
-        checkIndex = m_layerCheckListBox->Append( m_board->GetLayerName( layer ) );
 
-        if( m_plotOpts.GetLayerSelection() & GetLayerMask( layer ) )
+        int checkIndex = m_layerCheckListBox->Append( m_board->GetLayerName( layer ) );
+
+        if( m_plotOpts.GetLayerSelection()[layer] )
             m_layerCheckListBox->Check( checkIndex );
     }
 
     // Option for using proper Gerber extensions
     m_useGerberExtensions->SetValue( m_plotOpts.GetUseGerberExtensions() );
+
+    // Option for including Gerber attributes (from Gerber X2 format) in the output
+    m_useGerberAttributes->SetValue( m_plotOpts.GetUseGerberAttributes() );
+
+    // Gerber precision for coordinates
+    m_rbGerberFormat->SetSelection( m_plotOpts.GetGerberPrecision() == 5 ? 0 : 1 );
 
     // Option for excluding contents of "Edges Pcb" layer
     m_excludeEdgeLayerOpt->SetValue( m_plotOpts.GetExcludeEdgeLayer() );
@@ -186,7 +184,6 @@ void DIALOG_PLOT::Init_Dialog()
     // Options to plot texts on footprints
     m_plotModuleValueOpt->SetValue( m_plotOpts.GetPlotValue() );
     m_plotModuleRefOpt->SetValue( m_plotOpts.GetPlotReference() );
-    m_plotTextOther->SetValue( m_plotOpts.GetPlotOtherText() );
     m_plotInvisibleText->SetValue( m_plotOpts.GetPlotInvisibleText() );
 
     // Options to plot pads and vias holes
@@ -242,48 +239,46 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
 
     switch( event.GetId() )
     {
-        case ID_LAYER_FAB: // Select layers usually needed to build a board
-            for( i = 0; i < m_layerList.size(); i++ )
-            {
-                LAYER_MSK layermask = GetLayerMask( m_layerList[ i ] );
-                if( layermask & ( ALL_CU_LAYERS | ALL_AUX_LAYERS ) )
-                    m_layerCheckListBox->Check( i, true );
-                else
-                    m_layerCheckListBox->Check( i, false );
+    case ID_LAYER_FAB: // Select layers usually needed to build a board
+        for( i = 0; i < m_layerList.size(); i++ )
+        {
+            LSET layermask( m_layerList[ i ] );
 
-            }
-            break;
-
-        case ID_SELECT_COPPER_LAYERS:
-            for( i = 0; i < m_layerList.size(); i++ )
-            {
-                if( m_layerList[i] <= LAST_COPPER_LAYER )
-                    m_layerCheckListBox->Check( i, true );
-
-            }
-            break;
-
-        case ID_DESELECT_COPPER_LAYERS:
-            for( i = 0; i < m_layerList.size(); i++ )
-            {
-                if( m_layerList[i] <= LAST_COPPER_LAYER )
-                    m_layerCheckListBox->Check( i, false );
-
-            }
-            break;
-
-        case ID_SELECT_ALL_LAYERS:
-            for( i = 0; i < m_layerList.size(); i++ )
+            if( ( layermask & ( LSET::AllCuMask() | LSET::AllTechMask() ) ).any() )
                 m_layerCheckListBox->Check( i, true );
-            break;
-
-        case ID_DESELECT_ALL_LAYERS:
-            for( i = 0; i < m_layerList.size(); i++ )
+            else
                 m_layerCheckListBox->Check( i, false );
-            break;
+        }
+        break;
 
-        default:
-            break;
+    case ID_SELECT_COPPER_LAYERS:
+        for( i = 0; i < m_layerList.size(); i++ )
+        {
+            if( IsCopperLayer( m_layerList[i] ) )
+                m_layerCheckListBox->Check( i, true );
+        }
+        break;
+
+    case ID_DESELECT_COPPER_LAYERS:
+        for( i = 0; i < m_layerList.size(); i++ )
+        {
+            if( IsCopperLayer( m_layerList[i] ) )
+                m_layerCheckListBox->Check( i, false );
+        }
+        break;
+
+    case ID_SELECT_ALL_LAYERS:
+        for( i = 0; i < m_layerList.size(); i++ )
+            m_layerCheckListBox->Check( i, true );
+        break;
+
+    case ID_DESELECT_ALL_LAYERS:
+        for( i = 0; i < m_layerList.size(); i++ )
+            m_layerCheckListBox->Check( i, false );
+        break;
+
+    default:
+        break;
     }
 }
 
@@ -381,6 +376,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_subtractMaskFromSilk->SetValue( false );
         m_useGerberExtensions->Enable( false );
         m_useGerberExtensions->SetValue( false );
+        m_useGerberAttributes->Enable( false );
+        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
@@ -409,6 +406,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_subtractMaskFromSilk->SetValue( false );
         m_useGerberExtensions->Enable( false );
         m_useGerberExtensions->SetValue( false );
+        m_useGerberAttributes->Enable( false );
+        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( true );
         m_fineAdjustXscaleOpt->Enable( true );
         m_fineAdjustYscaleOpt->Enable( true );
@@ -435,6 +434,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( true );
         m_useGerberExtensions->Enable( true );
+        m_useGerberAttributes->Enable( true );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
@@ -464,6 +464,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_subtractMaskFromSilk->SetValue( false );
         m_useGerberExtensions->Enable( false );
         m_useGerberExtensions->SetValue( false );
+        m_useGerberAttributes->Enable( false );
+        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( true );
         m_fineAdjustXscaleOpt->Enable( false );
         m_fineAdjustYscaleOpt->Enable( false );
@@ -479,7 +481,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 
     case PLOT_FORMAT_DXF:
         m_drillShapeOpt->Enable( true );
-        m_plotModeOpt->Enable( true );
+        m_plotModeOpt->Enable( false );
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
@@ -491,6 +493,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_subtractMaskFromSilk->SetValue( false );
         m_useGerberExtensions->Enable( false );
         m_useGerberExtensions->SetValue( false );
+        m_useGerberAttributes->Enable( false );
+        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
@@ -501,7 +505,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_forcePSA4OutputOpt->Enable( false );
         m_forcePSA4OutputOpt->SetValue( false );
 
-        m_PlotOptionsSizer->Show( m_GerberOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
         break;
@@ -569,7 +573,6 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetUseAuxOrigin( m_useAuxOriginCheckBox->GetValue() );
     tempOptions.SetPlotValue( m_plotModuleValueOpt->GetValue() );
     tempOptions.SetPlotReference( m_plotModuleRefOpt->GetValue() );
-    tempOptions.SetPlotOtherText( m_plotTextOther->GetValue() );
     tempOptions.SetPlotInvisibleText( m_plotInvisibleText->GetValue() );
     tempOptions.SetScaleSelection( m_scaleOpt->GetSelection() );
     tempOptions.SetDrillMarksType( static_cast<PCB_PLOT_PARAMS::DrillMarksType>
@@ -583,11 +586,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // read HPLG pen size (this param is stored in mils)
     wxString    msg = m_HPGLPenSizeOpt->GetValue();
-    int         tmp = ReturnValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
+    int         tmp = ValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
 
     if( !tempOptions.SetHPGLPenDiameter( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
+        msg = StringFromValue( g_UserUnit, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
         m_HPGLPenSizeOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen size constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -595,11 +598,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // Read HPGL pen overlay (this param is stored in mils)
     msg = m_HPGLPenOverlayOpt->GetValue();
-    tmp = ReturnValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
+    tmp = ValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
 
     if( !tempOptions.SetHPGLPenOverlay( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit,
+        msg = StringFromValue( g_UserUnit,
                                      tempOptions.GetHPGLPenOverlay() * IU_PER_MILS );
         m_HPGLPenOverlayOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen overlay constrained!\n" ) );
@@ -608,11 +611,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // Default linewidth
     msg = m_linesWidth->GetValue();
-    tmp = ReturnValueFromString( g_UserUnit, msg );
+    tmp = ValueFromString( g_UserUnit, msg );
 
     if( !tempOptions.SetLineWidth( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetLineWidth() );
+        msg = StringFromValue( g_UserUnit, tempOptions.GetLineWidth() );
         m_linesWidth->SetValue( msg );
         msg.Printf( _( "Default line width constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -649,11 +652,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // PS Width correction
     msg = m_PSFineAdjustWidthOpt->GetValue();
-    int itmp = ReturnValueFromString( g_UserUnit, msg );
+    int itmp = ValueFromString( g_UserUnit, msg );
 
     if( !setInt( &m_PSWidthAdjust, itmp, m_widthAdjustMinValue, m_widthAdjustMaxValue ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, m_PSWidthAdjust );
+        msg = StringFromValue( g_UserUnit, m_PSWidthAdjust );
         m_PSFineAdjustWidthOpt->SetValue( msg );
         msg.Printf( _( "Width correction constrained!\n"
                        "The reasonable width correction value must be in a range of\n"
@@ -668,17 +671,18 @@ void DIALOG_PLOT::applyPlotSettings()
     ConfigBaseWriteDouble( m_config, CONFIG_PS_FINEWIDTH_ADJ,
                            (double)m_PSWidthAdjust / IU_PER_MM );
 
-    tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
-
     tempOptions.SetFormat( GetPlotFormat() );
 
-    long            selectedLayers = 0;
-    unsigned int    i;
+    tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
+    tempOptions.SetUseGerberAttributes( m_useGerberAttributes->GetValue() );
+    tempOptions.SetGerberPrecision( m_rbGerberFormat->GetSelection() == 0 ? 5 : 6 );
 
-    for( i = 0; i < m_layerList.size(); i++ )
+    LSET selectedLayers;
+
+    for( unsigned i = 0; i < m_layerList.size(); i++ )
     {
         if( m_layerCheckListBox->IsChecked( i ) )
-            selectedLayers |= GetLayerMask( m_layerList[i] );
+            selectedLayers.set( m_layerList[i] );
     }
 
     tempOptions.SetLayerSelection( selectedLayers );
@@ -774,51 +778,51 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     // Save the current plot options in the board
     m_parent->SetPlotSettings( m_plotOpts );
 
-    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
+    wxBusyCursor dummy;
+
+    for( LSEQ seq = m_plotOpts.GetLayerSelection().UIOrder();  seq;  ++seq )
     {
-        if( m_plotOpts.GetLayerSelection() & GetLayerMask( layer ) )
+        LAYER_ID layer = *seq;
+
+        // Pick the basename from the board file
+        wxFileName fn( boardFilename );
+
+        // Use Gerber Extensions based on layer number
+        // (See http://en.wikipedia.org/wiki/Gerber_File)
+        if( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER && m_useGerberExtensions->GetValue() )
+            file_ext = GetGerberExtension( layer );
+
+        // Create file name (from the English layer name for non copper layers).
+        BuildPlotFileName( &fn, outputDir.GetPath(),
+                           m_board->GetStandardLayerName( layer ),
+                           file_ext );
+
+        LOCALE_IO toggle;
+
+        BOARD*      board = m_parent->GetBoard();
+        PLOTTER*    plotter = StartPlotBoard( board, &m_plotOpts, layer, fn.GetFullPath(), wxEmptyString );
+
+        // Print diags in messages box:
+        wxString msg;
+
+        if( plotter )
         {
-            // Pick the basename from the board file
-            wxFileName fn( boardFilename );
+            PlotOneBoardLayer( board, plotter, layer, m_plotOpts );
+            plotter->EndPlot();
+            delete plotter;
 
-            // Use Gerber Extensions based on layer number
-            // (See http://en.wikipedia.org/wiki/Gerber_File)
-            if( ( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER )
-                && m_useGerberExtensions->GetValue() )
-                file_ext = GetGerberExtension( layer );
-
-            // Create file name (from the English layer name for non copper layers).
-            BuildPlotFileName( &fn, outputDir.GetPath(),
-                               m_board->GetStandardLayerName( layer ),
-                               file_ext );
-
-            LOCALE_IO toggle;
-            BOARD *board = m_parent->GetBoard();
-            PLOTTER *plotter = StartPlotBoard( board, &m_plotOpts,
-                                               fn.GetFullPath(),
-                                               wxEmptyString );
-
-            // Print diags in messages box:
-            wxString msg;
-
-            if( plotter )
-            {
-                PlotOneBoardLayer( board, plotter, layer, m_plotOpts );
-                plotter->EndPlot();
-                delete plotter;
-
-                msg.Printf( _( "Plot file <%s> created" ), GetChars( fn.GetFullPath() ) );
-            }
-            else
-                msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
-
-            msg << wxT( "\n" );
-            m_messagesBox->AppendText( msg );
+            msg.Printf( _( "Plot file <%s> created" ), GetChars( fn.GetFullPath() ) );
         }
+        else
+            msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
+
+        msg << wxT( "\n" );
+        m_messagesBox->AppendText( msg );
     }
 
     // If no layer selected, we have nothing plotted.
     // Prompt user if it happens because he could think there is a bug in Pcbnew.
-    if( !m_plotOpts.GetLayerSelection() )
+    if( !m_plotOpts.GetLayerSelection().any() )
         DisplayError( this, _( "No layer selected" ) );
 }
+

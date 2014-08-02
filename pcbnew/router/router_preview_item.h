@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __ROUTER_PREVIEW_ITEM_H
@@ -44,28 +44,35 @@ class PNS_ROUTER;
 class ROUTER_PREVIEW_ITEM : public EDA_ITEM
 {
 public:
-    enum ItemType
+    enum ITEM_TYPE
     {
-        PR_VIA,
-        PR_LINE,
-        PR_STUCK_MARKER
+        PR_STUCK_MARKER = 0,
+        PR_POINT,
+        PR_SHAPE
     };
-
-    enum ItemFlags
-    {
-        PR_SUGGESTION = 1
-    };
-
+    
     ROUTER_PREVIEW_ITEM( const PNS_ITEM* aItem = NULL, KIGFX::VIEW_GROUP* aParent = NULL );
     ~ROUTER_PREVIEW_ITEM();
 
     void Update( const PNS_ITEM* aItem );
 
     void StuckMarker( VECTOR2I& aPosition );
-    void DebugLine( const SHAPE_LINE_CHAIN& aLine, int aWidth = 0, int aStyle = 0 );
-    void DebugBox( const BOX2I& aBox, int aStyle = 0 );
+    
+    void Line( const SHAPE_LINE_CHAIN& aLine, int aWidth = 0, int aStyle = 0 );
+    void Box( const BOX2I& aBox, int aStyle = 0 );
+    void Point ( const VECTOR2I& aPos, int aStyle = 0);
 
-    void Show( int a, std::ostream& b ) const {};
+    void SetColor( const KIGFX::COLOR4D& aColor ) 
+    {
+        m_color = aColor;
+    }
+
+    void SetClearance( int aClearance )
+    {
+        m_clearance = aClearance;
+    }
+
+    void Show( int aA, std::ostream& aB ) const {};
 
     const BOX2I ViewBBox() const;
 
@@ -77,7 +84,7 @@ public:
         aCount = 1;
     }
 
-    void MarkAsHead();
+    void drawLineChain( const SHAPE_LINE_CHAIN& aL, KIGFX::GAL* aGal ) const;
 
 private:
     const KIGFX::COLOR4D assignColor( int aStyle ) const;
@@ -86,17 +93,25 @@ private:
     KIGFX::VIEW_GROUP* m_parent;
 
     PNS_ROUTER* m_router;
-    SHAPE_LINE_CHAIN m_line;
+    SHAPE* m_shape;
 
-    ItemType m_type;
+    ITEM_TYPE m_type;
+    
     int m_style;
     int m_width;
     int m_layer;
+    int m_originLayer;
+    int m_clearance;
+
+    // fixme: shouldn't this go to VIEW?
+    static const int ClearanceOverlayDepth = -2000;
+    static const int BaseOverlayDepth = -2010;
+    static const int ViaOverlayDepth = -2046;
+
+    double m_depth;
 
     KIGFX::COLOR4D m_color;
-
-    VECTOR2I m_stuckPosition;
-    VECTOR2I m_viaCenter;
+    VECTOR2I m_pos;
 };
 
 #endif

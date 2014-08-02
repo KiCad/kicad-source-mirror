@@ -5,9 +5,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
-  * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+  * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,8 @@
 
 #include <wx/wx.h>
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <confirm.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
@@ -56,7 +57,7 @@ public:
 
 private:
     PCB_BASE_FRAME* m_parent;
-    wxConfig*       m_config;               ///< Current config
+    wxConfigBase*       m_config;               ///< Current config
     ZONE_SETTINGS   m_zonesettings;
     ZONE_SETTINGS*  m_ptr;
 
@@ -105,7 +106,7 @@ DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* 
     DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( aParent )
 {
     m_parent = aParent;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
 
     m_ptr = aSettings;
     m_zonesettings = *aSettings;
@@ -147,27 +148,30 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
     wxListItem column0;
     column0.SetId( 0 );
     m_LayerSelectionCtrl->InsertColumn( 0, column0 );
-    // Build copper layer list and append to layer widget
-    int layerCount = board->GetCopperLayerCount();
+
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
-    for( int ii = 0; ii < layerCount; ii++ )
+
+    // Build copper layer list and append to layer widget
+    LSET show = LSET::AllCuMask( board->GetCopperLayerCount() );
+    int imgIdx = 0;
+
+    for( LSEQ cu_stack = show.UIOrder();  cu_stack;  ++cu_stack, imgIdx++ )
     {
-        LAYER_NUM layerNumber = LAYER_N_BACK;
+        LAYER_ID layer = *cu_stack;
 
-        if( layerCount <= 1 || ii < layerCount - 1 )
-            layerNumber = ii;
-        else if( ii == layerCount - 1 )
-            layerNumber = LAYER_N_FRONT;
+        m_layerId.push_back( layer );
 
-        m_layerId.insert( m_layerId.begin(), layerNumber );
+        msg = board->GetLayerName( layer );
 
-        msg = board->GetLayerName( layerNumber );
-        EDA_COLOR_T layerColor = board->GetLayerColor( layerNumber );
+        EDA_COLOR_T layerColor = board->GetLayerColor( layer );
+
         imageList->Add( makeLayerBitmap( layerColor ) );
-        int itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, ii );
 
-        if( m_zonesettings.m_CurrentZone_Layer == layerNumber )
+        int itemIndex = m_LayerSelectionCtrl->InsertItem(
+                m_LayerSelectionCtrl->GetItemCount(), msg, imgIdx );
+
+        if( m_zonesettings.m_CurrentZone_Layer == layer )
             m_LayerSelectionCtrl->Select( itemIndex );
     }
 
@@ -220,7 +224,7 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
         return false;
     }
 
-    m_zonesettings.m_CurrentZone_Layer = m_layerId[ii];
+    m_zonesettings.m_CurrentZone_Layer = ToLAYER_ID( m_layerId[ii] );
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
     case 0:

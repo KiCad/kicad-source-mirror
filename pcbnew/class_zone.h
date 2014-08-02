@@ -181,35 +181,10 @@ public:
      * Function IsOnCopperLayer
      * @return true if this zone is on a copper layer, false if on a technical layer
      */
-    bool IsOnCopperLayer( void ) const
+    bool IsOnCopperLayer() const
     {
-        return ( GetLayer() < FIRST_NON_COPPER_LAYER ) ? true : false;
+        return  IsCopperLayer( GetLayer() );
     }
-
-    /**
-     * Function SetNet
-     * sets the netcode and the netname.
-     *
-     * @param aNetCode The net code of the zone container if greater than or equal to
-     *                 zero.  Otherwise the current net code is kept and set the net
-     *                 code error flag.
-     */
-    virtual void SetNet( int aNetCode );
-
-    /**
-     * Function SetNetNameFromNetCode
-     * Find the net name corresponding to the net code.
-     * @return bool - true if net found, else false
-     */
-    bool SetNetNameFromNetCode( void );
-
-    /**
-     * Function GetNetName
-     * returns the net name.
-     * @return const wxString& - The net name.
-     */
-    const wxString& GetNetName() const                  { return m_Netname; };
-    void SetNetName( const wxString& aName )            { m_Netname = aName; }
 
     /// How to fill areas: 0 = use filled polygons, 1 => fill with segments.
     void SetFillMode( int aFillMode )                   { m_FillMode = aFillMode; }
@@ -242,6 +217,10 @@ public:
     int GetSelectedCorner() const { return m_CornerSelection; }
     void SetSelectedCorner( int aCorner ) { m_CornerSelection = aCorner; }
 
+    ///
+    // Like HitTest but selects the current corner to be operated on
+    void SetSelectedCorner( const wxPoint& aPosition );
+
     int GetLocalFlags() const { return m_localFlgs; }
     void SetLocalFlags( int aFlags ) { m_localFlgs = aFlags; }
 
@@ -259,7 +238,7 @@ public:
      * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    virtual bool HitTest( const wxPoint& aPosition );
+    virtual bool HitTest( const wxPoint& aPosition ) const;
 
     /**
      * Function HitTest
@@ -367,7 +346,7 @@ public:
      * @return true if found
      * @param refPos : A wxPoint to test
      */
-    bool HitTestForCorner( const wxPoint& refPos );
+    int HitTestForCorner( const wxPoint& refPos ) const;
 
     /**
      * Function HitTestForEdge
@@ -376,25 +355,12 @@ public:
      * @return true if found
      * @param refPos : A wxPoint to test
      */
-    bool HitTestForEdge( const wxPoint& refPos );
+    int HitTestForEdge( const wxPoint& refPos ) const;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
      */
     bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
-
-    /**
-     * Function Fill_Zone
-     * Calculate the zone filling
-     * The zone outline is a frontier, and can be complex (with holes)
-     * The filling starts from starting points like pads, tracks.
-     * If exists the old filling is removed
-     * @param frame = reference to the main frame
-     * @param DC = current Device Context
-     * @param verbose = true to show error messages
-     * @return error level (0 = no error)
-     */
-    int Fill_Zone( PCB_EDIT_FRAME* frame, wxDC* DC, bool verbose = true );
 
     /**
      * Function FillZoneAreasWithSegments
@@ -425,10 +391,11 @@ public:
 
     /**
      * Function MoveEdge
-     * Move the outline Edge. m_CornerSelection is the start point of the outline edge
+     * Move the outline Edge
      * @param offset = moving vector
+     * @param aEdge = start point of the outline edge
      */
-    void MoveEdge( const wxPoint& offset );
+    void MoveEdge( const wxPoint& offset, int aEdge );
 
     /**
      * Function Rotate
@@ -607,7 +574,6 @@ public:
 
 private:
     CPolyLine*            m_Poly;                ///< Outline of the zone.
-    wxString              m_Netname;             ///< Name of the net assigned to the zone.
     CPolyLine*            m_smoothedPoly;        // Corner-smoothed version of m_Poly
     int                   m_cornerSmoothingType;
     unsigned int          m_cornerRadius;

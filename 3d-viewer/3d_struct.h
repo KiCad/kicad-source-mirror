@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2014 Mario Luzeiro <mrluzeiro@gmail.com>
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
@@ -32,8 +33,9 @@
 
 #include <common.h>
 #include <base_struct.h>
-
-
+#include <3d_material.h>
+#include <gal/opengl/glm/glm.hpp>
+ 
 /* 3D modeling units -> PCB units conversion scale:
  * 1 "3D model unit" wings3d = 1 unit = 2.54 mm = 0.1 inch = 100 mils
  */
@@ -44,48 +46,7 @@ class S3D_MASTER;
 class STRUCT_3D_SHAPE;
 
 /*  S3D_VERTEX manages a 3D coordinate (3 float numbers: x,y,z coordinates)*/
-class S3D_VERTEX
-{
-public:
-    double x, y, z;
-
-public:
-    S3D_VERTEX()
-    {
-        x = y = z = 0.0;
-    }
-
-    S3D_VERTEX( double px, double py, double pz)
-    {
-        x = px;
-        y = py;
-        z = pz;
-    }
-};
-
-class S3D_MATERIAL : public EDA_ITEM       /* openGL "material" data*/
-{
-public:
-    wxString   m_Name;
-    S3D_VERTEX m_DiffuseColor;
-    S3D_VERTEX m_EmissiveColor;
-    S3D_VERTEX m_SpecularColor;
-    float      m_AmbientIntensity;
-    float      m_Transparency;
-    float      m_Shininess;
-
-public:
-    S3D_MATERIAL( S3D_MASTER* father, const wxString& name );
-
-    S3D_MATERIAL* Next() const { return (S3D_MATERIAL*) Pnext; }
-    S3D_MATERIAL* Back() const { return (S3D_MATERIAL*) Pback; }
-
-    void SetMaterial();
-
-#if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
-#endif
-};
+#define S3D_VERTEX glm::vec3
 
 
 /* Master structure for a 3D item description */
@@ -106,9 +67,23 @@ public:
         FILE3D_UNKNOWN
     };
 
+    // Check defaults in S3D_MASTER
+    bool        m_use_modelfile_diffuseColor;
+    bool        m_use_modelfile_emissiveColor;
+    bool        m_use_modelfile_specularColor;
+    bool        m_use_modelfile_ambientIntensity;
+    bool        m_use_modelfile_transparency;
+    bool        m_use_modelfile_shininess;
+
 private:
     wxString    m_Shape3DName;  /* 3D shape name in 3D library */
     FILE3D_TYPE m_ShapeType;
+    double      m_lastTransparency;     // last transparency value from
+                                            // last material in use
+    bool        m_loadTransparentObjects;
+    bool        m_loadNonTransparentObjects;
+
+
 
 public:
     S3D_MASTER( EDA_ITEM* aParent );
@@ -117,11 +92,41 @@ public:
     S3D_MASTER* Next() const { return (S3D_MASTER*) Pnext; }
     S3D_MASTER* Back() const { return (S3D_MASTER*) Pback; }
 
+    // Accessors
+    void SetLastTransparency( double aValue ) { m_lastTransparency = aValue; }
+
+    void SetLoadTransparentObjects( bool aLoad )
+        { m_loadTransparentObjects = aLoad; }
+
+    void SetLoadNonTransparentObjects( bool aLoad )
+        { m_loadNonTransparentObjects = aLoad; }
+
     void Insert( S3D_MATERIAL* aMaterial );
 
+    /**
+     * Function IsOpenGlAllowed
+     * @return true if opengl current list accepts a gl data
+     * used to filter transparent objects, which are drawn after
+     * non transparent objects
+     */
+    bool IsOpenGlAllowed();
+
     void Copy( S3D_MASTER* pattern );
+
+    /**
+     * Function ReadData
+     * Select the parser to read the 3D data file (vrml, x3d ...)
+     * and build the description objects list
+     */
     int  ReadData();
-    void Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices );
+
+    /**
+     * Function ObjectCoordsTo3DUnits
+     * @param aVertices = a list of 3D coordinates in shape units
+     * to convert to 3D canvas units, according to the
+     * footprint 3Dshape rotation, offset and scale parameters
+     */
+    void ObjectCoordsTo3DUnits( std::vector< S3D_VERTEX >& aVertices );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
@@ -147,6 +152,13 @@ public:
      */
     const wxString GetShape3DFullFilename();
 
+    /**
+     * Function SetShape3DName
+     * @param aShapeName = file name of the data file relative to the 3D shape
+     *
+     * Set the filename of the 3D shape, and depending on the file extention
+     * (vrl, x3d, idf ) the type of file.
+     */
     void SetShape3DName( const wxString& aShapeName );
 };
 

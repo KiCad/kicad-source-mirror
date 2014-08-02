@@ -28,104 +28,167 @@
  */
 
 
+#include <macros.h>
 #include <fctsys.h>
-#include <appl_wxstruct.h>
-
+#include <wx/stdpaths.h>
 #include <kicad.h>
+#include <kiway.h>
+#include <pgm_kicad.h>
 #include <tree_project_frame.h>
+#include <online_help.h>
 #include <wildcards_and_files_ext.h>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <build_version.h>
 
-const wxString g_KicadPrjFilenameExtension( wxT( ".pro" ) );
 
-/************************************/
-/* Called to initialize the program */
-/************************************/
-
-// Create a new application object
-IMPLEMENT_APP( EDA_APP )
-
-/* MacOSX: Needed for file association
- * http://wiki.wxwidgets.org/WxMac-specific_topics
- */
-void EDA_APP::MacOpenFile( const wxString& aFileName )
+/// Extend LIB_ENV_VAR list with the directory from which I came, prepending it.
+static void set_lib_env_var( const wxString& aAbsoluteArgv0 )
 {
-    KICAD_MANAGER_FRAME* frame = (KICAD_MANAGER_FRAME*) GetTopWindow();
+    // POLICY CHOICE 2: Keep same path, so that installer MAY put the
+    // "subsidiary DSOs" in the same directory as the kiway top process modules.
+    // A subsidiary shared library is one that is not a top level DSO, but rather
+    // some shared library that a top level DSO needs to even be loaded.  It is
+    // a static link to a shared object from a top level DSO.
 
-    wxFileName fn = aFileName;
+    // This directory POLICY CHOICE 2 is not the only dir in play, since LIB_ENV_VAR
+    // has numerous path options in it, as does DSO searching on linux, windows, and OSX.
+    // See "man ldconfig" on linux. What's being done here is for quick installs
+    // into a non-standard place, and especially for Windows users who may not
+    // know what the PATH environment variable is or how to set it.
 
-    frame->m_ProjectFileName = fn;
+    wxFileName  fn( aAbsoluteArgv0 );
 
-    if( !frame->m_ProjectFileName.FileExists() && m_fileHistory.GetCount() )
+    wxString    ld_path( LIB_ENV_VAR );
+    wxString    my_path   = fn.GetPath();
+    wxString    new_paths = PrePendPath( ld_path, my_path );
+
+    wxSetEnv( ld_path, new_paths );
+
+#if defined(DEBUG)
     {
-        m_fileHistory.RemoveFileFromHistory( 0 );
-        return;
+        wxString    test;
+        wxGetEnv( ld_path, &test );
+        printf( "LIB_ENV_VAR:'%s'\n", TO_UTF8( test ) );
     }
-
-    wxCommandEvent loadEvent;
-    loadEvent.SetId( wxID_ANY );
-
-    frame->OnLoadProject( loadEvent );
-
-    wxString title = GetTitle() + wxT( " " ) + GetBuildVersion() +
-                     wxT( " " ) + frame->m_ProjectFileName.GetFullPath();
-
-    if( !fn.IsDirWritable() )
-        title += _( " [Read Only]" );
-
-    frame->SetTitle( title );
-
-    frame->m_LeftWin->ReCreateTreePrj();
-
-    frame->PrintPrjInfo();
+#endif
 }
 
 
-bool EDA_APP::OnInit()
+// a dummy to quiet linking with EDA_BASE_FRAME::config();
+#include <kiface_i.h>
+KIFACE_I& Kiface()
 {
-    KICAD_MANAGER_FRAME* frame;
+    // This function should never be called.  It is only referenced from
+    // EDA_BASE_FRAME::config() and this is only provided to satisfy the linker,
+    // not to be actually called.
+    wxLogFatalError( wxT( "Unexpected call to Kiface() in kicad/kicad.cpp" ) );
 
-    InitEDA_Appl( wxT( "KiCad" ), APP_KICAD_T );
+    return (KIFACE_I&) *(KIFACE_I*) 0;
+}
 
-    // read current setup and reopen last directory if no filename to open in command line
-    bool reopenLastUsedDirectory = argc == 1;
-    GetSettings( reopenLastUsedDirectory );
+static PGM_KICAD program;
 
-    frame = new KICAD_MANAGER_FRAME( NULL, wxT( "KiCad" ),
+PGM_KICAD& Pgm()
+{
+    return program;
+}
+
+
+bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
+{
+    m_wx_app = aWxApp;      // first thing.
+
+    m_bm.Init();
+
+    wxString absoluteArgv0 = wxStandardPaths::Get().GetExecutablePath();
+
+    if( !wxIsAbsolutePath( absoluteArgv0 ) )
+    {
+        wxLogSysError( wxT( "No meaningful argv[0]" ) );
+        return false;
+    }
+
+    // Set LIB_ENV_VAR *before* loading the KIFACE DSOs, in case they have hard
+    // dependencies on subsidiary DSOs below it.
+    set_lib_env_var( absoluteArgv0 );
+
+    if( !initPgm() )
+        return false;
+
+    // Add search paths to feed the PGM_KICAD::SysSearch() function,
+    // currenly limited in support to only look for project templates
+    {
+        SEARCH_STACK bases;
+
+        SystemDirsAppend( &bases );
+
+        // DBG( bases.Show( (std::string(__func__) + " bases").c_str() );)
+
+        for( unsigned i = 0; i < bases.GetCount(); ++i )
+        {
+            wxFileName fn( bases[i], wxEmptyString );
+
+            // Add KiCad template file path to search path list.
+            fn.AppendDir( wxT( "template" ) );
+            m_bm.m_search.AddPaths( fn.GetPath() );
+        }
+
+        //DBG( m_bm.m_search.Show( (std::string( __func__ ) + " SysSearch()").c_str() );)
+    }
+
+    // Read current setup and reopen last directory if no filename to open on
+    // command line.
+    if( App().argc == 1  )
+    {
+        wxString dir;
+
+        if( PgmSettings()->Read( workingDirKey, &dir ) && wxDirExists( dir ) )
+        {
+            wxSetWorkingDirectory( dir );
+        }
+    }
+
+    KICAD_MANAGER_FRAME* frame = new KICAD_MANAGER_FRAME( NULL, wxT( "KiCad" ),
                                      wxDefaultPosition, wxDefaultSize );
-    SetTopWindow( frame );
+    App().SetTopWindow( frame );
+
+    Kiway.SetTop( frame );
 
     bool prjloaded = false;    // true when the project is loaded
 
-    if( argc > 1 )
-        frame->m_ProjectFileName = argv[1];
-    else if( m_fileHistory.GetCount() )
+    if( App().argc > 1 )
+        frame->SetProjectFileName( App().argv[1] );
+
+    else if( GetFileHistory().GetCount() )
     {
         // Try to open the last opened project,
         // if a project name is not given when starting Kicad
-        frame->m_ProjectFileName = m_fileHistory.GetHistoryFile( 0 );
+        frame->SetProjectFileName( GetFileHistory().GetHistoryFile( 0 ) );
 
-        if( !frame->m_ProjectFileName.FileExists() )
-            m_fileHistory.RemoveFileFromHistory( 0 );
+        if( !wxFileExists( frame->GetProjectFileName() ) )
+            GetFileHistory().RemoveFileFromHistory( 0 );
         else
         {
             wxCommandEvent cmd( 0, wxID_FILE1 );
+
             frame->OnFileHistory( cmd );
             prjloaded = true;    // OnFileHistory() loads the project
         }
     }
 
-    if( !frame->m_ProjectFileName.FileExists() )
+    if( !wxFileExists( frame->GetProjectFileName() ) )
     {
         wxFileName namelessProject( wxGetCwd(), NAMELESS_PROJECT,
                                     ProjectFileExtension );
-        frame->m_ProjectFileName = namelessProject;
+
+        frame->SetProjectFileName( namelessProject.GetFullPath() );
     }
 
-    if( ! prjloaded )
+    if( !prjloaded )
     {
         wxCommandEvent cmd( 0, wxID_ANY );
+
         frame->OnLoadProject( cmd );
     }
 
@@ -134,3 +197,137 @@ bool EDA_APP::OnInit()
 
     return true;
 }
+
+
+void PGM_KICAD::OnPgmExit()
+{
+    Kiway.OnKiwayEnd();
+
+    saveCommonSettings();
+
+    // write common settings to disk, and destroy everything in PGM_KICAD,
+    // especially wxSingleInstanceCheckerImpl earlier than wxApp and earlier
+    // than static destruction would.
+    destroy();
+}
+
+
+void PGM_KICAD::MacOpenFile( const wxString& aFileName )
+{
+#if defined(__WXMAC__)
+
+    KICAD_MANAGER_FRAME* frame = (KICAD_MANAGER_FRAME*) App().GetTopWindow();
+
+    frame->SetProjectFileName( aFileName );
+
+    wxCommandEvent loadEvent;
+
+    loadEvent.SetId( wxID_ANY );
+
+    frame->OnLoadProject( loadEvent );
+#endif
+}
+
+
+void PGM_KICAD::destroy()
+{
+    // unlike a normal destructor, this is designed to be called more
+    // than once safely:
+
+    m_bm.End();
+
+    PGM_BASE::destroy();
+}
+
+
+KIWAY  Kiway( &Pgm(), KFCTL_CPP_PROJECT_SUITE );
+
+
+/**
+ * Struct APP_KICAD
+ * is not publicly visible because most of the action is in PGM_KICAD these days.
+ */
+struct APP_KICAD : public wxApp
+{
+    bool OnInit()           // overload wxApp virtual
+    {
+        // if( Kiways.OnStart( this ) )
+        {
+            return Pgm().OnPgmInit( this );
+        }
+        return false;
+    }
+
+    int  OnExit()           // overload wxApp virtual
+    {
+        // Kiways.OnEnd();
+
+        Pgm().OnPgmExit();
+
+        return wxApp::OnExit();
+    }
+
+    int OnRun()             // overload wxApp virtual
+    {
+        try
+        {
+            return wxApp::OnRun();
+        }
+        catch( const std::exception& e )
+        {
+            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
+                GetChars( FROM_UTF8( typeid(e).name() )),
+                GetChars( FROM_UTF8( e.what() ) ) );;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( GetChars( ioe.errorText ) );
+        }
+        catch(...)
+        {
+            wxLogError( wxT( "Unhandled exception of unknown type" ) );
+        }
+
+        return -1;
+    }
+
+    /**
+     * Function MacOpenFile
+     * is specific to MacOSX (not used under Linux or Windows).
+     * MacOSX requires it for file association.
+     * @see http://wiki.wxwidgets.org/WxMac-specific_topics
+     */
+    void MacOpenFile( const wxString& aFileName )   // overload wxApp virtual
+    {
+        Pgm().MacOpenFile( aFileName );
+    }
+};
+
+IMPLEMENT_APP( APP_KICAD );
+
+
+// The C++ project manager supports one open PROJECT, so Prj() calls within
+// this link image need this function.
+PROJECT& Prj()
+{
+    return Kiway.Prj();
+}
+
+
+#if 0   // there can be only one in C++ project manager.
+
+bool KIWAY_MGR::OnStart( wxApp* aProcess )
+{
+    // The C++ project manager supports only one open PROJECT
+    // We should need no copy constructor for KIWAY to push a pointer.
+    m_kiways.push_back( new KIWAY() );
+
+    return true;
+}
+
+
+void KIWAY_MGR::OnEnd()
+{
+}
+
+#endif

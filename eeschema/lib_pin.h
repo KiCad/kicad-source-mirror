@@ -33,13 +33,6 @@
 
 
 #define TARGET_PIN_RADIUS   12  // Circle diameter drawn at the active end of pins
-#define DEFAULT_PIN_LENGTH  300 // Default Length of a pin when it is created.
-
-// pins: special symbols sizes
-#define INVERT_PIN_RADIUS   30  // Radius of inverted pin circle.
-#define CLOCK_PIN_DIM       40  // Dim of clock pin symbol.
-#define IEEE_SYMBOL_PIN_DIM 40  // Dim of special pin symbol.
-#define NONLOGIC_PIN_DIM    30  // Dim of nonlogic pin symbol (X).
 
 /**
  * The component library pin object electrical types used in ERC tests.
@@ -131,9 +124,9 @@ public:
 
     bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
-    bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition ) const;
 
-    bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
+    bool HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const;
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
@@ -142,20 +135,20 @@ public:
     const EDA_RECT GetBoundingBox() const;    // Virtual
 
     /**
-     * Function ReturnPinEndPoint
+     * Function PinEndPoint
      *
      * @return The pin end position for a component in the normal orientation.
      */
-    wxPoint ReturnPinEndPoint() const;
+    wxPoint PinEndPoint() const;
 
     /**
-     * Function ReturnPinDrawOrient
+     * Function PinDrawOrient
      * returns the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
      * according to its orientation and the matrix transform (rot, mirror) \a aTransform
      *
      * @param aTransform Transform matrix
      */
-    int ReturnPinDrawOrient( const TRANSFORM& aTransform ) const;
+    int PinDrawOrient( const TRANSFORM& aTransform ) const;
 
     /**
      * Fill a string buffer with pin number.
@@ -165,20 +158,20 @@ public:
      *
      * @param aStringBuffer - the wxString to store the pin num as an unicode string
      */
-    void ReturnPinStringNum( wxString& aStringBuffer ) const;
+    void PinStringNum( wxString& aStringBuffer ) const;
 
     long GetNumber() const { return m_number; }
 
-    wxString GetNumberString() const { return ReturnPinStringNum( m_number ); }
+    wxString GetNumberString() const { return PinStringNum( m_number ); }
 
     /**
-     * Function ReturnPinStringNum (static function)
+     * Function PinStringNum (static function)
      * Pin num is coded as a long or 4 ascii chars
      * @param aPinNum = a long containing a pin num
      * @return aStringBuffer = the wxString to store the pin num as an
      *                         unicode string
      */
-    static wxString ReturnPinStringNum( long aPinNum );
+    static wxString PinStringNum( long aPinNum );
 
     /**
      * Function SetPinNumFromString

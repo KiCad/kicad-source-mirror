@@ -14,7 +14,6 @@ class SCH_SHEET;
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
 
 #define TXTMARGE 10             // Offset in mils for placement of labels and pin numbers
-#define DEFAULT_TEXT_SIZE   50  // Default size for field texts
 #define DANGLING_SYMBOL_SIZE 12
 
 #define GR_DEFAULT_DRAWMODE GR_COPY
@@ -74,7 +73,19 @@ extern SCH_SHEET*   g_RootSheet;
  * default thickness line value (i.e. = 0 ).
  */
 int GetDefaultLineThickness();
-void SetDefaultLineThickness( int aThickness);
+void SetDefaultLineThickness( int aThickness );
+
+/**
+ * Default size for text in general
+ */
+int GetDefaultTextSize();
+void SetDefaultTextSize( int aSize );
+
+/**
+ * Default length for new pins in module editor
+ */
+int GetDefaultPinLength();
+void SetDefaultPinLength( int aLength );
 
 /**
  * Default line thickness used to draw/plot busses.

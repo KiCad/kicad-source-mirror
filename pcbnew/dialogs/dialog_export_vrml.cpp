@@ -28,9 +28,10 @@
  */
 #include <fctsys.h>
 #include <wxPcbStruct.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
 #include <pcbnew.h>
 #include <class_board.h>
+
 
 /* the dialog to create VRML files, derived from DIALOG_EXPORT_3DFILE_BASE,
  * created by wxFormBuilder
@@ -44,7 +45,7 @@ class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
 {
 private:
     PCB_EDIT_FRAME* m_parent;
-    wxConfig* m_config;
+    wxConfigBase* m_config;
     int m_unitsOpt;          // to remember last option
     int m_3DFilesOpt;        // to remember last option
 
@@ -56,7 +57,7 @@ public:
         DIALOG_EXPORT_3DFILE_BASE( parent )
     {
         m_parent = parent;
-        m_config = wxGetApp().GetSettings();
+        m_config = Kiface().KifaceSettings();
         SetFocus();
         m_config->Read( OPTKEY_OUTPUT_UNIT, &m_unitsOpt );
         m_config->Read( OPTKEY_3DFILES_OPT, &m_3DFilesOpt );

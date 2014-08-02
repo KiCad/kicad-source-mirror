@@ -59,7 +59,9 @@ set( BOOST_LIBS_BUILT
     )
 #-----</configure>---------------------------------------------------------------
 
-find_package( BZip2 REQUIRED )
+if( NOT BZIP2_FOUND )
+    find_package( BZip2 REQUIRED )
+endif()
 
 string( REGEX REPLACE "\\." "_" BOOST_VERS "${BOOST_RELEASE}" )
 set( PREFIX ${DOWNLOAD_DIR}/boost_${BOOST_VERS} )
@@ -99,7 +101,17 @@ else()
 endif()
 
 
-if( MINGW )
+find_program(patch_bin NAMES patch patch.exe)
+
+if( "${patch_bin}" STREQUAL "patch_bin-NOTFOUND" )
+    set( PATCH_STR_CMD ${PATCH_STR_CMD} )
+else()
+    set( PATCH_STR_CMD ${patch_bin} -p0 -i )
+endif()
+
+
+
+if( MINGW AND NOT CMAKE_HOST_UNIX )  # building for MINGW on windows not UNIX
     if( MSYS )
         # The Boost system does not build properly on MSYS using bootstrap.sh.  Running
         # bootstrap.bat with cmd.exe does.  It's ugly but it works.  At least for Boost
@@ -113,14 +125,16 @@ if( MINGW )
         set( b2_libs ${b2_libs} --with-${lib} )
     endforeach()
     unset( BOOST_CFLAGS )
+
 else()
     string( REGEX REPLACE "\\;" "," libs_csv "${boost_libs_list}" )
     #message( STATUS "libs_csv:${libs_csv}" )
 
     set( bootstrap ./bootstrap.sh --with-libraries=${libs_csv} )
     # pass to *both* C and C++ compilers
-    set( BOOST_CFLAGS "cflags=${PIC_FLAG}" )
-    set( BOOST_INCLUDE "${BOOST_ROOT}/include" )
+    set( BOOST_CFLAGS   "cflags=${PIC_FLAG}" )
+    set( BOOST_CXXFLAGS "cxxflags=${PIC_FLAG}" )
+    set( BOOST_INCLUDE  "${BOOST_ROOT}/include" )
     unset( b2_libs )
 endif()
 
@@ -173,7 +187,7 @@ ExternalProject_Add( boost
 
     URL             http://downloads.sourceforge.net/project/boost/boost/${BOOST_RELEASE}/boost_${BOOST_VERS}.tar.bz2
     DOWNLOAD_DIR    "${DOWNLOAD_DIR}"
-    TIMEOUT         600             # 10 minutes
+    TIMEOUT         1200            # 20 minutes
     URL_MD5         ${BOOST_MD5}
     # If download fails, then enable "LOG_DOWNLOAD ON" and try again.
     # Upon a second failure with logging enabled, then look at these logs:
@@ -193,25 +207,25 @@ ExternalProject_Add( boost
         # bzr revert is insufficient to remove "added" files:
         COMMAND     bzr clean-tree -q --force
 
-        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_minkowski.patch"
-        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_cstdint.patch"
+        COMMAND     ${PATCH_STR_CMD} "${PROJECT_SOURCE_DIR}/patches/boost_minkowski.patch"
+        COMMAND     ${PATCH_STR_CMD} "${PROJECT_SOURCE_DIR}/patches/boost_cstdint.patch"
 
-        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86.patch"        #https://svn.boost.org/trac/boost/ticket/8266
+        COMMAND     ${PATCH_STR_CMD} "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86.patch"        #https://svn.boost.org/trac/boost/ticket/8266
         # tell bzr about "added" files by last patch:
         COMMAND     bzr add libs/context/src/asm/jump_i386_x86_64_sysv_macho_gas.S
         COMMAND     bzr add libs/context/src/asm/make_i386_x86_64_sysv_macho_gas.S
 
-        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86_build.patch"  #https://svn.boost.org/trac/boost/ticket/8266
-        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_older_openssl.patch"  #https://svn.boost.org/trac/boost/ticket/9273
+        COMMAND     ${PATCH_STR_CMD} "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86_build.patch"  #https://svn.boost.org/trac/boost/ticket/8266
+        COMMAND     ${PATCH_STR_CMD} "${PROJECT_SOURCE_DIR}/patches/boost_macosx_older_openssl.patch"  #https://svn.boost.org/trac/boost/ticket/9273
 
-        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_mingw.patch"             #https://svn.boost.org/trac/boost/ticket/7262
+        COMMAND     ${PATCH_STR_CMD} "${PROJECT_SOURCE_DIR}/patches/boost_mingw.patch"             #https://svn.boost.org/trac/boost/ticket/7262
         # tell bzr about "added" files by last patch:
         COMMAND     bzr add libs/context/src/asm/make_i386_ms_pe_gas.S
         COMMAND     bzr add libs/context/src/asm/jump_i386_ms_pe_gas.S
         COMMAND     bzr add libs/context/src/asm/make_x86_64_ms_pe_gas.S
         COMMAND     bzr add libs/context/src/asm/jump_x86_64_ms_pe_gas.S
 
-        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/patch_macosx_context_ppc_v2.patch" #https://svn.boost.org/trac/boost/ticket/8266
+        COMMAND     ${PATCH_STR_CMD} "${PROJECT_SOURCE_DIR}/patches/patch_macosx_context_ppc_v2.patch" #https://svn.boost.org/trac/boost/ticket/8266
         COMMAND     bzr add libs/context/build/Jamfile.v2
         COMMAND     bzr add libs/context/build/architecture.jam
         COMMAND     bzr add libs/context/src/asm/jump_combined_sysv_macho_gas.S

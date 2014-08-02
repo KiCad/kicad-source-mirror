@@ -155,7 +155,7 @@ struct IO_ERROR // : std::exception
 
 
 /**
- * Class PARSE_ERROR
+ * Struct PARSE_ERROR
  * contains a filename or source description, a problem input line, a line number,
  * a byte offset, and an error message which contains the the caller's report and his
  * call site information: CPP source file, function, and line number.
@@ -432,8 +432,9 @@ public:
      * Constructor WXINPUTSTREAM_LINE_READER
      *
      * @param aStream A pointer to a wxInputStream object to read.
+     * @param aSource The name of the stream source, for error reporting purposes.
      */
-    INPUTSTREAM_LINE_READER( wxInputStream* aStream );
+    INPUTSTREAM_LINE_READER( wxInputStream* aStream, const wxString& aSource );
 
     char* ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
 };

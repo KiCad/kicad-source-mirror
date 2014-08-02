@@ -39,7 +39,7 @@
  * but units are ignored.
  * notation like 1e+3 is legal
  */
-double ReturnDoubleFromString( const wxString& TextValue )
+double DoubleFromString( const wxString& TextValue )
 {
     double value = 0;
 

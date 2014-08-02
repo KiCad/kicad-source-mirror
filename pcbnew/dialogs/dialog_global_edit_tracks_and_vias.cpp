@@ -46,21 +46,22 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
 
     // Display current setup for tracks and vias
     BOARD*        board = m_Parent->GetBoard();
-    NETCLASSES&   netclasses = board->m_NetClasses;
+    BOARD_DESIGN_SETTINGS& dsnSettings = board->GetDesignSettings();
+    NETCLASSES&   netclasses = dsnSettings.m_NetClasses;
+    NETCLASSPTR   netclass = netclasses.GetDefault();
     NETINFO_ITEM* net = board->FindNet( m_Netcode );
-    NETCLASS*     netclass = netclasses.GetDefault();
 
     if( net )
     {
         m_CurrentNetName->SetLabel( net->GetNetname() );
-        m_CurrentNetclassName->SetLabel( board->GetCurrentNetClassName() );
-        netclass = netclasses.Find( board->GetCurrentNetClassName() );
+        m_CurrentNetclassName->SetLabel( dsnSettings.GetCurrentNetClassName() );
+        netclass = netclasses.Find( dsnSettings.GetCurrentNetClassName() );
     }
 
     /* Disable the option "copy current to net" if we have only default netclass values
      * i.e. when m_TrackWidthSelector and m_ViaSizeSelector are set to 0
      */
-    if( !board->GetTrackWidthIndex() && !board->GetViaSizeIndex() )
+    if( !dsnSettings.GetTrackWidthIndex() && !dsnSettings.GetViaSizeIndex() )
     {
         m_Net2CurrValueButton->Enable( false );
         m_OptionID = ID_NETCLASS_VALUES_TO_CURRENT_NET;
@@ -74,13 +75,13 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
 
     // Display current values, and current netclass values:
     int value = netclass->GetTrackWidth();      // Display track width
-    msg = ReturnStringFromValue( g_UserUnit, value, true );
+    msg = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 0, msg  );
 
-    if( board->GetTrackWidthIndex() )
+    if( dsnSettings.GetTrackWidthIndex() )
     {
-        value = board->GetCurrentTrackWidth();
-        msg   = ReturnStringFromValue( g_UserUnit, value, true );
+        value = dsnSettings.GetCurrentTrackWidth();
+        msg   = StringFromValue( g_UserUnit, value, true );
     }
     else
         msg = _( "Default" );
@@ -88,45 +89,45 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     m_gridDisplayCurrentSettings->SetCellValue( 1, 0, msg  );
 
     value = netclass->GetViaDiameter();      // Display via diameter
-    msg   = ReturnStringFromValue( g_UserUnit, value, true );
+    msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 1, msg  );
 
-    if( board->GetViaSizeIndex() )
+    if( dsnSettings.GetViaSizeIndex() )
     {
-        value = board->GetCurrentViaSize();
-        msg   = ReturnStringFromValue( g_UserUnit, value, true );
+        value = dsnSettings.GetCurrentViaSize();
+        msg   = StringFromValue( g_UserUnit, value, true );
     }
     else
         msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 1, msg  );
 
     value = netclass->GetViaDrill();      // Display via drill
-    msg   = ReturnStringFromValue( g_UserUnit, value, true );
+    msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 2, msg  );
-    value = board->GetCurrentViaDrill();
+    value = dsnSettings.GetCurrentViaDrill();
     if( value >= 0 )
-        msg = ReturnStringFromValue( g_UserUnit, value, true );
+        msg = StringFromValue( g_UserUnit, value, true );
     else
         msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 2, msg  );
 
     value = netclass->GetuViaDiameter();      // Display micro via diameter
-    msg   = ReturnStringFromValue( g_UserUnit, value, true );
+    msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 3, msg  );
 #if 0   // Currently we use always the default netclass value
     value = board->GetCurrentMicroViaSize();
-    msg   = ReturnStringFromValue( g_UserUnit, value, true );
+    msg   = StringFromValue( g_UserUnit, value, true );
 #endif
     msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 3, msg  );
 
     value = netclass->GetuViaDrill();      // Display micro via drill
-    msg   = ReturnStringFromValue( g_UserUnit, value, true );
+    msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 4, msg  );
 #if 0   // Currently we use always the default netclass value
     value = board->GetCurrentMicroViaDrill();
     if( value >= 0 )
-        msg = ReturnStringFromValue( g_UserUnit, value, true );
+        msg = StringFromValue( g_UserUnit, value, true );
     else
 #endif
     msg = _( "Default" );

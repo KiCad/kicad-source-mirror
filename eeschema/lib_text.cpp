@@ -185,32 +185,27 @@ bool LIB_TEXT::Load( LINE_READER& aLineReader, wxString& errorMsg )
 }
 
 
-bool LIB_TEXT::HitTest( const wxPoint& aPosition )
+bool LIB_TEXT::HitTest( const wxPoint& aPosition ) const
 {
     return HitTest( aPosition, 0, DefaultTransform );
 }
 
 
-bool LIB_TEXT::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_TEXT::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
 {
     if( aThreshold < 0 )
         aThreshold = 0;
 
-    wxPoint physicalpos = aTransform.TransformCoordinate( m_Pos );
-    wxPoint tmp = m_Pos;
-    m_Pos = physicalpos;
+    EDA_TEXT tmp_text( *this );
+    tmp_text.SetTextPosition( aTransform.TransformCoordinate( m_Pos ) );
 
     /* The text orientation may need to be flipped if the
      *  transformation matrix causes xy axes to be flipped.
      * this simple algo works only for schematic matrix (rot 90 or/and mirror)
      */
     int t1 = ( aTransform.x1 != 0 ) ^ ( m_Orient != 0 );
-    int orient = t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
-    EXCHG( m_Orient, orient );
-    bool hit = TextHitTest( aPosition );
-    EXCHG( m_Orient, orient );
-    m_Pos = tmp;
-    return hit;
+    tmp_text.SetOrientation( t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT );
+    return tmp_text.TextHitTest( aPosition );
 }
 
 
@@ -423,7 +418,7 @@ void LIB_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
     LIB_ITEM::GetMsgPanelInfo( aList );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Thickness, true );
+    msg = StringFromValue( g_UserUnit, m_Thickness, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line width" ), msg, BLUE ) );
 }

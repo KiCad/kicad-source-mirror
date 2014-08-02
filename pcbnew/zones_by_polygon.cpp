@@ -29,7 +29,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
@@ -130,7 +131,7 @@ void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
 
         s_AuxiliaryList.ClearListAndDeleteItems();
         s_PickedList.ClearListAndDeleteItems();
-        SaveCopyOfZones( s_PickedList, GetBoard(), newZone->GetNet(), newZone->GetLayer() );
+        SaveCopyOfZones( s_PickedList, GetBoard(), newZone->GetNetCode(), newZone->GetLayer() );
         GetBoard()->Add( newZone );
 
         ITEM_PICKER picker( newZone, UR_NEW );
@@ -205,8 +206,14 @@ static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( zone )
     {
         zone->DrawWhileCreateOutline( Panel, DC, GR_XOR );
-        zone->ClearFlags();
         zone->RemoveAllContours();
+        if( zone->IsNew() )
+        {
+            delete zone;
+            pcbframe->GetBoard()->m_CurrentZoneContour = NULL;
+        }
+        else
+            zone->ClearFlags();
     }
 
     pcbframe->SetCurItem( NULL );
@@ -227,10 +234,10 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone,
         }
 
         ZONE_SETTINGS zoneInfo = GetZoneSettings();
-        zoneInfo.m_NetcodeSelection = aZone->GetNet();
+        zoneInfo.m_NetcodeSelection = aZone->GetNetCode();
         SetZoneSettings( zoneInfo );
 
-        GetBoard()->SetHighLightNet( aZone->GetNet() );
+        GetBoard()->SetHighLightNet( aZone->GetNetCode() );
 
         if( DC )
             HighLight( DC );
@@ -248,8 +255,7 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone,
     s_AuxiliaryList.ClearListAndDeleteItems();
     s_PickedList.ClearListAndDeleteItems();
 
-    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNet(),
-                     aZone->GetLayer() );
+    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNetCode(), aZone->GetLayer() );
 
     if ( IsNewCorner )
         aZone->Outline()->InsertCorner(corner_id-1, cx, cy );
@@ -278,8 +284,7 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
 
     s_PickedList.ClearListAndDeleteItems();
     s_AuxiliaryList.ClearListAndDeleteItems();
-    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNet(),
-                     aZone->GetLayer() );
+    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNetCode(), aZone->GetLayer() );
 }
 
 
@@ -294,17 +299,16 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* aZone )
         }
 
         ZONE_SETTINGS zoneInfo = GetZoneSettings();
-        zoneInfo.m_NetcodeSelection = aZone->GetNet();
+        zoneInfo.m_NetcodeSelection = aZone->GetNetCode();
         SetZoneSettings( zoneInfo );
 
-        GetBoard()->SetHighLightNet( aZone->GetNet() );
+        GetBoard()->SetHighLightNet( aZone->GetNetCode() );
         HighLight( DC );
     }
 
     s_PickedList.ClearListAndDeleteItems();
     s_AuxiliaryList.ClearListAndDeleteItems();
-    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNet(),
-                     aZone->GetLayer() );
+    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNetCode(), aZone->GetLayer() );
 
     aZone->SetFlags( IS_MOVED );
     m_canvas->SetMouseCapture( Show_Zone_Corner_Or_Outline_While_Move_Mouse,
@@ -372,7 +376,7 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone )
         return;
     }
 
-    LAYER_NUM layer = aZone->GetLayer();
+    LAYER_ID layer = aZone->GetLayer();
 
     if( DC )
     {
@@ -382,7 +386,7 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone )
 
     s_AuxiliaryList.ClearListAndDeleteItems();
     s_PickedList. ClearListAndDeleteItems();
-    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNet(), aZone->GetLayer() );
+    SaveCopyOfZones( s_PickedList, GetBoard(), aZone->GetNetCode(), aZone->GetLayer() );
     aZone->Outline()->DeleteCorner( aZone->GetSelectedCorner() );
 
     // modify zones outlines according to the new aZone shape
@@ -429,9 +433,9 @@ void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC )
     }
     else if( zone->IsDragging() )
     {
-        wxPoint offset;
-        offset = s_CornerInitialPosition - s_CursorLastPosition;
-        zone->MoveEdge( offset );
+        wxPoint offset = s_CornerInitialPosition - s_CursorLastPosition;
+        int selection = zone->GetSelectedCorner();
+        zone->MoveEdge( offset, selection );
     }
     else
     {
@@ -481,9 +485,9 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC*
     }
     else if( zone->IsDragging() )
     {
-        wxPoint offset;
-        offset = pos - s_CursorLastPosition;
-        zone->MoveEdge( offset );
+        wxPoint offset = pos - s_CursorLastPosition;
+        int selection = zone->GetSelectedCorner();
+        zone->MoveEdge( offset, selection );
         s_CursorLastPosition = pos;
     }
     else
@@ -514,21 +518,26 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         s_CurrentZone = NULL;
     }
 
-    // If no zone contour in progress, a new zone is being created:
-    if( !GetBoard()->m_CurrentZoneContour )
+    ZONE_CONTAINER* zone = GetBoard()->m_CurrentZoneContour;
+
+    // Verify if a new zone is allowed on this layer:
+    if( zone == NULL  )
     {
-        if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT &&
-            getActiveLayer() >= FIRST_NON_COPPER_LAYER )
+        if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT && !IsCopperLayer( GetActiveLayer() ) )
         {
             DisplayError( this,
                           _( "Error: a keepout area is allowed only on copper layers" ) );
             return 0;
         }
-        else
-            GetBoard()->m_CurrentZoneContour = new ZONE_CONTAINER( GetBoard() );
     }
 
-    ZONE_CONTAINER* zone = GetBoard()->m_CurrentZoneContour;
+    // If no zone contour in progress, a new zone is being created,
+    if( zone == NULL )
+    {
+        zone = GetBoard()->m_CurrentZoneContour = new ZONE_CONTAINER( GetBoard() );
+        zone->SetFlags( IS_NEW );
+        zone->SetTimeStamp( GetNewTimeStamp() );
+    }
 
     if( zone->GetNumCorners() == 0 )    // Start a new contour: init zone params (net, layer ...)
     {
@@ -537,7 +546,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             ZONE_EDIT_T edited;
 
             // Init zone params to reasonable values
-            zone->SetLayer( getActiveLayer() );
+            zone->SetLayer( GetActiveLayer() );
 
             // Prompt user for parameters:
             m_canvas->SetIgnoreMouseEvents( true );
@@ -548,27 +557,25 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                 if( GetBoard()->GetHighLightNetCode() > 0 )
                 {
                     zoneInfo.m_NetcodeSelection = GetBoard()->GetHighLightNetCode();
-
-                    zone->SetNet( zoneInfo.m_NetcodeSelection );
-                    zone->SetNetNameFromNetCode( );
+                    zone->SetNetCode( zoneInfo.m_NetcodeSelection );
                 }
+
                 double tmp = ZONE_THERMAL_RELIEF_GAP_MIL;
-                wxGetApp().GetSettings()->Read( ZONE_THERMAL_RELIEF_GAP_STRING_KEY, &tmp );
+
+                wxConfigBase* cfg = Kiface().KifaceSettings();
+                cfg->Read( ZONE_THERMAL_RELIEF_GAP_STRING_KEY, &tmp );
                 zoneInfo.m_ThermalReliefGap = KiROUND( tmp * IU_PER_MILS);
 
                 tmp = ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL;
-                wxGetApp().GetSettings()->Read( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
-                                                &tmp );
+                cfg->Read( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY, &tmp );
                 zoneInfo.m_ThermalReliefCopperBridge = KiROUND( tmp * IU_PER_MILS );
 
                 tmp = ZONE_CLEARANCE_MIL;
-                wxGetApp().GetSettings()->Read( ZONE_CLEARANCE_WIDTH_STRING_KEY,
-                                                &tmp );
+                cfg->Read( ZONE_CLEARANCE_WIDTH_STRING_KEY, &tmp );
                 zoneInfo.m_ZoneClearance = KiROUND( tmp * IU_PER_MILS );
 
                 tmp = ZONE_THICKNESS_MIL;
-                wxGetApp().GetSettings()->Read( ZONE_MIN_THICKNESS_WIDTH_STRING_KEY,
-                                                &tmp );
+                cfg->Read( ZONE_MIN_THICKNESS_WIDTH_STRING_KEY, &tmp );
                 zoneInfo.m_ZoneMinThickness = KiROUND( tmp * IU_PER_MILS );
 
                 zoneInfo.m_CurrentZone_Layer = zone->GetLayer();
@@ -578,8 +585,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                     zoneInfo.SetIsKeepout( true );
                     // Netcode and netname are irrelevant,
                     // so ensure they are cleared
-                    zone->SetNet( 0 );
-                    zone->SetNetName( wxEmptyString );
+                    zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
                     edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
                 }
                 else
@@ -599,11 +605,14 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             m_canvas->SetIgnoreMouseEvents( false );
 
             if( edited == ZONE_ABORT )
+            {
+                GetBoard()->m_CurrentZoneContour = NULL;
+                delete zone;
                 return 0;
+            }
 
             // Switch active layer to the selected zone layer
-            setActiveLayer( zoneInfo.m_CurrentZone_Layer );
-
+            SetActiveLayer( zoneInfo.m_CurrentZone_Layer );
             SetZoneSettings( zoneInfo );
         }
         else
@@ -612,7 +621,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             // zone (add cutout or similar zone)
 
             zoneInfo.m_CurrentZone_Layer = s_CurrentZone->GetLayer();
-            setActiveLayer( s_CurrentZone->GetLayer() );
+            SetActiveLayer( s_CurrentZone->GetLayer() );
 
             zoneInfo << *s_CurrentZone;
 
@@ -620,12 +629,12 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         }
 
         // Show the Net for zones on copper layers
-        if( zoneInfo.m_CurrentZone_Layer < FIRST_NON_COPPER_LAYER &&
-            ! zoneInfo.GetIsKeepout() )
+        if( IsCopperLayer( zoneInfo.m_CurrentZone_Layer ) &&
+            !zoneInfo.GetIsKeepout() )
         {
             if( s_CurrentZone )
             {
-                zoneInfo.m_NetcodeSelection = s_CurrentZone->GetNet();
+                zoneInfo.m_NetcodeSelection = s_CurrentZone->GetNetCode();
                 GetBoard()->SetZoneSettings( zoneInfo );
             }
 
@@ -645,9 +654,6 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
     // if first segment
     if( zone->GetNumCorners() == 0 )
     {
-        zone->SetFlags( IS_NEW );
-        zone->SetTimeStamp( GetNewTimeStamp() );
-
         zoneInfo.ExportSetting( *zone );
 
         zone->Outline()->Start( zoneInfo.m_CurrentZone_Layer,
@@ -739,14 +745,14 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
     m_canvas->SetMouseCapture( NULL, NULL );
 
     // Undraw old drawings, because they can have important changes
-    LAYER_NUM layer = zone->GetLayer();
+    LAYER_ID layer = zone->GetLayer();
     GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_XOR, layer );
     GetBoard()->RedrawFilledAreas( m_canvas, DC, GR_XOR, layer );
 
     // Save initial zones configuration, for undo/redo, before adding new zone
     s_AuxiliaryList.ClearListAndDeleteItems();
     s_PickedList.ClearListAndDeleteItems();
-    SaveCopyOfZones(s_PickedList, GetBoard(), zone->GetNet(), zone->GetLayer() );
+    SaveCopyOfZones(s_PickedList, GetBoard(), zone->GetNetCode(), zone->GetLayer() );
 
     // Put new zone in list
     if( !s_CurrentZone )
@@ -859,7 +865,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
         zoneInfo << *aZone;
         edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
     }
-    else if( aZone->GetLayer() < FIRST_NON_COPPER_LAYER )
+    else if( IsCopperLayer( aZone->GetLayer() ) )
     {
         // edit a zone on a copper layer
 
@@ -904,7 +910,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     NETINFO_ITEM* net = GetBoard()->FindNet( zoneInfo.m_NetcodeSelection );
 
     if( net )   // net == NULL should not occur
-        aZone->SetNetName( net->GetNetname() );
+        aZone->SetNetCode( net->GetNet() );
 
     // Combine zones if possible
     GetBoard()->OnAreaPolygonModified( &s_AuxiliaryList, aZone );

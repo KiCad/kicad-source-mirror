@@ -27,57 +27,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <appl_wxstruct.h>
-#include <dxf2brd_items.h>
-#include <wxPcbStruct.h>
+#include <dialog_dxf_import.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <convert_from_iu.h>
-#include <dialog_dxf_import_base.h>
 #include <class_pcb_layer_box_selector.h>
+#include <class_draw_panel_gal.h>
 
+#include <class_board.h>
+#include <class_module.h>
+#include <class_edge_mod.h>
+#include <class_text_mod.h>
+#include <class_pcb_text.h>
 
 // Keys to store setup in config
 #define DXF_IMPORT_LAYER_OPTION_KEY wxT("DxfImportBrdLayer")
 #define DXF_IMPORT_COORD_ORIGIN_KEY wxT("DxfImportCoordOrigin")
 #define DXF_IMPORT_LAST_FILE_KEY wxT("DxfImportLastFile")
 
-class DIALOG_DXF_IMPORT : public DIALOG_DXF_IMPORT_BASE
-{
-private:
-    PCB_EDIT_FRAME * m_parent;
-    wxConfig*        m_config;               // Current config
-
-    static wxString m_dxfFilename;
-    static int m_offsetSelection;
-    static LAYER_NUM m_layer;
-
-public:
-
-    DIALOG_DXF_IMPORT( PCB_EDIT_FRAME* aParent );
-    ~DIALOG_DXF_IMPORT();
-
-private:
-    // Virtual event handlers
-    void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-    void OnOKClick( wxCommandEvent& event );
-	void OnBrowseDxfFiles( wxCommandEvent& event );
-};
-
 // Static members of DIALOG_DXF_IMPORT, to remember
 // the user's choices during the session
 wxString DIALOG_DXF_IMPORT::m_dxfFilename;
 int DIALOG_DXF_IMPORT::m_offsetSelection = 4;
-LAYER_NUM DIALOG_DXF_IMPORT::m_layer = DRAW_N;
+LAYER_NUM DIALOG_DXF_IMPORT::m_layer = Dwgs_User;
 
 
-DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_EDIT_FRAME* aParent )
-    : DIALOG_DXF_IMPORT_BASE(  aParent )
+DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_BASE_FRAME* aParent )
+    : DIALOG_DXF_IMPORT_BASE( aParent )
 {
     m_parent = aParent;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
 
     if( m_config )
     {
-        m_layer = m_config->Read( DXF_IMPORT_LAYER_OPTION_KEY, (long)DRAW_N );
+        m_layer = m_config->Read( DXF_IMPORT_LAYER_OPTION_KEY, (long)Dwgs_User );
         m_offsetSelection = m_config->Read( DXF_IMPORT_COORD_ORIGIN_KEY, 3 );
         m_dxfFilename =  m_config->Read( DXF_IMPORT_LAST_FILE_KEY, wxEmptyString );
     }
@@ -86,14 +69,14 @@ DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_EDIT_FRAME* aParent )
     m_rbOffsetOption->SetSelection( m_offsetSelection );
 
     // Configure the layers list selector
-    m_SelLayerBox->SetLayersHotkeys( false );       // Do not display hotkeys
-    m_SelLayerBox->SetLayerMask( ALL_CU_LAYERS );   // Do not use copper layers
+    m_SelLayerBox->SetLayersHotkeys( false );           // Do not display hotkeys
+    m_SelLayerBox->SetLayerSet( LSET::AllCuMask() );    // Do not use copper layers
     m_SelLayerBox->SetBoardFrame( m_parent );
     m_SelLayerBox->Resync();
 
     if( m_SelLayerBox->SetLayerSelection( m_layer ) < 0 )
     {
-        m_layer = DRAW_N;
+        m_layer = Dwgs_User;
         m_SelLayerBox->SetLayerSelection( m_layer );
     }
 
@@ -120,16 +103,18 @@ DIALOG_DXF_IMPORT::~DIALOG_DXF_IMPORT()
 void DIALOG_DXF_IMPORT::OnBrowseDxfFiles( wxCommandEvent& event )
 {
     wxString path;
+    wxString filename;
 
     if( !m_dxfFilename.IsEmpty() )
     {
         wxFileName fn( m_dxfFilename );
         path = fn.GetPath();
+        filename = fn.GetFullName();
     }
     wxFileDialog dlg( m_parent,
                       wxT( "Open File" ),
-                      path, m_dxfFilename,
-                      wxT( "dxf Files (*.dxf)|*.dxf|*.DXF" ),
+                      path, filename,
+                      wxT( "dxf Files (*.dxf)|*.dxf" ),
                       wxFD_OPEN|wxFD_FILE_MUST_EXIST );
     dlg.ShowModal();
 
@@ -141,6 +126,7 @@ void DIALOG_DXF_IMPORT::OnBrowseDxfFiles( wxCommandEvent& event )
     m_dxfFilename = fileName;
     m_textCtrlFileName->SetValue( fileName );
 }
+
 
 void DIALOG_DXF_IMPORT::OnOKClick( wxCommandEvent& event )
 {
@@ -172,41 +158,105 @@ void DIALOG_DXF_IMPORT::OnOKClick( wxCommandEvent& event )
             break;
     }
 
-    BOARD * brd = m_parent->GetBoard();
-    DXF2BRD_CONVERTER dxf_importer;
-
     // Set coordinates offset for import (offset is given in mm)
-    dxf_importer.SetOffset( offsetX, offsetY );
+    m_dxfImporter.SetOffset( offsetX, offsetY );
     m_layer = m_SelLayerBox->GetLayerSelection();
-    dxf_importer.SetBrdLayer( m_layer );
+    m_dxfImporter.SetBrdLayer( m_layer );
 
     // Read dxf file:
-    dxf_importer.ImportDxfFile( m_dxfFilename, brd );
-
-    // Prepare the undo list
-    std::vector<BOARD_ITEM*>& list = dxf_importer.GetItemsList();
-    PICKED_ITEMS_LIST picklist;
-
-    // Build the undo list
-    for( unsigned ii = 0; ii < list.size(); ii++ )
-    {
-        ITEM_PICKER itemWrapper( list[ii], UR_NEW );
-        picklist.PushItem( itemWrapper );
-    }
-
-    m_parent->SaveCopyInUndoList( picklist, UR_NEW, wxPoint(0,0) );
+    m_dxfImporter.ImportDxfFile( m_dxfFilename );
 
     EndModal( wxID_OK );
 }
 
 
-bool InvokeDXFDialogImport( PCB_EDIT_FRAME* aCaller )
+bool InvokeDXFDialogBoardImport( PCB_BASE_FRAME* aCaller )
 {
     DIALOG_DXF_IMPORT dlg( aCaller );
-    bool success = dlg.ShowModal() == wxID_OK;
+    bool success = ( dlg.ShowModal() == wxID_OK );
 
     if( success )
+    {
+        const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
+        PICKED_ITEMS_LIST picklist;
+
+        BOARD* board = aCaller->GetBoard();
+        KIGFX::VIEW* view = aCaller->GetGalCanvas()->GetView();
+
+        std::list<BOARD_ITEM*>::const_iterator it, itEnd;
+        for( it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
+        {
+            BOARD_ITEM* item = *it;
+            board->Add( item );
+
+            ITEM_PICKER itemWrapper( item, UR_NEW );
+            picklist.PushItem( itemWrapper );
+
+            if( aCaller->IsGalCanvasActive() )
+                view->Add( item );
+        }
+
+        aCaller->SaveCopyInUndoList( picklist, UR_NEW, wxPoint( 0, 0 ) );
         aCaller->OnModify();
+    }
+
+    return success;
+}
+
+
+bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
+{
+    DIALOG_DXF_IMPORT dlg( aCaller );
+    bool success = ( dlg.ShowModal() == wxID_OK );
+
+    if( success )
+    {
+        const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
+        MODULE* module = aCaller->GetBoard()->m_Modules;
+        KIGFX::VIEW* view = aCaller->GetGalCanvas()->GetView();
+
+        aCaller->SaveCopyInUndoList( module, UR_MODEDIT );
+        aCaller->OnModify();
+
+        std::list<BOARD_ITEM*>::const_iterator it, itEnd;
+        for( it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
+        {
+            BOARD_ITEM* item = *it;
+            BOARD_ITEM* converted = NULL;
+
+            // Modules use different types for the same things,
+            // so we need to convert imported items to appropriate classes.
+            switch( item->Type() )
+            {
+            case PCB_LINE_T:
+            {
+                converted = new EDGE_MODULE( module );
+                *static_cast<DRAWSEGMENT*>( converted ) = *static_cast<DRAWSEGMENT*>( item );
+                module->Add( converted );
+                static_cast<EDGE_MODULE*>( converted )->SetLocalCoord();
+                delete item;
+                break;
+            }
+
+            case PCB_TEXT_T:
+            {
+                converted = new TEXTE_MODULE( module );
+                *static_cast<TEXTE_PCB*>( converted ) = *static_cast<TEXTE_PCB*>( item );
+                module->Add( module );
+                static_cast<TEXTE_MODULE*>( converted )->SetLocalCoord();
+                delete item;
+                break;
+            }
+
+            default:
+                assert( false );    // there is a type that is currently not handled here
+                break;
+            }
+
+            if( aCaller->IsGalCanvasActive() )
+                view->Add( converted );
+        }
+    }
 
     return success;
 }

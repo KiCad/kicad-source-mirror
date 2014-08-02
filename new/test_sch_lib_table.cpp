@@ -118,7 +118,7 @@ int main( int argc, char** argv )
 
         printf( "%*s^\n", ioe.byteIndex>=1 ? ioe.byteIndex-1 : 0, "" );
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         printf( "%s\n", (const char*) ioe.errorText.ToUTF8() );
     }

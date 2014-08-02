@@ -22,7 +22,7 @@ CPolyLine::CPolyLine()
 {
     m_hatchStyle = NO_HATCH;
     m_hatchPitch = 0;
-    m_layer      = LAYER_N_FRONT;
+    m_layer      = F_Cu;
     m_utility    = 0;
 }
 
@@ -1222,7 +1222,7 @@ int CPolyLine::HitTestForCorner( const wxPoint& aPos, int aDistMax ) const
  * Copy the contours to a KI_POLYGON_WITH_HOLES
  * The first contour is the main outline, others are holes
  */
-void CPOLYGONS_LIST::ExportTo( KI_POLYGON_WITH_HOLES& aPolygoneWithHole )
+void CPOLYGONS_LIST::ExportTo( KI_POLYGON_WITH_HOLES& aPolygoneWithHole ) const
 {
     unsigned    corners_count = m_cornersList.size();
 
@@ -1273,7 +1273,7 @@ void CPOLYGONS_LIST::ExportTo( KI_POLYGON_WITH_HOLES& aPolygoneWithHole )
  * Each contour is copied into a KI_POLYGON, and each KI_POLYGON
  * is append to aPolygons
  */
-void CPOLYGONS_LIST::ExportTo( KI_POLYGON_SET& aPolygons )
+void CPOLYGONS_LIST::ExportTo( KI_POLYGON_SET& aPolygons ) const
 {
     std::vector<KI_POLY_POINT> cornerslist;
     unsigned    corners_count = GetCornersCount();

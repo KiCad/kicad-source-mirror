@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
@@ -80,12 +80,12 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
 
             if( !success )
             {
-                msg.Printf( _( "Error creating file <%s>\n" ), 
+                msg.Printf( _( "Error creating file <%s>\n" ),
                             GetChars( fn.GetFullPath() ) );
             }
             else
             {
-                msg.Printf( _( "File <%s> OK\n" ), 
+                msg.Printf( _( "File <%s> OK\n" ),
                             GetChars( fn.GetFullPath() ) );
             }
 

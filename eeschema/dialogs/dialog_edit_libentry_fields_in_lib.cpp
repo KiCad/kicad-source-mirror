@@ -27,7 +27,8 @@
 #include <algorithm>
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiway.h>
 #include <confirm.h>
 #include <class_drawpanel.h>
 #include <wxEeschemaStruct.h>
@@ -141,7 +142,7 @@ void LIB_EDIT_FRAME::InstallFieldsEditorDialog( wxCommandEvent& event )
 
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB dlg( this, m_component );
 
-    int abort = dlg.ShowModal();
+    int abort = dlg.ShowQuasiModal();
 
     if( abort )
         return;
@@ -211,7 +212,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnListItemSelected( wxListEvent& event 
 
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnCancelButtonClick( wxCommandEvent& event )
 {
-    EndModal( 1 );
+    EndQuasiModal( 1 );
 }
 
 
@@ -282,7 +283,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
 
     m_parent->OnModify();
 
-    EndModal( 0 );
+    EndQuasiModal( 0 );
 }
 
 
@@ -352,11 +353,10 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& e
     if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
         return;
 
-    if( fieldNdx < MANDATORY_FIELDS )
-    {
-        wxBell();
+    // The first field which can be moved up is the second user field
+    // so any field which id <= MANDATORY_FIELDS cannot be moved up
+    if( fieldNdx <= MANDATORY_FIELDS )
         return;
-    }
 
     if( !copyPanelToSelectedField() )
         return;
@@ -367,9 +367,11 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& e
 
     m_FieldsBuf[fieldNdx - 1] = m_FieldsBuf[fieldNdx];
     setRowItem( fieldNdx - 1, m_FieldsBuf[fieldNdx] );
+    m_FieldsBuf[fieldNdx - 1].SetId(fieldNdx - 1);
 
     m_FieldsBuf[fieldNdx] = tmp;
     setRowItem( fieldNdx, tmp );
+    m_FieldsBuf[fieldNdx].SetId(fieldNdx);
 
     updateDisplay( );
 
@@ -381,8 +383,28 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& e
 
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::showButtonHandler( wxCommandEvent& event )
 {
-    wxString datasheet_uri = fieldValueTextCtrl->GetValue();
-    ::wxLaunchDefaultBrowser( datasheet_uri );
+    unsigned fieldNdx = getSelectedFieldNdx();
+
+    if( fieldNdx == DATASHEET )
+    {
+        wxString datasheet_uri = fieldValueTextCtrl->GetValue();
+        ::wxLaunchDefaultBrowser( datasheet_uri );
+    }
+    else if( fieldNdx == FOOTPRINT )
+    {
+        // pick a footprint using the footprint picker.
+        wxString fpid;
+
+        KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
+
+        if( frame->ShowModal( &fpid, this ) )
+        {
+            // DBG( printf( "%s: %s\n", __func__, TO_UTF8( fpid ) ); )
+            fieldValueTextCtrl->SetValue( fpid );
+        }
+
+        frame->Destroy();
+    }
 }
 
 
@@ -486,8 +508,9 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
     // Add template fieldnames:
     // Now copy in the template fields, in the order that they are present in the
     // template field editor UI.
-    const TEMPLATE_FIELDNAMES& tfnames =
-        ((SCH_EDIT_FRAME*)m_parent->GetParent())->GetTemplateFieldNames();
+    SCH_EDIT_FRAME* editor = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, true );
+
+    const TEMPLATE_FIELDNAMES& tfnames = editor->GetTemplateFieldNames();
 
     for( TEMPLATE_FIELDNAMES::const_iterator it = tfnames.begin();  it!=tfnames.end();  ++it )
     {
@@ -643,7 +666,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     // only user defined fields may be moved, and not the top most user defined
     // field since it would be moving up into the fixed fields, > not >=
-    moveUpButton->Enable( fieldNdx >= MANDATORY_FIELDS );
+    moveUpButton->Enable( fieldNdx > MANDATORY_FIELDS );
 
     // if fieldNdx == REFERENCE, VALUE, then disable delete button
     deleteFieldButton->Enable( fieldNdx >= MANDATORY_FIELDS );
@@ -652,7 +675,14 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetSize().x ) );
 
-    m_show_datasheet_button->Enable( fieldNdx == DATASHEET );
+    m_show_datasheet_button->Enable( fieldNdx == DATASHEET || fieldNdx == FOOTPRINT );
+
+    if( fieldNdx == DATASHEET )
+        m_show_datasheet_button->SetLabel( _( "Show in Browser" ) );
+    else if( fieldNdx == FOOTPRINT )
+        m_show_datasheet_button->SetLabel( _( "Assign Footprint" ) );
+    else
+        m_show_datasheet_button->SetLabel( wxEmptyString );
 
     wxPoint coord = field.GetTextPosition();
     wxPoint zero;
@@ -675,13 +705,13 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
         // top of each other.
     }
 
-    wxString coordText = ReturnStringFromValue( g_UserUnit, coord.x );
+    wxString coordText = StringFromValue( g_UserUnit, coord.x );
     posXTextCtrl->SetValue( coordText );
 
     // Note: the Y axis for components in lib is from bottom to top
     // and the screen axis is top to bottom: we must change the y coord sign for editing
     NEGATE( coord.y );
-    coordText = ReturnStringFromValue( g_UserUnit, coord.y );
+    coordText = StringFromValue( g_UserUnit, coord.y );
     posYTextCtrl->SetValue( coordText );
 }
 
@@ -747,8 +777,8 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     field.SetItalic( (style & 1 ) != 0 );
     field.SetBold( (style & 2 ) != 0 );
 
-    wxPoint pos( ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue() ),
-                 ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue() ) );
+    wxPoint pos( ValueFromString( g_UserUnit, posXTextCtrl->GetValue() ),
+                 ValueFromString( g_UserUnit, posYTextCtrl->GetValue() ) );
 
     // Note: the Y axis for components in lib is from bottom to top
     // and the screen axis is top to bottom: we must change the y coord sign for editing

@@ -7,7 +7,6 @@ LIBS:linear
 LIBS:regul
 LIBS:interface
 LIBS:special
-LIBS:complex_hierarchy-cache
 EELAYER 24 0
 EELAYER END
 $Descr A4 11693 8268

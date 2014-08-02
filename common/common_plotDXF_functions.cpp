@@ -11,6 +11,7 @@
 #include <plot_common.h>
 #include <macros.h>
 #include <kicad_string.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 /**
  * Oblique angle for DXF native text
@@ -319,24 +320,115 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int 
 
 /**
  * DXF polygon: doesn't fill it but at least it close the filled ones
+ * DXF does not know thick outline.
+ * It does not know thhick segments, therefore filled polygons with thick outline
+ * are converted to inflated polygon by aWidth/2
  */
+#include "clipper.hpp"
 void DXF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
                             FILL_T aFill, int aWidth)
 {
     if( aCornerList.size() <= 1 )
         return;
 
-    MoveTo( aCornerList[0] );
-    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
-        LineTo( aCornerList[ii] );
+    unsigned last = aCornerList.size() - 1;
 
-    // Close polygon if 'fill' requested
-    if( aFill )
+    // Plot outlines with lines (thickness = 0) to define the polygon
+    if( aWidth <= 0  )
     {
-        unsigned ii = aCornerList.size() - 1;
-        if( aCornerList[ii] != aCornerList[0] )
-            LineTo( aCornerList[0] );
+        MoveTo( aCornerList[0] );
+
+        for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+            LineTo( aCornerList[ii] );
+
+        // Close polygon if 'fill' requested
+        if( aFill )
+        {
+            if( aCornerList[last] != aCornerList[0] )
+                LineTo( aCornerList[0] );
+        }
+
+        PenFinish();
+
+        return;
     }
+
+
+    // if the polygon outline has thickness, and is not filled
+    // (i.e. is a polyline) plot outlines with thick segments
+    if( aWidth > 0 && !aFill )
+    {
+        MoveTo( aCornerList[0] );
+
+        for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+            ThickSegment( aCornerList[ii-1], aCornerList[ii],
+                          aWidth, FILLED );
+
+        return;
+    }
+
+    // The polygon outline has thickness, and is filled
+    // Build and plot the polygon which contains the initial
+    // polygon and its thick outline
+    CPOLYGONS_LIST  bufferOutline;
+    CPOLYGONS_LIST  bufferPolybase;
+    const int circleToSegmentsCount = 16;
+
+    // enter outline as polygon:
+    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+    {
+        TransformRoundedEndsSegmentToPolygon( bufferOutline,
+            aCornerList[ii-1], aCornerList[ii], circleToSegmentsCount, aWidth );
+    }
+
+    // enter the initial polygon:
+    for( unsigned ii = 0; ii < aCornerList.size(); ii++ )
+    {
+        CPolyPt polypoint( aCornerList[ii].x, aCornerList[ii].y );
+        bufferPolybase.Append( polypoint );
+    }
+
+    bufferPolybase.CloseLastContour();
+
+    // Merge polygons to build the polygon which contains the initial
+    // polygon and its thick outline
+    KI_POLYGON_SET  polysBase;      // Store the main outline and the final outline
+    KI_POLYGON_SET  polysOutline;   // Store the thick segments to draw the outline
+    bufferPolybase.ExportTo( polysBase );
+    bufferOutline.ExportTo( polysOutline );
+
+    polysBase += polysOutline;      // create the outline which contains thick outline
+
+    // We should have only one polygon in list, now.
+    wxASSERT( polysBase.size() == 1 );
+
+    if( polysBase.size() < 1 )      // should not happen
+        return;
+
+    KI_POLYGON poly = polysBase[0]; // Expected only one polygon here
+
+    if( poly.size() < 2 )           // should not happen
+        return;
+
+    // Now, output the final polygon to DXF file:
+    last = poly.size() - 1;
+    KI_POLY_POINT point = *(poly.begin());
+    wxPoint startPoint( point.x(), point.y() );
+    MoveTo( startPoint );
+
+    for( unsigned ii = 1; ii < poly.size(); ii++ )
+    {
+        point = *( poly.begin() + ii );
+        LineTo( wxPoint( point.x(), point.y() ) );
+    }
+
+    // Close polygon, if needed
+    point = *(poly.begin() + last);
+    wxPoint endPoint( point.x(), point.y() );
+
+    if( endPoint != startPoint )
+        LineTo( startPoint );
+
     PenFinish();
 }
 
@@ -570,12 +662,21 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                         enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                         int                         aWidth,
                         bool                        aItalic,
-                        bool                        aBold )
+                        bool                        aBold,
+                        bool                        aMultilineAllowed )
 {
-    if( textAsLines || containsNonAsciiChars( aText ) )
-        /* output text as graphics */
+    // Fix me: see how to use DXF text mode for multiline texts
+    if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
+        aMultilineAllowed = false;  // the text has only one line.
+
+    if( textAsLines || containsNonAsciiChars( aText ) || aMultilineAllowed )
+    {
+        // output text as graphics.
+        // Perhaps miltiline texts could be handled as DXF text entity
+        // but I do not want spend time about this (JPC)
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                aWidth, aItalic, aBold );
+                aWidth, aItalic, aBold, aMultilineAllowed );
+    }
     else
     {
         /* Emit text as a text entity. This loses formatting and shape but it's

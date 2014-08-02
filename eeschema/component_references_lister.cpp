@@ -592,12 +592,12 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             msg.Printf( _( "Different values for %s%d%s (%s) and %s%d%s (%s)" ),
                         GetChars( componentFlatList[ii].GetRef() ),
                         componentFlatList[ii].m_NumRef,
-                        GetChars( LIB_COMPONENT::ReturnSubReference(
+                        GetChars( LIB_COMPONENT::SubReference(
                                   componentFlatList[ii].m_Unit ) ),
                         GetChars( componentFlatList[ii].m_Value->GetText() ),
                         GetChars( componentFlatList[next].GetRef() ),
                         componentFlatList[next].m_NumRef,
-                        GetChars( LIB_COMPONENT::ReturnSubReference(
+                        GetChars( LIB_COMPONENT::SubReference(
                                   componentFlatList[next].m_Unit ) ),
                         GetChars( componentFlatList[next].m_Value->GetText() ) );
 

@@ -26,10 +26,11 @@
  */
 
 #include <fctsys.h>
+#include <kiway.h>
 #include <common.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 
 #include <general.h>
 #include <libeditframe.h>
@@ -435,22 +436,25 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& event )
 {
-    wxString FullFileName, mask;
-    wxString docpath, filename;
+    PROJECT&        prj = Prj();
+    SEARCH_STACK&   search = prj.SchSearchS();
 
-    docpath = wxGetApp().ReturnLastVisitedLibraryPath( wxT( "doc" ) );
+    wxString    mask = wxT( "*" );
+    wxString    docpath = prj.GetRString( PROJECT::DOC_PATH );
 
-    mask = wxT( "*" );
-    FullFileName = EDA_FileSelector( _( "Doc Files" ),
-                                     docpath,       /* Chemin par defaut */
-                                     wxEmptyString, /* nom fichier par defaut */
-                                     wxEmptyString, /* extension par defaut */
-                                     mask,          /* Masque d'affichage */
+    if( !docpath )
+        docpath = search.LastVisitedPath( wxT( "doc" ) );
+
+    wxString    fullFileName = EDA_FileSelector( _( "Doc Files" ),
+                                     docpath,
+                                     wxEmptyString,
+                                     wxEmptyString,
+                                     mask,
                                      this,
                                      wxFD_OPEN,
                                      true
                                      );
-    if( FullFileName.IsEmpty() )
+    if( fullFileName.IsEmpty() )
         return;
 
     /* If the path is already in the library search paths
@@ -460,10 +464,12 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
      * because it preserve use of default libraries paths, when the path is a sub path of
      * these default paths
      */
-    wxFileName fn = FullFileName;
-    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
+    wxFileName fn = fullFileName;
 
-    filename = wxGetApp().ReturnFilenameWithRelativePathInLibPath( FullFileName );
+    prj.SetRString( PROJECT::DOC_PATH, fn.GetPath() );
+
+    wxString filename = search.FilenameWithRelativePathInSearchList( fullFileName );
+
     // Filenames are always stored in unix like mode, ie separator "\" is stored as "/"
     // to ensure files are identical under unices and windows
 #ifdef __WINDOWS__

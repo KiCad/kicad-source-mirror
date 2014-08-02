@@ -31,6 +31,7 @@
 
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_set.html
 #include <boost/ptr_container/ptr_set.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <fctsys.h>
 #include <specctra_lexer.h>
@@ -40,7 +41,7 @@
 class TYPE_COLLECTOR;           // outside the DSN namespace
 class BOARD;
 class TRACK;
-class SEGVIA;
+class VIA;
 class NETCLASS;
 class MODULE;
 
@@ -3619,7 +3620,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     std::vector<int> kicadLayer2pcb;
 
     /// maps PCB layer number to BOARD layer numbers
-    std::vector<LAYER_NUM> pcbLayer2kicad;
+    std::vector<LAYER_ID>   pcbLayer2kicad;
 
     /// used during FromSESSION() only, memory for it is not owned here.
     UNIT_RES*       routeResolution;
@@ -3790,12 +3791,12 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
 
     /**
      * Function makeVia
-     * makes any kind of PADSTACK using the given KiCad SEGVIA.
-     * @param aVia The SEGVIA to build the padstack from.
+     * makes any kind of PADSTACK using the given KiCad VIA.
+     * @param aVia The VIA to build the padstack from.
      * @return PADSTACK* - The padstack, which is on the heap only, user must save
      *  or delete it.
      */
-    PADSTACK* makeVia( const SEGVIA* aVia );
+    PADSTACK* makeVia( const ::VIA* aVia );
 
     /**
      * Function deleteNETs
@@ -3813,7 +3814,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * Function exportNETCLASS
      * exports \a aNetClass to the DSN file.
      */
-    void exportNETCLASS( NETCLASS* aNetClass, BOARD* aBoard );
+    void exportNETCLASS( boost::shared_ptr<NETCLASS> aNetClass, BOARD* aBoard );
 
     //-----</FromBOARD>------------------------------------------------------
 
@@ -3827,10 +3828,10 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
 
     /**
      * Function makeVIA
-     * instantiates a KiCad SEGVIA on the heap and initializes it with internal
+     * instantiates a KiCad VIA on the heap and initializes it with internal
      * values consistent with the given PADSTACK, POINT, and netcode.
      */
-    SEGVIA* makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IO_ERROR );
+    ::VIA* makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IO_ERROR );
 
     //-----</FromSESSION>----------------------------------------------------
 

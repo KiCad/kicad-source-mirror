@@ -34,17 +34,16 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <gestfich.h>
-#include <param_config.h>
+#include <config_params.h>
 #include <colors_selection.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <hotkeys.h>
 #include <dialog_hotkeys_editor.h>
 
 
 #define GROUP wxT("/gerbview")
-
-#define INSETUP true
 
 
 void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )

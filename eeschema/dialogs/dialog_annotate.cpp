@@ -29,21 +29,20 @@
 
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
 #include <wxEeschemaStruct.h>
 #include <class_drawpanel.h>
 
 #include <invoke_sch_dialog.h>
 #include <dialog_annotate_base.h>
+#include <kiface_i.h>
+
+#define KEY_ANNOTATE_SORT_OPTION        wxT( "AnnotateSortOption" )
+#define KEY_ANNOTATE_ALGO_OPTION        wxT( "AnnotateAlgoOption" )
+#define KEY_ANNOTATE_AUTOCLOSE_OPTION   wxT( "AnnotateAutoCloseOption" )
+#define KEY_ANNOTATE_USE_SILENTMODE     wxT( "AnnotateSilentMode" )
 
 
-#define KEY_ANNOTATE_SORT_OPTION wxT( "AnnotateSortOption" )
-#define KEY_ANNOTATE_ALGO_OPTION wxT( "AnnotateAlgoOption" )
-#define KEY_ANNOTATE_AUTOCLOSE_OPTION wxT( "AnnotateAutoCloseOption" )
-#define KEY_ANNOTATE_USE_SILENTMODE wxT( "AnnotateSilentMode" )
-
-
-class wxConfig;
+class wxConfigBase;
 
 
 /**
@@ -57,7 +56,7 @@ public:
 
 private:
     SCH_EDIT_FRAME* m_Parent;
-    wxConfig*       m_Config;
+    wxConfigBase*   m_Config;
 
     /// Initialises member variables
     void InitValues();
@@ -112,7 +111,7 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent )
 
 void DIALOG_ANNOTATE::InitValues()
 {
-    m_Config = wxGetApp().GetSettings();
+    m_Config = Kiface().KifaceSettings();
 
     if( m_Config )
     {

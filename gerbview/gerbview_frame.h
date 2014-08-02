@@ -31,13 +31,12 @@
 #define  WX_GERBER_STRUCT_H
 
 
-#include <param_config.h>
-#include <wxstruct.h>
+#include <config_params.h>
+#include <draw_frame.h>
 
 #include <gerbview.h>
 #include <class_gbr_layout.h>
 #include <class_gbr_screen.h>
-#include <layers_id_colors_and_visibility.h>
 
 #define NO_AVAILABLE_LAYERS UNDEFINED_LAYER
 
@@ -167,7 +166,7 @@ public:
      * different radiobutton is clicked on) prior to then clicking on the "Deselect"
      * button provided within the "Layer selection:" dialog box).
      */
-    LAYER_NUM SelectPCBLayer( LAYER_NUM aDefaultLayer, int aOpperLayerCount, bool aNullLayer = false );
+    int SelectPCBLayer( int aDefaultLayer, int aOpperLayerCount, bool aNullLayer = false );
 
 protected:
     GERBER_LAYER_WIDGET*    m_LayersManager;
@@ -201,14 +200,14 @@ private:
 
     // An array sting to store warning messages when reaging a gerber file.
     wxArrayString   m_Messages;
-public:
-    GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
-                    const wxPoint& aPosition, const wxSize& aSize,
-                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
+public:
+    GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~GERBVIEW_FRAME();
 
     void    OnCloseWindow( wxCloseEvent& Event );
+
+    bool    OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl );   // overload KIWAY_PLAYER
 
     // Virtual basic functions:
     void    RedrawActiveWindow( wxDC* DC, bool EraseBg );
@@ -306,9 +305,9 @@ public:
      * Function GetVisibleLayers
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * Returns a bit-mask of all the layers that are visible
-     * @return int - the visible layers in bit-mapped form.
+     * @return long - the visible layers in bit-mapped form.
      */
-    LAYER_MSK GetVisibleLayers() const;
+    long GetVisibleLayers() const;
 
     /**
      * Function SetVisibleLayers
@@ -316,7 +315,7 @@ public:
      * changes the bit-mask of visible layers
      * @param aLayerMask = The new bit-mask of visible layers
      */
-    void    SetVisibleLayers( LAYER_MSK aLayerMask );
+    void    SetVisibleLayers( long aLayerMask );
 
     /**
      * Function IsLayerVisible
@@ -324,7 +323,7 @@ public:
      * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool    IsLayerVisible( LAYER_NUM aLayer ) const;
+    bool    IsLayerVisible( int aLayer ) const;
 
     /**
      * Function GetVisibleElementColor
@@ -338,13 +337,13 @@ public:
      * Function GetLayerColor
      * gets a layer color for any valid layer.
      */
-    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const;
+    EDA_COLOR_T GetLayerColor( int aLayer ) const;
 
     /**
      * Function SetLayerColor
      * changes a layer color for any valid layer.
      */
-    void    SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor );
+    void    SetLayerColor( int aLayer, EDA_COLOR_T aColor );
 
     /**
      * Function GetNegativeItemsColor
@@ -396,13 +395,13 @@ public:
      * will change the currently active layer to \a aLayer and also
      * update the GERBER_LAYER_WIDGET.
      */
-    void    setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
+    void    setActiveLayer( int aLayer, bool doLayerWidgetUpdate = true );
 
     /**
      * Function getActiveLayer
      * returns the active layer
      */
-    LAYER_NUM getActiveLayer();
+    int getActiveLayer();
 
     /**
      * Function getNextAvailableLayer
@@ -411,7 +410,7 @@ public:
      * @param aLayer The first layer to search.
      * @return The first empty layer found or NO_AVAILABLE_LAYERS.
      */
-    LAYER_NUM getNextAvailableLayer( LAYER_NUM aLayer = FIRST_LAYER ) const;
+    int getNextAvailableLayer( int aLayer = 0 ) const;
 
     bool hasAvailableLayers() const
     {
@@ -458,34 +457,11 @@ public:
      */
     PARAM_CFG_ARRAY&    GetConfigurationSettings( void );
 
-    /**
-     * Load applications settings specific to the Pcbnew.
-     *
-     * This overrides the base class EDA_DRAW_FRAME::LoadSettings() to
-     * handle settings specific common to the PCB layout application.  It
-     * calls down to the base class to load settings common to all
-     * EDA_DRAW_FRAME type drawing frames.
-     * Please put your application settings for Pcbnew here
-     * to avoid having application settings loaded all over the place.
-     */
-    virtual void        LoadSettings();
+    void LoadSettings( wxConfigBase* aCfg );    // override virtual
 
-    /**
-     * Save applications settings common to PCB draw frame objects.
-     *
-     * This overrides the base class EDA_DRAW_FRAME::SaveSettings() to
-     * save settings specific to the gerbview application main window.  It
-     * calls down to the base class to save settings common to all
-     * drawing frames.  Please put your application settings for Gerbview here
-     * to avoid having application settings saved all over the place.
-     */
-    virtual void        SaveSettings();
+    void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
-    /**
-     * Function SetLanguage
-     * called on a language menu selection
-     */
-    virtual void        SetLanguage( wxCommandEvent& event );
+    void                ShowChangedLanguage();  // override EDA_BASE_FRAME virtual
 
     void                Process_Special_Functions( wxCommandEvent& event );
     void                OnSelectOptionToolbar( wxCommandEvent& event );
@@ -556,11 +532,11 @@ public:
     void                OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
 
     /**
-     * Function ReturnBlockCommand
+     * Function BlockCommand
      * returns the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
      * the \a aKey (ALT, SHIFT ALT ..)
      */
-    virtual int         ReturnBlockCommand( int key );
+    virtual int         BlockCommand( int key );
 
     /**
      * Function HandleBlockPlace
@@ -654,8 +630,8 @@ public:
     void                Liste_D_Codes();
 
     // PCB handling
-    bool                Clear_Pcb( bool query );
-    void                Erase_Current_Layer( bool query );
+    bool                Clear_DrawLayers( bool query );
+    void                Erase_Current_DrawLayer( bool query );
 
     // Conversion function
     void                ExportDataInPcbnewFormat( wxCommandEvent& event );
@@ -676,7 +652,7 @@ public:
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
-    void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                              UNDO_REDO_T aTypeCommand,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
     {
@@ -690,7 +666,7 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void    PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer, bool aPrintMirrorMode,
+    virtual void    PrintPage( wxDC* aDC, LSET aPrintMasklayer, bool aPrintMirrorMode,
                                void* aData = NULL );
 
     /**

@@ -42,6 +42,14 @@ if( CMAKE_TOOLCHAIN_FILE )
     set( TOOLCHAIN "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" )
 endif()
 
+FIND_PROGRAM (patch_bin NAMES patch.exe patch)
+
+if( "${patch_bin}" STREQUAL "patch_bin-NOTFOUND" )
+    set( PATCH_STR_CMD bzr patch -p0 )
+else()
+    set( PATCH_STR_CMD ${patch_bin} -p0 -i )
+endif()
+
 ExternalProject_Add(
     openssl
     DOWNLOAD_DIR ${DOWNLOAD_DIR}
@@ -58,13 +66,13 @@ ExternalProject_Add(
     # PATCH_COMMAND patch -p0 < ${PROJECT_SOURCE_DIR}/patches/openssl-1.0.1e.patch
 
     # This one requires the bzr commit below, since bzr patch only knows a working tree.
-    
+
     # Revert the branch to pristine before applying patch sets as bzr patch
     # fails when applying a patch to the branch twice and doesn't have a switch
     # to ignore previously applied patches
     PATCH_COMMAND   bzr revert
         # PATCH_COMMAND continuation (any *_COMMAND here can be continued with COMMAND):
-        COMMAND     bzr patch -p0 ${PROJECT_SOURCE_DIR}/patches/openssl-1.0.1e.patch
+        COMMAND    ${PATCH_STR_CMD} ${PROJECT_SOURCE_DIR}/patches/openssl-1.0.1e.patch
 
     CONFIGURE_COMMAND
             ${CMAKE_COMMAND}

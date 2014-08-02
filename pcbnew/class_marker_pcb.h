@@ -64,12 +64,22 @@ public:
     const wxPoint& GetPosition() const          { return m_Pos; }
     void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }
 
-    bool HitTest( const wxPoint& aPosition )
+    void SetItem( const BOARD_ITEM* aItem )
+    {
+        m_item = aItem;
+    }
+
+    const BOARD_ITEM* GetItem() const
+    {
+        return m_item;
+    }
+
+    bool HitTest( const wxPoint& aPosition ) const
     {
         return HitTestMarker( aPosition );
     }
 
-    bool IsOnLayer( LAYER_NUM aLayer ) const;
+    bool IsOnLayer( LAYER_ID aLayer ) const;
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
@@ -77,9 +87,22 @@ public:
 
     BITMAP_DEF GetMenuImage() const { return  drc_xpm; }
 
+    ///> @copydoc VIEW_ITEM::ViewBBox()
+    virtual const BOX2I ViewBBox() const
+    {
+        return GetParent()->ViewBBox();
+    }
+
+    ///> @copydoc VIEW_ITEM::ViewGetLayers()
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
+
+protected:
+    ///> Pointer to BOARD_ITEM that causes DRC error.
+    const BOARD_ITEM* m_item;
 };
 
 #endif      //  CLASS_MARKER_PCB_H

@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <cstdio>
@@ -42,12 +42,14 @@
 #include "pns_solid.h"
 #include "pns_utils.h"
 #include "pns_router.h"
+#include "pns_shove.h"
+#include "pns_dragger.h"
 
 #include <router/router_preview_item.h>
 
 #include <class_board.h>
-#include <class_board_item.h>
-#include <class_pad.h>
+#include <class_board_connected_item.h>
+#include <class_module.h>
 #include <class_track.h>
 #include <ratsnest_data.h>
 #include <layers_id_colors_and_visibility.h>
@@ -66,8 +68,11 @@ public:
         for( unsigned int i = 0; i < aBoard->GetNetCount(); i++ )
         {
             NETINFO_ITEM* ni = aBoard->FindNet( i );
+            if( ni == NULL )
+                continue;
+
             wxString netClassName = ni->GetClassName();
-            NETCLASS* nc = aBoard->m_NetClasses.Find( netClassName );
+            NETCLASSPTR nc = aBoard->GetDesignSettings().m_NetClasses.Find( netClassName );
             int clearance = nc->GetClearance();
             m_clearanceCache[i] = clearance;
             TRACE( 1, "Add net %d netclass %s clearance %d", i % netClassName.mb_str() %
@@ -77,12 +82,28 @@ public:
         m_defaultClearance = 254000;    // aBoard->m_NetClasses.Find ("Default clearance")->GetClearance();
     }
 
-    int operator()( const PNS_ITEM* a, const PNS_ITEM* b )
+    int localPadClearance( const PNS_ITEM* aItem ) const
     {
-        int net_a = a->GetNet();
-        int cl_a = (net_a >= 0 ? m_clearanceCache[net_a] : m_defaultClearance);
-        int net_b = b->GetNet();
-        int cl_b = (net_b >= 0 ? m_clearanceCache[net_b] : m_defaultClearance);
+        if( !aItem->Parent() || aItem->Parent()->Type() != PCB_PAD_T )
+            return 0;
+
+        const D_PAD* pad = static_cast<D_PAD*>( aItem->Parent() );
+
+        return pad->GetLocalClearance();
+    }
+
+    int operator()( const PNS_ITEM* aA, const PNS_ITEM* aB )
+    {
+        int net_a = aA->Net();
+        int cl_a = ( net_a >= 0 ? m_clearanceCache[net_a] : m_defaultClearance );
+        int net_b = aB->Net();
+        int cl_b = ( net_b >= 0 ? m_clearanceCache[net_b] : m_defaultClearance );
+
+        int pad_a = localPadClearance( aA );
+        int pad_b = localPadClearance( aB );
+
+        cl_a = std::max( cl_a, pad_a );
+        cl_b = std::max( cl_b, pad_b );
 
         return std::max( cl_a, cl_b );
     }
@@ -92,32 +113,32 @@ private:
     int m_defaultClearance;
 };
 
+
 PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 {
-    PNS_LAYERSET layers;
+    PNS_LAYERSET layers( 0, MAX_CU_LAYERS - 1 );
 
     switch( aPad->GetAttribute() )
     {
     case PAD_STANDARD:
-        layers = PNS_LAYERSET( 0, 15 );
+        layers = PNS_LAYERSET( 0, MAX_CU_LAYERS - 1 ); // TODO necessary? it is already initialized
         break;
 
     case PAD_SMD:
     case PAD_CONN:
-    {
-        LAYER_MSK lmsk = aPad->GetLayerMask();
-        int i;
+        {
+            LSET lmsk = aPad->GetLayerSet();
 
-        for( i = FIRST_COPPER_LAYER; i <= LAST_COPPER_LAYER; i++ )
-		{
-            if( lmsk & (1 << i) )
+            for( int i = 0; i < MAX_CU_LAYERS; i++ )
             {
-                layers = PNS_LAYERSET( i );
-                break;
+                if( lmsk[i] )
+                {
+                    layers = PNS_LAYERSET( i );
+                    break;
+                }
             }
-		}
+        }
         break;
-    }
 
     default:
         TRACE( 0, "unsupported pad type 0x%x", aPad->GetAttribute() );
@@ -127,50 +148,67 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
     PNS_SOLID* solid = new PNS_SOLID;
 
     solid->SetLayers( layers );
-    solid->SetNet( aPad->GetNet() );
+    solid->SetNet( aPad->GetNetCode() );
+    solid->SetParent( aPad );
+
     wxPoint wx_c = aPad->GetPosition();
     wxSize  wx_sz = aPad->GetSize();
 
     VECTOR2I c( wx_c.x, wx_c.y );
     VECTOR2I sz( wx_sz.x, wx_sz.y );
 
-    solid->SetCenter( c );
+    solid->SetPos( c );
 
     double orient = aPad->GetOrientation() / 10.0;
+    bool nonOrtho = false;
 
     if( orient == 90.0 || orient == 270.0 )
         sz = VECTOR2I( sz.y, sz.x );
     else if( orient != 0.0 && orient != 180.0 )
     {
-        TRACEn( 0, "non-orthogonal pad rotations not supported yet" );
-        delete solid;
-        return NULL;
+        // rotated pads are replaced by for the moment by circles due to my laziness ;)
+        solid->SetShape( new SHAPE_CIRCLE( c, std::min( sz.x, sz.y ) / 2 ) );
+        nonOrtho = true;
     }
 
-    switch( aPad->GetShape() )
+    if( !nonOrtho )
     {
-    case PAD_CIRCLE:
-        solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
-        break;
-
-    case PAD_OVAL:
-        if( sz.x == sz.y )
+        switch( aPad->GetShape() )
+        {
+        case PAD_CIRCLE:
             solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
-        else
+            break;
+
+        case PAD_OVAL:
+            if( sz.x == sz.y )
+                solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
+            else
+            {
+                VECTOR2I delta;
+
+                if( sz.x > sz.y )
+                    delta = VECTOR2I( ( sz.x - sz.y ) / 2, 0 );
+                else
+                    delta = VECTOR2I( 0, ( sz.y - sz.x ) / 2 );
+
+                SHAPE_SEGMENT* shape = new SHAPE_SEGMENT( c - delta, c + delta,
+                                                          std::min( sz.x, sz.y ) );
+                solid->SetShape( shape );
+            }
+            break;
+
+        case PAD_RECT:
             solid->SetShape( new SHAPE_RECT( c - sz / 2, sz.x, sz.y ) );
-        break;
+            break;
 
-    case PAD_RECT:
-        solid->SetShape( new SHAPE_RECT( c - sz / 2, sz.x, sz.y ) );
-        break;
+        default:
+            TRACEn( 0, "unsupported pad shape" );
+            delete solid;
 
-    default:
-        TRACEn( 0, "unsupported pad shape" );
-        delete solid;
-        return NULL;
+            return NULL;
+        }
     }
 
-    solid->SetParent( aPad );
     return solid;
 }
 
@@ -178,7 +216,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 PNS_ITEM* PNS_ROUTER::syncTrack( TRACK* aTrack )
 {
     PNS_SEGMENT* s =
-        new PNS_SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNet() );
+        new PNS_SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() );
 
     s->SetWidth( aTrack->GetWidth() );
     s->SetLayers( PNS_LAYERSET( aTrack->GetLayer() ) );
@@ -187,15 +225,20 @@ PNS_ITEM* PNS_ROUTER::syncTrack( TRACK* aTrack )
 }
 
 
-PNS_ITEM* PNS_ROUTER::syncVia( SEGVIA* aVia )
+PNS_ITEM* PNS_ROUTER::syncVia( VIA* aVia )
 {
+    LAYER_ID top, bottom;
+    aVia->LayerPair( &top, &bottom );
     PNS_VIA* v = new PNS_VIA(
             aVia->GetPosition(),
-            PNS_LAYERSET( 0, 15 ),
+            PNS_LAYERSET( top, bottom ),
             aVia->GetWidth(),
-            aVia->GetNet() );
+            aVia->GetDrillValue(),
+            aVia->GetNetCode(),
+            aVia->GetViaType() );
 
     v->SetParent( aVia );
+
     return v;
 }
 
@@ -209,21 +252,23 @@ void PNS_ROUTER::SetBoard( BOARD* aBoard )
 
 int PNS_ROUTER::NextCopperLayer( bool aUp )
 {
-    LAYER_MSK mask = m_board->GetEnabledLayers() & m_board->GetVisibleLayers();
-    LAYER_NUM l = m_currentLayer;
+    LSET        mask = m_board->GetEnabledLayers() & m_board->GetVisibleLayers();
+    LAYER_NUM   l = m_currentLayer;
 
-    do {
+    do
+    {
         l += ( aUp ? 1 : -1 );
 
-        if( l > LAST_COPPER_LAYER )
-            l = FIRST_COPPER_LAYER;
+        if( l >= MAX_CU_LAYERS )
+            l = 0;
 
-        if( l < FIRST_COPPER_LAYER )
-            l = LAST_COPPER_LAYER;
+        if( l < 0 )
+            l = MAX_CU_LAYERS - 1;
 
-        if( mask & GetLayerMask( l ) )
+        if( mask[l] )
             return l;
-    } while( l != m_currentLayer );
+    }
+    while( l != m_currentLayer );
 
     return l;
 }
@@ -231,8 +276,6 @@ int PNS_ROUTER::NextCopperLayer( bool aUp )
 
 void PNS_ROUTER::SyncWorld()
 {
-    std::vector<D_PAD*> pads;
-
     if( !m_board )
     {
         TRACEn( 0, "No board attached, aborting sync." );
@@ -241,18 +284,22 @@ void PNS_ROUTER::SyncWorld()
 
     ClearWorld();
 
+    int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
 
     m_clearanceFunc = new PCBNEW_CLEARANCE_FUNC( m_board );
     m_world = new PNS_NODE();
     m_world->SetClearanceFunctor( m_clearanceFunc );
-    m_world->SetMaxClearance( 1000000 );    // m_board->GetBiggestClearanceValue());
-    pads = m_board->GetPads();
+    m_world->SetMaxClearance( 4 * worstClearance );
 
-    BOOST_FOREACH( D_PAD * pad, pads ) {
-        PNS_ITEM* solid = syncPad( pad );
+    for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
+    {
+        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+        {
+            PNS_ITEM* solid = syncPad( pad );
 
-        if( solid )
-            m_world->Add( solid );
+            if( solid )
+                m_world->Add( solid );
+        }
     }
 
     for( TRACK* t = m_board->m_Track; t; t = t->Next() )
@@ -263,13 +310,11 @@ void PNS_ROUTER::SyncWorld()
         if( type == PCB_TRACE_T )
             item = syncTrack( t );
         else if( type == PCB_VIA_T )
-            item = syncVia( static_cast <SEGVIA*>(t) );
+            item = syncVia( static_cast<VIA*>( t ) );
 
         if( item )
             m_world->Add( item );
     }
-
-    m_placer = new PNS_LINE_PLACER( m_world );
 }
 
 
@@ -281,15 +326,14 @@ PNS_ROUTER::PNS_ROUTER()
 
     m_currentLayer = 1;
     m_placingVia = false;
+    m_startsOnVia = false;
     m_currentNet = -1;
     m_state = IDLE;
     m_world = NULL;
     m_placer = NULL;
     m_previewItems = NULL;
-    m_start_diagonal = false;
     m_board = NULL;
-
-    TRACE( 1, "m_board = %p\n", m_board );
+    m_dragger = NULL;
 }
 
 
@@ -319,6 +363,9 @@ PNS_ROUTER::~PNS_ROUTER()
 {
     ClearWorld();
     theRouter = NULL;
+
+    if( m_previewItems )
+        delete m_previewItems;
 }
 
 
@@ -333,16 +380,13 @@ void PNS_ROUTER::ClearWorld()
     if( m_placer )
         delete m_placer;
 
+    if( m_previewItems )
+        delete m_previewItems;
+
     m_clearanceFunc = NULL;
     m_world = NULL;
     m_placer = NULL;
-}
-
-
-void PNS_ROUTER::SetCurrentWidth( int w )
-{
-    // fixme: change width while routing
-    m_currentWidth = w;
+    m_previewItems = NULL;
 }
 
 
@@ -357,52 +401,56 @@ const PNS_ITEMSET PNS_ROUTER::QueryHoverItems( const VECTOR2I& aP )
     if( m_state == IDLE )
         return m_world->HitTest( aP );
     else
-        return m_placer->GetCurrentNode()->HitTest( aP );
+    {
+        //assert ( m_placer->GetCurrentNode()->checkExists() );
+        //TRACE(0,"query-hover [%p]", m_placer->GetCurrentNode());
+        return m_placer->CurrentNode()->HitTest( aP );
+    }
 }
 
 
-const VECTOR2I PNS_ROUTER::SnapToItem( PNS_ITEM* item, VECTOR2I aP, bool& aSplitsSegment )
+const VECTOR2I PNS_ROUTER::SnapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment )
 {
     VECTOR2I anchor;
 
-    if( !item )
+    if( !aItem )
     {
         aSplitsSegment = false;
         return aP;
     }
 
-    switch( item->GetKind() )
+    switch( aItem->Kind() )
     {
     case PNS_ITEM::SOLID:
-        anchor = static_cast<PNS_SOLID*>(item)->GetCenter();
+        anchor = static_cast<PNS_SOLID*>( aItem )->Pos();
         aSplitsSegment = false;
         break;
 
     case PNS_ITEM::VIA:
-        anchor = static_cast<PNS_VIA*>(item)->GetPos();
+        anchor = static_cast<PNS_VIA*>( aItem )->Pos();
         aSplitsSegment = false;
         break;
 
     case PNS_ITEM::SEGMENT:
+    {
+        PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( aItem );
+        const SEG& s = seg->Seg();
+        int w = seg->Width();
+
+        aSplitsSegment = false;
+
+        if( ( aP - s.A ).EuclideanNorm() < w / 2 )
+            anchor = s.A;
+        else if( ( aP - s.B ).EuclideanNorm() < w / 2 )
+            anchor = s.B;
+        else
         {
-            PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
-            const SEG& s = seg->GetSeg();
-            int w = seg->GetWidth();
-
-            aSplitsSegment = false;
-
-            if( ( aP - s.A ).EuclideanNorm() < w / 2 )
-                anchor = s.A;
-            else if( ( aP - s.B ).EuclideanNorm() < w / 2 )
-                anchor = s.B;
-            else
-            {
-                anchor = s.NearestPoint( aP );
-                aSplitsSegment = true;
-            }
-
-            break;
+            anchor = s.NearestPoint( aP );
+            aSplitsSegment = true;
         }
+
+        break;
+    }
 
     default:
         break;
@@ -412,70 +460,109 @@ const VECTOR2I PNS_ROUTER::SnapToItem( PNS_ITEM* item, VECTOR2I aP, bool& aSplit
 }
 
 
-void PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem )
+bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
-    VECTOR2I p;
+    if( !aStartItem || aStartItem->OfKind( PNS_ITEM::SOLID ) )
+        return false;
 
-    static int unknowNetIdx = 0;    // -10000;
+    m_dragger = new PNS_DRAGGER( this );
+    m_dragger->SetWorld( m_world );
 
-    m_placingVia = false;
-    m_startsOnVia = false;
-    m_currentNet = -1;
-
-    bool splitSeg = false;
-
-    p = SnapToItem( aStartItem, aP, splitSeg );
-
-    if( !aStartItem || aStartItem->GetNet() < 0 )
-        m_currentNet = unknowNetIdx--;
+    if( m_dragger->Start ( aP, aStartItem ) )
+        m_state = DRAG_SEGMENT;
     else
-        m_currentNet = aStartItem->GetNet();
+    {
+        delete m_dragger;
+        m_state = IDLE;
+        return false;
+    }
 
-    m_currentStart  = p;
-    m_originalStart = p;
-    m_currentEnd = p;
-
-    m_placer->SetInitialDirection( m_start_diagonal ? DIRECTION_45(
-                    DIRECTION_45::NE ) : DIRECTION_45( DIRECTION_45::N ) );
-    m_placer->StartPlacement( m_originalStart, m_currentNet, m_currentWidth, m_currentLayer );
-    m_state = ROUTE_TRACK;
-
-    if( splitSeg )
-        splitAdjacentSegments( m_placer->GetCurrentNode(), aStartItem, p );
+    return true;
 }
 
 
-const VECTOR2I PNS_ROUTER::GetCurrentEnd() const
+bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem )
+{
+    m_state = ROUTE_TRACK;
+
+    m_placer = new PNS_LINE_PLACER( this );
+    m_placer->SetLayer( m_currentLayer );
+
+    const BOARD_DESIGN_SETTINGS& dsnSettings = m_board->GetDesignSettings();
+
+    if( dsnSettings.UseNetClassTrack() && aStartItem != NULL ) // netclass value
+    {
+        m_settings.SetTrackWidth( aStartItem->Parent()->GetNetClass()->GetTrackWidth() );
+    }
+    else
+    {
+        m_settings.SetTrackWidth( dsnSettings.GetCurrentTrackWidth() );
+    }
+
+    if( dsnSettings.UseNetClassVia() && aStartItem != NULL )   // netclass value
+    {
+        m_settings.SetViaDiameter( aStartItem->Parent()->GetNetClass()->GetViaDiameter() );
+        m_settings.SetViaDrill( aStartItem->Parent()->GetNetClass()->GetViaDrill() );
+    }
+    else
+    {
+        m_settings.SetViaDiameter( dsnSettings.GetCurrentViaSize() );
+        m_settings.SetViaDrill( dsnSettings.GetCurrentViaDrill() );
+    }
+
+    m_placer->UpdateSizes( m_settings );
+    m_placer->Start( aP, aStartItem );
+    m_currentEnd = aP;
+    m_currentEndItem = NULL;
+
+    return true;
+}
+
+
+const VECTOR2I PNS_ROUTER::CurrentEnd() const
 {
     return m_currentEnd;
 }
 
 
-void PNS_ROUTER::EraseView()
+void PNS_ROUTER::eraseView()
 {
     BOOST_FOREACH( BOARD_ITEM* item, m_hiddenItems )
     {
         item->ViewSetVisible( true );
     }
 
-    if( m_previewItems )
-        m_previewItems->FreeItems();
+    m_hiddenItems.clear();
 
-    m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    if( m_previewItems )
+    {
+        m_previewItems->FreeItems();
+        m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    }
 }
 
 
-void PNS_ROUTER::DisplayItem( const PNS_ITEM* aItem, bool aIsHead )
+void PNS_ROUTER::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClearance )
 {
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_previewItems );
 
-    m_previewItems->Add( pitem );
+    if( aColor >= 0 )
+        pitem->SetColor( KIGFX::COLOR4D ( aColor ) );
 
-    if( aIsHead )
-        pitem->MarkAsHead();
+    if( aClearance >= 0 )
+        pitem->SetClearance( aClearance );
+
+    m_previewItems->Add( pitem );
 
     pitem->ViewSetVisible( true );
     m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY | KIGFX::VIEW_ITEM::APPEARANCE );
+}
+
+
+void PNS_ROUTER::DisplayItems( const PNS_ITEMSET& aItems )
+{
+    BOOST_FOREACH( const PNS_ITEM *item, aItems.CItems() )
+        DisplayItem( item );
 }
 
 
@@ -483,53 +570,109 @@ void PNS_ROUTER::DisplayDebugLine( const SHAPE_LINE_CHAIN& aLine, int aType, int
 {
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( NULL, m_previewItems );
 
-    pitem->DebugLine( aLine, aWidth, aType );
+    pitem->Line( aLine, aWidth, aType );
     m_previewItems->Add( pitem );
     pitem->ViewSetVisible( true );
     m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY | KIGFX::VIEW_ITEM::APPEARANCE );
 }
 
 
-void PNS_ROUTER::DisplayDebugBox( const BOX2I& aBox, int aType, int aWidth )
+void PNS_ROUTER::DisplayDebugPoint( const VECTOR2I aPos, int aType )
 {
+    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( NULL, m_previewItems );
+
+    pitem->Point( aPos, aType );
+    m_previewItems->Add( pitem );
+    pitem->ViewSetVisible( true );
+    m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY | KIGFX::VIEW_ITEM::APPEARANCE );
 }
 
 
 void PNS_ROUTER::Move( const VECTOR2I& aP, PNS_ITEM* endItem )
 {
-    PNS_NODE::ItemVector removed, added;
-    VECTOR2I p = aP;
+    m_currentEnd = aP;
+    m_currentEndItem = endItem;
 
-    if( m_state == IDLE )
+    switch( m_state )
+    {
+        case ROUTE_TRACK:
+            movePlacing( aP, endItem );
+            break;
+
+        case DRAG_SEGMENT:
+            moveDragging( aP, endItem );
+            break;
+
+        default:
+            break;
+    }
+}
+
+
+void PNS_ROUTER::moveDragging( const VECTOR2I& aP, PNS_ITEM* aEndItem )
+{
+    eraseView();
+
+    m_dragger->Drag( aP );
+    PNS_ITEMSET dragged = m_dragger->Traces();
+
+    updateView( m_dragger->CurrentNode(), dragged );
+}
+
+
+void PNS_ROUTER::markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,
+                                 PNS_NODE::ITEM_VECTOR& aRemoved )
+{
+    BOOST_FOREACH( PNS_ITEM* item, aCurrent.Items() )
+    {
+        PNS_NODE::OBSTACLES obstacles;
+
+        aNode->QueryColliding( item, obstacles, PNS_ITEM::ANY );
+
+        if( item->OfKind( PNS_ITEM::LINE ) )
+        {
+            PNS_LINE* l = static_cast<PNS_LINE*>( item );
+
+            if( l->EndsWithVia() )
+            {
+                PNS_VIA v( l->Via() );
+                aNode->QueryColliding( &v, obstacles, PNS_ITEM::ANY );
+            }
+        }
+
+        BOOST_FOREACH( PNS_OBSTACLE& obs, obstacles )
+        {
+            int clearance = aNode->GetClearance( item, obs.m_item );
+            std::auto_ptr<PNS_ITEM> tmp( obs.m_item->Clone() );
+            tmp->Mark( MK_VIOLATION );
+            DisplayItem( tmp.get(), -1, clearance );
+            aRemoved.push_back( obs.m_item );
+        }
+    }
+}
+
+
+void PNS_ROUTER::updateView( PNS_NODE* aNode, PNS_ITEMSET& aCurrent )
+{
+    PNS_NODE::ITEM_VECTOR removed, added;
+    PNS_NODE::OBSTACLES obstacles;
+
+    if( !aNode )
         return;
 
-    // TODO is something missing here?
-    if( m_state == START_ROUTING )
-    {
-    }
+    if( Settings().Mode() == RM_MarkObstacles )
+        markViolations(aNode, aCurrent, removed);
 
-    EraseView();
-
-    m_currentEnd = p;
-    m_placer->Route( p );
-
-    PNS_LINE current = m_placer->GetTrace();
-
-    DisplayItem( &current, true );
-
-    if( current.EndsWithVia() )
-        DisplayItem( &current.GetVia(), true );
-
-    m_placer->GetCurrentNode()->GetUpdatedItems( removed, added );
+    aNode->GetUpdatedItems( removed, added );
 
     BOOST_FOREACH( PNS_ITEM* item, added )
-	{
+    {
         DisplayItem( item );
     }
 
     BOOST_FOREACH( PNS_ITEM* item, removed )
     {
-        BOARD_ITEM* parent = item->GetParent();
+        BOARD_CONNECTED_ITEM* parent = item->Parent();
 
         if( parent )
         {
@@ -543,79 +686,88 @@ void PNS_ROUTER::Move( const VECTOR2I& aP, PNS_ITEM* endItem )
 }
 
 
-void PNS_ROUTER::splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, const VECTOR2I& aP )
+void PNS_ROUTER::ApplySettings()
 {
-    if( aSeg && aSeg->OfKind( PNS_ITEM::SEGMENT ) )
+    // Change track/via size settings
+    if( m_state == ROUTE_TRACK)
     {
-        PNS_NODE::OptJoint jt = aNode->FindJoint( aP, aSeg->GetLayers().Start(), aSeg->GetNet() );
-
-        if( jt && jt->LinkCount() >= 1 )
-            return;
-
-        PNS_SEGMENT* s_old = static_cast<PNS_SEGMENT*>( aSeg );
-        PNS_SEGMENT* s_new[2];
-
-        s_new[0] = s_old->Clone();
-        s_new[1] = s_old->Clone();
-
-        s_new[0]->SetEnds( s_old->GetSeg().A, aP );
-        s_new[1]->SetEnds( aP, s_old->GetSeg().B );
-
-        aNode->Remove( s_old );
-        aNode->Add( s_new[0] );
-        aNode->Add( s_new[1] );
+        m_placer->UpdateSizes( m_settings );
+        m_placer->Move( m_currentEnd, m_currentEndItem );
+        movePlacing( m_currentEnd, m_currentEndItem );
     }
 }
 
 
-void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
+void PNS_ROUTER::movePlacing( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 {
-    PNS_NODE::ItemVector removed, added;
+    eraseView();
+
+    m_placer->Move( aP, aEndItem );
+    PNS_LINE current = m_placer->Trace();
+
+    DisplayItem( &current );
+
+    if( current.EndsWithVia() )
+        DisplayItem( &current.Via() );
+
+    PNS_ITEMSET tmp( &current );
+    updateView( m_placer->CurrentNode( true ), tmp );
+}
+
+
+void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
+{
+    PNS_NODE::ITEM_VECTOR removed, added;
 
     aNode->GetUpdatedItems( removed, added );
 
     for( unsigned int i = 0; i < removed.size(); i++ )
     {
-        BOARD_ITEM* parent = removed[i]->GetParent();
+        BOARD_CONNECTED_ITEM* parent = removed[i]->Parent();
 
         if( parent )
         {
             m_view->Remove( parent );
             m_board->Remove( parent );
+            m_undoBuffer.PushItem( ITEM_PICKER( parent, UR_DELETED ) );
         }
     }
 
     BOOST_FOREACH( PNS_ITEM* item, added )
     {
-        BOARD_ITEM* newBI = NULL;
+        BOARD_CONNECTED_ITEM* newBI = NULL;
 
-        switch( item->GetKind() )
+        switch( item->Kind() )
         {
         case PNS_ITEM::SEGMENT:
-            {
-                PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
-                TRACK* track = new TRACK( m_board );
-                const SEG& s = seg->GetSeg();
+        {
+            PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
+            TRACK* track = new TRACK( m_board );
+            const SEG& s = seg->Seg();
 
-                track->SetStart( wxPoint( s.A.x, s.A.y ) );
-                track->SetEnd( wxPoint( s.B.x, s.B.y ) );
-                track->SetWidth( seg->GetWidth() );
-                track->SetLayer( seg->GetLayers().Start() );
-                track->SetNet( seg->GetNet() );
-                newBI = track;
-                break;
-            }
+            track->SetStart( wxPoint( s.A.x, s.A.y ) );
+            track->SetEnd( wxPoint( s.B.x, s.B.y ) );
+            track->SetWidth( seg->Width() );
+            track->SetLayer( ToLAYER_ID( seg->Layers().Start() ) );
+            track->SetNetCode( seg->Net() );
+            newBI = track;
+            break;
+        }
 
         case PNS_ITEM::VIA:
-            {
-                SEGVIA* via_board = new SEGVIA( m_board );
-                PNS_VIA* via = static_cast<PNS_VIA*>( item );
-                via_board->SetPosition( wxPoint( via->GetPos().x, via->GetPos().y ) );
-                via_board->SetWidth( via->GetDiameter() );
-                via_board->SetNet( via->GetNet() );
-                newBI = via_board;
-                break;
-            }
+        {
+            VIA* via_board = new VIA( m_board );
+            PNS_VIA* via = static_cast<PNS_VIA*>( item );
+            via_board->SetPosition( wxPoint( via->Pos().x, via->Pos().y ) );
+            via_board->SetWidth( via->Diameter() );
+            via_board->SetDrill( via->Drill() );
+            via_board->SetNetCode( via->Net() );
+            via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
+            via_board->SetLayerPair( ToLAYER_ID( via->Layers().Start() ),
+                                     ToLAYER_ID( via->Layers().End() ) );
+            newBI = via_board;
+            break;
+        }
 
         default:
             break;
@@ -627,7 +779,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
             newBI->ClearFlags();
             m_view->Add( newBI );
             m_board->Add( newBI );
-            m_board->GetRatsnest()->Update( static_cast<BOARD_CONNECTED_ITEM*>( newBI ) );
+            m_undoBuffer.PushItem( ITEM_PICKER( newBI, UR_NEW ) );
             newBI->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
     }
@@ -641,12 +793,12 @@ PNS_VIA* PNS_ROUTER::checkLoneVia( PNS_JOINT* aJoint ) const
     PNS_VIA* theVia = NULL;
     PNS_LAYERSET l;
 
-    BOOST_FOREACH( PNS_ITEM* item, aJoint->GetLinkList() )
+    BOOST_FOREACH( PNS_ITEM* item, aJoint->LinkList() )
     {
-        if( item->GetKind() == PNS_ITEM::VIA )
+        if( item->Kind() == PNS_ITEM::VIA )
             theVia = static_cast<PNS_VIA*>( item );
 
-        l.Merge( item->GetLayers() );
+        l.Merge( item->Layers() );
     }
 
     if( l.Start() == l.End() )
@@ -656,148 +808,83 @@ PNS_VIA* PNS_ROUTER::checkLoneVia( PNS_JOINT* aJoint ) const
 }
 
 
-PNS_NODE* PNS_ROUTER::removeLoops( PNS_NODE* aNode, PNS_SEGMENT* aLatestSeg )
-{
-    PNS_LINE* ourLine = aNode->AssembleLine( aLatestSeg );
-    PNS_NODE* cleaned = aNode->Branch();
-    PNS_JOINT a, b;
-
-    std::vector<PNS_LINE*> lines;
-
-    cleaned->FindLineEnds( ourLine, a, b );
-    cleaned->FindLinesBetweenJoints( a, b, lines );
-
-    BOOST_FOREACH( PNS_LINE* line, lines )
-    {
-        if( !( line->ContainsSegment( aLatestSeg ) ) )
-        {
-            cleaned->Remove( line );
-        }
-    }
-
-    return cleaned;
-}
-
-
 bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 {
-    bool real_end = false;
+    bool rv = false;
 
-    PNS_LINE pl = m_placer->GetTrace();
-    const SHAPE_LINE_CHAIN& l = pl.GetCLine();
-
-    if( !l.SegmentCount() )
-        return true;
-
-    VECTOR2I p_pre_last = l.CPoint( -1 );
-    const VECTOR2I p_last = l.CPoint( -1 );
-    DIRECTION_45 d_last( l.CSegment( -1 ) );
-
-    if( l.PointCount() > 2 )
-        p_pre_last = l.CPoint( -2 );
-
-    if( aEndItem && m_currentNet >= 0 && m_currentNet == aEndItem->GetNet() )
-        real_end = true;
-
-    int last = ( real_end || m_placingVia ) ? l.SegmentCount() : std::max( 1, l.SegmentCount() - 1 );
-
-    PNS_NODE* latest = m_placer->GetCurrentNode();
-
-    if( real_end )
-        splitAdjacentSegments( latest, aEndItem, aP );
-
-    PNS_SEGMENT* lastSeg = NULL;
-
-    for( int i = 0; i < last; i++ )
+    switch( m_state )
     {
-        const SEG& s = pl.GetCLine().CSegment( i );
-        PNS_SEGMENT* seg = new PNS_SEGMENT( s, m_currentNet );
-        seg->SetWidth( pl.GetWidth() );
-        seg->SetLayer( m_currentLayer );
-        latest->Add( seg );
-        lastSeg = seg;
+        case ROUTE_TRACK:
+            rv = m_placer->FixRoute( aP, aEndItem );
+            m_startsOnVia = m_placingVia;
+            m_placingVia = false;
+            break;
+
+        case DRAG_SEGMENT:
+            rv = m_dragger->FixRoute();
+            break;
+
+        default:
+            break;
     }
 
-    if( pl.EndsWithVia() )
-        latest->Add( pl.GetVia().Clone() );
+    if( rv )
+       StopRouting();
 
-    if( real_end )
-        latest = removeLoops( latest, lastSeg );
-
-    commitRouting( latest );
-
-    EraseView();
-
-    if( real_end )
-    {
-        m_state = IDLE;
-        // m_world->KillChildren();
-    }
-    else
-    {
-        m_state = ROUTE_TRACK;
-        m_placer->SetInitialDirection( d_last );
-        m_currentStart = m_placingVia ? p_last : p_pre_last;
-
-        if( m_placingVia )
-            m_currentLayer = NextCopperLayer( true );
-
-        m_placer->StartPlacement( m_currentStart, m_currentNet, m_currentWidth, m_currentLayer );
-
-        m_startsOnVia = m_placingVia;
-        m_placingVia = false;
-    }
-
-    return real_end;
+    return rv;
 }
 
 
 void PNS_ROUTER::StopRouting()
 {
+    // Update the ratsnest with new changes
+    m_board->GetRatsnest()->Recalculate( m_currentNet );
+
     if( !RoutingInProgress() )
         return;
 
-    // highlightCurrent(false);
+    if( m_placer )
+        delete m_placer;
 
-    // Update the ratsnest
-    m_board->GetRatsnest()->Recalculate( m_currentNet );
-    EraseView();
+    if( m_dragger )
+        delete m_dragger;
+
+    m_placer = NULL;
+    m_dragger = NULL;
+
+    eraseView();
 
     m_state = IDLE;
     m_world->KillChildren();
+    m_world->ClearRanks();
 }
 
 
 void PNS_ROUTER::FlipPosture()
 {
-    if( m_placer->GetTail().GetCLine().SegmentCount() == 0 )
+    if( m_state == ROUTE_TRACK )
     {
-        m_start_diagonal = !m_start_diagonal;
-        m_placer->SetInitialDirection( m_start_diagonal ?
-			DIRECTION_45( DIRECTION_45::NE ) : DIRECTION_45( DIRECTION_45::N ) );
-    }
-    else
         m_placer->FlipPosture();
-
-    Move( m_currentEnd, NULL );
+        m_placer->Move( m_currentEnd, m_currentEndItem );
+    }
 }
 
 
-void PNS_ROUTER::SwitchLayer( int layer )
+void PNS_ROUTER::SwitchLayer( int aLayer )
 {
     switch( m_state )
     {
     case IDLE:
-        m_currentLayer = layer;
+        m_currentLayer = aLayer;
         break;
 
     case ROUTE_TRACK:
-    if( m_startsOnVia )
-    {
-        m_currentLayer = layer;
-        m_placer->StartPlacement( m_currentStart, m_currentNet, m_currentWidth,
-                m_currentLayer );
-    }
+        if( m_startsOnVia )
+        {
+            m_currentLayer = aLayer;
+            m_placer->SetLayer( aLayer );
+        }
+        break;
 
     default:
         break;
@@ -810,6 +897,51 @@ void PNS_ROUTER::ToggleViaPlacement()
     if( m_state == ROUTE_TRACK )
     {
         m_placingVia = !m_placingVia;
-        m_placer->AddVia( m_placingVia, m_currentViaDiameter, m_currentViaDrill );
+        m_placer->AddVia( m_placingVia, m_settings.GetViaDiameter(), m_settings.GetViaDrill() );
     }
+}
+
+
+int PNS_ROUTER::GetCurrentNet() const
+{
+    switch( m_state )
+    {
+        case ROUTE_TRACK:
+            return m_placer->CurrentNet();
+
+        default:
+            return m_currentNet;
+    }
+}
+
+
+int PNS_ROUTER::GetCurrentLayer() const
+{
+    switch( m_state )
+    {
+        case ROUTE_TRACK:
+            return m_placer->CurrentLayer();
+
+        default:
+            return m_currentLayer;
+    }
+}
+
+
+void PNS_ROUTER::DumpLog()
+{
+    PNS_LOGGER* logger = NULL;
+
+    switch( m_state )
+    {
+        case DRAG_SEGMENT:
+            logger = m_dragger->Logger();
+            break;
+
+        default:
+            break;
+    }
+
+    if( logger )
+        logger->Save( "/tmp/shove.log" );
 }

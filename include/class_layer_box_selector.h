@@ -5,7 +5,7 @@
 #include <colors.h>     // EDA_COLOR_T definition
 #include <layers_id_colors_and_visibility.h>
 
-class EDA_HOTKEY_CONFIG;
+struct EDA_HOTKEY_CONFIG;
 
 /* Basic class to build a layer list.
  * this is an basic abstract class to build a layer list selector.
@@ -15,7 +15,6 @@ class LAYER_SELECTOR
 {
 protected:
     bool m_layerhotkeys;
-    bool m_layerorder;
 
 public:
     // Hotkey Info
@@ -36,17 +35,18 @@ public:
     // Virtual function pure because GerbView uses its own functions in a derived class
     virtual bool IsLayerEnabled( LAYER_NUM aLayer ) const = 0;
 
-    bool SetLayersOrdered(bool value);
-    bool SetLayersHotkeys(bool value);
+    bool SetLayersOrdered( bool value );
+    bool SetLayersHotkeys( bool value );
 
 protected:
    // Fills the layer bitmap aLayerbmp with the layer color
     void SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer );
 };
 
+
 /* class to display a layer list in a wxBitmapComboBox.
  */
-class LAYER_BOX_SELECTOR :public wxBitmapComboBox, public LAYER_SELECTOR
+class LAYER_BOX_SELECTOR : public wxBitmapComboBox, public LAYER_SELECTOR
 {
 public:
     // Hotkey Info
@@ -69,7 +69,7 @@ public:
     LAYER_NUM GetLayerSelection() const;
 
     // Set Layer #
-    int SetLayerSelection(LAYER_NUM layer);
+    int SetLayerSelection( LAYER_NUM layer );
 
     // Reload the Layers
     // Virtual pure function because GerbView uses its own functions in a derived class
@@ -79,23 +79,4 @@ public:
     void ResyncBitmapOnly();
 };
 
-#define DECLARE_LAYERS_HOTKEY(list) int list[NB_LAYERS] = \
-        { \
-            HK_SWITCH_LAYER_TO_COPPER,   \
-            HK_SWITCH_LAYER_TO_INNER1,   \
-            HK_SWITCH_LAYER_TO_INNER2,   \
-            HK_SWITCH_LAYER_TO_INNER3,   \
-            HK_SWITCH_LAYER_TO_INNER4,   \
-            HK_SWITCH_LAYER_TO_INNER5,   \
-            HK_SWITCH_LAYER_TO_INNER6,   \
-            HK_SWITCH_LAYER_TO_INNER7,   \
-            HK_SWITCH_LAYER_TO_INNER8,   \
-            HK_SWITCH_LAYER_TO_INNER9,   \
-            HK_SWITCH_LAYER_TO_INNER10,  \
-            HK_SWITCH_LAYER_TO_INNER11,  \
-            HK_SWITCH_LAYER_TO_INNER12,  \
-            HK_SWITCH_LAYER_TO_INNER13,  \
-            HK_SWITCH_LAYER_TO_INNER14,  \
-            HK_SWITCH_LAYER_TO_COMPONENT \
-        };
-#endif //CLASS_LAYER_BOX_SELECTOR_H
+#endif // CLASS_LAYER_BOX_SELECTOR_H

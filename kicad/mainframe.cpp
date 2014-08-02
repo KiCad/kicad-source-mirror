@@ -29,7 +29,9 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_kicad.h>
+#include <kiway.h>
+#include <kiway_player.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <macros.h>
@@ -40,13 +42,12 @@
 #include <menus_helpers.h>
 
 
-static const wxString TreeFrameWidthEntry( wxT( "LeftWinWidth" ) );
+#define TreeFrameWidthEntry     wxT( "LeftWinWidth" )
 
-KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
-                                          const wxString& title,
-                                          const wxPoint&  pos,
-                                          const wxSize&   size ) :
-    EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_TYPE, title, pos, size,
+
+KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
+        const wxString& title, const wxPoint&  pos, const wxSize&   size ) :
+    EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_T, title, pos, size,
                     KICAD_DEFAULT_DRAWFRAME_STYLE, wxT( "KicadFrame" ) )
 {
     m_leftWinWidth = 60;
@@ -63,7 +64,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
     SetIcon( icon );
 
     // Give the last sise and pos to main window
-    LoadSettings();
+    LoadSettings( config() );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Left window: is the box which display tree project
@@ -71,6 +72,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
 
     // Right top Window: buttons to launch applications
     m_Launcher = new LAUNCHER_PANEL( this );
+
     // Add the wxTextCtrl showing all messages from KiCad:
     m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
                                     wxDefaultPosition, wxDefaultSize,
@@ -115,6 +117,80 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 }
 
 
+wxConfigBase* KICAD_MANAGER_FRAME::config()
+{
+    wxConfigBase* ret = Pgm().PgmSettings();
+    wxASSERT( ret );
+    return ret;
+}
+
+
+void KICAD_MANAGER_FRAME::SetProjectFileName( const wxString& aFullProjectProFileName )
+{
+    // ensure file name is absolute:
+    wxFileName fn( aFullProjectProFileName );
+
+    if( !fn.IsAbsolute() )
+        fn.MakeAbsolute();
+
+    Prj().SetProjectFullName( fn.GetFullPath() );
+}
+
+
+const wxString KICAD_MANAGER_FRAME::GetProjectFileName()
+{
+    return  Prj().GetProjectFullName();
+}
+
+
+const wxString KICAD_MANAGER_FRAME::SchFileName()
+{
+   wxFileName   fn( GetProjectFileName() );
+
+   fn.SetExt( SchematicFileExtension );
+
+   return fn.GetFullName();
+}
+
+
+const wxString KICAD_MANAGER_FRAME::PcbFileName()
+{
+   wxFileName   fn( GetProjectFileName() );
+
+   fn.SetExt( PcbFileExtension );
+
+   return fn.GetFullName();
+}
+
+
+const wxString KICAD_MANAGER_FRAME::PcbLegacyFileName()
+{
+   wxFileName   fn( GetProjectFileName() );
+
+   fn.SetExt( LegacyPcbFileExtension );
+
+   return fn.GetFullName();
+}
+
+
+void KICAD_MANAGER_FRAME::ReCreateTreePrj()
+{
+    m_LeftWin->ReCreateTreePrj();
+}
+
+
+const SEARCH_STACK& KICAD_MANAGER_FRAME::sys_search()
+{
+    return Pgm().SysSearch();
+}
+
+
+wxString KICAD_MANAGER_FRAME::help_name()
+{
+    return Pgm().GetHelpFileName();
+}
+
+
 void KICAD_MANAGER_FRAME::PrintMsg( const wxString& aText )
 {
     m_MessagesBox->AppendText( aText );
@@ -132,35 +208,29 @@ void KICAD_MANAGER_FRAME::OnSize( wxSizeEvent& event )
 
 void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    int px, py;
-
-    UpdateFileHistory( m_ProjectFileName.GetFullPath() );
-
-    if( !IsIconized() )   // save main frame position and size
+    if( Kiway.PlayersClose( false ) )
     {
-        GetPosition( &px, &py );
-        m_FramePos.x = px;
-        m_FramePos.y = py;
+        int px, py;
 
-        GetSize( &px, &py );
-        m_FrameSize.x = px;
-        m_FrameSize.y = py;
+        UpdateFileHistory( GetProjectFileName(), &Pgm().GetFileHistory() );
+
+        if( !IsIconized() )   // save main frame position and size
+        {
+            GetPosition( &px, &py );
+            m_FramePos.x = px;
+            m_FramePos.y = py;
+
+            GetSize( &px, &py );
+            m_FrameSize.x = px;
+            m_FrameSize.y = py;
+        }
+
+        Event.SetCanVeto( true );
+
+        m_LeftWin->Show( false );
+
+        Destroy();
     }
-
-    Event.SetCanVeto( true );
-
-    // Close the help frame
-    if( wxGetApp().GetHtmlHelpController() )
-    {
-        if( wxGetApp().GetHtmlHelpController()->GetFrame() ) // returns NULL if no help frame active
-            wxGetApp().GetHtmlHelpController()->GetFrame()->Close( true );
-
-        wxGetApp().SetHtmlHelpController( NULL );
-    }
-
-    m_LeftWin->Show( false );
-
-    Destroy();
 }
 
 
@@ -170,39 +240,86 @@ void KICAD_MANAGER_FRAME::OnExit( wxCommandEvent& event )
 }
 
 
-void KICAD_MANAGER_FRAME::PROCESS_TERMINATE_EVENT_HANDLER::
-                        OnTerminate( int pid, int status )
+void KICAD_MANAGER_FRAME::TERMINATE_HANDLER::OnTerminate( int pid, int status )
 {
+    wxString msg = wxString::Format( _( "%s closed [pid=%d]\n" ),
+            GetChars( appName ), pid );
 
-    wxString msg;
-
-    msg.Printf( appName + _( " closed [pid=%d]\n" ), pid );
-    ( (KICAD_MANAGER_FRAME*) wxGetApp().GetTopWindow() )->PrintMsg( msg );
+    ( (KICAD_MANAGER_FRAME*) Pgm().App().GetTopWindow() )->PrintMsg( msg );
 
     delete this;
 }
 
 
 void KICAD_MANAGER_FRAME::Execute( wxWindow* frame, const wxString& execFile,
-                                   const wxString& param )
+                                   wxString params )
 {
+    if( params.size() )
+        AddDelimiterString( params );
 
-    PROCESS_TERMINATE_EVENT_HANDLER* callback;
-    long pid;
-    wxString msg;
+    TERMINATE_HANDLER* callback = new TERMINATE_HANDLER( execFile );
 
-    callback = new PROCESS_TERMINATE_EVENT_HANDLER( execFile );
-    pid = ExecuteFile( frame, execFile, param, callback );
+    long pid = ExecuteFile( frame, execFile, params, callback );
 
     if( pid > 0 )
     {
-        msg.Printf( execFile + _( " opened [pid=%ld]\n" ), pid );
+        wxString msg = wxString::Format( _( "%s opened [pid=%ld]\n" ),
+                GetChars( execFile ), pid );
+
         PrintMsg( msg );
     }
     else
     {
         delete callback;
     }
+}
+
+
+void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName )
+{
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_SCH, false );
+    if( !frame )
+    {
+        frame = Kiway.Player( FRAME_SCH, true );
+        frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectSchematicFileName ) );
+        frame->Show( true );
+    }
+    frame->Raise();
+}
+
+
+void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
+{
+    wxFileName fn( GetProjectFileName() );
+
+    fn.SetExt( SchematicFileExtension );
+
+    RunEeschema( fn.GetFullPath() );
+}
+
+
+void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
+{
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB, false );
+    if( !frame )
+    {
+        frame = Kiway.Player( FRAME_PCB, true );
+        frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
+        frame->Show( true );
+    }
+    frame->Raise();
+}
+
+
+void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
+{
+    wxFileName  kicad_board( PcbFileName() );
+    wxFileName  legacy_board( PcbLegacyFileName() );
+
+    wxFileName& board = ( !legacy_board.FileExists() || kicad_board.FileExists() ) ?
+                            kicad_board : legacy_board;
+
+    RunPcbNew( board.GetFullPath() );
 }
 
 
@@ -223,51 +340,34 @@ void KICAD_MANAGER_FRAME::OnRunPageLayoutEditor( wxCommandEvent& event )
 }
 
 
-void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
-{
-    wxFileName  legacy_board( m_ProjectFileName );
-    wxFileName  kicad_board( m_ProjectFileName );
-
-    legacy_board.SetExt( LegacyPcbFileExtension );
-    kicad_board.SetExt( KiCadPcbFileExtension );
-
-    if( !legacy_board.FileExists() || kicad_board.FileExists() )
-        Execute( this, PCBNEW_EXE, QuoteFullPath( kicad_board ) );
-    else
-        Execute( this, PCBNEW_EXE, QuoteFullPath( legacy_board ) );
-}
-
-
 void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
 {
-    wxFileName fn( m_ProjectFileName );
+    wxFileName fn( GetProjectFileName() );
 
     fn.SetExt( NetlistFileExtension );
-    Execute( this, CVPCB_EXE, QuoteFullPath( fn ) );
+
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_CVPCB, false );
+    if( !frame )
+    {
+        frame = Kiway.Player( FRAME_CVPCB, true );
+        frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+        frame->Show( true );
+    }
+    frame->Raise();
 }
 
-void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
-{
-    wxFileName fn( m_ProjectFileName );
-
-    fn.SetExt( SchematicFileExtension );
-    Execute( this, EESCHEMA_EXE, QuoteFullPath( fn ) );
-
-}
 
 void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )
 {
-    wxFileName fn( m_ProjectFileName );
-    wxString path = wxT( "\"" );
-    path += fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) + wxT( "\"" );
-
-    Execute( this, GERBVIEW_EXE, path );
+    // Gerbview is called without any file to open, because we do not know
+    // the list and the name of files to open (if any...).
+    Execute( this, GERBVIEW_EXE, wxEmptyString );
 }
 
 
 void KICAD_MANAGER_FRAME::OnOpenTextEditor( wxCommandEvent& event )
 {
-    wxString editorname = wxGetApp().GetEditorName();
+    wxString editorname = Pgm().GetEditorName();
 
     if( !editorname.IsEmpty() )
         Execute( this, editorname, wxEmptyString );
@@ -294,8 +394,8 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
     wxString filename = wxT( "\"" );
     filename += dlg.GetPath() + wxT( "\"" );
 
-    if( !dlg.GetPath().IsEmpty() &&  !wxGetApp().GetEditorName().IsEmpty() )
-        Execute( this, wxGetApp().GetEditorName(), filename );
+    if( !dlg.GetPath().IsEmpty() &&  !Pgm().GetEditorName().IsEmpty() )
+        Execute( this, Pgm().GetEditorName(), filename );
 }
 
 
@@ -305,34 +405,33 @@ void KICAD_MANAGER_FRAME::OnRefresh( wxCommandEvent& event )
 }
 
 
+void KICAD_MANAGER_FRAME::language_change( wxCommandEvent& event )
+{
+    int id = event.GetId();
+
+    Kiway.SetLanguage( id );
+}
+
+
 void KICAD_MANAGER_FRAME::ClearMsg()
 {
     m_MessagesBox->Clear();
 }
 
 
-void KICAD_MANAGER_FRAME::LoadSettings()
+void KICAD_MANAGER_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxConfig* cfg = wxGetApp().GetSettings();
-
-    if( cfg )
-    {
-        EDA_BASE_FRAME::LoadSettings();
-        cfg->Read( TreeFrameWidthEntry, &m_leftWinWidth );
-    }
+    EDA_BASE_FRAME::LoadSettings( aCfg );
+    aCfg->Read( TreeFrameWidthEntry, &m_leftWinWidth );
 }
 
 
-void KICAD_MANAGER_FRAME::SaveSettings()
+void KICAD_MANAGER_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxConfig* cfg = wxGetApp().GetSettings();
-
-    if( cfg )
-    {
-        EDA_BASE_FRAME::SaveSettings();
-        cfg->Write( TreeFrameWidthEntry, m_LeftWin->GetSize().x );
-    }
+    EDA_BASE_FRAME::SaveSettings( aCfg );
+    aCfg->Write( TreeFrameWidthEntry, m_LeftWin->GetSize().x );
 }
+
 
 /**
  * a minor helper function:
@@ -340,9 +439,11 @@ void KICAD_MANAGER_FRAME::SaveSettings()
  */
 void KICAD_MANAGER_FRAME::PrintPrjInfo()
 {
-    wxString msg;
-    msg.Printf( _( "Working dir: %s\nProject: %s\n" ),
-                GetChars( wxGetCwd() ),
-                GetChars( m_ProjectFileName.GetFullPath() ) );
+    wxString msg = wxString::Format( _(
+            "Working dir: %s\nProject: %s\n" ),
+            GetChars( wxGetCwd() ),
+            GetChars( GetProjectFileName() )
+            );
     PrintMsg( msg );
 }
+

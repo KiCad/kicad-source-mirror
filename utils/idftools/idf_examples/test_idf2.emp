@@ -1,0 +1,290 @@
+.HEADER
+LIBRARY_FILE 3.0 "Created by KiCad (2014-01-25 BZR 4633)-product" 2014/02/01.15:09:15 1
+.END_HEADER
+
+# cylindrical outline, vertical, no pins
+# file: "cylvmm_0_D5_L8_Z3.idf"
+# dia: 5.000 mm
+# length: 8.000 mm
+# extra height: 3.000 mm
+.ELECTRICAL
+"CYLV_MM" "D5.000_H8.000_Z3.000" MM 11.000
+0 0 0 0
+0 5.000 0 360
+.END_ELECTRICAL
+
+# cylindrical outline, vertical, no pins
+# file: "cylvin_0_D0.25_L0.25_Z0.127.idf"
+# dia: 250 THOU
+# length: 250 THOU
+# extra height: 127 THOU
+.ELECTRICAL
+"CYLV_IN" "D0.250_H0.250_Z0.127" THOU 377
+0 0 0 0
+0 250 0 360
+.END_ELECTRICAL
+
+# cylindrical outline, vertical, 1 pin on left
+# file: "cylvmm_1L_D5_L8_Z3_WD0.8_P3.5.idf"
+# dia: 5.000 mm
+# length: 8.000 mm
+# extra height: 3.000 mm
+# wire dia: 0.800 mm
+# pitch: 3.500 mm
+.ELECTRICAL
+"CYLV_MM_L" "D5.000_H8.000_Z3.000_WD0.800_P3.500" MM 11.000
+1 -0.718 0.400 0
+1 -0.718 -0.400 -341.586
+1 -1.750 -0.400 0
+1 -1.750 0.400 -180
+1 -0.718 0.400 0
+.END_ELECTRICAL
+
+# cylindrical outline, vertical, 1 pin on right
+# file: "cylvmm_1R_D5_L8_Z3_WD0.8_P3.5.idf"
+# dia: 5.000 mm
+# length: 8.000 mm
+# extra height: 3.000 mm
+# wire dia: 0.800 mm
+# pitch: 3.500 mm
+.ELECTRICAL
+"CYLV_MM_R" "D5.000_H8.000_Z3.000_WD0.800_P3.500" MM 11.000
+0 0.718 0.400 0
+0 0.718 -0.400 341.586
+0 1.750 -0.400 0
+0 1.750 0.400 180
+0 0.718 0.400 0
+.END_ELECTRICAL
+
+# cylindrical outline, vertical, 1 pin on left
+# file: "cylvin_1L_D0.25_L0.25_Z0.127_WD0.062_P0.25.idf"
+# dia: 250 THOU
+# length: 250 THOU
+# extra height: 127 THOU
+# wire dia: 62 THOU
+# pitch: 250 THOU
+.ELECTRICAL
+"CYLV_IN_L" "D0.250_H0.250_Z0.127_WD0.062_P0.250" THOU 377
+1 3 31 0
+1 3 -31 -331.282
+1 -125 -31 0
+1 -125 31 -180
+1 3 31 0
+.END_ELECTRICAL
+
+# cylindrical outline, vertical, 1 pin on right
+# file: "cylvin_1R_D0.25_L0.25_Z0.127_WD0.062_P0.25.idf"
+# dia: 250 THOU
+# length: 250 THOU
+# extra height: 127 THOU
+# wire dia: 62 THOU
+# pitch: 250 THOU
+.ELECTRICAL
+"CYLV_IN_R" "D0.250_H0.250_Z0.127_WD0.062_P0.250" THOU 377
+0 -3 31 0
+0 -3 -31 331.282
+0 125 -31 0
+0 125 31 180
+0 -3 31 0
+.END_ELECTRICAL
+
+# cylindrical outline, horiz., axial pins
+# file: "resistor.idf"
+# dia: 2.500 mm
+# length: 4.000 mm
+# extra height: 0.500 mm
+# wire dia: 0.600 mm
+# pitch: 8.000 mm
+.ELECTRICAL
+"CYLH_MM_AXI" "D2.500_H4.000_Z0.500_WD0.600_P8.000" MM 3.000
+0 -2.000 1.250 0
+0 -2.000 0.300 0
+0 -4.000 0.300 0
+0 -4.000 -0.300 180
+0 -2.000 -0.300 0
+0 -2.000 -1.250 0
+0 2.000 -1.250 0
+0 2.000 -0.300 0
+0 4.000 -0.300 0
+0 4.000 0.300 180
+0 2.000 0.300 0
+0 2.000 1.250 0
+0 -2.000 1.250 0
+.END_ELECTRICAL
+
+# cylindrical outline, horiz., axial pins
+# file: "resistor_in.idf"
+# dia: 98 THOU
+# length: 157 THOU
+# extra height: 20 THOU
+# wire dia: 24 THOU
+# pitch: 315 THOU
+.ELECTRICAL
+"CYLH_IN_AXI" "D0.098_H0.157_Z0.020_WD0.024_P0.315" THOU 118
+0 -78 49 0
+0 -78 12 0
+0 -157 12 0
+0 -157 -12 180
+0 -78 -12 0
+0 -78 -49 0
+0 78 -49 0
+0 78 -12 0
+0 157 -12 0
+0 157 12 180
+0 78 12 0
+0 78 49 0
+0 -78 49 0
+.END_ELECTRICAL
+
+# cylindrical outline, horiz., radial pins
+# file: "capacitor.idf"
+# dia: 5.000 mm
+# length: 6.000 mm
+# extra height: 0.200 mm
+# wire dia: 0.600 mm
+# pitch: 2.500 mm
+# lead: 3.000 mm
+.ELECTRICAL
+"CYLH_MM_RAD" "D5.000_H6.000_Z0.200_WD0.600_P2.500_L3.000" MM 5.200
+0 -2.500 9.000 0
+0 -2.500 3.000 0
+0 -1.550 3.000 0
+0 -1.550 0 0
+0 -0.950 0 180
+0 -0.950 3.000 0
+0 0.950 3.000 0
+0 0.950 0 0
+0 1.550 0 180
+0 1.550 3.000 0
+0 2.500 3.000 0
+0 2.500 9.000 0
+0 -2.500 9.000 0
+.END_ELECTRICAL
+
+# cylindrical outline, horiz., radial pins
+# file: "capacitor_in.idf"
+# dia: 197 THOU
+# length: 236 THOU
+# extra height: 8 THOU
+# wire dia: 24 THOU
+# pitch: 98 THOU
+# lead: 118 THOU
+.ELECTRICAL
+"CYLH_IN_RAD" "D0.197_H0.236_Z0.008_WD0.024_P0.098_L0.118" THOU 205
+0 -98 354 0
+0 -98 118 0
+0 -61 118 0
+0 -61 0 0
+0 -37 0 180
+0 -37 118 0
+0 37 118 0
+0 37 0 0
+0 61 0 180
+0 61 118 0
+0 98 118 0
+0 98 354 0
+0 -98 354 0
+.END_ELECTRICAL
+
+# rectangular outline
+# file: "rectMM_10x10x6_C0.idf"
+# width: 10.000 mm
+# length: 10.000 mm
+# height: 6.000 mm
+# chamfer: 0.000 mm
+.ELECTRICAL
+"RECTMM" "W10.000_L10.000_H6.000_C0.000" MM 6.000
+0 5.000 5.000 0
+0 -5.000 5.000 0
+0 -5.000 -5.000 0
+0 5.000 -5.000 0
+0 5.000 5.000 0
+.END_ELECTRICAL
+
+# rectangular outline
+# file: "rectIN_10x10x6mm_C0mm.idf"
+# width: 393 THOU
+# length: 393 THOU
+# height: 236 THOU
+# chamfer: 0 THOU
+.ELECTRICAL
+"RECTIN" "W393_L393_H236_C0" THOU 236
+0 196 196 0
+0 -196 196 0
+0 -196 -196 0
+0 196 -196 0
+0 196 196 0
+.END_ELECTRICAL
+
+# rectangular outline
+# file: "rectMM_10x10x2_C0.5.idf"
+# width: 10.000 mm
+# length: 10.000 mm
+# height: 2.000 mm
+# chamfer: 0.500 mm
+.ELECTRICAL
+"RECTMM" "W10.000_L10.000_H2.000_C0.500" MM 2.000
+0 5.000 5.000 0
+0 -4.500 5.000 0
+0 -5.000 4.500 0
+0 -5.000 -5.000 0
+0 5.000 -5.000 0
+0 5.000 5.000 0
+.END_ELECTRICAL
+
+# rectangular outline
+# file: "rectIN_10x10x2mm_C0.5mm.idf"
+# width: 393 THOU
+# length: 393 THOU
+# height: 78 THOU
+# chamfer: 19 THOU
+.ELECTRICAL
+"RECTIN" "W393_L393_H78_C19" THOU 78
+0 196 196 0
+0 -176 196 0
+0 -196 176 0
+0 -196 -196 0
+0 196 -196 0
+0 196 196 0
+.END_ELECTRICAL
+
+# rectangular outline, leaded
+# file: "rectLMM_10x10x12_D0.8_P6.0.idf"
+# width: 10.000 mm
+# length: 10.000 mm
+# height: 12.000 mm
+# wire dia: 0.800 mm
+# pitch: 6.000 mm
+.ELECTRICAL
+"RECTLMM" "W10.000_L10.000_H12.000_D0.800_P6.000" MM 12.000
+0 3.000 0.400 0
+0 2.000 0.400 0
+0 2.000 5.000 0
+0 -8.000 5.000 0
+0 -8.000 -5.000 0
+0 2.000 -5.000 0
+0 2.000 -0.400 0
+0 3.000 -0.400 0
+0 3.000 0.400 180
+.END_ELECTRICAL
+
+# rectangular outline, leaded
+# file: "rectLIN_10x10x12mm_D0.8mm_P6.0mm.idf"
+# width: 393 THOU
+# length: 393 THOU
+# height: 472 THOU
+# wire dia: 31 THOU
+# pitch: 236 THOU
+.ELECTRICAL
+"RECTLIN" "W393_L393_H472_D31_P236" THOU 472
+0 118 15 0
+0 78 15 0
+0 78 196 0
+0 -315 196 0
+0 -315 -196 0
+0 78 -196 0
+0 78 -15 0
+0 118 -15 0
+0 118 15 180
+.END_ELECTRICAL
+

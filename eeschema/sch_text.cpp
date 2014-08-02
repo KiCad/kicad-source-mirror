@@ -445,7 +445,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     if( size == 0 )
-        size = DEFAULT_SIZE_TEXT;
+        size = GetDefaultTextSize();
 
     char* text = strtok( (char*) aLine, "\n\r" );
 
@@ -795,7 +795,7 @@ void SCH_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     }
 
     // Display text size (X or Y value, with are the same value in Eeschema)
-    msg = ReturnStringFromValue( g_UserUnit, m_Size.x, true );
+    msg = StringFromValue( g_UserUnit, m_Size.x, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg, RED ) );
 }
 
@@ -930,7 +930,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     if( size == 0 )
-        size = DEFAULT_SIZE_TEXT;
+        size = GetDefaultTextSize();
 
     char* text = strtok( (char*) aLine, "\n\r" );
 
@@ -1093,7 +1093,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     if( size == 0 )
-        size = DEFAULT_SIZE_TEXT;
+        size = GetDefaultTextSize();
 
     char* text = strtok( (char*) aLine, "\n\r" );
 
@@ -1524,7 +1524,7 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     if( size == 0 )
-        size = DEFAULT_SIZE_TEXT;
+        size = GetDefaultTextSize();
 
     char* text = strtok( (char*) aLine, "\n\r" );
 

@@ -35,30 +35,12 @@
 #include <class_module.h>
 
 
-#if defined(DEBUG)
-/**
- * Function NestedSpace
- * outputs nested space for pretty indenting.
- * @param aNestLevel The nest count
- * @param aReporter A reference to a #REPORTER object where to output.
- * @return REPORTER& for continuation.
- **/
-static REPORTER& NestedSpace( int aNestLevel, REPORTER& aReporter )
+int COMPONENT_NET::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 {
-    for( int i = 0;  i < aNestLevel;  ++i )
-        aReporter.Report( wxT( "  " ) );
-
-    return aReporter;
+    return aOut->Print( aNestLevel, "(pin_net %s %s)",
+            aOut->Quotew( m_pinName ).c_str(),
+            aOut->Quotew( m_netName ).c_str() );
 }
-
-
-void COMPONENT_NET::Show( int aNestLevel, REPORTER& aReporter )
-{
-    NestedSpace( aNestLevel, aReporter );
-    aReporter.Report( wxString::Format( wxT( "<pin_name=%s net_name=%s>\n" ),
-                                        GetChars( m_pinName ), GetChars( m_netName ) ) );
-}
-#endif
 
 
 void COMPONENT::SetModule( MODULE* aModule )
@@ -108,51 +90,66 @@ bool COMPONENT::MatchesFootprintFilters( const wxString& aFootprintName ) const
 }
 
 
-#if defined(DEBUG)
-void COMPONENT::Show( int aNestLevel, REPORTER& aReporter )
+void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 {
-    NestedSpace( aNestLevel, aReporter );
-    aReporter.Report( wxT( "<component>\n" ) );
-    NestedSpace( aNestLevel+1, aReporter );
-    aReporter.Report( wxString::Format( wxT( "<ref=%s value=%s name=%s library=%s fpid=%s "
-                                             "timestamp=%s>\n" ),
-                                        GetChars( m_reference ), GetChars( m_value ),
-                                        GetChars( m_name ), GetChars( m_library ),
-                                        m_fpid.Format().c_str(),
-                                        GetChars( m_timeStamp ) ) );
+    int nl = aNestLevel;
 
-    if( !m_footprintFilters.IsEmpty() )
+    aOut->Print( nl, "(ref %s ",      aOut->Quotew( m_reference ).c_str() );
+    aOut->Print( 0, "(fpid %s)\n",    aOut->Quotew( m_fpid.Format() ).c_str() );
+
+    if( ! ( aCtl & CTL_OMIT_EXTRA ) )
     {
-        NestedSpace( aNestLevel+1, aReporter );
-        aReporter.Report( wxT( "<fp_filters>\n" ) );
+        aOut->Print( nl+1, "(value %s)\n",    aOut->Quotew( m_value ).c_str() );
+        aOut->Print( nl+1, "(name %s)\n",     aOut->Quotew( m_name ).c_str() );
+        aOut->Print( nl+1, "(library %s)\n",  aOut->Quotew( m_library ).c_str() );
+        aOut->Print( nl+1, "(timestamp %s)\n", aOut->Quotew( m_timeStamp ).c_str() );
+    }
 
-        for( unsigned i = 0;  i < m_footprintFilters.GetCount();  i++ )
+    if( !( aCtl & CTL_OMIT_FILTERS ) && m_footprintFilters.GetCount() )
+    {
+        aOut->Print( nl+1, "(fp_filters" );
+
+        for( unsigned i = 0;  i < m_footprintFilters.GetCount();  ++i )
+            aOut->Print( 0, " %s", aOut->Quotew( m_footprintFilters[i] ).c_str() );
+
+        aOut->Print( 0, ")\n" );
+    }
+
+    if( !( aCtl & CTL_OMIT_NETS ) && m_nets.size() )
+    {
+        int llen = aOut->Print( nl+1, "(nets " );
+
+        for( unsigned i = 0;  i < m_nets.size();  ++i )
         {
-            NestedSpace( aNestLevel+2, aReporter );
-            aReporter.Report( wxString::Format( wxT( "<%s>\n" ),
-                                                GetChars( m_footprintFilters[i] ) ) );
+            if( llen > 80 )
+            {
+                aOut->Print( 0, "\n" );
+                llen = aOut->Print( nl+1, "  " );
+            }
+
+            llen += m_nets[i].Format( aOut, 0, aCtl );
         }
 
-        NestedSpace( aNestLevel+1, aReporter );
-        aReporter.Report( wxT( "</fp_filters>\n" ) );
+        aOut->Print( 0, ")\n" );
     }
 
-    if( !m_nets.empty() )
-    {
-        NestedSpace( aNestLevel+1, aReporter );
-        aReporter.Report( wxT( "<nets>\n" ) );
-
-        for( unsigned i = 0;  i < m_nets.size();  i++ )
-            m_nets[i].Show( aNestLevel+3, aReporter );
-
-        NestedSpace( aNestLevel+1, aReporter );
-        aReporter.Report( "</nets>\n" );
-    }
-
-    NestedSpace( aNestLevel, aReporter );
-    aReporter.Report( "</component>\n" );
+    aOut->Print( nl, ")\n" );    // </ref>
 }
-#endif
+
+
+void NETLIST::Format( const char* aDocName, OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
+{
+    int nl = aNestLevel;
+
+    aOut->Print( nl, "(%s\n", aDocName );
+
+    for( unsigned i = 0;  i < m_components.size();  i++ )
+    {
+        m_components[i].Format( aOut, nl+1, aCtl );
+    }
+
+    aOut->Print( nl, ")\n" );
+}
 
 
 void NETLIST::AddComponent( COMPONENT* aComponent )
@@ -250,29 +247,3 @@ bool NETLIST::AllFootprintsLinked() const
     return true;
 }
 
-
-#if defined( DEBUG )
-void NETLIST::Show( int aNestLevel, REPORTER& aReporter )
-{
-    NestedSpace( aNestLevel, aReporter );
-    aReporter.Report( "<netlist>\n" );
-
-    if( !m_components.empty() )
-    {
-        NestedSpace( aNestLevel+1, aReporter );
-        aReporter.Report( "<components>\n" );
-
-        for( unsigned i = 0;  i < m_components.size();  i++ )
-        {
-            m_components[i].Show( aNestLevel+2, aReporter );
-        }
-
-        NestedSpace( aNestLevel+1, aReporter );
-
-        aReporter.Report( "</components>\n" );
-    }
-
-    NestedSpace( aNestLevel, aReporter );
-    aReporter.Report( "</netlist>\n" );
-}
-#endif

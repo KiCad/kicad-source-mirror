@@ -44,32 +44,10 @@
 #include <class_module.h>
 #include <class_text_mod.h>
 
-#include <dialog_edit_module_text_base.h>
+#include <dialog_edit_module_text.h>
 
 
 extern wxPoint MoveVector;  // Move vector for move edge, imported from edtxtmod.cpp
-
-
-/*************** **************/
-/* class DialogEditModuleText */
-/*************** **************/
-class DialogEditModuleText : public DialogEditModuleText_base
-{
-private:
-    PCB_BASE_FRAME* m_parent;
-    wxDC* m_dc;
-    MODULE* m_module;
-    TEXTE_MODULE* m_currentText;
-
-public:
-    DialogEditModuleText( PCB_BASE_FRAME* aParent, TEXTE_MODULE* aTextMod, wxDC* aDC );
-    ~DialogEditModuleText() {};
-
-private:
-    void initDlg( );
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
-};
 
 
 void PCB_BASE_FRAME::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC )
@@ -197,15 +175,15 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     wxPoint tmp;
 
     msg = m_TxtPosCtrlX->GetValue();
-    tmp.x = ReturnValueFromString( g_UserUnit, msg );
+    tmp.x = ValueFromString( g_UserUnit, msg );
 
     msg = m_TxtPosCtrlY->GetValue();
-    tmp.y = ReturnValueFromString( g_UserUnit, msg );
+    tmp.y = ValueFromString( g_UserUnit, msg );
 
     m_currentText->SetPos0( tmp );
 
-    wxSize textSize( wxSize( ReturnValueFromString( g_UserUnit, m_TxtSizeCtrlX->GetValue() ),
-                             ReturnValueFromString( g_UserUnit, m_TxtSizeCtrlY->GetValue() ) ) );
+    wxSize textSize( wxSize( ValueFromString( g_UserUnit, m_TxtSizeCtrlX->GetValue() ),
+                             ValueFromString( g_UserUnit, m_TxtSizeCtrlY->GetValue() ) ) );
 
     // Test for a reasonnable size:
     if( textSize.x < TEXTS_MIN_SIZE )
@@ -216,7 +194,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     m_currentText->SetSize( textSize ),
 
     msg = m_TxtWidthCtlr->GetValue();
-    int width = ReturnValueFromString( g_UserUnit, msg );
+    int width = ValueFromString( g_UserUnit, msg );
 
     // Test for a reasonnable width:
     if( width <= 1 )

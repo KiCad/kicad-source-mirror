@@ -9,7 +9,7 @@
 
 #include <dialog_lib_edit_pin.h>
 
-DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin ) :
+DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( EDA_DRAW_FRAME* parent, LIB_PIN* aPin ) :
     DIALOG_LIB_EDIT_PIN_BASE( parent )
 {
     // Creates a dummy pin to show on a panel, inside this dialog:
@@ -20,7 +20,7 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin ) :
     m_dummyPin->SetParent( NULL );
     m_dummyPin->ClearFlags();
 
-    m_panelShowPin->SetBackgroundColour( MakeColour( g_DrawBgColor ) );
+    m_panelShowPin->SetBackgroundColour( MakeColour( parent->GetDrawBgColor() ) );
 
     // Set tab order
     m_textPadName->MoveAfterInTabOrder(m_textPinName);
@@ -94,10 +94,10 @@ void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
     if( ! IsShown() )   // do nothing at init time
         return;
 
-    int pinNameSize = ReturnValueFromString( g_UserUnit, GetNameTextSize() );
-    int pinNumSize = ReturnValueFromString( g_UserUnit, GetPadNameTextSize());
+    int pinNameSize = ValueFromString( g_UserUnit, GetNameTextSize() );
+    int pinNumSize = ValueFromString( g_UserUnit, GetPadNameTextSize());
     int pinOrient = LIB_PIN::GetOrientationCode( GetOrientation() );
-    int pinLength = ReturnValueFromString( g_UserUnit, GetLength() );
+    int pinLength = ValueFromString( g_UserUnit, GetLength() );
     int pinShape = LIB_PIN::GetStyleCode( GetStyle() );
     int pinType = GetElectricalType();
 

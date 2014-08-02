@@ -67,6 +67,7 @@
 #include <confirm.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <trigo.h>
 #include <macros.h>
 #include <base_units.h>
@@ -92,13 +93,13 @@ extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 extern void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                                  APERTURE_T        aAperture,
                                  int               Dcode_index,
-                                 LAYER_NUM         aLayer,
+                                 int         aLayer,
                                  const wxPoint&    aPos,
                                  wxSize            aSize,
                                  bool              aLayerNegative );
 void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               int               Dcode_index,
-                              LAYER_NUM         aLayer,
+                              int         aLayer,
                               const wxPoint&    aStart,
                               const wxPoint&    aEnd,
                               wxSize            aPenSize,
@@ -167,7 +168,7 @@ static EXCELLON_CMD excellon_G_CmdList[] =
 bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 {
     wxString msg;
-    LAYER_NUM layer = getActiveLayer();      // current layer used in GerbView
+    int layer = getActiveLayer();      // current layer used in GerbView
 
     if( g_GERBER_List[layer] == NULL )
     {
@@ -543,7 +544,7 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
 
 bool EXCELLON_IMAGE::Select_Tool( char*& text )
 {
-    int tool_id = ReturnTCodeNumber( text );
+    int tool_id = TCodeNumber( text );
 
     if( tool_id >= 0 )
     {

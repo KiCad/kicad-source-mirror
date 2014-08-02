@@ -1,8 +1,12 @@
-add_definitions(-DPL_EDITOR)
+# the map generation creates on Windows/gcc a lot of useless warnings
+# so disable it on windows
+if( WIN32 AND NOT CMAKE_CROSSCOMPILING )
+    set( MAKE_LINK_MAPS false )
+else()
+    set( MAKE_LINK_MAPS true )
+endif()
 
-###
-# Includes
-###
+add_definitions(-DPL_EDITOR)
 
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
@@ -11,12 +15,7 @@ include_directories(
     ${INC_AFTER}
     )
 
-
-###
-# Sources
-###
-
-set(PL_EDITOR_SRCS
+set( PL_EDITOR_SRCS
     dialogs/properties_frame_base.cpp
     dialogs/dialogs_for_printing.cpp
     dialogs/dialog_new_dataitem_base.cpp
@@ -30,7 +29,6 @@ set(PL_EDITOR_SRCS
     onleftclick.cpp
     onrightclick.cpp
     page_layout_writer.cpp
-    pl_editor.cpp
     pl_editor_config.cpp
     pl_editor_frame.cpp
     pl_editor_undo_redo.cpp
@@ -40,10 +38,7 @@ set(PL_EDITOR_SRCS
     toolbars_pl_editor.cpp
     )
 
-###
-# We need some extra sources from common
-###
-set(PL_EDITOR_EXTRA_SRCS
+set( PL_EDITOR_EXTRA_SRCS
     ../common/base_screen.cpp
     ../common/base_units.cpp
     ../common/eda_text.cpp
@@ -51,58 +46,124 @@ set(PL_EDITOR_EXTRA_SRCS
     ../common/dialogs/dialog_page_settings.cpp
 )
 
-###
-# Windows resource file
-###
-if(WIN32)
-    if(MINGW)
-        # PL_EDITOR_RESOURCES variable is set by the macro.
-        mingw_resource_compiler(pl_editor)
-    else(MINGW)
-        set(PL_EDITOR_RESOURCES pl_editor.rc)
-    endif(MINGW)
-endif(WIN32)
 
-###
-# Apple resource files
-###
-if(APPLE)
-    set(PL_EDITOR_RESOURCES pl_editor.icns pl_editor_doc.icns)
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/pl_editor.icns"
-                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/pl_editor_doc.icns"
-                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    set(MACOSX_BUNDLE_ICON_FILE pl_editor.icns)
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pl_editor)
-endif(APPLE)
+if( MINGW )
+    # PL_EDITOR_RESOURCES variable is set by the macro.
+    mingw_resource_compiler( pl_editor )
+endif()
 
-###
-# Create the pl_editor executable
-###
-add_executable(pl_editor WIN32 MACOSX_BUNDLE
-               ${PL_EDITOR_SRCS}
-               ${DIALOGS_SRCS}
-               ${PL_EDITOR_EXTRA_SRCS}
-               ${PL_EDITOR_RESOURCES})
 
-###
-# Set properties for APPLE on pl_editor target
-###
-if(APPLE)
-    set_target_properties(pl_editor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
-endif(APPLE)
+if( APPLE )
+    set( PL_EDITOR_RESOURCES pl_editor.icns pl_editor_doc.icns )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pl_editor.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pl_editor_doc.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set( MACOSX_BUNDLE_ICON_FILE pl_editor.icns )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pl_editor )
+endif()
 
-###
-# Link executable target pl_editor with correct libraries
-###
-target_link_libraries(pl_editor common polygon bitmaps
-                      ${OPENGL_LIBRARIES}
-                      ${wxWidgets_LIBRARIES}
-                      ${GDI_PLUS_LIBRARIES})
 
-###
-# Add pl_editor as install target
-###
-install(TARGETS pl_editor
+if( USE_KIWAY_DLLS )
+
+    # a very small program launcher for pl_editor_kiface
+    add_executable( pl_editor WIN32 MACOSX_BUNDLE
+        ../common/single_top.cpp
+        ../common/pgm_base.cpp
+        ${PL_EDITOR_RESOURCES}
+        )
+    set_source_files_properties( ../common/single_top.cpp PROPERTIES
+        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PL_EDITOR;PGM_DATA_FILE_EXT=\"kicad_wks\";BUILD_KIWAY_DLL"
+        )
+    target_link_libraries( pl_editor
+        #singletop  # replaces common, giving us restrictive control and link warnings.
+        # There's way too much crap coming in from common yet.
+        common
+        bitmaps
+        ${wxWidgets_LIBRARIES}
+        )
+    if( MAKE_LINK_MAPS )
+        set_target_properties( pl_editor PROPERTIES
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pl_editor.map" )
+    endif()
+
+    # the main pl_editor program, in DSO form.
+    add_library( pl_editor_kiface MODULE
+        pl_editor.cpp
+        ${PL_EDITOR_SRCS}
+        ${DIALOGS_SRCS}
+        ${PL_EDITOR_EXTRA_SRCS}
+        )
+    target_link_libraries( pl_editor_kiface
+        common
+        polygon
+        bitmaps
+        ${OPENGL_LIBRARIES}
+        ${wxWidgets_LIBRARIES}
+        ${GDI_PLUS_LIBRARIES}
+        )
+    set_target_properties( pl_editor_kiface PROPERTIES
+        OUTPUT_NAME     pl_editor
+        PREFIX          ${KIFACE_PREFIX}
+        SUFFIX          ${KIFACE_SUFFIX}
+        )
+    set_source_files_properties( pl_editor.cpp PROPERTIES
+        # The KIFACE is in pcbnew.cpp, export it:
+        COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+        )
+    if( MAKE_LINK_MAPS )
+        set_target_properties( pl_editor_kiface PROPERTIES
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pl_editor.kiface.map" )
+    endif()
+
+    # if building pl_editor, then also build pl_editor_kiface if out of date.
+    add_dependencies( pl_editor pl_editor_kiface )
+
+    # these 2 binaries are a matched set, keep them together:
+    install( TARGETS pl_editor
         DESTINATION ${KICAD_BIN}
-        COMPONENT binary)
+        COMPONENT binary
+        )
+    if( APPLE )
+        # puts the *.kiface into the *.app bundle while linking
+        set_target_properties( pl_editor_kiface PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/pl_editor.app/Contents/MacOS/
+            )
+    else()
+        install( TARGETS pl_editor_kiface
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+    endif()
+
+else()
+
+    add_executable( pl_editor WIN32 MACOSX_BUNDLE
+        pl_editor.cpp
+        ${PL_EDITOR_SRCS}
+        ${DIALOGS_SRCS}
+        ${PL_EDITOR_EXTRA_SRCS}
+        ${PL_EDITOR_RESOURCES}
+        )
+    target_link_libraries( pl_editor
+        common
+        polygon
+        bitmaps
+        ${OPENGL_LIBRARIES}
+        ${wxWidgets_LIBRARIES}
+        ${GDI_PLUS_LIBRARIES}
+        )
+    install( TARGETS pl_editor
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+endif()
+
+
+if( APPLE )
+    set_target_properties( pl_editor PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+        )
+endif()

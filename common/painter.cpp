@@ -38,6 +38,7 @@ RENDER_SETTINGS::RENDER_SETTINGS()
     m_highlightEnabled      = false;
     m_hiContrastEnabled     = false;
     m_hiContrastFactor      = 0.2;
+    m_highlightNetcode      = -1;
     m_outlineWidth          = 1;
     m_worksheetLineWidth    = 100000;
 
@@ -59,7 +60,7 @@ RENDER_SETTINGS::~RENDER_SETTINGS()
 
 void RENDER_SETTINGS::update()
 {
-    m_hiContrastColor = COLOR4D( m_hiContrastFactor, m_hiContrastFactor, m_highlightFactor,
+    m_hiContrastColor = COLOR4D( m_hiContrastFactor, m_hiContrastFactor, m_hiContrastFactor,
                                  m_layerOpacity );
 }
 
@@ -72,10 +73,4 @@ PAINTER::PAINTER( GAL* aGal ) :
 
 PAINTER::~PAINTER()
 {
-}
-
-
-void PAINTER::SetGAL( GAL* aGal )
-{
-    m_gal = aGal;
 }

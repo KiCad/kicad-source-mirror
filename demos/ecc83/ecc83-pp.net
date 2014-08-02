@@ -1,129 +1,160 @@
-# EESchema Netlist Version 1.1 created  27/8/2008-06:26:11
-(
- ( /48B4F266 VALVE-NOVAL_P  U1 ECC81_83 {Lib=ECC81_83}
-  (    1 N-000001 )
-  (    2 N-000004 )
-  (    3 N-000005 )
-  (    4 N-000007 )
-  (    5 N-000007 )
-  (    6 N-000008 )
-  (    7 N-000001 )
-  (    8 N-000009 )
-  (    9 N-000002 )
- )
- ( /456A8ACC $noname  P4 CONN_2 {Lib=CONN_2}
-  (    1 N-000007 )
-  (    2 N-000002 )
- )
- ( /4549F4BE $noname  C1 10uF {Lib=C}
-  (    1 N-000008 )
-  (    2 GND )
- )
- ( /4549F4A5 $noname  P3 POWER {Lib=CONN_2}
-  (    1 N-000008 )
-  (    2 GND )
- )
- ( /4549F46C $noname  P2 OUT {Lib=CONN_2}
-  (    1 N-000006 )
-  (    2 GND )
- )
- ( /4549F464 $noname  P1 IN {Lib=CONN_2}
-  (    1 GND )
-  (    2 N-000004 )
- )
- ( /4549F3BE $noname  C2 680nF {Lib=C}
-  (    1 N-000006 )
-  (    2 N-000009 )
- )
- ( /4549F3AD $noname  R3 100K {Lib=R}
-  (    1 N-000006 )
-  (    2 GND )
- )
- ( /4549F3A2 $noname  R4 47K {Lib=R}
-  (    1 N-000004 )
-  (    2 GND )
- )
- ( /4549F39D $noname  R2 1.5K {Lib=R}
-  (    1 N-000005 )
-  (    2 GND )
- )
- ( /4549F38A $noname  R1 1.5K {Lib=R}
-  (    1 N-000001 )
-  (    2 N-000009 )
- )
-)
-*
-{ Allowed footprints by component:
-$component C1
- SM*
- C?
- C1-1
-$endlist
-$component C2
- SM*
- C?
- C1-1
-$endlist
-$component R3
- R?
- SM0603
- SM0805
-$endlist
-$component R4
- R?
- SM0603
- SM0805
-$endlist
-$component R2
- R?
- SM0603
- SM0805
-$endlist
-$component R1
- R?
- SM0603
- SM0805
-$endlist
-$endfootprintlist
-}
-{ Pin List by Nets
-Net 1 ""
- R1 1
- U1 7
- U1 1
-Net 2 ""
- P4 2
- U1 9
-Net 3 "GND"
- R2 2
- R4 2
- R3 2
- P1 1
- P2 2
- P3 2
- C1 2
-Net 4 ""
- P1 2
- R4 1
- U1 2
-Net 5 ""
- R2 1
- U1 3
-Net 6 ""
- P2 1
- R3 1
- C2 1
-Net 7 ""
- P4 1
- U1 4
- U1 5
-Net 8 ""
- P3 1
- U1 6
- C1 1
-Net 9 ""
- U1 8
- C2 2
- R1 2
-}
-#End
+(export (version D)
+  (design
+    (source F:/kicad-launchpad/testing/demos/ecc83/ecc83-pp.sch)
+    (date "04/07/2014 20:15:10")
+    (tool "Eeschema (2014-07-02 BZR 4969)-product"))
+  (components
+    (comp (ref U1)
+      (value ECC83)
+      (footprint VALVE-NOVAL_P)
+      (libsource (lib valves) (part ECC83))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 48B4F266))
+    (comp (ref P4)
+      (value CONN_2)
+      (libsource (lib conn) (part CONN_2))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 456A8ACC))
+    (comp (ref C1)
+      (value 10uF)
+      (libsource (lib device) (part C))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4549F4BE))
+    (comp (ref P3)
+      (value POWER)
+      (libsource (lib conn) (part CONN_2))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4549F4A5))
+    (comp (ref P2)
+      (value OUT)
+      (libsource (lib conn) (part CONN_2))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4549F46C))
+    (comp (ref P1)
+      (value IN)
+      (libsource (lib conn) (part CONN_2))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4549F464))
+    (comp (ref C2)
+      (value 680nF)
+      (libsource (lib device) (part C))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4549F3BE))
+    (comp (ref R3)
+      (value 100K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4549F3AD))
+    (comp (ref R4)
+      (value 47K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4549F3A2))
+    (comp (ref R2)
+      (value 1.5K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4549F39D))
+    (comp (ref R1)
+      (value 1.5K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4549F38A)))
+  (libparts
+    (libpart (lib device) (part C)
+      (description "Condensateur non polarise")
+      (footprints
+        (fp SM*)
+        (fp C?)
+        (fp C1-1))
+      (fields
+        (field (name Reference) C)
+        (field (name Value) C))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
+    (libpart (lib device) (part R)
+      (description Resistance)
+      (footprints
+        (fp R?)
+        (fp SM0603)
+        (fp SM0805)
+        (fp R?-*)
+        (fp SM1206))
+      (fields
+        (field (name Reference) R)
+        (field (name Value) R))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
+    (libpart (lib conn) (part CONN_2)
+      (description "Symbole general de connecteur")
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_2))
+      (pins
+        (pin (num 1) (name P1) (type passive))
+        (pin (num 2) (name PM) (type passive))))
+    (libpart (lib valves) (part ECC81)
+      (aliases
+        (alias ECC83))
+      (fields
+        (field (name Reference) U)
+        (field (name Value) ECC81)
+        (field (name Footprint) VALVE-NOVAL_P))
+      (pins
+        (pin (num 1) (name A) (type output))
+        (pin (num 2) (name G) (type input))
+        (pin (num 3) (name K) (type BiDi))
+        (pin (num 4) (name F1) (type power_in))
+        (pin (num 5) (name F1) (type power_in))
+        (pin (num 6) (name A) (type output))
+        (pin (num 7) (name G) (type input))
+        (pin (num 8) (name K) (type BiDi))
+        (pin (num 9) (name F2) (type power_in)))))
+  (libraries
+    (library (logical device)
+      (uri f:\kicad\share\library\device.lib))
+    (library (logical conn)
+      (uri f:\kicad\share\library\conn.lib))
+    (library (logical valves)
+      (uri f:\kicad\share\library\valves.lib)))
+  (nets
+    (net (code 1) (name "Net-(C1-Pad1)")
+      (node (ref U1) (pin 6))
+      (node (ref C1) (pin 1))
+      (node (ref P3) (pin 1)))
+    (net (code 2) (name "Net-(R2-Pad1)")
+      (node (ref R2) (pin 1))
+      (node (ref U1) (pin 3)))
+    (net (code 3) (name "Net-(C2-Pad2)")
+      (node (ref U1) (pin 8))
+      (node (ref R1) (pin 2))
+      (node (ref C2) (pin 2)))
+    (net (code 4) (name "Net-(C2-Pad1)")
+      (node (ref C2) (pin 1))
+      (node (ref R3) (pin 1))
+      (node (ref P2) (pin 1)))
+    (net (code 5) (name "Net-(P4-Pad2)")
+      (node (ref U1) (pin 9))
+      (node (ref P4) (pin 2)))
+    (net (code 6) (name "Net-(P1-Pad2)")
+      (node (ref U1) (pin 2))
+      (node (ref P1) (pin 2))
+      (node (ref R4) (pin 1)))
+    (net (code 7) (name "Net-(R1-Pad1)")
+      (node (ref R1) (pin 1))
+      (node (ref U1) (pin 1))
+      (node (ref U1) (pin 7)))
+    (net (code 8) (name GND)
+      (node (ref R3) (pin 2))
+      (node (ref C1) (pin 2))
+      (node (ref P1) (pin 1))
+      (node (ref P2) (pin 2))
+      (node (ref P3) (pin 2))
+      (node (ref R4) (pin 2))
+      (node (ref R2) (pin 2)))
+    (net (code 9) (name "Net-(P4-Pad1)")
+      (node (ref U1) (pin 4))
+      (node (ref U1) (pin 5))
+      (node (ref P4) (pin 1)))))

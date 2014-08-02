@@ -44,68 +44,145 @@
 #include <macros.h>
 
 
-wxString GetGerberExtension( LAYER_NUM layer )
+const wxString GetGerberExtension( LAYER_NUM aLayer )
 {
-    switch( layer )
+    if( IsCopperLayer( aLayer ) )
     {
-    case LAYER_N_FRONT:
-        return wxString( wxT( "gtl" ) );
-
-    case LAYER_N_2:
-    case LAYER_N_3:
-    case LAYER_N_4:
-    case LAYER_N_5:
-    case LAYER_N_6:
-    case LAYER_N_7:
-    case LAYER_N_8:
-    case LAYER_N_9:
-    case LAYER_N_10:
-    case LAYER_N_11:
-    case LAYER_N_12:
-    case LAYER_N_13:
-    case LAYER_N_14:
-    case LAYER_N_15:
-
-        // TODO: see if we use .gbr or a layer identifier (gb1 .. gbnn ?)
-        // according to the new internal layers designation
-        // (1 is the first internal layer from the front layer)
-        return wxString( wxT( "gbr" ) );
-
-    case LAYER_N_BACK:
-        return wxString( wxT( "gbl" ) );
-
-    case ADHESIVE_N_BACK:
-        return wxString( wxT( "gba" ) );
-
-    case ADHESIVE_N_FRONT:
-        return wxString( wxT( "gta" ) );
-
-    case SOLDERPASTE_N_BACK:
-        return wxString( wxT( "gbp" ) );
-
-    case SOLDERPASTE_N_FRONT:
-        return wxString( wxT( "gtp" ) );
-
-    case SILKSCREEN_N_BACK:
-        return wxString( wxT( "gbo" ) );
-
-    case SILKSCREEN_N_FRONT:
-        return wxString( wxT( "gto" ) );
-
-    case SOLDERMASK_N_BACK:
-        return wxString( wxT( "gbs" ) );
-
-    case SOLDERMASK_N_FRONT:
-        return wxString( wxT( "gts" ) );
-
-    case DRAW_N:
-    case COMMENT_N:
-    case ECO1_N:
-    case ECO2_N:
-    case EDGE_N:
-    default:
-        return wxString( wxT( "gbr" ) );
+        if( aLayer == F_Cu )
+            return wxT( "gtl" );
+        else if( aLayer == B_Cu )
+            return wxT( "gbl" );
+        else
+        {
+            return wxT( "gbr" );
+        }
     }
+    else
+    {
+        switch( aLayer )
+        {
+        case B_Adhes:       return wxT( "gba" );
+        case F_Adhes:       return wxT( "gta" );
+
+        case B_Paste:       return wxT( "gbp" );
+        case F_Paste:       return wxT( "gtp" );
+
+        case B_SilkS:       return wxT( "gbo" );
+        case F_SilkS:       return wxT( "gto" );
+
+        case B_Mask:        return wxT( "gbs" );
+        case F_Mask:        return wxT( "gts" );
+
+        case Dwgs_User:
+        case Cmts_User:
+        case Eco1_User:
+        case Eco2_User:
+        case Edge_Cuts:
+        default:            return wxT( "gbr" );
+        }
+    }
+}
+
+
+wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer )
+{
+    wxString attrib = wxEmptyString;
+
+    switch( aLayer )
+    {
+    case F_Adhes:
+        attrib = wxString( wxT( "Glue,Top" ) );
+        break;
+
+    case B_Adhes:
+        attrib = wxString( wxT( "Glue,Bot" ) );
+        break;
+
+    case F_SilkS:
+        attrib = wxString( wxT( "Legend,Top" ) );
+        break;
+
+    case B_SilkS:
+        attrib = wxString( wxT( "Legend,Bot" ) );
+        break;
+
+    case F_Mask:
+        attrib = wxString( wxT( "Soldermask,Top" ) );
+        break;
+
+    case B_Mask:
+        attrib = wxString( wxT( "Soldermask,Bot" ) );
+        break;
+
+    case F_Paste:
+        attrib = wxString( wxT( "Paste,Top" ) );
+        break;
+
+    case B_Paste:
+        attrib = wxString( wxT( "Paste,Bot" ) );
+        break;
+
+    case Edge_Cuts:
+        // Board outline.
+        // Can be "Profile,NP" (Not Plated: usual) or "Profile,P"
+        // This last is the exception (Plated)
+        attrib = wxString( wxT( "Profile,NP" ) );
+        break;
+
+    case Dwgs_User:
+        attrib = wxString( wxT( "Drawing" ) );
+        break;
+
+    case Cmts_User:
+        attrib = wxString( wxT( "Other,Comment" ) );
+        break;
+
+    case Eco1_User:
+        attrib = wxString( wxT( "Other,ECO1" ) );
+        break;
+
+    case Eco2_User:
+        attrib = wxString( wxT( "Other,ECO2" ) );
+        break;
+
+    case B_Cu:
+        attrib = wxString::Format( wxT( "Copper,L%d,Bot" ), aBoard->GetCopperLayerCount() );
+        break;
+
+    case F_Cu:
+        attrib = wxString::Format( wxT( "Copper,L1,Top" ) );
+        break;
+
+    default:
+        if( IsCopperLayer( aLayer ) )
+        {
+            attrib = wxString::Format( wxT( "Copper,L%d,Inr" ), aLayer+1 );
+        }
+        break;
+    }
+
+    // Add the signal type of the layer, if relevant
+    if( IsCopperLayer( aLayer ) )
+    {
+        LAYER_T type = aBoard->GetLayerType( ToLAYER_ID( aLayer ) );
+
+        switch( type )
+        {
+        case LT_SIGNAL:
+            attrib += wxString( wxT( ",Signal" ) );
+            break;
+        case LT_POWER:
+            attrib += wxString( wxT( ",Plane" ) );
+            break;
+        case LT_MIXED:
+            attrib += wxString( wxT( ",Mixed" ) );
+            break;
+        default:
+            ;   // do nothing (but avoid a warning for unhandled LAYER_T values from GCC)
+        }
+    }
+
+    return attrib;
 }
 
 
@@ -241,7 +318,7 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
         wxFileName fn( boardFilename );
         BuildPlotFileName( &fn, outputDirName, aSuffix, GetDefaultPlotExtension( aFormat ) );
 
-        m_plotter = StartPlotBoard( m_board, &m_plotOpts, fn.GetFullPath(), aSheetDesc );
+        m_plotter = StartPlotBoard( m_board, &m_plotOpts, UNDEFINED_LAYER, fn.GetFullPath(), aSheetDesc );
     }
 
     return( m_plotter != NULL );

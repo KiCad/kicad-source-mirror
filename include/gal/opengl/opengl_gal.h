@@ -37,21 +37,11 @@
 #include <gal/opengl/noncached_container.h>
 #include <gal/opengl/opengl_compositor.h>
 
-#include <wx/wx.h>
 #include <wx/glcanvas.h>
 
-#include <cmath>
-#include <iterator>
-#include <vector>
-#include <algorithm>
-#include <memory>
 #include <map>
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/shared_array.hpp>
-
-#include <stdlib.h>
-#include <iostream>
-#include <fstream>
 
 #ifndef CALLBACK
 #define CALLBACK
@@ -143,21 +133,14 @@ public:
     virtual void Flush();
 
     /// @copydoc GAL::ClearScreen()
-    virtual void ClearScreen();
-
-    // -----------------
-    // Attribute setting
-    // -----------------
-
-    /// @copydoc GAL::SetStrokeColor()
-    virtual void SetStrokeColor( const COLOR4D& aColor );
+    virtual void ClearScreen( const COLOR4D& aColor );
 
     // --------------
     // Transformation
     // --------------
 
     /// @copydoc GAL::Transform()
-    virtual void Transform( MATRIX3x3D aTransformation );
+    virtual void Transform( const MATRIX3x3D& aTransformation );
 
     /// @copydoc GAL::Rotate()
     virtual void Rotate( double aAngle );
@@ -270,7 +253,7 @@ private:
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
 
     wxClientDC*             clientDC;               ///< Drawing context
-    wxGLContext*            glContext;              ///< OpenGL context of wxWidgets
+    static wxGLContext*     glContext;              ///< OpenGL context of wxWidgets
     wxWindow*               parentWindow;           ///< Parent window
     wxEvtHandler*           mouseListener;
     wxEvtHandler*           paintListener;
@@ -299,8 +282,6 @@ private:
     bool                    isShaderInitialized;        ///< Was the shader initialized?
     bool                    isGrouping;                 ///< Was a group started?
 
-    VECTOR2D                cursorPosition;         ///< Current cursor position
-
     // Polygon tesselation
     /// The tessellator
     GLUtesselator*          tesselator;
@@ -313,7 +294,7 @@ private:
      * @param aStartPoint is the start point of the line.
      * @param aEndPoint is the end point of the line.
      */
-    inline void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+    void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /**
      * @brief Draw a semicircle. Depending on settings (isStrokeEnabled & isFilledEnabled) it runs
@@ -363,9 +344,6 @@ private:
 
     /// Initialize GLEW
     void initGlew();
-
-    /// @copydoc GAL::initCursor()
-    virtual void initCursor( int aCursorSize );
 
     /**
      * @brief Blits cursor into the current screen.

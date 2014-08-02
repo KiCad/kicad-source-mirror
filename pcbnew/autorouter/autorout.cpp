@@ -66,7 +66,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     }
     else
     {
-        g_Route_Layer_TOP = g_Route_Layer_BOTTOM = LAYER_N_BACK;
+        g_Route_Layer_TOP = g_Route_Layer_BOTTOM = B_Cu;
     }
 
     switch( mode )
@@ -78,7 +78,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
             {
             case PCB_PAD_T:
                 Pad = (D_PAD*) GetScreen()->GetCurItem();
-                autoroute_net_code = Pad->GetNet();
+                autoroute_net_code = Pad->GetNetCode();
                 break;
 
             default:

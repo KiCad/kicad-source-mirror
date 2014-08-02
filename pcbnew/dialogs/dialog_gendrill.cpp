@@ -27,7 +27,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <pcbplot.h>
@@ -74,7 +75,7 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* parent ) :
 {
     m_parent = parent;
     m_board  = parent->GetBoard();
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
     m_plotOpts = m_parent->GetPlotSettings();
 
     SetReturnCode( 1 );
@@ -139,15 +140,27 @@ void DIALOG_GENDRILL::InitDisplayParams()
 
     for( TRACK* track = m_parent->GetBoard()->m_Track; track != NULL; track = track->Next() )
     {
-        if( track->Type() != PCB_VIA_T )
-            continue;
+        const VIA *via = dynamic_cast<const VIA*>( track );
+        if( via )
+        {
+            switch( via->GetViaType() )
+            {
+            case VIA_THROUGH:
+                m_throughViasCount++;
+                break;
 
-        if( track->GetShape() == VIA_THROUGH )
-            m_throughViasCount++;
-        else if( track->GetShape() == VIA_MICROVIA )
-            m_microViasCount++;
-        else if( track->GetShape() == VIA_BLIND_BURIED )
-            m_blindOrBuriedViasCount++;
+            case VIA_MICROVIA:
+                m_microViasCount++;
+                break;
+
+            case VIA_BLIND_BURIED:
+                m_blindOrBuriedViasCount++;
+                break;
+
+            default:
+                break;
+            }
+        }
     }
 
     m_MicroViaDrillValue->Enable( m_microViasCount );
@@ -341,21 +354,23 @@ void DIALOG_GENDRILL::SetParams()
 
 void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
 {
-    wxString   layer_extend;              /* added to the  Board FileName to
-                                           * create FullFileName (= Board
-                                           * FileName + layer pair names) */
+    wxString   layername_extend;        /* added to the  Board FileName to
+                                         * create FullFileName (= Board
+                                         * FileName + layer pair names)
+                                         */
     wxString   msg;
-    bool       hasBuriedVias = false;  /* If true, drill files are created
-                                        * layer pair by layer pair for
-                                        * buried vias */
-    int        layer1 = LAYER_N_BACK;
-    int        layer2 = LAYER_N_FRONT;
+    bool       hasBuriedVias = false;   /* If true, drill files are created
+                                         * layer pair by layer pair for
+                                         * buried vias
+                                         */
+    int        layer1 = F_Cu;
+    int        layer2 = B_Cu;
     bool       gen_through_holes = true;
     bool       gen_NPTH_holes    = false;
 
     wxString   currentWD = ::wxGetCwd();
 
-    UpdateConfig(); // set params and Save drill options
+    UpdateConfig();     // set params and Save drill options
 
     m_parent->ClearMsgPanel();
 
@@ -379,26 +394,26 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
         if( excellonWriter.GetHolesCount() > 0 ) // has holes?
         {
             fn = m_parent->GetBoard()->GetFileName();
-            layer_extend.Empty();
+            layername_extend.Empty();
 
             if( gen_NPTH_holes )
             {
-                layer_extend << wxT( "-NPTH" );
+                layername_extend << wxT( "-NPTH" );
             }
             else if( !gen_through_holes )
             {
-                if( layer1 == LAYER_N_BACK )
-                    layer_extend << wxT( "-back" );
+                if( layer1 == F_Cu )
+                    layername_extend << wxT( "-front" );
                 else
-                    layer_extend << wxT( "-inner" ) << layer1;
+                    layername_extend << wxT( "-inner" ) << layer1;
 
-                if( layer2 == LAYER_N_FRONT )
-                    layer_extend << wxT( "-front" );
+                if( layer2 == B_Cu )
+                    layername_extend << wxT( "-back" );
                 else
-                    layer_extend << wxT( "-inner" ) << layer2;
+                    layername_extend << wxT( "-inner" ) << layer2;
             }
 
-            fn.SetName( fn.GetName() + layer_extend );
+            fn.SetName( fn.GetName() + layername_extend );
             wxString defaultPath = m_plotOpts.GetOutputDirectory();
 
             if( defaultPath.IsEmpty() )
@@ -455,14 +470,14 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
             gen_NPTH_holes = true;
         else
         {
-            if(  gen_through_holes )
-                layer2 = layer1 + 1;    // prepare generation of first layer pair
+            if( gen_through_holes )
+                layer2 = layer1 + 1;    // done with through-board holes, prepare generation of first layer pair
             else
             {
-                if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
+                if( layer2 >= B_Cu )    // no more layer pair to consider
                 {
-                    layer1 = LAYER_N_BACK;
-                    layer2 = LAYER_N_FRONT;
+                    layer1 = F_Cu;
+                    layer2 = B_Cu;
                     gen_NPTH_holes = true;
                     continue;
                 }
@@ -471,8 +486,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
                 layer2++;                      // use next layer pair
 
                 if( layer2 == m_parent->GetBoard()->GetCopperLayerCount() - 1 )
-                    layer2 = LAYER_N_FRONT;         // the last layer is always the
-                                                    // Front layer
+                    layer2 = B_Cu;      // the last layer is always the back layer
             }
 
             gen_through_holes = false;

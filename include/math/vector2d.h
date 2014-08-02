@@ -28,9 +28,11 @@
 #ifndef VECTOR2D_H_
 #define VECTOR2D_H_
 
+#include <cmath>
 #include <climits>
 #include <iostream>
 #include <sstream>
+#include <cmath>
 
 #include <math/math_util.h>
 
@@ -375,7 +377,7 @@ VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
 
     return VECTOR2<T> (
         ( x < 0 ? -1 : 1 ) * sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ),
-        ( y < 0 ? -1 : 1 ) * sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) );
+        ( y < 0 ? -1 : 1 ) * sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) ) * sign( aNewLength );
 }
 
 

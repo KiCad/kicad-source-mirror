@@ -33,7 +33,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <wxEeschemaStruct.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 
 #include <eeschema_id.h>
 #include <class_library.h>
@@ -243,14 +243,14 @@ bool SCH_EDIT_FRAME::LoadCacheLibrary( const wxString& aFilename )
 }
 
 
-bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
+bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
     SCH_SCREEN* screen;
-    wxString    FullFileName, msg;
-    bool        LibCacheExist = false;
-    SCH_SCREENS ScreenList;
+    wxString    fullFileName( aFileSet[0] );
+    wxString    msg;
+    SCH_SCREENS screenList;
 
-    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+    for( screen = screenList.GetFirst(); screen != NULL; screen = screenList.GetNext() )
     {
         if( screen->IsModify() )
             break;
@@ -258,10 +258,12 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
 
     if( screen )
     {
-        int response = YesNoCancelDialog( this, _( "The current schematic has been modified.  Do "
-                                                   "you wish to save the changes?" ),
-                                          wxEmptyString,
-                                          _( "Save and Load" ), _( "Load Without Saving" ) );
+        int response = YesNoCancelDialog( this,
+            _( "The current schematic has been modified.  Do you wish to save the changes?" ),
+            wxEmptyString,
+            _( "Save and Load" ),
+            _( "Load Without Saving" )
+            );
 
         if( response == wxID_CANCEL )
         {
@@ -274,9 +276,8 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
         }
     }
 
-    FullFileName = aFileName;
-
-    if( FullFileName.IsEmpty() && !aIsNew )
+/*
+    if( fullFileName.IsEmpty() && !aIsNew )
     {
         wxFileDialog dlg( this, _( "Open Schematic" ), wxGetCwd(),
                           wxEmptyString, SchematicFileWildcard,
@@ -287,16 +288,17 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
 
         FullFileName = dlg.GetPath();
     }
+*/
 
-    wxFileName fn = FullFileName;
+    wxFileName fn = fullFileName;
 
     if( fn.IsRelative() )
     {
         fn.MakeAbsolute();
-        FullFileName = fn.GetFullPath();
+        fullFileName = fn.GetFullPath();
     }
 
-    if( !wxGetApp().LockFile( FullFileName ) )
+    if( !Pgm().LockFile( fullFileName ) )
     {
         DisplayError( this, _( "This file is already open." ) );
         return false;
@@ -312,16 +314,19 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
     CreateScreens();
     screen = GetScreen();
 
-    wxLogDebug( wxT( "Loading schematic " ) + FullFileName );
+    wxLogDebug( wxT( "Loading schematic " ) + fullFileName );
+
+    // @todo: this is bad:
     wxSetWorkingDirectory( fn.GetPath() );
 
-    screen->SetFileName( FullFileName );
-    g_RootSheet->SetFileName( FullFileName );
+    screen->SetFileName( fullFileName );
+    g_RootSheet->SetFileName( fullFileName );
     SetStatusText( wxEmptyString );
     ClearMsgPanel();
 
     screen->ClrModify();
 
+#if 0
     if( aIsNew )
     {
         /* SCH_SCREEN constructor does this now
@@ -347,12 +352,13 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
         m_canvas->Refresh();
         return true;
     }
+#endif
 
     // Reloading configuration.
-    msg.Printf( _( "Ready\nWorking dir: <%s>\n" ), GetChars( wxGetCwd() ) );
+    msg.Printf( _( "Ready\nWorking dir: '%s'\n" ), GetChars( wxGetCwd() ) );
     PrintMsg( msg );
 
-    LoadProjectFile( wxEmptyString, false );
+    LoadProjectFile( wxEmptyString, true );
 
     // Clear (if needed) the current active library in libedit because it could be
     // removed from memory
@@ -361,38 +367,52 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
     // Delete old caches.
     CMP_LIBRARY::RemoveCacheLibrary();
 
-    LibCacheExist = LoadCacheLibrary( g_RootSheet->GetScreen()->GetFileName() );
-
-    if( !wxFileExists( g_RootSheet->GetScreen()->GetFileName() ) && !LibCacheExist )
+    if( !wxFileExists( g_RootSheet->GetScreen()->GetFileName() ) )
     {
         Zoom_Automatique( false );
-        msg.Printf( _( "File <%s> not found." ),
-                    GetChars( g_RootSheet->GetScreen()->GetFileName() ) );
-        DisplayInfoMessage( this, msg );
-        return false;
+
+        if( aCtl == 0 )
+        {
+            msg.Printf( _( "File '%s' not found." ),
+                        GetChars( g_RootSheet->GetScreen()->GetFileName() ) );
+            DisplayInfoMessage( this, msg );
+        }
+
+        return true;    // do not close Eeschema if the file if not found:
+                        // we may have to create a new schematic file.
     }
 
     // load the project.
+    bool libCacheExist = LoadCacheLibrary( g_RootSheet->GetScreen()->GetFileName() );
+
     g_RootSheet->SetScreen( NULL );
+
     bool diag = g_RootSheet->Load( this );
+
     SetScreen( m_CurrentSheet->LastScreen() );
 
     UpdateFileHistory( g_RootSheet->GetScreen()->GetFileName() );
 
-    /* Redraw base screen (ROOT) if necessary. */
+    // Redraw base screen (ROOT) if necessary.
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     Zoom_Automatique( false );
     SetSheetNumberAndCount();
     m_canvas->Refresh( true );
-    return diag;
+
+    (void) libCacheExist;
+    (void) diag;
+
+//    return diag;
+    return true;    // do not close Eeschema if the file if not found:
+                    // we may have to create a new schematic file.
 }
 
 
 bool SCH_EDIT_FRAME::AppendOneEEProject()
 {
     SCH_SCREEN* screen;
-    wxString    FullFileName;
-    wxString msg;
+    wxString    fullFileName;
+    wxString    msg;
 
     screen = GetScreen();
 
@@ -410,22 +430,22 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
 
-    FullFileName = dlg.GetPath();
+    fullFileName = dlg.GetPath();
 
-    wxFileName fn = FullFileName;
+    wxFileName fn = fullFileName;
 
     if( fn.IsRelative() )
     {
         fn.MakeAbsolute();
-        FullFileName = fn.GetFullPath();
+        fullFileName = fn.GetFullPath();
     }
 
-    LoadCacheLibrary( FullFileName );
+    LoadCacheLibrary( fullFileName );
 
-    wxLogDebug( wxT( "Importing schematic " ) + FullFileName );
+    wxLogDebug( wxT( "Importing schematic " ) + fullFileName );
 
     // load the project
-    bool success = LoadOneEEFile( screen, FullFileName, true );
+    bool success = LoadOneEEFile( screen, fullFileName, true );
     if( success )
     {
         // load sub-sheets

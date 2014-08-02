@@ -179,7 +179,7 @@ void DIALOG_BLOCK_OPTIONS::ExecuteCommand( wxCommandEvent& event )
 }
 
 
-int PCB_EDIT_FRAME::ReturnBlockCommand( int aKey )
+int PCB_EDIT_FRAME::BlockCommand( int aKey )
 {
     int cmd = 0;
 
@@ -381,7 +381,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
 void PCB_EDIT_FRAME::Block_SelectItems()
 {
-    LAYER_MSK layerMask;
+    LSET layerMask;
     bool selectOnlyComplete = GetScreen()->m_BlockLocate.GetWidth() > 0 ;
 
     GetScreen()->m_BlockLocate.Normalize();
@@ -392,9 +392,9 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     // Add modules
     if( blockIncludeModules )
     {
-        for( MODULE* module = m_Pcb->m_Modules; module != NULL; module = module->Next() )
+        for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
         {
-            LAYER_NUM layer = module->GetLayer();
+            LAYER_ID layer = module->GetLayer();
 
             if( module->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete )
                 && ( !module->IsLocked() || blockIncludeLockedModules ) )
@@ -418,7 +418,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
                 if( blockIncludeItemsOnInvisibleLayers
                   || m_Pcb->IsLayerVisible( track->GetLayer() ) )
                 {
-                    picker.SetItem ( track );
+                    picker.SetItem( track );
                     itemsList->PushItem( picker );
                 }
             }
@@ -426,13 +426,13 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     }
 
     // Add graphic items
-    layerMask = EDGE_LAYER;
+    layerMask = LSET( Edge_Cuts );
 
     if( blockIncludeItemsOnTechLayers )
-        layerMask = ALL_LAYERS;
+        layerMask.set();
 
     if( !blockIncludeBoardOutlineLayer )
-        layerMask &= ~EDGE_LAYER;
+        layerMask.set( Edge_Cuts, false );
 
     for( BOARD_ITEM* PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
@@ -444,7 +444,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         switch( PtStruct->Type() )
         {
         case PCB_LINE_T:
-            if( (GetLayerMask( PtStruct->GetLayer() ) & layerMask) == 0  )
+            if( !layerMask[PtStruct->GetLayer()] )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
@@ -464,7 +464,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             break;
 
         case PCB_TARGET_T:
-            if( ( GetLayerMask( PtStruct->GetLayer() ) & layerMask ) == 0  )
+            if( !layerMask[PtStruct->GetLayer()] )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
@@ -474,7 +474,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             break;
 
         case PCB_DIMENSION_T:
-            if( ( GetLayerMask( PtStruct->GetLayer() ) & layerMask ) == 0 )
+            if( !layerMask[PtStruct->GetLayer()] )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
@@ -656,8 +656,8 @@ void PCB_EDIT_FRAME::Block_Delete()
 void PCB_EDIT_FRAME::Block_Rotate()
 {
     wxPoint oldpos;
-    wxPoint centre;         // rotation cent-re for the rotation transform
-    int     rotAngle = 900; // rotation angle in 0.1 deg.
+    wxPoint centre;                     // rotation cent-re for the rotation transform
+    int     rotAngle = m_rotationAngle; // rotation angle in 0.1 deg.
 
     oldpos = GetCrossHairPosition();
     centre = GetScreen()->m_BlockLocate.Centre();
@@ -665,14 +665,13 @@ void PCB_EDIT_FRAME::Block_Rotate()
     OnModify();
 
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.GetItems();
-    itemsList->m_Status = UR_ROTATED;
+    itemsList->m_Status = UR_CHANGED;
 
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
         wxASSERT( item );
-        itemsList->SetPickedItemStatus( UR_ROTATED, ii );
-        item->Rotate( centre, rotAngle );
+        itemsList->SetPickedItemStatus( UR_CHANGED, ii );
 
         switch( item->Type() )
         {
@@ -706,7 +705,16 @@ void PCB_EDIT_FRAME::Block_Rotate()
         }
     }
 
-    SaveCopyInUndoList( *itemsList, UR_ROTATED, centre );
+    // Save all the block items in there current state before applying the rotation.
+    SaveCopyInUndoList( *itemsList, UR_CHANGED, centre );
+
+    // Now perform the rotation.
+    for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
+    {
+        BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
+        wxASSERT( item );
+        item->Rotate( centre, rotAngle );
+    }
 
     Compile_Ratsnest( NULL, true );
     m_canvas->Refresh( true );

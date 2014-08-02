@@ -134,7 +134,7 @@ const wxPoint DRAWSEGMENT::GetArcEnd() const
     return endPoint;   // after rotation, the end of the arc.
 }
 
-const double DRAWSEGMENT::GetArcAngleStart() const
+double DRAWSEGMENT::GetArcAngleStart() const
 {
     // due to the Y axis orient atan2 needs - y value
     double angleStart = ArcTangente( GetArcStart().y - GetCenter().y,
@@ -147,6 +147,7 @@ const double DRAWSEGMENT::GetArcAngleStart() const
 
     return angleStart;
 }
+
 
 void DRAWSEGMENT::SetAngle( double aAngle )
 {
@@ -172,7 +173,8 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     int l_trace;
     int mode;
     int radius;
-    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+
+    LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     EDA_COLOR_T color;
 
     BOARD * brd =  GetBoard( );
@@ -184,13 +186,12 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
     if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) &&  DisplayOpt.ContrastModeDisplay )
     {
-        if( !IsOnLayer( curr_layer ) && !IsOnLayer( EDGE_N ) )
+        if( !IsOnLayer( curr_layer ) && !IsOnLayer( Edge_Cuts ) )
             ColorTurnToDarkDarkGray( &color );
     }
 
-
     GRSetDrawMode( DC, draw_mode );
-    l_trace = m_Width >> 1;  /* half trace width */
+    l_trace = m_Width >> 1;         // half trace width
 
     // Line start point or Circle and Arc center
     ux0 = m_Start.x + aOffset.x;
@@ -245,7 +246,6 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
             if( StAngle < EndAngle )
                 EXCHG( StAngle, EndAngle );
         }
-
 
         if( mode == LINE )
             GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle, radius, color );
@@ -379,6 +379,59 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
             wxPoint end = m_End;
             RotatePoint( &end, m_Start, -m_Angle );
             bbox.Merge( end );
+
+            // Determine the starting quarter
+            // 0 right-bottom
+            // 1 left-bottom
+            // 2 left-top
+            // 3 right-top
+            unsigned int quarter = 0;       // assume right-bottom
+
+            if( m_End.y < m_Start.y )       // change to left-top
+                quarter |= 3;
+
+            if( m_End.x < m_Start.x )       // for left side, the LSB is 2nd bit negated
+                quarter ^= 1;
+
+            int radius = GetRadius();
+            int angle = (int) GetArcAngleStart() % 900 + m_Angle;
+            bool directionCW = ( m_Angle > 0 );      // Is the direction of arc clockwise?
+
+            if( !directionCW )
+            {
+                angle = 900 - angle;
+                quarter = ( quarter + 3 ) % 4;       // -1 modulo arithmetic
+            }
+
+            while( angle > 900 )
+            {
+                switch( quarter )
+                {
+                case 0:
+                    bbox.Merge( wxPoint( m_Start.x, m_Start.y + radius ) );     // down
+                    break;
+
+                case 1:
+                    bbox.Merge( wxPoint( m_Start.x - radius, m_Start.y ) );     // left
+                    break;
+
+                case 2:
+                    bbox.Merge( wxPoint( m_Start.x, m_Start.y - radius ) );     // up
+                    break;
+
+                case 3:
+                    bbox.Merge( wxPoint( m_Start.x + radius, m_Start.y ) );     // right
+                    break;
+                }
+
+                if( directionCW )
+                    ++quarter;
+                else
+                    quarter += 3;       // -1 modulo arithmetic
+
+                quarter %= 4;
+                angle -= 900;
+            }
         }
         break;
 
@@ -421,7 +474,7 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 }
 
 
-bool DRAWSEGMENT::HitTest( const wxPoint& aPosition )
+bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
 {
     switch( m_Shape )
     {
@@ -558,4 +611,3 @@ EDA_ITEM* DRAWSEGMENT::Clone() const
 {
     return new DRAWSEGMENT( *this );
 }
-

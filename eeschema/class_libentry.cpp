@@ -136,7 +136,7 @@ bool LIB_ALIAS::SaveDoc( OUTPUTFORMATTER& aFormatter )
 
         aFormatter.Print( 0, "$ENDCMP\n" );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         return false;
     }
@@ -258,7 +258,7 @@ wxString LIB_COMPONENT::GetLibraryName()
 }
 
 
-wxString LIB_COMPONENT::ReturnSubReference( int aUnit, bool aAddSeparator )
+wxString LIB_COMPONENT::SubReference( int aUnit, bool aAddSeparator )
 {
     wxString subRef;
 
@@ -569,7 +569,7 @@ LIB_PIN* LIB_COMPONENT::GetPin( const wxString& aNumber, int aUnit, int aConvert
     {
         wxASSERT( pinList[i]->Type() == LIB_PIN_T );
 
-        pinList[i]->ReturnPinStringNum( pNumber );
+        pinList[i]->PinStringNum( pNumber );
 
         if( aNumber == pNumber )
             return pinList[i];

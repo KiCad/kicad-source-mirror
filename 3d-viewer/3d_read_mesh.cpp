@@ -31,7 +31,7 @@
 #include <common.h>
 #include <macros.h>
 #include <kicad_string.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 
 #include <3d_viewer.h>
 #include <info3d_visu.h>

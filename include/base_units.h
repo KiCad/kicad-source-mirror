@@ -108,7 +108,7 @@ wxString AngleToStringDegrees( double aAngle );
 wxString LengthDoubleToString( double aValue, bool aConvertToMils = false );
 
 /**
- * Function ReturnStringFromValue
+ * Function StringFromValue
  * returns the string from \a aValue according to units (inch, mm ...) for display,
  * and the initial unit for value.
  *
@@ -126,7 +126,7 @@ wxString LengthDoubleToString( double aValue, bool aConvertToMils = false );
  * @param aAddUnitSymbol = true to add symbol unit to the string value
  * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
  */
-wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol = false );
+wxString StringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol = false );
 
 /**
  * Operator << overload
@@ -153,17 +153,17 @@ void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue );
 double From_User_Unit( EDA_UNITS_T aUnit, double aValue );
 
 /**
- * Function ReturnValueFromString
+ * Function ValueFromString
  * converts \a aTextValue in \a aUnits to internal units used by the application.
  *
  * @param aUnits The units of \a aTextValue.
  * @param aTextValue A reference to a wxString object containing the string to convert.
  * @return The string from Value, according to units (inch, mm ...) for display,
  */
-int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue );
+int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue );
 
 /**
- * Function ReturnValueFromString
+ * Function ValueFromString
 
  * converts \a aTextValue in \a aUnits to internal units used by the application,
  * unit type will be obtained from g_UserUnit.
@@ -172,12 +172,12 @@ int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue );
  * @return The string from Value, according to units (inch, mm ...) for display,
  */
 
-int ReturnValueFromString( const wxString& aTextValue );
+int ValueFromString( const wxString& aTextValue );
 
 /**
  * Convert the number Value in a string according to the internal units
  *  and the selected unit (g_UserUnit) and put it in the wxTextCtrl TextCtrl
  */
-int ReturnValueFromTextCtrl( const wxTextCtrl& aTextCtr );
+int ValueFromTextCtrl( const wxTextCtrl& aTextCtr );
 
 #endif   // _BASE_UNITS_H_

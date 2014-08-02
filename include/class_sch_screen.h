@@ -523,7 +523,7 @@ public:
     int GetCount() const { return m_screens.size(); }
     SCH_SCREEN* GetFirst();
     SCH_SCREEN* GetNext();
-    SCH_SCREEN* GetScreen( unsigned int aIndex );
+    SCH_SCREEN* GetScreen( unsigned int aIndex ) const;
 
     /**
      * Function ClearAnnotation

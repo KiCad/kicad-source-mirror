@@ -112,7 +112,7 @@ int SCH_SHEET_PATH::Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const
 }
 
 
-SCH_SHEET* SCH_SHEET_PATH::Last()
+SCH_SHEET* SCH_SHEET_PATH::Last() const
 {
     if( m_numSheets )
         return m_sheets[m_numSheets - 1];
@@ -121,7 +121,7 @@ SCH_SHEET* SCH_SHEET_PATH::Last()
 }
 
 
-SCH_SCREEN* SCH_SHEET_PATH::LastScreen()
+SCH_SCREEN* SCH_SHEET_PATH::LastScreen() const
 {
     SCH_SHEET* lastSheet = Last();
 
@@ -132,7 +132,7 @@ SCH_SCREEN* SCH_SHEET_PATH::LastScreen()
 }
 
 
-SCH_ITEM* SCH_SHEET_PATH::LastDrawList()
+SCH_ITEM* SCH_SHEET_PATH::LastDrawList() const
 {
     SCH_SHEET* lastSheet = Last();
 
@@ -143,7 +143,7 @@ SCH_ITEM* SCH_SHEET_PATH::LastDrawList()
 }
 
 
-SCH_ITEM* SCH_SHEET_PATH::FirstDrawList()
+SCH_ITEM* SCH_SHEET_PATH::FirstDrawList() const
 {
     SCH_ITEM* item = NULL;
 
@@ -316,7 +316,7 @@ void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aInclu
 }
 
 
-SCH_ITEM* SCH_SHEET_PATH::FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap )
+SCH_ITEM* SCH_SHEET_PATH::FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap ) const
 {
     bool hasWrapped = false;
     bool firstItemFound = false;
@@ -349,7 +349,7 @@ SCH_ITEM* SCH_SHEET_PATH::FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem, bool
 }
 
 
-SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap )
+SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap ) const
 {
     bool hasWrapped = false;
     bool firstItemFound = false;

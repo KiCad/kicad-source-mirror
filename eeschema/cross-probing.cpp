@@ -28,7 +28,9 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
+#include <kiway_express.h>
 #include <macros.h>
 #include <eda_dde.h>
 #include <wxEeschemaStruct.h>
@@ -58,17 +60,11 @@
 void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 {
     char     line[1024];
-    char*    idcmd;
-    char*    text;
-    wxString part_ref, msg;
-    SCH_EDIT_FRAME* frame;
-
-    frame = (SCH_EDIT_FRAME*)wxGetApp().GetTopWindow();
 
     strncpy( line, cmdline, sizeof(line) - 1 );
 
-    idcmd = strtok( line, " \n\r" );
-    text  = strtok( NULL, "\"\n\r" );
+    char* idcmd = strtok( line, " \n\r" );
+    char* text  = strtok( NULL, "\"\n\r" );
 
     if( (idcmd == NULL) || (text == NULL) )
         return;
@@ -76,14 +72,14 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( strcmp( idcmd, "$PART:" ) != 0 )
         return;
 
-    part_ref = FROM_UTF8( text );
+    wxString part_ref = FROM_UTF8( text );
 
     /* look for a complement */
     idcmd = strtok( NULL, " \n\r" );
 
     if( idcmd == NULL )    // component only
     {
-        frame->FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
+        FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
         return;
     }
 
@@ -92,77 +88,128 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( text == NULL )
         return;
 
-    msg = FROM_UTF8( text );
+    wxString msg = FROM_UTF8( text );
 
     if( strcmp( idcmd, "$REF:" ) == 0 )
     {
-        frame->FindComponentAndItem( part_ref, true, FIND_REFERENCE, msg, false );
+        FindComponentAndItem( part_ref, true, FIND_REFERENCE, msg, false );
     }
     else if( strcmp( idcmd, "$VAL:" ) == 0 )
     {
-        frame->FindComponentAndItem( part_ref, true, FIND_VALUE, msg, false );
+        FindComponentAndItem( part_ref, true, FIND_VALUE, msg, false );
     }
     else if( strcmp( idcmd, "$PAD:" ) == 0 )
     {
-        frame->FindComponentAndItem( part_ref, true, FIND_PIN, msg, false );
+        FindComponentAndItem( part_ref, true, FIND_PIN, msg, false );
     }
     else
     {
-        frame->FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
+        FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
     }
 }
 
 
-void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT* LibItem )
+std::string FormatProbeItem( EDA_ITEM* aComponent, SCH_COMPONENT* aPart )
 {
-    if( objectToSync == NULL )
-        return;
-
-    LIB_PIN* Pin = NULL;
-    char     Line[1024];
-
-    /* Cross probing to Pcbnew if a pin or a component is found */
-    switch( objectToSync->Type() )
+    // Cross probing to Pcbnew if a pin or a component is found
+    switch( aComponent->Type() )
     {
     case SCH_FIELD_T:
     case LIB_FIELD_T:
-    {
-        if( LibItem == NULL )
-            break;
+        {
+            if( !aPart )
+                break;
 
-        sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
-        SendCommand( MSG_TO_PCB, Line );
-    }
-    break;
-
-    case SCH_COMPONENT_T:
-        LibItem = (SCH_COMPONENT*) objectToSync;
-        sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
-        SendCommand( MSG_TO_PCB, Line );
+            return StrPrintf( "$PART: %s", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+        }
         break;
 
+    case SCH_COMPONENT_T:
+        aPart = (SCH_COMPONENT*) aComponent;
+        return StrPrintf( "$PART: %s", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+
     case LIB_PIN_T:
-        if( LibItem == NULL )
-            break;
-
-        Pin = (LIB_PIN*) objectToSync;
-
-        if( Pin->GetNumber() )
         {
-            wxString pinnum;
-            Pin->ReturnPinStringNum( pinnum );
-            sprintf( Line, "$PIN: %s $PART: %s", TO_UTF8( pinnum ),
-                     TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
-        }
-        else
-        {
-            sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
-        }
+            if( !aPart )
+                break;
 
-        SendCommand( MSG_TO_PCB, Line );
+            LIB_PIN* pin = (LIB_PIN*) aComponent;
+
+            if( pin->GetNumber() )
+            {
+                wxString pinnum;
+
+                pin->PinStringNum( pinnum );
+
+                return StrPrintf( "$PIN: %s $PART: %s", TO_UTF8( pinnum ),
+                         TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+            }
+            else
+            {
+                return StrPrintf( "$PART: %s", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+            }
+        }
         break;
 
     default:
         break;
     }
+
+    return "";
 }
+
+
+void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aComponent, SCH_COMPONENT* aPart )
+{
+#if 1
+    wxASSERT( aComponent );     // fix the caller
+
+#else  // WTF?
+    if( !aComponent )           // caller remains eternally stupid.
+        return;
+#endif
+
+    std::string packet = FormatProbeItem( aComponent, aPart );
+
+    if( packet.size() )
+    {
+        if( Kiface().IsSingle() )
+            SendCommand( MSG_TO_PCB, packet.c_str() );
+        else
+        {
+            // Typically ExpressMail is going to be s-expression packets, but since
+            // we have existing interpreter of the cross probe packet on the other
+            // side in place, we use that here.
+            Kiway().ExpressMail( FRAME_PCB, MAIL_CROSS_PROBE, packet, this );
+        }
+    }
+}
+
+
+void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+{
+    const std::string& payload = mail.GetPayload();
+
+    switch( mail.Command() )
+    {
+    case MAIL_CROSS_PROBE:
+        ExecuteRemoteCommand( payload.c_str() );
+        break;
+
+    case MAIL_BACKANNOTATE_FOOTPRINTS:
+        try
+        {
+            backAnnotateFootprints( payload );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DBG( printf( "%s: ioe:%s\n", __func__, TO_UTF8( ioe.errorText ) );)
+        }
+        break;
+
+    // many many others.
+
+    }
+}
+
+

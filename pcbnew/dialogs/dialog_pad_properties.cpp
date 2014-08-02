@@ -51,32 +51,35 @@
 
 
 // list of pad shapes.
-static PAD_SHAPE_T CodeShape[] = {
-    PAD_CIRCLE, PAD_OVAL, PAD_RECT, PAD_TRAPEZOID
+static PAD_SHAPE_T code_shape[] = {
+    PAD_CIRCLE,
+    PAD_OVAL,
+    PAD_RECT,
+    PAD_TRAPEZOID
 };
 
 
-static PAD_ATTR_T CodeType[] = {
-    PAD_STANDARD, PAD_SMD, PAD_CONN, PAD_HOLE_NOT_PLATED
+static PAD_ATTR_T code_type[] = {
+    PAD_STANDARD,
+    PAD_SMD,
+    PAD_CONN,
+    PAD_HOLE_NOT_PLATED
 };
-
-#define NBTYPES     DIM(CodeType)
 
 
 // Default mask layers setup for pads according to the pad type
-static const LAYER_MSK Std_Pad_Layers[] = {
-
+static const LSET std_pad_layers[] = {
     // PAD_STANDARD:
-    PAD_STANDARD_DEFAULT_LAYERS,
-
-    // PAD_CONN:
-    PAD_CONN_DEFAULT_LAYERS,
+    D_PAD::StandardMask(),
 
     // PAD_SMD:
-    PAD_SMD_DEFAULT_LAYERS,
+    D_PAD::SMDMask(),
 
-    //PAD_HOLE_NOT_PLATED:
-    PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS
+    // PAD_CONN:
+    D_PAD::ConnSMDMask(),
+
+    // PAD_HOLE_NOT_PLATED:
+    D_PAD::UnplatedHoleMask()
 };
 
 
@@ -95,30 +98,39 @@ public:
 
 private:
     PCB_BASE_FRAME* m_parent;
-    D_PAD*  m_currentPad;            // pad currently being edited
-    D_PAD*  m_dummyPad;              // a working copy used to show changes
-    BOARD*  m_board;
-    D_PAD&  m_padMaster;
+    D_PAD*  m_currentPad;           // pad currently being edited
+    D_PAD*  m_dummyPad;             // a working copy used to show changes
+    D_PAD*  m_padMaster;            // The pad used to create new pads in board or
+                                    // footprint editor
+    BOARD*  m_board;                // the main board: this is the board handled by
+                                    // the PCB editor, if running or the dummy
+                                    // board used by the footprint editor
+                                    // (could happen when the Footprint editor will be run
+                                    // alone, outside the board editor
     bool    m_isFlipped;            // true if the parent footprint (therefore pads) is flipped (mirrored)
                                     // in this case, some Y coordinates values must be negated
     bool    m_canUpdate;
+    bool    m_canEditNetName;       // true only if the called is the board editor
 
 private:
     void initValues();
 
     bool padValuesOK();       ///< test if all values are acceptable for the pad
 
+    void redraw();
+
     /**
      * Function setPadLayersList
      * updates the CheckBox states in pad layers list,
      * @param layer_mask = pad layer mask (ORed layers bit mask)
      */
-    void setPadLayersList( LAYER_MSK layer_mask );
+    void setPadLayersList( LSET layer_mask );
 
     /// Copy values from dialog field to aPad's members
     bool transferDataToPad( D_PAD* aPad );
 
     // event handlers:
+    void OnResize( wxSizeEvent& event );
 
     void OnPadShapeSelection( wxCommandEvent& event );
     void OnDrillShapeSelected( wxCommandEvent& event );
@@ -139,24 +151,51 @@ private:
     void PadPropertiesAccept( wxCommandEvent& event );
 };
 
+void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
+{
+    DIALOG_PAD_PROPERTIES dlg( this, aPad );
+
+    dlg.ShowModal();
+}
+
 
 DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
-    DIALOG_PAD_PROPERTIES_BASE( aParent ),
-    // use aParent's parent, which is the original BOARD, not the dummy module editor BOARD,
-    // since FOOTPRINT_EDIT_FRAME::GetDesignSettings() is tricked out to use the PCB_EDIT_FRAME's
-    // BOARD, not its own BOARD.
-    m_padMaster( aParent->GetDesignSettings().m_Pad_Master )
+    DIALOG_PAD_PROPERTIES_BASE( aParent )
 {
     m_canUpdate  = false;
     m_parent     = aParent;
-    m_currentPad = aPad;
+    m_currentPad = aPad;        // aPad can be NULL, if the dialog is called
+                                // from the module editor to set default pad characteristics
+
     m_board      = m_parent->GetBoard();
+
+    m_padMaster  = &m_parent->GetDesignSettings().m_Pad_Master;
     m_dummyPad   = new D_PAD( (MODULE*) NULL );
 
     if( aPad )
         m_dummyPad->Copy( aPad );
+    else    // We are editing a "master" pad, i.e. a pad used to create new pads
+        m_dummyPad->Copy( m_padMaster );
+
+    if( m_parent->IsGalCanvasActive() )
+    {
+        m_panelShowPadGal->UseColorScheme( m_board->GetColorsSettings() );
+        m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
+#if !wxCHECK_VERSION( 3, 0, 0 )
+        m_panelShowPadGal->SetSize( m_panelShowPad->GetSize() );
+#endif
+        m_panelShowPadGal->Show();
+        m_panelShowPad->Hide();
+        m_panelShowPadGal->GetView()->Add( m_dummyPad );
+        m_panelShowPadGal->StartDrawing();
+
+        Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PAD_PROPERTIES::OnResize ) );
+    }
     else
-        m_dummyPad->Copy( &m_padMaster );
+    {
+        m_panelShowPad->Show();
+        m_panelShowPadGal->Hide();
+    }
 
     initValues();
 
@@ -175,12 +214,12 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     EDA_COLOR_T color = BLACK;
 
-    if( m_dummyPad->GetLayerMask() & LAYER_FRONT )
+    if( m_dummyPad->GetLayerSet()[F_Cu] )
     {
         color = m_board->GetVisibleElementColor( PAD_FR_VISIBLE );
     }
 
-    if( m_dummyPad->GetLayerMask() & LAYER_BACK )
+    if( m_dummyPad->GetLayerSet()[B_Cu] )
     {
         color = ColorMix( color, m_board->GetVisibleElementColor( PAD_BK_VISIBLE ) );
     }
@@ -237,35 +276,32 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 }
 
 
-void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
-{
-    DIALOG_PAD_PROPERTIES dlg( this, aPad );
-
-    dlg.ShowModal();
-}
-
-
 void DIALOG_PAD_PROPERTIES::initValues()
 {
     wxString    msg;
     double      angle;
 
+    // Disable pad net name wxTextCtrl if the caller is the footprint editor
+    // because nets are living only in the board managed by the board editor
+    m_canEditNetName = m_parent->IsType( FRAME_PCB );
+
+
     // Setup layers names from board
     // Should be made first, before calling m_rbCopperLayersSel->SetSelection()
-    m_rbCopperLayersSel->SetString( 0, m_board->GetLayerName( LAYER_N_FRONT ) );
-    m_rbCopperLayersSel->SetString( 1, m_board->GetLayerName( LAYER_N_BACK ) );
+    m_rbCopperLayersSel->SetString( 0, m_board->GetLayerName( F_Cu ) );
+    m_rbCopperLayersSel->SetString( 1, m_board->GetLayerName( B_Cu ) );
 
-    m_PadLayerAdhCmp->SetLabel( m_board->GetLayerName( ADHESIVE_N_FRONT ) );
-    m_PadLayerAdhCu->SetLabel( m_board->GetLayerName( ADHESIVE_N_BACK ) );
-    m_PadLayerPateCmp->SetLabel( m_board->GetLayerName( SOLDERPASTE_N_FRONT ) );
-    m_PadLayerPateCu->SetLabel( m_board->GetLayerName( SOLDERPASTE_N_BACK ) );
-    m_PadLayerSilkCmp->SetLabel( m_board->GetLayerName( SILKSCREEN_N_FRONT ) );
-    m_PadLayerSilkCu->SetLabel( m_board->GetLayerName( SILKSCREEN_N_BACK ) );
-    m_PadLayerMaskCmp->SetLabel( m_board->GetLayerName( SOLDERMASK_N_FRONT ) );
-    m_PadLayerMaskCu->SetLabel( m_board->GetLayerName( SOLDERMASK_N_BACK ) );
-    m_PadLayerECO1->SetLabel( m_board->GetLayerName( ECO1_N ) );
-    m_PadLayerECO2->SetLabel( m_board->GetLayerName( ECO2_N ) );
-    m_PadLayerDraft->SetLabel( m_board->GetLayerName( DRAW_N ) );
+    m_PadLayerAdhCmp->SetLabel( m_board->GetLayerName( F_Adhes ) );
+    m_PadLayerAdhCu->SetLabel( m_board->GetLayerName( B_Adhes ) );
+    m_PadLayerPateCmp->SetLabel( m_board->GetLayerName( F_Paste ) );
+    m_PadLayerPateCu->SetLabel( m_board->GetLayerName( B_Paste ) );
+    m_PadLayerSilkCmp->SetLabel( m_board->GetLayerName( F_SilkS ) );
+    m_PadLayerSilkCu->SetLabel( m_board->GetLayerName( B_SilkS ) );
+    m_PadLayerMaskCmp->SetLabel( m_board->GetLayerName( F_Mask ) );
+    m_PadLayerMaskCu->SetLabel( m_board->GetLayerName( B_Mask ) );
+    m_PadLayerECO1->SetLabel( m_board->GetLayerName( Eco1_User ) );
+    m_PadLayerECO2->SetLabel( m_board->GetLayerName( Eco2_User ) );
+    m_PadLayerDraft->SetLabel( m_board->GetLayerName( Dwgs_User ) );
 
     m_isFlipped = false;
 
@@ -273,7 +309,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     {
         MODULE* module = m_currentPad->GetParent();
 
-        if( module->GetLayer() == LAYER_N_BACK )
+        if( module->GetLayer() == B_Cu )
         {
             m_isFlipped = true;
             m_staticModuleSideValue->SetLabel( _( "Back side (footprint is mirrored)" ) );
@@ -294,7 +330,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_dummyPad->SetDelta( sz );
 
         // flip pad's layers
-        m_dummyPad->SetLayerMask( FlipLayerMask( m_dummyPad->GetLayerMask() ) );
+        m_dummyPad->SetLayerSet( FlipLayerMask( m_dummyPad->GetLayerSet() ) );
     }
 
     m_staticTextWarningPadFlipped->Show(m_isFlipped);
@@ -403,7 +439,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     NORMALIZE_ANGLE_180( angle );    // ? normalizing is in D_PAD::SetOrientation()
 
     // Set layers used by this pad: :
-    setPadLayersList( m_dummyPad->GetLayerMask() );
+    setPadLayersList( m_dummyPad->GetLayerSet() );
 
     // Pad Orient
     switch( int( angle ) )
@@ -456,9 +492,9 @@ void DIALOG_PAD_PROPERTIES::initValues()
     // Type of pad selection
     m_PadType->SetSelection( 0 );
 
-    for( unsigned ii = 0; ii < NBTYPES; ii++ )
+    for( unsigned ii = 0; ii < DIM( code_type ); ii++ )
     {
-        if( CodeType[ii] == m_dummyPad->GetAttribute() )
+        if( code_type[ii] == m_dummyPad->GetAttribute() )
         {
             m_PadType->SetSelection( ii );
             break;
@@ -470,7 +506,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     bool enable = m_dummyPad->GetAttribute() != PAD_HOLE_NOT_PLATED;
 
     m_PadNumCtrl->Enable( enable );
-    m_PadNetNameCtrl->Enable( enable );
+    m_PadNetNameCtrl->Enable( m_canEditNetName && enable && m_currentPad != NULL );
     m_LengthPadToDieCtrl->Enable( enable );
 
     if( m_dummyPad->GetDrillShape() != PAD_DRILL_OBLONG )
@@ -480,9 +516,16 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     // Update some dialog widgets state (Enable/disable options):
     wxCommandEvent cmd_event;
-    setPadLayersList( m_dummyPad->GetLayerMask() );
+    setPadLayersList( m_dummyPad->GetLayerSet() );
     OnDrillShapeSelected( cmd_event );
     OnPadShapeSelection( cmd_event );
+}
+
+
+void DIALOG_PAD_PROPERTIES::OnResize( wxSizeEvent& event )
+{
+    redraw();
+    event.Skip();
 }
 
 
@@ -524,7 +567,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     }
 
     transferDataToPad( m_dummyPad );
-    m_panelShowPad->Refresh();
+    redraw();
 }
 
 
@@ -553,7 +596,7 @@ void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
     }
 
     transferDataToPad( m_dummyPad );
-    m_panelShowPad->Refresh();
+    redraw();
 }
 
 
@@ -586,25 +629,25 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
     m_PadOrientCtrl->SetValue( msg );
 
     transferDataToPad( m_dummyPad );
-    m_panelShowPad->Refresh();
+    redraw();
 }
 
 
 void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 {
-    unsigned    ii = m_PadType->GetSelection();
+    unsigned ii = m_PadType->GetSelection();
 
-    if( ii >= NBTYPES ) // catches < 0 also
+    if( ii >= DIM( code_type ) ) // catches < 0 also
         ii = 0;
 
-    LAYER_MSK layer_mask = Std_Pad_Layers[ii];
+    LSET layer_mask = std_pad_layers[ii];
     setPadLayersList( layer_mask );
 
     // Enable/disable drill dialog items:
     event.SetId( m_DrillShapeCtrl->GetSelection() );
     OnDrillShapeSelected( event );
 
-    if( ii == 0 || ii == NBTYPES-1 )
+    if( ii == 0 || ii == DIM( code_type )-1 )
         m_DrillShapeCtrl->Enable( true );
     else
         m_DrillShapeCtrl->Enable( false );
@@ -613,38 +656,40 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     // (disable for NPTH pads (mechanical pads)
     bool enable = ii != 3;
     m_PadNumCtrl->Enable( enable );
-    m_PadNetNameCtrl->Enable( enable );
+    m_PadNetNameCtrl->Enable( m_canEditNetName && enable && m_currentPad != NULL );
     m_LengthPadToDieCtrl->Enable( enable );
 }
 
 
-void DIALOG_PAD_PROPERTIES::setPadLayersList( LAYER_MSK layer_mask )
+void DIALOG_PAD_PROPERTIES::setPadLayersList( LSET layer_mask )
 {
-    if( ( layer_mask & ALL_CU_LAYERS ) == LAYER_FRONT )
+    LSET cu_set = layer_mask & LSET::AllCuMask();
+
+    if( cu_set == LSET( F_Cu ) )
         m_rbCopperLayersSel->SetSelection(0);
-    else if( ( layer_mask & ALL_CU_LAYERS ) == LAYER_BACK)
+    else if( cu_set == LSET( B_Cu ) )
         m_rbCopperLayersSel->SetSelection(1);
-    else if( ( layer_mask & ALL_CU_LAYERS ) != 0 )
+    else if( cu_set.any() )
         m_rbCopperLayersSel->SetSelection(2);
     else
         m_rbCopperLayersSel->SetSelection(3);
 
-    m_PadLayerAdhCmp->SetValue( bool( layer_mask & ADHESIVE_LAYER_FRONT ) );
-    m_PadLayerAdhCu->SetValue( bool( layer_mask & ADHESIVE_LAYER_BACK ) );
+    m_PadLayerAdhCmp->SetValue( layer_mask[F_Adhes] );
+    m_PadLayerAdhCu->SetValue( layer_mask[B_Adhes] );
 
-    m_PadLayerPateCmp->SetValue( bool( layer_mask & SOLDERPASTE_LAYER_FRONT ) );
-    m_PadLayerPateCu->SetValue( bool( layer_mask & SOLDERPASTE_LAYER_BACK ) );
+    m_PadLayerPateCmp->SetValue( layer_mask[F_Paste] );
+    m_PadLayerPateCu->SetValue( layer_mask[B_Paste] );
 
-    m_PadLayerSilkCmp->SetValue( bool( layer_mask & SILKSCREEN_LAYER_FRONT ) );
-    m_PadLayerSilkCu->SetValue( bool( layer_mask & SILKSCREEN_LAYER_BACK ) );
+    m_PadLayerSilkCmp->SetValue( layer_mask[F_SilkS] );
+    m_PadLayerSilkCu->SetValue( layer_mask[B_SilkS] );
 
-    m_PadLayerMaskCmp->SetValue( bool( layer_mask & SOLDERMASK_LAYER_FRONT ) );
-    m_PadLayerMaskCu->SetValue( bool( layer_mask & SOLDERMASK_LAYER_BACK ) );
+    m_PadLayerMaskCmp->SetValue( layer_mask[F_Mask] );
+    m_PadLayerMaskCu->SetValue( layer_mask[B_Mask] );
 
-    m_PadLayerECO1->SetValue( bool( layer_mask & ECO1_LAYER ) );
-    m_PadLayerECO2->SetValue( bool( layer_mask & ECO2_LAYER ) );
+    m_PadLayerECO1->SetValue( layer_mask[Eco1_User] );
+    m_PadLayerECO2->SetValue( layer_mask[Eco2_User] );
 
-    m_PadLayerDraft->SetValue( bool( layer_mask & DRAW_LAYER ) );
+    m_PadLayerDraft->SetValue( layer_mask[Dwgs_User] );
 }
 
 
@@ -652,7 +697,7 @@ void DIALOG_PAD_PROPERTIES::setPadLayersList( LAYER_MSK layer_mask )
 void DIALOG_PAD_PROPERTIES::OnSetLayers( wxCommandEvent& event )
 {
     transferDataToPad( m_dummyPad );
-    m_panelShowPad->Refresh();
+    redraw();
 }
 
 
@@ -671,12 +716,12 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         error_msgs.Add(  _( "Incorrect value for pad drill: pad drill bigger than pad size" ) );
     }
 
-    LAYER_MSK padlayers_mask = m_dummyPad->GetLayerMask();
-    if( ( padlayers_mask == 0 ) && ( m_dummyPad->GetAttribute() != PAD_HOLE_NOT_PLATED ) )
-        error_msgs.Add( _( "Error: pad has no layer and is not a mechanical pad" ) );
+    LSET padlayers_mask = m_dummyPad->GetLayerSet();
 
-    padlayers_mask &= (LAYER_BACK | LAYER_FRONT);
     if( padlayers_mask == 0 )
+        error_msgs.Add( _( "Error: pad has no layer" ) );
+
+    if( !padlayers_mask[F_Cu] && !padlayers_mask[B_Cu] )
     {
         if( m_dummyPad->GetDrillSize().x || m_dummyPad->GetDrillSize().y )
         {
@@ -714,20 +759,21 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     switch( m_dummyPad->GetAttribute() )
     {
-    case PAD_STANDARD :     // Pad through hole, a hole is expected
+    case PAD_HOLE_NOT_PLATED:   // Not plated, but through hole, a hole is expected
+    case PAD_STANDARD :         // Pad through hole, a hole is also expected
         if( m_dummyPad->GetDrillSize().x <= 0 )
-            error_msgs.Add( _( "Incorrect value for pad drill (too small value)" ) );
+            error_msgs.Add( _( "Error: Through hole pad: drill diameter set to 0" ) );
         break;
 
-    case PAD_SMD:     // SMD and Connector pads (One external copper layer only)
-        if( (padlayers_mask & LAYER_BACK) && (padlayers_mask & LAYER_FRONT) )
-            error_msgs.Add( _( "Error: only one copper layer allowed for this pad" ) );
-        break;
+    case PAD_CONN:      // Connector pads are smd pads, just they do not have solder paste.
+        if( padlayers_mask[B_Paste] || padlayers_mask[F_Paste] )
+            error_msgs.Add( _( "Error: Connector pads are not on the solder paste layer\n"
+                               "Use SMD pads instead" ) );
+        // Fall trough
 
-    case PAD_CONN:              // connectors can have pads on "All" Cu layers.
-        break;
-
-    case PAD_HOLE_NOT_PLATED:   // Not plated
+    case PAD_SMD:       // SMD and Connector pads (One external copper layer only)
+        if( padlayers_mask[B_Cu] && padlayers_mask[F_Cu] )
+            error_msgs.Add( _( "Error: only one copper layer allowed for SMD or Connector pads" ) );
         break;
     }
 
@@ -737,7 +783,34 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         dlg.ListSet( error_msgs );
         dlg.ShowModal();
     }
+
     return error_msgs.GetCount() == 0;
+}
+
+
+void DIALOG_PAD_PROPERTIES::redraw()
+{
+    if( m_parent->IsGalCanvasActive() )
+    {
+        m_dummyPad->ViewUpdate();
+
+        BOX2I bbox = m_dummyPad->ViewBBox();
+
+        if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
+        {
+            // Autozoom
+            m_panelShowPadGal->GetView()->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
+
+            // Add a margin
+            m_panelShowPadGal->GetView()->SetScale( m_panelShowPadGal->GetView()->GetScale() * 0.7 );
+
+            m_panelShowPadGal->Refresh();
+        }
+    }
+    else
+    {
+        m_panelShowPad->Refresh();
+    }
 }
 
 
@@ -749,7 +822,9 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     bool rastnestIsChanged = false;
     int  isign = m_isFlipped ? -1 : 1;
 
-    transferDataToPad( &m_padMaster );
+    transferDataToPad( m_padMaster );
+    // m_padMaster is a pattern: ensure there is no net for this pad:
+    m_padMaster->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     if( m_currentPad )   // Set current Pad parameters
     {
@@ -765,12 +840,12 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_currentPad->ClearFlags( DO_NOT_DRAW );
 
         // Update values
-        m_currentPad->SetShape( m_padMaster.GetShape() );
-        m_currentPad->SetAttribute( m_padMaster.GetAttribute() );
+        m_currentPad->SetShape( m_padMaster->GetShape() );
+        m_currentPad->SetAttribute( m_padMaster->GetAttribute() );
 
-        if( m_currentPad->GetPosition() != m_padMaster.GetPosition() )
+        if( m_currentPad->GetPosition() != m_padMaster->GetPosition() )
         {
-            m_currentPad->SetPosition( m_padMaster.GetPosition() );
+            m_currentPad->SetPosition( m_padMaster->GetPosition() );
             rastnestIsChanged = true;
         }
 
@@ -782,63 +857,62 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
         m_currentPad->SetPos0( pt );
 
-        m_currentPad->SetOrientation( m_padMaster.GetOrientation() * isign + module->GetOrientation() );
+        m_currentPad->SetOrientation( m_padMaster->GetOrientation() * isign + module->GetOrientation() );
 
-        m_currentPad->SetSize( m_padMaster.GetSize() );
+        m_currentPad->SetSize( m_padMaster->GetSize() );
 
-        size = m_padMaster.GetDelta();
+        size = m_padMaster->GetDelta();
         size.y *= isign;
         m_currentPad->SetDelta( size );
 
-        m_currentPad->SetDrillSize( m_padMaster.GetDrillSize() );
-        m_currentPad->SetDrillShape( m_padMaster.GetDrillShape() );
+        m_currentPad->SetDrillSize( m_padMaster->GetDrillSize() );
+        m_currentPad->SetDrillShape( m_padMaster->GetDrillShape() );
 
-        wxPoint offset = m_padMaster.GetOffset();
+        wxPoint offset = m_padMaster->GetOffset();
         offset.y *= isign;
         m_currentPad->SetOffset( offset );
 
-        m_currentPad->SetPadToDieLength( m_padMaster.GetPadToDieLength() );
+        m_currentPad->SetPadToDieLength( m_padMaster->GetPadToDieLength() );
 
-        if( m_currentPad->GetLayerMask() != m_padMaster.GetLayerMask() )
+        if( m_currentPad->GetLayerSet() != m_padMaster->GetLayerSet() )
         {
             rastnestIsChanged = true;
-            m_currentPad->SetLayerMask( m_padMaster.GetLayerMask() );
+            m_currentPad->SetLayerSet( m_padMaster->GetLayerSet() );
         }
 
         if( m_isFlipped )
-            m_currentPad->SetLayerMask( FlipLayerMask( m_currentPad->GetLayerMask() ) );
+            m_currentPad->SetLayerSet( FlipLayerMask( m_currentPad->GetLayerSet() ) );
 
-        m_currentPad->SetPadName( m_padMaster.GetPadName() );
+        m_currentPad->SetPadName( m_padMaster->GetPadName() );
 
-        if( m_currentPad->GetNetname() != m_padMaster.GetNetname() )
+        wxString padNetname;
+
+        // For PAD_HOLE_NOT_PLATED, ensure there is no net name selected
+        if( m_padMaster->GetAttribute() != PAD_HOLE_NOT_PLATED  )
+            padNetname = m_PadNetNameCtrl->GetValue();
+
+        if( m_currentPad->GetNetname() != padNetname )
         {
-            if( m_padMaster.GetNetname().IsEmpty() )
+            const NETINFO_ITEM* netinfo = m_board->FindNet( padNetname );
+
+            if( !padNetname.IsEmpty() &&  netinfo == NULL )
             {
-                rastnestIsChanged = true;
-                m_currentPad->SetNet( 0 );
-                m_currentPad->SetNetname( wxEmptyString );
+                DisplayError( NULL, _( "Unknown netname, netname not changed" ) );
             }
             else
             {
-                const NETINFO_ITEM* net = m_board->FindNet( m_padMaster.GetNetname() );
-                if( net )
-                {
-                    rastnestIsChanged = true;
-                    m_currentPad->SetNetname( m_padMaster.GetNetname() );
-                    m_currentPad->SetNet( net->GetNet() );
-                }
-                else
-                    DisplayError( NULL, _( "Unknown netname, netname not changed" ) );
+                rastnestIsChanged = true;
+                m_currentPad->SetNetCode( netinfo->GetNet() );
             }
         }
 
-        m_currentPad->SetLocalClearance( m_padMaster.GetLocalClearance() );
-        m_currentPad->SetLocalSolderMaskMargin( m_padMaster.GetLocalSolderMaskMargin() );
-        m_currentPad->SetLocalSolderPasteMargin( m_padMaster.GetLocalSolderPasteMargin() );
-        m_currentPad->SetLocalSolderPasteMarginRatio( m_padMaster.GetLocalSolderPasteMarginRatio() );
-        m_currentPad->SetZoneConnection( m_padMaster.GetZoneConnection() );
-        m_currentPad->SetThermalWidth( m_padMaster.GetThermalWidth() );
-        m_currentPad->SetThermalGap( m_padMaster.GetThermalGap() );
+        m_currentPad->SetLocalClearance( m_padMaster->GetLocalClearance() );
+        m_currentPad->SetLocalSolderMaskMargin( m_padMaster->GetLocalSolderMaskMargin() );
+        m_currentPad->SetLocalSolderPasteMargin( m_padMaster->GetLocalSolderPasteMargin() );
+        m_currentPad->SetLocalSolderPasteMarginRatio( m_padMaster->GetLocalSolderPasteMarginRatio() );
+        m_currentPad->SetZoneConnection( m_padMaster->GetZoneConnection() );
+        m_currentPad->SetThermalWidth( m_padMaster->GetThermalWidth() );
+        m_currentPad->SetThermalGap( m_padMaster->GetThermalGap() );
 
         module->CalculateBoundingBox();
         m_parent->SetMsgPanel( m_currentPad );
@@ -860,15 +934,15 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     wxString    msg;
     int         x, y;
 
-    aPad->SetAttribute( CodeType[m_PadType->GetSelection()] );
-    aPad->SetShape( CodeShape[m_PadShape->GetSelection()] );
+    aPad->SetAttribute( code_type[m_PadType->GetSelection()] );
+    aPad->SetShape( code_shape[m_PadShape->GetSelection()] );
 
     // Read pad clearances values:
-    aPad->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
-    aPad->SetLocalSolderMaskMargin( ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
-    aPad->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
-    aPad->SetThermalWidth( ReturnValueFromTextCtrl( *m_ThermalWidthCtrl ) );
-    aPad->SetThermalGap( ReturnValueFromTextCtrl( *m_ThermalGapCtrl ) );
+    aPad->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
+    aPad->SetLocalSolderMaskMargin( ValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
+    aPad->SetLocalSolderPasteMargin( ValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
+    aPad->SetThermalWidth( ValueFromTextCtrl( *m_ThermalWidthCtrl ) );
+    aPad->SetThermalGap( ValueFromTextCtrl( *m_ThermalGapCtrl ) );
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
@@ -904,15 +978,15 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     }
 
     // Read pad position:
-    x = ReturnValueFromTextCtrl( *m_PadPosition_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_PadPosition_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_PadPosition_X_Ctrl );
+    y = ValueFromTextCtrl( *m_PadPosition_Y_Ctrl );
 
     aPad->SetPosition( wxPoint( x, y ) );
     aPad->SetPos0( wxPoint( x, y ) );
 
     // Read pad drill:
-    x = ReturnValueFromTextCtrl( *m_PadDrill_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_PadDrill_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_PadDrill_X_Ctrl );
+    y = ValueFromTextCtrl( *m_PadDrill_Y_Ctrl );
 
     if( m_DrillShapeCtrl->GetSelection() == 0 )
     {
@@ -925,24 +999,24 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetDrillSize( wxSize( x, y ) );
 
     // Read pad shape size:
-    x = ReturnValueFromTextCtrl( *m_ShapeSize_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_ShapeSize_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_ShapeSize_X_Ctrl );
+    y = ValueFromTextCtrl( *m_ShapeSize_Y_Ctrl );
     if( aPad->GetShape() == PAD_CIRCLE )
         y = x;
 
     aPad->SetSize( wxSize( x, y ) );
 
     // Read pad length die
-    aPad->SetPadToDieLength( ReturnValueFromTextCtrl( *m_LengthPadToDieCtrl ) );
+    aPad->SetPadToDieLength( ValueFromTextCtrl( *m_LengthPadToDieCtrl ) );
 
     // Read pad shape delta size:
     // m_DeltaSize.x or m_DeltaSize.y must be NULL. for a trapezoid.
     wxSize delta;
 
     if( m_trapDeltaDirChoice->GetSelection() == 0 )
-        delta.x = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl );
+        delta.x = ValueFromTextCtrl( *m_ShapeDelta_Ctrl );
     else
-        delta.y = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl );
+        delta.y = ValueFromTextCtrl( *m_ShapeDelta_Ctrl );
 
     // Test bad values (be sure delta values are not too large)
     // remember DeltaSize.x is the Y size variation
@@ -975,8 +1049,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetDelta( delta );
 
     // Read pad shape offset:
-    x = ReturnValueFromTextCtrl( *m_ShapeOffset_X_Ctrl );
-    y = ReturnValueFromTextCtrl( *m_ShapeOffset_Y_Ctrl );
+    x = ValueFromTextCtrl( *m_ShapeOffset_X_Ctrl );
+    y = ValueFromTextCtrl( *m_ShapeOffset_Y_Ctrl );
     aPad->SetOffset( wxPoint( x, y ) );
 
     double orient_value = 0;
@@ -987,7 +1061,14 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
     msg = m_PadNumCtrl->GetValue().Left( 4 );
     aPad->SetPadName( msg );
-    aPad->SetNetname( m_PadNetNameCtrl->GetValue() );
+
+    // Check if user has set an existing net name
+    const NETINFO_ITEM* netinfo = m_board->FindNet( m_PadNetNameCtrl->GetValue() );
+
+    if( netinfo != NULL )
+        aPad->SetNetCode( netinfo->GetNet() );
+    else
+        aPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     // Clear some values, according to the pad type and shape
     switch( aPad->GetShape() )
@@ -1035,7 +1116,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         // no offset, no net name, no pad name allowed
         aPad->SetOffset( wxPoint( 0, 0 ) );
         aPad->SetPadName( wxEmptyString );
-        aPad->SetNetname( wxEmptyString );
+        aPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
         break;
 
     default:
@@ -1043,20 +1124,20 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         break;
     }
 
-    LAYER_MSK padLayerMask = NO_LAYERS;
+    LSET padLayerMask;
 
     switch( m_rbCopperLayersSel->GetSelection() )
     {
     case 0:
-        padLayerMask |= LAYER_FRONT;
+        padLayerMask.set( F_Cu );
         break;
 
     case 1:
-        padLayerMask |= LAYER_BACK;
+        padLayerMask.set( B_Cu );
         break;
 
     case 2:
-        padLayerMask |= ALL_CU_LAYERS;
+        padLayerMask |= LSET::AllCuMask();
         break;
 
     case 3:     // No copper layers
@@ -1064,29 +1145,39 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     }
 
     if( m_PadLayerAdhCmp->GetValue() )
-        padLayerMask |= ADHESIVE_LAYER_FRONT;
-    if( m_PadLayerAdhCu->GetValue() )
-        padLayerMask |= ADHESIVE_LAYER_BACK;
-    if( m_PadLayerPateCmp->GetValue() )
-        padLayerMask |= SOLDERPASTE_LAYER_FRONT;
-    if( m_PadLayerPateCu->GetValue() )
-        padLayerMask |= SOLDERPASTE_LAYER_BACK;
-    if( m_PadLayerSilkCmp->GetValue() )
-        padLayerMask |= SILKSCREEN_LAYER_FRONT;
-    if( m_PadLayerSilkCu->GetValue() )
-        padLayerMask |= SILKSCREEN_LAYER_BACK;
-    if( m_PadLayerMaskCmp->GetValue() )
-        padLayerMask |= SOLDERMASK_LAYER_FRONT;
-    if( m_PadLayerMaskCu->GetValue() )
-        padLayerMask |= SOLDERMASK_LAYER_BACK;
-    if( m_PadLayerECO1->GetValue() )
-        padLayerMask |= ECO1_LAYER;
-    if( m_PadLayerECO2->GetValue() )
-        padLayerMask |= ECO2_LAYER;
-    if( m_PadLayerDraft->GetValue() )
-        padLayerMask |= DRAW_LAYER;
+        padLayerMask.set( F_Adhes );
 
-    aPad->SetLayerMask( padLayerMask );
+    if( m_PadLayerAdhCu->GetValue() )
+        padLayerMask.set( B_Adhes );
+
+    if( m_PadLayerPateCmp->GetValue() )
+        padLayerMask.set( F_Paste );
+
+    if( m_PadLayerPateCu->GetValue() )
+        padLayerMask.set( B_Paste );
+
+    if( m_PadLayerSilkCmp->GetValue() )
+        padLayerMask.set( F_SilkS );
+
+    if( m_PadLayerSilkCu->GetValue() )
+        padLayerMask.set( B_SilkS );
+
+    if( m_PadLayerMaskCmp->GetValue() )
+        padLayerMask.set( F_Mask );
+
+    if( m_PadLayerMaskCu->GetValue() )
+        padLayerMask.set( B_Mask );
+
+    if( m_PadLayerECO1->GetValue() )
+        padLayerMask.set( Eco1_User );
+
+    if( m_PadLayerECO2->GetValue() )
+        padLayerMask.set( Eco2_User );
+
+    if( m_PadLayerDraft->GetValue() )
+        padLayerMask.set( Dwgs_User );
+
+    aPad->SetLayerSet( padLayerMask );
 
     return error;
 }
@@ -1097,7 +1188,7 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
     if( m_canUpdate )
     {
         transferDataToPad( m_dummyPad );
-        m_panelShowPad->Refresh();
+        redraw();
     }
 }
 

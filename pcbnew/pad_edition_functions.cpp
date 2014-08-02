@@ -54,7 +54,7 @@ void PCB_BASE_FRAME::Export_Pad_Settings( D_PAD* aPad )
 
     mp.SetShape( aPad->GetShape() );
     mp.SetAttribute( aPad->GetAttribute() );
-    mp.SetLayerMask( aPad->GetLayerMask() );
+    mp.SetLayerSet( aPad->GetLayerSet() );
 
     mp.SetOrientation( aPad->GetOrientation() - aPad->GetParent()->GetOrientation() );
 
@@ -82,7 +82,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     D_PAD& mp = GetDesignSettings().m_Pad_Master;
 
     aPad->SetShape( mp.GetShape() );
-    aPad->SetLayerMask( mp.GetLayerMask() );
+    aPad->SetLayerSet( mp.GetLayerSet() );
     aPad->SetAttribute( mp.GetAttribute() );
     aPad->SetOrientation( mp.GetOrientation() + aPad->GetParent()->GetOrientation() );
     aPad->SetSize( mp.GetSize() );
@@ -163,7 +163,7 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
 
     // Update the pad properties.
     Import_Pad_Settings( pad, false );
-    pad->SetNetname( wxEmptyString );
+    pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     pad->SetPosition( GetCrossHairPosition() );
 

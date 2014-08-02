@@ -54,9 +54,7 @@ set( GITHUB_PLUGIN_SRCS
     github_plugin.cpp
     )
 
-add_library( github_plugin
-    github_plugin.cpp
-    )
+add_library( github_plugin STATIC ${GITHUB_PLUGIN_SRCS} )
 
 # No, you don't get github without boost and openssl. Boost_LIBRARIES now moved up
 # into CMakeLists.txt for pcbnew and cvpcb:

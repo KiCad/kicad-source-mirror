@@ -70,6 +70,33 @@ public:
 
     virtual ~TOOL_BASE() {};
 
+    ///> Determines the reason of reset for a tool
+    enum RESET_REASON
+    {
+        RUN,                ///< Tool is invoked after being inactive
+        MODEL_RELOAD,       ///< Model changes
+        GAL_SWITCH          ///< Rendering engine changes
+    };
+
+    /**
+     * Function Init()
+     * Init() is called once upon a registration of the tool.
+     *
+     * @return True if the initialization went fine, false - otherwise.
+     */
+    virtual bool Init()
+    {
+        return true;
+    }
+
+    /**
+     * Function Reset()
+     * Brings the tool to a known, initial state. If the tool claimed anything from
+     * the model or the view, it must release it when its reset.
+     * @param aReason contains information about the reason of tool reset.
+     */
+    virtual void Reset( RESET_REASON aReason ) = 0;
+
     /**
      * Function GetType()
      * Returns the type of the tool.
@@ -158,7 +185,7 @@ protected:
      * Returns the model object if it matches the requested type.
      */
     template <typename T>
-    T* getModel( KICAD_T aModelType ) const
+    T* getModel() const
     {
         EDA_ITEM* m = getModelInt();
 

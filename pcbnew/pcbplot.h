@@ -69,20 +69,18 @@ class REPORTER;
 
 
 // A helper class to plot board items
-class BRDITEMS_PLOTTER: public PCB_PLOT_PARAMS
+class BRDITEMS_PLOTTER : public PCB_PLOT_PARAMS
 {
-    PLOTTER* m_plotter;
-    BOARD*   m_board;
-    int      m_layerMask;
-
+    PLOTTER*    m_plotter;
+    BOARD*      m_board;
+    LSET        m_layerMask;
 
 public:
-    BRDITEMS_PLOTTER( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS& aPlotOpts )
-        : PCB_PLOT_PARAMS( aPlotOpts )
+    BRDITEMS_PLOTTER( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS& aPlotOpts ) :
+        PCB_PLOT_PARAMS( aPlotOpts )
     {
         m_plotter = aPlotter;
         m_board = aBoard;
-        m_layerMask = 0;
     }
 
     /**
@@ -99,7 +97,7 @@ public:
     }
 
     // Basic functions to plot a board item
-    void SetLayerMask( int aLayerMask ){ m_layerMask = aLayerMask; }
+    void SetLayerSet( LSET aLayerMask )     { m_layerMask = aLayerMask; }
     void Plot_Edges_Modules();
     void Plot_1_EdgeModule( EDGE_MODULE* aEdge );
     void PlotTextModule( TEXTE_MODULE* aTextMod, EDA_COLOR_T aColor );
@@ -164,6 +162,7 @@ private:
 
 PLOTTER* StartPlotBoard( BOARD* aBoard,
                          PCB_PLOT_PARAMS* aPlotOpts,
+                         int aLayer,
                          const wxString& aFullFileName,
                          const wxString& aSheetDesc );
 
@@ -201,8 +200,19 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
  *      SetDrillMarksType( DrillMarksType aVal ) controle the actual hole:
  *              no hole, small hole, actual hole
  */
-void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
+void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                         const PCB_PLOT_PARAMS& aPlotOpt );
+
+/**
+ * Function PlotLayerOutlines
+ * plot copper outline of a copper layer.
+ * @param aBoard = the board to plot
+ * @param aPlotter = the plotter to use
+ * @param aLayerMask = the mask to define the layers to plot
+ * @param aPlotOpt = the plot options. Has meaning for some formats only
+ */
+void PlotLayerOutlines( BOARD *aBoard, PLOTTER* aPlotter,
+                        LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
  * Function PlotSilkScreen
@@ -213,7 +223,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
  * @param aLayerMask = the mask to define the layers to plot (silkscreen Front and/or Back)
  * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
  */
-void PlotSilkScreen( BOARD* aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
+void PlotSilkScreen( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                      const PCB_PLOT_PARAMS&  aPlotOpt );
 
 
@@ -252,8 +262,18 @@ void BuildPlotFileName( wxFileName*     aFilename,
  * Function GetGerberExtension
  * @return the appropriate Gerber file extension for \a aLayer
  */
-extern wxString GetGerberExtension( LAYER_NUM aLayer );
+const wxString GetGerberExtension( LAYER_NUM aLayer );
 
+/**
+ * Function GetGerberFileFunction
+ * Returns the "file function" attribute for \a aLayer, as defined in the
+ * Gerber file format specification J1 (chapter 5). The returned string excludes
+ * the "%TF.FileFunction" attribute prefix and the "*%" suffix.
+ * @param aBoard = the board, needed to get the total count of copper layers
+ * @param aLayer = the layer number to create the attribute for
+ * @return The attribute, as a text string
+ */
+extern wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer );
 
 // PLOTGERB.CPP
 void SelectD_CODE_For_LineDraw( PLOTTER* plotter, int aSize );

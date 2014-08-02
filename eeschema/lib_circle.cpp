@@ -87,7 +87,7 @@ bool LIB_CIRCLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 }
 
 
-bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
+bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef ) const
 {
     int mindist = GetPenSize() / 2;
 
@@ -99,7 +99,7 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
 }
 
 
-bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_CIRCLE::HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const
 {
     if( aThreshold < 0 )
         aThreshold = GetPenSize() / 2;
@@ -270,11 +270,11 @@ void LIB_CIRCLE::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
     LIB_ITEM::GetMsgPanelInfo( aList );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
+    msg = StringFromValue( g_UserUnit, m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM(  _( "Line width" ), msg, BLUE ) );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Radius, true );
+    msg = StringFromValue( g_UserUnit, m_Radius, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,

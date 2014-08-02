@@ -250,7 +250,7 @@ void LIB_RECTANGLE::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
     LIB_ITEM::GetMsgPanelInfo( aList );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
+    msg = StringFromValue( g_UserUnit, m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line width" ), msg, BLUE ) );
 }
@@ -267,7 +267,7 @@ const EDA_RECT LIB_RECTANGLE::GetBoundingBox() const
 }
 
 
-bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition )
+bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition ) const
 {
     int mindist = ( GetPenSize() / 2 ) + 1;
 
@@ -279,7 +279,7 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition )
 }
 
 
-bool LIB_RECTANGLE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_RECTANGLE::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
 {
     if( aThreshold < 0 )
         aThreshold = GetPenSize() / 2;

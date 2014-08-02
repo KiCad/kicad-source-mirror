@@ -172,7 +172,7 @@ bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
 }
 
 
-void pcbnewFinishPythonScripting( char )
+void pcbnewFinishPythonScripting()
 {
 #ifdef KICAD_SCRIPTING_WXPYTHON
     wxPyEndAllowThreads( g_PythonMainTState );

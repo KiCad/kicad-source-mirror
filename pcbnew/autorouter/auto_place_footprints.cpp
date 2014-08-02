@@ -122,7 +122,7 @@ static void     drawPlacementRoutingMatrix( BOARD* aBrd, wxDC* DC );
 static int      TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide );
 
 static void     CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
-                                        int marge, int aKeepOut, int aLayerMask );
+                                        int marge, int aKeepOut, LSET aLayerMask );
 
 static MODULE*  PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC );
 static int      propagate();
@@ -133,7 +133,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     wxPoint             PosOK;
     wxPoint             memopos;
     int                 error;
-    LAYER_NUM           lay_tmp_TOP, lay_tmp_BOTTOM;
+    LAYER_ID            lay_tmp_TOP, lay_tmp_BOTTOM;
 
     // Undo: init list
     PICKED_ITEMS_LIST   newList;
@@ -488,18 +488,18 @@ int genPlacementRoutingMatrix( BOARD* aBrd, EDA_MSG_PANEL* messagePanel )
     msg.Printf( wxT( "%d" ), RoutingMatrix.m_MemSize / 1024 );
     messagePanel->SetMessage( 24, wxT( "Mem(Kb)" ), msg, CYAN );
 
-    g_Route_Layer_BOTTOM = LAYER_N_FRONT;
+    g_Route_Layer_BOTTOM = F_Cu;
 
     if( RoutingMatrix.m_RoutingLayersCount > 1 )
-        g_Route_Layer_BOTTOM = LAYER_N_BACK;
+        g_Route_Layer_BOTTOM = B_Cu;
 
-    g_Route_Layer_TOP = LAYER_N_FRONT;
+    g_Route_Layer_TOP = F_Cu;
 
     // Place the edge layer segments
     TRACK TmpSegm( NULL );
 
     TmpSegm.SetLayer( UNDEFINED_LAYER );
-    TmpSegm.SetNet( -1 );
+    TmpSegm.SetNetCode( -1 );
     TmpSegm.SetWidth( RoutingMatrix.m_GridRouting / 2 );
 
     EDA_ITEM* PtStruct = aBrd->m_Drawings;
@@ -513,15 +513,10 @@ int genPlacementRoutingMatrix( BOARD* aBrd, EDA_MSG_PANEL* messagePanel )
         case PCB_LINE_T:
             DrawSegm = (DRAWSEGMENT*) PtStruct;
 
-            if( DrawSegm->GetLayer() != EDGE_N )
+            if( DrawSegm->GetLayer() != Edge_Cuts )
                 break;
 
-            TmpSegm.SetStart( DrawSegm->GetStart() );
-            TmpSegm.SetEnd( DrawSegm->GetEnd() );
-            TmpSegm.SetShape( DrawSegm->GetShape() );
-            TmpSegm.m_Param = DrawSegm->GetAngle();
-
-            TraceSegmentPcb( &TmpSegm, HOLE | CELL_is_EDGE,
+            TraceSegmentPcb( DrawSegm, HOLE | CELL_is_EDGE,
                              RoutingMatrix.m_GridRouting, WRITE_CELL );
             break;
 
@@ -555,7 +550,7 @@ int genPlacementRoutingMatrix( BOARD* aBrd, EDA_MSG_PANEL* messagePanel )
 void genModuleOnRoutingMatrix( MODULE* Module )
 {
     int         ox, oy, fx, fy;
-    int         layerMask;
+    LSET        layerMask;
     D_PAD*      Pad;
 
     EDA_RECT    fpBBox = Module->GetBoundingBox();
@@ -590,13 +585,11 @@ void genModuleOnRoutingMatrix( MODULE* Module )
     if( fy > RoutingMatrix.m_BrdBox.GetBottom() )
         fy = RoutingMatrix.m_BrdBox.GetBottom();
 
-    layerMask = 0;
+    if( Module->GetLayer() == F_Cu )
+        layerMask.set( F_Cu );
 
-    if( Module->GetLayer() == LAYER_N_FRONT )
-        layerMask = LAYER_FRONT;
-
-    if( Module->GetLayer() == LAYER_N_BACK )
-        layerMask = LAYER_BACK;
+    if( Module->GetLayer() == B_Cu )
+        layerMask.set( B_Cu );
 
     TraceFilledRectangle( ox, oy, fx, fy, layerMask,
                           CELL_is_MODULE, WRITE_OR_CELL );
@@ -671,15 +664,11 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
 
     if( RoutingMatrix.m_RoutingLayersCount > 1 )
     {
-        D_PAD*  Pad;
-        int     otherLayerMask = LAYER_BACK;
+        LSET    other( aModule->GetLayer() == B_Cu  ? F_Cu : B_Cu );
 
-        if( aModule->GetLayer() == LAYER_N_BACK )
-            otherLayerMask = LAYER_FRONT;
-
-        for( Pad = aModule->Pads(); Pad != NULL; Pad = Pad->Next() )
+        for( D_PAD* pad = aModule->Pads(); pad; pad = pad->Next() )
         {
-            if( ( Pad->GetLayerMask() & otherLayerMask ) == 0 )
+            if( !( pad->GetLayerSet() & other ).any() )
                 continue;
 
             TstOtherSide = true;
@@ -880,7 +869,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* aModule, bool TstOtherSide )
     int side = TOP;
     int otherside = BOTTOM;
 
-    if( aModule->GetLayer() == LAYER_N_BACK )
+    if( aModule->GetLayer() == B_Cu )
     {
         side = BOTTOM; otherside = TOP;
     }
@@ -971,7 +960,7 @@ double compute_Ratsnest_PlaceModule( BOARD* aBrd )
  *  Therefore the cost is high in rect x0,y0 to x1,y1, and decrease outside this rectangle
  */
 void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
-                             int marge, int aKeepOut, int aLayerMask )
+                             int marge, int aKeepOut, LSET aLayerMask )
 {
     int         row, col;
     int         row_min, row_max, col_min, col_max, pmarge;
@@ -979,10 +968,10 @@ void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
     DIST_CELL   data, LocalKeepOut;
     int         lgain, cgain;
 
-    if( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) )
+    if( aLayerMask[g_Route_Layer_BOTTOM] )
         trace = 1; // Trace on bottom layer.
 
-    if( ( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) ) && RoutingMatrix.m_RoutingLayersCount )
+    if( aLayerMask[g_Route_Layer_TOP] && RoutingMatrix.m_RoutingLayersCount )
         trace |= 2; // Trace on top layer.
 
     if( trace == 0 )

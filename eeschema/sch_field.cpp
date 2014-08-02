@@ -35,19 +35,6 @@
  * They can be renamed and can appear in reports
  */
 
-/* set USE_TEXT_JUSTIFY_INITIAL_BEHAVIOR to 0 to use
- * a justification relative to the text itself
- * i.e. justification relative to an horizontal text
- * or to 1 to keep the initial Eeschema behavior
- * The initial behavior is:
- *  For vertical texts, exchange the horizontal and the vertical justification
- *  The idea is to keep the justification always left or top for instance,
- *  no matter the text orientation
- *  This is a bit tricky when you want to change a text field justification
- *  when the fiels and the component are both rotated 90.0 degrees
- */
-#define USE_TEXT_JUSTIFY_INITIAL_BEHAVIOR 0
-
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <base_struct.h>
@@ -104,7 +91,7 @@ const wxString SCH_FIELD::GetFullyQualifiedText() const
                      wxT( "No component associated with field" ) + text );
 
         if( component->GetPartCount() > 1 )
-            text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
+            text << LIB_COMPONENT::SubReference( component->GetUnit() );
     }
 
     return text;
@@ -206,7 +193,7 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
         textpos  = m_Pos - origin;
         textpos  = parentComponent->GetScreenCoord( textpos );
         textpos += parentComponent->GetPosition();
-        GRLine( clipbox, DC, origin.x, origin.y, textpos.x, textpos.y, 2, DARKGRAY );
+        GRLine( clipbox, DC, origin, textpos, 2, DARKGRAY );
     }
 
     /* Enable this to draw the bounding box around the text field to validate
@@ -281,26 +268,14 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
     // Calculate the text bounding box:
     EDA_RECT rect;
 
-    // set USE_TEXT_JUSTIFY_INITIAL_BEHAVIOR to 0 to use
-    // a justification relative to the text itself
-    // i.e. justification relative to an horizontal text
-    // or to 1 to keep the initial behavior
-#if (USE_TEXT_JUSTIFY_INITIAL_BEHAVIOR == 1 )
-    if( m_Orient == TEXT_ORIENT_VERT )
+    if( m_id == REFERENCE )     // multi units have one letter or more added to reference
     {
-        // For vertical texts, exchange the horizontal and the vertical justification
-        // The idea is to keep the justification always left or top for instance,
-        // no matter the text orientation
-        SCH_FIELD text( *this );    // Make a local copy to swap justifications
+        SCH_FIELD text( *this );    // Make a local copy to change text
                                     // because GetBoundingBox() is const
-        int tmp = (int)text.m_VJustify;
-        NEGATE( tmp );
-        text.m_VJustify  = (EDA_TEXT_VJUSTIFY_T)text.m_HJustify;
-        text.m_HJustify = (EDA_TEXT_HJUSTIFY_T)tmp;
+        text.SetText( GetFullyQualifiedText() );
         rect = text.GetTextBox( -1, linewidth );
     }
     else
-#endif
         rect = GetTextBox( -1, linewidth );
 
     // Calculate the bounding box position relative to the component:
@@ -419,7 +394,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
         text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
         if( component->GetPartCount() > 1 )
-            text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
+            text << LIB_COMPONENT::SubReference( component->GetUnit() );
     }
 
     match = SCH_ITEM::Matches( text, aSearchData );
@@ -457,7 +432,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
         text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
         // if( component->GetPartCount() > 1 )
-        //     text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
+        //     text << LIB_COMPONENT::SubReference( component->GetUnit() );
 
         isReplaced = EDA_ITEM::Replace( aSearchData, text );
 
@@ -598,7 +573,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     else    /* We plot the reference, for a multiple parts per package */
     {
         /* Adding A, B ... to the reference */
-        wxString Text = m_Text + LIB_COMPONENT::ReturnSubReference( parent->GetUnit() );
+        wxString Text = m_Text + LIB_COMPONENT::SubReference( parent->GetUnit() );
 
         aPlotter->Text( textpos, color, Text, orient, m_Size, hjustify, vjustify,
                         thickness, m_Italic, m_Bold );

@@ -27,13 +27,11 @@
  */
 
 #include <fctsys.h>
-//#include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxEeschemaStruct.h>
 #include <base_units.h>
 
-//#include <general.h>
 #include <sch_sheet.h>
 
 #include <dialogs/dialog_sch_sheet_props.h>
@@ -50,10 +48,10 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
     wxString units = GetUnitsLabel( g_UserUnit );
     dlg.SetFileName( aSheet->GetFileName() );
-    dlg.SetFileNameTextSize( ReturnStringFromValue( g_UserUnit, aSheet->GetFileNameSize() ) );
+    dlg.SetFileNameTextSize( StringFromValue( g_UserUnit, aSheet->GetFileNameSize() ) );
     dlg.SetFileNameTextSizeUnits( units );
     dlg.SetSheetName( aSheet->GetName() );
-    dlg.SetSheetNameTextSize( ReturnStringFromValue( g_UserUnit, aSheet->GetSheetNameSize() ) );
+    dlg.SetSheetNameTextSize( StringFromValue( g_UserUnit, aSheet->GetSheetNameSize() ) );
     dlg.SetSheetNameTextSizeUnits( units );
     dlg.SetSheetTimeStamp( wxString::Format( wxT("%8.8lX"),
                            (unsigned long) aSheet->GetTimeStamp() ) );
@@ -213,9 +211,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     else if( loadFromFile )
         aSheet->Load( this );
 
-    aSheet->SetFileNameSize( ReturnValueFromString( g_UserUnit, dlg.GetFileNameTextSize() ) );
+    aSheet->SetFileNameSize( ValueFromString( g_UserUnit, dlg.GetFileNameTextSize() ) );
     aSheet->SetName( dlg.GetSheetName() );
-    aSheet->SetSheetNameSize( ReturnValueFromString( g_UserUnit, dlg.GetSheetNameTextSize() ) );
+    aSheet->SetSheetNameSize( ValueFromString( g_UserUnit, dlg.GetSheetNameTextSize() ) );
 
     if( aSheet->GetName().IsEmpty() )
         aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ), aSheet->GetTimeStamp() ) );
@@ -285,7 +283,7 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
     SCH_ITEM*   item = screen->GetCurItem();
 
-    SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
+    SCH_EDIT_FRAME* parent = (SCH_EDIT_FRAME*) aPanel->GetParent();
 
     if( (item == NULL) || (item->Type() != SCH_SHEET_T) || (parent == NULL) )
         return;

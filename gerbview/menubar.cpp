@@ -29,15 +29,16 @@
  */
 #include <fctsys.h>
 
-#include <appl_wxstruct.h>
-
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <hotkeys.h>
 #include <menus_helpers.h>
 
 
-void GERBVIEW_FRAME::ReCreateMenuBar( void )
+void GERBVIEW_FRAME::ReCreateMenuBar()
 {
     // Create and try to get the current menubar
     wxMenuBar* menuBar = GetMenuBar();
@@ -77,11 +78,13 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     // Add this menu to list menu managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
     if( openRecentGbrMenu )
-        wxGetApp().GetFileHistory().RemoveMenu( openRecentGbrMenu );
+        Kiface().GetFileHistory().RemoveMenu( openRecentGbrMenu );
 
     openRecentGbrMenu = new wxMenu();
-    wxGetApp().GetFileHistory().UseMenu( openRecentGbrMenu );
-    wxGetApp().GetFileHistory().AddFilesToMenu();
+
+    Kiface().GetFileHistory().UseMenu( openRecentGbrMenu );
+    Kiface().GetFileHistory().AddFilesToMenu();
+
     AddMenuItem( fileMenu, openRecentGbrMenu,
                  wxID_ANY,
                  _( "Open &Recent Gerber File" ),
@@ -166,9 +169,8 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
                  KiBitmap( preference_xpm ) );
 #endif // __WXMAC__
 
-
     // Language submenu
-    wxGetApp().AddMenuLanguageList( configMenu );
+    Pgm().AddMenuLanguageList( configMenu );
 
     // Hotkey submenu
     AddHotkeyConfigMenu( configMenu );

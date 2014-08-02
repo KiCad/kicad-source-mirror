@@ -29,6 +29,8 @@
 
 #include <wxBasePcbFrame.h>
 
+// The name (for wxWidgets) of the footprint viewer frame
+#define FOOTPRINTVIEWER_FRAME_NAME wxT( "FootprintViewerFrame" )
 
 class CVPCB_MAINFRAME;
 
@@ -40,10 +42,7 @@ class CVPCB_MAINFRAME;
 class DISPLAY_FOOTPRINTS_FRAME : public PCB_BASE_FRAME
 {
 public:
-    DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father, const wxString& title,
-                              const wxPoint& pos, const wxSize& size,
-                              long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
-
+    DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, CVPCB_MAINFRAME* aParent );
     ~DISPLAY_FOOTPRINTS_FRAME();
 
     void    OnCloseWindow( wxCloseEvent& Event );
@@ -124,7 +123,7 @@ public:
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
-    virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+    virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                                      UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
     {

@@ -221,7 +221,7 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 
         if( zis.OpenEntry( *entry ) )
         {
-            INPUTSTREAM_LINE_READER reader( &zis );
+            INPUTSTREAM_LINE_READER reader( &zis, aLibraryPath );
 #if 1
             // I am a PCB_IO derivative with my own PCB_PARSER
             m_parser->SetLineReader( &reader );     // ownership not passed
@@ -570,7 +570,7 @@ int main( int argc, char** argv )
             printf("[%d]:%s\n", i, TO_UTF8( fps[i] ) );
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         printf( "%s\n", TO_UTF8(ioe.errorText) );
     }

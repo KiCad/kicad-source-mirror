@@ -36,10 +36,8 @@
 
 using namespace KIGFX;
 
-WORKSHEET_VIEWITEM::WORKSHEET_VIEWITEM( const std::string& aFileName, const std::string& aSheetName,
-                                const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock ) :
+WORKSHEET_VIEWITEM::WORKSHEET_VIEWITEM( const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock ) :
     EDA_ITEM( NOT_USED ), // this item is never added to a BOARD so it needs no type
-    m_fileName( aFileName ), m_sheetName( aSheetName ),
     m_titleBlock( aTitleBlock ), m_pageInfo( aPageInfo ), m_sheetNumber( 1 ), m_sheetCount( 1 ) {}
 
 
@@ -191,7 +189,7 @@ void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_TEXT* aItem, GAL* aGal ) const
     aGal->SetStrokeColor( COLOR4D( aItem->GetColor() ) );
     aGal->SetLineWidth( aItem->GetThickness() );
     aGal->SetTextAttributes( aItem );
-    aGal->StrokeText( std::wstring( aItem->GetText().wc_str() ), position, 0.0 );
+    aGal->StrokeText( aItem->GetText(), position, 0.0 );
 }
 
 

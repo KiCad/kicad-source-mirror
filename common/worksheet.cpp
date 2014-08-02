@@ -31,13 +31,13 @@
 
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gr_basic.h>
 #include <common.h>
 #include <class_drawpanel.h>
 #include <class_base_screen.h>
 #include <drawtxt.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <worksheet.h>
 #include <class_title_block.h>
 #include <build_version.h>
@@ -83,12 +83,12 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
     wxSize  pageSize = pageInfo.GetSizeMils();
 
     // if not printing, draw the page limits:
-    if( !aScreen->m_IsPrinting && g_ShowPageLimits )
+    if( !aScreen->m_IsPrinting && m_showPageLimits )
     {
         GRSetDrawMode( aDC, GR_COPY );
         GRRect( m_canvas->GetClipBox(), aDC, 0, 0,
                 pageSize.x * aScalar, pageSize.y * aScalar, aLineWidth,
-                g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
+                m_drawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
     }
 
     TITLE_BLOCK t_block = GetTitleBlock();
@@ -170,7 +170,7 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 break;
 
             case 'K':
-                msg += productName + wxGetApp().GetAppName();
+                msg += productName + Pgm().App().GetAppName();
                 msg += wxT( " " ) + GetBuildVersion();
                 break;
 

@@ -135,6 +135,9 @@ int SHAPE_LINE_CHAIN::Distance( const VECTOR2I& aP ) const
 {
     int d = INT_MAX;
 
+    if( IsClosed() && PointInside( aP ) )
+        return 0;
+
     for( int s = 0; s < SegmentCount(); s++ )
         d = std::min( d, CSegment( s ).Distance( aP ) );
 
@@ -179,8 +182,18 @@ int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
 
 int SHAPE_LINE_CHAIN::Find( const VECTOR2I& aP ) const
 {
-    for( int s = 0; s< PointCount(); s++ )
+    for( int s = 0; s < PointCount(); s++ )
         if( CPoint( s ) == aP )
+            return s;
+
+    return -1;
+}
+
+
+int SHAPE_LINE_CHAIN::FindSegment( const VECTOR2I& aP ) const
+{
+    for( int s = 0; s < SegmentCount(); s++ )
+        if( CSegment( s ).Distance( aP ) <= 1 )
             return s;
 
     return -1;
@@ -261,6 +274,9 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
 
             if( a.Collinear( b ) )
             {
+                is.our = a;
+                is.their = b;
+
                 if( a.Contains( b.A ) ) { is.p = b.A; aIp.push_back( is ); }
                 if( a.Contains( b.B ) ) { is.p = b.B; aIp.push_back( is ); }
                 if( b.Contains( a.A ) ) { is.p = a.A; aIp.push_back( is ); }
@@ -273,44 +289,6 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
                 if( p )
                 {
                     is.p = *p;
-                    is.our = a;
-                    is.their = b;
-                    aIp.push_back( is );
-                }
-            }
-        }
-    }
-
-    return aIp.size();
-
-    for( int s1 = 0; s1 < SegmentCount(); s1++ )
-    {
-        for( int s2 = 0; s2 < aChain.SegmentCount(); s2++ )
-        {
-            const SEG& a = CSegment( s1 );
-            const SEG& b = aChain.CSegment( s2 );
-            OPT_VECTOR2I p = a.Intersect( b );
-            INTERSECTION is;
-
-            if( p )
-            {
-                is.p = *p;
-                is.our = a;
-                is.their = b;
-                aIp.push_back( is );
-            }
-            else if( a.Collinear( b ) )
-            {
-                if( a.A != b.A && a.A != b.B && b.Contains( a.A ) )
-                {
-                    is.p = a.A;
-                    is.our = a;
-                    is.their = b;
-                    aIp.push_back( is );
-                }
-                else if( a.B != b.A && a.B != b.B && b.Contains( a.B ) )
-                {
-                    is.p = a.B;
                     is.our = a;
                     is.their = b;
                     aIp.push_back( is );
@@ -372,10 +350,13 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
 
 bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
 {
-    if( SegmentCount() < 1 )
+	if( !PointCount() )
+		return false;
+
+	else if( PointCount() == 1 )
         return m_points[0] == aP;
 
-    for( int i = 1; i < SegmentCount(); i++ )
+    for( int i = 0; i < SegmentCount(); i++ )
     {
         const SEG s = CSegment( i );
 
@@ -533,4 +514,31 @@ const std::string SHAPE_LINE_CHAIN::Format() const
         ss << m_points[i].x << " " << m_points[i].y << " "; // Format() << " ";
 
     return ss.str();
+}
+
+
+bool SHAPE_LINE_CHAIN::CompareGeometry ( const SHAPE_LINE_CHAIN & aOther ) const
+{
+    SHAPE_LINE_CHAIN a(*this), b(aOther);
+    a.Simplify();
+    b.Simplify();
+
+    if(a.m_points.size() != b.m_points.size())
+        return false;
+
+    for(int i = 0; i < a.PointCount(); i++)
+        if(a.CPoint(i) != b.CPoint(i))
+            return false;
+    return true;
+}
+
+bool SHAPE_LINE_CHAIN::Intersects( const SHAPE_LINE_CHAIN& aChain ) const
+{
+    INTERSECTIONS dummy;
+    return Intersect(aChain, dummy) != 0;
+}
+
+SHAPE* SHAPE_LINE_CHAIN::Clone() const
+{
+    return new SHAPE_LINE_CHAIN( *this );
 }

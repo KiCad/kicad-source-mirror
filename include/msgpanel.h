@@ -121,7 +121,9 @@ protected:
     wxSize computeTextSize( const wxString& text ) const;
 
 public:
-    EDA_MSG_PANEL( wxWindow* aParent, int aId, const wxPoint& aPosition, const wxSize& aSize );
+    EDA_MSG_PANEL( wxWindow* aParent, int aId,
+                   const wxPoint& aPosition, const wxSize& aSize,
+                   long style=wxTAB_TRAVERSAL, const wxString &name=wxPanelNameStr);
     ~EDA_MSG_PANEL();
 
     /**

@@ -45,16 +45,11 @@
 #include <info3d_visu.h>
 #include <trackball.h>
 
-// Exported function:
-void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
 
-
-void S3D_MASTER::Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices )
+void S3D_MASTER::ObjectCoordsTo3DUnits( std::vector< S3D_VERTEX >& aVertices )
 {
-    unsigned ii;
-
     /* adjust object scale, rotation and offset position */
-    for( ii = 0; ii < aVertices.size(); ii++ )
+    for( unsigned ii = 0; ii < aVertices.size(); ii++ )
     {
         aVertices[ii].x *= m_MatScale.x;
         aVertices[ii].y *= m_MatScale.y;
@@ -62,13 +57,31 @@ void S3D_MASTER::Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices )
 
         // adjust rotation
         if( m_MatRotation.x )
-            RotatePoint( &aVertices[ii].y, &aVertices[ii].z, m_MatRotation.x * 10 );
+        {
+            double a = aVertices[ii].y;
+            double b = aVertices[ii].z;
+            RotatePoint( &a, &b, m_MatRotation.x * 10 );
+            aVertices[ii].y = (float)a;
+            aVertices[ii].z = (float)b;
+        }
 
         if( m_MatRotation.y )
-            RotatePoint( &aVertices[ii].z, &aVertices[ii].x, m_MatRotation.y * 10 );
+        {
+            double a = aVertices[ii].z;
+            double b = aVertices[ii].x;
+            RotatePoint( &a, &b, m_MatRotation.x * 10 );
+            aVertices[ii].z = (float)a;
+            aVertices[ii].x = (float)b;
+        }
 
         if( m_MatRotation.z )
-            RotatePoint( &aVertices[ii].x, &aVertices[ii].y, m_MatRotation.z * 10 );
+        {
+            double a = aVertices[ii].x;
+            double b = aVertices[ii].y;
+            RotatePoint( &a, &b, m_MatRotation.x * 10 );
+            aVertices[ii].x = (float)a;
+            aVertices[ii].y = (float)b;
+        }
 
         /* adjust offset position (offset is given in UNIT 3D (0.1 inch) */
 #define SCALE_3D_CONV ((IU_PER_MILS * 1000) / UNITS3D_TO_UNITSPCB)
@@ -79,7 +92,7 @@ void S3D_MASTER::Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices )
 }
 
 
-void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits )
+void TransfertToGLlist( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits )
 {
     unsigned ii;
     GLfloat ax, ay, az, bx, by, bz, nx, ny, nz, r;
@@ -138,52 +151,14 @@ void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits
     glEnd();
 }
 
-
-GLuint EDA_3D_CANVAS::DisplayCubeforTest()
-{
-    GLuint gllist = glGenLists( 1 );
-
-    glNewList( gllist, GL_COMPILE_AND_EXECUTE );
-    /* draw six faces of a cube */
-    glBegin( GL_QUADS );
-    glNormal3f( 0.0F, 0.0F, 1.0F );
-    glVertex3f( 0.5F, 0.5F, 0.5F ); glVertex3f( -0.5F, 0.5F, 0.5F );
-    glVertex3f( -0.5F, -0.5F, 0.5F ); glVertex3f( 0.5F, -0.5F, 0.5F );
-
-    glNormal3f( 0.0F, 0.0F, -1.0F );
-    glVertex3f( -0.5F, -0.5F, -0.5F ); glVertex3f( -0.5F, 0.5F, -0.5F );
-    glVertex3f( 0.5F, 0.5F, -0.5F ); glVertex3f( 0.5F, -0.5F, -0.5F );
-
-    glNormal3f( 0.0F, 1.0F, 0.0F );
-    glVertex3f( 0.5F, 0.5F, 0.5F ); glVertex3f( 0.5F, 0.5F, -0.5F );
-    glVertex3f( -0.5F, 0.5F, -0.5F ); glVertex3f( -0.5F, 0.5F, 0.5F );
-
-    glNormal3f( 0.0F, -1.0F, 0.0F );
-    glVertex3f( -0.5F, -0.5F, -0.5F ); glVertex3f( 0.5F, -0.5F, -0.5F );
-    glVertex3f( 0.5F, -0.5F, 0.5F ); glVertex3f( -0.5F, -0.5F, 0.5F );
-
-    glNormal3f( 1.0F, 0.0F, 0.0F );
-    glVertex3f( 0.5F, 0.5F, 0.5F ); glVertex3f( 0.5F, -0.5F, 0.5F );
-    glVertex3f( 0.5F, -0.5F, -0.5F ); glVertex3f( 0.5F, 0.5F, -0.5F );
-
-    glNormal3f( -1.0F, 0.0F, 0.0F );
-    glVertex3f( -0.5F, -0.5F, -0.5F ); glVertex3f( -0.5F, -0.5F, 0.5F );
-    glVertex3f( -0.5F, 0.5F, 0.5F ); glVertex3f( -0.5F, 0.5F, -0.5F );
-    glEnd();
-
-    glEndList();
-
-    return gllist;
-}
-
 VERTEX_VALUE_CTRL::VERTEX_VALUE_CTRL( wxWindow* aParent, wxBoxSizer* aBoxSizer )
 {
     wxString text;
 
     wxFlexGridSizer* gridSizer = new wxFlexGridSizer( 0, 2, 0, 0 );
-	gridSizer->AddGrowableCol( 1 );
-	gridSizer->SetFlexibleDirection( wxHORIZONTAL );
-	gridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+    gridSizer->AddGrowableCol( 1 );
+    gridSizer->SetFlexibleDirection( wxHORIZONTAL );
+    gridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
     aBoxSizer->Add( gridSizer, 0, wxEXPAND, 5 );
 

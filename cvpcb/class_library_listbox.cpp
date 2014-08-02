@@ -60,11 +60,13 @@ int LIBRARY_LISTBOX::GetCount()
 
 void LIBRARY_LISTBOX::SetString( unsigned linecount, const wxString& text )
 {
-    if( linecount >= m_libraryList.Count() )
-        linecount = m_libraryList.Count() - 1;
-
-    if( linecount >= 0 )
+    unsigned count = m_libraryList.Count();
+    if( count > 0 )
+    {
+        if( linecount >= count )
+            linecount = count - 1;
         m_libraryList[linecount] = text;
+    }
 }
 
 
@@ -95,9 +97,9 @@ wxString LIBRARY_LISTBOX::OnGetItemText( long item, long column ) const
 }
 
 
-void LIBRARY_LISTBOX::SetSelection( unsigned index, bool State )
+void LIBRARY_LISTBOX::SetSelection( int index, bool State )
 {
-    if( (int) index >= GetCount() )
+    if( index >= GetCount() )
         index = GetCount() - 1;
 
     if( (index >= 0)  && (GetCount() > 0) )
@@ -128,7 +130,7 @@ void LIBRARY_LISTBOX::SetLibraryList( const wxArrayString& aList )
     {
         RefreshItems( 0L, m_libraryList.Count()-1 );
 
-#if defined (__WXGTK__ ) // && wxMINOR_VERSION == 8
+#if defined (__WXGTK__ ) && wxMINOR_VERSION == 8
         // @bug On GTK and wxWidgets 2.8.x, this will assert in debug builds because the
         //      column parameter is -1.  This was the only way to prevent GTK3 from
         //      ellipsizing long strings down to a few characters.  It still doesn't set

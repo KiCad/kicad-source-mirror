@@ -35,7 +35,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcbnew.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
 #include <gestfich.h>
 #include <3d_struct.h>
 #include <3d_viewer.h>
@@ -291,17 +291,31 @@ void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape(wxCommandEvent& event)
 
 void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
 {
-    wxString fullfilename, shortfilename;
-    wxString fullpath;
+    PROJECT&        prj = Prj();
+    SEARCH_STACK&   search = Kiface().KifaceSearch();
 
-    fullpath = wxGetApp().ReturnLastVisitedLibraryPath( LIB3D_PATH );
+    wxString    fullpath;
+    wxString    kisys3dmod = wxGetenv( wxT( KISYS3DMOD ) );
+
+    if( !kisys3dmod || !wxFileName::IsDirReadable( kisys3dmod ) )
+    {
+        fullpath = search.FindValidPath( LIB3D_PATH );
+    }
+
+    if( !fullpath )
+    {
+        fullpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
+        if( !fullpath )
+            fullpath = search.LastVisitedPath( LIB3D_PATH );
+    }
 
 #ifdef __WINDOWS__
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
 
-    wxString fileFilters;
-    fileFilters = wxGetTranslation( Shapes3DFileWildcard );
+    wxString fullfilename, shortfilename;
+    wxString fileFilters = wxGetTranslation( Shapes3DFileWildcard );
+
     fileFilters += wxChar(  '|' );
     fileFilters += wxGetTranslation( IDF3DFileWildcard );
 
@@ -319,27 +333,20 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
         return;
 
     wxFileName fn = fullfilename;
-    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    /* If the file path is already in the default search path
-     * list, just add the name to the list.  Otherwise, add
-     * the name with the full or relative path.
+    prj.SetRString( PROJECT::VIEWER_3D_PATH, fn.GetPath() );
+
+    /* If the file path is already in the library search paths
+     * list, just add the library name to the list.  Otherwise, add
+     * the library name with the full or relative path.
      * the relative path, when possible is preferable,
-     * because it preserve use of default search path, when the path is a
-     * sub path
+     * because it preserve use of default libraries paths, when the path is a sub path of these default paths
      */
+    shortfilename = search.FilenameWithRelativePathInSearchList( fullfilename );
 
-    wxString default_path;
-    wxGetEnv( wxT( KISYS3DMOD ), &default_path );
-    fn.MakeRelativeTo( default_path );
+    wxFileName aux = shortfilename;
 
-    // Here, we want a path relative only to the default_path
-    if( fn.GetPathWithSep().StartsWith( wxT("..") ) )
-        fn = fullfilename;  // keep the full file name
-
-    shortfilename = fn.GetFullPath();
-
-    if( fn.IsAbsolute() )
+    if( aux.IsAbsolute() )
     {   // Absolute path, ask if the user wants a relative one
         int diag = wxMessageBox(
             _( "Use a relative path?" ),
@@ -348,8 +355,8 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
 
         if( diag == wxYES )
         {   // Make it relative
-            fn.MakeRelativeTo( wxT( "." ) );
-            shortfilename = fn.GetFullPath();
+            aux.MakeRelativeTo( wxT( "." ) );
+            shortfilename = aux.GetPathWithSep() + aux.GetFullName();
         }
     }
 
@@ -370,7 +377,6 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
     m_lastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetCount() - 1;
     m_3D_ShapeNameListBox->SetSelection( m_lastSelected3DShapeIndex );
     Transfert3DValuesToDisplay( m_shapes3D_list[m_lastSelected3DShapeIndex] );
-
 }
 
 
@@ -391,7 +397,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
         {
             wxString msg;
             msg.Printf( _( "Error:\none of invalid chars <%s> found\nin <%s>" ),
-                        MODULE::ReturnStringLibNameInvalidChars( true ),
+                        MODULE::StringLibNameInvalidChars( true ),
                         GetChars( footprintName ) );
 
             DisplayError( NULL, msg );
@@ -431,9 +437,9 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     m_currentModule->Value().Copy( m_valueCopy );
 
     // Initialize masks clearances
-    m_currentModule->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
-    m_currentModule->SetLocalSolderMaskMargin( ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
-    m_currentModule->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
+    m_currentModule->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
+    m_currentModule->SetLocalSolderMaskMargin( ValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
+    m_currentModule->SetLocalSolderPasteMargin( ValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
     double   dtmp;
     wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );

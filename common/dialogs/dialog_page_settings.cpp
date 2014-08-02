@@ -33,7 +33,7 @@
 #include <base_struct.h>
 #include <class_drawpanel.h>
 #include <class_title_block.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <worksheet_shape_builder.h>
 #include <class_base_screen.h>
 #include <wildcards_and_files_ext.h>
@@ -703,21 +703,21 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
     {
         PAGE_INFO       pageInfo;   // SetType() later to lookup size
 
-        static const wxString* papers[] = {
+        static const wxChar* papers[] = {
             // longest common string first, since sequential search below
-            &PAGE_INFO::A4,
-            &PAGE_INFO::A3,
-            &PAGE_INFO::A2,
-            &PAGE_INFO::A1,
-            &PAGE_INFO::A0,
-            &PAGE_INFO::A,
-            &PAGE_INFO::B,
-            &PAGE_INFO::C,
-            &PAGE_INFO::D,
-            &PAGE_INFO::E,
-            &PAGE_INFO::USLetter,
-            &PAGE_INFO::USLegal,
-            &PAGE_INFO::USLedger,
+            PAGE_INFO::A4,
+            PAGE_INFO::A3,
+            PAGE_INFO::A2,
+            PAGE_INFO::A1,
+            PAGE_INFO::A0,
+            PAGE_INFO::A,
+            PAGE_INFO::B,
+            PAGE_INFO::C,
+            PAGE_INFO::D,
+            PAGE_INFO::E,
+            PAGE_INFO::USLetter,
+            PAGE_INFO::USLegal,
+            PAGE_INFO::USLedger,
         };
 
         unsigned i;

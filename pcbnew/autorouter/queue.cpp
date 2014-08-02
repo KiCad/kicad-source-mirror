@@ -119,7 +119,7 @@ void GetQueue( int* r, int* c, int* s, int* d, int* a )
 
 
 /* add a search node to the list
- *  Return:
+ *  :
  *      1 - OK
  *      0 - Failed to allocate memory.
  */

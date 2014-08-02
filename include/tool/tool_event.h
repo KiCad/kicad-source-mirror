@@ -54,39 +54,48 @@ enum TOOL_EVENT_CATEGORY
 enum TOOL_ACTIONS
 {
     // UI input events
-    TA_NONE         = 0x0000,
-    TA_MOUSE_CLICK  = 0x0001,
-    TA_MOUSE_UP     = 0x0002,
-    TA_MOUSE_DOWN   = 0x0004,
-    TA_MOUSE_DRAG   = 0x0008,
-    TA_MOUSE_MOTION = 0x0010,
-    TA_MOUSE_WHEEL  = 0x0020,
-    TA_MOUSE        = 0x003f,
-    TA_KEY_UP       = 0x0040,
-    TA_KEY_DOWN     = 0x0080,
-    TA_KEYBOARD     = TA_KEY_UP | TA_KEY_DOWN,
+    TA_NONE                 = 0x0000,
+    TA_MOUSE_CLICK          = 0x0001,
+    TA_MOUSE_DBLCLICK       = 0x0002,
+    TA_MOUSE_UP             = 0x0004,
+    TA_MOUSE_DOWN           = 0x0008,
+    TA_MOUSE_DRAG           = 0x0010,
+    TA_MOUSE_MOTION         = 0x0020,
+    TA_MOUSE_WHEEL          = 0x0040,
+    TA_MOUSE                = 0x007f,
+
+    TA_KEY_PRESSED          = 0x0080,
+    TA_KEYBOARD             = TA_KEY_PRESSED,
 
     // View related events
-    TA_VIEW_REFRESH = 0x0100,
-    TA_VIEW_ZOOM    = 0x0200,
-    TA_VIEW_PAN     = 0x0400,
-    TA_VIEW_DIRTY   = 0x0800,
-    TA_CHANGE_LAYER = 0x1000,
+    TA_VIEW_REFRESH         = 0x0100,
+    TA_VIEW_ZOOM            = 0x0200,
+    TA_VIEW_PAN             = 0x0400,
+    TA_VIEW_DIRTY           = 0x0800,
+    TA_VIEW                 = 0x0f00,
+
+    TA_CHANGE_LAYER         = 0x1000,
 
     // Tool cancel event. Issued automagically when the user hits escape or selects End Tool from
     // the context menu.
-    TA_CANCEL_TOOL  = 0x2000,
+    TA_CANCEL_TOOL          = 0x2000,
 
     // Context menu update. Issued whenever context menu is open and the user hovers the mouse
     // over one of choices. Used in dynamic highligting in disambiguation menu
-    TA_CONTEXT_MENU_UPDATE = 0x4000,
+    TA_CONTEXT_MENU_UPDATE  = 0x4000,
 
     // Context menu choice. Sent if the user picked something from the context menu or
     // closed it without selecting anything.
-    TA_CONTEXT_MENU_CHOICE = 0x8000,
+    TA_CONTEXT_MENU_CHOICE  = 0x8000,
 
-    // Tool action (allows to control tools)
-    TA_ACTION             = 0x10000,
+    // This event is sent *before* undo/redo command is performed.
+    TA_UNDO_REDO            = 0x10000,
+
+    // Tool action (allows to control tools).
+    TA_ACTION               = 0x20000,
+
+    // Tool activation event.
+    TA_ACTIVATE             = 0x40000,
 
     TA_ANY = 0xffffffff
 };
@@ -115,6 +124,14 @@ enum TOOL_ACTION_SCOPE
     AS_CONTEXT = 1,  ///> Action belongs to a particular tool (i.e. a part of a pop-up menu)
     AS_ACTIVE,       ///> All active tools
     AS_GLOBAL        ///> Global action (toolbar/main menu event, global shortcut)
+};
+
+/// Flags for tool actions
+enum TOOL_ACTION_FLAGS
+{
+    AF_NONE     = 0,
+    AF_ACTIVATE = 1,    ///> Action activates a tool
+    AF_NOTIFY   = 2     ///> Action is a notification (it is by default passed to all tools)
 };
 
 /// Defines when a context menu is opened.
@@ -182,7 +199,7 @@ public:
         m_scope( aScope ),
         m_mouseButtons( 0 )
     {
-        if( aCategory == TC_COMMAND )
+        if( aCategory == TC_COMMAND || aCategory == TC_MESSAGE )
             m_commandStr = aExtraParam;
     }
 
@@ -200,7 +217,7 @@ public:
 
     ///> Returns information about difference between current mouse cursor position and the place
     ///> where dragging has started.
-    const VECTOR2D Delta() const
+    const VECTOR2D& Delta() const
     {
         assert( m_category == TC_MOUSE );    // this should be used only with mouse events
         return m_mouseDelta;
@@ -233,6 +250,12 @@ public:
                && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
     }
 
+    bool IsDblClick( int aButtonMask = BUT_ANY ) const
+    {
+        return ( m_actions == TA_MOUSE_DBLCLICK )
+               && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
+    }
+
     bool IsDrag( int aButtonMask = BUT_ANY ) const
     {
         return ( m_actions == TA_MOUSE_DRAG ) && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
@@ -253,6 +276,11 @@ public:
         return m_actions == TA_CANCEL_TOOL;
     }
 
+    bool IsActivate() const
+    {
+        return m_actions == TA_ACTIVATE;
+    }
+
     ///> Returns information about key modifiers state (Ctrl, Alt, etc.)
     int Modifier( int aMask = MD_MODIFIER_MASK ) const
     {
@@ -264,20 +292,15 @@ public:
         return m_keyCode;
     }
 
-    bool IsKeyUp() const
+    bool IsKeyPressed() const
     {
-        return m_actions == TA_KEY_UP;
-    }
-
-    bool IsKeyDown() const
-    {
-        return m_actions == TA_KEY_DOWN;
+        return m_actions == TA_KEY_PRESSED;
     }
 
     void SetMouseDragOrigin( const VECTOR2D& aP )
     {
         m_mouseDragOrigin = aP;
-    }
+     }
 
     void SetMousePosition( const VECTOR2D& aP )
     {
@@ -304,12 +327,12 @@ public:
         if( !( m_actions & aEvent.m_actions ) )
             return false;
 
-        if( m_category == TC_COMMAND )
+        if( m_category == TC_COMMAND || m_category == TC_MESSAGE )
         {
-            if( m_commandStr && aEvent.m_commandStr )
+            if( (bool) m_commandStr && (bool) aEvent.m_commandStr )
                 return *m_commandStr == *aEvent.m_commandStr;
 
-            if( m_commandId && aEvent.m_commandId )
+            if( (bool) m_commandId && (bool) aEvent.m_commandId )
                 return *m_commandId == *aEvent.m_commandId;
         }
 
@@ -324,9 +347,14 @@ public:
      */
     bool IsAction( const TOOL_ACTION* aAction ) const;
 
-    boost::optional<int> GetCommandId()
+    boost::optional<int> GetCommandId() const
     {
         return m_commandId;
+    }
+
+    boost::optional<std::string> GetCommandStr() const
+    {
+        return m_commandStr;
     }
 
 private:
@@ -485,7 +513,6 @@ inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& aEventA, const TOOL_E
 
     return l;
 }
-
 
 inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& aEvent,
                                          const TOOL_EVENT_LIST& aEventList )

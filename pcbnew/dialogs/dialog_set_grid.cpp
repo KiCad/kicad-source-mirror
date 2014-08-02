@@ -141,8 +141,8 @@ wxPoint DIALOG_SET_GRID::getGridOrigin()
     wxPoint grid;
 
     // @todo Some error checking here would be a good thing.
-    grid.x = ReturnValueFromTextCtrl( *m_GridOriginXCtrl );
-    grid.y = ReturnValueFromTextCtrl( *m_GridOriginYCtrl );
+    grid.x = ValueFromTextCtrl( *m_GridOriginXCtrl );
+    grid.y = ValueFromTextCtrl( *m_GridOriginYCtrl );
 
     return grid;
 }
@@ -211,7 +211,7 @@ bool PCB_BASE_FRAME::InvokeDialogGrid()
 
     if( ret == wxID_OK )
     {
-        if( GetGridOrigin() != grid_origin && IsType( PCB_FRAME_TYPE ) )
+        if( GetGridOrigin() != grid_origin && IsType( FRAME_PCB ) )
             OnModify();     // because grid origin is saved in board, show as modified
 
         SetGridOrigin( grid_origin );

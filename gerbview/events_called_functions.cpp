@@ -4,13 +4,14 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <common.h>
 #include <gestfich.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <kicad_device_context.h>
 #include <gerbview_id.h>
 #include <class_GERBER.h>
@@ -51,8 +52,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
               GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_MENU( wxID_PREFERENCES, GERBVIEW_FRAME::InstallGerberOptionsDialog )
-
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, EDA_DRAW_FRAME::SetLanguage )
 
     // menu Postprocess
     EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES, GERBVIEW_FRAME::Process_Special_Functions )
@@ -165,7 +164,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_GERBVIEW_GLOBAL_DELETE:
-        Erase_Current_Layer( true );
+        Erase_Current_DrawLayer( true );
         ClearMsgPanel();
         break;
 
@@ -209,9 +208,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-/* Selects the active DCode for the current active layer.
- *  Items using this DCode are hightlighted
- */
 void GERBVIEW_FRAME::OnSelectActiveDCode( wxCommandEvent& event )
 {
     GERBER_IMAGE* gerber_image = g_GERBER_List[getActiveLayer()];
@@ -228,13 +224,10 @@ void GERBVIEW_FRAME::OnSelectActiveDCode( wxCommandEvent& event )
     }
 }
 
-/* Selects the active layer:
- *  - if a file is loaded, it is loaded in this layer
- *  _ this layer is displayed on top of other layers
- */
+
 void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
 {
-    LAYER_NUM layer = getActiveLayer();
+    int layer = getActiveLayer();
 
     setActiveLayer( event.GetSelection() );
 
@@ -246,17 +239,14 @@ void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
 }
 
 
-/* Call preferred editor to show (and edit) the gerber source file
- * loaded in the active layer
- */
 void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
 {
-    LAYER_NUM     layer = getActiveLayer();
+    int     layer = getActiveLayer();
     GERBER_IMAGE* gerber_layer = g_GERBER_List[layer];
 
     if( gerber_layer )
     {
-        wxString editorname = wxGetApp().GetEditorName();
+        wxString editorname = Pgm().GetEditorName();
         if( !editorname.IsEmpty() )
         {
             wxFileName fn( gerber_layer->m_FileName );
@@ -275,9 +265,6 @@ void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
 }
 
 
-/* Function OnSelectDisplayMode: called to select display mode
- * (fast display, or exact mode with stacked images or with transparency
- */
 void GERBVIEW_FRAME::OnSelectDisplayMode( wxCommandEvent& event )
 {
     int oldMode = GetDisplayMode();
@@ -301,20 +288,20 @@ void GERBVIEW_FRAME::OnSelectDisplayMode( wxCommandEvent& event )
         m_canvas->Refresh();
 }
 
+
 void GERBVIEW_FRAME::OnQuit( wxCommandEvent& event )
 {
     Close( true );
 }
 
-/**
- * Function SetLanguage
- * called on a language menu selection
- * Update Layer manager title and tabs texts
- */
-void GERBVIEW_FRAME::SetLanguage( wxCommandEvent& event )
+
+void GERBVIEW_FRAME::ShowChangedLanguage()
 {
-    EDA_DRAW_FRAME::SetLanguage( event );
+    // call my base class
+    EDA_DRAW_FRAME::ShowChangedLanguage();
+
     m_LayersManager->SetLayersManagerTabsText();
+
     wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_LayersManager );
     pane_info.Caption( _( "Visibles" ) );
     m_auimgr.Update();
@@ -322,14 +309,12 @@ void GERBVIEW_FRAME::SetLanguage( wxCommandEvent& event )
     ReFillLayerWidget();
 }
 
-/**
- * Function OnSelectOptionToolbar
- *  called to validate current choices
- */
+
 void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
-    int id = event.GetId();
-    bool state;
+    int     id = event.GetId();
+    bool    state;
+
     switch( id )
     {
         case ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG:
@@ -374,6 +359,7 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR:
+
         // show/hide auxiliary Vertical layers and visibility manager toolbar
         m_show_layer_manager_tools = state;
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );

@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <wxstruct.h>
 #include <macros.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <wildcards_and_files_ext.h>
 
 #include <cvpcb.h>
@@ -60,11 +60,13 @@ int FOOTPRINTS_LISTBOX::GetCount()
 
 void FOOTPRINTS_LISTBOX::SetString( unsigned linecount, const wxString& text )
 {
-    if( linecount >= m_footprintList.Count() )
-        linecount = m_footprintList.Count() - 1;
-
-    if( linecount >= 0 )
+    unsigned count = m_footprintList.Count();
+    if( count > 0 )
+    {
+        if( linecount >= count )
+            linecount = count - 1;
         m_footprintList[linecount] = text;
+    }
 }
 
 
@@ -101,9 +103,9 @@ wxString FOOTPRINTS_LISTBOX::OnGetItemText( long item, long column ) const
 }
 
 
-void FOOTPRINTS_LISTBOX::SetSelection( unsigned index, bool State )
+void FOOTPRINTS_LISTBOX::SetSelection( int index, bool State )
 {
-    if( (int) index >= GetCount() )
+    if( index >= GetCount() )
         index = GetCount() - 1;
 
     if( (index >= 0)  && (GetCount() > 0) )
@@ -207,7 +209,7 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
         return;
 
     // If the footprint view window is displayed, update the footprint.
-    if( GetParent()->m_DisplayFootprintFrame )
+    if( GetParent()->GetFpViewerFrame() )
         GetParent()->CreateScreenCmp();
 
     GetParent()->DisplayStatus();

@@ -34,11 +34,11 @@
 #include <typeinfo>
 #include <wx/msgdlg.h>
 #include <confirm.h>
-#ifdef __WXDEBUG__
+#ifdef PROFILE
 #include <profile.h>
 #include <wx/debug.h>
 #include <wx/log.h>
-#endif
+#endif /* PROFILE */
 
 using namespace KIGFX;
 
@@ -187,10 +187,10 @@ void GPU_CACHED_MANAGER::EndDrawing()
 
 void GPU_CACHED_MANAGER::uploadToGpu()
 {
-#ifdef __WXDEBUG__
+#ifdef PROFILE
     prof_counter totalTime;
     prof_start( &totalTime );
-#endif /* __WXDEBUG__ */
+#endif /* PROFILE  */
 
     if( !m_buffersInitialized )
         Initialize();
@@ -207,15 +207,13 @@ void GPU_CACHED_MANAGER::uploadToGpu()
     m_indices.reset( new GLuint[bufferSize] );
 
     if( glGetError() != GL_NO_ERROR )
-    {
         DisplayError( NULL, wxT( "Error during data upload to the GPU memory" ) );
-    }
 
-#ifdef __WXDEBUG__
+#ifdef PROFILE
     prof_end( &totalTime );
 
     wxLogDebug( wxT( "Uploading %d vertices to GPU / %.1f ms" ), bufferSize, totalTime.msecs() );
-#endif /* __WXDEBUG__ */
+#endif /* PROFILE */
 }
 
 

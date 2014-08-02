@@ -190,7 +190,7 @@ static void formatNode( OUTPUTFORMATTER* out, int aNestLevel, int aCtl,
 
         out->Print( aNestLevel, "(%s%s", out->Quotes( aKey ).c_str(), ctl & CTL_OMIT_NL ? "" : "\n" );
 
-        if( aTree.data().size() )   // only xml typically uses "data()", not sexpr.
+        if( aTree.data().size() )       // sexpr format does not use data()
         {
             out->Print( 0, " %s%s",
                 out->Quotes( aTree.data() ).c_str(),

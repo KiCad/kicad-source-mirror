@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <gr_basic.h>
 #include <trigo.h>
@@ -1311,7 +1311,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             GetField( fieldNdx )->SetAttributes( attr );
 
             if( (w == 0 ) || (ii == 4) )
-                w = DEFAULT_SIZE_TEXT;
+                w = GetDefaultTextSize();
 
             GetField( fieldNdx )->SetSize( wxSize( w, w ) );
             GetField( fieldNdx )->SetOrientation( TEXT_ORIENT_HORIZ );

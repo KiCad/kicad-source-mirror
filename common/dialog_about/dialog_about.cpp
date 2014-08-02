@@ -29,16 +29,9 @@ dialog_about::dialog_about(wxWindow *parent, AboutAppInfo& appInfo)
     m_staticTextBuildVersion->SetLabel( info.GetBuildVersion() );
     m_staticTextLibVersion->SetLabel( info.GetLibVersion() );
 
-    /* Affects m_titlepanel the parent of some wxStaticText.
-     * Changing the text afterwards makes it under Windows necessary to call 'Layout()'
-     * so that the new text gets properly layout.
-     */
-/*    m_staticTextCopyright->GetParent()->Layout();
-    m_staticTextBuildVersion->GetParent()->Layout();
-    m_staticTextLibVersion->GetParent()->Layout();
-*/
     DeleteNotebooks();
     CreateNotebooks();
+
     GetSizer()->SetSizeHints(this);
     m_auiNotebook->Update();
     SetFocus();

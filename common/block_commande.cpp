@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <common.h>
 #include <macros.h>
 #include <base_struct.h>
@@ -69,6 +69,10 @@ void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
 
     case BLOCK_DRAG:     // Drag
         msg = _( "Block Drag" );
+        break;
+
+    case BLOCK_DRAG_ITEM:     // Drag
+        msg = _( "Drag item" );
         break;
 
     case BLOCK_COPY:     // Copy

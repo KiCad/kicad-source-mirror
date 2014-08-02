@@ -2,8 +2,8 @@
 /* colors.h */
 /************/
 
-#ifndef _COLORS_H
-#define _COLORS_H
+#ifndef COLORS_H_
+#define COLORS_H_
 
 #include <wx/wx.h>
 
@@ -195,4 +195,4 @@ inline wxColour MakeColour( EDA_COLOR_T aColor )
         );
 }
 
-#endif /* ifndef _COLORS_H */
+#endif // COLORS_H_

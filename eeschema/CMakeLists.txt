@@ -1,4 +1,10 @@
-set( MAKE_LINK_MAPS false )
+# the map generation creates on Windows/gcc a lot of useless warnings
+# so disable it on windows
+if( WIN32 AND NOT CMAKE_CROSSCOMPILING )
+    set( MAKE_LINK_MAPS false )
+else()
+    set( MAKE_LINK_MAPS true )
+endif()
 
 add_definitions( -DEESCHEMA )
 
@@ -185,20 +191,24 @@ if( APPLE )
     set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/eeschema.icns" PROPERTIES
         MACOSX_PACKAGE_LOCATION Resources
         )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/eeschema_doc.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
 
     set( MACOSX_BUNDLE_ICON_FILE eeschema.icns )
     set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.eeschema )
+    set( MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist )
 endif()
 
 
 # auto-generate cmp_library_lexer.h and cmp_library_keywords.cpp for the component
 # library format.
 make_lexer(
-   ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
-   ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp
-   TLIB_T
-   )
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp
+    TLIB_T
+    )
 
 make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords
@@ -238,21 +248,35 @@ set_source_files_properties( dialogs/dialog_bom.cpp
     )
 
 
-# not ready for even building yet:
 if( USE_KIWAY_DLLS )
-
     add_executable( eeschema WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
+        ../common/pgm_base.cpp
+        ${EESCHEMA_RESOURCES}
+        )
+    set_source_files_properties( ../common/single_top.cpp PROPERTIES
+        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_SCH;PGM_DATA_FILE_EXT=\"sch\";BUILD_KIWAY_DLL"
         )
     target_link_libraries( eeschema
+        #singletop  # replaces common, giving us restrictive control and link warnings.
+        # There's way too much crap coming in from common yet.
         common
+        bitmaps
         ${wxWidgets_LIBRARIES}
         )
 
+    # the DSO (KIFACE) housing the main eeschema code:
     add_library( eeschema_kiface MODULE
         ${EESCHEMA_SRCS}
         ${EESCHEMA_COMMON_SRCS}
-        ${EESCHEMA_RESOURCES}
+#        ${EESCHEMA_RESOURCES}
+        )
+    target_link_libraries( eeschema_kiface
+        common
+        bitmaps
+        polygon
+        ${wxWidgets_LIBRARIES}
+        ${GDI_PLUS_LIBRARIES}
         )
     set_target_properties( eeschema_kiface PROPERTIES
         # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
@@ -262,38 +286,68 @@ if( USE_KIWAY_DLLS )
         SUFFIX          ${KIFACE_SUFFIX}
         )
 
+    # The KIFACE is in eeschema.cpp, export it:
+    set_source_files_properties( eeschema.cpp PROPERTIES
+        COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+        )
+
+    # if building eeschema, then also build eeschema_kiface if out of date.
+    add_dependencies( eeschema eeschema_kiface )
+
     if( APPLE )
-        set_target_properties( eeschema_kiface PROPERTIES
+        set_target_properties( eeschema PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
             )
     endif()
 
     if( MAKE_LINK_MAPS )
-        # generate a link map with cross reference
+        # generate link map with cross reference
         set_target_properties( eeschema_kiface PROPERTIES
-            LINK_FLAGS "-Wl,-cref -Wl,-Map=${KIFACE_PRE}eeschema.${KIFACE_EXT}.map"
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=${KIFACE_PREFIX}eeschema${KIFACE_SUFFIX}.map"
+            )
+        set_target_properties( eeschema PROPERTIES
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=eeschema.map"
             )
     endif()
 
-    target_link_libraries( eeschema_kiface
+    # these 2 binaries are a matched set, keep them together:
+    install( TARGETS eeschema
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+    if( APPLE )
+        # puts the *.kiface into the *.app bundle while linking
+        set_target_properties( eeschema_kiface PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/eeschema.app/Contents/MacOS/
+            )
+    else()
+        install( TARGETS eeschema_kiface
+            # actual filename subject to change at milestone C)
+            # modular-kicad blueprint.
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+    endif()
+
+else()
+    add_executable( eeschema WIN32 MACOSX_BUNDLE
+        ../common/single_top.cpp
+        ${EESCHEMA_SRCS}
+        ${EESCHEMA_COMMON_SRCS}
+        ${EESCHEMA_RESOURCES}
+        )
+
+    target_link_libraries( eeschema
         common
+#        lib_kicad
         bitmaps
         polygon
         ${wxWidgets_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         )
 
-    # Note that this filename is subject to change at milestone C) of
-    # modular-kicad blueprint.
-    install( TARGETS eeschema_kiface
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
-else()
-    add_executable( eeschema WIN32 MACOSX_BUNDLE
-        ${EESCHEMA_SRCS}
-        ${EESCHEMA_COMMON_SRCS}
-        ${EESCHEMA_RESOURCES}
+    set_source_files_properties( ../common/single_top.cpp PROPERTIES
+        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_SCH;PGM_DATA_FILE_EXT=\"sch\";BUILD_KIWAY_DLL"
         )
 
     if( APPLE )
@@ -302,19 +356,12 @@ else()
             )
     endif()
 
-    target_link_libraries( eeschema
-        common
-        bitmaps
-        polygon
-        ${wxWidgets_LIBRARIES}
-        ${GDI_PLUS_LIBRARIES}
+    install( TARGETS eeschema
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
         )
+
 endif()
 
-
-install( TARGETS eeschema
-    DESTINATION ${KICAD_BIN}
-    COMPONENT binary
-    )
 
 add_subdirectory( plugins )

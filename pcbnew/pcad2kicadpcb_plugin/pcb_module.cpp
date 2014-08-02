@@ -51,7 +51,7 @@ PCB_MODULE::PCB_MODULE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCB_COMPONE
     InitTTextValue( &m_value );
     m_mirror = 0;
     m_objType = wxT( 'M' );    // MODULE
-    m_KiCadLayer = SILKSCREEN_N_FRONT;  // default
+    m_KiCadLayer = F_SilkS;  // default
 }
 
 
@@ -506,7 +506,7 @@ void PCB_MODULE::AddToBoard()
     m_board->Add( module, ADD_APPEND );
 
     module->SetPosition( wxPoint( m_positionX, m_positionY ) );
-    module->SetLayer( m_mirror ? LAYER_N_BACK : LAYER_N_FRONT );
+    module->SetLayer( m_mirror ? B_Cu : F_Cu );
     module->SetOrientation( m_rotation );
     module->SetTimeStamp( 0 );
     module->SetLastEditTime( 0 );

@@ -104,7 +104,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBRARY_AS,
                  _( "Save Current Library As..." ),
                  _( "Save entire current library under a new name." ),
-                 wxNullBitmap );
+                 KiBitmap( copy_library_xpm ) );
 
     // Save module
     text = AddHotkeyName( _( "&Save Module in Active Library" ),
@@ -125,6 +125,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "&Export Module" ),
                  _( "Save current loaded module into file" ),
                  KiBitmap( export_module_xpm ) );
+
+    // Import DXF File
+    AddMenuItem( fileMenu, ID_GEN_IMPORT_DXF_FILE,
+                 _( "&Import DXF File" ),
+                 _( "Import a 2D Drawing DXF file to Pcbnew on the Drawings layer" ),
+                 KiBitmap( import_xpm ) );
+
     fileMenu->AppendSeparator();
 
     // Print

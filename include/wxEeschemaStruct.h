@@ -31,7 +31,7 @@
 #define  WX_EESCHEMA_STRUCT_H
 
 #include <sch_base_frame.h>
-#include <param_config.h>
+#include <config_params.h>
 #include <class_undoredo_container.h>
 #include <template_fieldnames.h>
 #include <block_commande.h>
@@ -66,7 +66,7 @@ class wxFindDialogEvent;
 class wxFindReplaceData;
 
 
-/* enum used in RotationMiroir() */
+/// enum used in RotationMiroir()
 enum COMPONENT_ORIENTATION_T {
     CMP_NORMAL,                     // Normal orientation, no rotation or mirror
     CMP_ROTATE_CLOCKWISE,           // Rotate -90
@@ -115,9 +115,9 @@ enum SCH_SEARCH_T {
 class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 {
 private:
+
     SCH_SHEET_PATH*         m_CurrentSheet;    ///< which sheet we are presently working on.
     wxString                m_DefaultSchematicFileName;
-    int                     m_TextFieldSize;
     PARAM_CFG_ARRAY         m_projectFileParams;
     PARAM_CFG_ARRAY         m_configSettings;
     wxPageSetupDialogData   m_pageSetupData;
@@ -145,8 +145,6 @@ private:
                                                   ///< generator.
 
     bool                    m_forceHVLines;       ///< force H or V directions for wires, bus, line
-    int                     m_defaultLabelSize;   ///< size of a new label
-
 
     /// An index to the last find item in the found items list #m_foundItems.
     int         m_foundItemIndex;
@@ -158,7 +156,10 @@ private:
     wxString    m_netListFormat;
 
     /// Add X prefix to component references when generating spice net lists.
-    bool        m_addReferencPrefix;
+    bool        m_spiceNetlistAddReferencePrefix;
+
+    /// Use netcodes (net number) as net names when generating spice net lists.
+    bool        m_spiceNetlistUseNetcodeAsNetname;
 
     wxString    m_userLibraryPath;
 
@@ -170,6 +171,11 @@ private:
 
 protected:
     TEMPLATES             m_TemplateFieldNames;
+
+    /**
+     * Initializing accessor for the pin text size
+     */
+    const wxSize &GetLastSheetPinTextSize();
 
     /**
      * Function doAutoSave
@@ -196,19 +202,15 @@ protected:
 
     void updateFindReplaceView( wxFindDialogEvent& aEvent );
 
-public:
-    SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
-                    const wxPoint& aPosition, const wxSize& aSize,
-                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    void backAnnotateFootprints( const std::string& aChangedSetOfReferences ) throw( IO_ERROR );
 
+public:
+    SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SCH_EDIT_FRAME();
 
     SCH_SCREEN* GetScreen() const;                  // overload SCH_BASE_FRAME
 
     void OnCloseWindow( wxCloseEvent& Event );
-
-    int GetDefaultLabelSize() const { return m_defaultLabelSize; }
-    void SetDefaultLabelSize( int aLabelSize ) { m_defaultLabelSize = aLabelSize; }
 
     bool GetForceHVLines() const { return m_forceHVLines; }
     void SetForceHVLines( bool aForceHVdirection ) { m_forceHVLines = aForceHVdirection; }
@@ -221,9 +223,13 @@ public:
 
     void SetNetListFormatName( const wxString& aFormat ) { m_netListFormat = aFormat; }
 
-    bool GetAddReferencePrefix() const { return m_addReferencPrefix; }
+    bool GetSpiceAddReferencePrefix() const { return m_spiceNetlistAddReferencePrefix; }
 
-    void SetAddReferencePrefix( bool aEnable ) { m_addReferencPrefix = aEnable; }
+    void SetSpiceAddReferencePrefix( bool aEnable ) { m_spiceNetlistAddReferencePrefix = aEnable; }
+
+    bool GetSpiceUseNetcodeAsNetname() const { return m_spiceNetlistUseNetcodeAsNetname; }
+
+    void SetSpiceUseNetcodeAsNetname( bool aEnable ) { m_spiceNetlistUseNetcodeAsNetname = aEnable; }
 
     wxString GetUserLibraryPath() const { return m_userLibraryPath; }
 
@@ -338,8 +344,8 @@ public:
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings( void );
 
-    void LoadSettings();
-    void SaveSettings();
+    void LoadSettings( wxConfigBase* aCfg );
+    void SaveSettings( wxConfigBase* aCfg );
 
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
@@ -369,6 +375,8 @@ public:
      * @param cmdline = received command from socket
      */
     virtual void ExecuteRemoteCommand( const char* cmdline );
+
+    void KiwayMailIn( KIWAY_EXPRESS& aEvent );      // override virtual from KIWAY_PLAYER
 
     void OnLeftClick( wxDC* aDC, const wxPoint& aPosition );
     void OnLeftDClick( wxDC* aDC, const wxPoint& aPosition );
@@ -639,23 +647,23 @@ public:
     void OnSaveProject( wxCommandEvent& aEvent );
 
     /**
-     * Function LoadOneEEProject
-     * load an entire project into the schematic editor.
+     * Function OpenProjectFiles
+     * loads an entire project into the schematic editor.
      *
      * This function loads  schematic root file and it's subhierarchies, the project
      * configuration, and the component libraries which are not already loaded.
      *
-     * @param aFileName The full path an file name to load.
-     * @param aIsNew True indicates that this is a new project and the default project
-     *               template is loaded.
-     * @return True if the project loaded properly.
+     * @param aFileSet is a list of one file, the top level schematic.
+     *
+     * @return bool - true if the project loaded properly, else false.
      */
-    bool LoadOneEEProject( const wxString& aFileName, bool aIsNew );
+    //bool LoadOneEEProject( const wxString& aFileName, bool aIsNew );
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 );  // virtual from KIWAY_PLAYER
 
     /**
      * Function AppendOneEEProject
-     * read an entire project and loads it into the schematic editor *whitout* replacing the
-     * existing contents.
+     * read an entire project and loads it into the schematic editor *without*
+     * replacing the existing contents.
      * @return True if the project was imported properly.
      */
     bool AppendOneEEProject();
@@ -703,7 +711,7 @@ public:
      * @param aFieldsVisibleAttributeState = footprint field flag visible new state
      * @return bool = true if success.
      */
-    bool ProcessCmpToFootprintLinkFile( wxString& aFullFilename,
+    bool ProcessCmpToFootprintLinkFile( const wxString& aFullFilename,
                                         bool aForceFieldsVisibleAttribute,
                                         bool aFieldsVisibleAttributeState );
 
@@ -793,6 +801,7 @@ private:
     void OnLoadProject( wxCommandEvent& event );
     void OnAppendProject( wxCommandEvent& event );
     void OnOpenPcbnew( wxCommandEvent& event );
+    void OnOpenPcbModuleEditor( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
     void OnOpenLibraryEditor( wxCommandEvent& event );
     void OnSetOptions( wxCommandEvent& event );
@@ -812,12 +821,6 @@ private:
     void OnUpdateHiddenPins( wxUpdateUIEvent& event );
     void OnUpdateBusOrientation( wxUpdateUIEvent& event );
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
-
-    /**
-     * Function SetLanguage
-     * called on a language menu selection
-     */
-    void SetLanguage( wxCommandEvent& event );
 
     /**
      * Function UpdateTitle
@@ -1094,7 +1097,7 @@ public:
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
-    void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                              UNDO_REDO_T aTypeCommand,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
@@ -1152,14 +1155,14 @@ public:
     void InitBlockPasteInfos();
 
     /**
-     * Function ReturnBlockCommand
+     * Function BlockCommand
      * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
      * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
      * block command is started by dragging the mouse.
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int ReturnBlockCommand( int aKey );
+    virtual int BlockCommand( int aKey );
 
     /**
      * Function HandleBlockPlace
@@ -1263,7 +1266,7 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, LAYER_MSK aPrintMask,
+    virtual void PrintPage( wxDC* aDC, LSET aPrintMask,
                             bool aPrintMirrorMode, void* aData = NULL );
 
     void SetSimulatorCommand( const wxString& aCommand ) { m_simulatorCommand = aCommand; }

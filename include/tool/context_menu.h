@@ -28,6 +28,7 @@
 #include <wx/menu.h>
 #include <tool/tool_action.h>
 #include <map>
+#include <boost/function.hpp>
 
 class TOOL_INTERACTIVE;
 
@@ -37,7 +38,7 @@ class TOOL_INTERACTIVE;
  * Defines the structure of a context (usually right-click) popup menu
  * for a given tool.
  */
-class CONTEXT_MENU
+class CONTEXT_MENU : public wxMenu
 {
 public:
     ///> Default constructor
@@ -45,6 +46,10 @@ public:
 
     ///> Copy constructor
     CONTEXT_MENU( const CONTEXT_MENU& aMenu );
+
+    CONTEXT_MENU& operator=( const CONTEXT_MENU& aMenu );
+
+    virtual ~CONTEXT_MENU() {}
 
     /**
      * Function SetTitle()
@@ -79,60 +84,55 @@ public:
     void Clear();
 
     /**
-     * Function GetMenu()
-     * Returns the instance of wxMenu object used to display the menu.
+     * Function GetSelected()
+     * Returns the position of selected item. If the returned value is negative, that means that
+     * menu was dismissed.
+     * @return The position of selected item in the context menu.
      */
-    wxMenu* GetMenu() const
+    int GetSelected() const
     {
-        return const_cast<wxMenu*>( &m_menu );
+        return m_selected;
+    }
+
+protected:
+    void setCustomEventHandler( boost::function<OPT_TOOL_EVENT(const wxEvent&)> aHandler )
+    {
+        m_customHandler = aHandler;
+    }
+
+    virtual OPT_TOOL_EVENT handleCustomEvent( const wxEvent& aEvent )
+    {
+        return OPT_TOOL_EVENT();
     }
 
 private:
-    ///> Class CMEventHandler takes care of handling menu events. After reception of particular
-    ///> events, it translates them to TOOL_EVENTs that may control tools.
-    class CMEventHandler : public wxEvtHandler
-    {
-    public:
-        ///> Default constructor
-        ///> aMenu is the CONTEXT_MENU instance for which it handles events.
-        CMEventHandler( CONTEXT_MENU* aMenu ) : m_menu( aMenu ) {};
+    /**
+     * Function copyItem
+     * Copies all properties of a menu entry to another.
+     */
+    void copyItem( const wxMenuItem* aSource, wxMenuItem* aDest ) const;
 
-        ///> Handler for menu events.
-        void onEvent( wxEvent& aEvent );
+    ///> Initializes handlers for events.
+    void setupEvents();
 
-    private:
-        ///> CONTEXT_MENU instance for which it handles events.
-        CONTEXT_MENU* m_menu;
-    };
-
-    friend class TOOL_INTERACTIVE;
+    ///> Event handler.
+    void onMenuEvent( wxEvent& aEvent );
 
     /**
      * Function setTool()
      * Sets a tool that is the creator of the menu.
      * @param aTool is the tool that created the menu.
      */
-    void setTool( TOOL_INTERACTIVE* aTool )
-    {
-        m_tool = aTool;
-    }
-
-    /**
-     * Function getHotKeyDescription()
-     * Returns a hot key in the string format accepted by wxMenu.
-     * @param aAction is the action with hot key to be translated..
-     * @return Hot key in the string format compatible with wxMenu.
-     */
-    std::string getHotKeyDescription( const TOOL_ACTION& aAction ) const;
+    void setTool( TOOL_INTERACTIVE* aTool );
 
     ///> Flag indicating that the menu title was set up.
     bool m_titleSet;
 
-    ///> Instance of wxMenu used for display of the context menu.
-    wxMenu m_menu;
+    ///> Stores the id number of selected item.
+    int m_selected;
 
     ///> Instance of menu event handler.
-    CMEventHandler m_handler;
+    //CMEventHandler m_handler;
 
     ///> Creator of the menu
     TOOL_INTERACTIVE* m_tool;
@@ -142,6 +142,11 @@ private:
 
     /// Associates tool actions with menu item IDs. Non-owning.
     std::map<int, const TOOL_ACTION*> m_toolActions;
+
+    /// Custom events handler, allows to translate wxEvents to TOOL_EVENTs.
+    boost::function<OPT_TOOL_EVENT(const wxEvent& aEvent)> m_customHandler;
+
+    friend class TOOL_INTERACTIVE;
 };
 
 #endif

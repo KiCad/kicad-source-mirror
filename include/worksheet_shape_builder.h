@@ -59,7 +59,7 @@ public:
     EDA_COLOR_T GetColor() const { return m_color; }
     WS_DRAW_TYPE GetType() const { return m_type; };
 
-    WORKSHEET_DATAITEM* GetParent() { return m_parent; }
+    WORKSHEET_DATAITEM* GetParent() const { return m_parent; }
 
     /** The function to draw a WS_DRAW_ITEM
      */
@@ -69,7 +69,7 @@ public:
      * Abstract function: should exist for derived items
      * return true if the point aPosition is on the item
      */
-    virtual bool HitTest( const wxPoint& aPosition) = 0;
+    virtual bool HitTest( const wxPoint& aPosition) const = 0;
 
     /**
      * Abstract function: should exist for derived items
@@ -124,7 +124,7 @@ public:
      * Virtual function
      * return true if the point aPosition is on the line
      */
-    virtual bool HitTest( const wxPoint& aPosition);
+    virtual bool HitTest( const wxPoint& aPosition) const;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
@@ -174,7 +174,7 @@ public:
      * Virtual function
      * return true if the point aPosition is inside one polygon
      */
-    virtual bool HitTest( const wxPoint& aPosition);
+    virtual bool HitTest( const wxPoint& aPosition) const;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
@@ -202,7 +202,7 @@ public:
      * Virtual function
      * return true if the point aPosition is on one edge of the rectangle
      */
-    virtual bool HitTest( const wxPoint& aPosition);
+    virtual bool HitTest( const wxPoint& aPosition) const;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
@@ -239,7 +239,7 @@ public:
      * Virtual function
      * return true if the point aPosition is on the text
      */
-    virtual bool HitTest( const wxPoint& aPosition);
+    virtual bool HitTest( const wxPoint& aPosition) const;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
@@ -274,7 +274,7 @@ public:
      * Virtual function
      * return true if the point aPosition is on bitmap
      */
-    virtual bool HitTest( const wxPoint& aPosition);
+    virtual bool HitTest( const wxPoint& aPosition) const;
 
     /**
      * return true if the point aPosition is on the reference point of this item.

@@ -27,26 +27,25 @@
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tools/common_actions.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 
-#include <class_drawpanel_gal.h>
-
+#include <class_draw_panel_gal.h>
 #include <pcbnew_id.h>
 
 #include <boost/optional.hpp>
 #include <boost/foreach.hpp>
 
-using boost::optional;
-
 ///> Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
 {
     BUTTON_STATE( TOOL_MOUSE_BUTTONS aButton, const wxEventType& aDownEvent,
-                 const wxEventType& aUpEvent ) :
+                 const wxEventType& aUpEvent, const wxEventType& aDblClickEvent ) :
         button( aButton ),
         downEvent( aDownEvent ),
-        upEvent( aUpEvent )
+        upEvent( aUpEvent ),
+        dblClickEvent( aDblClickEvent )
     {};
 
     ///> Flag indicating that dragging is active for the given button.
@@ -74,6 +73,9 @@ struct TOOL_DISPATCHER::BUTTON_STATE
     ///> The type of wxEvent that determines mouse button release.
     wxEventType upEvent;
 
+    ///> The type of wxEvent that determines mouse button double click.
+    wxEventType dblClickEvent;
+
     ///> Time stamp for the last mouse button press event.
     wxLongLong downTimestamp;
 
@@ -83,15 +85,42 @@ struct TOOL_DISPATCHER::BUTTON_STATE
         dragging = false;
         pressed = false;
     }
+
+    ///> Checks the current state of the button.
+    bool GetState() const
+    {
+        wxMouseState mouseState = wxGetMouseState();
+
+        switch( button )
+        {
+        case BUT_LEFT:
+            return mouseState.LeftIsDown();
+
+        case BUT_MIDDLE:
+            return mouseState.MiddleIsDown();
+
+        case BUT_RIGHT:
+            return mouseState.RightIsDown();
+
+        default:
+            assert( false );
+            break;
+        }
+
+        return false;
+    }
 };
 
 
-TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditFrame ) :
-    m_toolMgr( aToolMgr ), m_editFrame( aEditFrame )
+TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr ) :
+    m_toolMgr( aToolMgr )
 {
-    m_buttons.push_back( new BUTTON_STATE( BUT_LEFT, wxEVT_LEFT_DOWN, wxEVT_LEFT_UP ) );
-    m_buttons.push_back( new BUTTON_STATE( BUT_RIGHT, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_UP ) );
-    m_buttons.push_back( new BUTTON_STATE( BUT_MIDDLE, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_UP ) );
+    m_buttons.push_back( new BUTTON_STATE( BUT_LEFT, wxEVT_LEFT_DOWN,
+                         wxEVT_LEFT_UP, wxEVT_LEFT_DCLICK ) );
+    m_buttons.push_back( new BUTTON_STATE( BUT_RIGHT, wxEVT_RIGHT_DOWN,
+                         wxEVT_RIGHT_UP, wxEVT_RIGHT_DCLICK ) );
+    m_buttons.push_back( new BUTTON_STATE( BUT_MIDDLE, wxEVT_MIDDLE_DOWN,
+                         wxEVT_MIDDLE_UP, wxEVT_MIDDLE_DCLICK ) );
 
     ResetState();
 }
@@ -113,7 +142,7 @@ void TOOL_DISPATCHER::ResetState()
 
 KIGFX::VIEW* TOOL_DISPATCHER::getView()
 {
-    return m_editFrame->GetGalCanvas()->GetView();
+    return static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->GetGalCanvas()->GetView();
 }
 
 
@@ -121,11 +150,24 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 {
     BUTTON_STATE* st = m_buttons[aIndex];
     wxEventType type = aEvent.GetEventType();
-    optional<TOOL_EVENT> evt;
+    boost::optional<TOOL_EVENT> evt;
     bool isClick = false;
 
-    bool up = type == st->upEvent;
-    bool down = type == st->downEvent;
+//    bool up = type == st->upEvent;
+//    bool down = type == st->downEvent;
+    bool up = false, down = false;
+    bool dblClick = type == st->dblClickEvent;
+    bool state = st->GetState();
+
+    if( !dblClick )
+    {
+        // Sometimes the dispatcher does not receive mouse button up event, so it stays
+        // in the dragging mode even if the mouse button is not held anymore
+        if( st->pressed && !state )
+            up = true;
+        else if( !st->pressed && state )
+            down = true;
+    }
 
     int mods = decodeModifiers<wxMouseEvent>( static_cast<wxMouseEvent*>( &aEvent ) );
     int args = st->button | mods;
@@ -139,7 +181,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
         st->pressed = true;
         evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_DOWN, args );
     }
-    else if( up )    // Handle mouse button release
+    else if( up )   // Handle mouse button release
     {
         st->pressed = false;
 
@@ -161,6 +203,10 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
             evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_CLICK, args );
 
         st->dragging = false;
+    }
+    else if( dblClick )
+    {
+        evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_DBLCLICK, args );
     }
 
     if( st->pressed && aMotion )
@@ -195,7 +241,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
     bool motion = false, buttonEvents = false;
-    optional<TOOL_EVENT> evt;
+    boost::optional<TOOL_EVENT> evt;
 
     int type = aEvent.GetEventType();
 
@@ -204,17 +250,22 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
         type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
         type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
+        type == wxEVT_LEFT_DCLICK || type == wxEVT_MIDDLE_DCLICK || type == wxEVT_RIGHT_DCLICK ||
         // Event issued whem mouse retains position in screen coordinates,
-        // but changes in world coordinates (eg. autopanning)
+        // but changes in world coordinates (e.g. autopanning)
         type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
     {
-        VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetCursorPosition();
+        wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
+        int mods = decodeModifiers<wxMouseEvent>( me );
+
+        VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetMousePosition();
         VECTOR2D pos = getView()->ToWorld( screenPos );
 
-        if( pos != m_lastMousePos || type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
+        if( pos != m_lastMousePos )
         {
             motion = true;
             m_lastMousePos = pos;
+            static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->UpdateStatusBar();
         }
 
         for( unsigned int i = 0; i < m_buttons.size(); i++ )
@@ -222,29 +273,45 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         if( !buttonEvents && motion )
         {
-            evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_MOTION );
+            evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_MOTION, mods );
             evt->SetMousePosition( pos );
         }
+
+#ifdef __APPLE__
+        // TODO That's a big ugly workaround, somehow DRAWPANEL_GAL loses focus
+        // after second LMB click and currently I have no means to do better debugging
+        if( type == wxEVT_LEFT_UP )
+            static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->GetGalCanvas()->SetFocus();
+#endif /* __APPLE__ */
     }
 
     // Keyboard handling
-    else if( type == wxEVT_KEY_UP || type == wxEVT_KEY_DOWN )
+    else if( type == wxEVT_CHAR )
     {
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
         int key = ke->GetKeyCode();
         int mods = decodeModifiers<wxKeyEvent>( ke );
 
-        if( type == wxEVT_KEY_UP )
+        if( mods & MD_CTRL )
         {
-            if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
-                evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
-            else
-                evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_UP, key | mods );
+#if !wxCHECK_VERSION( 2, 9, 0 )
+            // I really look forward to the day when we will use only one version of wxWidgets..
+            const int WXK_CONTROL_A = 1;
+            const int WXK_CONTROL_Z = 26;
+#endif
+
+            // wxWidgets have a quirk related to Ctrl+letter hot keys handled by CHAR_EVT
+            // http://docs.wxwidgets.org/trunk/classwx_key_event.html:
+            // "char events for ASCII letters in this case carry codes corresponding to the ASCII
+            // value of Ctrl-Latter, i.e. 1 for Ctrl-A, 2 for Ctrl-B and so on until 26 for Ctrl-Z."
+            if( key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
+                key += 'A' - 1;
         }
+
+        if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
+            evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
         else
-        {
-            evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_DOWN, key | mods );
-        }
+            evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_PRESSED, key | mods );
     }
 
     if( evt )
@@ -255,26 +322,12 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 }
 
 
-void TOOL_DISPATCHER::DispatchWxCommand( const wxCommandEvent& aEvent )
+void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
 {
-    bool activateTool = false;
-    std::string toolName;
+    boost::optional<TOOL_EVENT> evt = COMMON_ACTIONS::TranslateLegacyId( aEvent.GetId() );
 
-    // fixme: use TOOL_ACTIONs here
-    switch( aEvent.GetId() )
-    {
-    case ID_PNS_ROUTER_TOOL:
-        toolName = "pcbnew.InteractiveRouter";
-        activateTool = true;
-        break;
-
-    case ID_SELECTION_TOOL:
-        toolName = "pcbnew.InteractiveSelection";
-        activateTool = true;
-        break;
-    }
-
-    // do nothing if the legacy view is active
-    if( activateTool && m_editFrame->IsGalCanvasActive() )
-        m_toolMgr->InvokeTool( toolName );
+    if( evt )
+        m_toolMgr->ProcessEvent( *evt );
+    else
+        aEvent.Skip();
 }

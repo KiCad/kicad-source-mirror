@@ -52,7 +52,7 @@ public:
     int                      GetSelection();
     void                     OnSize( wxSizeEvent& event );
 
-    virtual CVPCB_MAINFRAME* GetParent();
+    virtual CVPCB_MAINFRAME* GetParent() const;
 };
 
 
@@ -78,7 +78,7 @@ public:
     ~FOOTPRINTS_LISTBOX();
 
     int      GetCount();
-    void     SetSelection( unsigned index, bool State = true );
+    void     SetSelection( int index, bool State = true );
     void     SetString( unsigned linecount, const wxString& text );
     void     AppendLine( const wxString& text );
 
@@ -127,7 +127,7 @@ public:
     ~LIBRARY_LISTBOX();
 
     int      GetCount();
-    void     SetSelection( unsigned index, bool State = true );
+    void     SetSelection( int index, bool State = true );
     void     SetString( unsigned linecount, const wxString& text );
     void     AppendLine( const wxString& text );
     void     SetLibraryList( const wxArrayString& aList );
@@ -187,7 +187,7 @@ public:
     /*
      * Enable or disable an item
      */
-    void     SetSelection( unsigned index, bool State = true );
+    void     SetSelection( int index, bool State = true );
     void     SetString( unsigned linecount, const wxString& text );
     void     AppendLine( const wxString& text );
 

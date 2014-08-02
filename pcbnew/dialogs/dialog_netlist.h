@@ -43,7 +43,7 @@ private:
     bool            m_silentMode;   // if true, do not display warning message about undo
     bool            m_reportAll;    // If true report all messages,
                                     // false, report only warnings or errors
-    wxConfig*       m_config;
+    wxConfigBase*       m_config;
 
 public:
     DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC* aDC, const wxString & aNetlistFullFilename );

@@ -50,12 +50,13 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
 #include <drawtxt.h>
 #include <worksheet.h>
 #include <class_title_block.h>
 #include <worksheet_shape_builder.h>
 #include <class_worksheet_dataitem.h>
+
 
 // The layout shape used in the application
 // It is accessible by WORKSHEET_LAYOUT::GetTheInstance()
@@ -70,20 +71,24 @@ WORKSHEET_LAYOUT::WORKSHEET_LAYOUT()
     m_bottomMargin = 10.0;  // the bottom page margin in mm
 }
 
+
 void WORKSHEET_LAYOUT::SetLeftMargin( double aMargin )
 {
     m_leftMargin = aMargin;    // the left page margin in mm
 }
+
 
 void WORKSHEET_LAYOUT::SetRightMargin( double aMargin )
 {
     m_rightMargin = aMargin;   // the right page margin in mm
 }
 
+
 void WORKSHEET_LAYOUT::SetTopMargin( double aMargin )
 {
     m_topMargin = aMargin;     // the top page margin in mm
 }
+
 
 void WORKSHEET_LAYOUT::SetBottomMargin( double aMargin )
 {
@@ -98,8 +103,7 @@ void WORKSHEET_LAYOUT::ClearList()
     m_list.clear();
 }
 
-/* Insert an item to the list of items at position aIdx
- */
+
 void WORKSHEET_LAYOUT::Insert( WORKSHEET_DATAITEM* aItem, unsigned aIdx )
 {
     if ( aIdx >= GetCount() )
@@ -108,8 +112,7 @@ void WORKSHEET_LAYOUT::Insert( WORKSHEET_DATAITEM* aItem, unsigned aIdx )
         m_list.insert(  m_list.begin() + aIdx, aItem );
 }
 
-/* Remove the item to the list of items at position aIdx
- */
+
 bool WORKSHEET_LAYOUT::Remove( unsigned aIdx )
 {
     if ( aIdx >= GetCount() )
@@ -118,8 +121,7 @@ bool WORKSHEET_LAYOUT::Remove( unsigned aIdx )
     return true;
 }
 
-/* Remove the item to the list of items at position aIdx
- */
+
 bool WORKSHEET_LAYOUT::Remove( WORKSHEET_DATAITEM* aItem )
 {
     unsigned idx = 0;
@@ -135,8 +137,7 @@ bool WORKSHEET_LAYOUT::Remove( WORKSHEET_DATAITEM* aItem )
     return Remove( idx );
 }
 
-/* return the index of aItem, or -1 if does not exist
- */
+
 int WORKSHEET_LAYOUT::GetItemIndex( WORKSHEET_DATAITEM* aItem ) const
 {
     unsigned idx = 0;
@@ -161,17 +162,13 @@ WORKSHEET_DATAITEM* WORKSHEET_LAYOUT::GetItem( unsigned aIdx ) const
         return NULL;
 }
 
-/* return a short filename  from a full filename:
- * if the path is the current path,or if the path is the same
- * as kicad.pro (in template), returns a shortname
- * else do nothing and returns the full filename
- */
+
 const wxString WORKSHEET_LAYOUT::MakeShortFileName( const wxString& aFullFileName )
 {
-    wxFileName fn = aFullFileName;
-    wxString shortFileName = aFullFileName;
+    wxFileName  fn = aFullFileName;
+    wxString    shortFileName = aFullFileName;
+    wxString    fileName = Kiface().KifaceSearch().FindValidPath( fn.GetFullName() );
 
-    wxString fileName = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
     if( !fileName.IsEmpty() )
     {
         fn = fileName;
@@ -182,19 +179,15 @@ const wxString WORKSHEET_LAYOUT::MakeShortFileName( const wxString& aFullFileNam
     return shortFileName;
 }
 
-/**
- * @return a full filename from a short filename,
- * if the short filename path is void
- * In this case the path is the same as kicad.pro (in template)
- * else return the short filename (which have an absolute os relative path
-  */
+
 const wxString WORKSHEET_LAYOUT::MakeFullFileName( const wxString& aShortFileName )
 {
-    wxFileName fn = aShortFileName;
-    wxString fullFileName = aShortFileName;
+    wxFileName  fn = aShortFileName;
+    wxString    fullFileName = aShortFileName;
+
     if( fn.GetPath().IsEmpty() && !fn.GetFullName().IsEmpty() )
     {
-        wxString name = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+        wxString name = Kiface().KifaceSearch().FindValidPath( fn.GetFullName() );
         if( !name.IsEmpty() )
             fullFileName = name;
     }

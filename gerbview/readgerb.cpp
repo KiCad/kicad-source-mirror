@@ -8,6 +8,7 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_GERBER.h>
 
 #include <html_messagebox.h>
@@ -25,7 +26,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
 
     wxString msg;
     char*    text;
-    LAYER_NUM layer;         // current layer used in GerbView
+    int layer;         // current layer used in GerbView
 
     layer = getActiveLayer();
 
@@ -97,13 +98,13 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
                 break;
 
             case 'G':    /* Line type Gxx : command */
-                G_command = gerber->ReturnGCodeNumber( text );
+                G_command = gerber->GCodeNumber( text );
                 gerber->Execute_G_Command( text, G_command );
                 break;
 
             case 'D':       /* Line type Dxx : Tool selection (xx > 0) or
                              * command if xx = 0..9 */
-                D_commande = gerber->ReturnDCodeNumber( text );
+                D_commande = gerber->DCodeNumber( text );
                 gerber->Execute_DCODE_Command( text, D_commande );
                 break;
 

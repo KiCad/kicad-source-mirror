@@ -32,14 +32,6 @@
 #include <trigo.h>               // RotatePoint
 #include <class_drawpanel.h>     // EDA_DRAW_PANEL
 
-// until bzr rev 4476, Y position of vertical justification
-// of multiline texts was incorrectly calculated for BOTTOM
-// and CENTER vertical justification. (Only the first line was justified)
-// If this line is left uncommented, the bug is fixed, but
-// creates a (very minor) issue for existing texts, mainly in Pcbnew
-// because the text position is sometimes critical.
-#define FIX_MULTILINE_VERT_JUSTIF
-
 // Conversion to application internal units defined at build time.
 #if defined( PCBNEW )
     #include <class_board_item.h>
@@ -94,7 +86,7 @@ EDA_TEXT::~EDA_TEXT()
 
 int EDA_TEXT::LenSize( const wxString& aLine ) const
 {
-    return ReturnGraphicTextWidth( aLine, m_Size.x, m_Italic, m_Bold );
+    return GraphicTextWidth( aLine, m_Size.x, m_Italic, m_Bold );
 }
 
 /**
@@ -205,7 +197,6 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
 
     if( linecount > 1 )
     {
-#ifdef FIX_MULTILINE_VERT_JUSTIF
         int yoffset;
         linecount -= 1;
 
@@ -224,7 +215,6 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
             rect.SetY( rect.GetY() - yoffset );
             break;
         }
-#endif
     }
 
     rect.Inflate( thickness / 2 );
@@ -305,7 +295,6 @@ void EDA_TEXT::GetPositionsOfLinesOfMultilineText(
 
     offset.y = GetInterline();
 
-#ifdef FIX_MULTILINE_VERT_JUSTIF
     if( aLineCount > 1 )
     {
         switch( m_VJustify )
@@ -326,7 +315,7 @@ void EDA_TEXT::GetPositionsOfLinesOfMultilineText(
     // Rotate the position of the first line
     // around the center of the multiline text block
     RotatePoint( &pos, m_Pos, m_Orient );
-#endif
+
     // Rotate the offset lines to increase happened in the right direction
     RotatePoint( &offset, m_Orient );
 

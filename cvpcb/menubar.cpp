@@ -27,7 +27,8 @@
  * @brief (Re)Create the menubar for CvPcb
  */
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <menus_helpers.h>
@@ -74,11 +75,13 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Add this menu to list menu managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
     if( openRecentMenu )
-        wxGetApp().GetFileHistory().RemoveMenu( openRecentMenu );
+        Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
 
     openRecentMenu = new wxMenu();
-    wxGetApp().GetFileHistory().UseMenu( openRecentMenu );
-    wxGetApp().GetFileHistory().AddFilesToMenu();
+
+    Kiface().GetFileHistory().UseMenu( openRecentMenu );
+    Kiface().GetFileHistory().AddFilesToMenu();
+
     AddMenuItem( filesMenu, openRecentMenu, -1,
                  _( "Open &Recent" ),
                  _( "Open recent netlist" ),
@@ -115,7 +118,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                  KiBitmap( library_table_xpm ) );
 
     // Language submenu
-    wxGetApp().AddMenuLanguageList( preferencesMenu );
+    Pgm().AddMenuLanguageList( preferencesMenu );
 
     // Keep open on save
     item = new wxMenuItem( preferencesMenu, ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,

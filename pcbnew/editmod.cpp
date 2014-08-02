@@ -27,6 +27,8 @@
  */
 
 #include <fctsys.h>
+#include <kiface_i.h>
+#include <kiway.h>
 #include <confirm.h>
 #include <class_drawpanel.h>
 #include <pcbnew.h>
@@ -67,22 +69,19 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 
 #ifdef __WXMAC__
     // If something edited, push a refresh request
-    if (retvalue == 0 || retvalue == 1)
+    if( retvalue == 0 || retvalue == 1 )
         m_canvas->Refresh();
 #endif
 
     if( retvalue == 2 )
     {
-        FOOTPRINT_EDIT_FRAME* editorFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+        FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
 
-        if( editorFrame == NULL )
-            editorFrame = new FOOTPRINT_EDIT_FRAME( this, m_footprintLibTable );
-
-        editorFrame->Load_Module_From_BOARD( Module );
+        editor->Load_Module_From_BOARD( Module );
         SetCurItem( NULL );
 
-        editorFrame->Show( true );
-        editorFrame->Iconize( false );
+        editor->Show( true );
+        editor->Raise();        // Iconize( false );
     }
 }
 

@@ -24,13 +24,16 @@
  */
 
 
+#include <fctsys.h>
 #include <wx/config.h>      // wxExpandEnvVars()
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 
 #include <set>
 
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
+#include <search_stack.h>
 #include <pcb_netlist.h>
 #include <reporter.h>
 #include <footprint_info.h>
@@ -43,20 +46,7 @@
 using namespace FP_LIB_TABLE_T;
 
 
-/**
- * Definition for enabling and disabling footprint library trace output.  See the
- * wxWidgets documentation on using the WXTRACE environment variable.
- */
-static const wxString traceFpLibTable( wxT( "KicadFpLibTable" ) );
-
-
-/// The footprint library table name used when no project file is passed to Pcbnew or CvPcb.
-/// This is used temporarily to store the project specific library table until the project
-/// file being edited is save.  It is then moved to the file fp-lib-table in the folder where
-/// the project file is saved.
-static wxString defaultProjectFileName( wxT( "prj-fp-lib-table" ) );
-
-static wxString defaultFileName( wxT( "fp-lib-table" ) );
+static const wxChar global_tbl_name[] = wxT( "fp-lib-table" );
 
 
 void FP_LIB_TABLE::ROW::SetType( const wxString& aType )
@@ -144,6 +134,12 @@ FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
 {
     // not copying fall back, simply search aFallBackTable separately
     // if "nickName not found".
+}
+
+
+FP_LIB_TABLE::~FP_LIB_TABLE()
+{
+    // *fallBack is not owned here.
 }
 
 
@@ -406,19 +402,6 @@ void FP_LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
                 );
 }
 
-
-void FP_LIB_TABLE::Save( const wxFileName& aPath ) const throw( IO_ERROR )
-{
-    wxFileName fn = GetProjectFileName( aPath );
-
-    wxLogTrace( traceFpLibTable, wxT( "Saving footprint libary table <%s>." ),
-                GetChars( fn.GetFullPath() ) );
-
-    FILE_OUTPUTFORMATTER sf( fn.GetFullPath() );
-    Format( &sf, 0 );
-}
-
-
 #define OPT_SEP     '|'         ///< options separator character
 
 PROPERTIES* FP_LIB_TABLE::ParseOptions( const std::string& aOptionsList )
@@ -537,9 +520,16 @@ std::vector<wxString> FP_LIB_TABLE::GetLogicalLibs()
 
     } while( ( cur = cur->fallBack ) != 0 );
 
+    ret.reserve( unique.size() );
+
+    // DBG(printf( "%s: count:%zd\n", __func__, unique.size() );)
+
     // return a sorted, unique set of nicknames in a std::vector<wxString> to caller
     for( std::set<wxString>::const_iterator it = unique.begin();  it!=unique.end();  ++it )
+    {
+        //DBG(printf( " %s\n", TO_UTF8( *it ) );)
         ret.push_back( *it );
+    }
 
     return ret;
 }
@@ -645,8 +635,6 @@ const FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
 // wxGetenv( wchar_t* ) is not re-entrant on linux.
 // Put a lock on multithreaded use of wxGetenv( wchar_t* ), called from wxEpandEnvVars(),
 // needed by bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = NULL );
-#if 1
-
 #include <ki_mutex.h>
 
 const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString& aString )
@@ -660,262 +648,57 @@ const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString& aString )
     return wxExpandEnvVars( aString );
 }
 
-#else
-
-const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString& aString )
-{
-    // We reserve the right to do this another way, by providing our own member
-    // function.
-    return wxExpandEnvVars( aString );
-}
-
-#endif
 
 bool FP_LIB_TABLE::IsEmpty( bool aIncludeFallback )
 {
-    if( !aIncludeFallback || (fallBack == NULL) )
+    if( !aIncludeFallback || !fallBack )
         return rows.empty();
 
-    return fallBack->IsEmpty() && rows.empty();
+    return rows.empty() && fallBack->IsEmpty( true );
 }
 
 
-bool FP_LIB_TABLE::MissingLegacyLibs( const wxArrayString& aLibNames, wxString* aErrorMsg )
+MODULE* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const FPID& aFootprintId )
+    throw( IO_ERROR, PARSE_ERROR )
 {
-    bool retv = false;
+    wxString   nickname = aFootprintId.GetLibNickname();
+    wxString   fpname   = aFootprintId.GetFootprintName();
 
-    for( unsigned i = 0;  i < aLibNames.GetCount();  i++ )
+    if( nickname.size() )
     {
-        wxFileName fn = wxFileName( wxEmptyString, aLibNames[i], LegacyFootprintLibPathExtension );
-        wxString legacyLibPath = wxGetApp().FindLibraryPath( fn );
-
-        if( legacyLibPath.IsEmpty() )
-            continue;
-
-        if( FindRowByURI( legacyLibPath ) == 0 )
-        {
-            retv = true;
-
-            if( aErrorMsg )
-                *aErrorMsg += wxT( "\"" ) + legacyLibPath + wxT( "\"\n" );
-        }
+        return FootprintLoad( nickname, fpname );
     }
 
-    return retv;
-}
-
-
-bool FP_LIB_TABLE::ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aLibNames,
-                                      REPORTER* aReporter ) throw( IO_ERROR )
-{
-    wxString   msg;
-    FPID       lastFPID;
-    COMPONENT* component;
-    MODULE*    module = 0;
-    bool       retv = true;
-
-    if( aNetList.IsEmpty() )
-        return true;
-
-    aNetList.SortByFPID();
-
-    wxString   libPath;
-    wxFileName fn;
-
-    PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
-
-    for( unsigned ii = 0; ii < aNetList.GetCount(); ii++ )
-    {
-        component = aNetList.GetComponent( ii );
-
-        // The footprint hasn't been assigned yet so ignore it.
-        if( component->GetFPID().empty() )
-            continue;
-
-        if( component->GetFPID() != lastFPID )
-        {
-            module = NULL;
-
-            for( unsigned ii = 0; ii < aLibNames.GetCount(); ii++ )
-            {
-                fn = wxFileName( wxEmptyString, aLibNames[ii], LegacyFootprintLibPathExtension );
-
-                libPath = wxGetApp().FindLibraryPath( fn );
-
-                if( !libPath )
-                {
-                    if( aReporter )
-                    {
-                        msg.Printf( _( "Cannot find footprint library file '%s' in any of the "
-                                       "KiCad legacy library search paths.\n" ),
-                                    GetChars( fn.GetFullPath() ) );
-                        aReporter->Report( msg );
-                    }
-
-                    retv = false;
-                    continue;
-                }
-
-                module = pi->FootprintLoad( libPath, component->GetFPID().GetFootprintName() );
-
-                if( module )
-                {
-                    lastFPID = component->GetFPID();
-                    break;
-                }
-            }
-        }
-
-        if( module == NULL )
-        {
-            if( aReporter )
-            {
-                msg.Printf( _( "Component `%s` footprint '%s' was not found in any legacy "
-                               "library.\n" ),
-                            GetChars( component->GetReference() ),
-                            GetChars( component->GetFPID().Format() ) );
-                aReporter->Report( msg );
-            }
-
-            // Clear the footprint assignment since the old library lookup method is no
-            // longer valid.
-            FPID emptyFPID;
-            component->SetFPID( emptyFPID );
-            retv = false;
-            continue;
-        }
-        else
-        {
-            wxString libNickname;
-
-            FP_LIB_TABLE* cur = this;
-
-            do
-            {
-                cur->ensureIndex();
-
-                for( unsigned i = 0;  i < cur->rows.size();  i++ )
-                {
-                    wxString uri = cur->rows[i].GetFullURI( true );
-
-                    if( wxFileName::GetPathSeparator() == wxChar( '\\' )
-                        && uri.Find( wxChar( '/' ) ) >= 0 )
-                        uri.Replace( wxT( "/"), wxT( "\\" ) );
-#ifdef __WINDOWS__
-                    if( uri.CmpNoCase( libPath ) )
-#else
-                    if( uri == libPath )
-#endif
-                    {
-                        libNickname = cur->rows[i].GetNickName();
-                        break;
-                    }
-                }
-
-            } while( ( cur = cur->fallBack ) != 0 && libNickname.IsEmpty() );
-
-            if( libNickname.IsEmpty() )
-            {
-                if( aReporter )
-                {
-                    msg.Printf( _( "Component `%s` footprint '%s' legacy library path <%s > "
-                                   "was not found in the footprint library table.\n" ),
-                                GetChars( component->GetReference() ),
-                                GetChars( component->GetFPID().Format() ) );
-                    aReporter->Report( msg );
-                }
-
-                retv = false;
-            }
-            else
-            {
-                FPID newFPID = lastFPID;
-                newFPID.SetLibNickname( libNickname );
-
-                if( !newFPID.IsValid() )
-                {
-                    if( aReporter )
-                    {
-                        msg.Printf( _( "Component `%s` FPID '%s' is not valid.\n" ),
-                                    GetChars( component->GetReference() ),
-                                    GetChars( newFPID.Format() ) );
-                        aReporter->Report( msg );
-                    }
-
-                    retv = false;
-                }
-                else
-                {
-                    // The footprint name should already be set.
-                    component->SetFPID( newFPID );
-                }
-            }
-        }
-    }
-
-    return retv;
-}
-
-
-void FP_LIB_TABLE::SetProjectPathEnvVariable( const wxFileName& aPath )
-{
-    wxString path;
-
-    if( !aPath.IsOk() || !aPath.DirExists() )
-        path = wxEmptyString;
+    // nickname is empty, sequentially search (alphabetically) all libs/nicks for first match:
     else
-        path = aPath.GetPath();
+    {
+        std::vector<wxString> nicks = GetLogicalLibs();
 
-    wxLogTrace( traceFpLibTable, wxT( "Setting env %s to '%s'." ),
-                GetChars( ProjectPathEnvVariableName() ), GetChars( path ) );
-    wxSetEnv( ProjectPathEnvVariableName(), path );
-}
+        // Search each library going through libraries alphabetically.
+        for( unsigned i = 0;  i<nicks.size();  ++i )
+        {
+            // FootprintLoad() returns NULL on not found, does not throw exception
+            // unless there's an IO_ERROR.
+            MODULE* ret = FootprintLoad( nicks[i], fpname );
+            if( ret )
+                return ret;
+        }
 
-
-const wxString FP_LIB_TABLE::ProjectPathEnvVariableName()
-{
-    return  wxT( "KIPRJMOD" );
+        return NULL;
+    }
 }
 
 
 const wxString FP_LIB_TABLE::GlobalPathEnvVariableName()
 {
-    return  wxT( KISYSMOD );
-}
-
-
-wxString FP_LIB_TABLE::GetProjectFileName( const wxFileName& aPath )
-{
-    wxFileName fn = aPath;
-
-    // Set $KICAD_PRJ_PATH to user's configuration path if aPath is not set or does not exist.
-    if( !aPath.IsOk() || !aPath.DirExists() )
-    {
-        fn.AssignDir( wxStandardPaths::Get().GetUserConfigDir() );
-
-#if defined( __WINDOWS__ )
-        fn.AppendDir( wxT( "kicad" ) );
-#endif
-
-        fn.SetName( defaultProjectFileName );
-    }
-    else
-    {
-        fn.AssignDir( aPath.GetPath() );
-        fn.SetName( defaultFileName );
-    }
-
-    wxLogTrace( traceFpLibTable, wxT( "Project specific footprint library table file '%s'." ),
-                GetChars( fn.GetFullPath() ) );
-
-    return fn.GetFullPath();
+    return  wxT( "KISYSMOD" );
 }
 
 
 bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR )
 {
-    bool tableExists = true;
-    wxFileName fn = GetGlobalTableFileName();
+    bool        tableExists = true;
+    wxFileName  fn = GetGlobalTableFileName();
 
     if( !fn.FileExists() )
     {
@@ -927,23 +710,21 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARS
                                               GetChars( fn.GetPath() ) ) );
         }
 
-        // Attempt to copy the default global file table from the KiCad template folder to
-        // the users home configuration path.
-        wxString fileName = wxGetApp().FindLibraryPath( defaultFileName );
+        // Attempt to copy the default global file table from the KiCad
+        // template folder to the user's home configuration path.
+        wxString fileName = Kiface().KifaceSearch().FindValidPath( global_tbl_name );
 
         // The fallback is to create an empty global footprint table for the user to populate.
         if( fileName.IsEmpty() || !::wxCopyFile( fileName, fn.GetFullPath(), false ) )
         {
-            FP_LIB_TABLE emptyTable;
-            FILE_OUTPUTFORMATTER sf( fn.GetFullPath() );
-            emptyTable.Format( &sf, 0 );
+            FP_LIB_TABLE    emptyTable;
+
+            emptyTable.Save( fn.GetFullPath() );
         }
     }
 
-    FILE_LINE_READER reader( fn.GetFullPath() );
-    FP_LIB_TABLE_LEXER lexer( &reader );
+    aTable.Load( fn.GetFullPath() );
 
-    aTable.Parse( &lexer );
     return tableExists;
 }
 
@@ -952,38 +733,38 @@ wxString FP_LIB_TABLE::GetGlobalTableFileName()
 {
     wxFileName fn;
 
+    // This is possibly problematic with an uncertain wxApp title, which is now
+    // the case.  We'll need a better technique soon.
     fn.SetPath( wxStandardPaths::Get().GetUserConfigDir() );
 
 #if defined( __WINDOWS__ )
     fn.AppendDir( wxT( "kicad" ) );
 #endif
 
-    fn.SetName( GetFileName() );
-
-    wxLogTrace( traceFpLibTable, wxT( "Global footprint library table file '%s'." ),
-                GetChars( fn.GetFullPath() ) );
+    fn.SetName( global_tbl_name );
 
     return fn.GetFullPath();
 }
 
+// prefer wxString filename so it can be seen in a debugger easier than wxFileName.
 
-const wxString& FP_LIB_TABLE::GetFileName()
+void FP_LIB_TABLE::Load( const wxString& aFileName )
+    throw( IO_ERROR )
 {
-    return defaultFileName;
+    // It's OK if footprint library tables are missing.
+    if( wxFileName::IsFileReadable( aFileName ) )
+    {
+        FILE_LINE_READER    reader( aFileName );
+        FP_LIB_TABLE_LEXER  lexer( &reader );
+
+        Parse( &lexer );
+    }
 }
 
 
-void FP_LIB_TABLE::Load( const wxFileName& aFileName, FP_LIB_TABLE* aFallBackTable )
-    throw( IO_ERROR )
+void FP_LIB_TABLE::Save( const wxString& aFileName ) const throw( IO_ERROR )
 {
-    fallBack = aFallBackTable;
-
-    // Empty footprint library tables are valid.
-    if( aFileName.IsOk() && aFileName.FileExists() )
-    {
-        FILE_LINE_READER reader( aFileName.GetFullPath() );
-        FP_LIB_TABLE_LEXER lexer( &reader );
-        Parse( &lexer );
-    }
+    FILE_OUTPUTFORMATTER sf( aFileName );
+    Format( &sf, 0 );
 }
 

@@ -8,6 +8,7 @@
 #include <id.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <menus_helpers.h>
 
 

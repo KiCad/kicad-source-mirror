@@ -15,34 +15,32 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __TRACE_H
 #define __TRACE_H
 
-#ifdef DEBUG
-
 #include <string>
 #include <iostream>
 #include <boost/format.hpp>
 
-static void _trace_print( const char* aFuncName, int level, const std::string& aMsg )
+static inline void _trace_print( const char* aFuncName, int aLevel, const std::string& aMsg )
 {
-    std::cerr << "trace[" << level << "]: " << aFuncName << ": " << aMsg << std::endl;
+#ifdef DEBUG
+    std::cerr << "trace[" << aLevel << "]: " << aFuncName << ": " << aMsg << std::endl;
+#endif
 }
 
-#define TRACE( level, fmt, ... ) \
-    _trace_print( __FUNCTION__, level, ( boost::format( fmt ) % __VA_ARGS__ ).str() );
+#ifdef PNS_DEBUG
+    #define TRACE( level, fmt, ... ) \
+        _trace_print( __FUNCTION__, level, ( boost::format( fmt ) % __VA_ARGS__ ).str() );
 
-#define TRACEn( level, msg ) \
-    _trace_print( __FUNCTION__, level, std::string( msg ) );
-
+    #define TRACEn( level, msg ) \
+        _trace_print( __FUNCTION__, level, std::string( msg ) );
 #else
-
-#define TRACE( level, fmt, ... )
-#define TRACEn( level, msg )
-
+    #define TRACE( ... )
+    #define TRACEn( ... )
 #endif
 
 #endif

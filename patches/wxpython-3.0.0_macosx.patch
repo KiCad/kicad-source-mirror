@@ -1,6 +1,6 @@
 === modified file 'Makefile.in'
---- Makefile.in	2014-02-05 21:57:29 +0000
-+++ Makefile.in	2014-02-05 22:00:01 +0000
+--- Makefile.in	2014-06-11 15:08:00 +0000
++++ Makefile.in	2014-06-11 15:10:36 +0000
 @@ -14601,7 +14601,7 @@
  	monodll_carbon_frame.o \
  	monodll_carbon_mdi.o \
@@ -92,8 +92,8 @@
  @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/overlay.cpp
 
 === modified file 'include/wx/overlay.h'
---- include/wx/overlay.h	2014-02-05 21:57:29 +0000
-+++ include/wx/overlay.h	2014-02-05 21:57:47 +0000
+--- include/wx/overlay.h	2014-06-11 15:08:00 +0000
++++ include/wx/overlay.h	2014-06-11 15:10:36 +0000
 @@ -13,7 +13,7 @@
  
  #include "wx/defs.h"
@@ -105,8 +105,8 @@
      #define wxHAS_NATIVE_OVERLAY 1
 
 === modified file 'include/wx/private/overlay.h'
---- include/wx/private/overlay.h	2014-02-05 21:57:29 +0000
-+++ include/wx/private/overlay.h	2014-02-05 21:57:47 +0000
+--- include/wx/private/overlay.h	2014-06-11 15:08:00 +0000
++++ include/wx/private/overlay.h	2014-06-11 15:10:36 +0000
 @@ -16,7 +16,11 @@
  #ifdef wxHAS_NATIVE_OVERLAY
  
@@ -121,8 +121,8 @@
  #else
 
 === modified file 'src/osx/cocoa/overlay.mm'
---- src/osx/cocoa/overlay.mm	2014-02-05 21:57:29 +0000
-+++ src/osx/cocoa/overlay.mm	2014-02-05 21:57:47 +0000
+--- src/osx/cocoa/overlay.mm	2014-06-11 15:08:00 +0000
++++ src/osx/cocoa/overlay.mm	2014-06-11 15:12:45 +0000
 @@ -34,6 +34,7 @@
  #include "wx/private/overlay.h"
  
@@ -180,7 +180,7 @@
  }
  
  void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
-@@ -107,84 +66,50 @@
+@@ -107,84 +66,54 @@
      wxASSERT_MSG( !IsOk() , _("You cannot Init an overlay twice") );
  
      m_window = dc->GetWindow();
@@ -222,6 +222,8 @@
 +	m_overlayWindow = m_window->MacGetTopLevelWindowRef();
 +	
 +	NSRect box = [m_overlayWindow frame];
++	box.origin.x = 0;
++	box.origin.y = 0;
 +	
 +	if( [m_overlayWindow isVisible] ) 	
 +	{
@@ -280,6 +282,8 @@
 -        [m_overlayWindow release];
 -        m_overlayWindow = NULL ;
 +		NSRect box = [m_overlayWindow frame];
++		box.origin.x = 0;
++		box.origin.y = 0;
 +		
 +		[m_overlayWindow discardCachedImage];
 +		[m_overlayWindow cacheImageInRect:box];

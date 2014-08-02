@@ -176,7 +176,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      */
     EDA_RECT item_boundingbox;
     EDA_RECT zone_boundingbox  = GetBoundingBox();
-    int      biggest_clearance = aPcb->GetBiggestClearanceValue();
+    int      biggest_clearance = aPcb->GetDesignSettings().GetBiggestClearanceValue();
     biggest_clearance = std::max( biggest_clearance, zone_clearance );
     zone_boundingbox.Inflate( biggest_clearance );
 
@@ -199,9 +199,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      */
     MODULE dummymodule( aPcb );    // Creates a dummy parent
     D_PAD dummypad( &dummymodule );
-    D_PAD* nextpad;
+
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
+        D_PAD* nextpad;
+
         for( D_PAD* pad = module->Pads(); pad != NULL; pad = nextpad )
         {
             nextpad = pad->Next();  // pad pointer can be modified by next code, so
@@ -228,7 +230,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 pad = &dummypad;
             }
 
-            if( pad->GetNet() != GetNet() )
+            // Note: netcode <=0 means not connected item
+            if( ( pad->GetNetCode() != GetNetCode() ) || ( pad->GetNetCode() <= 0 ) )
             {
                 item_clearance   = pad->GetClearance() + margin;
                 item_boundingbox = pad->GetBoundingBox();
@@ -246,14 +249,15 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 continue;
             }
 
-            int gap = zone_clearance;
-
             if( ( GetPadConnection( pad ) == PAD_NOT_IN_ZONE )
-                || ( GetNet() == 0 ) || ( pad->GetShape() == PAD_TRAPEZOID ) )
+                || ( pad->GetShape() == PAD_TRAPEZOID ) )
 
             // PAD_TRAPEZOID shapes are not in zones because they are used in microwave apps
             // and i think it is good that shapes are not changed by thermal pads or others
             {
+                int gap = zone_clearance;
+                int thermalGap = GetThermalReliefGap( pad );
+                gap = std::max( gap, thermalGap );
                 item_boundingbox = pad->GetBoundingBox();
 
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
@@ -275,7 +279,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         if( !track->IsOnLayer( GetLayer() ) )
             continue;
 
-        if( track->GetNet() == GetNet()  && (GetNet() != 0) )
+        if( track->GetNetCode() == GetNetCode()  && (GetNetCode() != 0) )
             continue;
 
         item_clearance   = track->GetClearance() + margin;
@@ -293,13 +297,13 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
     /* Add module edge items that are on copper layers
      * Pcbnew allows these items to be on copper layers in microwave applictions
-     * This is a bad thing, but must be handle here, until a better way is found
+     * This is a bad thing, but must be handled here, until a better way is found
      */
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
         for( BOARD_ITEM* item = module->GraphicalItems();  item;  item = item->Next() )
         {
-            if( !item->IsOnLayer( GetLayer() ) )
+            if( !item->IsOnLayer( GetLayer() ) && !item->IsOnLayer( Edge_Cuts ) )
                 continue;
 
             if( item->Type() != PCB_MODULE_EDGE_T )
@@ -319,7 +323,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     // Add graphic items (copper texts) and board edges
     for( BOARD_ITEM* item = aPcb->m_Drawings; item; item = item->Next() )
     {
-        if( item->GetLayer() != GetLayer() && item->GetLayer() != EDGE_N )
+        if( item->GetLayer() != GetLayer() && item->GetLayer() != Edge_Cuts )
             continue;
 
         switch( item->Type() )
@@ -363,7 +367,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         // do not add clearance.
         // the zone will be connected to the current zone, but filled areas
         // will use different parameters (clearance, thermal shapes )
-        bool addclearance = GetNet() != zone->GetNet();
+        bool addclearance = GetNetCode() != zone->GetNetCode();
         int clearance = zone_clearance;
 
         if( zone->GetIsKeepout() )
@@ -394,7 +398,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             if( !pad->IsOnLayer( GetLayer() ) )
                 continue;
 
-            if( pad->GetNet() != GetNet() )
+            if( pad->GetNetCode() != GetNetCode() )
                 continue;
             item_boundingbox = pad->GetBoundingBox();
             int thermalGap = GetThermalReliefGap( pad );
@@ -428,7 +432,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     CopyPolygonsFromKiPolygonListToFilledPolysList( polyset_zone_solid_areas );
 
     // Remove insulated islands:
-    if( GetNet() > 0 )
+    if( GetNetCode() > 0 )
         TestForCopperIslandAndRemoveInsulatedIslands( aPcb );
 
     // Now we remove all unused thermal stubs.
@@ -436,7 +440,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
     // Test thermal stubs connections and add polygons to remove unconnected stubs.
     // (this is a refinement for thermal relief shapes)
-    if( GetNet() > 0 )
+    if( GetNetCode() > 0 )
         BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this,
                                                  s_Correction, s_thermalRot );
 
@@ -453,7 +457,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         m_FilledPolysList.RemoveAllContours();
         CopyPolygonsFromKiPolygonListToFilledPolysList( polyset_zone_solid_areas );
 
-        if( GetNet() > 0 )
+        if( GetNetCode() > 0 )
             TestForCopperIslandAndRemoveInsulatedIslands( aPcb );
     }
 

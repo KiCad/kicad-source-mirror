@@ -198,14 +198,14 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     Mself.lng = min_len;
 
     // Enter the desired length.
-    msg = ReturnStringFromValue( g_UserUnit, Mself.lng );
+    msg = StringFromValue( g_UserUnit, Mself.lng );
     wxTextEntryDialog dlg( this, _( "Length:" ), _( "Length" ), msg );
 
     if( dlg.ShowModal() != wxID_OK )
         return NULL; // canceled by user
 
     msg = dlg.GetValue();
-    Mself.lng = ReturnValueFromString( g_UserUnit, msg );
+    Mself.lng = ValueFromString( g_UserUnit, msg );
 
     // Control values (ii = minimum length)
     if( Mself.lng < min_len )
@@ -215,7 +215,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     }
 
     // Calculate the elements.
-    Mself.m_Width = GetBoard()->GetCurrentTrackWidth();
+    Mself.m_Width = GetDesignSettings().GetCurrentTrackWidth();
 
     std::vector <wxPoint> buffer;
     ll = BuildCornersList_S_Shape( buffer, Mself.m_Start, Mself.m_End, Mself.lng, Mself.m_Width );
@@ -265,7 +265,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
 
     pad->SetSize( wxSize( Mself.m_Width, Mself.m_Width ) );
 
-    pad->SetLayerMask( GetLayerMask( module->GetLayer() ) );
+    pad->SetLayerSet( LSET( module->GetLayer() ) );
     pad->SetAttribute( PAD_SMD );
     pad->SetShape( PAD_CIRCLE );
 
@@ -561,13 +561,13 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
 
         module->Pads().PushFront( pad );
 
-        int tw = GetBoard()->GetCurrentTrackWidth();
+        int tw = GetDesignSettings().GetCurrentTrackWidth();
         pad->SetSize( wxSize( tw, tw ) );
 
         pad->SetPosition( module->GetPosition() );
         pad->SetShape( PAD_RECT );
         pad->SetAttribute( PAD_SMD );
-        pad->SetLayerMask( LAYER_FRONT );
+        pad->SetLayerSet( F_Cu );
 
         Line.Printf( wxT( "%d" ), pad_num );
         pad->SetPadName( Line );
@@ -588,7 +588,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     int      angle     = 0;
 
     // Enter the size of the gap or stub
-    int      gap_size = GetBoard()->GetCurrentTrackWidth();
+    int      gap_size = GetDesignSettings().GetCurrentTrackWidth();
 
     switch( shape_type )
     {
@@ -614,7 +614,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         break;
     }
 
-    wxString          value = ReturnStringFromValue( g_UserUnit, gap_size );
+    wxString          value = StringFromValue( g_UserUnit, gap_size );
     wxTextEntryDialog dlg( this, msg, _( "Create microwave module" ), value );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -624,7 +624,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     }
 
     value    = dlg.GetValue();
-    gap_size = ReturnValueFromString( g_UserUnit, value );
+    gap_size = ValueFromString( g_UserUnit, value );
 
     bool abort = false;
 
@@ -692,7 +692,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         module->GraphicalItems().PushFront( edge );
 
         edge->SetShape( S_POLYGON );
-        edge->SetLayer( LAYER_N_FRONT );
+        edge->SetLayer( F_Cu );
 
         int numPoints = angle / 50 + 3;     // Note: angles are in 0.1 degrees
         std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
@@ -992,7 +992,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     module->GraphicalItems().PushFront( edge );
 
     edge->SetShape( S_POLYGON );
-    edge->SetLayer( LAYER_N_FRONT );
+    edge->SetLayer( F_Cu );
 
     std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
     polyPoints.reserve( 2 * PolyEdges.size() + 2 );
@@ -1094,17 +1094,17 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
     gap_size = next_pad->GetPos0().x - pad->GetPos0().x - pad->GetSize().x;
 
     // Entrer the desired length of the gap.
-    msg = ReturnStringFromValue( g_UserUnit, gap_size );
+    msg = StringFromValue( g_UserUnit, gap_size );
     wxTextEntryDialog dlg( this, _( "Gap:" ), _( "Create Microwave Gap" ), msg );
 
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user
 
     msg = dlg.GetValue();
-    gap_size = ReturnValueFromString( g_UserUnit, msg );
+    gap_size = ValueFromString( g_UserUnit, msg );
 
     // Updating sizes of pads forming the gap.
-    int tw = GetBoard()->GetCurrentTrackWidth();
+    int tw = GetDesignSettings().GetCurrentTrackWidth();
     pad->SetSize( wxSize( tw, tw ) );
 
     pad->SetY0( 0 );
@@ -1118,7 +1118,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
 
     pad->SetPosition( padpos );
 
-    tw = GetBoard()->GetCurrentTrackWidth();
+    tw = GetDesignSettings().GetCurrentTrackWidth();
     next_pad->SetSize( wxSize( tw, tw ) );
 
     next_pad->SetY0( 0 );

@@ -35,9 +35,7 @@ using namespace KIGFX;
 const wxEventType WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE = wxNewEventType();
 
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
-    VIEW_CONTROLS( aView ),
-    m_state( IDLE ),
-    m_parentPanel( aParentPanel )
+    VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel )
 {
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
@@ -68,33 +66,57 @@ void VIEW_CONTROLS::ShowCursor( bool aEnabled )
 }
 
 
+void VIEW_CONTROLS::setCenter( const VECTOR2D& aCenter )
+{
+    if( !m_panBoundary.Contains( aCenter ) )
+    {
+        VECTOR2D newCenter( aCenter );
+
+        if( aCenter.x < m_panBoundary.GetLeft() )
+            newCenter.x = m_panBoundary.GetLeft();
+        else if( aCenter.x > m_panBoundary.GetRight() )
+            newCenter.x = m_panBoundary.GetRight();
+
+        if( aCenter.y < m_panBoundary.GetTop() )
+            newCenter.y = m_panBoundary.GetTop();
+        else if( aCenter.y > m_panBoundary.GetBottom() )
+            newCenter.y = m_panBoundary.GetBottom();
+
+        m_view->SetCenter( newCenter );
+    }
+    else
+    {
+        m_view->SetCenter( aCenter );
+    }
+}
+
+
+void VIEW_CONTROLS::setScale( double aScale, const VECTOR2D& aAnchor )
+{
+    if( aScale < m_minScale )
+        aScale = m_minScale;
+    else if( aScale > m_maxScale )
+        aScale = m_maxScale;
+
+    m_view->SetScale( aScale, aAnchor );
+}
+
+
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
-    m_mousePosition.x = aEvent.GetX();
-    m_mousePosition.y = aEvent.GetY();
-
-    if( m_forceCursorPosition )
-        m_cursorPosition = m_view->ToScreen( m_forcedPosition );
-    else if( m_snappingEnabled )
-        m_cursorPosition = m_view->GetGAL()->GetGridPoint( m_mousePosition );
-    else
-        m_cursorPosition = m_mousePosition;
-
     bool isAutoPanning = false;
 
     if( m_autoPanEnabled )
-    {
         isAutoPanning = handleAutoPanning( aEvent );
-    }
 
     if( !isAutoPanning && aEvent.Dragging() )
     {
         if( m_state == DRAG_PANNING )
         {
-            VECTOR2D   d = m_dragStartPoint - m_mousePosition;
+            VECTOR2D   d = m_dragStartPoint - VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             VECTOR2D   delta = m_view->ToWorld( d, false );
 
-            m_view->SetCenter( m_lookStartPoint + delta );
+            setCenter( m_lookStartPoint + delta );
             aEvent.StopPropagation();
         }
         else
@@ -112,8 +134,8 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     if( aEvent.ControlDown() || aEvent.ShiftDown() )
     {
         // Scrolling
-        VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize() *
-                             ( (double) aEvent.GetWheelRotation() * wheelPanSpeed ), false );
+        VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) *
+                             ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
         double   scrollSpeed;
 
         if( abs( scrollVec.x ) > abs( scrollVec.y ) )
@@ -124,7 +146,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         VECTOR2D delta( aEvent.ControlDown() ? -scrollSpeed : 0.0,
                         aEvent.ShiftDown() ? -scrollSpeed : 0.0 );
 
-        m_view->SetCenter( m_view->GetCenter() + delta );
+        setCenter( m_view->GetCenter() + delta );
     }
     else
     {
@@ -138,16 +160,16 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         // Set scaling speed depending on scroll wheel event interval
         if( timeDiff < 500 && timeDiff > 0 )
         {
-            zoomScale = ( aEvent.GetWheelRotation() > 0.0 ) ? 2.05 - timeDiff / 500 :
+            zoomScale = ( aEvent.GetWheelRotation() > 0 ) ? 2.05 - timeDiff / 500 :
                         1.0 / ( 2.05 - timeDiff / 500 );
         }
         else
         {
-            zoomScale = ( aEvent.GetWheelRotation() > 0.0 ) ? 1.05 : 0.95;
+            zoomScale = ( aEvent.GetWheelRotation() > 0 ) ? 1.05 : 0.95;
         }
 
         VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
-        m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
+        setScale( m_view->GetScale() * zoomScale, anchor );
     }
 
     aEvent.Skip();
@@ -168,17 +190,13 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         }
 
         if( aEvent.LeftUp() )
-        {
             m_state = IDLE;     // Stop autopanning when user release left mouse button
-        }
 
         break;
 
     case DRAG_PANNING:
         if( aEvent.MiddleUp() )
-        {
             m_state = IDLE;
-        }
 
         break;
     }
@@ -199,6 +217,11 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
     {
     case AUTO_PANNING:
     {
+#if wxCHECK_VERSION( 3, 0, 0 )
+        if( !m_parentPanel->HasFocus() )
+            break;
+#endif
+
         double borderSize = std::min( m_autoPanMargin * m_view->GetScreenPixelSize().x,
                                       m_autoPanMargin * m_view->GetScreenPixelSize().y );
 
@@ -208,10 +231,23 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             dir = dir.Resize( borderSize );
 
         dir = m_view->ToWorld( dir, false );
-        m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
+        setCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
 
         // Notify tools that the cursor position has changed in the world coordinates
-        wxCommandEvent moveEvent( EVT_REFRESH_MOUSE );
+        wxMouseEvent moveEvent( EVT_REFRESH_MOUSE );
+
+        // Set the modifiers state
+#if wxCHECK_VERSION( 3, 0, 0 )
+        moveEvent.SetControlDown( wxGetKeyState( WXK_CONTROL ) );
+        moveEvent.SetShiftDown( wxGetKeyState( WXK_SHIFT ) );
+        moveEvent.SetAltDown( wxGetKeyState( WXK_ALT ) );
+#else
+        // wx <3.0 do not have accessors, but the fields are exposed
+        moveEvent.m_controlDown = wxGetKeyState( WXK_CONTROL );
+        moveEvent.m_shiftDown = wxGetKeyState( WXK_SHIFT );
+        moveEvent.m_altDown = wxGetKeyState( WXK_ALT );
+#endif
+
         wxPostEvent( m_parentPanel, moveEvent );
     }
     break;
@@ -225,7 +261,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 
 void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 {
-    m_grabMouse = aEnabled;
+    VIEW_CONTROLS::SetGrabMouse( aEnabled );
 
     if( aEnabled )
         m_parentPanel->CaptureMouse();
@@ -234,7 +270,7 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 }
 
 
-const VECTOR2D WX_VIEW_CONTROLS::GetMousePosition() const
+VECTOR2D WX_VIEW_CONTROLS::GetMousePosition() const
 {
     wxPoint msp = wxGetMousePosition();
     wxPoint winp = m_parentPanel->GetScreenPosition();
@@ -243,12 +279,19 @@ const VECTOR2D WX_VIEW_CONTROLS::GetMousePosition() const
 }
 
 
-const VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
+VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
 {
-    if( m_snappingEnabled )
-        return m_view->GetGAL()->GetGridPoint( GetMousePosition() );
+    if( m_forceCursorPosition )
+        return m_forcedPosition;
     else
-        return GetMousePosition();
+    {
+        VECTOR2D mousePosition = GetMousePosition();
+
+        if( m_snappingEnabled )
+            return m_view->GetGAL()->GetGridPoint( m_view->ToWorld( mousePosition ) );
+        else
+            return m_view->ToWorld( mousePosition );
+    }
 }
 
 
@@ -262,17 +305,19 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
     double borderEndX = m_view->GetScreenPixelSize().x - borderStart;
     double borderEndY = m_view->GetScreenPixelSize().y - borderStart;
 
-    m_panDirection = VECTOR2D();
-
     if( p.x < borderStart )
         m_panDirection.x = -( borderStart - p.x );
     else if( p.x > borderEndX )
         m_panDirection.x = ( p.x - borderEndX );
+    else
+        m_panDirection.x = 0;
 
     if( p.y < borderStart )
         m_panDirection.y = -( borderStart - p.y );
     else if( p.y > borderEndY )
         m_panDirection.y = ( p.y - borderEndY );
+    else
+        m_panDirection.y = 0;
 
     bool borderHit = ( m_panDirection.x != 0 || m_panDirection.y != 0 );
 

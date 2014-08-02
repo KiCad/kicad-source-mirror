@@ -29,7 +29,7 @@
 #include <macros.h>
 #include <common.h>
 #include <kicad_string.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <pcb_calculator.h>
 #include <pcb_calculator_datafile_lexer.h>
 #include <class_regulator_data.h>
@@ -66,13 +66,16 @@ bool PCB_CALCULATOR_FRAME::ReadDataFile()
     {
         datafile_parser.Parse( datafile );
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         delete datafile;
-        ioe.errorText += '\n';
-        ioe.errorText += _("Data file error.");
 
-        wxMessageBox( ioe.errorText );
+        wxString msg = ioe.errorText;
+
+        msg += wxChar('\n');
+        msg += _("Data file error.");
+
+        wxMessageBox( msg );
         return false;
     }
 
@@ -99,7 +102,7 @@ bool PCB_CALCULATOR_FRAME::WriteDataFile()
         while( nestlevel-- )
             formatter.Print( nestlevel, ")\n" );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         return false;
     }
@@ -127,7 +130,7 @@ int PCB_CALCULATOR_DATAFILE::WriteHeader( OUTPUTFORMATTER* aFormatter ) const th
     aFormatter->Print( nestlevel++, "(date %s)\n",
                        aFormatter->Quotew( DateAndTime() ).c_str() );
     aFormatter->Print( nestlevel++, "(tool %s)\n",
-                       aFormatter->Quotew( wxGetApp().GetAppName() +
+                       aFormatter->Quotew( Pgm().App().GetAppName() +
                                             wxChar(' ') + GetBuildVersion() ).c_str() );
 
     return nestlevel;

@@ -29,7 +29,8 @@
 
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <wxEeschemaStruct.h>
@@ -161,7 +162,7 @@ private:
     // the first is the title
     // the second is the command line
     wxArrayString     m_plugins;
-    wxConfig*         m_config;     // to store the "plugins"
+    wxConfigBase*         m_config;     // to store the "plugins"
 
 public:
     // Constructor and destructor
@@ -169,7 +170,7 @@ public:
     ~DIALOG_BOM();
 
 private:
-	void OnPluginSelected( wxCommandEvent& event );
+    void OnPluginSelected( wxCommandEvent& event );
     void OnRunPlugin( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
     void OnHelp( wxCommandEvent& event );
@@ -177,10 +178,10 @@ private:
     void OnChoosePlugin( wxCommandEvent& event );
     void OnRemovePlugin( wxCommandEvent& event );
     void OnEditPlugin( wxCommandEvent& event );
-	void OnCommandLineEdited( wxCommandEvent& event );
-	void OnNameEdited( wxCommandEvent& event );
+    void OnCommandLineEdited( wxCommandEvent& event );
+    void OnNameEdited( wxCommandEvent& event );
 
-	void pluginInit();
+    void pluginInit();
     void installPluginsList();
 };
 
@@ -195,7 +196,7 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
     DIALOG_BOM_BASE( parent )
 {
     m_parent = parent;
-    m_config = wxGetApp().GetSettings();
+    m_config = Kiface().KifaceSettings();
     installPluginsList();
 
     GetSizer()->SetSizeHints( this );
@@ -248,7 +249,7 @@ void DIALOG_BOM::installPluginsList()
         {
             cfg_parser.Parse();
         }
-        catch( IO_ERROR ioe )
+        catch( const IO_ERROR& ioe )
         {
 //            wxLogMessage( ioe.errorText );
         }
@@ -377,38 +378,37 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
  */
 void DIALOG_BOM::OnChoosePlugin( wxCommandEvent& event )
 {
-    wxString FullFileName, Mask, Path;
+    wxString mask = wxT( "*" );
+    wxString path = Pgm().GetExecutablePath();
 
-    Mask = wxT( "*" );
-    Path = wxGetApp().GetExecutablePath();
-    FullFileName = EDA_FileSelector( _( "Plugin files:" ),
-                                     Path,
-                                     FullFileName,
+    wxString fullFileName = EDA_FileSelector( _( "Plugin files:" ),
+                                     path,
                                      wxEmptyString,
-                                     Mask,
+                                     wxEmptyString,
+                                     mask,
                                      this,
                                      wxFD_OPEN,
                                      true
                                      );
-    if( FullFileName.IsEmpty() )
+    if( fullFileName.IsEmpty() )
         return;
 
     // Creates a default command line,
     // suitable to run the external tool xslproc or python
     // The default command line depending on plugin extension, currently
     // "xsl" or "exe" or "py"
-    wxString cmdLine;
-    wxFileName fn( FullFileName );
-    wxString ext = fn.GetExt();
+    wxString    cmdLine;
+    wxFileName  fn( fullFileName );
+    wxString    ext = fn.GetExt();
 
     if( ext == wxT("xsl" ) )
-        cmdLine.Printf(wxT("xsltproc -o \"%%O\" \"%s\" \"%%I\""), GetChars(FullFileName) );
+        cmdLine.Printf(wxT("xsltproc -o \"%%O\" \"%s\" \"%%I\""), GetChars( fullFileName ) );
     else if( ext == wxT("exe" ) || ext.IsEmpty() )
-        cmdLine.Printf(wxT("\"%s\" < \"%%I\" > \"%%O\""), GetChars(FullFileName) );
+        cmdLine.Printf(wxT("\"%s\" < \"%%I\" > \"%%O\""), GetChars( fullFileName ) );
     else if( ext == wxT("py" ) || ext.IsEmpty() )
-        cmdLine.Printf(wxT("python \"%s\" \"%%I\" \"%%O\""), GetChars(FullFileName) );
+        cmdLine.Printf(wxT("python \"%s\" \"%%I\" \"%%O\""), GetChars( fullFileName ) );
     else
-        cmdLine.Printf(wxT("\"%s\""), GetChars(FullFileName) );
+        cmdLine.Printf(wxT("\"%s\""), GetChars( fullFileName ) );
 
     m_textCtrlCommand->SetValue( cmdLine );
 }
@@ -449,7 +449,7 @@ void DIALOG_BOM::OnEditPlugin( wxCommandEvent& event )
         }
     }
     AddDelimiterString( pluginName );
-    wxString    editorname = wxGetApp().GetEditorName();
+    wxString    editorname = Pgm().GetEditorName();
 
     if( !editorname.IsEmpty() )
         ExecuteFile( this, editorname, pluginName );

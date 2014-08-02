@@ -744,7 +744,7 @@ void WORKSHEET_LAYOUT::SetDefaultLayout()
     {
         lp_parser.Parse( this );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         wxLogMessage( ioe.errorText );
     }
@@ -765,7 +765,7 @@ void WORKSHEET_LAYOUT::SetPageLayout( const char* aPageLayout, bool Append )
     {
         lp_parser.Parse( this );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         wxLogMessage( ioe.errorText );
     }
@@ -828,7 +828,7 @@ void WORKSHEET_LAYOUT::SetPageLayout( const wxString& aFullFileName, bool Append
         {
             lp_parser.Parse( this );
         }
-        catch( IO_ERROR ioe )
+        catch( const IO_ERROR& ioe )
         {
             wxLogMessage( ioe.errorText );
         }

@@ -204,7 +204,7 @@ public:
  *   or
  *        IO_MGR::Save(...);
  *   }
- *   catch( IO_ERROR ioe )
+ *   catch( const IO_ERROR& ioe )
  *   {
  *        // grab text from ioe, show in error window.
  *   }

@@ -96,7 +96,7 @@ bool TestPointInsidePolygon( const CPOLYGONS_LIST& aPolysList,
 /* Function TestPointInsidePolygon (overlaid)
  * same as previous, but use wxPoint and aCount corners
  */
-bool TestPointInsidePolygon( wxPoint *aPolysList, int aCount,wxPoint aRefPoint )
+bool TestPointInsidePolygon( const wxPoint *aPolysList, int aCount, const wxPoint &aRefPoint )
 {
     // count intersection points to right of (refx,refy). If odd number, point (refx,refy) is inside polyline
     int ics, ice;

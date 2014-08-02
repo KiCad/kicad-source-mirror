@@ -10,7 +10,7 @@
 #include <utility>
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <common.h>
 #include <hotkeys_basic.h>
 

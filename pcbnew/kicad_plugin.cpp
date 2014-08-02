@@ -60,6 +60,19 @@
  */
 static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
 
+///> Removes empty nets (i.e. with node count equal zero) from net classes
+void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
+{
+    for( NETCLASS::const_iterator it = aNetClass.begin(); it != aNetClass.end(); )
+    {
+        NETINFO_ITEM* netinfo = aBoard.FindNet( *it );
+
+        if( netinfo && netinfo->GetNodesCount() <= 0 ) // hopefully there are no nets with negative
+            aNetClass.Remove( it++ );                  // node count, but you never know..
+        else
+        	++it;
+    }
+}
 
 /**
  * Class FP_CACHE_ITEM
@@ -279,7 +292,7 @@ void FP_CACHE::Load()
             MODULE*     footprint = (MODULE*) m_owner->m_parser->Parse();
 
             // The footprint name is the file name without the extension.
-            footprint->SetFPID( fullPath.GetName() );
+            footprint->SetFPID( FPID( fullPath.GetName() ) );
             m_modules.insert( name, new FP_CACHE_ITEM( footprint, fullPath ) );
 
         } while( dir.GetNext( &fpFileName ) );
@@ -380,6 +393,9 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* a
 
     m_board = aBoard;       // after init()
 
+    // Prepare net mapping that assures that net codes saved in a file are consecutive integers
+    m_mapping->SetBoard( aBoard );
+
     FILE_OUTPUTFORMATTER    formatter( aFileName );
 
     m_out = &formatter;     // no ownership
@@ -467,7 +483,7 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 {
     if( m_ctl & CTL_STD_LAYER_NAMES )
     {
-        LAYER_NUM layer = aItem->GetLayer();
+        LAYER_ID layer = aItem->GetLayer();
 
         // English layer names should never need quoting.
         m_out->Print( 0, " (layer %s)", TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
@@ -480,6 +496,8 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     throw( IO_ERROR )
 {
+    const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
+
     m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel, "(general\n" );
@@ -493,13 +511,13 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                   FMTIU( aBoard->GetBoundingBox().GetRight() ).c_str(),
                   FMTIU( aBoard->GetBoundingBox().GetBottom() ).c_str() );
     m_out->Print( aNestLevel+1, "(thickness %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().GetBoardThickness() ).c_str() );
+                  FMTIU( dsnSettings.GetBoardThickness() ).c_str() );
 
     m_out->Print( aNestLevel+1, "(drawings %d)\n", aBoard->m_Drawings.GetCount() );
     m_out->Print( aNestLevel+1, "(tracks %d)\n", aBoard->GetNumSegmTrack() );
     m_out->Print( aNestLevel+1, "(zones %d)\n", aBoard->GetNumSegmZone() );
     m_out->Print( aNestLevel+1, "(modules %d)\n", aBoard->m_Modules.GetCount() );
-    m_out->Print( aNestLevel+1, "(nets %d)\n", aBoard->GetNetCount() );
+    m_out->Print( aNestLevel+1, "(nets %d)\n", (int) m_mapping->GetSize() );
     m_out->Print( aNestLevel, ")\n\n" );
 
     aBoard->GetPageSettings().Format( m_out, aNestLevel, m_ctl );
@@ -509,9 +527,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel, "(layers\n" );
 
     // Save only the used copper layers from front to back.
+#if 0   // was:
     for( LAYER_NUM layer = LAST_COPPER_LAYER; layer >= FIRST_COPPER_LAYER; --layer)
     {
-        LAYER_MSK mask = GetLayerMask( layer );
+        LSET mask = GetLayerSet( layer );
         if( mask & aBoard->GetEnabledLayers() )
         {
             m_out->Print( aNestLevel+1, "(%d %s %s", layer,
@@ -524,8 +543,27 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
             m_out->Print( 0, ")\n" );
         }
     }
+#else
+    LSET visible_layers = aBoard->GetVisibleLayers();
+
+    for( LSEQ cu = aBoard->GetEnabledLayers().CuStack();  cu;  ++cu )
+    {
+        LAYER_ID layer = *cu;
+
+        m_out->Print( aNestLevel+1, "(%d %s %s", layer,
+                      m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str(),
+                      LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
+
+        if( !visible_layers[layer] )
+            m_out->Print( 0, " hide" );
+
+        m_out->Print( 0, ")\n" );
+    }
+#endif
+
 
     // Save used non-copper layers in the order they are defined.
+#if 0 // was:
     for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER; ++layer)
     {
         LAYER_MSK mask = GetLayerMask( layer );
@@ -540,6 +578,42 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
             m_out->Print( 0, ")\n" );
         }
     }
+#else
+    // desired sequence for non Cu BOARD layers.
+    static const LAYER_ID non_cu[] = {
+        B_Adhes,        // 32
+        F_Adhes,
+        B_Paste,
+        F_Paste,
+        B_SilkS,
+        F_SilkS,
+        B_Mask,
+        F_Mask,
+        Dwgs_User,
+        Cmts_User,
+        Eco1_User,
+        Eco2_User,
+        Edge_Cuts,
+        Margin,
+        B_CrtYd,
+        F_CrtYd,
+        B_Fab,
+        F_Fab,
+    };
+
+    for( LSEQ seq = aBoard->GetEnabledLayers().Seq( non_cu, DIM( non_cu ) );  seq;  ++seq )
+    {
+        LAYER_ID layer = *seq;
+
+        m_out->Print( aNestLevel+1, "(%d %s user", layer,
+                      m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str() );
+
+        if( !visible_layers[layer] )
+            m_out->Print( 0, " hide" );
+
+        m_out->Print( 0, ")\n" );
+    }
+#endif
 
     m_out->Print( aNestLevel, ")\n\n" );
 
@@ -548,15 +622,15 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     // Save current default track width, for compatibility with older Pcbnew version;
     m_out->Print( aNestLevel+1, "(last_trace_width %s)\n",
-                  FMTIU( aBoard->GetCurrentTrackWidth() ).c_str() );
+                  FMTIU( dsnSettings.GetCurrentTrackWidth() ).c_str() );
 
     // Save custom tracks width list (the first is not saved here: this is the netclass value
-    for( unsigned ii = 1; ii < aBoard->m_TrackWidthList.size(); ii++ )
+    for( unsigned ii = 1; ii < dsnSettings.m_TrackWidthList.size(); ii++ )
         m_out->Print( aNestLevel+1, "(user_trace_width %s)\n",
-                      FMTIU( aBoard->m_TrackWidthList[ii] ).c_str() );
+                      FMTIU( dsnSettings.m_TrackWidthList[ii] ).c_str() );
 
     m_out->Print( aNestLevel+1, "(trace_clearance %s)\n",
-                  FMTIU( aBoard->m_NetClasses.GetDefault()->GetClearance() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetClearance() ).c_str() );
 
     // ZONE_SETTINGS
     m_out->Print( aNestLevel+1, "(zone_clearance %s)\n",
@@ -565,78 +639,79 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                   aBoard->GetZoneSettings().m_Zone_45_Only ? "yes" : "no" );
 
     m_out->Print( aNestLevel+1, "(trace_min %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_TrackMinWidth ).c_str() );
+                  FMTIU( dsnSettings.m_TrackMinWidth ).c_str() );
 
     m_out->Print( aNestLevel+1, "(segment_width %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_DrawSegmentWidth ).c_str() );
+                  FMTIU( dsnSettings.m_DrawSegmentWidth ).c_str() );
     m_out->Print( aNestLevel+1, "(edge_width %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_EdgeSegmentWidth ).c_str() );
+                  FMTIU( dsnSettings.m_EdgeSegmentWidth ).c_str() );
 
     // Save current default via size, for compatibility with older Pcbnew version;
     m_out->Print( aNestLevel+1, "(via_size %s)\n",
-                  FMTIU( aBoard->m_NetClasses.GetDefault()->GetViaDiameter() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetViaDiameter() ).c_str() );
     m_out->Print( aNestLevel+1, "(via_drill %s)\n",
-                  FMTIU( aBoard->m_NetClasses.GetDefault()->GetViaDrill() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetViaDrill() ).c_str() );
     m_out->Print( aNestLevel+1, "(via_min_size %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_ViasMinSize ).c_str() );
+                  FMTIU( dsnSettings.m_ViasMinSize ).c_str() );
     m_out->Print( aNestLevel+1, "(via_min_drill %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_ViasMinDrill ).c_str() );
+                  FMTIU( dsnSettings.m_ViasMinDrill ).c_str() );
 
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
-    for( unsigned ii = 1; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
+    for( unsigned ii = 1; ii < dsnSettings.m_ViasDimensionsList.size(); ii++ )
         m_out->Print( aNestLevel+1, "(user_via %s %s)\n",
-                      FMTIU( aBoard->m_ViasDimensionsList[ii].m_Diameter ).c_str(),
-                      FMTIU( aBoard->m_ViasDimensionsList[ii].m_Drill ).c_str() );
+                      FMTIU( dsnSettings.m_ViasDimensionsList[ii].m_Diameter ).c_str(),
+                      FMTIU( dsnSettings.m_ViasDimensionsList[ii].m_Drill ).c_str() );
 
     // for old versions compatibility:
-    if( aBoard->GetDesignSettings().m_BlindBuriedViaAllowed )
+    if( dsnSettings.m_BlindBuriedViaAllowed )
         m_out->Print( aNestLevel+1, "(blind_buried_vias_allowed yes)\n" );
+
     m_out->Print( aNestLevel+1, "(uvia_size %s)\n",
-                  FMTIU( aBoard->m_NetClasses.GetDefault()->GetuViaDiameter() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetuViaDiameter() ).c_str() );
     m_out->Print( aNestLevel+1, "(uvia_drill %s)\n",
-                  FMTIU( aBoard->m_NetClasses.GetDefault()->GetuViaDrill() ).c_str() );
+                  FMTIU( dsnSettings.GetDefault()->GetuViaDrill() ).c_str() );
     m_out->Print( aNestLevel+1, "(uvias_allowed %s)\n",
-                  ( aBoard->GetDesignSettings().m_MicroViasAllowed ) ? "yes" : "no" );
+                  ( dsnSettings.m_MicroViasAllowed ) ? "yes" : "no" );
     m_out->Print( aNestLevel+1, "(uvia_min_size %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_MicroViasMinSize ).c_str() );
+                  FMTIU( dsnSettings.m_MicroViasMinSize ).c_str() );
     m_out->Print( aNestLevel+1, "(uvia_min_drill %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_MicroViasMinDrill ).c_str() );
+                  FMTIU( dsnSettings.m_MicroViasMinDrill ).c_str() );
 
     m_out->Print( aNestLevel+1, "(pcb_text_width %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_PcbTextWidth ).c_str() );
+                  FMTIU( dsnSettings.m_PcbTextWidth ).c_str() );
     m_out->Print( aNestLevel+1, "(pcb_text_size %s %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_PcbTextSize.x ).c_str(),
-                  FMTIU( aBoard->GetDesignSettings().m_PcbTextSize.y ).c_str() );
+                  FMTIU( dsnSettings.m_PcbTextSize.x ).c_str(),
+                  FMTIU( dsnSettings.m_PcbTextSize.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(mod_edge_width %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_ModuleSegmentWidth ).c_str() );
+                  FMTIU( dsnSettings.m_ModuleSegmentWidth ).c_str() );
     m_out->Print( aNestLevel+1, "(mod_text_size %s %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_ModuleTextSize.x ).c_str(),
-                  FMTIU( aBoard->GetDesignSettings().m_ModuleTextSize.y ).c_str() );
+                  FMTIU( dsnSettings.m_ModuleTextSize.x ).c_str(),
+                  FMTIU( dsnSettings.m_ModuleTextSize.y ).c_str() );
     m_out->Print( aNestLevel+1, "(mod_text_width %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_ModuleTextWidth ).c_str() );
+                  FMTIU( dsnSettings.m_ModuleTextWidth ).c_str() );
 
     m_out->Print( aNestLevel+1, "(pad_size %s %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_Pad_Master.GetSize().x ).c_str(),
-                  FMTIU( aBoard->GetDesignSettings().m_Pad_Master.GetSize().y ).c_str() );
+                  FMTIU( dsnSettings.m_Pad_Master.GetSize().x ).c_str(),
+                  FMTIU( dsnSettings.m_Pad_Master.GetSize().y ).c_str() );
     m_out->Print( aNestLevel+1, "(pad_drill %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_Pad_Master.GetDrillSize().x ).c_str() );
+                  FMTIU( dsnSettings.m_Pad_Master.GetDrillSize().x ).c_str() );
 
     m_out->Print( aNestLevel+1, "(pad_to_mask_clearance %s)\n",
-                  FMTIU( aBoard->GetDesignSettings().m_SolderMaskMargin ).c_str() );
+                  FMTIU( dsnSettings.m_SolderMaskMargin ).c_str() );
 
-    if( aBoard->GetDesignSettings().m_SolderMaskMinWidth )
+    if( dsnSettings.m_SolderMaskMinWidth )
         m_out->Print( aNestLevel+1, "(solder_mask_min_width %s)\n",
-                      FMTIU( aBoard->GetDesignSettings().m_SolderMaskMinWidth ).c_str() );
+                      FMTIU( dsnSettings.m_SolderMaskMinWidth ).c_str() );
 
-    if( aBoard->GetDesignSettings().m_SolderPasteMargin != 0 )
+    if( dsnSettings.m_SolderPasteMargin != 0 )
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance %s)\n",
-                      FMTIU( aBoard->GetDesignSettings().m_SolderPasteMargin ).c_str() );
+                      FMTIU( dsnSettings.m_SolderPasteMargin ).c_str() );
 
-    if( aBoard->GetDesignSettings().m_SolderPasteMarginRatio != 0 )
+    if( dsnSettings.m_SolderPasteMarginRatio != 0 )
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %s)\n",
-                      Double2Str( aBoard->GetDesignSettings().m_SolderPasteMarginRatio ).c_str() );
+                      Double2Str( dsnSettings.m_SolderPasteMarginRatio ).c_str() );
 
     m_out->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
                   FMTIU( aBoard->GetAuxOrigin().x ).c_str(),
@@ -648,34 +723,36 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                       FMTIU( aBoard->GetGridOrigin().y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(visible_elements %X)\n",
-                  aBoard->GetDesignSettings().GetVisibleElements() );
+                  dsnSettings.GetVisibleElements() );
 
     aBoard->GetPlotOptions().Format( m_out, aNestLevel+1 );
 
     m_out->Print( aNestLevel, ")\n\n" );
 
-    int netcount = aBoard->GetNetCount();
-
-    for( int i = 0;  i < netcount;  ++i )
+    // Save net codes and names
+    for( NETINFO_MAPPING::iterator net = m_mapping->begin(), netEnd = m_mapping->end();
+            net != netEnd; ++net )
     {
-        NETINFO_ITEM*   net = aBoard->FindNet( i );
         m_out->Print( aNestLevel, "(net %d %s)\n",
-                      net->GetNet(),
-                      m_out->Quotew( net->GetNetname() ).c_str() );
+                                  m_mapping->Translate( net->GetNet() ),
+                                  m_out->Quotew( net->GetNetname() ).c_str() );
     }
 
     m_out->Print( 0, "\n" );
 
     // Save the default net class first.
-    aBoard->m_NetClasses.GetDefault()->Format( m_out, aNestLevel, m_ctl );
+    NETCLASS defaultNC = *dsnSettings.GetDefault();
+    filterNetClass( *aBoard, defaultNC );       // Remove empty nets (from a copy of a netclass)
+    defaultNC.Format( m_out, aNestLevel, m_ctl );
 
     // Save the rest of the net classes alphabetically.
-    for( NETCLASSES::const_iterator it = aBoard->m_NetClasses.begin();
-         it != aBoard->m_NetClasses.end();
+    for( NETCLASSES::const_iterator it = dsnSettings.m_NetClasses.begin();
+         it != dsnSettings.m_NetClasses.end();
          ++it )
     {
-        NETCLASS* netclass = it->second;
-        netclass->Format( m_out, aNestLevel, m_ctl );
+        NETCLASS netclass = *it->second;
+        filterNetClass( *aBoard, netclass );    // Remove empty nets (from a copy of a netclass)
+        netclass.Format( m_out, aNestLevel, m_ctl );
     }
 
     // Save the modules.
@@ -705,7 +782,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     ///       will not be saved.
 
     // Save the polygon (which are the newer technology) zones.
-    for( int i=0;  i < aBoard->GetAreaCount();  ++i )
+    for( int i = 0; i < aBoard->GetAreaCount();  ++i )
         Format( aBoard->GetArea( i ), aNestLevel );
 }
 
@@ -745,26 +822,26 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
                   FMT_IU( aDimension->m_crossBarF.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow1a (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowD1O.x ).c_str(),
-                  FMT_IU( aDimension->m_arrowD1O.y ).c_str(),
+                  FMT_IU( aDimension->m_crossBarF.x ).c_str(),
+                  FMT_IU( aDimension->m_crossBarF.y ).c_str(),
                   FMT_IU( aDimension->m_arrowD1F.x ).c_str(),
                   FMT_IU( aDimension->m_arrowD1F.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow1b (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowD2O.x ).c_str(),
-                  FMT_IU( aDimension->m_arrowD2O.y ).c_str(),
+                  FMT_IU( aDimension->m_crossBarF.x ).c_str(),
+                  FMT_IU( aDimension->m_crossBarF.y ).c_str(),
                   FMT_IU( aDimension->m_arrowD2F.x ).c_str(),
                   FMT_IU( aDimension->m_arrowD2F.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow2a (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowG1O.x ).c_str(),
-                  FMT_IU( aDimension->m_arrowG1O.y ).c_str(),
+                  FMT_IU( aDimension->m_crossBarO.x ).c_str(),
+                  FMT_IU( aDimension->m_crossBarO.y ).c_str(),
                   FMT_IU( aDimension->m_arrowG1F.x ).c_str(),
                   FMT_IU( aDimension->m_arrowG1F.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow2b (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowG2O.x ).c_str(),
-                  FMT_IU( aDimension->m_arrowG2O.y ).c_str(),
+                  FMT_IU( aDimension->m_crossBarO.x ).c_str(),
+                  FMT_IU( aDimension->m_crossBarO.y ).c_str(),
                   FMT_IU( aDimension->m_arrowG2F.x ).c_str(),
                   FMT_IU( aDimension->m_arrowG2F.y ).c_str() );
 
@@ -959,10 +1036,11 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 
     formatLayer( aModule );
 
+    m_out->Print( 0, " (tedit %lX)", aModule->GetLastEditTime() );
+
     if( !( m_ctl & CTL_OMIT_TSTAMPS ) )
     {
-        m_out->Print( 0, " (tedit %lX) (tstamp %lX)\n",
-                       aModule->GetLastEditTime(), aModule->GetTimeStamp() );
+        m_out->Print( 0, " (tstamp %lX)\n", aModule->GetTimeStamp() );
     }
     else
         m_out->Print( 0, "\n" );
@@ -1078,7 +1156,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 }
 
 
-void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
+void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
     throw( IO_ERROR )
 {
     std::string  output;
@@ -1088,46 +1166,67 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
 
     output += "(layers";
 
-    LAYER_MSK cuMask = ALL_CU_LAYERS;
+    static const LSET cu_all( LSET::AllCuMask() );
+    static const LSET fr_bk( 2, B_Cu,       F_Cu );
+    static const LSET adhes( 2, B_Adhes,    F_Adhes );
+    static const LSET paste( 2, B_Paste,    F_Paste );
+    static const LSET silks( 2, B_SilkS,    F_SilkS );
+    static const LSET mask(  2, B_Mask,     F_Mask );
+    static const LSET crt_yd(2, B_CrtYd,    F_CrtYd );
+    static const LSET fab(   2, B_Fab,      F_Fab );
+
+    LSET cu_mask = cu_all;
 
     if( m_board )
-        cuMask &= m_board->GetEnabledLayers();
+        cu_mask &= m_board->GetEnabledLayers();
 
     // output copper layers first, then non copper
 
-    if( ( aLayerMask & cuMask ) == cuMask )
+    if( ( aLayerMask & cu_mask ) == cu_mask )
     {
         output += " *.Cu";
-        aLayerMask &= ~ALL_CU_LAYERS;       // clear bits, so they are not output again below
+        aLayerMask &= ~cu_all;          // clear bits, so they are not output again below
     }
-    else if( ( aLayerMask & cuMask ) == (LAYER_BACK | LAYER_FRONT) )
+    else if( ( aLayerMask & cu_mask ) == fr_bk )
     {
         output += " F&B.Cu";
-        aLayerMask &= ~(LAYER_BACK | LAYER_FRONT);
+        aLayerMask &= ~fr_bk;
     }
 
-    if( ( aLayerMask & (ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT)) == (ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT) )
+    if( ( aLayerMask & adhes ) == adhes )
     {
         output += " *.Adhes";
-        aLayerMask &= ~(ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT);
+        aLayerMask &= ~adhes;
     }
 
-    if( ( aLayerMask & (SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT)) == (SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT) )
+    if( ( aLayerMask & paste ) == paste )
     {
         output += " *.Paste";
-        aLayerMask &= ~(SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT);
+        aLayerMask &= ~paste;
     }
 
-    if( ( aLayerMask & (SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT)) == (SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT) )
+    if( ( aLayerMask & silks ) == silks )
     {
         output += " *.SilkS";
-        aLayerMask &= ~(SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT);
+        aLayerMask &= ~silks;
     }
 
-    if( ( aLayerMask & (SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT)) == (SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT) )
+    if( ( aLayerMask & mask ) == mask )
     {
         output += " *.Mask";
-        aLayerMask &= ~(SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT);
+        aLayerMask &= ~mask;
+    }
+
+    if( ( aLayerMask & crt_yd ) == crt_yd )
+    {
+        output += " *.CrtYd";
+        aLayerMask &= ~crt_yd;
+    }
+
+    if( ( aLayerMask & fab ) == fab )
+    {
+        output += " *.Fab";
+        aLayerMask &= ~fab;
     }
 
     // output any individual layers not handled in wildcard combos above
@@ -1137,15 +1236,15 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
 
     wxString layerName;
 
-    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
+    for( LAYER_NUM layer = 0; layer < LAYER_ID_COUNT; ++layer )
     {
-        if( aLayerMask & GetLayerMask( layer ) )
+        if( aLayerMask[layer] )
         {
             if( m_board && !( m_ctl & CTL_STD_LAYER_NAMES ) )
-                layerName = m_board->GetLayerName( layer );
+                layerName = m_board->GetLayerName( LAYER_ID( layer ) );
 
             else    // I am being called from FootprintSave()
-                layerName = BOARD::GetStandardLayerName( layer );
+                layerName = BOARD::GetStandardLayerName( LAYER_ID( layer ) );
 
             output += ' ';
             output += m_out->Quotew( layerName );
@@ -1223,13 +1322,14 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, ")" );
     }
 
-    formatLayers( aPad->GetLayerMask(), 0 );
+    formatLayers( aPad->GetLayerSet(), 0 );
 
     std::string output;
 
     // Unconnected pad is default net so don't save it.
-    if( !(m_ctl & CTL_OMIT_NETS) && aPad->GetNet() != 0 )
-        StrPrintf( &output, " (net %d %s)", aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
+    if( !( m_ctl & CTL_OMIT_NETS ) && aPad->GetNetCode() != NETINFO_LIST::UNCONNECTED )
+        StrPrintf( &output, " (net %d %s)", m_mapping->Translate( aPad->GetNetCode() ),
+                   m_out->Quotew( aPad->GetNetname() ).c_str() );
 
     if( aPad->GetPadToDieLength() != 0 )
         StrPrintf( &output, " (die_length %s)", FMT_IU( aPad->GetPadToDieLength() ).c_str() );
@@ -1337,19 +1437,19 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 {
     if( aTrack->Type() == PCB_VIA_T )
     {
-        LAYER_NUM layer1, layer2;
+        LAYER_ID  layer1, layer2;
 
-        SEGVIA* via = (SEGVIA*) aTrack;
-        BOARD* board = (BOARD*) via->GetParent();
+        const VIA*  via = static_cast<const VIA*>(aTrack);
+        BOARD*      board = (BOARD*) via->GetParent();
 
         wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText() +
                      wxT( " has no parent." ) );
 
         m_out->Print( aNestLevel, "(via" );
 
-        via->ReturnLayerPair( &layer1, &layer2 );
+        via->LayerPair( &layer1, &layer2 );
 
-        switch( aTrack->GetShape() )
+        switch( via->GetViaType() )
         {
         case VIA_THROUGH:           //  Default shape not saved.
             break;
@@ -1363,15 +1463,15 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
             break;
 
         default:
-            THROW_IO_ERROR( wxString::Format( _( "unknown via type %d"  ), aTrack->GetShape() ) );
+            THROW_IO_ERROR( wxString::Format( _( "unknown via type %d"  ), via->GetViaType() ) );
         }
 
         m_out->Print( 0, " (at %s) (size %s)",
                       FMT_IU( aTrack->GetStart() ).c_str(),
                       FMT_IU( aTrack->GetWidth() ).c_str() );
 
-        if( aTrack->GetDrill() != UNDEFINED_DRILL_DIAMETER )
-            m_out->Print( 0, " (drill %s)", FMT_IU( aTrack->GetDrill() ).c_str() );
+        if( via->GetDrill() != UNDEFINED_DRILL_DIAMETER )
+            m_out->Print( 0, " (drill %s)", FMT_IU( via->GetDrill() ).c_str() );
 
         m_out->Print( 0, " (layers %s %s)",
                       m_out->Quotew( m_board->GetLayerName( layer1 ) ).c_str(),
@@ -1386,7 +1486,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
         m_out->Print( 0, " (layer %s)", m_out->Quotew( aTrack->GetLayerName() ).c_str() );
     }
 
-    m_out->Print( 0, " (net %d)", aTrack->GetNet() );
+    m_out->Print( 0, " (net %d)", m_mapping->Translate( aTrack->GetNetCode() ) );
 
     if( aTrack->GetTimeStamp() != 0 )
         m_out->Print( 0, " (tstamp %lX)", aTrack->GetTimeStamp() );
@@ -1405,8 +1505,8 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     // so be sure a dummy value is stored, just for ZONE_CONTAINER compatibility
     // (perhaps netcode and netname should be not stored)
     m_out->Print( aNestLevel, "(zone (net %d) (net_name %s)",
-                  aZone->GetIsKeepout() ? 0 : aZone->GetNet(),
-                  m_out->Quotew( aZone->GetIsKeepout() ? wxT("") : aZone->GetNetName() ).c_str() );
+                  aZone->GetIsKeepout() ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
+                  m_out->Quotew( aZone->GetIsKeepout() ? wxT("") : aZone->GetNetname() ).c_str() );
 
     formatLayer( aZone );
 
@@ -1622,20 +1722,11 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 }
 
 
-PCB_IO::PCB_IO() :
-    m_cache( 0 ),
-    m_ctl( CTL_FOR_BOARD ),         // expecting to OUTPUTFORMAT into BOARD files.
-    m_parser( new PCB_PARSER() )
-{
-    init( 0 );
-    m_out = &m_sf;
-}
-
-
 PCB_IO::PCB_IO( int aControlFlags ) :
     m_cache( 0 ),
     m_ctl( aControlFlags ),
-    m_parser( new PCB_PARSER() )
+    m_parser( new PCB_PARSER() ),
+    m_mapping( new NETINFO_MAPPING() )
 {
     init( 0 );
     m_out = &m_sf;
@@ -1646,6 +1737,7 @@ PCB_IO::~PCB_IO()
 {
     delete m_cache;
     delete m_parser;
+    delete m_mapping;
 }
 
 
@@ -1658,7 +1750,7 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPER
     m_parser->SetLineReader( &reader );
     m_parser->SetBoard( aAppendToMe );
 
-    BOARD* board = dynamic_cast<BOARD*>( m_parser->Parse() );
+    BOARD* board = dyn_cast<BOARD*>( m_parser->Parse() );
     wxASSERT( board );
 
     // Give the filename to the board if it's new
@@ -1815,7 +1907,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     module->SetParent( 0 );
     module->SetOrientation( 0 );
 
-    if( module->GetLayer() != LAYER_N_FRONT )
+    if( module->GetLayer() != F_Cu )
         module->Flip( module->GetPosition() );
 
     wxLogTrace( traceFootprintLibrary, wxT( "Creating s-expression footprint file: %s." ),

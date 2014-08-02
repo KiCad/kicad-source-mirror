@@ -29,7 +29,7 @@ add_custom_target(
 
 set( GAL_SRCS
     # Common part
-    drawpanel_gal.cpp
+    draw_panel_gal.cpp
     painter.cpp
     worksheet_viewitem.cpp
     gal/graphics_abstraction_layer.cpp
@@ -66,6 +66,48 @@ if( WIN32 AND MSYS )
     add_definitions( -DGLEW_STATIC )
 endif()
 
+
+# A shared library subsetted from common which restricts what can go into
+# a single_top link image.  By not linking to common, we control what does
+# statically go into single_top link images.  My current thinking is that only
+# wxWidgets should be a shared link from single top, everything else should be
+# statically bound into it. Otherwise you will have DSO loading problems. After it
+# sets the LIB PATHS however, we want the *.kiface modules to use shared linking.
+add_library( singletop STATIC EXCLUDE_FROM_ALL
+    confirm.cpp
+    eda_doc.cpp
+    kiway.cpp
+    kiway_holder.cpp
+    )
+
+
+# A shared library used by multiple *.kiface files and one or two program
+# launchers.  Object files can migrate into here over time, but only if they are
+# surely needed and certainly used from more than one place without recompilation.
+# Functions and data all need to use the #include <import_export.h> and be declared
+# as APIEXPORT
+set( LIB_KICAD_SRCS
+    colors.cpp
+    dlist.cpp
+    string.cpp
+    )
+
+if( future )
+add_library( lib_kicad SHARED
+    )
+target_link_libraries( lib_kicad
+    ${wxWidgets_LIBRARIES}
+    )
+set_target_properties( lib_kicad PROPERTIES
+    OUTPUT_NAME     ki
+    )
+install( TARGETS lib_kicad
+    DESTINATION ${KICAD_BIN}
+    COMPONENT binary
+    )
+endif()
+
+
 set( COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp
     dialog_about/dialog_about.cpp
@@ -93,11 +135,13 @@ set( COMMON_PAGE_LAYOUT_SRCS
     )
 
 set( COMMON_SRCS
+    ${LIB_KICAD_SRCS}
     ${COMMON_ABOUT_DLG_SRCS}
     ${COMMON_PAGE_LAYOUT_SRCS}
     base_struct.cpp
     basicframe.cpp
     bezier_curves.cpp
+    bin_mod.cpp
     bitmap.cpp
     block_commande.cpp
     build_version.cpp
@@ -107,6 +151,7 @@ set( COMMON_SRCS
     class_marker_base.cpp
     class_plotter.cpp
     class_undoredo_container.cpp
+    colors.cpp
     common.cpp
     common_plot_functions.cpp
     common_plotHPGL_functions.cpp
@@ -115,18 +160,20 @@ set( COMMON_SRCS
     common_plotGERBER_functions.cpp
     common_plotDXF_functions.cpp
     common_plotSVG_functions.cpp
+    config_params.cpp
     confirm.cpp
     copy_to_clipboard.cpp
+    convert_basic_shapes_to_polygon.cpp
     dialog_shim.cpp
     displlst.cpp
-    dlist.cpp
-    drawframe.cpp
-    drawpanel.cpp
+    draw_frame.cpp
+    draw_panel.cpp
     drawtxt.cpp
     dsnlexer.cpp
     eda_dde.cpp
     eda_doc.cpp
     filter_reader.cpp
+#    findkicadhelppath.cpp.notused      deprecated, use searchhelpfilefullpath.cpp
     gestfich.cpp
     getrunningmicrosecs.cpp
     grid_tricks.cpp
@@ -134,28 +181,38 @@ set( COMMON_SRCS
     hotkeys_basic.cpp
     hotkey_grid_table.cpp
     html_messagebox.cpp
+    kiface_i.cpp
     kiway.cpp
+    kiway_express.cpp
+    kiway_holder.cpp
+    kiway_player.cpp
     msgpanel.cpp
     netlist_keywords.cpp
     newstroke_font.cpp
-    projet_config.cpp
+    prependpath.cpp
+    project.cpp
     ptree.cpp
     reporter.cpp
     richio.cpp
+    searchhelpfilefullpath.cpp
+    search_stack.cpp
     selcolor.cpp
-    string.cpp
+    systemdirsappend.cpp
     trigo.cpp
     utf8.cpp
     wildcards_and_files_ext.cpp
     worksheet.cpp
     wxwineda.cpp
+    wxunittext.cpp
     xnode.cpp
     zoom.cpp
     )
 
-# We will not want edaappl.cpp linked into the KIFACE, only into the KIWAY.
 if( TRUE OR NOT USE_KIWAY_DLLS )
-    list( APPEND COMMON_SRCS edaappl.cpp )
+#if( NOT USE_KIWAY_DLLS )
+    # We DO NOT want pgm_base.cpp linked into the KIFACE, only into the KIWAY.
+    # Check the map files to verify eda_pgm.o not being linked in.
+    list( APPEND COMMON_SRCS pgm_base.cpp )
 endif()
 
 if( NOT HAVE_STRTOKR )
@@ -171,6 +228,7 @@ set( COMMON_SRCS
 
     math/math_util.cpp
 
+    tool/tool_action.cpp
     tool/tool_base.cpp
     tool/tool_manager.cpp
     tool/tool_dispatcher.cpp
@@ -184,17 +242,16 @@ set( COMMON_SRCS
     geometry/shape_collisions.cpp
     geometry/shape_index.cpp
 )
-
-
 add_library( common STATIC ${COMMON_SRCS} )
 add_dependencies( common lib-dependencies )
+
 
 set( PCB_COMMON_SRCS
     base_screen.cpp
     eda_text.cpp
     class_page_info.cpp
-    convert_basic_shapes_to_polygon.cpp
     pcbcommon.cpp
+    lset.cpp
     footprint_info.cpp
     ../pcbnew/basepcbframe.cpp
     ../pcbnew/class_board.cpp
@@ -219,6 +276,8 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_zone.cpp
     ../pcbnew/class_zone_settings.cpp
     ../pcbnew/classpcb.cpp
+    ../pcbnew/ratsnest_data.cpp
+    ../pcbnew/ratsnest_viewitem.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/netlist_reader.cpp
     ../pcbnew/legacy_netlist_reader.cpp

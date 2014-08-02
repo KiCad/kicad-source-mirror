@@ -27,7 +27,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_kicad.h>
 #include <wx/fs_zip.h>
 #include <wx/zipstrm.h>
 #include <wx/docview.h>
@@ -41,27 +41,29 @@
 
 #include <kicad.h>
 
-static const wxString ZipFileExtension( wxT( "zip" ) );
-static const wxString ZipFileWildcard( wxT( "Zip file (*.zip) | *.zip" ) );
+#define     ZipFileExtension        wxT( "zip" )
+#define     ZipFileWildcard         wxT( "Zip file (*.zip) | *.zip" )
 
 
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 {
-    wxString fn;
+    wxString fn = GetFileFromHistory( event.GetId(),
+                    _( "KiCad project file" ), &Pgm().GetFileHistory() );
 
-    fn = GetFileFromHistory( event.GetId(), _( "KiCad project file" ) );
-
-    if( fn != wxEmptyString )
+    if( fn.size() )
     {
         wxCommandEvent cmd( 0, wxID_ANY );
-        m_ProjectFileName = fn;
+
+        SetProjectFileName( fn );
         OnLoadProject( cmd );
     }
 }
 
+
 void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 {
-    wxFileName fn = m_ProjectFileName;
+    wxFileName fn = GetProjectFileName();
+
     fn.SetExt( ZipFileExtension );
 
     wxFileDialog dlg( this, _( "Unzip Project" ), fn.GetPath(),
@@ -71,8 +73,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString msg;
-    msg.Printf( _("\nOpen <%s>\n" ), GetChars( dlg.GetPath() ) );
+    wxString msg = wxString::Format( _("\nOpen '%s'\n" ), GetChars( dlg.GetPath() ) );
     PrintMsg( msg );
 
     wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(),
@@ -82,10 +83,11 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
         return;
 
     wxSetWorkingDirectory( dirDlg.GetPath() );
-    msg.Printf( _( "Unzipping project in <%s>\n" ), GetChars( dirDlg.GetPath() ) );
+    msg.Printf( _( "Unzipping project in '%s'\n" ), GetChars( dirDlg.GetPath() ) );
     PrintMsg( msg );
 
     wxFileSystem zipfilesys;
+
     zipfilesys.AddHandler( new wxZipFSHandler );
     zipfilesys.ChangePathTo( dlg.GetPath() + wxT( "#zip:" ) );
 
@@ -95,7 +97,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     while( !localfilename.IsEmpty() )
     {
         zipfile = zipfilesys.OpenFile( localfilename );
-        if( zipfile == NULL )
+        if( !zipfile )
         {
             DisplayError( this, wxT( "Zip file read error" ) );
             break;
@@ -131,19 +133,17 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 {
-    /* List of file extensions to save. */
+    // List of file extensions to save.
     static const wxChar* extentionList[] = {
         wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.mod" ), wxT( "*.cmp" ),
-        wxT( "*.brd" ), wxT( "*.kicad_pcb" ),
+        wxT( "*.brd" ), wxT( "*.kicad_pcb" ), wxT( "*.gbr" ),
         wxT( "*.net" ), wxT( "*.pro" ), wxT( "*.pho" ), wxT( "*.py" ),
         wxT( "*.pdf" ), wxT( "*.txt" ), wxT( "*.dcm" ), wxT( "*.kicad_wks" ),
-        NULL
     };
 
-    wxString msg;
-    size_t i;
-    wxFileName fileName = m_ProjectFileName;
-    wxString oldPath = wxGetCwd();
+    wxString    msg;
+    wxFileName  fileName = GetProjectFileName();
+    wxString    oldPath = wxGetCwd();
 
     fileName.SetExt( wxT( "zip" ) );
 
@@ -153,7 +153,6 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
-
 
     wxFileName zip = dlg.GetPath();
 
@@ -173,17 +172,21 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     // Build list of filenames to put in zip archive
     wxString currFilename;
     int zipBytesCnt = 0;    // Size of the zip file
-    for( i = 0; extentionList[i] != 0; i++ )
+
+    for( unsigned i = 0;  i<DIM( extentionList ); i++ )
     {
         bool cont = dir.GetFirst( &currFilename, extentionList[i] );
 
         while( cont )
         {
             wxFileSystem fsfile;
+
             msg.Printf(_( "Archive file <%s>" ), GetChars( currFilename ) );
             PrintMsg( msg );
+
             // Read input file and put it in zip file:
-            wxFSFile * infile = fsfile.OpenFile(currFilename);
+            wxFSFile* infile = fsfile.OpenFile(currFilename);
+
             if( infile )
             {
                 zipstream.PutNextEntry( currFilename, infile->GetModificationTime() );

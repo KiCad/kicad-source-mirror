@@ -28,7 +28,7 @@
 
 #include <fctsys.h>
 #include <wx/treectrl.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <common.h>
 #include <macros.h>
@@ -70,12 +70,8 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_EXIT, PL_EDITOR_FRAME::OnQuit )
 
     // menu Preferences
-    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
-                    PL_EDITOR_FRAME::Process_Config )
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
-                    EDA_DRAW_FRAME::SetLanguage )
-    EVT_MENU( ID_MENU_PL_EDITOR_SELECT_PREFERED_EDITOR,
-              EDA_BASE_FRAME::OnSelectPreferredEditor )
+    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END, PL_EDITOR_FRAME::Process_Config )
+    EVT_MENU( ID_MENU_PL_EDITOR_SELECT_PREFERED_EDITOR, EDA_BASE_FRAME::OnSelectPreferredEditor )
     EVT_MENU( wxID_PREFERENCES, PL_EDITOR_FRAME::Process_Config )
     EVT_MENU( ID_MENU_SWITCH_BGCOLOR, PL_EDITOR_FRAME::Process_Config )
     EVT_MENU( ID_MENU_GRID_ONOFF, PL_EDITOR_FRAME::Process_Config )
@@ -335,16 +331,29 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
     wxCHECK_RET( (item != NULL), wxT( "Cannot move NULL item." ) );
     wxPoint position = aPanel->GetParent()->GetCrossHairPosition()
                       - ( initialCursorPosition - initialPositionUi );
+    wxPoint previous_position;
 
     if( (item->GetFlags() & LOCATE_STARTPOINT) )
+    {
+        previous_position = item->GetStartPosUi();
         item->MoveStartPointToUi( position );
+    }
     else if( (item->GetFlags() & LOCATE_ENDPOINT) )
+    {
+        previous_position = item->GetEndPosUi();
         item->MoveEndPointToUi( position );
+    }
     else
+    {
+        previous_position = item->GetStartPosUi();
         item->MoveToUi( position );
+    }
 
-    // Draw the item item at it's new position.
-    if( aPanel )
+    // Draw the item item at it's new position, if it is modified,
+    // (does not happen each time the mouse is moved, because the
+    // item is placed on grid)
+    // to avoid useless computation time.
+    if( aPanel && ( previous_position != position ) )
         aPanel->Refresh();
 }
 
@@ -473,15 +482,6 @@ void PL_EDITOR_FRAME::OnQuit( wxCommandEvent& event )
     Close( true );
 }
 
-/**
- * Function SetLanguage
- * called on a language menu selection
- * Update Layer manager title and tabs texts
- */
-void PL_EDITOR_FRAME::SetLanguage( wxCommandEvent& event )
-{
-    EDA_DRAW_FRAME::SetLanguage( event );
-}
 
 void PL_EDITOR_FRAME::ToPlotter(wxCommandEvent& event)
 {

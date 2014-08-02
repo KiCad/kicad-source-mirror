@@ -5,7 +5,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <confirm.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 
 #include <general.h>
 #include <protos.h>

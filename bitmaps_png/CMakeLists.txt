@@ -176,6 +176,7 @@ set( BMAPS_MID
     copyblock
     copycomponent
     copy_button
+    copy_library
     copper_layers_setup
     cursor_shape
     cursor
@@ -286,7 +287,6 @@ set( BMAPS_MID
     import
     info
     insert_module_board
-    invert_module
     invisible_text
     kicad_icon_small
     label2glabel
@@ -334,6 +334,8 @@ set( BMAPS_MID
     mirepcb
     mirror_h
     mirror_v
+    mirror_footprint_axisX
+    mirror_footprint_axisY
     mode_module
     mode_track
     modratsnest
@@ -458,8 +460,8 @@ set( BMAPS_MID
     right
     rotate_field
     rotate_glabel
-    rotate_module_neg
-    rotate_module_pos
+    rotate_module_cw
+    rotate_module_ccw
     rotate_pin
     rotate_ccw
     rotate_cw

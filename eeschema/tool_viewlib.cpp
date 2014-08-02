@@ -116,9 +116,8 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
                                 _( "View component documents" ) );
         m_mainToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, false );
 
-        if( m_semaphore )
+        if( IsModal() )
         {
-            // The library browser is called from a "load component" command
             m_mainToolBar->AddSeparator();
             m_mainToolBar->AddTool( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
                                     wxEmptyString, KiBitmap( export_xpm ),
@@ -130,11 +129,11 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
         m_mainToolBar->Realize();
     }
 
-    if( (m_libraryName != wxEmptyString) && (m_entryName != wxEmptyString) )
+    if( m_libraryName.size() && m_entryName.size() )
     {
         lib = CMP_LIBRARY::FindLibrary( m_libraryName );
 
-        if( lib != NULL )
+        if( lib )
         {
             component = lib->FindComponent( m_entryName );
 
@@ -161,7 +160,6 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
         m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, false );
      }
 
-
     int parts_count = 1;
 
     if( component )
@@ -171,8 +169,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
     for( ii = 0; ii < parts_count; ii++ )
     {
-        wxString msg;
-        msg.Printf( _( "Unit %c" ), 'A' + ii );
+        wxString msg = wxString::Format( _( "Unit %c" ), 'A' + ii );
         m_selpartBox->Append( msg );
     }
 

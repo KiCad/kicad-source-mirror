@@ -27,9 +27,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <boost/bind.hpp>
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
+#include <class_draw_panel_gal.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
 #include <wxPcbStruct.h>
@@ -42,6 +44,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <ratsnest_data.h>
 #include <pcbnew.h>
 #include <io_mgr.h>
 
@@ -59,6 +62,8 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     wxString        msg;
     NETLIST         netlist;
     NETLIST_READER* netlistReader;
+    KIGFX::VIEW*    view = GetGalCanvas()->GetView();
+    BOARD*          board = GetBoard();
 
     netlist.SetIsDryRun( aIsDryRun );
     netlist.SetFindByTimeStamp( aSelectByTimeStamp );
@@ -82,7 +87,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
         netlistReader->LoadNetlist();
         loadFootprints( netlist, aReporter );
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         msg.Printf( _( "Error loading netlist.\n%s" ), ioe.errorText.GetData() );
         wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
@@ -93,8 +98,18 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     if( !netlist.IsDryRun() )
         GetScreen()->ClearUndoRedoList();
 
+    if( !netlist.IsDryRun() )
+    {
+        // Remove old modules
+        for( MODULE* module = board->m_Modules; module; module = module->Next() )
+        {
+            module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+            view->Remove( module );
+        }
+    }
+
     netlist.SortByReference();
-    GetBoard()->ReplaceNetlist( netlist, aDeleteSinglePadNets, aReporter );
+    board->ReplaceNetlist( netlist, aDeleteSinglePadNets, aReporter );
 
     // If it was a dry run, nothing has changed so we're done.
     if( netlist.IsDryRun() )
@@ -104,15 +119,27 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
 
     SetCurItem( NULL );
 
-    if( aDeleteUnconnectedTracks && GetBoard()->m_Track )
+    // Reload modules
+    for( MODULE* module = board->m_Modules; module; module = module->Next() )
+    {
+        module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+        view->Add( module );
+        module->ViewUpdate();
+    }
+
+    if( aDeleteUnconnectedTracks && board->m_Track )
     {
         // Remove erroneous tracks.  This should probably pushed down to the #BOARD object.
         RemoveMisConnectedTracks();
     }
 
     // Rebuild the board connectivity:
-    Compile_Ratsnest( NULL, true );
-    SetMsgPanel( GetBoard() );
+    if( IsGalCanvasActive() )
+        board->GetRatsnest()->ProcessBoard();
+    else
+        Compile_Ratsnest( NULL, true );
+
+    SetMsgPanel( board );
     m_canvas->Refresh();
 }
 
@@ -172,7 +199,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     MODULE*    module = 0;
     MODULE*    fpOnBoard;
 
-    if( aNetlist.IsEmpty() || m_footprintLibTable->IsEmpty() )
+    if( aNetlist.IsEmpty() || Prj().PcbFootprintLibs()->IsEmpty() )
         return;
 
     aNetlist.SortByFPID();

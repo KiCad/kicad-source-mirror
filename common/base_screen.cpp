@@ -175,13 +175,6 @@ void BASE_SCREEN::SetGridList( GRIDS& gridlist )
 }
 
 
-void BASE_SCREEN::GetGrids( GRIDS& aList )
-{
-    for( size_t i = 0;  i < m_grids.size();  i++ )
-        aList.push_back( m_grids[ i ] );
-}
-
-
 int BASE_SCREEN::SetGrid( const wxRealPoint& size )
 {
     wxASSERT( !m_grids.empty() );

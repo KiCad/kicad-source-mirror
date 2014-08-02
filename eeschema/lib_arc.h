@@ -100,9 +100,9 @@ public:
 
     bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
-    bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition ) const;
 
-    bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
+    bool HitTest( const wxPoint& aPosition, int aThreshold, const TRANSFORM& aTransform ) const;
 
     const EDA_RECT GetBoundingBox() const;  // Virtual
 

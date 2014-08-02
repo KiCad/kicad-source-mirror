@@ -41,6 +41,7 @@
 #include <PolyLine.h>
 #include "zones.h"
 
+#include <boost/function.hpp>
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -76,8 +77,13 @@ public:
 
     ~MODULE();
 
-    MODULE* Next() const { return (MODULE*) Pnext; }
-    MODULE* Back() const { return (MODULE*) Pback; }
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return PCB_MODULE_T == aItem->Type();
+    }
+
+    MODULE* Next() const { return static_cast<MODULE*>( Pnext ); }
+    MODULE* Back() const { return static_cast<MODULE*>( Pback ); }
 
     void Copy( MODULE* Module );        // Copy structure
 
@@ -85,9 +91,31 @@ public:
      * Function Add
      * adds the given item to this MODULE and takes ownership of its memory.
      * @param aBoardItem The item to add to this board.
-     * @param doInsert If true, then insert, else append
-     *  void    Add( BOARD_ITEM* aBoardItem, bool doInsert = true );
+     * @param doAppend If true, then append, else insert.
      */
+    void Add( BOARD_ITEM* aBoardItem, bool doAppend = true );
+
+    /**
+     * Function Delete
+     * removes the given single item from this MODULE and deletes its memory.
+     * @param aBoardItem The item to remove from this module and delete
+     */
+    void Delete( BOARD_ITEM* aBoardItem )
+    {
+        // developers should run DEBUG versions and fix such calls with NULL
+        wxASSERT( aBoardItem );
+
+        if( aBoardItem )
+            delete Remove( aBoardItem );
+    }
+
+    /**
+     * Function Remove
+     * removes \a aBoardItem from this MODULE and returns it to caller without deleting it.
+     * @param aBoardItem The item to remove from this module.
+     * @return BOARD_ITEM* \a aBoardItem which was passed in.
+     */
+    BOARD_ITEM* Remove( BOARD_ITEM* aBoardItem );
 
     /**
      * Function CalculateBoundingBox
@@ -183,7 +211,7 @@ public:
      * function IsFlipped
      * @return true if the module is flipped, i.e. on the back side of the board
      */
-    bool IsFlipped() const {return GetLayer() == LAYER_N_BACK; }
+    bool IsFlipped() const {return GetLayer() == B_Cu; }
 
 // m_ModuleStatus bits:
 #define MODULE_is_LOCKED    0x01        ///< module LOCKED: no autoplace allowed
@@ -250,8 +278,16 @@ public:
      * function ReadandInsert3DComponentShape
      * read the 3D component shape(s) of the footprint (physical shape)
      * and insert mesh in gl list
+     * @param glcanvas = the openGL canvas
+     * @param  aAllowNonTransparentObjects = true to load non transparent objects
+     * @param  aAllowTransparentObjects = true to load non transparent objects
+     * @param  aSideToLoad = false will load not fliped, true will load fliped objects
+     * in openGL, transparent objects should be drawn *after* non transparent objects
      */
-    void ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas );
+    void ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
+                                        bool aAllowNonTransparentObjects,
+                                        bool aAllowTransparentObjects,
+                                        bool aSideToLoad );
 
     /**
      * function TransformPadsShapesWithClearanceToPolygon
@@ -270,7 +306,7 @@ public:
      *  the radius of circle approximated by segments is
      *  initial radius * aCorrectionFactor
      */
-    void TransformPadsShapesWithClearanceToPolygon( LAYER_NUM aLayer,
+    void TransformPadsShapesWithClearanceToPolygon( LAYER_ID aLayer,
                             CPOLYGONS_LIST& aCornerBuffer,
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
@@ -294,12 +330,11 @@ public:
      *  initial radius * aCorrectionFactor
      */
     void TransformGraphicShapesWithClearanceToPolygonSet(
-                            LAYER_NUM aLayer,
+                            LAYER_ID aLayer,
                             CPOLYGONS_LIST& aCornerBuffer,
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
                             double          aCorrectionFactor );
-
 
     /**
      * Function DrawEdgesOnly
@@ -317,7 +352,7 @@ public:
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
-    bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition ) const;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
@@ -388,7 +423,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a D_PAD object if found otherwise NULL.
      */
-    D_PAD* GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask = ALL_LAYERS );
+    D_PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask = LSET::AllLayersMask() );
 
     enum INCLUDE_NPTH_T
     {
@@ -425,14 +460,6 @@ public:
      */
     void Add3DModel( S3D_MASTER* a3DModel );
 
-    /**
-     * Function AddPad
-     * adds \a aPad to the end of the pad list.
-     *
-     * @param aPad A pointer to a #D_PAD to add to the list.
-     */
-    void AddPad( D_PAD* aPad );
-
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                          const KICAD_T scanTypes[] );
 
@@ -446,6 +473,23 @@ public:
     BITMAP_DEF GetMenuImage() const { return  module_xpm; }
 
     EDA_ITEM* Clone() const;
+
+    /**
+     * Function RunOnChildren
+     *
+     * Invokes a function on all BOARD_ITEMs that belong to the module (pads, drawings, texts).
+     * @param aFunction is the function to be invoked.
+     */
+    void RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction );
+
+    /// @copydoc VIEW_ITEM::ViewUpdate()
+    void ViewUpdate( int aUpdateFlags = KIGFX::VIEW_ITEM::ALL );
+
+    /// @copydoc VIEW_ITEM::ViewGetLayers()
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+
+    /// @copydoc VIEW_ITEM::ViewGetLOD()
+    virtual unsigned int ViewGetLOD( int aLayer ) const;
 
     /**
      * Function CopyNetlistSettings
@@ -470,14 +514,14 @@ public:
     static bool IsLibNameValid( const wxString & aName );
 
     /**
-     * static function ReturnStringLibNameInvalidChars
+     * static function StringLibNameInvalidChars
      * Test for validity of the name in a library of the footprint
      * ( no spaces, dir separators ... )
      * @param aUserReadable = false to get the list of invalid chars
      *        true to get a readable form (i.e ' ' = 'space' '\\t'= 'tab')
      * @return a constant std::string giving the list of invalid chars in lib name
      */
-    static const wxChar* ReturnStringLibNameInvalidChars( bool aUserReadable );
+    static const wxChar* StringLibNameInvalidChars( bool aUserReadable );
 
     /**
      * Function SetInitialComments

@@ -34,6 +34,7 @@
 #include <wxPcbStruct.h>
 #include <macros.h>
 #include <pcbcommon.h>
+#include <ratsnest_data.h>
 
 #include <class_board.h>
 #include <class_track.h>
@@ -53,7 +54,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
     {
         if( g_CurrentTrackList.GetCount() > 0 )
         {
-            LAYER_NUM previous_layer = getActiveLayer();
+            LAYER_ID previous_layer = GetActiveLayer();
 
             DBG( g_CurrentTrackList.VerifyListIntegrity(); )
 
@@ -86,7 +87,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
 
             // Correct active layer which could change if a via
             // has been erased
-            setActiveLayer( previous_layer );
+            SetActiveLayer( previous_layer );
 
             UpdateStatusBar();
 
@@ -120,10 +121,12 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
         return NULL;
     }
 
-    current_net_code = aTrack->GetNet();
+    current_net_code = aTrack->GetNetCode();
 
     DLIST<TRACK>* container = (DLIST<TRACK>*)aTrack->GetList();
     wxASSERT( container );
+    GetBoard()->GetRatsnest()->Remove( aTrack );
+    aTrack->ViewRelease();
     container->Remove( aTrack );
 
     // redraw the area where the track was
@@ -142,7 +145,7 @@ void PCB_EDIT_FRAME::Delete_Track( wxDC* DC, TRACK* aTrack )
 {
     if( aTrack != NULL )
     {
-        int current_net_code = aTrack->GetNet();
+        int current_net_code = aTrack->GetNetCode();
         Remove_One_Track( DC, aTrack );
         OnModify();
         TestNetConnection( DC, current_net_code );
@@ -160,7 +163,7 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
 
     PICKED_ITEMS_LIST itemsList;
     ITEM_PICKER       picker( NULL, UR_DELETED );
-    int    net_code_delete = aTrack->GetNet();
+    int    net_code_delete = aTrack->GetNetCode();
 
     /* Search the first item for the given net code */
     TRACK* trackList = GetBoard()->m_Track->GetStartNetCode( net_code_delete );
@@ -171,9 +174,11 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
     for( TRACK* segm = trackList;  segm; segm = next_track, ++ii )
     {
         next_track = segm->Next();
-        if( segm->GetNet() != net_code_delete )
+        if( segm->GetNetCode() != net_code_delete )
             break;
 
+        GetBoard()->GetRatsnest()->Remove( segm );
+        segm->ViewRelease();
         GetBoard()->m_Track.Remove( segm );
 
         // redraw the area where the track was
@@ -202,7 +207,7 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     if( segments_to_delete_count == 0 )
         return;
 
-    int net_code = pt_segm->GetNet();
+    int net_code = pt_segm->GetNetCode();
     PICKED_ITEMS_LIST itemsList;
     ITEM_PICKER       picker( NULL, UR_DELETED );
 
@@ -219,6 +224,8 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
                      << TO_UTF8( TRACK::ShowState( tracksegment->GetStatus() ) ) \
                      << std::endl; )
 
+        GetBoard()->GetRatsnest()->Remove( tracksegment );
+        tracksegment->ViewRelease();
         GetBoard()->m_Track.Remove( tracksegment );
 
         // redraw the area where the track was

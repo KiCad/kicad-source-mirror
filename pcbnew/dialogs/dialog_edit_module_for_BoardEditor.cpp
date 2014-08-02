@@ -29,11 +29,12 @@
 
 
 #include <fctsys.h>
+#include <kiface_i.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcbnew.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gestfich.h>
 #include <3d_struct.h>
 #include <3d_viewer.h>
@@ -95,7 +96,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     m_YPosUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
     m_LayerCtrl->SetSelection(
-         (m_CurrentModule->GetLayer() == LAYER_N_BACK) ? 1 : 0 );
+         (m_CurrentModule->GetLayer() == B_Cu) ? 1 : 0 );
 
     bool select = false;
     switch( int( m_CurrentModule->GetOrientation() ) )
@@ -427,17 +428,34 @@ void DIALOG_MODULE_BOARD_EDITOR::Remove3DShape( wxCommandEvent& event )
 
 void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
 {
-    wxString fullfilename, shortfilename;
-    wxString fullpath;
+    PROJECT&        prj = Prj();
+    SEARCH_STACK&   search = Kiface().KifaceSearch();
 
-    fullpath = wxGetApp().ReturnLastVisitedLibraryPath( LIB3D_PATH );
+    wxString    fullpath;
+    wxString    kisys3dmod = wxGetenv( wxT( KISYS3DMOD ) );
+
+    if( !kisys3dmod || !wxFileName::IsDirReadable( kisys3dmod ) )
+    {
+        fullpath = search.FindValidPath( LIB3D_PATH );
+    }
+
+    if( !fullpath )
+    {
+        fullpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
+        if( !fullpath )
+            fullpath = search.LastVisitedPath( LIB3D_PATH );
+    }
+
 #ifdef __WINDOWS__
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
 
-    wxString fileFilters;
-    fileFilters = wxGetTranslation( Shapes3DFileWildcard );
-    fileFilters += wxChar(  '|' );
+    wxString    fullfilename;
+    wxString    shortfilename;
+
+    wxString    fileFilters = wxGetTranslation( Shapes3DFileWildcard );
+
+    fileFilters += wxChar( '|' );
     fileFilters += wxGetTranslation( IDF3DFileWildcard );
 
     fullfilename = EDA_FileSelector( _( "3D Shape:" ),
@@ -454,45 +472,42 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
         return;
 
     wxFileName fn = fullfilename;
-    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    /* If the file path is already in the default search path
-     * list, just add the name to the list.  Otherwise, add
-     * the name with the full or relative path.
+    prj.SetRString( PROJECT::VIEWER_3D_PATH, fn.GetPath() );
+
+    /* If the file path is already in the library search paths
+     * list, just add the library name to the list.  Otherwise, add
+     * the library name with the full or relative path.
      * the relative path, when possible is preferable,
-     * because it preserve use of default search path, when the path is a
-     * sub path
+     * because it preserve use of default libraries paths, when the path is a
+     * sub path of these default paths
      */
+    shortfilename = search.FilenameWithRelativePathInSearchList( fullfilename );
 
-    wxString default_path;
-    wxGetEnv( wxT( KISYS3DMOD ), &default_path );
-    fn.MakeRelativeTo( default_path );
-
-    // Here, we want a path relative only to the default_path
-    if( fn.GetPathWithSep().StartsWith( wxT("..") ) )
-        fn = fullfilename;  // keep the full file name
-
-    shortfilename = fn.GetFullPath();
-
-    if( fn.IsAbsolute() )
-    {   // Absolute path, ask if the user wants a relative one
+    wxFileName aux = shortfilename;
+    if( aux.IsAbsolute() )
+    {
+        // Absolute path, ask if the user wants a relative one
         int diag = wxMessageBox(
             _( "Use a relative path?" ),
             _( "Path type" ),
             wxYES_NO | wxICON_QUESTION, this );
 
         if( diag == wxYES )
-        {   // Make it relative
-            fn.MakeRelativeTo( wxT(".") );
-            shortfilename = fn.GetFullPath();
+        {
+            // Make it relative
+            aux.MakeRelativeTo( wxT(".") );
+            shortfilename = aux.GetPathWithSep() + aux.GetFullName();
         }
     }
 
     S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
+
 #ifdef __WINDOWS__
     // Store filename in Unix notation
     shortfilename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
+
     new3DShape->SetShape3DName( shortfilename );
     m_Shapes3D_list.push_back( new3DShape );
     m_3D_ShapeNameListBox->Append( shortfilename );
@@ -526,9 +541,9 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     m_CurrentModule->Value().Copy( m_ValueCopy );
 
     // Initialize masks clearances
-    m_CurrentModule->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
-    m_CurrentModule->SetLocalSolderMaskMargin( ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
-    m_CurrentModule->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
+    m_CurrentModule->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
+    m_CurrentModule->SetLocalSolderMaskMargin( ValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
+    m_CurrentModule->SetLocalSolderPasteMargin( ValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
 
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
@@ -565,8 +580,8 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     }
 
     // Set Module Position
-    modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX );
-    modpos.y = ReturnValueFromTextCtrl( *m_ModPositionY );
+    modpos.x = ValueFromTextCtrl( *m_ModPositionX );
+    modpos.y = ValueFromTextCtrl( *m_ModPositionY );
     m_CurrentModule->SetPosition( modpos );
     m_CurrentModule->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
@@ -604,17 +619,17 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     bool change_layer = false;
     if( m_LayerCtrl->GetSelection() == 0 )     // layer req = COMPONENT
     {
-        if( m_CurrentModule->GetLayer() == LAYER_N_BACK )
+        if( m_CurrentModule->GetLayer() == B_Cu )
             change_layer = true;
     }
-    else if( m_CurrentModule->GetLayer() == LAYER_N_FRONT )
+    else if( m_CurrentModule->GetLayer() == F_Cu )
         change_layer = true;
 
     if( change_layer )
         m_CurrentModule->Flip( m_CurrentModule->GetPosition() );
 
     // Update 3D shape list
-    int         ii = m_3D_ShapeNameListBox->GetSelection();
+    int ii = m_3D_ShapeNameListBox->GetSelection();
 
     if( ii >= 0 )
         TransfertDisplayTo3DValues( ii  );
@@ -692,3 +707,4 @@ void DIALOG_MODULE_BOARD_EDITOR::OnEditValue( wxCommandEvent& event )
     m_Parent->SetCrossHairPosition( tmp );
     m_ValueCtrl->SetValue( m_ValueCopy->GetText() );
 }
+

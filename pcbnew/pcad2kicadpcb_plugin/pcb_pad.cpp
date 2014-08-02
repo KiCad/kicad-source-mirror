@@ -194,6 +194,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
     int             height = 0;
 
     D_PAD* pad = new D_PAD( aModule );
+
     aModule->Pads().PushBack( pad );
 
     if( !m_isHolePlated && m_hole )
@@ -206,7 +207,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
         pad->SetDrillSize( wxSize( m_hole, m_hole ) );
         pad->SetSize( wxSize( m_hole, m_hole ) );
 
-        pad->SetLayerMask( ALL_CU_LAYERS  | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT );
+        pad->SetLayerSet( LSET::AllCuMask() | LSET( 3, B_Mask, F_Mask ) );
     }
     else
     {
@@ -219,21 +220,18 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
 
             if( padShape->m_width > 0 && padShape->m_height > 0 )
             {
-                if( padShape->m_KiCadLayer == LAYER_N_FRONT
-                    || padShape->m_KiCadLayer == LAYER_N_BACK )
+                if( padShape->m_KiCadLayer == F_Cu ||
+                    padShape->m_KiCadLayer == B_Cu )
                 {
                     padShapeName = padShape->m_shape;
                     width = padShape->m_width;
                     height = padShape->m_height;
 
                     // assume this is SMD pad
-                    if( padShape->m_KiCadLayer == LAYER_N_FRONT )
-                        pad->SetLayerMask( LAYER_FRONT | SOLDERPASTE_LAYER_FRONT |
-                                           SOLDERMASK_LAYER_FRONT );
+                    if( padShape->m_KiCadLayer == F_Cu )
+                        pad->SetLayerSet( LSET( 3, F_Cu, F_Paste, F_Mask ) );
                     else
-                        pad->SetLayerMask( LAYER_BACK | SOLDERPASTE_LAYER_BACK |
-                                           SOLDERMASK_LAYER_BACK );
-
+                        pad->SetLayerSet( LSET( 3, B_Cu, B_Paste, B_Mask ) );
                     break;
                 }
             }
@@ -241,7 +239,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
 
         if( padType == PAD_STANDARD )
             // actually this is a thru-hole pad
-            pad->SetLayerMask( ALL_CU_LAYERS  | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT );
+            pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );
 
         if( width == 0 || height == 0 )
             THROW_IO_ERROR( wxT( "pad with zero size" ) );
@@ -273,8 +271,16 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
 
         pad->SetAttribute( padType );
 
-        pad->SetNet( 0 );
-        pad->SetNetname( m_net );
+        // Set the proper net code
+        NETINFO_ITEM* netinfo = m_board->FindNet( m_net );
+        if( netinfo == NULL )   // I believe this should not happen, but just in case
+        {
+            // It is a new net
+            netinfo = new NETINFO_ITEM( m_board, m_net );
+            m_board->AppendNet( netinfo );
+        }
+
+        pad->SetNetCode( netinfo->GetNet() );
     }
 
     if( !aEncapsulatedPad )
@@ -305,8 +311,8 @@ void PCB_PAD::AddToBoard()
 
             if( padShape->m_width > 0 && padShape->m_height > 0 )
             {
-                if( padShape->m_KiCadLayer == LAYER_N_FRONT
-                    || padShape->m_KiCadLayer == LAYER_N_BACK )
+                if( padShape->m_KiCadLayer == F_Cu
+                    || padShape->m_KiCadLayer == B_Cu )
                 {
                     width = padShape->m_width;
                     height = padShape->m_height;
@@ -321,7 +327,7 @@ void PCB_PAD::AddToBoard()
 
         if( IsCopperLayer( m_KiCadLayer ) )
         {
-            SEGVIA* via = new SEGVIA( m_board );
+            VIA* via = new VIA( m_board );
             m_board->m_Track.Append( via );
 
             via->SetTimeStamp( 0 );
@@ -330,12 +336,12 @@ void PCB_PAD::AddToBoard()
             via->SetEnd( wxPoint( m_positionX, m_positionY ) );
 
             via->SetWidth( height );
-            via->SetShape( VIA_THROUGH );
-            ( (SEGVIA*) via )->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
+            via->SetViaType( VIA_THROUGH );
+            via->SetLayerPair( F_Cu, B_Cu );
             via->SetDrill( m_hole );
 
             via->SetLayer( m_KiCadLayer );
-            via->SetNet( m_netCode );
+            via->SetNetCode( m_netCode );
         }
     }
     else // pad

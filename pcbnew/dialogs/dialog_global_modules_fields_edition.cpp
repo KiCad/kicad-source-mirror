@@ -97,11 +97,11 @@ void DIALOG_GLOBAL_MODULES_FIELDS_EDITION::initDialog()
     m_SizeYunit->SetLabel( GetAbbreviatedUnitsLabel() );
     m_Ticknessunit->SetLabel( GetAbbreviatedUnitsLabel() );
     m_SizeX_Value->SetValue(
-        ReturnStringFromValue( g_UserUnit, m_brdSettings->m_ModuleTextSize.x ) );
+        StringFromValue( g_UserUnit, m_brdSettings->m_ModuleTextSize.x ) );
     m_SizeY_Value->SetValue(
-        ReturnStringFromValue( g_UserUnit, m_brdSettings->m_ModuleTextSize.y ) );
+        StringFromValue( g_UserUnit, m_brdSettings->m_ModuleTextSize.y ) );
     m_TicknessValue->SetValue(
-        ReturnStringFromValue( g_UserUnit, m_brdSettings->m_ModuleTextWidth) );
+        StringFromValue( g_UserUnit, m_brdSettings->m_ModuleTextWidth) );
 
     Layout();
     GetSizer()->SetSizeHints( this );
@@ -116,9 +116,9 @@ void DIALOG_GLOBAL_MODULES_FIELDS_EDITION::OnOKClick( wxCommandEvent& event )
     m_othersSelection = m_OtherFields->GetValue();
     m_filterString = m_ModuleFilter->GetValue();
 
-    m_brdSettings->m_ModuleTextSize.x = ReturnValueFromTextCtrl( *m_SizeX_Value );
-    m_brdSettings->m_ModuleTextSize.y = ReturnValueFromTextCtrl( *m_SizeY_Value );
-    m_brdSettings->m_ModuleTextWidth = ReturnValueFromTextCtrl( *m_TicknessValue );
+    m_brdSettings->m_ModuleTextSize.x = ValueFromTextCtrl( *m_SizeX_Value );
+    m_brdSettings->m_ModuleTextSize.y = ValueFromTextCtrl( *m_SizeY_Value );
+    m_brdSettings->m_ModuleTextWidth = ValueFromTextCtrl( *m_TicknessValue );
 
     // clip m_ModuleTextWidth to the 1/4 of min size, to keep it always readable
     int minsize = std::min( m_brdSettings->m_ModuleTextSize.x,

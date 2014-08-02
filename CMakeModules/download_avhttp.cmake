@@ -38,6 +38,12 @@
 # Where the library is to be installed.
 set( PREFIX ${DOWNLOAD_DIR}/avhttp )
 
+if( KICAD_SKIP_BOOST )
+    set( AVHTTP_DEPEND "" )
+else()
+    set( AVHTTP_DEPEND "boost" )
+endif()
+
 
 # Install the AVHTTP header only library ${PREFIX}
 ExternalProject_Add( avhttp
@@ -46,7 +52,7 @@ ExternalProject_Add( avhttp
 
     # grab it from a local zip file for now, cmake caller's source dir
     URL             ${CMAKE_CURRENT_SOURCE_DIR}/avhttp-master.zip
-    DEPENDS         boost
+    DEPENDS         ${AVHTTP_DEPEND}
 
     CONFIGURE_COMMAND ""
 

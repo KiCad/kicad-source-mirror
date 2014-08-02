@@ -99,11 +99,11 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME
 
     // Size:
     m_staticTextSizeUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_TargetSizeCtrl->SetValue( ReturnStringFromValue( g_UserUnit, m_Target->GetSize() ) );
+    m_TargetSizeCtrl->SetValue( StringFromValue( g_UserUnit, m_Target->GetSize() ) );
 
     // Thickness:
     m_staticTextThicknessUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_TargetThicknessCtrl->SetValue( ReturnStringFromValue( g_UserUnit, m_Target->GetWidth() ) );
+    m_TargetThicknessCtrl->SetValue( StringFromValue( g_UserUnit, m_Target->GetWidth() ) );
 
     // Shape
     m_TargetShape->SetSelection( m_Target->GetShape() ? 1 : 0 );
@@ -127,7 +127,8 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick( wxCommandEvent& event )
  */
 void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
 {
-    m_Target->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
+    if( m_DC )
+        m_Target->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
 
     // Save old item in undo list, if is is not currently edited (will be later if so)
     if( m_Target->GetFlags() == 0 )
@@ -137,15 +138,16 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
         m_Target->SetFlags( IN_EDIT );      // set flag in edit to force
                                             // undo/redo/abort proper operation
 
-    int tmp = ReturnValueFromString( g_UserUnit, m_TargetThicknessCtrl->GetValue() );
+    int tmp = ValueFromString( g_UserUnit, m_TargetThicknessCtrl->GetValue() );
     m_Target->SetWidth( tmp );
 
-    MireDefaultSize = ReturnValueFromString( g_UserUnit, m_TargetSizeCtrl->GetValue() );
+    MireDefaultSize = ValueFromString( g_UserUnit, m_TargetSizeCtrl->GetValue() );
     m_Target->SetSize( MireDefaultSize );
 
     m_Target->SetShape( m_TargetShape->GetSelection() ? 1 : 0 );
 
-    m_Target->Draw( m_Parent->GetCanvas(), m_DC, ( m_Target->IsMoving() ) ? GR_XOR : GR_OR );
+    if( m_DC )
+        m_Target->Draw( m_Parent->GetCanvas(), m_DC, ( m_Target->IsMoving() ) ? GR_XOR : GR_OR );
 
     m_Parent->OnModify();
     EndModal( 1 );
@@ -207,7 +209,7 @@ PCB_TARGET* PCB_EDIT_FRAME::CreateTarget( wxDC* DC )
 
     GetBoard()->Add( target );
 
-    target->SetLayer( EDGE_N );
+    target->SetLayer( Edge_Cuts );
     target->SetWidth( GetDesignSettings().m_EdgeSegmentWidth );
     target->SetSize( MireDefaultSize );
     target->SetPosition( GetCrossHairPosition() );

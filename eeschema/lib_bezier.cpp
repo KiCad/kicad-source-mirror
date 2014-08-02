@@ -345,7 +345,7 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 }
 
 
-bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
+bool LIB_BEZIER::HitTest( const wxPoint& aRefPos ) const
 {
     int mindist = GetPenSize() / 2;
 
@@ -357,7 +357,7 @@ bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
 }
 
 
-bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_BEZIER::HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const
 {
     wxPoint ref, start, end;
 
@@ -411,7 +411,7 @@ void LIB_BEZIER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     LIB_ITEM::GetMsgPanelInfo( aList );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
+    msg = StringFromValue( g_UserUnit, m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line width" ), msg, BLUE ) );
 

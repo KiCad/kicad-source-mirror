@@ -11,7 +11,9 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
+#include <kiway_express.h>
 #include <wxPcbStruct.h>
 #include <eda_dde.h>
 #include <macros.h>
@@ -87,7 +89,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         if( pad )
         {
-            netcode = pad->GetNet();
+            netcode = pad->GetNetCode();
 
             // put cursor on the pad:
             pos = pad->GetPosition();
@@ -130,6 +132,55 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 }
 
 
+std::string FormatProbeItem( BOARD_ITEM* aItem )
+{
+    MODULE*     module;
+
+    switch( aItem->Type() )
+    {
+    case PCB_MODULE_T:
+        module = (MODULE*) aItem;
+        return StrPrintf( "$PART: \"%s\"", TO_UTF8( module->GetReference() ) );
+
+    case PCB_PAD_T:
+        {
+            module = (MODULE*) aItem->GetParent();
+            wxString pad = ((D_PAD*)aItem)->GetPadName();
+
+            return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"",
+                     TO_UTF8( module->GetReference() ),
+                     TO_UTF8( pad ) );
+        }
+
+    case PCB_MODULE_TEXT_T:
+        {
+            module = (MODULE*) aItem->GetParent();
+
+            TEXTE_MODULE*   text_mod = (TEXTE_MODULE*) aItem;
+
+            const char*     text_key;
+
+            if( text_mod->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
+                text_key = "$REF:";
+            else if( text_mod->GetType() == TEXTE_MODULE::TEXT_is_VALUE )
+                text_key = "$VAL:";
+            else
+                break;
+
+            return StrPrintf( "$PART: \"%s\" %s \"%s\"",
+                     TO_UTF8( module->GetReference() ),
+                     text_key,
+                     TO_UTF8( text_mod->GetText() ) );
+        }
+
+    default:
+        break;
+    }
+
+    return "";
+}
+
+
 /**
  * Send a remote command to Eeschema via a socket,
  * @param objectToSync = item to be located on schematic (module, pin or text)
@@ -139,57 +190,45 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
  * $PART: "reference" $REF: "reference" put cursor on the component ref
  * $PART: "reference" $VAL: "value" put cursor on the component value
  */
-void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
+void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* aSyncItem )
 {
-    char          cmd[1024];
-    const char*   text_key;
-    MODULE*       module = NULL;
-    D_PAD*        pad;
-    TEXTE_MODULE* text_mod;
-    wxString      msg;
-
-    if( objectToSync == NULL )
+#if 1
+    wxASSERT( aSyncItem );      // can't we fix the caller?
+#else
+    if( !aSyncItem )
         return;
+#endif
 
-    switch( objectToSync->Type() )
+    std::string packet = FormatProbeItem( aSyncItem );
+
+    if( packet.size() )
     {
-    case PCB_MODULE_T:
-        module = (MODULE*) objectToSync;
-        sprintf( cmd, "$PART: \"%s\"", TO_UTF8( module->GetReference() ) );
-        break;
-
-    case PCB_PAD_T:
-        module = (MODULE*) objectToSync->GetParent();
-        pad    = (D_PAD*) objectToSync;
-        msg    = pad->GetPadName();
-        sprintf( cmd, "$PART: \"%s\" $PAD: \"%s\"",
-                 TO_UTF8( module->GetReference() ),
-                 TO_UTF8( msg ) );
-        break;
-
-    case PCB_MODULE_TEXT_T:
-        module   = (MODULE*) objectToSync->GetParent();
-        text_mod = (TEXTE_MODULE*) objectToSync;
-
-        if( text_mod->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
-            text_key = "$REF:";
-        else if( text_mod->GetType() == TEXTE_MODULE::TEXT_is_VALUE )
-            text_key = "$VAL:";
+        if( Kiface().IsSingle() )
+            SendCommand( MSG_TO_SCH, packet.c_str() );
         else
-            break;
-
-        sprintf( cmd, "$PART: \"%s\" %s \"%s\"",
-                 TO_UTF8( module->GetReference() ),
-                 text_key,
-                 TO_UTF8( text_mod->GetText() ) );
-        break;
-
-    default:
-        break;
-    }
-
-    if( module )
-    {
-        SendCommand( MSG_TO_SCH, cmd );
+        {
+            // Typically ExpressMail is going to be s-expression packets, but since
+            // we have existing interpreter of the cross probe packet on the other
+            // side in place, we use that here.
+            Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, packet, this );
+        }
     }
 }
+
+
+void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+{
+    const std::string& payload = mail.GetPayload();
+
+    switch( mail.Command() )
+    {
+    case MAIL_CROSS_PROBE:
+        ExecuteRemoteCommand( payload.c_str() );
+        break;
+
+    // many many others.
+    default:
+        ;
+    }
+}
+

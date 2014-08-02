@@ -51,13 +51,22 @@ public:
 
     ~EDGE_MODULE();
 
-    EDGE_MODULE* Next() const { return (EDGE_MODULE*) Pnext; }
-    EDGE_MODULE* Back() const { return (EDGE_MODULE*) Pback; }
-
     /// skip the linked list stuff, and parent
     const EDGE_MODULE& operator = ( const EDGE_MODULE& rhs );
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && PCB_MODULE_EDGE_T == aItem->Type();
+    }
+
     void Copy( EDGE_MODULE* source );           // copy structure
+
+    void Move( const wxPoint& aMoveVector )
+    {
+        m_Start += aMoveVector;
+        m_End   += aMoveVector;
+        SetLocalCoord();
+    }
 
     void SetStart0( const wxPoint& aPoint )     { m_Start0 = aPoint; }
     const wxPoint& GetStart0() const            { return m_Start0; }
@@ -65,6 +74,10 @@ public:
     void SetEnd0( const wxPoint& aPoint )       { m_End0 = aPoint; }
     const wxPoint& GetEnd0() const              { return m_End0; }
 
+    ///> Set relative coordinates.
+    void SetLocalCoord();
+
+    ///> Set absolute coordinates.
     void SetDrawCoord();
 
     /* drawing functions */

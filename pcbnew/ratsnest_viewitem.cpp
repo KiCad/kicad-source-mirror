@@ -30,6 +30,7 @@
 #include <ratsnest_viewitem.h>
 #include <ratsnest_data.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <pcb_painter.h>
 #include <layers_id_colors_and_visibility.h>
 
 #include <boost/foreach.hpp>
@@ -57,41 +58,49 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
     aGal->SetIsStroke( true );
     aGal->SetIsFill( false );
     aGal->SetLineWidth( 1.0 );
-    aGal->SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 0.4 ) );
+    RENDER_SETTINGS* rs = m_view->GetPainter()->GetSettings();
+    COLOR4D color = rs->GetColor( NULL, ITEM_GAL_LAYER( RATSNEST_VISIBLE ) );
+    int highlightedNet = rs->GetHighlightNetCode();
 
-    // Draw the temporary ratsnest
-    BOOST_FOREACH( const RN_NET& net, m_data->GetNets() )
+    for( int i = 1; i < m_data->GetNetCount(); ++i )
     {
+        RN_NET& net = m_data->GetNet( i );
+
         if( !net.IsVisible() )
             continue;
 
-        // Avoid duplicate destinations for ratsnest lines by storing already used nodes
-        boost::unordered_set<RN_NODE_PTR> usedDestinations;
+        // Set brighter color for the temporary ratsnest
+        aGal->SetStrokeColor( color.Brightened( 0.8 ) );
 
         // Draw the "dynamic" ratsnest (ie. for objects that may be currently being moved)
         BOOST_FOREACH( const RN_NODE_PTR& node, net.GetSimpleNodes() )
         {
             RN_NODE_PTR dest = net.GetClosestNode( node, WITHOUT_FLAG() );
 
-            if( dest && usedDestinations.find( dest ) == usedDestinations.end() )
+            if( dest )
             {
                 VECTOR2D origin( node->GetX(), node->GetY() );
                 VECTOR2D end( dest->GetX(), dest->GetY() );
 
                 aGal->DrawLine( origin, end );
-                usedDestinations.insert( dest );
+
+                // Avoid duplicate destinations for ratsnest lines by storing already used nodes
+                net.AddBlockedNode( dest );
             }
         }
 
         // Draw the "static" ratsnest
+        if( i != highlightedNet )
+            aGal->SetStrokeColor( color );  // using the default ratsnest color for not highlighted
+
         const std::vector<RN_EDGE_PTR>* edges = net.GetUnconnected();
         if( edges == NULL )
             continue;
 
         BOOST_FOREACH( const RN_EDGE_PTR& edge, *edges )
         {
-            const RN_NODE_PTR& sourceNode = edge->getSourceNode();
-            const RN_NODE_PTR& targetNode = edge->getTargetNode();
+            const RN_NODE_PTR& sourceNode = edge->GetSourceNode();
+            const RN_NODE_PTR& targetNode = edge->GetTargetNode();
             VECTOR2D source( sourceNode->GetX(), sourceNode->GetY()  );
             VECTOR2D target( targetNode->GetX(), targetNode->GetY() );
 

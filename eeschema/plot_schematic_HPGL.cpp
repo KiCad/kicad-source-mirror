@@ -97,7 +97,7 @@ static const wxChar* plot_sheet_list( int aSize )
 
 void DIALOG_PLOT_SCHEMATIC::SetHPGLPenWidth()
 {
-    m_HPGLPenSize = ReturnValueFromTextCtrl( *m_penHPGLWidthCtrl );
+    m_HPGLPenSize = ValueFromTextCtrl( *m_penHPGLWidthCtrl );
 
     if( m_HPGLPenSize > Millimeter2iu( 2 ) )
         m_HPGLPenSize = Millimeter2iu( 2 );

@@ -12,15 +12,21 @@
  * in Eeschema, Pcbnew and GerbView
  */
 
-/* Initial colors values: optimized for Pcbnew, but are also Ok for Eeschema
+/* Initial colors values: optimized for Pcbnew 64 layers.
+ * The table is not actually used by Eeschema.
  * these values are superseded by config reading
  */
-static const EDA_COLOR_T default_layer_color[LAYERSCOLORSBUFFERSIZE] =
-{
-    GREEN,        BLUE,         LIGHTGRAY, BROWN,
-    RED,          MAGENTA,      LIGHTGRAY, MAGENTA,
-    DARKGRAY,     BLUE,         GREEN,     CYAN,
-    LIGHTRED,     LIGHTMAGENTA, YELLOW,    RED,
+static const EDA_COLOR_T default_layer_color[] = {
+    RED,            YELLOW,         LIGHTMAGENTA,   LIGHTRED,
+    CYAN,           GREEN,          BLUE,           DARKGRAY,
+    MAGENTA,        LIGHTGRAY,      MAGENTA,        RED,
+    BROWN,          LIGHTGRAY,      BLUE,           GREEN,
+
+    RED,            YELLOW,         LIGHTMAGENTA,   LIGHTRED,
+    CYAN,           GREEN,          BLUE,           DARKGRAY,
+    MAGENTA,        LIGHTGRAY,      MAGENTA,        RED,
+    BROWN,          LIGHTGRAY,      BLUE,           GREEN,
+
     BLUE,         MAGENTA,
     LIGHTCYAN,    RED,
     MAGENTA,      CYAN,
@@ -34,8 +40,8 @@ static const EDA_COLOR_T default_layer_color[LAYERSCOLORSBUFFERSIZE] =
     DARKGRAY
 };
 
-static const EDA_COLOR_T default_items_color[LAYERSCOLORSBUFFERSIZE] =
-{
+
+static const EDA_COLOR_T default_items_color[] = {
     LIGHTGRAY, // unused
     CYAN,      // VIA_MICROVIA_VISIBLE
     BROWN,     // VIA_BBLIND_VISIBLE
@@ -56,13 +62,24 @@ static const EDA_COLOR_T default_items_color[LAYERSCOLORSBUFFERSIZE] =
     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY
 };
 
+
 COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS()
 {
-    for( unsigned ii = 0; ii < DIM(m_LayersColors); ii++ )
-        m_LayersColors[ii] = default_layer_color[ii];
+    for( unsigned src = 0, dst = 0; dst < DIM(m_LayersColors); ++dst )
+    {
+        m_LayersColors[dst] = default_layer_color[src++];
 
-    for( unsigned ii = 0; ii < DIM(m_ItemsColors); ii++ )
-        m_ItemsColors[ii] = default_items_color[ii];
+        if( src >= DIM( default_layer_color ) )
+            src = 0;        // wrap the source.
+    }
+
+    for( unsigned src = 0, dst = 0; dst < DIM(m_ItemsColors);  ++dst )
+    {
+        m_ItemsColors[dst] = default_items_color[src++];
+
+        if( src >= DIM( default_items_color ) )
+            src = 0;
+    }
 }
 
 
@@ -100,12 +117,13 @@ void COLORS_DESIGN_SETTINGS::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor
  * @return the color for an item which is one of the item indices given
  * in pcbstruct.h, enum PCB_VISIBLE or in schematic
  */
-EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx )
+EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx ) const
 {
-    if( (unsigned) aItemIdx < DIM(m_ItemsColors) )
+    if( (unsigned) aItemIdx < DIM( m_ItemsColors ) )
     {
         return m_ItemsColors[aItemIdx];
     }
+
     return UNSPECIFIED_COLOR;
 }
 

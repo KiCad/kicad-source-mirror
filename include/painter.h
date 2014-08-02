@@ -64,7 +64,7 @@ public:
      * Loads a list of color settings for layers.
      * @param aSettings is a list of color settings.
      */
-    virtual void ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings ) = 0;
+    virtual void ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings ) = 0;
 
     /**
      * Function SetActiveLayer
@@ -110,6 +110,26 @@ public:
     }
 
     /**
+     * Function GetHighlight
+     * Returns current highlight setting.
+     * @return True if highlight is enabled, false otherwise.
+     */
+    inline bool GetHighlight() const
+    {
+        return m_highlightEnabled;
+    }
+
+    /**
+     * Function GetHighlightNetCode
+     * Returns netcode of currently highlighted net.
+     * @return Netcode of currently highlighted net.
+     */
+    inline int GetHighlightNetCode() const
+    {
+        return m_highlightNetcode;
+    }
+
+    /**
      * Function SetHighlight
      * Turns on/off highlighting - it may be done for the active layer or the specified net.
      * @param aEnabled tells if highlighting should be enabled.
@@ -119,9 +139,7 @@ public:
     inline void SetHighlight( bool aEnabled, int aNetcode = -1 )
     {
         m_highlightEnabled = aEnabled;
-
-        if( aNetcode > 0 )
-            m_highlightNetcode = aNetcode;
+        m_highlightNetcode = aNetcode;
     }
 
     /**
@@ -159,15 +177,45 @@ public:
         return m_worksheetLineWidth;
     }
 
+    /**
+     * Function TranslateColor
+     * Returns the color responding to the one of EDA_COLOR_T enum values.
+     * @param EDA_COLOR_T color equivalent.
+     */
+    inline const COLOR4D& TranslateColor( EDA_COLOR_T aColor )
+    {
+        return m_legacyColorMap[aColor];
+    }
+
+    /**
+     * Function GetBackgroundColor
+     * Returns current background color settings.
+     * @return Background color.
+     */
+    inline const COLOR4D& GetBackgroundColor() const
+    {
+        return m_backgroundColor;
+    }
+
+    /**
+     * Function SetBackgroundColor
+     * Sets new color for background.
+     * @param aColor is the new background color.
+     */
+    inline void SetBackgroundColor( const COLOR4D& aColor )
+    {
+        m_backgroundColor = aColor;
+    }
+
 protected:
     /**
      * Function update
-     * Precalculates extra colors for layers (eg. highlighted, darkened and any needed version
+     * Precalculates extra colors for layers (e.g. highlighted, darkened and any needed version
      * of base colors).
      */
     virtual void update();
 
-    std::set<unsigned int> m_activeLayers; /// Stores active layers number
+    std::set<unsigned int> m_activeLayers; ///< Stores active layers number
 
     /// Parameters for display modes
     bool    m_hiContrastEnabled;    ///< High contrast display mode on/off
@@ -184,6 +232,8 @@ protected:
     float   m_layerOpacity;         ///< Determines opacity of all layers
     float   m_outlineWidth;         ///< Line width used when drawing outlines
     float   m_worksheetLineWidth;   ///< Line width used when drawing worksheet
+
+    COLOR4D m_backgroundColor;      ///< The background color
 
     /// Map of colors that were usually used for display
     std::map<EDA_COLOR_T, COLOR4D> m_legacyColorMap;
@@ -218,31 +268,28 @@ public:
     virtual ~PAINTER();
 
     /**
-     * Function ApplySettings
-     * Loads colors and display modes settings that are going to be used when drawing items.
-     * @param aSettings are settings to be applied.
-     */
-    virtual void ApplySettings( RENDER_SETTINGS* aSettings )
-    {
-        m_settings.reset( aSettings );
-    }
-
-    /**
      * Function SetGAL
      * Changes Graphics Abstraction Layer used for drawing items for a new one.
      * @param aGal is the new GAL instance.
      */
-    void SetGAL( GAL* aGal );
+    void SetGAL( GAL* aGal )
+    {
+        m_gal = aGal;
+    }
+
+    /**
+     * Function ApplySettings
+     * Loads colors and display modes settings that are going to be used when drawing items.
+     * @param aSettings are settings to be applied.
+     */
+    virtual void ApplySettings( const RENDER_SETTINGS* aSettings ) = 0;
 
     /**
      * Function GetSettings
      * Returns pointer to current settings that are going to be used when drawing items.
      * @return Current rendering settings.
      */
-    virtual RENDER_SETTINGS* GetSettings() const
-    {
-        return m_settings.get();
-    }
+    virtual RENDER_SETTINGS* GetSettings() = 0;
 
     /**
      * Function Draw
@@ -257,13 +304,10 @@ public:
 protected:
     /// Instance of graphic abstraction layer that gives an interface to call
     /// commands used to draw (eg. DrawLine, DrawCircle, etc.)
-    GAL*                m_gal;
-
-    /// Colors and display modes settings that are going to be used when drawing items.
-    boost::shared_ptr<RENDER_SETTINGS> m_settings;
+    GAL* m_gal;
 
     /// Color of brightened item frame
-    COLOR4D             m_brightenedColor;
+    COLOR4D m_brightenedColor;
 };
 } // namespace KIGFX
 

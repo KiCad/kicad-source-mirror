@@ -31,6 +31,8 @@
 #ifndef CLASS_PCB_LAYER_WIDGET_H_
 #define CLASS_PCB_LAYER_WIDGET_H_
 
+#include <layer_widget.h>
+
 /**
  * Class PCB_LAYER_WIDGET
  * is here to implement the abtract functions of LAYER_WIDGET so they
@@ -49,7 +51,7 @@ public:
      *  effectively sets the overal size of the widget via the row height and bitmap
      *  button sizes.
      */
-    PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize = 10 );
+    PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize = 10 );
 
     void ReFill();
 
@@ -82,9 +84,9 @@ public:
     void SetLayersManagerTabsText();
 
     //-----<implement LAYER_WIDGET abstract callback functions>-----------
-    void OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor );
-    bool OnLayerSelect( LAYER_NUM aLayer );
-    void OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal );
+    void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor );
+    bool OnLayerSelect( int aLayer );
+    void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
     void OnRenderColorChange( int aId, EDA_COLOR_T aColor );
     void OnRenderEnable( int aId, bool isEnabled );
     //-----</implement LAYER_WIDGET abstract callback functions>----------
@@ -108,7 +110,7 @@ protected:
     bool m_alwaysShowActiveCopperLayer;         // If true: Only shows the current active layer
                                                 // even if it is changed
 
-    PCB_EDIT_FRAME*    myframe;
+    PCB_BASE_FRAME* myframe;
 
     // popup menu ids.
 #define ID_SHOW_ALL_COPPERS                     wxID_HIGHEST

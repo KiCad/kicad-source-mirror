@@ -132,6 +132,11 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
     if( fullFileName == wxEmptyString )
         return;
 
+    ExportSpecctraFile( fullFileName );
+}
+
+bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
+{
     SPECCTRA_DB     db;
     bool            ok = true;
     wxString        errorText;
@@ -152,12 +157,12 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
     {
         GetBoard()->SynchronizeNetsAndNetClasses();
         db.FromBOARD( GetBoard() );
-        db.ExportPCB(  fullFileName, true );
+        db.ExportPCB(  aFullFilename, true );
 
         // if an exception is thrown by FromBOARD or ExportPCB(), then
         // ~SPECCTRA_DB() will close the file.
     }
-    catch( IO_ERROR& ioe )
+    catch( const IO_ERROR& ioe )
     {
         ok = false;
 
@@ -184,6 +189,8 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
         errorText   += _( "Unable to export, please fix and try again." );
         DisplayError( this, errorText );
     }
+
+    return ok;
 }
 
 
@@ -352,7 +359,7 @@ static bool isRoundKeepout( D_PAD* aPad )
         if( aPad->GetDrillSize().x >= aPad->GetSize().x )
             return true;
 
-        if( (aPad->GetLayerMask() & ALL_CU_LAYERS) == 0 )
+        if( !( aPad->GetLayerSet() & LSET::AllCuMask() ).any() )
             return true;
     }
 
@@ -386,11 +393,13 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
     PADSTACK*   padstack = new PADSTACK();
 
     int         reportedLayers = 0;         // how many in reported padstack
-    const char* layerName[NB_COPPER_LAYERS];
+    const char* layerName[MAX_CU_LAYERS];
 
     uniqifier = '[';
 
-    bool onAllCopperLayers = ( (aPad->GetLayerMask() & ALL_CU_LAYERS) == ALL_CU_LAYERS );
+    static const LSET all_cu = LSET::AllCuMask();
+
+    bool onAllCopperLayers = ( (aPad->GetLayerSet() & all_cu) == all_cu );
 
     if( onAllCopperLayers )
         uniqifier += 'A'; // A for all layers
@@ -398,7 +407,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
     const int copperCount = aBoard->GetCopperLayerCount();
     for( int layer=0; layer<copperCount; ++layer )
     {
-        LAYER_NUM kilayer = pcbLayer2kicad[layer];
+        LAYER_ID kilayer = pcbLayer2kicad[layer];
 
         if( onAllCopperLayers || aPad->IsOnLayer( kilayer ) )
         {
@@ -692,7 +701,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
                 pin->pin_id += buf;      // append "@1" or "@2", etc. to pin name
             }
 
-            pin->kiNetCode = pad->GetNet();
+            pin->kiNetCode = pad->GetNetCode();
 
             image->pins.push_back( pin );
 
@@ -827,12 +836,12 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
 }
 
 
-PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
+PADSTACK* SPECCTRA_DB::makeVia( const ::VIA* aVia )
 {
-    LAYER_NUM topLayerNum;
-    LAYER_NUM botLayerNum;
+    LAYER_ID    topLayerNum;
+    LAYER_ID    botLayerNum;
 
-    aVia->ReturnLayerPair( &topLayerNum, &botLayerNum );
+    aVia->LayerPair( &topLayerNum, &botLayerNum );
 
     int topLayer = kicadLayer2pcb[topLayerNum];
     int botLayer = kicadLayer2pcb[botLayerNum];
@@ -883,7 +892,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
     const int   STEPS = 36;     // for a segmentation of an arc of 360 degrees
 
     // Get all the DRAWSEGMENTS and module graphics into 'items',
-    // then keep only those on layer == EDGE_N.
+    // then keep only those on layer == Edge_Cuts.
 
     static const KICAD_T  scan_graphics[] = { PCB_LINE_T, PCB_MODULE_EDGE_T, EOT };
 
@@ -891,11 +900,11 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 
     for( int i = 0; i<items.GetCount(); )
     {
-        if( items[i]->GetLayer() != EDGE_N )
+        if( items[i]->GetLayer() != Edge_Cuts )
         {
             items.Remove( i );
         }
-        else    // remove graphics not on EDGE_N layer
+        else    // remove graphics not on Edge_Cuts layer
         {
             DBG( items[i]->Show( 0, std::cout );)
             ++i;
@@ -1315,7 +1324,7 @@ bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
             aHoles.CloseLastContour();
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         // Creates a valid polygon outline is not possible.
         // So uses the board edge cuts bounding box to create a
@@ -1469,9 +1478,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
     //-----<rules>--------------------------------------------------------
     {
         char        rule[80];
+        NETCLASSPTR defaultClass = aBoard->GetDesignSettings().GetDefault();
 
-        int         defaultTrackWidth   = aBoard->m_NetClasses.GetDefault()->GetTrackWidth();
-        int         defaultClearance    = aBoard->m_NetClasses.GetDefault()->GetClearance();
+        int         defaultTrackWidth   = defaultClass->GetTrackWidth();
+        int         defaultClearance    = defaultClass->GetClearance();
 
         double      clearance = scale( defaultClearance );
 
@@ -1548,6 +1558,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             if( item->GetIsKeepout() )
                 continue;
 
+            // Currently, we export only copper layers
+            if( ! IsCopperLayer( item->GetLayer() ) )
+                continue;
+
             COPPER_PLANE*   plane = new COPPER_PLANE( pcb->structure );
 
             pcb->structure->planes.push_back( plane );
@@ -1556,7 +1570,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
             plane->SetShape( mainPolygon );
 
-            plane->name = TO_UTF8( item->GetNetName() );
+            plane->name = TO_UTF8( item->GetNetname() );
 
             if( plane->name.size() == 0 )
             {
@@ -1822,7 +1836,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
     //-----< output vias used in netclasses >-----------------------------------
     {
-        NETCLASSES& nclasses = aBoard->m_NetClasses;
+        NETCLASSES& nclasses = aBoard->GetDesignSettings().m_NetClasses;
 
         // Assume the netclass vias are all the same kind of thru, blind, or buried vias.
         // This is in lieu of either having each netclass via have its own layer pair in
@@ -1846,7 +1860,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         // Add the via from the Default netclass first.  The via container
         // in pcb->library preserves the sequence of addition.
 
-        NETCLASS*   netclass = nclasses.GetDefault();
+        NETCLASSPTR netclass = nclasses.GetDefault();
 
         PADSTACK*   via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
                                    m_top_via_layer, m_bot_via_layer );
@@ -1922,7 +1936,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         {
             TRACK*  track = (TRACK*) items[i];
 
-            int     netcode = track->GetNet();
+            int     netcode = track->GetNetCode();
 
             if( netcode == 0 )
                 continue;
@@ -1978,10 +1992,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
         for( int i = 0; i<items.GetCount(); ++i )
         {
-            SEGVIA* via = (SEGVIA*) items[i];
+            ::VIA* via = (::VIA*) items[i];
             wxASSERT( via->Type() == PCB_VIA_T );
 
-            int     netcode = via->GetNet();
+            int     netcode = via->GetNetCode();
 
             if( netcode == 0 )
                 continue;
@@ -2032,19 +2046,19 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
 
     //-----<output NETCLASSs>----------------------------------------------------
-    NETCLASSES& nclasses = aBoard->m_NetClasses;
+    NETCLASSES& nclasses = aBoard->GetDesignSettings().m_NetClasses;
 
     exportNETCLASS( nclasses.GetDefault(), aBoard );
 
     for( NETCLASSES::iterator nc = nclasses.begin(); nc != nclasses.end(); ++nc )
     {
-        NETCLASS* netclass = nc->second;
+        NETCLASSPTR netclass = nc->second;
         exportNETCLASS( netclass, aBoard );
     }
 }
 
 
-void SPECCTRA_DB::exportNETCLASS( NETCLASS* aNetClass, BOARD* aBoard )
+void SPECCTRA_DB::exportNETCLASS( NETCLASSPTR aNetClass, BOARD* aBoard )
 {
     /*  From page 11 of specctra spec:
      *
@@ -2125,7 +2139,7 @@ void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
         module->SetFlag( 0 );
-        if( module->GetLayer() == LAYER_N_BACK )
+        if( module->GetLayer() == B_Cu )
         {
             module->Flip( module->GetPosition() );
             module->SetFlag( 1 );

@@ -13,6 +13,7 @@ enum hotkey_id_commnand {
     HK_FIND_NEXT_ITEM = HK_COMMON_END,
     HK_FIND_NEXT_DRC_MARKER,
     HK_FIND_ITEM,
+    HK_FIND_REPLACE,
     HK_DELETE,
     HK_REPEAT_LAST,
     HK_LIBEDIT_MOVE_GRAPHIC_ITEM,
@@ -48,7 +49,9 @@ enum hotkey_id_commnand {
     HK_ADD_NOCONN_FLAG,
     HK_SAVE_LIB,
     HK_SAVE_SCH,
-    HK_LOAD_SCH
+    HK_LOAD_SCH,
+    HK_LEFT_CLICK,
+    HK_LEFT_DCLICK
 };
 
 // List of hotkey descriptors for Eeschema

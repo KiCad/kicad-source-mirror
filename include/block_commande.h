@@ -55,6 +55,8 @@ typedef enum {
     BLOCK_DELETE,
     BLOCK_PASTE,
     BLOCK_DRAG,
+    BLOCK_DRAG_ITEM,    // like BLOCK_DRAG, when used to drag a selected component
+                        // and not using an area defined by a mouse drag
     BLOCK_ROTATE,
     BLOCK_FLIP,
     BLOCK_ZOOM,
@@ -166,7 +168,10 @@ public:
      * Function IsDragging
      * returns true if the current block command is a drag operation.
      */
-    bool IsDragging() const { return m_command == BLOCK_DRAG; }
+    bool IsDragging() const
+    {
+        return m_command == BLOCK_DRAG || m_command == BLOCK_DRAG_ITEM;
+    }
 
     /**
      * Function IsIdle

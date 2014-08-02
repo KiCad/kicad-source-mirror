@@ -4,7 +4,7 @@
 
 #include <fctsys.h>
 #include <eda_dde.h>
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <id.h>
 #include <common.h>
 #include <macros.h>

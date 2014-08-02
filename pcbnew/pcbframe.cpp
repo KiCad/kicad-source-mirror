@@ -30,7 +30,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
@@ -51,12 +52,13 @@
 #include <hotkeys.h>
 #include <pcbnew_config.h>
 #include <module_editor_frame.h>
-#include <dialog_SVG_print.h>
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
 #include <convert_from_iu.h>
 #include <view/view.h>
-#include <painter.h>
+#include <view/view_controls.h>
+#include <pcb_painter.h>
+#include <invoke_pcb_dialog.h>
 
 #include <class_track.h>
 #include <class_board.h>
@@ -68,11 +70,25 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 
+#include <tools/selection_tool.h>
+#include <router/router_tool.h>
+#include <tools/edit_tool.h>
+#include <tools/drawing_tool.h>
+#include <tools/point_editor.h>
+#include <tools/pcbnew_control.h>
+#include <tools/pcb_editor_control.h>
+#include <tools/placement_tool.h>
+#include <tools/common_actions.h>
+
+
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
+// The name of the pane info handling the python console:
+#define PYTHONCONSOLE_STRID   wxT( "PythonPanel" )
 #endif
 
-#include <class_drawpanel_gal.h>
+#include <pcb_draw_panel_gal.h>
+#include <boost/bind.hpp>
 
 // Keys used in read/write config
 #define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth_mm" )
@@ -126,14 +142,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
 
     // menu Config
-
-    /* Tom's hacks start */
-    EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
-    EVT_TOOL ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
-    EVT_MENU ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
-    EVT_TOOL ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
-    /* Tom's hacks end */
-
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, PCB_EDIT_FRAME::OnConfigurePcbOptions )
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_SAVE, PCB_EDIT_FRAME::Process_Config )
@@ -152,8 +160,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PREFRENCES_MACROS_READ, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, PCB_EDIT_FRAME::InstallDisplayOptionsDialog )
     EVT_MENU( ID_PCB_USER_GRID_SETUP, PCB_EDIT_FRAME::Process_Special_Functions )
-
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, PCB_EDIT_FRAME::SetLanguage )
 
     // menu Postprocess
     EVT_MENU( ID_PCB_GEN_POS_MODULES_FILE, PCB_EDIT_FRAME::GenFootprintsPositionFile )
@@ -179,9 +185,9 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, PCB_EDIT_FRAME::Show3D_Frame )
 
     // Switching canvases
-    EVT_MENU( ID_MENU_CANVAS_DEFAULT,           PCB_EDIT_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_CAIRO,             PCB_EDIT_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL,            PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_DEFAULT, PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_CAIRO, PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_EDIT_FRAME::SwitchCanvas )
 
     // Menu Get Design Rules Editor
     EVT_MENU( ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG, PCB_EDIT_FRAME::ShowDesignRulesEditor )
@@ -192,8 +198,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( wxID_CUT, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_COPY, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_PASTE, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_UNDO, PCB_EDIT_FRAME::GetBoardFromUndoList )
-    EVT_TOOL( wxID_REDO, PCB_EDIT_FRAME::GetBoardFromRedoList )
+    EVT_TOOL( wxID_UNDO, PCB_EDIT_FRAME::RestoreCopyFromUndoList )
+    EVT_TOOL( wxID_REDO, PCB_EDIT_FRAME::RestoreCopyFromRedoList )
     EVT_TOOL( wxID_PRINT, PCB_EDIT_FRAME::ToPrinter )
     EVT_TOOL( ID_GEN_PLOT_SVG, PCB_EDIT_FRAME::SVG_Print )
     EVT_TOOL( ID_GEN_PLOT, PCB_EDIT_FRAME::Process_Special_Functions )
@@ -210,6 +216,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, PCB_EDIT_FRAME::Access_to_External_Tool )
 #ifdef KICAD_SCRIPTING_WXPYTHON
     EVT_TOOL( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, PCB_EDIT_FRAME::ScriptingConsoleEnableDisable )
+    EVT_UPDATE_UI( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
+                   PCB_EDIT_FRAME::OnUpdateScriptingConsoleState )
 #endif
     // Option toolbar
     EVT_TOOL( ID_TB_OPTIONS_DRC_OFF,
@@ -282,6 +290,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
                    PCB_EDIT_FRAME::OnUpdateSelectAutoTrackWidth )
     EVT_UPDATE_UI( ID_POPUP_PCB_SELECT_AUTO_WIDTH, PCB_EDIT_FRAME::OnUpdateSelectAutoTrackWidth )
+    EVT_UPDATE_UI( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH,
+                   PCB_EDIT_FRAME::OnUpdateSelectCustomTrackWidth )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_VIA_SIZE, PCB_EDIT_FRAME::OnUpdateSelectViaSize )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_MODE_MODULE, PCB_EDIT_FRAME::OnUpdateAutoPlaceModulesMode )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_MODE_TRACKS, PCB_EDIT_FRAME::OnUpdateAutoPlaceTracksMode )
@@ -295,6 +305,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
                          PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle )
     EVT_UPDATE_UI_RANGE( ID_PCB_MUWAVE_START_CMD, ID_PCB_MUWAVE_END_CMD,
                          PCB_EDIT_FRAME::OnUpdateMuWaveToolbar )
+
+    EVT_COMMAND( wxID_ANY, LAYER_WIDGET::EVT_LAYER_COLOR_CHANGE, PCB_EDIT_FRAME::OnLayerColorChange )
 END_EVENT_TABLE()
 
 
@@ -302,11 +314,9 @@ END_EVENT_TABLE()
 
 #define PCB_EDIT_FRAME_NAME wxT( "PcbFrame" )
 
-PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
-                                const wxPoint& pos, const wxSize& size,
-                                long style ) :
-    PCB_BASE_FRAME( parent, PCB_FRAME_TYPE, title, pos, size,
-                    style, PCB_EDIT_FRAME_NAME )
+PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+    PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB, wxT( "Pcbnew" ), wxDefaultPosition,
+        wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PCB_EDIT_FRAME_NAME )
 {
     m_FrameName = PCB_EDIT_FRAME_NAME;
     m_showBorderAndTitleBlock = true;   // true to display sheet references
@@ -323,29 +333,21 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
     m_useCmpFileForFpNames = true;
-
-    m_footprintLibTable = NULL;
-    m_globalFootprintTable = NULL;
-    m_rotationAngle = 900;
-
-#ifdef KICAD_SCRIPTING_WXPYTHON
+#if defined(KICAD_SCRIPTING_WXPYTHON)
     m_pythonPanel = NULL;
+    m_pythonPanelShow = false;
 #endif
+
+    m_rotationAngle = 900;
 
     for ( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
 
+    // Create GAL canvas
+    SetGalCanvas( new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                          PCB_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) );
+
     SetBoard( new BOARD() );
-
-    if( GetGalCanvas() )
-    {
-        ViewReloadBoard( m_Pcb );
-
-        // update the tool manager with the new board and its view.
-        if( m_toolManager )
-            m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                           GetGalCanvas()->GetViewControls(), this );
-    }
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
 
@@ -373,7 +375,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
-    LoadSettings();
+    LoadSettings( config() );
 
     // Be sure options are updated
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
@@ -418,7 +420,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     lyrs.MinSize( m_Layers->GetBestSize() );    // updated in ReFillLayerWidget
     lyrs.BestSize( m_Layers->GetBestSize() );
     lyrs.Caption( _( "Visibles" ) );
-
+    lyrs.TopDockable( false ).BottomDockable( false );
 
     if( m_mainToolBar )    // The main horizontal toolbar
     {
@@ -434,7 +436,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     if( m_microWaveToolBar )    // The auxiliary vertical right toolbar (currently microwave tools)
         m_auimgr.AddPane( m_microWaveToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_microWaveToolBar" ) ).Right().Layer( 1 ).Position(1).Hide() );
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_microWaveToolBar" ) ).
+                          Right().Layer( 1 ).Position(1).Hide() );
 
     if( m_drawToolBar )    // The main right vertical toolbar
         m_auimgr.AddPane( m_drawToolBar,
@@ -464,23 +467,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
         m_auimgr.AddPane( m_messagePanel,
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
-
-#ifdef KICAD_SCRIPTING_WXPYTHON
-    // Add the scripting panel
-    EDA_PANEINFO  pythonAuiInfo;
-    pythonAuiInfo.ScriptingToolbarPane();
-    pythonAuiInfo.Caption( wxT( "Python Scripting" ) );
-    pythonAuiInfo.MinSize( wxSize( 200, 100 ) );
-    pythonAuiInfo.BestSize( wxSize( GetClientSize().x/2, 200 ) );
-    pythonAuiInfo.Hide();
-
-    m_pythonPanel = CreatePythonShellWindow( this );
-    m_auimgr.AddPane( m_pythonPanel,
-                      pythonAuiInfo.Name( wxT( "PythonPanel" ) ).Bottom().Layer(9) );
-
-    m_pythonPanelHidden = true;
-#endif
-
     ReFillLayerWidget();        // this is near end because contents establish size
 
     m_Layers->ReFillRender();   // Update colors in Render after the config is read
@@ -489,50 +475,18 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     m_auimgr.Update();
 
-    if( m_globalFootprintTable == NULL )
-    {
-        try
-        {
-            m_globalFootprintTable = new FP_LIB_TABLE();
-
-            if( !FP_LIB_TABLE::LoadGlobalTable( *m_globalFootprintTable ) )
-            {
-                DisplayInfoMessage( this, wxT( "You have run Pcbnew for the first time using the "
-                                               "new footprint library table method for finding "
-                                               "footprints.  Pcbnew has either copied the default "
-                                               "table or created an empty table in your home "
-                                               "folder.  You must first configure the library "
-                                               "table to include all footprint libraries not "
-                                               "included with KiCad.  See the \"Footprint Library "
-                                               "Table\" section of the CvPcb documentation for "
-                                               "more information." ) );
-            }
-        }
-        catch( IO_ERROR ioe )
-        {
-            wxString msg;
-            msg.Printf( _( "An error occurred attempting to load the global footprint library "
-                           "table:\n\n%s" ), GetChars( ioe.errorText ) );
-            DisplayError( this, msg );
-        }
-    }
-
     setupTools();
 }
 
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
-    destroyTools();
     m_RecordingMacros = -1;
 
     for( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
 
     delete m_drc;
-
-    delete m_footprintLibTable;
-    delete m_globalFootprintTable;
 }
 
 
@@ -540,105 +494,68 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 {
     PCB_BASE_FRAME::SetBoard( aBoard );
 
-    if( GetGalCanvas() )
+    if( IsGalCanvasActive() )
     {
-        ViewReloadBoard( aBoard );
+        PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+
+        drawPanel->DisplayBoard( aBoard );
+        aBoard->GetRatsnest()->Recalculate();
+
+        // Prepare worksheet template
+        KIGFX::WORKSHEET_VIEWITEM* worksheet;
+        worksheet = new KIGFX::WORKSHEET_VIEWITEM( &aBoard->GetPageSettings(),
+                                                   &aBoard->GetTitleBlock() );
+        worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
+
+        BASE_SCREEN* screen = GetScreen();
+
+        if( screen != NULL )
+        {
+            worksheet->SetSheetNumber( screen->m_ScreenNumber );
+            worksheet->SetSheetCount( screen->m_NumberOfScreens );
+        }
+
+        // PCB_DRAW_PANEL_GAL takes ownership of the worksheet
+        drawPanel->SetWorksheet( worksheet );
 
         // update the tool manager with the new board and its view.
         if( m_toolManager )
-            m_toolManager->SetEnvironment( aBoard, GetGalCanvas()->GetView(),
-                                           GetGalCanvas()->GetViewControls(), this );
-    }
-}
-
-
-void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
-{
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-    view->Clear();
-
-    // All of PCB drawing elements should be added to the VIEW
-    // in order to be displayed
-
-    // Load zones
-    for( int i = 0; i < aBoard->GetAreaCount(); ++i )
-    {
-        view->Add( (KIGFX::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
-    }
-
-    // Load drawings
-    for( BOARD_ITEM* drawing = aBoard->m_Drawings; drawing; drawing = drawing->Next() )
-    {
-        view->Add( drawing );
-    }
-
-    // Load tracks
-    for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
-    {
-        view->Add( track );
-    }
-
-    // Load modules and its additional elements
-    for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
-    {
-        // Load module's pads
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
         {
-            view->Add( pad );
+            m_toolManager->SetEnvironment( aBoard, drawPanel->GetView(),
+                                           drawPanel->GetViewControls(), this );
+            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
         }
-
-        // Load module's drawing (mostly silkscreen)
-        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
-             drawing = drawing->Next() )
-        {
-            view->Add( drawing );
-        }
-
-        // Load module's texts (name and value)
-        view->Add( &module->Reference() );
-        view->Add( &module->Value() );
-
-        // Add the module itself
-        view->Add( module );
     }
-
-    // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
-    for( SEGZONE* zone = aBoard->m_Zone; zone; zone = zone->Next() )
-    {
-        view->Add( zone );
-    }
-
-    // Add an entry for the worksheet layout
-    KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM(
-                                            std::string( aBoard->GetFileName().mb_str() ),
-                                            std::string( GetScreenDesc().mb_str() ),
-                                            &GetPageSettings(), &GetTitleBlock() );
-    BASE_SCREEN* screen = GetScreen();
-    if( screen != NULL )
-    {
-        worksheet->SetSheetNumber( GetScreen()->m_ScreenNumber );
-        worksheet->SetSheetCount( GetScreen()->m_NumberOfScreens );
-    }
-
-    view->Add( worksheet );
-
-    // Add an entry for the ratsnest
-    RN_DATA* ratsnest = aBoard->GetRatsnest();
-    ratsnest->ProcessBoard();
-    ratsnest->Recalculate();
-    view->Add( new KIGFX::RATSNEST_VIEWITEM( ratsnest ) );
-
-    view->SetPanBoundary( worksheet->ViewBBox() );
-    view->RecacheAllItems( true );
-
-    if( IsGalCanvasActive() )
-        GetGalCanvas()->Refresh();
 }
 
 
 bool PCB_EDIT_FRAME::isAutoSaveRequired() const
 {
     return GetScreen()->IsSave();
+}
+
+
+void PCB_EDIT_FRAME::setupTools()
+{
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( NULL, GetGalCanvas()->GetView(),
+                                   GetGalCanvas()->GetViewControls(), this );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+
+    // Register tools
+    m_toolManager->RegisterTool( new SELECTION_TOOL );
+    m_toolManager->RegisterTool( new ROUTER_TOOL );
+    m_toolManager->RegisterTool( new EDIT_TOOL );
+    m_toolManager->RegisterTool( new DRAWING_TOOL );
+    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+    m_toolManager->RegisterTool( new PCB_EDITOR_CONTROL );
+    m_toolManager->RegisterTool( new PLACEMENT_TOOL );
+    m_toolManager->ResetTools( TOOL_BASE::RUN );
+
+    // Run the selection tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 }
 
 
@@ -670,9 +587,8 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     m_canvas->SetAbortRequest( true );
-    GetGalCanvas()->StopDrawing();
 
-    if( GetScreen()->IsModify() )
+    if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
         wxString msg;
         msg.Printf( _("Save the changes in\n<%s>\nbefore closing?"),
@@ -694,6 +610,8 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
+    GetGalCanvas()->StopDrawing();
+
     // Delete the auto save file if it exists.
     wxFileName fn = GetBoard()->GetFileName();
 
@@ -708,7 +626,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         msg.Printf( _( "The auto save file <%s> could not be removed!" ),
                     GetChars( fn.GetFullPath() ) );
 
-        wxMessageBox( msg, wxGetApp().GetAppName(), wxOK | wxICON_ERROR, this );
+        wxMessageBox( msg, Pgm().App().GetAppName(), wxOK | wxICON_ERROR, this );
     }
 
     // Delete board structs and undo/redo lists, to avoid crash on exit
@@ -741,7 +659,7 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
         return;
     }
 
-    m_Draw3DFrame = new EDA_3D_FRAME( this, _( "3D Viewer" ) );
+    m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, _( "3D Viewer" ) );
     m_Draw3DFrame->SetDefaultFileName( GetBoard()->GetFileName() );
     m_Draw3DFrame->Show( true );
 }
@@ -751,10 +669,18 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
 
-    m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                    GetGalCanvas()->GetViewControls(), this );
-
-    ViewReloadBoard( m_Pcb );
+    if( aEnable )
+    {
+        SetBoard( m_Pcb );
+        GetGalCanvas()->GetView()->RecacheAllItems( true );
+        GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
+        GetGalCanvas()->StartDrawing();
+    }
+    else
+    {
+        // Redirect all events to the legacy canvas
+        GetGalCanvas()->SetEventDispatcher( NULL );
+    }
 }
 
 
@@ -765,6 +691,7 @@ void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
     switch( id )
     {
     case ID_MENU_CANVAS_DEFAULT:
+        Compile_Ratsnest( NULL, true );
         UseGalCanvas( false );
         break;
 
@@ -796,62 +723,55 @@ void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
 }
 
 
-void PCB_EDIT_FRAME::LoadSettings()
+void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    wxConfig* config = wxGetApp().GetSettings();
+    PCB_BASE_FRAME::LoadSettings( aCfg );
 
-    if( config == NULL )
-        return;
-
-    // The configuration setting that used to be mixed in with the project file settings.
-    wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
-
-    PCB_BASE_FRAME::LoadSettings();
+    wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     double dtmp;
-    config->Read( OPTKEY_DEFAULT_LINEWIDTH_VALUE, &dtmp, 0.1 ); // stored in mm
+    aCfg->Read( OPTKEY_DEFAULT_LINEWIDTH_VALUE, &dtmp, 0.1 ); // stored in mm
+
     if( dtmp < 0.01 )
         dtmp = 0.01;
+
     if( dtmp > 5.0 )
         dtmp = 5.0;
+
     g_DrawDefaultLineThickness = Millimeter2iu( dtmp );
+
     long tmp;
-    config->Read( PCB_SHOW_FULL_RATSNET_OPT, &tmp );
+
+    aCfg->Read( PCB_SHOW_FULL_RATSNET_OPT, &tmp );
     GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, tmp);
 
-    config->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
-    config->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
-    config->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
-    config->Read( SHOW_LAYER_MANAGER_TOOLS, &m_show_layer_manager_tools );
+    aCfg->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
+    aCfg->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
+    aCfg->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
+    aCfg->Read( SHOW_LAYER_MANAGER_TOOLS, &m_show_layer_manager_tools );
 
     // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
-    // when reading doubles in config,
+    // when reading doubles in cfg,
     // but forget to back to current locale. So we call SetLocaleTo_Default
     SetLocaleTo_Default( );
 }
 
 
-void PCB_EDIT_FRAME::SaveSettings()
+void PCB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxConfig* config = wxGetApp().GetSettings();
+    PCB_BASE_FRAME::SaveSettings( aCfg );
 
-    if( config == NULL )
-        return;
-
-    // The configuration setting that used to be mixed in with the project file settings.
-    wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
-
-    PCB_BASE_FRAME::SaveSettings();
+    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 
     // This value is stored in mm )
-    config->Write( OPTKEY_DEFAULT_LINEWIDTH_VALUE,
+    aCfg->Write( OPTKEY_DEFAULT_LINEWIDTH_VALUE,
                    MM_PER_IU * g_DrawDefaultLineThickness );
     long tmp = GetBoard()->IsElementVisible(RATSNEST_VISIBLE);
-    config->Write( PCB_SHOW_FULL_RATSNET_OPT, tmp );
-    config->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
-    config->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
-    config->Write( SHOW_MICROWAVE_TOOLS, (long) m_show_microwave_tools );
-    config->Write( SHOW_LAYER_MANAGER_TOOLS, (long)m_show_layer_manager_tools );
+    aCfg->Write( PCB_SHOW_FULL_RATSNET_OPT, tmp );
+    aCfg->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
+    aCfg->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
+    aCfg->Write( SHOW_MICROWAVE_TOOLS, (long) m_show_microwave_tools );
+    aCfg->Write( SHOW_LAYER_MANAGER_TOOLS, (long)m_show_layer_manager_tools );
 }
 
 
@@ -879,10 +799,10 @@ void PCB_EDIT_FRAME::SetGridColor(EDA_COLOR_T aColor)
 }
 
 
-bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
+bool PCB_EDIT_FRAME::IsMicroViaAcceptable()
 {
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
-    LAYER_NUM currLayer = getActiveLayer();
+    LAYER_ID currLayer = GetActiveLayer();
 
     if( !GetDesignSettings().m_MicroViasAllowed )
         return false;   // Obvious..
@@ -890,118 +810,36 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
     if( copperlayercnt < 4 )
         return false;   // Only on multilayer boards..
 
-    if( ( currLayer == LAYER_N_BACK )
-       || ( currLayer == LAYER_N_FRONT )
+    if( ( currLayer == B_Cu )
+       || ( currLayer == F_Cu )
        || ( currLayer == copperlayercnt - 2 )
-       || ( currLayer == LAYER_N_2 ) )
+       || ( currLayer == In1_Cu ) )
         return true;
 
     return false;
 }
 
 
-void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
+void PCB_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
 {
-    // Set display settings for high contrast mode
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-    KIGFX::RENDER_SETTINGS* rSettings = view->GetPainter()->GetSettings();
+    PCB_BASE_FRAME::SetActiveLayer( aLayer );
 
-    setTopLayer( aLayer );
+    GetGalCanvas()->SetHighContrastLayer( aLayer );
 
-    rSettings->ClearActiveLayers();
-    rSettings->SetActiveLayer( aLayer );
-
-    if( IsCopperLayer( aLayer ) )
-    {
-        // Bring some other layers to the front in case of copper layers and make them colored
-        // fixme do not like the idea of storing the list of layers here,
-        // should be done in some other way I guess..
-        LAYER_NUM layers[] = {
-                GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
-                ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
-                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
-                ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE )
-        };
-
-        for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
-            rSettings->SetActiveLayer( layers[i] );
-
-        // Pads should be shown too
-        if( aLayer == FIRST_COPPER_LAYER )
-        {
-            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-            rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
-        }
-        else if( aLayer == LAST_COPPER_LAYER )
-        {
-            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-            rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
-        }
-    }
-
-    view->UpdateAllLayersColor();
-}
-
-
-void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
-{
-    // Set display settings for high contrast mode
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-
-    view->ClearTopLayers();
-    view->SetTopLayer( aLayer );
-
-    if( IsCopperLayer( aLayer ) )
-    {
-        // Bring some other layers to the front in case of copper layers and make them colored
-        // fixme do not like the idea of storing the list of layers here,
-        // should be done in some other way I guess..
-        LAYER_NUM layers[] = {
-                GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
-                ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
-                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
-                ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE ), DRAW_N
-        };
-
-        for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
-        {
-            view->SetTopLayer( layers[i] );
-        }
-
-        // Pads should be shown too
-        if( aLayer == FIRST_COPPER_LAYER )
-        {
-            view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-            view->SetTopLayer( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
-        }
-        else if( aLayer == LAST_COPPER_LAYER )
-        {
-            view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-            view->SetTopLayer( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
-        }
-    }
-
-    view->UpdateAllLayersOrder();
-}
-
-
-void PCB_EDIT_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
-{
-    ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
-
-    setHighContrastLayer( aLayer );
-
-    if( doLayerWidgetUpdate )
-        syncLayerWidgetLayer();
+    syncLayerWidgetLayer();
 
     if( IsGalCanvasActive() )
+    {
+        m_toolManager->RunAction( COMMON_ACTIONS::layerChanged );       // notify other tools
+        GetGalCanvas()->SetFocus();                 // otherwise hotkeys are stuck somewhere
         GetGalCanvas()->Refresh();
+    }
 }
 
 
 void PCB_EDIT_FRAME::syncLayerWidgetLayer()
 {
-    m_Layers->SelectLayer( getActiveLayer() );
+    m_Layers->SelectLayer( GetActiveLayer() );
     m_Layers->OnLayerSelected();
 }
 
@@ -1015,29 +853,7 @@ void PCB_EDIT_FRAME::syncRenderStates()
 void PCB_EDIT_FRAME::syncLayerVisibilities()
 {
     m_Layers->SyncLayerVisibilities();
-
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-
-    // Load layer & elements visibility settings
-    for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
-    {
-        view->SetLayerVisible( i, m_Pcb->IsLayerVisible( i ) );
-
-        // Synchronize netname layers as well
-        if( IsCopperLayer( i ) )
-            view->SetLayerVisible( GetNetnameLayer( i ), m_Pcb->IsLayerVisible( i ) );
-    }
-
-    for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )
-    {
-        view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( i ) );
-    }
-
-    // Enable some layers that are GAL specific
-    view->SetLayerVisible( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), true );
-    view->SetLayerVisible( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), true );
-    view->SetLayerVisible( ITEM_GAL_LAYER( WORKSHEET ), true );
-    view->SetLayerVisible( ITEM_GAL_LAYER( GP_OVERLAY ), true );
+    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
 }
 
 
@@ -1058,6 +874,7 @@ bool PCB_EDIT_FRAME::IsElementVisible( int aElement ) const
 
 void PCB_EDIT_FRAME::SetElementVisibility( int aElement, bool aNewState )
 {
+    GetGalCanvas()->GetView()->SetLayerVisible( ITEM_GAL_LAYER( aElement ), aNewState );
     GetBoard()->SetElementVisibility( aElement, aNewState );
     m_Layers->SetRenderState( aElement, aNewState );
 }
@@ -1072,18 +889,18 @@ void PCB_EDIT_FRAME::SetVisibleAlls()
 }
 
 
-void PCB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ShowChangedLanguage()
 {
-    EDA_DRAW_FRAME::SetLanguage( event );
+    // call my base class
+    PCB_BASE_FRAME::ShowChangedLanguage();
+
     m_Layers->SetLayersManagerTabsText();
+
     wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_Layers );
+
     pane_info.Caption( _( "Visibles" ) );
     m_auimgr.Update();
     ReFillLayerWidget();
-
-    FOOTPRINT_EDIT_FRAME * moduleEditFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
-    if( moduleEditFrame )
-        moduleEditFrame->EDA_DRAW_FRAME::SetLanguage( event );
 }
 
 
@@ -1126,18 +943,25 @@ void PCB_EDIT_FRAME::OnModify( )
 
 void PCB_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
 {
-    DIALOG_SVG_PRINT frame( this );
+    PCB_PLOT_PARAMS  tmp = GetPlotSettings();
 
-    frame.ShowModal();
+    // we don't want dialogs knowing about complex wxFrame functions so
+    // pass everything the dialog needs without reference to *this frame's class.
+    if( InvokeSVGPrint( this, GetBoard(), &tmp ) )
+    {
+        if( tmp != GetPlotSettings() )
+        {
+            SetPlotSettings( tmp );
+            OnModify();
+        }
+    }
 }
 
 
 void PCB_EDIT_FRAME::UpdateTitle()
 {
-    wxString title;
-    wxFileName fileName = GetBoard()->GetFileName();
-
-    title.Printf( wxT( "Pcbnew %s " ), GetChars( GetBuildVersion() ) );
+    wxFileName  fileName = GetBoard()->GetFileName();
+    wxString    title = wxString::Format( wxT( "Pcbnew %s " ), GetChars( GetBuildVersion() ) );
 
     if( fileName.IsOk() && fileName.FileExists() )
     {
@@ -1154,22 +978,42 @@ void PCB_EDIT_FRAME::UpdateTitle()
     SetTitle( title );
 }
 
-#ifdef KICAD_SCRIPTING_WXPYTHON
+#if defined(KICAD_SCRIPTING_WXPYTHON)
 void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
 {
-    if ( m_pythonPanelHidden )
+    if( m_pythonPanel == NULL )
     {
-        m_auimgr.GetPane( m_pythonPanel ).Show();
-        m_pythonPanelHidden = false;
+        // Add the scripting panel
+        EDA_PANEINFO  pythonAuiPane;
+        pythonAuiPane.ScriptingConsolePane();
+        pythonAuiPane.Caption( wxT( "Python Scripting" ) );
+        pythonAuiPane.MinSize( 300, 150 );
+
+    #if 1   // Set to 0 to make the Python console dockable
+        // Currently the console is not dockable. Reasons:
+        // * When docked there is an issue with accelerator keys used in the main menu:
+        //   these keys are not sent to the console, even if it has the focus
+        // * The console is more easy to move if it is not dockable
+        pythonAuiPane.Dockable( false ).Float();
+
+        // Gives a reasonnable position to the console
+        wxPoint pos = m_canvas->GetScreenPosition();
+        pythonAuiPane.FloatingPosition( pos.x + 10, pos.y + 10 );
+        pythonAuiPane.FloatingSize( 600, 200 );
+    #else
+        pythonAuiPane.BestSize( 600, 200 );
+        pythonAuiPane.LeftDockable( false ).RightDockable( false );
+    #endif
+
+        m_pythonPanel = CreatePythonShellWindow( this );
+        m_auimgr.AddPane( m_pythonPanel,
+                          pythonAuiPane.Name( PYTHONCONSOLE_STRID ).Bottom().Layer(9) );
     }
-    else
-    {
-        m_auimgr.GetPane( m_pythonPanel ).Hide();
-        m_pythonPanelHidden = true;
-    }
+
+    m_pythonPanelShow = ! m_pythonPanelShow;
+    m_auimgr.GetPane( PYTHONCONSOLE_STRID ).Show( m_pythonPanelShow );
 
     m_auimgr.Update();
-
 }
 #endif
 
@@ -1185,32 +1029,34 @@ void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )
 
     switch( aEvent.GetId() )
     {
-        case ID_TOOLBARH_PCB_MODE_MODULE:
-            if( aEvent.IsChecked() &&
-                m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_TRACKS ) )
-                m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, false );
-            break;
-
-        case ID_TOOLBARH_PCB_MODE_TRACKS:
-            if( aEvent.IsChecked() &&
-                m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_MODULE ) )
-                m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, false );
-            break;
+    case ID_TOOLBARH_PCB_MODE_MODULE:
+        if( aEvent.IsChecked() &&
+            m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_TRACKS ) )
+        {
+            m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, false );
         }
+        break;
+
+    case ID_TOOLBARH_PCB_MODE_TRACKS:
+        if( aEvent.IsChecked() &&
+            m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_MODULE ) )
+        {
+            m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, false );
+        }
+        break;
+    }
+}
+
+
+void PCB_EDIT_FRAME::OnLayerColorChange( wxCommandEvent& aEvent )
+{
+    ReCreateLayerBox();
 }
 
 
 void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 {
     DIALOG_PLOT dlg( this );
+
     dlg.ShowModal();
-}
-
-
-void PCB_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
-{
-    wxCHECK2_MSG( aRotationAngle > 0 && aRotationAngle <= 900, aRotationAngle = 900,
-                  wxT( "Invalid rotation angle, defaulting to 90." ) );
-
-    m_rotationAngle = aRotationAngle;
 }

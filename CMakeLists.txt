@@ -23,8 +23,9 @@ set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 # reports.
 #
 
-option( USE_KIWAY_DLLS
-    "Build the major modules as KIFACE DLLs or DSOs, will soon be the norm." OFF )
+#option( USE_KIWAY_DLLS "Build the major modules as KIFACE DLLs or DSOs, will soon be the norm." ON )
+set( USE_KIWAY_DLLS true )  # this is now mandatory, the code is the same anyways, the old code is gone.
+
 
 # The desire is to migrate designs *away from* case independence, and to create designs which use
 # literally (case specific) interpreted component names.  But for backwards compatibility,
@@ -81,7 +82,7 @@ mark_as_advanced( KICAD_SKIP_BOOST )    # Normal builders should build Boost.
 # when not defined by user, the default is python.exe under Windows and python2 for others
 # python binary file should be is exec path.
 
-option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
+option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." ON )
 
 # This can be set to a custom name to brag about a particular branch in the "About" dialog:
 set( KICAD_REPO_NAME "product" CACHE STRING "Name of the tree from which this build came." )
@@ -114,6 +115,12 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     execute_process( COMMAND ${CMAKE_C_COMPILER} -dumpversion
         OUTPUT_VARIABLE GCC_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE )
+
+    if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+        set( TO_LINKER -XLinker )
+    else()
+        set( TO_LINKER -Wl )
+    endif()
 
     # Establish -Wall early, so specialized relaxations of this may come
     # subsequently on the command line, such as in pcbnew/github/CMakeLists.txt
@@ -149,6 +156,20 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden" )
     endif()
 
+    find_package( OpenMP QUIET )
+
+    if( OPENMP_FOUND )
+        set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}" )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}" )
+        add_definitions( -DUSE_OPENMP )
+
+        # MinGW does not include the OpenMP link library and FindOpenMP.cmake does not
+        # set it either.  Not sure this is the most elegant solution but it works.
+        if( MINGW )
+            set( OPENMP_LIBRARIES gomp )
+        endif()
+    endif()
+
     if( MINGW )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
 
@@ -182,19 +203,20 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   ${PIC_FLAG}" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PIC_FLAG}" )
 
-        if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-            set( TO_LINKER -XLinker )
-        else()
-            set( TO_LINKER -Wl )
-        endif()
-
-        # Thou shalt not link vaporware and tell us it's a valid DSO (apple ld doesn't support it)
         if( NOT APPLE )
+            # Thou shalt not link vaporware and tell us it's a valid DSO (apple ld doesn't support it)
             set( CMAKE_SHARED_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
             set( CMAKE_MODULE_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
+
+            set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
+
+            # Defeat ELF's ability to use the GOT to replace locally implemented functions
+            # with ones from another module.
+            # https://bugs.launchpad.net/kicad/+bug/1322354
+            set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${TO_LINKER},-Bsymbolic" )
+            set( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${TO_LINKER},-Bsymbolic" )
         endif()
 
-        set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
     endif()
 
     # quiet GCC while in boost
@@ -208,16 +230,16 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
 
-        # Allows .dylib relocation in the future
+        # Allows .dylib relocation in the future - needed by fixbundle
         set( CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS} -headerpad_max_install_names")
 
         if( NOT CMAKE_CXX_COMPILER )
             EXEC_PROGRAM( wx-config ARGS --cc  OUTPUT_VARIABLE CMAKE_C_COMPILER )
-        endif( NOT CMAKE_CXX_COMPILER )
+        endif()
 
         if( NOT CMAKE_CXX_COMPILER )
             EXEC_PROGRAM( wx-config ARGS --cxx OUTPUT_VARIABLE CMAKE_CXX_COMPILER )
-        endif( NOT CMAKE_CXX_COMPILER )
+        endif()
 
     endif()
 
@@ -333,7 +355,7 @@ include( ExternalProject )
 include( CheckFindPackageResult )
 
 # Turn on wxWidgets compatibility mode for some classes
-add_definitions(-DWX_COMPATIBILITY)
+add_definitions( -DWX_COMPATIBILITY )
 
 #######################
 # Find OpenGL library #
@@ -341,14 +363,20 @@ add_definitions(-DWX_COMPATIBILITY)
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
 
+# Dick 5-Feb-2014:
+# Marco: We cannot use both ExternalProject_Add() add and find_package()
+# in the same CMake tree and have them both reference the same package:
+# http://stackoverflow.com/questions/6351609/cmake-linking-to-library-downloaded-from-externalproject-add
+# https://www.mail-archive.com/cmake@cmake.org/msg47501.html
+
 # Handle target used to specify if a target needs wx-widgets or other libraries
-# Always defined, empty if no libraries are to be build
+# Always defined, empty if no libraries are to be built
 add_custom_target( lib-dependencies )
 
 if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
-    # This should be build in all cases, if swig exec is not avaiable
-    # will be impossible also enable SCRIPTING being for PCBNEW required immediatly
+    # This should be built in all cases, if swig exec is not avaiable
+    # will be impossible also enable SCRIPTING being for PCBNEW required immediately
 
     include( download_pcre )
     include( download_swig )
@@ -373,8 +401,8 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
 
     if( KICAD_SCRIPTING OR KICAD_SCRIPTING_WXPYTHON OR KICAD_SCRIPTING_MODULES )
- 
-        message(STATUS "Scripting ENABLED")        
+
+        message(STATUS "Scripting ENABLED")
         include( download_wxpython )
 
         set( SWIG_EXECUTABLE  ${SWIG_ROOT}/bin/swig )
@@ -424,7 +452,7 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     if( KICAD_BUILD_DYNAMIC AND APPLE )
         add_custom_target( osx_fix_bundles ALL DEPENDS cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
-        add_custom_command(TARGET osx_fix_bundles POST_BUILD COMMAND scripts/osx_fixbundle.sh COMMENT "Migrating dylibs to bundles")
+        add_custom_command(TARGET osx_fix_bundles POST_BUILD COMMAND ${PROJECT_SOURCE_DIR}/scripts/osx_fixbundle.sh ${PROJECT_SOURCE_DIR} COMMENT "Migrating dylibs to bundles")
     endif()
 
 endif( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC)
@@ -432,14 +460,18 @@ endif( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC)
 #####################
 # Find GLEW library #
 #####################
-find_package(GLEW)
-check_find_package_result(GLEW_FOUND "GLEW")
+if( NOT GLEW_FOUND )
+    find_package( GLEW )
+    check_find_package_result( GLEW_FOUND "GLEW" )
+endif()
 
 ######################
 # Find Cairo library #
 ######################
-find_package(Cairo 1.8.1 QUIET)
-check_find_package_result(CAIRO_FOUND "Cairo")
+if( NOT CAIRO_FOUND )
+    find_package( Cairo 1.8.1 QUIET )
+    check_find_package_result( CAIRO_FOUND "Cairo" )
+endif()
 
 # Download boost and possibly build parts of it
 #################################################
@@ -450,6 +482,8 @@ if( KICAD_SKIP_BOOST )
     if( NOT Boost_FOUND )
         message( FATAL_ERROR "Boost 1.54+ libraries are required." )
     endif()
+
+    add_custom_target( boost )      # it is required to meet some further dependencies
 
     message( WARNING "
 WARNING: You decided to skip building boost library.
@@ -466,6 +500,9 @@ endif()
 # application. You can figure out what libraries you need here;
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
 
+# See line 41 of CMakeModules/FindwxWidgets.cmake
+set( wxWidgets_CONFIG_OPTIONS --static=no )
+
 # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
 # Seems no more needed on wx-3
 if( APPLE AND ( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES OR KICAD_SCRIPTING_WXPYTHON) )
@@ -475,8 +512,8 @@ else()
 endif()
 
 if( NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
-check_find_package_result( wxWidgets_FOUND "wxWidgets" )
-endif( NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
+    check_find_package_result( wxWidgets_FOUND "wxWidgets" )
+endif()
 
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
@@ -524,15 +561,15 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         set( PythonInterp_FIND_VERSION 2.6 )
         set( PythonLibs_FIND_VERSION 2.6 )
     endif()
-    
+
     # force a python version < 3.0
     set( PythonInterp_FIND_VERSION 2.6)
     set( PythonLibs_FIND_VERSION 2.6 )
 
     find_package( PythonInterp )
-    
+
     check_find_package_result( PYTHONINTERP_FOUND "Python Interpreter" )
-    
+
     if( NOT PYTHON_VERSION_MAJOR EQUAL 2 )
         message( FATAL_ERROR "Python 2.x is required." )
     endif()
@@ -595,7 +632,6 @@ add_subdirectory( 3d-viewer )
 add_subdirectory( cvpcb )
 add_subdirectory( eeschema )
 add_subdirectory( gerbview )
-add_subdirectory( kicad )
 add_subdirectory( lib_dxf )
 add_subdirectory( pcbnew )
 add_subdirectory( polygon )
@@ -603,9 +639,11 @@ add_subdirectory( pagelayout_editor )
 add_subdirectory( potrace )
 add_subdirectory( bitmap2component )
 add_subdirectory( pcb_calculator )
+add_subdirectory( kicad )               # should follow pcbnew, eeschema
 add_subdirectory( tools )
 add_subdirectory( utils )
 add_subdirectory( qa )
+
 #add_subdirectory( new )
 
 
@@ -625,16 +663,16 @@ add_dependencies( pnsrouter boost )
 
 
 if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
-add_dependencies( pcbnew lib-dependencies )
-add_dependencies( eeschema lib-dependencies )
-add_dependencies( cvpcb lib-dependencies )
-add_dependencies( common lib-dependencies )
-add_dependencies( gal lib-dependencies )
-add_dependencies( pcbcommon lib-dependencies )
-add_dependencies( 3d-viewer lib-dependencies )
-add_dependencies( pcad2kicadpcb lib-dependencies )
-add_dependencies( pl_editor lib-dependencies )
-add_dependencies( pnsrouter lib-dependencies )
+    add_dependencies( pcbnew lib-dependencies )
+    add_dependencies( eeschema lib-dependencies )
+    add_dependencies( cvpcb lib-dependencies )
+    add_dependencies( common lib-dependencies )
+    add_dependencies( gal lib-dependencies )
+    add_dependencies( pcbcommon lib-dependencies )
+    add_dependencies( 3d-viewer lib-dependencies )
+    add_dependencies( pcad2kicadpcb lib-dependencies )
+    add_dependencies( pl_editor lib-dependencies )
+    add_dependencies( pnsrouter lib-dependencies )
 endif()
 
 if ( KICAD_BUILD_DYNAMIC )
@@ -657,6 +695,13 @@ if( DOXYGEN_FOUND )
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         DEPENDS Doxyfile
         COMMENT "building doxygen docs into directory Documentation/doxygen/html"
+        )
+    add_custom_target( dev-docs
+        ${CMAKE_COMMAND} -E remove_directory Documentation/development/doxygen
+        COMMAND ${DOXYGEN_EXECUTABLE}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Documentation/development
+        DEPENDS Doxyfile
+        COMMENT "building developer's resource docs into directory Documentation/development/doxygen/html"
         )
 else()
     message( STATUS "WARNING: Doxygen not found - doxygen-docs (Source Docs) target not created" )

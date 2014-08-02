@@ -35,6 +35,7 @@
 #include <gr_basic.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
 
 #include <wx/debug.h>
@@ -46,7 +47,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
                                      bool erase );
 
 
-int GERBVIEW_FRAME::ReturnBlockCommand( int key )
+int GERBVIEW_FRAME::BlockCommand( int key )
 {
     int cmd = 0;
 

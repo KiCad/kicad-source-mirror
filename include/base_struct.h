@@ -32,12 +32,12 @@
 #ifndef BASE_STRUCT_H_
 #define BASE_STRUCT_H_
 
+#include <core/typeinfo.h>
+
 #include <colors.h>
 #include <bitmaps.h>
 #include <richio.h>
 #include <view/view_item.h>
-
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #if defined(DEBUG)
 #include <iostream>         // needed for Show()
@@ -369,14 +369,23 @@ public:
     EDA_ITEM( const EDA_ITEM& base );
     virtual ~EDA_ITEM() { };
 
-    /// @copydoc VIEW_ITEM::Type()
-    KICAD_T Type()  const { return m_StructType; }
+    /**
+     * Function Type()
+     *
+     * returns the type of object.  This attribute should never be changed
+     * after a constructor sets it, so there is no public "setter" method.
+     * @return KICAD_T - the type of object.
+     */
+    inline KICAD_T Type() const
+    {
+        return m_StructType;
+    }
 
     void SetTimeStamp( time_t aNewTimeStamp ) { m_TimeStamp = aNewTimeStamp; }
     time_t GetTimeStamp() const { return m_TimeStamp; }
 
-    EDA_ITEM* Next() const { return (EDA_ITEM*) Pnext; }
-    EDA_ITEM* Back() const { return (EDA_ITEM*) Pback; }
+    EDA_ITEM* Next() const { return Pnext; }
+    EDA_ITEM* Back() const { return Pback; }
     EDA_ITEM* GetParent() const { return m_Parent; }
     DHEAD* GetList() const { return m_List; }
 
@@ -456,14 +465,10 @@ public:
      * Function HitTest
      * tests if \a aPosition is contained within or on the bounding area of an item.
      *
-     * @note This function cannot be const because some of the derive objects perform
-     *       intermediate calculations which change object members.  Make sure derived
-     *       objects do not declare this as const.
-     *
      * @param aPosition A reference to a wxPoint object containing the coordinates to test.
      * @return True if \a aPosition is within or on the item bounding area.
      */
-    virtual bool HitTest( const wxPoint& aPosition )
+    virtual bool HitTest( const wxPoint& aPosition ) const
     {
         return false;   // derived classes should override this function
     }

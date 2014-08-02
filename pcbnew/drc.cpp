@@ -38,6 +38,8 @@
 #include <class_track.h>
 #include <class_pad.h>
 #include <class_zone.h>
+#include <class_draw_panel_gal.h>
+#include <view/view.h>
 
 #include <pcbnew.h>
 #include <drc_stuff.h>
@@ -293,13 +295,13 @@ void DRC::updatePointers()
 }
 
 
-bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
+bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
 {
     bool ret = true;
 
     const BOARD_DESIGN_SETTINGS& g = m_pcb->GetDesignSettings();
 
-#define FmtVal( x ) GetChars( ReturnStringFromValue( g_UserUnit, x ) )
+#define FmtVal( x ) GetChars( StringFromValue( g_UserUnit, x ) )
 
 #if 0   // set to 1 when (if...) BOARD_DESIGN_SETTINGS has a m_MinClearance value
     if( nc->GetClearance() < g.m_MinClearance )
@@ -312,6 +314,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_CLEARANCE, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -327,6 +330,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_TRACKWIDTH, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -341,6 +345,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_VIASIZE, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -355,6 +360,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_VIADRILLSIZE, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -369,6 +375,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_uVIASIZE, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -383,6 +390,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_uVIADRILLSIZE, msg, m_currentMarker );
         m_pcb->Add( m_currentMarker );
+        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
         m_currentMarker = 0;
         ret = false;
     }
@@ -395,7 +403,7 @@ bool DRC::testNetClasses()
 {
     bool        ret = true;
 
-    NETCLASSES& netclasses = m_pcb->m_NetClasses;
+    NETCLASSES& netclasses = m_pcb->GetDesignSettings().m_NetClasses;
 
     wxString    msg;   // construct this only once here, not in a loop, since somewhat expensive.
 
@@ -404,7 +412,7 @@ bool DRC::testNetClasses()
 
     for( NETCLASSES::const_iterator i = netclasses.begin();  i != netclasses.end();  ++i )
     {
-        NETCLASS* nc = i->second;
+        NETCLASSPTR nc = i->second;
 
         if( !doNetClass( nc, msg ) )
             ret = false;
@@ -447,6 +455,7 @@ void DRC::testPad2Pad()
         {
             wxASSERT( m_currentMarker );
             m_pcb->Add( m_currentMarker );
+            m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
             m_currentMarker = 0;
         }
     }
@@ -493,6 +502,7 @@ void DRC::testTracks( bool aShowProgressBar )
         {
             wxASSERT( m_currentMarker );
             m_pcb->Add( m_currentMarker );
+            m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
             m_currentMarker = 0;
         }
     }
@@ -526,6 +536,7 @@ void DRC::testUnconnected()
         D_PAD*    padEnd   = rat.m_PadEnd;
 
         msg = padStart->GetSelectMenuText() + wxT( " net " ) + padStart->GetNetname();
+
         DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_PADS,
                                           msg,
                                           padEnd->GetSelectMenuText(),
@@ -549,11 +560,12 @@ void DRC::testZones()
         if( !test_area->IsOnCopperLayer() )
             continue;
 
-        if( test_area->GetNet() < 0 )
+        if( test_area->GetNetCode() < 0 )
         {
             m_currentMarker = fillMarker( test_area,
                                           DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE, m_currentMarker );
             m_pcb->Add( m_currentMarker );
+            m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
             m_currentMarker = 0;
         }
     }
@@ -589,6 +601,7 @@ void DRC::testKeepoutAreas()
                     m_currentMarker = fillMarker( segm, NULL,
                                                   DRCE_TRACK_INSIDE_KEEPOUT, m_currentMarker );
                     m_pcb->Add( m_currentMarker );
+                    m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
                     m_currentMarker = 0;
                 }
             }
@@ -597,7 +610,7 @@ void DRC::testKeepoutAreas()
                 if( ! area->GetDoNotAllowVias()  )
                     continue;
 
-                if( ! ((SEGVIA*)segm)->IsOnLayer( area->GetLayer() ) )
+                if( ! ((VIA*)segm)->IsOnLayer( area->GetLayer() ) )
                     continue;
 
                 if( area->Outline()->Distance( segm->GetPosition() ) < segm->GetWidth()/2 )
@@ -605,6 +618,7 @@ void DRC::testKeepoutAreas()
                     m_currentMarker = fillMarker( segm, NULL,
                                                   DRCE_VIA_INSIDE_KEEPOUT, m_currentMarker );
                     m_pcb->Add( m_currentMarker );
+                    m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
                     m_currentMarker = 0;
                 }
             }
@@ -645,7 +659,7 @@ bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
             if( ! area->GetDoNotAllowVias()  )
                 continue;
 
-            if( ! ((SEGVIA*)aRefSeg)->IsOnLayer( area->GetLayer() ) )
+            if( ! ((VIA*)aRefSeg)->IsOnLayer( area->GetLayer() ) )
                 continue;
 
             if( area->Outline()->Distance( aRefSeg->GetPosition() ) < aRefSeg->GetWidth()/2 )
@@ -663,7 +677,9 @@ bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
 
 bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit )
 {
-    LAYER_MSK layerMask = aRefPad->GetLayerMask() & ALL_CU_LAYERS;
+    const static LSET all_cu = LSET::AllCuMask();
+
+    LSET layerMask = aRefPad->GetLayerSet() & all_cu;
 
     /* used to test DRC pad to holes: this dummy pad has the size and shape of the hole
      * to test pad to pad hole DRC, using the pad to pad DRC test function.
@@ -671,11 +687,11 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
      * A pad must have a parent because some functions expect a non null parent
      * to find the parent board, and some other data
      */
-    MODULE dummymodule( m_pcb );    // Creates a dummy parent
-    D_PAD dummypad( &dummymodule );
+    MODULE  dummymodule( m_pcb );    // Creates a dummy parent
+    D_PAD   dummypad( &dummymodule );
 
     // Ensure the hole is on all copper layers
-    dummypad.SetLayerMask( ALL_CU_LAYERS | dummypad.GetLayerMask() );
+    dummypad.SetLayerSet( all_cu | dummypad.GetLayerSet() );
 
     // Use the minimal local clearance value for the dummy pad.
     // The clearance of the active pad will be used as minimum distance to a hole
@@ -697,7 +713,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
         // No problem if pads are on different copper layers,
         // but their hole (if any ) can create DRC error because they are on all
         // copper layers, so we test them
-        if( ( pad->GetLayerMask() & layerMask ) == 0 )
+        if( ( pad->GetLayerSet() & layerMask ) == 0 )
         {
             // if holes are in the same location and have the same size and shape,
             // this can be accepted
@@ -756,7 +772,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 
         // The pad must be in a net (i.e pt_pad->GetNet() != 0 ),
         // But no problem if pads have the same netcode (same net)
-        if( pad->GetNet() && ( aRefPad->GetNet() == pad->GetNet() ) )
+        if( pad->GetNetCode() && ( aRefPad->GetNetCode() == pad->GetNetCode() ) )
             continue;
 
         // if pads are from the same footprint

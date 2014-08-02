@@ -51,11 +51,11 @@ PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
     m_Shape = 0;
     m_Size  = Millimeter2iu( 5 );       // Gives a decent size
     m_Width = Millimeter2iu( 0.15 );    // Gives a decent width
-    m_Layer = EDGE_N;                   // a target is on all layers
+    m_Layer = Edge_Cuts;                   // a target is on all layers
 }
 
-PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent, int aShape, LAYER_NUM aLayer,
-    const wxPoint& aPos, int aSize, int aWidth ) :
+PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent, int aShape, LAYER_ID aLayer,
+        const wxPoint& aPos, int aSize, int aWidth ) :
     BOARD_ITEM( aParent, PCB_TARGET_T )
 {
     m_Shape = aShape;
@@ -158,7 +158,7 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
 }
 
 
-bool PCB_TARGET::HitTest( const wxPoint& aPosition )
+bool PCB_TARGET::HitTest( const wxPoint& aPosition ) const
 {
     int dX = aPosition.x - m_Pos.x;
     int dY = aPosition.y - m_Pos.y;

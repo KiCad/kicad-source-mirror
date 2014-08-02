@@ -30,6 +30,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <wxEeschemaStruct.h>
+#include <kiface_i.h>
 
 #include <general.h>
 #include <hotkeys.h>
@@ -139,9 +140,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
                             HELP_RUN_LIB_VIEWER );
 
-
     m_mainToolBar->AddSeparator();
-
 
     m_mainToolBar->AddTool( ID_GET_ANNOTATE, wxEmptyString, KiBitmap( annotate_xpm ),
                             HELP_ANNOTATE );
@@ -158,6 +157,13 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
 
+    // The user must HAVE footprints before he can assign them.  So put this before
+    // the CVPCB.
+    if( !Kiface().IsSingle() )  // if pcbnew is not a separate process
+    {
+        m_mainToolBar->AddTool( ID_TO_PCB_MODULE_EDITOR, wxEmptyString, KiBitmap( module_editor_xpm ),
+                                _( "Footprint Editor" ) );
+    }
 
     m_mainToolBar->AddTool( ID_TO_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
                             _( "Run CvPcb to associate components and footprints" ) );

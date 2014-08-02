@@ -29,8 +29,8 @@
 #ifndef _DRC_STUFF_H
 #define _DRC_STUFF_H
 
-
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 #define OK_DRC  0
 #define BAD_DRC 1
@@ -212,14 +212,14 @@ private:
      * DRC problem, or unconnected pad problem.
      *
      * @param aTrack The reference track.
-     * @param aItem  Another item on the BOARD, such as a SEGVIA, SEGZONE,
+     * @param aItem  Another item on the BOARD, such as a VIA, SEGZONE,
      *               or TRACK.
      * @param aErrorCode A categorizing identifier for the particular type
      *                   of error that is being reported.
      * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to
      *               first be allocated, then filled.
      */
-    MARKER_PCB* fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
+    MARKER_PCB* fillMarker( const TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
 
     MARKER_PCB* fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER_PCB* fillMe );
 
@@ -283,7 +283,7 @@ private:
 
     //-----<single "item" tests>-----------------------------------------
 
-    bool doNetClass( NETCLASS* aNetClass, wxString& msg );
+    bool doNetClass( boost::shared_ptr<NETCLASS> aNetClass, wxString& msg );
 
     /**
      * Function doPadToPadsDrc

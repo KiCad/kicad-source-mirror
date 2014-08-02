@@ -75,25 +75,50 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
 {
     // specctra wants top physical layer first, then going down to the
     // bottom most physical layer in physical sequence.
-    // @question : why does KiCad not display layers in that order?
-    int layerCount = aBoard->GetCopperLayerCount();
+    // Same as KiCad now except for B_Cu
+    unsigned layerCount = aBoard->GetCopperLayerCount();
 
     layerIds.clear();
     pcbLayer2kicad.resize( layerCount );
-    kicadLayer2pcb.resize( LAYER_N_FRONT + 1 );
+    kicadLayer2pcb.resize( B_Cu + 1 );
 
+#if 0 // was:
     for( LAYER_NUM kiNdx = layerCount - 1, pcbNdx=FIRST_LAYER;
          kiNdx >= 0; --kiNdx, ++pcbNdx )
     {
-        LAYER_NUM kilayer = (kiNdx>0 && kiNdx==layerCount-1) ? LAYER_N_FRONT : kiNdx;
+        LAYER_NUM kilayer = (kiNdx>0 && kiNdx==layerCount-1) ? F_Cu : kiNdx;
 
         // establish bi-directional mapping between KiCad's BOARD layer and PCB layer
         pcbLayer2kicad[pcbNdx]  = kilayer;
         kicadLayer2pcb[kilayer] = pcbNdx;
 
         // save the specctra layer name in SPECCTRA_DB::layerIds for later.
-        layerIds.push_back( TO_UTF8( aBoard->GetLayerName( kilayer ) ) );
+        layerIds.push_back( TO_UTF8( aBoard->GetLayerName( ToLAYER_ID( kilayer ) ) ) );
     }
+#else
+
+    // establish bi-directional mapping between KiCad's BOARD layer and PCB layer
+
+    for( unsigned i = 0;  i < kicadLayer2pcb.size();  ++i )
+    {
+        if( i < layerCount-1 )
+            kicadLayer2pcb[i] = i;
+        else
+            kicadLayer2pcb[i] = layerCount - 1;
+    }
+
+    for( unsigned i = 0;  i < pcbLayer2kicad.size();  ++i )
+    {
+        if( i < layerCount-1 )
+            pcbLayer2kicad[i] = ToLAYER_ID( i );
+        else
+            pcbLayer2kicad[i] = B_Cu;
+
+        // save the specctra layer name in SPECCTRA_DB::layerIds for later.
+        layerIds.push_back( TO_UTF8( aBoard->GetLayerName( ToLAYER_ID( i ) ) ) );
+    }
+
+#endif
 }
 
 

@@ -64,14 +64,14 @@ public:
      * Read values stored in config for this attenuator
      * @param aConfig = the config to use
      */
-    void         ReadConfig( wxConfig* aConfig );
+    void         ReadConfig( wxConfigBase* aConfig );
 
     /**
      * Function WriteConfig
      * Read values stored in config for this attenuator
      * @param aConfig = the config to use
      */
-    void         WriteConfig( wxConfig* aConfig );
+    void         WriteConfig( wxConfigBase* aConfig );
 };
 
 class ATTENUATOR_PI : public ATTENUATOR

@@ -27,11 +27,12 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiface_i.h>
+#include <fp_lib_table.h>
 #include <id.h>
 #include <common.h>
 #include <gestfich.h>
-#include <param_config.h>
+#include <config_params.h>
 #include <wildcards_and_files_ext.h>
 #include <fp_lib_table.h>
 #include <confirm.h>
@@ -41,29 +42,18 @@
 #include <class_DisplayFootprintsFrame.h>
 
 
-#define GROUP wxT("/cvpcb")
-#define GROUPLIB wxT("/pcbnew/libraries")
-#define GROUPEQU wxT("/cvpcb/libraries")
-
-
-PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters( void )
+PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters()
 {
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
 
-    m_projectFileParams.push_back( new PARAM_CFG_BASE( GROUPLIB,
-                                                       PARAM_COMMAND_ERASE ) );
-    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
-                                                               &m_ModuleLibNames,
-                                                               GROUPLIB ) );
-    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "EquName" ),
-                                                               &m_AliasLibNames,
-                                                               GROUPEQU ) );
-    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetIExt" ),
-                                                           &m_NetlistFileExtension ) );
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),
-                                                           &m_UserLibraryPath,
-                                                           GROUPLIB ) );
+    m_projectFileParams.push_back( new PARAM_CFG_BASE( GROUP_PCB_LIBS, PARAM_COMMAND_ERASE ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST(
+        wxT( "EquName" ), &m_AliasLibNames, GROUP_CVP_EQU ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING(
+        wxT( "NetIExt" ), &m_NetlistFileExtension ) );
 
     return m_projectFileParams;
 }
@@ -71,45 +61,22 @@ PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters( void )
 
 void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
 {
-    wxFileName fn = aFileName;
+    wxFileName      fn( aFileName );
+    PROJECT&        prj = Prj();
 
     m_ModuleLibNames.Clear();
     m_AliasLibNames.Clear();
 
-    if( fn.GetExt() != ProjectFileExtension )
-        fn.SetExt( ProjectFileExtension );
+    fn.SetExt( ProjectFileExtension );
 
-    wxGetApp().RemoveLibraryPath( m_UserLibraryPath );
-
-    wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
+    // was: Pgm().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
+    prj.ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_CVP, GetProjectFileParameters(), false );
 
     if( m_NetlistFileExtension.IsEmpty() )
         m_NetlistFileExtension = wxT( "net" );
 
-    // User library path takes precedent over default library search paths.
-    wxGetApp().InsertLibraryPath( m_UserLibraryPath, 1 );
-
-    delete m_footprintLibTable;
-
-    // Attempt to load the project footprint library table if it exists.
-    m_footprintLibTable = new FP_LIB_TABLE();
-
-    if( m_DisplayFootprintFrame )
-        m_DisplayFootprintFrame->SetFootprintLibTable( m_footprintLibTable );
-
-    wxFileName projectFpLibTableFileName;
-
-    projectFpLibTableFileName = FP_LIB_TABLE::GetProjectFileName( fn );
-    FP_LIB_TABLE::SetProjectPathEnvVariable( projectFpLibTableFileName );
-
-    try
-    {
-        m_footprintLibTable->Load( projectFpLibTableFileName, m_globalFootprintTable );
-    }
-    catch( IO_ERROR ioe )
-    {
-        DisplayError( this, ioe.errorText );
-    }
+    // Force FP_LIB_TABLE to be loaded on demand.
+    prj.ElemClear( PROJECT::ELEM_FPTBL );
 }
 
 
@@ -136,5 +103,11 @@ void CVPCB_MAINFRAME::SaveProjectFile( wxCommandEvent& aEvent )
     if( !IsWritable( fn ) )
         return;
 
-    wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+    // was:
+    // Pgm().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+
+    PROJECT&        prj = Prj();
+
+    prj.ConfigSave( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_CVP, GetProjectFileParameters() );
 }
+

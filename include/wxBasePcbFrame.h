@@ -34,7 +34,7 @@
 
 #include <vector>
 
-#include <wxstruct.h>
+#include <draw_frame.h>
 #include <base_struct.h>
 #include <eda_text.h>                // EDA_DRAW_MODE_T
 #include <richio.h>
@@ -76,8 +76,8 @@ public:
     EDA_UNITS_T m_UserGridUnit;
     wxRealPoint m_UserGridSize;
 
-    int m_FastGrid1;
-    int m_FastGrid2;
+    int m_FastGrid1;                // 1st fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
+    int m_FastGrid2;                // 2nd fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
 
     EDA_3D_FRAME* m_Draw3DFrame;
 
@@ -85,11 +85,6 @@ public:
 protected:
     BOARD*              m_Pcb;
     GENERAL_COLLECTOR*  m_Collector;
-
-    /// The project footprint library table.  This is a combination of the project
-    /// footprint library table and the global footprint table.  This is the one to
-    /// use when finding a #MODULE.
-    FP_LIB_TABLE*       m_footprintLibTable;
 
     /// Auxiliary tool bar typically shown below the main tool bar at the top of the
     /// main window.
@@ -108,22 +103,17 @@ protected:
      *
      * @param aFootprintId is the #FPID of component footprint to load.
      * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
-     *         libraries in #m_footprintLibTable.
+     *         libraries in the table returned from #Prj().PcbFootprintLibs().
      * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
      *                 occurs while reading footprint library files.
      */
     MODULE* loadFootprint( const FPID& aFootprintId )
         throw( IO_ERROR, PARSE_ERROR );
 
-    ///> Rendering order of layers on GAL-based canvas (lower index in the array
-    ///> means that layer is displayed closer to the user, ie. on the top).
-    static const LAYER_NUM GAL_LAYER_ORDER[];
-
 public:
-    PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
-                    const wxString& aTitle,
-                    const wxPoint& aPos, const wxSize& aSize,
-                    long aStyle, const wxString & aFrameName );
+    PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
+            const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
+            long aStyle, const wxString& aFrameName );
 
     ~PCB_BASE_FRAME();
 
@@ -133,7 +123,7 @@ public:
      *
      * @param aFootprintId is the #FPID of component footprint to load.
      * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
-     *         libraries in #m_footprintLibTable.
+     *         libraries in table returned from #Prj().PcbFootprintLibs().
      */
     MODULE* LoadFootprint( const FPID& aFootprintId );
 
@@ -191,17 +181,6 @@ public:
         return m_Pcb;
     }
 
-    /**
-     * Function SetFootprintLibTable
-     * set the footprint library table to \a aFootprintLibTable.
-     *
-     * @param aFootprintLibTable is a pointer to the #FP_LIB_TABLE object.
-     */
-    void SetFootprintLibTable( FP_LIB_TABLE* aFootprintLibTable )
-    {
-        m_footprintLibTable = aFootprintLibTable;
-    }
-
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
@@ -220,12 +199,9 @@ public:
      * Function BestZoom
      * @return the "best" zoom to show the entire board or footprint on the screen.
      */
-
     virtual double BestZoom();
 
     virtual void Show3D_Frame( wxCommandEvent& event );
-
-public:
 
     // Read/write functions:
     EDA_ITEM* ReadDrawSegmentDescr( LINE_READER* aReader );
@@ -483,14 +459,6 @@ public:
      */
     wxString SelectFootprintFromLibBrowser();
 
-    /**
-     * Function GetFootprintLibraryTable
-     * @return the project #FP_LIB_TABLE so programs can find footprints.
-     */
-    FP_LIB_TABLE* GetFootprintLibraryTable() { return m_footprintLibTable; }
-
-    void SetFootprintLibraryTable( FP_LIB_TABLE* aTable ) { m_footprintLibTable = aTable; }
-
     //  ratsnest functions
     /**
      * Function Compile_Ratsnest
@@ -622,7 +590,7 @@ public:
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
-    virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+    virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                                      UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
 
@@ -634,51 +602,62 @@ public:
      * @param aDlgPosition = position of dialog ( defualt = centered)
      * @return the selected layer id
      */
-    LAYER_NUM SelectLayer( LAYER_NUM aDefaultLayer,
-                           LAYER_MSK aNotAllowedLayersMask = 0,
-                           wxPoint aDlgPosition = wxDefaultPosition );
+    LAYER_ID SelectLayer( LAYER_ID aDefaultLayer,
+                          LSET aNotAllowedLayersMask = LSET(),
+                          wxPoint aDlgPosition = wxDefaultPosition );
 
     /* Display a list of two copper layers to choose a pair of copper layers
      * the layer pair is used to fast switch between copper layers when placing vias
      */
     void SelectCopperLayerPair();
 
-    virtual void SwitchLayer( wxDC* DC, LAYER_NUM layer );
+    virtual void SwitchLayer( wxDC* DC, LAYER_ID layer );
 
     /**
-     * Load applications settings common to PCB draw frame objects.
-     *
-     * This overrides the base class EDA_DRAW_FRAME::LoadSettings() to
-     * handle settings common to the PCB layout application and footprint
-     * editor main windows.  It calls down to the base class to load
-     * settings common to all drawing frames.  Please put your application
-     * settings common to all pcb drawing frames here to avoid having
-     * application settings loaded all over the place.
+     * Function SetActiveLayer
+     * will change the currently active layer to \a aLayer.
      */
-    virtual void LoadSettings();
+    virtual void SetActiveLayer( LAYER_ID aLayer )
+    {
+        ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
+    }
+
+    /**
+     * Function GetActiveLayer
+     * returns the active layer
+     */
+    virtual LAYER_ID GetActiveLayer() const
+    {
+        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+    }
+
+    void LoadSettings( wxConfigBase* aCfg );    // override virtual
+    void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
     bool InvokeDialogGrid();
-
-    /**
-     * Save applications settings common to PCB draw frame objects.
-     *
-     * This overrides the base class EDA_DRAW_FRAME::SaveSettings() to
-     * save settings common to the PCB layout application and footprint
-     * editor main windows.  It calls down to the base class to save
-     * settings common to all drawing frames.  Please put your application
-     * settings common to all pcb drawing frames here to avoid having
-     * application settings saved all over the place.
-     */
-    virtual void SaveSettings();
 
     void OnTogglePolarCoords( wxCommandEvent& aEvent );
     void OnTogglePadDrawMode( wxCommandEvent& aEvent );
 
-    /* User interface update event handlers. */
+    // User interface update event handlers.
     void OnUpdateCoordType( wxUpdateUIEvent& aEvent );
     void OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
+
+    /**
+     * Function SetFastGrid1()
+     *
+     * Switches grid settings to the 1st "fast" setting predefined by user.
+     */
+    void SetFastGrid1();
+
+    /**
+     * Function SetFastGrid2()
+     *
+     * Switches grid settings to the 1st "fast" setting predefined by user.
+     */
+    void SetFastGrid2();
 
     DECLARE_EVENT_TABLE()
 };

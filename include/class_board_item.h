@@ -33,8 +33,6 @@
 
 #include <base_struct.h>
 #include <gr_basic.h>
-#include <boost/ptr_container/ptr_vector.hpp>
-#include <gr_basic.h>
 #include <layers_id_colors_and_visibility.h>
 
 /// Abbrevation for fomatting internal units to a string.
@@ -78,13 +76,12 @@ class BOARD_ITEM : public EDA_ITEM
     void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
 
 protected:
-    LAYER_NUM m_Layer;
+    LAYER_ID    m_Layer;
 
 public:
 
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
-        EDA_ITEM( aParent, idtype )
-        , m_Layer( FIRST_LAYER )
+        EDA_ITEM( aParent, idtype ), m_Layer( F_Cu )
     {
     }
 
@@ -95,19 +92,29 @@ public:
     virtual void SetPosition( const wxPoint& aPos ) = 0;
 
     /**
+     * Function IsConnected()
+     * Returns information if the object is derived from BOARD_CONNECTED_ITEM.
+     * @return True if the object is of BOARD_CONNECTED_ITEM type, false otherwise.
+     */
+    virtual bool IsConnected() const
+    {
+        return false;
+    }
+
+    /**
      * A value of wxPoint(0,0) which can be passed to the Draw() functions.
      */
     static wxPoint ZeroOffset;
 
-    BOARD_ITEM* Next() const { return (BOARD_ITEM*) Pnext; }
-    BOARD_ITEM* Back() const { return (BOARD_ITEM*) Pback; }
+    BOARD_ITEM* Next() const { return static_cast<BOARD_ITEM*>( Pnext ); }
+    BOARD_ITEM* Back() const { return static_cast<BOARD_ITEM*>( Pback ); }
     BOARD_ITEM* GetParent() const { return (BOARD_ITEM*) m_Parent; }
 
     /**
      * Function GetLayer
      * returns the layer this item is on.
      */
-    LAYER_NUM GetLayer() const { return m_Layer; }
+    LAYER_ID GetLayer() const { return m_Layer; }
 
     /**
      * Function SetLayer
@@ -116,7 +123,7 @@ public:
      * is virtual because some items (in fact: class DIMENSION)
      * have a slightly different initialization
      */
-    virtual void SetLayer( LAYER_NUM aLayer )
+    virtual void SetLayer( LAYER_ID aLayer )
     {
         // trap any invalid layers, then go find the caller and fix it.
         // wxASSERT( unsigned( aLayer ) < unsigned( NB_PCB_LAYERS ) );
@@ -149,7 +156,7 @@ public:
      * @param aLayer The layer to test for.
      * @return bool - true if on given layer, else false.
      */
-    virtual bool IsOnLayer( LAYER_NUM aLayer ) const
+    virtual bool IsOnLayer( LAYER_ID aLayer ) const
     {
         return m_Layer == aLayer;
     }
@@ -245,7 +252,7 @@ public:
      */
     wxString GetLayerName() const;
 
-    virtual bool HitTest( const wxPoint& aPosition )
+    virtual bool HitTest( const wxPoint& aPosition ) const
     {
         return EDA_ITEM::HitTest( aPosition );
     }

@@ -80,9 +80,7 @@ public:
      * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the character offset into
      *               aId at which an error was detected.
      */
-    int Parse( const std::string& aId );
-
-    int Parse( const wxString& aId );
+    int Parse( const UTF8& aId );
 
     /**
      * Function GetLibNickname
@@ -100,9 +98,7 @@ public:
      *               into the parameter at which an error was detected, usually because it
      *               contained '/' or ':'.
      */
-    int SetLibNickname( const std::string& aNickname );
-
-    int SetLibNickname( const wxString& aNickname );
+    int SetLibNickname( const UTF8& aNickname );
 
     /**
      * Function GetFootprintName
@@ -114,11 +110,9 @@ public:
      * Function SetFootprintName
      * overrides the footprint name portion of the FPID to @a aFootprintName
      */
-    int SetFootprintName( const std::string& aFootprintName );
+    int SetFootprintName( const UTF8& aFootprintName );
 
-    int SetFootprintName( const wxString& aFootprintName );
-
-    int SetRevision( const std::string& aRevision );
+    int SetRevision( const UTF8& aRevision );
 
     const UTF8& GetRevision() const { return revision; }
 
@@ -136,10 +130,10 @@ public:
      * aLibNickname, aFootprintName, and aRevision.
      *
      * @throw PARSE_ERROR if any of the pieces are illegal.
-     */
-    static UTF8 Format( const std::string& aLibNickname, const std::string& aFootprintName,
-                               const std::string& aRevision )
+    static UTF8 Format( const UTF8& aLibNickname, const UTF8& aFootprintName,
+                               const UTF8& aRevision = "" )
         throw( PARSE_ERROR );
+     */
 
     /**
      * Function IsValid
@@ -152,7 +146,6 @@ public:
      *       entry.
      */
     bool IsValid() const { return !nickname.empty() && !footprint.empty(); }
-
 
     /**
      * Function IsLegacy

@@ -2,72 +2,54 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>pen</string>
-				<string>gba</string>
-				<string>gbr</string>
-				<string>gbx</string>
-				<string>gbo</string>
-				<string>gbl</string>
-				<string>gtl</string>
-				<string>gto</string>
-				<string>gta</string>
-				<string>gbp</string>
-				<string>gbp</string>
-				<string>gbs</string>
-				<string>gts</string>
-				<string>gtp</string>
-				<string>gbx</string>
-				<string>lgr</string>
-				<string>ger</string>
-				<string>pho</string>
-				<string>drl</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>gerbview_doc.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>gerbview document</string>
-			<key>LSHandlerRank</key>
-			<string>Default</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-		</dict>
-	</array>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
-	<string>gerbview</string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
-	<key>CFBundleIconFile</key>
-	<string>gerbview.icns</string>
-	<key>CFBundleIdentifier</key>
-	<string>org.kicad-eda.gerbview</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleLongVersionString</key>
-	<string></string>
-	<key>CFBundleName</key>
-	<string>GerbView</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string></string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string></string>
-	<key>CSResourcesFileMapped</key>
-	<true/>
-	<key>LSRequiresCarbon</key>
-	<true/>
-	<key>NSHumanReadableCopyright</key>
-	<string></string>
-        <key>NSHighResolutionCapable</key>
-        <string>True</string>
+    <key>CFBundleDocumentTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleTypeExtensions</key>
+                    <array>
+                        <string>pen</string>
+                        <string>gba</string>
+                        <string>gbr</string>
+                        <string>gbx</string>
+                        <string>gbo</string>
+                        <string>gbl</string>
+                        <string>gtl</string>
+                        <string>gto</string>
+                        <string>gta</string>
+                        <string>gbp</string>
+                        <string>gbp</string>
+                        <string>gbs</string>
+                        <string>gts</string>
+                        <string>gtp</string>
+                        <string>gbx</string>
+                        <string>lgr</string>
+                        <string>ger</string>
+                        <string>pho</string>
+                        <string>drl</string>
+                    </array>
+
+                <key>CFBundleTypeIconFile</key>     <string>gerbview_doc.icns</string>
+                <key>CFBundleTypeName</key>         <string>gerbview document</string>
+                <key>LSHandlerRank</key>            <string>Default</string>
+                <key>CFBundleTypeRole</key>         <string>Viewer</string>
+            </dict>
+        </array>
+
+    <key>CFBundleDevelopmentRegion</key>            <string>English</string>
+    <key>CFBundleExecutable</key>                   <string>gerbview</string>
+    <key>CFBundleGetInfoString</key>                <string></string>
+    <key>CFBundleIconFile</key>                     <string>gerbview.icns</string>
+    <key>CFBundleIdentifier</key>                   <string>org.kicad-eda.gerbview</string>
+    <key>CFBundleInfoDictionaryVersion</key>        <string>6.0</string>
+    <key>CFBundleLongVersionString</key>            <string></string>
+    <key>CFBundleName</key>                         <string>GerbView</string>
+    <key>CFBundlePackageType</key>                  <string>APPL</string>
+    <key>CFBundleShortVersionString</key>           <string></string>
+    <key>CFBundleSignature</key>                    <string>????</string>
+    <key>CFBundleVersion</key>                      <string></string>
+    <key>CSResourcesFileMapped</key>                <true/>
+    <key>LSRequiresCarbon</key>                     <true/>
+    <key>NSHumanReadableCopyright</key>             <string></string>
+    <key>NSHighResolutionCapable</key>              <string>True</string>
 </dict>
 </plist>

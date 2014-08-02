@@ -1,5 +1,5 @@
 #ifndef DATAFILE_READ_WRITE_H_
-#define PDATAFILE_READ_WRITE_H_
+#define DATAFILE_READ_WRITE_H_
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *

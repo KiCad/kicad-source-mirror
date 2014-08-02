@@ -40,9 +40,10 @@
 #include <kicad_string.h>
 #include <pcbnew_id.h>
 #include <class_board.h>
+#include <collectors.h>
 
 #include <dialog_general_options.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <pcb_painter.h>
 #include <base_units.h>
@@ -153,11 +154,6 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
     bool state = event.IsChecked();
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*> ( GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
-    bool recache = false;
 
     switch( id )
     {
@@ -192,44 +188,33 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_ZONES:
         DisplayOpt.DisplayZonesMode = 0;
-        recache = true;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
         DisplayOpt.DisplayZonesMode = 1;
-        recache = true;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
         DisplayOpt.DisplayZonesMode = 2;
-        recache = true;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
         m_DisplayViaFill = DisplayOpt.DisplayViaFill = !state;
-        recache = true;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = !state;
-        recache = true;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
     {
         DisplayOpt.ContrastModeDisplay = state;
-
-        // Apply new display options to the GAL canvas (this is faster than recaching)
-        settings->LoadDisplayOptions( DisplayOpt );
-
-        setHighContrastLayer( getActiveLayer() );
         m_canvas->Refresh();
-
         break;
     }
 
@@ -259,14 +244,4 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
                       wxT( "PCB_EDIT_FRAME::OnSelectOptionToolbar error \n (event not handled!)" ) );
         break;
     }
-
-    if( recache )
-    {
-        // Apply new display options to the GAL canvas
-        settings->LoadDisplayOptions( DisplayOpt );
-        GetGalCanvas()->GetView()->RecacheAllItems( true );
-    }
-
-    if( IsGalCanvasActive() )
-        GetGalCanvas()->Refresh();
 }

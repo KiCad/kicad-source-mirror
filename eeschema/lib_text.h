@@ -82,11 +82,11 @@ public:
 
     bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
-    bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition ) const;
 
-    bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
+    bool HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const;
 
-    bool HitTest( EDA_RECT& aRect )
+    bool HitTest( const EDA_RECT& aRect ) const
     {
         return TextHitTest( aRect );
     }

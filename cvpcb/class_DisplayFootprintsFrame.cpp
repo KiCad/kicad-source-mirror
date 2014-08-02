@@ -28,10 +28,10 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <class_drawpanel_gal.h>
+#include <class_draw_panel_gal.h>
 #include <confirm.h>
 #include <macros.h>
 #include <bitmaps.h>
@@ -70,28 +70,25 @@ BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
                    DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode )
 END_EVENT_TABLE()
 
-#define DISPLAY_FOOTPRINTS_FRAME_NAME wxT( "CmpFrame" )
 
-
-DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* parent,
-                                                    const wxString& title,
-                                                    const wxPoint& pos,
-                                                    const wxSize& size, long style ) :
-    PCB_BASE_FRAME( parent, CVPCB_DISPLAY_FRAME_TYPE, title, pos, size,
-                    style, DISPLAY_FOOTPRINTS_FRAME_NAME )
+DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, CVPCB_MAINFRAME* aParent ) :
+    PCB_BASE_FRAME( aKiway, aParent, FRAME_CVPCB_DISPLAY, _( "Footprint Viewer" ),
+        wxDefaultPosition, wxDefaultSize,
+        KICAD_DEFAULT_DRAWFRAME_STYLE, FOOTPRINTVIEWER_FRAME_NAME )
 {
-    m_FrameName = DISPLAY_FOOTPRINTS_FRAME_NAME;
+    m_FrameName = FOOTPRINTVIEWER_FRAME_NAME;
     m_showAxis = true;         // true to draw axis.
 
     // Give an icon
     wxIcon  icon;
+
     icon.CopyFromBitmap( KiBitmap( icon_cvpcb_xpm ) );
     SetIcon( icon );
 
     SetBoard( new BOARD() );
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
 
-    LoadSettings();
+    LoadSettings( config() );
 
     // Initialize grid id to a default value if not found in config or bad:
     if( (m_LastGridSizeId <= 0) ||
@@ -148,8 +145,6 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
     delete GetScreen();
     SetScreen( NULL );      // Be sure there is no double deletion
-
-    ( (CVPCB_MAINFRAME*) wxGetApp().GetTopWindow() )->m_DisplayFootprintFrame = NULL;
 }
 
 
@@ -332,17 +327,19 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
 void DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
-    wxRealPoint gridSize;
-    wxPoint     oldpos;
-    PCB_SCREEN* screen = GetScreen();
-    wxPoint     pos = aPosition;
+    // Filter out the 'fake' mouse motion after a keyboard movement
+    if( !aHotKey && m_movingCursorWithKeyboard )
+    {
+        m_movingCursorWithKeyboard = false;
+        return;
+    }
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    pos = GetNearestGridPosition( pos );
-    oldpos = GetCrossHairPosition();
-    gridSize = screen->GetGridSize();
+    wxPoint pos = aPosition;
+    wxPoint oldpos = GetCrossHairPosition();
+    GeneralControlKeyMovement( aHotKey, &pos, true );
 
     switch( aHotKey )
     {
@@ -372,49 +369,12 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPositi
         break;
 
     case ' ':
-        screen->m_O_Curseur = GetCrossHairPosition();
-        break;
-
-    case WXK_NUMPAD8:       /* cursor moved up */
-    case WXK_UP:
-        pos.y -= KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD2:       /* cursor moved down */
-    case WXK_DOWN:
-        pos.y += KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD4:       /*  cursor moved left */
-    case WXK_LEFT:
-        pos.x -= KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD6:      /*  cursor moved right */
-    case WXK_RIGHT:
-        pos.x += KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
+        GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
     }
 
     SetCrossHairPosition( pos );
-
-    if( oldpos != GetCrossHairPosition() )
-    {
-        pos = GetCrossHairPosition();
-        SetCrossHairPosition( oldpos );
-        m_canvas->CrossHairOff( aDC );
-        SetCrossHairPosition( pos );
-        m_canvas->CrossHairOn( aDC );
-
-        if( m_canvas->IsMouseCaptured() )
-        {
-            m_canvas->CallMouseCapture( aDC, aPosition, 0 );
-        }
-    }
+    RefreshCrossHair( oldpos, aPosition, aDC );
 
     UpdateStatusBar();    /* Display new cursor coordinates */
 }
@@ -438,7 +398,7 @@ void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
         return;
     }
 
-    m_Draw3DFrame = new EDA_3D_FRAME( this, _( "3D Viewer" ), KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
+    m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, _( "3D Viewer" ), KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
     m_Draw3DFrame->Show( true );
 }
 
@@ -493,9 +453,10 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
         wxLogDebug( wxT( "Load footprint <%s> from library <%s>." ),
                     fpname.c_str(), nickname.c_str()  );
 
-        footprint = m_footprintLibTable->FootprintLoad( FROM_UTF8( nickname.c_str() ), FROM_UTF8( fpname.c_str() ) );
+        footprint = Prj().PcbFootprintLibs()->FootprintLoad(
+                FROM_UTF8( nickname.c_str() ), FROM_UTF8( fpname.c_str() ) );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
         return NULL;
@@ -520,7 +481,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
     CVPCB_MAINFRAME* parentframe = (CVPCB_MAINFRAME *) GetParent();
 
-    wxString footprintName = parentframe->m_FootprintList->GetSelectedFootprint();
+    wxString footprintName = parentframe->m_footprintListBox->GetSelectedFootprint();
 
     if( !footprintName.IsEmpty() )
     {

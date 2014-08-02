@@ -58,8 +58,9 @@ enum  NETLIST_TYPE_ID {
 
 /// Options for Spice netlist generation (OR'ed bits
 enum netlistOptions {
-    NET_USE_X_PREFIX = 2,           // for Spice netlist : change "U" and "IC" reference prefix to "X"
-    NET_PCBNEW_USE_NEW_FORMAT = 1,  // For Pcbnew use the new format (S expression and SWEET)
+    NET_PCBNEW_USE_NEW_FORMAT = 1,      // For Pcbnew use the new format (S expression and SWEET)
+    NET_USE_X_PREFIX = 2,               // for Spice netlist : change "U" and "IC" reference prefix to "X"
+    NET_USE_NETCODES_AS_NETNAMES = 4    // for Spice netlist : use netcode numbers as netnames
 };
 
 

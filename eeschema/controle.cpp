@@ -78,7 +78,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
         return NULL;
     }
 
-    /* Cross probing to Pcbnew if a pin or a component is found */
+    // Cross probing to Pcbnew if a pin or a component is found
     switch( item->Type() )
     {
     case SCH_FIELD_T:
@@ -105,6 +105,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
     {
         // Force display pin information (the previous display could be a component info)
         MSG_PANEL_ITEMS items;
+
         Pin->GetMsgPanelInfo( items );
 
         if( LibItem )
@@ -204,10 +205,12 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
 
 void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
-    wxRealPoint gridSize;
-    SCH_SCREEN* screen = GetScreen();
-    wxPoint     oldpos;
-    wxPoint     pos = aPosition;
+    // Filter out the 'fake' mouse motion after a keyboard movement
+    if( !aHotKey && m_movingCursorWithKeyboard )
+    {
+        m_movingCursorWithKeyboard = false;
+        return;
+    }
 
     // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
     // for next cursor position
@@ -220,76 +223,18 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     if( GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
         snapToGrid = true;
 
-    if( snapToGrid )
-        pos = GetNearestGridPosition( pos );
-
-    oldpos   = GetCrossHairPosition();
-    gridSize = screen->GetGridSize();
-
-    switch( aHotKey )
-    {
-    case 0:
-        break;
-
-    case WXK_NUMPAD8:
-    case WXK_UP:
-        pos.y -= KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD2:
-    case WXK_DOWN:
-        pos.y += KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD4:
-    case WXK_LEFT:
-        pos.x -= KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD6:
-    case WXK_RIGHT:
-        pos.x += KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    default:
-        break;
-    }
+    wxPoint pos = aPosition;
+    wxPoint oldpos = GetCrossHairPosition();
+    GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
 
     // Update cursor position.
     SetCrossHairPosition( pos, snapToGrid );
-
-    if( oldpos != GetCrossHairPosition() )
-    {
-        pos = GetCrossHairPosition();
-        SetCrossHairPosition( oldpos, false);
-        m_canvas->CrossHairOff( aDC );
-        SetCrossHairPosition( pos, snapToGrid );
-        m_canvas->CrossHairOn( aDC );
-
-        if( m_canvas->IsMouseCaptured() )
-        {
-#ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( m_overlay, (wxWindowDC*)aDC );
-            oDC.Clear();
-            m_canvas->CallMouseCapture( aDC, aPosition, false );
-#else
-            m_canvas->CallMouseCapture( aDC, aPosition, true );
-#endif
-        }
-#ifdef USE_WX_OVERLAY
-        else
-        {
-            m_overlay.Reset();
-        }
-#endif
-    }
+    RefreshCrossHair( oldpos, aPosition, aDC );
 
     if( aHotKey )
     {
+        SCH_SCREEN* screen = GetScreen();
+
         if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
             OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
@@ -302,9 +247,12 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
 void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
-    wxRealPoint gridSize;
-    wxPoint     oldpos;
-    wxPoint     pos = aPosition;
+    // Filter out the 'fake' mouse motion after a keyboard movement
+    if( !aHotKey && m_movingCursorWithKeyboard )
+    {
+        m_movingCursorWithKeyboard = false;
+        return;
+    }
 
     // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
     // for next cursor position
@@ -317,73 +265,13 @@ void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     if( GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
         snapToGrid = true;
 
-    if( snapToGrid )
-        pos = GetNearestGridPosition( pos );
-
-    oldpos   = GetCrossHairPosition();
-    gridSize = GetScreen()->GetGridSize();
-
-    switch( aHotKey )
-    {
-    case 0:
-        break;
-
-    case WXK_NUMPAD8:
-    case WXK_UP:
-        pos.y -= KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD2:
-    case WXK_DOWN:
-        pos.y += KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD4:
-    case WXK_LEFT:
-        pos.x -= KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD6:
-    case WXK_RIGHT:
-        pos.x += KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    default:
-        break;
-    }
+    wxPoint pos = aPosition;
+    wxPoint oldpos = GetCrossHairPosition();
+    GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
 
     // Update the cursor position.
     SetCrossHairPosition( pos, snapToGrid );
-
-    if( oldpos != GetCrossHairPosition() )
-    {
-        pos = GetCrossHairPosition();
-        SetCrossHairPosition( oldpos, false );
-        m_canvas->CrossHairOff( aDC );
-        SetCrossHairPosition( pos, snapToGrid );
-        m_canvas->CrossHairOn( aDC );
-
-        if( m_canvas->IsMouseCaptured() )
-        {
-#ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( m_overlay, (wxWindowDC*)aDC );
-            oDC.Clear();
-            m_canvas->CallMouseCapture( aDC, aPosition, false );
-#else
-            m_canvas->CallMouseCapture( aDC, aPosition, true );
-#endif
-        }
-#ifdef USE_WX_OVERLAY
-        else
-        {
-            m_overlay.Reset();
-        }
-#endif
-    }
+    RefreshCrossHair( oldpos, aPosition, aDC );
 
     if( aHotKey )
     {
@@ -396,72 +284,30 @@ void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
 void LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
-    wxRealPoint gridSize;
-    SCH_SCREEN* screen = GetScreen();
-    wxPoint     oldpos;
-    wxPoint     pos = aPosition;
-
-    pos    = GetNearestGridPosition( pos );
-    oldpos = GetCrossHairPosition();
-    gridSize = screen->GetGridSize();
-
-    switch( aHotKey )
+    // Filter out the 'fake' mouse motion after a keyboard movement
+    if( !aHotKey && m_movingCursorWithKeyboard )
     {
-    case 0:
-        break;
-
-    case WXK_NUMPAD8:
-    case WXK_UP:
-        pos.y -= KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD2:
-    case WXK_DOWN:
-        pos.y += KiROUND( gridSize.y );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD4:
-    case WXK_LEFT:
-        pos.x -= KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    case WXK_NUMPAD6:
-    case WXK_RIGHT:
-        pos.x += KiROUND( gridSize.x );
-        m_canvas->MoveCursor( pos );
-        break;
-
-    default:
-        break;
+        m_movingCursorWithKeyboard = false;
+        return;
     }
+
+    wxPoint pos = aPosition;
+    wxPoint oldpos = GetCrossHairPosition();
+    GeneralControlKeyMovement( aHotKey, &pos, true );
 
     // Update cursor position.
-    SetCrossHairPosition( pos );
-
-    if( oldpos != GetCrossHairPosition() )
-    {
-        pos = GetCrossHairPosition();
-        SetCrossHairPosition( oldpos );
-        m_canvas->CrossHairOff( aDC );
-        SetCrossHairPosition( pos );
-        m_canvas->CrossHairOn( aDC );
-
-        if( m_canvas->IsMouseCaptured() )
-        {
-            m_canvas->CallMouseCapture( aDC, aPosition, true );
-        }
-    }
+    SetCrossHairPosition( pos, true );
+    RefreshCrossHair( oldpos, aPosition, aDC );
 
     if( aHotKey )
     {
+        SCH_SCREEN* screen = GetScreen();
+
         if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
             OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
             OnHotKey( aDC, aHotKey, aPosition, NULL );
     }
 
-    UpdateStatusBar();
+    UpdateStatusBar();    /* Display cursor coordinates info */
 }

@@ -90,29 +90,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile,
 void AddDelimiterString( wxString& string );
 
 /**
- * Function FindKicadHelpPath
- * finds the absolute path for KiCad "help" (or "help/&ltlanguage&gt")
- *  Find path kicad/doc/help/xx/ or kicad/doc/help/:
- *  from BinDir
- *  else from environment variable KICAD
- *  else from one of s_HelpPathList
- *  typically c:/kicad/doc/help or /usr/share/kicad/help
- *            or /usr/local/share/kicad/help
- *  (must have kicad in path name)
- *
- *  xx = iso639-1 language id (2 letters (generic) or 4 letters):
- *  fr = french (or fr_FR)
- *  en = English (or en_GB or en_US ...)
- *  de = deutch
- *  es = spanish
- *  pt = portuguese (or pt_BR ...)
- *
- *  default = en (if not found = fr)
- */
-wxString FindKicadHelpPath();
-
-/**
- * Function ReturnKicadDatasPath
+ * Function KicadDatasPath
  * returns the data path common to KiCad.
  * If environment variable KICAD is defined (KICAD = path to kicad)
  * Returns \<KICAD\> /;
@@ -122,7 +100,7 @@ wxString FindKicadHelpPath();
  * Note:
  * The \\ are replaced by / (a la Unix)
  */
-wxString ReturnKicadDatasPath();
+wxString KicadDatasPath();
 
 /**
  * Function FindKicadFile

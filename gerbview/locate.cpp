@@ -31,6 +31,7 @@
 #include <msgpanel.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
 
 
@@ -46,7 +47,7 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
     if( aTypeloc == CURSEUR_ON_GRILLE )
         ref = GetNearestGridPosition( ref );
 
-    LAYER_NUM layer = getActiveLayer();
+    int layer = getActiveLayer();
 
     // Search first on active layer
     GERBER_DRAW_ITEM* gerb_item = GetItemsList();

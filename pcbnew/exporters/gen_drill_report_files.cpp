@@ -78,6 +78,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         offset  = GetOffset();
         plotter = new GERBER_PLOTTER();
         plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+        plotter->SetGerberCoordinatesFormat( 5 );   // format x.5 unit = mm
         break;
 
     case PLOT_FORMAT_HPGL:    // Scale for HPGL format.
@@ -168,7 +169,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
 
     // Draw items on edge layer (not all, only items useful for drill map
     BRDITEMS_PLOTTER itemplotter( plotter, m_pcb, plot_opts );
-    itemplotter.SetLayerMask( EDGE_LAYER );
+    itemplotter.SetLayerSet( Edge_Cuts );
 
     for( EDA_ITEM* PtStruct = m_pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
@@ -283,8 +284,8 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
 {
     unsigned    totalHoleCount;
     char        line[1024];
-    LAYER_NUM   layer1 = LAYER_N_BACK;
-    LAYER_NUM   layer2 = LAYER_N_FRONT;
+    LAYER_NUM   layer1 = B_Cu;
+    LAYER_NUM   layer2 = F_Cu;
     bool        gen_through_holes   = true;
     bool        gen_NPTH_holes      = false;
 
@@ -317,12 +318,12 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
         else
         {
             // If this is the first partial hole list: print a title
-            if( layer1 == LAYER_N_BACK )
+            if( layer1 == B_Cu )
                 fputs( "Drill report for buried and blind vias :\n\n", m_file );
 
             sprintf( line, "Drill report for holes from layer %s to layer %s :\n",
-                     TO_UTF8( m_pcb->GetLayerName( layer1 ) ),
-                     TO_UTF8( m_pcb->GetLayerName( layer2 ) ) );
+                     TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( layer1 ) ) ),
+                     TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( layer2 ) ) ) );
         }
 
         fputs( line, m_file );
@@ -378,22 +379,23 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
                 continue;
             }
 
-            if(  gen_through_holes )
+            if( gen_through_holes )
             {
                 layer2 = layer1 + 1;
             }
             else
             {
-                if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
+                if( layer2 >= F_Cu )    // no more layer pair to consider
                 {
                     gen_NPTH_holes = true;
                     continue;
                 }
 
-                ++layer1; ++layer2;           // use next layer pair
+                ++layer1;
+                ++layer2;           // use next layer pair
 
                 if( layer2 == m_pcb->GetCopperLayerCount() - 1 )
-                    layer2 = LAYER_N_FRONT; // the last layer is always the
+                    layer2 = F_Cu; // the last layer is always the
 
                 // component layer
             }

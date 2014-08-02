@@ -39,15 +39,13 @@
 
 #include <id.h>
 #include <wxstruct.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
 
 // With a recent wxWidget, we can use the wxFileSystemWatcherEvent
 // to monitor files add/remove/rename in tree project
 #if wxCHECK_VERSION( 2, 9, 4  )
 #define KICAD_USE_FILES_WATCHER
 #endif
-
-extern const wxString g_KicadPrjFilenameExtension;
 
 class LAUNCHER_PANEL;
 class TREEPROJECTFILES;
@@ -116,24 +114,14 @@ enum id_kicad_frm {
 };
 
 
-/* class KICAD_MANAGER_FRAME
- * This is the main KiCad frame
+/**
+ * Class KICAD_MANAGER_FRAME
+ * is the main KiCad project manager frame.  It is not a KIWAY_PLAYER.
  */
 class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME
 {
 public:
-    TREE_PROJECT_FRAME* m_LeftWin;
-    LAUNCHER_PANEL*     m_Launcher;
-    wxTextCtrl*         m_MessagesBox;
-    wxAuiToolBar*       m_VToolBar;  // Vertical toolbar (not used)
-    wxString            m_BoardFileName;
-    wxString            m_SchematicRootFileName;
-    wxFileName          m_ProjectFileName;
-
-private:
-    int m_leftWinWidth;
-
-public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
+    KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
                              const wxPoint& pos, const wxSize& size );
 
     ~KICAD_MANAGER_FRAME();
@@ -194,7 +182,6 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
      */
     void ClearMsg();
 
-    void SetLanguage( wxCommandEvent& event );
     void OnRefresh( wxCommandEvent& event );
     void OnSelectDefaultPdfBrowser( wxCommandEvent& event );
     void OnSelectPreferredPdfBrowser( wxCommandEvent& event );
@@ -202,25 +189,11 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
     void OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event );
     void OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event );
 
-    void CreateNewProject( const wxString aPrjFullFileName, bool aTemplateSelector );
+    void CreateNewProject( const wxString& aPrjFullFileName, bool aTemplateSelector );
 
-    /**
-     * Function LoadSettings
-     * loads the KiCad main frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get loaded.
-     */
-    void LoadSettings();
+    void LoadSettings( wxConfigBase* aCfg );
 
-    /**
-     * Function SaveSettings
-     * saves the KiCad main frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get saved.
-     */
-    void SaveSettings();
+    void SaveSettings( wxConfigBase* aCfg );
 
     /**
      * Function Execute
@@ -230,15 +203,15 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
      * @param param = parameters to be passed to the executable.
      */
     void Execute( wxWindow* frame, const wxString& execFile,
-                  const wxString& param = wxEmptyString );
+                  wxString param = wxEmptyString );
 
-    class PROCESS_TERMINATE_EVENT_HANDLER : public wxProcess
+    class TERMINATE_HANDLER : public wxProcess
     {
     private:
         wxString appName;
 
     public:
-        PROCESS_TERMINATE_EVENT_HANDLER( const wxString& appName ) :
+        TERMINATE_HANDLER( const wxString& appName ) :
             appName(appName)
         {
         }
@@ -254,7 +227,42 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
     void OnChangeWatchedPaths(wxCommandEvent& aEvent );
 #endif
 
+    void SetProjectFileName( const wxString& aFullProjectProFileName );
+    const wxString GetProjectFileName();
+
+    // read only accessors
+    const wxString SchFileName();
+    const wxString PcbFileName();
+    const wxString PcbLegacyFileName();
+
+    void ReCreateTreePrj();
+
+    /// Call this only for a PCB associated with the current project.  That is,
+    /// it must have the same path and name as the project *.pro file.
+    void RunPcbNew( const wxString& aProjectBoardFileName );
+
+    /// Call this only for a SCH associated with the current project.  That is,
+    /// it must have the same path and name as the project *.pro file.
+    void RunEeschema( const wxString& aProjectSchematicFileName );
+
     DECLARE_EVENT_TABLE()
+
+private:
+
+    wxConfigBase*       config();       // override EDA_BASE_FRAME virtual
+
+    const SEARCH_STACK& sys_search();   // override EDA_BASE_FRAME virtual
+
+    wxString help_name();               // override EDA_BASE_FRAME virtual
+
+    TREE_PROJECT_FRAME* m_LeftWin;
+    LAUNCHER_PANEL*     m_Launcher;
+    wxTextCtrl*         m_MessagesBox;
+    wxAuiToolBar*       m_VToolBar;             // Vertical toolbar (not used)
+
+    int m_leftWinWidth;
+
+    void language_change( wxCommandEvent& event );
 };
 
 
@@ -286,5 +294,9 @@ private:
 
     wxBitmapButton* AddBitmapButton( wxWindowID aId, const wxBitmap& aBitmap );
 };
+
+// The C++ project manager includes a single PROJECT in its link image.
+class PROJECT;
+extern PROJECT& Prj();
 
 #endif

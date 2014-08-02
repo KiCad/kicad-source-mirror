@@ -142,7 +142,7 @@ int PCB_EDIT_FRAME::SelectHighLight( wxDC* DC )
         switch( item->Type() )
         {
         case PCB_PAD_T:
-            netcode = ( (D_PAD*) item )->GetNet();
+            netcode = ( (D_PAD*) item )->GetNetCode();
             SendMessageToEESCHEMA( item );
             break;
 
@@ -151,11 +151,11 @@ int PCB_EDIT_FRAME::SelectHighLight( wxDC* DC )
         case PCB_ZONE_T:
             // since these classes are all derived from TRACK, use a common
             // GetNet() function:
-            netcode = ( (TRACK*) item )->GetNet();
+            netcode = ( (TRACK*) item )->GetNetCode();
             break;
 
         case PCB_ZONE_AREA_T:
-            netcode = ( (ZONE_CONTAINER*) item )->GetNet();
+            netcode = ( (ZONE_CONTAINER*) item )->GetNetCode();
             break;
 
         default:

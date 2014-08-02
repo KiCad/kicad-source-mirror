@@ -161,7 +161,7 @@ static const char* GetHersheyShapeDescription( int AsciiCode )
 }
 
 
-int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool aItalic, bool aWidth )
+int GraphicTextWidth( const wxString& aText, int aXSize, bool aItalic, bool aWidth )
 {
     int tally = 0;
     int char_count = aText.length();
@@ -315,7 +315,7 @@ void DrawGraphicText( EDA_RECT* aClipBox,
 
     current_char_pos = aPos;
 
-    dx  = ReturnGraphicTextWidth( aText, size_h, aItalic, aWidth );
+    dx  = GraphicTextWidth( aText, size_h, aItalic, aWidth );
     dy  = size_v;
 
     /* Do not draw the text if out of draw area! */

@@ -37,25 +37,29 @@
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/foreach.hpp>
 
 class BOARD;
 class BOARD_ITEM;
 class BOARD_CONNECTED_ITEM;
 class MODULE;
 class D_PAD;
-class SEGVIA;
+class VIA;
 class TRACK;
 class ZONE_CONTAINER;
 class CPolyPt;
 
 // Preserve KiCad coding style policy
-typedef hed::Node RN_NODE;
-typedef hed::NodePtr RN_NODE_PTR;
-typedef hed::Edge RN_EDGE;
-typedef hed::EdgePtr RN_EDGE_PTR;
-typedef hed::EdgeMST RN_EDGE_MST;
-typedef boost::shared_ptr<hed::EdgeMST> RN_EDGE_MST_PTR;
-typedef hed::Triangulation TRIANGULATOR;
+typedef hed::NODE           RN_NODE;
+typedef hed::NODE_PTR       RN_NODE_PTR;
+typedef hed::EDGE           RN_EDGE;
+typedef hed::EDGE_PTR       RN_EDGE_PTR;
+typedef hed::EDGE_MST       RN_EDGE_MST;
+typedef hed::TRIANGULATION  TRIANGULATOR;
+typedef boost::shared_ptr<hed::EDGE_MST> RN_EDGE_MST_PTR;
+
+bool operator==( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond );
+bool operator!=( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond );
 
 ///> General interface for filtering out nodes in search functions.
 struct RN_NODE_FILTER : public std::unary_function<const RN_NODE_PTR&, bool>
@@ -83,7 +87,7 @@ struct RN_NODE_COMPARE : std::binary_function<RN_NODE_PTR, RN_NODE_PTR, bool>
 {
     bool operator()( const RN_NODE_PTR& aNode1, const RN_NODE_PTR& aNode2 ) const
     {
-        return ( aNode1->GetX() == aNode2->GetX() && aNode1->GetY() == aNode2->GetY() );
+        return aNode1 == aNode2;
     }
 };
 
@@ -129,8 +133,9 @@ public:
      * Function RemoveNode()
      * Removes a node described by a given node pointer.
      * @param aNode is a pointer to node to be removed.
+     * @return True if node was removed, false if there were other references, so it was kept.
      */
-    void RemoveNode( const RN_NODE_PTR& aNode );
+    bool RemoveNode( const RN_NODE_PTR& aNode );
 
     /**
      * Function GetNodes()
@@ -279,7 +284,7 @@ public:
 
     /**
      * Function MarkDirty()
-     * Marks ratsnest for given net as 'dirty', ie. requiring recomputation.
+     * Marks ratsnest for given net as 'dirty', i.e. requiring recomputation.
      */
     void MarkDirty()
     {
@@ -327,7 +332,7 @@ public:
      * taken into account during ratsnest computations.
      * @param aVia is a via for which node is added.
      */
-    void AddItem( const SEGVIA* aVia );
+    void AddItem( const VIA* aVia );
 
     /**
      * Function AddItem()
@@ -359,7 +364,7 @@ public:
      * taken into account during ratsnest computations anymore.
      * @param aVia is a via for which nodes and edges are removed.
      */
-    void RemoveItem( const SEGVIA* aVia );
+    void RemoveItem( const VIA* aVia );
 
     /**
      * Function RemoveItem()
@@ -427,7 +432,7 @@ public:
     /**
      * Function GetEdges()
      * Returns pointer to the vector of edges that makes ratsnest for a given net.
-     * @return Pointer to the vector of edges that makes ratsnest for a given net
+     * @return Pointer to the vector of edges that makes ratsnest for a given net.
      */
     const std::vector<RN_EDGE_PTR>* GetEdges() const
     {
@@ -436,8 +441,8 @@ public:
 
     /**
      * Function AddSimpleNode()
-     * Changes drawing mode for a node to simple (ie. one ratsnest line per node).
-     * @param aNode is a node that changes its drawing mode..
+     * Changes drawing mode for a node to simple (i.e. one ratsnest line per node).
+     * @param aNode is a node that changes its drawing mode.
      */
     void AddSimpleNode( RN_NODE_PTR& aNode )
     {
@@ -446,8 +451,20 @@ public:
     }
 
     /**
+     * Function AddBlockedNode()
+     * Specifies a node as not suitable as a ratsnest line target (i.e. ratsnest lines will not
+     * target the node). The status is cleared after calling ClearSimple().
+     * @param aNode is the node that is not going to be used as a ratsnest line target.
+     */
+    void AddBlockedNode( RN_NODE_PTR& aNode )
+    {
+        m_blockedNodes.push_back( aNode );
+        aNode->SetFlag( true );
+    }
+
+    /**
      * Function GetSimpleNodes()
-     * Returns list of nodes for which ratsnest is drawn in simple mode (ie. one
+     * Returns list of nodes for which ratsnest is drawn in simple mode (i.e. one
      * ratsnest line per node).
      * @return list of nodes for which ratsnest is drawn in simple mode.
      */
@@ -460,10 +477,20 @@ public:
      * Function ClearSimple()
      * Removes all nodes and edges that are used for displaying ratsnest in simple mode.
      */
-    void ClearSimple();
+    void ClearSimple()
+    {
+        BOOST_FOREACH( const RN_NODE_PTR& node, m_simpleNodes )
+            node->SetFlag( false );
+
+        BOOST_FOREACH( const RN_NODE_PTR& node, m_blockedNodes )
+            node->SetFlag( false );
+
+        m_simpleNodes.clear();
+        m_blockedNodes.clear();
+    }
 
 protected:
-    ///> Validates edge, ie. modifies source and target nodes for an edge
+    ///> Validates edge, i.e. modifies source and target nodes for an edge
     ///> to make sure that they are not ones with the flag set.
     void validateEdge( RN_EDGE_PTR& aEdge );
 
@@ -485,6 +512,9 @@ protected:
     ///> List of nodes for which ratsnest is drawn in simple mode.
     std::deque<RN_NODE_PTR> m_simpleNodes;
 
+    ///> List of nodes which should be used as ratsnest target nodes..
+    std::deque<RN_NODE_PTR> m_blockedNodes;
+
     ///> Flag indicating necessity of recalculation of ratsnest for a net.
     bool m_dirty;
 
@@ -492,7 +522,7 @@ protected:
     boost::unordered_map<const D_PAD*, RN_NODE_PTR> m_pads;
 
     ///> Map that associates nodes in the ratsnest model to respective vias.
-    boost::unordered_map<const SEGVIA*, RN_NODE_PTR> m_vias;
+    boost::unordered_map<const VIA*, RN_NODE_PTR> m_vias;
 
     ///> Map that associates edges in the ratsnest model to respective tracks.
     boost::unordered_map<const TRACK*, RN_EDGE_PTR> m_tracks;
@@ -523,40 +553,61 @@ public:
     RN_DATA( const BOARD* aBoard ) : m_board( aBoard ) {}
 
     /**
-     * Function UpdateItem()
-     * Updates ratsnest data for an item.
+     * Function Add()
+     * Adds an item to the ratsnest data.
+     * @param aItem is an item to be added.
+     */
+    void Add( const BOARD_ITEM* aItem );
+
+    /**
+     * Function Remove()
+     * Removes an item from the ratsnest data.
      * @param aItem is an item to be updated.
      */
-    void Update( const BOARD_CONNECTED_ITEM* aItem );
+    void Remove( const BOARD_ITEM* aItem );
 
     /**
-     * Function UpdateItem()
-     * Updates ratsnest data for a module.
-     * @param aItem is a module to be updated.
+     * Function Update()
+     * Updates the ratsnest data for an item.
+     * @param aItem is an item to be updated.
      */
-    void Update( const MODULE* aModule );
+    void Update( const BOARD_ITEM* aItem );
 
     /**
      * Function AddSimple()
-     * Sets an item to be drawn in simple mode (ie. one line per node, instead of full ratsnest).
-     * It is used for drawing temporary ratsnest, eg. while moving an item.
+     * Sets an item to be drawn in simple mode (i.e. one line per node, instead of full ratsnest).
+     * It is used for drawing quick, temporary ratsnest, eg. while moving an item.
      * @param aItem is an item to be drawn in simple node.
      */
-    void AddSimple( const BOARD_CONNECTED_ITEM* aItem );
+    void AddSimple( const BOARD_ITEM* aItem );
 
     /**
      * Function AddSimple()
-     * Sets a module to be drawn in simple mode (ie. one line per node, instead of full ratsnest).
-     * It is used for drawing temporary ratsnest, eg. while moving a module.
-     * @param aModule is a module to be drawn in simple node.
+     * Allows to draw a ratsnest line using a position expressed in world coordinates and a
+     * net code (so there is no need to have a real BOARD_ITEM to draw ratsnest line).
+     * It is used for drawing quick, temporary ratsnest, eg. while moving an item.
+     * @param aPosition is the point for which ratsnest line are going to be drawn.
+     * @param aNetCode determines the net code for which the ratsnest line are going to be drawn.
      */
-    void AddSimple( const MODULE* aModule );
+    void AddSimple( const VECTOR2I& aPosition, int aNetCode );
+
+    /**
+     * Function AddBlocked()
+     * Specifies an item as not suitable as a ratsnest line target (i.e. ratsnest lines will not
+     * target its node(s)). The status is cleared after calling ClearSimple().
+     * @param aItem is the item of which node(s) are not going to be used as a ratsnest line target.
+     */
+    void AddBlocked( const BOARD_ITEM* aItem );
 
     /**
      * Function ClearSimple()
      * Clears the list of nodes for which ratsnest is drawn in simple mode (one line per node).
      */
-    void ClearSimple();
+    void ClearSimple()
+    {
+        BOOST_FOREACH( RN_NET& net, m_nets )
+            net.ClearSimple();
+    }
 
     /**
      * Function ProcessBoard()
@@ -573,13 +624,26 @@ public:
     void Recalculate( int aNet = -1 );
 
     /**
-     * Function GetNets()
-     * Returns ratsnest grouped by net numbers.
-     * @return Vector of ratsnest grouped by net numbers.
+     * Function GetNetCount()
+     * Returns the number of nets handled by the ratsnest.
+     * @return Number of the nets.
      */
-    const std::vector<RN_NET>& GetNets() const
+    int GetNetCount() const
     {
-        return m_nets;
+        return m_nets.size();
+    }
+
+    /**
+     * Function GetNet()
+     * Returns ratsnest grouped by net numbers.
+     * @param aNetCode is the net code.
+     * @return Ratsnest data for a specified net.
+     */
+    RN_NET& GetNet( int aNetCode )
+    {
+        assert( aNetCode > 0 );     // ratsnest does not handle the unconnected net
+
+        return m_nets[aNetCode];
     }
 
 protected:

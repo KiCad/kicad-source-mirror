@@ -29,31 +29,24 @@
 #include <fctsys.h>
 
 #include <3d_viewer.h>
+#include <3d_struct.h>
 
-S3D_MATERIAL::S3D_MATERIAL( S3D_MASTER* father, const wxString& name ) :
-    EDA_ITEM( father, NOT_USED )
+
+bool S3D_MASTER::IsOpenGlAllowed()
 {
-    m_DiffuseColor.x   = m_DiffuseColor.y = m_DiffuseColor.z = 1.0;
-    m_SpecularColor.x  = m_SpecularColor.y = m_SpecularColor.z = 1.0;
-    m_AmbientIntensity = 1.0;
-    m_Transparency     = 0.0;
-    m_Shininess = 1.0;
-    m_Name = name;
-}
+    if( m_loadNonTransparentObjects )    // return true for non transparent objects only
+    {
+        if( m_lastTransparency == 0.0 )
+            return true;
+    }
 
+    if( m_loadTransparentObjects )      // return true for transparent objects only
+    {
+        if( m_lastTransparency != 0.0 )
+            return true;
+    }
 
-void S3D_MATERIAL::SetMaterial()
-{
-    glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-    glColor4f( m_DiffuseColor.x * m_AmbientIntensity,
-               m_DiffuseColor.y * m_AmbientIntensity,
-               m_DiffuseColor.z * m_AmbientIntensity,
-               1.0 - m_Transparency );
-#if 0
-    glColorMaterial( GL_FRONT_AND_BACK, GL_SPECULAR );
-    glColor3f( m_SpecularColor.x, m_SpecularColor.y, m_SpecularColor.z );
-    glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-#endif
+    return false;
 }
 
 
@@ -79,9 +72,17 @@ S3D_MASTER::S3D_MASTER( EDA_ITEM* aParent ) :
     EDA_ITEM( aParent, NOT_USED )
 {
     m_MatScale.x  = m_MatScale.y = m_MatScale.z = 1.0;
+    m_lastTransparency = 0.0;
     m_3D_Drawings = NULL;
     m_Materials   = NULL;
     m_ShapeType   = FILE3D_NONE;
+
+    m_use_modelfile_diffuseColor = true;
+    m_use_modelfile_emissiveColor = false;
+    m_use_modelfile_specularColor = false;
+    m_use_modelfile_ambientIntensity = false;
+    m_use_modelfile_transparency = true;
+    m_use_modelfile_shininess = false;
 }
 
 

@@ -13,16 +13,8 @@
 
 LAYER_SELECTOR::LAYER_SELECTOR()
 {
-    m_layerorder   = true;
     m_layerhotkeys = true;
     m_hotkeys      = NULL;
-}
-
-
-bool LAYER_SELECTOR::SetLayersOrdered( bool value )
-{
-    m_layerorder = value;
-    return m_layerorder;
 }
 
 
@@ -120,12 +112,15 @@ int LAYER_BOX_SELECTOR::SetLayerSelection( LAYER_NUM layer )
     return -1;
 }
 
+
 void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
 {
-    LAYER_NUM elements = GetCount();
-    for( LAYER_NUM i = FIRST_LAYER; i < elements; ++i )
+    int elements = GetCount();
+
+    for( LAYER_NUM i = 0; i < elements; ++i )
     {
         wxBitmap layerbmp( 14, 14 );
         SetBitmapLayer( layerbmp, i );
     }
 }
+

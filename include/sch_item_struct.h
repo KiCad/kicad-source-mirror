@@ -34,6 +34,8 @@
 #include <class_base_screen.h>
 #include <general.h>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+ 
 class SCH_ITEM;
 class SCH_SHEET_PATH;
 class LINE_READER;
@@ -136,8 +138,8 @@ public:
      */
     virtual void SwapData( SCH_ITEM* aItem );
 
-    SCH_ITEM* Next() { return (SCH_ITEM*) Pnext; }
-    SCH_ITEM* Back() { return (SCH_ITEM*) Pback; }
+    SCH_ITEM* Next() const { return static_cast<SCH_ITEM*>( Pnext ); }
+    SCH_ITEM* Back() const { return static_cast<SCH_ITEM*>( Pback ); }
 
     /**
      * Function GetLayer
@@ -291,7 +293,10 @@ public:
     bool IsConnected( const wxPoint& aPoint ) const;
 
     /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
-    virtual bool HitTest( const wxPoint& aPosition ) { return HitTest( aPosition, 0 ); }
+    virtual bool HitTest( const wxPoint& aPosition ) const 
+    {
+        return HitTest( aPosition, 0 );
+    }
 
     /**
      * Function HitTest

@@ -22,7 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
 #include <wxstruct.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -43,24 +44,88 @@ const wxString PcbCalcDataFileExt( wxT("pcbcalc") );
 
 // PCB_CALCULATOR_APP
 
-void EDA_APP::MacOpenFile( const wxString& aFileName )
+
+namespace PCBCALC {
+
+static struct IFACE : public KIFACE_I
 {
+    // Of course all are virtual overloads, implementations of the KIFACE.
+
+    IFACE( const char* aName, KIWAY::FACE_T aType ) :
+        KIFACE_I( aName, aType )
+    {}
+
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
+
+    void OnKifaceEnd();
+
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
+    {
+        switch( aClassId )
+        {
+        default:
+            {
+                PCB_CALCULATOR_FRAME* frame = new PCB_CALCULATOR_FRAME( aKiway, aParent );
+                return frame;
+            }
+            break;
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Function IfaceOrAddress
+     * return a pointer to the requested object.  The safest way to use this
+     * is to retrieve a pointer to a static instance of an interface, similar to
+     * how the KIFACE interface is exported.  But if you know what you are doing
+     * use it to retrieve anything you want.
+     *
+     * @param aDataId identifies which object you want the address of.
+     *
+     * @return void* - and must be cast into the know type.
+     */
+    void* IfaceOrAddress( int aDataId )
+    {
+        return NULL;
+    }
+
+} kiface( "pcb_calculator", KIWAY::FACE_PCB_CALCULATOR );
+
+} // namespace
+
+using namespace PCBCALC;
+
+static PGM_BASE* process;
+
+KIFACE_I& Kiface() { return kiface; }
+
+
+// KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.
+// KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
+MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKiwayVersion, PGM_BASE* aProgram )
+{
+    process = (PGM_BASE*) aProgram;
+    return &kiface;
 }
 
-IMPLEMENT_APP( EDA_APP )
 
-///-----------------------------------------------------------------------------
-// PCB_CALCULATOR_APP
-// main program
-//-----------------------------------------------------------------------------
-
-bool EDA_APP::OnInit()
+PGM_BASE& Pgm()
 {
-    InitEDA_Appl( wxT( "pcb_calculator" ) );
+    wxASSERT( process );    // KIFACE_GETTER has already been called.
+    return *process;
+}
 
-    wxFrame* frame = new PCB_CALCULATOR_FRAME( NULL );
-    SetTopWindow( frame );
-    frame->Show( true );
+
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
+{
+    start_common( aCtlBits );
 
     return true;
+}
+
+
+void IFACE::OnKifaceEnd()
+{
+    end_common();
 }

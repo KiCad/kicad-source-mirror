@@ -83,8 +83,7 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent ) :
 
 TREEPROJECTFILES::~TREEPROJECTFILES()
 {
-    if( m_ImageList )
-        delete m_ImageList;
+    delete m_ImageList;
 }
 
 
@@ -93,16 +92,18 @@ int TREEPROJECTFILES::OnCompareItems( const wxTreeItemId& item1, const wxTreeIte
     TREEPROJECT_ITEM* myitem1 = (TREEPROJECT_ITEM*) GetItemData( item1 );
     TREEPROJECT_ITEM* myitem2 = (TREEPROJECT_ITEM*) GetItemData( item2 );
 
-    if( (myitem1->m_Type == TREE_DIRECTORY) && ( myitem2->m_Type != TREE_DIRECTORY ) )
+    if( myitem1->GetType() == TREE_DIRECTORY && myitem2->GetType() != TREE_DIRECTORY )
         return -1;
-    if( (myitem2->m_Type == TREE_DIRECTORY) && ( myitem1->m_Type != TREE_DIRECTORY ) )
+
+    if( myitem2->GetType() == TREE_DIRECTORY && myitem1->GetType() != TREE_DIRECTORY )
         return 1;
 
-    if( myitem1->m_IsRootFile  && !myitem2->m_IsRootFile )
+    if( myitem1->IsRootFile() && !myitem2->IsRootFile() )
         return -1;
-    if( myitem2->m_IsRootFile && !myitem1->m_IsRootFile )
+
+    if( myitem2->IsRootFile() && !myitem1->IsRootFile() )
         return 1;
 
-    return myitem1->m_FileName.CmpNoCase( myitem2->m_FileName );
+    return myitem1->GetFileName().CmpNoCase( myitem2->GetFileName() );
 }
 

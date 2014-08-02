@@ -47,6 +47,11 @@
 #define LYR_COLUMN_COUNT        4           ///< Layer tab column count
 #define RND_COLUMN_COUNT        2           ///< Rendering tab column count
 
+#define COLUMN_ICON_ACTIVE 0
+#define COLUMN_COLORBM 1
+#define COLUMN_COLOR_LYR_CB 2
+#define COLUMN_COLOR_LYRNAME 3
+
 
 /**
  * Class LAYER_WIDGET
@@ -94,6 +99,7 @@ public:
         }
     };
 
+    static const wxEventType EVT_LAYER_COLOR_CHANGE;
 
 protected:
 
@@ -221,6 +227,8 @@ public:
     LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPointSize = -1,
         wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
+
+    virtual ~LAYER_WIDGET();
 
     /**
      * Function GetBestSize
@@ -350,7 +358,6 @@ public:
      */
     bool GetRenderState( int aId );
 
-
     void UpdateLayouts();
 
 /*  did not help:
@@ -378,7 +385,7 @@ public:
      * @param aLayer is the board layer to change
      * @param aColor is the new color
      */
-    virtual void OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor ) = 0;
+    virtual void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor ) = 0;
 
     /**
      * Function OnLayerSelect
@@ -387,7 +394,7 @@ public:
      * the change by returning false.
      * @param aLayer is the board layer to select
      */
-    virtual bool OnLayerSelect( LAYER_NUM aLayer ) = 0;
+    virtual bool OnLayerSelect( int aLayer ) = 0;
 
     /**
      * Function OnLayerVisible

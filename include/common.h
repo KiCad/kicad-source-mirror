@@ -44,6 +44,8 @@
 
 
 class wxAboutDialogInfo;
+class SEARCH_STACK;
+
 
 // Flag for special keys
 #define GR_KB_RIGHTSHIFT 0x10000000                 /* Keybd states: right
@@ -100,7 +102,7 @@ enum pseudokeys {
 #define GERBVIEW_EXE        wxT( "gerbview.app/Contents/MacOS/gerbview" )
 #define BITMAPCONVERTER_EXE wxT( "bitmap2component.app/Contents/MacOS/bitmap2component" )
 #define PCB_CALCULATOR_EXE  wxT( "pcb_calculator.app/Contents/MacOS/pcb_calculator" )
-#define PL_EDITOR_EXE  wxT( "pcb_calculator.app/Contents/MacOS/pl_editor" )
+#define PL_EDITOR_EXE       wxT( "pl_editor.app/Contents/MacOS/pl_editor" )
 # endif
 #endif
 
@@ -199,21 +201,22 @@ public:
     // paper size names which are part of the public API, pass to SetType() or
     // above constructor.
 
-    static const wxString A4;
-    static const wxString A3;
-    static const wxString A2;
-    static const wxString A1;
-    static const wxString A0;
-    static const wxString A;
-    static const wxString B;
-    static const wxString C;
-    static const wxString D;
-    static const wxString E;
-    static const wxString GERBER;
-    static const wxString USLetter;
-    static const wxString USLegal;
-    static const wxString USLedger;
-    static const wxString Custom;     ///< "User" defined page type
+    // these were once wxStrings, but it caused static construction sequence problems:
+    static const wxChar A4[];
+    static const wxChar A3[];
+    static const wxChar A2[];
+    static const wxChar A1[];
+    static const wxChar A0[];
+    static const wxChar A[];
+    static const wxChar B[];
+    static const wxChar C[];
+    static const wxChar D[];
+    static const wxChar E[];
+    static const wxChar GERBER[];
+    static const wxChar USLetter[];
+    static const wxChar USLegal[];
+    static const wxChar USLedger[];
+    static const wxChar Custom[];     ///< "User" defined page type
 
 
     /**
@@ -381,11 +384,6 @@ private:
 
     void    setMargins();
 };
-
-/// Default user lib path can be left void, if the standard lib path is used
-extern wxString     g_UserLibDirBuffer;
-
-extern bool         g_ShowPageLimits;       ///< true to display the page limits
 
 extern EDA_UNITS_T  g_UserUnit;     ///< display units
 
@@ -578,5 +576,38 @@ unsigned GetRunningMicroSecs();
  * so no attempt to parse it should be done
  */
 wxString FormatDateLong( const wxDateTime &aDate );
+
+/**
+ * Function SystemDirsAppend
+ * appends system places to aSearchStack in a platform specific way, and pertinent
+ * to KiCad programs.  It seems to be a place to collect bad ideas and keep them
+ * out of view.
+ */
+void SystemDirsAppend( SEARCH_STACK* aSearchStack );
+
+
+/**
+ * Function SearchHelpFileFullPath
+ * returns the help file's full path.
+ * <p>
+ * Return the KiCad help file with path.
+ * If the help file for the current locale is not found, an attempt to find
+ * the English version of the help file is made.
+ * Help file is searched in directories in this order:
+ *  help/\<canonical name\> like help/en_GB
+ *  help/\<short name\> like help/en
+ *  help/en
+ * </p>
+ * @param aSearchStack contains some possible base dirs that may be above the
+ *  the one actually holding @a aBaseName.  These are starting points for nested searches.
+ * @param aBaseName is the name of the help file to search for.
+ * @return  wxEmptyString is returned if aBaseName is not found, else the full path & filename.
+ */
+wxString SearchHelpFileFullPath( const SEARCH_STACK& aSearchStack, const wxString& aBaseName );
+
+
+/// Put aPriorityPath in front of all paths in the value of aEnvVar.
+const wxString PrePendPath( const wxString& aEnvVar, const wxString& aPriorityPath );
+
 
 #endif  // INCLUDE__COMMON_H_

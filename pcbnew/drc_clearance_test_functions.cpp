@@ -145,15 +145,17 @@ bool trapezoid2pointDRC( wxPoint aTref[4], wxPoint aPcompare, int aDist )
     return true;
 }
 
+
 bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 {
     TRACK*    track;
     wxPoint   delta;           // lenght on X and Y axis of segments
-    LAYER_MSK layerMask;
+    LSET layerMask;
     int       net_code_ref;
     wxPoint   shape_pos;
 
-    NETCLASS* netclass = aRefSeg->GetNetClass();
+    NETCLASSPTR netclass = aRefSeg->GetNetClass();
+    BOARD_DESIGN_SETTINGS& dsnSettings = m_pcb->GetDesignSettings();
 
     /* In order to make some calculations more easier or faster,
      * pads and tracks coordinates will be made relative to the reference segment origin
@@ -163,27 +165,28 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     m_segmEnd   = delta = aRefSeg->GetEnd() - origin;
     m_segmAngle = 0;
 
-    layerMask    = aRefSeg->GetLayerMask();
-    net_code_ref = aRefSeg->GetNet();
+    layerMask    = aRefSeg->GetLayerSet();
+    net_code_ref = aRefSeg->GetNetCode();
 
     // Phase 0 : Test vias
     if( aRefSeg->Type() == PCB_VIA_T )
     {
+        const VIA *refvia = static_cast<const VIA*>( aRefSeg );
         // test if the via size is smaller than minimum
-        if( aRefSeg->GetShape() == VIA_MICROVIA )
+        if( refvia->GetViaType() == VIA_MICROVIA )
         {
-            if( aRefSeg->GetWidth() < netclass->GetuViaMinDiameter() )
+            if( refvia->GetWidth() < dsnSettings.m_MicroViasMinSize )
             {
-                m_currentMarker = fillMarker( aRefSeg, NULL,
+                m_currentMarker = fillMarker( refvia, NULL,
                                               DRCE_TOO_SMALL_MICROVIA, m_currentMarker );
                 return false;
             }
         }
         else
         {
-            if( aRefSeg->GetWidth() < netclass->GetViaMinDiameter() )
+            if( refvia->GetWidth() < dsnSettings.m_ViasMinSize )
             {
-                m_currentMarker = fillMarker( aRefSeg, NULL,
+                m_currentMarker = fillMarker( refvia, NULL,
                                               DRCE_TOO_SMALL_VIA, m_currentMarker );
                 return false;
             }
@@ -192,9 +195,9 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // test if via's hole is bigger than its diameter
         // This test is necessary since the via hole size and width can be modified
         // and a default via hole can be bigger than some vias sizes
-        if( aRefSeg->GetDrillValue() > aRefSeg->GetWidth() )
+        if( refvia->GetDrillValue() > refvia->GetWidth() )
         {
-            m_currentMarker = fillMarker( aRefSeg, NULL,
+            m_currentMarker = fillMarker( refvia, NULL,
                                           DRCE_VIA_HOLE_BIGGER, m_currentMarker );
             return false;
         }
@@ -202,27 +205,35 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // For microvias: test if they are blind vias and only between 2 layers
         // because they are used for very small drill size and are drill by laser
         // and **only one layer** can be drilled
-        if( aRefSeg->GetShape() == VIA_MICROVIA )
+        if( refvia->GetViaType() == VIA_MICROVIA )
         {
-            LAYER_NUM layer1, layer2;
-            bool err = true;
+            LAYER_ID    layer1, layer2;
+            bool        err = true;
 
-            ( (SEGVIA*) aRefSeg )->ReturnLayerPair( &layer1, &layer2 );
+            refvia->LayerPair( &layer1, &layer2 );
 
             if( layer1 > layer2 )
                 EXCHG( layer1, layer2 );
 
+#if 0   // was:
             // test:
-            if( layer1 == LAYER_N_BACK && layer2 == LAYER_N_2 )
+            if( layer1 == B_Cu && layer2 == LAYER_N_2 )
                 err = false;
 
             if( layer1 == (m_pcb->GetDesignSettings().GetCopperLayerCount() - 2 )
-                && layer2 == LAYER_N_FRONT )
+                && layer2 == F_Cu )
                 err = false;
+#else
+            if( layer2 == B_Cu && layer1 == m_pcb->GetDesignSettings().GetCopperLayerCount() - 2 )
+                err = false;
+
+            else if( layer1 == F_Cu  &&  layer2 == In1_Cu  )
+                err = false;
+#endif
 
             if( err )
             {
-                m_currentMarker = fillMarker( aRefSeg, NULL,
+                m_currentMarker = fillMarker( refvia, NULL,
                                               DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR, m_currentMarker );
                 return false;
             }
@@ -230,7 +241,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     }
     else    // This is a track segment
     {
-        if( aRefSeg->GetWidth() < netclass->GetTrackMinWidth() )
+        if( aRefSeg->GetWidth() < dsnSettings.m_TrackMinWidth )
         {
             m_currentMarker = fillMarker( aRefSeg, NULL,
                                           DRCE_TOO_SMALL_TRACK_WIDTH, m_currentMarker );
@@ -264,10 +275,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
      * A pad must have a parent because some functions expect a non null parent
      * to find the parent board, and some other data
      */
-    MODULE dummymodule( m_pcb );    // Creates a dummy parent
-    D_PAD dummypad( &dummymodule );
+    MODULE  dummymodule( m_pcb );    // Creates a dummy parent
+    D_PAD   dummypad( &dummymodule );
 
-    dummypad.SetLayerMask( ALL_CU_LAYERS );     // Ensure the hole is on all layers
+    dummypad.SetLayerSet( LSET::AllCuMask() );     // Ensure the hole is on all layers
 
     // Compute the min distance to pads
     if( testPads )
@@ -280,7 +291,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
              * But if a drill hole exists	(a pad on a single layer can have a hole!)
              * we must test the hole
              */
-            if( (pad->GetLayerMask() & layerMask ) == 0 )
+            if( !( pad->GetLayerSet() & layerMask ).any() )
             {
                 /* We must test the pad hole. In order to use the function
                  * checkClearanceSegmToPad(),a pseudo pad is used, with a shape and a
@@ -310,12 +321,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             // The pad must be in a net (i.e pt_pad->GetNet() != 0 )
             // but no problem if the pad netcode is the current netcode (same net)
-            if( pad->GetNet()                       // the pad must be connected
-               && net_code_ref == pad->GetNet() )   // the pad net is the same as current net -> Ok
+            if( pad->GetNetCode()                       // the pad must be connected
+               && net_code_ref == pad->GetNetCode() )   // the pad net is the same as current net -> Ok
                 continue;
 
             // DRC for the pad
-            shape_pos = pad->ReturnShapePos();
+            shape_pos = pad->ShapePos();
             m_padToTestPos = shape_pos - origin;
 
             if( !checkClearanceSegmToPad( pad, aRefSeg->GetWidth(), aRefSeg->GetClearance( pad ) ) )
@@ -339,11 +350,11 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     for( track = aStart; track; track = track->Next() )
     {
         // No problem if segments have the same net code:
-        if( net_code_ref == track->GetNet() )
+        if( net_code_ref == track->GetNetCode() )
             continue;
 
         // No problem if segment are on different layers :
-        if( ( layerMask & track->GetLayerMask() ) == 0 )
+        if( !( layerMask & track->GetLayerSet() ).any() )
             continue;
 
         // the minimum distance = clearance plus half the reference track
@@ -588,7 +599,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     int     dist_min = aRefPad->GetClearance( aPad );
 
     // relativePadPos is the aPad shape position relative to the aRefPad shape position
-    wxPoint relativePadPos = aPad->ReturnShapePos() - aRefPad->ReturnShapePos();
+    wxPoint relativePadPos = aPad->ShapePos() - aRefPad->ShapePos();
 
     dist = KiROUND( EuclideanNorm( relativePadPos ) );
 

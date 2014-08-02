@@ -48,7 +48,7 @@
 
 namespace PCAD2KICAD {
 
-LAYER_NUM PCB::GetKiCadLayer( int aPCadLayer )
+LAYER_ID PCB::GetKiCadLayer( int aPCadLayer )
 {
     wxASSERT( aPCadLayer >= 0 && aPCadLayer < MAX_PCAD_LAYER_QTY );
     return m_layersMap[aPCadLayer].KiCadLayer;
@@ -74,23 +74,23 @@ PCB::PCB( BOARD* aBoard ) : PCB_MODULE( this, aBoard )
 
     for( i = 0; i < MAX_PCAD_LAYER_QTY; i++ )
     {
-        m_layersMap[i].KiCadLayer = SOLDERMASK_N_FRONT; // default
-        m_layersMap[i].layerType = LAYER_TYPE_NONSIGNAL; // default
+        m_layersMap[i].KiCadLayer = F_Mask; // default
+        m_layersMap[i].layerType  = LAYER_TYPE_NONSIGNAL; // default
         m_layersMap[i].netNameRef = wxT( "" ); // default
     }
 
     m_sizeX = 0;
     m_sizeY = 0;
 
-    m_layersMap[1].KiCadLayer  = LAST_COPPER_LAYER;
-    m_layersMap[1].layerType = LAYER_TYPE_SIGNAL;
+    m_layersMap[1].KiCadLayer = F_Cu;
+    m_layersMap[1].layerType  = LAYER_TYPE_SIGNAL;
 
-    m_layersMap[2].KiCadLayer  = FIRST_COPPER_LAYER;
-    m_layersMap[2].layerType = LAYER_TYPE_SIGNAL;
+    m_layersMap[2].KiCadLayer = B_Cu;
+    m_layersMap[2].layerType  = LAYER_TYPE_SIGNAL;
 
-    m_layersMap[3].KiCadLayer  = ECO2_N;
-    m_layersMap[6].KiCadLayer  = SILKSCREEN_N_FRONT;
-    m_layersMap[7].KiCadLayer  = SILKSCREEN_N_BACK;
+    m_layersMap[3].KiCadLayer  = Eco2_User;
+    m_layersMap[6].KiCadLayer  = F_SilkS;
+    m_layersMap[7].KiCadLayer  = B_SilkS;
     m_timestamp_cnt = 0x10000000;
 }
 
@@ -445,9 +445,10 @@ void PCB::ConnectPinToNet( wxString aCompRef, wxString aPinRef, wxString aNetNam
     }
 }
 
+
 int PCB::FindLayer( wxString aLayerName )
 {
-    for ( LAYER_NUM i = FIRST_COPPER_LAYER; i < (int)m_layersStackup.GetCount(); ++i )
+    for( LAYER_NUM i = 0; i < (int)m_layersStackup.GetCount(); ++i )
     {
         if( m_layersStackup[i] == aLayerName )
             return i;
@@ -455,6 +456,7 @@ int PCB::FindLayer( wxString aLayerName )
 
     return -1;
 }
+
 
 /* KiCad layers
  *  0 Copper layer
@@ -477,42 +479,46 @@ int PCB::FindLayer( wxString aLayerName )
 void PCB::MapLayer( XNODE* aNode )
 {
     wxString    lName, layerType;
-    LAYER_NUM   KiCadLayer;
+    LAYER_ID    KiCadLayer;
     long        num = 0;
 
     aNode->GetAttribute( wxT( "Name" ), &lName );
     lName = lName.MakeUpper();
 
     if( lName == wxT( "TOP ASSY" ) )
-        KiCadLayer = COMMENT_N;
+        KiCadLayer = Cmts_User;
     else if( lName == wxT( "TOP SILK" ) )
-        KiCadLayer = SILKSCREEN_N_FRONT;
+        KiCadLayer = F_SilkS;
     else if( lName == wxT( "TOP PASTE" ) )
-        KiCadLayer = SOLDERPASTE_N_FRONT;
+        KiCadLayer = F_Paste;
     else if( lName == wxT( "TOP MASK" ) )
-        KiCadLayer = SOLDERMASK_N_FRONT;
+        KiCadLayer = F_Mask;
     else if( lName == wxT( "TOP" ) )
-        KiCadLayer = LAST_COPPER_LAYER;
+        KiCadLayer = F_Cu;
     else if( lName == wxT( "BOTTOM" ) )
-        KiCadLayer = FIRST_COPPER_LAYER;
+        KiCadLayer = B_Cu;
     else if( lName == wxT( "BOT MASK" ) )
-        KiCadLayer = SOLDERMASK_N_BACK;
+        KiCadLayer = B_Mask;
     else if( lName == wxT( "BOT PASTE" ) )
-        KiCadLayer = SOLDERPASTE_N_BACK;
+        KiCadLayer = B_Paste;
     else if( lName == wxT( "BOT SILK" ) )
-        KiCadLayer = SILKSCREEN_N_BACK;
+        KiCadLayer = B_SilkS;
     else if( lName == wxT( "BOT ASSY" ) )
-        KiCadLayer = DRAW_N;
+        KiCadLayer = Dwgs_User;
     else if( lName == wxT( "BOARD" ) )
-        KiCadLayer = EDGE_N;
+        KiCadLayer = Edge_Cuts;
     else
     {
         int layernum = FindLayer( lName );
 
         if( layernum == -1 )
-            KiCadLayer = DRAW_N;    // default
+            KiCadLayer = Dwgs_User;    // default
         else
+#if 0 // was:
             KiCadLayer = FIRST_COPPER_LAYER + m_layersStackup.GetCount() - 1 - layernum;
+#else
+            KiCadLayer = ToLAYER_ID( layernum );
+#endif
     }
 
     if( FindNode( aNode, wxT( "layerNum" ) ) )
@@ -591,7 +597,7 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, wxString aActualConversion )
                 if( FindNode( iNode, wxT( "layerNumRef" ) ) )
                     FindNode( iNode, wxT( "layerNumRef" ) )->GetNodeContent().ToLong( &PCadLayer );
 
-                if( GetKiCadLayer( PCadLayer ) == EDGE_N )
+                if( GetKiCadLayer( PCadLayer ) == Edge_Cuts )
                 {
                     lNode = iNode->GetChildren();
                     while( lNode )
@@ -914,16 +920,16 @@ void PCB::AddToBoard()
 
     m_board->SetCopperLayerCount( m_layersStackup.GetCount() );
 
-    for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
-    {
-        m_pcbComponents[i]->AddToBoard();
-    }
-
     for( i = 0; i < (int) m_pcbNetlist.GetCount(); i++ )
     {
         net = m_pcbNetlist[i];
 
         m_board->AppendNet( new NETINFO_ITEM( m_board, net->m_name, net->m_netCode ) );
+    }
+
+    for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
+    {
+        m_pcbComponents[i]->AddToBoard();
     }
 }
 

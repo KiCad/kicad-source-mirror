@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  5 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,11 +11,13 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class KIWAY_PLAYER;
 class UNIT_SELECTOR_ANGLE;
 class UNIT_SELECTOR_FREQUENCY;
 class UNIT_SELECTOR_LEN;
 class UNIT_SELECTOR_RESISTOR;
 
+#include "kiway_player.h"
 #include <wx/string.h>
 #include <wx/menu.h>
 #include <wx/gdicmn.h>
@@ -48,7 +50,7 @@ class UNIT_SELECTOR_RESISTOR;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PCB_CALCULATOR_FRAME_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PCB_CALCULATOR_FRAME_BASE : public wxFrame 
+class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 {
 	private:
 	

@@ -76,7 +76,7 @@ public:
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
-    bool HitTest( const wxPoint& aPosition )
+    bool HitTest( const wxPoint& aPosition ) const
     {
         return TextHitTest( aPosition );
     }

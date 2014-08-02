@@ -315,10 +315,11 @@ char* STRING_LINE_READER::ReadLine() throw( IO_ERROR )
 }
 
 
-INPUTSTREAM_LINE_READER::INPUTSTREAM_LINE_READER( wxInputStream* aStream ) :
+INPUTSTREAM_LINE_READER::INPUTSTREAM_LINE_READER( wxInputStream* aStream, const wxString& aSource ) :
     LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
     m_stream( aStream )
 {
+    source = aSource;
 }
 
 

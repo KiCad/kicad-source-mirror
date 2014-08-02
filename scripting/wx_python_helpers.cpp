@@ -102,10 +102,14 @@ wxString* newWxStringFromPy( PyObject* src )
     }
 
     if( must_unref_str )
+    {
         Py_DECREF( uni_str );
+    }
 
     if( must_unref_obj )
+    {
         Py_DECREF( obj );
+    }
 
 #else
     // normal string (or object) to normal python string
@@ -136,7 +140,9 @@ wxString* newWxStringFromPy( PyObject* src )
     result = new wxString( str_ptr, str_size );
 
     if( must_unref_str )
+    {
         Py_DECREF( str );
+    }
 
 #endif
 

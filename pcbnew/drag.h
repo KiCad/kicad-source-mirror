@@ -183,7 +183,7 @@ void EraseDragList();
  * @param aNetCode = the net code to consider
  * @param aMaxDist = max distance from aRefPos to a track end candidate to collect the track
  */
-void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LAYER_MSK aLayerMask,
+void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LSET aLayerMask,
                                   int aNetCode, int aMaxDist );
 
 /* Add aTrack to the drag list

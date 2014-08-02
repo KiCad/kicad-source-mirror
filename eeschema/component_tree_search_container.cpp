@@ -191,7 +191,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
             for( int u = 1; u <= a->GetComponent()->GetPartCount(); ++u )
             {
                 wxString unitName = _("Unit");
-                unitName += wxT( " " ) + LIB_COMPONENT::ReturnSubReference( u, false );
+                unitName += wxT( " " ) + LIB_COMPONENT::SubReference( u, false );
                 TREE_NODE* unit_node = new TREE_NODE( TREE_NODE::TYPE_UNIT,
                                                       alias_node, a,
                                                       unitName,

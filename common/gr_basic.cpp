@@ -47,9 +47,6 @@ static const bool NOT_FILLED = false;
 // For draw mode = XOR GR_XOR or GR_NXOR by background color
 GR_DRAWMODE g_XorMode = GR_NXOR;
 
-// Background color of the design frame
-EDA_COLOR_T g_DrawBgColor = WHITE;
-
 
 static void ClipAndDrawPoly( EDA_RECT * ClipBox, wxDC * DC, wxPoint Points[],
                              int n );
@@ -79,6 +76,26 @@ static EDA_COLOR_T   s_DC_lastbrushcolor = UNSPECIFIED_COLOR;
 static bool  s_DC_lastbrushfill  = false;
 static wxDC* s_DC_lastDC = NULL;
 
+/***
+ * Utility for the line clipping code, returns the boundary code of
+ * a point. Bit allocation is arbitrary
+ */
+static inline int clipOutCode( const EDA_RECT *aClipBox, int x, int y )
+{
+    int code;
+    if( y < aClipBox->GetY() )
+        code = 2;
+    else if( y > aClipBox->GetBottom() )
+        code = 1;
+    else
+        code = 0;
+    if( x < aClipBox->GetX() )
+        code |= 4;
+    else if( x > aClipBox->GetRight() )
+        code |= 8;
+    return code;
+}
+
 
 /**
  * Test if any part of a line falls within the bounds of a rectangle.
@@ -93,224 +110,67 @@ static wxDC* s_DC_lastDC = NULL;
  *
  * @return - False if any part of the line lies within the rectangle.
  */
-static bool clipLine( EDA_RECT* aClipBox, int& x1, int& y1, int& x2, int& y2 )
+static bool clipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &y2 )
 {
-    if( aClipBox->Contains( x1, y1 ) && aClipBox->Contains( x2, y2 ) )
-        return false;
+    // Stock Cohen-Sutherland algorithm; check *any* CG book for details
+    int outcode1 = clipOutCode( aClipBox, x1, y1 );
+    int outcode2 = clipOutCode( aClipBox, x2, y2 );
 
-    wxRect rect = *aClipBox;
-    int    minX = rect.GetLeft();
-    int    maxX = rect.GetRight();
-    int    minY = rect.GetTop();
-    int    maxY = rect.GetBottom();
-    int    clippedX, clippedY;
-
-#if DEBUG_DUMP_CLIP_COORDS
-    int    tmpX1, tmpY1, tmpX2, tmpY2;
-    tmpX1 = x1;
-    tmpY1 = y1;
-    tmpX2 = x2;
-    tmpY2 = y2;
-#endif
-
-    if( aClipBox->Contains( x1, y1 ) )
+    while( outcode1 || outcode2 )
     {
-        if( x1 == x2 )         /* Vertical line, clip Y. */
-        {
-            if( y2 < minY )
-            {
-                y2 = minY;
-                return false;
-            }
+        // Fast reject
+        if( outcode1 & outcode2 )
+            return true;
 
-            if( y2 > maxY )
-            {
-                y2 = maxY;
-                return false;
-            }
+        // Choose a side to clip
+        int thisoutcode, x, y;
+        if( outcode1 )
+            thisoutcode = outcode1;
+        else
+            thisoutcode = outcode2;
+
+        /* One clip round
+         * Since we use the full range of 32 bit ints, the proportion
+         * computation has to be done in 64 bits to avoid horrible
+         * results */
+        if( thisoutcode & 1 ) // Clip the bottom
+        {
+            y = aClipBox->GetBottom();
+            x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
         }
-        else if( y1 == y2 )    /* Horizontal line, clip X. */
+        else if( thisoutcode & 2 ) // Clip the top
         {
-            if( x2 < minX )
-            {
-                x2 = minX;
-                return false;
-            }
-
-            if( x2 > maxX )
-            {
-                x2 = maxX;
-                return false;
-            }
+            y = aClipBox->GetY();
+            x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
         }
-
-        /* If we're here, it's a diagonal line. */
-
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, minX, maxY,
-                                                       &clippedX, &clippedY )       /* Left */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, maxX, minY,
-                                                         &clippedX, &clippedY )     /* Top */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, maxX, minY, maxX, maxY,
-                                                         &clippedX, &clippedY )     /* Right */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, maxY, maxX, maxY,
-                                                         &clippedX, &clippedY ) )   /* Bottom */
+        else if( thisoutcode & 8 ) // Clip the right
         {
-            if( x2 != clippedX )
-                x2 = clippedX;
-            if( y2 != clippedY )
-                y2 = clippedY;
-            return false;
+            x = aClipBox->GetRight();
+            y = y1 + (y2 - y1) * int64_t(x - x1) / (x2 - x1);
+        }
+        else // if( thisoutcode & 4), obviously, clip the left
+        {
+            x = aClipBox->GetX();
+            y = y1 + (y2 - y1) * int64_t(x - x1) / (x2 - x1);
         }
 
-        /* If we're here, something has gone terribly wrong. */
-#if DEBUG_DUMP_CLIP_ERROR_COORDS
-        wxLogDebug( wxT( "Line (%d,%d):(%d,%d) in rectangle (%d,%d,%d,%d) clipped to (%d,%d,%d,%d)" ),
-                    tmpX1, tmpY1, tmpX2, tmpY2, minX, minY, maxX, maxY, x1, y1, x2, y2 );
-#endif
-        return false;
+        // Put the result back and update the boundary code
+        // No ambiguity, otherwise it would have been a fast reject
+        if( thisoutcode == outcode1 )
+        {
+            x1 = x;
+            y1 = y;
+            outcode1 = clipOutCode( aClipBox, x1, y1 );
+        }
+        else
+        {
+            x2 = x;
+            y2 = y;
+            outcode2 = clipOutCode( aClipBox, x2, y2 );
+        }
     }
-    else if( aClipBox->Contains( x2, y2 ) )
-    {
-        if( x1 == x2 )         /* Vertical line, clip Y. */
-        {
-            if( y2 < minY )
-            {
-                y2 = minY;
-                return false;
-            }
-
-            if( y2 > maxY )
-            {
-                y2 = maxY;
-                return false;
-            }
-        }
-        else if( y1 == y2 )    /* Horizontal line, clip X. */
-        {
-            if( x2 < minX )
-            {
-                x2 = minX;
-                return false;
-            }
-
-            if( x2 > maxX )
-            {
-                x2 = maxX;
-                return false;
-            }
-        }
-
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, minX, maxY,
-                                                       &clippedX, &clippedY )       /* Left */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, maxX, minY,
-                                                         &clippedX, &clippedY )     /* Top */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, maxX, minY, maxX, maxY,
-                                                         &clippedX, &clippedY )     /* Right */
-           || TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, maxY, maxX, maxY,
-                                                         &clippedX, &clippedY ) )   /* Bottom */
-        {
-            if( x1 != clippedX )
-                x1 = clippedX;
-            if( y1 != clippedY )
-                y1 = clippedY;
-            return false;
-        }
-
-        /* If we're here, something has gone terribly wrong. */
-#if DEBUG_DUMP_CLIP_ERROR_COORDS
-        wxLogDebug( wxT( "Line (%d,%d):(%d,%d) in rectangle (%d,%d,%d,%d) clipped to (%d,%d,%d,%d)" ),
-                    tmpX1, tmpY1, tmpX2, tmpY2, minX, minY, maxX, maxY, x1, y1, x2, y2 );
-#endif
-        return false;
-    }
-    else
-    {
-        int* intersectX;
-        int* intersectY;
-        int  intersectX1, intersectY1, intersectX2, intersectY2;
-        bool haveFirstPoint = false;
-
-        intersectX = &intersectX1;
-        intersectY = &intersectY1;
-
-        /* Left clip rectangle line. */
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, minX, maxY,
-                                                       intersectX, intersectY ) )
-        {
-            intersectX     = &intersectX2;
-            intersectY     = &intersectY2;
-            haveFirstPoint = true;
-        }
-
-        /* Top clip rectangle line. */
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, minY, maxX, minY,
-                                                       intersectX, intersectY ) )
-        {
-            intersectX = &intersectX2;
-            intersectY = &intersectY2;
-            if( haveFirstPoint )
-            {
-                x1 = intersectX1;
-                y1 = intersectY1;
-                x2 = intersectX2;
-                y2 = intersectY2;
-                return false;
-            }
-            haveFirstPoint = true;
-        }
-
-        /* Right clip rectangle line. */
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, maxX, minY, maxX, maxY,
-                                                       intersectX, intersectY ) )
-        {
-            intersectX = &intersectX2;
-            intersectY = &intersectY2;
-            if( haveFirstPoint )
-            {
-                x1 = intersectX1;
-                y1 = intersectY1;
-                x2 = intersectX2;
-                y2 = intersectY2;
-                return false;
-            }
-            haveFirstPoint = true;
-        }
-
-        /* Bottom clip rectangle line. */
-        if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, minX, maxY, maxX, maxY,
-                                                       intersectX, intersectY ) )
-        {
-            intersectX = &intersectX2;
-            intersectY = &intersectY2;
-            if( haveFirstPoint )
-            {
-                x1 = intersectX1;
-                y1 = intersectY1;
-                x2 = intersectX2;
-                y2 = intersectY2;
-                return false;
-            }
-        }
-
-        /* If we're here and only one line of the clip box has been intersected,
-         * something has gone terribly wrong. */
-#if DEBUG_DUMP_CLIP_ERROR_COORDS
-        if( haveFirstPoint )
-            wxLogDebug( wxT( "Line (%d,%d):(%d,%d) in rectangle (%d,%d,%d,%d) clipped to (%d,%d,%d,%d)" ),
-                        tmpX1, tmpY1, tmpX2, tmpY2, minX, minY, maxX, maxY, x1, y1, x2, y2 );
-#endif
-    }
-
-    /* Set this to one to verify that diagonal lines get clipped properly. */
-#if DEBUG_DUMP_CLIP_COORDS
-    if( !( x1 == x2 || y1 == y2 ) )
-        wxLogDebug( wxT( "Clipped line (%d,%d):(%d,%d) from rectangle (%d,%d,%d,%d)" ),
-                    tmpX1, tmpY1, tmpX2, tmpY2, minX, minY, maxX, maxY );
-#endif
-
-    return true;
+    return false;
 }
-
 
 static void WinClipAndDrawLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
                                 EDA_COLOR_T Color, int width = 1 )
@@ -805,15 +665,11 @@ static void GRSPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[],
     }
     else
     {
-        wxPoint endPt = Points[n - 1];
-
-        GRSetBrush( DC, Color );
-        DC->DrawLines( n, Points );
-
-        // The last point is not drawn by DrawLine and DrawLines
-        // Add it if the polygon is not closed
-        if( endPt != Points[0] )
-            DC->DrawPoint( endPt.x, endPt.y );
+        GRMoveTo( Points[0].x, Points[0].y );
+        for( int i = 1; i < n; ++i )
+        {
+            GRLineTo( ClipBox, DC, Points[i].x, Points[i].y, width, Color );
+        }
     }
 }
 
@@ -841,16 +697,18 @@ static void GRSClosedPoly( EDA_RECT* aClipBox, wxDC* aDC,
     }
     else
     {
-        GRSetBrush( aDC, aBgColor );
-        aDC->DrawLines( aPointCount, aPoints );
+        GRMoveTo( aPoints[0].x, aPoints[0].y );
+        for( int i = 1; i < aPointCount; ++i )
+        {
+            GRLineTo( aClipBox, aDC, aPoints[i].x, aPoints[i].y, aWidth, aColor );
+        }
 
         int lastpt = aPointCount - 1;
-        /* Close the polygon. */
+
+        // Close the polygon
         if( aPoints[lastpt] != aPoints[0] )
         {
-            GRLine( aClipBox, aDC, aPoints[0].x, aPoints[0].y,
-                    aPoints[lastpt].x, aPoints[lastpt].y,
-                    aWidth, aColor );
+            GRLineTo( aClipBox, aDC, aPoints[0].x, aPoints[0].y, aWidth, aColor );
         }
     }
 }
@@ -1345,113 +1203,6 @@ void GRBezier( EDA_RECT* ClipBox,
     GRPoly( ClipBox, DC, Points.size(), &Points[0], false, width, Color, Color );
 }
 
-
-EDA_COLOR_T ColorMix( EDA_COLOR_T aColor1, EDA_COLOR_T aColor2 )
-{
-    /* Memoization storage. This could be potentially called for each
-     * color merge so a cache is useful (there are few colours anyway) */
-    static EDA_COLOR_T mix_cache[NBCOLORS][NBCOLORS];
-
-    // TODO how is alpha used? it's a mac only thing, I have no idea
-    aColor1 = ColorGetBase( aColor1 );
-    aColor2 = ColorGetBase( aColor2 );
-
-    // First easy thing: a black gives always the other colour
-    if( aColor1 == BLACK )
-        return aColor2;
-    if( aColor2 == BLACK)
-        return aColor1;
-
-    /* Now we are sure that black can't occur, so the rule is:
-     * BLACK means not computed yet. If we're lucky we already have
-     * an answer */
-    EDA_COLOR_T candidate = mix_cache[aColor1][aColor2];
-    if( candidate != BLACK )
-        return candidate;
-
-    // Blend the two colors (i.e. OR the RGB values)
-    const StructColors &c1 = g_ColorRefs[aColor1];
-    const StructColors &c2 = g_ColorRefs[aColor2];
-
-    // Ask the palette for the nearest color to the mix
-    wxColour mixed( c1.m_Red | c2.m_Red,
-                    c1.m_Green | c2.m_Green,
-                    c1.m_Blue | c2.m_Blue );
-    candidate = ColorFindNearest( mixed );
-
-    /* Here, BLACK is *not* a good answer, since it would recompute the next time.
-     * Even theorically its not possible (with the current rules), but
-     * maybe the metric will change in the future */
-    if( candidate == BLACK)
-        candidate = DARKDARKGRAY;
-
-    // Store the result in the cache. The operation is commutative, too
-    mix_cache[aColor1][aColor2] = candidate;
-    mix_cache[aColor2][aColor1] = candidate;
-    return candidate;
-}
-
-
-EDA_COLOR_T ColorByName( const wxString& aName )
-{
-    // look for a match in the palette itself
-    for( EDA_COLOR_T trying = BLACK; trying < NBCOLORS; trying = NextColor(trying) )
-    {
-        if( 0 == aName.CmpNoCase( g_ColorRefs[trying].m_Name ) )
-            return trying;
-    }
-
-    // Not found, no idea...
-    return UNSPECIFIED_COLOR;
-}
-
-bool ColorIsLight( EDA_COLOR_T aColor )
-{
-    const StructColors &c = g_ColorRefs[ColorGetBase( aColor )];
-    int r = c.m_Red;
-    int g = c.m_Green;
-    int b = c.m_Blue;
-    return ((r * r) + (g * g) + (b * b)) > (128 * 128 * 3);
-}
-
-EDA_COLOR_T ColorFindNearest( const wxColour &aColor )
-{
-    return ColorFindNearest( aColor.Red(), aColor.Green(), aColor.Blue() );
-}
-
-EDA_COLOR_T ColorFindNearest( int aR, int aG, int aB )
-{
-    EDA_COLOR_T candidate = BLACK;
-
-    /* Find the 'nearest' color in the palette. This is fun. There is
-       a gazilion of metrics for the color space and no one of the
-       useful one is in the RGB color space. Who cares, this is a CAD,
-       not a photosomething...
-
-       I hereby declare that the distance is the sum of the square of the
-       component difference. Think about the RGB color cube. Now get the
-       euclidean distance, but without the square root... for ordering
-       purposes it's the same, obviously. Also each component can't be
-       less of the target one, since I found this currently work better...
-       */
-    int nearest_distance = 255 * 255 * 3 + 1; // Can't beat this
-
-    for( EDA_COLOR_T trying = BLACK; trying < NBCOLORS; trying = NextColor(trying) )
-    {
-        const StructColors &c = g_ColorRefs[trying];
-        int distance = (aR - c.m_Red) * (aR - c.m_Red) +
-            (aG - c.m_Green) * (aG - c.m_Green) +
-            (aB - c.m_Blue) * (aB - c.m_Blue);
-        if( distance < nearest_distance && c.m_Red >= aR &&
-            c.m_Green >= aG && c.m_Blue >= aB )
-        {
-            nearest_distance = distance;
-            candidate = trying;
-        }
-    }
-
-    return candidate;
-}
 
 void GRDrawAnchor( EDA_RECT *aClipBox, wxDC *aDC, int x, int y,
                    int aSize, EDA_COLOR_T aColor )

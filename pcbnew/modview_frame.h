@@ -34,34 +34,22 @@
 
 class wxSashLayoutWindow;
 class wxListBox;
-class wxSemaphore;
 class FP_LIB_TABLE;
 
+namespace PCB { struct IFACE; }
 
 /**
  * Component library viewer main window.
  */
 class FOOTPRINT_VIEWER_FRAME : public PCB_BASE_FRAME
 {
-private:
-    wxListBox*          m_libList;               // The list of libs names
-    wxListBox*          m_footprintList;         // The list of footprint names
-
-    // Flags
-    wxSemaphore*        m_semaphore;             // != NULL if the frame emulates a modal dialog
-    wxString            m_configPath;            // subpath for configuration
+    friend struct PCB::IFACE;       // constructor called from here only
 
 protected:
-    static wxString     m_libraryName;           // Current selected library
-    static wxString     m_footprintName;         // Current selected footprint
-    static wxString     m_selectedFootprintName; // When the viewer is used to select a footprint
-                                                 // the selected footprint is here
+    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType );
+
 
 public:
-    FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent, FP_LIB_TABLE* aTable,
-                            wxSemaphore* aSemaphore = NULL,
-                            long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
-
     ~FOOTPRINT_VIEWER_FRAME();
 
     /**
@@ -71,23 +59,7 @@ public:
      */
     static const wxChar* GetFootprintViewerFrameName();
 
-    /**
-     * Function GetActiveFootprintViewer (static)
-     * @return a reference to the current opened Footprint viewer
-     * or NULL if no Footprint viewer currently opened
-     */
-    static FOOTPRINT_VIEWER_FRAME* GetActiveFootprintViewer();
-
-    wxString& GetSelectedFootprint( void ) const { return m_selectedFootprintName; }
-    const wxString GetSelectedLibraryFullName( void );
-
-    /**
-     * Function GetSelectedLibrary
-     * @return the selected library name from the #FP_LIB_TABLE.
-     */
-    const wxString& GetSelectedLibrary() { return m_libraryName; }
-
-    virtual EDA_COLOR_T GetGridColor( void ) const;
+    virtual EDA_COLOR_T GetGridColor() const;
 
     /**
      * Function ReCreateLibraryList
@@ -97,7 +69,21 @@ public:
      */
     void ReCreateLibraryList();
 
+    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
+    virtual void UseGalCanvas( bool aEnable );
+
 private:
+
+    wxListBox*          m_libList;               // The list of libs names
+    wxListBox*          m_footprintList;         // The list of footprint names
+
+    wxString            m_configPath;            // subpath for configuration
+
+    const wxString      getCurNickname();
+    void                setCurNickname( const wxString& aNickname );
+
+    const wxString      getCurFootprintName();
+    void                setCurFootprintName( const wxString& aName );
 
     void OnSize( wxSizeEvent& event );
 
@@ -128,25 +114,8 @@ private:
 
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
-    /**
-     * Function LoadSettings
-     * loads the library viewer frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get loaded.
-     */
-    void LoadSettings();
-
-    /**
-     * Function SaveSettings
-     * save library viewer frame specific configuration settings.
-     *
-     * Don't forget to call this base method from any derived classes or the
-     * settings will not get saved.
-     */
-    void SaveSettings();
-
-    wxString& GetFootprintName( void ) const { return m_footprintName; }
+    void LoadSettings( wxConfigBase* aCfg );    // override virtual
+    void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
     /**
      * Function OnActivate
@@ -201,8 +170,9 @@ private:
      */
     void OnLeftDClick( wxDC*, const wxPoint& ) {}
     void SaveCopyInUndoList( BOARD_ITEM*, UNDO_REDO_T, const wxPoint& ) {}
-    void SaveCopyInUndoList( PICKED_ITEMS_LIST&, UNDO_REDO_T, const wxPoint &) {}
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO_T, const wxPoint &) {}
 
+    void updateView();
 
     DECLARE_EVENT_TABLE()
 };

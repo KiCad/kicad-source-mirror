@@ -160,7 +160,7 @@ private:
     wxSize  kicad_fontz( double d ) const;
 
     /// Convert an Eagle layer to a KiCad layer.
-    LAYER_NUM kicad_layer( int aLayer ) const;
+    LAYER_ID kicad_layer( int aLayer ) const;
 
     /// Convert a KiCad distance to an Eagle distance.
     double  eagle( BIU d ) const            { return mm_per_biu * d; }

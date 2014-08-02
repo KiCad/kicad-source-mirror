@@ -49,11 +49,15 @@ class wxSize;
 //class wxRealPoint;
 class wxString;
 
+class BOARD;
+class MODULE;
 
 // Often this is not used in the prototypes, since wxFrame is good enough and would
 // represent maximum information hiding.
-class PCB_EDIT_FRAME;
+class PCB_BASE_FRAME;
 class FP_LIB_TABLE;
+class BOARD;
+class PCB_PLOT_PARAMS;
 
 
 /**
@@ -79,13 +83,30 @@ void InvokePluginOptionsEditor( wxTopLevelWindow* aCaller, const wxString& aNick
     const wxString& aPluginType, const wxString& aOptions, wxString* aResult );
 
 /**
- * Function InvokePcbLibTableEditor
- * shows the modal DIALOG_FP_LIB_TABLE for purposes of editing two lib tables.
+ * Function InvokeDXFDialogBoardImport
+ * shows the modal DIALOG_DXF_IMPORT for importing a DXF file to a board.
+
+ * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ * @return true if the import was made.
+ */
+bool InvokeDXFDialogBoardImport( PCB_BASE_FRAME* aCaller );
+
+/**
+ * Function InvokeDXFDialogModuleImport
+ * shows the modal DIALOG_DXF_IMPORT for importing a DXF file.to a module.
  *
  * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
- * @return true if the ilport was made.
+ * @return true if the import was made.
  */
-bool InvokeDXFDialogImport( PCB_EDIT_FRAME* aCaller );
+bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule );
 
+/**
+ * Function InvokeLayerSetup
+ * shows the layer setup dialog
+ * @return bool - true if user pressed OK (did not abort), else false.
+ */
+bool InvokeLayerSetup( wxTopLevelWindow* aCaller, BOARD* aBoard );
+
+bool InvokeSVGPrint( wxTopLevelWindow* aCaller, BOARD* aBoard, PCB_PLOT_PARAMS* aSettings );
 
 #endif  // INVOKE_A_DIALOG_H_

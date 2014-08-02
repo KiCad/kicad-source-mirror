@@ -17,7 +17,7 @@ class DIALOG_LIB_EDIT_PIN : public DIALOG_LIB_EDIT_PIN_BASE
 
 public:
     /** Constructor */
-    DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin );
+    DIALOG_LIB_EDIT_PIN( EDA_DRAW_FRAME* parent, LIB_PIN* aPin );
     ~DIALOG_LIB_EDIT_PIN();
 
     void OnCloseDialog( wxCloseEvent& event );

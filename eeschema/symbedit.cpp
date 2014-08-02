@@ -29,7 +29,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <kiway.h>
+#include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <kicad_string.h>
@@ -54,9 +55,14 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     if( m_component == NULL || ( m_drawItem && m_drawItem->GetFlags() ) )
         return;
 
+    PROJECT&        prj = Prj();
+    SEARCH_STACK&   search = prj.SchSearchS();
+
     m_canvas->SetIgnoreMouseEvents( true );
 
-    wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
+    wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+    if( !default_path )
+        default_path = search.LastVisitedPath();
 
     wxFileDialog dlg( this, _( "Import Symbol Drawings" ), default_path,
                       wxEmptyString, SchematicSymbolFileWildcard,
@@ -70,13 +76,14 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     m_canvas->SetIgnoreMouseEvents( false );
 
     wxFileName fn = dlg.GetPath();
-    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
+
+    prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
     Lib = new CMP_LIBRARY( LIBRARY_TYPE_SYMBOL, fn );
 
     if( !Lib->Load( err ) )
     {
-        msg.Printf( _( "Error <%s> occurred loading symbol library <%s>." ),
+        msg.Printf( _( "Error '%s' occurred loading symbol library '%s'." ),
                     GetChars( err ), GetChars( fn.GetName() ) );
         DisplayError( this, msg );
         delete Lib;
@@ -85,7 +92,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
     if( Lib->IsEmpty() )
     {
-        msg.Printf( _( "No components found in symbol library <%s>." ),
+        msg.Printf( _( "No components found in symbol library '%s'." ),
                     GetChars( fn.GetName() ) );
         delete Lib;
         return;
@@ -93,7 +100,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
     if( Lib->GetCount() > 1 )
     {
-        msg.Printf( _( "More than one part in symbol file <%s>." ),
+        msg.Printf( _( "More than one part in symbol file '%s'." ),
                     GetChars( fn.GetName() ) );
         wxMessageBox( msg, _( "Warning" ), wxOK | wxICON_EXCLAMATION, this );
     }
@@ -131,12 +138,16 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
 void LIB_EDIT_FRAME::SaveOneSymbol()
 {
-    wxString msg;
+    wxString        msg;
+    PROJECT&        prj = Prj();
+    SEARCH_STACK&   search = prj.SchSearchS();
 
     if( m_component->GetDrawItemList().empty() )
         return;
 
-    wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
+    wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+    if( !default_path )
+        default_path = search.LastVisitedPath();
 
     wxFileDialog dlg( this, _( "Export Symbol Drawings" ), default_path,
                       m_component->GetName(), SchematicSymbolFileWildcard,
@@ -152,9 +163,9 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     if( fn.GetExt().IsEmpty() )
         fn.SetExt( SchematicSymbolFileExtension );
 
-    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
+    prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
-    msg.Printf( _( "Saving symbol in <%s>" ), GetChars( fn.GetPath() ) );
+    msg.Printf( _( "Saving symbol in '%s'" ), GetChars( fn.GetPath() ) );
     SetStatusText( msg );
 
     wxString line;
@@ -218,14 +229,14 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
             formatter.Print( 0, "ENDDRAW\n" );
             formatter.Print( 0, "ENDDEF\n" );
         }
-        catch( IO_ERROR ioe )
+        catch( const IO_ERROR& ioe )
         {
-            msg.Printf( _( "An error occurred attempting to save symbol file <%s>" ),
+            msg.Printf( _( "An error occurred attempting to save symbol file '%s'" ),
                         GetChars( fn.GetFullPath() ) );
             DisplayError( this, msg );
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
         return;

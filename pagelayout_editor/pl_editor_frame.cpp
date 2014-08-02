@@ -27,7 +27,8 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+//#include <pgm_base.h>
+#include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <build_version.h>
 #include <macros.h>
@@ -52,19 +53,19 @@
 
 #define PL_EDITOR_FRAME_NAME wxT( "PlEditorFrame" )
 
-PL_EDITOR_FRAME::PL_EDITOR_FRAME( wxWindow* aParent, const wxString& aTitle,
-                                const wxPoint& aPosition, const wxSize& aSize,
-                                long aStyle ) :
-    EDA_DRAW_FRAME( aParent, PL_EDITOR_FRAME_TYPE, aTitle, aPosition, aSize,
-                    aStyle, PL_EDITOR_FRAME_NAME )
+PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+    EDA_DRAW_FRAME( aKiway, aParent, FRAME_PL_EDITOR, wxT( "PlEditorFrame" ),
+            wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )
 {
     m_FrameName = PL_EDITOR_FRAME_NAME;
 
-    m_showAxis = false;                     // true to show X and Y axis on screen
+    m_showAxis = false;                 // true to show X and Y axis on screen
     m_showGridAxis = true;
-    m_showBorderAndTitleBlock   = true;     // true for reference drawings.
+    m_showBorderAndTitleBlock   = true; // true for reference drawings.
     m_HotkeysZoomAndGridList    = s_PlEditor_Hokeys_Descr;
     m_originSelectChoice = 0;
+    SetDrawBgColor( WHITE );            // default value, user option (WHITE/BLACK)
+    SetShowPageLimits( true );
 
     m_designTreeWidth = 150;
     m_propertiesFrameWidth = 200;
@@ -79,8 +80,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( wxWindow* aParent, const wxString& aTitle,
     wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU();
     SetScreen( new PL_EDITOR_SCREEN( pageSizeIU ) );
 
-    m_config = wxGetApp().GetSettings();
-    LoadSettings();
+    LoadSettings( config() );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     if( m_LastGridSizeId < ID_POPUP_GRID_LEVEL_1MM-ID_POPUP_GRID_LEVEL_1000 )
@@ -173,11 +173,43 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( wxWindow* aParent, const wxString& aTitle,
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer( 10 ) );
 
     m_auimgr.Update();
+
+    // Initialize the current page layout
+    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+#if 0       //start with empty layout
+    pglayout.AllowVoidList( true );
+    pglayout.ClearList();
+#else       // start with the default Kicad layout
+    pglayout.SetPageLayout();
+#endif
+    OnNewPageLayout();
 }
 
 
 PL_EDITOR_FRAME::~PL_EDITOR_FRAME()
 {
+}
+
+
+bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
+{
+    wxString fn = aFileSet[0];
+
+    if( !LoadPageLayoutDescrFile( fn ) )
+    {
+        wxString msg = wxString::Format(
+            _( "Error when loading file '%s'" ),
+            GetChars( fn )
+            );
+
+        wxMessageBox( msg );
+        return false;
+    }
+    else
+    {
+        OnNewPageLayout();
+        return true;
+    }
 }
 
 
@@ -232,7 +264,8 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
     // do not show the window because we do not want any paint event
     Show( false );
 
-    wxGetApp().SaveCurrentSetupValues( m_configSettings );
+    // was: Pgm().SaveCurrentSetupValues( m_configSettings );
+    wxConfigSaveSetups( Kiface().KifaceSettings(), m_configSettings );
 
     // On Linux, m_propertiesPagelayout must be destroyed
     // before deleting the main frame to avoid a crash when closing
@@ -264,35 +297,38 @@ double PL_EDITOR_FRAME::BestZoom()
     return bestzoom;
 }
 
-#define DESIGN_TREE_WIDTH_KEY wxT("DesignTreeWidth")
-#define PROPERTIES_FRAME_WIDTH_KEY wxT("PropertiesFrameWidth")
-#define CORNER_ORIGIN_CHOICE_KEY wxT("CornerOriginChoice")
+static const wxChar designTreeWidthKey[] = wxT("DesignTreeWidth");
+static const wxChar propertiesFrameWidthKey[] = wxT("PropertiesFrameWidth");
+static const wxChar cornerOriginChoiceKey[] = wxT("CornerOriginChoice");
+static const wxChar blackBgColorKey[] = wxT( "BlackBgColor" );
 
-void PL_EDITOR_FRAME::LoadSettings()
+void PL_EDITOR_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    EDA_DRAW_FRAME::LoadSettings();
-    m_config->Read( DESIGN_TREE_WIDTH_KEY, &m_designTreeWidth, 100);
-    m_config->Read( PROPERTIES_FRAME_WIDTH_KEY, &m_propertiesFrameWidth, 150);
-    m_config->Read( CORNER_ORIGIN_CHOICE_KEY, &m_originSelectChoice );
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
+
+    aCfg->Read( designTreeWidthKey, &m_designTreeWidth, 100);
+    aCfg->Read( propertiesFrameWidthKey, &m_propertiesFrameWidth, 150);
+    aCfg->Read( cornerOriginChoiceKey, &m_originSelectChoice );
+    bool tmp;
+    aCfg->Read( blackBgColorKey, &tmp, false );
+    SetDrawBgColor( tmp ? BLACK : WHITE );
 }
 
 
-void PL_EDITOR_FRAME::SaveSettings()
+void PL_EDITOR_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    wxConfig* config = wxGetApp().GetSettings();
-
-    if( config == NULL )
-        return;
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
 
     m_designTreeWidth = m_treePagelayout->GetSize().x;
     m_propertiesFrameWidth = m_propertiesPagelayout->GetSize().x;
 
-    EDA_DRAW_FRAME::SaveSettings();
-    m_config->Write( DESIGN_TREE_WIDTH_KEY, m_designTreeWidth);
-    m_config->Write( PROPERTIES_FRAME_WIDTH_KEY, m_propertiesFrameWidth);
-    m_config->Write( CORNER_ORIGIN_CHOICE_KEY, m_originSelectChoice );
+    aCfg->Write( designTreeWidthKey, m_designTreeWidth);
+    aCfg->Write( propertiesFrameWidthKey, m_propertiesFrameWidth);
+    aCfg->Write( cornerOriginChoiceKey, m_originSelectChoice );
+    aCfg->Write( blackBgColorKey, GetDrawBgColor() == BLACK );
 
-    wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
+    // was: wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
+    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 }
 
 
@@ -467,7 +503,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     // Display units
 }
 
-void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
+void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
                            bool aPrintMirrorMode, void * aData )
 {
     GetScreen()-> m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
@@ -488,7 +524,7 @@ void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
     WORKSHEET_DATAITEM* selecteditem = GetSelectedItem();
 
     // the color to draw selected items
-    if( g_DrawBgColor == WHITE )
+    if( GetDrawBgColor() == WHITE )
         WORKSHEET_DATAITEM::m_SelectedColor = DARKCYAN;
     else
         WORKSHEET_DATAITEM::m_SelectedColor = YELLOW;
@@ -504,6 +540,15 @@ void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
     }
 
     DrawWorkSheet( aDC, GetScreen(), 0, IU_PER_MILS, GetCurrFileName() );
+
+#ifdef USE_WX_OVERLAY
+    if( IsShown() )
+    {
+        m_overlay.Reset();
+        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)aDC );
+        overlaydc.Clear();
+    }
+#endif
 
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
@@ -725,5 +770,6 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
     GetScreen()->ClrModify();
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
     RebuildDesignTree();
+    Zoom_Automatique( true );
     m_canvas->Refresh();
 }

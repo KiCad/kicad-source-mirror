@@ -170,7 +170,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
 
     int thickness;
 
-    if( m_Item->GetLayer() == EDGE_N )
+    if( m_Item->GetLayer() == Edge_Cuts )
         thickness =  m_brdSettings.m_EdgeSegmentWidth;
     else
         thickness =  m_brdSettings.m_DrawSegmentWidth;
@@ -179,7 +179,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
 
     // Configure the layers list selector
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetLayerMask( ALL_CU_LAYERS );
+    m_LayerSelectionCtrl->SetLayerSet( LSET::AllCuMask() );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
 
@@ -187,7 +187,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
     {
         wxMessageBox( _( "This item has an illegal layer id.\n"
                          "Now, forced on the drawings layer. Please, fix it" ) );
-        m_LayerSelectionCtrl->SetLayerSelection( DRAW_N );
+        m_LayerSelectionCtrl->SetLayerSelection( Dwgs_User );
     }
 }
 
@@ -196,7 +196,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnLayerChoice( wxCommandEvent& event )
 {
     int thickness;
 
-    if( m_LayerSelectionCtrl->GetLayerSelection() == EDGE_N )
+    if( m_LayerSelectionCtrl->GetLayerSelection() == Edge_Cuts )
         thickness =  m_brdSettings.m_EdgeSegmentWidth;
     else
         thickness =  m_brdSettings.m_DrawSegmentWidth;
@@ -215,26 +215,26 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
         m_Item->Draw( m_parent->GetCanvas(), m_DC, GR_XOR );
 
     msg = m_Center_StartXCtrl->GetValue();
-    m_Item->SetStartX( ReturnValueFromString( g_UserUnit, msg ) );
+    m_Item->SetStartX( ValueFromString( g_UserUnit, msg ) );
 
     msg = m_Center_StartYCtrl->GetValue();
-    m_Item->SetStartY( ReturnValueFromString( g_UserUnit, msg ) );
+    m_Item->SetStartY( ValueFromString( g_UserUnit, msg ) );
 
     msg = m_EndX_Radius_Ctrl->GetValue();
-    m_Item->SetEndX( ReturnValueFromString( g_UserUnit, msg ) );
+    m_Item->SetEndX( ValueFromString( g_UserUnit, msg ) );
 
     msg = m_EndY_Ctrl->GetValue();
-    m_Item->SetEndY( ReturnValueFromString( g_UserUnit, msg ) );
+    m_Item->SetEndY( ValueFromString( g_UserUnit, msg ) );
 
     msg = m_ThicknessCtrl->GetValue();
-    m_Item->SetWidth( ReturnValueFromString( g_UserUnit, msg ) );
+    m_Item->SetWidth( ValueFromString( g_UserUnit, msg ) );
 
     msg = m_DefaultThicknessCtrl->GetValue();
-    int thickness = ReturnValueFromString( g_UserUnit, msg );
+    int thickness = ValueFromString( g_UserUnit, msg );
 
-    m_Item->SetLayer( m_LayerSelectionCtrl->GetLayerSelection() );
+    m_Item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
 
-    if( m_Item->GetLayer() == EDGE_N )
+    if( m_Item->GetLayer() == Edge_Cuts )
          m_brdSettings.m_EdgeSegmentWidth = thickness;
     else
          m_brdSettings.m_DrawSegmentWidth = thickness;

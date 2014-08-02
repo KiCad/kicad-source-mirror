@@ -32,7 +32,7 @@
 #include <class_drawpanel.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
 #include <invoke_sch_dialog.h>
@@ -562,7 +562,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
         if( WriteDiagnosticERC( dlg.GetPath() ) )
         {
             Close( true );
-            ExecuteFile( this, wxGetApp().GetEditorName(), QuoteFullPath( fn ) );
+            ExecuteFile( this, Pgm().GetEditorName(), QuoteFullPath( fn ) );
         }
     }
 }

@@ -40,7 +40,8 @@ STROKE_FONT::STROKE_FONT( GAL* aGal ) :
     m_gal( aGal ),
     m_bold( false ),
     m_italic( false ),
-    m_mirrored( false )
+    m_mirrored( false ),
+    m_overbar( false )
 {
     // Default values
     m_glyphSize = VECTOR2D( 10.0, 10.0 );
@@ -149,6 +150,9 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLY
 
 void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle )
 {
+    if( aText.empty() )
+        return;
+
     // Context needs to be saved before any transformations
     m_gal->Save();
 
@@ -268,9 +272,9 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
             // If it is a double tilda, just process the second one
         }
 
-        unsigned dd = *chIt - ' ';
+        int dd = *chIt - ' ';
 
-        if( dd >= m_glyphBoundingBoxes.size() || dd < 0 )
+        if( dd >= (int) m_glyphBoundingBoxes.size() || dd < 0 )
             dd = '?' - ' ';
 
         GLYPH& glyph = m_glyphs[dd];
@@ -336,9 +340,9 @@ VECTOR2D STROKE_FONT::computeTextSize( const UTF8& aText ) const
         }
 
         // Index in the bounding boxes table
-        unsigned dd = *it - ' ';
+        int dd = *it - ' ';
 
-        if( dd >= m_glyphBoundingBoxes.size() || dd < 0 )
+        if( dd >= (int) m_glyphBoundingBoxes.size() || dd < 0 )
             dd = '?' - ' ';
 
         result.x += m_glyphSize.x * m_glyphBoundingBoxes[dd].GetEnd().x;

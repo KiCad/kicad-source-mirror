@@ -34,6 +34,7 @@
 #include <macros.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <class_GERBER.h>
 
 
@@ -225,7 +226,7 @@ bool GERBER_IMAGE::HasNegativeItems()
     return m_hasNegativeItems == 1;
 }
 
-int GERBER_IMAGE::ReturnUsedDcodeNumber()
+int GERBER_IMAGE::UsedDcodeNumber()
 {
     int count = 0;
 

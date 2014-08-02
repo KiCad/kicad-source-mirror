@@ -45,6 +45,7 @@ endif()
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/pcbnew
+    ${BOOST_INCLUDE}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}
     )
@@ -77,57 +78,3 @@ target_link_libraries( property_tree
     ${wxWidgets_LIBRARIES}
     )
 
-
-#-----<KIWAY Low Level DSO Testing>---------------------------------------------
-
-# The small launcher, it sets up wxWidgets library and loads a MODULE by the same name
-# but with extension ${KIFACE_SUFFIX}.
-
-set( PAIR_BASE kiway_test )
-
-add_executable( ${PAIR_BASE} WIN32 MACOSX_BUNDLE
-    EXCLUDE_FROM_ALL
-    ../common/single_top.cpp
-    )
-target_link_libraries( ${PAIR_BASE}
-    common
-    ${wxWidgets_LIBRARIES}
-    )
-if( APPLE )
-    set_target_properties( ${PAIR_BASE} PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-        )
-endif()
-
-
-# make a KIFACE top level DLL/DSO
-add_library( ${PAIR_BASE}_kiface MODULE
-    EXCLUDE_FROM_ALL
-    kiface_test.cpp
-    )
-target_link_libraries( ${PAIR_BASE}_kiface
-    common
-    ${wxWidgets_LIBRARIES}
-    )
-set_target_properties( ${PAIR_BASE}_kiface PROPERTIES
-    OUTPUT_NAME     ${PAIR_BASE}
-    PREFIX          ${KIFACE_PREFIX}
-    SUFFIX          ${KIFACE_SUFFIX}
-    )
-
-# if you build ${PAIR_BASE}, then also build ${PAIR_BASE}_kiface if out of date.
-add_dependencies( ${PAIR_BASE} ${PAIR_BASE}_kiface )
-
-if( MAKE_LINK_MAPS )
-
-    # generate a link maps with cross reference
-
-    set_target_properties( ${PAIR_BASE}_kiface PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=${KIFACE_PREFIX}${PAIR_BASE}${KIFACE_SUFFIX}.map"
-        )
-
-    set_target_properties( ${PAIR_BASE} PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=${PAIR_BASE}.map"
-        )
-
-endif()

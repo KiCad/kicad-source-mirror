@@ -62,7 +62,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     // Set text tickness to a default value
     m_Thickness = Millimeter2iu( 0.15 );
 
-    SetLayer( SILKSCREEN_N_FRONT );
+    SetLayer( F_SilkS );
 
     if( module && ( module->Type() == PCB_MODULE_T ) )
     {
@@ -70,12 +70,12 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
 
         if( IsBackLayer( module->GetLayer() ) )
         {
-            SetLayer( SILKSCREEN_N_BACK );
+            SetLayer( B_SilkS );
             m_Mirror = true;
         }
         else
         {
-            SetLayer( SILKSCREEN_N_FRONT );
+            SetLayer( F_SilkS );
             m_Mirror = false;
         }
     }
@@ -129,7 +129,7 @@ int TEXTE_MODULE::GetLength() const
     return m_Text.Len();
 }
 
-// Update draw coordinates
+
 void TEXTE_MODULE::SetDrawCoord()
 {
     MODULE* module = (MODULE*) m_Parent;
@@ -146,8 +146,6 @@ void TEXTE_MODULE::SetDrawCoord()
 }
 
 
-// Update "local" coordinates (coordinates relatives to the footprint
-//  anchor point)
 void TEXTE_MODULE::SetLocalCoord()
 {
     MODULE* module = (MODULE*) m_Parent;
@@ -163,7 +161,8 @@ void TEXTE_MODULE::SetLocalCoord()
     RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
 }
 
-bool TEXTE_MODULE::HitTest( const wxPoint& aPosition )
+
+bool TEXTE_MODULE::HitTest( const wxPoint& aPosition ) const
 {
     wxPoint  rel_pos;
     EDA_RECT area = GetTextBox( -1, -1 );
@@ -224,13 +223,13 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     // Determine the element color or suppress it element if hidden
     switch( module->GetLayer() )
     {
-    case LAYER_N_BACK:
+    case B_Cu:
         if( !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE ) )
             return;
         color = brd->GetVisibleElementColor( MOD_TEXT_BK_VISIBLE );
         break;
 
-    case LAYER_N_FRONT:
+    case F_Cu:
         if( !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ) )
             return;
         color = brd->GetVisibleElementColor( MOD_TEXT_FR_VISIBLE );
@@ -415,6 +414,18 @@ EDA_ITEM* TEXTE_MODULE::Clone() const
 }
 
 
+const BOX2I TEXTE_MODULE::ViewBBox() const
+{
+    double   angle = GetDrawRotation();
+    EDA_RECT text_area = GetTextBox( -1, -1 );
+
+    if( angle )
+        text_area = text_area.GetBoundingBoxRotated( m_Pos, angle );
+
+    return BOX2I( text_area.GetPosition(), text_area.GetSize() );
+}
+
+
 void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     if( m_NoShow )      // Hidden text
@@ -436,13 +447,16 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
         default:
             switch( GetParent()->GetLayer() )
             {
-            case LAYER_N_BACK:
-                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE );    // how about SILKSCREEN_N_BACK?
+            case B_Cu:
+                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE );    // how about B_SilkS?
                 break;
 
-            case LAYER_N_FRONT:
-                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );    // how about SILKSCREEN_N_FRONT?
+            case F_Cu:
+                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );    // how about F_SilkS?
                 break;
+
+            default:
+                wxFAIL_MSG( wxT( "Can't tell text layer" ) );
             }
             break;
         }

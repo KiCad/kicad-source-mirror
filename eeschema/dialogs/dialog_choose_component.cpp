@@ -77,6 +77,7 @@ void DIALOG_CHOOSE_COMPONENT::OnSearchBoxChange( wxCommandEvent& aEvent )
 {
     m_search_container->UpdateSearchTerm( m_searchBox->GetLineText(0) );
     updateSelection();
+    m_searchBox->SetFocus();
 }
 
 

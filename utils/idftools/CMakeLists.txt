@@ -1,29 +1,25 @@
 include_directories(
-    "${CMAKE_SOURCE_DIR}/include"
     "${CMAKE_SOURCE_DIR}/lib_dxf"
-    "${CMAKE_SOURCE_DIR}/pcbnew/exporters"
     "${CMAKE_SOURCE_DIR}/utils/idftools"
   )
 
 link_directories(
     "${CMAKE_BINARY_DIR}/lib_dxf"
-)
-
-add_executable( idfcyl idf_cylinder.cpp )
-
-add_executable( idfrect idf_rect.cpp )
-
-add_executable( dxf2idf dxf2idfmain.cpp dxf2idf.cpp
-    "${CMAKE_SOURCE_DIR}/pcbnew/exporters/idf_common.cpp"
-    "${CMAKE_SOURCE_DIR}/common/richio.cpp"
   )
 
-add_dependencies( idfcyl lib-dependencies )
-add_dependencies( idfrect lib-dependencies )
-add_dependencies( dxf2idf lib-dependencies )
+add_library( idf3 STATIC
+    idf_helpers.cpp idf_common.cpp idf_outlines.cpp
+    idf_parser.cpp vrml_layer.cpp )
 
-target_link_libraries( dxf2idf lib_dxf ${wxWidgets_LIBRARIES} )
+add_executable( idfcyl idf_cylinder.cpp )
+add_executable( idfrect idf_rect.cpp )
+add_executable( dxf2idf dxf2idfmain.cpp dxf2idf.cpp )
+add_executable( idf2vrml idf2vrml.cpp )
 
-install( TARGETS idfcyl idfrect dxf2idf
+target_link_libraries( dxf2idf lib_dxf idf3 ${wxWidgets_LIBRARIES} )
+
+target_link_libraries( idf2vrml idf3 ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )
+
+install( TARGETS idfcyl idfrect dxf2idf idf2vrml
     DESTINATION ${KICAD_BIN}
     COMPONENT binary )

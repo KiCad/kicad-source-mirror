@@ -29,6 +29,7 @@
 
 #include <fctsys.h>
 #include <wxEeschemaStruct.h>
+#include <confirm.h>
 
 #include <netlist.h>
 #include <class_netlist_object.h>
@@ -46,6 +47,49 @@
 
 #define IS_WIRE false
 #define IS_BUS true
+
+//Imported function:
+int TestDuplicateSheetNames( bool aCreateMarker );
+
+bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
+                                    unsigned aNetlistOptions )
+{
+    SCH_SHEET_LIST sheets;
+    sheets.AnnotatePowerSymbols();
+
+    // Performs some controls:
+    if( CheckAnnotate( NULL, 0 ) )
+    {
+        if( !IsOK( NULL, _( "Some items are not annotated\n"
+                            "Do you want to annotate schematic?" ) ) )
+            return false;
+
+        // Schematic must be annotated: call Annotate dialog:
+        wxCommandEvent event;
+        OnAnnotate( event );
+
+        if( CheckAnnotate( NULL, 0 ) )
+            return false;
+    }
+
+    // Test duplicate sheet names:
+    if( TestDuplicateSheetNames( false ) > 0 )
+    {
+        if( !IsOK( NULL, _( "Error: duplicate sheet names. Continue?" ) ) )
+            return false;
+    }
+
+    // Cleanup the entire hierarchy
+    SCH_SCREENS screens;
+    screens.SchematicCleanUp();
+
+    NETLIST_OBJECT_LIST * connectedItemsList = BuildNetListBase();
+    bool success = WriteNetListFile( connectedItemsList, aFormat,
+                                     aFullFileName, aNetlistOptions );
+
+    return success;
+}
+
 
 // Buffer to build the list of items used in netlist and erc calculations
 NETLIST_OBJECT_LIST s_NetObjectslist( true );

@@ -211,34 +211,34 @@ void PSLIKE_PLOTTER::fputsPostscriptString(FILE *fout, const wxString& txt)
     putc( '(', fout );
     for( unsigned i = 0; i < txt.length(); i++ )
     {
-	// Lazyness made me use stdio buffering yet another time...
-	wchar_t ch = txt[i];
-	if( ch < 256 )
-	{
-	    switch (ch)
-	    {
-	    // The ~ shouldn't reach the outside
-	    case '~':
-		break;
-	    // These characters must be escaped
-	    case '(':
-	    case ')':
-	    case '\\':
-		putc( '\\', fout );
+    // Lazyness made me use stdio buffering yet another time...
+    wchar_t ch = txt[i];
+    if( ch < 256 )
+    {
+        switch (ch)
+        {
+        // The ~ shouldn't reach the outside
+        case '~':
+        break;
+        // These characters must be escaped
+        case '(':
+        case ')':
+        case '\\':
+        putc( '\\', fout );
 
-		// FALLTHRU
-	    default:
-		putc( ch, fout );
-		break;
-	    }
-	}
+        // FALLTHRU
+        default:
+        putc( ch, fout );
+        break;
+        }
+    }
     }
     putc( ')', fout );
 }
 
 
 /**
- * Sister function for the ReturnGraphicTextWidth in drawtxt.cpp
+ * Sister function for the GraphicTextWidth in drawtxt.cpp
  * Does the same processing (i.e. calculates a text string width) but
  * using postscript metrics for the Helvetica font (optionally used for
  * PS and PDF plotting
@@ -303,7 +303,7 @@ void PSLIKE_PLOTTER::postscriptOverlinePositions( const wxString& aText, int aXS
 }
 
 void PS_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-			      double aScale, bool aMirror )
+                  double aScale, bool aMirror )
 {
     wxASSERT( !outputFile );
     m_plotMirror = aMirror;
@@ -354,31 +354,31 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
     switch( aH_justify )
     {
     case GR_TEXT_HJUSTIFY_CENTER:
-	dx = -tw / 2;
-	break;
+    dx = -tw / 2;
+    break;
 
     case GR_TEXT_HJUSTIFY_RIGHT:
-	dx = -tw;
-	break;
+    dx = -tw;
+    break;
 
     case GR_TEXT_HJUSTIFY_LEFT:
-	dx = 0;
-	break;
+    dx = 0;
+    break;
     }
 
     switch( aV_justify )
     {
     case GR_TEXT_VJUSTIFY_CENTER:
-	dy = th / 2;
-	break;
+    dy = th / 2;
+    break;
 
     case GR_TEXT_VJUSTIFY_TOP:
         dy = th;
-	break;
+    break;
 
     case GR_TEXT_VJUSTIFY_BOTTOM:
-	dy = 0;
-	break;
+    dy = 0;
+    break;
     }
 
     RotatePoint( &dx, &dy, aOrient );
@@ -620,7 +620,7 @@ void PS_PLOTTER::PenTo( const wxPoint& pos, char plume )
     }
     if( penState != plume || pos != penLastpos )
     {
-	DPOINT pos_dev = userToDeviceCoordinates( pos );
+    DPOINT pos_dev = userToDeviceCoordinates( pos );
         fprintf( outputFile, "%g %g %sto\n",
                  pos_dev.x, pos_dev.y,
                  ( plume=='D' ) ? "line" : "move" );
@@ -650,39 +650,39 @@ bool PS_PLOTTER::StartPlot()
 
     static const char* PSMacro[] =
     {
-	"%%BeginProlog\n"
-	"/line { newpath moveto lineto stroke } bind def\n",
-	"/cir0 { newpath 0 360 arc stroke } bind def\n",
-	"/cir1 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
-	"/cir2 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
-	"/arc0 { newpath arc stroke } bind def\n",
-	"/arc1 { newpath 4 index 4 index moveto arc closepath gsave fill\n",
-	"    grestore stroke } bind def\n",
-	"/arc2 { newpath 4 index 4 index moveto arc closepath gsave fill\n",
-	"    grestore stroke } bind def\n",
-	"/poly0 { stroke } bind def\n",
-	"/poly1 { closepath gsave fill grestore stroke } bind def\n",
-	"/poly2 { closepath gsave fill grestore stroke } bind def\n",
-	"/rect0 { rectstroke } bind def\n",
-	"/rect1 { rectfill } bind def\n",
-	"/rect2 { rectfill } bind def\n",
-	"/linemode0 { 0 setlinecap 0 setlinejoin 0 setlinewidth } bind def\n",
-	"/linemode1 { 1 setlinecap 1 setlinejoin } bind def\n",
-	"/dashedline { [200] 100 setdash } bind def\n",
-	"/solidline { [] 0 setdash } bind def\n",
+    "%%BeginProlog\n"
+    "/line { newpath moveto lineto stroke } bind def\n",
+    "/cir0 { newpath 0 360 arc stroke } bind def\n",
+    "/cir1 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
+    "/cir2 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
+    "/arc0 { newpath arc stroke } bind def\n",
+    "/arc1 { newpath 4 index 4 index moveto arc closepath gsave fill\n",
+    "    grestore stroke } bind def\n",
+    "/arc2 { newpath 4 index 4 index moveto arc closepath gsave fill\n",
+    "    grestore stroke } bind def\n",
+    "/poly0 { stroke } bind def\n",
+    "/poly1 { closepath gsave fill grestore stroke } bind def\n",
+    "/poly2 { closepath gsave fill grestore stroke } bind def\n",
+    "/rect0 { rectstroke } bind def\n",
+    "/rect1 { rectfill } bind def\n",
+    "/rect2 { rectfill } bind def\n",
+    "/linemode0 { 0 setlinecap 0 setlinejoin 0 setlinewidth } bind def\n",
+    "/linemode1 { 1 setlinecap 1 setlinejoin } bind def\n",
+    "/dashedline { [200] 100 setdash } bind def\n",
+    "/solidline { [] 0 setdash } bind def\n",
 
-	// This is for 'hidden' text (search anchors for PDF)
+    // This is for 'hidden' text (search anchors for PDF)
         "/phantomshow { moveto\n",
         "    /KicadFont findfont 0.000001 scalefont setfont\n",
-	"    show } bind def\n",
+    "    show } bind def\n",
 
         // This is for regular postscript text
         "/textshow { gsave\n",
         "    findfont exch scalefont setfont concat 1 scale 0 0 moveto show\n",
         "    } bind def\n",
 
-	// Utility for getting Latin1 encoded fonts
-	"/reencodefont {\n",
+    // Utility for getting Latin1 encoded fonts
+    "/reencodefont {\n",
         "  findfont dup length dict begin\n",
         "  { 1 index /FID ne\n",
         "    { def }\n",
@@ -692,13 +692,13 @@ bool PS_PLOTTER::StartPlot()
         "  currentdict\n",
         "  end } bind def\n"
 
-	// Remap AdobeStandard fonts to Latin1
-	"/KicadFont /Helvetica reencodefont definefont pop\n",
-	"/KicadFont-Bold /Helvetica-Bold reencodefont definefont pop\n",
-	"/KicadFont-Oblique /Helvetica-Oblique reencodefont definefont pop\n",
-	"/KicadFont-BoldOblique /Helvetica-BoldOblique reencodefont definefont pop\n",
-	"%%EndProlog\n",
-	NULL
+    // Remap AdobeStandard fonts to Latin1
+    "/KicadFont /Helvetica reencodefont definefont pop\n",
+    "/KicadFont-Bold /Helvetica-Bold reencodefont definefont pop\n",
+    "/KicadFont-Oblique /Helvetica-Oblique reencodefont definefont pop\n",
+    "/KicadFont-BoldOblique /Helvetica-BoldOblique reencodefont definefont pop\n",
+    "%%EndProlog\n",
+    NULL
     };
 
     time_t time1970 = time( NULL );
@@ -726,8 +726,8 @@ bool PS_PLOTTER::StartPlot()
         psPaperSize.Set( pageInfo.GetHeightMils(), pageInfo.GetWidthMils() );
 
     fprintf( outputFile, "%%%%BoundingBox: 0 0 %d %d\n",
-	    (int) ceil( psPaperSize.x * BIGPTsPERMIL ),
-	    (int) ceil( psPaperSize.y * BIGPTsPERMIL ) );
+        (int) ceil( psPaperSize.x * BIGPTsPERMIL ),
+        (int) ceil( psPaperSize.y * BIGPTsPERMIL ) );
 
     // Specify the size of the sheet and the name associated with that size.
     // (If the "User size" option has been selected for the sheet size,
@@ -775,9 +775,9 @@ bool PS_PLOTTER::StartPlot()
     // within the Document Structuring Convention.
     fputs( "%%Page: 1 1\n"
            "%%BeginPageSetup\n"
-	   "gsave\n"
-	   "0.0072 0.0072 scale\n"    // Configure postscript for decimils coordinates
-	   "linemode1\n", outputFile );
+       "gsave\n"
+       "0.0072 0.0072 scale\n"    // Configure postscript for decimils coordinates
+       "linemode1\n", outputFile );
 
 
     // Rototranslate the coordinate to achieve the landscape layout
@@ -803,7 +803,7 @@ bool PS_PLOTTER::EndPlot()
     wxASSERT( outputFile );
     fputs( "showpage\n"
            "grestore\n"
-	   "%%EOF\n", outputFile );
+       "%%EOF\n", outputFile );
     fclose( outputFile );
     outputFile = NULL;
 
@@ -812,27 +812,32 @@ bool PS_PLOTTER::EndPlot()
 
 
 
-void PS_PLOTTER::Text( const wxPoint&              aPos,
-		       enum EDA_COLOR_T            aColor,
-		       const wxString&             aText,
-		       double                      aOrient,
-		       const wxSize&               aSize,
-		       enum EDA_TEXT_HJUSTIFY_T    aH_justify,
-		       enum EDA_TEXT_VJUSTIFY_T    aV_justify,
-		       int                         aWidth,
-		       bool                        aItalic,
-		       bool                        aBold )
+void PS_PLOTTER::Text( const wxPoint&       aPos,
+                enum EDA_COLOR_T            aColor,
+                const wxString&             aText,
+                double                      aOrient,
+                const wxSize&               aSize,
+                enum EDA_TEXT_HJUSTIFY_T    aH_justify,
+                enum EDA_TEXT_VJUSTIFY_T    aV_justify,
+                int                         aWidth,
+                bool                        aItalic,
+                bool                        aBold,
+                bool                        aMultilineAllowed )
 {
     SetCurrentLineWidth( aWidth );
     SetColor( aColor );
 
+    // Fix me: see how to use PS text mode for multiline texts
+    if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
+        aMultilineAllowed = false;  // the text has only one line.
+
     // Draw the native postscript text (if requested)
-    if( m_textMode == PLOTTEXTMODE_NATIVE )
+    if( m_textMode == PLOTTEXTMODE_NATIVE && !aMultilineAllowed )
     {
         const char *fontname = aItalic ? (aBold ? "/KicadFont-BoldOblique"
                 : "/KicadFont-Oblique")
-            : (aBold ? "/KicadFont-Bold"
-                    : "/KicadFont");
+                : (aBold ? "/KicadFont-Bold"
+                : "/KicadFont");
 
         // Compute the copious tranformation parameters
         double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
@@ -874,16 +879,16 @@ void PS_PLOTTER::Text( const wxPoint&              aPos,
     if( m_textMode == PLOTTEXTMODE_PHANTOM )
     {
         fputsPostscriptString( outputFile, aText );
-	DPOINT pos_dev = userToDeviceCoordinates( aPos );
+        DPOINT pos_dev = userToDeviceCoordinates( aPos );
         fprintf( outputFile, " %g %g phantomshow\n",
                  pos_dev.x, pos_dev.y );
     }
 
     // Draw the stroked text (if requested)
-    if( m_textMode != PLOTTEXTMODE_NATIVE )
+    if( m_textMode != PLOTTEXTMODE_NATIVE || aMultilineAllowed )
     {
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                aWidth, aItalic, aBold );
+                aWidth, aItalic, aBold, aMultilineAllowed );
     }
 }
 

@@ -25,6 +25,7 @@
 #ifndef ACTION_MANAGER_H_
 #define ACTION_MANAGER_H_
 
+#include <list>
 #include <map>
 #include <string>
 
@@ -48,6 +49,12 @@ public:
     ACTION_MANAGER( TOOL_MANAGER* aToolManager );
 
     /**
+     * Destructor.
+     * Unregisters every registered action.
+     */
+    ~ACTION_MANAGER();
+
+    /**
      * Function RegisterAction()
      * Adds a tool action to the manager and sets it up. After that is is possible to invoke
      * the action using hotkeys or sending a command event with its name.
@@ -68,21 +75,17 @@ public:
     static int MakeActionId( const std::string& aActionName );
 
     /**
-     * Function RunAction()
-     * Runs an action with a given name (if there is one available).
-     * @param aActionName is the name of action to be run.
-     * @return True if there was an action associated with the name, false otherwise.
+     * Function FindAction()
+     * Finds an action with a given name (if there is one available).
+     * @param aActionName is the searched action.
+     * @return Pointer to a TOOL_ACTION object or NULL if there is no such action.
      */
-    bool RunAction( const std::string& aActionName ) const;
-
-    // TODO to be considered
-    // bool RunAction( int aActionId ) const;
-    // bool RunAction( TOOL_ACTION* aAction ) const;
+    TOOL_ACTION* FindAction( const std::string& aActionName ) const;
 
     /**
      * Function RunHotKey()
      * Runs an action associated with a hotkey (if there is one available).
-     * @param aHotKey is the hotkey to be served.
+     * @param aHotKey is the hotkey to be handled.
      * @return True if there was an action associated with the hotkey, false otherwise.
      */
     bool RunHotKey( int aHotKey ) const;
@@ -98,15 +101,8 @@ private:
     std::map<std::string, TOOL_ACTION*> m_actionNameIndex;
 
     ///> Map for indexing actions by their hotkeys
-    std::map<int, TOOL_ACTION*> m_actionHotKeys;
-
-    /**
-     * Function runAction()
-     * Prepares an appropriate event and sends it to the destination specified in a TOOL_ACTION
-     * object.
-     * @param aAction is the action to be run.
-     */
-    void runAction( const TOOL_ACTION* aAction ) const;
+    typedef std::map<int, std::list<TOOL_ACTION*> > HOTKEY_LIST;
+    HOTKEY_LIST m_actionHotKeys;
 };
 
 #endif /* ACTION_MANAGER_H_ */

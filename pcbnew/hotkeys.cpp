@@ -29,12 +29,20 @@
  *  and see this list for some ascii keys (space ...)
  */
 
-/* local variables */
-/* Hotkey list: */
-static EDA_HOTKEY HkSwitch2CopperLayer( wxT( "Switch to Copper layer" ),
+// Hotkey list:
+
+// mouse click command:
+static EDA_HOTKEY HkMouseLeftClick( wxT( "Mouse Left Click" ),
+                                    HK_LEFT_CLICK, WXK_RETURN, 0 );
+static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left DClick" ),
+                                     HK_LEFT_DCLICK, WXK_END, 0 );
+
+static EDA_HOTKEY HkSwitch2CopperLayer( wxT( "Switch to Copper (B.Cu) layer" ),
                                         HK_SWITCH_LAYER_TO_COPPER, WXK_PAGEDOWN );
-static EDA_HOTKEY HkSwitch2ComponentLayer( wxT( "Switch to Component layer" ),
+
+static EDA_HOTKEY HkSwitch2ComponentLayer( wxT( "Switch to Component (F.Cu) layer" ),
                                            HK_SWITCH_LAYER_TO_COMPONENT, WXK_PAGEUP );
+
 static EDA_HOTKEY HkSwitch2InnerLayer1( wxT( "Switch to Inner layer 1" ),
                                         HK_SWITCH_LAYER_TO_INNER1, WXK_F5 );
 static EDA_HOTKEY HkSwitch2InnerLayer2( wxT( "Switch to Inner layer 2" ),
@@ -70,7 +78,6 @@ static EDA_HOTKEY HkSelLayerAndAddBlindBuriedVia( wxT( "Sel Layer and Add Blind/
 static EDA_HOTKEY HkSwitchTrackPosture( wxT( "Switch Track Posture" ),  HK_SWITCH_TRACK_POSTURE, '/' );
 static EDA_HOTKEY HkDragTrackKeepSlope( wxT( "Drag track keep slope" ), HK_DRAG_TRACK_KEEP_SLOPE, 'D' );
 static EDA_HOTKEY HkPlaceItem( wxT( "Place Item" ), HK_PLACE_ITEM, 'P' );
-static EDA_HOTKEY HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
 static EDA_HOTKEY HkEditBoardItem( wxT( "Edit Item" ), HK_EDIT_ITEM, 'E' );
 static EDA_HOTKEY HkFlipItem( wxT( "Flip Item" ), HK_FLIP_ITEM, 'F' );
 static EDA_HOTKEY HkRotateItem( wxT( "Rotate Item" ), HK_ROTATE_ITEM, 'R' );
@@ -211,6 +218,8 @@ EDA_HOTKEY* common_Hotkey_List[] =
     &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,
     &HkSwitchUnits, &HkResetLocalCoord, &HkSetGridOrigin, &HkResetGridOrigin,
     &HkUndo,        &HkRedo,
+    &HkMouseLeftClick,
+    &HkMouseLeftDClick,
     NULL
 };
 
@@ -225,7 +234,8 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkSwitchTrackPosture,
     &HkDragTrackKeepSlope,
     &HkPlaceItem,              &HkCopyItem,
-    &HkEndTrack,               &HkMoveItem,                  &HkFlipItem,
+    &HkMoveItem,
+    &HkFlipItem,
     &HkRotateItem,             &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile, &HkSavefileAs,
     &HkLoadfile,               &HkFindItem,                  &HkEditBoardItem,

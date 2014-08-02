@@ -26,12 +26,14 @@
 #ifndef __SELECTION_TOOL_H
 #define __SELECTION_TOOL_H
 
-#include <set>
-
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
 #include <tool/context_menu.h>
+#include <class_undoredo_container.h>
 
+#include "selection_conditions.h"
+
+class PCB_BASE_FRAME;
 class SELECTION_AREA;
 class BOARD_ITEM;
 class GENERAL_COLLECTOR;
@@ -41,6 +43,41 @@ namespace KIGFX
 class VIEW_GROUP;
 }
 
+struct SELECTION
+{
+    /// Set of selected items
+    PICKED_ITEMS_LIST items;
+
+    /// VIEW_GROUP that holds currently selected items
+    KIGFX::VIEW_GROUP* group;
+
+    /// Checks if there is anything selected
+    bool Empty() const
+    {
+        return ( items.GetCount() == 0 );
+    }
+
+    /// Returns the number of selected parts
+    int Size() const
+    {
+        return items.GetCount();
+    }
+
+    /// Alias to make code shorter and clearer
+    template <typename T>
+    T* Item( unsigned int aIndex ) const
+    {
+        return static_cast<T*>( items.GetPickedItem( aIndex ) );
+    }
+
+private:
+    /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
+    /// change properties of selected items (e.g. selection flag).
+    void clear();
+
+    friend class SELECTION_TOOL;
+};
+
 /**
  * Class SELECTION_TOOL
  *
@@ -48,31 +85,18 @@ class VIEW_GROUP;
  * - pick single objects (click LMB)
  * - add objects to existing selection (Shift+LMB)
  * - draw selection box (drag LMB)
- * - handles MODULEs properly (ie. selects either MODULE or its PADs, TEXTs, etc.)
+ * - handles MODULEs properly (i.e. selects either MODULE or its PADs, TEXTs, etc.)
  * - takes into account high-contrast & layer visibility settings
- * - invokes InteractiveMove tool when user starts to drag selected items
+ * - invokes InteractiveEdit tool when user starts to drag selected items
  */
-
 class SELECTION_TOOL : public TOOL_INTERACTIVE
 {
 public:
     SELECTION_TOOL();
     ~SELECTION_TOOL();
 
-    struct SELECTION
-    {
-        /// Set of selected items
-        std::set<BOARD_ITEM*> items;
-
-        /// VIEW_GROUP that holds currently selected items
-        KIGFX::VIEW_GROUP* group;
-
-        /// Checks if there is anything selected
-        bool Empty() const { return items.empty(); }
-    };
-
     /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset();
+    void Reset( RESET_REASON aReason );
 
     /**
      * Function Main()
@@ -92,12 +116,55 @@ public:
     }
 
     /**
-     * Function AddAction()
+     * Function AddMenuItem()
      *
      * Adds a menu entry to run a TOOL_ACTION on selected items.
      * @param aAction is a menu entry to be added.
+     * @param aCondition is a condition that has to be fulfilled to enable the menu entry.
      */
-    void AddMenuItem( const TOOL_ACTION& aAction );
+    void AddMenuItem( const TOOL_ACTION& aAction,
+                      const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways );
+
+    /**
+     * Function AddSubMenu()
+     *
+     * Adds a submenu to the selection tool right-click context menu.
+     * @param aMenu is the submenu to be added.
+     * @param aLabel is the label of added submenu.
+     * @param aCondition is a condition that has to be fulfilled to enable the submenu entry.
+     */
+    void AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel,
+                     const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways );
+
+    /**
+     * Function EditModules()
+     *
+     * Toggles edit module mode. When enabled, one may select parts of modules individually
+     * (graphics, pads, etc.), so they can be modified.
+     * @param aEnabled decides if the mode should be enabled.
+     */
+    void EditModules( bool aEnabled )
+    {
+        m_editModules = aEnabled;
+    }
+
+    ///> Checks if the user has agreed to modify locked items for the given selection.
+    bool CheckLock();
+
+    ///> Select single item event handler.
+    int SingleSelection( TOOL_EVENT& aEvent );
+
+    ///> Clear current selection event handler.
+    int ClearSelection( TOOL_EVENT& aEvent );
+
+    ///> Event sent after an item is selected.
+    const TOOL_EVENT SelectedEvent;
+
+    ///> Event sent after an item is deselected.
+    const TOOL_EVENT DeselectedEvent;
+
+    ///> Event sent after selection is cleared.
+    const TOOL_EVENT ClearedEvent;
 
 private:
     /**
@@ -106,16 +173,28 @@ private:
      * place, there is a menu displayed that allows to choose the item.
      *
      * @param aWhere is the place where the item should be selected.
+     * @param aAllowDisambiguation decides what to do in case of disambiguation. If true, then
+     * a menu is shown, otherise function finishes without selecting anything.
+     * @return True if an item was selected, false otherwise.
      */
-    void selectSingle( const VECTOR2I& aWhere );
+    bool selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
 
     /**
      * Function selectMultiple()
      * Handles drawing a selection box that allows to select many items at the same time.
      *
-     * @return true if the function was cancelled (ie. CancelEvent was received).
+     * @return true if the function was cancelled (i.e. CancelEvent was received).
      */
     bool selectMultiple();
+
+    ///> Sets up handlers for various events.
+    void setTransitions();
+
+    /**
+     * Function ClearSelection()
+     * Clears the current selection.
+     */
+    void clearSelection();
 
     /**
      * Function disambiguationMenu()
@@ -143,12 +222,6 @@ private:
     void toggleSelection( BOARD_ITEM* aItem );
 
     /**
-     * Function clearSelection()
-     * Clears selections of currently selected items.
-     */
-    void clearSelection();
-
-    /**
      * Function selectable()
      * Checks conditions for an item to be selected.
      *
@@ -162,7 +235,7 @@ private:
      *
      * @param aItem is an item to be selected.
      */
-    void selectItem( BOARD_ITEM* aItem );
+    void select( BOARD_ITEM* aItem );
 
     /**
      * Function deselectItem()
@@ -170,7 +243,21 @@ private:
      *
      * @param aItem is an item to be deselected.
      */
-    void deselectItem( BOARD_ITEM* aItem );
+    void deselect( BOARD_ITEM* aItem );
+
+    /**
+     * Function deselectVisually()
+     * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
+     * @param aItem is an item to be be marked.
+     */
+    void selectVisually( BOARD_ITEM* aItem ) const;
+
+    /**
+     * Function deselectVisually()
+     * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
+     * @param aItem is an item to be be marked.
+     */
+    void deselectVisually( BOARD_ITEM* aItem ) const;
 
     /**
      * Function containsSelected()
@@ -178,22 +265,62 @@ private:
      *
      * @return True if the given point is contained in any of selected items' bouding box.
      */
-    bool containsSelected( const VECTOR2I& aPoint ) const;
+    bool selectionContains( const VECTOR2I& aPoint ) const;
 
-    /// Visual representation of selection box
+    /**
+     * Function highlightNet()
+     * Looks for a BOARD_CONNECTED_ITEM in a given spot, and if one is found - it enables
+     * highlight for its net.
+     * @param aPoint is the point where an item is expected (world coordinates).
+     */
+    void highlightNet( const VECTOR2I& aPoint );
+
+    /**
+     * Function prefer()
+     * Checks if collector's list contains only single entry of asked types. If so, it returns it.
+     * @param aCollector is the collector that has a list of items to be queried.
+     * @param aTypes is the list of searched/preferred types.
+     * @return Pointer to the preferred item, if there is only one entry of given type or NULL
+     * if there are more entries or no entries at all.
+     */
+    BOARD_ITEM* prefer( GENERAL_COLLECTOR& aCollector, const KICAD_T aTypes[] ) const;
+
+    /**
+     * Function generateMenu()
+     * Creates a copy of context menu that is filtered by menu conditions and displayed to
+     * the user.
+     */
+    void generateMenu();
+
+    /// Pointer to the parent frame.
+    PCB_BASE_FRAME* m_frame;
+
+    /// Visual representation of selection box.
     SELECTION_AREA* m_selArea;
 
-    /// Current state of selection
+    /// Current state of selection.
     SELECTION m_selection;
 
-    /// Flag saying if items should be added to the current selection or rather replace it
+    /// Flag saying if items should be added to the current selection or rather replace it.
     bool m_additive;
 
-    /// Flag saying if multiple selection mode is active
+    /// Flag saying if multiple selection mode is active.
     bool m_multiple;
 
-    /// Right click popup menu
+    /// Right click popup menu (master instance).
     CONTEXT_MENU m_menu;
+
+    /// Copy of the context menu that is filtered by menu conditions and displayed to the user.
+    CONTEXT_MENU m_menuCopy;
+
+    /// Edit module mode flag.
+    bool m_editModules;
+
+    /// Can other tools modify locked items.
+    bool m_locked;
+
+    /// Conditions for specific context menu entries.
+    std::deque<SELECTION_CONDITION> m_menuConditions;
 };
 
 #endif

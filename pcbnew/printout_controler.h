@@ -34,6 +34,8 @@
 
 #include <wx/dcps.h>
 #include <layers_id_colors_and_visibility.h>
+#include <wx/print.h>
+
 #define DEFAULT_ORIENTATION_PAPER wxLANDSCAPE   // other option is wxPORTRAIT
 
 
@@ -51,7 +53,7 @@ public:
     double m_XScaleAdjust;                   // fine scale adjust for X axis
     double m_YScaleAdjust;                   // fine scale adjust for Y axis
     bool   m_Print_Sheet_Ref;                // Option: print page references
-    LAYER_MSK m_PrintMaskLayer;                 // Layers to print
+    LSET m_PrintMaskLayer;                 // Layers to print
     bool   m_PrintMirror;                    // Option: Print mirrored
     bool   m_Print_Black_and_White;          // Option: Print in B&W or Color
     int    m_OptionPrintPage;                // Option: 0 = a layer per page, 1 = all layers at once
@@ -98,7 +100,6 @@ public:
  * is a class derived from wxPrintout to handle the necessary information to control a printer
  * when printing a board
  */
-
 class BOARD_PRINTOUT_CONTROLLER : public wxPrintout
 {
 private:

@@ -3,7 +3,7 @@
 /****************************************/
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -63,7 +63,7 @@ public:
 
         m_Parent = aParent;
     }
-
+    SCH_EDIT_FRAME* GetSchFrameParent() { return m_Parent->GetParent(); }
     bool OnPrintPage( int page );
     bool HasPage( int page );
     bool OnBeginDocument( int startPage, int endPage );
@@ -425,7 +425,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     aScreen->m_IsPrinting = true;
 
-    EDA_COLOR_T bg_color = g_DrawBgColor;
+    EDA_COLOR_T bg_color = GetSchFrameParent()->GetDrawBgColor();
 
     aScreen->Draw( panel, dc, GR_DEFAULT_DRAWMODE );
 
@@ -433,7 +433,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
         parent->DrawWorkSheet( dc, aScreen, GetDefaultLineThickness(),
                 IU_PER_MILS, aScreen->GetFileName() );
 
-    g_DrawBgColor = bg_color;
+    GetSchFrameParent()->SetDrawBgColor( bg_color );
     aScreen->m_IsPrinting = false;
     panel->SetClipBox( oldClipBox );
 

@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2014 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.or/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <boost/foreach.hpp>
@@ -27,16 +27,14 @@
 #include "pns_node.h"
 #include "pns_optimizer.h"
 #include "pns_utils.h"
+#include "pns_router.h"
 
 /**
- *
  *  Cost Estimator Methods
- *
- **/
-
-int PNS_COST_ESTIMATOR::CornerCost( const SEG& a, const SEG& b )
+ */
+int PNS_COST_ESTIMATOR::CornerCost( const SEG& aA, const SEG& aB )
 {
-    DIRECTION_45 dir_a( a ), dir_b( b );
+    DIRECTION_45 dir_a( aA ), dir_b( aB );
 
     switch( dir_a.Angle( dir_b ) )
     {
@@ -74,29 +72,29 @@ int PNS_COST_ESTIMATOR::CornerCost( const SHAPE_LINE_CHAIN& aLine )
 
 int PNS_COST_ESTIMATOR::CornerCost( const PNS_LINE& aLine )
 {
-    return CornerCost( aLine.GetCLine() );
+    return CornerCost( aLine.CLine() );
 }
 
 
 void PNS_COST_ESTIMATOR::Add( PNS_LINE& aLine )
 {
-    m_lengthCost += aLine.GetCLine().Length();
+    m_lengthCost += aLine.CLine().Length();
     m_cornerCost += CornerCost( aLine );
 }
 
 
 void PNS_COST_ESTIMATOR::Remove( PNS_LINE& aLine )
 {
-    m_lengthCost -= aLine.GetCLine().Length();
+    m_lengthCost -= aLine.CLine().Length();
     m_cornerCost -= CornerCost( aLine );
 }
 
 
 void PNS_COST_ESTIMATOR::Replace( PNS_LINE& aOldLine, PNS_LINE& aNewLine )
 {
-    m_lengthCost -= aOldLine.GetCLine().Length();
+    m_lengthCost -= aOldLine.CLine().Length();
     m_cornerCost -= CornerCost( aOldLine );
-    m_lengthCost += aNewLine.GetCLine().Length();
+    m_lengthCost += aNewLine.CLine().Length();
     m_cornerCost += CornerCost( aNewLine );
 }
 
@@ -108,8 +106,8 @@ bool PNS_COST_ESTIMATOR::IsBetter( PNS_COST_ESTIMATOR& aOther,
     if( aOther.m_cornerCost < m_cornerCost && aOther.m_lengthCost < m_lengthCost )
         return true;
 
-    else if( aOther.m_cornerCost < m_cornerCost * aCornerTollerance && aOther.m_lengthCost <
-             m_lengthCost * aLengthTollerance )
+    else if( aOther.m_cornerCost < m_cornerCost * aCornerTollerance &&
+             aOther.m_lengthCost < m_lengthCost * aLengthTollerance )
         return true;
 
     return false;
@@ -117,9 +115,7 @@ bool PNS_COST_ESTIMATOR::IsBetter( PNS_COST_ESTIMATOR& aOther,
 
 
 /**
- *
  *  Optimizer
- *
  **/
 PNS_OPTIMIZER::PNS_OPTIMIZER( PNS_NODE* aWorld ) :
     m_world( aWorld ), m_collisionKindMask( PNS_ITEM::ANY ), m_effortLevel( MERGE_SEGMENTS )
@@ -134,18 +130,18 @@ PNS_OPTIMIZER::~PNS_OPTIMIZER()
 }
 
 
-struct PNS_OPTIMIZER::CacheVisitor
+struct PNS_OPTIMIZER::CACHE_VISITOR
 {
-    CacheVisitor( const PNS_ITEM* aOurItem, PNS_NODE* aNode, int aMask ) :
+    CACHE_VISITOR( const PNS_ITEM* aOurItem, PNS_NODE* aNode, int aMask ) :
         m_ourItem( aOurItem ),
         m_collidingItem( NULL ),
         m_node( aNode ),
         m_mask( aMask )
-    {};
+    {}
 
     bool operator()( PNS_ITEM* aOtherItem )
     {
-        if( !m_mask & aOtherItem->GetKind() )
+        if( !m_mask & aOtherItem->Kind() )
             return true;
 
         int clearance = m_node->GetClearance( aOtherItem, m_ourItem );
@@ -170,20 +166,20 @@ void PNS_OPTIMIZER::cacheAdd( PNS_ITEM* aItem, bool aIsStatic = false )
         return;
 
     m_cache.Add( aItem );
-    m_cacheTags[aItem].hits = 1;
-    m_cacheTags[aItem].isStatic = aIsStatic;
+    m_cacheTags[aItem].m_hits = 1;
+    m_cacheTags[aItem].m_isStatic = aIsStatic;
 }
 
 
 void PNS_OPTIMIZER::removeCachedSegments( PNS_LINE* aLine, int aStartVertex, int aEndVertex )
 {
-    std::vector<PNS_SEGMENT*>* segs = aLine->GetLinkedSegments();
+    PNS_LINE::SEGMENT_REFS* segs = aLine->LinkedSegments();
 
     if( !segs )
         return;
 
     if( aEndVertex < 0 )
-        aEndVertex += aLine->GetCLine().PointCount();
+        aEndVertex += aLine->PointCount();
 
     for( int i = aStartVertex; i < aEndVertex - 1; i++ )
     {
@@ -196,8 +192,8 @@ void PNS_OPTIMIZER::removeCachedSegments( PNS_LINE* aLine, int aStartVertex, int
 
 void PNS_OPTIMIZER::CacheRemove( PNS_ITEM* aItem )
 {
-    if( aItem->GetKind() == PNS_ITEM::LINE )
-        removeCachedSegments( static_cast<PNS_LINE*> (aItem) );
+    if( aItem->Kind() == PNS_ITEM::LINE )
+        removeCachedSegments( static_cast<PNS_LINE*>( aItem ) );
 }
 
 
@@ -218,7 +214,7 @@ void PNS_OPTIMIZER::ClearCache( bool aStaticOnly  )
 
     for( CachedItemTags::iterator i = m_cacheTags.begin(); i!= m_cacheTags.end(); ++i )
     {
-        if( i->second.isStatic )
+        if( i->second.m_isStatic )
         {
             m_cache.Remove( i->first );
             m_cacheTags.erase( i->first );
@@ -229,28 +225,28 @@ void PNS_OPTIMIZER::ClearCache( bool aStaticOnly  )
 
 bool PNS_OPTIMIZER::checkColliding( PNS_ITEM* aItem, bool aUpdateCache )
 {
-    CacheVisitor v( aItem, m_world, m_collisionKindMask );
+    CACHE_VISITOR v( aItem, m_world, m_collisionKindMask );
 
     return m_world->CheckColliding( aItem );
 
     // something is wrong with the cache, need to investigate.
-    m_cache.Query( aItem->GetShape(), m_world->GetMaxClearance(), v, false );
+    m_cache.Query( aItem->Shape(), m_world->GetMaxClearance(), v, false );
 
     if( !v.m_collidingItem )
     {
-        PNS_NODE::OptObstacle obs = m_world->CheckColliding( aItem );
+        PNS_NODE::OPT_OBSTACLE obs = m_world->CheckColliding( aItem );
 
         if( obs )
         {
             if( aUpdateCache )
-                cacheAdd( obs->item );
+                cacheAdd( obs->m_item );
 
             return true;
         }
     }
     else
     {
-        m_cacheTags[v.m_collidingItem].hits++;
+        m_cacheTags[v.m_collidingItem].m_hits++;
         return true;
     }
 
@@ -268,7 +264,7 @@ bool PNS_OPTIMIZER::checkColliding( PNS_LINE* aLine, const SHAPE_LINE_CHAIN& aOp
 
 bool PNS_OPTIMIZER::mergeObtuse( PNS_LINE* aLine )
 {
-    SHAPE_LINE_CHAIN& line = aLine->GetLine();
+    SHAPE_LINE_CHAIN& line = aLine->Line();
 
     int step = line.PointCount() - 3;
     int iter = 0;
@@ -360,7 +356,7 @@ bool PNS_OPTIMIZER::mergeObtuse( PNS_LINE* aLine )
 
 bool PNS_OPTIMIZER::mergeFull( PNS_LINE* aLine )
 {
-    SHAPE_LINE_CHAIN& line = aLine->GetLine();
+    SHAPE_LINE_CHAIN& line = aLine->Line();
     int step = line.SegmentCount() - 1;
 
     int segs_pre = line.SegmentCount();
@@ -395,7 +391,7 @@ bool PNS_OPTIMIZER::mergeFull( PNS_LINE* aLine )
 }
 
 
-bool PNS_OPTIMIZER::Optimize( PNS_LINE* aLine, PNS_LINE* aResult, int aStartVertex, int aEndVertex )
+bool PNS_OPTIMIZER::Optimize( PNS_LINE* aLine, PNS_LINE* aResult )//, int aStartVertex, int aEndVertex )
 {
     if( !aResult )
         aResult = aLine;
@@ -415,6 +411,9 @@ bool PNS_OPTIMIZER::Optimize( PNS_LINE* aLine, PNS_LINE* aResult, int aStartVert
     if( m_effortLevel & SMART_PADS )
         rv |= runSmartPads( aResult );
 
+    if( m_effortLevel & FANOUT_CLEANUP )
+        rv |= fanoutCleanup( aResult );
+
     return rv;
 }
 
@@ -426,19 +425,19 @@ bool PNS_OPTIMIZER::mergeStep( PNS_LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, 
 
     int cost_orig = PNS_COST_ESTIMATOR::CornerCost( aCurrentPath );
 
-
-    if( aLine->GetCLine().SegmentCount() < 4 )
+    if( aLine->SegmentCount() < 4 )
         return false;
 
-    DIRECTION_45 orig_start( aLine->GetCLine().CSegment( 0 ) );
-    DIRECTION_45 orig_end( aLine->GetCLine().CSegment( -1 ) );
+    DIRECTION_45 orig_start( aLine->CSegment( 0 ) );
+    DIRECTION_45 orig_end( aLine->CSegment( -1 ) );
 
     while( n < n_segs - step )
     {
         const SEG s1    = aCurrentPath.CSegment( n );
         const SEG s2    = aCurrentPath.CSegment( n + step );
 
-        SHAPE_LINE_CHAIN path[2], * picked = NULL;
+        SHAPE_LINE_CHAIN path[2];
+        SHAPE_LINE_CHAIN* picked = NULL;
         int cost[2];
 
         for( int i = 0; i < 2; i++ )
@@ -481,10 +480,10 @@ bool PNS_OPTIMIZER::mergeStep( PNS_LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, 
 }
 
 
-PNS_OPTIMIZER::BreakoutList PNS_OPTIMIZER::circleBreakouts( int aWidth,
+PNS_OPTIMIZER::BREAKOUT_LIST PNS_OPTIMIZER::circleBreakouts( int aWidth,
         const SHAPE* aShape, bool aPermitDiagonal ) const
 {
-    BreakoutList breakouts;
+    BREAKOUT_LIST breakouts;
 
     for( int angle = 0; angle < 360; angle += 45 )
     {
@@ -501,12 +500,12 @@ PNS_OPTIMIZER::BreakoutList PNS_OPTIMIZER::circleBreakouts( int aWidth,
 }
 
 
-PNS_OPTIMIZER::BreakoutList PNS_OPTIMIZER::rectBreakouts( int aWidth,
+PNS_OPTIMIZER::BREAKOUT_LIST PNS_OPTIMIZER::rectBreakouts( int aWidth,
         const SHAPE* aShape, bool aPermitDiagonal ) const
 {
     const SHAPE_RECT* rect = static_cast<const SHAPE_RECT*>(aShape);
     VECTOR2I s = rect->GetSize(), c = rect->GetPosition() + VECTOR2I( s.x / 2, s.y / 2 );
-    BreakoutList breakouts;
+    BREAKOUT_LIST breakouts;
 
     VECTOR2I d_offset;
 
@@ -515,7 +514,6 @@ PNS_OPTIMIZER::BreakoutList PNS_OPTIMIZER::rectBreakouts( int aWidth,
 
     VECTOR2I d_vert  = VECTOR2I( 0, s.y / 2 + aWidth );
     VECTOR2I d_horiz = VECTOR2I( s.x / 2 + aWidth, 0 );
-
 
     breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_horiz ) );
     breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_horiz ) );
@@ -556,52 +554,59 @@ PNS_OPTIMIZER::BreakoutList PNS_OPTIMIZER::rectBreakouts( int aWidth,
 }
 
 
-PNS_OPTIMIZER::BreakoutList PNS_OPTIMIZER::computeBreakouts( int aWidth,
+PNS_OPTIMIZER::BREAKOUT_LIST PNS_OPTIMIZER::computeBreakouts( int aWidth,
         const PNS_ITEM* aItem, bool aPermitDiagonal ) const
 {
-    switch( aItem->GetKind() )
+    switch( aItem->Kind() )
     {
     case PNS_ITEM::VIA:
-        {
-            const PNS_VIA* via = static_cast<const PNS_VIA*>( aItem );
-            return circleBreakouts( aWidth, via->GetShape(), aPermitDiagonal );
-        }
+    {
+        const PNS_VIA* via = static_cast<const PNS_VIA*>( aItem );
+        return circleBreakouts( aWidth, via->Shape(), aPermitDiagonal );
+    }
 
     case PNS_ITEM::SOLID:
+    {
+        const SHAPE* shape = aItem->Shape();
+
+        switch( shape->Type() )
         {
-            const SHAPE* shape = aItem->GetShape();
+        case SH_RECT:
+            return rectBreakouts( aWidth, shape, aPermitDiagonal );
 
-            switch( shape->Type() )
-            {
-            case SH_RECT:
-                return rectBreakouts( aWidth, shape, aPermitDiagonal );
-
-            case SH_CIRCLE:
-                return circleBreakouts( aWidth, shape, aPermitDiagonal );
-
-            default:
-                break;
-            }
+        case SH_SEGMENT:
+        {
+            const SHAPE_SEGMENT* seg = static_cast<const SHAPE_SEGMENT*> (shape);
+            const SHAPE_RECT rect = ApproximateSegmentAsRect ( *seg );
+            return rectBreakouts( aWidth, &rect, aPermitDiagonal );
         }
+
+        case SH_CIRCLE:
+            return circleBreakouts( aWidth, shape, aPermitDiagonal );
+
+        default:
+            break;
+        }
+    }
 
     default:
         break;
     }
 
-    return BreakoutList();
+    return BREAKOUT_LIST();
 }
 
 
 PNS_ITEM* PNS_OPTIMIZER::findPadOrVia( int aLayer, int aNet, const VECTOR2I& aP ) const
 {
-    PNS_NODE::OptJoint jt = m_world->FindJoint( aP, aLayer, aNet );
+    PNS_JOINT* jt = m_world->FindJoint( aP, aLayer, aNet );
 
     if( !jt )
         return NULL;
 
-    BOOST_FOREACH( PNS_ITEM* item, jt->GetLinkList() )
+    BOOST_FOREACH( PNS_ITEM* item, jt->LinkList() )
     {
-        if( item->GetKind() == PNS_ITEM::VIA || item->GetKind() == PNS_ITEM::SOLID )
+        if( item->OfKind( PNS_ITEM::VIA | PNS_ITEM::SOLID ) )
             return item;
     }
 
@@ -621,32 +626,30 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
     typedef std::pair<int, SHAPE_LINE_CHAIN> RtVariant;
     std::vector<RtVariant> variants;
 
-    BreakoutList breakouts = computeBreakouts( aLine->GetWidth(), aPad, true );
+    BREAKOUT_LIST breakouts = computeBreakouts( aLine->Width(), aPad, true );
 
-    SHAPE_LINE_CHAIN line = ( aEnd ? aLine->GetCLine().Reverse() : aLine->GetCLine() );
+    SHAPE_LINE_CHAIN line = ( aEnd ? aLine->CLine().Reverse() : aLine->CLine() );
 
-    // bool startDiagonal = DIRECTION_45( line.CSegment(0) ).IsDiagonal();
 
     int p_end = std::min( aEndVertex, std::min( 3, line.PointCount() - 1 ) );
 
     for( int p = 1; p <= p_end; p++ )
     {
         BOOST_FOREACH( SHAPE_LINE_CHAIN & l, breakouts ) {
-            // PNSDisplayDebugLine (l, 0);
-
 
             for( int diag = 0; diag < 2; diag++ )
             {
                 SHAPE_LINE_CHAIN v;
                 SHAPE_LINE_CHAIN connect = dir.BuildInitialTrace( l.CPoint( -1 ),
-                                line.CPoint( p ), diag == 0 );
+                                                                  line.CPoint( p ), diag == 0 );
 
                 DIRECTION_45 dir_bkout( l.CSegment( -1 ) );
-                // DIRECTION_45 dir_head ( line.CSegment(p + 1));
 
+                if(!connect.SegmentCount())
+                    continue;
+                
                 int ang1 = dir_bkout.Angle( DIRECTION_45( connect.CSegment( 0 ) ) );
                 int ang2 = 0;
-                // int ang2 = dir_head.Angle ( DIRECTION_45(connect.CSegment(-1) ));
 
                 if( (ang1 | ang2) & ForbiddenAngles )
                     continue;
@@ -662,7 +665,6 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
                     v.Append( line.CPoint( i ) );
 
                 PNS_LINE tmp( *aLine, v );
-                // tmp.GetLine().Simplify();
                 int cc = tmp.CountCorners( ForbiddenAngles );
 
                 if( cc == 0 )
@@ -689,18 +691,12 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
 
         if( !checkColliding( &tmp ) )
         {
-/*            if(aEnd)
- *               PNSDisplayDebugLine (l_best, 6);
- *           else
- *               PNSDisplayDebugLine (l_best, 5);*/
-
             if( cost < min_cost || ( cost == min_cost && len < min_len ) )
             {
                 l_best = vp.second;
                 p_best = vp.first;
                 found  = true;
 
-                // if(cost == min_cost)
                 if( cost == min_cost )
                     min_len = std::min( len, min_len );
 
@@ -711,12 +707,6 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
 
     if( found )
     {
-// printf("end: %d, p-best: %d, p-end: %d, p-total: %d\n", aEnd, p_best, p_end, l_best.PointCount());
-
-// if(!aEnd)
-// PNSDisplayDebugLine (l_best, 5);
-// else
-
         aLine->SetShape( l_best );
         return p_best;
     }
@@ -724,18 +714,17 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
     return -1;
 }
 
-
 bool PNS_OPTIMIZER::runSmartPads( PNS_LINE* aLine )
 {
-    SHAPE_LINE_CHAIN& line = aLine->GetLine();
-
+    SHAPE_LINE_CHAIN& line = aLine->Line();
+    
     if( line.PointCount() < 3 )
         return false;
 
     VECTOR2I p_start = line.CPoint( 0 ), p_end = line.CPoint( -1 );
 
-    PNS_ITEM* startPad = findPadOrVia( aLine->GetLayer(), aLine->GetNet(), p_start );
-    PNS_ITEM* endPad = findPadOrVia( aLine->GetLayer(), aLine->GetNet(), p_end );
+    PNS_ITEM* startPad = findPadOrVia( aLine->Layer(), aLine->Net(), p_start );
+    PNS_ITEM* endPad = findPadOrVia( aLine->Layer(), aLine->Net(), p_end );
 
     int vtx = -1;
 
@@ -744,18 +733,66 @@ bool PNS_OPTIMIZER::runSmartPads( PNS_LINE* aLine )
 
     if( endPad )
         smartPadsSingle( aLine, endPad, true,
-                vtx < 0 ? line.PointCount() - 1 : line.PointCount() - 1 - vtx );
+                         vtx < 0 ? line.PointCount() - 1 : line.PointCount() - 1 - vtx );
 
-    aLine->GetLine().Simplify();
+    aLine->Line().Simplify();
+
     return true;
 }
 
 
 bool PNS_OPTIMIZER::Optimize( PNS_LINE* aLine, int aEffortLevel, PNS_NODE* aWorld )
 {
-    PNS_OPTIMIZER opt( aWorld ? aWorld : aLine->GetWorld() );
+    PNS_OPTIMIZER opt( aWorld );
 
     opt.SetEffortLevel( aEffortLevel );
     opt.SetCollisionMask( -1 );
     return opt.Optimize( aLine );
+}
+
+
+bool PNS_OPTIMIZER::fanoutCleanup( PNS_LINE* aLine )
+{
+    if( aLine->PointCount() < 3 )
+        return false;
+
+    VECTOR2I p_start = aLine->CPoint( 0 ), p_end = aLine->CPoint( -1 );
+
+    PNS_ITEM* startPad = findPadOrVia( aLine->Layer(), aLine->Net(), p_start );
+    PNS_ITEM* endPad = findPadOrVia( aLine->Layer(), aLine->Net(), p_end );
+
+    int thr = aLine->Width() * 10; 
+    int len = aLine->CLine().Length();
+
+    if( !startPad )
+        return false;
+
+    bool startMatch = startPad->OfKind( PNS_ITEM::VIA | PNS_ITEM::SOLID );
+    bool endMatch = false;   
+
+    if(endPad)
+    {
+        endMatch = endPad->OfKind( PNS_ITEM::VIA | PNS_ITEM::SOLID );
+    } else {
+        endMatch = aLine->EndsWithVia();
+    }
+    
+    if( startMatch && endMatch && len < thr )
+    {
+        for(int i = 0; i < 2; i++ )
+        {
+            SHAPE_LINE_CHAIN l2 = DIRECTION_45().BuildInitialTrace( p_start, p_end, i );
+            PNS_ROUTER::GetInstance()->DisplayDebugLine( l2, 4, 10000 );
+            PNS_LINE repl;
+            repl = PNS_LINE( *aLine, l2 );
+
+            if( !m_world->CheckColliding( &repl ) )
+            {
+                aLine->SetShape( repl.CLine() );
+                return true;
+            }
+        }
+    }
+
+    return false;
 }

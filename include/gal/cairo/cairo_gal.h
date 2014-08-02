@@ -135,7 +135,7 @@ public:
     virtual void Flush();
 
     /// @copydoc GAL::ClearScreen()
-    virtual void ClearScreen();
+    virtual void ClearScreen( const COLOR4D& aColor );
 
     // -----------------
     // Attribute setting
@@ -164,7 +164,7 @@ public:
     // --------------
 
     /// @copydoc GAL::Transform()
-    virtual void Transform( MATRIX3x3D aTransformation );
+    virtual void Transform( const MATRIX3x3D& aTransformation );
 
     /// @copydoc GAL::Rotate()
     virtual void Rotate( double aAngle );
@@ -229,6 +229,9 @@ public:
     // Cursor
     // -------
 
+    /// @copydoc GAL::SetCursorSize()
+    virtual void SetCursorSize( unsigned int aCursorSize );
+
     /// @copydoc GAL::DrawCursor()
     virtual void DrawCursor( const VECTOR2D& aCursorPosition );
 
@@ -283,8 +286,6 @@ private:
     wxPoint                 savedCursorPosition;    ///< The last cursor position
     wxBitmap*               cursorPixels;           ///< Cursor pixels
     wxBitmap*               cursorPixelsSaved;      ///< Saved cursor pixels
-    int                     cursorSize;             ///< Cursor size
-    VECTOR2D                cursorPosition;         ///< Current cursor position
 
     /// Maximum number of arguments for one command
     static const int MAX_CAIRO_ARGUMENTS = 6;
@@ -311,7 +312,7 @@ private:
     /// Type definition for an graphics group element
     typedef struct
     {
-        GRAPHICS_COMMAND command;                    ///< Command to execute
+        GRAPHICS_COMMAND command;                   ///< Command to execute
         double arguments[MAX_CAIRO_ARGUMENTS];      ///< Arguments for Cairo commands
         bool boolArgument;                          ///< A bool argument
         int intArgument;                            ///< An int argument
@@ -335,6 +336,7 @@ private:
     unsigned int*       bitmapBufferBackup;     ///< Backup storage of the cairo image
     int                 stride;                 ///< Stride value for Cairo
     bool                isInitialized;          ///< Are Cairo image & surface ready to use
+    COLOR4D             backgroundColor;        ///< Background color
 
     // Methods
     void storePath();                           ///< Store the actual path
@@ -354,8 +356,10 @@ private:
      */
     void skipMouseEvent( wxMouseEvent& aEvent );
 
-    /// @copydoc GAL::initCursor()
-    virtual void initCursor( int aCursorSize );
+    /**
+     * @brief Prepares cursor bitmap.
+     */
+    virtual void initCursor();
 
     /**
      * @brief Blits cursor into the current screen.
@@ -386,6 +390,9 @@ private:
 
     /// Format used to store pixels
     static const cairo_format_t GAL_FORMAT = CAIRO_FORMAT_RGB24;
+
+    ///> Opacity of a single layer
+    static const float LAYER_ALPHA;
 };
 } // namespace KIGFX
 

@@ -70,9 +70,9 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     int     ii, jj, nb_segm, nbconnect;
     wxPoint start;
     wxPoint end;
-    LAYER_MSK startmasklayer, endmasklayer;
+    LSET startmasklayer, endmasklayer;
 
-    int     netcode = aNewTrack->GetNet();
+    int     netcode = aNewTrack->GetNetCode();
 
     /* Reconstruct the complete track (the new track has to start on a segment of track).
      */
@@ -135,31 +135,31 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         return 0;
 
     // Determine layers interconnected these points.
-    startmasklayer = StartTrack->GetLayerMask();
-    endmasklayer   = EndTrack->GetLayerMask();
+    startmasklayer = StartTrack->GetLayerSet();
+    endmasklayer   = EndTrack->GetLayerSet();
 
     // There may be a via or a pad on the end points.
     pt_segm = m_Pcb->m_Track->GetVia( NULL, start, startmasklayer );
 
     if( pt_segm )
-        startmasklayer |= pt_segm->GetLayerMask();
+        startmasklayer |= pt_segm->GetLayerSet();
 
     if( StartTrack->start && ( StartTrack->start->Type() == PCB_PAD_T ) )
     {
         // Start on pad.
         D_PAD* pad = (D_PAD*) StartTrack->start;
-        startmasklayer |= pad->GetLayerMask();
+        startmasklayer |= pad->GetLayerSet();
     }
 
     pt_segm = m_Pcb->m_Track->GetVia( NULL, end, endmasklayer );
 
     if( pt_segm )
-        endmasklayer |= pt_segm->GetLayerMask();
+        endmasklayer |= pt_segm->GetLayerSet();
 
     if( EndTrack->end && ( EndTrack->end->Type() == PCB_PAD_T ) )
     {
         D_PAD* pad = (D_PAD*) EndTrack->end;
-        endmasklayer |= pad->GetLayerMask();
+        endmasklayer |= pad->GetLayerSet();
     }
 
     // Mark as deleted a new track (which is not involved in the search for other connections)
@@ -168,7 +168,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     /* A segment must be connected to the starting point, otherwise
      * it is unnecessary to analyze the other point
      */
-    pt_segm = GetTrace( bufStart, bufEnd, start, startmasklayer );
+    pt_segm = GetTrack( bufStart, bufEnd, start, startmasklayer );
 
     if( pt_segm == NULL )     // Not connected to the track starting point.
     {
@@ -183,7 +183,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
      */
     for( pt_del = bufStart, nbconnect = 0; ; )
     {
-        pt_segm = GetTrace( pt_del, bufEnd, end, endmasklayer );
+        pt_segm = GetTrack( pt_del, bufEnd, end, endmasklayer );
 
         if( pt_segm == NULL )
             break;

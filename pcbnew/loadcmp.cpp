@@ -30,10 +30,13 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
+#include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <eda_doc.h>
 #include <kicad_string.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
+#include <kiway.h>
+//#include <frame_type.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
 #include <filter_reader.h>
@@ -53,6 +56,7 @@
 #include <dialog_get_component.h>
 #include <modview_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <class_pcb_layer_widget.h>
 
 
 static void DisplayCmpDoc( wxString& Name );
@@ -63,14 +67,17 @@ static FOOTPRINT_LIST MList;
 bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 {
     MODULE* newModule;
-    PCB_BASE_FRAME* parent = (PCB_BASE_FRAME*) GetParent();
+    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
+
+    if( frame == NULL )     // happens if no board editor opened
+        return false;
 
     if( aModule == NULL )
     {
-        if( ! parent->GetBoard() || ! parent->GetBoard()->m_Modules )
+        if( ! frame->GetBoard() || ! frame->GetBoard()->m_Modules )
             return false;
 
-        aModule = SelectFootprint( parent->GetBoard() );
+        aModule = SelectFootprint( frame->GetBoard() );
     }
 
     if( aModule == NULL )
@@ -87,25 +94,34 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     aModule = newModule;
 
-    GetBoard()->Add( aModule );
+    GetBoard()->Add( newModule );
 
-    aModule->ClearFlags();
+    newModule->ClearFlags();
 
-    GetBoard()->BuildListOfNets();
+    // Clear references to net info, because the footprint editor
+    // does know any thing about nets handled by the current edited board.
+    // Morever the main board can change or the net info relative to this main board
+    // can change while editing this footprint in the footprint editor
+    for( D_PAD* pad = newModule->Pads(); pad; pad = pad->Next() )
+        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
-    PlaceModule( aModule, NULL );
+    PlaceModule( newModule, NULL );
+    newModule->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
 
     // Put it on FRONT layer,
     // because this is the default in ModEdit, and in libs
-    if( aModule->GetLayer() != LAYER_N_FRONT )
-        aModule->Flip( aModule->GetPosition() );
+    if( newModule->GetLayer() != F_Cu )
+        newModule->Flip( newModule->GetPosition() );
 
     // Put it in orientation 0,
     // because this is the default orientation in ModEdit, and in libs
-    Rotate_Module( NULL, aModule, 0, false );
+    Rotate_Module( NULL, newModule, 0, false );
     GetScreen()->ClrModify();
     Zoom_Automatique( false );
+
+    if( IsGalCanvasActive() )
+        updateView();
 
     return true;
 }
@@ -113,33 +129,21 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
 wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 {
-    wxString    fpname;
-    wxString    fpid;
+    // Close the current non-modal Lib browser if opened, and open a new one, in "modal" mode:
+    FOOTPRINT_VIEWER_FRAME* viewer;
 
-    wxSemaphore semaphore( 0, 1 );
-
-    // Close the current Lib browser, if opened, and open a new one, in "modal" mode:
-    FOOTPRINT_VIEWER_FRAME * viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
+    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
 
     if( viewer )
         viewer->Destroy();
 
-    viewer = new FOOTPRINT_VIEWER_FRAME( this, m_footprintLibTable, &semaphore,
-                                         KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
 
-    // Show the library viewer frame until it is closed
-    while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
-    {
-        wxYield();
-        wxMilliSleep( 50 );
-    }
+    wxString    fpid;
 
-    fpname = viewer->GetSelectedFootprint();
+    viewer->ShowModal( &fpid, this );
 
-    if( !!fpname )
-    {
-        fpid = viewer->GetSelectedLibrary() + wxT( ":" ) + fpname;
-    }
+    //DBG(printf("%s: fpid:'%s'\n", __func__, TO_UTF8( fpid ) );)
 
     viewer->Destroy();
 
@@ -221,7 +225,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
     {
         module = loadFootprint( fpid );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
                     fpid.Format().c_str(), GetChars( ioe.errorText ) );
@@ -253,7 +257,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
             {
                 module = loadFootprint( fpid );
             }
-            catch( IO_ERROR ioe )
+            catch( const IO_ERROR& ioe )
             {
                 wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
                             fpid.Format().c_str(), GetChars( ioe.errorText ) );
@@ -272,10 +276,14 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
 
         module->SetFlags( IS_NEW );
         module->SetLink( 0 );
-        module->SetPosition( curspos );
+
+        if( IsGalCanvasActive() )
+            module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
+        else
+            module->SetPosition( curspos );
+
         module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;
-
 
         // Put it on FRONT layer,
         // (Can be stored flipped if the lib is an archive built from a board)
@@ -305,7 +313,7 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const FPID& aFootprintId )
     {
         module = loadFootprint( aFootprintId );
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
                     aFootprintId.Format().c_str(), GetChars( ioe.errorText ) );
@@ -318,34 +326,11 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const FPID& aFootprintId )
 MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
     throw( IO_ERROR, PARSE_ERROR )
 {
-    wxCHECK_MSG( m_footprintLibTable != NULL, NULL,
-                 wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
+    FP_LIB_TABLE*   fptbl = Prj().PcbFootprintLibs();
 
-    wxString   nickname = aFootprintId.GetLibNickname();
-    wxString   fpname   = aFootprintId.GetFootprintName();
+    wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
 
-    if( nickname.size() )
-    {
-        return m_footprintLibTable->FootprintLoad( nickname, fpname );
-    }
-
-    // user did not enter a nickname, just a footprint name, help him out a little:
-    else
-    {
-        std::vector<wxString> nicks = m_footprintLibTable->GetLogicalLibs();
-
-        // Search each library going through libraries alphabetically.
-        for( unsigned i = 0;  i<nicks.size();  ++i )
-        {
-            // FootprintLoad() returns NULL on not found, does not throw exception
-            // unless there's an IO_ERROR.
-            MODULE* ret = m_footprintLibTable->FootprintLoad( nicks[i], fpname );
-            if( ret )
-                return ret;
-        }
-
-        return NULL;
-    }
+    return fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
 }
 
 
@@ -360,7 +345,6 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
     wxString        fpname;
     wxString        msg;
     wxArrayString   libraries;
-    FP_LIB_TABLE    libTable;
 
     std::vector< wxArrayString > rows;
 
@@ -557,7 +541,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
             // m is deleted here by auto_ptr.
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.errorText );
         return;

@@ -30,53 +30,46 @@
 #ifndef __3D_VIEWER_H__
 #define __3D_VIEWER_H__
 
-#include <wxstruct.h>   // for EDA_BASE_FRAME.
+#include <draw_frame.h>
 
 #if !wxUSE_GLCANVAS
 #error Please build wxWidgets with Opengl support (./configure --with-opengl)
 #endif
 
 #include <wx/glcanvas.h>
-
-#ifdef __WXMAC__
-#  ifdef __DARWIN__
-#    include <OpenGL/glu.h>
-#  else
-#    include <glu.h>
-#  endif
-#else
-#  include <GL/glu.h>
-#endif
-
+#include <3d_struct.h>
 
 #define KISYS3DMOD "KISYS3DMOD"
-
-#include <3d_struct.h>
 
 class EDA_3D_CANVAS;
 class PCB_BASE_FRAME;
 
-#define KICAD_DEFAULT_3D_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
-#define LIB3D_PATH wxT( "packages3d" )
+#define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
+#define LIB3D_PATH                          wxT( "packages3d" )
 
-class EDA_3D_FRAME : public EDA_BASE_FRAME
+
+class EDA_3D_FRAME : public KIWAY_PLAYER
 {
 private:
     EDA_3D_CANVAS*  m_canvas;
     bool            m_reloadRequest;
     wxString        m_defaultFileName;  /// Filename to propose for screenshot
+
     /// Tracks whether to use Orthographic or Perspective projection
     bool            m_ortho;
 
 public:
-    EDA_3D_FRAME( PCB_BASE_FRAME* parent, const wxString& title,
+    EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent, const wxString& aTitle,
                   long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
+
     ~EDA_3D_FRAME()
     {
         m_auimgr.UnInit();
     };
 
-    PCB_BASE_FRAME* Parent() { return (PCB_BASE_FRAME*)GetParent(); }
+    PCB_BASE_FRAME* Parent() const { return (PCB_BASE_FRAME*)GetParent(); }
+
+    BOARD* GetBoard();
 
     /**
      * Function ReloadRequest
@@ -93,8 +86,10 @@ public:
      * Function NewDisplay
      * Rebuild the display list.
      * must be called when 3D opengl data is modified
+     * @param aGlList = the list to rebuild.
+     * if 0 (default) all lists are rebuilt
      */
-    void NewDisplay();
+    void NewDisplay( int aGlList = 0 );
 
     void SetDefaultFileName(const wxString &aFn) { m_defaultFileName = aFn; }
     const wxString &GetDefaultFileName() const { return m_defaultFileName; }
@@ -121,8 +116,9 @@ private:
                                     // to the current display options
     void ReCreateMainToolbar();
     void SetToolbars();
-    void GetSettings();
-    void SaveSettings();
+
+    void LoadSettings( wxConfigBase* aCfg );    // overload virtual
+    void SaveSettings( wxConfigBase* aCfg );    // overload virtual
 
     // Other functions
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );

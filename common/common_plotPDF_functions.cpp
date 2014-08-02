@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <trigo.h>
 #include <wxstruct.h>
 #include <base_struct.h>
@@ -78,6 +78,8 @@ void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 
     // The CTM is set to 1 user unit per decimil
     iuPerDeviceUnit = 1.0 / aIusPerDecimil;
+
+    SetDefaultLineWidth( 100 / iuPerDeviceUnit );  // arbitrary default
 
     /* The paper size in this engined is handled page by page
        Look in the StartPage function */
@@ -511,7 +513,6 @@ void PDF_PLOTTER::StartPage()
     paperSize = pageInfo.GetSizeMils();
     paperSize.x *= 10.0 / iuPerDeviceUnit;
     paperSize.y *= 10.0 / iuPerDeviceUnit;
-    SetDefaultLineWidth( 100 / iuPerDeviceUnit );  // arbitrary default
 
     // Open the content stream; the page object will go later
     pageStreamHandle = startPdfStream();
@@ -723,7 +724,7 @@ bool PDF_PLOTTER::EndPlot()
              "<< /Size %lu /Root %d 0 R /Info %d 0 R >>\n"
              "startxref\n"
              "%ld\n" // The offset we saved before
-             "%%EOF\n",
+             "%%%%EOF\n",
              (unsigned long) xrefTable.size(), catalogHandle, infoDictHandle, xref_start );
 
     fclose( outputFile );
@@ -741,10 +742,15 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
                         enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                         int                         aWidth,
                         bool                        aItalic,
-                        bool                        aBold )
+                        bool                        aBold,
+                        bool                        aMultilineAllowed )
 {
+    // Fix me: see how to use PDF text mode for multiline texts
+    if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
+        aMultilineAllowed = false;  // the text has only one line.
+
     // Emit native PDF text (if requested)
-    if( m_textMode != PLOTTEXTMODE_STROKE )
+    if( m_textMode != PLOTTEXTMODE_STROKE && !aMultilineAllowed )
     {
         const char *fontname = aItalic ? (aBold ? "/KicadFontBI" : "/KicadFontI")
             : (aBold ? "/KicadFontB" : "/KicadFont");
@@ -800,10 +806,10 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     }
 
     // Plot the stroked text (if requested)
-    if( m_textMode != PLOTTEXTMODE_NATIVE )
+    if( m_textMode != PLOTTEXTMODE_NATIVE || aMultilineAllowed )
     {
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                aWidth, aItalic, aBold );
+                aWidth, aItalic, aBold, aMultilineAllowed );
     }
 }
 

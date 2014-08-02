@@ -42,21 +42,28 @@ public:
     BRIGHT_BOX( BOARD_ITEM* aItem );
     ~BRIGHT_BOX() {};
 
-    virtual const BOX2I ViewBBox() const;
+    virtual const BOX2I ViewBBox() const
+    {
+        return m_item->ViewBBox();
+    }
 
     void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const;
-    void ViewGetLayers( int aLayers[], int& aCount ) const;
+
+    void ViewGetLayers( int aLayers[], int& aCount ) const
+    {
+        aLayers[0] = ITEM_GAL_LAYER( GP_OVERLAY );
+        aCount = 1;
+    }
 
     void Show( int x, std::ostream& st ) const
     {
     }
 
 private:
-    static const int BrightBoxLayer = ITEM_GAL_LAYER( GP_OVERLAY );
-    static const KIGFX::COLOR4D BrightColor;
-    static const double LineWidth = 100000.0;
+    static const KIGFX::COLOR4D BOX_COLOR;
+    static const double LINE_WIDTH;
 
-    BOARD_ITEM* item;
+    BOARD_ITEM* m_item;
 };
 
 #endif

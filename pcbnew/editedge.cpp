@@ -145,9 +145,9 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 }
 
 
-void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( LAYER_NUM aLayer )
+void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( LAYER_ID aLayer )
 {
-    if( aLayer <= LAST_COPPER_LAYER )
+    if( IsCopperLayer( aLayer ) )
     {
         DisplayError( this, _( "Copper layer global delete not allowed!" ) );
         return;
@@ -246,7 +246,7 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T s
 
     s_large = GetDesignSettings().m_DrawSegmentWidth;
 
-    if( getActiveLayer() == EDGE_N )
+    if( GetActiveLayer() == Edge_Cuts )
     {
         s_large = GetDesignSettings().m_EdgeSegmentWidth;
     }
@@ -255,7 +255,7 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T s
     {
         SetCurItem( Segment = new DRAWSEGMENT( GetBoard() ) );
         Segment->SetFlags( IS_NEW );
-        Segment->SetLayer( getActiveLayer() );
+        Segment->SetLayer( GetActiveLayer() );
         Segment->SetWidth( s_large );
         Segment->SetShape( shape );
         Segment->SetAngle( 900 );

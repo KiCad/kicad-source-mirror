@@ -151,14 +151,22 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    LAYER_NUM      ll;
-    unsigned int   cnt;
+    LAYER_NUM  ll;
 
     switch( hk_id )
     {
     default:
     case HK_NOT_FOUND:
         return;
+        break;
+
+    case HK_LEFT_CLICK:
+        OnLeftClick( aDC, aPosition );
+        break;
+
+    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
+        OnLeftClick( aDC, aPosition );
+        OnLeftDClick( aDC, aPosition );
         break;
 
     case HK_RECORD_MACROS_0:
@@ -191,10 +199,10 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( GetCanvas()->IsMouseCaptured() )
             GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
 
-        if( GetBoard()->GetTrackWidthIndex() < GetBoard()->m_TrackWidthList.size() - 1 )
-            GetBoard()->SetTrackWidthIndex( GetBoard()->GetTrackWidthIndex() + 1 );
+        if( GetDesignSettings().GetTrackWidthIndex() < GetDesignSettings().m_TrackWidthList.size() - 1 )
+            GetDesignSettings().SetTrackWidthIndex( GetDesignSettings().GetTrackWidthIndex() + 1 );
         else
-            GetBoard()->SetTrackWidthIndex( 0 );
+            GetDesignSettings().SetTrackWidthIndex( 0 );
 
         if( GetCanvas()->IsMouseCaptured() )
             GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
@@ -205,10 +213,10 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( GetCanvas()->IsMouseCaptured() )
             GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
 
-        if( GetBoard()->GetTrackWidthIndex() <= 0 )
-            GetBoard()->SetTrackWidthIndex( GetBoard()->m_TrackWidthList.size() -1 );
+        if( GetDesignSettings().GetTrackWidthIndex() <= 0 )
+            GetDesignSettings().SetTrackWidthIndex( GetDesignSettings().m_TrackWidthList.size() -1 );
         else
-            GetBoard()->SetTrackWidthIndex( GetBoard()->GetTrackWidthIndex() - 1 );
+            GetDesignSettings().SetTrackWidthIndex( GetDesignSettings().GetTrackWidthIndex() - 1 );
 
         if( GetCanvas()->IsMouseCaptured() )
             GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
@@ -216,114 +224,81 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_GRID_TO_FASTGRID1:
-        if( m_gridSelectBox )
-        {
-            m_gridSelectBox->SetSelection( m_FastGrid1 );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
-
+        SetFastGrid1();
         break;
 
     case HK_SWITCH_GRID_TO_FASTGRID2:
-        if( m_gridSelectBox )
-        {
-            m_gridSelectBox->SetSelection( m_FastGrid2 );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
-
+        SetFastGrid2();
         break;
 
     case HK_SWITCH_GRID_TO_NEXT:
-        if( m_gridSelectBox )
-        {
-            m_gridSelectBox->SetSelection( ( m_gridSelectBox->GetSelection() + 1 ) %
-                                           m_gridSelectBox->GetCount() );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
+        SetNextGrid();
         break;
 
     case HK_SWITCH_GRID_TO_PREVIOUS:
-        if( m_gridSelectBox )
-        {
-            cnt = m_gridSelectBox->GetSelection();
-
-            if ( cnt == 0 )
-                cnt = m_gridSelectBox->GetCount() - 1;
-            else
-                cnt--;
-
-            m_gridSelectBox->SetSelection( cnt );
-            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
-            OnSelectGrid( cmd );
-        }
-
+        SetPrevGrid();
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
-        ll = getActiveLayer();
+        ll = GetActiveLayer();
 
-        if( (ll <= LAYER_N_BACK) || (ll > LAYER_N_FRONT) )
+        if( !IsCopperLayer( ll ) )
             break;
 
-        if( GetBoard()->GetCopperLayerCount() < 2 ) // Single layer
-            ll = LAYER_N_BACK;
-        else if( ll == LAYER_N_FRONT )
-            ll = std::max( LAYER_N_BACK, FIRST_COPPER_LAYER + GetBoard()->GetCopperLayerCount() - 2 );
+        if( ll == F_Cu )
+            ll = B_Cu;
+        else if( ll == B_Cu )
+            ll = ToLAYER_ID( GetBoard()->GetCopperLayerCount() - 2 );
         else
-            --ll;
+            ll = ll - 1;
 
-        SwitchLayer( aDC, ll );
+        SwitchLayer( aDC, ToLAYER_ID( ll ) );
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
-        ll = getActiveLayer();
+        ll = GetActiveLayer();
 
-        if( (ll < LAYER_N_BACK) || (ll >= LAYER_N_FRONT) )
+        if( !IsCopperLayer( ll ) )
             break;
 
-        if( GetBoard()->GetCopperLayerCount() < 2 ) // Single layer
-            ll = LAYER_N_BACK;
-        else if( ll >= GetBoard()->GetCopperLayerCount() - 2 )
-            ll = LAYER_N_FRONT;
-        else
-            ++ll;
+        if( ll == B_Cu )
+            ll = F_Cu;
+        else if( ++ll >= GetBoard()->GetCopperLayerCount() - 1 )
+            ll = B_Cu;
 
-        SwitchLayer( aDC, ll );
+        SwitchLayer( aDC, ToLAYER_ID( ll ) );
         break;
 
     case HK_SWITCH_LAYER_TO_COMPONENT:
-        SwitchLayer( aDC, LAYER_N_FRONT );
+        SwitchLayer( aDC, F_Cu );
         break;
 
     case HK_SWITCH_LAYER_TO_COPPER:
-        SwitchLayer( aDC, LAYER_N_BACK );
+        SwitchLayer( aDC, B_Cu );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER1:
-        SwitchLayer( aDC, LAYER_N_2 );
+        SwitchLayer( aDC, In1_Cu );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER2:
-        SwitchLayer( aDC, LAYER_N_3 );
+        SwitchLayer( aDC, In2_Cu );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER3:
-        SwitchLayer( aDC, LAYER_N_4 );
+        SwitchLayer( aDC, In3_Cu );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER4:
-        SwitchLayer( aDC, LAYER_N_5 );
+        SwitchLayer( aDC, In4_Cu );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER5:
-        SwitchLayer( aDC, LAYER_N_6 );
+        SwitchLayer( aDC, In5_Cu );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER6:
-        SwitchLayer( aDC, LAYER_N_7 );
+        SwitchLayer( aDC, In6_Cu );
         break;
 
     case HK_HELP: // Display Current hotkey list
@@ -386,8 +361,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_TRACK_DISPLAY_MODE:
-        DisplayOpt.DisplayPcbTrackFill ^= 1;
-        DisplayOpt.DisplayPcbTrackFill &= 1;
+        DisplayOpt.DisplayPcbTrackFill = !DisplayOpt.DisplayPcbTrackFill;
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
         m_canvas->Refresh();
         break;
@@ -397,7 +371,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_BACK_SPACE:
-        if( IsCopperLayer( getActiveLayer() ) )
+        if( IsCopperLayer( GetActiveLayer() ) )
         {
             if( !itemCurrentlyEdited )
             {
@@ -424,16 +398,6 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
                 SetCurItem( track );
                 OnModify();
             }
-        }
-
-        break;
-
-    case HK_END_TRACK:
-        if( itemCurrentlyEdited && GetCurItem()->IsTrack() && GetCurItem()->IsNew() )
-        {
-            // A new track is in progress: call to End_Route()
-            m_canvas->MoveCursorToCrossHair();
-            End_Route( (TRACK*) GetCurItem(), aDC );
         }
 
         break;
@@ -622,7 +586,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
     switch( GetToolId() )
     {
     case ID_TRACK_BUTT:
-        if( getActiveLayer() > LAYER_N_FRONT )
+        if( GetActiveLayer() > F_Cu )
             return false;
 
         if( ItemFree )
@@ -983,7 +947,7 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
 
 TRACK * PCB_EDIT_FRAME::OnHotkeyBeginRoute( wxDC* aDC )
 {
-    if( getActiveLayer() > LAYER_N_FRONT )
+    if( GetActiveLayer() > F_Cu )
         return NULL;
 
     bool itemCurrentlyEdited = (GetCurItem() && GetCurItem()->GetFlags());

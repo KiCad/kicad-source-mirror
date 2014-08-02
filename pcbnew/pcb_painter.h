@@ -37,7 +37,7 @@ class DISPLAY_OPTIONS;
 
 class BOARD_ITEM;
 class BOARD;
-class SEGVIA;
+class VIA;
 class TRACK;
 class D_PAD;
 class DRAWSEGMENT;
@@ -48,6 +48,7 @@ class TEXTE_PCB;
 class TEXTE_MODULE;
 class DIMENSION;
 class PCB_TARGET;
+class MARKER_PCB;
 
 namespace KIGFX
 {
@@ -78,7 +79,7 @@ public:
     PCB_RENDER_SETTINGS();
 
     /// @copydoc RENDER_SETTINGS::ImportLegacyColors()
-    void ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings );
+    void ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings );
 
     /**
      * Function LoadDisplayOptions
@@ -96,26 +97,64 @@ public:
      * Returns the color used to draw a layer.
      * @param aLayer is the layer number.
      */
-    const COLOR4D& GetLayerColor( int aLayer ) const;
+    inline const COLOR4D& GetLayerColor( int aLayer ) const
+    {
+        return m_layerColors[aLayer];
+    }
+
+    /**
+     * Function SetLayerColor
+     * Changes the color used to draw a layer.
+     * @param aLayer is the layer number.
+     * @param aColor is the new color.
+     */
+    inline void SetLayerColor( int aLayer, const COLOR4D& aColor )
+    {
+        m_layerColors[aLayer] = aColor;
+
+        update();       // recompute other shades of the color
+    }
+
+    /**
+     * Function SetSketchMode
+     * Turns on/off sketch mode for given item layer.
+     * @param aItemLayer is the item layer that is changed.
+     * @param aEnabled decides if it is drawn in sketch mode (true for sketched mode,
+     * false for filled mode).
+     */
+    inline void SetSketchMode( int aItemLayer, bool aEnabled )
+    {
+        m_sketchMode[aItemLayer] = aEnabled;
+    }
+
+    /**
+     * Function GetSketchMode
+     * Returns sketch mode setting for a given item layer.
+     * @param aItemLayer is the item layer that is changed.
+     */
+    inline bool GetSketchMode( int aItemLayer ) const
+    {
+        return m_sketchMode[aItemLayer];
+    }
 
 protected:
     ///> @copydoc RENDER_SETTINGS::Update()
     void update();
 
     ///> Colors for all layers (normal)
-    COLOR4D m_layerColors    [TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColors[TOTAL_LAYER_COUNT];
 
     ///> Colors for all layers (highlighted)
-    COLOR4D m_layerColorsHi  [TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColorsHi[TOTAL_LAYER_COUNT];
 
     ///> Colors for all layers (selected)
-    COLOR4D m_layerColorsSel [TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColorsSel[TOTAL_LAYER_COUNT];
 
     ///> Colors for all layers (darkened)
     COLOR4D m_layerColorsDark[TOTAL_LAYER_COUNT];
 
-    ///> Flag determining if items on a given layer should be drawn as an outline or a full item
-    bool    m_sketchModeSelect[TOTAL_LAYER_COUNT];
+    ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
+    bool    m_sketchMode[TOTAL_LAYER_COUNT];
 
     ///> Flag determining if pad numbers should be visible
     bool    m_padNumbers;
@@ -143,32 +182,36 @@ class PCB_PAINTER : public PAINTER
 public:
     PCB_PAINTER( GAL* aGal );
 
-    /// @copydoc PAINTER::Draw()
-    virtual bool Draw( const VIEW_ITEM*, int );
-
     /// @copydoc PAINTER::ApplySettings()
-    virtual void ApplySettings( RENDER_SETTINGS* aSettings )
+    virtual void ApplySettings( const RENDER_SETTINGS* aSettings )
     {
-        PAINTER::ApplySettings( aSettings );
-
-        // Store PCB specific render settings
-        m_pcbSettings = (PCB_RENDER_SETTINGS*) m_settings.get();
+        m_pcbSettings = *static_cast<const PCB_RENDER_SETTINGS*>( aSettings );
     }
 
+    /// @copydoc PAINTER::GetSettings()
+    virtual RENDER_SETTINGS* GetSettings()
+    {
+        return &m_pcbSettings;
+    }
+
+    /// @copydoc PAINTER::Draw()
+    virtual bool Draw( const VIEW_ITEM* aItem, int aLayer );
+
 protected:
-    /// Just a properly casted pointer to settings
-    PCB_RENDER_SETTINGS* m_pcbSettings;
+    PCB_RENDER_SETTINGS m_pcbSettings;
 
     // Drawing functions for various types of PCB-specific items
     void draw( const TRACK* aTrack, int aLayer );
-    void draw( const SEGVIA* aVia, int aLayer );
+    void draw( const VIA* aVia, int aLayer );
     void draw( const D_PAD* aPad, int aLayer );
-    void draw( const DRAWSEGMENT* aSegment );
+    void draw( const DRAWSEGMENT* aSegment, int aLayer );
     void draw( const TEXTE_PCB* aText, int aLayer );
     void draw( const TEXTE_MODULE* aText, int aLayer );
+    void draw( const MODULE* aModule );
     void draw( const ZONE_CONTAINER* aZone );
     void draw( const DIMENSION* aDimension, int aLayer );
     void draw( const PCB_TARGET* aTarget );
+    void draw( const MARKER_PCB* aMarker );
 };
 } // namespace KIGFX
 

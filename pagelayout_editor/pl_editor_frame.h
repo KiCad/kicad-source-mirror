@@ -30,8 +30,8 @@
 #define  _PL_EDITOR_FRAME_H
 
 
-#include <param_config.h>
-#include <wxstruct.h>
+#include <config_params.h>
+#include <draw_frame.h>
 #include <class_drawpanel.h>
 #include <class_pl_editor_screen.h>
 #include <class_pl_editor_layout.h>
@@ -40,22 +40,23 @@ class PROPERTIES_FRAME;
 class DESIGN_TREE_FRAME;
 class WORKSHEET_DATAITEM;
 
+
 /**
  * Class PL_EDITOR_FRAME
  * is the main window used in the page layout editor.
  */
-
 class PL_EDITOR_FRAME : public EDA_DRAW_FRAME
 {
     PL_EDITOR_LAYOUT m_pageLayout;
-    int m_designTreeWidth;          // the last width (in pixels) of m_treePagelayout
-    int m_propertiesFrameWidth;     // the last width (in pixels) of m_propertiesPagelayout
-    wxConfig* m_config;
-    wxChoice* m_originSelectBox;    // Corner origin choice for coordinates
-    int       m_originSelectChoice; // the last choice for m_originSelectBox
-    wxChoice* m_pageSelectBox;      // The page number sel'ector (page 1 or other pages
-                                    // usefull when there are some items which are
-                                    // only on page 1, not on page 1
+
+    int         m_designTreeWidth;      // the last width (in pixels) of m_treePagelayout
+    int         m_propertiesFrameWidth; // the last width (in pixels) of m_propertiesPagelayout
+
+    wxChoice*   m_originSelectBox;      // Corner origin choice for coordinates
+    int         m_originSelectChoice;   // the last choice for m_originSelectBox
+    wxChoice*   m_pageSelectBox;        // The page number sel'ector (page 1 or other pages
+                                        // usefull when there are some items which are
+                                        // only on page 1, not on page 1
 
     wxPoint     m_grid_origin;
 
@@ -70,11 +71,32 @@ private:
     PARAM_CFG_ARRAY         m_configSettings;
 
 public:
-    PL_EDITOR_FRAME( wxWindow* aParent, const wxString& aTitle,
-                    const wxPoint& aPosition, const wxSize& aSize,
-                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
-
+    PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~PL_EDITOR_FRAME();
+
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl );   // overload KIWAY_PLAYER
+
+    /**
+     * Function LoadPageLayoutDescrFile
+     * Loads a .kicad_wks page layout descr file
+     * @param aFullFileName = the filename.
+     */
+    bool LoadPageLayoutDescrFile( const wxString& aFullFileName );
+
+    /**
+     * Function SavePageLayoutDescrFile
+     * Save the current layout in a .kicad_wks page layout descr file
+     * @param aFullFileName = the filename.
+     */
+    bool SavePageLayoutDescrFile( const wxString& aFullFileName );
+
+    /**
+     * Function InsertPageLayoutDescrFile
+     * Loads a .kicad_wks page layout descr file, and add items
+     * to the current layout list
+     * @param aFullFileName = the filename.
+     */
+    bool InsertPageLayoutDescrFile( const wxString& aFullFileName );
 
     void    OnCloseWindow( wxCloseEvent& Event );
 
@@ -86,9 +108,9 @@ public:
     const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
     const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME
 
-    PL_EDITOR_SCREEN* GetScreen()
+    PL_EDITOR_SCREEN* GetScreen() const                         // overload EDA_DRAW_FRAME
     {
-        return (PL_EDITOR_SCREEN*) m_canvas->GetScreen();
+        return (PL_EDITOR_SCREEN*) EDA_DRAW_FRAME::GetScreen();
     }
 
     const wxPoint& GetAuxOrigin() const                         // overload EDA_DRAW_FRAME
@@ -172,29 +194,9 @@ public:
      */
     PARAM_CFG_ARRAY&    GetConfigurationSettings( void );
 
-    /**
-     * Load applications settings specific to page layout editor.
-     *
-     * This overrides the base class EDA_DRAW_FRAME::LoadSettings().
-     */
-    virtual void        LoadSettings();
+    void LoadSettings( wxConfigBase* aCfg );    // override virtual
 
-    /**
-     * Save applications settings common to PCB draw frame objects.
-     *
-     * This overrides the base class EDA_DRAW_FRAME::SaveSettings() to
-     * save settings specific to the application main window.  It
-     * calls down to the base class to save settings common to all
-     * drawing frames.  Please put your application settings for pl editor here
-     * to avoid having application settings saved all over the place.
-     */
-    virtual void        SaveSettings();
-
-    /**
-     * Function SetLanguage
-     * called on a language menu selection
-     */
-    virtual void        SetLanguage( wxCommandEvent& event );
+    void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
     void                Process_Special_Functions( wxCommandEvent& event );
     void                OnSelectOptionToolbar( wxCommandEvent& event );
@@ -261,32 +263,10 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void    PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
+    virtual void    PrintPage( wxDC* aDC, LSET aPrintMasklayer,
                                bool aPrintMirrorMode, void * aData );
 
     void OnFileHistory( wxCommandEvent& event );
-
-    /**
-     * Function LoadPageLayoutDescrFile
-     * Loads a .kicad_wks page layout descr file
-     * @param aFullFileName = the filename.
-     */
-    bool LoadPageLayoutDescrFile( const wxString& aFullFileName );
-
-    /**
-     * Function SavePageLayoutDescrFile
-     * Save the current layout in a .kicad_wks page layout descr file
-     * @param aFullFileName = the filename.
-     */
-    bool SavePageLayoutDescrFile( const wxString& aFullFileName );
-
-    /**
-     * Function InsertPageLayoutDescrFile
-     * Loads a .kicad_wks page layout descr file, and add items
-     * to the current layout list
-     * @param aFullFileName = the filename.
-     */
-    bool InsertPageLayoutDescrFile( const wxString& aFullFileName );
 
     /**
      * @return the filename of the current layout descr file

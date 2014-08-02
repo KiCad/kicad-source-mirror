@@ -46,6 +46,12 @@ TOOL_INTERACTIVE::~TOOL_INTERACTIVE()
 }
 
 
+void TOOL_INTERACTIVE::Activate()
+{
+    m_toolMgr->InvokeTool( m_toolId );
+}
+
+
 OPT_TOOL_EVENT TOOL_INTERACTIVE::Wait( const TOOL_EVENT_LIST& aEventList )
 {
     return m_toolMgr->ScheduleWait( this, aEventList );

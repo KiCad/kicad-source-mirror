@@ -32,6 +32,7 @@
 #include <macros.h>
 
 #include <gerbview.h>
+#include <gerbview_frame.h>
 #include <dialog_show_page_borders.h>
 
 

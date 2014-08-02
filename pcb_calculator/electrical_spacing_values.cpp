@@ -30,7 +30,7 @@
 #include <UnitSelector.h>
 #include <units_scales.h>
 
-extern double ReturnDoubleFromString( const wxString& TextValue );
+extern double DoubleFromString( const wxString& TextValue );
 
 
 #define VALUE_COUNT 7
@@ -122,7 +122,7 @@ void PCB_CALCULATOR_FRAME::ElectricalSpacingUpdateData( double aUnitScale )
     double voltage = 500.0;     // to calculate values at V > 500V
     txt = m_ElectricalSpacingVoltage->GetValue();
     if( ! txt.IsEmpty() )
-        voltage = ReturnDoubleFromString(txt);
+        voltage = DoubleFromString(txt);
     if( voltage < 500.0 )
         voltage = 500.0;
     txt.Printf( wxT( "%g" ), voltage );

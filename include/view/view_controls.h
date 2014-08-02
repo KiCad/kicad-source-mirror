@@ -46,13 +46,39 @@ class VIEW;
 class VIEW_CONTROLS
 {
 public:
-    VIEW_CONTROLS( VIEW* aView ) : m_view( aView ), m_forceCursorPosition( false ),
-        m_snappingEnabled( false ), m_grabMouse( false ), m_autoPanEnabled( false ),
-        m_autoPanMargin( 0.1 ), m_autoPanSpeed( 0.15 )
-    {}
+    VIEW_CONTROLS( VIEW* aView ) : m_view( aView ), m_minScale( 4.0 ), m_maxScale( 15000 ),
+        m_forceCursorPosition( false ), m_snappingEnabled( false ), m_grabMouse( false ),
+        m_autoPanEnabled( false ), m_autoPanMargin( 0.1 ), m_autoPanSpeed( 0.15 )
+    {
+        m_panBoundary.SetMaximum();
+    }
 
     virtual ~VIEW_CONTROLS()
     {}
+
+    /**
+     * Function SetPanBoundary()
+     * Sets limits for panning area.
+     * @param aBoundary is the box that limits panning area.
+     */
+    void SetPanBoundary( const BOX2I& aBoundary )
+    {
+        m_panBoundary = aBoundary;
+    }
+
+    /**
+     * Function SetScaleLimits()
+     * Sets minimum and maximum values for scale.
+     * @param aMaximum is the maximum value for scale.
+     * @param aMinimum is the minimum value for scale.
+     */
+    void SetScaleLimits( double aMaximum, double aMinimum )
+    {
+        wxASSERT_MSG( aMaximum > aMinimum, wxT( "I guess you passed parameters in wrong order" ) );
+
+        m_minScale = aMinimum;
+        m_maxScale = aMaximum;
+    }
 
     /**
      * Function SetSnapping()
@@ -60,7 +86,7 @@ public:
      *
      * @param aEnabled says whether the opion should be enabled or disabled.
      */
-    void SetSnapping( bool aEnabled )
+    virtual void SetSnapping( bool aEnabled )
     {
         m_snappingEnabled = aEnabled;
     }
@@ -108,21 +134,22 @@ public:
 
     /**
      * Function GetMousePosition()
-     * Returns the current mouse pointer position in the screen coordinates. Note, that it may be
+     * Returns the current mouse pointer position in screen coordinates. Note, that it may be
      * different from the cursor position if snapping is enabled (@see GetCursorPosition()).
      *
-     * @return The current mouse pointer position.
+     * @return The current mouse pointer position in screen coordinates.
      */
-    virtual const VECTOR2D GetMousePosition() const = 0;
+    virtual VECTOR2D GetMousePosition() const = 0;
 
     /**
      * Function GetCursorPosition()
-     * Returns the current cursor position in the screen coordinates. Note, that it may be
-     * different from the mouse pointer position if snapping is enabled (@see GetMousePosition()).
+     * Returns the current cursor position in world coordinates. Note, that it may be
+     * different from the mouse pointer position if snapping is enabled or cursor position
+     * is forced to specific point.
      *
-     * @return The current cursor position in screen coordinates.
+     * @return The current cursor position in world coordinates.
      */
-    virtual const VECTOR2D GetCursorPosition() const = 0;
+    virtual VECTOR2D GetCursorPosition() const = 0;
 
 
     /**
@@ -131,7 +158,7 @@ public:
      * @param aEnabled enable forced cursor position
      * @param aPosition the position
      */
-    virtual void ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition = VECTOR2D(0, 0) )
+    virtual void ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) )
     {
         m_forcedPosition = aPosition;
         m_forceCursorPosition = aEnabled;
@@ -145,11 +172,23 @@ public:
     virtual void ShowCursor( bool aEnabled );
 
 protected:
+    /// Sets center for VIEW, takes into account panning boundaries.
+    void setCenter( const VECTOR2D& aCenter );
+
+    /// Sets scale for VIEW, takes into account scale limits.
+    void setScale( double aScale, const VECTOR2D& aAnchor );
+
     /// Pointer to controlled VIEW.
     VIEW*       m_view;
 
-    /// Current mouse position
-    VECTOR2D    m_mousePosition;
+    /// Panning boundaries.
+    BOX2I       m_panBoundary;
+
+    /// Scale lower limit.
+    double      m_minScale;
+
+    /// Scale upper limit.
+    double      m_maxScale;
 
     /// Current cursor position
     VECTOR2D    m_cursorPosition;

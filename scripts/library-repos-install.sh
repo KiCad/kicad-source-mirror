@@ -34,12 +34,15 @@ usage()
     echo ""
     echo "./library-sources-install.sh <cmd>"
     echo "    where <cmd> is one of:"
+    echo "      --install-prerequisites     (install command tools needed here, run once first.)"
     echo "      --install-or-update         (from github, the library sources.)"
     echo "      --remove-all-libraries      (remove all *.pretty from $WORKING_TREES/library-repos/. )"
-    echo "      --install-prerequisites     (install command tools needed here, run once first.)"
     echo "      --remove-orphaned-libraries (remove local libraries which have been deleted or renamed at github.)"
+    echo "      --list-libraries            (show the full list of github libraries.)"
+    echo "      --create-bat-file           (cat a windows batch file, redirect to capture to disk.)"
     echo ""
-    echo "example:"
+    echo "examples (with --install-prerequisites once first):"
+    echo '    $ ./library-sources-install.sh --install-prerequisites'
     echo '    $ ./library-sources-install.sh --install-or-update'
 }
 
@@ -111,6 +114,10 @@ detect_pretty_repos()
         | sed -r  's:.+ "KiCad/(.+)",:\1:'`
 
     #echo "PRETTY_REPOS:$PRETTY_REPOS"
+
+    PRETTY_REPOS=`echo $PRETTY_REPOS | tr " " "\n" | sort`
+
+    #echo "PRETTY_REPOS sorted:$PRETTY_REPOS"
 }
 
 
@@ -134,7 +141,7 @@ checkout_or_update_libraries()
 
         if [ ! -e "$WORKING_TREES/library-repos/$repo" ]; then
 
-            # Be _sure_ and preserve the directory name, we want extension .pretty not .pretty.git.
+            # Preserve the directory extension as ".pretty".
             # That way those repos can serve as pretty libraries directly if need be.
 
             echo "installing $WORKING_TREES/library-repos/$repo"
@@ -217,5 +224,36 @@ if [ $# -eq 1 -a "$1" == "--install-prerequisites" ]; then
     exit
 fi
 
+if [ $# -eq 1 -a "$1" == "--list-libraries" ]; then
+
+    # use github API to get repos into PRETTY_REPOS var
+    detect_pretty_repos
+
+    # add the "schematic parts & 3D model" kicad-library to total
+    for repo in $PRETTY_REPOS; do
+        echo "$repo"
+    done
+
+    echo
+    echo "and the special 'kicad-library' which holds 3D stuff and schematic parts"
+
+    exit
+fi
+
+# may re-direct this output to a disk file for Windows *.BAT file creation.
+if [ $# -eq 1 -a "$1" == "--create-bat-file" ]; then
+
+    # use github API to get repos into PRETTY_REPOS var
+    detect_pretty_repos
+
+    echo "REM This file was created using <kicad_src>/scripts/library-repos-install.sh on linux."
+    echo "REM Run it from a directory you desire as the base for all libraries."
+
+    # add the "schematic parts & 3D model" kicad-library to total
+    for repo in kicad-library $PRETTY_REPOS; do
+        echo "git clone https://github.com/KiCad/$repo"
+    done
+    exit
+fi
 
 usage

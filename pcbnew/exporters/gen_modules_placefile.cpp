@@ -35,7 +35,7 @@
 #include <gestfich.h>
 #include <wxPcbStruct.h>
 #include <trigo.h>
-#include <appl_wxstruct.h>
+#include <pgm_base.h>
 #include <build_version.h>
 #include <macros.h>
 
@@ -57,7 +57,7 @@ public:
     MODULE*       m_Module;         // Link to the actual footprint
     wxString      m_Reference;      // Its schematic reference
     wxString      m_Value;          // Its schematic value
-    LAYER_NUM     m_Layer;          // its side (LAYER_N_BACK, or LAYER_N_FRONT)
+    LAYER_NUM     m_Layer;          // its side (B_Cu, or F_Cu)
 };
 
 
@@ -211,8 +211,8 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 
     fn = m_parent->GetBoard()->GetFileName();
     fn.SetPath( GetOutputDirectory() );
-    frontLayerName = brd->GetLayerName( LAYER_N_FRONT );
-    backLayerName = brd->GetLayerName( LAYER_N_BACK );
+    frontLayerName = brd->GetLayerName( F_Cu );
+    backLayerName = brd->GetLayerName( B_Cu );
 
     // Create the the Front or Top side placement file,
     // or the single file
@@ -374,9 +374,9 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     {
         if( aSide < 2 )
         {
-            if( module->GetLayer() == LAYER_N_BACK && aSide == 1)
+            if( module->GetLayer() == B_Cu && aSide == 1)
                 continue;
-            if( module->GetLayer() == LAYER_N_FRONT && aSide == 0)
+            if( module->GetLayer() == F_Cu && aSide == 0)
                 continue;
         }
 
@@ -429,9 +429,9 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     {
         if( aSide < 2 )
         {
-            if( module->GetLayer() == LAYER_N_BACK && aSide == 1)
+            if( module->GetLayer() == B_Cu && aSide == 1)
                 continue;
-            if( module->GetLayer() == LAYER_N_FRONT && aSide == 0)
+            if( module->GetLayer() == F_Cu && aSide == 0)
                 continue;
         }
 
@@ -452,8 +452,8 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     if( list.size() > 1 )
         sort( list.begin(), list.end(), sortFPlist );
 
-    wxString frontLayerName = GetBoard()->GetLayerName( LAYER_N_FRONT );
-    wxString backLayerName = GetBoard()->GetLayerName( LAYER_N_BACK );
+    wxString frontLayerName = GetBoard()->GetLayerName( F_Cu );
+    wxString backLayerName = GetBoard()->GetLayerName( B_Cu );
 
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO   toggle;
@@ -462,7 +462,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     sprintf( line, "### Module positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
     fputs( line, file );
 
-    wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+    wxString Title = Pgm().App().GetAppName() + wxT( " " ) + GetBuildVersion();
     sprintf( line, "### Printed by Pcbnew version %s\n", TO_UTF8( Title ) );
     fputs( line, file );
 
@@ -500,15 +500,15 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
 
         LAYER_NUM layer = list[ii].m_Module->GetLayer();
 
-        wxASSERT( layer==LAYER_N_FRONT || layer==LAYER_N_BACK );
+        wxASSERT( layer==F_Cu || layer==B_Cu );
 
-        if( layer == LAYER_N_FRONT )
+        if( layer == F_Cu )
         {
             strcat( line, TO_UTF8( frontLayerName ) );
             strcat( line, "\n" );
             fputs( line, file );
         }
-        else if( layer == LAYER_N_BACK )
+        else if( layer == B_Cu )
         {
             strcat( line, TO_UTF8( backLayerName ) );
             strcat( line, "\n" );
@@ -582,7 +582,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
     sprintf( line, "## Module report - date %s\n", TO_UTF8( DateAndTime() ) );
     fputs( line, rptfile );
 
-    wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+    wxString Title = Pgm().App().GetAppName() + wxT( " " ) + GetBuildVersion();
     sprintf( line, "## Created by Pcbnew version %s\n", TO_UTF8( Title ) );
     fputs( line, rptfile );
     fputs( unit_text, rptfile );
@@ -654,9 +654,9 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
 
             sprintf( line, "orientation  %.2f\n", Module->GetOrientation() / 10.0 );
 
-            if( Module->GetLayer() == LAYER_N_FRONT )
+            if( Module->GetLayer() == F_Cu )
                 strcat( line, "layer component\n" );
-            else if( Module->GetLayer() == LAYER_N_BACK )
+            else if( Module->GetLayer() == B_Cu )
                 strcat( line, "layer copper\n" );
             else
                 strcat( line, "layer other\n" );
@@ -697,10 +697,10 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
 
                 int layer = 0;
 
-                if( pad->GetLayerMask() & LAYER_BACK )
+                if( pad->GetLayerSet()[B_Cu] )
                     layer = 1;
 
-                if( pad->GetLayerMask() & LAYER_FRONT )
+                if( pad->GetLayerSet()[F_Cu] )
                     layer |= 2;
 
                 static const char* layer_name[4] = { "none", "back", "front", "both" };
@@ -713,7 +713,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
             fprintf( rptfile, "$EndMODULE  %s\n\n", TO_UTF8 (Module->GetReference() ) );
         }
     }
-    catch( IO_ERROR ioe )
+    catch( const IO_ERROR& ioe )
     {
         DisplayError( NULL, ioe.errorText );
     }
@@ -726,7 +726,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
         if( PtStruct->Type() != PCB_LINE_T )
             continue;
 
-        if( ( (DRAWSEGMENT*) PtStruct )->GetLayer() != EDGE_N )
+        if( ( (DRAWSEGMENT*) PtStruct )->GetLayer() != Edge_Cuts )
             continue;
 
         WriteDrawSegmentPcb( (DRAWSEGMENT*) PtStruct, rptfile, conv_unit );
