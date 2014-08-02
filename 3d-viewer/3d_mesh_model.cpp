@@ -365,7 +365,7 @@ void S3D_MESH::calcPerPointNormals ()
     // for each face A in mesh
     #ifdef USE_OPENMP
     #pragma omp parallel for
-    #endif
+    #endif /* USE_OPENMP */
     for( unsigned int each_face_A_idx = 0; each_face_A_idx < m_CoordIndex.size(); each_face_A_idx++ )
     {
         // n = face A facet normal
