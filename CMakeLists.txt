@@ -68,8 +68,6 @@ option( KICAD_BUILD_DYNAMIC
 
 # WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
 # as it is known to work with KiCad.  Other versions may contain bugs that may result
-# WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
-# as it is known to work with KiCad.  Other versions may contain bugs that may result
 # in KiCad errors.
 option( KICAD_SKIP_BOOST
     "Skip building downloaded Boost library components, use Boost from your system."
@@ -100,9 +98,9 @@ set( DOWNLOAD_DIR ${PROJECT_SOURCE_DIR}/.downloads-by-cmake
 LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} )
 
 if( UNIX )
-    set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specifig KiCad config files" )
+    set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specific KiCad config files" )
 elseif( MINGW )
-    set( KICAD_USER_CONFIG_DIR $ENV{%APPDATA%} CACHE PATH "Location of user specifig KiCad config files" )
+    set( KICAD_USER_CONFIG_DIR $ENV{%APPDATA%} CACHE PATH "Location of user specific KiCad config files" )
 endif()
 mark_as_advanced( KICAD_USER_CONFIG_DIR )
 
@@ -343,16 +341,17 @@ add_definitions(-DWX_COMPATIBILITY)
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
 
+# Handle target used to specify if a target needs wx-widgets or other libraries
+# Always defined, empty if no libraries are to be build
+add_custom_target( lib-dependencies )
 
 if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
-add_custom_target( lib-wxpython )
+    # This should be build in all cases, if swig exec is not avaiable
+    # will be impossible also enable SCRIPTING being for PCBNEW required immediatly
+
     include( download_pcre )
     include( download_swig )
-    include( download_wxpython )
-    add_dependencies( lib-wxpython pcre )
-    add_dependencies( lib-wxpython swig )
-    add_dependencies( lib-wxpython libwxpython )
 
 
     #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
@@ -372,15 +371,11 @@ add_custom_target( lib-wxpython )
         message(STATUS "KICAD_BUILD_DYNAMIC set")
     endif()
 
-    add_custom_target( lib-dependencies
-        DEPENDS boost cairo glew libpng pixman pkgconfig
-        )
-
-    include( download_libpng )
 
     if( KICAD_SCRIPTING OR KICAD_SCRIPTING_WXPYTHON OR KICAD_SCRIPTING_MODULES )
  
         message(STATUS "Scripting ENABLED")        
+        include( download_wxpython )
 
         set( SWIG_EXECUTABLE  ${SWIG_ROOT}/bin/swig )
         set( SWIG_INCLUDE     ${SWIG_ROOT}/include )
@@ -388,7 +383,7 @@ add_custom_target( lib-wxpython )
 
         if( NOT EXISTS ${SWIG_EXECUTABLE} )
             set(KICAD_SCRIPTING CACHE OFF FORCE "Disabling KICAD_SCRIPTING")
-            message( STATUS  "KICAD_SCRIPTING Enabled but SWIG not found, please disable and before reenabling execute: make lib-wxpython")
+            message( STATUS  "KICAD_SCRIPTING Enabled but SWIG not found, please disable and before reenabling execute: make swig")
             message( FATAL_ERROR "Missing SWIG!")
         endif()
         message(STATUS "SWIG_EXECUTABLE: ${SWIG_EXECUTABLE}")
@@ -401,10 +396,14 @@ add_custom_target( lib-wxpython )
         set(wxWidgets_LIBRARY_DIRS      ${LIBWXPYTHON_ROOT}/lib )
 
         add_dependencies( lib-dependencies libwxpython )
+        add_dependencies( lib-dependencies swig )
+
     else()
         include( download_wxwidgets )
         add_dependencies( lib-dependencies libwx )
     endif()
+
+    include( download_libpng )
 
     include( download_pkgconfig )
         set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config" )
@@ -416,6 +415,12 @@ add_custom_target( lib-wxpython )
     include( download_cairo )
         set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo" )
         set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a" )
+
+    add_dependencies( lib-dependencies boost )
+    add_dependencies( lib-dependencies cairo )
+    add_dependencies( lib-dependencies libpng )
+    add_dependencies( lib-dependencies pixman )
+    add_dependencies( lib-dependencies pkgconfig )
 
     if( KICAD_BUILD_DYNAMIC AND APPLE )
         add_custom_target( osx_fix_bundles ALL DEPENDS cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
@@ -623,17 +628,13 @@ if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 add_dependencies( pcbnew lib-dependencies )
 add_dependencies( eeschema lib-dependencies )
 add_dependencies( cvpcb lib-dependencies )
-add_dependencies( gal lib-dependencies )
 add_dependencies( common lib-dependencies )
+add_dependencies( gal lib-dependencies )
 add_dependencies( pcbcommon lib-dependencies )
 add_dependencies( 3d-viewer lib-dependencies )
 add_dependencies( pcad2kicadpcb lib-dependencies )
-add_dependencies( polygon lib-dependencies )
 add_dependencies( pl_editor lib-dependencies )
 add_dependencies( pnsrouter lib-dependencies )
-    if ( BUILD_GITHUB_PLUGIN )
-    add_dependencies( github_plugin lib-dependencies )
-    endif()
 endif()
 
 if ( KICAD_BUILD_DYNAMIC )

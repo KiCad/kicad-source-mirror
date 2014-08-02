@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Feb 26 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -52,25 +52,32 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 	
-	sbTrackFilter = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Track Filter") ), wxVERTICAL );
+	sbFilter = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter Settings") ), wxVERTICAL );
 	
 	m_TrackFilterAR = new wxCheckBox( this, wxID_ANY, _("Automatically routed tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackFilterAR->SetValue(true); 
-	sbTrackFilter->Add( m_TrackFilterAR, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbFilter->Add( m_TrackFilterAR, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TrackFilterLocked = new wxCheckBox( this, wxID_ANY, _("Locked tracks"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbTrackFilter->Add( m_TrackFilterLocked, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbFilter->Add( m_TrackFilterLocked, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_TrackFilterNormal = new wxCheckBox( this, wxID_ANY, _("Normal tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackFilterNormal = new wxCheckBox( this, wxID_ANY, _("Unlocked tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackFilterNormal->SetValue(true); 
-	sbTrackFilter->Add( m_TrackFilterNormal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbFilter->Add( m_TrackFilterNormal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TrackFilterVias = new wxCheckBox( this, wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackFilterVias->SetValue(true); 
-	sbTrackFilter->Add( m_TrackFilterVias, 0, wxALL, 5 );
+	sbFilter->Add( m_TrackFilterVias, 0, wxALL, 5 );
+	
+	m_ModuleFilterLocked = new wxCheckBox( this, wxID_ANY, _("Locked footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbFilter->Add( m_ModuleFilterLocked, 0, wxALL, 5 );
+	
+	m_ModuleFilterNormal = new wxCheckBox( this, wxID_ANY, _("Unlocked footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ModuleFilterNormal->SetValue(true); 
+	sbFilter->Add( m_ModuleFilterNormal, 0, wxALL, 5 );
 	
 	
-	bSizerRight->Add( sbTrackFilter, 0, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( sbFilter, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_rbLayersOptionChoices[] = { _("All layers"), _("Current layer only") };
 	int m_rbLayersOptionNChoices = sizeof( m_rbLayersOptionChoices ) / sizeof( wxString );
@@ -112,6 +119,7 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	m_DelModules->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_DELETION_BASE::OnCheckDeleteModules ), NULL, this );
 	m_DelTracks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_DELETION_BASE::OnCheckDeleteTracks ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_DELETION_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_DELETION_BASE::OnOkClick ), NULL, this );
@@ -120,6 +128,7 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 DIALOG_GLOBAL_DELETION_BASE::~DIALOG_GLOBAL_DELETION_BASE()
 {
 	// Disconnect Events
+	m_DelModules->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_DELETION_BASE::OnCheckDeleteModules ), NULL, this );
 	m_DelTracks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_DELETION_BASE::OnCheckDeleteTracks ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_DELETION_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_DELETION_BASE::OnOkClick ), NULL, this );

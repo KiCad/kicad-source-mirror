@@ -23,6 +23,21 @@
 #include <class_edge_mod.h>
 #include <convert_basic_shapes_to_polygon.h>
 
+// These variables are parameters used in addTextSegmToPoly.
+// But addTextSegmToPoly is a call-back function,
+// so we cannot send them as arguments.
+int s_textWidth;
+int s_textCircle2SegmentCount;
+CPOLYGONS_LIST* s_cornerBuffer;
+
+// This is a call back function, used by DrawGraphicText to draw the 3D text shape:
+static void addTextSegmToPoly( int x0, int y0, int xf, int yf )
+{
+    TransformRoundedEndsSegmentToPolygon( *s_cornerBuffer,
+                                           wxPoint( x0, y0), wxPoint( xf, yf ),
+                                           s_textCircle2SegmentCount, s_textWidth );
+}
+
 /* generate pads shapes on layer aLayer as polygons,
  * and adds these polygons to aCornerBuffer
  * aCornerBuffer = the buffer to store polygons
@@ -91,12 +106,16 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
                         int                    aCircleToSegmentsCount,
                         double                 aCorrectionFactor )
 {
+    std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
     EDGE_MODULE* outline;
+
     for( EDA_ITEM* item = GraphicalItems(); item != NULL; item = item->Next() )
     {
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
+            if( ((TEXTE_MODULE*)item)->GetLayer() == aLayer )
+                texts.push_back( (TEXTE_MODULE *) item );
             break;
 
         case PCB_MODULE_EDGE_T:
@@ -153,6 +172,33 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
                 break;
         }
     }
+
+    // Convert texts sur modules
+    if( Reference().GetLayer() == aLayer && Reference().IsVisible() )
+        texts.push_back( &Reference() );
+
+    if( Value().GetLayer() == aLayer && Value().IsVisible() )
+        texts.push_back( &Value() );
+
+    s_cornerBuffer = &aCornerBuffer;
+    s_textCircle2SegmentCount = aCircleToSegmentsCount;
+
+    for( unsigned ii = 0; ii < texts.size(); ii++ )
+    {
+        TEXTE_MODULE *textmod = texts[ii];
+        s_textWidth  = textmod->GetThickness() + ( 2 * aInflateValue );
+        wxSize size = textmod->GetSize();
+
+        if( textmod->IsMirrored() )
+            NEGATE( size.x );
+
+        DrawGraphicText( NULL, NULL, textmod->GetTextPosition(), BLACK,
+                         textmod->GetText(), textmod->GetDrawRotation(), size,
+                         textmod->GetHorizJustify(), textmod->GetVertJustify(),
+                         textmod->GetThickness(), textmod->IsItalic(),
+                         true, addTextSegmToPoly );
+    }
+
 }
 
  /* Function TransformSolidAreasShapesToPolygonSet
@@ -257,20 +303,6 @@ void TEXTE_PCB::TransformBoundingBoxWithClearanceToPolygon(
  * clearance when the circle is approximated by segment bigger or equal
  * to the real clearance value (usually near from 1.0)
  */
-// These variables are parameters used in addTextSegmToPoly.
-// But addTextSegmToPoly is a call-back function,
-// so we cannot send them as arguments.
-int s_textWidth;
-int s_textCircle2SegmentCount;
-CPOLYGONS_LIST* s_cornerBuffer;
-
-// This is a call back function, used by DrawGraphicText to draw the 3D text shape:
-static void addTextSegmToPoly( int x0, int y0, int xf, int yf )
-{
-    TransformRoundedEndsSegmentToPolygon( *s_cornerBuffer,
-                                           wxPoint( x0, y0), wxPoint( xf, yf ),
-                                           s_textCircle2SegmentCount, s_textWidth );
-}
 
 void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
                             CPOLYGONS_LIST& aCornerBuffer,
@@ -309,7 +341,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
     }
     else
     {
-        DrawGraphicText( NULL, NULL, GetTextPosition(), (EDA_COLOR_T) color,
+        DrawGraphicText( NULL, NULL, GetTextPosition(), color,
                          GetText(), GetOrientation(), size,
                          GetHorizJustify(), GetVertJustify(),
                          GetThickness(), IsItalic(),

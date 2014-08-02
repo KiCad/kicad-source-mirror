@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="12" />
+    <FileVersion major="1" minor="11" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -104,7 +104,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticText" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -281,7 +281,7 @@
                 <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
                     <property name="flag">wxALL|wxEXPAND</property>
-                    <property name="proportion">2</property>
+                    <property name="proportion">1</property>
                     <object class="wxTreeCtrl" expanded="0">
                         <property name="BottomDockable">1</property>
                         <property name="LeftDockable">1</property>
@@ -338,7 +338,7 @@
                         <event name="OnEnterWindow"></event>
                         <event name="OnEraseBackground"></event>
                         <event name="OnKeyDown"></event>
-                        <event name="OnKeyUp"></event>
+                        <event name="OnKeyUp">OnInterceptTreeEnter</event>
                         <event name="OnKillFocus"></event>
                         <event name="OnLeaveWindow"></event>
                         <event name="OnLeftDClick"></event>
@@ -363,7 +363,7 @@
                         <event name="OnTreeEndDrag"></event>
                         <event name="OnTreeEndLabelEdit"></event>
                         <event name="OnTreeGetInfo"></event>
-                        <event name="OnTreeItemActivated">OnDoubleClickTreeSelect</event>
+                        <event name="OnTreeItemActivated">OnDoubleClickTreeActivation</event>
                         <event name="OnTreeItemCollapsed"></event>
                         <event name="OnTreeItemCollapsing"></event>
                         <event name="OnTreeItemExpanded"></event>
@@ -392,7 +392,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND | wxALL</property>
-                            <property name="proportion">2</property>
+                            <property name="proportion">4</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -573,7 +573,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="wxStdDialogButtonSizer" expanded="0">
                                 <property name="Apply">0</property>

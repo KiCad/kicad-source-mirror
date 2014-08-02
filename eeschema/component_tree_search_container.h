@@ -97,7 +97,7 @@ public:
     /** Function GetSelectedAlias
      *
      * @param if not-NULL, the selected sub-unit is set here.
-     * @return the selected alias or NULL if there is none.
+     * @return the selected alias or NULL if there is none, or there is no tree.
      */
     LIB_ALIAS* GetSelectedAlias( int* aUnit );
 

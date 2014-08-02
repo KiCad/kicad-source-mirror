@@ -17,27 +17,31 @@
 
 ; General Product Description Definitions
 !define PRODUCT_NAME "KiCad"
-!define PRODUCT_VERSION "2013.03.13"
-!define PRODUCT_WEB_SITE "http://iut-tice.ujf-grenoble.fr/kicad/"
-!define SOURCEFORGE_WEB_SITE "http://kicad.sourceforge.net/"
+!define PRODUCT_VERSION "2014.03.05"
+!define ALT_DOWNLOAD_WEB_SITE "http://iut-tice.ujf-grenoble.fr/kicad/"
+!define LIBRARIES_WEB_SITE "https://github.com/KiCad/"
+!define KICAD_MAIN_SITE "www.kicad-pcb.org/"
 !define COMPANY_NAME ""
 !define TRADE_MARKS ""
 !define COPYRIGHT "Kicad Developers Team"
 !define COMMENTS ""
 !define HELP_WEB_SITE "http://groups.yahoo.com/group/kicad-users/"
-!define DEVEL_WEB_SITE "https://launchpad.net/~kicad-developers/"
+!define DEVEL_WEB_SITE "https://launchpad.net/kicad/"
 !define WINGS3D_WEB_SITE "http://www.wings3d.com"
 
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define UNINST_ROOT "HKLM"
 
+
 ;Comment out the following SetCompressor command while testing this script
-SetCompressor /final /solid lzma
+;SetCompressor /final /solid lzma
+
 CRCCheck force
 XPStyle on
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "${PRODUCT_NAME}_stable-${PRODUCT_VERSION}-BZR4000_Win_full_version.exe"
-InstallDir "$PROGRAMFILES\KiCad"
+OutFile "${PRODUCT_NAME}_stable-${PRODUCT_VERSION}-BZR4xxx_Win_full_version.exe"
+;InstallDir "$PROGRAMFILES\KiCad"
+InstallDir "C:\KiCad"
 ShowInstDetails hide
 ShowUnInstDetails hide
 
@@ -72,21 +76,25 @@ ShowUnInstDetails hide
 !insertmacro MUI_UNPAGE_INSTFILES
 
 ; Language files
-; - To add another language; add an insert macro line here and inlcude a language file as below
+; - To add another language; add an insert macro line here and include a language file as below
 ; - This must be after all page macros have been inserted
 !insertmacro MUI_LANGUAGE "English" ;first language is the default language
 !insertmacro MUI_LANGUAGE "French"
+!insertmacro MUI_LANGUAGE "Italian"
 !insertmacro MUI_LANGUAGE "Polish"
+!insertmacro MUI_LANGUAGE "Portuguese"
 !insertmacro MUI_LANGUAGE "Dutch"
 !insertmacro MUI_LANGUAGE "Russian"
 !insertmacro MUI_LANGUAGE "Japanese"
 
 !include "English.nsh"
 !include "French.nsh"
-!include "Polish.nsh"
 !include "Dutch.nsh"
-!include "Russian.nsh"
+!include "Italian.nsh"
 !include "Japanese.nsh"
+!include "Polish.nsh"
+!include "Portuguese.nsh"
+!include "Russian.nsh"
 
 ; MUI end ------
 
@@ -150,20 +158,22 @@ SectionEnd
 
 Section -CreateShortcuts
   SetOutPath $INSTDIR
-  WriteIniStr "$INSTDIR\HomePage.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-  WriteIniStr "$INSTDIR\SourceForge.url" "InternetShortcut" "URL" "${SOURCEFORGE_WEB_SITE}"
-  WriteIniStr "$INSTDIR\UserGroup.url" "InternetShortcut" "URL" "${HELP_WEB_SITE}"
-  WriteIniStr "$INSTDIR\DevelGroup.url" "InternetShortcut" "URL" "${DEVEL_WEB_SITE}"
-  WriteIniStr "$INSTDIR\Wings3D.url" "InternetShortcut" "URL" "${WINGS3D_WEB_SITE}"
+  WriteIniStr "$INSTDIR\HomePage.url"     "InternetShortcut" "URL" "${KICAD_MAIN_SITE}"
+  WriteIniStr "$INSTDIR\AltDownloadSite.url" "InternetShortcut" "URL" "${ALT_DOWNLOAD_WEB_SITE}"
+  WriteIniStr "$INSTDIR\UserGroup.url"    "InternetShortcut" "URL" "${HELP_WEB_SITE}"
+  WriteIniStr "$INSTDIR\DevelGroup.url"   "InternetShortcut" "URL" "${DEVEL_WEB_SITE}"
+  WriteIniStr "$INSTDIR\LibrariesGroup.url" "InternetShortcut" "URL" "${LIBRARIES_WEB_SITE}"
+  WriteIniStr "$INSTDIR\Wings3D.url"      "InternetShortcut" "URL" "${WINGS3D_WEB_SITE}"
   SetShellVarContext all
   CreateDirectory "$SMPROGRAMS\KiCad"
   CreateShortCut "$SMPROGRAMS\KiCad\Home Page.lnk" "$INSTDIR\HomePage.url"
-  CreateShortCut "$SMPROGRAMS\KiCad\Kicad SourceForge.lnk" "$INSTDIR\SourceForge.url"
+  CreateShortCut "$SMPROGRAMS\KiCad\Kicad Alternate Download.lnk" "$INSTDIR\AltDownloadSite.url"
+  CreateShortCut "$SMPROGRAMS\KiCad\Kicad Libraries.lnk" "$INSTDIR\LibrariesGroup.url"
+  CreateShortCut "$SMPROGRAMS\KiCad\Wings3D.lnk" "$INSTDIR\Wings3D.url"
   CreateShortCut "$SMPROGRAMS\KiCad\User Group.lnk" "$INSTDIR\UserGroup.url"
   CreateShortCut "$SMPROGRAMS\KiCad\Devel Group.lnk" "$INSTDIR\DevelGroup.url"
   CreateShortCut "$SMPROGRAMS\KiCad\Uninstall.lnk" "$INSTDIR\uninstaller.exe"
   CreateShortCut "$SMPROGRAMS\KiCad\KiCad.lnk" "$INSTDIR\bin\kicad.exe"
-  CreateShortCut "$SMPROGRAMS\KiCad\Wings3D.lnk" "$INSTDIR\Wings3D.url"
   CreateShortCut "$DESKTOP\KiCad.lnk" "$INSTDIR\bin\kicad.exe"
 SectionEnd
 
@@ -172,13 +182,13 @@ Section -CreateAddRemoveEntry
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "Publisher" "${COMPANY_NAME}"
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninstaller.exe"
-  WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
+  WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${KICAD_MAIN_SITE}"
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\bin\kicad.exe"
   WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "NoModify" "1"
   WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "NoRepair" "1"
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "Comments" "${COMMENTS}"
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "HelpLink" "${HELP_WEB_SITE}"
-  WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "URLUpdateInfo" "${PRODUCT_WEB_SITE}"
+  WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "URLUpdateInfo" "${KICAD_MAIN_SITE}"
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "InstallLocation" "$INSTDIR"
 
   WriteUninstaller "$INSTDIR\uninstaller.exe"
@@ -213,6 +223,9 @@ Section Uninstall
   ;remove start menu shortcuts and web page links
   SetShellVarContext all
   Delete "$SMPROGRAMS\KiCad\Home Page.lnk"
+  Delete "$SMPROGRAMS\KiCad\Kicad Libraries.lnk"
+  Delete "$SMPROGRAMS\KiCad\Kicad Alternate Download.lnk"
+  Delete "$SMPROGRAMS\KiCad\Devel Group.lnk"
   Delete "$SMPROGRAMS\KiCad\User Group.lnk"
   Delete "$SMPROGRAMS\KiCad\Uninstall.lnk"
   Delete "$SMPROGRAMS\KiCad\KiCad.lnk"
@@ -221,6 +234,9 @@ Section Uninstall
   Delete "$INSTDIR\Wings3D.url"
   Delete "$INSTDIR\HomePage.url"
   Delete "$INSTDIR\UserGroup.url"
+  Delete "$INSTDIR\AltDownloadSite.url"
+  Delete "$INSTDIR\DevelGroup.url"
+  Delete "$INSTDIR\LibrariesGroup.url"
   RMDir "$SMPROGRAMS\KiCad"
 
   ;remove all program files now

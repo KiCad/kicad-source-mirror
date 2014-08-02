@@ -764,14 +764,14 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
         m_transform.x2 = m_transform.y1 = 0;
         break;
 
-    case CMP_ROTATE_CLOCKWISE:            // Rotate + (incremental rotation)
+    case CMP_ROTATE_COUNTERCLOCKWISE:  // Rotate + (incremental rotation)
         temp.x1   = temp.y2 = 0;
         temp.y1   = 1;
         temp.x2   = -1;
         transform = true;
         break;
 
-    case CMP_ROTATE_COUNTERCLOCKWISE:    // Rotate - (incremental rotation)
+    case CMP_ROTATE_CLOCKWISE:          // Rotate - (incremental rotation)
         temp.x1   = temp.y2 = 0;
         temp.y1   = -1;
         temp.x2   = 1;
@@ -1534,8 +1534,7 @@ void SCH_COMPONENT::Rotate( wxPoint aPosition )
 
     RotatePoint( &m_Pos, aPosition, 900 );
 
-    //SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
-    SetOrientation( CMP_ROTATE_CLOCKWISE );
+    SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
 
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {

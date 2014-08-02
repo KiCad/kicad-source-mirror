@@ -47,29 +47,6 @@ class CMP_LIBRARY;
  */
 class LIB_VIEW_FRAME : public SCH_BASE_FRAME
 {
-private:
-    wxComboBox*         m_selpartBox;
-
-    // List of libraries (for selection )
-    wxListBox*          m_libList;          // The list of libs
-    int                 m_libListWidth;     // Last width of the window
-
-    // List of components in the selected library
-    wxListBox*          m_cmpList;          // The list of components
-    int                 m_cmpListWidth;     // Last width of the window
-
-    // Flags
-    wxSemaphore*        m_semaphore;        // != NULL if the frame must emulate a modal dialog
-    wxString            m_configPath;       // subpath for configuration
-
-protected:
-    static wxString m_libraryName;
-    static wxString m_entryName;
-    static wxString m_exportToEeschemaCmpName;  // When the viewer is used to select a component
-                                                // in schematic, the selected component is here
-    static int      m_unit;
-    static int      m_convert;
-
 public:
     LIB_VIEW_FRAME( SCH_BASE_FRAME* aParent, CMP_LIBRARY* aLibrary = NULL,
                     wxSemaphore* aSemaphore = NULL,
@@ -134,11 +111,26 @@ public:
      */
     void SaveSettings();
 
-    wxString& GetEntryName( void ) const { return m_entryName; }
-    wxString& GetSelectedComponent( void ) const { return m_exportToEeschemaCmpName; }
+    /**
+     * Set the selected library in the library window.
+     *
+     * @param aLibName name of the library to be selected.
+     */
+    void SetSelectedLibrary( const wxString& aLibName );
 
-    static int  GetUnit( void ) { return m_unit; }
-    static int  GetConvert( void ) { return m_convert; }
+    /**
+     * Set the selected component.
+     *
+     * @param the alias name of the component to be selected.
+     */
+    void SetSelectedComponent( const wxString& aComponentName );
+    const wxString& GetSelectedComponent( void ) const { return m_exportToEeschemaCmpName; }
+
+    void SetUnit( int aUnit ) { m_unit = aUnit; }
+    int GetUnit( void ) { return m_unit; }
+
+    void SetConvert( int aConvert ) { m_convert = aConvert; }
+    int GetConvert( void ) { return m_convert; }
 
 private:
     /**
@@ -159,6 +151,33 @@ private:
     void ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag );
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     void DClickOnCmpList( wxCommandEvent& event );
+
+    wxComboBox*         m_selpartBox;
+
+    // List of libraries (for selection )
+    wxListBox*          m_libList;          // The list of libs
+    int                 m_libListWidth;     // Last width of the window
+
+    // List of components in the selected library
+    wxListBox*          m_cmpList;          // The list of components
+    int                 m_cmpListWidth;     // Last width of the window
+
+    // Flags
+    wxSemaphore*        m_semaphore;        // != NULL if the frame must emulate a modal dialog
+    wxString            m_configPath;       // subpath for configuration
+
+    // TODO(hzeller): looks like these members were chosen to be static to survive different
+    // instances of this browser and communicate it to the next instance. This looks like an
+    // ugly hack, and should be solved differently.
+    static wxString m_libraryName;
+
+    // TODO(hzeller): figure out what the difference between these is and the motivation to
+    // have this distinction. Shouldn't these essentially be the same ?
+    static wxString m_entryName;
+    static wxString m_exportToEeschemaCmpName;  // When the viewer is used to select a component
+                                                // in schematic, the selected component is here
+    static int      m_unit;
+    static int      m_convert;
 
     DECLARE_EVENT_TABLE()
 };

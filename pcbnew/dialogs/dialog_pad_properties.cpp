@@ -680,13 +680,14 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     {
         if( m_dummyPad->GetDrillSize().x || m_dummyPad->GetDrillSize().y )
         {
-            msg = _( "Error: pad is not on a copper layer and has a hole" );
+            // Note: he message is shown in an HTML window
+            msg = _( "Error: the pad is not on a copper layer and has a hole" );
 
             if( m_dummyPad->GetAttribute() == PAD_HOLE_NOT_PLATED )
             {
-                msg += wxT("\n");
-                msg += _(   "For NPTH pad, set pad drill value to pad size value,\n"
-                            "if you do not want this pad plotted in gerber files"
+                msg += wxT("<br><br><i>");
+                msg += _(   "For NPTH pad, set pad size value to pad drill value,"
+                            " if you do not want this pad plotted in gerber files"
                             );
             }
 

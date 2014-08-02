@@ -57,6 +57,10 @@ set( GAL_SRCS
 add_library( gal STATIC ${GAL_SRCS} )
 add_dependencies( gal shader_headers )
 
+add_dependencies( gal lib-dependencies )
+add_dependencies( shader_headers lib-dependencies )
+
+
 # Only for win32 cross compilation using MXE
 if( WIN32 AND MSYS )
     add_definitions( -DGLEW_STATIC )
@@ -183,6 +187,7 @@ set( COMMON_SRCS
 
 
 add_library( common STATIC ${COMMON_SRCS} )
+add_dependencies( common lib-dependencies )
 
 set( PCB_COMMON_SRCS
     base_screen.cpp
@@ -249,6 +254,7 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
     )
 
 add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
+add_dependencies( pcbcommon lib-dependencies )
 
 # auto-generate specctra_lexer.h and specctra_keywords.cpp
 make_lexer(
@@ -315,3 +321,6 @@ make_lexer(
 # to build it, first enable #define STAND_ALONE at top of dsnlexer.cpp
 add_executable( dsntest EXCLUDE_FROM_ALL dsnlexer.cpp )
 target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} rt )
+
+add_dependencies( dsntest lib-dependencies )
+

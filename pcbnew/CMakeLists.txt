@@ -4,6 +4,10 @@ set( MAKE_LINK_MAPS false )
 add_definitions( -DPCBNEW )
 add_subdirectory(router)
 
+# psnrouter depends on make_lexer outputs in common (bug # 1285878 )
+add_dependencies( pnsrouter pcbcommon )
+
+
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting )
     find_package( SWIG REQUIRED )
@@ -513,6 +517,7 @@ make_lexer(
 add_subdirectory( pcad2kicadpcb_plugin )
 if( BUILD_GITHUB_PLUGIN )
     add_subdirectory( github )
+    add_dependencies( github_plugin lib-dependencies )
 endif()
 
 
@@ -526,6 +531,7 @@ add_executable( pcbnew WIN32 MACOSX_BUNDLE
     ${PCBNEW_RESOURCES}
     )
 
+add_dependencies( pcbnew lib-dependencies )
 ###
 # Set properties for APPLE on pcbnew target
 ###
@@ -616,6 +622,13 @@ if( KICAD_SCRIPTING )
  
         # fix bundle after copying wxpython, fixing and copying
         add_dependencies( osx_fix_bundles pcbnew_copy_wxpython_scripting )
+
+        if ( KICAD_SCRIPTING_MODULES )
+            #they do more or less the same job, avoid race between them
+            #Cmake copy goes in error otherwise
+            add_dependencies( pcbnew_copy_wxpython_scripting  pcbnew_copy_wxpython_module )
+        endif()
+
     endif()
 endif()
 

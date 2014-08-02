@@ -52,8 +52,15 @@ void S3D_MATERIAL::SetMaterial()
 #if 0
     glColorMaterial( GL_FRONT_AND_BACK, GL_SPECULAR );
     glColor3f( m_SpecularColor.x, m_SpecularColor.y, m_SpecularColor.z );
-#endif
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
+#endif
+}
+
+
+void S3D_MASTER::Insert( S3D_MATERIAL* aMaterial )
+{
+    aMaterial->SetNext( m_Materials );
+    m_Materials = aMaterial;
 }
 
 

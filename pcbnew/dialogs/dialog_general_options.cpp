@@ -237,6 +237,10 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         m_show_microwave_tools = state;
         m_auimgr.GetPane( wxT( "m_microWaveToolBar" ) ).Show( m_show_microwave_tools );
         m_auimgr.Update();
+
+        GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR,
+                        m_show_microwave_tools ?
+                        _( "Hide Microwave Toolbar" ): _( "Show Microwave Toolbar" ));
         break;
 
     case ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR:

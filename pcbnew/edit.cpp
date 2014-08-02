@@ -1077,7 +1077,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 #ifndef USE_WX_OVERLAY
         InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*) GetCurItem(), &dc );
 #else
-        // #1267772 - Draw into dialog converted in refresh request
+        // #1277772 - Draw into dialog converted in refresh request
         InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*) GetCurItem(), NULL );
         m_canvas->Refresh();
 #endif

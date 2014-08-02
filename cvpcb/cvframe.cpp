@@ -606,6 +606,9 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     libraryName = m_LibraryList->GetSelectedLibrary();
     m_FootprintList->SetFootprints( m_footprints, libraryName, component, filter );
 
+    // Tell AuiMgr that objects are changed !
+    m_auimgr.Update();
+
     if( component == NULL )
         return;
 

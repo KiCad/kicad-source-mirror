@@ -1,5 +1,6 @@
 Bazaar
-------
+======
+
 KiCad uses the Bazaar version control system to track source code changes,
 and download the boost libraries needed by Kicad.
 The easiest way to get a copy of the KiCad source is to use Bazaar.
@@ -11,7 +12,8 @@ Be sure bzrtools is also installed.
 boost libraries will be downloaded the first time you build Kicad.
 
 CMake
------
+=====
+
 KiCad uses CMake to generate the build files specific for the target platform
 specified by the developer.  This document attempts to define some of the more
 common CMake and KiCad build configuration settings.  You can use CMake either
@@ -23,7 +25,8 @@ http://www.cmake.org/cmake/help/documentation.html.
 
 
 Useful CMake Build Settings.
-----------------------------
+============================
+
 This section defines some of the more common CMake build configuration setting
 used when configuring KiCad.  These settings are valid for all projects that
 use CMake.
@@ -39,13 +42,17 @@ switch on the command line.  Please note, only a small subset of these project
 generators are supported.  If you want to use Eclipse on Linux to build KiCad,
 you may be in for a lot of work.
 
+
 CMAKE_BUILD_TYPE (Release/Debug/RelWithDebInfo/MinSizeRel)
 ----------------------------------------------------------
+Default: Release
+
 When configuring the KiCad build for the command line you must specify build
 type.  To create a debug build, set CMAKE_BUILD_TYPE to Debug.  To create a
 release build, set CMAKE_BUILD_TYPE to Release.  See the CMake documentation
 for other build types.  For IDE project files, the build type can be selected
 by the IDE configuration manager.
+
 
 CMAKE_INSTALL_PATH (InstallPath)
 --------------------------------
@@ -57,7 +64,8 @@ installed on your system.
 
 
 wxWidgets Library Configuration.
---------------------------------
+================================
+
 KiCad is built using the wxWidgets library.  The following options allow you
 to specifically tailor the wxWidgets library configuration.  For the complete
 list of wxWidgets setting see CMakeModules/FindwxWidgets.cmake in the KiCad
@@ -69,85 +77,147 @@ CMake looks in the standard platform locations to find the default version of
 the wxWidgets library.  If you wish to use a custom built wxWidgets library,
 set wxWidgets_ROOT_DIR to the correct path.
 
+
 wxWidgets_USE_DEBUG (ON/OFF)
 ----------------------------
+Default: OFF
+
 When creating a debug build of KiCad, it is often useful to link against the
 debug build of the wxWidgets.  To use the debug build of wxWidgets, set
 wxWidgets_USE_DEBUG to ON.
 
+
 wxWidgets_USE_UNICODE (ON/OFF)
 ------------------------------
+Default: ON (wxWidgets 2.9 or later), OFF (older versions)
+
 If your platform supports Unicode and you wish to build KiCad with Unicode
 support, set wxWidgets_USE_UNICODE to ON.  Please note as of the 2.9 branch
 this option is not required.
 
 
 KiCad Specific Options
-----------------------
+======================
+
 All of the configuration settings below are specific to the KiCad project.
 If for any reason you add or remove a build option to the KiCad CMake files,
 please update the list below.
 
 KICAD_SKIP_BOOST (ON/OFF)
 --------------------------
-Skips building the required boost library components.
-WARNING: KiCad developers strongly advise you to build the bundled boost library, as it is
-known to work with KiCad. Other versions may contain bugs that may result in KiCad errors.
+Default: OFF
+
+Use the version of the Boost library installed on the system rather than
+building a local copy.
+
+WARNING: The KiCad developers strongly advise you to build the bundled copy of
+the Boost library, as it is known to work with KiCad. Other versions may
+contain bugs that may result in KiCad errors.
+
 
 USE_WX_GRAPHICS_CONTEXT (ON/OFF)
 --------------------------------
-This option is *Experimental* and used the advanced drawing library code
-using wxGraphicsContext and should only be used for testing purposes.
-Under Windows, a very recent version of mingw is needed.  It also requires
-wxWidgets to be built with the --enable-graphics_ctx configuration switch.
+Default: OFF
+
+This option is *Experimental*. It enables advanced drawing library code using
+wxGraphicsContext and should only be used for testing purposes.  Under Windows,
+a very recent version of mingw is needed.  It also requires wxWidgets to be
+built with the --enable-graphics_ctx configuration switch.
+
 
 USE_IMAGES_IN_MENUS (ON/OFF)
 ----------------------------
+Default: OFF for OSX, ON for other platforms.
+
 This option is used to enable or disable building KiCad with images in menu
 items.  If this is not defined when CMake is used to create the build files,
 images will be included in menu items on all platforms except OSX.
 
+
+DOWNLOAD_DIR (PATH)
+-------------------
+Default: <source directory>/.downloads-by-cmake
+
+Some external dependencies are automatically download and built when you
+compile KiCad. This option specifies which directory they are stored in. If you
+are building multiple copies of KiCad (e.g., to test different features or your
+own modifications), it is recommended you set this option to a global directory
+to avoid download and building the dependencies multiple times.
+
+
+KICAD_USER_CONFIG_DIR (PATH)
+----------------------------
+Default: Home directory (Unix-based systems), Application data directory (Windows)
+
+This option specifies where to store user-specific configuration information.
+
+
 KICAD_KEEPCASE (ON/OFF)
 -----------------------
-This option enables or disables turning off the  automatic component name
-conversion to uppercase.  The default is OFF which means component names will
-be converted to upper case.
+Default: ON
+
+If this is OFF, component names are automatically converted to uppercase meaning
+they are case insensitive. If it is ON, component names are not changed and
+are therefore case sensitive.
+
 
 USE_WX_OVERLAY (ON/OFF)
 -----------------------
-This option enables or disables wxOverlay for drawing operation on OSX.  It is
-OFF by default on all platforms except OSX.  Warning, this is experimental!
+Default: ON for OSX, OFF for other platforms.
+
+This option enables or disables the use of wxOverlay for drawing operations.
+Warning, this is experimental!
+
 
 KICAD_SCRIPTING (ON/OFF)
 ------------------------
-This option enables or disables building Python scripting support for KiCad.
-The default is OFF.  Currently only Pcbnew is supported.  This option requires
-that SWIG and Python are installed on the system.
+Default: OFF
+
+This option enables or disables building Python scripting support within KiCad.
+Currently only Pcbnew is supported.  This option requires SWIG and Python to be
+installed on the system.
+
 
 KICAD_SCRIPTING_MODULES (ON/OFF)
 --------------------------------
-This option enables or disables building the KiCad modules that can be used
-from scripting languages.  The default is OFF.  Currently only Pcbnew is
-supported.  This option requires that SWIG and Python are installed on the
-system.
+Default: OFF
+
+This option enables or disables building KiCad Python modules that can be used
+externally by Python.  Currently only Pcbnew is supported.  This option
+requires SWIG and Python to be installed on the system.
+
 
 KICAD_SCRIPTING_WXPYTHON (ON/OFF)
 ---------------------------------
-This option enables or disables building wxPython support into KiCad for
-python and py.shell.    The default is OFF.  Currently only Pcbnew is
-supported.  This option requires that SWIG, Python, and wxPython are
-installed on the system.
+Default: OFF
+
+This option enables or disables building wxPython support into the KiCad
+scripting support.  Currently only Pcbnew is supported.  This option requires
+SWIG, Python, and wxPython to be installed on the system.
+
 
 PYTHON_SITE_PACKAGE_PATH (PATH)
 -------------------------------
+Default: System site library path
+
 When building KiCad with Python scripting enable, the Python site library path
 is used by default.  If you want to install the KiCad Python extension in a
 different path, set this variable to the desired path.
 
 
-USE_FP_LIB_TABLE (ON/OFF)
--------------------------
-This option enable or disables building KiCad with the new footprint library
-table support.  The default setting (OFF) builds KiCad with the legacy library
-path support.  This option is experimental until the library table support is
-ready for release.
+BUILD_GITHUB_PLUGIN (ON/OFF)
+----------------------------
+Default: OFF
+
+This option enables or disables building KiCad with a pcbnew plugin for loading
+footprints from a GitHub repository.
+
+
+KICAD_REPO_NAME (STRING)
+------------------------
+Default: "product"
+
+The name of the repository this copy of KiCad was compiled from. This is
+reported in the "About" dialog and is useful for people who are working with
+multiple copies of the code from different sources. The default value is
+"product", the name of the main development branch on Launchpad.

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Feb 26 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -48,11 +48,13 @@ class DIALOG_GLOBAL_DELETION_BASE : public DIALOG_SHIM
 		wxCheckBox* m_DelTracks;
 		wxCheckBox* m_DelMarkers;
 		wxCheckBox* m_DelAlls;
-		wxStaticBoxSizer* sbTrackFilter;
+		wxStaticBoxSizer* sbFilter;
 		wxCheckBox* m_TrackFilterAR;
 		wxCheckBox* m_TrackFilterLocked;
 		wxCheckBox* m_TrackFilterNormal;
 		wxCheckBox* m_TrackFilterVias;
+		wxCheckBox* m_ModuleFilterLocked;
+		wxCheckBox* m_ModuleFilterNormal;
 		wxRadioBox* m_rbLayersOption;
 		wxStaticText* m_staticText1;
 		wxTextCtrl* m_textCtrlCurrLayer;
@@ -62,6 +64,7 @@ class DIALOG_GLOBAL_DELETION_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnCheckDeleteModules( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckDeleteTracks( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }

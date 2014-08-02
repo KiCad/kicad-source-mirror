@@ -27,9 +27,11 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent )
     m_TrackFilterLocked->Enable( m_DelTracks->GetValue() );
     m_TrackFilterNormal->Enable( m_DelTracks->GetValue() );
     m_TrackFilterVias->Enable( m_DelTracks->GetValue() );
+    m_ModuleFilterLocked->Enable( m_DelModules->GetValue() );
+    m_ModuleFilterNormal->Enable( m_DelModules->GetValue() );
     SetFocus();
 
-    GetSizer()->SetSizeHints(this);
+    GetSizer()->SetSizeHints( this );
     Centre();
 }
 
@@ -42,11 +44,13 @@ void PCB_EDIT_FRAME::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
     dlg.ShowModal();
 }
 
+
 void DIALOG_GLOBAL_DELETION::SetCurrentLayer( LAYER_NUM aLayer )
 {
     m_currentLayer = aLayer;
     m_textCtrlCurrLayer->SetValue( m_Parent->GetBoard()->GetLayerName( aLayer ) );
 }
+
 
 void DIALOG_GLOBAL_DELETION::OnCheckDeleteTracks( wxCommandEvent& event )
 {
@@ -55,6 +59,14 @@ void DIALOG_GLOBAL_DELETION::OnCheckDeleteTracks( wxCommandEvent& event )
     m_TrackFilterNormal->Enable( m_DelTracks->GetValue() );
     m_TrackFilterVias->Enable( m_DelTracks->GetValue() );
 }
+
+
+void DIALOG_GLOBAL_DELETION::OnCheckDeleteModules( wxCommandEvent& event )
+{
+    m_ModuleFilterLocked->Enable( m_DelModules->GetValue() );
+    m_ModuleFilterNormal->Enable( m_DelModules->GetValue() );
+}
+
 
 void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 {
@@ -68,72 +80,102 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
     }
     else
     {
-        if( !IsOK( this, _( "OK to delete selected items ?" ) ) )
+
+        if( !IsOK( this, _( "Are you sure you want to delete the selected items?" ) ) )
             return;
 
-        BOARD * pcb = m_Parent->GetBoard();
+        BOARD*            pcb = m_Parent->GetBoard();
         PICKED_ITEMS_LIST pickersList;
         ITEM_PICKER       itemPicker( NULL, UR_DELETED );
         BOARD_ITEM*       item, * nextitem;
 
-        if( m_DelZones->GetValue() )
-        {
-            gen_rastnest = true;
-
-            /* SEG_ZONE items used in Zone filling selection are now deprecated :
-            * and are deleted but not put in undo buffer if exist
-            */
-            pcb->m_Zone.DeleteAll();
-
-            while( pcb->GetAreaCount() )
-            {
-                item = pcb->GetArea( 0 );
-                itemPicker.SetItem( item );
-                pickersList.PushItem( itemPicker );
-                pcb->Remove( item );
-            }
-        }
-
-        LAYER_MSK masque_layer = NO_LAYERS;
         LAYER_MSK layers_filter = ALL_LAYERS;
+
         if( m_rbLayersOption->GetSelection() != 0 )     // Use current layer only
             layers_filter = GetLayerMask( m_currentLayer );
 
-
-        if( m_DelDrawings->GetValue() )
-            masque_layer = (~EDGE_LAYER) & ALL_NO_CU_LAYERS;
-
-        if( m_DelBoardEdges->GetValue() )
-            masque_layer |= EDGE_LAYER;
-
-        layers_filter &= layers_filter;
-
-        for( item = pcb->m_Drawings; item != NULL; item = nextitem )
+        if( m_DelZones->GetValue() )
         {
-            nextitem = item->Next();
-            bool removeme = GetLayerMask( item->GetLayer() ) & masque_layer;
+            int area_index = 0;
+            item = pcb->GetArea( area_index );
 
-            if( ( item->Type() == PCB_TEXT_T ) && m_DelTexts->GetValue() )
-                removeme = true;
-
-            if( removeme )
+            while( item != NULL )
             {
-                itemPicker.SetItem( item );
-                pickersList.PushItem( itemPicker );
-                item->UnLink();
+
+                if( GetLayerMask( item->GetLayer() ) & layers_filter )
+                {
+                    itemPicker.SetItem( item );
+                    pickersList.PushItem( itemPicker );
+                    pcb->Remove( item );
+                    gen_rastnest = true;
+                }
+                else
+                {
+                    area_index++;
+                }
+
+                item = pcb->GetArea( area_index );
+            }
+        }
+
+        if( m_DelDrawings->GetValue() || m_DelBoardEdges->GetValue() )
+        {
+            LAYER_MSK masque_layer = NO_LAYERS;
+
+            if( m_DelDrawings->GetValue() )
+                 masque_layer = (~EDGE_LAYER) & ALL_NO_CU_LAYERS;
+
+            if( m_DelBoardEdges->GetValue() )
+                 masque_layer |= EDGE_LAYER;
+
+            masque_layer &= layers_filter;
+
+            for( item = pcb->m_Drawings; item != NULL; item = nextitem )
+            {
+                nextitem = item->Next();
+
+                if( ( item->Type() == PCB_LINE_T ) && ( GetLayerMask( item->GetLayer() ) & masque_layer) )
+                {
+                    itemPicker.SetItem( item );
+                    pickersList.PushItem( itemPicker );
+                    item->UnLink();
+                }
+            }
+        }
+
+        if( m_DelTexts->GetValue() )
+        {
+            LAYER_MSK del_text_layers = ALL_LAYERS & layers_filter;
+
+            for( item = pcb->m_Drawings; item != NULL; item = nextitem )
+            {
+                nextitem = item->Next();
+
+                if( ( item->Type() == PCB_TEXT_T ) && ( GetLayerMask( item->GetLayer() ) & del_text_layers ) )
+                {
+                    itemPicker.SetItem( item );
+                    pickersList.PushItem( itemPicker );
+                    item->UnLink();
+                }
             }
         }
 
         if( m_DelModules->GetValue() )
         {
-            gen_rastnest = true;
 
             for( item = pcb->m_Modules; item; item = nextitem )
             {
                 nextitem = item->Next();
-                itemPicker.SetItem( item );
-                pickersList.PushItem( itemPicker );
-                item->UnLink();
+
+                if( ( GetLayerMask( item->GetLayer() ) & layers_filter ) &&
+                    ( ( m_ModuleFilterNormal->GetValue() && !item->IsLocked() ) ||
+                      ( m_ModuleFilterLocked->GetValue() && item->IsLocked() ) ) )
+                {
+                    itemPicker.SetItem( item );
+                    pickersList.PushItem( itemPicker );
+                    item->UnLink();
+                    gen_rastnest = true;
+                }
             }
         }
 
@@ -148,6 +190,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
                 track_mask_filter |= TRACK_AR;
 
             TRACK * nexttrack;
+
             for( TRACK *track = pcb->m_Track; track != NULL; track = nexttrack )
             {
                 nexttrack = track->Next();
@@ -180,6 +223,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 
         if( gen_rastnest )
             m_Parent->Compile_Ratsnest( NULL, true );
+
     }
 
     m_Parent->GetCanvas()->Refresh();
@@ -187,4 +231,3 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 
     EndModal( 1 );
 }
-

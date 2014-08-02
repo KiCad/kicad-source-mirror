@@ -50,7 +50,6 @@
 #include <3d_draw_basic_functions.h>
 
 // Imported function:
-extern void     Set_Object_Data( std::vector<S3D_VERTEX>& aVertices, double aBiuTo3DUnits );
 extern void     CheckGLError();
 
 /* returns true if aLayer should be displayed, false otherwise
@@ -99,7 +98,7 @@ static void BuildPadShapeThickOutlineAsPolygon( D_PAD*          aPad,
 }
 
 
-void EDA_3D_CANVAS::Redraw( bool finish )
+void EDA_3D_CANVAS::Redraw()
 {
     // SwapBuffer requires the window to be shown before calling
     if( !IsShown() )
@@ -138,11 +137,6 @@ void EDA_3D_CANVAS::Redraw( bool finish )
         glCallList( m_gllist );
     else
         CreateDrawGL_List();
-
-    glFlush();
-
-    if( finish )
-        glFinish();
 
     SwapBuffers();
 }
@@ -593,8 +587,11 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     }
 
     // draw modules 3D shapes
-    for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
-        module->ReadAndInsert3DComponentShape( this );
+    if( g_Parm_3D_Visu.GetFlag( FL_MODULE )  )
+    {
+        for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
+            module->ReadAndInsert3DComponentShape( this );
+    }
 }
 
 
@@ -831,41 +828,32 @@ void EDA_3D_CANVAS::Draw3DViaHole( SEGVIA* aVia )
 
 void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas )
 {
-    // Draw module shape: 3D shape if exists (or module outlines if not exists)
-    S3D_MASTER* struct3D = m_3D_Drawings;
+    // Read from disk and draws the footprint 3D shapes if exists
+    S3D_MASTER* shape3D = m_3D_Drawings;
+    double zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( IsFlipped() );
 
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE )  )
+    glPushMatrix();
+
+    glTranslatef( m_Pos.x * g_Parm_3D_Visu.m_BiuTo3Dunits,
+                  -m_Pos.y * g_Parm_3D_Visu.m_BiuTo3Dunits,
+                  zpos );
+
+    if( m_Orient )
+        glRotatef( (double) m_Orient / 10, 0.0, 0.0, 1.0 );
+
+    if( IsFlipped() )
     {
-        double zpos;
-
-        if( IsFlipped() )
-            zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( true );
-        else
-            zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( false );
-
-        glPushMatrix();
-
-        glTranslatef( m_Pos.x * g_Parm_3D_Visu.m_BiuTo3Dunits,
-                      -m_Pos.y * g_Parm_3D_Visu.m_BiuTo3Dunits,
-                      zpos );
-
-        if( m_Orient )
-            glRotatef( (double) m_Orient / 10, 0.0, 0.0, 1.0 );
-
-        if( IsFlipped() )
-        {
-            glRotatef( 180.0, 0.0, 1.0, 0.0 );
-            glRotatef( 180.0, 0.0, 0.0, 1.0 );
-        }
-
-        for( ; struct3D != NULL; struct3D = struct3D->Next() )
-        {
-            if( struct3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
-                struct3D->ReadData();
-        }
-
-        glPopMatrix();
+        glRotatef( 180.0, 0.0, 1.0, 0.0 );
+        glRotatef( 180.0, 0.0, 0.0, 1.0 );
     }
+
+    for( ; shape3D != NULL; shape3D = shape3D->Next() )
+    {
+        if( shape3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
+            shape3D->ReadData();
+    }
+
+    glPopMatrix();
 }
 
 

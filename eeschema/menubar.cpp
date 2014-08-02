@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2009-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2009-2014 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,15 +66,15 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // New
     AddMenuItem( fileMenu,
                  ID_NEW_PROJECT,
-                 _( "&New" ),
-                 _( "New schematic project" ),
+                 _( "&New Schematic Project" ),
+                 _( "Clear current schematic hierarchy and start a new schematic root sheet" ),
                  KiBitmap( new_xpm ) );
 
     // Open
-    text = AddHotkeyName( _( "&Open" ), s_Schematic_Hokeys_Descr, HK_LOAD_SCH );
+    text = AddHotkeyName( _( "&Open Schematic Project" ), s_Schematic_Hokeys_Descr, HK_LOAD_SCH );
     AddMenuItem( fileMenu,
                  ID_LOAD_PROJECT, text,
-                 _( "Open an existing schematic project" ),
+                 _( "Open an existing schematic hierarchy" ),
                  KiBitmap( open_document_xpm ) );
 
     // Open Recent submenu
@@ -95,19 +95,19 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     // Import
     AddMenuItem( fileMenu,
-                 ID_APPEND_PROJECT, _( "&Append Schematic" ),
-                 _( "Append another schematic project to the current loaded schematic" ),
+                 ID_APPEND_PROJECT, _( "&Append Schematic Sheet" ),
+                 _( "Append schematic sheet to current project" ),
                  KiBitmap( open_document_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();
 
     // Save schematic project
-    text = AddHotkeyName( _( "&Save Whole Schematic Project" ),
+    text = AddHotkeyName( _( "&Save Schematic Project" ),
                           s_Schematic_Hokeys_Descr, HK_SAVE_SCH );
     AddMenuItem( fileMenu,
                  ID_SAVE_PROJECT, text,
-                 _( "Save all sheets in the schematic project" ),
+                 _( "Save all sheets in schematic project" ),
                  KiBitmap( save_project_xpm ) );
 
     // Save current sheet
@@ -131,14 +131,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu,
                  ID_SHEET_SET,
                  _( "Pa&ge Settings" ),
-                 _( "Settigns for page size and information" ),
+                 _( "Setting for sheet size and frame references" ),
                  KiBitmap( sheetset_xpm ) );
 
     // Print
     AddMenuItem( fileMenu,
                  wxID_PRINT,
                  _( "Pri&nt" ),
-                 _( "Print schematic" ),
+                 _( "Print schematic sheet" ),
                  KiBitmap( print_button_xpm ) );
 
 #ifdef __WINDOWS__ // __WINDOWS__
@@ -259,8 +259,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Hierarchy
     AddMenuItem( viewMenu,
                  ID_HIERARCHY,
-                 _( "&Hierarchy" ),
-                 _( "Navigate schematic hierarchy" ),
+                 _( "Show &Hierarchical Navigator" ),
+                 _( "Navigate hierarchical sheets" ),
                  KiBitmap( hierarchy_nav_xpm ) );
 
     // Redraw
@@ -399,15 +399,15 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Library
     AddMenuItem( preferencesMenu,
                  ID_CONFIG_REQ,
-                 _( "&Library" ),
-                 _( "Library preferences" ),
+                 _( "Set Active &Libraries" ),
+                 _( "Set active library list and library paths" ),
                  KiBitmap( library_xpm ) );
 
     // Colors
     AddMenuItem( preferencesMenu,
                  ID_COLORS_SETUP,
-                 _( "&Colors" ),
-                 _( "Color preferences" ),
+                 _( "Set &Colors Scheme" ),
+                 _( "Set color preferences" ),
                  KiBitmap( palette_xpm ) );
 
     // Options (Preferences on WXMAC)
@@ -417,8 +417,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 #else
     AddMenuItem( preferencesMenu,
                  wxID_PREFERENCES,
-                 _( "&Options" ),
-                 _( "Eeschema preferences" ),
+                 _( "Schematic Editor &Options" ),
+                 _( "Set Eeschema preferences" ),
                  KiBitmap( preference_xpm ) );
 #endif // __WXMAC__
 
@@ -467,21 +467,21 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Annotate
     AddMenuItem( toolsMenu,
                  ID_GET_ANNOTATE,
-                 _( "&Annotate" ), HELP_ANNOTATE,
+                 _( "&Annotate Schematic" ), HELP_ANNOTATE,
                  KiBitmap( annotate_xpm ) );
 
     // ERC
     AddMenuItem( toolsMenu,
                  ID_GET_ERC,
-                 _( "ER&C" ),
+                 _( "Electric Rules &Checker" ),
                  _( "Perform electrical rule check" ),
                  KiBitmap( erc_xpm ) );
 
     // Generate netlist
     AddMenuItem( toolsMenu,
                  ID_GET_NETLIST,
-                 _( "Generate &Netlist" ),
-                 _( "Generate the component netlist" ),
+                 _( "Generate &Netlist File" ),
+                 _( "Generate the component netlist file" ),
                  KiBitmap( netlist_xpm ) );
 
     // Generate bill of materials
@@ -497,7 +497,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     //Run CvPcb
     AddMenuItem( toolsMenu,
                  ID_TO_CVPCB,
-                 _( "A&ssign Component Footprints" ),
+                 _( "A&ssign Component Footprint" ),
                  _( "Run CvPcb" ),
                  KiBitmap( cvpcb_xpm ) );
 
@@ -517,14 +517,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Contents
     AddMenuItem( helpMenu,
                  wxID_HELP,
-                 _( "&Contents" ),
-                 _( "Open the Eeschema handbook" ),
+                 _( "Eesc&hema Manual" ),
+                 _( "Open Eeschema manual" ),
                  KiBitmap( online_help_xpm ) );
 
     AddMenuItem( helpMenu,
                  wxID_INDEX,
                  _( "&Getting Started in KiCad" ),
-                 _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
+                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
     // About Eeschema

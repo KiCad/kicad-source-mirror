@@ -212,4 +212,5 @@ Make the Debug binaries:
     make
 
 
-See ./cmake_config.txt for customizing the KiCad build setting.
+See Documentation/compiling/build-config.txt for a list of all CMake options
+available when compiling KiCad.

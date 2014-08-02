@@ -11,32 +11,40 @@ Contribute to KiCad (under Linux)
 2) initialize Bazaar:
     bzr whoami "John Doe <john.doe@gmail.com>"
 
-3) get LATEST KiCad source tree and name it, for instance, "kicad_john":
+3) get latest KiCad source tree:
     cd ~/
-    bzr branch lp:kicad kicad_john
+    bzr branch lp:kicad kicad.bzr
 
-4) Read coding_style_policy.pdf, in <kicad_sources>/Documentation,
-    and other docs.
+   this should leave you with the folder kicad.bzr
 
-5) Modify/add source code.
-    cd kicad_john
+4) Read coding_style_policy.pdf, in kicad.bzr/Documentation,
+   and other docs.
+
+5) create a local (branch) copy of the KiCad project
+    bzr branch ./kicad.bzr ./kicad.my_contrib
+
+6) Modify/add source code in
+    cd kicad.my_contrib
     gedit .......
+   if you need to create and add the file foo.cpp do so and:
+    bzr add foo.cpp
+   if you need to delete files:
+    bzr rm foo.cpp
 
-6) Compile:
-    cd kicad_john
+7) Compile:
+    cd kicad.my_contrib
     mkdir build; cd build
     cmake ../ -DCMAKE_BUILD_TYPE=Debug
-    to build a debug version
-    or
+   to build a debug version
+   or
     cmake ../ -DCMAKE_BUILD_TYPE=Release
-    to build a release version
-    make
+   to build a release version
+    make -j8
 
-7) Repeat step 5 and 6 until satisfied.
+8) Repeat step 6 and 7 until satisfied.
 
-8) Create a patch:
-    in kicad_john:
-    if some files are added: bzr add [FILE...]
+9) Create a patch file:
+    cd kicad.my_contrib
     bzr diff  > my_changes.patch
 
 9) Send the patch file "my_changes.patch" to the KiCad developers mailing list.

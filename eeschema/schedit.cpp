@@ -701,7 +701,7 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
         // Erase the wire representation before the 'normal' view is drawn.
         if ( item->IsWireImage() )
-          item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+            item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
         item->ClearFlags();
     }

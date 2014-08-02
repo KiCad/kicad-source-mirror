@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  8 2014)
+// C++ code generated with wxFormBuilder (version Feb 22 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -50,8 +50,9 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 		virtual void OnInterceptSearchBoxKey( wxKeyEvent& event ) { event.Skip(); }
 		virtual void OnSearchBoxChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSearchBoxEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnInterceptTreeEnter( wxKeyEvent& event ) { event.Skip(); }
 		virtual void OnTreeMouseUp( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnDoubleClickTreeSelect( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnDoubleClickTreeActivation( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnTreeSelect( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnStartComponentBrowser( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnHandlePreviewRepaint( wxPaintEvent& event ) { event.Skip(); }

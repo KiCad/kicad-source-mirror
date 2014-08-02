@@ -69,11 +69,7 @@
  */
 
 
-/*
- * Create the drill file in EXCELLON format
- * return hole count
- */
-int EXCELLON_WRITER::CreateDrillFile( FILE * aFile )
+int EXCELLON_WRITER::CreateDrillFile( FILE* aFile )
 {
     m_file = aFile;
 
@@ -100,7 +96,8 @@ int EXCELLON_WRITER::CreateDrillFile( FILE * aFile )
 
     fputs( "G90\n", m_file );                       // Absolute mode
     fputs( "G05\n", m_file );                       // Drill mode
-    /* Units : */
+
+    // Units :
     if( !m_minimalHeader )
     {
         if( m_unitsDecimal  )
@@ -112,12 +109,14 @@ int EXCELLON_WRITER::CreateDrillFile( FILE * aFile )
     /* Read the hole file and generate lines for normal holes (oblong
      * holes will be created later) */
     int tool_reference = -2;
+
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
         HOLE_INFO& hole_descr = m_holeListBuffer[ii];
 
         if( hole_descr.m_Hole_Shape )
             continue;  // oblong holes will be created later
+
         if( tool_reference != hole_descr.m_Tool_Reference )
         {
             tool_reference = hole_descr.m_Tool_Reference;
@@ -145,16 +144,18 @@ int EXCELLON_WRITER::CreateDrillFile( FILE * aFile )
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
         HOLE_INFO& hole_descr = m_holeListBuffer[ii];
+
         if( hole_descr.m_Hole_Shape == 0 )
             continue;  // wait for oblong holes
+
         if( tool_reference != hole_descr.m_Tool_Reference )
         {
             tool_reference = hole_descr.m_Tool_Reference;
             fprintf( m_file, "T%d\n", tool_reference );
         }
 
-        diam = std::min( hole_descr.m_Hole_Size.x,
-                         hole_descr.m_Hole_Size.y );
+        diam = std::min( hole_descr.m_Hole_Size.x, hole_descr.m_Hole_Size.y );
+
         if( diam == 0 )
             continue;
 
@@ -166,20 +167,23 @@ int EXCELLON_WRITER::CreateDrillFile( FILE * aFile )
         if( hole_descr.m_Hole_Size.x < hole_descr.m_Hole_Size.y )
         {
             int delta = ( hole_descr.m_Hole_Size.y - hole_descr.m_Hole_Size.x ) / 2;
-            y0 -= delta; yf += delta;
+            y0 -= delta;
+            yf += delta;
         }
         else
         {
             int delta = ( hole_descr.m_Hole_Size.x - hole_descr.m_Hole_Size.y ) / 2;
-            x0 -= delta; xf += delta;
+            x0 -= delta;
+            xf += delta;
         }
+
         RotatePoint( &x0, &y0, xc, yc, hole_descr.m_Hole_Orient );
         RotatePoint( &xf, &yf, xc, yc, hole_descr.m_Hole_Orient );
 
-
         if( !m_mirror )
         {
-            y0 *= -1;  yf *= -1;
+            y0 *= -1;
+            yf *= -1;
         }
 
         xt = x0 * m_conversionUnits;
@@ -189,11 +193,12 @@ int EXCELLON_WRITER::CreateDrillFile( FILE * aFile )
         /* remove the '\n' from end of line, because we must add the "G85"
          * command to the line: */
         for( int kk = 0; line[kk] != 0; kk++ )
+        {
             if( line[kk] == '\n' || line[kk] =='\r' )
                 line[kk] = 0;
+        }
 
         fputs( line, m_file );
-
         fputs( "G85", m_file );    // add the "G85" command
 
         xt = xf * m_conversionUnits;
@@ -213,14 +218,6 @@ int EXCELLON_WRITER::CreateDrillFile( FILE * aFile )
 }
 
 
-/**
- * SetFormat
- * Initialize internal parameters to match the given format
- * @param aMetric = true for metric coordinates, false for imperial units
- * @param aZerosFmt =  DECIMAL_FORMAT, SUPPRESS_LEADING, SUPPRESS_TRAILING, KEEP_ZEROS
- * @param aLeftDigits = number of digits for integer part of coordinates
- * @param aRightDigits = number of digits for mantissa part of coordinates
- */
 void EXCELLON_WRITER::SetFormat( bool      aMetric,
                                  zeros_fmt aZerosFmt,
                                  int       aLeftDigits,
@@ -240,10 +237,6 @@ void EXCELLON_WRITER::SetFormat( bool      aMetric,
 }
 
 
-/* Created a line like:
- * X48000Y19500
- * According to the selected format
- */
 void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoordY )
 {
     wxString xs, ys;
@@ -277,8 +270,10 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
         //Remove useless trailing 0
         while( xs.Last() == '0' )
             xs.RemoveLast();
+
         while( ys.Last() == '0' )
             ys.RemoveLast();
+
         sprintf( aLine, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
         break;
 
@@ -301,6 +296,7 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
 
         if( aCoordX < 0 )
             xpad++;
+
         if( aCoordY < 0 )
             ypad++;
 
@@ -308,10 +304,12 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
         ys.Printf( wxT( "%0*d" ), ypad, KiROUND( aCoordY ) );
 
         size_t j = xs.Len() - 1;
+
         while( xs[j] == '0' && j )
             xs.Truncate( j-- );
 
         j = ys.Len() - 1;
+
         while( ys[j] == '0' && j )
             ys.Truncate( j-- );
 
@@ -327,8 +325,10 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
 
         if( aCoordX < 0 )
             xpad++;
+
         if( aCoordY < 0 )
             ypad++;
+
         xs.Printf( wxT( "%0*d" ), xpad, KiROUND( aCoordX ) );
         ys.Printf( wxT( "%0*d" ), ypad, KiROUND( aCoordY ) );
         sprintf( aLine, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
@@ -337,13 +337,6 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
 }
 
 
-/* Print the DRILL file header. The full header is:
- * M48
- * ;DRILL file {PCBNEW (2007-11-29-b)} date 17/1/2008-21:02:35
- * ;FORMAT={ <precision> / absolute / <units> / <numbers format>}
- * FMAT,2
- * INCH,TZ
- */
 void EXCELLON_WRITER::WriteEXCELLONHeader()
 {
     fputs( "M48\n", m_file );    // The beginning of a header
@@ -361,13 +354,14 @@ void EXCELLON_WRITER::WriteEXCELLONHeader()
             msg << m_precision.GetPrecisionString();
         else
             msg << wxT( "-:-" );  // in decimal format the precision is irrelevant
+
         msg << wxT( "/ absolute / " );
         msg << ( m_unitsDecimal ? wxT( "metric" ) :  wxT( "inch" ) );
 
         /* Adding numbers notation format.
          * this is same as m_Choice_Zeros_Format strings, but NOT translated
-         * because some EXCELLON parsers do not like non ascii values
-         * so we use ONLY english (ascii) strings.
+         * because some EXCELLON parsers do not like non ASCII values
+         * so we use ONLY English (ASCII) strings.
          * if new options are added in m_Choice_Zeros_Format, they must also
          * be added here
          */
@@ -432,21 +426,11 @@ static bool CmpHoleDiameterValue( const HOLE_INFO& a, const HOLE_INFO& b )
 }
 
 
-/*
- * Create the list of holes and tools for a given board
- * The list is sorted by increasing drill values
- * Only holes from aFirstLayer to aLastLayer copper layers  are listed (for vias, because pad holes are always through holes)
- * param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored   (used to creates report file)
- * param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
- * param aExcludeThroughHoles : if true, exclude through holes ( pads and vias through )
- * param aGenerateNPTH_list :
- *       true to create NPTH only list (with no plated holes)
- *       false to created plated holes list (with no NPTH )
- */
 void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
                                       int aLastLayer,
                                       bool aExcludeThroughHoles,
-                                      bool aGenerateNPTH_list )
+                                      bool aGenerateNPTH_list,
+                                      bool aMergePTHNPTH )
 {
     HOLE_INFO new_hole;
     int       hole_value;
@@ -460,8 +444,12 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
             EXCHG( aFirstLayer, aLastLayer );
     }
 
-    /* build hole list for vias
-    */
+    if ( aGenerateNPTH_list && aMergePTHNPTH )
+    {
+        return;
+    }
+
+    // build hole list for vias
     if( ! aGenerateNPTH_list )  // vias are always plated !
     {
         for( TRACK* track = m_pcb->m_Track;  track;  track = track->Next() )
@@ -507,7 +495,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
             // Read and analyse pads
             for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
             {
-                if( ! aGenerateNPTH_list && pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
+                if( ! aGenerateNPTH_list && pad->GetAttribute() == PAD_HOLE_NOT_PLATED && ! aMergePTHNPTH )
                     continue;
 
                 if( aGenerateNPTH_list && pad->GetAttribute() != PAD_HOLE_NOT_PLATED )
@@ -519,15 +507,15 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
                 new_hole.m_Hole_NotPlated = (pad->GetAttribute() == PAD_HOLE_NOT_PLATED);
                 new_hole.m_Tool_Reference = -1;         // Flag is: Not initialized
                 new_hole.m_Hole_Orient    = pad->GetOrientation();
-                new_hole.m_Hole_Shape    = 0;           // hole shape: round
-                new_hole.m_Hole_Diameter = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
+                new_hole.m_Hole_Shape     = 0;           // hole shape: round
+                new_hole.m_Hole_Diameter  = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
                 new_hole.m_Hole_Size.x    = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
 
                 if( pad->GetDrillShape() != PAD_DRILL_CIRCLE )
                     new_hole.m_Hole_Shape = 1; // oval flag set
 
-                new_hole.m_Hole_Size = pad->GetDrillSize();
-                new_hole.m_Hole_Pos = pad->GetPosition();               // hole position
+                new_hole.m_Hole_Size         = pad->GetDrillSize();
+                new_hole.m_Hole_Pos          = pad->GetPosition();               // hole position
                 new_hole.m_Hole_Bottom_Layer = LAYER_N_BACK;
                 new_hole.m_Hole_Top_Layer    = LAYER_N_FRONT;// pad holes are through holes
                 m_holeListBuffer.push_back( new_hole );
@@ -539,7 +527,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
     sort( m_holeListBuffer.begin(), m_holeListBuffer.end(), CmpHoleDiameterValue );
 
     // build the tool list
-    int        LastHole = -1; /* Set to not initialised (this is a value not used
+    int        LastHole = -1; /* Set to not initialized (this is a value not used
                                * for m_holeListBuffer[ii].m_Hole_Diameter) */
     DRILL_TOOL new_tool( 0 );
     unsigned   jj;
@@ -556,7 +544,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
         jj = m_toolListBuffer.size();
 
         if( jj == 0 )
-            continue;                                       // Should not occurs
+            continue;                                        // Should not occurs
 
         m_holeListBuffer[ii].m_Tool_Reference = jj;          // Tool value Initialized (value >= 1)
 

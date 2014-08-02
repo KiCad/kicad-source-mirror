@@ -294,6 +294,7 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* parent ) :
     m_TitlePanel->SetMinSize( wxSize( -1, m_AdhesFrontName->GetSize().y+10 ) );
 
     Layout();
+    Fit();
 
     Center();
 

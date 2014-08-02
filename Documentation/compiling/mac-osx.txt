@@ -37,11 +37,11 @@ Building Kicad with support for Scripting
   then issue for example
 
       cmake -DKICAD_BUILD_DYNAMIC=ON .
-      make lib-wxpython
+      make swig
 
   After successfully building you can set your KICAD_SCRIPTING* options (for example):
 
-      cmake -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_WXPYTHON=ON .
+      cmake -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_WXPYTHON=ON -DKICAD_SCRIPTING_MODULES=ON .
       make
 
   The system will build all accordling your choices and package all in the bundle

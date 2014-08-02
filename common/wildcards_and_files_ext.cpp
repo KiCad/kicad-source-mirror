@@ -42,7 +42,7 @@ const wxString ProjectFileExtension( wxT( "pro" ) );
 const wxString SchematicFileExtension( wxT( "sch" ) );
 const wxString NetlistFileExtension( wxT( "net" ) );
 const wxString ComponentFileExtension( wxT( "cmp" ) );
-const wxString GerberFileExtension( wxT( "pho" ) );
+const wxString GerberFileExtension( wxT( ".((gbr|(gb|gt)[alops])|pho)" ) );
 
 const wxString LegacyPcbFileExtension( wxT( "brd" ) );
 const wxString KiCadPcbFileExtension( wxT( "kicad_pcb" ) );

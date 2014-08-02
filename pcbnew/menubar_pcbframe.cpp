@@ -482,6 +482,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  HELP_SHOW_HIDE_LAYERMANAGER,
                  KiBitmap( layers_manager_xpm ) );
 
+    AddMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR,
+                 m_show_microwave_tools ?
+                 _( "Hide Microwave Toolbar" ): _( "Show Microwave Toolbar" ),
+                 HELP_SHOW_HIDE_MICROWAVE_TOOLS,
+                 KiBitmap( mw_toolbar_xpm ) );
+
+
     // General
 #ifdef __WXMAC__
     configmenu->Append(wxID_PREFERENCES);

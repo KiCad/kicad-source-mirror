@@ -84,7 +84,7 @@ public:
     GLuint DisplayCubeforTest();        // Just a test function
     void   SetView3D( int keycode );
     void   DisplayStatus();
-    void   Redraw( bool finish = false );
+    void   Redraw();
     void   Render();
 
     /**

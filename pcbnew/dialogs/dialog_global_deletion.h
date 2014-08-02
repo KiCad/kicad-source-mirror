@@ -30,6 +30,7 @@ private:
 
     void AcceptPcbDelete();
     void OnCheckDeleteTracks( wxCommandEvent& event );
+    void OnCheckDeleteModules( wxCommandEvent& event );
 };
 
 #endif  // _DIALOG_GLOBAL_DELETION_H_

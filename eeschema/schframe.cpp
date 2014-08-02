@@ -173,6 +173,7 @@ END_EVENT_TABLE()
 
 #define SCH_EDIT_FRAME_NAME wxT( "SchematicFrame" )
 
+
 SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
                     const wxPoint& aPosition, const wxSize& aSize,
                     long aStyle ) :
@@ -213,6 +214,13 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
 
     /* Get config */
     LoadSettings();
+
+    // Ensure m_LastGridSizeId is an offset inside the allowed schematic range
+    if( m_LastGridSizeId < ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000 )
+        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
+
+    if( m_LastGridSizeId > ID_POPUP_GRID_LEVEL_1 - ID_POPUP_GRID_LEVEL_1000 )
+        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_1 - ID_POPUP_GRID_LEVEL_1000;
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
@@ -534,12 +542,6 @@ double SCH_EDIT_FRAME::BestZoom()
 }
 
 
-/* Build a filename that can be used in plot and print functions
- * for the current sheet path.
- * This filename is unique and must be used instead of the screen filename
- * when one must creates file for each sheet in the hierarchy,
- * because in complex hierarchies a sheet and a SCH_SCREEN is used more than once
- */
 wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 {
     wxFileName fn = GetScreen()->GetFileName();
@@ -581,11 +583,6 @@ void SCH_EDIT_FRAME::OnModify()
         m_foundItems.SetForceSearch();
 }
 
-
-/*****************************************************************************
-* Enable or disable menu entry and toolbar buttons according to current
-* conditions.
-*****************************************************************************/
 
 void SCH_EDIT_FRAME::OnUpdateBlockSelected( wxUpdateUIEvent& event )
 {
@@ -782,9 +779,11 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
     }
 }
 
+
 void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 {
     SCH_COMPONENT* component = NULL;
+
     if( event.GetId() == ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP )
     {
         SCH_ITEM* item = GetScreen()->GetCurItem();
@@ -860,6 +859,7 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
         wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParametersList() );
     }
 }
+
 
 void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMask, bool aPrintMirrorMode,
                                 void* aData )
@@ -975,7 +975,7 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
 
     // Erase the wire representation before the 'normal' view is drawn.
     if ( item->IsWireImage() )
-      item->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
+        item->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     item->ClearFlags();
     screen->SetModify();
@@ -993,13 +993,7 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
     }
 }
 
-/* sets the main window title bar text.
- * If file name defined by SCH_SCREEN::m_FileName is not set, the title is set to the
- * application name appended with no file.
- * Otherwise, the title is set to the hierarchical sheet path and the full file name,
- * and read only is appended to the title if the user does not have write
- * access to the file.
- */
+
 void SCH_EDIT_FRAME::UpdateTitle()
 {
     wxString title;
