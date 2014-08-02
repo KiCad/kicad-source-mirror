@@ -354,13 +354,16 @@ void S3D_MESH::calcPerPointNormals ()
     }
 
     m_PerFaceVertexNormals.clear();
+    
+    // Pre-allocate space for the entire vector of vertex normals so we can do parallel writes
+    m_PerFaceVertexNormals.resize(m_CoordIndex.size());
 
     // for each face A in mesh
+    #pragma omp parallel for
     for( unsigned int each_face_A_idx = 0; each_face_A_idx < m_CoordIndex.size(); each_face_A_idx++ )
     {
         // n = face A facet normal
-        std::vector< glm::vec3 > face_A_normals;
-        face_A_normals.clear();
+        std::vector< glm::vec3 >& face_A_normals = m_PerFaceVertexNormals[each_face_A_idx];
         face_A_normals.resize(m_CoordIndex[each_face_A_idx].size());
 
         // loop through all 3 vertices
@@ -402,7 +405,5 @@ void S3D_MESH::calcPerPointNormals ()
             }
             
         }
-
-        m_PerFaceVertexNormals.push_back( face_A_normals );
     }
 }
