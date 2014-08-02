@@ -298,12 +298,29 @@ public:
 
     static LSET AllLayersMask();
 
+    /**
+     * Function FrontTechMask
+     * returns a mask holding all technical layers (no CU layer) on front side.
+     */
     static LSET FrontTechMask();
+
+    /**
+     * Function BackTechMask
+     * returns a mask holding all technical layers (no CU layer) on back side.
+     */
     static LSET BackTechMask();
     static LSET AllTechMask();
 
+    /**
+     * Function FrontMask
+     * returns a mask holding all technical layers and the external CU layer on front side.
+     */
     static LSET FrontMask();
 
+    /**
+     * Function BackMask
+     * returns a mask holding all technical layers and the external CU layer on back side.
+     */
     static LSET BackMask();
 
     static LSET UserMask();

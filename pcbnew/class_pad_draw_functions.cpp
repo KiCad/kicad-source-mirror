@@ -126,12 +126,12 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         drawInfo.m_ShowPadFilled = false;
 
     EDA_COLOR_T color = BLACK;
-    if( ( m_layerMask & LSET::FrontMask() ).any() )
+    if( m_layerMask[F_Cu] )
     {
         color = brd->GetVisibleElementColor( PAD_FR_VISIBLE );
     }
 
-    if( ( m_layerMask & LSET::BackMask() ).any() )
+    if( m_layerMask[B_Cu] )
     {
         color = ColorMix( color, brd->GetVisibleElementColor( PAD_BK_VISIBLE ) );
     }
