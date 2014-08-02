@@ -5,9 +5,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
-  * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+  * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,8 +154,9 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
 
     // Build copper layer list and append to layer widget
     LSET show = LSET::AllCuMask( board->GetCopperLayerCount() );
+    int imgIdx = 0;
 
-    for( LSEQ cu_stack = show.UIOrder();  cu_stack;  ++cu_stack )
+    for( LSEQ cu_stack = show.UIOrder();  cu_stack;  ++cu_stack, imgIdx++ )
     {
         LAYER_ID layer = *cu_stack;
 
@@ -167,7 +168,8 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
 
         imageList->Add( makeLayerBitmap( layerColor ) );
 
-        int itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, layer );
+        int itemIndex = m_LayerSelectionCtrl->InsertItem(
+                m_LayerSelectionCtrl->GetItemCount(), msg, imgIdx );
 
         if( m_zonesettings.m_CurrentZone_Layer == layer )
             m_LayerSelectionCtrl->Select( itemIndex );
