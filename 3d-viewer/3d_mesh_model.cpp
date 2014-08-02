@@ -121,7 +121,7 @@ void S3D_MESH::openGL_Render()
         {       
             if( m_Materials )
             {
-                m_Materials->SetOpenGLMaterial(m_MaterialIndex[idx]);
+                m_Materials->SetOpenGLMaterial( m_MaterialIndex[idx] );
             }
         }          
         
@@ -136,7 +136,7 @@ void S3D_MESH::openGL_Render()
 
         if( m_PerVertexNormalsNormalized.size() > 0 )
         {
-            for(unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+            for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
             {
                 glm::vec3 normal = m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]];
                 glNormal3fv( &normal.x );
@@ -211,9 +211,12 @@ void S3D_MESH::calcPointNormalized ()
         p = m_Point[i] * biggerPoint;
         m_PointNormalized.push_back( p );
     }
+
+    //DBG( printf("m_Point.size %u\n", m_Point.size()) );
 }
 
-bool IsClockwise(glm::vec3 v0, glm::vec3 v1, glm::vec3 v2)
+
+bool IsClockwise( glm::vec3 v0, glm::vec3 v1, glm::vec3 v2 )
 {
     double sum = 0.0;
 
@@ -253,6 +256,9 @@ void S3D_MESH::calcPerFaceNormals ()
     m_PerFaceNormalsRaw.clear();
     m_PerFaceSquaredArea.clear();
 
+    //DBG( printf("m_CoordIndex.size %u\n", m_CoordIndex.size()) );
+    //DBG( printf("m_PointNormalized.size %u\n", m_PointNormalized.size()) );
+    
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
     {
 
@@ -289,7 +295,7 @@ void S3D_MESH::calcPerFaceNormals ()
             area = -area;
         }
 
-        if (area < FLT_EPSILON)
+        if( area < FLT_EPSILON )
         {
             area = FLT_EPSILON * 2.0f;
         }
@@ -311,10 +317,10 @@ void S3D_MESH::calcPerFaceNormals ()
             else
             {
                 // Cannot calc normal
-                if( (cross_prod.x > cross_prod.y) && (cross_prod.x > cross_prod.z))
+                if( ( cross_prod.x > cross_prod.y ) && ( cross_prod.x > cross_prod.z ) )
                 {
                     cross_prod.x = 1.0;    cross_prod.y = 0.0; cross_prod.z = 0.0;
-                } else if( (cross_prod.y > cross_prod.x) && (cross_prod.y > cross_prod.z))
+                } else if( ( cross_prod.y > cross_prod.x ) && ( cross_prod.y > cross_prod.z ))
                 {
                     cross_prod.x = 0.0;    cross_prod.y = 1.0; cross_prod.z = 0.0;
                 } else
@@ -363,17 +369,19 @@ void S3D_MESH::calcPerPointNormals ()
         {
             face_A_normals[each_vert_A_idx] = m_PerFaceNormalsRaw[each_face_A_idx] * (m_PerFaceSquaredArea[each_face_A_idx]);
 
-            // for each face A in mesh
+            int vertexIndex = (int)(m_CoordIndex[each_face_A_idx][each_vert_A_idx]);
+            glm::vec3 vector_face_A = m_PerFaceNormalsNormalized[each_face_A_idx];
+
+            // for each face B in mesh
             for( unsigned int each_face_B_idx = 0; each_face_B_idx < m_CoordIndex.size(); each_face_B_idx++ )
             {
                 //if A != B { // ignore self
                 if ( each_face_A_idx != each_face_B_idx)
                 {
-                    if( (m_CoordIndex[each_face_B_idx][0] == (int)(m_CoordIndex[each_face_A_idx][each_vert_A_idx])) ||
-                        (m_CoordIndex[each_face_B_idx][1] == (int)(m_CoordIndex[each_face_A_idx][each_vert_A_idx])) ||
-                        (m_CoordIndex[each_face_B_idx][2] == (int)(m_CoordIndex[each_face_A_idx][each_vert_A_idx])) )
+                    if( (m_CoordIndex[each_face_B_idx][0] == vertexIndex) ||
+                        (m_CoordIndex[each_face_B_idx][1] == vertexIndex) ||
+                        (m_CoordIndex[each_face_B_idx][2] == vertexIndex) )
                     {
-                        glm::vec3 vector_face_A = m_PerFaceNormalsNormalized[each_face_A_idx];
                         glm::vec3 vector_face_B = m_PerFaceNormalsNormalized[each_face_B_idx];
 
                         float dot_prod = glm::dot(vector_face_A, vector_face_B);
