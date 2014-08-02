@@ -531,7 +531,6 @@ void EDA_3D_CANVAS::Redraw()
             glBindTexture( GL_TEXTURE_2D, m_text_fake_shadow_back );
             glCallList( m_glLists[GL_ID_SHADOW_BACK] );
         }
-
         glColor4f( 1.0, 1.0, 1.0, 1.0 );
 
         glEnable( GL_DEPTH_TEST );

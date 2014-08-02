@@ -172,9 +172,11 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
     // Draw solid areas contained in this list
     CPOLYGONS_LIST polylist = aPolysList;    // temporary copy for gluTessVertex
 
+    int startContour;
+
     for( int side = 0; side < 2; side++ )
     {
-        int startContour = 1;
+        startContour = 1;
 
         for( unsigned ii = 0; ii < polylist.GetCornersCount(); ii++ )
         {
@@ -215,6 +217,12 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
         v_data[2] = zpos;
         // Now;, set normal to toward negative Z axis, for the solid object bottom side
         SetNormalZneg();
+    }
+
+    if( startContour == 0 )
+    {
+        gluTessEndContour( tess );
+        gluTessEndPolygon( tess );
     }
 
     gluDeleteTess( tess );

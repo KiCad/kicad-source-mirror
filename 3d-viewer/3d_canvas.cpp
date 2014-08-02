@@ -52,8 +52,8 @@ void CheckGLError(const char *aFileName, int aLineNumber)
         }
 
         errLast = err;
-
-        wxLogError( wxT( "OpenGL error %d\nAt: %s, line: %d" ), err, aFileName, aLineNumber );
+        
+        wxLogError( wxT( "OpenGL error %d At: %s, line: %d" ), err,  GetChars( FROM_UTF8( aFileName ) ), aLineNumber );
     }
 }
 

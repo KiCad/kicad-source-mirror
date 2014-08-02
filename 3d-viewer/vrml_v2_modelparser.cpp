@@ -80,7 +80,6 @@ void VRML2_MODEL_PARSER::Load( const wxString aFilename )
 
 #define SCALE_3D_CONV ((IU_PER_MILS * 1000.0f) / UNITS3D_TO_UNITSPCB)
 
-    //glPushMatrix();
     glTranslatef( matPos.x * SCALE_3D_CONV, matPos.y * SCALE_3D_CONV, matPos.z * SCALE_3D_CONV );
 
     glRotatef(-matRot.z, 0.0f, 0.0f, 1.0f );
@@ -140,7 +139,7 @@ int VRML2_MODEL_PARSER::read_Transform()
 {
     char       text[128];
 
-    ///DBG( printf( "Transform\n" ) ); 
+    //DBG( printf( "Transform\n" ) ); 
 
     while( GetNextTag( m_file, text ) )
     {
@@ -204,7 +203,7 @@ int VRML2_MODEL_PARSER::read_Transform()
             read_DEF();
         } else
         {
-            //DBG( printf( "    %s NotImplemented\n", text ) );
+            DBG( printf( "    %s NotImplemented\n", text ) );
             read_NotImplemented( m_file, '}' );
         }
     }
@@ -264,7 +263,7 @@ int VRML2_MODEL_PARSER::read_DEF()
         }
     }
 
-    //DBG( printf( "  DEF failed\n" ) );
+    DBG( printf( "  DEF failed\n" ) );
     return -1;
 }
 
@@ -302,12 +301,12 @@ int VRML2_MODEL_PARSER::read_Shape()
             read_IndexedFaceSet();
         } else
         {
-            //DBG( printf( "    %s NotImplemented\n", text ) );
+            DBG( printf( "    %s NotImplemented\n", text ) );
             read_NotImplemented( m_file, '}' );
         }
     }
 
-    //DBG( printf( "  Shape failed\n") );
+    DBG( printf( "  Shape failed\n") );
     return -1;
 }
 
@@ -336,7 +335,7 @@ int VRML2_MODEL_PARSER::read_Appearance()
         }
     }
 
-    //DBG( printf( "  Appearance failed\n") );
+    DBG( printf( "  Appearance failed\n") );
     return -1;
 }
 
@@ -407,12 +406,12 @@ int VRML2_MODEL_PARSER::read_material()
                         return 0;
                     }
                 }
-                //DBG( printf( "   read_material error: material not found\n" ) );
+                DBG( printf( "   read_material error: material not found\n" ) );
             }
         }
     }
 
-    //DBG( printf( "  failed material\n") );
+    DBG( printf( "  failed material\n") );
     return -1;
 }
 
