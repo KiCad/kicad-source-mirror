@@ -269,11 +269,13 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( LAYER_ID aLayer )
         if( aLayer == B_Cu )
         {
             rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
             rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
         }
         else if( aLayer == F_Cu )
         {
             rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
             rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
         }
     }

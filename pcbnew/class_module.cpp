@@ -832,8 +832,23 @@ void MODULE::ViewUpdate( int aUpdateFlags )
 
 void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount = 1;
+    aCount = 2;
     aLayers[0] = ITEM_GAL_LAYER( ANCHOR_VISIBLE );
+
+    switch( m_Layer )
+    {
+    case F_Cu:
+        aLayers[1] = ITEM_GAL_LAYER( MOD_FR_VISIBLE );
+        break;
+
+    case B_Cu:
+        aLayers[1] = ITEM_GAL_LAYER( MOD_BK_VISIBLE );
+        break;
+
+    default:
+        assert( false );    // do you really have modules placed on inner layers?
+        break;
+    }
 }
 
 
