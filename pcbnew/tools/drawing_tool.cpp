@@ -941,19 +941,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             break;
         }
 
-        else if( evt->IsKeyPressed() )
-        {
-            int width = aGraphic->GetWidth();
-
-            // Modify the new item width
-            if( evt->KeyCode() == '-' && width > WIDTH_STEP )   // TODO change it to TOOL_ACTIONs
-                aGraphic->SetWidth( width - WIDTH_STEP );
-            else if( evt->KeyCode() == '=' )
-                aGraphic->SetWidth( width + WIDTH_STEP );
-
-            updatePreview = true;
-        }
-
         else if( evt->IsClick( BUT_LEFT ) )
         {
             if( !started )
@@ -1014,6 +1001,23 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             updatePreview = true;
         }
 
+        else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
+        {
+            aGraphic->SetWidth( aGraphic->GetWidth() + WIDTH_STEP );
+            updatePreview = true;
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
+        {
+            int width = aGraphic->GetWidth();
+
+            if( width > WIDTH_STEP )
+            {
+                aGraphic->SetWidth( width - WIDTH_STEP );
+                updatePreview = true;
+            }
+        }
+
         if( updatePreview )
             preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
@@ -1069,28 +1073,6 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             delete aGraphic;
             aGraphic = NULL;
             break;
-        }
-
-        else if( evt->IsKeyPressed() && step != SET_ORIGIN )
-        {
-            int width = aGraphic->GetWidth();
-
-            // Modify the new item width
-            if( evt->KeyCode() == '-' && width > WIDTH_STEP )       // TODO convert to tool actions
-                aGraphic->SetWidth( width - WIDTH_STEP );
-            else if( evt->KeyCode() == '=' )
-                aGraphic->SetWidth( width + WIDTH_STEP );
-            else if( evt->KeyCode() == '/' )
-            {
-                if( clockwise )
-                    aGraphic->SetAngle( aGraphic->GetAngle() - 3600.0 );
-                else
-                    aGraphic->SetAngle( aGraphic->GetAngle() + 3600.0 );
-
-                clockwise = !clockwise;
-            }
-
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -1189,6 +1171,34 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             }
 
             // Show a preview of the item
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
+        {
+            aGraphic->SetWidth( aGraphic->GetWidth() + WIDTH_STEP );
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
+        {
+            int width = aGraphic->GetWidth();
+
+            if( width > WIDTH_STEP )
+            {
+                aGraphic->SetWidth( width - WIDTH_STEP );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::arcPosture ) )
+        {
+            if( clockwise )
+                aGraphic->SetAngle( aGraphic->GetAngle() - 3600.0 );
+            else
+                aGraphic->SetAngle( aGraphic->GetAngle() + 3600.0 );
+
+            clockwise = !clockwise;
             preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
     }

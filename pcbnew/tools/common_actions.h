@@ -96,6 +96,15 @@ public:
     /// Activation of the drawing tool (placing the footprint anchor)
     static TOOL_ACTION setAnchor;
 
+    /// Increase width of currently drawn line
+    static TOOL_ACTION incWidth;
+
+    /// Decrease width of currently drawn line
+    static TOOL_ACTION decWidth;
+
+    /// Switch posture when drawing arc
+    static TOOL_ACTION arcPosture;
+
     // Push and Shove Router Tool
     /// Activation of the Push and Shove router
     static TOOL_ACTION routerActivate;
