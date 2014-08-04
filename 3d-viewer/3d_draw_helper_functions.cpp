@@ -27,7 +27,7 @@
 
 #include <fctsys.h>
 
-#include <Polyline.h>
+#include <PolyLine.h>
 #include <colors.h>
 #include <colors_selection.h>
 #include <class_pad.h>
