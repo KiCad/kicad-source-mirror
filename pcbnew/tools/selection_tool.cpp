@@ -588,13 +588,13 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         int layers[KIGFX::VIEW::VIEW_MAX_LAYERS], layers_count;
 
         // Filter out items that do not belong to active layers
-        std::set<unsigned int> activeLayers = getView()->GetPainter()->
-                                              GetSettings()->GetActiveLayers();
+        const std::set<unsigned int>& activeLayers = getView()->GetPainter()->
+                                                     GetSettings()->GetActiveLayers();
         aItem->ViewGetLayers( layers, layers_count );
 
         for( int i = 0; i < layers_count; ++i )
         {
-            if( activeLayers.count( layers[i] ) > 0 )    // Item is on at least one of active layers
+            if( activeLayers.count( layers[i] ) > 0 ) // Item is on at least one of the active layers
             {
                 onActive = true;
                 break;
