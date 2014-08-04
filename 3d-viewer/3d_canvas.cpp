@@ -52,8 +52,9 @@ void CheckGLError(const char *aFileName, int aLineNumber)
         }
 
         errLast = err;
-        
-        wxLogError( wxT( "OpenGL error %d At: %s, line: %d" ), err,  GetChars( FROM_UTF8( aFileName ) ), aLineNumber );
+
+        wxLogError( wxT( "OpenGL error %d At: %s, line: %d" ), err,
+                    GetChars( FROM_UTF8( aFileName ) ), aLineNumber );
     }
 }
 
@@ -625,13 +626,17 @@ void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
         wxYield();
     }
 
-    struct vieport_params
+    struct viewport_params
     {
         GLint originx;
         GLint originy;
         GLint x;
         GLint y;
     } viewport;
+
+    // Be sure we have the latest 3D view (remember 3D view is buffered)
+    Refresh();
+    wxYield();
 
     // Build image from the 3D buffer
     wxWindowUpdateLocker noUpdates( this );
