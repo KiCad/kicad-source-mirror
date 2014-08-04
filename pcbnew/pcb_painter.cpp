@@ -235,7 +235,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_MODULE_T:
-        draw( (MODULE*) item );
+        draw( (MODULE*) item, aLayer );
         break;
 
     case PCB_ZONE_AREA_T:
@@ -771,20 +771,23 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const MODULE* aModule )
+void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
 {
-    const COLOR4D color = m_pcbSettings.GetColor( aModule, ITEM_GAL_LAYER( ANCHOR_VISIBLE ) );
+    if( aLayer == ITEM_GAL_LAYER( ANCHOR_VISIBLE ) )
+    {
+        const COLOR4D color = m_pcbSettings.GetColor( aModule, ITEM_GAL_LAYER( ANCHOR_VISIBLE ) );
 
-    // Draw anchor
-    m_gal->SetStrokeColor( color );
-    m_gal->SetLineWidth( 1.0 );
+        // Draw anchor
+        m_gal->SetStrokeColor( color );
+        m_gal->SetLineWidth( 1.0 );
 
-    // Keep the size constant, not related to the scale
-    double anchorSize = 5.0 / m_gal->GetWorldScale();
+        // Keep the size constant, not related to the scale
+        double anchorSize = 5.0 / m_gal->GetWorldScale();
 
-    VECTOR2D center = aModule->GetPosition();
-    m_gal->DrawLine( center - VECTOR2D( anchorSize, 0 ), center + VECTOR2D( anchorSize, 0 ) );
-    m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
+        VECTOR2D center = aModule->GetPosition();
+        m_gal->DrawLine( center - VECTOR2D( anchorSize, 0 ), center + VECTOR2D( anchorSize, 0 ) );
+        m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
+    }
 }
 
 
