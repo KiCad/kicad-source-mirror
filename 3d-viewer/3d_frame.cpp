@@ -107,8 +107,64 @@ EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
     ReCreateMainToolbar();
 
     // Make a EDA_3D_CANVAS
-    int attrs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16,
-                    WX_GL_STENCIL_SIZE, 1, 0 };
+    int attrs[] = { // This array should be 2*n+1
+                    // Sadly wxwidgets / glx < 13 allowed
+                    // a thing named "boolean attributes" that don't take a value.
+                    // (See src/unix/glx11.cpp -> wxGLCanvasX11::ConvertWXAttrsToGL() ).
+                    // To avoid problems due to this, just specify those attributes twice.
+                    // Only WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_STEREO are such boolean
+                    // attributes.
+
+                    // Boolean attributes (using itself at padding):
+                    WX_GL_RGBA, WX_GL_RGBA,
+                    WX_GL_DOUBLEBUFFER, WX_GL_DOUBLEBUFFER,
+
+                    // Normal attributes with values:
+                    WX_GL_DEPTH_SIZE, 16,
+                    WX_GL_STENCIL_SIZE, 1,
+                    WX_GL_SAMPLE_BUFFERS, 1,    // Enable multisampling support (antialiasing).
+                    WX_GL_SAMPLES, 0,           // Disable AA for the start.
+                    0 };                        // NULL termination
+
+    unsigned int ii;
+
+    // Check if the canvas supports multisampling.
+    if( EDA_3D_CANVAS::IsDisplaySupported( attrs ) )
+    {
+        // Check for possible sample sizes, start form the top.
+        int maxSamples = 8; // Any higher doesn't change anything.
+        int samplesOffset = 0;
+
+        for( ii = 0; ii < sizeof( attrs ) / sizeof( attrs[0] ) - 1; ii += 2 )
+        {
+            if( attrs[ii] == WX_GL_SAMPLES )
+            {
+                samplesOffset = ii+1;
+                break;
+            }
+        }
+
+        attrs[samplesOffset] = maxSamples;
+
+        for( ; maxSamples > 0 && !EDA_3D_CANVAS::IsDisplaySupported( attrs );
+            maxSamples = maxSamples>>1 )
+        {
+            attrs[samplesOffset] = maxSamples;
+        }
+    }
+    else
+    {
+        // Disable multisampling
+        for( ii = 0; ii < sizeof( attrs ) / sizeof( attrs[0] ) - 1; ii += 2 )
+        {
+            if( attrs[ii] == WX_GL_SAMPLE_BUFFERS )
+            {
+                attrs[ii+1] = 0;
+                break;
+            }
+        }
+    }
+
     m_canvas = new EDA_3D_CANVAS( this, attrs );
 
     m_auimgr.SetManagedWindow( this );
