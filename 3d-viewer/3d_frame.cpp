@@ -107,6 +107,8 @@ EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
     ReCreateMainToolbar();
 
     // Make a EDA_3D_CANVAS
+    // Note: We try to use anti aliasing if the graphic card allows that,
+    // but only on wxWidgets >= 3.0.0 (this option does not exist on wxWidgets 2.8)
     int attrs[] = { // This array should be 2*n+1
                     // Sadly wxwidgets / glx < 13 allowed
                     // a thing named "boolean attributes" that don't take a value.
@@ -122,9 +124,14 @@ EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
                     // Normal attributes with values:
                     WX_GL_DEPTH_SIZE, 16,
                     WX_GL_STENCIL_SIZE, 1,
+#if wxCHECK_VERSION( 3, 0, 0 )
                     WX_GL_SAMPLE_BUFFERS, 1,    // Enable multisampling support (antialiasing).
                     WX_GL_SAMPLES, 0,           // Disable AA for the start.
+#endif
                     0 };                        // NULL termination
+
+
+#if wxCHECK_VERSION( 3, 0, 0 )
 
     unsigned int ii;
 
@@ -164,6 +171,7 @@ EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
             }
         }
     }
+#endif
 
     m_canvas = new EDA_3D_CANVAS( this, attrs );
 
