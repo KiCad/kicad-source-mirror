@@ -46,6 +46,7 @@
 
 class BOARD_DESIGN_SETTINGS;
 class EDA_3D_FRAME;
+class CPOLYGONS_LIST;
 
 class VIA;
 class D_PAD;
@@ -134,14 +135,39 @@ public:
     void   CreateDrawGL_List();
     void   InitGL();
     void   SetLights();
+
     void   SetOffset(double aPosX, double aPosY)
     {
         m_draw3dOffset.x = aPosX;
         m_draw3dOffset.y = aPosY;
     }
+
+private:
+    /**
+     * Helper function SetGLTechLayersColor
+     * Initialize the color to draw the non copper layers
+     * in realistic mode and normal mode.
+     */
     void SetGLTechLayersColor( LAYER_NUM aLayer );
+
+    /**
+     * Helper function SetGLCopperColor
+     * Initialize the copper color to draw the board
+     * in realistic mode (a golden yellow color )
+     */
     void SetGLCopperColor();
+
+    /**
+     * Helper function SetGLEpoxyColor
+     * Initialize the color to draw the epoxy body board in realistic mode.
+     */
     void SetGLEpoxyColor( double aTransparency = 1.0 );
+
+    /**
+     * Helper function SetGLSolderMaskColor
+     * Initialize the color to draw the solder mask layers in realistic mode.
+     */
+    void SetGLSolderMaskColor( double aTransparency = 1.0 );
 
     /**
      * Function BuildBoard3DView
@@ -187,7 +213,31 @@ public:
     void   Draw3DGrid( double aGriSizeMM );
     void   Draw3DAxis();
 
+    /**
+     * Helper function BuildPadShapeThickOutlineAsPolygon:
+     * Build a pad outline as non filled polygon, to draw pads on silkscreen layer
+     * with a line thickness = aWidth
+     * Used only to draw pads outlines on silkscreen layers.
+     */
+    void BuildPadShapeThickOutlineAsPolygon( const D_PAD*          aPad,
+                                             CPOLYGONS_LIST& aCornerBuffer,
+                                             int             aWidth,
+                                             int             aCircleToSegmentsCount,
+                                             double          aCorrectionFactor );
+
+
+    /**
+     * Helper function Draw3DViaHole:
+     * Draw the via hole:
+     * Build a vertical hole (a cylinder) between the first and the last via layers
+     */
     void   Draw3DViaHole( const VIA * aVia );
+
+    /**
+     * Helper function Draw3DPadHole:
+     * Draw the pad hole:
+     * Build a vertical hole (round or oblong) between the front and back layers
+     */
     void   Draw3DPadHole( const D_PAD * aPad );
 
     void   GenerateFakeShadowsTextures();

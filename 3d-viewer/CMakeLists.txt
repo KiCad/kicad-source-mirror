@@ -17,6 +17,7 @@ set(3D-VIEWER_SRCS
     3d_class.cpp
     3d_draw.cpp
     3d_draw_basic_functions.cpp
+    3d_draw_helper_functions.cpp
     3d_frame.cpp
     3d_material.cpp
     3d_mesh_model.cpp

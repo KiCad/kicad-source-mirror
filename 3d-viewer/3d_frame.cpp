@@ -522,15 +522,15 @@ void EDA_3D_FRAME::Set3DBgColor()
 
     newcolor = wxGetColourFromUser( this, oldcolor );
 
-    if( !newcolor.IsOk() )     // Happens on cancel dialog
+    if( !newcolor.IsOk() )     // Cancel command
         return;
 
     if( newcolor != oldcolor )
     {
-        g_Parm_3D_Visu.m_BgColor.m_Red = (double) newcolor.Red() / 255.0;
+        g_Parm_3D_Visu.m_BgColor.m_Red      = (double) newcolor.Red() / 255.0;
         g_Parm_3D_Visu.m_BgColor.m_Green    = (double) newcolor.Green() / 255.0;
         g_Parm_3D_Visu.m_BgColor.m_Blue     = (double) newcolor.Blue() / 255.0;
-        NewDisplay();
+        m_canvas->Redraw();
     }
 }
 
