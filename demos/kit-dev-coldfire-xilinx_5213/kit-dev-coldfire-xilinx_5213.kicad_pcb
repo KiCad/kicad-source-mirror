@@ -2566,7 +2566,7 @@
       (net 103 GND))
     (pad 3 thru_hole circle (at 2.286 5.08 270) (size 4.8006 4.8006) (drill oval 2.54 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 142 "Net-(J1-Pad3)"))
-    (model Connectors/POWER_21.wrl
+    (model connectors/POWER_21.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.800000011920929 0.800000011920929 0.800000011920929))
       (rotate (xyz 0 0 0))
@@ -5506,7 +5506,7 @@
     (pad 8 thru_hole circle (at 1.397 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 40 /inout_user/RTS0))
     (pad 9 thru_hole circle (at 4.191 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS))
-    (model Conn_DBxx/db9_female_pin90deg.wrl
+    (model conn_DBxx/db9_female_pin90deg.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5553,7 +5553,7 @@
     (pad 8 thru_hole circle (at 1.397 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 41 /inout_user/RTS1))
     (pad 9 thru_hole circle (at 4.191 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS))
-    (model Conn_DBxx/db9_female_pin90deg.wrl
+    (model conn_DBxx/db9_female_pin90deg.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5600,7 +5600,7 @@
     (pad 8 thru_hole circle (at 1.397 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 42 /inout_user/RTS2))
     (pad 9 thru_hole circle (at 4.191 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS))
-    (model Conn_DBxx/db9_female_pin90deg.wrl
+    (model conn_DBxx/db9_female_pin90deg.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
