@@ -107,9 +107,10 @@ char* GetNextTag( FILE* File, char* tag )
     if( (c != '}') && (c != ']') )
     {
         char *dst = &tag[1];
-        while (fscanf( File, "%c",  dst))
+        while( fscanf( File, "%c",  dst) )
         {
-            if( (*dst == ' ') || (*dst == '[') || (*dst == '{') || (*dst == '\t') || (*dst == '\n')|| (*dst == '\r') )
+            if( (*dst == ' ') || (*dst == '[') || (*dst == '{') ||
+                (*dst == '\t') || (*dst == '\n')|| (*dst == '\r') )
             {
                 *dst = 0;
                 break;
