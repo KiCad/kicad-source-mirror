@@ -76,7 +76,7 @@ void VRML2_MODEL_PARSER::Load( const wxString aFilename )
     glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y, GetMaster()->m_MatScale.z );
     glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y, GetMaster()->m_MatRotation.z );
     glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y, GetMaster()->m_MatPosition.z );
-    
+
 
 #define SCALE_3D_CONV ((IU_PER_MILS * 1000.0f) / UNITS3D_TO_UNITSPCB)
 
@@ -85,7 +85,7 @@ void VRML2_MODEL_PARSER::Load( const wxString aFilename )
     glRotatef(-matRot.z, 0.0f, 0.0f, 1.0f );
     glRotatef(-matRot.y, 0.0f, 1.0f, 0.0f );
     glRotatef(-matRot.x, 1.0f, 0.0f, 0.0f );
-    
+
     glScalef( matScale.x, matScale.y, matScale.z );
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
@@ -108,8 +108,9 @@ void VRML2_MODEL_PARSER::Load( const wxString aFilename )
             childs.push_back( m_model );
 
             read_Transform();
-            
-        } else if( strcmp( text, "DEF" ) == 0 )
+
+        }
+        else if( strcmp( text, "DEF" ) == 0 )
         {
             m_model = new S3D_MESH();
 
@@ -123,7 +124,7 @@ void VRML2_MODEL_PARSER::Load( const wxString aFilename )
     SetLocaleTo_Default();       // revert to the current locale
 
 
-    //DBG( printf( "chils size:%lu\n", childs.size() ) ); 
+    //DBG( printf( "chils size:%lu\n", childs.size() ) );
 
     if( GetMaster()->IsOpenGlAllowed() )
     {
@@ -139,7 +140,7 @@ int VRML2_MODEL_PARSER::read_Transform()
 {
     char       text[128];
 
-    //DBG( printf( "Transform\n" ) ); 
+    //DBG( printf( "Transform\n" ) );
 
     while( GetNextTag( m_file, text ) )
     {
@@ -149,42 +150,79 @@ int VRML2_MODEL_PARSER::read_Transform()
         }
         if ( ( *text == '}' ) )
         {
-            //DBG( printf( "  } Exit Transform\n" ) ); 
+            //DBG( printf( "  } Exit Transform\n" ) );
             break;
         }
         if( strcmp( text, "translation" ) == 0 )
         {
             parseVertex( m_file, m_model->m_translation );
-        } else if( strcmp( text, "rotation" ) == 0 )
+        }
+        else if( strcmp( text, "rotation" ) == 0 )
         {
-            fscanf( m_file, "%f %f %f %f", &m_model->m_rotation[0], &m_model->m_rotation[1], &m_model->m_rotation[2], &m_model->m_rotation[3]);
-            m_model->m_rotation[3] = m_model->m_rotation[3] * 180.0f / 3.14f; // !TODO: use constants or functions
-        } else if( strcmp( text, "scale" ) == 0 )
+            if( fscanf( m_file, "%f %f %f %f", &m_model->m_rotation[0],
+                                               &m_model->m_rotation[1],
+                                               &m_model->m_rotation[2],
+                                               &m_model->m_rotation[3] ) != 4 )
+            {
+                // !TODO: log errors
+                m_model->m_rotation[0] = 0.0f;
+                m_model->m_rotation[1] = 0.0f;
+                m_model->m_rotation[2] = 0.0f;
+                m_model->m_rotation[3] = 0.0f;
+            }
+            else
+            {
+                m_model->m_rotation[3] = m_model->m_rotation[3] * 180.0f / 3.14f; // !TODO: use constants or functions
+            }
+        }
+        else if( strcmp( text, "scale" ) == 0 )
         {
             parseVertex( m_file, m_model->m_scale );
-        } else if( strcmp( text, "scaleOrientation" ) == 0 )
+        }
+        else if( strcmp( text, "scaleOrientation" ) == 0 )
         {
-            fscanf( m_file, "%f %f %f %f", &m_model->m_scaleOrientation[0], &m_model->m_scaleOrientation[1], &m_model->m_scaleOrientation[2], &m_model->m_scaleOrientation[3]);
-        } else if( strcmp( text, "center" ) == 0 )
+            // this m_scaleOrientation is not implemented, but it will be parsed
+            if( fscanf( m_file, "%f %f %f %f", &m_model->m_scaleOrientation[0],
+                                               &m_model->m_scaleOrientation[1],
+                                               &m_model->m_scaleOrientation[2],
+                                               &m_model->m_scaleOrientation[3] ) != 4 )
+            {
+                // !TODO: log errors
+                m_model->m_scaleOrientation[0] = 0.0f;
+                m_model->m_scaleOrientation[1] = 0.0f;
+                m_model->m_scaleOrientation[2] = 0.0f;
+                m_model->m_scaleOrientation[3] = 0.0f;
+            }
+        }
+        else if( strcmp( text, "center" ) == 0 )
         {
             parseVertex( m_file, m_model->m_center );
-        } else if( strcmp( text, "children" ) == 0 )
+        }
+        else if( strcmp( text, "children" ) == 0 )
         {
             // skip
-        } else if( strcmp( text, "Switch" ) == 0 )
+        }
+        else if( strcmp( text, "Switch" ) == 0 )
         {
             // skip
-        } else if( strcmp( text, "whichChoice" ) == 0 )
+        }
+        else if( strcmp( text, "whichChoice" ) == 0 )
         {
             int dummy;
-            fscanf( m_file, "%d", &dummy );
-        } else if( strcmp( text, "choice" ) == 0 )
+            if( fscanf( m_file, "%d", &dummy ) != 1 )
+            {
+                // !TODO: log errors
+            }
+        }
+        else if( strcmp( text, "choice" ) == 0 )
         {
             // skip
-        } else if( strcmp( text, "Group" ) == 0 )
+        }
+        else if( strcmp( text, "Group" ) == 0 )
         {
             // skip
-        } else if( strcmp( text, "Shape" ) == 0 )
+        }
+        else if( strcmp( text, "Shape" ) == 0 )
         {
             S3D_MESH *parent = m_model;
 
@@ -198,10 +236,12 @@ int VRML2_MODEL_PARSER::read_Transform()
 
             m_model = parent;
 
-        } else if( strcmp( text, "DEF" ) == 0 )
+        }
+        else if( strcmp( text, "DEF" ) == 0 )
         {
             read_DEF();
-        } else
+        }
+        else
         {
             DBG( printf( "    %s NotImplemented\n", text ) );
             read_NotImplemented( m_file, '}' );
@@ -238,16 +278,20 @@ int VRML2_MODEL_PARSER::read_DEF()
         } else if( strcmp( text, "children" ) == 0 )
         {
             // skip
-        } else if( strcmp( text, "Switch" ) == 0 )
+        }
+        else if( strcmp( text, "Switch" ) == 0 )
         {
             // skip
-        } else if( strcmp( text, "whichChoice" ) == 0 )
+        }
+        else if( strcmp( text, "whichChoice" ) == 0 )
         {
             // skip
-        } else if( strcmp( text, "choice" ) == 0 )
+        }
+        else if( strcmp( text, "choice" ) == 0 )
         {
             // skip
-        }else if( strcmp( text, "Shape" ) == 0 )
+        }
+        else if( strcmp( text, "Shape" ) == 0 )
         {
             S3D_MESH *parent = m_model;
 
@@ -290,16 +334,20 @@ int VRML2_MODEL_PARSER::read_Shape()
         if( strcmp( text, "appearance" ) == 0 )
         {
             //skip
-        } else if( strcmp( text, "Appearance" ) == 0 )
+        }
+        else if( strcmp( text, "Appearance" ) == 0 )
         {
             read_Appearance();
-        } else if( strcmp( text, "geometry" ) == 0 )
+        }
+        else if( strcmp( text, "geometry" ) == 0 )
         {
             //skip
-        } else if( strcmp( text, "IndexedFaceSet" ) == 0 )
+        }
+        else if( strcmp( text, "IndexedFaceSet" ) == 0 )
         {
             read_IndexedFaceSet();
-        } else
+        }
+        else
         {
             DBG( printf( "    %s NotImplemented\n", text ) );
             read_NotImplemented( m_file, '}' );
@@ -344,11 +392,11 @@ int VRML2_MODEL_PARSER::read_material()
 {
     S3D_MATERIAL* material = NULL;
     char       text[128];
-    
+
     //DBG( printf( "  material ") );
 
     if( GetNextTag( m_file, text ) )
-    {  
+    {
         if( strcmp( text, "Material" ) == 0 )
         {
             wxString      mat_name;
@@ -362,12 +410,13 @@ int VRML2_MODEL_PARSER::read_material()
             {
                 return read_Material();
             }
-        } else if( strcmp( text, "DEF" ) == 0 )
+        }
+        else if( strcmp( text, "DEF" ) == 0 )
         {
             //DBG( printf( "DEF") );
 
             if( GetNextTag( m_file, text ) )
-            {  
+            {
                 //DBG( printf( "%s", text ) );
 
                 wxString      mat_name;
@@ -387,12 +436,13 @@ int VRML2_MODEL_PARSER::read_material()
                     }
                 }
             }
-        } else if( strcmp( text, "USE" ) == 0 )
+        }
+        else if( strcmp( text, "USE" ) == 0 )
         {
             //DBG( printf( "USE") );
 
             if( GetNextTag( m_file, text ) )
-            {  
+            {
                 //DBG( printf( "%s\n", text ) );
 
                 wxString      mat_name;
@@ -450,7 +500,8 @@ int VRML2_MODEL_PARSER::read_Material()
             {
                 m_model->m_Materials->m_EmissiveColor.push_back( vertex );
             }
-        } else if( strcmp( text, "specularColor" ) == 0 )
+        }
+        else if( strcmp( text, "specularColor" ) == 0 )
         {
             //DBG( printf( "  specularColor") );
             parseVertex ( m_file, vertex);
@@ -459,7 +510,8 @@ int VRML2_MODEL_PARSER::read_Material()
             {
                 m_model->m_Materials->m_SpecularColor.push_back( vertex );
             }
-        } else if( strcmp( text, "ambientIntensity" ) == 0 )
+        }
+        else if( strcmp( text, "ambientIntensity" ) == 0 )
         {
             float ambientIntensity;
             parseFloat( m_file, &ambientIntensity );
@@ -468,7 +520,8 @@ int VRML2_MODEL_PARSER::read_Material()
             {
                 m_model->m_Materials->m_AmbientColor.push_back( glm::vec3( ambientIntensity, ambientIntensity, ambientIntensity ) );
             }
-        } else if( strcmp( text, "transparency" ) == 0 )
+        }
+        else if( strcmp( text, "transparency" ) == 0 )
         {
             float transparency;
             parseFloat( m_file, &transparency );
@@ -477,7 +530,8 @@ int VRML2_MODEL_PARSER::read_Material()
             {
                 m_model->m_Materials->m_Transparency.push_back( transparency );
             }
-        } else if( strcmp( text, "shininess" ) == 0 )
+        }
+        else if( strcmp( text, "shininess" ) == 0 )
         {
             float shininess;
             parseFloat( m_file, &shininess );
@@ -528,7 +582,8 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
                     m_normalPerVertex = true;
                 }
             }
-        } else if( strcmp( text, "colorPerVertex" ) == 0 )
+        }
+        else if( strcmp( text, "colorPerVertex" ) == 0 )
         {
             GetNextTag( m_file, text );
             if( strcmp( text, "TRUE" ) )
@@ -540,26 +595,32 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
                 colorPerVertex = false;
             }
 
-        } else  if( strcmp( text, "Coordinate" ) == 0 )
+        }
+        else  if( strcmp( text, "Coordinate" ) == 0 )
         {
             read_Coordinate();
-        } else if( strcmp( text, "Normal" ) == 0 )
+        }
+        else if( strcmp( text, "Normal" ) == 0 )
         {
             read_Normal();
-        } else if( strcmp( text, "normalIndex" ) == 0 )
+        }
+        else if( strcmp( text, "normalIndex" ) == 0 )
         {
             read_NormalIndex();
-        } else if( strcmp( text, "Color" ) == 0 )
+        }
+        else if( strcmp( text, "Color" ) == 0 )
         {
             read_Color();
-        } else if( strcmp( text, "coordIndex" ) == 0 )
+        }
+        else if( strcmp( text, "coordIndex" ) == 0 )
         {
             read_coordIndex();
-        } else if( strcmp( text, "colorIndex" ) == 0 )
+        }
+        else if( strcmp( text, "colorIndex" ) == 0 )
         {
             read_colorIndex();
         }
-        
+
     }
 
     DBG( printf( "  IndexedFaceSet failed %s\n", text) );
@@ -583,21 +644,24 @@ int VRML2_MODEL_PARSER::read_colorIndex()
             {
                 // it only implemented color per face, so it will store as the first in the list
                 m_model->m_MaterialIndex.push_back( first_index );
-            } else
+            }
+            else
             {
                 first_index = index;
             }
         }
-    } else
+    }
+    else
     {
         int index;
+
         while( fscanf( m_file, "%d,", &index ) )
         {
             m_model->m_MaterialIndex.push_back( index );
         }
     }
 
-    //DBG( printf( "    m_MaterialIndex.size: %ld\n", m_model->m_MaterialIndex.size() ) );    
+    //DBG( printf( "    m_MaterialIndex.size: %ld\n", m_model->m_MaterialIndex.size() ) );
 
     return 0;
 }
@@ -622,14 +686,15 @@ int VRML2_MODEL_PARSER::read_NormalIndex()
             m_model->m_NormalIndex.push_back( coord_list );
             //DBG( printf( " size: %lu ", coord_list.size()) );
             coord_list.clear();
-        } else
+        }
+        else
         {
             coord_list.push_back( dummy );
             //DBG( printf( "%d ", dummy) );
         }
     }
 
-    //DBG( printf( "    m_NormalIndex.size: %ld\n", m_model->m_NormalIndex.size() ) );    
+    //DBG( printf( "    m_NormalIndex.size: %ld\n", m_model->m_NormalIndex.size() ) );
 
     return 0;
 }
@@ -654,14 +719,15 @@ int VRML2_MODEL_PARSER::read_coordIndex()
             m_model->m_CoordIndex.push_back( coord_list );
             //DBG( printf( " size: %lu ", coord_list.size()) );
             coord_list.clear();
-        } else
+        }
+        else
         {
             coord_list.push_back( dummy );
             //DBG( printf( "%d ", dummy) );
         }
     }
 
-    //DBG( printf( "    m_CoordIndex.size: %ld\n", m_model->m_CoordIndex.size() ) );    
+    //DBG( printf( "    m_CoordIndex.size: %ld\n", m_model->m_CoordIndex.size() ) );
 
     return 0;
 }
@@ -682,7 +748,7 @@ int VRML2_MODEL_PARSER::read_Color()
 
         if ( ( *text == '}' ) )
         {
-            //DBG( printf( "    m_DiffuseColor.size: %ld\n", m_model->m_Materials->m_DiffuseColor.size() ) );    
+            //DBG( printf( "    m_DiffuseColor.size: %ld\n", m_model->m_Materials->m_DiffuseColor.size() ) );
             return 0;
         }
 
@@ -693,7 +759,7 @@ int VRML2_MODEL_PARSER::read_Color()
     }
 
     //DBG( printf( "  read_Color failed\n") );
-    return -1; 
+    return -1;
 }
 
 
@@ -714,7 +780,7 @@ int VRML2_MODEL_PARSER::read_Normal()
 
         if ( ( *text == '}' ) )
         {
-            //DBG( printf( "    m_PerFaceNormalsNormalized.size: %lu\n", m_model->m_PerFaceNormalsNormalized.size() ) );    
+            //DBG( printf( "    m_PerFaceNormalsNormalized.size: %lu\n", m_model->m_PerFaceNormalsNormalized.size() ) );
             return 0;
         }
 
@@ -723,16 +789,17 @@ int VRML2_MODEL_PARSER::read_Normal()
             if(m_normalPerVertex == false )
             {
                 parseVertexList( m_file, m_model->m_PerFaceNormalsNormalized );
-            } else
+            }
+            else
             {
                 parseVertexList( m_file, m_model->m_PerVertexNormalsNormalized );
 
-                //DBG( printf( "    m_PerVertexNormalsNormalized.size: %lu\n", m_model->m_PerVertexNormalsNormalized.size() ) );    
+                //DBG( printf( "    m_PerVertexNormalsNormalized.size: %lu\n", m_model->m_PerVertexNormalsNormalized.size() ) );
             }
         }
     }
 
-    return -1; 
+    return -1;
 }
 
 
@@ -751,7 +818,7 @@ int VRML2_MODEL_PARSER::read_Coordinate()
 
         if ( ( *text == '}' ) )
         {
-            //DBG( printf( "    m_Point.size: %lu\n", m_model->m_Point.size() ) );    
+            //DBG( printf( "    m_Point.size: %lu\n", m_model->m_Point.size() ) );
             return 0;
         }
 
@@ -761,6 +828,6 @@ int VRML2_MODEL_PARSER::read_Coordinate()
         }
     }
 
-    return -1; 
+    return -1;
 }
 

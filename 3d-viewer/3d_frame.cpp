@@ -28,6 +28,7 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
+#include <macros.h>
 
 #include <3d_viewer.h>
 #include <3d_canvas.h>
@@ -133,8 +134,6 @@ EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
 
 #if wxCHECK_VERSION( 3, 0, 0 )
 
-    unsigned int ii;
-
     // Check if the canvas supports multisampling.
     if( EDA_3D_CANVAS::IsDisplaySupported( attrs ) )
     {
@@ -142,7 +141,7 @@ EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
         int maxSamples = 8; // Any higher doesn't change anything.
         int samplesOffset = 0;
 
-        for( ii = 0; ii < sizeof( attrs ) / sizeof( attrs[0] ) - 1; ii += 2 )
+        for( unsigned int ii = 0; ii < DIM( attrs ); ii += 2 )
         {
             if( attrs[ii] == WX_GL_SAMPLES )
             {
@@ -162,7 +161,7 @@ EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
     else
     {
         // Disable multisampling
-        for( ii = 0; ii < sizeof( attrs ) / sizeof( attrs[0] ) - 1; ii += 2 )
+        for( unsigned int ii = 0; ii < DIM( attrs ); ii += 2 )
         {
             if( attrs[ii] == WX_GL_SAMPLE_BUFFERS )
             {

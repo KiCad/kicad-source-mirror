@@ -40,15 +40,6 @@
 
 #include <wx/process.h>
 
-// Show warning if wxWidgets Gnome or GTK printing was not configured.
-// Since wxWidgets 3.0, this is no more needed (build in printing works!)
-#if defined( __WXGTK__ )
-    #if !wxCHECK_VERSION( 3, 0, 0 )
-    #   if !wxUSE_LIBGNOMEPRINT && !wxUSE_GTKPRINT && !SWIG
-    #       warning "You must use '--with-gnomeprint' or '--with-gtkprint' in your wx library configuration for full print capabilities."
-    #   endif
-    #endif
-#endif
 
 /**
  * Global variables definitions.
@@ -59,7 +50,6 @@
  */
 
 bool           g_ShowPageLimits = true;
-
 EDA_UNITS_T    g_UserUnit;
 EDA_COLOR_T    g_GhostColor;
 
