@@ -101,7 +101,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         // single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
-            if( evt->Modifier( MD_CTRL ) )
+            if( evt->Modifier( MD_CTRL ) && !m_editModules )
             {
                 highlightNet( evt->Position() );
             }
