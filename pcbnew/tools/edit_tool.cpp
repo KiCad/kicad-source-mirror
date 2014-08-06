@@ -165,7 +165,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
                 editFrame->OnModify();
                 editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
-                if( evt->Modifier( MD_CTRL ) )
+                if( selection.Size() == 1 )
                 {
                     // Set the current cursor position to the first dragged item origin, so the
                     // movement vector could be computed later
