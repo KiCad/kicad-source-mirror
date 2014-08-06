@@ -34,9 +34,8 @@
 # Set where the 3 source trees will go, use a full path
 WORKING_TREES=~/kicad_sources
 
-STABLE=tag:pre-kiway    # currently the best mix of features and stabilty
+STABLE=5054             # a sensible mix of features and stability
 TESTING=last:1          # the most recent
-
 
 # Set this to STABLE or TESTING or other known revision number:
 REVISION=$STABLE
