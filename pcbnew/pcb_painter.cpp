@@ -75,6 +75,8 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
     m_layerColors[ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE )]             = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( PADS_HOLES_VISIBLE )]             = COLOR4D( 0.0, 0.5, 0.5, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )]            = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
+    m_layerColors[ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE )]             = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
+    m_layerColors[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )]           = COLOR4D( 0.4, 0.4, 0.8, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( PADS_VISIBLE )]                   = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
     m_layerColors[NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE )]      = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
@@ -102,9 +104,11 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions )
     m_padNumbers        = aOptions.DisplayPadNum;
 
     // Whether to draw tracks, vias & pads filled or as outlines
-    m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )]        = !aOptions.DisplayPadFill;
-    m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )] = !aOptions.DisplayViaFill;
-    m_sketchMode[ITEM_GAL_LAYER( TRACKS_VISIBLE )]      = !aOptions.DisplayPcbTrackFill;
+    m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )]         = !aOptions.DisplayPadFill;
+    m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )]  = !aOptions.DisplayViaFill;
+    m_sketchMode[ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE )]   = !aOptions.DisplayViaFill;
+    m_sketchMode[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )] = !aOptions.DisplayViaFill;
+    m_sketchMode[ITEM_GAL_LAYER( TRACKS_VISIBLE )]       = !aOptions.DisplayPcbTrackFill;
 
     switch( aOptions.DisplayNetNamesMode )
     {
@@ -334,7 +338,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
 void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 {
     VECTOR2D center( aVia->GetStart() );
-    double   radius;
+    double   radius = 0.0;
 
     // Only draw the via if at least one of the layers it crosses is being displayed
     BOARD*  brd =  aVia->GetBoard( );
@@ -342,34 +346,87 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         return;
 
     // Choose drawing settings depending on if we are drawing via's pad or hole
-    if( aLayer == ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ) )
-    {
-        radius = aVia->GetWidth() / 2.0;
-    }
-    else if( aLayer == ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ) )
-    {
+    if( aLayer == ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ) )
         radius = aVia->GetDrillValue() / 2.0;
-    }
     else
-        return;
+        radius = aVia->GetWidth() / 2.0;
 
+    bool sketchMode = false;
     const COLOR4D& color  = m_pcbSettings.GetColor( aVia, aLayer );
 
-    if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )] )
+    switch( aVia->GetViaType() )
     {
-        // Outline mode
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetStrokeColor( color );
-        m_gal->DrawCircle( center, radius );
+    case VIA_THROUGH:
+        sketchMode = m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )];
+        break;
+
+    case VIA_BLIND_BURIED:
+        sketchMode = m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE )];
+        break;
+
+    case VIA_MICROVIA:
+        sketchMode = m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )];
+        break;
+
+    default:
+        assert( false );
+        break;
+    }
+
+    if( aVia->GetViaType() == VIA_BLIND_BURIED )
+    {
+        LAYER_ID layerTop, layerBottom;
+        aVia->LayerPair( &layerTop, &layerBottom );
+
+        if( aLayer == ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ) )
+        {                                                               // TODO outline mode
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
+            m_gal->SetFillColor( color );
+            m_gal->DrawCircle( center, radius );
+        }
+        else
+        {
+            double width = ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0;
+            radius -= width / 2.0;
+
+            m_gal->SetLineWidth( width );
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
+            m_gal->SetFillColor( color );
+
+            if( aLayer == layerTop )
+            {
+                m_gal->DrawArc( center, radius, 0.0, M_PI / 2.0 );
+            }
+            else if( aLayer == layerBottom )
+            {
+                m_gal->DrawArc( center, radius, M_PI, 3.0 * M_PI / 2.0 );
+            }
+            else if( aLayer == ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE ) )
+            {
+                m_gal->DrawArc( center, radius, M_PI / 2.0, M_PI );
+                m_gal->DrawArc( center, radius, 3.0 * M_PI / 2.0, 2.0 * M_PI );
+            }
+        }
     }
     else
     {
-        // Filled mode
-        m_gal->SetIsFill( true );
-        m_gal->SetIsStroke( false );
-        m_gal->SetFillColor( color );
+        m_gal->SetIsFill( !sketchMode );
+        m_gal->SetIsStroke( sketchMode );
+
+        if( sketchMode )
+        {
+            // Outline mode
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+            m_gal->SetStrokeColor( color );
+        }
+        else
+        {
+            // Filled mode
+            m_gal->SetFillColor( color );
+        }
+
         m_gal->DrawCircle( center, radius );
     }
 }
@@ -637,15 +694,9 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
     m_gal->SetStrokeColor( color );
 
     if( m_pcbSettings.m_sketchMode[aLayer] )
-    {
-        // Outline mode
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-    }
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );    // Outline mode
     else
-    {
-        // Filled mode
-        m_gal->SetLineWidth( aSegment->GetWidth() );
-    }
+        m_gal->SetLineWidth( aSegment->GetWidth() );            // Filled mode
 
     switch( aSegment->GetShape() )
     {
@@ -779,7 +830,7 @@ void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
 
         // Draw anchor
         m_gal->SetStrokeColor( color );
-        m_gal->SetLineWidth( 1.0 );
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
         // Keep the size constant, not related to the scale
         double anchorSize = 5.0 / m_gal->GetWorldScale();
