@@ -171,7 +171,10 @@ public:
             TOOL_ACTION_SCOPE aScope = AS_GLOBAL ) :
         m_category( aCategory ),
         m_actions( aAction ),
-        m_scope( aScope )
+        m_scope( aScope ),
+        m_mouseButtons( 0 ),
+        m_keyCode( 0 ),
+        m_modifiers( 0 )
     {
         if( aCategory == TC_MOUSE )
         {
@@ -197,7 +200,9 @@ public:
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
-        m_mouseButtons( 0 )
+        m_mouseButtons( 0 ),
+        m_keyCode( 0 ),
+        m_modifiers( 0 )
     {
         if( aCategory == TC_COMMAND || aCategory == TC_MESSAGE )
             m_commandStr = aExtraParam;
