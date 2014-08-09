@@ -151,7 +151,7 @@ void TransfertToGLlist( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUni
     glEnd();
 }
 
-VERTEX_VALUE_CTRL::VERTEX_VALUE_CTRL( wxWindow* aParent, wxBoxSizer* aBoxSizer )
+S3DPOINT_VALUE_CTRL::S3DPOINT_VALUE_CTRL( wxWindow* aParent, wxBoxSizer* aBoxSizer )
 {
     wxString text;
 
@@ -187,15 +187,16 @@ VERTEX_VALUE_CTRL::VERTEX_VALUE_CTRL( wxWindow* aParent, wxBoxSizer* aBoxSizer )
 }
 
 
-VERTEX_VALUE_CTRL::~VERTEX_VALUE_CTRL()
+S3DPOINT_VALUE_CTRL::~S3DPOINT_VALUE_CTRL()
 {
+    // Nothing to delete: all items are managed by the parent window.
 }
 
 
-S3D_VERTEX VERTEX_VALUE_CTRL::GetValue()
+S3DPOINT S3DPOINT_VALUE_CTRL::GetValue()
 {
-    S3D_VERTEX value;
-    double     dtmp;
+    S3DPOINT value;
+    double   dtmp;
 
     m_XValueCtrl->GetValue().ToDouble( &dtmp );
     value.x = dtmp;
@@ -207,7 +208,7 @@ S3D_VERTEX VERTEX_VALUE_CTRL::GetValue()
 }
 
 
-void VERTEX_VALUE_CTRL::SetValue( S3D_VERTEX vertex )
+void S3DPOINT_VALUE_CTRL::SetValue( S3DPOINT vertex )
 {
     wxString text;
 
@@ -225,7 +226,7 @@ void VERTEX_VALUE_CTRL::SetValue( S3D_VERTEX vertex )
 }
 
 
-void VERTEX_VALUE_CTRL::Enable( bool onoff )
+void S3DPOINT_VALUE_CTRL::Enable( bool onoff )
 {
     m_XValueCtrl->Enable( onoff );
     m_YValueCtrl->Enable( onoff );

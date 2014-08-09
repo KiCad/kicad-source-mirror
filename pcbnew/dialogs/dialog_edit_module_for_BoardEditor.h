@@ -20,9 +20,9 @@ private:
     TEXTE_MODULE* m_ValueCopy;
     std::vector <S3D_MASTER*>   m_Shapes3D_list;
     int m_LastSelected3DShapeIndex;
-    VERTEX_VALUE_CTRL * m_3D_Scale;
-    VERTEX_VALUE_CTRL * m_3D_Offset;
-    VERTEX_VALUE_CTRL * m_3D_Rotation;
+    S3DPOINT_VALUE_CTRL * m_3D_Scale;
+    S3DPOINT_VALUE_CTRL * m_3D_Offset;
+    S3DPOINT_VALUE_CTRL * m_3D_Rotation;
 
 public:
 

@@ -73,9 +73,12 @@ void VRML2_MODEL_PARSER::Load( const wxString aFilename )
     float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
     glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
 
-    glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y, GetMaster()->m_MatScale.z );
-    glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y, GetMaster()->m_MatRotation.z );
-    glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y, GetMaster()->m_MatPosition.z );
+    glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y,
+                        GetMaster()->m_MatScale.z );
+    glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y,
+                      GetMaster()->m_MatRotation.z );
+    glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y,
+                      GetMaster()->m_MatPosition.z );
 
 
 #define SCALE_3D_CONV ((IU_PER_MILS * 1000.0f) / UNITS3D_TO_UNITSPCB)
@@ -104,7 +107,6 @@ void VRML2_MODEL_PARSER::Load( const wxString aFilename )
         if( strcmp( text, "Transform" ) == 0 )
         {
             m_model = new S3D_MESH();
-
             childs.push_back( m_model );
 
             read_Transform();
@@ -113,7 +115,6 @@ void VRML2_MODEL_PARSER::Load( const wxString aFilename )
         else if( strcmp( text, "DEF" ) == 0 )
         {
             m_model = new S3D_MESH();
-
             childs.push_back( m_model );
 
             read_DEF();
@@ -294,15 +295,11 @@ int VRML2_MODEL_PARSER::read_DEF()
         else if( strcmp( text, "Shape" ) == 0 )
         {
             S3D_MESH *parent = m_model;
-
             S3D_MESH *new_mesh_model = new S3D_MESH();
-
             m_model->childs.push_back( new_mesh_model );
 
             m_model = new_mesh_model;
-
             read_Shape();
-
             m_model = parent;
         }
     }
@@ -401,9 +398,7 @@ int VRML2_MODEL_PARSER::read_material()
         {
             wxString      mat_name;
             material = new S3D_MATERIAL( GetMaster(), mat_name );
-
             GetMaster()->Insert( material );
-
             m_model->m_Materials = material;
 
             if( strcmp( text, "Material" ) == 0 )
@@ -423,9 +418,7 @@ int VRML2_MODEL_PARSER::read_material()
                 mat_name = FROM_UTF8( text );
 
                 material = new S3D_MATERIAL( GetMaster(), mat_name );
-
                 GetMaster()->Insert( material );
-
                 m_model->m_Materials = material;
 
                 if( GetNextTag( m_file, text ) )
@@ -506,6 +499,7 @@ int VRML2_MODEL_PARSER::read_Material()
             //DBG( printf( "  specularColor") );
             parseVertex ( m_file, vertex);
             //DBG( printf( "\n") );
+
             if( GetMaster()->m_use_modelfile_specularColor == true )
             {
                 m_model->m_Materials->m_SpecularColor.push_back( vertex );
@@ -516,6 +510,7 @@ int VRML2_MODEL_PARSER::read_Material()
             float ambientIntensity;
             parseFloat( m_file, &ambientIntensity );
             //DBG( printf( "  ambientIntensity %f\n", ambientIntensity) );
+
             if( GetMaster()->m_use_modelfile_ambientIntensity == true )
             {
                 m_model->m_Materials->m_AmbientColor.push_back( glm::vec3( ambientIntensity, ambientIntensity, ambientIntensity ) );
@@ -526,6 +521,7 @@ int VRML2_MODEL_PARSER::read_Material()
             float transparency;
             parseFloat( m_file, &transparency );
             //DBG( printf( "  transparency %f\n", transparency) );
+
             if( GetMaster()->m_use_modelfile_transparency == true )
             {
                 m_model->m_Materials->m_Transparency.push_back( transparency );
@@ -535,6 +531,7 @@ int VRML2_MODEL_PARSER::read_Material()
         {
             float shininess;
             parseFloat( m_file, &shininess );
+
             //DBG( printf( "  shininess %f\n", shininess) );
             // VRML value is normalized and openGL expects a value 0 - 128
             if( GetMaster()->m_use_modelfile_shininess == true )
@@ -590,7 +587,8 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
             {
                 //DBG( printf( "  colorPerVertex = true\n") );
                 colorPerVertex = true;
-            } else
+            }
+            else
             {
                 colorPerVertex = false;
             }

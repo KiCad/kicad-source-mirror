@@ -35,11 +35,11 @@
 
 class S3D_MASTER;
 
-class S3D_MATERIAL : public EDA_ITEM       /* openGL "material" data*/
+class S3D_MATERIAL : public EDA_ITEM       // openGL "material" data
 {
 public:
     wxString   m_Name;
-    
+
     // Material list
     std::vector< glm::vec3 > m_AmbientColor;
     std::vector< glm::vec3 > m_DiffuseColor;

@@ -78,11 +78,11 @@ S3D_MASTER::S3D_MASTER( EDA_ITEM* aParent ) :
     m_ShapeType   = FILE3D_NONE;
 
     m_use_modelfile_diffuseColor = true;
-    m_use_modelfile_emissiveColor = false;
-    m_use_modelfile_specularColor = false;
-    m_use_modelfile_ambientIntensity = false;
+    m_use_modelfile_emissiveColor = true;
+    m_use_modelfile_specularColor = true;
+    m_use_modelfile_ambientIntensity = true;
     m_use_modelfile_transparency = true;
-    m_use_modelfile_shininess = false;
+    m_use_modelfile_shininess = true;
 }
 
 

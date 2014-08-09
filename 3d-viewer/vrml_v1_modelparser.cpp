@@ -84,8 +84,8 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
     glRotatef(-matRot.z, 0.0f, 0.0f, 1.0f );
     glRotatef(-matRot.y, 0.0f, 1.0f, 0.0f );
     glRotatef(-matRot.x, 1.0f, 0.0f, 0.0f );
-    
-    glScalef( matScale.x, matScale.y, matScale.z );    
+
+    glScalef( matScale.x, matScale.y, matScale.z );
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
     SetLocaleTo_C_standard();
@@ -103,9 +103,7 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
         if( strcmp( text, "Separator" ) == 0 )
         {
             m_model = new S3D_MESH();
-
             childs.push_back( m_model );
-
             read_separator();
         }
     }
@@ -114,7 +112,7 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
     SetLocaleTo_Default();       // revert to the current locale
 
 
-    //DBG( printf( "chils size:%lu\n", childs.size() ) ); 
+    //DBG( printf( "chils size:%lu\n", childs.size() ) );
 
     if( GetMaster()->IsOpenGlAllowed() )
     {
@@ -137,13 +135,16 @@ int VRML1_MODEL_PARSER::read_separator()
         if( strcmp( text, "Material" ) == 0 )
         {
             readMaterial( );
-        } else if( strcmp( text, "Coordinate3" ) == 0 )
+        }
+        else if( strcmp( text, "Coordinate3" ) == 0 )
         {
             readCoordinate3();
-        } else if( strcmp( text, "IndexedFaceSet" ) == 0 )
+        }
+        else if( strcmp( text, "IndexedFaceSet" ) == 0 )
         {
             readIndexedFaceSet();
-        } else if( strcmp( text, "Separator" ) == 0 )
+        }
+        else if( strcmp( text, "Separator" ) == 0 )
         {
             S3D_MESH *parent = m_model;
 
@@ -157,11 +158,13 @@ int VRML1_MODEL_PARSER::read_separator()
             read_separator();
 
             m_model = parent;
-        }else if ( ( *text != '}' ) )
+        }
+        else if ( ( *text != '}' ) )
         {
             //DBG( printf( "read_NotImplemented %s\n", text ) );
             read_NotImplemented( m_file, '}');
-        } else
+        }
+        else
         {
             break;
         }
@@ -201,19 +204,24 @@ int VRML1_MODEL_PARSER::readMaterial()
         if( strcmp( text, "ambientColor" ) == 0 )
         {
             readMaterial_ambientColor();
-        } else if( strcmp( text, "diffuseColor" ) == 0 )
+        }
+        else if( strcmp( text, "diffuseColor" ) == 0 )
         {
             readMaterial_diffuseColor( );
-        } else if( strcmp( text, "emissiveColor" ) == 0 )
+        }
+        else if( strcmp( text, "emissiveColor" ) == 0 )
         {
             readMaterial_emissiveColor( );
-        }else if( strcmp( text, "specularColor" ) == 0 )
+        }
+        else if( strcmp( text, "specularColor" ) == 0 )
         {
             readMaterial_specularColor( );
-        }else if( strcmp( text, "shininess" ) == 0 )
+        }
+        else if( strcmp( text, "shininess" ) == 0 )
         {
             readMaterial_shininess( );
-        }else if( strcmp( text, "transparency" ) == 0 )
+        }
+        else if( strcmp( text, "transparency" ) == 0 )
         {
             readMaterial_transparency( );
         }
@@ -272,7 +280,8 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet( )
         if( strcmp( text, "coordIndex" ) == 0 )
         {
             readIndexedFaceSet_coordIndex( );
-        } else if( strcmp( text, "materialIndex" ) == 0 )
+        }
+        else if( strcmp( text, "materialIndex" ) == 0 )
         {
             readIndexedFaceSet_materialIndex( );
         }
@@ -292,7 +301,7 @@ int VRML1_MODEL_PARSER::readMaterial_ambientColor( )
 int VRML1_MODEL_PARSER::readMaterial_diffuseColor( )
 {
     //DBG( printf( "    readMaterial_diffuseColor\n" ) );
-    
+
     return parseVertexList( m_file, m_model->m_Materials->m_DiffuseColor);
 }
 
@@ -334,6 +343,7 @@ int VRML1_MODEL_PARSER::readMaterial_shininess( )
     m_model->m_Materials->m_Shininess.clear();
 
     float shininess_value;
+
     while( fscanf( m_file, "%f,", &shininess_value ) )
     {
         // VRML value is normalized and openGL expects a value 0 - 128
@@ -346,7 +356,7 @@ int VRML1_MODEL_PARSER::readMaterial_shininess( )
         m_model->m_Materials->m_Shininess.clear();
     }
 
-    //DBG( printf( "    m_Shininess.size: %ld\n", m_model->m_Materials->m_Shininess.size() ) );    
+    //DBG( printf( "    m_Shininess.size: %ld\n", m_model->m_Materials->m_Shininess.size() ) );
 
     return 0;
 }
@@ -359,6 +369,7 @@ int VRML1_MODEL_PARSER::readMaterial_transparency()
     m_model->m_Materials->m_Transparency.clear();
 
     float tmp;
+
     while( fscanf (m_file, "%f,", &tmp) )
     {
         m_model->m_Materials->m_Transparency.push_back( tmp );
@@ -368,8 +379,8 @@ int VRML1_MODEL_PARSER::readMaterial_transparency()
     {
         m_model->m_Materials->m_Transparency.clear();
     }
-    
-    //DBG( printf( "    m_Transparency.size: %ld\n", m_model->m_Materials->m_Transparency.size() ) );    
+
+    //DBG( printf( "    m_Transparency.size: %ld\n", m_model->m_Materials->m_Transparency.size() ) );
 
     return 0;
 }
@@ -378,7 +389,7 @@ int VRML1_MODEL_PARSER::readMaterial_transparency()
 int VRML1_MODEL_PARSER::readCoordinate3_point()
 {
     //DBG( printf( "    readCoordinate3_point\n" ) );
-    
+
     if( parseVertexList( m_file, m_model->m_Point ) == 0 )
     {
         return 0;
@@ -420,7 +431,7 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet_coordIndex()
         m_model->m_CoordIndex.push_back( coord_list );
     }
 
-    //DBG( printf( "    m_CoordIndex.size: %ld\n", m_model->m_CoordIndex.size() ) );    
+    //DBG( printf( "    m_CoordIndex.size: %ld\n", m_model->m_CoordIndex.size() ) );
 
     return 0;
 }
@@ -438,7 +449,7 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet_materialIndex()
         m_model->m_MaterialIndex.push_back( index );
     }
 
-    //DBG( printf( "    m_MaterialIndex.size: %ld\n", m_model->m_MaterialIndex.size() ) );    
+    //DBG( printf( "    m_MaterialIndex.size: %ld\n", m_model->m_MaterialIndex.size() ) );
 
     return 0;
 }

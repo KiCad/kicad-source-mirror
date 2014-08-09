@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Mario Luzeiro <mrluzeiro@gmail.com>
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -35,9 +35,10 @@
 #include <base_struct.h>
 #include <3d_material.h>
 #include <gal/opengl/glm/glm.hpp>
- 
-/* 3D modeling units -> PCB units conversion scale:
- * 1 "3D model unit" wings3d = 1 unit = 2.54 mm = 0.1 inch = 100 mils
+
+/**
+ * @note For historical reasons the 3D modeling unit is 0.1 inch
+ * 1 3Dunit = 2.54 mm = 0.1 inch = 100 mils
  */
 #define UNITS3D_TO_UNITSPCB (IU_PER_MILS * 100)
 
@@ -45,19 +46,42 @@
 class S3D_MASTER;
 class STRUCT_3D_SHAPE;
 
-/*  S3D_VERTEX manages a 3D coordinate (3 float numbers: x,y,z coordinates)*/
+// S3D_VERTEX manages a opengl 3D coordinate (3 float numbers: x,y,z coordinates)
+// float are widely used in opengl functions.
+// they are used here in coordinates which are also used in opengl functions.
 #define S3D_VERTEX glm::vec3
 
+// S3DPOINT manages a set of 3 double values (x,y,z )
+// It is used for values which are not directly used in opengl functions.
+// It is used in dialogs, or when reading/writing files for instance
+class S3DPOINT
+{
+public:
+    double x, y, z;
 
-/* Master structure for a 3D item description */
+public:
+    S3DPOINT()
+    {
+        x = y = z = 0.0;
+    }
+
+    S3DPOINT( double px, double py, double pz)
+    {
+        x = px;
+        y = py;
+        z = pz;
+    }
+};
+
+// Master structure for a 3D footprint shape description
 class S3D_MASTER : public EDA_ITEM
 {
 public:
-    S3D_VERTEX      m_MatScale;
-    S3D_VERTEX      m_MatRotation;
-    S3D_VERTEX      m_MatPosition;
-    STRUCT_3D_SHAPE* m_3D_Drawings;
-    S3D_MATERIAL*   m_Materials;
+    S3DPOINT      m_MatScale;       ///< a scaling factor for the entire 3D footprint shape
+    S3DPOINT      m_MatRotation;    ///< a grotation for the entire 3D footprint shape
+    S3DPOINT      m_MatPosition;    ///< an offset for the entire 3D footprint shape
+    STRUCT_3D_SHAPE* m_3D_Drawings; ///< the list of basic shapes
+    S3D_MATERIAL*   m_Materials;    ///< the list of materiels used by the shapes
 
     enum FILE3D_TYPE
     {
@@ -76,9 +100,9 @@ public:
     bool        m_use_modelfile_shininess;
 
 private:
-    wxString    m_Shape3DName;  /* 3D shape name in 3D library */
+    wxString    m_Shape3DName;      // the 3D shape filename in 3D library
     FILE3D_TYPE m_ShapeType;
-    double      m_lastTransparency;     // last transparency value from
+    double      m_lastTransparency;         // last transparency value from
                                             // last material in use
     bool        m_loadTransparentObjects;
     bool        m_loadNonTransparentObjects;
@@ -185,26 +209,26 @@ public:
 
 
 /**
- * Class VERTEX_VALUE_CTRL
- * displays a vertex for editing.  A vertex is a triplet of values
+ * Class S3DPOINT_VALUE_CTRL
+ * displays a S3DPOINT for editing (in dialogs).  A S3DPOINT is a triplet of values
  * Values can be scale, rotation, offset...
  */
-class VERTEX_VALUE_CTRL
+class S3DPOINT_VALUE_CTRL
 {
 private:
     wxTextCtrl*   m_XValueCtrl, * m_YValueCtrl, * m_ZValueCtrl;
 
 public:
-    VERTEX_VALUE_CTRL( wxWindow* parent, wxBoxSizer* BoxSizer );
+    S3DPOINT_VALUE_CTRL( wxWindow* parent, wxBoxSizer* BoxSizer );
 
-    ~VERTEX_VALUE_CTRL();
+    ~S3DPOINT_VALUE_CTRL();
 
     /**
      * Function GetValue
-     * @return the vertex in internal units.
+     * @return the 3D point in internal units.
      */
-    S3D_VERTEX GetValue();
-    void       SetValue( S3D_VERTEX vertex );
+    S3DPOINT   GetValue();
+    void       SetValue( S3DPOINT a3Dpoint );
     void       Enable( bool enbl );
     void       SetToolTip( const wxString& text );
 };

@@ -319,9 +319,9 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
     m_CostRot180Ctrl->SetValue( m_CurrentModule->GetPlacementCost180() );
 
     // Initialize 3D parameters
-    m_3D_Scale = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeScale );
-    m_3D_Offset = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeOffset );
-    m_3D_Rotation = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeRotation );
+    m_3D_Scale = new S3DPOINT_VALUE_CTRL( m_Panel3D, m_bSizerShapeScale );
+    m_3D_Offset = new S3DPOINT_VALUE_CTRL( m_Panel3D, m_bSizerShapeOffset );
+    m_3D_Rotation = new S3DPOINT_VALUE_CTRL( m_Panel3D, m_bSizerShapeRotation );
 
     // if m_3D_ShapeNameListBox is not empty, preselect first 3D shape
     if( m_3D_ShapeNameListBox->GetCount() > 0 )
@@ -352,8 +352,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Transfert3DValuesToDisplay(
     }
     else
     {
-        S3D_VERTEX dummy_vertex;
-        dummy_vertex.x = dummy_vertex.y = dummy_vertex.z = 1.0;
+        S3DPOINT dummy_vertex( 1.0, 1.0, 1.0 );
         m_3D_Scale->SetValue( dummy_vertex );
     }
 }
