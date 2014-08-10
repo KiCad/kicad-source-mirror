@@ -367,11 +367,11 @@ public:
     LSEQ Seq() const;
 
     /**
-     * Function SVG
-     * returns the sequence used to output an SVG plot.
-    LSEQ SVG() const;
-     put this in the needed source file using Seq() there.
-    */
+     * Function SeqStackBottom2Top
+     * returns the sequence that is typical for a bottom-to-top stack-up.
+     * For instance, to plot multiple layers in a single image, the top layers output last.
+     */
+    LSEQ SeqStackupBottom2Top() const;
 
     /**
      * Function FmtHex
