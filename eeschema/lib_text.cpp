@@ -98,7 +98,7 @@ bool LIB_TEXT::Save( OUTPUTFORMATTER& aFormatter )
 
 bool LIB_TEXT::Load( LINE_READER& aLineReader, wxString& errorMsg )
 {
-    int     cnt, thickness;
+    int     cnt, thickness = 0;
     char    hjustify = 'C', vjustify = 'C';
     char    buf[256];
     char    tmp[256];
@@ -108,7 +108,7 @@ bool LIB_TEXT::Load( LINE_READER& aLineReader, wxString& errorMsg )
     buf[0] = 0;
     tmp[0] = 0;         // For italic option, Not in old versions
 
-    cnt = sscanf( line + 2, "%lf %d %d %d %d %d %d \"%[^\"]\" %s %d %c %c",
+    cnt = sscanf( line + 2, "%lf %d %d %d %d %d %d \"%[^\"]\" %255s %d %c %c",
                   &angle, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
                   &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify,
                   &vjustify );
@@ -122,7 +122,7 @@ bool LIB_TEXT::Load( LINE_READER& aLineReader, wxString& errorMsg )
     }
     else
     {
-        cnt = sscanf( line + 2, "%lf %d %d %d %d %d %d %s %s %d %c %c",
+        cnt = sscanf( line + 2, "%lf %d %d %d %d %d %d %255s %255s %d %c %c",
                       &angle, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
                       &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify,
                       &vjustify );

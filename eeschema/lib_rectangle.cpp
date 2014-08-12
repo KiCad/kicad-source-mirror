@@ -67,10 +67,10 @@ bool LIB_RECTANGLE::Save( OUTPUTFORMATTER& aFormatter )
 bool LIB_RECTANGLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     int  cnt;
-    char tmp[256];
+    char tmp[256] = "";
     char* line = (char*)aLineReader;
 
-    cnt = sscanf( line + 2, "%d %d %d %d %d %d %d %s", &m_Pos.x, &m_Pos.y,
+    cnt = sscanf( line + 2, "%d %d %d %d %d %d %d %255s", &m_Pos.x, &m_Pos.y,
                   &m_End.x, &m_End.y, &m_Unit, &m_Convert, &m_Width, tmp );
 
     if( cnt < 7 )

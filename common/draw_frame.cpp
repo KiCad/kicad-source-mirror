@@ -113,6 +113,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_showAxis            = false;      // true to draw axis.
     m_showBorderAndTitleBlock = false;  // true to display reference sheet.
     m_showGridAxis        = false;      // true to draw the grid axis
+    m_showOriginAxis      = false;      // true to draw the grid origin
     m_cursorShape         = 0;
     m_LastGridSizeId      = 0;
     m_DrawGrid            = true;       // hide/Show grid. default = show
