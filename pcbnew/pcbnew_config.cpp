@@ -32,7 +32,7 @@
 #include <kiface_i.h>
 #include <project.h>
 #include <class_drawpanel.h>
-#include <class_draw_panel_gal.h>
+#include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <xnode.h>
@@ -106,6 +106,9 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             OnModify();
             ReCreateLayerBox();
             ReFillLayerWidget();
+
+            if( IsGalCanvasActive() )
+                static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( GetBoard() );
         }
         break;
 
