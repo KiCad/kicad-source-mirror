@@ -85,14 +85,17 @@ INFO3D_VISU::~INFO3D_VISU()
  */
 void INFO3D_VISU::InitSettings( BOARD* aBoard )
 {
+    // Calculates the board bounding box
+    // First, use only the board outlines
     EDA_RECT bbbox = aBoard->ComputeBoundingBox( true );
 
+    // If no outlines, use the board with items
     if( bbbox.GetWidth() == 0 && bbbox.GetHeight() == 0 )
-    {
-        bbbox.SetWidth( Millimeter2iu( 100 ) );
-        bbbox.SetHeight( Millimeter2iu( 100 ) );
-    }
+       bbbox = aBoard->ComputeBoundingBox( false );
 
+    // Gives a non null size to avoid issues in zoom / scale calculations
+    if( bbbox.GetWidth() == 0 && bbbox.GetHeight() == 0 )
+        bbbox.Inflate( Millimeter2iu( 10 ) );
 
     m_BoardSettings = &aBoard->GetDesignSettings();
 

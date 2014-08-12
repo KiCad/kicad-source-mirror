@@ -1436,7 +1436,8 @@ void VRML_LAYER::glEnd( void )
 
             double firstX = 0.0;
             double firstY = 0.0;
-            double lastX, lastY;
+            double lastX = 0.0;
+            double lastY = 0.0;
             double curX, curY;
             double area = 0.0;
 

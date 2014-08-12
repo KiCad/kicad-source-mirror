@@ -567,28 +567,34 @@ void EDA_3D_CANVAS::InitGL()
 /* Initialize OpenGL light sources. */
 void EDA_3D_CANVAS::SetLights()
 {
-    double  light;
-    GLfloat light_color[4];
-
     /* set viewing projection */
-    light_color[3] = 1.0;
     GLfloat Z_axis_pos[4]    = { 0.0, 0.0, 30.0, 0.0 };
     GLfloat lowZ_axis_pos[4] = { 0.0, 0.0, -30.0, 0.5 };
 
-    /* activate light */
-    light = 1.0;
-    light_color[0] = light_color[1] = light_color[2] = light;
+    // activate lights. 2 lights are used:
+    // One is above the xy plane, the other is below the xy plane
+    GLfloat light_color[4];     // color of lights (RGBA values)
+    light_color[3] = 1.0;
+
+    // Light above the xy plane
+    // The default setting for GL_AMBIENT light intensity is (0.0, 0.0, 0.0, 1.0)
     glLightfv( GL_LIGHT0, GL_POSITION, Z_axis_pos );
+    light_color[0] = light_color[1] = light_color[2] = 1.0;
     glLightfv( GL_LIGHT0, GL_DIFFUSE, light_color );
 
-    light_color[0] = 0.3;
-    light_color[1] = 0.3;
-    light_color[2] = 0.4;
+    light_color[0] = light_color[1] = light_color[2] = 0.2;
+    glLightfv( GL_LIGHT0, GL_SPECULAR, light_color );
 
+    // Light below the xy plane
     glLightfv( GL_LIGHT1, GL_POSITION, lowZ_axis_pos );
+    light_color[0] = light_color[1] = light_color[2] = 0.4;
     glLightfv( GL_LIGHT1, GL_DIFFUSE, light_color );
-    glEnable( GL_LIGHT0 );      // White spot on Z axis
-    glEnable( GL_LIGHT1 );      // White spot on Z axis ( bottom)
+
+    light_color[0] = light_color[1] = light_color[2] = 0.1;
+    glLightfv( GL_LIGHT1, GL_SPECULAR, light_color );
+
+    glEnable( GL_LIGHT0 );      // White spot on Z axis ( top )
+//    glEnable( GL_LIGHT1 );      // White spot on Z axis ( bottom )
     glEnable( GL_LIGHTING );
 }
 
