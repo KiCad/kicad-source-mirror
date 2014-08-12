@@ -55,9 +55,24 @@ class CMP_READER
     LINE_READER* m_lineReader;            ///< The line reader to read.
 
 public:
+    /**
+     * CMP_READER constructor.
+     * @param aLineReader is a LINE_READER (in fact a FILE_LINE_READER)
+     * which is owned by me ( and deleted by me) to read
+     * the component footprint link file.
+     */
     CMP_READER( LINE_READER* aLineReader )
     {
         m_lineReader = aLineReader;
+    }
+
+    ~CMP_READER()
+    {
+        if( m_lineReader )
+        {
+            delete m_lineReader;
+            m_lineReader = NULL;
+        }
     }
 
     /**
