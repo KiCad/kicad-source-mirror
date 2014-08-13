@@ -60,10 +60,12 @@ static EDA_COLOR_T s_layerColor[NB_SCH_LAYERS];
 /// The width to draw busses that do not have a specific width
 static int s_defaultBusThickness;
 
+
 int GetDefaultBusThickness()
 {
     return s_defaultBusThickness;
 }
+
 
 void SetDefaultBusThickness( int aThickness)
 {
@@ -73,6 +75,7 @@ void SetDefaultBusThickness( int aThickness)
         s_defaultBusThickness = 1;
 }
 
+
 /// Default size for text (not only labels)
 static int s_defaultTextSize;
 
@@ -81,10 +84,12 @@ int GetDefaultTextSize()
     return s_defaultTextSize;
 }
 
+
 void SetDefaultTextSize( int aTextSize )
 {
     s_defaultTextSize = aTextSize;
 }
+
 
 /*
  * Default line (in Eeschema units) thickness used to draw/plot items having a
@@ -92,10 +97,12 @@ void SetDefaultTextSize( int aTextSize )
  */
 static int s_drawDefaultLineThickness;
 
+
 int GetDefaultLineThickness()
 {
     return s_drawDefaultLineThickness;
 }
+
 
 void SetDefaultLineThickness( int aThickness )
 {
@@ -105,36 +112,43 @@ void SetDefaultLineThickness( int aThickness )
         s_drawDefaultLineThickness = 1;
 }
 
+
 /*
  * Default pin length
  */
 static int s_defaultPinLength;
+
 
 int GetDefaultPinLength()
 {
     return s_defaultPinLength;
 }
 
+
 void SetDefaultPinLength( int aLength )
 {
     s_defaultPinLength = aLength;
 }
+
 
 EDA_COLOR_T GetLayerColor( LayerNumber aLayer )
 {
     return s_layerColor[aLayer];
 }
 
+
 void SetLayerColor( EDA_COLOR_T aColor, int aLayer )
 {
     s_layerColor[aLayer] = aColor;
 }
+
 
 // Color to draw selected items
 EDA_COLOR_T GetItemSelectedColor()
 {
     return BROWN;
 }
+
 
 // Color to draw items flagged invisible, in libedit (they are invisible
 // in Eeschema
@@ -335,8 +349,9 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     int sep, firstId;
     dlg.GetRefIdSeparator( sep, firstId);
-    if( sep != (int)LIB_COMPONENT::GetSubpartIdSeparator() ||
-        firstId != (int)LIB_COMPONENT::GetSubpartFirstId() )
+
+    if( sep != (int)LIB_COMPONENT::GetSubpartIdSeparator()
+      || firstId != (int)LIB_COMPONENT::GetSubpartFirstId() )
     {
         LIB_COMPONENT::SetSubpartIdNotation( sep, firstId );
         SaveProjectSettings( true );
@@ -710,6 +725,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     if( !templateFieldNames.IsEmpty() )
     {
         TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
+
         try
         {
             m_TemplateFieldNames.Parse( &lexer );

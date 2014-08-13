@@ -72,9 +72,13 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
     if( m_currentText )
         m_module = (MODULE*) m_currentText->GetParent();
 
-    initDlg( );
+    initDlg();
 
-    m_buttonOK->SetDefault();
+    wxButton* okButton = (wxButton*) FindWindowById( wxID_OK );
+
+    if( okButton )
+        SetDefaultItem( okButton );
+
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 
@@ -84,7 +88,7 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
 
 void DialogEditModuleText::OnCancelClick( wxCommandEvent& event )
 {
-   EndModal(0);
+   EndModal( 0 );
 }
 
 
@@ -185,9 +189,10 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     wxSize textSize( wxSize( ValueFromString( g_UserUnit, m_TxtSizeCtrlX->GetValue() ),
                              ValueFromString( g_UserUnit, m_TxtSizeCtrlY->GetValue() ) ) );
 
-    // Test for a reasonnable size:
+    // Test for a reasonable size:
     if( textSize.x < TEXTS_MIN_SIZE )
         textSize.x = TEXTS_MIN_SIZE;
+
     if( textSize.y < TEXTS_MIN_SIZE )
         textSize.y = TEXTS_MIN_SIZE;
 
@@ -196,7 +201,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     msg = m_TxtWidthCtlr->GetValue();
     int width = ValueFromString( g_UserUnit, msg );
 
-    // Test for a reasonnable width:
+    // Test for a reasonable width:
     if( width <= 1 )
         width = 1;
 
@@ -233,5 +238,5 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     if( m_module )
         m_module->SetLastEditTime();
 
-    EndModal(1);
+    EndModal( 1 );
 }
