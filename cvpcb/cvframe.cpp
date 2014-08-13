@@ -68,17 +68,14 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
     EVT_MENU( wxID_EXIT, CVPCB_MAINFRAME::OnQuit )
     EVT_MENU( wxID_HELP, CVPCB_MAINFRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, CVPCB_MAINFRAME::GetKicadAbout )
-    EVT_MENU( wxID_PREFERENCES, CVPCB_MAINFRAME::ConfigCvpcb )
     EVT_MENU( ID_SAVE_PROJECT, CVPCB_MAINFRAME::SaveProjectFile )
     EVT_MENU( ID_SAVE_PROJECT_AS, CVPCB_MAINFRAME::SaveProjectFile )
     EVT_MENU( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE, CVPCB_MAINFRAME::OnKeepOpenOnSave )
 
-    EVT_MENU( ID_CVPCB_LIB_TABLE_EDIT, CVPCB_MAINFRAME::OnEditFootprintLibraryTable )
-
     // Toolbar events
     EVT_TOOL( ID_CVPCB_QUIT, CVPCB_MAINFRAME::OnQuit )
     EVT_TOOL( ID_CVPCB_READ_INPUT_NETLIST, CVPCB_MAINFRAME::LoadNetList )
-    EVT_TOOL( ID_CVPCB_CREATE_CONFIGWINDOW, CVPCB_MAINFRAME::ConfigCvpcb )
+    EVT_TOOL( ID_CVPCB_LIB_TABLE_EDIT, CVPCB_MAINFRAME::OnEditFootprintLibraryTable )
     EVT_TOOL( ID_CVPCB_CREATE_SCREENCMP, CVPCB_MAINFRAME::DisplayModule )
     EVT_TOOL( ID_CVPCB_GOTO_FIRSTNA, CVPCB_MAINFRAME::ToFirstNA )
     EVT_TOOL( ID_CVPCB_GOTO_PREVIOUSNA, CVPCB_MAINFRAME::ToPreviousNA )
@@ -144,7 +141,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Set minimal frame width and height
     SetSizeHints( FRAME_MIN_SIZE_X, FRAME_MIN_SIZE_Y, -1, -1, -1, -1 );
 
-    // Framesize and position
+    // Frame size and position
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // create the status bar
@@ -205,7 +202,7 @@ void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
 
     aCfg->Read( KeepCvpcbOpenEntry, &m_KeepCvpcbOpen, true );
     aCfg->Read( FootprintDocFileEntry, &m_DocModulesFileName,
-               DEFAULT_FOOTPRINTS_LIST_FILENAME );
+                DEFAULT_FOOTPRINTS_LIST_FILENAME );
 }
 
 
@@ -459,18 +456,6 @@ bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 }
 
 
-void CVPCB_MAINFRAME::ConfigCvpcb( wxCommandEvent& event )
-{
-    /*  This is showing FOOTPRINT search paths, which are obsoleted.
-        I am removing this for the time being, since cvpcb will soon be part of pcbnew.
-
-    DIALOG_CVPCB_CONFIG     dlg( this );
-
-    dlg.ShowModal();
-    */
-}
-
-
 void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 {
     bool    tableChanged = false;
@@ -487,8 +472,8 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
         }
         catch( const IO_ERROR& ioe )
         {
-            wxString msg = wxString::Format( _(
-                    "Error occurred saving the global footprint library table:\n'%s'\n%s" ),
+            wxString msg = wxString::Format(
+                    _( "Error occurred saving the global footprint library table:\n'%s'\n%s" ),
                     GetChars( fileName ),
                     GetChars( ioe.errorText )
                     );
@@ -507,8 +492,8 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
         }
         catch( const IO_ERROR& ioe )
         {
-            wxString msg = wxString::Format( _(
-                    "Error occurred saving the project footprint library table:\n'%s'\n%s" ),
+            wxString msg = wxString::Format(
+                    _( "Error occurred saving the project footprint library table:\n'%s'\n%s" ),
                     GetChars( fileName ),
                     GetChars( ioe.errorText )
                     );
@@ -917,15 +902,15 @@ void CVPCB_MAINFRAME::BuildFOOTPRINTS_LISTBOX()
     if( m_footprintListBox == NULL )
     {
         m_footprintListBox = new FOOTPRINTS_LISTBOX( this, ID_CVPCB_FOOTPRINT_LIST,
-                                                  wxDefaultPosition, wxDefaultSize );
+                                                     wxDefaultPosition, wxDefaultSize );
         m_footprintListBox->SetFont( wxFont( guiFont.GetPointSize(),
-                                          wxFONTFAMILY_MODERN,
-                                          wxFONTSTYLE_NORMAL,
-                                          wxFONTWEIGHT_NORMAL ) );
+                                             wxFONTFAMILY_MODERN,
+                                             wxFONTSTYLE_NORMAL,
+                                             wxFONTWEIGHT_NORMAL ) );
     }
 
     m_footprintListBox->SetFootprints( m_footprints, wxEmptyString, NULL,
-                                    FOOTPRINTS_LISTBOX::UNFILTERED );
+                                       FOOTPRINTS_LISTBOX::UNFILTERED );
     DisplayStatus();
 }
 
@@ -939,11 +924,11 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
     if( m_compListBox == NULL )
     {
         m_compListBox = new COMPONENTS_LISTBOX( this, ID_CVPCB_COMPONENT_LIST,
-                                            wxDefaultPosition, wxDefaultSize );
+                                                wxDefaultPosition, wxDefaultSize );
         m_compListBox->SetFont( wxFont( guiFont.GetPointSize(),
-                                    wxFONTFAMILY_MODERN,
-                                    wxFONTSTYLE_NORMAL,
-                                    wxFONTWEIGHT_NORMAL ) );
+                                        wxFONTFAMILY_MODERN,
+                                        wxFONTSTYLE_NORMAL,
+                                        wxFONTWEIGHT_NORMAL ) );
     }
 
     m_compListBox->m_ComponentList.Clear();
@@ -986,11 +971,11 @@ void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
     if( m_libListBox == NULL )
     {
         m_libListBox = new LIBRARY_LISTBOX( this, ID_CVPCB_LIBRARY_LIST,
-                                             wxDefaultPosition, wxDefaultSize );
+                                            wxDefaultPosition, wxDefaultSize );
         m_libListBox->SetFont( wxFont( guiFont.GetPointSize(),
-                                        wxFONTFAMILY_MODERN,
-                                        wxFONTSTYLE_NORMAL,
-                                        wxFONTWEIGHT_NORMAL ) );
+                                       wxFONTFAMILY_MODERN,
+                                       wxFONTSTYLE_NORMAL,
+                                       wxFONTWEIGHT_NORMAL ) );
     }
 
     FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();

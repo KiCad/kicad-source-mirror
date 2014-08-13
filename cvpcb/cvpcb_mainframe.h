@@ -135,8 +135,6 @@ public:
      */
     void             LoadNetList( wxCommandEvent& event );
 
-    void             ConfigCvpcb( wxCommandEvent& event );
-
     /**
      * Function OnEditLibraryTable
      * envokes the footpirnt library table edit dialog.

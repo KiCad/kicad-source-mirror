@@ -52,13 +52,12 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString,
                             KiBitmap( open_document_xpm ), LOAD_FILE_HELP );
 
-    m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiBitmap( save_xpm ),
-                            SAVE_HLP_MSG );
+    m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiBitmap( save_xpm ), SAVE_HLP_MSG );
 
     m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_CVPCB_CREATE_CONFIGWINDOW, wxEmptyString,
+    m_mainToolBar->AddTool( ID_CVPCB_LIB_TABLE_EDIT, wxEmptyString,
                             KiBitmap( config_xpm ),
-                            _( "Set CvPcb config (paths and equ files)" ) );
+                            _( "Edit footprint library table" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_CREATE_SCREENCMP, wxEmptyString,
