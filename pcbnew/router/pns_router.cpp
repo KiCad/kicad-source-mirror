@@ -372,7 +372,10 @@ PNS_ROUTER::~PNS_ROUTER()
 void PNS_ROUTER::ClearWorld()
 {
     if( m_world )
+    {
+        m_world->KillChildren();
         delete m_world;
+    }
 
     if( m_clearanceFunc )
         delete m_clearanceFunc;
