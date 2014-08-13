@@ -298,6 +298,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_Layers->ReFillRender();
 
     m_auimgr.Update();
+
+    Zoom_Automatique( true );
 }
 
 

@@ -266,7 +266,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
 
     // Menu place:
-    // @todo unify IDs
     wxMenu* placeMenu = new wxMenu;
 
     text = AddHotkeyName( _( "&Component" ), s_Schematic_Hokeys_Descr,
@@ -428,7 +427,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* toolsMenu = new wxMenu;
 
     AddMenuItem( toolsMenu,
-                 ID_TO_LIBRARY,
+                 ID_RUN_LIBRARY,
                  _( "Library &Editor" ), HELP_RUN_LIB_EDITOR,
                  KiBitmap( libedit_xpm ) );
 
@@ -467,14 +466,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     // Run CvPcb
     AddMenuItem( toolsMenu,
-                 ID_TO_CVPCB,
+                 ID_RUN_CVPCB,
                  _( "A&ssign Component Footprint" ),
                  _( "Run CvPcb" ),
                  KiBitmap( cvpcb_xpm ) );
 
     // Run Pcbnew
     AddMenuItem( toolsMenu,
-                 ID_TO_PCB,
+                 ID_RUN_PCB,
                  _( "&Layout Printed Circuit Board" ),
                  _( "Run Pcbnew" ),
                  KiBitmap( pcbnew_xpm ) );

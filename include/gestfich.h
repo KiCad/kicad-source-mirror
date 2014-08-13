@@ -54,24 +54,6 @@ wxString EDA_FileSelector( const wxString& Title,
                            const wxPoint&  Pos = wxPoint( -1, -1 ) );
 
 
-/**
- * Function MakeReducedFileName
- * calculate the "reduced" filename from \a fullfilename.
- *
- * @param fullfilename = full filename
- * @param default_path = default path
- * @param default_ext = default extension
- * @return  the "reduced" filename, i.e.:
- *  without path if it is default_path
- *  with ./ if the path is the current path
- *  without extension if extension is default_ext
- *
- *  the new filename is in unix like notation ('/' as path separator)
- */
-wxString MakeReducedFileName( const wxString& fullfilename,
-                              const wxString& default_path,
-                              const wxString& default_ext );
-
 EDA_LIST_DIALOG* GetFileNames( char* Directory, char* Mask );
 
 

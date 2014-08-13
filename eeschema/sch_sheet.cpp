@@ -768,7 +768,8 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
         }
         else
         {
-            SetScreen( new SCH_SCREEN() );
+            SetScreen( new SCH_SCREEN( &aFrame->Kiway() ) );
+
             success = aFrame->LoadOneEEFile( m_screen, m_fileName );
 
             if( success )
@@ -777,7 +778,7 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
 
                 while( bs )
                 {
-                    if( bs->Type() ==  SCH_SHEET_T )
+                    if( bs->Type() == SCH_SHEET_T )
                     {
                         SCH_SHEET* sheetstruct = (SCH_SHEET*) bs;
 

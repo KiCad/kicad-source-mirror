@@ -49,7 +49,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     // Menu events
     EVT_MENU( ID_SAVE_PROJECT, KICAD_MANAGER_FRAME::OnSaveProject )
     EVT_MENU( wxID_EXIT, KICAD_MANAGER_FRAME::OnExit )
-    EVT_MENU( ID_TO_EDITOR, KICAD_MANAGER_FRAME::OnOpenTextEditor )
+    EVT_MENU( ID_TO_TEXT_EDITOR, KICAD_MANAGER_FRAME::OnOpenTextEditor )
     EVT_MENU( ID_BROWSE_AN_SELECT_FILE, KICAD_MANAGER_FRAME::OnOpenFileInTextEditor )
     EVT_MENU( ID_SELECT_PREFERED_EDITOR, EDA_BASE_FRAME::OnSelectPreferredEditor )
     EVT_MENU( ID_SELECT_DEFAULT_PDF_BROWSER, KICAD_MANAGER_FRAME::OnSelectDefaultPdfBrowser )
@@ -74,9 +74,14 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
 #endif
 
     // Button events
-    EVT_BUTTON( ID_TO_PCB, KICAD_MANAGER_FRAME::OnRunPcbNew )
+    EVT_BUTTON( ID_TO_SCH, KICAD_MANAGER_FRAME::OnRunEeschema )
+    EVT_BUTTON( ID_TO_SCH_LIB_EDITOR, KICAD_MANAGER_FRAME::OnRunSchLibEditor )
+
     EVT_BUTTON( ID_TO_CVPCB, KICAD_MANAGER_FRAME::OnRunCvpcb )
-    EVT_BUTTON( ID_TO_EESCHEMA, KICAD_MANAGER_FRAME::OnRunEeschema )
+
+    EVT_BUTTON( ID_TO_PCB, KICAD_MANAGER_FRAME::OnRunPcbNew )
+    EVT_BUTTON( ID_TO_PCB_FP_EDITOR, KICAD_MANAGER_FRAME::OnRunPcbFpEditor )
+
     EVT_BUTTON( ID_TO_GERBVIEW, KICAD_MANAGER_FRAME::OnRunGerbview )
     EVT_BUTTON( ID_TO_BITMAP_CONVERTER, KICAD_MANAGER_FRAME::OnRunBitmapConverter )
     EVT_BUTTON( ID_TO_PCB_CALCULATOR, KICAD_MANAGER_FRAME::OnRunPcbCalculator )
@@ -193,7 +198,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     // Text editor
     AddMenuItem( browseMenu,
-                 ID_TO_EDITOR,
+                 ID_TO_TEXT_EDITOR,
                  _( "Open Text E&ditor" ),
                  _( "Launch preferred text editor" ),
                  KiBitmap( editor_xpm ) );

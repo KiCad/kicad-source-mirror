@@ -34,16 +34,23 @@
 #include <sch_field.h>
 #include <transform.h>
 #include <general.h>
+#include <boost/weak_ptr.hpp>
 
 
 class SCH_SHEET_PATH;
 class LIB_ITEM;
 class LIB_PIN;
-class LIB_COMPONENT;
+class LIB_PART;
 class NETLIST_OBJECT_LIST;
+class LIB_PART;
+class PART_LIBS;
+class SCH_COLLECTOR;
+
 
 /// A container for several SCH_FIELD items
-typedef std::vector<SCH_FIELD> SCH_FIELDS;
+typedef std::vector<SCH_FIELD>      SCH_FIELDS;
+
+typedef boost::weak_ptr<LIB_PART>   PART_REF;
 
 
 /**
@@ -54,18 +61,21 @@ class SCH_COMPONENT : public SCH_ITEM
 {
     friend class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC;
 
-    wxPoint m_Pos;
-    wxString m_ChipName;    ///< Name to look for in the library, i.e. "74LS00".
-    int      m_unit;        ///< The unit for multiple part per package components.
-    int      m_convert;     ///< The alternate body style for components that have more than
-                            ///< one body style defined.  Primarily used for components that
-                            ///< have a De Morgan conversion.
-    wxString m_prefix;      ///< C, R, U, Q etc - the first character which typically indicates
-                            ///< what the component is. Determined, upon placement, from the
-                            ///< library component.  Created upon file load, by the first
-                            ///<  non-digits in the reference fields.
-    TRANSFORM m_transform;  ///< The rotation/mirror transformation matrix.
-    SCH_FIELDS m_Fields;    ///< Variable length list of fields.
+    wxPoint     m_Pos;
+    wxString    m_part_name;    ///< Name to look for in the library, i.e. "74LS00".
+
+    int         m_unit;         ///< The unit for multiple part per package components.
+    int         m_convert;      ///< The alternate body style for components that have more than
+                                ///< one body style defined.  Primarily used for components that
+                                ///< have a De Morgan conversion.
+    wxString    m_prefix;       ///< C, R, U, Q etc - the first character which typically indicates
+                                ///< what the component is. Determined, upon placement, from the
+                                ///< library component.  Created upon file load, by the first
+                                ///<  non-digits in the reference fields.
+    TRANSFORM   m_transform;    ///< The rotation/mirror transformation matrix.
+    SCH_FIELDS  m_Fields;       ///< Variable length list of fields.
+
+    PART_REF    m_part;         ///< points into the PROJECT's libraries to the LIB_PART for this component
 
     /**
      * A temporary sheet path is required to generate the correct reference designator string
@@ -93,9 +103,8 @@ public:
     /**
      * Create schematic component from library component object.
      *
-     * @param libComponent - Component library object to create schematic
-     *                       component from.
-     * @param sheet - Schematic sheet the component is place into.
+     * @param aPart - library part to create schematic component from.
+     * @param aSheet - Schematic sheet the component is place into.
      * @param unit - Part for components that have multiple parts per
      *               package.
      * @param convert - Use the alternate body style for the schematic
@@ -103,7 +112,7 @@ public:
      * @param pos - Position to place new component.
      * @param setNewItemFlag - Set the component IS_NEW and IS_MOVED flags.
      */
-    SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet,
+    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet,
                    int unit = 0, int convert = 0,
                    const wxPoint& pos = wxPoint( 0, 0 ),
                    bool setNewItemFlag = false );
@@ -124,9 +133,18 @@ public:
         return wxT( "SCH_COMPONENT" );
     }
 
-    wxString GetLibName() const { return m_ChipName; }
+    void SetPartName( const wxString& aName, PART_LIBS* aLibs=NULL );
+    const wxString& GetPartName() const        { return m_part_name; }
 
-    void SetLibName( const wxString& aName );
+    /**
+     * Function Resolve
+     * [re-]assigns the current LIB_PART from aLibs which this component
+     * is based on.
+     * @param aLibs is the current set of LIB_PARTs to choose from.
+     */
+    bool Resolve( PART_LIBS* aLibs );
+
+    static void ResolveAll( const SCH_COLLECTOR& aComponents, PART_LIBS* aLibs );
 
     int GetUnit() const { return m_unit; }
 
@@ -158,12 +176,12 @@ public:
     void SetTransform( const TRANSFORM& aTransform );
 
     /**
-     * Function GetPartCount
+     * Function GetUnitCount
      * returns the number of parts per package of the component.
      *
      * @return The number of parts per package or zero if the library entry cannot be found.
      */
-    int GetPartCount() const;
+    int GetUnitCount() const;
 
     bool Save( FILE* aFile ) const;
 

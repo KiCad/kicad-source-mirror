@@ -36,6 +36,7 @@
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
 #include <invoke_sch_dialog.h>
+#include <project.h>
 
 #include <netlist.h>
 #include <class_netlist_object.h>
@@ -134,14 +135,12 @@ void DIALOG_ERC::OnCloseErcDialog( wxCloseEvent& event )
 }
 
 
-/* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RESET_MATRIX */
 void DIALOG_ERC::OnResetMatrixClick( wxCommandEvent& event )
 {
     ResetDefaultERCDiag( event );
 }
 
 
-/* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERC_CMP */
 void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
 {
     wxBusyCursor();
@@ -155,7 +154,6 @@ void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
         m_MessagesList->AppendText( messageList[ii] );
 }
 
-// Single click on a marker info:
 void DIALOG_ERC::OnLeftClickMarkersList( wxCommandEvent& event )
 {
     m_lastMarkerFound = NULL;
@@ -209,8 +207,7 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxCommandEvent& event )
     m_parent->RedrawScreen( marker->m_Pos, false);
 }
 
-// Double click on a marker info:
-// Close the dialog and jump to the selected marker
+
 void DIALOG_ERC::OnLeftDblClickMarkersList( wxCommandEvent& event )
 {
     // Remember: OnLeftClickMarkersList was called just berfore
@@ -231,8 +228,6 @@ void DIALOG_ERC::OnLeftDblClickMarkersList( wxCommandEvent& event )
 }
 
 
-/* Build or rebuild the panel showing the ERC conflict matrix
- */
 void DIALOG_ERC::ReBuildMatrixPanel()
 {
     // Try to know the size of bitmap button used in drc matrix
@@ -325,10 +320,6 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 }
 
 
-/*
- * Function DisplayERC_MarkersList
- * read the schematic and display the list of ERC markers
- */
 void DIALOG_ERC::DisplayERC_MarkersList()
 {
     SCH_SHEET_LIST sheetList;
@@ -358,8 +349,6 @@ void DIALOG_ERC::DisplayERC_MarkersList()
 }
 
 
-/* Resets the default values of the ERC matrix.
- */
 void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
 {
     memcpy( DiagErc, DefaultDiagErc, sizeof(DiagErc) );
@@ -367,8 +356,6 @@ void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
 }
 
 
-/* Change the error level for the pressed button, on the matrix table
- */
 void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
 {
     int             id, level, ii, x, y;
@@ -426,9 +413,9 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 
     m_writeErcFile = m_WriteResultOpt->GetValue();
 
-    /* Build the whole sheet list in hierarchy (sheet, not screen) */
+    // Build the whole sheet list in hierarchy (sheet, not screen)
     SCH_SHEET_LIST sheets;
-    sheets.AnnotatePowerSymbols();
+    sheets.AnnotatePowerSymbols( Prj().SchLibs() );
 
     if( m_parent->CheckAnnotate( aMessagesList, false ) )
     {

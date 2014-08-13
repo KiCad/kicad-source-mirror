@@ -43,7 +43,7 @@
 #include <transform.h>
 
 
-LIB_CIRCLE::LIB_CIRCLE( LIB_COMPONENT* aParent ) :
+LIB_CIRCLE::LIB_CIRCLE( LIB_PART*      aParent ) :
     LIB_ITEM( LIB_CIRCLE_T, aParent )
 {
     m_Radius     = 0;

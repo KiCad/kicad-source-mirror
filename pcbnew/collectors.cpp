@@ -447,7 +447,7 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
 
 
 // see collectors.h
-SEARCH_RESULT TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testData )
+SEARCH_RESULT PCB_TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testData )
 {
     // The Vist() function only visits the testItem if its type was in the
     // the scanList, so therefore we can collect anything given to us here.
@@ -456,7 +456,8 @@ SEARCH_RESULT TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testData 
     return SEARCH_CONTINUE;     // always when collecting
 }
 
-void TYPE_COLLECTOR::Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] )
+
+void PCB_TYPE_COLLECTOR::Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] )
 {
     Empty();        // empty any existing collection
 

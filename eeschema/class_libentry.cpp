@@ -51,36 +51,30 @@
 
 #include <boost/foreach.hpp>
 
-// Set this to 1 to print debugging output in alias and component destructors to verify
-// objects get cleaned up properly.
-#if defined( TRACE_DESTRUCTOR )
-#undef TRACE_DESTRUCTOR
-#endif
-
-#define TRACE_DESTRUCTOR 0
-
 // the separator char between the subpart id and the reference
 // 0 (no separator) or '.' or some other character
-int LIB_COMPONENT::m_subpartIdSeparator = 0;
+int LIB_PART::m_subpartIdSeparator = 0;
+
 // the ascii char value to calculate the subpart symbol id from the part number:
 // 'A' or '1' usually. (to print U1.A or U1.1)
 // if this a a digit, a number is used as id symbol
-int LIB_COMPONENT::m_subpartFirstId = 'A';
+int LIB_PART::m_subpartFirstId = 'A';
 
 
-LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent ):
-    EDA_ITEM( LIB_ALIAS_T )
+LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ):
+    EDA_ITEM( LIB_ALIAS_T ),
+    shared( aRootPart )
 {
-    root = aRootComponent;
     name = aName;
 }
 
 
-LIB_ALIAS::LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_COMPONENT* aRootComponent ) :
-    EDA_ITEM( aAlias )
+LIB_ALIAS::LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_PART* aRootPart ) :
+    EDA_ITEM( aAlias ),
+    shared( aRootPart )
 {
-    name = aAlias.name;
-    root = aRootComponent;
+    name   = aAlias.name;
+
     description = aAlias.description;
     keyWords = aAlias.keyWords;
     docFileName = aAlias.docFileName;
@@ -89,17 +83,24 @@ LIB_ALIAS::LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_COMPONENT* aRootComponent ) :
 
 LIB_ALIAS::~LIB_ALIAS()
 {
-#if TRACE_DESTRUCTOR
-    wxLogDebug( wxT( "Destroying alias \"%s\" of component \"%s\" with alias list count %d." ),
-                GetChars( name ), GetChars( root->GetName() ), root->m_aliases.size() );
+    wxASSERT_MSG( shared, wxT( "~LIB_ALIAS() without a LIB_PART" ) );
+
+#if defined(DEBUG) && 1
+    printf( "%s: destroying alias:'%s' of part:'%s' alias count:%zd.\n",
+        __func__, TO_UTF8( name ), TO_UTF8( shared->GetName() ), shared->m_aliases.size() );
 #endif
+
+    if( shared )
+        shared->RemoveAlias( this );
 }
 
 
-wxString LIB_ALIAS::GetLibraryName()
+const wxString LIB_ALIAS::GetLibraryName()
 {
-    if( GetComponent() )
-        return GetComponent()->GetLibraryName();
+    wxASSERT_MSG( shared, wxT( "LIB_ALIAS without a LIB_PART" ) );
+
+    if( shared )
+        return shared->GetLibraryName();
 
     return wxString( _( "none" ) );
 }
@@ -107,12 +108,13 @@ wxString LIB_ALIAS::GetLibraryName()
 
 bool LIB_ALIAS::IsRoot() const
 {
-    return name.CmpNoCase( root->GetName() ) == 0;
+    return Cmp_KEEPCASE( name, shared->GetName() ) == 0;
 }
 
-CMP_LIBRARY* LIB_ALIAS::GetLibrary()
+
+PART_LIB* LIB_ALIAS::GetLib()
 {
-    return root->GetLibrary();
+    return shared->GetLib();
 }
 
 
@@ -147,24 +149,34 @@ bool LIB_ALIAS::SaveDoc( OUTPUTFORMATTER& aFormatter )
 
 bool LIB_ALIAS::operator==( const wxChar* aName ) const
 {
-    return name.CmpNoCase( aName ) == 0;
+    return Cmp_KEEPCASE( name, aName ) == 0;
 }
 
 
 bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 )
 {
-    return aItem1.GetName().CmpNoCase( aItem2.GetName() ) < 0;
+    return Cmp_KEEPCASE( aItem1.GetName(), aItem2.GetName() ) < 0;
 }
 
 
 int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2 )
 {
-    return aItem1->GetName().CmpNoCase( aItem2->GetName() );
+    return Cmp_KEEPCASE( aItem1->GetName(), aItem2->GetName() );
 }
 
 
-LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
-    EDA_ITEM( LIB_COMPONENT_T )
+/// http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
+struct null_deleter
+{
+    void operator()(void const *) const
+    {
+    }
+};
+
+
+LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
+    EDA_ITEM( LIB_PART_T ),
+    m_me( this, null_deleter() )
 {
     m_name                = aName;
     m_library             = aLibrary;
@@ -192,23 +204,24 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
 }
 
 
-LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary ) :
-    EDA_ITEM( aComponent )
+LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
+    EDA_ITEM( aPart ),
+    m_me( this, null_deleter() )
 {
     LIB_ITEM* newItem;
 
     m_library             = aLibrary;
-    m_name                = aComponent.m_name;
-    m_FootprintList       = aComponent.m_FootprintList;
-    m_unitCount           = aComponent.m_unitCount;
-    m_unitsLocked         = aComponent.m_unitsLocked;
-    m_pinNameOffset       = aComponent.m_pinNameOffset;
-    m_showPinNumbers      = aComponent.m_showPinNumbers;
-    m_showPinNames        = aComponent.m_showPinNames;
-    m_dateModified        = aComponent.m_dateModified;
-    m_options             = aComponent.m_options;
+    m_name                = aPart.m_name;
+    m_FootprintList       = aPart.m_FootprintList;
+    m_unitCount           = aPart.m_unitCount;
+    m_unitsLocked         = aPart.m_unitsLocked;
+    m_pinNameOffset       = aPart.m_pinNameOffset;
+    m_showPinNumbers      = aPart.m_showPinNumbers;
+    m_showPinNames        = aPart.m_showPinNames;
+    m_dateModified        = aPart.m_dateModified;
+    m_options             = aPart.m_options;
 
-    BOOST_FOREACH( LIB_ITEM& oldItem, aComponent.GetDrawItemList() )
+    BOOST_FOREACH( LIB_ITEM& oldItem, aPart.GetDrawItemList() )
     {
         if( oldItem.IsNew() )
             continue;
@@ -218,47 +231,49 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary )
         drawings.push_back( newItem );
     }
 
-    for( size_t i = 0; i < aComponent.m_aliases.size(); i++ )
+    for( size_t i = 0; i < aPart.m_aliases.size(); i++ )
     {
-        LIB_ALIAS* alias = new LIB_ALIAS( *aComponent.m_aliases[i], this );
+        LIB_ALIAS* alias = new LIB_ALIAS( *aPart.m_aliases[i], this );
         m_aliases.push_back( alias );
     }
 }
 
 
-LIB_COMPONENT::~LIB_COMPONENT()
+LIB_PART::~LIB_PART()
 {
-#if TRACE_DESTRUCTOR
-    wxLogDebug( wxT( "Destroying component <%s> with alias list count of %d" ),
-                GetChars( GetName() ), m_aliases.size() );
+#if defined(DEBUG) && 1
+
+    if( m_aliases.size() )
+    {
+        int breakhere = 1;
+        (void) breakhere;
+    }
+
+    printf( "%s: destroying part '%s' with alias list count of %zd\n",
+        __func__, TO_UTF8( GetName() ), m_aliases.size() );
 #endif
 
-    // If the component is being delete directly rather than trough the library, free all
-    // of the memory allocated by the aliases.
-    if( !m_aliases.empty() )
+    // If the part is being deleted directly rather than through the library,
+    // delete all of the aliases.
+    while( m_aliases.size() )
     {
-        LIB_ALIAS* alias;
-
-        while( !m_aliases.empty() )
-        {
-            alias = m_aliases.back();
-            m_aliases.pop_back();
-            delete alias;
-        }
+        LIB_ALIAS* alias = m_aliases.back();
+        m_aliases.pop_back();
+        delete alias;
     }
 }
 
 
-wxString LIB_COMPONENT::GetLibraryName()
+const wxString LIB_PART::GetLibraryName()
 {
-    if( m_library != NULL )
+    if( m_library )
         return m_library->GetName();
 
     return wxString( _( "none" ) );
 }
 
 
-wxString LIB_COMPONENT::SubReference( int aUnit, bool aAddSeparator )
+wxString LIB_PART::SubReference( int aUnit, bool aAddSeparator )
 {
     wxString subRef;
 
@@ -274,7 +289,7 @@ wxString LIB_COMPONENT::SubReference( int aUnit, bool aAddSeparator )
 }
 
 
-void LIB_COMPONENT::SetName( const wxString& aName )
+void LIB_PART::SetName( const wxString& aName )
 {
     m_name = aName;
     GetValueField().SetText( aName );
@@ -282,7 +297,7 @@ void LIB_COMPONENT::SetName( const wxString& aName )
 }
 
 
-void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, int aMulti,
+void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, int aMulti,
                           int aConvert, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor, const TRANSFORM& aTransform,
                           bool aShowPinText, bool aDrawFields, bool aOnlySelected )
 {
@@ -390,7 +405,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
 }
 
 
-void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
+void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
                           const wxPoint& aOffset, const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
@@ -415,7 +430,7 @@ void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
     }
 }
 
-void LIB_COMPONENT::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
+void LIB_PART::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
                                   const wxPoint& aOffset, const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
@@ -449,7 +464,7 @@ void LIB_COMPONENT::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
 }
 
 
-void LIB_COMPONENT::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aDc )
+void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aDc )
 {
     wxASSERT( aItem != NULL );
 
@@ -461,10 +476,10 @@ void LIB_COMPONENT::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxD
 
         if( field->GetId() < MANDATORY_FIELDS )
         {
-            wxLogWarning( _( "An attempt was made to remove the %s field \
-from component %s in library %s." ),
-                          GetChars( field->GetName() ), GetChars( GetName() ),
-                          GetChars( GetLibraryName() ) );
+            wxLogWarning( _(
+                "An attempt was made to remove the %s field from component %s in library %s." ),
+                GetChars( field->GetName() ), GetChars( GetName() ),
+                GetChars( GetLibraryName() ) );
             return;
         }
     }
@@ -486,7 +501,7 @@ from component %s in library %s." ),
 }
 
 
-void LIB_COMPONENT::AddDrawItem( LIB_ITEM* aItem )
+void LIB_PART::AddDrawItem( LIB_ITEM* aItem )
 {
     wxASSERT( aItem != NULL );
 
@@ -495,7 +510,7 @@ void LIB_COMPONENT::AddDrawItem( LIB_ITEM* aItem )
 }
 
 
-LIB_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_ITEM* aItem, KICAD_T aType )
+LIB_ITEM* LIB_PART::GetNextDrawItem( LIB_ITEM* aItem, KICAD_T aType )
 {
     /* Return the next draw object pointer.
      * If item is NULL return the first item of type in the list.
@@ -532,7 +547,7 @@ LIB_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_ITEM* aItem, KICAD_T aType )
 }
 
 
-void LIB_COMPONENT::GetPins( LIB_PINS& aList, int aUnit, int aConvert )
+void LIB_PART::GetPins( LIB_PINS& aList, int aUnit, int aConvert )
 {
     /* Notes:
      * when aUnit == 0: no unit filtering
@@ -558,7 +573,7 @@ void LIB_COMPONENT::GetPins( LIB_PINS& aList, int aUnit, int aConvert )
 }
 
 
-LIB_PIN* LIB_COMPONENT::GetPin( const wxString& aNumber, int aUnit, int aConvert )
+LIB_PIN* LIB_PART::GetPin( const wxString& aNumber, int aUnit, int aConvert )
 {
     wxString pNumber;
     LIB_PINS pinList;
@@ -579,7 +594,7 @@ LIB_PIN* LIB_COMPONENT::GetPin( const wxString& aNumber, int aUnit, int aConvert
 }
 
 
-bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
+bool LIB_PART::Save( OUTPUTFORMATTER& aFormatter )
 {
     LIB_FIELD&  value = GetValueField();
 
@@ -714,7 +729,7 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
 }
 
 
-bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
+bool LIB_PART::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     int      unused;
     char*    p;
@@ -866,7 +881,7 @@ ok:
 }
 
 
-bool LIB_COMPONENT::LoadDrawEntries( LINE_READER& aLineReader, wxString& aErrorMsg )
+bool LIB_PART::LoadDrawEntries( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     char* line;
     LIB_ITEM* newEntry = NULL;
@@ -914,8 +929,8 @@ bool LIB_COMPONENT::LoadDrawEntries( LINE_READER& aLineReader, wxString& aErrorM
             newEntry = ( LIB_ITEM* ) new LIB_BEZIER( this );
             break;
 
-    case '#':    // Comment
-            continue;
+        case '#':    // Comment
+                continue;
 
         default:
             aErrorMsg.Printf( wxT( "undefined DRAW command %c" ), line[0] );
@@ -924,7 +939,7 @@ bool LIB_COMPONENT::LoadDrawEntries( LINE_READER& aLineReader, wxString& aErrorM
 
         if( !newEntry->Load( aLineReader, aErrorMsg ) )
         {
-            aErrorMsg.Printf( wxT( "error <%s> in DRAW command %c" ),
+            aErrorMsg.Printf( wxT( "error '%s' in DRAW command %c" ),
                               GetChars( aErrorMsg ), line[0] );
             delete newEntry;
 
@@ -951,7 +966,7 @@ bool LIB_COMPONENT::LoadDrawEntries( LINE_READER& aLineReader, wxString& aErrorM
 }
 
 
-bool LIB_COMPONENT::LoadAliases( char* aLine, wxString& aErrorMsg )
+bool LIB_PART::LoadAliases( char* aLine, wxString& aErrorMsg )
 {
     char* text = strtok( aLine, " \t\r\n" );
 
@@ -965,7 +980,7 @@ bool LIB_COMPONENT::LoadAliases( char* aLine, wxString& aErrorMsg )
 }
 
 
-bool LIB_COMPONENT::LoadField( LINE_READER& aLineReader, wxString& aErrorMsg )
+bool LIB_PART::LoadField( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     LIB_FIELD* field = new LIB_FIELD( this );
 
@@ -1000,7 +1015,7 @@ bool LIB_COMPONENT::LoadField( LINE_READER& aLineReader, wxString& aErrorMsg )
 }
 
 
-bool LIB_COMPONENT::LoadFootprints( LINE_READER& aLineReader, wxString& aErrorMsg )
+bool LIB_PART::LoadFootprints( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     char* line;
     char* p;
@@ -1025,7 +1040,7 @@ bool LIB_COMPONENT::LoadFootprints( LINE_READER& aLineReader, wxString& aErrorMs
 }
 
 
-EDA_RECT LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
+EDA_RECT LIB_PART::GetBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
@@ -1050,7 +1065,7 @@ EDA_RECT LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
 }
 
 
-EDA_RECT LIB_COMPONENT::GetBodyBoundingBox( int aUnit, int aConvert ) const
+EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
@@ -1075,7 +1090,7 @@ EDA_RECT LIB_COMPONENT::GetBodyBoundingBox( int aUnit, int aConvert ) const
 }
 
 
-void LIB_COMPONENT::deleteAllFields()
+void LIB_PART::deleteAllFields()
 {
     LIB_ITEMS::iterator it;
 
@@ -1093,7 +1108,7 @@ void LIB_COMPONENT::deleteAllFields()
 }
 
 
-void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD>& aFields )
+void LIB_PART::SetFields( const std::vector <LIB_FIELD>& aFields )
 {
     deleteAllFields();
 
@@ -1111,7 +1126,7 @@ void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD>& aFields )
 }
 
 
-void LIB_COMPONENT::GetFields( LIB_FIELDS& aList )
+void LIB_PART::GetFields( LIB_FIELDS& aList )
 {
     LIB_FIELD*  field;
 
@@ -1146,7 +1161,7 @@ void LIB_COMPONENT::GetFields( LIB_FIELDS& aList )
 }
 
 
-LIB_FIELD* LIB_COMPONENT::GetField( int aId )
+LIB_FIELD* LIB_PART::GetField( int aId )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
@@ -1163,7 +1178,7 @@ LIB_FIELD* LIB_COMPONENT::GetField( int aId )
 }
 
 
-LIB_FIELD* LIB_COMPONENT::FindField( const wxString& aFieldName )
+LIB_FIELD* LIB_PART::FindField( const wxString& aFieldName )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
@@ -1180,7 +1195,7 @@ LIB_FIELD* LIB_COMPONENT::FindField( const wxString& aFieldName )
 }
 
 
-LIB_FIELD& LIB_COMPONENT::GetValueField()
+LIB_FIELD& LIB_PART::GetValueField()
 {
     LIB_FIELD* field = GetField( VALUE );
     wxASSERT( field != NULL );
@@ -1188,7 +1203,7 @@ LIB_FIELD& LIB_COMPONENT::GetValueField()
 }
 
 
-LIB_FIELD& LIB_COMPONENT::GetReferenceField()
+LIB_FIELD& LIB_PART::GetReferenceField()
 {
     LIB_FIELD* field = GetField( REFERENCE );
     wxASSERT( field != NULL );
@@ -1196,7 +1211,7 @@ LIB_FIELD& LIB_COMPONENT::GetReferenceField()
 }
 
 
-bool LIB_COMPONENT::SaveDateAndTime( OUTPUTFORMATTER& aFormatter )
+bool LIB_PART::SaveDateAndTime( OUTPUTFORMATTER& aFormatter )
 {
     int year, mon, day, hour, min, sec;
 
@@ -1216,7 +1231,7 @@ bool LIB_COMPONENT::SaveDateAndTime( OUTPUTFORMATTER& aFormatter )
 }
 
 
-bool LIB_COMPONENT::LoadDateAndTime( char* aLine )
+bool LIB_PART::LoadDateAndTime( char* aLine )
 {
     int   year, mon, day, hour, min, sec;
 
@@ -1235,7 +1250,7 @@ bool LIB_COMPONENT::LoadDateAndTime( char* aLine )
 }
 
 
-void LIB_COMPONENT::SetOffset( const wxPoint& aOffset )
+void LIB_PART::SetOffset( const wxPoint& aOffset )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
@@ -1244,13 +1259,13 @@ void LIB_COMPONENT::SetOffset( const wxPoint& aOffset )
 }
 
 
-void LIB_COMPONENT::RemoveDuplicateDrawItems()
+void LIB_PART::RemoveDuplicateDrawItems()
 {
     drawings.unique();
 }
 
 
-bool LIB_COMPONENT::HasConversion() const
+bool LIB_PART::HasConversion() const
 {
     for( unsigned ii = 0; ii < drawings.size(); ii++  )
     {
@@ -1263,7 +1278,7 @@ bool LIB_COMPONENT::HasConversion() const
 }
 
 
-void LIB_COMPONENT::ClearStatus()
+void LIB_PART::ClearStatus()
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
@@ -1272,7 +1287,7 @@ void LIB_COMPONENT::ClearStatus()
 }
 
 
-int LIB_COMPONENT::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool aEditPinByPin )
+int LIB_PART::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool aEditPinByPin )
 {
     int itemCount = 0;
 
@@ -1303,7 +1318,7 @@ int LIB_COMPONENT::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool a
 }
 
 
-void LIB_COMPONENT::MoveSelectedItems( const wxPoint& aOffset )
+void LIB_PART::MoveSelectedItems( const wxPoint& aOffset )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
@@ -1318,7 +1333,7 @@ void LIB_COMPONENT::MoveSelectedItems( const wxPoint& aOffset )
 }
 
 
-void LIB_COMPONENT::ClearSelectedItems()
+void LIB_PART::ClearSelectedItems()
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
@@ -1327,7 +1342,7 @@ void LIB_COMPONENT::ClearSelectedItems()
 }
 
 
-void LIB_COMPONENT::DeleteSelectedItems()
+void LIB_PART::DeleteSelectedItems()
 {
     LIB_ITEMS::iterator item = drawings.begin();
 
@@ -1357,7 +1372,7 @@ void LIB_COMPONENT::DeleteSelectedItems()
 }
 
 
-void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
+void LIB_PART::CopySelectedItems( const wxPoint& aOffset )
 {
     /* *do not* use iterators here, because new items
      * are added to drawings that is a  boost::ptr_vector.
@@ -1390,7 +1405,7 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
 
 
 
-void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& aCenter )
+void LIB_PART::MirrorSelectedItemsH( const wxPoint& aCenter )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
@@ -1404,7 +1419,7 @@ void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& aCenter )
     drawings.sort();
 }
 
-void LIB_COMPONENT::MirrorSelectedItemsV( const wxPoint& aCenter )
+void LIB_PART::MirrorSelectedItemsV( const wxPoint& aCenter )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
@@ -1418,7 +1433,7 @@ void LIB_COMPONENT::MirrorSelectedItemsV( const wxPoint& aCenter )
     drawings.sort();
 }
 
-void LIB_COMPONENT::RotateSelectedItems( const wxPoint& aCenter )
+void LIB_PART::RotateSelectedItems( const wxPoint& aCenter )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
@@ -1434,7 +1449,7 @@ void LIB_COMPONENT::RotateSelectedItems( const wxPoint& aCenter )
 
 
 
-LIB_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert,
+LIB_ITEM* LIB_PART::LocateDrawItem( int aUnit, int aConvert,
                                          KICAD_T aType, const wxPoint& aPoint )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
@@ -1452,7 +1467,7 @@ LIB_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert,
 }
 
 
-LIB_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
+LIB_ITEM* LIB_PART::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
                                          const wxPoint& aPoint, const TRANSFORM& aTransform )
 {
     /* we use LocateDrawItem( int aUnit, int convert, KICAD_T type, const
@@ -1473,7 +1488,7 @@ LIB_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
 }
 
 
-void LIB_COMPONENT::SetPartCount( int aCount )
+void LIB_PART::SetUnitCount( int aCount )
 {
     if( m_unitCount == aCount )
         return;
@@ -1520,7 +1535,7 @@ void LIB_COMPONENT::SetPartCount( int aCount )
 }
 
 
-void LIB_COMPONENT::SetConversion( bool aSetConvert )
+void LIB_PART::SetConversion( bool aSetConvert )
 {
     if( aSetConvert == HasConversion() )
         return;
@@ -1559,7 +1574,7 @@ void LIB_COMPONENT::SetConversion( bool aSetConvert )
 }
 
 
-wxArrayString LIB_COMPONENT::GetAliasNames( bool aIncludeRoot ) const
+wxArrayString LIB_PART::GetAliasNames( bool aIncludeRoot ) const
 {
     wxArrayString names;
 
@@ -1577,14 +1592,14 @@ wxArrayString LIB_COMPONENT::GetAliasNames( bool aIncludeRoot ) const
 }
 
 
-bool LIB_COMPONENT::HasAlias( const wxString& aName ) const
+bool LIB_PART::HasAlias( const wxString& aName ) const
 {
     wxCHECK2_MSG( !aName.IsEmpty(), return false,
                   wxT( "Cannot get alias with an empty name, bad programmer." ) );
 
     for( size_t i = 0; i < m_aliases.size(); i++ )
     {
-        if( aName.CmpNoCase( m_aliases[i]->GetName() ) == 0 )
+        if( Cmp_KEEPCASE( aName, m_aliases[i]->GetName() ) == 0 )
             return true;
     }
 
@@ -1592,10 +1607,10 @@ bool LIB_COMPONENT::HasAlias( const wxString& aName ) const
 }
 
 
-void LIB_COMPONENT::SetAliases( const wxArrayString& aAliasList )
+void LIB_PART::SetAliases( const wxArrayString& aAliasList )
 {
-    wxCHECK_RET( m_library == NULL,
-                 wxT( "Component aliases cannot be changed when they are owned by a library." ) );
+    wxCHECK_RET( !m_library,
+                 wxT( "Part aliases cannot be changed when they are owned by a library." ) );
 
     if( aAliasList == GetAliasNames() )
         return;
@@ -1624,17 +1639,19 @@ void LIB_COMPONENT::SetAliases( const wxArrayString& aAliasList )
 }
 
 
-void LIB_COMPONENT::RemoveAlias( const wxString& aName )
+#if 0   // this version looked suspect to me, it did not rename a deleted root
+
+void LIB_PART::RemoveAlias( const wxString& aName )
 {
     wxCHECK_RET( m_library == NULL,
-                 wxT( "Component aliases cannot be changed when they are owned by a library." ) );
+                 wxT( "Part aliases cannot be changed when they are owned by a library." ) );
     wxCHECK_RET( !aName.IsEmpty(), wxT( "Cannot get alias with an empty name." ) );
 
     LIB_ALIASES::iterator it;
 
     for( it = m_aliases.begin(); it < m_aliases.end(); it++ )
     {
-        if( aName.CmpNoCase( (*it)->GetName() ) == 0 )
+        if( Cmp_KEEPCASE( aName, (*it)->GetName() ) == 0 )
         {
             m_aliases.erase( it );
             break;
@@ -1642,39 +1659,53 @@ void LIB_COMPONENT::RemoveAlias( const wxString& aName )
     }
 }
 
-
-LIB_ALIAS* LIB_COMPONENT::RemoveAlias( LIB_ALIAS* aAlias )
+#else
+void LIB_PART::RemoveAlias( const wxString& aName )
 {
-    wxCHECK_MSG( aAlias != NULL, NULL, wxT( "Cannot remove alias by NULL pointer." ) );
+    LIB_ALIAS* a = GetAlias( aName );
+
+    if( a )
+        RemoveAlias( a );
+}
+#endif
+
+
+LIB_ALIAS* LIB_PART::RemoveAlias( LIB_ALIAS* aAlias )
+{
+    wxCHECK_MSG( aAlias, NULL, wxT( "Cannot remove alias by NULL pointer." ) );
 
     LIB_ALIAS* nextAlias = NULL;
+
     LIB_ALIASES::iterator it = find( m_aliases.begin(), m_aliases.end(), aAlias );
 
     if( it != m_aliases.end() )
     {
         bool rename = aAlias->IsRoot();
 
+        DBG( printf( "%s: part:'%s'  alias:'%s'\n", __func__,
+            TO_UTF8( m_name ),
+            TO_UTF8( aAlias->GetName() )
+            );)
+
         it = m_aliases.erase( it );
-        delete aAlias;
 
         if( !m_aliases.empty() )
         {
             if( it == m_aliases.end() )
                 it = m_aliases.begin();
 
-            nextAlias = (*it);
+            nextAlias = *it;
 
             if( rename )
                 SetName( nextAlias->GetName() );
         }
-
     }
 
     return nextAlias;
 }
 
 
-void LIB_COMPONENT::RemoveAllAliases()
+void LIB_PART::RemoveAllAliases()
 {
     // Remove all of the aliases except the root alias.
     while( m_aliases.size() > 1 )
@@ -1682,14 +1713,14 @@ void LIB_COMPONENT::RemoveAllAliases()
 }
 
 
-LIB_ALIAS* LIB_COMPONENT::GetAlias( const wxString& aName )
+LIB_ALIAS* LIB_PART::GetAlias( const wxString& aName )
 {
     wxCHECK2_MSG( !aName.IsEmpty(), return NULL,
                   wxT( "Cannot get alias with an empty name.  Bad programmer!" ) );
 
     for( size_t i = 0; i < m_aliases.size(); i++ )
     {
-        if( aName.CmpNoCase( m_aliases[i]->GetName() ) == 0 )
+        if( Cmp_KEEPCASE( aName, m_aliases[i]->GetName() ) == 0 )
             return m_aliases[i];
     }
 
@@ -1697,7 +1728,7 @@ LIB_ALIAS* LIB_COMPONENT::GetAlias( const wxString& aName )
 }
 
 
-LIB_ALIAS* LIB_COMPONENT::GetAlias( size_t aIndex )
+LIB_ALIAS* LIB_PART::GetAlias( size_t aIndex )
 {
     wxCHECK2_MSG( aIndex < m_aliases.size(), return NULL,
                   wxT( "Illegal alias list index, bad programmer." ) );
@@ -1706,10 +1737,10 @@ LIB_ALIAS* LIB_COMPONENT::GetAlias( size_t aIndex )
 }
 
 
-void LIB_COMPONENT::AddAlias( const wxString& aName )
+void LIB_PART::AddAlias( const wxString& aName )
 {
     wxCHECK_RET( !HasAlias( aName ),
-                 wxT( "Component <" ) + GetName() + wxT( "> already has an alias <" ) +
+                 wxT( "Part <" ) + GetName() + wxT( "> already has an alias <" ) +
                  aName + wxT( ">.  Bad programmer." ) );
 
     m_aliases.push_back( new LIB_ALIAS( aName, this ) );
@@ -1725,7 +1756,7 @@ void LIB_COMPONENT::AddAlias( const wxString& aName )
  * @param aSep = the separator symbol (0 (no separator) or '.' , '-' and '_')
  * @param aFirstId = the Id of the first part ('A' or '1')
  */
-void LIB_COMPONENT::SetSubpartIdNotation( int aSep, int aFirstId )
+void LIB_PART::SetSubpartIdNotation( int aSep, int aFirstId )
 {
     m_subpartFirstId = 'A';
     m_subpartIdSeparator = 0;

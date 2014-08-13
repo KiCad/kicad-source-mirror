@@ -39,12 +39,11 @@
 
 #include <id.h>
 #include <wxstruct.h>
-//#include <pgm_base.h>
 
 // With a recent wxWidget, we can use the wxFileSystemWatcherEvent
 // to monitor files add/remove/rename in tree project
 #if wxCHECK_VERSION( 2, 9, 4  )
-#define KICAD_USE_FILES_WATCHER
+ #define KICAD_USE_FILES_WATCHER
 #endif
 
 class LAUNCHER_PANEL;
@@ -97,12 +96,17 @@ enum id_kicad_frm {
     ID_PROJECT_RENAME,
     ID_PROJECT_OPEN_FILE_WITH_TEXT_EDITOR,
 
-    ID_TO_EDITOR,
-    ID_TO_EESCHEMA,
+    ID_TO_SCH,
+    ID_TO_SCH_LIB_EDITOR,
+    ID_TO_CVPCB,
+    ID_TO_PCB,
+    ID_TO_PCB_FP_EDITOR,
     ID_TO_GERBVIEW,
     ID_TO_BITMAP_CONVERTER,
     ID_TO_PCB_CALCULATOR,
     ID_TO_PL_EDITOR,
+
+    ID_TO_TEXT_EDITOR,
     ID_BROWSE_AN_SELECT_FILE,
     ID_SELECT_PREFERED_EDITOR,
     ID_SELECT_PREFERED_PDF_BROWSER_NAME,
@@ -144,9 +148,12 @@ public:
 
     void OnArchiveFiles( wxCommandEvent& event );
     void OnUnarchiveFiles( wxCommandEvent& event );
-    void OnRunPcbNew( wxCommandEvent& event );
-    void OnRunCvpcb( wxCommandEvent& event );
+
     void OnRunEeschema( wxCommandEvent& event );
+    void OnRunSchLibEditor( wxCommandEvent& event );
+    void OnRunPcbNew( wxCommandEvent& event );
+    void OnRunPcbFpEditor( wxCommandEvent& event );
+    void OnRunCvpcb( wxCommandEvent& event );
     void OnRunGerbview( wxCommandEvent& event );
     void OnRunBitmapConverter( wxCommandEvent& event );
     void OnRunPcbCalculator( wxCommandEvent& event );

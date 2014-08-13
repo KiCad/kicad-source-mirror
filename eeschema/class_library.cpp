@@ -28,6 +28,7 @@
  */
 
 #include <fctsys.h>
+#include <kiface_i.h>
 #include <gr_basic.h>
 #include <macros.h>
 #include <kicad_string.h>
@@ -35,6 +36,9 @@
 #include <eda_doc.h>
 #include <wxstruct.h>
 #include <richio.h>
+#include <config_params.h>
+#include <wildcards_and_files_ext.h>
+//#include <richio.h>
 
 #include <general.h>
 #include <class_library.h>
@@ -44,27 +48,30 @@
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
 
-static const wxString duplicate_name_msg =
-    _(  "Library '%s' has duplicate entry name '%s'.\n"
-        "This may cause some unexpected behavior when loading components into a schematic." );
+#define duplicate_name_msg  \
+    _(  "Library '%s' has duplicate entry name '%s'.\n" \
+        "This may cause some unexpected behavior when loading components into a schematic." )
 
 
-bool operator==( const CMP_LIBRARY& aLibrary, const wxString& aName )
+bool operator==( const PART_LIB& aLibrary, const wxString& aName )
 {
     // See our header class_libentry.h for function Cmp_KEEPCASE().
     return Cmp_KEEPCASE( aLibrary.GetName(), aName ) == 0;
 }
 
 
-bool operator!=( const CMP_LIBRARY& aLibrary, const wxString& aName )
+bool operator!=( const PART_LIB& aLibrary, const wxString& aName )
 {
     return !( aLibrary == aName );
 }
 
 
-bool operator<( const CMP_LIBRARY& aItem1, const CMP_LIBRARY& aItem2 )
+wxArrayString PART_LIBS::s_libraryListSortOrder;
+
+
+bool operator<( const PART_LIB& aItem1, const PART_LIB& aItem2 )
 {
-    /* The cache library always is sorted to the end of the library list. */
+    // The cache library always is sorted to the end of the library list.
     if( aItem2.IsCache() )
         return true;
 
@@ -72,11 +79,11 @@ bool operator<( const CMP_LIBRARY& aItem1, const CMP_LIBRARY& aItem2 )
         return false;
 
     // If the sort order array isn't set, then sort alphabetically except.
-    if( CMP_LIBRARY::GetSortOrder().IsEmpty() )
+    if( PART_LIBS::GetSortOrder().IsEmpty() )
         return Cmp_KEEPCASE( aItem1.GetName(), aItem2.GetName() ) < 0;
 
-    int i1 = CMP_LIBRARY::GetSortOrder().Index( aItem1.GetName(), false );
-    int i2 = CMP_LIBRARY::GetSortOrder().Index( aItem2.GetName(), false );
+    int i1 = PART_LIBS::GetSortOrder().Index( aItem1.GetName(), false );
+    int i2 = PART_LIBS::GetSortOrder().Index( aItem2.GetName(), false );
 
     if( i1 == wxNOT_FOUND && i2 == wxNOT_FOUND )
         return true;
@@ -91,7 +98,10 @@ bool operator<( const CMP_LIBRARY& aItem1, const CMP_LIBRARY& aItem2 )
 }
 
 
-CMP_LIBRARY::CMP_LIBRARY( int aType, const wxFileName& aFileName )
+PART_LIB::PART_LIB( int aType, const wxString& aFileName ) :
+    // start @ != 0 so each additional library added
+    // is immediately detectable, zero would not be.
+    m_mod_hash( PART_LIBS::s_modify_generation )
 {
     type = aType;
     isModified = false;
@@ -99,33 +109,21 @@ CMP_LIBRARY::CMP_LIBRARY( int aType, const wxFileName& aFileName )
     isCache = false;
     timeStamp = wxDateTime::Now();
 
-    if( aFileName.IsOk() )
-        fileName = aFileName;
-    else
-        fileName = wxFileName( wxT( "unnamed.lib" ) );
+    fileName = aFileName;
+
+    if( !fileName.IsOk() )
+        fileName = wxT( "unnamed.lib" );
 }
 
 
-CMP_LIBRARY::~CMP_LIBRARY()
+PART_LIB::~PART_LIB()
 {
-    for( LIB_ALIAS_MAP::iterator it=aliases.begin();  it!=aliases.end();  it++ )
-    {
-        LIB_ALIAS*      alias = (*it).second;
-        LIB_COMPONENT*  component = alias->GetComponent();
-
-        alias = component->RemoveAlias( alias );
-
-        if( alias == NULL )
-            delete component;
-    }
 }
 
 
-void CMP_LIBRARY::GetEntryNames( wxArrayString& aNames, bool aSort, bool aMakeUpperCase )
+void PART_LIB::GetEntryNames( wxArrayString& aNames, bool aSort, bool aMakeUpperCase )
 {
-    LIB_ALIAS_MAP::iterator it;
-
-    for( it=aliases.begin();  it!=aliases.end();  it++ )
+    for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  it++ )
     {
         if( aMakeUpperCase )
         {
@@ -158,28 +156,28 @@ bool sortFunction( wxArrayString aItem1, wxArrayString aItem2 )
 }
 
 
-void CMP_LIBRARY::SearchEntryNames( std::vector<wxArrayString>& aNames,
+void PART_LIB::SearchEntryNames( std::vector<wxArrayString>& aNames,
                                     const wxString& aNameSearch,
                                     const wxString& aKeySearch,
                                     bool aSort )
 {
-    LIB_ALIAS_MAP::iterator it;
-
-    for( it = aliases.begin();  it!=aliases.end();  it++ )
+    for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it != m_amap.end();  ++it )
     {
-        if( !aKeySearch.IsEmpty() && KeyWordOk( aKeySearch, (*it).second->GetKeyWords() ) )
+        if( !!aKeySearch && KeyWordOk( aKeySearch, it->second->GetKeyWords() ) )
         {
             wxArrayString item;
-            item.Add( (*it).first );
+
+            item.Add( it->first );
             item.Add( GetLogicalName() );
             aNames.push_back( item );
         }
 
-        if( !aNameSearch.IsEmpty() && WildCompareString( aNameSearch,
-                                                         (*it).second->GetName(), false ) )
+        if( !aNameSearch.IsEmpty() &&
+                WildCompareString( aNameSearch, it->second->GetName(), false ) )
         {
             wxArrayString item;
-            item.Add( (*it).first );
+
+            item.Add( it->first );
             item.Add( GetLogicalName() );
             aNames.push_back( item );
         }
@@ -190,17 +188,17 @@ void CMP_LIBRARY::SearchEntryNames( std::vector<wxArrayString>& aNames,
 }
 
 
-void CMP_LIBRARY::SearchEntryNames( wxArrayString& aNames, const wxRegEx& aRe, bool aSort )
+void PART_LIB::SearchEntryNames( wxArrayString& aNames, const wxRegEx& aRe, bool aSort )
 {
     if( !aRe.IsValid() )
         return;
 
     LIB_ALIAS_MAP::iterator it;
 
-    for( it = aliases.begin();  it!=aliases.end();  it++ )
+    for( it = m_amap.begin();  it!=m_amap.end();  it++ )
     {
-        if( aRe.Matches( (*it).second->GetKeyWords() ) )
-            aNames.Add( (*it).first );
+        if( aRe.Matches( it->second->GetKeyWords() ) )
+            aNames.Add( it->first );
     }
 
     if( aSort )
@@ -208,16 +206,16 @@ void CMP_LIBRARY::SearchEntryNames( wxArrayString& aNames, const wxRegEx& aRe, b
 }
 
 
-bool CMP_LIBRARY::Conflicts( LIB_COMPONENT* aComponent )
+bool PART_LIB::Conflicts( LIB_PART* aPart )
 {
-    wxCHECK_MSG( aComponent != NULL, false,
+    wxCHECK_MSG( aPart != NULL, false,
                  wxT( "Cannot test NULL component for conflicts in library " ) + GetName() );
 
-    for( size_t i=0;  i<aComponent->m_aliases.size();  i++ )
+    for( size_t i=0;  i<aPart->m_aliases.size();  i++ )
     {
-        LIB_ALIAS_MAP::iterator it = aliases.find( aComponent->m_aliases[i]->GetName() );
+        LIB_ALIAS_MAP::iterator it = m_amap.find( aPart->m_aliases[i]->GetName() );
 
-        if( it != aliases.end() )
+        if( it != m_amap.end() )
             return true;
     }
 
@@ -225,29 +223,28 @@ bool CMP_LIBRARY::Conflicts( LIB_COMPONENT* aComponent )
 }
 
 
-LIB_ALIAS* CMP_LIBRARY::FindEntry( const wxString& aName )
+LIB_ALIAS* PART_LIB::FindEntry( const wxString& aName )
 {
-    LIB_ALIAS_MAP::iterator it = aliases.find( aName );
+    LIB_ALIAS_MAP::iterator it = m_amap.find( aName );
 
-    if( it != aliases.end() )
-        return (*it).second;
+    if( it != m_amap.end() )
+        return it->second;
 
     return NULL;
 }
 
 
-LIB_ALIAS* CMP_LIBRARY::GetFirstEntry()
+LIB_ALIAS* PART_LIB::GetFirstEntry()
 {
-    if( aliases.size() )
-        return (*aliases.begin()).second;
+    if( m_amap.size() )
+        return m_amap.begin()->second;
     else
         return NULL;
 }
 
 
-LIB_COMPONENT* CMP_LIBRARY::FindComponent( const wxString& aName )
+LIB_PART* PART_LIB::FindPart( const wxString& aName )
 {
-
 #if 0 && defined(DEBUG)
     if( !aName.Cmp( wxT( "TI_STELLARIS_BOOSTERPACK" ) ) )
     {
@@ -256,21 +253,20 @@ LIB_COMPONENT* CMP_LIBRARY::FindComponent( const wxString& aName )
     }
 #endif
 
-    LIB_COMPONENT*  component = NULL;
-    LIB_ALIAS*      entry = FindEntry( aName );
+    if( LIB_ALIAS* alias = FindEntry( aName ) )
+    {
+        return alias->GetPart();
+    }
 
-    if( entry )
-        component = entry->GetComponent();
-
-    return component;
+    return NULL;
 }
 
 
-bool CMP_LIBRARY::AddAlias( LIB_ALIAS* aAlias )
+bool PART_LIB::AddAlias( LIB_ALIAS* aAlias )
 {
     wxASSERT( aAlias );
 
-#if 0 && defined(DEBUG)
+#if defined(DEBUG) && 0
     if( !aAlias->GetName().Cmp( wxT( "TI_STELLARIS_BOOSTERPACK" ) ) )
     {
         int breakhere = 1;
@@ -278,173 +274,175 @@ bool CMP_LIBRARY::AddAlias( LIB_ALIAS* aAlias )
     }
 #endif
 
-    LIB_ALIAS_MAP::iterator it = aliases.find( aAlias->GetName() );
+    LIB_ALIAS_MAP::iterator it = m_amap.find( aAlias->GetName() );
 
-    if( it != aliases.end() )
+    if( it != m_amap.end() )
     {
         wxString msg;
 
-        msg.Printf( _( "Cannot add duplicate alias <%s> to library <%s>." ),
+        msg.Printf( _( "Cannot add duplicate alias '%s' to library '%s'." ),
                     GetChars( aAlias->GetName() ),
                     GetChars( fileName.GetName() ) );
         return false;
     }
 
-    aliases[ aAlias->GetName() ] = aAlias;
+    wxString name = aAlias->GetName();
+
+    m_amap[ name ] = aAlias;
     isModified = true;
+    ++m_mod_hash;
+
     return true;
 }
 
 
-LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
+bool PART_LIB::AddPart( LIB_PART* aPart )
 {
-    if( !aComponent )
-        return NULL;
-
     // Conflict detection: See if already existing aliases exist,
     // and if yes, ask user for continue or abort
     // Special case: if the library is the library cache of the project,
     // old aliases are always removed to avoid conflict,
     //      and user is not prompted )
-    if( Conflicts( aComponent ) && !IsCache() )
+    if( Conflicts( aPart ) && !IsCache() )
     {
-        wxFAIL_MSG( wxT( "Cannot add component <" ) + aComponent->GetName() +
+        wxFAIL_MSG( wxT( "Cannot add component <" ) + aPart->GetName() +
                     wxT( "> to library <" ) + GetName() + wxT( "> due to name conflict." ) );
-        return NULL;
+        return false;
     }
 
-    LIB_COMPONENT* newCmp = new LIB_COMPONENT( *aComponent, this );
+    // add a clone, not the caller's copy
+    LIB_PART* my_part = new LIB_PART( *aPart, this );
 
-    for( size_t i = 0; i < newCmp->m_aliases.size(); i++ )
+    for( size_t i = 0; i < my_part->m_aliases.size(); i++ )
     {
-        wxString aliasname = newCmp->m_aliases[i]->GetName();
-        LIB_ALIAS* alias = FindAlias( aliasname );
+        wxString aliasname = my_part->m_aliases[i]->GetName();
 
-        if( alias != NULL )
+        if( LIB_ALIAS* alias = FindAlias( aliasname ) )
             RemoveEntry( alias );
 
-        aliases[ aliasname ] = newCmp->m_aliases[i];
+        m_amap[ aliasname ] = my_part->m_aliases[i];
     }
 
     isModified = true;
+    ++m_mod_hash;
 
-    return newCmp;
+    return true;
 }
 
 
-LIB_ALIAS* CMP_LIBRARY::RemoveEntry( LIB_ALIAS* aEntry )
+LIB_ALIAS* PART_LIB::RemoveEntry( LIB_ALIAS* aEntry )
 {
     wxCHECK_MSG( aEntry != NULL, NULL, wxT( "NULL pointer cannot be removed from library." ) );
 
-    LIB_ALIAS_MAP::iterator it = aliases.find( aEntry->GetName() );
+    LIB_ALIAS_MAP::iterator it = m_amap.find( aEntry->GetName() );
 
-    if( it == aliases.end() )
+    if( it == m_amap.end() )
         return NULL;
 
     // If the entry pointer doesn't match the name it is mapped to in the library, we
     // have done something terribly wrong.
-    wxCHECK_MSG( (*it).second == aEntry, NULL,
+    wxCHECK_MSG( *it->second == aEntry, NULL,
                  wxT( "Pointer mismatch while attempting to remove entry <" ) +
                  aEntry->GetName() + wxT( "> from library <" ) + GetName() + wxT( ">." ) );
 
-    LIB_ALIAS* alias = (LIB_ALIAS*) aEntry;
-    LIB_COMPONENT* component = alias->GetComponent();
-    alias = component->RemoveAlias( alias );
+    LIB_ALIAS*  alias = aEntry;
+    LIB_PART*   part = alias->GetPart();
 
-    if( alias == NULL )
+    alias = part->RemoveAlias( alias );
+
+    if( !alias )
     {
-        delete component;
+        delete part;
 
-        if( aliases.size() > 1 )
+        if( m_amap.size() > 1 )
         {
             LIB_ALIAS_MAP::iterator next = it;
             next++;
 
-            if( next == aliases.end() )
-                next = aliases.begin();
+            if( next == m_amap.end() )
+                next = m_amap.begin();
 
-            alias = (*next).second;
+            alias = next->second;
         }
     }
 
-    aliases.erase( it );
+    m_amap.erase( it );
     isModified = true;
-
+    ++m_mod_hash;
     return alias;
 }
 
 
-LIB_COMPONENT* CMP_LIBRARY::ReplaceComponent( LIB_COMPONENT* aOldComponent,
-                                              LIB_COMPONENT* aNewComponent )
+LIB_PART* PART_LIB::ReplacePart( LIB_PART* aOldPart, LIB_PART* aNewPart )
 {
-    wxASSERT( aOldComponent != NULL );
-    wxASSERT( aNewComponent != NULL );
+    wxASSERT( aOldPart != NULL );
+    wxASSERT( aNewPart != NULL );
 
     /* Remove the old root component.  The component will automatically be deleted
      * when all it's aliases are deleted.  Do not place any code that accesses
-     * aOldComponent inside this loop that gets evaluated after the last alias is
+     * aOldPart inside this loop that gets evaluated after the last alias is
      * removed in RemoveEntry().  Failure to heed this warning will result in a
      * segfault.
      */
-    size_t i = aOldComponent->m_aliases.size();
+    size_t i = aOldPart->m_aliases.size();
 
-    while( i != 0 )
+    while( i > 0 )
     {
         i -= 1;
-        RemoveEntry( aOldComponent->m_aliases[ i ] );
+        RemoveEntry( aOldPart->m_aliases[ i ] );
     }
 
-    LIB_COMPONENT* newCmp = new LIB_COMPONENT( *aNewComponent, this );
+    LIB_PART* my_part = new LIB_PART( *aNewPart, this );
 
     // Add new aliases to library alias map.
-    for( i = 0; i < newCmp->m_aliases.size(); i++ )
+    for( i = 0; i < my_part->m_aliases.size(); i++ )
     {
-        aliases[ newCmp->m_aliases[ i ]->GetName() ] = newCmp->m_aliases[ i ];
+        wxString aname = my_part->m_aliases[ i ]->GetName();
+        m_amap[ aname ] = my_part->m_aliases[ i ];
     }
 
     isModified = true;
-
-    return newCmp;
+    ++m_mod_hash;
+    return my_part;
 }
 
 
-LIB_ALIAS* CMP_LIBRARY::GetNextEntry( const wxString& aName )
+LIB_ALIAS* PART_LIB::GetNextEntry( const wxString& aName )
 {
-    if( aliases.empty() )
+    if( m_amap.empty() )
         return NULL;
 
-    LIB_ALIAS_MAP::iterator it = aliases.find( aName );
+    LIB_ALIAS_MAP::iterator it = m_amap.find( aName );
 
     it++;
 
-    if( it == aliases.end() )
-        it = aliases.begin();
+    if( it == m_amap.end() )
+        it = m_amap.begin();
 
-    return (*it).second;
+    return it->second;
 }
 
 
-LIB_ALIAS* CMP_LIBRARY::GetPreviousEntry( const wxString& aName )
+LIB_ALIAS* PART_LIB::GetPreviousEntry( const wxString& aName )
 {
-    if( aliases.empty() )
+    if( m_amap.empty() )
         return NULL;
 
-    LIB_ALIAS_MAP::iterator it = aliases.find( aName );
+    LIB_ALIAS_MAP::iterator it = m_amap.find( aName );
 
-    if( it == aliases.begin() )
-        it = aliases.end();
+    if( it == m_amap.begin() )
+        it = m_amap.end();
 
     it--;
 
-    return (*it).second;
+    return it->second;
 }
 
 
-bool CMP_LIBRARY::Load( wxString& aErrorMsg )
+bool PART_LIB::Load( wxString& aErrorMsg )
 {
     FILE*          file;
     char*          line;
-    LIB_COMPONENT* libEntry;
     wxString       msg;
 
     if( fileName.GetFullPath().IsEmpty() )
@@ -469,7 +467,7 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
         return false;
     }
 
-    /* There is no header if this is a symbol library. */
+    // There is no header if this is a symbol library.
     if( type == LIBRARY_TYPE_EESCHEMA )
     {
         wxString tmp;
@@ -514,14 +512,15 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
             || !vers.GetNextToken().ToLong( & minor ) || minor < 0L
             || minor > 99 )
         {
-#if 0   // Note for developers:
-        // Not sure this warning is very useful: old designs *must* be always loadable
-            wxLogWarning( wxT( "The component library <%s> header version \
-number is invalid.\n\nIn future versions of Eeschema this library may not \
-load correctly.  To resolve this problem open the library in the library \
-editor and save it.  If this library is the project cache library, save \
-the current schematic." ),
-                          GetChars( GetName() ) );
+#if 0       // Note for developers:
+            // Not sure this warning is very useful: old designs *must* be always loadable
+            wxLogWarning( wxT(
+                "The component library '%s' header version "
+                "number is invalid.\n\nIn future versions of Eeschema this library may not "
+                "load correctly.  To resolve this problem open the library in the library "
+                "editor and save it.  If this library is the project cache library, save "
+                "the current schematic." ),
+                GetChars( GetName() ) );
 #endif
         }
         else
@@ -548,60 +547,63 @@ the current schematic." ),
 
         if( strnicmp( line, "DEF", 3 ) == 0 )
         {
-            /* Read one DEF/ENDDEF part entry from library: */
-            libEntry = new LIB_COMPONENT( wxEmptyString, this );
+            // Read one DEF/ENDDEF part entry from library:
+            LIB_PART* part = new LIB_PART( wxEmptyString, this );
 
-            if( libEntry->Load( reader, msg ) )
+            if( part->Load( reader, msg ) )
             {
-                /* Check for duplicate entry names and warn the user about
-                 * the potential conflict.
-                 */
-                if( FindEntry( libEntry->GetName() ) != NULL )
+                // Check for duplicate entry names and warn the user about
+                // the potential conflict.
+                if( FindEntry( part->GetName() ) != NULL )
                 {
-                    wxString msg( wxGetTranslation( duplicate_name_msg ) );
+                    wxString msg = duplicate_name_msg;
+
                     wxLogWarning( msg,
                                   GetChars( fileName.GetName() ),
-                                  GetChars( libEntry->GetName() ) );
+                                  GetChars( part->GetName() ) );
                 }
 
-                LoadAliases( libEntry );
+                LoadAliases( part );
             }
             else
             {
-                wxLogWarning( _( "Library <%s> component load error %s." ),
+                wxLogWarning( _( "Library '%s' component load error %s." ),
                               GetChars( fileName.GetName() ),
                               GetChars( msg ) );
                 msg.Clear();
-                delete libEntry;
+                delete part;
             }
         }
     }
+
+    ++m_mod_hash;
 
     return true;
 }
 
 
-void CMP_LIBRARY::LoadAliases( LIB_COMPONENT* component )
+void PART_LIB::LoadAliases( LIB_PART* aPart )
 {
-    wxCHECK_RET( component != NULL,
-                 wxT( "Cannot load aliases of NULL component object.  Bad programmer!" ) );
+    wxCHECK_RET( aPart, wxT( "Cannot load aliases of NULL part.  Bad programmer!" ) );
 
-    for( size_t i = 0; i < component->m_aliases.size(); i++ )
+    for( size_t i = 0; i < aPart->m_aliases.size(); i++ )
     {
-        if( FindEntry( component->m_aliases[i]->GetName() ) != NULL )
+        if( FindEntry( aPart->m_aliases[i]->GetName() ) != NULL )
         {
-            wxString msg( wxGetTranslation( duplicate_name_msg ) );
+            wxString msg = duplicate_name_msg;
+
             wxLogError( msg,
                         GetChars( fileName.GetName() ),
-                        GetChars( component->m_aliases[i]->GetName() ) );
+                        GetChars( aPart->m_aliases[i]->GetName() ) );
         }
 
-        aliases[ component->m_aliases[i]->GetName() ] = component->m_aliases[i];
+        wxString aname = aPart->m_aliases[i]->GetName();
+        m_amap[ aname ] = aPart->m_aliases[i];
     }
 }
 
 
-bool CMP_LIBRARY::LoadHeader( LINE_READER& aLineReader )
+bool PART_LIB::LoadHeader( LINE_READER& aLineReader )
 {
     char* line, * text, * data;
 
@@ -623,7 +625,7 @@ bool CMP_LIBRARY::LoadHeader( LINE_READER& aLineReader )
 }
 
 
-bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
+bool PART_LIB::LoadDocs( wxString& aErrorMsg )
 {
     int        lineNumber = 0;
     char       line[8000], * name, * text;
@@ -638,14 +640,14 @@ bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
 
     if( file == NULL )
     {
-        aErrorMsg.Printf( _( "Could not open component document library file <%s>." ),
+        aErrorMsg.Printf( _( "Could not open component document library file '%s'." ),
                           GetChars( fn.GetFullPath() ) );
         return false;
     }
 
     if( GetLine( file, line, &lineNumber, sizeof(line) ) == NULL )
     {
-        aErrorMsg.Printf( _( "Component document library file <%s> is empty." ),
+        aErrorMsg.Printf( _( "Part document library file '%s' is empty." ),
                           GetChars( fn.GetFullPath() ) );
         fclose( file );
         return false;
@@ -653,7 +655,7 @@ bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
 
     if( strnicmp( line, DOCFILE_IDENT, 10 ) != 0 )
     {
-        aErrorMsg.Printf( _( "File <%s> is not a valid component library document file." ),
+        aErrorMsg.Printf( _( "File '%s' is not a valid component library document file." ),
                           GetChars( fn.GetFullPath() ) );
         fclose( file );
         return false;
@@ -668,7 +670,7 @@ bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
             return false;
         }
 
-        /* Read one $CMP/$ENDCMP part entry from library: */
+        // Read one $CMP/$ENDCMP part entry from library:
         name = strtok( line + 5, "\n\r" );
 
         wxString cmpname = FROM_UTF8( name );
@@ -707,7 +709,7 @@ bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
 }
 
 
-bool CMP_LIBRARY::Save( OUTPUTFORMATTER& aFormatter )
+bool PART_LIB::Save( OUTPUTFORMATTER& aFormatter )
 {
     if( isModified )
     {
@@ -721,12 +723,12 @@ bool CMP_LIBRARY::Save( OUTPUTFORMATTER& aFormatter )
     {
         SaveHeader( aFormatter );
 
-        for( LIB_ALIAS_MAP::iterator it=aliases.begin();  it!=aliases.end();  it++ )
+        for( LIB_ALIAS_MAP::iterator it=m_amap.begin();  it!=m_amap.end();  it++ )
         {
-            if( !(*it).second->IsRoot() )
+            if( !it->second->IsRoot() )
                 continue;
 
-            (*it).second->GetComponent()->Save( aFormatter );
+            it->second->GetPart()->Save( aFormatter );
         }
 
         aFormatter.Print( 0, "#\n#End Library\n" );
@@ -740,7 +742,7 @@ bool CMP_LIBRARY::Save( OUTPUTFORMATTER& aFormatter )
 }
 
 
-bool CMP_LIBRARY::SaveDocs( OUTPUTFORMATTER& aFormatter )
+bool PART_LIB::SaveDocs( OUTPUTFORMATTER& aFormatter )
 {
     bool success = true;
 
@@ -748,9 +750,9 @@ bool CMP_LIBRARY::SaveDocs( OUTPUTFORMATTER& aFormatter )
     {
         aFormatter.Print( 0, "%s\n", DOCFILE_IDENT );
 
-        for( LIB_ALIAS_MAP::iterator it=aliases.begin();  it!=aliases.end();  it++ )
+        for( LIB_ALIAS_MAP::iterator it=m_amap.begin();  it!=m_amap.end();  it++ )
         {
-            if ( !(*it).second->SaveDoc( aFormatter ) )
+            if( !it->second->SaveDoc( aFormatter ) )
                 success = false;
         }
 
@@ -765,7 +767,7 @@ bool CMP_LIBRARY::SaveDocs( OUTPUTFORMATTER& aFormatter )
 }
 
 
-bool CMP_LIBRARY::SaveHeader( OUTPUTFORMATTER& aFormatter )
+bool PART_LIB::SaveHeader( OUTPUTFORMATTER& aFormatter )
 {
     aFormatter.Print( 0, "%s %d.%d\n", LIBFILE_IDENT,
                       LIB_VERSION_MAJOR, LIB_VERSION_MINOR );
@@ -775,7 +777,7 @@ bool CMP_LIBRARY::SaveHeader( OUTPUTFORMATTER& aFormatter )
 #if 0
     aFormatter.Print( 0, "$HEADER\n" );
     aFormatter.Print( 0, "TimeStamp %8.8lX\n", m_TimeStamp );
-    aFormatter.Print( 0, "Parts %d\n", aliases.size() );
+    aFormatter.Print( 0, "Parts %d\n", m_amap.size() );
     aFormatter.Print( 0, "$ENDHEADER\n" ) != 1 );
 #endif
 
@@ -783,136 +785,126 @@ bool CMP_LIBRARY::SaveHeader( OUTPUTFORMATTER& aFormatter )
 }
 
 
-/*
- * The static library list and list management methods.
- */
-CMP_LIBRARY_LIST CMP_LIBRARY::libraryList;
-wxArrayString CMP_LIBRARY::libraryListSortOrder;
-
-
-CMP_LIBRARY* CMP_LIBRARY::LoadLibrary( const wxFileName& aFileName, wxString& aErrorMsg )
+PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName ) throw( IO_ERROR )
 {
-    CMP_LIBRARY* lib = NULL;
-
-    lib = new CMP_LIBRARY( LIBRARY_TYPE_EESCHEMA, aFileName );
+    std::auto_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
 
     wxBusyCursor ShowWait;
 
-    if( !lib->Load( aErrorMsg ) )
-    {
-        delete lib;
-        return NULL;
-    }
+    wxString errorMsg;
+
+    if( !lib->Load( errorMsg ) )
+        THROW_IO_ERROR( errorMsg );
 
     if( USE_OLD_DOC_FILE_FORMAT( lib->versionMajor, lib->versionMinor ) )
-        lib->LoadDocs( aErrorMsg );
+    {
+#if 1
+        // not fatal if error here.
+        lib->LoadDocs( errorMsg );
+#else
+        if( !lib->LoadDocs( errorMsg ) )
+            THROW_IO_ERROR( errorMsg );
+#endif
+    }
+
+    PART_LIB* ret = lib.release();
+
+    return ret;
+}
+
+
+PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName ) throw( IO_ERROR )
+{
+    PART_LIB* lib;
+
+#if 1
+    wxFileName fn = aFileName;
+    // Don't reload the library if it is already loaded.
+    lib = FindLibrary( fn.GetName() );
+    if( lib )
+        return lib;
+#endif
+
+    lib = PART_LIB::LoadLibrary( aFileName );
+
+    push_back( lib );
 
     return lib;
 }
 
 
-bool CMP_LIBRARY::AddLibrary( const wxFileName& aFileName, wxString& aErrorMsg )
+PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName, PART_LIBS::iterator& aIterator ) throw( IO_ERROR )
 {
-    CMP_LIBRARY* lib;
+#if 1
+    // Don't reload the library if it is already loaded.
+    wxFileName fn( aFileName );
+    PART_LIB* lib = FindLibrary( fn.GetName() );
 
-    /* Don't reload the library if it is already loaded. */
-    lib = FindLibrary( aFileName.GetName() );
+    if( lib )
+        return lib;
+#endif
 
-    if( lib != NULL )
-        return true;
+    lib = PART_LIB::LoadLibrary( aFileName );
 
-    lib = LoadLibrary( aFileName, aErrorMsg );
-
-    if( lib == NULL )
-        return false;
-
-    libraryList.push_back( lib );
-
-    return true;
-}
-
-
-bool CMP_LIBRARY::AddLibrary( const wxFileName& aFileName, wxString& aErrorMsg,
-                              CMP_LIBRARY_LIST::iterator& aIterator )
-{
-    CMP_LIBRARY* lib;
-
-    /* Don't reload the library if it is already loaded. */
-    lib = FindLibrary( aFileName.GetName() );
-
-    if( lib != NULL )
-        return true;
-
-    lib = LoadLibrary( aFileName, aErrorMsg );
-
-    if( lib == NULL )
-        return false;
-
-    if( aIterator >= libraryList.begin() && aIterator < libraryList.end() )
-        libraryList.insert( aIterator, lib );
+    if( aIterator >= begin() && aIterator < end() )
+        insert( aIterator, lib );
     else
-        libraryList.push_back( lib );
+        push_back( lib );
 
-    return true;
+    return lib;
 }
 
 
-void CMP_LIBRARY::RemoveLibrary( const wxString& aName )
+void PART_LIBS::RemoveLibrary( const wxString& aName )
 {
     if( aName.IsEmpty() )
         return;
 
-    CMP_LIBRARY_LIST::iterator i;
-
-    for( i = libraryList.begin(); i < libraryList.end(); i++ )
+    for( PART_LIBS::iterator it = begin(); it < end();  ++it )
     {
-        if( i->GetName().CmpNoCase( aName ) == 0 )
+        if( it->GetName().CmpNoCase( aName ) == 0 )
         {
-            CMP_LIBRARY::libraryList.erase( i );
+            erase( it );
             return;
         }
     }
 }
 
 
-bool CMP_LIBRARY::LibraryExists( const CMP_LIBRARY* aLibptr )
+PART_LIB* PART_LIBS::FindLibrary( const wxString& aName )
 {
-    BOOST_FOREACH( CMP_LIBRARY& lib, libraryList )
-    {
-        if( &lib == aLibptr )
-            return true;
-    }
-
-    return false;
-}
-
-
-CMP_LIBRARY* CMP_LIBRARY::FindLibrary( const wxString& aName )
-{
-    BOOST_FOREACH( CMP_LIBRARY& lib, libraryList )
+#if 0
+    BOOST_FOREACH( PART_LIB& lib, *this )
     {
         if( lib == aName )
             return &lib;
     }
+#else
+    for( PART_LIBS::iterator it = begin();  it!=end();  ++it )
+    {
+        if( *it == aName )
+            return &*it;
+    }
+#endif
 
     return NULL;
 }
 
 
-wxArrayString CMP_LIBRARY::GetLibraryNames( bool aSorted )
+wxArrayString PART_LIBS::GetLibraryNames( bool aSorted )
 {
     wxArrayString cacheNames;
     wxArrayString names;
 
-    BOOST_FOREACH( CMP_LIBRARY& lib, CMP_LIBRARY::libraryList )
+    BOOST_FOREACH( PART_LIB& lib, *this )
     {
-        if( lib.isCache && aSorted )
+        if( lib.IsCache() && aSorted )
             cacheNames.Add( lib.GetName() );
         else
             names.Add( lib.GetName() );
     }
 
-    /* Even sorted, the cache library is always at the end of the list. */
+    // Even sorted, the cache library is always at the end of the list.
     if( aSorted )
         names.Sort();
 
@@ -923,38 +915,37 @@ wxArrayString CMP_LIBRARY::GetLibraryNames( bool aSorted )
 }
 
 
-LIB_COMPONENT* CMP_LIBRARY::FindLibraryComponent( const wxString& aName,
-                                                  const wxString& aLibraryName )
+LIB_PART* PART_LIBS::FindLibPart( const wxString& aName, const wxString& aLibraryName )
 {
-    LIB_COMPONENT* component = NULL;
+    LIB_PART* part = NULL;
 
-    BOOST_FOREACH( CMP_LIBRARY& lib, libraryList )
+    BOOST_FOREACH( PART_LIB& lib, *this )
     {
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
 
-        component = lib.FindComponent( aName );
+        part = lib.FindPart( aName );
 
-        if( component != NULL )
+        if( part )
             break;
     }
 
-    return component;
+    return part;
 }
 
 
-LIB_ALIAS* CMP_LIBRARY::FindLibraryEntry( const wxString& aName, const wxString& aLibraryName )
+LIB_ALIAS* PART_LIBS::FindLibraryEntry( const wxString& aName, const wxString& aLibraryName )
 {
     LIB_ALIAS* entry = NULL;
 
-    BOOST_FOREACH( CMP_LIBRARY& lib, libraryList )
+    BOOST_FOREACH( PART_LIB& lib, *this )
     {
-        if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
+        if( !!aLibraryName && lib.GetName() != aLibraryName )
             continue;
 
         entry = lib.FindEntry( aName );
 
-        if( entry != NULL )
+        if( entry )
             break;
     }
 
@@ -962,13 +953,214 @@ LIB_ALIAS* CMP_LIBRARY::FindLibraryEntry( const wxString& aName, const wxString&
 }
 
 
-void CMP_LIBRARY::RemoveCacheLibrary()
-{
-    CMP_LIBRARY_LIST::iterator i;
+int PART_LIBS::s_modify_generation = 1;     // starts at 1 and goes up
 
-    for( i = libraryList.begin(); i < libraryList.end(); i++ )
+
+int PART_LIBS::GetModifyHash()
+{
+    int hash = 0;
+
+    for( PART_LIBS::const_iterator it = begin();  it != end();  ++it )
     {
-        if( i->isCache )
-            libraryList.erase( i-- );
+        hash += it->m_mod_hash;
     }
+
+    return hash;
+}
+
+
+/*
+void PART_LIBS::RemoveCacheLibrary()
+{
+    for( PART_LIBS::iterator it = begin(); it < end();  ++it )
+    {
+        if( it->IsCache() )
+            erase( it-- );
+    }
+}
+*/
+
+
+void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
+        wxString* aPaths, wxArrayString* aNames ) throw( IO_ERROR )
+{
+    wxString pro = aProject->GetProjectFullName();
+
+    PARAM_CFG_ARRAY ca;
+
+    if( aPaths )
+        ca.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ), aPaths ) );
+
+    if( aNames )
+        ca.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),  aNames, GROUP_SCH_LIBS ) );
+
+    if( doSave )
+    {
+        aProject->ConfigSave( Kiface().KifaceSearch(), GROUP_SCH, ca );
+
+        /*
+        {
+            wxString msg = wxString::Format( _(
+                "Unable save project's '%s' file" ),
+                GetChars( pro )
+                );
+            THROW_IO_ERROR( msg );
+        }
+        */
+    }
+    else
+    {
+        wxString pro = aProject->GetProjectFullName();
+
+        if( !aProject->ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH, ca ) )
+        {
+            wxString msg = wxString::Format( _(
+                "Unable to load project's '%s' file" ),
+                GetChars( pro )
+                );
+            THROW_IO_ERROR( msg );
+        }
+    }
+}
+
+
+const wxString PART_LIBS::CacheName( const wxString& aFullProjectFilename )
+{
+    /* until apr 2009 the project cache lib was named: <root_name>.cache.lib,
+     * and after: <root_name>-cache.lib.  So if the <name>-cache.lib is not found,
+     * the old file will be renamed and returned.
+     */
+    wxFileName  new_name = aFullProjectFilename;
+
+    new_name.SetName( new_name.GetName() + wxT( "-cache" ) );
+    new_name.SetExt( SchematicLibraryFileExtension );
+
+    if( new_name.FileExists() )
+        return new_name.GetFullPath();
+    else
+    {
+        wxFileName old_name = aFullProjectFilename;
+        old_name.SetExt( wxT( "cache.lib" ) );
+
+        if( old_name.FileExists() )
+        {
+            wxRenameFile( old_name.GetFullPath(), new_name.GetFullPath() );
+            return new_name.GetFullPath();
+        }
+    }
+    return wxEmptyString;
+}
+
+
+void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR )
+{
+    wxFileName      fn;
+    wxString        filename;
+    wxString        libs_not_found;
+    wxArrayString   sortOrder;
+    SEARCH_STACK*   lib_search = aProject->SchSearchS();
+
+#if defined(DEBUG) && 1
+    lib_search->Show( __func__ );
+#endif
+
+    wxArrayString   lib_names;
+
+    LibNamesAndPaths( aProject, false, NULL, &lib_names );
+
+    // If the list is empty, force loading the standard power symbol library.
+    if( !lib_names.GetCount() )
+        lib_names.Add( wxT( "power" ) );
+
+    wxASSERT( !size() );    // expect to load into "this" empty container.
+
+    for( unsigned i = 0; i < lib_names.GetCount();  ++i )
+    {
+        fn.Clear();
+        fn.SetName( lib_names[i] );
+        fn.SetExt( SchematicLibraryFileExtension );
+
+        // Skip if the file name is not valid..
+        if( !fn.IsOk() )
+            continue;
+
+        if( !fn.FileExists() )
+        {
+            filename = lib_search->FindValidPath( fn.GetFullPath() );
+
+            if( !filename )
+            {
+                libs_not_found += fn.GetName();
+                libs_not_found += wxT( '\n' );
+                continue;
+            }
+        }
+        else
+        {
+            filename = fn.GetFullPath();
+        }
+
+        try
+        {
+            AddLibrary( filename );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxString msg = wxString::Format( _(
+                    "Part library '%s' failed to load. Error:\n"
+                    "%s" ),
+                    GetChars( filename ),
+                    GetChars( ioe.errorText )
+                    );
+
+            THROW_IO_ERROR( msg );
+        }
+    }
+
+    // add the special cache library.
+    wxString cache_name = CacheName( aProject->GetProjectFullName() );
+    if( !!cache_name )
+    {
+        try
+        {
+            if( PART_LIB* lib = AddLibrary( cache_name ) )
+                lib->SetCache();
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxString msg = wxString::Format( _(
+                    "Part library '%s' failed to load.\nError: %s" ),
+                    GetChars( cache_name ),
+                    GetChars( ioe.errorText )
+                    );
+
+            THROW_IO_ERROR( msg );
+        }
+    }
+
+    // Print the libraries not found
+    if( !!libs_not_found )
+    {
+        // Use a different exception type so catch()er can route to proper use
+        // of the HTML_MESSAGE_BOX.
+        THROW_PARSE_ERROR( wxEmptyString, UTF8( __func__ ),
+            UTF8( libs_not_found ), 0, 0 );
+    }
+
+    // Put the libraries in the correct order.
+    PART_LIBS::SetSortOrder( sortOrder );
+
+    sort();
+
+#if defined(DEBUG) && 1
+    printf( "%s: sort order:\n", __func__ );
+
+    for( size_t i = 0; i < sortOrder.GetCount(); i++ )
+         printf( " %s\n", TO_UTF8( sortOrder[i] ) );
+
+    printf( "%s: actual order:\n", __func__ );
+
+    for( PART_LIBS::const_iterator it = begin(); it < end(); ++it )
+        printf( " %s\n", TO_UTF8( it->GetName() ) );
+#endif
 }

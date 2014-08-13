@@ -40,6 +40,40 @@
 #include <boost/foreach.hpp>
 
 
+void wxConfigLoadParams( wxConfigBase* aCfg,
+            const PARAM_CFG_ARRAY& aList, const wxString& aGroup )
+{
+    wxASSERT( aCfg );
+
+    BOOST_FOREACH( const PARAM_CFG_BASE& param, aList )
+    {
+        if( !!param.m_Group )
+            aCfg->SetPath( param.m_Group );
+        else
+            aCfg->SetPath( aGroup );
+
+        if( param.m_Setup )
+            continue;
+
+        param.ReadParam( aCfg );
+    }
+}
+
+
+void wxConfigLoadSetups( wxConfigBase* aCfg, const PARAM_CFG_ARRAY& aList )
+{
+    wxASSERT( aCfg );
+
+    BOOST_FOREACH( const PARAM_CFG_BASE& param, aList )
+    {
+        if( !param.m_Setup )
+            continue;
+
+        param.ReadParam( aCfg );
+    }
+}
+
+
 void wxConfigSaveParams( wxConfigBase* aCfg,
         const PARAM_CFG_ARRAY& aList, const wxString& aGroup )
 {
@@ -68,26 +102,6 @@ void wxConfigSaveParams( wxConfigBase* aCfg,
 }
 
 
-void wxConfigLoadParams( wxConfigBase* aCfg,
-            const PARAM_CFG_ARRAY& aList, const wxString& aGroup )
-{
-    wxASSERT( aCfg );
-
-    BOOST_FOREACH( const PARAM_CFG_BASE& param, aList )
-    {
-        if( !!param.m_Group )
-            aCfg->SetPath( param.m_Group );
-        else
-            aCfg->SetPath( aGroup );
-
-        if( param.m_Setup )
-            continue;
-
-        param.ReadParam( aCfg );
-    }
-}
-
-
 void wxConfigSaveSetups( wxConfigBase* aCfg, const PARAM_CFG_ARRAY& aList )
 {
     wxASSERT( aCfg );
@@ -108,21 +122,6 @@ void wxConfigSaveSetups( wxConfigBase* aCfg, const PARAM_CFG_ARRAY& aList )
         }
     }
 }
-
-
-void wxConfigLoadSetups( wxConfigBase* aCfg, const PARAM_CFG_ARRAY& aList )
-{
-    wxASSERT( aCfg );
-
-    BOOST_FOREACH( const PARAM_CFG_BASE& param, aList )
-    {
-        if( !param.m_Setup )
-            continue;
-
-        param.ReadParam( aCfg );
-    }
-}
-
 
 
 void ConfigBaseWriteDouble( wxConfigBase* aConfig, const wxString& aKey, double aValue )

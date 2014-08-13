@@ -52,6 +52,8 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <memory.h>
 
+using namespace PCB_KEYS_T;
+
 #define FMTIU        BOARD_ITEM::FormatInternalUnits
 
 /**
@@ -70,7 +72,7 @@ void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
         if( netinfo && netinfo->GetNodesCount() <= 0 ) // hopefully there are no nets with negative
             aNetClass.Remove( it++ );                  // node count, but you never know..
         else
-        	++it;
+            ++it;
     }
 }
 
@@ -307,7 +309,6 @@ void FP_CACHE::Load()
 
 void FP_CACHE::Remove( const wxString& aFootprintName )
 {
-
     std::string footprintName = TO_UTF8( aFootprintName );
 
     MODULE_CITER it = m_modules.find( footprintName );

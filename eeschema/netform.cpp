@@ -92,7 +92,9 @@ bool UNIQUE_STRINGS::Lookup( const wxString& aString )
  */
 class NETLIST_EXPORT_TOOL
 {
-    NETLIST_OBJECT_LIST * m_masterList;  /// The main connected items flat list
+    NETLIST_OBJECT_LIST* m_masterList;      /// The main connected items flat list
+
+    PART_LIBS*          m_libs;             /// no ownership
 
     /// Used to temporary store and filter the list of pins of a schematic component
     /// when generating schematic component data in netlist (comp section)
@@ -167,7 +169,7 @@ class NETLIST_EXPORT_TOOL
      * to the temporary sorted pin list.
      */
     void findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
-                                      LIB_COMPONENT*  aEntry,
+                                      LIB_PART*       aEntry,
                                       SCH_SHEET_PATH* aSheetPath );
 
     /**
@@ -230,9 +232,10 @@ class NETLIST_EXPORT_TOOL
     XNODE* makeGenericLibraries();
 
 public:
-    NETLIST_EXPORT_TOOL( NETLIST_OBJECT_LIST * aMasterList )
+    NETLIST_EXPORT_TOOL( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs )
     {
         m_masterList = aMasterList;
+        m_libs = aLibs;
     }
 
     /**
@@ -375,7 +378,8 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
 {
     bool        ret = true;
     FILE*       f = NULL;
-    NETLIST_EXPORT_TOOL helper( aConnectedItemsList );
+
+    NETLIST_EXPORT_TOOL helper( aConnectedItemsList, Prj().SchLibs() );
 
     bool open_file = aFormat < NET_TYPE_CUSTOM1;
     if( (aFormat == NET_TYPE_PCBNEW) && (aNetlistOptions & NET_PCBNEW_USE_NEW_FORMAT ) )
@@ -524,12 +528,12 @@ SCH_COMPONENT* NETLIST_EXPORT_TOOL::findNextComponent( EDA_ITEM* aItem, SCH_SHEE
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
-        if( !entry )
+        LIB_PART* part = m_libs->FindLibPart( comp->GetPartName() );
+        if( !part )
             continue;
 
         // If component is a "multi parts per package" type
-        if( entry->GetPartCount() > 1 )
+        if( part->GetUnitCount() > 1 )
         {
             // test if this reference has already been processed, and if so skip
             if( m_ReferencesAlreadyFound.Lookup( ref ) )
@@ -537,7 +541,7 @@ SCH_COMPONENT* NETLIST_EXPORT_TOOL::findNextComponent( EDA_ITEM* aItem, SCH_SHEE
         }
 
         // record the usage of this library component entry.
-        m_LibParts.insert( entry );     // rejects non-unique pointers
+        m_LibParts.insert( part );     // rejects non-unique pointers
 
         return comp;
     }
@@ -575,13 +579,13 @@ SCH_COMPONENT* NETLIST_EXPORT_TOOL::findNextComponentAndCreatePinList( EDA_ITEM*
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
+        LIB_PART* part = m_libs->FindLibPart( comp->GetPartName() );
 
-        if( !entry )
+        if( !part )
             continue;
 
         // If component is a "multi parts per package" type
-        if( entry->GetPartCount() > 1 )
+        if( part->GetUnitCount() > 1 )
         {
             // test if this reference has already been processed, and if so skip
             if( m_ReferencesAlreadyFound.Lookup( ref ) )
@@ -590,14 +594,14 @@ SCH_COMPONENT* NETLIST_EXPORT_TOOL::findNextComponentAndCreatePinList( EDA_ITEM*
             // Collect all pins for this reference designator by searching
             // the entire design for other parts with the same reference designator.
             // This is only done once, it would be too expensive otherwise.
-            findAllInstancesOfComponent( comp, entry, aSheetPath );
+            findAllInstancesOfComponent( comp, part, aSheetPath );
         }
 
-        else    // entry->GetPartCount() <= 1 means one part per package
+        else    // entry->GetUnitCount() <= 1 means one part per package
         {
             LIB_PINS pins;      // constructed once here
 
-            entry->GetPins( pins, comp->GetUnitSelection( aSheetPath ), comp->GetConvert() );
+            part->GetPins( pins, comp->GetUnitSelection( aSheetPath ), comp->GetConvert() );
 
             for( size_t i = 0; i < pins.size(); i++ )
             {
@@ -617,7 +621,7 @@ SCH_COMPONENT* NETLIST_EXPORT_TOOL::findNextComponentAndCreatePinList( EDA_ITEM*
         eraseDuplicatePins( );
 
         // record the usage of this library component entry.
-        m_LibParts.insert( entry );     // rejects non-unique pointers
+        m_LibParts.insert( part );     // rejects non-unique pointers
 
         return comp;
     }
@@ -690,7 +694,7 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericLibraries()
 
     for( std::set<void*>::iterator it = m_Libraries.begin(); it!=m_Libraries.end();  ++it )
     {
-        CMP_LIBRARY*    lib = (CMP_LIBRARY*) *it;
+        PART_LIB*    lib = (PART_LIB*) *it;
         XNODE*      xlibrary;
 
         xlibs->AddChild( xlibrary = node( wxT( "library" ) ) );
@@ -732,8 +736,8 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericLibParts()
 
     for( std::set<void*>::iterator it = m_LibParts.begin(); it!=m_LibParts.end();  ++it )
     {
-        LIB_COMPONENT*  lcomp = (LIB_COMPONENT*) *it;
-        CMP_LIBRARY*    library = lcomp->GetLibrary();
+        LIB_PART*       lcomp = (LIB_PART*     ) *it;
+        PART_LIB*    library = lcomp->GetLib();
 
         m_Libraries.insert( library );  // inserts component's library if unique
 
@@ -1028,12 +1032,14 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericComponents()
             // "logical" library name, which is in anticipation of a better search
             // algorithm for parts based on "logical_lib.part" and where logical_lib
             // is merely the library name minus path and extension.
-            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
-            if( entry )
-                xlibsource->AddAttribute( sLib, entry->GetLibrary()->GetLogicalName() );
-            xlibsource->AddAttribute( sPart, comp->GetLibName() );
+            LIB_PART* part = m_libs->FindLibPart( comp->GetPartName() );
+            if( part )
+                xlibsource->AddAttribute( sLib, part->GetLib()->GetLogicalName() );
+
+            xlibsource->AddAttribute( sPart, comp->GetPartName() );
 
             XNODE* xsheetpath;
+
             xcomp->AddChild( xsheetpath = node( sSheetPath ) );
             xsheetpath->AddAttribute( sNames, path->PathHumanReadable() );
             xsheetpath->AddAttribute( sTStamps, path->Path() );
@@ -1410,13 +1416,13 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
 
             // Get the Component FootprintFilter and put the component in
             // cmpList if filter is present
-            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
+            LIB_PART* part = m_libs->FindLibPart( comp->GetPartName() );
 
-            if( entry )
+            if( part )
             {
-                if( entry->GetFootPrints().GetCount() != 0 )    // Put in list
+                if( part->GetFootPrints().GetCount() != 0 )    // Put in list
                 {
-                    cmpList.push_back( SCH_REFERENCE( comp, entry, *path ) );
+                    cmpList.push_back( SCH_REFERENCE( comp, part, *path ) );
                 }
             }
 
@@ -1442,7 +1448,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
 
             if( with_pcbnew )  // Add the lib name for this component
             {
-                field = comp->GetLibName();
+                field = comp->GetPartName();
                 field.Replace( wxT( " " ), wxT( "_" ) );
                 ret |= fprintf( f, " {Lib=%s}", TO_UTF8( field ) );
             }
@@ -1482,7 +1488,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
 
         for( unsigned ii = 0; ii < cmpList.size(); ii++ )
         {
-            LIB_COMPONENT* entry = cmpList[ii].GetLibComponent();
+            LIB_PART*      entry = cmpList[ii].GetLibComponent();
 
             ref = cmpList[ii].GetRef();
 
@@ -1612,7 +1618,7 @@ void NETLIST_EXPORT_TOOL::eraseDuplicatePins( )
 
 
 void NETLIST_EXPORT_TOOL::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
-                                         LIB_COMPONENT*  aEntry,
+                                         LIB_PART*       aEntry,
                                          SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref = aComponent->GetRef( aSheetPath );

@@ -31,12 +31,15 @@
  */
 
 #include <dialog_select_pretty_lib.h>
+#include <project.h>
 
 
-DIALOG_SELECT_PRETTY_LIB::DIALOG_SELECT_PRETTY_LIB( wxWindow* parent )
-    :DIALOG_SELECT_PRETTY_LIB_BASE( parent )
+DIALOG_SELECT_PRETTY_LIB::DIALOG_SELECT_PRETTY_LIB( wxWindow* parent ) :
+    DIALOG_SELECT_PRETTY_LIB_BASE( parent )
 {
-    m_dirCtrl->SetPath( wxGetCwd() );
+    wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
+
+    m_dirCtrl->SetPath( pro_dir );
 }
 
 

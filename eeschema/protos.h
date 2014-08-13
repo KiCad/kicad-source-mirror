@@ -7,7 +7,7 @@
 class EDA_DRAW_PANEL;
 class EDA_DRAW_FRAME;
 class PICKED_ITEMS_LIST;
-class CMP_LIBRARY;
+class PART_LIB;
 class SCH_ITEM;
 
 //void DisplayCmpDoc( wxString& Name );
@@ -51,7 +51,7 @@ void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC,
  *   0 if canceled order
  */
 int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
-                                 CMP_LIBRARY*    Library,
+                                 PART_LIB*    Library,
                                  wxString&       Buffer,
                                  wxString&       OldName );
 
@@ -61,7 +61,7 @@ int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
  * a library
  * This list is sorted, with the library cache always at end of the list
  */
-CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame );
+PART_LIB* SelectLibraryFromList( EDA_DRAW_FRAME* frame );
 
 /**
  * Get the name component from a library to load.
@@ -72,6 +72,6 @@ CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame );
  *   0 if canceled order
  * Place the name of the selected component list in BufName
  */
-int GetNameOfPartToLoad( EDA_DRAW_FRAME* frame, CMP_LIBRARY* Lib, wxString& BufName );
+int GetNameOfPartToLoad( EDA_DRAW_FRAME* frame, PART_LIB* Lib, wxString& BufName );
 
 #endif  /* __PROTOS_H__ */

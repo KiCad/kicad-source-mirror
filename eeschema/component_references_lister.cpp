@@ -291,7 +291,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
     int LastReferenceNumber = 0;
     int NumberOfUnits, Unit;
 
-    /* Components with an invisible reference (power...) always are re-annotated. */
+    // Components with an invisible reference (power...) always are re-annotated.
     ResetHiddenReferences();
 
     /* calculate index of the first component with the same reference prefix
@@ -301,7 +301,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
      */
     unsigned first = 0;
 
-    /* calculate the last used number for this reference prefix: */
+    // calculate the last used number for this reference prefix:
 #ifdef USE_OLD_ALGO
     int minRefId = 0;
 
@@ -330,7 +330,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
         if(  ( componentFlatList[first].CompareRef( componentFlatList[ii] ) != 0 )
           || ( aUseSheetNum && ( componentFlatList[first].m_SheetNum != componentFlatList[ii].m_SheetNum ) )  )
         {
-            /* New reference found: we need a new ref number for this reference */
+            // New reference found: we need a new ref number for this reference
             first = ii;
 #ifdef USE_OLD_ALGO
             minRefId = 0;
@@ -352,7 +352,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
         }
 
         // Annotation of one part per package components (trivial case).
-        if( componentFlatList[ii].GetLibComponent()->GetPartCount() <= 1 )
+        if( componentFlatList[ii].GetLibComponent()->GetUnitCount() <= 1 )
         {
             if( componentFlatList[ii].m_IsNew )
             {
@@ -370,8 +370,8 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
             continue;
         }
 
-        /* Annotation of multi-part components ( n parts per package ) (complex case) */
-        NumberOfUnits = componentFlatList[ii].GetLibComponent()->GetPartCount();
+        // Annotation of multi-unit parts ( n units per part ) (complex case)
+        NumberOfUnits = componentFlatList[ii].GetLibComponent()->GetUnitCount();
 
         if( componentFlatList[ii].m_IsNew )
         {
@@ -382,7 +382,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
 #endif
             componentFlatList[ii].m_NumRef = LastReferenceNumber;
 
-            if( !componentFlatList[ii].IsPartsLocked() )
+            if( !componentFlatList[ii].IsUnitsLocked() )
                 componentFlatList[ii].m_Unit = 1;
 
             componentFlatList[ii].m_Flag = 1;
@@ -400,9 +400,9 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
             int found = FindUnit( ii, Unit );
 
             if( found >= 0 )
-                continue; /* this unit exists for this reference (unit already annotated) */
+                continue; // this unit exists for this reference (unit already annotated)
 
-            /* Search a component to annotate ( same prefix, same value, not annotated) */
+            // Search a component to annotate ( same prefix, same value, not annotated)
             for( unsigned jj = ii + 1; jj < componentFlatList.size(); jj++ )
             {
                 if( componentFlatList[jj].m_Flag )    // already tested
@@ -420,8 +420,8 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
                 if( !componentFlatList[jj].m_IsNew )
                     continue;
 
-                /* Component without reference number found, annotate it if possible */
-                if( !componentFlatList[jj].IsPartsLocked()
+                // Component without reference number found, annotate it if possible
+                if( !componentFlatList[jj].IsUnitsLocked()
                     || ( componentFlatList[jj].m_Unit == Unit ) )
                 {
                     componentFlatList[jj].m_NumRef = componentFlatList[ii].m_NumRef;
@@ -486,7 +486,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
         // Error if unit number selected does not exist ( greater than the  number of
         // parts in the component ).  This can happen if a component has changed in a
         // library after a previous annotation.
-        if( std::max( componentFlatList[ii].GetLibComponent()->GetPartCount(), 1 )
+        if( std::max( componentFlatList[ii].GetLibComponent()->GetUnitCount(), 1 )
           < componentFlatList[ii].m_Unit )
         {
             if( componentFlatList[ii].m_NumRef >= 0 )
@@ -498,7 +498,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
                         GetChars( componentFlatList[ii].GetRef() ),
                         GetChars( tmp ),
                         componentFlatList[ii].m_Unit,
-                        componentFlatList[ii].GetLibComponent()->GetPartCount() );
+                        componentFlatList[ii].GetLibComponent()->GetUnitCount() );
 
             if( aMessageList )
                 aMessageList->Add( msg );
@@ -555,8 +555,8 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
 
         /* Test error if units are different but number of parts per package
          * too high (ex U3 ( 1 part) and we find U3B this is an error) */
-        if(  componentFlatList[ii].GetLibComponent()->GetPartCount()
-          != componentFlatList[ii + 1].GetLibComponent()->GetPartCount()  )
+        if(  componentFlatList[ii].GetLibComponent()->GetUnitCount()
+          != componentFlatList[ii + 1].GetLibComponent()->GetUnitCount()  )
         {
             if( componentFlatList[ii].m_NumRef >= 0 )
                 tmp << componentFlatList[ii].m_NumRef;
@@ -584,7 +584,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             error++;
         }
 
-        /* Error if values are different between units, for the same reference */
+        // Error if values are different between units, for the same reference
         int next = ii + 1;
 
         if( componentFlatList[ii].CompareValue( componentFlatList[next] ) != 0 )
@@ -592,12 +592,12 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             msg.Printf( _( "Different values for %s%d%s (%s) and %s%d%s (%s)" ),
                         GetChars( componentFlatList[ii].GetRef() ),
                         componentFlatList[ii].m_NumRef,
-                        GetChars( LIB_COMPONENT::SubReference(
+                        GetChars( LIB_PART::SubReference(
                                   componentFlatList[ii].m_Unit ) ),
                         GetChars( componentFlatList[ii].m_Value->GetText() ),
                         GetChars( componentFlatList[next].GetRef() ),
                         componentFlatList[next].m_NumRef,
-                        GetChars( LIB_COMPONENT::SubReference(
+                        GetChars( LIB_PART::SubReference(
                                   componentFlatList[next].m_Unit ) ),
                         GetChars( componentFlatList[next].m_Value->GetText() ) );
 
@@ -617,7 +617,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
           || ( componentFlatList[ii].GetSheetPath() != componentFlatList[ii + 1].GetSheetPath() )  )
             continue;
 
-        /* Same time stamp found.  */
+        // Same time stamp found.
         wxString full_path;
 
         full_path.Printf( wxT( "%s%8.8X" ),
@@ -640,7 +640,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
 }
 
 
-SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_COMPONENT* aLibComponent,
+SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART*      aLibComponent,
                               SCH_SHEET_PATH& aSheetPath )
 {
     wxASSERT( aComponent != NULL && aLibComponent != NULL );
@@ -694,7 +694,7 @@ void SCH_REFERENCE::Split()
     {
         m_IsNew = true;
 
-        if( !IsPartsLocked() )
+        if( !IsUnitsLocked() )
             m_Unit = 0x7FFFFFFF;
 
         refText.erase( ll );  // delete last char
@@ -705,7 +705,7 @@ void SCH_REFERENCE::Split()
     {
         m_IsNew = true;
 
-        if( !IsPartsLocked() )
+        if( !IsUnitsLocked() )
             m_Unit = 0x7FFFFFFF;
     }
     else

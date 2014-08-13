@@ -37,16 +37,15 @@
 #include <specctra_lexer.h>
 #include <pcbnew.h>
 
-
-class TYPE_COLLECTOR;           // outside the DSN namespace
+// all outside the DSN namespace:
+namespace PCB {  class TYPE_COLLECTOR;  }
 class BOARD;
 class TRACK;
 class VIA;
 class NETCLASS;
 class MODULE;
 
-typedef DSN::T            DSN_T;
-using namespace DSN;
+typedef DSN::T  DSN_T;
 
 
 /**

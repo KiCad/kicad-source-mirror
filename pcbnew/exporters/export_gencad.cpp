@@ -251,7 +251,9 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 
     fn.SetExt( ext );
 
-    wxFileDialog dlg( this, _( "Save GenCAD Board File" ), wxGetCwd(),
+    wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
+
+    wxFileDialog dlg( this, _( "Save GenCAD Board File" ), pro_dir,
                       fn.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 

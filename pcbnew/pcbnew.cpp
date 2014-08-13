@@ -90,7 +90,6 @@ wxPoint     g_Offset_Module;     /* Distance to offset module trace when moving.
  */
 wxString    g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
 
-// wxWindow* DoPythonStuff(wxWindow* parent); // declaration
 
 namespace PCB {
 
@@ -114,8 +113,6 @@ static struct IFACE : public KIFACE_I
             {
                 PCB_EDIT_FRAME* frame = new PCB_EDIT_FRAME( aKiway, aParent );
 
-                frame->Zoom_Automatique( true );
-
 #if defined(KICAD_SCRIPTING)
                 // give the scripting helpers access to our frame
                 ScriptingSetPcbEditFrame( frame );
@@ -133,12 +130,6 @@ static struct IFACE : public KIFACE_I
         case FRAME_PCB_MODULE_EDITOR:
             {
                 FOOTPRINT_EDIT_FRAME* frame = new FOOTPRINT_EDIT_FRAME( aKiway, aParent );
-
-                frame->Zoom_Automatique( true );
-
-                /* Read a default config file in case no project given on command line.
-                frame->LoadProjectFile( wxEmptyString, true );
-                */
                 return frame;
             }
             break;
@@ -149,11 +140,6 @@ static struct IFACE : public KIFACE_I
                 FOOTPRINT_VIEWER_FRAME* frame = new FOOTPRINT_VIEWER_FRAME(
                         aKiway, aParent, FRAME_T( aClassId ) );
 
-                frame->Zoom_Automatique( true );
-
-                /* Read a default config file in case no project given on command line.
-                frame->LoadProjectFile( wxEmptyString, true );
-                */
                 return frame;
             }
             break;
@@ -161,7 +147,7 @@ static struct IFACE : public KIFACE_I
         case FRAME_PCB_FOOTPRINT_WIZARD_MODAL:
             {
                 FOOTPRINT_WIZARD_FRAME* frame = new FOOTPRINT_WIZARD_FRAME(
-                    aKiway, aParent, FRAME_T( aClassId ) );
+                        aKiway, aParent, FRAME_T( aClassId ) );
 
                 return frame;
             }
@@ -319,7 +305,7 @@ static bool set3DShapesPath( const wxString& aKiSys3Dmod )
 }
 
 
-#ifdef KICAD_SCRIPTING
+#if defined(KICAD_SCRIPTING)
 static bool scriptingSetup()
 {
     wxString path_frag;
@@ -429,13 +415,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // Set 3D shape path from environment variable KISYS3DMOD
     set3DShapesPath( wxT(KISYS3DMOD) );
 
-    /*  Now that there are no *.mod files in the standard library, this function
-        has no utility.  User should simply set the variable manually.
-        Looking for *.mod files which do not exist is fruitless.
-
-        SetFootprintLibTablePath();
-    */
-
     try
     {
         // The global table is not related to a specific project.  All projects
@@ -467,7 +446,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
         return false;
     }
 
-#ifdef KICAD_SCRIPTING
+#if defined(KICAD_SCRIPTING)
     scriptingSetup();
 #endif
 

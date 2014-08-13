@@ -2532,6 +2532,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     }
 }
 
+
 /* Extracts the board outlines and build a closed polygon
  * from lines, arcs and circle items on edge cut layer
  * Any closed outline inside the main outline is a hole
@@ -2544,7 +2545,7 @@ bool BOARD::GetBoardPolygonOutlines( CPOLYGONS_LIST& aOutlines,
                                      wxString* aErrorText )
 {
     // the SPECCTRA_DB function to extract board outlines:
-    SPECCTRA_DB dummy;
+    DSN::SPECCTRA_DB dummy;
     return dummy.GetBoardPolygonOutlines( this, aOutlines,
                                           aHoles, aErrorText );
 }

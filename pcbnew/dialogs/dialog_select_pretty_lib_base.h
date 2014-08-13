@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -30,7 +33,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_SELECT_PRETTY_LIB_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SELECT_PRETTY_LIB_BASE : public wxDialog 
+class DIALOG_SELECT_PRETTY_LIB_BASE : public DIALOG_SHIM
 {
 	private:
 	

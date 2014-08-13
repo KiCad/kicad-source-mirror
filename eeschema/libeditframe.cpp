@@ -72,15 +72,6 @@ int ImportPartId = ::wxNewId();
 int CreateNewLibAndSavePartId = ::wxNewId();
 
 
-/*
- * Static component library editor members.  These are static so their
- * state is saved between editing sessions.  This way the last component
- * that was being edited will be displayed.  These members are protected
- * making it necessary to use the class access methods.
- */
-LIB_COMPONENT* LIB_EDIT_FRAME::m_component = NULL;
-CMP_LIBRARY* LIB_EDIT_FRAME::  m_library   = NULL;
-
 wxString LIB_EDIT_FRAME::      m_aliasName;
 int LIB_EDIT_FRAME::           m_unit    = 1;
 int LIB_EDIT_FRAME::           m_convert = 1;
@@ -189,7 +180,9 @@ END_EVENT_TABLE()
 
 LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_LIB_EDITOR, _( "Library Editor" ),
-        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GetLibEditFrameName() )
+        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GetLibEditFrameName() ),
+    m_my_part( 0 ),
+    m_tempCopyComponent( 0 )
 {
     wxASSERT( aParent );
 
@@ -199,7 +192,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetShowDeMorgan( false );
     m_drawSpecificConvert = true;
     m_drawSpecificUnit    = false;
-    m_tempCopyComponent   = NULL;
     m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
     m_editPinsPerPartOrConvert = false;
 
@@ -214,7 +206,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     icon.CopyFromBitmap( KiBitmap( libedit_icon_xpm ) );
     SetIcon( icon );
 
-    SetScreen( new SCH_SCREEN() );
+    SetScreen( new SCH_SCREEN( aKiway ) );
     GetScreen()->m_Center = true;
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
@@ -235,7 +227,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     if( m_canvas )
         m_canvas->SetEnableBlockCommands( true );
 
-    EnsureActiveLibExists();
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -284,10 +275,8 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 {
     m_drawItem = m_lastDrawItem = NULL;
 
-    if ( m_tempCopyComponent )
-        delete m_tempCopyComponent;
-
-    m_tempCopyComponent = NULL;
+    delete m_tempCopyComponent;
+    delete m_my_part;
 }
 
 const wxChar* LIB_EDIT_FRAME::GetLibEditFrameName()
@@ -299,16 +288,6 @@ static const wxChar drawBgColorKey[] = wxT( "LibeditBgColor" );
 
 void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-#if 0   // original
-
-    wxConfigBase* cfg;
-
-    EDA_DRAW_FRAME::LoadSettings();
-
-    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
-    cfg = Pgm().GetSettings();
-#else
-
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
     wxConfigPathChanger cpc( aCfg, m_configPath );
@@ -316,13 +295,13 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     EDA_COLOR_T itmp = ColorByName( aCfg->Read( drawBgColorKey, wxT("WHITE") ) );
     SetDrawBgColor( itmp );
 
-    m_lastLibExportPath = aCfg->Read( lastLibExportPathEntry, ::wxGetCwd() );
-    m_lastLibImportPath = aCfg->Read( lastLibImportPathEntry, ::wxGetCwd() );
+    wxString pro_dir = Prj().GetProjectFullName();
 
-#endif
+    m_lastLibExportPath = aCfg->Read( lastLibExportPathEntry, pro_dir );
+    m_lastLibImportPath = aCfg->Read( lastLibImportPathEntry, pro_dir );
 
-    m_lastLibExportPath = aCfg->Read( lastLibExportPathEntry, ::wxGetCwd() );
-    m_lastLibImportPath = aCfg->Read( lastLibImportPathEntry, ::wxGetCwd() );
+    m_lastLibExportPath = aCfg->Read( lastLibExportPathEntry, pro_dir );
+    m_lastLibImportPath = aCfg->Read( lastLibImportPathEntry, pro_dir );
 }
 
 
@@ -330,7 +309,6 @@ void LIB_EDIT_FRAME::SetDrawItem( LIB_ITEM* drawItem )
 {
     m_drawItem = drawItem;
 }
-
 
 
 void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
@@ -369,13 +347,16 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         GetScreen()->ClrModify();
     }
 
-    BOOST_FOREACH( const CMP_LIBRARY &lib, CMP_LIBRARY::GetLibraryList() )
+    PART_LIBS* libs = Prj().SchLibs();
+
+    BOOST_FOREACH( const PART_LIB& lib, *libs )
     {
         if( lib.IsModified() )
         {
-            wxString msg;
-            msg.Printf( _( "Library %s was modified!\nDiscard changes?" ),
-                        GetChars( lib.GetName() ) );
+            wxString msg = wxString::Format( _(
+                "Library '%s' was modified!\nDiscard changes?" ),
+                GetChars( lib.GetName() )
+                );
 
             if( !IsOK( this, msg ) )
             {
@@ -398,14 +379,15 @@ double LIB_EDIT_FRAME::BestZoom()
      * and replace by static const int VIEWPORT_EXTENT = 10000;
      */
     int      dx, dy;
-    wxSize   size;
-    EDA_RECT BoundaryBox;
 
-    if( m_component )
+    LIB_PART*      part = GetCurPart();
+
+    if( part )
     {
-        BoundaryBox = m_component->GetBoundingBox( m_unit, m_convert );
-        dx = BoundaryBox.GetWidth();
-        dy = BoundaryBox.GetHeight();
+        EDA_RECT boundingBox = part->GetBoundingBox( m_unit, m_convert );
+
+        dx = boundingBox.GetWidth();
+        dy = boundingBox.GetHeight();
         SetScrollCenterPosition( wxPoint( 0, 0 ) );
     }
     else
@@ -418,7 +400,7 @@ double LIB_EDIT_FRAME::BestZoom()
         SetScrollCenterPosition( wxPoint( 0, 0 ) );
     }
 
-    size = m_canvas->GetClientSize();
+    wxSize size = m_canvas->GetClientSize();
 
     // Reserve a 10% margin around component bounding box.
     double margin_scale_factor = 0.8;
@@ -443,10 +425,12 @@ void LIB_EDIT_FRAME::UpdateAliasSelectList()
 
     m_aliasSelectBox->Clear();
 
-    if( m_component == NULL )
+    LIB_PART*      part = GetCurPart();
+
+    if( !part )
         return;
 
-    m_aliasSelectBox->Append( m_component->GetAliasNames() );
+    m_aliasSelectBox->Append( part->GetAliasNames() );
     m_aliasSelectBox->SetSelection( 0 );
 
     int index = m_aliasSelectBox->FindString( m_aliasName );
@@ -464,17 +448,19 @@ void LIB_EDIT_FRAME::UpdatePartSelectList()
     if( m_partSelectBox->GetCount() != 0 )
         m_partSelectBox->Clear();
 
-    if( m_component == NULL || m_component->GetPartCount() <= 1 )
+    LIB_PART*      part = GetCurPart();
+
+    if( !part || part->GetUnitCount() <= 1 )
     {
         m_partSelectBox->Append( wxEmptyString );
     }
     else
     {
-        for( int i = 0; i < m_component->GetPartCount(); i++ )
+        for( int i = 0; i < part->GetUnitCount(); i++ )
         {
-            wxString sub  = LIB_COMPONENT::SubReference( i+1, false );
-            wxString part = wxString::Format( _( "Unit %s" ), GetChars( sub ) );
-            m_partSelectBox->Append( part );
+            wxString sub  = LIB_PART::SubReference( i+1, false );
+            wxString unit = wxString::Format( _( "Unit %s" ), GetChars( sub ) );
+            m_partSelectBox->Append( unit );
         }
     }
 
@@ -484,37 +470,41 @@ void LIB_EDIT_FRAME::UpdatePartSelectList()
 
 void LIB_EDIT_FRAME::OnUpdateEditingPart( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( m_component != NULL );
+    LIB_PART*      part = GetCurPart();
 
-    if( m_component != NULL && aEvent.GetEventObject() == m_drawToolBar )
+    aEvent.Enable( part != NULL );
+
+    if( part && aEvent.GetEventObject() == m_drawToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 
 void LIB_EDIT_FRAME::OnUpdateNotEditingPart( wxUpdateUIEvent& event )
 {
-    event.Enable( m_component == NULL );
+    event.Enable( !GetCurPart() );
 }
 
 
 void LIB_EDIT_FRAME::OnUpdateUndo( wxUpdateUIEvent& event )
 {
-    event.Enable( m_component != NULL && GetScreen() != NULL
-                  && GetScreen()->GetUndoCommandCount() != 0 && !IsEditingDrawItem() );
+    event.Enable( GetCurPart() && GetScreen() &&
+        GetScreen()->GetUndoCommandCount() != 0 && !IsEditingDrawItem() );
 }
 
 
 void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 {
-    event.Enable( m_component != NULL && GetScreen() != NULL
-                  && GetScreen()->GetRedoCommandCount() != 0 && !IsEditingDrawItem() );
+    event.Enable( GetCurPart() && GetScreen() &&
+        GetScreen()->GetRedoCommandCount() != 0 && !IsEditingDrawItem() );
 }
 
 
 void LIB_EDIT_FRAME::OnUpdateSaveCurrentLib( wxUpdateUIEvent& event )
 {
-    event.Enable( m_library != NULL && !m_library->IsReadOnly()
-                  && ( m_library->IsModified() || GetScreen()->IsModify() ) );
+    PART_LIB* lib = GetCurLib();
+
+    event.Enable( lib && !lib->IsReadOnly()
+                  && ( lib->IsModified() || GetScreen()->IsModify() ) );
 }
 
 
@@ -522,9 +512,12 @@ void LIB_EDIT_FRAME::OnUpdateViewDoc( wxUpdateUIEvent& event )
 {
     bool enable = false;
 
-    if( m_component != NULL && m_library != NULL )
+    PART_LIB*    lib  = GetCurLib();
+    LIB_PART*       part = GetCurPart();
+
+    if( part && lib )
     {
-        LIB_ALIAS* alias = m_component->GetAlias( m_aliasName );
+        LIB_ALIAS* alias = part->GetAlias( m_aliasName );
 
         wxCHECK_RET( alias != NULL, wxT( "Alias <" ) + m_aliasName + wxT( "> not found." ) );
 
@@ -537,8 +530,9 @@ void LIB_EDIT_FRAME::OnUpdateViewDoc( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdatePinByPin( wxUpdateUIEvent& event )
 {
-    event.Enable( ( m_component != NULL )
-                 && ( ( m_component->GetPartCount() > 1 ) || m_showDeMorgan ) );
+    LIB_PART*      part = GetCurPart();
+
+    event.Enable( part && ( part->GetUnitCount() > 1 || m_showDeMorgan ) );
 
     event.Check( m_editPinsPerPartOrConvert );
 }
@@ -549,10 +543,11 @@ void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
     if( m_partSelectBox == NULL )
         return;
 
-    /* Using the typical event.Enable() call doesn't seem to work with wxGTK
-     * so use the pointer to alias combobox to directly enable or disable.
-     */
-    m_partSelectBox->Enable( m_component && m_component->GetPartCount() > 1 );
+    LIB_PART*      part = GetCurPart();
+
+    // Using the typical event.Enable() call doesn't seem to work with wxGTK
+    // so use the pointer to alias combobox to directly enable or disable.
+    m_partSelectBox->Enable( part && part->GetUnitCount() > 1 );
 }
 
 
@@ -561,7 +556,9 @@ void LIB_EDIT_FRAME::OnUpdateDeMorganNormal( wxUpdateUIEvent& event )
     if( m_mainToolBar == NULL )
         return;
 
-    event.Enable( GetShowDeMorgan() || ( m_component && m_component->HasConversion() ) );
+    LIB_PART*      part = GetCurPart();
+
+    event.Enable( GetShowDeMorgan() || ( part && part->HasConversion() ) );
     event.Check( m_convert <= 1 );
 }
 
@@ -571,7 +568,9 @@ void LIB_EDIT_FRAME::OnUpdateDeMorganConvert( wxUpdateUIEvent& event )
     if( m_mainToolBar == NULL )
         return;
 
-    event.Enable( GetShowDeMorgan() || ( m_component && m_component->HasConversion() ) );
+    LIB_PART*      part = GetCurPart();
+
+    event.Enable( GetShowDeMorgan() || ( part && part->HasConversion() ) );
     event.Check( m_convert > 1 );
 }
 
@@ -581,10 +580,11 @@ void LIB_EDIT_FRAME::OnUpdateSelectAlias( wxUpdateUIEvent& event )
     if( m_aliasSelectBox == NULL )
         return;
 
-    /* Using the typical event.Enable() call doesn't seem to work with wxGTK
-     * so use the pointer to alias combobox to directly enable or disable.
-     */
-    m_aliasSelectBox->Enable( m_component != NULL && m_component->GetAliasCount() > 1 );
+    LIB_PART*      part = GetCurPart();
+
+    // Using the typical event.Enable() call doesn't seem to work with wxGTK
+    // so use the pointer to alias combobox to directly enable or disable.
+    m_aliasSelectBox->Enable( part && part->GetAliasCount() > 1 );
 }
 
 
@@ -618,11 +618,13 @@ void LIB_EDIT_FRAME::OnSelectPart( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
 {
-    if( m_component == NULL )
+    LIB_PART* part = GetCurPart();
+
+    if( !part )
         return;
 
     wxString    fileName;
-    LIB_ALIAS*  alias = m_component->GetAlias( m_aliasName );
+    LIB_ALIAS*  alias = part->GetAlias( m_aliasName );
 
     wxCHECK_RET( alias != NULL, wxT( "Alias not found." ) );
 
@@ -630,7 +632,7 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
 
     if( !fileName.IsEmpty() )
     {
-        SEARCH_STACK* lib_search = &Prj().SchSearchS();
+        SEARCH_STACK* lib_search = Prj().SchSearchS();
 
         GetAssociatedDocument( this, fileName, lib_search );
     }
@@ -710,7 +712,30 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBEDIT_SAVE_CURRENT_PART:
-        SaveOnePartInMemory();
+        {
+            LIB_PART*   part = GetCurPart();
+
+            if( !part )
+            {
+                DisplayError( this, _( "No part to save." ) );
+                break;
+            }
+
+            PART_LIB*   lib  = GetCurLib();
+
+            if( !lib )
+                SelectActiveLibrary();
+
+            lib = GetCurLib();
+
+            if( !lib )
+            {
+                DisplayError( this, _( "No library specified." ) );
+                break;
+            }
+
+            SaveOnePart( lib );
+        }
         break;
 
     case ID_LIBEDIT_EDIT_PIN_BY_PIN:
@@ -821,13 +846,18 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
-        if( ( m_drawItem == NULL ) || ( m_drawItem->Type() != LIB_PIN_T ) )
-            break;
+        {
+            if( !m_drawItem || m_drawItem->Type() != LIB_PIN_T )
+                break;
 
-        SaveCopyInUndoList( m_component );
-        GlobalSetPins( (LIB_PIN*) m_drawItem, id );
-        m_canvas->MoveCursorToCrossHair();
-        m_canvas->Refresh();
+            LIB_PART*      part = GetCurPart();
+
+            SaveCopyInUndoList( part );
+
+            GlobalSetPins( (LIB_PIN*) m_drawItem, id );
+            m_canvas->MoveCursorToCrossHair();
+            m_canvas->Refresh();
+        }
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
@@ -899,49 +929,92 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnActivate( wxActivateEvent& event )
 {
     EDA_DRAW_FRAME::OnActivate( event );
-
-    // Verify the existence of the current active library
-    // (can be removed or changed by the schematic editor)
-    EnsureActiveLibExists();
 }
 
 
-void LIB_EDIT_FRAME::EnsureActiveLibExists()
+PART_LIB* LIB_EDIT_FRAME::GetCurLib()
 {
-    if( m_library == NULL )
-        return;
+    wxString  name = Prj().GetRString( PROJECT::SCH_LIBEDIT_CUR_LIB );
 
-    bool exists = CMP_LIBRARY::LibraryExists( m_library );
+    if( !!name )
+    {
+        PART_LIB* lib = Prj().SchLibs()->FindLibrary( name );
 
-    if( exists )
-        return;
+        if( !lib )
+            Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, wxEmptyString );
+
+        return lib;
+    }
+
+    return NULL;
+}
+
+
+PART_LIB* LIB_EDIT_FRAME::SetCurLib( PART_LIB* aLib )
+{
+    PART_LIB* old = GetCurLib();
+
+    if( !aLib || !aLib->GetName() )
+        Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, wxEmptyString );
     else
-        m_library = NULL;
+        Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, aLib->GetName() );
+
+    return old;
+}
+
+
+LIB_PART* LIB_EDIT_FRAME::GetCurPart()
+{
+    if( !m_my_part )
+    {
+        wxString    name = Prj().GetRString( PROJECT::SCH_LIBEDIT_CUR_PART );
+        LIB_PART*   part;
+
+        if( !!name && ( part = Prj().SchLibs()->FindLibPart( name ) ) )
+        {
+            // clone it from the PART_LIB and own it.
+            m_my_part = new LIB_PART( *part );
+        }
+        else
+            Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, wxEmptyString );
+    }
+
+    return m_my_part;
+}
+
+
+void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
+{
+    delete m_my_part;
+    m_my_part = aPart;      // take ownership here
+
+    // retain in case this wxFrame is re-opened later on the same PROJECT
+    Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART,
+            aPart ? aPart->GetName() : wxString() );
 }
 
 
 void LIB_EDIT_FRAME::TempCopyComponent()
 {
-    if( m_tempCopyComponent )
-        delete m_tempCopyComponent;
+    delete m_tempCopyComponent;
 
-    m_tempCopyComponent = NULL;
-
-    if( m_component )
-        m_tempCopyComponent = new LIB_COMPONENT( *m_component );
+    if( LIB_PART* part = GetCurPart() )
+        // clone it and own the clone.
+        m_tempCopyComponent = new LIB_PART( *part );
+    else
+        // clear it, there was no CurPart
+        m_tempCopyComponent = NULL;
 }
 
 
 void LIB_EDIT_FRAME::RestoreComponent()
 {
-    if( m_tempCopyComponent == NULL )
-        return;
-
-    if( m_component )
-        delete m_component;
-
-    m_component = m_tempCopyComponent;
-    m_tempCopyComponent = NULL;
+    if( m_tempCopyComponent )
+    {
+        // transfer ownership to CurPart
+        SetCurPart( m_tempCopyComponent );
+        m_tempCopyComponent = NULL;
+    }
 }
 
 
@@ -950,7 +1023,6 @@ void LIB_EDIT_FRAME::ClearTempCopyComponent()
     delete m_tempCopyComponent;
     m_tempCopyComponent = NULL;
 }
-
 
 
 void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )
@@ -977,18 +1049,18 @@ void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )
 
 void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
 {
-    bool partLocked = GetComponent()->UnitsLocked();
+    bool partLocked = GetCurPart()->UnitsLocked();
 
     DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    if( partLocked != GetComponent()->UnitsLocked() )
+    if( partLocked != GetCurPart()->UnitsLocked() )
     {
         // m_editPinsPerPartOrConvert is set to the better value, if m_UnitSelectionLocked
         // has changed
-        m_editPinsPerPartOrConvert = GetComponent()->UnitsLocked() ? true : false;
+        m_editPinsPerPartOrConvert = GetCurPart()->UnitsLocked() ? true : false;
     }
 
     UpdateAliasSelectList();
@@ -1009,15 +1081,19 @@ void LIB_EDIT_FRAME::InstallDimensionsDialog( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnCreateNewPartFromExisting( wxCommandEvent& event )
 {
-    wxCHECK_RET( m_component != NULL,
-                 wxT( "Cannot create new part from non-existent current part." ) );
+    LIB_PART*      part = GetCurPart();
+
+    wxCHECK_RET( part, wxT( "Cannot create new part from non-existent current part." ) );
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     m_canvas->CrossHairOff( &dc );
-    EditField( &m_component->GetValueField() );
+
+    EditField( &part->GetValueField() );
+
     m_canvas->MoveCursorToCrossHair();
     m_canvas->CrossHairOn( &dc );
 }
+
 
 void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 {
@@ -1029,6 +1105,8 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(),
                                wxEmptyString );
 
+    LIB_PART*      part = GetCurPart();
+
     switch( id )
     {
     case ID_NO_TOOL_SELECTED:
@@ -1036,14 +1114,16 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_LIBEDIT_PIN_BUTT:
-        if( m_component )
+        if( part )
         {
             SetToolID( id, wxCURSOR_PENCIL, _( "Add pin" ) );
         }
         else
         {
             SetToolID( id, wxCURSOR_ARROW, _( "Set pin options" ) );
+
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+
             cmd.SetId( ID_LIBEDIT_EDIT_PIN );
             GetEventHandler()->ProcessEvent( cmd );
             SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
@@ -1087,7 +1167,7 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_LIBEDIT_DELETE_ITEM_BUTT:
-        if( m_component == NULL )
+        if( !part )
         {
             wxBell();
             break;
@@ -1111,7 +1191,9 @@ void LIB_EDIT_FRAME::OnRotateItem( wxCommandEvent& aEvent )
 
     if( !m_drawItem->InEditMode() )
     {
-        SaveCopyInUndoList( m_component );
+        LIB_PART*      part = GetCurPart();
+
+        SaveCopyInUndoList( part );
         m_drawItem->SetUnit( m_unit );
     }
 
@@ -1131,7 +1213,9 @@ void LIB_EDIT_FRAME::OnRotateItem( wxCommandEvent& aEvent )
 LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition,
                                                  const KICAD_T aFilterList[] )
 {
-    if( m_component == NULL )
+    LIB_PART*      part = GetCurPart();
+
+    if( !part )
         return NULL;
 
     LIB_ITEM* item = locateItem( aPosition, aFilterList );
@@ -1150,12 +1234,14 @@ LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition,
 
 LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aFilterList[] )
 {
-    if( m_component == NULL )
+    LIB_PART*      part = GetCurPart();
+
+    if( !part )
         return NULL;
 
     LIB_ITEM* item = NULL;
 
-    m_collectedItems.Collect( m_component->GetDrawItemList(), aFilterList, aPosition,
+    m_collectedItems.Collect( part->GetDrawItemList(), aFilterList, aPosition,
                               m_unit, m_convert );
 
     if( m_collectedItems.GetCount() == 0 )
@@ -1181,8 +1267,9 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
 
             for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
             {
-                wxString text = m_collectedItems[i]->GetSelectMenuText();
-                BITMAP_DEF xpm = m_collectedItems[i]->GetMenuImage();
+                wxString    text = m_collectedItems[i]->GetSelectMenuText();
+                BITMAP_DEF  xpm = m_collectedItems[i]->GetMenuImage();
+
                 AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, KiBitmap( xpm ) );
             }
 
@@ -1215,28 +1302,31 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
     wxCHECK_RET( m_drawItem != NULL, wxT( "No drawing item selected to delete." ) );
 
     m_canvas->CrossHairOff( aDC );
-    SaveCopyInUndoList( m_component );
+
+    LIB_PART*      part = GetCurPart();
+
+    SaveCopyInUndoList( part );
 
     if( m_drawItem->Type() == LIB_PIN_T )
     {
-        LIB_PIN* pin = (LIB_PIN*) m_drawItem;
-        wxPoint pos = pin->GetPosition();
+        LIB_PIN*    pin = (LIB_PIN*) m_drawItem;
+        wxPoint     pos = pin->GetPosition();
 
-        m_component->RemoveDrawItem( (LIB_ITEM*) pin, m_canvas, aDC );
+        part->RemoveDrawItem( (LIB_ITEM*) pin, m_canvas, aDC );
 
         if( SynchronizePins() )
         {
-            LIB_PIN* tmp = m_component->GetNextPin();
+            LIB_PIN* tmp = part->GetNextPin();
 
             while( tmp != NULL )
             {
                 pin = tmp;
-                tmp = m_component->GetNextPin( pin );
+                tmp = part->GetNextPin( pin );
 
                 if( pin->GetPosition() != pos )
                     continue;
 
-                m_component->RemoveDrawItem( (LIB_ITEM*) pin );
+                part->RemoveDrawItem( (LIB_ITEM*) pin );
             }
         }
 
@@ -1250,7 +1340,7 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
         }
         else
         {
-            m_component->RemoveDrawItem( m_drawItem, m_canvas, aDC );
+            part->RemoveDrawItem( m_drawItem, m_canvas, aDC );
             m_canvas->Refresh();
         }
     }
@@ -1277,8 +1367,10 @@ void LIB_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
 }
 
 
-bool LIB_EDIT_FRAME::SynchronizePins() const
+bool LIB_EDIT_FRAME::SynchronizePins()
 {
-    return !m_editPinsPerPartOrConvert && ( m_component && ( m_component->HasConversion() ||
-                                                             m_component->IsMulti()) );
+    LIB_PART*      part = GetCurPart();
+
+    return !m_editPinsPerPartOrConvert && ( part &&
+        ( part->HasConversion() || part->IsMulti() ) );
 }

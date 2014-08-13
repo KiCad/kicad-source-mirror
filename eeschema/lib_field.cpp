@@ -46,7 +46,7 @@
 #include <template_fieldnames.h>
 
 
-LIB_FIELD::LIB_FIELD(LIB_COMPONENT * aParent, int idfield ) :
+LIB_FIELD::LIB_FIELD(LIB_PART * aParent, int idfield ) :
     LIB_ITEM( LIB_FIELD_T, aParent )
 {
     Init( idfield );
@@ -346,9 +346,9 @@ bool LIB_FIELD::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFO
     {
         wxString extended_text = tmp_text.GetText();
         extended_text.Append('?');
-        const LIB_COMPONENT* parent = static_cast<const LIB_COMPONENT*>( m_Parent );
+        const LIB_PART*      parent = static_cast<const LIB_PART*     >( m_Parent );
 
-        if ( parent && ( parent->GetPartCount() > 1 ) )
+        if ( parent && ( parent->GetUnitCount() > 1 ) )
             extended_text.Append('A');
         tmp_text.SetText( extended_text );
     }
@@ -506,7 +506,7 @@ wxString LIB_FIELD::GetFullText( int unit )
     text << wxT( "?" );
 
     if( GetParent()->IsMulti() )
-        text << LIB_COMPONENT::SubReference( unit );
+        text << LIB_PART::SubReference( unit );
 
     return text;
 }
@@ -649,7 +649,7 @@ void LIB_FIELD::SetText( const wxString& aText )
 
     if( m_id == VALUE && m_Parent != NULL )
     {
-        LIB_COMPONENT* parent = GetParent();
+        LIB_PART*      parent = GetParent();
 
         // Set the parent component and root alias to the new name.
         if( parent->GetName().CmpNoCase( aText ) != 0 )

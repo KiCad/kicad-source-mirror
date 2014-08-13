@@ -90,8 +90,8 @@ const wxString SCH_FIELD::GetFullyQualifiedText() const
         wxCHECK_MSG( component != NULL, text,
                      wxT( "No component associated with field" ) + text );
 
-        if( component->GetPartCount() > 1 )
-            text << LIB_COMPONENT::SubReference( component->GetUnit() );
+        if( component->GetUnitCount() > 1 )
+            text << LIB_PART::SubReference( component->GetUnit() );
     }
 
     return text;
@@ -393,8 +393,8 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
 
         text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
-        if( component->GetPartCount() > 1 )
-            text << LIB_COMPONENT::SubReference( component->GetUnit() );
+        if( component->GetUnitCount() > 1 )
+            text << LIB_PART::SubReference( component->GetUnit() );
     }
 
     match = SCH_ITEM::Matches( text, aSearchData );
@@ -431,8 +431,8 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 
         text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
-        // if( component->GetPartCount() > 1 )
-        //     text << LIB_COMPONENT::SubReference( component->GetUnit() );
+        // if( component->GetUnitCount() > 1 )
+        //     text << LIB_PART::SubReference( component->GetUnit() );
 
         isReplaced = EDA_ITEM::Replace( aSearchData, text );
 
@@ -565,7 +565,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
 
     int      thickness = GetPenSize();
 
-    if( (parent->GetPartCount() <= 1) || (m_id != REFERENCE) )
+    if( (parent->GetUnitCount() <= 1) || (m_id != REFERENCE) )
     {
         aPlotter->Text( textpos, color, m_Text, orient, m_Size, hjustify, vjustify,
                         thickness, m_Italic, m_Bold );
@@ -573,7 +573,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     else    /* We plot the reference, for a multiple parts per package */
     {
         /* Adding A, B ... to the reference */
-        wxString Text = m_Text + LIB_COMPONENT::SubReference( parent->GetUnit() );
+        wxString Text = m_Text + LIB_PART::SubReference( parent->GetUnit() );
 
         aPlotter->Text( textpos, color, Text, orient, m_Size, hjustify, vjustify,
                         thickness, m_Italic, m_Bold );

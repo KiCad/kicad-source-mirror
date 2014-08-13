@@ -481,7 +481,8 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
      * because it preserve use of default libraries paths, when the path is a
      * sub path of these default paths
      */
-    shortfilename = search.FilenameWithRelativePathInSearchList( fullfilename );
+    shortfilename = search.FilenameWithRelativePathInSearchList(
+            fullfilename, wxPathOnly( Prj().GetProjectFullName() ) );
 
     wxFileName aux = shortfilename;
     if( aux.IsAbsolute() )

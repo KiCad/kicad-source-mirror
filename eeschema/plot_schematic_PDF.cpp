@@ -32,6 +32,8 @@
 #include <base_units.h>
 #include <sch_sheet_path.h>
 #include <dialog_plot_schematic.h>
+#include <project.h>
+
 
 void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 {
@@ -87,7 +89,9 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
             plotFileName = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( "." )
                            + PDF_PLOTTER::GetDefaultFileExtension();
 
-            if( ! plotter->OpenFile( plotFileName ) )
+            plotFileName = Prj().AbsolutePath( plotFileName );
+
+            if( !plotter->OpenFile( plotFileName ) )
             {
                 msg.Printf( _( "Unable to create <%s>\n" ), GetChars( plotFileName ) );
                 m_MessagesBox->AppendText( msg );

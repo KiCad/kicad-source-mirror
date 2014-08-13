@@ -83,6 +83,7 @@ class SCH_MARKER;
 class SCH_SHEET;
 class SCH_ITEM;
 class SCH_REFERENCE_LIST;
+class PART_LIBS;
 
 
 /**
@@ -215,7 +216,7 @@ public:
      *                   the annotation starts at 1.  The number is incremented for
      *                   each power symbol annotated.
      */
-    void AnnotatePowerSymbols( int* aReference );
+    void AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference );
 
     /**
      * Function GetComponents
@@ -223,7 +224,7 @@ public:
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
-    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true  );
+    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true  );
 
     /**
      * Function SetFootprintField
@@ -391,7 +392,7 @@ public:
      * Function AnnotatePowerSymbols
      * clear and annotates the entire hierarchy of the sheet path list.
      */
-    void AnnotatePowerSymbols();
+    void AnnotatePowerSymbols( PART_LIBS* aLib );
 
     /**
      * Function GetComponents
@@ -400,7 +401,7 @@ public:
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
-    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true  );
+    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true  );
 
     /**
      * Function FindNextItem

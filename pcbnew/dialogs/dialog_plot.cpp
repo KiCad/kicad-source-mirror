@@ -306,12 +306,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
     // Build the absolute path of current output plot directory
     // to preselect it when opening the dialog.
     wxFileName  fn( m_outputDirectoryName->GetValue() );
-    wxString    path;
-
-    if( fn.IsRelative() )
-        path = wxGetCwd() + fn.GetPathSeparator() + m_outputDirectoryName->GetValue();
-    else
-        path = m_outputDirectoryName->GetValue();
+    wxString    path = Prj().AbsolutePath( m_outputDirectoryName->GetValue() );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
@@ -326,7 +321,9 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
     if( dialog.ShowModal() == wxID_YES )
     {
-        wxString boardFilePath = ( (wxFileName) m_parent->GetBoard()->GetFileName() ).GetPath();
+        wxString boardFilePath = Prj().AbsolutePath( m_parent->GetBoard()->GetFileName() );
+
+        boardFilePath = wxPathOnly( boardFilePath );
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
             wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),

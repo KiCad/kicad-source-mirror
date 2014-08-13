@@ -25,7 +25,7 @@ public:
     wxString GetReference( void ) { return m_textReference->GetValue(); }
 
     void SetPartCount( int count ) { m_spinPartCount->SetValue( count ); }
-    int GetPartCount( void ) { return m_spinPartCount->GetValue(); }
+    int GetUnitCount( void ) { return m_spinPartCount->GetValue(); }
 
     void SetAlternateBodyStyle( bool enable )
     {

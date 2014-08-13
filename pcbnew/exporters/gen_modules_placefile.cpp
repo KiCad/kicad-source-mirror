@@ -140,13 +140,8 @@ void DIALOG_GEN_MODULE_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent&
 {
     // Build the absolute path of current output plot directory
     // to preselect it when opening the dialog.
-    wxFileName fn( m_outputDirectoryName->GetValue() );
-    wxString path;
-
-    if( fn.IsRelative() )
-        path = wxGetCwd() + fn.GetPathSeparator() + m_outputDirectoryName->GetValue();
-    else
-        path = m_outputDirectoryName->GetValue();
+    wxFileName  fn( m_outputDirectoryName->GetValue() );
+    wxString    path = Prj().AbsolutePath( m_outputDirectoryName->GetValue() );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 

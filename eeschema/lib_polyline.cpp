@@ -44,7 +44,7 @@
 #include <boost/foreach.hpp>
 
 
-LIB_POLYLINE::LIB_POLYLINE( LIB_COMPONENT* aParent ) :
+LIB_POLYLINE::LIB_POLYLINE( LIB_PART*      aParent ) :
     LIB_ITEM( LIB_POLYLINE_T, aParent )
 {
     m_Fill  = NO_FILL;

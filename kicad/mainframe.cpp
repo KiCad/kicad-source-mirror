@@ -149,7 +149,7 @@ const wxString KICAD_MANAGER_FRAME::SchFileName()
 
    fn.SetExt( SchematicFileExtension );
 
-   return fn.GetFullName();
+   return fn.GetFullPath();
 }
 
 
@@ -159,7 +159,7 @@ const wxString KICAD_MANAGER_FRAME::PcbFileName()
 
    fn.SetExt( PcbFileExtension );
 
-   return fn.GetFullName();
+   return fn.GetFullPath();
 }
 
 
@@ -169,7 +169,7 @@ const wxString KICAD_MANAGER_FRAME::PcbLegacyFileName()
 
    fn.SetExt( LegacyPcbFileExtension );
 
-   return fn.GetFullName();
+   return fn.GetFullPath();
 }
 
 
@@ -298,6 +298,19 @@ void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 }
 
 
+void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
+{
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_SCH_LIB_EDITOR, false );
+    if( !frame )
+    {
+        frame = Kiway.Player( FRAME_SCH_LIB_EDITOR, true );
+        // frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectSchematicFileName ) );
+        frame->Show( true );
+    }
+    frame->Raise();
+}
+
+
 void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
 {
     KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB, false );
@@ -320,6 +333,19 @@ void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
                             kicad_board : legacy_board;
 
     RunPcbNew( board.GetFullPath() );
+}
+
+
+void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
+{
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB_MODULE_EDITOR, false );
+    if( !frame )
+    {
+        frame = Kiway.Player( FRAME_PCB_MODULE_EDITOR, true );
+//        frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
+        frame->Show( true );
+    }
+    frame->Raise();
 }
 
 

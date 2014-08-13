@@ -98,7 +98,7 @@ enum KICAD_T
      * If you add a new draw item, type, please make sure you add it so the
      * sort order is logical.
      */
-    LIB_COMPONENT_T,
+    LIB_PART_T,
     LIB_ALIAS_T,
     LIB_ARC_T,
     LIB_CIRCLE_T,

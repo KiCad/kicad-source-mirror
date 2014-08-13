@@ -587,11 +587,11 @@ public:
 
 
 /**
- * Class TYPE_COLLECTOR
+ * Class PCB_TYPE_COLLECTOR
  * merely gathers up all BOARD_ITEMs of a given set of KICAD_T type(s).
  * @see class COLLECTOR
  */
-class TYPE_COLLECTOR : public COLLECTOR
+class PCB_TYPE_COLLECTOR : public COLLECTOR
 {
 
 public:
@@ -633,7 +633,5 @@ public:
      */
     void Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] );
 };
-
-
 
 #endif // COLLECTORS_H

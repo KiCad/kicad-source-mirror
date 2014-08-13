@@ -613,7 +613,7 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     fn.SetExt( fileExt );
 
     if( fn.GetPath().IsEmpty() )
-       fn.SetPath( wxGetCwd() );
+       fn.SetPath( wxPathOnly( Prj().GetProjectFullName() ) );
 
     wxString fullpath = fn.GetFullPath();
 

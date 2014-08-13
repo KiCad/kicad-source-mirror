@@ -26,7 +26,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
     if( aField == NULL )
         return;
 
-    LIB_COMPONENT* parent = aField->GetParent();
+    LIB_PART*      parent = aField->GetParent();
 
     // Editing the component value field is equivalent to creating a new component based
     // on the current component.  Set the dialog message to inform the user.
@@ -71,17 +71,21 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
      * the old one.  Rename the component and remove any conflicting aliases to prevent name
      * errors when updating the library.
      */
-    if( (aField->GetId() == VALUE) && ( text != aField->GetText() ) )
+    if( aField->GetId() == VALUE && text != aField->GetText() )
     {
         wxString msg;
 
+        PART_LIB* lib = GetCurLib();
+
         // Test the current library for name conflicts.
-        if( m_library && m_library->FindEntry( text ) != NULL )
+        if( lib && lib->FindEntry( text ) )
         {
-            msg.Printf( _( "The name <%s> conflicts with an existing entry in the component \
-library <%s>.\n\nDo you wish to replace the current component in library with this one?" ),
-                        GetChars( text ),
-                        GetChars( m_library->GetName() ) );
+            msg.Printf( _(
+                "The name '%s' conflicts with an existing entry in the component library '%s'.\n\n"
+                "Do you wish to replace the current component in library with this one?" ),
+                GetChars( text ),
+                GetChars( lib->GetName() )
+                );
 
             int rsp = wxMessageBox( msg, _( "Confirm" ),
                                     wxYES_NO | wxICON_QUESTION | wxNO_DEFAULT, this );
@@ -93,9 +97,11 @@ library <%s>.\n\nDo you wish to replace the current component in library with th
         // Test the current component for name conflicts.
         if( parent->HasAlias( text ) )
         {
-            msg.Printf( _( "The current component already has an alias named <%s>.\n\nDo you \
-wish to remove this alias from the component?" ),
-                        GetChars( text ) );
+            msg.Printf( _(
+                "The current component already has an alias named '%s'.\n\n"
+                "Do you wish to remove this alias from the component?" ),
+                GetChars( text )
+                );
 
             int rsp = wxMessageBox( msg, _( "Confirm" ), wxYES_NO | wxICON_QUESTION, this );
 
@@ -108,12 +114,13 @@ wish to remove this alias from the component?" ),
         parent->SetName( text );
 
         // Test the library for any conflicts with the any aliases in the current component.
-        if( parent->GetAliasCount() > 1 && m_library && m_library->Conflicts( parent ) )
+        if( parent->GetAliasCount() > 1 && lib && lib->Conflicts( parent ) )
         {
-            msg.Printf( _( "The new component contains alias names that conflict with entries \
-in the component library <%s>.\n\nDo you wish to remove all of the conflicting aliases from \
-this component?" ),
-                        GetChars( m_library->GetName() ) );
+            msg.Printf( _(
+                "The new component contains alias names that conflict with entries in the component library '%s'.\n\n"
+                "Do you wish to remove all of the conflicting aliases from this component?" ),
+                GetChars( lib->GetName() )
+                );
 
             int rsp = wxMessageBox( msg, _( "Confirm" ), wxYES_NO | wxICON_QUESTION, this );
 
@@ -127,7 +134,7 @@ this component?" ),
 
             for( size_t i = 0;  i < aliases.GetCount();  i++ )
             {
-                if( m_library->FindEntry( aliases[ i ] ) != NULL )
+                if( lib->FindEntry( aliases[ i ] ) != NULL )
                     parent->RemoveAlias( aliases[ i ] );
             }
         }

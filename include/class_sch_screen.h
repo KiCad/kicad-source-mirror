@@ -35,6 +35,7 @@
 #include <sch_item_struct.h>
 #include <class_base_screen.h>
 #include <class_title_block.h>
+#include <kiway_player.h>
 
 #include <../eeschema/general.h>
 
@@ -60,9 +61,10 @@ enum SCH_LINE_TEST_T
 #define NB_MAX_SHEET    500
 
 
-class SCH_SCREEN : public BASE_SCREEN
+class SCH_SCREEN : public BASE_SCREEN, public KIWAY_HOLDER
 {
 private:
+
     wxString    m_fileName;     ///< File used to load the screen.
 
     int         m_refCount;     ///< Number of sheets referencing this screen.
@@ -76,8 +78,10 @@ private:
     /// Origin of the auxilliary axis, which is used in exports mostly, but not yet in EESCHEMA
     wxPoint     m_aux_origin;
 
-    DLIST< SCH_ITEM > m_drawList;     ///< Object list for the screen.
-                                      /// @todo use DLIST<SCH_ITEM> or superior container
+    DLIST< SCH_ITEM > m_drawList;       ///< Object list for the screen.
+
+    int     m_modification_sync;        ///< inequality with PART_LIBS::GetModificationHash()
+                                        ///< will trigger ResolveAll().
 
     /**
      * Function addConnectedItemsToBlock
@@ -96,7 +100,7 @@ public:
     /**
      * Constructor
      */
-    SCH_SCREEN();
+    SCH_SCREEN( KIWAY* aKiway );
 
     ~SCH_SCREEN();
 
@@ -123,15 +127,19 @@ public:
 
     void IncRefCount();
 
-    int GetRefCount() const { return m_refCount; }
+    int GetRefCount() const                                 { return m_refCount; }
 
     /**
      * Function GetDrawItems().
      * @return - A pointer to the first item in the linked list of draw items.
      */
-    SCH_ITEM* GetDrawItems() const          { return m_drawList.begin(); }
+    SCH_ITEM* GetDrawItems() const                          { return m_drawList.begin(); }
 
-    void Append( SCH_ITEM* aItem )          { m_drawList.Append( aItem ); }
+    void Append( SCH_ITEM* aItem )
+    {
+        m_drawList.Append( aItem );
+        --m_modification_sync;
+    }
 
     /**
      * Function Append
@@ -139,7 +147,11 @@ public:
      *
      * @param aList A reference to a #DLIST containing the #SCH_ITEM to add to the sheet.
      */
-    void Append( DLIST< SCH_ITEM >& aList ) { m_drawList.Append( aList ); }
+    void Append( DLIST< SCH_ITEM >& aList )
+    {
+        m_drawList.Append( aList );
+        --m_modification_sync;
+    }
 
     /**
      * Function GetCurItem
@@ -507,10 +519,9 @@ public:
 
 /**
  * Class SCH_SCREENS
- * is a class to handle the list of *screens* in a hierarchy.
+ * is a container class that holds multiple SCH_SCREENs in a hierarchy.
+ * Individual SCH_SCREENs are unique, and correspond to .sch files.
  */
-
-// screens are unique, and correspond to .sch files.
 class SCH_SCREENS
 {
 private:

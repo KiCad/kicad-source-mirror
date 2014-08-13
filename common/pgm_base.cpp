@@ -364,6 +364,8 @@ bool PGM_BASE::initPgm()
 {
     wxFileName pgm_name( App().argv[0] );
 
+    wxConfigBase::DontCreateOnDemand();
+
     wxInitAllImageHandlers();
 
     m_pgm_checker = new wxSingleInstanceChecker( pgm_name.GetName().Lower() + wxT( "-" ) + wxGetUserId() );
@@ -536,7 +538,9 @@ void PGM_BASE::saveCommonSettings()
     // process startup: initPgm(), so test before using:
     if( m_common_settings )
     {
-        m_common_settings->Write( workingDirKey, wxGetCwd() );
+        wxString cur_dir = wxGetCwd();
+
+        m_common_settings->Write( workingDirKey, cur_dir );
     }
 }
 

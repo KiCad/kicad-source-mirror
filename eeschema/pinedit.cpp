@@ -222,14 +222,13 @@ static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC )
  */
 void LIB_EDIT_FRAME::PlacePin()
 {
-    LIB_PIN* Pin;
-    LIB_PIN* CurrentPin  = (LIB_PIN*) m_drawItem;
+    LIB_PIN* cur_pin  = (LIB_PIN*) m_drawItem;
     bool     ask_for_pin = true;
     wxPoint  newpos;
     bool     status;
 
     // Some tests
-    if( (CurrentPin == NULL) || (CurrentPin->Type() != LIB_PIN_T) )
+    if( !cur_pin || cur_pin->Type() != LIB_PIN_T )
     {
         wxMessageBox( wxT( "LIB_EDIT_FRAME::PlacePin() error" ) );
         return;
@@ -237,18 +236,20 @@ void LIB_EDIT_FRAME::PlacePin()
 
     newpos = GetCrossHairPosition( true );
 
+    LIB_PART*      part = GetCurPart();
+
     // Test for an other pin in same new position:
-    for( Pin = m_component->GetNextPin(); Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
+    for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
     {
-        if( Pin == CurrentPin || newpos != Pin->GetPosition() || Pin->GetFlags() )
+        if( pin == cur_pin || newpos != pin->GetPosition() || pin->GetFlags() )
             continue;
 
         if( ask_for_pin && SynchronizePins() )
         {
             m_canvas->SetIgnoreMouseEvents( true );
-            status =
-                IsOK( this, _( "This position is already occupied by \
-another pin. Continue?" ) );
+
+            status = IsOK( this, _( "This position is already occupied by another pin. Continue?" ) );
+
             m_canvas->MoveCursorToCrossHair();
             m_canvas->SetIgnoreMouseEvents( false );
 
@@ -264,33 +265,33 @@ another pin. Continue?" ) );
     if( GetTempCopyComponent() )
         SaveCopyInUndoList( GetTempCopyComponent() );
     else
-        SaveCopyInUndoList( m_component );
+        SaveCopyInUndoList( part );
 
     m_canvas->SetMouseCapture( NULL, NULL );
     OnModify();
-    CurrentPin->Move( newpos );
+    cur_pin->Move( newpos );
 
-    if( CurrentPin->IsNew() )
+    if( cur_pin->IsNew() )
     {
-        LastPinOrient = CurrentPin->GetOrientation();
-        LastPinType   = CurrentPin->GetType();
-        LastPinShape  = CurrentPin->GetShape();
+        LastPinOrient = cur_pin->GetOrientation();
+        LastPinType   = cur_pin->GetType();
+        LastPinShape  = cur_pin->GetShape();
 
         if( SynchronizePins() )
-            CreateImagePins( CurrentPin, m_unit, m_convert, m_showDeMorgan );
+            CreateImagePins( cur_pin, m_unit, m_convert, m_showDeMorgan );
 
-        m_lastDrawItem = CurrentPin;
-        m_component->AddDrawItem( m_drawItem );
+        m_lastDrawItem = cur_pin;
+        part->AddDrawItem( m_drawItem );
     }
 
     // Put linked pins in new position, and clear flags
-    for( Pin = m_component->GetNextPin(); Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
+    for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
     {
-        if( Pin->GetFlags() == 0 )
+        if( pin->GetFlags() == 0 )
             continue;
 
-        Pin->Move( CurrentPin->GetPosition() );
-        Pin->ClearFlags();
+        pin->Move( cur_pin->GetPosition() );
+        pin->ClearFlags();
     }
 
     m_drawItem = NULL;
@@ -307,37 +308,41 @@ another pin. Continue?" ) );
  */
 void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
 {
-    LIB_PIN* currentPin = (LIB_PIN*) m_drawItem;
+    LIB_PIN* cur_pin = (LIB_PIN*) m_drawItem;
     wxPoint  startPos;
 
     TempCopyComponent();
 
-    // Mark pins for moving.
-    LIB_PIN* pin = m_component->GetNextPin();
+    LIB_PART*      part = GetCurPart();
 
-    for( ; pin != NULL; pin = m_component->GetNextPin( pin ) )
+    // Mark pins for moving.
+    for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
     {
         pin->ClearFlags();
 
-        if( pin == currentPin )
+        if( pin == cur_pin )
             continue;
 
-        if( ( pin->GetPosition() == currentPin->GetPosition() )
-            && ( pin->GetOrientation() == currentPin->GetOrientation() )
-            && SynchronizePins() )
+        if( pin->GetPosition() == cur_pin->GetPosition() &&
+            pin->GetOrientation() == cur_pin->GetOrientation() && SynchronizePins() )
+        {
             pin->SetFlags( IS_LINKED | IS_MOVED );
+        }
     }
 
-    currentPin->SetFlags( IS_LINKED | IS_MOVED );
-    PinPreviousPos = OldPos = currentPin->GetPosition();
+    cur_pin->SetFlags( IS_LINKED | IS_MOVED );
+
+    PinPreviousPos = OldPos = cur_pin->GetPosition();
     startPos.x = OldPos.x;
     startPos.y = -OldPos.y;
+
 //    m_canvas->CrossHairOff( DC );
     SetCrossHairPosition( startPos );
     m_canvas->MoveCursorToCrossHair();
 
     MSG_PANEL_ITEMS items;
-    currentPin->GetMsgPanelInfo( items );
+
+    cur_pin->GetMsgPanelInfo( items );
     SetMsgPanel( items );
     m_canvas->SetMouseCapture( DrawMovePin, AbortPinMove );
 //    m_canvas->CrossHairOn( DC );
@@ -358,33 +363,33 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     if( parent == NULL )
         return;
 
-    LIB_PIN* CurrentPin = (LIB_PIN*) parent->GetDrawItem();
+    LIB_PIN* cur_pin = (LIB_PIN*) parent->GetDrawItem();
 
-    if( CurrentPin == NULL || CurrentPin->Type() != LIB_PIN_T )
+    if( cur_pin == NULL || cur_pin->Type() != LIB_PIN_T )
         return;
 
-    wxPoint pinpos = CurrentPin->GetPosition();
+    wxPoint pinpos = cur_pin->GetPosition();
     bool    showPinText = true;
 
     // Erase pin in old position
     if( aErase )
     {
-        CurrentPin->Move( PinPreviousPos );
-        CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode,
+        cur_pin->Move( PinPreviousPos );
+        cur_pin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode,
                           &showPinText, DefaultTransform );
     }
 
     // Redraw pin in new position
-    CurrentPin->Move( aPanel->GetParent()->GetCrossHairPosition( true ) );
-    CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode,
+    cur_pin->Move( aPanel->GetParent()->GetCrossHairPosition( true ) );
+    cur_pin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode,
                       &showPinText, DefaultTransform );
 
-    PinPreviousPos = CurrentPin->GetPosition();
+    PinPreviousPos = cur_pin->GetPosition();
 
     /* Keep the original position for existing pin (for Undo command)
      * and the current position for a new pin */
-    if( !CurrentPin->IsNew() )
-        CurrentPin->Move( pinpos );
+    if( !cur_pin->IsNew() )
+        cur_pin->Move( pinpos );
 }
 
 
@@ -393,15 +398,16 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
  */
 void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
 {
-    LIB_PIN* pin;
     bool     showPinText = true;
 
-    if( m_component == NULL )
+    LIB_PART*      part = GetCurPart();
+
+    if( !part )
         return;
 
-    m_component->ClearStatus();
+    part->ClearStatus();
 
-    pin = new LIB_PIN( m_component );
+    LIB_PIN* pin = new LIB_PIN( part );
 
     m_drawItem = pin;
 
@@ -469,7 +475,7 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bo
         aPin->GetParent()->AddDrawItem( NewPin );
     }
 
-    for( ii = 1; ii <= aPin->GetParent()->GetPartCount(); ii++ )
+    for( ii = 1; ii <= aPin->GetParent()->GetUnitCount(); ii++ )
     {
         if( ii == aUnit || aPin->GetUnit() == 0 )
             continue;                       // Pin common to all units.
@@ -513,7 +519,9 @@ void LIB_EDIT_FRAME::GlobalSetPins( LIB_PIN* aMasterPin, int aId )
 {
     bool selected = aMasterPin->IsSelected();
 
-    if( ( m_component == NULL ) || ( aMasterPin == NULL ) )
+    LIB_PART*      part = GetCurPart();
+
+    if( !part || !aMasterPin )
         return;
 
     if( aMasterPin->Type() != LIB_PIN_T )
@@ -521,11 +529,9 @@ void LIB_EDIT_FRAME::GlobalSetPins( LIB_PIN* aMasterPin, int aId )
 
     OnModify( );
 
-    LIB_PIN* pin = m_component->GetNextPin();
-
-    for( ; pin != NULL; pin = m_component->GetNextPin( pin ) )
+    for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
     {
-        if( ( pin->GetConvert() ) && ( pin->GetConvert() != m_convert ) )
+        if( pin->GetConvert() && pin->GetConvert() != m_convert )
             continue;
 
         // Is it the "selected mode" ?
@@ -557,45 +563,47 @@ void LIB_EDIT_FRAME::GlobalSetPins( LIB_PIN* aMasterPin, int aId )
 // Create a new pin based on the previous pin with an incremented pin number.
 void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 {
-    LIB_PIN* Pin;
     wxString msg;
 
-    if( m_component == NULL || SourcePin == NULL || SourcePin->Type() != LIB_PIN_T )
+    LIB_PART*      part = GetCurPart();
+
+    if( !part || !SourcePin || SourcePin->Type() != LIB_PIN_T )
         return;
 
-    Pin = (LIB_PIN*) SourcePin->Clone();
-    Pin->ClearFlags();
-    Pin->SetFlags( IS_NEW );
-    Pin->Move( Pin->GetPosition() + wxPoint( g_RepeatStep.x, -g_RepeatStep.y ) );
-    wxString nextName = Pin->GetName();
+    LIB_PIN* pin = (LIB_PIN*) SourcePin->Clone();
+
+    pin->ClearFlags();
+    pin->SetFlags( IS_NEW );
+    pin->Move( pin->GetPosition() + wxPoint( g_RepeatStep.x, -g_RepeatStep.y ) );
+    wxString nextName = pin->GetName();
     IncrementLabelMember( nextName );
-    Pin->SetName( nextName );
+    pin->SetName( nextName );
 
-    Pin->PinStringNum( msg );
+    pin->PinStringNum( msg );
     IncrementLabelMember( msg );
-    Pin->SetPinNumFromString( msg );
+    pin->SetPinNumFromString( msg );
 
-    m_drawItem = Pin;
+    m_drawItem = pin;
 
     if( SynchronizePins() )
-        Pin->SetFlags( IS_LINKED );
+        pin->SetFlags( IS_LINKED );
 
     wxPoint savepos = GetCrossHairPosition();
     m_canvas->CrossHairOff( DC );
 
-    SetCrossHairPosition( wxPoint( Pin->GetPosition().x, -Pin->GetPosition().y ) );
+    SetCrossHairPosition( wxPoint( pin->GetPosition().x, -pin->GetPosition().y ) );
 
     // Add this new pin in list, and creates pins for others parts if needed
-    m_drawItem = Pin;
+    m_drawItem = pin;
     ClearTempCopyComponent();
     PlacePin();
-    m_lastDrawItem = Pin;
+    m_lastDrawItem = pin;
 
     SetCrossHairPosition( savepos );
     m_canvas->CrossHairOn( DC );
 
     MSG_PANEL_ITEMS items;
-    Pin->GetMsgPanelInfo( items );
+    pin->GetMsgPanelInfo( items );
     SetMsgPanel( items );
     OnModify( );
 }
@@ -620,20 +628,18 @@ bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
 }
 
 
-/* Test for duplicate pins and off grid pins:
- * Pins are considered off grid when they are not on the 25 mils grid
- * A grid smaller than 25 mils must be used only to build graphic shapes.
- */
 void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 {
-    if( m_component == NULL )
+    LIB_PART*      part = GetCurPart();
+
+    if( !part )
         return;
 
     const int MIN_GRID_SIZE = 25;
 
     LIB_PINS pinList;
 
-    m_component->GetPins( pinList );
+    part->GetPins( pinList );
 
     if( pinList.size() == 0 )
     {
@@ -672,18 +678,20 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
            this thing! Lorenzo */
         curr_pin->PinStringNum( stringCurrPinNum );
 
-        wxString msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, \
-%.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
-                    GetChars( stringCurrPinNum ),
-                    GetChars( curr_pin->GetName() ),
-                    curr_pin->GetPosition().x / 1000.0,
-                    -curr_pin->GetPosition().y / 1000.0,
-                    GetChars( stringPinNum ),
-                    GetChars( pin->GetName() ),
-                    pin->GetPosition().x / 1000.0,
-                    -pin->GetPosition().y / 1000.0 );
+        wxString msg = wxString::Format( _(
+            "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
+            " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
+            GetChars( stringCurrPinNum ),
+            GetChars( curr_pin->GetName() ),
+            curr_pin->GetPosition().x / 1000.0,
+            -curr_pin->GetPosition().y / 1000.0,
+            GetChars( stringPinNum ),
+            GetChars( pin->GetName() ),
+            pin->GetPosition().x / 1000.0,
+            -pin->GetPosition().y / 1000.0
+            );
 
-        if( m_component->GetPartCount() > 1 )
+        if( part->GetUnitCount() > 1 )
         {
             msg += wxString::Format( _( " in part %c" ), 'A' + curr_pin->GetUnit() - 1 );
         }
@@ -717,13 +725,15 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
         wxString stringPinNum;
         pin->PinStringNum( stringPinNum );
 
-        wxString msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>" ),
-                    GetChars( stringPinNum ),
-                    GetChars( pin->GetName() ),
-                    pin->GetPosition().x / 1000.0,
-                    -pin->GetPosition().y / 1000.0 );
+        wxString msg = wxString::Format( _(
+            "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>" ),
+            GetChars( stringPinNum ),
+            GetChars( pin->GetName() ),
+            pin->GetPosition().x / 1000.0,
+            -pin->GetPosition().y / 1000.0
+            );
 
-        if( m_component->GetPartCount() > 1 )
+        if( part->GetUnitCount() > 1 )
         {
             msg += wxString::Format( _( " in part %c" ), 'A' + pin->GetUnit() - 1 );
         }

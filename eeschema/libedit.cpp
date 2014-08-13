@@ -51,15 +51,14 @@
 
 void LIB_EDIT_FRAME::DisplayLibInfos()
 {
-    wxString msg = _( "Component Library Editor: " );
+    wxString        msg = _( "Part Library Editor: " );
+    PART_LIB*    lib = GetCurLib();
 
-    EnsureActiveLibExists();
-
-    if( m_library )
+    if( lib )
     {
-        msg += m_library->GetFullFileName();
+        msg += lib->GetFullFileName();
 
-        if( m_library->IsReadOnly() )
+        if( lib->IsReadOnly() )
             msg += _( " [Read Only]" );
     }
     else
@@ -71,21 +70,21 @@ void LIB_EDIT_FRAME::DisplayLibInfos()
 }
 
 
-void LIB_EDIT_FRAME::SelectActiveLibrary( CMP_LIBRARY* aLibrary )
+void LIB_EDIT_FRAME::SelectActiveLibrary( PART_LIB* aLibrary )
 {
-    if( aLibrary == NULL )
+    if( !aLibrary )
         aLibrary = SelectLibraryFromList( this );
 
     if( aLibrary )
     {
-        m_library = aLibrary;
+        SetCurLib( aLibrary );
     }
 
     DisplayLibInfos();
 }
 
 
-bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, CMP_LIBRARY* aLibrary )
+bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, PART_LIB* aLibrary )
 {
     if( GetScreen()->IsModify()
         && !IsOK( this, _( "The current component is not saved.\n\nDiscard current changes?" ) ) )
@@ -98,14 +97,14 @@ bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, CMP_LIBRAR
 
 bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry )
 {
-    if( !LoadOneLibraryPartAux( aLibEntry, m_library ) )
+    if( !LoadOneLibraryPartAux( aLibEntry, GetCurLib() ) )
         return false;
 
-    m_editPinsPerPartOrConvert = m_component->UnitsLocked() ? true : false;
+    m_editPinsPerPartOrConvert = GetCurPart()->UnitsLocked() ? true : false;
 
     GetScreen()->ClearUndoRedoList();
     Zoom_Automatique( false );
-    SetShowDeMorgan( m_component->HasConversion() );
+    SetShowDeMorgan( GetCurPart()->HasConversion() );
 
     return true;
 }
@@ -113,8 +112,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry )
 
 void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 {
-    wxString   msg;
-    wxString   CmpName;
+    wxString   cmp_name;
     LIB_ALIAS* libEntry = NULL;
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
@@ -123,80 +121,84 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
         && !IsOK( this, _( "The current component is not saved.\n\nDiscard current changes?" ) ) )
         return;
 
-     // No current lib, ask user for the library to use.
-    if( m_library == NULL )
+    PART_LIB* lib = GetCurLib();
+
+    // No current lib, ask user for the library to use.
+    if( !lib )
     {
         SelectActiveLibrary();
+        lib = GetCurLib();
 
-        if( m_library == NULL )
+        if( !lib )
             return;
     }
 
     wxArrayString dummyHistoryList;
     int dummyLastUnit;
-    CmpName = SelectComponentFromLibrary( m_library->GetName(), dummyHistoryList, dummyLastUnit,
+    cmp_name = SelectComponentFromLibrary( lib->GetName(), dummyHistoryList, dummyLastUnit,
                                           true, NULL, NULL );
 
-    if( CmpName.IsEmpty() )
+    if( cmp_name.IsEmpty() )
         return;
 
     GetScreen()->ClrModify();
     m_lastDrawItem = m_drawItem = NULL;
 
     // Delete previous library component, if any
-    if( m_component )
+    SetCurPart( NULL );
+    m_aliasName.Empty();
+
+    // Load the new library component
+    libEntry = lib->FindEntry( cmp_name );
+    PART_LIB* searchLib = lib;
+
+    if( !libEntry )
     {
-        delete m_component;
-        m_component = NULL;
-        m_aliasName.Empty();
-    }
-
-    /* Load the new library component */
-    libEntry = m_library->FindEntry( CmpName );
-    CMP_LIBRARY* searchLib = m_library;
-
-    if( libEntry == NULL )
-    {   // Not found in the active library: search inside the full list
+        // Not found in the active library: search inside the full list
         // (can happen when using Viewlib to load a component)
-        libEntry = CMP_LIBRARY::FindLibraryEntry( CmpName );
+        libEntry = Prj().SchLibs()->FindLibraryEntry( cmp_name );
 
         if( libEntry )
         {
-            searchLib = libEntry->GetLibrary();
+            searchLib = libEntry->GetLib();
+
             // The entry to load is not in the active lib
             // Ask for a new active lib
-            wxString msg;
-            msg << _("The selected component is not in the active library");
-            msg << wxT("\n\n");
-            msg << _("Do you want to change the active library?");
+            wxString msg = _( "The selected component is not in the active library." );
+            msg += wxT("\n\n");
+            msg += _( "Do you want to change the active library?" );
 
             if( IsOK( this, msg ) )
                 SelectActiveLibrary( searchLib );
         }
     }
 
-    if( libEntry == NULL )
+    if( !libEntry )
     {
-        msg.Printf( _( "Component name %s not found in library %s" ),
-                    GetChars( CmpName ),
-                    GetChars( searchLib->GetName() ) );
+        wxString msg = wxString::Format( _(
+            "Part name '%s' not found in library '%s'" ),
+            GetChars( cmp_name ),
+            GetChars( searchLib->GetName() )
+            );
         DisplayError( this, msg );
         return;
     }
 
-    EXCHG( searchLib, m_library );
+    PART_LIB* old = SetCurLib( searchLib );
+
     LoadComponentFromCurrentLib( libEntry );
-    EXCHG( searchLib, m_library );
+
+    SetCurLib( old );
+
     DisplayLibInfos();
 }
 
 
-bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLibrary )
+bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, PART_LIB* aLibrary )
 {
-    wxString msg, cmpName, rootName;
-    LIB_COMPONENT* component;
+    wxString msg, rootName;
 
-    if( ( aEntry == NULL ) || ( aLibrary == NULL ) )
+    if( !aEntry || !aLibrary )
         return false;
 
     if( aEntry->GetName().IsEmpty() )
@@ -206,41 +208,28 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLib
         return false;
     }
 
-    cmpName = m_aliasName = aEntry->GetName();
+    wxString cmpName = m_aliasName = aEntry->GetName();
 
     LIB_ALIAS* alias = (LIB_ALIAS*) aEntry;
-    component = alias->GetComponent();
 
-    wxASSERT( component != NULL );
+    LIB_PART* lib_part = alias->GetPart();
+
+    wxASSERT( lib_part );
 
     wxLogDebug( wxT( "\"<%s>\" is alias of \"<%s>\"" ),
                 GetChars( cmpName ),
-                GetChars( component->GetName() ) );
+                GetChars( lib_part->GetName() ) );
 
-    if( m_component )
-    {
-        delete m_component;
-        m_aliasName.Empty();
-    }
-
-    m_component = new LIB_COMPONENT( *component );
-
-    if( m_component == NULL )
-    {
-        msg.Printf( _( "Could not create copy of component <%s> in library <%s>." ),
-                    GetChars( aEntry->GetName() ),
-                    GetChars( aLibrary->GetName() ) );
-        DisplayError( this, msg );
-        return false;
-    }
-
+    LIB_PART* part = new LIB_PART( *lib_part );      // clone it and own it.
+    SetCurPart( part );
     m_aliasName = aEntry->GetName();
+
     m_unit = 1;
     m_convert = 1;
 
     m_showDeMorgan = false;
 
-    if( m_component->HasConversion() )
+    if( part->HasConversion() )
         m_showDeMorgan = true;
 
     GetScreen()->ClrModify();
@@ -248,8 +237,8 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLib
     UpdateAliasSelectList();
     UpdatePartSelectList();
 
-    /* Display the document information based on the entry selected just in
-     * case the entry is an alias. */
+    // Display the document information based on the entry selected just in
+    // case the entry is an alias.
     DisplayCmpDoc();
 
     return true;
@@ -258,16 +247,19 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLib
 
 void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
 {
-    if( m_component )
+    LIB_PART*      part = GetCurPart();
+
+    if( part )
     {
         // display reference like in schematic (a reference U is shown U? or U?A)
         // although it is stored without ? and part id.
         // So temporary change the reference by a schematic like reference
-        LIB_FIELD* field = m_component->GetField( REFERENCE );
-        wxString fieldText = field->GetText();
-        wxString fieldfullText = field->GetFullText( m_unit );
+        LIB_FIELD*  field = part->GetField( REFERENCE );
+        wxString    fieldText = field->GetText();
+        wxString    fieldfullText = field->GetFullText( m_unit );
+
         field->EDA_TEXT::SetText( fieldfullText );  // change the field text string only
-        m_component->Draw( m_canvas, aDC, aOffset, m_unit, m_convert, GR_DEFAULT_DRAWMODE );
+        part->Draw( m_canvas, aDC, aOffset, m_unit, m_convert, GR_DEFAULT_DRAWMODE );
         field->EDA_TEXT::SetText( fieldText );      // restore the field text string
     }
 }
@@ -317,7 +309,9 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
-    if( !m_library )
+    PART_LIB* lib = GetCurLib();
+
+    if( !lib )
     {
         DisplayError( this, _( "No library specified." ) );
         return false;
@@ -326,20 +320,21 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     if( GetScreen()->IsModify() )
     {
         if( IsOK( this, _( "Include last component changes?" ) ) )
-            SaveOnePartInMemory();
+            SaveOnePart( lib );
     }
 
     if( newFile )
     {
         PROJECT&        prj = Prj();
-        SEARCH_STACK&   search = prj.SchSearchS();
+        SEARCH_STACK*   search = prj.SchSearchS();
 
         // Get a new name for the library
         wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
-        if( !default_path )
-            default_path = search.LastVisitedPath();
 
-        wxFileDialog dlg( this, _( "Component Library Name:" ), default_path,
+        if( !default_path )
+            default_path = search->LastVisitedPath();
+
+        wxFileDialog dlg( this, _( "Part Library Name:" ), default_path,
                           wxEmptyString, SchematicLibraryFileExtension,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -348,8 +343,8 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
         fn = dlg.GetPath();
 
-        /* The GTK file chooser doesn't return the file extension added to
-         * file name so add it here. */
+        // The GTK file chooser doesn't return the file extension added to
+        // file name so add it here.
         if( fn.GetExt().IsEmpty() )
             fn.SetExt( SchematicLibraryFileExtension );
 
@@ -357,16 +352,17 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     }
     else
     {
-        fn = wxFileName( m_library->GetFullFileName() );
+        fn = wxFileName( lib->GetFullFileName() );
 
-        msg.Printf( _( "Modify library file <%s> ?" ),
+        msg.Printf( _( "Modify library file '%s' ?" ),
                     GetChars( fn.GetFullPath() ) );
 
         if( !IsOK( this, msg ) )
             return false;
     }
 
-    // Verify the user has write privileges before attempting to save the library file.
+    // Verify the user has write privileges before attempting to
+    // save the library file.
     if( !IsWritable( fn ) )
         return false;
 
@@ -379,6 +375,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     if( libFileName.FileExists() )
     {
         backupFileName.SetExt( wxT( "bak" ) );
+
         if( backupFileName.FileExists() )
             wxRemoveFile( backupFileName.GetFullPath() );
 
@@ -395,9 +392,9 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     {
         FILE_OUTPUTFORMATTER    libFormatter( libFileName.GetFullPath() );
 
-        if( !m_library->Save( libFormatter ) )
+        if( !lib->Save( libFormatter ) )
         {
-            msg.Printf( _( "Error occurred while saving library file <%s>" ),
+            msg.Printf( _( "Error occurred while saving library file '%s'" ),
                         GetChars( fn.GetFullPath() ) );
             AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
             DisplayError( this, msg );
@@ -407,7 +404,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     catch( ... /* IO_ERROR ioe */ )
     {
         libFileName.MakeAbsolute();
-        msg.Printf( _( "Failed to create component library file <%s>" ),
+        msg.Printf( _( "Failed to create component library file '%s'" ),
                     GetChars( libFileName.GetFullPath() ) );
         DisplayError( this, msg );
         return false;
@@ -437,7 +434,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     {
         FILE_OUTPUTFORMATTER    docFormatter( docFileName.GetFullPath() );
 
-        if( !m_library->SaveDocs( docFormatter ) )
+        if( !lib->SaveDocs( docFormatter ) )
         {
             msg.Printf( _( "Error occurred while saving library documentation file <%s>" ),
                         GetChars( docFileName.GetFullPath() ) );
@@ -455,10 +452,10 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
         return false;
     }
 
-    msg.Printf( _( "Library file <%s> OK" ), GetChars( fn.GetFullName() ) );
+    msg.Printf( _( "Library file '%s' OK" ), GetChars( fn.GetFullName() ) );
     fn.SetExt( DOC_EXT );
     wxString msg1;
-    msg1.Printf( _( "Documentation file <%s> OK" ), GetChars( fn.GetFullPath() ) );
+    msg1.Printf( _( "Documentation file '%s' OK" ), GetChars( fn.GetFullPath() ) );
     AppendMsgPanel( msg, msg1, BLUE );
 
     return true;
@@ -467,24 +464,25 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
 void LIB_EDIT_FRAME::DisplayCmpDoc()
 {
-    wxString msg;
-    LIB_ALIAS* alias;
+    LIB_ALIAS*      alias;
+    PART_LIB*    lib = GetCurLib();
+    LIB_PART*       part = GetCurPart();
 
     ClearMsgPanel();
 
-    if( m_library == NULL || m_component == NULL )
+    if( !lib || !part )
         return;
 
-    msg = m_component->GetName();
+    wxString msg = part->GetName();
 
     AppendMsgPanel( _( "Name" ), msg, BLUE, 8 );
 
-    if( m_aliasName == m_component->GetName() )
+    if( m_aliasName == part->GetName() )
         msg = _( "None" );
     else
         msg = m_aliasName;
 
-    alias = m_component->GetAlias( m_aliasName );
+    alias = part->GetAlias( m_aliasName );
 
     wxCHECK_RET( alias != NULL, wxT( "Alias not found in component." ) );
 
@@ -502,10 +500,10 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
 
     AppendMsgPanel( _( "Body" ), msg, GREEN, 8 );
 
-    if( m_component->IsPower() )
+    if( part->IsPower() )
         msg = _( "Power Symbol" );
     else
-        msg = _( "Component" );
+        msg = _( "Part" );
 
     AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
     AppendMsgPanel( _( "Description" ), alias->GetDescription(), CYAN, 8 );
@@ -516,9 +514,9 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
 
 void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
 {
-    wxString      CmpName;
-    LIB_ALIAS*    LibEntry;
-    wxArrayString ListNames;
+    wxString      cmp_name;
+    LIB_ALIAS*    libEntry;
+    wxArrayString nameList;
     wxString      msg;
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
@@ -526,79 +524,84 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
     m_lastDrawItem = NULL;
     m_drawItem = NULL;
 
-    if( m_library == NULL )
+    PART_LIB* lib = GetCurLib();
+
+    if( !lib )
     {
         SelectActiveLibrary();
 
-        if( m_library == NULL )
+        lib = GetCurLib();
+        if( !lib )
         {
             DisplayError( this, _( "Please select a component library." ) );
             return;
         }
     }
 
-    m_library->GetEntryNames( ListNames );
+    lib->GetEntryNames( nameList );
 
-    if( ListNames.IsEmpty() )
+    if( nameList.IsEmpty() )
     {
-        msg.Printf( _( "Component library <%s> is empty." ), GetChars( m_library->GetName() ) );
+        msg.Printf( _( "Part library '%s' is empty." ), GetChars( lib->GetName() ) );
         wxMessageBox( msg, _( "Delete Entry Error" ), wxID_OK | wxICON_EXCLAMATION, this );
         return;
     }
 
-    msg.Printf( _( "Select 1 of %d components to delete\nfrom library <%s>." ),
-                ListNames.GetCount(),
-                GetChars( m_library->GetName() ) );
+    msg.Printf( _( "Select 1 of %d components to delete\nfrom library '%s'." ),
+                nameList.GetCount(),
+                GetChars( lib->GetName() ) );
 
-    wxSingleChoiceDialog dlg( this, msg, _( "Delete Component" ), ListNames );
+    wxSingleChoiceDialog dlg( this, msg, _( "Delete Part" ), nameList );
 
     if( dlg.ShowModal() == wxID_CANCEL || dlg.GetStringSelection().IsEmpty() )
         return;
 
-    LibEntry = m_library->FindEntry( dlg.GetStringSelection() );
+    libEntry = lib->FindEntry( dlg.GetStringSelection() );
 
-    if( LibEntry == NULL )
+    if( !libEntry )
     {
-        msg.Printf( _( "Entry <%s> not found in library <%s>." ),
+        msg.Printf( _( "Entry '%s' not found in library '%s'." ),
                     GetChars( dlg.GetStringSelection() ),
-                    GetChars( m_library->GetName() ) );
+                    GetChars( lib->GetName() ) );
         DisplayError( this, msg );
         return;
     }
 
-    msg.Printf( _( "Delete component %s from library %s?" ),
-                GetChars( LibEntry->GetName() ),
-                GetChars( m_library->GetName() ) );
+    msg.Printf( _( "Delete component '%s' from library '%s' ?" ),
+                GetChars( libEntry->GetName() ),
+                GetChars( lib->GetName() ) );
 
     if( !IsOK( this, msg ) )
         return;
 
-    if( m_component == NULL || !m_component->HasAlias( LibEntry->GetName() ) )
+    LIB_PART* part = GetCurPart();
+
+    if( !part || !part->HasAlias( libEntry->GetName() ) )
     {
-        m_library->RemoveEntry( LibEntry );
+        lib->RemoveEntry( libEntry );
         return;
     }
 
-    /* If deleting the current entry or removing one of the aliases for
-     * the current entry, sync the changes in the current entry as well.
-     */
+    // If deleting the current entry or removing one of the aliases for
+    // the current entry, sync the changes in the current entry as well.
 
-    if( GetScreen()->IsModify()
-        && !IsOK( this, _( "The component being deleted has been modified. \
-All changes will be lost. Discard changes?" ) ) )
+    if( GetScreen()->IsModify() && !IsOK( this, _(
+        "The component being deleted has been modified."
+        " All changes will be lost. Discard changes?" ) ) )
+    {
         return;
+    }
 
-    LIB_ALIAS* nextEntry = m_library->RemoveEntry( LibEntry );
+    LIB_ALIAS* nextEntry = lib->RemoveEntry( libEntry );
 
     if( nextEntry != NULL )
     {
-        if( LoadOneLibraryPartAux( nextEntry, m_library ) )
+        if( LoadOneLibraryPartAux( nextEntry, lib ) )
             Zoom_Automatique( false );
     }
     else
     {
-        delete m_component;
-        m_component = NULL;
+        SetCurPart( NULL );     // delete CurPart
         m_aliasName.Empty();
     }
 
@@ -611,16 +614,19 @@ void LIB_EDIT_FRAME::CreateNewLibraryPart( wxCommandEvent& event )
 {
     wxString name;
 
-    if( m_component && GetScreen()->IsModify()
-        && !IsOK( this, _( "All changes to the current component will be \
-lost!\n\nClear the current component from the screen?" ) ) )
+    if( GetCurPart() && GetScreen()->IsModify() && !IsOK( this, _(
+        "All changes to the current component will be lost!\n\n"
+        "Clear the current component from the screen?" ) ) )
+    {
         return;
+    }
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     m_drawItem = NULL;
 
     DIALOG_LIB_NEW_COMPONENT dlg( this );
+
     dlg.SetMinSize( dlg.GetSize() );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -639,101 +645,86 @@ lost!\n\nClear the current component from the screen?" ) ) )
 #endif
     name.Replace( wxT( " " ), wxT( "_" ) );
 
-    /* Test if there a component with this name already. */
-    if( m_library && m_library->FindEntry( name ) )
+    PART_LIB* lib = GetCurLib();
+
+    // Test if there a component with this name already.
+    if( lib && lib->FindEntry( name ) )
     {
-        wxString msg;
-        msg.Printf( _( "Component %s already exists in library %s" ),
-                    GetChars( name ),
-                    GetChars( m_library->GetName() ) );
+        wxString msg = wxString::Format( _(
+            "Part '%s' already exists in library '%s'" ),
+            GetChars( name ),
+            GetChars( lib->GetName() )
+            );
         DisplayError( this, msg );
         return;
     }
 
-    LIB_COMPONENT* component = new LIB_COMPONENT( name );
-    component->GetReferenceField().SetText( dlg.GetReference() );
-    component->SetPartCount( dlg.GetPartCount() );
+    LIB_PART* new_part = new LIB_PART( name );
 
-    // Initialize component->m_TextInside member:
+    SetCurPart( new_part );
+    m_aliasName = new_part->GetName();
+
+    new_part->GetReferenceField().SetText( dlg.GetReference() );
+    new_part->SetUnitCount( dlg.GetUnitCount() );
+
+    // Initialize new_part->m_TextInside member:
     // if 0, pin text is outside the body (on the pin)
     // if > 0, pin text is inside the body
-    component->SetConversion( dlg.GetAlternateBodyStyle() );
+    new_part->SetConversion( dlg.GetAlternateBodyStyle() );
     SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
 
     if( dlg.GetPinNameInside() )
     {
-        component->SetPinNameOffset( dlg.GetPinTextPosition() );
+        new_part->SetPinNameOffset( dlg.GetPinTextPosition() );
 
-        if( component->GetPinNameOffset() == 0 )
-            component->SetPinNameOffset( 1 );
+        if( new_part->GetPinNameOffset() == 0 )
+            new_part->SetPinNameOffset( 1 );
     }
     else
     {
-        component->SetPinNameOffset( 0 );
+        new_part->SetPinNameOffset( 0 );
     }
 
-    ( dlg.GetPowerSymbol() ) ? component->SetPower() : component->SetNormal();
-    component->SetShowPinNumbers( dlg.GetShowPinNumber() );
-    component->SetShowPinNames( dlg.GetShowPinName() );
-    component->LockUnits( dlg.GetLockItems() );
+    ( dlg.GetPowerSymbol() ) ? new_part->SetPower() : new_part->SetNormal();
+    new_part->SetShowPinNumbers( dlg.GetShowPinNumber() );
+    new_part->SetShowPinNames( dlg.GetShowPinName() );
+    new_part->LockUnits( dlg.GetLockItems() );
 
-    if( dlg.GetPartCount() < 2 )
-        component->LockUnits( false );
+    if( dlg.GetUnitCount() < 2 )
+        new_part->LockUnits( false );
 
-    m_aliasName = component->GetName();
-
-    if( m_component )
-    {
-        delete m_component;
-        m_aliasName.Empty();
-    }
-
-    m_component = component;
-    m_aliasName = m_component->GetName();
     m_unit = 1;
     m_convert  = 1;
+
     DisplayLibInfos();
     DisplayCmpDoc();
     UpdateAliasSelectList();
     UpdatePartSelectList();
-    m_editPinsPerPartOrConvert = m_component->UnitsLocked() ? true : false;
+
+    m_editPinsPerPartOrConvert = new_part->UnitsLocked() ? true : false;
     m_lastDrawItem = NULL;
+
     GetScreen()->ClearUndoRedoList();
     OnModify();
+
     m_canvas->Refresh();
     m_mainToolBar->Refresh();
 }
 
 
-void LIB_EDIT_FRAME::SaveOnePartInMemory()
+void LIB_EDIT_FRAME::SaveOnePart( PART_LIB* aLib )
 {
-    LIB_COMPONENT* oldComponent;
-    LIB_COMPONENT* component;
-    wxString       msg;
-
-    if( m_component == NULL )
-    {
-        DisplayError( this, _( "No component to save." ) );
-        return;
-    }
-
-    if( m_library == NULL )
-        SelectActiveLibrary();
-
-    if( m_library == NULL )
-    {
-        DisplayError( this, _( "No library specified." ) );
-        return;
-    }
+    wxString    msg;
+    LIB_PART*   part = GetCurPart();
 
     GetScreen()->ClrModify();
 
-    oldComponent = m_library->FindComponent( m_component->GetName() );
+    LIB_PART* old_part = aLib->FindPart( part->GetName() );
 
-    if( oldComponent != NULL )
+    if( old_part )
     {
-        msg.Printf( _( "Component %s already exists. Change it?" ),
-                    GetChars( m_component->GetName() ) );
+        msg.Printf( _( "Part '%s' already exists. Change it?" ),
+                    GetChars( part->GetName() ) );
 
         if( !IsOK( this, msg ) )
             return;
@@ -741,16 +732,14 @@ void LIB_EDIT_FRAME::SaveOnePartInMemory()
 
     m_drawItem = m_lastDrawItem = NULL;
 
-    if( oldComponent != NULL )
-        component = m_library->ReplaceComponent( oldComponent, m_component );
+    if( old_part )
+        aLib->ReplacePart( old_part, part );
     else
-        component = m_library->AddComponent( m_component );
+        aLib->AddPart( part );
 
-    if( component == NULL )
-        return;
+    msg.Printf( _( "Part '%s' saved in library '%s'" ),
+                GetChars( part->GetName() ),
+                GetChars( aLib->GetName() ) );
 
-    msg.Printf( _( "Component %s saved in library %s" ),
-                GetChars( component->GetName() ),
-                GetChars( m_library->GetName() ) );
     SetStatusText( msg );
 }

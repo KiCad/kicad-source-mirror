@@ -28,8 +28,8 @@
  */
 
 
-#ifndef ID_H
-#define ID_H
+#ifndef ID_H_
+#define ID_H_
 
 #define MAX_ITEMS_IN_PICKER     15  ///< max no. items in the popup menu for item selection
 
@@ -44,9 +44,11 @@
 
 enum main_id
 {
-    ID_TO_PCB = wxID_HIGHEST,
-    ID_TO_PCB_MODULE_EDITOR,
-    ID_TO_CVPCB,
+    ID_RUN_PCB                  = wxID_HIGHEST,
+    ID_RUN_PCB_MODULE_EDITOR,
+    ID_RUN_CVPCB,
+    ID_RUN_LIBRARY,     // pcbnew & eeschema each use this internally to load their respective lib editors
+
     ID_LOAD_PROJECT,
     ID_APPEND_PROJECT,
     ID_NEW_PROJECT,
@@ -207,7 +209,6 @@ enum main_id
     ID_POPUP_GRID_USER,
 
     ID_SHEET_SET,
-    ID_TO_LIBRARY,
     ID_COMPONENT_BUTT,
 
     ID_ZOOM_IN,
@@ -215,7 +216,7 @@ enum main_id
     ID_ZOOM_PAGE,
     ID_ZOOM_REDRAW,
 
-    /* Panning command event IDs. */
+    // Panning command event IDs.
     ID_PAN_UP,
     ID_PAN_DOWN,
     ID_PAN_LEFT,
@@ -228,7 +229,7 @@ enum main_id
     ID_EDA_SOCKET_EVENT_SERV,
     ID_EDA_SOCKET_EVENT,
 
-    /* Command IDs common to Pcbnew and CvPcb. */
+    // Command IDs common to Pcbnew and CvPcb.
     ID_PCB_DISPLAY_FOOTPRINT_DOC,
 
     // Common to all
@@ -252,4 +253,4 @@ enum main_id
     ID_END_LIST
 };
 
-#endif  /* define ID_H */
+#endif  // ID_H_

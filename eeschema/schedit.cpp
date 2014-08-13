@@ -192,32 +192,32 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_BREAK_WIRE:
-    {
-        DLIST< SCH_ITEM > oldWires;
-
-        oldWires.SetOwnership( false );      // Prevent DLIST for deleting items in destructor.
-        m_canvas->MoveCursorToCrossHair();
-        screen->ExtractWires( oldWires, true );
-        screen->BreakSegment( GetCrossHairPosition() );
-
-        if( oldWires.GetCount() != 0 )
         {
-            PICKED_ITEMS_LIST oldItems;
+            DLIST< SCH_ITEM > oldWires;
 
-            oldItems.m_Status = UR_WIRE_IMAGE;
+            oldWires.SetOwnership( false );      // Prevent DLIST for deleting items in destructor.
+            m_canvas->MoveCursorToCrossHair();
+            screen->ExtractWires( oldWires, true );
+            screen->BreakSegment( GetCrossHairPosition() );
 
-            while( oldWires.GetCount() != 0 )
+            if( oldWires.GetCount() != 0 )
             {
-                ITEM_PICKER picker = ITEM_PICKER( oldWires.PopFront(), UR_WIRE_IMAGE );
-                oldItems.PushItem( picker );
+                PICKED_ITEMS_LIST oldItems;
+
+                oldItems.m_Status = UR_WIRE_IMAGE;
+
+                while( oldWires.GetCount() != 0 )
+                {
+                    ITEM_PICKER picker = ITEM_PICKER( oldWires.PopFront(), UR_WIRE_IMAGE );
+                    oldItems.PushItem( picker );
+                }
+
+                SaveCopyInUndoList( oldItems, UR_WIRE_IMAGE );
             }
 
-            SaveCopyInUndoList( oldItems, UR_WIRE_IMAGE );
+            screen->TestDanglingEnds( m_canvas, &dc );
         }
-
-        screen->TestDanglingEnds( m_canvas, &dc );
-    }
-    break;
+        break;
 
     case ID_POPUP_SCH_DELETE_CMP:
     case ID_POPUP_SCH_DELETE:
@@ -290,14 +290,16 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         // Ensure the struct is a component (could be a piece of a component, like Field, text..)
         if( item && item->Type() == SCH_COMPONENT_T )
         {
-            LIB_ALIAS* LibEntry;
-            LibEntry = CMP_LIBRARY::FindLibraryEntry( ( (SCH_COMPONENT*) item )->GetLibName() );
-
-            if( LibEntry && LibEntry->GetDocFileName() != wxEmptyString )
+            if( PART_LIBS* libs = Prj().SchLibs() )
             {
-                SEARCH_STACK* lib_search = &Prj().SchSearchS();
+                LIB_ALIAS* entry = libs->FindLibraryEntry( ( (SCH_COMPONENT*) item )->GetPartName() );
 
-                GetAssociatedDocument( this, LibEntry->GetDocFileName(), lib_search );
+                if( entry && !!entry->GetDocFileName() )
+                {
+                    SEARCH_STACK* lib_search = Prj().SchSearchS();
+
+                    GetAssociatedDocument( this, entry->GetDocFileName(), lib_search );
+                }
             }
         }
         break;

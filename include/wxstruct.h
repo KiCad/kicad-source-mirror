@@ -295,14 +295,14 @@ public:
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialize.
      */
-    void ImportHotkeyConfigFromFile( struct EDA_HOTKEY_CONFIG* aDescList );
+    void ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList );
 
     /**
      * Function ExportHotkeyConfigToFile
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialize.
      */
-    void ExportHotkeyConfigToFile( struct EDA_HOTKEY_CONFIG* aDescList );
+    void ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList );
 
     /**
      * Function GetFileFromHistory

@@ -62,8 +62,7 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
     // pray that aParent is either a KIWAY_PLAYER or DIALOG_SHIM derivation.
     KIWAY_HOLDER* h = dynamic_cast<KIWAY_HOLDER*>( aParent );
 
-    wxASSERT_MSG( h,
-        wxT( "DIALOG_SHIM's parent is NULL or not derived from KIWAY_PLAYER nor DIALOG_SHIM" ) );
+    // wxASSERT_MSG( h, wxT( "DIALOG_SHIM's parent is NULL or not derived from KIWAY_PLAYER nor DIALOG_SHIM" ) );
 
     if( h )
         SetKiway( this, &h->Kiway() );

@@ -54,7 +54,7 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
     SCH_SHEET_LIST      sheets;
     bool                isChanged = false;
 
-    sheets.GetComponents( refs, false );
+    sheets.GetComponents( Prj().SchLibs(), refs, false );
 
     DSNLEXER    lexer( aChangedSetOfReferences, FROM_UTF8( __func__ ) );
     PTREE       doc;
@@ -98,7 +98,7 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
                     // We have found a candidate.
                     // Note: it can be not unique (multiple parts per package)
                     // So we *do not* stop the search here
-                    SCH_COMPONENT*  component = refs[ii].GetComponent();
+                    SCH_COMPONENT*  component = refs[ii].GetComp();
                     SCH_FIELD*      fpfield   = component->GetField( FOOTPRINT );
                     const wxString& oldfp = fpfield->GetText();
 
@@ -133,9 +133,9 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
 {
     // Build a flat list of components in schematic:
     SCH_REFERENCE_LIST  referencesList;
-    SCH_SHEET_LIST      SheetList;
+    SCH_SHEET_LIST      sheetList;
 
-    SheetList.GetComponents( referencesList, false );
+    sheetList.GetComponents( Prj().SchLibs(), referencesList, false );
 
     FILE* cmpFile = wxFopen( aFullFilename, wxT( "rt" ) );
     if( cmpFile == NULL )
@@ -196,9 +196,9 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
             if( Cmp_KEEPCASE( reference, referencesList[ii].GetRef() ) == 0 )
             {
                 // We have found a candidate.
-                // Note: it can be not unique (multiple parts per package)
+                // Note: it can be not unique (multiple units per part)
                 // So we *do not* stop the search here
-                SCH_COMPONENT*  component = referencesList[ii].GetComponent();
+                SCH_COMPONENT*  component = referencesList[ii].GetComp();
                 SCH_FIELD*      fpfield = component->GetField( FOOTPRINT );
 
                 fpfield->SetText( footprint );
@@ -218,7 +218,7 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
 
 bool SCH_EDIT_FRAME::LoadCmpToFootprintLinkFile()
 {
-    wxString path = wxGetCwd();
+    wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
     wxFileDialog dlg( this, _( "Load Component-Footprint Link File" ),
                       path, wxEmptyString,

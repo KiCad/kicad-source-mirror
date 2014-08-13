@@ -13,7 +13,7 @@ class TEMPLATE_FIELDNAMES_LEXER;
 /**
  * Enum NumFieldType
  * is the set of all field indices assuming an array like sequence that a
- * SCH_COMPONENT or LIB_COMPONENT can hold.
+ * SCH_COMPONENT or LIB_PART can hold.
  * The first fields are called fixed fields and the quantity of them is
  * given by MANDATORY_FIELDS.  After that come an unlimited number of
  * user defined fields, only some of which have indices defined here.
@@ -25,7 +25,7 @@ enum  NumFieldType {
     DATASHEET,              ///< name of datasheet
 
     /// The first 4 are mandatory, and must be instantiated in SCH_COMPONENT
-    /// and LIB_COMPONENT constructors
+    /// and LIB_PART constructors
     MANDATORY_FIELDS,
 
     FIELD1 = MANDATORY_FIELDS,

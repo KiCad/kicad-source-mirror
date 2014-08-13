@@ -39,9 +39,6 @@
 #include <netlist_lexer.h>    // netlist_lexer is common to Eeschema and Pcbnew
 
 
-using namespace NL_T;
-
-
 class NETLIST;
 class COMPONENT;
 
@@ -291,7 +288,7 @@ public:
 class KICAD_NETLIST_PARSER : public NETLIST_LEXER
 {
 private:
-    T            token;
+    NL_T::T      token;
     LINE_READER* m_lineReader;  ///< The line reader used to parse the netlist.  Not owned.
     NETLIST*     m_netlist;     ///< The netlist to parse into.  Not owned.
 
@@ -365,7 +362,7 @@ public:
     void Parse() throw( IO_ERROR, PARSE_ERROR );
 
     // Useful for debug only:
-    const char* getTokenName( T aTok )
+    const char* getTokenName( NL_T::T aTok )
     {
         return NETLIST_LEXER::TokenName( aTok );
     }

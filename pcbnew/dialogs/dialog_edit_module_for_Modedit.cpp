@@ -341,7 +341,8 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
      * the relative path, when possible is preferable,
      * because it preserve use of default libraries paths, when the path is a sub path of these default paths
      */
-    shortfilename = search.FilenameWithRelativePathInSearchList( fullfilename );
+    shortfilename = search.FilenameWithRelativePathInSearchList(
+            fullfilename, wxPathOnly( Prj().GetProjectFullName() ) );
 
     wxFileName aux = shortfilename;
 

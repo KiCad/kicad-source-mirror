@@ -115,7 +115,6 @@ enum SCH_SEARCH_T {
 class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 {
 private:
-
     SCH_SHEET_PATH*         m_CurrentSheet;    ///< which sheet we are presently working on.
     wxString                m_DefaultSchematicFileName;
     PARAM_CFG_ARRAY         m_projectFileParams;
@@ -161,13 +160,14 @@ private:
     /// Use netcodes (net number) as net names when generating spice net lists.
     bool        m_spiceNetlistUseNetcodeAsNetname;
 
-    wxString    m_userLibraryPath;
+    /*  these are PROJECT specific, not schematic editor specific
+    wxString        m_userLibraryPath;
+    wxArrayString   m_componentLibFiles;
+    */
 
-    wxArrayString m_componentLibFiles;
-
-    static int            m_lastSheetPinType;      ///< Last sheet pin type.
-    static wxSize         m_lastSheetPinTextSize;  ///< Last sheet pin text size.
-    static wxPoint        m_lastSheetPinPosition;  ///< Last sheet pin position.
+    static int      m_lastSheetPinType;         ///< Last sheet pin type.
+    static wxSize   m_lastSheetPinTextSize;     ///< Last sheet pin text size.
+    static wxPoint  m_lastSheetPinPosition;     ///< Last sheet pin position.
 
 protected:
     TEMPLATES             m_TemplateFieldNames;
@@ -231,13 +231,12 @@ public:
 
     void SetSpiceUseNetcodeAsNetname( bool aEnable ) { m_spiceNetlistUseNetcodeAsNetname = aEnable; }
 
+    /* These are PROJECT specific, not schematic editor specific
     wxString GetUserLibraryPath() const { return m_userLibraryPath; }
-
     void SetUserLibraryPath( const wxString& aPath ) { m_userLibraryPath = aPath; }
-
     const wxArrayString& GetComponentLibraries() const { return m_componentLibFiles; }
-
     void SetComponentLibraries( const wxArrayString& aList ) { m_componentLibFiles = aList; }
+    */
 
     void Process_Special_Functions( wxCommandEvent& event );
     void OnColorConfig( wxCommandEvent& aEvent );
@@ -250,15 +249,12 @@ public:
      * Function GetProjectFileParametersList
      * returns the project file parameter list for Eeschema.
      *
-     *<p?
+     *<p>
      * Populate the project file parameter array specific to Eeschema if it hasn't
      * already been populated and return a reference to the array to the caller.
-     * Creating the parameter list at run time has the advantage of being able to
-     * define local variables.  The old method of statically building the array at
-     * compile time required global variable definitions.
      * </p>
      */
-    PARAM_CFG_ARRAY& GetProjectFileParametersList( void );
+    PARAM_CFG_ARRAY& GetProjectFileParametersList();
 
     /**
      * Function SaveProjectSettings
@@ -275,7 +271,7 @@ public:
      * @param aForceReread Force the project file to be reread if true.
      * @return True if the project file was loaded correctly.
      */
-    bool LoadProjectFile( const wxString& aFileName, bool aForceReread );
+    bool LoadProjectFile();
 
     /**
      * Function GetDefaultFieldName
@@ -342,7 +338,7 @@ public:
      * setting that need to be loaded at run time, this is the place to define it.
      * </p>
      */
-    PARAM_CFG_ARRAY& GetConfigurationSettings( void );
+    PARAM_CFG_ARRAY& GetConfigurationSettings();
 
     void LoadSettings( wxConfigBase* aCfg );
     void SaveSettings( wxConfigBase* aCfg );
@@ -736,6 +732,7 @@ public:
     // General search:
 
 private:
+
     /**
      * Function OnMoveItem
      * handles the #ID_SCH_MOVE_ITEM event used to move schematic itams.
@@ -1230,13 +1227,6 @@ public:
      * @param aItem The item to swap with the current undo item.
      */
     void SaveUndoItemInUndoList( SCH_ITEM* aItem );
-
-    /**
-     * Function LoadLibraries
-     *
-     * Clear all libraries currently loaded and load all of the project libraries.
-     */
-    void LoadLibraries( void );
 
     /**
      * Function CreateArchiveLibraryCacheFile

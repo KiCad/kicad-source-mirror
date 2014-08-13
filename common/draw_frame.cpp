@@ -659,7 +659,7 @@ void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper,
 }
 
 
-void EDA_DRAW_FRAME::ClearMsgPanel( void )
+void EDA_DRAW_FRAME::ClearMsgPanel()
 {
     if( m_messagePanel == NULL )
         return;

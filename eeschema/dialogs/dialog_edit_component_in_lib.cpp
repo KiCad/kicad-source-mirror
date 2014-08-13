@@ -64,7 +64,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::initDlg()
 {
     m_AliasLocation = -1;
 
-    LIB_COMPONENT* component = m_Parent->GetComponent();
+    LIB_PART*      component = m_Parent->GetCurPart();
 
     if( component == NULL )
     {
@@ -125,7 +125,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnCancelClick( wxCommandEvent& event )
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
 {
     LIB_ALIAS* alias;
-    LIB_COMPONENT* component = m_Parent->GetComponent();
+    LIB_PART*      component = m_Parent->GetCurPart();
 
     if( component == NULL )
         return;
@@ -151,7 +151,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
  */
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
 {
-    LIB_COMPONENT* component = m_Parent->GetComponent();
+    LIB_PART*      component = m_Parent->GetCurPart();
 
     if( m_Parent->GetShowDeMorgan() )
         m_AsConvertButt->SetValue( true );
@@ -172,10 +172,10 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
     m_ShowPinNumButt->SetValue( component->ShowPinNumbers() );
     m_ShowPinNameButt->SetValue( component->ShowPinNames() );
     m_PinsNameInsideButt->SetValue( component->GetPinNameOffset() != 0 );
-    m_SelNumberOfUnits->SetValue( component->GetPartCount() );
+    m_SelNumberOfUnits->SetValue( component->GetUnitCount() );
     m_SetSkew->SetValue( component->GetPinNameOffset() );
     m_OptionPower->SetValue( component->IsPower() );
-    m_OptionPartsLocked->SetValue( component->UnitsLocked() && component->GetPartCount() > 1 );
+    m_OptionPartsLocked->SetValue( component->UnitsLocked() && component->GetUnitCount() > 1 );
 }
 
 
@@ -184,7 +184,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     /* Update the doc, keyword and doc filename strings */
     int index;
     LIB_ALIAS* alias;
-    LIB_COMPONENT* component = m_Parent->GetComponent();
+    LIB_PART*      component = m_Parent->GetCurPart();
 
     if( component == NULL )
     {
@@ -248,7 +248,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
      *  Obviously, cannot be true if there is only one part */
     component->LockUnits( m_OptionPartsLocked->GetValue() );
 
-    if( component->GetPartCount() <= 1 )
+    if( component->GetUnitCount() <= 1 )
         component->LockUnits( false );
 
     /* Update the footprint filter list */
@@ -265,7 +265,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocFromRootToAlias( wxCommandEvent& e
         return;
 
     LIB_ALIAS* parent_alias;
-    LIB_COMPONENT* component = m_Parent->GetComponent();
+    LIB_PART*      component = m_Parent->GetCurPart();
 
     if( component == NULL )
         return;
@@ -309,8 +309,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart( wxCommandEvent& eve
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
 {
     wxString aliasname;
-    LIB_COMPONENT* component = m_Parent->GetComponent();
-    CMP_LIBRARY* library = m_Parent->GetLibrary();
+    LIB_PART*      component = m_Parent->GetCurPart();
+    PART_LIB* library = m_Parent->GetCurLib();
 
     if( component == NULL )
         return;
@@ -371,7 +371,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart( wxCommandEvent& event 
     }
 
     m_PartAliasListCtrl->Delete( m_PartAliasListCtrl->GetSelection() );
-    LIB_COMPONENT* component = m_Parent->GetComponent();
+    LIB_PART*      component = m_Parent->GetCurPart();
 
     if( component )
         component->RemoveAlias( aliasname );
@@ -389,16 +389,16 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart( wxCommandEvent& event 
  */
 bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
 {
-    LIB_COMPONENT* component = m_Parent->GetComponent();
+    LIB_PART*      part = m_Parent->GetCurPart();
 
-    if( component == NULL || component->GetPartCount() == MaxUnit || MaxUnit < 1 )
+    if( !part || part->GetUnitCount() == MaxUnit || MaxUnit < 1 )
         return false;
 
-    if( MaxUnit < component->GetPartCount()
+    if( MaxUnit < part->GetUnitCount()
         && !IsOK( this, _( "Delete extra parts from component?" ) ) )
         return false;
 
-    component->SetPartCount( MaxUnit );
+    part->SetUnitCount( MaxUnit );
     return true;
 }
 
@@ -408,7 +408,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
  */
 bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
 {
-    LIB_COMPONENT* component = m_Parent->GetComponent();
+    LIB_PART*      component = m_Parent->GetCurPart();
 
     if( component == NULL || ( m_Parent->GetShowDeMorgan() == component->HasConversion() ) )
         return false;
@@ -437,13 +437,13 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& event )
 {
     PROJECT&        prj = Prj();
-    SEARCH_STACK&   search = prj.SchSearchS();
+    SEARCH_STACK*   search = prj.SchSearchS();
 
     wxString    mask = wxT( "*" );
     wxString    docpath = prj.GetRString( PROJECT::DOC_PATH );
 
     if( !docpath )
-        docpath = search.LastVisitedPath( wxT( "doc" ) );
+        docpath = search->LastVisitedPath( wxT( "doc" ) );
 
     wxString    fullFileName = EDA_FileSelector( _( "Doc Files" ),
                                      docpath,
@@ -468,7 +468,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
 
     prj.SetRString( PROJECT::DOC_PATH, fn.GetPath() );
 
-    wxString filename = search.FilenameWithRelativePathInSearchList( fullFileName );
+    wxString filename = search->FilenameWithRelativePathInSearchList(
+            fullFileName, wxPathOnly( Prj().GetProjectFullName() ) );
 
     // Filenames are always stored in unix like mode, ie separator "\" is stored as "/"
     // to ensure files are identical under unices and windows
@@ -496,7 +497,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter( wxCommandEvent&
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& event )
 {
     wxString Line;
-    LIB_COMPONENT* component = m_Parent->GetComponent();
+    LIB_PART*      component = m_Parent->GetCurPart();
 
     if( component == NULL )
         return;
@@ -531,7 +532,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& event
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter( wxCommandEvent& event )
 {
-    LIB_COMPONENT* component = m_Parent->GetComponent();
+    LIB_PART*      component = m_Parent->GetCurPart();
     int ii = m_FootprintFilterListBox->GetSelection();
 
     m_FootprintFilterListBox->Delete( ii );

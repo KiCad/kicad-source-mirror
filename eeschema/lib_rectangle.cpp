@@ -42,7 +42,7 @@
 #include <transform.h>
 
 
-LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :
+LIB_RECTANGLE::LIB_RECTANGLE( LIB_PART*      aParent ) :
     LIB_ITEM( LIB_RECTANGLE_T, aParent )
 {
     m_Width                = 0;

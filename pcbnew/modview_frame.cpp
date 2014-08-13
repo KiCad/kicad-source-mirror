@@ -272,6 +272,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 #else
     Zoom_Automatique( false );
 #endif
+    Zoom_Automatique( true );
 
     Show( true );
 

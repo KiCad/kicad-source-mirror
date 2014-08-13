@@ -70,7 +70,7 @@ private:
 
     SCH_EDIT_FRAME* m_Parent;
     SCH_COMPONENT*  m_Cmp;
-    LIB_COMPONENT*  m_LibEntry;
+    LIB_PART*       m_part;
     bool            m_skipCopyFromPanel;
 
     static int      s_SelectedRow;
@@ -161,7 +161,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
 {
     m_Parent = (SCH_EDIT_FRAME*) parent;
 
-    m_LibEntry = NULL;
+    m_part = NULL;
     m_skipCopyFromPanel = false;
 
     wxListItem columnLabel;
@@ -225,23 +225,27 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 #ifndef KICAD_KEEPCASE
     newname.MakeUpper();
 #endif
+
     newname.Replace( wxT( " " ), wxT( "_" ) );
 
     if( newname.IsEmpty() )
     {
         DisplayError( NULL, _( "No Component Name!" ) );
     }
-    else if( newname.CmpNoCase( m_Cmp->m_ChipName ) )
+    else if( Cmp_KEEPCASE( newname, m_Cmp->m_part_name ) )
     {
-        if( CMP_LIBRARY::FindLibraryEntry( newname ) == NULL )
+        PART_LIBS* libs = Prj().SchLibs();
+
+        if( libs->FindLibraryEntry( newname ) == NULL )
         {
-            wxString message;
-            message.Printf( _( "Component [%s] not found!" ), GetChars( newname ) );
-            DisplayError( NULL, message );
+            wxString msg = wxString::Format( _(
+                "Component '%s' not found!" ),
+                GetChars( newname ) );
+            DisplayError( this, msg );
         }
         else    // Change component from lib!
         {
-            m_Cmp->m_ChipName = newname;
+            m_Cmp->SetPartName( newname, libs );
         }
     }
 
@@ -256,6 +260,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
         STATUS_FLAGS flags = m_Cmp->GetFlags();
+
         m_Cmp->SetUnitSelection( &m_Parent->GetCurrentSheet(), unit_selection );
         m_Cmp->SetUnit( unit_selection );
         m_Cmp->ClearFlags();
@@ -362,10 +367,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
         m_FieldsBuf[i].SetTextPosition( m_FieldsBuf[i].GetTextPosition() + m_Cmp->m_Pos );
     }
 
-    LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( m_Cmp->m_ChipName );
+    LIB_PART* entry = Prj().SchLibs()->FindLibPart( m_Cmp->m_part_name );
 
-    if( entry &&  entry->IsPower() )
-        m_FieldsBuf[VALUE].SetText( m_Cmp->m_ChipName );
+    if( entry && entry->IsPower() )
+        m_FieldsBuf[VALUE].SetText( m_Cmp->m_part_name );
 
     // copy all the fields back, and change the length of m_Fields.
     m_Cmp->SetFields( m_FieldsBuf );
@@ -553,7 +558,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
         which came from the component.
     */
 
-    m_LibEntry = CMP_LIBRARY::FindLibraryComponent( m_Cmp->m_ChipName );
+    m_part = Prj().SchLibs()->FindLibPart( m_Cmp->m_part_name );
 
 #if 0 && defined(DEBUG)
     for( int i = 0;  i<aComponent->GetFieldCount();  ++i )
@@ -765,7 +770,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     // For power symbols, the value is NOR editable, because value and pin
     // name must be same and can be edited only in library editor
-    if( fieldNdx == VALUE && m_LibEntry && m_LibEntry->IsPower() )
+    if( fieldNdx == VALUE && m_part && m_part->IsPower() )
         fieldValueTextCtrl->Enable( false );
     else
         fieldValueTextCtrl->Enable( true );
@@ -869,7 +874,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     int choiceCount = unitChoice->GetCount();
 
     // Remove non existing choices (choiceCount must be <= number for parts)
-    int unitcount = m_LibEntry ? m_LibEntry->GetPartCount() : 1;
+    int unitcount = m_part ? m_part->GetUnitCount() : 1;
 
     if( unitcount < 1 )
         unitcount = 1;
@@ -899,7 +904,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     else
     {
         // Show the "Units are not interchangeable" message option?
-        if( !m_LibEntry || !m_LibEntry->UnitsLocked() )
+        if( !m_part || !m_part->UnitsLocked() )
             unitsInterchageableLabel->SetLabel( _("Yes") );
         else
             unitsInterchageableLabel->SetLabel( _("No") );
@@ -937,11 +942,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     if( m_Cmp->GetConvert() > 1 )
         convertCheckBox->SetValue( true );
 
-    if( m_LibEntry == NULL || !m_LibEntry->HasConversion() )
+    if( m_part == NULL || !m_part->HasConversion() )
         convertCheckBox->Enable( false );
 
     // Set the component's library name.
-    chipnameTextCtrl->SetValue( m_Cmp->m_ChipName );
+    chipnameTextCtrl->SetValue( m_Cmp->m_part_name );
 
     // Set the component's unique ID time stamp.
     m_textCtrlTimeStamp->SetValue( wxString::Format( wxT("%8.8lX"),
@@ -955,53 +960,54 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
  */
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 {
-    LIB_COMPONENT* entry;
-
-    if( m_Cmp == NULL )
+    if( !m_Cmp )
         return;
 
-    entry = CMP_LIBRARY::FindLibraryComponent( m_Cmp->m_ChipName );
-
-    if( entry == NULL )
-        return;
-
-    // save old cmp in undo list if not already in edit, or moving ...
-    if( m_Cmp->m_Flags == 0 )
-        m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
-
-    INSTALL_UNBUFFERED_DC( dc, m_Parent->GetCanvas() );
-    m_Cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), g_XorMode );
-
-    // Initialize fixed field values to default values found in library
-    // Note: the field texts are not modified because they are set in schematic,
-    // the text from libraries is most of time a dummy text
-    // Only VALUE, REFERENCE , FOOTPRINT and DATASHEET are re-initialized
-    LIB_FIELD& refField = entry->GetReferenceField();
-    m_Cmp->GetField( REFERENCE )->SetTextPosition( refField.GetTextPosition() + m_Cmp->m_Pos );
-    m_Cmp->GetField( REFERENCE )->ImportValues( refField );
-
-    LIB_FIELD& valField = entry->GetValueField();
-    m_Cmp->GetField( VALUE )->SetTextPosition( valField.GetTextPosition() + m_Cmp->m_Pos );
-    m_Cmp->GetField( VALUE )->ImportValues( valField );
-
-    LIB_FIELD* field = entry->GetField(FOOTPRINT);
-    if( field && m_Cmp->GetField( FOOTPRINT ) )
+    if( LIB_PART* part = Prj().SchLibs()->FindLibPart( m_Cmp->m_part_name ) )
     {
-        m_Cmp->GetField( FOOTPRINT )->SetTextPosition( field->GetTextPosition() + m_Cmp->m_Pos );
-        m_Cmp->GetField( FOOTPRINT )->ImportValues( *field );
+        // save old cmp in undo list if not already in edit, or moving ...
+        if( m_Cmp->m_Flags == 0 )
+            m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
+
+        INSTALL_UNBUFFERED_DC( dc, m_Parent->GetCanvas() );
+        m_Cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), g_XorMode );
+
+        // Initialize fixed field values to default values found in library
+        // Note: the field texts are not modified because they are set in schematic,
+        // the text from libraries is most of time a dummy text
+        // Only VALUE, REFERENCE , FOOTPRINT and DATASHEET are re-initialized
+        LIB_FIELD& refField = part->GetReferenceField();
+
+        m_Cmp->GetField( REFERENCE )->SetTextPosition( refField.GetTextPosition() + m_Cmp->m_Pos );
+        m_Cmp->GetField( REFERENCE )->ImportValues( refField );
+
+        LIB_FIELD& valField = part->GetValueField();
+
+        m_Cmp->GetField( VALUE )->SetTextPosition( valField.GetTextPosition() + m_Cmp->m_Pos );
+        m_Cmp->GetField( VALUE )->ImportValues( valField );
+
+        LIB_FIELD* field = part->GetField(FOOTPRINT);
+
+        if( field && m_Cmp->GetField( FOOTPRINT ) )
+        {
+            m_Cmp->GetField( FOOTPRINT )->SetTextPosition( field->GetTextPosition() + m_Cmp->m_Pos );
+            m_Cmp->GetField( FOOTPRINT )->ImportValues( *field );
+        }
+
+        field = part->GetField(DATASHEET);
+
+        if( field && m_Cmp->GetField( DATASHEET ) )
+        {
+            m_Cmp->GetField( DATASHEET )->SetTextPosition( field->GetTextPosition() + m_Cmp->m_Pos );
+            m_Cmp->GetField( DATASHEET )->ImportValues( *field );
+        }
+
+        m_Cmp->SetOrientation( CMP_NORMAL );
+
+        m_Parent->OnModify();
+
+        m_Cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+
+        EndQuasiModal( 1 );
     }
-
-    field = entry->GetField(DATASHEET);
-    if( field && m_Cmp->GetField( DATASHEET ) )
-    {
-        m_Cmp->GetField( DATASHEET )->SetTextPosition( field->GetTextPosition() + m_Cmp->m_Pos );
-        m_Cmp->GetField( DATASHEET )->ImportValues( *field );
-    }
-
-    m_Cmp->SetOrientation( CMP_NORMAL );
-
-    m_Parent->OnModify();
-
-    m_Cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    EndQuasiModal( 1 );
 }

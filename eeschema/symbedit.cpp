@@ -47,22 +47,20 @@
 
 void LIB_EDIT_FRAME::LoadOneSymbol()
 {
-    LIB_COMPONENT* Component;
-    wxString       msg, err;
-    CMP_LIBRARY*   Lib;
+    LIB_PART*       part = GetCurPart();
 
-    /* Exit if no library entry is selected or a command is in progress. */
-    if( m_component == NULL || ( m_drawItem && m_drawItem->GetFlags() ) )
+    // Exit if no library entry is selected or a command is in progress.
+    if( !part || ( m_drawItem && m_drawItem->GetFlags() ) )
         return;
 
     PROJECT&        prj = Prj();
-    SEARCH_STACK&   search = prj.SchSearchS();
+    SEARCH_STACK*   search = prj.SchSearchS();
 
     m_canvas->SetIgnoreMouseEvents( true );
 
     wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
     if( !default_path )
-        default_path = search.LastVisitedPath();
+        default_path = search->LastVisitedPath();
 
     wxFileDialog dlg( this, _( "Import Symbol Drawings" ), default_path,
                       wxEmptyString, SchematicSymbolFileWildcard,
@@ -75,38 +73,46 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
 
-    wxFileName fn = dlg.GetPath();
+    wxString filename = dlg.GetPath();
 
-    prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
+    prj.SetRString( PROJECT::SCH_LIB_PATH, filename );
 
-    Lib = new CMP_LIBRARY( LIBRARY_TYPE_SYMBOL, fn );
+    std::auto_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_SYMBOL, filename ) );
 
-    if( !Lib->Load( err ) )
+    wxString err;
+
+    if( !lib->Load( err ) )
     {
-        msg.Printf( _( "Error '%s' occurred loading symbol library '%s'." ),
-                    GetChars( err ), GetChars( fn.GetName() ) );
+        wxString msg = wxString::Format( _(
+            "Error '%s' occurred loading part file '%s'." ),
+            GetChars( err ),
+            GetChars( filename )
+            );
         DisplayError( this, msg );
-        delete Lib;
         return;
     }
 
-    if( Lib->IsEmpty() )
+    if( lib->IsEmpty() )
     {
-        msg.Printf( _( "No components found in symbol library '%s'." ),
-                    GetChars( fn.GetName() ) );
-        delete Lib;
+        wxString msg = wxString::Format( _(
+            "No parts found in part file '%s'." ),
+            GetChars( filename )
+            );
+        DisplayError( this, msg );
         return;
     }
 
-    if( Lib->GetCount() > 1 )
+    if( lib->GetCount() > 1 )
     {
-        msg.Printf( _( "More than one part in symbol file '%s'." ),
-                    GetChars( fn.GetName() ) );
+        wxString msg = wxString::Format( _(
+            "More than one part in part file '%s'." ),
+            GetChars( filename )
+            );
         wxMessageBox( msg, _( "Warning" ), wxOK | wxICON_EXCLAMATION, this );
     }
 
-    Component = Lib->GetFirstEntry()->GetComponent();
-    LIB_ITEMS& drawList = Component->GetDrawItemList();
+    LIB_PART*   first = lib->GetFirstEntry()->GetPart();
+    LIB_ITEMS&  drawList = first->GetDrawItemList();
 
     BOOST_FOREACH( LIB_ITEM& item, drawList )
     {
@@ -122,17 +128,16 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
         item.SetFlags( IS_NEW | SELECTED );
 
         LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
-        newItem->SetParent( m_component );
-        m_component->AddDrawItem( newItem );
+
+        newItem->SetParent( part );
+        part->AddDrawItem( newItem );
     }
 
-    m_component->RemoveDuplicateDrawItems();
-    m_component->ClearSelectedItems();
+    part->RemoveDuplicateDrawItems();
+    part->ClearSelectedItems();
 
     OnModify();
     m_canvas->Refresh();
-
-    delete Lib;
 }
 
 
@@ -140,17 +145,18 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 {
     wxString        msg;
     PROJECT&        prj = Prj();
-    SEARCH_STACK&   search = prj.SchSearchS();
+    SEARCH_STACK*   search = prj.SchSearchS();
+    LIB_PART*       part = GetCurPart();
 
-    if( m_component->GetDrawItemList().empty() )
+    if( !part || part->GetDrawItemList().empty() )
         return;
 
     wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
     if( !default_path )
-        default_path = search.LastVisitedPath();
+        default_path = search->LastVisitedPath();
 
     wxFileDialog dlg( this, _( "Export Symbol Drawings" ), default_path,
-                      m_component->GetName(), SchematicSymbolFileWildcard,
+                      part->GetName(), SchematicSymbolFileWildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -170,28 +176,28 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
     wxString line;
 
-    /* File header */
+    // File header
     line << wxT( LIBFILE_IDENT ) << wxT( " " ) << LIB_VERSION_MAJOR
          << wxT( "." ) << LIB_VERSION_MINOR << wxT( "  SYMBOL  " )
          << wxT( "Date: " ) << DateAndTime() << wxT( "\n" );
 
-    /* Component name comment and definition. */
-    line << wxT( "# SYMBOL " ) << m_component->GetName() << wxT( "\n#\nDEF " )
-         << m_component->GetName() << wxT( " " );
+    // Component name comment and definition.
+    line << wxT( "# SYMBOL " ) << part->GetName() << wxT( "\n#\nDEF " )
+         << part->GetName() << wxT( " " );
 
-    if( !m_component->GetReferenceField().GetText().IsEmpty() )
-        line << m_component->GetReferenceField().GetText() << wxT( " " );
+    if( !part->GetReferenceField().GetText().IsEmpty() )
+        line << part->GetReferenceField().GetText() << wxT( " " );
     else
         line << wxT( "~ " );
 
-    line << 0 << wxT( " " ) << m_component->GetPinNameOffset() << wxT( " " );
+    line << 0 << wxT( " " ) << part->GetPinNameOffset() << wxT( " " );
 
-    if( m_component->ShowPinNumbers() )
+    if( part->ShowPinNumbers() )
         line << wxT( "Y " );
     else
         line << wxT( "N " );
 
-    if( m_component->ShowPinNames() )
+    if( part->ShowPinNames() )
         line << wxT( "Y " );
     else
         line << wxT( "N " );
@@ -205,18 +211,18 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
         try
         {
             formatter.Print( 0, "%s", TO_UTF8( line ) );
-            m_component->GetReferenceField().Save( formatter );
-            m_component->GetValueField().Save( formatter );
+            part->GetReferenceField().Save( formatter );
+            part->GetValueField().Save( formatter );
             formatter.Print( 0, "DRAW\n" );
 
-            LIB_ITEMS& drawList = m_component->GetDrawItemList();
+            LIB_ITEMS& drawList = part->GetDrawItemList();
 
             BOOST_FOREACH( LIB_ITEM& item, drawList )
             {
                 if( item.Type() == LIB_FIELD_T )
                     continue;
 
-                /* Don't save unused parts or alternate body styles. */
+                // Don't save unused parts or alternate body styles.
                 if( m_unit && item.GetUnit() && ( item.GetUnit() != m_unit ) )
                     continue;
 
@@ -246,18 +252,18 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
 void LIB_EDIT_FRAME::PlaceAnchor()
 {
-    if( m_component == NULL )
-        return;
+    if( LIB_PART*      part = GetCurPart() )
+    {
+        const wxPoint& cross_hair = GetCrossHairPosition();
 
-    const wxPoint& cross_hair = GetCrossHairPosition();
+        wxPoint offset( -cross_hair.x, cross_hair.y );
 
-    wxPoint offset( -cross_hair.x, cross_hair.y );
+        OnModify( );
 
-    OnModify( );
+        part->SetOffset( offset );
 
-    m_component->SetOffset( offset );
-
-    /* Redraw the symbol */
-    RedrawScreen( wxPoint( 0 , 0 ), true );
-    m_canvas->Refresh();
+        // Redraw the symbol
+        RedrawScreen( wxPoint( 0 , 0 ), true );
+        m_canvas->Refresh();
+    }
 }

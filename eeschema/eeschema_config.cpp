@@ -42,6 +42,7 @@
 #include <sch_sheet.h>
 #include <class_libentry.h>
 #include <worksheet_shape_builder.h>
+#include <class_library.h>
 
 #include <dialog_hotkeys_editor.h>
 
@@ -54,8 +55,6 @@
 #define HOTKEY_FILENAME         wxT( "eeschema" )
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
-
-static EDA_COLOR_T s_layerColor[NB_SCH_LAYERS];
 
 /// The width to draw busses that do not have a specific width
 static int s_defaultBusThickness;
@@ -131,18 +130,6 @@ void SetDefaultPinLength( int aLength )
 }
 
 
-EDA_COLOR_T GetLayerColor( LayerNumber aLayer )
-{
-    return s_layerColor[aLayer];
-}
-
-
-void SetLayerColor( EDA_COLOR_T aColor, int aLayer )
-{
-    s_layerColor[aLayer] = aColor;
-}
-
-
 // Color to draw selected items
 EDA_COLOR_T GetItemSelectedColor()
 {
@@ -160,10 +147,31 @@ EDA_COLOR_T GetInvisibleItemColor()
 
 void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 {
-    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
-    wxASSERT( frame );
+    // Identical to SCH_EDIT_FRAME::InstallConfigFrame()
 
-    InvokeEeschemaConfig( frame, this );
+    PROJECT*        prj = &Prj();
+    wxArrayString   lib_names;
+    wxString        lib_paths;
+
+    try
+    {
+        PART_LIBS::LibNamesAndPaths( prj, false, &lib_paths, &lib_names );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        DBG(printf( "%s: %s\n", __func__, TO_UTF8( ioe.errorText ) );)
+        return;
+    }
+
+    if( InvokeEeschemaConfig( this, &lib_paths, &lib_names ) )
+    {
+        // save the [changed] settings.
+        PART_LIBS::LibNamesAndPaths( prj, true, &lib_paths, &lib_names );
+
+        // Force a reload of the PART_LIBS
+        prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
+        prj->SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, NULL );
+    }
 }
 
 
@@ -191,6 +199,10 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     case ID_CONFIG_READ:
         {
+#if 0   // This is confusing.  From the library parts editor, we trigger the loading
+        // of configuration information into the schematic editor?  Makes no more sense
+        // than me storing my old newspapers in your garage.
+
             fn = g_RootSheet->GetScreen()->GetFileName();
             fn.SetExt( ProjectFileExtension );
 
@@ -201,10 +213,13 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             if( dlg.ShowModal() == wxID_CANCEL )
                 break;
 
-            schFrame->LoadProjectFile( dlg.GetPath(), true );
+            wxString foreign_pro = dlg.GetPath();
+
+            Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH,
+                GetProjectFileParametersList(), foreign_pro );
+#endif
         }
         break;
-
 
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
@@ -240,7 +255,41 @@ void SCH_EDIT_FRAME::OnColorConfig( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 {
-    InvokeEeschemaConfig( this, this );
+    // Identical to LIB_EDIT_FRAME::InstallConfigFrame()
+
+    PROJECT*        prj = &Prj();
+    wxArrayString   lib_names;
+    wxString        lib_paths;
+
+    try
+    {
+        PART_LIBS::LibNamesAndPaths( prj, false, &lib_paths, &lib_names );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        DBG(printf( "%s: %s\n", __func__, TO_UTF8( ioe.errorText ) );)
+        return;
+    }
+
+    if( InvokeEeschemaConfig( this, &lib_paths, &lib_names ) )
+    {
+        // save the [changed] settings.
+        PART_LIBS::LibNamesAndPaths( prj, true, &lib_paths, &lib_names );
+
+#if defined(DEBUG)
+        printf( "%s: lib_names:\n", __func__ );
+        for( unsigned i=0; i<lib_names.size();  ++i )
+        {
+            printf( " %s\n", TO_UTF8( lib_names[i] ) );
+        }
+
+        printf( "%s: lib_paths:'%s'\n", __func__, TO_UTF8( lib_paths ) );
+#endif
+
+        // Force a reload of the PART_LIBS
+        prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
+        prj->SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, NULL );
+    }
 }
 
 
@@ -267,7 +316,12 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             if( dlg.ShowModal() == wxID_CANCEL )
                 break;
 
-            LoadProjectFile( dlg.GetPath(), true );
+            wxString chosen = dlg.GetPath();
+
+            if( chosen == Prj().GetProjectFullName() )
+                LoadProjectFile();
+            else
+                Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH, GetProjectFileParametersList() );
         }
         break;
 
@@ -315,8 +369,8 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetRepeatVertical( g_RepeatStep.y );
     dlg.SetRepeatLabel( g_RepeatDeltaLabel );
     dlg.SetAutoSaveInterval( GetAutoSaveInterval() / 60 );
-    dlg.SetRefIdSeparator( LIB_COMPONENT::GetSubpartIdSeparator( ),
-                           LIB_COMPONENT::GetSubpartFirstId() );
+    dlg.SetRefIdSeparator( LIB_PART::GetSubpartIdSeparator( ),
+                           LIB_PART::GetSubpartFirstId() );
 
     dlg.SetShowGrid( IsGridVisible() );
     dlg.SetShowHiddenPins( m_showAllPins );
@@ -349,11 +403,10 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     int sep, firstId;
     dlg.GetRefIdSeparator( sep, firstId);
-
-    if( sep != (int)LIB_COMPONENT::GetSubpartIdSeparator()
-      || firstId != (int)LIB_COMPONENT::GetSubpartFirstId() )
+    if( sep != (int)LIB_PART::GetSubpartIdSeparator() ||
+        firstId != (int)LIB_PART::GetSubpartFirstId() )
     {
-        LIB_COMPONENT::SetSubpartIdNotation( sep, firstId );
+        LIB_PART::SetSubpartIdNotation( sep, firstId );
         SaveProjectSettings( true );
     }
 
@@ -408,17 +461,19 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
                                         &BASE_SCREEN::m_PageLayoutDescrFileName ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
-                                        LIB_COMPONENT::SubpartIdSeparatorPtr(),
+                                        LIB_PART::SubpartIdSeparatorPtr(),
                                         0, 0, 126 ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartFirstId" ),
-                                        LIB_COMPONENT::SubpartFirstIdPtr(),
+                                        LIB_PART::SubpartFirstIdPtr(),
                                         'A', '1', 'z' ) );
 
+    /* moved to library load/save specific code
     m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),
                                                            &m_userLibraryPath ) );
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
                                                                &m_componentLibFiles,
                                                                GROUP_SCH_LIBS ) );
+    */
 
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
                                                          &m_netListFormat) );
@@ -445,52 +500,23 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
 }
 
 
-bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& aFileName, bool aForceReread )
+bool SCH_EDIT_FRAME::LoadProjectFile()
 {
-    wxFileName      fn;
-    bool            isRead = true;
-    wxArrayString   liblist_tmp = m_componentLibFiles;
-    PROJECT&        prj = Prj();
-
-    if( aFileName.IsEmpty() )
-        fn = g_RootSheet->GetScreen()->GetFileName();
-    else
-        fn = aFileName;
-
-    m_componentLibFiles.Clear();
-
-    // Change the schematic file extension (.sch) to the project file
-    // extension (.pro).
-    fn.SetExt( ProjectFileExtension );
-
-    if( !prj.ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_SCH,
-            GetProjectFileParametersList(), !aForceReread ) )
-    {
-        m_componentLibFiles = liblist_tmp;
-        isRead = false;
-    }
+    bool isRead = Prj().ConfigLoad( Kiface().KifaceSearch(),
+                    GROUP_SCH, GetProjectFileParametersList() );
 
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:
-    LIB_COMPONENT::SetSubpartIdNotation( LIB_COMPONENT::GetSubpartIdSeparator(),
-                                         LIB_COMPONENT::GetSubpartFirstId() );
+    LIB_PART::SetSubpartIdNotation(
+            LIB_PART::GetSubpartIdSeparator(),
+            LIB_PART::GetSubpartFirstId() );
 
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
     // If empty, the default descr is loaded
     WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    pglayout.SetPageLayout(BASE_SCREEN::m_PageLayoutDescrFileName);
 
-    // libraries in the *.pro file take precedence over standard library search paths,
-    // but not over the directory of the project, which is at index 0.
-    prj.SchSearchS().AddPaths( m_userLibraryPath, 1 );
-
-    // If the list is empty, force loading the standard power symbol library.
-    if( m_componentLibFiles.GetCount() == 0 )
-        m_componentLibFiles.Add( wxT( "power" ) );
-
-    LoadLibraries();
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
+    pglayout.SetPageLayout( BASE_SCREEN::m_PageLayoutDescrFileName );
 
     return isRead;
 }
@@ -518,8 +544,7 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
         fn = dlg.GetPath();
     }
 
-    prj.ConfigSave( Kiface().KifaceSearch(),
-            fn.GetFullPath(), GROUP_SCH, GetProjectFileParametersList() );
+    prj.ConfigSave( Kiface().KifaceSearch(), GROUP_SCH, GetProjectFileParametersList() );
 }
 
 
@@ -549,7 +574,7 @@ static const wxChar FieldNamesEntry[] =             wxT( "FieldNames" );
 static const wxChar SimulatorCommandEntry[] =       wxT( "SimCmdLine" );
 
 
-PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
+PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
 {
     if( !m_configSettings.empty() )
         return m_configSettings;
@@ -562,79 +587,6 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
                                                         &m_drawBgColor,
                                                         WHITE ) );
 
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorWireEx" ),
-                                                        &s_layerColor[LAYER_WIRE],
-                                                        GREEN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBusEx" ),
-                                                        &s_layerColor[LAYER_BUS],
-                                                        BLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorConnEx" ),
-                                                        &s_layerColor[LAYER_JUNCTION],
-                                                        GREEN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLLabelEx" ),
-                                                        &s_layerColor[LAYER_LOCLABEL],
-                                                        BLACK ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorHLabelEx" ),
-                                                        &s_layerColor[LAYER_HIERLABEL],
-                                                        BROWN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGLabelEx" ),
-                                                        &s_layerColor[LAYER_GLOBLABEL],
-                                                        RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinNumEx" ),
-                                                        &s_layerColor[LAYER_PINNUM],
-                                                        RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinNameEx" ),
-                                                        &s_layerColor[LAYER_PINNAM],
-                                                        CYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorFieldEx" ),
-                                                        &s_layerColor[LAYER_FIELDS],
-                                                        MAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorReferenceEx" ),
-                                                        &s_layerColor[LAYER_REFERENCEPART],
-                                                        CYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorValueEx" ),
-                                                        &s_layerColor[LAYER_VALUEPART],
-                                                        CYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNoteEx" ),
-                                                        &s_layerColor[LAYER_NOTES],
-                                                        LIGHTBLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBodyEx" ),
-                                                        &s_layerColor[LAYER_DEVICE],
-                                                        RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBodyBgEx" ),
-                                                        &s_layerColor[LAYER_DEVICE_BACKGROUND],
-                                                        LIGHTYELLOW ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNetNameEx" ),
-                                                        &s_layerColor[LAYER_NETNAM],
-                                                        DARKGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinEx" ),
-                                                        &s_layerColor[LAYER_PIN],
-                                                        RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetEx" ),
-                                                        &s_layerColor[LAYER_SHEET],
-                                                        MAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
-                                                        wxT( "ColorSheetFileNameEx" ),
-                                                        &s_layerColor[LAYER_SHEETFILENAME],
-                                                        BROWN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetNameEx" ),
-                                                        &s_layerColor[LAYER_SHEETNAME],
-                                                        CYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetLabelEx" ),
-                                                        &s_layerColor[LAYER_SHEETLABEL],
-                                                        BROWN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNoConnectEx" ),
-                                                        &s_layerColor[LAYER_NOCONNECT],
-                                                        BLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcWEx" ),
-                                                        &s_layerColor[LAYER_ERC_WARN],
-                                                        GREEN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcEEx" ),
-                                                        &s_layerColor[LAYER_ERC_ERR],
-                                                        RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGridEx" ),
-                                                        &s_layerColor[LAYER_GRID],
-                                                        DARKGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintMonochrome" ),
                                                     &m_printMonochrome, true ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintSheetReferenceAndTitleBlock" ),
@@ -652,7 +604,6 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
-    // This is required until someone gets rid of the global variable s_layerColor.
     m_GridColor = GetLayerColor( LAYER_GRID );
 
     SetDefaultBusThickness( aCfg->Read( DefaultBusWidthEntry, 12l ) );

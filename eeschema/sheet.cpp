@@ -109,12 +109,12 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         {
             if( useScreen != NULL )
             {
-                msg.Printf( _( "A file named <%s> already exists in the current schematic hierarchy." ),
+                msg.Printf( _( "A file named '%s' already exists in the current schematic hierarchy." ),
                             GetChars( newFullFilename ) );
             }
             else
             {
-                msg.Printf( _( "A file named <%s> already exists." ),
+                msg.Printf( _( "A file named '%s' already exists." ),
                             GetChars( newFullFilename ) );
             }
 
@@ -125,7 +125,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         }
         else                                                   // New file.
         {
-            aSheet->SetScreen( new SCH_SCREEN() );
+            aSheet->SetScreen( new SCH_SCREEN( &Kiway() ) );
             aSheet->GetScreen()->SetFileName( newFullFilename );
         }
     }

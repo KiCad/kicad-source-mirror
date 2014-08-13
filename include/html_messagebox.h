@@ -25,7 +25,7 @@ public:
      */
     HTML_MESSAGE_BOX( wxWindow* parent, const wxString& aTitle,
                        wxPoint aPos = wxDefaultPosition,
-                       wxSize aSize = wxSize( 450,250 ) );
+                       wxSize aSize = wxSize( 450, 250 ) );
 
     /**
      * Function ListSet

@@ -52,12 +52,8 @@ class EDA_DRAW_FRAME;
  */
 class EDA_LIST_DIALOG : public EDA_LIST_DIALOG_BASE
 {
-private:
-    bool m_sortList;
-    void (*m_callBackFct)( wxString& Text );
-    const std::vector<wxArrayString>* m_itemsListCp;
-
 public:
+
     /**
      * Constructor:
      * @param aParent Pointer to the parent window.
@@ -66,13 +62,15 @@ public:
      * @param aItemList = A wxArrayString of the list of elements.
      * @param aRefText = An item name if an item must be preselected.
      * @param aCallBackFunction = callback function to display comments
+     * @param aCallBackFunctionData = a pointer to pass to @a aCallBackFunction
      * @param aSortList = true to sort list items by alphabetic order.
      */
     EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                      const wxArrayString& aItemHeaders,
                      const std::vector<wxArrayString>& aItemList,
                      const wxString& aRefText,
-                     void(*aCallBackFunction)(wxString& Text) = NULL,
+                     void (* aCallBackFunction)( wxString& text, void* data ) = NULL,
+                     void* aCallBackFunctionData = NULL,
                      bool aSortList = false );
 
     // ~EDA_LIST_DIALOG() {}
@@ -97,6 +95,11 @@ private:
     void     onListItemActivated( wxListEvent& event );
     void     textChangeInFilterBox(wxCommandEvent& event);
     void     sortList();
+
+    bool    m_sortList;
+    void    (* m_cb_func)( wxString& text, void* data );
+    void*   m_cb_data;
+    const   std::vector<wxArrayString>* m_itemsListCp;
 };
 
 
