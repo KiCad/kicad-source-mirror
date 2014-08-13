@@ -29,6 +29,7 @@
 
 #include <eda_text.h>
 #include <drawtxt.h>
+#include <macros.h>
 #include <trigo.h>               // RotatePoint
 #include <class_drawpanel.h>     // EDA_DRAW_PANEL
 
@@ -446,4 +447,56 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
         aFormatter->Print( 0, ")\n" );
     }
 #endif
+}
+
+// Convert the text shape to a list of segment
+// each segment is stored as 2 wxPoints: its starting point and its ending point
+// we are using DrawGraphicText to create the segments.
+// and therefore a call-back function is needed
+static std::vector<wxPoint>* s_cornerBuffer;
+
+// This is a call back function, used by DrawGraphicText to put each segment in buffer
+static void addTextSegmToBuffer( int x0, int y0, int xf, int yf )
+{
+    s_cornerBuffer->push_back( wxPoint( x0, y0 ) );
+    s_cornerBuffer->push_back( wxPoint( xf, yf ) );
+}
+
+void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuffer ) const
+{
+    wxSize size = GetSize();
+
+    if( IsMirrored() )
+        NEGATE( size.x );
+
+    s_cornerBuffer = &aCornerBuffer;
+    EDA_COLOR_T color = BLACK;  // not actually used, but needed by DrawGraphicText
+
+    if( IsMultilineAllowed() )
+    {
+        wxArrayString* list = wxStringSplit( GetText(), '\n' );
+        std::vector<wxPoint> positions;
+        positions.reserve( list->Count() );
+        GetPositionsOfLinesOfMultilineText( positions, list->Count() );
+
+        for( unsigned ii = 0; ii < list->Count(); ii++ )
+        {
+            wxString txt = list->Item( ii );
+            DrawGraphicText( NULL, NULL, positions[ii], color,
+                             txt, GetOrientation(), size,
+                             GetHorizJustify(), GetVertJustify(),
+                             GetThickness(), IsItalic(),
+                             true, addTextSegmToBuffer );
+        }
+
+        delete list;
+    }
+    else
+    {
+        DrawGraphicText( NULL, NULL, GetTextPosition(), color,
+                         GetText(), GetOrientation(), size,
+                         GetHorizJustify(), GetVertJustify(),
+                         GetThickness(), IsItalic(),
+                         true, addTextSegmToBuffer );
+    }
 }

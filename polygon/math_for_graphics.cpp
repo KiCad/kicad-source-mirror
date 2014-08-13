@@ -197,7 +197,7 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
             if( InRange( y1, y1i, y1f ) && InRange( x1, x2i, x2f ) && InRange( y1, y2i, y2f ) )
             {
                 if( x )
-                    *x = KiROUND( x1 ); 
+                    *x = KiROUND( x1 );
 
                 if( y )
                     *y = KiROUND( y1 );
@@ -399,7 +399,7 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int w1,
     double  dist;
     TestForIntersectionOfStraightLineSegments( x1i, y1i, x1f, y1f,
                                                x2i, y2i, x2f, y2f, &xx, &yy, &dist );
-    int d = KiROUND( dist - (w1 + w2) / 2 );
+    int d = KiROUND( dist ) - ((w1 + w2) / 2);
     if( d < 0 )
         d = 0;
 

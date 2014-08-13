@@ -309,11 +309,11 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet(
 
 /**
  * Function TransformBoundingBoxWithClearanceToPolygon
- * Convert the text bonding box to a rectangular polygon
+ * Convert the text bounding box to a rectangular polygon
  * Used in filling zones calculations
  * Circles and arcs are approximated by segments
  * @param aCornerBuffer = a buffer to store the polygon
- * @param aClearanceValue = the clearance around the pad
+ * @param aClearanceValue = the clearance around the text bounding box
  */
 void TEXTE_PCB::TransformBoundingBoxWithClearanceToPolygon(
                     CPOLYGONS_LIST& aCornerBuffer,

@@ -203,6 +203,14 @@ public:
                EDA_COLOR_T aAnchor_color = UNSPECIFIED_COLOR );
 
     /**
+     * Convert the text shape to a list of segment
+     * each segment is stored as 2 wxPoints: the starting point and the ending point
+     * there are therefore 2*n points
+     * @param aCornerBuffer = a buffer to store the polygon
+     */
+    void TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuffer ) const;
+
+    /**
      * Function TextHitTest
      * Test if \a aPoint is within the bounds of this object.
      * @param aPoint- A wxPoint to test

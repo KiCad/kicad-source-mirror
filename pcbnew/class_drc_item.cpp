@@ -111,6 +111,15 @@ wxString DRC_ITEM::GetErrorText() const
     case DRCE_PAD_INSIDE_KEEPOUT:
         return wxString( _("Pad inside a keepout area"));
 
+    case DRCE_VIA_INSIDE_TEXT:
+        return wxString( _("Via inside a text"));
+
+    case DRCE_TRACK_INSIDE_TEXT:
+        return wxString( _("Track inside a text"));
+
+    case DRCE_PAD_INSIDE_TEXT:
+        return wxString( _("Pad inside a text"));
+
     default:
         {
             wxString msg;
