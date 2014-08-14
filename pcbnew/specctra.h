@@ -38,7 +38,6 @@
 #include <pcbnew.h>
 
 // all outside the DSN namespace:
-namespace PCB {  class TYPE_COLLECTOR;  }
 class BOARD;
 class TRACK;
 class VIA;
