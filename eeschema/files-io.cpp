@@ -255,18 +255,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         CreateScreens();
     }
 
-#if defined(DEBUG) && 1
-    {
-        wxFileName fn = aFileSet[0];
-        fn.SetExt( ProjectFileExtension );
-
-        wxString n1 = fn.GetFullPath();
-        wxString n2 = Prj().GetProjectFullName();
-
-        wxASSERT( n1 == n2 );
-    }
-#endif
-
     GetScreen()->SetFileName( fullFileName );
     g_RootSheet->SetFileName( fullFileName );
 
