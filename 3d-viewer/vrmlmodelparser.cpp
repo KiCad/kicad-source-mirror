@@ -76,20 +76,21 @@ void VRML_MODEL_PARSER::Load( const wxString aFilename )
     if( fgets( line, 11, file ) == NULL )
     {
         fclose( file );
-        
+
         return;
     }
+
     fclose( file );
-    
-    
-    if( stricmp( line, "#VRML V2.0" ) == 0)
+
+
+    if( stricmp( line, "#VRML V2.0" ) == 0 )
     {
         //DBG( printf( "About to parser a #VRML V2.0 file\n" ) );
         vrml2_parser->Load( aFilename );
-        
+
         return;
     }
-    else if( stricmp( line, "#VRML V1.0" ) == 0)
+    else if( stricmp( line, "#VRML V1.0" ) == 0 )
     {
         //DBG( printf( "About to parser a #VRML V1.0 file\n" ) );
         vrml1_parser->Load( aFilename );
@@ -97,5 +98,5 @@ void VRML_MODEL_PARSER::Load( const wxString aFilename )
         return;
     }
 
-    DBG( printf( "Unknown VRML file format: %s\n", line ) );
+    // DBG( printf( "Unknown VRML file format: %s\n", line ) );
 }

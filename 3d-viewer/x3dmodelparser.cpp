@@ -43,11 +43,13 @@
 
 X3D_MODEL_PARSER::X3D_MODEL_PARSER( S3D_MASTER* aMaster ) :
     S3D_MODEL_PARSER( aMaster )
-{}
+{
+}
 
 
 X3D_MODEL_PARSER::~X3D_MODEL_PARSER()
-{}
+{
+}
 
 
 void X3D_MODEL_PARSER::Load( const wxString aFilename )
@@ -66,28 +68,28 @@ void X3D_MODEL_PARSER::Load( const wxString aFilename )
         return;
     }
 
-    glShadeModel(GL_SMOOTH);
-    glEnable(GL_NORMALIZE);
+    glShadeModel( GL_SMOOTH );
+    glEnable( GL_NORMALIZE );
 
     float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
     glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
 
     glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y,
-                        GetMaster()->m_MatScale.z );
+            GetMaster()->m_MatScale.z );
     glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y,
-                      GetMaster()->m_MatRotation.z );
+            GetMaster()->m_MatRotation.z );
     glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y,
-                      GetMaster()->m_MatPosition.z );
+            GetMaster()->m_MatPosition.z );
 
 
-#define SCALE_3D_CONV ((IU_PER_MILS * 1000.0f) / UNITS3D_TO_UNITSPCB)
+#define SCALE_3D_CONV ( (IU_PER_MILS * 1000.0f) / UNITS3D_TO_UNITSPCB )
 
 
     glTranslatef( matPos.x * SCALE_3D_CONV, matPos.y * SCALE_3D_CONV, matPos.z * SCALE_3D_CONV );
 
-    glRotatef(-matRot.z, 0.0f, 0.0f, 1.0f );
-    glRotatef(-matRot.y, 0.0f, 1.0f, 0.0f );
-    glRotatef(-matRot.x, 1.0f, 0.0f, 0.0f );
+    glRotatef( -matRot.z, 0.0f, 0.0f, 1.0f );
+    glRotatef( -matRot.y, 0.0f, 1.0f, 0.0f );
+    glRotatef( -matRot.x, 1.0f, 0.0f, 0.0f );
 
     glScalef( matScale.x, matScale.y, matScale.z );
 
@@ -103,8 +105,8 @@ void X3D_MODEL_PARSER::Load( const wxString aFilename )
     GetChildsByName( doc.GetRoot(), wxT( "Transform" ), transforms );
 
     for( NODE_LIST::iterator node_it = transforms.begin();
-        node_it != transforms.end();
-        node_it++ )
+         node_it != transforms.end();
+         node_it++ )
     {
         m_model = new S3D_MESH();
         childs.push_back( m_model );
@@ -112,7 +114,7 @@ void X3D_MODEL_PARSER::Load( const wxString aFilename )
         readTransform( *node_it );
     }
 
-    //DBG( printf( "chils size:%lu\n", childs.size() ) );
+    // DBG( printf( "chils size:%lu\n", childs.size() ) );
 
     if( GetMaster()->IsOpenGlAllowed() )
     {
@@ -140,7 +142,7 @@ wxString X3D_MODEL_PARSER::VRML2_representation()
                  "  geometry IndexedFaceSet {\n"
                  "    solid TRUE\n"
                  "    coord Coordinate {\n"
-                 "      point [\n") +
+                 "      point [\n" ) +
             vrml_points[i] +
             wxT( "      ]\n"
                  "    }\n"
@@ -156,19 +158,19 @@ wxString X3D_MODEL_PARSER::VRML2_representation()
 
 
 void X3D_MODEL_PARSER::GetChildsByName( wxXmlNode* aParent,
-                                        const wxString aName,
-                                        std::vector< wxXmlNode* >& aResult )
+        const wxString aName,
+        std::vector<wxXmlNode*>& aResult )
 {
     // Breadth-first search (BFS)
-    std::queue< wxXmlNode* > found;
+    std::queue<wxXmlNode*> found;
 
     found.push( aParent );
 
     while( !found.empty() )
     {
-        wxXmlNode *elem = found.front();
+        wxXmlNode* elem = found.front();
 
-        for( wxXmlNode *child = elem->GetChildren();
+        for( wxXmlNode* child = elem->GetChildren();
              child != NULL;
              child = child->GetNext() )
         {
@@ -197,11 +199,13 @@ void X3D_MODEL_PARSER::GetNodeProperties( wxXmlNode* aNode, PROPERTY_MAP& aProps
     }
 }
 
+
 /* Private ----- */
 
 void X3D_MODEL_PARSER::readTransform( wxXmlNode* aTransformNode )
 {
     NODE_LIST childnodes;
+
     GetChildsByName( aTransformNode, wxT( "Material" ), childnodes );
 
     for( NODE_LIST::iterator node = childnodes.begin();
@@ -216,7 +220,7 @@ void X3D_MODEL_PARSER::readTransform( wxXmlNode* aTransformNode )
     PROPERTY_MAP properties;
 
     GetNodeProperties( aTransformNode, properties );
-    GetChildsByName( aTransformNode, wxT("IndexedFaceSet"), childnodes );
+    GetChildsByName( aTransformNode, wxT( "IndexedFaceSet" ), childnodes );
 
     for( NODE_LIST::iterator node = childnodes.begin();
          node != childnodes.end();
@@ -234,6 +238,7 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
     glm::vec3 color;
 
     PROPERTY_MAP properties;
+
     GetNodeProperties( aMatNode, properties );
 
     // DEFine new Material named as value of DEF
@@ -246,10 +251,9 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
 
         m_model->m_Materials = material;
 
-        if( !parseDoubleTriplet( properties[ wxT( "diffuseColor" ) ],
-                                 color ) )
+        if( !parseDoubleTriplet( properties[ wxT( "diffuseColor" ) ], color ) )
         {
-            DBG( printf("diffuseColor parsing error") );
+            // DBG( printf( "diffuseColor parsing error" ) );
         }
         else
         {
@@ -258,7 +262,7 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
 
         if( !parseDoubleTriplet( properties[ wxT( "specularColor" ) ], color ) )
         {
-            DBG( printf("specularColor parsing error") );
+            // DBG( printf( "specularColor parsing error" ) );
         }
         else
         {
@@ -267,7 +271,7 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
 
         if( !parseDoubleTriplet( properties[ wxT( "emissiveColor" ) ], color ) )
         {
-            DBG( printf("emissiveColor parsing error") );
+            // DBG( printf( "emissiveColor parsing error" ) );
         }
         else
         {
@@ -283,7 +287,7 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
         }
         else
         {
-            DBG( printf( "ambienterror" ) );
+            // DBG( printf( "ambienterror" ) );
         }
 
         values.SetString( properties[ wxT( "shininess" ) ]  );
@@ -296,7 +300,7 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
         }
         else
         {
-            DBG( printf( "shininess error" ) );
+            // DBG( printf( "shininess error" ) );
         }
 
         values.SetString( properties[ wxT( "transparency" ) ] );
@@ -307,12 +311,12 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
         }
         else
         {
-            DBG( printf( "trans error") );
+            // DBG( printf( "trans error" ) );
         }
 
         // VRML
         wxString vrml_material;
-        PROPERTY_MAP::const_iterator p = ++properties.begin(); // skip DEF
+        PROPERTY_MAP::const_iterator p = ++properties.begin();    // skip DEF
 
         for( ; p != properties.end(); p++ )
         {
@@ -321,7 +325,6 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
 
         vrml_materials.push_back( vrml_material );
     }
-
     // USE existing material named by value of USE
     else if( properties.find( wxT( "USE" ) ) != properties.end() )
     {
@@ -335,28 +338,28 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
                 wxString vrml_material;
 
                 vrml_material.Append( wxString::Format( wxT( "specularColor %f %f %f\n" ),
-                                                             material->m_SpecularColor[0].x,
-                                                             material->m_SpecularColor[0].y,
-                                                             material->m_SpecularColor[0].z ) );
+                                material->m_SpecularColor[0].x,
+                                material->m_SpecularColor[0].y,
+                                material->m_SpecularColor[0].z ) );
 
                 vrml_material.Append( wxString::Format( wxT( "diffuseColor %f %f %f\n" ),
-                                                             material->m_DiffuseColor[0].x,
-                                                             material->m_DiffuseColor[0].y,
-                                                             material->m_DiffuseColor[0].z ) );
+                                material->m_DiffuseColor[0].x,
+                                material->m_DiffuseColor[0].y,
+                                material->m_DiffuseColor[0].z ) );
 
                 vrml_material.Append( wxString::Format( wxT( "emissiveColor %f %f %f\n" ),
-                                                             material->m_EmissiveColor[0].x,
-                                                             material->m_EmissiveColor[0].y,
-                                                             material->m_EmissiveColor[0].z ) );
+                                material->m_EmissiveColor[0].x,
+                                material->m_EmissiveColor[0].y,
+                                material->m_EmissiveColor[0].z ) );
 
-                vrml_material.Append( wxString::Format( wxT( "ambientIntensity %f\n"),
-                                                             material->m_AmbientColor[0].x ) );
+                vrml_material.Append( wxString::Format( wxT( "ambientIntensity %f\n" ),
+                                material->m_AmbientColor[0].x ) );
 
-                vrml_material.Append( wxString::Format( wxT( "shininess %f\n"),
-                                                             material->m_Shininess[0] ) );
+                vrml_material.Append( wxString::Format( wxT( "shininess %f\n" ),
+                                material->m_Shininess[0] ) );
 
-                vrml_material.Append( wxString::Format( wxT( "transparency %f\n"),
-                                                             material->m_Transparency[0] ) );
+                vrml_material.Append( wxString::Format( wxT( "transparency %f\n" ),
+                                material->m_Transparency[0] ) );
 
                 vrml_materials.push_back( vrml_material );
 
@@ -366,38 +369,38 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
             }
         }
 
-        DBG( printf( "ReadMaterial error: material not found\n" ) );
+        // DBG( printf( "ReadMaterial error: material not found\n" ) );
     }
 }
 
 
 bool X3D_MODEL_PARSER::parseDoubleTriplet( const wxString& aData,
-                                           S3D_VERTEX& aResult )
+        S3D_VERTEX& aResult )
 {
-    wxStringTokenizer tokens(aData);
+    wxStringTokenizer tokens( aData );
 
-    double x,y,z;
+    double x, y, z;
 
-    bool ret =  tokens.GetNextToken().ToDouble( &x ) &&
-                tokens.GetNextToken().ToDouble( &y ) &&
-                tokens.GetNextToken().ToDouble( &z );
+    bool ret = tokens.GetNextToken().ToDouble( &x )
+               && tokens.GetNextToken().ToDouble( &y )
+               && tokens.GetNextToken().ToDouble( &z );
 
-    aResult.x = x;
-    aResult.y = y;
-    aResult.z = z;
+    aResult.x   = x;
+    aResult.y   = y;
+    aResult.z   = z;
 
     return ret;
 }
 
 
 void X3D_MODEL_PARSER::rotate( S3D_VERTEX& aV,
-                               S3D_VERTEX& aU,
-                               double angle )
+        S3D_VERTEX& aU,
+        double angle )
 {
     S3D_VERTEX rotated;
-    double C = cos( angle );
-    double S = sin( angle );
-    double t = 1.0 - C;
+    double  C   = cos( angle );
+    double  S   = sin( angle );
+    double  t   = 1.0 - C;
 
     rotated.x = ( t * aU.x * aU.x + C ) * aV.x +
                 ( t * aU.x * aU.y - S * aU.z ) * aV.y +
@@ -411,9 +414,9 @@ void X3D_MODEL_PARSER::rotate( S3D_VERTEX& aV,
                 ( t * aU.y * aU.z + S * aU.x ) * aV.y +
                 ( t * aU.z * aU.z + C) * aV.z;
 
-    aV.x = rotated.x;
-    aV.y = rotated.y;
-    aV.z = rotated.z;
+    aV.x    = rotated.x;
+    aV.y    = rotated.y;
+    aV.z    = rotated.z;
 }
 
 
@@ -424,12 +427,13 @@ void X3D_MODEL_PARSER::rotate( S3D_VERTEX& aV,
  * 4. Apply geometry to Master object
  */
 void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
-                                           PROPERTY_MAP& aTransformProps)
+        PROPERTY_MAP& aTransformProps )
 {
     /* Step 1: Read transform data
      * --------------------------- */
 
     S3D_VERTEX translation;
+
     parseDoubleTriplet( aTransformProps[ wxT( "translation" ) ], translation );
 
     S3D_VERTEX scale;
@@ -437,35 +441,36 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
 
     S3D_VERTEX rotation;
     double angle = 0.0;
-    wxStringTokenizer tokens(aTransformProps[ wxT( "rotation" ) ]);
+    wxStringTokenizer tokens( aTransformProps[ wxT( "rotation" ) ] );
 
-    double x,y,z;
-    if( !(tokens.GetNextToken().ToDouble( &x ) &&
-          tokens.GetNextToken().ToDouble( &y ) &&
-          tokens.GetNextToken().ToDouble( &z ) &&
-          tokens.GetNextToken().ToDouble( &angle ) ) )
+    double x, y, z;
+
+    if( !( tokens.GetNextToken().ToDouble( &x )
+           && tokens.GetNextToken().ToDouble( &y )
+           && tokens.GetNextToken().ToDouble( &z )
+           && tokens.GetNextToken().ToDouble( &angle ) ) )
     {
-        DBG( printf("rotation read error") );
+        // DBG( printf( "rotation read error" ) );
     }
     else
     {
-        rotation.x = x;
-        rotation.y = y;
-        rotation.z = z;
+        rotation.x  = x;
+        rotation.y  = y;
+        rotation.z  = z;
     }
 
     /* Step 2: Read all coordinate points
      * ---------------------------- */
-    std::vector< double > points;
+    std::vector<double> points;
     NODE_LIST coordinates;
-    GetChildsByName( aFaceNode, wxT( "Coordinate" ), coordinates);
+    GetChildsByName( aFaceNode, wxT( "Coordinate" ), coordinates );
 
     PROPERTY_MAP coordinate_properties;
     // IndexedFaceSet has one Coordinate child node
     GetNodeProperties( coordinates[0], coordinate_properties );
 
     // Save points to vector as doubles
-    wxStringTokenizer point_tokens( coordinate_properties[ wxT("point") ] );
+    wxStringTokenizer point_tokens( coordinate_properties[ wxT( "point" ) ] );
     double point = 0.0;
 
     while( point_tokens.HasMoreTokens() )
@@ -482,7 +487,7 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
 
     if( points.size() % 3 != 0 )
     {
-        DBG( printf( "Number of points is incorrect" ) );
+        // DBG( printf( "Number of points is incorrect" ) );
         return;
     }
 
@@ -490,14 +495,14 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
      * apply transforms in order of SCALE, ROTATION, TRANSLATION
      */
     wxString vrml_pointlist;
-    std::vector< S3D_VERTEX > triplets;
+    std::vector<S3D_VERTEX> triplets;
 
     for( unsigned id = 0; id < points.size() / 3; id++ )
     {
         int triplet_indx = id * 3;
         S3D_VERTEX point( points[ triplet_indx ],
-                          points[ triplet_indx + 1 ],
-                          points[ triplet_indx + 2 ] );
+                points[ triplet_indx + 1 ],
+                points[ triplet_indx + 2 ] );
 
         point.x *= scale.x;
         point.y *= scale.y;
@@ -520,9 +525,9 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
 
     /* Step 3: Read all color points
      * ---------------------------- */
-    std::vector< double > color_points;
+    std::vector<double> color_points;
     NODE_LIST color;
-    GetChildsByName( aFaceNode, wxT( "Color" ), color);
+    GetChildsByName( aFaceNode, wxT( "Color" ), color );
 
     // Some models lack color information, need to handle this safely
     if( !color.empty() )
@@ -532,7 +537,7 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
         GetNodeProperties( color[0], color_properties );
 
         // Save points to vector as doubles
-        wxStringTokenizer colorpoint_tokens( color_properties[ wxT("color") ] );
+        wxStringTokenizer colorpoint_tokens( color_properties[ wxT( "color" ) ] );
         double color_point = 0.0;
 
         while( colorpoint_tokens.HasMoreTokens() )
@@ -549,21 +554,22 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
 
         if( color_points.size() % 3 != 0 )
         {
-            DBG( printf( "Number of points is incorrect" ) );
+            // DBG( printf( "Number of points is incorrect" ) );
             return;
         }
 
         /* Create 3D face color from 3 color points
          */
         m_model->m_Materials->m_DiffuseColor.clear();
+
         for( unsigned id = 0; id < color_points.size() / 3; id++ )
         {
             m_model->m_MaterialIndex.push_back( id );
 
             int color_triplet_indx = id * 3;
             glm::vec3 colorface( color_points[ color_triplet_indx + 0 ],
-                                 color_points[ color_triplet_indx + 1 ],
-                                 color_points[ color_triplet_indx + 2 ] );
+                    color_points[ color_triplet_indx + 1 ],
+                    color_points[ color_triplet_indx + 2 ] );
 
             m_model->m_Materials->m_DiffuseColor.push_back( colorface );
         }

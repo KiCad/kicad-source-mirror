@@ -40,7 +40,7 @@ VRML1_MODEL_PARSER::VRML1_MODEL_PARSER( S3D_MASTER* aMaster ) :
     S3D_MODEL_PARSER( aMaster )
 {
     m_model = NULL;
-    m_file = NULL;
+    m_file  = NULL;
 }
 
 
@@ -48,16 +48,16 @@ VRML1_MODEL_PARSER::~VRML1_MODEL_PARSER()
 {
     for( unsigned int idx = 0; idx < childs.size(); idx++ )
     {
-       delete childs[idx];
+        delete childs[idx];
     }
 }
 
 
 void VRML1_MODEL_PARSER::Load( const wxString aFilename )
 {
-    char       text[128];
+    char text[128];
 
-    //DBG( printf( "Load %s\n", static_cast<const char*>(aFilename.mb_str()) ) );
+    // DBG( printf( "Load %s\n", static_cast<const char*>(aFilename.mb_str()) ) );
     m_file = wxFopen( aFilename, wxT( "rt" ) );
 
     if( m_file == NULL )
@@ -71,19 +71,22 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
     float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
     glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
 
-    glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y, GetMaster()->m_MatScale.z );
-    glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y, GetMaster()->m_MatRotation.z );
-    glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y, GetMaster()->m_MatPosition.z );
+    glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y,
+            GetMaster()->m_MatScale.z );
+    glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y,
+            GetMaster()->m_MatRotation.z );
+    glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y,
+            GetMaster()->m_MatPosition.z );
 
 
-#define SCALE_3D_CONV ((IU_PER_MILS * 1000.0f) / UNITS3D_TO_UNITSPCB)
+#define SCALE_3D_CONV ( (IU_PER_MILS * 1000.0f) / UNITS3D_TO_UNITSPCB )
 
-    //glPushMatrix();
+    // glPushMatrix();
     glTranslatef( matPos.x * SCALE_3D_CONV, matPos.y * SCALE_3D_CONV, matPos.z * SCALE_3D_CONV );
 
-    glRotatef(-matRot.z, 0.0f, 0.0f, 1.0f );
-    glRotatef(-matRot.y, 0.0f, 1.0f, 0.0f );
-    glRotatef(-matRot.x, 1.0f, 0.0f, 0.0f );
+    glRotatef( -matRot.z, 0.0f, 0.0f, 1.0f );
+    glRotatef( -matRot.y, 0.0f, 1.0f, 0.0f );
+    glRotatef( -matRot.x, 1.0f, 0.0f, 0.0f );
 
     glScalef( matScale.x, matScale.y, matScale.z );
 
@@ -94,8 +97,7 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
 
     while( GetNextTag( m_file, text ) )
     {
-
-        if ( ( text == NULL ) || ( *text == '}' ) || ( *text == ']' ) )
+        if( ( text == NULL ) || ( *text == '}' ) || ( *text == ']' ) )
         {
             continue;
         }
@@ -112,7 +114,7 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
     SetLocaleTo_Default();       // revert to the current locale
 
 
-    //DBG( printf( "chils size:%lu\n", childs.size() ) );
+    // DBG( printf( "chils size:%lu\n", childs.size() ) );
 
     if( GetMaster()->IsOpenGlAllowed() )
     {
@@ -123,18 +125,18 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
     }
 }
 
+
 int VRML1_MODEL_PARSER::read_separator()
 {
-    char       text[128];
+    char text[128];
 
-    //DBG( printf( "Separator\n" ) );
+    // DBG( printf( "Separator\n" ) );
 
-    while( GetNextTag( m_file, text) )
+    while( GetNextTag( m_file, text ) )
     {
-
         if( strcmp( text, "Material" ) == 0 )
         {
-            readMaterial( );
+            readMaterial();
         }
         else if( strcmp( text, "Coordinate3" ) == 0 )
         {
@@ -146,9 +148,9 @@ int VRML1_MODEL_PARSER::read_separator()
         }
         else if( strcmp( text, "Separator" ) == 0 )
         {
-            S3D_MESH *parent = m_model;
+            S3D_MESH* parent = m_model;
 
-            S3D_MESH *new_mesh_model = new S3D_MESH();
+            S3D_MESH* new_mesh_model = new S3D_MESH();
 
             m_model->childs.push_back( new_mesh_model );
 
@@ -159,10 +161,10 @@ int VRML1_MODEL_PARSER::read_separator()
 
             m_model = parent;
         }
-        else if ( ( *text != '}' ) )
+        else if( ( *text != '}' ) )
         {
-            //DBG( printf( "read_NotImplemented %s\n", text ) );
-            read_NotImplemented( m_file, '}');
+            // DBG( printf( "read_NotImplemented %s\n", text ) );
+            read_NotImplemented( m_file, '}' );
         }
         else
         {
@@ -176,12 +178,12 @@ int VRML1_MODEL_PARSER::read_separator()
 
 int VRML1_MODEL_PARSER::readMaterial()
 {
-    char       text[128];
+    char text[128];
     S3D_MATERIAL* material = NULL;
 
-    //DBG( printf( "  readMaterial\n" ) );
+    // DBG( printf( "  readMaterial\n" ) );
 
-    wxString      mat_name;
+    wxString mat_name;
 
     material = new S3D_MATERIAL( GetMaster(), mat_name );
 
@@ -191,12 +193,12 @@ int VRML1_MODEL_PARSER::readMaterial()
 
     while( GetNextTag( m_file, text ) )
     {
-        if ( ( text == NULL ) || ( *text == ']' ) )
+        if( ( text == NULL ) || ( *text == ']' ) )
         {
             continue;
         }
 
-        if ( ( *text == '}' ) )
+        if( ( *text == '}' ) )
         {
             return 0;
         }
@@ -207,23 +209,23 @@ int VRML1_MODEL_PARSER::readMaterial()
         }
         else if( strcmp( text, "diffuseColor" ) == 0 )
         {
-            readMaterial_diffuseColor( );
+            readMaterial_diffuseColor();
         }
         else if( strcmp( text, "emissiveColor" ) == 0 )
         {
-            readMaterial_emissiveColor( );
+            readMaterial_emissiveColor();
         }
         else if( strcmp( text, "specularColor" ) == 0 )
         {
-            readMaterial_specularColor( );
+            readMaterial_specularColor();
         }
         else if( strcmp( text, "shininess" ) == 0 )
         {
-            readMaterial_shininess( );
+            readMaterial_shininess();
         }
         else if( strcmp( text, "transparency" ) == 0 )
         {
-            readMaterial_transparency( );
+            readMaterial_transparency();
         }
     }
 
@@ -231,27 +233,27 @@ int VRML1_MODEL_PARSER::readMaterial()
 }
 
 
-int VRML1_MODEL_PARSER::readCoordinate3( )
+int VRML1_MODEL_PARSER::readCoordinate3()
 {
-    char       text[128];
+    char text[128];
 
-    //DBG( printf( "  readCoordinate3\n" ) );
+    // DBG( printf( "  readCoordinate3\n" ) );
 
     while( GetNextTag( m_file, text ) )
     {
-        if ( ( text == NULL ) || ( *text == ']' ) )
+        if( ( text == NULL ) || ( *text == ']' ) )
         {
             continue;
         }
 
-        if ( ( *text == '}' ) )
+        if( ( *text == '}' ) )
         {
             return 0;
         }
 
         if( strcmp( text, "point" ) == 0 )
         {
-            readCoordinate3_point( );
+            readCoordinate3_point();
         }
     }
 
@@ -259,60 +261,61 @@ int VRML1_MODEL_PARSER::readCoordinate3( )
 }
 
 
-int VRML1_MODEL_PARSER::readIndexedFaceSet( )
+int VRML1_MODEL_PARSER::readIndexedFaceSet()
 {
-    char       text[128];
+    char text[128];
 
-    //DBG( printf( "  readIndexedFaceSet\n" ) );
+    // DBG( printf( "  readIndexedFaceSet\n" ) );
 
     while( GetNextTag( m_file, text ) )
     {
-        if ( ( text == NULL ) || ( *text == ']' ) )
+        if( ( text == NULL ) || ( *text == ']' ) )
         {
             continue;
         }
 
-        if ( ( *text == '}' ) )
+        if( ( *text == '}' ) )
         {
             return 0;
         }
 
         if( strcmp( text, "coordIndex" ) == 0 )
         {
-            readIndexedFaceSet_coordIndex( );
+            readIndexedFaceSet_coordIndex();
         }
         else if( strcmp( text, "materialIndex" ) == 0 )
         {
-            readIndexedFaceSet_materialIndex( );
+            readIndexedFaceSet_materialIndex();
         }
     }
 
     return -1;
 }
 
-int VRML1_MODEL_PARSER::readMaterial_ambientColor( )
-{
-    //DBG( printf( "    readMaterial_ambientColor\n" ) );
 
-    return parseVertexList( m_file, m_model->m_Materials->m_AmbientColor);
+int VRML1_MODEL_PARSER::readMaterial_ambientColor()
+{
+    // DBG( printf( "    readMaterial_ambientColor\n" ) );
+
+    return parseVertexList( m_file, m_model->m_Materials->m_AmbientColor );
 }
 
 
-int VRML1_MODEL_PARSER::readMaterial_diffuseColor( )
+int VRML1_MODEL_PARSER::readMaterial_diffuseColor()
 {
-    //DBG( printf( "    readMaterial_diffuseColor\n" ) );
+    // DBG( printf( "    readMaterial_diffuseColor\n" ) );
 
-    return parseVertexList( m_file, m_model->m_Materials->m_DiffuseColor);
+    return parseVertexList( m_file, m_model->m_Materials->m_DiffuseColor );
 }
 
 
-int VRML1_MODEL_PARSER::readMaterial_emissiveColor( )
+int VRML1_MODEL_PARSER::readMaterial_emissiveColor()
 {
-    //DBG( printf( "    readMaterial_emissiveColor\n" ) );
+    // DBG( printf( "    readMaterial_emissiveColor\n" ) );
 
-    int ret = parseVertexList( m_file, m_model->m_Materials->m_EmissiveColor);
+    int ret = parseVertexList( m_file, m_model->m_Materials->m_EmissiveColor );
 
-    if( GetMaster()->m_use_modelfile_emissiveColor == false)
+    if( GetMaster()->m_use_modelfile_emissiveColor == false )
     {
         m_model->m_Materials->m_EmissiveColor.clear();
     }
@@ -323,11 +326,11 @@ int VRML1_MODEL_PARSER::readMaterial_emissiveColor( )
 
 int VRML1_MODEL_PARSER::readMaterial_specularColor()
 {
-    //DBG( printf( "    readMaterial_specularColor\n" ) );
+    // DBG( printf( "    readMaterial_specularColor\n" ) );
 
     int ret = parseVertexList( m_file, m_model->m_Materials->m_SpecularColor );
 
-    if( GetMaster()->m_use_modelfile_specularColor == false)
+    if( GetMaster()->m_use_modelfile_specularColor == false )
     {
         m_model->m_Materials->m_SpecularColor.clear();
     }
@@ -336,9 +339,9 @@ int VRML1_MODEL_PARSER::readMaterial_specularColor()
 }
 
 
-int VRML1_MODEL_PARSER::readMaterial_shininess( )
+int VRML1_MODEL_PARSER::readMaterial_shininess()
 {
-    //DBG( printf( "    readMaterial_shininess\n" ) );
+    // DBG( printf( "    readMaterial_shininess\n" ) );
 
     m_model->m_Materials->m_Shininess.clear();
 
@@ -356,7 +359,7 @@ int VRML1_MODEL_PARSER::readMaterial_shininess( )
         m_model->m_Materials->m_Shininess.clear();
     }
 
-    //DBG( printf( "    m_Shininess.size: %ld\n", m_model->m_Materials->m_Shininess.size() ) );
+    // DBG( printf( "    m_Shininess.size: %ld\n", m_model->m_Materials->m_Shininess.size() ) );
 
     return 0;
 }
@@ -364,13 +367,13 @@ int VRML1_MODEL_PARSER::readMaterial_shininess( )
 
 int VRML1_MODEL_PARSER::readMaterial_transparency()
 {
-    //DBG( printf( "    readMaterial_transparency\n" ) );
+    // DBG( printf( "    readMaterial_transparency\n" ) );
 
     m_model->m_Materials->m_Transparency.clear();
 
     float tmp;
 
-    while( fscanf (m_file, "%f,", &tmp) )
+    while( fscanf( m_file, "%f,", &tmp ) )
     {
         m_model->m_Materials->m_Transparency.push_back( tmp );
     }
@@ -380,7 +383,7 @@ int VRML1_MODEL_PARSER::readMaterial_transparency()
         m_model->m_Materials->m_Transparency.clear();
     }
 
-    //DBG( printf( "    m_Transparency.size: %ld\n", m_model->m_Materials->m_Transparency.size() ) );
+    // DBG( printf( "    m_Transparency.size: %ld\n", m_model->m_Materials->m_Transparency.size() ) );
 
     return 0;
 }
@@ -388,7 +391,7 @@ int VRML1_MODEL_PARSER::readMaterial_transparency()
 
 int VRML1_MODEL_PARSER::readCoordinate3_point()
 {
-    //DBG( printf( "    readCoordinate3_point\n" ) );
+    // DBG( printf( "    readCoordinate3_point\n" ) );
 
     if( parseVertexList( m_file, m_model->m_Point ) == 0 )
     {
@@ -401,13 +404,14 @@ int VRML1_MODEL_PARSER::readCoordinate3_point()
 
 int VRML1_MODEL_PARSER::readIndexedFaceSet_coordIndex()
 {
-    //DBG( printf( "    readIndexedFaceSet_coordIndex\n" ) );
+    // DBG( printf( "    readIndexedFaceSet_coordIndex\n" ) );
 
     m_model->m_CoordIndex.clear();
 
     glm::ivec3 coord;
 
-    int dummy; // should be -1
+    int dummy;    // should be -1
+
     while( fscanf( m_file, "%d,%d,%d,%d,", &coord[0], &coord[1], &coord[2], &dummy ) )
     {
         std::vector<int> coord_list;
@@ -417,21 +421,22 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet_coordIndex()
         coord_list[1] = coord[1];
         coord_list[2] = coord[2];
 
-        if( (coord[0] == coord[1]) ||
-            (coord[0] == coord[2]) ||
-            (coord[2] == coord[1]) )
+        if( (coord[0] == coord[1])
+            || (coord[0] == coord[2])
+            || (coord[2] == coord[1]) )
         {
-            //DBG( printf( "    invalid coordIndex at index %lu (%d, %d, %d, %d)\n", m_model->m_CoordIndex.size()+1,coord[0], coord[1], coord[2], dummy ) );
+            // DBG( printf( "    invalid coordIndex at index %lu (%d, %d, %d, %d)\n", m_model->m_CoordIndex.size()+1,coord[0], coord[1], coord[2], dummy ) );
         }
 
-        if (dummy != -1)
+        if( dummy != -1 )
         {
-            //DBG( printf( "    Error at index %lu, -1 Expected, got %d\n", m_model->m_CoordIndex.size()+1, dummy  ) );
+            // DBG( printf( "    Error at index %lu, -1 Expected, got %d\n", m_model->m_CoordIndex.size()+1, dummy  ) );
         }
+
         m_model->m_CoordIndex.push_back( coord_list );
     }
 
-    //DBG( printf( "    m_CoordIndex.size: %ld\n", m_model->m_CoordIndex.size() ) );
+    // DBG( printf( "    m_CoordIndex.size: %ld\n", m_model->m_CoordIndex.size() ) );
 
     return 0;
 }
@@ -439,17 +444,18 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet_coordIndex()
 
 int VRML1_MODEL_PARSER::readIndexedFaceSet_materialIndex()
 {
-    //DBG( printf( "    readIndexedFaceSet_materialIndex\n" ) );
+    // DBG( printf( "    readIndexedFaceSet_materialIndex\n" ) );
 
     m_model->m_MaterialIndex.clear();
 
     int index;
+
     while( fscanf( m_file, "%d,", &index ) )
     {
         m_model->m_MaterialIndex.push_back( index );
     }
 
-    //DBG( printf( "    m_MaterialIndex.size: %ld\n", m_model->m_MaterialIndex.size() ) );
+    // DBG( printf( "    m_MaterialIndex.size: %ld\n", m_model->m_MaterialIndex.size() ) );
 
     return 0;
 }
