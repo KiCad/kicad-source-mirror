@@ -111,6 +111,7 @@ public:
         m_MainPosition      = aMainPos;
         m_AuxiliaryPosition = bAuxiliaryPos;
         m_hasSecondItem     = true;
+        m_noCoordinate      = false;
     }
 
     /**
