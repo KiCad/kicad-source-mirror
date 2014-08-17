@@ -313,6 +313,7 @@ void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
 {
+#if 0   // line 171 of modview_frame.cpp breaks this code
     KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB, false );
     if( !frame )
     {
@@ -320,6 +321,16 @@ void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
         frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
         frame->Show( true );
     }
+#else
+    KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB, true );
+
+    if( !frame->IsVisible() )
+    {
+        frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
+        frame->Show( true );
+    }
+
+#endif
     frame->Raise();
 }
 
