@@ -148,6 +148,10 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     // make sure the chipnameTextCtrl is wide enough to hold any unusually long chip names:
     EnsureTextCtrlWidth( dlg->chipnameTextCtrl );
 
+    // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
+    // frame. Therefore this dialog as a modal frame parent, MUST be run under
+    // quasimodal mode for the quasimodal frame support to work.  So don't use
+    // the QUASIMODAL macros here.
     dlg->ShowQuasiModal();
 
     m_canvas->SetIgnoreMouseEvents( false );

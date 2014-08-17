@@ -104,14 +104,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
         // re-enables only those that were disabled on exit
         wxWindowDisabler    toggle( this );
 
-        WX_EVENT_LOOP           event_loop;
-
-#if wxCHECK_VERSION( 2, 9, 4 )  // 2.9.4 is only approximate.
-        // new code needs this, old code does it in wxEventLoop::Run() and cannot
-        // tolerate it here. Where that boundary is as a version number, I don't know.
-        // A closer look at the subversion repo for wx would tell.
-        wxEventLoopActivator    event_loop_stacker( &event_loop );
-#endif
+        WX_EVENT_LOOP          event_loop;
 
         m_modal_loop = &event_loop;
 

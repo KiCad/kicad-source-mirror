@@ -182,7 +182,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 
 void DIALOG_MODULE_BOARD_EDITOR::OnCancelClick( wxCommandEvent& event )
 {
-    EndModal( -1 );
+    ENDQUASIMODAL( -1 );
 }
 
 
@@ -194,7 +194,7 @@ void DIALOG_MODULE_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent& event )
         m_Parent->OnModify();
     }
 
-    EndModal( 2 );
+    ENDQUASIMODAL( 2 );
 }
 
 
@@ -204,7 +204,7 @@ void DIALOG_MODULE_BOARD_EDITOR::ExchangeModule( wxCommandEvent& event )
 
     // Warning: m_CurrentModule was deleted by exchange module
     m_Parent->SetCurItem( NULL );
-    EndModal( 0 );
+    ENDQUASIMODAL( 0 );
 }
 
 
@@ -241,8 +241,6 @@ void DIALOG_MODULE_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent& event )
 
 void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 {
-    SetFocus();
-
     wxString default_path;
     wxGetEnv( wxT( KISYS3DMOD ), &default_path );
 #ifdef __WINDOWS__
@@ -675,7 +673,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     m_Parent->OnModify();
 
-    EndModal( 1 );
+    ENDQUASIMODAL( 1 );
 
     if( m_DC )
     {

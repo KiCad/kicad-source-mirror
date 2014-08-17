@@ -35,13 +35,19 @@
  #define DLGSHIM_USE_SETFOCUS      0
 #endif
 
-#if wxCHECK_VERSION( 2, 9, 4 )
- #define WX_EVENT_LOOP      wxGUIEventLoop
-#else
- #define WX_EVENT_LOOP      wxEventLoop
-#endif
+class WDO_ENABLE_DISABLE;
+class EVENT_LOOP;
 
-class WX_EVENT_LOOP;
+// These macros are for DIALOG_SHIM only, NOT for KIWAY_PLAYER.  KIWAY_PLAYER
+// has its own support for quasi modal and its platform specific issues are different
+// than for a wxDialog.
+#if wxCHECK_VERSION( 3, 0, 0 )
+ #define SHOWQUASIMODAL     ShowQuasiModal
+ #define ENDQUASIMODAL      EndQuasiModal
+#else
+ #define SHOWQUASIMODAL     ShowModal
+ #define ENDQUASIMODAL      EndModal
+#endif
 
 
 /**
@@ -86,9 +92,9 @@ protected:
     std::string m_hash_key;     // alternate for class_map when classname re-used.
 
     // variables for quasi-modal behavior support, only used by a few derivatives.
-    WX_EVENT_LOOP*  m_qmodal_loop;      // points to nested event_loop, NULL means not qmodal and dismissed
-    bool            m_qmodal_showing;
-
+    EVENT_LOOP*         m_qmodal_loop;      // points to nested event_loop, NULL means not qmodal and dismissed
+    bool                m_qmodal_showing;
+    WDO_ENABLE_DISABLE* m_qmodal_parent_disabler;
 
 #if DLGSHIM_USE_SETFOCUS
 private:
