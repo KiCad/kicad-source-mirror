@@ -194,6 +194,16 @@ public:
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
 
     /**
+     * Initialize or reinitialize the pointer
+     * to the LIB_PART for each component found in m_drawList
+     * must be called:
+     *  in Draw function
+     *  when loading a schematic file
+     *  before creating a netlist (in case a library is modified)
+     */
+    void BuildSchCmpLinksToLibCmp();
+
+    /**
      * Function Draw
      * draws all the items in the screen to \a aCanvas.
      * note: this function is useful only for schematic.

@@ -546,13 +546,11 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     return true;
 }
 
-
-void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
+void SCH_SCREEN::BuildSchCmpLinksToLibCmp()
 {
-    /* note: SCH_SCREEN::Draw is useful only for schematic.
-     * library editor and library viewer do not use m_drawList, and therefore
-     * their SCH_SCREEN::Draw() draws nothing
-     */
+    // Initialize or reinitialize the pointer to the LIB_PART for each component
+    // found in m_drawList, but only if needed (change in lib or schematic)
+    // therefore the calculation time is usually very low.
 
     if( m_drawList.GetCount() )
     {
@@ -571,6 +569,18 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
             m_modification_sync = mod_hash;     // note the last mod_hash
         }
     }
+}
+
+
+
+void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
+{
+    /* note: SCH_SCREEN::Draw is useful only for schematic.
+     * library editor and library viewer do not use m_drawList, and therefore
+     * their SCH_SCREEN::Draw() draws nothing
+     */
+
+    BuildSchCmpLinksToLibCmp();
 
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
@@ -592,6 +602,8 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
  */
 void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 {
+    BuildSchCmpLinksToLibCmp();
+
     for( SCH_ITEM* item = m_drawList.begin();  item;  item = item->Next() )
     {
         aPlotter->SetCurrentLineWidth( item->GetPenSize() );
@@ -1395,6 +1407,13 @@ void SCH_SCREENS::BuildScreenList( EDA_ITEM* aItem )
     if( aItem && aItem->Type() == SCH_SCREEN_T )
     {
         SCH_SCREEN*     screen = (SCH_SCREEN*) aItem;
+
+        // Ensure each component has its pointer to its part lib LIB_PART
+        // up to date (the cost is low if this is the case)
+        // We do this update here, because most of time this function is called
+        // to create a netlist, or an ERC, which need this update
+        screen->BuildSchCmpLinksToLibCmp();
+
         AddScreenToList( screen );
         EDA_ITEM* strct = screen->GetDrawItems();
 

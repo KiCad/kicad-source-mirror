@@ -277,6 +277,13 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     LoadProjectFile();
 
+    // load the libraries here, not in SCH_SCREEN::Draw() which is a context
+    // that will not tolerate DisplayError() dialog since we're already in an
+    // event handler in there.
+    // And when a schematic file is loaded, we need these libs to initialize
+    // some parameters (links to PART LIB, dangling ends ...)
+    Prj().SchLibs();
+
     if( is_new )
     {
         // mark new, unsaved file as modified.
@@ -301,15 +308,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     Zoom_Automatique( false );
     SetSheetNumberAndCount();
-
-    /* this is done in ReDraw()
-    UpdateTitle();
-    */
-
-    // load the libraries here, not in SCH_SCREEN::Draw() which is a context
-    // that will not tolerate DisplayError() dialog since we're already in an
-    // event handler in there.
-    Prj().SchLibs();
 
     m_canvas->Refresh( true );
 
@@ -363,6 +361,7 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
 
     // load the project
     bool success = LoadOneEEFile( screen, fullFileName, true );
+
     if( success )
     {
         // load sub-sheets

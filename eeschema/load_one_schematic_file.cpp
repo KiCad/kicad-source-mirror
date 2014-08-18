@@ -260,6 +260,7 @@ again." );
     aScreen->Show( 0, std::cout );
 #endif
 
+    aScreen->BuildSchCmpLinksToLibCmp();    // Build links between each components and its part lib LIB_PART
     aScreen->TestDanglingEnds();
 
     msgDiag.Printf( _( "Done Loading <%s>" ), GetChars( aScreen->GetFileName() ) );
