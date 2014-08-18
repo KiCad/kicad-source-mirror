@@ -1413,6 +1413,10 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         }
     }
 
+    // ensure flags (mainly used in edit) are cleared.
+    // some changes have set the modified flag
+    m_Flags = 0;
+
     return true;
 }
 
