@@ -11,6 +11,8 @@
  * from being rebuilt when adding new commands to the Pcbnew.
  */
 
+#define MAX_ITEMS_IN_PICKER     15  ///< max no. items in the popup menu for item selection
+
 enum pcbnew_ids
 {
     ID_MAIN_MENUBAR = ID_END_LIST,
@@ -371,7 +373,9 @@ enum pcbnew_ids
     ID_FOOTPRINT_WIZARD_PAGES_WINDOW,
     ID_FOOTPRINT_WIZARD_PARAMETERS_WINDOW,
     ID_FOOTPRINT_WIZARD_SELECT_WIZARD,
-    ID_FOOTPRINT_WIZARD_EXPORT_TO_BOARD
+    ID_FOOTPRINT_WIZARD_EXPORT_TO_BOARD,
+
+    ID_PCBNEW_END_LIST
 };
 
 #endif  // PCBNEW_ID_H_

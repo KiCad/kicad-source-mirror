@@ -40,16 +40,17 @@
 #include <info3d_visu.h>
 #include <3d_draw_basic_functions.h>
 
+#define TEXTURE_PCB_SCALE 5.0
 
 // Helper function: initialize the copper color to draw the board
 // in realistic mode.
 void EDA_3D_CANVAS::SetGLCopperColor()
 {
     glDisable( GL_TEXTURE_2D );
-
-    // Generates a golden yellow color, near board "copper" color
-    const double lum = 0.7/255.0;
-    glColor4f( 255.0*lum, 223.0*lum, 0.0*lum, 1.0 );
+    glColor4f( g_Parm_3D_Visu.m_CopperColor.m_Red,
+               g_Parm_3D_Visu.m_CopperColor.m_Green,
+               g_Parm_3D_Visu.m_CopperColor.m_Blue,
+               1.0 );
 }
 
 // Helper function: initialize the color to draw the epoxy
@@ -57,8 +58,15 @@ void EDA_3D_CANVAS::SetGLCopperColor()
 void EDA_3D_CANVAS::SetGLEpoxyColor( double aTransparency )
 {
     // Generates an epoxy color, near board color
-    const double lum = 0.2/255.0;
-    glColor4f( 255.0*lum, 218.0*lum, 110.0*lum, aTransparency );
+    glColor4f( 0.45 * 0.85 - (1.0 - g_Parm_3D_Visu.m_BoardColor.m_Red)   * 0.32,
+               0.39 * 0.85 - (1.0 - g_Parm_3D_Visu.m_BoardColor.m_Green) * 0.28,
+               0.33 * 0.85 - (1.0 - g_Parm_3D_Visu.m_BoardColor.m_Blue)  * 0.23,
+               aTransparency );
+
+    if( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
+    {
+        SetGLTexture( m_text_pcb, TEXTURE_PCB_SCALE );
+    }
 }
 
 // Helper function: initialize the color to draw the
@@ -66,8 +74,15 @@ void EDA_3D_CANVAS::SetGLEpoxyColor( double aTransparency )
 void EDA_3D_CANVAS::SetGLSolderMaskColor( double aTransparency )
 {
     // Generates a solder mask color
-    const double lum = 0.2/255.0;
-    glColor4f( 100.0*lum, 255.0*lum, 180.0*lum, aTransparency );
+    glColor4f( g_Parm_3D_Visu.m_BoardColor.m_Red,
+               g_Parm_3D_Visu.m_BoardColor.m_Green,
+               g_Parm_3D_Visu.m_BoardColor.m_Blue,
+               aTransparency );
+
+    if( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
+    {
+        SetGLTexture( m_text_pcb, TEXTURE_PCB_SCALE );
+    }
 }
 
 // Helper function: initialize the color to draw the non copper layers
@@ -87,20 +102,31 @@ void EDA_3D_CANVAS::SetGLTechLayersColor( LAYER_NUM aLayer )
 
         case B_SilkS:
         case F_SilkS:
-            SetGLColor( LIGHTGRAY, 0.9 );
-            if( g_Parm_3D_Visu.HightQualityMode() )
             {
-                SetGLTexture( m_text_silk, 50.0f );
+            	// http://en.wikipedia.org/wiki/Luminance_(relative)
+                double luminance =  g_Parm_3D_Visu.m_BoardColor.m_Red   * 0.2126 +
+                                    g_Parm_3D_Visu.m_BoardColor.m_Green * 0.7152 +
+                                    g_Parm_3D_Visu.m_BoardColor.m_Blue  * 0.0722;
+
+                if( luminance < 0.5 )
+                {
+                    glColor4f(  0.9,  0.9,  0.9, 0.96 );
+                }
+                else
+                {
+                    glColor4f( 0.1, 0.1, 0.1, 0.96 );
+                }
+
+                if( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
+                {
+                    SetGLTexture( m_text_silk, 10.0f );
+                }
             }
             break;
 
         case B_Mask:
         case F_Mask:
-            SetGLSolderMaskColor( 0.7 );
-            if( g_Parm_3D_Visu.HightQualityMode() )
-            {
-                SetGLTexture( m_text_pcb, 35.0f );
-            }
+            SetGLSolderMaskColor( 0.90 );
             break;
 
         default:

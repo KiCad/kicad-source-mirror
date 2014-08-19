@@ -38,6 +38,7 @@
 
 #include <wx/glcanvas.h>
 #include <3d_struct.h>
+#include <info3d_visu.h>
 
 #define KISYS3DMOD "KISYS3DMOD"
 
@@ -127,7 +128,7 @@ private:
     double BestZoom();
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
-    void Set3DBgColor();
+    bool Set3DBgColor( S3D_COLOR &color );
 
     DECLARE_EVENT_TABLE()
 };

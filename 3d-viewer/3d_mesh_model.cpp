@@ -113,7 +113,7 @@ void S3D_MESH::openGL_Render()
 
     if( m_PerVertexNormalsNormalized.size() == 0 )
     {
-        if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.HightQualityMode() )
+        if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.GetFlag( FL_RENDER_SMOOTH ) )
         {
             calcPerPointNormals();
         }
@@ -148,7 +148,7 @@ void S3D_MESH::openGL_Render()
                 glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
                 glVertex3fv( &point.x );
             }
-        } else if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.HightQualityMode() )
+        } else if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.GetFlag( FL_RENDER_SMOOTH ) )
         {
             std::vector< glm::vec3 > normals_list;
             normals_list = m_PerFaceVertexNormals[idx];

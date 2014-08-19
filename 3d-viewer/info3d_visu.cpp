@@ -72,7 +72,8 @@ INFO3D_VISU::INFO3D_VISU()
 
     SetFlag( FL_GRID, false );
     SetFlag( FL_USE_COPPER_THICKNESS, false );
-    SetFlag( FL_USE_MAXQUALITY_IN_REALISTIC_MODE, false );
+    SetFlag( FL_RENDER_SHADOWS, false );
+    SetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES, false );
 }
 
 

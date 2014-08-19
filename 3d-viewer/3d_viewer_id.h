@@ -8,13 +8,15 @@
  * Please add IDs that are unique to the 3D viewer here and not in the global
  * id.h file.  This will prevent the entire project from being rebuilt when
  * adding new commands to the 3D viewer.
+ * However the number of IDs should be < ROOM_FOR_3D_VIEWER, defined in id.h
+ * Please change the value of ROOM_FOR_3D_VIEWER if too small.
  */
 
- #include <id.h>        // Generic Id.
+#include <id.h>        // Generic Id.
 
 enum id_3dview_frm
 {
-    ID_START_COMMAND_3D = ID_END_LIST,
+    ID_START_COMMAND_3D = ID_KICAD_3D_VIEWER_START,
     ID_ROTATE3D_X_NEG,
     ID_ROTATE3D_X_POS,
     ID_ROTATE3D_Y_NEG,
@@ -28,11 +30,16 @@ enum id_3dview_frm
     ID_MOVE3D_UP,
     ID_MOVE3D_DOWN,
     ID_ORTHO,
+    ID_MENU3D_COLOR,
     ID_MENU3D_BGCOLOR_SELECTION,
+    ID_MENU3D_BGCOLOR_TOP_SELECTION,
+    ID_MENU3D_BOARDCOLOR_SELECTION,
+    ID_MENU3D_COPPERCOLOR_SELECTION,
     ID_MENU3D_USE_COPPER_THICKNESS,
     ID_MENU3D_AXIS_ONOFF,
     ID_MENU3D_MODULE_ONOFF,
     ID_MENU3D_ZONE_ONOFF,
+    ID_MENU3D_LAYERS,
     ID_MENU3D_ADHESIVE_ONOFF,
     ID_MENU3D_SILKSCREEN_ONOFF,
     ID_MENU3D_SOLDER_PASTE_ONOFF,
@@ -41,7 +48,11 @@ enum id_3dview_frm
     ID_MENU3D_ECO_ONOFF,
     ID_MENU3D_SHOW_BOARD_BODY,
     ID_MENU3D_REALISTIC_MODE,
-    ID_MENU3D_MAX_QUALITY_FOR_REALISTIC_MODE,
+    ID_MENU3D_FL_RENDER_SHADOWS,
+    ID_MENU3D_FL_RENDER_SHOW_HOLES_IN_ZONES,
+    ID_MENU3D_FL_RENDER_TEXTURES,
+    ID_MENU3D_FL_RENDER_SMOOTH,
+    ID_MENU3D_FL_RENDER_MATERIAL,
     ID_END_COMMAND_3D,
 
     ID_TOOL_SET_VISIBLE_ITEMS,
