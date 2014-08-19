@@ -103,8 +103,6 @@ typedef boost::ptr_vector< PART_LIB >                   PART_LIBS_BASE;
  */
 class PART_LIBS : public PART_LIBS_BASE, public PROJECT::_ELEM
 {
-    static wxArrayString s_libraryListSortOrder;
-
 public:
 
     static int s_modify_generation;     ///< helper for GetModifyHash()
@@ -226,19 +224,7 @@ public:
 
     int GetLibraryCount() { return size(); }
 
-    static void SetSortOrder( const wxArrayString& aSortOrder )
-    {
-        s_libraryListSortOrder = aSortOrder;
-    }
-
-    static wxArrayString& GetSortOrder()
-    {
-        return s_libraryListSortOrder;
-    }
 };
-
-
-bool operator<( const PART_LIB& item1, const PART_LIB& item2 );
 
 
 /**

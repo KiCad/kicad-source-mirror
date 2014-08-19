@@ -53,51 +53,6 @@
         "This may cause some unexpected behavior when loading components into a schematic." )
 
 
-bool operator==( const PART_LIB& aLibrary, const wxString& aName )
-{
-    // See our header class_libentry.h for function Cmp_KEEPCASE().
-    return Cmp_KEEPCASE( aLibrary.GetName(), aName ) == 0;
-}
-
-
-bool operator!=( const PART_LIB& aLibrary, const wxString& aName )
-{
-    return !( aLibrary == aName );
-}
-
-
-wxArrayString PART_LIBS::s_libraryListSortOrder;
-
-
-bool operator<( const PART_LIB& aItem1, const PART_LIB& aItem2 )
-{
-    // The cache library always is sorted to the end of the library list.
-    if( aItem2.IsCache() )
-        return true;
-
-    if( aItem1.IsCache() )
-        return false;
-
-    // If the sort order array isn't set, then sort alphabetically except.
-    if( PART_LIBS::GetSortOrder().IsEmpty() )
-        return Cmp_KEEPCASE( aItem1.GetName(), aItem2.GetName() ) < 0;
-
-    int i1 = PART_LIBS::GetSortOrder().Index( aItem1.GetName(), false );
-    int i2 = PART_LIBS::GetSortOrder().Index( aItem2.GetName(), false );
-
-    if( i1 == wxNOT_FOUND && i2 == wxNOT_FOUND )
-        return true;
-
-    if( i1 == wxNOT_FOUND && i2 != wxNOT_FOUND )
-        return false;
-
-    if( i1 != wxNOT_FOUND && i2 == wxNOT_FOUND )
-        return true;
-
-    return ( i1 - i2 ) < 0;
-}
-
-
 PART_LIB::PART_LIB( int aType, const wxString& aFileName ) :
     // start @ != 0 so each additional library added
     // is immediately detectable, zero would not be.
@@ -873,19 +828,11 @@ void PART_LIBS::RemoveLibrary( const wxString& aName )
 
 PART_LIB* PART_LIBS::FindLibrary( const wxString& aName )
 {
-#if 0
-    BOOST_FOREACH( PART_LIB& lib, *this )
-    {
-        if( lib == aName )
-            return &lib;
-    }
-#else
     for( PART_LIBS::iterator it = begin();  it!=end();  ++it )
     {
-        if( *it == aName )
+        if( it->GetName() == aName )
             return &*it;
     }
-#endif
 
     return NULL;
 }
@@ -1057,7 +1004,6 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR )
     wxFileName      fn;
     wxString        filename;
     wxString        libs_not_found;
-    wxArrayString   sortOrder;
     SEARCH_STACK*   lib_search = aProject->SchSearchS();
 
 #if defined(DEBUG) && 1
@@ -1147,18 +1093,8 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR )
             UTF8( libs_not_found ), 0, 0 );
     }
 
-    // Put the libraries in the correct order.
-    PART_LIBS::SetSortOrder( sortOrder );
-
-    sort();
-
 #if defined(DEBUG) && 1
-    printf( "%s: sort order:\n", __func__ );
-
-    for( size_t i = 0; i < sortOrder.GetCount(); i++ )
-         printf( " %s\n", TO_UTF8( sortOrder[i] ) );
-
-    printf( "%s: actual order:\n", __func__ );
+    printf( "%s: lib_names:\n", __func__ );
 
     for( PART_LIBS::const_iterator it = begin(); it < end(); ++it )
         printf( " %s\n", TO_UTF8( it->GetName() ) );
