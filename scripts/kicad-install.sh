@@ -38,7 +38,7 @@ STABLE=5054             # a sensible mix of features and stability
 TESTING=last:1          # the most recent
 
 # Set this to STABLE or TESTING or other known revision number:
-REVISION=$STABLE
+REVISION=$TESTING
 
 # For info on revision syntax:
 # $ bzr help revisionspec
