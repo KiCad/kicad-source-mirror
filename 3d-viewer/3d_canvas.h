@@ -142,48 +142,62 @@ public:
         m_draw3dOffset.y = aPosY;
     }
 
+    INFO3D_VISU& GetPrm3DVisu() const;
+
+
 private:
+
     /**
      * return true if we are in realistic mode render
      */
     bool isRealisticMode() const;
 
     /**
-     * return true if aItem should be displayed
+     * @return true if aItem should be displayed
      * @param aItem = an item of DISPLAY3D_FLG enum
      */
     bool isEnabled( DISPLAY3D_FLG aItem ) const;
 
-    /* Helper function
+    /** Helper function
      * @return true if aLayer should be displayed, false otherwise
      */
     bool is3DLayerEnabled( LAYER_ID aLayer ) const;
+
+    /**
+     * @return the size of the board in pcb units
+     */
+    wxSize getBoardSize() const;
+
+    /**
+     * @return the position of the board center in pcb units
+     */
+    wxPoint getBoardCenter() const;
 
     /**
      * Helper function SetGLTechLayersColor
      * Initialize the color to draw the non copper layers
      * in realistic mode and normal mode.
      */
-    void SetGLTechLayersColor( LAYER_NUM aLayer );
+    void setGLTechLayersColor( LAYER_NUM aLayer );
 
     /**
      * Helper function SetGLCopperColor
      * Initialize the copper color to draw the board
      * in realistic mode (a golden yellow color )
      */
-    void SetGLCopperColor();
+    void setGLCopperColor();
 
     /**
      * Helper function SetGLEpoxyColor
      * Initialize the color to draw the epoxy body board in realistic mode.
      */
-    void SetGLEpoxyColor( double aTransparency = 1.0 );
+    void setGLEpoxyColor( double aTransparency = 1.0 );
 
     /**
      * Helper function SetGLSolderMaskColor
      * Initialize the color to draw the solder mask layers in realistic mode.
      */
-    void SetGLSolderMaskColor( double aTransparency = 1.0 );
+    void setGLSolderMaskColor( double aTransparency = 1.0 );
 
     /**
      * Function BuildBoard3DView

@@ -42,41 +42,54 @@
 
 #define TEXTURE_PCB_SCALE 5.0
 
+
+INFO3D_VISU& EDA_3D_CANVAS::GetPrm3DVisu() const
+{
+    return g_Parm_3D_Visu;
+}
+
+wxSize EDA_3D_CANVAS::getBoardSize() const
+{
+    // return the size of the board in pcb units
+    return GetPrm3DVisu().m_BoardSize;
+}
+
+
+wxPoint EDA_3D_CANVAS::getBoardCenter() const
+{
+    // return the position of the board center in pcb units
+    return GetPrm3DVisu().m_BoardPos;
+}
+
 // return true if we are in realistic mode render
 bool EDA_3D_CANVAS::isRealisticMode() const
 {
-    return g_Parm_3D_Visu.IsRealisticMode();
+    return GetPrm3DVisu().IsRealisticMode();
 }
 
 // return true if aItem should be displayed
 bool EDA_3D_CANVAS::isEnabled( DISPLAY3D_FLG aItem ) const
 {
-    return g_Parm_3D_Visu.GetFlag( aItem );
+    return GetPrm3DVisu().GetFlag( aItem );
 }
 
 
 // Helper function: initialize the copper color to draw the board
 // in realistic mode.
-void EDA_3D_CANVAS::SetGLCopperColor()
+void EDA_3D_CANVAS::setGLCopperColor()
 {
     glDisable( GL_TEXTURE_2D );
-    glColor4f( g_Parm_3D_Visu.m_CopperColor.m_Red,
-               g_Parm_3D_Visu.m_CopperColor.m_Green,
-               g_Parm_3D_Visu.m_CopperColor.m_Blue,
-               1.0 );
+    SetGLColor( GetPrm3DVisu().m_CopperColor, 1.0 );
 }
 
 // Helper function: initialize the color to draw the epoxy
 // body board in realistic mode.
-void EDA_3D_CANVAS::SetGLEpoxyColor( double aTransparency )
+void EDA_3D_CANVAS::setGLEpoxyColor( double aTransparency )
 {
     // Generates an epoxy color, near board color
-    glColor4f( g_Parm_3D_Visu.m_BoardBodyColor.m_Red,
-               g_Parm_3D_Visu.m_BoardBodyColor.m_Green,
-               g_Parm_3D_Visu.m_BoardBodyColor.m_Blue,
-               aTransparency );
+    SetGLColor( GetPrm3DVisu().m_BoardBodyColor, aTransparency );
 
-    if( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
+    if( isEnabled( FL_RENDER_TEXTURES ) )
     {
         SetGLTexture( m_text_pcb, TEXTURE_PCB_SCALE );
     }
@@ -84,15 +97,12 @@ void EDA_3D_CANVAS::SetGLEpoxyColor( double aTransparency )
 
 // Helper function: initialize the color to draw the
 // solder mask layers in realistic mode.
-void EDA_3D_CANVAS::SetGLSolderMaskColor( double aTransparency )
+void EDA_3D_CANVAS::setGLSolderMaskColor( double aTransparency )
 {
     // Generates a solder mask color
-    glColor4f( g_Parm_3D_Visu.m_SolderMaskColor.m_Red,
-               g_Parm_3D_Visu.m_SolderMaskColor.m_Green,
-               g_Parm_3D_Visu.m_SolderMaskColor.m_Blue,
-               aTransparency );
+    SetGLColor( GetPrm3DVisu().m_SolderMaskColor, aTransparency );
 
-    if( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
+    if( isEnabled( FL_RENDER_TEXTURES ) )
     {
         SetGLTexture( m_text_pcb, TEXTURE_PCB_SCALE );
     }
@@ -100,7 +110,7 @@ void EDA_3D_CANVAS::SetGLSolderMaskColor( double aTransparency )
 
 // Helper function: initialize the color to draw the non copper layers
 // in realistic mode and normal mode.
-void EDA_3D_CANVAS::SetGLTechLayersColor( LAYER_NUM aLayer )
+void EDA_3D_CANVAS::setGLTechLayersColor( LAYER_NUM aLayer )
 {
     EDA_COLOR_T color;
 
@@ -115,11 +125,9 @@ void EDA_3D_CANVAS::SetGLTechLayersColor( LAYER_NUM aLayer )
 
         case B_SilkS:
         case F_SilkS:
-            glColor4f( g_Parm_3D_Visu.m_SilkScreenColor.m_Red,
-                       g_Parm_3D_Visu.m_SilkScreenColor.m_Green,
-                       g_Parm_3D_Visu.m_SilkScreenColor.m_Blue, 0.96 );
+            SetGLColor( GetPrm3DVisu().m_SilkScreenColor, 0.96 );
 
-            if( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
+            if( isEnabled( FL_RENDER_TEXTURES ) )
             {
                 SetGLTexture( m_text_silk, 10.0f );
             }
@@ -128,7 +136,7 @@ void EDA_3D_CANVAS::SetGLTechLayersColor( LAYER_NUM aLayer )
 
         case B_Mask:
         case F_Mask:
-            SetGLSolderMaskColor( 0.90 );
+            setGLSolderMaskColor( 0.90 );
             break;
 
         default:
@@ -175,13 +183,13 @@ void EDA_3D_CANVAS::Draw3DGrid( double aGriSizeMM )
     double      zpos = 0.0;
     EDA_COLOR_T gridcolor = DARKGRAY;           // Color of grid lines
     EDA_COLOR_T gridcolor_marker = LIGHTGRAY;   // Color of grid lines every 5 lines
-    const double scale = g_Parm_3D_Visu.m_BiuTo3Dunits;
+    const double scale = GetPrm3DVisu().m_BiuTo3Dunits;
     const double transparency = 0.3;
 
     glNormal3f( 0.0, 0.0, 1.0 );
 
-    wxSize  brd_size = g_Parm_3D_Visu.m_BoardSize;
-    wxPoint brd_center_pos = g_Parm_3D_Visu.m_BoardPos;
+    wxSize  brd_size = getBoardSize();
+    wxPoint brd_center_pos = getBoardCenter();
     NEGATE( brd_center_pos.y );
 
     int     xsize   = std::max( brd_size.x, Millimeter2iu( 100 ) );
@@ -317,23 +325,23 @@ void EDA_3D_CANVAS::Draw3DPadHole( const D_PAD* aPad )
 
     // Store here the points to approximate hole by segments
     CPOLYGONS_LIST  holecornersBuffer;
-    int             thickness   = g_Parm_3D_Visu.GetCopperThicknessBIU();
-    int             height      = g_Parm_3D_Visu.GetLayerZcoordBIU( F_Cu ) -
-                                  g_Parm_3D_Visu.GetLayerZcoordBIU( B_Cu );
+    int             thickness   = GetPrm3DVisu().GetCopperThicknessBIU();
+    int             height      = GetPrm3DVisu().GetLayerZcoordBIU( F_Cu ) -
+                                  GetPrm3DVisu().GetLayerZcoordBIU( B_Cu );
 
     if( isRealisticMode() )
-        SetGLCopperColor();
+        setGLCopperColor();
     else
         SetGLColor( DARKGRAY );
 
-    int holeZpoz    = g_Parm_3D_Visu.GetLayerZcoordBIU( B_Cu ) + thickness / 2;
+    int holeZpoz    = GetPrm3DVisu().GetLayerZcoordBIU( B_Cu ) + thickness / 2;
     int holeHeight  = height - thickness;
 
     if( drillsize.x == drillsize.y )    // usual round hole
     {
         Draw3D_ZaxisCylinder( aPad->GetPosition(),
                               (drillsize.x + thickness) / 2, holeHeight,
-                              thickness, holeZpoz, g_Parm_3D_Visu.m_BiuTo3Dunits );
+                              thickness, holeZpoz, GetPrm3DVisu().m_BiuTo3Dunits );
     }
     else    // Oblong hole
     {
@@ -359,7 +367,7 @@ void EDA_3D_CANVAS::Draw3DPadHole( const D_PAD* aPad )
 
         // Draw the hole
         Draw3D_ZaxisOblongCylinder( start, end, hole_radius, holeHeight,
-                                    thickness, holeZpoz, g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                    thickness, holeZpoz, GetPrm3DVisu().m_BiuTo3Dunits );
     }
 }
 
@@ -368,25 +376,25 @@ void EDA_3D_CANVAS::Draw3DViaHole( const VIA* aVia )
 {
     LAYER_ID    top_layer, bottom_layer;
     int         inner_radius    = aVia->GetDrillValue() / 2;
-    int         thickness       = g_Parm_3D_Visu.GetCopperThicknessBIU();
+    int         thickness       = GetPrm3DVisu().GetCopperThicknessBIU();
 
     aVia->LayerPair( &top_layer, &bottom_layer );
 
     // Drawing via hole:
     if( isRealisticMode() )
-        SetGLCopperColor();
+        setGLCopperColor();
     else
     {
         EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + aVia->GetViaType() );
         SetGLColor( color );
     }
 
-    int         height = g_Parm_3D_Visu.GetLayerZcoordBIU( top_layer ) -
-                         g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer ) - thickness;
-    int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer ) + thickness / 2;
+    int height = GetPrm3DVisu().GetLayerZcoordBIU( top_layer ) -
+                 GetPrm3DVisu().GetLayerZcoordBIU( bottom_layer ) - thickness;
+    int   zpos = GetPrm3DVisu().GetLayerZcoordBIU( bottom_layer ) + thickness / 2;
 
     Draw3D_ZaxisCylinder( aVia->GetStart(), inner_radius + thickness / 2, height,
-                          thickness, zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
+                          thickness, zpos, GetPrm3DVisu().m_BiuTo3Dunits );
 }
 
 /* Build a pad outline as non filled polygon, to draw pads on silkscreen layer

@@ -130,6 +130,13 @@ void SetGLColor( EDA_COLOR_T color, double alpha )
     glColor4f( red, green, blue, alpha );
 }
 
+
+void SetGLColor( S3D_COLOR& aColor, float aTransparency )
+{
+    glColor4f( aColor.m_Red, aColor.m_Green, aColor.m_Blue, aTransparency );
+}
+
+
 static float m_texture_scale;
 
 void SetGLTexture( GLuint text_id, float scale )

@@ -125,6 +125,13 @@ void    Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
  */
 void SetGLColor( EDA_COLOR_T aColor, double aTransparency = 1.0 );
 
+/**
+ * Set the current 3D color from a S3D_COLOR color, with optional transparency
+ * @param aColor = a S3D_COLOR RGB color index
+ * @param aTransparency = the color transparency (default = 1.0 = no transparency)
+ */
+void SetGLColor( S3D_COLOR& aColor, float aTransparency );
+
 
 /**
  * Set a texture id and a scale to apply when rendering the polygons
