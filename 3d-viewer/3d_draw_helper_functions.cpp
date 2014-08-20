@@ -42,6 +42,19 @@
 
 #define TEXTURE_PCB_SCALE 5.0
 
+// return true if we are in realistic mode render
+bool EDA_3D_CANVAS::isRealisticMode() const
+{
+    return g_Parm_3D_Visu.IsRealisticMode();
+}
+
+// return true if aItem should be displayed
+bool EDA_3D_CANVAS::isEnabled( DISPLAY3D_FLG aItem ) const
+{
+    return g_Parm_3D_Visu.GetFlag( aItem );
+}
+
+
 // Helper function: initialize the copper color to draw the board
 // in realistic mode.
 void EDA_3D_CANVAS::SetGLCopperColor()
@@ -58,9 +71,9 @@ void EDA_3D_CANVAS::SetGLCopperColor()
 void EDA_3D_CANVAS::SetGLEpoxyColor( double aTransparency )
 {
     // Generates an epoxy color, near board color
-    glColor4f( 0.45 * 0.85 - (1.0 - g_Parm_3D_Visu.m_BoardColor.m_Red)   * 0.32,
-               0.39 * 0.85 - (1.0 - g_Parm_3D_Visu.m_BoardColor.m_Green) * 0.28,
-               0.33 * 0.85 - (1.0 - g_Parm_3D_Visu.m_BoardColor.m_Blue)  * 0.23,
+    glColor4f( g_Parm_3D_Visu.m_BoardBodyColor.m_Red,
+               g_Parm_3D_Visu.m_BoardBodyColor.m_Green,
+               g_Parm_3D_Visu.m_BoardBodyColor.m_Blue,
                aTransparency );
 
     if( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
@@ -74,9 +87,9 @@ void EDA_3D_CANVAS::SetGLEpoxyColor( double aTransparency )
 void EDA_3D_CANVAS::SetGLSolderMaskColor( double aTransparency )
 {
     // Generates a solder mask color
-    glColor4f( g_Parm_3D_Visu.m_BoardColor.m_Red,
-               g_Parm_3D_Visu.m_BoardColor.m_Green,
-               g_Parm_3D_Visu.m_BoardColor.m_Blue,
+    glColor4f( g_Parm_3D_Visu.m_SolderMaskColor.m_Red,
+               g_Parm_3D_Visu.m_SolderMaskColor.m_Green,
+               g_Parm_3D_Visu.m_SolderMaskColor.m_Blue,
                aTransparency );
 
     if( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
@@ -91,7 +104,7 @@ void EDA_3D_CANVAS::SetGLTechLayersColor( LAYER_NUM aLayer )
 {
     EDA_COLOR_T color;
 
-    if( g_Parm_3D_Visu.IsRealisticMode() )
+    if( isRealisticMode() )
     {
         switch( aLayer )
         {
@@ -102,26 +115,15 @@ void EDA_3D_CANVAS::SetGLTechLayersColor( LAYER_NUM aLayer )
 
         case B_SilkS:
         case F_SilkS:
+            glColor4f( g_Parm_3D_Visu.m_SilkScreenColor.m_Red,
+                       g_Parm_3D_Visu.m_SilkScreenColor.m_Green,
+                       g_Parm_3D_Visu.m_SilkScreenColor.m_Blue, 0.96 );
+
+            if( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
             {
-            	// http://en.wikipedia.org/wiki/Luminance_(relative)
-                double luminance =  g_Parm_3D_Visu.m_BoardColor.m_Red   * 0.2126 +
-                                    g_Parm_3D_Visu.m_BoardColor.m_Green * 0.7152 +
-                                    g_Parm_3D_Visu.m_BoardColor.m_Blue  * 0.0722;
-
-                if( luminance < 0.5 )
-                {
-                    glColor4f(  0.9,  0.9,  0.9, 0.96 );
-                }
-                else
-                {
-                    glColor4f( 0.1, 0.1, 0.1, 0.96 );
-                }
-
-                if( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
-                {
-                    SetGLTexture( m_text_silk, 10.0f );
-                }
+                SetGLTexture( m_text_silk, 10.0f );
             }
+
             break;
 
         case B_Mask:
@@ -319,7 +321,7 @@ void EDA_3D_CANVAS::Draw3DPadHole( const D_PAD* aPad )
     int             height      = g_Parm_3D_Visu.GetLayerZcoordBIU( F_Cu ) -
                                   g_Parm_3D_Visu.GetLayerZcoordBIU( B_Cu );
 
-    if( g_Parm_3D_Visu.IsRealisticMode() )
+    if( isRealisticMode() )
         SetGLCopperColor();
     else
         SetGLColor( DARKGRAY );
@@ -371,7 +373,7 @@ void EDA_3D_CANVAS::Draw3DViaHole( const VIA* aVia )
     aVia->LayerPair( &top_layer, &bottom_layer );
 
     // Drawing via hole:
-    if( g_Parm_3D_Visu.IsRealisticMode() )
+    if( isRealisticMode() )
         SetGLCopperColor();
     else
     {

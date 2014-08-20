@@ -195,16 +195,7 @@ void EDA_3D_FRAME::CreateMenuBar()
                  _( "Background Top Color" ), KiBitmap( palette_xpm ) );
 
     AddMenuItem( backgrounColorMenu, ID_MENU3D_BGCOLOR_SELECTION,
-                 _( "Background Botton Color" ), KiBitmap( palette_xpm ) );
-
-    backgrounColorMenu->AppendSeparator();
-
-    AddMenuItem( backgrounColorMenu, ID_MENU3D_BOARDCOLOR_SELECTION,
-                 _( "Board Mask Color" ), KiBitmap( pads_mask_layers_xpm ) );
-
-    AddMenuItem( backgrounColorMenu, ID_MENU3D_COPPERCOLOR_SELECTION,
-                 _( "Copper Color" ), KiBitmap( use_3D_copper_thickness_xpm ) );
-    //
+                 _( "Background Bottom Color" ), KiBitmap( palette_xpm ) );
 
     AddMenuItem( prefsMenu, ID_MENU3D_AXIS_ONOFF,
                  _( "Show 3D &Axis" ), KiBitmap( axis3d_front_xpm ), wxITEM_CHECK );

@@ -66,6 +66,33 @@ INFO3D_VISU::INFO3D_VISU()
     m_epoxyThickness    = 0;
     m_nonCopperLayerThickness = 0;
 
+    // Set copper color, in realistic mode
+    #define LUMINANCE 0.7/255.0
+    m_CopperColor.m_Red = 255.0*LUMINANCE;
+    m_CopperColor.m_Green = 223.0*LUMINANCE;
+    m_CopperColor.m_Blue = 0.0*LUMINANCE;
+
+    // Set the solder mask color, in realistic mode
+    #undef LUMINANCE
+    #define LUMINANCE 0.2/255.0
+    m_SolderMaskColor.m_Red = 100.0*LUMINANCE;
+    m_SolderMaskColor.m_Green = 255.0*LUMINANCE;
+    m_SolderMaskColor.m_Blue = 180.0*LUMINANCE;
+
+    // Set the silk screen mask color, in realistic mode
+    #undef LUMINANCE
+    #define LUMINANCE 0.9
+    m_SilkScreenColor.m_Red = 1.0*LUMINANCE;
+    m_SilkScreenColor.m_Green = 1.0*LUMINANCE;
+    m_SilkScreenColor.m_Blue = 1.0*LUMINANCE;
+
+    // Set the body board (FR4) color, in realistic mode
+    #undef LUMINANCE
+    #define LUMINANCE 0.2/255.0
+    m_BoardBodyColor.m_Red = 255.0*LUMINANCE;
+    m_BoardBodyColor.m_Green = 218.0*LUMINANCE;
+    m_BoardBodyColor.m_Blue = 110.0*LUMINANCE;
+
     // default all special item layers Visible
     for( ii = 0; ii < FL_LAST; ii++ )
         m_drawFlags[ii] = true;

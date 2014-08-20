@@ -50,14 +50,6 @@ static const wxChar keyBgColor_Red_Top[] =      wxT( "BgColor_Red_Top" );
 static const wxChar keyBgColor_Green_Top[] =    wxT( "BgColor_Green_Top" );
 static const wxChar keyBgColor_Blue_Top[] =     wxT( "BgColor_Blue_Top" );
 
-static const wxChar keyBoardColor_Red[] =       wxT( "BoardColor_Red" );
-static const wxChar keyBoardColor_Green[] =     wxT( "BoardColor_Green" );
-static const wxChar keyBoardColor_Blue[] =      wxT( "BoardColor_Blue" );
-
-static const wxChar keyCopperColor_Red[] =      wxT( "CopperColor_Red" );
-static const wxChar keyCopperColor_Green[] =    wxT( "CopperColor_Green" );
-static const wxChar keyCopperColor_Blue[] =     wxT( "CopperColor_Blue" );
-
 static const wxChar keyShowRealisticMode[] =    wxT( "ShowRealisticMode" );
 static const wxChar keyRenderShadows[] =        wxT( "Render_Shadows" );
 static const wxChar keyRenderRemoveHoles[] =    wxT( "Render_RemoveHoles" );
@@ -242,14 +234,6 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( keyBgColor_Green_Top, &g_Parm_3D_Visu.m_BgColor_Top.m_Green, 0.8 );
     aCfg->Read( keyBgColor_Blue_Top, &g_Parm_3D_Visu.m_BgColor_Top.m_Blue, 0.9 );
 
-    aCfg->Read( keyBoardColor_Red, &g_Parm_3D_Visu.m_BoardColor.m_Red, 0.0 );
-    aCfg->Read( keyBoardColor_Green, &g_Parm_3D_Visu.m_BoardColor.m_Green, 0.5 );
-    aCfg->Read( keyBoardColor_Blue, &g_Parm_3D_Visu.m_BoardColor.m_Blue, 0.0 );
-
-    aCfg->Read( keyCopperColor_Red, &g_Parm_3D_Visu.m_CopperColor.m_Red, 0.8 );
-    aCfg->Read( keyCopperColor_Green, &g_Parm_3D_Visu.m_CopperColor.m_Green, 0.75 );
-    aCfg->Read( keyCopperColor_Blue, &g_Parm_3D_Visu.m_CopperColor.m_Blue, 0.0 );
-
     bool tmp;
     aCfg->Read( keyShowRealisticMode, &tmp, false );
     prms.SetFlag( FL_USE_REALISTIC_MODE, tmp );
@@ -322,14 +306,6 @@ void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( keyBgColor_Red_Top, g_Parm_3D_Visu.m_BgColor_Top.m_Red );
     aCfg->Write( keyBgColor_Green_Top, g_Parm_3D_Visu.m_BgColor_Top.m_Green );
     aCfg->Write( keyBgColor_Blue_Top, g_Parm_3D_Visu.m_BgColor_Top.m_Blue );
-
-    aCfg->Write( keyBoardColor_Red, g_Parm_3D_Visu.m_BoardColor.m_Red );
-    aCfg->Write( keyBoardColor_Green, g_Parm_3D_Visu.m_BoardColor.m_Green );
-    aCfg->Write( keyBoardColor_Blue, g_Parm_3D_Visu.m_BoardColor.m_Blue );
-
-    aCfg->Write( keyCopperColor_Red, g_Parm_3D_Visu.m_CopperColor.m_Red );
-    aCfg->Write( keyCopperColor_Green, g_Parm_3D_Visu.m_CopperColor.m_Green );
-    aCfg->Write( keyCopperColor_Blue, g_Parm_3D_Visu.m_CopperColor.m_Blue );
 
     aCfg->Write( keyShowRealisticMode, prms.GetFlag( FL_USE_REALISTIC_MODE ) );
 
@@ -489,21 +465,6 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU3D_BGCOLOR_TOP_SELECTION:
         Set3DBgColor( g_Parm_3D_Visu.m_BgColor_Top );
-        return;
-
-    case ID_MENU3D_BOARDCOLOR_SELECTION:
-        if( Set3DBgColor( g_Parm_3D_Visu.m_BoardColor ) == true )
-        {
-        	NewDisplay(GL_ID_TECH_LAYERS);
-        	NewDisplay(GL_ID_BOARD);
-    	}
-        return;
-
-    case ID_MENU3D_COPPERCOLOR_SELECTION:
-        if( Set3DBgColor( g_Parm_3D_Visu.m_CopperColor ) == true )
-        {
-        	NewDisplay(GL_ID_BOARD);
-    	}
         return;
 
     case ID_MENU3D_REALISTIC_MODE:

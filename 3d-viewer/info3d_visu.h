@@ -89,8 +89,10 @@ public:
     double      m_3D_Grid;                          // 3D grid value, in mm
     S3D_COLOR   m_BgColor;
     S3D_COLOR   m_BgColor_Top;
-    S3D_COLOR   m_BoardColor;
-    S3D_COLOR   m_CopperColor;
+    S3D_COLOR   m_BoardBodyColor;                   // in realistic mode: FR4 board color
+    S3D_COLOR   m_SolderMaskColor;                  // in realistic mode: solder mask color
+    S3D_COLOR   m_SilkScreenColor;                  // in realistic mode: SilkScreen color
+    S3D_COLOR   m_CopperColor;                      // in realistic mode: copper color
     wxPoint     m_BoardPos;                         // center board actual position in board units
     wxSize      m_BoardSize;                        // board actual size in board units
     int         m_CopperLayersCount;                // Number of copper layers actually used by the board

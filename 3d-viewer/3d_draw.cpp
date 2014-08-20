@@ -53,11 +53,6 @@
 #include <trackball.h>
 #include <3d_draw_basic_functions.h>
 
-/* Helper function
- * returns true if aLayer should be displayed, false otherwise
- */
-static bool     Is3DLayerEnabled( LAYER_ID aLayer );
-
 /* returns the Z orientation parameter 1.0 or -1.0 for aLayer
  * Z orientation is 1.0 for all layers but "back" layers:
  *  B_Cu , B_Adhes, B_Paste ), B_SilkS
@@ -333,8 +328,8 @@ void EDA_3D_CANVAS::Redraw()
 
     InitGL();
 
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) && g_Parm_3D_Visu.IsRealisticMode() &&
-        g_Parm_3D_Visu.GetFlag( FL_RENDER_SHADOWS ) )
+    if( isEnabled( FL_MODULE ) && isRealisticMode() &&
+        isEnabled( FL_RENDER_SHADOWS ) )
     {
         GenerateFakeShadowsTextures();
     }
@@ -348,7 +343,7 @@ void EDA_3D_CANVAS::Redraw()
     glClearDepth( 1.0 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 
-	if( g_Parm_3D_Visu.GetFlag( FL_RENDER_SMOOTH ) )
+	if( isEnabled( FL_RENDER_SMOOTH ) )
 	{
 		glShadeModel( GL_SMOOTH );
 	}
@@ -450,7 +445,7 @@ void EDA_3D_CANVAS::Redraw()
     if( ! m_glLists[GL_ID_BOARD] || ! m_glLists[GL_ID_TECH_LAYERS] )
         CreateDrawGL_List();
 
-    if( g_Parm_3D_Visu.GetFlag( FL_AXIS ) && m_glLists[GL_ID_AXIS] )
+    if( isEnabled( FL_AXIS ) && m_glLists[GL_ID_AXIS] )
         glCallList( m_glLists[GL_ID_AXIS] );
 
     // move the board in order to draw it with its center at 0,0 3D coordinates
@@ -461,7 +456,7 @@ void EDA_3D_CANVAS::Redraw()
     // draw all objects in lists
     // transparent objects should be drawn after opaque objects
 
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) )
+    if( isEnabled( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
             CreateDrawGL_List();
@@ -470,9 +465,9 @@ void EDA_3D_CANVAS::Redraw()
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-	if( g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY ) )
+	if( isEnabled( FL_SHOW_BOARD_BODY ) )
 	{
-		if( g_Parm_3D_Visu.GetFlag( FL_SOLDERMASK ) )
+		if( isEnabled( FL_SOLDERMASK ) || !isRealisticMode() )
 		{
 			glDisable( GL_TEXTURE_2D );
 		}
@@ -501,7 +496,7 @@ void EDA_3D_CANVAS::Redraw()
     glMateriali ( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &specular.x );
 
-    if( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
+    if( isEnabled( FL_RENDER_TEXTURES ) && isRealisticMode() )
     {
     	glEnable( GL_TEXTURE_2D );
 	}
@@ -522,7 +517,7 @@ void EDA_3D_CANVAS::Redraw()
         glCallList( m_glLists[GL_ID_TECH_LAYERS] );
     }
 
-    if( g_Parm_3D_Visu.GetFlag( FL_COMMENTS ) || g_Parm_3D_Visu.GetFlag( FL_COMMENTS )  )
+    if( isEnabled( FL_COMMENTS ) || isEnabled( FL_COMMENTS )  )
     {
         if( ! m_glLists[GL_ID_AUX_LAYERS] )
             CreateDrawGL_List();
@@ -531,9 +526,8 @@ void EDA_3D_CANVAS::Redraw()
     }
 
     // Draw Component Shadow
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE )  &&
-        g_Parm_3D_Visu.IsRealisticMode() &&
-        g_Parm_3D_Visu.GetFlag( FL_RENDER_SHADOWS ) )
+    if( isEnabled( FL_MODULE )  && isRealisticMode() &&
+        isEnabled( FL_RENDER_SHADOWS ) )
     {
         glEnable( GL_CULL_FACE );
         glDisable( GL_DEPTH_TEST );
@@ -575,7 +569,7 @@ void EDA_3D_CANVAS::Redraw()
     glColor4f( 1.0, 1.0, 1.0, 1.0 );
 
     // Draw Solid Shapes
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) )
+    if( isEnabled( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
             CreateDrawGL_List();
@@ -584,19 +578,18 @@ void EDA_3D_CANVAS::Redraw()
     }
 
     // Grid uses transparency: draw it after all objects
-    if( g_Parm_3D_Visu.GetFlag( FL_GRID ) && m_glLists[GL_ID_GRID] )
+    if( isEnabled( FL_GRID ) && m_glLists[GL_ID_GRID] )
         glCallList( m_glLists[GL_ID_GRID] );
 
     // This list must be drawn last, because it contains the
     // transparent gl objects, which should be drawn after all
     // non transparent objects
-    if(  g_Parm_3D_Visu.GetFlag( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
+    if(  isEnabled( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
         glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] );
 
     // Draw Board Shadow
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) &&
-        g_Parm_3D_Visu.IsRealisticMode() &&
-        g_Parm_3D_Visu.GetFlag( FL_RENDER_SHADOWS ) )
+    if( isEnabled( FL_MODULE ) && isRealisticMode() &&
+        isEnabled( FL_RENDER_SHADOWS ) )
     {
         if( m_glLists[GL_ID_SHADOW_BOARD] )
         {
@@ -696,9 +689,9 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
     // If FL_RENDER_SHOW_HOLES_IN_ZONES is true, holes are correctly removed from copper zones areas.
     // If FL_RENDER_SHOW_HOLES_IN_ZONES is false, holes are not removed from copper zones areas,
     // but the calculation time is twice shorter.
-    bool remove_Holes = g_Parm_3D_Visu.GetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES );
+    bool remove_Holes = isEnabled( FL_RENDER_SHOW_HOLES_IN_ZONES );
 
-    bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
+    bool realistic_mode = isRealisticMode();
 
     // Number of segments to convert a circle to polygon
     // Boost polygon (at least v 1.54, v1.55 and previous) in very rare cases crashes
@@ -758,7 +751,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
 
         // Skip non enabled layers in normal mode,
         // and internal layers in realistic mode
-        if( !Is3DLayerEnabled( layer ) )
+        if( !is3DLayerEnabled( layer ) )
             continue;
 
         bufferPolys.RemoveAllContours();
@@ -823,7 +816,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
         }
 
         // Draw copper zones
-        if( g_Parm_3D_Visu.GetFlag( FL_ZONE ) )
+        if( isEnabled( FL_ZONE ) )
         {
             for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
             {
@@ -903,7 +896,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
                                             thickness,
                                             g_Parm_3D_Visu.m_BiuTo3Dunits );
 
-        if( g_Parm_3D_Visu.GetFlag( FL_USE_COPPER_THICKNESS ) == true )
+        if( isEnabled( FL_USE_COPPER_THICKNESS ) == true )
         {
         	thickness -= ( 0.04 * IU_PER_MM );
         }
@@ -917,7 +910,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
         throughHolesListBuilt = true;
     }
 
-    if ( !g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY ) )
+    if ( !isEnabled( FL_SHOW_BOARD_BODY ) )
     {
         SetGLCopperColor();
 
@@ -940,10 +933,10 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
 
 	glEndList();
 
-
+    // Build the body board:
 	glNewList( aBodyOnlyList, GL_COMPILE );
 
-    if( g_Parm_3D_Visu.IsRealisticMode() )
+    if( isRealisticMode() )
     {
     	SetGLEpoxyColor( 0.95 );
     }
@@ -1069,18 +1062,15 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
         F_Mask,
     };
 
+    // User layers are not drawn here, only technical layers
     for( LSEQ seq = LSET::AllTechMask().Seq( teckLayerList, DIM( teckLayerList ) );  seq;  ++seq )
     {
         LAYER_ID layer = *seq;
 
-        // Skip user layers, which are not drawn here
-//        if( IsUserLayer( layer) )
-//            continue;
-
-        if( !Is3DLayerEnabled( layer ) )
+        if( !is3DLayerEnabled( layer ) )
             continue;
 
-        if( layer == Edge_Cuts && g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY )  )
+        if( layer == Edge_Cuts && isEnabled( FL_SHOW_BOARD_BODY )  )
             continue;
 
         bufferPolys.RemoveAllContours();
@@ -1132,7 +1122,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
         }
 
         // Draw non copper zones
-        if( g_Parm_3D_Visu.GetFlag( FL_ZONE ) )
+        if( isEnabled( FL_ZONE ) )
         {
             for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
             {
@@ -1237,7 +1227,7 @@ void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
     {
         LAYER_ID layer = *aux;
 
-        if( !Is3DLayerEnabled( layer ) )
+        if( !is3DLayerEnabled( layer ) )
             continue;
 
         bufferPolys.RemoveAllContours();
@@ -1369,7 +1359,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
     }
 
     // draw modules 3D shapes
-    if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] && g_Parm_3D_Visu.GetFlag( FL_MODULE ) )
+    if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] && isEnabled( FL_MODULE ) )
     {
         m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] = glGenLists( 1 );
 
@@ -1468,10 +1458,9 @@ void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
 }
 
 
-static bool Is3DLayerEnabled( LAYER_ID aLayer )
+bool EDA_3D_CANVAS::is3DLayerEnabled( LAYER_ID aLayer ) const
 {
     DISPLAY3D_FLG flg;
-    bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
 
     // see if layer needs to be shown
     // check the flags
@@ -1499,7 +1488,7 @@ static bool Is3DLayerEnabled( LAYER_ID aLayer )
 
     case Dwgs_User:
     case Cmts_User:
-        if( realistic_mode )
+        if( isRealisticMode() )
             return false;
 
         flg = FL_COMMENTS;
@@ -1507,7 +1496,7 @@ static bool Is3DLayerEnabled( LAYER_ID aLayer )
 
     case Eco1_User:
     case Eco2_User:
-        if( realistic_mode )
+        if( isRealisticMode() )
             return false;
 
         flg = FL_ECO;
@@ -1516,20 +1505,20 @@ static bool Is3DLayerEnabled( LAYER_ID aLayer )
     case B_Cu:
     case F_Cu:
         return g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( aLayer )
-               || realistic_mode;
+               || isRealisticMode();
         break;
 
     default:
         // the layer is an internal copper layer, used the visibility
         //
-        if( realistic_mode )
+        if( isRealisticMode() )
             return false;
 
         return g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( aLayer );
     }
 
     // The layer has a flag, return the flag
-    return g_Parm_3D_Visu.GetFlag( flg );
+    return isEnabled( flg );
 }
 
 
