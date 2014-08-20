@@ -68,8 +68,6 @@ void X3D_MODEL_PARSER::Load( const wxString aFilename )
         return;
     }
 
-    glShadeModel( GL_SMOOTH );
-    glEnable( GL_NORMALIZE );
 
     float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
     glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
@@ -295,6 +293,13 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
         if( values.GetNextToken().ToDouble( &shine ) )
         {
             // VRML value is normalized and openGL expects a value 0 - 128
+            if( shine > 1.0 )
+            {
+                shine = 1.0;
+            } else if( shine < 0.0 )
+            {
+                shine = 0.0;
+            }
             shine = shine * 128.0f;
             m_model->m_Materials->m_Shininess.push_back( shine );
         }
@@ -607,7 +612,7 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
         else
         {
             coord_list.push_back( index );
-            vrml_coord_indx_list.Append( wxString::Format( wxT( "%u " ), index ) );
+            vrml_coord_indx_list.Append( wxString::Format( wxT( "%ld " ), index ) );
         }
     }
 

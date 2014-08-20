@@ -156,16 +156,46 @@ void EDA_3D_FRAME::CreateMenuBar()
                  _( "Realistic Mode" ),
                  KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( prefsMenu, ID_MENU3D_MAX_QUALITY_FOR_REALISTIC_MODE,
-                 _( "Max Quality in Realistic Mode" ),
-                 _( "When using max quality, holes are removed from copper zones, "
-                    "but the calculation time is longer" ),
-                 KiBitmap( green_xpm ), wxITEM_CHECK );
+    wxMenu * renderOptionsMenu = new wxMenu;
+    AddMenuItem( prefsMenu, renderOptionsMenu, ID_MENU3D_COLOR,
+           _( "Render options" ), KiBitmap( tools_xpm ) );
+
+    AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_SHADOWS,
+        _( "Render Shadows" ),
+        KiBitmap( green_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_SHOW_HOLES_IN_ZONES,
+        _( "Show Holes in Zones" ),
+        _( "Holes inside a copper layer copper zones are shown, "
+            "but the calculation time is longer" ),
+        KiBitmap( green_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_TEXTURES,
+        _( "Render Textures" ),
+        _( "Apply a grid/cloud textures to Board, Solder Mask and Silkscreen" ),
+        KiBitmap( green_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_SMOOTH,
+        _( "Render Smooth Normals" ),
+        KiBitmap( green_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_MATERIAL,
+        _( "Render Material properties" ),
+        KiBitmap( green_xpm ), wxITEM_CHECK );
 
     prefsMenu->AppendSeparator();
 
-    AddMenuItem( prefsMenu, ID_MENU3D_BGCOLOR_SELECTION,
-                _( "Choose Background Color" ), KiBitmap( palette_xpm ) );
+    wxMenu * backgrounColorMenu = new wxMenu;
+
+    // Add submenu Choose Colors
+    AddMenuItem( prefsMenu, backgrounColorMenu, ID_MENU3D_COLOR,
+           _( "Choose Colors" ), KiBitmap( palette_xpm ) );
+
+    AddMenuItem( backgrounColorMenu, ID_MENU3D_BGCOLOR_TOP_SELECTION,
+                 _( "Background Top Color" ), KiBitmap( palette_xpm ) );
+
+    AddMenuItem( backgrounColorMenu, ID_MENU3D_BGCOLOR_SELECTION,
+                 _( "Background Bottom Color" ), KiBitmap( palette_xpm ) );
 
     AddMenuItem( prefsMenu, ID_MENU3D_AXIS_ONOFF,
                  _( "Show 3D &Axis" ), KiBitmap( axis3d_front_xpm ), wxITEM_CHECK );
@@ -174,11 +204,11 @@ void EDA_3D_FRAME::CreateMenuBar()
     wxMenu * gridlistMenu = new wxMenu;
     AddMenuItem( prefsMenu, gridlistMenu, ID_MENU3D_GRID,
            _( "3D Grid" ), KiBitmap( grid_xpm ) );
-    gridlistMenu->Append( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), wxEmptyString, true  );
-    gridlistMenu->Append( ID_MENU3D_GRID_10_MM, _( "3D Grid 10 mm" ), wxEmptyString, true  );
-    gridlistMenu->Append( ID_MENU3D_GRID_5_MM, _( "3D Grid 5 mm" ), wxEmptyString, true  );
-    gridlistMenu->Append( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5 mm" ), wxEmptyString, true  );
-    gridlistMenu->Append( ID_MENU3D_GRID_1_MM, _( "3D Grid 1 mm" ), wxEmptyString, true  );
+    gridlistMenu->AppendCheckItem( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), wxEmptyString );
+    gridlistMenu->AppendCheckItem( ID_MENU3D_GRID_10_MM, _( "3D Grid 10 mm" ), wxEmptyString );
+    gridlistMenu->AppendCheckItem( ID_MENU3D_GRID_5_MM, _( "3D Grid 5 mm" ), wxEmptyString );
+    gridlistMenu->AppendCheckItem( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5 mm" ), wxEmptyString );
+    gridlistMenu->AppendCheckItem( ID_MENU3D_GRID_1_MM, _( "3D Grid 1 mm" ), wxEmptyString );
 
     // If the grid is on, check the corresponding menuitem showing the grid  size
     if( g_Parm_3D_Visu.GetFlag( FL_GRID ) )
@@ -207,22 +237,26 @@ void EDA_3D_FRAME::CreateMenuBar()
 
     prefsMenu->AppendSeparator();
 
-    AddMenuItem( prefsMenu, ID_MENU3D_ADHESIVE_ONOFF,
+    wxMenu * layersMenu = new wxMenu;
+    AddMenuItem( prefsMenu, layersMenu, ID_MENU3D_LAYERS,
+           _( "Show Layers" ), KiBitmap( tools_xpm ) );
+
+    AddMenuItem( layersMenu, ID_MENU3D_ADHESIVE_ONOFF,
            _( "Show &Adhesive Layers" ), KiBitmap( tools_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( prefsMenu, ID_MENU3D_SILKSCREEN_ONOFF,
+    AddMenuItem( layersMenu, ID_MENU3D_SILKSCREEN_ONOFF,
            _( "Show &Silkscreen Layer" ), KiBitmap( add_text_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( prefsMenu, ID_MENU3D_SOLDER_MASK_ONOFF,
+    AddMenuItem( layersMenu, ID_MENU3D_SOLDER_MASK_ONOFF,
            _( "Show Solder &Mask Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( prefsMenu, ID_MENU3D_SOLDER_PASTE_ONOFF,
+    AddMenuItem( layersMenu, ID_MENU3D_SOLDER_PASTE_ONOFF,
            _( "Show Solder &Paste Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( prefsMenu, ID_MENU3D_COMMENTS_ONOFF,
+    AddMenuItem( layersMenu, ID_MENU3D_COMMENTS_ONOFF,
            _( "Show &Comments and Drawings Layer" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( prefsMenu, ID_MENU3D_ECO_ONOFF,
+    AddMenuItem( layersMenu, ID_MENU3D_ECO_ONOFF,
            _( "Show &Eco Layers" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
 
     SetMenuBar( menuBar );
@@ -241,8 +275,23 @@ void EDA_3D_FRAME::SetMenuBarOptionsState()
     item = menuBar->FindItem( ID_MENU3D_REALISTIC_MODE );
     item->Check( g_Parm_3D_Visu.IsRealisticMode() );
 
-    item = menuBar->FindItem( ID_MENU3D_MAX_QUALITY_FOR_REALISTIC_MODE );
-    item->Check( g_Parm_3D_Visu.HightQualityMode() );
+    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SHADOWS );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_SHADOWS ) );
+
+    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SHADOWS );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_SHADOWS ) );
+
+    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SHOW_HOLES_IN_ZONES );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES ) );
+
+    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_TEXTURES );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) );
+
+    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SMOOTH );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_SMOOTH ) );
+
+    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_MATERIAL );
+    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_MATERIAL ) );
 
     item = menuBar->FindItem( ID_MENU3D_SHOW_BOARD_BODY );
     item->Check( g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY ) );

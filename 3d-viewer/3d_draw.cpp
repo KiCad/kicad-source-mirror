@@ -53,11 +53,6 @@
 #include <trackball.h>
 #include <3d_draw_basic_functions.h>
 
-/* Helper function
- * returns true if aLayer should be displayed, false otherwise
- */
-static bool     Is3DLayerEnabled( LAYER_ID aLayer );
-
 /* returns the Z orientation parameter 1.0 or -1.0 for aLayer
  * Z orientation is 1.0 for all layers but "back" layers:
  *  B_Cu , B_Adhes, B_Paste ), B_SilkS
@@ -109,8 +104,8 @@ static void blur_tex( GLuint aTex, int aPasses, GLuint aTexture_size )
 
     glEnable( GL_TEXTURE_2D );
     glBindTexture( GL_TEXTURE_2D, aTex );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 
     while (aPasses > 0)
     {
@@ -172,7 +167,7 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
     {
         if( m_glLists[GL_ID_BODY] )
         {
-            glCallList( m_glLists[GL_ID_BOARD] );
+            glCallList( m_glLists[GL_ID_BODY] );
         }
     }
 
@@ -311,7 +306,7 @@ void EDA_3D_CANVAS::GenerateFakeShadowsTextures()
     glTranslatef( 0, 0, -0.4f );
     glRotatef( 180.0, 0.0, 1.0, 0.0 );
 
-    Create_and_Render_Shadow_Buffer( &m_text_fake_shadow_board, 512, true, 10 );
+    Create_and_Render_Shadow_Buffer( &m_text_fake_shadow_board, 512, true, 20 );
 }
 
 
@@ -333,8 +328,8 @@ void EDA_3D_CANVAS::Redraw()
 
     InitGL();
 
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) && g_Parm_3D_Visu.IsRealisticMode() &&
-        g_Parm_3D_Visu.HightQualityMode() )
+    if( isEnabled( FL_MODULE ) && isRealisticMode() &&
+        isEnabled( FL_RENDER_SHADOWS ) )
     {
         GenerateFakeShadowsTextures();
     }
@@ -347,6 +342,15 @@ void EDA_3D_CANVAS::Redraw()
     glClearStencil( 0 );
     glClearDepth( 1.0 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
+
+	if( isEnabled( FL_RENDER_SMOOTH ) )
+	{
+		glShadeModel( GL_SMOOTH );
+	}
+	else
+	{
+		glShadeModel( GL_FLAT );
+	}
 
     // Draw background
     glMatrixMode( GL_PROJECTION );
@@ -362,24 +366,22 @@ void EDA_3D_CANVAS::Redraw()
 
     // Draw the background ( rectangle with color gradient)
     glBegin( GL_QUADS );
-    #define BGCOLOR1(x) (x)
-    #define BGCOLOR2(x) (x * 0.3)
-    glColor4f( BGCOLOR1( g_Parm_3D_Visu.m_BgColor.m_Red ),
-               BGCOLOR1( g_Parm_3D_Visu.m_BgColor.m_Green ),
-               BGCOLOR1( g_Parm_3D_Visu.m_BgColor.m_Blue  ),
+    glColor4f( g_Parm_3D_Visu.m_BgColor_Top.m_Red,
+               g_Parm_3D_Visu.m_BgColor_Top.m_Green,
+               g_Parm_3D_Visu.m_BgColor_Top.m_Blue,
                1.0 );
     glVertex2f( -1.0, 1.0 );    // Top left corner
 
-    glColor4f( BGCOLOR2( g_Parm_3D_Visu.m_BgColor.m_Red ),
-               BGCOLOR2( g_Parm_3D_Visu.m_BgColor.m_Green ),
-               BGCOLOR2( g_Parm_3D_Visu.m_BgColor.m_Blue ),
+    glColor4f( g_Parm_3D_Visu.m_BgColor.m_Red,
+               g_Parm_3D_Visu.m_BgColor.m_Green,
+               g_Parm_3D_Visu.m_BgColor.m_Blue,
                1.0 );
     glVertex2f( -1.0,-1.0 );    // bottom left corner
     glVertex2f( 1.0,-1.0 );     // bottom right corner
 
-    glColor4f( BGCOLOR1( g_Parm_3D_Visu.m_BgColor.m_Red ),
-               BGCOLOR1( g_Parm_3D_Visu.m_BgColor.m_Green ),
-               BGCOLOR1( g_Parm_3D_Visu.m_BgColor.m_Blue  ),
+    glColor4f( g_Parm_3D_Visu.m_BgColor_Top.m_Red,
+               g_Parm_3D_Visu.m_BgColor_Top.m_Green,
+               g_Parm_3D_Visu.m_BgColor_Top.m_Blue,
                1.0 );
     glVertex2f( 1.0, 1.0 );     // top right corner
 
@@ -403,7 +405,7 @@ void EDA_3D_CANVAS::Redraw()
 
          // Initialize Projection Matrix for Ortographic View
          glOrtho( -size.x / orthoReductionFactor, size.x / orthoReductionFactor,
-                  -size.y / orthoReductionFactor, size.y / orthoReductionFactor, 1, 10 );
+                  -size.y / orthoReductionFactor, size.y / orthoReductionFactor, 1, 100 );
      }
      else
      {
@@ -411,7 +413,7 @@ void EDA_3D_CANVAS::Redraw()
          double ratio_HV = (double) size.x / size.y;
 
          // Initialize Projection Matrix for Perspective View
-         gluPerspective( 45.0 * g_Parm_3D_Visu.m_Zoom, ratio_HV, 1, 10 );
+         gluPerspective( 45.0 * g_Parm_3D_Visu.m_Zoom, ratio_HV, 1, 100 );
      }
 
     // position viewer
@@ -443,7 +445,7 @@ void EDA_3D_CANVAS::Redraw()
     if( ! m_glLists[GL_ID_BOARD] || ! m_glLists[GL_ID_TECH_LAYERS] )
         CreateDrawGL_List();
 
-    if( g_Parm_3D_Visu.GetFlag( FL_AXIS ) && m_glLists[GL_ID_AXIS] )
+    if( isEnabled( FL_AXIS ) && m_glLists[GL_ID_AXIS] )
         glCallList( m_glLists[GL_ID_AXIS] );
 
     // move the board in order to draw it with its center at 0,0 3D coordinates
@@ -454,29 +456,68 @@ void EDA_3D_CANVAS::Redraw()
     // draw all objects in lists
     // transparent objects should be drawn after opaque objects
 
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) )
+    if( isEnabled( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
             CreateDrawGL_List();
     }
 
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-    glDisable( GL_TEXTURE_2D );
-    glEnable( GL_COLOR_MATERIAL );
-    SetOpenGlDefaultMaterial();
-    glColor4f( 1.0, 1.0, 1.0, 1.0 );
+	if( isEnabled( FL_SHOW_BOARD_BODY ) )
+	{
+		if( isEnabled( FL_SOLDERMASK ) || !isRealisticMode() )
+		{
+			glDisable( GL_TEXTURE_2D );
+		}
+		else
+		{
+			glEnable( GL_TEXTURE_2D );
+		}
+
+		glDisable( GL_LIGHTING );
+
+		if( m_glLists[GL_ID_BODY] )
+		{
+			glCallList( m_glLists[GL_ID_BODY] );
+		}
+
+		glEnable( GL_LIGHTING );
+	}
+
+	glEnable( GL_COLOR_MATERIAL );
+	SetOpenGlDefaultMaterial();
+    glm::vec4 specular( g_Parm_3D_Visu.m_CopperColor.m_Red   * 0.3,
+                        g_Parm_3D_Visu.m_CopperColor.m_Green * 0.3,
+                        g_Parm_3D_Visu.m_CopperColor.m_Blue  * 0.3, 1.0 );
+    GLint shininess_value = 8;
+
+    glMateriali ( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
+    glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &specular.x );
+
+    if( isEnabled( FL_RENDER_TEXTURES ) && isRealisticMode() )
+    {
+    	glEnable( GL_TEXTURE_2D );
+	}
+	else
+	{
+		glDisable( GL_TEXTURE_2D );
+	}
 
     if( m_glLists[GL_ID_BOARD] )
     {
         glCallList( m_glLists[GL_ID_BOARD] );
     }
 
+	SetOpenGlDefaultMaterial();
+
     if( m_glLists[GL_ID_TECH_LAYERS] )
     {
         glCallList( m_glLists[GL_ID_TECH_LAYERS] );
     }
 
-    if( g_Parm_3D_Visu.GetFlag( FL_COMMENTS ) || g_Parm_3D_Visu.GetFlag( FL_COMMENTS )  )
+    if( isEnabled( FL_COMMENTS ) || isEnabled( FL_COMMENTS )  )
     {
         if( ! m_glLists[GL_ID_AUX_LAYERS] )
             CreateDrawGL_List();
@@ -485,7 +526,8 @@ void EDA_3D_CANVAS::Redraw()
     }
 
     // Draw Component Shadow
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE )  && g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.HightQualityMode() )
+    if( isEnabled( FL_MODULE )  && isRealisticMode() &&
+        isEnabled( FL_RENDER_SHADOWS ) )
     {
         glEnable( GL_CULL_FACE );
         glDisable( GL_DEPTH_TEST );
@@ -527,7 +569,7 @@ void EDA_3D_CANVAS::Redraw()
     glColor4f( 1.0, 1.0, 1.0, 1.0 );
 
     // Draw Solid Shapes
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) )
+    if( isEnabled( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
             CreateDrawGL_List();
@@ -536,17 +578,18 @@ void EDA_3D_CANVAS::Redraw()
     }
 
     // Grid uses transparency: draw it after all objects
-    if( g_Parm_3D_Visu.GetFlag( FL_GRID ) && m_glLists[GL_ID_GRID] )
+    if( isEnabled( FL_GRID ) && m_glLists[GL_ID_GRID] )
         glCallList( m_glLists[GL_ID_GRID] );
 
     // This list must be drawn last, because it contains the
     // transparent gl objects, which should be drawn after all
     // non transparent objects
-    if(  g_Parm_3D_Visu.GetFlag( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
+    if(  isEnabled( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
         glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] );
 
     // Draw Board Shadow
-    if( g_Parm_3D_Visu.GetFlag( FL_MODULE ) && g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.HightQualityMode() )
+    if( isEnabled( FL_MODULE ) && isRealisticMode() &&
+        isEnabled( FL_RENDER_SHADOWS ) )
     {
         if( m_glLists[GL_ID_SHADOW_BOARD] )
         {
@@ -643,12 +686,12 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
 {
     BOARD* pcb = GetBoard();
 
-    // If hightQualityMode is true, holes are correctly removed from copper zones areas.
-    // If hightQualityMode is false, holes are not removed from copper zones areas,
+    // If FL_RENDER_SHOW_HOLES_IN_ZONES is true, holes are correctly removed from copper zones areas.
+    // If FL_RENDER_SHOW_HOLES_IN_ZONES is false, holes are not removed from copper zones areas,
     // but the calculation time is twice shorter.
-    bool hightQualityMode = g_Parm_3D_Visu.HightQualityMode();
+    bool remove_Holes = isEnabled( FL_RENDER_SHOW_HOLES_IN_ZONES );
 
-    bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
+    bool realistic_mode = isRealisticMode();
 
     // Number of segments to convert a circle to polygon
     // Boost polygon (at least v 1.54, v1.55 and previous) in very rare cases crashes
@@ -708,7 +751,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
 
         // Skip non enabled layers in normal mode,
         // and internal layers in realistic mode
-        if( !Is3DLayerEnabled( layer ) )
+        if( !is3DLayerEnabled( layer ) )
             continue;
 
         bufferPolys.RemoveAllContours();
@@ -773,7 +816,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
         }
 
         // Draw copper zones
-        if( g_Parm_3D_Visu.GetFlag( FL_ZONE ) )
+        if( isEnabled( FL_ZONE ) )
         {
             for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
             {
@@ -783,7 +826,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
                 if( zonelayer == layer )
                 {
                     zone->TransformSolidAreasShapesToPolygonSet(
-                        hightQualityMode ? bufferPolys : bufferZonesPolys,
+                        remove_Holes ? bufferPolys : bufferZonesPolys,
                         segcountLowQuality, correctionFactorLQ );
                 }
             }
@@ -853,6 +896,13 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
                                             thickness,
                                             g_Parm_3D_Visu.m_BiuTo3Dunits );
 
+        if( isEnabled( FL_USE_COPPER_THICKNESS ) == true )
+        {
+        	thickness -= ( 0.04 * IU_PER_MM );
+        }
+
+        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
+
         if( bufferZonesPolys.GetCornersCount() )
             Draw3D_SolidHorizontalPolyPolygons( bufferZonesPolys, zpos,
                                                 thickness,
@@ -860,7 +910,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
         throughHolesListBuilt = true;
     }
 
-    if ( !g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY ) )
+    if ( !isEnabled( FL_SHOW_BOARD_BODY ) )
     {
         SetGLCopperColor();
 
@@ -881,13 +931,14 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
         }
     }
 
-    if( g_Parm_3D_Visu.IsRealisticMode() )
+	glEndList();
+
+    // Build the body board:
+	glNewList( aBodyOnlyList, GL_COMPILE );
+
+    if( isRealisticMode() )
     {
-        SetGLEpoxyColor( 1.0 );
-        if( g_Parm_3D_Visu.HightQualityMode() )
-        {
-            SetGLTexture( m_text_pcb, 35.0f );
-        }
+    	SetGLEpoxyColor( 0.95 );
     }
     else
     {
@@ -927,27 +978,10 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
     bufferPcbOutlines.RemoveAllContours();
     bufferPcbOutlines.ImportFrom( currLayerPolyset );
 
-    // Draw board substrate:
-    if( bufferPcbOutlines.GetCornersCount() &&
-        ( g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY ) ) )
-    {
-
-        // for Draw3D_SolidHorizontalPolyPolygons, zpos it the middle between bottom and top
-        // sides
-        Draw3D_SolidHorizontalPolyPolygons( bufferPcbOutlines, zpos + board_thickness/2.0,
-                                            board_thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
-    }
-
-    glEndList();
-
-
-    glNewList( aBodyOnlyList, GL_COMPILE );
-
     if( bufferPcbOutlines.GetCornersCount() )
     {
-        glColor4f( 1.0, 1.0, 1.0, 1.0 );
         Draw3D_SolidHorizontalPolyPolygons( bufferPcbOutlines, zpos + board_thickness/2.0,
-                                    board_thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                            board_thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
     }
 
     glEndList();
@@ -1017,7 +1051,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     KI_POLYGON_SET  brdpolysetHoles;
     allLayerHoles.ExportTo( brdpolysetHoles );
 
-    static const LAYER_ID sequence[] = {
+    static const LAYER_ID teckLayerList[] = {
         B_Adhes,
         F_Adhes,
         B_Paste,
@@ -1028,18 +1062,15 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
         F_Mask,
     };
 
-    for( LSEQ seq = pcb->GetEnabledLayers().Seq( sequence, DIM( sequence ) );  seq;  ++seq )
+    // User layers are not drawn here, only technical layers
+    for( LSEQ seq = LSET::AllTechMask().Seq( teckLayerList, DIM( teckLayerList ) );  seq;  ++seq )
     {
         LAYER_ID layer = *seq;
 
-        // Skip user layers, which are not drawn here
-        if( IsUserLayer( layer) )
+        if( !is3DLayerEnabled( layer ) )
             continue;
 
-        if( !Is3DLayerEnabled( layer ) )
-            continue;
-
-        if( layer == Edge_Cuts && g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY )  )
+        if( layer == Edge_Cuts && isEnabled( FL_SHOW_BOARD_BODY )  )
             continue;
 
         bufferPolys.RemoveAllContours();
@@ -1091,7 +1122,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
         }
 
         // Draw non copper zones
-        if( g_Parm_3D_Visu.GetFlag( FL_ZONE ) )
+        if( isEnabled( FL_ZONE ) )
         {
             for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
             {
@@ -1196,7 +1227,7 @@ void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
     {
         LAYER_ID layer = *aux;
 
-        if( !Is3DLayerEnabled( layer ) )
+        if( !is3DLayerEnabled( layer ) )
             continue;
 
         bufferPolys.RemoveAllContours();
@@ -1328,7 +1359,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
     }
 
     // draw modules 3D shapes
-    if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] && g_Parm_3D_Visu.GetFlag( FL_MODULE ) )
+    if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] && isEnabled( FL_MODULE ) )
     {
         m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] = glGenLists( 1 );
 
@@ -1427,10 +1458,9 @@ void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
 }
 
 
-static bool Is3DLayerEnabled( LAYER_ID aLayer )
+bool EDA_3D_CANVAS::is3DLayerEnabled( LAYER_ID aLayer ) const
 {
     DISPLAY3D_FLG flg;
-    bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
 
     // see if layer needs to be shown
     // check the flags
@@ -1458,7 +1488,7 @@ static bool Is3DLayerEnabled( LAYER_ID aLayer )
 
     case Dwgs_User:
     case Cmts_User:
-        if( realistic_mode )
+        if( isRealisticMode() )
             return false;
 
         flg = FL_COMMENTS;
@@ -1466,7 +1496,7 @@ static bool Is3DLayerEnabled( LAYER_ID aLayer )
 
     case Eco1_User:
     case Eco2_User:
-        if( realistic_mode )
+        if( isRealisticMode() )
             return false;
 
         flg = FL_ECO;
@@ -1475,20 +1505,20 @@ static bool Is3DLayerEnabled( LAYER_ID aLayer )
     case B_Cu:
     case F_Cu:
         return g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( aLayer )
-               || realistic_mode;
+               || isRealisticMode();
         break;
 
     default:
-        // the layer is an internal copper layer
-        if( realistic_mode )
+        // the layer is an internal copper layer, used the visibility
+        //
+        if( isRealisticMode() )
             return false;
 
         return g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( aLayer );
     }
 
-    // if the layer has a flag, return the flag
-    return g_Parm_3D_Visu.GetFlag( flg ) &&
-           g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( aLayer );
+    // The layer has a flag, return the flag
+    return isEnabled( flg );
 }
 
 

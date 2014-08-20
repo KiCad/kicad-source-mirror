@@ -144,6 +144,22 @@ public:
 
 private:
     /**
+     * return true if we are in realistic mode render
+     */
+    bool isRealisticMode() const;
+
+    /**
+     * return true if aItem should be displayed
+     * @param aItem = an item of DISPLAY3D_FLG enum
+     */
+    bool isEnabled( DISPLAY3D_FLG aItem ) const;
+
+    /* Helper function
+     * @return true if aLayer should be displayed, false otherwise
+     */
+    bool is3DLayerEnabled( LAYER_ID aLayer ) const;
+
+    /**
      * Helper function SetGLTechLayersColor
      * Initialize the color to draw the non copper layers
      * in realistic mode and normal mode.

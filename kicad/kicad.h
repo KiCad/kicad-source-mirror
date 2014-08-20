@@ -81,13 +81,26 @@ enum TreeFileType {
 /**
  * Command IDs for KiCad.
  *
- * Please add IDs that are unique to Kicad  here and not in the global id.h
- * file.  This will prevent the entire project from being rebuilt when adding
+ * Please add IDs that are unique to Kicad here and not in the global id.h file.
+ * This will prevent the entire project from being rebuilt when adding
  * new commands to KiCad.
+ *
+ * However, now the Kicad manager and other sub applications are running inside
+ * the same application, these IDs are kept unique inside the whole Kicad code
+ * See the global id.h which reserves room for the Kicad manager IDs
+ * and expand this room if needed
+ *
+ * We have experienced issues with duplicate menus IDs between frames
+ * because wxUpdateUIEvent events are sent to parent frames, when a wxUpdateUIEvent
+ * event function does not exists for some menuitems ID, and therefore
+ * with duplicate menuitems IDs in different frames, the wrong menuitem can be used
+ * by a function called by the wxUpdateUIEvent event loop.
+ *
+ * The number of items in this list should be less than ROOM_FOR_KICADMANAGER (see id.h)
  */
 
 enum id_kicad_frm {
-    ID_LEFT_FRAME = ID_END_LIST,
+    ID_LEFT_FRAME = ID_KICAD_MANAGER_START,
     ID_PROJECT_TREE,
     ID_PROJECT_TXTEDIT,
     ID_PROJECT_TREE_REFRESH,
@@ -114,9 +127,12 @@ enum id_kicad_frm {
     ID_SELECT_DEFAULT_PDF_BROWSER,
     ID_SAVE_AND_ZIP_FILES,
     ID_READ_ZIP_ARCHIVE,
-    ID_INIT_WATCHED_PATHS
-};
+    ID_INIT_WATCHED_PATHS,
 
+    // Please, verify: the number of items in this list should be
+    // less than ROOM_FOR_KICADMANAGER (see id.h)
+    ID_KICADMANAGER_END_LIST
+};
 
 /**
  * Class KICAD_MANAGER_FRAME

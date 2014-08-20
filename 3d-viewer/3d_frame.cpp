@@ -45,8 +45,18 @@ INFO3D_VISU             g_Parm_3D_Visu;
 static const wxChar keyBgColor_Red[] =          wxT( "BgColor_Red" );
 static const wxChar keyBgColor_Green[] =        wxT( "BgColor_Green" );
 static const wxChar keyBgColor_Blue[] =         wxT( "BgColor_Blue" );
+
+static const wxChar keyBgColor_Red_Top[] =      wxT( "BgColor_Red_Top" );
+static const wxChar keyBgColor_Green_Top[] =    wxT( "BgColor_Green_Top" );
+static const wxChar keyBgColor_Blue_Top[] =     wxT( "BgColor_Blue_Top" );
+
 static const wxChar keyShowRealisticMode[] =    wxT( "ShowRealisticMode" );
-static const wxChar keyUseHQinRealisticMode[] = wxT( "UseHQinRealisticMode" );
+static const wxChar keyRenderShadows[] =        wxT( "Render_Shadows" );
+static const wxChar keyRenderRemoveHoles[] =    wxT( "Render_RemoveHoles" );
+static const wxChar keyRenderTextures[] =       wxT( "Render_Textures" );
+static const wxChar keyRenderSmooth[] =         wxT( "Render_Smooth" );
+static const wxChar keyRenderMaterial[] =       wxT( "Render_Material" );
+
 static const wxChar keyShowAxis[] =             wxT( "ShowAxis" );
 static const wxChar keyShowGrid[] =             wxT( "ShowGrid3D" );
 static const wxChar keyShowGridSize[] =         wxT( "Grid3DSize" );
@@ -216,16 +226,32 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     INFO3D_VISU& prms = g_Parm_3D_Visu;
 
-    aCfg->Read( keyBgColor_Red, &g_Parm_3D_Visu.m_BgColor.m_Red, 0.0 );
-    aCfg->Read( keyBgColor_Green, &g_Parm_3D_Visu.m_BgColor.m_Green, 0.0 );
-    aCfg->Read( keyBgColor_Blue, &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
+    aCfg->Read( keyBgColor_Red, &g_Parm_3D_Visu.m_BgColor.m_Red, 0.4 );
+    aCfg->Read( keyBgColor_Green, &g_Parm_3D_Visu.m_BgColor.m_Green, 0.4 );
+    aCfg->Read( keyBgColor_Blue, &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.5 );
+
+    aCfg->Read( keyBgColor_Red_Top, &g_Parm_3D_Visu.m_BgColor_Top.m_Red, 0.8 );
+    aCfg->Read( keyBgColor_Green_Top, &g_Parm_3D_Visu.m_BgColor_Top.m_Green, 0.8 );
+    aCfg->Read( keyBgColor_Blue_Top, &g_Parm_3D_Visu.m_BgColor_Top.m_Blue, 0.9 );
 
     bool tmp;
     aCfg->Read( keyShowRealisticMode, &tmp, false );
     prms.SetFlag( FL_USE_REALISTIC_MODE, tmp );
 
-    aCfg->Read( keyUseHQinRealisticMode, &tmp, false );
-    prms.SetFlag( FL_USE_MAXQUALITY_IN_REALISTIC_MODE, tmp );
+    aCfg->Read( keyRenderShadows, &tmp, false );
+    prms.SetFlag( FL_RENDER_SHADOWS, tmp );
+
+    aCfg->Read( keyRenderRemoveHoles, &tmp, false );
+    prms.SetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES, tmp );
+
+    aCfg->Read( keyRenderTextures, &tmp, false );
+    prms.SetFlag( FL_RENDER_TEXTURES, tmp );
+
+    aCfg->Read( keyRenderSmooth, &tmp, false );
+    prms.SetFlag( FL_RENDER_SMOOTH, tmp );
+
+    aCfg->Read( keyRenderMaterial, &tmp, false );
+    prms.SetFlag( FL_RENDER_MATERIAL, tmp );
 
     aCfg->Read( keyShowAxis, &tmp, true );
     prms.SetFlag( FL_AXIS, tmp );
@@ -234,7 +260,6 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
     prms.SetFlag( FL_GRID, tmp );
 
     aCfg->Read( keyShowGridSize, &prms.m_3D_Grid, 10.0 );
-    prms.SetFlag( FL_MODULE, tmp );
 
     aCfg->Read( keyShowFootprints, &tmp, true );
     prms.SetFlag( FL_MODULE, tmp );
@@ -277,21 +302,32 @@ void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( keyBgColor_Red, g_Parm_3D_Visu.m_BgColor.m_Red );
     aCfg->Write( keyBgColor_Green, g_Parm_3D_Visu.m_BgColor.m_Green );
     aCfg->Write( keyBgColor_Blue, g_Parm_3D_Visu.m_BgColor.m_Blue );
-    aCfg->Write( keyShowRealisticMode, prms.GetFlag( FL_USE_REALISTIC_MODE )  );
-    aCfg->Write( keyUseHQinRealisticMode, prms.GetFlag( FL_USE_MAXQUALITY_IN_REALISTIC_MODE )  );
-    aCfg->Write( keyShowAxis, prms.GetFlag( FL_AXIS )  );
-    aCfg->Write( keyShowGrid, prms.GetFlag( FL_GRID )  );
-    aCfg->Write( keyShowGridSize, prms.m_3D_Grid  );
-    aCfg->Write( keyShowFootprints, prms.GetFlag( FL_MODULE )  );
-    aCfg->Write( keyShowCopperThickness, prms.GetFlag( FL_USE_COPPER_THICKNESS )  );
-    aCfg->Write( keyShowZones, prms.GetFlag( FL_ZONE )  );
-    aCfg->Write( keyShowAdhesiveLayers, prms.GetFlag( FL_ADHESIVE )  );
-    aCfg->Write( keyShowSilkScreenLayers, prms.GetFlag( FL_SILKSCREEN )  );
-    aCfg->Write( keyShowSolderMaskLayers, prms.GetFlag( FL_SOLDERMASK )  );
-    aCfg->Write( keyShowSolderPasteLayers, prms.GetFlag( FL_SOLDERPASTE )  );
-    aCfg->Write( keyShowCommentsLayer, prms.GetFlag( FL_COMMENTS )  );
-    aCfg->Write( keyShowEcoLayers, prms.GetFlag( FL_ECO )  );
-    aCfg->Write( keyShowBoardBody, prms.GetFlag( FL_SHOW_BOARD_BODY )  );
+
+    aCfg->Write( keyBgColor_Red_Top, g_Parm_3D_Visu.m_BgColor_Top.m_Red );
+    aCfg->Write( keyBgColor_Green_Top, g_Parm_3D_Visu.m_BgColor_Top.m_Green );
+    aCfg->Write( keyBgColor_Blue_Top, g_Parm_3D_Visu.m_BgColor_Top.m_Blue );
+
+    aCfg->Write( keyShowRealisticMode, prms.GetFlag( FL_USE_REALISTIC_MODE ) );
+
+    aCfg->Write( keyRenderShadows, prms.GetFlag( FL_RENDER_SHADOWS ) );
+    aCfg->Write( keyRenderRemoveHoles, prms.GetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES ) );
+    aCfg->Write( keyRenderTextures, prms.GetFlag( FL_RENDER_TEXTURES ) );
+    aCfg->Write( keyRenderSmooth, prms.GetFlag( FL_RENDER_SMOOTH ) );
+    aCfg->Write( keyRenderMaterial, prms.GetFlag( FL_RENDER_MATERIAL ) );
+
+    aCfg->Write( keyShowAxis, prms.GetFlag( FL_AXIS ) );
+    aCfg->Write( keyShowGrid, prms.GetFlag( FL_GRID ) );
+    aCfg->Write( keyShowGridSize, prms.m_3D_Grid );
+    aCfg->Write( keyShowFootprints, prms.GetFlag( FL_MODULE ) );
+    aCfg->Write( keyShowCopperThickness, prms.GetFlag( FL_USE_COPPER_THICKNESS ) );
+    aCfg->Write( keyShowZones, prms.GetFlag( FL_ZONE ) );
+    aCfg->Write( keyShowAdhesiveLayers, prms.GetFlag( FL_ADHESIVE ) );
+    aCfg->Write( keyShowSilkScreenLayers, prms.GetFlag( FL_SILKSCREEN ) );
+    aCfg->Write( keyShowSolderMaskLayers, prms.GetFlag( FL_SOLDERMASK ) );
+    aCfg->Write( keyShowSolderPasteLayers, prms.GetFlag( FL_SOLDERPASTE ) );
+    aCfg->Write( keyShowCommentsLayer, prms.GetFlag( FL_COMMENTS ) );
+    aCfg->Write( keyShowEcoLayers, prms.GetFlag( FL_ECO ) );
+    aCfg->Write( keyShowBoardBody, prms.GetFlag( FL_SHOW_BOARD_BODY ) );
 }
 
 
@@ -424,7 +460,11 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MENU3D_BGCOLOR_SELECTION:
-        Set3DBgColor();
+        Set3DBgColor( g_Parm_3D_Visu.m_BgColor );
+        return;
+
+    case ID_MENU3D_BGCOLOR_TOP_SELECTION:
+        Set3DBgColor( g_Parm_3D_Visu.m_BgColor_Top );
         return;
 
     case ID_MENU3D_REALISTIC_MODE:
@@ -432,8 +472,29 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         NewDisplay();
         return;
 
-    case ID_MENU3D_MAX_QUALITY_FOR_REALISTIC_MODE:
-        g_Parm_3D_Visu.SetFlag( FL_USE_MAXQUALITY_IN_REALISTIC_MODE, isChecked );
+    case ID_MENU3D_FL_RENDER_SHADOWS:
+        g_Parm_3D_Visu.SetFlag( FL_RENDER_SHADOWS, isChecked );
+        NewDisplay();
+        return;
+
+    case ID_MENU3D_FL_RENDER_SHOW_HOLES_IN_ZONES:
+        g_Parm_3D_Visu.SetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES, isChecked );
+        NewDisplay();
+        return;
+
+    case ID_MENU3D_FL_RENDER_TEXTURES:
+        g_Parm_3D_Visu.SetFlag( FL_RENDER_TEXTURES, isChecked );
+        NewDisplay(GL_ID_BOARD);
+        NewDisplay(GL_ID_TECH_LAYERS);
+        return;
+
+    case ID_MENU3D_FL_RENDER_SMOOTH:
+        g_Parm_3D_Visu.SetFlag( FL_RENDER_SMOOTH, isChecked );
+        NewDisplay();
+        return;
+
+    case ID_MENU3D_FL_RENDER_MATERIAL:
+        g_Parm_3D_Visu.SetFlag( FL_RENDER_MATERIAL, isChecked );
         NewDisplay();
         return;
 
@@ -455,6 +516,7 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_MENU3D_USE_COPPER_THICKNESS:
         g_Parm_3D_Visu.SetFlag( FL_USE_COPPER_THICKNESS, isChecked );
         NewDisplay(GL_ID_BOARD);
+        NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_ZONE_ONOFF:
@@ -506,7 +568,7 @@ void EDA_3D_FRAME::On3DGridSelection( wxCommandEvent& event )
 {
     int id = event.GetId();
 
-    for( int ii = ID_MENU3D_GRID; ii < ID_MENU3D_GRID_END; ii++ )
+    for( int ii = ID_MENU3D_GRID_NOGRID; ii < ID_MENU3D_GRID_END; ii++ )
     {
         if( event.GetId() == ii )
             continue;
@@ -574,27 +636,27 @@ void EDA_3D_FRAME::OnActivate( wxActivateEvent& event )
 
 /* called to set the background color of the 3D scene
  */
-void EDA_3D_FRAME::Set3DBgColor()
+bool EDA_3D_FRAME::Set3DBgColor( S3D_COLOR &color )
 {
-    S3D_COLOR   color;
     wxColour    newcolor, oldcolor;
 
-    oldcolor.Set( KiROUND( g_Parm_3D_Visu.m_BgColor.m_Red * 255 ),
-                  KiROUND( g_Parm_3D_Visu.m_BgColor.m_Green * 255 ),
-                  KiROUND( g_Parm_3D_Visu.m_BgColor.m_Blue * 255 ) );
+    oldcolor.Set( KiROUND( color.m_Red * 255 ),
+                  KiROUND( color.m_Green * 255 ),
+                  KiROUND( color.m_Blue * 255 ) );
 
     newcolor = wxGetColourFromUser( this, oldcolor );
 
     if( !newcolor.IsOk() )     // Cancel command
-        return;
+        return false;
 
     if( newcolor != oldcolor )
     {
-        g_Parm_3D_Visu.m_BgColor.m_Red      = (double) newcolor.Red() / 255.0;
-        g_Parm_3D_Visu.m_BgColor.m_Green    = (double) newcolor.Green() / 255.0;
-        g_Parm_3D_Visu.m_BgColor.m_Blue     = (double) newcolor.Blue() / 255.0;
+        color.m_Red      = (double) newcolor.Red() / 255.0;
+        color.m_Green    = (double) newcolor.Green() / 255.0;
+        color.m_Blue     = (double) newcolor.Blue() / 255.0;
         m_canvas->Redraw();
     }
+    return true;
 }
 
 BOARD* EDA_3D_FRAME::GetBoard()

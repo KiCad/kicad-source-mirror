@@ -67,9 +67,6 @@ void VRML2_MODEL_PARSER::Load( const wxString aFilename )
         return;
     }
 
-    glShadeModel( GL_SMOOTH );
-    glEnable( GL_NORMALIZE );
-
     float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
     glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
 

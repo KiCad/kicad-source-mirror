@@ -71,7 +71,11 @@ enum DISPLAY3D_FLG {
     FL_USE_COPPER_THICKNESS,
     FL_SHOW_BOARD_BODY,
     FL_USE_REALISTIC_MODE,
-    FL_USE_MAXQUALITY_IN_REALISTIC_MODE,
+    FL_RENDER_SHADOWS,
+    FL_RENDER_SHOW_HOLES_IN_ZONES,
+    FL_RENDER_TEXTURES,
+    FL_RENDER_SMOOTH,
+    FL_RENDER_MATERIAL,
     FL_LAST
 };
 
@@ -84,6 +88,11 @@ public:
     double      m_Zoom;                             // 3D zoom value
     double      m_3D_Grid;                          // 3D grid value, in mm
     S3D_COLOR   m_BgColor;
+    S3D_COLOR   m_BgColor_Top;
+    S3D_COLOR   m_BoardBodyColor;                   // in realistic mode: FR4 board color
+    S3D_COLOR   m_SolderMaskColor;                  // in realistic mode: solder mask color
+    S3D_COLOR   m_SilkScreenColor;                  // in realistic mode: SilkScreen color
+    S3D_COLOR   m_CopperColor;                      // in realistic mode: copper color
     wxPoint     m_BoardPos;                         // center board actual position in board units
     wxSize      m_BoardSize;                        // board actual size in board units
     int         m_CopperLayersCount;                // Number of copper layers actually used by the board
@@ -97,7 +106,7 @@ public:
                                                     // used in some calculation
 
     double zpos_offset;
-    
+
 private:
     double  m_layerZcoord[LAYER_ID_COUNT];          // Z position of each layer (normalized)
     double  m_copperThickness;                      // Copper thickness (normalized)
@@ -200,7 +209,6 @@ public: INFO3D_VISU();
     }
 
     bool IsRealisticMode() { return GetFlag( FL_USE_REALISTIC_MODE ); }
-    bool HightQualityMode() { return GetFlag( FL_USE_MAXQUALITY_IN_REALISTIC_MODE ); }
 };
 
 extern INFO3D_VISU g_Parm_3D_Visu;

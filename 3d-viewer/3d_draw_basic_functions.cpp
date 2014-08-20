@@ -422,7 +422,7 @@ void CALLBACK tessCPolyPt2Vertex( const GLvoid* data )
     // cast back to double type
     const CPolyPt* ptr = (const CPolyPt*) data;
 
-    if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.HightQualityMode() )
+    if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
     {
         glTexCoord2f( ptr->x* g_Parm_3D_Visu.m_BiuTo3Dunits * m_texture_scale,
                     -ptr->y * g_Parm_3D_Visu.m_BiuTo3Dunits * m_texture_scale);

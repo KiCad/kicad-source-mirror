@@ -520,8 +520,8 @@ GLuint load_and_generate_texture( tsImage *image )
 
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     return texture;
@@ -547,7 +547,7 @@ void EDA_3D_CANVAS::InitGL()
         glEnable( GL_ALPHA_TEST );
         glEnable( GL_LINE_SMOOTH );
 //        glEnable(GL_POLYGON_SMOOTH);  // creates issues with some graphic cards
-        glShadeModel( GL_SMOOTH );
+        glEnable( GL_NORMALIZE );
         glEnable( GL_COLOR_MATERIAL );
         glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
@@ -569,7 +569,7 @@ void EDA_3D_CANVAS::SetLights()
 {
     /* set viewing projection */
     GLfloat Z_axis_pos[4]    = { 0.0, 0.0, 30.0, 0.0 };
-    GLfloat lowZ_axis_pos[4] = { 0.0, 0.0, -30.0, 0.5 };
+//    GLfloat lowZ_axis_pos[4] = { 0.0, 0.0, -30.0, 0.5 };
 
     // activate lights. 2 lights are used:
     // One is above the xy plane, the other is below the xy plane
@@ -577,14 +577,21 @@ void EDA_3D_CANVAS::SetLights()
     light_color[3] = 1.0;
 
     // Light above the xy plane
-    // The default setting for GL_AMBIENT light intensity is (0.0, 0.0, 0.0, 1.0)
-    glLightfv( GL_LIGHT0, GL_POSITION, Z_axis_pos );
+    light_color[0] = light_color[1] = light_color[2] = 0.1;
+    glLightfv( GL_LIGHT0, GL_AMBIENT, light_color );
+
     light_color[0] = light_color[1] = light_color[2] = 1.0;
     glLightfv( GL_LIGHT0, GL_DIFFUSE, light_color );
 
-    light_color[0] = light_color[1] = light_color[2] = 0.2;
+    light_color[0] = light_color[1] = light_color[2] = 1.0;
     glLightfv( GL_LIGHT0, GL_SPECULAR, light_color );
 
+    glLightfv( GL_LIGHT0, GL_POSITION, Z_axis_pos );
+
+    light_color[0] = light_color[1] = light_color[2] = 0.1;
+    glLightModelfv( GL_LIGHT_MODEL_AMBIENT, light_color );
+
+/*
     // Light below the xy plane
     glLightfv( GL_LIGHT1, GL_POSITION, lowZ_axis_pos );
     light_color[0] = light_color[1] = light_color[2] = 0.4;
@@ -592,9 +599,9 @@ void EDA_3D_CANVAS::SetLights()
 
     light_color[0] = light_color[1] = light_color[2] = 0.1;
     glLightfv( GL_LIGHT1, GL_SPECULAR, light_color );
-
+*/
     glEnable( GL_LIGHT0 );      // White spot on Z axis ( top )
-//    glEnable( GL_LIGHT1 );      // White spot on Z axis ( bottom )
+    glDisable( GL_LIGHT1 );      // White spot on Z axis ( bottom )
     glEnable( GL_LIGHTING );
 }
 
