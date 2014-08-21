@@ -121,12 +121,11 @@ static void Draw3D_VerticalPolygonalCylinder( const CPOLYGONS_LIST& aPolysList,
 
 void SetGLColor( EDA_COLOR_T color, double alpha )
 {
-    double              red, green, blue;
     const StructColors &colordata = g_ColorRefs[ColorGetBase( color )];
 
-    red     = colordata.m_Red / 255.0;
-    blue    = colordata.m_Blue / 255.0;
-    green   = colordata.m_Green / 255.0;
+    double red     = colordata.m_Red / 255.0;
+    double blue    = colordata.m_Blue / 255.0;
+    double green   = colordata.m_Green / 255.0;
     glColor4f( red, green, blue, alpha );
 }
 
@@ -170,7 +169,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
     g_Parm_3D_Visu.m_CurrentZpos = zpos;
     v_data[2] = aZpos + (aThickness / 2.0);
 
-    // Set normal to toward positive Z axis, for a solid object only (to draw the top side)
+    // Set normal toward positive Z axis, for a solid object on the top side
     if( aThickness )
         SetNormalZpos();
 
@@ -222,7 +221,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
         zpos = ( aZpos - (aThickness / 2.0) ) * aBiuTo3DUnits;
         g_Parm_3D_Visu.m_CurrentZpos = zpos;
         v_data[2] = zpos;
-        // Now;, set normal to toward negative Z axis, for the solid object bottom side
+        // Set normal toward negative Z axis, for a solid object on bottom side
         SetNormalZneg();
     }
 
@@ -432,7 +431,7 @@ void CALLBACK tessCPolyPt2Vertex( const GLvoid* data )
     if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
     {
         glTexCoord2f( ptr->x* g_Parm_3D_Visu.m_BiuTo3Dunits * m_texture_scale,
-                    -ptr->y * g_Parm_3D_Visu.m_BiuTo3Dunits * m_texture_scale);
+                      -ptr->y * g_Parm_3D_Visu.m_BiuTo3Dunits * m_texture_scale);
     }
 
     glVertex3d( ptr->x * g_Parm_3D_Visu.m_BiuTo3Dunits,

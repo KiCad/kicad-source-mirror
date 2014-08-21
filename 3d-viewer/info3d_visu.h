@@ -52,7 +52,9 @@
 
 class BOARD_DESIGN_SETTINGS;
 
-class S3D_COLOR     /* 3D color (R, G, B) 3 floats range 0 to 1.0*/
+/** Minor class to store a 3D color (R, G, B) 3 floats range 0 to 1.0
+ */
+class S3D_COLOR
 {
 public:
     double m_Red, m_Green, m_Blue;
@@ -62,7 +64,6 @@ public: S3D_COLOR()
     }
 };
 
-/* information needed to display 3D board */
 enum DISPLAY3D_FLG {
     FL_AXIS=0, FL_MODULE, FL_ZONE,
     FL_ADHESIVE, FL_SILKSCREEN, FL_SOLDERMASK, FL_SOLDERPASTE,
@@ -79,6 +80,8 @@ enum DISPLAY3D_FLG {
     FL_LAST
 };
 
+/** Helper class to handle information needed to display 3D board
+ */
 class INFO3D_VISU
 {
 public:
@@ -112,27 +115,25 @@ private:
     double  m_copperThickness;                      // Copper thickness (normalized)
     double  m_epoxyThickness;                       // Epoxy thickness (normalized)
     double  m_nonCopperLayerThickness;              // Non copper layers thickness
-    bool    m_drawFlags[FL_LAST];                   // Enable/disable flags (see DISPLAY3D_FLG list)
+    std::bitset<FL_LAST> m_drawFlags;               // Enable/disable flags (see DISPLAY3D_FLG list)
 
 public: INFO3D_VISU();
     ~INFO3D_VISU();
 
     // Accessors
     bool GetFlag( DISPLAY3D_FLG aFlag ) const { return m_drawFlags[aFlag]; }
-    bool SetFlag( DISPLAY3D_FLG aFlag, bool aState )
+    void SetFlag( DISPLAY3D_FLG aFlag, bool aState )
     {
-        return m_drawFlags[aFlag] = aState;
+        m_drawFlags[aFlag] = aState;
     }
 
     /**
-     * Function InitSettings
-     * Initialize info 3D Parameters from aBoard
+     * Initialize 3D Parameters depending on aBoard
      * @param aBoard: the board to display
      */
     void InitSettings( BOARD* aBoard );
 
     /**
-     * function GetModulesZcoord3DIU
      * @return the Z position of 3D shapes, in 3D Units
      * @param aIsFlipped: true for modules on Front (top) layer, false
      * if on back (bottom) layer
@@ -140,7 +141,6 @@ public: INFO3D_VISU();
     double GetModulesZcoord3DIU( bool aIsFlipped );
 
     /**
-     * function GetLayerZcoordBIU
      * @return the Z coordinate of the layer aLayer, in Board Internal Units
      * @param aLayerId: the layer number
      */
@@ -150,7 +150,6 @@ public: INFO3D_VISU();
     }
 
     /**
-     * function GetCopperThicknessBIU
      * @return the thickness (Z size) of the copper, in Board Internal Units
      * note: the thickness (Z size) of the copper is not the thickness
      * of the layer (the thickness of the layer is the epoxy thickness / layer count)

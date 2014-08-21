@@ -1320,7 +1320,8 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
             if( parser )
             {
                 // embed x3d model in vrml format
-                parser->Load( fname );
+                double vrml_to_x3d = aVRMLModelsToBiu;
+                parser->Load( fname, vrml_to_x3d );
 
                 try
                 {

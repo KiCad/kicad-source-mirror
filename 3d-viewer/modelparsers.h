@@ -66,12 +66,15 @@ public:
      * @param aExtension is file extension of the file you are going to parse.
      */
     static S3D_MODEL_PARSER* Create( S3D_MASTER* aMaster, const wxString aExtension );
+
     /**
-     * Function Load
-     *
+     * pure virtual Function
      * Concrete parsers should implement this function
+     * @param aFilename = the full file name of the file to load
+     * @param aVrmlunits_to_3Dunits = the scaling factor, i.e. the
+     *     convertion from file unit to internal 3D units
      */
-    virtual void Load( const wxString aFilename ) = 0;
+    virtual void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits ) = 0;
 
 private:
     S3D_MASTER* master;
@@ -89,7 +92,8 @@ class X3D_MODEL_PARSER: public S3D_MODEL_PARSER
 public:
     X3D_MODEL_PARSER( S3D_MASTER* aMaster );
     ~X3D_MODEL_PARSER();
-    void Load( const wxString aFilename );
+
+    void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits );
 
     typedef std::map< wxString, wxString > PROPERTY_MAP;
     typedef std::vector< wxXmlNode* > NODE_LIST;
@@ -148,7 +152,8 @@ class VRML2_MODEL_PARSER: public S3D_MODEL_PARSER
 public:
     VRML2_MODEL_PARSER( S3D_MASTER* aMaster );
     ~VRML2_MODEL_PARSER();
-    void Load( const wxString aFilename );
+
+    void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits );
 
     /**
      * Return string representing VRML2 file in vrml2 format
@@ -191,7 +196,8 @@ class VRML1_MODEL_PARSER: public S3D_MODEL_PARSER
 public:
     VRML1_MODEL_PARSER( S3D_MASTER* aMaster );
     ~VRML1_MODEL_PARSER();
-    void Load( const wxString aFilename );
+
+    void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits );
 
     /**
      * Return string representing VRML2 file in vrml2 format
@@ -236,7 +242,8 @@ class VRML_MODEL_PARSER: public S3D_MODEL_PARSER
 public:
     VRML_MODEL_PARSER( S3D_MASTER* aMaster );
     ~VRML_MODEL_PARSER();
-    void Load( const wxString aFilename );
+
+    void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits );
 
 private:
     VRML1_MODEL_PARSER *vrml1_parser;

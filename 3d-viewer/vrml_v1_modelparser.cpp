@@ -53,11 +53,11 @@ VRML1_MODEL_PARSER::~VRML1_MODEL_PARSER()
 }
 
 
-void VRML1_MODEL_PARSER::Load( const wxString aFilename )
+void VRML1_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3Dunits )
 {
     char text[128];
 
-    // DBG( printf( "Load %s\n", static_cast<const char*>(aFilename.mb_str()) ) );
+    // DBG( printf( "Load %s\n", GetChars(aFilename) ) );
     m_file = wxFopen( aFilename, wxT( "rt" ) );
 
     if( m_file == NULL )
@@ -65,7 +65,7 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
         return;
     }
 
-    float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
+    float vrmlunits_to_3Dunits = aVrmlunits_to_3Dunits;
     glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
 
     glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y,
@@ -87,8 +87,7 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
 
     glScalef( matScale.x, matScale.y, matScale.z );
 
-    // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    SetLocaleTo_C_standard();
+    LOCALE_IO toggle;   // Switch the locale to standard C
 
     childs.clear();
 
@@ -108,8 +107,6 @@ void VRML1_MODEL_PARSER::Load( const wxString aFilename )
     }
 
     fclose( m_file );
-    SetLocaleTo_Default();       // revert to the current locale
-
 
     // DBG( printf( "chils size:%lu\n", childs.size() ) );
 

@@ -89,10 +89,13 @@ void S3D_MESH::openGL_RenderAllChilds()
 void S3D_MESH::openGL_Render()
 {
     //DBG( printf( "openGL_Render" ) );
+    bool useMaterial = g_Parm_3D_Visu.GetFlag( FL_RENDER_MATERIAL );
+    bool smoothShapes = g_Parm_3D_Visu.IsRealisticMode()
+                        && g_Parm_3D_Visu.GetFlag( FL_RENDER_SMOOTH );
 
     if( m_Materials )
     {
-        m_Materials->SetOpenGLMaterial( 0 );
+        m_Materials->SetOpenGLMaterial( 0, useMaterial );
     }
 
     if( m_CoordIndex.size() == 0)
@@ -113,7 +116,7 @@ void S3D_MESH::openGL_Render()
 
     if( m_PerVertexNormalsNormalized.size() == 0 )
     {
-        if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.GetFlag( FL_RENDER_SMOOTH ) )
+        if( smoothShapes )
         {
             calcPerPointNormals();
         }
@@ -125,7 +128,7 @@ void S3D_MESH::openGL_Render()
         {
             if( m_Materials )
             {
-                m_Materials->SetOpenGLMaterial( m_MaterialIndex[idx] );
+                m_Materials->SetOpenGLMaterial( m_MaterialIndex[idx], useMaterial );
             }
         }
 
@@ -148,7 +151,8 @@ void S3D_MESH::openGL_Render()
                 glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
                 glVertex3fv( &point.x );
             }
-        } else if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.GetFlag( FL_RENDER_SMOOTH ) )
+        }
+        else if( smoothShapes )
         {
             std::vector< glm::vec3 > normals_list;
             normals_list = m_PerFaceVertexNormals[idx];
@@ -161,7 +165,8 @@ void S3D_MESH::openGL_Render()
                 glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
                 glVertex3fv( &point.x );
             }
-        } else
+        }
+        else
         {
             // Flat
             glm::vec3 normal = m_PerFaceNormalsNormalized[idx];

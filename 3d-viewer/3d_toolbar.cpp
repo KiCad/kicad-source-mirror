@@ -211,12 +211,12 @@ void EDA_3D_FRAME::CreateMenuBar()
     gridlistMenu->AppendCheckItem( ID_MENU3D_GRID_1_MM, _( "3D Grid 1 mm" ), wxEmptyString );
 
     // If the grid is on, check the corresponding menuitem showing the grid  size
-    if( g_Parm_3D_Visu.GetFlag( FL_GRID ) )
+    if( IsEnabled( FL_GRID ) )
     {
-        gridlistMenu->Check( ID_MENU3D_GRID_10_MM, g_Parm_3D_Visu.m_3D_Grid == 10.0 );
-        gridlistMenu->Check( ID_MENU3D_GRID_5_MM, g_Parm_3D_Visu.m_3D_Grid == 5.0 );
-        gridlistMenu->Check( ID_MENU3D_GRID_2P5_MM, g_Parm_3D_Visu.m_3D_Grid == 2.5 );
-        gridlistMenu->Check( ID_MENU3D_GRID_1_MM, g_Parm_3D_Visu.m_3D_Grid == 1.0 );
+        gridlistMenu->Check( ID_MENU3D_GRID_10_MM, GetPrm3DVisu().m_3D_Grid == 10.0 );
+        gridlistMenu->Check( ID_MENU3D_GRID_5_MM, GetPrm3DVisu().m_3D_Grid == 5.0 );
+        gridlistMenu->Check( ID_MENU3D_GRID_2P5_MM, GetPrm3DVisu().m_3D_Grid == 2.5 );
+        gridlistMenu->Check( ID_MENU3D_GRID_1_MM, GetPrm3DVisu().m_3D_Grid == 1.0 );
     }
     else
         gridlistMenu->Check( ID_MENU3D_GRID_NOGRID, true );
@@ -273,58 +273,58 @@ void EDA_3D_FRAME::SetMenuBarOptionsState()
     wxMenuItem* item;
     // Set the state of toggle menus according to the current display options
     item = menuBar->FindItem( ID_MENU3D_REALISTIC_MODE );
-    item->Check( g_Parm_3D_Visu.IsRealisticMode() );
+    item->Check( GetPrm3DVisu().IsRealisticMode() );
 
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SHADOWS );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_SHADOWS ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_SHADOWS ) );
 
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SHADOWS );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_SHADOWS ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_SHADOWS ) );
 
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SHOW_HOLES_IN_ZONES );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES ) );
 
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_TEXTURES );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_TEXTURES ) );
 
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SMOOTH );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_SMOOTH ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_SMOOTH ) );
 
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_MATERIAL );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_RENDER_MATERIAL ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_MATERIAL ) );
 
     item = menuBar->FindItem( ID_MENU3D_SHOW_BOARD_BODY );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_SHOW_BOARD_BODY ) );
 
     item = menuBar->FindItem( ID_MENU3D_USE_COPPER_THICKNESS );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_USE_COPPER_THICKNESS ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_USE_COPPER_THICKNESS ) );
 
     item = menuBar->FindItem( ID_MENU3D_MODULE_ONOFF );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_MODULE ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_MODULE ) );
 
     item = menuBar->FindItem( ID_MENU3D_ZONE_ONOFF );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_ZONE ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_ZONE ) );
 
     item = menuBar->FindItem( ID_MENU3D_AXIS_ONOFF );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_AXIS ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_AXIS ) );
 
     item = menuBar->FindItem( ID_MENU3D_ADHESIVE_ONOFF );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_ADHESIVE ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_ADHESIVE ) );
 
     item = menuBar->FindItem( ID_MENU3D_SILKSCREEN_ONOFF );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_SILKSCREEN ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_SILKSCREEN ) );
 
     item = menuBar->FindItem( ID_MENU3D_SOLDER_MASK_ONOFF );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_SOLDERMASK ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_SOLDERMASK ) );
 
     item = menuBar->FindItem( ID_MENU3D_SOLDER_PASTE_ONOFF );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_SOLDERPASTE ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_SOLDERPASTE ) );
 
     item = menuBar->FindItem( ID_MENU3D_COMMENTS_ONOFF );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_COMMENTS ) );
+    item->Check( GetPrm3DVisu().GetFlag( FL_COMMENTS ) );
 
     item = menuBar->FindItem( ID_MENU3D_ECO_ONOFF );
-    item->Check( g_Parm_3D_Visu.GetFlag( FL_ECO ));
+    item->Check( GetPrm3DVisu().GetFlag( FL_ECO ));
 }
 
 void EDA_3D_FRAME::SetToolbars()

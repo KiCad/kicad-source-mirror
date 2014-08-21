@@ -224,15 +224,15 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    INFO3D_VISU& prms = g_Parm_3D_Visu;
+    INFO3D_VISU& prms = GetPrm3DVisu();
 
-    aCfg->Read( keyBgColor_Red, &g_Parm_3D_Visu.m_BgColor.m_Red, 0.4 );
-    aCfg->Read( keyBgColor_Green, &g_Parm_3D_Visu.m_BgColor.m_Green, 0.4 );
-    aCfg->Read( keyBgColor_Blue, &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.5 );
+    aCfg->Read( keyBgColor_Red, &GetPrm3DVisu().m_BgColor.m_Red, 0.4 );
+    aCfg->Read( keyBgColor_Green, &GetPrm3DVisu().m_BgColor.m_Green, 0.4 );
+    aCfg->Read( keyBgColor_Blue, &GetPrm3DVisu().m_BgColor.m_Blue, 0.5 );
 
-    aCfg->Read( keyBgColor_Red_Top, &g_Parm_3D_Visu.m_BgColor_Top.m_Red, 0.8 );
-    aCfg->Read( keyBgColor_Green_Top, &g_Parm_3D_Visu.m_BgColor_Top.m_Green, 0.8 );
-    aCfg->Read( keyBgColor_Blue_Top, &g_Parm_3D_Visu.m_BgColor_Top.m_Blue, 0.9 );
+    aCfg->Read( keyBgColor_Red_Top, &GetPrm3DVisu().m_BgColor_Top.m_Red, 0.8 );
+    aCfg->Read( keyBgColor_Green_Top, &GetPrm3DVisu().m_BgColor_Top.m_Green, 0.8 );
+    aCfg->Read( keyBgColor_Blue_Top, &GetPrm3DVisu().m_BgColor_Top.m_Blue, 0.9 );
 
     bool tmp;
     aCfg->Read( keyShowRealisticMode, &tmp, false );
@@ -297,15 +297,15 @@ void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    INFO3D_VISU& prms = g_Parm_3D_Visu;
+    INFO3D_VISU& prms = GetPrm3DVisu();
 
-    aCfg->Write( keyBgColor_Red, g_Parm_3D_Visu.m_BgColor.m_Red );
-    aCfg->Write( keyBgColor_Green, g_Parm_3D_Visu.m_BgColor.m_Green );
-    aCfg->Write( keyBgColor_Blue, g_Parm_3D_Visu.m_BgColor.m_Blue );
+    aCfg->Write( keyBgColor_Red, GetPrm3DVisu().m_BgColor.m_Red );
+    aCfg->Write( keyBgColor_Green, GetPrm3DVisu().m_BgColor.m_Green );
+    aCfg->Write( keyBgColor_Blue, GetPrm3DVisu().m_BgColor.m_Blue );
 
-    aCfg->Write( keyBgColor_Red_Top, g_Parm_3D_Visu.m_BgColor_Top.m_Red );
-    aCfg->Write( keyBgColor_Green_Top, g_Parm_3D_Visu.m_BgColor_Top.m_Green );
-    aCfg->Write( keyBgColor_Blue_Top, g_Parm_3D_Visu.m_BgColor_Top.m_Blue );
+    aCfg->Write( keyBgColor_Red_Top, GetPrm3DVisu().m_BgColor_Top.m_Red );
+    aCfg->Write( keyBgColor_Green_Top, GetPrm3DVisu().m_BgColor_Top.m_Green );
+    aCfg->Write( keyBgColor_Blue_Top, GetPrm3DVisu().m_BgColor_Top.m_Blue );
 
     aCfg->Write( keyShowRealisticMode, prms.GetFlag( FL_USE_REALISTIC_MODE ) );
 
@@ -340,23 +340,23 @@ void EDA_3D_FRAME::Process_Zoom( wxCommandEvent& event )
     case ID_ZOOM_PAGE:
 
         for( ii = 0; ii < 4; ii++ )
-            g_Parm_3D_Visu.m_Rot[ii] = 0.0;
+            GetPrm3DVisu().m_Rot[ii] = 0.0;
 
-        g_Parm_3D_Visu.m_Zoom = 1.0;
+        GetPrm3DVisu().m_Zoom = 1.0;
         m_canvas->SetOffset( 0.0, 0.0 );
-        trackball( g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
+        trackball( GetPrm3DVisu().m_Quat, 0.0, 0.0, 0.0, 0.0 );
         break;
 
     case ID_ZOOM_IN:
-        g_Parm_3D_Visu.m_Zoom /= 1.2;
+        GetPrm3DVisu().m_Zoom /= 1.2;
 
-        if( g_Parm_3D_Visu.m_Zoom <= 0.01 )
-            g_Parm_3D_Visu.m_Zoom = 0.01;
+        if( GetPrm3DVisu().m_Zoom <= 0.01 )
+            GetPrm3DVisu().m_Zoom = 0.01;
 
         break;
 
     case ID_ZOOM_OUT:
-        g_Parm_3D_Visu.m_Zoom *= 1.2;
+        GetPrm3DVisu().m_Zoom *= 1.2;
         break;
 
     case ID_ZOOM_REDRAW:
@@ -410,27 +410,27 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_ROTATE3D_X_POS:
-        g_Parm_3D_Visu.m_ROTX += ROT_ANGLE;
+        GetPrm3DVisu().m_ROTX += ROT_ANGLE;
         break;
 
     case ID_ROTATE3D_X_NEG:
-        g_Parm_3D_Visu.m_ROTX -= ROT_ANGLE;
+        GetPrm3DVisu().m_ROTX -= ROT_ANGLE;
         break;
 
     case ID_ROTATE3D_Y_POS:
-        g_Parm_3D_Visu.m_ROTY += ROT_ANGLE;
+        GetPrm3DVisu().m_ROTY += ROT_ANGLE;
         break;
 
     case ID_ROTATE3D_Y_NEG:
-        g_Parm_3D_Visu.m_ROTY -= ROT_ANGLE;
+        GetPrm3DVisu().m_ROTY -= ROT_ANGLE;
         break;
 
     case ID_ROTATE3D_Z_POS:
-        g_Parm_3D_Visu.m_ROTZ += ROT_ANGLE;
+        GetPrm3DVisu().m_ROTZ += ROT_ANGLE;
         break;
 
     case ID_ROTATE3D_Z_NEG:
-        g_Parm_3D_Visu.m_ROTZ -= ROT_ANGLE;
+        GetPrm3DVisu().m_ROTZ -= ROT_ANGLE;
         break;
 
     case ID_MOVE3D_LEFT:
@@ -460,97 +460,97 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MENU3D_BGCOLOR_SELECTION:
-        Set3DBgColor( g_Parm_3D_Visu.m_BgColor );
+        Get3DColorFromUser( GetPrm3DVisu().m_BgColor );
         return;
 
     case ID_MENU3D_BGCOLOR_TOP_SELECTION:
-        Set3DBgColor( g_Parm_3D_Visu.m_BgColor_Top );
+        Get3DColorFromUser( GetPrm3DVisu().m_BgColor_Top );
         return;
 
     case ID_MENU3D_REALISTIC_MODE:
-        g_Parm_3D_Visu.SetFlag( FL_USE_REALISTIC_MODE, isChecked );
+        GetPrm3DVisu().SetFlag( FL_USE_REALISTIC_MODE, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_FL_RENDER_SHADOWS:
-        g_Parm_3D_Visu.SetFlag( FL_RENDER_SHADOWS, isChecked );
+        GetPrm3DVisu().SetFlag( FL_RENDER_SHADOWS, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_FL_RENDER_SHOW_HOLES_IN_ZONES:
-        g_Parm_3D_Visu.SetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES, isChecked );
+        GetPrm3DVisu().SetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_FL_RENDER_TEXTURES:
-        g_Parm_3D_Visu.SetFlag( FL_RENDER_TEXTURES, isChecked );
+        GetPrm3DVisu().SetFlag( FL_RENDER_TEXTURES, isChecked );
         NewDisplay(GL_ID_BOARD);
         NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_FL_RENDER_SMOOTH:
-        g_Parm_3D_Visu.SetFlag( FL_RENDER_SMOOTH, isChecked );
+        GetPrm3DVisu().SetFlag( FL_RENDER_SMOOTH, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_FL_RENDER_MATERIAL:
-        g_Parm_3D_Visu.SetFlag( FL_RENDER_MATERIAL, isChecked );
+        GetPrm3DVisu().SetFlag( FL_RENDER_MATERIAL, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_SHOW_BOARD_BODY:
-        g_Parm_3D_Visu.SetFlag( FL_SHOW_BOARD_BODY, isChecked );
+        GetPrm3DVisu().SetFlag( FL_SHOW_BOARD_BODY, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_AXIS_ONOFF:
-        g_Parm_3D_Visu.SetFlag( FL_AXIS, isChecked );
+        GetPrm3DVisu().SetFlag( FL_AXIS, isChecked );
         m_canvas->Refresh();
         return;
 
     case ID_MENU3D_MODULE_ONOFF:
-        g_Parm_3D_Visu.SetFlag( FL_MODULE, isChecked );
+        GetPrm3DVisu().SetFlag( FL_MODULE, isChecked );
         m_canvas->Refresh();
         return;
 
     case ID_MENU3D_USE_COPPER_THICKNESS:
-        g_Parm_3D_Visu.SetFlag( FL_USE_COPPER_THICKNESS, isChecked );
+        GetPrm3DVisu().SetFlag( FL_USE_COPPER_THICKNESS, isChecked );
         NewDisplay(GL_ID_BOARD);
         NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_ZONE_ONOFF:
-        g_Parm_3D_Visu.SetFlag( FL_ZONE, isChecked );
+        GetPrm3DVisu().SetFlag( FL_ZONE, isChecked );
         NewDisplay(GL_ID_BOARD);
         return;
 
     case ID_MENU3D_ADHESIVE_ONOFF:
-        g_Parm_3D_Visu.SetFlag( FL_ADHESIVE, isChecked );
+        GetPrm3DVisu().SetFlag( FL_ADHESIVE, isChecked );
         NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_SILKSCREEN_ONOFF:
-        g_Parm_3D_Visu.SetFlag( FL_SILKSCREEN, isChecked );
+        GetPrm3DVisu().SetFlag( FL_SILKSCREEN, isChecked );
         NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_SOLDER_MASK_ONOFF:
-        g_Parm_3D_Visu.SetFlag( FL_SOLDERMASK, isChecked );
+        GetPrm3DVisu().SetFlag( FL_SOLDERMASK, isChecked );
         NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_SOLDER_PASTE_ONOFF:
-        g_Parm_3D_Visu.SetFlag( FL_SOLDERPASTE, isChecked );
+        GetPrm3DVisu().SetFlag( FL_SOLDERPASTE, isChecked );
         NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
     case ID_MENU3D_COMMENTS_ONOFF:
-        g_Parm_3D_Visu.SetFlag( FL_COMMENTS, isChecked );
+        GetPrm3DVisu().SetFlag( FL_COMMENTS, isChecked );
         NewDisplay(GL_ID_AUX_LAYERS);
         return;
 
     case ID_MENU3D_ECO_ONOFF:
-        g_Parm_3D_Visu.SetFlag( FL_ECO, isChecked );
+        GetPrm3DVisu().SetFlag( FL_ECO, isChecked );
         NewDisplay(GL_ID_AUX_LAYERS);
         return;
 
@@ -579,27 +579,27 @@ void EDA_3D_FRAME::On3DGridSelection( wxCommandEvent& event )
     switch( id )
     {
     case ID_MENU3D_GRID_NOGRID:
-        g_Parm_3D_Visu.SetFlag( FL_GRID, false );
+        GetPrm3DVisu().SetFlag( FL_GRID, false );
         break;
 
     case ID_MENU3D_GRID_10_MM:
-        g_Parm_3D_Visu.SetFlag( FL_GRID, true );
-        g_Parm_3D_Visu.m_3D_Grid = 10.0;
+        GetPrm3DVisu().SetFlag( FL_GRID, true );
+        GetPrm3DVisu().m_3D_Grid = 10.0;
         break;
 
     case ID_MENU3D_GRID_5_MM:
-        g_Parm_3D_Visu.SetFlag( FL_GRID, true );
-        g_Parm_3D_Visu.m_3D_Grid = 5.0;
+        GetPrm3DVisu().SetFlag( FL_GRID, true );
+        GetPrm3DVisu().m_3D_Grid = 5.0;
         break;
 
     case ID_MENU3D_GRID_2P5_MM:
-        g_Parm_3D_Visu.SetFlag( FL_GRID, true );
-        g_Parm_3D_Visu.m_3D_Grid = 2.5;
+        GetPrm3DVisu().SetFlag( FL_GRID, true );
+        GetPrm3DVisu().m_3D_Grid = 2.5;
         break;
 
     case ID_MENU3D_GRID_1_MM:
-        g_Parm_3D_Visu.SetFlag( FL_GRID, true );
-        g_Parm_3D_Visu.m_3D_Grid = 1.0;
+        GetPrm3DVisu().SetFlag( FL_GRID, true );
+        GetPrm3DVisu().m_3D_Grid = 1.0;
         break;
 
     default:
@@ -636,7 +636,7 @@ void EDA_3D_FRAME::OnActivate( wxActivateEvent& event )
 
 /* called to set the background color of the 3D scene
  */
-bool EDA_3D_FRAME::Set3DBgColor( S3D_COLOR &color )
+bool EDA_3D_FRAME::Get3DColorFromUser( S3D_COLOR &color )
 {
     wxColour    newcolor, oldcolor;
 
@@ -662,4 +662,18 @@ bool EDA_3D_FRAME::Set3DBgColor( S3D_COLOR &color )
 BOARD* EDA_3D_FRAME::GetBoard()
 {
     return Parent()->GetBoard();
+}
+
+
+INFO3D_VISU& EDA_3D_FRAME::GetPrm3DVisu() const
+{
+    // return the INFO3D_VISU which contains the current parameters
+    // to draw the 3D view og the board
+    return g_Parm_3D_Visu;
+}
+
+bool EDA_3D_FRAME::IsEnabled( DISPLAY3D_FLG aItem ) const
+{
+    // return true if aItem must be displayed
+    return GetPrm3DVisu().GetFlag( aItem );
 }

@@ -52,7 +52,7 @@ X3D_MODEL_PARSER::~X3D_MODEL_PARSER()
 }
 
 
-void X3D_MODEL_PARSER::Load( const wxString aFilename )
+void X3D_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3Dunits )
 {
     wxXmlDocument doc;
 
@@ -69,7 +69,7 @@ void X3D_MODEL_PARSER::Load( const wxString aFilename )
     }
 
 
-    float vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
+    float vrmlunits_to_3Dunits = aVrmlunits_to_3Dunits;
     glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
 
     glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y,

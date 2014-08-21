@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,7 @@ INFO3D_VISU::INFO3D_VISU()
     m_copperThickness   = 0;
     m_epoxyThickness    = 0;
     m_nonCopperLayerThickness = 0;
+    m_BiuTo3Dunits = 1.0;
 
     // Set copper color, in realistic mode
     #define LUMINANCE 0.7/255.0
@@ -94,8 +95,7 @@ INFO3D_VISU::INFO3D_VISU()
     m_BoardBodyColor.m_Blue = 110.0*LUMINANCE;
 
     // default all special item layers Visible
-    for( ii = 0; ii < FL_LAST; ii++ )
-        m_drawFlags[ii] = true;
+    m_drawFlags.set();
 
     SetFlag( FL_GRID, false );
     SetFlag( FL_USE_COPPER_THICKNESS, false );
@@ -230,9 +230,10 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
  */
 double INFO3D_VISU::GetModulesZcoord3DIU( bool aIsFlipped )
 {
+    // NOTE: Z position to display modules in top of Paste and near the shadow
     if(  aIsFlipped )
-        return m_layerZcoord[B_Paste] - ( m_copperThickness / 2 ); //B_Cu NOTE: in order to display modules in top of Paste and near the shadow
+        return m_layerZcoord[B_Paste] - ( m_copperThickness / 2 );
     else
-        return m_layerZcoord[F_Paste] + ( m_copperThickness / 2 ); //F_Cu
+        return m_layerZcoord[F_Paste] + ( m_copperThickness / 2 );
 }
 

@@ -119,7 +119,7 @@ int S3D_MASTER::ReadData()
 
     if( parser )
     {
-        parser->Load( filename );
+        parser->Load( filename, g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB );
         delete parser;
         return 0;
     }

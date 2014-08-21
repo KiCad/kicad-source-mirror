@@ -45,7 +45,7 @@
 
 INFO3D_VISU& EDA_3D_CANVAS::GetPrm3DVisu() const
 {
-    return g_Parm_3D_Visu;
+    return Parent()->GetPrm3DVisu();
 }
 
 wxSize EDA_3D_CANVAS::getBoardSize() const

@@ -64,12 +64,12 @@ enum GL_LIST_ID
     GL_ID_AUX_LAYERS,           // List id for user layers (draw, eco, comment)
     GL_ID_3DSHAPES_SOLID_FRONT, // List id for 3D shapes, non transparent entities
     GL_ID_3DSHAPES_TRANSP_FRONT,// List id for 3D shapes, transparent entities
-    GL_ID_3DSHAPES_SOLID_BACK, // List id for 3D shapes, non transparent entities
-    GL_ID_3DSHAPES_TRANSP_BACK,// List id for 3D shapes, transparent entities
+    GL_ID_3DSHAPES_SOLID_BACK,  // List id for 3D shapes, non transparent entities
+    GL_ID_3DSHAPES_TRANSP_BACK, // List id for 3D shapes, transparent entities
     GL_ID_SHADOW_FRONT,
     GL_ID_SHADOW_BACK,
     GL_ID_SHADOW_BOARD,
-    GL_ID_BODY,                // Body only list
+    GL_ID_BODY,                 // Body only list
     GL_ID_END
 };
 
@@ -142,6 +142,9 @@ public:
         m_draw3dOffset.y = aPosY;
     }
 
+    /** @return the INFO3D_VISU which contains the current parameters
+     * to draw the 3D view og the board
+     */
     INFO3D_VISU& GetPrm3DVisu() const;
 
 

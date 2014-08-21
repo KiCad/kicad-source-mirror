@@ -98,8 +98,20 @@ public:
     /// Toggles orthographic projection on and off
     void ToggleOrtho(){ m_ortho = !m_ortho ; Refresh(true);};
 
-    /// Returns the orthographic projection flag
+    /// @return the orthographic projection flag
     bool ModeIsOrtho() { return m_ortho ;};
+
+    /** @return the INFO3D_VISU which contains the current parameters
+     * to draw the 3D view og the board
+     */
+    INFO3D_VISU& GetPrm3DVisu() const;
+
+    /**
+     * @return true if aItem must be displayed
+     * @param aItem = an item of DISPLAY3D_FLG enum
+     */
+    bool IsEnabled( DISPLAY3D_FLG aItem ) const;
+
 
 private:
     // Event handlers:
@@ -128,7 +140,10 @@ private:
     double BestZoom();
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
-    bool Set3DBgColor( S3D_COLOR &color );
+    // Get a S3D_COLOR from a wx colour dialog
+    // return true if a new color is chosen, false if
+    // no change or aborted by user
+    bool Get3DColorFromUser( S3D_COLOR &color );
 
     DECLARE_EVENT_TABLE()
 };

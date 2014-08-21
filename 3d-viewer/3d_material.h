@@ -54,7 +54,13 @@ public:
     S3D_MATERIAL* Next() const { return (S3D_MATERIAL*) Pnext; }
     S3D_MATERIAL* Back() const { return (S3D_MATERIAL*) Pback; }
 
-    void SetOpenGLMaterial(unsigned int materialIndex);
+    /**
+     * Initialize the material prms.
+     * @param aMaterialIndex = the index in list of available materials
+     * @param aUseMaterial = true to use the values found in the available material
+     *                     = false to use only the color, and other prms are fixed
+     */
+    void SetOpenGLMaterial(unsigned int aMaterialIndex, bool aUseMaterial);
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
