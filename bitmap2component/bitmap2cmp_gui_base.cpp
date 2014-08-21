@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  5 2013)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -126,10 +126,10 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	
 	brightSizer->Add( m_buttonExport, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	wxString m_radioBoxFormatChoices[] = { _("Eeschema"), _("Pcbnew old fmt (.emp)"), _("Pcbnew kicad_mod"), _("Postscript"), _("Logo for title block") };
+	wxString m_radioBoxFormatChoices[] = { _("Eeschema (.lib file)"), _("Pcbnew (.kicad_mod file)"), _("Postscript (.ps file)"), _("Logo for title block (.kicad_wks file)") };
 	int m_radioBoxFormatNChoices = sizeof( m_radioBoxFormatChoices ) / sizeof( wxString );
 	m_radioBoxFormat = new wxRadioBox( m_panelRight, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_radioBoxFormatNChoices, m_radioBoxFormatChoices, 1, wxRA_SPECIFY_COLS );
-	m_radioBoxFormat->SetSelection( 2 );
+	m_radioBoxFormat->SetSelection( 1 );
 	brightSizer->Add( m_radioBoxFormat, 0, wxEXPAND|wxALL, 5 );
 	
 	wxString m_rbOptionsChoices[] = { _("Normal"), _("Negative") };

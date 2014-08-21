@@ -31,6 +31,7 @@
 #include <gestfich.h>
 
 #include <bitmap2cmp_gui_base.h>
+#include <bitmap2component.h>
 
 #include <potracelib.h>
 #include <bitmap_io.h>
@@ -54,7 +55,7 @@
 #define DEFAULT_DPI 300     // Default resolution in Bit per inches
 
 extern int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
-                             int aFormat, int aDpi_X, int aDpi_Y );
+                             OUTPUT_FMT_ID aFormat, int aDpi_X, int aDpi_Y );
 
 /**
  * Class BM2CMP_FRAME_BASE
@@ -98,11 +99,9 @@ private:
     void OnExportEeschema();
 
     /**
-     * Depending on the option:
-     * Legacy format: generate a module library which comtains one component
-     * New kicad_mod format: generate a module in S expr format
+     * Generate a module in S expr format
      */
-    void OnExportPcbnew( bool aLegacyFormat );
+    void OnExportPcbnew();
 
     /**
      * Generate a postscript file
@@ -129,13 +128,14 @@ private:
     {
         m_DPIValueX->ChangeValue( wxString::Format( wxT( "%d" ), m_imageDPI.x ) );
     }
+
     void UpdateDPITextValueY( wxMouseEvent& event )
     {
         m_DPIValueY->ChangeValue( wxString::Format( wxT( "%d" ), m_imageDPI.y ) );
     }
 
     void NegateGreyscaleImage( );
-    void ExportFile( FILE* aOutfile, int aFormat );
+    void ExportFile( FILE* aOutfile, OUTPUT_FMT_ID aFormat );
     void updateImageInfo();
 };
 
@@ -160,8 +160,13 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     if( m_config->Read( KEYWORD_BW_NEGATIVE, &tmp ) )
         m_rbOptions->SetSelection( tmp  ? 1 : 0 );
 
-    m_config->Read( KEYWORD_LAST_FORMAT, &tmp );
-    m_radioBoxFormat->SetSelection( tmp );
+    if( m_config->Read( KEYWORD_LAST_FORMAT, &tmp ) )
+    {
+        if( tmp < 0 || tmp > FINAL_FMT )
+            tmp = PCBNEW_KICAD_MOD;
+
+        m_radioBoxFormat->SetSelection( tmp );
+    }
 
     // Give an icon
     wxIcon icon;
@@ -430,27 +435,25 @@ void BM2CMP_FRAME::OnThresholdChange( wxScrollEvent& event )
 
 void BM2CMP_FRAME::OnExport( wxCommandEvent& event )
 {
-    int sel = m_radioBoxFormat->GetSelection();
+    // choices of m_radioBoxFormat are expected to be in same order as
+    // OUTPUT_FMT_ID. See bitmap2component.h
+    OUTPUT_FMT_ID sel = (OUTPUT_FMT_ID) m_radioBoxFormat->GetSelection();
 
     switch( sel )
     {
-    case 0:
+    case EESCHEMA_FMT:
         OnExportEeschema();
         break;
 
-    case 1:
-        OnExportPcbnew( true );
+    case PCBNEW_KICAD_MOD:
+        OnExportPcbnew();
         break;
 
-    case 2:
-        OnExportPcbnew( false );
-        break;
-
-    case 3:
+    case POSTSCRIPT_FMT:
         OnExportPostScript();
         break;
 
-    case 4:
+    case KICAD_LOGO:
         OnExportLogo();
         break;
     }
@@ -476,6 +479,15 @@ void BM2CMP_FRAME::OnExportLogo()
 
     m_ConvertedFileName = fileDlg.GetPath();
 
+    if( m_ConvertedFileName.size() > 1
+        && m_ConvertedFileName.Right( 10 ).compare( _( ".kicad_wks") ) )
+    {
+        if( m_ConvertedFileName.Right( 1 ).compare( _( "." ) ) )
+            m_ConvertedFileName += _( ".kicad_wks" );
+        else
+            m_ConvertedFileName += _( "kicad_wks" );
+    }
+
     FILE*    outfile;
     outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
 
@@ -487,7 +499,7 @@ void BM2CMP_FRAME::OnExportLogo()
         return;
     }
 
-    ExportFile( outfile, 4 );
+    ExportFile( outfile, KICAD_LOGO );
     fclose( outfile );
 }
 
@@ -512,6 +524,15 @@ void BM2CMP_FRAME::OnExportPostScript()
 
     m_ConvertedFileName = fileDlg.GetPath();
 
+    if( m_ConvertedFileName.size() > 1
+        && m_ConvertedFileName.Right( 3 ).compare( _( ".ps") ) )
+    {
+        if( m_ConvertedFileName.Right( 1 ).compare( _( "." ) ) )
+            m_ConvertedFileName += _( ".ps" );
+        else
+            m_ConvertedFileName += _( "ps" );
+    }
+
     FILE*    outfile;
     outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
 
@@ -523,7 +544,7 @@ void BM2CMP_FRAME::OnExportPostScript()
         return;
     }
 
-    ExportFile( outfile, 3 );
+    ExportFile( outfile, POSTSCRIPT_FMT );
     fclose( outfile );
 }
 
@@ -549,6 +570,15 @@ void BM2CMP_FRAME::OnExportEeschema()
 
     m_ConvertedFileName = fileDlg.GetPath();
 
+    if( m_ConvertedFileName.size() > 1
+        && m_ConvertedFileName.Right( 4 ).compare( _( ".lib") ) )
+    {
+        if( m_ConvertedFileName.Right( 1 ).compare( _( "." ) ) )
+            m_ConvertedFileName += _( ".lib" );
+        else
+            m_ConvertedFileName += _( "lib" );
+    }
+
     FILE*    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
 
     if( outfile == NULL )
@@ -559,12 +589,12 @@ void BM2CMP_FRAME::OnExportEeschema()
         return;
     }
 
-    ExportFile( outfile, 2 );
+    ExportFile( outfile, EESCHEMA_FMT );
     fclose( outfile );
 }
 
 
-void BM2CMP_FRAME::OnExportPcbnew( bool aLegacyFormat )
+void BM2CMP_FRAME::OnExportPcbnew()
 {
     wxFileName  fn( m_ConvertedFileName );
     wxString    path = fn.GetPath();
@@ -572,9 +602,7 @@ void BM2CMP_FRAME::OnExportPcbnew( bool aLegacyFormat )
     if( path.IsEmpty() || !wxDirExists( path ) )
         path = ::wxGetCwd();
 
-    wxString msg = aLegacyFormat ?
-                _( "Footprint file (*.emp)|*.emp" ) :
-                _( "Footprint file (*.kicad_mod)|*.kicad_mod" );
+    wxString msg = _( "Footprint file (*.kicad_mod)|*.kicad_mod" );
 
     wxFileDialog fileDlg( this, _( "Create a footprint file for PcbNew" ),
                           path, wxEmptyString,
@@ -588,6 +616,15 @@ void BM2CMP_FRAME::OnExportPcbnew( bool aLegacyFormat )
 
     m_ConvertedFileName = fileDlg.GetPath();
 
+    if( m_ConvertedFileName.size() > 1
+        && m_ConvertedFileName.Right( 10 ).compare( _( ".kicad_mod") ) )
+    {
+        if( m_ConvertedFileName.Right( 1 ).compare( _( "." ) ) )
+            m_ConvertedFileName += _( ".kicad_mod" );
+        else
+            m_ConvertedFileName += _( "kicad_mod" );
+    }
+
     FILE* outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
 
     if( outfile == NULL )
@@ -598,12 +635,12 @@ void BM2CMP_FRAME::OnExportPcbnew( bool aLegacyFormat )
         return;
     }
 
-    ExportFile( outfile, aLegacyFormat ? 0 : 1 );
+    ExportFile( outfile, PCBNEW_KICAD_MOD );
     fclose( outfile );
 }
 
 
-void BM2CMP_FRAME::ExportFile( FILE* aOutfile, int aFormat )
+void BM2CMP_FRAME::ExportFile( FILE* aOutfile, OUTPUT_FMT_ID aFormat )
 {
     // Create a potrace bitmap
     int h = m_NB_Image.GetHeight();

@@ -38,6 +38,8 @@
 #include <potracelib.h>
 #include <auxiliary.h>
 
+#include <bitmap2component.h>
+
 
 // Define some types used here from boost::polygon
 namespace bpl = boost::polygon;         // bpl = boost polygon library
@@ -49,14 +51,6 @@ typedef bpl::polygon_data<coordinate_type> KPolygon;        // define a basic po
 typedef std::vector<KPolygon>              KPolygonSet;     // define a set of polygons
 
 typedef bpl::point_data<coordinate_type>   KPolyPoint;      // define a corner of a polygon
-
-enum output_format {
-    POSTSCRIPT_FMT = 1,
-    PCBNEW_LEGACY_EMP,
-    PCBNEW_KICAD_MOD,
-    EESCHEMA_FMT,
-    KICAD_LOGO
-};
 
 /* free a potrace bitmap */
 static void bm_free( potrace_bitmap_t* bm )
@@ -75,7 +69,7 @@ static void bm_free( potrace_bitmap_t* bm )
 class BITMAPCONV_INFO
 {
 public:
-    enum output_format m_Format;    // File format
+    enum OUTPUT_FMT_ID m_Format; // File format
     int m_PixmapWidth;
     int m_PixmapHeight;             // the bitmap size in pixels
     double             m_ScaleX;
@@ -139,7 +133,7 @@ BITMAPCONV_INFO::BITMAPCONV_INFO()
 
 
 int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
-                      int aFormat, int aDpi_X, int aDpi_Y )
+                      OUTPUT_FMT_ID aFormat, int aDpi_X, int aDpi_Y )
 {
     potrace_param_t* param;
     potrace_state_t* st;
@@ -169,14 +163,14 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
 
     switch( aFormat )
     {
-    case 4:
+    case KICAD_LOGO:
         info.m_Format = KICAD_LOGO;
         info.m_ScaleX = 1e3 * 25.4 / aDpi_X;       // the conversion scale from PPI to micro
         info.m_ScaleY = 1e3 * 25.4 / aDpi_Y;       // Y axis is top to bottom
         info.CreateOutputFile();
         break;
 
-    case 3:
+    case POSTSCRIPT_FMT:
         info.m_Format = POSTSCRIPT_FMT;
         info.m_ScaleX = 1.0;                // the conversion scale
         info.m_ScaleY = info.m_ScaleX;
@@ -184,24 +178,17 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
         info.CreateOutputFile();
         break;
 
-    case 2:
+    case EESCHEMA_FMT:
         info.m_Format = EESCHEMA_FMT;
         info.m_ScaleX = 1000.0 / aDpi_X;       // the conversion scale from PPI to UI
         info.m_ScaleY = -1000.0 / aDpi_Y;      // Y axis is bottom to Top for components in libs
         info.CreateOutputFile();
         break;
 
-    case 1:
+    case PCBNEW_KICAD_MOD:
         info.m_Format = PCBNEW_KICAD_MOD;
         info.m_ScaleX = 1e6 * 25.4 / aDpi_X;       // the conversion scale from PPI to UI
         info.m_ScaleY = 1e6 * 25.4 / aDpi_Y;       // Y axis is top to bottom in modedit
-        info.CreateOutputFile();
-        break;
-
-    case 0:
-        info.m_Format = PCBNEW_LEGACY_EMP;
-        info.m_ScaleX = 10000.0 / aDpi_X;          // the conversion scale
-        info.m_ScaleY = 10000.0 / aDpi_Y;          // Y axis is top to bottom in modedit
         info.CreateOutputFile();
         break;
 
@@ -231,25 +218,6 @@ void BITMAPCONV_INFO::OuputFileHeader()
         fprintf( m_Outfile, "%%%%BoundingBox: 0 0 %d %d\n",
                  m_PixmapWidth, m_PixmapHeight );
         fprintf( m_Outfile, "gsave\n" );
-        break;
-
-    case PCBNEW_LEGACY_EMP:
-        #define FIELD_LAYER 21
-        fieldSize = 600;             // fields text size = 60 mils
-        Ypos += fieldSize / 2;
-        fprintf( m_Outfile, "PCBNEW-LibModule-V1\n" );
-        fprintf( m_Outfile, "$INDEX\n%s\n$EndINDEX\n", m_CmpName );
-
-        fprintf( m_Outfile, "#\n# %s\n", m_CmpName );
-        fprintf( m_Outfile, "# pixmap w = %d, h = %d\n#\n",
-                 m_PixmapWidth, m_PixmapHeight );
-        fprintf( m_Outfile, "$MODULE %s\n", m_CmpName );
-        fprintf( m_Outfile, "Po 0 0 0 15 00000000 00000000 ~~\n" );
-        fprintf( m_Outfile, "Li %s\n", m_CmpName );
-        fprintf( m_Outfile, "T0 0 %d %d %d 0 %d N I %d \"G***\"\n",
-                 Ypos, fieldSize, fieldSize, fieldSize / 5, FIELD_LAYER );
-        fprintf( m_Outfile, "T1 0 %d %d %d 0 %d N I %d \"%s\"\n",
-                 -Ypos, fieldSize, fieldSize, fieldSize / 5, FIELD_LAYER, m_CmpName );
         break;
 
     case PCBNEW_KICAD_MOD:
@@ -293,11 +261,6 @@ void BITMAPCONV_INFO::OuputFileEnd()
     case POSTSCRIPT_FMT:
         fprintf( m_Outfile, "grestore\n" );
         fprintf( m_Outfile, "%%EOF\n" );
-        break;
-
-    case PCBNEW_LEGACY_EMP:
-        fprintf( m_Outfile, "$EndMODULE %s\n", m_CmpName );
-        fprintf( m_Outfile, "$EndLIBRARY\n" );
         break;
 
     case PCBNEW_KICAD_MOD:
@@ -352,27 +315,6 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
 
         fprintf( m_Outfile, "\nclosepath fill\n" );
         break;
-
-    case PCBNEW_LEGACY_EMP:
-    {
-        LAYER_NUM layer = F_SilkS;
-        int width = 1;
-        fprintf( m_Outfile, "DP %d %d %d %d %d %d %d\n",
-                 0, 0, 0, 0,
-                 (int) aPolygon.size() + 1, width, layer );
-
-        for( ii = 0; ii < aPolygon.size(); ii++ )
-        {
-            currpoint = *( aPolygon.begin() + ii );
-            fprintf( m_Outfile, "Dl %d %d\n",
-                    currpoint.x() - offsetX, currpoint.y() - offsetY );
-        }
-
-        // Close polygon
-        fprintf( m_Outfile, "Dl %d %d\n",
-                 startpoint.x() - offsetX, startpoint.y() - offsetY );
-    }
-    break;
 
     case PCBNEW_KICAD_MOD:
     {
