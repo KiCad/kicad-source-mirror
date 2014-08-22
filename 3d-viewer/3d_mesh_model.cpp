@@ -33,7 +33,7 @@
 
 #ifdef USE_OPENMP
 #include <omp.h>
-#endif /* USE_OPENMP */
+#endif  // USE_OPENMP
 
 S3D_MESH::S3D_MESH()
 {

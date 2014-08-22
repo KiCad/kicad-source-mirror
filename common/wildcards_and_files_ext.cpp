@@ -75,7 +75,7 @@ const wxString LegacyPcbFileWildcard( _( "KiCad printed circuit board files (*.b
 const wxString EaglePcbFileWildcard( _( "Eagle ver. 6.x XML PCB files (*.brd)|*.brd" ) );
 const wxString PCadPcbFileWildcard( _( "P-Cad 200x ASCII PCB files (*.pcb)|*.pcb" ) );
 const wxString PcbFileWildcard( _( "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb" ) );
-const wxString KiCadFootprintLibFileWildcard( _( "KiCad footprint s-expre library file (*.kicad_mod)|*.kicad_mod" ) );
+const wxString KiCadFootprintLibFileWildcard( _( "KiCad footprint s-expre file (*.kicad_mod)|*.kicad_mod" ) );
 const wxString KiCadFootprintLibPathWildcard( _( "KiCad footprint s-expre library path (*.pretty)|*.pretty" ) );
 const wxString LegacyFootprintLibPathWildcard( _( "Legacy footprint library file (*.mod)|*.mod" ) );
 const wxString EagleFootprintLibPathWildcard( _( "Eagle ver. 6.x XML library files (*.lbr)|*.lbr" ) );

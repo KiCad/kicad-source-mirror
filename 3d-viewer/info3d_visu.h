@@ -104,9 +104,7 @@ public:
 
     double  m_BiuTo3Dunits;                         // Normalization scale to convert board
                                                     // internal units to 3D units
-                                                    // to scale 3D units between -1.0 and +1.0
-    double  m_CurrentZpos;                          // temporary storage of current value of Z position,
-                                                    // used in some calculation
+                                                    // to normalize 3D units between -1.0 and +1.0
 
     double zpos_offset;
 

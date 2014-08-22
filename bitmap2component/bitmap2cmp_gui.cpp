@@ -29,6 +29,7 @@
 #include <wxstruct.h>
 #include <confirm.h>
 #include <gestfich.h>
+#include <wildcards_and_files_ext.h>
 
 #include <bitmap2cmp_gui_base.h>
 #include <bitmap2component.h>
@@ -278,14 +279,7 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
 
     if( !m_Pict_Image.LoadFile( m_BitmapFileName ) )
     {
-        /* LoadFile has its own UI, no need for further failure notification here
-        wxString msg = wxString::Format(
-                _( "Could not load image '%s'" ),
-                GetChars( aFilename )
-                );
-
-        wxMessageBox( msg );
-        */
+        // LoadFile has its own UI, no need for further failure notification here
         return false;
     }
 
@@ -468,25 +462,18 @@ void BM2CMP_FRAME::OnExportLogo()
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
 
-    wxString     msg = _( "Logo file (*.kicad_wks)|*.kicad_wks" );
-    wxFileDialog fileDlg( this, _( "Create a logo file" ), path, wxEmptyString,
-                          msg,
+    wxFileDialog fileDlg( this, _( "Create a logo file" ),
+                          path, wxEmptyString,
+                          wxGetTranslation( PageLayoutDescrFileWildcard ),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
     int          diag = fileDlg.ShowModal();
 
     if( diag != wxID_OK )
         return;
 
-    m_ConvertedFileName = fileDlg.GetPath();
-
-    if( m_ConvertedFileName.size() > 1
-        && m_ConvertedFileName.Right( 10 ).compare( _( ".kicad_wks") ) )
-    {
-        if( m_ConvertedFileName.Right( 1 ).compare( _( "." ) ) )
-            m_ConvertedFileName += _( ".kicad_wks" );
-        else
-            m_ConvertedFileName += _( "kicad_wks" );
-    }
+    fn = fileDlg.GetPath();
+    fn.SetExt( PageLayoutDescrFileExtension );
+    m_ConvertedFileName = fn.GetFullPath();
 
     FILE*    outfile;
     outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
@@ -494,7 +481,7 @@ void BM2CMP_FRAME::OnExportLogo()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
+        msg.Printf( _( "File '%s' could not be created" ), GetChars(m_ConvertedFileName) );
         wxMessageBox( msg );
         return;
     }
@@ -512,9 +499,9 @@ void BM2CMP_FRAME::OnExportPostScript()
     if( path.IsEmpty() || !wxDirExists( path ) )
         path = ::wxGetCwd();
 
-    wxString     msg = _( "Postscript file (*.ps)|*.ps" );
-    wxFileDialog fileDlg( this, _( "Create a Postscript file" ), path, wxEmptyString,
-                          msg,
+    wxFileDialog fileDlg( this, _( "Create a Postscript file" ),
+                          path, wxEmptyString,
+                          wxGetTranslation( PSFileWildcard ),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     int          diag = fileDlg.ShowModal();
@@ -522,16 +509,9 @@ void BM2CMP_FRAME::OnExportPostScript()
     if( diag != wxID_OK )
         return;
 
-    m_ConvertedFileName = fileDlg.GetPath();
-
-    if( m_ConvertedFileName.size() > 1
-        && m_ConvertedFileName.Right( 3 ).compare( _( ".ps") ) )
-    {
-        if( m_ConvertedFileName.Right( 1 ).compare( _( "." ) ) )
-            m_ConvertedFileName += _( ".ps" );
-        else
-            m_ConvertedFileName += _( "ps" );
-    }
+    fn = fileDlg.GetPath();
+    fn.SetExt( wxT( "ps" ) );
+    m_ConvertedFileName = fn.GetFullPath();
 
     FILE*    outfile;
     outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
@@ -539,7 +519,7 @@ void BM2CMP_FRAME::OnExportPostScript()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
+        msg.Printf( _( "File '%s' could not be created" ), GetChars( m_ConvertedFileName ) );
         wxMessageBox( msg );
         return;
     }
@@ -557,10 +537,9 @@ void BM2CMP_FRAME::OnExportEeschema()
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
 
-    wxString     msg = _( "Schematic lib file (*.lib)|*.lib" );
-
-    wxFileDialog fileDlg( this, _( "Create a lib file for Eeschema" ), path, wxEmptyString,
-                          msg,
+    wxFileDialog fileDlg( this, _( "Create a lib file for Eeschema" ),
+                          path, wxEmptyString,
+                          wxGetTranslation( SchematicLibraryFileWildcard ),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     int          diag = fileDlg.ShowModal();
@@ -568,23 +547,16 @@ void BM2CMP_FRAME::OnExportEeschema()
     if( diag != wxID_OK )
         return;
 
-    m_ConvertedFileName = fileDlg.GetPath();
-
-    if( m_ConvertedFileName.size() > 1
-        && m_ConvertedFileName.Right( 4 ).compare( _( ".lib") ) )
-    {
-        if( m_ConvertedFileName.Right( 1 ).compare( _( "." ) ) )
-            m_ConvertedFileName += _( ".lib" );
-        else
-            m_ConvertedFileName += _( "lib" );
-    }
+    fn = fileDlg.GetPath();
+    fn.SetExt( SchematicLibraryFileExtension );
+    m_ConvertedFileName = fn.GetFullPath();
 
     FILE*    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
 
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
+        msg.Printf( _( "File '%s' could not be created" ), GetChars( m_ConvertedFileName ) );
         wxMessageBox( msg );
         return;
     }
@@ -602,11 +574,9 @@ void BM2CMP_FRAME::OnExportPcbnew()
     if( path.IsEmpty() || !wxDirExists( path ) )
         path = ::wxGetCwd();
 
-    wxString msg = _( "Footprint file (*.kicad_mod)|*.kicad_mod" );
-
     wxFileDialog fileDlg( this, _( "Create a footprint file for PcbNew" ),
                           path, wxEmptyString,
-                          msg,
+                          wxGetTranslation( KiCadFootprintLibFileWildcard ),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     int          diag = fileDlg.ShowModal();
@@ -614,23 +584,16 @@ void BM2CMP_FRAME::OnExportPcbnew()
     if( diag != wxID_OK )
         return;
 
-    m_ConvertedFileName = fileDlg.GetPath();
-
-    if( m_ConvertedFileName.size() > 1
-        && m_ConvertedFileName.Right( 10 ).compare( _( ".kicad_mod") ) )
-    {
-        if( m_ConvertedFileName.Right( 1 ).compare( _( "." ) ) )
-            m_ConvertedFileName += _( ".kicad_mod" );
-        else
-            m_ConvertedFileName += _( "kicad_mod" );
-    }
+    fn = fileDlg.GetPath();
+    fn.SetExt( KiCadFootprintFileExtension );
+    m_ConvertedFileName = fn.GetFullPath();
 
     FILE* outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
 
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
+        msg.Printf( _( "File '%s' could not be created" ), GetChars( m_ConvertedFileName ) );
         wxMessageBox( msg );
         return;
     }

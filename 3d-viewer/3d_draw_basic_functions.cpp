@@ -42,6 +42,12 @@
 #define CALLBACK
 #endif
 
+// Variables used to pass a value to call back openGL functions
+static float s_textureScale;
+static double s_currentZpos;
+static double s_biuTo3Dunits;
+bool s_useTextures;
+
 // CALLBACK functions for GLU_TESS
 static void CALLBACK    tessBeginCB( GLenum which );
 static void CALLBACK    tessEndCB();
@@ -136,13 +142,11 @@ void SetGLColor( S3D_COLOR& aColor, float aTransparency )
 }
 
 
-static float m_texture_scale;
-
 void SetGLTexture( GLuint text_id, float scale )
 {
     glEnable( GL_TEXTURE_2D );
     glBindTexture( GL_TEXTURE_2D, text_id );
-    m_texture_scale = scale;
+    s_textureScale = scale;     // for Tess callback functions
 }
 
 
@@ -155,8 +159,13 @@ void SetGLTexture( GLuint text_id, float scale )
  *  The bottom side is located at aZpos - aThickness / 2
  */
 void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
-                                         int aZpos, int aThickness, double aBiuTo3DUnits )
+                                         int aZpos, int aThickness, double aBiuTo3DUnits,
+                                         bool aUseTextures )
 {
+    // for Tess callback functions:
+    s_biuTo3Dunits = aBiuTo3DUnits;
+    s_useTextures = aUseTextures;
+
     GLUtesselator* tess = gluNewTess();
 
     gluTessCallback( tess, GLU_TESS_BEGIN, ( void (CALLBACK*) () )tessBeginCB );
@@ -166,7 +175,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
 
     GLdouble    v_data[3];
     double      zpos = ( aZpos + (aThickness / 2.0) ) * aBiuTo3DUnits;
-    g_Parm_3D_Visu.m_CurrentZpos = zpos;
+    s_currentZpos = zpos;     // for Tess callback functions
     v_data[2] = aZpos + (aThickness / 2.0);
 
     // Set normal toward positive Z axis, for a solid object on the top side
@@ -219,7 +228,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
 
         // Prepare the bottom side of solid areas
         zpos = ( aZpos - (aThickness / 2.0) ) * aBiuTo3DUnits;
-        g_Parm_3D_Visu.m_CurrentZpos = zpos;
+        s_currentZpos = zpos;     // for Tess callback functions
         v_data[2] = zpos;
         // Set normal toward negative Z axis, for a solid object on bottom side
         SetNormalZneg();
@@ -249,12 +258,12 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
  */
 void Draw3D_SolidHorizontalPolygonWithHoles( const CPOLYGONS_LIST& aPolysList,
                                              int aZpos, int aThickness,
-                                             double aBiuTo3DUnits )
+                                             double aBiuTo3DUnits, bool aUseTextures )
 {
     CPOLYGONS_LIST polygon;
 
     ConvertPolysListWithHolesToOnePolygon( aPolysList, polygon );
-    Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, aThickness, aBiuTo3DUnits );
+    Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, aThickness, aBiuTo3DUnits, aUseTextures );
 }
 
 
@@ -301,13 +310,13 @@ void Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
 
         ConvertPolysListWithHolesToOnePolygon( outer_cornerBuffer, polygon );
         // draw top (front) horizontal ring
-        Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos + aHeight, 0, aBiuTo3DUnits );
+        Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos + aHeight, 0, aBiuTo3DUnits, false );
 
         if( aHeight )
         {
             // draw bottom (back) horizontal ring
             SetNormalZneg();
-            Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, 0, aBiuTo3DUnits );
+            Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, 0, aBiuTo3DUnits, false );
         }
     }
 
@@ -361,13 +370,13 @@ void Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
 
         // draw top (front) horizontal side (ring)
         SetNormalZpos();
-        Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos + aHeight, 0, aBiuTo3DUnits );
+        Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos + aHeight, 0, aBiuTo3DUnits, false );
 
         if( aHeight )
         {
             // draw bottom (back) horizontal side (ring)
             SetNormalZneg();
-            Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, 0, aBiuTo3DUnits );
+            Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, 0, aBiuTo3DUnits, false );
         }
     }
 
@@ -389,7 +398,7 @@ void Draw3D_SolidSegment( const wxPoint& aStart, const wxPoint& aEnd,
 
     TransformRoundedEndsSegmentToPolygon( cornerBuffer, aStart, aEnd, slice, aWidth );
 
-    Draw3D_SolidHorizontalPolyPolygons( cornerBuffer, aZpos, aThickness, aBiuTo3DUnits );
+    Draw3D_SolidHorizontalPolyPolygons( cornerBuffer, aZpos, aThickness, aBiuTo3DUnits, false );
 }
 
 
@@ -403,7 +412,7 @@ void Draw3D_ArcSegment( const wxPoint&  aCenterPos, const wxPoint& aStartPoint,
     TransformArcToPolygon( cornerBuffer, aCenterPos, aStartPoint, aArcAngle,
                            slice, aWidth );
 
-    Draw3D_SolidHorizontalPolyPolygons( cornerBuffer, aZpos, aThickness, aBiuTo3DUnits );
+    Draw3D_SolidHorizontalPolyPolygons( cornerBuffer, aZpos, aThickness, aBiuTo3DUnits, false );
 }
 
 
@@ -428,15 +437,13 @@ void CALLBACK tessCPolyPt2Vertex( const GLvoid* data )
     // cast back to double type
     const CPolyPt* ptr = (const CPolyPt*) data;
 
-    if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.GetFlag( FL_RENDER_TEXTURES ) )
+    if( s_useTextures )
     {
-        glTexCoord2f( ptr->x* g_Parm_3D_Visu.m_BiuTo3Dunits * m_texture_scale,
-                      -ptr->y * g_Parm_3D_Visu.m_BiuTo3Dunits * m_texture_scale);
+        glTexCoord2f( ptr->x * s_biuTo3Dunits * s_textureScale,
+                      -ptr->y * s_biuTo3Dunits * s_textureScale);
     }
 
-    glVertex3d( ptr->x * g_Parm_3D_Visu.m_BiuTo3Dunits,
-                -ptr->y * g_Parm_3D_Visu.m_BiuTo3Dunits,
-                g_Parm_3D_Visu.m_CurrentZpos );
+    glVertex3d( ptr->x * s_biuTo3Dunits, -ptr->y * s_biuTo3Dunits, s_currentZpos );
 }
 
 

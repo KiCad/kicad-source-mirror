@@ -488,7 +488,7 @@ void EDA_3D_CANVAS::Redraw()
     glMateriali ( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &specular.x );
 
-    if( isEnabled( FL_RENDER_TEXTURES ) && isRealisticMode() )
+    if( isRealisticMode() && isEnabled( FL_RENDER_TEXTURES ) )
     {
     	glEnable( GL_TEXTURE_2D );
 	}
@@ -684,6 +684,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
     bool remove_Holes = isEnabled( FL_RENDER_SHOW_HOLES_IN_ZONES );
 
     bool realistic_mode = isRealisticMode();
+    bool useTextures = isRealisticMode() && isEnabled( FL_RENDER_TEXTURES );
 
     // Number of segments to convert a circle to polygon
     // Boost polygon (at least v 1.54, v1.55 and previous) in very rare cases crashes
@@ -886,7 +887,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
         bufferPolys.ImportFrom( currLayerPolyset );
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
                                             thickness,
-                                            GetPrm3DVisu().m_BiuTo3Dunits );
+                                            GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
 
         if( isEnabled( FL_USE_COPPER_THICKNESS ) == true )
         {
@@ -898,7 +899,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
         if( bufferZonesPolys.GetCornersCount() )
             Draw3D_SolidHorizontalPolyPolygons( bufferZonesPolys, zpos,
                                                 thickness,
-                                                GetPrm3DVisu().m_BiuTo3Dunits );
+                                                GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
         throughHolesListBuilt = true;
     }
 
@@ -973,7 +974,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
     if( bufferPcbOutlines.GetCornersCount() )
     {
         Draw3D_SolidHorizontalPolyPolygons( bufferPcbOutlines, zpos + board_thickness/2.0,
-                                            board_thickness, GetPrm3DVisu().m_BiuTo3Dunits );
+                                            board_thickness, GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
     }
 
     glEndList();
@@ -983,6 +984,7 @@ void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
 void EDA_3D_CANVAS::BuildTechLayers3DView()
 {
     BOARD* pcb = GetBoard();
+    bool useTextures = isRealisticMode() && isEnabled( FL_RENDER_TEXTURES );
 
     // Number of segments to draw a circle using segments
     const int       segcountforcircle   = 18;
@@ -1185,7 +1187,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
         setGLTechLayersColor( layer );
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
-                                            thickness, GetPrm3DVisu().m_BiuTo3Dunits );
+                thickness, GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
     }
 }
 
@@ -1287,7 +1289,7 @@ void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
         setGLTechLayersColor( layer );
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
-                                            thickness, GetPrm3DVisu().m_BiuTo3Dunits );
+                                            thickness, GetPrm3DVisu().m_BiuTo3Dunits, false );
     }
 }
 
