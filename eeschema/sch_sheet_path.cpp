@@ -517,6 +517,8 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheet( const wxString aPath, bool aHumanReada
 
 void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 {
+    wxCHECK_RET( aSheet != NULL, wxT( "Cannot build sheet list from undefined sheet." ) );
+
     if( aSheet == g_RootSheet )
         m_isRootSheet = true;
 

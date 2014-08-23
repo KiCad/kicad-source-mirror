@@ -1084,9 +1084,15 @@ void SCH_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
 
 bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 {
-    SCH_SHEET_LIST sheetList;
+    // In case this event happens before g_RootSheet is initialized which does happen
+    // on mingw64 builds.
 
-    return sheetList.IsAutoSaveRequired();
+    if( g_RootSheet != NULL )
+    {
+        SCH_SHEET_LIST sheetList;
+
+        return sheetList.IsAutoSaveRequired();
+    }
 }
 
 
@@ -1161,7 +1167,7 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
             if( item->Type() == SCH_SHEET_PIN_T )
                 ( (SCH_SHEET*)undoItem )->AddPin( (SCH_SHEET_PIN*) item );
             else
-                wxLogMessage(wxT( "addCurrentItemToList: expected type = SCH_SHEET_PIN_T, actual type = %d" ),
+                wxLogMessage( wxT( "addCurrentItemToList: expected type = SCH_SHEET_PIN_T, actual type = %d" ),
                             item->Type() );
         }
     }
