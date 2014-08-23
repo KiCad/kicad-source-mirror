@@ -1093,6 +1093,8 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 
         return sheetList.IsAutoSaveRequired();
     }
+
+    return false;
 }
 
 
