@@ -369,11 +369,10 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     }
 
     wxMenu* orientmenu = new wxMenu;
-    msg = AddHotkeyName( _( "Rotate +" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
-    AddMenuItem( orientmenu, ID_SCH_ROTATE_COUNTERCLOCKWISE, msg,
+    msg = AddHotkeyName( _( "Rotate Clockwise" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
+    AddMenuItem( orientmenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_cw_xpm ) );
+    AddMenuItem( orientmenu, ID_SCH_ROTATE_COUNTERCLOCKWISE, _( "Rotate Counterclockwise" ),
                  KiBitmap( rotate_ccw_xpm ) );
-    AddMenuItem( orientmenu, ID_SCH_ROTATE_CLOCKWISE, _( "Rotate -" ),
-                 KiBitmap( rotate_cw_xpm ) );
     msg = AddHotkeyName( _( "Mirror --" ), s_Schematic_Hokeys_Descr, HK_MIRROR_X_COMPONENT );
     AddMenuItem( orientmenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
     msg = AddHotkeyName( _( "Mirror ||" ), s_Schematic_Hokeys_Descr, HK_MIRROR_Y_COMPONENT );
