@@ -1421,7 +1421,6 @@ void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
 {
 
     // Read from disk and draws the footprint 3D shapes if exists
-    S3D_MASTER* shape3D = m_3D_Drawings;
     double zpos = glcanvas->GetPrm3DVisu().GetModulesZcoord3DIU( IsFlipped() );
 
     glPushMatrix();
@@ -1439,13 +1438,18 @@ void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
         glRotatef( 180.0, 0.0, 0.0, 1.0 );
     }
 
+    S3D_MASTER* shape3D = Models();
     for( ; shape3D; shape3D = shape3D->Next() )
     {
         shape3D->SetLoadNonTransparentObjects( aAllowNonTransparentObjects );
         shape3D->SetLoadTransparentObjects( aAllowTransparentObjects );
 
         if( shape3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
+        {
+            glPushMatrix();
             shape3D->ReadData();
+            glPopMatrix();
+        }
     }
 
     glPopMatrix();
