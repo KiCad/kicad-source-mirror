@@ -32,7 +32,6 @@
 #include <macros.h>
 #include <pcbnew_id.h>
 #include <view/view_controls.h>
-#include <pcbcommon.h>
 #include <pcb_painter.h>
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_track_via_size.h>
@@ -213,7 +212,7 @@ public:
         Add( ACT_SwitchPosture );
 
         AppendSeparator();
-        
+
         CONTEXT_TRACK_WIDTH_MENU* trackMenu = new CONTEXT_TRACK_WIDTH_MENU;
         trackMenu->SetBoard( aBoard );
         AppendSubMenu( trackMenu, wxT( "Select Track Width" ) );
@@ -594,7 +593,7 @@ void ROUTER_TOOL::performRouting()
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
         }
-    
+
         handleCommonEvents( *evt );
     }
 

@@ -34,14 +34,20 @@ public:
     ~DIALOG_MODULE_MODULE_EDITOR();
 
 private:
+    void BrowseAndAdd3DShapeFile();
     void initModeditProperties();
     void Transfert3DValuesToDisplay( S3D_MASTER * aStruct3DSource );
     void TransfertDisplayTo3DValues( int aIndexSelection );
+
+    // virtual event functions
     void OnEditValue( wxCommandEvent& event );
     void OnEditReference( wxCommandEvent& event );
     void On3DShapeSelection( wxCommandEvent& event );
     void On3DShapeNameSelected( wxCommandEvent& event );
-    void BrowseAndAdd3DLib( wxCommandEvent& event );
+    void Add3DShape( wxCommandEvent& event )
+    {
+        BrowseAndAdd3DShapeFile();
+    }
     void Remove3DShape( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );

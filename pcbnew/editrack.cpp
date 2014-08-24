@@ -31,7 +31,6 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <trigo.h>
-#include <pcbcommon.h>
 #include <wxPcbStruct.h>
 #include <colors_selection.h>
 

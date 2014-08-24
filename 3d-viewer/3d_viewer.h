@@ -40,13 +40,18 @@
 #include <3d_struct.h>
 #include <info3d_visu.h>
 
-#define KISYS3DMOD "KISYS3DMOD"
+/// A variable name whose value holds the path of 3D shape files.
+/// Currently an environment variable, eventually a project variable.
+#define KISYS3DMOD wxT( "KISYS3DMOD" )
+
+/// All 3D files are expected to be stored in LIB3D_FOLDER, or one of
+/// its subdirectory.
+#define LIB3D_FOLDER  wxT( "packages3d" )
 
 class EDA_3D_CANVAS;
 class PCB_BASE_FRAME;
 
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
-#define LIB3D_PATH                          wxT( "packages3d" )
 
 
 class EDA_3D_FRAME : public KIWAY_PLAYER

@@ -38,7 +38,6 @@
 #include <gestfich.h>
 #include <kicad_device_context.h>
 #include <wxPcbStruct.h>
-#include <pcbcommon.h>
 
 #include <pcbnew_id.h>
 #include <pcbnew.h>

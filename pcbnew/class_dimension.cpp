@@ -31,7 +31,6 @@
 #include <fctsys.h>
 #include <macros.h>
 #include <gr_basic.h>
-#include <pcbcommon.h>
 #include <trigo.h>
 #include <wxstruct.h>
 #include <class_drawpanel.h>

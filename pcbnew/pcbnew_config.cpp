@@ -37,7 +37,6 @@
 #include <gestfich.h>
 #include <xnode.h>
 #include <macros.h>
-#include <pcbcommon.h>
 #include <wxPcbStruct.h>
 #include <class_board_design_settings.h>
 #include <plot_common.h>

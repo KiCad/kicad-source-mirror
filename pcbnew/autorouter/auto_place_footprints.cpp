@@ -37,7 +37,6 @@
 #include <wxPcbStruct.h>
 #include <gr_basic.h>
 #include <macros.h>
-#include <pcbcommon.h>
 #include <msgpanel.h>
 
 #include <autorout.h>

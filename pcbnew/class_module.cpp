@@ -37,7 +37,6 @@
 #include <trigo.h>
 #include <confirm.h>
 #include <kicad_string.h>
-#include <pcbcommon.h>
 #include <pcbnew.h>
 #include <colors_selection.h>
 #include <richio.h>

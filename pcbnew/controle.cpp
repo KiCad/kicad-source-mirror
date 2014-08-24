@@ -31,7 +31,6 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
-#include <pcbcommon.h>
 #include <pcbnew_id.h>
 #include <class_board.h>
 #include <class_module.h>

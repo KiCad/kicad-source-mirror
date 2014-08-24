@@ -35,7 +35,6 @@
 #include <kicad_string.h>
 #include <wxPcbStruct.h>
 #include <macros.h>
-#include <pcbcommon.h>
 
 #include <class_board.h>
 #include <class_module.h>

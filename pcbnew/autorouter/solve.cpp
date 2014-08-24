@@ -39,7 +39,6 @@
 #include <wxPcbStruct.h>
 #include <gr_basic.h>
 #include <macros.h>
-#include <pcbcommon.h>
 
 #include <class_board.h>
 #include <class_track.h>

@@ -23,49 +23,128 @@
  */
 
 /*
- * This file contains the global constants and variables used in the PCB
- * applications Pcbnew, CvPcb, and GervView.  The goal of this was to
- * unobfuscate the original header file design that made it very difficult
- * to figure out where these variables lived.  Ideally, they should be pushed
- * back into the application layer.
+ * This file contains some functions used in the PCB
+ * applications Pcbnew and CvPcb.
  */
 
 #include <fctsys.h>
+#include <pgm_base.h>
+#include <kiface_i.h>
+
 #include <pcbcommon.h>
-#include <plot_common.h>
-
 #include <class_board.h>
-#include <class_pad.h>
-#include <class_zone_settings.h>
-#include <class_board_design_settings.h>
-
-
-class MODULE;
-
-
-DISPLAY_OPTIONS DisplayOpt;      // Display options for board items
-
-int    g_AnchorColor        = BLUE;
-int    g_ModuleTextCMPColor = LIGHTGRAY;
-int    g_ModuleTextCUColor  = MAGENTA;
-int    g_ModuleTextNOVColor = DARKGRAY;
-int    g_PadCUColor         = GREEN;
-int    g_PadCMPColor        = RED;
-
+#include <3d_viewer.h>
 
 /**
- * Used in track creation, a list of track segments currently being created,
- * with the newest track at the end of the list, sorted by new-ness.  e.g. use
- * TRACK->Back() to get the next older track, TRACK->Next() to get the next
- * newer track.
+ * attempts to set the environment variable given by aKiSys3Dmod to a valid path.
+ * (typically "KISYS3DMOD" )
+ * If the environment variable is already set, then it left as is to respect
+ * the wishes of the user.
+ *
+ * The path is determined by attempting to find the path modules/packages3d
+ * files in kicad tree.
+ * This may or may not be the best path but it provides the best solution for
+ * backwards compatibility with the previous 3D shapes search path implementation.
+ *
+ * @note This must be called after #SetBinDir() is called at least on Windows.
+ * Otherwise, the kicad path is not known (Windows specific)
+ *
+ * @param aKiSys3Dmod = the value of environment variable, typically "KISYS3DMOD"
+ * @param aProcess = the current process
+ * @return false if the aKiSys3Dmod path is not valid.
  */
-DLIST<TRACK> g_CurrentTrackList;
-
-void AccumulateDescription( wxString &aDesc, const wxString &aItem )
+bool Set3DShapesDefaultPath( const wxString& aKiSys3Dmod, const PGM_BASE* aProcess )
 {
-    if( !aDesc.IsEmpty() )
-        aDesc << wxT(", ");
-    aDesc << aItem;
+    wxString    path;
+
+    // Set the KISYS3DMOD environment variable for the current process,
+    // if it is not already defined in the user's environment and valid.
+    if( wxGetEnv( aKiSys3Dmod, &path ) && wxFileName::DirExists( path ) )
+        return true;
+
+#if 1
+    // Try to find a valid path is standard KiCad paths
+    SEARCH_STACK&   search = Kiface().KifaceSearch();
+    path = search.FindValidPath( LIB3D_FOLDER );
+
+    if( !path.IsEmpty() )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+#endif
+
+    // Attempt to determine where the 3D shape libraries were installed using the
+    // legacy path:
+    // on Unix: /usr/local/kicad/share/modules/packages3d
+    // or  /usr/share/kicad/modules/packages3d
+    // On Windows: bin../share/modules/packages3d
+    wxString relpath( wxT( "modules/" ) );
+    relpath += LIB3D_FOLDER;
+
+// Apple MacOSx
+#ifdef __WXMAC__
+    path = wxT("/Library/Application Support/kicad/modules/packages3d/");
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+    path = wxString( wxGetenv( wxT( "HOME" ) ) ) + wxT("/Library/Application Support/kicad/modules/packages3d/");
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+#elif defined(__UNIX__)     // Linux and non-Apple Unix
+    // Try the home directory:
+    path.Empty();
+    wxGetEnv( wxT("HOME"), &path );
+    path += wxT("/kicad/share/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+    // Try the standard install path:
+    path = wxT("/usr/local/kicad/share/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+    // Try the official distrib standard install path:
+    path = wxT("/usr/share/kicad/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+#else   // Windows
+    // On Windows, the install path is given by the path of executables
+    wxFileName fn;
+    fn.AssignDir( aProcess->GetExecutablePath() );
+    fn.RemoveLastDir();
+    path = fn.GetPathWithSep() + wxT("share/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+#endif
+
+    return false;
 }
 
 

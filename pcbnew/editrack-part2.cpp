@@ -34,7 +34,6 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
-#include <pcbcommon.h>
 
 #include <class_board.h>
 #include <class_module.h>

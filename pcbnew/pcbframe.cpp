@@ -35,7 +35,6 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
-#include <pcbcommon.h>      // enum PCB_VISIBLE
 #include <collectors.h>
 #include <build_version.h>
 #include <macros.h>

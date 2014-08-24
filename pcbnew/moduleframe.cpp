@@ -40,7 +40,6 @@
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
 #include <3d_viewer.h>
-#include <pcbcommon.h>
 #include <msgpanel.h>
 #include <fp_lib_table.h>
 

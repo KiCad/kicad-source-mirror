@@ -36,7 +36,6 @@
 #include <trigo.h>
 #include <macros.h>
 #include <gr_basic.h>
-#include <pcbcommon.h>
 
 #include <class_board.h>
 

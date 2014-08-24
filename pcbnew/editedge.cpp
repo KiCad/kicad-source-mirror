@@ -33,7 +33,6 @@
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <gr_basic.h>
-#include <pcbcommon.h>
 
 #include <pcbnew.h>
 #include <protos.h>

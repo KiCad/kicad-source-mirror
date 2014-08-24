@@ -31,9 +31,7 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <wxstruct.h>
-#include <pcbcommon.h>
 #include <confirm.h>
-//#include <pgm_base.h>
 #include <kiface_i.h>
 #include <dialog_helpers.h>
 #include <kicad_device_context.h>
