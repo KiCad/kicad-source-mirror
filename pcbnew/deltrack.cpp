@@ -33,7 +33,6 @@
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <macros.h>
-#include <pcbcommon.h>
 #include <ratsnest_data.h>
 
 #include <class_board.h>

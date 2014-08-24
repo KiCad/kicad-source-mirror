@@ -27,7 +27,6 @@
 
 #include <fctsys.h>
 #include <macros.h>
-#include <gr_basic.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <common.h>         // NAMELESS_PROJECT

@@ -53,6 +53,8 @@
 #include <3d_viewer.h>
 
 
+DISPLAY_OPTIONS DisplayOpt;      // General display options
+
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )

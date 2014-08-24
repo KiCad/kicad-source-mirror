@@ -28,7 +28,6 @@
 #include <confirm.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
-#include <pcbcommon.h>
 #include <ratsnest_data.h>
 
 #include <class_board.h>

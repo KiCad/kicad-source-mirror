@@ -35,7 +35,6 @@
 #include <pcb_draw_panel_gal.h>
 #include <wxPcbStruct.h>
 #include <3d_viewer.h>
-#include <pcbcommon.h>
 #include <dialog_helpers.h>
 #include <msgpanel.h>
 #include <macros.h>

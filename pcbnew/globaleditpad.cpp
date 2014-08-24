@@ -7,7 +7,6 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
-#include <pcbcommon.h>
 #include <module_editor_frame.h>
 
 #include <class_board.h>

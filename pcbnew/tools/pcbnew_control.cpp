@@ -33,7 +33,6 @@
 #include <class_zone.h>
 #include <class_draw_panel_gal.h>
 #include <class_pcb_screen.h>
-#include <pcbcommon.h>
 #include <confirm.h>
 
 #include <gal/graphics_abstraction_layer.h>

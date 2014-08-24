@@ -38,7 +38,6 @@
 #include <class_pcb_screen.h>
 #include <colors_selection.h>
 #include <trigo.h>
-#include <pcbcommon.h>
 #include <msgpanel.h>
 
 #include <pcbnew.h>

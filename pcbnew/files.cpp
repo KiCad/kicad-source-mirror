@@ -35,7 +35,6 @@
 #include <gestfich.h>
 #include <wxPcbStruct.h>
 #include <macros.h>
-#include <pcbcommon.h>
 #include <3d_viewer.h>
 #include <richio.h>
 #include <filter_reader.h>

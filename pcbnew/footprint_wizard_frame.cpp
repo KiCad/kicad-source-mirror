@@ -33,7 +33,6 @@
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <3d_viewer.h>
-#include <pcbcommon.h>
 #include <msgpanel.h>
 #include <macros.h>
 

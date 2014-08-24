@@ -42,7 +42,6 @@
 #include <macros.h>
 #include <math_for_graphics.h>
 #include <wxBasePcbFrame.h>
-#include <pcbcommon.h>
 #include <msgpanel.h>
 #include <base_units.h>
 

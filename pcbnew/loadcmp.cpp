@@ -36,13 +36,11 @@
 #include <kicad_string.h>
 #include <pgm_base.h>
 #include <kiway.h>
-//#include <frame_type.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
 #include <filter_reader.h>
 #include <gr_basic.h>
 #include <macros.h>
-#include <pcbcommon.h>
 #include <fp_lib_table.h>
 #include <fpid.h>
 

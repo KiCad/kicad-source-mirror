@@ -77,7 +77,7 @@ const wxString S3D_MASTER::GetShape3DFullFilename()
         return shapeName;
 
     wxString default_path;
-    wxGetEnv( wxT( KISYS3DMOD ), &default_path );
+    wxGetEnv( KISYS3DMOD, &default_path );
 
     if( default_path.IsEmpty() )
         return shapeName;

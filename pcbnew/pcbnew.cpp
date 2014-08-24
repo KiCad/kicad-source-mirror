@@ -42,8 +42,6 @@
 #include <eda_dde.h>
 #include <pcbcommon.h>
 #include <colors_selection.h>
-#include <gr_basic.h>
-#include <3d_viewer.h>
 #include <wx/stdpaths.h>
 
 #include <wx/file.h>
@@ -52,7 +50,6 @@
 #include <gestfich.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <class_board.h>
@@ -81,7 +78,9 @@ int         g_MaxLinksShowed;
 int         g_MagneticPadOption   = capture_cursor_in_track_tool;
 int         g_MagneticTrackOption = capture_cursor_in_track_tool;
 
-wxPoint     g_Offset_Module;     /* Distance to offset module trace when moving. */
+wxPoint     g_Offset_Module;     // module offset used when moving a footprint
+
+DISPLAY_OPTIONS DisplayOpt;      // General display options
 
 /* Name of the document footprint list
  * usually located in share/modules/footprints_doc
@@ -90,6 +89,13 @@ wxPoint     g_Offset_Module;     /* Distance to offset module trace when moving.
  */
 wxString    g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
 
+/*
+ * Used in track creation, a list of track segments currently being created,
+ * with the newest track at the end of the list, sorted by new-ness.  e.g. use
+ * TRACK->Back() to get the next older track, TRACK->Next() to get the next
+ * newer track.
+ */
+DLIST<TRACK> g_CurrentTrackList;
 
 namespace PCB {
 
@@ -205,105 +211,6 @@ PGM_BASE& Pgm()
 }
 #endif
 
-/**
- * Function set3DShapesPath
- * attempts to set the environment variable given by aKiSys3Dmod to a valid path.
- * (typically "KISYS3DMOD" )
- * If the environment variable is already set,
- * then it left as is to respect the wishes of the user.
- *
- * The path is determined by attempting to find the path modules/packages3d
- * files in kicad tree.
- * This may or may not be the best path but it provides the best solution for
- * backwards compatibility with the previous 3D shapes search path implementation.
- *
- * @note This must be called after #SetBinDir() is called at least on Windows.
- * Otherwise, the kicad path is not known (Windows specific)
- *
- * @param aKiSys3Dmod = the value of environment variable, typically "KISYS3DMOD"
- * @return false if the aKiSys3Dmod path is not valid.
- */
-static bool set3DShapesPath( const wxString& aKiSys3Dmod )
-{
-    wxString    path;
-
-    // Set the KISYS3DMOD environment variable for the current process,
-    // if it is not already defined in the user's environment and valid.
-    if( wxGetEnv( aKiSys3Dmod, &path ) && wxFileName::DirExists( path ) )
-        return true;
-
-    // Attempt to determine where the 3D shape libraries were installed using the
-    // legacy path:
-    // on Unix: /usr/local/kicad/share/modules/packages3d
-    // or  /usr/share/kicad/modules/packages3d
-    // On Windows: bin../share/modules/packages3d
-    wxString relpath( wxT( "modules/packages3d" ) );
-
-// Apple MacOSx
-#ifdef __WXMAC__
-    path = wxT("/Library/Application Support/kicad/modules/packages3d/");
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-
-    path = wxString( wxGetenv( wxT( "HOME" ) ) ) + wxT("/Library/Application Support/kicad/modules/packages3d/");
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-
-#elif defined(__UNIX__)     // Linux and non-Apple Unix
-    // Try the home directory:
-    path.Empty();
-    wxGetEnv( wxT("HOME"), &path );
-    path += wxT("/kicad/share/") + relpath;
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-
-    // Try the standard install path:
-    path = wxT("/usr/local/kicad/share/") + relpath;
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-
-    // Try the official distrib standard install path:
-    path = wxT("/usr/share/kicad/") + relpath;
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-
-#else   // Windows
-    // On Windows, the install path is given by the path of executables
-    wxFileName fn;
-    fn.AssignDir( Pgm().GetExecutablePath() );
-    fn.RemoveLastDir();
-    path = fn.GetPathWithSep() + wxT("share/") + relpath;
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-#endif
-
-    return false;
-}
-
 
 #if defined(KICAD_SCRIPTING)
 static bool scriptingSetup()
@@ -412,8 +319,10 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // display the real hotkeys in menus or tool tips
     ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
 
-    // Set 3D shape path from environment variable KISYS3DMOD
-    set3DShapesPath( wxT(KISYS3DMOD) );
+    // Set 3D shape path (environment variable KISYS3DMOD) if not defined or valid
+    // Currently, called here, but could be moved ( OpenProjectFiles() ? )
+    // if KISYS3DMOD is defined in a project config file
+    Set3DShapesDefaultPath( KISYS3DMOD, aProgram );
 
     try
     {

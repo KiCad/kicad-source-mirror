@@ -36,6 +36,7 @@
 
 #include <fctsys.h>
 #include <project.h>
+#include <3d_viewer.h>      // for KISYS3DMOD
 #include <dialog_fp_lib_table_base.h>
 #include <fp_lib_table.h>
 #include <fp_lib_table_lexer.h>
@@ -712,6 +713,9 @@ private:
         // not used yet.  It is automatically set by KiCad to the directory holding
         // the current project.
         unique.insert( PROJECT_VAR_NAME );
+        unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
+        // This special environment variable is used to locad 3d shapes
+        unique.insert( KISYS3DMOD );
         unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
 
         m_path_subs_grid->AppendRows( unique.size() );

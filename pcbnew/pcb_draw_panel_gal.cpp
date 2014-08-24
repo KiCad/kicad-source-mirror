@@ -33,7 +33,6 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <pcbcommon.h>
 
 #include <boost/bind.hpp>
 

@@ -35,7 +35,6 @@
 #include <class_drawpanel.h>
 #include <drawtxt.h>
 #include <kicad_string.h>
-#include <pcbcommon.h>
 #include <colors_selection.h>
 #include <richio.h>
 #include <macros.h>
