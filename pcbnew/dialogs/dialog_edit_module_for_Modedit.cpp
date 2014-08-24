@@ -64,7 +64,7 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
     icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
     SetIcon( icon );
 
-    m_FootprintNameCtrl->SetValidator( FOOTPRINT_NAME_VALIDATOR() );
+    m_FootprintNameCtrl->SetValidator( FILE_NAME_CHAR_VALIDATOR() );
     initModeditProperties();
     m_sdbSizerStdButtonsOK->SetDefault();
     GetSizer()->SetSizeHints( this );
