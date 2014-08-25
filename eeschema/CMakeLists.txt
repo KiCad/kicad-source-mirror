@@ -48,6 +48,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_libedit_dimensions_base.cpp
     dialogs/dialog_lib_edit_draw_item.cpp
     dialogs/dialog_lib_edit_draw_item_base.cpp
+    dialogs/dialog_libedit_options_base.cpp
+    dialogs/dialog_libedit_options.cpp
     dialogs/dialog_lib_edit_pin.cpp
     dialogs/dialog_lib_edit_pin_base.cpp
     dialogs/dialog_lib_new_component.cpp

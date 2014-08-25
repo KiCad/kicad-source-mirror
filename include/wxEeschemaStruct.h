@@ -801,7 +801,7 @@ private:
     void OnOpenPcbModuleEditor( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
     void OnOpenLibraryEditor( wxCommandEvent& event );
-    void OnSetOptions( wxCommandEvent& event );
+    void OnPreferencesOptions( wxCommandEvent& event );
     void OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
     void OnSelectItem( wxCommandEvent& aEvent );

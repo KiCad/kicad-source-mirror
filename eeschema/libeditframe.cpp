@@ -58,12 +58,6 @@
 #include <boost/foreach.hpp>
 
 
-
-/* Library editor wxConfig entry names. */
-const wxString lastLibExportPathEntry( wxT( "LastLibraryExportPath" ) );
-const wxString lastLibImportPathEntry( wxT( "LastLibraryImportPath" ) );
-
-
 /* This method guarantees unique IDs for the library this run of Eeschema
  * which prevents ID conflicts and eliminates the need to recompile every
  * source file in the project when adding IDs to include/id.h. */
@@ -82,6 +76,12 @@ wxSize LIB_EDIT_FRAME::        m_clientSize      = wxSize( -1, -1 );
 int LIB_EDIT_FRAME::           m_textSize        = -1;
 int LIB_EDIT_FRAME::           m_textOrientation = TEXT_ORIENT_HORIZ;
 int LIB_EDIT_FRAME::           m_drawLineWidth   = 0;
+
+// these values are overridden when reading the config
+int LIB_EDIT_FRAME::           m_textPinNumDefaultSize = DEFAULTPINNUMSIZE;
+int LIB_EDIT_FRAME::           m_textPinNameDefaultSize = DEFAULTPINNAMESIZE;
+int LIB_EDIT_FRAME::           m_defaultPinLength = DEFAULTPINLENGTH;
+
 FILL_T LIB_EDIT_FRAME::        m_drawFillStyle   = NO_FILL;
 
 
@@ -131,9 +131,8 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
 
     EVT_MENU( ID_COLORS_SETUP, LIB_EDIT_FRAME::OnColorConfig )
+    EVT_MENU( wxID_PREFERENCES, LIB_EDIT_FRAME::OnPreferencesOptions )
     EVT_MENU( ID_CONFIG_REQ, LIB_EDIT_FRAME::InstallConfigFrame )
-    EVT_MENU( ID_CONFIG_SAVE, LIB_EDIT_FRAME::Process_Config )
-    EVT_MENU( ID_CONFIG_READ, LIB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_COLORS_SETUP, LIB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_LIBEDIT_DIMENSIONS, LIB_EDIT_FRAME::InstallDimensionsDialog )
 
@@ -284,42 +283,10 @@ const wxChar* LIB_EDIT_FRAME::GetLibEditFrameName()
     return LIB_EDIT_FRAME_NAME;
 }
 
-static const wxChar drawBgColorKey[] = wxT( "LibeditBgColor" );
-
-void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
-{
-    EDA_DRAW_FRAME::LoadSettings( aCfg );
-
-    wxConfigPathChanger cpc( aCfg, m_configPath );
-
-    EDA_COLOR_T itmp = ColorByName( aCfg->Read( drawBgColorKey, wxT("WHITE") ) );
-    SetDrawBgColor( itmp );
-
-    wxString pro_dir = Prj().GetProjectFullName();
-
-    m_lastLibExportPath = aCfg->Read( lastLibExportPathEntry, pro_dir );
-    m_lastLibImportPath = aCfg->Read( lastLibImportPathEntry, pro_dir );
-
-    m_lastLibExportPath = aCfg->Read( lastLibExportPathEntry, pro_dir );
-    m_lastLibImportPath = aCfg->Read( lastLibImportPathEntry, pro_dir );
-}
-
 
 void LIB_EDIT_FRAME::SetDrawItem( LIB_ITEM* drawItem )
 {
     m_drawItem = drawItem;
-}
-
-
-void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
-{
-    EDA_DRAW_FRAME::SaveSettings( aCfg );
-
-    wxConfigPathChanger cpc( aCfg, m_configPath );
-
-    aCfg->Write( drawBgColorKey, ColorGetName( GetDrawBgColor() ) );
-    aCfg->Write( lastLibExportPathEntry, m_lastLibExportPath );
-    aCfg->Write( lastLibImportPathEntry, m_lastLibImportPath );
 }
 
 

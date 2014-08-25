@@ -58,9 +58,6 @@ public:
     void SetLineWidth( int aWidth ) { m_spinLineWidth->SetValue( aWidth ); }
     int GetLineWidth( void ) { return m_spinLineWidth->GetValue(); }
 
-    void SetPinLength( int aLength ) { m_spinPinLength->SetValue( aLength ); }
-    int GetPinLength( void ) { return m_spinPinLength->GetValue(); }
-
     void SetTextSize( int text_size ) { m_spinTextSize->SetValue( text_size ); }
     int GetTextSize( void ) { return m_spinTextSize->GetValue(); }
 
