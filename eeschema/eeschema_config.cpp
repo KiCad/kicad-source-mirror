@@ -321,7 +321,12 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             if( chosen == Prj().GetProjectFullName() )
                 LoadProjectFile();
             else
+            {
+                // Read library list and library path list
                 Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH, GetProjectFileParametersList() );
+                // Read schematic editor setup
+                Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDITOR, GetProjectFileParametersList() );
+            }
         }
         break;
 
@@ -502,8 +507,13 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
 
 bool SCH_EDIT_FRAME::LoadProjectFile()
 {
+    // Read library list and library path list
     bool isRead = Prj().ConfigLoad( Kiface().KifaceSearch(),
                     GROUP_SCH, GetProjectFileParametersList() );
+
+    // Read schematic editor setup
+    isRead = isRead && Prj().ConfigLoad( Kiface().KifaceSearch(),
+                                         GROUP_SCH_EDITOR, GetProjectFileParametersList() );
 
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:
@@ -544,7 +554,7 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
         fn = dlg.GetPath();
     }
 
-    prj.ConfigSave( Kiface().KifaceSearch(), GROUP_SCH, GetProjectFileParametersList() );
+    prj.ConfigSave( Kiface().KifaceSearch(), GROUP_SCH_EDITOR, GetProjectFileParametersList() );
 }
 
 
