@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,17 +48,15 @@
 
 #include <dialogs/dialog_color_config.h>
 #include <dialogs/dialog_eeschema_options.h>
+#include <dialogs/dialog_libedit_options.h>
 #include <dialogs/dialog_schematic_find.h>
 
 #include <wildcards_and_files_ext.h>
 
-#define HOTKEY_FILENAME         wxT( "eeschema" )
-
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 
-/// The width to draw busses that do not have a specific width
-static int s_defaultBusThickness;
 
+static int s_defaultBusThickness = 15;
 
 int GetDefaultBusThickness()
 {
@@ -76,7 +74,7 @@ void SetDefaultBusThickness( int aThickness)
 
 
 /// Default size for text (not only labels)
-static int s_defaultTextSize;
+static int s_defaultTextSize = DEFAULT_SIZE_TEXT;
 
 int GetDefaultTextSize()
 {
@@ -109,24 +107,6 @@ void SetDefaultLineThickness( int aThickness )
         s_drawDefaultLineThickness = aThickness;
     else
         s_drawDefaultLineThickness = 1;
-}
-
-
-/*
- * Default pin length
- */
-static int s_defaultPinLength;
-
-
-int GetDefaultPinLength()
-{
-    return s_defaultPinLength;
-}
-
-
-void SetDefaultPinLength( int aLength )
-{
-    s_defaultPinLength = aLength;
 }
 
 
@@ -188,39 +168,8 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     int        id = event.GetId();
     wxFileName fn;
 
-    SCH_EDIT_FRAME* schFrame = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
-    wxASSERT( schFrame );
-
     switch( id )
     {
-    case ID_CONFIG_SAVE:
-        schFrame->SaveProjectSettings( true );
-        break;
-
-    case ID_CONFIG_READ:
-        {
-#if 0   // This is confusing.  From the library parts editor, we trigger the loading
-        // of configuration information into the schematic editor?  Makes no more sense
-        // than me storing my old newspapers in your garage.
-
-            fn = g_RootSheet->GetScreen()->GetFileName();
-            fn.SetExt( ProjectFileExtension );
-
-            wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
-                              fn.GetFullName(), ProjectFileWildcard,
-                              wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-            if( dlg.ShowModal() == wxID_CANCEL )
-                break;
-
-            wxString foreign_pro = dlg.GetPath();
-
-            Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH,
-                GetProjectFileParametersList(), foreign_pro );
-#endif
-        }
-        break;
-
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
         InstallHotkeyFrame( this, s_Eeschema_Hokeys_Descr );
@@ -354,7 +303,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
+void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 {
     wxArrayString units;
     GRIDS grid_list = GetScreen()->GetGrids();
@@ -368,7 +317,6 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetGridSizes( grid_list, GetScreen()->GetGridId() );
     dlg.SetBusWidth( GetDefaultBusThickness() );
     dlg.SetLineWidth( GetDefaultLineThickness() );
-    dlg.SetPinLength( GetDefaultPinLength() );
     dlg.SetTextSize( GetDefaultTextSize() );
     dlg.SetRepeatHorizontal( g_RepeatStep.x );
     dlg.SetRepeatVertical( g_RepeatStep.y );
@@ -417,7 +365,6 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     SetDefaultBusThickness( dlg.GetBusWidth() );
     SetDefaultLineThickness( dlg.GetLineWidth() );
-    SetDefaultPinLength( dlg.GetPinLength() );
     SetDefaultTextSize( dlg.GetTextSize() );
     g_RepeatStep.x = dlg.GetRepeatHorizontal();
     g_RepeatStep.y = dlg.GetRepeatVertical();
@@ -453,6 +400,8 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
         }
     }
 
+    SaveSettings( config() );  // save values shared by eeschema applications.
+
     m_canvas->Refresh( true );
 }
 
@@ -472,7 +421,7 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
                                         LIB_PART::SubpartFirstIdPtr(),
                                         'A', '1', 'z' ) );
 
-    /* moved to library load/save specific code
+    /* moved to library load/save specific code, in a specific section in .pro file
     m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),
                                                            &m_userLibraryPath ) );
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
@@ -560,7 +509,6 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 
 static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
 static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
-static const wxChar DefaultPinLengthEntry[] =       wxT( "DefaultPinLength" );
 static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
 static const wxChar HorzVertLinesOnlyEntry[] =      wxT( "HorizVertLinesOnly" );
 static const wxChar PreviewFramePositionXEntry[] =  wxT( "PreviewFramePositionX" );
@@ -582,6 +530,14 @@ static const wxChar FindStringHistoryEntry[] =      wxT( "FindStringHistoryList%
 static const wxChar ReplaceStringHistoryEntry[] =   wxT( "ReplaceStringHistoryList%d" );
 static const wxChar FieldNamesEntry[] =             wxT( "FieldNames" );
 static const wxChar SimulatorCommandEntry[] =       wxT( "SimCmdLine" );
+
+// Library editor wxConfig entry names.
+static const wxChar lastLibExportPathEntry[] =      wxT( "LastLibraryExportPath" );
+static const wxChar lastLibImportPathEntry[] =      wxT( "LastLibraryImportPath" );
+static const wxChar libeditdrawBgColorEntry[] =     wxT( "LibeditBgColor" );
+static const wxChar defaultPinNumSizeEntry[] =      wxT( "LibeditPinNumSize" );
+static const wxChar defaultPinNameSizeEntry[] =     wxT( "LibeditPinNameSize" );
+static const wxChar DefaultPinLengthEntry[] =       wxT( "DefaultPinLength" );
 
 
 PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
@@ -616,9 +572,8 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     m_GridColor = GetLayerColor( LAYER_GRID );
 
-    SetDefaultBusThickness( aCfg->Read( DefaultBusWidthEntry, 12l ) );
-    SetDefaultLineThickness( aCfg->Read( DefaultDrawLineWidthEntry, 6l ) );
-    SetDefaultPinLength( aCfg->Read( DefaultPinLengthEntry, 300l ) );
+    SetDefaultBusThickness( aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
+    SetDefaultLineThickness( aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
     aCfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
     aCfg->Read( HorzVertLinesOnlyEntry, &m_forceHVLines, true );
 
@@ -709,7 +664,6 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     aCfg->Write( DefaultBusWidthEntry, (long) GetDefaultBusThickness() );
     aCfg->Write( DefaultDrawLineWidthEntry, (long) GetDefaultLineThickness() );
-    aCfg->Write( DefaultPinLengthEntry, (long) GetDefaultPinLength() );
     aCfg->Write( ShowHiddenPinsEntry, m_showAllPins );
     aCfg->Write( HorzVertLinesOnlyEntry, GetForceHVLines() );
 
@@ -770,3 +724,74 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     aCfg->Write( FieldNamesEntry, record );
 }
+
+
+void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
+{
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
+
+    wxConfigPathChanger cpc( aCfg, m_configPath );
+
+    EDA_COLOR_T itmp = ColorByName( aCfg->Read( libeditdrawBgColorEntry, wxT("WHITE") ) );
+    SetDrawBgColor( itmp );
+
+    wxString pro_dir = Prj().GetProjectFullName();
+
+    m_lastLibExportPath = aCfg->Read( lastLibExportPathEntry, pro_dir );
+    m_lastLibImportPath = aCfg->Read( lastLibImportPathEntry, pro_dir );
+
+    SetDefaultLineThickness( aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
+    SetDefaultPinLength( aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) );
+    m_textPinNumDefaultSize = aCfg->Read( defaultPinNumSizeEntry, DEFAULTPINNUMSIZE );
+    m_textPinNameDefaultSize = aCfg->Read( defaultPinNameSizeEntry, DEFAULTPINNAMESIZE );
+}
+
+
+void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
+{
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
+
+    wxConfigPathChanger cpc( aCfg, m_configPath );
+
+    aCfg->Write( libeditdrawBgColorEntry, ColorGetName( GetDrawBgColor() ) );
+    aCfg->Write( lastLibExportPathEntry, m_lastLibExportPath );
+    aCfg->Write( lastLibImportPathEntry, m_lastLibImportPath );
+    aCfg->Write( DefaultPinLengthEntry, (long) GetDefaultPinLength() );
+    aCfg->Write( defaultPinNumSizeEntry, (long) m_textPinNumDefaultSize );
+    aCfg->Write( defaultPinNameSizeEntry, (long) m_textPinNameDefaultSize );
+}
+
+void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
+{
+    wxArrayString units;
+    GRIDS grid_list = GetScreen()->GetGrids();
+
+    DIALOG_LIBEDIT_OPTIONS dlg( this );
+
+    dlg.SetGridSizes( grid_list, GetScreen()->GetGridId() );
+    dlg.SetLineWidth( GetDefaultLineThickness() );
+    dlg.SetPinLength( GetDefaultPinLength() );
+    dlg.SetPinNumSize( m_textPinNumDefaultSize );
+    dlg.SetPinNameSize( m_textPinNameDefaultSize );
+
+    dlg.SetShowGrid( IsGridVisible() );
+    dlg.Layout();
+    dlg.Fit();
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxRealPoint  gridsize = grid_list[ (size_t) dlg.GetGridSelection() ].m_Size;
+    m_LastGridSizeId = GetScreen()->SetGrid( gridsize );
+
+    SetDefaultLineThickness( dlg.GetLineWidth() );
+    SetDefaultPinLength( dlg.GetPinLength() );
+    m_textPinNumDefaultSize = dlg.GetPinNumSize();
+    m_textPinNameDefaultSize = dlg.GetPinNameSize();
+    SetGridVisibility( dlg.GetShowGrid() );
+
+    SaveSettings( config() );  // save values shared by eeschema applications.
+
+    m_canvas->Refresh( true );
+}
+

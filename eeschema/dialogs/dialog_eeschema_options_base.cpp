@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -35,7 +35,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 11, 3, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizer1->AddGrowableCol( 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->AddGrowableCol( 2 );
@@ -88,17 +88,6 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticLineWidthUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticLineWidthUnits->Wrap( -1 );
 	fgSizer1->Add( m_staticLineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
-	
-	m_staticText52 = new wxStaticText( m_panel1, wxID_ANY, _("Default pin length:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText52->Wrap( -1 );
-	fgSizer1->Add( m_staticText52, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
-	
-	m_spinPinLength = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 50, 1000, 100 );
-	fgSizer1->Add( m_spinPinLength, 0, wxALIGN_CENTER|wxALL|wxEXPAND, 3 );
-	
-	m_staticPinLengthUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticPinLengthUnits->Wrap( -1 );
-	fgSizer1->Add( m_staticPinLengthUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
 	
 	m_staticText7 = new wxStaticText( m_panel1, wxID_ANY, _("Default text &size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
@@ -247,6 +236,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer2->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
 	
 	m_fieldName1 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fieldName1->SetMaxLength( 0 ); 
 	fgSizer2->Add( m_fieldName1, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticText161 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 2"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -254,6 +244,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer2->Add( m_staticText161, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
 	
 	m_fieldName2 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fieldName2->SetMaxLength( 0 ); 
 	fgSizer2->Add( m_fieldName2, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticText17 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 3"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -261,6 +252,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer2->Add( m_staticText17, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
 	
 	m_fieldName3 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fieldName3->SetMaxLength( 0 ); 
 	fgSizer2->Add( m_fieldName3, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticText18 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 4"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -268,6 +260,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer2->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
 	
 	m_fieldName4 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fieldName4->SetMaxLength( 0 ); 
 	fgSizer2->Add( m_fieldName4, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticText19 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 5"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -275,6 +268,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer2->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
 	
 	m_fieldName5 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fieldName5->SetMaxLength( 0 ); 
 	fgSizer2->Add( m_fieldName5, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticText20 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 6"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -282,6 +276,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer2->Add( m_staticText20, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
 	
 	m_fieldName6 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fieldName6->SetMaxLength( 0 ); 
 	fgSizer2->Add( m_fieldName6, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticText21 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 7"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -289,6 +284,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer2->Add( m_staticText21, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
 	
 	m_fieldName7 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fieldName7->SetMaxLength( 0 ); 
 	fgSizer2->Add( m_fieldName7, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticText22 = new wxStaticText( m_panel2, wxID_ANY, _("Custom field 8"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -296,6 +292,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer2->Add( m_staticText22, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 3 );
 	
 	m_fieldName8 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fieldName8->SetMaxLength( 0 ); 
 	fgSizer2->Add( m_fieldName8, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	

@@ -101,7 +101,7 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     // They are enabled when the loaded component has
     // Graphic items for converted shape
     // But under some circumstances (New component created)
-    // these tools must left enable
+    // these tools must left enabled
     static bool m_showDeMorgan;
 
     /// The current text size setting.
@@ -109,6 +109,15 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 
     /// Current text orientation setting.
     static int m_textOrientation;
+
+    /// The default pin num text size setting.
+    static int m_textPinNumDefaultSize;
+
+    /// The default  pin name text size setting.
+    static int m_textPinNameDefaultSize;
+
+    ///  Default pin length
+    static int m_defaultPinLength;
 
     static wxSize m_clientSize;
 
@@ -149,6 +158,23 @@ public:
      */
     void SetCurPart( LIB_PART* aPart );
 
+    /** @return the default pin num text size.
+     */
+    static int GetPinNumDefaultSize() { return m_textPinNumDefaultSize; }
+
+    /** @return The default  pin name text size setting.
+     */
+    static int GetPinNameDefaultSize() { return m_textPinNameDefaultSize; }
+
+    /** @return The default pin len setting.
+     */
+    static int GetDefaultPinLength() { return m_defaultPinLength; }
+
+    /** Set the default pin len.
+     */
+     static void SetDefaultPinLength( int aLength ) { m_defaultPinLength = aLength; }
+
+
     void ReCreateMenuBar();
 
     /**
@@ -161,6 +187,7 @@ public:
     void InstallConfigFrame( wxCommandEvent& event );
     void InstallDimensionsDialog( wxCommandEvent& event );
     void OnColorConfig( wxCommandEvent& aEvent );
+    void OnPreferencesOptions( wxCommandEvent& event );
     void Process_Config( wxCommandEvent& event );
 
     /**

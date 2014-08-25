@@ -158,7 +158,7 @@ void EDA_3D_FRAME::CreateMenuBar()
 
     wxMenu * renderOptionsMenu = new wxMenu;
     AddMenuItem( prefsMenu, renderOptionsMenu, ID_MENU3D_COLOR,
-           _( "Render options" ), KiBitmap( tools_xpm ) );
+           _( "Render Options" ), KiBitmap( tools_xpm ) );
 
     AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_SHADOWS,
         _( "Render Shadows" ),
@@ -180,7 +180,7 @@ void EDA_3D_FRAME::CreateMenuBar()
         KiBitmap( green_xpm ), wxITEM_CHECK );
 
     AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_MATERIAL,
-        _( "Render Material properties" ),
+        _( "Render Material Properties" ),
         KiBitmap( green_xpm ), wxITEM_CHECK );
 
     prefsMenu->AppendSeparator();
@@ -224,10 +224,10 @@ void EDA_3D_FRAME::CreateMenuBar()
     prefsMenu->AppendSeparator();
 
     AddMenuItem( prefsMenu, ID_MENU3D_SHOW_BOARD_BODY,
-           _( "Show Board Body" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
+           _( "Show Board Bod&y" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
 
     AddMenuItem( prefsMenu, ID_MENU3D_USE_COPPER_THICKNESS,
-           _( "Show Copper Thickness" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
+           _( "Show Copper &Thickness" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
 
     AddMenuItem( prefsMenu, ID_MENU3D_MODULE_ONOFF,
            _( "Show 3D F&ootprints" ), KiBitmap( shape_3d_xpm ), wxITEM_CHECK );
@@ -239,7 +239,7 @@ void EDA_3D_FRAME::CreateMenuBar()
 
     wxMenu * layersMenu = new wxMenu;
     AddMenuItem( prefsMenu, layersMenu, ID_MENU3D_LAYERS,
-           _( "Show Layers" ), KiBitmap( tools_xpm ) );
+           _( "Show &Layers" ), KiBitmap( tools_xpm ) );
 
     AddMenuItem( layersMenu, ID_MENU3D_ADHESIVE_ONOFF,
            _( "Show &Adhesive Layers" ), KiBitmap( tools_xpm ), wxITEM_CHECK );

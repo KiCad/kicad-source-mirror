@@ -16,6 +16,23 @@ class SCH_SHEET;
 #define TXTMARGE 10             // Offset in mils for placement of labels and pin numbers
 #define DANGLING_SYMBOL_SIZE 12
 
+///< The thickness to draw busses that do not have a specific width
+//</ (can be changed in preference menu)
+#define DEFAULTBUSTHICKNESS 12
+
+///< The thickness to draw lines that thickness is set to 0 (default thickness)
+///< (can be changed in preference menu)
+#define DEFAULTDRAWLINETHICKNESS 6
+
+///< The default pin len value when creating pins(can be changed in preference menu)
+#define DEFAULTPINLENGTH 200
+
+///< The default pin len value when creating pins(can be changed in preference menu)
+#define DEFAULTPINNUMSIZE 50
+
+///< The default pin len value when creating pins(can be changed in preference menu)
+#define DEFAULTPINNAMESIZE 50
+
 #define GR_DEFAULT_DRAWMODE GR_COPY
 
 // this enum is for color management
@@ -80,12 +97,6 @@ void SetDefaultLineThickness( int aThickness );
  */
 int GetDefaultTextSize();
 void SetDefaultTextSize( int aSize );
-
-/**
- * Default length for new pins in module editor
- */
-int GetDefaultPinLength();
-void SetDefaultPinLength( int aLength );
 
 /**
  * Default line thickness used to draw/plot busses.

@@ -71,7 +71,7 @@ static int     LastPinNumSize       = -1;
 static int GetLastPinLength()
 {
     if( LastPinLength == -1 )
-        LastPinLength = GetDefaultPinLength();
+        LastPinLength = LIB_EDIT_FRAME::GetDefaultPinLength();
 
     return LastPinLength;
 }
@@ -79,7 +79,7 @@ static int GetLastPinLength()
 static int GetLastPinNameSize()
 {
     if( LastPinNameSize == -1 )
-        LastPinNameSize = GetDefaultTextSize();
+        LastPinNameSize = LIB_EDIT_FRAME::GetPinNameDefaultSize();
 
     return LastPinNameSize;
 }
@@ -87,7 +87,7 @@ static int GetLastPinNameSize()
 static int GetLastPinNumSize()
 {
     if( LastPinNumSize == -1 )
-        LastPinNumSize = GetDefaultTextSize();
+        LastPinNumSize = LIB_EDIT_FRAME::GetPinNumDefaultSize();
 
     return LastPinNumSize;
 }
