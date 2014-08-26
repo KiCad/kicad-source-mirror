@@ -28,6 +28,7 @@
 #include <cstdlib>
 
 #include <boost/context/fcontext.hpp>
+#include <boost/version.hpp>
 
 #include "delegate.h"
 
@@ -88,6 +89,11 @@ public:
         if( m_saved )
             delete m_saved;
 
+#if BOOST_VERSION >= 105600
+        if( m_self )
+            delete m_self;
+#endif
+
         if( m_stack )
             free( m_stack );
     }
@@ -101,7 +107,7 @@ public:
      */
     void Yield()
     {
-        boost::context::jump_fcontext( m_self, m_saved, 0 );
+        jump( m_self, m_saved, 0 );
     }
 
     /**
@@ -113,7 +119,7 @@ public:
     void Yield( ReturnType& aRetVal )
     {
         m_retVal = aRetVal;
-        boost::context::jump_fcontext( m_self, m_saved, 0 );
+        jump( m_self, m_saved, 0 );
     }
 
     /**
@@ -147,12 +153,17 @@ public:
         assert( m_saved == NULL );
 
         m_args = &aArgs;
+#if BOOST_VERSION >= 105600
+        m_self = new boost::context::fcontext_t();
+        *m_self = boost::context::make_fcontext( sp, m_stackSize, callerStub );
+#else
         m_self = boost::context::make_fcontext( sp, m_stackSize, callerStub );
+#endif
         m_saved = new boost::context::fcontext_t();
 
         m_running = true;
         // off we go!
-        boost::context::jump_fcontext( m_saved, m_self, reinterpret_cast<intptr_t>( this ) );
+        jump( m_saved, m_self, reinterpret_cast<intptr_t>( this ) );
         return m_running;
     }
 
@@ -165,7 +176,7 @@ public:
      */
     bool Resume()
     {
-        boost::context::jump_fcontext( m_saved, m_self, 0 );
+        jump( m_saved, m_self, 0 );
 
         return m_running;
     }
@@ -204,7 +215,18 @@ private:
         cor->m_running = false;
 
         // go back to wherever we came from.
-        boost::context::jump_fcontext( cor->m_self, cor->m_saved, 0 );    // reinterpret_cast<intptr_t>( this ));
+        jump( cor->m_self, cor->m_saved, 0 );    // reinterpret_cast<intptr_t>( this ));
+    }
+
+    ///> Wrapper for jump_fcontext to assure compatibility between different boost versions
+    static inline intptr_t jump(boost::context::fcontext_t* aOld, boost::context::fcontext_t* aNew,
+                                intptr_t aP, bool aPreserveFPU = true )
+    {
+#if BOOST_VERSION >= 105600
+        return boost::context::jump_fcontext( aOld, *aNew, aP, aPreserveFPU );
+#else
+        return boost::context::jump_fcontext( aOld, aNew, aP, aPreserveFPU );
+#endif
     }
 
     template <typename T>
