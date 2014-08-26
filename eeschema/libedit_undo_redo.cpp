@@ -51,7 +51,11 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
 
     part = (LIB_PART*) wrapper.GetItem();
 
-    SetCurPart( part );
+    // Do not delete the previous part by calling SetCurPart( part )
+    // which calls delete <previous part>.
+    // <previous part> is now put in undo list and is owned by this list
+    // Just set the current part to the part which come from the redo list
+    m_my_part = part;
 
     if( !part )
         return;
@@ -90,7 +94,11 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
 
     part = (LIB_PART*     ) wrapper.GetItem();
 
-    SetCurPart( part );
+    // Do not delete the previous part by calling SetCurPart( part ),
+    // which calls delete <previous part>.
+    // <previous part> is now put in redo list and is owned by this list.
+    // Just set the current part to the part which come from the undo list
+    m_my_part = part;
 
     if( !part )
         return;
