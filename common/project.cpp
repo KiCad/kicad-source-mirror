@@ -251,7 +251,7 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList,
     if( wxFileName( cur_pro_fn ).IsFileReadable() )
     {
         // Note: currently, aGroupName is not used.
-        // Previoulsy, the version off aGroupName was tested, but it
+        // Previoulsy, the version of aGroupName was tested, but it
         // was useless, and if the version is important,
         // this is not the right place here, because configCreate does know anything
         // about info stored in this config file.

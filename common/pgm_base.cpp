@@ -308,6 +308,13 @@ void PGM_BASE::destroy()
     m_html_ctrl = 0;
 }
 
+void PGM_BASE::ReleaseFile()
+{
+    // Release the current file marked in use.
+    delete m_file_checker;
+    m_file_checker = 0;
+}
+
 
 void PGM_BASE::SetEditorName( const wxString& aFileName )
 {

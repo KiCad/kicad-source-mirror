@@ -180,6 +180,12 @@ public:
     VTBL_ENTRY bool LockFile( const wxString& aFileName );
 
     /**
+     * Function ReleaseFile
+     * Release the current file marked in use.
+     */
+    VTBL_ENTRY void ReleaseFile();
+
+    /**
      * Function App
      * returns a bare naked wxApp, which may come from wxPython, SINGLE_TOP, or kicad.exe.
      * Use this function instead of wxGetApp().
