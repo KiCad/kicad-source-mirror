@@ -420,7 +420,7 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
 #endif
 
     mask = _( "Text file (" ) + mask + wxT( ")|" ) + mask;
-    wxString default_dir = wxGetCwd();
+    wxString default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
 
     wxFileDialog dlg( this, _( "Load File to Edit" ), default_dir,
                       wxEmptyString, mask, wxFD_OPEN );

@@ -203,6 +203,12 @@ void PROJECT::SetElem( ELEM_T aIndex, _ELEM* aElem )
 
 static bool copy_pro_file_template( const SEARCH_STACK& aSearchS, const wxString& aDestination )
 {
+    if( aDestination.IsEmpty() )
+    {
+        DBG( printf( "%s: destination is empty.\n", __func__ );)
+        return false;
+    }
+
     wxString templateFile = wxT( "kicad." ) + ProjectFileExtension;
 
     wxString kicad_pro_template = aSearchS.FindValidPath( templateFile );
@@ -244,36 +250,16 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList,
 
     if( wxFileName( cur_pro_fn ).IsFileReadable() )
     {
+        // Note: currently, aGroupName is not used.
+        // Previoulsy, the version off aGroupName was tested, but it
+        // was useless, and if the version is important,
+        // this is not the right place here, because configCreate does know anything
+        // about info stored in this config file.
         cfg = new wxFileConfig( wxEmptyString, wxEmptyString, cur_pro_fn, wxEmptyString );
-
-        /* Check the application version against the version saved in the
-         * project file.
-         *
-         * TODO: Push the version test up the stack so that when one of the
-         *       KiCad application version changes, the other applications
-         *       settings do not get updated.  Practically, this can go away.
-         *       It isn't used anywhere as far as I know (WLS).
-         */
-
-        cfg->SetPath( aGroupName );
-
-        int def_version = 0;
-        int version = cfg->Read( wxT( "version" ), def_version );
-
-        if( version > 0 )
-        {
-            cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
-            return cfg;
-        }
-        else    // Version incorrect
-        {
-            DBG( printf( "%s: project file version is zero, not using this old project file, going with template.", __func__ );)
-            delete cfg;
-            cfg = 0;
-        }
+        return cfg;
     }
 
-    // No suitable pro file was found, either does not exist, or is too old.
+    // No suitable pro file was found, either does not exist, or not readable.
     // Use the template kicad.pro file.  Find it by using caller's SEARCH_STACK.
     copy_pro_file_template( aSList, cur_pro_fn );
 
