@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-24 11:55+0100\n"
-"PO-Revision-Date: 2014-08-24 11:56+0100\n"
+"POT-Creation-Date: 2014-08-26 17:53+0100\n"
+"PO-Revision-Date: 2014-08-26 17:56+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -329,7 +329,7 @@ msgid "Open KiCad user manual"
 msgstr "Otwórz podręcznik programu KiCad"
 
 #: kicad/menubar.cpp:275 eeschema/menubar.cpp:495
-#: eeschema/menubar_libedit.cpp:279 pcbnew/menubar_modedit.cpp:284
+#: eeschema/menubar_libedit.cpp:269 pcbnew/menubar_modedit.cpp:284
 #: pcbnew/menubar_pcbframe.cpp:561
 msgid "&Getting Started in KiCad"
 msgstr "Pierwsze kroki w pro&gramie KiCad"
@@ -349,7 +349,7 @@ msgid "About KiCad project manager"
 msgstr "O programie Menedżer projektu KiCad"
 
 #: kicad/menubar.cpp:289 eeschema/menubar.cpp:507
-#: eeschema/menubar_libedit.cpp:293 pcbnew/menubar_modedit.cpp:296
+#: eeschema/menubar_libedit.cpp:283 pcbnew/menubar_modedit.cpp:296
 #: pcbnew/menubar_pcbframe.cpp:572 cvpcb/menubar.cpp:161
 #: gerbview/menubar.cpp:236 3d-viewer/3d_toolbar.cpp:139
 #: pagelayout_editor/menubar.cpp:163
@@ -366,7 +366,7 @@ msgid "&Preferences"
 msgstr "&Ustawienia"
 
 #: kicad/menubar.cpp:292 eeschema/menubar.cpp:513
-#: eeschema/menubar_libedit.cpp:298 pcbnew/menubar_modedit.cpp:302
+#: eeschema/menubar_libedit.cpp:288 pcbnew/menubar_modedit.cpp:302
 #: pcbnew/menubar_pcbframe.cpp:580 cvpcb/menubar.cpp:163
 #: gerbview/menubar.cpp:239 pagelayout_editor/menubar.cpp:165
 msgid "&Help"
@@ -445,8 +445,8 @@ msgstr ""
 msgid "KiCad project file '%s' not found"
 msgstr "Plik projektu KiCad '%s' nie został znaleziony"
 
-#: kicad/prjconfig.cpp:271 eeschema/libedit.cpp:62 eeschema/schframe.cpp:1224
-#: pcbnew/moduleframe.cpp:682 pcbnew/pcbframe.cpp:974 cvpcb/cvframe.cpp:734
+#: kicad/prjconfig.cpp:271 eeschema/libedit.cpp:62 eeschema/schframe.cpp:1226
+#: pcbnew/moduleframe.cpp:682 pcbnew/pcbframe.cpp:976 cvpcb/cvframe.cpp:734
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -716,7 +716,7 @@ msgstr "Zdublowany odcisk czasowy (%s) dla %s%d i %s%d"
 msgid "Unit"
 msgstr "Część"
 
-#: eeschema/controle.cpp:165 eeschema/libeditframe.cpp:1263
+#: eeschema/controle.cpp:165 eeschema/libeditframe.cpp:1230
 msgid "Clarify Selection"
 msgstr "Sprecyzuj Wybór"
 
@@ -803,12 +803,11 @@ msgstr "Pole oznaczenie nie może być puste! Bez zmian"
 msgid "The value field cannot be empty!  No change"
 msgstr "Pole wartość nie może być puste! Bez zmian"
 
-#: eeschema/eeschema_config.cpp:209 eeschema/eeschema_config.cpp:312
-#: pcbnew/pcbnew_config.cpp:204
+#: eeschema/eeschema_config.cpp:261 pcbnew/pcbnew_config.cpp:204
 msgid "Read Project File"
 msgstr "Odczytaj plik projektu"
 
-#: eeschema/eeschema_config.cpp:537 pcbnew/pcbnew_config.cpp:283
+#: eeschema/eeschema_config.cpp:496 pcbnew/pcbnew_config.cpp:283
 #: cvpcb/cfg.cpp:86
 msgid "Save Project File"
 msgstr "Zapisz plik projektu"
@@ -1157,7 +1156,7 @@ msgstr "Czy chcesz zmienić aktywną bibliotekę?"
 msgid "Part name '%s' not found in library '%s'"
 msgstr "Nazwa symbolu '%s' nie została znaleziona w '%s'"
 
-#: eeschema/libedit.cpp:316 eeschema/libeditframe.cpp:733
+#: eeschema/libedit.cpp:316 eeschema/libeditframe.cpp:700
 msgid "No library specified."
 msgstr "Nie wybrano żadnej biblioteki."
 
@@ -1374,15 +1373,15 @@ msgstr "Symbol '%s' istnieje. Zmienić go?"
 msgid "Part '%s' saved in library '%s'"
 msgstr "Symbol '%s' zapisano w bibliotece '%s'"
 
-#: eeschema/libeditframe.cpp:182
+#: eeschema/libeditframe.cpp:181
 msgid "Library Editor"
 msgstr "Edytor bibliotek"
 
-#: eeschema/libeditframe.cpp:330
+#: eeschema/libeditframe.cpp:297
 msgid "Save the changes in the library before closing?"
 msgstr "Zapisać zmiany w bibliotece przed zamknięciem?"
 
-#: eeschema/libeditframe.cpp:357
+#: eeschema/libeditframe.cpp:324
 #, c-format
 msgid ""
 "Library '%s' was modified!\n"
@@ -1391,58 +1390,58 @@ msgstr ""
 "Biblioteka '%s' została zmieniona!\n"
 "Porzucić zmiany?"
 
-#: eeschema/libeditframe.cpp:462
+#: eeschema/libeditframe.cpp:429
 #, c-format
 msgid "Unit %s"
 msgstr "Część składowa %s"
 
-#: eeschema/libeditframe.cpp:720
+#: eeschema/libeditframe.cpp:687
 msgid "No part to save."
 msgstr "Brak symbolu by zapisać."
 
-#: eeschema/libeditframe.cpp:1119
+#: eeschema/libeditframe.cpp:1086
 msgid "Add pin"
 msgstr "Dodaj pin"
 
-#: eeschema/libeditframe.cpp:1123
+#: eeschema/libeditframe.cpp:1090
 msgid "Set pin options"
 msgstr "Ustaw opcje pinu"
 
-#: eeschema/libeditframe.cpp:1134 eeschema/schedit.cpp:541
+#: eeschema/libeditframe.cpp:1101 eeschema/schedit.cpp:541
 #: pcbnew/edit.cpp:1454 pcbnew/modedit.cpp:908
 #: pcbnew/tools/drawing_tool.cpp:1440 pcbnew/tools/drawing_tool.cpp:1558
 msgid "Add text"
 msgstr "Dodaj tekst"
 
-#: eeschema/libeditframe.cpp:1138
+#: eeschema/libeditframe.cpp:1105
 msgid "Add rectangle"
 msgstr "Dodaj prostokąt"
 
-#: eeschema/libeditframe.cpp:1142 pcbnew/modedit.cpp:904
+#: eeschema/libeditframe.cpp:1109 pcbnew/modedit.cpp:904
 msgid "Add circle"
 msgstr "Dodaj okrąg"
 
-#: eeschema/libeditframe.cpp:1146 pcbnew/modedit.cpp:900
+#: eeschema/libeditframe.cpp:1113 pcbnew/modedit.cpp:900
 msgid "Add arc"
 msgstr "Dodaj łuk"
 
-#: eeschema/libeditframe.cpp:1150 pcbnew/modedit.cpp:896
+#: eeschema/libeditframe.cpp:1117 pcbnew/modedit.cpp:896
 msgid "Add line"
 msgstr "Dodaj linię"
 
-#: eeschema/libeditframe.cpp:1154
+#: eeschema/libeditframe.cpp:1121
 msgid "Set anchor position"
 msgstr "Ustaw pozycję zakotwiczenia"
 
-#: eeschema/libeditframe.cpp:1158
+#: eeschema/libeditframe.cpp:1125
 msgid "Import"
 msgstr "Importuj"
 
-#: eeschema/libeditframe.cpp:1164 bitmap2component/bitmap2cmp_gui_base.cpp:124
+#: eeschema/libeditframe.cpp:1131 bitmap2component/bitmap2cmp_gui_base.cpp:124
 msgid "Export"
 msgstr "Eksportuj"
 
-#: eeschema/libeditframe.cpp:1176 eeschema/schedit.cpp:577
+#: eeschema/libeditframe.cpp:1143 eeschema/schedit.cpp:577
 #: pcbnew/edit.cpp:1466 pcbnew/modedit.cpp:933
 #: eeschema/help_common_strings.h:24
 msgid "Delete item"
@@ -2472,19 +2471,19 @@ msgstr "Tekst (grafika)"
 msgid "Image"
 msgstr "Obraz"
 
-#: eeschema/menubar.cpp:381
+#: eeschema/menubar.cpp:381 eeschema/menubar_libedit.cpp:230
 msgid "Set Active &Libraries"
 msgstr "Wybierz aktywne biblioteki"
 
-#: eeschema/menubar.cpp:382
+#: eeschema/menubar.cpp:382 eeschema/menubar_libedit.cpp:231
 msgid "Set active library list and library paths"
 msgstr "Ustawia listę aktywnych blibliotek i ścieżek do nich"
 
-#: eeschema/menubar.cpp:388
+#: eeschema/menubar.cpp:388 eeschema/menubar_libedit.cpp:244
 msgid "Set &Colors Scheme"
 msgstr "Wybierz schemat kolorów"
 
-#: eeschema/menubar.cpp:389
+#: eeschema/menubar.cpp:389 eeschema/menubar_libedit.cpp:245
 msgid "Set color preferences"
 msgstr "Ustawienia kolorów"
 
@@ -2500,8 +2499,7 @@ msgstr "Ustawienia Eeschema"
 msgid "&Save Preferences"
 msgstr "&Zapisz ustawienia"
 
-#: eeschema/menubar.cpp:417 eeschema/menubar_libedit.cpp:254
-#: pcbnew/menubar_pcbframe.cpp:505
+#: eeschema/menubar.cpp:417 pcbnew/menubar_pcbframe.cpp:505
 msgid "Save application preferences"
 msgstr "Zapisz ustawienia aplikacji"
 
@@ -2509,8 +2507,7 @@ msgstr "Zapisz ustawienia aplikacji"
 msgid "&Read Preferences"
 msgstr "W&czytaj ustawienia"
 
-#: eeschema/menubar.cpp:423 eeschema/menubar_libedit.cpp:261
-#: pcbnew/menubar_pcbframe.cpp:510
+#: eeschema/menubar.cpp:423 pcbnew/menubar_pcbframe.cpp:510
 msgid "Read application preferences"
 msgstr "Wczytaj ustawienia aplikacji"
 
@@ -2570,30 +2567,30 @@ msgstr "Otwórz podręcznik programu Eeschema"
 msgid "Open Eeschema manual"
 msgstr "Otwiera podręcznik do programu Eeschema"
 
-#: eeschema/menubar.cpp:502 eeschema/menubar_libedit.cpp:288
+#: eeschema/menubar.cpp:502 eeschema/menubar_libedit.cpp:278
 msgid "&About Eeschema"
 msgstr "O progr&amie Eeschema"
 
-#: eeschema/menubar.cpp:503 eeschema/menubar_libedit.cpp:289
+#: eeschema/menubar.cpp:503 eeschema/menubar_libedit.cpp:279
 msgid "About Eeschema schematic designer"
 msgstr "Informacje o  programie edytora schematów Eeschema"
 
-#: eeschema/menubar.cpp:508 eeschema/menubar_libedit.cpp:294
+#: eeschema/menubar.cpp:508 eeschema/menubar_libedit.cpp:284
 #: pcbnew/menubar_modedit.cpp:297 pcbnew/menubar_pcbframe.cpp:573
 msgid "&Edit"
 msgstr "&Edytuj"
 
-#: eeschema/menubar.cpp:509 eeschema/menubar_libedit.cpp:295
+#: eeschema/menubar.cpp:509 eeschema/menubar_libedit.cpp:285
 #: pcbnew/menubar_modedit.cpp:300 pcbnew/menubar_pcbframe.cpp:574
 msgid "&View"
 msgstr "&Widok"
 
-#: eeschema/menubar.cpp:510 eeschema/menubar_libedit.cpp:296
+#: eeschema/menubar.cpp:510 eeschema/menubar_libedit.cpp:286
 #: pcbnew/menubar_modedit.cpp:301 pcbnew/menubar_pcbframe.cpp:575
 msgid "&Place"
 msgstr "&Dodaj"
 
-#: eeschema/menubar.cpp:511 eeschema/menubar_libedit.cpp:297
+#: eeschema/menubar.cpp:511 eeschema/menubar_libedit.cpp:287
 #: pcbnew/menubar_pcbframe.cpp:576
 msgid "P&references"
 msgstr "Ustawienia"
@@ -2682,40 +2679,24 @@ msgstr "Łuk"
 msgid "&Line or Polygon"
 msgstr "&Linia lub wielokąt (grafika)"
 
-#: eeschema/menubar_libedit.cpp:230
-msgid "&Library"
-msgstr "&Biblioteka"
-
-#: eeschema/menubar_libedit.cpp:231
-msgid "Library preferences"
-msgstr "Ustawienia bibliotek"
-
 #: eeschema/menubar_libedit.cpp:237
-msgid "&Colors"
-msgstr "&Kolory"
+msgid "Component Editor &Options"
+msgstr "Opcje Edytora Bibliotek"
 
 #: eeschema/menubar_libedit.cpp:238
-msgid "Color preferences"
-msgstr "Ustawienia kolorów"
+msgid "Set Component Editor default values and options"
+msgstr "Ustawia domyślne wartości i opcje Edytora Bibliotek"
 
-#: eeschema/menubar_libedit.cpp:253
-msgid "&Save preferences"
-msgstr "&Zapisz ustawienia"
-
-#: eeschema/menubar_libedit.cpp:260
-msgid "&Read preferences"
-msgstr "W&czytaj ustawienia"
-
-#: eeschema/menubar_libedit.cpp:273 pcbnew/menubar_pcbframe.cpp:556
+#: eeschema/menubar_libedit.cpp:263 pcbnew/menubar_pcbframe.cpp:556
 #: gerbview/menubar.cpp:224 pagelayout_editor/menubar.cpp:151
 msgid "&Contents"
 msgstr "&Zawartość"
 
-#: eeschema/menubar_libedit.cpp:274
+#: eeschema/menubar_libedit.cpp:264
 msgid "Open the Eeschema manual"
 msgstr "Otwórz podręcznik programu Eeschema"
 
-#: eeschema/menubar_libedit.cpp:280 pcbnew/menubar_modedit.cpp:285
+#: eeschema/menubar_libedit.cpp:270 pcbnew/menubar_modedit.cpp:285
 #: pcbnew/menubar_pcbframe.cpp:562
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
 msgstr ""
@@ -3304,7 +3285,7 @@ msgstr "Nie znaleziono"
 msgid "The following libraries were not found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
-#: eeschema/schframe.cpp:596 pcbnew/pcbframe.cpp:593
+#: eeschema/schframe.cpp:598 pcbnew/pcbframe.cpp:595
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -3315,44 +3296,44 @@ msgstr ""
 "'%s'\n"
 "przed zamknięciem?"
 
-#: eeschema/schframe.cpp:744
+#: eeschema/schframe.cpp:746
 msgid "Draw wires and buses in any direction"
 msgstr "Rysowanie połączeń i magistral w dowolnym kierunku"
 
-#: eeschema/schframe.cpp:745
+#: eeschema/schframe.cpp:747
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Rysowanie połączeń i magistral tylko w pionie i poziomie"
 
-#: eeschema/schframe.cpp:754
+#: eeschema/schframe.cpp:756
 msgid "Do not show hidden pins"
 msgstr "Nie pokazuj ukrytych pinów"
 
-#: eeschema/schframe.cpp:755 eeschema/tool_sch.cpp:304
+#: eeschema/schframe.cpp:757 eeschema/tool_sch.cpp:304
 msgid "Show hidden pins"
 msgstr "Pokaż ukryte piny"
 
-#: eeschema/schframe.cpp:859
+#: eeschema/schframe.cpp:861
 msgid "Schematic"
 msgstr "Schemat"
 
-#: eeschema/schframe.cpp:878
+#: eeschema/schframe.cpp:880
 msgid "New Schematic"
 msgstr "Nowy schemat"
 
-#: eeschema/schframe.cpp:891
+#: eeschema/schframe.cpp:893
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr "Plik '%s' już istnieje. Użyj polecenia Otwórz"
 
-#: eeschema/schframe.cpp:911
+#: eeschema/schframe.cpp:913
 msgid "Open Schematic"
 msgstr "Otwórz schemat"
 
-#: eeschema/schframe.cpp:1006
+#: eeschema/schframe.cpp:1008
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1227
+#: eeschema/schframe.cpp:1229
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -3569,22 +3550,22 @@ msgstr "Wybór biblioteki"
 msgid "File name is not valid!"
 msgstr "Nazwa pliku jest niepoprawna!"
 
-#: eeschema/sheet.cpp:86
+#: eeschema/sheet.cpp:90
 #, c-format
 msgid "A sheet named \"%s\" already exists."
 msgstr "Arkusz o nazwie \"%s\" już istnieje."
 
-#: eeschema/sheet.cpp:112
+#: eeschema/sheet.cpp:120
 #, c-format
 msgid "A file named '%s' already exists in the current schematic hierarchy."
 msgstr "Plik o nazwie '%s' już istnieje w bieżącej hierarchii schematu."
 
-#: eeschema/sheet.cpp:117
+#: eeschema/sheet.cpp:125
 #, c-format
 msgid "A file named '%s' already exists."
 msgstr "Plik o nazwie '%s' już istnieje."
 
-#: eeschema/sheet.cpp:121
+#: eeschema/sheet.cpp:129
 msgid ""
 "\n"
 "\n"
@@ -3594,21 +3575,21 @@ msgstr ""
 "\n"
 "Czy chcesz utworzyć arkusz z zawartością tego pliku?"
 
-#: eeschema/sheet.cpp:145
+#: eeschema/sheet.cpp:158
 msgid "Changing the sheet file name cannot be undone.  "
 msgstr "Zmiana nazwy pliku arkusza nie może być cofnięta."
 
-#: eeschema/sheet.cpp:152
+#: eeschema/sheet.cpp:165
 #, c-format
 msgid "A file named <%s> already exists in the current schematic hierarchy."
 msgstr "Plik o nazwie <%s> już istnieje w bieżącej hierarchii schematu."
 
-#: eeschema/sheet.cpp:157
+#: eeschema/sheet.cpp:170
 #, c-format
 msgid "A file named <%s> already exists."
 msgstr "Plik o nazwie <%s> już istnieje."
 
-#: eeschema/sheet.cpp:162
+#: eeschema/sheet.cpp:175
 msgid ""
 "\n"
 "\n"
@@ -3618,7 +3599,7 @@ msgstr ""
 "\n"
 "Czy chcesz zamienić arkusz z zawartością tego pliku?"
 
-#: eeschema/sheet.cpp:174
+#: eeschema/sheet.cpp:187
 msgid ""
 "This sheet uses shared data in a complex hierarchy.\n"
 "\n"
@@ -3626,7 +3607,7 @@ msgstr ""
 "Ten arkusz używa danych współdzielonych w zaawansowanej hierarchii.\n"
 "\n"
 
-#: eeschema/sheet.cpp:175
+#: eeschema/sheet.cpp:188
 msgid "Do you wish to convert it to a simple hierarchical sheet?"
 msgstr "Czy chcesz go zamienić na prosty arkusz kierarchiczny?"
 
@@ -5183,6 +5164,7 @@ msgstr "Jednostki miary:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:57
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:33
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:36
 msgid "&Grid size:"
 msgstr "Rozmiar siatki:"
 
@@ -5192,7 +5174,6 @@ msgstr "Rozmiar siatki:"
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:99
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:110
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:121
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:132
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:43
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:54
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:65
@@ -5201,6 +5182,11 @@ msgstr "Rozmiar siatki:"
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:104
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:115
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:126
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:45
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:56
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:67
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:78
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:89
 msgid "mils"
 msgstr "milsy"
 
@@ -5209,135 +5195,133 @@ msgid "Default &bus width:"
 msgstr "Domyślna szerokość &magistrali:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:49
 msgid "Default &line width:"
 msgstr "Domyślna szerokość &linii:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:92
-msgid "Default pin length:"
-msgstr "Domyślna długość pinu:"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:103
 msgid "Default text &size:"
 msgstr "Domyślny rozmiar tekstu:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:114
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:103
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:69
 msgid "Repeat draw item &horizontal displacement:"
 msgstr "Powtarzaj rysowanie elementów z przesunięciem poziomym:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:125
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:114
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:83
 msgid "Repeat draw item &vertical displacement:"
 msgstr "Powtarzaj rysowanie elementów z przesunięciem pionowym:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:136
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:125
 msgid "&Repeat label increment:"
 msgstr "Zmieniaj numer etykiety co:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:146
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:135
 msgid "Auto save &time interval:"
 msgstr "Auto zapis tworzony co:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:153
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:142
 msgid "minutes"
 msgstr "minut"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:157
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:146
 msgid "Part id notation:"
 msgstr "Notacja ID elementów:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:161
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:150
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:278
 msgid "A"
 msgstr "A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:161
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:150
 msgid ".A"
 msgstr ".A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:161
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:150
 msgid "-A"
 msgstr "-A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:161
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:150
 msgid "_A"
 msgstr "_A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:161
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:150
 msgid ".1"
 msgstr ".1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:161
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:150
 msgid "-1"
 msgstr "-1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:161
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:150
 msgid "_1"
 msgstr "_1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:179
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:168
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:102
 msgid "Show gr&id"
 msgstr "Pokaż siatkę"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:182
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:171
 msgid "Show hi&dden pins"
 msgstr "Pokaż ukryte piny"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:185
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:174
 msgid "Do not center and &warp cursor on zoom"
 msgstr "Nie centruj i nie przesuwaj kursora przy powiększaniu"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:186
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:175
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:159
 #: cvpcb/dialogs/dialog_display_options_base.cpp:59
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:87
 msgid "Keep the cursor at its current location when zooming"
 msgstr "Zachowaj bieżącą pozycję kursora podczas powiększania"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:190
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:179
 msgid "Use &middle mouse button to pan"
 msgstr "Użyj środkowego klawisza myszy do panoramowania"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:191
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:180
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:164
 msgid "Use middle mouse button dragging to pan"
 msgstr "Użyj środkowego klawisza myszy do przesuwania widoku"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:195
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:184
 msgid "&Limit panning to scroll size"
 msgstr "Panoramuj tylko do obszaru dającego się przesuwać"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:196
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:185
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:169
 msgid "Middle mouse button panning limited by current scrollbar size"
 msgstr ""
 "Przesuwanie widoku za pomocą środkowego klawisza myszy ograniczone przez "
 "bieżący rozmiar suwaków"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:200
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:189
 msgid "Pan while moving ob&ject"
 msgstr "Panoramuj podczas przesuwania obiektów"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:203
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:192
 msgid "Allow buses and wires to be placed in H or V &orientation only"
 msgstr ""
 "Pozwól na prowadzenie połączeń lub magistral wyłącznie pod kątem prostym"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:206
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:195
 msgid "Show p&age limits"
 msgstr "Pokaż granice strony"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:219
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:208
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:68
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:617
 msgid "General Options"
 msgstr "Opcje główne"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:221
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:210
 msgid "User defined field names for schematic components. "
 msgstr "Nazwy pól użytkownika dla symboli schematowych."
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:229
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:218
 msgid ""
 "Please enter fieldnames which you want presented in the component fieldname "
 "(property) editors.  Names may not include (, ), or \" characters."
@@ -5345,39 +5329,39 @@ msgstr ""
 "Wpisz nazwy pól, które chcesz przedstawić w edytorze symboli "
 "(właściwościach). Nazwy nie mogą zawierać znaków (, ), lub \" ."
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:245
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:234
 msgid "Custom field 1"
 msgstr "Pole użytkownika 1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:252
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:242
 msgid "Custom field 2"
 msgstr "Pole użytkownika 2"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:259
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:250
 msgid "Custom field 3"
 msgstr "Pole użytkownika 3"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:266
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:258
 msgid "Custom field 4"
 msgstr "Pole użytkownika 4"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:273
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:266
 msgid "Custom field 5"
 msgstr "Pole użytkownika 5"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:280
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:274
 msgid "Custom field 6"
 msgstr "Pole użytkownika 6"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:287
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:282
 msgid "Custom field 7"
 msgstr "Pole użytkownika 7"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:294
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:290
 msgid "Custom field 8"
 msgstr "Pole użytkownika 8"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:311
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:308
 msgid "Template Field Names"
 msgstr "Wzorce nazw pól"
 
@@ -5490,6 +5474,18 @@ msgstr "Zmieniaj nume&r etykiety co:"
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:148
 msgid "Save as Default"
 msgstr "Zapisz jako domyślny"
+
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:60
+msgid "Default pin length:"
+msgstr "Domyślna długość pinu:"
+
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:71
+msgid "Default pin num &size:"
+msgstr "Domyślny rozmiar numeru pinu:"
+
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:82
+msgid "Default pin &name size:"
+msgstr "Domyślny rozmiar nazwy pinu:"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:34
 msgid "&Width:"
@@ -9013,7 +9009,7 @@ msgstr "Zmień warstwę elementów"
 msgid "Set Line Width"
 msgstr "Ustaw szerokość linii"
 
-#: pcbnew/moduleframe.cpp:239 pcbnew/pcbframe.cpp:419 pcbnew/pcbframe.cpp:904
+#: pcbnew/moduleframe.cpp:239 pcbnew/pcbframe.cpp:419 pcbnew/pcbframe.cpp:906
 #: gerbview/events_called_functions.cpp:306 gerbview/gerbview_frame.cpp:142
 msgid "Visibles"
 msgstr "Widoczność"
@@ -9027,7 +9023,7 @@ msgid "Library is not set, the module could not be saved."
 msgstr ""
 "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
-#: pcbnew/moduleframe.cpp:614 pcbnew/pcbframe.cpp:664
+#: pcbnew/moduleframe.cpp:614 pcbnew/pcbframe.cpp:666
 #: cvpcb/class_DisplayFootprintsFrame.cpp:403
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
@@ -9737,12 +9733,12 @@ msgstr "Przelotka %s, wiercenie %s"
 msgid "Delete Pad (module %s %s) "
 msgstr "Usuń pole lutownicze (footprint %s %s) "
 
-#: pcbnew/pcbframe.cpp:627
+#: pcbnew/pcbframe.cpp:629
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Plik automatycznej kopii zapasowej '%s' nie może zostac usunięty!"
 
-#: pcbnew/pcbframe.cpp:978
+#: pcbnew/pcbframe.cpp:980
 msgid " [new file]"
 msgstr " [nowy plik]"
 
@@ -16583,7 +16579,7 @@ msgid "Realistic Mode"
 msgstr "Tryb realistyczny"
 
 #: 3d-viewer/3d_toolbar.cpp:161
-msgid "Render options"
+msgid "Render Options"
 msgstr "Opcje renderingu"
 
 #: 3d-viewer/3d_toolbar.cpp:164
@@ -16616,7 +16612,7 @@ msgid "Render Smooth Normals"
 msgstr "Renderuj wygładzając"
 
 #: 3d-viewer/3d_toolbar.cpp:183
-msgid "Render Material properties"
+msgid "Render Material Properties"
 msgstr "Właściwości materiału podczas renderowania"
 
 #: 3d-viewer/3d_toolbar.cpp:192
@@ -16660,11 +16656,11 @@ msgid "3D Grid 1 mm"
 msgstr "Siatka 1mm"
 
 #: 3d-viewer/3d_toolbar.cpp:227
-msgid "Show Board Body"
+msgid "Show Board Bod&y"
 msgstr "Pokaż ciało płytki"
 
 #: 3d-viewer/3d_toolbar.cpp:230
-msgid "Show Copper Thickness"
+msgid "Show Copper &Thickness"
 msgstr "Pokazuj grubość miedzi"
 
 #: 3d-viewer/3d_toolbar.cpp:233
@@ -16676,7 +16672,7 @@ msgid "Show Zone &Filling"
 msgstr "Pokaż stre&fy wypełnień"
 
 #: 3d-viewer/3d_toolbar.cpp:242
-msgid "Show Layers"
+msgid "Show &Layers"
 msgstr "Pokaż warstwy"
 
 #: 3d-viewer/3d_toolbar.cpp:245
@@ -17185,28 +17181,28 @@ msgstr "Japoński"
 msgid "Bulgarian"
 msgstr "Bułgarski"
 
-#: common/pgm_base.cpp:341
+#: common/pgm_base.cpp:348
 msgid "No default editor found, you must choose it"
 msgstr "Nie znaleziono domyślnego edytora. Musisz go wybrać."
 
-#: common/pgm_base.cpp:348
+#: common/pgm_base.cpp:355
 msgid "Preferred Editor:"
 msgstr "Preferowany edytor:"
 
-#: common/pgm_base.cpp:376
+#: common/pgm_base.cpp:383
 #, c-format
 msgid "%s is already running, Continue?"
 msgstr "%s jest już uruchomiony. Kontynuować?"
 
-#: common/pgm_base.cpp:704
+#: common/pgm_base.cpp:711
 msgid "Language"
 msgstr "Język"
 
-#: common/pgm_base.cpp:705
+#: common/pgm_base.cpp:712
 msgid "Select application language (only for testing!)"
 msgstr "Wybierz język aplikacji (tylko do testowania!)"
 
-#: common/project.cpp:220
+#: common/project.cpp:226
 #, c-format
 msgid "Unable to find '%s' template config file."
 msgstr "Nie można odnaleźć pliku szablonu '%s'."
@@ -19128,19 +19124,19 @@ msgstr "Podgląd wydruku"
 msgid "Quit Pl_Editor"
 msgstr "Zakończ"
 
-#: pagelayout_editor/menubar.cpp:121 pagelayout_editor/pl_editor_config.cpp:61
+#: pagelayout_editor/menubar.cpp:121 pagelayout_editor/pl_editor_config.cpp:59
 msgid "&BackGround Black"
 msgstr "Tło w kolorze czarnym"
 
-#: pagelayout_editor/menubar.cpp:121 pagelayout_editor/pl_editor_config.cpp:62
+#: pagelayout_editor/menubar.cpp:121 pagelayout_editor/pl_editor_config.cpp:60
 msgid "&BackGround White"
 msgstr "Tło w kolorze białym"
 
-#: pagelayout_editor/menubar.cpp:126 pagelayout_editor/pl_editor_config.cpp:69
+#: pagelayout_editor/menubar.cpp:126 pagelayout_editor/pl_editor_config.cpp:67
 msgid "Hide &Grid"
 msgstr "Ukryj siatkę"
 
-#: pagelayout_editor/menubar.cpp:126 pagelayout_editor/pl_editor_config.cpp:70
+#: pagelayout_editor/menubar.cpp:126 pagelayout_editor/pl_editor_config.cpp:68
 msgid "Show &Grid"
 msgstr "Pokaż siatkę"
 
@@ -19669,7 +19665,7 @@ msgstr "Edytor tekstu"
 msgid "Field Properties"
 msgstr "Właściwości pola"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.h:127
+#: eeschema/dialogs/dialog_eeschema_options_base.h:126
 msgid "Schematic Editor Options"
 msgstr "Opcje edytora schematów"
 
@@ -19678,6 +19674,7 @@ msgid "EESchema Erc"
 msgstr "ERC Eeschema"
 
 #: eeschema/dialogs/dialog_libedit_dimensions_base.h:84
+#: eeschema/dialogs/dialog_libedit_options_base.h:66
 msgid "Library Editor Options"
 msgstr "Opcje Edytora bibliotek"
 
@@ -19926,6 +19923,24 @@ msgstr "Kalkulator PCB"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nowy element"
+
+#~ msgid "&Library"
+#~ msgstr "&Biblioteka"
+
+#~ msgid "Library preferences"
+#~ msgstr "Ustawienia bibliotek"
+
+#~ msgid "&Colors"
+#~ msgstr "&Kolory"
+
+#~ msgid "Color preferences"
+#~ msgstr "Ustawienia kolorów"
+
+#~ msgid "&Save preferences"
+#~ msgstr "&Zapisz ustawienia"
+
+#~ msgid "&Read preferences"
+#~ msgstr "W&czytaj ustawienia"
 
 #~ msgid "Max Quality in Realistic Mode"
 #~ msgstr "Maksymalna jakość w trybie realistycznym"
