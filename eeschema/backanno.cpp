@@ -45,6 +45,7 @@
 #include <dsnlexer.h>
 #include <ptree.h>
 #include <boost/property_tree/ptree.hpp>
+#include <wx/choicdlg.h>
 
 
 void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfReferences ) throw( IO_ERROR )
@@ -88,7 +89,7 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
             else
                 footprint.Empty();
 
-            DBG( printf( "%s: ref:%s  fpid:%s\n", __func__, TO_UTF8( reference ), TO_UTF8( footprint ) ); )
+            // DBG( printf( "%s: ref:%s  fpid:%s\n", __func__, TO_UTF8( reference ), TO_UTF8( footprint ) ); )
 
             // Search the component in the flat list
             for( unsigned ii = 0;  ii < refs.GetCount();  ++ii )
@@ -128,8 +129,8 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
 
 
 bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilename,
-                                                    bool aForceFieldsVisibleAttribute,
-                                                    bool aFieldsVisibleAttributeState )
+                                                    bool aForceVisibilityState,
+                                                    bool aVisibilityState )
 {
     // Build a flat list of components in schematic:
     SCH_REFERENCE_LIST  referencesList;
@@ -138,6 +139,7 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
     sheetList.GetComponents( Prj().SchLibs(), referencesList, false );
 
     FILE* cmpFile = wxFopen( aFullFilename, wxT( "rt" ) );
+
     if( cmpFile == NULL )
         return false;
 
@@ -155,7 +157,7 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
     {
         buffer = FROM_UTF8( cmpFileReader.Line() );
 
-        if( !buffer.StartsWith( wxT("BeginCmp") ) )
+        if( !buffer.StartsWith( wxT( "BeginCmp" ) ) )
             continue;
 
         // Begin component description.
@@ -166,7 +168,7 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
         {
             buffer = FROM_UTF8( cmpFileReader.Line() );
 
-            if( buffer.StartsWith( wxT("EndCmp") ) )
+            if( buffer.StartsWith( wxT( "EndCmp" ) ) )
                 break;
 
             // store string value, stored between '=' and ';' delimiters.
@@ -175,17 +177,17 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
             value.Trim(true);
             value.Trim(false);
 
-            if( buffer.StartsWith( wxT("Reference") ) )
+            if( buffer.StartsWith( wxT( "Reference" ) ) )
             {
                 reference = value;
             }
-            else if( buffer.StartsWith( wxT("IdModule  =" ) ) )
+            else if( buffer.StartsWith( wxT( "IdModule  =" ) ) )
             {
                 footprint = value;
             }
         }
 
-        // A block is read: initialize the footprint field of the correponding component
+        // A block is read: initialize the footprint field of the corresponding component
         // if the footprint name is not empty
         if( reference.IsEmpty() )
             continue;
@@ -203,10 +205,9 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
 
                 fpfield->SetText( footprint );
 
-                if( aForceFieldsVisibleAttribute )
+                if( aForceVisibilityState )
                 {
-                    component->GetField( FOOTPRINT )
-                            ->SetVisible( aFieldsVisibleAttributeState );
+                    component->GetField( FOOTPRINT )->SetVisible( aVisibilityState );
                 }
             }
         }
@@ -220,7 +221,7 @@ bool SCH_EDIT_FRAME::LoadCmpToFootprintLinkFile()
 {
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Load Component-Footprint Link File" ),
+    wxFileDialog dlg( this, _( "Load Component Footprint Link File" ),
                       path, wxEmptyString,
                       ComponentFileExtensionWildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
@@ -233,33 +234,26 @@ bool SCH_EDIT_FRAME::LoadCmpToFootprintLinkFile()
 
     SetTitle( title );
 
-    int response = wxMessageBox( _( "Do you want to force all the footprint fields visibility?" ),
-                                 _( "Field Visibility Change" ),
-                                 wxYES_NO | wxICON_QUESTION | wxCANCEL, this );
+    wxArrayString choices;
+    choices.Add( _( "Keep existing footprint field visibility" ) );
+    choices.Add( _( "Show all footprint fields" ) );
+    choices.Add( _( "Hide all footprint fields" ) );
 
-    if( response == wxCANCEL )
+    wxSingleChoiceDialog choiceDlg( this, _( "Select the footprint field visibility setting." ),
+                                    _( "Change Visibility" ), choices );
+
+
+    if( choiceDlg.ShowModal() == wxID_CANCEL )
         return false;
 
-    bool changevisibility = response == wxYES;
-    bool visible = false;
+    bool forceVisibility = (choiceDlg.GetSelection() != 0 );
+    bool visibilityState = (choiceDlg.GetSelection() == 1 );
 
-    if( changevisibility )
+    if( !ProcessCmpToFootprintLinkFile( filename, forceVisibility, visibilityState ) )
     {
-        response = wxMessageBox( _( "Do you want to make all the footprint fields visible?" ),
-                                     _( "Field Visibility Option" ),
-                                     wxYES_NO | wxICON_QUESTION | wxCANCEL, this );
-        if( response == wxCANCEL )
-            return false;
+        wxString msg = wxString::Format( _( "Failed to open component-footprint link file '%s'" ),
+                                         filename.GetData() );
 
-        visible = response == wxYES;
-    }
-
-    if( !ProcessCmpToFootprintLinkFile( filename, changevisibility, visible ) )
-    {
-        wxString msg = wxString::Format( _(
-                "Failed to open component-footprint link file '%s'" ),
-                filename.GetData()
-                );
         DisplayError( this, msg );
         return false;
     }
