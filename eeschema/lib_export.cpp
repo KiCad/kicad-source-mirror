@@ -136,7 +136,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     {
         FILE_OUTPUTFORMATTER    formatter( fn.GetFullPath() );
 
-        result = GetCurLib()->Save( formatter );
+        result = temp_lib.get()->Save( formatter );
     }
     catch( ... /* IO_ERROR ioe */ )
     {
