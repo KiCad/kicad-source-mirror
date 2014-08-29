@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "dialog_erc_listbox.h"
 
 #include "dialog_erc_base.h"
 
@@ -78,6 +80,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizerMessages->Add( m_titleMessages, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_MessagesList = new wxTextCtrl( m_PanelERC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
+	m_MessagesList->SetMaxLength( 0 ); 
 	bSizerMessages->Add( m_MessagesList, 1, wxEXPAND|wxLEFT, 5 );
 	
 	
