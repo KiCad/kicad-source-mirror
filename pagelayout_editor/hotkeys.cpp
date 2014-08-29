@@ -116,15 +116,7 @@ struct EDA_HOTKEY_CONFIG s_PlEditor_Hokeys_Descr[] =
 };
 
 
-/* OnHotKey.
- *  ** Commands are case insensitive **
- *  Some commands are relative to the item under the mouse cursor
- * aDC = current device context
- * aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
- * aPosition The cursor position in logical (drawing) units.
- * aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
- */
-void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
+bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
                                 const wxPoint& aPosition, EDA_ITEM* aItem )
 {
     bool busy = GetScreen()->GetCurItem() != NULL;
@@ -142,14 +134,14 @@ void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
         HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, s_Common_Hotkey_List );
 
     if( HK_Descr == NULL )
-        return;
+        return false;
 
     WORKSHEET_DATAITEM* item;
 
     switch( HK_Descr->m_Idcommand )
     {
     case HK_NOT_FOUND:
-        return;
+        return false;
 
     case HK_LEFT_CLICK:
         OnLeftClick( aDC, aPosition );
@@ -235,7 +227,9 @@ void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
         break;
 
     default:
-        wxMessageBox( wxT("Unknown hotkey") );
-        return;
+        wxMessageBox( wxT( "Unknown hotkey" ) );
+        return false;
     }
+
+    return true;
 }

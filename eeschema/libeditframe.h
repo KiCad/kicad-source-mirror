@@ -318,9 +318,9 @@ public:
     double BestZoom();         // Returns the best zoom
     void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
-    void OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
-    void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     void LoadSettings( wxConfigBase* aCfg );
 

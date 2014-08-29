@@ -53,43 +53,43 @@
 
 BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
 
-// Window events
-EVT_CLOSE( FOOTPRINT_WIZARD_FRAME::OnCloseWindow )
-EVT_SIZE( FOOTPRINT_WIZARD_FRAME::OnSize )
-EVT_ACTIVATE( FOOTPRINT_WIZARD_FRAME::OnActivate )
+    // Window events
+    EVT_CLOSE( FOOTPRINT_WIZARD_FRAME::OnCloseWindow )
+    EVT_SIZE( FOOTPRINT_WIZARD_FRAME::OnSize )
+    EVT_ACTIVATE( FOOTPRINT_WIZARD_FRAME::OnActivate )
 
-// Toolbar events
-EVT_TOOL( ID_FOOTPRINT_WIZARD_SELECT_WIZARD,
-          FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard )
+     // Toolbar events
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_SELECT_WIZARD,
+              FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard )
 
-EVT_TOOL( ID_FOOTPRINT_WIZARD_NEXT,
-          FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_NEXT,
+              FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
 
-EVT_TOOL( ID_FOOTPRINT_WIZARD_PREVIOUS,
-          FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_PREVIOUS,
+              FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
 
-EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE,
-          FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint )
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE,
+              FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint )
 
-EVT_TOOL( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW,
-          FOOTPRINT_WIZARD_FRAME::Show3D_Frame )
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW,
+              FOOTPRINT_WIZARD_FRAME::Show3D_Frame )
 
-// listbox events
-EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
+    // listbox events
+    EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
 
 
 #if wxCHECK_VERSION( 3, 0, 0 )
-EVT_GRID_CMD_CELL_CHANGED( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
-                          FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
+    EVT_GRID_CMD_CELL_CHANGED( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
+                               FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
 #else
-EVT_GRID_CMD_CELL_CHANGE( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
-                          FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
+    EVT_GRID_CMD_CELL_CHANGE( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
+                              FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
 #endif
 
-EVT_GRID_CMD_EDITOR_HIDDEN( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
-                            FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
+    EVT_GRID_CMD_EDITOR_HIDDEN( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
+                                FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
 
-EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset )
+    EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset )
 END_EVENT_TABLE()
 
 
@@ -454,13 +454,15 @@ void FOOTPRINT_WIZARD_FRAME::OnActivate( wxActivateEvent& event )
 }
 
 
-void FOOTPRINT_WIZARD_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+bool FOOTPRINT_WIZARD_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
+    bool eventHandled = true;
+
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
         m_movingCursorWithKeyboard = false;
-        return;
+        return false;
     }
 
     wxCommandEvent  cmd( wxEVT_COMMAND_MENU_SELECTED );
@@ -500,12 +502,17 @@ void FOOTPRINT_WIZARD_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
     case ' ':
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
+
+    default:
+        eventHandled = false;
     }
 
     SetCrossHairPosition( pos );
     RefreshCrossHair( oldpos, aPosition, aDC );
 
     UpdateStatusBar();    // Display new cursor coordinates
+
+    return eventHandled;
 }
 
 

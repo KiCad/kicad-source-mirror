@@ -92,7 +92,7 @@ public:
     void    OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    void    GeneralControl( wxDC* DC, const wxPoint& aPosition, int aHotKey = 0 );
+    bool    GeneralControl( wxDC* DC, const wxPoint& aPosition, int aHotKey = 0 );
     void    InstallOptionsDisplay( wxCommandEvent& event );
     MODULE* Get_Module( const wxString& CmpName );
 

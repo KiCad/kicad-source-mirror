@@ -104,11 +104,11 @@ void PCB_EDIT_FRAME::CallMacros( wxDC* aDC, const wxPoint& aPosition, int aNumbe
 }
 
 
-void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition,
+bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition,
                                EDA_ITEM* aItem )
 {
     if( aHotkeyCode == 0 )
-        return;
+        return false;
 
     bool itemCurrentlyEdited = GetCurItem() && GetCurItem()->GetFlags();
     MODULE* module = NULL;
@@ -128,7 +128,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
 
     if( HK_Descr == NULL )
-        return;
+        return false;
 
     int hk_id = HK_Descr->m_Idcommand;
 
@@ -156,8 +156,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     {
     default:
     case HK_NOT_FOUND:
-        return;
-        break;
+        return false;
 
     case HK_LEFT_CLICK:
         OnLeftClick( aDC, aPosition );
@@ -349,7 +348,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_RESET_GRID_ORIGIN:
-        SetGridOrigin( wxPoint(0,0) );
+        SetGridOrigin( wxPoint( 0,0 ) );
         OnModify();     // because grid origin is saved in board, show as modified
         m_canvas->Refresh();
         break;
@@ -427,16 +426,16 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
     case HK_ADD_MICROVIA: // Place a micro via if a track is in progress
         if( GetToolId() != ID_TRACK_BUTT )
-            return;
+            return true;
 
         if( !itemCurrentlyEdited )                         // no track in progress: nothing to do
             break;
 
         if( GetCurItem()->Type() != PCB_TRACE_T )           // Should not occur
-            return;
+            return true;
 
         if( !GetCurItem()->IsNew() )
-            return;
+            return true;
 
         // place micro via and switch layer
         if( IsMicroViaAcceptable() )
@@ -461,13 +460,13 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         }
 
         if( GetToolId() != ID_TRACK_BUTT )
-            return;
+            return true;
 
         if( GetCurItem()->Type() != PCB_TRACE_T )
-            return;
+            return true;
 
         if( !GetCurItem()->IsNew() )
-            return;
+            return true;
 
         evt_type = hk_id == HK_ADD_BLIND_BURIED_VIA ?
             ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA : ID_POPUP_PCB_PLACE_THROUGH_VIA;
@@ -574,6 +573,8 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         evt.SetId( evt_type );
         GetEventHandler()->ProcessEvent( evt );
     }
+
+    return true;
 }
 
 

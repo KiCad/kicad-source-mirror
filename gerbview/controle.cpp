@@ -33,13 +33,15 @@
 #include <gerbview_frame.h>
 
 
-void GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+bool GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
+    bool eventHandled = true;
+
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
         m_movingCursorWithKeyboard = false;
-        return;
+        return false;
     }
 
     wxPoint pos = aPosition;
@@ -51,8 +53,10 @@ void GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     if( aHotKey )
     {
-        OnHotKey( aDC, aHotKey, aPosition );
+        eventHandled = OnHotKey( aDC, aHotKey, aPosition );
     }
 
     UpdateStatusBar();
+
+    return eventHandled;
 }

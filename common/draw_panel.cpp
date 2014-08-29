@@ -1389,7 +1389,9 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     pos = wxPoint( DC.DeviceToLogicalX( pos.x ), DC.DeviceToLogicalY( pos.y ) );
 
     GetParent()->SetMousePosition( pos );
-    GetParent()->GeneralControl( &DC, pos, localkey );
+
+    if( !GetParent()->GeneralControl( &DC, pos, localkey ) )
+        event.Skip();
 }
 
 

@@ -616,13 +616,15 @@ void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+bool FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
+    bool eventHandled = true;
+
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
         m_movingCursorWithKeyboard = false;
-        return;
+        return false;
     }
 
     // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
@@ -642,10 +644,12 @@ void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
 
     if( aHotKey )
     {
-        OnHotKey( aDC, aHotKey, aPosition );
+        eventHandled = OnHotKey( aDC, aHotKey, aPosition );
     }
 
     UpdateStatusBar();
+
+    return eventHandled;
 }
 
 

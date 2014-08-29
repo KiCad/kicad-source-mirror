@@ -203,19 +203,22 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
 }
 
 
-void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+bool SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
+    bool eventHandled = true;
+
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
         m_movingCursorWithKeyboard = false;
-        return;
+        return false;
     }
 
     // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
     // for next cursor position
     // ( shift or ctrl key down are PAN command with mouse wheel)
     bool snapToGrid = true;
+
     if( !aHotKey && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_CONTROL ) )
         snapToGrid = false;
 
@@ -236,28 +239,33 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         SCH_SCREEN* screen = GetScreen();
 
         if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
-            OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
+            eventHandled = OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
-            OnHotKey( aDC, aHotKey, aPosition, NULL );
+            eventHandled = OnHotKey( aDC, aHotKey, aPosition, NULL );
     }
 
     UpdateStatusBar();    /* Display cursor coordinates info */
+
+    return eventHandled;
 }
 
 
-void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+bool LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
+    bool eventHandled = true;
+
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
         m_movingCursorWithKeyboard = false;
-        return;
+        return false;
     }
 
     // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
     // for next cursor position
     // ( shift or ctrl key down are PAN command with mouse wheel)
     bool snapToGrid = true;
+
     if( !aHotKey && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_CONTROL ) )
         snapToGrid = false;
 
@@ -275,20 +283,24 @@ void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     if( aHotKey )
     {
-        OnHotKey( aDC, aHotKey, aPosition, NULL );
+        eventHandled = OnHotKey( aDC, aHotKey, aPosition, NULL );
     }
 
     UpdateStatusBar();
+
+    return eventHandled;
 }
 
 
-void LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+bool LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
+    bool eventHandled = true;
+
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
         m_movingCursorWithKeyboard = false;
-        return;
+        return false;
     }
 
     wxPoint pos = aPosition;
@@ -304,10 +316,12 @@ void LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         SCH_SCREEN* screen = GetScreen();
 
         if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
-            OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
+            eventHandled = OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
-            OnHotKey( aDC, aHotKey, aPosition, NULL );
+            eventHandled = OnHotKey( aDC, aHotKey, aPosition, NULL );
     }
 
-    UpdateStatusBar();    /* Display cursor coordinates info */
+    UpdateStatusBar();    // Display cursor coordinates info.
+
+    return eventHandled;
 }
