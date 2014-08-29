@@ -617,7 +617,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
-    // Close the find dialog and perserve it's setting if it is displayed.
+    // Close the find dialog and preserve it's setting if it is displayed.
     if( m_dlgFindReplace )
     {
         m_findDialogPosition = m_dlgFindReplace->GetPosition();

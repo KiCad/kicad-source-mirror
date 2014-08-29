@@ -44,6 +44,7 @@
 #include <wxstruct.h>
 #include <macros.h>
 #include <menus_helpers.h>
+#include <dialog_shim.h>
 
 #include <boost/version.hpp>
 #include <typeinfo>
@@ -107,6 +108,39 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
 
 void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 {
+    DIALOG_SHIM* dlg  = NULL;
+    wxWindowList list = GetChildren();
+
+    // Quasi modal dialogs create issues (crashes) when closing Kicad.
+    // I am guessing they are delete too late, when deleting main frames.
+    // AFAIK, only these DIALOG_SHIM dialogs create such issues.
+    // The policy is do not allow closing Kicad if a Quasi modal dialog is open.
+    // (Anyway, closing without prompting the user is certainly bad,
+    // because an edit is in preogress)
+    // Therefore, iterate through the child list to find at least
+    // a DIALOG_SHIM opened in quasi modal mode
+    for( wxWindowList::iterator iter = list.begin(); iter != list.end(); ++iter )
+    {
+        if( (dlg = dynamic_cast<DIALOG_SHIM*> (*iter) ) != NULL )
+        {
+            if( dlg->IsQuasiModal() )
+                break;
+            else
+                dlg = NULL;
+        }
+    }
+
+    if( dlg )
+    {
+        // Happens when a quasi modal dialog is currently open.
+        // For example: if the Kicad manager try to close Kicad.
+        wxMessageBox( _(
+                "The program cannot be closed\n"
+                "A quasi-modal dialog window is currently open, please close it first." ) );
+        event.Veto();
+        return;
+    }
+
     wxConfigBase* cfg = config();
 
     if( cfg )

@@ -107,7 +107,7 @@ class EDA_BASE_FRAME : public wxFrame
      * SaveSettings().  SaveSettings() is called for all derived wxFrames in this
      * base class overload.  (Calling it from a destructor is deprecated since the
      * wxFrame's position is not available in the destructor on linux.)  In other words,
-     * you should not need to call call SaveSettings() anywhere, except in this
+     * you should not need to call SaveSettings() anywhere, except in this
      * one function found only in this class.
      */
     void windowClosing( wxCloseEvent& event );
