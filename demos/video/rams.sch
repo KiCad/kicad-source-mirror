@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 18/11/2010 18:50:34
+EESchema Schematic File Version 2
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -11,28 +11,19 @@ LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
 LIBS:special
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
 LIBS:analog_switches
 LIBS:motorola
-LIBS:texas
 LIBS:intel
 LIBS:audio
 LIBS:interface
-LIBS:digital-audio
 LIBS:philips
-LIBS:display
 LIBS:cypress
 LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
 LIBS:video-cache
-EELAYER 24  0
+EELAYER 24 0
 EELAYER END
-$Descr A3 16535 11700
+$Descr A3 16535 11693
+encoding utf-8
 Sheet 6 8
 Title "Kicad EDA"
 Date "18 nov 2010"
@@ -1177,6 +1168,8 @@ U 1 1 32FA1E5B
 P 10500 7500
 F 0 "U13" H 10500 8050 70  0000 C CNN
 F 1 "SIM4X32" H 10950 5500 70  0000 C CNN
+F 2 "footprints:sim72" H 10500 7500 60  0001 C CNN
+F 3 "" H 10500 7500 60  0001 C CNN
 	1    10500 7500
 	1    0    0    -1  
 $EndComp
@@ -1260,6 +1253,8 @@ U 1 1 4BF036CF
 P 7700 7500
 F 0 "U14" H 7700 8050 70  0000 C CNN
 F 1 "SIM4X32" H 8150 5500 70  0000 C CNN
+F 2 "footprints:sim72" H 7700 7500 60  0001 C CNN
+F 3 "" H 7700 7500 60  0001 C CNN
 	1    7700 7500
 	1    0    0    -1  
 $EndComp
@@ -1343,6 +1338,8 @@ U 1 1 4BF036CE
 P 4850 7500
 F 0 "U12" H 4850 8050 70  0000 C CNN
 F 1 "SIM4X32" H 5300 5500 70  0000 C CNN
+F 2 "footprints:sim72" H 4850 7500 60  0001 C CNN
+F 3 "" H 4850 7500 60  0001 C CNN
 	1    4850 7500
 	1    0    0    -1  
 $EndComp
@@ -1426,6 +1423,8 @@ U 1 1 4BF036D0
 P 2000 7500
 F 0 "U16" H 2000 8050 70  0000 C CNN
 F 1 "SIM4X32" H 2450 5500 70  0000 C CNN
+F 2 "footprints:sim72" H 2000 7500 60  0001 C CNN
+F 3 "" H 2000 7500 60  0001 C CNN
 	1    2000 7500
 	1    0    0    -1  
 $EndComp
@@ -1509,6 +1508,8 @@ U 1 1 4BF036D1
 P 10500 3050
 F 0 "U15" H 10500 3600 70  0000 C CNN
 F 1 "SIM4X32" H 10950 1050 70  0000 C CNN
+F 2 "footprints:sim72" H 10500 3050 60  0001 C CNN
+F 3 "" H 10500 3050 60  0001 C CNN
 	1    10500 3050
 	1    0    0    -1  
 $EndComp
@@ -1592,6 +1593,8 @@ U 1 1 4BF036D2
 P 7700 3050
 F 0 "U17" H 7700 3600 70  0000 C CNN
 F 1 "SIM4X32" H 8150 1050 70  0000 C CNN
+F 2 "footprints:sim72" H 7700 3050 60  0001 C CNN
+F 3 "" H 7700 3050 60  0001 C CNN
 	1    7700 3050
 	1    0    0    -1  
 $EndComp
@@ -1675,6 +1678,8 @@ U 1 1 4BF036D3
 P 4850 3050
 F 0 "U18" H 4850 3600 70  0000 C CNN
 F 1 "SIM4X32" H 5300 1050 70  0000 C CNN
+F 2 "footprints:sim72" H 4850 3050 60  0001 C CNN
+F 3 "" H 4850 3050 60  0001 C CNN
 	1    4850 3050
 	1    0    0    -1  
 $EndComp
@@ -1758,6 +1763,8 @@ U 1 1 4BF036D4
 P 2000 3050
 F 0 "U19" H 2000 3600 70  0000 C CNN
 F 1 "SIM4X32" H 2450 1050 70  0000 C CNN
+F 2 "footprints:sim72" H 2000 3050 60  0001 C CNN
+F 3 "" H 2000 3050 60  0001 C CNN
 	1    2000 3050
 	1    0    0    -1  
 $EndComp

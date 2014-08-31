@@ -1,4 +1,4 @@
-update=05/01/2014 10:29:06
+update=31/08/2014 15:16:56
 last_client=kicad
 [common]
 NetDir=
@@ -37,3 +37,12 @@ LibName5=pin_array
 LibName6=divers
 [general]
 version=1
+[eeschema]
+version=1
+LibDir=
+[eeschema/libraries]
+LibName1=power
+LibName2=device
+LibName3=74xx
+LibName4=conn
+LibName5=xilinx

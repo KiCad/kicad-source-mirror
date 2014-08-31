@@ -366,7 +366,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Add modules" ), KiBitmap( module_xpm ) );
 
     text = AddHotkeyName( _( "&Track" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ADD_NEW_TRACK );
+                          HK_ADD_NEW_TRACK, IS_COMMENT );
     AddMenuItem( placeMenu, ID_TRACK_BUTT, text,
                  _( "Add tracks and vias" ), KiBitmap( add_tracks_xpm ) );
 

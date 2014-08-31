@@ -126,7 +126,6 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, board_edit_Hotkey_List );
 
-
     if( HK_Descr == NULL )
         return false;
 
@@ -586,7 +585,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
     switch( GetToolId() )
     {
     case ID_TRACK_BUTT:
-        if( GetActiveLayer() > F_Cu )
+        if( !IsCopperLayer ( GetActiveLayer() ) )
             return false;
 
         if( ItemFree )
@@ -947,10 +946,10 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
 
 TRACK * PCB_EDIT_FRAME::OnHotkeyBeginRoute( wxDC* aDC )
 {
-    if( GetActiveLayer() > F_Cu )
+    if( !IsCopperLayer( GetActiveLayer() ) )
         return NULL;
 
-    bool itemCurrentlyEdited = (GetCurItem() && GetCurItem()->GetFlags());
+    bool itemCurrentlyEdited = GetCurItem() && GetCurItem()->GetFlags();
 
     // Ensure the track tool is active
     if( GetToolId() != ID_TRACK_BUTT && !itemCurrentlyEdited )

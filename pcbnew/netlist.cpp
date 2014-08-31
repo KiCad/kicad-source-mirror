@@ -242,8 +242,8 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             {
                 msg.Printf( _( "* Warning: component '%s' has footprint '%s' and should be '%s'\n" ),
                             GetChars( component->GetReference() ),
-                            GetChars( fpOnBoard->GetFPID().GetFootprintName() ),
-                            GetChars( component->GetFPID().GetFootprintName() ) );
+                            GetChars( fpOnBoard->GetFPID().Format() ),
+                            GetChars( component->GetFPID().Format() ) );
                 aReporter->Report( msg );
             }
 
@@ -272,7 +272,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
                     msg.Printf( _( "*** Warning: Component '%s' footprint ID '%s' is not "
                                    "valid. ***\n" ),
                                 GetChars( component->GetReference() ),
-                                GetChars( component->GetFPID().GetFootprintName() ) );
+                                GetChars( component->GetFPID().Format() ) );
                     aReporter->Report( msg );
                 }
 
