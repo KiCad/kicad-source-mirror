@@ -289,17 +289,21 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
                 break;
         }
 
-        else if( evt->IsKeyPressed() && step != SET_ORIGIN )
+        else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) && step != SET_ORIGIN )
         {
-            width = dimension->GetWidth();
-
-            // Modify the new item width
-            if( evt->KeyCode() == '-' && width > WIDTH_STEP )
-                dimension->SetWidth( width - WIDTH_STEP );
-            else if( evt->KeyCode() == '=' )
-                dimension->SetWidth( width + WIDTH_STEP );
-
+            dimension->SetWidth( dimension->GetWidth() + WIDTH_STEP );
             preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) && step != SET_ORIGIN )
+        {
+            int width = dimension->GetWidth();
+
+            if( width > WIDTH_STEP )
+            {
+                dimension->SetWidth( width - WIDTH_STEP );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -465,17 +469,21 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
         if( evt->IsCancel() || evt->IsActivate() )
             break;
 
-        else if( evt->IsKeyPressed() )
+        else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
+        {
+            target->SetWidth( target->GetWidth() + WIDTH_STEP );
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
         {
             int width = target->GetWidth();
 
-            // Modify the new item width
-            if( evt->KeyCode() == '-' && width > WIDTH_STEP )
+            if( width > WIDTH_STEP )
+            {
                 target->SetWidth( width - WIDTH_STEP );
-            else if( evt->KeyCode() == '=' )
-                target->SetWidth( width + WIDTH_STEP );
-
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -893,7 +901,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
         // Init the new item attributes
         aGraphic->SetShape( (STROKE_T) aShape );
-        aGraphic->SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
+        aGraphic->SetWidth( lineWidth );
         aGraphic->SetStart( wxPoint( aStartingPoint->x, aStartingPoint->y ) );
         aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
         aGraphic->SetLayer( layer );
@@ -955,7 +963,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 {
                     // Init the new item attributes
                     aGraphic->SetShape( (STROKE_T) aShape );
-                    aGraphic->SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
+                    lineWidth = getSegmentWidth( layer );
+                    aGraphic->SetWidth( lineWidth );
                     aGraphic->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
                     aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
                     aGraphic->SetLayer( layer );
@@ -1003,17 +1012,17 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
         {
-            aGraphic->SetWidth( aGraphic->GetWidth() + WIDTH_STEP );
+            lineWidth += WIDTH_STEP;
+            aGraphic->SetWidth( lineWidth );
             updatePreview = true;
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
         {
-            int width = aGraphic->GetWidth();
-
-            if( width > WIDTH_STEP )
+            if( lineWidth > WIDTH_STEP )
             {
-                aGraphic->SetWidth( width - WIDTH_STEP );
+                lineWidth -= WIDTH_STEP;
+                aGraphic->SetWidth( lineWidth );
                 updatePreview = true;
             }
         }
@@ -1093,7 +1102,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
                     // Init the new item attributes
                     aGraphic->SetShape( S_ARC );
                     aGraphic->SetAngle( 0.0 );
-                    aGraphic->SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
+                    aGraphic->SetWidth( getSegmentWidth( layer ) );
                     aGraphic->SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
                     aGraphic->SetLayer( layer );
 
@@ -1685,3 +1694,17 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::PlaceDXF,         COMMON_ACTIONS::placeDXF.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor,        COMMON_ACTIONS::setAnchor.MakeEvent() );
 }
+
+
+int DRAWING_TOOL::getSegmentWidth( unsigned int aLayer ) const
+{
+    assert( m_board );
+
+    if( aLayer == Edge_Cuts )
+        return m_board->GetDesignSettings().m_EdgeSegmentWidth;
+    else if( m_editModules )
+        return m_board->GetDesignSettings().m_ModuleSegmentWidth;
+    else
+        return m_board->GetDesignSettings().m_DrawSegmentWidth;
+}
+

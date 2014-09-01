@@ -191,6 +191,9 @@ private:
     ///> Sets up handlers for various events.
     void setTransitions();
 
+    ///> Returns the appropriate width for a segment depending on the settings.
+    int getSegmentWidth( unsigned int aLayer ) const;
+
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;
@@ -198,6 +201,9 @@ private:
 
     /// Edit module mode flag
     bool m_editModules;
+
+    /// Stores the current line width for multisegment drawing.
+    unsigned int lineWidth;
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP = 100000;
