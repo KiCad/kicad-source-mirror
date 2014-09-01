@@ -290,11 +290,15 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_toolManager->ResetTools( TOOL_BASE::RUN );
         m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
+        m_Layers->ReFill();
+        m_Layers->ReFillRender();
+
+        GetScreen()->m_Active_Layer = F_SilkS;
+        m_Layers->SelectLayer( F_SilkS );
+        m_Layers->OnLayerSelected();
+
         UseGalCanvas( true );
     }
-
-    m_Layers->ReFill();
-    m_Layers->ReFillRender();
 
     m_auimgr.Update();
 
