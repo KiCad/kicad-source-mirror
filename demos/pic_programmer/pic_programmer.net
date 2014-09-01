@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source F:/kicad-launchpad/testing/demos/pic_programmer/pic_programmer.sch)
-    (date "31/08/2014 15:17:53")
+    (date "01/09/2014 11:22:27")
     (tool "Eeschema (2014-08-26 BZR 5101)-product"))
   (components
     (comp (ref C9)
@@ -387,75 +387,6 @@
       (sheetpath (names /pic_sockets/) (tstamps /4804A5E2/))
       (tstamp 442AA12B)))
   (libparts
-    (libpart (lib device) (part DIODE)
-      (description "Diode simple")
-      (footprints
-        (fp D?)
-        (fp S*))
-      (fields
-        (field (name Reference) D)
-        (field (name Value) DIODE))
-      (pins
-        (pin (num 1) (name A) (type passive))
-        (pin (num 2) (name K) (type passive))))
-    (libpart (lib device) (part DIODESCH)
-      (description "Diode schottky")
-      (footprints
-        (fp D?)
-        (fp S*))
-      (fields
-        (field (name Reference) D)
-        (field (name Value) DIODESCH))
-      (pins
-        (pin (num 1) (name A) (type passive))
-        (pin (num 2) (name K) (type passive))))
-    (libpart (lib pic_programmer-cache) (part 24C16)
-      (aliases
-        (alias 24C512))
-      (fields
-        (field (name Reference) U)
-        (field (name Value) 24C16))
-      (pins
-        (pin (num 1) (name A0) (type input))
-        (pin (num 2) (name A1) (type input))
-        (pin (num 3) (name A2) (type input))
-        (pin (num 4) (name GND) (type power_in))
-        (pin (num 5) (name SDA) (type BiDi))
-        (pin (num 6) (name SCL) (type input))
-        (pin (num 7) (name WP) (type input))
-        (pin (num 8) (name VCC) (type power_in))))
-    (libpart (lib pic_programmer-cache) (part 7805)
-      (aliases
-        (alias LM7805)
-        (alias LM7812)
-        (alias 78L05))
-      (fields
-        (field (name Reference) U)
-        (field (name Value) 7805))
-      (pins
-        (pin (num GND) (name GND) (type input))
-        (pin (num VI) (name VI) (type input))
-        (pin (num VO) (name VO) (type power_out))))
-    (libpart (lib 74xx) (part 74LS125)
-      (description "Quad buffer 3 State out")
-      (fields
-        (field (name Reference) U)
-        (field (name Value) 74LS125))
-      (pins
-        (pin (num 1) (name E) (type input))
-        (pin (num 2) (name D) (type input))
-        (pin (num 3) (name O) (type 3state))
-        (pin (num 4) (name E) (type input))
-        (pin (num 5) (name D) (type input))
-        (pin (num 6) (name O) (type 3state))
-        (pin (num 7) (name GND) (type power_in))
-        (pin (num 8) (name O) (type 3state))
-        (pin (num 9) (name D) (type input))
-        (pin (num 10) (name E) (type input))
-        (pin (num 11) (name O) (type 3state))
-        (pin (num 12) (name D) (type input))
-        (pin (num 13) (name E) (type input))
-        (pin (num 14) (name VCC) (type power_in))))
     (libpart (lib device) (part C)
       (description "Condensateur non polarise")
       (footprints
@@ -481,37 +412,28 @@
       (pins
         (pin (num 1) (name ~) (type passive))
         (pin (num 2) (name ~) (type passive))))
-    (libpart (lib conn) (part CONN_1)
-      (description "1 pin")
-      (fields
-        (field (name Reference) P)
-        (field (name Value) CONN_1))
-      (pins
-        (pin (num 1) (name 1) (type passive))))
-    (libpart (lib conn) (part CONN_2)
-      (description "Symbole general de connecteur")
-      (fields
-        (field (name Reference) P)
-        (field (name Value) CONN_2))
-      (pins
-        (pin (num 1) (name P1) (type passive))
-        (pin (num 2) (name PM) (type passive))))
-    (libpart (lib conn) (part DB9)
+    (libpart (lib device) (part DIODE)
+      (description "Diode simple")
       (footprints
-        (fp DB9*))
+        (fp D?)
+        (fp S*))
       (fields
-        (field (name Reference) J)
-        (field (name Value) DB9))
+        (field (name Reference) D)
+        (field (name Value) DIODE))
       (pins
-        (pin (num 1) (name 1) (type passive))
-        (pin (num 2) (name 2) (type passive))
-        (pin (num 3) (name 3) (type passive))
-        (pin (num 4) (name 4) (type passive))
-        (pin (num 5) (name 5) (type passive))
-        (pin (num 6) (name P6) (type passive))
-        (pin (num 7) (name P7) (type passive))
-        (pin (num 8) (name P8) (type passive))
-        (pin (num 9) (name P9) (type passive))))
+        (pin (num 1) (name A) (type passive))
+        (pin (num 2) (name K) (type passive))))
+    (libpart (lib device) (part DIODESCH)
+      (description "Diode schottky")
+      (footprints
+        (fp D?)
+        (fp S*))
+      (fields
+        (field (name Reference) D)
+        (field (name Value) DIODESCH))
+      (pins
+        (pin (num 1) (name A) (type passive))
+        (pin (num 2) (name K) (type passive))))
     (libpart (lib device) (part INDUCTOR)
       (fields
         (field (name Reference) L)
@@ -582,6 +504,57 @@
       (pins
         (pin (num 1) (name ~) (type passive))
         (pin (num 2) (name ~) (type passive))))
+    (libpart (lib 74xx) (part 74LS125)
+      (description "Quad buffer 3 State out")
+      (fields
+        (field (name Reference) U)
+        (field (name Value) 74LS125))
+      (pins
+        (pin (num 1) (name E) (type input))
+        (pin (num 2) (name D) (type input))
+        (pin (num 3) (name O) (type 3state))
+        (pin (num 4) (name E) (type input))
+        (pin (num 5) (name D) (type input))
+        (pin (num 6) (name O) (type 3state))
+        (pin (num 7) (name GND) (type power_in))
+        (pin (num 8) (name O) (type 3state))
+        (pin (num 9) (name D) (type input))
+        (pin (num 10) (name E) (type input))
+        (pin (num 11) (name O) (type 3state))
+        (pin (num 12) (name D) (type input))
+        (pin (num 13) (name E) (type input))
+        (pin (num 14) (name VCC) (type power_in))))
+    (libpart (lib conn) (part CONN_1)
+      (description "1 pin")
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_1))
+      (pins
+        (pin (num 1) (name 1) (type passive))))
+    (libpart (lib conn) (part CONN_2)
+      (description "Symbole general de connecteur")
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_2))
+      (pins
+        (pin (num 1) (name P1) (type passive))
+        (pin (num 2) (name PM) (type passive))))
+    (libpart (lib conn) (part DB9)
+      (footprints
+        (fp DB9*))
+      (fields
+        (field (name Reference) J)
+        (field (name Value) DB9))
+      (pins
+        (pin (num 1) (name 1) (type passive))
+        (pin (num 2) (name 2) (type passive))
+        (pin (num 3) (name 3) (type passive))
+        (pin (num 4) (name 4) (type passive))
+        (pin (num 5) (name 5) (type passive))
+        (pin (num 6) (name P6) (type passive))
+        (pin (num 7) (name P7) (type passive))
+        (pin (num 8) (name P8) (type passive))
+        (pin (num 9) (name P9) (type passive))))
     (libpart (lib conn) (part SUPP28)
       (fields
         (field (name Reference) J)
@@ -660,6 +633,33 @@
         (pin (num 38) (name 38) (type passive))
         (pin (num 39) (name 39) (type passive))
         (pin (num 40) (name 40) (type passive))))
+    (libpart (lib pic_programmer-cache) (part 24C16)
+      (aliases
+        (alias 24C512))
+      (fields
+        (field (name Reference) U)
+        (field (name Value) 24C16))
+      (pins
+        (pin (num 1) (name A0) (type input))
+        (pin (num 2) (name A1) (type input))
+        (pin (num 3) (name A2) (type input))
+        (pin (num 4) (name GND) (type power_in))
+        (pin (num 5) (name SDA) (type BiDi))
+        (pin (num 6) (name SCL) (type input))
+        (pin (num 7) (name WP) (type input))
+        (pin (num 8) (name VCC) (type power_in))))
+    (libpart (lib pic_programmer-cache) (part 7805)
+      (aliases
+        (alias LM7805)
+        (alias LM7812)
+        (alias 78L05))
+      (fields
+        (field (name Reference) U)
+        (field (name Value) 7805))
+      (pins
+        (pin (num GND) (name GND) (type input))
+        (pin (num VI) (name VI) (type input))
+        (pin (num VO) (name VO) (type power_out))))
     (libpart (lib pic_programmer-cache) (part LT1372)
       (aliases
         (alias LT1373))
@@ -716,10 +716,10 @@
   (libraries
     (library (logical device)
       (uri f:\kicad\share\library\device.lib))
-    (library (logical conn)
-      (uri f:\kicad\share\library\conn.lib))
     (library (logical 74xx)
       (uri f:\kicad\share\library\74xx.lib))
+    (library (logical conn)
+      (uri f:\kicad\share\library\conn.lib))
     (library (logical pic_programmer-cache)
       (uri F:\kicad-launchpad\testing\demos\pic_programmer\pic_programmer-cache.lib)))
   (nets

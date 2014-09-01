@@ -1,9 +1,9 @@
-Cmp-Mod V01 Created by Cvpcb (2014-08-26 BZR 5101)-product   date = 31/08/2014 15:05:48
+Cmp-Mod V01 Created by Cvpcb (2014-08-26 BZR 5101)-product   date = 01/09/2014 11:21:38
 
 BeginCmp
 TimeStamp = /442A5056;
 Reference = C1;
-ValeurCmp = 100uF;
+ValeurCmp = 100µF;
 IdModule  = discret:CP10;
 EndCmp
 
@@ -45,13 +45,6 @@ EndCmp
 BeginCmp
 TimeStamp = /4804A5E2/442AA145;
 Reference = C7;
-ValeurCmp = 100nF;
-IdModule  = discret:C1-1;
-EndCmp
-
-BeginCmp
-TimeStamp = /4804A5E2/4639BE2C;
-Reference = C8;
 ValeurCmp = 100nF;
 IdModule  = discret:C1-1;
 EndCmp
@@ -187,6 +180,48 @@ TimeStamp = /4804A5E2/442A88ED;
 Reference = P3;
 ValeurCmp = SUPP40;
 IdModule  = footprints:textool_40;
+EndCmp
+
+BeginCmp
+TimeStamp = /54020BEA;
+Reference = P101;
+ValeurCmp = CONN_1;
+IdModule  = footprints:1pin-4;
+EndCmp
+
+BeginCmp
+TimeStamp = /54020DA9;
+Reference = P102;
+ValeurCmp = CONN_1;
+IdModule  = footprints:1pin-4;
+EndCmp
+
+BeginCmp
+TimeStamp = /54020DC2;
+Reference = P103;
+ValeurCmp = CONN_1;
+IdModule  = footprints:1pin-4;
+EndCmp
+
+BeginCmp
+TimeStamp = /54020DE3;
+Reference = P104;
+ValeurCmp = CONN_1;
+IdModule  = footprints:1pin-4;
+EndCmp
+
+BeginCmp
+TimeStamp = /54020E5D;
+Reference = P105;
+ValeurCmp = CONN_1;
+IdModule  = footprints:1pin-4;
+EndCmp
+
+BeginCmp
+TimeStamp = /54020E76;
+Reference = P106;
+ValeurCmp = CONN_1;
+IdModule  = footprints:1pin-4;
 EndCmp
 
 BeginCmp

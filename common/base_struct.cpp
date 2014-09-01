@@ -192,7 +192,7 @@ bool EDA_ITEM::Replace( wxFindReplaceData& aSearchData, wxString& aText )
     wxCHECK_MSG( IsReplaceable(), false,
                  wxT( "Attempt to replace text in <" ) + GetClass() + wxT( "> item." ) );
 
-    wxString searchString = (aSearchData.GetFlags() & wxFR_MATCHCASE) ? aText.Upper() : aText;
+    wxString searchString = (aSearchData.GetFlags() & wxFR_MATCHCASE) ? aText : aText.Upper();
 
     int result = searchString.Find( (aSearchData.GetFlags() & wxFR_MATCHCASE) ?
                                     aSearchData.GetFindString() :
