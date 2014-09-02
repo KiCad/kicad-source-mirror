@@ -419,6 +419,7 @@ void LIB_EDIT_FRAME::UpdatePartSelectList()
 
     if( !part || part->GetUnitCount() <= 1 )
     {
+        m_unit = 1;
         m_partSelectBox->Append( wxEmptyString );
     }
     else
@@ -430,6 +431,11 @@ void LIB_EDIT_FRAME::UpdatePartSelectList()
             m_partSelectBox->Append( unit );
         }
     }
+
+    // Ensure the current selected unit is compatible with
+    // the number of units of the current part:
+    if( part && part->GetUnitCount() < m_unit )
+        m_unit = 1;
 
     m_partSelectBox->SetSelection( ( m_unit > 0 ) ? m_unit - 1 : 0 );
 }

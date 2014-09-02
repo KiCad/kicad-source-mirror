@@ -182,7 +182,6 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 {
     /* Update the doc, keyword and doc filename strings */
-    int index;
     LIB_ALIAS* alias;
     LIB_PART*      component = m_Parent->GetCurPart();
 
@@ -206,8 +205,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 
     component->SetAliases( m_PartAliasListCtrl->GetStrings() );
 
-    index = m_SelNumberOfUnits->GetValue();
-    ChangeNbUnitsPerPackage( index );
+    int unitCount = m_SelNumberOfUnits->GetValue();
+    ChangeNbUnitsPerPackage( unitCount );
 
     if( m_AsConvertButt->GetValue() )
     {
