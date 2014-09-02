@@ -395,18 +395,27 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
      */
     if( event.GetId() == wxID_INDEX )
     {
-        // Search for "getting_started_in_kicad.pdf" or "Getting_Started_in_KiCad.pdf"
-        wxString helpFile = SearchHelpFileFullPath( search, wxT( "getting_started_in_kicad.pdf" ) );
+        // List of possible names for Getting Started in KiCad
+        const wxChar* names[2] = {
+            wxT( "getting_started_in_kicad" ),
+            wxT( "Getting_Started_in_KiCad" )
+            };
 
-        if( !helpFile )
-            helpFile = SearchHelpFileFullPath( search, wxT( "Getting_Started_in_KiCad.pdf" ) );
+        wxString helpFile;
+        // Search for "getting_started_in_kicad.html" or "getting_started_in_kicad.pdf"
+        // or "Getting_Started_in_KiCad.html" or "Getting_Started_in_KiCad.pdf"
+        for( unsigned ii = 0; ii < DIM( names ); ii++ )
+        {
+            helpFile = SearchHelpFileFullPath( search, names[ii] );
+
+            if( !helpFile.IsEmpty() )
+               break;
+        }
 
         if( !helpFile )
         {
             wxString msg = wxString::Format( _(
-                "Help file '%s' could not be found." ),
-                wxT( "getting_started_in_kicad.pdf" )
-                );
+                "Html or pdf help file \n'%s'\n or\n'%s' could not be found." ), names[0], names[1] );
             wxMessageBox( msg );
         }
         else
@@ -418,24 +427,6 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
     }
 
     wxString base_name = help_name();
-
-#if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
-
-    wxHtmlHelpController* hc = Pgm().GetHtmlHelpController();
-
-    wxString helpFile = SearchHelpFileFullPath( search,   );
-
-    if( !!helpFile )
-    {
-        hc->UseConfig( Pgm().CommonSettings() );
-        hc->SetTitleFormat( wxT( "KiCad Help" ) );
-        hc->AddBook( helpFile );
-    }
-
-    hc->DisplayContents();
-    hc->Display( helpFile );
-
-#elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
     wxString helpFile = SearchHelpFileFullPath( search, base_name );
 
     if( !helpFile )
@@ -450,10 +441,6 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
     {
         GetAssociatedDocument( this, helpFile );
     }
-
-#else
-#   error Help files format not defined
-#endif
 }
 
 

@@ -21,13 +21,11 @@ void BIN_MOD::Init()
 
     // Prepare On Line Help. Use only lower case for help file names, in order to
     // avoid problems with upper/lower case file names under windows and unix.
-#if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
-    m_help_file = wxString::FromUTF8( m_name ) + wxT( ".html" );
-#elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
-    m_help_file = wxString::FromUTF8( m_name ) + wxT( ".pdf" );
-#else
-    #error Help files format not defined
-#endif
+    // Help files are now using html format.
+    // Old help files used pdf format.
+    // so when searching a help file, the .html file will be searched,
+    // and if not found, the .pdf file  will be searched.
+    m_help_file = wxString::FromUTF8( m_name );     // no ext given. can be .html or .pdf
 }
 
 

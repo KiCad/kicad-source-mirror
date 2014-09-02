@@ -590,7 +590,10 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack );
  * Function SearchHelpFileFullPath
  * returns the help file's full path.
  * <p>
- * Return the KiCad help file with path.
+ * Return the KiCad help file with path and extension.
+ * Help files can be html (.html ext) or pdf (.pdf ext) files.
+ * A <BaseName>.html file is searched and if not found,
+ * <BaseName>.pdf file is searched in the same path.
  * If the help file for the current locale is not found, an attempt to find
  * the English version of the help file is made.
  * Help file is searched in directories in this order:
@@ -600,7 +603,7 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack );
  * </p>
  * @param aSearchStack contains some possible base dirs that may be above the
  *  the one actually holding @a aBaseName.  These are starting points for nested searches.
- * @param aBaseName is the name of the help file to search for.
+ * @param aBaseName is the name of the help file to search for, <p>without extension</p>.
  * @return  wxEmptyString is returned if aBaseName is not found, else the full path & filename.
  */
 wxString SearchHelpFileFullPath( const SEARCH_STACK& aSearchStack, const wxString& aBaseName );

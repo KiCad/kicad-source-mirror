@@ -38,7 +38,6 @@
 
 class wxConfigBase;
 class wxSingleInstanceChecker;
-class wxHtmlHelpController;
 class wxApp;
 class wxMenu;
 
@@ -85,8 +84,6 @@ public:
     virtual void MacOpenFile( const wxString& aFileName ) = 0;
 
     //----<Cross Module API>-----------------------------------------------------
-
-    VTBL_ENTRY wxHtmlHelpController* HtmlHelpController();
 
     VTBL_ENTRY wxConfigBase* CommonSettings() const                 { return m_common_settings; }
 
@@ -215,8 +212,6 @@ protected:
      */
     bool initPgm();
 
-    void initHtmlHelpController();
-
     /**
      * Function loadCommonSettings
      * loads the program (process) settings subset which are stored in .kicad_common
@@ -268,8 +263,6 @@ protected:
     wxString        m_pdf_browser;
     wxString        m_editor_name;
     wxSize          m_help_size;
-
-    wxHtmlHelpController*   m_html_ctrl;
 
     wxApp*          m_wx_app;
 
