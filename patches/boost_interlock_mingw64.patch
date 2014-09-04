@@ -1,0 +1,43 @@
+diff -r -u boost_1_54_0/boost/detail/interlocked.hpp boost_1_54_0-1/boost/detail/interlocked.hpp
+--- boost/detail/interlocked.hpp	2013-03-09 23:55:05.000000000 +0100
++++ boost/detail/interlocked.hpp	2013-09-23 11:04:18.405688110 +0200
+@@ -69,9 +69,9 @@
+ # define BOOST_INTERLOCKED_EXCHANGE_POINTER(dest,exchange) \
+     ((void*)BOOST_INTERLOCKED_EXCHANGE((long*)(dest),(long)(exchange)))
+ 
+-#elif defined( BOOST_MSVC ) || defined( BOOST_INTEL_WIN )
++#elif defined( BOOST_MSVC ) || defined( BOOST_INTEL_WIN ) || defined( __MINGW64_VERSION_MAJOR )
+ 
+-#if defined( BOOST_MSVC ) && BOOST_MSVC >= 1600
++#if (defined( BOOST_MSVC ) && BOOST_MSVC >= 1600) || defined( __MINGW64_VERSION_MAJOR )
+ 
+ #include <intrin.h>
+ 
+@@ -93,11 +93,13 @@
+ 
+ #endif
+ 
++#ifndef __MINGW64_VERSION_MAJOR
+ # pragma intrinsic( _InterlockedIncrement )
+ # pragma intrinsic( _InterlockedDecrement )
+ # pragma intrinsic( _InterlockedCompareExchange )
+ # pragma intrinsic( _InterlockedExchange )
+ # pragma intrinsic( _InterlockedExchangeAdd )
++#endif
+ 
+ # if defined(_M_IA64) || defined(_M_AMD64)
+ 
+@@ -127,13 +129,6 @@
+ 
+ #elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ ) || defined( __CYGWIN__ )
+ 
+-#if defined(__MINGW64__)
+-#define BOOST_INTERLOCKED_IMPORT
+-#else
+-#define BOOST_INTERLOCKED_IMPORT __declspec(dllimport)
+-#endif
+-
+-
+ namespace boost
+ {
+ 
