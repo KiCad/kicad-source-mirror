@@ -533,8 +533,9 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
     }
     else
     {
-        wxConfig config( m_FrameName );
-        config.Write( HOTKEYS_CONFIG_KEY, msg );
+        wxConfigBase* config = GetNewConfig( m_FrameName );
+        config->Write( HOTKEYS_CONFIG_KEY, msg );
+        delete config;
     }
 
     return 1;
@@ -575,16 +576,17 @@ int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
 
 void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescList )
 {
-    wxConfig config( Appname );
+    wxConfigBase* config = GetNewConfig( Appname );
 
-    if( !config.HasEntry( HOTKEYS_CONFIG_KEY ) )
+    if( !config->HasEntry( HOTKEYS_CONFIG_KEY ) )
     {
         // assume defaults are ok
         return;
     }
 
     wxString data;
-    config.Read( HOTKEYS_CONFIG_KEY, &data );
+    config->Read( HOTKEYS_CONFIG_KEY, &data );
+    delete config;
 
     ParseHotkeyConfig( data, aDescList );
 }

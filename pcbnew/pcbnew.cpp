@@ -256,7 +256,7 @@ static bool scriptingSetup()
     // (and remove the fixed paths from <src>/scripting/kicadplugins.i)
 
     // wizard plugins are stored in kicad/bin/plugins.
-    // so add this path to python scripting defualt search paths
+    // so add this path to python scripting default search paths
     // which are ( [KICAD_PATH] is an environment variable to define)
     // [KICAD_PATH]/scripting/plugins
     // Add this default search path:
@@ -336,11 +336,11 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
                 "You have run Pcbnew for the first time using the "
                 "new footprint library table method for finding "
                 "footprints.  Pcbnew has either copied the default "
-                "table or created an empty table in your home "
+                "table or created an empty table in the kicad configuration "
                 "folder.  You must first configure the library "
                 "table to include all footprint libraries not "
                 "included with KiCad.  See the \"Footprint Library "
-                "Table\" section of the CvPcb documentation for "
+                "Table\" section of the CvPcb or Pcbnew documentation for "
                 "more information." ) );
         }
     }

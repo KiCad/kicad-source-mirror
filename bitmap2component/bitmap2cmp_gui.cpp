@@ -65,19 +65,19 @@ extern int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
 class BM2CMP_FRAME : public BM2CMP_FRAME_BASE
 {
 private:
-    wxImage     m_Pict_Image;
-    wxBitmap    m_Pict_Bitmap;
-    wxImage     m_Greyscale_Image;
-    wxBitmap    m_Greyscale_Bitmap;
-    wxImage     m_NB_Image;
-    wxBitmap    m_BN_Bitmap;
-    wxSize      m_imageDPI;         // The initial image resolution. When unknown,
+    wxImage         m_Pict_Image;
+    wxBitmap        m_Pict_Bitmap;
+    wxImage         m_Greyscale_Image;
+    wxBitmap        m_Greyscale_Bitmap;
+    wxImage         m_NB_Image;
+    wxBitmap        m_BN_Bitmap;
+    wxSize          m_imageDPI;     // The initial image resolution. When unknown,
                                     // set to DEFAULT_DPI x DEFAULT_DPI per Inch
-    wxString    m_BitmapFileName;
-    wxString    m_ConvertedFileName;
-    wxSize      m_frameSize;
-    wxPoint     m_framePos;
-    wxConfig*   m_config;
+    wxString        m_BitmapFileName;
+    wxString        m_ConvertedFileName;
+    wxSize          m_frameSize;
+    wxPoint         m_framePos;
+    wxConfigBase*   m_config;
 
 public:
     BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -147,7 +147,7 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetKiway( this, aKiway );
 
     int tmp;
-    m_config = new wxConfig();
+    m_config = GetNewConfig( Pgm().App().GetAppName() );
     m_config->Read( KEYWORD_FRAME_POSX, & m_framePos.x, -1 );
     m_config->Read( KEYWORD_FRAME_POSY, & m_framePos.y, -1 );
     m_config->Read( KEYWORD_FRAME_SIZEX, & m_frameSize.x, -1 );

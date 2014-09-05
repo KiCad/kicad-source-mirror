@@ -1,8 +1,7 @@
 
-
-#include <wx/config.h>
 #include <bin_mod.h>
 #include <online_help.h>
+#include <common.h>
 
 
 BIN_MOD::BIN_MOD( const char* aName ) :
@@ -15,7 +14,7 @@ BIN_MOD::BIN_MOD( const char* aName ) :
 void BIN_MOD::Init()
 {
     // do an OS specific wxConfig instantiation, using the bin_mod (EXE/DLL/DSO) name.
-    m_config = new wxConfig( wxString::FromUTF8( m_name ) );
+    m_config = GetNewConfig( wxString::FromUTF8( m_name ) );
 
     m_history.Load( *m_config );
 

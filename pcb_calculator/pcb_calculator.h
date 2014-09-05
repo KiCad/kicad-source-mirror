@@ -26,9 +26,9 @@ private:
     bool m_RegulatorListChanged;        // set to true when m_RegulatorList
                                         // was modified, and the corresponging file
                                         // must be rewritten
-    wxSize m_FrameSize;
-    wxPoint m_FramePos;
-    wxConfig * m_Config;
+    wxSize          m_FrameSize;
+    wxPoint         m_FramePos;
+    wxConfigBase*   m_Config;
     enum TRANSLINE_TYPE_ID m_currTransLineType;
     TRANSLINE * m_currTransLine;        // a pointer to the active transline
     // List of translines: ordered like in dialog menu list

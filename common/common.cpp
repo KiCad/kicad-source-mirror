@@ -39,6 +39,9 @@
 #include <base_units.h>
 
 #include <wx/process.h>
+#include <wx/config.h>
+#include <wx/utils.h>
+#include <wx/stdpaths.h>
 
 
 /**
@@ -280,8 +283,8 @@ double RoundTo0( double x, double precision )
 
 wxString FormatDateLong( const wxDateTime &aDate )
 {
-    /* GetInfo was introduced only on wx 2.9; for portability reason an
-     * hardcoded format is used on wx 2.8 */
+    // GetInfo was introduced only on wx 2.9; for portability reason an
+    // hardcoded format is used on wx 2.8
 #if wxCHECK_VERSION( 2, 9, 0 )
     return aDate.Format( wxLocale::GetInfo( wxLOCALE_LONG_DATE_FMT ) );
 #else
@@ -289,3 +292,54 @@ wxString FormatDateLong( const wxDateTime &aDate )
 #endif
 }
 
+
+wxConfigBase* GetNewConfig( const wxString& aProgName )
+{
+    wxConfigBase* cfg = 0;
+    wxFileName configname;
+    configname.AssignDir( GetKicadConfigPath() );
+    configname.SetFullName( aProgName );
+
+    cfg = new wxFileConfig( wxT( "" ), wxT( "" ), configname.GetFullPath() );
+    return cfg;
+}
+
+
+wxString GetKicadConfigPath()
+{
+    wxFileName cfgpath;
+
+    // From the wxWidgets wxStandardPaths::GetUserConfigDir() help:
+    //      Unix: ~ (the home directory)
+    //      Windows: "C:\Documents and Settings\username\Application Data"
+    //      Mac: ~/Library/Preferences
+    cfgpath.AssignDir( wxStandardPaths::Get().GetUserConfigDir() );
+
+#if !defined( __WINDOWS__ ) && !defined( __WXMAC__ )
+    wxString envstr;
+
+    if( !wxGetEnv( wxT( "XDG_CONFIG_HOME" ), &envstr ) || envstr.IsEmpty() )
+    {
+        // XDG_CONFIG_HOME is not set, so use the fallback
+        cfgpath.AppendDir( wxT( ".config" ) );
+    }
+    else
+    {
+        // Override the assignment above with XDG_CONFIG_HOME
+        cfgpath.AssignDir( envstr );
+    }
+#endif
+
+    cfgpath.AppendDir( wxT( "kicad" ) );
+
+#if !wxCHECK_VERSION( 2, 9, 0 )
+    #define wxS_DIR_DEFAULT  0777
+#endif
+
+    if( !cfgpath.DirExists() )
+    {
+        cfgpath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+    }
+
+    return cfgpath.GetPath();
+}

@@ -405,7 +405,7 @@ bool PGM_BASE::initPgm()
     SetLanguagePath();
 
     // OS specific instantiation of wxConfigBase derivative:
-    m_common_settings = new wxConfig( KICAD_COMMON );
+    m_common_settings = GetNewConfig( KICAD_COMMON );
 
     ReadPdfBrowserInfos();      // needs m_common_settings
 
