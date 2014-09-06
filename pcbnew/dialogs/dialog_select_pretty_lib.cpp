@@ -46,4 +46,6 @@ DIALOG_SELECT_PRETTY_LIB::DIALOG_SELECT_PRETTY_LIB( wxWindow* parent ) :
 void DIALOG_SELECT_PRETTY_LIB::OnSelectFolder( wxTreeEvent& event )
 {
     m_libName->SetValue( m_dirCtrl->GetPath() );
+
+    event.Skip();
 }

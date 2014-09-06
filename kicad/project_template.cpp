@@ -33,6 +33,9 @@
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
 
+#include <macros.h>
+
+
 #define SEP()   wxFileName::GetPathSeparator()
 
 
@@ -92,7 +95,7 @@ std::vector<wxFileName> PROJECT_TEMPLATE::GetFileList()
 }
 
 
-wxString PROJECT_TEMPLATE::GetName()
+wxString PROJECT_TEMPLATE::GetPrjDirName()
 {
     return templateBasePath.GetDirs()[ templateBasePath.GetDirCount()-1 ];
 }
@@ -121,21 +124,17 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath )
     bool result = true;
 
     std::vector<wxFileName> srcFiles = GetFileList();
-    std::vector<wxFileName> dstFiles;
 
     for( size_t i=0; i < srcFiles.size(); i++ )
     {
         // Replace the template path
         wxFileName destination = srcFiles[i];
-        wxString destname = destination.GetName();
 
-        // Replace the template name with the project name for the new project creation
-        destname.Replace( GetName(), aNewProjectPath.GetName() );
+        // Replace the template filename with the project filename for the new project creation
+        destination.SetName( aNewProjectPath.GetName() );
 
-        // Add the file extension (if there was one!)
-        if( destination.GetExt() != wxEmptyString )
-            destname += wxT(".") + destination.GetExt();
-
+        // Replace the template path with the project path for the new project creation
+        // but keep the sub directory name, if exists
         wxString destpath = destination.GetPathWithSep();
         destpath.Replace( templateBasePath.GetPathWithSep(), aNewProjectPath.GetPathWithSep() );
 
@@ -145,11 +144,10 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath )
         if( !wxFileName::DirExists( destpath ) )
             wxFileName::Mkdir( destpath, 0777, wxPATH_MKDIR_FULL );
 
-        destination = destpath + destname;
-        dstFiles.push_back( destination );
+        destination.SetPath( destpath );
 
         wxString srcFile = srcFiles[i].GetFullPath();
-        wxString dstFile = dstFiles[i].GetFullPath();
+        wxString dstFile = destination.GetFullPath();
 
         if( !wxCopyFile( srcFile, dstFile ) )
         {

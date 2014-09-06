@@ -156,6 +156,13 @@ public:
     void OnLoadProject( wxCommandEvent& event );
 
     /**
+     * Function OnCreateProjectFromTemplate
+     * Creates a new project folder, copy a template into this new folder.
+     * and open this new projrct as working project
+     */
+    void OnCreateProjectFromTemplate( wxCommandEvent& event );
+
+    /**
      * Function OnSaveProject
      * is the command event hendler to Save the project (.pro) file containing the top level
      * configuration parameters.
