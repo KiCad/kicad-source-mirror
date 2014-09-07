@@ -121,9 +121,22 @@ wxBitmap* PROJECT_TEMPLATE::GetIcon()
 
 bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath )
 {
+    // CreateProject copy the files from template to the new project folder
+    // and rename files which have the same name as the template .pro file
     bool result = true;
 
     std::vector<wxFileName> srcFiles = GetFileList();
+
+    // Find the template file name base. this is the name of the .pro templte file
+    wxString basename;
+    for( size_t i=0; i < srcFiles.size(); i++ )
+    {
+        if( srcFiles[i].GetExt() == wxT( "pro" ) )
+        {
+            basename = srcFiles[i].GetName();
+            break;
+        }
+    }
 
     for( size_t i=0; i < srcFiles.size(); i++ )
     {
@@ -131,7 +144,9 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath )
         wxFileName destination = srcFiles[i];
 
         // Replace the template filename with the project filename for the new project creation
-        destination.SetName( aNewProjectPath.GetName() );
+        wxString currname = destination.GetName();
+        currname.Replace( basename, aNewProjectPath.GetName() );
+        destination.SetName( currname );
 
         // Replace the template path with the project path for the new project creation
         // but keep the sub directory name, if exists

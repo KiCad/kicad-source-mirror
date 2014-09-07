@@ -314,6 +314,15 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 
     wxFileName      fn;
 
+    // Build libs paths, to find later a relative path:
+    wxArrayString paths;
+
+    for( unsigned ll=0; ll < m_DefaultLibraryPathslistBox->GetCount(); ++ll )
+        paths.Add( m_DefaultLibraryPathslistBox->GetString( ll ) );
+
+    for( unsigned ll=0; ll < m_listUserPaths->GetCount(); ++ll )
+        paths.Add( m_listUserPaths->GetString( ll ) );
+
     for( unsigned jj = 0; jj < filenames.GetCount(); jj++ )
     {
         fn = filenames[jj];
@@ -321,10 +330,23 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         if( jj == 0 )
             prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
-        // Remove extension:
+        // Extension is not stored, so remove extension:
         fn.SetExt( wxEmptyString );
 
-        libfilename = fn.GetName();
+        // Try to use relative path:
+        for( unsigned ll = 0; ll < paths.GetCount(); ll++ )
+        {
+            wxFileName relfn = fn;
+            relfn.MakeRelativeTo( paths[ll] );
+
+            if( relfn.GetPath()[0] != '.' )
+            {
+                fn = relfn;
+                break;
+            }
+        }
+
+        libfilename = fn.GetFullPath();
 
         // Add or insert new library name, if not already in list
         if( m_ListLibr->FindString( libfilename, fn.IsCaseSensitive() ) == wxNOT_FOUND )
