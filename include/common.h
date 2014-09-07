@@ -45,6 +45,7 @@
 
 class wxAboutDialogInfo;
 class SEARCH_STACK;
+class wxSingleInstanceChecker;
 
 
 // Flag for special keys
@@ -607,6 +608,13 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack );
  * @return  wxEmptyString is returned if aBaseName is not found, else the full path & filename.
  */
 wxString SearchHelpFileFullPath( const SEARCH_STACK& aSearchStack, const wxString& aBaseName );
+
+/**
+ * Function LockFile
+ * tests to see if aFileName can be locked (is not already locked) and only then
+ * returns a wxSingleInstanceChecker protecting aFileName.  Caller owns the return value.
+ */
+wxSingleInstanceChecker* LockFile( const wxString& aFileName );
 
 
 /// Put aPriorityPath in front of all paths in the value of aEnvVar.

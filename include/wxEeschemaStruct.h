@@ -117,6 +117,7 @@ class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 private:
     SCH_SHEET_PATH*         m_CurrentSheet;    ///< which sheet we are presently working on.
     wxString                m_DefaultSchematicFileName;
+
     PARAM_CFG_ARRAY         m_projectFileParams;
     PARAM_CFG_ARRAY         m_configSettings;
     wxPageSetupDialogData   m_pageSetupData;

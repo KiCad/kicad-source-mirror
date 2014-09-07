@@ -186,6 +186,7 @@ set( COMMON_SRCS
     kiway_express.cpp
     kiway_holder.cpp
     kiway_player.cpp
+    lockfile.cpp
     msgpanel.cpp
     netlist_keywords.cpp
     newstroke_font.cpp

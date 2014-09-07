@@ -262,7 +262,6 @@ static LANGUAGE_DESCR s_Languages[] =
 PGM_BASE::PGM_BASE()
 {
     m_pgm_checker = NULL;
-    m_file_checker = NULL;
     m_locale = NULL;
     m_common_settings = NULL;
 
@@ -290,18 +289,8 @@ void PGM_BASE::destroy()
     delete m_pgm_checker;
     m_pgm_checker = 0;
 
-    delete m_file_checker;
-    m_file_checker = 0;
-
     delete m_locale;
     m_locale = 0;
-}
-
-void PGM_BASE::ReleaseFile()
-{
-    // Release the current file marked in use.
-    delete m_file_checker;
-    m_file_checker = 0;
 }
 
 
@@ -677,36 +666,3 @@ void PGM_BASE::AddMenuLanguageList( wxMenu* MasterMenu )
     }
 }
 
-
-bool PGM_BASE::LockFile( const wxString& aFileName )
-{
-    // first make absolute and normalize, to avoid that different lock files
-    // for the same file can be created
-    wxFileName fn( aFileName );
-
-    fn.MakeAbsolute();
-
-    // semaphore to protect the edition of the file by more than one instance
-    if( m_file_checker != NULL )
-    {
-        // it means that we had an open file and we are opening a different one
-        delete m_file_checker;
-    }
-
-    wxString lockFileName = fn.GetFullPath() + wxT( ".lock" );
-
-    lockFileName.Replace( wxT( "/" ), wxT( "_" ) );
-
-    // We can have filenames coming from Windows, so also convert Windows separator
-    lockFileName.Replace( wxT( "\\" ), wxT( "_" ) );
-
-    m_file_checker = new wxSingleInstanceChecker( lockFileName );
-
-    if( m_file_checker &&
-        m_file_checker->IsAnotherRunning() )
-    {
-        return false;
-    }
-
-    return true;
-}

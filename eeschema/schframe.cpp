@@ -417,9 +417,8 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     m_undoItem = NULL;
     g_RootSheet = NULL;
     m_findReplaceData = NULL;
-
-    Pgm().ReleaseFile();        // Release the lock on root file
 }
+
 
 void SCH_EDIT_FRAME::SetRepeatItem( SCH_ITEM* aItem )
 {

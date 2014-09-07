@@ -47,6 +47,7 @@
 #include <math/box2.h>
 
 #include <wx/fontdlg.h>
+#include <wx/snglinst.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -97,6 +98,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                 long aStyle, const wxString & aFrameName ) :
     KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
+    m_file_checker        = NULL;
+
     m_drawToolBar         = NULL;
     m_optionsToolBar      = NULL;
     m_gridSelectBox       = NULL;
@@ -179,6 +182,25 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
     m_currentScreen = NULL;
 
     m_auimgr.UnInit();
+
+    ReleaseFile();
+}
+
+
+void EDA_DRAW_FRAME::ReleaseFile()
+{
+    delete m_file_checker;
+    m_file_checker = 0;
+}
+
+
+bool EDA_DRAW_FRAME::LockFile( const wxString& aFileName )
+{
+    delete m_file_checker;
+
+    m_file_checker = ::LockFile( aFileName );
+
+    return bool( m_file_checker );
 }
 
 

@@ -486,8 +486,6 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
         m_Macros[i].m_Record.clear();
 
     delete m_drc;
-
-    Pgm().ReleaseFile();        // Release the lock on PCB file
 }
 
 

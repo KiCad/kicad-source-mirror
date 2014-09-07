@@ -770,11 +770,12 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
             error_msgs.Add( _( "Error: Connector pads are not on the solder paste layer\n"
                                "Use SMD pads instead" ) );
         // Fall trough
-
+/*
     case PAD_SMD:       // SMD and Connector pads (One external copper layer only)
         if( padlayers_mask[B_Cu] && padlayers_mask[F_Cu] )
             error_msgs.Add( _( "Error: only one copper layer allowed for SMD or Connector pads" ) );
         break;
+*/
     }
 
     if( error_msgs.GetCount() )

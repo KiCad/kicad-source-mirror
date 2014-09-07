@@ -169,20 +169,6 @@ public:
     VTBL_ENTRY void WritePdfBrowserInfos();
 
     /**
-     * Function LockFile
-     * marks a file as being in use.
-     * @param aFileName = full path to the file.
-     * @return false if the file was already locked, true otherwise.
-     */
-    VTBL_ENTRY bool LockFile( const wxString& aFileName );
-
-    /**
-     * Function ReleaseFile
-     * Release the current file marked in use.
-     */
-    VTBL_ENTRY void ReleaseFile();
-
-    /**
      * Function App
      * returns a bare naked wxApp, which may come from wxPython, SINGLE_TOP, or kicad.exe.
      * Use this function instead of wxGetApp().
@@ -226,9 +212,6 @@ protected:
 
     /// prevents multiple instances of a program from being run at the same time.
     wxSingleInstanceChecker* m_pgm_checker;
-
-    /// prevents opening the same file multiple times.
-    wxSingleInstanceChecker* m_file_checker;
 
     /// Configuration settings common to all KiCad program modules,
     /// like as in $HOME/.kicad_common

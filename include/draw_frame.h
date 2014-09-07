@@ -28,6 +28,8 @@
 #include <wxstruct.h>
 #include <kiway_player.h>
 
+class wxSingleInstanceChecker;
+
 
 /**
  * Class EDA_DRAW_FRAME
@@ -43,14 +45,17 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
     ///< Id of active button on the vertical toolbar.
     int         m_toolId;
 
-    BASE_SCREEN*    m_currentScreen;        ///< current used SCREEN
+    BASE_SCREEN*    m_currentScreen;            ///< current used SCREEN
 
-    bool        m_snapToGrid;               ///< Indicates if cursor should be snapped to grid.
-    bool        m_galCanvasActive;          ///< whether to use new GAL engine
+    bool        m_snapToGrid;                   ///< Indicates if cursor should be snapped to grid.
+    bool        m_galCanvasActive;              ///< whether to use new GAL engine
 
     EDA_DRAW_PANEL_GAL* m_galCanvas;
 
 protected:
+
+    wxSingleInstanceChecker* m_file_checker;    ///< prevents opening same file multiple times.
+
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
     int         m_LastGridSizeId;           // the command id offset (>= 0) of the last selected grid
                                             // 0 is for the grid corresponding to
@@ -142,6 +147,20 @@ public:
                     const wxString& aFrameName );
 
     ~EDA_DRAW_FRAME();
+
+    /**
+     * Function LockFile
+     * marks a schematic file as being in use.  Use ReleaseFile() to undo this.
+     * @param aFileName = full path to the file.
+     * @return false if the file was already locked, true otherwise.
+     */
+    bool LockFile( const wxString& aFileName );
+
+    /**
+     * Function ReleaseFile
+     * Release the current file marked in use.  See m_file_checker.
+     */
+    void ReleaseFile();
 
     virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) = 0;
     virtual const PAGE_INFO& GetPageSettings() const = 0;

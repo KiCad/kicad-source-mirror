@@ -191,7 +191,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(),
         wxT( "bug in single_top.cpp or project manager." ) );
 
-    if( !Pgm().LockFile( fullFileName ) )
+    if( !LockFile( fullFileName ) )
     {
         wxString msg = wxString::Format( _(
                 "Schematic file '%s' is already open." ),
