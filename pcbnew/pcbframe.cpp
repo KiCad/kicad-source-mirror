@@ -687,11 +687,11 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 
     if( aEnable )
     {
+        SetBoard( m_Pcb );
         m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
         GetGalCanvas()->GetView()->RecacheAllItems( true );
         GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
         GetGalCanvas()->StartDrawing();
-        SetBoard( m_Pcb );
     }
     else
     {
