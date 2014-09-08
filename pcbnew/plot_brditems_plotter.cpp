@@ -124,6 +124,13 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     if( textLayer > LAYER_ID_COUNT )        // how will this ever be true?
         return false;
 
+    // Special rule: assembly always shows reference from the silk layer
+    if( (m_layerMask[F_Fab]) && (textLayer == F_SilkS) )
+        trace_ref = true;
+
+    if( (m_layerMask[B_Fab]) && (textLayer == B_SilkS) )
+        trace_ref = true;
+
     if( !m_layerMask[textLayer] )
         trace_val = false;
 
@@ -216,7 +223,12 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, EDA_COLOR_T aColo
 
     // calculate some text parameters :
     size = pt_texte->GetSize();
-    pos  = pt_texte->GetTextPosition();
+
+    // Assembly drawings always have the reference on the origin
+    if( m_layerMask[F_Fab] || m_layerMask[B_Fab] )
+        pos = static_cast<MODULE*>( pt_texte->GetParent() )->GetPosition();
+    else
+        pos = pt_texte->GetTextPosition();
 
     orient = pt_texte->GetDrawRotation();
 
