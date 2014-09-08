@@ -38,6 +38,7 @@
 #include <pgm_base.h>
 #include <build_version.h>
 #include <macros.h>
+#include <reporter.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -45,6 +46,7 @@
 #include <legacy_plugin.h>
 
 #include <pcbnew.h>
+#include <pcbplot.h>
 #include <pcb_plot_params.h>
 #include <wildcards_and_files_ext.h>
 
@@ -204,8 +206,22 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
         return false;
     }
 
+    // Create output directory if it does not exist (also transform it in
+    // absolute form). Bail if it fails
+    wxFileName  outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
+    wxString    boardFilename = m_parent->GetBoard()->GetFileName();
+    WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
+
+    if( !EnsureOutputDirectory( &outputDir, boardFilename, &reporter ) )
+    {
+        msg.Printf( _( "Could not write plot files to folder \"%s\"." ),
+                    GetChars( outputDir.GetPath() ) );
+        DisplayError( this, msg );
+        return false;
+    }
+
     fn = m_parent->GetBoard()->GetFileName();
-    fn.SetPath( GetOutputDirectory() );
+    fn.SetPath( outputDir.GetPath() );
     frontLayerName = brd->GetLayerName( F_Cu );
     backLayerName = brd->GetLayerName( B_Cu );
 
@@ -227,16 +243,16 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
                                                      ForceAllSmd(), side );
     if( fpcount < 0 )
     {
-        msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
-        AddMessage( msg + wxT("\n") );
+        msg.Printf( _( "Unable to create '%s'" ), GetChars( fn.GetFullPath() ) );
         wxMessageBox( msg );
+        AddMessage( msg + wxT("\n") );
         return false;
     }
 
     if( singleFile  )
-        msg.Printf( _( "Place file: <%s>\n" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Place file: '%s'\n" ), GetChars( fn.GetFullPath() ) );
     else
-        msg.Printf( _( "Front side (top side) place file: <%s>\n" ),
+        msg.Printf( _( "Front side (top side) place file: '%s'\n" ),
                     GetChars( fn.GetFullPath() ) );
 
     AddMessage( msg );
@@ -250,7 +266,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     fullcount = fpcount;
     side = 0;
     fn = brd->GetFileName();
-    fn.SetPath( GetOutputDirectory() );
+    fn.SetPath( outputDir.GetPath() );
     fn.SetName( fn.GetName() + wxT( "-" ) + backLayerName );
     fn.SetExt( wxT( "pos" ) );
 
@@ -259,7 +275,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 
     if( fpcount < 0 )
     {
-        msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Unable to create '%s'" ), GetChars( fn.GetFullPath() ) );
         AddMessage( msg + wxT("\n") );
         wxMessageBox( msg );
         return false;
@@ -268,7 +284,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     // Display results
     if( !singleFile )
     {
-        msg.Printf( _( "Back side (bottom side) place file: <%s>\n" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Back side (bottom side) place file: '%s'\n" ), GetChars( fn.GetFullPath() ) );
         AddMessage( msg );
         msg.Printf( _( "Footprint count %d\n" ), fpcount );
         AddMessage( msg );
@@ -538,14 +554,14 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
     wxString msg;
     if( success )
     {
-        msg.Printf( _( "Module report file created:\n<%s>" ),
+        msg.Printf( _( "Module report file created:\n'%s'" ),
                     GetChars( fn.GetFullPath() ) );
         wxMessageBox( msg, _( "Module Report" ), wxICON_INFORMATION );
     }
 
     else
     {
-        msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Unable to create '%s'" ), GetChars( fn.GetFullPath() ) );
         DisplayError( this, msg );
     }
 }
