@@ -48,6 +48,12 @@ EDIT_TOOL::EDIT_TOOL() :
 }
 
 
+void EDIT_TOOL::Reset( RESET_REASON aReason )
+{
+    m_dragging = false;
+}
+
+
 bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
