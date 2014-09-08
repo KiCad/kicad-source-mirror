@@ -855,8 +855,11 @@ public:
      */
     bool Clear_Pcb( bool aQuery );
 
-    /// @copydoc PCB_BASE_FRAME::SetBoard()
+    ///> @copydoc PCB_BASE_FRAME::SetBoard()
     void SetBoard( BOARD* aBoard );
+
+    ///> @copydoc PCB_BASE_FRAME::SetPageSettings()
+    void SetPageSettings( const PAGE_INFO& aPageSettings ); // overload
 
     // Drc control
 
