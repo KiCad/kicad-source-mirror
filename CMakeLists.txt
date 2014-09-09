@@ -508,7 +508,7 @@ set( wxWidgets_CONFIG_OPTIONS --static=no )
 if( APPLE AND ( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES OR KICAD_SCRIPTING_WXPYTHON) )
     find_package( wxWidgets COMPONENTS gl adv html core net base xml QUIET )
 else()
-    find_package( wxWidgets COMPONENTS gl adv html core net base xml QUIET )
+    find_package( wxWidgets COMPONENTS gl aui adv html core net base xml QUIET )
 endif()
 
 if( NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
