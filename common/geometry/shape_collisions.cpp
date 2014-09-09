@@ -61,7 +61,7 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aC
     const VECTOR2I size = aA.GetSize();
     const int r = aB.GetRadius();
     const int min_dist = aClearance + r;
-    
+
     const VECTOR2I vts[] =
     {
         VECTOR2I( p0.x,          p0.y ),
@@ -107,7 +107,7 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aC
     if( !aNeedMTV )
         return true;
 
-   
+
     if( inside )
         aMTV = -delta.Resize( abs( min_dist + 1 + nearest_seg_dist ) + 1 );
     else
@@ -152,7 +152,7 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN& aB, 
 
     if( !aNeedMTV || !found )
         return found;
-    
+
     SHAPE_CIRCLE cmoved( aA );
     VECTOR2I f_total( 0, 0 );
 
@@ -162,7 +162,7 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN& aB, 
         cmoved.SetCenter( cmoved.GetCenter() + f );
         f_total += f;
     }
-    
+
     aMTV = f_total;
     return found;
 }
@@ -246,13 +246,13 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
 		case SH_RECT:
 			switch( aB->Type() )
 			{
-				case SH_CIRCLE: 
+				case SH_CIRCLE:
 					return CollCase<SHAPE_RECT, SHAPE_CIRCLE>( aA, aB, aClearance, aNeedMTV, aMTV );
 
-				case SH_LINE_CHAIN: 
+				case SH_LINE_CHAIN:
 					return CollCase<SHAPE_RECT, SHAPE_LINE_CHAIN>( aA, aB, aClearance, aNeedMTV, aMTV );
 
-				case SH_SEGMENT: 
+				case SH_SEGMENT:
 					return CollCase<SHAPE_RECT, SHAPE_SEGMENT>( aA, aB, aClearance, aNeedMTV, aMTV );
 
 				default:
@@ -320,6 +320,7 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
 	}
 
 	bool unsupported_collision = true;
+    (void) unsupported_collision;   // make gcc quiet
 
 	assert( unsupported_collision == false );
 
