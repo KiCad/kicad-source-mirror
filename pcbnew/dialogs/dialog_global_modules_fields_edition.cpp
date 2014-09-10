@@ -145,7 +145,6 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
 {
     MODULE* module;
     BOARD_ITEM* boardItem;
-    TEXTE_MODULE* item;
     ITEM_PICKER itemWrapper( NULL, UR_CHANGED );
     PICKED_ITEMS_LIST undoItemList;
     unsigned int ii;
@@ -165,7 +164,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
 
         if( aRef )
         {
-            item = &module->Reference();
+            TEXTE_MODULE *item = &module->Reference();
 
             if( item->GetSize() != GetDesignSettings().m_ModuleTextSize ||
                 item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
@@ -176,7 +175,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
 
         if( aValue )
         {
-            item = &module->Value();
+            TEXTE_MODULE *item = &module->Value();
 
             if( item->GetSize() != GetDesignSettings().m_ModuleTextSize ||
                 item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
@@ -192,7 +191,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
             {
                 if( boardItem->Type() == PCB_MODULE_TEXT_T )
                 {
-                    item = (TEXTE_MODULE*) boardItem;
+                    TEXTE_MODULE *item = static_cast<TEXTE_MODULE*>( boardItem );
 
                     if( item->GetSize() != GetDesignSettings().m_ModuleTextSize
                         || item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
@@ -233,7 +232,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
             {
                 if( boardItem->Type() == PCB_MODULE_TEXT_T )
                 {
-                    item = (TEXTE_MODULE*) boardItem;
+                    TEXTE_MODULE *item = static_cast<TEXTE_MODULE*>( boardItem );
                     item->SetThickness( GetDesignSettings().m_ModuleTextWidth );
                     item->SetSize( GetDesignSettings().m_ModuleTextSize );
                 }

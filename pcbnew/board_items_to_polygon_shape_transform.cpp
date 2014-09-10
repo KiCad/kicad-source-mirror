@@ -168,9 +168,12 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            if( ((TEXTE_MODULE*)item)->GetLayer() == aLayer )
-                texts.push_back( (TEXTE_MODULE *) item );
-            break;
+            {
+                TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+                if( text->GetLayer() == aLayer )
+                    texts.push_back( text );
+                break;
+            }
 
         case PCB_MODULE_EDGE_T:
             outline = (EDGE_MODULE*) item;

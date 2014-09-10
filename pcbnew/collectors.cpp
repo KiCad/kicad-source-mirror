@@ -286,9 +286,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         break;
 
     case PCB_MODULE_TEXT_T:
-        module = (MODULE*) item->GetParent();
+        module = static_cast<MODULE*>( item->GetParent() );
 
-        if( m_Guide->IgnoreMTextsMarkedNoShow() && !( (TEXTE_MODULE*) item )->IsVisible() )
+        if( m_Guide->IgnoreMTextsMarkedNoShow() && 
+                !static_cast<TEXTE_MODULE*>( item )->IsVisible() )
             goto exit;
 
         if( module )

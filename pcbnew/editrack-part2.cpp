@@ -263,11 +263,11 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
             if( item->Type() == PCB_MODULE_TEXT_T )
             {
                 if( item->GetParent() && ( item->GetParent()->Type() == PCB_MODULE_T ) )
-                    Module = (MODULE*) item->GetParent();
+                    Module = static_cast<MODULE*>( item->GetParent() );
             }
             else if( item->Type() == PCB_MODULE_T )
             {
-                Module = (MODULE*) item;
+                Module = static_cast<MODULE*>( item );
             }
 
             if( Module )

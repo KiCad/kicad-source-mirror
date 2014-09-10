@@ -99,7 +99,7 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
 
     case PCB_MODULE_TEXT_T:
     {
-        TEXTE_MODULE* text = (TEXTE_MODULE*) Item;
+        TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( Item );
 
         switch( text->GetType() )
         {
@@ -111,7 +111,7 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
             DisplayError( this, _( "Cannot delete VALUE!" ) );
             break;
 
-        default:
+        case TEXTE_MODULE::TEXT_is_DIVERS:
             DeleteTextModule( text );
         }
     }

@@ -111,7 +111,7 @@ public:
      * </p>
      * @return a const wxString object containing the string of the item.
      */
-    virtual const wxString GetText() const { return m_Text; }
+    virtual const wxString& GetText() const { return m_Text; }
 
     virtual void SetText( const wxString& aText ) { m_Text = aText; }
 

@@ -1211,11 +1211,11 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            export_vrml_text_module( dynamic_cast<TEXTE_MODULE*>( item ) );
+            export_vrml_text_module( static_cast<TEXTE_MODULE*>( item ) );
             break;
 
         case PCB_MODULE_EDGE_T:
-            export_vrml_edge_module( aModel, dynamic_cast<EDGE_MODULE*>( item ),
+            export_vrml_edge_module( aModel, static_cast<EDGE_MODULE*>( item ),
                                      aModule->GetOrientation() );
             break;
 

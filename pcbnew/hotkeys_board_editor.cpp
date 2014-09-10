@@ -34,6 +34,9 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
+#include <class_pcb_text.h>
+#include <class_mire.h>
+#include <class_drawsegment.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -900,33 +903,33 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
         case PCB_TRACE_T:
         case PCB_VIA_T:
             if( item->IsDragging() )
-                PlaceDraggedOrMovedTrackSegment( (TRACK*) item, aDC );
+                PlaceDraggedOrMovedTrackSegment( static_cast<TRACK*>( item ), aDC );
 
             break;
 
         case PCB_TEXT_T:
-            Place_Texte_Pcb( (TEXTE_PCB*) item, aDC );
+            Place_Texte_Pcb( static_cast<TEXTE_PCB*>( item ), aDC );
             break;
 
         case PCB_MODULE_TEXT_T:
-            PlaceTexteModule( (TEXTE_MODULE*) item, aDC );
+            PlaceTexteModule( static_cast<TEXTE_MODULE*>( item ), aDC );
             break;
 
         case PCB_PAD_T:
-            PlacePad( (D_PAD*) item, aDC );
+            PlacePad( static_cast<D_PAD*>( item ), aDC );
             break;
 
         case PCB_MODULE_T:
-            PlaceModule( (MODULE*) item, aDC );
+            PlaceModule( static_cast<MODULE*>( item ), aDC );
             break;
 
         case PCB_TARGET_T:
-            PlaceTarget( (PCB_TARGET*) item, aDC );
+            PlaceTarget( static_cast<PCB_TARGET*>( item ), aDC );
             break;
 
         case PCB_LINE_T:
             if( no_tool )   // when no tools: existing item moving.
-                Place_DrawItem( (DRAWSEGMENT*) item, aDC );
+                Place_DrawItem( static_cast<DRAWSEGMENT*>( item ), aDC );
 
             break;
 

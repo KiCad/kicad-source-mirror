@@ -430,48 +430,48 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
     switch( aItem->Type() )
     {
     case PCB_T:
-        format( (BOARD*) aItem, aNestLevel );
+        format( static_cast<BOARD*>( aItem ), aNestLevel );
         break;
 
     case PCB_DIMENSION_T:
-        format( ( DIMENSION*) aItem, aNestLevel );
+        format( static_cast<DIMENSION*>( aItem ), aNestLevel );
         break;
 
     case PCB_LINE_T:
-        format( (DRAWSEGMENT*) aItem, aNestLevel );
+        format( static_cast<DRAWSEGMENT*>( aItem ), aNestLevel );
         break;
 
     case PCB_MODULE_EDGE_T:
-        format( (EDGE_MODULE*) aItem, aNestLevel );
+        format( static_cast<EDGE_MODULE*>( aItem ), aNestLevel );
         break;
 
     case PCB_TARGET_T:
-        format( (PCB_TARGET*) aItem, aNestLevel );
+        format( static_cast<PCB_TARGET*>( aItem ), aNestLevel );
         break;
 
     case PCB_MODULE_T:
-        format( (MODULE*) aItem, aNestLevel );
+        format( static_cast<MODULE*>( aItem ), aNestLevel );
         break;
 
     case PCB_PAD_T:
-        format( (D_PAD*) aItem, aNestLevel );
+        format( static_cast<D_PAD*>( aItem ), aNestLevel );
         break;
 
     case PCB_TEXT_T:
-        format( (TEXTE_PCB*) aItem, aNestLevel );
+        format( static_cast<TEXTE_PCB*>( aItem ), aNestLevel );
         break;
 
     case PCB_MODULE_TEXT_T:
-        format( (TEXTE_MODULE*) aItem, aNestLevel );
+        format( static_cast<TEXTE_MODULE*>( aItem ), aNestLevel );
         break;
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
-        format( (TRACK*) aItem, aNestLevel );
+        format( static_cast<TRACK*>( aItem ), aNestLevel );
         break;
 
     case PCB_ZONE_AREA_T:
-        format( (ZONE_CONTAINER*) aItem, aNestLevel );
+        format( static_cast<ZONE_CONTAINER*>( aItem ), aNestLevel );
         break;
 
     default:
@@ -599,7 +599,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
         B_CrtYd,
         F_CrtYd,
         B_Fab,
-        F_Fab,
+        F_Fab
     };
 
     for( LSEQ seq = aBoard->GetEnabledLayers().Seq( non_cu, DIM( non_cu ) );  seq;  ++seq )
@@ -1403,7 +1403,7 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
     {
     case TEXTE_MODULE::TEXT_is_REFERENCE: type = wxT( "reference" );     break;
     case TEXTE_MODULE::TEXT_is_VALUE:     type = wxT( "value" );         break;
-    default:                              type = wxT( "user" );
+    case TEXTE_MODULE::TEXT_is_DIVERS:    type = wxT( "user" );
     }
 
     // Due to the Pcbnew history, m_Orient is saved in screen value

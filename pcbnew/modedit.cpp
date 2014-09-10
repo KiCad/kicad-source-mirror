@@ -656,29 +656,29 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_TEXTMODULE:
-        InstallTextModOptionsFrame( (TEXTE_MODULE*) GetScreen()->GetCurItem(), &dc );
+        InstallTextModOptionsFrame( static_cast<TEXTE_MODULE*>( GetScreen()->GetCurItem() ), &dc );
         m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:
         m_canvas->MoveCursorToCrossHair();
-        StartMoveTexteModule( (TEXTE_MODULE*) GetScreen()->GetCurItem(), &dc );
+        StartMoveTexteModule( static_cast<TEXTE_MODULE*>( GetScreen()->GetCurItem() ), &dc );
         break;
 
     case ID_POPUP_PCB_ROTATE_TEXTMODULE:
-        RotateTextModule( (TEXTE_MODULE*) GetScreen()->GetCurItem(), &dc );
+        RotateTextModule( static_cast<TEXTE_MODULE*>( GetScreen()->GetCurItem() ), &dc );
         m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_DELETE_TEXTMODULE:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-        DeleteTextModule( (TEXTE_MODULE*) GetScreen()->GetCurItem() );
+        DeleteTextModule( static_cast<TEXTE_MODULE*>( GetScreen()->GetCurItem() ) );
         SetCurItem( NULL );
         m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_MOVE_EDGE:
-        Start_Move_EdgeMod( (EDGE_MODULE*) GetScreen()->GetCurItem(), &dc );
+        Start_Move_EdgeMod( static_cast<EDGE_MODULE*>( GetScreen()->GetCurItem() ), &dc );
         m_canvas->MoveCursorToCrossHair();
         break;
 
@@ -818,7 +818,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
 void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 {
-    TEXTE_MODULE* textmod;
     wxPoint       pos;
     double        angle = 900;  // Necessary +- 900 (+- 90 degrees).
                                 // Be prudent: because RotateMarkedItems is used to rotate some items
@@ -827,45 +826,15 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
     switch( transform )
     {
     case ID_MODEDIT_MODULE_ROTATE:
-        #define ROTATE( z ) RotatePoint( (&z), angle )
+        module->Reference().RotateWithModule( wxPoint(0,0), angle );
+        module->Value().RotateWithModule( wxPoint(0,0), angle );
+
         RotateMarkedItems( module, wxPoint(0,0), true );
-
-        pos = module->Reference().GetTextPosition();
-        ROTATE( pos );
-        module->Reference().SetTextPosition( pos );
-        module->Reference().SetPos0( module->Reference().GetTextPosition() );
-        module->Reference().m_Orient += angle;
-
-        if( module->Reference().m_Orient >= 1800 )
-            module->Reference().m_Orient -= 1800;
-
-        pos = module->Value().GetTextPosition();
-        ROTATE( pos );
-        module->Value().SetTextPosition( pos );
-        module->Value().SetPos0( module->Value().m_Pos );
-        module->Value().m_Orient += angle;
-
-        if( module->Value().m_Orient >= 1800 )
-            module->Value().m_Orient -= 1800;
-
         break;
 
     case ID_MODEDIT_MODULE_MIRROR:
-         // Mirror reference.
-        textmod = &module->Reference();
-        NEGATE( textmod->m_Pos.x );
-        NEGATE( textmod->m_Pos0.x );
-
-        if( textmod->m_Orient )
-            textmod->m_Orient = 3600 - textmod->m_Orient;
-
-        // Mirror value.
-        textmod = &module->Value();
-        NEGATE( textmod->m_Pos.x );
-        NEGATE( textmod->m_Pos0.x );
-
-        if( textmod->m_Orient )
-            textmod->m_Orient = 3600 - textmod->m_Orient;
+        module->Reference().MirrorWithModule( 0 );
+        module->Value().MirrorWithModule( 0 );
 
         // Mirror pads and graphic items of the footprint:
         MirrorMarkedItems( module, wxPoint(0,0), true );

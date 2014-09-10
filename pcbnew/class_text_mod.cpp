@@ -102,6 +102,36 @@ void TEXTE_MODULE::Flip(const wxPoint& aCentre )
 }
 
 
+void TEXTE_MODULE::FlipWithModule( int aOffset )
+{
+    m_Pos.y = aOffset - (m_Pos.y - aOffset);
+    NEGATE_AND_NORMALIZE_ANGLE_POS( m_Orient );
+    SetLayer( FlipLayer( GetLayer() ) );
+    m_Mirror = IsBackLayer( GetLayer() );
+}
+
+
+void TEXTE_MODULE::MirrorWithModule( int aOffset )
+{
+    wxPoint tmp = GetTextPosition();
+    tmp.x = aOffset - (tmp.x - aOffset);
+    SetTextPosition( tmp );
+    tmp.y = GetPos0().y;
+    SetPos0( tmp );
+    NEGATE_AND_NORMALIZE_ANGLE_POS( m_Orient );
+}
+
+
+void TEXTE_MODULE::RotateWithModule( const wxPoint& aOffset, double aAngle )
+{
+    wxPoint pos = GetTextPosition();
+    RotatePoint( &pos, aOffset, aAngle );
+    SetTextPosition( pos );
+    SetPos0( GetTextPosition() );
+    SetOrientation( GetOrientation() + aAngle );
+}
+
+
 void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
 {
     if( source == NULL )
@@ -218,24 +248,31 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         return;
 
     BOARD* brd = GetBoard( );
+
+    // Suppress the element if the layer it is on is on a disabled side
+    LAYER_ID text_layer = GetLayer();
+
+    if( (IsFrontLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE )) ||
+        (IsBackLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE )) )
+        return;
+
+    /* Reference and values takes the color from the corresponding Visibles
+       other texts take the color of the layer they are on */
     EDA_COLOR_T color;
-    // Determine the element color or suppress it element if hidden
-    switch( module->GetLayer() )
+
+    switch( GetType() )
     {
-    case B_Cu:
-        if( !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE ) )
-            return;
-        color = brd->GetVisibleElementColor( MOD_TEXT_BK_VISIBLE );
+    case TEXT_is_REFERENCE:
+    case TEXT_is_VALUE:
+        if( IsFrontLayer( text_layer ) )
+            color = brd->GetVisibleElementColor( MOD_TEXT_FR_VISIBLE );
+        else
+            color = brd->GetVisibleElementColor( MOD_TEXT_BK_VISIBLE );
         break;
 
-    case F_Cu:
-        if( !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ) )
-            return;
-        color = brd->GetVisibleElementColor( MOD_TEXT_FR_VISIBLE );
-        break;
-
-    default:
-        color = brd->GetLayerColor( module->GetLayer() );
+    case TEXT_is_DIVERS:
+    default:    // This is to persuade the compiler that color is always initialized
+        color = brd->GetLayerColor( GetLayer() );
     }
 
     // 'Ghost' the element if forced show
@@ -247,7 +284,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     }
 
     // Draw mode compensation for the width
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
+    PCB_BASE_FRAME* frame = static_cast<PCB_BASE_FRAME*>( panel->GetParent() );
     int width = m_Thickness;
     if( ( frame->m_DisplayModText == LINE )
         || ( DC->LogicalToDeviceXRel( width ) <= MIN_DRAW_WIDTH ) )
@@ -295,7 +332,7 @@ void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
                                   GR_DRAWMODE     aDrawMode,
                                   const wxPoint&  aOffset )
 {
-    MODULE* parent = (MODULE*) GetParent();
+    MODULE* parent = static_cast<MODULE*>( GetParent() );
 
     if( !parent )
         return;
@@ -384,22 +421,21 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 wxString TEXTE_MODULE::GetSelectMenuText() const
 {
     wxString text;
+    const wxChar *reference = GetChars( static_cast<MODULE*>( GetParent() )->GetReference() );
 
     switch( m_Type )
     {
     case TEXT_is_REFERENCE:
-        text.Printf( _( "Reference %s" ), GetChars( m_Text ) );
+        text.Printf( _( "Reference %s" ), reference );
         break;
 
     case TEXT_is_VALUE:
-        text.Printf( _( "Value %s of %s" ), GetChars( m_Text ),
-                     GetChars( ( (MODULE*) GetParent() )->GetReference() ) );
+        text.Printf( _( "Value %s of %s" ), GetChars( m_Text ), reference );
         break;
 
     default:    // wrap this one in quotes:
         text.Printf( _( "Text \"%s\" on %s of %s" ), GetChars( m_Text ),
-                     GetChars( GetLayerName() ),
-                     GetChars( ( (MODULE*) GetParent() )->GetReference() ) );
+                     GetChars( GetLayerName() ), reference );
         break;
     }
 
@@ -443,23 +479,11 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
             aLayers[0] = ITEM_GAL_LAYER( MOD_VALUES_VISIBLE );
             break;
 
-        default:
-            switch( GetParent()->GetLayer() )
-            {
-            case B_Cu:
-                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE );    // how about B_SilkS?
-                break;
-
-            case F_Cu:
-                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );    // how about F_SilkS?
-                break;
-
-            default:
-                wxFAIL_MSG( wxT( "Can't tell text layer" ) );
-            }
-            break;
+        case TEXT_is_DIVERS:
+            aLayers[0] = GetLayer();
         }
     }
 
     aCount = 1;
 }
+

@@ -168,8 +168,8 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         PCB_TARGET_T,
         PCB_VIA_T,
         PCB_TRACE_T,
-        //        PCB_PAD_T,
-        //        PCB_MODULE_TEXT_T,
+        //        PCB_PAD_T,            Can't be at board level
+        //        PCB_MODULE_TEXT_T,    Can't be at board level
         PCB_MODULE_T,
         PCB_ZONE_AREA_T,
         EOT

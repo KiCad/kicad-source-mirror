@@ -59,14 +59,12 @@ static double  TextInitialOrientation;  // module text initial orientation for
 
 
 /* Add a new graphical text to the active module (footprint)
- *  Note there always are 2 texts: reference and value.
+ *  Note there always are 2 mandatory texts: reference and value.
  *  New texts have the member TEXTE_MODULE.GetType() set to TEXT_is_DIVERS
  */
 TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
 {
-    TEXTE_MODULE* Text;
-
-    Text = new TEXTE_MODULE( Module );
+    TEXTE_MODULE* Text = new TEXTE_MODULE( Module );
 
     // Add the new text object to the beginning of the draw item list.
     if( Module )
@@ -137,7 +135,7 @@ void PCB_BASE_FRAME::DeleteTextModule( TEXTE_MODULE* Text )
     if( Text == NULL )
         return;
 
-    Module = (MODULE*) Text->GetParent();
+    Module = static_cast<MODULE*>( Text->GetParent() );
 
     if( Text->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
     {
@@ -157,7 +155,7 @@ void PCB_BASE_FRAME::DeleteTextModule( TEXTE_MODULE* Text )
 static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     BASE_SCREEN*  screen = Panel->GetScreen();
-    TEXTE_MODULE* Text   = (TEXTE_MODULE*) screen->GetCurItem();
+    TEXTE_MODULE* Text   = static_cast<TEXTE_MODULE*>( screen->GetCurItem() );
     MODULE*       Module;
 
     Panel->SetMouseCapture( NULL, NULL );
@@ -165,7 +163,7 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( Text == NULL )
         return;
 
-    Module = (MODULE*) Text->GetParent();
+    Module = static_cast<MODULE*>( Text->GetParent() );
 
     Text->DrawUmbilical( Panel, DC, GR_XOR, -MoveVector );
     Text->Draw( Panel, DC, GR_XOR, MoveVector );
@@ -192,12 +190,10 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
  */
 void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 {
-    MODULE* Module;
-
     if( Text == NULL )
         return;
 
-    Module = (MODULE*) Text->GetParent();
+    MODULE *Module = static_cast<MODULE*>( Text->GetParent() );
 
     Text->SetFlags( IS_MOVED );
     Module->SetFlags( IN_EDIT );
@@ -228,7 +224,7 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
         Text->DrawUmbilical( m_canvas, DC, GR_XOR, -MoveVector );
 
         // Update the coordinates for anchor.
-        MODULE* Module = (MODULE*) Text->GetParent();
+        MODULE* Module = static_cast<MODULE*>( Text->GetParent() );
 
         if( Module )
         {
@@ -273,7 +269,7 @@ static void Show_MoveTexte_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
                                    bool aErase )
 {
     BASE_SCREEN*  screen = aPanel->GetScreen();
-    TEXTE_MODULE* Text   = (TEXTE_MODULE*) screen->GetCurItem();
+    TEXTE_MODULE* Text   = static_cast<TEXTE_MODULE*>( screen->GetCurItem() );
 
     if( Text == NULL )
         return;
@@ -308,21 +304,20 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
     case PCB_TEXT_T:
         newSize = GetDesignSettings().m_PcbTextSize;
         newThickness = GetDesignSettings().m_PcbTextWidth;
-        pcbText = (TEXTE_PCB*) aItem;
-        text = (EDA_TEXT*) pcbText;
+        pcbText = static_cast<TEXTE_PCB*>( aItem );
+        text = static_cast<EDA_TEXT*>( pcbText );
         break;
 
     case PCB_MODULE_TEXT_T:
         newSize = GetDesignSettings().m_ModuleTextSize;
         newThickness = GetDesignSettings().m_ModuleTextWidth;
-        moduleText = (TEXTE_MODULE*) aItem;
-        text = (EDA_TEXT*) moduleText;
+        moduleText = static_cast<TEXTE_MODULE*>( aItem );
+        text = static_cast<EDA_TEXT*>( moduleText );
         break;
 
     default:
         // Exit if aItem is not a text field
         return;
-        break;
     }
 
     // Exit if there's nothing to do

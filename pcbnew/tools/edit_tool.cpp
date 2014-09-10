@@ -489,7 +489,7 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
                 DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete VALUE!" ) );
                 return;
 
-            default:    // suppress warnings
+            case TEXTE_MODULE::TEXT_is_DIVERS:    // suppress warnings
                 break;
             }
         }

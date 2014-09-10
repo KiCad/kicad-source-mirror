@@ -214,54 +214,53 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     {
     case PCB_ZONE_T:
     case PCB_TRACE_T:
-        draw( (const TRACK*) item, aLayer );
+        draw( static_cast<const TRACK*>( item ), aLayer );
         break;
 
     case PCB_VIA_T:
-        draw( (const VIA*) item, aLayer );
+        draw( static_cast<const VIA*>( item ), aLayer );
         break;
 
     case PCB_PAD_T:
-        draw( (const D_PAD*) item, aLayer );
+        draw( static_cast<const D_PAD*>( item ), aLayer );
         break;
 
     case PCB_LINE_T:
     case PCB_MODULE_EDGE_T:
-        draw( (DRAWSEGMENT*) item, aLayer );
+        draw( static_cast<const DRAWSEGMENT*>( item ), aLayer );
         break;
 
     case PCB_TEXT_T:
-        draw( (TEXTE_PCB*) item, aLayer );
+        draw( static_cast<const TEXTE_PCB*>( item ), aLayer );
         break;
 
     case PCB_MODULE_TEXT_T:
-        draw( (TEXTE_MODULE*) item, aLayer );
+        draw( static_cast<const TEXTE_MODULE*>( item ), aLayer );
         break;
 
     case PCB_MODULE_T:
-        draw( (MODULE*) item, aLayer );
+        draw( static_cast<const MODULE*>( item ), aLayer );
         break;
 
     case PCB_ZONE_AREA_T:
-        draw( (ZONE_CONTAINER*) item );
+        draw( static_cast<const ZONE_CONTAINER*>( item ) );
         break;
 
     case PCB_DIMENSION_T:
-        draw( (DIMENSION*) item, aLayer );
+        draw( static_cast<const DIMENSION*>( item ), aLayer );
         break;
 
     case PCB_TARGET_T:
-        draw( (PCB_TARGET*) item );
+        draw( static_cast<const PCB_TARGET*>( item ) );
         break;
 
     case PCB_MARKER_T:
-        draw( (MARKER_PCB*) item );
+        draw( static_cast<const MARKER_PCB*>( item ) );
         break;
 
     default:
         // Painter does not know how to draw the object
         return false;
-        break;
     }
 
     return true;

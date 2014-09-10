@@ -123,7 +123,7 @@ void DialogEditModuleText::initDlg( )
         m_TextDataTitle->SetLabel( _( "Text:" ) );
         break;
 
-    default:
+    case TEXTE_MODULE::TEXT_is_REFERENCE:
         m_TextDataTitle->SetLabel( _( "Reference:" ) );
         break;
     }
