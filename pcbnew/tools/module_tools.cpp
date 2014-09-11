@@ -233,8 +233,8 @@ int MODULE_TOOLS::EnumeratePads( TOOL_EVENT& aEvent )
 
     GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
     guide.SetIgnoreMTextsMarkedNoShow( true );
-    guide.SetIgnoreMTextsOnCopper( true );
-    guide.SetIgnoreMTextsOnCmp( true );
+    guide.SetIgnoreMTextsOnBack( true );
+    guide.SetIgnoreMTextsOnFront( true );
     guide.SetIgnoreModulesVals( true );
     guide.SetIgnoreModulesRefs( true );
 

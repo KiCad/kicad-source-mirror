@@ -52,7 +52,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     BOARD_ITEM( parent, PCB_MODULE_TEXT_T ),
     EDA_TEXT()
 {
-    MODULE* module = (MODULE*) m_Parent;
+    MODULE* module = static_cast<MODULE*>( m_Parent );
 
     m_Type = text_type;
 
@@ -63,6 +63,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
 
     SetLayer( F_SilkS );
 
+    // Set position and layer if there is already a parent module
     if( module && ( module->Type() == PCB_MODULE_T ) )
     {
         m_Pos = module->GetPosition();
@@ -161,33 +162,34 @@ int TEXTE_MODULE::GetLength() const
 
 void TEXTE_MODULE::SetDrawCoord()
 {
-    MODULE* module = (MODULE*) m_Parent;
+    const MODULE* module = static_cast<const MODULE*>( m_Parent );
 
     m_Pos = m_Pos0;
 
-    if( module == NULL )
-        return;
+    if( module  )
+    {
+        double angle = module->GetOrientation();
 
-    double angle = module->GetOrientation();
-
-    RotatePoint( &m_Pos.x, &m_Pos.y, angle );
-    m_Pos += module->GetPosition();
+        RotatePoint( &m_Pos.x, &m_Pos.y, angle );
+        m_Pos += module->GetPosition();
+    }
 }
 
 
 void TEXTE_MODULE::SetLocalCoord()
 {
-    MODULE* module = (MODULE*) m_Parent;
+    const MODULE* module = static_cast<const MODULE*>( m_Parent );
 
-    if( module == NULL )
+    if( module )
+    {
+        m_Pos0 = m_Pos - module->GetPosition();
+        double angle = module->GetOrientation();
+        RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
+    }
+    else
     {
         m_Pos0 = m_Pos;
-        return;
     }
-
-    m_Pos0 = m_Pos - module->GetPosition();
-    double angle = module->GetOrientation();
-    RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
 }
 
 
@@ -196,9 +198,8 @@ bool TEXTE_MODULE::HitTest( const wxPoint& aPosition ) const
     wxPoint  rel_pos;
     EDA_RECT area = GetTextBox( -1, -1 );
 
-    /* Rotate refPos to - angle
-     * to test if refPos is within area (which is relative to an horizontal
-     * text)
+    /* Rotate refPos to - angle to test if refPos is within area (which
+     * is relative to an horizontal text)
      */
     rel_pos = aPosition;
     RotatePoint( &rel_pos, m_Pos, -GetDrawRotation() );
@@ -238,27 +239,29 @@ const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                          const wxPoint& offset )
 {
-    MODULE* module = (MODULE*) m_Parent;
+    if( panel == NULL )
+        return;
+
+    MODULE* module = static_cast<MODULE*>( m_Parent );
 
     /* parent must *not* be NULL (a module text without a footprint
        parent has no sense) */
     wxASSERT( module );
 
-    if( panel == NULL )
-        return;
-
     BOARD* brd = GetBoard( );
-
-    // Suppress the element if the layer it is on is on a disabled side
-    LAYER_ID text_layer = GetLayer();
-
-    if( (IsFrontLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE )) ||
-        (IsBackLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE )) )
-        return;
 
     /* Reference and values takes the color from the corresponding Visibles
        other texts take the color of the layer they are on */
     EDA_COLOR_T color;
+
+    /* For reference and value suppress the element if the layer it is
+     * on is on a disabled side, user text also has standard layer
+     * hiding.
+     * If the whole module side is disabled this isn't even called */
+    LAYER_ID text_layer = GetLayer();
+    if( (IsFrontLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE )) || 
+        (IsBackLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE )) )
+        return;
 
     switch( GetType() )
     {
@@ -270,9 +273,12 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
             color = brd->GetVisibleElementColor( MOD_TEXT_BK_VISIBLE );
         break;
 
+    default:    // Otherwise the compiler is not sure about initializing color
     case TEXT_is_DIVERS:
-    default:    // This is to persuade the compiler that color is always initialized
-        color = brd->GetLayerColor( GetLayer() );
+        if( brd->IsLayerVisible( m_Layer ) )
+            color = brd->GetLayerColor( GetLayer() );
+        else
+            return;
     }
 
     // 'Ghost' the element if forced show
