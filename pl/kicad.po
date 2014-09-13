@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-10 21:31+0100\n"
-"PO-Revision-Date: 2014-09-10 21:31+0100\n"
+"POT-Creation-Date: 2014-09-13 11:23+0100\n"
+"PO-Revision-Date: 2014-09-13 11:23+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1253,7 +1253,7 @@ msgstr "Skonwertowany"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:140
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:97
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:104
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:71
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:101
 #: gerbview/class_GERBER.cpp:345 gerbview/class_GERBER.cpp:349
@@ -1277,7 +1277,7 @@ msgstr "Element "
 #: eeschema/libedit.cpp:508 eeschema/lib_draw_item.cpp:64
 #: eeschema/lib_pin.cpp:1935 eeschema/sch_text.cpp:794
 #: pcbnew/class_drawsegment.cpp:322 pcbnew/class_marker_pcb.cpp:97
-#: pcbnew/class_text_mod.cpp:388 pcbnew/class_track.cpp:1123
+#: pcbnew/class_text_mod.cpp:394 pcbnew/class_track.cpp:1123
 #: pcbnew/class_track.cpp:1150 pcbnew/class_track.cpp:1199
 #: pcbnew/class_zone.cpp:605 pcbnew/dialogs/dialog_layers_setup.cpp:346
 #: gerbview/class_gerber_draw_item.cpp:548
@@ -1914,7 +1914,7 @@ msgstr "Oznaczenie"
 #: eeschema/dialogs/dialog_color_config.cpp:58
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:178
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
-#: pcbnew/class_edge_mod.cpp:285 pcbnew/class_text_mod.cpp:378
+#: pcbnew/class_edge_mod.cpp:285 pcbnew/class_text_mod.cpp:384
 #: pcbnew/footprint_wizard_frame.cpp:171
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:59
@@ -1940,7 +1940,7 @@ msgstr "Pole %s %s"
 
 #: eeschema/lib_field.cpp:753 eeschema/lib_pin.cpp:1939
 #: eeschema/sch_text.cpp:776 eeschema/dialogs/dialog_lib_edit_text_base.cpp:84
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:99
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:106
 msgid "Style"
 msgstr "Styl"
 
@@ -2093,7 +2093,7 @@ msgstr "Numer"
 #: eeschema/lib_pin.cpp:1942
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:912
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:42
-#: pcbnew/class_pcb_text.cpp:143 pcbnew/class_text_mod.cpp:393
+#: pcbnew/class_pcb_text.cpp:143 pcbnew/class_text_mod.cpp:399
 #: pcbnew/dialogs/dialog_display_options_base.cpp:128
 #: gerbview/class_gerber_draw_item.cpp:571
 #: gerbview/class_gerber_draw_item.cpp:572
@@ -2102,7 +2102,7 @@ msgstr "Tak"
 
 #: eeschema/lib_pin.cpp:1944
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:914
-#: pcbnew/class_pcb_text.cpp:141 pcbnew/class_text_mod.cpp:391
+#: pcbnew/class_pcb_text.cpp:141 pcbnew/class_text_mod.cpp:397
 #: pcbnew/dialogs/dialog_display_options_base.cpp:128
 #: gerbview/class_gerber_draw_item.cpp:571
 #: gerbview/class_gerber_draw_item.cpp:572
@@ -2110,7 +2110,7 @@ msgid "No"
 msgstr "Nie"
 
 #: eeschema/lib_pin.cpp:1946
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:116
 msgid "Visible"
 msgstr "Widoczny"
 
@@ -2121,7 +2121,7 @@ msgstr "Długość"
 #: eeschema/lib_pin.cpp:1953 eeschema/sch_text.cpp:765
 #: pcbnew/class_pcb_text.cpp:146
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:68
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:105
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:112
 msgid "Orientation"
 msgstr "Orientacja"
 
@@ -2174,7 +2174,7 @@ msgid "Rectangle from (%s, %s) to (%s, %s)"
 msgstr "Prostokąt od (%s, %s) do (%s, %s)"
 
 #: eeschema/lib_text.cpp:51 eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
-#: pcbnew/class_text_mod.cpp:378 pcbnew/class_text_mod.cpp:385
+#: pcbnew/class_text_mod.cpp:384 pcbnew/class_text_mod.cpp:391
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28
 #: cvpcb/dialogs/dialog_display_options_base.cpp:33
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:113
@@ -3475,7 +3475,7 @@ msgid "Hierarchical Sheet Pin"
 msgstr "Hierarchiczny pin arkusza"
 
 #: eeschema/sch_text.cpp:745
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:103
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:110
 msgid "Horizontal"
 msgstr "Poziomo"
 
@@ -3496,7 +3496,7 @@ msgstr "Pionowo w dół"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:77
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:82
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:97
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:104
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:101
 #: common/eda_text.cpp:368
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:109
@@ -4732,7 +4732,7 @@ msgstr "Odbij pionowo |"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:59
 #: pcbnew/class_pcb_text.cpp:141 pcbnew/class_pcb_text.cpp:143
-#: pcbnew/class_text_mod.cpp:405 pcbnew/modedit_onclick.cpp:263
+#: pcbnew/class_text_mod.cpp:411 pcbnew/modedit_onclick.cpp:263
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:97
 #: gerbview/class_gerber_draw_item.cpp:573
@@ -5590,7 +5590,7 @@ msgid "&Length:"
 msgstr "Długość:"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:64
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:103
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:110
 msgid "Vertical"
 msgstr "Pionowo"
 
@@ -5603,7 +5603,7 @@ msgid "Common to all body styles"
 msgstr "Wspólny dla wszystkich stylów"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:76
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:116
 msgid "Invisible"
 msgstr "Niewidoczny"
 
@@ -6362,7 +6362,7 @@ msgstr "Segment"
 
 #: pcbnew/class_drawsegment.cpp:353 pcbnew/class_module.cpp:557
 #: pcbnew/class_pad.cpp:626 pcbnew/class_pcb_layer_widget.cpp:208
-#: pcbnew/class_pcb_text.cpp:138 pcbnew/class_text_mod.cpp:398
+#: pcbnew/class_pcb_text.cpp:138 pcbnew/class_text_mod.cpp:404
 #: pcbnew/class_track.cpp:1133 pcbnew/class_track.cpp:1160
 #: pcbnew/class_zone.cpp:657 pcbnew/layer_widget.cpp:545
 #: gerbview/class_gerbview_layer_widget.cpp:88
@@ -6518,7 +6518,7 @@ msgid "Graphic Item"
 msgstr "Elementy graficzne"
 
 #: pcbnew/class_edge_mod.cpp:284 pcbnew/class_module.cpp:605
-#: pcbnew/class_pad.cpp:610 pcbnew/class_text_mod.cpp:382
+#: pcbnew/class_pad.cpp:610 pcbnew/class_text_mod.cpp:388
 #: pcbnew/loadcmp.cpp:418 pcbnew/loadcmp.cpp:482
 msgid "Module"
 msgstr "Footprint"
@@ -6572,7 +6572,7 @@ msgid "Stat"
 msgstr "Status"
 
 #: pcbnew/class_module.cpp:582 pcbnew/class_pad.cpp:661
-#: pcbnew/class_text_mod.cpp:408
+#: pcbnew/class_text_mod.cpp:414
 msgid "Orient"
 msgstr "Orientacja"
 
@@ -6637,11 +6637,11 @@ msgstr "Pole lutownicze"
 msgid "Net"
 msgstr "Sieć"
 
-#: pcbnew/class_pad.cpp:632 pcbnew/class_text_mod.cpp:414
+#: pcbnew/class_pad.cpp:632 pcbnew/class_text_mod.cpp:420
 msgid "H Size"
 msgstr "Rozmiar poziomy"
 
-#: pcbnew/class_pad.cpp:635 pcbnew/class_text_mod.cpp:417
+#: pcbnew/class_pad.cpp:635 pcbnew/class_text_mod.cpp:423
 msgid "V Size"
 msgstr "Rozmiar pionowy"
 
@@ -6945,7 +6945,7 @@ msgstr "Wymiar"
 msgid "PCB Text"
 msgstr "Tekst PCB"
 
-#: pcbnew/class_pcb_text.cpp:149 pcbnew/class_text_mod.cpp:411
+#: pcbnew/class_pcb_text.cpp:149 pcbnew/class_text_mod.cpp:417
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:64
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:113
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:325
@@ -6957,35 +6957,35 @@ msgstr "Grubość"
 msgid "Pcb Text \"%s\" on %s"
 msgstr "Tekst PCB \"%s\" na %s"
 
-#: pcbnew/class_text_mod.cpp:378
+#: pcbnew/class_text_mod.cpp:384
 msgid "Ref."
 msgstr "Oznaczenie"
 
-#: pcbnew/class_text_mod.cpp:395
+#: pcbnew/class_text_mod.cpp:401
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:85
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:111
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
 msgid "Display"
 msgstr "Pokazuj"
 
-#: pcbnew/class_text_mod.cpp:401
+#: pcbnew/class_text_mod.cpp:407
 msgid " Yes"
 msgstr " Tak"
 
-#: pcbnew/class_text_mod.cpp:403
+#: pcbnew/class_text_mod.cpp:409
 msgid " No"
 msgstr " Nie"
 
-#: pcbnew/class_text_mod.cpp:429
+#: pcbnew/class_text_mod.cpp:435
 #, c-format
 msgid "Reference %s"
 msgstr "Oznaczenie %s"
 
-#: pcbnew/class_text_mod.cpp:433
+#: pcbnew/class_text_mod.cpp:439
 #, c-format
 msgid "Value %s of %s"
 msgstr "Wartość %s z %s"
 
-#: pcbnew/class_text_mod.cpp:437
+#: pcbnew/class_text_mod.cpp:443
 #, c-format
 msgid "Text \"%s\" on %s of %s"
 msgstr "Tekst \"%s\" na %s z %s"
@@ -7203,7 +7203,7 @@ msgstr ""
 "Ten element posiada niepoprawny identyfikator warstwy.\n"
 "Obecnie został przeniesiony na warstwę rysunkową. Proszę to naprawić."
 
-#: pcbnew/dimension.cpp:202 pcbnew/dialogs/dialog_edit_module_text.cpp:213
+#: pcbnew/dimension.cpp:202 pcbnew/dialogs/dialog_edit_module_text.cpp:226
 #: pcbnew/dialogs/dialog_pcb_text_properties.cpp:248
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr ""
@@ -10594,6 +10594,7 @@ msgstr "Promień zaokrąglenia"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:37
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:89
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:129
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:30
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:52
@@ -11906,6 +11907,15 @@ msgstr "Wartość:"
 msgid "Reference:"
 msgstr "Oznaczenie:"
 
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:167
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:164
+msgid ""
+"This item has an illegal layer id.\n"
+"Now, forced on the front silk screen layer. Please, fix it"
+msgstr ""
+"Ten element posiada niepoprawny identyfikator warstwy.\n"
+"Obecnie został przeniesiony na górną warstwę opisową. Proszę to naprawić."
+
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:19
 #, c-format
 msgid "Footprint %s (%s) orientation %.1f"
@@ -13151,14 +13161,6 @@ msgstr "Grubość:"
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:117
 msgid "Default thickness:"
 msgstr "Domyślna grubość:"
-
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:164
-msgid ""
-"This item has an illegal layer id.\n"
-"Now, forced on the front silk screen layer. Please, fix it"
-msgstr ""
-"Ten element posiada niepoprawny identyfikator warstwy.\n"
-"Obecnie został przeniesiony na górną warstwę opisową. Proszę to naprawić."
 
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:214
 msgid "Tracks, vias and pads are allowed. The keepout is useless"
@@ -14544,29 +14546,29 @@ msgstr "Rysuj pola lutownicze na war. opisowej"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:95
 msgid ""
-"Enable/disable print/plot pads on silkscreen layers\n"
-"When disable, pads are never potted on silkscreen layers\n"
-"When enable, pads are potted only if they appear on silkscreen layers"
+"Enable plotting of pads on silkscreen layers\n"
+"When disabled, pads are never plotted on silkscreen layers\n"
+"When enabled, pads are plotted only if they appear on silkscreen layers"
 msgstr ""
 "Włącza/wyłącza wydruk/rysowanie pól lutowniczych na warstwach opisowych\n"
-"Gdy wyłączone, pola lutownicze nie są wbite na warstwach opisowych\n"
-"Gdy włączone, pola lutownicze są wbite tylko jesli występują na warstwach "
+"Gdy wyłączone, pola lutownicze nie są nigdy rysowane na warstwach opisowych\n"
+"Gdy włączone, pola lutownicze są rysowane tylko jesli występują na warstwach "
 "opisowych"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
-msgid "Plot module value on silkscreen"
-msgstr "Rysuj wartości na war. opisowej"
+msgid "Plot module values"
+msgstr "Rysuj wartości footprintów"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:102
-msgid "Plot module reference on silkscreen"
-msgstr "Rysuj oznaczenia na war. opisowej"
+msgid "Plot module references"
+msgstr "Rysuj oznaczenia footprintów"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:105
-msgid "Force plot invisible values/refrences"
+msgid "Force plot invisible values/references"
 msgstr "Wymuś rysowanie niewidocznych wartości/odnośników"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:106
-msgid "Force plot invisible values and/or references"
+msgid "Force plotting of invisible values and/or references"
 msgstr ""
 "Wymusza rysowanie wartości lub odnośników posiadających włączoną opcję ich "
 "ukrycia"
@@ -14576,8 +14578,8 @@ msgid "Do not tent vias"
 msgstr "Nie maskuj przelotek"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:111
-msgid "Remove soldermask on vias."
-msgstr "Usuń maskę lutowniczą z przelotek."
+msgid "Remove soldermask on vias"
+msgstr "Usuń maskę lutowniczą z przelotek"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:115
 msgid "Exclude PCB edge layer from other layers"
@@ -14600,9 +14602,9 @@ msgid "Use auxiliary axis as origin"
 msgstr "Użyj osi pomocniczej jako puntu początkowego"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
-msgid "Use auxiliary axis as coordinates origin in Gerber files."
+msgid "Use auxiliary axis as coordinates origin in plot files"
 msgstr ""
-"Użyj osi pomocniczej jako początku układu współrzędnych dla plików Gerber."
+"Użyj osi pomocniczej jako początku układu współrzędnych dla plików Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Drill marks:"
@@ -14664,24 +14666,26 @@ msgstr "val"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
 msgid ""
-"Min dist between 2 pad areas.\n"
+"Minimum distance between 2 pad areas.\n"
 "Two pad areas nearer than this value will be merged during plotting"
 msgstr ""
-"Minimalna odległość pomiędzy dwoma polami lut.\n"
+"Minimalna odległość pomiędzy dwoma polami lutowniczymi.\n"
 "Dwa pola umieszczone bliżej siebie niż ta wartość zostaną połączone podczas "
-"rysowania."
+"rysowania"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:222
 msgid "Gerber Options"
 msgstr "Opcje Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:227
-msgid "Use proper filename extensions"
-msgstr "Użyj właściwych rozszerzeń plików"
+msgid "Use Protel filename extensions"
+msgstr "Użyj sugerowanych przez Protel rozszerzeń plików"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:228
-msgid "Use proper Gerber extensions - .GBL, .GTL, etc..."
-msgstr "Użyj właściwych rozszerzeń dla plików Gerber - .GBL, .GTL, itd..."
+msgid "Use conventional Protel Gerber extensions - .GBL, .GTL, etc..."
+msgstr ""
+"Użyj sugerowanych przez Protel rozszerzeń dla plików Gerber - .GBL, .GTL, "
+"itd..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:232
 msgid "Include extended attributes"
@@ -14710,11 +14714,11 @@ msgstr "4.6 (w mm)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:249
 msgid ""
-"Precision of coordinates in Gerber files.\n"
-"Use the highter value if possible."
+"Resolution of coordinates in Gerber files.\n"
+"Use the higher value if possible"
 msgstr ""
 "Precyzja koordynatów w plikach Gerber.\n"
-"Użyj wyższej precyzji jeśli to możliwe."
+"Użyj wyższej precyzji jeśli to możliwe"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:264
 msgid "Pen size"
@@ -19779,7 +19783,7 @@ msgstr "Kontrola DRC"
 msgid "Module Properties"
 msgstr "Właściwości footprintu"
 
-#: pcbnew/dialogs/dialog_edit_module_text_base.h:68
+#: pcbnew/dialogs/dialog_edit_module_text_base.h:70
 msgid "Footprint Text Properties"
 msgstr "Właściwości tekstu footprintu"
 
