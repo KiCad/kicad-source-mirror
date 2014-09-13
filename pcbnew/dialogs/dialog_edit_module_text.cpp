@@ -155,6 +155,19 @@ void DialogEditModuleText::initDlg( )
 
     if( !m_currentText->IsVisible() )
         m_Show->SetSelection( 1 );;
+
+    // Configure the layers list selector
+    m_LayerSelectionCtrl->SetLayersHotkeys( false );
+    m_LayerSelectionCtrl->SetLayerSet( LSET::InternalCuMask().set( Edge_Cuts ) );
+    m_LayerSelectionCtrl->SetBoardFrame( m_parent );
+    m_LayerSelectionCtrl->Resync();
+
+    if( m_LayerSelectionCtrl->SetLayerSelection( m_currentText->GetLayer() ) < 0 )
+    {
+        wxMessageBox( _( "This item has an illegal layer id.\n"
+                        "Now, forced on the front silk screen layer. Please, fix it" ) );
+        m_LayerSelectionCtrl->SetLayerSelection( F_SilkS );
+    }
 }
 
 
@@ -162,7 +175,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 {
     wxString msg;
 
-    if ( m_module)
+    if( m_module )
         m_parent->SaveCopyInUndoList( m_module, UR_CHANGED );
 
 #ifndef USE_WX_OVERLAY
@@ -222,6 +235,9 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     m_currentText->SetOrientation( text_orient );
 
     m_currentText->SetDrawCoord();
+
+    LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
+    m_currentText->SetLayer( ToLAYER_ID( layer ) );
 
 #ifndef USE_WX_OVERLAY
     if( m_dc )     // Display new text

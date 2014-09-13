@@ -32,7 +32,7 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 6, 2, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 7, 2, 0, 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -84,6 +84,13 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	m_TxtPosCtrlY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TxtPosCtrlY->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_TxtPosCtrlY, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	m_LayerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerLabel->Wrap( -1 );
+	fgSizer1->Add( m_LayerLabel, 0, wxALL, 5 );
+	
+	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	fgSizer1->Add( m_LayerSelectionCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bSizer10->Add( fgSizer1, 1, wxALL|wxEXPAND, 5 );
