@@ -124,7 +124,6 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_valueCopy->Copy( &m_currentModule->Value() );
     m_ReferenceCtrl->SetValue( m_referenceCopy->GetText() );
     m_ValueCtrl->SetValue( m_valueCopy->GetText() );
-    m_ValueCtrl->SetValue( m_valueCopy->GetText() );
     m_FootprintNameCtrl->SetValue( m_currentModule->GetFPID().Format() );
 
     m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non SMD components" ) );

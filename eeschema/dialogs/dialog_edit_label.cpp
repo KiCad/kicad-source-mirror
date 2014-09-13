@@ -152,7 +152,7 @@ void DIALOG_LABEL_EDITOR::InitDialog()
 
     if ( !multiLine )
     {
-        max_len =m_CurrentText->GetText().Length();
+        max_len = m_CurrentText->GetText().Length();
     }
     else
     {

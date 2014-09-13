@@ -517,7 +517,7 @@ public:
 
     wxString GetText() const
     {
-        const SCH_TEXT* tmp = (SCH_TEXT*) m_label;
+        const SCH_TEXT* tmp = static_cast<SCH_TEXT*>( m_label );
         return tmp->GetText();
     }
 };

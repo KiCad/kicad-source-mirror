@@ -767,7 +767,8 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 
 void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
 {
-    if( aText->GetText().Length() == 0 )
+    wxString shownText( aText->GetShownText() );
+    if( shownText.Length() == 0 )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
@@ -789,13 +790,14 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( aText->GetText(), position, orientation );
+    m_gal->StrokeText( shownText, position, orientation );
 }
 
 
 void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 {
-    if( aText->GetLength() == 0 )
+    wxString shownText( aText->GetShownText() );
+    if( shownText.Length() == 0 )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
@@ -817,7 +819,7 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( aText->GetText(), position, orientation );
+    m_gal->StrokeText( shownText, position, orientation );
 }
 
 
@@ -941,7 +943,7 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
 
     m_gal->SetLineWidth( text.GetThickness() );
     m_gal->SetTextAttributes( &text );
-    m_gal->StrokeText( text.GetText(), position, orientation );
+    m_gal->StrokeText( text.GetShownText(), position, orientation );
 }
 
 

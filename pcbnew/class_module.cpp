@@ -538,7 +538,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     char     bufcar[512], Line[512];
     wxString msg;
 
-    aList.push_back( MSG_PANEL_ITEM( m_Reference->GetText(), m_Value->GetText(), DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( m_Reference->GetShownText(), m_Value->GetShownText(), DARKCYAN ) );
 
     // Display last date the component was edited (useful in Module Editor).
     time_t edit_time = m_LastEditTime;

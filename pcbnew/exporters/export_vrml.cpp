@@ -640,7 +640,7 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
 
     if( text->IsMultilineAllowed() )
     {
-        wxArrayString* list = wxStringSplit( text->GetText(), '\n' );
+        wxArrayString* list = wxStringSplit( text->GetShownText(), '\n' );
         std::vector<wxPoint> positions;
         positions.reserve( list->Count() );
         text->GetPositionsOfLinesOfMultilineText( positions, list->Count() );
@@ -661,7 +661,7 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
     else
     {
         DrawGraphicText( NULL, NULL, text->GetTextPosition(), color,
-                         text->GetText(), text->GetOrientation(), size,
+                         text->GetShownText(), text->GetOrientation(), size,
                          text->GetHorizJustify(), text->GetVertJustify(),
                          text->GetThickness(), text->IsItalic(),
                          true,
@@ -941,7 +941,7 @@ static void export_vrml_text_module( TEXTE_MODULE* module )
         model_vrml->s_text_width    = module->GetThickness();
 
         DrawGraphicText( NULL, NULL, module->GetTextPosition(), BLACK,
-                module->GetText(), module->GetDrawRotation(), size,
+                module->GetShownText(), module->GetDrawRotation(), size,
                 module->GetHorizJustify(), module->GetVertJustify(),
                 module->GetThickness(), module->IsItalic(),
                 true,

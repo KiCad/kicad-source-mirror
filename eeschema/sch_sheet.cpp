@@ -368,7 +368,7 @@ void SCH_SHEET::RemovePin( SCH_SHEET_PIN* aSheetPin )
     }
 
     wxLogDebug( wxT( "Fix me: attempt to remove label %s which is not in sheet %s." ),
-                GetChars( aSheetPin->GetText() ), GetChars( m_name ) );
+                GetChars( aSheetPin->GetShownText() ), GetChars( m_name ) );
 }
 
 
@@ -401,14 +401,14 @@ bool SCH_SHEET::HasUndefinedPins()
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
         EDA_ITEM* DrawStruct  = m_screen->GetDrawItems();
-        SCH_HIERLABEL* HLabel = NULL;
+        const SCH_HIERLABEL* HLabel = NULL;
 
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
             if( DrawStruct->Type() != SCH_HIERARCHICAL_LABEL_T )
                 continue;
 
-            HLabel = (SCH_HIERLABEL*) DrawStruct;
+            HLabel = static_cast<SCH_HIERLABEL*>( DrawStruct );
 
             if( pin.GetText().CmpNoCase( HLabel->GetText() ) == 0 )
                 break;  // Found!
@@ -485,14 +485,14 @@ void SCH_SHEET::CleanupSheet()
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
         EDA_ITEM* DrawStruct = m_screen->GetDrawItems();
-        SCH_HIERLABEL* HLabel = NULL;
+        const SCH_HIERLABEL* HLabel = NULL;
 
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
             if( DrawStruct->Type() != SCH_HIERARCHICAL_LABEL_T )
                 continue;
 
-            HLabel = (SCH_HIERLABEL*) DrawStruct;
+            HLabel = static_cast<SCH_HIERLABEL*>( DrawStruct );
 
             if( i->GetText().CmpNoCase( HLabel->GetText() ) == 0 )
                 break;  // Found!

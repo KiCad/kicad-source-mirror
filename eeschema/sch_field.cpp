@@ -565,19 +565,8 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
 
     int      thickness = GetPenSize();
 
-    if( (parent->GetUnitCount() <= 1) || (m_id != REFERENCE) )
-    {
-        aPlotter->Text( textpos, color, m_Text, orient, m_Size, hjustify, vjustify,
-                        thickness, m_Italic, m_Bold );
-    }
-    else    /* We plot the reference, for a multiple parts per package */
-    {
-        /* Adding A, B ... to the reference */
-        wxString Text = m_Text + LIB_PART::SubReference( parent->GetUnit() );
-
-        aPlotter->Text( textpos, color, Text, orient, m_Size, hjustify, vjustify,
-                        thickness, m_Italic, m_Bold );
-    }
+    aPlotter->Text( textpos, color, GetFullyQualifiedText(), orient, m_Size, hjustify, vjustify,
+            thickness, m_Italic, m_Bold );
 }
 
 

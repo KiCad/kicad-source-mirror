@@ -110,7 +110,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
 
         if( LibItem )
             items.push_back( MSG_PANEL_ITEM( LibItem->GetRef( m_CurrentSheet ),
-                                             LibItem->GetField( VALUE )->GetText(), DARKCYAN ) );
+                                             LibItem->GetField( VALUE )->GetShownText(), DARKCYAN ) );
 
         SetMsgPanel( items );
 

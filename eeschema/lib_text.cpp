@@ -221,12 +221,12 @@ EDA_ITEM* LIB_TEXT::Clone() const
     newitem->m_Convert   = m_Convert;
     newitem->m_Flags     = m_Flags;
     newitem->m_Text      = m_Text;
-    newitem->m_Thickness     = m_Thickness;
+    newitem->m_Thickness = m_Thickness;
     newitem->m_Italic    = m_Italic;
     newitem->m_Bold      = m_Bold;
     newitem->m_HJustify  = m_HJustify;
     newitem->m_VJustify  = m_VJustify;
-    return (EDA_ITEM*) newitem;
+    return newitem;
 }
 
 
@@ -320,7 +320,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     else
         color = BLACK;
 
-    plotter->Text( pos, color, m_Text,
+    plotter->Text( pos, color, GetShownText(),
                    t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
                    m_Size, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                    GetPenSize(), m_Italic, m_Bold );
@@ -349,7 +349,7 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
                             EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
                             const TRANSFORM& aTransform )
 {
-    EDA_COLOR_T     color = GetDefaultColor();
+    EDA_COLOR_T color = GetDefaultColor();
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -394,7 +394,7 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
     EDA_RECT* clipbox = aPanel? aPanel->GetClipBox() : NULL;
-    DrawGraphicText( clipbox, aDC, txtpos, (EDA_COLOR_T) color, m_Text, orient, m_Size,
+    DrawGraphicText( clipbox, aDC, txtpos, color, GetShownText(), orient, m_Size,
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, GetPenSize(),
                      m_Italic, m_Bold );
 
@@ -478,14 +478,8 @@ void LIB_TEXT::SetText( const wxString& aText )
 
 wxString LIB_TEXT::GetSelectMenuText() const
 {
-    wxString tmp = GetText();
-    tmp.Replace( wxT( "\n" ), wxT( " " ) );
-    tmp.Replace( wxT( "\r" ), wxT( " " ) );
-    tmp.Replace( wxT( "\t" ), wxT( " " ) );
-    tmp =( tmp.Length() > 15 ) ? tmp.Left( 12 ) + wxT( "..." ) : tmp;
-
     wxString msg;
-    msg.Printf( _( "Graphic Text %s" ), GetChars( tmp ) );
+    msg.Printf( _( "Graphic Text %s" ), GetChars( ShortenedShownText() ) );
     return msg;
 }
 

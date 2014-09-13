@@ -319,7 +319,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         size.x = -size.x;
 
     EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
-    DrawGraphicText( clipbox, DC, pos, color, m_Text, orient,
+    DrawGraphicText( clipbox, DC, pos, color, GetShownText(), orient,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
@@ -387,7 +387,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     Line = module->GetReference();
     aList.push_back( MSG_PANEL_ITEM( _( "Module" ), Line, DARKCYAN ) );
 
-    Line = m_Text;
+    Line = GetShownText();
     aList.push_back( MSG_PANEL_ITEM( _( "Text" ), Line, BROWN ) );
 
     wxASSERT( m_Type >= TEXT_is_REFERENCE && m_Type <= TEXT_is_DIVERS );
@@ -436,11 +436,11 @@ wxString TEXTE_MODULE::GetSelectMenuText() const
         break;
 
     case TEXT_is_VALUE:
-        text.Printf( _( "Value %s of %s" ), GetChars( m_Text ), reference );
+        text.Printf( _( "Value %s of %s" ), GetChars( GetShownText() ), reference );
         break;
 
     default:    // wrap this one in quotes:
-        text.Printf( _( "Text \"%s\" on %s of %s" ), GetChars( m_Text ),
+        text.Printf( _( "Text \"%s\" on %s of %s" ), GetChars( ShortenedShownText() ),
                      GetChars( GetLayerName() ), reference );
         break;
     }

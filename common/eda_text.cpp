@@ -90,6 +90,21 @@ int EDA_TEXT::LenSize( const wxString& aLine ) const
     return GraphicTextWidth( aLine, m_Size.x, m_Italic, m_Bold );
 }
 
+
+wxString EDA_TEXT::ShortenedShownText() const
+{
+    wxString tmp = GetShownText();
+    tmp.Replace( wxT( "\n" ), wxT( " " ) );
+    tmp.Replace( wxT( "\r" ), wxT( " " ) );
+    tmp.Replace( wxT( "\t" ), wxT( " " ) );
+
+    if( tmp.Length() > 15 )
+        tmp = tmp.Left( 12 ) + wxT( "..." );
+
+    return tmp;
+}
+
+
 /**
  * Function GetInterline
  * return the distance between 2 text lines
@@ -106,13 +121,13 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     EDA_RECT       rect;
     wxPoint        pos;
     wxArrayString* list = NULL;
-    wxString       text = m_Text;
+    wxString       text = GetShownText();
     int            thickness = ( aThickness < 0 ) ? m_Thickness : aThickness;
     int            linecount = 1;
 
     if( m_MultilineAllowed )
     {
-        list = wxStringSplit( m_Text, '\n' );
+        list = wxStringSplit( text, '\n' );
 
         if ( list->GetCount() )     // GetCount() == 0 for void strings
         {
@@ -129,7 +144,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     int    dx = LenSize( text );
     int    dy = GetInterline( aThickness );
 
-    /* Creates bounding box (rectangle) for an horizontal text */
+    // Creates bounding box (rectangle) for an horizontal text
     wxSize textsize = wxSize( dx, dy );
 
     if( aInvertY )
@@ -257,7 +272,7 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
     if( m_MultilineAllowed )
     {
         std::vector<wxPoint> positions;
-        wxArrayString* list = wxStringSplit( m_Text, '\n' );
+        wxArrayString* list = wxStringSplit( GetShownText(), '\n' );
         positions.reserve( list->Count() );
 
         GetPositionsOfLinesOfMultilineText(positions, list->Count() );
@@ -273,7 +288,7 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
     }
     else
         drawOneLineOfText( aClipBox, aDC, aOffset, aColor,
-                           aDrawMode, aFillMode, m_Text, m_Pos );
+                           aDrawMode, aFillMode, GetShownText(), m_Pos );
 
     // Draw text anchor, if requested
     if( aAnchor_color != UNSPECIFIED_COLOR )
@@ -330,7 +345,7 @@ void EDA_TEXT::GetPositionsOfLinesOfMultilineText(
 void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
                                   const wxPoint& aOffset, EDA_COLOR_T aColor,
                                   GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
-                                  wxString& aText, wxPoint aPos )
+                                  const wxString& aText, const wxPoint &aPos )
 {
     int width = m_Thickness;
 
@@ -474,7 +489,7 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
 
     if( IsMultilineAllowed() )
     {
-        wxArrayString* list = wxStringSplit( GetText(), '\n' );
+        wxArrayString* list = wxStringSplit( GetShownText(), '\n' );
         std::vector<wxPoint> positions;
         positions.reserve( list->Count() );
         GetPositionsOfLinesOfMultilineText( positions, list->Count() );

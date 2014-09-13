@@ -192,7 +192,7 @@ void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_TEXT* aItem, GAL* aGal ) const
     aGal->SetStrokeColor( COLOR4D( aItem->GetColor() ) );
     aGal->SetLineWidth( aItem->GetThickness() );
     aGal->SetTextAttributes( aItem );
-    aGal->StrokeText( aItem->GetText(), VECTOR2D( 0, 0 ), 0.0 );
+    aGal->StrokeText( aItem->GetShownText(), VECTOR2D( 0, 0 ), 0.0 );
     aGal->Restore();
 }
 

@@ -452,7 +452,7 @@ void LIB_PART::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
         // The reference is a special case: we shoud change the basic text
         // to add '?' and the part id
         LIB_FIELD& field = (LIB_FIELD&) item;
-        wxString tmp = field.GetText();
+        wxString tmp = field.GetShownText();
         if( field.GetId() == REFERENCE )
         {
             wxString text = field.GetFullText( aUnit );

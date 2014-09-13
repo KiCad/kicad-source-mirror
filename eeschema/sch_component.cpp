@@ -1496,7 +1496,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
         wxString msg = part->IsPower() ? _( "Power symbol" ) : _( "Value" );
 
-        aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetText(), DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetShownText(), DARKCYAN ) );
 
         // Display component reference in library and library
         aList.push_back( MSG_PANEL_ITEM( _( "Component" ), GetPartName(), BROWN ) );
@@ -1508,7 +1508,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
         // Display the current associated footprint, if exists.
         if( !GetField( FOOTPRINT )->IsVoid() )
-            msg = GetField( FOOTPRINT )->GetText();
+            msg = GetField( FOOTPRINT )->GetShownText();
         else
             msg = _( "<Unknown>" );
 
@@ -1683,7 +1683,7 @@ wxString SCH_COMPONENT::GetSelectMenuText() const
     wxString tmp;
     tmp.Printf( _( "Component %s, %s" ),
                 GetChars( GetPartName() ),
-                GetChars( GetField( REFERENCE )->GetText() ) );
+                GetChars( GetField( REFERENCE )->GetShownText() ) );
     return tmp;
 }
 
