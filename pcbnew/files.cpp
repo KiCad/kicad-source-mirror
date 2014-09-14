@@ -316,9 +316,12 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
         break;
 
     case ID_SAVE_BOARD:
-        SavePcbFile( Prj().AbsolutePath( GetBoard()->GetFileName() ) );
-        break;
-
+        if( ! GetBoard()->GetFileName().IsEmpty() )
+        {
+            SavePcbFile( Prj().AbsolutePath( GetBoard()->GetFileName() ) );
+            break;
+        }
+        // Fall through
     case ID_SAVE_BOARD_AS:
         {
             wxString    pro_dir = wxPathOnly( Prj().GetProjectFullName() );
