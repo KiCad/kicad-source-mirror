@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -45,7 +45,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	wxString m_CopperLayersChoiceChoices[] = { _("2"), _("4"), _("6"), _("8"), _("10"), _("12"), _("14"), _("16"), _("18"), _("20"), _("22"), _("24"), _("26"), _("28"), _("30"), _("32") };
 	int m_CopperLayersChoiceNChoices = sizeof( m_CopperLayersChoiceChoices ) / sizeof( wxString );
 	m_CopperLayersChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_CopperLayersChoiceNChoices, m_CopperLayersChoiceChoices, 0 );
-	m_CopperLayersChoice->SetSelection( 3 );
+	m_CopperLayersChoice->SetSelection( 2 );
 	bCopperLayersSizer->Add( m_CopperLayersChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
@@ -81,9 +81,59 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_LayerListFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
+	m_CrtYdFrontName = new wxStaticText( m_LayersListPanel, ID_CRTYDFRONTNAME, _("CrtYd_Front_later"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CrtYdFrontName->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_CrtYdFrontName, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_CrtYdFrontPanel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CrtYdFrontPanel->SetBackgroundColour( wxColour( 255, 233, 236 ) );
+	
+	wxBoxSizer* bSizer611;
+	bSizer611 = new wxBoxSizer( wxVERTICAL );
+	
+	m_CrtYdFrontCheckBox = new wxCheckBox( m_CrtYdFrontPanel, ID_CRTYDFRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CrtYdFrontCheckBox->SetToolTip( _("If you want a courtyard layer for the front side of the board") );
+	
+	bSizer611->Add( m_CrtYdFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	m_CrtYdFrontPanel->SetSizer( bSizer611 );
+	m_CrtYdFrontPanel->Layout();
+	bSizer611->Fit( m_CrtYdFrontPanel );
+	m_LayerListFlexGridSizer->Add( m_CrtYdFrontPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_CrtYdFrontStaticText = new wxStaticText( m_LayersListPanel, ID_CRTYDFRONTCHOICE, _("Off-board, testing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CrtYdFrontStaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_CrtYdFrontStaticText, 0, wxALL, 5 );
+	
+	m_FabFrontName = new wxStaticText( m_LayersListPanel, ID_FABFRONTNAME, _("Fab_Front_later"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FabFrontName->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_FabFrontName, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_FabFrontPanel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_FabFrontPanel->SetBackgroundColour( wxColour( 236, 233, 236 ) );
+	
+	wxBoxSizer* bSizer61;
+	bSizer61 = new wxBoxSizer( wxVERTICAL );
+	
+	m_FabFrontCheckBox = new wxCheckBox( m_FabFrontPanel, ID_FABFRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_FabFrontCheckBox->SetToolTip( _("If you want a fabrication layer for the front side of the board") );
+	
+	bSizer61->Add( m_FabFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	m_FabFrontPanel->SetSizer( bSizer61 );
+	m_FabFrontPanel->Layout();
+	bSizer61->Fit( m_FabFrontPanel );
+	m_LayerListFlexGridSizer->Add( m_FabFrontPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_FabFrontStaticText = new wxStaticText( m_LayersListPanel, ID_FABFRONTCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FabFrontStaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_FabFrontStaticText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
 	m_AdhesFrontName = new wxStaticText( m_LayersListPanel, ID_ADHESFRONTNAME, _("Adhes_Front_later"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AdhesFrontName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_AdhesFrontName, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	m_LayerListFlexGridSizer->Add( m_AdhesFrontName, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_AdhesFrontPanel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_AdhesFrontPanel->SetBackgroundColour( wxColour( 236, 233, 236 ) );
@@ -100,18 +150,18 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_AdhesFrontPanel->SetSizer( bSizer6 );
 	m_AdhesFrontPanel->Layout();
 	bSizer6->Fit( m_AdhesFrontPanel );
-	m_LayerListFlexGridSizer->Add( m_AdhesFrontPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_AdhesFrontPanel, 1, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_AdhesFrontStaticText = new wxStaticText( m_LayersListPanel, ID_ADHESFRONTCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AdhesFrontStaticText->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_AdhesFrontStaticText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	m_LayerListFlexGridSizer->Add( m_AdhesFrontStaticText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_SoldPFrontName = new wxStaticText( m_LayersListPanel, ID_SOLDPFRONTNAME, _("SoldP_Front_later"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SoldPFrontName->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_SoldPFrontName, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_SoldPFrontPanel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SoldPFrontPanel->SetBackgroundColour( wxColour( 236, 233, 236 ) );
+	m_SoldPFrontPanel->SetBackgroundColour( wxColour( 255, 253, 235 ) );
 	
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
@@ -127,7 +177,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer7->Fit( m_SoldPFrontPanel );
 	m_LayerListFlexGridSizer->Add( m_SoldPFrontPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_SoldPFrontStaticText = new wxStaticText( m_LayersListPanel, ID_SOLDPFRONTCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SoldPFrontStaticText = new wxStaticText( m_LayersListPanel, ID_SOLDPFRONTCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SoldPFrontStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_SoldPFrontStaticText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
@@ -1108,7 +1158,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_SoldPBackName, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_SoldPBackPanel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SoldPBackPanel->SetBackgroundColour( wxColour( 236, 233, 236 ) );
+	m_SoldPBackPanel->SetBackgroundColour( wxColour( 255, 253, 235 ) );
 	
 	wxBoxSizer* bSizer26;
 	bSizer26 = new wxBoxSizer( wxVERTICAL );
@@ -1124,7 +1174,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer26->Fit( m_SoldPBackPanel );
 	m_LayerListFlexGridSizer->Add( m_SoldPBackPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_SoldPBackStaticText = new wxStaticText( m_LayersListPanel, ID_SOLDPBACKCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SoldPBackStaticText = new wxStaticText( m_LayersListPanel, ID_SOLDPBACKCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SoldPBackStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_SoldPBackStaticText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
@@ -1152,6 +1202,56 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_AdhesBackStaticText = new wxStaticText( m_LayersListPanel, ID_ADHESBACKCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AdhesBackStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_AdhesBackStaticText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	
+	m_FabBackName = new wxStaticText( m_LayersListPanel, ID_FABBACKNAME, _("Fab_Back_later"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FabBackName->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_FabBackName, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_FabBackPanel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_FabBackPanel->SetBackgroundColour( wxColour( 236, 233, 236 ) );
+	
+	wxBoxSizer* bSizer281;
+	bSizer281 = new wxBoxSizer( wxVERTICAL );
+	
+	m_FabBackCheckBox = new wxCheckBox( m_FabBackPanel, ID_FABBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_FabBackCheckBox->SetToolTip( _("If you want a fabrication layer for the back side of the board") );
+	
+	bSizer281->Add( m_FabBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	m_FabBackPanel->SetSizer( bSizer281 );
+	m_FabBackPanel->Layout();
+	bSizer281->Fit( m_FabBackPanel );
+	m_LayerListFlexGridSizer->Add( m_FabBackPanel, 1, wxEXPAND, 5 );
+	
+	m_FabBackStaticText = new wxStaticText( m_LayersListPanel, ID_FABBACKCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FabBackStaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_FabBackStaticText, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_CrtYdBackName = new wxStaticText( m_LayersListPanel, ID_CRTYDBACKNAME, _("CrtYd_Back_later"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CrtYdBackName->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_CrtYdBackName, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_CrtYdBackPanel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CrtYdBackPanel->SetBackgroundColour( wxColour( 255, 233, 236 ) );
+	
+	wxBoxSizer* bSizer6111;
+	bSizer6111 = new wxBoxSizer( wxVERTICAL );
+	
+	m_CrtYdBackCheckBox = new wxCheckBox( m_CrtYdBackPanel, ID_CRTYDBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CrtYdBackCheckBox->SetToolTip( _("If you want a courtyard layer for the front side of the board") );
+	
+	bSizer6111->Add( m_CrtYdBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	m_CrtYdBackPanel->SetSizer( bSizer6111 );
+	m_CrtYdBackPanel->Layout();
+	bSizer6111->Fit( m_CrtYdBackPanel );
+	m_LayerListFlexGridSizer->Add( m_CrtYdBackPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_CrtYdBackStaticText = new wxStaticText( m_LayersListPanel, ID_CRTYDBACKCHOICE, _("Off-board, testing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CrtYdBackStaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_CrtYdBackStaticText, 0, wxALL, 5 );
 	
 	m_PCBEdgesName = new wxStaticText( m_LayersListPanel, ID_PCBEDGESNAME, _("PCB_Edges_later"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PCBEdgesName->Wrap( -1 );
@@ -1301,7 +1401,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayersListPanel->SetSizer( m_LayerListFlexGridSizer );
 	m_LayersListPanel->Layout();
 	m_LayerListFlexGridSizer->Fit( m_LayersListPanel );
-	b_layersListSizer->Add( m_LayersListPanel, 1, wxALL|wxEXPAND, 5 );
+	b_layersListSizer->Add( m_LayersListPanel, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bMainSizer->Add( b_layersListSizer, 1, wxEXPAND, 5 );
@@ -1318,11 +1418,12 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	// Connect Events
 	m_PresetsChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnPresetsChoice ), NULL, this );
 	m_CopperLayersChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCopperLayersChoice ), NULL, this );
+	m_CrtYdFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
+	m_FabFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_AdhesFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_SoldPFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_SilkSFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
@@ -1363,6 +1464,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_SilkSBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_SoldPBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_AdhesBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
+	m_FabBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
+	m_CrtYdBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_PCBEdgesCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_MarginCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_Eco1CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
@@ -1378,6 +1481,8 @@ DIALOG_LAYERS_SETUP_BASE::~DIALOG_LAYERS_SETUP_BASE()
 	// Disconnect Events
 	m_PresetsChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnPresetsChoice ), NULL, this );
 	m_CopperLayersChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCopperLayersChoice ), NULL, this );
+	m_CrtYdFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
+	m_FabFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_AdhesFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_SoldPFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_SilkSFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
@@ -1418,6 +1523,8 @@ DIALOG_LAYERS_SETUP_BASE::~DIALOG_LAYERS_SETUP_BASE()
 	m_SilkSBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_SoldPBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_AdhesBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
+	m_FabBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
+	m_CrtYdBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_PCBEdgesCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_MarginCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_Eco1CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );

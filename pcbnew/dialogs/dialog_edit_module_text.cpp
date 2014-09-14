@@ -113,6 +113,11 @@ void DialogEditModuleText::initDlg( )
 
     m_ModuleInfoText->SetLabel( msg );
 
+    // Create a list of not allowed layers.
+    // could be slightly dependent of the type of footprint text.
+    LSET forbiddenLayers( LSET::AllCuMask() );
+    forbiddenLayers.set( Edge_Cuts ).set( Margin ).set( F_Paste ).set( B_Paste ).set( F_Mask ).set( B_Mask );
+
     switch( m_currentText->GetType() )
     {
     case TEXTE_MODULE::TEXT_is_VALUE:
@@ -154,11 +159,11 @@ void DialogEditModuleText::initDlg( )
         m_Orient->SetSelection( 1 );
 
     if( !m_currentText->IsVisible() )
-        m_Show->SetSelection( 1 );;
+        m_Show->SetSelection( 1 );
 
     // Configure the layers list selector
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetLayerSet( LSET::InternalCuMask().set( Edge_Cuts ) );
+    m_LayerSelectionCtrl->SetLayerSet( forbiddenLayers );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
 
@@ -238,6 +243,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 
     LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
     m_currentText->SetLayer( ToLAYER_ID( layer ) );
+    m_currentText->SetMirrored( IsBackLayer( m_currentText->GetLayer() ) );
 
 #ifndef USE_WX_OVERLAY
     if( m_dc )     // Display new text

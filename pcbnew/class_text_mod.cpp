@@ -250,38 +250,25 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
     BOARD* brd = GetBoard( );
 
-    /* Reference and values takes the color from the corresponding Visibles
-       other texts take the color of the layer they are on */
-    EDA_COLOR_T color;
+    EDA_COLOR_T color = brd->GetLayerColor( GetLayer() );
+
 
     /* For reference and value suppress the element if the layer it is
      * on is on a disabled side, user text also has standard layer
      * hiding.
      * If the whole module side is disabled this isn't even called */
     LAYER_ID text_layer = GetLayer();
-    if( (IsFrontLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE )) || 
+    if( (IsFrontLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE )) ||
         (IsBackLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE )) )
         return;
 
-    switch( GetType() )
-    {
-    case TEXT_is_REFERENCE:
-    case TEXT_is_VALUE:
-        if( IsFrontLayer( text_layer ) )
-            color = brd->GetVisibleElementColor( MOD_TEXT_FR_VISIBLE );
-        else
-            color = brd->GetVisibleElementColor( MOD_TEXT_BK_VISIBLE );
-        break;
+    // text which are not ref or value are shown only if the layer is visible
+    // ref or value have a specific display option
+    if( GetType() == TEXT_is_DIVERS && ! brd->IsLayerVisible( m_Layer ) )
+        return;
 
-    default:    // Otherwise the compiler is not sure about initializing color
-    case TEXT_is_DIVERS:
-        if( brd->IsLayerVisible( m_Layer ) )
-            color = brd->GetLayerColor( GetLayer() );
-        else
-            return;
-    }
-
-    // 'Ghost' the element if forced show
+    // Invisible texts are still drawn (not plotted) in MOD_TEXT_INVISIBLE
+    // Just because we must have to edit them (at least to make them visible)
     if( m_NoShow )
     {
         if( !brd->IsElementVisible( MOD_TEXT_INVISIBLE ) )
