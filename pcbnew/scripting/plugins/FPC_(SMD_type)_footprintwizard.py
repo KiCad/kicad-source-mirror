@@ -30,7 +30,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
             pad.SetSize(size)
             pad.SetShape(PAD_RECT)
             pad.SetAttribute(PAD_SMD)
-            pad.SetLayerSet( pad.StandardMask() )
+            pad.SetLayerSet( pad.SMDMask() )
             pad.SetPos0(pos)
             pad.SetPosition(pos)
             pad.SetPadName(name)

@@ -15,7 +15,9 @@
 #
 
 import pcbnew
+import math
 import FootprintWizardDrawingAids
+
 
 class FootprintWizardParameterManager:
     """
@@ -50,8 +52,9 @@ class FootprintWizardParameterManager:
     uMils = 2
     uNatural = 3
     uBool = 4
+    uString = 5
 
-    def AddParam(self, section, param, unit, default, hint = ''):
+    def AddParam(self, section, param, unit, default, hint=''):
         """
         Add a parameter with some properties.
 
@@ -66,14 +69,16 @@ class FootprintWizardParameterManager:
             val = pcbnew.FromMils(default)
         elif unit == self.uNatural:
             val = default
+        elif unit == self.uString:
+            val = str(default)
         elif unit == self.uBool:
-            val = "True" if default else "False" #ugly stringing
+            val = "True" if default else "False"  # ugly stringing
         else:
             print "Warning: Unknown unit type: %s" % unit
             return
 
-        if unit in [self.uNatural, self.uBool]:
-            param = "*%s" % param #star prefix for natural
+        if unit in [self.uNatural, self.uBool, self.uString]:
+            param = "*%s" % param  # star prefix for natural
 
         if section not in self.parameters:
             self.parameters[section] = {}
@@ -89,7 +94,8 @@ class FootprintWizardParameterManager:
 
             for key, value in section.iteritems():
                 unit = ""
-                if (type(value) is int or type(value) is float) and not "*" in key:
+                if ((type(value) is int or type(value) is float)
+                        and not "*" in key):
                     unit = "mm"
 
                 if "*" in key:
@@ -101,7 +107,7 @@ class FootprintWizardParameterManager:
 
     def _ParametersHaveErrors(self):
         """
-        Return true if we discovered errors suring parameter processing
+        Return true if we discovered errors during parameter processing
         """
 
         for name, section in self.parameter_errors.iteritems():
@@ -124,8 +130,8 @@ class FootprintWizardParameterManager:
                     if not printed_section:
                         print "  %s:" % name
 
-                    print "       %s: %s (have %s)" % (key, value,
-                                        self.parameters[name][key])
+                    print "       %s: %s (have %s)" % (
+                        key, value, self.parameters[name][key])
 
     def ProcessParameters(self):
         """
@@ -134,14 +140,15 @@ class FootprintWizardParameterManager:
         """
 
         self.ClearErrors()
-        self.CheckParameters();
+        self.CheckParameters()
 
         if self._ParametersHaveErrors():
             print "Cannot build footprint: Parameters have errors:"
             self._PrintParameterErrors()
             return False
 
-        print "Building new %s footprint with the following parameters:" % self.name
+        print ("Building new %s footprint with the following parameters:"
+               % self.name)
 
         self._PrintParameterTable()
         return True
@@ -150,29 +157,37 @@ class FootprintWizardParameterManager:
     # PARAMETER CHECKERS
     #################################################################
 
-    def CheckParamPositiveInt(self, section, param, min_value = 1,
-                                max_value = None, is_multiple_of = 1):
+    def CheckParamInt(self, section, param, min_value=1,
+                      max_value=None, is_multiple_of=1):
         """
         Make sure a parameter can be made into an int, and enforce
         limits if required
         """
 
         try:
-            self.parameters[section][param] = int(self.parameters[section][param])
+            self.parameters[section][param] = (
+                int(self.parameters[section][param]))
         except ValueError:
-            self.parameter_errors[section][param] = "Must be a valid integer"
+            self.parameter_errors[section][param] = (
+                "Must be a valid integer")
             return
 
-        if min_value is not None and (self.parameters[section][param] < min_value):
-            self.parameter_errors[section][param] = "Must be greater than or equal to %d" % (min_value)
+        if min_value is not None and (
+                self.parameters[section][param] < min_value):
+            self.parameter_errors[section][param] = (
+                "Must be greater than or equal to %d" % (min_value))
             return
 
-        if max_value is not None and (self.parameters[section][param] > min_value):
-            self.parameter_errors[section][param] = "Must be less than or equal to %d" % (max_value)
+        if max_value is not None and (
+                self.parameters[section][param] > min_value):
+            self.parameter_errors[section][param] = (
+                "Must be less than or equal to %d" % (max_value))
             return
 
-        if is_multiple_of > 1 and (self.parameters[section][param] % is_multiple_of) > 0:
-            self.parameter_errors[section][param] = "Must be a multiple of %d" % is_multiple_of
+        if is_multiple_of > 1 and (
+                self.parameters[section][param] % is_multiple_of) > 0:
+            self.parameter_errors[section][param] = (
+                "Must be a multiple of %d" % is_multiple_of)
             return
 
         return
@@ -182,11 +197,13 @@ class FootprintWizardParameterManager:
         Make sure a parameter looks like a boolean, convert to native
         boolean type if so
         """
-        if str(self.parameters[section][param]).lower() in ["true", "t", "y", "yes", "on", "1", "1.0"]:
-            self.parameters[section][param] = True;
+        if str(self.parameters[section][param]).lower() in [
+                "true", "t", "y", "yes", "on", "1", "1.0"]:
+            self.parameters[section][param] = True
             return
-        elif str(self.parameters[section][param]).lower() in ["false", "f", "n", "no", "off", "0", "0.0"]:
-            self.parameters[section][param] = False;
+        elif str(self.parameters[section][param]).lower() in [
+                "false", "f", "n", "no", "off", "0", "0.0"]:
+            self.parameters[section][param] = False
             return
 
         self.parameter_errors[section][param] = "Must be boolean (true/false)"
@@ -194,7 +211,7 @@ class FootprintWizardParameterManager:
 
 
 class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
-                                    FootprintWizardParameterManager):
+                                   FootprintWizardParameterManager):
     """
     A class to simplify many aspects of footprint creation, leaving only
     the foot-print specific routines to the wizards themselves
@@ -216,16 +233,46 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
         self.decription = self.GetDescription()
         self.image = self.GetImage()
 
-    def GetReference(self):
+    def GetValue(self):
         raise NotImplementedError
 
-    def GetValuePrefix(self):
-        return "U" # footprints needing wizards of often ICs
+    def GetReferencePrefix(self):
+        return "U"  # footprints needing wizards of often ICs
 
     def GetImage(self):
         return ""
 
+    def GetTextSize(self):
+        """
+        IPC nominal
+        """
+        return pcbnew.FromMM(1.2)
+
+    def GetTextThickness(self):
+        """
+        Thicker than IPC guidelines (10% of text height = 0.12mm)
+        as 5 wires/mm is a common silk screen limitation
+        """
+        return pcbnew.FromMM(0.2)
+
+    def SetModule3DModel(self):
+        """
+        Set a 3D model for the module
+
+        Default is to do nothing, you need to implement this if you have
+        a model to set
+
+        FIXME: This doesn't seem to be enabled yet?
+        """
+        pass
+
     def BuildThisFootprint(self):
+        """
+        Draw the footprint.
+
+        This is specific to each footprint class, you need to implment
+        this to draw what you want
+        """
         raise NotImplementedError
 
     def BuildFootprint(self):
@@ -234,17 +281,26 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
         the implmenting class
         """
 
+        self.module = pcbnew.MODULE(None)  # create a new module
+        # do it first, so if we return early, we don't segfault KiCad
+
         if not self.ProcessParameters():
             return
 
-        self.module = pcbnew.MODULE(None) # create a new module
+        self.draw = FootprintWizardDrawingAids.FootprintWizardDrawingAids(
+            self.module)
 
-        self.draw = FootprintWizardDrawingAids.FootprintWizardDrawingAids(self.module)
+        self.module.SetValue(self.GetValue())
+        self.module.SetReference("%s**" % self.GetReferencePrefix())
 
-        self.module.SetReference(self.GetReference())
-        self.module.SetValue("%s**" % self.GetValuePrefix())
+        fpid = pcbnew.FPID(self.module.GetValue())  # the name in library
+        self.module.SetFPID(fpid)
 
-        fpid = pcbnew.FPID(self.module.GetReference())   #the name in library
-        self.module.SetFPID( fpid )
+        self.BuildThisFootprint()  # implementer's build function
 
-        self.BuildThisFootprint() # implementer's build function
+        self.SetModule3DModel()  # add a 3d module if specified
+
+        thick = self.GetTextThickness()
+
+        self.module.Reference().SetThickness(thick)
+        self.module.Value().SetThickness(thick)
