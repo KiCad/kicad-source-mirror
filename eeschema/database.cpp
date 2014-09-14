@@ -71,9 +71,7 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
     std::vector<wxArrayString>  nameList;
     wxString       msg;
 
-#ifndef KICAD_KEEPCASE
-    BufName.MakeUpper();
-#endif
+//    BufName.MakeUpper();
     Keys.MakeUpper();
 
     /* Review the list of libraries for counting. */

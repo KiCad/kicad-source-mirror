@@ -185,10 +185,6 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
         return NULL;
     }
 
-#ifndef KICAD_KEEPCASE
-    name.MakeUpper();
-#endif
-
     m_canvas->SetIgnoreMouseEvents( false );
     m_canvas->MoveCursorToCrossHair();
 

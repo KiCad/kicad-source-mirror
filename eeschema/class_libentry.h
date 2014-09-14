@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
@@ -46,11 +46,11 @@ class LIB_FIELD;
 /// Compiler controlled string compare function, either case independent or not:
 inline int Cmp_KEEPCASE( const wxString& aString1, const wxString& aString2 )
 {
-#ifdef KICAD_KEEPCASE
+#if 1
     // case specificity:
     return aString1.Cmp( aString2 );
 #else
-    // case independence:
+    // case independence (no more in use)
     return aString1.CmpNoCase( aString2 );
 #endif
 }

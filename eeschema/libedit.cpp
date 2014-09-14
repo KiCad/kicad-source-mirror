@@ -638,11 +638,7 @@ void LIB_EDIT_FRAME::CreateNewLibraryPart( wxCommandEvent& event )
         return;
     }
 
-#ifndef KICAD_KEEPCASE
-    name = dlg.GetName().MakeUpper();
-#else
     name = dlg.GetName();
-#endif
     name.Replace( wxT( " " ), wxT( "_" ) );
 
     PART_LIB* lib = GetCurLib();

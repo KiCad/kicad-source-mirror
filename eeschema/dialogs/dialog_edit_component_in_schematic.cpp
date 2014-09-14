@@ -226,10 +226,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 {
     wxString newname = chipnameTextCtrl->GetValue();
 
-#ifndef KICAD_KEEPCASE
-    newname.MakeUpper();
-#endif
-
     newname.Replace( wxT( " " ), wxT( "_" ) );
 
     if( newname.IsEmpty() )
@@ -242,10 +238,28 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 
         if( libs->FindLibraryEntry( newname ) == NULL )
         {
-            wxString msg = wxString::Format( _(
-                "Component '%s' not found!" ),
-                GetChars( newname ) );
-            DisplayError( this, msg );
+            if( LIB_ALIAS* entry = libs->FindLibraryNearEntry( newname ) )
+            {
+                wxString near_name = entry->GetName();
+                wxString msg = wxString::Format( _(
+                    "Component '%s' not found!\n"
+                    "But the component '%s' exists\n"
+                    "Do you want to use it?"),
+                    GetChars( newname ), GetChars( near_name ) );
+
+                if( IsOK( this, msg ) )
+                {
+                    chipnameTextCtrl->SetValue( near_name );
+                    m_Cmp->SetPartName( near_name, libs );
+                }
+            }
+            else
+            {
+                wxString msg = wxString::Format( _(
+                    "Component '%s' not found!" ),
+                    GetChars( newname ) );
+                DisplayError( this, msg );
+            }
         }
         else    // Change component from lib!
         {

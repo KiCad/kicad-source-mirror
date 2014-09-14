@@ -350,12 +350,14 @@ void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
 void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
 {
     KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB_MODULE_EDITOR, false );
+
     if( !frame )
     {
         frame = Kiway.Player( FRAME_PCB_MODULE_EDITOR, true );
 //        frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
         frame->Show( true );
     }
+
     frame->Raise();
 }
 

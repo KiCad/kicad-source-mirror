@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
@@ -897,6 +897,41 @@ LIB_ALIAS* PART_LIBS::FindLibraryEntry( const wxString& aName, const wxString& a
     }
 
     return entry;
+}
+
+/* searches all libraries in the list for an entry, using a case insensitive comparison.
+ * Used to find an entry, when the normal (case sensitive) search fails.
+  */
+LIB_ALIAS* PART_LIBS::FindLibraryNearEntry( const wxString& aEntryName,
+        const wxString& aLibraryName )
+{
+    BOOST_FOREACH( PART_LIB& lib, *this )
+    {
+        if( !!aLibraryName && lib.GetName() != aLibraryName )
+            continue;
+
+        LIB_ALIAS* entry = lib.GetFirstEntry();
+
+        if( ! entry )
+            continue;
+
+        wxString first_entry_name = entry->GetName();
+        wxString entry_name = first_entry_name;
+
+        for( ;; )
+        {
+            if( entry_name.CmpNoCase( aEntryName ) == 0 )
+                return entry;
+
+            entry = lib.GetNextEntry( entry_name );
+            entry_name = entry->GetName();
+
+            if( first_entry_name == entry_name )
+                break;
+        }
+    }
+
+    return NULL;
 }
 
 

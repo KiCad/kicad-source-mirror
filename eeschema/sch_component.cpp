@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -263,6 +263,22 @@ bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
     {
         m_part = part->SharedPtr();
         return true;
+    }
+
+    // the part was not found. try to search with no case comparison
+    // because during a long time, Eeschema was using upper case only
+    // for names.
+    // and we could have loaded an old schematic using upper case only
+    // and libs using upper+lower case for lib items names
+    if( LIB_ALIAS* entry = aLibs->FindLibraryNearEntry( m_part_name ) )
+    {
+        // Now find the part (the lib part if we are using an alias) using
+        // the "near" name
+        if( LIB_PART* part = aLibs->FindLibPart( entry->GetName() ) )
+        {
+            m_part = part->SharedPtr();
+            return true;
+        }
     }
 
     return false;
