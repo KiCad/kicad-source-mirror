@@ -408,14 +408,13 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            aModule,
         return false;
     }
 
+    m_parent->Exchange_Module( aModule, newModule, aUndoPickList );
     m_parent->GetBoard()->Add( newModule, ADD_APPEND );
 
     if( aModule == m_currentModule )
         m_currentModule = newModule;
 
     m_WinMessages->AppendText( wxT( " OK\n" ) );
-
-    m_parent->Exchange_Module( aModule, newModule, aUndoPickList );
 
     return true;
 }
