@@ -60,6 +60,7 @@ public:
 private:
     // Events handlers:
     void OnInitDialog( wxInitDialogEvent& event );
+	void OnCloseDialog( wxCloseEvent& event );
 
     void OnListItemDeselected( wxListEvent& event );
     void OnListItemSelected( wxListEvent& event );
@@ -146,9 +147,7 @@ void LIB_EDIT_FRAME::InstallFieldsEditorDialog( wxCommandEvent& event )
     // frame. Therefore this dialog as a modal frame parent, MUST be run under
     // quasimodal mode for the quasimodal frame support to work.  So don't use
     // the QUASIMODAL macros here.
-    int abort = dlg.ShowQuasiModal();
-
-    if( abort )
+    if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
     UpdateAliasSelectList();
@@ -216,7 +215,19 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnListItemSelected( wxListEvent& event 
 
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnCancelButtonClick( wxCommandEvent& event )
 {
-    EndQuasiModal( 1 );
+    EndQuasiModal( wxID_CANCEL );
+}
+
+
+void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnCloseDialog( wxCloseEvent& event )
+{
+    // On wxWidgets 2.8, and on Linux, call EndQuasiModal here is mandatory
+    // Otherwise, the main event loop is never restored, and Eeschema does not
+    // respond to any event, because the DIALOG_SHIM destructor is never called.
+    // on wxWidgets 3.0, or on Windows, the DIALOG_SHIM destructor is called,
+    // and calls EndQuasiModal.
+    // Therefore calling EndQuasiModal here is not mandatory but it creates no issues.
+    EndQuasiModal( wxID_CANCEL );
 }
 
 
@@ -287,7 +298,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
 
     m_parent->OnModify();
 
-    EndQuasiModal( 0 );
+    EndQuasiModal( wxID_OK );
 }
 
 
