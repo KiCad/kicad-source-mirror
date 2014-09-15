@@ -218,7 +218,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemSelected( wxListEvent& event 
 
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnCloseDialog( wxCloseEvent& event )
-{wxMessageBox("DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnCloseDialog");
+{
     // On wxWidgets 2.8, and on Linux, calling EndQuasiModal here is mandatory
     // Otherwise, the main event loop is never restored, and Eeschema does not
     // respond to any event, because the DIALOG_SHIM destructor is never called.
