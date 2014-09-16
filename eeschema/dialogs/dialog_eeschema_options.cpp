@@ -40,18 +40,18 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
 
     wxListItem col0;
     col0.SetId( 0 );
-    col0.SetText( _( "ID" ) );
-    col0.SetWidth( 50 );
+    col0.SetText( _( "Field Name" ) );
+    col0.SetWidth( 150 );
 
     wxListItem col1;
     col1.SetId( 1 );
-    col1.SetText( _( "Name" ) );
-    col1.SetWidth( 150 );
+    col1.SetText( _( "Default Value" ) );
+    col1.SetWidth( 250 );
 
     wxListItem col2;
     col2.SetId( 2 );
-    col2.SetText( _( "Default Value" ) );
-    col2.SetWidth( 250 );
+    col2.SetText( _( "Visible" ) );
+    col2.SetWidth( 100 );
 
     templateFieldListCtrl->InsertColumn( 0, col0 );
     templateFieldListCtrl->InsertColumn( 1, col1 );
@@ -142,29 +142,92 @@ void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& grid_sizes, int grid_id
 
 void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
 {
-    long itemindex = templateFieldListCtrl->InsertItem( 0, wxT( "ID" ) );
-    templateFieldListCtrl->SetItem( itemindex, 1, wxT( "Next Fieldname" ) );
-    templateFieldListCtrl->SetItem( itemindex, 2, wxT( "A Default value" ) );
+    long itemindex = templateFieldListCtrl->InsertItem( templateFieldListCtrl->GetItemCount(), wxT( "New Fieldname" ) );
+    templateFieldListCtrl->SetItem( itemindex, 1, wxT( "Default Value" ) );
+    templateFieldListCtrl->SetItem( itemindex, 2, wxT( "Hidden" ) );
 
+    event.Skip();
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::copyPanelToSelected( void )
+{
+    wxListItem iteminfo;
+    iteminfo.m_itemId = selectedField;
+    iteminfo.m_mask = wxLIST_MASK_TEXT;
+
+    iteminfo.m_col = 0;
+    iteminfo.m_text = fieldNameTextCtrl->GetValue();
+    templateFieldListCtrl->SetItem( iteminfo );
+
+    iteminfo.m_col = 1;
+    iteminfo.m_text = fieldDefaultValueTextCtrl->GetValue();
+    templateFieldListCtrl->SetItem( iteminfo );
+
+    /* TODO: Fixme! */
+    iteminfo.m_col = 2;
+    iteminfo.m_text = fieldNameTextCtrl->GetValue();
+    templateFieldListCtrl->SetItem( iteminfo );
+}
+
+void DIALOG_EESCHEMA_OPTIONS::copySelectedToPanel( void )
+{
+    wxListItem iteminfo;
+    iteminfo.m_itemId = selectedField;
+    iteminfo.m_mask = wxLIST_MASK_TEXT;
+
+    iteminfo.m_col = 0;
+    if( !templateFieldListCtrl->GetItem( iteminfo ) )
+        return;
+    fieldNameTextCtrl->SetValue( iteminfo.m_text );
+
+    iteminfo.m_col = 1;
+    if( !templateFieldListCtrl->GetItem( iteminfo ) )
+        return;
+    fieldDefaultValueTextCtrl->SetValue( iteminfo.m_text );
+
+    iteminfo.m_col = 2;
+    if( !templateFieldListCtrl->GetItem( iteminfo ) )
+        return;
+
+    if( iteminfo.m_text == wxT( "Hidden" ) )
+        fieldVisibleCheckbox->SetValue( false );
+    else
+        fieldVisibleCheckbox->SetValue( true );
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
+{
+    selectedField = event.GetIndex();
+    printf( "selectedField = %d\n", selectedField );
+    copySelectedToPanel();
+    event.Skip();
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldDeselected( wxListEvent& event )
+{
     event.Skip();
 }
 
 
 void DIALOG_EESCHEMA_OPTIONS::SetTemplateFields( const TEMPLATE_FIELDNAMES& aFields )
 {
-    printf( "SetTemplateFields %d\n", aFields.size() );
+    templateFields = aFields;
 
-    for( size_t i = 0; i < aFields.size(); i++ )
+    for( TEMPLATE_FIELDNAMES::iterator fld = templateFields.begin(); fld != templateFields.end(); ++fld )
     {
         long itemindex = templateFieldListCtrl->InsertItem( 0, wxT( "?" ) );
-        templateFieldListCtrl->SetItem( itemindex, 1, aFields[i].m_Name );
-        templateFieldListCtrl->SetItem( itemindex, 2, aFields[i].m_Value );
+        templateFieldListCtrl->SetItem( itemindex, 1, fld->m_Name );
+        templateFieldListCtrl->SetItem( itemindex, 2, fld->m_Value );
+        printf( "Parsed new templateField\n" );
     }
 }
 
 
-TEMPLATE_FIELDNAMES* DIALOG_EESCHEMA_OPTIONS::GetTemplateFields( void )
+TEMPLATE_FIELDNAMES DIALOG_EESCHEMA_OPTIONS::GetTemplateFields( void )
 {
-    return &templateFields;
+    return templateFields;
 }
 

@@ -366,6 +366,16 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     // look like the component field property editor, showing visibility and value also
 
     DeleteAllTemplateFieldNames();
+    TEMPLATE_FIELDNAMES newFieldNames = dlg.GetTemplateFields();
+
+    for( TEMPLATE_FIELDNAMES::iterator dlgfld = newFieldNames.begin(); dlgfld != newFieldNames.end(); ++dlgfld )
+    {
+        TEMPLATE_FIELDNAME fld = *dlgfld;
+/*        fld.m_Name = dlgfld->m_Name;
+        fld.m_Value = dlgfld->m_Value;
+        fld.m_Visible = dlgfld->m_Visible; */
+        AddTemplateFieldName( fld );
+    }
 /*
     for( int i=0; i<8; ++i )    // no. fields in this dialog window
     {
@@ -786,7 +796,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     m_TemplateFieldNames.Format( &sf, 0 );
 
-    DBG(printf("saving formatted template fieldnames:'%s'\n", sf.GetString().c_str() );)
+    printf("saving formatted template fieldnames:'%s'\n", sf.GetString().c_str() );
 
     wxString record = FROM_UTF8( sf.GetString().c_str() );
     record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines

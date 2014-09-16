@@ -38,9 +38,11 @@ class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 {
 protected:
     TEMPLATE_FIELDNAMES templateFields;
-
+    int selectedField;
     void OnAddButtonClick( wxCommandEvent& event );
-
+    void copySelectedToPanel( void );
+    void OnTemplateFieldSelected( wxListEvent& event );
+    void OnTemplateFieldDeselected( wxListEvent& event );
 public:
     DIALOG_EESCHEMA_OPTIONS( wxWindow* parent );
 
@@ -131,7 +133,7 @@ public:
     bool GetShowPageLimits( void ) { return m_checkPageLimits->GetValue(); }
 
     void SetTemplateFields( const TEMPLATE_FIELDNAMES& aFields );
-    TEMPLATE_FIELDNAMES* GetTemplateFields( void );
+    TEMPLATE_FIELDNAMES GetTemplateFields( void );
 
 private:
     void OnMiddleBtnPanEnbl( wxCommandEvent& event )
