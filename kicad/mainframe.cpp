@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 CERN (www.cern.ch)
  * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
  *
@@ -278,12 +278,32 @@ void KICAD_MANAGER_FRAME::Execute( wxWindow* frame, const wxString& execFile,
 void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName )
 {
     KIWAY_PLAYER* frame = Kiway.Player( FRAME_SCH, false );
+
+    // Please: note: DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers() calls
+    // Kiway.Player( FRAME_SCH, true )
+    // therefore, the schematic editor is sometimes running, but the schematic project
+    // is not loaded, if the library editor was called, and the dialog field editor was used.
+    // On linux, it happens the first time the schematic editor is launched, if
+    // library editor was running, and the dialog field editor was open
+    // On Windows, it happens always after the library editor was called,
+    // and the dialog field editor was used
     if( !frame )
     {
         frame = Kiway.Player( FRAME_SCH, true );
+    }
+
+    if( !frame->IsShown() ) // the frame exists, (created by the dialog field editor)
+                            // but no project loaded.
+    {
         frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectSchematicFileName ) );
         frame->Show( true );
     }
+
+    // On Windows, Raise() does not bring the window on screen, when iconized or not shown
+    // On linux, Raise() brings the window on screen, but this code works fine
+    if( frame->IsIconized() )
+        frame->Iconize( false );
+
     frame->Raise();
 }
 
@@ -301,12 +321,18 @@ void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
 {
     KIWAY_PLAYER* frame = Kiway.Player( FRAME_SCH_LIB_EDITOR, false );
+
     if( !frame )
     {
         frame = Kiway.Player( FRAME_SCH_LIB_EDITOR, true );
         // frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectSchematicFileName ) );
         frame->Show( true );
     }
+
+    // On Windows, Raise() does not bring the window on screen, when iconized
+    if( frame->IsIconized() )
+        frame->Iconize( false );
+
     frame->Raise();
 }
 
@@ -331,6 +357,11 @@ void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
     }
 
 #endif
+
+    // On Windows, Raise() does not bring the window on screen, when iconized
+    if( frame->IsIconized() )
+        frame->Iconize( false );
+
     frame->Raise();
 }
 
@@ -358,6 +389,10 @@ void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
         frame->Show( true );
     }
 
+    // On Windows, Raise() does not bring the window on screen, when iconized
+    if( frame->IsIconized() )
+        frame->Iconize( false );
+
     frame->Raise();
 }
 
@@ -373,12 +408,18 @@ void KICAD_MANAGER_FRAME::OnRunPcbCalculator( wxCommandEvent& event )
     Execute( this, PCB_CALCULATOR_EXE );
 }
 
+
 void KICAD_MANAGER_FRAME::OnRunPageLayoutEditor( wxCommandEvent& event )
 {
     Execute( this, PL_EDITOR_EXE );
 }
 
 
+// Dead code: Cvpcb can be run only from the schematic editor now,
+// This is due to the fact the footprint field of components in schematics
+// are now always set by Cvpcb.
+// ( The idea is to drop the .cmp files to avoid to have 2 places were
+// footprints are stored, but only one: the schematic )
 void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
 {
     wxFileName fn( GetProjectFileName() );
@@ -392,6 +433,7 @@ void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
         frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
         frame->Show( true );
     }
+
     frame->Raise();
 }
 
