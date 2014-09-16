@@ -278,12 +278,25 @@ void KICAD_MANAGER_FRAME::Execute( wxWindow* frame, const wxString& execFile,
 void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName )
 {
     KIWAY_PLAYER* frame = Kiway.Player( FRAME_SCH, false );
+
+    // Please: note: DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers() calls
+    // Kiway.Player( FRAME_SCH, true )
+    // therefore, the schematic editor is sometimes running, but the schematic project
+    // is not loaded, if the library editor was called, and the dialog field editor was used.
     if( !frame )
     {
         frame = Kiway.Player( FRAME_SCH, true );
+    }
+
+    if( !frame->IsShown() ) // the frame exists, but no project loaded.
+    {
         frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectSchematicFileName ) );
         frame->Show( true );
     }
+
+    if( frame->IsIconized() )
+        frame->Iconize( false );
+
     frame->Raise();
 }
 
@@ -301,12 +314,17 @@ void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
 {
     KIWAY_PLAYER* frame = Kiway.Player( FRAME_SCH_LIB_EDITOR, false );
+
     if( !frame )
     {
         frame = Kiway.Player( FRAME_SCH_LIB_EDITOR, true );
         // frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectSchematicFileName ) );
         frame->Show( true );
     }
+
+    if( frame->IsIconized() )
+        frame->Iconize( false );
+
     frame->Raise();
 }
 
@@ -331,6 +349,10 @@ void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
     }
 
 #endif
+
+    if( frame->IsIconized() )
+        frame->Iconize( false );
+
     frame->Raise();
 }
 
@@ -357,6 +379,9 @@ void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
 //        frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
         frame->Show( true );
     }
+
+    if( frame->IsIconized() )
+        frame->Iconize( false );
 
     frame->Raise();
 }
@@ -392,6 +417,10 @@ void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
         frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
         frame->Show( true );
     }
+
+    if( frame->IsIconized() )
+        frame->Iconize( false );
+
     frame->Raise();
 }
 

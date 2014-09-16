@@ -106,7 +106,7 @@ private:
     void setRowItem( int aFieldNdx, const SCH_FIELD& aField );
 
     // event handlers
-	void OnCloseDialog( wxCloseEvent& event );
+    void OnCloseDialog( wxCloseEvent& event );
     void OnListItemDeselected( wxListEvent& event );
     void OnListItemSelected( wxListEvent& event );
     void OnCancelButtonClick( wxCommandEvent& event );
