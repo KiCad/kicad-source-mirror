@@ -70,12 +70,12 @@ const PNS_LINE& PNS_LINE::operator=( const PNS_LINE& aOther )
     m_hasVia = aOther.m_hasVia;
     m_marker = aOther.m_marker;
     m_rank = aOther.m_rank;
-    
+
     copyLinks ( &aOther );
- 
+
     return *this;
 }
-    
+
 
 PNS_LINE* PNS_LINE::Clone() const
 {
@@ -88,7 +88,7 @@ PNS_LINE* PNS_LINE::Clone() const
 void PNS_LINE::Mark( int aMarker )
 {
     m_marker = aMarker;
-    
+
     if( m_segmentRefs )
     {
         BOOST_FOREACH( PNS_SEGMENT* s, *m_segmentRefs )
@@ -123,14 +123,14 @@ int PNS_LINE::Marker()const
 }
 
 
-void PNS_LINE::copyLinks( const PNS_LINE *aParent ) 
+void PNS_LINE::copyLinks( const PNS_LINE *aParent )
 {
     if( aParent->m_segmentRefs == NULL )
     {
         m_segmentRefs = NULL;
         return;
     }
-    
+
     m_segmentRefs = new SEGMENT_REFS();
     *m_segmentRefs = *aParent->m_segmentRefs;
 }
@@ -199,7 +199,10 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
     {
         const VECTOR2I p = ips[i].p;
         int dist = line.PathLength( p );
-        
+
+        if( dist < 0 )
+            return false;
+
         if( dist <= nearest_dist )
         {
             nearest_dist = dist;
@@ -222,7 +225,7 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
     aPre = line.Slice( 0, nearest.our.Index() );
     aPre.Append( nearest.p );
     aPre.Simplify();
-    
+
     aWalk.Clear();
     aWalk.SetClosed( false );
     aWalk.Append( nearest.p );
@@ -236,7 +239,7 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
 
     aObstacle.Split( nearest.p );
     aObstacle.Split( farthest.p );
-    
+
     int i_first = aObstacle.Find( nearest.p );
     int i_last = aObstacle.Find( farthest.p );
 
@@ -246,13 +249,13 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
     {
         aWalk.Append( aObstacle.CPoint( i ) );
         i += ( aCw ? 1 : -1 );
-        
+
         if( i < 0 )
             i = aObstacle.PointCount() - 1;
         else if( i == aObstacle.PointCount() )
             i = 0;
     }
-    
+
     aWalk.Append( farthest.p );
     aWalk.Simplify();
 
@@ -386,7 +389,7 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
         if( picked )
             break;
     }
-    
+
     if( picked )
     {
         SHAPE_LINE_CHAIN path = aOrigin.Slice( 0, i );
@@ -394,7 +397,7 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
 
         return path;
     }
-        
+
     return DIRECTION_45().BuildInitialTrace( aOrigin.CPoint( 0 ), aP, true );
 }
 
@@ -419,7 +422,7 @@ void PNS_LINE::DragCorner ( const VECTOR2I& aP, int aIndex, int aSnappingThresho
     }
 
     path.Simplify();
-    m_line = path;    
+    m_line = path;
 }
 
 
@@ -448,7 +451,7 @@ VECTOR2I PNS_LINE::snapDraggedCorner( const SHAPE_LINE_CHAIN& aPath, const VECTO
                 continue;
 
             OPT_VECTOR2I ip = a.IntersectLines(b);
-            
+
             if( ip )
             {
                 int dist = ( *ip - aP ).EuclideanNorm();
@@ -483,7 +486,7 @@ VECTOR2I PNS_LINE::snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const
             snap_d[0] = s.LineDistance( aP );
 
         snap_p[0] = s.A;
-    } 
+    }
 
     if( aIndex < aPath.SegmentCount() - 2 )
     {
@@ -493,7 +496,7 @@ VECTOR2I PNS_LINE::snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const
             snap_d[1] = s.LineDistance(aP);
 
         snap_p[1] = s.A;
-    } 
+    }
 
     VECTOR2I best = aP;
     int minDist = INT_MAX;
@@ -560,7 +563,7 @@ void PNS_LINE::DragSegment ( const VECTOR2I& aP, int aIndex, int aSnappingThresh
 
     bool lockEndpointA = true;
     bool lockEndpointB = true;
-    
+
     if( aIndex == 0 )
     {
         if( !lockEndpointA )
@@ -678,7 +681,7 @@ void PNS_LINE::DragSegment ( const VECTOR2I& aP, int aIndex, int aSnappingThresh
 }
 
 
-bool PNS_LINE::CompareGeometry( const PNS_LINE& aOther ) 
+bool PNS_LINE::CompareGeometry( const PNS_LINE& aOther )
 {
     return m_line.CompareGeometry( aOther.m_line );
 }
@@ -699,7 +702,7 @@ void PNS_LINE::AppendVia( const PNS_VIA& aVia )
     {
         Reverse();
     }
-    
+
     m_hasVia = true;
     m_via = aVia;
     m_via.SetNet( m_net );
@@ -741,12 +744,12 @@ int PNS_LINE::Rank() const
 void PNS_LINE::ClipVertexRange( int aStart, int aEnd )
 {
     m_line = m_line.Slice( aStart, aEnd );
-        
+
     if( m_segmentRefs )
     {
         SEGMENT_REFS* snew = new SEGMENT_REFS( m_segmentRefs->begin() + aStart,
                                                m_segmentRefs->begin() + aEnd );
-        
+
         delete m_segmentRefs;
         m_segmentRefs = snew;
     }
@@ -763,7 +766,7 @@ bool PNS_LINE::HasLoops() const
                 return true;
         }
     }
-           
+
     return false;
 }
 
