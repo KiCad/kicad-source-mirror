@@ -26,6 +26,19 @@ set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 #option( USE_KIWAY_DLLS "Build the major modules as KIFACE DLLs or DSOs, will soon be the norm." ON )
 set( USE_KIWAY_DLLS true )  # this is now mandatory, the code is the same anyways, the old code is gone.
 
+# The desire is to migrate designs *away from* case independence, and to create designs which use
+# literally (case specific) interpreted component names.  But for backwards compatibility,
+# you may turn OFF this option if you really must.  (Remember that with KiCad using text
+# data files, typically you would be better off simply doctoring those files into
+# a case literal state with a text editor and move forward into the brave new
+# world of case specificity.  Also, BOM generators may not work properly when you
+# have this option turned OFF, the xml export's referential integrity is broken
+# on library part name.  Hence the default is ON now, as of 29-Jan-2014.
+option( KICAD_KEEPCASE
+    "ON= case specific string matching on component names, OFF= match names as if they were spelt using uppercase."
+    ON
+    )
+
 option( USE_WX_GRAPHICS_CONTEXT
     "Use wxGraphicsContext for rendering ( default OFF). Warning, this is experimental" )
 
@@ -230,6 +243,10 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 
 endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+
+if( KICAD_KEEPCASE )
+    add_definitions( -DKICAD_KEEPCASE )
+endif()
 
 if( USE_WX_OVERLAY OR APPLE )
     add_definitions( -DUSE_WX_OVERLAY )

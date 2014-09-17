@@ -23,10 +23,11 @@ class DIALOG_SHIM;
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
-#include <wx/textctrl.h>
 #include <wx/checkbox.h>
+#include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/statbox.h>
+#include <wx/statline.h>
 #include <wx/listctrl.h>
 #include <wx/dialog.h>
 
@@ -47,12 +48,14 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
 		wxStaticText* unitsInterchageableLabel;
 		wxRadioBox* orientationRadioBox;
 		wxRadioBox* mirrorRadioBox;
-		wxStaticText* m_staticTextChipname;
-		wxTextCtrl* chipnameTextCtrl;
 		wxCheckBox* convertCheckBox;
-		wxButton* defaultsButton;
+		wxTextCtrl* chipnameTextCtrl;
+		wxButton* m_buttonTestChipName;
+		wxButton* m_buttonSelectChipName;
 		wxStaticText* m_staticTextTimeStamp;
 		wxTextCtrl* m_textCtrlTimeStamp;
+		wxStaticLine* m_staticline1;
+		wxButton* defaultsButton;
 		wxListCtrl* fieldListCtrl;
 		wxButton* addFieldButton;
 		wxButton* deleteFieldButton;
@@ -82,6 +85,8 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnTestChipName( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSelectChipName( wxCommandEvent& event ) { event.Skip(); }
 		virtual void SetInitCmp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnListItemDeselected( wxListEvent& event ) { event.Skip(); }
 		virtual void OnListItemSelected( wxListEvent& event ) { event.Skip(); }
@@ -95,7 +100,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 677,586 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP();
 	
 };

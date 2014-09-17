@@ -902,8 +902,9 @@ LIB_ALIAS* PART_LIBS::FindLibraryEntry( const wxString& aName, const wxString& a
 /* searches all libraries in the list for an entry, using a case insensitive comparison.
  * Used to find an entry, when the normal (case sensitive) search fails.
   */
-LIB_ALIAS* PART_LIBS::FindLibraryNearEntry( const wxString& aEntryName,
-        const wxString& aLibraryName )
+void PART_LIBS::FindLibraryNearEntries( std::vector<LIB_ALIAS*>& aCandidates,
+                                        const wxString& aEntryName,
+                                        const wxString& aLibraryName )
 {
     BOOST_FOREACH( PART_LIB& lib, *this )
     {
@@ -921,7 +922,7 @@ LIB_ALIAS* PART_LIBS::FindLibraryNearEntry( const wxString& aEntryName,
         for( ;; )
         {
             if( entry_name.CmpNoCase( aEntryName ) == 0 )
-                return entry;
+                aCandidates.push_back( entry );
 
             entry = lib.GetNextEntry( entry_name );
             entry_name = entry->GetName();
@@ -930,8 +931,6 @@ LIB_ALIAS* PART_LIBS::FindLibraryNearEntry( const wxString& aEntryName,
                 break;
         }
     }
-
-    return NULL;
 }
 
 
