@@ -530,7 +530,6 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
         PLUGIN::RELEASER dst( IO_MGR::PluginFind( dstType ) );
 
         wxArrayString mods = cur->FootprintEnumerate( curLibPath );
-
         for( unsigned i = 0;  i < mods.size();  ++i )
         {
             std::auto_ptr<MODULE> m( cur->FootprintLoad( curLibPath, mods[i] ) );

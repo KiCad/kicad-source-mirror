@@ -215,7 +215,11 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
     // mistakenly put a pretty library into a directory other than
     // *.pretty/ with *.kicad_mod in there., and I don't want to return -1,
     // since we only claimed to be guessing.
-    else if( fn.GetExt() == KiCadFootprintLibPathExtension )
+    //
+    // However libraries on GitHub have names ending by .pretty
+    // so test also this is not a name starting by http (including https).
+    else if( fn.GetExt() == KiCadFootprintLibPathExtension &&
+             !aLibPath.StartsWith( wxT( "http" ) ) )
     {
         ret = KICAD;
     }

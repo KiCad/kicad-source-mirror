@@ -225,7 +225,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnTestChipName( wxCommandEvent& event )
 
     msg.Printf( _( "Component '%s' not found in any library" ), GetChars( partname ) );
 
-#ifdef KICAD_KEEPCASE
     // Try to find components which have a name "near" the current chip name,
     // i.e. the same name when the comparison is case insensitive.
     // Could be helpful for old designs when lower cases and upper case were
@@ -250,7 +249,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnTestChipName( wxCommandEvent& event )
                               GetChars( candidates[ii]->GetName() ),
                               GetChars( candidates[ii]->GetLibraryName() ) );
     }
-#endif
+
     wxMessageBox( msg );
 }
 
