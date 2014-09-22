@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-08-26 BZR 5101)-product   date = 01/09/2014 11:21:38
+Cmp-Mod V01 Created by Cvpcb (2014-09-16 BZR 5138)-product   date = 20/09/2014 09:54:11
 
 BeginCmp
 TimeStamp = /442A5056;
@@ -179,7 +179,7 @@ BeginCmp
 TimeStamp = /4804A5E2/442A88ED;
 Reference = P3;
 ValeurCmp = SUPP40;
-IdModule  = footprints:textool_40;
+IdModule  = sockets:40tex-Ell600;
 EndCmp
 
 BeginCmp

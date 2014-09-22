@@ -1,3 +1,4 @@
 (fp_lib_table
-  (lib (name footprints)(type KiCad)(uri ${KIPRJMOD}/libs/footprints.pretty)(options "")(descr "project specific"))
+  (lib (name footprints)(type KiCad)(uri ${KIPRJMOD}/libs/pic_programmer_fp.pretty)(options "")(descr "project specific"))
+  (lib (name sockets)(type KiCad)(uri ${KISYSMOD}/Sockets.pretty)(options "")(descr ""))
 )

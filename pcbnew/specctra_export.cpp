@@ -236,8 +236,8 @@ static inline double mapY( int y )
 /**
  * Function mapPt
  * converts a KiCad point into a DSN file point.  Kicad's BOARD coordinates
- * are in deci-mils  (i.e. 1/10,000th of an inch) and we are exporting in units
- * of mils, so we have to divide by 10.
+ * are in nanometers (called Internal Units or IU)and we are exporting in units
+ * of mils, so we have to scale them.
  */
 static POINT mapPt( const wxPoint& pt )
 {
@@ -864,12 +864,14 @@ static void makeCircle( PATH* aPath, DRAWSEGMENT* aGraphic )
     // do a circle segmentation
     const int   STEPS = 2 * 36;
 
-    wxPoint     start;
-    wxPoint     center  = aGraphic->GetCenter();
     int         radius  = aGraphic->GetRadius();
-    double      angle   = 3600.0;
 
-    start   = center;
+    if( radius <= 0 )   // Should not occur, but ...
+        return;
+
+    wxPoint     center  = aGraphic->GetCenter();
+    double      angle   = 3600.0;
+    wxPoint     start = center;
     start.x += radius;
 
     wxPoint nextPt;
@@ -990,7 +992,8 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                     // pt has minimum x point
                     pt.x -= graphic->GetRadius();
 
-                    if( pt.x < xmin.x )
+                    // when the radius <= 0, this is a mal-formed circle. Skip it
+                    if( graphic->GetRadius() > 0 && pt.x < xmin.x )
                     {
                         xmin  = pt;
                         xmini = i;
@@ -1020,7 +1023,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 
         // Set maximum proximity threshold for point to point nearness metric for
         // board perimeter only, not interior keepouts yet.
-        prox = Millimeter2iu( 0.002 );  // should be enough to fix rounding issues
+        prox = Millimeter2iu( 0.01 );   // should be enough to fix rounding issues
                                         // is arc start and end point calculations
 
         // Output the Edge.Cuts perimeter as circle or polygon.

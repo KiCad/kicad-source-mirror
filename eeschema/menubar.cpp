@@ -308,6 +308,12 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_NOCONN_FLAG, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( placeMenu, ID_NOCONN_BUTT, text, HELP_PLACE_NC_FLAG, KiBitmap( noconn_xpm ) );
 
+    text = AddHotkeyName( _( "&Junction" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_JUNCTION, IS_ACCELERATOR );    // add an accelerator, not a shortcut
+    AddMenuItem( placeMenu, ID_JUNCTION_BUTT, text,
+                 HELP_PLACE_JUNCTION,
+                 KiBitmap( add_junction_xpm ) );
+
     text = AddHotkeyName( _( "&Label" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_LABEL, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( placeMenu, ID_LABEL_BUTT, text,
@@ -319,12 +325,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( placeMenu, ID_GLABEL_BUTT, text,
                  HELP_PLACE_GLOBALLABEL,
                  KiBitmap( add_glabel_xpm ) );
-
-    text = AddHotkeyName( _( "&Junction" ), s_Schematic_Hokeys_Descr,
-                          HK_ADD_JUNCTION, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( placeMenu, ID_JUNCTION_BUTT, text,
-                 HELP_PLACE_JUNCTION,
-                 KiBitmap( add_junction_xpm ) );
 
     placeMenu->AppendSeparator();
 

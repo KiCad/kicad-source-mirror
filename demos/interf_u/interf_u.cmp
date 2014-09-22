@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2013-08-20 BZR 4294)-product date = 21/08/2013 18:12:43
+Cmp-Mod V01 Created by Cvpcb (2014-09-16 BZR 5138)-product   date = 20/09/2014 09:12:59
 
 BeginCmp
 TimeStamp = /322D3011;
@@ -11,56 +11,56 @@ BeginCmp
 TimeStamp = /32307DE2;
 Reference = C1;
 ValeurCmp = 47uF;
-IdModule  = CP6;
+IdModule  = discret:CP6;
 EndCmp
 
 BeginCmp
 TimeStamp = /32307ECF;
 Reference = C2;
 ValeurCmp = 47pF;
-IdModule  = C1;
+IdModule  = discret:C1;
 EndCmp
 
 BeginCmp
 TimeStamp = /32307ED4;
 Reference = C3;
 ValeurCmp = 47pF;
-IdModule  = C1;
+IdModule  = discret:C1;
 EndCmp
 
 BeginCmp
 TimeStamp = /32307DCF;
 Reference = C4;
 ValeurCmp = 47uF;
-IdModule  = CP6;
+IdModule  = discret:CP6;
 EndCmp
 
 BeginCmp
 TimeStamp = /32307DCA;
 Reference = C5;
 ValeurCmp = 47uF;
-IdModule  = CP6;
+IdModule  = discret:CP6;
 EndCmp
 
 BeginCmp
 TimeStamp = /32307DC0;
 Reference = C6;
 ValeurCmp = 47uF;
-IdModule  = CP6;
+IdModule  = discret:CP6;
 EndCmp
 
 BeginCmp
 TimeStamp = /322D32AC;
 Reference = D1;
 ValeurCmp = LED;
-IdModule  = LEDV;
+IdModule  = discret:LEDV;
 EndCmp
 
 BeginCmp
 TimeStamp = /322D32BE;
 Reference = D2;
 ValeurCmp = LED;
-IdModule  = LEDV;
+IdModule  = discret:LEDV;
 EndCmp
 
 BeginCmp
@@ -74,84 +74,84 @@ BeginCmp
 TimeStamp = /3256759C;
 Reference = P1;
 ValeurCmp = DB25FEMELLE;
-IdModule  = DB25FC;
+IdModule  = connect:DB25FC;
 EndCmp
 
 BeginCmp
 TimeStamp = /32307EA1;
 Reference = R1;
 ValeurCmp = 100K;
-IdModule  = R3;
+IdModule  = discret:R3;
 EndCmp
 
 BeginCmp
 TimeStamp = /32307EAA;
 Reference = R2;
 ValeurCmp = 1K;
-IdModule  = R3;
+IdModule  = discret:R3;
 EndCmp
 
 BeginCmp
 TimeStamp = /324002E6;
 Reference = R3;
 ValeurCmp = 10K;
-IdModule  = R3;
+IdModule  = discret:R3;
 EndCmp
 
 BeginCmp
 TimeStamp = /322D3295;
 Reference = R4;
 ValeurCmp = 330;
-IdModule  = R3;
+IdModule  = discret:R3;
 EndCmp
 
 BeginCmp
 TimeStamp = /322D32A0;
 Reference = R5;
 ValeurCmp = 330;
-IdModule  = R3;
+IdModule  = discret:R3;
 EndCmp
 
 BeginCmp
 TimeStamp = /325679C1;
 Reference = RR1;
 ValeurCmp = 9x1K;
-IdModule  = r_pack9;
+IdModule  = discret:r_pack9;
 EndCmp
 
 BeginCmp
 TimeStamp = /322D31F4;
 Reference = U1;
 ValeurCmp = 74LS245;
-IdModule  = DIP-20__300;
+IdModule  = dip_sockets:DIP-20__300;
 EndCmp
 
 BeginCmp
 TimeStamp = /322D35B4;
 Reference = U2;
 ValeurCmp = 74LS688;
-IdModule  = DIP-20__300;
+IdModule  = dip_sockets:DIP-20__300;
 EndCmp
 
 BeginCmp
 TimeStamp = /4A087146;
 Reference = U3;
 ValeurCmp = 74LS541;
-IdModule  = DIP-20__300;
+IdModule  = dip_sockets:DIP-20__300;
 EndCmp
 
 BeginCmp
 TimeStamp = /3240023F;
 Reference = U5;
 ValeurCmp = 628128;
-IdModule  = DIP-32__600;
+IdModule  = dip_sockets:DIP-32__600;
 EndCmp
 
 BeginCmp
 TimeStamp = /322D321C;
 Reference = U8;
 ValeurCmp = EP600;
-IdModule  = DIP-24__300;
+IdModule  = dip_sockets:DIP-24__300;
 EndCmp
 
 BeginCmp
@@ -165,7 +165,7 @@ BeginCmp
 TimeStamp = /32307EC0;
 Reference = X1;
 ValeurCmp = 8MHz;
-IdModule  = HC-18UH;
+IdModule  = discret:HC-18UH;
 EndCmp
 
 EndListe

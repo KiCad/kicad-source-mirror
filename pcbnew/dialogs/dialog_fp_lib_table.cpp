@@ -347,6 +347,9 @@ public:
         // Fit();
         // We derive from DIALOG_SHIM so prior size will be used anyways.
 
+        // select the last selected page
+        m_auinotebook->ChangeSelection( m_pageNdx );
+
         // fire pageChangedHandler() so m_cur_grid gets set
         wxAuiNotebookEvent uneventful;
         pageChangedHandler( uneventful );
@@ -494,8 +497,8 @@ private:
 
     void pageChangedHandler( wxAuiNotebookEvent& event )
     {
-        int pageNdx = m_auinotebook->GetSelection();
-        m_cur_grid = ( pageNdx == 0 ) ? m_global_grid : m_project_grid;
+        m_pageNdx = m_auinotebook->GetSelection();
+        m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
     }
 
     void appendRowHandler( wxMouseEvent& event )
@@ -746,7 +749,10 @@ private:
     FP_TBL_MODEL*       cur_model() const       { return (FP_TBL_MODEL*) m_cur_grid->GetTable(); }
 
     wxGrid*             m_cur_grid;     ///< changed based on tab choice
+    static int          m_pageNdx;      ///< Remember the last notebook page selected during a session
 };
+
+int DIALOG_FP_LIB_TABLE::m_pageNdx = 0;
 
 
 int InvokePcbLibTableEditor( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject )
