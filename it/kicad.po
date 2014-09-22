@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-21 23:00+0100\n"
-"PO-Revision-Date: 2014-09-21 23:00+0100\n"
+"POT-Creation-Date: 2014-09-22 12:44+0100\n"
+"PO-Revision-Date: 2014-09-22 12:44+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -301,18 +301,18 @@ msgid ""
 "Do you want to create a new empty directory for the project?"
 msgstr ""
 "Il percorso selezionato non è vuoto. Si raccomanda la creazione di nuovi "
-"progetti in una destinazione dedicata.\n"
-"Si desidera creare per il progetto una nuova destinazione vuota? "
+"progetti in una cartella dedicata e vuota.\n"
+"Creare per il progetto una nuova cartella vuota?"
 
 #: kicad/prjconfig.cpp:259
 #, c-format
 msgid "KiCad project file '%s' not found"
-msgstr "Progetto di KiCad  '%s' non trovato"
+msgstr "File progetto di KiCad \"%s\" non trovato"
 
 #: kicad/prjconfig.cpp:271 pcbnew/pcbframe.cpp:988 pcbnew/moduleframe.cpp:694
 #: eeschema/libedit.cpp:62 eeschema/schframe.cpp:1225 cvpcb/cvframe.cpp:734
 msgid " [Read Only]"
-msgstr " [Read Only]"
+msgstr " [Sola lettura]"
 
 #: kicad/prjconfig.cpp:298
 msgid "New Project Folder"
@@ -320,7 +320,7 @@ msgstr "Nuova cartella progetto"
 
 #: kicad/files-io.cpp:51
 msgid "KiCad project file"
-msgstr "File progetto di KiCad"
+msgstr "File progetto KiCad"
 
 #: kicad/files-io.cpp:69
 msgid "Unzip Project"
@@ -4932,13 +4932,13 @@ msgstr "Scheda esportata correttamente."
 msgid "Unable to export, please fix and try again."
 msgstr "Impossibile esportare la scheda. Correggere e riprovare."
 
-#: pcbnew/specctra_export.cpp:1003 pcbnew/specctra_export.cpp:1106
-#: pcbnew/specctra_export.cpp:1225
+#: pcbnew/specctra_export.cpp:1006 pcbnew/specctra_export.cpp:1109
+#: pcbnew/specctra_export.cpp:1228
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "DRAWSEGMENT tipo %s non supportatato"
 
-#: pcbnew/specctra_export.cpp:1122
+#: pcbnew/specctra_export.cpp:1125
 #, c-format
 msgid ""
 "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
@@ -4948,7 +4948,7 @@ msgstr ""
 "Modificare il perimetro della grafica Edge.Cuts, rendendoli ognuno dei "
 "poligoni contigui."
 
-#: pcbnew/specctra_export.cpp:1241
+#: pcbnew/specctra_export.cpp:1244
 #, c-format
 msgid ""
 "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
@@ -4958,12 +4958,12 @@ msgstr ""
 "Modificare le grafiche interne a Edge.Cuts, rendendole ognuna poligoni "
 "contigui."
 
-#: pcbnew/specctra_export.cpp:1391
+#: pcbnew/specctra_export.cpp:1394
 #, c-format
 msgid "Component with value of '%s' has empty reference id."
 msgstr "Il componente con valore \"%s\" ha l'id di riferimento vuoto."
 
-#: pcbnew/specctra_export.cpp:1399
+#: pcbnew/specctra_export.cpp:1402
 #, c-format
 msgid "Multiple components have identical reference IDs of '%s'."
 msgstr "Più componenti hanno lo stesso id di riferimento \"%s\"."
@@ -8268,16 +8268,16 @@ msgid "Project Specific Libraries"
 msgstr "Librerie specifiche del progetto"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:101
-msgid "Append Row"
-msgstr "Inserisci riga"
+msgid "Append Library"
+msgstr "Accoda libreria"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:102
 msgid "Add a PCB library row to this table"
 msgstr "Inserisci una riga libreria PCB in questa tabella"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:106
-msgid "Delete Row"
-msgstr "Elimina riga"
+msgid "Remove Library"
+msgstr "Rimuovi libreria"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:107
 msgid "Remove a PCB library from this library table"
@@ -9681,21 +9681,21 @@ msgstr "Percorso libreria"
 msgid "Plugin Type"
 msgstr "Tipo di plugin:"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:411
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:416
 #, c-format
 msgid "Illegal character '%s' found in Nickname: '%s' in row %d"
 msgstr "Carattere illegale \"%s\" trovato nel nickname: \"%s\" riga %d"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:425
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:430
 msgid "No Colon in Nicknames"
 msgstr "No duepunti nei nickname"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:455
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:460
 #, c-format
 msgid "Duplicate Nickname: '%s' in rows %d and %d"
 msgstr "Duplicazione nickname: \"%s\" righe %d e %d"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:470
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:475
 msgid "Please Delete or Modify One"
 msgstr "Cancellare o modificare un elemento"
 
@@ -12958,16 +12958,16 @@ msgid "&No Connect Flag"
 msgstr "&Indicatore di non connessione "
 
 #: eeschema/menubar.cpp:311
+msgid "&Junction"
+msgstr "&Giunzione"
+
+#: eeschema/menubar.cpp:317
 msgid "&Label"
 msgstr "&Etichetta"
 
-#: eeschema/menubar.cpp:317
+#: eeschema/menubar.cpp:323
 msgid "Gl&obal Label"
 msgstr "Inserisci& etichetta globale "
-
-#: eeschema/menubar.cpp:323
-msgid "&Junction"
-msgstr "&Giunzione"
 
 #: eeschema/menubar.cpp:331
 msgid "&Hierarchical Label"
