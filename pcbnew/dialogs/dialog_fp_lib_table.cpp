@@ -348,9 +348,11 @@ public:
         // We derive from DIALOG_SHIM so prior size will be used anyways.
 
         // select the last selected page
-        m_auinotebook->ChangeSelection( m_pageNdx );
+        m_auinotebook->SetSelection( m_pageNdx );
 
         // fire pageChangedHandler() so m_cur_grid gets set
+        // m_auinotebook->SetSelection will generate a pageChangedHandler()
+        // event call later, but too late.
         wxAuiNotebookEvent uneventful;
         pageChangedHandler( uneventful );
 
