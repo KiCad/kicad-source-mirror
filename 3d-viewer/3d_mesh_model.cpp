@@ -24,12 +24,16 @@
 
 /**
  * @file 3d_mesh_model.cpp
- * @brief 
+ * @brief
  */
 
 
 #include <3d_mesh_model.h>
 #include <boost/geometry/algorithms/area.hpp>
+
+#ifdef USE_OPENMP
+#include <omp.h>
+#endif  // USE_OPENMP
 
 S3D_MESH::S3D_MESH()
 {
@@ -85,10 +89,13 @@ void S3D_MESH::openGL_RenderAllChilds()
 void S3D_MESH::openGL_Render()
 {
     //DBG( printf( "openGL_Render" ) );
+    bool useMaterial = g_Parm_3D_Visu.GetFlag( FL_RENDER_MATERIAL );
+    bool smoothShapes = g_Parm_3D_Visu.IsRealisticMode()
+                        && g_Parm_3D_Visu.GetFlag( FL_RENDER_SMOOTH );
 
     if( m_Materials )
     {
-        m_Materials->SetOpenGLMaterial( 0 );
+        m_Materials->SetOpenGLMaterial( 0, useMaterial );
     }
 
     if( m_CoordIndex.size() == 0)
@@ -109,7 +116,7 @@ void S3D_MESH::openGL_Render()
 
     if( m_PerVertexNormalsNormalized.size() == 0 )
     {
-        if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.HightQualityMode() )
+        if( smoothShapes )
         {
             calcPerPointNormals();
         }
@@ -118,21 +125,21 @@ void S3D_MESH::openGL_Render()
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
     {
         if( m_MaterialIndex.size() > 1 )
-        {       
+        {
             if( m_Materials )
             {
-                m_Materials->SetOpenGLMaterial( m_MaterialIndex[idx] );
+                m_Materials->SetOpenGLMaterial( m_MaterialIndex[idx], useMaterial );
             }
-        }          
-        
-        
+        }
+
+
         switch( m_CoordIndex[idx].size() )
         {
-            case 3:     glBegin( GL_TRIANGLES );break;
-            case 4:     glBegin( GL_QUADS );    break;
-            default:    glBegin( GL_POLYGON );  break;
+        case 3:     glBegin( GL_TRIANGLES );break;
+        case 4:     glBegin( GL_QUADS );    break;
+        default:    glBegin( GL_POLYGON );  break;
         }
-        
+
 
         if( m_PerVertexNormalsNormalized.size() > 0 )
         {
@@ -144,7 +151,8 @@ void S3D_MESH::openGL_Render()
                 glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
                 glVertex3fv( &point.x );
             }
-        } else if( g_Parm_3D_Visu.IsRealisticMode() && g_Parm_3D_Visu.HightQualityMode() )
+        }
+        else if( smoothShapes )
         {
             std::vector< glm::vec3 > normals_list;
             normals_list = m_PerFaceVertexNormals[idx];
@@ -157,7 +165,8 @@ void S3D_MESH::openGL_Render()
                 glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
                 glVertex3fv( &point.x );
             }
-        } else
+        }
+        else
         {
             // Flat
             glm::vec3 normal = m_PerFaceNormalsNormalized[idx];
@@ -167,7 +176,7 @@ void S3D_MESH::openGL_Render()
                 glNormal3fv( &normal.x );
 
                 glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
-                glVertex3fv( &point.x );                        
+                glVertex3fv( &point.x );
             }
         }
 
@@ -258,7 +267,7 @@ void S3D_MESH::calcPerFaceNormals ()
 
     //DBG( printf("m_CoordIndex.size %u\n", m_CoordIndex.size()) );
     //DBG( printf("m_PointNormalized.size %u\n", m_PointNormalized.size()) );
-    
+
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
     {
 
@@ -307,7 +316,7 @@ void S3D_MESH::calcPerFaceNormals ()
         if( haveAlreadyNormals_from_model_file == false )
         {
 
-            // normalize vertex normal           
+            // normalize vertex normal
             float l = glm::length( cross_prod );
 
             if( l > FLT_EPSILON ) // avoid division by zero
@@ -331,7 +340,7 @@ void S3D_MESH::calcPerFaceNormals ()
 
             m_PerFaceNormalsNormalized.push_back( cross_prod );
         }
-        
+
     }
 
 }
@@ -355,13 +364,18 @@ void S3D_MESH::calcPerPointNormals ()
 
     m_PerFaceVertexNormals.clear();
 
+    // Pre-allocate space for the entire vector of vertex normals so we can do parallel writes
+    m_PerFaceVertexNormals.resize( m_CoordIndex.size() );
+
     // for each face A in mesh
+    #ifdef USE_OPENMP
+    #pragma omp parallel for
+    #endif /* USE_OPENMP */
     for( unsigned int each_face_A_idx = 0; each_face_A_idx < m_CoordIndex.size(); each_face_A_idx++ )
     {
         // n = face A facet normal
-        std::vector< glm::vec3 > face_A_normals;
-        face_A_normals.clear();
-        face_A_normals.resize(m_CoordIndex[each_face_A_idx].size());
+        std::vector< glm::vec3 >& face_A_normals = m_PerFaceVertexNormals[each_face_A_idx];
+        face_A_normals.resize( m_CoordIndex[each_face_A_idx].size() );
 
         // loop through all 3 vertices
         // for each vert in face A
@@ -393,16 +407,14 @@ void S3D_MESH::calcPerPointNormals ()
                 }
             }
 
-            // normalize vertex normal           
+            // normalize vertex normal
             float l = glm::length( face_A_normals[each_vert_A_idx] );
 
             if( l > FLT_EPSILON ) // avoid division by zero
             {
                 face_A_normals[each_vert_A_idx] /= l;
             }
-            
-        }
 
-        m_PerFaceVertexNormals.push_back( face_A_normals );
+        }
     }
 }

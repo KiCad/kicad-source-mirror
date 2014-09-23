@@ -348,18 +348,20 @@ static void write_D356_records( std::vector <D356_RECORD> &aRecords,
     }
 }
 
-/* Driver function: processing starts here */
+
 void PCB_EDIT_FRAME::GenD356File( wxCommandEvent& aEvent )
 {
-    wxFileName fn = GetBoard()->GetFileName();
-    wxString   msg, ext, wildcard;
-    FILE       *file;
+    wxFileName  fn = GetBoard()->GetFileName();
+    wxString    msg, ext, wildcard;
+    FILE*       file;
 
     ext = wxT( "d356" );
     wildcard = _( "IPC-D-356 Test Files (.d356)|*.d356" );
     fn.SetExt( ext );
 
-    wxFileDialog dlg( this, _( "Export D-356 Test File" ), wxGetCwd(),
+    wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
+
+    wxFileDialog dlg( this, _( "Export D-356 Test File" ), pro_dir,
                       fn.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 

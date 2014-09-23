@@ -75,6 +75,9 @@
 #define DRCE_VIA_INSIDE_KEEPOUT                36   ///< Via in inside a keepout area
 #define DRCE_TRACK_INSIDE_KEEPOUT              37   ///< Track in inside a keepout area
 #define DRCE_PAD_INSIDE_KEEPOUT                38   ///< Pad in inside a keepout area
+#define DRCE_VIA_INSIDE_TEXT                   39   ///< Via in inside a text area
+#define DRCE_TRACK_INSIDE_TEXT                 40   ///< Track in inside a text area
+#define DRCE_PAD_INSIDE_TEXT                   41   ///< Pad in inside a text area
 
 
 class EDA_DRAW_PANEL;
@@ -221,7 +224,7 @@ private:
      */
     MARKER_PCB* fillMarker( const TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
 
-    MARKER_PCB* fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER_PCB* fillMe );
+    MARKER_PCB* fillMarker( D_PAD* aPad, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
 
     MARKER_PCB* fillMarker( ZONE_CONTAINER* aArea, int aErrorCode, MARKER_PCB* fillMe );
 
@@ -280,6 +283,8 @@ private:
     void testZones();
 
     void testKeepoutAreas();
+
+    void testTexts();
 
     //-----<single "item" tests>-----------------------------------------
 

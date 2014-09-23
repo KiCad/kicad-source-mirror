@@ -186,10 +186,14 @@ void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_TEXT* aItem, GAL* aGal ) const
 {
     VECTOR2D position( aItem->GetTextPosition().x, aItem->GetTextPosition().y );
 
+    aGal->Save();
+    aGal->Translate( position );
+    aGal->Rotate( -aItem->GetOrientation() * M_PI / 1800.0 );
     aGal->SetStrokeColor( COLOR4D( aItem->GetColor() ) );
     aGal->SetLineWidth( aItem->GetThickness() );
     aGal->SetTextAttributes( aItem );
-    aGal->StrokeText( aItem->GetText(), position, 0.0 );
+    aGal->StrokeText( aItem->GetShownText(), VECTOR2D( 0, 0 ), 0.0 );
+    aGal->Restore();
 }
 
 

@@ -129,7 +129,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             {
                 WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
                 plotter->Text( text->GetTextPosition(), text->GetColor(),
-                               text->GetText(), text->GetOrientation(),
+                               text->GetShownText(), text->GetOrientation(),
                                text->GetSize(),
                                text->GetHorizJustify(), text->GetVertJustify(),
                                text->GetPenWidth(),

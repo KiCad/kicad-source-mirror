@@ -48,7 +48,7 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     // In fact m_dummyPin should not have a parent, but draw functions need a parent
     // to know some options, about pin texts
     LIB_EDIT_FRAME* libframe = (LIB_EDIT_FRAME*) GetParent();
-    m_dummyPin->SetParent( libframe->GetComponent() );
+    m_dummyPin->SetParent( libframe->GetCurPart() );
 
     // Calculate a suitable scale to fit the available draw area
     EDA_RECT bBox = m_dummyPin->GetBoundingBox();

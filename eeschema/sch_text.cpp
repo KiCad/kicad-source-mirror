@@ -601,14 +601,8 @@ const EDA_RECT SCH_TEXT::GetBoundingBox() const
 
 wxString SCH_TEXT::GetSelectMenuText() const
 {
-    wxString tmp = GetText();
-    tmp.Replace( wxT( "\n" ), wxT( " " ) );
-    tmp.Replace( wxT( "\r" ), wxT( " " ) );
-    tmp.Replace( wxT( "\t" ), wxT( " " ) );
-    tmp =( tmp.Length() > 15 ) ? tmp.Left( 12 ) + wxT( "..." ) : tmp;
-
     wxString msg;
-    msg.Printf( _( "Graphic Text %s" ), GetChars( tmp ) );
+    msg.Printf( _( "Graphic Text %s" ), GetChars( ShortenedShownText() ) );
     return msg;
 }
 
@@ -674,7 +668,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
     if( m_MultilineAllowed )
     {
         std::vector<wxPoint> positions;
-        wxArrayString* list = wxStringSplit( m_Text, '\n' );
+        wxArrayString* list = wxStringSplit( GetShownText(), '\n' );
         positions.reserve( list->Count() );
 
         GetPositionsOfLinesOfMultilineText(positions, list->Count() );
@@ -690,7 +684,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
     }
     else
     {
-        aPlotter->Text( textpos, color, m_Text, m_Orient, m_Size, m_HJustify,
+        aPlotter->Text( textpos, color, GetShownText(), m_Orient, m_Size, m_HJustify,
                         m_VJustify, thickness, m_Italic, m_Bold );
     }
 
@@ -737,7 +731,7 @@ void SCH_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
         return;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( msg, GetText(), DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( msg, GetShownText(), DARKCYAN ) );
 
     switch( GetOrientation() )
     {
@@ -973,7 +967,7 @@ const EDA_RECT SCH_LABEL::GetBoundingBox() const
     x = m_Pos.x;
     y = m_Pos.y;
     int width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
-    length = LenSize( m_Text );
+    length = LenSize( GetShownText() );
     height = m_Size.y + width;
     dx     = dy = 0;
 
@@ -1016,10 +1010,8 @@ const EDA_RECT SCH_LABEL::GetBoundingBox() const
 
 wxString SCH_LABEL::GetSelectMenuText() const
 {
-    wxString tmp = ( GetText().Length() > 15 ) ? GetText().Left( 12 ) + wxT( "..." ) : GetText();
-
     wxString msg;
-    msg.Printf( _( "Label %s" ), GetChars(tmp) );
+    msg.Printf( _( "Label %s" ), GetChars( ShortenedShownText() ) );
     return msg;
 }
 
@@ -1312,7 +1304,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     aPoints.clear();
 
-    int symb_len = LenSize( m_Text ) + ( TXTMARGE * 2 );
+    int symb_len = LenSize( GetShownText() ) + ( TXTMARGE * 2 );
 
     // Create outline shape : 6 points
     int x = symb_len + linewidth + 3;
@@ -1406,7 +1398,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     height = ( (m_Size.y * 15) / 10 ) + width + 2 * TXTMARGE;
 
     // text X size add height for triangular shapes(bidirectional)
-    length = LenSize( m_Text ) + height + DANGLING_SYMBOL_SIZE;
+    length = LenSize( GetShownText() ) + height + DANGLING_SYMBOL_SIZE;
 
     switch( m_schematicOrientation )    // respect orientation
     {
@@ -1447,10 +1439,8 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
 
 wxString SCH_GLOBALLABEL::GetSelectMenuText() const
 {
-    wxString tmp = ( GetText().Length() > 15 ) ? GetText().Left( 12 ) + wxT( "..." ) : GetText();
-
     wxString msg;
-    msg.Printf( _( "Global Label %s" ), GetChars(tmp) );
+    msg.Printf( _( "Global Label %s" ), GetChars( ShortenedShownText() ) );
     return msg;
 }
 
@@ -1670,7 +1660,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 
     int width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
     height = m_Size.y + width + 2 * TXTMARGE;
-    length = LenSize( m_Text )
+    length = LenSize( GetShownText() )
              + height                 // add height for triangular shapes
              + 2 * DANGLING_SYMBOL_SIZE;
 
@@ -1794,9 +1784,7 @@ void SCH_HIERLABEL::Rotate( wxPoint aPosition )
 
 wxString SCH_HIERLABEL::GetSelectMenuText() const
 {
-    wxString tmp = ( GetText().Length() > 15 ) ? GetText().Left( 12 ) + wxT( "..." ) : GetText();
-
     wxString msg;
-    msg.Printf( _( "Hierarchical Label %s" ), GetChars( tmp ) );
+    msg.Printf( _( "Hierarchical Label %s" ), GetChars( ShortenedShownText() ) );
     return msg;
 }

@@ -36,13 +36,15 @@
  * @param aZpos = z position in board internal units
  * @param aThickness = thickness in board internal units
  * @param aBiuTo3DUnits = board internal units to 3D units scaling value
+ * @param aUseTextures = true to use textxures for the polygons
  * If aThickness = 0, a polygon area is drawn in a XY plane at Z position = aZpos.
  * If aThickness > 0, a solid object is drawn.
  *  The top side is located at aZpos + aThickness / 2
  *  The bottom side is located at aZpos - aThickness / 2
  */
 void    Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
-                                            int aZpos, int aThickness, double aBiuTo3DUnits );
+                                            int aZpos, int aThickness, double aBiuTo3DUnits,
+                                            bool aUseTextures );
 
 /** draw the solid polygon found in aPolysList
  * The first polygonj is the main polygon, others are holes
@@ -50,13 +52,15 @@ void    Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
  * @param aZpos = z position in board internal units
  * @param aThickness = thickness in board internal units
  * @param aBiuTo3DUnits = board internal units to 3D units scaling value
+ * @param aUseTextures = true to use textxures for the polygons
  * If aThickness = 0, a polygon area is drawn in a XY plane at Z position = aZpos.
  * If aThickness > 0, a solid object is drawn.
  *  The top side is located at aZpos + aThickness / 2
  *  The bottom side is located at aZpos - aThickness / 2
  */
 void    Draw3D_SolidHorizontalPolygonWithHoles( const CPOLYGONS_LIST& aPolysList,
-                                                int aZpos, int aThickness, double aBiuTo3DUnits );
+                                                int aZpos, int aThickness, double aBiuTo3DUnits,
+                                                bool aUseTextures );
 
 /** draw a thick segment using 3D primitives, in a XY plane
  * @param aStart = YX position of start point in board units
@@ -124,6 +128,13 @@ void    Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
  * @param aTransparency = the color transparency (default = 1.0 = no transparency)
  */
 void SetGLColor( EDA_COLOR_T aColor, double aTransparency = 1.0 );
+
+/**
+ * Set the current 3D color from a S3D_COLOR color, with optional transparency
+ * @param aColor = a S3D_COLOR RGB color index
+ * @param aTransparency = the color transparency (default = 1.0 = no transparency)
+ */
+void SetGLColor( S3D_COLOR& aColor, float aTransparency );
 
 
 /**

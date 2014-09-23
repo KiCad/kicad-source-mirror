@@ -95,18 +95,18 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     // Set sheet number and number of sheets.
     SetSheetNumberAndCount();
 
-    /* Build component list */
+    // Build component list
     if( aAnnotateSchematic )
     {
-        sheets.GetComponents( references );
+        sheets.GetComponents( Prj().SchLibs(), references );
     }
     else
     {
-        m_CurrentSheet->GetComponents( references );
+        m_CurrentSheet->GetComponents( Prj().SchLibs(), references );
     }
 
-    /* Break full components reference in name (prefix) and number:
-     * example: IC1 become IC, and 1 */
+    // Break full components reference in name (prefix) and number:
+    // example: IC1 become IC, and 1
     references.SplitReferences();
 
     switch( aSortOption )
@@ -172,15 +172,15 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
 int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly )
 {
-    /* build the screen list */
+    // build the screen list
     SCH_SHEET_LIST SheetList;
     SCH_REFERENCE_LIST ComponentsList;
 
-    /* Build the list of components */
+    // Build the list of components
     if( !aOneSheetOnly )
-        SheetList.GetComponents( ComponentsList );
+        SheetList.GetComponents( Prj().SchLibs(), ComponentsList );
     else
-        m_CurrentSheet->GetComponents( ComponentsList );
+        m_CurrentSheet->GetComponents( Prj().SchLibs(), ComponentsList );
 
     return ComponentsList.CheckAnnotation( aMessageList );
 }

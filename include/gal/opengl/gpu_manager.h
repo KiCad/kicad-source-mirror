@@ -144,6 +144,9 @@ protected:
     ///> Handle to vertices buffer
     GLuint  m_verticesBuffer;
 
+    ///> Handle to indices buffer
+    GLuint  m_indicesBuffer;
+
     ///> Number of indices stored in the indices buffer
     unsigned int m_indicesSize;
 };

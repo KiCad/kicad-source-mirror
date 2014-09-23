@@ -182,7 +182,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 
 void DIALOG_MODULE_BOARD_EDITOR::OnCancelClick( wxCommandEvent& event )
 {
-    EndModal( -1 );
+    ENDQUASIMODAL( -1 );
 }
 
 
@@ -194,7 +194,7 @@ void DIALOG_MODULE_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent& event )
         m_Parent->OnModify();
     }
 
-    EndModal( 2 );
+    ENDQUASIMODAL( 2 );
 }
 
 
@@ -204,7 +204,7 @@ void DIALOG_MODULE_BOARD_EDITOR::ExchangeModule( wxCommandEvent& event )
 
     // Warning: m_CurrentModule was deleted by exchange module
     m_Parent->SetCurItem( NULL );
-    EndModal( 0 );
+    ENDQUASIMODAL( 0 );
 }
 
 
@@ -241,10 +241,8 @@ void DIALOG_MODULE_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent& event )
 
 void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 {
-    SetFocus();
-
     wxString default_path;
-    wxGetEnv( wxT( KISYS3DMOD ), &default_path );
+    wxGetEnv( KISYS3DMOD, &default_path );
 #ifdef __WINDOWS__
     default_path.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
@@ -319,9 +317,9 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
     m_CostRot180Ctrl->SetValue( m_CurrentModule->GetPlacementCost180() );
 
     // Initialize 3D parameters
-    m_3D_Scale = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeScale );
-    m_3D_Offset = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeOffset );
-    m_3D_Rotation = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeRotation );
+    m_3D_Scale = new S3DPOINT_VALUE_CTRL( m_Panel3D, m_bSizerShapeScale );
+    m_3D_Offset = new S3DPOINT_VALUE_CTRL( m_Panel3D, m_bSizerShapeOffset );
+    m_3D_Rotation = new S3DPOINT_VALUE_CTRL( m_Panel3D, m_bSizerShapeRotation );
 
     // if m_3D_ShapeNameListBox is not empty, preselect first 3D shape
     if( m_3D_ShapeNameListBox->GetCount() > 0 )
@@ -352,8 +350,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Transfert3DValuesToDisplay(
     }
     else
     {
-        S3D_VERTEX dummy_vertex;
-        dummy_vertex.x = dummy_vertex.y = dummy_vertex.z = 1.0;
+        S3DPOINT dummy_vertex( 1.0, 1.0, 1.0 );
         m_3D_Scale->SetValue( dummy_vertex );
     }
 }
@@ -396,11 +393,6 @@ void DIALOG_MODULE_BOARD_EDITOR::On3DShapeNameSelected( wxCommandEvent& event )
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::Add3DShape( wxCommandEvent& event )
-{
-    Browse3DLib( event );
-}
-
 
 void DIALOG_MODULE_BOARD_EDITOR::Remove3DShape( wxCommandEvent& event )
 {
@@ -426,91 +418,72 @@ void DIALOG_MODULE_BOARD_EDITOR::Remove3DShape( wxCommandEvent& event )
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
+void DIALOG_MODULE_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
 {
     PROJECT&        prj = Prj();
-    SEARCH_STACK&   search = Kiface().KifaceSearch();
 
-    wxString    fullpath;
-    wxString    kisys3dmod = wxGetenv( wxT( KISYS3DMOD ) );
+    // here, the KISYS3DMOD default path for 3D shape files is expected
+    // to be already defined (when starting Pcbnew, it is defined
+    // from the user defined env variable, or set to a default value)
+    wxFileName fn( wxGetenv( KISYS3DMOD ), wxEmptyString );
+    wxString default3DPath = fn.GetPathWithSep();
 
-    if( !kisys3dmod || !wxFileName::IsDirReadable( kisys3dmod ) )
-    {
-        fullpath = search.FindValidPath( LIB3D_PATH );
-    }
+    wxString initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
 
-    if( !fullpath )
-    {
-        fullpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
-        if( !fullpath )
-            fullpath = search.LastVisitedPath( LIB3D_PATH );
-    }
-
-#ifdef __WINDOWS__
-    fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
-#endif
-
-    wxString    fullfilename;
-    wxString    shortfilename;
+    if( !initialpath )
+        initialpath = default3DPath;
 
     wxString    fileFilters = wxGetTranslation( Shapes3DFileWildcard );
 
     fileFilters += wxChar( '|' );
     fileFilters += wxGetTranslation( IDF3DFileWildcard );
 
-    fullfilename = EDA_FileSelector( _( "3D Shape:" ),
-                                     fullpath,
-                                     wxEmptyString,
-                                     wxEmptyString,
-                                     wxGetTranslation( fileFilters ),
-                                     this,
-                                     wxFD_OPEN,
-                                     true
-                                     );
+    wxString filename = EDA_FileSelector( _( "3D Shape:" ), initialpath,
+                                wxEmptyString, wxEmptyString,
+                                fileFilters, this, wxFD_OPEN, true );
 
-    if( fullfilename.IsEmpty() )
+    if( filename.IsEmpty() )
         return;
 
-    wxFileName fn = fullfilename;
+    fn = filename;
 
     prj.SetRString( PROJECT::VIEWER_3D_PATH, fn.GetPath() );
 
-    /* If the file path is already in the library search paths
-     * list, just add the library name to the list.  Otherwise, add
-     * the library name with the full or relative path.
-     * the relative path, when possible is preferable,
-     * because it preserve use of default libraries paths, when the path is a
-     * sub path of these default paths
+    /* If the file path is already in the 3D shape file default path
+     * just add the file name relative to this path to the list.
+     * Otherwise, add the file name with a full or relative path.
+     * The relative path, when possible, is preferable
+     * because it preserve use of default path, when the path is a sub path of this path
      */
-    shortfilename = search.FilenameWithRelativePathInSearchList( fullfilename );
+    wxString rootpath = filename.SubString( 0, default3DPath.Length()-1 );
+    bool useRelPath = rootpath.IsSameAs( default3DPath, wxFileName::IsCaseSensitive() );
 
-    wxFileName aux = shortfilename;
-    if( aux.IsAbsolute() )
+    if( useRelPath )
+        fn.MakeRelativeTo( default3DPath );
+    else    // Absolute path given, not a subpath of the default path,
+            // therefore ask if the user wants a relative (to the default path) one
     {
-        // Absolute path, ask if the user wants a relative one
-        int diag = wxMessageBox(
-            _( "Use a relative path?" ),
-            _( "Path type" ),
-            wxYES_NO | wxICON_QUESTION, this );
+        wxString msg;
+        msg.Printf( _( "Use a path relative to '%s'?" ), GetChars( default3DPath ) );
+        int diag = wxMessageBox( msg, _( "Path type" ),
+                                 wxYES_NO | wxICON_QUESTION, this );
 
-        if( diag == wxYES )
-        {
-            // Make it relative
-            aux.MakeRelativeTo( wxT(".") );
-            shortfilename = aux.GetPathWithSep() + aux.GetFullName();
-        }
+        if( diag == wxYES )     // Make it relative to the default 3D path
+            fn.MakeRelativeTo( default3DPath );
     }
+
+    filename = fn.GetFullPath();
 
     S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
 
 #ifdef __WINDOWS__
-    // Store filename in Unix notation
-    shortfilename.Replace( wxT( "\\" ), wxT( "/" ) );
+    // In Kicad files, filenames and paths are stored using Unix notation
+    filename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
-    new3DShape->SetShape3DName( shortfilename );
+    new3DShape->SetShape3DName( filename );
     m_Shapes3D_list.push_back( new3DShape );
-    m_3D_ShapeNameListBox->Append( shortfilename );
+    m_3D_ShapeNameListBox->Append( filename );
 
     if( m_LastSelected3DShapeIndex >= 0 )
         TransfertDisplayTo3DValues( m_LastSelected3DShapeIndex );
@@ -675,7 +648,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     m_Parent->OnModify();
 
-    EndModal( 1 );
+    ENDQUASIMODAL( 1 );
 
     if( m_DC )
     {

@@ -223,6 +223,19 @@ void CAIRO_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aS
     cairo_new_sub_path( currentContext );
     cairo_arc( currentContext, aCenterPoint.x, aCenterPoint.y, aRadius, aStartAngle, aEndAngle );
 
+    if( isFillEnabled )
+    {
+        VECTOR2D startPoint( cos( aStartAngle ) * aRadius + aCenterPoint.x,
+                             sin( aStartAngle ) * aRadius + aCenterPoint.y );
+        VECTOR2D endPoint( cos( aEndAngle ) * aRadius + aCenterPoint.x,
+                           sin( aEndAngle ) * aRadius + aCenterPoint.y );
+
+        cairo_move_to( currentContext, aCenterPoint.x, aCenterPoint.y );
+        cairo_line_to( currentContext, startPoint.x, startPoint.y );
+        cairo_line_to( currentContext, endPoint.x, endPoint.y );
+        cairo_close_path( currentContext );
+    }
+
     isElementAdded = true;
 }
 

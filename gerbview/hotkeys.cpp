@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2010 <Jean-Pierre Charras>
+ * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file gerbview/hotkeys.cpp
  */
@@ -70,16 +94,7 @@ struct EDA_HOTKEY_CONFIG s_Gerbview_Hokeys_Descr[] =
 };
 
 
-/*
- * Function OnHotKey.
- *  ** Commands are case insensitive **
- *  Some commands are relatives to the item under the mouse cursor
- * aDC = current device context
- * aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
- * aPosition The cursor position in logical (drawing) units.
- * aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
- */
-void GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem )
+bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
@@ -92,13 +107,13 @@ void GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     EDA_HOTKEY * HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, s_Gerbview_Hotkey_List );
 
     if( HK_Descr == NULL )
-        return;
+        return false;
 
     switch( HK_Descr->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:
-        return;
+        return false;
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, s_Gerbview_Hokeys_Descr );
@@ -162,4 +177,6 @@ void GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         }
         break;
     }
+
+    return true;
 }

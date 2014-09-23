@@ -46,7 +46,7 @@
 #include <template_fieldnames.h>
 
 
-LIB_FIELD::LIB_FIELD(LIB_COMPONENT * aParent, int idfield ) :
+LIB_FIELD::LIB_FIELD(LIB_PART * aParent, int idfield ) :
     LIB_ITEM( LIB_FIELD_T, aParent )
 {
     Init( idfield );
@@ -164,7 +164,7 @@ bool LIB_FIELD::Load( LINE_READER& aLineReader, wxString& errorMsg )
 
     // Doctor the *.lib file field which has a "~" in blank fields.  New saves will
     // not save like this, and eventually these two lines can be removed.
-    if( m_Text.size()==1  &&  m_Text[0]==wxChar( '~' ) )
+    if( m_Text.size() == 1 && m_Text[0] == wxChar( '~' ) )
         m_Text.clear();
 
     memset( textVJustify, 0, sizeof( textVJustify ) );
@@ -346,9 +346,9 @@ bool LIB_FIELD::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFO
     {
         wxString extended_text = tmp_text.GetText();
         extended_text.Append('?');
-        const LIB_COMPONENT* parent = static_cast<const LIB_COMPONENT*>( m_Parent );
+        const LIB_PART*      parent = static_cast<const LIB_PART*     >( m_Parent );
 
-        if ( parent && ( parent->GetPartCount() > 1 ) )
+        if ( parent && ( parent->GetUnitCount() > 1 ) )
             extended_text.Append('A');
         tmp_text.SetText( extended_text );
     }
@@ -491,7 +491,7 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     wxPoint textpos = aTransform.TransformCoordinate( BoundaryBox.Centre() )
                       + aOffset;
 
-    aPlotter->Text( textpos, GetDefaultColor(), m_Text, orient, m_Size,
+    aPlotter->Text( textpos, GetDefaultColor(), GetShownText(), orient, m_Size,
                     hjustify, vjustify,
                     GetPenSize(), m_Italic, m_Bold );
 }
@@ -500,13 +500,13 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 wxString LIB_FIELD::GetFullText( int unit )
 {
     if( m_id != REFERENCE )
-        return m_Text;
+        return GetText();
 
-    wxString text = m_Text;
+    wxString text = GetText();
     text << wxT( "?" );
 
     if( GetParent()->IsMulti() )
-        text << LIB_COMPONENT::SubReference( unit );
+        text << LIB_PART::SubReference( unit );
 
     return text;
 }
@@ -642,14 +642,14 @@ void LIB_FIELD::SetName( const wxString& aName )
 
 void LIB_FIELD::SetText( const wxString& aText )
 {
-    if( aText == m_Text )
+    if( aText == GetText() )
         return;
 
     wxString oldName = m_Text;
 
     if( m_id == VALUE && m_Parent != NULL )
     {
-        LIB_COMPONENT* parent = GetParent();
+        LIB_PART*      parent = GetParent();
 
         // Set the parent component and root alias to the new name.
         if( parent->GetName().CmpNoCase( aText ) != 0 )
@@ -673,7 +673,7 @@ wxString LIB_FIELD::GetSelectMenuText() const
 {
     return wxString::Format( _( "Field %s %s" ),
                              GetChars( GetName() ),
-                             GetChars( GetText() ) );
+                             GetChars( ShortenedShownText() ) );
 }
 
 
@@ -763,5 +763,5 @@ void LIB_FIELD::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Field" ), msg, BROWN ) );
 
     // Display field text:
-    aList.push_back( MSG_PANEL_ITEM( _( "Value" ), m_Text, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetShownText(), BROWN ) );
 }

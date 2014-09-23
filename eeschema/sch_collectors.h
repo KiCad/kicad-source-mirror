@@ -352,4 +352,37 @@ public:
 };
 
 
+/**
+ * Class TYPE_COLLECTOR
+ * merely gathers up all SCH_ITEMs of a given set of KICAD_T type(s).  It does
+ * no hit-testing.
+ *
+ * @see class COLLECTOR
+ */
+class SCH_TYPE_COLLECTOR : public SCH_COLLECTOR
+{
+public:
+    /**
+     * Function Inspect
+     * is the examining function within the INSPECTOR which is passed to the
+     * Iterate function.
+     *
+     * @param testItem An EDA_ITEM to examine.
+     * @param testData is not used in this class.
+     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
+     *   else SCAN_CONTINUE;
+     */
+    SEARCH_RESULT Inspect( EDA_ITEM* testItem, const void* testData );
+
+    /**
+     * Function Collect
+     * scans a BOARD_ITEM using this class's Inspector method, which does
+     * the collection.
+     * @param aBoard The BOARD_ITEM to scan.
+     * @param aScanList The KICAD_Ts to gather up.
+     */
+    void Collect( SCH_ITEM* aBoard, const KICAD_T aScanList[] );
+};
+
+
 #endif // _SCH_COLLECTORS_H_

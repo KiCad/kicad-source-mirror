@@ -93,7 +93,7 @@ static wxAcceleratorEntry accels[] =
 #define LIB_VIEW_FRAME_NAME wxT( "ViewlibFrame" )
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
-        CMP_LIBRARY* aLibrary ) :
+        PART_LIB* aLibrary ) :
     SCH_BASE_FRAME( aKiway, aParent, aFrameType, _( "Library Browser" ),
             wxDefaultPosition, wxDefaultSize,
             aFrameType==FRAME_SCH_VIEWER ?
@@ -121,7 +121,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_cmpList   = NULL;
     m_libList   = NULL;
 
-    SetScreen( new SCH_SCREEN() );
+    SetScreen( new SCH_SCREEN( aKiway ) );
     GetScreen()->m_Center = true;      // Axis origin centered on screen.
     LoadSettings( config() );
 
@@ -284,14 +284,14 @@ double LIB_VIEW_FRAME::BestZoom()
      * and replace by static const int VIEWPORT_EXTENT = 10000;
      */
 
-    LIB_COMPONENT*  component = NULL;
-    double          bestzoom = 16.0;      // default value for bestzoom
-    CMP_LIBRARY*    lib = CMP_LIBRARY::FindLibrary( m_libraryName );
+    LIB_PART*   part = NULL;
+    double      bestzoom = 16.0;      // default value for bestzoom
+    PART_LIB*   lib = Prj().SchLibs()->FindLibrary( m_libraryName );
 
     if( lib  )
-        component = lib->FindComponent( m_entryName );
+        part = lib->FindPart( m_entryName );
 
-    if( component == NULL )
+    if( !part )
     {
         SetScrollCenterPosition( wxPoint( 0, 0 ) );
         return bestzoom;
@@ -299,13 +299,13 @@ double LIB_VIEW_FRAME::BestZoom()
 
     wxSize size = m_canvas->GetClientSize();
 
-    EDA_RECT BoundaryBox = component->GetBoundingBox( m_unit, m_convert );
+    EDA_RECT boundingBox = part->GetBoundingBox( m_unit, m_convert );
 
     // Reserve a 10% margin around component bounding box.
     double margin_scale_factor = 0.8;
-    double zx =(double) BoundaryBox.GetWidth() /
+    double zx =(double) boundingBox.GetWidth() /
                ( margin_scale_factor * (double)size.x );
-    double zy = (double) BoundaryBox.GetHeight() /
+    double zy = (double) boundingBox.GetHeight() /
                 ( margin_scale_factor * (double)size.y);
 
     // Calculates the best zoom
@@ -316,7 +316,7 @@ double LIB_VIEW_FRAME::BestZoom()
     if( bestzoom  < GetScreen()->m_ZoomList[0] )
         bestzoom  = GetScreen()->m_ZoomList[0];
 
-    SetScrollCenterPosition( BoundaryBox.Centre() );
+    SetScrollCenterPosition( boundingBox.Centre() );
 
     return bestzoom;
 }
@@ -324,11 +324,11 @@ double LIB_VIEW_FRAME::BestZoom()
 
 void LIB_VIEW_FRAME::ReCreateListLib()
 {
-    if( m_libList == NULL )
+    if( !m_libList )
         return;
 
     m_libList->Clear();
-    m_libList->Append( CMP_LIBRARY::GetLibraryNames() );
+    m_libList->Append( Prj().SchLibs()->GetLibraryNames() );
 
     // Search for a previous selection:
     int index = m_libList->FindString( m_libraryName );
@@ -361,9 +361,9 @@ void LIB_VIEW_FRAME::ReCreateListCmp()
 
     m_cmpList->Clear();
 
-    CMP_LIBRARY* Library = CMP_LIBRARY::FindLibrary( m_libraryName );
+    PART_LIB* lib = Prj().SchLibs()->FindLibrary( m_libraryName );
 
-    if( Library == NULL )
+    if( !lib )
     {
         m_libraryName = wxEmptyString;
         m_entryName = wxEmptyString;
@@ -373,7 +373,8 @@ void LIB_VIEW_FRAME::ReCreateListCmp()
     }
 
     wxArrayString  nameList;
-    Library->GetEntryNames( nameList );
+
+    lib->GetEntryNames( nameList );
     m_cmpList->Append( nameList );
 
     int index = m_cmpList->FindString( m_entryName );

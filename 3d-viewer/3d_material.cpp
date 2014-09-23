@@ -28,6 +28,7 @@
 #include <fctsys.h>
 #include <3d_struct.h>
 #include <3d_material.h>
+#include <info3d_visu.h>
 
 #ifdef __WXMAC__
 #  ifdef __DARWIN__
@@ -54,83 +55,96 @@ S3D_MATERIAL::S3D_MATERIAL( S3D_MASTER* father, const wxString& name ) :
 
 void SetOpenGlDefaultMaterial()
 {
-    glm::vec4 ambient( 0.15, 0.15, 0.15, 1.0 );
-    glm::vec4 specular( 0.1, 0.1, 0.1, 1.0 );
-    glm::vec4 emissive( 0.1, 0.1, 0.1, 1.0 );
-    GLint shininess_value = 80;
+    glm::vec4 ambient( 0.2, 0.2, 0.2, 1.0 );
+    glm::vec4 specular( 0.0, 0.0, 0.0, 1.0 );
+    glm::vec4 emissive( 0.0, 0.0, 0.0, 1.0 );
+    glm::vec4 diffuse( 0.0, 0.0, 0.0, 1.0 );
+    GLint shininess_value = 0;
 
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-    //glColor4f( 1.0, 1.0, 1.0, 1.0 );
     glMateriali ( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
     glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, &emissive.x );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &specular.x );
     glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT,  &ambient.x );
+    glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE,  &diffuse.x );
 
 }
 
 
-void S3D_MATERIAL::SetOpenGLMaterial( unsigned int materialIndex )
+void S3D_MATERIAL::SetOpenGLMaterial( unsigned int aMaterialIndex, bool aUseMaterial )
 {
     S3D_MASTER * s3dParent = (S3D_MASTER *) GetParent();
-    
+
     if( ! s3dParent->IsOpenGlAllowed() )
         return;
 
-    float transparency_value = 0.0f;
-    if( m_Transparency.size() > materialIndex )
+    if( aUseMaterial )
     {
-        transparency_value = m_Transparency[materialIndex];
-        s3dParent->SetLastTransparency( transparency_value );
-    }
-
-    if( m_DiffuseColor.size() > materialIndex )            
-    {
-        glm::vec3 color = m_DiffuseColor[materialIndex];
-
-        if( m_AmbientColor.size() == 0 )
+        float transparency_value = 0.0f;
+        if( m_Transparency.size() > aMaterialIndex )
         {
-            glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
+            transparency_value = m_Transparency[aMaterialIndex];
+            s3dParent->SetLastTransparency( transparency_value );
         }
-        
-        glColor4f( color.x, color.y, color.z, 1.0 - transparency_value );
-    }
 
-    if( m_Shininess.size() > materialIndex )
-    {
-        glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, m_Shininess[materialIndex] );
-    }
+        if( m_DiffuseColor.size() > aMaterialIndex )
+        {
+            glm::vec3 color = m_DiffuseColor[aMaterialIndex];
 
-    // emissive
-    if( m_EmissiveColor.size() > materialIndex )
-    {
-        glm::vec4 emissive;
-        emissive[0] = m_EmissiveColor[materialIndex].x;
-        emissive[1] = m_EmissiveColor[materialIndex].y;
-        emissive[2] = m_EmissiveColor[materialIndex].z;
-        emissive[3] = 1.0f;
-        glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, &emissive.x );
-    }
+            if( m_AmbientColor.size() == 0 )
+            {
+                glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
+            }
 
-    // specular
-    if( m_SpecularColor.size() > materialIndex )
-    {
-        glm::vec4 specular;
-        specular[0] = m_SpecularColor[materialIndex].x;
-        specular[1] = m_SpecularColor[materialIndex].y;
-        specular[2] = m_SpecularColor[materialIndex].z;
-        specular[3] = 1.0f;
-        glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &specular.x );
-    }
+            glColor4f( color.x, color.y, color.z, 1.0 - transparency_value );
+        }
 
-    // ambient
-    if( m_AmbientColor.size() > materialIndex )
+        if( m_Shininess.size() > aMaterialIndex )
+        {
+            glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_Shininess[aMaterialIndex] );
+        }
+
+        // emissive
+        if( m_EmissiveColor.size() > aMaterialIndex )
+        {
+            glm::vec4 emissive;
+            emissive[0] = m_EmissiveColor[aMaterialIndex].x;
+            emissive[1] = m_EmissiveColor[aMaterialIndex].y;
+            emissive[2] = m_EmissiveColor[aMaterialIndex].z;
+            emissive[3] = 1.0f;
+            glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, &emissive.x );
+        }
+
+        // specular
+        if( m_SpecularColor.size() > aMaterialIndex )
+        {
+            glm::vec4 specular;
+            specular[0] = m_SpecularColor[aMaterialIndex].x;
+            specular[1] = m_SpecularColor[aMaterialIndex].y;
+            specular[2] = m_SpecularColor[aMaterialIndex].z;
+            specular[3] = 1.0f;
+            glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &specular.x );
+        }
+
+        // ambient
+        if( m_AmbientColor.size() > aMaterialIndex )
+        {
+            glm::vec4 ambient;
+            ambient[0] = m_AmbientColor[aMaterialIndex].x;
+            ambient[1] = m_AmbientColor[aMaterialIndex].y;
+            ambient[2] = m_AmbientColor[aMaterialIndex].z;
+            ambient[3] = 1.0f;
+            glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT,  &ambient.x );
+        }
+    }
+    else
     {
-        glm::vec4 ambient;
-        ambient[0] = m_AmbientColor[materialIndex].x;
-        ambient[1] = m_AmbientColor[materialIndex].y;
-        ambient[2] = m_AmbientColor[materialIndex].z;
-        ambient[3] = 1.0f;
-        glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT,  &ambient.x );
-    }    
+        if( m_DiffuseColor.size() > aMaterialIndex )
+        {
+            glm::vec3 color = m_DiffuseColor[aMaterialIndex];
+            glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
+            glColor4f( color.x, color.y, color.z, 1.0 );
+        }
+    }
 }
 

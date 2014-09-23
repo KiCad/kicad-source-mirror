@@ -30,16 +30,16 @@
 #include <wx/valtext.h>
 
 /**
- * Class FOOTPRINT_NAME_VALIDATOR
+ * Class FILE_NAME_CHAR_VALIDATOR
  *
  * This class provides a custom wxValidator object for limiting the allowable characters when
  * defining footprint names.  Since the introduction of the PRETTY footprint library format,
  * footprint names cannot have any characters that would prevent file creation on any platform.
  */
-class FOOTPRINT_NAME_VALIDATOR : public wxTextValidator
+class FILE_NAME_CHAR_VALIDATOR : public wxTextValidator
 {
 public:
-    FOOTPRINT_NAME_VALIDATOR( wxString* aValue = NULL ) :
+    FILE_NAME_CHAR_VALIDATOR( wxString* aValue = NULL ) :
         wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
     {
         // The Windows (DOS) file system forbidden characters already include the forbidden

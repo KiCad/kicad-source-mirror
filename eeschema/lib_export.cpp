@@ -46,11 +46,6 @@ extern int ExportPartId;
 
 void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 {
-    wxString     errMsg;
-    wxFileName   fn;
-    CMP_LIBRARY* LibTmp;
-    LIB_ALIAS*   LibEntry;
-
     m_lastDrawItem = NULL;
 
     wxFileDialog dlg( this, _( "Import Component" ), m_lastLibImportPath,
@@ -60,25 +55,40 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    fn = dlg.GetPath();
+    wxFileName  fn = dlg.GetPath();
 
-    LibTmp = CMP_LIBRARY::LoadLibrary( fn, errMsg );
+    std::auto_ptr<PART_LIB> lib;
 
-    if( LibTmp == NULL )
-        return;
-
-    LibEntry = LibTmp->GetFirstEntry();
-
-    if( LibEntry == NULL )
+    try
     {
-        wxString msg;
+        std::auto_ptr<PART_LIB> new_lib( PART_LIB::LoadLibrary( fn.GetFullPath() ) );
+        lib = new_lib;
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg = wxString::Format( _(
+            "Unable to import library '%s'.  Error:\n"
+            "%s" ),
+            GetChars( fn.GetFullPath() )
+            );
 
-        msg.Printf( _( "Component library file <%s> is empty." ), GetChars( fn.GetFullPath() ) );
+        DisplayError( this, msg );
+        return;
+    }
+
+    LIB_ALIAS* entry = lib->GetFirstEntry();
+
+    if( !entry )
+    {
+        wxString msg = wxString::Format( _(
+            "Part library file '%s' is empty." ),
+            GetChars( fn.GetFullPath() )
+            );
         DisplayError( this,  msg );
         return;
     }
 
-    if( LoadOneLibraryPartAux( LibEntry, LibTmp ) )
+    if( LoadOneLibraryPartAux( entry, lib.get() ) )
     {
         fn = dlg.GetPath();
         m_lastLibImportPath = fn.GetPath();
@@ -86,42 +96,39 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
         GetScreen()->ClearUndoRedoList();
         m_canvas->Refresh();
     }
-
-    delete LibTmp;
 }
 
 
 void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 {
-    wxFileName   fn;
-    wxString     msg, title;
-    CMP_LIBRARY* CurLibTmp;
-    bool         createLib = ( event.GetId() == ExportPartId ) ? false : true;
+    wxString    msg, title;
+    bool        createLib = ( event.GetId() == ExportPartId ) ? false : true;
 
-    if( m_component == NULL )
+    LIB_PART*   part = GetCurPart();
+
+    if( !part )
     {
         DisplayError( this, _( "There is no component selected to save." ) );
         return;
     }
 
-    fn = m_component->GetName().Lower();
+    wxFileName fn = part->GetName().Lower();
+
     fn.SetExt( SchematicLibraryFileExtension );
 
     title = createLib ? _( "New Library" ) : _( "Export Component" );
 
-    wxFileDialog dlg( this, title, wxGetCwd(), fn.GetFullName(),
-                      SchematicLibraryFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog dlg( this, title, m_lastLibExportPath, fn.GetFullName(),
+            SchematicLibraryFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     fn = dlg.GetPath();
 
-    CurLibTmp = m_library;
+    std::auto_ptr<PART_LIB> temp_lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, fn.GetFullPath() ) );
 
-    m_library = new CMP_LIBRARY( LIBRARY_TYPE_EESCHEMA, fn );
-
-    SaveOnePartInMemory();
+    SaveOnePart( temp_lib.get() );
 
     bool result = false;
 
@@ -129,7 +136,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     {
         FILE_OUTPUTFORMATTER    formatter( fn.GetFullPath() );
 
-        result = m_library->Save( formatter );
+        result = temp_lib.get()->Save( formatter );
     }
     catch( ... /* IO_ERROR ioe */ )
     {
@@ -142,26 +149,24 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     if( result )
         m_lastLibExportPath = fn.GetPath();
 
-    delete m_library;
-    m_library = CurLibTmp;
-
     if( result )
     {
         if( createLib )
         {
-            msg.Printf( _( "<%s> - OK" ), GetChars( fn.GetFullPath() ) );
-            DisplayInfoMessage( this, _( "This library will not be available \
-until it is loaded by Eeschema.\n\nModify the Eeschema library configuration \
-if you want to include it as part of this project." ) );
+            msg.Printf( _( "'%s' - OK" ), GetChars( fn.GetFullPath() ) );
+            DisplayInfoMessage( this, _(
+                "This library will not be available until it is loaded by Eeschema.\n\n"
+                "Modify the Eeschema library configuration if you want to include it"
+                " as part of this project." ) );
         }
         else
         {
-            msg.Printf( _( "<%s> - Export OK" ), GetChars( fn.GetFullPath() ) );
+            msg.Printf( _( "'%s' - Export OK" ), GetChars( fn.GetFullPath() ) );
         }
-    }   // Error
-    else
+    }
+    else    // Error
     {
-        msg.Printf( _( "Error creating <%s>" ), GetChars( fn.GetFullName() ) );
+        msg.Printf( _( "Error creating '%s'" ), GetChars( fn.GetFullName() ) );
     }
 
     SetStatusText( msg );

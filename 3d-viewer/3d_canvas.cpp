@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file 3d_canvas.cpp
 */
@@ -26,8 +49,8 @@
 #include <trackball.h>
 #include <3d_viewer_id.h>
 
-#include <textures/text_silk.c>
-#include <textures/text_pcb.c>
+#include <textures/text_silk.h>
+#include <textures/text_pcb.h>
 
 // -----------------
 // helper function (from wxWidgets, opengl/cube.cpp sample
@@ -52,8 +75,9 @@ void CheckGLError(const char *aFileName, int aLineNumber)
         }
 
         errLast = err;
-        
-        wxLogError( wxT( "OpenGL error %d At: %s, line: %d" ), err,  GetChars( FROM_UTF8( aFileName ) ), aLineNumber );
+
+        wxLogError( wxT( "OpenGL error %d At: %s, line: %d" ), err,
+                    GetChars( FROM_UTF8( aFileName ) ), aLineNumber );
     }
 }
 
@@ -137,7 +161,7 @@ void EDA_3D_CANVAS::OnChar( wxKeyEvent& event )
 void EDA_3D_CANVAS::SetView3D( int keycode )
 {
     int    ii;
-    double delta_move = 0.7 * g_Parm_3D_Visu.m_Zoom;
+    double delta_move = 0.7 * GetPrm3DVisu().m_Zoom;
 
     switch( keycode )
     {
@@ -158,22 +182,22 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
         break;
 
     case WXK_HOME:
-        g_Parm_3D_Visu.m_Zoom = 1.0;
+        GetPrm3DVisu().m_Zoom = 1.0;
         m_draw3dOffset.x = m_draw3dOffset.y = 0;
-        trackball( g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
+        trackball( GetPrm3DVisu().m_Quat, 0.0, 0.0, 0.0, 0.0 );
         break;
 
     case WXK_END:
         break;
 
     case WXK_F1:
-        g_Parm_3D_Visu.m_Zoom /= 1.4;
-        if( g_Parm_3D_Visu.m_Zoom <= 0.01 )
-            g_Parm_3D_Visu.m_Zoom = 0.01;
+        GetPrm3DVisu().m_Zoom /= 1.4;
+        if( GetPrm3DVisu().m_Zoom <= 0.01 )
+            GetPrm3DVisu().m_Zoom = 0.01;
         break;
 
     case WXK_F2:
-        g_Parm_3D_Visu.m_Zoom *= 1.4;
+        GetPrm3DVisu().m_Zoom *= 1.4;
         break;
 
     case '+':
@@ -186,59 +210,59 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
     case 'R':
         m_draw3dOffset.x = m_draw3dOffset.y = 0;
         for( ii = 0; ii < 4; ii++ )
-            g_Parm_3D_Visu.m_Rot[ii] = 0.0;
+            GetPrm3DVisu().m_Rot[ii] = 0.0;
 
-        trackball( g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
+        trackball( GetPrm3DVisu().m_Quat, 0.0, 0.0, 0.0, 0.0 );
         break;
 
     case 'x':
         for( ii = 0; ii < 4; ii++ )
-            g_Parm_3D_Visu.m_Rot[ii] = 0.0;
+            GetPrm3DVisu().m_Rot[ii] = 0.0;
 
-        trackball( g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
-        g_Parm_3D_Visu.m_ROTZ = -90;
-        g_Parm_3D_Visu.m_ROTX = -90;
+        trackball( GetPrm3DVisu().m_Quat, 0.0, 0.0, 0.0, 0.0 );
+        GetPrm3DVisu().m_ROTZ = -90;
+        GetPrm3DVisu().m_ROTX = -90;
         break;
 
     case 'X':
         for( ii = 0; ii < 4; ii++ )
-            g_Parm_3D_Visu.m_Rot[ii] = 0.0;
+            GetPrm3DVisu().m_Rot[ii] = 0.0;
 
-        trackball( g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
-        g_Parm_3D_Visu.m_ROTZ = 90;
-        g_Parm_3D_Visu.m_ROTX = -90;
+        trackball( GetPrm3DVisu().m_Quat, 0.0, 0.0, 0.0, 0.0 );
+        GetPrm3DVisu().m_ROTZ = 90;
+        GetPrm3DVisu().m_ROTX = -90;
         break;
 
     case 'y':
         for( ii = 0; ii < 4; ii++ )
-            g_Parm_3D_Visu.m_Rot[ii] = 0.0;
+            GetPrm3DVisu().m_Rot[ii] = 0.0;
 
-        trackball( g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
-        g_Parm_3D_Visu.m_ROTX = -90;
+        trackball( GetPrm3DVisu().m_Quat, 0.0, 0.0, 0.0, 0.0 );
+        GetPrm3DVisu().m_ROTX = -90;
         break;
 
     case 'Y':
         for( ii = 0; ii < 4; ii++ )
-            g_Parm_3D_Visu.m_Rot[ii] = 0.0;
+            GetPrm3DVisu().m_Rot[ii] = 0.0;
 
-        trackball( g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
-        g_Parm_3D_Visu.m_ROTX = -90;
-        g_Parm_3D_Visu.m_ROTZ = -180;
+        trackball( GetPrm3DVisu().m_Quat, 0.0, 0.0, 0.0, 0.0 );
+        GetPrm3DVisu().m_ROTX = -90;
+        GetPrm3DVisu().m_ROTZ = -180;
         break;
 
     case 'z':
         for( ii = 0; ii < 4; ii++ )
-            g_Parm_3D_Visu.m_Rot[ii] = 0.0;
+            GetPrm3DVisu().m_Rot[ii] = 0.0;
 
-        trackball( g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
+        trackball( GetPrm3DVisu().m_Quat, 0.0, 0.0, 0.0, 0.0 );
         break;
 
     case 'Z':
         for( ii = 0; ii < 4; ii++ )
-            g_Parm_3D_Visu.m_Rot[ii] = 0.0;
+            GetPrm3DVisu().m_Rot[ii] = 0.0;
 
-        trackball( g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
-        g_Parm_3D_Visu.m_ROTX = -180;
+        trackball( GetPrm3DVisu().m_Quat, 0.0, 0.0, 0.0, 0.0 );
+        GetPrm3DVisu().m_ROTX = -180;
         break;
 
     default:
@@ -255,47 +279,35 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
     if( event.ShiftDown() )
     {
         if( event.GetWheelRotation() < 0 )
-        {
-            /* up */
-            SetView3D( WXK_UP );
-        }
+            SetView3D( WXK_UP );    // move up
         else
-        {
-            /* down */
-            SetView3D( WXK_DOWN );
-        }
+            SetView3D( WXK_DOWN );  // move down
     }
     else if( event.ControlDown() )
     {
         if( event.GetWheelRotation() > 0 )
-        {
-            /* right */
-            SetView3D( WXK_RIGHT );
-        }
+            SetView3D( WXK_RIGHT ); // move right
         else
-        {
-            /* left */
-            SetView3D( WXK_LEFT );
-        }
+            SetView3D( WXK_LEFT );  // move left
     }
     else
     {
         if( event.GetWheelRotation() > 0 )
         {
-            g_Parm_3D_Visu.m_Zoom /= 1.4;
+            GetPrm3DVisu().m_Zoom /= 1.4;
 
-            if( g_Parm_3D_Visu.m_Zoom <= 0.01 )
-                g_Parm_3D_Visu.m_Zoom = 0.01;
+            if( GetPrm3DVisu().m_Zoom <= 0.01 )
+                GetPrm3DVisu().m_Zoom = 0.01;
         }
         else
-            g_Parm_3D_Visu.m_Zoom *= 1.4;
+            GetPrm3DVisu().m_Zoom *= 1.4;
 
         DisplayStatus();
         Refresh( false );
     }
 
-    g_Parm_3D_Visu.m_Beginx = event.GetX();
-    g_Parm_3D_Visu.m_Beginy = event.GetY();
+    GetPrm3DVisu().m_Beginx = event.GetX();
+    GetPrm3DVisu().m_Beginy = event.GetY();
 }
 
 
@@ -310,12 +322,12 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
         {
             /* drag in progress, simulate trackball */
             trackball( spin_quat,
-                       (2.0 * g_Parm_3D_Visu.m_Beginx - size.x) / size.x,
-                       (size.y - 2.0 * g_Parm_3D_Visu.m_Beginy) / size.y,
+                       (2.0 * GetPrm3DVisu().m_Beginx - size.x) / size.x,
+                       (size.y - 2.0 * GetPrm3DVisu().m_Beginy) / size.y,
                        (     2.0 * event.GetX() - size.x) / size.x,
                        ( size.y - 2.0 * event.GetY() ) / size.y );
 
-            add_quats( spin_quat, g_Parm_3D_Visu.m_Quat, g_Parm_3D_Visu.m_Quat );
+            add_quats( spin_quat, GetPrm3DVisu().m_Quat, GetPrm3DVisu().m_Quat );
         }
         else if( event.MiddleIsDown() )
         {
@@ -323,11 +335,11 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 
             /* Current zoom and an additional factor are taken into account
              * for the amount of panning. */
-            const double PAN_FACTOR = 8.0 * g_Parm_3D_Visu.m_Zoom;
+            const double PAN_FACTOR = 8.0 * GetPrm3DVisu().m_Zoom;
             m_draw3dOffset.x -= PAN_FACTOR *
-                           ( g_Parm_3D_Visu.m_Beginx - event.GetX() ) / size.x;
+                           ( GetPrm3DVisu().m_Beginx - event.GetX() ) / size.x;
             m_draw3dOffset.y -= PAN_FACTOR *
-                           (event.GetY() - g_Parm_3D_Visu.m_Beginy) / size.y;
+                           (event.GetY() - GetPrm3DVisu().m_Beginy) / size.y;
         }
 
         /* orientation has changed, redraw mesh */
@@ -335,8 +347,8 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
         Refresh( false );
     }
 
-    g_Parm_3D_Visu.m_Beginx = event.GetX();
-    g_Parm_3D_Visu.m_Beginy = event.GetY();
+    GetPrm3DVisu().m_Beginx = event.GetX();
+    GetPrm3DVisu().m_Beginy = event.GetY();
 }
 
 
@@ -478,7 +490,7 @@ void EDA_3D_CANVAS::DisplayStatus()
     msg.Printf( wxT( "dy %3.2f" ), m_draw3dOffset.y );
     Parent()->SetStatusText( msg, 2 );
 
-    msg.Printf( wxT( "View: %3.1f" ), 45 * g_Parm_3D_Visu.m_Zoom );
+    msg.Printf( wxT( "View: %3.1f" ), 45 * GetPrm3DVisu().m_Zoom );
     Parent()->SetStatusText( msg, 3 );
 }
 
@@ -515,12 +527,13 @@ GLuint load_and_generate_texture( tsImage *image )
 
     glGenTextures( 1, &texture );
     glBindTexture( GL_TEXTURE_2D, texture );
-    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, image->width, image->height, GL_RGBA, GL_UNSIGNED_BYTE, image->pixel_data );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, image->width, image->height,
+                       GL_RGBA, GL_UNSIGNED_BYTE, image->pixel_data );
 
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     return texture;
@@ -537,7 +550,7 @@ void EDA_3D_CANVAS::InitGL()
         m_text_pcb = load_and_generate_texture( (tsImage *)&text_pcb  );
         m_text_silk = load_and_generate_texture( (tsImage *)&text_silk );
 
-        g_Parm_3D_Visu.m_Zoom = 1.0;
+        GetPrm3DVisu().m_Zoom = 1.0;
         m_ZBottom = 1.0;
         m_ZTop = 10.0;
 
@@ -546,7 +559,7 @@ void EDA_3D_CANVAS::InitGL()
         glEnable( GL_ALPHA_TEST );
         glEnable( GL_LINE_SMOOTH );
 //        glEnable(GL_POLYGON_SMOOTH);  // creates issues with some graphic cards
-        glShadeModel( GL_SMOOTH );
+        glEnable( GL_NORMALIZE );
         glEnable( GL_COLOR_MATERIAL );
         glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
@@ -566,28 +579,27 @@ void EDA_3D_CANVAS::InitGL()
 /* Initialize OpenGL light sources. */
 void EDA_3D_CANVAS::SetLights()
 {
-    double  light;
-    GLfloat light_color[4];
-
-    /* set viewing projection */
+    // activate light. the source is above the xy plane, at source_pos
+    GLfloat source_pos[4]    = { 0.0, 0.0, 30.0, 0.0 };
+    GLfloat light_color[4];     // color of lights (RGBA values)
     light_color[3] = 1.0;
-    GLfloat Z_axis_pos[4]    = { 0.0, 0.0, 30.0, 0.0 };
-    GLfloat lowZ_axis_pos[4] = { 0.0, 0.0, -30.0, 0.5 };
 
-    /* activate light */
-    light = 1.0;
-    light_color[0] = light_color[1] = light_color[2] = light;
-    glLightfv( GL_LIGHT0, GL_POSITION, Z_axis_pos );
+    // Light above the xy plane
+    light_color[0] = light_color[1] = light_color[2] = 0.1;
+    glLightfv( GL_LIGHT0, GL_AMBIENT, light_color );
+
+    light_color[0] = light_color[1] = light_color[2] = 1.0;
     glLightfv( GL_LIGHT0, GL_DIFFUSE, light_color );
 
-    light_color[0] = 0.3;
-    light_color[1] = 0.3;
-    light_color[2] = 0.4;
+    light_color[0] = light_color[1] = light_color[2] = 1.0;
+    glLightfv( GL_LIGHT0, GL_SPECULAR, light_color );
 
-    glLightfv( GL_LIGHT1, GL_POSITION, lowZ_axis_pos );
-    glLightfv( GL_LIGHT1, GL_DIFFUSE, light_color );
-    glEnable( GL_LIGHT0 );      // White spot on Z axis
-    glEnable( GL_LIGHT1 );      // White spot on Z axis ( bottom)
+    glLightfv( GL_LIGHT0, GL_POSITION, source_pos );
+
+    light_color[0] = light_color[1] = light_color[2] = 0.1;
+    glLightModelfv( GL_LIGHT_MODEL_AMBIENT, light_color );
+
+    glEnable( GL_LIGHT0 );      // White spot on Z axis ( top )
     glEnable( GL_LIGHTING );
 }
 
@@ -625,13 +637,17 @@ void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
         wxYield();
     }
 
-    struct vieport_params
+    struct viewport_params
     {
         GLint originx;
         GLint originy;
         GLint x;
         GLint y;
     } viewport;
+
+    // Be sure we have the latest 3D view (remember 3D view is buffered)
+    Refresh();
+    wxYield();
 
     // Build image from the 3D buffer
     wxWindowUpdateLocker noUpdates( this );

@@ -53,6 +53,8 @@
 #include <3d_viewer.h>
 
 
+DISPLAY_OPTIONS DisplayOpt;      // General display options
+
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
@@ -325,13 +327,15 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+bool DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
+    bool eventHandled = true;
+
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
         m_movingCursorWithKeyboard = false;
-        return;
+        return false;
     }
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
@@ -371,12 +375,17 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPositi
     case ' ':
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
+
+    default:
+        eventHandled = false;
     }
 
     SetCrossHairPosition( pos );
     RefreshCrossHair( oldpos, aPosition, aDC );
 
     UpdateStatusBar();    /* Display new cursor coordinates */
+
+    return eventHandled;
 }
 
 

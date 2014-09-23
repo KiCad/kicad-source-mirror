@@ -55,7 +55,8 @@ bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
                                     unsigned aNetlistOptions )
 {
     SCH_SHEET_LIST sheets;
-    sheets.AnnotatePowerSymbols();
+
+    sheets.AnnotatePowerSymbols( Prj().SchLibs() );
 
     // Performs some controls:
     if( CheckAnnotate( NULL, 0 ) )
@@ -81,9 +82,11 @@ bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
 
     // Cleanup the entire hierarchy
     SCH_SCREENS screens;
+
     screens.SchematicCleanUp();
 
-    NETLIST_OBJECT_LIST * connectedItemsList = BuildNetListBase();
+    NETLIST_OBJECT_LIST* connectedItemsList = BuildNetListBase();
+
     bool success = WriteNetListFile( connectedItemsList, aFormat,
                                      aFullFileName, aNetlistOptions );
 
@@ -105,10 +108,6 @@ NETLIST_OBJECT_LIST::~NETLIST_OBJECT_LIST()
 }
 
 
-/*
- * Delete all objects in list and clear list
- * (free memory used to store info about NETLIST_OBJECT items)
- */
 void NETLIST_OBJECT_LIST::FreeList()
 {
     std::vector<NETLIST_OBJECT*>::iterator iter;
@@ -122,10 +121,12 @@ void NETLIST_OBJECT_LIST::FreeList()
     clear();
 }
 
+
 void NETLIST_OBJECT_LIST::SortListbyNetcode()
 {
     sort( this->begin(), this->end(), NETLIST_OBJECT_LIST::sortItemsbyNetcode );
 }
+
 
 void NETLIST_OBJECT_LIST::SortListbySheet()
 {
@@ -133,10 +134,6 @@ void NETLIST_OBJECT_LIST::SortListbySheet()
 }
 
 
-/*
- * Build net list connection table.
- * Initializes s_NetObjectslist
- */
 NETLIST_OBJECT_LIST * SCH_EDIT_FRAME::BuildNetListBase()
 {
     wxBusyCursor    Busy;
@@ -163,10 +160,7 @@ NETLIST_OBJECT_LIST * SCH_EDIT_FRAME::BuildNetListBase()
     return &s_NetObjectslist;
 }
 
-/* the master function of NETLIST_OBJECT_LIST class.
- * Build the list of connected objects (pins, labels ...) and
- * all info needed to generate netlists or run ERC diags
- */
+
 bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
 {
     s_NetObjectslist.SetOwner( true );
@@ -237,7 +231,7 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
 
             segmentToPointConnect( net_item, IS_WIRE, istart );
 
-            /* Control of the junction, on BUS. */
+            // Control of the junction, on BUS.
             if( net_item->m_BusNetCode == 0 )
             {
                 net_item->m_BusNetCode = m_lastBusNetCode;
@@ -265,7 +259,7 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
                 break;
 
         case NET_BUS:
-            /* Control type connections point to point mode bus */
+            // Control type connections point to point mode bus
             if( net_item->m_BusNetCode == 0 )
             {
                 net_item->m_BusNetCode = m_lastBusNetCode;
@@ -278,7 +272,7 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
         case NET_BUSLABELMEMBER:
         case NET_HIERBUSLABELMEMBER:
         case NET_GLOBBUSLABELMEMBER:
-            /* Control connections similar has on BUS */
+            // Control connections similar has on BUS
             if( net_item->GetNet() == 0 )
             {
                 net_item->m_BusNetCode = m_lastBusNetCode;
@@ -295,10 +289,10 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
     DumpNetTable();
 #endif
 
-    /* Updating the Bus Labels Netcode connected by Bus */
+    // Updating the Bus Labels Netcode connected by Bus
     connectBusLabels();
 
-    /* Group objects by label. */
+    // Group objects by label.
     for( unsigned ii = 0; ii < size(); ii++ )
     {
         switch( GetItem( ii )->m_Type )
@@ -350,7 +344,7 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
     DumpNetTable();
 #endif
 
-    /* Compress numbers of Netcode having consecutive values. */
+    // Compress numbers of Netcode having consecutive values.
     int NetCode = 0;
     m_lastNetCode = 0;
 
@@ -391,6 +385,7 @@ static int getPriority( const NETLIST_OBJECT* Objet )
 
     return 0;
 }
+
 
 /* function evalLabelsPriority used by findBestNetNameForEachNet()
  * evalLabelsPriority calculates the priority of alabel1 and aLabel2
@@ -434,17 +429,6 @@ static bool evalLabelsPriority( const NETLIST_OBJECT* aLabel1,
 }
 
 
-/**
- * Function findBestNetNameForEachNet
- * fill the .m_NetNameCandidate member of each item of aNetItemBuffer
- * with a reference to the "best" NETLIST_OBJECT usable to give a name to the net
- * If no suitable object found, .m_NetNameCandidate is filled with 0.
- * The "best" NETLIST_OBJECT is a NETLIST_OBJECT that have the type label
- * and by priority order:
- * the label is global or local
- * the label is in the first sheet in a hierarchy (the root sheet has the most priority)
- * alphabetic order.
- */
 void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
 {
     int netcode = 0;            // current netcode for tested items
@@ -582,10 +566,6 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
 }
 
 
-/*
- * Propagate net codes from a parent sheet to an include sheet,
- * from a pin sheet connection
- */
 void NETLIST_OBJECT_LIST::sheetLabelConnect( NETLIST_OBJECT* SheetLabel )
 {
     if( SheetLabel->GetNet() == 0 )
@@ -616,13 +596,6 @@ void NETLIST_OBJECT_LIST::sheetLabelConnect( NETLIST_OBJECT* SheetLabel )
 }
 
 
-/*
- * Analyzes the labels type bus member (<BUS_NAME><member_number>
- * Propagate net codes between the corresponding labels (ie when
- * the <member_number> is the same) when they are connected
- * uqsually by their BusNetCode
- * Uses and updates the variable m_lastNetCode
- */
 void NETLIST_OBJECT_LIST::connectBusLabels()
 {
     for( unsigned ii = 0; ii < size(); ii++ )
@@ -663,12 +636,6 @@ void NETLIST_OBJECT_LIST::connectBusLabels()
 }
 
 
-/*
- * propageNetCode propagates the net code NewNetCode to all elements
- * having previously the net code OldNetCode
- * If IsBus == false, m_Netcode is used to propagate the new net code
- * If IsBus == true, m_BusNetCode is used to propagate the new net code
- */
 void NETLIST_OBJECT_LIST::propageNetCode( int aOldNetCode, int aNewNetCode, bool aIsBus )
 {
     if( aOldNetCode == aNewNetCode )
@@ -678,44 +645,25 @@ void NETLIST_OBJECT_LIST::propageNetCode( int aOldNetCode, int aNewNetCode, bool
     {
         for( unsigned jj = 0; jj < size(); jj++ )
         {
-            NETLIST_OBJECT* objet = GetItem( jj );
+            NETLIST_OBJECT* object = GetItem( jj );
 
-            if( objet->GetNet() == aOldNetCode )
-                objet->SetNet( aNewNetCode );
+            if( object->GetNet() == aOldNetCode )
+                object->SetNet( aNewNetCode );
         }
     }
     else               // Propagate BusNetCode
     {
         for( unsigned jj = 0; jj < size(); jj++ )
         {
-            NETLIST_OBJECT* objet = GetItem( jj );
+            NETLIST_OBJECT* object = GetItem( jj );
 
-            if( objet->m_BusNetCode == aOldNetCode )
-                objet->m_BusNetCode = aNewNetCode;
+            if( object->m_BusNetCode == aOldNetCode )
+                object->m_BusNetCode = aNewNetCode;
         }
     }
 }
 
 
-/*
- * Check if Ref element is connected to other elements of the list of objects
- * in the schematic, by mode point
- * A point (end superimposed)
- *
- * If IsBus:
- * The connection involves elements such as bus
- * (Or BUS or BUSLABEL JUNCTION)
- * Otherwise
- * The connection involves elements such as non-bus
- * (Other than BUS or BUSLABEL)
- *
- * The Ref object must have a valid Netcode.
- *
- * The list of objects is SUPPOSED class by SheetPath Croissants,
- * And research is done from the start element, 1st element
- * Leaf schema
- * (There can be no physical connection between elements of different sheets)
- */
 void NETLIST_OBJECT_LIST::pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus,
                                                int start )
 {
@@ -765,13 +713,13 @@ void NETLIST_OBJECT_LIST::pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus
             }
         }
     }
-    else    /* Object type BUS, BUSLABELS, and junctions. */
+    else    // Object type BUS, BUSLABELS, and junctions.
     {
         netCode = aRef->m_BusNetCode;
 
         for( unsigned i = start; i < size(); i++ )
         {
-            NETLIST_OBJECT* item =  GetItem( i );
+            NETLIST_OBJECT* item = GetItem( i );
 
             if( item->m_SheetPath != aRef->m_SheetPath )
                 continue;
@@ -812,13 +760,6 @@ void NETLIST_OBJECT_LIST::pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus
 }
 
 
-/*
- * Search connections betweena junction and segments
- * Propagate the junction net code to objects connected by this junction.
- * The junction must have a valid net code
- * The list of objects is expected sorted by sheets.
- * Search is done from index aIdxStart to the last element of list
- */
 void NETLIST_OBJECT_LIST::segmentToPointConnect( NETLIST_OBJECT* aJonction,
                                                 bool aIsBus, int aIdxStart )
 {
@@ -863,11 +804,6 @@ void NETLIST_OBJECT_LIST::segmentToPointConnect( NETLIST_OBJECT* aJonction,
 }
 
 
-/*
- * This function merges the net codes of groups of objects already connected
- * to labels (wires, bus, pins ... ) when 2 labels are equivalents
- * (i.e. group objects connected by labels)
- */
 void NETLIST_OBJECT_LIST::labelConnect( NETLIST_OBJECT* aLabelRef )
 {
     if( aLabelRef->GetNet() == 0 )
@@ -911,12 +847,6 @@ void NETLIST_OBJECT_LIST::labelConnect( NETLIST_OBJECT* aLabelRef )
 }
 
 
-/* Set the m_ConnectionType member of items in list
- * depending on the connection type:
- * UNCONNECTED, PAD_CONNECT or NOCONNECT_SYMBOL_PRESENT
- * The list is expected sorted by order of net code,
- * i.e. items having the same net code are grouped
- */
 void NETLIST_OBJECT_LIST::setUnconnectedFlag()
 {
     NETLIST_OBJECT* NetItemRef;
@@ -931,13 +861,13 @@ void NETLIST_OBJECT_LIST::setUnconnectedFlag()
         if( NetItemRef->m_Type == NET_NOCONNECT && StateFlag != PAD_CONNECT )
             StateFlag = NOCONNECT_SYMBOL_PRESENT;
 
-        /* Analysis of current net. */
+        // Analysis of current net.
         unsigned idxtoTest = ii + 1;
 
         if( ( idxtoTest >= size() )
            || ( NetItemRef->GetNet() != GetItem( idxtoTest )->GetNet() ) )
         {
-            /* Net analysis to update m_ConnectionType */
+            // Net analysis to update m_ConnectionType
             NetEnd = idxtoTest;
 
             /* set m_ConnectionType member to StateFlag for all items of
@@ -948,7 +878,7 @@ void NETLIST_OBJECT_LIST::setUnconnectedFlag()
             if( idxtoTest >= size() )
                 return;
 
-            /* Start Analysis next Net */
+            // Start Analysis next Net
             StateFlag = UNCONNECTED;
             NetStart  = idxtoTest;
             continue;
@@ -962,7 +892,7 @@ void NETLIST_OBJECT_LIST::setUnconnectedFlag()
          * StateFlag is already set to PAD_CONNECT this state is kept (the
          * no connect symbol was surely an error and an ERC will report this)
          */
-        for( ; ; idxtoTest++ )
+       for( ; ; idxtoTest++ )
         {
             if( ( idxtoTest >= size() )
                || ( NetItemRef->GetNet() != GetItem( idxtoTest )->GetNet() ) )
@@ -1003,4 +933,3 @@ void NETLIST_OBJECT_LIST::setUnconnectedFlag()
         }
     }
 }
-

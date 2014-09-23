@@ -154,12 +154,14 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
 
     case PCB_MODULE_TEXT_T:
         {
-            module = (MODULE*) aItem->GetParent();
+            module = static_cast<MODULE*>( aItem->GetParent() );
 
-            TEXTE_MODULE*   text_mod = (TEXTE_MODULE*) aItem;
+            TEXTE_MODULE*   text_mod = static_cast<TEXTE_MODULE*>( aItem );
 
             const char*     text_key;
 
+            /* This can't be a switch since the break need to pull out
+             * from the outer switch! */
             if( text_mod->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
                 text_key = "$REF:";
             else if( text_mod->GetType() == TEXTE_MODULE::TEXT_is_VALUE )

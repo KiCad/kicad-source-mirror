@@ -34,16 +34,16 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             switch( item->Type() )
             {
             case PCB_MODULE_TEXT_T:
-                PlaceTexteModule( (TEXTE_MODULE*) item, DC );
+                PlaceTexteModule( static_cast<TEXTE_MODULE*>( item ), DC );
                 break;
 
             case PCB_MODULE_EDGE_T:
                 SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-                Place_EdgeMod( (EDGE_MODULE*) item );
+                Place_EdgeMod( static_cast<EDGE_MODULE*>( item ) );
                 break;
 
             case PCB_PAD_T:
-                PlacePad( (D_PAD*) item, DC );
+                PlacePad( static_cast<D_PAD*>( item ), DC );
                 break;
 
             default:
@@ -313,7 +313,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                                      HK_EDIT_ITEM );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_TEXTMODULE, msg, KiBitmap( edit_text_xpm ) );
 
-                if( ( (TEXTE_MODULE*) item )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
+                if( ( static_cast<TEXTE_MODULE*>( item ) )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
                 {
                     msg = AddHotkeyName( _("Delete Text Mod." ), g_Module_Editor_Hokeys_Descr,
                                          HK_DELETE );
@@ -444,13 +444,13 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_PAD_T:
-        InstallPadOptionsFrame( (D_PAD*) aItem );
+        InstallPadOptionsFrame( static_cast<D_PAD*>( aItem ) );
         m_canvas->MoveCursorToCrossHair();
         break;
 
     case PCB_MODULE_T:
         {
-        DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) aItem );
+        DIALOG_MODULE_MODULE_EDITOR dialog( this, static_cast<MODULE*>( aItem ) );
         int ret = dialog.ShowModal();
         GetScreen()->GetCurItem()->ClearFlags();
         m_canvas->MoveCursorToCrossHair();
@@ -461,13 +461,13 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_MODULE_TEXT_T:
-        InstallTextModOptionsFrame( (TEXTE_MODULE*) aItem, aDC );
+        InstallTextModOptionsFrame( static_cast<TEXTE_MODULE*>( aItem ), aDC );
         m_canvas->MoveCursorToCrossHair();
         break;
 
     case PCB_MODULE_EDGE_T :
         m_canvas->MoveCursorToCrossHair();
-        InstallFootprintBodyItemPropertiesDlg( (EDGE_MODULE*) aItem );
+        InstallFootprintBodyItemPropertiesDlg( static_cast<EDGE_MODULE*>( aItem ) );
         m_canvas->Refresh();
         break;
 

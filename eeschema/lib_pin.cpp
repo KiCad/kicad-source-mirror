@@ -199,17 +199,17 @@ static int ExternalPinDecoSize( const LIB_PIN &aPin )
     return aPin.GetNumberTextSize() / 2;
 }
 
-LIB_PIN::LIB_PIN( LIB_COMPONENT* aParent ) :
+LIB_PIN::LIB_PIN( LIB_PART*      aParent ) :
     LIB_ITEM( LIB_PIN_T, aParent )
 {
-    m_length = GetDefaultPinLength();           // default Pin len
+    m_length = LIB_EDIT_FRAME::GetDefaultPinLength();
     m_orientation = PIN_RIGHT;                  // Pin orient: Up, Down, Left, Right
     m_shape = NONE;                             // Pin shape, bitwise.
     m_type = PIN_UNSPECIFIED;                   // electrical type of pin
     m_attributes = 0;                           // bit 0 != 0: pin invisible
     m_number = 0;                               // pin number (i.e. 4 ASCII chars)
-    m_numTextSize = GetDefaultTextSize();       // Default size for pin name and num
-    m_nameTextSize = GetDefaultTextSize();      
+    m_numTextSize = LIB_EDIT_FRAME::GetPinNumDefaultSize();
+    m_nameTextSize = LIB_EDIT_FRAME::GetPinNameDefaultSize();
     m_width = 0;
     m_typeName = _( "Pin" );
 }
@@ -834,7 +834,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
         aColor = GetInvisibleItemColor();
     }
 
-    LIB_COMPONENT* Entry = GetParent();
+    LIB_PART*      Entry = GetParent();
     bool           DrawPinText = true;
 
     if( ( aData != NULL ) && ( (bool*) aData == false ) )
@@ -1956,7 +1956,7 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
 const EDA_RECT LIB_PIN::GetBoundingBox() const
 {
-    LIB_COMPONENT* entry = (LIB_COMPONENT*) m_Parent;
+    LIB_PART*      entry = (LIB_PART*     ) m_Parent;
     EDA_RECT       bbox;
     wxPoint        begin;
     wxPoint        end;

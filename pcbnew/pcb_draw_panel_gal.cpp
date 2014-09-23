@@ -33,7 +33,6 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <pcbcommon.h>
 
 #include <boost/bind.hpp>
 
@@ -49,7 +48,8 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
 
     ITEM_GAL_LAYER( RATSNEST_VISIBLE ), ITEM_GAL_LAYER( ANCHOR_VISIBLE ),
     ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ),
-    ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
+    ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ), ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE ),
+    ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
 
     NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ), F_Mask,
     NETNAMES_GAL_LAYER( F_Cu ), F_Cu,
@@ -269,11 +269,13 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( LAYER_ID aLayer )
         if( aLayer == B_Cu )
         {
             rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
             rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
         }
         else if( aLayer == F_Cu )
         {
             rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
             rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
         }
     }

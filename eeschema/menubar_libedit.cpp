@@ -224,18 +224,25 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;
 
-    // Library
+    // Library list
     AddMenuItem( preferencesMenu,
                  ID_CONFIG_REQ,
-                 _( "&Library" ),
-                 _( "Library preferences" ),
+                 _( "Set Active &Libraries" ),
+                 _( "Set active library list and library paths" ),
                  KiBitmap( library_xpm ) );
+
+    // Default values and options
+     AddMenuItem( preferencesMenu,
+                 wxID_PREFERENCES,
+                 _( "Component Editor &Options" ),
+                 _( "Set Component Editor default values and options" ),
+                 KiBitmap( preference_xpm ) );
 
     // Colors
     AddMenuItem( preferencesMenu,
                  ID_COLORS_SETUP,
-                 _( "&Colors" ),
-                 _( "Color preferences" ),
+                 _( "Set &Colors Scheme" ),
+                 _( "Set color preferences" ),
                  KiBitmap( palette_xpm ) );
 
     // Language submenu
@@ -243,23 +250,6 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     // Hotkey submenu
     AddHotkeyConfigMenu( preferencesMenu );
-
-    // Separator
-    preferencesMenu->AppendSeparator();
-
-    // Save preferences
-    AddMenuItem( preferencesMenu,
-                 ID_CONFIG_SAVE,
-                 _( "&Save preferences" ),
-                 _( "Save application preferences" ),
-                 KiBitmap( save_setup_xpm ) );
-
-    // Read preferences
-    AddMenuItem( preferencesMenu,
-                 ID_CONFIG_READ,
-                 _( "&Read preferences" ),
-                 _( "Read application preferences" ),
-                 KiBitmap( read_setup_xpm ) );
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;

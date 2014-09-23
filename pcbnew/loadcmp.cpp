@@ -36,13 +36,11 @@
 #include <kicad_string.h>
 #include <pgm_base.h>
 #include <kiway.h>
-//#include <frame_type.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
 #include <filter_reader.h>
 #include <gr_basic.h>
 #include <macros.h>
-#include <pcbcommon.h>
 #include <fp_lib_table.h>
 #include <fpid.h>
 
@@ -59,7 +57,7 @@
 #include <class_pcb_layer_widget.h>
 
 
-static void DisplayCmpDoc( wxString& Name );
+static void DisplayCmpDoc( wxString& aName, void* aData );
 
 static FOOTPRINT_LIST MList;
 
@@ -450,7 +448,7 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
 }
 
 
-static void DisplayCmpDoc( wxString& aName )
+static void DisplayCmpDoc( wxString& aName, void* aData )
 {
     FOOTPRINT_INFO* module_info = MList.GetModuleInfo( aName );
 
@@ -494,7 +492,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprint( BOARD* aPcb )
         itemsToDisplay.push_back( item );
     }
 
-    EDA_LIST_DIALOG dlg( this, msg, headers, itemsToDisplay, wxEmptyString, NULL, SORT_LIST );
+    EDA_LIST_DIALOG dlg( this, msg, headers, itemsToDisplay, wxEmptyString, NULL, NULL, SORT_LIST );
 
     if( dlg.ShowModal() == wxID_OK )
         fpname = dlg.GetTextSelection();

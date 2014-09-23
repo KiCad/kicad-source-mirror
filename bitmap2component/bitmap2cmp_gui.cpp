@@ -29,8 +29,10 @@
 #include <wxstruct.h>
 #include <confirm.h>
 #include <gestfich.h>
+#include <wildcards_and_files_ext.h>
 
 #include <bitmap2cmp_gui_base.h>
+#include <bitmap2component.h>
 
 #include <potracelib.h>
 #include <bitmap_io.h>
@@ -54,7 +56,7 @@
 #define DEFAULT_DPI 300     // Default resolution in Bit per inches
 
 extern int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
-                             int aFormat, int aDpi_X, int aDpi_Y );
+                             OUTPUT_FMT_ID aFormat, int aDpi_X, int aDpi_Y );
 
 /**
  * Class BM2CMP_FRAME_BASE
@@ -63,19 +65,19 @@ extern int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
 class BM2CMP_FRAME : public BM2CMP_FRAME_BASE
 {
 private:
-    wxImage     m_Pict_Image;
-    wxBitmap    m_Pict_Bitmap;
-    wxImage     m_Greyscale_Image;
-    wxBitmap    m_Greyscale_Bitmap;
-    wxImage     m_NB_Image;
-    wxBitmap    m_BN_Bitmap;
-    wxSize      m_imageDPI;         // The initial image resolution. When unknown,
+    wxImage         m_Pict_Image;
+    wxBitmap        m_Pict_Bitmap;
+    wxImage         m_Greyscale_Image;
+    wxBitmap        m_Greyscale_Bitmap;
+    wxImage         m_NB_Image;
+    wxBitmap        m_BN_Bitmap;
+    wxSize          m_imageDPI;     // The initial image resolution. When unknown,
                                     // set to DEFAULT_DPI x DEFAULT_DPI per Inch
-    wxString    m_BitmapFileName;
-    wxString    m_ConvertedFileName;
-    wxSize      m_frameSize;
-    wxPoint     m_framePos;
-    wxConfig*   m_config;
+    wxString        m_BitmapFileName;
+    wxString        m_ConvertedFileName;
+    wxSize          m_frameSize;
+    wxPoint         m_framePos;
+    wxConfigBase*   m_config;
 
 public:
     BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -98,11 +100,9 @@ private:
     void OnExportEeschema();
 
     /**
-     * Depending on the option:
-     * Legacy format: generate a module library which comtains one component
-     * New kicad_mod format: generate a module in S expr format
+     * Generate a module in S expr format
      */
-    void OnExportPcbnew( bool aLegacyFormat );
+    void OnExportPcbnew();
 
     /**
      * Generate a postscript file
@@ -129,13 +129,14 @@ private:
     {
         m_DPIValueX->ChangeValue( wxString::Format( wxT( "%d" ), m_imageDPI.x ) );
     }
+
     void UpdateDPITextValueY( wxMouseEvent& event )
     {
         m_DPIValueY->ChangeValue( wxString::Format( wxT( "%d" ), m_imageDPI.y ) );
     }
 
     void NegateGreyscaleImage( );
-    void ExportFile( FILE* aOutfile, int aFormat );
+    void ExportFile( FILE* aOutfile, OUTPUT_FMT_ID aFormat );
     void updateImageInfo();
 };
 
@@ -146,7 +147,7 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetKiway( this, aKiway );
 
     int tmp;
-    m_config = new wxConfig();
+    m_config = GetNewConfig( Pgm().App().GetAppName() );
     m_config->Read( KEYWORD_FRAME_POSX, & m_framePos.x, -1 );
     m_config->Read( KEYWORD_FRAME_POSY, & m_framePos.y, -1 );
     m_config->Read( KEYWORD_FRAME_SIZEX, & m_frameSize.x, -1 );
@@ -160,8 +161,13 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     if( m_config->Read( KEYWORD_BW_NEGATIVE, &tmp ) )
         m_rbOptions->SetSelection( tmp  ? 1 : 0 );
 
-    m_config->Read( KEYWORD_LAST_FORMAT, &tmp );
-    m_radioBoxFormat->SetSelection( tmp );
+    if( m_config->Read( KEYWORD_LAST_FORMAT, &tmp ) )
+    {
+        if( tmp < 0 || tmp > FINAL_FMT )
+            tmp = PCBNEW_KICAD_MOD;
+
+        m_radioBoxFormat->SetSelection( tmp );
+    }
 
     // Give an icon
     wxIcon icon;
@@ -273,14 +279,7 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
 
     if( !m_Pict_Image.LoadFile( m_BitmapFileName ) )
     {
-        /* LoadFile has its own UI, no need for further failure notification here
-        wxString msg = wxString::Format(
-                _( "Could not load image '%s'" ),
-                GetChars( aFilename )
-                );
-
-        wxMessageBox( msg );
-        */
+        // LoadFile has its own UI, no need for further failure notification here
         return false;
     }
 
@@ -430,27 +429,25 @@ void BM2CMP_FRAME::OnThresholdChange( wxScrollEvent& event )
 
 void BM2CMP_FRAME::OnExport( wxCommandEvent& event )
 {
-    int sel = m_radioBoxFormat->GetSelection();
+    // choices of m_radioBoxFormat are expected to be in same order as
+    // OUTPUT_FMT_ID. See bitmap2component.h
+    OUTPUT_FMT_ID sel = (OUTPUT_FMT_ID) m_radioBoxFormat->GetSelection();
 
     switch( sel )
     {
-    case 0:
+    case EESCHEMA_FMT:
         OnExportEeschema();
         break;
 
-    case 1:
-        OnExportPcbnew( true );
+    case PCBNEW_KICAD_MOD:
+        OnExportPcbnew();
         break;
 
-    case 2:
-        OnExportPcbnew( false );
-        break;
-
-    case 3:
+    case POSTSCRIPT_FMT:
         OnExportPostScript();
         break;
 
-    case 4:
+    case KICAD_LOGO:
         OnExportLogo();
         break;
     }
@@ -465,16 +462,18 @@ void BM2CMP_FRAME::OnExportLogo()
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
 
-    wxString     msg = _( "Logo file (*.kicad_wks)|*.kicad_wks" );
-    wxFileDialog fileDlg( this, _( "Create a logo file" ), path, wxEmptyString,
-                          msg,
+    wxFileDialog fileDlg( this, _( "Create a logo file" ),
+                          path, wxEmptyString,
+                          wxGetTranslation( PageLayoutDescrFileWildcard ),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
     int          diag = fileDlg.ShowModal();
 
     if( diag != wxID_OK )
         return;
 
-    m_ConvertedFileName = fileDlg.GetPath();
+    fn = fileDlg.GetPath();
+    fn.SetExt( PageLayoutDescrFileExtension );
+    m_ConvertedFileName = fn.GetFullPath();
 
     FILE*    outfile;
     outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
@@ -482,12 +481,12 @@ void BM2CMP_FRAME::OnExportLogo()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
+        msg.Printf( _( "File '%s' could not be created" ), GetChars(m_ConvertedFileName) );
         wxMessageBox( msg );
         return;
     }
 
-    ExportFile( outfile, 4 );
+    ExportFile( outfile, KICAD_LOGO );
     fclose( outfile );
 }
 
@@ -500,9 +499,9 @@ void BM2CMP_FRAME::OnExportPostScript()
     if( path.IsEmpty() || !wxDirExists( path ) )
         path = ::wxGetCwd();
 
-    wxString     msg = _( "Postscript file (*.ps)|*.ps" );
-    wxFileDialog fileDlg( this, _( "Create a Postscript file" ), path, wxEmptyString,
-                          msg,
+    wxFileDialog fileDlg( this, _( "Create a Postscript file" ),
+                          path, wxEmptyString,
+                          wxGetTranslation( PSFileWildcard ),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     int          diag = fileDlg.ShowModal();
@@ -510,7 +509,9 @@ void BM2CMP_FRAME::OnExportPostScript()
     if( diag != wxID_OK )
         return;
 
-    m_ConvertedFileName = fileDlg.GetPath();
+    fn = fileDlg.GetPath();
+    fn.SetExt( wxT( "ps" ) );
+    m_ConvertedFileName = fn.GetFullPath();
 
     FILE*    outfile;
     outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
@@ -518,12 +519,12 @@ void BM2CMP_FRAME::OnExportPostScript()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
+        msg.Printf( _( "File '%s' could not be created" ), GetChars( m_ConvertedFileName ) );
         wxMessageBox( msg );
         return;
     }
 
-    ExportFile( outfile, 3 );
+    ExportFile( outfile, POSTSCRIPT_FMT );
     fclose( outfile );
 }
 
@@ -536,10 +537,9 @@ void BM2CMP_FRAME::OnExportEeschema()
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
 
-    wxString     msg = _( "Schematic lib file (*.lib)|*.lib" );
-
-    wxFileDialog fileDlg( this, _( "Create a lib file for Eeschema" ), path, wxEmptyString,
-                          msg,
+    wxFileDialog fileDlg( this, _( "Create a lib file for Eeschema" ),
+                          path, wxEmptyString,
+                          wxGetTranslation( SchematicLibraryFileWildcard ),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     int          diag = fileDlg.ShowModal();
@@ -547,24 +547,26 @@ void BM2CMP_FRAME::OnExportEeschema()
     if( diag != wxID_OK )
         return;
 
-    m_ConvertedFileName = fileDlg.GetPath();
+    fn = fileDlg.GetPath();
+    fn.SetExt( SchematicLibraryFileExtension );
+    m_ConvertedFileName = fn.GetFullPath();
 
     FILE*    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
 
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
+        msg.Printf( _( "File '%s' could not be created" ), GetChars( m_ConvertedFileName ) );
         wxMessageBox( msg );
         return;
     }
 
-    ExportFile( outfile, 2 );
+    ExportFile( outfile, EESCHEMA_FMT );
     fclose( outfile );
 }
 
 
-void BM2CMP_FRAME::OnExportPcbnew( bool aLegacyFormat )
+void BM2CMP_FRAME::OnExportPcbnew()
 {
     wxFileName  fn( m_ConvertedFileName );
     wxString    path = fn.GetPath();
@@ -572,13 +574,9 @@ void BM2CMP_FRAME::OnExportPcbnew( bool aLegacyFormat )
     if( path.IsEmpty() || !wxDirExists( path ) )
         path = ::wxGetCwd();
 
-    wxString msg = aLegacyFormat ?
-                _( "Footprint file (*.emp)|*.emp" ) :
-                _( "Footprint file (*.kicad_mod)|*.kicad_mod" );
-
     wxFileDialog fileDlg( this, _( "Create a footprint file for PcbNew" ),
                           path, wxEmptyString,
-                          msg,
+                          wxGetTranslation( KiCadFootprintLibFileWildcard ),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     int          diag = fileDlg.ShowModal();
@@ -586,24 +584,26 @@ void BM2CMP_FRAME::OnExportPcbnew( bool aLegacyFormat )
     if( diag != wxID_OK )
         return;
 
-    m_ConvertedFileName = fileDlg.GetPath();
+    fn = fileDlg.GetPath();
+    fn.SetExt( KiCadFootprintFileExtension );
+    m_ConvertedFileName = fn.GetFullPath();
 
     FILE* outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
 
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
+        msg.Printf( _( "File '%s' could not be created" ), GetChars( m_ConvertedFileName ) );
         wxMessageBox( msg );
         return;
     }
 
-    ExportFile( outfile, aLegacyFormat ? 0 : 1 );
+    ExportFile( outfile, PCBNEW_KICAD_MOD );
     fclose( outfile );
 }
 
 
-void BM2CMP_FRAME::ExportFile( FILE* aOutfile, int aFormat )
+void BM2CMP_FRAME::ExportFile( FILE* aOutfile, OUTPUT_FMT_ID aFormat )
 {
     // Create a potrace bitmap
     int h = m_NB_Image.GetHeight();

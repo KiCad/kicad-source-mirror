@@ -35,7 +35,6 @@
 #include <trigo.h>
 #include <macros.h>
 #include <wxBasePcbFrame.h>
-#include <pcbcommon.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -217,7 +216,7 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, EDA_COLOR_T aColo
 
     // calculate some text parameters :
     size = pt_texte->GetSize();
-    pos  = pt_texte->GetTextPosition();
+    pos = pt_texte->GetTextPosition();
 
     orient = pt_texte->GetDrawRotation();
 
@@ -236,7 +235,7 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, EDA_COLOR_T aColo
     bool allow_bold = pt_texte->IsBold() || thickness;
 
     m_plotter->Text( pos, aColor,
-                     pt_texte->GetText(),
+                     pt_texte->GetShownText(),
                      orient, size,
                      pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
                      thickness, pt_texte->IsItalic(), allow_bold );
@@ -443,8 +442,9 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     int     thickness;
     wxPoint pos;
     wxSize  size;
+    wxString shownText( pt_texte->GetShownText() );
 
-    if( pt_texte->GetText().IsEmpty() )
+    if( shownText.IsEmpty() )
         return;
 
     if( !m_layerMask[pt_texte->GetLayer()] )
@@ -469,7 +469,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     if( pt_texte->IsMultilineAllowed() )
     {
         std::vector<wxPoint> positions;
-        wxArrayString* list = wxStringSplit( pt_texte->GetText(), '\n' );
+        wxArrayString* list = wxStringSplit( shownText, '\n' );
         positions.reserve( list->Count() );
 
         pt_texte->GetPositionsOfLinesOfMultilineText( positions, list->Count() );
@@ -486,7 +486,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     }
     else
     {
-        m_plotter->Text( pos, UNSPECIFIED_COLOR, pt_texte->GetText(), orient, size,
+        m_plotter->Text( pos, UNSPECIFIED_COLOR, shownText, orient, size,
                          pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
                          thickness, pt_texte->IsItalic(), allow_bold );
     }

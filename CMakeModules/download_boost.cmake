@@ -219,6 +219,8 @@ ExternalProject_Add( boost
         COMMAND     ${PATCH_STR_CMD} "${PROJECT_SOURCE_DIR}/patches/boost_macosx_older_openssl.patch"  #https://svn.boost.org/trac/boost/ticket/9273
 
         COMMAND     ${PATCH_STR_CMD} "${PROJECT_SOURCE_DIR}/patches/boost_mingw.patch"             #https://svn.boost.org/trac/boost/ticket/7262
+        COMMAND     ${PATCH_STR_CMD} "${PROJECT_SOURCE_DIR}/patches/boost_mingw64_interlocked.patch"
+
         # tell bzr about "added" files by last patch:
         COMMAND     bzr add libs/context/src/asm/make_i386_ms_pe_gas.S
         COMMAND     bzr add libs/context/src/asm/jump_i386_ms_pe_gas.S

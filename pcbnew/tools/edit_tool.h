@@ -50,7 +50,7 @@ public:
     EDIT_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) {};
+    void Reset( RESET_REASON aReason );
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init();

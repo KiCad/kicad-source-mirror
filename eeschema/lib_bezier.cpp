@@ -42,7 +42,7 @@
 #include <transform.h>
 
 
-LIB_BEZIER::LIB_BEZIER( LIB_COMPONENT* aParent ) :
+LIB_BEZIER::LIB_BEZIER( LIB_PART*      aParent ) :
     LIB_ITEM( LIB_BEZIER_T, aParent )
 {
     m_Fill       = NO_FILL;

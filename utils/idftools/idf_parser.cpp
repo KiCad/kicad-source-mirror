@@ -3053,15 +3053,38 @@ void IDF3_BOARD::writeBoardFile( const std::string& aFileName )
             std::map< std::string, IDF3_COMPONENT*>::iterator itcs = components.begin();
             std::map< std::string, IDF3_COMPONENT*>::iterator itce = components.end();
 
-            brd << ".PLACEMENT\n";
+            // determine if there are any component outlines at all and avoid
+            // writing an empty PLACEMENT section if there are no outlines.
+            // this will cost a little time but prevents software such as
+            // CircuitWorks from segfaulting on an empty section.
+
+            bool hasOutlines = false;
 
             while( itcs != itce )
             {
-                itcs->second->writePlaceData( brd );
+                if( itcs->second->GetOutlinesSize() > 0 )
+                {
+                    itcs = components.begin();
+                    hasOutlines = true;
+                    break;
+                }
+
                 ++itcs;
             }
 
-            brd << ".END_PLACEMENT\n";
+            if( hasOutlines )
+            {
+                brd << ".PLACEMENT\n";
+
+                while( itcs != itce )
+                {
+                    itcs->second->writePlaceData( brd );
+                    ++itcs;
+                }
+
+                brd << ".END_PLACEMENT\n";
+            }
+
         }
 
     }

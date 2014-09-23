@@ -17,8 +17,6 @@
                           wxLC_SINGLE_SEL | wxVSCROLL | wxHSCROLL )
 
 extern const wxString FootprintAliasFileExtension;
-extern const wxString RetroFileExtension;
-
 extern const wxString FootprintAliasFileWildcard;
 
 

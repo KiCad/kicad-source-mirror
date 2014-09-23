@@ -131,28 +131,28 @@ public:
      can simply omit from scanTypes[] PCB_ZONE_T */
 
     /**
-     * Function IgnoreMTextsOnCu
-     * @return bool - true if should ignore MTexts on copper layer.
+     * Function IgnoreMTextsOnBack
+     * @return bool - true if should ignore MTexts on back layers
      */
-    virtual     bool IgnoreMTextsOnCopper() const = 0;
+    virtual     bool IgnoreMTextsOnBack() const = 0;
 
     /**
-     * Function IgnoreMTextsOnCmp
-     * @return bool - true if should ignore MTexts on component layer.
+     * Function IgnoreMTextsOnFront
+     * @return bool - true if should ignore MTexts on front layers.
      */
-    virtual     bool IgnoreMTextsOnCmp() const = 0;
+    virtual     bool IgnoreMTextsOnFront() const = 0;
 
     /**
-     * Function IgnoreModulesOnCu
+     * Function IgnoreModulesOnBack
      * @return bool - true if should ignore MODULEs on Back Side.
      */
-    virtual     bool IgnoreModulesOnCu() const = 0;
+    virtual     bool IgnoreModulesOnBack() const = 0;
 
     /**
-     * Function IgnoreModulesOnCmp
+     * Function IgnoreModulesOnFront
      * @return bool - ture if should ignore MODULEs on Front Side.
      */
-    virtual     bool IgnoreModulesOnCmp() const = 0;
+    virtual     bool IgnoreModulesOnFront() const = 0;
 
     /**
      * Function IgnorePadsOnBack
@@ -395,10 +395,10 @@ private:
     bool    m_IncludeSecondary;
 
     bool    m_IgnoreMTextsMarkedNoShow;
-    bool    m_IgnoreMTextsOnCopper;
-    bool    m_IgnoreMTextsOnCmp;
-    bool    m_IgnoreModulesOnCu;
-    bool    m_IgnoreModulesOnCmp;
+    bool    m_IgnoreMTextsOnBack;
+    bool    m_IgnoreMTextsOnFront;
+    bool    m_IgnoreModulesOnBack;
+    bool    m_IgnoreModulesOnFront;
     bool    m_IgnorePadsOnFront;
     bool    m_IgnorePadsOnBack;
     bool    m_IgnoreModulesVals;
@@ -429,10 +429,10 @@ public:
 #endif
 
         m_IgnoreMTextsMarkedNoShow  = true; // g_ModuleTextNOVColor;
-        m_IgnoreMTextsOnCopper      = true;
-        m_IgnoreMTextsOnCmp         = false;
-        m_IgnoreModulesOnCu         = true; // !Show_Modules_Cmp;
-        m_IgnoreModulesOnCmp        = false;
+        m_IgnoreMTextsOnBack        = true;
+        m_IgnoreMTextsOnFront       = false;
+        m_IgnoreModulesOnBack       = true; // !Show_Modules_Cmp;
+        m_IgnoreModulesOnFront      = false;
 
         m_IgnorePadsOnFront         = false;
         m_IgnorePadsOnBack          = false;
@@ -530,31 +530,31 @@ public:
 
     /**
      * Function IgnoreMTextsOnCu
-     * @return bool - true if should ignore MTexts on copper layer.
+     * @return bool - true if should ignore MTexts on back layers
      */
-    bool IgnoreMTextsOnCopper() const { return m_IgnoreMTextsOnCopper; }
-    void SetIgnoreMTextsOnCopper( bool ignore ) { m_IgnoreMTextsOnCopper = ignore; }
+    bool IgnoreMTextsOnBack() const { return m_IgnoreMTextsOnBack; }
+    void SetIgnoreMTextsOnBack( bool ignore ) { m_IgnoreMTextsOnBack = ignore; }
 
     /**
-     * Function IgnoreMTextsOnCmp
-     * @return bool - true if should ignore MTexts on component layer.
+     * Function IgnoreMTextsOnFront
+     * @return bool - true if should ignore MTexts on front layers
      */
-    bool IgnoreMTextsOnCmp() const { return m_IgnoreMTextsOnCmp; }
-    void SetIgnoreMTextsOnCmp( bool ignore ) { m_IgnoreMTextsOnCmp = ignore; }
+    bool IgnoreMTextsOnFront() const { return m_IgnoreMTextsOnFront; }
+    void SetIgnoreMTextsOnFront( bool ignore ) { m_IgnoreMTextsOnFront = ignore; }
 
     /**
-     * Function IgnoreModulesOnCu
-     * @return bool - true if should ignore MODULEs on copper layer.
+     * Function IgnoreModulesOnBack
+     * @return bool - true if should ignore MODULEs on the back side
      */
-    bool IgnoreModulesOnCu() const { return m_IgnoreModulesOnCu; }
-    void SetIgnoreModulesOnCu( bool ignore ) { m_IgnoreModulesOnCu = ignore; }
+    bool IgnoreModulesOnBack() const { return m_IgnoreModulesOnBack; }
+    void SetIgnoreModulesOnBack( bool ignore ) { m_IgnoreModulesOnBack = ignore; }
 
     /**
-     * Function IgnoreModulesOnCmp
+     * Function IgnoreModulesOnFront
      * @return bool - true if should ignore MODULEs on component layer.
      */
-    bool IgnoreModulesOnCmp() const { return m_IgnoreModulesOnCmp; }
-    void SetIgnoreModulesOnCmp( bool ignore ) { m_IgnoreModulesOnCmp = ignore; }
+    bool IgnoreModulesOnFront() const { return m_IgnoreModulesOnFront; }
+    void SetIgnoreModulesOnFront( bool ignore ) { m_IgnoreModulesOnFront = ignore; }
 
     /**
      * Function IgnorePadsOnBack
@@ -587,11 +587,11 @@ public:
 
 
 /**
- * Class TYPE_COLLECTOR
+ * Class PCB_TYPE_COLLECTOR
  * merely gathers up all BOARD_ITEMs of a given set of KICAD_T type(s).
  * @see class COLLECTOR
  */
-class TYPE_COLLECTOR : public COLLECTOR
+class PCB_TYPE_COLLECTOR : public COLLECTOR
 {
 
 public:
@@ -633,7 +633,5 @@ public:
      */
     void Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] );
 };
-
-
 
 #endif // COLLECTORS_H

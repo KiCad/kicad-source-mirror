@@ -84,11 +84,10 @@ class SCH_REFERENC_LIST;
  */
 class SCH_REFERENCE
 {
-private:
     /// Component reference prefix, without number (for IC1, this is IC) )
-    std::string    m_Ref;               // it's private, use the accessors please
+    UTF8           m_Ref;               // it's private, use the accessors please
     SCH_COMPONENT* m_RootCmp;           ///< The component associated the reference object.
-    LIB_COMPONENT* m_Entry;             ///< The source component from a library.
+    LIB_PART*      m_Entry;             ///< The source component from a library.
     wxPoint        m_CmpPos;            ///< The physical position of the component in schematic
                                         ///< used to annotate by X or Y position
     int            m_Unit;              ///< The unit number for components with multiple parts
@@ -104,9 +103,11 @@ private:
 
     friend class SCH_REFERENCE_LIST;
 
+
 public:
 
-    SCH_REFERENCE()
+    SCH_REFERENCE() :
+        m_SheetPath()
     {
         m_RootCmp      = NULL;
         m_Entry        = NULL;
@@ -119,16 +120,16 @@ public:
         m_SheetNum     = 0;
     }
 
-    SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_COMPONENT* aLibComponent,
+    SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART*      aLibComponent,
                    SCH_SHEET_PATH& aSheetPath );
 
-    SCH_COMPONENT* GetComponent() const { return m_RootCmp; }
+    SCH_COMPONENT* GetComp() const          { return m_RootCmp; }
 
-    LIB_COMPONENT* GetLibComponent() const { return m_Entry; }
+    LIB_PART*      GetLibComponent() const  { return m_Entry; }
 
-    SCH_SHEET_PATH GetSheetPath() const { return m_SheetPath; }
+    SCH_SHEET_PATH GetSheetPath() const     { return m_SheetPath; }
 
-    int GetUnit() const { return m_Unit; }
+    int GetUnit() const                     { return m_Unit; }
 
     void SetSheetNumber( int aSheetNumber ) { m_SheetNum = aSheetNumber; }
 
@@ -153,12 +154,12 @@ public:
 
     void SetRef( const wxString& aReference )
     {
-        m_Ref =  TO_UTF8( aReference );
+        m_Ref = aReference;
     }
 
     wxString GetRef() const
     {
-        return FROM_UTF8( m_Ref.c_str() );
+        return m_Ref;
     }
     void SetRefStr( const std::string& aReference )
     {
@@ -171,7 +172,7 @@ public:
 
     int CompareValue( const SCH_REFERENCE& item ) const
     {
-        return m_Value->GetText().CmpNoCase( item.m_Value->GetText() );
+        return Cmp_KEEPCASE( m_Value->GetText(), item.m_Value->GetText() );
     }
 
     int CompareRef( const SCH_REFERENCE& item ) const
@@ -181,10 +182,10 @@ public:
 
     int CompareLibName( const SCH_REFERENCE& item ) const
     {
-        return m_RootCmp->GetLibName().CmpNoCase( item.m_RootCmp->GetLibName() );
+        return Cmp_KEEPCASE( m_RootCmp->GetPartName(), item.m_RootCmp->GetPartName() );
     }
 
-    bool IsPartsLocked()
+    bool IsUnitsLocked()
     {
         return m_Entry->UnitsLocked();
     }
@@ -516,7 +517,7 @@ public:
 
     wxString GetText() const
     {
-        const SCH_TEXT* tmp = (SCH_TEXT*) m_label;
+        const SCH_TEXT* tmp = static_cast<SCH_TEXT*>( m_label );
         return tmp->GetText();
     }
 };

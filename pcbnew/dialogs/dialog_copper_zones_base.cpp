@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -64,7 +64,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_staticText16->Wrap( -1 );
 	m_NetSortOptSizer->Add( m_staticText16, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	wxString m_NetDisplayOptionChoices[] = { _("Show all (alphabetical)"), _("Show all (advanced)"), _("Filtered (alphabetical)"), _("Filtered (advanced)") };
+	wxString m_NetDisplayOptionChoices[] = { _("Show all (alphabetical)"), _("Show all (pad count)"), _("Filtered (alphabetical)"), _("Filtered (pad count)") };
 	int m_NetDisplayOptionNChoices = sizeof( m_NetDisplayOptionChoices ) / sizeof( wxString );
 	m_NetDisplayOption = new wxChoice( this, ID_M_NETDISPLAYOPTION, wxDefaultPosition, wxDefaultSize, m_NetDisplayOptionNChoices, m_NetDisplayOptionChoices, 0 );
 	m_NetDisplayOption->SetSelection( 0 );

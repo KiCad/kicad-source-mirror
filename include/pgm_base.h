@@ -38,7 +38,6 @@
 
 class wxConfigBase;
 class wxSingleInstanceChecker;
-class wxHtmlHelpController;
 class wxApp;
 class wxMenu;
 
@@ -85,8 +84,6 @@ public:
     virtual void MacOpenFile( const wxString& aFileName ) = 0;
 
     //----<Cross Module API>-----------------------------------------------------
-
-    VTBL_ENTRY wxHtmlHelpController* HtmlHelpController();
 
     VTBL_ENTRY wxConfigBase* CommonSettings() const                 { return m_common_settings; }
 
@@ -172,14 +169,6 @@ public:
     VTBL_ENTRY void WritePdfBrowserInfos();
 
     /**
-     * Function LockFile
-     * marks a file as being in use.
-     * @param aFileName = full path to the file.
-     * @return false if the file was already locked, true otherwise.
-     */
-    VTBL_ENTRY bool LockFile( const wxString& aFileName );
-
-    /**
      * Function App
      * returns a bare naked wxApp, which may come from wxPython, SINGLE_TOP, or kicad.exe.
      * Use this function instead of wxGetApp().
@@ -209,8 +198,6 @@ protected:
      */
     bool initPgm();
 
-    void initHtmlHelpController();
-
     /**
      * Function loadCommonSettings
      * loads the program (process) settings subset which are stored in .kicad_common
@@ -225,9 +212,6 @@ protected:
 
     /// prevents multiple instances of a program from being run at the same time.
     wxSingleInstanceChecker* m_pgm_checker;
-
-    /// prevents opening the same file multiple times.
-    wxSingleInstanceChecker* m_file_checker;
 
     /// Configuration settings common to all KiCad program modules,
     /// like as in $HOME/.kicad_common
@@ -262,8 +246,6 @@ protected:
     wxString        m_pdf_browser;
     wxString        m_editor_name;
     wxSize          m_help_size;
-
-    wxHtmlHelpController*   m_html_ctrl;
 
     wxApp*          m_wx_app;
 

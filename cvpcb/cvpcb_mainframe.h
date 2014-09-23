@@ -135,8 +135,6 @@ public:
      */
     void             LoadNetList( wxCommandEvent& event );
 
-    void             ConfigCvpcb( wxCommandEvent& event );
-
     /**
      * Function OnEditLibraryTable
      * envokes the footpirnt library table edit dialog.
@@ -219,7 +217,7 @@ public:
      * Function LoadProjectFile
      * reads the configuration parameter from the project (.pro) file \a aFileName
      */
-    void             LoadProjectFile( const wxString& aFileName );
+    void LoadProjectFile();
 
     void LoadSettings( wxConfigBase* aCfg );    // override virtual
 

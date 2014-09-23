@@ -733,14 +733,7 @@ wxString FP_LIB_TABLE::GetGlobalTableFileName()
 {
     wxFileName fn;
 
-    // This is possibly problematic with an uncertain wxApp title, which is now
-    // the case.  We'll need a better technique soon.
-    fn.SetPath( wxStandardPaths::Get().GetUserConfigDir() );
-
-#if defined( __WINDOWS__ )
-    fn.AppendDir( wxT( "kicad" ) );
-#endif
-
+    fn.SetPath( GetKicadConfigPath() );
     fn.SetName( global_tbl_name );
 
     return fn.GetFullPath();

@@ -80,7 +80,7 @@ enum EDA_DRAW_MODE_T {
 class EDA_TEXT
 {
 protected:
-    wxString            m_Text;
+    wxString            m_Text;             ///< The 'base' text, maybe later processed for display    
     int                 m_Thickness;        ///< pen size used to draw this text
     double              m_Orient;           ///< Orient in 0.1 degrees
     wxPoint             m_Pos;              ///< XY position of anchor text.
@@ -104,14 +104,19 @@ public:
     /**
      * Function GetText
      * returns the string associated with the text object.
-     * <p>
-     * This function is virtual to allow derived classes to override getting the
-     * string to provide a way for modifying the base string by adding a suffix or
-     * prefix to the base string.
-     * </p>
-     * @return a const wxString object containing the string of the item.
+     *
+     * @return a const wxString reference containing the string of the item.
      */
-    virtual const wxString GetText() const { return m_Text; }
+    const wxString& GetText() const { return m_Text; }
+
+    /**
+     * Returns the string actually shown after processing of the base
+     * text. Default is no processing */
+    virtual wxString GetShownText() const { return m_Text; }
+
+    /**
+     * Returns a shortened version (max 15 characters) of the shown text */
+    wxString ShortenedShownText() const;
 
     virtual void SetText( const wxString& aText ) { m_Text = aText; }
 
@@ -201,6 +206,14 @@ public:
                const wxPoint& aOffset, EDA_COLOR_T aColor,
                GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = LINE,
                EDA_COLOR_T aAnchor_color = UNSPECIFIED_COLOR );
+
+    /**
+     * Convert the text shape to a list of segment
+     * each segment is stored as 2 wxPoints: the starting point and the ending point
+     * there are therefore 2*n points
+     * @param aCornerBuffer = a buffer to store the polygon
+     */
+    void TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuffer ) const;
 
     /**
      * Function TextHitTest
@@ -312,7 +325,7 @@ private:
     void drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
                             const wxPoint& aOffset, EDA_COLOR_T aColor,
                             GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
-                            wxString& aText, wxPoint aPos );
+                            const wxString& aText, const wxPoint &aPos );
 };
 
 

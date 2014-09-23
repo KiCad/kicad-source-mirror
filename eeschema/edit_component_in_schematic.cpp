@@ -53,18 +53,20 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
     wxCHECK_RET( component != NULL && component->Type() == SCH_COMPONENT_T,
                  wxT( "Invalid schematic field parent item." ) );
 
-    LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
+    LIB_PART* part = Prj().SchLibs()->FindLibPart( component->GetPartName() );
 
-    wxCHECK_RET( entry != NULL, wxT( "Library entry for component <" ) +
-                 component->GetLibName() + wxT( "> could not be found." ) );
+    wxCHECK_RET( part, wxT( "Library part for component <" ) +
+                 component->GetPartName() + wxT( "> could not be found." ) );
 
     fieldNdx = aField->GetId();
 
-    if( fieldNdx == VALUE && entry->IsPower() )
+    if( fieldNdx == VALUE && part->IsPower() )
     {
-        wxString msg;
-        msg.Printf( _( "%s is a power component and it's value cannot be modified!\n\nYou must \
-create a new power component with the new value." ), GetChars( entry->GetName() ) );
+        wxString msg = wxString::Format( _(
+            "%s is a power component and it's value cannot be modified!\n\n"
+            "You must create a new power component with the new value." ),
+            GetChars( part->GetName() )
+            );
         DisplayInfoMessage( this, msg );
         return;
     }

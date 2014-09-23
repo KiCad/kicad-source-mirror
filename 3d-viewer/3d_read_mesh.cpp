@@ -77,7 +77,7 @@ const wxString S3D_MASTER::GetShape3DFullFilename()
         return shapeName;
 
     wxString default_path;
-    wxGetEnv( wxT( KISYS3DMOD ), &default_path );
+    wxGetEnv( KISYS3DMOD, &default_path );
 
     if( default_path.IsEmpty() )
         return shapeName;
@@ -119,7 +119,7 @@ int S3D_MASTER::ReadData()
 
     if( parser )
     {
-        parser->Load( filename );
+        parser->Load( filename, g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB );
         delete parser;
         return 0;
     }

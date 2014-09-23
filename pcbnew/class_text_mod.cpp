@@ -35,7 +35,6 @@
 #include <class_drawpanel.h>
 #include <drawtxt.h>
 #include <kicad_string.h>
-#include <pcbcommon.h>
 #include <colors_selection.h>
 #include <richio.h>
 #include <macros.h>
@@ -53,7 +52,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     BOARD_ITEM( parent, PCB_MODULE_TEXT_T ),
     EDA_TEXT()
 {
-    MODULE* module = (MODULE*) m_Parent;
+    MODULE* module = static_cast<MODULE*>( m_Parent );
 
     m_Type = text_type;
 
@@ -64,6 +63,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
 
     SetLayer( F_SilkS );
 
+    // Set position and layer if there is already a parent module
     if( module && ( module->Type() == PCB_MODULE_T ) )
     {
         m_Pos = module->GetPosition();
@@ -103,6 +103,36 @@ void TEXTE_MODULE::Flip(const wxPoint& aCentre )
 }
 
 
+void TEXTE_MODULE::FlipWithModule( int aOffset )
+{
+    m_Pos.y = aOffset - (m_Pos.y - aOffset);
+    NEGATE_AND_NORMALIZE_ANGLE_POS( m_Orient );
+    SetLayer( FlipLayer( GetLayer() ) );
+    m_Mirror = IsBackLayer( GetLayer() );
+}
+
+
+void TEXTE_MODULE::MirrorWithModule( int aOffset )
+{
+    wxPoint tmp = GetTextPosition();
+    tmp.x = aOffset - (tmp.x - aOffset);
+    SetTextPosition( tmp );
+    tmp.y = GetPos0().y;
+    SetPos0( tmp );
+    NEGATE_AND_NORMALIZE_ANGLE_POS( m_Orient );
+}
+
+
+void TEXTE_MODULE::RotateWithModule( const wxPoint& aOffset, double aAngle )
+{
+    wxPoint pos = GetTextPosition();
+    RotatePoint( &pos, aOffset, aAngle );
+    SetTextPosition( pos );
+    SetPos0( GetTextPosition() );
+    SetOrientation( GetOrientation() + aAngle );
+}
+
+
 void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
 {
     if( source == NULL )
@@ -132,33 +162,34 @@ int TEXTE_MODULE::GetLength() const
 
 void TEXTE_MODULE::SetDrawCoord()
 {
-    MODULE* module = (MODULE*) m_Parent;
+    const MODULE* module = static_cast<const MODULE*>( m_Parent );
 
     m_Pos = m_Pos0;
 
-    if( module == NULL )
-        return;
+    if( module  )
+    {
+        double angle = module->GetOrientation();
 
-    double angle = module->GetOrientation();
-
-    RotatePoint( &m_Pos.x, &m_Pos.y, angle );
-    m_Pos += module->GetPosition();
+        RotatePoint( &m_Pos.x, &m_Pos.y, angle );
+        m_Pos += module->GetPosition();
+    }
 }
 
 
 void TEXTE_MODULE::SetLocalCoord()
 {
-    MODULE* module = (MODULE*) m_Parent;
+    const MODULE* module = static_cast<const MODULE*>( m_Parent );
 
-    if( module == NULL )
+    if( module )
+    {
+        m_Pos0 = m_Pos - module->GetPosition();
+        double angle = module->GetOrientation();
+        RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
+    }
+    else
     {
         m_Pos0 = m_Pos;
-        return;
     }
-
-    m_Pos0 = m_Pos - module->GetPosition();
-    double angle = module->GetOrientation();
-    RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
 }
 
 
@@ -167,9 +198,8 @@ bool TEXTE_MODULE::HitTest( const wxPoint& aPosition ) const
     wxPoint  rel_pos;
     EDA_RECT area = GetTextBox( -1, -1 );
 
-    /* Rotate refPos to - angle
-     * to test if refPos is within area (which is relative to an horizontal
-     * text)
+    /* Rotate refPos to - angle to test if refPos is within area (which
+     * is relative to an horizontal text)
      */
     rel_pos = aPosition;
     RotatePoint( &rel_pos, m_Pos, -GetDrawRotation() );
@@ -209,37 +239,36 @@ const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                          const wxPoint& offset )
 {
-    MODULE* module = (MODULE*) m_Parent;
+    if( panel == NULL )
+        return;
+
+    MODULE* module = static_cast<MODULE*>( m_Parent );
 
     /* parent must *not* be NULL (a module text without a footprint
        parent has no sense) */
     wxASSERT( module );
 
-    if( panel == NULL )
+    BOARD* brd = GetBoard( );
+
+    EDA_COLOR_T color = brd->GetLayerColor( GetLayer() );
+
+
+    /* For reference and value suppress the element if the layer it is
+     * on is on a disabled side, user text also has standard layer
+     * hiding.
+     * If the whole module side is disabled this isn't even called */
+    LAYER_ID text_layer = GetLayer();
+    if( (IsFrontLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE )) ||
+        (IsBackLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE )) )
         return;
 
-    BOARD* brd = GetBoard( );
-    EDA_COLOR_T color;
-    // Determine the element color or suppress it element if hidden
-    switch( module->GetLayer() )
-    {
-    case B_Cu:
-        if( !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE ) )
-            return;
-        color = brd->GetVisibleElementColor( MOD_TEXT_BK_VISIBLE );
-        break;
+    // text which are not ref or value are shown only if the layer is visible
+    // ref or value have a specific display option
+    if( GetType() == TEXT_is_DIVERS && ! brd->IsLayerVisible( m_Layer ) )
+        return;
 
-    case F_Cu:
-        if( !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ) )
-            return;
-        color = brd->GetVisibleElementColor( MOD_TEXT_FR_VISIBLE );
-        break;
-
-    default:
-        color = brd->GetLayerColor( module->GetLayer() );
-    }
-
-    // 'Ghost' the element if forced show
+    // Invisible texts are still drawn (not plotted) in MOD_TEXT_INVISIBLE
+    // Just because we must have to edit them (at least to make them visible)
     if( m_NoShow )
     {
         if( !brd->IsElementVisible( MOD_TEXT_INVISIBLE ) )
@@ -248,7 +277,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     }
 
     // Draw mode compensation for the width
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
+    PCB_BASE_FRAME* frame = static_cast<PCB_BASE_FRAME*>( panel->GetParent() );
     int width = m_Thickness;
     if( ( frame->m_DisplayModText == LINE )
         || ( DC->LogicalToDeviceXRel( width ) <= MIN_DRAW_WIDTH ) )
@@ -277,7 +306,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         size.x = -size.x;
 
     EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
-    DrawGraphicText( clipbox, DC, pos, color, m_Text, orient,
+    DrawGraphicText( clipbox, DC, pos, color, GetShownText(), orient,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
@@ -296,7 +325,7 @@ void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
                                   GR_DRAWMODE     aDrawMode,
                                   const wxPoint&  aOffset )
 {
-    MODULE* parent = (MODULE*) GetParent();
+    MODULE* parent = static_cast<MODULE*>( GetParent() );
 
     if( !parent )
         return;
@@ -345,7 +374,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     Line = module->GetReference();
     aList.push_back( MSG_PANEL_ITEM( _( "Module" ), Line, DARKCYAN ) );
 
-    Line = m_Text;
+    Line = GetShownText();
     aList.push_back( MSG_PANEL_ITEM( _( "Text" ), Line, BROWN ) );
 
     wxASSERT( m_Type >= TEXT_is_REFERENCE && m_Type <= TEXT_is_DIVERS );
@@ -385,22 +414,21 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 wxString TEXTE_MODULE::GetSelectMenuText() const
 {
     wxString text;
+    const wxChar *reference = GetChars( static_cast<MODULE*>( GetParent() )->GetReference() );
 
     switch( m_Type )
     {
     case TEXT_is_REFERENCE:
-        text.Printf( _( "Reference %s" ), GetChars( m_Text ) );
+        text.Printf( _( "Reference %s" ), reference );
         break;
 
     case TEXT_is_VALUE:
-        text.Printf( _( "Value %s of %s" ), GetChars( m_Text ),
-                     GetChars( ( (MODULE*) GetParent() )->GetReference() ) );
+        text.Printf( _( "Value %s of %s" ), GetChars( GetShownText() ), reference );
         break;
 
     default:    // wrap this one in quotes:
-        text.Printf( _( "Text \"%s\" on %s of %s" ), GetChars( m_Text ),
-                     GetChars( GetLayerName() ),
-                     GetChars( ( (MODULE*) GetParent() )->GetReference() ) );
+        text.Printf( _( "Text \"%s\" on %s of %s" ), GetChars( ShortenedShownText() ),
+                     GetChars( GetLayerName() ), reference );
         break;
     }
 
@@ -444,23 +472,11 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
             aLayers[0] = ITEM_GAL_LAYER( MOD_VALUES_VISIBLE );
             break;
 
-        default:
-            switch( GetParent()->GetLayer() )
-            {
-            case B_Cu:
-                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE );    // how about B_SilkS?
-                break;
-
-            case F_Cu:
-                aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );    // how about F_SilkS?
-                break;
-
-            default:
-                wxFAIL_MSG( wxT( "Can't tell text layer" ) );
-            }
-            break;
+        case TEXT_is_DIVERS:
+            aLayers[0] = GetLayer();
         }
     }
 
     aCount = 1;
 }
+

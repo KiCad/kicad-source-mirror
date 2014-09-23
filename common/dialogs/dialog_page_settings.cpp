@@ -28,6 +28,7 @@
 #include <fctsys.h>
 #include <macros.h>              // DIM()
 #include <common.h>
+#include <project.h>
 #include <confirm.h>
 #include <gr_basic.h>
 #include <base_struct.h>
@@ -781,9 +782,11 @@ void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
 // Called on .kicad_wks file description selection change
 void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 {
+    wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
+
     // Display a file picker dialog
     wxFileDialog fileDialog( this, _( "Select Page Layout Descr File" ),
-                             wxGetCwd(), GetWksFileName(),
+                             pro_dir, GetWksFileName(),
                              PageLayoutDescrFileWildcard,
                              wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
@@ -800,11 +803,14 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     // For Win/Linux/macOS compatibility, a relative path is a good idea
     if( fn.IsAbsolute() && fileName != GetWksFileName() )
     {
-        fn.MakeRelativeTo( wxGetCwd() );
-        wxString msg;
-        msg.Printf( _( "The page layout descr filename has changed\n"
-                       "Do you want to use the relative path:\n%s"),
-                       fn.GetFullPath().GetData() );
+        fn.MakeRelativeTo( pro_dir );
+
+        wxString msg = wxString::Format( _(
+                "The page layout descr filename has changed.\n"
+                "Do you want to use the relative path:\n"
+                "'%s'" ),
+                GetChars( fn.GetFullPath() )
+                );
         if( IsOK( this, msg ) )
             shortFileName = fn.GetFullPath();
     }

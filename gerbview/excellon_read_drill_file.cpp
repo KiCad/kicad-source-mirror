@@ -188,6 +188,7 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     }
 
     wxString path = wxPathOnly( aFullFileName );
+
     if( path != wxEmptyString )
         wxSetWorkingDirectory( path );
 
@@ -196,7 +197,7 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     // Display errors list
     if( m_Messages.size() > 0 )
     {
-        HTML_MESSAGE_BOX dlg( this, _("Files not found") );
+        HTML_MESSAGE_BOX dlg( this, _( "Files not found" ) );
         dlg.ListSet( m_Messages );
         dlg.ShowModal();
     }

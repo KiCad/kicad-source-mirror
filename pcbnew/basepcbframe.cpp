@@ -31,9 +31,7 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <wxstruct.h>
-#include <pcbcommon.h>
 #include <confirm.h>
-//#include <pgm_base.h>
 #include <kiface_i.h>
 #include <dialog_helpers.h>
 #include <kicad_device_context.h>
@@ -587,10 +585,10 @@ GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
 
     // account for the globals
     guide.SetIgnoreMTextsMarkedNoShow( ! m_Pcb->IsElementVisible( MOD_TEXT_INVISIBLE ));
-    guide.SetIgnoreMTextsOnCopper( ! m_Pcb->IsElementVisible( MOD_TEXT_BK_VISIBLE ));
-    guide.SetIgnoreMTextsOnCmp( ! m_Pcb->IsElementVisible( MOD_TEXT_FR_VISIBLE ));
-    guide.SetIgnoreModulesOnCu( ! m_Pcb->IsElementVisible( MOD_BK_VISIBLE ) );
-    guide.SetIgnoreModulesOnCmp( ! m_Pcb->IsElementVisible( MOD_FR_VISIBLE ) );
+    guide.SetIgnoreMTextsOnBack( ! m_Pcb->IsElementVisible( MOD_TEXT_BK_VISIBLE ));
+    guide.SetIgnoreMTextsOnFront( ! m_Pcb->IsElementVisible( MOD_TEXT_FR_VISIBLE ));
+    guide.SetIgnoreModulesOnBack( ! m_Pcb->IsElementVisible( MOD_BK_VISIBLE ) );
+    guide.SetIgnoreModulesOnFront( ! m_Pcb->IsElementVisible( MOD_FR_VISIBLE ) );
     guide.SetIgnorePadsOnBack( ! m_Pcb->IsElementVisible( PAD_BK_VISIBLE ) );
     guide.SetIgnorePadsOnFront( ! m_Pcb->IsElementVisible( PAD_FR_VISIBLE ) );
     guide.SetIgnoreModulesVals( ! m_Pcb->IsElementVisible( MOD_VALUES_VISIBLE ) );

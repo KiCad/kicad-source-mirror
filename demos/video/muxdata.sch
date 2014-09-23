@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 18/11/2010 18:50:34
+EESchema Schematic File Version 2
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -11,28 +11,19 @@ LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
 LIBS:special
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
 LIBS:analog_switches
 LIBS:motorola
-LIBS:texas
 LIBS:intel
 LIBS:audio
 LIBS:interface
-LIBS:digital-audio
 LIBS:philips
-LIBS:display
 LIBS:cypress
 LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
 LIBS:video-cache
-EELAYER 24  0
+EELAYER 24 0
 EELAYER END
-$Descr A4 11700 8267
+$Descr A4 11693 8268
+encoding utf-8
 Sheet 2 8
 Title "Video"
 Date "18 nov 2010"
@@ -355,6 +346,8 @@ U 1 1 4BF036D5
 P 2250 4900
 F 0 "U6" H 2250 4700 60  0000 C CNN
 F 1 "74LS245" H 2250 4600 60  0000 C CNN
+F 2 "lib_smd:SO20L" H 2250 4900 60  0001 C CNN
+F 3 "" H 2250 4900 60  0001 C CNN
 	1    2250 4900
 	1    0    0    -1  
 $EndComp
@@ -364,6 +357,8 @@ U 1 1 4BF036D6
 P 2250 3700
 F 0 "U5" H 2250 3500 60  0000 C CNN
 F 1 "74LS245" H 2250 3400 60  0000 C CNN
+F 2 "lib_smd:SO20L" H 2250 3700 60  0001 C CNN
+F 3 "" H 2250 3700 60  0001 C CNN
 	1    2250 3700
 	1    0    0    -1  
 $EndComp
@@ -373,6 +368,8 @@ U 1 1 4BF036D7
 P 2250 2500
 F 0 "U4" H 2250 2300 60  0000 C CNN
 F 1 "74LS245" H 2250 2200 60  0000 C CNN
+F 2 "lib_smd:SO20L" H 2250 2500 60  0001 C CNN
+F 3 "" H 2250 2500 60  0001 C CNN
 	1    2250 2500
 	1    0    0    -1  
 $EndComp
@@ -382,6 +379,8 @@ U 1 1 33A7E303
 P 2250 1300
 F 0 "U3" H 2250 1100 60  0000 C CNN
 F 1 "74LS245" H 2250 1000 60  0000 C CNN
+F 2 "lib_smd:SO20L" H 2250 1300 60  0001 C CNN
+F 3 "" H 2250 1300 60  0001 C CNN
 	1    2250 1300
 	1    0    0    -1  
 $EndComp
@@ -647,6 +646,8 @@ U 1 1 33A567E7
 P 5050 1250
 F 0 "#PWR06" H 5050 1450 40  0001 C CNN
 F 1 "VCC" H 5050 1400 40  0000 C CNN
+F 2 "" H 5050 1250 60  0001 C CNN
+F 3 "" H 5050 1250 60  0001 C CNN
 	1    5050 1250
 	1    0    0    -1  
 $EndComp
@@ -660,6 +661,8 @@ U 1 1 33A567B8
 P 6000 3550
 F 0 "U22" H 6000 3650 70  0000 C CNN
 F 1 "XC4003-VQ100" H 6000 3450 70  0000 C CNN
+F 2 "lib_smd:VQFP100" H 6000 3550 60  0001 C CNN
+F 3 "" H 6000 3550 60  0001 C CNN
 	1    6000 3550
 	1    0    0    -1  
 $EndComp

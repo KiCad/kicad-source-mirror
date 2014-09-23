@@ -3,6 +3,7 @@
 
 #include <wx/filefn.h>
 #include <wx/filename.h>
+#include <project.h>
 
 
 /**
@@ -12,7 +13,7 @@
  * that anything you put in here means searching work at some point in time.
  * (An alternative is to simply know where something is.)
  */
-class SEARCH_STACK : public wxPathList
+class SEARCH_STACK : public wxPathList, public PROJECT::_ELEM
 {
 public:
 
@@ -22,11 +23,25 @@ public:
 
     /**
      * Function  FilenameWithRelativePathInSearchList
+     * returns the shortest possible path which can be use later to find
+     * a full path from this SEARCH_STACK.
+     * <p>
+     * If the library path is already in the library search paths list,
+     * just add the library name to the list. Otherwise, add the library
+     * name with the full or relative path. The relative path is preferable
+     * because it preserves use of default libraries paths, when the path
+     * is a sub path of these default paths. Note we accept only sub paths
+     * not relative paths starting by ../ that are not subpaths and are
+     * outside kicad libs paths
+     *
+     * @param aFullFilename The filename with path and extension.
+     * @param aBaseDir The absolute path on which relative paths in this
+     *  SEARCH_STACK are based.
      * @return a short filename (with extension) with only a relative path if
      *         this filename can be found in library paths
-     * @param aFullFilename The filename with path and extension.
      */
-    wxString FilenameWithRelativePathInSearchList( const wxString& aFullFilename );
+    wxString FilenameWithRelativePathInSearchList(
+            const wxString& aFullFilename, const wxString& aBaseDir );
 
     wxString FindValidPath( const wxString& aFileName ) const
     {
@@ -59,6 +74,16 @@ public:
     void RemovePaths( const wxString& aPaths );
 
     /**
+     * Function Split
+     * separates aPathString into individual paths.
+     * @param aResult is where to put the paths, it should be empty upon entry.
+     * @param aPathString is concatonated string with interposing ';' or ':' separators.
+     * @return int - the count of paths found in aPathString
+     */
+    static int Split( wxArrayString* aResult, const wxString aPathString );
+
+#if 1   // this function is so poorly designed it deserves not to exist.
+    /**
      * Function LastVisitedPath
      * is a quirky function inherited from old code that seems to serve particular
      * needs in the UI.  It returns what is called the last visited directory, or
@@ -70,6 +95,8 @@ public:
      * @param aSubPathToSearch is the preferred sub path to search in path list
      */
     const wxString LastVisitedPath( const wxString& aSubPathToSearch = wxEmptyString );
+#endif
+
 };
 
 #endif  // SEARCH_STACK_H_

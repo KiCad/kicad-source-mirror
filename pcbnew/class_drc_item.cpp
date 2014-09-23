@@ -40,17 +40,17 @@ wxString DRC_ITEM::GetErrorText() const
     switch( m_ErrorCode )
     {
     case DRCE_UNCONNECTED_PADS:
-        return wxString( _("Unconnected pads") );
+        return wxString( _( "Unconnected pads" ) );
     case DRCE_TRACK_NEAR_THROUGH_HOLE:
-        return wxString( _("Track near thru-hole") );
+        return wxString( _( "Track near thru-hole" ) );
     case DRCE_TRACK_NEAR_PAD:
-        return wxString( _("Track near pad") );
+        return wxString( _( "Track near pad" ) );
     case DRCE_TRACK_NEAR_VIA:
-        return wxString( _("Track near via") );
+        return wxString( _( "Track near via" ) );
     case DRCE_VIA_NEAR_VIA:
-        return wxString( _("Via near via") );
+        return wxString( _( "Via near via" ) );
     case DRCE_VIA_NEAR_TRACK:
-        return wxString( _("Via near track") );
+        return wxString( _( "Via near track" ) );
     case DRCE_TRACK_ENDS1:
     case DRCE_TRACK_ENDS2:
     case DRCE_TRACK_ENDS3:
@@ -60,63 +60,68 @@ wxString DRC_ITEM::GetErrorText() const
     case DRCE_ENDS_PROBLEM3:
     case DRCE_ENDS_PROBLEM4:
     case DRCE_ENDS_PROBLEM5:
-        return wxString( _("Two track ends too close") );
+        return wxString( _( "Two track ends too close" ) );
     case DRCE_TRACK_SEGMENTS_TOO_CLOSE:
-        return wxString( _("Two parallel track segments too close") );
+        return wxString( _( "Two parallel track segments too close" ) );
     case DRCE_TRACKS_CROSSING:
-        return wxString( _("Tracks crossing") );
+        return wxString( _( "Tracks crossing" ) );
     case DRCE_PAD_NEAR_PAD1:
-        return wxString( _("Pad near pad") );
+        return wxString( _( "Pad near pad" ) );
     case DRCE_VIA_HOLE_BIGGER:
-        return wxString( _("Via hole > diameter"));
+        return wxString( _( "Via hole > diameter" ) );
     case DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR:
-        return wxString( _("Micro Via: incorrect layer pairs (not adjacent)"));
+        return wxString( _( "Micro Via: incorrect layer pairs (not adjacent)" ) );
     case COPPERAREA_INSIDE_COPPERAREA:
-        return wxString( _("Copper area inside copper area"));
+        return wxString( _( "Copper area inside copper area" ) );
     case COPPERAREA_CLOSE_TO_COPPERAREA:
-        return wxString( _("Copper areas intersect or are too close"));
+        return wxString( _( "Copper areas intersect or are too close" ) );
     case DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE:
-        return wxString( _("Copper area has a nonexistent net name"));
+        return wxString( _( "Copper area has a nonexistent net name" ) );
     case DRCE_HOLE_NEAR_PAD:
-        return wxString( _("Hole near pad"));
+        return wxString( _( "Hole near pad" ) );
     case DRCE_HOLE_NEAR_TRACK:
-        return wxString( _("Hole near track"));
+        return wxString( _( "Hole near track" ) );
     case DRCE_TOO_SMALL_TRACK_WIDTH:
-        return wxString( _("Too small track width"));
+        return wxString( _( "Too small track width" ) );
     case DRCE_TOO_SMALL_VIA:
-        return wxString( _("Too small via size"));
+        return wxString( _( "Too small via size" ) );
     case DRCE_TOO_SMALL_MICROVIA:
-        return wxString( _("Too small micro via size"));
+        return wxString( _( "Too small micro via size" ) );
 
     // use &lt; since this is text ultimately embedded in HTML
     case DRCE_NETCLASS_TRACKWIDTH:
-        return wxString( _("NetClass Track Width &lt; global limit"));
+        return wxString( _( "NetClass Track Width &lt; global limit" ) );
     case DRCE_NETCLASS_CLEARANCE:
-        return wxString( _("NetClass Clearance &lt; global limit"));
+        return wxString( _( "NetClass Clearance &lt; global limit" ) );
     case DRCE_NETCLASS_VIASIZE:
-        return wxString( _("NetClass Via Dia &lt; global limit"));
+        return wxString( _( "NetClass Via Dia &lt; global limit" ) );
     case DRCE_NETCLASS_VIADRILLSIZE:
-        return wxString( _("NetClass Via Drill &lt; global limit"));
+        return wxString( _( "NetClass Via Drill &lt; global limit" ) );
     case DRCE_NETCLASS_uVIASIZE:
-        return wxString( _("NetClass uVia Dia &lt; global limit"));
+        return wxString( _( "NetClass uVia Dia &lt; global limit" ) );
     case DRCE_NETCLASS_uVIADRILLSIZE:
-        return wxString( _("NetClass uVia Drill &lt; global limit"));
+        return wxString( _( "NetClass uVia Drill &lt; global limit" ) );
 
     case DRCE_VIA_INSIDE_KEEPOUT:
-        return wxString( _("Via inside a keepout area"));
+        return wxString( _( "Via inside a keepout area" ) );
 
     case DRCE_TRACK_INSIDE_KEEPOUT:
-        return wxString( _("Track inside a keepout area"));
+        return wxString( _( "Track inside a keepout area" ) );
 
     case DRCE_PAD_INSIDE_KEEPOUT:
-        return wxString( _("Pad inside a keepout area"));
+        return wxString( _( "Pad inside a keepout area" ) );
+
+    case DRCE_VIA_INSIDE_TEXT:
+        return wxString( _( "Via inside a text" ) );
+
+    case DRCE_TRACK_INSIDE_TEXT:
+        return wxString( _( "Track inside a text" ) );
+
+    case DRCE_PAD_INSIDE_TEXT:
+        return wxString( _( "Pad inside a text" ) );
 
     default:
-        {
-            wxString msg;
-            msg.Printf( wxT( "Unknown DRC error code %d" ), m_ErrorCode );
-            return ( msg );
-        }
+        return wxString::Format( wxT( "Unknown DRC error code %d" ), m_ErrorCode );
     }
 }
 
@@ -128,4 +133,3 @@ wxString DRC_ITEM::ShowCoord( const wxPoint& aPos )
     ret << aPos;
     return ret;
 }
-

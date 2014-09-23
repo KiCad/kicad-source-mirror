@@ -35,10 +35,7 @@
 #include <wxPcbStruct.h>
 #include <3d_viewer.h>
 #include <dialog_helpers.h>
-#include <pcbcommon.h>
-
 #include <class_board.h>
-
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <drc_stuff.h>

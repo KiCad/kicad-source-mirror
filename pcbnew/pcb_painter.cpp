@@ -75,6 +75,8 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
     m_layerColors[ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE )]             = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( PADS_HOLES_VISIBLE )]             = COLOR4D( 0.0, 0.5, 0.5, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )]            = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
+    m_layerColors[ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE )]             = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
+    m_layerColors[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )]           = COLOR4D( 0.4, 0.4, 0.8, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( PADS_VISIBLE )]                   = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
     m_layerColors[NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE )]      = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
@@ -102,9 +104,11 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions )
     m_padNumbers        = aOptions.DisplayPadNum;
 
     // Whether to draw tracks, vias & pads filled or as outlines
-    m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )]        = !aOptions.DisplayPadFill;
-    m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )] = !aOptions.DisplayViaFill;
-    m_sketchMode[ITEM_GAL_LAYER( TRACKS_VISIBLE )]      = !aOptions.DisplayPcbTrackFill;
+    m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )]         = !aOptions.DisplayPadFill;
+    m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )]  = !aOptions.DisplayViaFill;
+    m_sketchMode[ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE )]   = !aOptions.DisplayViaFill;
+    m_sketchMode[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )] = !aOptions.DisplayViaFill;
+    m_sketchMode[ITEM_GAL_LAYER( TRACKS_VISIBLE )]       = !aOptions.DisplayPcbTrackFill;
 
     switch( aOptions.DisplayNetNamesMode )
     {
@@ -210,54 +214,53 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     {
     case PCB_ZONE_T:
     case PCB_TRACE_T:
-        draw( (const TRACK*) item, aLayer );
+        draw( static_cast<const TRACK*>( item ), aLayer );
         break;
 
     case PCB_VIA_T:
-        draw( (const VIA*) item, aLayer );
+        draw( static_cast<const VIA*>( item ), aLayer );
         break;
 
     case PCB_PAD_T:
-        draw( (const D_PAD*) item, aLayer );
+        draw( static_cast<const D_PAD*>( item ), aLayer );
         break;
 
     case PCB_LINE_T:
     case PCB_MODULE_EDGE_T:
-        draw( (DRAWSEGMENT*) item, aLayer );
+        draw( static_cast<const DRAWSEGMENT*>( item ), aLayer );
         break;
 
     case PCB_TEXT_T:
-        draw( (TEXTE_PCB*) item, aLayer );
+        draw( static_cast<const TEXTE_PCB*>( item ), aLayer );
         break;
 
     case PCB_MODULE_TEXT_T:
-        draw( (TEXTE_MODULE*) item, aLayer );
+        draw( static_cast<const TEXTE_MODULE*>( item ), aLayer );
         break;
 
     case PCB_MODULE_T:
-        draw( (MODULE*) item );
+        draw( static_cast<const MODULE*>( item ), aLayer );
         break;
 
     case PCB_ZONE_AREA_T:
-        draw( (ZONE_CONTAINER*) item );
+        draw( static_cast<const ZONE_CONTAINER*>( item ) );
         break;
 
     case PCB_DIMENSION_T:
-        draw( (DIMENSION*) item, aLayer );
+        draw( static_cast<const DIMENSION*>( item ), aLayer );
         break;
 
     case PCB_TARGET_T:
-        draw( (PCB_TARGET*) item );
+        draw( static_cast<const PCB_TARGET*>( item ) );
         break;
 
     case PCB_MARKER_T:
-        draw( (MARKER_PCB*) item );
+        draw( static_cast<const MARKER_PCB*>( item ) );
         break;
 
     default:
         // Painter does not know how to draw the object
         return false;
-        break;
     }
 
     return true;
@@ -334,7 +337,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
 void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 {
     VECTOR2D center( aVia->GetStart() );
-    double   radius;
+    double   radius = 0.0;
 
     // Only draw the via if at least one of the layers it crosses is being displayed
     BOARD*  brd =  aVia->GetBoard( );
@@ -342,34 +345,87 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         return;
 
     // Choose drawing settings depending on if we are drawing via's pad or hole
-    if( aLayer == ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ) )
-    {
-        radius = aVia->GetWidth() / 2.0;
-    }
-    else if( aLayer == ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ) )
-    {
+    if( aLayer == ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ) )
         radius = aVia->GetDrillValue() / 2.0;
-    }
     else
-        return;
+        radius = aVia->GetWidth() / 2.0;
 
+    bool sketchMode = false;
     const COLOR4D& color  = m_pcbSettings.GetColor( aVia, aLayer );
 
-    if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )] )
+    switch( aVia->GetViaType() )
     {
-        // Outline mode
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetStrokeColor( color );
-        m_gal->DrawCircle( center, radius );
+    case VIA_THROUGH:
+        sketchMode = m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )];
+        break;
+
+    case VIA_BLIND_BURIED:
+        sketchMode = m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE )];
+        break;
+
+    case VIA_MICROVIA:
+        sketchMode = m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )];
+        break;
+
+    default:
+        assert( false );
+        break;
+    }
+
+    if( aVia->GetViaType() == VIA_BLIND_BURIED )
+    {
+        LAYER_ID layerTop, layerBottom;
+        aVia->LayerPair( &layerTop, &layerBottom );
+
+        if( aLayer == ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ) )
+        {                                                               // TODO outline mode
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
+            m_gal->SetFillColor( color );
+            m_gal->DrawCircle( center, radius );
+        }
+        else
+        {
+            double width = ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0;
+            radius -= width / 2.0;
+
+            m_gal->SetLineWidth( width );
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
+            m_gal->SetFillColor( color );
+
+            if( aLayer == layerTop )
+            {
+                m_gal->DrawArc( center, radius, 0.0, M_PI / 2.0 );
+            }
+            else if( aLayer == layerBottom )
+            {
+                m_gal->DrawArc( center, radius, M_PI, 3.0 * M_PI / 2.0 );
+            }
+            else if( aLayer == ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE ) )
+            {
+                m_gal->DrawArc( center, radius, M_PI / 2.0, M_PI );
+                m_gal->DrawArc( center, radius, 3.0 * M_PI / 2.0, 2.0 * M_PI );
+            }
+        }
     }
     else
     {
-        // Filled mode
-        m_gal->SetIsFill( true );
-        m_gal->SetIsStroke( false );
-        m_gal->SetFillColor( color );
+        m_gal->SetIsFill( !sketchMode );
+        m_gal->SetIsStroke( sketchMode );
+
+        if( sketchMode )
+        {
+            // Outline mode
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+            m_gal->SetStrokeColor( color );
+        }
+        else
+        {
+            // Filled mode
+            m_gal->SetFillColor( color );
+        }
+
         m_gal->DrawCircle( center, radius );
     }
 }
@@ -637,15 +693,9 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
     m_gal->SetStrokeColor( color );
 
     if( m_pcbSettings.m_sketchMode[aLayer] )
-    {
-        // Outline mode
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-    }
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );    // Outline mode
     else
-    {
-        // Filled mode
-        m_gal->SetLineWidth( aSegment->GetWidth() );
-    }
+        m_gal->SetLineWidth( aSegment->GetWidth() );            // Filled mode
 
     switch( aSegment->GetShape() )
     {
@@ -717,7 +767,8 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 
 void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
 {
-    if( aText->GetText().Length() == 0 )
+    wxString shownText( aText->GetShownText() );
+    if( shownText.Length() == 0 )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
@@ -739,13 +790,14 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( aText->GetText(), position, orientation );
+    m_gal->StrokeText( shownText, position, orientation );
 }
 
 
 void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 {
-    if( aText->GetLength() == 0 )
+    wxString shownText( aText->GetShownText() );
+    if( shownText.Length() == 0 )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
@@ -767,24 +819,27 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( aText->GetText(), position, orientation );
+    m_gal->StrokeText( shownText, position, orientation );
 }
 
 
-void PCB_PAINTER::draw( const MODULE* aModule )
+void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
 {
-    const COLOR4D color = m_pcbSettings.GetColor( aModule, ITEM_GAL_LAYER( ANCHOR_VISIBLE ) );
+    if( aLayer == ITEM_GAL_LAYER( ANCHOR_VISIBLE ) )
+    {
+        const COLOR4D color = m_pcbSettings.GetColor( aModule, ITEM_GAL_LAYER( ANCHOR_VISIBLE ) );
 
-    // Draw anchor
-    m_gal->SetStrokeColor( color );
-    m_gal->SetLineWidth( 1.0 );
+        // Draw anchor
+        m_gal->SetStrokeColor( color );
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
-    // Keep the size constant, not related to the scale
-    double anchorSize = 5.0 / m_gal->GetWorldScale();
+        // Keep the size constant, not related to the scale
+        double anchorSize = 5.0 / m_gal->GetWorldScale();
 
-    VECTOR2D center = aModule->GetPosition();
-    m_gal->DrawLine( center - VECTOR2D( anchorSize, 0 ), center + VECTOR2D( anchorSize, 0 ) );
-    m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
+        VECTOR2D center = aModule->GetPosition();
+        m_gal->DrawLine( center - VECTOR2D( anchorSize, 0 ), center + VECTOR2D( anchorSize, 0 ) );
+        m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
+    }
 }
 
 
@@ -888,7 +943,7 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
 
     m_gal->SetLineWidth( text.GetThickness() );
     m_gal->SetTextAttributes( &text );
-    m_gal->StrokeText( text.GetText(), position, orientation );
+    m_gal->StrokeText( text.GetShownText(), position, orientation );
 }
 
 

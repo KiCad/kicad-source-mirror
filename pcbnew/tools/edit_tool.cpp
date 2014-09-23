@@ -48,6 +48,12 @@ EDIT_TOOL::EDIT_TOOL() :
 }
 
 
+void EDIT_TOOL::Reset( RESET_REASON aReason )
+{
+    m_dragging = false;
+}
+
+
 bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
@@ -165,7 +171,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
                 editFrame->OnModify();
                 editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
-                if( evt->Modifier( MD_CTRL ) )
+                if( selection.Size() == 1 )
                 {
                     // Set the current cursor position to the first dragged item origin, so the
                     // movement vector could be computed later
@@ -483,7 +489,7 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
                 DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete VALUE!" ) );
                 return;
 
-            default:    // suppress warnings
+            case TEXTE_MODULE::TEXT_is_DIVERS:    // suppress warnings
                 break;
             }
         }

@@ -13,54 +13,65 @@
 #include <dialog_helpers.h>
 
 
-CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame )
+PART_LIB* SelectLibraryFromList( EDA_DRAW_FRAME* aFrame )
 {
-    static wxString OldLibName;
-    wxArrayString   libNamesList;
-    CMP_LIBRARY*    Lib = NULL;
+    PROJECT&    prj = aFrame->Prj();
 
-    int count = CMP_LIBRARY::GetLibraryCount();
-    if( count == 0 )
+    if( PART_LIBS* libs = prj.SchLibs() )
     {
-        DisplayError( frame, _( "No component libraries are loaded." ) );
-        return NULL;
+        if( !libs->GetLibraryCount() )
+        {
+            DisplayError( aFrame, _( "No component libraries are loaded." ) );
+            return NULL;
+        }
+
+        wxArrayString headers;
+
+        headers.Add( wxT( "Library" ) );
+
+        wxArrayString   libNamesList = libs->GetLibraryNames();
+
+        std::vector<wxArrayString> itemsToDisplay;
+
+        // Conversion from wxArrayString to vector of ArrayString
+        for( unsigned i = 0; i < libNamesList.GetCount(); i++ )
+        {
+            wxArrayString item;
+
+            item.Add( libNamesList[i] );
+
+            itemsToDisplay.push_back( item );
+        }
+
+        wxString old_lib_name = prj.GetRString( PROJECT::SCH_LIB_SELECT );
+
+        EDA_LIST_DIALOG dlg( aFrame, _( "Select Library" ), headers, itemsToDisplay, old_lib_name );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return NULL;
+
+        wxString libname = dlg.GetTextSelection();
+
+        if( !libname )
+            return NULL;
+
+        PART_LIB* lib = libs->FindLibrary( libname );
+
+        if( lib )
+            prj.SetRString( PROJECT::SCH_LIB_SELECT, libname );
+
+        return lib;
     }
 
-    wxArrayString headers;
-    headers.Add( wxT("Library") );
-
-    libNamesList = CMP_LIBRARY::GetLibraryNames();
-    std::vector<wxArrayString> itemsToDisplay;
-
-    // Conversion from wxArrayString to vector of ArrayString
-    for( unsigned i = 0; i < libNamesList.GetCount(); i++ )
-    {
-        wxArrayString item;
-        item.Add( libNamesList[i] );
-        itemsToDisplay.push_back( item );
-    }
-    EDA_LIST_DIALOG dlg( frame, _( "Select Library" ), headers, itemsToDisplay, OldLibName );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return NULL;
-
-    wxString libname = dlg.GetTextSelection();
-
-    if( libname.IsEmpty() )
-        return NULL;
-
-    Lib = CMP_LIBRARY::FindLibrary( libname );
-
-    if( Lib != NULL )
-        OldLibName = libname;
-
-    return Lib;
+    return NULL;
 }
 
-extern void DisplayCmpDocAndKeywords( wxString& Name );
+
+void DisplayCmpDocAndKeywords( wxString& aName, void* aData );
+
 
 int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
-                                 CMP_LIBRARY* Library,
+                                 PART_LIB* Library,
                                  wxString& Buffer, wxString& OldName )
 {
     wxArrayString  nameList;
@@ -86,8 +97,9 @@ int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
         item.Add( Library->GetLogicalName() );
         itemsToDisplay.push_back( item );
     }
+
     EDA_LIST_DIALOG dlg( frame, _( "Select Component" ), headers, itemsToDisplay,
-                         OldName, DisplayCmpDocAndKeywords );
+                         OldName, DisplayCmpDocAndKeywords, frame->Prj().SchLibs() );
 
     if( dlg.ShowModal() != wxID_OK )
         return 0;
@@ -98,7 +110,7 @@ int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
 }
 
 
-int GetNameOfPartToLoad( EDA_DRAW_FRAME* frame, CMP_LIBRARY* Library, wxString& BufName )
+int GetNameOfPartToLoad( EDA_DRAW_FRAME* frame, PART_LIB* Library, wxString& BufName )
 {
     int             ii;
     static wxString OldCmpName;

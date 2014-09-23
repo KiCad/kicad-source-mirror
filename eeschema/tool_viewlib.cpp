@@ -41,12 +41,10 @@
 
 void LIB_VIEW_FRAME::ReCreateHToolbar()
 {
-    int  ii;
-    wxString msg;
-    CMP_LIBRARY* lib;
-    LIB_COMPONENT* component = NULL;
-    LIB_ALIAS* entry = NULL;
-    bool asdeMorgan = false;
+    wxString    msg;
+    LIB_ALIAS*  entry = NULL;
+    bool        asdeMorgan = false;
+    LIB_PART*   part = NULL;
 
     if( m_mainToolBar  == NULL )
     {
@@ -131,13 +129,11 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
     if( m_libraryName.size() && m_entryName.size() )
     {
-        lib = CMP_LIBRARY::FindLibrary( m_libraryName );
-
-        if( lib )
+        if( PART_LIB* lib = Prj().SchLibs()->FindLibrary( m_libraryName ) )
         {
-            component = lib->FindComponent( m_entryName );
+            part = lib->FindPart( m_entryName );
 
-            if( component && component->HasConversion() )
+            if( part && part->HasConversion() )
                 asdeMorgan = true;
 
             entry = lib->FindEntry( m_entryName );
@@ -162,22 +158,21 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
     int parts_count = 1;
 
-    if( component )
-        parts_count = std::max( component->GetPartCount(), 1 );
+    if( part )
+        parts_count = std::max( part->GetUnitCount(), 1 );
 
     m_selpartBox->Clear();
 
-    for( ii = 0; ii < parts_count; ii++ )
+    for( int ii = 0; ii < parts_count; ii++ )
     {
         wxString msg = wxString::Format( _( "Unit %c" ), 'A' + ii );
         m_selpartBox->Append( msg );
     }
 
-    m_selpartBox->SetSelection( (m_unit > 0 ) ? m_unit - 1 : 0 );
+    m_selpartBox->SetSelection( m_unit > 0 ? m_unit - 1 : 0 );
     m_selpartBox->Enable( parts_count > 1 );
 
-    m_mainToolBar->EnableTool( ID_LIBVIEW_VIEWDOC,
-                               entry && ( entry->GetDocFileName() != wxEmptyString ) );
+    m_mainToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, entry && !!entry->GetDocFileName() );
 
     m_mainToolBar->Refresh();
 }

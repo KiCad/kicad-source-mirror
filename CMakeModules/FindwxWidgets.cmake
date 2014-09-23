@@ -783,6 +783,10 @@ ELSE(wxWidgets_FIND_STYLE STREQUAL "win32")
         STRING(REPLACE "-I" ""
           wxWidgets_INCLUDE_DIRS "${wxWidgets_INCLUDE_DIRS}")
 
+        # Flags are a string, not a list, fix it here
+        string(REPLACE ";" " "
+          wxWidgets_CXX_FLAGS "${wxWidgets_CXX_FLAGS}")
+
         DBG_MSG_V("wxWidgets_DEFINITIONS=${wxWidgets_DEFINITIONS}")
         DBG_MSG_V("wxWidgets_INCLUDE_DIRS=${wxWidgets_INCLUDE_DIRS}")
         DBG_MSG_V("wxWidgets_CXX_FLAGS=${wxWidgets_CXX_FLAGS}")

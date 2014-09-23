@@ -59,12 +59,12 @@ VRML_MODEL_PARSER::~VRML_MODEL_PARSER()
 }
 
 
-void VRML_MODEL_PARSER::Load( const wxString aFilename )
+void VRML_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3Dunits )
 {
-    char       line[12];
+    char       line[128];
     FILE*      file;
 
-    //DBG( printf( "Load %s", static_cast<const char*>(aFilename.mb_str()) ) );
+    //DBG( printf( "Load %s", GetChars( aFilename ) ) );
 
     file = wxFopen( aFilename, wxT( "rt" ) );
 
@@ -76,26 +76,27 @@ void VRML_MODEL_PARSER::Load( const wxString aFilename )
     if( fgets( line, 11, file ) == NULL )
     {
         fclose( file );
-        
+
         return;
     }
+
     fclose( file );
-    
-    
-    if( stricmp( line, "#VRML V2.0" ) == 0)
+
+
+    if( stricmp( line, "#VRML V2.0" ) == 0 )
     {
         //DBG( printf( "About to parser a #VRML V2.0 file\n" ) );
-        vrml2_parser->Load( aFilename );
-        
+        vrml2_parser->Load( aFilename, aVrmlunits_to_3Dunits );
+
         return;
     }
-    else if( stricmp( line, "#VRML V1.0" ) == 0)
+    else if( stricmp( line, "#VRML V1.0" ) == 0 )
     {
         //DBG( printf( "About to parser a #VRML V1.0 file\n" ) );
-        vrml1_parser->Load( aFilename );
+        vrml1_parser->Load( aFilename, aVrmlunits_to_3Dunits );
 
         return;
     }
 
-    DBG( printf( "Unknown VRML file format: %s\n", line ) );
+    // DBG( printf( "Unknown VRML file format: %s\n", line ) );
 }

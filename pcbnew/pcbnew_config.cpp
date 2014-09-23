@@ -32,12 +32,11 @@
 #include <kiface_i.h>
 #include <project.h>
 #include <class_drawpanel.h>
-#include <class_draw_panel_gal.h>
+#include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <xnode.h>
 #include <macros.h>
-#include <pcbcommon.h>
 #include <wxPcbStruct.h>
 #include <class_board_design_settings.h>
 #include <plot_common.h>
@@ -106,6 +105,9 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             OnModify();
             ReCreateLayerBox();
             ReFillLayerWidget();
+
+            if( IsGalCanvasActive() )
+                static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( GetBoard() );
         }
         break;
 
@@ -208,13 +210,17 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
             if( !wxFileExists( dlg.GetPath() ) )
             {
-                wxString msg;
-                msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
+                wxString msg = wxString::Format( _(
+                        "File %s not found" ),
+                        GetChars( dlg.GetPath() )
+                        );
                 DisplayError( this, msg );
                 break;
             }
 
-            LoadProjectSettings( dlg.GetPath() );
+            wxString pro_file = dlg.GetPath();
+
+            Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_PCB, GetProjectFileParameters(), pro_file );
         }
         break;
 
@@ -251,19 +257,12 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 }
 
 
-bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
+bool PCB_EDIT_FRAME::LoadProjectSettings()
 {
-    wxLogDebug( wxT( "Loading project '%s' settings." ), GetChars( aProjectFileName ) );
+    wxLogDebug( wxT( "Loading project '%s' settings." ),
+            GetChars( Prj().GetProjectFullName() ) );
 
-    wxFileName  fn = aProjectFileName;
-
-    if( fn.GetExt() != ProjectFileExtension )
-        fn.SetExt( ProjectFileExtension );
-
-    // was: wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
-    Prj().ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_PCB, GetProjectFileParameters(), false );
-
-    Prj().ElemClear( PROJECT::ELEM_FPTBL );      // Force it to be reloaded on demand.
+    bool rc = Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_PCB, GetProjectFileParameters() );
 
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
@@ -271,16 +270,13 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
     pglayout.SetPageLayout( BASE_SCREEN::m_PageLayoutDescrFileName );
 
-    return true;
+    return rc;
 }
 
 
 void PCB_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 {
-    wxFileName fn;
-
-    fn = GetBoard()->GetFileName();
-    fn.SetExt( ProjectFileExtension );
+    wxFileName fn = Prj().GetProjectFullName();
 
     if( aAskForSave )
     {
@@ -294,13 +290,18 @@ void PCB_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
         fn = dlg.GetPath();
     }
 
-    Prj().ConfigSave( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_PCB, GetProjectFileParameters() );
+    wxString pro_name = fn.GetFullPath();
+
+    Prj().ConfigSave( Kiface().KifaceSearch(), GROUP_PCB, GetProjectFileParameters(), pro_name );
 }
 
 
 PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
 {
-    PARAM_CFG_ARRAY         pca;
+    PARAM_CFG_ARRAY pca;
+
+    // This one cannot be cached because some settings are going to/from the BOARD,
+    // so pointers into that cannot be saved for long.
 
     pca.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
                                           &BASE_SCREEN::m_PageLayoutDescrFileName ) );

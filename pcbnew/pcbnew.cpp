@@ -42,8 +42,6 @@
 #include <eda_dde.h>
 #include <pcbcommon.h>
 #include <colors_selection.h>
-#include <gr_basic.h>
-#include <3d_viewer.h>
 #include <wx/stdpaths.h>
 
 #include <wx/file.h>
@@ -52,7 +50,6 @@
 #include <gestfich.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <class_board.h>
@@ -81,7 +78,9 @@ int         g_MaxLinksShowed;
 int         g_MagneticPadOption   = capture_cursor_in_track_tool;
 int         g_MagneticTrackOption = capture_cursor_in_track_tool;
 
-wxPoint     g_Offset_Module;     /* Distance to offset module trace when moving. */
+wxPoint     g_Offset_Module;     // module offset used when moving a footprint
+
+DISPLAY_OPTIONS DisplayOpt;      // General display options
 
 /* Name of the document footprint list
  * usually located in share/modules/footprints_doc
@@ -90,7 +89,13 @@ wxPoint     g_Offset_Module;     /* Distance to offset module trace when moving.
  */
 wxString    g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
 
-// wxWindow* DoPythonStuff(wxWindow* parent); // declaration
+/*
+ * Used in track creation, a list of track segments currently being created,
+ * with the newest track at the end of the list, sorted by new-ness.  e.g. use
+ * TRACK->Back() to get the next older track, TRACK->Next() to get the next
+ * newer track.
+ */
+DLIST<TRACK> g_CurrentTrackList;
 
 namespace PCB {
 
@@ -114,8 +119,6 @@ static struct IFACE : public KIFACE_I
             {
                 PCB_EDIT_FRAME* frame = new PCB_EDIT_FRAME( aKiway, aParent );
 
-                frame->Zoom_Automatique( true );
-
 #if defined(KICAD_SCRIPTING)
                 // give the scripting helpers access to our frame
                 ScriptingSetPcbEditFrame( frame );
@@ -133,12 +136,6 @@ static struct IFACE : public KIFACE_I
         case FRAME_PCB_MODULE_EDITOR:
             {
                 FOOTPRINT_EDIT_FRAME* frame = new FOOTPRINT_EDIT_FRAME( aKiway, aParent );
-
-                frame->Zoom_Automatique( true );
-
-                /* Read a default config file in case no project given on command line.
-                frame->LoadProjectFile( wxEmptyString, true );
-                */
                 return frame;
             }
             break;
@@ -149,11 +146,6 @@ static struct IFACE : public KIFACE_I
                 FOOTPRINT_VIEWER_FRAME* frame = new FOOTPRINT_VIEWER_FRAME(
                         aKiway, aParent, FRAME_T( aClassId ) );
 
-                frame->Zoom_Automatique( true );
-
-                /* Read a default config file in case no project given on command line.
-                frame->LoadProjectFile( wxEmptyString, true );
-                */
                 return frame;
             }
             break;
@@ -161,7 +153,7 @@ static struct IFACE : public KIFACE_I
         case FRAME_PCB_FOOTPRINT_WIZARD_MODAL:
             {
                 FOOTPRINT_WIZARD_FRAME* frame = new FOOTPRINT_WIZARD_FRAME(
-                    aKiway, aParent, FRAME_T( aClassId ) );
+                        aKiway, aParent, FRAME_T( aClassId ) );
 
                 return frame;
             }
@@ -219,107 +211,8 @@ PGM_BASE& Pgm()
 }
 #endif
 
-/**
- * Function set3DShapesPath
- * attempts to set the environment variable given by aKiSys3Dmod to a valid path.
- * (typically "KISYS3DMOD" )
- * If the environment variable is already set,
- * then it left as is to respect the wishes of the user.
- *
- * The path is determined by attempting to find the path modules/packages3d
- * files in kicad tree.
- * This may or may not be the best path but it provides the best solution for
- * backwards compatibility with the previous 3D shapes search path implementation.
- *
- * @note This must be called after #SetBinDir() is called at least on Windows.
- * Otherwise, the kicad path is not known (Windows specific)
- *
- * @param aKiSys3Dmod = the value of environment variable, typically "KISYS3DMOD"
- * @return false if the aKiSys3Dmod path is not valid.
- */
-static bool set3DShapesPath( const wxString& aKiSys3Dmod )
-{
-    wxString    path;
 
-    // Set the KISYS3DMOD environment variable for the current process,
-    // if it is not already defined in the user's environment and valid.
-    if( wxGetEnv( aKiSys3Dmod, &path ) && wxFileName::DirExists( path ) )
-        return true;
-
-    // Attempt to determine where the 3D shape libraries were installed using the
-    // legacy path:
-    // on Unix: /usr/local/kicad/share/modules/packages3d
-    // or  /usr/share/kicad/modules/packages3d
-    // On Windows: bin../share/modules/packages3d
-    wxString relpath( wxT( "modules/packages3d" ) );
-
-// Apple MacOSx
-#ifdef __WXMAC__
-    path = wxT("/Library/Application Support/kicad/modules/packages3d/");
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-
-    path = wxString( wxGetenv( wxT( "HOME" ) ) ) + wxT("/Library/Application Support/kicad/modules/packages3d/");
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-
-#elif defined(__UNIX__)     // Linux and non-Apple Unix
-    // Try the home directory:
-    path.Empty();
-    wxGetEnv( wxT("HOME"), &path );
-    path += wxT("/kicad/share/") + relpath;
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-
-    // Try the standard install path:
-    path = wxT("/usr/local/kicad/share/") + relpath;
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-
-    // Try the official distrib standard install path:
-    path = wxT("/usr/share/kicad/") + relpath;
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-
-#else   // Windows
-    // On Windows, the install path is given by the path of executables
-    wxFileName fn;
-    fn.AssignDir( Pgm().GetExecutablePath() );
-    fn.RemoveLastDir();
-    path = fn.GetPathWithSep() + wxT("share/") + relpath;
-
-    if( wxFileName::DirExists( path ) )
-    {
-        wxSetEnv( aKiSys3Dmod, path );
-        return true;
-    }
-#endif
-
-    return false;
-}
-
-
-#ifdef KICAD_SCRIPTING
+#if defined(KICAD_SCRIPTING)
 static bool scriptingSetup()
 {
     wxString path_frag;
@@ -363,7 +256,7 @@ static bool scriptingSetup()
     // (and remove the fixed paths from <src>/scripting/kicadplugins.i)
 
     // wizard plugins are stored in kicad/bin/plugins.
-    // so add this path to python scripting defualt search paths
+    // so add this path to python scripting default search paths
     // which are ( [KICAD_PATH] is an environment variable to define)
     // [KICAD_PATH]/scripting/plugins
     // Add this default search path:
@@ -426,15 +319,10 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // display the real hotkeys in menus or tool tips
     ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
 
-    // Set 3D shape path from environment variable KISYS3DMOD
-    set3DShapesPath( wxT(KISYS3DMOD) );
-
-    /*  Now that there are no *.mod files in the standard library, this function
-        has no utility.  User should simply set the variable manually.
-        Looking for *.mod files which do not exist is fruitless.
-
-        SetFootprintLibTablePath();
-    */
+    // Set 3D shape path (environment variable KISYS3DMOD) if not defined or valid
+    // Currently, called here, but could be moved ( OpenProjectFiles() ? )
+    // if KISYS3DMOD is defined in a project config file
+    Set3DShapesDefaultPath( KISYS3DMOD, aProgram );
 
     try
     {
@@ -448,11 +336,11 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
                 "You have run Pcbnew for the first time using the "
                 "new footprint library table method for finding "
                 "footprints.  Pcbnew has either copied the default "
-                "table or created an empty table in your home "
+                "table or created an empty table in the kicad configuration "
                 "folder.  You must first configure the library "
                 "table to include all footprint libraries not "
                 "included with KiCad.  See the \"Footprint Library "
-                "Table\" section of the CvPcb documentation for "
+                "Table\" section of the CvPcb or Pcbnew documentation for "
                 "more information." ) );
         }
     }
@@ -467,7 +355,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
         return false;
     }
 
-#ifdef KICAD_SCRIPTING
+#if defined(KICAD_SCRIPTING)
     scriptingSetup();
 #endif
 

@@ -38,7 +38,6 @@
 #include <gestfich.h>
 #include <kicad_device_context.h>
 #include <wxPcbStruct.h>
-#include <pcbcommon.h>
 
 #include <pcbnew_id.h>
 #include <pcbnew.h>
@@ -933,7 +932,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_TEXTMODULE:
-        InstallTextModOptionsFrame( (TEXTE_MODULE*) GetCurItem(), &dc );
+        InstallTextModOptionsFrame( static_cast<TEXTE_MODULE*>( GetCurItem() ), &dc );
         m_canvas->MoveCursorToCrossHair();
         break;
 
@@ -943,17 +942,16 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:
         m_canvas->MoveCursorToCrossHair();
-        StartMoveTexteModule( (TEXTE_MODULE*) GetCurItem(), &dc );
+        StartMoveTexteModule( static_cast<TEXTE_MODULE*>( GetCurItem() ), &dc );
         break;
 
     case ID_POPUP_PCB_ROTATE_TEXTMODULE:
-        RotateTextModule( (TEXTE_MODULE*) GetCurItem(),
-                         &dc );
+        RotateTextModule( static_cast<TEXTE_MODULE*>( GetCurItem() ), &dc );
         m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_DELETE_TEXTMODULE:
-        DeleteTextModule( (TEXTE_MODULE*) GetCurItem() );
+        DeleteTextModule( static_cast<TEXTE_MODULE*>( GetCurItem() ) );
         SetCurItem( NULL );
         m_canvas->MoveCursorToCrossHair();
         break;

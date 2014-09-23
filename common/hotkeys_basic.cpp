@@ -533,8 +533,9 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
     }
     else
     {
-        wxConfig config( m_FrameName );
-        config.Write( HOTKEYS_CONFIG_KEY, msg );
+        wxConfigBase* config = GetNewConfig( m_FrameName );
+        config->Write( HOTKEYS_CONFIG_KEY, msg );
+        delete config;
     }
 
     return 1;
@@ -575,16 +576,17 @@ int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
 
 void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescList )
 {
-    wxConfig config( Appname );
+    wxConfigBase* config = GetNewConfig( Appname );
 
-    if( !config.HasEntry( HOTKEYS_CONFIG_KEY ) )
+    if( !config->HasEntry( HOTKEYS_CONFIG_KEY ) )
     {
         // assume defaults are ok
         return;
     }
 
     wxString data;
-    config.Read( HOTKEYS_CONFIG_KEY, &data );
+    config->Read( HOTKEYS_CONFIG_KEY, &data );
+    delete config;
 
     ParseHotkeyConfig( data, aDescList );
 }
@@ -676,16 +678,17 @@ void ParseHotkeyConfig( const wxString&           data,
 }
 
 
-/**
- * Function ImportHotkeyConfigFromFile
- * Prompt the user for an old hotkey file to read, and read it.
- * @param aDescList = current hotkey list descr. to initialize.
- */
-void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( struct EDA_HOTKEY_CONFIG* aDescList )
+void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList )
 {
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
+
+#if 0   // pass in the project dir as an argument
+    wxString path = wxPathOnly( Prj().GetProjectFullName() );
+#else
     wxString path = wxGetCwd();
+#endif
+
     wxString filename = Kiface().Name() + wxT( '.' ) + ext;
 
     filename = EDA_FileSelector( _( "Read Hotkey Configuration File:" ),
@@ -704,16 +707,17 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( struct EDA_HOTKEY_CONFIG* aDesc
 }
 
 
-/**
- * Function ExportHotkeyConfigToFile
- * Prompt the user for an old hotkey file to read, and read it.
- * @param aDescList = current hotkey list descr. to initialize.
- */
-void EDA_BASE_FRAME::ExportHotkeyConfigToFile( struct EDA_HOTKEY_CONFIG* aDescList )
+void EDA_BASE_FRAME::ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList )
 {
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
+
+#if 0
+    wxString path = wxPathOnly( Prj().GetProjectFullName() );
+#else
     wxString path = wxGetCwd();
+#endif
+
     wxString filename = Kiface().Name() + wxT( "." ) + ext;
 
     filename = EDA_FileSelector( _( "Write Hotkey Configuration File:" ),

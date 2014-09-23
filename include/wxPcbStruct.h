@@ -336,13 +336,12 @@ public:
     void SaveProjectSettings( bool aAskForSave );
 
     /**
-     * Load the project file configuration settings.
+     * Load the current project's file configuration settings which are pertinent
+     * to this PCB_EDIT_FRAME instance.
      *
-     * @param aProjectFileName = The project filename.
-     *  if not found use kicad.pro and initialize default values
      * @return always returns true.
      */
-    bool LoadProjectSettings( const wxString& aProjectFileName );
+    bool LoadProjectSettings();
 
     /**
      * Function GetConfigurationSettings
@@ -417,7 +416,7 @@ public:
      * @param aPosition The cursor position in logical (drawing) units.
      * @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
      */
-    void OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
+    bool OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
     /**
      * Function OnHotkeyDeleteItem
@@ -583,7 +582,7 @@ public:
      */
     void SwitchCanvas( wxCommandEvent& aEvent );
 
-    void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
      * Function ShowDesignRulesEditor
@@ -826,14 +825,10 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 );
 
     /**
-     * Function ReadPcbFile
-     * reads a board file  &ltfile&gt.brd
-     * @param aReader The line reader object to read from.
-     * @param Append if 0: a previously loaded board is deleted before loading
-     *               the file else all items of the board file are added to the
-     *               existing board
+     * Function AppendBoardFile
+     * appends a board file onto the current one, creating God knows what.
      */
-    int ReadPcbFile( LINE_READER* aReader, bool Append );
+    bool AppendBoardFile( const wxString& aFullFileName, int aCtl );
 
     /**
      * Function SavePcbFile
@@ -860,8 +855,11 @@ public:
      */
     bool Clear_Pcb( bool aQuery );
 
-    /// @copydoc PCB_BASE_FRAME::SetBoard()
+    ///> @copydoc PCB_BASE_FRAME::SetBoard()
     void SetBoard( BOARD* aBoard );
+
+    ///> @copydoc PCB_BASE_FRAME::SetPageSettings()
+    void SetPageSettings( const PAGE_INFO& aPageSettings ); // overload
 
     // Drc control
 
@@ -1648,20 +1646,5 @@ public:
 
     DECLARE_EVENT_TABLE()
 };
-
-
-/**
- * Function AskBoardFileName
- * puts up a wxFileDialog asking for a BOARD filename to open.
- *
- * @param aParent is a wxFrame passed to wxFileDialog.
- * @param aCtl is where to put the OpenProjectFiles() control bits.
- *
- * @param aFileName on entry is a probable choice, on return is the chosen filename.
- *
- * @return bool - true if chosen, else false if user aborted.
- */
-bool AskBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName );
-
 
 #endif  // WXPCB_STRUCT_H_

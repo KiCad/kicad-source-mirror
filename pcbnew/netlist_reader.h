@@ -39,9 +39,6 @@
 #include <netlist_lexer.h>    // netlist_lexer is common to Eeschema and Pcbnew
 
 
-using namespace NL_T;
-
-
 class NETLIST;
 class COMPONENT;
 
@@ -55,9 +52,24 @@ class CMP_READER
     LINE_READER* m_lineReader;            ///< The line reader to read.
 
 public:
+    /**
+     * CMP_READER constructor.
+     * @param aLineReader is a LINE_READER (in fact a FILE_LINE_READER)
+     * which is owned by me ( and deleted by me) to read
+     * the component footprint link file.
+     */
     CMP_READER( LINE_READER* aLineReader )
     {
         m_lineReader = aLineReader;
+    }
+
+    ~CMP_READER()
+    {
+        if( m_lineReader )
+        {
+            delete m_lineReader;
+            m_lineReader = NULL;
+        }
     }
 
     /**
@@ -276,7 +288,7 @@ public:
 class KICAD_NETLIST_PARSER : public NETLIST_LEXER
 {
 private:
-    T            token;
+    NL_T::T      token;
     LINE_READER* m_lineReader;  ///< The line reader used to parse the netlist.  Not owned.
     NETLIST*     m_netlist;     ///< The netlist to parse into.  Not owned.
 
@@ -350,7 +362,7 @@ public:
     void Parse() throw( IO_ERROR, PARSE_ERROR );
 
     // Useful for debug only:
-    const char* getTokenName( T aTok )
+    const char* getTokenName( NL_T::T aTok )
     {
         return NETLIST_LEXER::TokenName( aTok );
     }

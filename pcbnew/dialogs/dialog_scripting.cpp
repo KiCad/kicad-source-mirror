@@ -7,7 +7,6 @@
 #include <fctsys.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
-#include <pcbcommon.h>
 #include <dialog_scripting.h>
 
 

@@ -53,6 +53,8 @@
 
 #include <boost/make_shared.hpp>
 
+using namespace PCB_KEYS_T;
+
 
 void PCB_PARSER::init()
 {

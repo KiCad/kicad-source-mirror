@@ -34,8 +34,6 @@
 #include <layers_id_colors_and_visibility.h>    // LAYER_ID
 #include <common.h>                             // KiROUND
 
-using namespace PCB_KEYS_T;
-
 
 class BOARD;
 class BOARD_ITEM;
@@ -196,7 +194,7 @@ class PCB_PARSER : public PCB_LEXER
         return parseDouble();
     }
 
-    inline double parseDouble( T aToken ) throw( IO_ERROR )
+    inline double parseDouble( PCB_KEYS_T::T aToken ) throw( IO_ERROR )
     {
         return parseDouble( GetTokenText( aToken ) );
     }
@@ -220,7 +218,7 @@ class PCB_PARSER : public PCB_LEXER
         return KiROUND( parseDouble( aExpected ) * IU_PER_MM );
     }
 
-    inline int parseBoardUnits( T aToken ) throw( PARSE_ERROR )
+    inline int parseBoardUnits( PCB_KEYS_T::T aToken ) throw( PARSE_ERROR )
     {
         return parseBoardUnits( GetTokenText( aToken ) );
     }

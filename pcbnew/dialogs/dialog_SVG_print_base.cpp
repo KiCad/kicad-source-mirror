@@ -89,6 +89,8 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	sbOptionsSizer->Add( m_PrintBoardEdgesCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_printMirrorOpt = new wxCheckBox( this, wxID_ANY, _("Print mirrored"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_printMirrorOpt->SetToolTip( _("Print the layer(s) horizontally mirrored") );
+	
 	sbOptionsSizer->Add( m_printMirrorOpt, 0, wxRIGHT|wxLEFT, 5 );
 	
 	

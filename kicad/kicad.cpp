@@ -137,18 +137,6 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
         //DBG( m_bm.m_search.Show( (std::string( __func__ ) + " SysSearch()").c_str() );)
     }
 
-    // Read current setup and reopen last directory if no filename to open on
-    // command line.
-    if( App().argc == 1  )
-    {
-        wxString dir;
-
-        if( PgmSettings()->Read( workingDirKey, &dir ) && wxDirExists( dir ) )
-        {
-            wxSetWorkingDirectory( dir );
-        }
-    }
-
     KICAD_MANAGER_FRAME* frame = new KICAD_MANAGER_FRAME( NULL, wxT( "KiCad" ),
                                      wxDefaultPosition, wxDefaultSize );
     App().SetTopWindow( frame );
@@ -162,27 +150,28 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
 
     else if( GetFileHistory().GetCount() )
     {
-        // Try to open the last opened project,
-        // if a project name is not given when starting Kicad
-        frame->SetProjectFileName( GetFileHistory().GetHistoryFile( 0 ) );
+        wxString last_pro = GetFileHistory().GetHistoryFile( 0 );
 
-        if( !wxFileExists( frame->GetProjectFileName() ) )
+        if( !wxFileExists( last_pro ) )
+        {
             GetFileHistory().RemoveFileFromHistory( 0 );
+
+            wxFileName namelessProject( wxGetCwd(), NAMELESS_PROJECT,
+                                        ProjectFileExtension );
+
+            frame->SetProjectFileName( namelessProject.GetFullPath() );
+        }
         else
         {
+            // Try to open the last opened project,
+            // if a project name is not given when starting Kicad
+            frame->SetProjectFileName( last_pro );
+
             wxCommandEvent cmd( 0, wxID_FILE1 );
 
             frame->OnFileHistory( cmd );
             prjloaded = true;    // OnFileHistory() loads the project
         }
-    }
-
-    if( !wxFileExists( frame->GetProjectFileName() ) )
-    {
-        wxFileName namelessProject( wxGetCwd(), NAMELESS_PROJECT,
-                                    ProjectFileExtension );
-
-        frame->SetProjectFileName( namelessProject.GetFullPath() );
     }
 
     if( !prjloaded )
@@ -220,9 +209,7 @@ void PGM_KICAD::MacOpenFile( const wxString& aFileName )
 
     frame->SetProjectFileName( aFileName );
 
-    wxCommandEvent loadEvent;
-
-    loadEvent.SetId( wxID_ANY );
+    wxCommandEvent loadEvent( 0, wxID_ANY );
 
     frame->OnLoadProject( loadEvent );
 #endif

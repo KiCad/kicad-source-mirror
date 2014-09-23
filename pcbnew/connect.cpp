@@ -30,7 +30,6 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <pcbcommon.h>
 #include <macros.h>
 #include <wxBasePcbFrame.h>
 

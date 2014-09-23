@@ -31,6 +31,7 @@
 #include <wxEeschemaStruct.h>
 #include <base_units.h>
 #include <sch_sheet_path.h>
+#include <project.h>
 
 #include <dialog_plot_schematic.h>
 
@@ -175,6 +176,8 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
 
         plotFileName = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( "." )
                        + HPGL_PLOTTER::GetDefaultFileExtension();
+
+        plotFileName = Prj().AbsolutePath( plotFileName );
 
         LOCALE_IO toggle;
 

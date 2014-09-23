@@ -18,11 +18,11 @@
  */
 
 
-void FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
+bool FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                                      EDA_ITEM* aItem )
 {
     if( aHotKey == 0 )
-        return;
+        return false;
 
     bool           blockActive = GetScreen()->m_BlockLocate.GetCommand() != BLOCK_IDLE;
     BOARD_ITEM*    item     = GetCurItem();
@@ -41,14 +41,13 @@ void FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
         HK_Descr = GetDescriptorFromHotkey( aHotKey, module_edit_Hotkey_List );
 
     if( HK_Descr == NULL )
-        return;
+        return false;
 
     switch( HK_Descr->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:
-        return;
-        break;
+        return false;
 
     case HK_HELP:                   // Display Current hotkey list
         DisplayHotkeyList( this, g_Module_Editor_Hokeys_Descr );
@@ -133,6 +132,8 @@ void FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
         OnHotkeyRotateItem( HK_ROTATE_ITEM );
         break;
     }
+
+    return true;
 }
 
 

@@ -20,9 +20,9 @@ private:
     TEXTE_MODULE* m_ValueCopy;
     std::vector <S3D_MASTER*>   m_Shapes3D_list;
     int m_LastSelected3DShapeIndex;
-    VERTEX_VALUE_CTRL * m_3D_Scale;
-    VERTEX_VALUE_CTRL * m_3D_Offset;
-    VERTEX_VALUE_CTRL * m_3D_Rotation;
+    S3DPOINT_VALUE_CTRL * m_3D_Scale;
+    S3DPOINT_VALUE_CTRL * m_3D_Offset;
+    S3DPOINT_VALUE_CTRL * m_3D_Rotation;
 
 public:
 
@@ -31,16 +31,21 @@ public:
     ~DIALOG_MODULE_BOARD_EDITOR();
 
 private:
+    void BrowseAndAdd3DShapeFile();
     void InitBoardProperties();
     void InitModeditProperties();
     void Transfert3DValuesToDisplay( S3D_MASTER * aStruct3DSource );
     void TransfertDisplayTo3DValues( int aIndexSelection );
+
+    // virtual event functions
     void OnEditValue( wxCommandEvent& event );
     void OnEditReference( wxCommandEvent& event );
     void On3DShapeSelection( wxCommandEvent& event );
     void On3DShapeNameSelected( wxCommandEvent& event );
-    void Browse3DLib( wxCommandEvent& event );
-    void Add3DShape( wxCommandEvent& event );
+    void Add3DShape( wxCommandEvent& event )
+    {
+        BrowseAndAdd3DShapeFile();
+    }
     void Remove3DShape( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );

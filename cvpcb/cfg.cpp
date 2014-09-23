@@ -59,30 +59,25 @@ PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters()
 }
 
 
-void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
+void CVPCB_MAINFRAME::LoadProjectFile()
 {
-    wxFileName      fn( aFileName );
-    PROJECT&        prj = Prj();
+    PROJECT&    prj = Prj();
 
     m_ModuleLibNames.Clear();
     m_AliasLibNames.Clear();
 
-    fn.SetExt( ProjectFileExtension );
-
     // was: Pgm().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
-    prj.ConfigLoad( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_CVP, GetProjectFileParameters(), false );
+    prj.ConfigLoad( Kiface().KifaceSearch(), GROUP_CVP, GetProjectFileParameters() );
 
     if( m_NetlistFileExtension.IsEmpty() )
         m_NetlistFileExtension = wxT( "net" );
-
-    // Force FP_LIB_TABLE to be loaded on demand.
-    prj.ElemClear( PROJECT::ELEM_FPTBL );
 }
 
 
 void CVPCB_MAINFRAME::SaveProjectFile( wxCommandEvent& aEvent )
 {
-    wxFileName fn = m_NetlistFileName;
+    PROJECT&    prj = Prj();
+    wxFileName  fn = prj.AbsolutePath( m_NetlistFileName.GetFullPath() );
 
     fn.SetExt( ProjectFileExtension );
 
@@ -103,11 +98,8 @@ void CVPCB_MAINFRAME::SaveProjectFile( wxCommandEvent& aEvent )
     if( !IsWritable( fn ) )
         return;
 
-    // was:
-    // Pgm().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+    wxString pro_name = fn.GetFullPath();
 
-    PROJECT&        prj = Prj();
-
-    prj.ConfigSave( Kiface().KifaceSearch(), fn.GetFullPath(), GROUP_CVP, GetProjectFileParameters() );
+    prj.ConfigSave( Kiface().KifaceSearch(), GROUP_CVP, GetProjectFileParameters(), pro_name );
 }
 

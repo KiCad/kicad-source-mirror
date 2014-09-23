@@ -156,7 +156,7 @@ SCH_ITEM* SCH_SHEET_PATH::FirstDrawList() const
      */
     SCH_ITEM* lastItem = NULL;
 
-    while( item != NULL )
+    while( item )
     {
         lastItem = item;
         item = item->Next();
@@ -242,22 +242,22 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
 }
 
 
-void SCH_SHEET_PATH::AnnotatePowerSymbols( int* aReference )
+void SCH_SHEET_PATH::AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference )
 {
     int ref = 1;
 
-    if( aReference != NULL )
+    if( aReference )
         ref = *aReference;
 
-    for( EDA_ITEM* item = LastDrawList(); item != NULL; item = item->Next() )
+    for( EDA_ITEM* item = LastDrawList();  item;  item = item->Next() )
     {
         if( item->Type() != SCH_COMPONENT_T )
                 continue;
 
-        SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
+        SCH_COMPONENT*  component = (SCH_COMPONENT*) item;
+        LIB_PART*       part = aLibs->FindLibPart( component->GetPartName() );
 
-        if( ( entry == NULL ) || !entry->IsPower() )
+        if( !part || !part->IsPower() )
             continue;
 
         wxString refstr = component->GetPrefix();
@@ -274,25 +274,25 @@ void SCH_SHEET_PATH::AnnotatePowerSymbols( int* aReference )
         ref++;
     }
 
-    if( aReference != NULL )
+    if( aReference )
         *aReference = ref;
 }
 
 
-void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols )
+void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols )
 {
     // Search to sheet path number:
     int sheetnumber = 1;    // 1 = root
+
     SCH_SHEET_LIST sheetList;
 
-    for( SCH_SHEET_PATH* path = sheetList.GetFirst(); path != NULL;
-         path = sheetList.GetNext(), sheetnumber++ )
+    for( SCH_SHEET_PATH* path = sheetList.GetFirst(); path; path = sheetList.GetNext(), sheetnumber++ )
     {
-        if( Cmp(*path) == 0 )
+        if( Cmp( *path ) == 0 )
             break;
     }
 
-    for( SCH_ITEM* item = LastDrawList(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = LastDrawList(); item; item = item->Next() )
     {
         if( item->Type() == SCH_COMPONENT_T )
         {
@@ -303,14 +303,12 @@ void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aInclu
             if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
                 continue;
 
-            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
-
-            if( entry == NULL )
-                continue;
-
-            SCH_REFERENCE reference = SCH_REFERENCE( component, entry, *this );
-            reference.SetSheetNumber( sheetnumber );
-            aReferences.AddItem( reference );
+            if( LIB_PART* part = aLibs->FindLibPart( component->GetPartName() ) )
+            {
+                SCH_REFERENCE reference = SCH_REFERENCE( component, part, *this );
+                reference.SetSheetNumber( sheetnumber );
+                aReferences.AddItem( reference );
+            }
         }
     }
 }
@@ -322,11 +320,11 @@ SCH_ITEM* SCH_SHEET_PATH::FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem, bool
     bool firstItemFound = false;
     SCH_ITEM* drawItem = LastDrawList();
 
-    while( drawItem != NULL )
+    while( drawItem )
     {
         if( drawItem->Type() == aType )
         {
-            if( aLastItem == NULL || firstItemFound )
+            if( !aLastItem || firstItemFound )
             {
                 return drawItem;
             }
@@ -338,7 +336,7 @@ SCH_ITEM* SCH_SHEET_PATH::FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem, bool
 
         drawItem = drawItem->Next();
 
-        if( drawItem == NULL && aLastItem && aWrap && !hasWrapped )
+        if( !drawItem && aLastItem && aWrap && !hasWrapped )
         {
             hasWrapped = true;
             drawItem = LastDrawList();
@@ -355,7 +353,7 @@ SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, 
     bool firstItemFound = false;
     SCH_ITEM* drawItem = FirstDrawList();
 
-    while( drawItem != NULL )
+    while( drawItem )
     {
         if( drawItem->Type() == aType )
         {
@@ -503,7 +501,7 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheet( const wxString aPath, bool aHumanReada
     SCH_SHEET_PATH* sheet = GetFirst();
     wxString sheetPath;
 
-    while( sheet != NULL )
+    while( sheet )
     {
         sheetPath = ( aHumanReadable ) ? sheet->PathHumanReadable() : sheet->Path();
 
@@ -519,12 +517,15 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheet( const wxString aPath, bool aHumanReada
 
 void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 {
+    wxCHECK_RET( aSheet != NULL, wxT( "Cannot build sheet list from undefined sheet." ) );
+
     if( aSheet == g_RootSheet )
         m_isRootSheet = true;
 
     if( m_List == NULL )
     {
         int count = aSheet->CountSheets();
+
         m_count = count;
         m_index = 0;
         m_List = new SCH_SHEET_PATH[ count ];
@@ -535,7 +536,7 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
     m_List[m_index] = m_currList;
     m_index++;
 
-    if( aSheet->GetScreen() != NULL )
+    if( aSheet->GetScreen() )
     {
         EDA_ITEM* strct = m_currList.LastDrawList();
 
@@ -557,7 +558,7 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 
 bool SCH_SHEET_LIST::IsModified()
 {
-    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet != NULL; sheet = GetNext() )
+    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
     {
         if( sheet->LastScreen() && sheet->LastScreen()->IsModify() )
             return true;
@@ -569,7 +570,7 @@ bool SCH_SHEET_LIST::IsModified()
 
 bool SCH_SHEET_LIST::IsAutoSaveRequired()
 {
-    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet != NULL; sheet = GetNext() )
+    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
     {
         if( sheet->LastScreen() && sheet->LastScreen()->IsSave() )
             return true;
@@ -581,7 +582,7 @@ bool SCH_SHEET_LIST::IsAutoSaveRequired()
 
 void SCH_SHEET_LIST::ClearModifyStatus()
 {
-    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet != NULL; sheet = GetNext() )
+    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
     {
         if( sheet->LastScreen() )
             sheet->LastScreen()->ClrModify();
@@ -589,20 +590,20 @@ void SCH_SHEET_LIST::ClearModifyStatus()
 }
 
 
-void SCH_SHEET_LIST::AnnotatePowerSymbols()
+void SCH_SHEET_LIST::AnnotatePowerSymbols( PART_LIBS* aLibs )
 {
     int ref = 1;
 
-    for( SCH_SHEET_PATH* path = GetFirst();  path != NULL;  path = GetNext() )
-        path->AnnotatePowerSymbols( &ref );
+    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
+        path->AnnotatePowerSymbols( aLibs, &ref );
 }
 
 
-void SCH_SHEET_LIST::GetComponents( SCH_REFERENCE_LIST& aReferences,
-                                    bool                aIncludePowerSymbols )
+void SCH_SHEET_LIST::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
+        bool aIncludePowerSymbols )
 {
-    for( SCH_SHEET_PATH* path = GetFirst();  path != NULL;  path = GetNext() )
-        path->GetComponents( aReferences, aIncludePowerSymbols );
+    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
+        path->GetComponents( aLibs, aReferences, aIncludePowerSymbols );
 }
 
 
@@ -611,14 +612,15 @@ SCH_ITEM* SCH_SHEET_LIST::FindNextItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFo
 {
     bool hasWrapped = false;
     bool firstItemFound = false;
-    SCH_ITEM* drawItem = NULL;
+
+    SCH_ITEM*       drawItem = NULL;
     SCH_SHEET_PATH* sheet = GetFirst();
 
-    while( sheet != NULL )
+    while( sheet )
     {
         drawItem = sheet->LastDrawList();
 
-        while( drawItem != NULL )
+        while( drawItem )
         {
             if( drawItem->Type() == aType )
             {
@@ -659,11 +661,11 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
     SCH_ITEM* drawItem = NULL;
     SCH_SHEET_PATH* sheet = GetLast();
 
-    while( sheet != NULL )
+    while( sheet )
     {
         drawItem = sheet->FirstDrawList();
 
-        while( drawItem != NULL )
+        while( drawItem )
         {
             if( drawItem->Type() == aType )
             {
@@ -701,7 +703,7 @@ bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
 {
     bool found = false;
 
-    for( SCH_SHEET_PATH* path = GetFirst();  path != NULL;  path = GetNext() )
+    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
         found = path->SetComponentFootprint( aReference, aFootPrint, aSetVisible );
 
     return found;

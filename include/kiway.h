@@ -393,6 +393,19 @@ private:
 };
 
 
+/*
+/// Given aProject, return its KIWAY*
+inline KIWAY* PrjToKiway( PROJECT* aProject )
+{
+    // It's ugly, but isolated.  The compiler should simply do what's
+    // it's told to do here and shut up.
+    KIWAY*      p = 0;
+    ptrdiff_t   offset = (char*) &p->m_project - (char*) p;
+
+    return (KIWAY*) ((char*)aProject - offset);
+}
+*/
+
 extern KIWAY Kiway;     // provided by single_top.cpp and kicad.cpp
 
 

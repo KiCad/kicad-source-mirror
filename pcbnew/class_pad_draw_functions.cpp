@@ -37,7 +37,6 @@
 #include <drawtxt.h>
 #include <layers_id_colors_and_visibility.h>
 #include <wxBasePcbFrame.h>
-#include <pcbcommon.h>
 #include <pcbnew_id.h>             // ID_TRACK_BUTT
 #include <pcbnew.h>
 #include <class_board.h>

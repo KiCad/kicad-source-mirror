@@ -164,9 +164,11 @@ void DIALOG_EESCHEMA_OPTIONS::copyPanelToSelected( void )
     iteminfo.m_text = fieldDefaultValueTextCtrl->GetValue();
     templateFieldListCtrl->SetItem( iteminfo );
 
-    /* TODO: Fixme! */
     iteminfo.m_col = 2;
-    iteminfo.m_text = fieldNameTextCtrl->GetValue();
+    if( fieldVisibleCheckbox->GetValue() )
+        iteminfo.m_text = _( "Visible" );
+    else
+        iteminfo.m_text = _( "Hidden" );
     templateFieldListCtrl->SetItem( iteminfo );
 }
 
@@ -190,7 +192,7 @@ void DIALOG_EESCHEMA_OPTIONS::copySelectedToPanel( void )
     if( !templateFieldListCtrl->GetItem( iteminfo ) )
         return;
 
-    if( iteminfo.m_text == wxT( "Hidden" ) )
+    if( iteminfo.m_text == _( "Hidden" ) )
         fieldVisibleCheckbox->SetValue( false );
     else
         fieldVisibleCheckbox->SetValue( true );
@@ -199,8 +201,7 @@ void DIALOG_EESCHEMA_OPTIONS::copySelectedToPanel( void )
 
 void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
 {
-    selectedField = event.GetIndex();
-    printf( "selectedField = %d\n", selectedField );
+    selectedField = event.GetSelection();
     copySelectedToPanel();
     event.Skip();
 }
@@ -208,6 +209,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
 
 void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldDeselected( wxListEvent& event )
 {
+    copyPanelToSelected();
     event.Skip();
 }
 

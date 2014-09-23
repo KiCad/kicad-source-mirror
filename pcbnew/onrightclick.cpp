@@ -180,11 +180,11 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             break;
 
         case PCB_PAD_T:
-            createPopUpMenuForFpPads( (D_PAD*) item, aPopMenu );
+            createPopUpMenuForFpPads( static_cast<D_PAD*>( item ), aPopMenu );
             break;
 
         case PCB_MODULE_TEXT_T:
-            createPopUpMenuForFpTexts( (TEXTE_MODULE*) item, aPopMenu );
+            createPopUpMenuForFpTexts( static_cast<TEXTE_MODULE*>( item ), aPopMenu );
             break;
 
         case PCB_LINE_T:  // Some graphic items on technical layers

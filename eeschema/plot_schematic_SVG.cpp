@@ -35,6 +35,7 @@
 #include <base_units.h>
 #include <libeditframe.h>
 #include <sch_sheet_path.h>
+#include <project.h>
 
 #include <dialog_plot_schematic.h>
 
@@ -72,7 +73,9 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
 
             sheetpath = SheetList.GetNext();
 
-            fn = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( ".svg" );
+            wxString fileName = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( ".svg" );
+
+            fn = Prj().AbsolutePath( fileName );
 
             bool success = plotOneSheetSVG( m_parent, fn.GetFullPath(), screen,
                                             getModeColor() ? false : true,

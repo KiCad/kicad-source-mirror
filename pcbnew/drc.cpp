@@ -2,9 +2,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2007 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2014 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,9 +24,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/****************************/
-/* DRC control              */
-/****************************/
+/**
+ * @file drc.cpp
+ */
 
 #include <fctsys.h>
 #include <wxPcbStruct.h>
@@ -38,8 +38,10 @@
 #include <class_track.h>
 #include <class_pad.h>
 #include <class_zone.h>
+#include <class_pcb_text.h>
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
+#include <geometry/seg.h>
 
 #include <pcbnew.h>
 #include <drc_stuff.h>
@@ -260,6 +262,15 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
         testKeepoutAreas();
     }
+
+    // find and gather vias, tracks, pads inside text boxes.
+    if( aMessages )
+    {
+        aMessages->AppendText( _( "Test texts...\n" ) );
+        wxSafeYield();
+    }
+
+    testTexts();
 
     // update the m_ui listboxes
     updatePointers();
@@ -624,6 +635,137 @@ void DRC::testKeepoutAreas()
             }
         }
         // Test pads: TODO
+    }
+}
+
+
+void DRC::testTexts()
+{
+    std::vector<wxPoint> textShape;      // a buffer to store the text shape (set of segments)
+    std::vector<D_PAD*> padList = m_pcb->GetPads();
+
+    // Test text areas for vias, tracks and pads inside text areas
+    for( BOARD_ITEM* item = m_pcb->m_Drawings; item; item = item->Next() )
+    {
+        // Drc test only items on copper layers
+        if( ! IsCopperLayer( item->GetLayer() ) )
+            continue;
+
+        // only texts on copper layers are tested
+        if( item->Type() !=  PCB_TEXT_T )
+            continue;
+
+        textShape.clear();
+
+        // So far the bounding box makes up the text-area
+        TEXTE_PCB* text = (TEXTE_PCB*) item;
+        text->TransformTextShapeToSegmentList( textShape );
+
+        if( textShape.size() == 0 )     // Should not happen (empty text?)
+            continue;
+
+        for( TRACK* track = m_pcb->m_Track; track != NULL; track = track->Next() )
+        {
+            if( ! track->IsOnLayer( item->GetLayer() ) )
+                    continue;
+
+            // Test the distance between each segment and the current track/via
+            int min_dist = ( track->GetWidth() + text->GetThickness() ) /2 +
+                           track->GetClearance(NULL);
+
+            if( track->Type() == PCB_TRACE_T )
+            {
+                SEG segref( track->GetStart(), track->GetEnd() );
+
+                // Error condition: Distance between text segment and track segment is
+                // smaller than the clearance of the segment
+                for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
+                {
+                    SEG segtest( textShape[jj], textShape[jj+1] );
+                    int dist = segref.Distance( segtest );
+
+                    if( dist < min_dist )
+                    {
+                        m_currentMarker = fillMarker( track, text,
+                                                      DRCE_TRACK_INSIDE_TEXT,
+                                                      m_currentMarker );
+                        m_pcb->Add( m_currentMarker );
+                        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
+                        m_currentMarker = NULL;
+                        break;
+                    }
+                }
+            }
+            else if( track->Type() == PCB_VIA_T )
+            {
+                // Error condition: Distance between text segment and via is
+                // smaller than the clearance of the via
+                for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
+                {
+                    SEG segtest( textShape[jj], textShape[jj+1] );
+
+                    if( segtest.PointCloserThan( track->GetPosition(), min_dist ) )
+                    {
+                        m_currentMarker = fillMarker( track, text,
+                                                      DRCE_VIA_INSIDE_TEXT, m_currentMarker );
+                        m_pcb->Add( m_currentMarker );
+                        m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
+                        m_currentMarker = NULL;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Test pads
+        for( unsigned ii = 0; ii < padList.size(); ii++ )
+        {
+            D_PAD* pad = padList[ii];
+
+            if( ! pad->IsOnLayer( item->GetLayer() ) )
+                    continue;
+
+            wxPoint shape_pos = pad->ShapePos();
+
+            for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
+            {
+                SEG segtest( textShape[jj], textShape[jj+1] );
+                /* In order to make some calculations more easier or faster,
+                 * pads and tracks coordinates will be made relative
+                 * to the segment origin
+                 */
+                wxPoint origin = textShape[jj];  // origin will be the origin of other coordinates
+                m_segmEnd = textShape[jj+1] - origin;
+                wxPoint delta = m_segmEnd;
+                m_segmAngle = 0;
+
+                // for a non horizontal or vertical segment Compute the segment angle
+                // in tenths of degrees and its length
+                if( delta.x || delta.y )    // delta.x == delta.y == 0 for vias
+                {
+                    // Compute the segment angle in 0,1 degrees
+                    m_segmAngle = ArcTangente( delta.y, delta.x );
+
+                    // Compute the segment length: we build an equivalent rotated segment,
+                    // this segment is horizontal, therefore dx = length
+                    RotatePoint( &delta, m_segmAngle );    // delta.x = length, delta.y = 0
+                }
+
+                m_segmLength = delta.x;
+                m_padToTestPos = shape_pos - origin;
+
+                if( !checkClearanceSegmToPad( pad, text->GetThickness(),
+                                              pad->GetClearance(NULL) ) )
+                {
+                    m_currentMarker = fillMarker( pad, text,
+                                                  DRCE_PAD_INSIDE_TEXT, m_currentMarker );
+                    m_pcb->Add( m_currentMarker );
+                    m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
+                    m_currentMarker = NULL;
+                    break;
+                }
+            }
+        }
     }
 }
 

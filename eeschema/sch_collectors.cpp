@@ -542,3 +542,23 @@ void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
         m_data.clear();
     }
 }
+
+
+SEARCH_RESULT SCH_TYPE_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestData )
+{
+    // The Vist() function only visits the testItem if its type was in the
+    // the scanList, so therefore we can collect anything given to us here.
+    Append( aItem );
+
+    return SEARCH_CONTINUE;
+}
+
+
+void SCH_TYPE_COLLECTOR::Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[] )
+{
+    Empty();        // empty the collection
+
+    SetScanTypes( aFilterList );
+
+    EDA_ITEM::IterateForward( aItem, this, NULL, m_ScanTypes );
+}

@@ -32,14 +32,15 @@
 #include <pl_editor_frame.h>
 
 
-void PL_EDITOR_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition,
-                                      int aHotKey )
+bool PL_EDITOR_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
+    bool eventHandled = true;
+
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
         m_movingCursorWithKeyboard = false;
-        return;
+        return false;
     }
 
     wxPoint pos = aPosition;
@@ -52,8 +53,10 @@ void PL_EDITOR_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition,
 
     if( aHotKey )
     {
-        OnHotKey( aDC, aHotKey, aPosition );
+        eventHandled = OnHotKey( aDC, aHotKey, aPosition );
     }
 
     UpdateStatusBar();
+
+    return eventHandled;
 }

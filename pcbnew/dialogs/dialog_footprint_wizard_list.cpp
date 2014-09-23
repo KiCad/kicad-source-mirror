@@ -9,7 +9,6 @@
 #include <fctsys.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
-#include <pcbcommon.h>
 #include <dialog_footprint_wizard_list.h>
 #include <class_footprint_wizard.h>
 

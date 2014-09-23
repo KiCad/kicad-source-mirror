@@ -334,7 +334,7 @@ bool PLOT_CONTROLLER::PlotLayer( LAYER_NUM aLayer )
         return false;
 
     // Fully delegated to the parent
-    PlotOneBoardLayer( m_board, m_plotter, aLayer, m_plotOpts );
+    PlotOneBoardLayer( m_board, m_plotter, ToLAYER_ID( aLayer ), m_plotOpts );
 
     return true;
 }

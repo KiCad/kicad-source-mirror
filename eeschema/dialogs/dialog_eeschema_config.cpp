@@ -39,31 +39,44 @@
 #include <libeditframe.h>
 #include <viewlib_frame.h>
 #include <wildcards_and_files_ext.h>
-
 #include <wx/tokenzr.h>
-
-
 #include <dialog_eeschema_config_fbp.h>
+
 
 class SCH_EDIT_FRAME;
 class EDA_DRAW_FRAME;
 
+
 class DIALOG_EESCHEMA_CONFIG : public DIALOG_EESCHEMA_CONFIG_FBP
 {
 public:
-    DIALOG_EESCHEMA_CONFIG( SCH_EDIT_FRAME* parent, wxFrame* activeWindow );
+    DIALOG_EESCHEMA_CONFIG( wxWindow* aParent,
+            wxString* aCallersProjectSpecificLibPaths, wxArrayString* aCallersLibNames );
 
 private:
-    SCH_EDIT_FRAME* m_Parent;
-    bool            m_LibListChanged;
-    bool            m_LibPathChanged;
-    wxString        m_UserLibDirBufferImg;
+    wxString*       m_callers_project_specific_lib_paths;
+    wxArrayString*  m_callers_lib_names;
 
-    // event handlers, overiding the fbp handlers
-    void Init();
+    bool            m_lib_list_changed;
+    bool            m_lib_path_changed;
+
+    //------ event handlers, overiding the fbp handlers --------------
+
     void OnCloseWindow( wxCloseEvent& event );
+
+    /* Remove a library to the library list.
+     * The real list (m_Parent->m_ComponentLibFiles) is not changed, so the change can be canceled
+     */
     void OnRemoveLibClick( wxCommandEvent& event );
+
+    /* Insert or add a library to the library list:
+     *   The new library is put in list before (insert button) the selection,
+     *   or added (add button) to end of list
+     * The real list (m_Parent->m_ComponentLibFiles) is not changed, so the change
+     * can be canceled
+     */
     void OnAddOrInsertLibClick( wxCommandEvent& event );
+
     void OnAddOrInsertPath( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
@@ -73,59 +86,53 @@ private:
 };
 
 
-DIALOG_EESCHEMA_CONFIG::DIALOG_EESCHEMA_CONFIG( SCH_EDIT_FRAME* aSchFrame,
-        wxFrame* aParent ) :
-    DIALOG_EESCHEMA_CONFIG_FBP( aParent )
+DIALOG_EESCHEMA_CONFIG::DIALOG_EESCHEMA_CONFIG( wxWindow* aParent,
+            wxString* aCallersProjectSpecificLibPaths, wxArrayString* aCallersLibNames ) :
+    DIALOG_EESCHEMA_CONFIG_FBP( aParent ),
+    m_callers_project_specific_lib_paths( aCallersProjectSpecificLibPaths ),
+    m_callers_lib_names( aCallersLibNames ),
+    m_lib_list_changed( false ),
+    m_lib_path_changed( false )
 {
-    m_Parent = aSchFrame;
+    m_ListLibr->InsertItems( *aCallersLibNames, 0 );
 
-    Init();
+    // Load user libs paths:
+    wxArrayString paths;
 
-    wxString msg = wxString::Format(
-        _( "from '%s'" ),
-        GetChars( Prj().GetProjectFullName() ) );
+    SEARCH_STACK::Split( &paths, *aCallersProjectSpecificLibPaths );
+
+    for( unsigned i=0; i<paths.GetCount();  ++i )
+    {
+        wxString path = paths[i];
+
+        if( wxFileName::DirExists( Prj().AbsolutePath( path ) ) )
+            m_listUserPaths->Append( path );
+    }
+
+    // Display actual library paths which come in part from KIFACE::KifaceSearch()
+    // along with aCallersProjectSpecificLibPaths at the front.
+    SEARCH_STACK* libpaths = Prj().SchSearchS();
+
+    DBG( libpaths->Show( __func__ ); )
+
+    for( unsigned ii = 0; ii < libpaths->GetCount(); ii++ )
+    {
+        m_DefaultLibraryPathslistBox->Append( (*libpaths)[ii] );
+    }
+
+    // select the first path after the current project's path
+    if( libpaths->GetCount() > 1 )
+        m_DefaultLibraryPathslistBox->Select( 1 );
+
+    wxString msg = wxString::Format( _(
+        "Project '%s'" ),
+        GetChars( Prj().GetProjectFullName() )
+        );
 
     SetTitle( msg );
 
     if( GetSizer() )
         GetSizer()->SetSizeHints( this );
-}
-
-
-void DIALOG_EESCHEMA_CONFIG::Init()
-{
-    wxString msg;
-
-    SetFocus();
-
-    m_LibListChanged = false;
-    m_LibPathChanged = false;
-    m_UserLibDirBufferImg = m_Parent->GetUserLibraryPath();
-
-    m_ListLibr->InsertItems( m_Parent->GetComponentLibraries(), 0 );
-
-    // Load user libs paths:
-    wxStringTokenizer tokenizer( m_UserLibDirBufferImg, wxT( ";\n\r" ) );
-
-    while( tokenizer.HasMoreTokens() )
-    {
-        wxString path = tokenizer.GetNextToken();
-
-        if( wxFileName::DirExists( path ) )
-            m_listUserPaths->Append( path );
-    }
-
-    // Display actual libraries paths:
-    SEARCH_STACK& libpaths = Prj().SchSearchS();
-
-    for( unsigned ii = 0; ii < libpaths.GetCount(); ii++ )
-    {
-        m_DefaultLibraryPathslistBox->Append( libpaths[ii] );
-    }
-
-    // select the first path after the current path project
-    if ( libpaths.GetCount() > 1 )
-        m_DefaultLibraryPathslistBox->Select( 1 );
 
     m_sdbSizer1OK->SetDefault();
 }
@@ -160,7 +167,7 @@ void DIALOG_EESCHEMA_CONFIG::OnButtonUpClick( wxCommandEvent& event )
         m_ListLibr->SetSelection(jj-1);
     }
 
-    m_LibListChanged = true;
+    m_lib_list_changed = true;
 }
 
 
@@ -194,49 +201,36 @@ void DIALOG_EESCHEMA_CONFIG::OnButtonDownClick( wxCommandEvent& event )
         m_ListLibr->SetSelection(jj+1);
     }
 
-    m_LibListChanged = true;
+    m_lib_list_changed = true;
 }
 
 
 void DIALOG_EESCHEMA_CONFIG::OnCancelClick( wxCommandEvent& event )
 {
-    SEARCH_STACK&    lib_search = Prj().SchSearchS();
-
-    // Recreate the user lib path
-    if( m_LibPathChanged )
-    {
-        for( unsigned ii = 0; ii < m_listUserPaths->GetCount(); ii++ )
-            lib_search.RemovePaths( m_listUserPaths->GetString(ii) );
-
-        lib_search.AddPaths( m_Parent->GetUserLibraryPath(), 1 );
-    }
-
     EndModal( wxID_CANCEL );
 }
 
 
 void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
 {
-    // Recreate the user lib path
-    if( m_LibPathChanged )
+    // Give caller the changed paths
+    if( m_lib_path_changed )
     {
-        wxString path;
+        wxString paths;
 
         for( unsigned ii = 0; ii < m_listUserPaths->GetCount(); ii++ )
         {
             if( ii > 0 )
-                path << wxT( ";" );
+                paths += wxT( ';' );
 
-            path << m_listUserPaths->GetString( ii );
+            paths += m_listUserPaths->GetString( ii );
         }
 
-        m_Parent->SetUserLibraryPath( path );
+        *m_callers_project_specific_lib_paths = paths;
     }
 
-    /* Set new active library list if the lib list of if default path list
-     * was modified
-     */
-    if( m_LibListChanged || m_LibPathChanged )
+    // Update caller's lib_names if changed.
+    if( m_lib_list_changed )
     {
         wxArrayString list;
 
@@ -244,17 +238,8 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
             list.Add( m_ListLibr->GetString( ii ) );
 
         // Recreate lib list
-        m_Parent->SetComponentLibraries( list );
-
-        // take new list in account
-        m_Parent->LoadLibraries();
-
-        // Clear (if needed) the current active library in libedit because it could be
-        // removed from memory
-        LIB_EDIT_FRAME::EnsureActiveLibExists();
+        *m_callers_lib_names = list;
     }
-
-    m_Parent->SaveProjectSettings( false );
 
     EndModal( wxID_OK );
 }
@@ -266,9 +251,6 @@ void DIALOG_EESCHEMA_CONFIG::OnCloseWindow( wxCloseEvent& event )
 }
 
 
-/* Remove a library to the library list.
- * The real list (m_Parent->m_ComponentLibFiles) is not changed, so the change can be canceled
- */
 void DIALOG_EESCHEMA_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
 {
     wxArrayInt selections;
@@ -278,7 +260,7 @@ void DIALOG_EESCHEMA_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
     for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
     {
         m_ListLibr->Delete( selections[ii] );
-        m_LibListChanged = true;
+        m_lib_list_changed = true;
     }
 
     // Select next item after deleted in m_ListLibr
@@ -294,21 +276,13 @@ void DIALOG_EESCHEMA_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
 }
 
 
-/* Insert or add a library to the library list:
- *   The new library is put in list before (insert button) the selection,
- *   or added (add button) to end of list
- * The real list (m_Parent->m_ComponentLibFiles) is not changed, so the change
- * can be canceled
- */
 void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 {
     int             ii;
     wxString        libfilename;
-    wxFileName      fn;
     wxArrayInt      selections;
 
     PROJECT&        prj = Prj();
-    SEARCH_STACK&   search = prj.SchSearchS();
 
     m_ListLibr->GetSelections( selections );
 
@@ -319,13 +293,12 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
     else
         ii = 0;
 
-    wxString libpath = m_DefaultLibraryPathslistBox->GetStringSelection();
+    wxString selection = m_DefaultLibraryPathslistBox->GetStringSelection();
+    wxString libpath   = Prj().AbsolutePath( selection );
 
     if( !libpath )
     {
         libpath = prj.GetRString( PROJECT::SCH_LIB_PATH );
-        if( !libpath )
-            libpath = search.LastVisitedPath();
     }
 
     wxFileDialog filesDialog( this, _( "Library files:" ), libpath,
@@ -335,9 +308,20 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
     if( filesDialog.ShowModal() != wxID_OK )
         return;
 
-    wxArrayString filenames;
+    wxArrayString   filenames;
 
     filesDialog.GetPaths( filenames );
+
+    wxFileName      fn;
+
+    // Build libs paths, to find later a relative path:
+    wxArrayString paths;
+
+    for( unsigned ll=0; ll < m_DefaultLibraryPathslistBox->GetCount(); ++ll )
+        paths.Add( m_DefaultLibraryPathslistBox->GetString( ll ) );
+
+    for( unsigned ll=0; ll < m_listUserPaths->GetCount(); ++ll )
+        paths.Add( m_listUserPaths->GetString( ll ) );
 
     for( unsigned jj = 0; jj < filenames.GetCount(); jj++ )
     {
@@ -346,24 +330,28 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         if( jj == 0 )
             prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
-        /* If the library path is already in the library search paths
-         * list, just add the library name to the list.  Otherwise, add
-         * the library name with the full or relative path.
-         * the relative path, when possible is preferable,
-         * because it preserve use of default libraries paths, when the path
-         * is a sub path of these default paths
-         */
-        libfilename = search.FilenameWithRelativePathInSearchList( fn.GetFullPath() );
-
-        // Remove extension:
-        fn = libfilename;
+        // Extension is not stored, so remove extension:
         fn.SetExt( wxEmptyString );
+
+        // Try to use relative path:
+        for( unsigned ll = 0; ll < paths.GetCount(); ll++ )
+        {
+            wxFileName relfn = fn;
+            relfn.MakeRelativeTo( paths[ll] );
+
+            if( relfn.GetPath()[0] != '.' )
+            {
+                fn = relfn;
+                break;
+            }
+        }
+
         libfilename = fn.GetFullPath();
 
         // Add or insert new library name, if not already in list
         if( m_ListLibr->FindString( libfilename, fn.IsCaseSensitive() ) == wxNOT_FOUND )
         {
-            m_LibListChanged = true;
+            m_lib_list_changed = true;
 
             if( event.GetId() == ID_ADD_LIB )
                 m_ListLibr->Append( libfilename );
@@ -372,8 +360,10 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         }
         else
         {
-            wxString msg = wxT( "<" ) + libfilename + wxT( "> : " ) +
-                           _( "Library already in use" );
+            wxString msg = wxString::Format( _(
+                "'%s' : library already in use" ),
+                GetChars( libfilename )
+                );
             DisplayError( this, msg );
         }
     }
@@ -383,24 +373,21 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
 {
     PROJECT&        prj = Prj();
-    SEARCH_STACK&   search = Prj().SchSearchS();
-    wxString        path = prj.GetRString( PROJECT::SCH_LIB_PATH );
-
-    if( !path )
-        path = search.LastVisitedPath();
+    wxString        abs_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+    wxString        path;
 
     bool select = EDA_DirectorySelector( _( "Default Path for Libraries" ),
-                                         path, wxDD_DEFAULT_STYLE,
+                                         abs_path, wxDD_DEFAULT_STYLE,
                                          this, wxDefaultPosition );
 
     if( !select )
         return;
 
-    if( !wxFileName::DirExists( path ) )    // Should not occurs
+    if( !wxFileName::DirExists( abs_path ) )    // Should not occur
         return;
 
     // Add or insert path if not already in list
-    if( m_listUserPaths->FindString( path ) == wxNOT_FOUND )
+    if( m_listUserPaths->FindString( abs_path ) == wxNOT_FOUND )
     {
         int ipos = m_listUserPaths->GetCount();
 
@@ -416,43 +403,53 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
         }
 
         // Ask the user if this is a relative path
-       int diag = wxMessageBox( _( "Use a relative path?" ), _( "Path type" ),
+        int diag = wxMessageBox( _( "Use a relative path?" ), _( "Path type" ),
                                 wxYES_NO | wxICON_QUESTION, this );
 
         if( diag == wxYES )
         {
             // Make it relative
-            wxFileName fn = path;
-            fn.MakeRelativeTo( wxT(".") );
+            wxFileName fn = abs_path;
+            fn.MakeRelativeTo( wxPathOnly( Prj().GetProjectFullName() ) );
             path = fn.GetPathWithSep() + fn.GetFullName();
         }
+        else
+            path = abs_path;
 
-        m_listUserPaths->Insert(path, ipos);
-        m_LibPathChanged = true;
+        m_listUserPaths->Insert( path, ipos );
+        m_lib_path_changed = true;
 
-        search.AddPaths( path, ipos+1 );
-
-        // Display actual libraries paths:
-        m_DefaultLibraryPathslistBox->Clear();
-
-        for( unsigned ii = 0; ii < search.GetCount(); ii++ )
-        {
-            m_DefaultLibraryPathslistBox->Append( search[ii] );
-        }
+        m_DefaultLibraryPathslistBox->InsertItems( 1, &path, ipos+1 );
     }
     else
     {
         DisplayError( this, _("Path already in use") );
     }
 
-    prj.SetRString( PROJECT::SCH_LIB_PATH, path );
+    prj.SetRString( PROJECT::SCH_LIB_PATH, abs_path );
+}
+
+
+static void remove_from_listbox( wxListBox* aListBox, const wxString& aText )
+{
+    wxArrayString   a;
+
+    for( int i=0, cnt = aListBox->GetCount();  i<cnt;  ++i )
+    {
+        wxString item = aListBox->GetString( i );
+
+        if( item != aText )
+            a.Add( item );
+    }
+
+    aListBox->Clear();
+
+    aListBox->InsertItems( a, 0 );
 }
 
 
 void DIALOG_EESCHEMA_CONFIG::OnRemoveUserPath( wxCommandEvent& event )
 {
-    SEARCH_STACK&    lib_search = Prj().SchSearchS();
-
     int ii = m_listUserPaths->GetSelection();
 
     if( ii < 0 )
@@ -460,27 +457,23 @@ void DIALOG_EESCHEMA_CONFIG::OnRemoveUserPath( wxCommandEvent& event )
 
     if( ii >= 0 )
     {
-        lib_search.RemovePaths( m_listUserPaths->GetStringSelection() );
+        wxString sel = m_listUserPaths->GetStringSelection();
+
+        remove_from_listbox( m_DefaultLibraryPathslistBox, sel );
 
         m_listUserPaths->Delete( ii );
-        m_LibPathChanged = true;
-    }
-
-    // Display actual libraries paths:
-    m_DefaultLibraryPathslistBox->Clear();
-
-    for( unsigned ii = 0; ii < lib_search.GetCount(); ii++ )
-    {
-        m_DefaultLibraryPathslistBox->Append( lib_search[ii] );
+        m_lib_path_changed = true;
     }
 }
 
 
-int InvokeEeschemaConfig( SCH_EDIT_FRAME* aEditFrame, wxFrame* aParent )
+bool InvokeEeschemaConfig( wxWindow* aParent,
+        wxString* aCallersProjectSpecificLibPaths, wxArrayString* aCallersLibNames )
 {
-    DIALOG_EESCHEMA_CONFIG  dlg( aEditFrame, aParent );
+    DIALOG_EESCHEMA_CONFIG  dlg( aParent,
+            aCallersProjectSpecificLibPaths, aCallersLibNames );
 
-    dlg.ShowModal();
+    int ret = dlg.ShowModal();
 
-    return 1;
+    return wxID_OK == ret;
 }

@@ -33,6 +33,7 @@
 #include <kicad_string.h>
 #include <wxEeschemaStruct.h>
 #include <richio.h>
+#include <project.h>
 
 #include <general.h>
 #include <sch_bus_entry.h>
@@ -76,17 +77,19 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     if( !append )
         aScreen->SetFileName( aFullFileName );
 
-    FILE* f;
-    wxString fname = aFullFileName;
+    wxString fname = Prj().AbsolutePath( aFullFileName );
+
 #ifdef __WINDOWS__
     fname.Replace( wxT("/"), wxT("\\") );
 #else
     fname.Replace( wxT("\\"), wxT("/") );
 #endif
 
-    if( ( f = wxFopen( fname, wxT( "rt" ) ) ) == NULL )
+    FILE* f = wxFopen( fname, wxT( "rt" ) );
+
+    if( !f )
     {
-        msgDiag.Printf( _( "Failed to open <%s>" ), GetChars( aFullFileName ) );
+        msgDiag.Printf( _( "Failed to open '%s'" ), GetChars( aFullFileName ) );
         DisplayError( this, msgDiag );
         return false;
     }
@@ -94,14 +97,14 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     // reader now owns the open FILE.
     FILE_LINE_READER    reader( f, aFullFileName );
 
-    msgDiag.Printf( _( "Loading <%s>" ), GetChars( aScreen->GetFileName() ) );
+    msgDiag.Printf( _( "Loading '%s'" ), GetChars( aScreen->GetFileName() ) );
     PrintMsg( msgDiag );
 
     if( !reader.ReadLine()
         || strncmp( (char*)reader + 9, SCHEMATIC_HEAD_STRING,
                     sizeof( SCHEMATIC_HEAD_STRING ) - 1 ) != 0 )
     {
-        msgDiag.Printf( _( "<%s> is NOT an Eeschema file!" ), GetChars( aFullFileName ) );
+        msgDiag.Printf( _( "'%s' is NOT an Eeschema file!" ), GetChars( aFullFileName ) );
         DisplayError( this, msgDiag );
         return false;
     }
@@ -119,9 +122,11 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
 
     if( version > EESCHEMA_VERSION )
     {
-        msgDiag.Printf( _( "<%s> was created by a more recent \
-version of Eeschema and may not load correctly. Please consider updating!" ),
-                GetChars( aFullFileName ) );
+        msgDiag.Printf( _(
+            "'%s' was created by a more recent version of Eeschema and may not"
+            " load correctly. Please consider updating!" ),
+                GetChars( aFullFileName )
+                );
         DisplayInfoMessage( this, msgDiag );
     }
 
@@ -255,6 +260,7 @@ again." );
     aScreen->Show( 0, std::cout );
 #endif
 
+    aScreen->BuildSchCmpLinksToLibCmp();    // Build links between each components and its part lib LIB_PART
     aScreen->TestDanglingEnds();
 
     msgDiag.Printf( _( "Done Loading <%s>" ), GetChars( aScreen->GetFileName() ) );

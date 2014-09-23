@@ -23,8 +23,10 @@ import PadArray as PA
 
 class BGAPadGridArray(PA.PadGridArray):
 
-    def NamingFunction(self, x, y):
-        return "%s%d" % (self.AlphaNameFromNumber(y + 1, alphabet="ABCDEFGHJKLMNPRTUVWY"), x + 1)
+    def NamingFunction(self, n_x, n_y):
+        return "%s%d" % (
+            self.AlphaNameFromNumber(n_y + 1, alphabet="ABCDEFGHJKLMNPRTUVWY"),
+            n_x + 1)
 
 
 class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
@@ -46,20 +48,18 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
 
     def CheckParameters(self):
 
-        self.CheckParamPositiveInt("Pads", "*row count")
-        self.CheckParamPositiveInt("Pads", "*column count")
+        self.CheckParamInt("Pads", "*row count")
+        self.CheckParamInt("Pads", "*column count")
 
+    def GetValue(self):
 
-    def GetReference(self):
-
-        pins = self.parameters["Pads"]["*row count"] * self.parameters["Pads"]["*column count"]
+        pins = (self.parameters["Pads"]["*row count"]
+                * self.parameters["Pads"]["*column count"])
 
         return "BGA %d" % pins
 
-
-    def GetValuePrefix(self):
+    def GetReferencePrefix(self):
         return "U"
-
 
     def BuildThisFootprint(self):
 
@@ -76,23 +76,24 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
         # add in the pads
         pad = PA.PadMaker(self.module).SMTRoundPad(pads["pad size"])
 
-        pin1Pos = pcbnew.wxPoint(-((cols - 1) * pad_pitch) / 2,
-                                 -((rows - 1) * pad_pitch) / 2)
+        pin1_pos = pcbnew.wxPoint(-((cols - 1) * pad_pitch) / 2,
+                                  -((rows - 1) * pad_pitch) / 2)
 
-        array = BGAPadGridArray(pad, cols, rows, pad_pitch, pad_pitch, pin1Pos)
-        array.AddPadsToModule()
+        array = BGAPadGridArray(pad, cols, rows, pad_pitch, pad_pitch)
+        array.AddPadsToModule(self.draw)
 
         #box
-        ssX = -pin1Pos.x + pads["outline x margin"]
-        ssY = -pin1Pos.y + pads["outline y margin"]
+        ssx = -pin1_pos.x + pads["outline x margin"]
+        ssy = -pin1_pos.y + pads["outline y margin"]
 
-        self.draw.BoxWithDiagonalAtCorner(0, 0, ssX*2, ssY*2, pads["outline x margin"])
+        self.draw.BoxWithDiagonalAtCorner(0, 0, ssx*2, ssy*2,
+                                          pads["outline x margin"])
 
         #reference and value
-        textSize = pcbnew.FromMM(0.8)
+        text_size = pcbnew.FromMM(1.2)  # IPC nominal
 
-        self.draw.Value(0, - ssY - textSize, textSize)
-        self.draw.Reference(0, ssY + textSize, textSize)
+        self.draw.Value(0, - ssy - text_size, text_size)
+        self.draw.Reference(0, ssy + text_size, text_size)
 
 
 BGAWizard().register()

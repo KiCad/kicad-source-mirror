@@ -640,7 +640,7 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
 
     if( text->IsMultilineAllowed() )
     {
-        wxArrayString* list = wxStringSplit( text->GetText(), '\n' );
+        wxArrayString* list = wxStringSplit( text->GetShownText(), '\n' );
         std::vector<wxPoint> positions;
         positions.reserve( list->Count() );
         text->GetPositionsOfLinesOfMultilineText( positions, list->Count() );
@@ -661,7 +661,7 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
     else
     {
         DrawGraphicText( NULL, NULL, text->GetTextPosition(), color,
-                         text->GetText(), text->GetOrientation(), size,
+                         text->GetShownText(), text->GetOrientation(), size,
                          text->GetHorizJustify(), text->GetVertJustify(),
                          text->GetThickness(), text->IsItalic(),
                          true,
@@ -941,7 +941,7 @@ static void export_vrml_text_module( TEXTE_MODULE* module )
         model_vrml->s_text_width    = module->GetThickness();
 
         DrawGraphicText( NULL, NULL, module->GetTextPosition(), BLACK,
-                module->GetText(), module->GetDrawRotation(), size,
+                module->GetShownText(), module->GetDrawRotation(), size,
                 module->GetHorizJustify(), module->GetVertJustify(),
                 module->GetThickness(), module->IsItalic(),
                 true,
@@ -1211,11 +1211,11 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            export_vrml_text_module( dynamic_cast<TEXTE_MODULE*>( item ) );
+            export_vrml_text_module( static_cast<TEXTE_MODULE*>( item ) );
             break;
 
         case PCB_MODULE_EDGE_T:
-            export_vrml_edge_module( aModel, dynamic_cast<EDGE_MODULE*>( item ),
+            export_vrml_edge_module( aModel, static_cast<EDGE_MODULE*>( item ),
                                      aModule->GetOrientation() );
             break;
 
@@ -1320,7 +1320,8 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
             if( parser )
             {
                 // embed x3d model in vrml format
-                parser->Load( fname );
+                double vrml_to_x3d = aVRMLModelsToBiu;
+                parser->Load( fname, vrml_to_x3d );
 
                 try
                 {

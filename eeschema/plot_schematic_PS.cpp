@@ -31,6 +31,7 @@
 #include <base_units.h>
 #include <sch_sheet_path.h>
 #include <dialog_plot_schematic.h>
+#include <project.h>
 
 
 void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
@@ -103,6 +104,8 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
         wxPoint plot_offset;
         plotFileName = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( "." )
                        + PS_PLOTTER::GetDefaultFileExtension();
+
+        plotFileName = Prj().AbsolutePath( plotFileName );
 
         wxString msg;
 

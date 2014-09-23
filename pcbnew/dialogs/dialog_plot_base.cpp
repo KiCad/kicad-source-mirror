@@ -92,23 +92,23 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerPlotItems->Add( m_plotSheetRef, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
 	m_plotPads_on_Silkscreen = new wxCheckBox( this, ID_ALLOW_PRINT_PAD_ON_SILKSCREEN, _("Plot pads on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotPads_on_Silkscreen->SetToolTip( _("Enable/disable print/plot pads on silkscreen layers\nWhen disable, pads are never potted on silkscreen layers\nWhen enable, pads are potted only if they appear on silkscreen layers") );
+	m_plotPads_on_Silkscreen->SetToolTip( _("Enable plotting of pads on silkscreen layers\nWhen disabled, pads are never plotted on silkscreen layers\nWhen enabled, pads are plotted only if they appear on silkscreen layers") );
 	
 	bSizerPlotItems->Add( m_plotPads_on_Silkscreen, 0, wxALL, 2 );
 	
-	m_plotModuleValueOpt = new wxCheckBox( this, wxID_ANY, _("Plot module value on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotModuleValueOpt = new wxCheckBox( this, wxID_ANY, _("Plot module values"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPlotItems->Add( m_plotModuleValueOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
-	m_plotModuleRefOpt = new wxCheckBox( this, ID_PRINT_REF, _("Plot module reference on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotModuleRefOpt = new wxCheckBox( this, ID_PRINT_REF, _("Plot module references"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPlotItems->Add( m_plotModuleRefOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
-	m_plotInvisibleText = new wxCheckBox( this, wxID_ANY, _("Force plot invisible values/refrences"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotInvisibleText->SetToolTip( _("Force plot invisible values and/or references") );
+	m_plotInvisibleText = new wxCheckBox( this, wxID_ANY, _("Force plot invisible values/references"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotInvisibleText->SetToolTip( _("Force plotting of invisible values and/or references") );
 	
 	bSizerPlotItems->Add( m_plotInvisibleText, 0, wxALL, 2 );
 	
 	m_plotNoViaOnMaskOpt = new wxCheckBox( this, wxID_ANY, _("Do not tent vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotNoViaOnMaskOpt->SetToolTip( _("Remove soldermask on vias.") );
+	m_plotNoViaOnMaskOpt->SetToolTip( _("Remove soldermask on vias") );
 	
 	bSizerPlotItems->Add( m_plotNoViaOnMaskOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
@@ -124,7 +124,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerPlotItems->Add( m_plotPSNegativeOpt, 0, wxALL, 2 );
 	
 	m_useAuxOriginCheckBox = new wxCheckBox( this, wxID_ANY, _("Use auxiliary axis as origin"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_useAuxOriginCheckBox->SetToolTip( _("Use auxiliary axis as coordinates origin in Gerber files.") );
+	m_useAuxOriginCheckBox->SetToolTip( _("Use auxiliary axis as coordinates origin in plot files") );
 	
 	bSizerPlotItems->Add( m_useAuxOriginCheckBox, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
@@ -205,7 +205,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_solderMaskMinWidthLabel = new wxStaticText( this, wxID_ANY, _("Solder mask min width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_solderMaskMinWidthLabel->Wrap( -1 );
-	m_solderMaskMinWidthLabel->SetToolTip( _("Min dist between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting") );
+	m_solderMaskMinWidthLabel->SetToolTip( _("Minimum distance between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting") );
 	
 	fgSizerSoldMaskOpts->Add( m_solderMaskMinWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
@@ -224,8 +224,8 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizerGbrOpt;
 	bSizerGbrOpt = new wxBoxSizer( wxVERTICAL );
 	
-	m_useGerberExtensions = new wxCheckBox( this, wxID_ANY, _("Use proper filename extensions"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_useGerberExtensions->SetToolTip( _("Use proper Gerber extensions - .GBL, .GTL, etc...") );
+	m_useGerberExtensions = new wxCheckBox( this, wxID_ANY, _("Use Protel filename extensions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useGerberExtensions->SetToolTip( _("Use conventional Protel Gerber extensions - .GBL, .GTL, etc...") );
 	
 	bSizerGbrOpt->Add( m_useGerberExtensions, 0, wxALL, 2 );
 	
@@ -246,7 +246,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	int m_rbGerberFormatNChoices = sizeof( m_rbGerberFormatChoices ) / sizeof( wxString );
 	m_rbGerberFormat = new wxRadioBox( this, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_rbGerberFormatNChoices, m_rbGerberFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbGerberFormat->SetSelection( 0 );
-	m_rbGerberFormat->SetToolTip( _("Precision of coordinates in Gerber files.\nUse the highter value if possible.") );
+	m_rbGerberFormat->SetToolTip( _("Resolution of coordinates in Gerber files.\nUse the higher value if possible") );
 	
 	m_GerberOptionsSizer->Add( m_rbGerberFormat, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	

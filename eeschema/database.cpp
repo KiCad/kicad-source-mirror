@@ -38,24 +38,26 @@
 
 #include <boost/foreach.hpp>
 
-extern void DisplayCmpDocAndKeywords( wxString& Name );
-
 
 // Used in DataBaseGetName: this is a callback function for EDA_LIST_DIALOG
 // to display keywords and description of a component
-void DisplayCmpDocAndKeywords( wxString& Name )
+void DisplayCmpDocAndKeywords( wxString& aName, void* aData )
 {
-    LIB_ALIAS* CmpEntry = NULL;
+    PART_LIBS*  libs = (PART_LIBS*) aData;
 
-    CmpEntry = CMP_LIBRARY::FindLibraryEntry( Name );
+    wxASSERT( libs );
 
-    if( CmpEntry == NULL )
+    LIB_ALIAS* part = libs->FindLibraryEntry( aName );
+
+    if( !part )
         return;
 
-    Name  = wxT( "Description: " ) + CmpEntry->GetDescription();
-    Name += wxT( "\nKey Words: " ) + CmpEntry->GetKeyWords();
+    aName  = wxT( "Description: " ) + part->GetDescription();
+    aName += wxT( "\nKey Words: " ) + part->GetKeyWords();
 }
 
+
+#if 0       // not used, should be wxFrame member for KIWAY and PROJECT access.
 
 /*
  * Displays a list of filtered components found in libraries for selection,
@@ -69,13 +71,11 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
     std::vector<wxArrayString>  nameList;
     wxString       msg;
 
-#ifndef KICAD_KEEPCASE
-    BufName.MakeUpper();
-#endif
+//    BufName.MakeUpper();
     Keys.MakeUpper();
 
     /* Review the list of libraries for counting. */
-    BOOST_FOREACH( CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
+    BOOST_FOREACH( PART_LIB& lib, PART_LIB::GetLibraryList() )
     {
         lib.SearchEntryNames( nameList, BufName, Keys );
     }
@@ -119,6 +119,7 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
 
     // Show candidate list:
     wxString cmpname;
+
     EDA_LIST_DIALOG dlg( frame, _( "Select Component" ), headers, nameList, cmpname,
                          DisplayCmpDocAndKeywords, true );
 
@@ -128,3 +129,4 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
     cmpname = dlg.GetTextSelection();
     return cmpname;
 }
+#endif

@@ -89,10 +89,20 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
     printf( "%s: m_help_file:'%s'\n", __func__, TO_UTF8( aBaseName ) );
 #endif
 
-    wxString fn = FindFileInSearchPaths( ss, aBaseName, &altsubdirs );
+    // Help files can be html (.html ext) or pdf (.pdf ext) files.
+    // Therefore, <BaseName>.html file is searched and if not found,
+    // <BaseName>.pdf file is searched in the same paths
+
+    wxString fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &altsubdirs );
 
     if( !fn  )
-        fn = FindFileInSearchPaths( ss, aBaseName, &subdirs );
+        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &altsubdirs );
+
+    if( !fn  )
+        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &subdirs );
+
+    if( !fn  )
+        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &subdirs );
 
     // Step 2 : if not found Try to find help file in help/<short name>
     if( !fn  )
@@ -104,10 +114,10 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
         subdirs.Add( i18n->GetName().BeforeLast( '_' ) );
         altsubdirs.Add( i18n->GetName().BeforeLast( '_' ) );
 
-        fn = FindFileInSearchPaths( ss, aBaseName, &altsubdirs );
+        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &altsubdirs );
 
         if( !fn )
-            fn = FindFileInSearchPaths( ss, aBaseName, &subdirs );
+            fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &subdirs );
     }
 
     // Step 3 : if not found Try to find help file in help/en
@@ -121,7 +131,13 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
         fn = FindFileInSearchPaths( ss, aBaseName, &altsubdirs );
 
         if( !fn )
-            fn = FindFileInSearchPaths( ss, aBaseName, &subdirs );
+         fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &altsubdirs );
+
+        if( !fn )
+            fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &subdirs );
+
+        if( !fn )
+            fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &subdirs );
     }
 
     return fn;

@@ -31,6 +31,7 @@
 #include <wxEeschemaStruct.h>
 #include <sch_sheet_path.h>
 #include <dialog_plot_schematic.h>
+#include <project.h>
 
 
 void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
@@ -79,6 +80,8 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
         wxPoint plot_offset;
         plotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT(".")
                        + DXF_PLOTTER::GetDefaultFileExtension();
+
+        plotFileName = Prj().AbsolutePath( plotFileName );
 
         wxString msg;
 

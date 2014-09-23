@@ -82,7 +82,6 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     if( dirDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxSetWorkingDirectory( dirDlg.GetPath() );
     msg.Printf( _( "Unzipping project in '%s'\n" ), GetChars( dirDlg.GetPath() ) );
     PrintMsg( msg );
 
@@ -105,7 +104,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 
         wxString unzipfilename = localfilename.AfterLast( ':' );
 
-        msg.Printf( _( "Extract file <%s>" ), GetChars( unzipfilename ) );
+        msg.Printf( _( "Extract file '%s'" ), GetChars( unzipfilename ) );
         PrintMsg( msg );
 
         wxInputStream*       stream = zipfile->GetStream();
@@ -122,12 +121,11 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 
         delete ofile;
         delete zipfile;
+
         localfilename = zipfilesys.FindNext();
     }
 
     PrintMsg( wxT( "** end **\n" ) );
-
-    wxSetWorkingDirectory( fn.GetPath() );
 }
 
 

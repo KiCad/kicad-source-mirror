@@ -7,7 +7,7 @@
  * Circles
  * Arcs
  * used as graphic elements found on non copper layers in boards
- * Footprint texts are not always graphic items and are not handled here
+ * Footprint texts are not graphic items and are not handled here
  */
 #include <fctsys.h>
 #include <macros.h>

@@ -40,7 +40,6 @@
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
 #include <3d_viewer.h>
-#include <pcbcommon.h>
 #include <msgpanel.h>
 #include <fp_lib_table.h>
 
@@ -138,6 +137,11 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_PCB_PAD_SETUP, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_PCB_USER_GRID_SETUP, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+
+    // Menu Help
+    EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
+    EVT_MENU( wxID_INDEX, EDA_DRAW_FRAME::GetKicadHelp )
+    EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
 
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, FOOTPRINT_EDIT_FRAME::Show3D_Frame )
@@ -291,13 +295,19 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_toolManager->ResetTools( TOOL_BASE::RUN );
         m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
+        m_Layers->ReFill();
+        m_Layers->ReFillRender();
+
+        GetScreen()->m_Active_Layer = F_SilkS;
+        m_Layers->SelectLayer( F_SilkS );
+        m_Layers->OnLayerSelected();
+
         UseGalCanvas( true );
     }
 
-    m_Layers->ReFill();
-    m_Layers->ReFillRender();
-
     m_auimgr.Update();
+
+    Zoom_Automatique( true );
 }
 
 
@@ -615,13 +625,15 @@ void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+bool FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
+    bool eventHandled = true;
+
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
         m_movingCursorWithKeyboard = false;
-        return;
+        return false;
     }
 
     // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
@@ -641,10 +653,12 @@ void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
 
     if( aHotKey )
     {
-        OnHotKey( aDC, aHotKey, aPosition );
+        eventHandled = OnHotKey( aDC, aHotKey, aPosition );
     }
 
     UpdateStatusBar();
+
+    return eventHandled;
 }
 
 

@@ -28,7 +28,7 @@
 
 class COMPONENT_TREE_SEARCH_CONTAINER;
 class LIB_ALIAS;
-class LIB_COMPONENT;
+class LIB_PART;
 class wxTreeItemId;
 
 class DIALOG_CHOOSE_COMPONENT : public DIALOG_CHOOSE_COMPONENT_BASE
@@ -79,7 +79,7 @@ protected:
 private:
     bool updateSelection();
     void selectIfValid( const wxTreeItemId& aTreeId );
-    void renderPreview( LIB_COMPONENT* aComponent, int aUnit );
+    void renderPreview( LIB_PART*      aComponent, int aUnit );
 
     COMPONENT_TREE_SEARCH_CONTAINER* const m_search_container;
     const int m_deMorganConvert;

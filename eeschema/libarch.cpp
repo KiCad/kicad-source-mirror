@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jp.charras ar wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
@@ -32,11 +32,8 @@
 #include <confirm.h>
 #include <class_sch_screen.h>
 #include <wxstruct.h>
-#include <sch_item_struct.h>
 #include <wxEeschemaStruct.h>
 
-#include <general.h>
-#include <netlist.h>
 #include <class_library.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
@@ -61,19 +58,19 @@ bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilenam
 
 bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 {
-    wxString msg;
-    LIB_COMPONENT* libComponent;
-    CMP_LIBRARY* libCache;
-    SCH_SCREENS screens;
+    SCH_SCREENS     screens;
+    PART_LIBS*      libs = Prj().SchLibs();
 
-    libCache = new CMP_LIBRARY( LIBRARY_TYPE_EESCHEMA, aFileName );
+    std::auto_ptr<PART_LIB> libCache( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
+
     libCache->SetCache();
 
     /* examine all screens (not sheets) used and build the list of components
-     * found in lib complex hierarchies are not a problem because we just want
+     * found in lib.
+     * Complex hierarchies are not a problem because we just want
      * to know used components in libraries
      */
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
         for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
         {
@@ -81,14 +78,26 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 continue;
 
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+
             // If not already saved in the new cache, put it:
-
-            if( libCache->FindEntry( component->GetLibName()) == NULL )
+            if( !libCache->FindEntry( component->GetPartName() ) )
             {
-                libComponent = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
+                if( LIB_PART* part = libs->FindLibPart( component->GetPartName() ) )
+                {
+                    // AddPart() does first clone the part before adding.
+                    libCache->AddPart( part );
+                }
+                else    // Search for a part/alias using case insensitive search
+                {       // for compatibility with old versions of schematics
+                    LIB_ALIAS* entry = libs->FindLibraryNearEntry( component->GetPartName() );
 
-                if( libComponent )    // if NULL : component not found, cannot be stored
-                    libCache->AddComponent( libComponent );
+                    if( entry && !libCache->FindEntry( entry->GetName() ) )
+                    {
+                        if( LIB_PART* part = libs->FindLibPart( entry->GetName() ) )
+                            libCache->AddPart( part );
+                    }
+                }
+
             }
         }
     }
@@ -99,16 +108,20 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
         if( !libCache->Save( formatter ) )
         {
-            msg.Printf( _( "An error occurred attempting to save component library <%s>." ),
-                        GetChars( aFileName ) );
+            wxString msg = wxString::Format( _(
+                "An error occurred attempting to save component library '%s'." ),
+                GetChars( aFileName )
+                );
             DisplayError( this, msg );
             return false;
         }
     }
     catch( ... /* IO_ERROR ioe */ )
     {
-        msg.Printf( _( "Failed to create component library file <%s>" ),
-                GetChars( aFileName ) );
+        wxString msg = wxString::Format( _(
+            "Failed to create component library file '%s'" ),
+            GetChars( aFileName )
+            );
         DisplayError( this, msg );
         return false;
     }

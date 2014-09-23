@@ -175,23 +175,25 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
         return;
 
     SCH_TEXT* newtext;
+    const wxPoint &position = text->GetPosition();
+    const wxString &txt = text->GetText();
 
     switch( type )
     {
     case SCH_LABEL_T:
-        newtext = new SCH_LABEL( text->GetPosition(), text->GetText() );
+        newtext = new SCH_LABEL( position, txt );
         break;
 
     case SCH_GLOBAL_LABEL_T:
-        newtext = new SCH_GLOBALLABEL( text->GetPosition(), text->GetText() );
+        newtext = new SCH_GLOBALLABEL( position, txt );
         break;
 
     case SCH_HIERARCHICAL_LABEL_T:
-        newtext = new SCH_HIERLABEL( text->GetPosition(), text->GetText() );
+        newtext = new SCH_HIERLABEL( position, txt );
         break;
 
     case SCH_TEXT_T:
-        newtext = new SCH_TEXT( text->GetPosition(), text->GetText() );
+        newtext = new SCH_TEXT( position, txt );
         break;
 
     default:

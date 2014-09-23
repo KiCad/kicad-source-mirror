@@ -84,7 +84,7 @@ static wxPoint calcCenter( const wxPoint& A, const wxPoint& B, const wxPoint& C 
 }
 
 
-LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
+LIB_ARC::LIB_ARC( LIB_PART*      aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
 {
     m_Radius        = 0;
     m_t1            = 0;
@@ -122,10 +122,10 @@ bool LIB_ARC::Save( OUTPUTFORMATTER& aFormatter )
 bool LIB_ARC::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     int startx, starty, endx, endy, cnt;
-    char tmp[256];
+    char tmp[256] = "";
     char* line = (char*) aLineReader;
 
-    cnt = sscanf( line + 2, "%d %d %d %d %d %d %d %d %s %d %d %d %d",
+    cnt = sscanf( line + 2, "%d %d %d %d %d %d %d %d %255s %d %d %d %d",
                   &m_Pos.x, &m_Pos.y, &m_Radius, &m_t1, &m_t2, &m_Unit,
                   &m_Convert, &m_Width, tmp, &startx, &starty, &endx, &endy );
     if( cnt < 8 )

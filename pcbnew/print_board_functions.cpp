@@ -30,8 +30,6 @@
 #include <wxPcbStruct.h>
 #include <printout_controler.h>
 #include <colors_selection.h>
-#include <pcbcommon.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
@@ -406,17 +404,18 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            if( !( mlayer & aMask ).any() )
-                break;
+            {
+                if( !( mlayer & aMask ).any() )
+                    break;
 
-            TEXTE_MODULE* textMod;
-            textMod = (TEXTE_MODULE*) item;
-            textMod->Draw( aPanel, aDC, aDraw_mode );
-            break;
+                TEXTE_MODULE* textMod = static_cast<TEXTE_MODULE*>( item );
+                textMod->Draw( aPanel, aDC, aDraw_mode );
+                break;
+            }
 
         case PCB_MODULE_EDGE_T:
             {
-                EDGE_MODULE* edge = (EDGE_MODULE*) item;
+                EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
 
                 if( !aMask[edge->GetLayer()] )
                     break;

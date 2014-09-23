@@ -40,11 +40,13 @@
 
 void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 {
-    LIB_ITEM* item = m_drawItem;
-    bool item_in_edit = item && item->InEditMode();
-    bool no_item_edited = !item_in_edit;
+    LIB_ITEM*   item = m_drawItem;
+    bool        item_in_edit = item && item->InEditMode();
+    bool        no_item_edited = !item_in_edit;
 
-    if( m_component == NULL )   // No component loaded !
+    LIB_PART*      part = GetCurPart();
+
+    if( !part )         // No component loaded !
         return;
 
     if( ( GetToolId() == ID_NO_TOOL_SELECTED ) && no_item_edited )
@@ -98,7 +100,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     case ID_LIBEDIT_BODY_RECT_BUTT:
     case ID_LIBEDIT_BODY_TEXT_BUTT:
         if( no_item_edited )
-            m_drawItem = CreateGraphicItem( m_component, DC );
+            m_drawItem = CreateGraphicItem( part, DC );
         else if( m_drawItem )
         {
             if( m_drawItem->IsNew() )
@@ -119,7 +121,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         break;
 
     case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
-        SaveCopyInUndoList( m_component );
+        SaveCopyInUndoList( part );
         PlaceAnchor();
         SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         break;
@@ -139,16 +141,19 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
  */
 void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
 {
-    if( m_component == NULL )
+    LIB_PART*      part = GetCurPart();
+
+    if( !part )
         return;
 
-    if( ( m_drawItem == NULL ) || !m_drawItem->InEditMode() )
+    if( !m_drawItem || !m_drawItem->InEditMode() )
     {   // We can locate an item
         m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem == NULL )
         {
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+
             cmd.SetId( ID_LIBEDIT_GET_FRAME_EDIT_PART );
             GetEventHandler()->ProcessEvent( cmd );
         }
@@ -160,7 +165,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
         return;
 
     m_canvas->SetIgnoreMouseEvents( true );
-    bool not_edited = ! m_drawItem->InEditMode();
+    bool not_edited = !m_drawItem->InEditMode();
 
     switch( m_drawItem->Type() )
     {
@@ -168,6 +173,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
         if( not_edited )
         {
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+
             cmd.SetId( ID_LIBEDIT_EDIT_PIN );
             GetEventHandler()->ProcessEvent( cmd );
         }

@@ -38,14 +38,20 @@
 
 #include <wx/glcanvas.h>
 #include <3d_struct.h>
+#include <info3d_visu.h>
 
-#define KISYS3DMOD "KISYS3DMOD"
+/// A variable name whose value holds the path of 3D shape files.
+/// Currently an environment variable, eventually a project variable.
+#define KISYS3DMOD wxT( "KISYS3DMOD" )
+
+/// All 3D files are expected to be stored in LIB3D_FOLDER, or one of
+/// its subdirectory.
+#define LIB3D_FOLDER  wxT( "packages3d" )
 
 class EDA_3D_CANVAS;
 class PCB_BASE_FRAME;
 
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
-#define LIB3D_PATH                          wxT( "packages3d" )
 
 
 class EDA_3D_FRAME : public KIWAY_PLAYER
@@ -97,8 +103,20 @@ public:
     /// Toggles orthographic projection on and off
     void ToggleOrtho(){ m_ortho = !m_ortho ; Refresh(true);};
 
-    /// Returns the orthographic projection flag
+    /// @return the orthographic projection flag
     bool ModeIsOrtho() { return m_ortho ;};
+
+    /** @return the INFO3D_VISU which contains the current parameters
+     * to draw the 3D view og the board
+     */
+    INFO3D_VISU& GetPrm3DVisu() const;
+
+    /**
+     * @return true if aItem must be displayed
+     * @param aItem = an item of DISPLAY3D_FLG enum
+     */
+    bool IsEnabled( DISPLAY3D_FLG aItem ) const;
+
 
 private:
     // Event handlers:
@@ -127,7 +145,10 @@ private:
     double BestZoom();
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
-    void Set3DBgColor();
+    // Get a S3D_COLOR from a wx colour dialog
+    // return true if a new color is chosen, false if
+    // no change or aborted by user
+    bool Get3DColorFromUser( S3D_COLOR &color );
 
     DECLARE_EVENT_TABLE()
 };

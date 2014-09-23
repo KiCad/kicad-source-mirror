@@ -26,7 +26,6 @@
 #include <vector>
 #include <wx/string.h>
 #include <wx/filename.h>
-#include <search_stack.h>
 
 /// A variable name whose value holds the current project directory.
 /// Currently an environment variable, eventually a project variable.
@@ -36,6 +35,8 @@
 class wxConfigBase;
 class PARAM_CFG_ARRAY;
 class FP_LIB_TABLE;
+class PART_LIBS;
+class SEARCH_STACK;
 
 #define VTBL_ENTRY      virtual
 
@@ -98,14 +99,15 @@ public:
      * Then the wxConfigBase derivative is written to the *.pro file for the project.
      *
      * @param aSearchS a SEARCH_STACK
-     * @param aFileName is where to save the *.pro file.
      * @param aGroupName
      * @param aParams is a ptr vector of PARAM_CFG_BASE derivatives.
      *  Saved parameters are the subset in this array having the .m_Setup member
      *  set to false.
+     * @param aFileName is where to save the *.pro file and if NULL means use this PROJECT's
+     *   @a m_project_name.
      */
-    VTBL_ENTRY void ConfigSave( const SEARCH_STACK& aSearchS, const wxString& aFileName,
-            const wxString&  aGroupName, const PARAM_CFG_ARRAY& aParams );
+    VTBL_ENTRY void ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName,
+        const PARAM_CFG_ARRAY& aParams, const wxString& aFileName = wxEmptyString );
 
     /**
      * Function ConfigLoad
@@ -116,31 +118,30 @@ public:
      * <p>
      * set:
      *  m_pro_date_and_time
-     *  m_pro_name
      *
      * @param aSearchS a SEARCH_STACK where a kicad.pro template file may be found.
-     * @param aLocalConfigFileName
      * @param aGroupName
      * @param aParams is ptr vector of PARAM_CFG_BASE derivatives.
-     * @param doLoadOnlyIfNew if true, then this file is read only if it differs from
-     * the current config on date (different dates), else the *.pro file is read and
-     * extracted from unconditionally.
+     * @param aForeignConfigFileName when NULL means load the *.pro filename given
+     *  in this PROJECT's @a m_project_name field, otherwise load the provided filename.
      *
      * @return bool - true if loaded OK.
      */
-    VTBL_ENTRY bool ConfigLoad( const SEARCH_STACK& aSearchS, const wxString& aLocalConfigFileName,
-            const wxString& aGroupName, const PARAM_CFG_ARRAY& aParams, bool doLoadOnlyIfNew );
-
-    /// Accessor for Eeschema search stack.
-    VTBL_ENTRY SEARCH_STACK&  SchSearchS()      { return m_sch_search; }
+    VTBL_ENTRY bool ConfigLoad( const SEARCH_STACK& aSearchS, const wxString& aGroupName,
+            const PARAM_CFG_ARRAY& aParams, const wxString& aForeignConfigFileName = wxEmptyString );
 
     /// Retain a number of project specific wxStrings, enumerated here:
     enum RSTRING_T
     {
         DOC_PATH,
         SCH_LIB_PATH,
-        PCB_LIB_NICKNAME,
+        SCH_LIB_SELECT,         // eeschema/selpart.cpp
+        SCH_LIBEDIT_CUR_LIB,
+        SCH_LIBEDIT_CUR_PART,        // eeschema/libeditframe.cpp
+
         VIEWER_3D_PATH,
+
+        PCB_LIB_NICKNAME,
         PCB_FOOTPRINT,
         PCB_FOOTPRINT_VIEWER_FPNAME,
         PCB_FOOTPRINT_VIEWER_NICKNAME,
@@ -172,6 +173,9 @@ public:
     {
         ELEM_FPTBL,
 
+        ELEM_SCH_PART_LIBS,
+        ELEM_SCH_SEARCH_STACK,
+
         ELEM_COUNT
     };
 
@@ -187,19 +191,32 @@ public:
     VTBL_ENTRY  _ELEM*  GetElem( ELEM_T aIndex );
     VTBL_ENTRY  void    SetElem( ELEM_T aIndex, _ELEM* aElem );
 
-    /// Inline, clear the _ELEM at position aIndex
-    void ElemClear( ELEM_T aIndex )
-    {
-        _ELEM*  existing = GetElem( aIndex );
-        delete existing;        // virtual
-        SetElem( aIndex, NULL );
-    }
-
     /**
      * Function ElemsClear
      * deletes all the _ELEMs and set their pointers to NULL.
      */
     VTBL_ENTRY void ElemsClear();
+
+    /**
+     * Function Clear
+     * clears the _ELEMs and RSTRINGs.
+     */
+    void Clear()        // inline not virtual
+    {
+        ElemsClear();
+
+        for( unsigned i = 0; i<RSTRING_COUNT;  ++i )
+            SetRString( RSTRING_T( i ), wxEmptyString );
+    }
+
+    /**
+     * Function AbsolutePath
+     * fixes up @a aFileName if it is relative to the project's directory to
+     * be an absolute path and filename.  This intends to overcome the now missing
+     * chdir() into the project directory.
+     */
+    VTBL_ENTRY const wxString AbsolutePath( const wxString& aFileName ) const;
+
 
     //-----</Cross Module API>---------------------------------------------------
 
@@ -209,7 +226,7 @@ public:
     // data on demand, and do so typicallly into m_elems[] at a particular index using
     // SetElem() & GetElem().  That is, they wrap SetElem() and GetElem().
     // To get the data to reload on demand, first SetProjectFullName(),
-    // then call ElemClear() from client code.
+    // then call SetElem( ELEM_T, NULL ) from client code.
 
     // non-virtuals resident in PCBNEW link image(s).  By being non-virtual, these
     // functions can get linked into the KIFACE that needs them, and only there.
@@ -222,6 +239,10 @@ public:
 
 #if defined(EESCHEMA)
     // These are all prefaced with "Sch"
+    PART_LIBS*  SchLibs();
+
+    /// Accessor for Eeschema search stack.
+    SEARCH_STACK*  SchSearchS();
 #endif
 
     //-----</KIFACE Specific APIs>-----------------------------------------------
@@ -230,24 +251,14 @@ private:
 
     /**
      * Function configCreate
-     * creates or recreates the KiCad project file and wxConfigBase:
+     * loads a *.pro file and returns a wxConfigBase.
      *
-     *      <project_name>.pro
-     *
-     * @param aFilename is a local configuration file path and basename.
-     *
-     * Initializes ?
-     * G_Prj_Config
-     * G_Prj_Config_LocalFilename
-     * G_Prj_Default_Config_FullFilename
-     * :
+     * @param aSList is the KIFACE or PGM's SEARCH_STACK
+     * @param aGroupName is the default config file subset to use.
+     * @param aProjectFileName is the *.pro file to open.
      */
-    wxConfigBase* configCreate( const SEARCH_STACK& aSearchS,
-            const wxString& aFilename, const wxString& aGroupName,
-            bool aForceUseLocalConfig );
-
-    SEARCH_STACK    m_sch_search;           ///< Eeschema's search paths
-    SEARCH_STACK    m_pcb_search;           ///< Pcbnew's obsolete footprint search paths, see comment above.
+    wxConfigBase* configCreate( const SEARCH_STACK& aSList,
+            const wxString& aGroupName, const wxString& aFileName = wxEmptyString );
 
     wxFileName      m_project_name;         ///< <fullpath>/<basename>.pro
     wxString        m_pro_date_and_time;

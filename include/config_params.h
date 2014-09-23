@@ -36,15 +36,17 @@
 #include <colors.h>
 #include <limits>
 
-
-#define GROUP_PCB           wxT( "/pcbnew" )
-#define GROUP_SCH           wxT( "/eeschema" )
-#define GROUP_PCB_LIBS      wxT( "/pcbnew/libraries" )
-#define GROUP_SCH_LIBS      wxT( "/eeschema/libraries" )
-#define GROUP_COMMON        wxT( "/common" )
+/// Names of sub sections where to store project info in *.pro project config files
+#define GROUP_PCB           wxT( "/pcbnew" )            /// parameters for Pcbnew/Modedit
+#define GROUP_SCH           wxT( "/eeschema" )          /// library list and lib paths list
+#define GROUP_SCH_EDITOR    wxT( "/schematic_editor" )  /// parameters for schematic editor
+                                                        /// (and few for component editor).
+                                                        /// Does not store libs list
+#define GROUP_PCB_LIBS      wxT( "/pcbnew/libraries" )  /// PCB library list, should be removed soon
+                                                        /// (Now in fp lib tables)
+#define GROUP_SCH_LIBS      wxT( "/eeschema/libraries" )    /// library list section
 
 #define GROUP_CVP           wxT("/cvpcb")
-//#define GROUP_CVP_LIBS      wxT("/pcbnew/libraries")
 #define GROUP_CVP_EQU       wxT("/cvpcb/libraries")
 
 

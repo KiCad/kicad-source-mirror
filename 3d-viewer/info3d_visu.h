@@ -52,7 +52,9 @@
 
 class BOARD_DESIGN_SETTINGS;
 
-class S3D_COLOR     /* 3D color (R, G, B) 3 floats range 0 to 1.0*/
+/** Minor class to store a 3D color (R, G, B) 3 floats range 0 to 1.0
+ */
+class S3D_COLOR
 {
 public:
     double m_Red, m_Green, m_Blue;
@@ -62,7 +64,6 @@ public: S3D_COLOR()
     }
 };
 
-/* information needed to display 3D board */
 enum DISPLAY3D_FLG {
     FL_AXIS=0, FL_MODULE, FL_ZONE,
     FL_ADHESIVE, FL_SILKSCREEN, FL_SOLDERMASK, FL_SOLDERPASTE,
@@ -71,10 +72,16 @@ enum DISPLAY3D_FLG {
     FL_USE_COPPER_THICKNESS,
     FL_SHOW_BOARD_BODY,
     FL_USE_REALISTIC_MODE,
-    FL_USE_MAXQUALITY_IN_REALISTIC_MODE,
+    FL_RENDER_SHADOWS,
+    FL_RENDER_SHOW_HOLES_IN_ZONES,
+    FL_RENDER_TEXTURES,
+    FL_RENDER_SMOOTH,
+    FL_RENDER_MATERIAL,
     FL_LAST
 };
 
+/** Helper class to handle information needed to display 3D board
+ */
 class INFO3D_VISU
 {
 public:
@@ -84,6 +91,11 @@ public:
     double      m_Zoom;                             // 3D zoom value
     double      m_3D_Grid;                          // 3D grid value, in mm
     S3D_COLOR   m_BgColor;
+    S3D_COLOR   m_BgColor_Top;
+    S3D_COLOR   m_BoardBodyColor;                   // in realistic mode: FR4 board color
+    S3D_COLOR   m_SolderMaskColor;                  // in realistic mode: solder mask color
+    S3D_COLOR   m_SilkScreenColor;                  // in realistic mode: SilkScreen color
+    S3D_COLOR   m_CopperColor;                      // in realistic mode: copper color
     wxPoint     m_BoardPos;                         // center board actual position in board units
     wxSize      m_BoardSize;                        // board actual size in board units
     int         m_CopperLayersCount;                // Number of copper layers actually used by the board
@@ -92,38 +104,34 @@ public:
 
     double  m_BiuTo3Dunits;                         // Normalization scale to convert board
                                                     // internal units to 3D units
-                                                    // to scale 3D units between -1.0 and +1.0
-    double  m_CurrentZpos;                          // temporary storage of current value of Z position,
-                                                    // used in some calculation
+                                                    // to normalize 3D units between -1.0 and +1.0
 
     double zpos_offset;
-    
+
 private:
     double  m_layerZcoord[LAYER_ID_COUNT];          // Z position of each layer (normalized)
     double  m_copperThickness;                      // Copper thickness (normalized)
     double  m_epoxyThickness;                       // Epoxy thickness (normalized)
     double  m_nonCopperLayerThickness;              // Non copper layers thickness
-    bool    m_drawFlags[FL_LAST];                   // Enable/disable flags (see DISPLAY3D_FLG list)
+    std::bitset<FL_LAST> m_drawFlags;               // Enable/disable flags (see DISPLAY3D_FLG list)
 
 public: INFO3D_VISU();
     ~INFO3D_VISU();
 
     // Accessors
     bool GetFlag( DISPLAY3D_FLG aFlag ) const { return m_drawFlags[aFlag]; }
-    bool SetFlag( DISPLAY3D_FLG aFlag, bool aState )
+    void SetFlag( DISPLAY3D_FLG aFlag, bool aState )
     {
-        return m_drawFlags[aFlag] = aState;
+        m_drawFlags[aFlag] = aState;
     }
 
     /**
-     * Function InitSettings
-     * Initialize info 3D Parameters from aBoard
+     * Initialize 3D Parameters depending on aBoard
      * @param aBoard: the board to display
      */
     void InitSettings( BOARD* aBoard );
 
     /**
-     * function GetModulesZcoord3DIU
      * @return the Z position of 3D shapes, in 3D Units
      * @param aIsFlipped: true for modules on Front (top) layer, false
      * if on back (bottom) layer
@@ -131,7 +139,6 @@ public: INFO3D_VISU();
     double GetModulesZcoord3DIU( bool aIsFlipped );
 
     /**
-     * function GetLayerZcoordBIU
      * @return the Z coordinate of the layer aLayer, in Board Internal Units
      * @param aLayerId: the layer number
      */
@@ -141,7 +148,6 @@ public: INFO3D_VISU();
     }
 
     /**
-     * function GetCopperThicknessBIU
      * @return the thickness (Z size) of the copper, in Board Internal Units
      * note: the thickness (Z size) of the copper is not the thickness
      * of the layer (the thickness of the layer is the epoxy thickness / layer count)
@@ -200,7 +206,6 @@ public: INFO3D_VISU();
     }
 
     bool IsRealisticMode() { return GetFlag( FL_USE_REALISTIC_MODE ); }
-    bool HightQualityMode() { return GetFlag( FL_USE_MAXQUALITY_IN_REALISTIC_MODE ); }
 };
 
 extern INFO3D_VISU g_Parm_3D_Visu;

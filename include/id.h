@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -28,10 +28,8 @@
  */
 
 
-#ifndef ID_H
-#define ID_H
-
-#define MAX_ITEMS_IN_PICKER     15  ///< max no. items in the popup menu for item selection
+#ifndef ID_H_
+#define ID_H_
 
 /**
  * Common command IDs shared by more than one of the KiCad applications.
@@ -40,13 +38,35 @@
  * across multple applications such as the zoom, grid, and language IDs.
  * Application specific IDs should be defined in the appropriate header
  * file to prevent the entire project from being rebuilt.
+ *
+ * However, we must avoid duplicate IDs in menus and toolbar items, when wxUpdateUIEvent
+ * are associated to menuitems and/or toolbar items
+ * The reason is the fact wxWidgets try to send a wxUpdateUIEvent event to a given window and,
+ * if a wxUpdateUIEvent event function is not defined for a menuitem, wxWidgets
+ * propagates this event ID to parents of the given window.
+ * Therefore duplicate IDs could create strange behavior in menus and subtle bugs, depending
+ * on the code inside the wxUpdateUIEvent event functions called in parent frames.
+ * I did not seen this propagation to child frames, only to parent frames
+ *
+ * Issues exist only if 2 menus have the same ID, and only one menu is associated to
+ * a wxUpdateUIEvent event, and this one is defined in a parent Window.
+ * The probability it happens is low, but not null.
+ *
+ * Therefore we reserve room in ID list for each sub application.
+ * Please, change these values if needed
  */
+
+// Define room for IDs, for each sub application
+#define ROOM_FOR_KICADMANAGER 50
+#define ROOM_FOR_3D_VIEWER 100
 
 enum main_id
 {
-    ID_TO_PCB = wxID_HIGHEST,
-    ID_TO_PCB_MODULE_EDITOR,
-    ID_TO_CVPCB,
+    ID_RUN_PCB                  = wxID_HIGHEST,
+    ID_RUN_PCB_MODULE_EDITOR,
+    ID_RUN_CVPCB,
+    ID_RUN_LIBRARY,     // pcbnew & eeschema each use this internally to load their respective lib editors
+
     ID_LOAD_PROJECT,
     ID_APPEND_PROJECT,
     ID_NEW_PROJECT,
@@ -207,7 +227,6 @@ enum main_id
     ID_POPUP_GRID_USER,
 
     ID_SHEET_SET,
-    ID_TO_LIBRARY,
     ID_COMPONENT_BUTT,
 
     ID_ZOOM_IN,
@@ -215,7 +234,7 @@ enum main_id
     ID_ZOOM_PAGE,
     ID_ZOOM_REDRAW,
 
-    /* Panning command event IDs. */
+    // Panning command event IDs.
     ID_PAN_UP,
     ID_PAN_DOWN,
     ID_PAN_LEFT,
@@ -228,7 +247,7 @@ enum main_id
     ID_EDA_SOCKET_EVENT_SERV,
     ID_EDA_SOCKET_EVENT,
 
-    /* Command IDs common to Pcbnew and CvPcb. */
+    // Command IDs common to Pcbnew and CvPcb.
     ID_PCB_DISPLAY_FOOTPRINT_DOC,
 
     // Common to all
@@ -249,7 +268,26 @@ enum main_id
 
     ID_DIALOG_ERC,      ///< eeschema ERC modeless dialog ID
 
+    // IDs specifics to a sub-application (Eeschema, Kicad manager....) start here
+    //
+    // We reserve here Ids for each sub-application, to avoid duplicate IDs
+    // between them.
+    // mainly we experienced issues related to wxUpdateUIEvent calls when 2 (or more) wxFrames
+    // share the same ID in menus, mainly in menubars/toolbars
+    // The reason is the fact wxWidgets propagates the wxUpdateUIEvent to all parent windows
+    // to find wxUpdateUIEvent event functions matching the menuitem IDs found when activate a menu in the first frame.
+
+    // Reserve ROOM_FOR_KICADMANAGER IDs, for Kicad manager
+    // Change it if this count is too small.
+    ID_KICAD_MANAGER_START,
+    ID_KICAD_MANAGER_END = ID_KICAD_MANAGER_START + ROOM_FOR_KICADMANAGER,
+
+    // Reserve ROOM_FOR_KICADMANAGER IDs, for Kicad manager
+    // Change it if this count is too small.
+    ID_KICAD_3D_VIEWER_START,
+    ID_KICAD_3D_VIEWER_END = ID_KICAD_3D_VIEWER_START + ROOM_FOR_3D_VIEWER,
+
     ID_END_LIST
 };
 
-#endif  /* define ID_H */
+#endif  // ID_H_

@@ -32,7 +32,6 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <pcbcommon.h>
 
 #include <pcbnew.h>
 #include <cell.h>

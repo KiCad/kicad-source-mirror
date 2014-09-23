@@ -270,20 +270,6 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
             argv1.MakeAbsolute();
 
             argSet[0] = argv1.GetFullPath();
-
-            if( !Pgm().LockFile( argSet[0] ) )
-            {
-                wxLogSysError( _( "This file is already open." ) );
-                return false;
-            }
-        }
-
-        // @todo: setting CWD is taboo in a multi-project environment, this
-        // will not be possible soon.
-        if( argv1.GetPath().size() )   // path only
-        {
-            // wxSetWorkingDirectory() does not like empty paths
-            wxSetWorkingDirectory( argv1.GetPath() );
         }
 
         // Use the KIWAY_PLAYER::OpenProjectFiles() API function:
@@ -297,24 +283,6 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
             // also in the KIFACE specific OpenProjectFiles() return value.
             return false;
         }
-    }
-    else
-    {
-        /*
-
-            The lean single_top program launcher has no access to program
-            settings, for if it did, it would not be lean. That kind of
-            functionality is in the KIFACE now, but it cannot assume that it is
-            the only KIFACE in memory. So this looks like a dead concept here,
-            or an expensive one in terms of code size.
-
-        wxString dir;
-
-        if( m_pgmSettings->Read( workingDirKey, &dir ) && wxDirExists( dir ) )
-        {
-            wxSetWorkingDirectory( dir );
-        }
-        */
     }
 
     frame->Show();

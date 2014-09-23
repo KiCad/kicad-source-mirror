@@ -13,10 +13,10 @@
 
 void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, int unused_flag )
 {
-    LIB_COMPONENT*     CopyItem;
+    LIB_PART*          CopyItem;
     PICKED_ITEMS_LIST* lastcmd;
 
-    CopyItem = new LIB_COMPONENT( *( (LIB_COMPONENT*) ItemToCopy ) );
+    CopyItem = new LIB_PART( * (LIB_PART*) ItemToCopy );
 
     // Clear current flags (which can be temporary set by a current edit command).
     CopyItem->ClearStatus();
@@ -31,35 +31,42 @@ void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, int unused_flag )
 }
 
 
-/* Redo the last edition:
- * - Place the current edited library component in undo list
- * - Get old version of the current edited library component
- */
 void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
 {
-    if ( GetScreen()->GetRedoCommandCount() <= 0 )
+    if( GetScreen()->GetRedoCommandCount() <= 0 )
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper( m_component, UR_LIBEDIT );
+
+    LIB_PART* part = GetCurPart();
+
+    ITEM_PICKER wrapper( part, UR_LIBEDIT );
+
     lastcmd->PushItem( wrapper );
     GetScreen()->PushCommandToUndoList( lastcmd );
 
     lastcmd = GetScreen()->PopCommandFromRedoList();
 
     wrapper = lastcmd->PopItem();
-    m_component = (LIB_COMPONENT*) wrapper.GetItem();
 
-    if( m_component == NULL )
+    part = (LIB_PART*) wrapper.GetItem();
+
+    // Do not delete the previous part by calling SetCurPart( part )
+    // which calls delete <previous part>.
+    // <previous part> is now put in undo list and is owned by this list
+    // Just set the current part to the part which come from the redo list
+    m_my_part = part;
+
+    if( !part )
         return;
 
-    if( !m_aliasName.IsEmpty() && !m_component->HasAlias( m_aliasName ) )
-        m_aliasName = m_component->GetName();
+    if( !m_aliasName.IsEmpty() && !part->HasAlias( m_aliasName ) )
+        m_aliasName = part->GetName();
 
     m_drawItem = NULL;
     UpdateAliasSelectList();
     UpdatePartSelectList();
-    SetShowDeMorgan( m_component->HasConversion() );
+    SetShowDeMorgan( part->HasConversion() );
     DisplayLibInfos();
     DisplayCmpDoc();
     OnModify();
@@ -67,35 +74,42 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
 }
 
 
-/** Undo the last edition:
- * - Place the current edited library component in Redo list
- * - Get old version of the current edited library component
- */
 void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
 {
-    if ( GetScreen()->GetUndoCommandCount() <= 0 )
+    if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper( m_component, UR_LIBEDIT );
+
+    LIB_PART*      part = GetCurPart();
+
+    ITEM_PICKER wrapper( part, UR_LIBEDIT );
+
     lastcmd->PushItem( wrapper );
     GetScreen()->PushCommandToRedoList( lastcmd );
 
     lastcmd = GetScreen()->PopCommandFromUndoList();
 
     wrapper = lastcmd->PopItem();
-    m_component = (LIB_COMPONENT*) wrapper.GetItem();
 
-    if( m_component == NULL )
+    part = (LIB_PART*     ) wrapper.GetItem();
+
+    // Do not delete the previous part by calling SetCurPart( part ),
+    // which calls delete <previous part>.
+    // <previous part> is now put in redo list and is owned by this list.
+    // Just set the current part to the part which come from the undo list
+    m_my_part = part;
+
+    if( !part )
         return;
 
-    if( !m_aliasName.IsEmpty() && !m_component->HasAlias( m_aliasName ) )
-        m_aliasName = m_component->GetName();
+    if( !m_aliasName.IsEmpty() && !part->HasAlias( m_aliasName ) )
+        m_aliasName = part->GetName();
 
     m_drawItem = NULL;
     UpdateAliasSelectList();
     UpdatePartSelectList();
-    SetShowDeMorgan( m_component->HasConversion() );
+    SetShowDeMorgan( part->HasConversion() );
     DisplayLibInfos();
     DisplayCmpDoc();
     OnModify();

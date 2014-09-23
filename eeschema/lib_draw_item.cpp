@@ -41,7 +41,7 @@ const int fill_tab[3] = { 'N', 'F', 'f' };
 
 
 LIB_ITEM::LIB_ITEM( KICAD_T        aType,
-                    LIB_COMPONENT* aComponent,
+                    LIB_PART*      aComponent,
                     int            aUnit,
                     int            aConvert,
                     FILL_T         aFillType ) :

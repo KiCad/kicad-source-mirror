@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -46,6 +46,7 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
+//#include <sch_collectors.h>
 #include <class_netlist_object.h>
 
 #include <dialogs/dialog_schematic_find.h>
@@ -53,9 +54,6 @@
 #include <wx/tokenzr.h>
 
 #define NULL_STRING "_NONAME_"
-
-static LIB_COMPONENT* DummyCmp;
-
 
 /**
  * Function toUTFTildaText
@@ -75,34 +73,42 @@ static std::string toUTFTildaText( const wxString& txt )
 }
 
 
-/* Descr component <DUMMY> used when a component is not found in library,
- *  to draw a dummy shape
- *  This component is a 400 mils square with the text ??
- *  DEF DUMMY U 0 40 Y Y 1 0 N
- *  F0 "U" 0 -350 60 H V
- *  F1 "DUMMY" 0 350 60 H V
- *  DRAW
- *  T 0 0 0 150 0 0 0 ??
- *  S -200 200 200 -200 0 1 0
- *  ENDDRAW
- *  ENDDEF
+/**
+ * Used when a LIB_PART is not found in library
+ * to draw a dummy shape
+ * This component is a 400 mils square with the text ??
+ * DEF DUMMY U 0 40 Y Y 1 0 N
+ * F0 "U" 0 -350 60 H V
+ * F1 "DUMMY" 0 350 60 H V
+ * DRAW
+ * T 0 0 0 150 0 0 0 ??
+ * S -200 200 200 -200 0 1 0
+ * ENDDRAW
+ * ENDDEF
  */
-void CreateDummyCmp()
+static LIB_PART* dummy()
 {
-    DummyCmp = new LIB_COMPONENT( wxEmptyString );
+    static LIB_PART* part;
 
-    LIB_RECTANGLE* Square = new LIB_RECTANGLE( DummyCmp );
+    if( !part )
+    {
+        part = new LIB_PART( wxEmptyString );
 
-    Square->Move( wxPoint( -200, 200 ) );
-    Square->SetEndPosition( wxPoint( 200, -200 ) );
+        LIB_RECTANGLE* square = new LIB_RECTANGLE( part );
 
-    LIB_TEXT* Text = new LIB_TEXT( DummyCmp );
+        square->Move( wxPoint( -200, 200 ) );
+        square->SetEndPosition( wxPoint( 200, -200 ) );
 
-    Text->SetSize( wxSize( 150, 150 ) );
-    Text->SetText( wxString( wxT( "??" ) ) );
+        LIB_TEXT* text = new LIB_TEXT( part );
 
-    DummyCmp->AddDrawItem( Square );
-    DummyCmp->AddDrawItem( Text );
+        text->SetSize( wxSize( 150, 150 ) );
+        text->SetText( wxString( wxT( "??" ) ) );
+
+        part->AddDrawItem( square );
+        part->AddDrawItem( text );
+    }
+
+    return part;
 }
 
 
@@ -113,7 +119,7 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet, int unit,
+SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
                               int convert, const wxPoint& pos, bool setNewItemFlag ) :
     SCH_ITEM( NULL, SCH_COMPONENT_T )
 {
@@ -121,7 +127,9 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet
 
     m_unit      = unit;
     m_convert   = convert;
-    m_ChipName  = libComponent.GetName();
+    m_part_name = aPart.GetName();
+    m_part      = aPart.SharedPtr();
+
     SetTimeStamp( GetNewTimeStamp() );
 
     if( setNewItemFlag )
@@ -130,7 +138,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet
     // Import user defined fields from the library component:
     LIB_FIELDS libFields;
 
-    libComponent.GetFields( libFields );
+    aPart.GetFields( libFields );
 
     for( LIB_FIELDS::iterator it = libFields.begin();  it!=libFields.end();  ++it )
     {
@@ -155,7 +163,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet
         schField->SetText( it->GetText() );
     }
 
-    wxString msg = libComponent.GetReferenceField().GetText();
+    wxString msg = aPart.GetReferenceField().GetText();
 
     if( msg.IsEmpty() )
         msg = wxT( "U" );
@@ -166,22 +174,24 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet
     msg += wxT( "?" );
     SetRef( sheet, msg );
 
-    /* Use the schematic component name instead of the library value field
-     * name.
-     */
-    GetField( VALUE )->SetText( m_ChipName );
+    // Use the schematic component name instead of the library value field
+    // name.
+    GetField( VALUE )->SetText( GetPartName() );
 }
 
 
 SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     SCH_ITEM( aComponent )
 {
-    m_Parent = aComponent.m_Parent;
-    m_Pos = aComponent.m_Pos;
-    m_unit = aComponent.m_unit;
-    m_convert = aComponent.m_convert;
-    m_ChipName = aComponent.m_ChipName;
+    m_Parent    = aComponent.m_Parent;
+    m_Pos       = aComponent.m_Pos;
+    m_unit      = aComponent.m_unit;
+    m_convert   = aComponent.m_convert;
+    m_part_name = aComponent.m_part_name;
+    m_part      = aComponent.m_part;
+
     SetTimeStamp( aComponent.m_TimeStamp );
+
     m_transform = aComponent.m_transform;
     m_prefix = aComponent.m_prefix;
     m_PathsAndReferences = aComponent.m_PathsAndReferences;
@@ -230,12 +240,60 @@ EDA_ITEM* SCH_COMPONENT::Clone() const
 }
 
 
-void SCH_COMPONENT::SetLibName( const wxString& aName )
+void SCH_COMPONENT::SetPartName( const wxString& aName, PART_LIBS* aLibs )
 {
-    if( m_ChipName != aName )
+    if( m_part_name != aName )
     {
-        m_ChipName = aName;
+        m_part_name = aName;
         SetModified();
+
+        if( aLibs )
+            Resolve( aLibs );
+        else
+            m_part.reset();
+    }
+}
+
+
+bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
+{
+    // I've never been happy that the actual individual PART_LIB is left up to
+    // flimsy search path ordering.  None-the-less find a part based on that design:
+    if( LIB_PART* part = aLibs->FindLibPart( m_part_name ) )
+    {
+        m_part = part->SharedPtr();
+        return true;
+    }
+
+    // the part was not found. try to search with no case comparison
+    // because during a long time, Eeschema was using upper case only
+    // for names.
+    // and we could have loaded an old schematic using upper case only
+    // and libs using upper+lower case for lib items names
+    if( LIB_ALIAS* entry = aLibs->FindLibraryNearEntry( m_part_name ) )
+    {
+        // Now find the part (the lib part if we are using an alias) using
+        // the "near" name
+        if( LIB_PART* part = aLibs->FindLibPart( entry->GetName() ) )
+        {
+            m_part = part->SharedPtr();
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+void SCH_COMPONENT::ResolveAll(
+        const SCH_COLLECTOR& aComponents, PART_LIBS* aLibs )
+{
+    for( int i = 0;  i < aComponents.GetCount();  ++i )
+    {
+        SCH_COMPONENT* c = dynamic_cast<SCH_COMPONENT*>( aComponents[i] );
+        wxASSERT( c );
+
+        c->Resolve( aLibs );
     }
 }
 
@@ -275,38 +333,28 @@ void SCH_COMPONENT::SetTransform( const TRANSFORM& aTransform )
 }
 
 
-int SCH_COMPONENT::GetPartCount() const
+int SCH_COMPONENT::GetUnitCount() const
 {
-    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+    if( PART_SPTR part = m_part.lock() )
+    {
+        return part->GetUnitCount();
+    }
 
-    if( Entry == NULL )
-        return 0;
-
-    return Entry->GetPartCount();
+    return 0;
 }
-
 
 
 void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                           GR_DRAWMODE DrawMode, EDA_COLOR_T Color, bool DrawPinText )
 {
-    bool           dummy = false;
-
-    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
-
-    if( Entry == NULL )
+    if( PART_SPTR part = m_part.lock() )
     {
-        /* Create a dummy component if the actual component can not be found. */
-        dummy = true;
-
-        if( DummyCmp == NULL )
-            CreateDummyCmp();
-
-        Entry = DummyCmp;
+        part->Draw( panel, DC, m_Pos + offset, m_unit, m_convert, DrawMode, Color, m_transform, DrawPinText, false );
     }
-
-    Entry->Draw( panel, DC, m_Pos + offset, dummy ? 0 : m_unit, dummy ? 0 : m_convert,
-                 DrawMode, Color, m_transform, DrawPinText, false );
+    else    // Use dummy() part if the actual cannot be found.
+    {
+        dummy()->Draw( panel, DC, m_Pos + offset, 0, 0, DrawMode, Color, m_transform, DrawPinText, false );
+    }
 
     SCH_FIELD* field = GetField( REFERENCE );
 
@@ -325,24 +373,23 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset
         field->Draw( panel, DC, offset, DrawMode );
     }
 
-
 #if 0
-    /* Draw the component boundary box */
+    // Draw the component bounding box
     {
-        EDA_RECT BoundaryBox;
-        BoundaryBox = GetBoundingBox();
-        GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
+        EDA_RECT boundingBox = GetBoundingBox();
+
+        GRRect( panel->GetClipBox(), DC, boundingBox, 0, BROWN );
 #if 1
         if( GetField( REFERENCE )->IsVisible() )
         {
-            BoundaryBox = GetField( REFERENCE )->GetBoundingBox();
-            GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
+            boundingBox = GetField( REFERENCE )->GetBoundingBox();
+            GRRect( panel->GetClipBox(), DC, boundingBox, 0, BROWN );
         }
 
         if( GetField( VALUE )->IsVisible() )
         {
-            BoundaryBox = GetField( VALUE )->GetBoundingBox();
-            GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
+            boundingBox = GetField( VALUE )->GetBoundingBox();
+            GRRect( panel->GetClipBox(), DC, boundingBox, 0, BROWN );
         }
 #endif
     }
@@ -631,12 +678,11 @@ SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName )
 
 LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
 {
-    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
-
-    if( Entry == NULL )
-        return NULL;
-
-    return Entry->GetPin( number, m_unit, m_convert );
+    if( PART_SPTR part = m_part.lock() )
+    {
+        return part->GetPin( number, m_unit, m_convert );
+    }
+    return NULL;
 }
 
 
@@ -647,12 +693,14 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) aItem;
 
-    EXCHG( m_ChipName, component->m_ChipName );
+    EXCHG( m_part_name, component->m_part_name );
+    EXCHG( m_part, component->m_part );
     EXCHG( m_Pos, component->m_Pos );
     EXCHG( m_unit, component->m_unit );
     EXCHG( m_convert, component->m_convert );
 
     TRANSFORM tmp = m_transform;
+
     m_transform = component->m_transform;
     component->m_transform = tmp;
 
@@ -677,13 +725,13 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
     bool           keepMulti = false;
-    LIB_COMPONENT* Entry;
-    static const wxString separators( wxT( " " ) );
     wxArrayString  reference_fields;
 
-    Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+    static const wxChar separators[] = wxT( " " );
 
-    if( Entry && Entry->UnitsLocked() )
+    PART_SPTR part = m_part.lock();
+
+    if( part && part->UnitsLocked() )
         keepMulti = true;
 
     // Build a reference with no annotation,
@@ -930,7 +978,7 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os ) const
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
                                  << " ref=\"" << TO_UTF8( GetField( 0 )->GetName() )
                                  << '"' << " chipName=\""
-                                 << TO_UTF8( m_ChipName ) << '"' << m_Pos
+                                 << TO_UTF8( GetPartName() ) << '"' << m_Pos
                                  << " layer=\"" << m_Layer
                                  << '"' << ">\n";
 
@@ -978,9 +1026,11 @@ bool SCH_COMPONENT::Save( FILE* f ) const
             name1 = toUTFTildaText( GetField( REFERENCE )->GetText() );
     }
 
-    if( !m_ChipName.IsEmpty() )
+    wxString part_name = GetPartName();
+
+    if( part_name.size() )
     {
-        name2 = toUTFTildaText( m_ChipName );
+        name2 = toUTFTildaText( part_name );
     }
     else
     {
@@ -993,11 +1043,11 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     if( fprintf( f, "L %s %s\n", name2.c_str(), name1.c_str() ) == EOF )
         return false;
 
-    /* Generate unit number, convert and time stamp*/
+    // Generate unit number, convert and time stamp
     if( fprintf( f, "U %d %d %8.8lX\n", m_unit, m_convert, m_TimeStamp ) == EOF )
         return false;
 
-    /* Save the position */
+    // Save the position
     if( fprintf( f, "P %d %d\n", m_Pos.x, m_Pos.y ) == EOF )
         return false;
 
@@ -1058,7 +1108,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
             return false;
     }
 
-    /* Unit number, position, box ( old standard ) */
+    // Unit number, position, box ( old standard )
     if( fprintf( f, "\t%-4d %-4d %-4d\n", m_unit, m_Pos.x, m_Pos.y ) == EOF )
         return false;
 
@@ -1109,14 +1159,14 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 name1[ii] = ' ';
         }
 
-        m_ChipName = FROM_UTF8( name1 );
+        SetPartName( FROM_UTF8( name1 ) );
 
         if( !newfmt )
             GetField( VALUE )->SetText( FROM_UTF8( name1 ) );
     }
     else
     {
-        m_ChipName.Empty();
+        m_part_name.Empty();
         GetField( VALUE )->Empty();
         GetField( VALUE )->SetOrientation( TEXT_ORIENT_HORIZ );
         GetField( VALUE )->SetVisible( false );
@@ -1379,35 +1429,37 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         }
     }
 
+    // ensure flags (mainly used in edit) are cleared.
+    // some changes have set the modified flag
+    m_Flags = 0;
+
     return true;
 }
 
 
 EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
 {
-    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
-    EDA_RECT       bBox;
-    int            x0, xm, y0, ym;
+    EDA_RECT    bBox;
 
-    if( Entry == NULL )
+    if( PART_SPTR part = m_part.lock() )
     {
-        if( DummyCmp == NULL )
-            CreateDummyCmp();
-        Entry = DummyCmp;
+        bBox = part->GetBodyBoundingBox( m_unit, m_convert );
+    }
+    else
+    {
+        bBox = dummy()->GetBodyBoundingBox( m_unit, m_convert );
     }
 
-    /* Get the basic Boundary box */
-    bBox = Entry->GetBodyBoundingBox( m_unit, m_convert );
-    x0 = bBox.GetX();
-    xm = bBox.GetRight();
+    int x0 = bBox.GetX();
+    int xm = bBox.GetRight();
 
     // We must reverse Y values, because matrix orientation
     // suppose Y axis normal for the library items coordinates,
     // m_transform reverse Y values, but bBox is already reversed!
-    y0 = -bBox.GetY();
-    ym = -bBox.GetBottom();
+    int y0 = -bBox.GetY();
+    int ym = -bBox.GetBottom();
 
-    /* Compute the real Boundary box (rotated, mirrored ...)*/
+    // Compute the real Boundary box (rotated, mirrored ...)
     int x1 = m_transform.x1 * x0 + m_transform.y1 * y0;
     int y1 = m_transform.x2 * x0 + m_transform.y2 * y0;
     int x2 = m_transform.x1 * xm + m_transform.y1 * ym;
@@ -1433,6 +1485,7 @@ EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
 const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 {
     EDA_RECT bbox = GetBodyBoundingBox();
+
     for( size_t i = 0; i < m_Fields.size(); i++ )
     {
         bbox.Merge( m_Fields[i].GetBoundingBox() );
@@ -1444,47 +1497,43 @@ const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 
 void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
-    // search for the component in lib
-    // Entry and root_component can differ if Entry is an alias
-    LIB_ALIAS* alias = CMP_LIBRARY::FindLibraryEntry( m_ChipName );
-    LIB_COMPONENT* root_component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+    // part and alias can differ if alias is not the root
+    if( PART_SPTR part = m_part.lock() )
+    {
+        LIB_ALIAS* alias = part->GetAlias( GetPartName() );
 
-    if( (alias == NULL) || (root_component == NULL) )
-        return;
+        if( !alias )
+            return;
 
-    wxString msg;
+        if( m_currentSheetPath )
+            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ),
+                                             GetRef( m_currentSheetPath ),
+                                             DARKCYAN ) );
 
-    if( m_currentSheetPath )
-        aList.push_back( MSG_PANEL_ITEM( _( "Reference" ),
-                                         GetRef( m_currentSheetPath ),
-                                         DARKCYAN ) );
+        wxString msg = part->IsPower() ? _( "Power symbol" ) : _( "Value" );
 
-    if( root_component->IsPower() )
-        msg = _( "Power symbol" );
-    else
-        msg = _( "Value" );
+        aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetShownText(), DARKCYAN ) );
 
-    aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetText(), DARKCYAN ) );
+        // Display component reference in library and library
+        aList.push_back( MSG_PANEL_ITEM( _( "Component" ), GetPartName(), BROWN ) );
 
-    // Display component reference in library and library
-    aList.push_back( MSG_PANEL_ITEM( _( "Component" ), m_ChipName, BROWN ) );
+        if( alias->GetName() != part->GetName() )
+            aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), part->GetName(), BROWN ) );
 
-    if( alias->GetName() != root_component->GetName() )
-        aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), root_component->GetName(), BROWN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibraryName(), BROWN ) );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibraryName(), BROWN ) );
+        // Display the current associated footprint, if exists.
+        if( !GetField( FOOTPRINT )->IsVoid() )
+            msg = GetField( FOOTPRINT )->GetShownText();
+        else
+            msg = _( "<Unknown>" );
 
-    // Display the current associated footprin, if exists.
-    if( ! GetField( FOOTPRINT )->IsVoid() )
-        msg = GetField( FOOTPRINT )->GetText();
-    else
-        msg = _( "<Unknown>" );
+        aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKRED ) );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKRED ) );
-
-    // Display description of the component, and keywords found in lib
-    aList.push_back( MSG_PANEL_ITEM( _( "Description" ), alias->GetDescription(), DARKCYAN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Key words" ), alias->GetKeyWords(), DARKCYAN ) );
+        // Display description of the component, and keywords found in lib
+        aList.push_back( MSG_PANEL_ITEM( _( "Description" ), alias->GetDescription(), DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Key words" ), alias->GetKeyWords(), DARKCYAN ) );
+    }
 }
 
 
@@ -1559,23 +1608,21 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
 
 void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
-    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
-
-    if( Entry == NULL )
-        return;
-
-    for( LIB_PIN* Pin = Entry->GetNextPin(); Pin != NULL; Pin = Entry->GetNextPin( Pin ) )
+    if( PART_SPTR part = m_part.lock() )
     {
-        wxASSERT( Pin->Type() == LIB_PIN_T );
+        for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
+        {
+            wxASSERT( pin->Type() == LIB_PIN_T );
 
-        if( Pin->GetUnit() && m_unit && ( m_unit != Pin->GetUnit() ) )
-            continue;
+            if( pin->GetUnit() && m_unit && ( m_unit != pin->GetUnit() ) )
+                continue;
 
-        if( Pin->GetConvert() && m_convert && ( m_convert != Pin->GetConvert() ) )
-            continue;
+            if( pin->GetConvert() && m_convert && ( m_convert != pin->GetConvert() ) )
+                continue;
 
-        DANGLING_END_ITEM item( PIN_END, Pin, GetPinPhysicalPosition( Pin ) );
-        aItemList.push_back( item );
+            DANGLING_END_ITEM item( PIN_END, pin, GetPinPhysicalPosition( pin ) );
+            aItemList.push_back( item );
+        }
     }
 }
 
@@ -1606,42 +1653,44 @@ bool SCH_COMPONENT::IsSelectStateChanged( const wxRect& aRect )
 
 void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
-    LIB_PIN* pin;
-    LIB_COMPONENT* component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
-
-    wxCHECK_RET( component != NULL,
-                 wxT( "Cannot add connection points to list.  Cannot find component <" ) +
-                 m_ChipName + wxT( "> in any of the loaded libraries." ) );
-
-    for( pin = component->GetNextPin(); pin != NULL; pin = component->GetNextPin( pin ) )
+    if( PART_SPTR part = m_part.lock() )
     {
-        wxCHECK_RET( pin->Type() == LIB_PIN_T,
-                     wxT( "GetNextPin() did not return a pin object.  Bad programmer!" ) );
+        for( LIB_PIN* pin = part->GetNextPin(); pin; pin = part->GetNextPin( pin ) )
+        {
+            wxCHECK_RET( pin->Type() == LIB_PIN_T,
+                         wxT( "GetNextPin() did not return a pin object.  Bad programmer!" ) );
 
-        // Skip items not used for this part.
-        if( m_unit && pin->GetUnit() && ( pin->GetUnit() != m_unit ) )
-            continue;
+            // Skip items not used for this part.
+            if( m_unit && pin->GetUnit() && ( pin->GetUnit() != m_unit ) )
+                continue;
 
-        if( m_convert && pin->GetConvert() && ( pin->GetConvert() != m_convert ) )
-            continue;
+            if( m_convert && pin->GetConvert() && ( pin->GetConvert() != m_convert ) )
+                continue;
 
-        // Calculate the pin position relative to the component position and orientation.
-        aPoints.push_back( m_transform.TransformCoordinate( pin->GetPosition() ) + m_Pos );
+            // Calculate the pin position relative to the component position and orientation.
+            aPoints.push_back( m_transform.TransformCoordinate( pin->GetPosition() ) + m_Pos );
+        }
+    }
+    else
+    {
+        wxCHECK_RET( 0,
+                 wxT( "Cannot add connection points to list.  Cannot find component <" ) +
+                 GetPartName() + wxT( "> in any of the loaded libraries." ) );
     }
 }
 
 
 LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 {
-    LIB_COMPONENT* component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+    if( PART_SPTR part = m_part.lock() )
+    {
+        // Calculate the position relative to the component.
+        wxPoint libPosition = aPosition - m_Pos;
 
-    if( component == NULL )
-        return NULL;
+        return part->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_transform );
+    }
 
-    // Calculate the position relative to the component.
-    wxPoint libPosition = aPosition - m_Pos;
-
-    return component->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_transform );
+    return NULL;
 }
 
 
@@ -1649,8 +1698,8 @@ wxString SCH_COMPONENT::GetSelectMenuText() const
 {
     wxString tmp;
     tmp.Printf( _( "Component %s, %s" ),
-                GetChars( m_ChipName ),
-                GetChars( GetField( REFERENCE )->GetText() ) );
+                GetChars( GetPartName() ),
+                GetChars( GetField( REFERENCE )->GetShownText() ) );
     return tmp;
 }
 
@@ -1658,8 +1707,7 @@ wxString SCH_COMPONENT::GetSelectMenuText() const
 SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData,
                                     const KICAD_T aFilterTypes[] )
 {
-    KICAD_T stype;
-    LIB_COMPONENT* component;
+    KICAD_T     stype;
 
     for( const KICAD_T* p = aFilterTypes; (stype = *p) != EOT; ++p )
     {
@@ -1669,50 +1717,51 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData
             if( SEARCH_QUIT == aInspector->Inspect( this, aTestData ) )
                 return SEARCH_QUIT;
         }
+
         switch( stype )
         {
-            case SCH_FIELD_T:
-                // Test the bounding boxes of fields if they are visible and not empty.
-                for( int ii = 0; ii < GetFieldCount(); ii++ )
+        case SCH_FIELD_T:
+            // Test the bounding boxes of fields if they are visible and not empty.
+            for( int ii = 0; ii < GetFieldCount(); ii++ )
+            {
+                if( SEARCH_QUIT == aInspector->Inspect( GetField( ii ), (void*) this ) )
+                    return SEARCH_QUIT;
+            }
+            break;
+
+        case SCH_FIELD_LOCATE_REFERENCE_T:
+            if( SEARCH_QUIT == aInspector->Inspect( GetField( REFERENCE ), (void*) this ) )
+                return SEARCH_QUIT;
+            break;
+
+        case SCH_FIELD_LOCATE_VALUE_T:
+            if( SEARCH_QUIT == aInspector->Inspect( GetField( VALUE ), (void*) this ) )
+                return SEARCH_QUIT;
+            break;
+
+        case SCH_FIELD_LOCATE_FOOTPRINT_T:
+            if( SEARCH_QUIT == aInspector->Inspect( GetField( FOOTPRINT ), (void*) this ) )
+                return SEARCH_QUIT;
+            break;
+
+
+        case LIB_PIN_T:
+            if( PART_SPTR part = m_part.lock() )
+            {
+                LIB_PINS pins;
+
+                part->GetPins( pins, m_unit, m_convert );
+
+                for( size_t i = 0;  i < pins.size();  i++ )
                 {
-                    if( SEARCH_QUIT == aInspector->Inspect( GetField( ii ), (void*) this ) )
+                    if( SEARCH_QUIT == aInspector->Inspect( pins[ i ], (void*) this ) )
                         return SEARCH_QUIT;
                 }
-                break;
+            }
+            break;
 
-            case SCH_FIELD_LOCATE_REFERENCE_T:
-                if( SEARCH_QUIT == aInspector->Inspect( GetField( REFERENCE ), (void*) this ) )
-                    return SEARCH_QUIT;
-                break;
-
-            case SCH_FIELD_LOCATE_VALUE_T:
-                if( SEARCH_QUIT == aInspector->Inspect( GetField( VALUE ), (void*) this ) )
-                    return SEARCH_QUIT;
-                break;
-
-            case SCH_FIELD_LOCATE_FOOTPRINT_T:
-                if( SEARCH_QUIT == aInspector->Inspect( GetField( FOOTPRINT ), (void*) this ) )
-                    return SEARCH_QUIT;
-                break;
-
-
-            case LIB_PIN_T:
-                component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
-
-                if( component != NULL )
-                {
-                    LIB_PINS pins;
-                    component->GetPins( pins, m_unit, m_convert );
-                    for( size_t i = 0;  i < pins.size();  i++ )
-                    {
-                        if( SEARCH_QUIT == aInspector->Inspect( pins[ i ], (void*) this ) )
-                            return SEARCH_QUIT;
-                    }
-                }
-                break;
-
-            default:
-                break;
+        default:
+            break;
         }
     }
 
@@ -1723,49 +1772,47 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData
 void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                                     SCH_SHEET_PATH*      aSheetPath )
 {
-    LIB_COMPONENT* component = CMP_LIBRARY::FindLibraryComponent( GetLibName() );
-
-    if( component == NULL )
-        return;
-
-    for( LIB_PIN* pin = component->GetNextPin();  pin;  pin = component->GetNextPin( pin ) )
+    if( PART_SPTR part = m_part.lock() )
     {
-        wxASSERT( pin->Type() == LIB_PIN_T );
-
-        if( pin->GetUnit() && ( pin->GetUnit() != GetUnitSelection( aSheetPath ) ) )
-            continue;
-
-        if( pin->GetConvert() && ( pin->GetConvert() != GetConvert() ) )
-            continue;
-
-        wxPoint pos = GetTransform().TransformCoordinate( pin->GetPosition() ) + m_Pos;
-
-        NETLIST_OBJECT* item = new NETLIST_OBJECT();
-        item->m_SheetPathInclude = *aSheetPath;
-        item->m_Comp = (SCH_ITEM*) pin;
-        item->m_SheetPath = *aSheetPath;
-        item->m_Type = NET_PIN;
-        item->m_Link = (SCH_ITEM*) this;
-        item->m_ElectricalType = pin->GetType();
-        item->m_PinNum = pin->GetNumber();
-        item->m_Label = pin->GetName();
-        item->m_Start = item->m_End = pos;
-
-        aNetListItems.push_back( item );
-
-        if( ( (int) pin->GetType() == (int) PIN_POWER_IN ) && !pin->IsVisible() )
+        for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
         {
-            /* There is an associated PIN_LABEL. */
-            item = new NETLIST_OBJECT();
+            wxASSERT( pin->Type() == LIB_PIN_T );
+
+            if( pin->GetUnit() && ( pin->GetUnit() != GetUnitSelection( aSheetPath ) ) )
+                continue;
+
+            if( pin->GetConvert() && ( pin->GetConvert() != GetConvert() ) )
+                continue;
+
+            wxPoint pos = GetTransform().TransformCoordinate( pin->GetPosition() ) + m_Pos;
+
+            NETLIST_OBJECT* item = new NETLIST_OBJECT();
             item->m_SheetPathInclude = *aSheetPath;
-            item->m_Comp = NULL;
+            item->m_Comp = (SCH_ITEM*) pin;
             item->m_SheetPath = *aSheetPath;
-            item->m_Type  = NET_PINLABEL;
+            item->m_Type = NET_PIN;
+            item->m_Link = (SCH_ITEM*) this;
+            item->m_ElectricalType = pin->GetType();
+            item->m_PinNum = pin->GetNumber();
             item->m_Label = pin->GetName();
-            item->m_Start = pos;
-            item->m_End = item->m_Start;
+            item->m_Start = item->m_End = pos;
 
             aNetListItems.push_back( item );
+
+            if( ( (int) pin->GetType() == (int) PIN_POWER_IN ) && !pin->IsVisible() )
+            {
+                // There is an associated PIN_LABEL.
+                item = new NETLIST_OBJECT();
+                item->m_SheetPathInclude = *aSheetPath;
+                item->m_Comp = NULL;
+                item->m_SheetPath = *aSheetPath;
+                item->m_Type  = NET_PINLABEL;
+                item->m_Label = pin->GetName();
+                item->m_Start = pos;
+                item->m_End = item->m_Start;
+
+                aNetListItems.push_back( item );
+            }
         }
     }
 }
@@ -1824,15 +1871,18 @@ SCH_ITEM& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
     {
         SCH_ITEM::operator=( aItem );
 
-        SCH_COMPONENT* component = (SCH_COMPONENT*) &aItem;
-        m_ChipName = component->m_ChipName;
-        m_Pos = component->m_Pos;
-        m_unit = component->m_unit;
-        m_convert = component->m_convert;
-        m_transform = component->m_transform;
-        m_PathsAndReferences = component->m_PathsAndReferences;
+        SCH_COMPONENT* c = (SCH_COMPONENT*) &aItem;
 
-        m_Fields = component->m_Fields;    // std::vector's assignment operator.
+        m_part_name = c->m_part_name;
+        m_part      = c->m_part;
+        m_Pos       = c->m_Pos;
+        m_unit      = c->m_unit;
+        m_convert   = c->m_convert;
+        m_transform = c->m_transform;
+
+        m_PathsAndReferences = c->m_PathsAndReferences;
+
+        m_Fields = c->m_Fields;    // std::vector's assignment operator.
 
         // Reparent fields after assignment to new component.
         for( int ii = 0; ii < GetFieldCount();  ++ii )
@@ -1888,10 +1938,7 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
     return false;
 }
 
-/* return true if the component is in netlist
- * which means this is not a power component, or something
- * like a component reference starting by #
- */
+
 bool SCH_COMPONENT::IsInNetlist() const
 {
     SCH_FIELD* rf = GetField( REFERENCE );
@@ -1901,20 +1948,17 @@ bool SCH_COMPONENT::IsInNetlist() const
 
 void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
 {
-    LIB_COMPONENT* Entry;
-    TRANSFORM temp = TRANSFORM();
+    TRANSFORM temp;
 
-    Entry = CMP_LIBRARY::FindLibraryComponent( GetLibName() );
-
-    if( Entry == NULL )
-        return;
-
-    temp = GetTransform();
-
-    Entry->Plot( aPlotter, GetUnit(), GetConvert(), m_Pos, temp );
-
-    for( size_t i = 0; i < m_Fields.size(); i++ )
+    if( PART_SPTR part = m_part.lock() )
     {
-        m_Fields[i].Plot( aPlotter );
+        temp = GetTransform();
+
+        part->Plot( aPlotter, GetUnit(), GetConvert(), m_Pos, temp );
+
+        for( size_t i = 0; i < m_Fields.size(); i++ )
+        {
+            m_Fields[i].Plot( aPlotter );
+        }
     }
 }

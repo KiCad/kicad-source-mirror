@@ -41,8 +41,6 @@
 
 #define GROUP wxT("/pl_editor")
 
-#define INSETUP true
-
 
 void PL_EDITOR_FRAME::Process_Config( wxCommandEvent& event )
 {

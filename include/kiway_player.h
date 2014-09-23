@@ -126,8 +126,8 @@ public:
     //----<Cross Module API>-----------------------------------------------------
 
     // For the aCtl argument of OpenProjectFiles()
-#define KICTL_OPEN_APPEND       (1<<0)      ///< append the data file, rather than replace
-#define KICTL_EAGLE_BRD         (1<<1)      ///< chosen *.brd file is Eagle according to user.
+#define KICTL_EAGLE_BRD         (1<<0)      ///< chosen *.brd file is Eagle according to user.
+#define KICTL_CREATE            (1<<1)      ///< caller thinks requested project files may not exist
 
     /**
      * Function OpenProjectFiles
@@ -139,11 +139,14 @@ public:
      * KIWAY_PLAYER is precluded.
      * <p>
      * Each derived class should handle this in a way specific to its needs.
-     * No prompting is done inside here for any file or project.  There should be
-     * no need to call this with aFileList which is empty.  However, calling it with
+     * No filename prompting is done inside here for any file or project.  There should
+     * be no need to call this with aFileList which is empty.  However, calling it with
      * a single filename which does not exist should indicate to the implementor
      * that a new session is being started and that the given name is the desired
      * name for the data file at time of save.
+     * <p>
+     * This function does not support "appending".  Use a different function for that.
+     * Any prior project data tree should be cleared before loading the new stuff.
      * <p>
      * Therefore, one of the first things an implementation should do is test for
      * existence of the first file in the list, and if it does not exist, treat
@@ -255,19 +258,33 @@ bool OpenProjectFiles( const std::vector<wxString>& aFileList, int aCtl = 0 )
 
     assert( aFileList[0] is absolute )      // bug in single_top.cpp or project manager.
 
-    if (window does not support appending) || !(aCtl & KICTL_OPEN_APPEND)
+    if( !Pgm().LockFile( fullFileName ) )
     {
-        close any currently open project files.
+        DisplayError( this, _( "This file is already open." ) );
+        return false;
     }
+
+    if current open project files have been modified
+    {
+        ask if user wants to save them and if yes save.
+    }
+
+    unload any currently open project files.
+
+    Prj().SetProjectFullName( )
 
     if( aFileList[0] does not exist )
     {
-        notify user file does not exist.
+        notify user file does not exist and ask if he wants to create it
+        if( yes )
+        {
+            create empty project file(s)
+            mark file as modified.
 
-        create an empty project file
-        mark file as modified.
-
-        use the default project config file.
+            use the default project config file.
+        }
+        else
+            return false
     }
     else
     {
@@ -276,7 +293,11 @@ bool OpenProjectFiles( const std::vector<wxString>& aFileList, int aCtl = 0 )
         use the project config file for project given by aFileList[0]s full path.
     }
 
+    UpdateFileHistory( g_RootSheet->GetScreen()->GetFileName() );
+
+    /* done in ReDraw typically:
     UpdateTitle();
+    */
 
     show contents.
 }

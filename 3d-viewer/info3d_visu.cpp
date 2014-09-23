@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,14 +65,42 @@ INFO3D_VISU::INFO3D_VISU()
     m_copperThickness   = 0;
     m_epoxyThickness    = 0;
     m_nonCopperLayerThickness = 0;
+    m_BiuTo3Dunits = 1.0;
+
+    // Set copper color, in realistic mode
+    #define LUMINANCE 0.7/255.0
+    m_CopperColor.m_Red = 255.0*LUMINANCE;
+    m_CopperColor.m_Green = 223.0*LUMINANCE;
+    m_CopperColor.m_Blue = 0.0*LUMINANCE;
+
+    // Set the solder mask color, in realistic mode
+    #undef LUMINANCE
+    #define LUMINANCE 0.2/255.0
+    m_SolderMaskColor.m_Red = 100.0*LUMINANCE;
+    m_SolderMaskColor.m_Green = 255.0*LUMINANCE;
+    m_SolderMaskColor.m_Blue = 180.0*LUMINANCE;
+
+    // Set the silk screen mask color, in realistic mode
+    #undef LUMINANCE
+    #define LUMINANCE 0.9
+    m_SilkScreenColor.m_Red = 1.0*LUMINANCE;
+    m_SilkScreenColor.m_Green = 1.0*LUMINANCE;
+    m_SilkScreenColor.m_Blue = 1.0*LUMINANCE;
+
+    // Set the body board (FR4) color, in realistic mode
+    #undef LUMINANCE
+    #define LUMINANCE 0.2/255.0
+    m_BoardBodyColor.m_Red = 255.0*LUMINANCE;
+    m_BoardBodyColor.m_Green = 218.0*LUMINANCE;
+    m_BoardBodyColor.m_Blue = 110.0*LUMINANCE;
 
     // default all special item layers Visible
-    for( ii = 0; ii < FL_LAST; ii++ )
-        m_drawFlags[ii] = true;
+    m_drawFlags.set();
 
     SetFlag( FL_GRID, false );
     SetFlag( FL_USE_COPPER_THICKNESS, false );
-    SetFlag( FL_USE_MAXQUALITY_IN_REALISTIC_MODE, false );
+    SetFlag( FL_RENDER_SHADOWS, false );
+    SetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES, false );
 }
 
 
@@ -85,14 +113,17 @@ INFO3D_VISU::~INFO3D_VISU()
  */
 void INFO3D_VISU::InitSettings( BOARD* aBoard )
 {
+    // Calculates the board bounding box
+    // First, use only the board outlines
     EDA_RECT bbbox = aBoard->ComputeBoundingBox( true );
 
+    // If no outlines, use the board with items
     if( bbbox.GetWidth() == 0 && bbbox.GetHeight() == 0 )
-    {
-        bbbox.SetWidth( Millimeter2iu( 100 ) );
-        bbbox.SetHeight( Millimeter2iu( 100 ) );
-    }
+       bbbox = aBoard->ComputeBoundingBox( false );
 
+    // Gives a non null size to avoid issues in zoom / scale calculations
+    if( bbbox.GetWidth() == 0 && bbbox.GetHeight() == 0 )
+        bbbox.Inflate( Millimeter2iu( 10 ) );
 
     m_BoardSettings = &aBoard->GetDesignSettings();
 
@@ -199,9 +230,10 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
  */
 double INFO3D_VISU::GetModulesZcoord3DIU( bool aIsFlipped )
 {
+    // NOTE: Z position to display modules in top of Paste and near the shadow
     if(  aIsFlipped )
-        return m_layerZcoord[B_Paste] - ( m_copperThickness / 2 ); //B_Cu NOTE: in order to display modules in top of Paste and near the shadow
+        return m_layerZcoord[B_Paste] - ( m_copperThickness / 2 );
     else
-        return m_layerZcoord[F_Paste] + ( m_copperThickness / 2 ); //F_Cu
+        return m_layerZcoord[F_Paste] + ( m_copperThickness / 2 );
 }
 

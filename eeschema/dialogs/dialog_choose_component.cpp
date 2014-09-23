@@ -251,13 +251,13 @@ void DIALOG_CHOOSE_COMPONENT::OnHandlePreviewRepaint( wxPaintEvent& aRepaintEven
     int unit = 0;
     LIB_ALIAS* selection = m_search_container->GetSelectedAlias( &unit );
 
-    renderPreview( selection ? selection->GetComponent() : NULL, unit );
+    renderPreview( selection ? selection->GetPart() : NULL, unit );
 }
 
 
 // Render the preview in our m_componentView. If this gets more complicated, we should
 // probably have a derived class from wxPanel; but this keeps things local.
-void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_COMPONENT* aComponent, int aUnit )
+void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_PART*      aComponent, int aUnit )
 {
     wxPaintDC dc( m_componentView );
     dc.SetBackground( *wxWHITE_BRUSH );

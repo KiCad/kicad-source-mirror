@@ -30,11 +30,13 @@
 #include <wxPcbStruct.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <pcbcommon.h>
 
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
+#include <class_pcb_text.h>
+#include <class_mire.h>
+#include <class_drawsegment.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -105,11 +107,11 @@ void PCB_EDIT_FRAME::CallMacros( wxDC* aDC, const wxPoint& aPosition, int aNumbe
 }
 
 
-void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition,
+bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition,
                                EDA_ITEM* aItem )
 {
     if( aHotkeyCode == 0 )
-        return;
+        return false;
 
     bool itemCurrentlyEdited = GetCurItem() && GetCurItem()->GetFlags();
     MODULE* module = NULL;
@@ -127,9 +129,8 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, board_edit_Hotkey_List );
 
-
     if( HK_Descr == NULL )
-        return;
+        return false;
 
     int hk_id = HK_Descr->m_Idcommand;
 
@@ -157,8 +158,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     {
     default:
     case HK_NOT_FOUND:
-        return;
-        break;
+        return false;
 
     case HK_LEFT_CLICK:
         OnLeftClick( aDC, aPosition );
@@ -350,7 +350,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_RESET_GRID_ORIGIN:
-        SetGridOrigin( wxPoint(0,0) );
+        SetGridOrigin( wxPoint( 0,0 ) );
         OnModify();     // because grid origin is saved in board, show as modified
         m_canvas->Refresh();
         break;
@@ -428,16 +428,16 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
     case HK_ADD_MICROVIA: // Place a micro via if a track is in progress
         if( GetToolId() != ID_TRACK_BUTT )
-            return;
+            return true;
 
         if( !itemCurrentlyEdited )                         // no track in progress: nothing to do
             break;
 
         if( GetCurItem()->Type() != PCB_TRACE_T )           // Should not occur
-            return;
+            return true;
 
         if( !GetCurItem()->IsNew() )
-            return;
+            return true;
 
         // place micro via and switch layer
         if( IsMicroViaAcceptable() )
@@ -462,13 +462,13 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         }
 
         if( GetToolId() != ID_TRACK_BUTT )
-            return;
+            return true;
 
         if( GetCurItem()->Type() != PCB_TRACE_T )
-            return;
+            return true;
 
         if( !GetCurItem()->IsNew() )
-            return;
+            return true;
 
         evt_type = hk_id == HK_ADD_BLIND_BURIED_VIA ?
             ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA : ID_POPUP_PCB_PLACE_THROUGH_VIA;
@@ -575,6 +575,8 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         evt.SetId( evt_type );
         GetEventHandler()->ProcessEvent( evt );
     }
+
+    return true;
 }
 
 
@@ -586,7 +588,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
     switch( GetToolId() )
     {
     case ID_TRACK_BUTT:
-        if( GetActiveLayer() > F_Cu )
+        if( !IsCopperLayer ( GetActiveLayer() ) )
             return false;
 
         if( ItemFree )
@@ -901,33 +903,33 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
         case PCB_TRACE_T:
         case PCB_VIA_T:
             if( item->IsDragging() )
-                PlaceDraggedOrMovedTrackSegment( (TRACK*) item, aDC );
+                PlaceDraggedOrMovedTrackSegment( static_cast<TRACK*>( item ), aDC );
 
             break;
 
         case PCB_TEXT_T:
-            Place_Texte_Pcb( (TEXTE_PCB*) item, aDC );
+            Place_Texte_Pcb( static_cast<TEXTE_PCB*>( item ), aDC );
             break;
 
         case PCB_MODULE_TEXT_T:
-            PlaceTexteModule( (TEXTE_MODULE*) item, aDC );
+            PlaceTexteModule( static_cast<TEXTE_MODULE*>( item ), aDC );
             break;
 
         case PCB_PAD_T:
-            PlacePad( (D_PAD*) item, aDC );
+            PlacePad( static_cast<D_PAD*>( item ), aDC );
             break;
 
         case PCB_MODULE_T:
-            PlaceModule( (MODULE*) item, aDC );
+            PlaceModule( static_cast<MODULE*>( item ), aDC );
             break;
 
         case PCB_TARGET_T:
-            PlaceTarget( (PCB_TARGET*) item, aDC );
+            PlaceTarget( static_cast<PCB_TARGET*>( item ), aDC );
             break;
 
         case PCB_LINE_T:
             if( no_tool )   // when no tools: existing item moving.
-                Place_DrawItem( (DRAWSEGMENT*) item, aDC );
+                Place_DrawItem( static_cast<DRAWSEGMENT*>( item ), aDC );
 
             break;
 
@@ -947,10 +949,10 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
 
 TRACK * PCB_EDIT_FRAME::OnHotkeyBeginRoute( wxDC* aDC )
 {
-    if( GetActiveLayer() > F_Cu )
+    if( !IsCopperLayer( GetActiveLayer() ) )
         return NULL;
 
-    bool itemCurrentlyEdited = (GetCurItem() && GetCurItem()->GetFlags());
+    bool itemCurrentlyEdited = GetCurItem() && GetCurItem()->GetFlags();
 
     // Ensure the track tool is active
     if( GetToolId() != ID_TRACK_BUTT && !itemCurrentlyEdited )

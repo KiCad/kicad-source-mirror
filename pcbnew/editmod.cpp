@@ -59,12 +59,12 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
     DIALOG_MODULE_BOARD_EDITOR* dialog = new DIALOG_MODULE_BOARD_EDITOR( this, Module, NULL );
 #endif
 
-    int retvalue = dialog->ShowModal(); /* retvalue =
-                                         *  -1 if abort,
-                                         *  0 if exchange module,
-                                         *  1 for normal edition
-                                         *  and 2 for a goto editor command
-                                         */
+    int retvalue = dialog->SHOWQUASIMODAL();    /* retvalue =
+                                                 *  -1 if abort,
+                                                 *  0 if exchange module,
+                                                 *  1 for normal edition
+                                                 *  and 2 for a goto editor command
+                                                 */
     dialog->Destroy();
 
 #ifdef __WXMAC__
@@ -99,7 +99,7 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
 
     case PCB_MODULE_TEXT_T:
     {
-        TEXTE_MODULE* text = (TEXTE_MODULE*) Item;
+        TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( Item );
 
         switch( text->GetType() )
         {
@@ -111,7 +111,7 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
             DisplayError( this, _( "Cannot delete VALUE!" ) );
             break;
 
-        default:
+        case TEXTE_MODULE::TEXT_is_DIVERS:
             DeleteTextModule( text );
         }
     }

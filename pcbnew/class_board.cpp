@@ -36,7 +36,6 @@
 #include <fctsys.h>
 #include <common.h>
 #include <kicad_string.h>
-#include <pcbcommon.h>
 #include <wxBasePcbFrame.h>
 #include <msgpanel.h>
 #include <pcb_netlist.h>
@@ -169,8 +168,8 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         PCB_TARGET_T,
         PCB_VIA_T,
         PCB_TRACE_T,
-        //        PCB_PAD_T,
-        //        PCB_MODULE_TEXT_T,
+        //        PCB_PAD_T,            Can't be at board level
+        //        PCB_MODULE_TEXT_T,    Can't be at board level
         PCB_MODULE_T,
         PCB_ZONE_AREA_T,
         EOT
@@ -1290,12 +1289,20 @@ MODULE* BOARD::FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeSt
 }
 
 
-// Sort nets by decreasing pad count
-static bool s_SortByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
+// Sort nets by decreasing pad count. For same pad count, sort by alphabetic names
+static bool sortNetsByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 {
+    if( b->GetNodesCount() == a->GetNodesCount() )
+        return a->GetNetname() < b->GetNetname();
+
     return b->GetNodesCount() < a->GetNodesCount();
 }
 
+// Sort nets by alphabetic names
+static bool sortNetsByNames( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
+{
+    return a->GetNetname() < b->GetNetname();
+}
 
 int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 {
@@ -1316,7 +1323,9 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 
     // sort the list
     if( aSortbyPadsCount )
-        sort( netBuffer.begin(), netBuffer.end(), s_SortByNodes );
+        sort( netBuffer.begin(), netBuffer.end(), sortNetsByNodes );
+    else
+        sort( netBuffer.begin(), netBuffer.end(), sortNetsByNames );
 
     for( unsigned ii = 0; ii <  netBuffer.size(); ii++ )
         aNames.Add( netBuffer[ii]->GetNetname() );
@@ -2532,6 +2541,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     }
 }
 
+
 /* Extracts the board outlines and build a closed polygon
  * from lines, arcs and circle items on edge cut layer
  * Any closed outline inside the main outline is a hole
@@ -2544,7 +2554,7 @@ bool BOARD::GetBoardPolygonOutlines( CPOLYGONS_LIST& aOutlines,
                                      wxString* aErrorText )
 {
     // the SPECCTRA_DB function to extract board outlines:
-    SPECCTRA_DB dummy;
+    DSN::SPECCTRA_DB dummy;
     return dummy.GetBoardPolygonOutlines( this, aOutlines,
                                           aHoles, aErrorText );
 }

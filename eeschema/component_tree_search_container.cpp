@@ -98,8 +98,11 @@ bool COMPONENT_TREE_SEARCH_CONTAINER::scoreComparator( const TREE_NODE* a1, cons
 }
 
 
-COMPONENT_TREE_SEARCH_CONTAINER::COMPONENT_TREE_SEARCH_CONTAINER()
-    : tree( NULL ), libraries_added( 0 ), preselect_unit_number( -1 )
+COMPONENT_TREE_SEARCH_CONTAINER::COMPONENT_TREE_SEARCH_CONTAINER( PART_LIBS* aLibs ) :
+    tree( NULL ),
+    libraries_added( 0 ),
+    preselect_unit_number( -1 ),
+    m_libs( aLibs )
 {
 }
 
@@ -127,7 +130,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::SetTree( wxTreeCtrl* aTree )
 }
 
 
-void COMPONENT_TREE_SEARCH_CONTAINER::AddLibrary( CMP_LIBRARY& aLib )
+void COMPONENT_TREE_SEARCH_CONTAINER::AddLibrary( PART_LIB& aLib )
 {
     wxArrayString all_aliases;
 
@@ -139,7 +142,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddLibrary( CMP_LIBRARY& aLib )
 
 void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
                                                     const wxArrayString& aAliasNameList,
-                                                    CMP_LIBRARY* aOptionalLib )
+                                                    PART_LIB* aOptionalLib )
 {
     TREE_NODE* const lib_node = new TREE_NODE( TREE_NODE::TYPE_LIB,  NULL, NULL,
                                                aNodeName, wxEmptyString, wxEmptyString );
@@ -152,7 +155,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
         if( aOptionalLib )
             a = aOptionalLib->FindAlias( aName );
         else
-            a = CMP_LIBRARY::FindLibraryEntry( aName, wxEmptyString );
+            a = m_libs->FindLibraryEntry( aName, wxEmptyString );
 
         if( a == NULL )
             continue;
@@ -186,12 +189,12 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
                                                a, a->GetName(), display_info, search_text );
         nodes.push_back( alias_node );
 
-        if( a->GetComponent()->IsMulti() )    // Add all units as sub-nodes.
+        if( a->GetPart()->IsMulti() )    // Add all units as sub-nodes.
         {
-            for( int u = 1; u <= a->GetComponent()->GetPartCount(); ++u )
+            for( int u = 1; u <= a->GetPart()->GetUnitCount(); ++u )
             {
                 wxString unitName = _("Unit");
-                unitName += wxT( " " ) + LIB_COMPONENT::SubReference( u, false );
+                unitName += wxT( " " ) + LIB_PART::SubReference( u, false );
                 TREE_NODE* unit_node = new TREE_NODE( TREE_NODE::TYPE_UNIT,
                                                       alias_node, a,
                                                       unitName,

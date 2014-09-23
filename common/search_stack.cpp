@@ -11,17 +11,39 @@
 #endif
 
 
-wxString SEARCH_STACK::FilenameWithRelativePathInSearchList( const wxString& aFullFilename )
+int SEARCH_STACK::Split( wxArrayString* aResult, const wxString aPathString )
 {
-    /* If the library path is already in the library search paths
-     * list, just add the library name to the list.  Otherwise, add
-     * the library name with the full or relative path.
-     * the relative path, when possible is preferable,
-     * because it preserve use of default libraries paths, when the path is a sub path of
-     * these default paths
-     * Note we accept only sub paths,
-     * not relative paths starting by ../ that are not subpaths and are outside kicad libs paths
-     */
+    wxStringTokenizer   tokenizer( aPathString, PATH_SEPS, wxTOKEN_STRTOK );
+
+    while( tokenizer.HasMoreTokens() )
+    {
+        wxString path = tokenizer.GetNextToken();
+
+        aResult->Add( path );
+    }
+
+    return aResult->GetCount();
+}
+
+
+// Convert aRelativePath to an absolute path based on aBaseDir
+static wxString base_dir( const wxString& aRelativePath, const wxString& aBaseDir )
+{
+    wxFileName fn = aRelativePath;
+
+    if( !fn.IsAbsolute() && !!aBaseDir )
+    {
+        wxASSERT_MSG( wxFileName( aBaseDir ).IsAbsolute(), wxT( "Must pass absolute path in aBaseDir" ) );
+        fn.MakeRelativeTo( aBaseDir );
+    }
+
+    return fn.GetFullPath();
+}
+
+
+wxString SEARCH_STACK::FilenameWithRelativePathInSearchList(
+        const wxString& aFullFilename, const wxString& aBaseDir )
+{
     wxFileName fn = aFullFilename;
     wxString   filename = aFullFilename;
 
@@ -33,7 +55,7 @@ wxString SEARCH_STACK::FilenameWithRelativePathInSearchList( const wxString& aFu
         fn = aFullFilename;
 
         // Search for the shortest subpath within 'this':
-        if( fn.MakeRelativeTo( (*this)[kk] ) )
+        if( fn.MakeRelativeTo( base_dir( (*this)[kk], aBaseDir ) ) )
         {
             if( fn.GetPathWithSep().StartsWith( wxT("..") ) )  // Path outside kicad libs paths
                 continue;
@@ -52,13 +74,16 @@ wxString SEARCH_STACK::FilenameWithRelativePathInSearchList( const wxString& aFu
 
 void SEARCH_STACK::RemovePaths( const wxString& aPaths )
 {
-    wxStringTokenizer tokenizer( aPaths, PATH_SEPS, wxTOKEN_STRTOK );
+    bool            isCS = wxFileName::IsCaseSensitive();
+    wxArrayString   paths;
 
-    while( tokenizer.HasMoreTokens() )
+    Split( &paths, aPaths );
+
+    for( unsigned i=0; i<paths.GetCount();  ++i )
     {
-        wxString path = tokenizer.GetNextToken();
+        wxString path = paths[i];
 
-        if( Index( path, wxFileName::IsCaseSensitive() ) != wxNOT_FOUND )
+        if( Index( path, isCS ) != wxNOT_FOUND )
         {
             Remove( path );
         }
@@ -68,15 +93,17 @@ void SEARCH_STACK::RemovePaths( const wxString& aPaths )
 
 void SEARCH_STACK::AddPaths( const wxString& aPaths, int aIndex )
 {
-    bool                isCS = wxFileName::IsCaseSensitive();
-    wxStringTokenizer   tokenizer( aPaths, PATH_SEPS, wxTOKEN_STRTOK );
+    bool            isCS = wxFileName::IsCaseSensitive();
+    wxArrayString   paths;
+
+    Split( &paths, aPaths );
 
     // appending all of them, on large or negative aIndex
     if( unsigned( aIndex ) >= GetCount() )
     {
-        while( tokenizer.HasMoreTokens() )
+        for( unsigned i=0; i<paths.GetCount();  ++i )
         {
-            wxString path = tokenizer.GetNextToken();
+            wxString path = paths[i];
 
             if( wxFileName::IsDirReadable( path )
                 && Index( path, isCS ) == wxNOT_FOUND )
@@ -89,9 +116,9 @@ void SEARCH_STACK::AddPaths( const wxString& aPaths, int aIndex )
     // inserting all of them:
     else
     {
-        while( tokenizer.HasMoreTokens() )
+        for( unsigned i=0; i<paths.GetCount();  ++i )
         {
-            wxString path = tokenizer.GetNextToken();
+            wxString path = paths[i];
 
             if( wxFileName::IsDirReadable( path )
                 && Index( path, isCS ) == wxNOT_FOUND )
@@ -103,6 +130,8 @@ void SEARCH_STACK::AddPaths( const wxString& aPaths, int aIndex )
     }
 }
 
+
+#if 1       // this function is too convoluted for words.
 
 const wxString SEARCH_STACK::LastVisitedPath( const wxString& aSubPathToSearch )
 {
@@ -142,6 +171,7 @@ const wxString SEARCH_STACK::LastVisitedPath( const wxString& aSubPathToSearch )
 
     return path;
 }
+#endif
 
 
 #if defined(DEBUG)

@@ -62,10 +62,8 @@ private:
     wxCheckBox*     m_boxSelectLayer[LAYER_ID_COUNT];
     bool            m_printBW;
     wxString        m_outputDirectory;
-
-    // Static member to store options
-    static bool     m_printMirror;
-    static bool     m_oneFileOnly;
+    bool            m_printMirror;
+    bool            m_oneFileOnly;
 
     void initDialog();
 
@@ -88,7 +86,7 @@ private:
         return m_rbSvgPageSizeOpt->GetSelection() == 0;
     }
 
-    bool CreateSVGFile( const wxString& FullFileName );
+    bool CreateSVGFile( const wxString& FullFileName, bool aOnlyOneFile );
 
     LSET getCheckBoxSelectedLayers() const;
 };
@@ -97,6 +95,8 @@ private:
 
 // Keys for configuration
 #define PLOTSVGMODECOLOR_KEY        wxT( "PlotSVGModeColor" )
+#define PLOTSVGMODEMIRROR_KEY       wxT( "PlotSVGModeMirror" )
+#define PLOTSVGMODEONEFILE_KEY      wxT( "PlotSVGModeOneFile" )
 #define PLOTSVGPAGESIZEOPT_KEY      wxT( "PlotSVGPageOpt" )
 #define PLOTSVGPLOT_BRD_EDGE_KEY    wxT( "PlotSVGBrdEdge" )
 
@@ -125,9 +125,6 @@ DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( wxTopLevelWindow* aParent, BOARD* aBoard, PC
     Centre();
 }
 
-bool DIALOG_SVG_PRINT::m_printMirror = false;
-bool DIALOG_SVG_PRINT::m_oneFileOnly = false;
-
 
 void DIALOG_SVG_PRINT::initDialog()
 {
@@ -136,6 +133,8 @@ void DIALOG_SVG_PRINT::initDialog()
         m_config->Read( PLOTSVGMODECOLOR_KEY, &m_printBW, false );
         long ltmp;
         m_config->Read( PLOTSVGPAGESIZEOPT_KEY, &ltmp, 0 );
+        m_config->Read( PLOTSVGMODEMIRROR_KEY, &m_printMirror, false );
+        m_config->Read( PLOTSVGMODEONEFILE_KEY, &m_oneFileOnly, false);
         m_rbSvgPageSizeOpt->SetSelection( ltmp );
         m_config->Read( PLOTSVGPLOT_BRD_EDGE_KEY, &ltmp, 1 );
         m_PrintBoardEdgesCtrl->SetValue( ltmp );
@@ -144,11 +143,7 @@ void DIALOG_SVG_PRINT::initDialog()
     m_outputDirectory = m_callers_params->GetOutputDirectory();
     m_outputDirectoryName->SetValue( m_outputDirectory );
 
-    if( m_printBW )
-        m_ModeColorOption->SetSelection( 1 );
-    else
-        m_ModeColorOption->SetSelection( 0 );
-
+    m_ModeColorOption->SetSelection( m_printBW ? 1 : 0 );
     m_printMirrorOpt->SetValue( m_printMirror );
     m_rbFileOpt->SetSelection( m_oneFileOnly ? 1 : 0 );
 
@@ -214,12 +209,7 @@ void DIALOG_SVG_PRINT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
     // Build the absolute path of current output plot directory
     // to preselect it when opening the dialog.
     wxFileName  fn( m_outputDirectoryName->GetValue() );
-    wxString    path;
-
-    if( fn.IsRelative() )
-        path = wxGetCwd() + fn.GetPathSeparator() + m_outputDirectoryName->GetValue();
-    else
-        path = m_outputDirectoryName->GetValue();
+    wxString    path = Prj().AbsolutePath( m_outputDirectoryName->GetValue() );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
@@ -234,7 +224,9 @@ void DIALOG_SVG_PRINT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
     if( dialog.ShowModal() == wxID_YES )
     {
-        wxString boardFilePath = ( (wxFileName) m_board->GetFileName() ).GetPath();
+        wxString boardFilePath = Prj().AbsolutePath( m_board->GetFileName() );
+
+        boardFilePath = wxPathOnly( boardFilePath );
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
             wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
@@ -307,7 +299,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
         if( m_PrintBoardEdgesCtrl->IsChecked() )
             m_printMaskLayer.set( Edge_Cuts );
 
-        if( CreateSVGFile( fn.GetFullPath() ) )
+        if( CreateSVGFile( fn.GetFullPath(), aOnlyOneFile ) )
         {
             m_messagesBox->AppendText(
                     wxString::Format( _( "Plot: '%s' OK\n" ), GetChars( fn.GetFullPath() ) )
@@ -327,7 +319,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
 
 
 // Actual SVG file export  function.
-bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
+bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName, bool aOnlyOneFile )
 {
     PCB_PLOT_PARAMS plot_opts;
 
@@ -372,15 +364,22 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
 
     if( plotter )
     {
-        plotter->SetColorMode( m_ModeColorOption->GetSelection() == 0 );
-        PlotStandardLayer( m_board, plotter, m_printMaskLayer, plot_opts );
+        plotter->SetColorMode( !m_printBW );
+        if( aOnlyOneFile )
+        {
+            for( LSEQ seq = m_printMaskLayer.SeqStackupBottom2Top();  seq;  ++seq )
+                PlotOneBoardLayer( m_board, plotter, *seq, plot_opts );
+        }
+        else
+        {
+            PlotStandardLayer( m_board, plotter, m_printMaskLayer, plot_opts );
+        }
         plotter->EndPlot();
     }
 
     delete plotter;
 
-    m_board->SetAuxOrigin( axisorigin );        // really, without a message saying so?
-
+    m_board->SetAuxOrigin( axisorigin );        // reset to the values saved earlier
     m_board->SetPageSettings( pageInfo );
 
     return true;
@@ -410,10 +409,9 @@ void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
         m_printBW = m_ModeColorOption->GetSelection();
         m_oneFileOnly = m_rbFileOpt->GetSelection() == 1;
 
-        // 1) Why is configuration data saved in two places: m_config and PCB_PLOT_OPTIONS?
-        // 2) Why are SVG layer choices co-mingled with other plot layer choices in the config file?
-        //    The string OPTKEY_LAYERBASE is used in multiple places.
-        // fix these.
+        // Why are SVG layer choices co-mingled with other plot layer choices in the config file?
+        // The string OPTKEY_LAYERBASE is used in multiple places.
+        // fix this.
 
         wxString dirStr = m_outputDirectoryName->GetValue();
         dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
@@ -423,6 +421,8 @@ void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
         if( m_config )
         {
             m_config->Write( PLOTSVGMODECOLOR_KEY, m_printBW );
+            m_config->Write( PLOTSVGMODEMIRROR_KEY, m_printMirror );
+            m_config->Write( PLOTSVGMODEONEFILE_KEY, m_oneFileOnly );
             m_config->Write( PLOTSVGPAGESIZEOPT_KEY, m_rbSvgPageSizeOpt->GetSelection() );
             m_config->Write( PLOTSVGPLOT_BRD_EDGE_KEY, m_PrintBoardEdgesCtrl->GetValue() );
 

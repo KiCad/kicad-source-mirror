@@ -55,15 +55,12 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
                                      bool aErase );
 
 
-/*
- * Show the dialog box for editing a graphical item properties
- */
 void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
 {
     if( DrawItem == NULL )
         return;
 
-    LIB_COMPONENT* component = DrawItem->GetParent();
+    LIB_PART*      component = DrawItem->GetParent();
 
     DIALOG_LIB_EDIT_DRAW_ITEM dialog( this, DrawItem->GetTypeName() );
 
@@ -72,7 +69,7 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
     wxString val = StringFromValue( g_UserUnit, DrawItem->GetWidth() );
     dialog.SetWidth( val );
     dialog.SetApplyToAllUnits( DrawItem->GetUnit() == 0 );
-    dialog.EnableApplyToAllUnits( component && component->GetPartCount() > 1 );
+    dialog.EnableApplyToAllUnits( component && component->GetUnitCount() > 1 );
     dialog.SetApplyToAllConversions( DrawItem->GetConvert() == 0 );
     dialog.EnableApplyToAllConversions( component && component->HasConversion() );
     dialog.SetFillStyle( DrawItem->GetFillMode() );
@@ -150,7 +147,7 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
+LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART*      LibEntry, wxDC* DC )
 {
     m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
     wxPoint drawPos = GetCrossHairPosition( true );
@@ -178,28 +175,29 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
         break;
 
     case ID_LIBEDIT_BODY_TEXT_BUTT:
-    {
-        LIB_TEXT* Text = new LIB_TEXT( LibEntry );
-        Text->SetSize( wxSize( m_textSize, m_textSize ) );
-        Text->SetOrientation( m_textOrientation );
-
-        // Enter the graphic text info
-        m_canvas->SetIgnoreMouseEvents( true );
-        EditSymbolText( NULL, Text );
-        m_canvas->SetIgnoreMouseEvents( false );
-        m_canvas->MoveCursorToCrossHair();
-
-        if( Text->GetText().IsEmpty() )
         {
-            delete Text;
-            m_drawItem = NULL;
-        }
-        else
-        {
-            m_drawItem = Text;
+            LIB_TEXT* Text = new LIB_TEXT( LibEntry );
+            Text->SetSize( wxSize( m_textSize, m_textSize ) );
+            Text->SetOrientation( m_textOrientation );
+
+            // Enter the graphic text info
+            m_canvas->SetIgnoreMouseEvents( true );
+            EditSymbolText( NULL, Text );
+            m_canvas->SetIgnoreMouseEvents( false );
+            m_canvas->MoveCursorToCrossHair();
+
+            if( Text->GetText().IsEmpty() )
+            {
+                delete Text;
+                m_drawItem = NULL;
+            }
+            else
+            {
+                m_drawItem = Text;
+            }
         }
         break;
-    }
+
     default:
         DisplayError( this, wxT( "LIB_EDIT_FRAME::CreateGraphicItem() error" ) );
         return NULL;
@@ -232,8 +230,6 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
 }
 
 
-/* Create new library component graphic object.
- */
 void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 {
     if( m_drawItem == NULL )
@@ -304,7 +300,6 @@ void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
 }
 
 
-// @brief Modify a graphic symbol (drag edges etc.)
 void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC )
 {
     if( m_drawItem == NULL )
@@ -332,35 +327,37 @@ static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 }
 
 
-/*
- * Place the new graphic object in the list of component drawing objects,
- * or terminate a draw item edition
- */
 void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
 {
-    if( m_component == NULL || m_drawItem == NULL )
-        return;
+    if( LIB_PART*      part = GetCurPart() )
+    {
+        if( !m_drawItem )
+            return;
 
-    if( GetToolId() != ID_NO_TOOL_SELECTED )
-        SetCursor( wxCURSOR_PENCIL );
-    else
-        SetCursor( (wxStockCursor) m_canvas->GetDefaultCursor() );
+        if( GetToolId() != ID_NO_TOOL_SELECTED )
+            SetCursor( wxCURSOR_PENCIL );
+        else
+            SetCursor( (wxStockCursor) m_canvas->GetDefaultCursor() );
 
-    if( GetTempCopyComponent() )    // used when editing an existing item
-        SaveCopyInUndoList( GetTempCopyComponent() );
-    else    // When creating a new item, there is still no change for the current component
-            // So save it.
-        SaveCopyInUndoList( m_component );
+        if( GetTempCopyComponent() )    // used when editing an existing item
+            SaveCopyInUndoList( GetTempCopyComponent() );
+        else
+        {
+            // When creating a new item, there is still no change for the
+            // current component. So save it.
+            SaveCopyInUndoList( part );
+        }
 
-    if( m_drawItem->IsNew() )
-        m_component->AddDrawItem( m_drawItem );
+        if( m_drawItem->IsNew() )
+            part->AddDrawItem( m_drawItem );
 
-    m_drawItem->EndEdit( GetCrossHairPosition( true ) );
+        m_drawItem->EndEdit( GetCrossHairPosition( true ) );
 
-    m_drawItem = NULL;
+        m_drawItem = NULL;
 
-    OnModify();
+        OnModify();
 
-    m_canvas->SetMouseCapture( NULL, NULL );
-    m_canvas->Refresh();
+        m_canvas->SetMouseCapture( NULL, NULL );
+        m_canvas->Refresh();
+    }
 }

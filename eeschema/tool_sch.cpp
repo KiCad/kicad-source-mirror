@@ -134,7 +134,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
 
 
-    m_mainToolBar->AddTool( ID_TO_LIBRARY, wxEmptyString, KiBitmap( libedit_xpm ),
+    m_mainToolBar->AddTool( ID_RUN_LIBRARY, wxEmptyString, KiBitmap( libedit_xpm ),
                             HELP_RUN_LIB_EDITOR );
 
     m_mainToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
@@ -161,14 +161,14 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     // the CVPCB.
     if( !Kiface().IsSingle() )  // if pcbnew is not a separate process
     {
-        m_mainToolBar->AddTool( ID_TO_PCB_MODULE_EDITOR, wxEmptyString, KiBitmap( module_editor_xpm ),
+        m_mainToolBar->AddTool( ID_RUN_PCB_MODULE_EDITOR, wxEmptyString, KiBitmap( module_editor_xpm ),
                                 _( "Footprint Editor" ) );
     }
 
-    m_mainToolBar->AddTool( ID_TO_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
+    m_mainToolBar->AddTool( ID_RUN_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
                             _( "Run CvPcb to associate components and footprints" ) );
 
-    m_mainToolBar->AddTool( ID_TO_PCB, wxEmptyString, KiBitmap( pcbnew_xpm ),
+    m_mainToolBar->AddTool( ID_RUN_PCB, wxEmptyString, KiBitmap( pcbnew_xpm ),
                             _( "Run Pcbnew to layout printed circuit board" ) );
 
     m_mainToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString,

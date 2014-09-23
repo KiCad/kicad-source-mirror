@@ -29,6 +29,7 @@
 
 #include <fctsys.h>
 #include <pgm_kicad.h>
+#include <kiway.h>
 #include <project.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -60,14 +61,10 @@ PARAM_CFG_ARRAY     s_KicadManagerParams;
 void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
                                             bool aTemplateSelector = false )
 {
-    wxString    filename;
     wxFileName  newProjectName = aPrjFullFileName;
     wxChar      sep[2] = { SEP(), 0 };  // nul terminated separator wxChar string.
 
     ClearMsg();
-
-    // default config filename
-    filename = Pgm().SysSearch().FindValidPath( wxT( "kicad.pro" ) );
 
     // If we are creating a project from a template, make sure the template directory is sane
     if( aTemplateSelector )
@@ -155,40 +152,38 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
             }
         }
     }
-    else
-    {
-        // Check if file kicad.pro exist in template directory
-        if( wxFileName::FileExists( filename ) )
-        {
-            wxCopyFile( filename, aPrjFullFileName );
-        }
-        else
-        {
-            DisplayInfoMessage( NULL, _( "Project template file <kicad.pro> not found. " ) );
-            return;
-        }
-    }
 
     // Init project filename
     SetProjectFileName( newProjectName.GetFullPath() );
 
     // Write settings to project file
     // was: wxGetApp().WriteProjectConfig( aPrjFullFileName, GeneralGroupName, s_KicadManagerParams );
-    Prj().ConfigSave( Pgm().SysSearch(), aPrjFullFileName, GeneralGroupName, s_KicadManagerParams );
+    Prj().ConfigSave( Pgm().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 }
 
 
 void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 {
+    // Any open KIFACE's must be closed if they are not part of the new project.
+    // (We never want a KIWAY_PLAYER open on a KIWAY that isn't in the same project.)
+    // User is prompted here to close those KIWAY_PLAYERs:
+    if( !Kiway.PlayersClose( false ) )
+        return;
+
+    // evt_id can be one of:
+    //   ID_NEW_PROJECT, ID_NEW_PROJECT_FROM_TEMPLATE, ID_LOAD_PROJECT, and
+    //   wxID_ANY from 3 different places.
+    int evt_id = event.GetId();
+
     wxString    title;
 
     ClearMsg();
 
-    if( event.GetId() != wxID_ANY )
+    if( evt_id != wxID_ANY )
     {
         int  style;
-        bool newProject = ( event.GetId() == ID_NEW_PROJECT ) ||
-                          ( event.GetId() == ID_NEW_PROJECT_FROM_TEMPLATE );
+        bool newProject = ( evt_id == ID_NEW_PROJECT ) ||
+                          ( evt_id == ID_NEW_PROJECT_FROM_TEMPLATE );
 
         if( newProject )
         {
@@ -208,14 +203,13 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
         if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
-        DBG( printf( "%s: wxFileDialog::GetPath=%s\n", __func__, TO_UTF8( dlg.GetPath() ) );)
+        //DBG( printf( "%s: wxFileDialog::GetPath=%s\n", __func__, TO_UTF8( dlg.GetPath() ) );)
 
         wxFileName pro( dlg.GetPath() );
+        pro.SetExt( ProjectFileExtension );     // enforce extension
 
         if( !pro.IsAbsolute() )
             pro.MakeAbsolute();
-
-        pro.SetExt( ProjectFileExtension );
 
         if( newProject )
         {
@@ -240,11 +234,11 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
                 }
             }
 
-            if( event.GetId() == ID_NEW_PROJECT )
+            if( evt_id == ID_NEW_PROJECT )
             {
                 CreateNewProject( pro.GetFullPath() );
             }
-            else if( event.GetId() == ID_NEW_PROJECT_FROM_TEMPLATE )
+            else if( evt_id == ID_NEW_PROJECT_FROM_TEMPLATE )
             {
                 // Launch the template selector dialog
                 CreateNewProject( pro.GetFullPath(), true );
@@ -261,20 +255,15 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     // Check if project file exists and if it is not noname.pro
     if( !wxFileExists( prj_filename ) && !prj_filename.IsSameAs( nameless_prj ) )
     {
-        wxString msg = wxString::Format(
-                _( "KiCad project file '%s' not found" ),
+        wxString msg = wxString::Format( _(
+                "KiCad project file '%s' not found" ),
                 GetChars( prj_filename ) );
 
         DisplayError( this, msg );
         return;
     }
 
-    wxSetWorkingDirectory( wxFileName( prj_filename ).GetPath() );
-
-    // was wxGetApp().ReadProjectConfig( m_ProjectFileName.GetFullPath(),
-    //                              GeneralGroupName, s_KicadManagerParams, false );
-    Prj().ConfigLoad( Pgm().SysSearch(), prj_filename,
-            GeneralGroupName, s_KicadManagerParams, false );
+    Prj().ConfigLoad( Pgm().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 
     title = wxT( "KiCad " ) + GetBuildVersion() +  wxT( ' ' ) + prj_filename;
 
@@ -300,6 +289,32 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     PrintPrjInfo();
 }
 
+/* Creates a new project folder, copy a template into this new folder.
+ * and open this new projrct as working project
+ */
+void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
+{
+    wxString    default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
+    wxString    title = _("New Project Folder");
+    wxDirDialog dlg( this, title, default_dir );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    // Buils the project .pro filename, from the new project folder name
+    wxFileName fn;
+    fn.AssignDir( dlg.GetPath() );
+    fn.SetName( dlg.GetPath().AfterLast( SEP() ) );
+    fn.SetExt( wxT( "pro" ) );
+
+    // Launch the template selector dialog, and copy files
+    CreateNewProject( fn.GetFullPath(), true );
+
+    // Initialize the project
+    event.SetId( wxID_ANY );
+    OnLoadProject( event );
+}
+
 
 void KICAD_MANAGER_FRAME::OnSaveProject( wxCommandEvent& event )
 {
@@ -308,6 +323,5 @@ void KICAD_MANAGER_FRAME::OnSaveProject( wxCommandEvent& event )
 
     // was: wxGetApp().WriteProjectConfig( m_ProjectFileName.GetFullPath(),
     //          GeneralGroupName, s_KicadManagerParams );
-    Prj().ConfigSave( Pgm().SysSearch(), GetProjectFileName(),
-            GeneralGroupName, s_KicadManagerParams );
+    Prj().ConfigSave( Pgm().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 }

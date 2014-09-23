@@ -45,6 +45,7 @@
 
 class wxAboutDialogInfo;
 class SEARCH_STACK;
+class wxSingleInstanceChecker;
 
 
 // Flag for special keys
@@ -590,7 +591,10 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack );
  * Function SearchHelpFileFullPath
  * returns the help file's full path.
  * <p>
- * Return the KiCad help file with path.
+ * Return the KiCad help file with path and extension.
+ * Help files can be html (.html ext) or pdf (.pdf ext) files.
+ * A <BaseName>.html file is searched and if not found,
+ * <BaseName>.pdf file is searched in the same path.
  * If the help file for the current locale is not found, an attempt to find
  * the English version of the help file is made.
  * Help file is searched in directories in this order:
@@ -600,14 +604,43 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack );
  * </p>
  * @param aSearchStack contains some possible base dirs that may be above the
  *  the one actually holding @a aBaseName.  These are starting points for nested searches.
- * @param aBaseName is the name of the help file to search for.
+ * @param aBaseName is the name of the help file to search for, <p>without extension</p>.
  * @return  wxEmptyString is returned if aBaseName is not found, else the full path & filename.
  */
 wxString SearchHelpFileFullPath( const SEARCH_STACK& aSearchStack, const wxString& aBaseName );
 
+/**
+ * Function LockFile
+ * tests to see if aFileName can be locked (is not already locked) and only then
+ * returns a wxSingleInstanceChecker protecting aFileName.  Caller owns the return value.
+ */
+wxSingleInstanceChecker* LockFile( const wxString& aFileName );
+
 
 /// Put aPriorityPath in front of all paths in the value of aEnvVar.
 const wxString PrePendPath( const wxString& aEnvVar, const wxString& aPriorityPath );
+
+/**
+ * Function GetNewConfig
+ *
+ * Use this function instead of creating a new wxConfig so we can put config files in
+ * a more proper place for each platform. This is generally $HOME/.config/kicad/ in Linux
+ * according to the FreeDesktop specification at
+ * http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
+ * The config object created here should be destroyed by the caller.
+ *
+ * @param aProgName is the name of the program calling this function - can be obtained by
+ *  calling Pgm().App().GetAppName().  This will be the actual file name of the config file.
+ * @return A pointer to a new wxConfigBase derived object is returned.  The caller is in charge
+ *  of deleting it.
+ */
+wxConfigBase* GetNewConfig( const wxString& aProgName );
+
+/**
+ * Function GetKicadConfigPath
+ * @return A wxString containing the config path for Kicad
+ */
+wxString GetKicadConfigPath();
 
 
 #endif  // INCLUDE__COMMON_H_

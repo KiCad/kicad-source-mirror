@@ -37,12 +37,14 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
                                   const wxArrayString& aItemHeaders,
                                   const std::vector<wxArrayString>& aItemList,
                                   const wxString& aSelection,
-                                  void( *aCallBackFunction )( wxString& ),
+                                  void( *aCallBackFunction )( wxString&, void* ),
+                                  void* aCallBackFunctionData,
                                   bool aSortList ) :
     EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle )
 {
     m_sortList    = aSortList;
-    m_callBackFct = aCallBackFunction;
+    m_cb_func     = aCallBackFunction;
+    m_cb_data     = aCallBackFunctionData;
     m_itemsListCp = &aItemList;
 
     for( unsigned i = 0; i < aItemHeaders.Count(); i++ )
@@ -57,7 +59,7 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
 
     InsertItems( aItemList, 0 );
 
-    if( m_callBackFct == NULL )
+    if( m_cb_func == NULL )
     {
         m_messages->Show( false );
         m_staticTextMsg->Show( false );
@@ -231,12 +233,11 @@ void EDA_LIST_DIALOG::onCancelClick( wxCommandEvent& event )
 
 void EDA_LIST_DIALOG::onListItemSelected( wxListEvent& event )
 {
-
-    if( m_callBackFct )
+    if( m_cb_func )
     {
         m_messages->Clear();
         wxString text = GetTextSelection();
-        m_callBackFct( text );
+        m_cb_func( text, m_cb_data );
         m_messages->WriteText( text );
     }
 }

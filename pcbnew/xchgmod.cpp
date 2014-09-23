@@ -35,7 +35,6 @@
 #include <kicad_string.h>
 #include <wxPcbStruct.h>
 #include <macros.h>
-#include <pcbcommon.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -409,14 +408,13 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            aModule,
         return false;
     }
 
+    m_parent->Exchange_Module( aModule, newModule, aUndoPickList );
     m_parent->GetBoard()->Add( newModule, ADD_APPEND );
 
     if( aModule == m_currentModule )
         m_currentModule = newModule;
 
     m_WinMessages->AppendText( wxT( " OK\n" ) );
-
-    m_parent->Exchange_Module( aModule, newModule, aUndoPickList );
 
     return true;
 }
@@ -515,11 +513,11 @@ void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
 void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
 {
     wxFileName  fn;
-    MODULE*     Module = GetBoard()->m_Modules;
+    MODULE*     module = GetBoard()->m_Modules;
     wxString    msg;
     wxString    wildcard;
 
-    if( Module == NULL )
+    if( module == NULL )
     {
         DisplayError( this, _( "No Modules!" ) );
         return;
@@ -530,7 +528,9 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     fn.SetExt( ComponentFileExtension );
     wildcard = wxGetTranslation( ComponentFileWildcard );
 
-    wxFileDialog dlg( this, _( "Save Component Files" ), wxGetCwd(),
+    wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
+
+    wxFileDialog dlg( this, _( "Save Component Files" ), pro_dir,
                       fn.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 

@@ -255,13 +255,13 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         }
         else  // smd, so use pads test after module test
         {
-            module = (MODULE*) item->GetParent();
+            module = static_cast<MODULE*>( item->GetParent() );
         }
 
         break;
 
     case PCB_VIA_T:     // vias are on many layers, so layer test is specific
-        via = (VIA*) item;
+        via = static_cast<VIA*>( item );
         break;
 
     case PCB_TRACE_T:
@@ -286,33 +286,53 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         break;
 
     case PCB_MODULE_TEXT_T:
-        module = (MODULE*) item->GetParent();
-
-        if( m_Guide->IgnoreMTextsMarkedNoShow() && !( (TEXTE_MODULE*) item )->IsVisible() )
-            goto exit;
-
-        if( module )
         {
-            if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==B_Cu )
+            TEXTE_MODULE *text = static_cast<TEXTE_MODULE*>( item );
+            if( m_Guide->IgnoreMTextsMarkedNoShow() && !text->IsVisible() )
                 goto exit;
 
-            if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==F_Cu )
+            if( m_Guide->IgnoreMTextsOnBack() && IsBackLayer( text->GetLayer() ) )
                 goto exit;
 
-            if( m_Guide->IgnoreModulesVals() && item == &module->Value() )
+            if( m_Guide->IgnoreMTextsOnFront() && IsFrontLayer( text->GetLayer() ) )
                 goto exit;
 
-            if( m_Guide->IgnoreModulesRefs() && item == &module->Reference() )
-                goto exit;
+            /* The three text types have different criteria: reference
+             * and value have their own ignore flags; user text instead
+             * follows their layer visibility. Checking this here is
+             * simpler than later (when layer visibility is checked for
+             * other entities) */
+
+            switch( text->GetType() )
+            {
+            case TEXTE_MODULE::TEXT_is_REFERENCE:
+                if( m_Guide->IgnoreModulesRefs() )
+                    goto exit;
+                break;
+
+            case TEXTE_MODULE::TEXT_is_VALUE:
+                if( m_Guide->IgnoreModulesVals() )
+                    goto exit;
+                break;
+
+            case TEXTE_MODULE::TEXT_is_DIVERS:
+                if( !m_Guide->IsLayerVisible( text->GetLayer() )
+                        && m_Guide->IgnoreNonVisibleLayers() )
+                    goto exit;
+                break;
+            }
+
+            // Extract the module since it could be hidden
+            module = static_cast<MODULE*>( item->GetParent() );
         }
         break;
 
     case PCB_MODULE_T:
-        module = (MODULE*) item;
+        module = static_cast<MODULE*>( item );
         break;
 
     case PCB_MARKER_T:
-        marker = (MARKER_PCB*) item;
+        marker = static_cast<MARKER_PCB*>( item );
         break;
 
     default:
@@ -323,10 +343,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
     if( module )    // true from case PCB_PAD_T, PCB_MODULE_TEXT_T, or PCB_MODULE_T
     {
-        if( m_Guide->IgnoreModulesOnCu() && module->GetLayer()==B_Cu )
+        if( m_Guide->IgnoreModulesOnBack() && (module->GetLayer() == B_Cu) )
             goto exit;
 
-        if( m_Guide->IgnoreModulesOnCmp() && module->GetLayer()==F_Cu )
+        if( m_Guide->IgnoreModulesOnFront() && (module->GetLayer() == F_Cu) )
             goto exit;
     }
 
@@ -357,14 +377,20 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         goto exit;
     }
 
-    if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) || m_Guide->IgnorePreferredLayer() )
+    if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) ||
+            m_Guide->IgnorePreferredLayer() )
     {
         LAYER_ID layer = item->GetLayer();
 
-        // Modules and their subcomponents: text and pads are not sensitive to the layer
-        // visibility controls.  They all have their own separate visibility controls
-        // for vias, GetLayer() has no meaning, but IsOnLayer() works fine
-        if( via || module || pad || m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
+        /* Modules and their subcomponents: reference, value and pads
+         * are not sensitive to the layer visibility controls.  They all
+         * have their own separate visibility controls for vias,
+         * GetLayer() has no meaning, but IsOnLayer() works fine. User
+         * text in module *is* sensitive to layer visibility but that
+         * was already handled */
+
+        if( via || module || pad || m_Guide->IsLayerVisible( layer )
+                || !m_Guide->IgnoreNonVisibleLayers() )
         {
             if( !m_Guide->IsLayerLocked( layer ) || !m_Guide->IgnoreLockedLayers() )
             {
@@ -389,9 +415,14 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
         LAYER_ID layer = item->GetLayer();
 
-        // Modules and their subcomponents: text and pads are not sensitive to the layer
-        // visibility controls.  They all have their own separate visibility controls
-        if( via || module || pad || m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
+        /* Modules and their subcomponents: reference, value and pads
+         * are not sensitive to the layer visibility controls.  They all
+         * have their own separate visibility controls. User texts
+         * follows layer visibility controls (but that was already
+         * checked) */
+
+        if( via || module || pad || m_Guide->IsLayerVisible( layer ) 
+                || !m_Guide->IgnoreNonVisibleLayers() )
         {
             if( !m_Guide->IsLayerLocked( layer ) || !m_Guide->IgnoreLockedLayers() )
             {
@@ -447,7 +478,7 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
 
 
 // see collectors.h
-SEARCH_RESULT TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testData )
+SEARCH_RESULT PCB_TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testData )
 {
     // The Vist() function only visits the testItem if its type was in the
     // the scanList, so therefore we can collect anything given to us here.
@@ -456,7 +487,8 @@ SEARCH_RESULT TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testData 
     return SEARCH_CONTINUE;     // always when collecting
 }
 
-void TYPE_COLLECTOR::Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] )
+
+void PCB_TYPE_COLLECTOR::Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] )
 {
     Empty();        // empty any existing collection
 

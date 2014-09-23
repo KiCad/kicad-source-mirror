@@ -44,6 +44,7 @@
 #include <wxstruct.h>
 #include <macros.h>
 #include <menus_helpers.h>
+#include <dialog_shim.h>
 
 #include <boost/version.hpp>
 #include <typeinfo>
@@ -107,6 +108,39 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
 
 void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 {
+    DIALOG_SHIM* dlg  = NULL;
+    wxWindowList list = GetChildren();
+
+    // Quasi modal dialogs create issues (crashes) when closing Kicad.
+    // I am guessing they are delete too late, when deleting main frames.
+    // AFAIK, only these DIALOG_SHIM dialogs create such issues.
+    // The policy is do not allow closing Kicad if a Quasi modal dialog is open.
+    // (Anyway, closing without prompting the user is certainly bad,
+    // because an edit is in preogress)
+    // Therefore, iterate through the child list to find at least
+    // a DIALOG_SHIM opened in quasi modal mode
+    for( wxWindowList::iterator iter = list.begin(); iter != list.end(); ++iter )
+    {
+        if( (dlg = dynamic_cast<DIALOG_SHIM*> (*iter) ) != NULL )
+        {
+            if( dlg->IsQuasiModal() )
+                break;
+            else
+                dlg = NULL;
+        }
+    }
+
+    if( dlg )
+    {
+        // Happens when a quasi modal dialog is currently open.
+        // For example: if the Kicad manager try to close Kicad.
+        wxMessageBox( _(
+                "The program cannot be closed\n"
+                "A quasi-modal dialog window is currently open, please close it first." ) );
+        event.Veto();
+        return;
+    }
+
     wxConfigBase* cfg = config();
 
     if( cfg )
@@ -361,18 +395,27 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
      */
     if( event.GetId() == wxID_INDEX )
     {
-        // Search for "getting_started_in_kicad.pdf" or "Getting_Started_in_KiCad.pdf"
-        wxString helpFile = SearchHelpFileFullPath( search, wxT( "getting_started_in_kicad.pdf" ) );
+        // List of possible names for Getting Started in KiCad
+        const wxChar* names[2] = {
+            wxT( "getting_started_in_kicad" ),
+            wxT( "Getting_Started_in_KiCad" )
+            };
 
-        if( !helpFile )
-            helpFile = SearchHelpFileFullPath( search, wxT( "Getting_Started_in_KiCad.pdf" ) );
+        wxString helpFile;
+        // Search for "getting_started_in_kicad.html" or "getting_started_in_kicad.pdf"
+        // or "Getting_Started_in_KiCad.html" or "Getting_Started_in_KiCad.pdf"
+        for( unsigned ii = 0; ii < DIM( names ); ii++ )
+        {
+            helpFile = SearchHelpFileFullPath( search, names[ii] );
+
+            if( !helpFile.IsEmpty() )
+               break;
+        }
 
         if( !helpFile )
         {
             wxString msg = wxString::Format( _(
-                "Help file '%s' could not be found." ),
-                wxT( "getting_started_in_kicad.pdf" )
-                );
+                "Html or pdf help file \n'%s'\n or\n'%s' could not be found." ), names[0], names[1] );
             wxMessageBox( msg );
         }
         else
@@ -384,24 +427,6 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
     }
 
     wxString base_name = help_name();
-
-#if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
-
-    wxHtmlHelpController* hc = Pgm().GetHtmlHelpController();
-
-    wxString helpFile = SearchHelpFileFullPath( search,   );
-
-    if( !!helpFile )
-    {
-        hc->UseConfig( Pgm().CommonSettings() );
-        hc->SetTitleFormat( wxT( "KiCad Help" ) );
-        hc->AddBook( helpFile );
-    }
-
-    hc->DisplayContents();
-    hc->Display( helpFile );
-
-#elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
     wxString helpFile = SearchHelpFileFullPath( search, base_name );
 
     if( !helpFile )
@@ -416,10 +441,6 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
     {
         GetAssociatedDocument( this, helpFile );
     }
-
-#else
-#   error Help files format not defined
-#endif
 }
 
 

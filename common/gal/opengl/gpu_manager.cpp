@@ -94,6 +94,7 @@ GPU_CACHED_MANAGER::~GPU_CACHED_MANAGER()
     {
         glBindBuffer( GL_ARRAY_BUFFER, 0 );
         glDeleteBuffers( 1, &m_verticesBuffer );
+        glDeleteBuffers( 1, &m_indicesBuffer );
     }
 }
 
@@ -105,6 +106,7 @@ void GPU_CACHED_MANAGER::Initialize()
     if( !m_buffersInitialized )
     {
         glGenBuffers( 1, &m_verticesBuffer );
+        glGenBuffers( 1, &m_indicesBuffer );
         m_buffersInitialized = true;
     }
 }
@@ -167,9 +169,13 @@ void GPU_CACHED_MANAGER::EndDrawing()
                                VertexSize, (GLvoid*) ShaderOffset );
     }
 
-    glDrawElements( GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, (GLvoid*) m_indices.get() );
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_indicesBuffer );
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, m_indicesSize * sizeof(int), (GLvoid*) m_indices.get(), GL_DYNAMIC_DRAW );
+
+    glDrawElements( GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, 0 );
 
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
     // Deactivate vertex array
     glDisableClientState( GL_COLOR_ARRAY );

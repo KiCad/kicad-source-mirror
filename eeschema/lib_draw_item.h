@@ -39,7 +39,7 @@
 
 class LINE_READER;
 class OUTPUTFORMATTER;
-class LIB_COMPONENT;
+class LIB_PART;
 class PLOTTER;
 class LIB_ITEM;
 class LIB_PIN;
@@ -117,7 +117,7 @@ class LIB_ITEM : public EDA_ITEM
     bool    m_eraseLastDrawItem; ///< Used when editing a new draw item to prevent drawing
                                  ///< artifacts.
 
-    friend class LIB_COMPONENT;
+    friend class LIB_PART;
 
 protected:
     /**
@@ -150,7 +150,7 @@ protected:
 public:
 
     LIB_ITEM( KICAD_T        aType,
-              LIB_COMPONENT* aComponent = NULL,
+              LIB_PART*      aComponent = NULL,
               int            aUnit      = 0,
               int            aConvert   = 0,
               FILL_T         aFillType  = NO_FILL );
@@ -237,9 +237,9 @@ public:
 
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg ) = 0;
 
-    LIB_COMPONENT* GetParent() const
+    LIB_PART*      GetParent() const
     {
-        return (LIB_COMPONENT *)m_Parent;
+        return (LIB_PART *)m_Parent;
     }
 
     virtual bool HitTest( const wxPoint& aPosition ) const

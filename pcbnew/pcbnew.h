@@ -8,6 +8,7 @@
 
 #include <fctsys.h>         // wxWidgets include.
 #include <base_struct.h>    // IS_DRAGGED and IN_EDIT definitions.
+#include <dlist.h>
 #include <convert_to_biu.h> // to define DMils2iu() conversion function
 #include <layers_id_colors_and_visibility.h>
 
@@ -37,6 +38,7 @@ enum ENDPOINT_T {
 #define TEXTS_MIN_SIZE  DMils2iu( 50 )      ///< Minimum text size in Pcbnew units value (50 * 0.0001 mils)
 #define TEXTS_MAX_SIZE  DMils2iu( 10000 )   ///< Maximum text size in Pcbnew units value (1 inch) )
 #define TEXTS_MAX_WIDTH DMils2iu( 5000 )    ///< Maximum text width in Pcbnew units value (0.5 inches)
+#define MIN_DRAW_WIDTH  1                   ///< Minimum trace drawing width in pixels.
 
 
 // Flag to force the SKETCH mode to display items (.m_Flags member)
@@ -70,6 +72,16 @@ extern int      g_MagneticPadOption;
 extern int      g_MagneticTrackOption;
 
 extern wxPoint  g_Offset_Module;         // Offset trace when moving footprint.
+
+/// List of segments of the trace currently being drawn.
+class TRACK;
+extern DLIST<TRACK> g_CurrentTrackList;
+#define g_CurrentTrackSegment g_CurrentTrackList.GetLast()    ///< most recently created segment
+#define g_FirstTrackSegment   g_CurrentTrackList.GetFirst()   ///< first segment created
+
+
+class DISPLAY_OPTIONS;
+extern DISPLAY_OPTIONS DisplayOpt;
 
 enum MagneticPadOptionValues {
     no_effect,

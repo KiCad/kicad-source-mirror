@@ -461,12 +461,8 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
-        {
-            TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
-            tm->Offset( offset );
-            tm->SetPos0( tm->GetPos0() + offset );
-        }
-        break;
+            static_cast<TEXTE_MODULE*>( item )->Move( offset );
+            break;
 
         case PCB_MODULE_EDGE_T:
         {
@@ -588,14 +584,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all )
             break;
 
         case PCB_MODULE_TEXT_T:
-            {
-                TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
-                tmp = tm->GetTextPosition();
-                SETMIRROR( tmp.x );
-                tm->SetTextPosition( tmp );
-                tmp.y = tm->GetPos0().y;
-                tm->SetPos0( tmp );
-            }
+            static_cast<TEXTE_MODULE*>( item )->MirrorWithModule( offset.x );
             break;
 
         default:
@@ -655,18 +644,11 @@ void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         break;
 
         case PCB_MODULE_TEXT_T:
-        {
-            TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
-            wxPoint pos = tm->GetTextPosition();
-            ROTATE( pos );
-            tm->SetTextPosition( pos );
-            tm->SetPos0( tm->GetTextPosition() );
-            tm->SetOrientation( tm->GetOrientation() + 900 );
-        }
-        break;
+            static_cast<TEXTE_MODULE*>( item )->RotateWithModule( wxPoint( 0, 0 ), 900 );
+            break;
 
         default:
-            ;
+            break;
         }
 
         item->ClearFlags();
@@ -742,7 +724,7 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
             break;
 
         case PCB_MODULE_TEXT_T:
-            pos = ( (TEXTE_MODULE*) item )->GetTextPosition();
+            pos = static_cast<TEXTE_MODULE*>( item )->GetTextPosition();
 
             if( Rect.Contains( pos ) )
             {

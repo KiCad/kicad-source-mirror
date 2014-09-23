@@ -107,7 +107,7 @@ class EDA_BASE_FRAME : public wxFrame
      * SaveSettings().  SaveSettings() is called for all derived wxFrames in this
      * base class overload.  (Calling it from a destructor is deprecated since the
      * wxFrame's position is not available in the destructor on linux.)  In other words,
-     * you should not need to call call SaveSettings() anywhere, except in this
+     * you should not need to call SaveSettings() anywhere, except in this
      * one function found only in this class.
      */
     void windowClosing( wxCloseEvent& event );
@@ -295,14 +295,14 @@ public:
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialize.
      */
-    void ImportHotkeyConfigFromFile( struct EDA_HOTKEY_CONFIG* aDescList );
+    void ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList );
 
     /**
      * Function ExportHotkeyConfigToFile
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialize.
      */
-    void ExportHotkeyConfigToFile( struct EDA_HOTKEY_CONFIG* aDescList );
+    void ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList );
 
     /**
      * Function GetFileFromHistory

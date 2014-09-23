@@ -41,7 +41,9 @@
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_zone.h>
+#include <class_zone.h>
 #include <class_marker_pcb.h>
+#include <class_pcb_text.h>
 
 
 MARKER_PCB* DRC::fillMarker( const TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode,
@@ -84,6 +86,11 @@ MARKER_PCB* DRC::fillMarker( const TRACK* aTrack, BOARD_ITEM* aItem, int aErrorC
             if( dToEnd < dToStart )
                 position = endPos;
         }
+        else if( aItem->Type() == PCB_TEXT_T )
+        {
+            position = aTrack->GetPosition();
+            posB = ((TEXTE_PCB*) aItem)->GetPosition();
+        }
     }
     else
         position = aTrack->GetPosition();
@@ -118,13 +125,33 @@ MARKER_PCB* DRC::fillMarker( const TRACK* aTrack, BOARD_ITEM* aItem, int aErrorC
 }
 
 
-MARKER_PCB* DRC::fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER_PCB* fillMe )
+MARKER_PCB* DRC::fillMarker( D_PAD* aPad, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe )
 {
     wxString textA = aPad->GetSelectMenuText();
-    wxString textB = bPad->GetSelectMenuText();
+    wxString textB;
 
     wxPoint  posA = aPad->GetPosition();
-    wxPoint  posB = bPad->GetPosition();
+    wxPoint  posB;
+
+    if( aItem )
+    {
+        textB = aItem->GetSelectMenuText();
+
+        switch( aItem->Type() )
+        {
+        case PCB_PAD_T:
+            posB = ((D_PAD*)aItem)->GetPosition();
+            break;
+
+        case PCB_TEXT_T:
+            posB = ((TEXTE_PCB*)aItem)->GetPosition();
+            break;
+
+        default:
+            wxLogDebug( wxT("fillMarker: unsupported item") );
+            break;
+        }
+    }
 
     if( fillMe )
     {

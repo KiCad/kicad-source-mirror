@@ -49,17 +49,19 @@ static void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame
 
 bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
-    LIB_ITEM* item = GetDrawItem();
-    bool BlockActive = GetScreen()->IsBlockActive();
+    LIB_ITEM*   item = GetDrawItem();
+    bool        blockActive = GetScreen()->IsBlockActive();
 
-    if( BlockActive )
+    if( blockActive )
     {
         AddMenusForBlock( PopMenu, this );
         PopMenu->AppendSeparator();
         return true;
     }
 
-    if( m_component == NULL )
+    LIB_PART*      part = GetCurPart();
+
+    if( !part )
         return true;
 
     //  If Command in progress, put menu "cancel"

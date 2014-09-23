@@ -48,11 +48,13 @@ class MSG_PANEL_ITEM;
 
 class TEXTE_MODULE : public BOARD_ITEM, public EDA_TEXT
 {
-    // @todo eliminate these friends, make them use accessors
-    friend class MODULE;
-    friend class FOOTPRINT_EDIT_FRAME;
-
 public:
+    /** Text module type: there must be only one (and only one) for each
+     * of the reference and value texts in one module; others could be
+     * added for the user (DIVERS is French for 'others'). Reference and
+     * value always live on silkscreen (on the module side); other texts
+     * are planned to go on whatever layer the user wants (except
+     * copper, probably) */
     enum TEXT_TYPE
     {
         TEXT_is_REFERENCE = 0,
@@ -92,6 +94,15 @@ public:
 
     void Flip( const wxPoint& aCentre );
 
+    /// Rotate entity during module rotation
+    void RotateWithModule( const wxPoint& aOffset, double aAngle );
+
+    /// Flip entity during module flip
+    void FlipWithModule( int aOffset );
+
+    /// Mirror entiry during module mirroring
+    void MirrorWithModule( int aOffset );
+
     /// @deprecated it seems (but the type is used to 'protect'
     //reference and value from deletion, and for identification)
     void SetType( TEXT_TYPE aType )     { m_Type = aType; }
@@ -100,6 +111,7 @@ public:
     void SetVisible( bool isVisible )   { m_NoShow = !isVisible; }
     bool IsVisible() const              { return !m_NoShow; }
 
+    // The Pos0 accessors are for module-relative coordinates
     void SetPos0( const wxPoint& aPos ) { m_Pos0 = aPos; SetDrawCoord(); }
     const wxPoint& GetPos0() const      { return m_Pos0; }
 

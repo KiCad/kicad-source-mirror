@@ -47,6 +47,7 @@
 #include <math/box2.h>
 
 #include <wx/fontdlg.h>
+#include <wx/snglinst.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -97,6 +98,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                 long aStyle, const wxString & aFrameName ) :
     KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
+    m_file_checker        = NULL;
+
     m_drawToolBar         = NULL;
     m_optionsToolBar      = NULL;
     m_gridSelectBox       = NULL;
@@ -113,6 +116,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_showAxis            = false;      // true to draw axis.
     m_showBorderAndTitleBlock = false;  // true to display reference sheet.
     m_showGridAxis        = false;      // true to draw the grid axis
+    m_showOriginAxis      = false;      // true to draw the grid origin
     m_cursorShape         = 0;
     m_LastGridSizeId      = 0;
     m_DrawGrid            = true;       // hide/Show grid. default = show
@@ -178,6 +182,25 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
     m_currentScreen = NULL;
 
     m_auimgr.UnInit();
+
+    ReleaseFile();
+}
+
+
+void EDA_DRAW_FRAME::ReleaseFile()
+{
+    delete m_file_checker;
+    m_file_checker = 0;
+}
+
+
+bool EDA_DRAW_FRAME::LockFile( const wxString& aFileName )
+{
+    delete m_file_checker;
+
+    m_file_checker = ::LockFile( aFileName );
+
+    return bool( m_file_checker );
 }
 
 
@@ -218,24 +241,17 @@ void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
     event.Skip();
 }
 
-/* function SkipNextLeftButtonReleaseEvent
- * after calling this function, if the left mouse button
- * is down, the next left mouse button release event will be ignored.
- * It is is usefull for instance when closing a dialog on a mouse click,
- * to skip the next mouse left button release event
- * by the parent window, because the mouse button
- * clicked on the dialog is often released in the parent frame,
- * and therefore creates a left button released mouse event
- * which can be unwanted in some cases
- */
+
 void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
 {
    m_canvas->SetIgnoreLeftButtonReleaseEvent( true );
 }
 
+
 void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {
     SetGridVisibility( !IsGridVisible() );
+
     if( IsGalCanvasActive() )
     {
         GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
@@ -321,8 +337,9 @@ void EDA_DRAW_FRAME::ReCreateMenuBar()
 }
 
 
-void EDA_DRAW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
+bool EDA_DRAW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
+    return false;
 }
 
 
@@ -658,7 +675,7 @@ void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper,
 }
 
 
-void EDA_DRAW_FRAME::ClearMsgPanel( void )
+void EDA_DRAW_FRAME::ClearMsgPanel()
 {
     if( m_messagePanel == NULL )
         return;

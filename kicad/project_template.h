@@ -165,10 +165,11 @@ public:
     ~PROJECT_TEMPLATE();
 
     /**
-     * @brief Get the system name of the project template
-     * @return the system name of the template
+     * @brief Get the dir name of the project template
+     * (i.e. the name of the last folder containing the template files)
+     * @return the dir name of the template
      */
-    wxString GetName();
+    wxString GetPrjDirName();
 
     /**
      * @brief Get the full Html filename for the project template

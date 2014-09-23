@@ -1221,7 +1221,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
 
             int tnum = intParse( line + SZ( "T" ) );
 
-            TEXTE_MODULE* textm;
+            TEXTE_MODULE* textm = 0;
 
             switch( tnum )
             {
@@ -1233,7 +1233,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
                 textm = &aModule->Value();
                 break;
 
-            default:
+            case TEXTE_MODULE::TEXT_is_DIVERS:
                 // text is a drawing
                 textm = new TEXTE_MODULE( aModule );
                 aModule->GraphicalItems().PushBack( textm );
@@ -1868,7 +1868,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     aText->SetPos0( wxPoint( pos0_x, pos0_y ) );
     aText->SetSize( wxSize( size0_x, size0_y ) );
 
-    orient -= ( (MODULE*) aText->GetParent() )->GetOrientation();
+    orient -= ( static_cast<MODULE*>( aText->GetParent() ) )->GetOrientation();
 
     aText->SetOrientation( orient );
 
@@ -1936,7 +1936,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
 
         else if( TESTLINE( "Sc" ) )     // Scale
         {
-            sscanf( line + SZ( "Sc" ), "%f %f %f\n",
+            sscanf( line + SZ( "Sc" ), "%lf %lf %lf\n",
                     &t3D->m_MatScale.x,
                     &t3D->m_MatScale.y,
                     &t3D->m_MatScale.z );
@@ -1944,7 +1944,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
 
         else if( TESTLINE( "Of" ) )     // Offset
         {
-            sscanf( line + SZ( "Of" ), "%f %f %f\n",
+            sscanf( line + SZ( "Of" ), "%lf %lf %lf\n",
                     &t3D->m_MatPosition.x,
                     &t3D->m_MatPosition.y,
                     &t3D->m_MatPosition.z );
@@ -1952,7 +1952,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
 
         else if( TESTLINE( "Ro" ) )     // Rotation
         {
-            sscanf( line + SZ( "Ro" ), "%f %f %f\n",
+            sscanf( line + SZ( "Ro" ), "%lf %lf %lf\n",
                     &t3D->m_MatRotation.x,
                     &t3D->m_MatRotation.y,
                     &t3D->m_MatRotation.z );
@@ -3832,10 +3832,10 @@ void LEGACY_PLUGIN::saveMODULE( const MODULE* me ) const
         switch( gr->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            saveMODULE_TEXT( (TEXTE_MODULE*) gr );
+            saveMODULE_TEXT( static_cast<TEXTE_MODULE*>( gr ));
             break;
         case PCB_MODULE_EDGE_T:
-            saveMODULE_EDGE( (EDGE_MODULE*) gr );
+            saveMODULE_EDGE( static_cast<EDGE_MODULE*>( gr ));
             break;
         default:
             THROW_IO_ERROR( wxString::Format( UNKNOWN_GRAPHIC_FORMAT, gr->Type() ) );

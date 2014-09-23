@@ -115,9 +115,9 @@ enum SCH_SEARCH_T {
 class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 {
 private:
-
     SCH_SHEET_PATH*         m_CurrentSheet;    ///< which sheet we are presently working on.
     wxString                m_DefaultSchematicFileName;
+
     PARAM_CFG_ARRAY         m_projectFileParams;
     PARAM_CFG_ARRAY         m_configSettings;
     wxPageSetupDialogData   m_pageSetupData;
@@ -161,13 +161,14 @@ private:
     /// Use netcodes (net number) as net names when generating spice net lists.
     bool        m_spiceNetlistUseNetcodeAsNetname;
 
-    wxString    m_userLibraryPath;
+    /*  these are PROJECT specific, not schematic editor specific
+    wxString        m_userLibraryPath;
+    wxArrayString   m_componentLibFiles;
+    */
 
-    wxArrayString m_componentLibFiles;
-
-    static int            m_lastSheetPinType;      ///< Last sheet pin type.
-    static wxSize         m_lastSheetPinTextSize;  ///< Last sheet pin text size.
-    static wxPoint        m_lastSheetPinPosition;  ///< Last sheet pin position.
+    static int      m_lastSheetPinType;         ///< Last sheet pin type.
+    static wxSize   m_lastSheetPinTextSize;     ///< Last sheet pin text size.
+    static wxPoint  m_lastSheetPinPosition;     ///< Last sheet pin position.
 
 protected:
     TEMPLATES             m_TemplateFieldNames;
@@ -231,34 +232,30 @@ public:
 
     void SetSpiceUseNetcodeAsNetname( bool aEnable ) { m_spiceNetlistUseNetcodeAsNetname = aEnable; }
 
+    /* These are PROJECT specific, not schematic editor specific
     wxString GetUserLibraryPath() const { return m_userLibraryPath; }
-
     void SetUserLibraryPath( const wxString& aPath ) { m_userLibraryPath = aPath; }
-
     const wxArrayString& GetComponentLibraries() const { return m_componentLibFiles; }
-
     void SetComponentLibraries( const wxArrayString& aList ) { m_componentLibFiles = aList; }
+    */
 
     void Process_Special_Functions( wxCommandEvent& event );
     void OnColorConfig( wxCommandEvent& aEvent );
     void Process_Config( wxCommandEvent& event );
     void OnSelectTool( wxCommandEvent& aEvent );
 
-    void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
      * Function GetProjectFileParametersList
      * returns the project file parameter list for Eeschema.
      *
-     *<p?
+     *<p>
      * Populate the project file parameter array specific to Eeschema if it hasn't
      * already been populated and return a reference to the array to the caller.
-     * Creating the parameter list at run time has the advantage of being able to
-     * define local variables.  The old method of statically building the array at
-     * compile time required global variable definitions.
      * </p>
      */
-    PARAM_CFG_ARRAY& GetProjectFileParametersList( void );
+    PARAM_CFG_ARRAY& GetProjectFileParametersList();
 
     /**
      * Function SaveProjectSettings
@@ -275,7 +272,7 @@ public:
      * @param aForceReread Force the project file to be reread if true.
      * @return True if the project file was loaded correctly.
      */
-    bool LoadProjectFile( const wxString& aFileName, bool aForceReread );
+    bool LoadProjectFile();
 
     /**
      * Function GetDefaultFieldName
@@ -342,7 +339,7 @@ public:
      * setting that need to be loaded at run time, this is the place to define it.
      * </p>
      */
-    PARAM_CFG_ARRAY& GetConfigurationSettings( void );
+    PARAM_CFG_ARRAY& GetConfigurationSettings();
 
     void LoadSettings( wxConfigBase* aCfg );
     void SaveSettings( wxConfigBase* aCfg );
@@ -354,7 +351,7 @@ public:
     void ReCreateVToolbar();
     void ReCreateOptToolbar();
     void ReCreateMenuBar();
-    void OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
     /**
      * Function OnModify
@@ -705,15 +702,16 @@ public:
      *  EndCmp
      *
      * @param aFullFilename = the full filename to read
-     * @param aForceFieldsVisibleAttribute = true to change the footprint field flag
-     *                                      visible or invisible
-     *                                      false = keep old state.
-     * @param aFieldsVisibleAttributeState = footprint field flag visible new state
+     * @param aForceVisibilityState = Set to true to change the footprint field visibility
+     *                                state to \a aVisibilityState.  False retains the
+     *                                current footprint field visibility state.
+     * @param aVisiblityState True to show the footprint field or false to hide the footprint
+     *                        field if \a aForceVisibilityState is true.
      * @return bool = true if success.
      */
     bool ProcessCmpToFootprintLinkFile( const wxString& aFullFilename,
-                                        bool aForceFieldsVisibleAttribute,
-                                        bool aFieldsVisibleAttributeState );
+                                        bool            aForceVisibilityState,
+                                        bool            aVisibilityState );
 
     /**
      * Function SaveEEFile
@@ -736,6 +734,7 @@ public:
     // General search:
 
 private:
+
     /**
      * Function OnMoveItem
      * handles the #ID_SCH_MOVE_ITEM event used to move schematic itams.
@@ -804,7 +803,7 @@ private:
     void OnOpenPcbModuleEditor( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
     void OnOpenLibraryEditor( wxCommandEvent& event );
-    void OnSetOptions( wxCommandEvent& event );
+    void OnPreferencesOptions( wxCommandEvent& event );
     void OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
     void OnSelectItem( wxCommandEvent& aEvent );
@@ -1230,13 +1229,6 @@ public:
      * @param aItem The item to swap with the current undo item.
      */
     void SaveUndoItemInUndoList( SCH_ITEM* aItem );
-
-    /**
-     * Function LoadLibraries
-     *
-     * Clear all libraries currently loaded and load all of the project libraries.
-     */
-    void LoadLibraries( void );
 
     /**
      * Function CreateArchiveLibraryCacheFile

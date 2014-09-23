@@ -35,7 +35,6 @@
 #include <drawtxt.h>
 #include <kicad_string.h>
 #include <trigo.h>
-#include <pcbcommon.h>
 #include <colors_selection.h>
 #include <richio.h>
 #include <class_drawpanel.h>
@@ -132,9 +131,9 @@ void TEXTE_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 #endif
 
     if( m_Parent && m_Parent->Type() == PCB_DIMENSION_T )
-        aList.push_back( MSG_PANEL_ITEM( _( "Dimension" ), m_Text, DARKGREEN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Dimension" ), GetShownText(), DARKGREEN ) );
     else
-        aList.push_back( MSG_PANEL_ITEM( _( "PCB Text" ), m_Text, DARKGREEN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "PCB Text" ), GetShownText(), DARKGREEN ) );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BLUE ) );
 
@@ -185,15 +184,10 @@ void TEXTE_PCB::Flip(const wxPoint& aCentre )
 
 wxString TEXTE_PCB::GetSelectMenuText() const
 {
-    wxString text, shorttxt;
-
-    if( m_Text.Len() < 12 )
-        shorttxt << m_Text;
-    else
-        shorttxt += m_Text.Left( 10 ) + wxT( "..." );
+    wxString text;
 
     text.Printf( _( "Pcb Text \"%s\" on %s"),
-                 GetChars ( shorttxt ), GetChars( GetLayerName() ) );
+                 GetChars ( ShortenedShownText() ), GetChars( GetLayerName() ) );
 
     return text;
 }

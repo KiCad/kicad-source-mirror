@@ -70,10 +70,7 @@ static struct IFACE : public KIFACE_I
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
 
-    void OnKifaceEnd( PGM_BASE* aProgram )
-    {
-        end_common();
-    }
+    void OnKifaceEnd( PGM_BASE* aProgram );
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {
@@ -82,11 +79,6 @@ static struct IFACE : public KIFACE_I
         case FRAME_SCH:
             {
                 SCH_EDIT_FRAME* frame = new SCH_EDIT_FRAME( aKiway, aParent );
-
-                frame->Zoom_Automatique( true );
-
-                // Read a default config file in case no project given on command line.
-                frame->LoadProjectFile( wxEmptyString, true );
 
                 if( Kiface().IsSingle() )
                 {
@@ -162,6 +154,62 @@ PGM_BASE& Pgm()
 }
 
 
+static EDA_COLOR_T s_layerColor[NB_SCH_LAYERS];
+
+EDA_COLOR_T GetLayerColor( LayerNumber aLayer )
+{
+    wxASSERT( unsigned( aLayer ) < DIM( s_layerColor ) );
+    return s_layerColor[aLayer];
+}
+
+void SetLayerColor( EDA_COLOR_T aColor, int aLayer )
+{
+    wxASSERT( unsigned( aLayer ) < DIM( s_layerColor ) );
+    s_layerColor[aLayer] = aColor;
+}
+
+
+static PARAM_CFG_ARRAY& cfg_params()
+{
+    static PARAM_CFG_ARRAY ca;
+
+    if( !ca.size() )
+    {
+        // These are KIFACE specific, they need to be loaded once when the
+        // eeschema KIFACE comes in.
+
+#define CLR(x, y, z)    ca.push_back( new PARAM_CFG_SETCOLOR( true, wxT( x ), &s_layerColor[y], z ));
+
+        CLR( "ColorWireEx",             LAYER_WIRE,             GREEN )
+        CLR( "ColorBusEx",              LAYER_BUS,              BLUE )
+        CLR( "ColorConnEx",             LAYER_JUNCTION,         GREEN )
+        CLR( "ColorLLabelEx",           LAYER_LOCLABEL,         BLACK )
+        CLR( "ColorHLabelEx",           LAYER_HIERLABEL,        BROWN )
+        CLR( "ColorGLabelEx",           LAYER_GLOBLABEL,        RED )
+        CLR( "ColorPinNumEx",           LAYER_PINNUM,           RED )
+        CLR( "ColorPinNameEx",          LAYER_PINNAM,           CYAN )
+        CLR( "ColorFieldEx",            LAYER_FIELDS,           MAGENTA )
+        CLR( "ColorReferenceEx",        LAYER_REFERENCEPART,    CYAN )
+        CLR( "ColorValueEx",            LAYER_VALUEPART,        CYAN )
+        CLR( "ColorNoteEx",             LAYER_NOTES,            LIGHTBLUE )
+        CLR( "ColorBodyEx",             LAYER_DEVICE,           RED )
+        CLR( "ColorBodyBgEx",           LAYER_DEVICE_BACKGROUND,LIGHTYELLOW )
+        CLR( "ColorNetNameEx",          LAYER_NETNAM,           DARKGRAY )
+        CLR( "ColorPinEx",              LAYER_PIN,              RED )
+        CLR( "ColorSheetEx",            LAYER_SHEET,            MAGENTA )
+        CLR( "ColorSheetFileNameEx",    LAYER_SHEETFILENAME,    BROWN )
+        CLR( "ColorSheetNameEx",        LAYER_SHEETNAME,        CYAN )
+        CLR( "ColorSheetLabelEx",       LAYER_SHEETLABEL,       BROWN )
+        CLR( "ColorNoConnectEx",        LAYER_NOCONNECT,        BLUE )
+        CLR( "ColorErcWEx",             LAYER_ERC_WARN,         GREEN )
+        CLR( "ColorErcEEx",             LAYER_ERC_ERR,          RED )
+        CLR( "ColorGridEx",             LAYER_GRID,             DARKGRAY )
+    }
+
+    return ca;
+}
+
+
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     // This is process level, not project level, initialization of the DSO.
@@ -179,6 +227,16 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // display the real hotkeys in menus or tool tips
     ReadHotkeyConfig( wxT("SchematicFrame"), s_Eeschema_Hokeys_Descr );
 
+    wxConfigLoadSetups( KifaceSettings(),  cfg_params() );
+
     return true;
+}
+
+
+void IFACE::OnKifaceEnd( PGM_BASE* aProgram )
+{
+    wxConfigSaveSetups( KifaceSettings(), cfg_params() );
+
+    end_common();
 }
 

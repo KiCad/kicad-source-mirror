@@ -38,7 +38,6 @@
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
 #include <filter_reader.h>
-#include <pcbcommon.h>
 #include <macros.h>
 #include <fp_lib_table.h>
 #include <validators.h>
@@ -719,7 +718,7 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
     if( moduleName.IsEmpty() )
     {
         wxTextEntryDialog dlg( this, FMT_MOD_REF, FMT_MOD_CREATE, moduleName );
-        dlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &moduleName ) );
+        dlg.SetTextValidator( FILE_NAME_CHAR_VALIDATOR( &moduleName ) );
 
         if( dlg.ShowModal() != wxID_OK )
             return NULL;    //Aborted by user

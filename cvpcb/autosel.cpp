@@ -29,6 +29,7 @@
 
 #include <fctsys.h>
 #include <common.h>
+#include <kiface_i.h>
 #include <project.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -91,7 +92,8 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
     char                 Line[1024];
     FILE*                file;
     size_t               ii;
-    SEARCH_STACK&        search = Prj().SchSearchS();
+
+    SEARCH_STACK&        search = Kiface().KifaceSearch();
 
     if( m_netlist.IsEmpty() )
         return;

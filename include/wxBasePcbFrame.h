@@ -135,7 +135,7 @@ public:
      */
     EDA_RECT    GetBoardBoundingBox( bool aBoardEdgesOnly = false ) const;
 
-    void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload
+    virtual void SetPageSettings( const PAGE_INFO& aPageSettings ); // overload
     const PAGE_INFO& GetPageSettings() const;                   // overload
     const wxSize GetPageSizeIU() const;                         // overload
 

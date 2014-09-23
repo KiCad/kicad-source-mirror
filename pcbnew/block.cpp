@@ -33,7 +33,6 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <block_commande.h>
-#include <pcbcommon.h>
 #include <wxPcbStruct.h>
 #include <trigo.h>
 

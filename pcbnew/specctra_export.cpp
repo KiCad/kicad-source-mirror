@@ -55,7 +55,6 @@
 
 #include <specctra.h>
 
-
 using namespace DSN;
 
 
@@ -135,6 +134,7 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
     ExportSpecctraFile( fullFileName );
 }
 
+
 bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
 {
     SPECCTRA_DB     db;
@@ -195,6 +195,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
 
 
 namespace DSN {
+
 const KICAD_T SPECCTRA_DB::scanPADs[] = { PCB_PAD_T, EOT };
 
 // "specctra reported units" are what we tell the external router that our
@@ -259,7 +260,7 @@ static POINT mapPt( const wxPoint& pt )
  * @return DRAWSEGMENT* - The first DRAWSEGMENT that has a start or end point matching
  *   aPoint, otherwise NULL if none.
  */
-static DRAWSEGMENT* findPoint( const wxPoint& aPoint, TYPE_COLLECTOR* items, unsigned aLimit )
+static DRAWSEGMENT* findPoint( const wxPoint& aPoint, ::PCB_TYPE_COLLECTOR* items, unsigned aLimit )
 {
     unsigned min_d = INT_MAX;
     int      ndx_min = 0;
@@ -625,9 +626,10 @@ typedef std::map<wxString, int> PINMAP;
 
 IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 {
-    PINMAP          pinmap;
-    TYPE_COLLECTOR  moduleItems;
-    wxString        padName;
+    PINMAP      pinmap;
+    wxString    padName;
+
+    PCB_TYPE_COLLECTOR  moduleItems;
 
     // get all the MODULE's pads.
     moduleItems.Collect( aModule, scanPADs );
@@ -887,8 +889,9 @@ static void makeCircle( PATH* aPath, DRAWSEGMENT* aGraphic )
 
 void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ERROR )
 {
-    TYPE_COLLECTOR  items;
-    unsigned        prox;       // a proximity BIU metric, not an accurate distance
+    PCB_TYPE_COLLECTOR  items;
+
+    unsigned    prox;           // a proximity BIU metric, not an accurate distance
     const int   STEPS = 36;     // for a segmentation of an arc of 360 degrees
 
     // Get all the DRAWSEGMENTS and module graphics into 'items',
@@ -1365,7 +1368,7 @@ typedef std::pair<STRINGSET::iterator, bool>    STRINGSET_PAIR;
 
 void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 {
-    TYPE_COLLECTOR          items;
+    PCB_TYPE_COLLECTOR     items;
 
     static const KICAD_T    scanMODULEs[] = { PCB_MODULE_T, EOT };
 
@@ -1373,7 +1376,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
     // Unless they are unique, we cannot import the session file which comes
     // back to us later from the router.
     {
-        TYPE_COLLECTOR  padItems;
+        PCB_TYPE_COLLECTOR  padItems;
 
         items.Collect( aBoard, scanMODULEs );
 
@@ -2168,4 +2171,6 @@ void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
 
     modulesAreFlipped = false;
 }
+
 }       // namespace DSN
+

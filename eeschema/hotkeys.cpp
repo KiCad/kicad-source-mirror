@@ -319,10 +319,10 @@ struct EDA_HOTKEY_CONFIG s_Viewlib_Hokeys_Descr[] =
  * Hot keys. Some commands are relative to the item under the mouse cursor
  * Commands are case insensitive
  */
-void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
+bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
     if( aHotKey == 0 )
-        return;
+        return false;
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
 
@@ -354,13 +354,13 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         hotKey = GetDescriptorFromHotkey( aHotKey, s_Schematic_Hotkey_List );
 
     if( hotKey == NULL )
-        return;
+        return false;
 
     switch( hotKey->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:
-        return;
+        return false;
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, s_Schematic_Hokeys_Descr );
@@ -531,18 +531,16 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
         break;
     }
+
+    // Hot key handled.
+    return true;
 }
 
 
-/*
- * Hot keys for the component editor. Some commands are relatives to the item
- * under the mouse cursor
- * Commands are case insensitive
- */
-void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
+bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
     if( aHotKey == 0 )
-        return;
+        return false;
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
 
@@ -561,13 +559,13 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         hotKey = GetDescriptorFromHotkey( aHotKey, s_LibEdit_Hotkey_List );
 
     if( hotKey == NULL )
-        return;
+        return false;
 
     switch( hotKey->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:
-        return;
+        return false;
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, s_Libedit_Hokeys_Descr );
@@ -702,4 +700,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
         break;
     }
+
+    // Hot key handled.
+    return true;
 }

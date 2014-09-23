@@ -27,7 +27,6 @@
 
 #include <fctsys.h>
 #include <macros.h>
-#include <gr_basic.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <common.h>         // NAMELESS_PROJECT
@@ -45,12 +44,13 @@ PROJECT::PROJECT()
 
 void PROJECT::ElemsClear()
 {
+    DBG( printf( "%s: clearing all _ELEMS for project %s\n", __func__, TO_UTF8( GetProjectFullName() ) );)
+
     // careful here, this should work, but the virtual destructor may not
     // be in the same link image as PROJECT.
-    for( unsigned i = 0;  i<DIM(m_elems);  ++i )
+    for( unsigned i = 0;  i < DIM( m_elems );  ++i )
     {
-        delete m_elems[i];
-        m_elems[i] = NULL;
+        SetElem( ELEM_T( i ), NULL );
     }
 }
 
@@ -63,23 +63,27 @@ PROJECT::~PROJECT()
 
 void PROJECT::SetProjectFullName( const wxString& aFullPathAndName )
 {
-    m_project_name = aFullPathAndName;
-
-    wxASSERT(  m_project_name.GetName() == NAMELESS_PROJECT || m_project_name.IsAbsolute() );
-#if 0
-    wxASSERT( m_project_name.GetExt() == ProjectFileExtension )
-#else
-    m_project_name.SetExt( ProjectFileExtension );
-#endif
-
-    // until multiple projects are in play, set an environment variable for the
-    // the project pointer.
+    // Edge transitions only.  This is what clears the project
+    // data using the Clear() function.
+    if( m_project_name != aFullPathAndName )
     {
-        wxString path = m_project_name.GetPath();
+        Clear();            // clear the data when the project changes.
 
-        // wxLogDebug( wxT( "Setting env %s to '%s'." ),  PROJECT_VAR_NAME, GetChars( path ) );
+        DBG(printf( "%s: old:'%s' new:'%s'\n", __func__, TO_UTF8( GetProjectFullName() ), TO_UTF8( aFullPathAndName ) );)
 
-        wxSetEnv( PROJECT_VAR_NAME, path );
+        m_project_name = aFullPathAndName;
+
+        wxASSERT( m_project_name.IsAbsolute() );
+
+        wxASSERT( m_project_name.GetExt() == ProjectFileExtension );
+
+        // until multiple projects are in play, set an environment variable for the
+        // the project pointer.
+        {
+            wxString path = m_project_name.GetPath();
+
+            wxSetEnv( PROJECT_VAR_NAME, path );
+        }
     }
 }
 
@@ -185,163 +189,90 @@ void PROJECT::SetElem( ELEM_T aIndex, _ELEM* aElem )
 
     if( unsigned( aIndex ) < DIM( m_elems ) )
     {
+#if defined(DEBUG) && 0
+        if( aIndex == ELEM_SCH_PART_LIBS )
+        {
+            printf( "%s: &m_elems[%i]:%p  aElem:%p\n", __func__, aIndex, &m_elems[aIndex], aElem );
+        }
+#endif
+        delete m_elems[aIndex];
         m_elems[aIndex] = aElem;
     }
 }
 
 
-// non-member so it can be moved easily, and kept REALLY private.
-// Do NOT Clear() in here.
-static void add_search_paths( SEARCH_STACK* aDst, wxConfigBase* aCfg, int aIndex )
+static bool copy_pro_file_template( const SEARCH_STACK& aSearchS, const wxString& aDestination )
 {
-    for( int i=1;  true;  ++i )
+    if( aDestination.IsEmpty() )
     {
-        wxString key   = wxString::Format( wxT( "LibraryPath%d" ), i );
-        wxString upath = aCfg->Read( key, wxEmptyString );
-
-        if( !upath )
-            break;
-
-        aDst->AddPaths( upath, aIndex );
-    }
-}
-
-
-// non-member so it can be moved easily, and kept REALLY private.
-// Do NOT Clear() in here.
-static void add_search_paths( SEARCH_STACK* aDst, const SEARCH_STACK& aSrc, int aIndex )
-{
-    for( unsigned i=0; i<aSrc.GetCount();  ++i )
-        aDst->AddPaths( aSrc[i], aIndex );
-}
-
-
-/*
-bool PROJECT::MaybeLoadProjectSettings( const std::vector<wxString>& aFileSet )
-{
-    // @todo
-    return true;
-}
-*/
-
-
-wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList, const wxString& aFileName,
-            const wxString& aGroupName, bool aForceUseLocalConfig )
-{
-    wxConfigBase*   cfg = 0;
-
-    wxFileName      fn = aFileName;
-    fn.SetExt( ProjectFileExtension );
-
-    wxString        cur_pro_fn = fn.GetFullPath();
-
-    // is there an edge transition, a change in m_project_filename?
-    if( m_project_name != cur_pro_fn )
-    {
-        m_sch_search.Clear();
-
-        // to the empty lists, add project dir as first
-        m_sch_search.AddPaths( fn.GetPath() );
-
-        // append all paths from aSList
-        add_search_paths( &m_sch_search, aSList, -1 );
-
-        // addLibrarySearchPaths( SEARCH_STACK* aSP, wxConfigBase* aCfg )
-        // This is undocumented, but somebody wanted to store !schematic!
-        // library search paths in the .kicad_common file?
-        add_search_paths( &m_sch_search, Pgm().CommonSettings(), -1 );
-
-#if 1 && defined(DEBUG)
-        m_sch_search.Show( __func__ );
-#endif
+        DBG( printf( "%s: destination is empty.\n", __func__ );)
+        return false;
     }
 
-    // Init local config filename
-    if( aForceUseLocalConfig || fn.FileExists() )
-    {
-        cfg = new wxFileConfig( wxEmptyString, wxEmptyString, cur_pro_fn, wxEmptyString );
-
-        cfg->DontCreateOnDemand();
-
-        if( aForceUseLocalConfig )
-        {
-            SetProjectFullName( cur_pro_fn );
-            return cfg;
-        }
-
-        /* Check the application version against the version saved in the
-         * project file.
-         *
-         * TODO: Push the version test up the stack so that when one of the
-         *       KiCad application version changes, the other applications
-         *       settings do not get updated.  Practically, this can go away.
-         *       It isn't used anywhere as far as I know (WLS).
-         */
-
-        cfg->SetPath( aGroupName );
-
-        int def_version = 0;
-        int version = cfg->Read( wxT( "version" ), def_version );
-
-        if( version > 0 )
-        {
-            cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
-            SetProjectFullName( cur_pro_fn );
-            return cfg;
-        }
-        else    // Version incorrect
-        {
-            wxLogDebug( wxT( "Project file version is zero, not using this old project file, going with template." ) );
-            delete cfg;
-            cfg = 0;
-        }
-    }
-
-    // No suitable pro file was found, either does not exist, or is too old.
-    // Use the template kicad.pro file.  Find it by using caller's SEARCH_STACK.
     wxString templateFile = wxT( "kicad." ) + ProjectFileExtension;
-    wxString kicad_pro_template = aSList.FindValidPath( templateFile );
+
+    wxString kicad_pro_template = aSearchS.FindValidPath( templateFile );
 
     if( !kicad_pro_template )
     {
-        wxLogDebug( wxT( "Template file <%s> not found using search paths." ),
-                    GetChars( templateFile ) );
+        DBG( printf( "%s: template file '%s' not found using search paths.\n", __func__, TO_UTF8( templateFile ) );)
 
         wxFileName  templ( wxStandardPaths::Get().GetDocumentsDir(),
                             wxT( "kicad" ), ProjectFileExtension );
 
         if( !templ.IsFileReadable() )
         {
-            wxString msg = wxString::Format( _( "Unable to find %s template config file." ),
-                                             GetChars( templateFile ) );
+            wxString msg = wxString::Format( _(
+                    "Unable to find '%s' template config file." ),
+                    GetChars( templateFile ) );
 
             DisplayError( NULL, msg );
 
-            return NULL;
+            return false;
         }
 
         kicad_pro_template = templ.GetFullPath();
     }
 
-    // The project config file is not found (happens for new projects,
-    // or if the schematic editor is run outside an existing project
-    // In this case the default template (kicad.pro) is used
-    cur_pro_fn = kicad_pro_template;
-    wxLogDebug( wxT( "Use template file '%s' as project file." ), GetChars( cur_pro_fn ) );
+    DBG( printf( "%s: using template file '%s' as project file.\n", __func__, TO_UTF8( kicad_pro_template ) );)
+
+    wxCopyFile( kicad_pro_template, aDestination );
+
+    return true;
+}
+
+
+wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList,
+        const wxString& aGroupName, const wxString& aFileName )
+{
+    wxConfigBase*   cfg = 0;
+    wxString        cur_pro_fn = !aFileName ? GetProjectFullName() : aFileName;
+
+    if( wxFileName( cur_pro_fn ).IsFileReadable() )
+    {
+        // Note: currently, aGroupName is not used.
+        // Previoulsy, the version of aGroupName was tested, but it
+        // was useless, and if the version is important,
+        // this is not the right place here, because configCreate does know anything
+        // about info stored in this config file.
+        cfg = new wxFileConfig( wxEmptyString, wxEmptyString, cur_pro_fn, wxEmptyString );
+        return cfg;
+    }
+
+    // No suitable pro file was found, either does not exist, or not readable.
+    // Use the template kicad.pro file.  Find it by using caller's SEARCH_STACK.
+    copy_pro_file_template( aSList, cur_pro_fn );
 
     cfg = new wxFileConfig( wxEmptyString, wxEmptyString, cur_pro_fn, wxEmptyString );
 
-    cfg->DontCreateOnDemand();
-
-    SetProjectFullName( cur_pro_fn );
     return cfg;
 }
 
 
-void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString&  aFileName,
-        const wxString& aGroupName, const PARAM_CFG_ARRAY& aParams )
+void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName,
+        const PARAM_CFG_ARRAY& aParams, const wxString& aFileName )
 {
-    std::auto_ptr<wxConfigBase> cfg( configCreate( aSList, aFileName, aGroupName, true ) );
+    std::auto_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName, aFileName ) );
 
     if( !cfg.get() )
     {
@@ -373,11 +304,10 @@ void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString&  aFileName
 }
 
 
-bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString& aFileName,
-        const wxString&  aGroupName, const PARAM_CFG_ARRAY& aParams,
-        bool doLoadOnlyIfNew )
+bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString&  aGroupName,
+        const PARAM_CFG_ARRAY& aParams, const wxString& aForeignProjectFileName )
 {
-    std::auto_ptr<wxConfigBase> cfg( configCreate( aSList, aFileName, aGroupName, false ) );
+    std::auto_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName, aForeignProjectFileName ) );
 
     if( !cfg.get() )
     {
@@ -389,11 +319,6 @@ bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString& aFileName,
 
     wxString timestamp = cfg->Read( wxT( "update" ) );
 
-    if( doLoadOnlyIfNew && timestamp.size() && timestamp == m_pro_date_and_time )
-    {
-        return false;
-    }
-
     m_pro_date_and_time = timestamp;
 
     wxConfigLoadParams( cfg.get(), aParams, aGroupName );
@@ -401,3 +326,17 @@ bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString& aFileName,
     return true;
 }
 
+
+const wxString PROJECT::AbsolutePath( const wxString& aFileName ) const
+{
+    wxFileName fn = aFileName;
+
+    if( !fn.IsAbsolute() )
+    {
+        wxString pro_dir = wxPathOnly( GetProjectFullName() );
+
+        fn.Normalize( wxPATH_NORM_ALL, pro_dir );
+    }
+
+    return fn.GetFullPath();
+}

@@ -12,7 +12,6 @@
 #include <trigo.h>
 #include <block_commande.h>
 #include <wxBasePcbFrame.h>
-#include <pcbcommon.h>
 
 #include <class_board.h>
 #include <class_module.h>

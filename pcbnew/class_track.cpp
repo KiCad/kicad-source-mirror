@@ -37,7 +37,6 @@
 #include <class_drawpanel.h>
 #include <class_pcb_screen.h>
 #include <drawtxt.h>
-#include <pcbcommon.h>
 #include <colors_selection.h>
 #include <wxstruct.h>
 #include <wxBasePcbFrame.h>
@@ -980,10 +979,31 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
 void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    // Just show it on common via & via holes layers
-    aLayers[0] = ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE );
-    aLayers[1] = ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE );
+    aLayers[0] = ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE );
     aCount = 2;
+
+    // Just show it on common via & via holes layers
+    switch( GetViaType() )
+    {
+    case VIA_THROUGH:
+        aLayers[1] = ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE );
+        break;
+
+    case VIA_BLIND_BURIED:
+        aLayers[1] = ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE );
+        aLayers[2] = m_Layer;
+        aLayers[3] = m_BottomLayer;
+        aCount += 2;
+        break;
+
+    case VIA_MICROVIA:
+        aLayers[1] = ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE );
+        break;
+
+    default:
+        assert( false );
+        break;
+    }
 }
 
 

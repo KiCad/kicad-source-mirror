@@ -24,6 +24,7 @@
 #include <wx/wx.h>
 #include <wx/config.h>
 
+#include <pgm_base.h>
 #include <pcb_calculator.h>
 #include <UnitSelector.h>
 #include <bitmaps.h>
@@ -61,7 +62,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_currTransLineType = DEFAULT_TYPE;
     m_currAttenuator    = NULL;
     m_RegulatorListChanged = false;
-    m_Config = new wxConfig();
+    m_Config = GetNewConfig( Pgm().App().GetAppName() );
 
     // Populate transline list ordered like in dialog menu list
     const static TRANSLINE_TYPE_ID tltype_list[8] =

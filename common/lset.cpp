@@ -381,6 +381,66 @@ LSEQ LSET::Seq() const
 }
 
 
+LSEQ LSET::SeqStackupBottom2Top() const
+{
+    // bottom-to-top stack-up layers
+    static const LAYER_ID sequence[] = {
+        B_Fab,
+        B_CrtYd,
+        B_Adhes,
+        B_SilkS,
+        B_Paste,
+        B_Mask,
+        B_Cu,
+        In30_Cu,
+        In29_Cu,
+        In28_Cu,
+        In27_Cu,
+        In26_Cu,
+        In25_Cu,
+        In24_Cu,
+        In23_Cu,
+        In22_Cu,
+        In21_Cu,
+        In20_Cu,
+        In19_Cu,
+        In18_Cu,
+        In17_Cu,
+        In16_Cu,
+        In15_Cu,
+        In14_Cu,
+        In13_Cu,
+        In12_Cu,
+        In11_Cu,
+        In10_Cu,
+        In9_Cu,
+        In8_Cu,
+        In7_Cu,
+        In6_Cu,
+        In5_Cu,
+        In4_Cu,
+        In3_Cu,
+        In2_Cu,
+        In1_Cu,
+        F_Cu,
+        F_Mask,
+        F_Paste,
+        F_SilkS,
+        F_Adhes,
+        F_CrtYd,
+        F_Fab,
+        Dwgs_User,
+        Cmts_User,
+        Eco1_User,
+        Eco2_User,
+        Margin,
+        Edge_Cuts,
+    };
+
+    return Seq( sequence, DIM( sequence ) );
+}
+
+
 LAYER_ID FlipLayer( LAYER_ID aLayerId )
 {
     switch( aLayerId )

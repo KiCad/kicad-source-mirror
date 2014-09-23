@@ -107,12 +107,10 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 
     if( check && !ext.IsEmpty() && !reg.Matches( newFile ) )
     {
-        wxMessageDialog dialog( m_parent,
-                                _(
-                                    "Changing file extension will change file \
-type.\n Do you want to continue ?"                                                                                 ),
-                                _( "Rename File" ),
-                                wxYES_NO | wxICON_QUESTION );
+        wxMessageDialog dialog( m_parent, _(
+            "Changing file extension will change file type.\n Do you want to continue ?" ),
+            _( "Rename File" ),
+            wxYES_NO | wxICON_QUESTION );
 
         if( wxID_YES != dialog.ShowModal() )
             return false;
@@ -184,7 +182,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
     wxString        fullFileName = GetFileName();
     wxTreeItemId    id = GetId();
 
-    KICAD_MANAGER_FRAME* mainFrame = (KICAD_MANAGER_FRAME*) Pgm().App().GetTopWindow();
+    KICAD_MANAGER_FRAME* frame = (KICAD_MANAGER_FRAME*) Pgm().App().GetTopWindow();
 
     switch( GetType() )
     {
@@ -196,46 +194,34 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         break;
 
     case TREE_SCHEMA:
+        if( fullFileName == frame->SchFileName() )
         {
-            wxFileName  ffn( fullFileName );
-            wxFileName  pro( mainFrame->GetProjectFileName() );
-
-            // compare all but the extension:
-            if( pro.GetPath()==ffn.GetPath() && pro.GetName()==ffn.GetName() )
-            {
-                // the project's schematic is opened using the *.kiface as part of this process.
-                mainFrame->RunEeschema( fullFileName );
-            }
-            else
-            {
-                // schematics not part of the project are opened in a separate process.
-                mainFrame->Execute( m_parent, EESCHEMA_EXE, fullFileName );
-            }
+            // the project's schematic is opened using the *.kiface as part of this process.
+            frame->RunEeschema( fullFileName );
+        }
+        else
+        {
+            // schematics not part of the project are opened in a separate process.
+            frame->Execute( m_parent, EESCHEMA_EXE, fullFileName );
         }
         break;
 
     case TREE_LEGACY_PCB:
     case TREE_SEXP_PCB:
+        if( fullFileName == frame->PcbFileName() || fullFileName == frame->PcbLegacyFileName() )
         {
-            wxFileName  ffn( fullFileName );
-            wxFileName  pro( mainFrame->GetProjectFileName() );
-
-            // compare all but the extension:
-            if( pro.GetPath()==ffn.GetPath() && pro.GetName()==ffn.GetName() )
-            {
-                // the project's BOARD is opened using the *.kiface as part of this process.
-                mainFrame->RunPcbNew( fullFileName );
-            }
-            else
-            {
-                // boards not part of the project are opened in a separate process.
-                mainFrame->Execute( m_parent, PCBNEW_EXE, fullFileName );
-            }
+            // the project's BOARD is opened using the *.kiface as part of this process.
+            frame->RunPcbNew( fullFileName );
+        }
+        else
+        {
+            // boards not part of the project are opened in a separate process.
+            frame->Execute( m_parent, PCBNEW_EXE, fullFileName );
         }
         break;
 
     case TREE_GERBER:
-        mainFrame->Execute( m_parent, GERBVIEW_EXE, fullFileName );
+        frame->Execute( m_parent, GERBVIEW_EXE, fullFileName );
         break;
 
     case TREE_PDF:
@@ -244,7 +230,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         break;
 
     case TREE_NET:
-        mainFrame->Execute( m_parent, CVPCB_EXE, fullFileName );
+        frame->Execute( m_parent, CVPCB_EXE, fullFileName );
         break;
 
     case TREE_TXT:
@@ -252,12 +238,12 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
             wxString editorname = Pgm().GetEditorName();
 
             if( !editorname.IsEmpty() )
-                mainFrame->Execute( m_parent, editorname, fullFileName );
+                frame->Execute( m_parent, editorname, fullFileName );
         }
         break;
 
     case TREE_PAGE_LAYOUT_DESCR:
-        mainFrame->Execute( m_parent, PL_EDITOR_EXE, fullFileName );
+        frame->Execute( m_parent, PL_EDITOR_EXE, fullFileName );
         break;
 
     default:

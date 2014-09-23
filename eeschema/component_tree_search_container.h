@@ -28,13 +28,14 @@
 #include <wx/string.h>
 
 class LIB_ALIAS;
-class CMP_LIBRARY;
+class PART_LIB;
+class PART_LIBS;
 class wxTreeCtrl;
 class wxArrayString;
 
 // class COMPONENT_TREE_SEARCH_CONTAINER
 // A container for components that allows to search them matching their name, keywords
-// and descripotions, updating a wxTreeCtrl with the results (toplevel nodes:
+// and descriptions, updating a wxTreeCtrl with the results (toplevel nodes:
 // libraries, leafs: components), scored by relevance.
 //
 // The scored result list is adpated on each update on the search-term: this allows
@@ -42,7 +43,7 @@ class wxArrayString;
 class COMPONENT_TREE_SEARCH_CONTAINER
 {
 public:
-    COMPONENT_TREE_SEARCH_CONTAINER();
+    COMPONENT_TREE_SEARCH_CONTAINER( PART_LIBS* aLibs );
     ~COMPONENT_TREE_SEARCH_CONTAINER();
 
     /** Function AddLibrary
@@ -51,7 +52,7 @@ public:
      *
      * @param aLib containting all the components to be added.
      */
-    void AddLibrary( CMP_LIBRARY& aLib );
+    void AddLibrary( PART_LIB& aLib );
 
     /** Function AddComponentList
      * Add the given list of components, given by name, to be searched.
@@ -62,7 +63,7 @@ public:
      * @param aOptionalLib       Library to look up the component names (if NULL: global lookup)
      */
     void AddAliasList( const wxString& aNodeName, const wxArrayString& aAliasNameList,
-                       CMP_LIBRARY* aOptionalLib );
+                       PART_LIB* aOptionalLib );
 
     /** Function SetPreselectNode
      * Set the component name to be selected in absence of any search-result.
@@ -111,6 +112,8 @@ private:
 
     wxString preselect_node_name;
     int preselect_unit_number;
+
+    PART_LIBS*      m_libs;         // no ownership
 };
 
 #endif /* COMPONENT_TREE_SEARCH_CONTAINER_H */

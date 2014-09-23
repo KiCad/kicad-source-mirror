@@ -74,6 +74,8 @@ static LSEQ dlg_layers()
     // layers that are put out into the dialog UI, coordinate with wxformbuilder and
     // getCTLs( LAYER_NUM aLayerNumber )
     static const LAYER_ID layers[] = {
+        F_CrtYd,
+        F_Fab,
         F_Adhes,
         F_Paste,
         F_SilkS,
@@ -117,6 +119,8 @@ static LSEQ dlg_layers()
         B_SilkS,
         B_Paste,
         B_Adhes,
+        B_Fab,
+        B_CrtYd,
 
         Edge_Cuts,
         Margin,
@@ -257,6 +261,8 @@ CTLs DIALOG_LAYERS_SETUP::getCTLs( LAYER_NUM aLayerNumber )
 
     switch( aLayerNumber )
     {
+    case F_CrtYd:               RETAUX( m_CrtYdFront );
+    case F_Fab:                 RETAUX( m_FabFront );
     case F_Adhes:               RETAUX( m_AdhesFront );
     case F_Paste:               RETAUX( m_SoldPFront );
     case F_SilkS:               RETAUX( m_SilkSFront );
@@ -300,6 +306,8 @@ CTLs DIALOG_LAYERS_SETUP::getCTLs( LAYER_NUM aLayerNumber )
     case B_SilkS:               RETAUX( m_SilkSBack );
     case B_Paste:               RETAUX( m_SoldPBack );
     case B_Adhes:               RETAUX( m_AdhesBack );
+    case B_Fab:                 RETAUX( m_FabBack );
+    case B_CrtYd:               RETAUX( m_CrtYdBack );
 
     case Edge_Cuts:             RETAUX( m_PCBEdges );
     case Margin:                RETAUX( m_Margin );

@@ -377,17 +377,12 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
     // Swap the angles, if start angle is greater than end angle
     SWAP( aStartAngle, >, aEndAngle );
 
-    VECTOR2D startPoint( cos( aStartAngle ), sin( aStartAngle ) );
-    VECTOR2D endPoint( cos( aEndAngle ), sin( aEndAngle ) );
-    VECTOR2D startEndPoint = startPoint + endPoint;
-    VECTOR2D middlePoint   = 0.5 * startEndPoint;
-
     Save();
     currentManager->Translate( aCenterPoint.x, aCenterPoint.y, layerDepth );
 
     if( isStrokeEnabled )
     {
-        double alphaIncrement = 2.0 * M_PI / CIRCLE_POINTS;
+        const double alphaIncrement = 2.0 * M_PI / CIRCLE_POINTS;
         currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
         VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
@@ -411,20 +406,24 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
 
     if( isFillEnabled )
     {
-        double alphaIncrement = 2 * M_PI / CIRCLE_POINTS;
+        const double alphaIncrement = 2 * M_PI / CIRCLE_POINTS;
         double alpha;
         currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+        currentManager->Shader( SHADER_NONE );
 
+        // Triangle fan
         for( alpha = aStartAngle; ( alpha + alphaIncrement ) < aEndAngle; )
         {
-            currentManager->Vertex( middlePoint.x, middlePoint.y,  0.0 );
-            currentManager->Vertex( cos( alpha ),  sin( alpha ),   0.0 );
+            currentManager->Vertex( 0.0, 0.0, 0.0 );
+            currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, 0.0 );
             alpha += alphaIncrement;
-            currentManager->Vertex( cos( alpha ),  sin( alpha ),   0.0 );
+            currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, 0.0 );
         }
 
-        currentManager->Vertex( middlePoint.x, middlePoint.y,  0.0 );
-        currentManager->Vertex( cos( alpha ),  sin( alpha ),   0.0 );
+        // The last missing triangle
+        const VECTOR2D endPoint( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
+        currentManager->Vertex( 0.0, 0.0, 0.0 );
+        currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, 0.0 );
         currentManager->Vertex( endPoint.x,    endPoint.y,     0.0 );
     }
 
