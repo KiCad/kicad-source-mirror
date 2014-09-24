@@ -69,10 +69,11 @@ static const wxChar autosavePrefix[] = wxT( "_autosave-" );
  * @param aCtl is where to put the OpenProjectFiles() control bits.
  *
  * @param aFileName on entry is a probable choice, on return is the chosen filename.
+ * @param aKicadFilesOnly true to list kiacad pcb files plugins only, false to list all plugins.
  *
  * @return bool - true if chosen, else false if user aborted.
  */
-bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName )
+bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bool aKicadFilesOnly = false )
 {
     // This is a subset of all PLUGINs which are trusted to be able to
     // load a BOARD. User may occasionally use the wrong plugin to load a
@@ -93,7 +94,9 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName )
     wxFileName  fileName( *aFileName );
     wxString    fileFilters;
 
-    for( unsigned i=0;  i<DIM( loaders );  ++i )
+    unsigned pluginsCount = aKicadFilesOnly ? 2 : DIM( loaders );
+
+    for( unsigned i=0; i < pluginsCount; ++i )
     {
         if( i > 0 )
             fileFilters += wxChar( '|' );
@@ -291,10 +294,12 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
             int         open_ctl;
             wxString    fileName;
 
-            if( !AskLoadBoardFileName( this, &open_ctl, &fileName ) )
+            if( !AskLoadBoardFileName( this, &open_ctl, &fileName, true ) )
                 break;
 
             AppendBoardFile( fileName, open_ctl );
+
+            m_canvas->Refresh();
         }
         break;
 
@@ -343,7 +348,7 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 // The KIWAY_PLAYER::OpenProjectFiles() API knows nothing about plugins, so
 // determine how to load the BOARD here, with minor assistance from KICTL_EAGLE_BRD
 // bit flag.
-static IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
+IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
 {
     IO_MGR::PCB_FILE_T  pluginType;
 
@@ -366,19 +371,6 @@ static IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
         pluginType = IO_MGR::KICAD;
 
     return pluginType;
-}
-
-
-bool PCB_EDIT_FRAME::AppendBoardFile( const wxString& aFullFileName, int aCtl )
-{
-    return false;
-
-    // I'll never use it, and it was mucking up OpenProjectFiles() with
-    // complicated cruft.  If you must, put it here separate from that important
-    // function.
-
-    // Actually I think this serves too many masters.  Just do panelization in
-    // a good gerber file manager.
 }
 
 
@@ -713,7 +705,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
                 );
         DisplayError( this, msg );
 
-        lowerTxt = _( "Failed to create " ) + pcbFileName.GetFullPath();
+        lowerTxt.Printf( _( "Failed to create '%s'" ), GetChars( pcbFileName.GetFullPath() ) );
 
         AppendMsgPanel( upperTxt, lowerTxt, CYAN );
 
@@ -739,9 +731,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         wxRemoveFile( autoSaveFileName.GetFullPath() );
 
     if( !!backupFileName )
-        upperTxt = _( "Backup file: " ) + backupFileName;
+        upperTxt.Printf( _( "Backup file: '%s'" ), GetChars( backupFileName ) );
 
-    lowerTxt = _( "Wrote board file: " ) + pcbFileName.GetFullPath();
+    lowerTxt.Printf( _( "Wrote board file: '%s'" ), GetChars( pcbFileName.GetFullPath() ) );
 
     AppendMsgPanel( upperTxt, lowerTxt, CYAN );
 

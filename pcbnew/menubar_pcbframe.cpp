@@ -43,6 +43,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
     wxString    text;
     wxMenuBar*  menuBar = GetMenuBar();
+    wxMenuItem * menutitem;
 
     wxFileHistory&  fhist = Kiface().GetFileHistory();
 
@@ -95,10 +96,14 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                      KiBitmap( open_project_xpm ) );
     }
 
-    AddMenuItem( filesMenu, ID_APPEND_FILE,
+    menutitem = AddMenuItem( filesMenu, ID_APPEND_FILE,
                  _( "&Append Board" ),
-                 _( "Append another Pcbnew board to the current loaded board" ),
+                 _( "Append another Pcbnew board to the current loaded board. Available only when Pcbnew runs in stand alone mode" ),
                  KiBitmap( import_xpm ) );
+    if( ! Kiface().IsSingle() )      // disable when under a project mgr
+        menutitem->Enable( false );
+
+
     filesMenu->AppendSeparator();
 
     text = AddHotkeyName( _( "&Save" ), g_Board_Editor_Hokeys_Descr, HK_SAVE_BOARD );
