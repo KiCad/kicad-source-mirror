@@ -48,7 +48,7 @@ int LIB_EDIT_FRAME::BlockCommand( int key )
     switch( key )
     {
     default:
-        cmd = key & 0x255;
+        cmd = key & 0xFF;
         break;
 
     case -1:

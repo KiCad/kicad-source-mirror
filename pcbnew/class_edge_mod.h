@@ -68,6 +68,9 @@ public:
         SetLocalCoord();
     }
 
+    /// Flip entity relative to aCentre
+    void Flip( const wxPoint& aCentre );
+
     void SetStart0( const wxPoint& aPoint )     { m_Start0 = aPoint; }
     const wxPoint& GetStart0() const            { return m_Start0; }
 
