@@ -143,13 +143,15 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
 
-    int ii = 0;
     int lyrSelect = ( (PCB_SCREEN*) m_parent->GetScreen() )->m_Active_Layer;
 
     if( m_zone )
         lyrSelect = m_zone->GetLayer();
 
-    for( LSEQ seq = LSET::AllNonCuMask().Seq(); seq; ++seq, ++ii )
+    int ctrlWidth = 0;  // Min width for m_LayerSelectionCtrl to show the layers names
+    int imgIdx = 0;
+
+    for( LSEQ seq = LSET::AllNonCuMask().Seq(); seq; ++seq, ++imgIdx )
     {
         LAYER_ID layer = *seq;
 
@@ -160,11 +162,25 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
         msg.Trim();
 
         int itemIndex = m_LayerSelectionCtrl->InsertItem(
-                m_LayerSelectionCtrl->GetItemCount(), msg, ii );
+                m_LayerSelectionCtrl->GetItemCount(), msg, imgIdx );
 
         if(lyrSelect == layer )
             m_LayerSelectionCtrl->Select( itemIndex );
+
+        wxSize tsize( GetTextSize( msg, m_LayerSelectionCtrl ) );
+        ctrlWidth = std::max( ctrlWidth, tsize.x );
     }
+
+    // The most easy way to ensure the right size is to use wxLIST_AUTOSIZE
+    // unfortunately this option does not work well both on
+    // wxWidgets 2.8 ( column witdth too small), and
+    // wxWidgets 2.9 ( column witdth too large)
+    ctrlWidth += LAYER_BITMAP_SIZE_X + 25;      // Add bitmap width + margin between bitmap and text
+    m_LayerSelectionCtrl->SetColumnWidth( 0, ctrlWidth );
+
+    ctrlWidth += 25;        // add small margin between text and window borders
+                            // and room for vertical scroll bar
+    m_LayerSelectionCtrl->SetMinSize( wxSize( ctrlWidth, -1 ) );
 }
 
 
