@@ -3,14 +3,12 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <draw_frame.h>
 #include <class_drawpanel.h>
 
 #include <general.h>
 
 #include <dialog_color_config.h>
-#include <layers_id_colors_and_visibility.h>
 
 
 #define ID_COLOR_SETUP  1800
@@ -86,7 +84,7 @@ static BUTTONINDEX buttonGroups[] = {
 };
 
 
-static EDA_COLOR_T currentColors[ NB_SCH_LAYERS ];
+static EDA_COLOR_T currentColors[ LAYERSCH_ID_COUNT ];
 
 
 IMPLEMENT_DYNAMIC_CLASS( DIALOG_COLOR_CONFIG, wxDialog )
@@ -188,7 +186,7 @@ void DIALOG_COLOR_CONFIG::CreateControls()
 
             iconDC.SelectObject( bitmap );
 
-            EDA_COLOR_T color = GetLayerColor( LayerNumber( buttons->m_Layer ) );
+            EDA_COLOR_T color = GetLayerColor( LAYERSCH_ID( buttons->m_Layer ) );
             currentColors[ buttons->m_Layer ] = color;
 
             iconDC.SetPen( *wxBLACK_PEN );
@@ -234,6 +232,9 @@ void DIALOG_COLOR_CONFIG::CreateControls()
                                    m_SelBgColorStrings, 1, wxRA_SPECIFY_COLS );
     m_SelBgColor->SetSelection( ( m_parent->GetDrawBgColor() == BLACK ) ? 1 : 0 );
     m_columnBoxSizer->Add( m_SelBgColor, 1, wxGROW | wxRIGHT | wxTOP | wxBOTTOM, 5 );
+
+    currentColors[ LAYER_BACKGROUND ] =  m_parent->GetDrawBgColor();
+
 
     // Provide a line to separate all of the controls added so far from the
     // "OK", "Cancel", and "Apply" buttons (which will be added after that
@@ -317,24 +318,27 @@ void DIALOG_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 bool DIALOG_COLOR_CONFIG::UpdateColorsSettings()
 {
     // Update color of background
-    if( m_SelBgColor->GetSelection() == 0 )
-        m_parent->SetDrawBgColor( WHITE );
-    else
-        m_parent->SetDrawBgColor( BLACK );
+    EDA_COLOR_T bgcolor = WHITE;
+
+    if( m_SelBgColor->GetSelection() > 0 )
+        bgcolor =  BLACK;
+
+    m_parent->SetDrawBgColor( bgcolor );
+    currentColors[ LAYER_BACKGROUND ] = bgcolor;
 
     bool warning = false;
 
-    for( LayerNumber ii = LAYER_WIRE; ii < NB_SCH_LAYERS; ++ii )
+    for( LAYERSCH_ID clyr = LAYER_WIRE; clyr < LAYERSCH_ID_COUNT; ++clyr )
     {
-        SetLayerColor( currentColors[ ii ], ii );
+        SetLayerColor( currentColors[ clyr ], clyr );
 
-        if(  m_parent->GetDrawBgColor() == GetLayerColor( ii ) )
+        if(  bgcolor == GetLayerColor( clyr ) && clyr != LAYER_BACKGROUND )
             warning = true;
     }
 
     m_parent->SetGridColor( GetLayerColor( LAYER_GRID ) );
 
-    if( m_parent->GetDrawBgColor() == GetLayerColor( LAYER_GRID ) )
+    if( bgcolor == GetLayerColor( LAYER_GRID ) )
         warning = true;
 
     return warning;
@@ -348,7 +352,8 @@ void DIALOG_COLOR_CONFIG::OnOkClick( wxCommandEvent& event )
     // Prompt the user if an item has the same color as the background
     // because this item cannot be seen:
     if( warning )
-        wxMessageBox( _("Warning:\nSome items have the same color as the background\nand they will not be seen on screen") );
+        wxMessageBox( _("Warning:\nSome items have the same color as the background\n"
+                        "and they will not be seen on screen") );
 
     m_parent->GetCanvas()->Refresh();
 

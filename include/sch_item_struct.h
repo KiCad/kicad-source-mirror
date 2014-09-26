@@ -35,7 +35,7 @@
 #include <general.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
- 
+
 class SCH_ITEM;
 class SCH_SHEET_PATH;
 class LINE_READER;
@@ -115,7 +115,7 @@ public:
 class SCH_ITEM : public EDA_ITEM
 {
 protected:
-    LayerNumber    m_Layer;
+    LAYERSCH_ID    m_Layer;
     EDA_ITEMS      m_connections;   ///< List of items connected to this item.
 
 public:
@@ -145,14 +145,14 @@ public:
      * Function GetLayer
      * returns the layer this item is on.
      */
-    LayerNumber GetLayer() const { return m_Layer; }
+    LAYERSCH_ID GetLayer() const { return m_Layer; }
 
     /**
      * Function SetLayer
      * sets the layer this item is on.
      * @param aLayer The layer number.
      */
-    void SetLayer( LayerNumber aLayer )  { m_Layer = aLayer; }
+    void SetLayer( LAYERSCH_ID aLayer )  { m_Layer = aLayer; }
 
     /**
      * Function GetPenSize virtual pure
@@ -293,7 +293,7 @@ public:
     bool IsConnected( const wxPoint& aPoint ) const;
 
     /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
-    virtual bool HitTest( const wxPoint& aPosition ) const 
+    virtual bool HitTest( const wxPoint& aPosition ) const
     {
         return HitTest( aPosition, 0 );
     }

@@ -70,7 +70,7 @@ static struct IFACE : public KIFACE_I
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
 
-    void OnKifaceEnd( PGM_BASE* aProgram );
+    void OnKifaceEnd();
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {
@@ -154,15 +154,15 @@ PGM_BASE& Pgm()
 }
 
 
-static EDA_COLOR_T s_layerColor[NB_SCH_LAYERS];
+static EDA_COLOR_T s_layerColor[LAYERSCH_ID_COUNT];
 
-EDA_COLOR_T GetLayerColor( LayerNumber aLayer )
+EDA_COLOR_T GetLayerColor( LAYERSCH_ID aLayer )
 {
     wxASSERT( unsigned( aLayer ) < DIM( s_layerColor ) );
     return s_layerColor[aLayer];
 }
 
-void SetLayerColor( EDA_COLOR_T aColor, int aLayer )
+void SetLayerColor( EDA_COLOR_T aColor, LAYERSCH_ID aLayer )
 {
     wxASSERT( unsigned( aLayer ) < DIM( s_layerColor ) );
     s_layerColor[aLayer] = aColor;
@@ -178,7 +178,8 @@ static PARAM_CFG_ARRAY& cfg_params()
         // These are KIFACE specific, they need to be loaded once when the
         // eeschema KIFACE comes in.
 
-#define CLR(x, y, z)    ca.push_back( new PARAM_CFG_SETCOLOR( true, wxT( x ), &s_layerColor[y], z ));
+#define CLR(x, y, z)\
+    ca.push_back( new PARAM_CFG_SETCOLOR( true, wxT( x ), &s_layerColor[y], z ) );
 
         CLR( "ColorWireEx",             LAYER_WIRE,             GREEN )
         CLR( "ColorBusEx",              LAYER_BUS,              BLUE )
@@ -204,6 +205,7 @@ static PARAM_CFG_ARRAY& cfg_params()
         CLR( "ColorErcWEx",             LAYER_ERC_WARN,         GREEN )
         CLR( "ColorErcEEx",             LAYER_ERC_ERR,          RED )
         CLR( "ColorGridEx",             LAYER_GRID,             DARKGRAY )
+        CLR( "ColorBgCanvasEx",         LAYER_BACKGROUND,       WHITE )
     }
 
     return ca;
@@ -220,23 +222,24 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     // Give a default colour for all layers
     // (actual color will be initialized by config)
-    for( int ii = 0; ii < NB_SCH_LAYERS; ii++ )
+    for( LAYERSCH_ID ii = LAYER_FIRST; ii < LAYERSCH_ID_COUNT; ++ii )
         SetLayerColor( DARKGRAY, ii );
+
+    SetLayerColor( WHITE, LAYER_BACKGROUND );
 
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips
     ReadHotkeyConfig( wxT("SchematicFrame"), s_Eeschema_Hokeys_Descr );
 
-    wxConfigLoadSetups( KifaceSettings(),  cfg_params() );
+    wxConfigLoadSetups( KifaceSettings(), cfg_params() );
 
     return true;
 }
 
 
-void IFACE::OnKifaceEnd( PGM_BASE* aProgram )
+void IFACE::OnKifaceEnd()
 {
     wxConfigSaveSetups( KifaceSettings(), cfg_params() );
-
     end_common();
 }
 

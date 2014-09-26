@@ -507,13 +507,13 @@ void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
+    SetGridColor( GetLayerColor( LAYER_GRID ) );
+    SetDrawBgColor( GetLayerColor( LAYER_BACKGROUND ) );
+
     wxConfigPathChanger cpc( aCfg, m_configPath );
 
-    EDA_COLOR_T itmp = ColorByName( aCfg->Read( LIBVIEW_BGCOLOR, wxT( "WHITE" ) ) );
-    SetDrawBgColor( itmp );
-
-    aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 100 );
-    aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 100 );
+    aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 150 );
+    aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );
 
     // Set parameters to a reasonable value.
     if( m_libListWidth > m_FrameSize.x/2 )
@@ -538,7 +538,6 @@ void LIB_VIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     m_cmpListWidth = m_cmpList->GetSize().x;
     aCfg->Write( CMPLIST_WIDTH_KEY, m_cmpListWidth );
-    aCfg->Write( LIBVIEW_BGCOLOR, ColorGetName( GetDrawBgColor() ) );
 }
 
 

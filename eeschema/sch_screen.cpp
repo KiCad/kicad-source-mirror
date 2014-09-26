@@ -504,7 +504,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     }
 
     // This section is not used, but written for file compatibility
-    if( fprintf( aFile, "EELAYER %d %d\n", NB_SCH_LAYERS, 0 ) < 0
+    if( fprintf( aFile, "EELAYER %d %d\n", LAYERSCH_ID_COUNT, 0 ) < 0
         || fprintf( aFile, "EELAYER END\n" ) < 0 )
         return false;
 

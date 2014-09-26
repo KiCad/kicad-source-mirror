@@ -60,9 +60,9 @@ protected:
     int         m_LastGridSizeId;           // the command id offset (>= 0) of the last selected grid
                                             // 0 is for the grid corresponding to
                                             // a wxCommand ID = ID_POPUP_GRID_LEVEL_1000.
-    bool        m_DrawGrid;                 // hide/Show grid
+    bool        m_drawGrid;                 // hide/Show grid
     bool        m_showPageLimits;           ///< true to display the page limits
-    EDA_COLOR_T m_GridColor;                // Grid color
+    EDA_COLOR_T m_gridColor;                // Grid color
     EDA_COLOR_T m_drawBgColor;              ///< the background color of the draw canvas
                                             ///< BLACK for Pcbnew, BLACK or WHITE for eeschema
 
@@ -258,8 +258,16 @@ public:
     virtual void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) = 0;
 
     // the background color of the draw canvas:
-    EDA_COLOR_T GetDrawBgColor() const { return m_drawBgColor; }
-    void SetDrawBgColor( EDA_COLOR_T aColor) { m_drawBgColor= aColor ; }
+    // Virtual because some frames can have a specific way to get/set the bg color
+    /**
+     * @return the EDA_COLOR_T for the canvas background
+     */
+    virtual EDA_COLOR_T GetDrawBgColor() const { return m_drawBgColor; }
+
+    /**
+     * @param aColor: the EDA_COLOR_T for the canvas background
+     */
+    virtual void SetDrawBgColor( EDA_COLOR_T aColor) { m_drawBgColor= aColor ; }
 
     int GetCursorShape() const { return m_cursorShape; }
 
@@ -355,7 +363,7 @@ public:
      */
     virtual bool IsGridVisible() const
     {
-        return m_DrawGrid;
+        return m_drawGrid;
     }
 
     /**
@@ -365,7 +373,7 @@ public:
      */
     virtual void SetGridVisibility( bool aVisible )
     {
-        m_DrawGrid = aVisible;
+        m_drawGrid = aVisible;
     }
 
     /**
@@ -374,7 +382,7 @@ public:
      */
     virtual EDA_COLOR_T GetGridColor() const
     {
-        return m_GridColor;
+        return m_gridColor;
     }
 
     /**
@@ -383,7 +391,7 @@ public:
      */
     virtual void SetGridColor( EDA_COLOR_T aColor )
     {
-        m_GridColor = aColor;
+        m_gridColor = aColor;
     }
 
     /**
