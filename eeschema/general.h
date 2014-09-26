@@ -36,8 +36,12 @@ class SCH_SHEET;
 #define GR_DEFAULT_DRAWMODE GR_COPY
 
 // this enum is for color management
+// Using here "LAYER" in name is due to historical reasons.
+// Eeschema does not actually use layers. It just uses "LAYER_XX" as identifier
+// mainly for item color
 typedef enum {
-    LAYER_WIRE,
+    LAYER_FIRST,
+    LAYER_WIRE = LAYER_FIRST,
     LAYER_BUS,
     LAYER_JUNCTION,
     LAYER_LOCLABEL,
@@ -61,12 +65,13 @@ typedef enum {
     LAYER_ERC_ERR,
     LAYER_DEVICE_BACKGROUND,
     LAYER_GRID,
-    NB_SCH_LAYERS
-} LayerNumber;
+    LAYER_BACKGROUND,
+    LAYERSCH_ID_COUNT
+} LAYERSCH_ID;
 
-inline LayerNumber operator++( LayerNumber& a )
+inline LAYERSCH_ID operator++( LAYERSCH_ID& a )
 {
-    a = LayerNumber( int( a ) + 1 );
+    a = LAYERSCH_ID( int( a ) + 1 );
     return a;
 }
 
@@ -104,14 +109,13 @@ void SetDefaultTextSize( int aSize );
 int GetDefaultBusThickness();
 void SetDefaultBusThickness( int aThickness );
 
-EDA_COLOR_T GetLayerColor( LayerNumber aLayer );
+EDA_COLOR_T GetLayerColor( LAYERSCH_ID aLayer );
+void        SetLayerColor( EDA_COLOR_T aColor, LAYERSCH_ID aLayer );
 
 // Color to draw selected items
 EDA_COLOR_T GetItemSelectedColor();
 
 // Color to draw items flagged invisible, in libedit (they are invisible in Eeschema
 EDA_COLOR_T GetInvisibleItemColor();
-
-void        SetLayerColor( EDA_COLOR_T aColor, int aLayer );
 
 #endif    // _GENERAL_H_

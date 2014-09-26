@@ -425,13 +425,13 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
 
 bool DISPLAY_FOOTPRINTS_FRAME::IsGridVisible() const
 {
-    return m_DrawGrid;
+    return m_drawGrid;
 }
 
 
 void DISPLAY_FOOTPRINTS_FRAME::SetGridVisibility(bool aVisible)
 {
-    m_DrawGrid = aVisible;
+    m_drawGrid = aVisible;
 }
 
 

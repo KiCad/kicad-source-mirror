@@ -68,6 +68,11 @@ public:
     }
     void SetGridOrigin( const wxPoint& aPoint )   {}            // overload EDA_DRAW_FRAME
 
+    // Virtual from EDA_DRAW_FRAME
+    // the background color of the draw canvas:
+    EDA_COLOR_T GetDrawBgColor() const;
+    void SetDrawBgColor( EDA_COLOR_T aColor);
+
     const TITLE_BLOCK& GetTitleBlock() const;                   // overload EDA_DRAW_FRAME
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload EDA_DRAW_FRAME
 

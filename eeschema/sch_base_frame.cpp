@@ -35,7 +35,6 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
     EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition,
             aSize, aStyle, aFrameName )
 {
-    SetDrawBgColor( WHITE );  // the background color of the draw canvas, BLACK or WHITE
 }
 
 
@@ -45,6 +44,18 @@ void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 
     viewlibFrame->Show( true );
     viewlibFrame->Raise();
+}
+
+// Virtual from EDA_DRAW_FRAME
+EDA_COLOR_T SCH_BASE_FRAME::GetDrawBgColor() const
+{
+    return GetLayerColor( LAYER_BACKGROUND );
+}
+
+void SCH_BASE_FRAME::SetDrawBgColor( EDA_COLOR_T aColor)
+{
+    m_drawBgColor= aColor;
+    SetLayerColor( aColor, LAYER_BACKGROUND );
 }
 
 

@@ -35,7 +35,7 @@
 static wxTreeItemId GetPrevItem( const wxTreeCtrl& tree, const wxTreeItemId& item );
 static wxTreeItemId GetNextItem( const wxTreeCtrl& tree, const wxTreeItemId& item );
 
-DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( wxWindow* aParent, const wxString& aTitle,
+DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                                                   COMPONENT_TREE_SEARCH_CONTAINER* aContainer,
                                                   int aDeMorganConvert )
     : DIALOG_CHOOSE_COMPONENT_BASE( aParent, wxID_ANY, aTitle ),
@@ -44,6 +44,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( wxWindow* aParent, const wxStr
       m_external_browser_requested( false ),
       m_received_doubleclick_in_tree( false )
 {
+    m_parent = aParent;
     m_search_container->SetTree( m_libraryComponentTree );
     m_searchBox->SetFocus();
     m_componentDetails->SetEditable( false );
@@ -260,7 +261,8 @@ void DIALOG_CHOOSE_COMPONENT::OnHandlePreviewRepaint( wxPaintEvent& aRepaintEven
 void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_PART*      aComponent, int aUnit )
 {
     wxPaintDC dc( m_componentView );
-    dc.SetBackground( *wxWHITE_BRUSH );
+    EDA_COLOR_T bgcolor = m_parent->GetDrawBgColor();
+    dc.SetBackground( bgcolor == BLACK ? *wxBLACK_BRUSH : *wxWHITE_BRUSH );
     dc.Clear();
 
     if( aComponent == NULL )
