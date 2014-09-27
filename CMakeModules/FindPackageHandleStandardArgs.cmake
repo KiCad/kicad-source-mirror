@@ -127,8 +127,8 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
-include(FindPackageMessage.cmake)
-include(CMakeParseArguments.cmake)
+include(FindPackageMessage)
+include(CMakeParseArguments)
 
 # internal helper macro
 macro(_FPHSA_FAILURE_MESSAGE _msg)
