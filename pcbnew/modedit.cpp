@@ -826,17 +826,10 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
     switch( transform )
     {
     case ID_MODEDIT_MODULE_ROTATE:
-        module->Reference().RotateWithModule( wxPoint(0,0), angle );
-        module->Value().RotateWithModule( wxPoint(0,0), angle );
-
         RotateMarkedItems( module, wxPoint(0,0), true );
         break;
 
     case ID_MODEDIT_MODULE_MIRROR:
-        module->Reference().MirrorWithModule( 0 );
-        module->Value().MirrorWithModule( 0 );
-
-        // Mirror pads and graphic items of the footprint:
         MirrorMarkedItems( module, wxPoint(0,0), true );
         break;
 

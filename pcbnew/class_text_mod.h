@@ -94,17 +94,21 @@ public:
 
     void Flip( const wxPoint& aCentre );
 
-    /// Rotate entity during module rotation
-    void RotateWithModule( const wxPoint& aOffset, double aAngle );
+    /// Rotate text during module rotation transform, in footprint editor
+    void RotateTransformWithModule( const wxPoint& aOffset, double aAngle );
 
     /// Flip entity during module flip
     void FlipWithModule( int aOffset );
 
-    /// Mirror entiry during module mirroring
-    void MirrorWithModule( int aOffset );
+    /// Mirror text during module mirroring transform, in footprint editor
+    /// the text itself is not mirrored, only position.
+    void MirrorTransformWithModule( int aOffset );
+
+    /// move text during module mirroring transform, in footprint editor
+    void MoveTransformWithModule( const wxPoint& aMoveVector );
 
     /// @deprecated it seems (but the type is used to 'protect'
-    //reference and value from deletion, and for identification)
+    //  reference and value from deletion, and for identification)
     void SetType( TEXT_TYPE aType )     { m_Type = aType; }
     TEXT_TYPE GetType() const           { return m_Type; }
 
