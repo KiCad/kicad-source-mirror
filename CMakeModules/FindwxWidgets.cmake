@@ -150,10 +150,10 @@
 # Helper macro to control the debugging output globally. There are
 # two versions for controlling how verbose your output should be.
 macro(dbg_msg _MSG)
-  message(STATUS "${_MSG}")
+#  message(STATUS "${_MSG}")
 endmacro(dbg_msg)
 macro(dbg_msg_v _MSG)
-  message(STATUS "${_MSG}")
+#  message(STATUS "${_MSG}")
 endmacro(dbg_msg_v)
 
 # Clear return values in case the module is loaded more than once.
