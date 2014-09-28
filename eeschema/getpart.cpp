@@ -127,7 +127,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
 
     if( !aHistoryList.empty() )
     {
-        // This is good for a transition for experineced users: giving them a History. Ideally,
+        // This is good for a transition for experienced users: giving them a History. Ideally,
         // we actually make this part even faster to access with a popup on ALT-a or something.
         // the history is under a node named  "-- History --"
         // However, because it is translatable, and we need to have a node name starting by "-- "

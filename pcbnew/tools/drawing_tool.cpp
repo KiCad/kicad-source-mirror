@@ -1019,7 +1019,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
         {
-            if( lineWidth > WIDTH_STEP )
+            if( lineWidth > (unsigned) WIDTH_STEP )
             {
                 lineWidth -= WIDTH_STEP;
                 aGraphic->SetWidth( lineWidth );

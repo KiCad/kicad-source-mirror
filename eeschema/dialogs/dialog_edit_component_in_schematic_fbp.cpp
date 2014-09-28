@@ -37,19 +37,19 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	unitsInterchageableText = new wxStaticText( this, wxID_ANY, _("Units are interchangeable:"), wxDefaultPosition, wxDefaultSize, 0 );
 	unitsInterchageableText->Wrap( -1 );
-	bSizerUnitsInterchangeable->Add( unitsInterchageableText, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerUnitsInterchangeable->Add( unitsInterchageableText, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	unitsInterchageableLabel = new wxStaticText( this, wxID_ANY, _("Yes"), wxDefaultPosition, wxDefaultSize, 0 );
 	unitsInterchageableLabel->Wrap( -1 );
 	bSizerUnitsInterchangeable->Add( unitsInterchageableLabel, 0, wxALL, 5 );
 	
 	
-	optionsSizer->Add( bSizerUnitsInterchangeable, 1, wxEXPAND, 5 );
+	optionsSizer->Add( bSizerUnitsInterchangeable, 0, wxEXPAND, 5 );
 	
 	wxString orientationRadioBoxChoices[] = { _("0"), _("+90"), _("180"), _("-90") };
 	int orientationRadioBoxNChoices = sizeof( orientationRadioBoxChoices ) / sizeof( wxString );
 	orientationRadioBox = new wxRadioBox( this, wxID_ANY, _("Orientation (Degrees)"), wxDefaultPosition, wxDefaultSize, orientationRadioBoxNChoices, orientationRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
-	orientationRadioBox->SetSelection( 1 );
+	orientationRadioBox->SetSelection( 0 );
 	orientationRadioBox->SetToolTip( _("Select if the component is to be rotated when drawn") );
 	
 	optionsSizer->Add( orientationRadioBox, 0, wxEXPAND|wxALL, 5 );
@@ -62,25 +62,34 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	optionsSizer->Add( mirrorRadioBox, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticTextChipname = new wxStaticText( this, wxID_ANY, _("Chip Name"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextChipname->Wrap( -1 );
-	optionsSizer->Add( m_staticTextChipname, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	convertCheckBox = new wxCheckBox( this, wxID_ANY, _("Converted Shape"), wxDefaultPosition, wxDefaultSize, 0 );
+	convertCheckBox->SetToolTip( _("Use the alternate shape of this component.\nFor gates, this is the \"De Morgan\" conversion") );
+	
+	optionsSizer->Add( convertCheckBox, 0, wxALL, 5 );
+	
+	wxStaticBoxSizer* sbSizerChipName;
+	sbSizerChipName = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Chip Name") ), wxVERTICAL );
 	
 	chipnameTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	chipnameTextCtrl->SetMaxLength( 32 ); 
 	chipnameTextCtrl->SetToolTip( _("The name of the symbol in the library from which this component came") );
 	
-	optionsSizer->Add( chipnameTextCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizerChipName->Add( chipnameTextCtrl, 0, wxEXPAND|wxBOTTOM, 5 );
 	
-	convertCheckBox = new wxCheckBox( this, wxID_ANY, _("Convert"), wxDefaultPosition, wxDefaultSize, 0 );
-	convertCheckBox->SetToolTip( _("Use the alternate shape of this component.\nFor gates, this is the \"De Morgan\" conversion") );
+	wxBoxSizer* bSizerChpinameButt;
+	bSizerChpinameButt = new wxBoxSizer( wxHORIZONTAL );
 	
-	optionsSizer->Add( convertCheckBox, 0, wxALL, 5 );
+	m_buttonTestChipName = new wxButton( this, wxID_ANY, _("Test"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerChpinameButt->Add( m_buttonTestChipName, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
-	defaultsButton = new wxButton( this, wxID_ANY, _("Reset to Library Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	defaultsButton->SetToolTip( _("Set position and style of fields and component orientation  to default lib value.\nFields texts are not modified.") );
+	m_buttonSelectChipName = new wxButton( this, wxID_ANY, _("Select"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerChpinameButt->Add( m_buttonSelectChipName, 0, wxTOP|wxBOTTOM, 5 );
 	
-	optionsSizer->Add( defaultsButton, 0, wxALL|wxEXPAND, 5 );
+	
+	sbSizerChipName->Add( bSizerChpinameButt, 1, wxEXPAND, 5 );
+	
+	
+	optionsSizer->Add( sbSizerChipName, 0, wxEXPAND|wxALL, 5 );
 	
 	m_staticTextTimeStamp = new wxStaticText( this, wxID_ANY, _("Timestamp"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTimeStamp->Wrap( -1 );
@@ -90,6 +99,14 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	m_textCtrlTimeStamp->SetToolTip( _("An unique ID (a time stamp) to identify the component.\nThis is an alternate identifier to the reference.") );
 	
 	optionsSizer->Add( m_textCtrlTimeStamp, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	optionsSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	defaultsButton = new wxButton( this, wxID_ANY, _("Reset to Library Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
+	defaultsButton->SetToolTip( _("Set position and style of fields and component orientation  to default lib value.\nFields texts are not modified.") );
+	
+	optionsSizer->Add( defaultsButton, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	upperSizer->Add( optionsSizer, 0, wxALIGN_TOP|wxEXPAND|wxALL, 5 );
@@ -132,13 +149,13 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	wxString m_FieldHJustifyCtrlChoices[] = { _("Left"), _("Center"), _("Right") };
 	int m_FieldHJustifyCtrlNChoices = sizeof( m_FieldHJustifyCtrlChoices ) / sizeof( wxString );
 	m_FieldHJustifyCtrl = new wxRadioBox( this, wxID_ANY, _("Horiz. Justify"), wxDefaultPosition, wxDefaultSize, m_FieldHJustifyCtrlNChoices, m_FieldHJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_FieldHJustifyCtrl->SetSelection( 0 );
+	m_FieldHJustifyCtrl->SetSelection( 2 );
 	bSizerJustification->Add( m_FieldHJustifyCtrl, 1, wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_FieldVJustifyCtrlChoices[] = { _("Bottom"), _("Center"), _("Top") };
 	int m_FieldVJustifyCtrlNChoices = sizeof( m_FieldVJustifyCtrlChoices ) / sizeof( wxString );
 	m_FieldVJustifyCtrl = new wxRadioBox( this, wxID_ANY, _("Vert. Justify"), wxDefaultPosition, wxDefaultSize, m_FieldVJustifyCtrlNChoices, m_FieldVJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_FieldVJustifyCtrl->SetSelection( 0 );
+	m_FieldVJustifyCtrl->SetSelection( 2 );
 	bSizerJustification->Add( m_FieldVJustifyCtrl, 1, wxRIGHT|wxLEFT, 5 );
 	
 	
@@ -200,7 +217,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	m_show_datasheet_button = new wxButton( this, wxID_ANY, _("Show in Browser"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_show_datasheet_button->SetToolTip( _("If your datasheet is an http:// link or a complete file path, then it may show in your browser by pressing this button.") );
 	
-	fieldNameBoxSizer->Add( m_show_datasheet_button, 0, wxBOTTOM|wxEXPAND, 5 );
+	fieldNameBoxSizer->Add( m_show_datasheet_button, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
 	fieldEditBoxSizer->Add( fieldNameBoxSizer, 0, wxBOTTOM|wxEXPAND, 5 );
@@ -277,10 +294,11 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
-	mainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnCloseDialog ) );
+	m_buttonTestChipName->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnTestChipName ), NULL, this );
+	m_buttonSelectChipName->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnSelectChipName ), NULL, this );
 	defaultsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::SetInitCmp ), NULL, this );
 	fieldListCtrl->Connect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnListItemDeselected ), NULL, this );
 	fieldListCtrl->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnListItemSelected ), NULL, this );
@@ -296,6 +314,8 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP(
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnCloseDialog ) );
+	m_buttonTestChipName->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnTestChipName ), NULL, this );
+	m_buttonSelectChipName->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnSelectChipName ), NULL, this );
 	defaultsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::SetInitCmp ), NULL, this );
 	fieldListCtrl->Disconnect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnListItemDeselected ), NULL, this );
 	fieldListCtrl->Disconnect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnListItemSelected ), NULL, this );

@@ -1,6 +1,6 @@
-update=07/08/2013 15:44:03
+update=20/09/2014 09:14:18
 version=1
-last_client=pcbnew
+last_client=kicad
 [common]
 NetDir=
 [general]
@@ -40,7 +40,7 @@ LibName12=image
 version=1
 PageLayoutDescrFile=pagelayout_logo.kicad_wks
 LastNetListRead=interf_u.net
-UseCmpFile=1
+UseCmpFile=0
 PadDrill=0.89916
 PadDrillOvalY=0.89916
 PadSizeH=1.397
@@ -56,14 +56,3 @@ SolderMaskMinWidth=0
 DrawSegmentWidth=0.381
 BoardOutlineThickness=0.127
 ModuleOutlineThickness=0.381
-[pcbnew/libraries]
-LibDir=
-LibName1=connect
-LibName2=discret
-LibName3=led
-LibName4=sockets
-LibName5=dip_sockets
-LibName6=pin_array
-LibName7=divers
-LibName8=libcms
-LibName9=display

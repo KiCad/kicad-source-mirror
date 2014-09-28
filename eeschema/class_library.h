@@ -217,23 +217,19 @@ public:
             const wxString& aLibraryName = wxEmptyString );
 
     /**
-     * Function FindLibraryNearEntry
+     * Function FindLibraryNearEntries
      * Searches all libraries in the list for an entry, using a case insensitive comparison.
-     * Used to find an entry, when the normal (case sensitive) search fails.
-     * Needed because during a long time, eeschema was using a case insensitive search.
-     * Therefore, for old schematics (<= 2013), or libs,
-     * which mixed upper case and lower case entry names, for compatibility reasons, if
-     * a normal search fails, this case insensitive search can be made.
-     * Could be also usefull also in some dialogs, when searching parts in libs.
-     * Remember this is a linear search, therefore slower than the normal binary search
+     * Helper function used in dialog to find all candidates.
+     * During a long time, eeschema was using a case insensitive search.
+     * Therefore, for old schematics (<= 2013), or libs, for some components,
+     * the chip name (name of alias in lib) can be broken.
+     * This function can be used to display a list of candidates, in component properties dialog.
      *
-     * The object can be either a part or an alias.
-     *
-     * @param aEntryName - Name of entry to search for (case insensitive).
+     * @param aEntryName - Name of entries to search for (case insensitive).
      * @param aLibraryName - Name of the library to search.
-     * @return The entry object if found, otherwise NULL.
+     * @param aCandidates - a std::vector to store candidates
      */
-    LIB_ALIAS* FindLibraryNearEntry( const wxString& aEntryName,
+    void FindLibraryNearEntries( std::vector<LIB_ALIAS*>& aCandidates, const wxString& aEntryName,
             const wxString& aLibraryName = wxEmptyString );
 
     /**

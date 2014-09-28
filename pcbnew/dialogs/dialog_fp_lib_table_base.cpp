@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -98,12 +98,12 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_append_button = new wxButton( this, wxID_ANY, _("Append Row"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_append_button = new wxButton( this, wxID_ANY, _("Append Library"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_append_button->SetToolTip( _("Add a PCB library row to this table") );
 	
 	bSizer51->Add( m_append_button, 0, wxALL, 5 );
 	
-	m_delete_button = new wxButton( this, wxID_ANY, _("Delete Row"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_delete_button = new wxButton( this, wxID_ANY, _("Remove Library"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_delete_button->SetToolTip( _("Remove a PCB library from this library table") );
 	
 	bSizer51->Add( m_delete_button, 0, wxALL, 5 );

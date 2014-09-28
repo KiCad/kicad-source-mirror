@@ -73,23 +73,6 @@ public:
 
     void UpdateStatusBar();                                     // overload EDA_DRAW_FRAME
 
-protected:
-
-    /**
-     * Function SelectComponentFromLibBrowser
-     * Calls the library viewer to select component to import into schematic.
-     * if the library viewer is currently running, it is closed and reopened
-     * in modal mode.
-     * @param aPreslectedAlias Preselected component alias. NULL if none.
-     * @param aUnit            Pointer to Unit-number. Input is the pre-selected unit, output
-     *                         is the finally selected unit by the user. Can be NULL.
-     * @param aConvert         Pointer to deMorgan conversion. Input is what is pre-selected,
-     *                         output is the finally selected deMorgan type by the user.
-     * @return the component name
-     */
-    wxString SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedAlias,
-                                            int* aUnit, int* aConvert );
-
     /**
      * Function SelectComponentFromLib
      * Calls the library viewer to select component to import into schematic.
@@ -112,6 +95,22 @@ protected:
                                          int*            aUnit,
                                          int*            aConvert );
 
+protected:
+
+    /**
+     * Function SelectComponentFromLibBrowser
+     * Calls the library viewer to select component to import into schematic.
+     * if the library viewer is currently running, it is closed and reopened
+     * in modal mode.
+     * @param aPreslectedAlias Preselected component alias. NULL if none.
+     * @param aUnit            Pointer to Unit-number. Input is the pre-selected unit, output
+     *                         is the finally selected unit by the user. Can be NULL.
+     * @param aConvert         Pointer to deMorgan conversion. Input is what is pre-selected,
+     *                         output is the finally selected deMorgan type by the user.
+     * @return the component name
+     */
+    wxString SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedAlias,
+                                            int* aUnit, int* aConvert );
 
     /**
      * Function OnOpenLibraryViewer

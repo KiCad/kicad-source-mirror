@@ -56,6 +56,9 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     templateFieldListCtrl->InsertColumn( 0, col0 );
     templateFieldListCtrl->InsertColumn( 1, col1 );
     templateFieldListCtrl->InsertColumn( 2, col2 );
+
+    // Invalid field selected...
+    selectedField = -1;
 }
 
 
@@ -140,11 +143,58 @@ void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& grid_sizes, int grid_id
 }
 
 
+void DIALOG_EESCHEMA_OPTIONS::RefreshTemplateFieldView( void )
+{
+    // Delete all items in the template field list control and add all of the
+    // current template fields
+    templateFieldListCtrl->DeleteAllItems();
+
+    for( TEMPLATE_FIELDNAMES::iterator fld = templateFields.begin(); fld != templateFields.end(); ++fld )
+    {
+        long itemindex = templateFieldListCtrl->InsertItem( templateFieldListCtrl->GetItemCount(), fld->m_Name );
+        templateFieldListCtrl->SetItem( itemindex, 1, fld->m_Value );
+        templateFieldListCtrl->SetItem( itemindex, 2, ( fld->m_Visible == true ) ? wxT( "Visible" ) : wxT( "Hidden" ) );
+    }
+
+    // If an item was selected, make sure we re-select it, or at least the
+    // same position in the grid and then copy the data to the edit panel in
+    // case it has changed
+    if( ( selectedField >= 0 ) && ( selectedField < templateFields.size() ) )
+    {
+        templateFieldListCtrl->SetItemState( selectedField, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+        copySelectedToPanel();
+    }
+}
+
+
 void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
 {
-    long itemindex = templateFieldListCtrl->InsertItem( templateFieldListCtrl->GetItemCount(), wxT( "New Fieldname" ) );
-    templateFieldListCtrl->SetItem( itemindex, 1, wxT( "Default Value" ) );
-    templateFieldListCtrl->SetItem( itemindex, 2, wxT( "Hidden" ) );
+    // If there is currently a valid selection, copy the edit panel to the
+    // selected field so as not to lose the data
+    if( ( selectedField >= 0 ) && ( selectedField < templateFields.size() ) )
+        copyPanelToSelected();
+
+    // Add a new fieldname to the fieldname list
+    TEMPLATE_FIELDNAME newFieldname = TEMPLATE_FIELDNAME( "New Fieldname" );
+    newFieldname.m_Value = wxString::Format( wxT( "Default Value %d" ), templateFields.size() );
+    newFieldname.m_Visible = false;
+    templateFields.push_back( newFieldname );
+
+    // Update the display to reflect the new data
+    RefreshTemplateFieldView();
+
+    // Select the newly added field and then copy that data to the edit panel.
+    // Make sure any previously selected state is cleared and then select the
+    // new field
+    long selected = templateFieldListCtrl->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+
+    if( selected >= 0 )
+        templateFieldListCtrl->SetItemState( selected, 0, wxLIST_STATE_SELECTED );
+
+    templateFieldListCtrl->SetItemState( templateFieldListCtrl->GetItemCount() - 1, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+    selectedField = templateFieldListCtrl->GetItemCount() - 1;
+
+    copySelectedToPanel();
 
     event.Skip();
 }
@@ -152,47 +202,25 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
 
 void DIALOG_EESCHEMA_OPTIONS::copyPanelToSelected( void )
 {
-    wxListItem iteminfo;
-    iteminfo.m_itemId = selectedField;
-    iteminfo.m_mask = wxLIST_MASK_TEXT;
+    if( ( selectedField < 0 ) || ( selectedField >= templateFields.size() ) )
+        return;
 
-    iteminfo.m_col = 0;
-    iteminfo.m_text = fieldNameTextCtrl->GetValue();
-    templateFieldListCtrl->SetItem( iteminfo );
-
-    iteminfo.m_col = 1;
-    iteminfo.m_text = fieldDefaultValueTextCtrl->GetValue();
-    templateFieldListCtrl->SetItem( iteminfo );
-
-    iteminfo.m_col = 2;
-    if( fieldVisibleCheckbox->GetValue() )
-        iteminfo.m_text = _( "Visible" );
-    else
-        iteminfo.m_text = _( "Hidden" );
-    templateFieldListCtrl->SetItem( iteminfo );
+    // Update the template field data
+    templateFields[selectedField].m_Name = fieldNameTextCtrl->GetValue();
+    templateFields[selectedField].m_Value = fieldDefaultValueTextCtrl->GetValue();
+    templateFields[selectedField].m_Visible = fieldVisibleCheckbox->GetValue();
 }
+
 
 void DIALOG_EESCHEMA_OPTIONS::copySelectedToPanel( void )
 {
-    wxListItem iteminfo;
-    iteminfo.m_itemId = selectedField;
-    iteminfo.m_mask = wxLIST_MASK_TEXT;
-
-    iteminfo.m_col = 0;
-    if( !templateFieldListCtrl->GetItem( iteminfo ) )
-        return;
-    fieldNameTextCtrl->SetValue( iteminfo.m_text );
-
-    iteminfo.m_col = 1;
-    if( !templateFieldListCtrl->GetItem( iteminfo ) )
-        return;
-    fieldDefaultValueTextCtrl->SetValue( iteminfo.m_text );
-
-    iteminfo.m_col = 2;
-    if( !templateFieldListCtrl->GetItem( iteminfo ) )
+    if( ( selectedField < 0 ) || ( selectedField >= templateFields.size() ) )
         return;
 
-    if( iteminfo.m_text == _( "Hidden" ) )
+    fieldNameTextCtrl->SetValue( templateFields[selectedField].m_Name );
+    fieldDefaultValueTextCtrl->SetValue( templateFields[selectedField].m_Value );
+
+    if( templateFields[selectedField].m_Visible == true )
         fieldVisibleCheckbox->SetValue( false );
     else
         fieldVisibleCheckbox->SetValue( true );
@@ -201,30 +229,32 @@ void DIALOG_EESCHEMA_OPTIONS::copySelectedToPanel( void )
 
 void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
 {
-    selectedField = event.GetSelection();
+    // Before getting the new field data, make sure we save the old!
+    if( selectedField >= 0 )
+        copyPanelToSelected();
+
+    // Now update the selected field and copy the data from the field to the
+    // edit panel
+    selectedField = event.GetIndex();
     copySelectedToPanel();
+
     event.Skip();
 }
 
 
 void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldDeselected( wxListEvent& event )
 {
-    copyPanelToSelected();
     event.Skip();
 }
 
 
 void DIALOG_EESCHEMA_OPTIONS::SetTemplateFields( const TEMPLATE_FIELDNAMES& aFields )
 {
+    // Set the template fields object
     templateFields = aFields;
 
-    for( TEMPLATE_FIELDNAMES::iterator fld = templateFields.begin(); fld != templateFields.end(); ++fld )
-    {
-        long itemindex = templateFieldListCtrl->InsertItem( 0, wxT( "?" ) );
-        templateFieldListCtrl->SetItem( itemindex, 1, fld->m_Name );
-        templateFieldListCtrl->SetItem( itemindex, 2, fld->m_Value );
-        printf( "Parsed new templateField\n" );
-    }
+    // Refresh the view
+    RefreshTemplateFieldView();
 }
 
 

@@ -46,11 +46,11 @@ class LIB_FIELD;
 /// Compiler controlled string compare function, either case independent or not:
 inline int Cmp_KEEPCASE( const wxString& aString1, const wxString& aString2 )
 {
-#if 1
-    // case specificity:
+#ifdef KICAD_KEEPCASE
+    // case specificity, the normal behavior:
     return aString1.Cmp( aString2 );
 #else
-    // case independence (no more in use)
+    // case independence (only for guys who want that: not recommended)
     return aString1.CmpNoCase( aString2 );
 #endif
 }

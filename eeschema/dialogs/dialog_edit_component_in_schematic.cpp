@@ -39,6 +39,7 @@
 #include <base_units.h>
 
 #include <general.h>
+#include <sch_base_frame.h>
 #include <class_library.h>
 #include <sch_component.h>
 #include <dialog_helpers.h>
@@ -116,6 +117,8 @@ private:
     void deleteFieldButtonHandler( wxCommandEvent& event );
     void moveUpButtonHandler( wxCommandEvent& event );
     void showButtonHandler( wxCommandEvent& event );
+	void OnTestChipName( wxCommandEvent& event );
+	void OnSelectChipName( wxCommandEvent& event );
 
     SCH_FIELD* findField( const wxString& aFieldName );
 
@@ -205,6 +208,64 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemDeselected( wxListEvent& even
     }
 }
 
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnTestChipName( wxCommandEvent& event )
+{
+    wxString partname = chipnameTextCtrl->GetValue();
+    LIB_PART* entry = Prj().SchLibs()->FindLibPart( partname );
+
+    wxString msg;
+
+    if( entry )
+    {
+        msg.Printf( _( "Component '%s' found in library '%s'" ),
+                    GetChars( partname ), GetChars( entry->GetLibraryName() ) );
+        wxMessageBox( msg );
+        return;
+    }
+
+    msg.Printf( _( "Component '%s' not found in any library" ), GetChars( partname ) );
+
+    // Try to find components which have a name "near" the current chip name,
+    // i.e. the same name when the comparison is case insensitive.
+    // Could be helpful for old designs when lower cases and upper case were
+    // equivalent.
+    std::vector<LIB_ALIAS*> candidates;
+    Prj().SchLibs()->FindLibraryNearEntries( candidates, partname );
+
+    if( candidates.size() == 0 )
+    {
+        wxMessageBox( msg );
+        return;
+    }
+
+    // Some candidates are found. Show them:
+    msg << wxT("\n") << _( "However, some candidates are found:" );
+
+    // add candidate names:
+    for( unsigned ii = 0; ii < candidates.size(); ii++ )
+    {
+        msg << wxT("\n") <<
+            wxString::Format( _( "'%s' found in library '%s'" ),
+                              GetChars( candidates[ii]->GetName() ),
+                              GetChars( candidates[ii]->GetLibraryName() ) );
+    }
+
+    wxMessageBox( msg );
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSelectChipName( wxCommandEvent& event )
+{
+    wxArrayString dummy;
+    int dummyunit = 1;
+    wxString chipname = m_Parent->SelectComponentFromLibrary( wxEmptyString, dummy, dummyunit,
+                                                              true, NULL, NULL );
+    if( chipname.IsEmpty() )
+        return;
+
+    chipnameTextCtrl->SetValue( chipname );
+}
+
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemSelected( wxListEvent& event )
 {
@@ -222,9 +283,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnCloseDialog( wxCloseEvent& event )
     // On wxWidgets 2.8, and on Linux, calling EndQuasiModal here is mandatory
     // Otherwise, the main event loop is never restored, and Eeschema does not
     // respond to any event, because the DIALOG_SHIM destructor is never called.
-    // on wxWidgets 3.0, or on Windows, the DIALOG_SHIM destructor is called,
+    // On wxWidgets 3.0, or on Windows, the DIALOG_SHIM destructor is called,
     // and calls EndQuasiModal.
-    // therefore calling EndQuasiModal here is not mandatory but it creates no issues
+    // therefore calling EndQuasiModal here is not always mandatory but it creates no issues
     EndQuasiModal( wxID_CANCEL );
 }
 
@@ -251,28 +312,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 
         if( libs->FindLibraryEntry( newname ) == NULL )
         {
-            if( LIB_ALIAS* entry = libs->FindLibraryNearEntry( newname ) )
-            {
-                wxString near_name = entry->GetName();
-                wxString msg = wxString::Format( _(
-                    "Component '%s' not found!\n"
-                    "But the component '%s' exists\n"
-                    "Do you want to use it?"),
-                    GetChars( newname ), GetChars( near_name ) );
-
-                if( IsOK( this, msg ) )
-                {
-                    chipnameTextCtrl->SetValue( near_name );
-                    m_Cmp->SetPartName( near_name, libs );
-                }
-            }
-            else
-            {
-                wxString msg = wxString::Format( _(
-                    "Component '%s' not found!" ),
-                    GetChars( newname ) );
-                DisplayError( this, msg );
-            }
+            wxString msg = wxString::Format( _(
+                "Component '%s' not found!" ),  GetChars( newname ) );
+            DisplayError( this, msg );
         }
         else    // Change component from lib!
         {

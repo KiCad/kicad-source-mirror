@@ -265,22 +265,6 @@ bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
         return true;
     }
 
-    // the part was not found. try to search with no case comparison
-    // because during a long time, Eeschema was using upper case only
-    // for names.
-    // and we could have loaded an old schematic using upper case only
-    // and libs using upper+lower case for lib items names
-    if( LIB_ALIAS* entry = aLibs->FindLibraryNearEntry( m_part_name ) )
-    {
-        // Now find the part (the lib part if we are using an alias) using
-        // the "near" name
-        if( LIB_PART* part = aLibs->FindLibPart( entry->GetName() ) )
-        {
-            m_part = part->SharedPtr();
-            return true;
-        }
-    }
-
     return false;
 }
 

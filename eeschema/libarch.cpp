@@ -87,17 +87,6 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                     // AddPart() does first clone the part before adding.
                     libCache->AddPart( part );
                 }
-                else    // Search for a part/alias using case insensitive search
-                {       // for compatibility with old versions of schematics
-                    LIB_ALIAS* entry = libs->FindLibraryNearEntry( component->GetPartName() );
-
-                    if( entry && !libCache->FindEntry( entry->GetName() ) )
-                    {
-                        if( LIB_PART* part = libs->FindLibPart( entry->GetName() ) )
-                            libCache->AddPart( part );
-                    }
-                }
-
             }
         }
     }

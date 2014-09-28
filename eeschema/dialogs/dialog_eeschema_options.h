@@ -44,6 +44,7 @@ protected:
     void copySelectedToPanel( void );
     void OnTemplateFieldSelected( wxListEvent& event );
     void OnTemplateFieldDeselected( wxListEvent& event );
+    void RefreshTemplateFieldView( void );
 public:
     DIALOG_EESCHEMA_OPTIONS( wxWindow* parent );
 
