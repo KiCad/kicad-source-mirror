@@ -818,11 +818,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
 void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 {
-    wxPoint       pos;
-    double        angle = 900;  // Necessary +- 900 (+- 90 degrees).
-                                // Be prudent: because RotateMarkedItems is used to rotate some items
-                                // used the same value as RotateMarkedItems
-
     switch( transform )
     {
     case ID_MODEDIT_MODULE_ROTATE:

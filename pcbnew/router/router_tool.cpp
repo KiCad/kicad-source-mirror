@@ -534,7 +534,13 @@ void ROUTER_TOOL::performRouting()
     frame->SetActiveLayer( ToLAYER_ID( m_startLayer ) );
 
     if( m_startItem && m_startItem->Net() >= 0 )
+    {
         highlightNet( true, m_startItem->Net() );
+        // Update track width and via size shown in main toolbar comboboxes
+        frame->SetCurrentNetClass( m_startItem->Parent()->GetNetClass()->GetName() );
+    }
+    else
+        frame->SetCurrentNetClass( NETCLASS::Default );
 
     ctls->ForceCursorPosition( false );
     ctls->SetAutoPan( true );

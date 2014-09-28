@@ -559,7 +559,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetBoard()->m_Status_Pcb = 0;
 
     // Update info shown by the horizontal toolbars
-    GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );
+    SetCurrentNetClass( NETCLASS::Default );
     ReFillLayerWidget();
     ReCreateLayerBox();
 
@@ -572,9 +572,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // BOARD::SetVisibleElements() was called from within any PLUGIN.
     // See case RATSNEST_VISIBLE: in BOARD::SetElementVisibility()
     GetBoard()->SetVisibleElements( GetBoard()->GetVisibleElements() );
-
-    updateTraceWidthSelectBox();
-    updateViaSizeSelectBox();
 
     // Display the loaded board:
     Zoom_Automatique( false );
@@ -681,7 +678,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     // Select default Netclass before writing file.
     // Useful to save default values in headers
-    GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );
+    SetCurrentNetClass( NETCLASS::Default );
 
     ClearMsgPanel();
 
