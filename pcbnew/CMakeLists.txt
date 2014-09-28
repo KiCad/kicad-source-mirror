@@ -166,6 +166,7 @@ set( PCBNEW_CLASS_SRCS
     modview_frame.cpp
     pcbframe.cpp
     pcb_base_edit_frame.cpp
+    append_board_to_current.cpp
     attribut.cpp
     board_items_to_polygon_shape_transform.cpp
     board_undo_redo.cpp

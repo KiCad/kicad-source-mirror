@@ -185,7 +185,7 @@ int PCB_EDIT_FRAME::BlockCommand( int aKey )
     switch( aKey )
     {
     default:
-        cmd = aKey & 0x255;
+        cmd = aKey & 0xFF;
         break;
 
     case 0:
@@ -219,6 +219,8 @@ int PCB_EDIT_FRAME::BlockCommand( int aKey )
 
 void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
+    GetBoard()->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;
+
     if( !m_canvas->IsMouseCaptured() )
     {
         DisplayError( this, wxT( "Error in HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
@@ -274,7 +276,6 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 {
     bool nextcmd = false;       // Will be set to true if a block place is needed
     bool cancelCmd = false;
-
     // If coming here after cancel block, clean up and exit
     if( GetScreen()->m_BlockLocate.GetState() == STATE_NO_BLOCK )
     {
@@ -369,6 +370,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( ! nextcmd )
     {
+        GetBoard()->m_Status_Pcb |= DO_NOT_SHOW_GENERAL_RASTNEST;
         GetScreen()->ClearBlockCommand();
         m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
                                    false );
@@ -562,6 +564,10 @@ static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 {
     BASE_SCREEN* screen = aPanel->GetScreen();
 
+    // do not show local module rastnest in block move, it is not usable.
+    bool tmp = g_Show_Module_Ratsnest;
+    g_Show_Module_Ratsnest = false;
+
     if( aErase )
     {
         if( screen->m_BlockLocate.GetMoveVector().x || screen->m_BlockLocate.GetMoveVector().y )
@@ -589,6 +595,8 @@ static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
         if( blockDrawItems )
             drawPickedItems( aPanel, aDC, screen->m_BlockLocate.GetMoveVector() );
     }
+
+    g_Show_Module_Ratsnest = tmp;
 }
 
 
@@ -795,6 +803,7 @@ void PCB_EDIT_FRAME::Block_Move()
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
         itemsList->SetPickedItemStatus( UR_MOVED, ii );
         item->Move( MoveVector );
+        item->ClearFlags( IS_MOVED );
 
         switch( item->Type() )
         {

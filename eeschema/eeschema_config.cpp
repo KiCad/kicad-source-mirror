@@ -307,6 +307,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 {
     wxArrayString units;
     GRIDS grid_list = GetScreen()->GetGrids();
+    bool saveProjectConfig = false;
 
     DIALOG_EESCHEMA_OPTIONS dlg( this );
 
@@ -357,19 +358,33 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 
     int sep, firstId;
     dlg.GetRefIdSeparator( sep, firstId);
+
     if( sep != (int)LIB_PART::GetSubpartIdSeparator() ||
         firstId != (int)LIB_PART::GetSubpartFirstId() )
     {
         LIB_PART::SetSubpartIdNotation( sep, firstId );
-        SaveProjectSettings( true );
+        saveProjectConfig = true;
     }
 
     SetDefaultBusThickness( dlg.GetBusWidth() );
     SetDefaultLineThickness( dlg.GetLineWidth() );
-    SetDefaultTextSize( dlg.GetTextSize() );
-    g_RepeatStep.x = dlg.GetRepeatHorizontal();
-    g_RepeatStep.y = dlg.GetRepeatVertical();
-    g_RepeatDeltaLabel = dlg.GetRepeatLabel();
+
+    if( dlg.GetTextSize() != GetDefaultTextSize() )
+    {
+        SetDefaultTextSize( dlg.GetTextSize() );
+        saveProjectConfig = true;
+    }
+
+    if( g_RepeatStep.x != dlg.GetRepeatHorizontal() ||
+        g_RepeatStep.y != dlg.GetRepeatVertical() ||
+        g_RepeatDeltaLabel != dlg.GetRepeatLabel() )
+    {
+        g_RepeatStep.x = dlg.GetRepeatHorizontal();
+        g_RepeatStep.y = dlg.GetRepeatVertical();
+        g_RepeatDeltaLabel = dlg.GetRepeatLabel();
+        saveProjectConfig = true;
+    }
+
     SetAutoSaveInterval( dlg.GetAutoSaveInterval() * 60 );
     SetGridVisibility( dlg.GetShowGrid() );
     m_showAllPins = dlg.GetShowHiddenPins();
@@ -413,6 +428,9 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 */
 
     SaveSettings( config() );  // save values shared by eeschema applications.
+
+    if( saveProjectConfig )
+        SaveProjectSettings( true );
 
     m_canvas->Refresh( true );
 }
@@ -546,7 +564,6 @@ static const wxChar SimulatorCommandEntry[] =       wxT( "SimCmdLine" );
 // Library editor wxConfig entry names.
 static const wxChar lastLibExportPathEntry[] =      wxT( "LastLibraryExportPath" );
 static const wxChar lastLibImportPathEntry[] =      wxT( "LastLibraryImportPath" );
-static const wxChar libeditdrawBgColorEntry[] =     wxT( "LibeditBgColor" );
 static const wxChar defaultPinNumSizeEntry[] =      wxT( "LibeditPinNumSize" );
 static const wxChar defaultPinNameSizeEntry[] =     wxT( "LibeditPinNameSize" );
 static const wxChar DefaultPinLengthEntry[] =       wxT( "DefaultPinLength" );
@@ -561,9 +578,6 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
                                                     &m_showPageLimits, true ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
                                                    (int*)&g_UserUnit, MILLIMETRES ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "SchEditorBgColor" ),
-                                                        &m_drawBgColor,
-                                                        WHITE ) );
 
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintMonochrome" ),
                                                     &m_printMonochrome, true ) );
@@ -582,7 +596,8 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
-    m_GridColor = GetLayerColor( LAYER_GRID );
+    SetGridColor( GetLayerColor( LAYER_GRID ) );
+    SetDrawBgColor( GetLayerColor( LAYER_BACKGROUND ) );
 
     SetDefaultBusThickness( aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
     SetDefaultLineThickness( aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
@@ -744,8 +759,8 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     wxConfigPathChanger cpc( aCfg, m_configPath );
 
-    EDA_COLOR_T itmp = ColorByName( aCfg->Read( libeditdrawBgColorEntry, wxT("WHITE") ) );
-    SetDrawBgColor( itmp );
+    SetGridColor( GetLayerColor( LAYER_GRID ) );
+    SetDrawBgColor( GetLayerColor( LAYER_BACKGROUND ) );
 
     wxString pro_dir = Prj().GetProjectFullName();
 
@@ -765,7 +780,6 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     wxConfigPathChanger cpc( aCfg, m_configPath );
 
-    aCfg->Write( libeditdrawBgColorEntry, ColorGetName( GetDrawBgColor() ) );
     aCfg->Write( lastLibExportPathEntry, m_lastLibExportPath );
     aCfg->Write( lastLibImportPathEntry, m_lastLibImportPath );
     aCfg->Write( DefaultPinLengthEntry, (long) GetDefaultPinLength() );

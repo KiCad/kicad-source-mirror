@@ -947,31 +947,7 @@ void MODULE::Flip( const wxPoint& aCentre )
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-            {
-                EDGE_MODULE* em = (EDGE_MODULE*) item;
-
-                wxPoint s = em->GetStart();
-                s.y -= m_Pos.y;
-                s.y  = -s.y;
-                s.y += m_Pos.y;
-                em->SetStart( s );
-
-                wxPoint e = em->GetEnd();
-                e.y -= m_Pos.y;
-                e.y  = -e.y;
-                e.y += m_Pos.y;
-                em->SetEnd( e );
-
-                NEGATE( em->m_Start0.y );
-                NEGATE( em->m_End0.y );
-
-                if( em->GetShape() == S_ARC )
-                {
-                    em->SetAngle( -em->GetAngle() );
-                }
-
-                em->SetLayer( FlipLayer( em->GetLayer() ) );
-            }
+            ( (EDGE_MODULE*) item )->Flip( m_Pos );
             break;
 
         case PCB_MODULE_TEXT_T:

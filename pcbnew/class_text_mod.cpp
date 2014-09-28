@@ -105,33 +105,45 @@ void TEXTE_MODULE::Flip(const wxPoint& aCentre )
 
 void TEXTE_MODULE::FlipWithModule( int aOffset )
 {
+    // flipping the footprint is relative to the X axis
     m_Pos.y = aOffset - (m_Pos.y - aOffset);
     NEGATE_AND_NORMALIZE_ANGLE_POS( m_Orient );
+    wxPoint tmp = GetPos0();
+    tmp.y = -tmp.y;
+    SetPos0( tmp );
     SetLayer( FlipLayer( GetLayer() ) );
     m_Mirror = IsBackLayer( GetLayer() );
 }
 
 
-void TEXTE_MODULE::MirrorWithModule( int aOffset )
+void TEXTE_MODULE::MirrorTransformWithModule( int aOffset )
 {
-    wxPoint tmp = GetTextPosition();
-    tmp.x = aOffset - (tmp.x - aOffset);
-    SetTextPosition( tmp );
-    tmp.y = GetPos0().y;
-    SetPos0( tmp );
+    // Used in modedit, to transform the footprint
+    // the mirror is relative to the Y axis
+    // the position is mirrored, but the text itself is not mirrored
+    // Note also in module editor, m_Pos0 = m_Pos
+    m_Pos.x = aOffset - (m_Pos.x - aOffset);
+    m_Pos0 = m_Pos;
     NEGATE_AND_NORMALIZE_ANGLE_POS( m_Orient );
 }
 
 
-void TEXTE_MODULE::RotateWithModule( const wxPoint& aOffset, double aAngle )
+void TEXTE_MODULE::RotateTransformWithModule( const wxPoint& aOffset, double aAngle )
 {
-    wxPoint pos = GetTextPosition();
-    RotatePoint( &pos, aOffset, aAngle );
-    SetTextPosition( pos );
-    SetPos0( GetTextPosition() );
+    // Used in modedit, to transform the footprint
+    // Note also in module editor, m_Pos0 = m_Pos
+    RotatePoint( &m_Pos, aOffset, aAngle );
+    m_Pos0 = m_Pos;
     SetOrientation( GetOrientation() + aAngle );
 }
 
+void TEXTE_MODULE::MoveTransformWithModule( const wxPoint& aMoveVector )
+{
+    // Used in modedit, to transform the footprint
+    // Note also in module editor, m_Pos0 = m_Pos
+    m_Pos0 += aMoveVector;
+    m_Pos = m_Pos0;
+}
 
 void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
 {

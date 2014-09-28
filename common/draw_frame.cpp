@@ -119,8 +119,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_showOriginAxis      = false;      // true to draw the grid origin
     m_cursorShape         = 0;
     m_LastGridSizeId      = 0;
-    m_DrawGrid            = true;       // hide/Show grid. default = show
-    m_GridColor           = DARKGRAY;   // Grid color
+    m_drawGrid            = true;       // hide/Show grid. default = show
+    m_gridColor           = DARKGRAY;   // Default grid color
     m_showPageLimits      = false;
     m_drawBgColor         = BLACK;      // the background color of the draw canvas:
                                         // BLACK for Pcbnew, BLACK or WHITE for eeschema

@@ -35,36 +35,39 @@ set( USE_KIWAY_DLLS true )  # this is now mandatory, the code is the same anyway
 # have this option turned OFF, the xml export's referential integrity is broken
 # on library part name.  Hence the default is ON now, as of 29-Jan-2014.
 option( KICAD_KEEPCASE
-    "ON= case specific string matching on component names, OFF= match names as if they were spelt using uppercase."
+    "Use case sensitive string matching for component names (default ON)."
     ON
     )
 
 option( USE_WX_GRAPHICS_CONTEXT
-    "Use wxGraphicsContext for rendering ( default OFF). Warning, this is experimental" )
+    "Use wxGraphicsContext for rendering (default OFF).  Warning, this is experimental" )
 
 option( USE_WX_OVERLAY
-    "Use wxOverlay: Always ON for MAC ( default OFF). Warning, this is experimental" )
+    "Use wxOverlay: Always ON for MAC (default OFF).  Warning, this is experimental" )
 
 option( KICAD_SCRIPTING
-    "set this option ON to build the scripting support inside kicad binaries"
+    "Build the Python scripting support inside KiCad binaries (default OFF)."
     )
 
 option( KICAD_SCRIPTING_MODULES
-    "set this option ON to build kicad modules that can be used from scripting languages"
+    "Build KiCad Python modules that can be used from scripting languages (default OFF)."
     )
 
 option( KICAD_SCRIPTING_WXPYTHON
-    "set this option ON to build wxpython implementation for wx interface building in python and py.shell"
+    "Build wxPython implementation for wx interface building in Python and py.shell (default OFF)."
     )
 
 option( KICAD_BUILD_STATIC
-    "Builds Kicad and all libraries static"
+    "Build dependencies as static libraries.  OSX only. (default OFF)."
     )
 
 option( KICAD_BUILD_DYNAMIC
-    "Builds Kicad and all libraries dynamic (required for wxPython)"
+    "Build dependencies as shared libraries.  Required for wxPython support.  OXS only. (default OFF)."
     )
 
+option( USE_OSX_DEPS_BUILDER
+    "Build dependencies from source instead of dependencies installed on system. OSX only. (default OFF)."
+    )
 
 # WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
 # as it is known to work with KiCad.  Other versions may contain bugs that may result
@@ -269,7 +272,6 @@ if( USE_WX_GRAPHICS_CONTEXT )
 endif()
 
 
-
 # Allow user to override the default settings for adding images to menu items.  By default
 # images in menu items are enabled on all platforms except OSX.  This can be over ridden by
 # defining -DUSE_IMAGES_IN_MENUS=ON/OFF to force the preferred behavior.
@@ -353,8 +355,29 @@ include( ExternalProject )
 #================================================
 include( CheckFindPackageResult )
 
+##########################
+# Find wxWidgets library #
+##########################
+# Here you can define what libraries of wxWidgets you need for your
+# application. You can figure out what libraries you need here;
+# http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
+
 # Turn on wxWidgets compatibility mode for some classes
 add_definitions( -DWX_COMPATIBILITY )
+
+# See line 41 of CMakeModules/FindwxWidgets.cmake
+set( wxWidgets_CONFIG_OPTIONS --static=no )
+
+# On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
+# Seems no longer needed on wx-3
+if( APPLE AND ( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES OR KICAD_SCRIPTING_WXPYTHON) )
+    find_package( wxWidgets 3.0.0 COMPONENTS gl adv html core net base xml REQUIRED )
+else()
+    find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml REQUIRED )
+endif()
+
+# Include wxWidgets macros.
+include( ${wxWidgets_USE_FILE} )
 
 #######################
 # Find OpenGL library #
@@ -372,7 +395,10 @@ check_find_package_result( OPENGL_FOUND "OpenGL" )
 # Always defined, empty if no libraries are to be built
 add_custom_target( lib-dependencies )
 
-if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
+# Only download and build all dependencies from source on OSX if the user specifically requests
+# it.  Otherwise, respect the developers wishes to use the dependencies already installed on
+# their systme.
+if( APPLE AND USE_OSX_DEPS_BUILDER )
 
     # This should be built in all cases, if swig exec is not avaiable
     # will be impossible also enable SCRIPTING being for PCBNEW required immediately
@@ -417,31 +443,24 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
         set( PYTHON_DEST ${LIBWXPYTHON_ROOT}/wxPython/lib/python2.6/site-packages )
 
-        set(wxWidgets_BIN_DIR           ${LIBWXPYTHON_ROOT}/bin/wxrc )
-        set(wxWidgets_CONFIG_EXECUTABLE ${LIBWXPYTHON_ROOT}/bin/wx-config )
-        set(wxWidgets_INCLUDE_DIRS      ${LIBWXPYTHON_ROOT}/include/wx-3.0 )
-        set(wxWidgets_LIBRARY_DIRS      ${LIBWXPYTHON_ROOT}/lib )
-
         add_dependencies( lib-dependencies libwxpython )
         add_dependencies( lib-dependencies swig )
-
     else()
         include( download_wxwidgets )
         add_dependencies( lib-dependencies libwx )
     endif()
 
     include( download_libpng )
-
     include( download_pkgconfig )
-        set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config" )
+    set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config" )
     include( download_glew )
-        set( GLEW_GLEW_LIBRARY "${GLEW_ROOT}/lib/libGLEW.a" )
-        set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include" )
+    set( GLEW_GLEW_LIBRARY "${GLEW_ROOT}/lib/libGLEW.a" )
+    set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include" )
     include( download_pixman )
-        set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a" )
+    set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a" )
     include( download_cairo )
-        set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo" )
-        set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a" )
+    set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo" )
+    set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a" )
 
     add_dependencies( lib-dependencies boost )
     add_dependencies( lib-dependencies cairo )
@@ -450,11 +469,13 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
     add_dependencies( lib-dependencies pkgconfig )
 
     if( KICAD_BUILD_DYNAMIC AND APPLE )
-        add_custom_target( osx_fix_bundles ALL DEPENDS cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
-        add_custom_command(TARGET osx_fix_bundles POST_BUILD COMMAND ${PROJECT_SOURCE_DIR}/scripts/osx_fixbundle.sh ${PROJECT_SOURCE_DIR} COMMENT "Migrating dylibs to bundles")
+        add_custom_target( osx_fix_bundles ALL DEPENDS
+            cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
+        add_custom_command(TARGET osx_fix_bundles
+            POST_BUILD COMMAND ${PROJECT_SOURCE_DIR}/scripts/osx_fixbundle.sh ${PROJECT_SOURCE_DIR}
+            COMMENT "Migrating dylibs to bundles")
     endif()
-
-endif( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC)
+endif()
 
 #####################
 # Find GLEW library #
@@ -492,31 +513,6 @@ else()
     include( download_boost )
 endif()
 
-##########################
-# Find wxWidgets library #
-##########################
-# Here you can define what libraries of wxWidgets you need for your
-# application. You can figure out what libraries you need here;
-# http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
-
-# See line 41 of CMakeModules/FindwxWidgets.cmake
-set( wxWidgets_CONFIG_OPTIONS --static=no )
-
-# On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
-# Seems no more needed on wx-3
-if( APPLE AND ( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES OR KICAD_SCRIPTING_WXPYTHON) )
-    find_package( wxWidgets COMPONENTS gl adv html core net base xml QUIET )
-else()
-    find_package( wxWidgets COMPONENTS gl aui adv html core net base xml QUIET )
-endif()
-
-if( NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
-    check_find_package_result( wxWidgets_FOUND "wxWidgets" )
-endif()
-
-# Include wxWidgets macros.
-include( ${wxWidgets_USE_FILE} )
-
 # Include MinGW resource compiler.
 include( MinGWResourceCompiler )
 
@@ -553,16 +549,8 @@ set( INC_AFTER
 
 # Find Python and other scripting resources
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
-
-    if( APPLE )
-        set( PYTHON_LIBRARY /System/Library/Frameworks/Python.framework/Versions/2.6/Python  )
-        set( PYTHON_INCLUDE_DIR /System/Library/Frameworks/Python.framework/Versions//2.6/include/python2.6 )
-        set( PythonInterp_FIND_VERSION 2.6 )
-        set( PythonLibs_FIND_VERSION 2.6 )
-    endif()
-
     # force a python version < 3.0
-    set( PythonInterp_FIND_VERSION 2.6)
+    set( PythonInterp_FIND_VERSION 2.6 )
     set( PythonLibs_FIND_VERSION 2.6 )
 
     find_package( PythonInterp )
@@ -572,6 +560,7 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     if( NOT PYTHON_VERSION_MAJOR EQUAL 2 )
         message( FATAL_ERROR "Python 2.x is required." )
     endif()
+
     # Get the correct Python site package install path from the Python interpreter found by
     # FindPythonInterp unless the user specifically defined a custom path.
     if( NOT PYTHON_SITE_PACKAGE_PATH )

@@ -668,7 +668,11 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
     case PCB_TRACE_T:
     case PCB_VIA_T:
         if( aIdCommand == HK_EDIT_ITEM )
+        {
+            // Be sure the corresponding netclass is selected before edit:
+            SetCurrentNetClass( ( (BOARD_CONNECTED_ITEM*)item )->GetNetClassName() );
             evt_type = ID_POPUP_PCB_EDIT_TRACKSEG;
+        }
 
         break;
 

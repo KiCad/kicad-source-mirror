@@ -166,10 +166,8 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         case PCB_TRACE_T:
         case PCB_VIA_T:
         case PCB_PAD_T:
-            GetDesignSettings().SetCurrentNetClass(
+            SetCurrentNetClass(
                 ((BOARD_CONNECTED_ITEM*)DrawStruct)->GetNetClassName() );
-            updateTraceWidthSelectBox();
-            updateViaSizeSelectBox();
             break;
 
         default:

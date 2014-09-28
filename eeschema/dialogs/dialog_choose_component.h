@@ -30,20 +30,27 @@ class COMPONENT_TREE_SEARCH_CONTAINER;
 class LIB_ALIAS;
 class LIB_PART;
 class wxTreeItemId;
+class SCH_BASE_FRAME;
 
 class DIALOG_CHOOSE_COMPONENT : public DIALOG_CHOOSE_COMPONENT_BASE
 {
+    SCH_BASE_FRAME* m_parent;
+    COMPONENT_TREE_SEARCH_CONTAINER* const m_search_container;
+    const int       m_deMorganConvert;
+    bool            m_external_browser_requested;
+    bool            m_received_doubleclick_in_tree;
+
 public:
     /**
      * Create dialog to choose component.
      *
-     * @param aParent          Parent window.
+     * @param aParent          a SCH_BASE_FRAME parent window.
      * @param aTitle           Dialog title.
      * @param aSearchContainer The tree selection search container. Needs to be pre-populated
      *                         This dialog does not take over ownership of this object.
      * @param aDeMorganConvert preferred deMorgan conversion (TODO: should happen in dialog)
      */
-    DIALOG_CHOOSE_COMPONENT( wxWindow* aParent, const wxString& aTitle,
+    DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                              COMPONENT_TREE_SEARCH_CONTAINER* aSearchContainer,
                              int aDeMorganConvert );
     virtual ~DIALOG_CHOOSE_COMPONENT();
@@ -80,11 +87,6 @@ private:
     bool updateSelection();
     void selectIfValid( const wxTreeItemId& aTreeId );
     void renderPreview( LIB_PART*      aComponent, int aUnit );
-
-    COMPONENT_TREE_SEARCH_CONTAINER* const m_search_container;
-    const int m_deMorganConvert;
-    bool m_external_browser_requested;
-    bool m_received_doubleclick_in_tree;
 };
 
 #endif /* DIALOG_CHOOSE_COMPONENT_H */

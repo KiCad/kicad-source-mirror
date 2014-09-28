@@ -67,7 +67,7 @@ void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     GRSetDrawMode( DC, GR_COPY );
 
     m_canvas->DrawBackGround( DC );
-   DrawWorkSheet( DC, screen, 0, IU_PER_MILS, wxEmptyString );
+    DrawWorkSheet( DC, screen, 0, IU_PER_MILS, wxEmptyString );
 
     // Redraw the footprints
     for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
@@ -153,11 +153,19 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
      */
     for( TRACK* track = m_Track; track; track = track->Next() )
     {
+        if( track->IsMoving() )
+            continue;
+
         track->Draw( aPanel, DC, aDrawMode );
     }
 
+    // SEGZONE is outdated, only her for compatibility with
+    // very old designs
     for( SEGZONE* zone = m_Zone; zone; zone = zone->Next() )
     {
+        if( zone->IsMoving() )
+            continue;
+
         zone->Draw( aPanel, DC, aDrawMode );
     }
 

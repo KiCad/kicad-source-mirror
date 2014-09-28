@@ -1079,3 +1079,17 @@ void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 
     dlg.ShowModal();
 }
+
+
+bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
+{
+    bool change = GetDesignSettings().SetCurrentNetClass( aNetClassName );
+
+    if( change )
+    {
+        updateTraceWidthSelectBox();
+        updateViaSizeSelectBox();
+    }
+
+    return change;
+}

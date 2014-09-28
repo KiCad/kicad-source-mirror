@@ -284,11 +284,11 @@ void DIALOG_COPPER_ZONE::initDialog()
     // unfortunately this option does not work well both on
     // wxWidgets 2.8 ( column witdth too small), and
     // wxWidgets 2.9 ( column witdth too large)
-    ctrlWidth += LAYER_BITMAP_SIZE_X + 16;      // Add bitmap width + margin between bitmap and text
+    ctrlWidth += LAYER_BITMAP_SIZE_X + 25;      // Add bitmap width + margin between bitmap and text
     m_LayerSelectionCtrl->SetColumnWidth( 0, ctrlWidth );
 
-    ctrlWidth += 4;     // add small margin between text and window borders
-
+    ctrlWidth += 25;        // add small margin between text and window borders
+                            // and room for vertical scroll bar
     m_LayerSelectionCtrl->SetMinSize( wxSize( ctrlWidth, -1 ) );
 
     wxString netNameDoNotShowFilter = wxT( "Net-*" );
