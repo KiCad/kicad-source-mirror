@@ -102,8 +102,8 @@ install_prerequisites()
             libcairo2-dev \
             libglew-dev \
             libssl-dev \
-            libwxgtk2.8-dev \
-            python-wxgtk2.8
+            libwxgtk3.0-dev \
+            python-wxgtk3.0
 
     # assume all yum systems have same prerequisites
     elif [ "$(expr match "$PM" '.*\(yum\)')" == "yum" ]; then

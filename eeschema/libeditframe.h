@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2008-2014 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -431,8 +431,11 @@ private:
      * Any changes are updated in memory only and NOT to a file.  The old component is
      * deleted from the library and/or any aliases before the edited component is updated
      * in the library.
+     * @param aPromptUser true to ask for confirmation, when the part_lib is already existing
+     *      in memory, false to save silently
+     * @return true if the part was saved, false if aborted by user
      */
-    void SaveOnePart( PART_LIB* aLib );
+    bool SaveOnePart( PART_LIB* aLib, bool aPromptUser = true );
 
     /**
      * Function SelectActiveLibrary
