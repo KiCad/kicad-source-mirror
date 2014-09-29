@@ -38,13 +38,16 @@ class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 {
 protected:
     TEMPLATE_FIELDNAMES templateFields;
-    int selectedField;
+    int selectedField = -1;
+    bool ignoreSelection = false;
     void OnAddButtonClick( wxCommandEvent& event );
+    void OnDeleteButtonClick( wxCommandEvent& event );
     void copyPanelToSelected( void );
     void copySelectedToPanel( void );
     void OnTemplateFieldSelected( wxListEvent& event );
     void OnTemplateFieldDeselected( wxListEvent& event );
     void RefreshTemplateFieldView( void );
+    void SelectTemplateField( int item );
 public:
     DIALOG_EESCHEMA_OPTIONS( wxWindow* parent );
 

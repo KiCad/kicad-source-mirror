@@ -153,17 +153,20 @@ void DIALOG_EESCHEMA_OPTIONS::RefreshTemplateFieldView( void )
     {
         long itemindex = templateFieldListCtrl->InsertItem( templateFieldListCtrl->GetItemCount(), fld->m_Name );
         templateFieldListCtrl->SetItem( itemindex, 1, fld->m_Value );
-        templateFieldListCtrl->SetItem( itemindex, 2, ( fld->m_Visible == true ) ? wxT( "Visible" ) : wxT( "Hidden" ) );
+        templateFieldListCtrl->SetItem( itemindex, 2, ( fld->m_Visible == true ) ? _( "Visible" ) : _( "Hidden" ) );
     }
+}
 
-    // If an item was selected, make sure we re-select it, or at least the
-    // same position in the grid and then copy the data to the edit panel in
-    // case it has changed
-    if( ( selectedField >= 0 ) && ( selectedField < templateFields.size() ) )
-    {
-        templateFieldListCtrl->SetItemState( selectedField, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-        copySelectedToPanel();
-    }
+
+void DIALOG_EESCHEMA_OPTIONS::SelectTemplateField( int item )
+{
+    // Only select valid items!
+    if( ( item < 0 ) || ( item >= templateFieldListCtrl->GetItemCount() ) )
+        return;
+
+    // Make sure we select the new item
+    ignoreSelection = true;
+    templateFieldListCtrl->SetItemState( item, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 }
 
 
@@ -175,37 +178,59 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
         copyPanelToSelected();
 
     // Add a new fieldname to the fieldname list
-    TEMPLATE_FIELDNAME newFieldname = TEMPLATE_FIELDNAME( "New Fieldname" );
-    newFieldname.m_Value = wxString::Format( wxT( "Default Value %d" ), templateFields.size() );
+    TEMPLATE_FIELDNAME newFieldname = TEMPLATE_FIELDNAME( "Fieldname" );
+    newFieldname.m_Value = wxT( "Value" );
     newFieldname.m_Visible = false;
     templateFields.push_back( newFieldname );
-
-    // Update the display to reflect the new data
-    RefreshTemplateFieldView();
 
     // Select the newly added field and then copy that data to the edit panel.
     // Make sure any previously selected state is cleared and then select the
     // new field
-    long selected = templateFieldListCtrl->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+    selectedField = templateFields.size() - 1;
 
-    if( selected >= 0 )
-        templateFieldListCtrl->SetItemState( selected, 0, wxLIST_STATE_SELECTED );
-
-    templateFieldListCtrl->SetItemState( templateFieldListCtrl->GetItemCount() - 1, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-    selectedField = templateFieldListCtrl->GetItemCount() - 1;
-
+    // Update the display to reflect the new data
+    RefreshTemplateFieldView();
     copySelectedToPanel();
+
+    // Make sure we select the new item
+    SelectTemplateField( selectedField );
 
     event.Skip();
 }
 
+
+void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
+{
+    // If there is currently a valid selection, delete the template field from
+    // the template field list
+    if( ( selectedField >= 0 ) && ( selectedField < templateFields.size() ) )
+    {
+        // Delete the fieldname from the fieldname list
+        templateFields.erase( templateFields.begin() + selectedField );
+
+        // If the selectedField is still not in the templateField range now,
+        // make sure we stay in range and when there are no fields present
+        // move to -1
+        if( selectedField >= templateFields.size() )
+            selectedField = templateFields.size() - 1;
+
+        // Update the display to reflect the new data
+        RefreshTemplateFieldView();
+        copySelectedToPanel();
+
+        // Make sure after the refresh that the selected item is correct
+        SelectTemplateField( selectedField );
+    }
+
+    event.Skip();
+}
 
 void DIALOG_EESCHEMA_OPTIONS::copyPanelToSelected( void )
 {
     if( ( selectedField < 0 ) || ( selectedField >= templateFields.size() ) )
         return;
 
-    // Update the template field data
+    // Update the template field from the edit panel
     templateFields[selectedField].m_Name = fieldNameTextCtrl->GetValue();
     templateFields[selectedField].m_Value = fieldDefaultValueTextCtrl->GetValue();
     templateFields[selectedField].m_Visible = fieldVisibleCheckbox->GetValue();
@@ -217,26 +242,38 @@ void DIALOG_EESCHEMA_OPTIONS::copySelectedToPanel( void )
     if( ( selectedField < 0 ) || ( selectedField >= templateFields.size() ) )
         return;
 
+    // Update the panel data from the selected template field
     fieldNameTextCtrl->SetValue( templateFields[selectedField].m_Name );
     fieldDefaultValueTextCtrl->SetValue( templateFields[selectedField].m_Value );
-
-    if( templateFields[selectedField].m_Visible == true )
-        fieldVisibleCheckbox->SetValue( false );
-    else
-        fieldVisibleCheckbox->SetValue( true );
+    fieldVisibleCheckbox->SetValue( templateFields[selectedField].m_Visible );
 }
 
 
 void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
 {
+    if( ignoreSelection )
+    {
+        ignoreSelection = false;
+        return;
+    }
+
     // Before getting the new field data, make sure we save the old!
-    if( selectedField >= 0 )
-        copyPanelToSelected();
+    copyPanelToSelected();
 
     // Now update the selected field and copy the data from the field to the
     // edit panel
     selectedField = event.GetIndex();
     copySelectedToPanel();
+
+    // Refresh the template field view - this deletes all fields and then
+    // re-fills the entire data grid. It then re-selects the currently
+    // selected field. This will be recursive, so disable this event while
+    // we refresh the view
+    RefreshTemplateFieldView();
+
+    // If an item was selected, make sure we re-select it, or at least the
+    // same position in the grid
+    SelectTemplateField( selectedField );
 
     event.Skip();
 }
