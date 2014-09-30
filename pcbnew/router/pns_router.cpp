@@ -895,12 +895,32 @@ void PNS_ROUTER::SwitchLayer( int aLayer )
 }
 
 
-void PNS_ROUTER::ToggleViaPlacement()
+void PNS_ROUTER::ToggleViaPlacement(VIATYPE_T type)
 {
+    const int layercount = m_board->GetDesignSettings().GetCopperLayerCount();
+
+    // Cannot place microvias or blind vias if not allowed (obvious)
+    if( ( type == VIA_BLIND_BURIED ) && ( !m_board->GetDesignSettings().m_BlindBuriedViaAllowed ) )
+        return;
+    if( ( type == VIA_MICROVIA ) && ( !m_board->GetDesignSettings().m_MicroViasAllowed ) )
+        return;
+    
+    //Can only place through vias on 2-layer boards
+    if( ( type != VIA_THROUGH ) && ( layercount <= 2 ) )
+        return;
+    
+    //Can only place microvias if we're on an outer layer, or directly adjacent to one
+    if( ( type == VIA_MICROVIA ) && ( m_currentLayer > In1_Cu ) && ( m_currentLayer < layercount-2 ) )
+        return;
+    
+    //Cannot place blind vias with front/back as the layer pair, this doesn't make sense
+    if( ( type == VIA_BLIND_BURIED ) && ( Settings().GetLayerTop() == F_Cu ) && ( Settings().GetLayerBottom() == B_Cu ) )
+        return;
+    
     if( m_state == ROUTE_TRACK )
     {
         m_placingVia = !m_placingVia;
-        m_placer->AddVia( m_placingVia, m_settings.GetViaDiameter(), m_settings.GetViaDrill() );
+        m_placer->AddVia( m_placingVia, m_settings.GetViaDiameter(), m_settings.GetViaDrill(), type );
     }
 }
 

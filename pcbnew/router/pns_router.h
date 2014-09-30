@@ -105,20 +105,20 @@ public:
 
     void DisplayItem( const PNS_ITEM* aItem, int aColor = -1, int aClearance = -1 );
     void DisplayItems( const PNS_ITEMSET& aItems );
-    
+
     void DisplayDebugLine( const SHAPE_LINE_CHAIN& aLine, int aType = 0, int aWidth = 0 );
     void DisplayDebugPoint( const VECTOR2I aPos, int aType = 0 );
     void DisplayDebugBox( const BOX2I& aBox, int aType = 0, int aWidth = 0 );
 
     void SwitchLayer( int layer );
 
-    void ToggleViaPlacement();
+    void ToggleViaPlacement( VIATYPE_T type = VIA_NOT_DEFINED );
 
     int GetCurrentLayer() const;
     int GetCurrentNet() const;
 
     void DumpLog();
-  
+
     PNS_CLEARANCE_FUNC* GetClearanceFunc() const
     {
         return m_clearanceFunc;
@@ -151,9 +151,9 @@ public:
     int GetShapshotIter() const { return m_snapshotIter; }
 
     PNS_ROUTING_SETTINGS& Settings() { return m_settings; }
-    
+
     void CommitRouting( PNS_NODE* aNode );
-    
+
     /**
      * Returns the last changes introduced by the router (since the last time ClearLastChanges()
      * was called or a new track has been started).
@@ -201,10 +201,10 @@ public:
 private:
     void movePlacing( const VECTOR2I& aP, PNS_ITEM* aItem );
     void moveDragging( const VECTOR2I& aP, PNS_ITEM* aItem );
-    
+
     void eraseView();
     void updateView( PNS_NODE* aNode, PNS_ITEMSET& aCurrent );
-    
+
     void clearViewFlags();
 
     // optHoverItem queryHoverItemEx(const VECTOR2I& aP);
@@ -224,7 +224,7 @@ private:
     void highlightCurrent( bool enabled );
 
     void markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,  PNS_NODE::ITEM_VECTOR& aRemoved );
-    
+
     int m_currentLayer;
     int m_currentNet;
 
@@ -246,7 +246,7 @@ private:
     KIGFX::VIEW_GROUP* m_previewItems;
 
     PNS_ITEM* m_currentEndItem;
-    
+
     VECTOR2I m_currentEnd;
     VECTOR2I m_currentStart;
     VECTOR2I m_originalStart;

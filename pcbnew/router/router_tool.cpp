@@ -65,6 +65,12 @@ static TOOL_ACTION ACT_Drag( "pcbnew.InteractiveRouter.Drag",
 static TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
                                  AS_CONTEXT, 'V',
                                  "Place Through Via", "Adds a through-hole via at the end of currently routed track." );
+static TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia",
+                                 AS_CONTEXT, 'Z',
+                                 "Place Blind/Buried Via", "Adds a blind or buried via at the end of currently routed track." );
+static TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
+                                 AS_CONTEXT, 'Q',
+                                 "Place Microvia", "Adds a microvia at the end of currently routed track." );
 static TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackWidth",
                                       AS_CONTEXT, 'W',
                                       "Custom Track Width", "Shows a dialog for changing the track width and via size.");
@@ -209,6 +215,8 @@ public:
 //        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
         Add( ACT_Drag );
         Add( ACT_PlaceThroughVia );
+        Add( ACT_PlaceBlindVia );
+        Add( ACT_PlaceMicroVia );
         Add( ACT_SwitchPosture );
 
         AppendSeparator();
@@ -580,7 +588,21 @@ void ROUTER_TOOL::performRouting()
         {
             m_router->Settings().SetLayerPair( frame->GetScreen()->m_Route_Layer_TOP,
                                                frame->GetScreen()->m_Route_Layer_BOTTOM );
-            m_router->ToggleViaPlacement();
+            m_router->ToggleViaPlacement( VIA_THROUGH );
+            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
+        }
+        else if( evt->IsAction( &ACT_PlaceBlindVia ) )
+        {
+            m_router->Settings().SetLayerPair( frame->GetScreen()->m_Route_Layer_TOP,
+                                               frame->GetScreen()->m_Route_Layer_BOTTOM );
+            m_router->ToggleViaPlacement( VIA_BLIND_BURIED );
+            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
+        }
+        else if( evt->IsAction( &ACT_PlaceMicroVia ) )
+        {
+            m_router->Settings().SetLayerPair( frame->GetScreen()->m_Route_Layer_TOP,
+                                               frame->GetScreen()->m_Route_Layer_BOTTOM );
+            m_router->ToggleViaPlacement( VIA_MICROVIA );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
