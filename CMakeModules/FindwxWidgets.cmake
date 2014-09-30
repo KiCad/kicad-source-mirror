@@ -857,7 +857,7 @@ endif(wxWidgets_FIND_STYLE STREQUAL "win32")
 
 # Check if a specfic version was requested by find_package().
 if(wxWidgets_FOUND AND wxWidgets_FIND_VERSION)
-  find_file(_filename wx/version.h PATHS ${wxWidgets_INCLUDE_DIRS})
+  find_file(_filename wx/version.h PATHS ${wxWidgets_INCLUDE_DIRS} NO_DEFAULT_PATH)
   dbg_msg("_filename:  ${_filename}")
 
   if(NOT _filename)
