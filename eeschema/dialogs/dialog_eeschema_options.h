@@ -37,36 +37,143 @@
 class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 {
 protected:
+    /** @brief The template fieldnames for this dialog */
     TEMPLATE_FIELDNAMES templateFields;
-    int selectedField = -1;
-    bool ignoreSelection = false;
+
+    /** @brief The current row selected in the template fieldname wxListCtrl which is also in the
+        edit panel */
+    int selectedField;
+
+    /** @brief Set to true internally when OnTemplateFieldSelected() an event needs to be
+        ignored */
+    bool ignoreSelection;
+
+    /**
+     * Function OnAddButtonClick
+     * Process the wxWidgets @a event produced when the user presses the Add buton for the
+     * template fieldnames control
+     *
+     * @param event The wxWidgets produced event information
+     *
+     * Adds a new template fieldname (with default values) to the template fieldnames data
+     */
+
     void OnAddButtonClick( wxCommandEvent& event );
+
+    /**
+     * Function OnDeleteButtonClick
+     * Process the wxWidgets @a event produced when the user presses the Delete button for the
+     * template fieldnames control
+     *
+     * @param event The wxWidgets produced event information
+     *
+     * Deletes the selected template fieldname from the template fieldnames data
+     */
     void OnDeleteButtonClick( wxCommandEvent& event );
+
+    /**
+     * Function OnSize
+     * Resize any controls that are dynamically sized when the dialog is resized
+     */
+    void OnSize( wxSizeEvent& event );
+
+    /**
+     * Function copyPanelToSelected
+     * Copies the data from the edit panel to the selected template fieldname
+     */
     void copyPanelToSelected( void );
+
+    /**
+     * Function copySelectedToPanel
+     * Copies the data from the selected template fieldname and fills in the edit panel
+     */
     void copySelectedToPanel( void );
+
+    /**
+     * Function OnTemplateFieldSelected
+     * Event handler for the wxListCtrl containing the template fieldnames
+     *
+     * @param event The event information provided by wxWidgets
+     *
+     * Processes data exchange between the edit panel and the selected template fieldname
+     */
     void OnTemplateFieldSelected( wxListEvent& event );
-    void OnTemplateFieldDeselected( wxListEvent& event );
+
+    /**
+     * Function RefreshTemplateFieldView
+     * Refresh the template fieldname wxListCtrl
+     *
+     * Deletes all data from the wxListCtrl and then re-polpulates the control with the data in
+     * the template fieldnames.
+     *
+     * Use any time the template field data has changed
+     */
     void RefreshTemplateFieldView( void );
-    void SelectTemplateField( int item );
+
+    /**
+     * Function SelectTemplateField
+     * Selects @a aItem from the wxListCtrl populated with the template fieldnames
+     *
+     * @param aItem The item index of the row to be selected
+     *
+     * When RefreshTemplateFieldView() is used the selection is lost because all of the items are
+     * removed from the wxListCtrl and then the control is re-populated. This function can be used
+     * to re-select an item that was previously selected so that the selection is not lost.
+     *
+     * <b>NOTE:</b> This function first sets the ignoreSelection flag before making the selection.
+     * This means the class can select something in the wxListCtrl without causing further
+     * selection events.
+     */
+    void SelectTemplateField( int aItem );
+
 public:
     DIALOG_EESCHEMA_OPTIONS( wxWindow* parent );
 
-    void SetUnits( const wxArrayString& units, int select = 0 );
+    /**
+     * Function GetUnitsSelection
+     * Returns the currently selected grid size in the dialog
+     */
     int GetUnitsSelection( void ) { return m_choiceUnits->GetSelection(); }
 
-    void SetGridSelection( int select ) { m_choiceGridSize->SetSelection( select ); }
+    /**
+     * Function SetUnits
+     * Set the unit options
+     *
+     * @param units The array of strings representing the unit options
+     * @param select The unit to select from the unit options
+     *
+     * Appends the @a units options to the list of unit options and selects the @a aSelect option
+     */
+    void SetUnits( const wxArrayString& units, int aSelect = 0 );
+
+    /**
+     * Function GetGridSelection
+     * Returns the curent grid size selected in the dialog
+     */
     int GetGridSelection( void ) { return m_choiceGridSize->GetSelection(); }
-    void SetGridSizes( const GRIDS& grid_sizes, int grid_id );
 
-    void SetBusWidth( int aWidth )
-    {
-        m_spinBusWidth->SetValue( aWidth );
-    }
+    /**
+     * Function SetGridSizes
+     * Sets the available grid size choices @a aGridSizes and selectd the current option @a aGridId
+     *
+     * @param aGridSizes The grid sizes that are able to be chosen from
+     * @param aGridId The grid size to select from the grid size options
+     */
+    void SetGridSizes( const GRIDS& aGridSizes, int aGridId );
 
-    int GetBusWidth( void )
-    {
-        return m_spinBusWidth->GetValue();
-    }
+    /**
+     * Function GetBusWidth
+     * Get the current bus width setting from the dialog
+     */
+    int GetBusWidth( void ) { return m_spinBusWidth->GetValue(); }
+
+    /**
+     * Function SetBusWidth
+     * Sets the bus width setting in the dialog
+     *
+     * @param aWidth The bus width to set the dialog edit spinbox with
+     */
+    void SetBusWidth( int aWidth ) { m_spinBusWidth->SetValue( aWidth ); }
 
     void SetLineWidth( int aWidth ) { m_spinLineWidth->SetValue( aWidth ); }
     int GetLineWidth( void ) { return m_spinLineWidth->GetValue(); }

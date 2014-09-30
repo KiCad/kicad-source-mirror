@@ -323,7 +323,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     dlg.SetRepeatVertical( g_RepeatStep.y );
     dlg.SetRepeatLabel( g_RepeatDeltaLabel );
     dlg.SetAutoSaveInterval( GetAutoSaveInterval() / 60 );
-    dlg.SetRefIdSeparator( LIB_PART::GetSubpartIdSeparator( ),
+    dlg.SetRefIdSeparator( LIB_PART::GetSubpartIdSeparator(),
                            LIB_PART::GetSubpartFirstId() );
 
     dlg.SetShowGrid( IsGridVisible() );
@@ -338,16 +338,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     dlg.Fit();
     dlg.SetMinSize( dlg.GetSize() );
     dlg.SetTemplateFields( m_TemplateFieldNames.GetTemplateFieldNames() );
-/*
-    const TEMPLATE_FIELDNAMES&  tfnames = m_TemplateFieldNames.GetTemplateFieldNames();
 
-    for( unsigned i=0; i<tfnames.size(); ++i )
-    {
-        DBG(printf("dlg.SetFieldName(%d, '%s')\n", i, TO_UTF8( tfnames[i].m_Name) );)
-
-        dlg.SetFieldName( i, tfnames[i].m_Name );
-    }
-*/
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
@@ -395,8 +386,6 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     SetForceHVLines( dlg.GetEnableHVBusOrientation() );
     m_showPageLimits = dlg.GetShowPageLimits();
 
-    wxString templateFieldName;
-
     // @todo this will change when the template field editor is redone to
     // look like the component field property editor, showing visibility and value also
 
@@ -406,26 +395,8 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     for( TEMPLATE_FIELDNAMES::iterator dlgfld = newFieldNames.begin(); dlgfld != newFieldNames.end(); ++dlgfld )
     {
         TEMPLATE_FIELDNAME fld = *dlgfld;
-/*        fld.m_Name = dlgfld->m_Name;
-        fld.m_Value = dlgfld->m_Value;
-        fld.m_Visible = dlgfld->m_Visible; */
         AddTemplateFieldName( fld );
     }
-/*
-    for( int i=0; i<8; ++i )    // no. fields in this dialog window
-    {
-        templateFieldName = dlg.GetFieldName( i );
-
-        if( !templateFieldName.IsEmpty() )
-        {
-            TEMPLATE_FIELDNAME  fld( dlg.GetFieldName( i ) );
-
-            // @todo set visibility and value also from a better editor
-
-            AddTemplateFieldName( fld );
-        }
-    }
-*/
 
     SaveSettings( config() );  // save values shared by eeschema applications.
 

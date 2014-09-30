@@ -38,27 +38,44 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     m_choiceUnits->SetFocus();
     m_sdbSizer1OK->SetDefault();
 
+    // Setup the wxListCtrl for displaying the template fieldnames
     wxListItem col0;
     col0.SetId( 0 );
     col0.SetText( _( "Field Name" ) );
-    col0.SetWidth( 150 );
 
     wxListItem col1;
     col1.SetId( 1 );
     col1.SetText( _( "Default Value" ) );
-    col1.SetWidth( 250 );
 
     wxListItem col2;
     col2.SetId( 2 );
     col2.SetText( _( "Visible" ) );
-    col2.SetWidth( 100 );
 
     templateFieldListCtrl->InsertColumn( 0, col0 );
     templateFieldListCtrl->InsertColumn( 1, col1 );
     templateFieldListCtrl->InsertColumn( 2, col2 );
+    templateFieldListCtrl->SetColumnWidth( 0, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
+    templateFieldListCtrl->SetColumnWidth( 1, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
+    templateFieldListCtrl->SetColumnWidth( 2, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
 
-    // Invalid field selected...
+    // Invalid field selected and don't ignore selection events because
+    // they'll be from the user
     selectedField = -1;
+    ignoreSelection = false;
+
+    // Make sure we select the first tab of the options tab page
+    m_notebook1->SetSelection( 0 );
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnSize( wxSizeEvent& event )
+{
+    templateFieldListCtrl->SetColumnWidth( 0, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
+    templateFieldListCtrl->SetColumnWidth( 1, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
+    templateFieldListCtrl->SetColumnWidth( 2, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
+
+    /* We're just eves dropping on the event, pass it on... */
+    event.Skip();
 }
 
 
@@ -70,6 +87,7 @@ void DIALOG_EESCHEMA_OPTIONS::SetUnits( const wxArrayString& units, int select )
     m_choiceUnits->Append( units );
     m_choiceUnits->SetSelection( select );
 }
+
 
 void DIALOG_EESCHEMA_OPTIONS::SetRefIdSeparator( wxChar aSep, wxChar aFirstId)
 {
@@ -123,19 +141,19 @@ void DIALOG_EESCHEMA_OPTIONS::GetRefIdSeparator( int& aSep, int& aFirstId)
 }
 
 
-void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& grid_sizes, int grid_id )
+void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& aGridSizes, int aGridId )
 {
-    wxASSERT( grid_sizes.size() > 0 );
+    wxASSERT( aGridSizes.size() > 0 );
 
     int select = wxNOT_FOUND;
 
-    for( size_t i = 0; i < grid_sizes.size(); i++ )
+    for( size_t i = 0; i < aGridSizes.size(); i++ )
     {
         wxString tmp;
-        tmp.Printf( wxT( "%0.1f" ), grid_sizes[i].m_Size.x );
+        tmp.Printf( wxT( "%0.1f" ), aGridSizes[i].m_Size.x );
         m_choiceGridSize->Append( tmp );
 
-        if( grid_sizes[i].m_Id == grid_id )
+        if( aGridSizes[i].m_Id == aGridId )
             select = (int) i;
     }
 
@@ -149,24 +167,30 @@ void DIALOG_EESCHEMA_OPTIONS::RefreshTemplateFieldView( void )
     // current template fields
     templateFieldListCtrl->DeleteAllItems();
 
-    for( TEMPLATE_FIELDNAMES::iterator fld = templateFields.begin(); fld != templateFields.end(); ++fld )
+    // Loop through the template fieldnames and add then to the list control
+    for( TEMPLATE_FIELDNAMES::iterator fld = templateFields.begin();
+            fld != templateFields.end(); ++fld )
     {
-        long itemindex = templateFieldListCtrl->InsertItem( templateFieldListCtrl->GetItemCount(), fld->m_Name );
+        long itemindex = templateFieldListCtrl->InsertItem(
+                templateFieldListCtrl->GetItemCount(), fld->m_Name );
+
         templateFieldListCtrl->SetItem( itemindex, 1, fld->m_Value );
-        templateFieldListCtrl->SetItem( itemindex, 2, ( fld->m_Visible == true ) ? _( "Visible" ) : _( "Hidden" ) );
+
+        templateFieldListCtrl->SetItem( itemindex, 2,
+                ( fld->m_Visible == true ) ? _( "Visible" ) : _( "Hidden" ) );
     }
 }
 
 
-void DIALOG_EESCHEMA_OPTIONS::SelectTemplateField( int item )
+void DIALOG_EESCHEMA_OPTIONS::SelectTemplateField( int aItem )
 {
     // Only select valid items!
-    if( ( item < 0 ) || ( item >= templateFieldListCtrl->GetItemCount() ) )
+    if( ( aItem < 0 ) || ( aItem >= templateFieldListCtrl->GetItemCount() ) )
         return;
 
     // Make sure we select the new item
     ignoreSelection = true;
-    templateFieldListCtrl->SetItemState( item, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+    templateFieldListCtrl->SetItemState( aItem, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 }
 
 
@@ -194,8 +218,6 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
 
     // Make sure we select the new item
     SelectTemplateField( selectedField );
-
-    event.Skip();
 }
 
 
@@ -221,8 +243,6 @@ void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
         // Make sure after the refresh that the selected item is correct
         SelectTemplateField( selectedField );
     }
-
-    event.Skip();
 }
 
 void DIALOG_EESCHEMA_OPTIONS::copyPanelToSelected( void )
@@ -251,6 +271,8 @@ void DIALOG_EESCHEMA_OPTIONS::copySelectedToPanel( void )
 
 void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
 {
+    // If the class has generated the event and asked to ignore it, honour that and reset the
+    // ignore flag for the next user event.
     if( ignoreSelection )
     {
         ignoreSelection = false;
@@ -274,14 +296,6 @@ void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
     // If an item was selected, make sure we re-select it, or at least the
     // same position in the grid
     SelectTemplateField( selectedField );
-
-    event.Skip();
-}
-
-
-void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldDeselected( wxListEvent& event )
-{
-    event.Skip();
 }
 
 
