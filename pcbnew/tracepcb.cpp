@@ -255,14 +255,14 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
     else
         draw_mode = GR_AND | GR_HIGHLIGHT;
 
-    // Redraw ZONE_CONTAINERS
-    BOARD::ZONE_CONTAINERS& zones = m_ZoneDescriptorList;
-
-    for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin(); zc!=zones.end(); ++zc )
+    // Redraw zones
+    for( int ii = 0; ii < GetAreaCount(); ii++ )
     {
-        if( (*zc)->GetNetCode() == aNetCode )
+        ZONE_CONTAINER* zone = GetArea( ii );
+
+        if( zone->GetNetCode() == aNetCode )
         {
-            (*zc)->Draw( am_canvas, DC, draw_mode );
+            zone->Draw( am_canvas, DC, draw_mode );
         }
     }
 

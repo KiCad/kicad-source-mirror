@@ -27,7 +27,7 @@
  * @brief unit conversion code
  */
 
-// Unit conversion, between internal
+// Unit conversion, between internal units and mm or mils
 
 %pythoncode
 {
