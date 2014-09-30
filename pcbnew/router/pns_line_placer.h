@@ -84,8 +84,9 @@ public:
      * @param aEnabled if true, a via is attached during placement
      * @param aDiameter diameter of the via
      * @param aDrill drill of the via
+     * @param aType Type of the via
      */
-    void AddVia( bool aEnabled, int aDiameter, int aDrill );
+    void AddVia( bool aEnabled, int aDiameter, int aDrill, VIATYPE_T aType );
 
     /**
      * Function SetLayer()
@@ -385,6 +386,9 @@ private:
 
     ///> current via drill
     int m_viaDrill;
+    
+    ///> current via type
+    VIATYPE_T m_viaType;
 
     ///> current track width
     int m_currentWidth;

@@ -60,11 +60,12 @@ void PNS_LINE_PLACER::setWorld ( PNS_NODE* aWorld )
 }
 
 
-void PNS_LINE_PLACER::AddVia( bool aEnabled, int aDiameter, int aDrill )
+void PNS_LINE_PLACER::AddVia( bool aEnabled, int aDiameter, int aDrill, VIATYPE_T aType )
 {
     m_viaDiameter = aDiameter;
     m_viaDrill = aDrill;
     m_placingVia = aEnabled;
+    m_viaType = aType;
 }
 
 
@@ -73,7 +74,7 @@ void PNS_LINE_PLACER::startPlacement( const VECTOR2I& aStart, int aNet, int aWid
     assert( m_world != NULL );
     
     m_direction = m_initial_direction;
-    TRACE( 1, "world %p, intitial-direction %s layer %d\n",
+    TRACE( 1, "world %p, initial-direction %s layer %d\n",
             m_world % m_direction.Format().c_str() % aLayer );
     m_head.SetNet( aNet );
     m_tail.SetNet( aNet );
@@ -379,8 +380,8 @@ bool PNS_LINE_PLACER::handleViaPlacement( PNS_LINE& aHead )
     if( !m_placingVia )
         return true;
 
-    PNS_LAYERSET allLayers( 0, MAX_CU_LAYERS - 1 );
-    PNS_VIA v( aHead.CPoint( -1 ), allLayers, m_viaDiameter, m_viaDrill, aHead.Net() );
+    PNS_LAYERSET layers( Settings().GetLayerTop(), Settings().GetLayerBottom() );
+    PNS_VIA v( aHead.CPoint( -1 ), layers, m_viaDiameter, m_viaDrill, aHead.Net(), m_viaType );
 
     VECTOR2I force;
     VECTOR2I lead = aHead.CPoint( -1 ) - aHead.CPoint( 0 );
@@ -439,8 +440,8 @@ bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
     }
     else if( m_placingVia && viaOk )
     {
-        PNS_LAYERSET allLayers( 0, MAX_CU_LAYERS - 1 );
-        PNS_VIA v1( walkFull.CPoint( -1 ), allLayers, m_viaDiameter, m_viaDrill );
+        PNS_LAYERSET layers( Settings().GetLayerTop(), Settings().GetLayerBottom() );
+        PNS_VIA v1( walkFull.CPoint( -1 ), layers, m_viaDiameter, m_viaDrill, -1, m_viaType );
         walkFull.AppendVia( v1 );
     }
 
@@ -464,8 +465,8 @@ bool PNS_LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead )
     
     if( m_placingVia )
     {
-        PNS_LAYERSET allLayers( 0, MAX_CU_LAYERS - 1 );
-        PNS_VIA v1( m_head.CPoint( -1 ), allLayers, m_viaDiameter, m_viaDrill );
+        PNS_LAYERSET layers( Settings().GetLayerTop(), Settings().GetLayerBottom() );
+        PNS_VIA v1( m_head.CPoint( -1 ), layers, m_viaDiameter, m_viaDrill, -1, m_viaType );
         m_head.AppendVia( v1 );
     }
 
@@ -507,9 +508,9 @@ bool PNS_LINE_PLACER::rhShoveOnly ( const VECTOR2I& aP, PNS_LINE& aNewHead )
 
     if( m_placingVia )
     {
-        PNS_LAYERSET allLayers( 0, MAX_CU_LAYERS - 1 );
-        PNS_VIA v1( l.CPoint( -1 ), allLayers, m_viaDiameter, m_viaDrill );
-        PNS_VIA v2( l2.CPoint( -1 ), allLayers, m_viaDiameter, m_viaDrill );
+        PNS_LAYERSET layers( Settings().GetLayerTop(), Settings().GetLayerBottom() );
+        PNS_VIA v1( l.CPoint( -1 ), layers, m_viaDiameter, m_viaDrill, -1, m_viaType );
+        PNS_VIA v2( l2.CPoint( -1 ), layers, m_viaDiameter, m_viaDrill, -1, m_viaType );
 
         l.AppendVia( v1 );
         l2.AppendVia( v2 );

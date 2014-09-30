@@ -129,7 +129,7 @@ public:
 
     void SetLayerPair( int aLayer1, int aLayer2 )
     {
-        if( aLayer1 > aLayer2 )
+        if( aLayer1 < aLayer2 )
         {
             m_layerTop = aLayer1;
             m_layerBottom = aLayer2;

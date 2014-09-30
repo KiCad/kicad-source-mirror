@@ -88,6 +88,7 @@
   #include <class_board.h>
   #include <class_module.h>
   #include <class_track.h>
+  #include <class_zone.h>
   #include <layers_id_colors_and_visibility.h>
   #include <class_pad.h>
   #include <pad_shapes.h>
@@ -123,6 +124,7 @@
 %include <class_board.h>
 %include <class_module.h>
 %include <class_track.h>
+%include <class_zone.h>
 %include <layers_id_colors_and_visibility.h>
 %include <class_pad.h>
 %include <pad_shapes.h>

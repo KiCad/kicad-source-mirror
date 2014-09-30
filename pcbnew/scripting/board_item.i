@@ -37,18 +37,18 @@
 
 %extend BOARD_ITEM
 {
-  TEXTE_PCB*    Cast_to_TEXTE_PCB()     {  return dynamic_cast<TEXTE_PCB*>(self);     }
-  DIMENSION*    Cast_to_DIMENSION()     {  return dynamic_cast<DIMENSION*>(self);     }
-  MODULE*       Cast_to_MODULE()        {  return dynamic_cast<MODULE*>(self);        }
-  TEXTE_MODULE* Cast_to_TEXTE_MODULE()  {  return dynamic_cast<TEXTE_MODULE*>(self);  }
-  DRAWSEGMENT*  Cast_to_DRAWSEGMENT()   {  return dynamic_cast<DRAWSEGMENT*>(self);   }
-  MARKER_PCB*   Cast_to_MARKER_PCB()    {  return dynamic_cast<MARKER_PCB*>(self);    }
-  BOARD*        Cast_to_BOARD()         {  return dynamic_cast<BOARD*>(self);         }
-  EDGE_MODULE*  Cast_to_EDGE_MODULE()   {  return dynamic_cast<EDGE_MODULE*>(self);   }
-  D_PAD*        Cast_to_D_PAD()         {  return dynamic_cast<D_PAD*>(self);         }
-  TRACK*        Cast_to_TRACK()         {  return dynamic_cast<TRACK*>(self);         }
-  SEGZONE*      Cast_to_SEGZONE()       {  return dynamic_cast<SEGZONE*>(self);       }
-  VIA*          Cast_to_VIA()           {  return dynamic_cast<VIA*>(self);           }
+  TEXTE_PCB*        Cast_to_TEXTE_PCB()         {  return dynamic_cast<TEXTE_PCB*>(self);     }
+  DIMENSION*        Cast_to_DIMENSION()         {  return dynamic_cast<DIMENSION*>(self);     }
+  MODULE*           Cast_to_MODULE()            {  return dynamic_cast<MODULE*>(self);        }
+  TEXTE_MODULE*     Cast_to_TEXTE_MODULE()      {  return dynamic_cast<TEXTE_MODULE*>(self);  }
+  DRAWSEGMENT*      Cast_to_DRAWSEGMENT()       {  return dynamic_cast<DRAWSEGMENT*>(self);   }
+  MARKER_PCB*       Cast_to_MARKER_PCB()        {  return dynamic_cast<MARKER_PCB*>(self);    }
+  BOARD*            Cast_to_BOARD()             {  return dynamic_cast<BOARD*>(self);         }
+  EDGE_MODULE*      Cast_to_EDGE_MODULE()       {  return dynamic_cast<EDGE_MODULE*>(self);   }
+  D_PAD*            Cast_to_D_PAD()             {  return dynamic_cast<D_PAD*>(self);         }
+  TRACK*            Cast_to_TRACK()             {  return dynamic_cast<TRACK*>(self);         }
+  ZONE_CONTAINER*   Cast_to_ZONE_CONTAINER()    {  return dynamic_cast<ZONE_CONTAINER*>(self);}
+  VIA*              Cast_to_VIA()               {  return dynamic_cast<VIA*>(self);           }
 
 
   %pythoncode
@@ -73,12 +73,12 @@
         return self.Cast_to_D_PAD()
       elif ct=="MTEXT":
         return self.Cast_to_TEXTE_MODULE()
-      elif ct=="ZONE":
-        return self.Cast_to_SEGZONE()
       elif ct=="VIA":
         return self.Cast_to_VIA()
       elif ct=="TRACK":
         return self.Cast_to_TRACK()
+      elif ct=="ZONE_CONTAINER":
+        return self.Cast_to_ZONE_CONTAINER()
       else:
         return None
   }

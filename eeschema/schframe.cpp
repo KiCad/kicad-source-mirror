@@ -1053,7 +1053,8 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
     if( fn.GetName() != NAMELESS_PROJECT )
     {
         // was: wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParametersList() );
-        Prj().ConfigSave( Kiface().KifaceSearch(), GROUP_SCH, GetProjectFileParametersList() );
+        Prj().ConfigSave( Kiface().KifaceSearch(), GROUP_SCH_EDITOR,
+                          GetProjectFileParametersList() );
     }
 }
 

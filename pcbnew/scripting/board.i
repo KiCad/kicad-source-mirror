@@ -35,22 +35,11 @@
     def GetModules(self):             return self.m_Modules
     def GetDrawings(self):            return self.m_Drawings
     def GetTracks(self):              return self.m_Track
-    def GetSegZones(self):            return self.m_Zone
     def GetFullRatsnest(self):        return self.m_FullRatsnest
-    def GetLocalRatsnest(self):       return self.m_LocalRatsnest
-    def GetNetClasses(self):          return self.m_NetClasses
-    def GetCurrentNetClassName(self): return self.m_CurrentNetClassName
-    def GetViasDimensionsList(self):  return self.m_ViasDimensionsList
-    def GetTrackWidthList(self):      return self.m_TrackWidthList
+    def GetZones(self):               return self.m_ZoneDescriptorList
 
-    def Save(self,filename,format = None):
-      if format is None:
-        str_filename = str(filename)
-        if str_filename.endswith(".brd"):
-          format = IO_MGR.LEGACY
-        if str_filename.endswith(".kicad_pcb"):
-          format = IO_MGR.KICAD
-      return SaveBoard(filename,self,format)
+    def Save(self,filename):
+        return SaveBoard(filename,self,IO_MGR.KICAD)
 
     #
     # add function, clears the thisown to avoid python from deleting
@@ -70,14 +59,12 @@
 %rename(Get) operator TRACK*;
 %rename(Get) operator D_PAD*;
 %rename(Get) operator MODULE*;
-%rename(Get) operator SEGZONE*;
 
 
 // we must translate C++ templates to scripting languages
 
 %template(BOARD_ITEM_List) DLIST<BOARD_ITEM>;
 %template(MODULE_List)     DLIST<MODULE>;
-%template(SEGZONE_List)    DLIST<SEGZONE>;
 %template(TRACK_List)      DLIST<TRACK>;
 %template(PAD_List)        DLIST<D_PAD>;
 
@@ -85,6 +72,25 @@
 
 %template(VIA_DIMENSION_Vector) std::vector<VIA_DIMENSION>;
 %template (RASTNET_Vector) std::vector<RATSNEST_ITEM>;
+
+%extend BOARD
+{
+        %pythoncode
+        {
+        def GetNetClasses(self):
+            return self.GetDesignSettings().m_NetClasses
+
+        def GetCurrentNetClassName(self):
+            return self.GetDesignSettings().m_CurrentNetClassName
+
+        def GetViasDimensionsList(self):
+            return self.GetDesignSettings().m_ViasDimensionsList
+
+        def GetTrackWidthList(self):
+            return self.GetDesignSettings().m_TrackWidthList
+        }
+}
+
 
 %extend DRAWSEGMENT
 {
