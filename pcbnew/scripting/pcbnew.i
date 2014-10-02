@@ -155,7 +155,6 @@
 %include <io_mgr.h>
 %include <kicad_plugin.h>
 
-
 %include "board.i"
 %include "module.i"
 %include "plugins.i"

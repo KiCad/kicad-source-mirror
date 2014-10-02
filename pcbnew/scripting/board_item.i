@@ -32,54 +32,64 @@
 
 %inline
 {
-  BOARD_ITEM*   Cast_to_BOARD_ITEM(EDA_ITEM* base)    {  return dynamic_cast<BOARD_ITEM*>(base);    }
+    BOARD_ITEM*   Cast_to_BOARD_ITEM(EDA_ITEM* base)    {  return dynamic_cast<BOARD_ITEM*>(base);    }
 }
 
 %extend BOARD_ITEM
 {
-  TEXTE_PCB*        Cast_to_TEXTE_PCB()         {  return dynamic_cast<TEXTE_PCB*>(self);     }
-  DIMENSION*        Cast_to_DIMENSION()         {  return dynamic_cast<DIMENSION*>(self);     }
-  MODULE*           Cast_to_MODULE()            {  return dynamic_cast<MODULE*>(self);        }
-  TEXTE_MODULE*     Cast_to_TEXTE_MODULE()      {  return dynamic_cast<TEXTE_MODULE*>(self);  }
-  DRAWSEGMENT*      Cast_to_DRAWSEGMENT()       {  return dynamic_cast<DRAWSEGMENT*>(self);   }
-  MARKER_PCB*       Cast_to_MARKER_PCB()        {  return dynamic_cast<MARKER_PCB*>(self);    }
-  BOARD*            Cast_to_BOARD()             {  return dynamic_cast<BOARD*>(self);         }
-  EDGE_MODULE*      Cast_to_EDGE_MODULE()       {  return dynamic_cast<EDGE_MODULE*>(self);   }
-  D_PAD*            Cast_to_D_PAD()             {  return dynamic_cast<D_PAD*>(self);         }
-  TRACK*            Cast_to_TRACK()             {  return dynamic_cast<TRACK*>(self);         }
-  ZONE_CONTAINER*   Cast_to_ZONE_CONTAINER()    {  return dynamic_cast<ZONE_CONTAINER*>(self);}
-  VIA*              Cast_to_VIA()               {  return dynamic_cast<VIA*>(self);           }
+    TEXTE_PCB*        Cast_to_TEXTE_PCB()         {  return dynamic_cast<TEXTE_PCB*>(self);     }
+    DIMENSION*        Cast_to_DIMENSION()         {  return dynamic_cast<DIMENSION*>(self);     }
+    MODULE*           Cast_to_MODULE()            {  return dynamic_cast<MODULE*>(self);        }
+    TEXTE_MODULE*     Cast_to_TEXTE_MODULE()      {  return dynamic_cast<TEXTE_MODULE*>(self);  }
+    DRAWSEGMENT*      Cast_to_DRAWSEGMENT()       {  return dynamic_cast<DRAWSEGMENT*>(self);   }
+    MARKER_PCB*       Cast_to_MARKER_PCB()        {  return dynamic_cast<MARKER_PCB*>(self);    }
+    BOARD*            Cast_to_BOARD()             {  return dynamic_cast<BOARD*>(self);         }
+    EDGE_MODULE*      Cast_to_EDGE_MODULE()       {  return dynamic_cast<EDGE_MODULE*>(self);   }
+    D_PAD*            Cast_to_D_PAD()             {  return dynamic_cast<D_PAD*>(self);         }
+    TRACK*            Cast_to_TRACK()             {  return dynamic_cast<TRACK*>(self);         }
+    ZONE_CONTAINER*   Cast_to_ZONE_CONTAINER()    {  return dynamic_cast<ZONE_CONTAINER*>(self);}
+    VIA*              Cast_to_VIA()               {  return dynamic_cast<VIA*>(self);           }
 
 
-  %pythoncode
-  {
+    %pythoncode
+    {
     def Cast(self):
 
-      ct = self.GetClass()
+        ct = self.GetClass()
 
-      if ct=="PTEXT":
-        return self.Cast_to_TEXTE_PCB()
-      elif ct=="BOARD":
-        return self.Cast_to_BOARD()
-      elif ct=="DIMENSION":
-        return self.Cast_to_DIMENSION()
-      elif ct=="DRAWSEGMENT":
-        return self.Cast_to_DRAWSEGMENT()
-      elif ct=="MGRAPHIC":
-        return self.Cast_to_EDGE_MODULE()
-      elif ct=="MODULE":
-        return self.Cast_to_MODULE()
-      elif ct=="PAD":
-        return self.Cast_to_D_PAD()
-      elif ct=="MTEXT":
-        return self.Cast_to_TEXTE_MODULE()
-      elif ct=="VIA":
-        return self.Cast_to_VIA()
-      elif ct=="TRACK":
-        return self.Cast_to_TRACK()
-      elif ct=="ZONE_CONTAINER":
-        return self.Cast_to_ZONE_CONTAINER()
-      else:
-        return None
-  }
+        if ct=="PTEXT":
+            return self.Cast_to_TEXTE_PCB()
+        elif ct=="BOARD":
+            return self.Cast_to_BOARD()
+        elif ct=="DIMENSION":
+            return self.Cast_to_DIMENSION()
+        elif ct=="DRAWSEGMENT":
+            return self.Cast_to_DRAWSEGMENT()
+        elif ct=="MGRAPHIC":
+            return self.Cast_to_EDGE_MODULE()
+        elif ct=="MODULE":
+            return self.Cast_to_MODULE()
+        elif ct=="PAD":
+            return self.Cast_to_D_PAD()
+        elif ct=="MTEXT":
+            return self.Cast_to_TEXTE_MODULE()
+        elif ct=="VIA":
+            return self.Cast_to_VIA()
+        elif ct=="TRACK":
+            return self.Cast_to_TRACK()
+        elif ct=="ZONE_CONTAINER":
+            return self.Cast_to_ZONE_CONTAINER()
+        else:
+            return None
+
+
+    def Duplicate(self):
+
+        ct = self.GetClass()
+
+        if ct=="BOARD":
+            return None
+        else:
+            return Cast_to_BOARD_ITEM(self.Clone()).Cast()
+    }
 }

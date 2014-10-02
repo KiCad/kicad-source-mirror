@@ -663,6 +663,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         TRACK* insertAid;
         insertAid = ( (TRACK*) aBoardItem )->GetBestInsertPoint( this );
         m_Track.Insert( (TRACK*) aBoardItem, insertAid );
+        aBoardItem->SetParent( this );
         break;
 
     case PCB_ZONE_T:

@@ -29,81 +29,79 @@
 
 
 %extend MODULE
-{ 
+{
   %pythoncode
   {
-     
+
     #def SaveToLibrary(self,filename):
     #  return SaveModuleToLibrary(filename,self)
-    
+
     #
     # add function, clears the thisown to avoid python from deleting
     # the object in the garbage collector
     #
-    
-    def Add(self,item): 
-    	
-    	itemC = item.Cast()
-    	
-    	if type(itemC) is D_PAD:
-    		item.thisown=0
-    		self.Pads().PushBack(itemC)
-    	elif type(itemC) in [ TEXTE_PCB, DIMENSION, TEXTE_MODULE, DRAWSEGMENT,EDGE_MODULE]:
-    		item.thisown = 0
-    		self.GraphicalItems().PushBack(item)
+
+    def Add(self,item):
+
+        itemC = item.Cast()
+
+        if type(itemC) is D_PAD:
+            item.thisown=0
+            self.Pads().PushBack(itemC)
+        elif type(itemC) in [ TEXTE_PCB, DIMENSION, TEXTE_MODULE, DRAWSEGMENT,EDGE_MODULE]:
+            item.thisown = 0
+            self.GraphicalItems().PushBack(item)
   }
-  
+
 }
 
-%pythoncode 
+%pythoncode
 {
-    
-def GetPluginForPath(lpath):
+
+    def GetPluginForPath(lpath):
         return IO_MGR.PluginFind(IO_MGR.LEGACY)
-	
-def FootprintEnumerate(lpath):
+
+    def FootprintEnumerate(lpath):
         plug = GetPluginForPath(lpath)
         return plug.FootprintEnumerate(lpath)
-	
-def FootprintLoad(lpath,name):
+
+    def FootprintLoad(lpath,name):
         plug = GetPluginForPath(lpath)
         return plug.FootprintLoad(lpath,name)
-	
-def FootprintSave(lpath,module):
-	plug = GetPluginForPath(lpath)
+
+    def FootprintSave(lpath,module):
+        plug = GetPluginForPath(lpath)
         return plug.FootprintSave(lpath,module)
-	
-def FootprintDelete(lpath,name):
+
+    def FootprintDelete(lpath,name):
         plug = GetPluginForPath(lpath)
         plug.FootprintDelete(lpath,name)
-	
-def FootprintLibCreate(lpath):
+
+    def FootprintLibCreate(lpath):
         plug = GetPluginForPath(lpath)
         plug.FootprintLibCreate(lpath)
-	
-def FootprintLibDelete(lpath):
+
+    def FootprintLibDelete(lpath):
         plug = GetPluginForPath(lpath)
         plug.FootprintLibDelete(lpath)
-	
-def FootprintIsWritable(lpath):
+
+    def FootprintIsWritable(lpath):
         plug = GetPluginForPath(lpath)
         plug.FootprintLibIsWritable(lpath)
-  
-    
 }
 
 %{
-    MODULE *PyModule_to_MODULE(PyObject *obj0) 
+    MODULE *PyModule_to_MODULE(PyObject *obj0)
     {
         void *argp;
         int res1 = SWIG_ConvertPtr(obj0, &argp,SWIGTYPE_p_MODULE, 0 |  0 );
-        if (!SWIG_IsOK(res1)) 
+        if (!SWIG_IsOK(res1))
         {
-            SWIG_exception_fail(SWIG_ArgError(res1), "Converting object to MODULE*"); 
+            SWIG_exception_fail(SWIG_ArgError(res1), "Converting object to MODULE*");
         }
-        
+
         return (MODULE*)argp;
-        
+
         fail:
         return NULL;
 
