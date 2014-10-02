@@ -56,23 +56,6 @@ if( UNIX )
         )
 endif()
 
-
-if( APPLE )
-    # In this CMakeLists.txt's build directory, create kiface symlinks should get
-    # "installed()" as part of the kicad.app bundle.  These are pointers on the
-    # target which point up and over to the stand alone kicad app's *.kiface files.
-    foreach( symlink pcbnew eeschema cvpcb )
-        add_custom_command( TARGET kicad
-            COMMAND ${CMAKE_COMMAND} -E remove
-                        "${CMAKE_CURRENT_BINARY_DIR}/kicad.app/Contents/MacOS/_${symlink}.kiface"
-            COMMAND ${CMAKE_COMMAND} -E create_symlink
-                        "../../../${symlink}.app/Contents/MacOS/_${symlink}.kiface"
-                        "${CMAKE_CURRENT_BINARY_DIR}/kicad.app/Contents/MacOS/_${symlink}.kiface"
-            COMMENT "kicad.app ${symlink} symlink"
-            )
-    endforeach()
-endif()
-
 if( APPLE )
     set_target_properties( kicad PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
@@ -97,4 +80,13 @@ install( TARGETS kicad
     DESTINATION ${KICAD_BIN}
     COMPONENT binary
     )
-
+if( APPLE )
+    install( CODE "
+       include(BundleUtilities)
+       fixup_bundle(\"${OSX_BUNDLE_INSTALL_BIN_DIR}/kicad\"
+           \"${OSX_BUNDLE_PLUGINS}\"
+           \"\"
+           )
+       " COMPONENT Runtime
+       )
+endif()

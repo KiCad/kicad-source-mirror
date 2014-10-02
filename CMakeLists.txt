@@ -312,7 +312,7 @@ set( KICAD_BIN bin
 set( KICAD_FP_LIB_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}"
      CACHE PATH "Default path where footprint libraries are installed." )
 
-if( UNIX )
+if( UNIX AND NOT APPLE )
     # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
     set( KICAD_PLUGINS lib/kicad/plugins
         CACHE PATH "Location of KiCad plugins." )
@@ -338,6 +338,38 @@ set( KICAD_DEMOS ${KICAD_DATA}/demos
     CACHE PATH "Location of KiCad demo files." )
 set( KICAD_TEMPLATE ${KICAD_DATA}/template
     CACHE PATH "Location of KiCad template files." )
+
+if( APPLE )
+    # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
+    # CMAKE_INSTALL_PREFIX is root of .dmg image
+    set( KICAD_BIN ${CMAKE_INSTALL_PREFIX}
+        CACHE PATH "Location of KiCad binaries." FORCE )
+
+    # everything provided with the application bundle goes into
+    # kicad.app/Contents/SharedSupport => accessible via GetDataDir()
+    # everything else to the .dmg image
+    set( KICAD_DATA ${CMAKE_INSTALL_PREFIX}/kicad.app/Contents/SharedSupport
+        CACHE PATH "Location of KiCad data files." FORCE )
+    set( KICAD_PLUGINS ${KICAD_DATA}/plugins
+        CACHE PATH "Location of KiCad plugins." FORCE )
+    set( KICAD_DOCS doc
+        CACHE PATH "Location of KiCad documentation files." FORCE )
+    set( KICAD_TEMPLATE ${KICAD_DATA}/template
+        CACHE PATH "Location of KiCad template files." FORCE )
+    set( KICAD_DEMOS demos
+        CACHE PATH "Location of KiCad demo files." FORCE )
+
+    # used to set DEFAULT_FP_LIB_PATH in config.h.cmake, but then never used
+    # set it to correct value just in case (see common.cpp)
+    set( KICAD_FP_LIB_INSTALL_PATH "~/Library/Preferences/kicad" )
+
+    # path to binaries in single app bundle
+    set( OSX_BUNDLE_BUILD_BIN_DIR "${CMAKE_BINARY_DIR}/kicad/kicad.app/Contents/MacOS" )
+    set( OSX_BUNDLE_INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/kicad.app/Contents/MacOS" )
+
+    # plugins/libs to additionally relocate during fixup_bundle (e.g., *.kiface added in subfolders)
+    set( OSX_BUNDLE_PLUGINS "" )
+endif()
 
 mark_as_advanced( KICAD_BIN
     KICAD_PLUGINS
@@ -397,10 +429,10 @@ add_custom_target( lib-dependencies )
 
 # Only download and build all dependencies from source on OSX if the user specifically requests
 # it.  Otherwise, respect the developers wishes to use the dependencies already installed on
-# their systme.
+# their system
 if( APPLE AND USE_OSX_DEPS_BUILDER )
 
-    # This should be built in all cases, if swig exec is not avaiable
+    # This should be built in all cases, if swig exec is not available
     # will be impossible also enable SCRIPTING being for PCBNEW required immediately
 
     include( download_pcre )
@@ -570,7 +602,7 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
             )
 
         if( NOT PYTHON_SITE_PACKAGE_PATH )
-            message( FATAL_ERROR "Error occurred while attemping to find the Python site library path." )
+            message( FATAL_ERROR "Error occurred while attempting to find the Python site library path." )
         endif()
     endif()
 
@@ -733,7 +765,7 @@ endif()
 ###
 # FreeDesktop .desktop and MIME resources
 ###
-if( UNIX )
+if( UNIX AND NOT APPLE )
 
     # Set paths
     set( UNIX_MIME_DIR resources/linux/mime )

@@ -472,19 +472,6 @@ if( MINGW )
     mingw_resource_compiler( pcbnew )
 endif()
 
-if( APPLE )
-    set( PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew_doc.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-    set( MACOSX_BUNDLE_ICON_FILE pcbnew.icns )
-    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pcbnew )
-    set( MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist )
-endif()
-
 # Create a C++ compilable string initializer containing html text into a *.h file:
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help_html.h
@@ -525,7 +512,7 @@ if( USE_KIWAY_DLLS )
 #if( false )
 
     # a very small program launcher for pcbnew_kiface
-    add_executable( pcbnew WIN32 MACOSX_BUNDLE
+    add_executable( pcbnew WIN32
         ../common/single_top.cpp
         ${PCBNEW_RESOURCES}
         )
@@ -604,16 +591,22 @@ if( USE_KIWAY_DLLS )
     add_dependencies( pcbnew pcbnew_kiface )
 
     # these 2 binaries are a matched set, keep them together:
-    install( TARGETS pcbnew
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
     if( APPLE )
-        # puts the *.kiface into the *.app bundle while linking
+        # puts binaries into the *.app bundle while linking
+        set_target_properties( pcbnew PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
         set_target_properties( pcbnew_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.app/Contents/MacOS/
+            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
+        set( OSX_BUNDLE_PLUGINS ${OSX_BUNDLE_PLUGINS} "${OSX_BUNDLE_INSTALL_BIN_DIR}/_pcbnew.kiface"
+            PARENT_SCOPE
             )
     else()
+        install( TARGETS pcbnew
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
         install( TARGETS pcbnew_kiface
             DESTINATION ${KICAD_BIN}
             COMPONENT binary
@@ -622,7 +615,7 @@ if( USE_KIWAY_DLLS )
 
 else()  # milestone A) kills this off:
 
-    add_executable( pcbnew WIN32 MACOSX_BUNDLE
+    add_executable( pcbnew WIN32
         ../common/single_top.cpp
         pcbnew.cpp
         ${PCBNEW_SRCS}
@@ -675,19 +668,21 @@ else()  # milestone A) kills this off:
             )
     endif()
 
-    install( TARGETS pcbnew
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
+    if( APPLE )
+        # puts binaries into the *.app bundle while linking
+        set_target_properties( pcbnew PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
+    else()
+        install( TARGETS pcbnew
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+    endif()
 endif()
 
 
 add_dependencies( pcbnew lib-dependencies )
-if( APPLE )
-    set_target_properties( pcbnew PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-        )
-endif()
 
 
 if( KICAD_SCRIPTING )
@@ -781,4 +776,3 @@ if( false )     # haven't been used in years.
         )
     target_link_libraries( layer_widget_test common ${wxWidgets_LIBRARIES} )
 endif()
-

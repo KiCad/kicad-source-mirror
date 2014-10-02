@@ -7,31 +7,32 @@
             <dict>
                 <key>CFBundleTypeRole</key>			    <string>Editor</string>
                 <key>CFBundleTypeIconFile</key>		    <string>kicad_doc.icns</string>
-
                 <key>CFBundleTypeExtensions</key>	    <array>
                                                             <string>pro</string>
                                                         </array>
-
                 <key>CFBundleTypeName</key>			    <string>kicad project files</string>
                 <key>LSHandlerRank</key>                <string>Owner</string>
             </dict>
         </array>
-
     <key>CFBundleDevelopmentRegion</key>            <string>English</string>
     <key>CFBundleExecutable</key>	                <string>kicad</string>
     <key>CFBundleGetInfoString</key>                <string></string>
     <key>CFBundleIconFile</key>	                    <string>kicad.icns</string>
     <key>CFBundleIdentifier</key>	                <string>org.kicad-eda.kicad</string>
     <key>CFBundleInfoDictionaryVersion</key>        <string>6.0</string>
-    <key>CFBundleLongVersionString</key>	            <string></string>
+    <key>CFBundleLongVersionString</key>	        <string></string>
     <key>CFBundleName</key>	                        <string>KiCad</string>
     <key>CFBundlePackageType</key>	                <string>APPL</string>
     <key>CFBundleShortVersionString</key>	        <string></string>
     <key>CFBundleSignature</key>                    <string>????</string>
     <key>CFBundleVersion</key>	                    <string></string>
-    <key>CSResourcesFileMapped</key>	                <true/>
+    <key>CSResourcesFileMapped</key>	            <true/>
     <key>LSRequiresCarbon</key>	                    <true/>
     <key>NSHumanReadableCopyright</key>	            <string></string>
     <key>NSHighResolutionCapable</key>              <string>True</string>
+    <key>LSEnvironment</key>
+        <dict>
+            <key>KIGITHUB</key>     <string>https://github.com/kicad</string>
+        </dict>
 </dict>
 </plist>

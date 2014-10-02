@@ -1,63 +1,150 @@
 Compiling KiCad on Apple Mac OS X
 =================================
- First written: 2010-01-31
- by: Jerry Jacobs <xor.gate.engineering[at]gmail[dot]com>
 
- Modified at: 2014-02-07
- by: Marco Serantoni <marco.serantoni[at]gmail[dot]com>
+Building on OSX is very similar to building on Linux. This document will provide a
+complete walk-through on what to do but it will focus on OSX specific things.
+See general documentation on non-OSX specific KiCad build switches, etc.
 
-Snow Leopard
-------------
 
-Requirements
-  * XCode Tools    (http://developer.apple.com/tools/xcode)
-  * bzr (bazaar)
-  * CMake          (http://www.cmake.org)
+Prerequisites
+-------------
 
-  The build of Kicad for OSX is now easier than before.
-  The building system will download and compile the needed libraries for you
-  patching them accordly to the needs.
+Tools needed for building KiCad:
+* XCode Tools
+* bzr       - Bazaar version control system
+* CMake     - Cross-platform make
 
-Building Kicad with no support for Scripting
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Optional tools:
+* Doxygen   - Documentation system for several programming languages
 
-  The building needs to know if you want a static binary or a dynamic one
-  Just set ONE of those two options KICAD_BUILD_STATIC or KICAD_BUILD_DYNAMIC
-  
-  If you set KICAD_BUILD_DYNAMIC the building system will build all and include
-  the needed libraries for each executable in its bundle
+Mandatory library dependencies needed to compile KiCad:
+* GLEW      - The OpenGL Extension Wrangler Library
+* cairo     - 2D graphics library
+* wxWidgets - Cross-Platform GUI Library
 
-      cmake -DKICAD_BUILD_DYNAMIC=ON .
-      make
+Optional library dependencies, depends on used KiCad features
+* OpenSSL - The Open Source toolkit for SSL/TLS
+  => Needed for github plugin
 
-Building Kicad with support for Scripting
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Due some problems with some dependencies the build of this kind of binary is a bit 
-  more complex, you should initially set KICAD_BUILD_DYNAMIC
-  then issue for example
+All tools (except XCode, of course) and all dependencies except wxWidgets can be compiled
+manually, but it is advised to install them using your favorite package manager for OSX
+like MacPorts or Homebrew.
+Depending on the package manager the development packages of the library dependencies
+may have to be installed (usually something like <pkg>-dev or <pkg>-devel).
+Further, depending on the configuration of your package manager packages might have to
+be compiled with special flags/variants to support the correct architecture. E.g., some
+packages of MacPorts need to have the "+universal" variant set to also include the
+x86_64 variant that might be chosen automatically by KiCad build process.
 
-      cmake -DKICAD_BUILD_DYNAMIC=ON .
-      make swig
+IMPORTANT:
+At the moment you *must not* use a wxWidgets version installed by any package manager.
+KiCad on OSX needs overlay support and some other fixes, which are not yet contained in
+mainline wxWidgets sources and builds.
 
-  After successfully building you can set your KICAD_SCRIPTING* options (for example):
+Install now the tools and library dependencies as mentioned above.
 
-      cmake -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_WXPYTHON=ON -DKICAD_SCRIPTING_MODULES=ON .
-      make
 
-  The system will build all accordling your choices and package all in the bundle
-  I know bundles will be huge, but those will be autosufficient.
+Folder Structure
+----------------
 
-Building Kicad for other processors or Universal binaries
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This documentation will use the following folder structure as an example, but it is not
+mandatory to do it like that:
+KiCad/
+  +-- kicad/            KiCad source folder
+  +-- build/            KiCad build folder
+  +-- bin/              KiCad binaries folder
+  +-- wx-src/           wxWidgets source folder
+  +-- wx-build/         wxWidgets build folder
+  +-- wx-bin/           wxWidgets binaries folder
 
-   I wish remember you should set the processor like
 
-       cmake -DCMAKE_OSX_ARCHITECTURES="x86_64"
+Get KiCad sources
+-----------------
 
-   for other platforms 
+Create your work root "KiCad" wherever you like and sync KiCad sources to it:
+  # mkdir KiCad
+  # cd KiCad
+  # bzr branch lp:kicad
 
-       cmake -DCMAKE_OSX_ARCHITECTURES="x86_64 -arch i386"
-       cmake -DCMAKE_OSX_ARCHITECTURES="x86_64 -arch i386 -arch ppc"
 
-   I know some you should prefer use ; as separator, this will be accomplished soon
-   keeping support for both the syntaxes
+Compiling wxWidgets
+-------------------
+
+Get wxWidgets sources from
+  http://www.wxwidgets.org/downloads/
+and unpack them to the wx-src folder.
+It's recommended to use the latest stable (at the time of this writing 3.0.1) version.
+
+Apply the patches needed for KiCad:
+  # cd wx-src
+  # patch -p0 ../kicad/patches/wxwidgets-3.0.0_macosx.patch
+  # patch -p0 ../kicad/patches/wxwidgets-3.0.0_macosx_bug_15908.patch
+  # patch -p0 ../kicad/patches/wxwidgets-3.0.0_macosx_soname.patch
+
+Configure:
+  # cd ..
+  # mkdir wx-build
+  # cd wx-build
+  # ../wx-src/configure \
+      --prefix=`pwd`/../wx-bin \
+      --with-opengl \
+      --enable-aui \
+      --enable-utf8 \
+      --enable-html \
+      --enable-stl \
+      --with-libjpeg=builtin \
+      --with-libpng=builtin \
+      --with-regex=builtin \
+      --with-libtiff=builtin \
+      --with-zlib=builtin \
+      --with-expat=builtin \
+      --without-liblzma \
+      --with-macosx-version-min=10.5 \
+      CPPFLAGS="-stdlib=libstdc++” \
+      LDFLAGS="-stdlib=libstdc++” \
+      CC=clang \
+      CXX=clang++
+
+Build & Install:
+  # make
+    ... will take some time ...
+  # make install
+
+If everything went fine you will now have a working wxWidgets installation in the wx-bin
+folder.
+For building KiCad it is sufficient to keep the wx-bin folder.
+The above configuration of wxWidgets is known to work, if you know what you are doing
+you of course can use different settings.
+
+
+Compiling KiCad (without scripting support)
+-------------------------------------------
+
+Change to your working root "KiCad" and create the build folder there:
+  # mkdir build
+
+Configure KiCad:
+  # cd build
+  # cmake ../kicad \
+      -DCMAKE_C_COMPILER=clang \
+      -DCMAKE_CXX_COMPILER=clang++ \
+      -DwxWidgets_CONFIG_EXECUTABLE=../wx-bin/bin/wx-config \
+      -DKICAD_SCRIPTING=OFF \
+      -DKICAD_SCRIPTING_MODULES=OFF \
+      -DKICAD_SCRIPTING_WXPYTHON=OFF \
+      -DCMAKE_INSTALL_PREFIX=../bin \
+      -DCMAKE_BUILD_TYPE=Release
+
+Now KiCad is configured using default features/build-switches without scripting support.
+See Documentation/compiling/build-config.txt for a list of all CMake options available
+when compiling KiCad.
+
+Build & Install:
+  # make
+    ... will take some time ...
+  # make install
+
+Again, if everything went fine you will now have KiCad binaries in the "bin" folder.
+KiCad application can be directly run from there to test.
+If everything is OK, you can create a .dmg image of your "bin" folder or just copy/install
+the KiCad binaries and/or support files (like demos or documentation) wherever you want.

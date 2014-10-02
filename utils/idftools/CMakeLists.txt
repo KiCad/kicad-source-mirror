@@ -20,6 +20,13 @@ target_link_libraries( dxf2idf lib_dxf idf3 ${wxWidgets_LIBRARIES} )
 
 target_link_libraries( idf2vrml idf3 ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )
 
-install( TARGETS idfcyl idfrect dxf2idf idf2vrml
-    DESTINATION ${KICAD_BIN}
-    COMPONENT binary )
+if( APPLE )
+    # puts binaries into the *.app bundle while linking
+    set_target_properties( idfcyl idfrect dxf2idf idf2vrml PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+        )
+else()
+    install( TARGETS idfcyl idfrect dxf2idf idf2vrml
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary )
+endif()
