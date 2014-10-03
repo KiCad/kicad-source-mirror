@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-28 22:51+0100\n"
-"PO-Revision-Date: 2014-09-29 08:49+0200\n"
+"POT-Creation-Date: 2014-10-03 08:47+0100\n"
+"PO-Revision-Date: 2014-10-03 08:47+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -300,7 +300,8 @@ msgid ""
 "\n"
 "Do you want to create a new empty directory for the project?"
 msgstr ""
-"La cartella selezionata non è vuota. Si raccomanda la creazione di nuovi progetti in una cartella dedicata e vuota.\n"
+"La cartella selezionata non è vuota. Si raccomanda la creazione di nuovi "
+"progetti in una cartella dedicata e vuota.\n"
 "Creare per il progetto una nuova cartella vuota?"
 
 #: kicad/prjconfig.cpp:259
@@ -309,7 +310,7 @@ msgid "KiCad project file '%s' not found"
 msgstr "File progetto di KiCad \"%s\" non trovato"
 
 #: kicad/prjconfig.cpp:271 pcbnew/pcbframe.cpp:988 pcbnew/moduleframe.cpp:694
-#: eeschema/libedit.cpp:62 eeschema/schframe.cpp:1225 cvpcb/cvframe.cpp:734
+#: eeschema/libedit.cpp:62 eeschema/schframe.cpp:1226 cvpcb/cvframe.cpp:734
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -379,7 +380,9 @@ msgstr " >>Errore\n"
 msgid ""
 "\n"
 "Zip archive <%s> created (%d bytes)"
-msgstr "\nArchivio Zip \"%s\" creato (%d byte)"
+msgstr ""
+"\n"
+"Archivio Zip \"%s\" creato (%d byte)"
 
 #: kicad/class_treeproject_item.cpp:111
 msgid ""
@@ -438,7 +441,9 @@ msgstr "GerbView - Visualizzatore Gerber"
 msgid ""
 "Bitmap2Component - Convert bitmap images to Eeschema\n"
 "or Pcbnew elements"
-msgstr "Bitmap2Component - Convertitore di immagini bitmap in elementi Eeschema o Pcbnew"
+msgstr ""
+"Bitmap2Component - Convertitore di immagini bitmap in elementi Eeschema o "
+"Pcbnew"
 
 #: kicad/commandframe.cpp:92
 msgid "Pcb calculator - Calculator for components, track width, etc."
@@ -1366,27 +1371,27 @@ msgstr "Dimensione Microvia troppo piccola"
 
 #: pcbnew/class_drc_item.cpp:93
 msgid "NetClass Track Width &lt; global limit"
-msgstr "Larghezza pista del gruppo collegamenti &lt; limiti globali"
+msgstr "Larghezza pista netclass &lt; limiti globali"
 
 #: pcbnew/class_drc_item.cpp:95
 msgid "NetClass Clearance &lt; global limit"
-msgstr "Isolamento del gruppo collegamenti &lt; limiti globali"
+msgstr "Isolamento netclass &lt; limiti globali"
 
 #: pcbnew/class_drc_item.cpp:97
 msgid "NetClass Via Dia &lt; global limit"
-msgstr "Diametro Via del gruppo collegamenti &lt; limiti globali"
+msgstr "Diametro via netclass &lt; limiti globali"
 
 #: pcbnew/class_drc_item.cpp:99
 msgid "NetClass Via Drill &lt; global limit"
-msgstr "Foratura Via del gruppo collegamenti &lt; limiti globali"
+msgstr "Foratura via netclass &lt; limiti globali"
 
 #: pcbnew/class_drc_item.cpp:101
 msgid "NetClass uVia Dia &lt; global limit"
-msgstr "Diametro MicroVia del gruppo collegamenti &lt; limiti globali"
+msgstr "Diametro microvia netclass &lt; limiti globali"
 
 #: pcbnew/class_drc_item.cpp:103
 msgid "NetClass uVia Drill &lt; global limit"
-msgstr "Foratura MicroVia del gruppo collegamenti &lt; limiti globali"
+msgstr "Foratura microvia netclass &lt; limiti globali"
 
 #: pcbnew/class_drc_item.cpp:106
 msgid "Via inside a keepout area"
@@ -2286,12 +2291,12 @@ msgid "Net Code"
 msgstr "Codice collegamento"
 
 #: pcbnew/class_netinfo_item.cpp:111 pcbnew/class_module.cpp:569
-#: pcbnew/class_board.cpp:916 cvpcb/dialogs/dialog_display_options_base.cpp:44
+#: pcbnew/class_board.cpp:917 cvpcb/dialogs/dialog_display_options_base.cpp:44
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:61
 msgid "Pads"
 msgstr "Piazzole"
 
-#: pcbnew/class_netinfo_item.cpp:131 pcbnew/class_board.cpp:919
+#: pcbnew/class_netinfo_item.cpp:131 pcbnew/class_board.cpp:920
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Via "
@@ -2657,7 +2662,7 @@ msgstr "Descrizione"
 msgid "Zone Outline"
 msgstr "Contorno zona"
 
-#: pcbnew/class_zone.cpp:603 pcbnew/class_zone.cpp:861
+#: pcbnew/class_zone.cpp:603 pcbnew/class_zone.cpp:862
 msgid "(Cutout)"
 msgstr "(Ritaglia)"
 
@@ -2677,7 +2682,7 @@ msgstr "Escluso rame"
 msgid "Keepout"
 msgstr "Zona vuota"
 
-#: pcbnew/class_zone.cpp:637 pcbnew/class_zone.cpp:891
+#: pcbnew/class_zone.cpp:637 pcbnew/class_zone.cpp:892
 #: eeschema/schframe.cpp:169
 msgid "Not Found"
 msgstr "Non trovato"
@@ -2719,15 +2724,15 @@ msgstr "Tratteggio"
 msgid "Corners in DrawList"
 msgstr "Angoli nella lista di disegno"
 
-#: pcbnew/class_zone.cpp:864
+#: pcbnew/class_zone.cpp:865
 msgid "(Keepout)"
 msgstr "(Zona vuota)"
 
-#: pcbnew/class_zone.cpp:884
+#: pcbnew/class_zone.cpp:885
 msgid "** NO BOARD DEFINED **"
 msgstr "** Nessuna scheda definita **"
 
-#: pcbnew/class_zone.cpp:896
+#: pcbnew/class_zone.cpp:897
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Contorno zona %s su %s"
@@ -3091,7 +3096,7 @@ msgstr ""
 "larghezza\n"
 "altrimenti usa la larghezza corrente"
 
-#: pcbnew/tool_pcb.cpp:631 pcbnew/router/router_tool.cpp:112
+#: pcbnew/tool_pcb.cpp:631 pcbnew/router/router_tool.cpp:118
 msgid "Track "
 msgstr "Pista "
 
@@ -3099,7 +3104,7 @@ msgstr "Pista "
 msgid " *"
 msgstr "*"
 
-#: pcbnew/tool_pcb.cpp:657 pcbnew/router/router_tool.cpp:125
+#: pcbnew/tool_pcb.cpp:657 pcbnew/router/router_tool.cpp:131
 msgid "Via "
 msgstr "Via "
 
@@ -5052,98 +5057,98 @@ msgstr "L'elemento token contiene i parameteri %d "
 msgid "This is the default net class."
 msgstr "Questo è il gruppo di collegamenti predefinito"
 
-#: pcbnew/class_board.cpp:922
+#: pcbnew/class_board.cpp:923
 msgid "trackSegm"
 msgstr "Segmenti"
 
-#: pcbnew/class_board.cpp:925
+#: pcbnew/class_board.cpp:926
 msgid "Nodes"
 msgstr "Nodi"
 
-#: pcbnew/class_board.cpp:928
+#: pcbnew/class_board.cpp:929
 msgid "Nets"
 msgstr "Piste"
 
-#: pcbnew/class_board.cpp:936
+#: pcbnew/class_board.cpp:937
 msgid "Links"
 msgstr "Collegamenti"
 
-#: pcbnew/class_board.cpp:939
+#: pcbnew/class_board.cpp:940
 msgid "Connect"
 msgstr "Connessi"
 
-#: pcbnew/class_board.cpp:942 pcbnew/dialogs/dialog_drc_base.cpp:184
+#: pcbnew/class_board.cpp:943 pcbnew/dialogs/dialog_drc_base.cpp:184
 msgid "Unconnected"
 msgstr "Disconnessi"
 
-#: pcbnew/class_board.cpp:2215
+#: pcbnew/class_board.cpp:2216
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Verifica componenti della lista collegamenti \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2233
+#: pcbnew/class_board.cpp:2234
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Aggiungi nuovo componente \"%s:%s\" modulo \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2243
+#: pcbnew/class_board.cpp:2244
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Impossibile aggiungere nuovo componente \"%s:%s\" a causa del modulo "
 "mancante \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2276
+#: pcbnew/class_board.cpp:2277
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Sostituisci il componente \"%s:%s\" modulo \"%s\" con  \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2288
+#: pcbnew/class_board.cpp:2289
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Impossibile rimpiazzare il componente \"%s:%s\" a causa del modulo mancante "
 "\"%s\".\n"
 
-#: pcbnew/class_board.cpp:2322
+#: pcbnew/class_board.cpp:2323
 #, c-format
 msgid "Changing footprint \"%s:%s\" reference to \"%s\".\n"
 msgstr "Cambia il riferimento modulo \"%s:%s\" in \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2338
+#: pcbnew/class_board.cpp:2339
 #, c-format
 msgid "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Cambiamento valore modulo \"%s:%s\" da \"%s\" a \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2355
+#: pcbnew/class_board.cpp:2356
 #, c-format
 msgid "Changing footprint path \"%s:%s\" to \"%s\".\n"
 msgstr "Cambiamento percorso modulo \"%s:%s\" a \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2381
+#: pcbnew/class_board.cpp:2382
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Cancellazione componente \"%s:%s\" pin \"%s\" nome collegamento.\n"
 
-#: pcbnew/class_board.cpp:2398
+#: pcbnew/class_board.cpp:2399
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2447
+#: pcbnew/class_board.cpp:2448
 #, c-format
 msgid "Removing footprint \"%s:%s\".\n"
 msgstr "Rimozione modulo \"%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2485
+#: pcbnew/class_board.cpp:2486
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr ""
 "Rimozione collegamento singola piazzola \"%s\" su \"%s\" piazzola \"%s\"\n"
 
-#: pcbnew/class_board.cpp:2534
+#: pcbnew/class_board.cpp:2535
 #, c-format
 msgid "*** Error: Component '%s' pad '%s' not found in footprint '%s' ***\n"
 msgstr ""
@@ -10794,39 +10799,39 @@ msgstr ""
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Extra Via %d Dimensione</b>%s &gt; <b>1 inch!</b><br>"
 
-#: pcbnew/router/router_tool.cpp:101
+#: pcbnew/router/router_tool.cpp:107
 msgid "Custom size"
 msgstr "Dimensioni personalizzate"
 
-#: pcbnew/router/router_tool.cpp:104
+#: pcbnew/router/router_tool.cpp:110
 msgid "Use the starting track width"
 msgstr "Usa larghezza iniziale della pista"
 
-#: pcbnew/router/router_tool.cpp:105
+#: pcbnew/router/router_tool.cpp:111
 msgid "Route using the width of the starting track."
 msgstr "Sbroglia usando la larghezza della pista iniziale."
 
-#: pcbnew/router/router_tool.cpp:107
+#: pcbnew/router/router_tool.cpp:113
 msgid "Use netclass values"
 msgstr "Utilizza regole del gruppo di collegamenti"
 
-#: pcbnew/router/router_tool.cpp:108
+#: pcbnew/router/router_tool.cpp:114
 msgid "Use track and via sizes from the net class"
 msgstr "Usa dimensioni piste e via dalla netclass"
 
-#: pcbnew/router/router_tool.cpp:116 pcbnew/router/router_tool.cpp:141
+#: pcbnew/router/router_tool.cpp:122 pcbnew/router/router_tool.cpp:147
 msgid " (from netclass)"
 msgstr " (dalla netclass)"
 
-#: pcbnew/router/router_tool.cpp:133
+#: pcbnew/router/router_tool.cpp:139
 msgid ", drill: default"
 msgstr ", foro: predefinito"
 
-#: pcbnew/router/router_tool.cpp:137
+#: pcbnew/router/router_tool.cpp:143
 msgid ", drill: "
 msgstr ", foro: "
 
-#: pcbnew/router/router_tool.cpp:637
+#: pcbnew/router/router_tool.cpp:659
 msgid "Interactive Router"
 msgstr "Sbroglio interattivo"
 
@@ -11094,43 +11099,43 @@ msgstr "Scegli editor preferito"
 
 #: common/basicframe.cpp:485
 msgid "Copy &Version Information"
-msgstr "Copia info di &versione"
+msgstr "Copia informazioni di &versione"
 
 #: common/basicframe.cpp:486
 msgid "Copy the version string to clipboard to send with bug reports"
 msgstr ""
-"Copia le informazioni sulla versione negli Appunti da inviare con il "
-"rapporto sul bug."
+"Copia le informazioni sulla versione negli appunti da inviare con il "
+"rapporto sul bug"
 
 #: common/basicframe.cpp:561
 msgid "Could not open clipboard to write version information."
 msgstr ""
-"Impossibile aprire gli Appunti per scrivere le informazioni sulla versione."
+"Impossibile aprire gli appunti per scrivere le informazioni sulla versione."
 
 #: common/basicframe.cpp:562
 msgid "Clipboard Error"
-msgstr "Errore degli Appunti! "
+msgstr "Errore degli appunti"
 
 #: common/basicframe.cpp:632
 msgid "Version Information (copied to the clipboard)"
-msgstr "Informazioni di versione (copiate sugli appunti)"
+msgstr "Informazioni di versione (copiate negli appunti)"
 
 #: common/basicframe.cpp:659
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
-msgstr "Non si possiedono i permessi di scrittura per la cartella <%s>"
+msgstr "Non si possiedono i permessi di scrittura per la cartella \"%s\"."
 
 #: common/basicframe.cpp:664
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr ""
-"Non si possiedono i permessi di scrittura per salvare il file <%s> nella "
-"cartella <%s>."
+"Non si possiedono i permessi di scrittura per salvare il file \"%s\" nella "
+"cartella \"%s\"."
 
 #: common/basicframe.cpp:669
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
-msgstr "Non si dispone dei permessi necessari per salvare il file <%s>."
+msgstr "Non si dispone dei permessi necessari per salvare il file \"%s\"."
 
 #: common/basicframe.cpp:701
 #, c-format
@@ -12840,19 +12845,19 @@ msgstr "&Apri schema"
 
 #: eeschema/menubar.cpp:78
 msgid "Open an existing schematic hierarchy"
-msgstr "Apri Esistente schema gerarchico"
+msgstr "Apri uno schema gerarchico già esistente"
 
 #: eeschema/menubar.cpp:100
 msgid "Open a recent opened schematic project"
-msgstr "Apri progetti recenti"
+msgstr "Apri un schema elettrico aperto recentemente"
 
 #: eeschema/menubar.cpp:105
 msgid "&Append Schematic Sheet"
-msgstr "&Aggiungi schema"
+msgstr "&Aggiungi foglio schema"
 
 #: eeschema/menubar.cpp:106
 msgid "Append schematic sheet to current project"
-msgstr "Aggiunge un nuovo schema al corrente"
+msgstr "Aggiunge un nuovo foglio allo schema corrente"
 
 #: eeschema/menubar.cpp:111
 msgid "&Save Schematic Project"
@@ -12864,15 +12869,15 @@ msgstr "Salva tutti i fogli dello schema"
 
 #: eeschema/menubar.cpp:120
 msgid "Save &Current Sheet Only"
-msgstr "Salva &foglio corrente"
+msgstr "Salva solo il foglio &corrente"
 
 #: eeschema/menubar.cpp:121
 msgid "Save only current schematic sheet"
-msgstr "Salva foglio corrente con nome..."
+msgstr "Salva solo il foglio corrente dello schema elettrico"
 
 #: eeschema/menubar.cpp:128
 msgid "Save Current Sheet &As"
-msgstr "Salva foglio con &nome"
+msgstr "Salv&a foglio con nome"
 
 #: eeschema/menubar.cpp:129
 msgid "Save current schematic sheet as..."
@@ -12880,11 +12885,11 @@ msgstr "Salva foglio corrente con nome... "
 
 #: eeschema/menubar.cpp:137
 msgid "Pa&ge Settings"
-msgstr "Imp&ostazioni pagina"
+msgstr "Impostazioni pa&gina"
 
 #: eeschema/menubar.cpp:138
 msgid "Setting for sheet size and frame references"
-msgstr "Impostazioni dimensioni pagina"
+msgstr "Impostazioni dimensioni riferimenti e pagina "
 
 #: eeschema/menubar.cpp:143
 msgid "Pri&nt"
@@ -12892,7 +12897,7 @@ msgstr "Sta&mpa"
 
 #: eeschema/menubar.cpp:144
 msgid "Print schematic sheet"
-msgstr "Stampa"
+msgstr "Stampa schema elettrico"
 
 #: eeschema/menubar.cpp:152 eeschema/menubar.cpp:165 eeschema/menubar.cpp:174
 msgid "&Plot"
@@ -12900,11 +12905,11 @@ msgstr "&Tracciatore"
 
 #: eeschema/menubar.cpp:153
 msgid "Plot schematic sheet in PostScript, PDF, SVG, DXF or HPGL format"
-msgstr "Traccia schema in formato PostScript, PDF, SVG, DXF or HPGL"
+msgstr "Stampa schema in formato PostScript, PDF, SVG, DXF or HPGL"
 
 #: eeschema/menubar.cpp:159
 msgid "Plot to &Clipboard"
-msgstr "Traccia su &appunti"
+msgstr "Stampa sugli app&unti"
 
 #: eeschema/menubar.cpp:160
 msgid "Export drawings to clipboard"
@@ -12912,7 +12917,7 @@ msgstr "Esporta grafica sugli appunti"
 
 #: eeschema/menubar.cpp:166 eeschema/menubar.cpp:175
 msgid "Plot schematic sheet in HPGL, PostScript or SVG format"
-msgstr "Traccia foglio in formato HPGL, PostScript or SVG"
+msgstr "Stampa il foglio dello schema in formato HPGL, PostScript or SVG"
 
 #: eeschema/menubar.cpp:187
 msgid "Quit Eeschema"
@@ -14611,7 +14616,7 @@ msgstr "Apri schema"
 msgid "Error: not a component or no component"
 msgstr "Errore: non è un componente o nessun componente"
 
-#: eeschema/schframe.cpp:1228
+#: eeschema/schframe.cpp:1229
 msgid " [no file]"
 msgstr "[nessun file]"
 
