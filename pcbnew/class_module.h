@@ -382,7 +382,7 @@ public:
      * Function GetValue
      * @return const wxString& - the value text.
      */
-    const wxString& GetValue()
+    const wxString& GetValue() const
     {
         return m_Value->GetText();
     }

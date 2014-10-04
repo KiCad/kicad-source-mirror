@@ -492,3 +492,64 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
     aCount = 1;
 }
 
+/**
+ * Macro-expansion for text in library modules
+ */
+wxString TEXTE_MODULE::GetShownText() const
+{
+    /* First order optimization: no % means that no processing is
+     * needed; just hope that RVO and copy constructor implementation
+     * avoid to copy the whole block; anyway it should be better than
+     * rebuild the string one character at a time...
+     * Also it seems wise to only expand macros in user text (but there
+     * is no technical reason, probably) */
+
+    if( (m_Type != TEXT_is_DIVERS) || (wxString::npos == m_Text.find('%')) )
+        return m_Text;
+    wxString newbuf;
+
+
+    const MODULE *module = static_cast<MODULE*>( GetParent() );
+
+    for( wxString::const_iterator it = m_Text.begin();
+            it != m_Text.end(); ++it )
+    {
+        // Process '%' and copy everything else
+        if( *it != '%' )
+            newbuf.append(*it);
+        else
+        {
+            /* Look at the next character (if is it there) and append
+             * its expansion */
+            ++it;
+            if( it != m_Text.end() )
+            {
+                switch( char(*it) )
+                {
+                case '%':
+                    newbuf.append( '%' );
+                    break;
+
+                case 'R':
+                    if( module )
+                        newbuf.append( module->GetReference() );
+                    break;
+
+                case 'V':
+                    if( module )
+                        newbuf.append( module->GetValue() );
+                    break;
+
+                default:
+                    newbuf.append( '?' );
+                    break;
+                }
+            }
+            else
+                break; // The string is over and we can't ++ anymore
+        }
+    }
+    return newbuf;
+}
+
+
