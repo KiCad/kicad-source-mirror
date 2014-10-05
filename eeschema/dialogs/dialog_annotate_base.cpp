@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -205,7 +205,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	m_btnClear = new wxButton( this, ID_CLEAR_ANNOTATION_CMP, _("Clear Annotation"), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_btnClear, 0, wxALL|wxEXPAND, 5 );
 	
-	m_btnApply = new wxButton( this, wxID_APPLY, _("Annotation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnApply = new wxButton( this, wxID_APPLY, _("Annotate"), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_btnApply, 0, wxALL|wxEXPAND, 5 );
 	
 	
