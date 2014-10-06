@@ -208,6 +208,9 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
     // alias exists because its root component was found
     component->SetPartName( name );
 
+    // Be sure the link to the corresponding LIB_PART is OK:
+    component->Resolve( Prj().SchLibs() );
+
     // Set the component value that can differ from component name in lib, for aliases
     component->GetField( VALUE )->SetText( name );
 

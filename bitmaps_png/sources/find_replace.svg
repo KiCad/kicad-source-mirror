@@ -14,7 +14,7 @@
    inkscape:export-xdpi="90.000000"
    inkscape:export-filename="/home/steven/edit-find-48.png"
    sodipodi:docname="find_replace.svg"
-   inkscape:version="0.48.2 r9819"
+   inkscape:version="0.48.4 r9939"
    sodipodi:version="0.32"
    id="svg249"
    height="26"
@@ -433,17 +433,17 @@
     </linearGradient>
   </defs>
   <sodipodi:namedview
-     inkscape:window-y="26"
-     inkscape:window-x="0"
-     inkscape:window-height="969"
-     inkscape:window-width="1280"
+     inkscape:window-y="-4"
+     inkscape:window-x="-4"
+     inkscape:window-height="1033"
+     inkscape:window-width="1920"
      inkscape:document-units="px"
      inkscape:grid-bbox="true"
      showgrid="true"
      inkscape:current-layer="layer5"
-     inkscape:cy="13.454817"
-     inkscape:cx="70.249125"
-     inkscape:zoom="4"
+     inkscape:cy="12.529668"
+     inkscape:cx="12.810992"
+     inkscape:zoom="32.571824"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="0.25490196"
@@ -470,7 +470,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <dc:subject>
           <rdf:Bag>
             <rdf:li>edit</rdf:li>
@@ -704,82 +704,6 @@
      inkscape:label="Magnifying Glass"
      style="display:inline"
      transform="translate(0,-22)">
-    <g
-       id="g3895"
-       transform="translate(-3.5870629,-0.56250016)">
-      <rect
-         style="color:#000000;fill:#9b9b9b;fill-opacity:0.54970757;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:block;overflow:visible"
-         id="rect15686"
-         width="11.975437"
-         height="1"
-         x="33.024563"
-         y="27"
-         rx="0.082502544"
-         ry="0.065390877" />
-      <rect
-         style="color:#000000;fill:#9b9b9b;fill-opacity:0.54970757;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:block;overflow:visible"
-         id="rect15732"
-         width="9"
-         height="1"
-         x="33"
-         y="35"
-         rx="0.062003829"
-         ry="0.065390877" />
-      <rect
-         style="color:#000000;fill:#9b9b9b;fill-opacity:0.54970757;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:block;overflow:visible"
-         id="rect15744"
-         width="8"
-         height="1"
-         x="33"
-         y="41"
-         rx="0.055114511"
-         ry="0.065390877" />
-      <rect
-         style="color:#000000;fill:#9b9b9b;fill-opacity:0.54970757;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:block;overflow:visible"
-         id="rect15686-1"
-         width="11.975437"
-         height="1"
-         x="33"
-         y="29"
-         rx="0.082502544"
-         ry="0.065390877" />
-      <rect
-         style="color:#000000;fill:#9b9b9b;fill-opacity:0.54970757;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:block;overflow:visible"
-         id="rect15686-9"
-         width="11.975437"
-         height="1"
-         x="33.024563"
-         y="31"
-         rx="0.082502544"
-         ry="0.065390877" />
-      <rect
-         style="color:#000000;fill:#9b9b9b;fill-opacity:0.54970757;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:block;overflow:visible"
-         id="rect15686-0"
-         width="11.975437"
-         height="1"
-         x="33"
-         y="33"
-         rx="0.082502544"
-         ry="0.065390877" />
-      <rect
-         style="color:#000000;fill:#9b9b9b;fill-opacity:0.54970757;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:block;overflow:visible"
-         id="rect15686-5"
-         width="11.975437"
-         height="1"
-         x="33.024563"
-         y="37"
-         rx="0.082502544"
-         ry="0.065390877" />
-      <rect
-         style="color:#000000;fill:#9b9b9b;fill-opacity:0.54970757;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:block;overflow:visible"
-         id="rect15686-03"
-         width="11.975437"
-         height="1"
-         x="33.024563"
-         y="39"
-         rx="0.082502544"
-         ry="0.065390877" />
-    </g>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.5538497;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.01754384;display:inline"
        d="m 6.2485326,26.884809 0,20.221684"
