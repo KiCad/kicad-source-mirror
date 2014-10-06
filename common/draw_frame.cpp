@@ -24,7 +24,7 @@
  */
 
 /**
- * @file drawframe.cpp
+ * @file draw_frame.cpp
  */
 
 #include <fctsys.h>

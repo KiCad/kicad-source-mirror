@@ -682,7 +682,7 @@ add_dependencies( pl_editor boost )
 add_dependencies( pnsrouter boost )
 
 
-if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
+if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
     add_dependencies( pcbnew lib-dependencies )
     add_dependencies( eeschema lib-dependencies )
     add_dependencies( cvpcb lib-dependencies )
@@ -695,7 +695,7 @@ if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
     add_dependencies( pnsrouter lib-dependencies )
 endif()
 
-if ( KICAD_BUILD_DYNAMIC )
+if( KICAD_BUILD_DYNAMIC )
 endif()
 
 #############

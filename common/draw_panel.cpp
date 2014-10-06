@@ -24,7 +24,7 @@
  */
 
 /**
- * @file drawpanel.cpp
+ * @file draw_panel.cpp
  */
 
 #include <fctsys.h>

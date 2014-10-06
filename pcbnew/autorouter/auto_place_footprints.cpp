@@ -1,5 +1,5 @@
 /**
- * @file autoplac.cpp
+ * @file auto_place_footprints.cpp
  * @brief Functions to automatically place Footprints on a board.
  */
 

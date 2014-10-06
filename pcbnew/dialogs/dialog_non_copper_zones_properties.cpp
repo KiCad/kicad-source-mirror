@@ -1,5 +1,5 @@
 /**
- * @file zones_non_copper_type_functions.cpp
+ * @file dialog_non_copper_zones_properties.cpp
  */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
