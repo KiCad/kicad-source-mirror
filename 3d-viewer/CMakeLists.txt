@@ -33,3 +33,4 @@ set(3D-VIEWER_SRCS
     )
 
 add_library(3d-viewer STATIC ${3D-VIEWER_SRCS})
+add_dependencies( 3d-viewer pcbcommon )
