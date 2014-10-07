@@ -77,9 +77,9 @@ It's recommended to use the latest stable (at the time of this writing 3.0.1) ve
 
 Apply the patches needed for KiCad:
   # cd wx-src
-  # patch -p0 ../kicad/patches/wxwidgets-3.0.0_macosx.patch
-  # patch -p0 ../kicad/patches/wxwidgets-3.0.0_macosx_bug_15908.patch
-  # patch -p0 ../kicad/patches/wxwidgets-3.0.0_macosx_soname.patch
+  # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx.patch
+  # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx_bug_15908.patch
+  # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx_soname.patch
 
 Configure:
   # cd ..
@@ -100,8 +100,8 @@ Configure:
       --with-expat=builtin \
       --without-liblzma \
       --with-macosx-version-min=10.5 \
-      CPPFLAGS="-stdlib=libstdc++” \
-      LDFLAGS="-stdlib=libstdc++” \
+      CPPFLAGS="-stdlib=libstdc++" \
+      LDFLAGS="-stdlib=libstdc++" \
       CC=clang \
       CXX=clang++
 
