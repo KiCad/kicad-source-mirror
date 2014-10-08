@@ -42,21 +42,21 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxGridSizer* gSizeDiag;
 	gSizeDiag = new wxGridSizer( 3, 2, 0, 0 );
 	
-	m_ErcTotalErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Total errors count:  "), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_ErcTotalErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Total:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_ErcTotalErrorsText->Wrap( -1 );
 	gSizeDiag->Add( m_ErcTotalErrorsText, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_TotalErrCount = new wxTextCtrl( m_PanelERC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	gSizeDiag->Add( m_TotalErrCount, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_WarnErcErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Warnings count:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_WarnErcErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Warnings:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_WarnErcErrorsText->Wrap( -1 );
 	gSizeDiag->Add( m_WarnErcErrorsText, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_LastWarningCount = new wxTextCtrl( m_PanelERC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	gSizeDiag->Add( m_LastWarningCount, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_LastErrCountText = new wxStaticText( m_PanelERC, wxID_ANY, _("Errors count:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_LastErrCountText = new wxStaticText( m_PanelERC, wxID_ANY, _("Errors:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_LastErrCountText->Wrap( -1 );
 	gSizeDiag->Add( m_LastErrCountText, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
