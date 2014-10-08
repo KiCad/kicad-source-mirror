@@ -88,18 +88,7 @@ void DIALOG_ERC::Init()
     m_WriteResultOpt->SetValue( m_writeErcFile );
 
     SCH_SCREENS screens;
-    int markers = screens.GetMarkerCount();
-    int warnings = screens.GetMarkerCount( WAR );
-
-    wxString num;
-    num.Printf( wxT( "%d" ), markers );
-    m_TotalErrCount->SetValue( num );
-
-    num.Printf( wxT( "%d" ), markers - warnings );
-    m_LastErrCount->SetValue( num );
-
-    num.Printf( wxT( "%d" ), warnings );
-    m_LastWarningCount->SetValue( num );
+    updateMarkerCounts( &screens );
 
     DisplayERC_MarkersList();
 
@@ -110,6 +99,22 @@ void DIALOG_ERC::Init()
     m_buttonERC->SetDefault();
 }
 
+void DIALOG_ERC::updateMarkerCounts( SCH_SCREENS *screens )
+{
+    int markers = screens->GetMarkerCount();
+    int warnings = screens->GetMarkerCount( WAR );
+
+    wxString num;
+    num.Printf( wxT( "%d" ), markers );
+    m_TotalErrCount->SetValue( num );
+
+    num.Printf( wxT( "%d" ), markers - warnings );
+    m_LastErrCount->SetValue( num );
+
+    num.Printf( wxT( "%d" ), warnings );
+    m_LastWarningCount->SetValue( num );
+}
+
 /* Delete the old ERC markers, over the whole hierarchy
  */
 void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
@@ -117,6 +122,8 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
     SCH_SCREENS ScreenList;
 
     ScreenList.DeleteAllMarkers( MARK_ERC );
+    updateMarkerCounts( &ScreenList );
+
     m_MarkersList->ClearList();
     m_parent->GetCanvas()->Refresh();
 }
@@ -521,18 +528,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     }
 
     // Displays global results:
-    wxString num;
-    int markers = screens.GetMarkerCount();
-    int warnings = screens.GetMarkerCount( WAR );
-
-    num.Printf( wxT( "%d" ), markers );
-    m_TotalErrCount->SetValue( num );
-
-    num.Printf( wxT( "%d" ), markers - warnings );
-    m_LastErrCount->SetValue( num );
-
-    num.Printf( wxT( "%d" ), warnings );
-    m_LastWarningCount->SetValue( num );
+    updateMarkerCounts(&screens);
 
     // Display diags:
     DisplayERC_MarkersList();

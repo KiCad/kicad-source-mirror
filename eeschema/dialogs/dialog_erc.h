@@ -62,6 +62,7 @@ private:
     void ChangeErrorLevel( wxCommandEvent& event );
     void ReBuildMatrixPanel();
     void setDRCMatrixButtonState( wxBitmapButton *aButton, int aState );
+    void updateMarkerCounts( SCH_SCREENS *screens );
 };
 
 
