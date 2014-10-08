@@ -242,6 +242,9 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fieldVisibleCheckbox = new wxCheckBox( m_panel2, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
 	fieldSizer->Add( fieldVisibleCheckbox, 0, wxALL, 5 );
 	
+	m_htmlWin2 = new wxHtmlWindow( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	fieldSizer->Add( m_htmlWin2, 1, wxALL|wxEXPAND, 5 );
+	
 	
 	bSizer6->Add( fieldSizer, 1, wxEXPAND, 5 );
 	

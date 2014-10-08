@@ -70,12 +70,7 @@ protected:
      * Deletes the selected template fieldname from the template fieldnames data
      */
     void OnDeleteButtonClick( wxCommandEvent& event );
-
-    /**
-     * Function OnSize
-     * Resize any controls that are dynamically sized when the dialog is resized
-     */
-    void OnSize( wxSizeEvent& event );
+    void OnInitDialog( wxInitDialogEvent& event );
 
     /**
      * Function copyPanelToSelected

@@ -31,6 +31,7 @@
 
 #include <dialog_eeschema_options.h>
 
+#include "wx/settings.h"
 
 DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     DIALOG_EESCHEMA_OPTIONS_BASE( parent )
@@ -38,7 +39,14 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     m_choiceUnits->SetFocus();
     m_sdbSizer1OK->SetDefault();
 
-    // Setup the wxListCtrl for displaying the template fieldnames
+    // Dialog should not shrink beyond it's minimal size.
+    GetSizer()->SetSizeHints( this );
+
+    // The width returned by GetSize includes the amount taken up by the scroll bar, remove the
+    // scrollbar width
+    int listWidth = templateFieldListCtrl->GetSize().GetWidth() - 1;
+//            - wxSystemSettings::GetMetric( wxSYS_HSCROLL_Y );
+
     wxListItem col0;
     col0.SetId( 0 );
     col0.SetText( _( "Field Name" ) );
@@ -54,28 +62,25 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     templateFieldListCtrl->InsertColumn( 0, col0 );
     templateFieldListCtrl->InsertColumn( 1, col1 );
     templateFieldListCtrl->InsertColumn( 2, col2 );
-    templateFieldListCtrl->SetColumnWidth( 0, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
-    templateFieldListCtrl->SetColumnWidth( 1, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
-    templateFieldListCtrl->SetColumnWidth( 2, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
+
+    templateFieldListCtrl->SetColumnWidth( 0, 200 );
+    templateFieldListCtrl->SetColumnWidth( 1, 200 );
+    templateFieldListCtrl->SetColumnWidth( 2, 75 );
 
     // Invalid field selected and don't ignore selection events because
     // they'll be from the user
     selectedField = -1;
     ignoreSelection = false;
 
+    // Set the html help for th template editor
+    m_htmlWin2->SetPage(
+        _( "<b>Template Field Names</b><br>"
+           "<p>Field names must be unique, and should be alpha-numeric only</p>"
+           "<p>Some field names are reserved and cannot be used. The following fieldnames are "
+           "reserved:</p>" ) );
+
     // Make sure we select the first tab of the options tab page
     m_notebook1->SetSelection( 0 );
-}
-
-
-void DIALOG_EESCHEMA_OPTIONS::OnSize( wxSizeEvent& event )
-{
-    templateFieldListCtrl->SetColumnWidth( 0, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
-    templateFieldListCtrl->SetColumnWidth( 1, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
-    templateFieldListCtrl->SetColumnWidth( 2, templateFieldListCtrl->GetViewRect().GetWidth() / 3 );
-
-    /* We're just eves dropping on the event, pass it on... */
-    event.Skip();
 }
 
 
