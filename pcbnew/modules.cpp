@@ -262,7 +262,7 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeD
     /* Confirm module delete. */
     if( aAskBeforeDeleting )
     {
-        msg.Printf( _( "Delete Module %s (value %s) ?" ),
+        msg.Printf( _( "Delete Footprint %s (value %s) ?" ),
                     GetChars( aModule->GetReference() ),
                     GetChars( aModule->GetValue() ) );
 

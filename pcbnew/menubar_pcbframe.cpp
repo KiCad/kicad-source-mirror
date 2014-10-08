@@ -134,8 +134,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //----- Fabrication Outputs submenu -----------------------------------------
     wxMenu* fabricationOutputsMenu = new wxMenu;
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_POS_MODULES_FILE,
-                 _( "&Modules Position (.pos) File" ),
-                 _( "Generate modules position file for pick and place" ),
+                 _( "&Footprint Position (.pos) File" ),
+                 _( "Generate footprint position file for pick and place" ),
                  KiBitmap( post_compo_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_DRILL_FILE,
@@ -144,8 +144,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( post_drill_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_GEN_EXPORT_FILE_MODULE_REPORT,
-                 _( "&Module (.rpt) Report" ),
-                 _( "Create a report of all modules on the current board" ),
+                 _( "&Footprint (.rpt) Report" ),
+                 _( "Create a report of all footprints on the current board" ),
                  KiBitmap( tools_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_D356_FILE,
@@ -279,7 +279,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( editMenu, ID_PCB_GLOBAL_DELETE,
                  _( "&Global Deletions" ),
-                 _( "Delete tracks, modules, texts... on board" ),
+                 _( "Delete tracks, footprints, texts... on board" ),
                  KiBitmap( general_deletions_xpm ) );
 
     AddMenuItem( editMenu, ID_MENU_PCB_CLEAN,
@@ -293,8 +293,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( swap_layer_xpm ) );
 
     AddMenuItem( editMenu, ID_MENU_PCB_RESET_TEXTMODULE_FIELDS_SIZES,
-                 _( "&Reset Module Field Sizes" ),
-                 _( "Reset text size and width of all module fields to current defaults" ),
+                 _( "&Reset Footprint Field Sizes" ),
+                 _( "Reset text size and width of all footprint fields to current defaults" ),
                  KiBitmap( reset_text_xpm ) );
 
     //----- View menu -----------------------------------------------------------
@@ -365,10 +365,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //----- Place Menu ----------------------------------------------------------
     wxMenu* placeMenu = new wxMenu;
 
-    text = AddHotkeyName( _( "&Module" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Footprint" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_ADD_MODULE );
     AddMenuItem( placeMenu, ID_PCB_MODULE_BUTT, text,
-                 _( "Add modules" ), KiBitmap( module_xpm ) );
+                 _( "Add footprints" ), KiBitmap( module_xpm ) );
 
     text = AddHotkeyName( _( "&Track" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_ADD_NEW_TRACK, IS_COMMENT );

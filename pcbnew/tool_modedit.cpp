@@ -61,14 +61,14 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             _( "Select active library" ) );
 
     m_mainToolBar->AddTool( ID_MODEDIT_SAVE_LIBMODULE, wxEmptyString, KiBitmap( save_library_xpm ),
-                            _( "Save module in active library" ) );
+                            _( "Save footprint in active library" ) );
 
     m_mainToolBar->AddTool( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART, wxEmptyString,
                             KiBitmap( new_library_xpm ),
-                            _( "Create new library and save current module" ) );
+                            _( "Create new library and save current footprint" ) );
 
     m_mainToolBar->AddTool( ID_OPEN_MODULE_VIEWER, wxEmptyString, KiBitmap( modview_icon_xpm ),
-                            _( "Open module viewer" ) );
+                            _( "Open footprint viewer" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_MODEDIT_DELETE_PART, wxEmptyString, KiBitmap( delete_xpm ),
@@ -76,38 +76,38 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE, wxEmptyString, KiBitmap( new_footprint_xpm ),
-                            _( "New module" ) );
+                            _( "New footprint" ) );
 
 #ifdef KICAD_SCRIPTING
     m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE_FROM_WIZARD, wxEmptyString,
                             KiBitmap( module_wizard_xpm ),
-                            _( "New module from footprint wizard" ) );
+                            _( "New footprint using wizard" ) );
 #endif
 
 
     m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE, wxEmptyString,
                             KiBitmap( load_module_lib_xpm ),
-                            _( "Load module from library" ) );
+                            _( "Load footprint from library" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, wxEmptyString,
                             KiBitmap( load_module_board_xpm ),
-                            _( "Load module from current board" ) );
+                            _( "Load footprint from current board" ) );
 
     m_mainToolBar->AddTool( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, wxEmptyString,
                             KiBitmap( update_module_board_xpm ),
-                            _( "Update module in current board" ) );
+                            _( "Update footprint in current board" ) );
 
     m_mainToolBar->AddTool( ID_MODEDIT_INSERT_MODULE_IN_BOARD, wxEmptyString,
                             KiBitmap( insert_module_board_xpm ),
-                            _( "Insert module into current board" ) );
+                            _( "Insert footprint into current board" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_MODEDIT_IMPORT_PART, wxEmptyString, KiBitmap( import_module_xpm ),
-                            _( "Import module" ) );
+                            _( "Import footprint" ) );
 
     m_mainToolBar->AddTool( ID_MODEDIT_EXPORT_PART, wxEmptyString, KiBitmap( export_module_xpm ),
-                            _( "Export module" ) );
+                            _( "Export footprint" ) );
 
 
     m_mainToolBar->AddSeparator();
@@ -119,11 +119,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_MODEDIT_EDIT_MODULE_PROPERTIES, wxEmptyString,
                             KiBitmap( module_options_xpm ),
-                            _( "Module properties" ) );
+                            _( "Footprint properties" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
-                            _( "Print module" ) );
+                            _( "Print footprint" ) );
 
     m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
@@ -146,7 +146,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_MODEDIT_CHECK, wxEmptyString,
                             KiBitmap( module_check_xpm ),
-                            _( "Check module" ) );
+                            _( "Check footprint" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
@@ -184,7 +184,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
 
     m_drawToolBar->AddSeparator();
     m_drawToolBar->AddTool( ID_MODEDIT_ANCHOR_TOOL, wxEmptyString, KiBitmap( anchor_xpm ),
-                            _( "Place the footprint module reference anchor" ),
+                            _( "Place the footprint reference anchor" ),
                             wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();

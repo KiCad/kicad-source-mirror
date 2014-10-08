@@ -620,7 +620,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
             m_mainToolBar->AddSeparator();
             m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_DONE,
                                     wxEmptyString, KiBitmap( export_footprint_names_xpm ),
-                                    _( "Insert footprint in board" ) );
+                                    _( "Add footprint to board" ) );
         }
 
         // after adding the buttons to the toolbar, must call Realize() to
