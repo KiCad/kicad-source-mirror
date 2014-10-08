@@ -146,10 +146,7 @@ if( USE_KIWAY_DLLS )
             RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
             )
         set_target_properties( cvpcb_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
-            )
-        set( OSX_BUNDLE_PLUGINS ${OSX_BUNDLE_PLUGINS} "${OSX_BUNDLE_INSTALL_BIN_DIR}/_cvpcb.kiface"
-            PARENT_SCOPE
+            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
             )
     else()
         install( TARGETS cvpcb

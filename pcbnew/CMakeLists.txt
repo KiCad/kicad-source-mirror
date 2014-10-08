@@ -417,8 +417,9 @@ if( KICAD_SCRIPTING_MODULES )
 
     if( ${OPENMP_FOUND} )
         set_property( TARGET _pcbnew APPEND_STRING
-            PROPERTY LINK_FLAGS " ${OpenMP_CXX_FLAGS}" )
-        endif()
+            PROPERTY LINK_FLAGS " ${OpenMP_CXX_FLAGS}"
+        )
+    endif()
 endif()
 
 
@@ -597,10 +598,7 @@ if( USE_KIWAY_DLLS )
             RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
             )
         set_target_properties( pcbnew_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
-            )
-        set( OSX_BUNDLE_PLUGINS ${OSX_BUNDLE_PLUGINS} "${OSX_BUNDLE_INSTALL_BIN_DIR}/_pcbnew.kiface"
-            PARENT_SCOPE
+            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
             )
     else()
         install( TARGETS pcbnew
@@ -686,43 +684,20 @@ add_dependencies( pcbnew lib-dependencies )
 
 
 if( KICAD_SCRIPTING )
-    add_custom_target( FixSwigImportsScripting ALL
-        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
-        DEPENDS pcbnew
-        COMMENT "Fixing swig_import_helper in Kicad scripting"
-        )
-
-    install( FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST} )
-
-    if( APPLE )
-        # copies all into PYTHON_DEST then all into the bundle !
-        add_custom_target( _pcbnew_py_copy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py "${PYTHON_DEST}/wx-3.0-osx_cocoa/"
-            DEPENDS FixSwigImportsScripting
-            COMMENT "Copying pcbnew.py into PYTHON_DEST/wx-3.0-osx_cocoa/"
+    if( NOT APPLE )
+        install( FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST} )
+    else()
+        # put into bundle at build time, it is relocated at install
+        add_custom_target( ScriptingPcbnewPyCopy ALL
+            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py" "${PYTHON_DEST}"
+            DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+            COMMENT "Copying pcbnew.py into ${PYTHON_DEST}"
             )
-
-        add_custom_target( pcbnew_copy_wxpython_scripting ALL
-            COMMAND ${CMAKE_COMMAND} -E copy_directory ${LIBWXPYTHON_ROOT}/wxPython/  ${CMAKE_SOURCE_DIR}/pcbnew/pcbnew.app/Contents/Frameworks/wxPython/
-            DEPENDS FixSwigImportsScripting _pcbnew_py_copy
-            COMMENT "Copying wxPython into pcbnew.app Framework"
+        # scripting plugins
+        install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/scripting/plugins/
+            DESTINATION ${KICAD_DATA}/scripting/plugins
+            COMPONENT binary
             )
-
-        add_custom_target( pcbnew_copy_plugins ALL
-            COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/pcbnew/scripting/plugins ${PROJECT_SOURCE_DIR}/pcbnew/pcbnew.app/Contents/PlugIns/scripting/plugins
-            DEPENDS pcbnew_copy_wxpython_scripting
-            COMMENT "Copying plugins into bundle"
-            )
-
-        # fix bundle after copying wxpython, fixing and copying
-        add_dependencies( osx_fix_bundles pcbnew_copy_wxpython_scripting )
-
-        if ( KICAD_SCRIPTING_MODULES )
-            #they do more or less the same job, avoid race between them
-            #Cmake copy goes in error otherwise
-            add_dependencies( pcbnew_copy_wxpython_scripting  pcbnew_copy_wxpython_module )
-        endif()
-
     endif()
 endif()
 
@@ -733,33 +708,43 @@ if( KICAD_SCRIPTING_MODULES )
         COMMENT "Fixing swig_import_helper in Kicad scripting modules"
         )
 
-    install( FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST} )
+    if( NOT APPLE )
+        install( FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST} )
+    else()
+        # put everything into bundle at build time, it is relocated at install
+        add_custom_target( ScriptingModulesPcbnewPyCopy ALL
+            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py" "${PYTHON_DEST}"
+            DEPENDS FixSwigImportsModuleScripting
+            COMMENT "Copying pcbnew.py into ${PYTHON_DEST}"
+            )
+    endif()
 
     if( MINGW )
         install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.pyd DESTINATION ${PYTHON_DEST} )
+    elseif( APPLE )
+         # put everything into bundle at build time, it is relocated at install
+        add_custom_target( ScriptingModulesPcbnewSoCopy ALL
+            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so" "${PYTHON_DEST}"
+            DEPENDS _pcbnew
+            COMMENT "Copying _pcbnew.so into ${PYTHON_DEST}"
+            )
     else()
         install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so DESTINATION ${PYTHON_DEST} )
     endif()
+endif()
 
-    if( APPLE )
-        # copies needed files into PYTHON_DEST then copy all into the bundle !
-        add_custom_target( _pcbnew_so_copy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so "${PYTHON_DEST}"
-            DEPENDS _pcbnew FixSwigImportsModuleScripting
-            COMMENT "Copying _pcbnew.so into PYTHON_DEST"
-            )
-
-        add_custom_target( pcbnew_copy_wxpython_module ALL
-            COMMAND ${CMAKE_COMMAND} -E copy_directory ${LIBWXPYTHON_ROOT}/wxPython/  ${PROJECT_SOURCE_DIR}/pcbnew/pcbnew.app/Contents/Frameworks/wxPython/
-            DEPENDS FixSwigImportsModuleScripting _pcbnew_so_copy
-            COMMENT "Copying wxPython into pcbnew.app Frameworks"
-            )
-
-        if( KICAD_BUILD_DYNAMIC )
-            # Tell that we have to run osx_fix_bundles fix after building _pcbnew and migrating wxPython
-            add_dependencies( osx_fix_bundles pcbnew_copy_wxpython_module )
-            add_dependencies( osx_fix_bundles _pcbnew )
+if( APPLE )
+    if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
+        # find wx-X.Y-osx_cocoa path below PYTHON_SITE_PACKAGE_PATH
+        file( GLOB WXPYTHON_PATH ${PYTHON_SITE_PACKAGE_PATH}/wx-?.?-osx_cocoa )
+        if( NOT WXPYTHON_PATH )
+            message( FATAL_ERROR "Could not find 'wx-?.?-osx_cocoa' in '${PYTHON_SITE_PACKAGE_PATH}'" )
         endif()
+        # copy contents
+        add_custom_target( ScriptingWxpythonCopy ALL
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${WXPYTHON_PATH}" "${PYTHON_DEST}"
+            COMMENT "Copying wxPython into ${PYTHON_DEST}"
+            )
     endif()
 endif()
 

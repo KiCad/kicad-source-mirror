@@ -114,6 +114,11 @@ const wxString KIWAY::dso_full_path( FACE_T aFaceId )
     }
 
     wxFileName fn = wxStandardPaths::Get().GetExecutablePath();
+#ifdef __WXMAC__
+    // we have the dso's in @executable_path/../Plugins in OSX bundle
+    fn.RemoveLastDir();
+    fn.AppendDir( wxT( "Plugins" ) );
+#endif
 
     fn.SetName( name );
 
