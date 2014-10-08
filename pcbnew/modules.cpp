@@ -64,7 +64,7 @@ MODULE* PCB_BASE_FRAME::GetModuleByName()
     wxString          moduleName;
     MODULE*           module = NULL;
 
-    wxTextEntryDialog dlg( this, _( "Name:" ), _( "Search footprint" ), moduleName );
+    wxTextEntryDialog dlg( this, _( "Reference:" ), _( "Search for footprint" ), moduleName );
 
     if( dlg.ShowModal() != wxID_OK )
         return NULL;    //Aborted by user
