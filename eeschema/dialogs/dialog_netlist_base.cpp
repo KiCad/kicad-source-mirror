@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -43,7 +43,7 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	
 	bLeftSizer->Add( 0, 0, 0, wxTOP, 15 );
 	
-	m_buttonNetlist = new wxButton( this, ID_CREATE_NETLIST, _("Netlist"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonNetlist = new wxButton( this, ID_CREATE_NETLIST, _("Generate"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftSizer->Add( m_buttonNetlist, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -72,6 +72,7 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	bMainSizer->Add( m_staticTextDefaultFN, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlDefaultFileName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_textCtrlDefaultFileName->SetMaxLength( 0 ); 
 	bMainSizer->Add( m_textCtrlDefaultFileName, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
@@ -106,6 +107,7 @@ NETLIST_DIALOG_ADD_PLUGIN_BASE::NETLIST_DIALOG_ADD_PLUGIN_BASE( wxWindow* parent
 	bSizerLeft->Add( m_staticTextCmd, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlCommand = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlCommand->SetMaxLength( 0 ); 
 	m_textCtrlCommand->SetMinSize( wxSize( 300,-1 ) );
 	
 	bSizerLeft->Add( m_textCtrlCommand, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -115,6 +117,7 @@ NETLIST_DIALOG_ADD_PLUGIN_BASE::NETLIST_DIALOG_ADD_PLUGIN_BASE( wxWindow* parent
 	bSizerLeft->Add( m_staticTextName, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlName->SetMaxLength( 0 ); 
 	bSizerLeft->Add( m_textCtrlName, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
