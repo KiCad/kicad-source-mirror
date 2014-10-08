@@ -93,13 +93,13 @@ void DIALOG_ERC::Init()
 
     wxString num;
     num.Printf( wxT( "%d" ), markers );
-    m_TotalErrCount->SetLabel( num );
+    m_TotalErrCount->SetValue( num );
 
     num.Printf( wxT( "%d" ), markers - warnings );
-    m_LastErrCount->SetLabel( num );
+    m_LastErrCount->SetValue( num );
 
     num.Printf( wxT( "%d" ), warnings );
-    m_LastWarningCount->SetLabel( num );
+    m_LastWarningCount->SetValue( num );
 
     DisplayERC_MarkersList();
 
@@ -289,34 +289,49 @@ void DIALOG_ERC::ReBuildMatrixPanel()
             }
 
             int event_id = ID_MATRIX_0 + ii + ( jj * PIN_NMAX );
-            BITMAP_DEF bitmap_butt = NULL;
-
-            // Add button on matrix
-            switch( diag )
-            {
-            case OK:
-                bitmap_butt = erc_green_xpm;
-                break;
-
-            case WAR:
-                bitmap_butt = ercwarn_xpm ;
-                break;
-
-            default:
-            case ERR:
-                bitmap_butt = ercerr_xpm;
-                break;
-            }
+            BITMAP_DEF bitmap_butt = erc_green_xpm;
 
             delete m_buttonList[ii][jj];
             m_buttonList[ii][jj] = new wxBitmapButton( m_matrixPanel,
                                                        event_id,
                                                        KiBitmap( bitmap_butt ),
                                                        wxPoint( x, y ) );
+            setDRCMatrixButtonState( m_buttonList[ii][jj], diag );
         }
     }
 
     m_initialized = true;
+}
+
+
+void DIALOG_ERC::setDRCMatrixButtonState( wxBitmapButton *aButton, int aState )
+{
+    BITMAP_DEF bitmap_butt = NULL;
+    wxString tooltip;
+
+    switch( aState )
+    {
+    case OK:
+        bitmap_butt = erc_green_xpm;
+        tooltip = _("No error or warning");
+        break;
+
+    case WAR:
+        bitmap_butt = ercwarn_xpm;
+        tooltip = _("Generate warning");
+        break;
+
+    case ERR:
+        bitmap_butt = ercerr_xpm;
+        tooltip = _("Generate error");
+        break;
+    }
+    
+    if( bitmap_butt )
+    {
+        aButton->SetBitmap(KiBitmap( bitmap_butt ));
+        aButton->SetToolTip(tooltip);
+    }
 }
 
 
@@ -359,7 +374,6 @@ void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
 void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
 {
     int             id, level, ii, x, y;
-    BITMAP_DEF      new_bitmap_butt = NULL;
     wxPoint         pos;
 
     id   = event.GetId();
@@ -371,33 +385,25 @@ void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
 
     level = DiagErc[y][x];
 
+    //change to the next error level
     switch( level )
     {
     case OK:
         level = WAR;
-        new_bitmap_butt = ercwarn_xpm;
         break;
 
     case WAR:
         level = ERR;
-        new_bitmap_butt = ercerr_xpm;
         break;
 
     case ERR:
         level = OK;
-        new_bitmap_butt = erc_green_xpm;
         break;
     }
 
-    if( new_bitmap_butt )
-    {
-        delete butt;
-        butt = new wxBitmapButton( m_matrixPanel, id,
-                                   KiBitmap( new_bitmap_butt ), pos );
+    setDRCMatrixButtonState( butt, level);
 
-        m_buttonList[y][x] = butt;
-        DiagErc[y][x] = DiagErc[x][y] = level;
-    }
+    DiagErc[y][x] = DiagErc[x][y] = level;
 }
 
 
@@ -520,13 +526,13 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     int warnings = screens.GetMarkerCount( WAR );
 
     num.Printf( wxT( "%d" ), markers );
-    m_TotalErrCount->SetLabel( num );
+    m_TotalErrCount->SetValue( num );
 
     num.Printf( wxT( "%d" ), markers - warnings );
-    m_LastErrCount->SetLabel( num );
+    m_LastErrCount->SetValue( num );
 
     num.Printf( wxT( "%d" ), warnings );
-    m_LastWarningCount->SetLabel( num );
+    m_LastWarningCount->SetValue( num );
 
     // Display diags:
     DisplayERC_MarkersList();

@@ -61,6 +61,7 @@ private:
     void ResetDefaultERCDiag( wxCommandEvent& event );
     void ChangeErrorLevel( wxCommandEvent& event );
     void ReBuildMatrixPanel();
+    void setDRCMatrixButtonState( wxBitmapButton *aButton, int aState );
 };
 
 
