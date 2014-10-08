@@ -1233,8 +1233,8 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
                 textm = &aModule->Value();
                 break;
 
-            case TEXTE_MODULE::TEXT_is_DIVERS:
-                // text is a drawing
+            // All other fields greater than 1.
+            default:
                 textm = new TEXTE_MODULE( aModule );
                 aModule->GraphicalItems().PushBack( textm );
             }

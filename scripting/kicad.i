@@ -29,6 +29,7 @@
 
 %include <std_vector.i>
 %include <std_string.i>
+%include <std_map.i>
 
 /* ignore some constructors of EDA_ITEM that will make the build fail */
 
@@ -56,19 +57,19 @@
 
 %{
     #include <cstddef>
-	#include <dlist.h>
-	#include <base_struct.h>
-	#include <common.h>
-	#include <wx_python_helpers.h>
-	#include <cstddef>
-  	#include <vector>
+    #include <dlist.h>
+    #include <base_struct.h>
+    #include <common.h>
+    #include <wx_python_helpers.h>
+    #include <cstddef>
+      #include <vector>
 
-	#include <class_title_block.h>
-	#include <class_colors_design_settings.h>
-	#include <class_marker_base.h>
+    #include <class_title_block.h>
+    #include <class_colors_design_settings.h>
+    #include <class_marker_base.h>
     #include <eda_text.h>
-	#include <convert_from_iu.h>
-	#include <convert_to_biu.h>
+    #include <convert_from_iu.h>
+    #include <convert_to_biu.h>
 
 %}
 

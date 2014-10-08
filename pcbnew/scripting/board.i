@@ -36,7 +36,6 @@
     def GetDrawings(self):            return self.m_Drawings
     def GetTracks(self):              return self.m_Track
     def GetFullRatsnest(self):        return self.m_FullRatsnest
-    def GetZones(self):               return self.m_ZoneDescriptorList
 
     def Save(self,filename):
         return SaveBoard(filename,self,IO_MGR.KICAD)
@@ -47,8 +46,8 @@
     #
 
     def Add(self,item):
-    	item.thisown=0
-    	self.AddNative(item)
+        item.thisown=0
+        self.AddNative(item)
   }
 
 }
@@ -75,44 +74,44 @@
 
 %extend BOARD
 {
-        %pythoncode
-        {
-        def GetNetClasses(self):
-            return self.GetDesignSettings().m_NetClasses
+    %pythoncode
+    {
+    def GetNetClasses(self):
+        return self.GetDesignSettings().m_NetClasses
 
-        def GetCurrentNetClassName(self):
-            return self.GetDesignSettings().m_CurrentNetClassName
+    def GetCurrentNetClassName(self):
+        return self.GetDesignSettings().m_CurrentNetClassName
 
-        def GetViasDimensionsList(self):
-            return self.GetDesignSettings().m_ViasDimensionsList
+    def GetViasDimensionsList(self):
+        return self.GetDesignSettings().m_ViasDimensionsList
 
-        def GetTrackWidthList(self):
-            return self.GetDesignSettings().m_TrackWidthList
-        }
+    def GetTrackWidthList(self):
+        return self.GetDesignSettings().m_TrackWidthList
+    }
 }
 
 
 %extend DRAWSEGMENT
 {
-	%pythoncode
-	{
-		def GetShapeStr(self):
-			return self.ShowShape(self.GetShape())
-	}
+    %pythoncode
+    {
+    def GetShapeStr(self):
+        return self.ShowShape(self.GetShape())
+    }
 }
 
 %extend BOARD_ITEM
 {
-        %pythoncode
-        {
-		def SetPos(self,p):
-			self.SetPosition(p)
-			self.SetPos0(p)
+    %pythoncode
+    {
+    def SetPos(self,p):
+        self.SetPosition(p)
+        self.SetPos0(p)
 
-		def SetStartEnd(self,start,end):
-			self.SetStart(start)
-			self.SetStart0(start)
-			self.SetEnd(end)
-			self.SetEnd0(end)
-        }
+    def SetStartEnd(self,start,end):
+        self.SetStart(start)
+        self.SetStart0(start)
+        self.SetEnd(end)
+        self.SetEnd0(end)
+    }
 }

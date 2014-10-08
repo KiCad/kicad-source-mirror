@@ -23,7 +23,7 @@
  */
 
 /**
- * @file printout_controller.cpp
+ * @file printout_control.cpp
  * @brief Board print handler implementation file.
  */
 

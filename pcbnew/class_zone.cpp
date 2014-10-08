@@ -804,7 +804,8 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     SetTimeStamp( src->m_TimeStamp );
     m_Poly->RemoveAllContours();
     m_Poly->Copy( src->m_Poly );                // copy outlines
-    m_CornerSelection  = -1;                    // For corner moving, corner index to drag, or -1 if no selection
+    m_CornerSelection  = -1;                    // For corner moving, corner index to drag,
+                                                // or -1 if no selection
     m_ZoneClearance    = src->m_ZoneClearance;  // clearance value
     m_ZoneMinThickness = src->m_ZoneMinThickness;
     m_FillMode = src->m_FillMode;               // Filling mode (segments/polygons)

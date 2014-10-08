@@ -217,7 +217,7 @@ static bool scriptingSetup()
 {
     wxString path_frag;
 
- #ifdef __MINGW32__
+#ifdef __MINGW32__
     // force python environment under Windows:
     const wxString python_us( "python27_us" );
 
@@ -261,32 +261,36 @@ static bool scriptingSetup()
     // [KICAD_PATH]/scripting/plugins
     // Add this default search path:
     path_frag = Pgm().GetExecutablePath() + wxT( "scripting/plugins" );
- #else
+#elif defined __WXMAC__
+    // User plugin folder is ~/Library/Application Support/kicad/scripting/plugins
+    path_frag = wxStandardPaths::Get().GetUserDataDir() + wxT( "/scripting/plugins" );
+
+    // Add default paths to PYTHONPATH
+    wxString pypath;
+    // User scripting folder (~/Library/Application Support/kicad/scripting/plugins)
+    pypath = wxStandardPaths::Get().GetUserDataDir() + wxT( "/scripting/plugins" );
+    // Machine scripting folder (/Library/Application Support/kicad/scripting/plugins)
+    pypath += wxT( ":/Library/Application Support/kicad/scripting/plugins" );
+    // Bundle scripting folder (<kicad.app>/Contents/SharedSupport/scripting/plugins)
+    pypath += wxT( ":" ) + wxStandardPaths::Get().GetDataDir() + wxT( "/scripting/plugins" );
+    // Bundle wxPython folder (<kicad.app>/Contents/Frameworks/python)
+    wxFileName fn = wxFileName( wxStandardPaths::Get().GetExecutablePath() );
+    fn.RemoveLastDir();
+    fn.AppendDir( wxT( "Frameworks" ) );
+    fn.AppendDir( wxT( "python" ) );
+    pypath += wxT( ":" ) + fn.GetPath();
+    // Original content of PYTHONPATH
+    if( wxGetenv("PYTHONPATH") != NULL )
+    {
+        pypath += wxT( ":" ) + wxString( wxGetenv("PYTHONPATH") );
+    }
+
+    // set $PYTHONPATH
+    wxSetEnv( "PYTHONPATH", pypath );
+#else
     // Add this default search path:
     path_frag = wxT( "/usr/local/kicad/bin/scripting/plugins" );
-
-  #ifdef  __WXMAC__
-    // OSX
-    // System Library first
-    // User Library then
-    // (TODO) Bundle package ? where to place ? Shared Support ?
-    path_frag = wxT( "/Library/Application Support/kicad/scripting" );
-    path_frag = wxString( wxGetenv("HOME") ) + wxT( "/Library/Application Support/kicad/scripting" );
-
-    // Get pcbnew.app/Contents directory
-    wxFileName bundledir( wxStandardPaths::Get().GetExecutablePath() ) ;
-    bundledir.RemoveLastDir();
-
-    // Prepend in PYTHONPATH the content of the bundle libraries !
-    wxSetEnv( "PYTHONPATH", ((wxGetenv("PYTHONPATH") != NULL ) ? (wxString(wxGetenv("PYTHONPATH")) + ":") : wxString("")) +
-            bundledir.GetPath() +
-            "/Frameworks/wxPython/lib/python2.6/site-packages/wx-3.0-osx_cocoa" + ":" +
-            "/Library/Application Support/kicad/" + ":" +
-            bundledir.GetPath() + "/PlugIns" + ":" +
-            wxString( wxGetenv("HOME") )  + "/Library/Application Support/kicad/"
-            );
-  #endif
- #endif
+#endif
 
     // On linux and osx, 2 others paths are
     // [HOME]/.kicad_plugins/

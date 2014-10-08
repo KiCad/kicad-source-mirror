@@ -42,17 +42,6 @@ if( MINGW )
     mingw_resource_compiler(pcb_calculator)
 endif()
 
-
-if( APPLE )
-    set( PCB_CALCULATOR_RESOURCES pcb_calculator.icns )
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-    set( MACOSX_BUNDLE_ICON_FILE pcb_calculator.icns )
-    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pcb_calculator )
-    set( MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist )
-endif()
-
 # auto-generate pcb_calculator_datafile.h and pcb_calculator_datafile_keywords.cpp
 # for the storage data file format.
 make_lexer(
@@ -69,7 +58,7 @@ make_lexer(
 if( USE_KIWAY_DLLS )
 #if( false )
 
-    add_executable( pcb_calculator WIN32 MACOSX_BUNDLE
+    add_executable( pcb_calculator WIN32
         ../common/single_top.cpp
         ../common/pgm_base.cpp
         ${PCB_CALCULATOR_RESOURCES}
@@ -118,16 +107,19 @@ if( USE_KIWAY_DLLS )
     add_dependencies( pcb_calculator pcb_calculator_kiface )
 
     # these 2 binaries are a matched set, keep them together
-    install( TARGETS pcb_calculator
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
     if( APPLE )
-        # puts the *.kiface into the *.app bundle while linking
+        # puts binaries into the *.app bundle while linking
+        set_target_properties( pcb_calculator PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
         set_target_properties( pcb_calculator_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/pcb_calculator.app/Contents/MacOS/
+            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
             )
     else()
+        install( TARGETS pcb_calculator
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
         install( TARGETS pcb_calculator_kiface
             DESTINATION ${KICAD_BIN}
             COMPONENT binary
@@ -136,7 +128,7 @@ if( USE_KIWAY_DLLS )
 
 else()
 
-    add_executable( pcb_calculator WIN32 MACOSX_BUNDLE
+    add_executable( pcb_calculator WIN32
         ../common/single_top.cpp
         pcb_calculator.cpp
         ${PCB_CALCULATOR_SRCS}
@@ -154,16 +146,16 @@ else()
         polygon
         ${wxWidgets_LIBRARIES}
         )
-    install( TARGETS pcb_calculator
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
+    if( APPLE )
+        # puts binaries into the *.app bundle while linking
+        set_target_properties( pcb_calculator PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
+    else()
+        install( TARGETS pcb_calculator
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+    endif()
 
-endif()
-
-
-if( APPLE )
-    set_target_properties( pcb_calculator PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-        )
 endif()

@@ -97,13 +97,14 @@ enum pseudokeys {
 #define PCB_CALCULATOR_EXE  wxT( "pcb_calculator" )
 #define PL_EDITOR_EXE       wxT( "pl_editor" )
 #else
-#define CVPCB_EXE           wxT( "cvpcb.app/Contents/MacOS/cvpcb" )
-#define PCBNEW_EXE          wxT( "pcbnew.app/Contents/MacOS/pcbnew" )
-#define EESCHEMA_EXE        wxT( "eeschema.app/Contents/MacOS/eeschema" )
-#define GERBVIEW_EXE        wxT( "gerbview.app/Contents/MacOS/gerbview" )
-#define BITMAPCONVERTER_EXE wxT( "bitmap2component.app/Contents/MacOS/bitmap2component" )
-#define PCB_CALCULATOR_EXE  wxT( "pcb_calculator.app/Contents/MacOS/pcb_calculator" )
-#define PL_EDITOR_EXE       wxT( "pl_editor.app/Contents/MacOS/pl_editor" )
+// All binaries are now in kicad.app bundle
+#define CVPCB_EXE           wxT( "kicad.app/Contents/MacOS/cvpcb" )
+#define PCBNEW_EXE          wxT( "kicad.app/Contents/MacOS/pcbnew" )
+#define EESCHEMA_EXE        wxT( "kicad.app/Contents/MacOS/eeschema" )
+#define GERBVIEW_EXE        wxT( "kicad.app/Contents/MacOS/gerbview" )
+#define BITMAPCONVERTER_EXE wxT( "kicad.app/Contents/MacOS/bitmap2component" )
+#define PCB_CALCULATOR_EXE  wxT( "kicad.app/Contents/MacOS/pcb_calculator" )
+#define PL_EDITOR_EXE       wxT( "kicad.app/Contents/MacOS/pl_editor" )
 # endif
 #endif
 

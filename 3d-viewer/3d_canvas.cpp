@@ -52,35 +52,6 @@
 #include <textures/text_silk.h>
 #include <textures/text_pcb.h>
 
-// -----------------
-// helper function (from wxWidgets, opengl/cube.cpp sample
-// -----------------
-void CheckGLError(const char *aFileName, int aLineNumber)
-{
-    GLenum errLast = GL_NO_ERROR;
-
-    for ( ; ; )
-    {
-        GLenum err = glGetError();
-        if ( err == GL_NO_ERROR )
-            return;
-
-        // normally the error is reset by the call to glGetError() but if
-        // glGetError() itself returns an error, we risk looping forever here
-        // so check that we get a different error than the last time
-        if ( err == errLast )
-        {
-            wxLogError(wxT("OpenGL error state couldn't be reset."));
-            return;
-        }
-
-        errLast = err;
-
-        wxLogError( wxT( "OpenGL error %d At: %s, line: %d" ), err,
-                    GetChars( FROM_UTF8( aFileName ) ), aLineNumber );
-    }
-}
-
 
 /*
  * EDA_3D_CANVAS implementation

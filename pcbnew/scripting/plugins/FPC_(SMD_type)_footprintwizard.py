@@ -131,15 +131,13 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         module.Add(outline)
 
         # lower line
-        outline1 = EDGE_MODULE(module)
-        outline1.Copy(outline)                  #copy all settings from outline
+        outline1 = outline.Duplicate()      #copy all settings from outline
         posy = pad_height/2 + linewidth/2 + margin
         outline1.SetStartEnd(wxPoint(xstart, posy), wxPoint( xend, posy))
         module.Add(outline1)
 
         # around left mechanical pad (the outline around right pad is mirrored/y axix)
-        outline2 = EDGE_MODULE(module)  # vertical segment
-        outline2.Copy(outline)
+        outline2 = outline.Duplicate()  # vertical segment
         yend = pad_s0_pos.y + shl_height/2 + margin
         outline2.SetStartEnd(wxPoint(xstart, posy), wxPoint( xstart, yend))
         module.Add(outline2)
@@ -148,8 +146,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         outline2_d.SetStartEnd(wxPoint(-xstart, posy), wxPoint( -xstart, yend))
         module.Add(outline2_d)
 
-        outline3 = EDGE_MODULE(module)  # horizontal segment below the pad
-        outline3.Copy(outline)
+        outline3 = outline.Duplicate()  # horizontal segment below the pad
         posy = yend
         xend = pad_s0_pos.x - (shl_width/2 + linewidth + margin*2)
         outline3.SetStartEnd(wxPoint(xstart, posy), wxPoint( xend, posy))
@@ -159,37 +156,31 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         outline3_d.SetStartEnd(wxPoint(-xstart, posy), wxPoint( -xend, yend))
         module.Add(outline3_d)
 
-        outline4 = EDGE_MODULE(module)  # vertical segment at left of the pad
-        outline4.Copy(outline)
+        outline4 = outline.Duplicate()  # vertical segment at left of the pad
         xstart = xend
         yend = posy - (shl_height + linewidth + margin*2)
         outline4.SetStartEnd(wxPoint(xstart, posy), wxPoint( xend, yend))
         module.Add(outline4)
-        outline4_d = EDGE_MODULE(module)  # right pad side
-        outline4_d.Copy(outline4)
+        outline4_d = outline.Duplicate()  # right pad side
         outline4_d.SetStartEnd(wxPoint(-xstart, posy), wxPoint( -xend, yend))
         module.Add(outline4_d)
 
-        outline5 = EDGE_MODULE(module)  # horizontal segment above the pad
-        outline5.Copy(outline)
+        outline5 = outline.Duplicate()  # horizontal segment above the pad
         xstart = xend
         xend = - pad_pitch*0.5-offsetX
         posy = yend
         outline5.SetStartEnd(wxPoint(xstart, posy), wxPoint( xend, yend))
         module.Add(outline5)
-        outline5_d = EDGE_MODULE(module)  # right pad side
-        outline5_d.Copy(outline5)
+        outline5_d = outline.Duplicate()  # right pad side
         outline5_d.SetStartEnd(wxPoint(-xstart, posy), wxPoint( -xend, yend))
         module.Add(outline5_d)
 
-        outline6 = EDGE_MODULE(module)  # vertical segment above the pad
-        outline6.Copy(outline)
+        outline6 = outline.Duplicate()  # vertical segment above the pad
         xstart = xend
         yend = -pad_height/2 - linewidth/2 - margin
         outline6.SetStartEnd(wxPoint(xstart, posy), wxPoint( xend, yend))
         module.Add(outline6)
-        outline6_d = EDGE_MODULE(module)  # right pad side
-        outline6_d.Copy(outline6)
+        outline6_d = outline.Duplicate()  # right pad side
         outline6_d.SetStartEnd(wxPoint(-xstart, posy), wxPoint( -xend, yend))
         module.Add(outline6_d)
 

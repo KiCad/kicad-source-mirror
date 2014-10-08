@@ -26,10 +26,12 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
     // Otherwise don't set it.
     maybe.AddPaths( wxGetenv( wxT( "KICAD" ) ) );
 
+#ifndef __WXMAC__
     // This is from CMAKE_INSTALL_PREFIX.
     // Useful when KiCad is installed by `make install`.
     // Use as second ranked place.
     maybe.AddPaths( wxT( DEFAULT_INSTALL_PATH ) );
+#endif
 
     // Add the directory for the user-dependent, program specific, data files:
     // Unix: ~/.appname
@@ -37,6 +39,17 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
     // Mac: ~/Library/Application Support/appname
     maybe.AddPaths( wxStandardPaths::Get().GetUserDataDir() );
 
+#ifdef __WXMAC__
+    // global machine specific application data
+    maybe.AddPaths( wxT( "/Library/Application Support/kicad" ) );
+
+    // Dir of the global (not user-specific), application specific, data files.
+    // From wx docs:
+    // Unix: prefix/share/appname
+    // Windows: the directory where the executable file is located
+    // Mac: appname.app/Contents/SharedSupport bundle subdirectory
+    maybe.AddPaths( wxStandardPaths::Get().GetDataDir() );
+#else
     {
         // Should be full path to this program executable.
         wxString   bin_dir = Pgm().GetExecutablePath();
@@ -77,11 +90,9 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
      */
 #if defined(__MINGW32__)
     maybe.AddPaths( wxGetenv( wxT( "PROGRAMFILES" ) ) );
-#elif __WXMAC__
-    maybe.AddPaths( wxString( wxGetenv( wxT( "HOME" ) ) ) + wxT( "/Library/Application Support" ) );
-    maybe.AddPaths( wxT( "/Library/Application Support" ) );
 #else
     maybe.AddPaths( wxGetenv( wxT( "PATH" ) ) );
+#endif
 #endif
 
 #if defined(DEBUG) && 0
@@ -96,6 +107,7 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
     {
         wxFileName fn( maybe[i], wxEmptyString );
 
+#ifndef __WXMAC__
         if( fn.GetPath().AfterLast( fn.GetPathSeparator() ) == wxT( "bin" ) )
         {
             fn.RemoveLastDir();
@@ -103,9 +115,11 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
             if( !fn.GetDirCount() )
                 continue;               // at least on linux
         }
+#endif
 
         aSearchStack->AddPaths( fn.GetPath() );
 
+#ifndef __WXMAC__
         fn.AppendDir( wxT( "kicad" ) );
         aSearchStack->AddPaths( fn.GetPath() );     // add maybe[i]/kicad
 
@@ -120,6 +134,7 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
 
         fn.AppendDir( wxT( "kicad" ) );
         aSearchStack->AddPaths( fn.GetPath() );     // add maybe[i]/share/kicad
+#endif
     }
 
 #if defined(DEBUG) && 0
@@ -127,4 +142,3 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
     aSearchStack->Show( __func__ );
 #endif
 }
-

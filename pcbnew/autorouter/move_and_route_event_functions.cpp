@@ -26,7 +26,7 @@
  */
 
 /**
- * @file automove.cpp
+ * @file move_and_route_event_functions.cpp
  * @brief Routines for automatic displacement and rotation of modules.
  */
 

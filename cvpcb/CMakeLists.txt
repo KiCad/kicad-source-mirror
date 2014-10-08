@@ -53,24 +53,8 @@ if( MINGW )
 endif()
 
 
-if( APPLE )
-    set( CVPCB_RESOURCES cvpcb.icns cvpcb_doc.icns )
-
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/cvpcb.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/cvpcb_doc.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-
-    set( MACOSX_BUNDLE_ICON_FILE cvpcb.icns )
-    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.cvpcb )
-endif()
-
-
 if( USE_KIWAY_DLLS )
-    add_executable( cvpcb WIN32 MACOSX_BUNDLE
+    add_executable( cvpcb WIN32
         ../common/single_top.cpp
         ../common/pgm_base.cpp
         ${CVPCB_RESOURCES}
@@ -156,16 +140,19 @@ if( USE_KIWAY_DLLS )
     add_dependencies( cvpcb cvpcb_kiface )
 
     # these 2 binaries are a matched set, keep them together:
-    install( TARGETS cvpcb
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
     if( APPLE )
-        # puts the *.kiface into the *.app bundle while linking
+        # puts binaries into the *.app bundle while linking
+        set_target_properties( cvpcb PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
         set_target_properties( cvpcb_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/cvpcb.app/Contents/MacOS/
+            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
             )
     else()
+        install( TARGETS cvpcb
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
         install( TARGETS cvpcb_kiface
             DESTINATION ${KICAD_BIN}
             COMPONENT binary
@@ -174,7 +161,7 @@ if( USE_KIWAY_DLLS )
 
 else()
 
-    add_executable( cvpcb WIN32 MACOSX_BUNDLE
+    add_executable( cvpcb WIN32
         ${CVPCB_SRCS}
         ${CVPCB_DIALOGS}
         ${CVPCB_RESOURCES}
@@ -214,15 +201,15 @@ else()
     # Must follow github_plugin
     target_link_libraries( cvpcb ${Boost_LIBRARIES} )
 
-    install( TARGETS cvpcb
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
-endif()
-
-
-if( APPLE )
-    set_target_properties( cvpcb PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-        )
+    if( APPLE )
+        # puts binaries into the *.app bundle while linking
+        set_target_properties( cvpcb PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
+    else()
+        install( TARGETS cvpcb
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+    endif()
 endif()

@@ -173,6 +173,8 @@ public:
 
     EDA_ITEM* Clone() const;
 
+    virtual wxString GetShownText() const;
+
     /// @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const;
 

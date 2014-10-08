@@ -187,22 +187,6 @@ if( MINGW )
 endif()
 
 
-if( APPLE )
-    set( EESCHEMA_RESOURCES eeschema.icns eeschema_doc.icns )
-
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/eeschema.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/eeschema_doc.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-
-    set( MACOSX_BUNDLE_ICON_FILE eeschema.icns )
-    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.eeschema )
-    set( MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist )
-endif()
-
-
 # auto-generate cmp_library_lexer.h and cmp_library_keywords.cpp for the component
 # library format.
 make_lexer(
@@ -251,7 +235,7 @@ set_source_files_properties( dialogs/dialog_bom.cpp
 
 
 if( USE_KIWAY_DLLS )
-    add_executable( eeschema WIN32 MACOSX_BUNDLE
+    add_executable( eeschema WIN32
         ../common/single_top.cpp
         ../common/pgm_base.cpp
         ${EESCHEMA_RESOURCES}
@@ -296,12 +280,6 @@ if( USE_KIWAY_DLLS )
     # if building eeschema, then also build eeschema_kiface if out of date.
     add_dependencies( eeschema eeschema_kiface )
 
-    if( APPLE )
-        set_target_properties( eeschema PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
-    endif()
-
     if( MAKE_LINK_MAPS )
         # generate link map with cross reference
         set_target_properties( eeschema_kiface PROPERTIES
@@ -313,16 +291,19 @@ if( USE_KIWAY_DLLS )
     endif()
 
     # these 2 binaries are a matched set, keep them together:
-    install( TARGETS eeschema
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
     if( APPLE )
-        # puts the *.kiface into the *.app bundle while linking
+        # puts binaries into the *.app bundle while linking
+        set_target_properties( eeschema PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
         set_target_properties( eeschema_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/eeschema.app/Contents/MacOS/
+            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
             )
     else()
+        install( TARGETS eeschema
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
         install( TARGETS eeschema_kiface
             # actual filename subject to change at milestone C)
             # modular-kicad blueprint.
@@ -332,7 +313,7 @@ if( USE_KIWAY_DLLS )
     endif()
 
 else()
-    add_executable( eeschema WIN32 MACOSX_BUNDLE
+    add_executable( eeschema WIN32
         ../common/single_top.cpp
         ${EESCHEMA_SRCS}
         ${EESCHEMA_COMMON_SRCS}
@@ -353,15 +334,16 @@ else()
         )
 
     if( APPLE )
+        # puts binaries into the *.app bundle while linking
         set_target_properties( eeschema PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
+    else()
+        install( TARGETS eeschema
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
             )
     endif()
-
-    install( TARGETS eeschema
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
 
 endif()
 

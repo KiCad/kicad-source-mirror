@@ -53,23 +53,10 @@ if( MINGW )
 endif()
 
 
-if( APPLE )
-    set( PL_EDITOR_RESOURCES pl_editor.icns pl_editor_doc.icns )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pl_editor.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pl_editor_doc.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-    set( MACOSX_BUNDLE_ICON_FILE pl_editor.icns )
-    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pl_editor )
-endif()
-
-
 if( USE_KIWAY_DLLS )
 
     # a very small program launcher for pl_editor_kiface
-    add_executable( pl_editor WIN32 MACOSX_BUNDLE
+    add_executable( pl_editor WIN32
         ../common/single_top.cpp
         ../common/pgm_base.cpp
         ${PL_EDITOR_RESOURCES}
@@ -122,16 +109,19 @@ if( USE_KIWAY_DLLS )
     add_dependencies( pl_editor pl_editor_kiface )
 
     # these 2 binaries are a matched set, keep them together:
-    install( TARGETS pl_editor
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
     if( APPLE )
-        # puts the *.kiface into the *.app bundle while linking
+        # puts binaries into the *.app bundle while linking
+        set_target_properties( pl_editor PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
         set_target_properties( pl_editor_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/pl_editor.app/Contents/MacOS/
+            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
             )
     else()
+        install( TARGETS pl_editor
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
         install( TARGETS pl_editor_kiface
             DESTINATION ${KICAD_BIN}
             COMPONENT binary
@@ -140,7 +130,7 @@ if( USE_KIWAY_DLLS )
 
 else()
 
-    add_executable( pl_editor WIN32 MACOSX_BUNDLE
+    add_executable( pl_editor WIN32
         pl_editor.cpp
         ${PL_EDITOR_SRCS}
         ${DIALOGS_SRCS}
@@ -155,15 +145,15 @@ else()
         ${wxWidgets_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         )
-    install( TARGETS pl_editor
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
-endif()
-
-
-if( APPLE )
-    set_target_properties( pl_editor PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-        )
+    if( APPLE )
+        # puts binaries into the *.app bundle while linking
+        set_target_properties( pl_editor PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
+    else()
+        install( TARGETS pl_editor
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+    endif()
 endif()

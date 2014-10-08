@@ -56,23 +56,6 @@ if( UNIX )
         )
 endif()
 
-
-if( APPLE )
-    # In this CMakeLists.txt's build directory, create kiface symlinks should get
-    # "installed()" as part of the kicad.app bundle.  These are pointers on the
-    # target which point up and over to the stand alone kicad app's *.kiface files.
-    foreach( symlink pcbnew eeschema cvpcb )
-        add_custom_command( TARGET kicad
-            COMMAND ${CMAKE_COMMAND} -E remove
-                        "${CMAKE_CURRENT_BINARY_DIR}/kicad.app/Contents/MacOS/_${symlink}.kiface"
-            COMMAND ${CMAKE_COMMAND} -E create_symlink
-                        "../../../${symlink}.app/Contents/MacOS/_${symlink}.kiface"
-                        "${CMAKE_CURRENT_BINARY_DIR}/kicad.app/Contents/MacOS/_${symlink}.kiface"
-            COMMENT "kicad.app ${symlink} symlink"
-            )
-    endforeach()
-endif()
-
 if( APPLE )
     set_target_properties( kicad PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
@@ -97,4 +80,47 @@ install( TARGETS kicad
     DESTINATION ${KICAD_BIN}
     COMPONENT binary
     )
+if( APPLE )
+    # "install( CODE ... )" will launch its own CMake, so no variables from
+    # this CMake instance are accessible... use helper to transfer
+    if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
+        set( SCRIPTING_HELPER "1" )
+    else()
+        set( SCRIPTING_HELPER "0" )
+    endif()
 
+    # make bundle relocatable
+    install( CODE "
+        # find all libs and modules
+        file( GLOB BUNDLE_FIX_LIBS ${OSX_BUNDLE_INSTALL_KIFACE_DIR}/*.kiface )
+        if( ${SCRIPTING_HELPER} )
+            file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR}/*.so )
+            set( BUNDLE_FIX_LIBS \${BUNDLE_FIX_LIBS} \${PYTHON_SCRIPTING_SO} )
+            file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR}/wx/*.so )
+            set( BUNDLE_FIX_LIBS \${BUNDLE_FIX_LIBS} \${PYTHON_SCRIPTING_SO} )
+        endif()
+
+        # override default embedded path settings
+        function( gp_item_default_embedded_path_override item default_embedded_path_var )
+            # by default, embed things right next to the main bundle executable:
+            set( path \"@executable_path/../../Contents/MacOS\" )
+            set( overridden 0 )
+
+            # embed .dylibs right next to the main bundle executable:
+            if( item MATCHES \"\\\\.dylib$\" )
+                set( path \"@executable_path/../Frameworks\" )
+                set( overridden 1 )
+            endif()
+
+            set( \${default_embedded_path_var} \"\${path}\" PARENT_SCOPE )
+        endfunction(gp_item_default_embedded_path_override)
+
+        # do all the work
+        include( BundleUtilities )
+        fixup_bundle( ${OSX_BUNDLE_INSTALL_BIN_DIR}/kicad
+            \"\${BUNDLE_FIX_LIBS}\"
+            \"\"
+            )
+        " COMPONENT Runtime
+        )
+endif()
