@@ -461,7 +461,7 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() )
     {
-        int ii = DisplayExitDialog( this, _( "Save the changes in the module before closing?" ) );
+        int ii = DisplayExitDialog( this, _( "Save the changes to the footprint before closing?" ) );
 
         switch( ii )
         {
@@ -482,7 +482,7 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             }
             else
             {
-                DisplayError( this, _( "Library is not set, the module could not be saved." ) );
+                DisplayError( this, _( "Library is not set, the footprint could not be saved." ) );
             }
             // fall through: cancel the close because of an error
 
@@ -672,7 +672,7 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 
 void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
-    wxString title   = _( "Module Editor " );
+    wxString title   = _( "Footprint Editor " );
 
     wxString nickname = GetCurrentLib();
 
@@ -688,7 +688,7 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
             bool writable = Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname );
 
             // no exception was thrown, this means libPath is valid, but it may be read only.
-            title = _( "Module Editor (active library: " ) + nickname + wxT( ")" );
+            title = _( "Footprint Editor (active library: " ) + nickname + wxT( ")" );
 
             if( !writable )
                 title += _( " [Read Only]" );

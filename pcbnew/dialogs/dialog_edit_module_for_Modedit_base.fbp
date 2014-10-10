@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="11" />
+    <FileVersion major="1" minor="13" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -44,10 +44,10 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_MODULE_MODULE_EDITOR_BASE</property>
             <property name="pos"></property>
-            <property name="size">486,462</property>
+            <property name="size">486,510</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">Module Properties</property>
+            <property name="title">Footprint Properties</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>

@@ -237,11 +237,11 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString,
                             KiBitmap( module_editor_xpm ),
-                            _( "Open module editor" ) );
+                            _( "Open footprint editor" ) );
 
     m_mainToolBar->AddTool( ID_OPEN_MODULE_VIEWER, wxEmptyString,
                             KiBitmap( modview_icon_xpm ),
-                            _( "Open module viewer" ) );
+                            _( "Open footprint viewer" ) );
 
     m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( HELP_UNDO, g_Board_Editor_Hokeys_Descr, HK_UNDO, IS_COMMENT );
@@ -297,7 +297,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_TOOLBARH_PCB_MODE_MODULE, wxEmptyString, KiBitmap( mode_module_xpm ),
-                            _( "Mode footprint: manual and automatic move and place modules" ),
+                            _( "Mode footprint: manual and automatic movement and placement" ),
                             wxITEM_CHECK );
     m_mainToolBar->AddTool( ID_TOOLBARH_PCB_MODE_TRACKS, wxEmptyString, KiBitmap( mode_track_xpm ),
                             _( "Mode track: autorouting" ), wxITEM_CHECK );
