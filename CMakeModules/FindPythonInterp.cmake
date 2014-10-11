@@ -91,7 +91,7 @@ unset(_PYTHON3_VERSIONS)
 
 # Search for newest python version if python executable isn't found
 if(NOT PYTHON_EXECUTABLE)
-    
+
     # If using the MINGW compiler, we mustn't find the standard python
     # distribution because of multiple C-Runtime errors. We must instead
     # use the Python-a-mingw-us distribution
@@ -110,7 +110,7 @@ if(NOT PYTHON_EXECUTABLE)
     else()
         list( APPEND _Python_PPATHS [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\${_CURRENT_VERSION}\\InstallPath] )
     endif()
-    
+
     foreach(_CURRENT_VERSION ${_Python_VERSIONS})
       set(_Python_NAMES python${_CURRENT_VERSION})
       if(WIN32)
