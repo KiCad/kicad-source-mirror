@@ -356,7 +356,7 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
                                _( "Show board ratsnest" ), wxITEM_CHECK );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST, wxEmptyString,
                                KiBitmap( local_ratsnest_xpm ),
-                               _( "Show module ratsnest when moving" ),
+                               _( "Show footprint ratsnest when moving" ),
                                wxITEM_CHECK );
 
     m_optionsToolBar->AddSeparator();
@@ -439,7 +439,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
 
     m_drawToolBar->AddSeparator();
     m_drawToolBar->AddTool( ID_PCB_MODULE_BUTT, wxEmptyString, KiBitmap( module_xpm ),
-                            _( "Add modules" ), wxITEM_CHECK );
+                            _( "Add footprints" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_TRACK_BUTT, wxEmptyString, KiBitmap( add_tracks_xpm ),
                             _( "Add tracks and vias" ), wxITEM_CHECK );

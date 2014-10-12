@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,14 +22,14 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindow
 	wxGridSizer* gSizer1;
 	gSizer1 = new wxGridSizer( 4, 2, 0, 0 );
 	
-	m_Include_Modules = new wxCheckBox( this, wxID_ANY, _("Include modules"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Include_Modules = new wxCheckBox( this, wxID_ANY, _("Include footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	gSizer1->Add( m_Include_Modules, 0, wxALL, 5 );
 	
 	m_Include_PcbTextes = new wxCheckBox( this, wxID_ANY, _("Include text items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Include_PcbTextes->SetValue(true); 
 	gSizer1->Add( m_Include_PcbTextes, 0, wxALL, 5 );
 	
-	m_IncludeLockedModules = new wxCheckBox( this, wxID_ANY, _("Include locked modules"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_IncludeLockedModules = new wxCheckBox( this, wxID_ANY, _("Include locked footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	gSizer1->Add( m_IncludeLockedModules, 0, wxALL, 5 );
 	
 	m_Include_Draw_Items = new wxCheckBox( this, wxID_ANY, _("Include drawings"), wxDefaultPosition, wxDefaultSize, 0 );

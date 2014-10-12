@@ -26,7 +26,7 @@
         <property name="ui_table">UI</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
-        <object class="Dialog" expanded="1">
+        <object class="Dialog" expanded="0">
             <property name="aui_managed">0</property>
             <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
             <property name="bg"></property>
@@ -88,21 +88,21 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="1">
+            <object class="wxBoxSizer" expanded="0">
                 <property name="minimum_size"></property>
                 <property name="name">m_MainSizer</property>
                 <property name="orient">wxHORIZONTAL</property>
                 <property name="permission">protected</property>
-                <object class="sizeritem" expanded="1">
+                <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
                     <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxBoxSizer" expanded="1">
+                    <object class="wxBoxSizer" expanded="0">
                         <property name="minimum_size"></property>
                         <property name="name">bSizer12</property>
                         <property name="orient">wxVERTICAL</property>
                         <property name="permission">none</property>
-                        <object class="sizeritem" expanded="1">
+                        <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">0</property>
@@ -579,20 +579,20 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="sizeritem" expanded="1">
+                        <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">0</property>
-                            <object class="wxBoxSizer" expanded="1">
+                            <object class="wxBoxSizer" expanded="0">
                                 <property name="minimum_size"></property>
                                 <property name="name">bUpperSizer</property>
                                 <property name="orient">wxHORIZONTAL</property>
                                 <property name="permission">none</property>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">3</property>
                                     <property name="flag">wxALL|wxEXPAND</property>
                                     <property name="proportion">1</property>
-                                    <object class="wxStaticBoxSizer" expanded="1">
+                                    <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">Layers</property>
                                         <property name="minimum_size"></property>
@@ -600,11 +600,11 @@
                                         <property name="orient">wxHORIZONTAL</property>
                                         <property name="permission">protected</property>
                                         <event name="OnUpdateUI"></event>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxEXPAND</property>
                                             <property name="proportion">1</property>
-                                            <object class="wxCheckListBox" expanded="1">
+                                            <object class="wxCheckListBox" expanded="0">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
@@ -691,20 +691,20 @@
                                         </object>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag"></property>
                                     <property name="proportion">0</property>
-                                    <object class="wxBoxSizer" expanded="1">
+                                    <object class="wxBoxSizer" expanded="0">
                                         <property name="minimum_size"></property>
                                         <property name="name">m_PlotOptionsSizer</property>
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="permission">protected</property>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">3</property>
                                             <property name="flag">wxALL|wxEXPAND</property>
                                             <property name="proportion">0</property>
-                                            <object class="wxStaticBoxSizer" expanded="1">
+                                            <object class="wxStaticBoxSizer" expanded="0">
                                                 <property name="id">wxID_ANY</property>
                                                 <property name="label">Options</property>
                                                 <property name="minimum_size"></property>
@@ -712,16 +712,16 @@
                                                 <property name="orient">wxVERTICAL</property>
                                                 <property name="permission">none</property>
                                                 <event name="OnUpdateUI"></event>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxBoxSizer" expanded="1">
+                                                    <object class="wxBoxSizer" expanded="0">
                                                         <property name="minimum_size"></property>
                                                         <property name="name">bSizer192</property>
                                                         <property name="orient">wxHORIZONTAL</property>
                                                         <property name="permission">none</property>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxEXPAND</property>
                                                             <property name="proportion">0</property>
@@ -924,7 +924,7 @@
                                                                         <property name="caption"></property>
                                                                         <property name="caption_visible">1</property>
                                                                         <property name="center_pane">0</property>
-                                                                        <property name="checked">0</property>
+                                                                        <property name="checked">1</property>
                                                                         <property name="close_button">1</property>
                                                                         <property name="context_help"></property>
                                                                         <property name="context_menu">1</property>
@@ -939,7 +939,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Plot module values</property>
+                                                                        <property name="label">Plot footprint values</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -1027,7 +1027,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">ID_PRINT_REF</property>
-                                                                        <property name="label">Plot module references</property>
+                                                                        <property name="label">Plot footprint references</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -1612,11 +1612,11 @@
                                                                 </object>
                                                             </object>
                                                         </object>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">3</property>
                                                             <property name="flag">wxRIGHT|wxLEFT</property>
                                                             <property name="proportion">1</property>
-                                                            <object class="wxBoxSizer" expanded="1">
+                                                            <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
                                                                 <property name="name">bSizer14</property>
                                                                 <property name="orient">wxVERTICAL</property>
@@ -2314,11 +2314,11 @@
                                                 </object>
                                             </object>
                                         </object>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxEXPAND</property>
                                             <property name="proportion">1</property>
-                                            <object class="wxStaticBoxSizer" expanded="1">
+                                            <object class="wxStaticBoxSizer" expanded="0">
                                                 <property name="id">wxID_ANY</property>
                                                 <property name="label">Current solder mask settings:</property>
                                                 <property name="minimum_size"></property>
@@ -2326,11 +2326,11 @@
                                                 <property name="orient">wxVERTICAL</property>
                                                 <property name="permission">none</property>
                                                 <event name="OnUpdateUI"></event>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">1</property>
-                                                    <object class="wxFlexGridSizer" expanded="1">
+                                                    <object class="wxFlexGridSizer" expanded="0">
                                                         <property name="cols">2</property>
                                                         <property name="flexible_direction">wxBOTH</property>
                                                         <property name="growablecols"></property>
@@ -2342,11 +2342,11 @@
                                                         <property name="permission">none</property>
                                                         <property name="rows">2</property>
                                                         <property name="vgap">0</property>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                             <property name="proportion">0</property>
-                                                            <object class="wxStaticText" expanded="1">
+                                                            <object class="wxStaticText" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
                                                                 <property name="RightDockable">1</property>
@@ -2425,11 +2425,11 @@
                                                                 <event name="OnUpdateUI"></event>
                                                             </object>
                                                         </object>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxALL</property>
                                                             <property name="proportion">0</property>
-                                                            <object class="wxStaticText" expanded="1">
+                                                            <object class="wxStaticText" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
                                                                 <property name="RightDockable">1</property>
@@ -2508,11 +2508,11 @@
                                                                 <event name="OnUpdateUI"></event>
                                                             </object>
                                                         </object>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                                             <property name="proportion">0</property>
-                                                            <object class="wxStaticText" expanded="1">
+                                                            <object class="wxStaticText" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
                                                                 <property name="RightDockable">1</property>
@@ -2591,11 +2591,11 @@
                                                                 <event name="OnUpdateUI"></event>
                                                             </object>
                                                         </object>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                                                             <property name="proportion">0</property>
-                                                            <object class="wxStaticText" expanded="1">
+                                                            <object class="wxStaticText" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
                                                                 <property name="RightDockable">1</property>
@@ -2678,11 +2678,11 @@
                                                 </object>
                                             </object>
                                         </object>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">3</property>
                                             <property name="flag">wxALL|wxEXPAND</property>
                                             <property name="proportion">0</property>
-                                            <object class="wxStaticBoxSizer" expanded="1">
+                                            <object class="wxStaticBoxSizer" expanded="0">
                                                 <property name="id">wxID_ANY</property>
                                                 <property name="label">Gerber Options</property>
                                                 <property name="minimum_size"></property>
@@ -2690,11 +2690,11 @@
                                                 <property name="orient">wxHORIZONTAL</property>
                                                 <property name="permission">protected</property>
                                                 <event name="OnUpdateUI"></event>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxBoxSizer" expanded="1">
+                                                    <object class="wxBoxSizer" expanded="0">
                                                         <property name="minimum_size"></property>
                                                         <property name="name">bSizerGbrOpt</property>
                                                         <property name="orient">wxVERTICAL</property>
@@ -2787,11 +2787,11 @@
                                                                 <event name="OnUpdateUI"></event>
                                                             </object>
                                                         </object>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">2</property>
                                                             <property name="flag">wxALL</property>
                                                             <property name="proportion">0</property>
-                                                            <object class="wxCheckBox" expanded="1">
+                                                            <object class="wxCheckBox" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
                                                                 <property name="RightDockable">1</property>
@@ -2965,11 +2965,11 @@
                                                         </object>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">1</property>
-                                                    <object class="wxRadioBox" expanded="1">
+                                                    <object class="wxRadioBox" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -3057,11 +3057,11 @@
                                                 </object>
                                             </object>
                                         </object>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">3</property>
                                             <property name="flag">wxALL|wxEXPAND</property>
                                             <property name="proportion">0</property>
-                                            <object class="wxStaticBoxSizer" expanded="1">
+                                            <object class="wxStaticBoxSizer" expanded="0">
                                                 <property name="id">wxID_ANY</property>
                                                 <property name="label">HPGL Options</property>
                                                 <property name="minimum_size"></property>
@@ -3069,20 +3069,20 @@
                                                 <property name="orient">wxVERTICAL</property>
                                                 <property name="permission">protected</property>
                                                 <event name="OnUpdateUI"></event>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">1</property>
-                                                    <object class="wxBoxSizer" expanded="1">
+                                                    <object class="wxBoxSizer" expanded="0">
                                                         <property name="minimum_size"></property>
                                                         <property name="name">bSizer22</property>
                                                         <property name="orient">wxHORIZONTAL</property>
                                                         <property name="permission">none</property>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxEXPAND</property>
                                                             <property name="proportion">1</property>
-                                                            <object class="wxBoxSizer" expanded="1">
+                                                            <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
                                                                 <property name="name">bSizer20</property>
                                                                 <property name="orient">wxVERTICAL</property>
@@ -3263,11 +3263,11 @@
                                                                 </object>
                                                             </object>
                                                         </object>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxEXPAND</property>
                                                             <property name="proportion">1</property>
-                                                            <object class="wxBoxSizer" expanded="1">
+                                                            <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
                                                                 <property name="name">bSizer21</property>
                                                                 <property name="orient">wxVERTICAL</property>
@@ -3843,20 +3843,20 @@
                                                                 </object>
                                                             </object>
                                                         </object>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxEXPAND</property>
                                                             <property name="proportion">1</property>
-                                                            <object class="wxBoxSizer" expanded="1">
+                                                            <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
                                                                 <property name="name">bSizer191</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
-                                                                <object class="sizeritem" expanded="1">
+                                                                <object class="sizeritem" expanded="0">
                                                                     <property name="border">5</property>
                                                                     <property name="flag">wxRIGHT|wxLEFT</property>
                                                                     <property name="proportion">0</property>
-                                                                    <object class="wxStaticText" expanded="1">
+                                                                    <object class="wxStaticText" expanded="0">
                                                                         <property name="BottomDockable">1</property>
                                                                         <property name="LeftDockable">1</property>
                                                                         <property name="RightDockable">1</property>
@@ -3935,11 +3935,11 @@
                                                                         <event name="OnUpdateUI"></event>
                                                                     </object>
                                                                 </object>
-                                                                <object class="sizeritem" expanded="1">
+                                                                <object class="sizeritem" expanded="0">
                                                                     <property name="border">5</property>
                                                                     <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
                                                                     <property name="proportion">0</property>
-                                                                    <object class="wxTextCtrl" expanded="1">
+                                                                    <object class="wxTextCtrl" expanded="0">
                                                                         <property name="BottomDockable">1</property>
                                                                         <property name="LeftDockable">1</property>
                                                                         <property name="RightDockable">1</property>
@@ -4030,11 +4030,11 @@
                                                         </object>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">2</property>
                                                     <property name="flag">wxALL</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxCheckBox" expanded="1">
+                                                    <object class="wxCheckBox" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -4124,11 +4124,11 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="sizeritem" expanded="1">
+                        <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
-                            <object class="wxStaticBoxSizer" expanded="1">
+                            <object class="wxStaticBoxSizer" expanded="0">
                                 <property name="id">wxID_ANY</property>
                                 <property name="label">Messages:</property>
                                 <property name="minimum_size"></property>
@@ -4229,11 +4229,11 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="sizeritem" expanded="1">
+                        <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxALIGN_RIGHT|wxRIGHT|wxLEFT</property>
                             <property name="proportion">0</property>
-                            <object class="wxBoxSizer" expanded="1">
+                            <object class="wxBoxSizer" expanded="0">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizerButtons</property>
                                 <property name="orient">wxHORIZONTAL</property>
@@ -4507,11 +4507,11 @@
                     </object>
                 </object>
             </object>
-            <object class="wxMenu" expanded="1">
+            <object class="wxMenu" expanded="0">
                 <property name="label">MyMenu</property>
                 <property name="name">m_popMenu</property>
                 <property name="permission">protected</property>
-                <object class="wxMenuItem" expanded="1">
+                <object class="wxMenuItem" expanded="0">
                     <property name="bitmap"></property>
                     <property name="checked">0</property>
                     <property name="enabled">1</property>
@@ -4526,7 +4526,7 @@
                     <event name="OnMenuSelection">OnPopUpLayers</event>
                     <event name="OnUpdateUI"></event>
                 </object>
-                <object class="wxMenuItem" expanded="1">
+                <object class="wxMenuItem" expanded="0">
                     <property name="bitmap"></property>
                     <property name="checked">0</property>
                     <property name="enabled">1</property>
@@ -4541,7 +4541,7 @@
                     <event name="OnMenuSelection">OnPopUpLayers</event>
                     <event name="OnUpdateUI"></event>
                 </object>
-                <object class="wxMenuItem" expanded="1">
+                <object class="wxMenuItem" expanded="0">
                     <property name="bitmap"></property>
                     <property name="checked">0</property>
                     <property name="enabled">1</property>
@@ -4556,7 +4556,7 @@
                     <event name="OnMenuSelection">OnPopUpLayers</event>
                     <event name="OnUpdateUI"></event>
                 </object>
-                <object class="wxMenuItem" expanded="1">
+                <object class="wxMenuItem" expanded="0">
                     <property name="bitmap"></property>
                     <property name="checked">0</property>
                     <property name="enabled">1</property>
@@ -4571,7 +4571,7 @@
                     <event name="OnMenuSelection">OnPopUpLayers</event>
                     <event name="OnUpdateUI"></event>
                 </object>
-                <object class="wxMenuItem" expanded="1">
+                <object class="wxMenuItem" expanded="0">
                     <property name="bitmap"></property>
                     <property name="checked">0</property>
                     <property name="enabled">1</property>

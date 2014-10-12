@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -96,14 +96,15 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bSizerPlotItems->Add( m_plotPads_on_Silkscreen, 0, wxALL, 2 );
 	
-	m_plotModuleValueOpt = new wxCheckBox( this, wxID_ANY, _("Plot module values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotModuleValueOpt = new wxCheckBox( this, wxID_ANY, _("Plot footprint values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotModuleValueOpt->SetValue(true); 
 	bSizerPlotItems->Add( m_plotModuleValueOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
-	m_plotModuleRefOpt = new wxCheckBox( this, ID_PRINT_REF, _("Plot module references"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotModuleRefOpt = new wxCheckBox( this, ID_PRINT_REF, _("Plot footprint references"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPlotItems->Add( m_plotModuleRefOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
-	m_plotInvisibleText = new wxCheckBox( this, wxID_ANY, _("Force plot invisible values/references"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotInvisibleText->SetToolTip( _("Force plotting of invisible values and/or references") );
+	m_plotInvisibleText = new wxCheckBox( this, wxID_ANY, _("Force plotting of invisible values/references"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotInvisibleText->SetToolTip( _("Force plot invisible values and/or references") );
 	
 	bSizerPlotItems->Add( m_plotInvisibleText, 0, wxALL, 2 );
 	
@@ -246,7 +247,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	int m_rbGerberFormatNChoices = sizeof( m_rbGerberFormatChoices ) / sizeof( wxString );
 	m_rbGerberFormat = new wxRadioBox( this, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_rbGerberFormatNChoices, m_rbGerberFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbGerberFormat->SetSelection( 0 );
-	m_rbGerberFormat->SetToolTip( _("Resolution of coordinates in Gerber files.\nUse the higher value if possible") );
+	m_rbGerberFormat->SetToolTip( _("Resolution of coordinates in Gerber files.\nUse the higher value if possible.") );
 	
 	m_GerberOptionsSizer->Add( m_rbGerberFormat, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	

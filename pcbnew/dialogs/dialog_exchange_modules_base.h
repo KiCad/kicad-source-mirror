@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -62,7 +62,7 @@ class DIALOG_EXCHANGE_MODULE_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Exchange Modules"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Exchange Footprints"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EXCHANGE_MODULE_BASE();
 	
 };

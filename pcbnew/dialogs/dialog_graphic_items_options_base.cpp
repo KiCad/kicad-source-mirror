@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -27,6 +27,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	sbSizerLeft->Add( m_GraphicSegmWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_OptPcbSegmWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptPcbSegmWidth->SetMaxLength( 0 ); 
 	sbSizerLeft->Add( m_OptPcbSegmWidth, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_BoardEdgesWidthTitle = new wxStaticText( this, wxID_ANY, _("Board Edges Width"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -34,6 +35,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	sbSizerLeft->Add( m_BoardEdgesWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_OptPcbEdgesWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptPcbEdgesWidth->SetMaxLength( 0 ); 
 	sbSizerLeft->Add( m_OptPcbEdgesWidth, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_CopperTextWidthTitle = new wxStaticText( this, wxID_ANY, _("Copper Text Width"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -41,6 +43,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	sbSizerLeft->Add( m_CopperTextWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_OptPcbTextWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptPcbTextWidth->SetMaxLength( 0 ); 
 	sbSizerLeft->Add( m_OptPcbTextWidth, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_TextSizeVTitle = new wxStaticText( this, wxID_ANY, _("Text Size V"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -48,6 +51,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	sbSizerLeft->Add( m_TextSizeVTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_OptPcbTextVSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptPcbTextVSize->SetMaxLength( 0 ); 
 	sbSizerLeft->Add( m_OptPcbTextVSize, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_TextSizeHTitle = new wxStaticText( this, wxID_ANY, _("Text Size H"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -55,40 +59,47 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	sbSizerLeft->Add( m_TextSizeHTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_OptPcbTextHSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptPcbTextHSize->SetMaxLength( 0 ); 
 	sbSizerLeft->Add( m_OptPcbTextHSize, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
 	
 	bSizerUpper->Add( sbSizerLeft, 1, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizerMiddle;
-	sbSizerMiddle = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Modules:") ), wxVERTICAL );
+	sbSizerMiddle = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprints:") ), wxVERTICAL );
 	
-	m_EdgeModWidthTitle = new wxStaticText( this, wxID_ANY, _("Edges Module Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EdgeModWidthTitle = new wxStaticText( this, wxID_ANY, _("Edges Width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_EdgeModWidthTitle->Wrap( -1 );
 	sbSizerMiddle->Add( m_EdgeModWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_OptModuleEdgesWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptModuleEdgesWidth->SetMaxLength( 0 ); 
 	sbSizerMiddle->Add( m_OptModuleEdgesWidth, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_TextModWidthTitle = new wxStaticText( this, wxID_ANY, _("Text Module Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModWidthTitle = new wxStaticText( this, wxID_ANY, _("Text Width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModWidthTitle->Wrap( -1 );
 	sbSizerMiddle->Add( m_TextModWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_OptModuleTextWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptModuleTextWidth->SetMaxLength( 0 ); 
 	sbSizerMiddle->Add( m_OptModuleTextWidth, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_TextModSizeVTitle = new wxStaticText( this, wxID_ANY, _("Text Module Size V"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModSizeVTitle = new wxStaticText( this, wxID_ANY, _("Text Size V"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModSizeVTitle->Wrap( -1 );
 	sbSizerMiddle->Add( m_TextModSizeVTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_OptModuleTextVSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptModuleTextVSize->SetMaxLength( 0 ); 
 	sbSizerMiddle->Add( m_OptModuleTextVSize, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_TextModSizeHTitle = new wxStaticText( this, wxID_ANY, _("Text Module Size H"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModSizeHTitle = new wxStaticText( this, wxID_ANY, _("Text Size H"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModSizeHTitle->Wrap( -1 );
 	sbSizerMiddle->Add( m_TextModSizeHTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_OptModuleTextHSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptModuleTextHSize->SetMaxLength( 0 ); 
 	sbSizerMiddle->Add( m_OptModuleTextHSize, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
 	
 	bSizerUpper->Add( sbSizerMiddle, 1, wxEXPAND|wxALL, 5 );
 	
@@ -102,9 +113,12 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	sbSizerRight->Add( m_DefaultPenSizeTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_DefaultPenSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_DefaultPenSizeCtrl->SetMaxLength( 0 ); 
 	sbSizerRight->Add( m_DefaultPenSizeCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	
 	bSizerUpper->Add( sbSizerRight, 1, wxEXPAND|wxALL, 5 );
+	
 	
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
 	
@@ -114,7 +128,9 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bSizerMain->Add( m_sdbSizer1, 0, wxALIGN_RIGHT|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
@@ -129,4 +145,5 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::~DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE()
 	// Disconnect Events
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::OnOkClick ), NULL, this );
+	
 }
