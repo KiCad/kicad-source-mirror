@@ -223,6 +223,8 @@ public:
     /// Find an item and start moving
     static TOOL_ACTION findMove;
 
+    /// Blocks CTRL+F, it is handled by wxWidgets
+    static TOOL_ACTION findDummy;
     /**
      * Function TranslateLegacyId()
      * Translates legacy tool ids to the corresponding TOOL_ACTION name.

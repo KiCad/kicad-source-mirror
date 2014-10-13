@@ -41,8 +41,11 @@ TOOL_ACTION COMMON_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
         "", "" );    // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION COMMON_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0,                                    // it is handled by wxWidgets hotkey system
         "Find an item", "Searches the document for an item" );
+
+TOOL_ACTION COMMON_ACTIONS::findDummy( "pcbnew.Find.Dummy", // only block the hotkey
+        AS_GLOBAL, MD_CTRL + int( 'F' ) );
 
 TOOL_ACTION COMMON_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, 'T');
