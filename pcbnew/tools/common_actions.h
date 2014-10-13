@@ -217,6 +217,9 @@ public:
     static TOOL_ACTION showHelp;
     static TOOL_ACTION toBeDone;
 
+    /// Find an item
+    static TOOL_ACTION find;
+
     /// Find an item and start moving
     static TOOL_ACTION findMove;
 
