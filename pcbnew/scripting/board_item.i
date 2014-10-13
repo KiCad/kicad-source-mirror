@@ -47,8 +47,9 @@
     EDGE_MODULE*      Cast_to_EDGE_MODULE()       {  return dynamic_cast<EDGE_MODULE*>(self);   }
     D_PAD*            Cast_to_D_PAD()             {  return dynamic_cast<D_PAD*>(self);         }
     TRACK*            Cast_to_TRACK()             {  return dynamic_cast<TRACK*>(self);         }
-    ZONE_CONTAINER*   Cast_to_ZONE_CONTAINER()    {  return dynamic_cast<ZONE_CONTAINER*>(self);}
     VIA*              Cast_to_VIA()               {  return dynamic_cast<VIA*>(self);           }
+    ZONE_CONTAINER*   Cast_to_ZONE_CONTAINER()    {  return dynamic_cast<ZONE_CONTAINER*>(self);}
+    PCB_TARGET*       Cast_to_PCB_TARGET()        {  return dynamic_cast<PCB_TARGET*>(self);    }
 
 
     %pythoncode
@@ -77,6 +78,8 @@
             return self.Cast_to_VIA()
         elif ct=="TRACK":
             return self.Cast_to_TRACK()
+        elif ct=="PCB_TARGET":
+            return self.Cast_to_PCB_TARGET()
         elif ct=="ZONE_CONTAINER":
             return self.Cast_to_ZONE_CONTAINER()
         else:

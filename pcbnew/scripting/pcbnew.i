@@ -97,6 +97,7 @@
   #include <class_dimension.h>
   #include <class_drawsegment.h>
   #include <class_marker_pcb.h>
+  #include <class_mire.h>
   #include <class_text_mod.h>
   #include <class_edge_mod.h>
   #include <dlist.h>
@@ -133,6 +134,7 @@
 %include <class_dimension.h>
 %include <class_drawsegment.h>
 %include <class_marker_pcb.h>
+%include <class_mire.h>
 %include <class_text_mod.h>
 %include <class_edge_mod.h>
 %include <dlist.h>
