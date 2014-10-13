@@ -217,6 +217,9 @@ public:
     static TOOL_ACTION showHelp;
     static TOOL_ACTION toBeDone;
 
+    /// Find an item and start moving
+    static TOOL_ACTION findMove;
+
     /**
      * Function TranslateLegacyId()
      * Translates legacy tool ids to the corresponding TOOL_ACTION name.

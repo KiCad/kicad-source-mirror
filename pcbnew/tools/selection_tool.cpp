@@ -176,6 +176,11 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
         }
 
+        else if( evt->IsAction( &COMMON_ACTIONS::findMove ) )
+        {
+            findMove( *evt );
+        }
+
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO ||
                  evt->IsAction( &COMMON_ACTIONS::selectionClear ) )
         {
@@ -386,6 +391,7 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
     Go( &SELECTION_TOOL::SingleSelection, COMMON_ACTIONS::selectionSingle.MakeEvent() );
     Go( &SELECTION_TOOL::ClearSelection, COMMON_ACTIONS::selectionClear.MakeEvent() );
+    Go( &SELECTION_TOOL::findMove, COMMON_ACTIONS::findMove.MakeEvent() );
 }
 
 
@@ -443,6 +449,23 @@ int SELECTION_TOOL::SingleSelection( TOOL_EVENT& aEvent )
 int SELECTION_TOOL::ClearSelection( TOOL_EVENT& aEvent )
 {
     clearSelection();
+    setTransitions();
+
+    return 0;
+}
+
+
+int SELECTION_TOOL::findMove( TOOL_EVENT& aEvent )
+{
+    MODULE* module = m_frame->GetModuleByName();
+
+    if( module )
+    {
+        clearSelection();
+        toggleSelection( module );
+        m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
+    }
+
     setTransitions();
 
     return 0;

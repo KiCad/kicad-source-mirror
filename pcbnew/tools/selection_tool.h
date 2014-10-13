@@ -187,6 +187,9 @@ private:
      */
     bool selectMultiple();
 
+    ///> Find an item and start moving.
+    int findMove( TOOL_EVENT& aEvent );
+
     ///> Sets up handlers for various events.
     void setTransitions();
 
