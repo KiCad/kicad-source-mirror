@@ -194,7 +194,7 @@ void PLOTTER::markerSquare( const wxPoint& position, int radius )
     corner.y = position.y + r;
     corner_list.push_back( corner );
 
-    PlotPoly( corner_list, NO_FILL );
+    PlotPoly( corner_list, NO_FILL, GetCurrentLineWidth() );
 }
 
 /**
@@ -202,7 +202,7 @@ void PLOTTER::markerSquare( const wxPoint& position, int radius )
  */
 void PLOTTER::markerCircle( const wxPoint& position, int radius )
 {
-    Circle( position, radius * 2, NO_FILL );
+    Circle( position, radius * 2, NO_FILL, GetCurrentLineWidth() );
 }
 
 /**
@@ -228,7 +228,7 @@ void PLOTTER::markerLozenge( const wxPoint& position, int radius )
     corner.y = position.y + radius;
     corner_list.push_back( corner );
 
-    PlotPoly( corner_list, NO_FILL );
+    PlotPoly( corner_list, NO_FILL, GetCurrentLineWidth() );
 }
 
 /**
@@ -354,8 +354,8 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
     };
     if( aShapeId >= MARKER_COUNT )
     {
-	// Fallback shape
-	markerCircle( position, radius );
+        // Fallback shape
+        markerCircle( position, radius );
     }
     else
     {
@@ -376,7 +376,6 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
 	if( pat & 0100 )
 	    markerCircle( position, radius );
     }
-
 }
 
 

@@ -23,6 +23,7 @@
  */
 
 #include <wx/wx.h>
+#include <pcb_plot_params_parser.h>
 #include <pcb_plot_params.h>
 #include <layers_id_colors_and_visibility.h>
 #include <plot_common.h>

@@ -24,56 +24,11 @@
  */
 
 #include <wx/wx.h>
-#include <pcb_plot_params_lexer.h>
 #include <eda_text.h>                // EDA_DRAW_MODE_T
 #include <plot_common.h>
 #include <layers_id_colors_and_visibility.h>
 
-class PCB_PLOT_PARAMS;
-class LINE_READER;
-
-
-/**
- * Class PCB_PLOT_PARAMS_PARSER
- * is the parser class for PCB_PLOT_PARAMS.
- */
-class PCB_PLOT_PARAMS_PARSER : public PCB_PLOT_PARAMS_LEXER
-{
-public:
-    PCB_PLOT_PARAMS_PARSER( LINE_READER* aReader );
-    PCB_PLOT_PARAMS_PARSER( char* aLine, const wxString& aSource );
-
-    LINE_READER* GetReader() { return reader; };
-
-    void Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( PARSE_ERROR, IO_ERROR );
-
-private:
-    bool parseBool();
-
-    /**
-     * Function parseInt
-     * parses an integer and constrains it between two values.
-     * @param aMin is the smallest return value.
-     * @param aMax is the largest return value.
-     * @return int - the parsed integer.
-     */
-    int parseInt( int aMin, int aMax );
-
-    /**
-     * Function parseDouble
-     * parses a double
-     * @return double - the parsed double.
-     */
-    double parseDouble();
-
-    /**
-     * Function skipCurrent
-     * Skip the current token level, i.e
-     * search for the RIGHT parenthesis which closes the current description
-     */
-    void skipCurrent() throw( IO_ERROR, PARSE_ERROR );
-};
-
+class PCB_PLOT_PARAMS_PARSER;
 
 /**
  * Class PCB_PLOT_PARAMS

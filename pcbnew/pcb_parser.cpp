@@ -47,6 +47,7 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <kicad_plugin.h>
+#include <pcb_plot_params_parser.h>
 #include <pcb_plot_params.h>
 #include <zones.h>
 #include <pcb_parser.h>
