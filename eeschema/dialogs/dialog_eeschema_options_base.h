@@ -31,7 +31,6 @@ class DIALOG_SHIM;
 #include <wx/icon.h>
 #include <wx/listctrl.h>
 #include <wx/textctrl.h>
-#include <wx/html/htmlwin.h>
 #include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/notebook.h>
@@ -111,7 +110,6 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* fieldDefaultValueLabel;
 		wxTextCtrl* fieldDefaultValueTextCtrl;
 		wxCheckBox* fieldVisibleCheckbox;
-		wxHtmlWindow* m_htmlWin2;
 		wxButton* addFieldButton;
 		wxButton* deleteFieldButton;
 		wxStdDialogButtonSizer* m_sdbSizer1;

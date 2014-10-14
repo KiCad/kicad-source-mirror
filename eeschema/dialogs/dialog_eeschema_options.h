@@ -71,6 +71,7 @@ protected:
      */
     void OnDeleteButtonClick( wxCommandEvent& event );
     void OnInitDialog( wxInitDialogEvent& event );
+    void OnEditControlKillFocus( wxFocusEvent& event );
 
     /**
      * Function copyPanelToSelected

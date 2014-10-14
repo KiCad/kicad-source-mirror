@@ -72,15 +72,15 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     selectedField = -1;
     ignoreSelection = false;
 
-    // Set the html help for th template editor
-    m_htmlWin2->SetPage(
-        _( "<b>Template Field Names</b><br>"
-           "<p>Field names must be unique, and should be alpha-numeric only</p>"
-           "<p>Some field names are reserved and cannot be used. The following fieldnames are "
-           "reserved:</p>" ) );
-
     // Make sure we select the first tab of the options tab page
     m_notebook1->SetSelection( 0 );
+
+    // Connect the edit controls for the template field names to the kill focus event which
+    // doesn't propogate, hence the need to connect it here.
+
+    fieldNameTextCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
+    fieldDefaultValueTextCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
+    fieldVisibleCheckbox->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
 }
 
 
@@ -259,6 +259,14 @@ void DIALOG_EESCHEMA_OPTIONS::copyPanelToSelected( void )
     templateFields[selectedField].m_Name = fieldNameTextCtrl->GetValue();
     templateFields[selectedField].m_Value = fieldDefaultValueTextCtrl->GetValue();
     templateFields[selectedField].m_Visible = fieldVisibleCheckbox->GetValue();
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus( wxFocusEvent& event )
+{
+    // Update the data + UI
+    copyPanelToSelected();
+    RefreshTemplateFieldView();
 }
 
 
