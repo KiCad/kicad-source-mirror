@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,12 +21,12 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/statline.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,6 +41,7 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticText1;
 		wxTextCtrl* m_TextValue;
+		wxButton* m_TextValueSelectButton;
 		wxStaticText* m_TextSizeText;
 		wxTextCtrl* m_TextSize;
 		wxCheckBox* m_Orient;
@@ -56,6 +57,8 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnTextValueSelectButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		

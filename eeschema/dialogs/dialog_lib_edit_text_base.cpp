@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -29,11 +29,20 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	m_staticText1->Wrap( -1 );
 	bTextValueBoxSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
+	wxBoxSizer* bTextValueOptsSizer;
+	bTextValueOptsSizer = new wxBoxSizer( wxHORIZONTAL );
+	
 	m_TextValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextValue->SetMaxLength( 0 ); 
 	m_TextValue->SetMinSize( wxSize( 200,-1 ) );
 	
-	bTextValueBoxSizer->Add( m_TextValue, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bTextValueOptsSizer->Add( m_TextValue, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
+	m_TextValueSelectButton = new wxButton( this, wxID_ANY, _("Select"), wxDefaultPosition, wxDefaultSize, 0 );
+	bTextValueOptsSizer->Add( m_TextValueSelectButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	
+	
+	bTextValueBoxSizer->Add( bTextValueOptsSizer, 1, wxEXPAND, 5 );
 	
 	
 	bUpperBoxSizer->Add( bTextValueBoxSizer, 1, wxEXPAND, 5 );
@@ -82,7 +91,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	wxString m_TextShapeOptChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
 	int m_TextShapeOptNChoices = sizeof( m_TextShapeOptChoices ) / sizeof( wxString );
 	m_TextShapeOpt = new wxRadioBox( this, wxID_ANY, _("Style"), wxDefaultPosition, wxDefaultSize, m_TextShapeOptNChoices, m_TextShapeOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextShapeOpt->SetSelection( 0 );
+	m_TextShapeOpt->SetSelection( 3 );
 	bBottomtBoxSizer->Add( m_TextShapeOpt, 1, wxALL|wxEXPAND, 5 );
 	
 	wxString m_TextHJustificationOptChoices[] = { _("Align left"), _("Align center"), _("Align right") };
@@ -124,6 +133,8 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	bMainSizer->Fit( this );
 	
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCloseDialog ) );
+	m_TextValueSelectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnTextValueSelectButtonClick ), NULL, this );
 	m_sdbSizerButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnOkClick ), NULL, this );
 }
@@ -131,6 +142,8 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 DIALOG_LIB_EDIT_TEXT_BASE::~DIALOG_LIB_EDIT_TEXT_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCloseDialog ) );
+	m_TextValueSelectButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnTextValueSelectButtonClick ), NULL, this );
 	m_sdbSizerButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnOkClick ), NULL, this );
 	

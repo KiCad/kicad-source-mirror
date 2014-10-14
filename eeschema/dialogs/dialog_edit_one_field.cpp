@@ -30,6 +30,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <base_units.h>
+#include <kiway.h>
 
 #include <general.h>
 #include <sch_base_frame.h>
@@ -50,8 +51,8 @@ void DIALOG_EDIT_ONE_FIELD::initDlg_base()
     m_TextValue->SetFocus();
 
     // Disable options for graphic text edition, not existing in fields
-    m_CommonConvert->Show(false);
-    m_CommonUnit->Show(false);
+    m_CommonConvert->Show( false );
+    m_CommonUnit->Show( false );
 
     msg = StringFromValue( g_UserUnit, m_textsize );
     m_TextSize->SetValue( msg );
@@ -99,26 +100,55 @@ void DIALOG_EDIT_ONE_FIELD::initDlg_base()
 }
 
 
+void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent )
+{
+    // pick a footprint using the footprint picker.
+    wxString fpid;
+
+    KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
+
+    if( frame->ShowModal( &fpid, this ) )
+    {
+        // DBG( printf( "%s: %s\n", __func__, TO_UTF8( fpid ) ); )
+        m_TextValue->SetValue( fpid );
+    }
+
+    frame->Destroy();
+}
+
+
 void DIALOG_LIB_EDIT_ONE_FIELD::initDlg()
 {
     m_textsize = m_field->GetSize().x;
     m_TextValue->SetValue( m_field->GetText() );
-
     m_textorient = m_field->GetOrientation();
-
     m_text_invisible = m_field->IsVisible() ? false : true;
 
     m_textshape = 0;
+
     if( m_field->IsItalic() )
         m_textshape = 1;
+
     if( m_field->IsBold() )
         m_textshape |= 2;
 
     m_textHjustify = m_field->GetHorizJustify();
     m_textVjustify = m_field->GetVertJustify();
 
+    if( m_field->GetId() == FOOTPRINT )
+    {
+        m_TextValueSelectButton->Show();
+        m_TextValueSelectButton->Enable();
+    }
+    else
+    {
+        m_TextValueSelectButton->Hide();
+        m_TextValueSelectButton->Disable();
+    }
+
     initDlg_base();
 }
+
 
 wxString DIALOG_LIB_EDIT_ONE_FIELD::GetTextField()
 {
@@ -126,7 +156,8 @@ wxString DIALOG_LIB_EDIT_ONE_FIELD::GetTextField()
     // Spaces are not allowed in fields, so replace them by '_'
     line.Replace( wxT( " " ), wxT( "_" ) );
     return line;
-};
+}
+
 
 void DIALOG_EDIT_ONE_FIELD::TransfertDataToField()
 {
@@ -165,6 +196,7 @@ void DIALOG_EDIT_ONE_FIELD::TransfertDataToField()
     }
 }
 
+
 void DIALOG_LIB_EDIT_ONE_FIELD::TransfertDataToField()
 {
     DIALOG_EDIT_ONE_FIELD::TransfertDataToField();
@@ -189,13 +221,26 @@ void DIALOG_SCH_EDIT_ONE_FIELD::initDlg()
     m_text_invisible = m_field->IsVisible() ? false : true;
 
     m_textshape = 0;
+
     if( m_field->IsItalic() )
         m_textshape = 1;
+
     if( m_field->IsBold() )
         m_textshape |= 2;
 
     m_textHjustify = m_field->GetHorizJustify();
     m_textVjustify = m_field->GetVertJustify();
+
+    if( m_field->GetId() == FOOTPRINT )
+    {
+        m_TextValueSelectButton->Show();
+        m_TextValueSelectButton->Enable();
+    }
+    else
+    {
+        m_TextValueSelectButton->Hide();
+        m_TextValueSelectButton->Disable();
+    }
 
     initDlg_base();
 }
@@ -208,6 +253,7 @@ wxString DIALOG_SCH_EDIT_ONE_FIELD::GetTextField()
     line.Trim( false );
     return line;
 };
+
 
 void DIALOG_SCH_EDIT_ONE_FIELD::TransfertDataToField()
 {

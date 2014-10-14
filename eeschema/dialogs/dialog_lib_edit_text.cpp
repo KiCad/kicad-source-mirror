@@ -131,6 +131,9 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
     m_TextSizeText->SetLabel( msg );
 
     m_sdbSizerButtonsOK->SetDefault();
+
+    // Hide the select button as the child dialog classes use this
+    m_TextValueSelectButton->Hide();
 }
 
 

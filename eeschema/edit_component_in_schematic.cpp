@@ -85,7 +85,9 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
 
     DIALOG_SCH_EDIT_ONE_FIELD dlg( this, title, aField );
 
-    int response = dlg.ShowModal();
+    //The diag may invoke a kiway player for footprint fields
+    //so we must use a quasimodal
+    int response = dlg.ShowQuasiModal();
 
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );

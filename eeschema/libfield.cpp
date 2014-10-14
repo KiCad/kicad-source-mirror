@@ -44,7 +44,9 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 
     DIALOG_LIB_EDIT_ONE_FIELD dlg( this, caption, aField );
 
-    if( dlg.ShowModal() != wxID_OK  )
+    //The diag may invoke a kiway player for footprint fields
+    //so we must use a quasimodal
+    if( dlg.ShowQuasiModal() != wxID_OK  )
         return;
 
     text = dlg.GetTextField();
