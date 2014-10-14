@@ -213,6 +213,8 @@ void LIBRARY_LISTBOX::OnChar( wxKeyEvent& event )
             break;
         }
     }
+
+    event.Skip();
 }
 
 
