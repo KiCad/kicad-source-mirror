@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -30,7 +30,7 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	
 	wxString m_Select_By_TimestampChoices[] = { _("Reference"), _("Timestamp") };
 	int m_Select_By_TimestampNChoices = sizeof( m_Select_By_TimestampChoices ) / sizeof( wxString );
-	m_Select_By_Timestamp = new wxRadioBox( this, wxID_ANY, _("Module Selection"), wxDefaultPosition, wxDefaultSize, m_Select_By_TimestampNChoices, m_Select_By_TimestampChoices, 1, wxRA_SPECIFY_COLS );
+	m_Select_By_Timestamp = new wxRadioBox( this, wxID_ANY, _("Footprint Selection"), wxDefaultPosition, wxDefaultSize, m_Select_By_TimestampNChoices, m_Select_By_TimestampChoices, 1, wxRA_SPECIFY_COLS );
 	m_Select_By_Timestamp->SetSelection( 0 );
 	m_Select_By_Timestamp->SetToolTip( _("Select how footprints are recognized:\nby their reference (U1, R3...) (normal setting)\nor their time stamp (special setting after a full schematic reannotation)") );
 	
@@ -38,7 +38,7 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	
 	wxString m_cmpNameSourceOptChoices[] = { _("From netlist"), _("From separate .cmp file") };
 	int m_cmpNameSourceOptNChoices = sizeof( m_cmpNameSourceOptChoices ) / sizeof( wxString );
-	m_cmpNameSourceOpt = new wxRadioBox( this, wxID_ANY, _("Module Name Source"), wxDefaultPosition, wxDefaultSize, m_cmpNameSourceOptNChoices, m_cmpNameSourceOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_cmpNameSourceOpt = new wxRadioBox( this, wxID_ANY, _("Footprint Name Source"), wxDefaultPosition, wxDefaultSize, m_cmpNameSourceOptNChoices, m_cmpNameSourceOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_cmpNameSourceOpt->SetSelection( 0 );
 	m_cmpNameSourceOpt->SetToolTip( _("Source of footprints names for component:\n- the netlist (if you have filled the footprint field of each component  in schematic)\n- the .cmp file created by CvPcb") );
 	
@@ -46,7 +46,7 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	
 	wxString m_ChangeExistingFootprintCtrlChoices[] = { _("Keep"), _("Change") };
 	int m_ChangeExistingFootprintCtrlNChoices = sizeof( m_ChangeExistingFootprintCtrlChoices ) / sizeof( wxString );
-	m_ChangeExistingFootprintCtrl = new wxRadioBox( this, wxID_ANY, _("Exchange Module"), wxDefaultPosition, wxDefaultSize, m_ChangeExistingFootprintCtrlNChoices, m_ChangeExistingFootprintCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_ChangeExistingFootprintCtrl = new wxRadioBox( this, wxID_ANY, _("Exchange Footprint"), wxDefaultPosition, wxDefaultSize, m_ChangeExistingFootprintCtrlNChoices, m_ChangeExistingFootprintCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_ChangeExistingFootprintCtrl->SetSelection( 0 );
 	m_ChangeExistingFootprintCtrl->SetToolTip( _("Keep or change an existing footprint when the netlist gives a different footprint") );
 	

@@ -149,8 +149,8 @@ void PCB_EDIT_FRAME::OnUpdateShowModuleRatsnest( wxUpdateUIEvent& aEvent )
     aEvent.Check( g_Show_Module_Ratsnest );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
                                         g_Show_Module_Ratsnest ?
-                                        _( "Hide module ratsnest" ) :
-                                        _( "Show module ratsnest" ) );
+                                        _( "Hide footprint ratsnest" ) :
+                                        _( "Show footprint ratsnest" ) );
 }
 
 

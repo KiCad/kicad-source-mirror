@@ -34,6 +34,7 @@
 #include <wxPcbStruct.h>
 #include <collectors.h>
 #include <confirm.h>
+#include <dialog_find.h>
 
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
@@ -174,6 +175,16 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         {
             // GetMousePosition() is used, as it is independent of snapping settings
             selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::find ) )
+        {
+            find( *evt );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::findMove ) )
+        {
+            findMove( *evt );
         }
 
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO ||
@@ -386,6 +397,8 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
     Go( &SELECTION_TOOL::SingleSelection, COMMON_ACTIONS::selectionSingle.MakeEvent() );
     Go( &SELECTION_TOOL::ClearSelection, COMMON_ACTIONS::selectionClear.MakeEvent() );
+    Go( &SELECTION_TOOL::find, COMMON_ACTIONS::find.MakeEvent() );
+    Go( &SELECTION_TOOL::findMove, COMMON_ACTIONS::findMove.MakeEvent() );
 }
 
 
@@ -443,6 +456,46 @@ int SELECTION_TOOL::SingleSelection( TOOL_EVENT& aEvent )
 int SELECTION_TOOL::ClearSelection( TOOL_EVENT& aEvent )
 {
     clearSelection();
+    setTransitions();
+
+    return 0;
+}
+
+
+void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
+{
+    clearSelection();
+
+    if( aItem )
+        toggleSelection( aItem );
+
+    m_frame->GetGalCanvas()->ForceRefresh();
+}
+
+
+int SELECTION_TOOL::find( TOOL_EVENT& aEvent )
+{
+    DIALOG_FIND dlg( m_frame );
+    dlg.EnableWarp( false );
+    dlg.SetCallback( boost::bind( &SELECTION_TOOL::findCallback, this, _1 ) );
+    dlg.ShowModal();
+    setTransitions();
+
+    return 0;
+}
+
+
+int SELECTION_TOOL::findMove( TOOL_EVENT& aEvent )
+{
+    MODULE* module = m_frame->GetModuleByName();
+
+    if( module )
+    {
+        clearSelection();
+        toggleSelection( module );
+        m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
+    }
+
     setTransitions();
 
     return 0;

@@ -286,4 +286,6 @@ void FOOTPRINTS_LISTBOX::OnChar( wxKeyEvent& event )
             break;
         }
     }
+
+    event.Skip();
 }

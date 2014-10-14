@@ -111,6 +111,12 @@ public:
     void Refresh( bool aEraseBackground = true, const wxRect* aRect = NULL );
 
     /**
+     * Function ForceRefresh()
+     * Forces a redraw.
+     */
+    void ForceRefresh();
+
+    /**
      * Function SetEventDispatcher()
      * Sets a dispatcher that processes events and forwards them to tools.
      * @param aEventDispatcher is the object that will be used for dispatching events.

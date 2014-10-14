@@ -689,10 +689,11 @@ if( KICAD_SCRIPTING )
     else()
         # put into bundle at build time, it is relocated at install
         add_custom_target( ScriptingPcbnewPyCopy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py" "${PYTHON_DEST}"
+            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py" "${PYTHON_DEST}/"
             DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
             COMMENT "Copying pcbnew.py into ${PYTHON_DEST}"
             )
+        add_dependencies( ScriptingPcbnewPyCopy ScriptingWxpythonCopy )
         # scripting plugins
         install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/scripting/plugins/
             DESTINATION ${KICAD_DATA}/scripting/plugins
@@ -713,10 +714,11 @@ if( KICAD_SCRIPTING_MODULES )
     else()
         # put everything into bundle at build time, it is relocated at install
         add_custom_target( ScriptingModulesPcbnewPyCopy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py" "${PYTHON_DEST}"
+            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py" "${PYTHON_DEST}/"
             DEPENDS FixSwigImportsModuleScripting
             COMMENT "Copying pcbnew.py into ${PYTHON_DEST}"
             )
+        add_dependencies( ScriptingModulesPcbnewPyCopy ScriptingWxpythonCopy )
     endif()
 
     if( MINGW )
@@ -724,10 +726,11 @@ if( KICAD_SCRIPTING_MODULES )
     elseif( APPLE )
          # put everything into bundle at build time, it is relocated at install
         add_custom_target( ScriptingModulesPcbnewSoCopy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so" "${PYTHON_DEST}"
+            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so" "${PYTHON_DEST}/"
             DEPENDS _pcbnew
             COMMENT "Copying _pcbnew.so into ${PYTHON_DEST}"
             )
+        add_dependencies( ScriptingModulesPcbnewSoCopy ScriptingWxpythonCopy )
     else()
         install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so DESTINATION ${PYTHON_DEST} )
     endif()

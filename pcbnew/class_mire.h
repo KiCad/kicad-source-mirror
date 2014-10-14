@@ -84,6 +84,11 @@ public:
 
     bool HitTest( const wxPoint& aPosition ) const;
 
+    wxString GetClass() const
+    {
+        return wxT( "PCB_TARGET" );
+    }
+
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
      */

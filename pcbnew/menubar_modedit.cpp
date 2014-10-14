@@ -69,7 +69,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // New module
     AddMenuItem( fileMenu, ID_MODEDIT_NEW_MODULE,
-                 _( "&New Module" ), _( "Create new module" ),
+                 _( "&New Footprint" ), _( "Create new footprint" ),
                  KiBitmap( new_footprint_xpm ) );
 
     // Open submenu
@@ -77,26 +77,26 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // from File
     AddMenuItem( openSubmenu, ID_MODEDIT_IMPORT_PART,
-                 _( "&Import Module From File" ),
+                 _( "&Import Footprint From File" ),
                  _( "Import footprint from an existing file" ),
                  KiBitmap( import_module_xpm ) );
 
     // from Library
     AddMenuItem( openSubmenu, ID_MODEDIT_LOAD_MODULE,
-                 _( "Load Module From Current Li&brary" ),
-                 _( "Open a footprint module from library" ),
+                 _( "Load Footprint From Current Li&brary" ),
+                 _( "Open a footprint from library" ),
                  KiBitmap( module_xpm ) );
 
     // from current Board
     AddMenuItem( openSubmenu, ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
-                 _( "Load Module From &Current Board" ),
-                 _( "Load a footprint module from the current board" ),
+                 _( "Load Footprint From &Current Board" ),
+                 _( "Load a footprint from the current board" ),
                  KiBitmap( load_module_board_xpm ) );
 
     /* Append openSubmenu to fileMenu */
     AddMenuItem( fileMenu, openSubmenu, -1,
-                 _( "&Load Module" ),
-                 _( "Load footprint module" ),
+                 _( "&Load Footprint" ),
+                 _( "Load footprint" ),
                  KiBitmap( open_document_xpm ) );
     fileMenu->AppendSeparator();
 
@@ -107,23 +107,23 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( copy_library_xpm ) );
 
     // Save module
-    text = AddHotkeyName( _( "&Save Module in Active Library" ),
+    text = AddHotkeyName( _( "&Save Footprint in Active Library" ),
                           g_Module_Editor_Hokeys_Descr, HK_SAVE_MODULE );
 
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE, text,
-                 _( "Save module in active library" ),
+                 _( "Save footprint in active library" ),
                  KiBitmap( save_library_xpm ) );
 
     // Save module in new lib
     AddMenuItem( fileMenu, ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-                 _( "S&ave Module in New Library" ),
+                 _( "S&ave Footprint in New Library" ),
                  _( "Create a new library and save current module into it" ),
                  KiBitmap( new_library_xpm ) );
 
     // Export module
     AddMenuItem( fileMenu, ID_MODEDIT_EXPORT_PART,
-                 _( "&Export Module" ),
-                 _( "Save current loaded module into file" ),
+                 _( "&Export Footprint" ),
+                 _( "Save currently loaded footprint into file" ),
                  KiBitmap( export_module_xpm ) );
 
     // Import DXF File
@@ -137,7 +137,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Print
     AddMenuItem( fileMenu, wxID_PRINT,
                  _( "&Print" ),
-                 _( "Print current module" ),
+                 _( "Print current footprint" ),
                  KiBitmap( plot_xpm ) );
 
     // Separator
@@ -175,7 +175,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Properties
     AddMenuItem( editMenu, ID_MODEDIT_EDIT_MODULE_PROPERTIES,
                  _( "Edit &Properties" ),
-                 _( "Edit module properties" ),
+                 _( "Edit footprint properties" ),
                  KiBitmap( module_options_xpm ) );
 
     // Dimensions submenu

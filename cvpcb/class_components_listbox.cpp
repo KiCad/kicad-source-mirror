@@ -168,6 +168,8 @@ void COMPONENTS_LISTBOX::OnChar( wxKeyEvent& event )
             break;
         }
     }
+
+    event.Skip();
 }
 
 

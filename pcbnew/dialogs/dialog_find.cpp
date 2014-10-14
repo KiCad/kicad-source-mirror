@@ -36,26 +36,7 @@
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <dialog_find_base.h>
-
-
-class DIALOG_FIND : public DIALOG_FIND_BASE
-{
-public:
-    DIALOG_FIND( PCB_BASE_FRAME* aParent );
-
-private:
-    PCB_BASE_FRAME* parent;
-
-    int itemCount, markerCount;
-    static wxString prevSearchString;
-    static bool warpMouse;
-
-    void onButtonFindItemClick( wxCommandEvent& event );
-    void onButtonFindMarkerClick( wxCommandEvent& event );
-    void onButtonCloseClick( wxCommandEvent& event );
-    void onClose( wxCloseEvent& event );
-};
+#include <dialog_find.h>
 
 
 // Initialize static member variables
@@ -66,6 +47,7 @@ bool DIALOG_FIND::warpMouse = true;
 DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent )
 {
     parent = aParent;
+    foundItem = NULL;
     GetSizer()->SetSizeHints( this );
 
     m_SearchTextCtrl->AppendText( prevSearchString );
@@ -78,6 +60,11 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent 
     Center();
 }
 
+void DIALOG_FIND::EnableWarp( bool aEnabled )
+{
+    m_NoMouseWarpCheckBox->SetValue( !aEnabled );
+    warpMouse = aEnabled;
+}
 
 void DIALOG_FIND::onButtonCloseClick( wxCommandEvent& aEvent )
 {
@@ -89,8 +76,8 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
 {
     PCB_SCREEN* screen = (PCB_SCREEN*) ( parent->GetScreen() );
     wxPoint     pos;
-    BOARD_ITEM* foundItem = 0;
 
+    foundItem = NULL;
     wxString searchString = m_SearchTextCtrl->GetValue();
 
     if( !searchString.IsSameAs( prevSearchString, false ) )
@@ -149,6 +136,9 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
         DisplayError( this, msg, 10 );
         itemCount = 0;
     }
+
+    if( callback )
+        callback( foundItem );
 }
 
 
@@ -156,7 +146,7 @@ void DIALOG_FIND::onButtonFindMarkerClick( wxCommandEvent& aEvent )
 {
     PCB_SCREEN* screen = (PCB_SCREEN*) ( parent->GetScreen() );
     wxPoint     pos;
-    BOARD_ITEM* foundItem = 0;
+    foundItem = NULL;
 
     parent->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
 
@@ -184,6 +174,9 @@ void DIALOG_FIND::onButtonFindMarkerClick( wxCommandEvent& aEvent )
         DisplayError( this, msg, 10 );
         markerCount = 0;
     }
+
+    if( callback )
+        callback( foundItem );
 }
 
 

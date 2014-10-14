@@ -1,15 +1,19 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_graphic_items_options_base__
-#define __dialog_graphic_items_options_base__
+#ifndef __DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE_H__
+#define __DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -28,7 +32,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE : public wxDialog 
+class DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -58,14 +62,15 @@ class DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE : public wxDialog
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Texts and Drawings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 459,315 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Texts and Drawings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 459,345 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE();
 	
 };
 
-#endif //__dialog_graphic_items_options_base__
+#endif //__DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE_H__

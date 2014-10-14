@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -39,7 +39,7 @@ DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_
 	
 	m_staticTextFilter = new wxStaticText( this, wxID_ANY, _("Footprint Filter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFilter->Wrap( -1 );
-	m_staticTextFilter->SetToolTip( _("A string to filter modules to edit.\nIf not void, footprint names should match this filter.\nA filter can be something like SM* (case insensitive)") );
+	m_staticTextFilter->SetToolTip( _("A string to filter footprints to edit.\nIf not void, footprint names should match this filter.\nA filter can be something like SM* (case insensitive)") );
 	
 	bLeftSizer->Add( m_staticTextFilter, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	

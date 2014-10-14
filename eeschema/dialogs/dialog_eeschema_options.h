@@ -42,7 +42,10 @@ protected:
 
     /** @brief The current row selected in the template fieldname wxListCtrl which is also in the
         edit panel */
-    int selectedField;
+    size_t selectedField;
+
+    /** @brief The selectedField value is only valid when this bool is set to true */
+    bool selectionValid;
 
     /** @brief Set to true internally when OnTemplateFieldSelected() an event needs to be
         ignored */
@@ -70,7 +73,17 @@ protected:
      * Deletes the selected template fieldname from the template fieldnames data
      */
     void OnDeleteButtonClick( wxCommandEvent& event );
-    void OnInitDialog( wxInitDialogEvent& event );
+
+    /**
+     * Function OnEditControlKillFocus
+     * This Focus Event Handler should be connected to any controls in the template field edit box
+     * so that any loss of focus results in the data being saved to the currently selected template
+     * field
+     *
+     * @param event The wxWidgets produced event information
+     *
+     * Copies data from the edit box to the selected field template
+     */
     void OnEditControlKillFocus( wxFocusEvent& event );
 
     /**
@@ -123,6 +136,11 @@ protected:
     void SelectTemplateField( int aItem );
 
 public:
+    /**
+     * Public constructor
+     *
+     * @param parent The dialog's parent
+     */
     DIALOG_EESCHEMA_OPTIONS( wxWindow* parent );
 
     /**
@@ -171,73 +189,242 @@ public:
      */
     void SetBusWidth( int aWidth ) { m_spinBusWidth->SetValue( aWidth ); }
 
+    /**
+     * Function SetLineWidth
+     * Sets the current LineWidth value in the dialog
+     * @param aWidth The line width to set in the dialog
+     */
     void SetLineWidth( int aWidth ) { m_spinLineWidth->SetValue( aWidth ); }
+
+    /**
+     * Function GetLineWidth
+     * Returns the current LineWidth value from the dialog
+     */
     int GetLineWidth( void ) { return m_spinLineWidth->GetValue(); }
 
+    /**
+     * Function SetTextSize
+     * Sets the current default TextSize value in the dialog
+     * @param text_size The text size to set in the dialog
+     */
     void SetTextSize( int text_size ) { m_spinTextSize->SetValue( text_size ); }
+
+    /**
+     * Function GetTextSize
+     * Returns the current default TextSize value from the dialog
+     */
     int GetTextSize( void ) { return m_spinTextSize->GetValue(); }
 
+    /**
+     * Function SetRepeatHorizontal
+     * Sets the current RepeatHorizontal displacement value in the dialog
+     * @param displacement The displacement to set in the dialog
+     */
     void SetRepeatHorizontal( int displacement )
     {
         m_spinRepeatHorizontal->SetValue( displacement );
     }
+
+    /**
+     * Function GetRepeatHorizontal
+     * Returns the current RepeatHorizontal displacement value from the dialog
+     */
     int GetRepeatHorizontal( void ) { return m_spinRepeatHorizontal->GetValue(); }
+
+    /**
+     * Function SetRepeatVertical
+     * Sets the current RepeatVertical displacement value in the dialog
+     * @param displacement The displacement to set in the dialog
+     */
     void SetRepeatVertical( int displacement ) { m_spinRepeatVertical->SetValue( displacement ); }
 
+    /**
+     * Function GetRepeatVertical
+     * Returns the current RepeatVertical displacement value from the dialog
+     */
     int GetRepeatVertical( void ) { return m_spinRepeatVertical->GetValue(); }
+
+    /**
+     * Function SetRepeatLabel
+     * Sets the current RepeatLabel increment value in the dialog
+     * @param increment The increment to set in the dialog
+     */
     void SetRepeatLabel( int increment ) { m_spinRepeatLabel->SetValue( increment ); }
+
+    /**
+     * Function GetRepeatLabel
+     * Returns the current RepeatLabel increment value from the dialog
+     */
     int GetRepeatLabel( void ) { return m_spinRepeatLabel->GetValue(); }
 
+    /**
+     * Function SetAutoSaveInterval
+     * Sets the current AutoSaveInterval value in the dialog
+     * @param aInterval The interval to set in the dialog
+     */
     void SetAutoSaveInterval( int aInterval ) { m_spinAutoSaveInterval->SetValue( aInterval ); }
+
+    /**
+     * Function GetAutoSaveInterval
+     * Returns the current AutoSaveInterval value from the dialog
+     */
     int GetAutoSaveInterval() const { return m_spinAutoSaveInterval->GetValue(); }
 
+    /**
+     * Function SetRefIdSeparator
+     * Sets the current RefIdSeparator value in the dialog
+     * @param aSep The seperator to use between the reference and the part ID
+     * @param aFirstId The first part ID, currently either 'A' or '1'
+     */
     void SetRefIdSeparator( wxChar aSep, wxChar aFirstId);
+
+    /**
+     * Function GetRefIdSeparator
+     * Returns the current RefIdSeparator value from the dialog
+     * @param aSep The OUTPUT seperator value
+     * @param aFirstId The OUTPUT reference first ID
+     */
     void GetRefIdSeparator( int& aSep, int& aFirstId);
 
+    /**
+     * Function SetShowGrid
+     * Sets the current ShowGrid value in the dialog
+     * @param show The ShowGrid value to set in the dialog
+     */
     void SetShowGrid( bool show ) { m_checkShowGrid->SetValue( show ); }
+
+    /**
+     * Function GetShowGrid
+     * Returns the current ShowGrid value from the dialog
+     */
     bool GetShowGrid( void ) { return m_checkShowGrid->GetValue(); }
 
+    /**
+     * Function SetShowHiddenPins
+     * Sets the current ShowHiddenPins value in the dialog
+     * @param show The ShowHiddenPins value to set in the dialog
+     */
     void SetShowHiddenPins( bool show ) { m_checkShowHiddenPins->SetValue( show ); }
+
+    /**
+     * Function GetShowHiddenPins
+     * Returns the current ShowHiddenPins value from the dialog
+     */
     bool GetShowHiddenPins( void ) { return m_checkShowHiddenPins->GetValue(); }
 
+    /**
+     * Function SetEnableZoomNoCenter
+     * Sets the current ZoomNoCenter value in the dialog
+     * @param enable The ZoomNoCenter value to set in the dialog
+     */
     void SetEnableZoomNoCenter( bool enable )
     {
         m_checkEnableZoomNoCenter->SetValue( enable );
     }
 
+    /**
+     * Function GetEnableZoomNoCenter
+     * Returns the current ZoomNoCenter value from the dialog
+     */
     bool GetEnableZoomNoCenter( void )
     {
         return m_checkEnableZoomNoCenter->GetValue();
     }
+
+    /**
+     * Function SetEnableMiddleButtonPan
+     * Sets the current MiddleButtonPan value in the dialog
+     *
+     * @param enable The boolean value to set the MiddleButtonPan value in the dialog
+     */
     void SetEnableMiddleButtonPan( bool enable )
     {
         m_checkEnableMiddleButtonPan->SetValue( enable );
         m_checkMiddleButtonPanLimited->Enable( enable );
     }
 
+    /**
+     * Function GetEnableMiddleButtonPan
+     * Returns the current MiddleButtonPan setting from the dialog
+     */
     bool GetEnableMiddleButtonPan( void )
     {
         return m_checkEnableMiddleButtonPan->GetValue();
     }
+
+    /**
+     * Function SetMiddleButtonPanLimited
+     * Sets the MiddleButtonPanLimited value in the dialog
+     *
+     * @param enable The boolean value to set the MiddleButtonPanLimted value in the dialog
+     */
     void SetMiddleButtonPanLimited( bool enable )
     {
         m_checkMiddleButtonPanLimited->SetValue( enable );
     }
+
+    /**
+     * Function GetMiddleButtonPanLimited
+     * Returns the MiddleButtonPanLimited setting from the dialog
+     */
     bool GetMiddleButtonPanLimited( void )
     {
         return m_checkMiddleButtonPanLimited->GetValue();
     }
 
+    /**
+     * Function SetEnableAutoPan
+     * Sets the AutoPan setting in the dialog
+     *
+     * @param enable The boolean value to set the AutoPan value in the dialog
+     */
     void SetEnableAutoPan( bool enable ) { m_checkAutoPan->SetValue( enable ); }
+
+    /**
+     * Function GetEnableAutoPan
+     * Return the AutoPan setting from the dialog
+     */
     bool GetEnableAutoPan( void ) { return m_checkAutoPan->GetValue(); }
 
+    /**
+     * Function SetEnableHVBusOrientation
+     * Set the HVBusOrientation setting in the dialog
+     *
+     * @param enable The boolean value to set the HVBusOrientation value in the dialog
+     */
     void SetEnableHVBusOrientation( bool enable ) { m_checkHVOrientation->SetValue( enable ); }
+
+    /**
+     * Function GetEnableHVBusOrientation
+     * Get the HVBusOrientation setting from the dialog
+     */
     bool GetEnableHVBusOrientation( void ) { return m_checkHVOrientation->GetValue(); }
 
+    /**
+     * Function
+     * Set the ShowPageLimits setting in the dialog
+     */
     void SetShowPageLimits( bool show ) { m_checkPageLimits->SetValue( show ); }
+
+    /**
+     * Function
+     * Return the current ShowPageLimits setting from the dialog
+     */
     bool GetShowPageLimits( void ) { return m_checkPageLimits->GetValue(); }
 
+    /**
+     * Function SetTemplateFields
+     * Set the template field data in the dialog
+     *
+     * @param aFields The template fieldnames that the dialog should start with before any editing
+     */
     void SetTemplateFields( const TEMPLATE_FIELDNAMES& aFields );
+
+    /**
+     * Function GetTemplateFields
+     * Get the dialog's template field data
+     *
+     */
     TEMPLATE_FIELDNAMES GetTemplateFields( void );
 
 private:

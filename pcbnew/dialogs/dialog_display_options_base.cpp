@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -74,7 +74,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	wxString m_OptDisplayModEdgesChoices[] = { _("Line"), _("Filled"), _("Sketch") };
 	int m_OptDisplayModEdgesNChoices = sizeof( m_OptDisplayModEdgesChoices ) / sizeof( wxString );
-	m_OptDisplayModEdges = new wxRadioBox( this, ID_EDGES_MODULES, _("Module Edges:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayModEdgesNChoices, m_OptDisplayModEdgesChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayModEdges = new wxRadioBox( this, ID_EDGES_MODULES, _("Footprint Edges:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayModEdgesNChoices, m_OptDisplayModEdgesChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayModEdges->SetSelection( 1 );
 	bLModuleSizer->Add( m_OptDisplayModEdges, 0, wxALL|wxEXPAND, 5 );
 	
@@ -128,7 +128,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxString m_Show_Page_LimitsChoices[] = { _("Yes"), _("No") };
 	int m_Show_Page_LimitsNChoices = sizeof( m_Show_Page_LimitsChoices ) / sizeof( wxString );
 	m_Show_Page_Limits = new wxRadioBox( this, wxID_ANY, _("Show page limits"), wxDefaultPosition, wxDefaultSize, m_Show_Page_LimitsNChoices, m_Show_Page_LimitsChoices, 1, wxRA_SPECIFY_COLS );
-	m_Show_Page_Limits->SetSelection( 0 );
+	m_Show_Page_Limits->SetSelection( 1 );
 	sRightUpperSizer->Add( m_Show_Page_Limits, 0, wxALL|wxEXPAND, 5 );
 	
 	

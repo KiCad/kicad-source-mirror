@@ -168,8 +168,7 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 
     if( delta >= MinRefreshPeriod )
     {
-        wxPaintEvent redrawEvent;
-        wxPostEvent( this, redrawEvent );
+        ForceRefresh();
         m_pendingRefresh = true;
     }
     else
@@ -178,6 +177,13 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
         m_refreshTimer.Start( ( MinRefreshPeriod - delta ).ToLong(), true );
         m_pendingRefresh = true;
     }
+}
+
+
+void EDA_DRAW_PANEL_GAL::ForceRefresh()
+{
+    wxPaintEvent redrawEvent;
+    wxPostEvent( this, redrawEvent );
 }
 
 

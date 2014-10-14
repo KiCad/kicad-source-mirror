@@ -695,6 +695,8 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
     }
     else
     {
+        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+
         // Redirect all events to the legacy canvas
         GetGalCanvas()->SetEventDispatcher( NULL );
     }

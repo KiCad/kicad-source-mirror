@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -46,10 +46,10 @@ DIALOG_GLOBAL_PADS_EDITION_BASE::DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* pare
 	
 	bRightSizer->Add( 10, 10, 0, 0, 5 );
 	
-	m_buttonChangeModule = new wxButton( this, ID_CHANGE_CURRENT_MODULE, _("Change Pads on Module"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonChangeModule = new wxButton( this, ID_CHANGE_CURRENT_MODULE, _("Change Pads on Footprint"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonChangeModule, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonIdModules = new wxButton( this, ID_CHANGE_ID_MODULES, _("Change Pads on Same Modules"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonIdModules = new wxButton( this, ID_CHANGE_ID_MODULES, _("Change Pads on Identical Footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonIdModules, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );

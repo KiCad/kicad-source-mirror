@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="11" />
+    <FileVersion major="1" minor="13" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -162,7 +162,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Module Selection</property>
+                                                        <property name="label">Footprint Selection</property>
                                                         <property name="majorDimension">1</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
@@ -252,7 +252,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Module Name Source</property>
+                                                        <property name="label">Footprint Name Source</property>
                                                         <property name="majorDimension">1</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
@@ -342,7 +342,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Exchange Module</property>
+                                                        <property name="label">Exchange Footprint</property>
                                                         <property name="majorDimension">1</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>

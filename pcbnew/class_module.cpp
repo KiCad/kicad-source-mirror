@@ -602,7 +602,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Attrib" ), msg, BROWN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Module" ), FROM_UTF8( m_fpid.Format().c_str() ), BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), FROM_UTF8( m_fpid.Format().c_str() ), BLUE ) );
 
     msg = _( "No 3D shape" );
     // Search the first active 3D shape in list

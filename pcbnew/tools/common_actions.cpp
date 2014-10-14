@@ -40,6 +40,16 @@ TOOL_ACTION COMMON_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
         AS_GLOBAL, 0,
         "", "" );    // No description, it is not supposed to be shown anywhere
 
+TOOL_ACTION COMMON_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
+        AS_GLOBAL, 0,                                    // it is handled by wxWidgets hotkey system
+        "Find an item", "Searches the document for an item" );
+
+TOOL_ACTION COMMON_ACTIONS::findDummy( "pcbnew.Find.Dummy", // only block the hotkey
+        AS_GLOBAL, MD_CTRL + int( 'F' ) );
+
+TOOL_ACTION COMMON_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
+        AS_GLOBAL, 'T');
+
 
 // Edit tool actions
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
@@ -485,6 +495,12 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_TB_OPTIONS_SELECT_CURSOR:
         return COMMON_ACTIONS::switchCursor.MakeEvent();
+
+    case ID_FIND_ITEMS:
+        return COMMON_ACTIONS::find.MakeEvent();
+
+    case ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST:
+        return COMMON_ACTIONS::findMove.MakeEvent();
 
     case ID_NO_TOOL_SELECTED:
         return COMMON_ACTIONS::selectionTool.MakeEvent();

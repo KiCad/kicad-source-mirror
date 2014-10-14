@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -13,11 +13,11 @@
 
 BEGIN_EVENT_TABLE( DIALOG_ERC_BASE, DIALOG_SHIM )
 	EVT_CLOSE( DIALOG_ERC_BASE::_wxFB_OnCloseErcDialog )
-	EVT_BUTTON( ID_ERC_CMP, DIALOG_ERC_BASE::_wxFB_OnErcCmpClick )
-	EVT_BUTTON( ID_ERASE_DRC_MARKERS, DIALOG_ERC_BASE::_wxFB_OnEraseDrcMarkersClick )
-	EVT_BUTTON( wxID_CANCEL, DIALOG_ERC_BASE::_wxFB_OnButtonCloseClick )
 	EVT_LISTBOX( ID_MAKER_HTMLLISTBOX, DIALOG_ERC_BASE::_wxFB_OnLeftClickMarkersList )
 	EVT_LISTBOX_DCLICK( ID_MAKER_HTMLLISTBOX, DIALOG_ERC_BASE::_wxFB_OnLeftDblClickMarkersList )
+	EVT_BUTTON( ID_ERASE_DRC_MARKERS, DIALOG_ERC_BASE::_wxFB_OnEraseDrcMarkersClick )
+	EVT_BUTTON( ID_ERC_CMP, DIALOG_ERC_BASE::_wxFB_OnErcCmpClick )
+	EVT_BUTTON( wxID_CANCEL, DIALOG_ERC_BASE::_wxFB_OnButtonCloseClick )
 	EVT_BUTTON( ID_RESET_MATRIX, DIALOG_ERC_BASE::_wxFB_OnResetMatrixClick )
 END_EVENT_TABLE()
 
@@ -37,26 +37,26 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bupperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sdiagSizer;
-	sdiagSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelERC, wxID_ANY, _("Erc report:") ), wxVERTICAL );
+	sdiagSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelERC, wxID_ANY, _("ERC Report:") ), wxVERTICAL );
 	
 	wxGridSizer* gSizeDiag;
 	gSizeDiag = new wxGridSizer( 3, 2, 0, 0 );
 	
-	m_ErcTotalErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Total errors count:  "), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_ErcTotalErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Total:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_ErcTotalErrorsText->Wrap( -1 );
 	gSizeDiag->Add( m_ErcTotalErrorsText, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_TotalErrCount = new wxTextCtrl( m_PanelERC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	gSizeDiag->Add( m_TotalErrCount, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_WarnErcErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Warnings count:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_WarnErcErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Warnings:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_WarnErcErrorsText->Wrap( -1 );
 	gSizeDiag->Add( m_WarnErcErrorsText, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_LastWarningCount = new wxTextCtrl( m_PanelERC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	gSizeDiag->Add( m_LastWarningCount, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_LastErrCountText = new wxStaticText( m_PanelERC, wxID_ANY, _("Errors count:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_LastErrCountText = new wxStaticText( m_PanelERC, wxID_ANY, _("Errors:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_LastErrCountText->Wrap( -1 );
 	gSizeDiag->Add( m_LastErrCountText, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -86,24 +86,8 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	bupperSizer->Add( bSizerMessages, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* bbuttonsSizer;
-	bbuttonsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonERC = new wxButton( m_PanelERC, ID_ERC_CMP, _("&Test Erc"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonERC->SetDefault(); 
-	bbuttonsSizer->Add( m_buttonERC, 0, wxALL|wxEXPAND, 5 );
-	
-	m_buttondelmarkers = new wxButton( m_PanelERC, ID_ERASE_DRC_MARKERS, _("&Del Markers"), wxDefaultPosition, wxDefaultSize, 0 );
-	bbuttonsSizer->Add( m_buttondelmarkers, 0, wxALL|wxEXPAND, 5 );
-	
-	m_buttonClose = new wxButton( m_PanelERC, wxID_CANCEL, _("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bbuttonsSizer->Add( m_buttonClose, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	bupperSizer->Add( bbuttonsSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
-	
-	
-	bercSizer->Add( bupperSizer, 0, wxEXPAND, 5 );
+	bercSizer->Add( bupperSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	m_textMarkers = new wxStaticText( m_PanelERC, wxID_ANY, _("Error list:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textMarkers->Wrap( -1 );
@@ -113,6 +97,22 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_MarkersList->SetMinSize( wxSize( 500,250 ) );
 	
 	bercSizer->Add( m_MarkersList, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bbuttonsSizer;
+	bbuttonsSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_buttondelmarkers = new wxButton( m_PanelERC, ID_ERASE_DRC_MARKERS, _("&Delete Markers"), wxDefaultPosition, wxDefaultSize, 0 );
+	bbuttonsSizer->Add( m_buttondelmarkers, 0, wxALL|wxEXPAND, 5 );
+	
+	m_buttonERC = new wxButton( m_PanelERC, ID_ERC_CMP, _("&Run"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonERC->SetDefault(); 
+	bbuttonsSizer->Add( m_buttonERC, 0, wxALL|wxEXPAND, 5 );
+	
+	m_buttonClose = new wxButton( m_PanelERC, wxID_CANCEL, _("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	bbuttonsSizer->Add( m_buttonClose, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	bercSizer->Add( bbuttonsSizer, 0, wxALIGN_RIGHT, 5 );
 	
 	
 	m_PanelERC->SetSizer( bercSizer );

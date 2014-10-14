@@ -42,11 +42,6 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     // Dialog should not shrink beyond it's minimal size.
     GetSizer()->SetSizeHints( this );
 
-    // The width returned by GetSize includes the amount taken up by the scroll bar, remove the
-    // scrollbar width
-    int listWidth = templateFieldListCtrl->GetSize().GetWidth() - 1;
-//            - wxSystemSettings::GetMetric( wxSYS_HSCROLL_Y );
-
     wxListItem col0;
     col0.SetId( 0 );
     col0.SetText( _( "Field Name" ) );
@@ -69,7 +64,8 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
 
     // Invalid field selected and don't ignore selection events because
     // they'll be from the user
-    selectedField = -1;
+    selectedField = 0;
+    selectionValid = false;
     ignoreSelection = false;
 
     // Make sure we select the first tab of the options tab page
@@ -78,9 +74,14 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     // Connect the edit controls for the template field names to the kill focus event which
     // doesn't propogate, hence the need to connect it here.
 
-    fieldNameTextCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
-    fieldDefaultValueTextCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
-    fieldVisibleCheckbox->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
+    fieldNameTextCtrl->Connect( wxEVT_KILL_FOCUS,
+            wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
+
+    fieldDefaultValueTextCtrl->Connect( wxEVT_KILL_FOCUS,
+            wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
+
+    fieldVisibleCheckbox->Connect( wxEVT_KILL_FOCUS,
+            wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
 }
 
 
@@ -203,7 +204,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
 {
     // If there is currently a valid selection, copy the edit panel to the
     // selected field so as not to lose the data
-    if( ( selectedField >= 0 ) && ( selectedField < templateFields.size() ) )
+    if( selectionValid && ( selectedField < templateFields.size() ) )
         copyPanelToSelected();
 
     // Add a new fieldname to the fieldname list
@@ -216,6 +217,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
     // Make sure any previously selected state is cleared and then select the
     // new field
     selectedField = templateFields.size() - 1;
+    selectionValid = true;
 
     // Update the display to reflect the new data
     RefreshTemplateFieldView();
@@ -230,7 +232,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
 {
     // If there is currently a valid selection, delete the template field from
     // the template field list
-    if( ( selectedField >= 0 ) && ( selectedField < templateFields.size() ) )
+    if( selectionValid && ( selectedField < templateFields.size() ) )
     {
         // Delete the fieldname from the fieldname list
         templateFields.erase( templateFields.begin() + selectedField );
@@ -252,7 +254,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
 
 void DIALOG_EESCHEMA_OPTIONS::copyPanelToSelected( void )
 {
-    if( ( selectedField < 0 ) || ( selectedField >= templateFields.size() ) )
+    if( !selectionValid || ( selectedField >= templateFields.size() ) )
         return;
 
     // Update the template field from the edit panel
@@ -272,7 +274,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus( wxFocusEvent& event )
 
 void DIALOG_EESCHEMA_OPTIONS::copySelectedToPanel( void )
 {
-    if( ( selectedField < 0 ) || ( selectedField >= templateFields.size() ) )
+    if( !selectionValid || ( selectedField >= templateFields.size() ) )
         return;
 
     // Update the panel data from the selected template field
@@ -298,6 +300,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
     // Now update the selected field and copy the data from the field to the
     // edit panel
     selectedField = event.GetIndex();
+    selectionValid = true;
     copySelectedToPanel();
 
     // Refresh the template field view - this deletes all fields and then

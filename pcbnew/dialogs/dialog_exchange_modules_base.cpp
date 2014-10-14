@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -52,10 +52,10 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bMiddleSizer;
 	bMiddleSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_SelectionChoices[] = { _("Change module"), _("Change same modules"), _("Ch. same module+value"), _("Change all") };
+	wxString m_SelectionChoices[] = { _("Change footprint"), _("Change same footprint"), _("Ch. same footprint+value"), _("Change all") };
 	int m_SelectionNChoices = sizeof( m_SelectionChoices ) / sizeof( wxString );
 	m_Selection = new wxRadioBox( this, ID_SELECTION_CLICKED, _("Options"), wxDefaultPosition, wxDefaultSize, m_SelectionNChoices, m_SelectionChoices, 1, wxRA_SPECIFY_COLS );
-	m_Selection->SetSelection( 2 );
+	m_Selection->SetSelection( 1 );
 	bMiddleSizer->Add( m_Selection, 0, wxALL, 5 );
 	
 	

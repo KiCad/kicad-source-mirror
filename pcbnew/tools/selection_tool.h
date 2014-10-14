@@ -187,6 +187,15 @@ private:
      */
     bool selectMultiple();
 
+    ///> Find dialog callback.
+    void findCallback( BOARD_ITEM* aItem );
+
+    ///> Find an item.
+    int find( TOOL_EVENT& aEvent );
+
+    ///> Find an item and start moving.
+    int findMove( TOOL_EVENT& aEvent );
+
     ///> Sets up handlers for various events.
     void setTransitions();
 

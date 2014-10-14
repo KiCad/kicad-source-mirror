@@ -386,13 +386,13 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     SetForceHVLines( dlg.GetEnableHVBusOrientation() );
     m_showPageLimits = dlg.GetShowPageLimits();
 
-    // @todo this will change when the template field editor is redone to
-    // look like the component field property editor, showing visibility and value also
-
+    // Delete all template fieldnames and then restore them using the template field data from
+    // the options dialog
     DeleteAllTemplateFieldNames();
     TEMPLATE_FIELDNAMES newFieldNames = dlg.GetTemplateFields();
 
-    for( TEMPLATE_FIELDNAMES::iterator dlgfld = newFieldNames.begin(); dlgfld != newFieldNames.end(); ++dlgfld )
+    for( TEMPLATE_FIELDNAMES::iterator dlgfld = newFieldNames.begin();
+         dlgfld != newFieldNames.end(); ++dlgfld )
     {
         TEMPLATE_FIELDNAME fld = *dlgfld;
         AddTemplateFieldName( fld );
@@ -711,10 +711,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     // Save template fieldnames
     STRING_FORMATTER sf;
-
     m_TemplateFieldNames.Format( &sf, 0 );
-
-    printf("saving formatted template fieldnames:'%s'\n", sf.GetString().c_str() );
 
     wxString record = FROM_UTF8( sf.GetString().c_str() );
     record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines

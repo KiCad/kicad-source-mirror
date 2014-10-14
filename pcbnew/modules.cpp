@@ -64,7 +64,7 @@ MODULE* PCB_BASE_FRAME::GetModuleByName()
     wxString          moduleName;
     MODULE*           module = NULL;
 
-    wxTextEntryDialog dlg( this, _( "Name:" ), _( "Search footprint" ), moduleName );
+    wxTextEntryDialog dlg( this, _( "Reference:" ), _( "Search for footprint" ), moduleName );
 
     if( dlg.ShowModal() != wxID_OK )
         return NULL;    //Aborted by user
@@ -262,7 +262,7 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeD
     /* Confirm module delete. */
     if( aAskBeforeDeleting )
     {
-        msg.Printf( _( "Delete Module %s (value %s) ?" ),
+        msg.Printf( _( "Delete Footprint %s (value %s) ?" ),
                     GetChars( aModule->GetReference() ),
                     GetChars( aModule->GetValue() ) );
 
