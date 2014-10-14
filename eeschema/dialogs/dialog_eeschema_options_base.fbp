@@ -3536,7 +3536,7 @@
                                                     <property name="maximum_size"></property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
-                                                    <property name="minimum_size">220,-1</property>
+                                                    <property name="minimum_size">500,-1</property>
                                                     <property name="moveable">1</property>
                                                     <property name="name">templateFieldListCtrl</property>
                                                     <property name="pane_border">1</property>

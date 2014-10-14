@@ -218,7 +218,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 	
 	templateFieldListCtrl = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
-	templateFieldListCtrl->SetMinSize( wxSize( 220,-1 ) );
+	templateFieldListCtrl->SetMinSize( wxSize( 500,-1 ) );
 	
 	bSizer6->Add( templateFieldListCtrl, 1, wxALIGN_TOP|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
 	

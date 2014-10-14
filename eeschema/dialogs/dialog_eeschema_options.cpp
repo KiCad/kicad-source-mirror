@@ -58,9 +58,9 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     templateFieldListCtrl->InsertColumn( 1, col1 );
     templateFieldListCtrl->InsertColumn( 2, col2 );
 
-    templateFieldListCtrl->SetColumnWidth( 0, 200 );
-    templateFieldListCtrl->SetColumnWidth( 1, 200 );
-    templateFieldListCtrl->SetColumnWidth( 2, 75 );
+    templateFieldListCtrl->SetColumnWidth( 0, templateFieldListCtrl->GetSize().GetWidth() / 3.5 );
+    templateFieldListCtrl->SetColumnWidth( 1, templateFieldListCtrl->GetSize().GetWidth() / 3.5 );
+    templateFieldListCtrl->SetColumnWidth( 2, templateFieldListCtrl->GetSize().GetWidth() / 3.5 );
 
     // Invalid field selected and don't ignore selection events because
     // they'll be from the user
@@ -191,7 +191,7 @@ void DIALOG_EESCHEMA_OPTIONS::RefreshTemplateFieldView( void )
 void DIALOG_EESCHEMA_OPTIONS::SelectTemplateField( int aItem )
 {
     // Only select valid items!
-    if( ( aItem < 0 ) || ( aItem >= templateFieldListCtrl->GetItemCount() ) )
+    if( !selectionValid || ( aItem >= templateFieldListCtrl->GetItemCount() ) )
         return;
 
     // Make sure we select the new item
@@ -225,6 +225,8 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
 
     // Make sure we select the new item
     SelectTemplateField( selectedField );
+
+    event.Skip();
 }
 
 
@@ -250,6 +252,8 @@ void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
         // Make sure after the refresh that the selected item is correct
         SelectTemplateField( selectedField );
     }
+
+    event.Skip();
 }
 
 void DIALOG_EESCHEMA_OPTIONS::copyPanelToSelected( void )
@@ -269,6 +273,9 @@ void DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus( wxFocusEvent& event )
     // Update the data + UI
     copyPanelToSelected();
     RefreshTemplateFieldView();
+    SelectTemplateField( selectedField );
+
+    event.Skip();
 }
 
 
@@ -291,6 +298,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
     if( ignoreSelection )
     {
         ignoreSelection = false;
+        event.Skip();
         return;
     }
 
@@ -312,6 +320,8 @@ void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
     // If an item was selected, make sure we re-select it, or at least the
     // same position in the grid
     SelectTemplateField( selectedField );
+
+    event.Skip();
 }
 
 
