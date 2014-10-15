@@ -27,6 +27,7 @@ wxString FindFileInSearchPaths( const SEARCH_STACK& aStack,
 
         if( fn.DirExists() )
         {
+wxLogMessage(fn.GetFullPath()+aFilename);
             paths.Add( fn.GetPath() );
         }
     }
@@ -115,6 +116,12 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
         altsubdirs.Add( i18n->GetName().BeforeLast( '_' ) );
 
         fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &altsubdirs );
+
+        if( !fn )
+            fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &altsubdirs );
+
+        if( !fn )
+            fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &subdirs );
 
         if( !fn )
             fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &subdirs );
