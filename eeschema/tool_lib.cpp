@@ -147,9 +147,9 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Save current component to new library" ) );
 
     m_mainToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Undo last command" ), s_Schematic_Hokeys_Descr, HK_UNDO, IS_COMMENT );
+    msg = AddHotkeyName( _( "Undo last command" ), g_Libedit_Hokeys_Descr, HK_UNDO, IS_COMMENT );
     m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), msg );
-    msg = AddHotkeyName( _( "Redo the last command" ), s_Schematic_Hokeys_Descr, HK_REDO,
+    msg = AddHotkeyName( _( "Redo the last command" ), g_Libedit_Hokeys_Descr, HK_REDO,
                          IS_COMMENT );
     m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), msg );
 
@@ -166,16 +166,16 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Test for duplicate and off grid pins" ) );
 
     m_mainToolBar->AddSeparator();
-    msg = AddHotkeyName( HELP_ZOOM_IN, s_Libedit_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
+    msg = AddHotkeyName( HELP_ZOOM_IN, g_Libedit_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_OUT, s_Libedit_Hokeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
+    msg = AddHotkeyName( HELP_ZOOM_OUT, g_Libedit_Hokeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, s_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
+    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_FIT, s_Libedit_Hokeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
+    msg = AddHotkeyName( HELP_ZOOM_FIT, g_Libedit_Hokeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
 
     m_mainToolBar->AddSeparator();

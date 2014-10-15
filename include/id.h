@@ -112,7 +112,7 @@ enum main_id
     ID_EXIT,
     ID_OPTIONS_SETUP,
 
-    // Find id menu
+    // id for toolbars
     ID_H_TOOLBAR,
     ID_V_TOOLBAR,
     ID_OPT_TOOLBAR,
@@ -169,10 +169,6 @@ enum main_id
     ID_POPUP_SELECT_ITEMS_BLOCK,
     ID_POPUP_MIRROR_X_BLOCK,
     ID_POPUP_MIRROR_Y_BLOCK,
-    ID_POPUP_MIRROR_UNUSED0,
-    ID_POPUP_MIRROR_UNUSED1,
-    ID_POPUP_MIRROR_UNUSED2,
-    ID_POPUP_MIRROR_UNUSED3,
     ID_POPUP_OTHER_COMMANDS,
     ID_POPUP_GENERAL_END_RANGE, // last number
 
@@ -185,6 +181,8 @@ enum main_id
     ID_POPUP_ZOOM_OUT,
     ID_POPUP_ZOOM_SELECT,
     ID_POPUP_ZOOM_CENTER,
+    ID_POPUP_ZOOM_PAGE,
+    ID_POPUP_ZOOM_REDRAW,
 
     /* Reserve IDs for popup menu zoom levels.  If you need more
      * levels of zoom, change ID_POPUP_ZOOM_LEVEL_END.  Note that more
@@ -229,10 +227,19 @@ enum main_id
     ID_SHEET_SET,
     ID_COMPONENT_BUTT,
 
-    ID_ZOOM_IN,
+    ID_ZOOM_BEGIN,
+    ID_ZOOM_IN = ID_ZOOM_BEGIN,
     ID_ZOOM_OUT,
     ID_ZOOM_PAGE,
     ID_ZOOM_REDRAW,
+    ID_VIEWER_ZOOM_IN,
+    ID_VIEWER_ZOOM_OUT,
+    ID_VIEWER_ZOOM_PAGE,
+    ID_VIEWER_ZOOM_REDRAW,
+    // zoom commands for non center zooming
+    ID_OFFCENTER_ZOOM_IN,
+    ID_OFFCENTER_ZOOM_OUT,
+    ID_ZOOM_END,
 
     // Panning command event IDs.
     ID_PAN_UP,
@@ -261,10 +268,6 @@ enum main_id
     ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
     ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
     ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-
-    // zoom commands for non center zooming
-    ID_OFFCENTER_ZOOM_IN,
-    ID_OFFCENTER_ZOOM_OUT,
 
     ID_DIALOG_ERC,      ///< eeschema ERC modeless dialog ID
 

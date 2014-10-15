@@ -172,20 +172,20 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     {
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, s_Eeschema_Hokeys_Descr );
+        InstallHotkeyFrame( this, g_Eeschema_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( s_Eeschema_Hokeys_Descr );
+        ExportHotkeyConfigToFile( g_Eeschema_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( s_Eeschema_Hokeys_Descr );
+        ImportHotkeyConfigFromFile( g_Eeschema_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for LibEdit.
-        DisplayHotkeyList( this, s_Libedit_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Libedit_Hokeys_Descr );
         break;
 
     default:
@@ -281,20 +281,20 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( s_Eeschema_Hokeys_Descr );
+        ExportHotkeyConfigToFile( g_Eeschema_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( s_Eeschema_Hokeys_Descr );
+        ImportHotkeyConfigFromFile( g_Eeschema_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, s_Eeschema_Hokeys_Descr );
+        InstallHotkeyFrame( this, g_Eeschema_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for eeschema.
-        DisplayHotkeyList( this, s_Schematic_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Schematic_Hokeys_Descr );
         break;
 
     default:

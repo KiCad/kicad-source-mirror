@@ -73,6 +73,10 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_SIZE( FOOTPRINT_VIEWER_FRAME::OnSize )
     EVT_ACTIVATE( FOOTPRINT_VIEWER_FRAME::OnActivate )
 
+    // Menu (and/or hotkey) events
+    EVT_MENU( wxID_EXIT, FOOTPRINT_VIEWER_FRAME::CloseFootprintViewer )
+    EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_VIEWER_FRAME::OnSetRelativeOffset )
+
     // Toolbar events
     EVT_TOOL( ID_MODVIEW_SELECT_LIB,
               FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary )
@@ -91,27 +95,9 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_LISTBOX( ID_MODVIEW_FOOTPRINT_LIST, FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList )
     EVT_LISTBOX_DCLICK( ID_MODVIEW_FOOTPRINT_LIST, FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList )
 
-    EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_VIEWER_FRAME::OnSetRelativeOffset )
 END_EVENT_TABLE()
 
 
-/*
- * This emulates the zoom menu entries found in the other KiCad applications.
- * The library viewer does not have any menus so add an accelerator table to
- * the main frame.
- */
-static wxAcceleratorEntry accels[] =
-{
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F1, ID_ZOOM_IN ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F2, ID_ZOOM_OUT ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F3, ID_ZOOM_REDRAW ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F4, ID_POPUP_ZOOM_CENTER ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_HOME, ID_ZOOM_PAGE ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_SPACE, ID_SET_RELATIVE_OFFSET )
-};
-
-
-#define EXTRA_BORDER_SIZE               2
 
 #define FOOTPRINT_VIEWER_FRAME_NAME     wxT( "ModViewFrame" )
 
@@ -128,8 +114,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     if( aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL )
         SetModal( true );
-
-    wxAcceleratorTable table( DIM( accels ), accels );
 
     m_FrameName  = GetFootprintViewerFrameName();
     m_configPath = wxT( "FootprintViewer" );
@@ -161,6 +145,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
+    // Menu bar is not mandatory: uncomment/comment the next line
+    // to add/remove the menubar
+    ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
 
@@ -196,9 +183,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     drawPanel->DisplayBoard( m_Pcb );
     updateView();
-
-    if( m_canvas )
-        m_canvas->SetAcceleratorTable( table );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -609,7 +593,12 @@ bool FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
     wxPoint pos = aPosition;
     GeneralControlKeyMovement( aHotKey, &pos, true );
 
-    switch( aHotKey )
+    if( aHotKey )
+    {
+        eventHandled = OnHotKey( aDC, aHotKey, aPosition );
+    }
+
+/*    switch( aHotKey )
     {
     case WXK_F1:
         cmd.SetId( ID_POPUP_ZOOM_IN );
@@ -643,7 +632,7 @@ bool FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
     default:
         eventHandled = false;
     }
-
+*/
     SetCrossHairPosition( pos );
     RefreshCrossHair( oldpos, aPosition, aDC );
 
@@ -897,4 +886,10 @@ void FOOTPRINT_VIEWER_FRAME::updateView()
         m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
         m_toolManager->RunAction( COMMON_ACTIONS::zoomFitScreen, true );
     }
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::CloseFootprintViewer( wxCommandEvent& event )
+{
+    Close();
 }

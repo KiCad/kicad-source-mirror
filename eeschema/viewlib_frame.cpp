@@ -70,26 +70,14 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, LIB_VIEW_FRAME::ClickOnCmpList )
     EVT_LISTBOX_DCLICK( ID_LIBVIEW_CMP_LIST, LIB_VIEW_FRAME::DClickOnCmpList )
 
+    // Menu (and/or hotkey) events
+    EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
+    EVT_MENU( wxID_EXIT, LIB_VIEW_FRAME::CloseLibraryViewer )
     EVT_MENU( ID_SET_RELATIVE_OFFSET, LIB_VIEW_FRAME::OnSetRelativeOffset )
+
 END_EVENT_TABLE()
 
 
-/*
- * This emulates the zoom menu entries found in the other KiCad applications.
- * The library viewer does not have any menus so add an accelerator table to
- * the main frame.
- */
-static wxAcceleratorEntry accels[] =
-{
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F1, ID_ZOOM_IN ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F2, ID_ZOOM_OUT ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F3, ID_ZOOM_REDRAW ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F4, ID_POPUP_ZOOM_CENTER ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_HOME, ID_ZOOM_PAGE ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_SPACE, ID_SET_RELATIVE_OFFSET )
-};
-
-#define ACCEL_TABLE_CNT ( sizeof( accels ) / sizeof( wxAcceleratorEntry ) )
 #define LIB_VIEW_FRAME_NAME wxT( "ViewlibFrame" )
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
@@ -106,18 +94,15 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     if( aFrameType == FRAME_SCH_VIEWER_MODAL )
         SetModal( true );
 
-    wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
-
     m_FrameName = GetLibViewerFrameName();
     m_configPath = wxT( "LibraryViewer" );
 
     // Give an icon
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( library_browse_xpm ) );
-
     SetIcon( icon );
 
-    m_HotkeysZoomAndGridList = s_Viewlib_Hokeys_Descr;
+    m_HotkeysZoomAndGridList = g_Viewlib_Hokeys_Descr;
     m_cmpList   = NULL;
     m_libList   = NULL;
 
@@ -131,6 +116,9 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
+    // Menu bar is not mandatory: uncomment/comment the next line
+    // to add/remove the menubar
+    ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
 
@@ -166,11 +154,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     DisplayLibInfos();
 
-    if( m_canvas )
-        m_canvas->SetAcceleratorTable( table );
-
     m_auimgr.SetManagedWindow( this );
-
 
     EDA_PANEINFO horiz;
     horiz.HorizontalToolbarPane();
@@ -549,4 +533,10 @@ void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
         ReCreateListLib();
 
     DisplayLibInfos();
+}
+
+
+void LIB_VIEW_FRAME::CloseLibraryViewer( wxCommandEvent& event )
+{
+    Close();
 }
