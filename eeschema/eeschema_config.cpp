@@ -323,7 +323,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     dlg.SetRepeatVertical( g_RepeatStep.y );
     dlg.SetRepeatLabel( g_RepeatDeltaLabel );
     dlg.SetAutoSaveInterval( GetAutoSaveInterval() / 60 );
-    dlg.SetRefIdSeparator( LIB_PART::GetSubpartIdSeparator( ),
+    dlg.SetRefIdSeparator( LIB_PART::GetSubpartIdSeparator(),
                            LIB_PART::GetSubpartFirstId() );
 
     dlg.SetShowGrid( IsGridVisible() );
@@ -337,15 +337,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     dlg.Layout();
     dlg.Fit();
     dlg.SetMinSize( dlg.GetSize() );
-
-    const TEMPLATE_FIELDNAMES&  tfnames = m_TemplateFieldNames.GetTemplateFieldNames();
-
-    for( unsigned i=0; i<tfnames.size(); ++i )
-    {
-        DBG(printf("dlg.SetFieldName(%d, '%s')\n", i, TO_UTF8( tfnames[i].m_Name) );)
-
-        dlg.SetFieldName( i, tfnames[i].m_Name );
-    }
+    dlg.SetTemplateFields( m_TemplateFieldNames.GetTemplateFieldNames() );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -394,25 +386,16 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     SetForceHVLines( dlg.GetEnableHVBusOrientation() );
     m_showPageLimits = dlg.GetShowPageLimits();
 
-    wxString templateFieldName;
-
-    // @todo this will change when the template field editor is redone to
-    // look like the component field property editor, showing visibility and value also
-
+    // Delete all template fieldnames and then restore them using the template field data from
+    // the options dialog
     DeleteAllTemplateFieldNames();
+    TEMPLATE_FIELDNAMES newFieldNames = dlg.GetTemplateFields();
 
-    for( int i=0; i<8; ++i )    // no. fields in this dialog window
+    for( TEMPLATE_FIELDNAMES::iterator dlgfld = newFieldNames.begin();
+         dlgfld != newFieldNames.end(); ++dlgfld )
     {
-        templateFieldName = dlg.GetFieldName( i );
-
-        if( !templateFieldName.IsEmpty() )
-        {
-            TEMPLATE_FIELDNAME  fld( dlg.GetFieldName( i ) );
-
-            // @todo set visibility and value also from a better editor
-
-            AddTemplateFieldName( fld );
-        }
+        TEMPLATE_FIELDNAME fld = *dlgfld;
+        AddTemplateFieldName( fld );
     }
 
     SaveSettings( config() );  // save values shared by eeschema applications.
@@ -728,10 +711,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     // Save template fieldnames
     STRING_FORMATTER sf;
-
     m_TemplateFieldNames.Format( &sf, 0 );
-
-    DBG(printf("saving formatted template fieldnames:'%s'\n", sf.GetString().c_str() );)
 
     wxString record = FROM_UTF8( sf.GetString().c_str() );
     record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines

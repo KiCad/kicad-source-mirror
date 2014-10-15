@@ -31,12 +31,57 @@
 
 #include <dialog_eeschema_options.h>
 
+#include "wx/settings.h"
 
 DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     DIALOG_EESCHEMA_OPTIONS_BASE( parent )
 {
     m_choiceUnits->SetFocus();
     m_sdbSizer1OK->SetDefault();
+
+    // Dialog should not shrink beyond it's minimal size.
+    GetSizer()->SetSizeHints( this );
+
+    wxListItem col0;
+    col0.SetId( 0 );
+    col0.SetText( _( "Field Name" ) );
+
+    wxListItem col1;
+    col1.SetId( 1 );
+    col1.SetText( _( "Default Value" ) );
+
+    wxListItem col2;
+    col2.SetId( 2 );
+    col2.SetText( _( "Visible" ) );
+
+    templateFieldListCtrl->InsertColumn( 0, col0 );
+    templateFieldListCtrl->InsertColumn( 1, col1 );
+    templateFieldListCtrl->InsertColumn( 2, col2 );
+
+    templateFieldListCtrl->SetColumnWidth( 0, templateFieldListCtrl->GetSize().GetWidth() / 3.5 );
+    templateFieldListCtrl->SetColumnWidth( 1, templateFieldListCtrl->GetSize().GetWidth() / 3.5 );
+    templateFieldListCtrl->SetColumnWidth( 2, templateFieldListCtrl->GetSize().GetWidth() / 3.5 );
+
+    // Invalid field selected and don't ignore selection events because
+    // they'll be from the user
+    selectedField = 0;
+    selectionValid = false;
+    ignoreSelection = false;
+
+    // Make sure we select the first tab of the options tab page
+    m_notebook1->SetSelection( 0 );
+
+    // Connect the edit controls for the template field names to the kill focus event which
+    // doesn't propogate, hence the need to connect it here.
+
+    fieldNameTextCtrl->Connect( wxEVT_KILL_FOCUS,
+            wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
+
+    fieldDefaultValueTextCtrl->Connect( wxEVT_KILL_FOCUS,
+            wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
+
+    fieldVisibleCheckbox->Connect( wxEVT_KILL_FOCUS,
+            wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
 }
 
 
@@ -48,6 +93,7 @@ void DIALOG_EESCHEMA_OPTIONS::SetUnits( const wxArrayString& units, int select )
     m_choiceUnits->Append( units );
     m_choiceUnits->SetSelection( select );
 }
+
 
 void DIALOG_EESCHEMA_OPTIONS::SetRefIdSeparator( wxChar aSep, wxChar aFirstId)
 {
@@ -101,107 +147,196 @@ void DIALOG_EESCHEMA_OPTIONS::GetRefIdSeparator( int& aSep, int& aFirstId)
 }
 
 
-void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& grid_sizes, int grid_id )
+void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& aGridSizes, int aGridId )
 {
-    wxASSERT( grid_sizes.size() > 0 );
+    wxASSERT( aGridSizes.size() > 0 );
 
     int select = wxNOT_FOUND;
 
-    for( size_t i = 0; i < grid_sizes.size(); i++ )
+    for( size_t i = 0; i < aGridSizes.size(); i++ )
     {
         wxString tmp;
-        tmp.Printf( wxT( "%0.1f" ), grid_sizes[i].m_Size.x );
+        tmp.Printf( wxT( "%0.1f" ), aGridSizes[i].m_Size.x );
         m_choiceGridSize->Append( tmp );
 
-        if( grid_sizes[i].m_Id == grid_id )
+        if( aGridSizes[i].m_Id == aGridId )
             select = (int) i;
     }
 
     m_choiceGridSize->SetSelection( select );
 }
 
-void DIALOG_EESCHEMA_OPTIONS::SetFieldName( int aNdx, wxString aName )
+
+void DIALOG_EESCHEMA_OPTIONS::RefreshTemplateFieldView( void )
 {
-    switch( aNdx )
+    // Delete all items in the template field list control and add all of the
+    // current template fields
+    templateFieldListCtrl->DeleteAllItems();
+
+    // Loop through the template fieldnames and add then to the list control
+    for( TEMPLATE_FIELDNAMES::iterator fld = templateFields.begin();
+            fld != templateFields.end(); ++fld )
     {
-    case 0:
-        m_fieldName1->SetValue( aName );
-        break;
+        long itemindex = templateFieldListCtrl->InsertItem(
+                templateFieldListCtrl->GetItemCount(), fld->m_Name );
 
-    case 1:
-        m_fieldName2->SetValue( aName );
-        break;
+        templateFieldListCtrl->SetItem( itemindex, 1, fld->m_Value );
 
-    case 2:
-        m_fieldName3->SetValue( aName );
-        break;
-
-    case 3:
-        m_fieldName4->SetValue( aName );
-        break;
-
-    case 4:
-        m_fieldName5->SetValue( aName );
-        break;
-
-    case 5:
-        m_fieldName6->SetValue( aName );
-        break;
-
-    case 6:
-        m_fieldName7->SetValue( aName );
-        break;
-
-    case 7:
-        m_fieldName8->SetValue( aName );
-        break;
-
-    default:
-        break;
+        templateFieldListCtrl->SetItem( itemindex, 2,
+                ( fld->m_Visible == true ) ? _( "Visible" ) : _( "Hidden" ) );
     }
 }
 
-wxString DIALOG_EESCHEMA_OPTIONS::GetFieldName( int aNdx )
+
+void DIALOG_EESCHEMA_OPTIONS::SelectTemplateField( int aItem )
 {
-    wxString nme;
+    // Only select valid items!
+    if( !selectionValid || ( aItem >= templateFieldListCtrl->GetItemCount() ) )
+        return;
 
-    switch ( aNdx )
+    // Make sure we select the new item
+    ignoreSelection = true;
+    templateFieldListCtrl->SetItemState( aItem, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
+{
+    // If there is currently a valid selection, copy the edit panel to the
+    // selected field so as not to lose the data
+    if( selectionValid && ( selectedField < templateFields.size() ) )
+        copyPanelToSelected();
+
+    // Add a new fieldname to the fieldname list
+    TEMPLATE_FIELDNAME newFieldname = TEMPLATE_FIELDNAME( "Fieldname" );
+    newFieldname.m_Value = wxT( "Value" );
+    newFieldname.m_Visible = false;
+    templateFields.push_back( newFieldname );
+
+    // Select the newly added field and then copy that data to the edit panel.
+    // Make sure any previously selected state is cleared and then select the
+    // new field
+    selectedField = templateFields.size() - 1;
+    selectionValid = true;
+
+    // Update the display to reflect the new data
+    RefreshTemplateFieldView();
+    copySelectedToPanel();
+
+    // Make sure we select the new item
+    SelectTemplateField( selectedField );
+
+    event.Skip();
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
+{
+    // If there is currently a valid selection, delete the template field from
+    // the template field list
+    if( selectionValid && ( selectedField < templateFields.size() ) )
     {
-    case 0:
-        nme = m_fieldName1->GetValue();
-        break;
+        // Delete the fieldname from the fieldname list
+        templateFields.erase( templateFields.begin() + selectedField );
 
-    case 1:
-        nme = m_fieldName2->GetValue();
-        break;
+        // If the selectedField is still not in the templateField range now,
+        // make sure we stay in range and when there are no fields present
+        // move to -1
+        if( selectedField >= templateFields.size() )
+            selectedField = templateFields.size() - 1;
 
-    case 2:
-        nme = m_fieldName3->GetValue();
-        break;
+        // Update the display to reflect the new data
+        RefreshTemplateFieldView();
+        copySelectedToPanel();
 
-    case 3:
-        nme = m_fieldName4->GetValue();
-        break;
-
-    case 4:
-        nme = m_fieldName5->GetValue();
-        break;
-
-    case 5:
-        nme = m_fieldName6->GetValue();
-        break;
-
-    case 6:
-        nme = m_fieldName7->GetValue();
-        break;
-
-    case 7:
-        nme = m_fieldName8->GetValue();
-        break;
-
-    default:
-        break;
+        // Make sure after the refresh that the selected item is correct
+        SelectTemplateField( selectedField );
     }
 
-    return nme;
+    event.Skip();
 }
+
+void DIALOG_EESCHEMA_OPTIONS::copyPanelToSelected( void )
+{
+    if( !selectionValid || ( selectedField >= templateFields.size() ) )
+        return;
+
+    // Update the template field from the edit panel
+    templateFields[selectedField].m_Name = fieldNameTextCtrl->GetValue();
+    templateFields[selectedField].m_Value = fieldDefaultValueTextCtrl->GetValue();
+    templateFields[selectedField].m_Visible = fieldVisibleCheckbox->GetValue();
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus( wxFocusEvent& event )
+{
+    // Update the data + UI
+    copyPanelToSelected();
+    RefreshTemplateFieldView();
+    SelectTemplateField( selectedField );
+
+    event.Skip();
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::copySelectedToPanel( void )
+{
+    if( !selectionValid || ( selectedField >= templateFields.size() ) )
+        return;
+
+    // Update the panel data from the selected template field
+    fieldNameTextCtrl->SetValue( templateFields[selectedField].m_Name );
+    fieldDefaultValueTextCtrl->SetValue( templateFields[selectedField].m_Value );
+    fieldVisibleCheckbox->SetValue( templateFields[selectedField].m_Visible );
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
+{
+    // If the class has generated the event and asked to ignore it, honour that and reset the
+    // ignore flag for the next user event.
+    if( ignoreSelection )
+    {
+        ignoreSelection = false;
+        event.Skip();
+        return;
+    }
+
+    // Before getting the new field data, make sure we save the old!
+    copyPanelToSelected();
+
+    // Now update the selected field and copy the data from the field to the
+    // edit panel
+    selectedField = event.GetIndex();
+    selectionValid = true;
+    copySelectedToPanel();
+
+    // Refresh the template field view - this deletes all fields and then
+    // re-fills the entire data grid. It then re-selects the currently
+    // selected field. This will be recursive, so disable this event while
+    // we refresh the view
+    RefreshTemplateFieldView();
+
+    // If an item was selected, make sure we re-select it, or at least the
+    // same position in the grid
+    SelectTemplateField( selectedField );
+
+    event.Skip();
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::SetTemplateFields( const TEMPLATE_FIELDNAMES& aFields )
+{
+    // Set the template fields object
+    templateFields = aFields;
+
+    // Refresh the view
+    RefreshTemplateFieldView();
+}
+
+
+TEMPLATE_FIELDNAMES DIALOG_EESCHEMA_OPTIONS::GetTemplateFields( void )
+{
+    return templateFields;
+}
+

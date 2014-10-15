@@ -62,6 +62,13 @@ struct TEMPLATE_FIELDNAME
     {
     }
 
+    TEMPLATE_FIELDNAME( const TEMPLATE_FIELDNAME& ref )
+    {
+        m_Name = ref.m_Name;
+        m_Value = ref.m_Value;
+        m_Visible = ref.m_Visible;
+    }
+
     /**
      * Function Format
      * serializes this object out as text into the given OUTPUTFORMATTER.
