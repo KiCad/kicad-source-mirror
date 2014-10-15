@@ -104,8 +104,12 @@ private:
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
     void OnCloseWindow( wxCloseEvent& Event );
+    void CloseFootprintViewer( wxCommandEvent& event );
+
     void ReCreateHToolbar();
     void ReCreateVToolbar();
+    void ReCreateMenuBar();
+
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnFootprintList( wxCommandEvent& event );
@@ -113,6 +117,16 @@ private:
     void OnSetRelativeOffset( wxCommandEvent& event );
 
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+
+    /**
+     * Function OnHotKey
+     * handle hot key events.
+     * <p?
+     * Some commands are relative to the item under the mouse cursor.  Commands are
+     * case insensitive
+     * </p>
+     */
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
     void LoadSettings( wxConfigBase* aCfg );    // override virtual
     void SaveSettings( wxConfigBase* aCfg );    // override virtual

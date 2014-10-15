@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
  *
@@ -34,6 +34,7 @@
 
 #include <general.h>
 #include <libeditframe.h>
+#include <viewlib_frame.h>
 #include <class_libentry.h>
 #include <sch_junction.h>
 #include <sch_line.h>
@@ -55,8 +56,8 @@
  * OnHotKey() function.
  * default key value is the default hotkey for this command. Can be overridden
  * by the user hotkey list file
- * add the HkMyNewEntry pointer in the s_Schematic_Hotkey_List list or the
- * s_LibEdit_Hotkey_List list or s_Common_Hotkey_List if the same command is
+ * add the HkMyNewEntry pointer in the schematic_Hotkey_List list or the
+ * libEdit_Hotkey_List list or common_Hotkey_List if the same command is
  * added both in Eeschema and libedit)
  * Add the new code in the switch in OnHotKey() function.
  * when the variable itemInEdit is true, an item is currently edited.
@@ -211,7 +212,7 @@ static EDA_HOTKEY HkSaveSchematic( wxT( "Save Schematic" ), HK_SAVE_SCH, 'S' + G
 static EDA_HOTKEY HkLoadSchematic( wxT( "Load Schematic" ), HK_LOAD_SCH, 'L' + GR_KB_CTRL );
 
 // List of common hotkey descriptors
-EDA_HOTKEY* s_Common_Hotkey_List[] =
+static EDA_HOTKEY* common_Hotkey_List[] =
 {
     &HkHelp,
     &HkZoomIn,
@@ -231,8 +232,23 @@ EDA_HOTKEY* s_Common_Hotkey_List[] =
     NULL
 };
 
+// List of common hotkey descriptors, for the library vierwer
+static EDA_HOTKEY* common_basic_Hotkey_List[] =
+{
+    &HkHelp,
+    &HkZoomIn,
+    &HkZoomOut,
+    &HkZoomRedraw,
+    &HkZoomCenter,
+    &HkZoomAuto,
+    &HkResetLocalCoord,
+    &HkMouseLeftClick,
+    &HkMouseLeftDClick,
+    NULL
+};
+
 // List of hotkey descriptors for schematic
-EDA_HOTKEY* s_Schematic_Hotkey_List[] =
+static EDA_HOTKEY* schematic_Hotkey_List[] =
 {
     &HkSaveSchematic,
     &HkLoadSchematic,
@@ -270,7 +286,7 @@ EDA_HOTKEY* s_Schematic_Hotkey_List[] =
 };
 
 // List of hotkey descriptors for library editor
-EDA_HOTKEY* s_LibEdit_Hotkey_List[] =
+static EDA_HOTKEY* libEdit_Hotkey_List[] =
 {
     &HkSaveLib,
     &HkCreatePin,
@@ -279,40 +295,46 @@ EDA_HOTKEY* s_LibEdit_Hotkey_List[] =
     NULL
 };
 
+// List of hotkey descriptors for library viewer (currently empty
+static EDA_HOTKEY* viewlib_Hotkey_List[] =
+{
+    NULL
+};
+
 // list of sections and corresponding hotkey list for Eeschema (used to create
 // an hotkey config file)
-struct EDA_HOTKEY_CONFIG s_Eeschema_Hokeys_Descr[] =
+struct EDA_HOTKEY_CONFIG g_Eeschema_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    s_Common_Hotkey_List,    L"Common keys"           },
-    { &g_SchematicSectionTag, s_Schematic_Hotkey_List, L"Schematic editor keys" },
-    { &g_LibEditSectionTag,   s_LibEdit_Hotkey_List,   L"library editor keys"   },
+    { &g_CommonSectionTag,    common_Hotkey_List,    L"Common keys"           },
+    { &g_SchematicSectionTag, schematic_Hotkey_List, L"Schematic editor keys" },
+    { &g_LibEditSectionTag,   libEdit_Hotkey_List,   L"library editor keys"   },
     { NULL,                   NULL,                    NULL                     }
 };
 
 // list of sections and corresponding hotkey list for the schematic editor
 // (used to list current hotkeys)
-struct EDA_HOTKEY_CONFIG s_Schematic_Hokeys_Descr[] =
+struct EDA_HOTKEY_CONFIG g_Schematic_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    s_Common_Hotkey_List,    NULL },
-    { &g_SchematicSectionTag, s_Schematic_Hotkey_List, NULL },
+    { &g_CommonSectionTag,    common_Hotkey_List,    NULL },
+    { &g_SchematicSectionTag, schematic_Hotkey_List, NULL },
     { NULL,                   NULL,                    NULL }
 };
 
 // list of sections and corresponding hotkey list for the component editor
 // (used to list current hotkeys)
-struct EDA_HOTKEY_CONFIG s_Libedit_Hokeys_Descr[] =
+struct EDA_HOTKEY_CONFIG g_Libedit_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,  s_Common_Hotkey_List,  NULL },
-    { &g_LibEditSectionTag, s_LibEdit_Hotkey_List, NULL },
+    { &g_CommonSectionTag,  common_Hotkey_List,  NULL },
+    { &g_LibEditSectionTag, libEdit_Hotkey_List, NULL },
     { NULL,                 NULL,                  NULL }
 };
 
 // list of sections and corresponding hotkey list for the component browser
 // (used to list current hotkeys)
-struct EDA_HOTKEY_CONFIG s_Viewlib_Hokeys_Descr[] =
+struct EDA_HOTKEY_CONFIG g_Viewlib_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag, s_Common_Hotkey_List, NULL },
-    { NULL,                NULL,                 NULL }
+    { &g_CommonSectionTag, common_basic_Hotkey_List, NULL },
+    { NULL,                NULL,                     NULL }
 };
 
 /*
@@ -348,10 +370,10 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         aHotKey += 'A' - 'a';
 
     // Search command from key :
-    EDA_HOTKEY* hotKey = GetDescriptorFromHotkey( aHotKey, s_Common_Hotkey_List );
+    EDA_HOTKEY* hotKey = GetDescriptorFromHotkey( aHotKey, common_Hotkey_List );
 
     if( hotKey == NULL )
-        hotKey = GetDescriptorFromHotkey( aHotKey, s_Schematic_Hotkey_List );
+        hotKey = GetDescriptorFromHotkey( aHotKey, schematic_Hotkey_List );
 
     if( hotKey == NULL )
         return false;
@@ -363,7 +385,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         return false;
 
     case HK_HELP:       // Display Current hotkey list
-        DisplayHotkeyList( this, s_Schematic_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Schematic_Hokeys_Descr );
         break;
 
     case HK_RESET_LOCAL_COORD:         // Reset the relative coord
@@ -553,10 +575,10 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     if( (aHotKey >= 'a') && (aHotKey <= 'z') )
         aHotKey += 'A' - 'a';
 
-    EDA_HOTKEY* hotKey = GetDescriptorFromHotkey( aHotKey, s_Common_Hotkey_List );
+    EDA_HOTKEY* hotKey = GetDescriptorFromHotkey( aHotKey, common_Hotkey_List );
 
     if( hotKey == NULL )
-        hotKey = GetDescriptorFromHotkey( aHotKey, s_LibEdit_Hotkey_List );
+        hotKey = GetDescriptorFromHotkey( aHotKey, libEdit_Hotkey_List );
 
     if( hotKey == NULL )
         return false;
@@ -568,7 +590,7 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         return false;
 
     case HK_HELP:       // Display Current hotkey list
-        DisplayHotkeyList( this, s_Libedit_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Libedit_Hokeys_Descr );
         break;
 
     case HK_RESET_LOCAL_COORD:         // Reset the relative coord
@@ -702,5 +724,79 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     }
 
     // Hot key handled.
+    return true;
+}
+
+bool LIB_VIEW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
+                                     EDA_ITEM* aItem )
+{
+    if( aHotKey == 0 )
+        return false;
+
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetEventObject( this );
+
+    /* Convert lower to upper case (the usual toupper function has problem with non ascii
+     * codes like function keys */
+    if( (aHotKey >= 'a') && (aHotKey <= 'z') )
+        aHotKey += 'A' - 'a';
+
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromHotkey( aHotKey, common_basic_Hotkey_List );
+
+    if( HK_Descr == NULL )
+        HK_Descr = GetDescriptorFromHotkey( aHotKey, viewlib_Hotkey_List );
+
+    if( HK_Descr == NULL )
+        return false;
+
+    switch( HK_Descr->m_Idcommand )
+    {
+    default:
+    case HK_NOT_FOUND:
+        return false;
+
+    case HK_HELP:                   // Display Current hotkey list
+        DisplayHotkeyList( this, g_Viewlib_Hokeys_Descr );
+        break;
+
+    case HK_RESET_LOCAL_COORD:      // set local (relative) coordinate origin
+        GetScreen()->m_O_Curseur = GetCrossHairPosition();
+        break;
+
+    case HK_LEFT_CLICK:
+        OnLeftClick( aDC, aPosition );
+        break;
+
+    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
+        OnLeftClick( aDC, aPosition );
+        OnLeftDClick( aDC, aPosition );
+        break;
+
+    case HK_ZOOM_IN:
+        cmd.SetId( ID_POPUP_ZOOM_IN );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_OUT:
+        cmd.SetId( ID_POPUP_ZOOM_OUT );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_REDRAW:
+        cmd.SetId( ID_ZOOM_REDRAW );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_CENTER:
+        cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_AUTO:
+        cmd.SetId( ID_ZOOM_PAGE );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+    }
+
     return true;
 }

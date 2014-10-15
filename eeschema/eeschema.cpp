@@ -229,7 +229,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips
-    ReadHotkeyConfig( wxT("SchematicFrame"), s_Eeschema_Hokeys_Descr );
+    ReadHotkeyConfig( wxT("SchematicFrame"), g_Eeschema_Hokeys_Descr );
 
     wxConfigLoadSetups( KifaceSettings(), cfg_params() );
 

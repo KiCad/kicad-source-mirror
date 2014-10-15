@@ -320,15 +320,14 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
     text = AddHotkeyName( _( "&Fit on Screen" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ZOOM_AUTO, IS_ACCELERATOR  );
+                          HK_ZOOM_AUTO  );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT,
                  KiBitmap( zoom_fit_in_page_xpm ) );
-
-    viewMenu->AppendSeparator();
 
     text = AddHotkeyName( _( "&Redraw" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
                  HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
+
     viewMenu->AppendSeparator();
 
     AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,

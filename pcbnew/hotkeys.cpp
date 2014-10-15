@@ -5,6 +5,8 @@
 #include <fctsys.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
+#include <modview_frame.h>
+#include <pcbnew_id.h>
 
 #include <hotkeys.h>
 
@@ -223,6 +225,17 @@ EDA_HOTKEY* common_Hotkey_List[] =
     NULL
 };
 
+// common hotkey descriptors only useful in footprint viewer
+EDA_HOTKEY* common_basic_Hotkey_List[] =
+{
+    &HkHelp,        &HkZoomIn,          &HkZoomOut,
+    &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,
+    &HkSwitchUnits, &HkResetLocalCoord,
+    &HkMouseLeftClick,
+    &HkMouseLeftDClick,
+    NULL
+};
+
 // List of hotkey descriptors for Pcbnew
 EDA_HOTKEY* board_edit_Hotkey_List[] =
 {
@@ -263,6 +276,12 @@ EDA_HOTKEY* module_edit_Hotkey_List[] = {
     NULL
  };
 
+// List of hotkey descriptors for the module viewer
+// Currently empty
+EDA_HOTKEY* module_viewer_Hotkey_List[] = {
+    NULL
+ };
+
 // list of sections and corresponding hotkey list for Pcbnew
  // (used to create an hotkey config file, and edit hotkeys )
 struct EDA_HOTKEY_CONFIG g_Pcbnew_Editor_Hokeys_Descr[] = {
@@ -291,7 +310,87 @@ struct EDA_HOTKEY_CONFIG g_Module_Editor_Hokeys_Descr[] = {
 // list of sections and corresponding hotkey list for the footprint viewer
 // (used to list current hotkeys in the module viewer)
 struct EDA_HOTKEY_CONFIG g_Module_Viewer_Hokeys_Descr[] = {
-    { &g_CommonSectionTag, common_Hotkey_List, NULL },
+    { &g_CommonSectionTag, common_basic_Hotkey_List, NULL },
     { NULL, NULL, NULL }
 };
 
+
+bool FOOTPRINT_VIEWER_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
+                                     EDA_ITEM* aItem )
+{
+    if( aHotKey == 0 )
+        return false;
+
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetEventObject( this );
+
+    /* Convert lower to upper case (the usual toupper function has problem with non ascii
+     * codes like function keys */
+    if( (aHotKey >= 'a') && (aHotKey <= 'z') )
+        aHotKey += 'A' - 'a';
+
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromHotkey( aHotKey, common_Hotkey_List );
+
+    if( HK_Descr == NULL )
+        HK_Descr = GetDescriptorFromHotkey( aHotKey, module_viewer_Hotkey_List );
+
+    if( HK_Descr == NULL )
+        return false;
+
+    switch( HK_Descr->m_Idcommand )
+    {
+    default:
+    case HK_NOT_FOUND:
+        return false;
+
+    case HK_HELP:                   // Display Current hotkey list
+        DisplayHotkeyList( this, g_Module_Viewer_Hokeys_Descr );
+        break;
+
+    case HK_RESET_LOCAL_COORD:      // set local (relative) coordinate origin
+        GetScreen()->m_O_Curseur = GetCrossHairPosition();
+        break;
+
+    case HK_LEFT_CLICK:
+        OnLeftClick( aDC, aPosition );
+        break;
+
+    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
+        OnLeftClick( aDC, aPosition );
+        OnLeftDClick( aDC, aPosition );
+        break;
+
+    case HK_SWITCH_UNITS:
+        cmd.SetId( (g_UserUnit == INCHES) ?
+                    ID_TB_OPTIONS_SELECT_UNIT_MM : ID_TB_OPTIONS_SELECT_UNIT_INCH );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_IN:
+        cmd.SetId( ID_POPUP_ZOOM_IN );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_OUT:
+        cmd.SetId( ID_POPUP_ZOOM_OUT );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_REDRAW:
+        cmd.SetId( ID_ZOOM_REDRAW );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_CENTER:
+        cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_AUTO:
+        cmd.SetId( ID_ZOOM_PAGE );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+    }
+
+    return true;
+}

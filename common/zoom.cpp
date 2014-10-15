@@ -138,6 +138,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         center = GetCrossHairPosition();
 
     // fall thru
+    case ID_VIEWER_ZOOM_IN:
     case ID_ZOOM_IN:
         if( screen->SetPreviousZoom() )
             RedrawScreen( center, zoom_at_cursor );
@@ -154,11 +155,14 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         center = GetCrossHairPosition();
 
     // fall thru
+    case ID_VIEWER_ZOOM_OUT:
     case ID_ZOOM_OUT:
         if( screen->SetNextZoom() )
             RedrawScreen( center, zoom_at_cursor );
         break;
 
+    case ID_VIEWER_ZOOM_REDRAW:
+    case ID_POPUP_ZOOM_REDRAW:
     case ID_ZOOM_REDRAW:
         m_canvas->Refresh();
         break;
@@ -168,6 +172,8 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         RedrawScreen( center, true );
         break;
 
+    case ID_POPUP_ZOOM_PAGE:
+    case ID_VIEWER_ZOOM_PAGE:
     case ID_ZOOM_PAGE:
         Zoom_Automatique( false );
         break;
@@ -227,9 +233,9 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     msg = AddHotkeyName( _( "Zoom out" ), m_HotkeysZoomAndGridList, HK_ZOOM_OUT );
     AddMenuItem( MasterMenu, ID_POPUP_ZOOM_OUT, msg, KiBitmap( zoom_out_xpm ) );
     msg = AddHotkeyName( _( "Redraw view" ), m_HotkeysZoomAndGridList, HK_ZOOM_REDRAW );
-    AddMenuItem( MasterMenu, ID_ZOOM_REDRAW, msg, KiBitmap( zoom_redraw_xpm ) );
+    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_REDRAW, msg, KiBitmap( zoom_redraw_xpm ) );
     msg = AddHotkeyName( _( "Zoom auto" ), m_HotkeysZoomAndGridList, HK_ZOOM_AUTO );
-    AddMenuItem( MasterMenu, ID_ZOOM_PAGE, msg, KiBitmap( zoom_fit_in_page_xpm ) );
+    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_PAGE, msg, KiBitmap( zoom_fit_in_page_xpm ) );
 
 
     wxMenu* zoom_choice = new wxMenu;

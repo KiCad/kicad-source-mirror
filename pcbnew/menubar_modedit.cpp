@@ -38,6 +38,7 @@
 
 #include <pcbnew_id.h>
 #include <hotkeys.h>
+#include <help_common_strings.h>
 
 
 void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
@@ -200,28 +201,35 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // View menu
     wxMenu* viewMenu = new wxMenu;
 
-    // Zoom In
-    AddMenuItem( viewMenu, ID_ZOOM_IN,
-                 _( "Zoom &In" ), _( "Zoom in" ),
-                 KiBitmap( zoom_in_xpm ) );
+    /* Important Note for ZOOM IN and ZOOM OUT commands from menubar:
+     * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
+     * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
+     * zoom in and out from hotkeys are equivalent to the pop up menu zoom
+     * From here, zooming is made around the screen center
+     * From hotkeys, zooming is made around the mouse cursor position
+     * (obviously not possible from the toolbar or menubar command)
+     *
+     * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
+     * for Zoom in and Zoom out sub menus
+     */
+    text = AddHotkeyName( _( "Zoom &In" ), g_Module_Editor_Hokeys_Descr,
+                          HK_ZOOM_IN, IS_ACCELERATOR );
+    AddMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
 
-    // Zoom Out
-    AddMenuItem( viewMenu, ID_ZOOM_OUT,
-                 _( "Zoom &Out" ), _( "Zoom out" ),
-                 KiBitmap( zoom_out_xpm ) );
+    text = AddHotkeyName( _( "Zoom &Out" ), g_Module_Editor_Hokeys_Descr,
+                          HK_ZOOM_OUT, IS_ACCELERATOR );
+    AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
-    // Fit on Screen
-    AddMenuItem( viewMenu, ID_ZOOM_PAGE,
-                 _( "&Fit on Screen" ),
-                 _( "Zoom to fit the module in the window" ),
+    text = AddHotkeyName( _( "&Fit on Screen" ), g_Module_Editor_Hokeys_Descr,
+                          HK_ZOOM_AUTO  );
+    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT,
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
-    viewMenu->AppendSeparator();
+    text = AddHotkeyName( _( "&Redraw" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_REDRAW );
+    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
+                 HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
 
-    // Redraw
-    AddMenuItem( viewMenu, ID_ZOOM_REDRAW,
-                 _( "&Redraw" ), _( "Redraw window's viewport" ),
-                 KiBitmap( zoom_redraw_xpm ) );
+    viewMenu->AppendSeparator();
 
     // 3D view
     AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,

@@ -79,8 +79,11 @@ public:
     void DisplayLibInfos();
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void OnCloseWindow( wxCloseEvent& Event );
+    void CloseLibraryViewer( wxCommandEvent& event );
     void ReCreateHToolbar();
     void ReCreateVToolbar();
+    void ReCreateMenuBar();
+
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     double BestZoom();
     void ClickOnLibList( wxCommandEvent& event );
@@ -88,6 +91,16 @@ public:
     void OnSetRelativeOffset( wxCommandEvent& event );
 
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+
+    /**
+     * Function OnHotKey
+     * handle hot key events.
+     * <p?
+     * Some commands are relative to the item under the mouse cursor.  Commands are
+     * case insensitive
+     * </p>
+     */
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
     void LoadSettings( wxConfigBase* aCfg );
     void SaveSettings( wxConfigBase* aCfg );

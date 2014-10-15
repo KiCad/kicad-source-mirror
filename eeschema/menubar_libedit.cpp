@@ -115,7 +115,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* editMenu = new wxMenu;
 
     // Undo
-    text = AddHotkeyName( _( "&Undo" ), s_Libedit_Hokeys_Descr, HK_UNDO );
+    text = AddHotkeyName( _( "&Undo" ), g_Libedit_Hokeys_Descr, HK_UNDO );
 
     AddMenuItem( editMenu,
                  wxID_UNDO,
@@ -124,7 +124,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( undo_xpm ) );
 
     // Redo
-    text = AddHotkeyName( _( "&Redo" ), s_Libedit_Hokeys_Descr, HK_REDO );
+    text = AddHotkeyName( _( "&Redo" ), g_Libedit_Hokeys_Descr, HK_REDO );
     AddMenuItem( editMenu,
                  wxID_REDO,
                  text,
@@ -166,14 +166,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
     // Fit on screen
-    text = AddHotkeyName( _( "&Fit on Screen" ), s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO );
+    text = AddHotkeyName( _( "&Fit on Screen" ), g_Libedit_Hokeys_Descr, HK_ZOOM_AUTO );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, KiBitmap( zoom_fit_in_page_xpm ) );
 
     // Separator
     viewMenu->AppendSeparator();
 
     // Redraw
-    text = AddHotkeyName( _( "&Redraw" ), s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
+    text = AddHotkeyName( _( "&Redraw" ), g_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
 
     // Menu Place:
