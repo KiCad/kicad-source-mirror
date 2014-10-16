@@ -167,6 +167,10 @@ wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
     int      ii;
     bool     found = false;
 
+    // Assume keycode of 0 is "unassigned"
+    if( aKeycode == 0 )
+        return wxT( "<unassigned>");
+
     if( (aKeycode & GR_KB_CTRL) != 0 )
         modifier << MODIFIER_CTRL;
 

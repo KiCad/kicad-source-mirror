@@ -59,7 +59,7 @@
 
 // mouse click command:
 static EDA_HOTKEY HkMouseLeftClick( wxT( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN, 0 );
-static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left DClick" ), HK_LEFT_DCLICK, WXK_END, 0 );
+static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left Double Click" ), HK_LEFT_DCLICK, WXK_END, 0 );
 
 static EDA_HOTKEY    HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
                                         HK_RESET_LOCAL_COORD, ' ' );

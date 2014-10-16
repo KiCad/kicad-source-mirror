@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2014 Kicad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,6 +70,13 @@ HOTKEY_LIST_CTRL::HOTKEY_LIST_CTRL( wxWindow *aParent, struct EDA_HOTKEY_CONFIG*
 
 void HOTKEY_LIST_CTRL::OnSize( wxSizeEvent& aEvent )
 {
+    recalculateColumns();
+    aEvent.Skip();
+}
+
+
+void HOTKEY_LIST_CTRL::recalculateColumns()
+{
     float totalLength = 0;
     float scale = 0;
 
@@ -99,8 +106,6 @@ void HOTKEY_LIST_CTRL::OnSize( wxSizeEvent& aEvent )
 
     SetColumnWidth( 0, int( maxInfoMsgLength*scale ) - 2 );
     SetColumnWidth( 1, int( maxKeyCodeLength*scale ) );
-
-    aEvent.Skip();
 }
 
 
@@ -144,7 +149,6 @@ void HOTKEY_LIST_CTRL::OnChar( wxKeyEvent& aEvent )
             DeselectRow( m_curEditingRow );
             m_curEditingRow = -1;
             break;
-
         default:
             if( aEvent.ControlDown() )
                 key |= GR_KB_CTRL;
@@ -174,15 +178,13 @@ void HOTKEY_LIST_CTRL::OnChar( wxKeyEvent& aEvent )
                 if( canUpdate )
                 {
                     m_hotkeys[m_curEditingRow]->m_KeyCode = key;
+                    recalculateColumns();
                 }
 
                 // Remove selection
                 DeselectRow( m_curEditingRow );
                 m_curEditingRow = -1;
             }
-
-
-            break;
         }
     }
     RefreshItems(0,m_hotkeys.size()-1);
@@ -311,12 +313,6 @@ void HOTKEYS_EDITOR_DIALOG::CancelClicked( wxCommandEvent& event )
 }
 
 
-/**
- * Function UndoClicked
- * Reinit the hotkeys to the initial state (remove all pending changes
- *
- * @param aEvent is the button press event, unused
- */
 void HOTKEYS_EDITOR_DIALOG::UndoClicked( wxCommandEvent& aEvent )
 {
     std::vector<HOTKEY_SECTION_PAGE*>::iterator i;
