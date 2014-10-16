@@ -17,9 +17,17 @@ Rok Markovic <rok[at]kanardia.eu>
 Tim Hanson <sideskate[at]gmail-dot-com>
 Vesa Solonen <vesa.solonen[at]hut-dot-fi>
 Alexander Zakamaldin <zaka62[at]mail.ru>
-Miguel Angel Ajo Pelayo <miguelangel@nbee.es> (Python Scripting)
-Alexander Lunev <al.lunev@yahoo.com>  (Pcad to Kicad converter)
-Jacobo Aragunde Perez <jaragunde@igalia.com> for Igalia and the CERN
+Miguel Angel Ajo Pelayo <miguelangel[at]nbee.es> (Python Scripting)
+Alexander Lunev <al.lunev[at]yahoo.com>  (Pcad to Kicad converter)
+Jacobo Aragunde Perez <jaragunde[at]igalia.com> for Igalia and the CERN
+Brian Sidebotham <brian.sidebotham[at]gmail.com>
+Maciej Sumiński <maciej.suminski[at]cern.ch>
+Tomasz Wlostowski <tomasz.wlostowski[at]cern.ch>
+Henner Zeller <h.zeller[at]acm.org>
+Mark Roszko <mark.roszko[at]gmail.com>
+Daniel Majewski <lordblick[at]gmail.com>
+Konstantin Baranovskiy <baranovskiykonstantin[at]gmail.com>
+Torsten Hüter <torstenhtr[at]gmx.de>
 
 See also CHANGELOG.txt for contributors.
 
