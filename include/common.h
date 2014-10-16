@@ -88,7 +88,6 @@ enum pseudokeys {
 #define PCB_CALCULATOR_EXE  wxT( "pcb_calculator.exe" )
 #define PL_EDITOR_EXE       wxT( "pl_editor.exe" )
 #else
-#ifndef __WXMAC__
 #define CVPCB_EXE           wxT( "cvpcb" )
 #define PCBNEW_EXE          wxT( "pcbnew" )
 #define EESCHEMA_EXE        wxT( "eeschema" )
@@ -96,16 +95,6 @@ enum pseudokeys {
 #define BITMAPCONVERTER_EXE wxT( "bitmap2component" )
 #define PCB_CALCULATOR_EXE  wxT( "pcb_calculator" )
 #define PL_EDITOR_EXE       wxT( "pl_editor" )
-#else
-// All binaries are now in kicad.app bundle
-#define CVPCB_EXE           wxT( "kicad.app/Contents/MacOS/cvpcb" )
-#define PCBNEW_EXE          wxT( "kicad.app/Contents/MacOS/pcbnew" )
-#define EESCHEMA_EXE        wxT( "kicad.app/Contents/MacOS/eeschema" )
-#define GERBVIEW_EXE        wxT( "kicad.app/Contents/MacOS/gerbview" )
-#define BITMAPCONVERTER_EXE wxT( "kicad.app/Contents/MacOS/bitmap2component" )
-#define PCB_CALCULATOR_EXE  wxT( "kicad.app/Contents/MacOS/pcb_calculator" )
-#define PL_EDITOR_EXE       wxT( "kicad.app/Contents/MacOS/pl_editor" )
-# endif
 #endif
 
 
@@ -643,5 +632,24 @@ wxConfigBase* GetNewConfig( const wxString& aProgName );
  */
 wxString GetKicadConfigPath();
 
+#ifdef __WXMAC__
+/**
+ * OSX specific function GetOSXKicadUserDataDir
+ * @return A wxString pointing to the user data directory for Kicad
+ */
+wxString GetOSXKicadUserDataDir();
+
+/**
+ * OSX specific function GetOSXMachineDataDir
+ * @return A wxString pointing to the machine data directory for Kicad
+ */
+wxString GetOSXKicadMachineDataDir();
+
+/**
+ * OSX specific function GetOSXKicadDataDir
+ * @return A wxString pointing to the bundle data directory for Kicad
+ */
+wxString GetOSXKicadDataDir();
+#endif
 
 #endif  // INCLUDE__COMMON_H_

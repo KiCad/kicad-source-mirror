@@ -26,30 +26,27 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
     // Otherwise don't set it.
     maybe.AddPaths( wxGetenv( wxT( "KICAD" ) ) );
 
-#ifndef __WXMAC__
+#ifdef __WXMAC__
+    // Add the directory for the user-dependent, program specific data files.
+    maybe.AddPaths( GetOSXKicadUserDataDir() );
+
+    // Global machine specific application data
+    maybe.AddPaths( GetOSXKicadMachineDataDir() );
+
+    // Global application specific data files inside bundle
+    maybe.AddPaths( GetOSXKicadDataDir() );
+#else
     // This is from CMAKE_INSTALL_PREFIX.
     // Useful when KiCad is installed by `make install`.
     // Use as second ranked place.
     maybe.AddPaths( wxT( DEFAULT_INSTALL_PATH ) );
-#endif
 
-    // Add the directory for the user-dependent, program specific, data files:
+    // Add the directory for the user-dependent, program specific data files.
+    // According to wxWidgets documentation:
     // Unix: ~/.appname
     // Windows: C:\Documents and Settings\username\Application Data\appname
-    // Mac: ~/Library/Application Support/appname
     maybe.AddPaths( wxStandardPaths::Get().GetUserDataDir() );
 
-#ifdef __WXMAC__
-    // global machine specific application data
-    maybe.AddPaths( wxT( "/Library/Application Support/kicad" ) );
-
-    // Dir of the global (not user-specific), application specific, data files.
-    // From wx docs:
-    // Unix: prefix/share/appname
-    // Windows: the directory where the executable file is located
-    // Mac: appname.app/Contents/SharedSupport bundle subdirectory
-    maybe.AddPaths( wxStandardPaths::Get().GetDataDir() );
-#else
     {
         // Should be full path to this program executable.
         wxString   bin_dir = Pgm().GetExecutablePath();

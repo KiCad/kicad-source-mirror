@@ -473,6 +473,22 @@ if( MINGW )
     mingw_resource_compiler( pcbnew )
 endif()
 
+
+if( APPLE )
+    # setup bundle
+    set( PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew_doc.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set( MACOSX_BUNDLE_ICON_FILE pcbnew.icns )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.kicad )
+    set( MACOSX_BUNDLE_NAME pcbnew )
+endif()
+
+
 # Create a C++ compilable string initializer containing html text into a *.h file:
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help_html.h
@@ -513,7 +529,7 @@ if( USE_KIWAY_DLLS )
 #if( false )
 
     # a very small program launcher for pcbnew_kiface
-    add_executable( pcbnew WIN32
+    add_executable( pcbnew WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
         ${PCBNEW_RESOURCES}
         )
@@ -593,12 +609,31 @@ if( USE_KIWAY_DLLS )
 
     # these 2 binaries are a matched set, keep them together:
     if( APPLE )
-        # puts binaries into the *.app bundle while linking
         set_target_properties( pcbnew PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
             )
+
+        # puts binaries into the *.app bundle while linking
         set_target_properties( pcbnew_kiface PROPERTIES
             LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
+            )
+        # put individual bundle outside of main bundle as a first step
+        # will be pulled into the main bundle when creating main bundle
+        install( TARGETS pcbnew
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+        install( CODE "
+            # override default embedded path settings
+            ${OSX_BUNDLE_OVERRIDE_PATHS}
+
+            # do all the work
+            include( BundleUtilities )
+            fixup_bundle( ${KICAD_BIN}/pcbnew.app/Contents/MacOS/pcbnew
+                \"\"
+                \"\"
+                )
+            " COMPONENT Runtime
             )
     else()
         install( TARGETS pcbnew
@@ -613,7 +648,7 @@ if( USE_KIWAY_DLLS )
 
 else()  # milestone A) kills this off:
 
-    add_executable( pcbnew WIN32
+    add_executable( pcbnew WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
         pcbnew.cpp
         ${PCBNEW_SRCS}
@@ -666,17 +701,10 @@ else()  # milestone A) kills this off:
             )
     endif()
 
-    if( APPLE )
-        # puts binaries into the *.app bundle while linking
-        set_target_properties( pcbnew PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
-            )
-    else()
-        install( TARGETS pcbnew
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-    endif()
+    install( TARGETS pcbnew
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
 endif()
 
 

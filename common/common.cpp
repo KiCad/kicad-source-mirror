@@ -343,3 +343,50 @@ wxString GetKicadConfigPath()
 
     return cfgpath.GetPath();
 }
+
+#ifdef __WXMAC__
+wxString GetOSXKicadUserDataDir()
+{
+    // According to wxWidgets documentation for GetUserDataDir:
+    // Mac: ~/Library/Application Support/appname
+    wxFileName udir( wxStandardPaths::Get().GetUserDataDir(), wxEmptyString );
+
+    // Since appname is different if started via launcher or standalone binary
+    // map all to "kicad" here
+    udir.RemoveLastDir();
+    udir.AppendDir( wxT( "kicad" ) );
+
+    return udir.GetPath();
+}
+
+
+wxString GetOSXKicadMachineDataDir()
+{
+    return wxT( "/Library/Application Support/kicad" );
+}
+
+
+wxString GetOSXKicadDataDir()
+{
+    // According to wxWidgets documentation for GetDataDir:
+    // Mac: appname.app/Contents/SharedSupport bundle subdirectory
+    wxFileName ddir( wxStandardPaths::Get().GetDataDir(), wxEmptyString );
+
+    // This must be mapped to main bundle for everything but kicad.app
+    const wxArrayString dirs = ddir.GetDirs();
+    if( dirs[dirs.GetCount() - 3] != wxT( "kicad.app" ) )
+    {
+        // Bundle structure resp. current path is
+        //   kicad.app/Contents/Applications/<standalone>.app/Contents/SharedSupport
+        // and will be mapped to
+        //   kicad.app/Contents/SharedSupprt
+        ddir.RemoveLastDir();
+        ddir.RemoveLastDir();
+        ddir.RemoveLastDir();
+        ddir.RemoveLastDir();
+        ddir.AppendDir( wxT( "SharedSupport" ) );
+    }
+
+    return ddir.GetPath();
+}
+#endif
