@@ -52,6 +52,12 @@ wxString g_LibEditSectionTag( wxT( "[libedit]" ) );
 wxString g_BoardEditorSectionTag( wxT( "[pcbnew]" ) );
 wxString g_ModuleEditSectionTag( wxT( "[footprinteditor]" ) );
 
+wxString g_CommonSectionTitle( wxT( "Common" ) );
+wxString g_SchematicSectionTitle( wxT( "Schematic Editor" ) );
+wxString g_LibEditSectionTitle( wxT( "Library Editor" ) );
+wxString g_BoardEditorSectionTitle( wxT( "Board Editor" ) );
+wxString g_ModuleEditSectionTitle( wxT( "Footprint Editor" ) );
+
 
 /* Class to handle hotkey commnands. hotkeys have a default value
  * This class allows the real key code changed by user from a key code list
@@ -490,10 +496,10 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
 
     for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
     {
-        if( aDescList->m_Comment )
+        if( aDescList->m_Title )
         {
             msg += wxT( "# " );
-            msg += wxString( aDescList->m_Comment );
+            msg += *aDescList->m_Title;
             msg += wxT( "\n" );
         }
 

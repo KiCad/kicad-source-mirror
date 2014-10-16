@@ -305,18 +305,18 @@ static EDA_HOTKEY* viewlib_Hotkey_List[] =
 // an hotkey config file)
 struct EDA_HOTKEY_CONFIG g_Eeschema_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    common_Hotkey_List,    L"Common keys"           },
-    { &g_SchematicSectionTag, schematic_Hotkey_List, L"Schematic editor keys" },
-    { &g_LibEditSectionTag,   libEdit_Hotkey_List,   L"library editor keys"   },
-    { NULL,                   NULL,                    NULL                     }
+    { &g_CommonSectionTag,    common_Hotkey_List,    &g_CommonSectionTitle    },
+    { &g_SchematicSectionTag, schematic_Hotkey_List, &g_SchematicSectionTitle },
+    { &g_LibEditSectionTag,   libEdit_Hotkey_List,   &g_LibEditSectionTitle   },
+    { NULL,                   NULL,                  NULL                     }
 };
 
 // list of sections and corresponding hotkey list for the schematic editor
 // (used to list current hotkeys)
 struct EDA_HOTKEY_CONFIG g_Schematic_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    common_Hotkey_List,    NULL },
-    { &g_SchematicSectionTag, schematic_Hotkey_List, NULL },
+    { &g_CommonSectionTag,    common_Hotkey_List,    &g_CommonSectionTitle },
+    { &g_SchematicSectionTag, schematic_Hotkey_List, &g_SchematicSectionTitle },
     { NULL,                   NULL,                    NULL }
 };
 
@@ -324,17 +324,17 @@ struct EDA_HOTKEY_CONFIG g_Schematic_Hokeys_Descr[] =
 // (used to list current hotkeys)
 struct EDA_HOTKEY_CONFIG g_Libedit_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,  common_Hotkey_List,  NULL },
-    { &g_LibEditSectionTag, libEdit_Hotkey_List, NULL },
-    { NULL,                 NULL,                  NULL }
+    { &g_CommonSectionTag,  common_Hotkey_List,  &g_CommonSectionTitle },
+    { &g_LibEditSectionTag, libEdit_Hotkey_List, &g_LibEditSectionTitle },
+    { NULL,                 NULL,                NULL }
 };
 
 // list of sections and corresponding hotkey list for the component browser
 // (used to list current hotkeys)
 struct EDA_HOTKEY_CONFIG g_Viewlib_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag, common_basic_Hotkey_List, NULL },
-    { NULL,                NULL,                     NULL }
+    { &g_CommonSectionTag, common_basic_Hotkey_List, &g_CommonSectionTitle },
+    { NULL,                NULL,                 NULL }
 };
 
 /*

@@ -285,33 +285,33 @@ EDA_HOTKEY* module_viewer_Hotkey_List[] = {
 // list of sections and corresponding hotkey list for Pcbnew
  // (used to create an hotkey config file, and edit hotkeys )
 struct EDA_HOTKEY_CONFIG g_Pcbnew_Editor_Hokeys_Descr[] = {
-    { &g_CommonSectionTag, common_Hotkey_List, L"Common keys" },
-    { &g_BoardEditorSectionTag, board_edit_Hotkey_List, L"Board editor keys" },
-    { &g_ModuleEditSectionTag, module_edit_Hotkey_List, L"Footprint editor keys" },
-    { NULL, NULL, NULL }
+    { &g_CommonSectionTag,      common_Hotkey_List,         &g_CommonSectionTitle      },
+    { &g_BoardEditorSectionTag, board_edit_Hotkey_List,     &g_BoardEditorSectionTitle },
+    { &g_ModuleEditSectionTag,  module_edit_Hotkey_List,    &g_ModuleEditSectionTitle  },
+    { NULL,                     NULL,                       NULL                       }
 };
 
 // list of sections and corresponding hotkey list for the board editor
 // (used to list current hotkeys in the board editor)
 struct EDA_HOTKEY_CONFIG g_Board_Editor_Hokeys_Descr[] = {
-    { &g_CommonSectionTag, common_Hotkey_List, NULL },
-    { &g_BoardEditorSectionTag, board_edit_Hotkey_List, NULL },
+    { &g_CommonSectionTag,      common_Hotkey_List,      &g_CommonSectionTitle },
+    { &g_BoardEditorSectionTag, board_edit_Hotkey_List,  &g_BoardEditorSectionTitle },
     { NULL, NULL, NULL }
 };
 
 // list of sections and corresponding hotkey list for the footprint editor
 // (used to list current hotkeys in the module editor)
 struct EDA_HOTKEY_CONFIG g_Module_Editor_Hokeys_Descr[] = {
-    { &g_CommonSectionTag, common_Hotkey_List, NULL },
-    { &g_ModuleEditSectionTag, module_edit_Hotkey_List, NULL },
-    { NULL, NULL, NULL }
+    { &g_CommonSectionTag,     common_Hotkey_List,      &g_CommonSectionTitle },
+    { &g_ModuleEditSectionTag, module_edit_Hotkey_List, &g_ModuleEditSectionTitle },
+    { NULL,                    NULL,                    NULL }
 };
 
 // list of sections and corresponding hotkey list for the footprint viewer
 // (used to list current hotkeys in the module viewer)
 struct EDA_HOTKEY_CONFIG g_Module_Viewer_Hokeys_Descr[] = {
-    { &g_CommonSectionTag, common_basic_Hotkey_List, NULL },
-    { NULL, NULL, NULL }
+    { &g_CommonSectionTag, common_basic_Hotkey_List, &g_CommonSectionTitle },
+    { NULL,                NULL,                     NULL }
 };
 
 
