@@ -216,7 +216,7 @@ HOTKEY_SECTION_PAGE::HOTKEY_SECTION_PAGE( HOTKEYS_EDITOR_DIALOG* aDialog,
                                           const wxString& aTitle,
                                           EDA_HOTKEY_CONFIG* aSection ) :
     wxPanel( aParent, -1, wxDefaultPosition, wxDefaultSize,
-             wxTAB_TRAVERSAL | wxBORDER_SUNKEN ),
+             wxTAB_TRAVERSAL | wxNO_BORDER ),
     m_hotkeySection( aSection ),
     m_dialog( aDialog )
 {
@@ -224,7 +224,9 @@ HOTKEY_SECTION_PAGE::HOTKEY_SECTION_PAGE( HOTKEYS_EDITOR_DIALOG* aDialog,
 
 	wxBoxSizer* bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	this->SetSizer( bMainSizer );
+	SetSizer( bMainSizer );
+	Layout();
+	bMainSizer->Fit( this );
 
 	m_hotkeyList = new HOTKEY_LIST_CTRL( this, aSection );
 	bMainSizer->Add( m_hotkeyList, 1, wxALL|wxEXPAND, 5 );
