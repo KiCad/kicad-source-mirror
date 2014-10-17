@@ -52,6 +52,12 @@ wxString g_LibEditSectionTag( wxT( "[libedit]" ) );
 wxString g_BoardEditorSectionTag( wxT( "[pcbnew]" ) );
 wxString g_ModuleEditSectionTag( wxT( "[footprinteditor]" ) );
 
+wxString g_CommonSectionTitle( wxT( "Common" ) );
+wxString g_SchematicSectionTitle( wxT( "Schematic Editor" ) );
+wxString g_LibEditSectionTitle( wxT( "Library Editor" ) );
+wxString g_BoardEditorSectionTitle( wxT( "Board Editor" ) );
+wxString g_ModuleEditSectionTitle( wxT( "Footprint Editor" ) );
+
 
 /* Class to handle hotkey commnands. hotkeys have a default value
  * This class allows the real key code changed by user from a key code list
@@ -161,6 +167,10 @@ wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
     int      ii;
     bool     found = false;
 
+    // Assume keycode of 0 is "unassigned"
+    if( aKeycode == 0 )
+        return wxT( "<unassigned>");
+
     if( (aKeycode & GR_KB_CTRL) != 0 )
         modifier << MODIFIER_CTRL;
 
@@ -224,6 +234,7 @@ static void AddModifierToKey( wxString& aFullKey, const wxString & aKey )
         aFullKey << wxT( "\t" ) << MODIFIER_ALT << aKey;
 }
 
+
 /* AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  *  aText = a wxString. returns aText + key name
@@ -247,17 +258,17 @@ wxString AddHotkeyName( const wxString& aText, EDA_HOTKEY** aList,
     {
         switch( aShortCutType )
         {
-            case IS_HOTKEY:
-                msg << wxT( "\t" ) << keyname;
-                break;
+        case IS_HOTKEY:
+            msg << wxT( "\t" ) << keyname;
+            break;
 
-            case IS_ACCELERATOR:
-                AddModifierToKey( msg, keyname );
-                break;
+        case IS_ACCELERATOR:
+            AddModifierToKey( msg, keyname );
+            break;
 
-            case IS_COMMENT:
-                msg << wxT( " (" ) << keyname << wxT( ")" );
-                break;
+        case IS_COMMENT:
+            msg << wxT( " (" ) << keyname << wxT( ")" );
+            break;
         }
     }
 
@@ -295,18 +306,19 @@ wxString AddHotkeyName( const wxString&           aText,
             {
                 switch( aShortCutType )
                 {
-                    case IS_HOTKEY:
-                        msg << wxT( "\t" ) << keyname;
-                        break;
+                case IS_HOTKEY:
+                    msg << wxT( "\t" ) << keyname;
+                    break;
 
-                    case IS_ACCELERATOR:
-                        AddModifierToKey( msg, keyname );
-                        break;
+                case IS_ACCELERATOR:
+                    AddModifierToKey( msg, keyname );
+                    break;
 
-                    case IS_COMMENT:
-                        msg << wxT( " (" ) << keyname << wxT( ")" );
-                        break;
+                case IS_COMMENT:
+                    msg << wxT( " (" ) << keyname << wxT( ")" );
+                    break;
                 }
+
                 break;
             }
         }
@@ -414,9 +426,9 @@ void DisplayHotkeyList( EDA_DRAW_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescL
 
     wxString     msg = wxT( "<html><body bgcolor=\"#E2E2E2\">" );
 
-    msg += wxT( "<H3>");
-    msg += _("Hotkeys List");
-    msg += wxT("</H3> <table cellpadding=\"0\">");
+    msg += wxT( "<H3>" );
+    msg += _( "Hotkeys List" );
+    msg += wxT( "</H3> <table cellpadding=\"0\">" );
 
     for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
     {
@@ -432,16 +444,16 @@ void DisplayHotkeyList( EDA_DRAW_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescL
 
                 // Some chars should be modified, using html encoding, to be
                 // displayed by DisplayHtmlInfoMessage()
-                keyname.Replace( wxT("<"), wxT("&lt;") );
-                keyname.Replace( wxT(">"), wxT("&gt;") );
-                msg    += wxT( "<tr><td>" ) + hk_decr->m_InfoMsg + wxT("</td>");
-                msg    += wxT("<td><b>&nbsp;&nbsp;") + keyname + wxT( "</b></td></tr>" );
+                keyname.Replace( wxT( "<" ), wxT( "&lt;" ) );
+                keyname.Replace( wxT( ">" ), wxT( "&gt;" ) );
+                msg    += wxT( "<tr><td>" ) + hk_decr->m_InfoMsg + wxT( "</td>" );
+                msg    += wxT( "<td><b>&nbsp;&nbsp;" ) + keyname + wxT( "</b></td></tr>" );
             }
         }
     }
 
-    msg += wxT("</table></html></body>");
-    DisplayHtmlInfoMessage( aFrame, _("Hotkeys List"), msg, wxSize(340, 750));
+    msg += wxT( "</table></html></body>" );
+    DisplayHtmlInfoMessage( aFrame, _( "Hotkeys List" ), msg, wxSize( 340, 750 ) );
 }
 
 
@@ -466,17 +478,6 @@ EDA_HOTKEY* GetDescriptorFromHotkey( int aKey, EDA_HOTKEY** aList )
 }
 
 
-/**
- * Function WriteHotkeyConfig
- * Store the current hotkey list
- * It is stored using the standard wxConfig mechanism or a file.
- *
- * @param aDescList = pointer to the current hotkey list.
- * @param aFullFileName = a wxString pointer to a full file name.
- *  if NULL, use the standard wxConfig mechanism (default)
- * the output format is: shortcut  "key"  "function"
- * lines starting with # are comments
- */
 int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
                                        wxString*                 aFullFileName )
 {
@@ -490,10 +491,10 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
 
     for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
     {
-        if( aDescList->m_Comment )
+        if( aDescList->m_Title )
         {
             msg += wxT( "# " );
-            msg += wxString( aDescList->m_Comment );
+            msg += *aDescList->m_Title;
             msg += wxT( "\n" );
         }
 
@@ -542,13 +543,6 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
 }
 
 
-/**
- * Function ReadHotkeyConfigFile
- * Read an old configuration file (&ltfile&gt.key) and fill the current hotkey list
- * with hotkeys
- * @param aFilename = file name to read.
- * @param aDescList = current hotkey list descr. to initialise.
- */
 int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
                                           struct EDA_HOTKEY_CONFIG* aDescList )
 {
@@ -574,6 +568,7 @@ int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
     return 1;
 }
 
+
 void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescList )
 {
     wxConfigBase* config = GetNewConfig( Appname );
@@ -590,6 +585,7 @@ void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescL
 
     ParseHotkeyConfig( data, aDescList );
 }
+
 
 /* Function ReadHotkeyConfig
  * Read configuration data and fill the current hotkey list with hotkeys

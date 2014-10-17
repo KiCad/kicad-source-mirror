@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2014 Kicad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,59 +30,259 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <common.h>
+#include <confirm.h>
 
 #include <dialog_hotkeys_editor.h>
 
-void InstallHotkeyFrame( EDA_DRAW_FRAME* parent, EDA_HOTKEY_CONFIG* hotkeys )
-{
-    HOTKEYS_EDITOR_DIALOG dialog( parent, hotkeys );
 
-    int diag = dialog.ShowModal();
-    if( diag == wxID_OK )
+HOTKEY_LIST_CTRL::HOTKEY_LIST_CTRL( wxWindow *aParent, struct EDA_HOTKEY_CONFIG* aSection ) :
+    wxListCtrl( aParent, wxID_ANY, wxDefaultPosition,
+                wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VIRTUAL )
+{
+    m_sectionTag = aSection->m_SectionTag;
+    m_curEditingRow = -1;
+
+    InsertColumn( 0, _( "Command" ) );
+    InsertColumn( 1, _( "Hotkey" ) );
+
+    // Add a dummy hotkey_spec which is a header before each hotkey list
+    EDA_HOTKEY** hotkey_descr_list;
+
+    // Add a copy of hotkeys to our list
+    for( hotkey_descr_list = aSection->m_HK_InfoList; *hotkey_descr_list; hotkey_descr_list++ )
     {
-        parent->ReCreateMenuBar();
-        parent->Refresh();
+        EDA_HOTKEY* hotkey_descr = *hotkey_descr_list;
+        m_hotkeys.push_back( new EDA_HOTKEY( hotkey_descr ) );
+    }
+
+    // Set item count to hotkey size, this gets it to autoload the entries
+    SetItemCount( m_hotkeys.size() );
+
+    SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    SetColumnWidth( 1, wxLIST_AUTOSIZE );
+
+    Bind( wxEVT_CHAR, &HOTKEY_LIST_CTRL::OnChar, this );
+    Bind( wxEVT_LIST_ITEM_SELECTED, &HOTKEY_LIST_CTRL::OnListItemSelected, this );
+    Bind( wxEVT_SIZE, &HOTKEY_LIST_CTRL::OnSize, this );
+}
+
+
+void HOTKEY_LIST_CTRL::OnSize( wxSizeEvent& aEvent )
+{
+    recalculateColumns();
+    aEvent.Skip();
+}
+
+
+void HOTKEY_LIST_CTRL::recalculateColumns()
+{
+    float totalLength = 0;
+    float scale = 0;
+
+    // Find max character length of first column
+    int maxInfoMsgLength = 0;
+
+    for( int i = 0; i < GetItemCount(); i++ )
+    {
+        int length = GetItemText( i, 0 ).Length();
+
+        if( length > maxInfoMsgLength )
+            maxInfoMsgLength = length;
+    }
+
+    // Find max character length of second column
+    int maxKeyCodeLength = 0;
+
+    for( int i = 0; i < GetItemCount(); i++ )
+    {
+        int length = GetItemText( i, 1 ).Length();
+        if( length > maxKeyCodeLength )
+            maxKeyCodeLength = length;
+    }
+
+    // Use the lengths of column texts to create a scale of the max list width
+    // to set the column widths
+    totalLength = maxInfoMsgLength + maxKeyCodeLength;
+
+    scale = (float) GetClientSize().x / totalLength;
+
+    SetColumnWidth( 0, int( maxInfoMsgLength*scale ) - 2 );
+    SetColumnWidth( 1, int( maxKeyCodeLength*scale ) );
+}
+
+
+void HOTKEY_LIST_CTRL::OnListItemSelected( wxListEvent& aEvent )
+{
+    m_curEditingRow = aEvent.GetIndex();
+}
+
+
+void HOTKEY_LIST_CTRL::DeselectRow( int aRow )
+{
+    SetItemState( aRow, 0, wxLIST_STATE_SELECTED );
+}
+
+
+wxString HOTKEY_LIST_CTRL::OnGetItemText( long aRow, long aColumn ) const
+{
+    EDA_HOTKEY* hotkey_descr = m_hotkeys[aRow];
+
+    if( aColumn == 0 )
+    {
+        return hotkey_descr->m_InfoMsg;
+    }
+    else
+    {
+        return KeyNameFromKeyCode( hotkey_descr->m_KeyCode );
     }
 }
 
 
-HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_DRAW_FRAME*    parent,
-                                              EDA_HOTKEY_CONFIG* hotkeys ) :
-    HOTKEYS_EDITOR_DIALOG_BASE( parent )
+void HOTKEY_LIST_CTRL::OnChar( wxKeyEvent& aEvent )
 {
-    m_parent  = parent;
-    m_hotkeys = hotkeys;
+    if( m_curEditingRow != -1 )
+    {
+        long key = aEvent.GetKeyCode();
+
+        switch( key )
+        {
+        case WXK_ESCAPE:
+            // Remove selection
+            DeselectRow( m_curEditingRow );
+            m_curEditingRow = -1;
+            break;
+        default:
+            if( aEvent.ControlDown() )
+                key |= GR_KB_CTRL;
+
+            if( aEvent.AltDown() )
+                key |= GR_KB_ALT;
+
+            if( aEvent.ShiftDown() && (key > 256) )
+                key |= GR_KB_SHIFT;
+
+            // Remap Ctrl A (=1+GR_KB_CTRL) to Ctrl Z(=26+GR_KB_CTRL)
+            // to GR_KB_CTRL+'A' .. GR_KB_CTRL+'Z'
+            if( (key > GR_KB_CTRL) && (key <= GR_KB_CTRL+26) )
+                key += ('A' - 1);
+
+            if( key >= 'a' && key <= 'z' ) // convert to uppercase
+                key = key + ('A' - 'a');
+
+            // See if this key code is handled in hotkeys names list
+            bool exists;
+            KeyNameFromKeyCode( key, &exists );
+
+            if( exists && m_hotkeys[m_curEditingRow]->m_KeyCode != key )
+            {
+                bool canUpdate = ((HOTKEY_SECTION_PAGE *)m_parent)->GetDialog()->CanSetKey( key, m_sectionTag );
+
+                if( canUpdate )
+                {
+                    m_hotkeys[m_curEditingRow]->m_KeyCode = key;
+                    recalculateColumns();
+                }
+
+                // Remove selection
+                DeselectRow( m_curEditingRow );
+                m_curEditingRow = -1;
+            }
+        }
+    }
+    RefreshItems(0,m_hotkeys.size()-1);
+}
+
+
+void HOTKEY_LIST_CTRL::RestoreFrom( struct EDA_HOTKEY_CONFIG* aSection )
+{
+    int row = 0;
+
+    EDA_HOTKEY** info_ptr;
+
+    for( info_ptr = aSection->m_HK_InfoList; *info_ptr; info_ptr++ )
+    {
+        EDA_HOTKEY* info = *info_ptr;
+        m_hotkeys[row++]->m_KeyCode = info->m_KeyCode;
+    }
+
+    // Remove selection
+    DeselectRow( m_curEditingRow );
     m_curEditingRow = -1;
 
-    m_table = new HOTKEY_EDITOR_GRID_TABLE( hotkeys );
-    m_hotkeyGrid->SetTable( m_table, true );
+    RefreshItems( 0, m_hotkeys.size()-1 );
+}
 
-    m_hotkeyGrid->AutoSizeColumn( 0 );
-    m_hotkeyGrid->EnableDragGridSize( false );
 
-    for( int i = 0; i < m_hotkeyGrid->GetNumberRows(); ++i )
+HOTKEY_SECTION_PAGE::HOTKEY_SECTION_PAGE( HOTKEYS_EDITOR_DIALOG* aDialog,
+                                          wxNotebook*     aParent,
+                                          const wxString& aTitle,
+                                          EDA_HOTKEY_CONFIG* aSection ) :
+    wxPanel( aParent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER ),
+    m_hotkeySection( aSection ),
+    m_dialog( aDialog )
+{
+    aParent->AddPage( this, aTitle );
+
+	wxBoxSizer* bMainSizer = new wxBoxSizer( wxVERTICAL );
+
+	SetSizer( bMainSizer );
+	Layout();
+	bMainSizer->Fit( this );
+
+	m_hotkeyList = new HOTKEY_LIST_CTRL( this, aSection );
+	bMainSizer->Add( m_hotkeyList, 1, wxALL|wxEXPAND, 5 );
+}
+
+
+void HOTKEY_SECTION_PAGE::Restore()
+{
+    m_hotkeyList->RestoreFrom( m_hotkeySection );
+
+    Update();
+}
+
+
+void InstallHotkeyFrame( EDA_DRAW_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys )
+{
+    HOTKEYS_EDITOR_DIALOG dialog( aParent, aHotkeys );
+
+    int diag = dialog.ShowModal();
+    if( diag == wxID_OK )
     {
-        m_hotkeyGrid->SetReadOnly( i, 0, true );
-        m_hotkeyGrid->SetReadOnly( i, 1, true );
+        aParent->ReCreateMenuBar();
+        aParent->Refresh();
+    }
+}
+
+
+HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_DRAW_FRAME*    aParent,
+                                              EDA_HOTKEY_CONFIG* aHotkeys ) :
+    HOTKEYS_EDITOR_DIALOG_BASE( aParent ),
+    m_parent( aParent ),
+    m_hotkeys( aHotkeys )
+{
+    EDA_HOTKEY_CONFIG* section;
+
+    for( section = m_hotkeys; section->m_HK_InfoList; section++ )
+    {
+        m_hotkeySectionPages.push_back( new HOTKEY_SECTION_PAGE( this, m_hotkeySections,
+                                                                 _( *section->m_Title ),
+                                                                 section ) );
     }
 
     m_OKButton->SetDefault();
-    m_hotkeyGrid->SetFocus();
-    GetSizer()->SetSizeHints( this );
     Center();
 }
 
 
 void HOTKEYS_EDITOR_DIALOG::OnOKClicked( wxCommandEvent& event )
 {
-    /* edit the live hotkey table */
-    HOTKEY_EDITOR_GRID_TABLE::hotkey_spec_vector& hotkey_vec = m_table->getHotkeys();
+    std::vector<HOTKEY_SECTION_PAGE*>::iterator i;
 
-    EDA_HOTKEY_CONFIG*      section;
-
-    for( section = m_hotkeys; section->m_HK_InfoList; section++ )
+    for( i = m_hotkeySectionPages.begin(); i != m_hotkeySectionPages.end(); ++i )
     {
-        wxString     sectionTag = *section->m_SectionTag;
+        std::vector<EDA_HOTKEY*>& hotkey_vec = (*i)->GetHotkeys();
+        EDA_HOTKEY_CONFIG* section = (*i)->GetHotkeySection();
 
         EDA_HOTKEY** info_ptr;
 
@@ -91,15 +291,13 @@ void HOTKEYS_EDITOR_DIALOG::OnOKClicked( wxCommandEvent& event )
             EDA_HOTKEY* info = *info_ptr;
 
             /* find the corresponding hotkey */
-            HOTKEY_EDITOR_GRID_TABLE::hotkey_spec_vector::iterator i;
+            std::vector<EDA_HOTKEY*>::iterator j;
 
-            for( i = hotkey_vec.begin(); i != hotkey_vec.end(); ++i )
+            for( j = hotkey_vec.begin(); j != hotkey_vec.end(); ++j )
             {
-                if( i->first == sectionTag
-                    && i->second
-                    && i->second->m_Idcommand == info->m_Idcommand )
+                if( (*j) && (*j)->m_Idcommand == info->m_Idcommand )
                 {
-                    info->m_KeyCode = i->second->m_KeyCode;
+                    info->m_KeyCode = (*j)->m_KeyCode;
                     break;
                 }
             }
@@ -119,154 +317,68 @@ void HOTKEYS_EDITOR_DIALOG::CancelClicked( wxCommandEvent& event )
 }
 
 
-/* Reinit the hotkeys to the initial state (remove all pending changes
- */
-void HOTKEYS_EDITOR_DIALOG::UndoClicked( wxCommandEvent& event )
+void HOTKEYS_EDITOR_DIALOG::UndoClicked( wxCommandEvent& aEvent )
 {
-    m_table->RestoreFrom( m_hotkeys );
-    m_curEditingRow = -1;
+    std::vector<HOTKEY_SECTION_PAGE*>::iterator i;
 
-    for( int i = 0; i < m_hotkeyGrid->GetNumberRows(); ++i )
-        SetHotkeyCellState( i, false );
-
-    m_hotkeyGrid->Refresh();
-    Update();
-}
-
-
-void HOTKEYS_EDITOR_DIALOG::SetHotkeyCellState( int aRow, bool aHightlight )
-{
-    if( aHightlight )
+    for( i = m_hotkeySectionPages.begin(); i != m_hotkeySectionPages.end(); ++i )
     {
-        m_hotkeyGrid->SetCellTextColour( aRow, 1, *wxRED );
-        wxFont bold_font(m_hotkeyGrid->GetDefaultCellFont() );
-        bold_font.SetWeight(wxFONTWEIGHT_BOLD);
-        m_hotkeyGrid->SetCellFont( aRow, 1, bold_font );
-    }
-    else
-    {
-        m_hotkeyGrid->SetCellTextColour( aRow, 1, m_hotkeyGrid->GetDefaultCellTextColour() );
-        m_hotkeyGrid->SetCellFont( aRow, 1, m_hotkeyGrid->GetDefaultCellFont() );
+        (*i)->Restore();
     }
 }
 
 
-void HOTKEYS_EDITOR_DIALOG::OnClickOnCell( wxGridEvent& event )
+bool HOTKEYS_EDITOR_DIALOG::CanSetKey( long aKey, const wxString* sectionTag )
 {
-    if( m_curEditingRow != -1 )
-        SetHotkeyCellState( m_curEditingRow, false );
+    std::vector<HOTKEY_SECTION_PAGE*>::iterator i;
 
-    int newRow = event.GetRow();
+    EDA_HOTKEY* conflictingKey = NULL;
+    HOTKEY_SECTION_PAGE* conflictingSection = NULL;
 
-    if( ( event.GetCol() != 1 ) || ( m_table->IsHeader( newRow ) ) )
+    for( i = m_hotkeySectionPages.begin(); i != m_hotkeySectionPages.end(); ++i )
     {
-        m_curEditingRow = -1;
-    }
-    else
-    {
-        m_curEditingRow = newRow;
-        SetHotkeyCellState( m_curEditingRow, true );
-    }
-    m_hotkeyGrid->Refresh();
-    Update();
-}
+        // Any non Common section can only conflict with itself and Common
+        if( *sectionTag != g_CommonSectionTag
+                 && *((*i)->GetHotkeySection()->m_SectionTag) != g_CommonSectionTag
+                 && *((*i)->GetHotkeySection()->m_SectionTag) != *sectionTag )
+            continue;
 
+        std::vector<EDA_HOTKEY*>& hotkey_vec = (*i)->GetHotkeys();
+        /* find the corresponding hotkey */
+        std::vector<EDA_HOTKEY*>::iterator j;
 
-/** OnRightClickOnCell
- * If a cell is selected, display a list of keys for selection
- * The list is restricted to keys that cannot be entered:
- * tab, home, return ... because these keys have special functions in dialogs
- */
-void HOTKEYS_EDITOR_DIALOG::OnRightClickOnCell( wxGridEvent& event )
-{
-    // Select the new cell if needed
-    OnClickOnCell(event);
-
-    if( m_curEditingRow == -1 )
-        return;
-
-    // Do not translate these key names. They are internally used.
-    // See hotkeys_basic.cpp
-    #define C_COUNT 9
-    wxString choices[C_COUNT] =
-    {
-        wxT("End")
-        wxT("Tab"),
-        wxT("Ctrl+Tab"),
-        wxT("Alt+Tab"),
-        wxT("Home"),
-        wxT("Space"),
-        wxT("Ctrl+Space"),
-        wxT("Alt+Space"),
-        wxT("Return")
-    };
-
-    wxString keyname = wxGetSingleChoice( _( "Special keys only. For others keys, use keyboard" ),
-                                          _( "Select a key" ), C_COUNT, choices, this );
-    int key = KeyCodeFromKeyName( keyname );
-
-    if( key == 0 )
-        return;
-
-    m_table->SetKeyCode( m_curEditingRow, key );
-    m_hotkeyGrid->Refresh();
-    Update();
-}
-
-
-void HOTKEYS_EDITOR_DIALOG::OnKeyPressed( wxKeyEvent& event )
-{
-    if( m_curEditingRow != -1 )
-    {
-        long key = event.GetKeyCode();
-
-        switch( key )
+        for( j = hotkey_vec.begin(); j != hotkey_vec.end(); ++j )
         {
-        case WXK_ESCAPE:
-            SetHotkeyCellState( m_curEditingRow, false );
-            m_curEditingRow = -1;
-            break;
-
-        default:
-            if( event.ControlDown() )
-                key |= GR_KB_CTRL;
-
-            if( event.AltDown() )
-                key |= GR_KB_ALT;
-
-            if( event.ShiftDown() && (key > 256) )
-                key |= GR_KB_SHIFT;
-
-            // Remap Ctrl A (=1+GR_KB_CTRL) to Ctrl Z(=26+GR_KB_CTRL)
-            // to GR_KB_CTRL+'A' .. GR_KB_CTRL+'Z'
-            if( (key > GR_KB_CTRL) && (key <= GR_KB_CTRL+26) )
-                key += ('A' - 1);
-
-            if( key >= 'a' && key <= 'z' ) // convert to uppercase
-                key = key + ('A' - 'a');
-
-#if 0       // For debug only
-            wxString msg;
-            msg.Printf(wxT("key %X, keycode %X"),event.GetKeyCode(), key);
-            wxMessageBox(msg);
-#endif
-            // See if this key code is handled in hotkeys names list
-            bool exists;
-            KeyNameFromKeyCode( key, &exists );
-
-            if( !exists )   // not handled, see hotkeys_basic.cpp
+            if( aKey == (*j)->m_KeyCode )
             {
-                wxMessageBox( _( "Hotkey code not handled" ) );
-            }
-            else
-            {
-                m_table->SetKeyCode( m_curEditingRow, key );
-            }
+                conflictingKey = (*j);
+                conflictingSection = (*i);
 
-            break;
+                break;
+            }
         }
     }
 
-    m_hotkeyGrid->Refresh();
-    Update();
+    if( conflictingKey != NULL )
+    {
+        wxString msg = wxString::Format(
+            _( "<%s> is already assigned to \"%s\" in section \"%s\". Are you sure you want "
+               "to change its assignment?" ),
+            KeyNameFromKeyCode( aKey ), conflictingKey->m_InfoMsg,
+            *(conflictingSection->GetHotkeySection()->m_Title) );
+
+        wxMessageDialog dlg( this, msg, _( "Confirm change" ), wxYES_NO | wxNO_DEFAULT );
+
+        if( dlg.ShowModal() == wxID_YES )
+        {
+            conflictingKey->m_KeyCode = 0;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    return true;
 }

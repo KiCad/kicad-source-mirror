@@ -36,7 +36,7 @@
 // mouse click command:
 static EDA_HOTKEY HkMouseLeftClick( wxT( "Mouse Left Click" ),
                                     HK_LEFT_CLICK, WXK_RETURN, 0 );
-static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left DClick" ),
+static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left Double Click" ),
                                      HK_LEFT_DCLICK, WXK_END, 0 );
 
 static EDA_HOTKEY HkSwitch2CopperLayer( wxT( "Switch to Copper (B.Cu) layer" ),
@@ -64,21 +64,21 @@ static EDA_HOTKEY HkSwitch2PreviousCopperLayer( wxT( "Switch to Previous Layer" 
                                                 HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
 static EDA_HOTKEY HkSaveModule( wxT( "Save Module" ), HK_SAVE_MODULE, 'S' + GR_KB_CTRL );
-static EDA_HOTKEY HkSavefile( wxT( "Save board" ), HK_SAVE_BOARD, 'S' + GR_KB_CTRL );
-static EDA_HOTKEY HkSavefileAs( wxT( "Save board as" ), HK_SAVE_BOARD_AS, 'S' + GR_KB_CTRL + GR_KB_SHIFT );
-static EDA_HOTKEY HkLoadfile( wxT( "Load board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
+static EDA_HOTKEY HkSavefile( wxT( "Save Board" ), HK_SAVE_BOARD, 'S' + GR_KB_CTRL );
+static EDA_HOTKEY HkSavefileAs( wxT( "Save Board As" ), HK_SAVE_BOARD_AS, 'S' + GR_KB_CTRL + GR_KB_SHIFT );
+static EDA_HOTKEY HkLoadfile( wxT( "Load Board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
 static EDA_HOTKEY HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
-static EDA_HOTKEY HkBackspace( wxT( "Delete track segment" ), HK_BACK_SPACE, WXK_BACK );
-static EDA_HOTKEY HkAddNewTrack( wxT( "Add new track" ), HK_ADD_NEW_TRACK, 'X' );
+static EDA_HOTKEY HkBackspace( wxT( "Delete Track Segment" ), HK_BACK_SPACE, WXK_BACK );
+static EDA_HOTKEY HkAddNewTrack( wxT( "Add New Track" ), HK_ADD_NEW_TRACK, 'X' );
 static EDA_HOTKEY HkAddThroughVia( wxT( "Add Through Via" ), HK_ADD_THROUGH_VIA, 'V' );
-static EDA_HOTKEY HkSelLayerAndAddThroughVia( wxT( "Sel Layer and Add Through Via" ),
+static EDA_HOTKEY HkSelLayerAndAddThroughVia( wxT( "Select Layer and Add Through Via" ),
                                               HK_SEL_LAYER_AND_ADD_THROUGH_VIA, '<' );
 static EDA_HOTKEY HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V' + GR_KB_CTRL );
 static EDA_HOTKEY HkAddBlindBuriedVia( wxT( "Add Blind/Buried Via" ), HK_ADD_BLIND_BURIED_VIA, 'V' + GR_KB_ALT );
-static EDA_HOTKEY HkSelLayerAndAddBlindBuriedVia( wxT( "Sel Layer and Add Blind/Buried Via" ),
+static EDA_HOTKEY HkSelLayerAndAddBlindBuriedVia( wxT( "Select Layer and Add Blind/Buried Via" ),
                                                   HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA, '<' + GR_KB_ALT );
 static EDA_HOTKEY HkSwitchTrackPosture( wxT( "Switch Track Posture" ),  HK_SWITCH_TRACK_POSTURE, '/' );
-static EDA_HOTKEY HkDragTrackKeepSlope( wxT( "Drag track keep slope" ), HK_DRAG_TRACK_KEEP_SLOPE, 'D' );
+static EDA_HOTKEY HkDragTrackKeepSlope( wxT( "Drag Track Keep Slope" ), HK_DRAG_TRACK_KEEP_SLOPE, 'D' );
 static EDA_HOTKEY HkPlaceItem( wxT( "Place Item" ), HK_PLACE_ITEM, 'P' );
 static EDA_HOTKEY HkEditBoardItem( wxT( "Edit Item" ), HK_EDIT_ITEM, 'E' );
 static EDA_HOTKEY HkFlipItem( wxT( "Flip Item" ), HK_FLIP_ITEM, 'F' );
@@ -90,16 +90,16 @@ static EDA_HOTKEY HkGetAndMoveFootprint( wxT( "Get and Move Footprint" ), HK_GET
 static EDA_HOTKEY HkLock_Unlock_Footprint( wxT( "Lock/Unlock Footprint" ), HK_LOCK_UNLOCK_FOOTPRINT, 'L' );
 static EDA_HOTKEY HkDelete( wxT( "Delete Track or Footprint" ), HK_DELETE, WXK_DELETE );
 static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
-static EDA_HOTKEY HkSwitchHighContrastMode( wxT("Switch Highcontrast mode"), HK_SWITCH_HIGHCONTRAST_MODE,'H');
+static EDA_HOTKEY HkSwitchHighContrastMode( wxT( "Toggle High Contrast Mode" ), HK_SWITCH_HIGHCONTRAST_MODE,'H');
 
-static EDA_HOTKEY HkSetGridOrigin( wxT("Set Grid Origin"), HK_SET_GRID_ORIGIN, 'S' );
-static EDA_HOTKEY HkResetGridOrigin( wxT("Reset Grid Origin"), HK_RESET_GRID_ORIGIN, 'Z' );
+static EDA_HOTKEY HkSetGridOrigin( wxT( "Set Grid Origin" ), HK_SET_GRID_ORIGIN, 'S' );
+static EDA_HOTKEY HkResetGridOrigin( wxT( "Reset Grid Origin" ), HK_RESET_GRID_ORIGIN, 'Z' );
 
-static EDA_HOTKEY HkCanvasDefault( wxT( "Switch to default canvas" ),
+static EDA_HOTKEY HkCanvasDefault( wxT( "Switch to Default Canvas" ),
                                    HK_CANVAS_DEFAULT, WXK_F9 );
-static EDA_HOTKEY HkCanvasOpenGL( wxT( "Switch to OpenGL canvas" ),
+static EDA_HOTKEY HkCanvasOpenGL( wxT( "Switch to OpenGL Canvas" ),
                                   HK_CANVAS_OPENGL, WXK_F11 );
-static EDA_HOTKEY HkCanvasCairo( wxT( "Switch to Cairo canvas" ),
+static EDA_HOTKEY HkCanvasCairo( wxT( "Switch to Cairo Canvas" ),
                                  HK_CANVAS_CAIRO, WXK_F12 );
 
 /* Fit on Screen */
@@ -285,33 +285,33 @@ EDA_HOTKEY* module_viewer_Hotkey_List[] = {
 // list of sections and corresponding hotkey list for Pcbnew
  // (used to create an hotkey config file, and edit hotkeys )
 struct EDA_HOTKEY_CONFIG g_Pcbnew_Editor_Hokeys_Descr[] = {
-    { &g_CommonSectionTag, common_Hotkey_List, L"Common keys" },
-    { &g_BoardEditorSectionTag, board_edit_Hotkey_List, L"Board editor keys" },
-    { &g_ModuleEditSectionTag, module_edit_Hotkey_List, L"Footprint editor keys" },
-    { NULL, NULL, NULL }
+    { &g_CommonSectionTag,      common_Hotkey_List,         &g_CommonSectionTitle      },
+    { &g_BoardEditorSectionTag, board_edit_Hotkey_List,     &g_BoardEditorSectionTitle },
+    { &g_ModuleEditSectionTag,  module_edit_Hotkey_List,    &g_ModuleEditSectionTitle  },
+    { NULL,                     NULL,                       NULL                       }
 };
 
 // list of sections and corresponding hotkey list for the board editor
 // (used to list current hotkeys in the board editor)
 struct EDA_HOTKEY_CONFIG g_Board_Editor_Hokeys_Descr[] = {
-    { &g_CommonSectionTag, common_Hotkey_List, NULL },
-    { &g_BoardEditorSectionTag, board_edit_Hotkey_List, NULL },
+    { &g_CommonSectionTag,      common_Hotkey_List,      &g_CommonSectionTitle },
+    { &g_BoardEditorSectionTag, board_edit_Hotkey_List,  &g_BoardEditorSectionTitle },
     { NULL, NULL, NULL }
 };
 
 // list of sections and corresponding hotkey list for the footprint editor
 // (used to list current hotkeys in the module editor)
 struct EDA_HOTKEY_CONFIG g_Module_Editor_Hokeys_Descr[] = {
-    { &g_CommonSectionTag, common_Hotkey_List, NULL },
-    { &g_ModuleEditSectionTag, module_edit_Hotkey_List, NULL },
-    { NULL, NULL, NULL }
+    { &g_CommonSectionTag,     common_Hotkey_List,      &g_CommonSectionTitle },
+    { &g_ModuleEditSectionTag, module_edit_Hotkey_List, &g_ModuleEditSectionTitle },
+    { NULL,                    NULL,                    NULL }
 };
 
 // list of sections and corresponding hotkey list for the footprint viewer
 // (used to list current hotkeys in the module viewer)
 struct EDA_HOTKEY_CONFIG g_Module_Viewer_Hokeys_Descr[] = {
-    { &g_CommonSectionTag, common_basic_Hotkey_List, NULL },
-    { NULL, NULL, NULL }
+    { &g_CommonSectionTag, common_basic_Hotkey_List, &g_CommonSectionTitle },
+    { NULL,                NULL,                     NULL }
 };
 
 

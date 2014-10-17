@@ -44,6 +44,12 @@ extern wxString g_LibEditSectionTag;
 extern wxString g_BoardEditorSectionTag;
 extern wxString g_ModuleEditSectionTag;
 
+extern wxString g_CommonSectionTitle;
+extern wxString g_SchematicSectionTitle;
+extern wxString g_LibEditSectionTitle;
+extern wxString g_BoardEditorSectionTitle;
+extern wxString g_ModuleEditSectionTitle;
+
 
 /**
  * class EDA_HOTKEY
@@ -81,7 +87,7 @@ struct EDA_HOTKEY_CONFIG
 public:
     wxString*       m_SectionTag;     // The configuration file section name.
     EDA_HOTKEY**    m_HK_InfoList;    // List of EDA_HOTKEY pointers
-    const wchar_t*  m_Comment;        // Will be printed in the config file only.
+    wxString*  m_Title;        // Title displayed in hotkey editor and used as comment in file
 };
 
 

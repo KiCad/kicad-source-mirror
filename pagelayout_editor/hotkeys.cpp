@@ -59,7 +59,7 @@
 
 // mouse click command:
 static EDA_HOTKEY HkMouseLeftClick( wxT( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN, 0 );
-static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left DClick" ), HK_LEFT_DCLICK, WXK_END, 0 );
+static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left Double Click" ), HK_LEFT_DCLICK, WXK_END, 0 );
 
 static EDA_HOTKEY    HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
                                         HK_RESET_LOCAL_COORD, ' ' );
@@ -107,12 +107,13 @@ EDA_HOTKEY* s_PlEditor_Hotkey_List[] =
 // list of sections and corresponding hotkey list for Pl_Editor
 // (used to create an hotkey config file)
 wxString s_PlEditorSectionTag( wxT( "[pl_editor]" ) );
+wxString s_PlEditorSectionTitle( wxT( "Part Layout Editor" ) );
 
 struct EDA_HOTKEY_CONFIG s_PlEditor_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    s_Common_Hotkey_List,     L"Common keys"    },
-    { &s_PlEditorSectionTag,  s_PlEditor_Hotkey_List,   L"pl_editor keys" },
-    { NULL,                   NULL,                     NULL              }
+    { &g_CommonSectionTag,    s_Common_Hotkey_List,     &g_CommonSectionTitle    },
+    { &s_PlEditorSectionTag,  s_PlEditor_Hotkey_List,   &s_PlEditorSectionTitle  },
+    { NULL,                   NULL,                     NULL                     }
 };
 
 

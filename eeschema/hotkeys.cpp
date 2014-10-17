@@ -131,7 +131,7 @@ static EDA_HOTKEY HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 'Z'
 
 // mouse click command:
 static EDA_HOTKEY HkMouseLeftClick( wxT( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN, 0 );
-static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left DClick" ), HK_LEFT_DCLICK, WXK_END, 0 );
+static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left Double Click" ), HK_LEFT_DCLICK, WXK_END, 0 );
 
 // Schematic editor
 static EDA_HOTKEY HkBeginWire( wxT( "Begin Wire" ), HK_BEGIN_WIRE, 'W', ID_WIRE_BUTT );
@@ -149,7 +149,7 @@ static EDA_HOTKEY HkAddComponent( wxT( "Add Component" ), HK_ADD_NEW_COMPONENT, 
                                   ID_SCH_PLACE_COMPONENT );
 static EDA_HOTKEY HkAddPower( wxT( "Add Power" ), HK_ADD_NEW_POWER, 'P',
                               ID_PLACE_POWER_BUTT );
-static EDA_HOTKEY HkAddNoConn( wxT( "Add NoConnected Flag" ), HK_ADD_NOCONN_FLAG, 'Q',
+static EDA_HOTKEY HkAddNoConn( wxT( "Add No Connect Flag" ), HK_ADD_NOCONN_FLAG, 'Q',
                                ID_NOCONN_BUTT );
 static EDA_HOTKEY HkAddHierSheet( wxT( "Add Sheet" ), HK_ADD_HIER_SHEET, 'S',
                                   ID_SHEET_SYMBOL_BUTT );
@@ -207,7 +207,7 @@ static EDA_HOTKEY HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT )
 static EDA_HOTKEY HkMoveLibItem( wxT( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
 
 // Load/save files
-static EDA_HOTKEY HkSaveLib( wxT( "Save Lib" ), HK_SAVE_LIB, 'S' + GR_KB_CTRL );
+static EDA_HOTKEY HkSaveLib( wxT( "Save Library" ), HK_SAVE_LIB, 'S' + GR_KB_CTRL );
 static EDA_HOTKEY HkSaveSchematic( wxT( "Save Schematic" ), HK_SAVE_SCH, 'S' + GR_KB_CTRL );
 static EDA_HOTKEY HkLoadSchematic( wxT( "Load Schematic" ), HK_LOAD_SCH, 'L' + GR_KB_CTRL );
 
@@ -305,18 +305,18 @@ static EDA_HOTKEY* viewlib_Hotkey_List[] =
 // an hotkey config file)
 struct EDA_HOTKEY_CONFIG g_Eeschema_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    common_Hotkey_List,    L"Common keys"           },
-    { &g_SchematicSectionTag, schematic_Hotkey_List, L"Schematic editor keys" },
-    { &g_LibEditSectionTag,   libEdit_Hotkey_List,   L"library editor keys"   },
-    { NULL,                   NULL,                    NULL                     }
+    { &g_CommonSectionTag,    common_Hotkey_List,    &g_CommonSectionTitle    },
+    { &g_SchematicSectionTag, schematic_Hotkey_List, &g_SchematicSectionTitle },
+    { &g_LibEditSectionTag,   libEdit_Hotkey_List,   &g_LibEditSectionTitle   },
+    { NULL,                   NULL,                  NULL                     }
 };
 
 // list of sections and corresponding hotkey list for the schematic editor
 // (used to list current hotkeys)
 struct EDA_HOTKEY_CONFIG g_Schematic_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    common_Hotkey_List,    NULL },
-    { &g_SchematicSectionTag, schematic_Hotkey_List, NULL },
+    { &g_CommonSectionTag,    common_Hotkey_List,    &g_CommonSectionTitle },
+    { &g_SchematicSectionTag, schematic_Hotkey_List, &g_SchematicSectionTitle },
     { NULL,                   NULL,                    NULL }
 };
 
@@ -324,17 +324,17 @@ struct EDA_HOTKEY_CONFIG g_Schematic_Hokeys_Descr[] =
 // (used to list current hotkeys)
 struct EDA_HOTKEY_CONFIG g_Libedit_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,  common_Hotkey_List,  NULL },
-    { &g_LibEditSectionTag, libEdit_Hotkey_List, NULL },
-    { NULL,                 NULL,                  NULL }
+    { &g_CommonSectionTag,  common_Hotkey_List,  &g_CommonSectionTitle },
+    { &g_LibEditSectionTag, libEdit_Hotkey_List, &g_LibEditSectionTitle },
+    { NULL,                 NULL,                NULL }
 };
 
 // list of sections and corresponding hotkey list for the component browser
 // (used to list current hotkeys)
 struct EDA_HOTKEY_CONFIG g_Viewlib_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag, common_basic_Hotkey_List, NULL },
-    { NULL,                NULL,                     NULL }
+    { &g_CommonSectionTag, common_basic_Hotkey_List, &g_CommonSectionTitle },
+    { NULL,                NULL,                 NULL }
 };
 
 /*
