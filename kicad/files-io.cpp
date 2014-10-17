@@ -134,14 +134,14 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     // List of file extensions to save.
     static const wxChar* extentionList[] = {
         wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.mod" ), wxT( "*.cmp" ),
-        wxT( "*.brd" ), wxT( "*.kicad_pcb" ), wxT( "*.gbr" ),
-        wxT( "*.net" ), wxT( "*.pro" ), wxT( "*.pho" ), wxT( "*.py" ),
+        wxT( "*.brd" ), wxT( "*.kicad_pcb" ), wxT( "*.gbr" ), wxT( "*.pos" ),
+        wxT( "*.net" ), wxT( "*.pro" ), wxT( "*.drl" ), wxT( "*.py" ),
         wxT( "*.pdf" ), wxT( "*.txt" ), wxT( "*.dcm" ), wxT( "*.kicad_wks" ),
     };
 
     wxString    msg;
     wxFileName  fileName = GetProjectFileName();
-    wxString    oldPath = wxGetCwd();
+    wxString    oldCwd = wxGetCwd();
 
     fileName.SetExt( wxT( "zip" ) );
 
@@ -154,12 +154,13 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
     wxFileName zip = dlg.GetPath();
 
-    wxString currdirname = wxT( "." );
-    currdirname += zip.GetPathSeparator();
+    wxString currdirname = fileName.GetPathWithSep();
     wxDir dir( currdirname );
 
     if( !dir.IsOpened() )
         return;
+
+    wxSetWorkingDirectory( currdirname );
 
     // Prepare the zip file
     wxString zipfilename = zip.GetFullPath();
@@ -169,45 +170,49 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
     // Build list of filenames to put in zip archive
     wxString currFilename;
-    int zipBytesCnt = 0;    // Size of the zip file
 
-    for( unsigned i = 0;  i<DIM( extentionList ); i++ )
+	wxArrayString files;
+
+    for( unsigned ii = 0; ii < DIM( extentionList ); ii++ )
+        wxDir::GetAllFiles( currdirname, &files, extentionList[ii] );
+
+    files.Sort();
+
+    int zipBytesCnt = 0;
+
+    for( unsigned ii = 0; ii < files.GetCount(); ii++ )
     {
-        bool cont = dir.GetFirst( &currFilename, extentionList[i] );
+        wxFileSystem fsfile;
 
-        while( cont )
+        wxFileName curr_fn( files[ii] );
+        curr_fn.MakeRelativeTo( currdirname );
+        currFilename = curr_fn.GetFullPath();
+
+        msg.Printf(_( "Archive file <%s>" ), GetChars( currFilename ) );
+        PrintMsg( msg );
+
+        // Read input file and add it to the zip file:
+        wxFSFile* infile = fsfile.OpenFile(currFilename);
+
+        if( infile )
         {
-            wxFileSystem fsfile;
-
-            msg.Printf(_( "Archive file <%s>" ), GetChars( currFilename ) );
+            zipstream.PutNextEntry( currFilename, infile->GetModificationTime() );
+            infile->GetStream()->Read( zipstream );
+            zipstream.CloseEntry();
+            int zippedsize = zipstream.GetSize() - zipBytesCnt;
+            zipBytesCnt = zipstream.GetSize();
+            PrintMsg( wxT("  ") );
+            msg.Printf( _( "(%d bytes, compressed %d bytes)\n"),
+                        infile->GetStream()->GetSize(), zippedsize );
             PrintMsg( msg );
-
-            // Read input file and put it in zip file:
-            wxFSFile* infile = fsfile.OpenFile(currFilename);
-
-            if( infile )
-            {
-                zipstream.PutNextEntry( currFilename, infile->GetModificationTime() );
-                infile->GetStream()->Read( zipstream );
-                zipstream.CloseEntry();
-                int zippedsize = zipstream.GetSize() - zipBytesCnt;
-                zipBytesCnt = zipstream.GetSize();
-                PrintMsg( wxT("  ") );
-                msg.Printf( _( "(%d bytes, compressed %d bytes)\n"),
-                            infile->GetStream()->GetSize(), zippedsize );
-                PrintMsg( msg );
-                delete infile;
-            }
-            else
-            {
-                PrintMsg( _(" >>Error\n") );
-            }
-
-            cont = dir.GetNext( &currFilename );
+            delete infile;
         }
+        else
+            PrintMsg( _(" >>Error\n") );
     }
 
     zipBytesCnt = ostream.GetSize();
+
     if( zipstream.Close() )
     {
         msg.Printf( _("\nZip archive <%s> created (%d bytes)" ),
@@ -222,5 +227,5 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
         PrintMsg( msg );
     }
 
-    wxSetWorkingDirectory( oldPath );
+    wxSetWorkingDirectory( oldCwd );
 }
