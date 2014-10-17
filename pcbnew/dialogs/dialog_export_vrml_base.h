@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -23,6 +23,7 @@ class DIALOG_SHIM;
 #include <wx/filepicker.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/radiobox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
@@ -38,12 +39,18 @@ class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
+		enum
+		{
+			ID_USE_ABS_PATH = 1000
+		};
+		
 		wxStaticText* m_staticText1;
 		wxFilePickerCtrl* m_filePicker;
 		wxStaticText* m_staticText3;
 		wxTextCtrl* m_SubdirNameCtrl;
+		wxCheckBox* m_cbCopyFiles;
+		wxCheckBox* m_cbUseAbsolutePaths;
 		wxRadioBox* m_rbSelectUnits;
-		wxRadioBox* m_rb3DFilesOption;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
@@ -56,7 +63,7 @@ class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Vrml Board Export Options:"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 370,252 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("VRML Export Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EXPORT_3DFILE_BASE();
 	
 };
