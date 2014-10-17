@@ -79,9 +79,23 @@ if( MINGW )
     mingw_resource_compiler( gerbview )
 endif()
 
+if( APPLE )
+    # setup bundle
+    set( GERBVIEW_RESOURCES gerbview.icns gerbview_doc.icns )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/gerbview.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/gerbview_doc.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set( MACOSX_BUNDLE_ICON_FILE gerbview.icns )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.kicad )
+    set( MACOSX_BUNDLE_NAME gerbview )
+endif()
+
 if( USE_KIWAY_DLLS )
 
-    add_executable( gerbview WIN32
+    add_executable( gerbview WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
         ../common/pgm_base.cpp
         ${GERBVIEW_RESOURCES}
@@ -135,12 +149,31 @@ if( USE_KIWAY_DLLS )
 
     # these 2 binaries are a matched set, keep them together
     if( APPLE )
-        # puts binaries into the *.app bundle while linking
         set_target_properties( gerbview PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
             )
+
+        # puts binaries into the *.app bundle while linking
         set_target_properties( gerbview_kiface PROPERTIES
             LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
+            )
+        # put individual bundle outside of main bundle as a first step
+        # will be pulled into the main bundle when creating main bundle
+        install( TARGETS gerbview
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+        install( CODE "
+            # override default embedded path settings
+            ${OSX_BUNDLE_OVERRIDE_PATHS}
+
+            # do all the work
+            include( BundleUtilities )
+            fixup_bundle( ${KICAD_BIN}/gerbview.app/Contents/MacOS/gerbview
+                \"\"
+                \"\"
+                )
+            " COMPONENT Runtime
             )
     else()
         install( TARGETS gerbview
@@ -155,7 +188,7 @@ if( USE_KIWAY_DLLS )
 
 else()
 
-    add_executable( gerbview WIN32
+    add_executable( gerbview WIN32 MACOSX_BUNDLE
         gerbview.cpp
         ${GERBVIEW_SRCS}
         ${DIALOGS_SRCS}
@@ -170,16 +203,9 @@ else()
         ${wxWidgets_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         )
-    if( APPLE )
-        # puts binaries into the *.app bundle while linking
-        set_target_properties( gerbview PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
-            )
-    else()
-        install( TARGETS gerbview
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-    endif()
+    install( TARGETS gerbview
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
 
 endif()

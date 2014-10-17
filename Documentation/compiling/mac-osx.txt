@@ -100,6 +100,8 @@ target folder for compiled binaries, third parameter is the kicad folder, and
 the last optional parameter are make options used during the build (in this
 case for building with 4 jobs in parallel).
 The script will automatically detect if you are compiling wxWidgets or wxPython.
+NOTE: All paths are assumed to be relative to the current directory, i.e., the
+working root you are in.
 CAUTION: The script will erase existing wx-build and target folders (wx-bin)
 without any confirmation!
 

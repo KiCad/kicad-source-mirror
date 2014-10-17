@@ -41,6 +41,7 @@
 #include <vector>
 #include <build_version.h>
 #include <macros.h>
+#include <common.h>
 
 #include <wx/dir.h>
 #include <wx/filename.h>
@@ -74,6 +75,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
         wxFileName  templatePath;
         wxString    envStr;
 
+#ifndef __WXMAC__
         wxGetEnv( wxT( "KICAD" ), &envStr );
 
         // Add a new tab for system templates
@@ -101,6 +103,10 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
                 sep + wxT( ".." ) + sep + wxT( "share" ) + sep + wxT( "template" ) + sep;
             }
         }
+#else
+        // Use what is provided in the bundle data dir
+        templatePath = GetOSXKicadDataDir() + sep + wxT( "template" );
+#endif
 
         ps->AddPage( _( "System Templates" ), templatePath );
 

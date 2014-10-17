@@ -10,13 +10,11 @@
                     <array>
                         <string>sch</string>
                     </array>
-
-                <key>CFBundleTypeIconFile</key>     <string>eeschema.icns</string>
+                <key>CFBundleTypeIconFile</key>     <string>eeschema_doc.icns</string>
                 <key>CFBundleTypeName</key>         <string>eeschema document</string>
                 <key>LSHandlerRank</key>            <string>Owner</string>
             </dict>
         </array>
-
     <key>CFBundleDevelopmentRegion</key>            <string>English</string>
     <key>CFBundleExecutable</key>                   <string>eeschema</string>
     <key>CFBundleGetInfoString</key>                <string></string>

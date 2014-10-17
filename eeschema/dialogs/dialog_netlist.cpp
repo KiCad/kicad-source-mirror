@@ -871,7 +871,11 @@ void NETLIST_DIALOG_ADD_PLUGIN::OnBrowsePlugins( wxCommandEvent& event )
     wxString FullFileName, Mask, Path;
 
     Mask = wxT( "*" );
+#ifndef __WXMAC__
     Path = Pgm().GetExecutablePath();
+#else
+    Path = GetOSXKicadDataDir() + wxT( "/plugins" );
+#endif
     FullFileName = EDA_FileSelector( _( "Plugin files:" ),
                                      Path,
                                      FullFileName,

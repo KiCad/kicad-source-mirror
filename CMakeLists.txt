@@ -349,8 +349,9 @@ if( APPLE )
     set( OSX_BUNDLE_MAIN "kicad.app" )
     set( OSX_BUNDLE_BIN_DIR "Contents/MacOS" )
     set( OSX_BUNDLE_LIB_DIR "Contents/Frameworks" )
-    set( OSX_BUNDLE_KIFACE_DIR "Contents/Plugins" )
+    set( OSX_BUNDLE_KIFACE_DIR "Contents/PlugIns" )
     set( OSX_BUNDLE_SUP_DIR "Contents/SharedSupport" )
+    set( OSX_BUNDLE_APP_DIR "Contents/Applications" )
     set( OSX_BUNDLE_BUILD_DIR "${CMAKE_BINARY_DIR}/kicad/${OSX_BUNDLE_MAIN}" )
     set( OSX_BUNDLE_BUILD_BIN_DIR "${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_BIN_DIR}" )
     set( OSX_BUNDLE_BUILD_LIB_DIR "${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_LIB_DIR}" )
@@ -377,6 +378,24 @@ if( APPLE )
     # used to set DEFAULT_FP_LIB_PATH in config.h.cmake, but then never used
     # set it to correct value just in case (see common.cpp)
     set( KICAD_FP_LIB_INSTALL_PATH "~/Library/Preferences/kicad" )
+
+    # Override default paths for fixup_bundle
+    set( OSX_BUNDLE_OVERRIDE_PATHS "
+        function( gp_item_default_embedded_path_override item default_embedded_path_var )
+            # by default, embed things right next to the main bundle executable:
+            set( path \"@executable_path/../../Contents/MacOS\" )
+            set( overridden 0 )
+
+            # embed .dylibs right next to the main bundle executable:
+            if( item MATCHES \"\\\\.dylib$\" )
+                set( path \"@executable_path/../Frameworks\" )
+                set( overridden 1 )
+            endif()
+
+            set( \${default_embedded_path_var} \"\${path}\" PARENT_SCOPE )
+        endfunction(gp_item_default_embedded_path_override)
+        "
+        )
 endif()
 
 mark_as_advanced( KICAD_BIN
@@ -614,7 +633,7 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
             )
     else()
         # relative path for python in bundle
-        set( PYTHON_LIB_DIR "python" )
+        set( PYTHON_LIB_DIR "python/site-packages" )
         # install into bundle Frameworks folder
         set( PYTHON_DEST "${OSX_BUNDLE_BUILD_LIB_DIR}/${PYTHON_LIB_DIR}"
             CACHE PATH "Python module install path."
@@ -654,6 +673,25 @@ endif()
 # Let CMake look in these directories for nested
 # 'CMakeLists.txt' files to process
 #================================================
+
+if( APPLE )
+    # Remove app bundles in ${KICAD_BIN} before installing anything new.
+    # Must be defined before all includes so that it is executed first.
+    install( CODE "
+            message( STATUS \"Removing existing application bundles...\" )
+            # Remove links to standalone apps
+            file( REMOVE ${KICAD_BIN}/bitmap2component.app )
+            file( REMOVE ${KICAD_BIN}/eeschema.app )
+            file( REMOVE ${KICAD_BIN}/cvpcb.app )
+            file( REMOVE ${KICAD_BIN}/gerbview.app )
+            file( REMOVE ${KICAD_BIN}/pcb_calculator.app )
+            file( REMOVE ${KICAD_BIN}/pcbnew.app )
+            file( REMOVE ${KICAD_BIN}/pl_editor.app )
+            # Remove main bundle
+            file( REMOVE_RECURSE ${KICAD_BIN}/${OSX_BUNDLE_MAIN} )
+        " COMPONENT Runtime
+        )
+endif()
 
 ############################
 # Binaries ( CMake targets ) #

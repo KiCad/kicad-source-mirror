@@ -10,13 +10,11 @@
                     <array>
                         <string>kicad_wks</string>
                     </array>
-
-                <key>CFBundleTypeIconFile</key>     <string>pl_editor.icns</string>
+                <key>CFBundleTypeIconFile</key>     <string>pl_editor_doc.icns</string>
                 <key>CFBundleTypeName</key>         <string>pl_editor document</string>
                 <key>LSHandlerRank</key>            <string>Owner</string>
             </dict>
         </array>
-
     <key>CFBundleDevelopmentRegion</key>            <string>English</string>
     <key>CFBundleExecutable</key>                   <string>pl_editor</string>
     <key>CFBundleGetInfoString</key>                <string></string>

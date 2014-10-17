@@ -53,8 +53,23 @@ if( MINGW )
 endif()
 
 
+if( APPLE )
+    # setup bundle
+    set( CVPCB_RESOURCES cvpcb.icns cvpcb_doc.icns )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/cvpcb.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/cvpcb_doc.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set( MACOSX_BUNDLE_ICON_FILE cvpcb.icns )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.kicad )
+    set( MACOSX_BUNDLE_NAME cvpcb )
+endif()
+
+
 if( USE_KIWAY_DLLS )
-    add_executable( cvpcb WIN32
+    add_executable( cvpcb WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
         ../common/pgm_base.cpp
         ${CVPCB_RESOURCES}
@@ -141,12 +156,31 @@ if( USE_KIWAY_DLLS )
 
     # these 2 binaries are a matched set, keep them together:
     if( APPLE )
-        # puts binaries into the *.app bundle while linking
         set_target_properties( cvpcb PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
             )
+
+        # puts binaries into the *.app bundle while linking
         set_target_properties( cvpcb_kiface PROPERTIES
             LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
+            )
+        # put individual bundle outside of main bundle as a first step
+        # will be pulled into the main bundle when creating main bundle
+        install( TARGETS cvpcb
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+        install( CODE "
+            # override default embedded path settings
+            ${OSX_BUNDLE_OVERRIDE_PATHS}
+
+            # do all the work
+            include( BundleUtilities )
+            fixup_bundle( ${KICAD_BIN}/cvpcb.app/Contents/MacOS/cvpcb
+                \"\"
+                \"\"
+                )
+            " COMPONENT Runtime
             )
     else()
         install( TARGETS cvpcb
@@ -161,7 +195,7 @@ if( USE_KIWAY_DLLS )
 
 else()
 
-    add_executable( cvpcb WIN32
+    add_executable( cvpcb WIN32 MACOSX_BUNDLE
         ${CVPCB_SRCS}
         ${CVPCB_DIALOGS}
         ${CVPCB_RESOURCES}
@@ -201,15 +235,8 @@ else()
     # Must follow github_plugin
     target_link_libraries( cvpcb ${Boost_LIBRARIES} )
 
-    if( APPLE )
-        # puts binaries into the *.app bundle while linking
-        set_target_properties( cvpcb PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
-            )
-    else()
-        install( TARGETS cvpcb
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-    endif()
+    install( TARGETS cvpcb
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
 endif()

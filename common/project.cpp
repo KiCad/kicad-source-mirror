@@ -111,7 +111,12 @@ const wxString PROJECT::FootprintLibTblName() const
         // application title which is no longer constant or known.  This next line needs
         // to be re-thought out.
 
+#ifndef __WXMAC__
         fn.AssignDir( wxStandardPaths::Get().GetUserConfigDir() );
+#else
+        // don't pollute home folder, temp folder seems to be more appropriate
+        fn.AssignDir( wxStandardPaths::Get().GetTempDir() );
+#endif
 
 #if defined( __WINDOWS__ )
         fn.AppendDir( wxT( "kicad" ) );

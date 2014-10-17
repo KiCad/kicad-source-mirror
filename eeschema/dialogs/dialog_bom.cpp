@@ -379,7 +379,11 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
 void DIALOG_BOM::OnChoosePlugin( wxCommandEvent& event )
 {
     wxString mask = wxT( "*" );
+#ifndef __WXMAC__
     wxString path = Pgm().GetExecutablePath();
+#else
+    wxString path = GetOSXKicadDataDir() + wxT( "/plugins" );
+#endif
 
     wxString fullFileName = EDA_FileSelector( _( "Plugin files:" ),
                                      path,

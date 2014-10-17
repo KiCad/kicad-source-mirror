@@ -412,38 +412,30 @@ bool PGM_BASE::initPgm()
 
 bool PGM_BASE::setExecutablePath()
 {
-#ifdef __APPLE__        // Apple MacOSx
-
-    // Derive path from location of the app bundle
-    CFBundleRef mainBundle = CFBundleGetMainBundle();
-
-    if( mainBundle == NULL )
-        return false;
-
-    CFURLRef urlref = CFBundleCopyBundleURL( mainBundle );
-
-    if( urlref == NULL )
-        return false;
-
-    CFStringRef str = CFURLCopyFileSystemPath( urlref, kCFURLPOSIXPathStyle );
-
-    if( str == NULL )
-        return false;
-
-    char* native_str = NULL;
-    int   len = CFStringGetMaximumSizeForEncoding( CFStringGetLength( str ),
-                                                   kCFStringEncodingUTF8 ) + 1;
-    native_str = new char[len];
-
-    CFStringGetCString( str, native_str, len, kCFStringEncodingUTF8 );
-    m_bin_dir = FROM_UTF8( native_str );
-    delete[] native_str;
-
-#else
     m_bin_dir = wxStandardPaths::Get().GetExecutablePath();
 
-#endif
+#ifdef __WXMAC__
+    // On OSX Pgm().GetExecutablePath() will always point to main
+    // bundle directory, e.g., /Applications/kicad.app/
 
+    wxFileName fn( m_bin_dir );
+    if( fn.GetName() == wxT( "kicad" ) )
+    {
+        // kicad launcher, so just remove the Contents/MacOS part
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+    }
+    else
+    {
+        // standalone binaries live in Contents/Applications/<standalone>.app/Contents/MacOS
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+    }
+    m_bin_dir = fn.GetPath() + wxT( "/" );
+#else
     // Use unix notation for paths. I am not sure this is a good idea,
     // but it simplifies compatibility between Windows and Unices.
     // However it is a potential problem in path handling under Windows.
@@ -452,6 +444,7 @@ bool PGM_BASE::setExecutablePath()
     // Remove file name form command line:
     while( m_bin_dir.Last() != '/' && !m_bin_dir.IsEmpty() )
         m_bin_dir.RemoveLast();
+#endif
 
     return true;
 }

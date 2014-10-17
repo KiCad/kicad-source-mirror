@@ -233,9 +233,23 @@ set_source_files_properties( dialogs/dialog_bom.cpp
         OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
     )
 
+if( APPLE )
+    # setup bundle
+    set( EESCHEMA_RESOURCES eeschema.icns eeschema_doc.icns )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/eeschema.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/eeschema_doc.icns"  PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+    set( MACOSX_BUNDLE_ICON_FILE eeschema.icns )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.kicad )
+    set( MACOSX_BUNDLE_NAME eeschema )
+endif()
+
 
 if( USE_KIWAY_DLLS )
-    add_executable( eeschema WIN32
+    add_executable( eeschema WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
         ../common/pgm_base.cpp
         ${EESCHEMA_RESOURCES}
@@ -292,12 +306,31 @@ if( USE_KIWAY_DLLS )
 
     # these 2 binaries are a matched set, keep them together:
     if( APPLE )
-        # puts binaries into the *.app bundle while linking
         set_target_properties( eeschema PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
             )
+
+        # puts binaries into the *.app bundle while linking
         set_target_properties( eeschema_kiface PROPERTIES
             LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
+            )
+        # put individual bundle outside of main bundle as a first step
+        # will be pulled into the main bundle when creating main bundle
+        install( TARGETS eeschema
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+        install( CODE "
+            # override default embedded path settings
+            ${OSX_BUNDLE_OVERRIDE_PATHS}
+
+            # do all the work
+            include( BundleUtilities )
+            fixup_bundle( ${KICAD_BIN}/eeschema.app/Contents/MacOS/eeschema
+                \"\"
+                \"\"
+                )
+            " COMPONENT Runtime
             )
     else()
         install( TARGETS eeschema
@@ -313,7 +346,7 @@ if( USE_KIWAY_DLLS )
     endif()
 
 else()
-    add_executable( eeschema WIN32
+    add_executable( eeschema WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
         ${EESCHEMA_SRCS}
         ${EESCHEMA_COMMON_SRCS}
@@ -333,17 +366,10 @@ else()
         COMPILE_DEFINITIONS "TOP_FRAME=FRAME_SCH;PGM_DATA_FILE_EXT=\"sch\";BUILD_KIWAY_DLL"
         )
 
-    if( APPLE )
-        # puts binaries into the *.app bundle while linking
-        set_target_properties( eeschema PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
-            )
-    else()
-        install( TARGETS eeschema
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-    endif()
+    install( TARGETS eeschema
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
 
 endif()
 

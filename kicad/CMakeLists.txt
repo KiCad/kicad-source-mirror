@@ -89,7 +89,7 @@ if( APPLE )
         set( SCRIPTING_HELPER "0" )
     endif()
 
-    # make bundle relocatable
+    # make main bundle relocatable
     install( CODE "
         # find all libs and modules
         file( GLOB BUNDLE_FIX_LIBS ${OSX_BUNDLE_INSTALL_KIFACE_DIR}/*.kiface )
@@ -101,19 +101,7 @@ if( APPLE )
         endif()
 
         # override default embedded path settings
-        function( gp_item_default_embedded_path_override item default_embedded_path_var )
-            # by default, embed things right next to the main bundle executable:
-            set( path \"@executable_path/../../Contents/MacOS\" )
-            set( overridden 0 )
-
-            # embed .dylibs right next to the main bundle executable:
-            if( item MATCHES \"\\\\.dylib$\" )
-                set( path \"@executable_path/../Frameworks\" )
-                set( overridden 1 )
-            endif()
-
-            set( \${default_embedded_path_var} \"\${path}\" PARENT_SCOPE )
-        endfunction(gp_item_default_embedded_path_override)
+        ${OSX_BUNDLE_OVERRIDE_PATHS}
 
         # do all the work
         include( BundleUtilities )
@@ -121,6 +109,34 @@ if( APPLE )
             \"\${BUNDLE_FIX_LIBS}\"
             \"\"
             )
+        " COMPONENT Runtime
+        )
+
+    # move all individual app bundles into main bundle
+    install( CODE "
+        # helper function to move a bundle into main bundle
+        function( move_to_main_bundle bundle_name )
+            message( STATUS \"Moving \${bundle_name} into main bundle...\" )
+            file( MAKE_DIRECTORY ${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_APP_DIR} )
+            file( REMOVE_RECURSE ${KICAD_BIN}/\${bundle_name}/${OSX_BUNDLE_LIB_DIR} )
+            file( RENAME ${KICAD_BIN}/\${bundle_name} ${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_APP_DIR}/\${bundle_name} )
+            execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink \"../../../Frameworks\" \"Frameworks\"
+                WORKING_DIRECTORY ${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_APP_DIR}/\${bundle_name}/Contents
+            )
+            # create a top-level link pointing inside main bundle
+            execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink \"${OSX_BUNDLE_MAIN}/${OSX_BUNDLE_APP_DIR}/\${bundle_name}\" \"\${bundle_name}\"
+                WORKING_DIRECTORY ${KICAD_BIN}
+            )
+        endfunction( move_to_main_bundle )
+
+        # move all app bundles
+        move_to_main_bundle( bitmap2component.app )
+        move_to_main_bundle( eeschema.app )
+        move_to_main_bundle( cvpcb.app )
+        move_to_main_bundle( gerbview.app )
+        move_to_main_bundle( pcb_calculator.app )
+        move_to_main_bundle( pcbnew.app )
+        move_to_main_bundle( pl_editor.app )
         " COMPONENT Runtime
         )
 endif()
