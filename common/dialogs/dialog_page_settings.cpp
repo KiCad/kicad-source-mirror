@@ -725,9 +725,9 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
 
         for( i=0;  i < DIM( papers );  ++i )
         {
-            if( paperType.Contains( *papers[i] ) )
+            if( paperType.Contains( papers[i] ) )
             {
-                pageInfo.SetType( *papers[i] );
+                pageInfo.SetType( papers[i] );
                 break;
             }
         }
