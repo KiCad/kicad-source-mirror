@@ -370,7 +370,7 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAn
     fprintf( outputFile, "X%dY%dI%dJ%dD01*\n",
              KiROUND( devEnd.x ), KiROUND( devEnd.y ),
              KiROUND( devCenter.x ), KiROUND( devCenter.y ) );
-    fprintf( outputFile, "G74*\nG01*\n" ); // Back to single quadrant and linear interp.
+    fprintf( outputFile, "G01*\n" ); // Back to linear interp.
 }
 
 
@@ -409,6 +409,11 @@ void GERBER_PLOTTER:: PlotPoly( const std::vector< wxPoint >& aCornerList,
 
         for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
             LineTo( aCornerList[ii] );
+
+        // Ensure the thick outline is closed for filled polygons
+        // (if not filled, could be only a polyline)
+        if( aFill && ( aCornerList[aCornerList.size()-1] != aCornerList[0] ) )
+            LineTo( aCornerList[0] );
 
         PenFinish();
     }

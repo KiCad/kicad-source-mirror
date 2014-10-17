@@ -27,7 +27,6 @@ wxString FindFileInSearchPaths( const SEARCH_STACK& aStack,
 
         if( fn.DirExists() )
         {
-wxLogMessage(fn.GetFullPath()+aFilename);
             paths.Add( fn.GetPath() );
         }
     }
@@ -81,9 +80,14 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
 
     wxLocale* i18n = Pgm().GetLocale();
 
-    // Step 1 : Try to find help file in help/<canonical name>
-    subdirs.Add( i18n->GetCanonicalName() );
-    altsubdirs.Add( i18n->GetCanonicalName() );
+    // We try to find help file in help/<canonical name>
+    // If fails, try to find help file in help/<short canonical name>
+    // If fails, try to find help file in help/en
+    wxArrayString locale_name_dirs;
+    locale_name_dirs.Add( i18n->GetCanonicalName() );           // canonical name like fr_FR
+    // wxLocale::GetName() does not return always the short name
+    locale_name_dirs.Add( i18n->GetName().BeforeLast( '_' ) );  // short canonical name like fr
+    locale_name_dirs.Add( wxT("en") );                          // default (en)
 
 #if defined(DEBUG) && 0
     ss.Show( __func__ );
@@ -93,58 +97,35 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
     // Help files can be html (.html ext) or pdf (.pdf ext) files.
     // Therefore, <BaseName>.html file is searched and if not found,
     // <BaseName>.pdf file is searched in the same paths
+    wxString fn;
 
-    wxString fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &altsubdirs );
-
-    if( !fn  )
-        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &altsubdirs );
-
-    if( !fn  )
-        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &subdirs );
-
-    if( !fn  )
-        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &subdirs );
-
-    // Step 2 : if not found Try to find help file in help/<short name>
-    if( !fn  )
+    for( unsigned ii = 0; ii < locale_name_dirs.GetCount(); ii++ )
     {
-        subdirs.RemoveAt( subdirs.GetCount() - 1 );
-        altsubdirs.RemoveAt( altsubdirs.GetCount() - 1 );
-
-        // wxLocale::GetName() does not return always the short name
-        subdirs.Add( i18n->GetName().BeforeLast( '_' ) );
-        altsubdirs.Add( i18n->GetName().BeforeLast( '_' ) );
+        subdirs.Add( locale_name_dirs[ii] );
+        altsubdirs.Add( locale_name_dirs[ii] );
 
         fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &altsubdirs );
 
-        if( !fn )
-            fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &altsubdirs );
+        if( !fn.IsEmpty() )
+            break;
 
-        if( !fn )
-            fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &subdirs );
+        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &altsubdirs );
 
-        if( !fn )
-            fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &subdirs );
-    }
+        if( !fn.IsEmpty() )
+            break;
 
-    // Step 3 : if not found Try to find help file in help/en
-    if( !fn )
-    {
+        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &subdirs );
+
+        if( !fn.IsEmpty() )
+            break;
+
+        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &subdirs );
+
+        if( !fn.IsEmpty() )
+            break;
+
         subdirs.RemoveAt( subdirs.GetCount() - 1 );
         altsubdirs.RemoveAt( altsubdirs.GetCount() - 1 );
-        subdirs.Add( wxT( "en" ) );
-        altsubdirs.Add( wxT( "en" ) );
-
-        fn = FindFileInSearchPaths( ss, aBaseName, &altsubdirs );
-
-        if( !fn )
-         fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &altsubdirs );
-
-        if( !fn )
-            fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &subdirs );
-
-        if( !fn )
-            fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &subdirs );
     }
 
     return fn;
