@@ -15,7 +15,7 @@
 #
 # 2) You want to run with local pretty footprint libraries and not those remotely located
 #    on https://github.com using Github plugin.  After running this script you should be able to
-#      a)  $ cp ~/kicad_sources/library-repos/kicad-library/template/fp-lib-table.for-pretty ~/fp-lib-table
+#      a)  $ cp ~/kicad_sources/library-repos/kicad-library/template/fp-lib-table.for-pretty ~/.config/kicad/fp-lib-table
 #    and then
 #      b) set your environment variable KISYSMOD to "~/kicad_sources/library-repos".
 #         Edit /etc/profile.d/kicad.sh, then reboot.
