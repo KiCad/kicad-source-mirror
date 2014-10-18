@@ -1,4 +1,4 @@
-# Road Map # {#mainpage}
+# Road Map #
 
 This document is the KiCad Developer's road map document.  It is a living
 document that should be maintained as the project progresses.  The goal of
