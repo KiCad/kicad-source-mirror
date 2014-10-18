@@ -76,6 +76,10 @@ public:
     {
     }
 
+    ~UTF8()     // Needed mainly to build python wrapper
+    {
+    }
+
     UTF8& operator=( const wxString& o );
 
     UTF8& operator=( const std::string& o )
@@ -143,6 +147,11 @@ public:
 
 
     public:
+
+        uni_iter()  // Needed only to build python wrapper, not used outside the wrapper
+        {
+            it = NULL;
+        }
 
         uni_iter( const uni_iter& o )
         {

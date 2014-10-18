@@ -20,8 +20,8 @@ import sys
 import os
 
 
-lib_path1='/tmp/lib1.pretty'
-lib_path2='/tmp/lib2.pretty'
+lib_path1='f:/tmp/lib1.pretty'
+lib_path2='f:/tmp/lib2.pretty'
 
 
 plugin = IO_MGR.PluginFind( IO_MGR.KICAD )
@@ -65,23 +65,27 @@ plugin.FootprintSave( lib_path1, module )
 # create a disparity between the library's name ("footprint"),
 # and the module's internal useless name ("mine").  Module is officially named "footprint" now
 # but has (module mine ...) internally:
-os.rename( '/tmp/lib2.pretty/mine.kicad_mod', '/tmp/lib2.pretty/footprint.kicad_mod' )
+os.rename( 'f:/tmp/lib2.pretty/mine.kicad_mod', 'f:/tmp/lib2.pretty/footprint.kicad_mod' )
 
 footprint=plugin.FootprintLoad( lib_path2, 'footprint' )
 
 fpid = footprint.GetFPID()
+fpid.SetLibNickname( UTF8( 'mylib' ) )
+name = fpid.Format().GetChars()
 
 # Always after a FootprintLoad() the internal name should match the one used to load it.
-print( "internal name should be 'footprint':", fpid.GetFootprintName() )
+print( "internal name should be 'footprint':", name  )
 
 # Verify that the same plugin instance can edge trigger on a lib_path change
 # for FootprintLoad()
 footprint=plugin.FootprintLoad( lib_path1, 'mine' )
 
 fpid = footprint.GetFPID()
+fpid.SetLibNickname( UTF8( 'other_mylib' ) )
+name = fpid.Format().GetChars()
 
 # Always after a FootprintLoad() the internal name should match the one used to load it.
-print( "internal name should be 'mine':", fpid.GetFootprintName() )
+print( "internal name should be 'mine':", name )
 
 # As of 3-Dec-2013 this test is passed by KICAD_PLUGIN and Wayne is owed an atta boy!
 
