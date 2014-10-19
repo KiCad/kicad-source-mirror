@@ -840,6 +840,34 @@ else(wxWidgets_FIND_STYLE STREQUAL "win32")
       endif(RET EQUAL 0)
     endif(wxWidgets_CONFIG_EXECUTABLE)
 
+    # When using wx-config in MSYS, the include paths are UNIX style paths which may or may
+    # not work correctly depending on you MSYS/MinGW configuration.  CMake expects native
+    # paths internally.
+    if(wxWidgets_FOUND AND MSYS)
+      find_program(_cygpath_exe cygpath ONLY_CMAKE_FIND_ROOT_PATH)
+      dbg_msg_v("_cygpath_exe:  ${_cygpath_exe}")
+      if(_cygpath_exe)
+          set(_tmp_path "")
+          foreach(_path ${wxWidgets_INCLUDE_DIRS})
+            execute_process(
+              COMMAND cygpath -w ${_path}
+              OUTPUT_VARIABLE _native_path
+              RESULT_VARIABLE _retv
+              OUTPUT_STRIP_TRAILING_WHITESPACE
+              ERROR_QUIET
+              )
+            if(_retv EQUAL 0)
+              file(TO_CMAKE_PATH ${_native_path} _native_path)
+              dbg_msg_v("Path ${_path} converted to ${_native_path}")
+              set(_tmp_path "${_tmp_path} ${_native_path}")
+            endif()
+          endforeach()
+        dbg_msg("Setting wxWidgets_INCLUDE_DIRS = ${_tmp_path}")
+        set(wxWidgets_INCLUDE_DIRS ${_tmp_path})
+        separate_arguments(wxWidgets_INCLUDE_DIRS)
+        list(REMOVE_ITEM wxWidgets_INCLUDE_DIRS "")
+      endif()
+    endif()
 #=====================================================================
 # Neither UNIX_FIND_STYLE, nor WIN32_FIND_STYLE
 #=====================================================================
@@ -900,7 +928,7 @@ include(FindPackageHandleStandardArgs)
 
 find_package_handle_standard_args(wxWidgets
   FOUND_VAR     wxWidgets_FOUND
-  REQUIRED_VARS wxWidgets_LIBRARIES
+  REQUIRED_VARS wxWidgets_LIBRARIES wxWidgets_INCLUDE_DIRS
   VERSION_VAR   wxWidgets_VERSION_STRING
   )
 
