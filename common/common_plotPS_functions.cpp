@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file common_plotPS_functions.cpp
  * @brief Kicad: Common plot Postscript Routines
@@ -211,28 +235,30 @@ void PSLIKE_PLOTTER::fputsPostscriptString(FILE *fout, const wxString& txt)
     putc( '(', fout );
     for( unsigned i = 0; i < txt.length(); i++ )
     {
-    // Lazyness made me use stdio buffering yet another time...
-    wchar_t ch = txt[i];
-    if( ch < 256 )
-    {
-        switch (ch)
-        {
-        // The ~ shouldn't reach the outside
-        case '~':
-        break;
-        // These characters must be escaped
-        case '(':
-        case ')':
-        case '\\':
-        putc( '\\', fout );
+        // Lazyness made me use stdio buffering yet another time...
+        wchar_t ch = txt[i];
 
-        // FALLTHRU
-        default:
-        putc( ch, fout );
-        break;
+        if( ch < 256 )
+        {
+            switch (ch)
+            {
+                // The ~ shouldn't reach the outside
+            case '~':
+                break;
+                // These characters must be escaped
+            case '(':
+            case ')':
+            case '\\':
+                putc( '\\', fout );
+
+                // FALLTHRU
+            default:
+                putc( ch, fout );
+                break;
+            }
         }
     }
-    }
+
     putc( ')', fout );
 }
 
@@ -354,31 +380,31 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
     switch( aH_justify )
     {
     case GR_TEXT_HJUSTIFY_CENTER:
-    dx = -tw / 2;
-    break;
+        dx = -tw / 2;
+        break;
 
     case GR_TEXT_HJUSTIFY_RIGHT:
-    dx = -tw;
-    break;
+        dx = -tw;
+        break;
 
     case GR_TEXT_HJUSTIFY_LEFT:
-    dx = 0;
-    break;
+        dx = 0;
+        break;
     }
 
     switch( aV_justify )
     {
     case GR_TEXT_VJUSTIFY_CENTER:
-    dy = th / 2;
-    break;
+        dy = th / 2;
+        break;
 
     case GR_TEXT_VJUSTIFY_TOP:
         dy = th;
-    break;
+        break;
 
     case GR_TEXT_VJUSTIFY_BOTTOM:
-    dy = 0;
-    break;
+        dy = 0;
+        break;
     }
 
     RotatePoint( &dx, &dy, aOrient );
@@ -421,11 +447,11 @@ void PS_PLOTTER::SetCurrentLineWidth( int width )
         pen_width = defaultPenWidth;
 
     if( pen_width != currentPenWidth )
-        fprintf( outputFile, "%g setlinewidth\n",
-                 userToDeviceSize( pen_width ) );
+        fprintf( outputFile, "%g setlinewidth\n", userToDeviceSize( pen_width ) );
 
     currentPenWidth = pen_width;
 }
+
 
 void PS_PLOTTER::emitSetRGBColor( double r, double g, double b )
 {
@@ -560,7 +586,7 @@ void PS_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
     // Map image size to device
     DPOINT end_dev = userToDeviceCoordinates( end );
     fprintf( outputFile, "%g %g scale\n",
-            std::abs(end_dev.x - start_dev.x), std::abs(end_dev.y - start_dev.y));
+             std::abs(end_dev.x - start_dev.x), std::abs(end_dev.y - start_dev.y));
 
     // Dimensions of source image (in pixels
     fprintf( outputFile, "%d %d 8", pix_size.x, pix_size.y );
@@ -568,6 +594,7 @@ void PS_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
     fprintf( outputFile, " [%d 0 0 %d 0 %d]\n", pix_size.x, -pix_size.y , pix_size.y);
     // include image data in ps file
     fprintf( outputFile, "{currentfile pix readhexstring pop}\n" );
+
     if( colorMode )
         fputs( "false 3 colorimage\n", outputFile );
     else
@@ -575,6 +602,7 @@ void PS_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
     // Single data source, 3 colors, Output RGB data (hexadecimal)
     // (or the same downscaled to gray)
     int jj = 0;
+
     for( int yy = 0; yy < pix_size.y; yy ++ )
     {
         for( int xx = 0; xx < pix_size.x; xx++, jj++ )
@@ -584,16 +612,19 @@ void PS_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
                 jj = 0;
                 fprintf( outputFile, "\n");
             }
+
             int red, green, blue;
             red = aImage.GetRed( xx, yy) & 0xFF;
             green = aImage.GetGreen( xx, yy) & 0xFF;
             blue = aImage.GetBlue( xx, yy) & 0xFF;
+
             if( colorMode )
                 fprintf( outputFile, "%2.2X%2.2X%2.2X", red, green, blue );
             else
                 fprintf( outputFile, "%2.2X", (red + green + blue) / 3 );
         }
     }
+
     fprintf( outputFile, "\n");
     fprintf( outputFile, "origstate restore\n" );
 }
@@ -602,6 +633,7 @@ void PS_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
 void PS_PLOTTER::PenTo( const wxPoint& pos, char plume )
 {
     wxASSERT( outputFile );
+
     if( plume == 'Z' )
     {
         if( penState != 'Z' )
@@ -611,6 +643,7 @@ void PS_PLOTTER::PenTo( const wxPoint& pos, char plume )
             penLastpos.x = -1;
             penLastpos.y = -1;
         }
+
         return;
     }
 
@@ -618,13 +651,15 @@ void PS_PLOTTER::PenTo( const wxPoint& pos, char plume )
     {
         fputs( "newpath\n", outputFile );
     }
+
     if( penState != plume || pos != penLastpos )
     {
-    DPOINT pos_dev = userToDeviceCoordinates( pos );
+        DPOINT pos_dev = userToDeviceCoordinates( pos );
         fprintf( outputFile, "%g %g %sto\n",
                  pos_dev.x, pos_dev.y,
                  ( plume=='D' ) ? "line" : "move" );
     }
+
     penState   = plume;
     penLastpos = pos;
 }
@@ -790,8 +825,7 @@ bool PS_PLOTTER::StartPlot()
                  plotScaleAdjX, plotScaleAdjY );
 
     // Set default line width
-    fprintf( outputFile, "%g setlinewidth\n",
-             userToDeviceSize( defaultPenWidth ) );
+    fprintf( outputFile, "%g setlinewidth\n", userToDeviceSize( defaultPenWidth ) );
     fputs( "%%EndPageSetup\n", outputFile );
 
     return true;
@@ -803,7 +837,7 @@ bool PS_PLOTTER::EndPlot()
     wxASSERT( outputFile );
     fputs( "showpage\n"
            "grestore\n"
-       "%%EOF\n", outputFile );
+           "%%EOF\n", outputFile );
     fclose( outputFile );
     outputFile = NULL;
 
@@ -863,12 +897,13 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
         std::vector<int> pos_pairs;
         postscriptOverlinePositions( aText, aSize.x, aItalic, aBold, &pos_pairs );
         int overbar_y = KiROUND( aSize.y * 1.1 );
+
         for( unsigned i = 0; i < pos_pairs.size(); i += 2)
         {
             DPOINT dev_from = userToDeviceSize( wxSize( pos_pairs[i], overbar_y ) );
             DPOINT dev_to = userToDeviceSize( wxSize( pos_pairs[i + 1], overbar_y ) );
             fprintf( outputFile, "%g %g %g %g line ",
-                    dev_from.x, dev_from.y, dev_to.x, dev_to.y );
+                     dev_from.x, dev_from.y, dev_to.x, dev_to.y );
         }
 
         // Restore the CTM
@@ -880,15 +915,14 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
     {
         fputsPostscriptString( outputFile, aText );
         DPOINT pos_dev = userToDeviceCoordinates( aPos );
-        fprintf( outputFile, " %g %g phantomshow\n",
-                 pos_dev.x, pos_dev.y );
+        fprintf( outputFile, " %g %g phantomshow\n", pos_dev.x, pos_dev.y );
     }
 
     // Draw the stroked text (if requested)
     if( m_textMode != PLOTTEXTMODE_NATIVE || aMultilineAllowed )
     {
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                aWidth, aItalic, aBold, aMultilineAllowed );
+                       aWidth, aItalic, aBold, aMultilineAllowed );
     }
 }
 
@@ -1044,4 +1078,3 @@ const double hvbo_widths[256] = {
     0.611, 0.611, 0.611, 0.611, 0.611, 0.611, 0.611, 0.584,
     0.611, 0.611, 0.611, 0.611, 0.611, 0.556, 0.611, 0.556
 };
-

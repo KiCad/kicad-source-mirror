@@ -4,21 +4,21 @@
  * Copyright (C) 2013 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
- * Contact information: E-mail: tor.dokken@sintef.no                      
- * SINTEF ICT, Department of Applied Mathematics,                         
- * P.O. Box 124 Blindern,                                                 
- * 0314 Oslo, Norway.                                                     
+ * Contact information: E-mail: tor.dokken@sintef.no
+ * SINTEF ICT, Department of Applied Mathematics,
+ * P.O. Box 124 Blindern,
+ * 0314 Oslo, Norway.
  *
  * This file is part of TTL.
  *
  * TTL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version. 
+ * License, or (at your option) any later version.
  *
- * TTL is distributed in the hope that it will be useful,        
- * but WITHOUT ANY WARRANTY; without even the implied warranty of         
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          
+ * TTL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public
@@ -36,7 +36,7 @@
  * disclosing the source code of your own applications.
  *
  * This file may be used in accordance with the terms contained in a
- * written agreement between you and SINTEF ICT. 
+ * written agreement between you and SINTEF ICT.
  */
 
 #include <ttl/halfedge/hetriang.h>
@@ -636,7 +636,7 @@ EDGE_PTR TRIANGULATION::GetInteriorNode() const
 {
     const std::list<EDGE_PTR>& leadingEdges = GetLeadingEdges();
     std::list<EDGE_PTR>::const_iterator it;
-    
+
     for( it = leadingEdges.begin(); it != leadingEdges.end(); ++it )
     {
         EDGE_PTR edge = *it;

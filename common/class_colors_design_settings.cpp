@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file class_colors_design_settings.cpp
  * @brief Handle colors used to draw all items or layers.
@@ -83,11 +107,6 @@ COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS()
 }
 
 
-/**
- * Function GetLayerColor
- * @return the color for aLayer which is one of the layer indices given
- * in pcbstruct.h or in schematic
- */
 EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetLayerColor( LAYER_NUM aLayer ) const
 {
     if( (unsigned) aLayer < DIM(m_LayersColors) )
@@ -98,11 +117,6 @@ EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetLayerColor( LAYER_NUM aLayer ) const
 }
 
 
-/**
- * Function SetLayerColor
- * sets the color for aLayer which is one of the layer indices given
- * in pcbstruct.h or in schematic
- */
 void COLORS_DESIGN_SETTINGS::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
 {
     if( (unsigned) aLayer < DIM(m_LayersColors) )
@@ -112,11 +126,6 @@ void COLORS_DESIGN_SETTINGS::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor
 }
 
 
-/**
- * Function GetItemColor
- * @return the color for an item which is one of the item indices given
- * in pcbstruct.h, enum PCB_VISIBLE or in schematic
- */
 EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx ) const
 {
     if( (unsigned) aItemIdx < DIM( m_ItemsColors ) )
@@ -128,11 +137,6 @@ EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx ) const
 }
 
 
-/**
- * Function SetItemColor
- * sets the color for an item which is one of the item indices given
- * in pcbstruct.h, enum PCB_VISIBLE or in schematic
- */
 void COLORS_DESIGN_SETTINGS::SetItemColor( int aItemIdx, EDA_COLOR_T aColor )
 {
     if( (unsigned) aItemIdx < DIM(m_ItemsColors) )
@@ -142,11 +146,6 @@ void COLORS_DESIGN_SETTINGS::SetItemColor( int aItemIdx, EDA_COLOR_T aColor )
 }
 
 
-/**
- * Function SetAllColorsAs
- * sets alls colors to aColor
- * Usefull to create a monochrome color selection for printing purpose
- */
 void COLORS_DESIGN_SETTINGS::SetAllColorsAs( EDA_COLOR_T aColor )
 {
     for( unsigned ii = 0; ii < DIM(m_LayersColors); ii++ )

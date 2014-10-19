@@ -1,6 +1,27 @@
-/****************/
-/* SELCOLOR.CPP */
-/****************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 
 /* Dialog for selecting color from the palette of available colors.
  */
@@ -19,7 +40,6 @@ enum colors_id {
 
 class WinEDA_SelColorFrame : public wxDialog
 {
-private:
 public:
     WinEDA_SelColorFrame( wxWindow* parent,
                           const wxPoint& framepos, int OldColor );
@@ -93,19 +113,24 @@ WinEDA_SelColorFrame::WinEDA_SelColorFrame( wxWindow*      parent,
 
     windowPosition = GetPosition();
     wxRect freeScreenArea( wxGetClientDisplayRect( ) );
+
     if( freeScreenArea.GetRight() < endCornerPosition.x )
     {
         windowPosition.x += freeScreenArea.GetRight() - endCornerPosition.x;
+
         if( windowPosition.x < freeScreenArea.x )
             windowPosition.x = freeScreenArea.x;
+
         // Sligly modify the vertical position to avoid the mouse to be
         // exactly on the upper side of the window
         windowPosition.y +=5;
         endCornerPosition.y += 5;
     }
+
     if( freeScreenArea.GetBottom() < endCornerPosition.y )
     {
         windowPosition.y += freeScreenArea.GetBottom() - endCornerPosition.y;
+
         if( windowPosition.y < freeScreenArea.y )
             windowPosition.y = freeScreenArea.y;
     }

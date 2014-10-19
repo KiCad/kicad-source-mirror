@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <colors.h>
 
@@ -97,6 +120,7 @@ EDA_COLOR_T ColorFindNearest( int aR, int aG, int aB )
         int distance = (aR - c.m_Red) * (aR - c.m_Red) +
             (aG - c.m_Green) * (aG - c.m_Green) +
             (aB - c.m_Blue) * (aB - c.m_Blue);
+
         if( distance < nearest_distance && c.m_Red >= aR &&
             c.m_Green >= aG && c.m_Blue >= aB )
         {
@@ -130,6 +154,7 @@ EDA_COLOR_T ColorMix( EDA_COLOR_T aColor1, EDA_COLOR_T aColor2 )
      * BLACK means not computed yet. If we're lucky we already have
      * an answer */
     EDA_COLOR_T candidate = mix_cache[aColor1][aColor2];
+
     if( candidate != BLACK )
         return candidate;
 
@@ -146,7 +171,7 @@ EDA_COLOR_T ColorMix( EDA_COLOR_T aColor1, EDA_COLOR_T aColor2 )
     /* Here, BLACK is *not* a good answer, since it would recompute the next time.
      * Even theorically its not possible (with the current rules), but
      * maybe the metric will change in the future */
-    if( candidate == BLACK)
+    if( candidate == BLACK )
         candidate = DARKDARKGRAY;
 
     // Store the result in the cache. The operation is commutative, too
