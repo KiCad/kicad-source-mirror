@@ -1,4 +1,26 @@
-
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <template_fieldnames.h>
 #include <dsnlexer.h>
@@ -22,7 +44,7 @@ wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
 
     else
     {
-        wxString fieldName = _("Field");
+        wxString fieldName = _( "Field" );
 
         fieldName << aFieldNdx;
 
@@ -90,8 +112,10 @@ void TEMPLATES::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ER
     // We'll keep this general, and include the \n, even though the only known
     // use at this time will not want the newlines or the indentation.
     out->Print( nestLevel, "(templatefields" );
+
     for( unsigned i=0;  i<m_Fields.size();  ++i )
         m_Fields[i].Format( out, nestLevel+1 );
+
     out->Print( 0, ")\n" );
 }
 
@@ -140,7 +164,7 @@ int TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName )
     // Ensure that the template fieldname does not match a fixed fieldname.
     for( int i=0;  i<MANDATORY_FIELDS;  ++i )
     {
-        if( TEMPLATE_FIELDNAME::GetDefaultFieldName(i) == aFieldName.m_Name )
+        if( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) == aFieldName.m_Name )
         {
             return -1;
         }
@@ -151,8 +175,8 @@ int TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName )
     {
         if( m_Fields[i].m_Name == aFieldName.m_Name )
         {
-            DBG( printf( "inserting template fieldname:'%s' at %d\n",
-                       TO_UTF8( aFieldName.m_Name ), i ); )
+            // DBG( printf( "inserting template fieldname:'%s' at %d\n",
+            //            TO_UTF8( aFieldName.m_Name ), i ); )
 
             m_Fields[i] = aFieldName;
             return i;   // return the container index

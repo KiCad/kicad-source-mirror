@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include "dialog_3D_view_option_base.h"
 #include <3d_viewer.h>
@@ -43,6 +66,7 @@ DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_FRAME* parent )
 	Centre();
 }
 
+
 void DIALOG_3D_VIEW_OPTIONS::initDialog()
 {
     m_bitmapCuThickness->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
@@ -67,6 +91,7 @@ void DIALOG_3D_VIEW_OPTIONS::initDialog()
     m_checkBoxECO->SetValue( m_3Dprms.GetFlag( FL_ECO ) );
 }
 
+
 void DIALOG_3D_VIEW_OPTIONS::OnShowAllClick( wxCommandEvent& event )
 {
     bool state = true;
@@ -80,6 +105,7 @@ void DIALOG_3D_VIEW_OPTIONS::OnShowAllClick( wxCommandEvent& event )
     m_checkBoxComments->SetValue( state );
     m_checkBoxECO->SetValue( state );
 }
+
 
 void DIALOG_3D_VIEW_OPTIONS::OnShowNoneClick( wxCommandEvent& event )
 {
@@ -95,10 +121,10 @@ void DIALOG_3D_VIEW_OPTIONS::OnShowNoneClick( wxCommandEvent& event )
     m_checkBoxECO->SetValue( state );
 }
 
+
 void DIALOG_3D_VIEW_OPTIONS::OnOKClick( wxCommandEvent& event )
 {
-    m_3Dprms.SetFlag( FL_USE_COPPER_THICKNESS,
-                            m_checkBoxCuThickness->GetValue() );
+    m_3Dprms.SetFlag( FL_USE_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
     m_3Dprms.SetFlag( FL_MODULE, m_checkBox3Dshapes->GetValue() );
     m_3Dprms.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
     m_3Dprms.SetFlag( FL_SILKSCREEN, m_checkBoxSilkscreen->GetValue() );
