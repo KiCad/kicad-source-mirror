@@ -89,41 +89,55 @@ install_prerequisites()
     # assume all these Debian, Mint, Ubuntu systems have same prerequisites
     if [ "$(expr match "$PM" '.*\(apt-get\)')" == "apt-get" ]; then
         #echo "debian compatible system"
-        sudo apt-get install \
-            bzr \
-            bzrtools \
-            build-essential \
-            cmake \
-            cmake-curses-gui \
-            debhelper \
-            doxygen \
-            grep \
-            libbz2-dev \
-            libcairo2-dev \
-            libglew-dev \
-            libssl-dev \
-            libwxgtk3.0-dev \
+        prerequisite_list="
+            bzr
+            bzrtools
+            build-essential
+            cmake
+            cmake-curses-gui
+            debhelper
+            doxygen
+            grep
+            libbz2-dev
+            libcairo2-dev
+            libglew-dev
+            libssl-dev
+            libwxgtk3.0-dev
             python-wxgtk3.0
+       "
+
+	    for p in ${prerequisite_list}
+	    do
+	        sudo apt-get install $p || exit 1
+	    done
 
     # assume all yum systems have same prerequisites
     elif [ "$(expr match "$PM" '.*\(yum\)')" == "yum" ]; then
         #echo "red hat compatible system"
         # Note: if you find this list not to be accurate, please submit a patch:
-        sudo yum groupinstall "Development Tools"
-        sudo yum install \
-            bzr \
-            bzrtools \
-            bzip2-libs \
-            bzip2-devel \
-            cmake \
-            cmake-gui \
-            doxygen \
-            cairo-devel \
-            glew-devel \
-            grep \
-            openssl-devel \
-            wxGTK-devel \
+        sudo yum groupinstall "Development Tools" || exit 1
+
+        prerequisite_list="
+            install
+            bzr
+            bzrtools
+            bzip2-libs
+            bzip2-devel
+            cmake
+            cmake-gui
+            doxygen
+            cairo-devel
+            glew-devel
+            grep
+            openssl-devel
+            wxGTK-devel
             wxPython
+        "
+
+	    for p in ${prerequisite_list}
+	    do
+            sudo yum install $p || exit 1
+        done
     else
         echo
         echo "Incompatible System. Neither 'yum' nor 'apt-get' found. Not possible to continue."
@@ -255,14 +269,14 @@ install_or_update()
     cd kicad.bzr
     if [ ! -d "build" ]; then
         mkdir build && cd build
-        cmake $OPTS ../
+        cmake $OPTS ../ || exit 1
     else
         cd build
         # Although a "make clean" is sometimes needed, more often than not it slows down the update
         # more than it is worth.  Do it manually if you need to in this directory.
         # make clean
     fi
-    make -j4
+    make -j4 || exit 1
     echo " kicad compiled."
 
 
