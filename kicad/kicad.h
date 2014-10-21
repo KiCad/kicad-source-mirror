@@ -54,7 +54,6 @@ class TREE_PROJECT_FRAME;
 //
 // When changing this enum  please verify (and perhaps update)
 // TREE_PROJECT_FRAME::GetFileExt(),
-// TREE_PROJECT_FRAME::GetFileExt()
 // s_AllowedExtensionsToList[]
 
 enum TreeFileType {
@@ -74,6 +73,8 @@ enum TreeFileType {
     TREE_DRILL,             // Excellon drill file (.drl)
     TREE_SVG,               // SVG file (.svg)
     TREE_PAGE_LAYOUT_DESCR, // Page layout and title block descr file (.kicad_wks)
+    TREE_FOOTPRINT_FILE,    // footprint file (.kicad_mod)
+    TREE_SCHEMATIC_LIBFILE, // schematic library file (.lib)
     TREE_MAX
 };
 

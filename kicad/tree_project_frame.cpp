@@ -65,9 +65,11 @@ static const wxChar* s_allowedExtensionsToList[] =
     wxT( "^.*\\.pro$" ),
     wxT( "^.*\\.pdf$" ),
     wxT( "^[^$].*\\.brd$" ),        // Legacy Pcbnew files
-    wxT( "^[^$].*\\.kicad_pcb$" ),  // S format Pcbnew files
+    wxT( "^[^$].*\\.kicad_pcb$" ),  // S format Pcbnew board files
     wxT( "^[^$].*\\.kicad_wks$" ),  // S format kicad page layout descr files
+    wxT( "^[^$].*\\.kicad_mod$" ),  // S format kicad footprint files, currently not listed
     wxT( "^.*\\.net$" ),
+    wxT( "^.*\\.lib$" ),            // Schematic library file
     wxT( "^.*\\.txt$" ),
     wxT( "^.*\\.pho$" ),            // Gerber file (Old Kicad extension)
     wxT( "^.*\\.gbr$" ),            // Gerber file
@@ -75,7 +77,6 @@ static const wxChar* s_allowedExtensionsToList[] =
     wxT( "^.*\\.gt[alops]$" ),      // Gerber front (or top) layer file
     wxT( "^.*\\.g[0-9]{1,2}$" ),    // Gerber inner layer file
     wxT( "^.*\\.odt$" ),
-    wxT( "^.*\\.sxw$" ),
     wxT( "^.*\\.htm$" ),
     wxT( "^.*\\.html$" ),
     wxT( "^.*\\.rpt$" ),    // Report files
@@ -196,27 +197,33 @@ void TREE_PROJECT_FRAME::OnCreateNewDirectory( wxCommandEvent& event )
             root = m_TreeProject->GetSelection();
     }
 
+    wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
+
     // Ask for the new sub directory name
     wxString curr_dir = treeData->GetDir();
 
-    // Make the current subdir relative to the current path:
     if( !curr_dir.IsEmpty() )    // A subdir is selected
     {
-        curr_dir    += wxFileName::GetPathSeparator();
-        curr_dir    += wxT( "dummy" );
-        wxFileName fn( curr_dir );
-        fn.MakeRelativeTo();
-        curr_dir = fn.GetPath() + wxFileName::GetPathSeparator();
+        // Make this subdir name relative to the current path.
+        // It will be more easy to read by the user, in the next dialog
+        wxFileName fn;
+        fn.AssignDir( curr_dir );
+        fn.MakeRelativeTo( prj_dir );
+        curr_dir = fn.GetPath();
+
+        if( !curr_dir.IsEmpty() )
+            curr_dir += wxFileName::GetPathSeparator();
     }
 
-    wxString    msg = wxString::Format( _( "Current working directory:\n%s" ), GetChars( wxGetCwd() ) );
-
+    wxString    msg = wxString::Format( _( "Current project directory:\n%s" ), GetChars( prj_dir ) );
     wxString    subdir = wxGetTextFromUser( msg, _( "Create New Directory" ), curr_dir );
 
     if( subdir.IsEmpty() )
         return;
 
-    if( wxMkdir( subdir ) )
+    wxString full_dirname = prj_dir + wxFileName::GetPathSeparator() + subdir;
+
+    if( wxMkdir( full_dirname ) )
     {
 #ifndef KICAD_USE_FILES_WATCHER
         AddItemToTreeProject( subdir, root );
@@ -285,6 +292,14 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
 
     case TREE_PAGE_LAYOUT_DESCR:
         ext = PageLayoutDescrFileExtension;
+        break;
+
+    case TREE_FOOTPRINT_FILE:
+        ext = KiCadFootprintFileExtension;
+        break;
+
+    case TREE_SCHEMATIC_LIBFILE:
+        ext = SchematicLibraryFileExtension;
         break;
 
     default:                       // Eliminates unnecessary GCC warning.
@@ -357,7 +372,15 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
         ext = PageLayoutDescrFileWildcard;
         break;
 
-    default:                       // Eliminates unnecessary GCC warning.
+    case TREE_FOOTPRINT_FILE:
+        ext = KiCadFootprintLibFileWildcard;
+        break;
+
+    case TREE_SCHEMATIC_LIBFILE:
+        ext = SchematicLibraryFileWildcard;
+        break;
+
+     default:                       // Eliminates unnecessary GCC warning.
         break;
     }
 
@@ -536,7 +559,7 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
             {
                 do    // Add name in tree, but do not recurse
                 {
-                    wxString path = aName + wxCONFIG_PATH_SEPARATOR + dir_filename;
+                    wxString path = aName + wxFileName::GetPathSeparator() + dir_filename;
                     AddItemToTreeProject( path, cellule, false );
                 } while( dir.GetNext( &dir_filename ) );
             }
@@ -603,8 +626,8 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
             {
                 if( filename != fn.GetFullName() )
                 {
-                    wxString n = dir.GetName() + wxCONFIG_PATH_SEPARATOR + filename;
-                    AddItemToTreeProject( n, m_root );
+                    wxString name = dir.GetName() + wxFileName::GetPathSeparator() + filename;
+                    AddItemToTreeProject( name, m_root );
                 }
 
                 cont = dir.GetNext( &filename );
@@ -791,8 +814,8 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
             {
                 do    // Add name to tree item, but do not recurse in subdirs:
                 {
-                    wxString n = fileName + wxCONFIG_PATH_SEPARATOR + dir_filename;
-                    AddItemToTreeProject( n, kid, false );
+                    wxString name = fileName + wxFileName::GetPathSeparator() + dir_filename;
+                    AddItemToTreeProject( name, kid, false );
                 } while( dir.GetNext( &dir_filename ) );
             }
 
@@ -830,9 +853,11 @@ TREEPROJECT_ITEM* TREE_PROJECT_FRAME::GetItemIdData( wxTreeItemId aId )
 
 wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
 {
+    wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
+
     // If the subdir is the current working directory, return m_root
     // in main list:
-    if( wxGetCwd() == aSubDir )
+    if( prj_dir == aSubDir )
         return m_root;
 
     // The subdir is in the main tree or in a subdir: Locate it
@@ -905,8 +930,8 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
         return;
     }
 
-
     wxTreeItemId root_id = findSubdirTreeItem( subdir );
+
     if( !root_id.IsOk() )
         return;
 
@@ -976,12 +1001,15 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
     // moreover, under wxWidgets 2.9.4, AddTree does not work properly.
 
     // We can see wxString under a debugger, not a wxFileName
-    wxString pro_dir = wxPathOnly( m_Parent->GetProjectFileName() );
+    wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
+    wxFileName fn;
+    fn.AssignDir( prj_dir );
+    fn.DontFollowLink();
 
 #ifdef __WINDOWS__
-    m_watcher->AddTree( pro_dir );
+    m_watcher->AddTree( fn );
 #else
-    m_watcher->Add( pro_dir );
+    m_watcher->Add( fn );
 
     // Add subdirs
     wxTreeItemIdValue  cookie;
@@ -1017,7 +1045,8 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
 
             if( wxFileName::IsDirReadable( path ) )     // linux whines about watching protected dir
             {
-                m_watcher->Add( path );
+                fn.AssignDir( path );
+                m_watcher->Add( fn );
 
                 // if kid is a subdir, push in list to explore it later
                 if( itemData->IsPopulated() && m_TreeProject->GetChildrenCount( kid ) )
