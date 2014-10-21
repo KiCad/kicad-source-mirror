@@ -103,13 +103,27 @@ install_prerequisites()
             libglew-dev
             libssl-dev
             libwxgtk3.0-dev
-            python-wxgtk3.0
        "
 
-	    for p in ${prerequisite_list}
-	    do
-	        sudo apt-get install $p || exit 1
-	    done
+        for p in ${prerequisite_list}
+        do
+            sudo apt-get install $p || exit 1
+        done
+
+        # Only install the scripting prerequisites if required.
+        if [ "$(expr match "$OPTS" '.*\(-DKICAD_SCRIPTING=ON\)')" == "-DKICAD_SCRIPTING=ON" ]; then
+        #echo "KICAD_SCRIPTING=ON"
+            scripting_prerequisites="
+                python-dev
+                python-wxgtk3.0-dev
+                swig
+            "
+
+            for sp in ${scripting_prerequisites}
+            do
+                sudo apt-get install $sp || exit 1
+            done
+        fi
 
     # assume all yum systems have same prerequisites
     elif [ "$(expr match "$PM" '.*\(yum\)')" == "yum" ]; then
@@ -131,13 +145,26 @@ install_prerequisites()
             grep
             openssl-devel
             wxGTK-devel
-            wxPython
         "
 
-	    for p in ${prerequisite_list}
-	    do
+        for p in ${prerequisite_list}
+        do
             sudo yum install $p || exit 1
         done
+
+        # Only install the scripting prerequisites if required.
+        if [ "$(expr match "$OPTS" '.*\(-DKICAD_SCRIPTING=ON\)')" == "-DKICAD_SCRIPTING=ON" ]; then
+        #echo "KICAD_SCRIPTING=ON"
+            scripting_prerequisites="
+                swig
+                wxPython
+            "
+
+            for sp in ${scripting_prerequisites}
+            do
+                sudo yum install $sp || exit 1
+            done
+        fi
     else
         echo
         echo "Incompatible System. Neither 'yum' nor 'apt-get' found. Not possible to continue."
