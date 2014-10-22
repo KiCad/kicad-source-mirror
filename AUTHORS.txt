@@ -1,5 +1,5 @@
-* Copyright (C) 1992-2010 Jean-Pierre Charras
-* Copyright (C) 1992-2010 Kicad Developers Team
+* Copyright (C) 1992-2014 Jean-Pierre Charras
+* Copyright (C) 1992-2014 Kicad Developers Team
 * under GNU General Public License (see copyright.txt)
 
 == Main Authors
@@ -28,6 +28,8 @@ Mark Roszko <mark.roszko[at]gmail.com>
 Daniel Majewski <lordblick[at]gmail.com>
 Konstantin Baranovskiy <baranovskiykonstantin[at]gmail.com>
 Torsten Hüter <torstenhtr[at]gmx.de>
+Nick Østergaard <oe.nick[at]gmail.com>
+Andrew Zonenberg <azonenberg[at]drawersteak.com>
 
 See also CHANGELOG.txt for contributors.
 
