@@ -563,6 +563,7 @@ WARNING: You decided to skip building boost library.
 KiCad developers strongly advise you to build the bundled boost library, as it is known to work with KiCad.
 Other versions may contain bugs that may result in KiCad errors." )
 else()
+    add_dependencies( lib-dependencies boost )
     include( download_boost )
 endif()
 

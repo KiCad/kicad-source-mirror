@@ -505,20 +505,8 @@ set_source_files_properties( dialogs/dialog_freeroute_exchange.cpp PROPERTIES
     OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help_html.h
     )
 
-
-# auto-generate specctra_lexer.h and specctra_keywords.cpp
-make_lexer(
-    ${CMAKE_CURRENT_SOURCE_DIR}/specctra.keywords
-    ${CMAKE_CURRENT_SOURCE_DIR}/specctra_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/specctra_keywords.cpp
-    DSN
-
-    # Pass header file with dependency on *_lexer.h as extra_arg
-    specctra.h
-    )
-
-
 add_subdirectory( pcad2kicadpcb_plugin )
+
 if( BUILD_GITHUB_PLUGIN )
     add_subdirectory( github )
     add_dependencies( github_plugin lib-dependencies )

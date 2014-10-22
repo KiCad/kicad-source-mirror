@@ -39,20 +39,8 @@ set( PCB_CALCULATOR_SRCS
 
 if( MINGW )
     # PCB_CALCULATOR_RESOURCES variable is set by the macro.
-    mingw_resource_compiler(pcb_calculator)
+    mingw_resource_compiler( pcb_calculator )
 endif()
-
-# auto-generate pcb_calculator_datafile.h and pcb_calculator_datafile_keywords.cpp
-# for the storage data file format.
-make_lexer(
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile.keywords
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
-    PCBCALC_DATA_T
-
-    # Pass header file with dependency on *_lexer.h as extra_arg
-    datafile_read_write.h
-   )
 
 if( APPLE )
     # setup bundle
@@ -182,3 +170,24 @@ else()
         )
 
 endif()
+
+# auto-generate pcb_calculator_datafile.h and pcb_calculator_datafile_keywords.cpp
+# for the storage data file format.
+make_lexer(
+    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile.keywords
+    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
+    PCBCALC_DATA_T
+
+    # Pass header file with dependency on *_lexer.h as extra_arg
+    datafile_read_write.h
+   )
+
+add_custom_target(
+    pcb_calculator_lexer_source_files ALL
+    DEPENDS
+        ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_lexer.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
+)
+
+add_dependencies( pcb_calculator_kiface pcb_calculator_lexer_source_files )
