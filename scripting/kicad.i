@@ -132,16 +132,12 @@
     %pythoncode
     {
 
-    /*
-     * Get the char buffer of the UTF8 string
-     */
+    # Get the char buffer of the UTF8 string
     def GetChars(self):
         return self.Cast_to_CChar()
 
-    /*
-     * Convert the UTF8 string to a python string
-     * Same as GetChars(), but more easy to use in print command
-     */
+    # Convert the UTF8 string to a python string
+    # Same as GetChars(), but more easy to use in print command
     def __str__(self):
         return self.GetChars()
 
