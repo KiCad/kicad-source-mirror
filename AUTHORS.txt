@@ -30,6 +30,7 @@ Konstantin Baranovskiy <baranovskiykonstantin[at]gmail.com>
 Torsten Hüter <torstenhtr[at]gmx.de>
 Nick Østergaard <oe.nick[at]gmail.com>
 Andrew Zonenberg <azonenberg[at]drawersteak.com>
+Cirilo Bernardo <cirilo_bernardo[at]yahoo.com>
 
 See also CHANGELOG.txt for contributors.
 
