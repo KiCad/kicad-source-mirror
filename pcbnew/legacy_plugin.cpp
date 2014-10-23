@@ -4487,7 +4487,7 @@ void LP_CACHE::Save()
     // and it is fully inexplicable.  See if this dodges the error.
     wxMilliSleep( 250L );
 
-    if( wxRename( tempFileName, m_lib_path ) )
+    if( !wxRenameFile( tempFileName, m_lib_path ) )
     {
         THROW_IO_ERROR( wxString::Format(
             _( "Unable to rename tempfile '%s' to library file '%s'" ),

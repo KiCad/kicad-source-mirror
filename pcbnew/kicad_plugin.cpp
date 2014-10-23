@@ -246,7 +246,11 @@ void FP_CACHE::Save()
 
         wxRemove( fn.GetFullPath() );     // it is not an error if this does not exist
 
-        if( wxRename( tempFileName, fn.GetFullPath() ) )
+        // Even on linux you can see an _intermittent_ error when calling wxRename(),
+        // and it is fully inexplicable.  See if this dodges the error.
+        wxMilliSleep( 250L );
+
+        if( !wxRenameFile( tempFileName, fn.GetFullPath() ) )
         {
             wxString msg = wxString::Format(
                     _( "Cannot rename temporary file '%s' to footprint library file '%s'" ),
