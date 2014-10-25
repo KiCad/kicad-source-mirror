@@ -170,6 +170,7 @@ foreach(_CURRENT_VERSION ${_Python_VERSIONS})
         "C:/python${_CURRENT_VERSION}"
         "C:/python${_CURRENT_VERSION_NOT_DOTS}"
       PATH_SUFFIXES
+        include
         python${_CURRENT_VERSION}
         python${_CURRENT_VERSION_NOT_DOTS}
     )
