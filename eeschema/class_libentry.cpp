@@ -86,8 +86,8 @@ LIB_ALIAS::~LIB_ALIAS()
     wxASSERT_MSG( shared, wxT( "~LIB_ALIAS() without a LIB_PART" ) );
 
 #if defined(DEBUG) && 1
-    printf( "%s: destroying alias:'%s' of part:'%s' alias count:%zd.\n",
-        __func__, TO_UTF8( name ), TO_UTF8( shared->GetName() ), shared->m_aliases.size() );
+    printf( "%s: destroying alias:'%s' of part:'%s' alias count:%d.\n",
+        __func__, TO_UTF8( name ), TO_UTF8( shared->GetName() ), int( shared->m_aliases.size() ) );
 #endif
 
     if( shared )
@@ -249,8 +249,8 @@ LIB_PART::~LIB_PART()
         (void) breakhere;
     }
 
-    printf( "%s: destroying part '%s' with alias list count of %zd\n",
-        __func__, TO_UTF8( GetName() ), m_aliases.size() );
+    printf( "%s: destroying part '%s' with alias list count of %d\n",
+        __func__, TO_UTF8( GetName() ), int( m_aliases.size() ) );
 #endif
 
     // If the part is being deleted directly rather than through the library,
@@ -1112,6 +1112,7 @@ void LIB_PART::SetFields( const std::vector <LIB_FIELD>& aFields )
         // drawings is a ptr_vector, new and copy an object on the heap.
         LIB_FIELD* field = new LIB_FIELD( aFields[i] );
 
+        field->SetParent( this );
         drawings.push_back( field );
     }
 

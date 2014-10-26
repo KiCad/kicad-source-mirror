@@ -48,6 +48,8 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 
     LIB_PART*      parent = aField->GetParent();
 
+    wxASSERT( parent );
+
     // Editing the component value field is equivalent to creating a new component based
     // on the current component.  Set the dialog message to inform the user.
     if( aField->GetId() == VALUE )

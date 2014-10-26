@@ -267,7 +267,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     // Contents
     AddMenuItem( helpMenu, wxID_HELP,
-                 _( "KiCad Manual" ),
+                 _( "KiCad &Manual" ),
                  _( "Open KiCad user manual" ),
                  KiBitmap( online_help_xpm ) );
 

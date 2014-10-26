@@ -136,7 +136,7 @@ private:
 
 void LIB_EDIT_FRAME::InstallFieldsEditorDialog( wxCommandEvent& event )
 {
-    if( !GetCurLib() )
+    if( !GetCurPart() )
         return;
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
