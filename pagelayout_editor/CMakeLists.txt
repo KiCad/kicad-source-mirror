@@ -67,121 +67,97 @@ if( APPLE )
     set( MACOSX_BUNDLE_NAME pl_editor )
 endif()
 
+# a very small program launcher for pl_editor_kiface
+add_executable( pl_editor WIN32 MACOSX_BUNDLE
+    ../common/single_top.cpp
+    ../common/pgm_base.cpp
+    ${PL_EDITOR_RESOURCES}
+    )
+set_source_files_properties( ../common/single_top.cpp PROPERTIES
+    COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PL_EDITOR;PGM_DATA_FILE_EXT=\"kicad_wks\";BUILD_KIWAY_DLL"
+    )
+target_link_libraries( pl_editor
+    #singletop  # replaces common, giving us restrictive control and link warnings.
+    # There's way too much crap coming in from common yet.
+    common
+    bitmaps
+    ${wxWidgets_LIBRARIES}
+    )
 
-if( USE_KIWAY_DLLS )
+if( MAKE_LINK_MAPS )
+    set_target_properties( pl_editor PROPERTIES
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pl_editor.map" )
+endif()
 
-    # a very small program launcher for pl_editor_kiface
-    add_executable( pl_editor WIN32 MACOSX_BUNDLE
-        ../common/single_top.cpp
-        ../common/pgm_base.cpp
-        ${PL_EDITOR_RESOURCES}
-        )
-    set_source_files_properties( ../common/single_top.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PL_EDITOR;PGM_DATA_FILE_EXT=\"kicad_wks\";BUILD_KIWAY_DLL"
-        )
-    target_link_libraries( pl_editor
-        #singletop  # replaces common, giving us restrictive control and link warnings.
-        # There's way too much crap coming in from common yet.
-        common
-        bitmaps
-        ${wxWidgets_LIBRARIES}
-        )
-    if( MAKE_LINK_MAPS )
-        set_target_properties( pl_editor PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pl_editor.map" )
-    endif()
+# the main pl_editor program, in DSO form.
+add_library( pl_editor_kiface MODULE
+    pl_editor.cpp
+    ${PL_EDITOR_SRCS}
+    ${DIALOGS_SRCS}
+    ${PL_EDITOR_EXTRA_SRCS}
+    )
+target_link_libraries( pl_editor_kiface
+    common
+    polygon
+    bitmaps
+    ${OPENGL_LIBRARIES}
+    ${wxWidgets_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    )
+set_target_properties( pl_editor_kiface PROPERTIES
+    OUTPUT_NAME     pl_editor
+    PREFIX          ${KIFACE_PREFIX}
+    SUFFIX          ${KIFACE_SUFFIX}
+    )
+set_source_files_properties( pl_editor.cpp PROPERTIES
+    # The KIFACE is in pcbnew.cpp, export it:
+    COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+    )
 
-    # the main pl_editor program, in DSO form.
-    add_library( pl_editor_kiface MODULE
-        pl_editor.cpp
-        ${PL_EDITOR_SRCS}
-        ${DIALOGS_SRCS}
-        ${PL_EDITOR_EXTRA_SRCS}
-        )
-    target_link_libraries( pl_editor_kiface
-        common
-        polygon
-        bitmaps
-        ${OPENGL_LIBRARIES}
-        ${wxWidgets_LIBRARIES}
-        ${GDI_PLUS_LIBRARIES}
-        )
+if( MAKE_LINK_MAPS )
     set_target_properties( pl_editor_kiface PROPERTIES
-        OUTPUT_NAME     pl_editor
-        PREFIX          ${KIFACE_PREFIX}
-        SUFFIX          ${KIFACE_SUFFIX}
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pl_editor.kiface.map" )
+endif()
+
+# if building pl_editor, then also build pl_editor_kiface if out of date.
+add_dependencies( pl_editor pl_editor_kiface )
+
+# these 2 binaries are a matched set, keep them together:
+if( APPLE )
+    set_target_properties( pl_editor PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
         )
-    set_source_files_properties( pl_editor.cpp PROPERTIES
-        # The KIFACE is in pcbnew.cpp, export it:
-        COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+
+    # puts binaries into the *.app bundle while linking
+    set_target_properties( pl_editor_kiface PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
         )
-    if( MAKE_LINK_MAPS )
-        set_target_properties( pl_editor_kiface PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pl_editor.kiface.map" )
-    endif()
 
-    # if building pl_editor, then also build pl_editor_kiface if out of date.
-    add_dependencies( pl_editor pl_editor_kiface )
-
-    # these 2 binaries are a matched set, keep them together:
-    if( APPLE )
-        set_target_properties( pl_editor PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
-
-        # puts binaries into the *.app bundle while linking
-        set_target_properties( pl_editor_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
-            )
-        # put individual bundle outside of main bundle as a first step
-        # will be pulled into the main bundle when creating main bundle
-        install( TARGETS pl_editor
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-        install( CODE "
-            # override default embedded path settings
-            ${OSX_BUNDLE_OVERRIDE_PATHS}
-
-            # do all the work
-            include( BundleUtilities )
-            fixup_bundle( ${KICAD_BIN}/pl_editor.app/Contents/MacOS/pl_editor
-                \"\"
-                \"\"
-                )
-            " COMPONENT Runtime
-            )
-    else()
-        install( TARGETS pl_editor
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-        install( TARGETS pl_editor_kiface
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-    endif()
-
-else()
-
-    add_executable( pl_editor WIN32 MACOSX_BUNDLE
-        pl_editor.cpp
-        ${PL_EDITOR_SRCS}
-        ${DIALOGS_SRCS}
-        ${PL_EDITOR_EXTRA_SRCS}
-        ${PL_EDITOR_RESOURCES}
-        )
-    target_link_libraries( pl_editor
-        common
-        polygon
-        bitmaps
-        ${OPENGL_LIBRARIES}
-        ${wxWidgets_LIBRARIES}
-        ${GDI_PLUS_LIBRARIES}
-        )
+    # put individual bundle outside of main bundle as a first step
+    # will be pulled into the main bundle when creating main bundle
     install( TARGETS pl_editor
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
+    install( CODE "
+        # override default embedded path settings
+        ${OSX_BUNDLE_OVERRIDE_PATHS}
 
+        # do all the work
+        include( BundleUtilities )
+        fixup_bundle( ${KICAD_BIN}/pl_editor.app/Contents/MacOS/pl_editor
+            \"\"
+            \"\"
+            )
+        " COMPONENT Runtime
+        )
+else()
+    install( TARGETS pl_editor
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+    install( TARGETS pl_editor_kiface
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
 endif()

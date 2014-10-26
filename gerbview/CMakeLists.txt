@@ -93,77 +93,77 @@ if( APPLE )
     set( MACOSX_BUNDLE_NAME gerbview )
 endif()
 
-if( USE_KIWAY_DLLS )
+add_executable( gerbview WIN32 MACOSX_BUNDLE
+    ../common/single_top.cpp
+    ../common/pgm_base.cpp
+    ${GERBVIEW_RESOURCES}
+    )
+set_source_files_properties( ../common/single_top.cpp PROPERTIES
+    COMPILE_DEFINITIONS "TOP_FRAME=FRAME_GERBER;BUILD_KIWAY_DLL"
+    )
+target_link_libraries( gerbview
+    #singletop  # replaces common, giving us restrictive control and link warnings.
+    # There's way too much crap coming in from common yet.
+    common
+    bitmaps
+    ${wxWidgets_LIBRARIES}
+    )
 
-    add_executable( gerbview WIN32 MACOSX_BUNDLE
-        ../common/single_top.cpp
-        ../common/pgm_base.cpp
-        ${GERBVIEW_RESOURCES}
-        )
-    set_source_files_properties( ../common/single_top.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_GERBER;BUILD_KIWAY_DLL"
-        )
-    target_link_libraries( gerbview
-        #singletop  # replaces common, giving us restrictive control and link warnings.
-        # There's way too much crap coming in from common yet.
-        common
-        bitmaps
-        ${wxWidgets_LIBRARIES}
-        )
-    if( MAKE_LINK_MAPS )
-        set_target_properties( gerbview PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=gerbview.map" )
-    endif()
+if( MAKE_LINK_MAPS )
+    set_target_properties( gerbview PROPERTIES
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=gerbview.map" )
+endif()
 
-    # the main gerbview program, in DSO form.
-    add_library( gerbview_kiface MODULE
-        gerbview.cpp
-        ${GERBVIEW_SRCS}
-        ${DIALOGS_SRCS}
-        ${GERBVIEW_EXTRA_SRCS}
-        )
+# the main gerbview program, in DSO form.
+add_library( gerbview_kiface MODULE
+    gerbview.cpp
+    ${GERBVIEW_SRCS}
+    ${DIALOGS_SRCS}
+    ${GERBVIEW_EXTRA_SRCS}
+    )
+set_target_properties( gerbview_kiface PROPERTIES
+    OUTPUT_NAME     gerbview
+    PREFIX          ${KIFACE_PREFIX}
+    SUFFIX          ${KIFACE_SUFFIX}
+    )
+target_link_libraries( gerbview_kiface
+    common
+    polygon
+    bitmaps
+    ${OPENGL_LIBRARIES}
+    ${wxWidgets_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    )
+set_source_files_properties( gerbview.cpp PROPERTIES
+    # The KIFACE is in gerbview.cpp, export it:
+    COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+    )
+
+if( MAKE_LINK_MAPS )
     set_target_properties( gerbview_kiface PROPERTIES
-        OUTPUT_NAME     gerbview
-        PREFIX          ${KIFACE_PREFIX}
-        SUFFIX          ${KIFACE_SUFFIX}
-        )
-    target_link_libraries( gerbview_kiface
-        common
-        polygon
-        bitmaps
-        ${OPENGL_LIBRARIES}
-        ${wxWidgets_LIBRARIES}
-        ${GDI_PLUS_LIBRARIES}
-        )
-    set_source_files_properties( gerbview.cpp PROPERTIES
-        # The KIFACE is in gerbview.cpp, export it:
-        COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
-        )
-    if( MAKE_LINK_MAPS )
-        set_target_properties( gerbview_kiface PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_gerbview.kiface.map" )
-    endif()
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_gerbview.kiface.map" )
+endif()
 
-    # if building gerbview, then also build gerbview_kiface if out of date.
-    add_dependencies( gerbview gerbview_kiface )
+# if building gerbview, then also build gerbview_kiface if out of date.
+add_dependencies( gerbview gerbview_kiface )
 
-    # these 2 binaries are a matched set, keep them together
-    if( APPLE )
-        set_target_properties( gerbview PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
+# these 2 binaries are a matched set, keep them together
+if( APPLE )
+    set_target_properties( gerbview PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+        )
 
-        # puts binaries into the *.app bundle while linking
-        set_target_properties( gerbview_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
-            )
-        # put individual bundle outside of main bundle as a first step
-        # will be pulled into the main bundle when creating main bundle
-        install( TARGETS gerbview
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-        install( CODE "
+    # puts binaries into the *.app bundle while linking
+    set_target_properties( gerbview_kiface PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
+        )
+    # put individual bundle outside of main bundle as a first step
+    # will be pulled into the main bundle when creating main bundle
+    install( TARGETS gerbview
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+    install( CODE "
             # override default embedded path settings
             ${OSX_BUNDLE_OVERRIDE_PATHS}
 
@@ -174,38 +174,14 @@ if( USE_KIWAY_DLLS )
                 \"\"
                 )
             " COMPONENT Runtime
-            )
-    else()
-        install( TARGETS gerbview
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-        install( TARGETS gerbview_kiface
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-    endif()
-
+        )
 else()
-
-    add_executable( gerbview WIN32 MACOSX_BUNDLE
-        gerbview.cpp
-        ${GERBVIEW_SRCS}
-        ${DIALOGS_SRCS}
-        ${GERBVIEW_EXTRA_SRCS}
-        ${GERBVIEW_RESOURCES}
-        )
-    target_link_libraries( gerbview
-        common
-        polygon
-        bitmaps
-        ${OPENGL_LIBRARIES}
-        ${wxWidgets_LIBRARIES}
-        ${GDI_PLUS_LIBRARIES}
-        )
     install( TARGETS gerbview
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-
+    install( TARGETS gerbview_kiface
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
 endif()

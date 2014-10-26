@@ -53,122 +53,94 @@ if( APPLE )
     set( MACOSX_BUNDLE_NAME pcb_calculator )
 endif()
 
+add_executable( pcb_calculator WIN32 MACOSX_BUNDLE
+    ../common/single_top.cpp
+    ../common/pgm_base.cpp
+    ${PCB_CALCULATOR_RESOURCES}
+    )
+set_source_files_properties( ../common/single_top.cpp PROPERTIES
+    COMPILE_DEFINITIONS "TOP_FRAME=FRAME_CALC;BUILD_KIWAY_DLL"
+    )
+target_link_libraries( pcb_calculator
+    #singletop  # replaces common, giving us restrictive control and link warnings.
+    # There's way too much crap coming in from common yet.
+    common
+    bitmaps
+    ${wxWidgets_LIBRARIES}
+    )
 
-if( USE_KIWAY_DLLS )
-#if( false )
+if( MAKE_LINK_MAPS )
+    set_target_properties( pcb_calculator PROPERTIES
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcb_calculator.map" )
+endif()
 
-    add_executable( pcb_calculator WIN32 MACOSX_BUNDLE
-        ../common/single_top.cpp
-        ../common/pgm_base.cpp
-        ${PCB_CALCULATOR_RESOURCES}
-        )
-    set_source_files_properties( ../common/single_top.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_CALC;BUILD_KIWAY_DLL"
-        )
-    target_link_libraries( pcb_calculator
-        #singletop  # replaces common, giving us restrictive control and link warnings.
-        # There's way too much crap coming in from common yet.
-        common
-        bitmaps
-        ${wxWidgets_LIBRARIES}
-        )
-    if( MAKE_LINK_MAPS )
-        set_target_properties( pcb_calculator PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcb_calculator.map" )
-    endif()
+# the main pcb_calculator program, in DSO form.
+add_library( pcb_calculator_kiface MODULE
+    pcb_calculator.cpp
+    ${PCB_CALCULATOR_SRCS}
+    )
+set_target_properties( pcb_calculator_kiface PROPERTIES
+    OUTPUT_NAME     pcb_calculator
+    PREFIX          ${KIFACE_PREFIX}
+    SUFFIX          ${KIFACE_SUFFIX}
+    )
+target_link_libraries( pcb_calculator_kiface
+    common
+    bitmaps
+    polygon
+    ${wxWidgets_LIBRARIES}
+    )
+set_source_files_properties( pcb_calculator.cpp PROPERTIES
+    # The KIFACE is in pcb_calculator.cpp, export it:
+    COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+    )
 
-    # the main pcb_calculator program, in DSO form.
-    add_library( pcb_calculator_kiface MODULE
-        pcb_calculator.cpp
-        ${PCB_CALCULATOR_SRCS}
-        )
+if( MAKE_LINK_MAPS )
     set_target_properties( pcb_calculator_kiface PROPERTIES
-        OUTPUT_NAME     pcb_calculator
-        PREFIX          ${KIFACE_PREFIX}
-        SUFFIX          ${KIFACE_SUFFIX}
-        )
-    target_link_libraries( pcb_calculator_kiface
-        common
-        bitmaps
-        polygon
-        ${wxWidgets_LIBRARIES}
-        )
-    set_source_files_properties( pcb_calculator.cpp PROPERTIES
-        # The KIFACE is in pcb_calculator.cpp, export it:
-        COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
-        )
-    if( MAKE_LINK_MAPS )
-        set_target_properties( pcb_calculator_kiface PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pcb_calculator.kiface.map" )
-    endif()
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pcb_calculator.kiface.map" )
+endif()
 
-    # if building pcb_calculator, then also build pcb_calculator_kiface if out of date.
-    add_dependencies( pcb_calculator pcb_calculator_kiface )
+# if building pcb_calculator, then also build pcb_calculator_kiface if out of date.
+add_dependencies( pcb_calculator pcb_calculator_kiface )
 
-    # these 2 binaries are a matched set, keep them together
-    if( APPLE )
-        set_target_properties( pcb_calculator PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
-
-        # puts binaries into the *.app bundle while linking
-        set_target_properties( pcb_calculator_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
-            )
-        # put individual bundle outside of main bundle as a first step
-        # will be pulled into the main bundle when creating main bundle
-        install( TARGETS pcb_calculator
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-        install( CODE "
-            # override default embedded path settings
-            ${OSX_BUNDLE_OVERRIDE_PATHS}
-
-            # do all the work
-            include( BundleUtilities )
-            fixup_bundle( ${KICAD_BIN}/pcb_calculator.app/Contents/MacOS/pcb_calculator
-                \"\"
-                \"\"
-                )
-            " COMPONENT Runtime
-            )
-    else()
-        install( TARGETS pcb_calculator
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-        install( TARGETS pcb_calculator_kiface
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-    endif()
-
-else()
-
-    add_executable( pcb_calculator WIN32 MACOSX_BUNDLE
-        ../common/single_top.cpp
-        pcb_calculator.cpp
-        ${PCB_CALCULATOR_SRCS}
-        ${PCB_CALCULATOR_RESOURCES}
+# these 2 binaries are a matched set, keep them together
+if( APPLE )
+    set_target_properties( pcb_calculator PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
         )
-    set_source_files_properties( ../common/single_top.cpp PROPERTIES
-        COMPILE_DEFINITIONS     "TOP_FRAME=0"
+
+    # puts binaries into the *.app bundle while linking
+    set_target_properties( pcb_calculator_kiface PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
         )
-    set_source_files_properties( pcb_calculator.cpp PROPERTIES
-        COMPILE_DEFINITIONS     "COMPILING_DLL"
-        )
-    target_link_libraries( pcb_calculator
-        common
-        bitmaps
-        polygon
-        ${wxWidgets_LIBRARIES}
-        )
+
+    # put individual bundle outside of main bundle as a first step
+    # will be pulled into the main bundle when creating main bundle
     install( TARGETS pcb_calculator
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
+    install( CODE "
+        # override default embedded path settings
+        ${OSX_BUNDLE_OVERRIDE_PATHS}
 
+        # do all the work
+        include( BundleUtilities )
+        fixup_bundle( ${KICAD_BIN}/pcb_calculator.app/Contents/MacOS/pcb_calculator
+            \"\"
+            \"\"
+            )
+        " COMPONENT Runtime
+        )
+else()
+    install( TARGETS pcb_calculator
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+    install( TARGETS pcb_calculator_kiface
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
 endif()
 
 # auto-generate pcb_calculator_datafile.h and pcb_calculator_datafile_keywords.cpp

@@ -68,109 +68,109 @@ if( APPLE )
 endif()
 
 
-if( USE_KIWAY_DLLS )
-    add_executable( cvpcb WIN32 MACOSX_BUNDLE
-        ../common/single_top.cpp
-        ../common/pgm_base.cpp
-        ${CVPCB_RESOURCES}
-        )
-    set_source_files_properties( ../common/single_top.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_CVPCB;PGM_DATA_FILE_EXT=\"net\";BUILD_KIWAY_DLL"
-        )
-    target_link_libraries( cvpcb
-        #singletop  # replaces common, giving us restrictive control and link warnings.
-        # There's way too much crap coming in from common yet.
-        common
-        bitmaps
-        ${wxWidgets_LIBRARIES}
-        )
-    if( MAKE_LINK_MAPS )
-        set_target_properties( cvpcb PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=cvpcb.map" )
-    endif()
+add_executable( cvpcb WIN32 MACOSX_BUNDLE
+    ../common/single_top.cpp
+    ../common/pgm_base.cpp
+    ${CVPCB_RESOURCES}
+    )
+set_source_files_properties( ../common/single_top.cpp PROPERTIES
+    COMPILE_DEFINITIONS "TOP_FRAME=FRAME_CVPCB;PGM_DATA_FILE_EXT=\"net\";BUILD_KIWAY_DLL"
+    )
+target_link_libraries( cvpcb
+    #singletop  # replaces common, giving us restrictive control and link warnings.
+    # There's way too much crap coming in from common yet.
+    common
+    bitmaps
+    ${wxWidgets_LIBRARIES}
+    )
 
-    # the main cvpcb program, in DSO form.
-    add_library( cvpcb_kiface MODULE
-        cvpcb.cpp
-        ${CVPCB_SRCS}
-        ${CVPCB_DIALOGS}
-        )
-    set_target_properties( cvpcb_kiface PROPERTIES
-        OUTPUT_NAME     cvpcb
-        PREFIX          ${KIFACE_PREFIX}
-        SUFFIX          ${KIFACE_SUFFIX}
-        )
+if( MAKE_LINK_MAPS )
+    set_target_properties( cvpcb PROPERTIES
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=cvpcb.map" )
+endif()
+
+# the main cvpcb program, in DSO form.
+add_library( cvpcb_kiface MODULE
+    cvpcb.cpp
+    ${CVPCB_SRCS}
+    ${CVPCB_DIALOGS}
+    )
+set_target_properties( cvpcb_kiface PROPERTIES
+    OUTPUT_NAME     cvpcb
+    PREFIX          ${KIFACE_PREFIX}
+    SUFFIX          ${KIFACE_SUFFIX}
+    )
+target_link_libraries( cvpcb_kiface
+    3d-viewer
+    pcbcommon
+    pcad2kicadpcb
+    common
+    bitmaps
+    polygon
+    gal
+    ${wxWidgets_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${CAIRO_LIBRARIES}
+    ${PIXMAN_LIBRARY}
+    ${OPENMP_LIBRARIES}
+    )
+
+# Only for win32 cross compilation using MXE
+if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
     target_link_libraries( cvpcb_kiface
-        3d-viewer
-        pcbcommon
-        pcad2kicadpcb
-        common
-        bitmaps
-        polygon
-        gal
-        ${wxWidgets_LIBRARIES}
-        ${OPENGL_LIBRARIES}
-        ${GDI_PLUS_LIBRARIES}
-        ${GLEW_LIBRARIES}
-        ${CAIRO_LIBRARIES}
-        ${PIXMAN_LIBRARY}
-        ${OPENMP_LIBRARIES}
+        opengl32
+        glu32
+        pixman-1
+        fontconfig
+        freetype
+        bz2
+        )
+endif()
+
+if( BUILD_GITHUB_PLUGIN )
+    target_link_libraries( cvpcb_kiface github_plugin )
+endif()
+
+# Must follow github_plugin
+target_link_libraries( cvpcb_kiface ${Boost_LIBRARIES} )
+
+if( UNIX AND NOT APPLE )
+    # -lrt must follow Boost
+    target_link_libraries( cvpcb_kiface rt )
+endif()
+
+set_source_files_properties( cvpcb.cpp PROPERTIES
+    # The KIFACE is in cvpcb.cpp, export it:
+    COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+    )
+
+if( MAKE_LINK_MAPS )
+    set_target_properties( cvpcb_kiface PROPERTIES
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_cvpcb.kiface.map" )
+endif()
+
+# if building cvpcb, then also build cvpcb_kiface if out of date.
+add_dependencies( cvpcb cvpcb_kiface )
+
+# these 2 binaries are a matched set, keep them together:
+if( APPLE )
+    set_target_properties( cvpcb PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
         )
 
-    # Only for win32 cross compilation using MXE
-    if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
-        target_link_libraries( cvpcb_kiface
-            opengl32
-            glu32
-            pixman-1
-            fontconfig
-            freetype
-            bz2
-            )
-    endif()
-
-    if( BUILD_GITHUB_PLUGIN )
-        target_link_libraries( cvpcb_kiface github_plugin )
-    endif()
-
-    # Must follow github_plugin
-    target_link_libraries( cvpcb_kiface ${Boost_LIBRARIES} )
-
-    if( UNIX AND NOT APPLE )
-        # -lrt must follow Boost
-        target_link_libraries( cvpcb_kiface rt )
-    endif()
-
-    set_source_files_properties( cvpcb.cpp PROPERTIES
-        # The KIFACE is in cvpcb.cpp, export it:
-        COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+    # puts binaries into the *.app bundle while linking
+    set_target_properties( cvpcb_kiface PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
         )
-
-    if( MAKE_LINK_MAPS )
-        set_target_properties( cvpcb_kiface PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_cvpcb.kiface.map" )
-    endif()
-
-    # if building cvpcb, then also build cvpcb_kiface if out of date.
-    add_dependencies( cvpcb cvpcb_kiface )
-
-    # these 2 binaries are a matched set, keep them together:
-    if( APPLE )
-        set_target_properties( cvpcb PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
-
-        # puts binaries into the *.app bundle while linking
-        set_target_properties( cvpcb_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
-            )
-        # put individual bundle outside of main bundle as a first step
-        # will be pulled into the main bundle when creating main bundle
-        install( TARGETS cvpcb
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-        install( CODE "
+    # put individual bundle outside of main bundle as a first step
+    # will be pulled into the main bundle when creating main bundle
+    install( TARGETS cvpcb
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+    install( CODE "
             # override default embedded path settings
             ${OSX_BUNDLE_OVERRIDE_PATHS}
 
@@ -181,61 +181,13 @@ if( USE_KIWAY_DLLS )
                 \"\"
                 )
             " COMPONENT Runtime
-            )
-    else()
-        install( TARGETS cvpcb
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-        install( TARGETS cvpcb_kiface
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-    endif()
-
+        )
 else()
-
-    add_executable( cvpcb WIN32 MACOSX_BUNDLE
-        ${CVPCB_SRCS}
-        ${CVPCB_DIALOGS}
-        ${CVPCB_RESOURCES}
-        )
-    target_link_libraries( cvpcb
-        3d-viewer
-        pcbcommon
-        pcad2kicadpcb
-        common
-        bitmaps
-        polygon
-        gal
-        ${wxWidgets_LIBRARIES}
-        ${OPENGL_LIBRARIES}
-        ${GDI_PLUS_LIBRARIES}
-        ${GLEW_LIBRARIES}
-        ${CAIRO_LIBRARIES}
-        ${PIXMAN_LIBRARY}
-        )
-
-    # Only for win32 cross compilation using MXE
-    if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
-    target_link_libraries( cvpcb
-        opengl32
-        glu32
-        pixman-1
-        fontconfig
-        freetype
-        bz2
-        )
-    endif()
-
-    if( BUILD_GITHUB_PLUGIN )
-        target_link_libraries( cvpcb github_plugin )
-    endif()
-
-    # Must follow github_plugin
-    target_link_libraries( cvpcb ${Boost_LIBRARIES} )
-
     install( TARGETS cvpcb
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+    install( TARGETS cvpcb_kiface
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )

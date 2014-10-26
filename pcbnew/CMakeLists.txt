@@ -235,9 +235,6 @@ set( PCBNEW_CLASS_SRCS
     printout_controler.cpp
     ratsnest.cpp
     ratsnest_viewitem.cpp
-#    specctra.cpp           #moved in pcbcommon lib
-#    specctra_export.cpp
-#    specctra_keywords.cpp
     specctra_import.cpp
     swap_layers.cpp
     target_edit.cpp
@@ -513,188 +510,126 @@ if( BUILD_GITHUB_PLUGIN )
 endif()
 
 
-if( USE_KIWAY_DLLS )
-#if( false )
+# a very small program launcher for pcbnew_kiface
+add_executable( pcbnew WIN32 MACOSX_BUNDLE
+    ../common/single_top.cpp
+    ${PCBNEW_RESOURCES}
+    )
+set_source_files_properties( ../common/single_top.cpp pcbnew.cpp PROPERTIES
+    COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PCB;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
+    )
+target_link_libraries( pcbnew
+    #singletop  # replaces common, giving us restrictive control and link warnings.
+    # There's way too much crap coming in from common yet.
+    common
+    bitmaps
+    ${wxWidgets_LIBRARIES}
+    )
 
-    # a very small program launcher for pcbnew_kiface
-    add_executable( pcbnew WIN32 MACOSX_BUNDLE
-        ../common/single_top.cpp
-        ${PCBNEW_RESOURCES}
-        )
-    set_source_files_properties( ../common/single_top.cpp pcbnew.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PCB;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
-        )
-    target_link_libraries( pcbnew
-        #singletop  # replaces common, giving us restrictive control and link warnings.
-        # There's way too much crap coming in from common yet.
-        common
-        bitmaps
-        ${wxWidgets_LIBRARIES}
-        )
-    if( MAKE_LINK_MAPS )
-        set_target_properties( pcbnew PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map" )
-    endif()
+if( MAKE_LINK_MAPS )
+    set_target_properties( pcbnew PROPERTIES
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map" )
+endif()
 
-    # the main pcbnew program, in DSO form.
-    add_library( pcbnew_kiface MODULE
-        pcbnew.cpp
-        ${PCBNEW_SRCS}
-        ${PCBNEW_COMMON_SRCS}
-        ${PCBNEW_SCRIPTING_SRCS}
-        )
+# the main pcbnew program, in DSO form.
+add_library( pcbnew_kiface MODULE
+    pcbnew.cpp
+    ${PCBNEW_SRCS}
+    ${PCBNEW_COMMON_SRCS}
+    ${PCBNEW_SCRIPTING_SRCS}
+    )
+set_target_properties( pcbnew_kiface PROPERTIES
+    # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
+    # _pcbnew.so, _pcbnew.dll, or _pcbnew.kiface
+    OUTPUT_NAME     pcbnew
+    PREFIX          ${KIFACE_PREFIX}
+    SUFFIX          ${KIFACE_SUFFIX}
+    )
+
+if( ${OPENMP_FOUND} )
     set_target_properties( pcbnew_kiface PROPERTIES
-        # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
-        # _pcbnew.so, _pcbnew.dll, or _pcbnew.kiface
-        OUTPUT_NAME     pcbnew
-        PREFIX          ${KIFACE_PREFIX}
-        SUFFIX          ${KIFACE_SUFFIX}
+        COMPILE_FLAGS   ${OpenMP_CXX_FLAGS}
         )
-    if( ${OPENMP_FOUND} )
-        set_target_properties( pcbnew_kiface PROPERTIES
-            COMPILE_FLAGS   ${OpenMP_CXX_FLAGS}
-            )
-    endif()
+endif()
 
-    target_link_libraries( pcbnew_kiface
-        3d-viewer
-        pcbcommon
-        pnsrouter
-        common
-        pcad2kicadpcb
-        polygon
-        bitmaps
-        gal
-        lib_dxf
-        idf3
-        ${GITHUB_PLUGIN_LIBRARIES}
-        ${wxWidgets_LIBRARIES}
-        ${OPENGL_LIBRARIES}
-        ${GDI_PLUS_LIBRARIES}
-        ${PYTHON_LIBRARIES}
-        ${GLEW_LIBRARIES}
-        ${CAIRO_LIBRARIES}
-        ${PIXMAN_LIBRARY}
-        ${Boost_LIBRARIES}      # must follow GITHUB
-        ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
-        ${OPENMP_LIBRARIES}
+target_link_libraries( pcbnew_kiface
+    3d-viewer
+    pcbcommon
+    pnsrouter
+    common
+    pcad2kicadpcb
+    polygon
+    bitmaps
+    gal
+    lib_dxf
+    idf3
+    ${GITHUB_PLUGIN_LIBRARIES}
+    ${wxWidgets_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    ${PYTHON_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${CAIRO_LIBRARIES}
+    ${PIXMAN_LIBRARY}
+    ${Boost_LIBRARIES}      # must follow GITHUB
+    ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
+    ${OPENMP_LIBRARIES}
+    )
+set_source_files_properties( pcbnew.cpp PROPERTIES
+    # The KIFACE is in pcbnew.cpp, export it:
+    COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+    )
+
+if( MAKE_LINK_MAPS )
+    set_target_properties( pcbnew_kiface PROPERTIES
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pcbnew.kiface.map"
         )
-    set_source_files_properties( pcbnew.cpp PROPERTIES
-        # The KIFACE is in pcbnew.cpp, export it:
-        COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
+    set_target_properties( pcbnew PROPERTIES
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map"
         )
-    if( MAKE_LINK_MAPS )
-        set_target_properties( pcbnew_kiface PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pcbnew.kiface.map"
-            )
-        set_target_properties( pcbnew PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map"
-            )
-    endif()
+endif()
 
-    # if building pcbnew, then also build pcbnew_kiface if out of date.
-    add_dependencies( pcbnew pcbnew_kiface )
+# if building pcbnew, then also build pcbnew_kiface if out of date.
+add_dependencies( pcbnew pcbnew_kiface )
 
-    # these 2 binaries are a matched set, keep them together:
-    if( APPLE )
-        set_target_properties( pcbnew PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
-
-        # puts binaries into the *.app bundle while linking
-        set_target_properties( pcbnew_kiface PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
-            )
-        # put individual bundle outside of main bundle as a first step
-        # will be pulled into the main bundle when creating main bundle
-        install( TARGETS pcbnew
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-        install( CODE "
-            # override default embedded path settings
-            ${OSX_BUNDLE_OVERRIDE_PATHS}
-
-            # do all the work
-            include( BundleUtilities )
-            fixup_bundle( ${KICAD_BIN}/pcbnew.app/Contents/MacOS/pcbnew
-                \"\"
-                \"\"
-                )
-            " COMPONENT Runtime
-            )
-    else()
-        install( TARGETS pcbnew
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-        install( TARGETS pcbnew_kiface
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-    endif()
-
-else()  # milestone A) kills this off:
-
-    add_executable( pcbnew WIN32 MACOSX_BUNDLE
-        ../common/single_top.cpp
-        pcbnew.cpp
-        ${PCBNEW_SRCS}
-        ${PCBNEW_COMMON_SRCS}
-        ${PCBNEW_SCRIPTING_SRCS}
-        ${PCBNEW_RESOURCES}
-        )
-    set_source_files_properties( ../common/single_top.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PCB;PGM_DATA_FILE_EXT=\"kicad_pcb\""
-        )
-    target_link_libraries( pcbnew
-        3d-viewer
-        pcbcommon
-        pnsrouter
-        common
-        pcad2kicadpcb
-        polygon
-        bitmaps
-        gal
-        lib_dxf
-        idf3
-        ${GITHUB_PLUGIN_LIBRARIES}
-        ${wxWidgets_LIBRARIES}
-        ${OPENGL_LIBRARIES}
-        ${GDI_PLUS_LIBRARIES}
-        ${PYTHON_LIBRARIES}
-        ${GLEW_LIBRARIES}
-        ${CAIRO_LIBRARIES}
-        ${PIXMAN_LIBRARY}
-        ${Boost_LIBRARIES}      # must follow GITHUB
-        ${PCBNEW_EXTRA_LIBS}
+# these 2 binaries are a matched set, keep them together:
+if( APPLE )
+    set_target_properties( pcbnew PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
         )
 
-    # Only for win32 cross compilation using MXE
-    if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
-        target_link_libraries( pcbnew
-            opengl32
-            glu32
-            pixman-1
-            fontconfig
-            freetype
-            bz2
-            )
-    endif()
-
-    if( MAKE_LINK_MAPS )
-        # generate a link map with cross reference
-        set_target_properties( pcbnew PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map"
-            )
-    endif()
-
+    # puts binaries into the *.app bundle while linking
+    set_target_properties( pcbnew_kiface PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
+        )
+    # put individual bundle outside of main bundle as a first step
+    # will be pulled into the main bundle when creating main bundle
     install( TARGETS pcbnew
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-endif()
+    install( CODE "
+        # override default embedded path settings
+        ${OSX_BUNDLE_OVERRIDE_PATHS}
 
+        # do all the work
+        include( BundleUtilities )
+        fixup_bundle( ${KICAD_BIN}/pcbnew.app/Contents/MacOS/pcbnew
+            \"\"
+            \"\"
+            )
+        " COMPONENT Runtime
+        )
+else()
+    install( TARGETS pcbnew
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+    install( TARGETS pcbnew_kiface
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary
+        )
+endif()
 
 add_dependencies( pcbnew lib-dependencies )
 
