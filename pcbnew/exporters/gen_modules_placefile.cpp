@@ -212,7 +212,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     wxString    boardFilename = m_parent->GetBoard()->GetFileName();
     WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
 
-    if( !EnsureOutputDirectory( &outputDir, boardFilename, &reporter ) )
+    if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
     {
         msg.Printf( _( "Could not write plot files to folder \"%s\"." ),
                     GetChars( outputDir.GetPath() ) );

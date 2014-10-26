@@ -268,7 +268,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
 
     WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
 
-    if( !EnsureOutputDirectory( &outputDir, boardFilename, &reporter ) )
+    if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
     {
         wxString msg = wxString::Format(
                 _( "Could not write plot files to folder '%s'." ),

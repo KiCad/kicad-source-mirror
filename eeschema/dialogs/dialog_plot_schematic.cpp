@@ -57,6 +57,10 @@ void SCH_EDIT_FRAME::PlotSchematic( wxCommandEvent& event )
     DIALOG_PLOT_SCHEMATIC dlg( this );
 
     dlg.ShowModal();
+
+    // save project config if the prj config has changed:
+    if( dlg.PrjConfigChanged() )
+        SaveProjectSettings( true );
 }
 
 
@@ -64,6 +68,7 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent ) :
     DIALOG_PLOT_SCHEMATIC_BASE( parent )
 {
     m_parent = parent;
+    m_configChanged = false;
     m_config = Kiface().KifaceSettings();
 
     initDlg();
@@ -139,11 +144,58 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     PutValueInLocalUnits( *m_penHPGLWidthCtrl, m_HPGLPenSize );
     m_HPGLPaperSizeOption->SetSelection( m_HPGLPaperSizeSelect );
 
+    // Plot directory
+    wxString path = m_parent->GetPlotDirectoryName();
+#ifdef __WINDOWS__
+    path.Replace( '/', '\\' );
+#endif
+    m_outputDirectoryName->SetValue( path );
+
     // Hide/show widgets that are not always displayed:
     wxCommandEvent cmd_event;
     OnPlotFormatSelection( cmd_event );
 }
 
+/*
+ * TODO: Copy of DIALOG_PLOT::OnOutputDirectoryBrowseClicked in dialog_plot.cpp, maybe merge to a common method.
+ */
+void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
+{
+    // Build the absolute path of current output plot directory
+    // to preselect it when opening the dialog.
+    wxFileName  fn( m_outputDirectoryName->GetValue() );
+    wxString    path = Prj().AbsolutePath( m_outputDirectoryName->GetValue() );
+
+    wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
+
+    if( dirDialog.ShowModal() == wxID_CANCEL )
+    {
+        return;
+    }
+
+    wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
+
+    wxMessageDialog dialog( this, _( "Use a relative path? " ),
+                            _( "Plot Output Directory" ),
+                            wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
+
+    // relative directory selected
+    if( dialog.ShowModal() == wxID_YES )
+    {
+
+        wxString plotFilePath = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( "." )
+                       + PS_PLOTTER::GetDefaultFileExtension();
+
+        plotFilePath = Prj().AbsolutePath(plotFilePath);
+        plotFilePath = wxPathOnly( plotFilePath );
+
+        if( !dirName.MakeRelativeTo( plotFilePath ) )
+            wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
+                          _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
+    }
+
+    m_outputDirectoryName->SetValue( dirName.GetFullPath() );
+}
 
 PlotFormat DIALOG_PLOT_SCHEMATIC::GetPlotFileFormat()
 {
@@ -161,7 +213,6 @@ PlotFormat DIALOG_PLOT_SCHEMATIC::GetPlotFileFormat()
 
 void DIALOG_PLOT_SCHEMATIC::OnButtonCancelClick( wxCommandEvent& event )
 {
-    getPlotOptions();
     EndModal( wxID_CANCEL );
 }
 
@@ -179,6 +230,16 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
 
     m_pageSizeSelect    = m_PaperSizeOption->GetSelection();
     SetDefaultLineThickness( ValueFromTextCtrl( *m_DefaultLineSizeCtrl ) );
+
+    // Plot directory
+    wxString path = m_outputDirectoryName->GetValue();
+    path.Replace( '\\', '/' );
+
+    if(  m_parent->GetPlotDirectoryName() != path )
+        m_configChanged = true;
+
+    m_parent->SetPlotDirectoryName( path );
+
 }
 
 
@@ -250,12 +311,6 @@ void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
         createHPGLFile( aPlotAll, getPlotFrameRef() );
         break;
 
-    default:
-        // Fall through.  Default to Postscript.
-    case PLOT_FORMAT_POST:
-        createPSFile( aPlotAll, getPlotFrameRef() );
-        break;
-
     case PLOT_FORMAT_DXF:
         CreateDXFFile( aPlotAll, getPlotFrameRef() );
         break;
@@ -267,7 +322,31 @@ void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
     case PLOT_FORMAT_SVG:
         createSVGFile( aPlotAll, getPlotFrameRef() );
         break;
+
+    case PLOT_FORMAT_POST:
+    // Fall through.  Default to Postscript.
+    default:
+        createPSFile( aPlotAll, getPlotFrameRef() );
+        break;
+
     }
 
     m_MessagesBox->AppendText( wxT( "****\n" ) );
+}
+
+wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( wxTextCtrl* aOutputDirectoryName,
+                                                      wxString& aPlotFileName,
+                                                      wxString& aExtension,
+                                                      REPORTER* aReporter )
+{
+    wxString outputDirName = aOutputDirectoryName->GetValue();
+    wxFileName outputDir = wxFileName::DirName( outputDirName );
+
+    wxString plotFileName = Prj().AbsolutePath( aPlotFileName + wxT(".") + aExtension);
+
+    EnsureFileDirectoryExists( &outputDir, plotFileName, aReporter );
+    wxFileName fn( plotFileName );
+    fn.SetPath( outputDir.GetFullPath() );
+    return fn;
+
 }

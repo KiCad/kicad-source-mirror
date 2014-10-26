@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -37,6 +37,7 @@
 #include <build_version.h>
 #include <confirm.h>
 #include <base_units.h>
+#include <reporter.h>
 
 #include <wx/process.h>
 #include <wx/config.h>
@@ -343,6 +344,61 @@ wxString GetKicadConfigPath()
 
     return cfgpath.GetPath();
 }
+
+
+
+bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
+                                const wxString& aBaseFilename,
+                                REPORTER*       aReporter )
+{
+    wxString msg;
+    wxString baseFilePath = wxFileName( aBaseFilename ).GetPath();
+
+    // make aTargetFullFileName path, which is relative to aBaseFilename path (if it is not
+    // already an absolute path) absolute:
+    if( !aTargetFullFileName->MakeAbsolute( baseFilePath ) )
+    {
+        if( aReporter )
+        {
+            msg.Printf( _( "*** Error: cannot make path '%s' absolute with respect to '%s'! ***" ),
+                        GetChars( aTargetFullFileName->GetPath() ),
+                        GetChars( baseFilePath ) );
+            aReporter->Report( msg );
+        }
+
+        return false;
+    }
+
+    // Ensure the path of aTargetFullFileName exists, and create it if needed:
+    wxString outputPath( aTargetFullFileName->GetPath() );
+
+    if( !wxFileName::DirExists( outputPath ) )
+    {
+        if( wxMkdir( outputPath ) )
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "Output directory '%s' created.\n" ), GetChars( outputPath ) );
+                aReporter->Report( msg );
+                return true;
+            }
+        }
+        else
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "*** Error: cannot create output directory '%s'! ***\n" ),
+                            GetChars( outputPath ) );
+                aReporter->Report( msg );
+            }
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
 
 #ifdef __WXMAC__
 wxString GetOSXKicadUserDataDir()

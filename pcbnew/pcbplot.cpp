@@ -214,56 +214,6 @@ void BuildPlotFileName( wxFileName*     aFilename,
 }
 
 
-bool EnsureOutputDirectory( wxFileName*     aOutputDir,
-                            const wxString& aBoardFilename,
-                            REPORTER*       aReporter )
-{
-    wxString msg;
-    wxString boardFilePath = wxFileName( aBoardFilename ).GetPath();
-
-    if( !aOutputDir->MakeAbsolute( boardFilePath ) )
-    {
-        if( aReporter )
-        {
-            msg.Printf( _( "*** Error: cannot make path '%s' absolute with respect to '%s'! ***" ),
-                        GetChars( aOutputDir->GetPath() ),
-                        GetChars( boardFilePath ) );
-            aReporter->Report( msg );
-        }
-
-        return false;
-    }
-
-    wxString outputPath( aOutputDir->GetPath() );
-
-    if( !wxFileName::DirExists( outputPath ) )
-    {
-        if( wxMkdir( outputPath ) )
-        {
-            if( aReporter )
-            {
-                msg.Printf( _( "Output directory '%s' created.\n" ), GetChars( outputPath ) );
-                aReporter->Report( msg );
-                return true;
-            }
-        }
-        else
-        {
-            if( aReporter )
-            {
-                msg.Printf( _( "*** Error: cannot create output directory '%s'! ***\n" ),
-                            GetChars( outputPath ) );
-                aReporter->Report( msg );
-            }
-
-            return false;
-        }
-    }
-
-    return true;
-}
-
-
 PLOT_CONTROLLER::PLOT_CONTROLLER( BOARD *aBoard )
     : m_plotter( NULL ), m_board( aBoard )
 {
@@ -313,7 +263,7 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
     wxFileName outputDir = wxFileName::DirName( outputDirName );
     wxString boardFilename = m_board->GetFileName();
 
-    if( EnsureOutputDirectory( &outputDir, boardFilename ) )
+    if( EnsureFileDirectoryExists( &outputDir, boardFilename ) )
     {
         wxFileName fn( boardFilename );
         BuildPlotFileName( &fn, outputDirName, aSuffix, GetDefaultPlotExtension( aFormat ) );

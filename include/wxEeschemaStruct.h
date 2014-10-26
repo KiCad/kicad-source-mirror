@@ -152,6 +152,9 @@ private:
     /// Flag to indicate show hidden pins.
     bool        m_showAllPins;
 
+    /// The name of the destination directory to use when generating plot files.
+    wxString    m_plotDirectoryName;
+
     /// The name of the format to use when generating a net list.
     wxString    m_netListFormat;
 
@@ -238,6 +241,10 @@ public:
     const wxArrayString& GetComponentLibraries() const { return m_componentLibFiles; }
     void SetComponentLibraries( const wxArrayString& aList ) { m_componentLibFiles = aList; }
     */
+
+    /// accessor to the destination directory to use when generating plot files.
+    const wxString& GetPlotDirectoryName() const { return m_plotDirectoryName; }
+    void SetPlotDirectoryName( const wxString& aDirName ) { m_plotDirectoryName = aDirName; }
 
     void Process_Special_Functions( wxCommandEvent& event );
     void OnColorConfig( wxCommandEvent& aEvent );

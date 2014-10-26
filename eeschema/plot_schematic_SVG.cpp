@@ -43,7 +43,6 @@
 void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
 {
     wxString    msg;
-    wxFileName  fn;
 
     if( aPrintAll )
     {
@@ -52,11 +51,14 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
         SCH_SHEET_LIST  SheetList( NULL );
         sheetpath = SheetList.GetFirst();
         SCH_SHEET_PATH  list;
+        WX_TEXT_CTRL_REPORTER reporter(m_MessagesBox);
 
         for( ; ; )
         {
             if( sheetpath == NULL )
+            {
                 break;
+            }
 
             SCH_SCREEN*  screen;
             list.Clear();
@@ -69,30 +71,47 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
                 screen = m_parent->GetCurrentSheet().LastScreen();
             }
             else // Should not happen
+            {
                 return;
+            }
 
             sheetpath = SheetList.GetNext();
 
-            wxString fileName = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( ".svg" );
-
-            fn = Prj().AbsolutePath( fileName );
-
-            bool success = plotOneSheetSVG( m_parent, fn.GetFullPath(), screen,
-                                            getModeColor() ? false : true,
-                                            aPrintFrameRef );
-
-            if( !success )
+            try
             {
-                msg.Printf( _( "Error creating file <%s>\n" ),
-                            GetChars( fn.GetFullPath() ) );
-            }
-            else
-            {
-                msg.Printf( _( "File <%s> OK\n" ),
-                            GetChars( fn.GetFullPath() ) );
-            }
+                wxString fname = m_parent->GetUniqueFilenameForCurrentSheet();
+                wxString ext = SVG_PLOTTER::GetDefaultFileExtension();
+                wxFileName plotFileName = createPlotFileName( m_outputDirectoryName,
+                                                              fname, ext, &reporter );
 
-            m_MessagesBox->AppendText( msg );
+                bool success = plotOneSheetSVG( m_parent, plotFileName.GetFullPath(), screen,
+                                                getModeColor() ? false : true,
+                                                aPrintFrameRef );
+
+                if( !success )
+                {
+                    msg.Printf( _( "Error creating file '%s'\n" ),
+                                GetChars( plotFileName.GetFullPath() ) );
+                }
+                else
+                {
+                    msg.Printf( _( "File '%s' OK\n" ),
+                                GetChars( plotFileName.GetFullPath() ) );
+                }
+
+                m_MessagesBox->AppendText( msg );
+            }
+            catch (const IO_ERROR& e)
+            {
+                // Cannot plot SVG file
+                msg.Printf( _( "SVG Plotter Exception : '%s'" ), wxString( e.errorText ) );
+                m_MessagesBox->AppendText( msg );
+
+                m_parent->SetCurrentSheet( oldsheetpath );
+                m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+                m_parent->SetSheetNumberAndCount();
+                return;
+            }
         }
 
         m_parent->SetCurrentSheet( oldsheetpath );
@@ -103,21 +122,34 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
     {
         SCH_SCREEN* screen = (SCH_SCREEN*) m_parent->GetScreen();
 
-        fn = screen->GetFileName();
-        fn.SetExt( wxT( "svg" ) );
-        fn.MakeAbsolute();
+        try
+        {
+            wxString fname = screen->GetFileName();
+            wxString ext = SVG_PLOTTER::GetDefaultFileExtension();
+            wxFileName fn = createPlotFileName( m_outputDirectoryName, fname, ext );
 
-        bool success = plotOneSheetSVG( m_parent, fn.GetFullPath(), screen,
-                                        getModeColor() ? false : true,
-                                        aPrintFrameRef );
-        if( success )
-            msg.Printf( _( "Plot: <%s> OK\n" ),
-                        GetChars( fn.GetFullPath() ) );
-        else    // Error
-             msg.Printf( _( "Unable to create <%s>\n" ),
-                        GetChars( fn.GetFullPath() ) );
-
-        m_MessagesBox->AppendText( msg );
+            bool success = plotOneSheetSVG( m_parent, fn.GetFullPath(), screen,
+                                            getModeColor() ? false : true,
+                                            aPrintFrameRef );
+            if( success )
+            {
+                msg.Printf( _( "Plot: <%s> OK\n" ),
+                            GetChars( fn.GetFullPath() ) );
+            }
+            else    // Error
+            {
+                msg.Printf( _( "Unable to create <%s>\n" ),
+                            GetChars( fn.GetFullPath() ) );
+            }
+            m_MessagesBox->AppendText( msg );
+        }
+        catch (const IO_ERROR& e)
+        {
+            // Cannot plot SVG file
+            msg.Printf( _( "SVG Plotter Exception : <%s>"), wxString(e.errorText ) );
+            m_MessagesBox->AppendText( msg );
+            return;
+        }
     }
 }
 

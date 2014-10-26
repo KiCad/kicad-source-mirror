@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Sep 11 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -15,18 +15,18 @@ class DIALOG_SHIM;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/radiobox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stattext.h>
-#include <wx/choice.h>
 #include <wx/textctrl.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/radiobox.h>
+#include <wx/choice.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -45,6 +45,9 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 			wxID_PRINT_ALL
 		};
 		
+		wxStaticText* m_staticTextOutputDirectory;
+		wxTextCtrl* m_outputDirectoryName;
+		wxButton* m_browseButton;
 		wxBoxSizer* m_optionsSizer;
 		wxStaticBoxSizer* m_paperOptionsSizer;
 		wxRadioBox* m_PaperSizeOption;
@@ -68,6 +71,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnHPGLPageSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlotFormatSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonPlotCurrentClick( wxCommandEvent& event ) { event.Skip(); }

@@ -228,19 +228,6 @@ void PlotSilkScreen( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
 
 /**
- * Function EnsureOutputDirectory (helper function)
- * make \a OutputDir absolute and creates the path if it doesn't exist.
- * @param aOutputDir  the wxFileName containing the full path and file name to modify.  The path
- *                    may be absolute or relative to \a aBoardFilename .
- * @param aBoardFilename the board full path and filename.
- * @param aReporter a point to a REPORTER object use to show messages (can be NULL)
- * @return true if \a aOutputDir already exists or was successfully created.
- */
-bool EnsureOutputDirectory( wxFileName*     aOutputDir,
-                            const wxString& aBoardFilename,
-                            REPORTER*       aReporter = NULL );
-
-/**
  * Function BuildPlotFileName (helper function)
  * Complete a plot filename: forces the output directory,
  * add a suffix to the name and sets the specified extension

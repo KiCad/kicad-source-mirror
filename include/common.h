@@ -46,6 +46,7 @@
 class wxAboutDialogInfo;
 class SEARCH_STACK;
 class wxSingleInstanceChecker;
+class REPORTER;
 
 
 // Flag for special keys
@@ -598,6 +599,19 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack );
  * @return  wxEmptyString is returned if aBaseName is not found, else the full path & filename.
  */
 wxString SearchHelpFileFullPath( const SEARCH_STACK& aSearchStack, const wxString& aBaseName );
+
+/**
+ * Helper function EnsureFileDirectoryExists
+ * make \a aTargetFullFileName absolute and creates the path of this file if it doesn't yet exist.
+ * @param aTargetFullFileName  the wxFileName containing the full path and file name to modify.  The path
+ *                    may be absolute or relative to \a aBaseFilename .
+ * @param aBaseFilename a full filename. Only its path is used to set the aTargetFullFileName path.
+ * @param aReporter a point to a REPORTER object use to show messages (can be NULL)
+ * @return true if \a aOutputDir already exists or was successfully created.
+ */
+bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
+                                  const wxString& aBaseFilename,
+                                  REPORTER*       aReporter = NULL );
 
 /**
  * Function LockFile

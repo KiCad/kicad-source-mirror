@@ -415,6 +415,9 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
     m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
                                         &BASE_SCREEN::m_PageLayoutDescrFileName ) );
 
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "PlotDirectoryName" ),
+                                        &m_plotDirectoryName ) );
+
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
                                         LIB_PART::SubpartIdSeparatorPtr(),
                                         0, 0, 126 ) );

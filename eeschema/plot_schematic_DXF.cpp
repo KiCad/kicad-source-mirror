@@ -40,7 +40,6 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
     SCH_SCREEN*     screen    = schframe->GetScreen();
     SCH_SHEET_PATH* sheetpath;
     SCH_SHEET_PATH  oldsheetpath = schframe->GetCurrentSheet();
-    wxString        plotFileName;
 
     /* When printing all pages, the printed page is not the current page.
      *  In complex hierarchies, we must setup references and others parameters
@@ -52,6 +51,7 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
 
     sheetpath = SheetList.GetFirst();
     SCH_SHEET_PATH list;
+    WX_TEXT_CTRL_REPORTER reporter(m_MessagesBox);
 
     while( true )
     {
@@ -78,23 +78,39 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
         }
 
         wxPoint plot_offset;
-        plotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT(".")
-                       + DXF_PLOTTER::GetDefaultFileExtension();
-
-        plotFileName = Prj().AbsolutePath( plotFileName );
-
         wxString msg;
 
-        if( PlotOneSheetDXF( plotFileName, screen, plot_offset, 1.0, aPlotFrameRef ) )
-            msg.Printf( _( "Plot: <%s> OK\n" ), GetChars( plotFileName ) );
-        else    // Error
-            msg.Printf( _( "Unable to create <%s>\n" ), GetChars( plotFileName ) );
+        try
+        {
+            wxString fname = schframe->GetUniqueFilenameForCurrentSheet();
+            wxString ext = DXF_PLOTTER::GetDefaultFileExtension();
+            wxFileName plotFileName = createPlotFileName( m_outputDirectoryName, fname,
+                                                          ext, &reporter );
 
-        m_MessagesBox->AppendText( msg );
+            if( PlotOneSheetDXF( plotFileName.GetFullPath(), screen, plot_offset, 1.0, aPlotFrameRef ) )
+            {
+                msg.Printf( _( "Plot: '%s' OK\n" ), GetChars( plotFileName.GetFullPath() ) );
+            }
+            else    // Error
+            {
+                msg.Printf( _( "Unable to create '%s'\n" ), GetChars( plotFileName.GetFullPath() ) );
+            }
+            m_MessagesBox->AppendText( msg );
 
-
+        }
+        catch (IO_ERROR& e)
+        {
+            msg.Printf( _( "DXF Plotter Exception : '%s'"), wxString(e.errorText ) );
+            m_MessagesBox->AppendText( msg );
+            schframe->SetCurrentSheet( oldsheetpath );
+            schframe->GetCurrentSheet().UpdateAllScreenReferences();
+            schframe->SetSheetNumberAndCount();
+            return;
+        }
         if( !aPlotAll )
+        {
             break;
+        }
     }
 
     schframe->SetCurrentSheet( oldsheetpath );
