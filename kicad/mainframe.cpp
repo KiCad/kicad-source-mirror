@@ -516,15 +516,12 @@ void KICAD_MANAGER_FRAME::SaveSettings( wxConfigBase* aCfg )
 
 /**
  * a minor helper function:
- * Prints the Current Working Dir name and the projet name on the text panel.
+ * Prints the Current Project full name on the text panel.
  */
 void KICAD_MANAGER_FRAME::PrintPrjInfo()
 {
-    wxString msg = wxString::Format( _(
-            "Working dir: %s\nProject: %s\n" ),
-            GetChars( wxGetCwd() ),
-            GetChars( GetProjectFileName() )
-            );
+    wxString msg = wxString::Format( _( "Project name:\n%s\n" ),
+                        GetChars( GetProjectFileName() ) );
     PrintMsg( msg );
 }
 

@@ -116,14 +116,7 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
             return false;
     }
 
-#if ( ( wxMAJOR_VERSION < 2 ) || ( ( wxMAJOR_VERSION == 2 ) \
-    && ( wxMINOR_VERSION < 7 )  ) )
-
-    if( !wxRenameFile( GetFileName(), newFile ) )
-#else
-
     if( !wxRenameFile( GetFileName(), newFile, false ) )
-#endif
     {
         wxMessageDialog( m_parent, _( "Unable to rename file ... " ),
                          _( "Permission error ?" ), wxICON_ERROR | wxOK );
@@ -225,7 +218,6 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         break;
 
     case TREE_PDF:
-        AddDelimiterString( fullFileName );
         OpenPDF( fullFileName );
         break;
 

@@ -43,7 +43,6 @@
 #include <cvstruct.h>
 #include <wildcards_and_files_ext.h>
 
-#define titleComponentLibErr _( "Component Library Error" )
 
 void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 {
