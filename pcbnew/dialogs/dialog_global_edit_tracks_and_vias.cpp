@@ -1,9 +1,26 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_global_edit_tracks_and_vias.cpp
-// Author:      jean-pierre Charras
-// Created:     30 oct 2009
-// Licence:     GPL
-/////////////////////////////////////////////////////////////////////////////
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <fctsys.h>
 #include <confirm.h>
@@ -36,9 +53,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
 }
 
 
-/*************************************************/
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
-/*************************************************/
 {
     SetFocus();
 
@@ -147,9 +162,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
 }
 
 
-/*******************************************************************/
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
-/*******************************************************************/
 {
     bool change = false;
 
@@ -157,7 +170,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
     {
     case ID_CURRENT_VALUES_TO_CURRENT_NET:
         if( !IsOK( this,
-                  _( "Set current Net tracks and vias sizes and drill to the current values?" ) ) )
+                   _( "Set current Net tracks and vias sizes and drill to the current values?" ) ) )
             return;
         {
             wxBusyCursor dummy;
@@ -167,8 +180,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
 
     case ID_NETCLASS_VALUES_TO_CURRENT_NET:
         if( !IsOK( this,
-                  _(
-                      "Set current Net tracks and vias sizes and drill to the Netclass default value?" ) ) )
+                   _( "Set current Net tracks and vias sizes and drill to the Netclass default value?" ) ) )
             return;
         {
             wxBusyCursor dummy;
@@ -211,9 +223,6 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
 }
 
 
-/*******************************
- *event handler for wxID_CANCEL
- ******************************/
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( 0 );
