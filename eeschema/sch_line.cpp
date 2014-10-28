@@ -571,17 +571,18 @@ bool SCH_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 bool SCH_LINE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )
+    if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
     EDA_RECT rect = aRect;
 
-    rect.Inflate( aAccuracy );
+    if ( aAccuracy )
+    	rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Contains( GetBoundingBox() );
+        return rect.Contains( m_start ) && rect.Contains( m_end );
 
-    return rect.Intersects( GetBoundingBox() );
+    return rect.Intersects( m_start, m_end );
 }
 
 
