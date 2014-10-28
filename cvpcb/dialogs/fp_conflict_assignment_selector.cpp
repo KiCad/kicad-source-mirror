@@ -1,5 +1,5 @@
 /**
- * @file fp_choice_selector.cpp
+ * @file fp_conflict_assignment_selector.cpp
  */
 
 /*
