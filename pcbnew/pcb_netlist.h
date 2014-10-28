@@ -98,6 +98,11 @@ class COMPONENT
     /// The #FPID of the footprint assigned to the component.
     FPID           m_fpid;
 
+    /// The alt FPID of the footprint, when there are 2 different assigned footprints,
+    /// One from the netlist, the other from the .cmp file.
+    /// this one is a copy of the netlist footprint assignment
+    FPID           m_altFpid;
+
     /// The #MODULE loaded for #m_fpid.
     std::auto_ptr< MODULE > m_footprint;
 
@@ -150,9 +155,16 @@ public:
         m_fpid = aFPID;
     }
 
-    const FPID& GetFPID() const { return m_fpid; }
+    void SetAltFPID( const FPID& aFPID )
+    {
+        m_altFpid = aFPID;
+    }
 
-    const wxString& GetTimeStamp() const { return m_timeStamp; }
+   const FPID& GetFPID() const { return m_fpid; }
+
+    const FPID& GetAltFPID() const { return m_altFpid; }
+
+     const wxString& GetTimeStamp() const { return m_timeStamp; }
 
     void SetFootprintFilters( const wxArrayString& aFilterList )
     {
@@ -261,7 +273,7 @@ public:
      */
     void AddComponent( COMPONENT* aComponent );
 
-    /*
+    /**
      * Function GetComponentByReference
      * returns a #COMPONENT by \a aReference.
      *
@@ -270,7 +282,7 @@ public:
      */
     COMPONENT* GetComponentByReference( const wxString& aReference );
 
-    /*
+    /**
      * Function GetComponentByTimeStamp
      * returns a #COMPONENT by \a aTimeStamp.
      *

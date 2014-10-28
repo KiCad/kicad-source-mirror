@@ -209,6 +209,13 @@ bool CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
                 THROW_IO_ERROR( error );
             }
 
+            // For checking purpose, store the existing FPID (if any) in the alternate fpid copy
+            // if this existing FPID differs from the FPID read from the .cmp file.
+            // Cvpcb can ask for user to chose the right FPID.
+            // It happens if the FPIT was modified outside CvPcb.
+            if( fpid != component->GetFPID() && !component->GetFPID().empty() )
+                component->SetAltFPID( component->GetFPID() );
+
             component->SetFPID( fpid );
         }
         else

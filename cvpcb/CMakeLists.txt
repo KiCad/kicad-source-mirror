@@ -21,6 +21,8 @@ include_directories(
 
 
 set( CVPCB_DIALOGS
+    dialogs/fp_conflict_assignment_selector_base.cpp
+    dialogs/fp_conflict_assignment_selector.cpp
     dialogs/dialog_display_options.cpp
     dialogs/dialog_display_options_base.cpp
     ../pcbnew/dialogs/dialog_fp_lib_table.cpp

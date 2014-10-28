@@ -42,6 +42,7 @@
 #include <cvpcb_mainframe.h>
 #include <cvstruct.h>
 #include <wildcards_and_files_ext.h>
+#include <fp_conflict_assignment_selector.h>
 
 
 void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
@@ -290,6 +291,58 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
         }
     }
 
+
+    // Display a dialog to select footprint selection, if the netlist
+    // and the .cmp file give 2 different valid footprints
+    std::vector <int > m_indexes;   // indexes of footprints in netlist
+
+    for( unsigned ii = 0; ii < m_netlist.GetCount(); ii++ )
+    {
+        COMPONENT* component = m_netlist.GetComponent( ii );
+
+        if( component->GetAltFPID().empty() )
+            continue;
+
+        if( component->GetFPID().IsLegacy() || component->GetAltFPID().IsLegacy())
+            continue;
+
+        m_indexes.push_back( ii );;
+    }
+
+    // If a n assignment conflict is found,
+    // open a dialog to chose between schematic assignment
+    // and .cmp file assignment:
+    if( m_indexes.size() > 0 )
+    {
+        DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR dlg( this );
+
+        for( unsigned ii = 0; ii < m_indexes.size(); ii++ )
+        {
+            COMPONENT* component = m_netlist.GetComponent( m_indexes[ii] );
+
+            wxString cmpfpid = component->GetFPID().Format();
+            wxString schfpid = component->GetAltFPID().Format();
+
+            dlg.Add( component->GetReference(), schfpid, cmpfpid );
+        }
+
+        if( dlg.ShowModal() == wxID_OK )
+        {
+
+            // Update the fp selection:
+            for( unsigned ii = 0; ii < m_indexes.size(); ii++ )
+            {
+                COMPONENT* component = m_netlist.GetComponent( m_indexes[ii] );
+
+                int choice = dlg.GetSelection( component->GetReference() );
+
+                if( choice == 0 )   // the schematic (alt fpid) is chosen:
+                    component->SetFPID( component->GetAltFPID() );
+            }
+        }
+    }
+
+    // Populates the component list box:
     for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
     {
         COMPONENT* component = m_netlist.GetComponent( i );
