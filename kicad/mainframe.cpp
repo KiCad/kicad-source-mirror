@@ -437,12 +437,18 @@ void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
     frame->Raise();
 }
 
-
+#include <wx/filefn.h>
 void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )
 {
+
     // Gerbview is called without any file to open, because we do not know
     // the list and the name of files to open (if any...).
+    // however we run it in the path of the project
+    wxFileName fn( GetProjectFileName() );
+    wxString cwd = wxGetCwd();
+    wxSetWorkingDirectory( fn.GetPathWithSep() );
     Execute( this, GERBVIEW_EXE, wxEmptyString );
+    wxSetWorkingDirectory( cwd );
 }
 
 
