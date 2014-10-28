@@ -645,7 +645,8 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = Documentation/development/road-map.md \
+INPUT                  = Documentation/development/stable-release-policy.md \
+                         Documentation/development/road-map.md \
                          kicad \
                          pcbnew \
                          cvpcb \

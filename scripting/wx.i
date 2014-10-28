@@ -60,19 +60,19 @@ public:
 
     int GetWidth() const { return width; }
     void SetWidth(int w) { width = w; }
-    
+
     int GetHeight() const { return height; }
     void SetHeight(int h) { height = h; }
 
     wxPoint GetPosition() const { return wxPoint(x, y); }
     void SetPosition( const wxPoint &p ) { x = p.x; y = p.y; }
-    
+
     int x, y, width, height;
-    
-    %extend 
-    {  
+
+    %extend
+    {
        /* extend the wxRect object so it can be converted into a tuple */
-       PyObject* Get() 
+       PyObject* Get()
        {
             PyObject* res = PyTuple_New(4);
             PyTuple_SET_ITEM(res, 0, PyInt_FromLong(self->x));
@@ -82,23 +82,23 @@ public:
             return res;
         }
     }
-    
-    
-    %pythoncode 
+
+
+    %pythoncode
     {
-    
-    def __eq__(self,other):	
-    	return self.x==other.x and self.y==other.y and self.width==other.width and self.height==other.height
+
+    def __eq__(self,other):
+        return self.x==other.x and self.y==other.y and self.width==other.width and self.height==other.height
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wxRect'+str(self.Get())
     def __len__(self):                   return len(self.Get())
     def __getitem__(self, index):        return self.Get()[index]
     def __setitem__(self, index, val):
-        if 	index == 0: 	self.SetX(val)
-        elif 	index == 1: 	self.SetY(val)
-        elif 	index == 2: 	self.SetWidth(val)
-        elif 	index == 3: 	self.SetHeight(val)
-        else: 			raise IndexError
+        if  index == 0:     self.SetX(val)
+        elif    index == 1:     self.SetY(val)
+        elif    index == 2:     self.SetWidth(val)
+        elif    index == 3:     self.SetHeight(val)
+        else:           raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0,0,0)
     __safe_for_unpickling__ = True
    }
@@ -113,9 +113,9 @@ public:
     int x,y;
     wxSize(int xx, int yy) : x(xx), y(yy) { }
     wxSize(double xx, double yy) : x(xx), y(yy) {}
-    %extend 
-    {    
-       PyObject* Get() 
+    %extend
+    {
+       PyObject* Get()
        {
             PyObject* res = PyTuple_New(2);
             PyTuple_SET_ITEM(res, 0, PyInt_FromLong(self->x));
@@ -123,39 +123,39 @@ public:
             return res;
         }
     }
- 
+
     ~wxSize();
-    
+
     void SetWidth(int w);
     void SetHeight(int h);
     int GetWidth() const;
     int GetHeight() const;
-    
- 
-    %pythoncode 
+
+
+    %pythoncode
     {
-	    def Scale(self,xscale,yscale):
-	    	return wxSize(self.x*xscale,self.y*yscale)
-	    def __eq__(self,other):	
-	    	return self.GetWidth()==other.GetWidth() and self.GetHeight()==other.GetHeight()
-	    def __str__(self):                   return str(self.Get())
-	    def __repr__(self):                  return 'wxSize'+str(self.Get())
-	    def __len__(self):                   return len(self.Get())
-	    def __getitem__(self, index):        return self.Get()[index]
-	    def __setitem__(self, index, val):
-	        if 	index == 0: 	self.SetWidth(val)
-	        elif 	index == 1: 	self.SetHeight(val)
-	        else: 			raise IndexError
-	    def __nonzero__(self):               return self.Get() != (0,0)
-	    __safe_for_unpickling__ = True
-    
+        def Scale(self,xscale,yscale):
+            return wxSize(self.x*xscale,self.y*yscale)
+        def __eq__(self,other):
+            return self.GetWidth()==other.GetWidth() and self.GetHeight()==other.GetHeight()
+        def __str__(self):                   return str(self.Get())
+        def __repr__(self):                  return 'wxSize'+str(self.Get())
+        def __len__(self):                   return len(self.Get())
+        def __getitem__(self, index):        return self.Get()[index]
+        def __setitem__(self, index, val):
+            if  index == 0:     self.SetWidth(val)
+            elif    index == 1:     self.SetHeight(val)
+            else:           raise IndexError
+        def __nonzero__(self):               return self.Get() != (0,0)
+        __safe_for_unpickling__ = True
+
     }
 };
 
 // wxPoint class wrapper to (xx,yy) tuple /////////////////////////////////////
 
 class wxPoint
-{	
+{
 public:
     int x, y;
     wxPoint(int xx, int yy);
@@ -166,8 +166,8 @@ public:
         wxPoint __sub__(const wxPoint& pt) {   return *self - pt;  }
 
         void Set(long x, long y) {  self->x = x;     self->y = y;  }
-        PyObject* Get() 
-	{
+        PyObject* Get()
+    {
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
@@ -175,7 +175,7 @@ public:
         }
     }
 
-    %pythoncode { 
+    %pythoncode {
     def __eq__(self,other):            return (self.x==other.x and self.y==other.y)
     def __ne__(self,other):            return not (self==other)
     def __str__(self):                 return str(self.Get())
@@ -183,11 +183,11 @@ public:
     def __len__(self):                 return len(self.Get())
     def __getitem__(self, index):      return self.Get()[index]
     def __setitem__(self, index, val):
-        if index == 0: 
+        if index == 0:
             self.x = val
-        elif index == 1: 
+        elif index == 1:
             self.y = val
-        else: 
+        else:
             raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
 
@@ -204,7 +204,7 @@ public:
 
 // wxString wrappers /////////////////////////////////////////////////////////
 
-%typemap(out) wxString& 
+%typemap(out) wxString&
 {
 %#if wxUSE_UNICODE
     $result = PyUnicode_FromWideChar($1->c_str(), $1->Len());
@@ -215,7 +215,7 @@ public:
 
 %apply wxString& { wxString* }
 
-%typemap(out) wxString 
+%typemap(out) wxString
 {
 %#if wxUSE_UNICODE
     $result = PyUnicode_FromWideChar($1.c_str(), $1.Len());
@@ -224,7 +224,7 @@ public:
 %#endif
 }
 
-%typemap(varout) wxString 
+%typemap(varout) wxString
 {
 %#if wxUSE_UNICODE
     $result = PyUnicode_FromWideChar($1.c_str(), $1.Len());
@@ -233,14 +233,14 @@ public:
 %#endif
 }
 
-%typemap(in) wxString& (bool temp=false) 
+%typemap(in) wxString& (bool temp=false)
 {
     $1 = newWxStringFromPy($input);
     if ($1 == NULL) SWIG_fail;
     temp = true;
 }
 
-%typemap(freearg) wxString& 
+%typemap(freearg) wxString&
 {
     if (temp$argnum)
         delete $1;
@@ -261,20 +261,20 @@ public:
 
 // wxArrayString wrappers //////////////////////////////////////////////////////
 %typemap(in) wxArrayString& (bool temp=false) {
-    if (!PySequence_Check($input)) 
+    if (!PySequence_Check($input))
     {
         PyErr_SetString(PyExc_TypeError, "Not a sequence of strings");
         SWIG_fail;
     }
-    
+
     $1 = new wxArrayString;
     temp = true;
     int last=PySequence_Length($input);
-    for (int i=0; i<last; i++) 
+    for (int i=0; i<last; i++)
     {
         PyObject* pyStr = PySequence_GetItem($input, i);
         wxString* wxS = newWxStringFromPy(pyStr);
-        if (PyErr_Occurred())  
+        if (PyErr_Occurred())
             SWIG_fail;
         $1->Add(*wxS);
         delete wxS;
@@ -282,21 +282,19 @@ public:
     }
 }
 
-%typemap(freearg) wxArrayString& 
+%typemap(freearg) wxArrayString&
 {
-    if (temp$argnum) 
+    if (temp$argnum)
         delete $1;
 }
 
-%typemap(out) wxArrayString& 
+%typemap(out) wxArrayString&
 {
     $result = wxArrayString2PyList(*$1);
 }
 
-%typemap(out) wxArrayString 
+%typemap(out) wxArrayString
 {
     $result = wxArrayString2PyList($1);
 }
-
-
 
