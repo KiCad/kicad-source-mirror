@@ -222,7 +222,7 @@ provided by version 3 can be utilized.
 - wxWidgets 3 is widely available on Linux distributions.
 
 **Status:**
-- No progress
+- Build now requires 3.0.0 or greater.
 
 ## Linux Printing Improvements ## {#linux_print}
 **Goal:**
@@ -428,6 +428,20 @@ Provide a method of passing information to other tools via the net list.
 **Status:**
 - No progress.
 
+## Net Highlighting ## {#sch_net_highlight}
+**Goal:**
+Highlight wires, buses, and junctions when corresponding net in Pcbnew is selected.
+
+**Task:**
+- Add communications link to handle net selection from Pcbnew.
+- Implement highlight algorithm for net objects.
+- Highlight objects connected to net selected in Pcbnew.
+
+**Dependencies:**
+- [GAL port, maybe](#sch_gal).
+
+**Status:**
+- No progress.
 
 # CvPcb: Footprint Association Tool # {#cvpcb}
 This section covers the source code of the footprint assignment tool CvPcb.
@@ -641,7 +655,6 @@ GAL rendering.
 **Progress:**
 - Initial discussion.
 
-
 ## Gerber File Attributes ## {#gerber_attributes}
 **Goal:**
 
@@ -659,6 +672,21 @@ document for more information.
 
 **Progress:**
 - Under investigation.
+
+## Net Highlighting ## {#pcb_net_highlight}
+**Goal:**
+Highlight rats nest links and/or traces when corresponding net in Eeschema is selected.
+
+**Task:**
+- Add communications link to handle net selection from Eeschema.
+- Implement highlight algorithm for objects connected to the selected net.
+- Highlight objects connected to net selected in Eeschema
+
+**Dependencies:**
+- None.
+
+**Status:**
+- No progress.
 
 
 # GerbView: Gerber File Viewer # {#gerbview}
