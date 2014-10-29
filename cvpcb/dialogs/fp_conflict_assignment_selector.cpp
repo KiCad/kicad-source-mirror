@@ -34,11 +34,11 @@
 DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR( wxWindow* aParent )
         : DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR_BASE( aParent )
 {
-    m_listFp->InsertColumn( 0, _( "Ref" ) );
-    m_listFp->InsertColumn( 1, _( "Schematic assignment" ) );
-    m_listFp->InsertColumn( 2, wxT( "<=" ) );
-    m_listFp->InsertColumn( 3, wxT( "=>" ) );
-    m_listFp->InsertColumn( 4, _( "Cmp file assignment" ) );
+    m_listFp->AppendColumn( _( "Ref" ) );
+    m_listFp->AppendColumn(  _( "Schematic assignment" ) );
+    m_listFp->AppendColumn( wxT( "<=" ) );
+    m_listFp->AppendColumn( wxT( "=>" ) );
+    m_listFp->AppendColumn( _( "Cmp file assignment" ) );
 
     m_lineCount = 0;
 }
@@ -46,29 +46,12 @@ DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR( 
 void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::Add( const wxString& aRef, const wxString& aFpSchName,
           const wxString& aFpCmpName )
 {
-    wxListItem item;
+    long idx = m_listFp->InsertItem(m_lineCount, aRef );
 
-    item.SetId( m_lineCount );
-    item.SetText( aRef );
-    item.SetColumn( COL_REF );
-    m_listFp->InsertItem( item );
-
-    item.SetText( aFpSchName );
-    item.SetColumn( COL_FPSCH );
-    m_listFp->SetItem( item );
-
-
-    item.SetText( wxT("") );
-    item.SetColumn( COL_SELSCH );
-    m_listFp->SetItem( item );
-
-    item.SetText( wxT("X") );
-    item.SetColumn( COL_SELCMP );
-    m_listFp->SetItem( item );
-
-    item.SetText( aFpCmpName );
-    item.SetColumn( COL_FPCMP );
-    m_listFp->SetItem( item );
+    m_listFp->SetItem(idx, COL_FPSCH, aFpSchName );
+    m_listFp->SetItem(idx, COL_SELSCH, wxT("")  );
+    m_listFp->SetItem(idx, COL_SELCMP, wxT("X") );
+    m_listFp->SetItem(idx, COL_FPCMP, aFpCmpName );
 
     m_lineCount ++;
 }
