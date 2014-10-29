@@ -20,7 +20,7 @@ DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR_BASE::DIALOG_FP_CONFLICT_ASSIGNMENT_SELEC
 	m_staticTextInfo->Wrap( -1 );
 	bSizerMain->Add( m_staticTextInfo, 0, wxALL|wxEXPAND, 5 );
 	
-	m_listFp = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_ICON|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
+	m_listFp = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
 	bSizerMain->Add( m_listFp, 1, wxALL|wxEXPAND, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
