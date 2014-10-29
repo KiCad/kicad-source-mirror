@@ -7,10 +7,10 @@
 #  db: Usare le maiuscole con moderazione: vanno usate per i nomi propri e all'inizio
 #  db: di una frase: negli altri casi può risultare molto inelegante
 #
-# mc:  footprint -> impronta
-# mc:  module -> modulo (non dovrebbe comparire più. Il termine è stato eliminato)
-# mc:  component -> componente
 # mc: Note:
+# mc: - footprint -> impronta
+# mc: - module -> modulo (non dovrebbe comparire più. Il termine è stato eliminato)
+# mc: - component -> componente
 # mc: - gli apici singoli non si usano in italiano, sostituiti con virgolette
 # mc:   idem per i simboli <>
 # mc: - come regola generale si usano le parole più corte (es. utilizza -> usa)
@@ -39,12 +39,13 @@
 # mc: - PCB = C. S.
 # mc: - component documentation = specifiche componente
 # mc: - setback = sporgenza?
+# mc: - wizard = assistente
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-29 10:30+0100\n"
-"PO-Revision-Date: 2014-10-29 10:30+0100\n"
+"POT-Creation-Date: 2014-10-29 23:12+0100\n"
+"PO-Revision-Date: 2014-10-29 23:13+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -926,7 +927,7 @@ msgstr "Piazzole fronte"
 
 #: pcbnew/class_pcb_layer_widget.cpp:66
 msgid "Show footprint pads on board's front"
-msgstr "Mostra le piazzole dei moduli sul fronte della scheda"
+msgstr "Mostra piazzole impronte sul fronte della scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Pads Back"
@@ -934,7 +935,7 @@ msgstr "Piazzole retro"
 
 #: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Show footprint pads on board's back"
-msgstr "Mostra le piazzole dei moduli sul retro della scheda"
+msgstr "Mostra piazzole impronte sul retro della scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:69
 msgid "Text Front"
@@ -942,7 +943,7 @@ msgstr "Testo fronte"
 
 #: pcbnew/class_pcb_layer_widget.cpp:69
 msgid "Show footprint text on board's front"
-msgstr "Mostra testo dei moduli sul fronte della scheda"
+msgstr "Mostra testo impronte sul fronte della scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:70
 msgid "Text Back"
@@ -950,7 +951,7 @@ msgstr "Testo retro"
 
 #: pcbnew/class_pcb_layer_widget.cpp:70
 msgid "Show footprint text on board's back"
-msgstr "Mostra testo dei moduli sul retro della scheda"
+msgstr "Mostra testo impronte sul retro della scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:71
 msgid "Hidden Text"
@@ -958,7 +959,7 @@ msgstr "Testo nascosto"
 
 #: pcbnew/class_pcb_layer_widget.cpp:71
 msgid "Show footprint text marked as invisible"
-msgstr "Mostra testo del moduli marcati come invisibili"
+msgstr "Mostra testo impronte marcato come invisibile"
 
 #: pcbnew/class_pcb_layer_widget.cpp:73
 msgid "Anchors"
@@ -966,7 +967,7 @@ msgstr "Ancoraggi"
 
 #: pcbnew/class_pcb_layer_widget.cpp:73
 msgid "Show footprint and text origins as a cross"
-msgstr "Mostra origine di moduli e testi con una crocetta"
+msgstr "Mostra origine impronte e testi con una crocetta"
 
 #: pcbnew/class_pcb_layer_widget.cpp:74
 #: eeschema/dialogs/dialog_color_config.cpp:96
@@ -993,7 +994,7 @@ msgstr "Moduli fronte"
 
 #: pcbnew/class_pcb_layer_widget.cpp:76
 msgid "Show footprints that are on board's front"
-msgstr "Mostra i moduli presenti sul fronte della scheda"
+msgstr "Mostra impronte presenti sul fronte della scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Modules Back"
@@ -1001,7 +1002,7 @@ msgstr "Moduli retro"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Show footprints that are on board's back"
-msgstr "Mostra i moduli presenti sul retro della scheda"
+msgstr "Mostra le impronte presenti sul retro della scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:78
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1088
@@ -1010,7 +1011,7 @@ msgstr "Valori"
 
 #: pcbnew/class_pcb_layer_widget.cpp:78
 msgid "Show footprint's values"
-msgstr "Mostra i valori dei moduli"
+msgstr "Mostra i valori delle impronte"
 
 #: pcbnew/class_pcb_layer_widget.cpp:79
 msgid "References"
@@ -1018,7 +1019,7 @@ msgstr "Riferimenti"
 
 #: pcbnew/class_pcb_layer_widget.cpp:79
 msgid "Show footprint's references"
-msgstr "Mostra i riferimenti dei moduli"
+msgstr "Mostra i riferimenti delle impronte"
 
 #: pcbnew/class_pcb_layer_widget.cpp:132
 msgid "Show All Copper Layers"
@@ -1107,19 +1108,19 @@ msgstr "Limite assoluto sporgenza scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:332
 msgid "Footprint courtyards on board's front"
-msgstr "Courtyard moduli sul fronte della scheda"
+msgstr "Courtyard impronte sul fronte della scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:333
 msgid "Footprint courtyards on board's back"
-msgstr "Courtyard moduli sul retro della scheda"
+msgstr "Courtyard impronte sul retro della scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:334
 msgid "Footprint assembly on board's front"
-msgstr "Assembly moduli sul fronte scheda"
+msgstr "Assembly impronte sul fronte scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:335
 msgid "Footprint assembly on board's back"
-msgstr "Assembly moduli sul retro scheda"
+msgstr "Assembly impronte sul retro scheda"
 
 #: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:960
 #: pcbnew/tools/drawing_tool.cpp:1097
@@ -1140,7 +1141,7 @@ msgstr "Dimensioni non consentite sugli strati in rame o di taglio"
 
 #: pcbnew/footprint_wizard_frame.cpp:120 pcbnew/footprint_wizard.cpp:82
 msgid "Footprint Wizard"
-msgstr "Creazione guidata modulo"
+msgstr "Assistente impronte"
 
 #: pcbnew/footprint_wizard_frame.cpp:170
 msgid "Parameter"
@@ -1173,7 +1174,7 @@ msgstr "Seleziona il successivo elemento modificabile"
 #: pcbnew/footprint_wizard_frame.cpp:594 pcbnew/tool_modview.cpp:76
 #: pcbnew/tool_modview.cpp:180
 msgid "Show footprint in 3D viewer"
-msgstr "Mostra modulo nel visualizzatore 3D"
+msgstr "Mostra impronta nel visualizzatore 3D"
 
 #: pcbnew/footprint_wizard_frame.cpp:597 pcbnew/tool_modview.cpp:79
 #: pcbnew/tool_modedit.cpp:129 common/zoom.cpp:231
@@ -1817,11 +1818,11 @@ msgstr "Blocca tutte le impronte"
 
 #: pcbnew/onrightclick.cpp:392
 msgid "Spread out All Footprints"
-msgstr "Spargi tutte le impronte"
+msgstr "Disponi tutte le impronte"
 
 #: pcbnew/onrightclick.cpp:394
 msgid "Spread out Footprints not Already on Board"
-msgstr "Spargi tutte le impronte non già presenti sulla scheda"
+msgstr "Disponi tutte le impronte non già presenti sulla scheda"
 
 #: pcbnew/onrightclick.cpp:397
 msgid "Automatically Place All Footprints"
@@ -2272,29 +2273,29 @@ msgstr "Compilazione collegamenti..."
 #: pcbnew/kicad_plugin.cpp:216
 #, c-format
 msgid "Cannot create footprint library path '%s'"
-msgstr "Impossibile creare il percorso libreria moduli \"%s\""
+msgstr "Impossibile creare il percorso libreria impronte \"%s\""
 
 #: pcbnew/kicad_plugin.cpp:222
 #, c-format
 msgid "Footprint library path '%s' is read only"
-msgstr "Il percorso della libreria \"%s\" è in sola lettura"
+msgstr "Il percorso libreria impronte \"%s\" è in sola lettura"
 
 #: pcbnew/kicad_plugin.cpp:256
 #, c-format
 msgid "Cannot rename temporary file '%s' to footprint library file '%s'"
 msgstr ""
-"Impossibile rinominare il file temporaneo \"%s\" nel file libreria moduli "
+"Impossibile rinominare il file temporaneo \"%s\" nel file libreria impronte "
 "\"%s\""
 
 #: pcbnew/kicad_plugin.cpp:276
 #, c-format
 msgid "Footprint library path '%s' does not exist"
-msgstr "Il percorso libreria moduli \"%s\" non esiste"
+msgstr "Il percorso libreria impronte \"%s\" non esiste"
 
 #: pcbnew/kicad_plugin.cpp:323 pcbnew/legacy_plugin.cpp:4663
 #, c-format
 msgid "library '%s' has no footprint '%s' to delete"
-msgstr "la libreria \"%s\" non ha moduli \"%s\" da cancellare"
+msgstr "la libreria \"%s\" non ha impronte \"%s\" da cancellare"
 
 #: pcbnew/kicad_plugin.cpp:1276 pcbnew/legacy_plugin.cpp:98
 #, c-format
@@ -2320,7 +2321,7 @@ msgstr "tipo smusso angolo zona sconosciuto %d"
 #: pcbnew/gpcb_plugin.cpp:894
 #, c-format
 msgid "footprint library path '%s' does not exist"
-msgstr "il percorso di libreria \"%s\" non esiste"
+msgstr "il percorso libreria impronte \"%s\" non esiste"
 
 #: pcbnew/kicad_plugin.cpp:1870 pcbnew/kicad_plugin.cpp:1935
 #: pcbnew/librairi.cpp:491 pcbnew/gpcb_plugin.cpp:962
@@ -2362,7 +2363,7 @@ msgstr "file inatteso \"%s\" trovato nel percorso libreria \"%s\""
 #: pcbnew/kicad_plugin.cpp:2017 pcbnew/gpcb_plugin.cpp:1026
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
-msgstr "la libreria moduli \"%s\" non può essere cancellata"
+msgstr "la libreria impronte \"%s\" non può essere cancellata"
 
 #: pcbnew/class_netinfo_item.cpp:90
 msgid "Net Name"
@@ -2623,7 +2624,8 @@ msgstr "Impossibile trovare o caricare l'impronta dal percorso \"%s\""
 msgid ""
 "The footprint library '%s' could not be found in any of the search paths."
 msgstr ""
-"La libreria moduli \"%s\" non è stata trovata in nessun percorso di ricerca."
+"La libreria impronte \"%s\" non è stata trovata in nessun percorso di "
+"ricerca."
 
 #: pcbnew/librairi.cpp:68
 #, c-format
@@ -2650,7 +2652,7 @@ msgstr "Impronta esportata nel file \"%s\""
 #: pcbnew/librairi.cpp:74
 #, c-format
 msgid "Footprint %s deleted from library '%s'"
-msgstr "Componente %s cancellato dalla libreria \"%s\""
+msgstr "Impronta %s cancellata dalla libreria \"%s\""
 
 #: pcbnew/librairi.cpp:75
 msgid "New Footprint"
@@ -2694,8 +2696,8 @@ msgid ""
 msgstr ""
 "La modifica delle librerie datate (file .mod) non è consentita.\n"
 "Salvare la libreriea corrente nel nuovo formato .pretty\n"
-"e aggiornare la tabella delle librerie moduli\n"
-"prima di cancellare un modulo"
+"e aggiornare la tabella delle librerie impronte\n"
+"prima di cancellare un'impronta"
 
 #: pcbnew/librairi.cpp:94
 msgid "Legacy foot print export files (*.emp)|*.emp"
@@ -2703,7 +2705,7 @@ msgstr "File di esportazione impronte datati (*.emp)|*.emp"
 
 #: pcbnew/librairi.cpp:95
 msgid "GPcb foot print files (*)|*"
-msgstr "File moduli GPcb (*)|*"
+msgstr "File impronte GPcb (*)|*"
 
 #: pcbnew/librairi.cpp:622 common/dialogs/dialog_get_component_base.cpp:22
 #: eeschema/dialogs/dialog_netlist_base.cpp:115
@@ -2831,7 +2833,7 @@ msgstr "Nessuna libreria selezionata"
 
 #: pcbnew/footprint_wizard.cpp:135
 msgid "Couldn't reload footprint wizard"
-msgstr "Impossibile ricaricare l'assistente moduli"
+msgstr "Impossibile ricaricare l'assistente impronte"
 
 #: pcbnew/modedit.cpp:123 pcbnew/controle.cpp:230
 #: pagelayout_editor/pl_editor_frame.cpp:742
@@ -3230,7 +3232,7 @@ msgstr "Carica impronta dalla li&breria corrente"
 
 #: pcbnew/menubar_modedit.cpp:88
 msgid "Open a footprint from library"
-msgstr "Apri una impronta da una libreria"
+msgstr "Apri un'impronta da una libreria"
 
 #: pcbnew/menubar_modedit.cpp:93
 msgid "Load Footprint From &Current Board"
@@ -3238,7 +3240,7 @@ msgstr "Carica impronta dalla scheda &corrente "
 
 #: pcbnew/menubar_modedit.cpp:94
 msgid "Load a footprint from the current board"
-msgstr "Carica una impronta dalla scheda corrente"
+msgstr "Carica un'impronta dalla scheda corrente"
 
 #: pcbnew/menubar_modedit.cpp:99
 msgid "&Load Footprint"
@@ -3269,8 +3271,8 @@ msgid "S&ave Footprint in New Library"
 msgstr "S&alva impronta in una nuova libreria"
 
 #: pcbnew/menubar_modedit.cpp:121
-msgid "Create a new library and save current footprint into it"
-msgstr "Crea una nuova libreria e salva l'impronta corrente in essa"
+msgid "Create a new library and save current module into it"
+msgstr "Crea una nuova libreria e salva il modulo corrente in essa"
 
 #: pcbnew/menubar_modedit.cpp:126
 msgid "&Export Footprint"
@@ -3396,8 +3398,8 @@ msgid "A&nchor"
 msgstr "A&ncoraggio"
 
 #: pcbnew/menubar_modedit.cpp:276
-msgid "Place footprint reference anchor"
-msgstr "Posiziona ancoraggio di riferimento dell'impronta"
+msgid "Place footprint module reference anchor"
+msgstr "Posiziona ancoraggio di riferimento del modulo"
 
 #: pcbnew/menubar_modedit.cpp:305 pcbnew/menubar_pcbframe.cpp:577
 #: eeschema/menubar.cpp:508 eeschema/menubar_libedit.cpp:284
@@ -3481,7 +3483,8 @@ msgstr ""
 #: pcbnew/legacy_netlist_reader.cpp:131
 msgid "Cannot parse footprint name in component section of netlist."
 msgstr ""
-"Impossibile elaborare il nome modulo nalla sezione componenti della netlist."
+"Impossibile elaborare il nome impronta nalla sezione componenti della "
+"netlist."
 
 #: pcbnew/legacy_netlist_reader.cpp:145
 msgid "Cannot parse reference designator in component section of netlist."
@@ -3509,7 +3512,7 @@ msgstr ""
 #, c-format
 msgid "Cannot find component '%s' in footprint filter section of netlist."
 msgstr ""
-"Impossibile trovare il componente \"%s\" nella sezione filtro moduli della "
+"Impossibile trovare il componente \"%s\" nella sezione filtro impronte della "
 "netlist."
 
 #: pcbnew/class_track.cpp:145
@@ -3651,7 +3654,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Errore durante il caricamento della tabella librerie moduli globale:\n"
+"Errore durante il caricamento della tabella librerie impronte globale:\n"
 "\n"
 "%s"
 
@@ -3746,7 +3749,7 @@ msgstr "Attributi"
 #: eeschema/onrightclick.cpp:432 eeschema/sch_component.cpp:1515
 #: eeschema/lib_field.cpp:595
 msgid "Footprint"
-msgstr "Modulo"
+msgstr "Impronta"
 
 #: pcbnew/class_module.cpp:607
 msgid "No 3D shape"
@@ -3955,11 +3958,11 @@ msgid ""
 "in any of the library search paths.  Verify your system is configured "
 "properly so the footprint libraries can be found."
 msgstr ""
-"Impossibile leggere alcun modulo dai file libreria:\n"
+"Impossibile leggere alcuna impronta dai file libreria:\n"
 "\n"
 "%s\n"
 "in nessuno dei percorsi di ricerca. Verificare che il sistema sia "
-"configurato in modo che possa trovare le librerie di moduli."
+"configurato in modo che possa trovare le librerie di impronte."
 
 #: pcbnew/loadcmp.cpp:419 eeschema/sch_component.cpp:1507
 #: eeschema/database.cpp:118
@@ -3973,7 +3976,7 @@ msgstr "Moduli [%d elementi]"
 
 #: pcbnew/loadcmp.cpp:438
 msgid "No footprint found."
-msgstr "Nessun modulo trovato."
+msgstr "Nessuna impronta trovata."
 
 #: pcbnew/loadcmp.cpp:461 cvpcb/cvframe.cpp:659
 msgid "Description: "
@@ -3990,7 +3993,7 @@ msgstr ""
 #: pcbnew/loadcmp.cpp:548
 #, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr "Libreria moduli \"%s\" salvata come \"%s\""
+msgstr "Libreria impronte \"%s\" salvata come \"%s\""
 
 #: pcbnew/menubar_pcbframe.cpp:68
 msgid "&New"
@@ -4196,32 +4199,32 @@ msgstr "Traccia in formato HPGL, PostScript o Gerber RS-274X"
 
 #: pcbnew/menubar_pcbframe.cpp:241
 msgid "&Archive New Footprints"
-msgstr "&Archivia nuovi moduli"
+msgstr "&Archivia nuove impronte"
 
 #: pcbnew/menubar_pcbframe.cpp:242
 msgid ""
 "Archive new footprints only in a library (keep other footprints in this lib)"
 msgstr ""
-"Archivia solo i nuovi moduli in una libreria (mantiene gli altri moduli in "
-"questa)"
+"Archivia solo le nuove impronte in una libreria (mantiene le altre impronte "
+"in questa)"
 
 #: pcbnew/menubar_pcbframe.cpp:246
 msgid "&Create Footprint Archive"
-msgstr "&Crea archivio moduli"
+msgstr "&Crea archivio impronte"
 
 #: pcbnew/menubar_pcbframe.cpp:247
 msgid "Archive all footprints in a library (old library will be deleted)"
 msgstr ""
-"Archivia tutti i moduli in una libreria (la vecchia libreria verrà "
+"Archivia tutte le impronte in una libreria (la vecchia libreria verrà "
 "cancellata)"
 
 #: pcbnew/menubar_pcbframe.cpp:252
 msgid "Arc&hive Footprints"
-msgstr "Ar&chivia moduli"
+msgstr "Ar&chivia impronte"
 
 #: pcbnew/menubar_pcbframe.cpp:253
 msgid "Archive or add footprints in a library file"
-msgstr "Archivia o aggiungi i moduli in un file libreria"
+msgstr "Archivia o aggiungi le impronte in un file libreria"
 
 #: pcbnew/menubar_pcbframe.cpp:257
 msgid "Quit Pcbnew"
@@ -4346,7 +4349,7 @@ msgstr "Tabelle li&brerie"
 
 #: pcbnew/menubar_pcbframe.cpp:425 cvpcb/menubar.cpp:117
 msgid "Setup footprint libraries"
-msgstr "Imposta librerie moduli"
+msgstr "Imposta librerie impronte"
 
 #: pcbnew/menubar_pcbframe.cpp:431
 msgid "Hide La&yers Manager"
@@ -4528,7 +4531,7 @@ msgstr "&Preferenze"
 #: pcbnew/edit.cpp:760 pcbnew/edit.cpp:788 pcbnew/edit.cpp:816
 #, c-format
 msgid "Footprint %s found, but it is locked"
-msgstr "Il modulo %s è stato trovato, ma è bloccato"
+msgstr "L'impronta %s è stata trovata, ma è bloccata"
 
 #: pcbnew/edit.cpp:877 pcbnew/edit.cpp:896
 #, c-format
@@ -4705,7 +4708,7 @@ msgstr "Aggiungi forma polinominale "
 
 #: pcbnew/modview_frame.cpp:106
 msgid "Footprint Library Browser"
-msgstr "Librerie moduli"
+msgstr "Esploratore librerie impronte"
 
 #: pcbnew/modview_frame.cpp:444
 #, c-format
@@ -4714,7 +4717,7 @@ msgid ""
 "\n"
 "Error %s."
 msgstr ""
-"Impossibile caricare modulo \"%s\" dalla libreria \"%s\".\n"
+"Impossibile caricare impronta \"%s\" dalla libreria \"%s\".\n"
 "\n"
 "Errore %s."
 
@@ -4747,7 +4750,7 @@ msgstr "Nuova impronta usando l'assistente"
 
 #: pcbnew/tool_modedit.cpp:90
 msgid "Load footprint from library"
-msgstr "Apri impronta da una libreria"
+msgstr "Carica impronta da libreria"
 
 #: pcbnew/tool_modedit.cpp:95
 msgid "Load footprint from current board"
@@ -11228,7 +11231,7 @@ msgstr "Coreano"
 
 #: common/pgm_base.cpp:225
 msgid "Chinese simplified"
-msgstr "Cinese "
+msgstr "Cinese semplificato"
 
 #: common/pgm_base.cpp:233
 msgid "Catalan"
@@ -20155,9 +20158,3 @@ msgstr "Parametri regolatore"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nuovo elemento"
-
-#~ msgid "Create a new library and save current module into it"
-#~ msgstr "Crea una nuova libreria e salva il modulo corrente in essa"
-
-#~ msgid "Place footprint module reference anchor"
-#~ msgstr "Posiziona ancoraggio di riferimento del modulo"
