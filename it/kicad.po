@@ -48,8 +48,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-30 10:32+0100\n"
-"PO-Revision-Date: 2014-10-30 10:32+0100\n"
+"POT-Creation-Date: 2014-10-31 00:58+0100\n"
+"PO-Revision-Date: 2014-10-31 00:58+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -993,16 +993,16 @@ msgid "Show a marker on pads which have no net connected"
 msgstr "Mostra un marcatore sulle piazzole che non hanno connessione"
 
 #: pcbnew/class_pcb_layer_widget.cpp:76
-msgid "Modules Front"
-msgstr "Moduli fronte"
+msgid "Footprints Front"
+msgstr "Impronte sul fronte"
 
 #: pcbnew/class_pcb_layer_widget.cpp:76
 msgid "Show footprints that are on board's front"
 msgstr "Mostra impronte presenti sul fronte della scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
-msgid "Modules Back"
-msgstr "Moduli retro"
+msgid "Footprints Back"
+msgstr "Impronte sul retro"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Show footprints that are on board's back"
@@ -3402,8 +3402,8 @@ msgid "A&nchor"
 msgstr "A&ncoraggio"
 
 #: pcbnew/menubar_modedit.cpp:276
-msgid "Place footprint module reference anchor"
-msgstr "Posiziona ancoraggio di riferimento del modulo impronta"
+msgid "Place footprint reference anchor"
+msgstr "Posiziona ancoraggio di riferimento dell'impronta"
 
 #: pcbnew/menubar_modedit.cpp:305 pcbnew/menubar_pcbframe.cpp:577
 #: eeschema/menubar.cpp:508 eeschema/menubar_libedit.cpp:284
@@ -3917,12 +3917,12 @@ msgid "Shape has no points!"
 msgstr "La forma non ha punti!"
 
 #: pcbnew/muonde.cpp:1078
-msgid "No pad for this module"
-msgstr "Il modulo non ha piazzole"
+msgid "No pad for this footprint"
+msgstr "L'impronta non ha piazzole"
 
 #: pcbnew/muonde.cpp:1086
-msgid "Only one pad for this module"
-msgstr "Il modulo ha soltanto un piedino"
+msgid "Only one pad for this footprint"
+msgstr "L'impronta ha soltanto una piazzola"
 
 #: pcbnew/muonde.cpp:1097
 msgid "Gap:"
@@ -5596,8 +5596,8 @@ msgstr "Le impronte NON PIAZZATE saranno spostate"
 
 #: pcbnew/autorouter/auto_place_footprints.cpp:281
 #, c-format
-msgid "Place module %d of %d"
-msgstr "Posiziona modulo %d di %d"
+msgid "Place footprint %d of %d"
+msgstr "Posiziona impronta %d di %d"
 
 #: pcbnew/autorouter/auto_place_footprints.cpp:466
 msgid "No PCB edge found, unknown board size!"
@@ -5623,9 +5623,9 @@ msgid "OK to abort?"
 msgstr "Abbandonare l'operazione in corso? "
 
 #: pcbnew/autorouter/spread_footprints.cpp:177
-msgid "Could not automatically place modules. No board outlines detected."
+msgid "Could not automatically place footprints. No board outlines detected."
 msgstr ""
-"Impossibile posizionare i moduli automaticamente. Nessun ingombro della "
+"Impossibile posizionare le impronte automaticamente. Nessun ingombro della "
 "scheda stabilito."
 
 #: pcbnew/autorouter/solve.cpp:301
