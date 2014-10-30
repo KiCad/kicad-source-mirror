@@ -114,6 +114,11 @@ also work. If you do so, be sure to apply the patches needed for KiCad:
   # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx.patch
   # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx_bug_15908.patch
   # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx_soname.patch
+  # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx_bug_15684.patch
+
+Optionally, to enable Magic Trackpad pinch-to-zoom support, add the following:
+  # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx_magnify_event.patch
+
 The same patches apply both for wxWidgets and for wxPython.
 
 The script uses the following configure command/options for wxWidgets known to
@@ -177,7 +182,8 @@ been generated when compiling/installing wxPython. If you want to use a specific
 python, you can also specify it via "-DPYTHON_EXECUTABLE" instead of using
 `which python` (this one will just detect/use you default python).
 
-Now KiCad is configured using default features/build-switches.
+Now KiCad is configured using default features/build-switches. To add Magic
+Trackpad pinch-to-zoom support, add -DUSE_OSX_MAGNIFY_EVENT=ON to the above.
 See Documentation/compiling/build-config.txt for a list of all CMake options
 available when compiling KiCad.
 
