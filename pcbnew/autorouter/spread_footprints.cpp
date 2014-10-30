@@ -174,7 +174,7 @@ void PCB_EDIT_FRAME::SpreadFootprints( bool aFootprintsOutsideBoardOnly )
     if( aFootprintsOutsideBoardOnly && !edgesExist )
     {
         DisplayError( this,
-                      _( "Could not automatically place modules. No board outlines detected." ) );
+                      _( "Could not automatically place footprints. No board outlines detected." ) );
         return;
     }
 

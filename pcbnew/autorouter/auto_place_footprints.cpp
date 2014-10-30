@@ -278,7 +278,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     while( ( Module = PickModule( this, DC ) ) != NULL )
     {
         // Display some info about activity, module placement can take a while:
-        msg.Printf( _( "Place module %d of %d" ), cnt, moduleCount );
+        msg.Printf( _( "Place footprint %d of %d" ), cnt, moduleCount );
         SetStatusText( msg );
 
         double initialOrient = Module->GetOrientation();
