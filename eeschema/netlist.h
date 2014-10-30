@@ -65,7 +65,6 @@ enum netlistOptions {
 
 
 class SCH_COMPONENT;
-class SCH_REFERENC_LIST;
 
 
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
@@ -194,7 +193,7 @@ public:
 
 /**
  * Class SCH_REFERENCE_LIST
- * is used create a flattened list of components because in a complex hierarchy, a component
+ * is used to create a flattened list of components because in a complex hierarchy, a component
  * can be used more than once and its reference designator is dependent on the sheet path for
  * the same component.  This flattened list is used for netlist generation, BOM generation,
  * and schematic annotation.
@@ -482,47 +481,5 @@ private:
      */
     int CreateFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue );
 };
-
-
-/**
- * Class BOM_LABEL
- * is used to build a List of Labels by handling the list of labels in schematic because in a
- * complex hierarchy, a label is used more than once and has more than one sheet path
- * so we must create a flat list of labels.
- */
-class BOM_LABEL
-{
-    KICAD_T        m_type;
-    SCH_ITEM*      m_label;
-
-    // have to store it here since the object references will be duplicated.
-    SCH_SHEET_PATH m_sheetPath;  //composed of UIDs
-
-    static const SCH_SHEET_PATH emptySheetPath;
-
-public:
-    BOM_LABEL( KICAD_T aType = TYPE_NOT_INIT, SCH_ITEM* aLabel = NULL,
-               const SCH_SHEET_PATH& aSheetPath = emptySheetPath )
-        : m_type( aType )
-        , m_label( aLabel )
-        , m_sheetPath( aSheetPath )
-    {
-    }
-
-    KICAD_T GetType() const { return m_type; }
-
-    const SCH_ITEM* GetLabel() const { return m_label; }
-
-    const SCH_SHEET_PATH& GetSheetPath() const { return m_sheetPath; }
-
-    wxString GetText() const
-    {
-        const SCH_TEXT* tmp = static_cast<SCH_TEXT*>( m_label );
-        return tmp->GetText();
-    }
-};
-
-
-typedef std::vector <BOM_LABEL> BOM_LABEL_LIST;
 
 #endif    // _NETLIST_H_

@@ -40,7 +40,8 @@ class SCH_COMPONENT;
 
 
 /* Type of Net objects (wires, labels, pins...) */
-enum NETLIST_ITEM_T {
+enum NETLIST_ITEM_T
+{
     NET_ITEM_UNSPECIFIED,           // only for not yet initialized instances
     NET_SEGMENT,                    // connection by wire
     NET_BUS,                        // connection by bus
@@ -76,7 +77,8 @@ enum NETLIST_ITEM_T {
 
 
 /* Values for .m_FlagOfConnection member */
-enum NET_CONNECTION_T {
+enum NET_CONNECTION_T
+{
     UNCONNECTED = 0,            /* Pin or Label not connected (error) */
     NOCONNECT_SYMBOL_PRESENT,   /* Pin not connected but have a  NoConnect
                                  * symbol on it (no error) */
@@ -87,33 +89,33 @@ enum NET_CONNECTION_T {
 class NETLIST_OBJECT
 {
 public:
-    NETLIST_ITEM_T  m_Type;             /* Type of item (see NETLIST_ITEM_T enum) */
-    EDA_ITEM*       m_Comp;             /* Pointer to the library item that
+    NETLIST_ITEM_T m_Type;              /* Type of item (see NETLIST_ITEM_T enum) */
+    EDA_ITEM* m_Comp;                   /* Pointer to the library item that
                                          * created this net object (the parent)
                                          */
-    SCH_ITEM*       m_Link;             /* For SCH_SHEET_PIN:
+    SCH_ITEM* m_Link;                   /* For SCH_SHEET_PIN:
                                          * Pointer to the hierarchy sheet that
                                          * contains this SCH_SHEET_PIN
                                          * For Pins: pointer to the schematic component
                                          * that contains this pin
                                          */
-    int            m_Flag;              /* flag used in calculations */
-    SCH_SHEET_PATH m_SheetPath;         // the sheet path which contains this item
+    int m_Flag;                         /* flag used in calculations */
+    SCH_SHEET_PATH  m_SheetPath;        // the sheet path which contains this item
     SCH_SHEET_PATH  m_SheetPathInclude; // sheet path which contains the hierarchical label
-    int            m_ElectricalType;    /* Has meaning only for Pins and
+    int m_ElectricalType;               /* Has meaning only for Pins and
                                          * hierarchical pins: electrical type */
     int m_BusNetCode;                   /* Used for BUS connections */
     int m_Member;                       /* for labels type NET_BUSLABELMEMBER ( bus member
                                          * created from the BUS label ) member number.
                                          */
     NET_CONNECTION_T m_ConnectionType;  // Used to store the connection type
-    long            m_PinNum;           // pin number ( 1 long = 4 bytes -> 4 ascii codes)
-    wxString        m_Label;            // Label text (for labels) or Pin name (for pins)
-    wxPoint         m_Start;            // Position of object or for segments: starting point
-    wxPoint         m_End;              // For segments (wire and buses): ending point
+    long m_PinNum;                      // pin number ( 1 long = 4 bytes -> 4 ascii codes)
+    wxString    m_Label;                // Label text (for labels) or Pin name (for pins)
+    wxPoint     m_Start;                // Position of object or for segments: starting point
+    wxPoint     m_End;                  // For segments (wire and buses): ending point
 
 private:
-    int            m_netCode;           /* net code for all items except BUS
+    int m_netCode;                      /* net code for all items except BUS
                                          * labels because a BUS label has
                                          * as many net codes as bus members
                                          */
@@ -123,10 +125,12 @@ private:
                                          * When no label, the pin is used to build
                                          * default net name.
                                          */
+
 public:
 
 #if defined(DEBUG)
     void Show( std::ostream& out, int ndx ) const;      // override
+
 #endif
 
     NETLIST_OBJECT();
@@ -214,7 +218,7 @@ public:
      */
     bool IsLabelGlobal() const
     {
-        return  ( m_Type == NET_PINLABEL ) || ( m_Type == NET_GLOBLABEL );
+        return ( m_Type == NET_PINLABEL ) || ( m_Type == NET_GLOBLABEL );
     }
 
     /**
@@ -251,18 +255,17 @@ public:
 };
 
 
-
 /**
  * NETLIST_OBJECT_LIST is a class to handle the list of connected items
- * in a full shematic hierarchy for netlist and erc calculations
+ * in a full schematic hierarchy for netlist and erc calculations
  */
-class NETLIST_OBJECT_LIST: public std::vector <NETLIST_OBJECT*>
+class NETLIST_OBJECT_LIST : public std::vector <NETLIST_OBJECT*>
 {
-    bool m_isOwner;     // = true if the objects in list are owned my me, and therefore
-                        // the memory should be freed by the destructor and the list cleared
-    int m_lastNetCode;  // Used in intermediate calculation: last net code created
-    int m_lastBusNetCode;  // Used in intermediate calculation:
-                           // last net code created for bus members
+    bool m_isOwner;         // = true if the objects in list are owned my me, and therefore
+                            // the memory should be freed by the destructor and the list cleared
+    int m_lastNetCode;      // Used in intermediate calculation: last net code created
+    int m_lastBusNetCode;   // Used in intermediate calculation:
+                            // last net code created for bus members
 
 public:
     /**
@@ -293,7 +296,7 @@ public:
      */
     NETLIST_OBJECT* GetItem( unsigned aIdx ) const
     {
-        return  *( this->begin() + aIdx );
+        return *( this->begin() + aIdx );
     }
 
     /*
@@ -301,7 +304,7 @@ public:
      */
     NETLIST_ITEM_T GetItemType( unsigned aIdx ) const
     {
-        return  GetItem( aIdx )->m_Type;
+        return GetItem( aIdx )->m_Type;
     }
 
     /*
@@ -344,7 +347,7 @@ public:
     /**
      * Reset the connection type of all items to UNCONNECTED type
      */
-    void ResetConnectionsType( )
+    void ResetConnectionsType()
     {
         for( unsigned ii = 0; ii < size(); ii++ )
             GetItem( ii )->SetConnectionType( UNCONNECTED );
@@ -371,7 +374,9 @@ public:
             GetItem( idx )->Show( std::cout, idx );
         }
     }
+
     #endif
+
 private:
     /*
      * Propagate aNewNetCode to items having an internal netcode aOldNetCode
@@ -394,13 +399,13 @@ private:
         return Objet1->GetNet() < Objet2->GetNet();
     }
 
-
     /* Comparison routine to sort items by Sheet Number
      */
     static bool sortItemsBySheet( const NETLIST_OBJECT* Objet1, const NETLIST_OBJECT* Objet2 )
     {
         return Objet1->m_SheetPath.Cmp( Objet2->m_SheetPath ) < 0;
     }
+
     /*
      * Propagate net codes from a parent sheet to an include sheet,
      * from a pin sheet connection
@@ -452,4 +457,4 @@ private:
  */
 extern bool IsBusLabel( const wxString& aLabel );
 
-#endif  // _CLASS_NETLIST_OBJECT_H_
+#endif    // _CLASS_NETLIST_OBJECT_H_

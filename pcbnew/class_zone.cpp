@@ -73,6 +73,8 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
 ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     BOARD_CONNECTED_ITEM( aZone )
 {
+    m_smoothedPoly = NULL;
+
     // Should the copy be on the same net?
     SetNetCode( aZone.GetNetCode() );
     m_Poly = new CPolyLine( *aZone.m_Poly );
