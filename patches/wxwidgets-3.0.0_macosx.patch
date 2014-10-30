@@ -41,7 +41,7 @@
  monodll_osx_cocoa_notebook.o: $(srcdir)/src/osx/cocoa/notebook.mm $(MONODLL_ODEP)
  	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/notebook.mm
  
-+monodll_osx_cocoa_overla.o: $(srcdir)/src/osx/cocoa/overlay.mm $(MONODLL_ODEP)
++monodll_osx_cocoa_overlay.o: $(srcdir)/src/osx/cocoa/overlay.mm $(MONODLL_ODEP)
 +	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/overlay.mm
 +
  monodll_osx_cocoa_radiobut.o: $(srcdir)/src/osx/cocoa/radiobut.mm $(MONODLL_ODEP)
