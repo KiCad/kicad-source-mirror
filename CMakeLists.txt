@@ -268,6 +268,10 @@ if( USE_WX_GRAPHICS_CONTEXT )
     add_definitions( -DUSE_WX_GRAPHICS_CONTEXT )
 endif()
 
+if( USE_OSX_MAGNIFY_EVENT )
+    add_definitions( -DUSE_OSX_MAGNIFY_EVENT )
+endif()
+
 
 # Allow user to override the default settings for adding images to menu items.  By default
 # images in menu items are enabled on all platforms except OSX.  This can be over ridden by

@@ -115,6 +115,9 @@ public:
     void   OnEraseBackground( wxEraseEvent& event );
     void   OnChar( wxKeyEvent& event );
     void   OnMouseWheel( wxMouseEvent& event );
+#ifdef USE_OSX_MAGNIFY_EVENT
+    void   OnMagnify( wxMouseEvent& event );
+#endif
     void   OnMouseMove( wxMouseEvent& event );
     void   OnRightClick( wxMouseEvent& event );
     void   OnPopUpMenu( wxCommandEvent& event );

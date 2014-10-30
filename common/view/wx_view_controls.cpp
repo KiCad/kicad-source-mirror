@@ -39,6 +39,10 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
 {
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
+#ifdef USE_OSX_MAGNIFY_EVENT
+    m_parentPanel->Connect( wxEVT_MAGNIFY,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onMagnify ), NULL, this );
+#endif
     m_parentPanel->Connect( wxEVT_MOUSEWHEEL,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onWheel ), NULL, this );
     m_parentPanel->Connect( wxEVT_MIDDLE_UP,
@@ -175,6 +179,16 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     aEvent.Skip();
 }
 
+#ifdef USE_OSX_MAGNIFY_EVENT
+void WX_VIEW_CONTROLS::onMagnify( wxMouseEvent& aEvent )
+{
+    // Scale based on the magnification from our underlying magnification event.
+    VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
+    setScale( m_view->GetScale() * (aEvent.GetMagnification() + 1.0f), anchor );
+
+    aEvent.Skip();
+}
+#endif
 
 void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
 {
