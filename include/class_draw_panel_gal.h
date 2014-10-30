@@ -107,6 +107,24 @@ public:
         return (KIGFX::VIEW_CONTROLS*)( m_viewControls );
     }
 
+    /**
+     * Function GetEnableMousewheelPan
+     * Return default mousewheel behavior.
+     */
+    bool GetEnableMousewheelPan() const
+    {
+        return m_enableMousewheelPan;
+    }
+
+    /**
+     * Function SetEnableMousewheelPan
+     * Set default mousewheel behavior.
+     */
+    void SetEnableMousewheelPan( bool aEnable )
+    {
+        m_enableMousewheelPan = aEnable;
+    }
+
     /// @copydoc wxWindow::Refresh()
     void Refresh( bool aEraseBackground = true, const wxRect* aRect = NULL );
 
@@ -191,6 +209,9 @@ protected:
 
     /// Processes and forwards events to tools
     TOOL_DISPATCHER*         m_eventDispatcher;
+
+    /// True to enable mousewheel panning by default.
+    bool                     m_enableMousewheelPan;
 };
 
 #endif

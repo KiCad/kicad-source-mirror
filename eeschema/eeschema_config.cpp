@@ -328,6 +328,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 
     dlg.SetShowGrid( IsGridVisible() );
     dlg.SetShowHiddenPins( m_showAllPins );
+    dlg.SetEnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
     dlg.SetEnableMiddleButtonPan( m_canvas->GetEnableMiddleButtonPan() );
     dlg.SetEnableZoomNoCenter( m_canvas->GetEnableZoomNoCenter() );
     dlg.SetMiddleButtonPanLimited( m_canvas->GetMiddleButtonPanLimited() );
@@ -379,6 +380,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     SetAutoSaveInterval( dlg.GetAutoSaveInterval() * 60 );
     SetGridVisibility( dlg.GetShowGrid() );
     m_showAllPins = dlg.GetShowHiddenPins();
+    m_canvas->SetEnableMousewheelPan( dlg.GetEnableMousewheelPan() );
     m_canvas->SetEnableMiddleButtonPan( dlg.GetEnableMiddleButtonPan() );
     m_canvas->SetEnableZoomNoCenter( dlg.GetEnableZoomNoCenter() );
     m_canvas->SetMiddleButtonPanLimited( dlg.GetMiddleButtonPanLimited() );

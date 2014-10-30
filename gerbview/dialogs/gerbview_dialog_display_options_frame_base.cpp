@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Oct 17 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -83,16 +83,21 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* bLeftBottomSizer;
 	bLeftBottomSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
 	
-	m_OptZoomNoCenter = new wxCheckBox( this, wxID_ANY, _("Do not center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptZoomNoCenter = new wxCheckBox( bLeftBottomSizer->GetStaticBox(), wxID_ANY, _("Do not center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptZoomNoCenter->SetToolTip( _("Keep the cursor at its current location when zooming") );
 	
 	bLeftBottomSizer->Add( m_OptZoomNoCenter, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_OptMiddleButtonPan = new wxCheckBox( this, wxID_ANY, _("Use middle mouse button to pan"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptMiddleButtonPan = new wxCheckBox( bLeftBottomSizer->GetStaticBox(), wxID_ANY, _("Use middle mouse button to pan"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftBottomSizer->Add( m_OptMiddleButtonPan, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_OptMiddleButtonPanLimited = new wxCheckBox( this, wxID_ANY, _("Limit panning to scroll size"), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftBottomSizer->Add( m_OptMiddleButtonPanLimited, 0, wxALL, 5 );
+	m_OptMiddleButtonPanLimited = new wxCheckBox( bLeftBottomSizer->GetStaticBox(), wxID_ANY, _("Limit panning to scroll size"), wxDefaultPosition, wxDefaultSize, 0 );
+	bLeftBottomSizer->Add( m_OptMiddleButtonPanLimited, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	
+	m_OptMousewheelPan = new wxCheckBox( bLeftBottomSizer->GetStaticBox(), wxID_ANY, _("Use mousewheel to pan"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptMousewheelPan->SetToolTip( _("Use mousewheel to pan canvas") );
+	
+	bLeftBottomSizer->Add( m_OptMousewheelPan, 0, wxALL, 5 );
 	
 	
 	bRightSizer->Add( bLeftBottomSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );

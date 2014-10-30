@@ -250,19 +250,18 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
 
 void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
 {
-    if( event.ShiftDown() )
+    double delta = 0.05 * GetPrm3DVisu().m_Zoom * event.GetWheelRotation();
+
+    if( event.ShiftDown() || true )
     {
-        if( event.GetWheelRotation() < 0 )
-            SetView3D( WXK_UP );    // move up
+        if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL )
+            m_draw3dOffset.x -= delta;
         else
-            SetView3D( WXK_DOWN );  // move down
+            m_draw3dOffset.y -= delta;
     }
     else if( event.ControlDown() )
     {
-        if( event.GetWheelRotation() > 0 )
-            SetView3D( WXK_RIGHT ); // move right
-        else
-            SetView3D( WXK_LEFT );  // move left
+        m_draw3dOffset.y -= delta;
     }
     else
     {
@@ -276,10 +275,10 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
         else
             GetPrm3DVisu().m_Zoom *= 1.4;
 
-        DisplayStatus();
-        Refresh( false );
     }
 
+    DisplayStatus();
+    Refresh( false );
     GetPrm3DVisu().m_Beginx = event.GetX();
     GetPrm3DVisu().m_Beginy = event.GetY();
 }

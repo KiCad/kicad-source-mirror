@@ -29,6 +29,7 @@
 #include <wx/colour.h>
 #include <wx/filename.h>
 
+#include <kiface_i.h>
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
@@ -46,6 +47,9 @@
 #ifdef __WXDEBUG__
 #include <profile.h>
 #endif /* __WXDEBUG__ */
+
+// keys to retrieve options in config:
+#define ENBL_MOUSEWHEEL_PAN_KEY         wxT( "MousewheelPAN" )
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
@@ -91,11 +95,20 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
                  NULL, m_eventDispatcher );
     }
 
+    m_enableMousewheelPan = false;
+
     // Set up timer that prevents too frequent redraw commands
     m_refreshTimer.SetOwner( this );
     m_pendingRefresh = false;
     m_drawing = false;
     Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
+
+    wxConfigBase* cfg = Kiface().KifaceSettings();
+
+    if( cfg )
+    {
+        cfg->Read( ENBL_MOUSEWHEEL_PAN_KEY, &m_enableMousewheelPan, false );
+    }
 }
 
 

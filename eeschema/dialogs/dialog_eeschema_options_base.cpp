@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Oct 17 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -191,6 +191,9 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	bSizer2->Add( m_checkMiddleButtonPanLimited, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
 	
+	m_checkEnableMousewheelPan = new wxCheckBox( m_panel1, wxID_ANY, _("Use mousewheel to pan"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_checkEnableMousewheelPan, 0, wxLEFT|wxRIGHT|wxTOP, 3 );
+	
 	m_checkAutoPan = new wxCheckBox( m_panel1, wxID_ANY, _("Pan while moving ob&ject"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_checkAutoPan, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
 	
@@ -225,21 +228,21 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	wxStaticBoxSizer* fieldSizer;
 	fieldSizer = new wxStaticBoxSizer( new wxStaticBox( m_panel2, wxID_ANY, _("Field Settings") ), wxVERTICAL );
 	
-	fieldNameLabel = new wxStaticText( m_panel2, wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
+	fieldNameLabel = new wxStaticText( fieldSizer->GetStaticBox(), wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
 	fieldNameLabel->Wrap( -1 );
 	fieldSizer->Add( fieldNameLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	fieldNameTextCtrl = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fieldNameTextCtrl = new wxTextCtrl( fieldSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fieldSizer->Add( fieldNameTextCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	fieldDefaultValueLabel = new wxStaticText( m_panel2, wxID_ANY, _("Default Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	fieldDefaultValueLabel = new wxStaticText( fieldSizer->GetStaticBox(), wxID_ANY, _("Default Value"), wxDefaultPosition, wxDefaultSize, 0 );
 	fieldDefaultValueLabel->Wrap( -1 );
 	fieldSizer->Add( fieldDefaultValueLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	fieldDefaultValueTextCtrl = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fieldDefaultValueTextCtrl = new wxTextCtrl( fieldSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fieldSizer->Add( fieldDefaultValueTextCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	fieldVisibleCheckbox = new wxCheckBox( m_panel2, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
+	fieldVisibleCheckbox = new wxCheckBox( fieldSizer->GetStaticBox(), wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
 	fieldSizer->Add( fieldVisibleCheckbox, 0, wxALL, 5 );
 	
 	
@@ -255,7 +258,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook1->AddPage( m_panel2, _("Template Field Names"), true );
+	m_notebook1->AddPage( m_panel2, _("Template Field Names"), false );
 	
 	bOptionsSizer->Add( m_notebook1, 1, wxALL|wxEXPAND, 5 );
 	

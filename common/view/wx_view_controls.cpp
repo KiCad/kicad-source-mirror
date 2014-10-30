@@ -25,6 +25,7 @@
 
 #include <wx/wx.h>
 
+#include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -134,22 +135,22 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 {
     const double wheelPanSpeed = 0.001;
+    VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) *
+                                          ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
 
-    if( aEvent.ControlDown() || aEvent.ShiftDown() )
+
+    if( !aEvent.ControlDown() && ( aEvent.ShiftDown() || ((EDA_DRAW_PANEL_GAL *)m_parentPanel)->GetEnableMousewheelPan() ) )
     {
         // Scrolling
-        VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) *
-                             ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
-        double   scrollSpeed;
+        int axis = aEvent.GetWheelAxis();
+        VECTOR2D delta( axis == wxMOUSE_WHEEL_HORIZONTAL ? scrollVec.x : 0.0,
+                        axis == wxMOUSE_WHEEL_VERTICAL ? -scrollVec.y : 0.0 );
 
-        if( abs( scrollVec.x ) > abs( scrollVec.y ) )
-            scrollSpeed = scrollVec.x;
-        else
-            scrollSpeed = scrollVec.y;
-
-        VECTOR2D delta( aEvent.ControlDown() ? -scrollSpeed : 0.0,
-                        aEvent.ShiftDown() ? -scrollSpeed : 0.0 );
-
+        setCenter( m_view->GetCenter() + delta );
+    }
+    else if( aEvent.ControlDown() && !aEvent.ShiftDown() && !((EDA_DRAW_PANEL_GAL *)m_parentPanel)->GetEnableMousewheelPan() )
+    {
+        VECTOR2D delta( 0.0, -scrollVec.y );
         setCenter( m_view->GetCenter() + delta );
     }
     else

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Oct 17 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -49,6 +49,7 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_OptZoomNoCenter;
 		wxCheckBox* m_OptMiddleButtonPan;
 		wxCheckBox* m_OptMiddleButtonPanLimited;
+		wxCheckBox* m_OptMousewheelPan;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;

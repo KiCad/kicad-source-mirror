@@ -47,6 +47,7 @@ static const int CURSOR_SIZE = 12; ///< Cursor size in pixels
 
 // keys to store options in config:
 #define ENBL_ZOOM_NO_CENTER_KEY         wxT( "ZoomNoCenter" )
+#define ENBL_MOUSEWHEEL_PAN_KEY         wxT( "MousewheelPAN" )
 #define ENBL_MIDDLE_BUTT_PAN_KEY        wxT( "MiddleButtonPAN" )
 #define MIDDLE_BUTT_PAN_LIMITED_KEY     wxT( "MiddleBtnPANLimited" )
 #define ENBL_AUTO_PAN_KEY               wxT( "AutoPAN" )
@@ -121,6 +122,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_ClipBox.SetY( 0 );
     m_canStartBlock = -1;       // Command block can start if >= 0
     m_abortRequest = false;
+    m_enableMousewheelPan = false;
     m_enableMiddleButtonPan = true;
     m_enableZoomNoCenter = false;
     m_panScrollbarLimits = false;
@@ -135,6 +137,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 
     if( cfg )
     {
+        cfg->Read( ENBL_MOUSEWHEEL_PAN_KEY, &m_enableMousewheelPan, false );
         cfg->Read( ENBL_MIDDLE_BUTT_PAN_KEY, &m_enableMiddleButtonPan, true );
         cfg->Read( ENBL_ZOOM_NO_CENTER_KEY, &m_enableZoomNoCenter, false );
         cfg->Read( MIDDLE_BUTT_PAN_LIMITED_KEY, &m_panScrollbarLimits, false );
@@ -164,6 +167,7 @@ EDA_DRAW_PANEL::~EDA_DRAW_PANEL()
 
     if( cfg )
     {
+        cfg->Write( ENBL_MOUSEWHEEL_PAN_KEY, m_enableMousewheelPan );
         cfg->Write( ENBL_MIDDLE_BUTT_PAN_KEY, m_enableMiddleButtonPan );
         cfg->Write( ENBL_ZOOM_NO_CENTER_KEY, m_enableZoomNoCenter );
         cfg->Write( MIDDLE_BUTT_PAN_LIMITED_KEY, m_panScrollbarLimits );
@@ -424,7 +428,7 @@ void EDA_DRAW_PANEL::OnScroll( wxScrollWinEvent& event )
     // so we skip these events.
     // Note they are here just in case, because they are not actually used
     // in Kicad
-#if wxCHECK_VERSION( 3, 1, 0 ) || !wxCHECK_VERSION( 2, 9, 5 ) || !defined (__WINDOWS__)
+#if wxCHECK_VERSION( 3, 1, 0 ) || !wxCHECK_VERSION( 2, 9, 5 ) || ( !defined (__WINDOWS__) && !defined (__WXMAC__) )
     int maxX = unitsX - csizeX;
     int maxY = unitsY - csizeY;
 
@@ -934,47 +938,40 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     bool offCenterReq = event.ControlDown() && event.ShiftDown();
     offCenterReq = offCenterReq || m_enableZoomNoCenter;
 
-#if wxMAJOR_VERSION >= 2 && wxMINOR_VERSION >= 9
+#if wxCHECK_VERSION(2, 9, 0)
     int axis = event.GetWheelAxis();
 #else
     const int axis = 0;
 #endif
 
-    // This is a zoom in or out command
-    if( event.GetWheelRotation() > 0 )
-    {
-        if( event.ShiftDown() && !event.ControlDown() )
-        {
-            if( axis == 0 )
-                cmd.SetId( ID_PAN_UP );
-            else
-                cmd.SetId( ID_PAN_RIGHT );
-        }
-        else if( event.ControlDown() && !event.ShiftDown() )
-            cmd.SetId( ID_PAN_LEFT );
-        else if( offCenterReq )
-            cmd.SetId( ID_OFFCENTER_ZOOM_IN );
-        else
-            cmd.SetId( ID_POPUP_ZOOM_IN );
-    }
-    else if( event.GetWheelRotation() < 0 )
-    {
-        if( event.ShiftDown() && !event.ControlDown() )
-        {
-            if( axis == 0 )
-                cmd.SetId( ID_PAN_DOWN );
-            else
-                cmd.SetId( ID_PAN_LEFT );
-        }
-        else if( event.ControlDown() && !event.ShiftDown() )
-            cmd.SetId( ID_PAN_RIGHT );
-        else if( offCenterReq )
-            cmd.SetId( ID_OFFCENTER_ZOOM_OUT );
-        else
-            cmd.SetId( ID_POPUP_ZOOM_OUT );
-    }
+    wxPoint delta;
+    wxPoint start = GetViewStart();
 
-    GetEventHandler()->ProcessEvent( cmd );
+    if( ( m_enableMousewheelPan || event.ShiftDown() ) && !event.ControlDown() )
+    {
+        if( axis == wxMOUSE_WHEEL_HORIZONTAL )
+            delta.x = -event.GetWheelRotation();
+        else
+            delta.y = event.GetWheelRotation();
+    }
+    else if( event.ControlDown() && !event.ShiftDown() && !m_enableMousewheelPan )
+        delta.y = event.GetWheelRotation();
+    else if( offCenterReq )
+        cmd.SetId( event.GetWheelRotation() > 0 ? ID_OFFCENTER_ZOOM_IN : ID_OFFCENTER_ZOOM_OUT );
+    else
+        cmd.SetId( event.GetWheelRotation() > 0 ? ID_POPUP_ZOOM_IN : ID_POPUP_ZOOM_OUT );
+
+    if( cmd.GetId() )
+    {
+        GetEventHandler()->ProcessEvent( cmd );
+    }
+    else
+    {
+        wxPoint newStart = start - delta;
+        wxPoint center = GetScreenCenterLogicalPosition();
+        GetParent()->SetScrollCenterPosition(center);
+        Scroll(newStart);
+    }
     event.Skip();
 }
 

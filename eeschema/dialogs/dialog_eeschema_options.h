@@ -373,6 +373,20 @@ public:
     }
 
     /**
+     * Function SetEnableMousewheelPan
+     * Sets the MousewheelPan setting in the dialog
+     *
+     * @param enable The boolean value to set the AutoPan value in the dialog
+     */
+    void SetEnableMousewheelPan( bool enable ) { m_checkEnableMousewheelPan->SetValue( enable ); }
+
+    /**
+     * Function GetEnableMousewheelPan
+     * Return the MousewheelPan setting from the dialog
+     */
+    bool GetEnableMousewheelPan( void ) { return m_checkEnableMousewheelPan->GetValue(); }
+
+    /**
      * Function SetEnableAutoPan
      * Sets the AutoPan setting in the dialog
      *

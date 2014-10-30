@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Oct 17 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -100,6 +100,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkEnableZoomNoCenter;
 		wxCheckBox* m_checkEnableMiddleButtonPan;
 		wxCheckBox* m_checkMiddleButtonPanLimited;
+		wxCheckBox* m_checkEnableMousewheelPan;
 		wxCheckBox* m_checkAutoPan;
 		wxCheckBox* m_checkHVOrientation;
 		wxCheckBox* m_checkPageLimits;
