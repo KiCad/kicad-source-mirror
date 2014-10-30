@@ -7,13 +7,17 @@
 #  db: Usare le maiuscole con moderazione: vanno usate per i nomi propri e all'inizio
 #  db: di una frase: negli altri casi può risultare molto inelegante
 #
-# mc: Note:
-# mc: - footprint -> impronta
-# mc: - module -> modulo (non dovrebbe comparire più. Il termine è stato eliminato)
-# mc: - component -> componente
+# mc: note linguistiche:
 # mc: - gli apici singoli non si usano in italiano, sostituiti con virgolette
-# mc:   idem per i simboli <>
+# mc: - idem per i simboli <>
 # mc: - come regola generale si usano le parole più corte (es. utilizza -> usa)
+#
+# mc: Note terminologiche:
+#
+# mc: - component -> componente, simbolo elettrico dello schema con significato (riferimento, àncora, valori, ecc.)
+# mc: - footprint -> impronta, un simbolo PCB generico
+# mc: - module    -> modulo, un'impronta con significato (riferimento, àncora, valori, ecc.)
+#
 # mc: - netlist = non si traduce perché termine tecnico = TT
 # mc: - ratsnest = TT
 # mc: - editor = TT
@@ -44,8 +48,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-29 23:12+0100\n"
-"PO-Revision-Date: 2014-10-29 23:13+0100\n"
+"POT-Creation-Date: 2014-10-30 10:32+0100\n"
+"PO-Revision-Date: 2014-10-30 10:32+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -593,7 +597,7 @@ msgid "Module"
 msgstr "Modulo"
 
 #: pcbnew/class_text_mod.cpp:393 pcbnew/class_marker_pcb.cpp:97
-#: pcbnew/class_zone.cpp:605 pcbnew/class_track.cpp:1123
+#: pcbnew/class_zone.cpp:607 pcbnew/class_track.cpp:1123
 #: pcbnew/class_track.cpp:1150 pcbnew/class_track.cpp:1199
 #: pcbnew/class_drawsegment.cpp:322 pcbnew/dialogs/dialog_layers_setup.cpp:354
 #: eeschema/sch_text.cpp:788 eeschema/libedit.cpp:508
@@ -631,7 +635,7 @@ msgid "Display"
 msgstr "Mostra"
 
 #: pcbnew/class_text_mod.cpp:403 pcbnew/class_pcb_layer_widget.cpp:208
-#: pcbnew/class_zone.cpp:657 pcbnew/layer_widget.cpp:545
+#: pcbnew/class_zone.cpp:659 pcbnew/layer_widget.cpp:545
 #: pcbnew/class_track.cpp:1133 pcbnew/class_track.cpp:1160
 #: pcbnew/class_drawsegment.cpp:353 pcbnew/class_module.cpp:557
 #: pcbnew/class_pcb_text.cpp:138 pcbnew/class_pad.cpp:626
@@ -2252,7 +2256,7 @@ msgstr "Impossibile creare il file \"%s\""
 msgid "Filling zone %d out of %d (net %s)..."
 msgstr "Riempimento zona %d fuori di %d (collegamento %s)..."
 
-#: pcbnew/zones_by_polygon_fill_functions.cpp:111 pcbnew/class_zone.cpp:640
+#: pcbnew/zones_by_polygon_fill_functions.cpp:111 pcbnew/class_zone.cpp:642
 #: pcbnew/class_track.cpp:1072
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:46
 msgid "NetName"
@@ -2748,81 +2752,81 @@ msgstr "Nomignolo"
 msgid "Description"
 msgstr "Descrizione"
 
-#: pcbnew/class_zone.cpp:596
+#: pcbnew/class_zone.cpp:598
 msgid "Zone Outline"
 msgstr "Contorno zona"
 
-#: pcbnew/class_zone.cpp:603 pcbnew/class_zone.cpp:862
+#: pcbnew/class_zone.cpp:605 pcbnew/class_zone.cpp:864
 msgid "(Cutout)"
 msgstr "(Ritaglia)"
 
-#: pcbnew/class_zone.cpp:612
+#: pcbnew/class_zone.cpp:614
 msgid "No via"
 msgstr "Nessun Via"
 
-#: pcbnew/class_zone.cpp:615
+#: pcbnew/class_zone.cpp:617
 msgid "No track"
 msgstr "Nessuna pista"
 
-#: pcbnew/class_zone.cpp:618
+#: pcbnew/class_zone.cpp:620
 msgid "No copper pour"
 msgstr "Escluso rame"
 
-#: pcbnew/class_zone.cpp:620
+#: pcbnew/class_zone.cpp:622
 msgid "Keepout"
 msgstr "Zona vuota"
 
-#: pcbnew/class_zone.cpp:637 pcbnew/class_zone.cpp:892
+#: pcbnew/class_zone.cpp:639 pcbnew/class_zone.cpp:894
 #: eeschema/schframe.cpp:169
 msgid "Not Found"
 msgstr "Non trovato"
 
-#: pcbnew/class_zone.cpp:645 pcbnew/class_track.cpp:1076
+#: pcbnew/class_zone.cpp:647 pcbnew/class_track.cpp:1076
 msgid "NetCode"
 msgstr "Codice collegamento"
 
-#: pcbnew/class_zone.cpp:650
+#: pcbnew/class_zone.cpp:652
 msgid "Priority"
 msgstr "Priorità"
 
-#: pcbnew/class_zone.cpp:654
+#: pcbnew/class_zone.cpp:656
 msgid "Non Copper Zone"
 msgstr "Zona non in rame"
 
-#: pcbnew/class_zone.cpp:660
+#: pcbnew/class_zone.cpp:662
 msgid "Corners"
 msgstr "Angoli"
 
-#: pcbnew/class_zone.cpp:663
+#: pcbnew/class_zone.cpp:665
 msgid "Segments"
 msgstr "Segmenti"
 
-#: pcbnew/class_zone.cpp:665
+#: pcbnew/class_zone.cpp:667
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:67
 msgid "Polygons"
 msgstr "Poligoni"
 
-#: pcbnew/class_zone.cpp:667
+#: pcbnew/class_zone.cpp:669
 msgid "Fill mode"
 msgstr "Modalità piena"
 
-#: pcbnew/class_zone.cpp:671
+#: pcbnew/class_zone.cpp:673
 msgid "Hatch lines"
 msgstr "Tratteggio"
 
-#: pcbnew/class_zone.cpp:676
+#: pcbnew/class_zone.cpp:678
 msgid "Corners in DrawList"
 msgstr "Angoli nella lista di disegno"
 
-#: pcbnew/class_zone.cpp:865
+#: pcbnew/class_zone.cpp:867
 msgid "(Keepout)"
 msgstr "(Zona vuota)"
 
-#: pcbnew/class_zone.cpp:885
+#: pcbnew/class_zone.cpp:887
 msgid "** NO BOARD DEFINED **"
 msgstr "** Nessuna scheda definita **"
 
-#: pcbnew/class_zone.cpp:897
+#: pcbnew/class_zone.cpp:899
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Contorno zona %s su %s"
@@ -3399,7 +3403,7 @@ msgstr "A&ncoraggio"
 
 #: pcbnew/menubar_modedit.cpp:276
 msgid "Place footprint module reference anchor"
-msgstr "Posiziona ancoraggio di riferimento del modulo"
+msgstr "Posiziona ancoraggio di riferimento del modulo impronta"
 
 #: pcbnew/menubar_modedit.cpp:305 pcbnew/menubar_pcbframe.cpp:577
 #: eeschema/menubar.cpp:508 eeschema/menubar_libedit.cpp:284
@@ -3772,7 +3776,7 @@ msgstr "Parola chiave: %s"
 #: pcbnew/class_module.cpp:788
 #, c-format
 msgid "Footprint %s on %s"
-msgstr "Modulo %s su %s "
+msgstr "Impronta %s su %s "
 
 #: pcbnew/editedge.cpp:151
 msgid "Copper layer global delete not allowed!"
@@ -5630,7 +5634,7 @@ msgstr "Cessare sbroglio?"
 
 #: pcbnew/autorouter/move_and_route_event_functions.cpp:133
 msgid "Not locked footprints inside the board will be moved. OK?"
-msgstr "Nessun modulo bloccato dentro la scheda verrà spostato. OK?"
+msgstr "Nessuna impronta bloccata dentro la scheda verrà spostata. OK?"
 
 #: pcbnew/autorouter/move_and_route_event_functions.cpp:139
 msgid "No modules found!"
@@ -6722,7 +6726,7 @@ msgstr "%"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:315
 msgid "Back side (footprint is mirrored)"
-msgstr "Lato retrostante (modulo speculare)"
+msgstr "Lato retrostante (impronta speculare)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:716
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
@@ -7046,7 +7050,7 @@ msgstr "Aiuto specifico opzione:"
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:19
 #, c-format
 msgid "Footprint %s (%s) orientation %.1f"
-msgstr "Modulo %s (%s) orientamento %.1f"
+msgstr "Impronta %s (%s) orientamento %.1f"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:56
 msgid "Height"
@@ -7289,7 +7293,7 @@ msgid ""
 "by their reference (U1, R3...) (normal setting)\n"
 "or their time stamp (special setting after a full schematic reannotation)"
 msgstr ""
-"Seleziona la modalità di riconoscimento moduli:\n"
+"Seleziona la modalità di riconoscimento impronte:\n"
 "tramite il riferimento (U1, R3...) (impostazione normale)\n"
 "oppure tramite marcatura temporale (impostazione speciale dopo una "
 "riannotazione completa dello schema)"
@@ -7313,10 +7317,10 @@ msgid ""
 "schematic)\n"
 "- the .cmp file created by CvPcb"
 msgstr ""
-"Sorgenti di nomi di moduli per componente sono:\n"
-" - la netlist (se si è riempito il campo modulo in ogni componente dello "
+"Sorgenti di nomi di impronte per componente sono:\n"
+" - la netlist (se si è riempito il campo impronta in ogni componente dello "
 "schema elettrico)\n"
-" - file associazione moduli .cmp creato da CvPcb"
+" - il file .cmp creato da CvPcb"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:47
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
@@ -7337,7 +7341,9 @@ msgstr "Scambia impronta"
 msgid ""
 "Keep or change an existing footprint when the netlist gives a different "
 "footprint"
-msgstr "Mantiene o cambia un modulo quando la netlist indica un modulo diverso"
+msgstr ""
+"Mantiene o cambia un'impronta esistente quando la netlist indica un'impronta "
+"diversa"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
 msgid "Unconnected Tracks"
@@ -7351,15 +7357,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:71
 msgid "Extra Footprints"
-msgstr "Moduli extra"
+msgstr "Impronte extra"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:73
 msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
 msgstr ""
-"Rimuove i moduli trovati sulla scheda ma non nella netlist.\n"
-"Nota: solo i moduli non bloccati verranno rimossi."
+"Rimuove le impronte trovate sulla scheda ma non nella netlist.\n"
+"Nota: solo le impronte non bloccate verranno rimosse."
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:79
 msgid "Single Pad Nets"
@@ -7375,12 +7381,12 @@ msgstr "Verifica la corrente Lista componenti e aggiorna i collegamenti "
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:104
 msgid "Test Footprints"
-msgstr "Moduli di test"
+msgstr "Impronte di test"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:105
 msgid "Read the current neltist file and list missing and extra footprints"
 msgstr ""
-"Leggi il file netlist corrente ed elenca i moduli mancanti e quelli extra"
+"Leggi il file netlist corrente ed elenca le impronte mancanti e quelle extra"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:109
 msgid "Rebuild Board Connectivity"
@@ -7741,7 +7747,7 @@ msgstr "Angolo di rotazione:"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:83
 msgid "Context menu and hot key footprint rotation increment."
-msgstr "Menu contestuale e tasti scorciatoie incremento rotazione modulo."
+msgstr "Menu contestuale e tasti scorciatoie incremento rotazione impronta."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:91
 #: pcbnew/dialogs/dialog_block_options_base.cpp:20
@@ -7781,8 +7787,9 @@ msgid ""
 "Shows (or not) the local ratsnest relative to a footprint, when moving it.\n"
 "This ratsnest is useful to place a footprint."
 msgstr ""
-"Mostra (o no) i collegamenti del singolo componente quando lo si muove.\n"
-"Utile nel posizionamento dei moduli."
+"Mostra (o no) le ratsnest relative al singolo componente quando lo si "
+"muove.\n"
+"Utile nel posizionamento delle impronte."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:110
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:32
@@ -8028,13 +8035,13 @@ msgstr "Lettura file netlist \"%s\".\n"
 #: pcbnew/dialogs/dialog_netlist.cpp:184
 #, c-format
 msgid "Using component footprint link file \"%s\".\n"
-msgstr "Uso del file di collegamento moduli componenti \"%s\".\n"
+msgstr "Uso del file di collegamento impronte componenti \"%s\".\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:190
 #, c-format
 msgid "Using time stamps to select footprints in file \"%s\".\n"
 msgstr ""
-"Uso delle marcature temporali per selezionare un modulo nel file \"%s\".\n"
+"Uso delle marcature temporali per selezionare un'impronta nel file \"%s\".\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:212
 msgid "No modules"
@@ -8172,7 +8179,7 @@ msgstr "Dim. testo orizz."
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:69
 #: pcbnew/dialogs/dialog_display_options_base.cpp:70
 msgid "Footprints:"
-msgstr "Moduli:"
+msgstr "Impronte:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:71
 msgid "Edges Width"
@@ -8188,7 +8195,7 @@ msgstr "Generale:"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:26
 msgid "Footprint Fields"
-msgstr "Campi modulo"
+msgstr "Campi impronte"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:28
 msgid "Reference designator"
@@ -8249,7 +8256,7 @@ msgstr "Spessore:"
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:213
 msgid "Print Footprint"
-msgstr "Stampa modulo"
+msgstr "Stampa impronta"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 msgid "Scale 1"
@@ -8466,7 +8473,7 @@ msgid ""
 "Creates only one file containing all footprints to place\n"
 msgstr ""
 "Creare 2 file: uno per ciascun lato della scheda oppure\n"
-"Creare un unico file contenente tutti i moduli da inserire\n"
+"Creare un unico file contenente tutte le impronte da inserire\n"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:66
 msgid "With INSERT attribute set"
@@ -8474,11 +8481,11 @@ msgstr "Con attributo INSERT impostato"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:66
 msgid "Force INSERT attribute for all SMD footprints"
-msgstr "Forza attributo INSERT per tutti i moduli SMD"
+msgstr "Forza attributo INSERT per tutte le impronte SMD"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:68
 msgid "Footprints Selection:"
-msgstr "Selezione moduli:"
+msgstr "Selezione impronte:"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:70
 msgid ""
@@ -8486,9 +8493,9 @@ msgid ""
 "This option can force this option for all footprints having only SMD pads.\n"
 "Warning: this options will modify the board."
 msgstr ""
-"Soltanto i moduli con opzione INSERT sono elencati nel file di "
+"Soltanto le impronte con opzione INSERT sono elencate nel file di "
 "posizionamento.\n"
-"Questa opzione può forzare l'opzione INSERT per tutti i moduli che hanno "
+"Questa opzione può forzare l'opzione INSERT per tutte le impronte che hanno "
 "soltanto piazzole SMD.\n"
 "Attenzione: queste opzioni modificheranno la scheda!"
 
@@ -8664,7 +8671,7 @@ msgstr "Grafica"
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:210
 msgid "Footprints"
-msgstr "Moduli"
+msgstr "Impronte"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
 msgid "Tracks"
@@ -8696,11 +8703,11 @@ msgstr "Piste sbloccate"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:72
 msgid "Locked footprints"
-msgstr "Moduli bloccati"
+msgstr "Impronte bloccate"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:75
 msgid "Unlocked footprints"
-msgstr "Moduli sbloccati"
+msgstr "Impronte sbloccate"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:82
 msgid "All layers"
@@ -8932,7 +8939,7 @@ msgstr "Verticale"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:225
 msgid "Parent footprint orientation"
-msgstr "Orientamento modulo genitore"
+msgstr "Orientamento impronta genitore"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:233
 msgid "Rotation:"
@@ -9028,7 +9035,7 @@ msgid ""
 "If 0, the footprint local value or the Netclass value is used"
 msgstr ""
 "Questo è il valore locale di isolamento collegamenti per la piazzola.\n"
-"Se 0, sarà usato il valore locale del modulo o della netclass"
+"Se 0, sarà usato il valore locale dell'impronta o della netclass"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:415
 msgid ""
@@ -9036,7 +9043,7 @@ msgid ""
 "If 0, the footprint local value or the global value is used"
 msgstr ""
 "Imposta l'isolamento tra questa piazzola e la maschera di saldatura.\n"
-"Se 0, sara usato il valore del gruppo di collegamenti."
+"Se 0, verrà usato il valore locale dell'impronta o il valore globale."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:429
 msgid ""
@@ -9047,7 +9054,7 @@ msgid ""
 "A negative value means a smaller mask size than pad size"
 msgstr ""
 "Questo è l'isolamento locale tra questa piazzola e la pasta salda.\n"
-"Se 0 verrà usato il valore del modulo o il valore globale.\n"
+"Se 0 verrà usato il valore dell'impronta o il valore globale.\n"
 "L'isolamento finale sarà la somma di questo valore e il valore di "
 "isolamento.\n"
 "Un valore negativo indica una dimensione minore dalla maschera rispetto alla "
@@ -9066,7 +9073,7 @@ msgstr ""
 "piazzola e la pasta salda.\n"
 "Il valore 10 indica che il valore d'isolamento è il 10% delle dimensioni "
 "della piazzola.\n"
-"Se 0 verrà usato il valore del modulo o il valore globale.\n"
+"Se 0 verrà usato il valore dell'impronta o il valore globale.\n"
 "L'isolamento finale sarà dato dalla somma di questo valore e il valore "
 "dell'isolamento.\n"
 "Un valore negativo indica una dimensione minore dalla maschera rispetto alla "
@@ -9742,7 +9749,7 @@ msgstr "Parole chiave"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:79
 msgid "Footprint Name in Library"
-msgstr "Nome modulo nella libreria"
+msgstr "Nome impronta nella libreria"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:140
@@ -10219,15 +10226,15 @@ msgstr "Filtro:"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:36
 msgid "Filter to select footprints by reference"
-msgstr "Filtrare per selezionare i moduli per riferimento"
+msgstr "Filtrare per selezionare le impronte per riferimento"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:43
 msgid "Include Locked Footprints"
-msgstr "Include moduli bloccati"
+msgstr "Include impronte bloccate"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:44
 msgid "Force locked footprints to be modified"
-msgstr "Forza il modulo bloccato per consentire le modifiche"
+msgstr "Forza le impronte bloccate per consentire le modifiche"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:129
 msgid "Use this attribute for most non SMD components"
@@ -10239,9 +10246,9 @@ msgid ""
 "Use this attribute for SMD components.\n"
 "Only components with this option are put in the footprint position list file"
 msgstr ""
-"Usa questo attributo per componenti SMD.\n"
+"Usa questo attributo per i componenti SMD.\n"
 "Solo componenti con questa opzione sono inseriti nel file elenco posizioni "
-"moduli"
+"impronte"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:133
 msgid ""
@@ -10386,11 +10393,11 @@ msgstr "Lista di piazzole disconnesse, pulsante destro per menù a scomparsa"
 #: pcbnew/dialogs/dialog_orient_footprints.cpp:119
 #, c-format
 msgid "OK to set footprints orientation to %.1f degrees ?"
-msgstr "Orientare i moduli a %.1f gradi?"
+msgstr "Orientare le impronte a %.1f gradi?"
 
 #: pcbnew/dialogs/dialog_orient_footprints.cpp:150
 msgid "Bad value for footprints orientation"
-msgstr "Valore errato per l'orientamento del modulo"
+msgstr "Valore errato per l'orientamento dell'impronta"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:173
 msgid "Set current Net tracks and vias sizes and drill to the current values?"
@@ -10502,7 +10509,7 @@ msgid ""
 msgstr ""
 "Usa questo attributo per la maggior parte dei componenti non SMD.\n"
 "I componenti con questa opzione non vengono inseriti nel file elenco "
-"posizioni moduli"
+"posizioni impronte"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:285
 msgid ""
@@ -10571,7 +10578,7 @@ msgstr "File del tracciatore <%s> creato"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:25
 msgid "Current footprint"
-msgstr "Modulo corrente"
+msgstr "Impronta corrente"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:55
 msgid "Change footprint"
@@ -10695,8 +10702,8 @@ msgid ""
 "The footprint library is a folder with a name ending by .pretty\n"
 "Footprints are .kicad_mod files inside this folder."
 msgstr ""
-"La libreria moduli è una cartella con un nome che finisce per .pretty\n"
-"I moduli sono file .kicad_mod all'interno di questa cartella."
+"La libreria impronte è una cartella con un nome che finisce per .pretty\n"
+"Le impronte sono file .kicad_mod all'interno di questa cartella."
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:30
 msgid "Library (.pretty folder)"
@@ -10882,7 +10889,7 @@ msgid ""
 "is not in the writable portion of this Github library\n"
 "'%s'"
 msgstr ""
-"Modulo\n"
+"Impronta\n"
 "\"%s\"\n"
 "non trovato nella porzione scrivibile di questa libreria Github\n"
 "\"%s\""
@@ -10896,12 +10903,13 @@ msgid ""
 "directory <b>must</b> have a <b>.pretty</b> file extension because the "
 "format of the save is pretty.</p>"
 msgstr ""
-"Imposta questa proprietà ad una cartella dove i moduli devono essere scritti "
-"come moduli standard pretty quando si salva su questa libreria. Qualsiasi "
-"cosa salvata avrà la precedenza sui moduli con lo stesso nome nel su github. "
-"Questi moduli salvati poi possono essere spediti al manutentore della "
-"libreria come aggiornamenti. <p>La cartella <b>deve</b> avere estensione "
-"file <b>.pretty</b> perché il formato del salvato sarà pretty.</p>"
+"Imposta questa proprietà ad una cartella nella quale le impronte dovranno "
+"essere scritte come impronte standard pretty quando si salverà su questa "
+"libreria. Qualsiasi cosa salvata avrà la precedenza sulle impronte con lo "
+"stesso nome su github. Queste impronte salvate, poi possono essere spedite "
+"al manutentore della libreria come aggiornamenti. <p>La cartella <b>deve</b> "
+"avere estensione file <b>.pretty</b> perché il formato del salvato sarà "
+"pretty.</p>"
 
 #: pcbnew/github/github_plugin.cpp:414
 #, c-format
@@ -10965,7 +10973,7 @@ msgstr "Pos "
 #: common/fp_lib_table.cpp:373
 #, c-format
 msgid "'%s' is a duplicate footprint library nickName"
-msgstr "\"%s\" è un nickname di libreria moduli duplicato"
+msgstr "\"%s\" è un nickname di libreria impronte duplicato"
 
 #: common/fp_lib_table.cpp:620
 #, c-format
@@ -11171,7 +11179,7 @@ msgstr ""
 
 #: common/footprint_info.cpp:312 common/footprint_info.cpp:333
 msgid "Errors were encountered loading footprints"
-msgstr "Errori riscontrati durante il caricamento di moduli"
+msgstr "Errori riscontrati durante il caricamento di impronte"
 
 #: common/footprint_info.cpp:331
 msgid "Load Error"
@@ -11312,15 +11320,15 @@ msgstr "File Pcbew s-expr (*.kicad_pcb)|*.kicad_pcb"
 
 #: common/wildcards_and_files_ext.cpp:78
 msgid "KiCad footprint s-expre file (*.kicad_mod)|*.kicad_mod"
-msgstr "File moduli Kicad s-expre (*.kicad_mod)|*.kicad_mod"
+msgstr "File impronte Kicad s-expre (*.kicad_mod)|*.kicad_mod"
 
 #: common/wildcards_and_files_ext.cpp:79
 msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
-msgstr "Percorso librerie moduli Kicad s-expre (*.pretty)|*.pretty"
+msgstr "Percorso librerie impronte Kicad s-expre (*.pretty)|*.pretty"
 
 #: common/wildcards_and_files_ext.cpp:80
 msgid "Legacy footprint library file (*.mod)|*.mod"
-msgstr "File libreria di moduli PcbNew di vecchio formato (*.mod)|*.mod"
+msgstr "File libreria di impronte PcbNew di vecchio formato (*.mod)|*.mod"
 
 #: common/wildcards_and_files_ext.cpp:81
 msgid "Eagle ver. 6.x XML library files (*.lbr)|*.lbr"
@@ -11328,7 +11336,7 @@ msgstr "File libreria XML Eagle ver. 6.x (*.lbr)|*.lbr"
 
 #: common/wildcards_and_files_ext.cpp:82
 msgid "Geda PCB footprint library file (*.fp)|*.fp"
-msgstr "File librerie di moduli Geda PCB (*.fp)|*.fp"
+msgstr "File librerie di impronte Geda PCB (*.fp)|*.fp"
 
 #: common/wildcards_and_files_ext.cpp:83
 msgid "KiCad recorded macros (*.mcr)|*.mcr"
@@ -11336,7 +11344,7 @@ msgstr "Kicad: Macro registrata (*.mcr)|*.mcr"
 
 #: common/wildcards_and_files_ext.cpp:84
 msgid "Component-footprint link file (*.cmp)|*cmp"
-msgstr "File Associazione moduli (*.cmp)|*cmp"
+msgstr "File collegamento componenti-impronte (*.cmp)|*cmp"
 
 #: common/wildcards_and_files_ext.cpp:85
 msgid "Page layout descr file (*.kicad_wks)|*kicad_wks"
@@ -11372,7 +11380,7 @@ msgstr "File di rapporto della Verifica Regole Disegno (.rpt)|*.rpt"
 
 #: common/wildcards_and_files_ext.cpp:98
 msgid "Footprint place files (*.pos)|*.pos"
-msgstr "File posizionamento moduli (*.pos)|*.pos"
+msgstr "File posizionamento impronte (*.pos)|*.pos"
 
 #: common/wildcards_and_files_ext.cpp:99
 msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
@@ -12531,7 +12539,7 @@ msgstr "Sposta valore"
 
 #: eeschema/onrightclick.cpp:304
 msgid "Move Footprint Field"
-msgstr "Sposta campo modulo"
+msgstr "Sposta campo impronta"
 
 #: eeschema/onrightclick.cpp:315
 msgid "Rotate Reference"
@@ -12543,7 +12551,7 @@ msgstr "Ruota valore"
 
 #: eeschema/onrightclick.cpp:317
 msgid "Rotate Footprint Field"
-msgstr "Ruota campo modulo"
+msgstr "Ruota campo impronta"
 
 #: eeschema/onrightclick.cpp:318
 msgid "Rotate Field"
@@ -12559,7 +12567,7 @@ msgstr "Modifica valore"
 
 #: eeschema/onrightclick.cpp:338
 msgid "Edit Footprint Field"
-msgstr "Modifica campo modulo"
+msgstr "Modifica campo impronta"
 
 #: eeschema/onrightclick.cpp:342
 msgid "Edit Field"
@@ -12967,7 +12975,7 @@ msgstr "Trova e &Sostituisci"
 
 #: eeschema/menubar.cpp:223
 msgid "Import Footprint Selection"
-msgstr "Importa file Associazione moduli"
+msgstr "Importa selezione impronte"
 
 #: eeschema/menubar.cpp:261
 msgid "Show &Hierarchical Navigator"
@@ -13103,7 +13111,7 @@ msgstr "Genera distinta &materiali"
 
 #: eeschema/menubar.cpp:470
 msgid "A&ssign Component Footprint"
-msgstr "A&ssegna modulo al componente"
+msgstr "A&ssegna impronta al componente"
 
 #: eeschema/menubar.cpp:471
 msgid "Run CvPcb"
@@ -13341,7 +13349,7 @@ msgstr "Crea file S&VG"
 
 #: eeschema/menubar_libedit.cpp:101
 msgid "Create a SVG file from the current loaded component"
-msgstr "Crea un file SVG dal Corrente modulo"
+msgstr "Crea un file SVG dal componente caricato correntemente"
 
 #: eeschema/menubar_libedit.cpp:111
 msgid "Quit Library Editor"
@@ -13377,7 +13385,7 @@ msgstr "Apri il manuale di Eeschema"
 
 #: eeschema/backanno.cpp:224
 msgid "Load Component Footprint Link File"
-msgstr "Carica file di collegamento componente modulo "
+msgstr "Carica file di collegamento componente impronta"
 
 #: eeschema/backanno.cpp:238
 msgid "Keep existing footprint field visibility"
@@ -13385,15 +13393,15 @@ msgstr "Mantieni la visibilità dei campi componenti esistente"
 
 #: eeschema/backanno.cpp:239
 msgid "Show all footprint fields"
-msgstr "Mostra tutti i campi moduli"
+msgstr "Mostra tutti i campi impronta"
 
 #: eeschema/backanno.cpp:240
 msgid "Hide all footprint fields"
-msgstr "Nascondi tutti i campi moduli"
+msgstr "Nascondi tutti i campi impronta"
 
 #: eeschema/backanno.cpp:242
 msgid "Select the footprint field visibility setting."
-msgstr "Selezionare le impostazioni di visibilità campi moduli."
+msgstr "Selezionare le impostazioni di visibilità campi impronta."
 
 #: eeschema/backanno.cpp:243
 msgid "Change Visibility"
@@ -13402,7 +13410,7 @@ msgstr "Cambia la visibilità"
 #: eeschema/backanno.cpp:254
 #, c-format
 msgid "Failed to open component-footprint link file '%s'"
-msgstr "Fallita l'apertura del file di associazione componenti-moduli \"%s\""
+msgstr "Fallita l'apertura del file di associazione componenti-impronte \"%s\""
 
 #: eeschema/sch_sheet.cpp:828 eeschema/dialogs/dialog_color_config.cpp:87
 msgid "Sheet name"
@@ -14390,7 +14398,7 @@ msgstr "Genera netlist"
 
 #: eeschema/tool_sch.cpp:169
 msgid "Run CvPcb to associate components and footprints"
-msgstr "Avvia CvPcb per attribuire i moduli ai componenti dello schema "
+msgstr "Avvia CvPcb per associare le impronte ai componenti"
 
 #: eeschema/tool_sch.cpp:172
 msgid "Run Pcbnew to layout printed circuit board"
@@ -15208,7 +15216,7 @@ msgstr "Filtro impronta"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:521
 #, c-format
 msgid "Foot print filter <%s> is already defined."
-msgstr "Il filtro modulo \"%s\" è già stato definito."
+msgstr "Il filtro impronta \"%s\" è già stato definito."
 
 #: eeschema/dialogs/dialog_erc.cpp:202
 msgid "Marker not found"
@@ -16667,7 +16675,7 @@ msgstr "Informazioni"
 
 #: cvpcb/tool_cvpcb.cpp:60
 msgid "Edit footprint library table"
-msgstr "Modifica tabella librerie moduli"
+msgstr "Modifica tabella librerie impronte"
 
 #: cvpcb/tool_cvpcb.cpp:65
 msgid "View selected footprint"
@@ -16675,7 +16683,7 @@ msgstr "Mostra impronta selezionata"
 
 #: cvpcb/tool_cvpcb.cpp:69
 msgid "Perform automatic footprint association"
-msgstr "Esegui automaticamente associazione moduli"
+msgstr "Esegui automaticamente associazione impronte"
 
 #: cvpcb/tool_cvpcb.cpp:74
 msgid "Select previous unlinked component"
@@ -16707,15 +16715,15 @@ msgstr "Filtra lista componenti per libreria"
 
 #: cvpcb/cvpcb.cpp:57
 msgid "KiCad footprint alias files (*.equ)|*.equ"
-msgstr "File Kicad di alias di moduli (*.equ)|*.equ"
+msgstr "File Kicad di alias di impronte (*.equ)|*.equ"
 
 #: cvpcb/cvframe.cpp:249
 msgid ""
 "Component to Footprint links modified.\n"
 "Save before exit ?"
 msgstr ""
-"Associazione moduli modificato.\n"
-"Si desidera salvarlo?"
+"Le associazioni componenti a impronte sono state modificate.\n"
+"Salvare prima di uscire?"
 
 #: cvpcb/cvframe.cpp:270
 msgid "Problem when saving file, exit anyway ?"
@@ -16793,7 +16801,8 @@ msgstr "Filtrato da"
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
-"Nessuna libreria di moduli è elencata nella tabella delle librerie corrente."
+"Nessuna libreria di impronte è elencata nella tabella delle librerie "
+"corrente."
 
 #: cvpcb/cvframe.cpp:710
 msgid "Configuration Error"
@@ -16827,11 +16836,11 @@ msgstr "Prima controllare le voci fp-lib-table."
 
 #: cvpcb/readwrite_dlgs.cpp:388
 msgid "Save Component Footprint Link File"
-msgstr "Salva file Associazione moduli"
+msgstr "Salva il file associazione componenti a impronte"
 
 #: cvpcb/readwrite_dlgs.cpp:389
 msgid "Unnamed file"
-msgstr "File non nominato"
+msgstr "File senza nome"
 
 #: cvpcb/readwrite_dlgs.cpp:410
 msgid ""
@@ -16839,7 +16848,7 @@ msgid ""
 "\n"
 "Do you want to overwrite it?"
 msgstr ""
-"Una tabella di librerie moduli esiste già in questo percorso.\n"
+"Una tabella di librerie impronte esiste già in questo percorso.\n"
 "\n"
 "Sovrascriverla?"
 
@@ -16850,14 +16859,14 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Errore durante il salvataggio della tabella librerie moduli \"%s\"\n"
+"Errore durante il salvataggio della tabella librerie impronte \"%s\"\n"
 "\n"
 "%s"
 
 #: cvpcb/readwrite_dlgs.cpp:438
 msgid "Unable to create component footprint link file (.cmp)"
 msgstr ""
-"Impossibile creare il file elenco collegamenti componenti moduli (.cmp)"
+"Impossibile creare il file di associazione componenti a impronte (.cmp)"
 
 #: cvpcb/autosel.cpp:46
 msgid "Library Load Error"
@@ -16869,7 +16878,7 @@ msgid ""
 "Footprint alias library file '%s' could not be found in the default search "
 "paths."
 msgstr ""
-"La libreria di alias di moduli \"%s\" non è stata trovata nei percorsi di "
+"La libreria di alias di impronte \"%s\" non è stata trovata nei percorsi di "
 "ricerca predefiniti."
 
 #: cvpcb/autosel.cpp:131
@@ -16880,7 +16889,7 @@ msgstr "Errore nell'apertura della libreria alias \"%s\"."
 #: cvpcb/autosel.cpp:163
 #, c-format
 msgid "%d footprint aliases found."
-msgstr "%d alias di moduli trovati."
+msgstr "%d alias di impronte trovati."
 
 #: cvpcb/autosel.cpp:201
 #, c-format
@@ -16896,7 +16905,7 @@ msgstr "Errore CVPcb"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:77
 msgid "Footprint Viewer"
-msgstr "Visualizzatore moduli"
+msgstr "Visualizzatore impronte"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:204
 #: cvpcb/class_DisplayFootprintsFrame.cpp:251
@@ -19813,7 +19822,7 @@ msgstr "Preferenze circuito stampato"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.h:53
 msgid "Footprints Orientation"
-msgstr "Orientamento moduli"
+msgstr "Orientamento impronte"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.h:120
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.h:141
@@ -19862,7 +19871,7 @@ msgstr "Proprietà piazzola"
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.h:56
 msgid "Select Footprint Library Folder"
-msgstr "Seleziona cartella libreria moduli"
+msgstr "Seleziona cartella libreria impronte"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:80
 msgid "Drill Files Generation"
@@ -20121,11 +20130,12 @@ msgstr "Apri Lista componenti "
 
 #: cvpcb/common_help_msg.h:29
 msgid "Save component/footprint link file (.cmp file)"
-msgstr "Salva file associazione moduli (.cmp) "
+msgstr "Salva file associazione componenti/impronte (.cmp) "
 
 #: cvpcb/common_help_msg.h:30
 msgid "Save component/footprint link file (.cmp file) with new name"
-msgstr "Salva il file Associazione moduli (.cmp) con un nuovo nome "
+msgstr ""
+"Salva il file associazione componenti/impronte (.cmp) con un nuovo nome"
 
 #: cvpcb/dialogs/dialog_display_options_base.h:66
 msgid "Display Options"
