@@ -309,7 +309,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Fast access to the Web Based FreeROUTE advanced router" ) );
 
     // Access to the scripting console
-#ifdef KICAD_SCRIPTING_WXPYTHON
+#if defined(KICAD_SCRIPTING_WXPYTHON)
     m_mainToolBar->AddSeparator();
 
     m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,

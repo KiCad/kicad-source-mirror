@@ -79,6 +79,7 @@
 #include <tools/placement_tool.h>
 #include <tools/common_actions.h>
 
+#include <scripting/python_console_frame.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -211,11 +212,12 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TOOLBARH_PCB_MODE_MODULE, PCB_EDIT_FRAME::OnSelectAutoPlaceMode )
     EVT_TOOL( ID_TOOLBARH_PCB_MODE_TRACKS, PCB_EDIT_FRAME::OnSelectAutoPlaceMode )
     EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, PCB_EDIT_FRAME::Access_to_External_Tool )
-#ifdef KICAD_SCRIPTING_WXPYTHON
+
+    // has meaning only with KICAD_SCRIPTING_WXPYTHON enabled
     EVT_TOOL( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, PCB_EDIT_FRAME::ScriptingConsoleEnableDisable )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
                    PCB_EDIT_FRAME::OnUpdateScriptingConsoleState )
-#endif
+
     // Option toolbar
     EVT_TOOL( ID_TB_OPTIONS_DRC_OFF,
                     PCB_EDIT_FRAME::OnSelectOptionToolbar )
@@ -992,34 +994,23 @@ void PCB_EDIT_FRAME::UpdateTitle()
 }
 
 
-#if defined(KICAD_SCRIPTING_WXPYTHON)
+wxSize PYTHON_CONSOLE_FRAME::m_frameSize;   ///< The size of the PYTHON_CONSOLE_FRAME frame, stored during a session
+wxPoint PYTHON_CONSOLE_FRAME::m_framePos;   ///< The position ofPYTHON_CONSOLE_FRAME  the frame, stored during a session
+
 void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
 {
 
-    wxMiniFrame * pythonPanelFrame = (wxMiniFrame *) findPythonConsole();
+    wxWindow * pythonPanelFrame = findPythonConsole();
     bool pythonPanelShown = false;
 
     if( pythonPanelFrame == NULL )
-    {
-        long style = wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxFRAME_FLOAT_ON_PARENT;
-        pythonPanelFrame = new wxMiniFrame( this, wxID_ANY, wxT("Python console"), wxDefaultPosition, wxDefaultSize,
-                                         style, pythonConsoleNameId() );
-        wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-
-        wxWindow * pythonPanel = CreatePythonShellWindow( pythonPanelFrame );
-        sizer->Add( pythonPanel, 1, wxEXPAND | wxALL, 5 );
-        pythonPanelFrame->SetSizer( sizer );
-        pythonPanelFrame->SetSize( wxSize( 600, 300 ) );
-        pythonPanelFrame->Layout();
-        pythonPanelFrame->Centre();
-    }
+        pythonPanelFrame = new PYTHON_CONSOLE_FRAME( this, pythonConsoleNameId() );
     else
         pythonPanelShown = pythonPanelFrame->IsShown();
 
     pythonPanelShown = ! pythonPanelShown;
     pythonPanelFrame->Show( pythonPanelShown );
 }
-#endif
 
 
 void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )
