@@ -29,6 +29,9 @@
 #ifndef PYTHON_CONSOLE_FRAME_H_
 #define PYTHON_CONSOLE_FRAME_H_
 
+#if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
+#include <python_scripting.h>
+#endif
 
 
 /**
@@ -51,7 +54,7 @@ public:
         wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
-        wxWindow * pythonPanel = CreatePythonShellWindow( pythonPanelFrame );
+        wxWindow * pythonPanel = CreatePythonShellWindow( this );
         sizer->Add( pythonPanel, 1, wxEXPAND | wxALL, 5 );
 #endif
         SetSizer( sizer );
@@ -91,8 +94,6 @@ private:
 
         event.Skip();
     }
-
-//    DECLARE_EVENT_TABLE()
 };
 
 #endif    // PYTHON_CONSOLE_FRAME_H_
