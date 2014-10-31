@@ -493,7 +493,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
 
         const wxString& ref = list[ii].m_Reference;
         const wxString& val = list[ii].m_Value;
-        const wxString& pkg = list[ii].m_Module->GetFPID().Format();
+        const wxString& pkg = list[ii].m_Module->GetFPID().GetFootprintName();
 
         sprintf( line, "%-8.8s %-16.16s %-16.16s",
                  TO_UTF8( ref ), TO_UTF8( val ), TO_UTF8( pkg ) );
