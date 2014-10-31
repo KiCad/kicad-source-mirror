@@ -273,7 +273,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Anchor
     AddMenuItem( placeMenu, ID_MODEDIT_ANCHOR_TOOL,
                  _( "A&nchor" ),
-                 _( "Place footprint module reference anchor" ),
+                 _( "Place footprint reference anchor" ),
                  KiBitmap( anchor_xpm ) );
 
     // Menu Help:

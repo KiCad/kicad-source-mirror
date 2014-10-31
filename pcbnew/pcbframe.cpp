@@ -82,8 +82,6 @@
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
-// The name of the pane info handling the python console:
-#define PYTHONCONSOLE_STRID   wxT( "PythonPanel" )
 #endif
 
 #include <pcb_draw_panel_gal.h>
@@ -330,10 +328,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
     m_useCmpFileForFpNames = true;
-#if defined(KICAD_SCRIPTING_WXPYTHON)
-    m_pythonPanel = NULL;
-    m_pythonPanelShow = false;
-#endif
 
     m_rotationAngle = 900;
 
@@ -1001,39 +995,29 @@ void PCB_EDIT_FRAME::UpdateTitle()
 #if defined(KICAD_SCRIPTING_WXPYTHON)
 void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
 {
-    if( m_pythonPanel == NULL )
+
+    wxMiniFrame * pythonPanelFrame = (wxMiniFrame *) findPythonConsole();
+    bool pythonPanelShown = false;
+
+    if( pythonPanelFrame == NULL )
     {
-        // Add the scripting panel
-        EDA_PANEINFO  pythonAuiPane;
-        pythonAuiPane.ScriptingConsolePane();
-        pythonAuiPane.Caption( wxT( "Python Scripting" ) );
-        pythonAuiPane.MinSize( 300, 150 );
+        long style = wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxFRAME_FLOAT_ON_PARENT;
+        pythonPanelFrame = new wxMiniFrame( this, wxID_ANY, wxT("Python console"), wxDefaultPosition, wxDefaultSize,
+                                         style, pythonConsoleNameId() );
+        wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
-    #if 1   // Set to 0 to make the Python console dockable
-        // Currently the console is not dockable. Reasons:
-        // * When docked there is an issue with accelerator keys used in the main menu:
-        //   these keys are not sent to the console, even if it has the focus
-        // * The console is more easy to move if it is not dockable
-        pythonAuiPane.Dockable( false ).Float();
-
-        // Gives a reasonnable position to the console
-        wxPoint pos = m_canvas->GetScreenPosition();
-        pythonAuiPane.FloatingPosition( pos.x + 10, pos.y + 10 );
-        pythonAuiPane.FloatingSize( 600, 200 );
-    #else
-        pythonAuiPane.BestSize( 600, 200 );
-        pythonAuiPane.LeftDockable( false ).RightDockable( false );
-    #endif
-
-        m_pythonPanel = CreatePythonShellWindow( this );
-        m_auimgr.AddPane( m_pythonPanel,
-                          pythonAuiPane.Name( PYTHONCONSOLE_STRID ).Bottom().Layer(9) );
+        wxWindow * pythonPanel = CreatePythonShellWindow( pythonPanelFrame );
+        sizer->Add( pythonPanel, 1, wxEXPAND | wxALL, 5 );
+        pythonPanelFrame->SetSizer( sizer );
+        pythonPanelFrame->SetSize( wxSize( 600, 300 ) );
+        pythonPanelFrame->Layout();
+        pythonPanelFrame->Centre();
     }
+    else
+        pythonPanelShown = pythonPanelFrame->IsShown();
 
-    m_pythonPanelShow = ! m_pythonPanelShow;
-    m_auimgr.GetPane( PYTHONCONSOLE_STRID ).Show( m_pythonPanelShow );
-
-    m_auimgr.Update();
+    pythonPanelShown = ! pythonPanelShown;
+    pythonPanelFrame->Show( pythonPanelShown );
 }
 #endif
 

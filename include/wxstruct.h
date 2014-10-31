@@ -484,21 +484,6 @@ public:
         CaptionVisible( false );
         return *this;
     }
-
-    /**
-     * Function ScriptingConsolePane
-     * Change *this to a python scripting console pane for KiCad.
-     * Used in Pcbnew
-     */
-    EDA_PANEINFO& ScriptingConsolePane()
-    {
-        CloseButton( false );
-        Floatable( true );
-        Resizable( true );
-        return *this;
-    }
-
-
 };
 
 #endif  // WXSTRUCT_H_

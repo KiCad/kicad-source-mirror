@@ -73,8 +73,8 @@ const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
     RR( _( "Anchors" ),         ANCHOR_VISIBLE,         WHITE,      _( "Show footprint and text origins as a cross" ) ),
     RR( _( "Grid" ),            GRID_VISIBLE,           WHITE,      _( "Show the (x,y) grid dots" ) ),
     RR( _( "No-Connects" ),     NO_CONNECTS_VISIBLE,    UNSPECIFIED_COLOR,  _( "Show a marker on pads which have no net connected" ) ),
-    RR( _( "Modules Front" ),   MOD_FR_VISIBLE,         UNSPECIFIED_COLOR,  _( "Show footprints that are on board's front") ),
-    RR( _( "Modules Back" ),    MOD_BK_VISIBLE,         UNSPECIFIED_COLOR,  _( "Show footprints that are on board's back") ),
+    RR( _( "Footprints Front" ),   MOD_FR_VISIBLE,         UNSPECIFIED_COLOR,  _( "Show footprints that are on board's front") ),
+    RR( _( "Footprints Back" ),    MOD_BK_VISIBLE,         UNSPECIFIED_COLOR,  _( "Show footprints that are on board's back") ),
     RR( _( "Values" ),          MOD_VALUES_VISIBLE,     UNSPECIFIED_COLOR,  _( "Show footprint's values") ),
     RR( _( "References" ),      MOD_REFERENCES_VISIBLE, UNSPECIFIED_COLOR,  _( "Show footprint's references") ),
 };

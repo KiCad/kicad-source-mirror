@@ -1075,7 +1075,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
 
     if( pad == NULL )
     {
-        DisplayError( this, _( "No pad for this module" ) );
+        DisplayError( this, _( "No pad for this footprint" ) );
         return;
     }
 
@@ -1083,7 +1083,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
 
     if( next_pad == NULL )
     {
-        DisplayError( this, _( "Only one pad for this module" ) );
+        DisplayError( this, _( "Only one pad for this footprint" ) );
         return;
     }
 
