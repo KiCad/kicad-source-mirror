@@ -946,20 +946,26 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
 
     wxPoint delta;
     wxPoint start = GetViewStart();
+    int wheelRotation = event.GetWheelRotation();
 
     if( ( m_enableMousewheelPan || event.ShiftDown() ) && !event.ControlDown() )
     {
         if( axis == wxMOUSE_WHEEL_HORIZONTAL )
-            delta.x = -event.GetWheelRotation();
+            delta.x = -wheelRotation;
         else
-            delta.y = event.GetWheelRotation();
+            delta.y = wheelRotation;
     }
     else if( event.ControlDown() && !event.ShiftDown() && !m_enableMousewheelPan )
-        delta.y = event.GetWheelRotation();
+        delta.y = wheelRotation;
     else if( offCenterReq )
-        cmd.SetId( event.GetWheelRotation() > 0 ? ID_OFFCENTER_ZOOM_IN : ID_OFFCENTER_ZOOM_OUT );
+    {
+        // Don't let wxWidgets invert the wheel rotation when shift+ctrl-modified.
+        if( axis == wxMOUSE_WHEEL_HORIZONTAL )
+            wheelRotation = -wheelRotation;
+        cmd.SetId( wheelRotation > 0 ? ID_OFFCENTER_ZOOM_IN : ID_OFFCENTER_ZOOM_OUT );
+    }
     else
-        cmd.SetId( event.GetWheelRotation() > 0 ? ID_POPUP_ZOOM_IN : ID_POPUP_ZOOM_OUT );
+        cmd.SetId( wheelRotation > 0 ? ID_POPUP_ZOOM_IN : ID_POPUP_ZOOM_OUT );
 
     if( cmd.GetId() )
     {

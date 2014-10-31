@@ -137,18 +137,18 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     const double wheelPanSpeed = 0.001;
     VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) *
                                           ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
+    bool mousewheelPanEnabled = ((EDA_DRAW_PANEL_GAL *)m_parentPanel)->GetEnableMousewheelPan();
 
-
-    if( !aEvent.ControlDown() && ( aEvent.ShiftDown() || ((EDA_DRAW_PANEL_GAL *)m_parentPanel)->GetEnableMousewheelPan() ) )
+    int axis = aEvent.GetWheelAxis();
+    if( !aEvent.ControlDown() && ( aEvent.ShiftDown() ||  mousewheelPanEnabled) )
     {
         // Scrolling
-        int axis = aEvent.GetWheelAxis();
         VECTOR2D delta( axis == wxMOUSE_WHEEL_HORIZONTAL ? scrollVec.x : 0.0,
                         axis == wxMOUSE_WHEEL_VERTICAL ? -scrollVec.y : 0.0 );
 
         setCenter( m_view->GetCenter() + delta );
     }
-    else if( aEvent.ControlDown() && !aEvent.ShiftDown() && !((EDA_DRAW_PANEL_GAL *)m_parentPanel)->GetEnableMousewheelPan() )
+    else if( aEvent.ControlDown() && !aEvent.ShiftDown() && !mousewheelPanEnabled )
     {
         VECTOR2D delta( 0.0, -scrollVec.y );
         setCenter( m_view->GetCenter() + delta );
@@ -161,16 +161,21 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 
         m_timeStamp = timeStamp;
         double zoomScale;
+        int wheelRotation = aEvent.GetWheelRotation();
+
+        // Don't let wxWidgets invert the wheel rotation when shift+ctrl-modified.
+        if( axis == wxMOUSE_WHEEL_HORIZONTAL )
+            wheelRotation = -wheelRotation;
 
         // Set scaling speed depending on scroll wheel event interval
         if( timeDiff < 500 && timeDiff > 0 )
         {
-            zoomScale = ( aEvent.GetWheelRotation() > 0 ) ? 2.05 - timeDiff / 500 :
+            zoomScale = ( wheelRotation > 0 ) ? 2.05 - timeDiff / 500 :
                         1.0 / ( 2.05 - timeDiff / 500 );
         }
         else
         {
-            zoomScale = ( aEvent.GetWheelRotation() > 0 ) ? 1.05 : 0.95;
+            zoomScale = ( wheelRotation > 0 ) ? 1.05 : 0.95;
         }
 
         VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
