@@ -106,12 +106,13 @@ void PCB_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
     m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
 }
 
-#ifdef KICAD_SCRIPTING_WXPYTHON
+// Used only when the DKICAD_SCRIPTING_WXPYTHON option is on
 void PCB_EDIT_FRAME::OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( m_pythonPanelShow );
+    wxMiniFrame * pythonPanelFrame = (wxMiniFrame *) findPythonConsole();
+    bool pythonPanelShown = pythonPanelFrame ? pythonPanelFrame->IsShown() : false;
+    aEvent.Check( pythonPanelShown );
 }
-#endif
 
 void PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
 {
