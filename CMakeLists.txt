@@ -531,6 +531,10 @@ if( KICAD_SKIP_BOOST )
         message( FATAL_ERROR "Boost 1.54+ libraries are required." )
     endif()
 
+    # Keeps CMake from complaining about undefined boost dependencies even though Boost was
+    # found.  Sigh!!!!!
+    add_custom_target( boost )
+
     message( WARNING "
 WARNING: You decided to skip building boost library.
 KiCad developers strongly advise you to build the bundled boost library, as it is known to work with KiCad.
