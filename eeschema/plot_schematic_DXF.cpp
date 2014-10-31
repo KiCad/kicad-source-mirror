@@ -98,9 +98,9 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
             m_MessagesBox->AppendText( msg );
 
         }
-        catch (IO_ERROR& e)
+        catch( IO_ERROR& e )
         {
-            msg.Printf( _( "DXF Plotter Exception : '%s'"), wxString(e.errorText ) );
+            msg.Printf( wxT( "DXF Plotter Exception : '%s'"), GetChars( e.errorText ) );
             m_MessagesBox->AppendText( msg );
             schframe->SetCurrentSheet( oldsheetpath );
             schframe->GetCurrentSheet().UpdateAllScreenReferences();

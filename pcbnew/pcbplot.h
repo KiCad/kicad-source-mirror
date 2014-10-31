@@ -258,9 +258,12 @@ const wxString GetGerberExtension( LAYER_NUM aLayer );
  * the "%TF.FileFunction" attribute prefix and the "*%" suffix.
  * @param aBoard = the board, needed to get the total count of copper layers
  * @param aLayer = the layer number to create the attribute for
+ * @param aUseX1CompatibilityMode = true to use a file function attribute like G04 comment
+ *      , compatible with X1 (rx274) notation (G04#@!TF.FileFunction)
  * @return The attribute, as a text string
  */
-extern wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer );
+extern wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer,
+                                       bool aUseX1CompatibilityMode );
 
 // PLOTGERB.CPP
 void SelectD_CODE_For_LineDraw( PLOTTER* plotter, int aSize );

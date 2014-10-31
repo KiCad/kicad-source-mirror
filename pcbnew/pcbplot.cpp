@@ -84,9 +84,10 @@ const wxString GetGerberExtension( LAYER_NUM aLayer )
 }
 
 
-wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer )
+wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer,
+                                bool aUseX1CompatibilityMode )
 {
-    wxString attrib = wxEmptyString;
+    wxString attrib;
 
     switch( aLayer )
     {
@@ -178,11 +179,18 @@ wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer )
             attrib += wxString( wxT( ",Mixed" ) );
             break;
         default:
-            ;   // do nothing (but avoid a warning for unhandled LAYER_T values from GCC)
+            break;   // do nothing (but avoid a warning for unhandled LAYER_T values from GCC)
         }
     }
 
-    return attrib;
+    wxString fileFct;
+
+    if( aUseX1CompatibilityMode )
+        fileFct.Printf( "G04 #@! TF.FileFunction,%s*", GetChars( attrib ) );
+    else
+        fileFct.Printf( "%%TF.FileFunction,%s*%%", GetChars( attrib ) );
+
+    return fileFct;
 }
 
 

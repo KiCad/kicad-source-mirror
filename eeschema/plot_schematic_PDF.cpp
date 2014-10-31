@@ -110,10 +110,10 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
                 first_page = false;
 
             }
-            catch (const IO_ERROR& e)
+            catch( const IO_ERROR& e )
             {
                 // Cannot plot PDF file
-                msg.Printf( _( "PDF Plotter Exception : <%s>"), wxString(e.errorText ) );
+                msg.Printf( wxT( "PDF Plotter Exception : <%s>"), GetChars( e.errorText ) );
                 restoreEnvironment(plotter, oldsheetpath, msg);
                 return;
             }

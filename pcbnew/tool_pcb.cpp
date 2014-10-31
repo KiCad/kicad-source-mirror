@@ -631,7 +631,7 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
         msg = _( "Track " ) + CoordinateToString( GetDesignSettings().m_TrackWidthList[ii], true );
 
         if( ii == 0 )
-            msg << _( " *" );
+            msg << wxT( " *" );
 
         m_SelTrackWidthBox->Append( msg );
     }
@@ -662,7 +662,7 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
                  << CoordinateToString( GetDesignSettings().m_ViasDimensionsList[ii].m_Drill, true );
 
         if( ii == 0 )
-            msg << _( " *" );
+            msg << wxT( " *" );
 
         m_SelViaSizeBox->Append( msg );
     }
