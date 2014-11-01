@@ -14,9 +14,8 @@
 #
 # mc: Note terminologiche:
 #
-# mc: - component -> componente, simbolo elettrico dello schema con significato (riferimento, àncora, valori, ecc.)
-# mc: - footprint -> impronta, un simbolo PCB generico
-# mc: - module    -> modulo, un'impronta con significato (riferimento, àncora, valori, ecc.)
+# mc: - component -> componente, un simbolo dello schema elettrico
+# mc: - footprint -> impronta, un simbolo del circuito stampato
 #
 # mc: - netlist = non si traduce perché termine tecnico = TT
 # mc: - ratsnest = TT
@@ -24,8 +23,8 @@
 # mc: - netclass = TT
 # mc: - DRC = TT
 # mc: - Browser = TT
-# mc: - Nickname" = TT
-# mc: - Die" = TT
+# mc: - Nickname = TT
+# mc: - Die = TT
 # mc: - legacy = datato (o non tradurlo)
 # mc: - courtyard = TT
 # mc: - assembly = TT
@@ -48,8 +47,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-31 00:58+0100\n"
-"PO-Revision-Date: 2014-10-31 00:58+0100\n"
+"POT-Creation-Date: 2014-11-01 20:04+0100\n"
+"PO-Revision-Date: 2014-11-01 20:04+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -318,7 +317,7 @@ msgstr ""
 msgid "KiCad project file '%s' not found"
 msgstr "File progetto di KiCad \"%s\" non trovato"
 
-#: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:990 pcbnew/moduleframe.cpp:696
+#: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:986 pcbnew/moduleframe.cpp:696
 #: eeschema/libedit.cpp:62 eeschema/schframe.cpp:1226 cvpcb/cvframe.cpp:734
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
@@ -698,12 +697,12 @@ msgstr "Valore %s di %s"
 msgid "Text \"%s\" on %s of %s"
 msgstr "Testo \"%s\" su %s di %s"
 
-#: pcbnew/pcbframe.cpp:419 pcbnew/pcbframe.cpp:920 pcbnew/moduleframe.cpp:245
+#: pcbnew/pcbframe.cpp:415 pcbnew/pcbframe.cpp:916 pcbnew/moduleframe.cpp:245
 #: gerbview/gerbview_frame.cpp:142 gerbview/events_called_functions.cpp:330
 msgid "Visibles"
 msgstr "Visibili"
 
-#: pcbnew/pcbframe.cpp:607 eeschema/schframe.cpp:597
+#: pcbnew/pcbframe.cpp:603 eeschema/schframe.cpp:597
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -714,17 +713,17 @@ msgstr ""
 "\"%s\"\n"
 "prima di chiudere?"
 
-#: pcbnew/pcbframe.cpp:641
+#: pcbnew/pcbframe.cpp:637
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 
-#: pcbnew/pcbframe.cpp:678 pcbnew/moduleframe.cpp:624
+#: pcbnew/pcbframe.cpp:674 pcbnew/moduleframe.cpp:624
 #: cvpcb/class_DisplayFootprintsFrame.cpp:410
 msgid "3D Viewer"
 msgstr "Visualizzatore 3D"
 
-#: pcbnew/pcbframe.cpp:994
+#: pcbnew/pcbframe.cpp:990
 msgid " [new file]"
 msgstr " [nuovo file]"
 
@@ -2973,7 +2972,7 @@ msgstr "Apri scheda esistente"
 
 #: pcbnew/tool_pcb.cpp:231
 msgid "Save board"
-msgstr "Salva la scheda"
+msgstr "Salva scheda"
 
 #: pcbnew/tool_pcb.cpp:235 pcbnew/menubar_pcbframe.cpp:218
 msgid "Page settings for paper size and texts"
@@ -3019,7 +3018,7 @@ msgstr "Accesso veloce allo sbrogliatore basato su Web FreeRoute"
 msgid "Show/Hide the Python Scripting console"
 msgstr "Mostra/Nascondi Console scripting Python "
 
-#: pcbnew/tool_pcb.cpp:337 pcbnew/toolbars_update_user_interface.cpp:134
+#: pcbnew/tool_pcb.cpp:337 pcbnew/toolbars_update_user_interface.cpp:135
 msgid "Enable design rule checking"
 msgstr "Abilita controllo regole"
 
@@ -3048,7 +3047,7 @@ msgstr "Unità in millimetri"
 msgid "Change cursor shape"
 msgstr "Cambia dimensione puntatore"
 
-#: pcbnew/tool_pcb.cpp:356 pcbnew/toolbars_update_user_interface.cpp:143
+#: pcbnew/tool_pcb.cpp:356 pcbnew/toolbars_update_user_interface.cpp:144
 msgid "Show board ratsnest"
 msgstr "Mostra collegamenti scheda"
 
@@ -3077,11 +3076,11 @@ msgstr "Mostra contorni e isolamento dei riempimenti nelle zone"
 msgid "Show pads in outline mode"
 msgstr "Mostra contorno piazzole"
 
-#: pcbnew/tool_pcb.cpp:385 pcbnew/toolbars_update_user_interface.cpp:172
+#: pcbnew/tool_pcb.cpp:385 pcbnew/toolbars_update_user_interface.cpp:173
 msgid "Show vias in outline mode"
 msgstr "Mostra contorno Via"
 
-#: pcbnew/tool_pcb.cpp:389 pcbnew/toolbars_update_user_interface.cpp:182
+#: pcbnew/tool_pcb.cpp:389 pcbnew/toolbars_update_user_interface.cpp:183
 msgid "Show tracks in outline mode"
 msgstr "Mostra contorno piste"
 
@@ -3194,10 +3193,6 @@ msgstr ""
 msgid "Track "
 msgstr "Pista "
 
-#: pcbnew/tool_pcb.cpp:634 pcbnew/tool_pcb.cpp:665
-msgid " *"
-msgstr "*"
-
 #: pcbnew/tool_pcb.cpp:657 pcbnew/router/router_tool.cpp:131
 msgid "Via "
 msgstr "Via "
@@ -3256,7 +3251,7 @@ msgstr "Carica impronta"
 
 #: pcbnew/menubar_modedit.cpp:106
 msgid "Save Current Library As..."
-msgstr "Salva libreria corrente &come..."
+msgstr "Salva libreria corrente come..."
 
 #: pcbnew/menubar_modedit.cpp:107
 msgid "Save entire current library under a new name."
@@ -4447,11 +4442,11 @@ msgstr "&Salva Preferenze"
 
 #: pcbnew/menubar_pcbframe.cpp:509 eeschema/menubar.cpp:417
 msgid "Save application preferences"
-msgstr "Salva preferenze"
+msgstr "Salva le preferenze dell'applicazione"
 
 #: pcbnew/menubar_pcbframe.cpp:513 eeschema/menubar.cpp:422
 msgid "&Read Preferences"
-msgstr "&Preferenze"
+msgstr "Leggi le p&referenze"
 
 #: pcbnew/menubar_pcbframe.cpp:514 eeschema/menubar.cpp:423
 msgid "Read application preferences"
@@ -4459,7 +4454,7 @@ msgstr "Vedi Preferenze dell'applicazione"
 
 #: pcbnew/menubar_pcbframe.cpp:521
 msgid "&Netlist"
-msgstr "Importa Lista componenti"
+msgstr "&Netlist"
 
 #: pcbnew/menubar_pcbframe.cpp:522
 msgid "Read the netlist and update board connectivity"
@@ -5002,44 +4997,44 @@ msgstr "Il componente con valore \"%s\" ha l'id di riferimento vuoto."
 msgid "Multiple components have identical reference IDs of '%s'."
 msgstr "Più componenti hanno lo stesso id di riferimento \"%s\"."
 
-#: pcbnew/toolbars_update_user_interface.cpp:133
+#: pcbnew/toolbars_update_user_interface.cpp:134
 msgid "Disable design rule checking"
 msgstr "Disabilita controllo regole"
 
-#: pcbnew/toolbars_update_user_interface.cpp:142
+#: pcbnew/toolbars_update_user_interface.cpp:143
 msgid "Hide board ratsnest"
 msgstr "Nascondi ratsnest scheda"
 
-#: pcbnew/toolbars_update_user_interface.cpp:152
+#: pcbnew/toolbars_update_user_interface.cpp:153
 msgid "Hide footprint ratsnest"
 msgstr "Nascondi ratsnest impronta"
 
-#: pcbnew/toolbars_update_user_interface.cpp:153
+#: pcbnew/toolbars_update_user_interface.cpp:154
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:105
 msgid "Show footprint ratsnest"
 msgstr "Mostra ratsnest impronta"
 
-#: pcbnew/toolbars_update_user_interface.cpp:162
+#: pcbnew/toolbars_update_user_interface.cpp:163
 msgid "Disable auto delete old track"
 msgstr "Disabilita autoelimina vecchie piste"
 
-#: pcbnew/toolbars_update_user_interface.cpp:163
+#: pcbnew/toolbars_update_user_interface.cpp:164
 msgid "Enable auto delete old track"
 msgstr "Abilita autoelimina vecchie piste"
 
-#: pcbnew/toolbars_update_user_interface.cpp:173
+#: pcbnew/toolbars_update_user_interface.cpp:174
 msgid "Show vias in fill mode"
 msgstr "Mostra Via in modalità piena"
 
-#: pcbnew/toolbars_update_user_interface.cpp:183
+#: pcbnew/toolbars_update_user_interface.cpp:184
 msgid "Show tracks in fill mode"
 msgstr "Mostra piste in modalità piena"
 
-#: pcbnew/toolbars_update_user_interface.cpp:192
+#: pcbnew/toolbars_update_user_interface.cpp:193
 msgid "Normal contrast display mode"
 msgstr "Visualizza con contrasto normale"
 
-#: pcbnew/toolbars_update_user_interface.cpp:193
+#: pcbnew/toolbars_update_user_interface.cpp:194
 msgid "High contrast display mode"
 msgstr "Visualizza con contrasto aumentato"
 
@@ -7971,12 +7966,12 @@ msgstr "Tracciatore: %s OK\n"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:505
 msgid "Save Drill Report File"
-msgstr "Salva rapporto del file di foratura"
+msgstr "Salva file rapporto foratura"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:530
 #, c-format
 msgid "Report file %s created\n"
-msgstr "Il file di rapporto %s è sato creato\n"
+msgstr "Il file di rapporto %s è stato creato\n"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:548
 msgid "HPGL plot files (.plt)|*.plt"
@@ -9429,7 +9424,7 @@ msgstr "Dia uVia"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:148
 #: common/pgm_base.cpp:104
 msgid "Default"
-msgstr "Predefinito"
+msgstr "Predefinita"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:67
 msgid "Net Class parameters"
@@ -10534,7 +10529,7 @@ msgstr "File di rapporto della Verifica Regole Disegno (.rpt)|*.rpt"
 
 #: pcbnew/dialogs/dialog_drc.cpp:266
 msgid "Save DRC Report File"
-msgstr "Salva file di rapporto della Verifica Regole Disegno"
+msgstr "Salva file rapporto DRC"
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:124
 msgid "Value:"
@@ -11596,11 +11591,11 @@ msgstr "Elenco Comandi da tastiera"
 
 #: common/hotkeys_basic.cpp:690
 msgid "Read Hotkey Configuration File:"
-msgstr "Configurazione comandi da tastiera"
+msgstr "Leggi file configurazione scorciatoie da tastiera:"
 
 #: common/hotkeys_basic.cpp:719
 msgid "Write Hotkey Configuration File:"
-msgstr "Salva comandi da tastiera:"
+msgstr "Salva file configurazione scorciatoie da tastiera:"
 
 #: common/hotkeys_basic.cpp:747
 msgid "&List Current Keys"
@@ -12245,11 +12240,6 @@ msgstr "Errore nel creare il file \"%s\"\n"
 msgid "File '%s' OK\n"
 msgstr "File \"%s\" OK\n"
 
-#: eeschema/plot_schematic_SVG.cpp:107
-#, c-format
-msgid "SVG Plotter Exception : '%s'"
-msgstr "Eccezione SVG: \"%s\""
-
 #: eeschema/plot_schematic_SVG.cpp:136 eeschema/plot_schematic_PDF.cpp:135
 #, c-format
 msgid "Plot: <%s> OK\n"
@@ -12259,11 +12249,6 @@ msgstr "Disegno: \"%s\" OK\n"
 #, c-format
 msgid "Unable to create <%s>\n"
 msgstr "Impossibile creare \"%s\"\n"
-
-#: eeschema/plot_schematic_SVG.cpp:149
-#, c-format
-msgid "SVG Plotter Exception : <%s>"
-msgstr "Eccezione SVG: \"%s\""
 
 #: eeschema/schedit.cpp:258
 msgid "There are no undefined labels in this sheet to clean up."
@@ -12907,11 +12892,11 @@ msgstr "Aggiunge un nuovo foglio allo schema corrente"
 
 #: eeschema/menubar.cpp:111
 msgid "&Save Schematic Project"
-msgstr "&Salva schema"
+msgstr "&Salva schema progetto"
 
 #: eeschema/menubar.cpp:115
 msgid "Save all sheets in schematic project"
-msgstr "Salva tutti i fogli dello schema"
+msgstr "Salva tutti i fogli dello schema del progetto"
 
 #: eeschema/menubar.cpp:120
 msgid "Save &Current Sheet Only"
@@ -12919,7 +12904,7 @@ msgstr "Salva solo il foglio &corrente"
 
 #: eeschema/menubar.cpp:121
 msgid "Save only current schematic sheet"
-msgstr "Salva solo il foglio corrente dello schema elettrico"
+msgstr "Salva solo il foglio corrente dello schema"
 
 #: eeschema/menubar.cpp:128
 msgid "Save Current Sheet &As"
@@ -13325,7 +13310,7 @@ msgstr "&Salva libreria corrente\tCtrl+S"
 
 #: eeschema/menubar_libedit.cpp:77
 msgid "Save the current active library"
-msgstr "Salva la libreria corrente"
+msgstr "Salva la libreria attiva corrente"
 
 #: eeschema/menubar_libedit.cpp:83
 msgid "Save Current Library &As"
@@ -13872,7 +13857,7 @@ msgstr "Esporta grafica corrente"
 
 #: eeschema/tool_lib.cpp:112
 msgid "Save current library to disk"
-msgstr "Salva libreria corrente"
+msgstr "Salva libreria corrente su disco"
 
 #: eeschema/tool_lib.cpp:118
 msgid "Delete component in current library"
@@ -13908,11 +13893,11 @@ msgstr "Salva il componente in una nuova libreria"
 
 #: eeschema/tool_lib.cpp:150 eeschema/help_common_strings.h:40
 msgid "Undo last command"
-msgstr "Annulla  "
+msgstr "Annulla l'ultimo comando"
 
 #: eeschema/tool_lib.cpp:152
 msgid "Redo the last command"
-msgstr "Ripristina"
+msgstr "Ripeti l'ultimo comando"
 
 #: eeschema/tool_lib.cpp:158
 msgid "Edit component properties"
@@ -14221,11 +14206,6 @@ msgstr "Componente %s, %s"
 msgid "Unable to create '%s'\n"
 msgstr "Impossibile creare \"%s\"\n"
 
-#: eeschema/plot_schematic_PS.cpp:134
-#, c-format
-msgid "PS Plotter Exception : '%s'"
-msgstr "Eccezione PS: \"%s\""
-
 #: eeschema/sheet.cpp:77
 msgid "File name is not valid!"
 msgstr "Nome file non valido! Termina"
@@ -14441,11 +14421,6 @@ msgstr "Seleziona componente (%d elementi caricati):"
 #, c-format
 msgid "Failed to find part '%s' in library"
 msgstr "Impossibile trovare il componente \"%s\" nella libreria"
-
-#: eeschema/plot_schematic_PDF.cpp:116
-#, c-format
-msgid "PDF Plotter Exception : <%s>"
-msgstr "Eccezione PDF: \"%s\""
 
 #: eeschema/sch_sheet_path.cpp:172
 #, c-format
@@ -14704,16 +14679,6 @@ msgstr "Punto %d della polilinea posizione Y non definita"
 #, c-format
 msgid "Polyline at (%s, %s) with %zu points"
 msgstr "Polilinea a (%s, %s) con %zu punti"
-
-#: eeschema/plot_schematic_DXF.cpp:103
-#, c-format
-msgid "DXF Plotter Exception : '%s'"
-msgstr "Eccezione DXF: \"%s\""
-
-#: eeschema/plot_schematic_HPGL.cpp:200
-#, c-format
-msgid "HPGL Plotter Exception : '%s'"
-msgstr "Eccezione HPGL: \"%s\""
 
 #: eeschema/database.cpp:89
 #, c-format
@@ -15122,7 +15087,7 @@ msgstr "Coordinate Y del testo relativo al componente"
 
 #: eeschema/dialogs/dialog_bom.cpp:299 eeschema/dialogs/dialog_netlist.cpp:573
 msgid "Save Netlist File"
-msgstr "Salva Lista componenti"
+msgstr "Salva file netlist"
 
 #: eeschema/dialogs/dialog_bom.cpp:354
 msgid "Plugin"
@@ -16631,7 +16596,7 @@ msgstr "Chiudi CvPcb"
 
 #: cvpcb/menubar.cpp:117
 msgid "Edit Li&brary Table"
-msgstr "Modifica Tabella l&ibrerie:"
+msgstr "Modifica tabella l&ibrerie:"
 
 #: cvpcb/menubar.cpp:125
 msgid "Keep Open On Save"
@@ -16643,15 +16608,15 @@ msgstr "Impedisci la chiusura dopo il salvataggio"
 
 #: cvpcb/menubar.cpp:134
 msgid "&Save Project File"
-msgstr "&Salva progetto"
+msgstr "&Salva file progetto"
 
 #: cvpcb/menubar.cpp:135
 msgid "Save changes to the project configuration file"
-msgstr "Salva modifiche al progetto"
+msgstr "Salva modifiche al file di configurazione del progetto"
 
 #: cvpcb/menubar.cpp:139
 msgid "&Save Project File As"
-msgstr "&Salva progetto"
+msgstr "&Salva progetto con nome"
 
 #: cvpcb/menubar.cpp:140
 msgid "Save changes to a new project configuration file"
@@ -16659,19 +16624,19 @@ msgstr "Salva modifiche in un nuovo file di configurazione progetto"
 
 #: cvpcb/menubar.cpp:150
 msgid "&CvPcb Manual"
-msgstr "&Manuale"
+msgstr "Manuale &CvPcb"
 
 #: cvpcb/menubar.cpp:151
 msgid "Open CvPcb manual"
-msgstr "Manuale  "
+msgstr "Apri il manuale di CvPcb"
 
 #: cvpcb/menubar.cpp:156
 msgid "&About CvPcb"
-msgstr "&Informazioni"
+msgstr "&Informazioni su CvPcb"
 
 #: cvpcb/menubar.cpp:157
 msgid "About CvPcb footprint selector"
-msgstr "Informazioni"
+msgstr "Informazioni sul selezionatore di impronte CvPcb"
 
 #: cvpcb/tool_cvpcb.cpp:60
 msgid "Edit footprint library table"
@@ -16691,7 +16656,7 @@ msgstr "Seleziona il precedente componente libero"
 
 #: cvpcb/tool_cvpcb.cpp:78
 msgid "Select next unlinked component"
-msgstr "Seleziona il prossimo componente libero"
+msgstr "Seleziona il successivo componente libero"
 
 #: cvpcb/tool_cvpcb.cpp:83
 msgid "Delete all associations (links)"
@@ -16836,7 +16801,7 @@ msgstr "Prima controllare le voci fp-lib-table."
 
 #: cvpcb/readwrite_dlgs.cpp:388
 msgid "Save Component Footprint Link File"
-msgstr "Salva il file associazione componenti a impronte"
+msgstr "Salva il file di collegamento componenti impronte"
 
 #: cvpcb/readwrite_dlgs.cpp:389
 msgid "Unnamed file"
@@ -19442,7 +19407,7 @@ msgstr "&Salva progetto disposizione pagina"
 
 #: pagelayout_editor/menubar.cpp:96
 msgid "Save Page Layout Design &As"
-msgstr "Salva squadratura &con nome"
+msgstr "S&alva progetto disposizione pagina con nome"
 
 #: pagelayout_editor/menubar.cpp:103
 msgid "Print Pre&view"
@@ -20168,3 +20133,24 @@ msgstr "Parametri regolatore"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nuovo elemento"
+
+#~ msgid " *"
+#~ msgstr "*"
+
+#~ msgid "SVG Plotter Exception : '%s'"
+#~ msgstr "Eccezione SVG: \"%s\""
+
+#~ msgid "SVG Plotter Exception : <%s>"
+#~ msgstr "Eccezione SVG: \"%s\""
+
+#~ msgid "PS Plotter Exception : '%s'"
+#~ msgstr "Eccezione PS: \"%s\""
+
+#~ msgid "PDF Plotter Exception : <%s>"
+#~ msgstr "Eccezione PDF: \"%s\""
+
+#~ msgid "DXF Plotter Exception : '%s'"
+#~ msgstr "Eccezione DXF: \"%s\""
+
+#~ msgid "HPGL Plotter Exception : '%s'"
+#~ msgstr "Eccezione HPGL: \"%s\""
