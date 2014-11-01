@@ -129,7 +129,7 @@ install_prerequisites()
     elif [ "$(expr match "$PM" '.*\(yum\)')" == "yum" ]; then
         #echo "red hat compatible system"
         # Note: if you find this list not to be accurate, please submit a patch:
-        sudo yum groupinstall "Development Tools" || exit 1
+        sudo yum groupinstall "Development Tools"
 
         prerequisite_list="
             bzr
