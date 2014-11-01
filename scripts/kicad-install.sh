@@ -132,7 +132,6 @@ install_prerequisites()
         sudo yum groupinstall "Development Tools" || exit 1
 
         prerequisite_list="
-            install
             bzr
             bzrtools
             bzip2-libs
