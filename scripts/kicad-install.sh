@@ -143,7 +143,7 @@ install_prerequisites()
             glew-devel
             grep
             openssl-devel
-            wxGTK-devel
+            wxGTK3-devel
         "
 
         for p in ${prerequisite_list}
