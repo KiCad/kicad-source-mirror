@@ -151,6 +151,15 @@ install_prerequisites()
             sudo yum install $p || exit 1
         done
 
+        echo "Checking wxGTK version. Maybe you have to symlink /usr/bin/wx-config-3.0 to /usr/bin/wx-config"
+        V=`wx-config --version | cut -f 1 -d '.'` || echo "Error running wx-config."
+        if [ $V -lt 3 ]
+        then
+        	echo "Error: wx-config is reporting version prior to 3"
+        	exit
+        else
+        	echo "All ok"
+        fi
         # Only install the scripting prerequisites if required.
         if [ "$(expr match "$OPTS" '.*\(-DKICAD_SCRIPTING=ON\)')" == "-DKICAD_SCRIPTING=ON" ]; then
         #echo "KICAD_SCRIPTING=ON"
