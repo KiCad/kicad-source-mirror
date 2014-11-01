@@ -101,10 +101,10 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
 
                 m_MessagesBox->AppendText( msg );
             }
-            catch (const IO_ERROR& e)
+            catch( const IO_ERROR& e )
             {
                 // Cannot plot SVG file
-                msg.Printf( _( "SVG Plotter Exception : '%s'" ), wxString( e.errorText ) );
+                msg.Printf( wxT( "SVG Plotter Exception : '%s'" ), GetChars( e.errorText ) );
                 m_MessagesBox->AppendText( msg );
 
                 m_parent->SetCurrentSheet( oldsheetpath );
@@ -143,10 +143,10 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
             }
             m_MessagesBox->AppendText( msg );
         }
-        catch (const IO_ERROR& e)
+        catch( const IO_ERROR& e )
         {
             // Cannot plot SVG file
-            msg.Printf( _( "SVG Plotter Exception : <%s>"), wxString(e.errorText ) );
+            msg.Printf( wxT( "SVG Plotter Exception : <%s>"), GetChars( e.errorText ) );
             m_MessagesBox->AppendText( msg );
             return;
         }

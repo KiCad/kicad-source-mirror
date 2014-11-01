@@ -309,7 +309,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Fast access to the Web Based FreeROUTE advanced router" ) );
 
     // Access to the scripting console
-#ifdef KICAD_SCRIPTING_WXPYTHON
+#if defined(KICAD_SCRIPTING_WXPYTHON)
     m_mainToolBar->AddSeparator();
 
     m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,
@@ -631,7 +631,7 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
         msg = _( "Track " ) + CoordinateToString( GetDesignSettings().m_TrackWidthList[ii], true );
 
         if( ii == 0 )
-            msg << _( " *" );
+            msg << wxT( " *" );
 
         m_SelTrackWidthBox->Append( msg );
     }
@@ -662,7 +662,7 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
                  << CoordinateToString( GetDesignSettings().m_ViasDimensionsList[ii].m_Drill, true );
 
         if( ii == 0 )
-            msg << _( " *" );
+            msg << wxT( " *" );
 
         m_SelViaSizeBox->Append( msg );
     }

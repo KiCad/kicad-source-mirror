@@ -307,40 +307,22 @@ set( KIFACE_PREFIX  "_" )
 
 #================================================
 # Locations for install targets.
-set( KICAD_BIN bin
-    CACHE PATH "Location of KiCad binaries." )
-
-set( KICAD_FP_LIB_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}"
-     CACHE PATH "Default path where footprint libraries are installed." )
-
-if( UNIX AND NOT APPLE )
+#================================================
+if( NOT APPLE )
     # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
+    set( KICAD_BIN bin
+        CACHE PATH "Location of KiCad binaries." )
     set( KICAD_PLUGINS lib/kicad/plugins
         CACHE PATH "Location of KiCad plugins." )
     set( KICAD_DATA share/kicad
         CACHE PATH "Location of KiCad data files." )
     set( KICAD_DOCS share/doc/kicad
         CACHE PATH "Location of KiCad documentation files." )
-    set( KICAD_FP_LIB_INSTALL_PATH "${KICAD_FP_LIB_INSTALL_PATH}/share/kicad/modules" )
-endif()
-
-if( MINGW )
-    # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
-    set( KICAD_PLUGINS ${KICAD_BIN}/plugins
-        CACHE PATH "Location of KiCad plugins." )
-    set( KICAD_DATA share
-        CACHE PATH "Location of KiCad data files." )
-    set( KICAD_DOCS doc
-        CACHE PATH "Location of KiCad documentation files." )
-    set( KICAD_FP_LIB_INSTALL_PATH "${KICAD_FP_LIB_INSTALL_PATH}/modules" )
-endif()
-
-set( KICAD_DEMOS ${KICAD_DATA}/demos
-    CACHE PATH "Location of KiCad demo files." )
-set( KICAD_TEMPLATE ${KICAD_DATA}/template
-    CACHE PATH "Location of KiCad template files." )
-
-if( APPLE )
+    set( KICAD_DEMOS ${KICAD_DATA}/demos
+        CACHE PATH "Location of KiCad demo files." )
+    set( KICAD_TEMPLATE ${KICAD_DATA}/template
+        CACHE PATH "Location of KiCad template files." )
+else()
     # everything without leading / is relative to CMAKE_INSTALL_PREFIX.
     # CMAKE_INSTALL_PREFIX is root of .dmg image
     set( KICAD_BIN ${CMAKE_INSTALL_PREFIX}
@@ -375,10 +357,6 @@ if( APPLE )
         CACHE PATH "Location of KiCad documentation files." FORCE )
     set( KICAD_DEMOS demos
         CACHE PATH "Location of KiCad demo files." FORCE )
-
-    # used to set DEFAULT_FP_LIB_PATH in config.h.cmake, but then never used
-    # set it to correct value just in case (see common.cpp)
-    set( KICAD_FP_LIB_INSTALL_PATH "~/Library/Preferences/kicad" )
 
     # Override default paths for fixup_bundle
     set( OSX_BUNDLE_OVERRIDE_PATHS "
@@ -557,7 +535,9 @@ if( KICAD_SKIP_BOOST )
         message( FATAL_ERROR "Boost 1.54+ libraries are required." )
     endif()
 
-    add_custom_target( boost )      # it is required to meet some further dependencies
+    # Keeps CMake from complaining about undefined boost dependencies even though Boost was
+    # found.  Sigh!!!!!
+    add_custom_target( boost )
 
     message( WARNING "
 WARNING: You decided to skip building boost library.

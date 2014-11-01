@@ -195,9 +195,9 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
             if( !aPlotAll )
                 break;
         }
-        catch (IO_ERROR& e)
+        catch( IO_ERROR& e )
         {
-            msg.Printf( _( "HPGL Plotter Exception : '%s'"), wxString(e.errorText ) );
+            msg.Printf( wxT( "HPGL Plotter Exception : '%s'"), GetChars( e.errorText ) );
             m_MessagesBox->AppendText( msg );
         }
 

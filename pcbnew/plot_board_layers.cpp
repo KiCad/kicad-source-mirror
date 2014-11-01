@@ -1005,8 +1005,12 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
     if( plotter->OpenFile( aFullFileName ) )
     {
         // For the Gerber "file function" attribute, set the layer number
-        if( plotter->GetPlotterType() == PLOT_FORMAT_GERBER && plotOpts.GetUseGerberAttributes() )
-            plotter->SetLayerAttribFunction( GetGerberFileFunction( aBoard, aLayer ) );
+        if( plotter->GetPlotterType() == PLOT_FORMAT_GERBER )
+        {
+            bool useX2mode = plotOpts.GetUseGerberAttributes();
+            plotter->SetLayerAttribFunction( GetGerberFileFunction( aBoard, aLayer,
+                                             useX2mode ? false : true ) );
+        }
 
         plotter->StartPlot();
 
