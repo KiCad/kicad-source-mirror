@@ -398,8 +398,8 @@ public:
      * Function SetLayerPair
      * For a via m_Layer contains the top layer, the other layer is in
      * m_BottomLayer
-     * @param top_layer = first layer connected by the via
-     * @param bottom_layer = last layer connected by the via
+     * @param aTopLayer = first layer connected by the via
+     * @param aBottomLayer = last layer connected by the via
      */
     void SetLayerPair( LAYER_ID aTopLayer, LAYER_ID aBottomLayer );
 

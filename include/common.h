@@ -584,8 +584,8 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack );
  * <p>
  * Return the KiCad help file with path and extension.
  * Help files can be html (.html ext) or pdf (.pdf ext) files.
- * A <BaseName>.html file is searched and if not found,
- * <BaseName>.pdf file is searched in the same path.
+ * A \<BaseName\>.html file is searched and if not found,
+ * \<BaseName\>.pdf file is searched in the same path.
  * If the help file for the current locale is not found, an attempt to find
  * the English version of the help file is made.
  * Help file is searched in directories in this order:

@@ -125,7 +125,7 @@ public:
     /**
      * Function SetAutoPanMArgin()
      * Sets margin for autopanning (ie. the area when autopanning becomes active).
-     * @param aSpeed is a new margin for autopanning.
+     * @param aMargin is a new margin for autopanning.
      */
     virtual void SetAutoPanMargin( float aMargin )
     {

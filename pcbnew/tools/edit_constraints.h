@@ -184,8 +184,8 @@ public:
      * Constructor.
      *
      * @param aConstrained is the point that is put under constrain.
-     * @parama aCenter is the point that is the center of the circle.
-     * @parama aEnd is the point that decides on the radius of the circle.
+     * @param aCenter is the point that is the center of the circle.
+     * @param aEnd is the point that decides on the radius of the circle.
      */
     EC_CIRCLE( EDIT_POINT& aConstrained, const EDIT_POINT& aCenter, const EDIT_POINT& aEnd ) :
         EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_center( aCenter ), m_end( aEnd )

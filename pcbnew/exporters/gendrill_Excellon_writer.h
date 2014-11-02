@@ -181,6 +181,7 @@ public:
      * @param aMirror = true to create mirrored coordinates (Y coordinates negated)
      * @param aMinimalHeader = true to use a minimal header (no comments, no info)
      * @param aOffset = drill coordinates offset
+     * @param aMergePTHNPTH : true to create only one list which contains both PTH and NPTH
      */
     void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset, bool aMergePTHNPTH )
     {
@@ -202,6 +203,7 @@ public:
      * @param aGenerateNPTH_list :
      *       true to create NPTH only list (with no plated holes)
      *       false to created plated holes list (with no NPTH )
+     * @param aMergePTHNPTH : true to create only one list which contains both PTH and NPTH
      */
     void BuildHolesList( int aFirstLayer, int aLastLayer,
                          bool aExcludeThroughHoles,

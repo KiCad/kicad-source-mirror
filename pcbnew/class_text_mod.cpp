@@ -254,11 +254,9 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( panel == NULL )
         return;
 
-    MODULE* module = static_cast<MODULE*>( m_Parent );
-
-    /* parent must *not* be NULL (a module text without a footprint
+    /* parent must *not* be NULL (a footprint text without a footprint
        parent has no sense) */
-    wxASSERT( module );
+    wxASSERT( m_Parent );
 
     BOARD* brd = GetBoard( );
 

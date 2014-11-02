@@ -199,9 +199,9 @@ public:
      * Function FromHSV()
      * Changes currently used color to the one given by hue, saturation and value parameters.
      *
-     * @param aOutH is hue component.
-     * @param aOutS is saturation component.
-     * @param aOutV is value component.
+     * @param aInH is hue component.
+     * @param aInS is saturation component.
+     * @param aInV is value component.
      */
     void FromHSV( double aInH, double aInS, double aInV );
 

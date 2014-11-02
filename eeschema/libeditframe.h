@@ -431,6 +431,7 @@ private:
      * Any changes are updated in memory only and NOT to a file.  The old component is
      * deleted from the library and/or any aliases before the edited component is updated
      * in the library.
+     * @param aLib - the part library where the part must be saved.
      * @param aPromptUser true to ask for confirmation, when the part_lib is already existing
      *      in memory, false to save silently
      * @return true if the part was saved, false if aborted by user

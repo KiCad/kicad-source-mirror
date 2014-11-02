@@ -68,8 +68,8 @@ struct prof_counter
 /**
  * Function prof_start
  * Begins code execution time counting for a given profiling counter.
- * @param cnt is the counter which should be started.
- * @param use_rdtsc tells if processor's time-stamp counter should be used for time counting.
+ * @param aCnt is the counter which should be started.
+ * use_rdtsc tells if processor's time-stamp counter should be used for time counting.
  *      Otherwise is system tics method will be used. IMPORTANT: time-stamp counter should not
  *      be used on multicore machines executing threaded code.
  */
@@ -81,7 +81,7 @@ static inline void prof_start( prof_counter* aCnt )
 /**
  * Function prof_stop
  * Ends code execution time counting for a given profiling counter.
- * @param cnt is the counter which should be stopped.
+ * @param aCnt is the counter which should be stopped.
  */
 static inline void prof_end( prof_counter* aCnt )
 {

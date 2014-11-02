@@ -78,12 +78,12 @@ public:
      * @param a00 is the component [0,0].
      * @param a01 is the component [0,1].
      * @param a02 is the component [0,2].
+     * @param a10 is the component [1,0].
      * @param a11 is the component [1,1].
      * @param a12 is the component [1,2].
-     * @param a13 is the component [1,3].
      * @param a20 is the component [2,0].
      * @param a21 is the component [2,1].
-     * @param a00 is the component [2,2].
+     * @param a22 is the component [2,2].
      */
     MATRIX3x3( T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22 );
 

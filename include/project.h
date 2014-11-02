@@ -87,6 +87,13 @@ public:
     VTBL_ENTRY const wxString GetProjectFullName() const;
 
     /**
+     * Function GetProjectPath
+     * returns the full path of the project.  This is the path
+     * of the *.pro file and will always be an absolute path, ending by a dir separator.
+     */
+    VTBL_ENTRY const wxString GetProjectPath() const;
+
+    /**
      * Function FootprintLibTblName
      * returns the path and filename of this project's fp-lib-table,
      * i.e. the project specific one, not the global one.
@@ -98,8 +105,8 @@ public:
      * saves the current "project" parameters into the wxConfigBase* derivative.
      * Then the wxConfigBase derivative is written to the *.pro file for the project.
      *
-     * @param aSearchS a SEARCH_STACK
-     * @param aGroupName
+     * @param aSList a SEARCH_STACK
+     * @param aGroupName is the name of the group inside the config which contains parameters
      * @param aParams is a ptr vector of PARAM_CFG_BASE derivatives.
      *  Saved parameters are the subset in this array having the .m_Setup member
      *  set to false.
@@ -258,9 +265,9 @@ private:
      * @param aProjectFileName is the *.pro file to open.
      */
     wxConfigBase* configCreate( const SEARCH_STACK& aSList,
-            const wxString& aGroupName, const wxString& aFileName = wxEmptyString );
+            const wxString& aGroupName, const wxString& aProjectFileName = wxEmptyString );
 
-    wxFileName      m_project_name;         ///< <fullpath>/<basename>.pro
+    wxFileName      m_project_name;         ///< \<fullpath\>/\<basename\>.pro
     wxString        m_pro_date_and_time;
 
     /// @see this::SetRString(), GetRString(), and enum RSTRING_T.

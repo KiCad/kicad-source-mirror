@@ -133,7 +133,7 @@ public:
      * Function SetHighlight
      * Turns on/off highlighting - it may be done for the active layer or the specified net.
      * @param aEnabled tells if highlighting should be enabled.
-     * @param aNetCode is optional and if specified, turns on higlighting only for the net with
+     * @param aNetcode is optional and if specified, turns on higlighting only for the net with
      * number given as the parameter.
      */
     inline void SetHighlight( bool aEnabled, int aNetcode = -1 )
@@ -180,7 +180,7 @@ public:
     /**
      * Function TranslateColor
      * Returns the color responding to the one of EDA_COLOR_T enum values.
-     * @param EDA_COLOR_T color equivalent.
+     * @param aColor equivalent.
      */
     inline const COLOR4D& TranslateColor( EDA_COLOR_T aColor )
     {
