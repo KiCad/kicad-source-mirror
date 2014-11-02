@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-01 17:06+0100\n"
-"PO-Revision-Date: 2014-11-01 17:12+0100\n"
+"PO-Revision-Date: 2014-11-02 12:17+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -4126,7 +4126,7 @@ msgstr "Nazwa:"
 #: eeschema/dialogs/dialog_bom_base.cpp:59
 #: eeschema/dialogs/dialog_netlist_base.cpp:46
 msgid "Generate"
-msgstr "Generuj BOM"
+msgstr "Utwórz listę"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:66
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:97
