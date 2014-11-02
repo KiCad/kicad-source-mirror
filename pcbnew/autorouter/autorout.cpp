@@ -95,7 +95,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
         Module = (MODULE*) GetScreen()->GetCurItem();
         if( (Module == NULL) || (Module->Type() != PCB_MODULE_T) )
         {
-            wxMessageBox( _( "Module not selected" ) );
+            wxMessageBox( _( "Footprint not selected" ) );
             return;
         }
         break;

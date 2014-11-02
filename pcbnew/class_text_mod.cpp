@@ -384,7 +384,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     };
 
     Line = module->GetReference();
-    aList.push_back( MSG_PANEL_ITEM( _( "Module" ), Line, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), Line, DARKCYAN ) );
 
     Line = GetShownText();
     aList.push_back( MSG_PANEL_ITEM( _( "Text" ), Line, BROWN ) );

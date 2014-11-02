@@ -415,10 +415,10 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
     {
         wxArrayString headers;
 
-        headers.Add( _( "Module" ) );
+        headers.Add( _( "Footprint" ) );
         headers.Add( _( "Library" ) );
 
-        msg.Printf( _( "Modules [%d items]" ), (int) rows.size() );
+        msg.Printf( _( "Footprints [%d items]" ), (int) rows.size() );
 
         EDA_LIST_DIALOG dlg( aWindow, msg, headers, rows, oldName, DisplayCmpDoc );
 
