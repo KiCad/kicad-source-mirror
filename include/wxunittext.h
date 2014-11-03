@@ -68,7 +68,7 @@ public:
      */
     virtual void SetValue( double aValue );
 
-    /**
+    /*
      * Function GetValue
      * Returns the current value using specified units (if currently used units are different, then
      * they are converted first).

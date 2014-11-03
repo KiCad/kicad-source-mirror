@@ -54,9 +54,9 @@ public:
      * Constructor
      *
      * @param aToolMgr: tool manager instance the events will be sent to
-     * @param aEditFrame: the frame wx events come from
      */
     TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr );
+
     virtual ~TOOL_DISPATCHER();
 
     /**

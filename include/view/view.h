@@ -65,7 +65,6 @@ public:
     /**
      * Constructor.
      * @param aIsDynamic decides whether we are creating a static or a dynamic VIEW.
-     * @param aUseGroups tells if items added to the VIEW should be stored in groups.
      */
     VIEW( bool aIsDynamic = true );
 
@@ -192,6 +191,7 @@ public:
      * Function SetScale()
      * Sets the scaling factor, zooming around a given anchor point.
      * (depending on correct GAL unit length & DPI settings).
+     * @param aAnchor: the zooming  anchor point
      * @param aScale: the scale factor
      */
     void SetScale( double aScale, const VECTOR2D& aAnchor );
@@ -235,7 +235,7 @@ public:
      * Function ToWorld()
      * Converts a screen space one dimensional size to a one dimensional size in world
      * space coordinates.
-     * @param aCoord: the size to be converted
+     * @param aSize : the size to be converted
      */
     double ToWorld( double aSize ) const;
 
@@ -383,7 +383,7 @@ public:
      * Enables or disables display of the top layer. When disabled - layers are rendered as usual
      * with no influence from SetTopLayer function. Otherwise on the top there is displayed the
      * layer set previously with SetTopLayer function.
-     * @param aEnabled: whether to enable or disable display of the top layer.
+     * @param aEnable whether to enable or disable display of the top layer.
      */
     void EnableTopLayer( bool aEnable );
 
@@ -574,7 +574,7 @@ private:
      * Function draw()
      * Draws a group of items on all layers that those items use.
      *
-     * @param aItem is the group to be drawn.
+     * @param aGroup is the group to be drawn.
      * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
      * for cached items.
      */

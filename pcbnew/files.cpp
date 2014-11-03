@@ -143,7 +143,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
  * puts up a wxFileDialog asking for a BOARD filename to save.
  *
  * @param aParent is a wxFrame passed to wxFileDialog.
- * @param aFullFileName on entry is a probable choice, on return is the
+ * @param aFileName on entry is a probable choice, on return is the
  *  chosen full filename (includes path).
  *
  * @return bool - true if chosen, else false if user aborted.

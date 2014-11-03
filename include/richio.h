@@ -58,8 +58,7 @@ int
  * Function StrPrintf
  * is like sprintf() but the output is returned in a std::string instead of to a
  * character array.
- * @param aResult is the string to append to, previous text is not clear()ed.
- * @param aFormat is a printf() style format string.
+ * @param format is a printf() style format string.
  * @return std::string - the result of the sprintf().
  */
 std::string

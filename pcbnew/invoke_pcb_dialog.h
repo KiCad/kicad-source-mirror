@@ -64,6 +64,10 @@ class PCB_PLOT_PARAMS;
  * Function InvokePcbLibTableEditor
  * shows the modal DIALOG_FP_LIB_TABLE for purposes of editing two lib tables.
  *
+ * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ * @param aGlobal is the common footprint library table file being edited.
+ * @param aProject is the project specific footprint library table file being edited.
+ *
  * @return int - bits 0 and 1 tell whether a change was made to the @a aGlobal
  *  and/or the @a aProject table, respectively.  If set, table was modified.
  */
@@ -76,7 +80,7 @@ int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal, F
  * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
  * @param aNickname is the footprint library whose options are being edited.
  * @param aPluginType is something that will pass through IO_MGR::EnumFromStr().
- * @param aOptionsIn is the options string on calling into this function.
+ * @param aOptions is the options string on calling into this function.
  * @param aResult is where to put the result of the editing.
  */
 void InvokePluginOptionsEditor( wxTopLevelWindow* aCaller, const wxString& aNickname,
@@ -93,9 +97,10 @@ bool InvokeDXFDialogBoardImport( PCB_BASE_FRAME* aCaller );
 
 /**
  * Function InvokeDXFDialogModuleImport
- * shows the modal DIALOG_DXF_IMPORT for importing a DXF file.to a module.
+ * shows the modal DIALOG_DXF_IMPORT for importing a DXF file as footprint outlines.
  *
  * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ * @param aModule is the footprint currently edited.
  * @return true if the import was made.
  */
 bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule );
@@ -103,10 +108,20 @@ bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule );
 /**
  * Function InvokeLayerSetup
  * shows the layer setup dialog
+ * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ * @param aBoard is the currently edited board.
  * @return bool - true if user pressed OK (did not abort), else false.
  */
 bool InvokeLayerSetup( wxTopLevelWindow* aCaller, BOARD* aBoard );
 
+/**
+ * Function InvokeSVGPrint
+ * shows the SVG print dialog
+ * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ * @param aBoard is the currently edited board.
+ * @param aSettings is the current pcb plot parameters.
+ * @return bool - true if user pressed OK (did not abort), else false.
+ */
 bool InvokeSVGPrint( wxTopLevelWindow* aCaller, BOARD* aBoard, PCB_PLOT_PARAMS* aSettings );
 
 #endif  // INVOKE_A_DIALOG_H_

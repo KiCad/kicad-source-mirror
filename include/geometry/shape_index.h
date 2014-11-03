@@ -37,7 +37,7 @@
  * It is used by SHAPE_INDEX to get a SHAPE* from another type.
  * By default relies on T::GetShape() method, should be specialized if the T object
  * doesn't allow that method.
- * @param object generic T object
+ * @param aItem generic T object
  * @return a SHAPE* object equivalent to object.
  */
 template <class T>
@@ -59,7 +59,7 @@ const SHAPE* shapeFunctor( SHAPE* aItem );
  * It is used by SHAPE_INDEX to get the bounding box of a generic T object.
  * By default relies on T::BBox() method, should be specialized if the T object
  * doesn't allow that method.
- * @param object generic T object
+ * @param aObject generic T object
  * @return a BOX2I object containing the bounding box of the T object.
  */
 template <class T>
@@ -75,8 +75,8 @@ BOX2I boundingBox( T aObject )
  * It is used by SHAPE_INDEX to implement Accept().
  * By default relies on V::operation() redefinition, should be specialized if V class
  * doesn't have its () operation defined to accept T objects.
- * @param object generic T object
- * @param visitor V visitor object
+ * @param aObject generic T object
+ * @param aVisitor V visitor object
  */
 template <class T, class V>
 void acceptVisitor( T aObject, V aVisitor )
@@ -91,9 +91,9 @@ void acceptVisitor( T aObject, V aVisitor )
  * It is used by SHAPE_INDEX to implement Query().
  * By default relies on T::Collide(U) method, should be specialized if the T object
  * doesn't allow that method.
- * @param object generic T object
- * @param anotherObject generic U object
- * @param minDistance minimum collision distance
+ * @param aObject generic T object
+ * @param aAnotherObject generic U object
+ * @param aMinDistance minimum collision distance
  * @return if object and anotherObject collide
  */
 template <class T, class U>
@@ -126,7 +126,7 @@ class SHAPE_INDEX
              * Function Init()
              *
              * Setup the internal tree iterator.
-             * @param tree pointer to a RTREE object
+             * @param aTree pointer to a RTREE object
              */
             void Init( RTree<T, int, 2, float>* aTree )
             {
@@ -138,7 +138,7 @@ class SHAPE_INDEX
              * Iterator constructor
              *
              * Creates an iterator for the index object
-             * @param index SHAPE_INDEX object to iterate
+             * @param aIndex SHAPE_INDEX object to iterate
              */
             Iterator( SHAPE_INDEX* aIndex )
             {
@@ -244,7 +244,7 @@ class SHAPE_INDEX
          * Function Accept()
          *
          * Accepts a visitor for every SHAPE object contained in this INDEX.
-         * @param visitor Visitor object to be run
+         * @param aVisitor Visitor object to be run
          */
         template <class V>
         void Accept( V aVisitor )
@@ -271,9 +271,9 @@ class SHAPE_INDEX
          * Function Query()
          *
          * Runs a callback on every SHAPE object contained in the bounding box of (shape).
-         * @param shape shape to search against
-         * @param minDistance distance threshold
-         * @param visitor object to be invoked on every object contained in the search area.
+         * @param aShape shape to search against
+         * @param aMinDistance distance threshold
+         * @param aVisitor object to be invoked on every object contained in the search area.
          */
         template <class V>
         int Query( const SHAPE *aShape, int aMinDistance, V& aVisitor, bool aExact )

@@ -183,9 +183,8 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
 }
 
 
-/**
- * Send a remote command to Eeschema via a socket,
- * @param objectToSync = item to be located on schematic (module, pin or text)
+/* Send a remote command to Eeschema via a socket,
+ * aSyncItem = item to be located on schematic (module, pin or text)
  * Commands are
  * $PART: "reference"   put cursor on component anchor
  * $PART: "reference" $PAD: "pad number" put cursor on the component pin

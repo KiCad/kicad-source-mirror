@@ -112,8 +112,8 @@ public:
      * @param aMTV minimum translation vector
      * @return true, if there is a collision.
      */
-    virtual bool Collide( const SHAPE* aShape, int aClerance, VECTOR2I& aMTV ) const;
-    virtual bool Collide( const SHAPE* aShape, int aClerance = 0 ) const;
+    virtual bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I& aMTV ) const;
+    virtual bool Collide( const SHAPE* aShape, int aClearance = 0 ) const;
 
     /**
      * Function Collide()
@@ -129,7 +129,7 @@ public:
      *
      * Computes a bounding box of the shape, with a margin of aClearance
      * a collision.
-     * @aClearance how much the bounding box is expanded wrs to the minimum enclosing rectangle
+     * @param aClearance how much the bounding box is expanded wrs to the minimum enclosing rectangle
      * for the shape.
      * @return the bounding box.
      */

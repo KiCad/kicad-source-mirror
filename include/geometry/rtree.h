@@ -123,7 +123,6 @@ public:
     /// Find all within search rectangle
     /// \param a_min Min of search bounding rect
     /// \param a_max Max of search bounding rect
-    /// \param a_searchResult Search result array.  Caller should set grow size. Function will reset, not append to array.
     /// \param a_resultCallback Callback function to return result.  Callback should return 'true' to continue searching
     /// \param a_context User context to pass as parameter to a_resultCallback
     /// \return Returns the number of entries found

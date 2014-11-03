@@ -209,7 +209,7 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
 {
     if( m_parent->GetBoard()->m_Modules == NULL )
     {
-        DisplayInfoMessage( this, _( "No modules" ) );
+        DisplayInfoMessage( this, _( "No footprints" ) );
         return;
     }
 
@@ -268,7 +268,7 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
 
     // Search for missing modules on board.
     if( missing.size() == 0 )
-        list << wxT("<p><b>") <<  _( "No missing modules." ) << wxT("</b></p>");
+        list << wxT("<p><b>") <<  _( "No missing footprints." ) << wxT("</b></p>");
     else
     {
         list << wxT("<p><b>") << _( "Missing:" ) << wxT("</b></p>");
@@ -287,7 +287,7 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
 
     // Search for modules found on board but not in net list.
     if( notInNetlist.size() == 0 )
-        list << wxT( "<p><b>" ) << _( "No extra modules." ) << wxT( "</b></p>" );
+        list << wxT( "<p><b>" ) << _( "No extra footprints." ) << wxT( "</b></p>" );
     else
     {
         list << wxT( "<p><b>" ) << _( "Not in Netlist:" ) << wxT( "</b></p>" );
@@ -319,7 +319,7 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
              << wxT( "</b></p>" );
     }
 
-    HTML_MESSAGE_BOX dlg( this, _( "Check Modules" ) );
+    HTML_MESSAGE_BOX dlg( this, _( "Check footprints" ) );
     dlg.AddHTML_Text( list );
     dlg.ShowModal();
 }

@@ -235,7 +235,7 @@ public:
     /**
      * Function HitTest
      * tests if a point is near an outline edge or a corner of this zone.
-     * @param aRefPos A wxPoint to test
+     * @param aPosition the wxPoint to test
      * @return bool - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aPosition ) const;
@@ -244,7 +244,7 @@ public:
      * Function HitTest
      * tests if a point is inside the zone area, i.e. inside the main outline
      * and outside holes.
-     * @param aRefPos A wxPoint to test
+     * @param aPosition : the wxPoint to test
      * @return bool - true if a hit, else false
      */
     bool HitTestInsideZone( const wxPoint& aPosition ) const

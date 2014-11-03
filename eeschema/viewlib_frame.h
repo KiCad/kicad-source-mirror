@@ -49,8 +49,11 @@ public:
 
     /**
      * Constructor
+     * @param aKiway
+     * @param aParent = the parent frame
      * @param aFrameType must be given either FRAME_SCH_LIB_VIEWER or
      *  FRAME_SCH_LIB_VIEWER_MODAL
+     * @param aLibrary = the library to open when starting (default = NULL)
      */
     LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent,
             FRAME_T aFrameType, PART_LIB* aLibrary = NULL );
@@ -115,10 +118,11 @@ public:
     /**
      * Set the selected component.
      *
-     * @param the alias name of the component to be selected.
+     * @param aComponentName : the name of the component to be selected.
      */
     void SetSelectedComponent( const wxString& aComponentName );
 
+    // Accessors:
     void SetUnit( int aUnit ) { m_unit = aUnit; }
     int GetUnit( void ) { return m_unit; }
 

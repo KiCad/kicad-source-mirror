@@ -136,7 +136,7 @@ void PCB_EDIT_FRAME::OnPlaceOrRouteFootprints( wxCommandEvent& event )
     case ID_POPUP_PCB_SPREAD_NEW_MODULES:
         if( GetBoard()->m_Modules == NULL )
         {
-            DisplayError( this, _( "No modules found!" ) );
+            DisplayError( this, _( "No footprint found!" ) );
             return;
         }
 

@@ -554,9 +554,9 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
     wxString msg;
     if( success )
     {
-        msg.Printf( _( "Module report file created:\n'%s'" ),
+        msg.Printf( _( "Footprint report file created:\n'%s'" ),
                     GetChars( fn.GetFullPath() ) );
-        wxMessageBox( msg, _( "Module Report" ), wxICON_INFORMATION );
+        wxMessageBox( msg, _( "Footprint Report" ), wxICON_INFORMATION );
     }
 
     else

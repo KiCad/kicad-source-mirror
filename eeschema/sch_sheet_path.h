@@ -211,6 +211,7 @@ public:
     /**
      * Function AnnotatePowerSymbols
      * annotates the power symbols only starting at \a aReference in the sheet path.
+     * @param aLibs the library list to use
      * @param aReference A pointer to the number for the reference designator of the
      *                   first power symbol to be annotated.  If the pointer is NULL
      *                   the annotation starts at 1.  The number is incremented for
@@ -221,10 +222,12 @@ public:
     /**
      * Function GetComponents
      * adds a SCH_REFERENCE() object to \a aReferences for each component in the sheet.
+     * @param aLibs the library list to use
      * @param aReferences List of references to populate.
-     * @param aIncludePowerSymbols Set to false to only get normal components.
+     * @param aIncludePowerSymbols : false to only get normal components.
      */
-    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true  );
+    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
+                        bool aIncludePowerSymbols = true  );
 
     /**
      * Function SetFootprintField
@@ -391,6 +394,7 @@ public:
     /**
      * Function AnnotatePowerSymbols
      * clear and annotates the entire hierarchy of the sheet path list.
+     * @param aLib the library list to use
      */
     void AnnotatePowerSymbols( PART_LIBS* aLib );
 
@@ -398,6 +402,7 @@ public:
      * Function GetComponents
      * adds a SCH_REFERENCE() object to \a aReferences for each component in the list
      * of sheets.
+     * @param aLibs the library list to use
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */

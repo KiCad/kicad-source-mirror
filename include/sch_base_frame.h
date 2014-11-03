@@ -107,7 +107,7 @@ protected:
      * Calls the library viewer to select component to import into schematic.
      * if the library viewer is currently running, it is closed and reopened
      * in modal mode.
-     * @param aPreslectedAlias Preselected component alias. NULL if none.
+     * @param aPreselectedAlias Preselected component alias. NULL if none.
      * @param aUnit            Pointer to Unit-number. Input is the pre-selected unit, output
      *                         is the finally selected unit by the user. Can be NULL.
      * @param aConvert         Pointer to deMorgan conversion. Input is what is pre-selected,

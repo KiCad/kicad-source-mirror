@@ -36,6 +36,7 @@
 
 #include <dialogs/dialog_sch_sheet_props.h>
 #include <wildcards_and_files_ext.h>
+#include <project.h>
 
 
 bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
@@ -85,7 +86,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     // Duplicate sheet names are not valid.
     const SCH_SHEET* sheet = GetScreen()->GetSheet( dlg.GetSheetName() );
 
-    if( (sheet != NULL) && (sheet != aSheet) )
+    if( sheet && sheet != aSheet )
     {
         DisplayError( this, wxString::Format( _( "A sheet named \"%s\" already exists." ),
                                               GetChars( dlg.GetSheetName() ) ) );
@@ -101,29 +102,36 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     bool loadFromFile = false;
     SCH_SCREEN* useScreen = NULL;
 
-    wxString newFullFilename = fileName.GetFullPath();
-    // Inside Eeschema, filenames are stored using unix notation
-    newFullFilename.Replace( wxT("\\"), wxT("/") );
+    wxString newFilename = fileName.GetFullPath();
 
-    // Search for a schematic file having the same filename exists,
-    // already in use in the hierarchy, or on disk,
-    // in order to reuse it
-    if( !g_RootSheet->SearchHierarchy( newFullFilename, &useScreen ) )
-        loadFromFile = fileName.FileExists();
+    // Search for a schematic file having the same filename
+    // already in use in the hierarchy or on disk, in order to reuse it.
+    if( !g_RootSheet->SearchHierarchy( newFilename, &useScreen ) )
+    {
+        // if user entered a relative path, allow that to stay, but do the
+        // file existence test with an absolute (full) path.  This transformation
+        // is local to this scope, but is the same one used at load time later.
+        wxString absolute = Prj().AbsolutePath( newFilename );
+
+        loadFromFile = wxFileExists( absolute );
+    }
+
+    // Inside Eeschema, filenames are stored using unix notation
+    newFilename.Replace( wxT("\\"), wxT("/") );
 
     if( aSheet->GetScreen() == NULL )                          // New sheet.
     {
-        if( ( useScreen != NULL ) || loadFromFile )            // Load from existing file.
+        if( useScreen || loadFromFile )            // Load from existing file.
         {
             if( useScreen != NULL )
             {
                 msg.Printf( _( "A file named '%s' already exists in the current schematic hierarchy." ),
-                            GetChars( newFullFilename ) );
+                            GetChars( newFilename ) );
             }
             else
             {
                 msg.Printf( _( "A file named '%s' already exists." ),
-                            GetChars( newFullFilename ) );
+                            GetChars( newFilename ) );
             }
 
             msg += _("\n\nDo you want to create a sheet with the contents of this file?" );
@@ -139,7 +147,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         else                                                   // New file.
         {
             aSheet->SetScreen( new SCH_SCREEN( &Kiway() ) );
-            aSheet->GetScreen()->SetFileName( newFullFilename );
+            aSheet->GetScreen()->SetFileName( newFilename );
         }
     }
     else                                                       // Existing sheet.
@@ -151,24 +159,24 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         // to avoid issues under Windows, although under Unix
         // filenames are case sensitive.
         // But many users create schematic under both Unix and Windows
-        if( newFullFilename.CmpNoCase( aSheet->GetFileName() ) != 0 )
+        if( newFilename.CmpNoCase( aSheet->GetFileName() ) != 0 )
         {
             // Sheet file name changes cannot be undone.
             isUndoable = false;
             msg = _( "Changing the sheet file name cannot be undone.  " );
 
-            if( ( useScreen != NULL ) || loadFromFile )        // Load from existing file.
+            if( useScreen || loadFromFile )        // Load from existing file.
             {
                 wxString tmp;
                 if( useScreen != NULL )
                 {
                     tmp.Printf( _( "A file named <%s> already exists in the current schematic hierarchy." ),
-                                GetChars( newFullFilename ) );
+                                GetChars( newFilename ) );
                 }
                 else
                 {
                     tmp.Printf( _( "A file named <%s> already exists." ),
-                                GetChars( newFullFilename ) );
+                                GetChars( newFilename ) );
                 }
 
                 msg += tmp;
@@ -203,7 +211,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
         if( renameFile )
         {
-            aSheet->GetScreen()->SetFileName( newFullFilename );
+            aSheet->GetScreen()->SetFileName( newFilename );
             SaveEEFile( aSheet->GetScreen() );
 
             // If the the associated screen is shared by more than one sheet, remove the
@@ -217,7 +225,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         }
     }
 
-    aSheet->SetFileName( newFullFilename );
+    aSheet->SetFileName( newFilename );
 
     if( useScreen )
         aSheet->SetScreen( useScreen );

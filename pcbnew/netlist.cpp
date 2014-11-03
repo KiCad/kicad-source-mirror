@@ -148,7 +148,7 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
 {
     if( GetBoard()->m_Modules == NULL )
     {
-        DisplayError( this, _( "No Modules" ) );
+        DisplayError( this, _( "No footprints" ) );
         return 0;
     }
 

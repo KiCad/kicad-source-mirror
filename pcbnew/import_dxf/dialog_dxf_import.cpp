@@ -206,16 +206,17 @@ bool InvokeDXFDialogBoardImport( PCB_BASE_FRAME* aCaller )
 
 bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
 {
+    wxASSERT( aModule );
+
     DIALOG_DXF_IMPORT dlg( aCaller );
     bool success = ( dlg.ShowModal() == wxID_OK );
 
     if( success )
     {
         const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
-        MODULE* module = aCaller->GetBoard()->m_Modules;
         KIGFX::VIEW* view = aCaller->GetGalCanvas()->GetView();
 
-        aCaller->SaveCopyInUndoList( module, UR_MODEDIT );
+        aCaller->SaveCopyInUndoList( aModule, UR_MODEDIT );
         aCaller->OnModify();
 
         std::list<BOARD_ITEM*>::const_iterator it, itEnd;
@@ -230,9 +231,9 @@ bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
             {
             case PCB_LINE_T:
             {
-                converted = new EDGE_MODULE( module );
+                converted = new EDGE_MODULE( aModule );
                 *static_cast<DRAWSEGMENT*>( converted ) = *static_cast<DRAWSEGMENT*>( item );
-                module->Add( converted );
+                aModule->Add( converted );
                 static_cast<EDGE_MODULE*>( converted )->SetLocalCoord();
                 delete item;
                 break;
@@ -240,20 +241,20 @@ bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
 
             case PCB_TEXT_T:
             {
-                converted = new TEXTE_MODULE( module );
+                converted = new TEXTE_MODULE( aModule );
                 *static_cast<TEXTE_PCB*>( converted ) = *static_cast<TEXTE_PCB*>( item );
-                module->Add( module );
+                aModule->Add( converted );
                 static_cast<TEXTE_MODULE*>( converted )->SetLocalCoord();
                 delete item;
                 break;
             }
 
             default:
-                assert( false );    // there is a type that is currently not handled here
+                wxLogDebug( wxT( "type %d currently not handled" ), item->Type() );
                 break;
             }
 
-            if( aCaller->IsGalCanvasActive() )
+            if( aCaller->IsGalCanvasActive() && converted )
                 view->Add( converted );
         }
     }

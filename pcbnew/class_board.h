@@ -651,8 +651,8 @@ public:
      * GetLayerName() if want the layer names of a specific BOARD, which could
      * be different than the default if the user has renamed any copper layers.
      *
-     * @param  aLayerNumber is the layer number to fetch
-     * @return const wxString - containing the layer name or "BAD INDEX" if aLayerNumber
+     * @param  aLayerId is the layer identifier (index) to fetch
+     * @return const wxString - containing the layer name or "BAD INDEX" if aLayerId
      *                      is not legal
      */
     static const wxString GetStandardLayerName( LAYER_ID aLayerId )

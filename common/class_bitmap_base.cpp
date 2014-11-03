@@ -1,5 +1,5 @@
 /**
- * @file sch_bitmap.cpp
+ * @file class_bitmap_base.cpp
  */
 
 /*

@@ -121,8 +121,6 @@ public:
      * allocates and adds a part library to the library list.
      *
      * @param aFileName - File name object of part library.
-     * @param aErrorMsg - Error message if the part library failed to load.
-     * @return PART_LIB* - the new PART_LIB, which remains owned by this PART_LIBS container.
      * @throw IO_ERROR if there's any problem loading.
      */
     PART_LIB* AddLibrary( const wxString& aFileName ) throw( IO_ERROR );
@@ -136,7 +134,8 @@ public:
      * @return PART_LIB* - the new PART_LIB, which remains owned by this PART_LIBS container.
      * @throw IO_ERROR if there's any problem loading.
      */
-    PART_LIB* AddLibrary( const wxString& aFileName, PART_LIBS::iterator& aIterator ) throw( IO_ERROR );
+    PART_LIB* AddLibrary( const wxString& aFileName,
+                          PART_LIBS::iterator& aIterator ) throw( IO_ERROR );
 
     /**
      * Function RemoveLibrary

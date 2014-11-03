@@ -163,7 +163,7 @@ EDA_COLOR_T ColorFindNearest( const wxColour &aColor );
  * Find the nearest color match
  * @param aR is the red component of the color to be matched (in range 0-255)
  * @param aG is the green component of the color to be matched (in range 0-255)
- * @param aG is the blue component of the color to be matched (in range 0-255)
+ * @param aB is the blue component of the color to be matched (in range 0-255)
  */
 EDA_COLOR_T ColorFindNearest( int aR, int aG, int aB );
 

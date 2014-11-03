@@ -99,7 +99,7 @@ public:
     /**
      * Function GetVertices()
      * returns vertices stored at the specific offset.
-     * @aOffset is the offset.
+     * @param aOffset is the offset.
      */
     virtual inline VERTEX* GetVertices( unsigned int aOffset ) const
     {

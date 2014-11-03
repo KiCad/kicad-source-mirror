@@ -36,6 +36,7 @@
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
 #include <base_units.h>
+#include <sch_sheet.h>
 #include <dialog_plot_schematic.h>
 
 // Keys for configuration
@@ -183,8 +184,7 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
     if( dialog.ShowModal() == wxID_YES )
     {
 
-        wxString plotFilePath = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( "." )
-                       + PS_PLOTTER::GetDefaultFileExtension();
+        wxString plotFilePath = g_RootSheet->GetFileName();
 
         plotFilePath = Prj().AbsolutePath(plotFilePath);
         plotFilePath = wxPathOnly( plotFilePath );

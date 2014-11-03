@@ -89,7 +89,7 @@ public:
     /**
      * Function Clone()
      *
-     * Returns a deep copy of the item 
+     * Returns a deep copy of the item
      */
     virtual PNS_ITEM* Clone() const = 0;
 
@@ -111,17 +111,17 @@ public:
      *
      * Returns the type (kind) of the item
      */
-    PnsKind Kind() const 
-    { 
+    PnsKind Kind() const
+    {
         return m_kind;
     }
-    
+
     /**
      * Function OfKind()
      *
      * Returns true if the item's type matches the mask aKindMask.
      */
-    bool OfKind( int aKindMask ) const 
+    bool OfKind( int aKindMask ) const
     {
         return ( aKindMask & m_kind ) != 0;
     }
@@ -138,19 +138,19 @@ public:
      *
      * Sets the corresponding parent object in the host application's model.
      */
-    void SetParent( BOARD_CONNECTED_ITEM* aParent ) 
+    void SetParent( BOARD_CONNECTED_ITEM* aParent )
     {
         m_parent = aParent;
     }
-    
+
     /**
      * Function Parent()
      *
      * Returns the corresponding parent object in the host application's model.
      */
-    BOARD_CONNECTED_ITEM* Parent() const 
-    { 
-        return m_parent; 
+    BOARD_CONNECTED_ITEM* Parent() const
+    {
+        return m_parent;
     }
 
     /**
@@ -158,9 +158,9 @@ public:
      *
      * Sets the item's net to aNet
      */
-    void SetNet( int aNet ) 
-    { 
-        m_net = aNet; 
+    void SetNet( int aNet )
+    {
+        m_net = aNet;
     }
 
     /**
@@ -168,9 +168,9 @@ public:
      *
      * Returns the item's net.
      */
-    int Net() const 
-    { 
-        return m_net; 
+    int Net() const
+    {
+        return m_net;
     }
 
     /**
@@ -178,11 +178,11 @@ public:
      *
      * Sets the layers spanned by the item to aLayers.
      */
-    void SetLayers( const PNS_LAYERSET& aLayers ) 
-    { 
-        m_layers = aLayers; 
+    void SetLayers( const PNS_LAYERSET& aLayers )
+    {
+        m_layers = aLayers;
     }
-    
+
     /**
      * Function SetLayer()
      *
@@ -193,23 +193,23 @@ public:
         m_layers = PNS_LAYERSET( aLayer, aLayer );
     }
 
-    /** 
+    /**
      * Function Layers()
      *
      * Returns the contiguous set of layers spanned by the item.
      */
-    const PNS_LAYERSET& Layers() const 
-    { 
-        return m_layers; 
+    const PNS_LAYERSET& Layers() const
+    {
+        return m_layers;
     }
-    
+
     /**
      * Function Layer()
      *
      * Returns the item's layer, for single-layered items only.
      */
     virtual int Layer() const
-    { 
+    {
         return Layers().Start();
     }
 
@@ -227,27 +227,27 @@ public:
     /**
      * Functon SetOwner()
      *
-     * Sets the node that owns this item. An item can belong to a single 
+     * Sets the node that owns this item. An item can belong to a single
      * PNS_NODE or stay unowned.
      */
-    void SetOwner( PNS_NODE* aOwner ) 
-    { 
-        m_owner = aOwner; 
+    void SetOwner( PNS_NODE* aOwner )
+    {
+        m_owner = aOwner;
     }
-    
+
     /**
      * Function BelongsTo()
      *
-     * Returns true if the item is owned by the node aNode.
+     * @return true if the item is owned by the node aNode.
      */
-    bool BelongsTo( PNS_NODE* aNode ) const 
-    { 
-        return m_owner == aNode; 
+    bool BelongsTo( PNS_NODE* aNode ) const
+    {
+        return m_owner == aNode;
     }
-    
+
     /**
      * Function Owner()
-     * 
+     *
      * Returns the owner of this item, or NULL if there's none.
      */
     PNS_NODE* Owner() const { return m_owner; }
@@ -255,7 +255,7 @@ public:
     /**
      * Function Collide()
      *
-     * Checks for a collision (clearance violation) with between us and item aOther. 
+     * Checks for a collision (clearance violation) with between us and item aOther.
      * Collision checking takes all PCB stuff into accound (layers, nets, DRC rules).
      * Optionally returns a minimum translation vector for force propagation
      * algorithm.
@@ -264,7 +264,7 @@ public:
      * @param aClearance desired clearance
      * @param aNeedMTV when true, the minimum translation vector is calculated
      * @param aMTV the minimum translation vector
-     * @param true, if a collision was found.
+     * @return true, if a collision was found.
      */
     virtual bool Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
             VECTOR2I& aMTV ) const;
@@ -292,17 +292,17 @@ public:
         return NULL;
     }
 
-    virtual void Mark(int aMarker) 
+    virtual void Mark(int aMarker)
     {
         m_marker = aMarker;
     }
 
-    virtual void Unmark () 
+    virtual void Unmark ()
     {
         m_marker = 0;
     }
 
-    virtual int Marker() const 
+    virtual int Marker() const
     {
         return m_marker;
     }
@@ -312,19 +312,19 @@ public:
         m_rank = aRank;
     }
 
-    virtual int Rank() const 
+    virtual int Rank() const
     {
         return m_rank;
     }
 
     virtual VECTOR2I Anchor( int n ) const
-    { 
+    {
         return VECTOR2I ();
     }
-    
-    virtual int AnchorCount() const 
-    { 
-        return 0; 
+
+    virtual int AnchorCount() const
+    {
+        return 0;
     }
 
 private:

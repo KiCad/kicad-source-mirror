@@ -93,6 +93,11 @@ const wxString PROJECT::GetProjectFullName() const
     return m_project_name.GetFullPath();
 }
 
+const wxString PROJECT::GetProjectPath() const
+{
+    return m_project_name.GetPathWithSep();
+}
+
 
 const wxString PROJECT::FootprintLibTblName() const
 {
@@ -248,10 +253,10 @@ static bool copy_pro_file_template( const SEARCH_STACK& aSearchS, const wxString
 
 
 wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList,
-        const wxString& aGroupName, const wxString& aFileName )
+        const wxString& aGroupName, const wxString& aProjectFileName )
 {
     wxConfigBase*   cfg = 0;
-    wxString        cur_pro_fn = !aFileName ? GetProjectFullName() : aFileName;
+    wxString        cur_pro_fn = !aProjectFileName ? GetProjectFullName() : aProjectFileName;
 
     if( wxFileName( cur_pro_fn ).IsFileReadable() )
     {

@@ -99,7 +99,7 @@ public:
     typedef boost::optional<PNS_OBSTACLE>   OPT_OBSTACLE;
     typedef std::vector<PNS_ITEM*>          ITEM_VECTOR;
     typedef std::vector<PNS_OBSTACLE>       OBSTACLES;
-    
+
     PNS_NODE ();
     ~PNS_NODE ();
 
@@ -131,12 +131,12 @@ public:
     }
 
     ///> Returns the number of nodes in the inheritance chain (wrs to the root node)
-    int Depth() const 
+    int Depth() const
     {
         return m_depth;
     }
 
-    /** 
+    /**
      * Function QueryColliding()
      *
      * Finds items collliding (closer than clearance) with the item aItem.
@@ -150,7 +150,7 @@ public:
                         OBSTACLES&      aObstacles,
                         int             aKindMask = PNS_ITEM::ANY,
                         int             aLimitCount = -1 );
-    
+
     /**
      * Function NearestObstacle()
      *
@@ -163,7 +163,7 @@ public:
     OPT_OBSTACLE NearestObstacle( const PNS_LINE*   aItem,
                                   int               aKindMask = PNS_ITEM::ANY );
 
-    /** 
+    /**
      * Function CheckColliding()
      *
      * Checks if the item collides with anything else in the world,
@@ -174,9 +174,9 @@ public:
      */
     OPT_OBSTACLE CheckColliding( const PNS_ITEM*     aItem,
                                  int                 aKindMask = PNS_ITEM::ANY );
-    
 
-    /** 
+
+    /**
      * Function CheckColliding()
      *
      * Checks if any item in the set collides with anything else in the world,
@@ -189,12 +189,13 @@ public:
                                  int                 aKindMask = PNS_ITEM::ANY );
 
 
-    /** 
+    /**
      * Function CheckColliding()
      *
-     * Checks if any item in the set collides with anything else in the world,
+     * Checks if 2 items collide.
      * and if found, returns the obstacle.
-     * @param aSet set of items to find collisions with
+     * @param aItemA  first item to find collisions with
+     * @param aItemB  second item to find collisions with
      * @param aKindMask mask of obstacle types to take into account
      * @return the obstacle, if found, otherwise empty.
      */
@@ -202,7 +203,7 @@ public:
                          const PNS_ITEM*    aItemB,
                          int                aKindMask = PNS_ITEM::ANY );
 
-    /** 
+    /**
      * Function HitTest()
      *
      * Finds all items that contain the point aPoint.
@@ -214,22 +215,22 @@ public:
     /**
      * Function Add()
      *
-     * Adds an item to the current node. 
+     * Adds an item to the current node.
      * @param aItem item to add
-     * @param aAllowRedundant if true, duplicate items are allowed (e.g. a segment or via 
+     * @param aAllowRedundant if true, duplicate items are allowed (e.g. a segment or via
      * at the same coordinates as an existing one)
      */
     void Add( PNS_ITEM* aItem, bool aAllowRedundant = false );
-    
-    /** 
+
+    /**
      * Function Remove()
      *
      * Just as the name says, removes an item from this branch.
      * @param aItem item to remove
      */
     void Remove( PNS_ITEM* aItem );
-    
-    /** 
+
+    /**
      * Function Replace()
      *
      * Just as the name says, replaces an item with another one.
@@ -248,10 +249,10 @@ public:
      */
     PNS_NODE* Branch();
 
-    /** 
+    /**
      * Function AssembleLine()
      *
-     * Follows the joint map to assemble a line connecting two non-trivial 
+     * Follows the joint map to assemble a line connecting two non-trivial
      * joints starting from segment aSeg.
      * @param aSeg the initial segment
      * @param aOriginSegmentIndex index of aSeg in the resulting line
@@ -271,7 +272,7 @@ public:
      * @param aAdded added items
      */
     void GetUpdatedItems( ITEM_VECTOR& aRemoved, ITEM_VECTOR& aAdded );
-    
+
     /**
      * Function Commit()
      *
@@ -313,14 +314,14 @@ public:
 
     ///> finds the joints corresponding to the ends of line aLine
     void FindLineEnds( PNS_LINE* aLine, PNS_JOINT& aA, PNS_JOINT& aB );
-    
+
     ///> Destroys all child nodes. Applicable only to the root node.
     void KillChildren();
 
     void AllItemsInNet( int aNet, std::set<PNS_ITEM*>& aItems );
-    
+
     void ClearRanks();
-    
+
     int FindByMarker( int aMarker, PNS_ITEMSET& aItems );
     int RemoveByMarker( int aMarker );
 
@@ -334,7 +335,7 @@ private:
     PNS_NODE& operator=( const PNS_NODE& aB );
 
     ///> tries to find matching joint and creates a new one if not found
-    PNS_JOINT& touchJoint( const VECTOR2I&      aPos, 
+    PNS_JOINT& touchJoint( const VECTOR2I&      aPos,
                            const PNS_LAYERSET&  aLayers,
                            int                  aNet );
 

@@ -44,13 +44,13 @@ public:
     NONCACHED_CONTAINER( unsigned int aSize = defaultInitSize );
     virtual ~NONCACHED_CONTAINER();
 
-    ///< @copydoc VERTEX_CONTAINER::SetItem()
+    ///< @copydoc VERTEX_CONTAINER::SetItem( VERTEX_ITEM* aItem )
     virtual void SetItem( VERTEX_ITEM* aItem );
 
-    ///< @copydoc VERTEX_CONTAINER::Allocate()
+    ///< @copydoc VERTEX_CONTAINER::Allocate( unsigned int aSize )
     virtual VERTEX* Allocate( unsigned int aSize );
 
-    ///< @copydoc VERTEX_CONTAINER::Delete()
+    ///< @copydoc VERTEX_CONTAINER::Delete( VERTEX_ITEM* aItem )
     void Delete( VERTEX_ITEM* aItem ) {};
 
     ///< @copydoc VERTEX_CONTAINER::Clear()
