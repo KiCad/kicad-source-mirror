@@ -105,6 +105,10 @@ if( APPLE )
 
         # do all the work
         include( BundleUtilities )
+
+        # If `BU_CHMOD_BUNDLE_ITEMS` is not set, `install_name_tool` will fail to re-write some loader paths due to lack of writable permissions if the build dependencies were installed by brew (or didn't have writable permissions)
+        set(BU_CHMOD_BUNDLE_ITEMS ON)
+
         fixup_bundle( ${OSX_BUNDLE_INSTALL_BIN_DIR}/kicad
             \"\${BUNDLE_FIX_LIBS}\"
             \"\"
