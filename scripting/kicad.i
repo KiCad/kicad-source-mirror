@@ -115,6 +115,10 @@
 /* KiCad plugin handling */
 %include "kicadplugins.i"
 
+// map CPolyLine and classes used in CPolyLine:
+#include <../polygon/PolyLine.h>
+%include <../polygon/PolyLine.h>
+
 // ignore warning relative to operator = and operator ++:
 #pragma SWIG nowarn=362,383
 
