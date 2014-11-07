@@ -33,6 +33,7 @@
     <key>LSEnvironment</key>
         <dict>
             <key>KIGITHUB</key>     <string>https://github.com/kicad</string>
+            <key>KISYSMOD</key>     <string>/Library/Application Support/KiCad/pretty</string>
         </dict>
 </dict>
 </plist>

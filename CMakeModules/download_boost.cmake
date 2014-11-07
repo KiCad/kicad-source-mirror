@@ -159,6 +159,10 @@ if( APPLE )
             message( "-- BOOST found 32/64 Address Model" )
 
             set( BOOST_ADDRESSMODEL "address-model=32_64" )
+        else()
+            message( "-- BOOST found 64 Address Model" )
+
+            set( BOOST_ADDRESSMODEL "address-model=64" )
         endif()
 
         if( (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64" OR CMAKE_OSX_ARCHITECTURES MATCHES "386") AND

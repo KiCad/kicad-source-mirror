@@ -406,7 +406,7 @@ add_definitions( -DWX_COMPATIBILITY )
 # See line 41 of CMakeModules/FindwxWidgets.cmake
 set( wxWidgets_CONFIG_OPTIONS --static=no )
 
-find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml REQUIRED )
+find_package( wxWidgets 3.0.0 COMPONENTS gl adv html core net base xml REQUIRED )
 
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
@@ -435,8 +435,8 @@ if( APPLE AND USE_OSX_DEPS_BUILDER )
     # This should be built in all cases, if swig exec is not available
     # will be impossible also enable SCRIPTING being for PCBNEW required immediately
 
-    include( download_pcre )
-    include( download_swig )
+    #include( download_pcre )
+    #include( download_swig )
 
 
     #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
@@ -462,6 +462,7 @@ if( APPLE AND USE_OSX_DEPS_BUILDER )
         message(STATUS "Scripting ENABLED")
         include( download_wxpython )
 
+        set( SWIG_ROOT        /opt/local )
         set( SWIG_EXECUTABLE  ${SWIG_ROOT}/bin/swig )
         set( SWIG_INCLUDE     ${SWIG_ROOT}/include )
         set( PYTHON_DEST ${LIBWXPYTHON_ROOT}/wxPython/lib/python2.6/site-packages )
@@ -476,7 +477,7 @@ if( APPLE AND USE_OSX_DEPS_BUILDER )
         set( PYTHON_DEST ${LIBWXPYTHON_ROOT}/wxPython/lib/python2.6/site-packages )
 
         add_dependencies( lib-dependencies libwxpython )
-        add_dependencies( lib-dependencies swig )
+        #add_dependencies( lib-dependencies swig )
     else()
         include( download_wxwidgets )
         add_dependencies( lib-dependencies libwx )

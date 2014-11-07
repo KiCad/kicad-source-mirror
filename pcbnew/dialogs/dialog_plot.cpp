@@ -315,18 +315,19 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
     wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
 
-    wxMessageDialog dialog( this, _( "Use a relative path? " ),
-                            _( "Plot Output Directory" ),
+    fn = Prj().AbsolutePath( m_parent->GetBoard()->GetFileName() );
+    wxString defaultPath = fn.GetPathWithSep();
+    wxString msg;
+    msg.Printf( _( "Do you want to use a path relative to\n'%s'" ),
+                   GetChars( defaultPath ) );
+
+    wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
                             wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
 
     if( dialog.ShowModal() == wxID_YES )
     {
-        wxString boardFilePath = Prj().AbsolutePath( m_parent->GetBoard()->GetFileName() );
-
-        boardFilePath = wxPathOnly( boardFilePath );
-
-        if( !dirName.MakeRelativeTo( boardFilePath ) )
-            wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
+        if( !dirName.MakeRelativeTo( defaultPath ) )
+            wxMessageBox( _( "Cannot make path relative (target volume different from file volume)!" ),
                           _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
     }
 

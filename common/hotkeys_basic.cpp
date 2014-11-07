@@ -770,7 +770,7 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
 
     // Append HotkeySubmenu to menu
     AddMenuItem( aMenu, HotkeySubmenu,
-                 ID_PREFERENCES_HOTKEY_SUBMENU, _( "&Hotkeys" ),
+                 wxID_ANY, _( "&Hotkeys" ),
                  _( "Hotkeys configuration and preferences" ),
                  KiBitmap( hotkeys_xpm ) );
 }

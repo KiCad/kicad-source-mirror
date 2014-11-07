@@ -176,21 +176,20 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
 
     wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
 
-    wxMessageDialog dialog( this, _( "Use a relative path? " ),
-                            _( "Plot Output Directory" ),
+    fn = Prj().AbsolutePath( g_RootSheet->GetFileName() );
+    wxString defaultPath = fn.GetPathWithSep();
+    wxString msg;
+    msg.Printf( _( "Do you want to use a path relative to\n'%s'" ),
+                GetChars( defaultPath ) );
+
+    wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
                             wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
 
     // relative directory selected
     if( dialog.ShowModal() == wxID_YES )
     {
-
-        wxString plotFilePath = g_RootSheet->GetFileName();
-
-        plotFilePath = Prj().AbsolutePath(plotFilePath);
-        plotFilePath = wxPathOnly( plotFilePath );
-
-        if( !dirName.MakeRelativeTo( plotFilePath ) )
-            wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
+        if( !dirName.MakeRelativeTo( defaultPath ) )
+            wxMessageBox( _( "Cannot make path relative (target volume different from file volume)!" ),
                           _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
     }
 
