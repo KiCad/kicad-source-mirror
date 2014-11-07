@@ -1,0 +1,50 @@
+=== modified file 'src/generic/scrlwing.cpp'
+--- src/generic/scrlwing.cpp	2013-12-16 05:42:30 -0800
++++ src/generic/scrlwing.cpp	2014-10-21 01:19:02 -0700
+@@ -214,9 +214,6 @@
+         return true;
+     }
+ 
+-    if ( processed && event.IsCommandEvent())
+-        return true;
+-
+     // For wxEVT_PAINT the user code can either handle this event as usual or
+     // override virtual OnDraw(), so if the event hasn't been handled we need
+     // to call this virtual function ourselves.
+@@ -235,6 +232,11 @@
+         return true;
+     }
+ 
++    // If the user code handled this event, it should prevent the default 
++    // handling from taking place, so don't do anything else in this case. 
++    if ( processed ) 
++        return true; 
++
+     if ( evType == wxEVT_CHILD_FOCUS )
+     {
+         m_scrollHelper->HandleOnChildFocus((wxChildFocusEvent &)event);
+=== modified file 'src/generic/vscroll.cpp'
+--- src/generic/vscroll.cpp	2013-12-16 05:42:30 -0800
++++ src/generic/vscroll.cpp	2014-10-21 01:19:09 -0700
+@@ -89,9 +89,6 @@
+         return true;
+     }
+ 
+-    if ( processed && event.IsCommandEvent())
+-        return true;
+-
+     // For wxEVT_PAINT the user code can either handle this event as usual or
+     // override virtual OnDraw(), so if the event hasn't been handled we need
+     // to call this virtual function ourselves.
+@@ -110,6 +107,11 @@
+         return true;
+     }
+ 
++    // If the user code handled this event, it should prevent the default 
++    // handling from taking place, so don't do anything else in this case. 
++    if ( processed ) 
++        return true; 
++
+     // reset the skipped flag (which might have been set to true in
+     // ProcessEvent() above) to be able to test it below
+     bool wasSkipped = event.GetSkipped();
