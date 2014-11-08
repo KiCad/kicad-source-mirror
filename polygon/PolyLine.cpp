@@ -53,7 +53,7 @@ CPolyLine::CPolyLine()
     m_hatchStyle = NO_HATCH;
     m_hatchPitch = 0;
     m_layer      = F_Cu;
-    m_utility    = 0;
+    m_flags    = 0;
 }
 
 CPolyLine::CPolyLine( const CPolyLine& aCPolyLine)
@@ -599,7 +599,6 @@ void CPolyLine::InsertCorner( int ic, int x, int y )
 
 
 // undraw polyline by removing all graphic elements from display list
-//
 void CPolyLine::UnHatch()
 {
     m_HatchLines.clear();
@@ -612,41 +611,49 @@ int CPolyLine::GetEndContour( int ic )
 }
 
 
-CRect CPolyLine::GetBoundingBox()
+EDA_RECT CPolyLine::GetBoundingBox()
 {
-    CRect r;
-
-    r.left  = r.bottom = INT_MAX;
-    r.right = r.top = INT_MIN;
+    int xmin    = INT_MAX;
+    int ymin    = INT_MAX;
+    int xmax    = INT_MIN;
+    int ymax    = INT_MIN;
 
     for( unsigned i = 0; i< m_CornersList.GetCornersCount(); i++ )
     {
-        r.left      = std::min( r.left, m_CornersList[i].x );
-        r.right     = std::max( r.right, m_CornersList[i].x );
-        r.bottom    = std::min( r.bottom, m_CornersList[i].y );
-        r.top       = std::max( r.top, m_CornersList[i].y );
+        xmin    = std::min( xmin, m_CornersList[i].x );
+        xmax    = std::max( xmax, m_CornersList[i].x );
+        ymin    = std::min( ymin, m_CornersList[i].y );
+        ymax    = std::max( ymax, m_CornersList[i].y );
     }
+
+    EDA_RECT r;
+    r.SetOrigin( wxPoint( xmin, ymin ) );
+    r.SetEnd( wxPoint( xmax, ymax ) );
 
     return r;
 }
 
 
-CRect CPolyLine::GetBoundingBox( int icont )
+EDA_RECT CPolyLine::GetBoundingBox( int icont )
 {
-    CRect r;
-
-    r.left  = r.bottom = INT_MAX;
-    r.right = r.top = INT_MIN;
+    int xmin    = INT_MAX;
+    int ymin    = INT_MAX;
+    int xmax    = INT_MIN;
+    int ymax    = INT_MIN;
     int istart  = GetContourStart( icont );
     int iend    = GetContourEnd( icont );
 
     for( int i = istart; i<=iend; i++ )
     {
-        r.left      = std::min( r.left, m_CornersList[i].x );
-        r.right     = std::max( r.right, m_CornersList[i].x );
-        r.bottom    = std::min( r.bottom, m_CornersList[i].y );
-        r.top       = std::max( r.top, m_CornersList[i].y );
+        xmin    = std::min( xmin, m_CornersList[i].x );
+        xmax    = std::max( xmax, m_CornersList[i].x );
+        ymin    = std::min( ymin, m_CornersList[i].y );
+        ymax    = std::max( ymax, m_CornersList[i].y );
     }
+
+    EDA_RECT r;
+    r.SetOrigin( wxPoint( xmin, ymin ) );
+    r.SetEnd( wxPoint( xmax, ymax ) );
 
     return r;
 }
@@ -1469,7 +1476,7 @@ bool CPolyLine::IsPolygonSelfIntersecting()
     int                n_cont  = GetContoursCount();
 
     // make bounding rect for each contour
-    std::vector<CRect> cr;
+    std::vector<EDA_RECT> cr;
     cr.reserve( n_cont );
 
     for( int icont = 0; icont<n_cont; icont++ )
@@ -1498,12 +1505,9 @@ bool CPolyLine::IsPolygonSelfIntersecting()
             int y1f   = GetY( is_next );
 
             // check for intersection with any other sides
-            for( int icont2 = icont; icont2<n_cont; icont2++ )
+            for( int icont2 = icont; icont2 < n_cont; icont2++ )
             {
-                if( cr[icont].left > cr[icont2].right
-                    || cr[icont].bottom > cr[icont2].top
-                    || cr[icont2].left > cr[icont].right
-                    || cr[icont2].bottom > cr[icont].top )
+                if( !cr[icont].Intersects( cr[icont2] ) )
                 {
                     // rectangles don't overlap, do nothing
                 }

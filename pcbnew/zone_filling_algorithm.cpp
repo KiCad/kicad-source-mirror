@@ -175,7 +175,7 @@ int ZONE_CONTAINER::FillZoneAreasWithSegments()
 
                 for( ics = istart, ice = iend; ics <= iend; ice = ics, ics++ )
                 {
-                    if( m_FilledPolysList[ice].m_utility )
+                    if( m_FilledPolysList[ice].m_flags )
                         continue;
 
                     int seg_startX = m_FilledPolysList[ics].x;

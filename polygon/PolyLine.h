@@ -5,6 +5,8 @@
  * (see http://www.freepcb.com/ )
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2008-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2012-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -48,16 +50,10 @@
 
 #include <vector>
 
-#include <pad_shapes.h>
-#include <wx/gdicmn.h>      // for wxPoint definition
-#include <layers_id_colors_and_visibility.h>
+#include <wx/gdicmn.h>                          // for wxPoint definition
+#include <layers_id_colors_and_visibility.h>    // for LAYER_NUM definition
+#include <class_eda_rect.h>                     // for EDA_RECT definition
 #include <polygons_defs.h>
-
-class CRect
-{
-public:
-    int left, right, top, bottom;
-};
 
 class CSegment
 {
@@ -83,22 +79,22 @@ class CPolyPt : public wxPoint
 {
 public:
     CPolyPt( int aX = 0, int aY = 0, bool aEnd = false, int aUtility = 0 ) :
-        wxPoint( aX, aY ), end_contour( aEnd ), m_utility( aUtility )
+        wxPoint( aX, aY ), end_contour( aEnd ), m_flags( aUtility )
     {}
 
     // / Pure copy constructor is here to dis-ambiguate from the
     // / specialized CPolyPt( const wxPoint& ) constructor version below.
     CPolyPt( const CPolyPt& aPt ) :
-        wxPoint( aPt.x, aPt.y ), end_contour( aPt.end_contour ), m_utility( aPt.m_utility )
+        wxPoint( aPt.x, aPt.y ), end_contour( aPt.end_contour ), m_flags( aPt.m_flags )
     {}
 
     CPolyPt( const wxPoint& aPoint ) :
-        wxPoint( aPoint ), end_contour( false ), m_utility( 0 )
+        wxPoint( aPoint ), end_contour( false ), m_flags( 0 )
     {}
 
 
     bool    end_contour;
-    int     m_utility;
+    int     m_flags;
 
     bool operator ==( const CPolyPt& cpt2 ) const
     { return (x == cpt2.x) && (y == cpt2.y) && (end_contour == cpt2.end_contour); }
@@ -127,10 +123,10 @@ public:
     void       SetX( int ic, int aValue ) { m_cornersList[ic].x = aValue; }
     int        GetY( int ic ) const { return m_cornersList[ic].y; }
     void       SetY( int ic, int aValue ) { m_cornersList[ic].y = aValue; }
-    int        GetUtility( int ic ) const { return m_cornersList[ic].m_utility; }
+    int        GetUtility( int ic ) const { return m_cornersList[ic].m_flags; }
     void       SetFlag( int ic, int aFlag )
     {
-        m_cornersList[ic].m_utility = aFlag;
+        m_cornersList[ic].m_flags = aFlag;
     }
 
     bool       IsEndContour( int ic ) const
@@ -327,8 +323,18 @@ public:
     void        MoveOrigin( int x_off, int y_off );
 
     // misc. functions
-    CRect       GetBoundingBox();
-    CRect       GetBoundingBox( int icont );
+    /**
+     * @return the full bounding box of polygons
+     */
+    EDA_RECT    GetBoundingBox();
+
+    /**
+     * @return the bounding box of a given polygon
+     * @param icont = the index of the polygon contour
+     * (0 = main contour, 1 ... n = other contours, usually holes)
+     */
+    EDA_RECT    GetBoundingBox( int icont );
+
     void        Copy( const CPolyLine* src );
     bool        TestPointInside( int x, int y );
 
@@ -464,7 +470,7 @@ private:
     int                 m_hatchPitch;       // for DIAGONAL_EDGE hatched outlines, basic distance between 2 hatch lines
                                             // and the len of eacvh segment
                                             // for DIAGONAL_FULL, the pitch is twice this value
-    int                 m_utility;          // a flag used in some calculations
+    int                 m_flags;            // a flag used in some calculations
 public:
     CPOLYGONS_LIST          m_CornersList;  // array of points for corners
     std::vector <CSegment>  m_HatchLines;   // hatch lines showing the polygon area
