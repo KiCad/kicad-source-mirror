@@ -60,6 +60,7 @@
     #include <cstddef>
     #include <dlist.h>
     #include <base_struct.h>
+    #include <class_eda_rect.h>
     #include <common.h>
     #include <wx_python_helpers.h>
     #include <cstddef>
@@ -96,6 +97,7 @@
 
 %include <dlist.h>
 %include <base_struct.h>
+%include <class_eda_rect.h>
 %include <common.h>
 %include <class_title_block.h>
 %include <class_colors_design_settings.h>
