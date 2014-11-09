@@ -146,7 +146,6 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	bSizer4->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-	m_MessagesBox->SetMaxLength( 0 ); 
 	m_MessagesBox->SetMinSize( wxSize( -1,80 ) );
 	
 	bSizer4->Add( m_MessagesBox, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
