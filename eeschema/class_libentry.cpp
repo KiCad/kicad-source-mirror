@@ -413,9 +413,11 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
     aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
     bool fill = aPlotter->GetColorMode();
 
+    // draw background for filled items using background option
+    // Solid lines will be drawn after the background
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
-        // Lib Fields not are plotted here, because this plot function
+        // Lib Fields are not plotted here, because this plot function
         // is used to plot schematic items, which have they own fields
         if( item.Type() == LIB_FIELD_T )
             continue;
@@ -426,7 +428,25 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        item.Plot( aPlotter, aOffset, fill, aTransform );
+        if( item.m_Fill == FILLED_WITH_BG_BODYCOLOR )
+            item.Plot( aPlotter, aOffset, fill, aTransform );
+    }
+
+    // Not filled items and filled shapes are now plotted
+    // (plot only items which are not already plotted)
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
+    {
+        if( item.Type() == LIB_FIELD_T )
+            continue;
+
+        if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
+            continue;
+
+        if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
+            continue;
+
+        if( item.m_Fill != FILLED_WITH_BG_BODYCOLOR )
+            item.Plot( aPlotter, aOffset, fill, aTransform );
     }
 }
 
