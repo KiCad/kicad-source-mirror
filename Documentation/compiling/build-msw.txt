@@ -103,16 +103,16 @@ install the wxWidgets library into MinGW then enter the following commands:
 
 #mkdir Release
 #cd Release
-#../configure --with-opengl
+#../configure --enable-monolithic=no --enable-shared=yes --with-opengl
 #make
 
 If you want to install wxWidgets in MinGW then enter the following commands:
 #mkdir Release
 #cd Release
-#../configure --prefix=/mingw --enable-monolithic=no --disable-shared --with-opengl
+#../configure --prefix=/mingw --enable-monolithic=no --enable-shared=yes --with-opengl
 #make && make install
 
-wxWidgets will be statically linked to Kicad, which avoid issus with wxWidgets dlls
+wxWidgets cannot be statically linked to Kicad.
 
 Download the KiCad Source Code
 ------------------------------
@@ -126,16 +126,19 @@ Launchpad repository has two branches for KiCad sources:
   near a stable state)
 
 To download the testing branch:
-#bzr branch lp:kicad kicad_testing
+#bzr branch https://code.launchpad.net/~kicad-product-committers/kicad kicad_testing
 
 To download the stable branch:
-#bzr branch lp:kicad/stable kicad_stable
+#bzr branch https://code.launchpad.net/~kicad-product-committers/kicad/stable kicad_stable
 
-To download the component and footprint libraries
-#bzr branch lp:~kicad-lib-committers/kicad/library kicad_libraries
+To download the component and footprint libraries:
+(This branch is a bzr/launchpad import of the Git repository
+at https://github.com/KiCad/kicad-library.git.
+It has schematic parts and 3D models in it.)
+#bzr branch https://code.launchpad.net/~kicad-product-committers/kicad/library kicad_libraries
 
 To download the documentation and translation files:
-#bzr branch lp:~kicad-developers/kicad/doc kicad_doc
+#bzr branch https://code.launchpad.net/~kicad-developers/kicad/doc kicad_doc
 
 Create Makefiles with CMake
 ---------------------------
@@ -219,7 +222,7 @@ Building the Developer Documentation
 ------------------------------------
 To build the HTML developer documentation, run the following commands:
 
-#cd <kicadSource>/build/debug
+#cd <kicadSource>/build/release
 #make doxygen-docs
 
 The documentation will be created in the <kicadSouce>/Documentation/html

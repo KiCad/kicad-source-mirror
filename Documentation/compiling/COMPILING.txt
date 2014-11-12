@@ -130,10 +130,10 @@ In order to have a working Kicad installtion, you need
 - documentation and translations (they are not included in sources)
 
 product branch:
-bzr branch lp:kicad kicad_src
+bzr branch https://code.launchpad.net/~kicad-product-committers/kicad kicad_src
 
 Stable branch:
-bzr branch lp:kicad/stable kicad_src
+bzr branch https://code.launchpad.net/~kicad-product-committers/kicad/stable kicad_src
 
 Components and Footprints libraries
 all (schematic libs, 3D shapes ...) but new footprints libraries (use Download zip tool)
