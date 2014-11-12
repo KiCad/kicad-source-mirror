@@ -86,7 +86,7 @@ public:
      * Creates the output file specified by m_Outfile,
      * depending on file format given by m_Format
      */
-    void CreateOutputFile();
+    void CreateOutputFile( BMP2CMP_MOD_LAYER aModLayer = (BMP2CMP_MOD_LAYER) 0 );
 
 
 private:
@@ -94,7 +94,7 @@ private:
      * Function OuputFileHeader
      * write to file the header depending on file format
      */
-    void OuputFileHeader();
+    void OuputFileHeader(  const char * aBrdLayerName );
 
     /**
      * Function OuputFileEnd
@@ -104,11 +104,17 @@ private:
 
 
     /**
+     * @return the board layer name depending on the board layer selected
+     * @param aChoice = the choice (MOD_LYR_FSILKS to MOD_LYR_FINAL)
+     */
+    const char * getBrdLayerName( BMP2CMP_MOD_LAYER aChoice );
+
+    /**
      * Function OuputOnePolygon
      * write one polygon to output file.
      * Polygon coordinates are expected scaled by the polugon extraction function
      */
-    void OuputOnePolygon( KPolygon & aPolygon );
+    void OuputOnePolygon( KPolygon & aPolygon, const char * aBrdLayerName );
 
 };
 
@@ -133,7 +139,8 @@ BITMAPCONV_INFO::BITMAPCONV_INFO()
 
 
 int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
-                      OUTPUT_FMT_ID aFormat, int aDpi_X, int aDpi_Y )
+                      OUTPUT_FMT_ID aFormat, int aDpi_X, int aDpi_Y,
+                      BMP2CMP_MOD_LAYER aModLayer )
 {
     potrace_param_t* param;
     potrace_state_t* st;
@@ -189,7 +196,7 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
         info.m_Format = PCBNEW_KICAD_MOD;
         info.m_ScaleX = 1e6 * 25.4 / aDpi_X;       // the conversion scale from PPI to UI
         info.m_ScaleY = 1e6 * 25.4 / aDpi_Y;       // Y axis is top to bottom in modedit
-        info.CreateOutputFile();
+        info.CreateOutputFile( aModLayer );
         break;
 
     default:
@@ -204,8 +211,33 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
     return 0;
 }
 
+const char* BITMAPCONV_INFO::getBrdLayerName( BMP2CMP_MOD_LAYER aChoice )
+{
+    const char * layerName = "F.SilkS";
 
-void BITMAPCONV_INFO::OuputFileHeader()
+    switch( aChoice )
+    {
+    case MOD_LYR_FSOLDERMASK:
+        layerName = "F.Mask";
+        break;
+
+    case MOD_LYR_ECO1:
+        layerName = "Eco1.User";
+        break;
+
+    case MOD_LYR_ECO2:
+        layerName = "Eco2.User";
+        break;
+
+    case MOD_LYR_FSILKS:
+    default:    // case MOD_LYR_FSILKS only unless there is a bug
+        break;
+    }
+
+    return layerName;
+}
+
+void BITMAPCONV_INFO::OuputFileHeader(  const char * aBrdLayerName )
 {
     int Ypos = (int) ( m_PixmapHeight / 2 * m_ScaleY );
     int fieldSize;             // fields text size = 60 mils
@@ -225,11 +257,10 @@ void BITMAPCONV_INFO::OuputFileHeader()
         // fields text thickness = 1.5 / 5 = 0.3mm
         fprintf( m_Outfile, "(module %s (layer F.Cu)\n  (at 0 0)\n",
                  m_CmpName );
-        fprintf( m_Outfile, " (fp_text reference \"G***\" (at 0 0) (layer F.SilkS) hide\n"
-                            "  (effects (font (thickness 0.3)))\n  )\n" );
-        fprintf( m_Outfile, "  (fp_text value \"%s\" (at 0.75 0) (layer F.SilkS) hide\n"
-                            "  (effects (font (thickness 0.3)))\n  )\n",
-                 m_CmpName );
+        fprintf( m_Outfile, " (fp_text reference \"G***\" (at 0 0) (layer %s) hide\n"
+            "  (effects (font (thickness 0.3)))\n  )\n", aBrdLayerName );
+        fprintf( m_Outfile, "  (fp_text value \"%s\" (at 0.75 0) (layer %s) hide\n"
+            "  (effects (font (thickness 0.3)))\n  )\n", m_CmpName, aBrdLayerName );
         break;
 
     case KICAD_LOGO:
@@ -283,7 +314,7 @@ void BITMAPCONV_INFO::OuputFileEnd()
  * write one polygon to output file.
  * Polygon coordinates are expected scaled by the polygon extraction function
  */
-void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
+void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon, const char * aBrdLayerName )
 {
     unsigned ii, jj;
     KPolyPoint currpoint;
@@ -338,7 +369,9 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
         // Close polygon
         fprintf( m_Outfile, " (xy %f %f) )",
                 (startpoint.x() - offsetX) / 1e6, (startpoint.y() - offsetY) / 1e6 );
-        fprintf( m_Outfile, "(layer F.SilkS) (width  %f)\n  )\n", width );
+
+        fprintf( m_Outfile, "(layer %s) (width  %f)\n  )\n", aBrdLayerName, width );
+
     }
     break;
 
@@ -383,7 +416,7 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
 }
 
 
-void BITMAPCONV_INFO::CreateOutputFile()
+void BITMAPCONV_INFO::CreateOutputFile( BMP2CMP_MOD_LAYER aModLayer )
 {
     KPolyPoint currpoint;
 
@@ -400,7 +433,10 @@ void BITMAPCONV_INFO::CreateOutputFile()
 
     setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C
 
-    OuputFileHeader();
+    // The layer name has meaning only for .kicad_mod files.
+    // For these files the header creates 2 invisible texts: value and ref
+    // (needed but not usefull) on silk screen layer
+    OuputFileHeader( getBrdLayerName( MOD_LYR_FSILKS ) );
 
     bool main_outline = true;
 
@@ -477,7 +513,7 @@ void BITMAPCONV_INFO::CreateOutputFile()
             for( unsigned ii = 0; ii < polyset_areas.size(); ii++ )
             {
                 KPolygon& poly = polyset_areas[ii];
-                OuputOnePolygon(poly );
+                OuputOnePolygon(poly, getBrdLayerName( aModLayer ) );
             }
 
             polyset_areas.clear();

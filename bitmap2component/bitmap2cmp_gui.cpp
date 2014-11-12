@@ -50,13 +50,15 @@
 #define KEYWORD_LAST_INPUT_FILE     wxT( "Last_input" )
 #define KEYWORD_LAST_OUTPUT_FILE    wxT( "Last_output" )
 #define KEYWORD_LAST_FORMAT         wxT( "Last_format" )
+#define KEYWORD_LAST_MODLAYER       wxT( "Last_modlayer" )
 #define KEYWORD_BINARY_THRESHOLD    wxT( "Threshold" )
 #define KEYWORD_BW_NEGATIVE         wxT( "Negative_choice" )
 
 #define DEFAULT_DPI 300     // Default resolution in Bit per inches
 
 extern int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
-                             OUTPUT_FMT_ID aFormat, int aDpi_X, int aDpi_Y );
+                             OUTPUT_FMT_ID aFormat, int aDpi_X, int aDpi_Y,
+                             BMP2CMP_MOD_LAYER aModLayer );
 
 /**
  * Class BM2CMP_FRAME_BASE
@@ -138,6 +140,7 @@ private:
     void NegateGreyscaleImage( );
     void ExportFile( FILE* aOutfile, OUTPUT_FMT_ID aFormat );
     void updateImageInfo();
+    void OnFormatChange( wxCommandEvent& event );
 };
 
 
@@ -167,6 +170,19 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             tmp = PCBNEW_KICAD_MOD;
 
         m_radioBoxFormat->SetSelection( tmp );
+    }
+
+    if( tmp == PCBNEW_KICAD_MOD )
+        m_radio_PCBLayer->Enable( true );
+    else
+        m_radio_PCBLayer->Enable( false );
+
+    if( m_config->Read( KEYWORD_LAST_MODLAYER, &tmp ) )
+    {
+        if( (unsigned) tmp > MOD_LYR_FINAL )    // Out of range
+            m_radio_PCBLayer->SetSelection( MOD_LYR_FSILKS );
+        else
+            m_radio_PCBLayer->SetSelection( tmp );
     }
 
     // Give an icon
@@ -204,6 +220,7 @@ BM2CMP_FRAME::~BM2CMP_FRAME()
     m_config->Write( KEYWORD_BINARY_THRESHOLD, m_sliderThreshold->GetValue() );
     m_config->Write( KEYWORD_BW_NEGATIVE, m_rbOptions->GetSelection() );
     m_config->Write( KEYWORD_LAST_FORMAT,  m_radioBoxFormat->GetSelection() );
+    m_config->Write( KEYWORD_LAST_MODLAYER,  m_radio_PCBLayer->GetSelection() );
 
     delete m_config;
 
@@ -628,7 +645,14 @@ void BM2CMP_FRAME::ExportFile( FILE* aOutfile, OUTPUT_FMT_ID aFormat )
         }
     }
 
-    bitmap2component( potrace_bitmap, aOutfile, aFormat, m_imageDPI.x, m_imageDPI.y );
+    // choices of m_radio_PCBLayer are expected to be in same order as
+    // BMP2CMP_MOD_LAYER. See bitmap2component.h
+    BMP2CMP_MOD_LAYER modLayer = MOD_LYR_FSILKS;
+
+    if( aFormat == PCBNEW_KICAD_MOD )
+        modLayer = (BMP2CMP_MOD_LAYER) m_radio_PCBLayer->GetSelection();
+
+    bitmap2component( potrace_bitmap, aOutfile, aFormat, m_imageDPI.x, m_imageDPI.y, modLayer );
 }
 
 
@@ -711,3 +735,12 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     return start_common( aCtlBits );
 }
 
+void BM2CMP_FRAME::OnFormatChange( wxCommandEvent& event )
+{
+    if( m_radioBoxFormat->GetSelection() == PCBNEW_KICAD_MOD )
+        m_radio_PCBLayer->Enable( true );
+    else
+        m_radio_PCBLayer->Enable( false );
+
+    event.Skip();
+}
