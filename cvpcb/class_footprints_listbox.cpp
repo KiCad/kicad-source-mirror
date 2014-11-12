@@ -67,6 +67,7 @@ void FOOTPRINTS_LISTBOX::SetString( unsigned linecount, const wxString& text )
             linecount = count - 1;
         m_footprintList[linecount] = text;
     }
+    UpdateWidth( linecount );
 }
 
 
@@ -90,7 +91,9 @@ wxString FOOTPRINTS_LISTBOX::GetSelectedFootprint()
 void FOOTPRINTS_LISTBOX::AppendLine( const wxString& text )
 {
     m_footprintList.Add( text );
-    SetItemCount( m_footprintList.Count() );
+    int lines = m_footprintList.Count();
+    SetItemCount( lines );
+    UpdateWidth( lines - 1 );
 }
 
 
@@ -179,24 +182,12 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
         SetItemCount( m_footprintList.GetCount() );
         SetSelection( selection, true );
         RefreshItems( 0L, m_footprintList.GetCount()-1 );
-
-#if defined (__WXGTK__ ) //&& wxMINOR_VERSION == 8
-        // @bug On GTK and wxWidgets 2.8.x, this will assert in debug builds because the
-
-        //      column parameter is -1.  This was the only way to prevent GTK3 from
-        //      ellipsizing long strings down to a few characters.  It still doesn't set
-        //      the scroll bars correctly (too short) but it's better than any of the
-        //      other alternatives.  If someone knows how to fix this, please do.
-        SetColumnWidth( -1, wxLIST_AUTOSIZE );
-#else
-        SetColumnWidth( 0, wxLIST_AUTOSIZE );
-#endif
+        UpdateWidth();
     }
 }
 
 
 BEGIN_EVENT_TABLE( FOOTPRINTS_LISTBOX, ITEMS_LISTBOX_BASE )
-    EVT_SIZE( ITEMS_LISTBOX_BASE::OnSize )
     EVT_CHAR( FOOTPRINTS_LISTBOX::OnChar )
     EVT_LIST_ITEM_SELECTED( ID_CVPCB_FOOTPRINT_LIST, FOOTPRINTS_LISTBOX::OnLeftClick )
     EVT_LIST_ITEM_ACTIVATED( ID_CVPCB_FOOTPRINT_LIST, FOOTPRINTS_LISTBOX::OnLeftDClick )

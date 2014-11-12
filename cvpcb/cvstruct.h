@@ -50,9 +50,23 @@ public:
     ~ITEMS_LISTBOX_BASE();
 
     int                      GetSelection();
-    void                     OnSize( wxSizeEvent& event );
 
     virtual CVPCB_MAINFRAME* GetParent() const;
+
+    /* Function UpdateWidth
+     *
+     * Update the width of the column based on its contents.
+     *
+     * @param aLine is the line to calculate the width from. If positive, the
+     * width will only be increased if needed. If negative, we start from
+     * scratch and all lines are considered, i.e., the column may be shrunk.
+     */
+    void UpdateWidth( int aLine = -1 );
+
+private:
+    void UpdateLineWidth( unsigned aLine );
+
+    int columnWidth;
 };
 
 

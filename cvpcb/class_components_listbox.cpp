@@ -47,7 +47,6 @@ COMPONENTS_LISTBOX::~COMPONENTS_LISTBOX()
 
 
 BEGIN_EVENT_TABLE( COMPONENTS_LISTBOX, ITEMS_LISTBOX_BASE )
-    EVT_SIZE( ITEMS_LISTBOX_BASE::OnSize )
     EVT_CHAR( COMPONENTS_LISTBOX::OnChar )
     EVT_LIST_ITEM_SELECTED( ID_CVPCB_COMPONENT_LIST, COMPONENTS_LISTBOX::OnSelectComponent )
 END_EVENT_TABLE()
@@ -72,14 +71,19 @@ void COMPONENTS_LISTBOX::SetString( unsigned linecount, const wxString& text )
         linecount = m_ComponentList.Count() - 1;
 
     if( m_ComponentList.Count() > 0 )
+    {
         m_ComponentList[linecount] = text;
+        UpdateWidth( linecount );
+    }
 }
 
 
 void COMPONENTS_LISTBOX::AppendLine( const wxString& text )
 {
     m_ComponentList.Add( text );
-    SetItemCount( m_ComponentList.Count() );
+    int lines = m_ComponentList.Count();
+    SetItemCount( lines );
+    UpdateWidth( lines - 1 );
 }
 
 
