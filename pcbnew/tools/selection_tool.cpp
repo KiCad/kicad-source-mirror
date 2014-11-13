@@ -252,7 +252,8 @@ bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambigua
     GENERAL_COLLECTOR collector;
 
     // Preferred types (they have the priority when if they are covered by a bigger item)
-    const KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_LINE_T, PCB_MODULE_TEXT_T, EOT };
+    const KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_LINE_T,
+                              PCB_MODULE_EDGE_T, PCB_MODULE_TEXT_T, EOT };
 
     if( m_editModules )
         collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::ModuleItems,
