@@ -308,6 +308,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                 controls->SetAutoPan( false );
                 setAltConstraint( false );
                 modified = false;
+                m_toolMgr->PassEvent();
             }
 
             else if( evt->IsCancel() )

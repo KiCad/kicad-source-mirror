@@ -348,9 +348,6 @@ bool SELECTION_TOOL::selectMultiple()
 
         if( evt->IsMouseUp( BUT_LEFT ) )
         {
-            // End drawing the selection box
-            m_selArea->ViewSetVisible( false );
-
             // Mark items within the selection box as selected
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
             BOX2I selectionBox = m_selArea->ViewBBox();
@@ -384,6 +381,8 @@ bool SELECTION_TOOL::selectMultiple()
         }
     }
 
+    // Stop drawing the selection box
+    m_selArea->ViewSetVisible( false );
     view->Remove( m_selArea );
     m_multiple = false;         // Multiple selection mode is inactive
     getViewControls()->SetAutoPan( false );
