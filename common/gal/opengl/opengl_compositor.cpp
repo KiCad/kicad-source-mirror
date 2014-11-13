@@ -55,7 +55,7 @@ void OPENGL_COMPOSITOR::Initialize()
     // We need framebuffer objects for drawing the screen contents
     // Generate framebuffer and a depth buffer
     glGenFramebuffersEXT( 1, &m_framebuffer );
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebuffer );
+    glBindFramebufferEXT( GL_FRAMEBUFFER, m_framebuffer );
     m_currentFbo = m_framebuffer;
 
     // Allocate memory for the depth buffer
