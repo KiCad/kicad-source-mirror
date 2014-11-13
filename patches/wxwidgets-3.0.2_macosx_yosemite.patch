@@ -1,7 +1,22 @@
-=== added file 'patches/wxwidgets-3.0.2_macosx_yosemite_webview_webkit.mm.patch'
---- patches/wxwidgets-3.0.2_macosx_yosemite_webview_webkit.mm.patch	1970-01-01 00:00:00 +0000
-+++ patches/wxwidgets-3.0.2_macosx_yosemite_webview_webkit.mm.patch	2014-10-29 18:17:55 +0000
-@@ -0,0 +1,11 @@
+=== modified file 'patches/wxwidgets-3.0.2_macosx_yosemite.patch'
+--- patches/wxwidgets-3.0.2_macosx_yosemite.patch	2014-11-04 19:24:22 +0000
++++ patches/wxwidgets-3.0.2_macosx_yosemite.patch	2014-11-12 01:54:50 +0000
+@@ -1,15 +1,11 @@
+-=== added file 'patches/wxwidgets-3.0.2_macosx_yosemite_webview_webkit.mm.patch'
+---- patches/wxwidgets-3.0.2_macosx_yosemite_webview_webkit.mm.patch	1970-01-01 00:00:00 +0000
+-+++ patches/wxwidgets-3.0.2_macosx_yosemite_webview_webkit.mm.patch	2014-10-29 18:17:55 +0000
+-@@ -0,0 +1,11 @@
+-+--- src/osx/webview_webkit.mm.orig	2014-09-16 07:27:52.000000000 -0600
+-++++ src/osx/webview_webkit.mm	2014-09-16 07:28:12.000000000 -0600
+-+@@ -28,7 +28,7 @@
+-+ #include "wx/hashmap.h"
+-+ #include "wx/filesys.h"
+-+
+-+-#include <WebKit/WebKit.h>
+-++#include <WebKit/WebKitLegacy.h>
+-+ #include <WebKit/HIWebView.h>
+-+ #include <WebKit/CarbonUtils.h>
+-+
 +--- src/osx/webview_webkit.mm.orig	2014-09-16 07:27:52.000000000 -0600
 ++++ src/osx/webview_webkit.mm	2014-09-16 07:28:12.000000000 -0600
 +@@ -28,7 +28,7 @@
@@ -13,3 +28,4 @@
 + #include <WebKit/HIWebView.h>
 + #include <WebKit/CarbonUtils.h>
 +
+
