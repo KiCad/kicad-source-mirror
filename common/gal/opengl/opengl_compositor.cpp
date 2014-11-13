@@ -91,12 +91,10 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 {
     wxASSERT( m_initialized );
 
-    unsigned int maxBuffers, maxWidth, maxHeight;
+    unsigned int maxBuffers;
 
-    // Get the maximum size & number of buffers
+    // Get the maximum number of buffers
     glGetIntegerv( GL_MAX_COLOR_ATTACHMENTS, (GLint*) &maxBuffers );
-    glGetIntegerv( GL_MAX_FRAMEBUFFER_WIDTH, (GLint*) &maxWidth );
-    glGetIntegerv( GL_MAX_FRAMEBUFFER_HEIGHT, (GLint*) &maxHeight );
 
     if( usedBuffers() >= maxBuffers )
     {
@@ -104,14 +102,6 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
                         "backend requires at least 3 framebuffers. You may try to update/change "
                         "your graphic drivers." ) );
         return 0;    // Unfortunately we have no more free buffers left
-    }
-
-    if( m_width > maxWidth || m_height > maxHeight ) {
-        DisplayError( NULL, wxString::Format( wxT( "Max handled framebuffer size is %d x %d,"
-                            " but %x x %x is required." ),
-                            maxWidth, maxHeight, m_width, m_height ) );
-
-        return 0;
     }
 
     // GL_COLOR_ATTACHMENTn are consecutive integers
