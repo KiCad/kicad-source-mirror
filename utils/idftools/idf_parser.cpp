@@ -728,7 +728,8 @@ void IDF3_COMP_OUTLINE_DATA::writePlaceData( std::ofstream& aBoardFile,
 
     if( aPlacement == PS_INVALID )
     {
-        ERROR_IDF << "placement invalid; defaulting to PLACED\n";
+        ERROR_IDF << "placement invalid (" << aRefDes << ":";
+        std::cerr << aPlacement << "); defaulting to PLACED\n";
         aPlacement = PS_PLACED;
     }
 

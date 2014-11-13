@@ -30,7 +30,7 @@
 //    a closed loop as assumed for all other outlines.
 // 3. a scheme is needed to tell a castellated edge from a plain board edge
 
-#include <iostream>
+
 #include <sstream>
 #include <string>
 #include <iomanip>
