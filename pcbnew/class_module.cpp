@@ -863,6 +863,12 @@ unsigned int MODULE::ViewGetLOD( int aLayer ) const
         return 30;
 }
 
+const BOX2I MODULE::ViewBBox() const
+{
+    EDA_RECT fpRect = GetFootprintRect();
+
+    return BOX2I( VECTOR2I( fpRect.GetOrigin() ), VECTOR2I( fpRect.GetSize() ) );
+}
 
 /* Test for validity of the name in a library of the footprint
  * ( no spaces, dir separators ... )
