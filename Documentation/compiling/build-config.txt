@@ -14,7 +14,7 @@ boost libraries will be downloaded the first time you build Kicad.
 CMake
 =====
 
-KiCad uses CMake to generate the build files specific for the target platform
+KiCad uses CMake (version 2.12 or later) to generate the build files specific for the target platform
 specified by the developer.  This document attempts to define some of the more
 common CMake and KiCad build configuration settings.  You can use CMake either
 by the command CMake on or the graphical version ccmake.  This document only
@@ -78,24 +78,6 @@ the wxWidgets library.  If you wish to use a custom built wxWidgets library,
 set wxWidgets_ROOT_DIR to the correct path.
 
 
-wxWidgets_USE_DEBUG (ON/OFF)
-----------------------------
-Default: OFF
-
-When creating a debug build of KiCad, it is often useful to link against the
-debug build of the wxWidgets.  To use the debug build of wxWidgets, set
-wxWidgets_USE_DEBUG to ON.
-
-
-wxWidgets_USE_UNICODE (ON/OFF)
-------------------------------
-Default: ON (wxWidgets 2.9 or later), OFF (older versions)
-
-If your platform supports Unicode and you wish to build KiCad with Unicode
-support, set wxWidgets_USE_UNICODE to ON.  Please note as of the 2.9 branch
-this option is not required.
-
-
 KiCad Specific Options
 ======================
 
@@ -113,17 +95,6 @@ building a local copy.
 WARNING: The KiCad developers strongly advise you to build the bundled copy of
 the Boost library, as it is known to work with KiCad. Other versions may
 contain bugs that may result in KiCad errors.
-
-
-USE_WX_GRAPHICS_CONTEXT (ON/OFF)
---------------------------------
-Default: OFF
-
-This option is *Experimental*. It enables advanced drawing library code using
-wxGraphicsContext and should only be used for testing purposes.  Under Windows,
-a very recent version of mingw is needed.  It also requires wxWidgets to be
-built with the --enable-graphics_ctx configuration switch.
-
 
 USE_IMAGES_IN_MENUS (ON/OFF)
 ----------------------------
@@ -147,18 +118,9 @@ to avoid download and building the dependencies multiple times.
 
 KICAD_USER_CONFIG_DIR (PATH)
 ----------------------------
-Default: Home directory (Unix-based systems), Application data directory (Windows)
+Default: ~/.config (Unix-based systems), Application data directory (Windows)
 
 This option specifies where to store user-specific configuration information.
-
-
-KICAD_KEEPCASE (ON/OFF)
------------------------
-Default: ON
-
-If this is OFF, component names are automatically converted to uppercase meaning
-they are case insensitive. If it is ON, component names are not changed and
-are therefore case sensitive.
 
 
 USE_WX_OVERLAY (ON/OFF)
@@ -192,7 +154,7 @@ KICAD_SCRIPTING_WXPYTHON (ON/OFF)
 Default: OFF
 
 This option enables or disables building wxPython support into the KiCad
-scripting support.  Currently only Pcbnew is supported.  This option requires
+scripting support.  Currently only Pcbnew has scripting support.  This option requires
 SWIG, Python, and wxPython to be installed on the system.
 
 

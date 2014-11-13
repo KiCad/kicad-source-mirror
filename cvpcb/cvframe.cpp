@@ -445,6 +445,10 @@ bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 
         UpdateTitle();
 
+        // Resize the components list box. This is needed in case the
+        // contents have shrunk compared to the previous netlist.
+        m_compListBox->UpdateWidth();
+
         // OSX need it since some objects are "rebuild" just make aware AUI
         // Fixes #1258081
         m_auimgr.Update();
@@ -949,17 +953,7 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
         m_compListBox->SetItemCount( m_compListBox->m_ComponentList.Count() );
         m_compListBox->SetSelection( 0, true );
         m_compListBox->RefreshItems( 0L, m_compListBox->m_ComponentList.Count()-1 );
-
-#if defined (__WXGTK__ )
-        // @bug On GTK and wxWidgets 2.8.x, this will assert in debug builds because the
-        //      column parameter is -1.  This was the only way to prevent GTK3 from
-        //      ellipsizing long strings down to a few characters.  It still doesn't set
-        //      the scroll bars correctly (too short) but it's better than any of the
-        //      other alternatives.  If someone knows how to fix this, please do.
-        m_compListBox->SetColumnWidth( -1, wxLIST_AUTOSIZE );
-#else
-        m_compListBox->SetColumnWidth( 0, wxLIST_AUTOSIZE );
-#endif
+        m_compListBox->UpdateWidth();
     }
 }
 

@@ -26,7 +26,6 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	bSizer9->Add( m_TextLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TextContentCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-	m_TextContentCtrl->SetMaxLength( 0 ); 
 	m_TextContentCtrl->SetToolTip( _("Enter the text placed on selected layer.") );
 	m_TextContentCtrl->SetMinSize( wxSize( 400,60 ) );
 	

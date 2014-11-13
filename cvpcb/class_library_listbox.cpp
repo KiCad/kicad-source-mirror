@@ -66,6 +66,7 @@ void LIBRARY_LISTBOX::SetString( unsigned linecount, const wxString& text )
         if( linecount >= count )
             linecount = count - 1;
         m_libraryList[linecount] = text;
+        UpdateWidth( linecount );
     }
 }
 
@@ -87,7 +88,9 @@ wxString LIBRARY_LISTBOX::GetSelectedLibrary()
 void LIBRARY_LISTBOX::AppendLine( const wxString& text )
 {
     m_libraryList.Add( text );
-    SetItemCount( m_libraryList.Count() );
+    int lines = m_libraryList.Count();
+    SetItemCount( lines );
+    UpdateWidth( lines - 1 );
 }
 
 
@@ -129,23 +132,12 @@ void LIBRARY_LISTBOX::SetLibraryList( const wxArrayString& aList )
     if( m_libraryList.Count() )
     {
         RefreshItems( 0L, m_libraryList.Count()-1 );
-
-#if defined (__WXGTK__ ) && wxMINOR_VERSION == 8
-        // @bug On GTK and wxWidgets 2.8.x, this will assert in debug builds because the
-        //      column parameter is -1.  This was the only way to prevent GTK3 from
-        //      ellipsizing long strings down to a few characters.  It still doesn't set
-        //      the scroll bars correctly (too short) but it's better than any of the
-        //      other alternatives.  If someone knows how to fix this, please do.
-        SetColumnWidth( -1, wxLIST_AUTOSIZE );
-#else
-        SetColumnWidth( 0, wxLIST_AUTOSIZE );
-#endif
+        UpdateWidth();
     }
 }
 
 
 BEGIN_EVENT_TABLE( LIBRARY_LISTBOX, ITEMS_LISTBOX_BASE )
-    EVT_SIZE( ITEMS_LISTBOX_BASE::OnSize )
     EVT_CHAR( LIBRARY_LISTBOX::OnChar )
     EVT_LIST_ITEM_SELECTED( ID_CVPCB_LIBRARY_LIST, LIBRARY_LISTBOX::OnSelectLibrary )
 END_EVENT_TABLE()

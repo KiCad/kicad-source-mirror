@@ -44,10 +44,9 @@
 ITEMS_LISTBOX_BASE::ITEMS_LISTBOX_BASE( CVPCB_MAINFRAME* aParent, wxWindowID aId,
                                         const wxPoint& aLocation, const wxSize& aSize,
                                         long aStyle) :
-    wxListView( aParent, aId, aLocation, aSize, LISTB_STYLE | aStyle )
+    wxListView( aParent, aId, aLocation, aSize, LISTB_STYLE | aStyle ), columnWidth(0)
 {
     InsertColumn( 0, wxEmptyString );
-    SetColumnWidth( 0, wxLIST_AUTOSIZE );
 }
 
 
@@ -56,17 +55,47 @@ ITEMS_LISTBOX_BASE::~ITEMS_LISTBOX_BASE()
 }
 
 
-/*
- * Adjust the column width to the entire available window width
- */
-void ITEMS_LISTBOX_BASE::OnSize( wxSizeEvent& event )
+void ITEMS_LISTBOX_BASE::UpdateWidth( int aLine )
 {
-    wxSize size  = GetClientSize();
-    int    width = 0;
+    // Less than zero: recalculate width of all items.
+    if( aLine < 0 )
+    {
+        columnWidth = 0;
+        for( int ii = 0; ii < GetItemCount(); ii++ )
+        {
+            UpdateLineWidth( (unsigned)ii );
+        }
+    }
 
-    SetColumnWidth( 0, std::max( width, size.x ) );
+    // Zero or above: update from a single line.
+    else
+    {
+        if( aLine < GetItemCount() )
+            UpdateLineWidth( (unsigned)aLine );
+    }
+}
 
-    event.Skip();
+
+/*
+ * Calculate the width of the given line, and increase the column width
+ * if needed. This is effectively the wxListCtrl code for autosizing.
+ * NB. it relies on the caller checking the given line number is valid.
+ */
+void ITEMS_LISTBOX_BASE::UpdateLineWidth( unsigned aLine )
+{
+    wxClientDC dc( this );
+    wxCoord w;
+    int newWidth = 10;  // Value of AUTOSIZE_COL_MARGIN from wxWidgets source.
+
+    dc.SetFont( GetFont() );
+    dc.GetTextExtent( GetItemText( aLine, 0 ) + " ", &w, NULL );
+    newWidth += w;
+
+    if( newWidth > columnWidth )
+    {
+        columnWidth = newWidth;
+        SetColumnWidth( 0, columnWidth );
+    }    
 }
 
 

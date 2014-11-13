@@ -273,18 +273,13 @@ if( USE_OSX_MAGNIFY_EVENT )
 endif()
 
 
-# Allow user to override the default settings for adding images to menu items.  By default
-# images in menu items are enabled on all platforms except OSX.  This can be over ridden by
-# defining -DUSE_IMAGES_IN_MENUS=ON/OFF to force the preferred behavior.
-if( NOT DEFINED USE_IMAGES_IN_MENUS )
-    if( NOT APPLE )
-        set( USE_IMAGES_IN_MENUS ON )
-    endif()
+# By default images in menu items are enabled on all platforms except OSX.
+if( NOT APPLE )
+    set( USE_IMAGES_IN_MENUS ON CACHE BOOL "Enable images in menus" )
 else()
-    if( USE_IMAGES_IN_MENUS )
-        set( USE_IMAGES_IN_MENUS ON )
-    endif()
+    set( USE_IMAGES_IN_MENUS OFF CACHE BOOL "Enable images in menus" )
 endif()
+
 
 
 # KIFACE_SUFFIX is the file extension used for top level program modules which
