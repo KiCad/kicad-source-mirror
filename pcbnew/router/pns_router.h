@@ -217,7 +217,7 @@ private:
 
     void highlightCurrent( bool enabled );
 
-    void markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,  PNS_NODE::ITEM_VECTOR& aRemoved );
+    void markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent, PNS_NODE::ITEM_VECTOR& aRemoved );
 
     VECTOR2I m_currentEnd;
     RouterState m_state;

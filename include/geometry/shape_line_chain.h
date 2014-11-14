@@ -114,7 +114,7 @@ public:
     }
 
 
-    SHAPE_LINE_CHAIN(const VECTOR2I* aV, int aCount ) :
+    SHAPE_LINE_CHAIN( const VECTOR2I* aV, int aCount ) :
         SHAPE( SH_LINE_CHAIN ),
         m_closed( false )
     {
@@ -564,9 +564,9 @@ public:
 
     bool CompareGeometry( const SHAPE_LINE_CHAIN & aOther ) const;
 
-    void Move ( const VECTOR2I& aVector )
+    void Move( const VECTOR2I& aVector )
     {
-        for(std::vector<VECTOR2I>::iterator i = m_points.begin(); i != m_points.end(); ++i)
+        for( std::vector<VECTOR2I>::iterator i = m_points.begin(); i != m_points.end(); ++i )
             (*i) += aVector;
     }
 

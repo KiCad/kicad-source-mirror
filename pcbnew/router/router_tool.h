@@ -47,10 +47,10 @@ private:
     PNS_ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1 );
 
     int getDefaultWidth( int aNetCode );
-    
+
     void performRouting();
     void performDragging();
-    
+
     void highlightNet( bool aEnabled, int aNetcode = -1 );
 
     void updateStartItem( TOOL_EVENT& aEvent );
@@ -59,7 +59,7 @@ private:
     void getNetclassDimensions( int aNetCode, int& aWidth, int& aViaDiameter, int& aViaDrill );
     void handleCommonEvents( TOOL_EVENT& evt );
 
-    int getStartLayer( const PNS_ITEM *aItem );
+    int getStartLayer( const PNS_ITEM* aItem );
     void switchLayerOnViaPlacement();
     bool onViaCommand( VIATYPE_T aType );
 

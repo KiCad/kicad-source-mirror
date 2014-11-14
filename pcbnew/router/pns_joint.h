@@ -72,7 +72,7 @@ public:
         m_layers = aB.m_layers;
     }
 
-    PNS_ITEM* Clone ( ) const
+    PNS_ITEM* Clone( ) const
     {
         assert( false );
         return NULL;
@@ -98,17 +98,17 @@ public:
     ///> Links the joint to a given board item (when it's added to the PNS_NODE)
     void Link( PNS_ITEM* aItem )
     {
-        if (m_linkedItems.Contains( aItem ))
+        if( m_linkedItems.Contains( aItem ) )
             return;
 
-        m_linkedItems.Add ( aItem );
+        m_linkedItems.Add( aItem );
     }
 
     ///> Unlinks a given board item from the joint (upon its removal from a PNS_NODE)
     ///> Returns true if the joint became dangling after unlinking.
     bool Unlink( PNS_ITEM* aItem )
     {
-        m_linkedItems.Erase ( aItem );
+        m_linkedItems.Erase( aItem );
         return m_linkedItems.Size() == 0;
     }
 
@@ -124,24 +124,24 @@ public:
 
 
     /// trivial accessors
-    const HASH_TAG& Tag() const 
-    { 
-        return m_tag; 
+    const HASH_TAG& Tag() const
+    {
+        return m_tag;
     }
-    
-    const VECTOR2I& Pos() const 
-    { 
-        return m_tag.pos; 
+
+    const VECTOR2I& Pos() const
+    {
+        return m_tag.pos;
     }
-    
-    int Net() const 
-    { 
-        return m_tag.net; 
+
+    int Net() const
+    {
+        return m_tag.net;
     }
-    
+
     const LINKED_ITEMS& LinkList() const
-    { 
-        return m_linkedItems.CItems(); 
+    {
+        return m_linkedItems.CItems();
     }
 
     const PNS_ITEMSET& CLinks() const
@@ -159,7 +159,6 @@ public:
         return m_linkedItems.Count( aMask );
     }
 
-
     void Dump() const;
 
     bool operator==( const PNS_JOINT& rhs )  const
@@ -174,9 +173,9 @@ public:
 
         m_layers.Merge( aJoint.m_layers );
 
-        BOOST_FOREACH ( PNS_ITEM *item, aJoint.LinkList() )
+        BOOST_FOREACH( PNS_ITEM* item, aJoint.LinkList() )
         {
-            m_linkedItems.Add (item); 
+            m_linkedItems.Add( item );
         }
     }
 

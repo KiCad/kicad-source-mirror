@@ -387,7 +387,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         else
         {
             double width = ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0;
-            
+
             m_gal->SetLineWidth( width );
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );

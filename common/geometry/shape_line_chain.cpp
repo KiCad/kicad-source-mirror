@@ -29,9 +29,9 @@ using boost::optional;
 
 bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance ) const
 {
-	// fixme: ugly!
-    SEG s(aP, aP);
-    return this->Collide(s, aClearance);
+    // fixme: ugly!
+    SEG s( aP, aP );
+    return this->Collide( s, aClearance );
 }
 
 
@@ -161,9 +161,9 @@ int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
         if( dist < min_dist && seg.A != aP && seg.B != aP )
         {
             min_dist = dist;
-            if(found_index < 0)
+            if( found_index < 0 )
                 ii = s;
-            else if(s < found_index)
+            else if( s < found_index )
                 ii = s;
         }
     }
@@ -521,24 +521,26 @@ const std::string SHAPE_LINE_CHAIN::Format() const
 
 bool SHAPE_LINE_CHAIN::CompareGeometry ( const SHAPE_LINE_CHAIN & aOther ) const
 {
-    SHAPE_LINE_CHAIN a(*this), b(aOther);
+    SHAPE_LINE_CHAIN a(*this), b( aOther );
     a.Simplify();
     b.Simplify();
 
-    if(a.m_points.size() != b.m_points.size())
+    if( a.m_points.size() != b.m_points.size() )
         return false;
 
-    for(int i = 0; i < a.PointCount(); i++)
-        if(a.CPoint(i) != b.CPoint(i))
+    for( int i = 0; i < a.PointCount(); i++)
+        if( a.CPoint( i ) != b.CPoint( i ) )
             return false;
     return true;
 }
 
+
 bool SHAPE_LINE_CHAIN::Intersects( const SHAPE_LINE_CHAIN& aChain ) const
 {
     INTERSECTIONS dummy;
-    return Intersect(aChain, dummy) != 0;
+    return Intersect( aChain, dummy ) != 0;
 }
+
 
 SHAPE* SHAPE_LINE_CHAIN::Clone() const
 {

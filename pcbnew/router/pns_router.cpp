@@ -456,7 +456,7 @@ bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLayer )
 {
     m_placer = new PNS_LINE_PLACER( this );
-    
+
     m_placer->UpdateSizes ( m_sizes );
     m_placer->SetLayer( aLayer );
     m_placer->Start( aP, aStartItem );
@@ -504,7 +504,7 @@ void PNS_ROUTER::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClearance 
 
 void PNS_ROUTER::DisplayItems( const PNS_ITEMSET& aItems )
 {
-    BOOST_FOREACH( const PNS_ITEM *item, aItems.CItems() )
+    BOOST_FOREACH( const PNS_ITEM* item, aItems.CItems() )
         DisplayItem( item );
 }
 
@@ -604,7 +604,7 @@ void PNS_ROUTER::updateView( PNS_NODE* aNode, PNS_ITEMSET& aCurrent )
         return;
 
     if( Settings().Mode() == RM_MarkObstacles )
-        markViolations(aNode, aCurrent, removed);
+        markViolations( aNode, aCurrent, removed );
 
     aNode->GetUpdatedItems( removed, added );
 
@@ -760,7 +760,7 @@ bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 void PNS_ROUTER::StopRouting()
 {
     // Update the ratsnest with new changes
-    if(m_placer)
+    if( m_placer )
     {
         int n = m_placer->CurrentNet();
 
@@ -827,7 +827,7 @@ void PNS_ROUTER::ToggleViaPlacement()
 
 int PNS_ROUTER::GetCurrentNet() const
 {
-    if(m_placer)
+    if( m_placer )
         return m_placer->CurrentNet();
     return -1;
 }
@@ -839,7 +839,6 @@ int PNS_ROUTER::GetCurrentLayer() const
         return m_placer->CurrentLayer();
     return -1;
 }
-
 
 
 void PNS_ROUTER::DumpLog()

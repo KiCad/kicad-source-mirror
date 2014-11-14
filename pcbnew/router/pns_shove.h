@@ -37,7 +37,7 @@ class PNS_ROUTER;
 /**
  * Class PNS_SHOVE
  *
- * The actual Push and Shove algorithm. 
+ * The actual Push and Shove algorithm.
  */
 
 class PNS_SHOVE : public PNS_ALGO_BASE
@@ -88,11 +88,11 @@ private:
     SHOVE_STATUS processSingleLine( PNS_LINE* aCurrent, PNS_LINE* aObstacle, PNS_LINE* aShoved );
     SHOVE_STATUS processHullSet( PNS_LINE* aCurrent, PNS_LINE* aObstacle,
                                  PNS_LINE* aShoved, const HULL_SET& hulls );
-    
+
     bool reduceSpringback( const PNS_ITEMSET& aHeadItems );
     bool pushSpringback( PNS_NODE* aNode, const PNS_ITEMSET &aHeadItems,
                          const PNS_COST_ESTIMATOR& aCost );
-    
+
     SHOVE_STATUS walkaroundLoneVia( PNS_LINE* aCurrent, PNS_LINE* aObstacle, PNS_LINE* aShoved );
     bool checkBumpDirection( PNS_LINE* aCurrent, PNS_LINE* aShoved ) const;
 
@@ -104,20 +104,20 @@ private:
     SHOVE_STATUS pushVia( PNS_VIA* aVia, const VECTOR2I& aForce, int aCurrentRank );
 
     void unwindStack( PNS_SEGMENT* aSeg );
-    void unwindStack( PNS_ITEM *aItem );
+    void unwindStack( PNS_ITEM* aItem );
 
     void runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead );
 
-    void pushLine( PNS_LINE *aL );
-    void popLine(); 
+    void pushLine( PNS_LINE* aL );
+    void popLine();
 
-    const RANGE<int> findShovedVertexRange( PNS_LINE *aL );
+    const RANGE<int> findShovedVertexRange( PNS_LINE* aL );
 
     PNS_LINE* assembleLine( const PNS_SEGMENT* aSeg, int* aIndex = NULL );
     PNS_LINE* cloneLine( const PNS_LINE* aLine );
 
     SHOVE_STATUS shoveIteration( int aIter );
-    SHOVE_STATUS shoveMainLoop(); 
+    SHOVE_STATUS shoveMainLoop();
 
     std::vector<SPRINGBACK_TAG> m_nodeStack;
     std::vector<PNS_LINE*>      m_lineStack;
@@ -126,7 +126,7 @@ private:
 
     PNS_NODE*                   m_root;
     PNS_NODE*                   m_currentNode;
-    
+
     OPT_LINE                     m_newHead;
 
     PNS_LOGGER                  m_logger;

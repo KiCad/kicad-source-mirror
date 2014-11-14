@@ -79,7 +79,7 @@ public:
 
 private:
 
-    int inheritTrackWidth( PNS_ITEM *aItem );
+    int inheritTrackWidth( PNS_ITEM* aItem );
 
     int m_trackWidth;
     int m_diffPairWidth;

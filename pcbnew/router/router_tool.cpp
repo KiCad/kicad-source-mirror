@@ -304,7 +304,7 @@ PNS_ITEM* ROUTER_TOOL::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLa
 
     PNS_ITEM* prioritized[4];
 
-    for(int i = 0; i < 4; i++)
+    for( int i = 0; i < 4; i++ )
         prioritized[i] = 0;
 
     PNS_ITEMSET candidates = m_router->QueryHoverItems( aWhere );
@@ -379,7 +379,7 @@ void ROUTER_TOOL::highlightNet( bool aEnabled, int aNetcode )
 void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME> ();
-    BOARD *board = getModel<BOARD> ();
+    BOARD* board = getModel<BOARD> ();
 
 #ifdef DEBUG
     if( aEvent.IsKeyPressed() )
@@ -401,7 +401,7 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
         if( settingsDlg.ShowModal() )
 	    {
             // FIXME: do we need an explicit update?
-        } 
+        }
     }
 
     else if( aEvent.IsAction( &ACT_CustomTrackWidth ) )
@@ -409,7 +409,7 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
         BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
         DIALOG_TRACK_VIA_SIZE sizeDlg( frame, bds );
 
-        if ( sizeDlg.ShowModal() )
+        if( sizeDlg.ShowModal() )
         {
             bds.UseCustomTrackViaSize( true );
             m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
@@ -437,7 +437,7 @@ void ROUTER_TOOL::updateStartItem( TOOL_EVENT& aEvent )
     {
         VECTOR2I p = aEvent.Position();
         startItem = pickSingleItem( p );
-        bool snapEnabled = !aEvent.Modifier(MD_SHIFT);
+        bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
         m_router->EnableSnapping ( snapEnabled );
 
         if( !snapEnabled && startItem && !startItem->Layers().Overlaps( tl ) )
@@ -520,20 +520,20 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
         TRACE( 0, "%s, layer : %d", m_endItem->KindStr().c_str() % m_endItem->Layers().Start() );
 }
 
-int ROUTER_TOOL::getStartLayer( const PNS_ITEM *aItem )
+int ROUTER_TOOL::getStartLayer( const PNS_ITEM* aItem )
 {
     int tl = getView()->GetTopLayer();
 
-    if (m_startItem)
+    if( m_startItem )
     {
         const PNS_LAYERSET& ls = m_startItem->Layers();
 
-        if(ls.Overlaps( tl ))
+        if( ls.Overlaps( tl ) )
             return tl;
         else
             return ls.Start();
     }
-    
+
     return tl;
 }
 void ROUTER_TOOL::switchLayerOnViaPlacement()
@@ -542,7 +542,7 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 
     int al = frame->GetActiveLayer();
     int cl = m_router->GetCurrentLayer();
-    
+
     if( cl != al )
     {
         m_router->SwitchLayer( al );
@@ -559,7 +559,7 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 
 bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
 {
-    BOARD *board = getModel<BOARD> ();
+    BOARD* board = getModel<BOARD> ();
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
 
@@ -572,32 +572,32 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
     sizes.AddLayerPair( frame->GetScreen()->m_Route_Layer_TOP,
                         frame->GetScreen()->m_Route_Layer_BOTTOM );
 
-    if (!m_router->IsPlacingVia())
+    if( !m_router->IsPlacingVia() )
     {
         // Cannot place microvias or blind vias if not allowed (obvious)
         if( ( aType == VIA_BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
             return false;
         if( ( aType == VIA_MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
             return false;
-    
+
         //Can only place through vias on 2-layer boards
         if( ( aType != VIA_THROUGH ) && ( layerCount <= 2 ) )
             return false;
-        
+
         //Can only place microvias if we're on an outer layer, or directly adjacent to one
         if( ( aType == VIA_MICROVIA ) && ( currentLayer > In1_Cu ) && ( currentLayer < layerCount-2 ) )
             return false;
-        
+
         //Cannot place blind vias with front/back as the layer pair, this doesn't make sense
         if( ( aType == VIA_BLIND_BURIED ) && ( sizes.GetLayerTop() == F_Cu ) && ( sizes.GetLayerBottom() == B_Cu ) )
             return false;
     }
 
-    
+
     sizes.SetViaType ( aType );
     m_router->ToggleViaPlacement( );
     m_router->UpdateSizes( sizes );
-    
+
     m_router->Move( m_endSnapPoint, m_endItem );        // refresh
 
     return false;
@@ -612,7 +612,7 @@ void ROUTER_TOOL::performRouting()
 
 	int routingLayer = getStartLayer ( m_startItem );
     frame->SetActiveLayer( ToLAYER_ID ( routingLayer ) );
-    // fixme: switch on invisible layer 
+    // fixme: switch on invisible layer
 
     if( m_startItem && m_startItem->Net() >= 0 )
     {
@@ -631,7 +631,7 @@ void ROUTER_TOOL::performRouting()
     sizes.AddLayerPair ( frame->GetScreen()->m_Route_Layer_TOP,
                          frame->GetScreen()->m_Route_Layer_BOTTOM );
     m_router->UpdateSizes( sizes );
-    
+
     m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer );
 
     m_endItem = NULL;
@@ -659,7 +659,7 @@ void ROUTER_TOOL::performRouting()
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
 
-            if(needLayerSwitch)
+            if( needLayerSwitch )
             {
                 switchLayerOnViaPlacement();
             }
@@ -764,7 +764,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
             else
                 performRouting();
         }
-        else if ( evt->IsAction( &ACT_Drag ) )
+        else if( evt->IsAction( &ACT_Drag ) )
             performDragging();
 
         handleCommonEvents( *evt );

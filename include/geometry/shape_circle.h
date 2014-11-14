@@ -38,7 +38,7 @@ public:
         SHAPE( SH_CIRCLE ), m_radius( aRadius ), m_center( aCenter )
     {}
 
-    SHAPE_CIRCLE ( const SHAPE_CIRCLE& aOther ) : 
+    SHAPE_CIRCLE( const SHAPE_CIRCLE& aOther ) :
         SHAPE( SH_CIRCLE ),
         m_radius( aOther.m_radius ),
         m_center( aOther.m_center )
@@ -86,7 +86,7 @@ public:
         return m_center;
     }
 
-    void Move ( const VECTOR2I& aVector )
+    void Move( const VECTOR2I& aVector )
     {
         m_center += aVector;
     }

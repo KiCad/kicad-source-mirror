@@ -123,7 +123,7 @@ int PNS_LINE::Marker()const
 }
 
 
-void PNS_LINE::copyLinks( const PNS_LINE *aParent )
+void PNS_LINE::copyLinks( const PNS_LINE* aParent )
 {
     if( aParent->m_segmentRefs == NULL )
     {
@@ -413,7 +413,7 @@ void PNS_LINE::DragCorner ( const VECTOR2I& aP, int aIndex, int aSnappingThresho
 
     if( aIndex == 0 )
         path = dragCornerInternal( m_line.Reverse(), snapped ).Reverse();
-    else if ( aIndex == m_line.SegmentCount() )
+    else if( aIndex == m_line.SegmentCount() )
         path = dragCornerInternal( m_line, snapped );
     else
     {

@@ -24,8 +24,8 @@
 
 PNS_ITEMSET::PNS_ITEMSET( PNS_ITEM* aInitialItem )
 {
-    if(aInitialItem)
-        m_items.push_back(aInitialItem);
+    if( aInitialItem )
+        m_items.push_back( aInitialItem );
 }
 
 PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd, bool aInvert )
@@ -55,7 +55,7 @@ PNS_ITEMSET& PNS_ITEMSET::FilterKinds( int aKindMask, bool aInvert )
 
     BOOST_FOREACH( PNS_ITEM* item, m_items )
     {
-        if( item->OfKind ( aKindMask ) ^ aInvert )
+        if( item->OfKind( aKindMask ) ^ aInvert )
             newItems.push_back( item );
     }
 
@@ -71,7 +71,7 @@ PNS_ITEMSET& PNS_ITEMSET::FilterNet( int aNet, bool aInvert )
 
     BOOST_FOREACH( PNS_ITEM* item, m_items )
     {
-        if( (item->Net() == aNet) ^ aInvert )
+        if( ( item->Net() == aNet ) ^ aInvert )
             newItems.push_back( item );
     }
 
@@ -80,7 +80,7 @@ PNS_ITEMSET& PNS_ITEMSET::FilterNet( int aNet, bool aInvert )
     return *this;
 }
 
-PNS_ITEMSET& PNS_ITEMSET::ExcludeItem ( const PNS_ITEM *aItem )
+PNS_ITEMSET& PNS_ITEMSET::ExcludeItem( const PNS_ITEM* aItem )
 {
     ITEMS newItems;
 

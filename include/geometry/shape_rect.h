@@ -57,7 +57,7 @@ public:
         SHAPE( SH_RECT ), m_p0( aP0 ), m_w( aW ), m_h( aH )
     {}
 
-    SHAPE_RECT ( const SHAPE_RECT& aOther ) : 
+    SHAPE_RECT( const SHAPE_RECT& aOther ) :
         SHAPE( SH_RECT ),
         m_p0( aOther.m_p0 ),
         m_w( aOther.m_w ),
@@ -159,7 +159,7 @@ public:
         return m_h;
     }
 
-    void Move ( const VECTOR2I& aVector )
+    void Move( const VECTOR2I& aVector )
     {
         m_p0 += aVector;
     }
@@ -168,7 +168,7 @@ public:
     {
         return true;
     }
-    
+
 private:
     ///> Top-left corner
     VECTOR2I m_p0;
