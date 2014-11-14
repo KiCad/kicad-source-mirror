@@ -597,7 +597,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingVia (PNS_ITEM* aCurrent, PNS_VIA* 
     {
         CollideShapes( aObstacleVia->Shape(), aCurrent->Shape(), 
                        clearance + PNS_HULL_MARGIN, true, mtvSolid );
-        mtv = mtvSolid;
+        mtv = -mtvSolid;
         rank = aCurrent->Rank() + 10000;
     }
 
@@ -924,7 +924,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
     if( m_newHead && st == SH_OK ) 
     {
         st = SH_HEAD_MODIFIED;
-        Router()->DisplayDebugLine( m_newHead->CLine(), 3, 20000 );
+        //Router()->DisplayDebugLine( m_newHead->CLine(), 3, 20000 );
     } 
 
     m_currentNode->RemoveByMarker( MK_HEAD );
