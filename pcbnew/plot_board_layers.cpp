@@ -252,14 +252,23 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_ID aLayer,
         case B_CrtYd:
         case F_Fab:
         case B_Fab:
-            PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
-            break;
+            plotOpt.SetSkipPlotNPTH_Pads( false );
+            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
-        default:
             if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
+            break;
+
+        default:
+            plotOpt.SetSkipPlotNPTH_Pads( false );
+            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+
+            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+                PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
+            else
+                PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
             break;
         }
     }
