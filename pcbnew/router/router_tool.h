@@ -57,8 +57,11 @@ private:
     void updateEndItem( TOOL_EVENT& aEvent );
 
     void getNetclassDimensions( int aNetCode, int& aWidth, int& aViaDiameter, int& aViaDrill );
-
     void handleCommonEvents( TOOL_EVENT& evt );
+
+    int getStartLayer( const PNS_ITEM *aItem );
+    void switchLayerOnViaPlacement();
+    bool onViaCommand( VIATYPE_T aType );
 
     MSG_PANEL_ITEMS m_panelItems;
 

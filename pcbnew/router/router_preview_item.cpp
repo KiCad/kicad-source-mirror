@@ -81,6 +81,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS_ITEM* aItem )
     }
 
     case PNS_ITEM::VIA:
+        m_originLayer = m_layer = ITEM_GAL_LAYER( VIAS_VISIBLE );
         m_type = PR_SHAPE;
         m_width = 0;
         m_color = COLOR4D( 0.7, 0.7, 0.7, 0.8 );

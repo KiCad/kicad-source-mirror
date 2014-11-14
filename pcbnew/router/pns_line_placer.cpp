@@ -40,10 +40,10 @@ PNS_LINE_PLACER::PNS_LINE_PLACER( PNS_ROUTER* aRouter ) :
     PNS_ALGO_BASE ( aRouter )
 {
     m_initial_direction = DIRECTION_45::N;
-    m_iteration = 0;
     m_world = NULL;
     m_shove = NULL;
     m_currentNode = NULL;
+    m_idle = true;
 }
 
 
@@ -59,51 +59,21 @@ void PNS_LINE_PLACER::setWorld ( PNS_NODE* aWorld )
     m_world = aWorld;
 }
 
-
-void PNS_LINE_PLACER::AddVia( bool aEnabled, int aDiameter, int aDrill, VIATYPE_T aType )
+const PNS_VIA PNS_LINE_PLACER::makeVia ( const VECTOR2I& aP )
 {
-    m_viaDiameter = aDiameter;
-    m_viaDrill = aDrill;
+    const PNS_LAYERSET layers( m_sizes.GetLayerTop(), m_sizes.GetLayerBottom() );
+
+    return PNS_VIA ( aP, layers, m_sizes.ViaDiameter(), m_sizes.ViaDrill(), -1, m_sizes.ViaType() );
+}
+
+
+void PNS_LINE_PLACER::ToggleVia( bool aEnabled )
+{
     m_placingVia = aEnabled;
-    m_viaType = aType;
+    if(!m_idle)
+        Move ( m_currentEnd, NULL );
 }
 
-
-void PNS_LINE_PLACER::startPlacement( const VECTOR2I& aStart, int aNet, int aWidth, int aLayer )
-{
-    assert( m_world != NULL );
-    
-    m_direction = m_initial_direction;
-    TRACE( 1, "world %p, initial-direction %s layer %d\n",
-            m_world % m_direction.Format().c_str() % aLayer );
-    m_head.SetNet( aNet );
-    m_tail.SetNet( aNet );
-    m_head.SetWidth( aWidth );
-    m_tail.SetWidth( aWidth );
-    m_head.Line().Clear();
-    m_tail.Line().Clear();
-    m_head.SetLayer( aLayer );
-    m_tail.SetLayer( aLayer );
-    m_iteration = 0;
-    m_p_start = aStart;
-
-    m_lastNode = NULL;    
-    m_currentNode = m_world;
-    
-    m_currentMode = Settings().Mode();
-
-    if( m_shove )
-        delete m_shove;
-    
-    m_shove = NULL;
-
-    if( m_currentMode == RM_Shove || m_currentMode == RM_Smart )
-    {
-        m_shove = new PNS_SHOVE( m_world->Branch(), Router() );
-    }
-    
-    m_placingVia = false;
-}
 
 
 void PNS_LINE_PLACER::setInitialDirection( const DIRECTION_45& aDirection )
@@ -380,8 +350,9 @@ bool PNS_LINE_PLACER::handleViaPlacement( PNS_LINE& aHead )
     if( !m_placingVia )
         return true;
 
-    PNS_LAYERSET layers( Settings().GetLayerTop(), Settings().GetLayerBottom() );
-    PNS_VIA v( aHead.CPoint( -1 ), layers, m_viaDiameter, m_viaDrill, aHead.Net(), m_viaType );
+    PNS_VIA v ( makeVia ( aHead.CPoint( -1 ) ) );
+    v.SetNet ( aHead.Net() );
+
 
     VECTOR2I force;
     VECTOR2I lead = aHead.CPoint( -1 ) - aHead.CPoint( 0 );
@@ -440,9 +411,7 @@ bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
     }
     else if( m_placingVia && viaOk )
     {
-        PNS_LAYERSET layers( Settings().GetLayerTop(), Settings().GetLayerBottom() );
-        PNS_VIA v1( walkFull.CPoint( -1 ), layers, m_viaDiameter, m_viaDrill, -1, m_viaType );
-        walkFull.AppendVia( v1 );
+        walkFull.AppendVia( makeVia ( walkFull.CPoint( -1 ) ) );
     }
 
     PNS_OPTIMIZER::Optimize( &walkFull, effort, m_currentNode );
@@ -465,9 +434,7 @@ bool PNS_LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead )
     
     if( m_placingVia )
     {
-        PNS_LAYERSET layers( Settings().GetLayerTop(), Settings().GetLayerBottom() );
-        PNS_VIA v1( m_head.CPoint( -1 ), layers, m_viaDiameter, m_viaDrill, -1, m_viaType );
-        m_head.AppendVia( v1 );
+        m_head.AppendVia( makeVia ( m_head.CPoint( -1 ) ) );
     }
 
     aNewHead = m_head;
@@ -508,9 +475,8 @@ bool PNS_LINE_PLACER::rhShoveOnly ( const VECTOR2I& aP, PNS_LINE& aNewHead )
 
     if( m_placingVia )
     {
-        PNS_LAYERSET layers( Settings().GetLayerTop(), Settings().GetLayerBottom() );
-        PNS_VIA v1( l.CPoint( -1 ), layers, m_viaDiameter, m_viaDrill, -1, m_viaType );
-        PNS_VIA v2( l2.CPoint( -1 ), layers, m_viaDiameter, m_viaDrill, -1, m_viaType );
+        PNS_VIA v1( makeVia ( l.CPoint( -1 ) ) );
+        PNS_VIA v2( makeVia ( l2.CPoint( -1 ) ) );
 
         l.AppendVia( v1 );
         l2.AppendVia( v2 );
@@ -759,14 +725,23 @@ void PNS_LINE_PLACER::splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, co
 }
 
 
-void PNS_LINE_PLACER::SetLayer( int aLayer )
+bool PNS_LINE_PLACER::SetLayer( int aLayer )
 {
-    m_currentLayer = aLayer;
+    if(m_idle)
+    {
+        m_currentLayer = aLayer;
+        return true;
+    } else if (m_chainedPlacement) {
+        return false;
+    } else if (!m_startItem || (m_startItem->OfKind(PNS_ITEM::VIA) && m_startItem->Layers().Overlaps( aLayer ))) {
+        m_currentLayer = aLayer;
+        initPlacement ( );
+        Move ( m_currentEnd, NULL );
+        return true;
+    }
 
-    m_head.SetLayer( aLayer );
-    m_tail.SetLayer( aLayer );
+    return false;
 }
-
 
 void PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
@@ -775,10 +750,6 @@ void PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     static int unknowNetIdx = 0;    // -10000;
     int net = -1;
 
-    m_lastNode = NULL;
-    m_placingVia = false;
-    m_startsOnVia = false;
-    
     bool splitSeg = false;
 
     if( Router()->SnappingEnabled() )
@@ -789,19 +760,60 @@ void PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     else
         net = aStartItem->Net();
 
-    m_currentStart  = p;
-    m_originalStart = p;
+    m_currentStart = p;
     m_currentEnd = p;
     m_currentNet = net;
+    m_startItem = aStartItem;
+    m_placingVia = false;
+    m_chainedPlacement = false;
 
-    PNS_NODE* rootNode = Router()->GetWorld()->Branch();
-
-    if( splitSeg )
-        splitAdjacentSegments( rootNode, aStartItem, p );
-    
-    setWorld( rootNode );
     setInitialDirection( Settings().InitialDirection() );
-    startPlacement( p, m_currentNet, m_currentWidth, m_currentLayer );
+    
+    initPlacement( splitSeg );    
+}
+
+void PNS_LINE_PLACER::initPlacement( bool aSplitSeg )
+{
+    m_idle = false;
+
+    m_head.Line().Clear();
+    m_tail.Line().Clear();
+    m_head.SetNet( m_currentNet );
+    m_tail.SetNet( m_currentNet );
+    m_head.SetLayer( m_currentLayer );
+    m_tail.SetLayer( m_currentLayer );
+    m_head.SetWidth( m_sizes.TrackWidth() );
+    m_tail.SetWidth( m_sizes.TrackWidth() );
+    
+    m_p_start = m_currentStart;
+    m_direction = m_initial_direction;
+
+    PNS_NODE *world = Router()->GetWorld();
+    
+    world->KillChildren();
+    PNS_NODE* rootNode = world->Branch();
+
+    if( aSplitSeg )
+        splitAdjacentSegments( rootNode, m_startItem, m_currentStart );
+
+    setWorld( rootNode );
+    
+    TRACE( 1, "world %p, intitial-direction %s layer %d\n",
+            m_world % m_direction.Format().c_str() % aLayer );
+   
+    m_lastNode = NULL;    
+    m_currentNode = m_world;
+    m_currentMode = Settings().Mode();
+
+    if( m_shove )
+        delete m_shove;
+    
+    m_shove = NULL;
+
+    if( m_currentMode == RM_Shove || m_currentMode == RM_Smart )
+    {
+        m_shove = new PNS_SHOVE( m_world->Branch(), Router() );
+    }    
 }
 
 
@@ -902,25 +914,13 @@ bool PNS_LINE_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     if( !realEnd )
     {
         setInitialDirection( d_last );
-        VECTOR2I p_start = m_placingVia ? p_last : p_pre_last;
-
-        if( m_placingVia )
-        {
-            int layerTop = Router()->Settings().GetLayerTop();
-            int layerBottom = Router()->Settings().GetLayerBottom();
-
-            // Change the current layer to the other side of the board
-            if( m_currentLayer == layerTop )
-                m_currentLayer = layerBottom;
-            else
-                m_currentLayer = layerTop;
-        }
-
-        setWorld( Router()->GetWorld()->Branch() );
-        startPlacement( p_start, m_head.Net(), m_head.Width(), m_currentLayer );
-
-        m_startsOnVia = m_placingVia;
+        m_currentStart = m_placingVia ? p_last : p_pre_last;
+        m_startItem = NULL;
         m_placingVia = false;
+        m_chainedPlacement = !pl.EndsWithVia();
+        initPlacement(); 
+    } else {
+        m_idle = true;
     }
 
     return realEnd;
@@ -995,16 +995,14 @@ void PNS_LINE_PLACER::simplifyNewLine( PNS_NODE* aNode, PNS_SEGMENT* aLatest )
 }
 
 
-void PNS_LINE_PLACER::UpdateSizes( const PNS_ROUTING_SETTINGS& aSettings )
+void PNS_LINE_PLACER::UpdateSizes( const PNS_SIZES_SETTINGS& aSizes )
 {
-    int trackWidth = aSettings.GetTrackWidth();
-
-    m_head.SetWidth( trackWidth );
-    m_tail.SetWidth( trackWidth );
-
-    m_currentWidth = trackWidth;
-    m_viaDiameter = aSettings.GetViaDiameter();
-    m_viaDrill = aSettings.GetViaDrill();
+    m_sizes = aSizes;
+    if( !m_idle )
+    {
+        initPlacement ( );
+        Move ( m_currentEnd, NULL );
+    }
 }
 
 

@@ -26,6 +26,7 @@
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 
+#include "pns_sizes_settings.h"
 #include "pns_node.h"
 #include "pns_via.h"
 #include "pns_line.h"
@@ -35,6 +36,9 @@ class PNS_ROUTER;
 class PNS_SHOVE;
 class PNS_OPTIMIZER;
 class PNS_ROUTER_BASE;
+class PNS_VIA;
+class PNS_SIZES_SETTINGS;
+
 
 /**
  * Class PNS_LINE_PLACER
@@ -78,29 +82,19 @@ public:
     bool FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem );
     
     /**
-     * Function AddVia()
+     * Function ToggleVia()
      * 
      * Enables/disables a via at the end of currently routed trace.
-     * @param aEnabled if true, a via is attached during placement
-     * @param aDiameter diameter of the via
-     * @param aDrill drill of the via
-     * @param aType Type of the via
      */
-    void AddVia( bool aEnabled, int aDiameter, int aDrill, VIATYPE_T aType );
+    void ToggleVia( bool aEnabled );
 
     /**
      * Function SetLayer()
      *
      * Sets the current routing layer.
      */
-    void SetLayer( int aLayer );
+    bool SetLayer( int aLayer );
 
-    /**
-     * Function SetWidth()
-     *
-     * Sets the current track width.
-     */
-    void SetWidth( int aWidth );
 
     /**
      * Function Head()
@@ -184,8 +178,9 @@ public:
      * a settings class. Used to dynamically change these parameters as
      * the track is routed.
      */
-    void UpdateSizes( const PNS_ROUTING_SETTINGS& aSettings );
+    void UpdateSizes( const PNS_SIZES_SETTINGS& aSizes );
 
+    bool IsPlacingVia() const { return m_placingVia; }
 private:
     /**
      * Function route()
@@ -220,7 +215,7 @@ private:
      *
      * Initializes placement of a new line with given parameters.
      */
-    void startPlacement( const VECTOR2I& aStart, int aNet, int aWidth, int aLayer );
+    void initPlacement( bool aSplitSeg = false );
 
     /**
      * Function setInitialDirection()
@@ -346,7 +341,9 @@ private:
 
     ///> route step, mark obstacles mode
     bool rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead );
-    
+
+    const PNS_VIA makeVia ( const VECTOR2I& aP );
+
     ///> current routing direction
     DIRECTION_45 m_direction;
 
@@ -378,6 +375,8 @@ private:
     ///> Postprocessed world state (including marked collisions & removed loops)
     PNS_NODE* m_lastNode;
 
+    PNS_SIZES_SETTINGS m_sizes;
+
     ///> Are we placing a via?
     bool m_placingVia;
 
@@ -387,9 +386,6 @@ private:
     ///> current via drill
     int m_viaDrill;
     
-    ///> current via type
-    VIATYPE_T m_viaType;
-
     ///> current track width
     int m_currentWidth;
 
@@ -398,10 +394,14 @@ private:
 
     bool m_startsOnVia;
     
-    VECTOR2I m_originalStart, m_currentEnd, m_currentStart;
+    VECTOR2I m_currentEnd, m_currentStart;
     PNS_LINE m_currentTrace;
 
     PNS_MODE m_currentMode;
+    PNS_ITEM *m_startItem;
+
+    bool m_idle;
+    bool m_chainedPlacement;
 };
 
 #endif    // __PNS_LINE_PLACER_H

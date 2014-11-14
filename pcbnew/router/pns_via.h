@@ -53,7 +53,7 @@ public:
         if( aViaType == VIA_THROUGH )
         {
             PNS_LAYERSET allLayers( 0, MAX_CU_LAYERS - 1 );
-            SetLayers( allLayers);
+            SetLayers( allLayers );
         }
     }
 

@@ -188,7 +188,7 @@ void PNS_DRAGGER::dumbDragVia( PNS_VIA* aVia, PNS_NODE* aNode, const VECTOR2I& a
         draggedLine->DragCorner( aP, 0 );
         draggedLine->ClearSegmentLinks();
 
-        m_draggedItems.AddOwned( draggedLine );            
+        m_draggedItems.Add( draggedLine );             // FIXME: mem leak
         
         m_lastNode->Remove( &origLine );
         m_lastNode->Add( draggedLine );

@@ -21,6 +21,8 @@
 #ifndef __PNS_ROUTING_SETTINGS
 #define __PNS_ROUTING_SETTINGS
 
+#include <cstdio>
+
 #include "time_limit.h"
 
 class DIRECTION_45;
@@ -112,13 +114,6 @@ public:
     bool CanViolateDRC() const { return m_canViolateDRC; }
     void SetCanViolateDRC( bool aViolate ) { m_canViolateDRC = aViolate; }
 
-	void SetTrackWidth( int aWidth ) { m_trackWidth = aWidth; }
-    int GetTrackWidth() const { return m_trackWidth; }
-    void SetViaDiameter( int aDiameter ) { m_viaDiameter = aDiameter; }
-    int GetViaDiameter() const { return m_viaDiameter; }
-    void SetViaDrill( int aDrill ) { m_viaDrill = aDrill; }
-    int GetViaDrill() const { return m_viaDrill; }
-
     const DIRECTION_45 InitialDirection() const;
 
     int ShoveIterationLimit() const;
@@ -127,22 +122,6 @@ public:
     int WalkaroundIterationLimit() const { return m_walkaroundIterationLimit; };
     TIME_LIMIT WalkaroundTimeLimit() const;
 
-    void SetLayerPair( int aLayer1, int aLayer2 )
-    {
-        if( aLayer1 < aLayer2 )
-        {
-            m_layerTop = aLayer1;
-            m_layerBottom = aLayer2;
-        }
-        else
-        {
-            m_layerBottom = aLayer1;
-            m_layerTop = aLayer2;
-        }
-    }
-
-    int GetLayerTop() const { return m_layerTop; }
-    int GetLayerBottom() const { return m_layerBottom; }
 
 private:
     bool m_shoveVias;
@@ -158,19 +137,11 @@ private:
     PNS_MODE m_routingMode;
     PNS_OPTIMIZATION_EFFORT m_optimizerEffort;
     
-    int m_trackWidth;
-    int m_viaDiameter;
-    int m_viaDrill;
 
-    int m_preferredLayer;
     int m_walkaroundIterationLimit;
     int m_shoveIterationLimit;
     TIME_LIMIT m_shoveTimeLimit;
     TIME_LIMIT m_walkaroundTimeLimit;
-
-    // Routing layers pair
-    int m_layerTop;
-    int m_layerBottom;
 };
 
 #endif

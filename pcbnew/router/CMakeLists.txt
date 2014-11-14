@@ -24,6 +24,7 @@ set( PCBNEW_PNS_SRCS
     pns_router.cpp
     pns_routing_settings.cpp
     pns_shove.cpp
+    pns_sizes_settings.cpp
     pns_solid.cpp
     pns_utils.cpp
     pns_via.cpp

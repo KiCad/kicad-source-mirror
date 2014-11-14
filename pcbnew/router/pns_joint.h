@@ -28,6 +28,7 @@
 
 #include "pns_item.h"
 #include "pns_segment.h"
+#include "pns_itemset.h"
 
 /**
  * Class PNS_JOINT
@@ -81,7 +82,7 @@ public:
     /// segments of the same net, on the same layer.
     bool IsLineCorner() const
     {
-        if( m_linkedItems.size() != 2 )
+        if( m_linkedItems.Size() != 2 )
             return false;
 
         if( m_linkedItems[0]->Kind() != SEGMENT || m_linkedItems[1]->Kind() != SEGMENT )
@@ -97,24 +98,18 @@ public:
     ///> Links the joint to a given board item (when it's added to the PNS_NODE)
     void Link( PNS_ITEM* aItem )
     {
-        LINKED_ITEMS::iterator f = std::find( m_linkedItems.begin(), m_linkedItems.end(), aItem );
-
-        if( f != m_linkedItems.end() )
+        if (m_linkedItems.Contains( aItem ))
             return;
 
-        m_linkedItems.push_back( aItem );
+        m_linkedItems.Add ( aItem );
     }
 
     ///> Unlinks a given board item from the joint (upon its removal from a PNS_NODE)
     ///> Returns true if the joint became dangling after unlinking.
     bool Unlink( PNS_ITEM* aItem )
     {
-        LINKED_ITEMS::iterator f = std::find( m_linkedItems.begin(), m_linkedItems.end(), aItem );
-
-        if( f != m_linkedItems.end() )
-            f = m_linkedItems.erase( f );
-
-        return m_linkedItems.size() == 0;
+        m_linkedItems.Erase ( aItem );
+        return m_linkedItems.Size() == 0;
     }
 
     ///> For trivial joints, returns the segment adjacent to (aCurrent). For non-trival ones, returns
@@ -127,16 +122,6 @@ public:
         return static_cast<PNS_SEGMENT*>( m_linkedItems[m_linkedItems[0] == aCurrent ? 1 : 0] );
     }
 
-    PNS_VIA* Via()
-    {
-        for( LINKED_ITEMS::iterator i = m_linkedItems.begin(); i != m_linkedItems.end(); ++i )
-        {
-            if( (*i)->Kind() == PNS_ITEM::VIA )
-                return (PNS_VIA*)( *i );
-        }
-
-        return NULL;
-    }
 
     /// trivial accessors
     const HASH_TAG& Tag() const 
@@ -154,25 +139,26 @@ public:
         return m_tag.net; 
     }
     
-    LINKED_ITEMS& LinkList() 
+    const LINKED_ITEMS& LinkList() const
     { 
-        return m_linkedItems; 
+        return m_linkedItems.CItems(); 
     }
 
-    ///> Returns the number of linked items of types listed in aMask.
+    const PNS_ITEMSET& CLinks() const
+    {
+        return m_linkedItems;
+    }
+
+    PNS_ITEMSET Links() const
+    {
+        return m_linkedItems;
+    }
+
     int LinkCount( int aMask = -1 ) const
     {
-        int n = 0;
-
-        for( LINKED_ITEMS::const_iterator i = m_linkedItems.begin();
-                                          i != m_linkedItems.end(); ++i )
-        {
-            if( (*i)->Kind() & aMask )
-                n++;
-        }
-
-        return n;
+        return m_linkedItems.Count( aMask );
     }
+
 
     void Dump() const;
 
@@ -188,11 +174,9 @@ public:
 
         m_layers.Merge( aJoint.m_layers );
 
-        // fixme: duplicate links (?)
-        for( LINKED_ITEMS::const_iterator i = aJoint.m_linkedItems.begin();
-                                          i != aJoint.m_linkedItems.end(); ++i )
+        BOOST_FOREACH ( PNS_ITEM *item, aJoint.LinkList() )
         {
-            m_linkedItems.push_back( *i );
+            m_linkedItems.Add (item); 
         }
     }
 
@@ -207,7 +191,7 @@ private:
     HASH_TAG m_tag;
 
     ///> list of items linked to this joint
-    LINKED_ITEMS m_linkedItems;
+    PNS_ITEMSET m_linkedItems;
 };
 
 
