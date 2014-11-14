@@ -491,6 +491,9 @@ public:
     /// @copydoc VIEW_ITEM::ViewGetLOD()
     virtual unsigned int ViewGetLOD( int aLayer ) const;
 
+    /// @copydoc VIEW_ITEM::ViewBBox()
+    virtual const BOX2I ViewBBox() const;
+
     /**
      * Function CopyNetlistSettings
      * copies the netlist settings to \a aModule.

@@ -198,6 +198,8 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_ID aLayer,
 
             break;
 
+        case B_Adhes:
+        case F_Adhes:
         case B_Paste:
         case F_Paste:
             plotOpt.SetSkipPlotNPTH_Pads( false );
@@ -237,8 +239,36 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_ID aLayer,
             }
             break;
 
+        // These layers are plotted like silk screen layers.
+        // Mainly, pads on these layers are not filled.
+        // This is not necessary the best choice.
+        case Dwgs_User:
+        case Cmts_User:
+        case Eco1_User:
+        case Eco2_User:
+        case Edge_Cuts:
+        case Margin:
+        case F_CrtYd:
+        case B_CrtYd:
+        case F_Fab:
+        case B_Fab:
+            plotOpt.SetSkipPlotNPTH_Pads( false );
+            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+
+            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+                PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
+            else
+                PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
+            break;
+
         default:
-            PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
+            plotOpt.SetSkipPlotNPTH_Pads( false );
+            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+
+            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+                PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
+            else
+                PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
             break;
         }
     }
@@ -306,23 +336,6 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             if( ( aLayerMask & LSET::AllCuMask() ).any() )
                 width_adj =  itemplotter.getFineWidthAdj();
 
-#if 0   // was:
-            switch( aLayerMask &
-                   ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
-                     SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT ) )
-            {
-            case SOLDERMASK_LAYER_FRONT:
-            case SOLDERMASK_LAYER_BACK:
-                break;
-
-            case SOLDERPASTE_LAYER_FRONT:
-            case SOLDERPASTE_LAYER_BACK:
-                break;
-
-            default:
-                break;
-            }
-#else
             static const LSET speed( 4, B_Mask, F_Mask, B_Paste, F_Paste );
 
             LSET anded = ( speed & aLayerMask );
@@ -335,7 +348,6 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             {
                 margin = pad->GetSolderPasteMargin();
             }
-#endif
 
             wxSize padPlotsSize;
             padPlotsSize.x = pad->GetSize().x + ( 2 * margin.x ) + width_adj;

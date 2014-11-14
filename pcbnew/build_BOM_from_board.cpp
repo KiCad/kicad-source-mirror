@@ -163,20 +163,22 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         module = module->Next();
     }
 
-    // Print list
-    for( iter = list.begin(); iter != list.end(); iter++ )
+    // Print list. Also delete temporary created objects.
+    for( size_t ii = list.GetCount(); ii > 0; ii-- )
     {
-        cmp* current = *iter;
+        cmp* current = *list.begin();   // Because the first object will be removed
+                                        // from list, all objects will be get here
 
         msg.Empty();
 
         msg << current->m_Id << wxT( ";\"" );
         msg << current->m_Ref << wxT( "\";\"" );
-        msg << FROM_UTF8( current->m_fpid.Format().c_str() ) << wxT( "\";" );
+        msg << FROM_UTF8( current->m_fpid.GetFootprintName().c_str() ) << wxT( "\";" );
         msg << current->m_CmpCount << wxT( ";\"" );
         msg << current->m_Val << wxT( "\";;;\n" );
         fprintf( fp_bom, "%s", TO_UTF8( msg ) );
 
+        // We do not need this object, now: remove it from list and delete it
         list.DeleteObject( current );
         delete (current);
     }

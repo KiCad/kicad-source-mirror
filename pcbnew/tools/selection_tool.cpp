@@ -252,7 +252,8 @@ bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambigua
     GENERAL_COLLECTOR collector;
 
     // Preferred types (they have the priority when if they are covered by a bigger item)
-    const KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_LINE_T, PCB_MODULE_TEXT_T, EOT };
+    const KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_LINE_T,
+                              PCB_MODULE_EDGE_T, PCB_MODULE_TEXT_T, EOT };
 
     if( m_editModules )
         collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::ModuleItems,
@@ -348,9 +349,6 @@ bool SELECTION_TOOL::selectMultiple()
 
         if( evt->IsMouseUp( BUT_LEFT ) )
         {
-            // End drawing the selection box
-            m_selArea->ViewSetVisible( false );
-
             // Mark items within the selection box as selected
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
             BOX2I selectionBox = m_selArea->ViewBBox();
@@ -384,6 +382,8 @@ bool SELECTION_TOOL::selectMultiple()
         }
     }
 
+    // Stop drawing the selection box
+    m_selArea->ViewSetVisible( false );
     view->Remove( m_selArea );
     m_multiple = false;         // Multiple selection mode is inactive
     getViewControls()->SetAutoPan( false );

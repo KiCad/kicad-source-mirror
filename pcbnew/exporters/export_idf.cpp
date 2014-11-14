@@ -439,10 +439,13 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
                     comp->SetPosition( aModule->GetPosition().x * scale + dx,
                                        -aModule->GetPosition().y * scale + dy,
                                        rotz, IDF3::LYR_TOP );
-                    else
-                        comp->SetPosition( aModule->GetPosition().x * scale + dx,
-                                           -aModule->GetPosition().y * scale + dy,
-                                           rotz, IDF3::LYR_BOTTOM );
+                else
+                    comp->SetPosition( aModule->GetPosition().x * scale + dx,
+                                       -aModule->GetPosition().y * scale + dy,
+                                       rotz, IDF3::LYR_BOTTOM );
+
+                comp->SetPlacement( IDF3::PS_ECAD );
+
             }
             else
             {

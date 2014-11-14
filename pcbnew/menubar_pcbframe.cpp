@@ -370,7 +370,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Add footprints" ), KiBitmap( module_xpm ) );
 
     text = AddHotkeyName( _( "&Track" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ADD_NEW_TRACK, IS_COMMENT );
+                          HK_ADD_NEW_TRACK );
     AddMenuItem( placeMenu, ID_TRACK_BUTT, text,
                  _( "Add tracks and vias" ), KiBitmap( add_tracks_xpm ) );
 
@@ -381,8 +381,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "&Keepout Area" ), _( "Add keepout areas" ), KiBitmap( add_keepout_area_xpm ) );
 
     AddMenuItem( placeMenu, ID_PCB_ADD_TEXT_BUTT,
-                  _( "Te&xt" ), _( "Add text on copper layers or graphic text" ),
-                  KiBitmap( add_text_xpm ) );
+                 _( "Te&xt" ), _( "Add text on copper layers or graphic text" ),
+                 KiBitmap( add_text_xpm ) );
 
     AddMenuItem( placeMenu, ID_PCB_ARC_BUTT,
                  _( "&Arc" ), _( "Add graphic arc" ),KiBitmap( add_arc_xpm ) );

@@ -2506,6 +2506,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
     }
 
+    m_ratsnest->ProcessBoard();
+
     // Last step: Some tests:
     // verify all pads found in netlist:
     // They should exist in footprints, otherwise the footprint is wrong
