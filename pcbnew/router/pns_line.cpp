@@ -190,6 +190,9 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
 
     line.Intersect( aObstacle, ips );
 
+    aWalk.Clear();
+    aPost.Clear();
+
     int nearest_dist = INT_MAX;
     int farthest_dist = 0;
 

@@ -735,7 +735,8 @@ bool PNS_LINE_PLACER::SetLayer( int aLayer )
         return false;
     } else if (!m_startItem || (m_startItem->OfKind(PNS_ITEM::VIA) && m_startItem->Layers().Overlaps( aLayer ))) {
         m_currentLayer = aLayer;
-        initPlacement ( );
+        m_splitSeg = false;
+        initPlacement ( m_splitSeg );
         Move ( m_currentEnd, NULL );
         return true;
     }
@@ -766,10 +767,11 @@ void PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     m_startItem = aStartItem;
     m_placingVia = false;
     m_chainedPlacement = false;
+    m_splitSeg = splitSeg;
 
     setInitialDirection( Settings().InitialDirection() );
     
-    initPlacement( splitSeg );    
+    initPlacement( m_splitSeg );    
 }
 
 void PNS_LINE_PLACER::initPlacement( bool aSplitSeg )
@@ -918,7 +920,8 @@ bool PNS_LINE_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
         m_startItem = NULL;
         m_placingVia = false;
         m_chainedPlacement = !pl.EndsWithVia();
-        initPlacement(); 
+        m_splitSeg = false;
+        initPlacement( ); 
     } else {
         m_idle = true;
     }
@@ -1000,7 +1003,7 @@ void PNS_LINE_PLACER::UpdateSizes( const PNS_SIZES_SETTINGS& aSizes )
     m_sizes = aSizes;
     if( !m_idle )
     {
-        initPlacement ( );
+        initPlacement ( m_splitSeg );
         Move ( m_currentEnd, NULL );
     }
 }

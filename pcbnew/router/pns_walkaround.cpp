@@ -57,7 +57,7 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
 
     VECTOR2I last = aPath.CPoint( -1 );
 
-    if( ( current_obs->m_hull ).PointInside( last ) )
+    if( ( current_obs->m_hull ).PointInside( last ) || ( current_obs->m_hull ).PointOnEdge( last ) )
     {
         m_recursiveBlockageCount++;
 
@@ -99,7 +99,10 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
         pnew.Append( path_walk[1] );
         pnew.Append( path_post[1] );
 
-        current_obs = nearestObstacle( PNS_LINE( aPath, path_post[1] ) );
+        if(!path_post[1].PointCount() || !path_walk[1].PointCount())
+            current_obs = nearestObstacle( PNS_LINE( aPath, path_pre[1] ) );
+        else
+            current_obs = nearestObstacle( PNS_LINE( aPath, path_post[1] ) );
         prev_recursive = false;
     }
     else
@@ -108,7 +111,10 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
         pnew.Append( path_walk[0] );
         pnew.Append( path_post[0] );
 
-        current_obs = nearestObstacle( PNS_LINE( aPath, path_walk[0] ) );
+        if(!path_post[0].PointCount() || !path_walk[0].PointCount())
+            current_obs = nearestObstacle( PNS_LINE( aPath, path_pre[0] ) );
+        else
+            current_obs = nearestObstacle( PNS_LINE( aPath, path_walk[0] ) );
 
         if( !current_obs )
         {

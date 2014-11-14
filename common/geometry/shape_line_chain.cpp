@@ -150,10 +150,7 @@ int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
     int ii = -1;
     int min_dist = 2;
 
-    ii = Find( aP );
-
-    if( ii >= 0 )
-        return ii;
+    int found_index = Find( aP );
 
     for( int s = 0; s < SegmentCount(); s++ )
     {
@@ -165,9 +162,15 @@ int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
         if( dist < min_dist && seg.A != aP && seg.B != aP )
         {
             min_dist = dist;
-            ii = s;
+            if(found_index < 0)
+                ii = s;
+            else if(s < found_index)
+                ii = s;
         }
     }
+
+    if( ii < 0 )
+        ii = found_index;
 
     if( ii >= 0 )
     {

@@ -402,6 +402,7 @@ private:
 
     bool m_idle;
     bool m_chainedPlacement;
+    bool m_splitSeg;
 };
 
 #endif    // __PNS_LINE_PLACER_H
