@@ -33,6 +33,7 @@ IF (WIN32)
       NAMES glew glew32 glew32s
       PATHS
       $ENV{GLEW_ROOT_PATH}/lib
+      $ENV{GLEW_ROOT_PATH}/lib/Release/Win32
       ${OPENGL_LIBRARY_DIR}
     )
 
