@@ -82,6 +82,17 @@ public:
 		return m_width;
 	}
 
+	bool IsSolid() const
+	{
+		return true;
+	}
+
+	void Move ( const VECTOR2I& aVector	)
+	{
+		m_seg.A += aVector;
+		m_seg.B += aVector;
+	}
+
 private:
 	SEG m_seg;
 	int m_width;

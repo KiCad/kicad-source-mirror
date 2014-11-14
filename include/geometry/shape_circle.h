@@ -86,6 +86,15 @@ public:
         return m_center;
     }
 
+    void Move ( const VECTOR2I& aVector )
+    {
+        m_center += aVector;
+    }
+
+    bool IsSolid() const
+    {
+        return true;
+    }
 private:
     int m_radius;
     VECTOR2I m_center;

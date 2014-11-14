@@ -29,16 +29,15 @@ using boost::optional;
 
 bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance ) const
 {
-    assert( false );
-
-    return false;
+	// fixme: ugly!
+    SEG s(aP, aP);
+    return this->Collide(s, aClearance);
 }
 
 
 bool SHAPE_LINE_CHAIN::Collide( const BOX2I& aBox, int aClearance ) const
 {
     assert( false );
-
     return false;
 }
 

@@ -159,6 +159,16 @@ public:
         return m_h;
     }
 
+    void Move ( const VECTOR2I& aVector )
+    {
+        m_p0 += aVector;
+    }
+
+    bool IsSolid() const
+    {
+        return true;
+    }
+    
 private:
     ///> Top-left corner
     VECTOR2I m_p0;
