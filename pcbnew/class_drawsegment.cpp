@@ -317,7 +317,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     wxASSERT( m_Parent );
 
-    msg = wxT( "DRAWING" );
+    msg = _( "Drawing" );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
 
@@ -340,7 +340,18 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         break;
 
     default:
+    {
         aList.push_back( MSG_PANEL_ITEM( shape, _( "Segment" ), RED ) );
+
+        msg = ::CoordinateToString( GetLineLength( m_Start, m_End ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKGREEN ) );
+
+        // angle counter-clockwise from 3'o-clock
+        const double deg = RAD2DEG( atan2( m_Start.y - m_End.y,
+                                           m_End.x - m_Start.x ) );
+        msg.Printf( wxT( "%.1f" ), deg );
+        aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, DARKGREEN ) );
+    }
     }
 
     wxString start;
