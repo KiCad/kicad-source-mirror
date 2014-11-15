@@ -753,10 +753,10 @@ void LIB_FIELD::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg, MAGENTA ) );
 
     msg = StringFromValue( g_UserUnit, m_Size.x, true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Size X" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, BLUE ) );
 
     msg = StringFromValue( g_UserUnit, m_Size.y, true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Size Y" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, BLUE ) );
 
     // Display field name (ref, value ...)
     msg = GetName();

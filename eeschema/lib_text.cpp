@@ -420,7 +420,7 @@ void LIB_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
     msg = StringFromValue( g_UserUnit, m_Thickness, true );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Line width" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 }
 
 

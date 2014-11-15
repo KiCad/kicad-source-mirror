@@ -143,16 +143,16 @@ void TEXTE_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), _( "Yes" ), DARKGREEN ) );
 
     msg.Printf( wxT( "%.1f" ), m_Orient / 10.0 );
-    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg, DARKGREEN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, DARKGREEN ) );
 
     msg = ::CoordinateToString( m_Thickness );
     aList.push_back( MSG_PANEL_ITEM( _( "Thickness" ), msg, MAGENTA ) );
 
     msg = ::CoordinateToString( m_Size.x );
-    aList.push_back( MSG_PANEL_ITEM( _( "Size X" ), msg, RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, RED ) );
 
     msg = ::CoordinateToString( m_Size.y );
-    aList.push_back( MSG_PANEL_ITEM( _( "Size Y" ), msg, RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, RED ) );
 }
 
 const EDA_RECT TEXTE_PCB::GetBoundingBox() const

@@ -242,21 +242,21 @@ void MODULE::Copy( MODULE* aModule )
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            {
-                TEXTE_MODULE* textm = new TEXTE_MODULE( this );
-                textm->Copy( static_cast<TEXTE_MODULE*>( item ) );
-                m_Drawings.PushBack( textm );
-                break;
-            }
+        {
+            TEXTE_MODULE* textm = new TEXTE_MODULE( this );
+            textm->Copy( static_cast<TEXTE_MODULE*>( item ) );
+            m_Drawings.PushBack( textm );
+            break;
+        }
 
         case PCB_MODULE_EDGE_T:
-            {
-                EDGE_MODULE * edge;
-                edge = new EDGE_MODULE( this );
-                edge->Copy( (EDGE_MODULE*) item );
-                m_Drawings.PushBack( edge );
-                break;
-            }
+        {
+            EDGE_MODULE * edge;
+            edge = new EDGE_MODULE( this );
+            edge->Copy( (EDGE_MODULE*) item );
+            m_Drawings.PushBack( edge );
+            break;
+        }
 
         default:
             wxLogMessage( wxT( "MODULE::Copy() Internal Err:  unknown type" ) );
@@ -322,14 +322,14 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, bool doAppend )
         break;
 
     default:
-        {
-            wxString msg;
-            msg.Printf( wxT( "MODULE::Add() needs work: BOARD_ITEM type (%d) not handled" ),
-                        aBoardItem->Type() );
-            wxFAIL_MSG( msg );
+    {
+        wxString msg;
+        msg.Printf( wxT( "MODULE::Add() needs work: BOARD_ITEM type (%d) not handled" ),
+                    aBoardItem->Type() );
+        wxFAIL_MSG( msg );
 
-            return;
-        }
+        return;
+    }
     }
 
     aBoardItem->SetParent( this );
@@ -353,12 +353,12 @@ BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
         return m_Pads.Remove( static_cast<D_PAD*>( aBoardItem ) );
 
     default:
-        {
-            wxString msg;
-            msg.Printf( wxT( "MODULE::Remove() needs work: BOARD_ITEM type (%d) not handled" ),
-                        aBoardItem->Type() );
-            wxFAIL_MSG( msg );
-        }
+    {
+        wxString msg;
+        msg.Printf( wxT( "MODULE::Remove() needs work: BOARD_ITEM type (%d) not handled" ),
+                    aBoardItem->Type() );
+        wxFAIL_MSG( msg );
+    }
     }
 
     return NULL;
@@ -552,7 +552,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Last Change" ), msg, BROWN ) );
 
     // display schematic path
-    aList.push_back( MSG_PANEL_ITEM( _( "Netlist path" ), m_Path, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Netlist Path" ), m_Path, BROWN ) );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), RED ) );
 
@@ -576,32 +576,32 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     if( m_ModuleStatus & MODULE_is_PLACED )
         msg[1] = 'P';
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Stat" ), msg, MAGENTA ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Status" ), msg, MAGENTA ) );
 
     msg.Printf( wxT( "%.1f" ), m_Orient / 10.0 );
-    aList.push_back( MSG_PANEL_ITEM( _( "Orient" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, BROWN ) );
 
     // Controls on right side of the dialog
     switch( m_Attributs & 255 )
     {
     case 0:
-        msg = _("Normal");
+        msg = _( "Normal" );
         break;
 
     case MOD_CMS:
-        msg = _("Insert");
+        msg = _( "Insert" );
         break;
 
     case MOD_VIRTUAL:
-        msg = _("Virtual");
+        msg = _( "Virtual" );
         break;
 
     default:
-        msg = wxT("???");
+        msg = wxT( "???" );
         break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Attrib" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Attributes" ), msg, BROWN ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), FROM_UTF8( m_fpid.Format().c_str() ), BLUE ) );
 
     msg = _( "No 3D shape" );
@@ -619,7 +619,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     wxString doc, keyword;
     doc.Printf( _( "Doc: %s" ), GetChars( m_Doc ) );
-    keyword.Printf( _( "KeyW: %s" ), GetChars( m_KeyWord ) );
+    keyword.Printf( _( "Key Words: %s" ), GetChars( m_KeyWord ) );
     aList.push_back( MSG_PANEL_ITEM( doc, keyword, BLACK ) );
 }
 
@@ -1047,21 +1047,21 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-            {
-                EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
-                edge->m_Start0 += moveVector;
-                edge->m_End0   += moveVector;
-                edge->SetDrawCoord();
-                break;
-            }
+        {
+            EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
+            edge->m_Start0 += moveVector;
+            edge->m_End0   += moveVector;
+            edge->SetDrawCoord();
+            break;
+        }
 
         case PCB_MODULE_TEXT_T:
-            {
-                TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
-                text->SetPos0( text->GetPos0() + moveVector );
-                text->SetDrawCoord();
-                break;
-            }
+        {
+            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+            text->SetPos0( text->GetPos0() + moveVector );
+            text->SetDrawCoord();
+            break;
+        }
 
         default:
             break;
@@ -1103,7 +1103,6 @@ void MODULE::SetOrientation( double newangle )
         {
             static_cast<EDGE_MODULE*>( item )->SetDrawCoord();
         }
-
         else if( item->Type() == PCB_MODULE_TEXT_T )
         {
             static_cast<TEXTE_MODULE*>( item )->SetDrawCoord();

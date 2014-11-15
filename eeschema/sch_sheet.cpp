@@ -825,8 +825,8 @@ wxString SCH_SHEET::GetFileName( void ) const
 
 void SCH_SHEET::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
-    aList.push_back( MSG_PANEL_ITEM( _( "Sheet name" ), m_name, CYAN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "File name" ), m_fileName, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Sheet Name" ), m_name, CYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "File Name" ), m_fileName, BROWN ) );
 
 #if 0   // Set to 1 to display the sheet time stamp (mainly for test)
     wxString msg;

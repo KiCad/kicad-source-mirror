@@ -920,7 +920,7 @@ void BOARD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Vias" ), txt, DARKGREEN ) );
 
     txt.Printf( wxT( "%d" ), trackSegmentsCount );
-    aList.push_back( MSG_PANEL_ITEM( _( "trackSegm" ), txt, DARKGREEN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Track Segments" ), txt, DARKGREEN ) );
 
     txt.Printf( wxT( "%d" ), GetNodesCount() );
     aList.push_back( MSG_PANEL_ITEM( _( "Nodes" ), txt, DARKCYAN ) );
@@ -937,7 +937,7 @@ void BOARD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Links" ), txt, DARKGREEN ) );
 
         txt.Printf( wxT( "%d" ), GetRatsnestsCount() - GetUnconnectedNetCount() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Connect" ), txt, DARKGREEN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Connections" ), txt, DARKGREEN ) );
 
         txt.Printf( wxT( "%d" ), GetUnconnectedNetCount() );
         aList.push_back( MSG_PANEL_ITEM( _( "Unconnected" ), txt, BLUE ) );

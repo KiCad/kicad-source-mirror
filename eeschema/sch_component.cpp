@@ -1516,7 +1516,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
         // Display description of the component, and keywords found in lib
         aList.push_back( MSG_PANEL_ITEM( _( "Description" ), alias->GetDescription(), DARKCYAN ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "Key words" ), alias->GetKeyWords(), DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Key Words" ), alias->GetKeyWords(), DARKCYAN ) );
     }
 }
 

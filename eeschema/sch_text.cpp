@@ -708,7 +708,7 @@ void SCH_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     switch( Type() )
     {
     case SCH_TEXT_T:
-        msg = _( "Graphic text" );
+        msg = _( "Graphic Text" );
         break;
 
     case SCH_LABEL_T:
@@ -716,11 +716,11 @@ void SCH_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
         break;
 
     case SCH_GLOBAL_LABEL_T:
-        msg = _( "Global label" );
+        msg = _( "Global Label" );
         break;
 
     case SCH_HIERARCHICAL_LABEL_T:
-        msg = _( "Hierarchical label" );
+        msg = _( "Hierarchical Label" );
         break;
 
     case SCH_SHEET_PIN_T:
@@ -767,7 +767,7 @@ void SCH_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     if( m_Bold )
         style += 2;
 
-    aList.push_back( MSG_PANEL_ITEM( _("Style"), textStyle[style], BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), textStyle[style], BROWN ) );
 
 
     // Display electricat type if it is relevant

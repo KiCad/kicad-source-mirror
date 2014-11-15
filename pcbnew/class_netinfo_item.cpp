@@ -132,7 +132,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     // Displays the full net length (tracks on pcb + internal ICs connections ):
     txt = ::LengthDoubleToString( lengthnet + lengthPadToDie );
-    aList.push_back( MSG_PANEL_ITEM( _( "Net Length:" ), txt, RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Net Length" ), txt, RED ) );
 
     // Displays the net length of tracks only:
     txt = ::LengthDoubleToString( lengthnet );
