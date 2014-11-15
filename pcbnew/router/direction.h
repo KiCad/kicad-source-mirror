@@ -65,7 +65,7 @@ public:
         ANG_UNDEFINED   = 0x20
     };
 
-    DIRECTION_45( Directions aDir = UNDEFINED ) : m_dir( aDir ) {};
+    DIRECTION_45( Directions aDir = UNDEFINED ) : m_dir( aDir ) {}
 
     /**
      * Constructor

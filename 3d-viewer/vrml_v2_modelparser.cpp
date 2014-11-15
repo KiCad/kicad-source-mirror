@@ -145,7 +145,7 @@ int VRML2_MODEL_PARSER::read_Transform()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             // DBG( printf( "  } Exit Transform\n" ) );
             break;
@@ -265,7 +265,7 @@ int VRML2_MODEL_PARSER::read_DEF()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             // DBG( printf( "  } Exit DEF\n") );
             return 0;
@@ -321,7 +321,7 @@ int VRML2_MODEL_PARSER::read_Shape()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             // DBG( printf( "  } Exit Shape\n") );
             return 0;
@@ -368,7 +368,7 @@ int VRML2_MODEL_PARSER::read_Appearance()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             return 0;
         }
@@ -473,7 +473,7 @@ int VRML2_MODEL_PARSER::read_Material()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             return 0;
         }
@@ -566,7 +566,7 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             // DBG( printf( "  } Exit IndexedFaceSet\n") );
             return 0;
@@ -749,7 +749,7 @@ int VRML2_MODEL_PARSER::read_Color()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             // DBG( printf( "    m_DiffuseColor.size: %ld\n", m_model->m_Materials->m_DiffuseColor.size() ) );
             return 0;
@@ -779,7 +779,7 @@ int VRML2_MODEL_PARSER::read_Normal()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             // DBG( printf( "    m_PerFaceNormalsNormalized.size: %lu\n", m_model->m_PerFaceNormalsNormalized.size() ) );
             return 0;
@@ -817,7 +817,7 @@ int VRML2_MODEL_PARSER::read_Coordinate()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             // DBG( printf( "    m_Point.size: %lu\n", m_model->m_Point.size() ) );
             return 0;

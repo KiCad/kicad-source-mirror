@@ -384,7 +384,9 @@ bool X3D_MODEL_PARSER::parseDoubleTriplet( const wxString& aData,
 {
     wxStringTokenizer tokens( aData );
 
-    double x, y, z;
+    double x = 0;
+    double y = 0;
+    double z = 0;
 
     bool ret = tokens.GetNextToken().ToDouble( &x )
                && tokens.GetNextToken().ToDouble( &y )

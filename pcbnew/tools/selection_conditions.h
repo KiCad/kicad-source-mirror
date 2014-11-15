@@ -28,7 +28,7 @@
 #include <boost/function.hpp>
 #include <core/typeinfo.h>
 
-class SELECTION;
+struct SELECTION;
 
 ///> Functor type that checks a specific condition for selected items.
 typedef boost::function<bool (const SELECTION&)> SELECTION_CONDITION;

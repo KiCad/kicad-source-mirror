@@ -192,7 +192,7 @@ int VRML1_MODEL_PARSER::readMaterial()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             return 0;
         }
@@ -240,7 +240,7 @@ int VRML1_MODEL_PARSER::readCoordinate3()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             return 0;
         }
@@ -268,7 +268,7 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet()
             continue;
         }
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
         {
             return 0;
         }

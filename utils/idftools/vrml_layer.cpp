@@ -848,7 +848,7 @@ bool VRML_LAYER::Tesselate( VRML_LAYER* holes, bool aHolesOnly )
         std::ostringstream ostr;
         ostr << "Tesselate():FAILED: " << holes->GetError();
         error = ostr.str();
-        return NULL;
+        return false;
     }
 
     if( Fault )

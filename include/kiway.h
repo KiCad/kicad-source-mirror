@@ -250,7 +250,7 @@ struct KIFACE
  */
 class KIWAY : public wxEvtHandler
 {
-    friend class PGM_SINGLE_TOP;        // can use set_kiface()
+    friend struct PGM_SINGLE_TOP;        // can use set_kiface()
 
 public:
     /// Known KIFACE implementations
