@@ -1,11 +1,10 @@
-
 [Desktop Entry]
-Categories=Development;Electronics
-Comment=Design a printed circuit board
+Categories=Development;Electronics;
+Comment=Assign footprints to symbols (part of KiCad)
 Exec=cvpcb
 GenericName=EDA Suite
 Icon=cvpcb
 MimeType=application/x-cvpcb-project;
-Name=cvpcb
+Name=CvPcb
 Type=Application
-Name[en_US]=cvpcb
+Name[en_US]=CvPcb

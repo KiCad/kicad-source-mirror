@@ -103,7 +103,18 @@ public:
         m_points[2] = aC;
     }
 
-    SHAPE_LINE_CHAIN(const VECTOR2I* aV, int aCount ) :
+    SHAPE_LINE_CHAIN( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC, const VECTOR2I& aD ) :
+        SHAPE( SH_LINE_CHAIN ), m_closed( false )
+    {
+        m_points.resize( 4 );
+        m_points[0] = aA;
+        m_points[1] = aB;
+        m_points[2] = aC;
+        m_points[3] = aD;
+    }
+
+
+    SHAPE_LINE_CHAIN( const VECTOR2I* aV, int aCount ) :
         SHAPE( SH_LINE_CHAIN ),
         m_closed( false )
     {
@@ -553,6 +564,16 @@ public:
 
     bool CompareGeometry( const SHAPE_LINE_CHAIN & aOther ) const;
 
+    void Move( const VECTOR2I& aVector )
+    {
+        for( std::vector<VECTOR2I>::iterator i = m_points.begin(); i != m_points.end(); ++i )
+            (*i) += aVector;
+    }
+
+    bool IsSolid() const
+    {
+        return false;
+    }
 private:
     /// array of vertices
     std::vector<VECTOR2I> m_points;

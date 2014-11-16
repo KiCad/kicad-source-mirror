@@ -21,10 +21,12 @@
 #ifndef __PNS_ROUTING_SETTINGS
 #define __PNS_ROUTING_SETTINGS
 
+#include <cstdio>
+
 #include "time_limit.h"
 
 class DIRECTION_45;
- 
+
 ///> Routing modes
 enum PNS_MODE
 {
@@ -35,9 +37,9 @@ enum PNS_MODE
 };
 
 ///> Optimization effort
-enum PNS_OPTIMIZATION_EFFORT 
+enum PNS_OPTIMIZATION_EFFORT
 {
-    OE_LOW = 0,             
+    OE_LOW = 0,
     OE_MEDIUM = 1,
     OE_FULL = 2
 };
@@ -58,44 +60,44 @@ public:
 
     ///> Sets the routing mode.
     void SetMode( PNS_MODE aMode ) { m_routingMode = aMode; }
-    
+
     ///> Returns the optimizer effort. Bigger means cleaner traces, but slower routing.
     PNS_OPTIMIZATION_EFFORT OptimizerEffort() const { return m_optimizerEffort; }
-    
+
     ///> Sets the optimizer effort. Bigger means cleaner traces, but slower routing.
     void SetOptimizerEffort( PNS_OPTIMIZATION_EFFORT aEffort ) { m_optimizerEffort = aEffort; }
-    
+
     ///> Returns true if shoving vias is enbled.
     bool ShoveVias() const { return m_shoveVias; }
 
     ///> Enables/disables shoving vias.
     void SetShoveVias( bool aShoveVias ) { m_shoveVias = aShoveVias; }
-    
+
     ///> Returns true if loop (redundant track) removal is on.
     bool RemoveLoops() const { return m_removeLoops; }
 
     ///> Enables/disables loop (redundant track) removal.
     void SetRemoveLoops( bool aRemoveLoops ) { m_removeLoops = aRemoveLoops; }
-    
+
     ///> Returns true if suggesting the finish of currently placed track is on.
     bool SuggestFinish() { return m_suggestFinish; }
-    
+
     ///> Enables displaying suggestions for finishing the currently placed track.
     void SetSuggestFinish( bool aSuggestFinish ) { m_suggestFinish = aSuggestFinish; }
-    
+
     ///> Returns true if Smart Pads (automatic neckdown) is enabled.
     bool SmartPads () const { return m_smartPads; }
 
     ///> Enables/disables Smart Pads (automatic neckdown).
     void SetSmartPads( bool aSmartPads ) { m_smartPads = aSmartPads; }
-    
+
     ///> Returns true if follow mouse mode is active (permanently on for the moment).
-    bool FollowMouse() const 
-    { 
+    bool FollowMouse() const
+    {
         return m_followMouse && !( Mode() == RM_MarkObstacles );
     }
-    
-    ///> Returns true if smoothing segments durign dragging is enabled.    
+
+    ///> Returns true if smoothing segments durign dragging is enabled.
     bool SmoothDraggedSegments() const { return m_smoothDraggedSegments; }
 
     ///> Enables/disabled smoothing segments during dragging.
@@ -104,20 +106,13 @@ public:
     ///> Returns true if jumping over unmovable obstacles is on.
     bool JumpOverObstacles() const { return m_jumpOverObstacles; }
 
-    ///> Enables/disables jumping over unmovable obstacles.    
+    ///> Enables/disables jumping over unmovable obstacles.
     void SetJumpOverObstacles( bool aJumpOverObstacles ) { m_jumpOverObstacles = aJumpOverObstacles; }
-    
-    void SetStartDiagonal(bool aStartDiagonal) { m_startDiagonal = aStartDiagonal; }
-	
+
+    void SetStartDiagonal( bool aStartDiagonal ) { m_startDiagonal = aStartDiagonal; }
+
     bool CanViolateDRC() const { return m_canViolateDRC; }
     void SetCanViolateDRC( bool aViolate ) { m_canViolateDRC = aViolate; }
-
-	void SetTrackWidth( int aWidth ) { m_trackWidth = aWidth; }
-    int GetTrackWidth() const { return m_trackWidth; }
-    void SetViaDiameter( int aDiameter ) { m_viaDiameter = aDiameter; }
-    int GetViaDiameter() const { return m_viaDiameter; }
-    void SetViaDrill( int aDrill ) { m_viaDrill = aDrill; }
-    int GetViaDrill() const { return m_viaDrill; }
 
     const DIRECTION_45 InitialDirection() const;
 
@@ -127,22 +122,6 @@ public:
     int WalkaroundIterationLimit() const { return m_walkaroundIterationLimit; };
     TIME_LIMIT WalkaroundTimeLimit() const;
 
-    void SetLayerPair( int aLayer1, int aLayer2 )
-    {
-        if( aLayer1 < aLayer2 )
-        {
-            m_layerTop = aLayer1;
-            m_layerBottom = aLayer2;
-        }
-        else
-        {
-            m_layerBottom = aLayer1;
-            m_layerTop = aLayer2;
-        }
-    }
-
-    int GetLayerTop() const { return m_layerTop; }
-    int GetLayerBottom() const { return m_layerBottom; }
 
 private:
     bool m_shoveVias;
@@ -157,20 +136,12 @@ private:
 
     PNS_MODE m_routingMode;
     PNS_OPTIMIZATION_EFFORT m_optimizerEffort;
-    
-    int m_trackWidth;
-    int m_viaDiameter;
-    int m_viaDrill;
 
-    int m_preferredLayer;
+
     int m_walkaroundIterationLimit;
     int m_shoveIterationLimit;
     TIME_LIMIT m_shoveTimeLimit;
     TIME_LIMIT m_walkaroundTimeLimit;
-
-    // Routing layers pair
-    int m_layerTop;
-    int m_layerBottom;
 };
 
 #endif

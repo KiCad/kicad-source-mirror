@@ -98,7 +98,8 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
                 // Every coordinate description of the Hershey format has an offset,
                 // it has to be subtracted
                 point.x = (double) ( coordinate[0] - 'R' ) * HERSHEY_SCALE - glyphStartX;
-                point.y = (double) ( coordinate[1] - 'R' ) * HERSHEY_SCALE;
+				// -10 is here to keep GAL rendering consistent with the legacy gfx stuff
+                point.y = (double) ( coordinate[1] - 'R' - 10) * HERSHEY_SCALE;
                 pointList.push_back( point );
             }
 
@@ -160,26 +161,42 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
     m_gal->Rotate( -aRotationAngle );
 
     // Single line height
-    int lineHeight = getInterline();
-
-    // The overall height of all lines of text
-    double textBlockHeight = lineHeight * ( linesCount( aText ) - 1 );
-
+    int lineHeight = getInterline( );
+    int lineCount = linesCount( aText );
+    
+    // align the 1st line of text
     switch( m_verticalJustify )
     {
+    case GR_TEXT_VJUSTIFY_TOP:
+        m_gal->Translate( VECTOR2D( 0, m_glyphSize.y ) );
+        break;
+
     case GR_TEXT_VJUSTIFY_CENTER:
-        m_gal->Translate( VECTOR2D( 0, -textBlockHeight / 2.0 ) );
+        m_gal->Translate( VECTOR2D( 0, m_glyphSize.y / 2.0 ) );
         break;
 
     case GR_TEXT_VJUSTIFY_BOTTOM:
-        m_gal->Translate( VECTOR2D( 0, -textBlockHeight ) );
-        break;
-
-    case GR_TEXT_VJUSTIFY_TOP:
         break;
 
     default:
         break;
+    }
+
+    if( lineCount > 1 )
+    {
+        switch( m_verticalJustify )
+        {
+        case GR_TEXT_VJUSTIFY_TOP:
+            break;
+
+        case GR_TEXT_VJUSTIFY_CENTER:
+            m_gal->Translate( VECTOR2D(0, -( lineCount - 1 ) * lineHeight / 2) );
+            break;
+
+        case GR_TEXT_VJUSTIFY_BOTTOM:
+            m_gal->Translate( VECTOR2D(0, -( lineCount - 1 ) * lineHeight ) );
+            break;
+        }
     }
 
     m_gal->SetIsStroke( true );

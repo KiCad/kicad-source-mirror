@@ -161,7 +161,7 @@ void SCH_MARKER::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Electronics rule check error" ),
+    aList.push_back( MSG_PANEL_ITEM( _( "Electronics Rule Check Error" ),
                                      GetReporter().GetErrorText(), DARKRED ) );
 }
 

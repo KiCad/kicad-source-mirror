@@ -1023,15 +1023,15 @@ void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         double lenPadToDie = 0;
         board->MarkTrace( this, NULL, &trackLen, &lenPadToDie, false );
         msg = ::LengthDoubleToString( trackLen );
-        aList.push_back( MSG_PANEL_ITEM( _( "Track Len" ), msg, DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKCYAN ) );
 
         if( lenPadToDie != 0 )
         {
             msg = ::LengthDoubleToString( trackLen + lenPadToDie );
-            aList.push_back( MSG_PANEL_ITEM( _( "Full Len" ), msg, DARKCYAN ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Full Length" ), msg, DARKCYAN ) );
 
             msg = ::LengthDoubleToString( lenPadToDie );
-            aList.push_back( MSG_PANEL_ITEM( _( "In Package" ), msg, DARKCYAN ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Pad To Die Length" ), msg, DARKCYAN ) );
         }
     }
 
@@ -1155,7 +1155,7 @@ void SEGZONE::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
     if( board )
         msg = board->GetLayerName( m_Layer );
     else
-        msg.Printf(wxT("%d"), m_Layer );
+        msg.Printf( wxT( "%d" ), m_Layer );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, BROWN ) );
 
@@ -1209,7 +1209,7 @@ void VIA::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
         msg = board->GetLayerName( top_layer ) + wxT( "/" )
             + board->GetLayerName( bottom_layer );
     else
-        msg.Printf(wxT("%d/%d"), top_layer, bottom_layer );
+        msg.Printf( wxT( "%d/%d" ), top_layer, bottom_layer );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Layers" ), msg, BROWN ) );
 
@@ -1217,7 +1217,7 @@ void VIA::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
     msg = ::CoordinateToString( (unsigned) m_Width );
 
     // Display diameter value:
-    aList.push_back( MSG_PANEL_ITEM( _( "Diam" ), msg, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Diameter" ), msg, DARKCYAN ) );
 
     // Display drill value
     int drill_value = GetDrillValue();

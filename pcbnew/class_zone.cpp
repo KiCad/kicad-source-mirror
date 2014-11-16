@@ -608,7 +608,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         msg.Empty();
 
         if( GetDoNotAllowVias() )
-            AccumulateDescription( msg, _("No via") );
+            AccumulateDescription( msg, _( "No via" ) );
 
         if( GetDoNotAllowTracks() )
             AccumulateDescription( msg, _("No track") );
@@ -663,16 +663,16 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     else
         msg = _( "Polygons" );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Fill mode" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Fill Mode" ), msg, BROWN ) );
 
     // Useful for statistics :
     msg.Printf( wxT( "%d" ), (int) m_Poly->m_HatchLines.size() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Hatch lines" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Hatch Lines" ), msg, BLUE ) );
 
     if( m_FilledPolysList.GetCornersCount() )
     {
         msg.Printf( wxT( "%d" ), (int) m_FilledPolysList.GetCornersCount() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Corners in DrawList" ), msg, BLUE ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
     }
 }
 

@@ -57,7 +57,7 @@ public:
         SHAPE( SH_RECT ), m_p0( aP0 ), m_w( aW ), m_h( aH )
     {}
 
-    SHAPE_RECT ( const SHAPE_RECT& aOther ) : 
+    SHAPE_RECT( const SHAPE_RECT& aOther ) :
         SHAPE( SH_RECT ),
         m_p0( aOther.m_p0 ),
         m_w( aOther.m_w ),
@@ -157,6 +157,16 @@ public:
     const int GetHeight() const
     {
         return m_h;
+    }
+
+    void Move( const VECTOR2I& aVector )
+    {
+        m_p0 += aVector;
+    }
+
+    bool IsSolid() const
+    {
+        return true;
     }
 
 private:

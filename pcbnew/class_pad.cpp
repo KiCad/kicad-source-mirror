@@ -607,7 +607,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
     if( module )
     {
         wxString msg = module->GetReference();
-        aList.push_back( MSG_PANEL_ITEM( _( "Module" ), msg, DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKCYAN ) );
         StringPadName( Line );
         aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), Line, BROWN ) );
     }
@@ -629,10 +629,10 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
     aList.push_back( MSG_PANEL_ITEM( ShowPadShape(), ShowPadAttr(), DARKGREEN ) );
 
     Line = ::CoordinateToString( m_Size.x );
-    aList.push_back( MSG_PANEL_ITEM( _( "H Size" ), Line, RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), Line, RED ) );
 
     Line = ::CoordinateToString( m_Size.y );
-    aList.push_back( MSG_PANEL_ITEM( _( "V Size" ), Line, RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), Line, RED ) );
 
     Line = ::CoordinateToString( (unsigned) m_Drill.x );
 
@@ -658,13 +658,10 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
     else
         Line.Printf( wxT( "%3.1f" ), m_Orient / 10.0 );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Orient" ), Line, LIGHTBLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), Line, LIGHTBLUE ) );
 
-    Line = ::CoordinateToString( m_Pos.x );
-    aList.push_back( MSG_PANEL_ITEM( _( "X Pos" ), Line, LIGHTBLUE ) );
-
-    Line = ::CoordinateToString( m_Pos.y );
-    aList.push_back( MSG_PANEL_ITEM( _( "Y pos" ), Line, LIGHTBLUE ) );
+    Line = ::CoordinateToString( m_Pos.x ) + wxT( ", " ) + ::CoordinateToString( m_Pos.y );
+    aList.push_back( MSG_PANEL_ITEM( _( "Position" ), Line, LIGHTBLUE ) );
 
     if( GetPadToDieLength() )
     {

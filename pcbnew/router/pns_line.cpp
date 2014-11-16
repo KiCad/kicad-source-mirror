@@ -123,7 +123,7 @@ int PNS_LINE::Marker()const
 }
 
 
-void PNS_LINE::copyLinks( const PNS_LINE *aParent )
+void PNS_LINE::copyLinks( const PNS_LINE* aParent )
 {
     if( aParent->m_segmentRefs == NULL )
     {
@@ -189,6 +189,9 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
     SHAPE_LINE_CHAIN::INTERSECTIONS ips, ips2;
 
     line.Intersect( aObstacle, ips );
+
+    aWalk.Clear();
+    aPost.Clear();
 
     int nearest_dist = INT_MAX;
     int farthest_dist = 0;
@@ -410,7 +413,7 @@ void PNS_LINE::DragCorner ( const VECTOR2I& aP, int aIndex, int aSnappingThresho
 
     if( aIndex == 0 )
         path = dragCornerInternal( m_line.Reverse(), snapped ).Reverse();
-    else if ( aIndex == m_line.SegmentCount() )
+    else if( aIndex == m_line.SegmentCount() )
         path = dragCornerInternal( m_line, snapped );
     else
     {

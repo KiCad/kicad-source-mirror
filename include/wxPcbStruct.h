@@ -75,7 +75,7 @@ namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
  */
 class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 {
-    friend class PCB::IFACE;
+    friend struct PCB::IFACE;
     friend class PCB_LAYER_WIDGET;
 
     void updateTraceWidthSelectBox();

@@ -34,7 +34,7 @@ class PNS_WALKAROUND : public PNS_ALGO_BASE
 public:
     PNS_WALKAROUND( PNS_NODE* aWorld, PNS_ROUTER* aRouter ) :
         PNS_ALGO_BASE ( aRouter ),
-        m_world( aWorld ), 
+        m_world( aWorld ),
         m_iterationLimit( DefaultIterationLimit )
     {
         m_forceSingleDirection = false;

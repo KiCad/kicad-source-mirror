@@ -57,7 +57,7 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
 
     VECTOR2I last = aPath.CPoint( -1 );
 
-    if( ( current_obs->m_hull ).PointInside( last ) )
+    if( ( current_obs->m_hull ).PointInside( last ) || ( current_obs->m_hull ).PointOnEdge( last ) )
     {
         m_recursiveBlockageCount++;
 
@@ -83,10 +83,10 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
     m_logger.Log( &current_obs->m_hull, 2, "hull" );
     m_logger.Log( current_obs->m_item, 3, "item" );
 #endif
-               
+
     int len_pre = path_walk[0].Length();
     int len_alt = path_walk[1].Length();
-    
+
     PNS_LINE walk_path( aPath, path_walk[1] );
 
     bool alt_collides = m_world->CheckColliding( &walk_path, m_itemMask );
@@ -99,7 +99,10 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
         pnew.Append( path_walk[1] );
         pnew.Append( path_post[1] );
 
-        current_obs = nearestObstacle( PNS_LINE( aPath, path_post[1] ) );
+        if(!path_post[1].PointCount() || !path_walk[1].PointCount())
+            current_obs = nearestObstacle( PNS_LINE( aPath, path_pre[1] ) );
+        else
+            current_obs = nearestObstacle( PNS_LINE( aPath, path_post[1] ) );
         prev_recursive = false;
     }
     else
@@ -108,7 +111,10 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
         pnew.Append( path_walk[0] );
         pnew.Append( path_post[0] );
 
-        current_obs = nearestObstacle( PNS_LINE( aPath, path_walk[0] ) );
+        if(!path_post[0].PointCount() || !path_walk[0].PointCount())
+            current_obs = nearestObstacle( PNS_LINE( aPath, path_pre[0] ) );
+        else
+            current_obs = nearestObstacle( PNS_LINE( aPath, path_walk[0] ) );
 
         if( !current_obs )
         {
@@ -152,7 +158,7 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::Route( const PNS_LINE& aInitia
         {
             int len_cw  = path_cw.CLine().Length();
             int len_ccw = path_ccw.CLine().Length();
-            
+
             if( m_forceLongerPath )
                 aWalkPath = (len_cw > len_ccw ? path_cw : path_ccw);
             else
@@ -173,7 +179,7 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::Route( const PNS_LINE& aInitia
 
         m_iteration++;
     }
-    
+
     if( m_iteration == m_iterationLimit )
     {
         int len_cw  = path_cw.CLine().Length();
@@ -229,7 +235,7 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::Route( const PNS_LINE& aInitia
 
     if( aWalkPath.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
         return STUCK;
-    
+
     WALKAROUND_STATUS st = s_ccw == DONE || s_cw == DONE ? DONE : STUCK;
 
     if( aOptimize && st == DONE )

@@ -1,11 +1,10 @@
-
 [Desktop Entry]
-Categories=Development;Electronics
-Comment=Design a printed circuit board
+Categories=Development;Electronics;
+Comment=Create a component from a bitmap for use with KiCad
 Exec=bitmap2component
 GenericName=EDA Suite
 Icon=bitmap2component
 MimeType=application/x-bitmap2component-project;
-Name=bitmap2component
+Name=Bitmap to Component Converter
 Type=Application
-Name[en_US]=bitmap2component
+Name[en_US]=Bitmap to Component Converter

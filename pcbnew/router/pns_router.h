@@ -30,6 +30,7 @@
 #include <class_undoredo_container.h>
 
 #include "pns_routing_settings.h"
+#include "pns_sizes_settings.h"
 #include "pns_item.h"
 #include "pns_itemset.h"
 #include "pns_node.h"
@@ -86,13 +87,12 @@ public:
     void SetView( KIGFX::VIEW* aView );
 
     bool RoutingInProgress() const;
-    bool StartRouting( const VECTOR2I& aP, PNS_ITEM* aItem );
+    bool StartRouting( const VECTOR2I& aP, PNS_ITEM* aItem, int aLayer );
     void Move( const VECTOR2I& aP, PNS_ITEM* aItem );
     bool FixRoute( const VECTOR2I& aP, PNS_ITEM* aItem );
 
     void StopRouting();
 
-    const VECTOR2I CurrentEnd() const;
 
     int GetClearance( const PNS_ITEM* aA, const PNS_ITEM* aB ) const;
 
@@ -112,7 +112,7 @@ public:
 
     void SwitchLayer( int layer );
 
-    void ToggleViaPlacement( VIATYPE_T type = VIA_NOT_DEFINED );
+    void ToggleViaPlacement();
 
     int GetCurrentLayer() const;
     int GetCurrentNet() const;
@@ -123,15 +123,7 @@ public:
     {
         return m_clearanceFunc;
     }
-
-    bool IsPlacingVia() const
-    {
-        return m_placingVia;
-    }
-
-    int NextCopperLayer( bool aUp );
-
-    // typedef boost::optional<hoverItem> optHoverItem;
+    bool IsPlacingVia() const;
 
     const PNS_ITEMSET   QueryHoverItems( const VECTOR2I& aP );
     const VECTOR2I      SnapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment );
@@ -175,7 +167,7 @@ public:
      * Applies stored settings.
      * @see Settings()
      */
-    void ApplySettings();
+    void UpdateSizes( const PNS_SIZES_SETTINGS& aSizes );
 
     /**
      * Changes routing settings to ones passed in the parameter.
@@ -184,8 +176,6 @@ public:
     void LoadSettings( const PNS_ROUTING_SETTINGS& aSettings )
     {
         m_settings = aSettings;
-
-        ApplySettings();
     }
 
     void EnableSnapping( bool aEnable )
@@ -196,6 +186,11 @@ public:
     bool SnappingEnabled() const
     {
         return m_snappingEnabled;
+    }
+
+    PNS_SIZES_SETTINGS& Sizes()
+    {
+        return m_sizes;
     }
 
 private:
@@ -211,7 +206,6 @@ private:
 
     PNS_ITEM* pickSingleItem( PNS_ITEMSET& aItems ) const;
     void splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, const VECTOR2I& aP );
-    PNS_VIA* checkLoneVia( PNS_JOINT* aJoint ) const;
 
     PNS_ITEM* syncPad( D_PAD* aPad );
     PNS_ITEM* syncTrack( TRACK* aTrack );
@@ -223,11 +217,9 @@ private:
 
     void highlightCurrent( bool enabled );
 
-    void markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,  PNS_NODE::ITEM_VECTOR& aRemoved );
+    void markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent, PNS_NODE::ITEM_VECTOR& aRemoved );
 
-    int m_currentLayer;
-    int m_currentNet;
-
+    VECTOR2I m_currentEnd;
     RouterState m_state;
 
     BOARD* m_board;
@@ -235,9 +227,7 @@ private:
     PNS_NODE* m_lastNode;
     PNS_LINE_PLACER* m_placer;
     PNS_DRAGGER* m_dragger;
-    PNS_LINE* m_draggedLine;
     PNS_SHOVE* m_shove;
-    int m_draggedSegmentIndex;
     int m_iterLimit;
     bool m_showInterSteps;
     int m_snapshotIter;
@@ -247,11 +237,6 @@ private:
 
     PNS_ITEM* m_currentEndItem;
 
-    VECTOR2I m_currentEnd;
-    VECTOR2I m_currentStart;
-    VECTOR2I m_originalStart;
-    bool m_placingVia;
-    bool m_startsOnVia;
     bool m_snappingEnabled;
     bool m_violation;
 
@@ -264,6 +249,7 @@ private:
 
     ///> Stores list of modified items in the current operation
     PICKED_ITEMS_LIST m_undoBuffer;
+    PNS_SIZES_SETTINGS m_sizes;
 };
 
 #endif

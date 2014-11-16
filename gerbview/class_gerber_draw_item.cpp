@@ -553,7 +553,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     // Display graphic layer number
     msg.Printf( wxT( "%d" ), GetLayer() + 1 );
-    aList.push_back( MSG_PANEL_ITEM( _( "Graphic layer" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Graphic Layer" ), msg, BROWN ) );
 
     // Display item rotation
     // The full rotation is Image rotation + m_lyrRotation

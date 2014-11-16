@@ -26,6 +26,7 @@
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 
+#include "pns_sizes_settings.h"
 #include "pns_node.h"
 #include "pns_via.h"
 #include "pns_line.h"
@@ -35,11 +36,14 @@ class PNS_ROUTER;
 class PNS_SHOVE;
 class PNS_OPTIMIZER;
 class PNS_ROUTER_BASE;
+class PNS_VIA;
+class PNS_SIZES_SETTINGS;
+
 
 /**
  * Class PNS_LINE_PLACER
  *
- * Single track placement algorithm. Interactively routes a track. 
+ * Single track placement algorithm. Interactively routes a track.
  * Applies shove and walkaround algorithms when needed.
  */
 
@@ -51,7 +55,7 @@ public:
 
     /**
      * Function Start()
-     * 
+     *
      * Starts routing a single track at point aP, taking item aStartItem as anchor
      * (unless NULL).
      */
@@ -59,8 +63,8 @@ public:
 
     /**
      * Function Move()
-     * 
-     * Moves the end of the currently routed trace to the point aP, taking 
+     *
+     * Moves the end of the currently routed trace to the point aP, taking
      * aEndItem as anchor (if not NULL).
      * (unless NULL).
      */
@@ -68,7 +72,7 @@ public:
 
     /**
      * Function FixRoute()
-     * 
+     *
      * Commits the currently routed track to the parent node, taking
      * aP as the final end point and aEndItem as the final anchor (if provided).
      * @return true, if route has been commited. May return false if the routing
@@ -76,31 +80,21 @@ public:
      * if Settings.CanViolateDRC() is on.
      */
     bool FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem );
-    
+
     /**
-     * Function AddVia()
-     * 
+     * Function ToggleVia()
+     *
      * Enables/disables a via at the end of currently routed trace.
-     * @param aEnabled if true, a via is attached during placement
-     * @param aDiameter diameter of the via
-     * @param aDrill drill of the via
-     * @param aType Type of the via
      */
-    void AddVia( bool aEnabled, int aDiameter, int aDrill, VIATYPE_T aType );
+    void ToggleVia( bool aEnabled );
 
     /**
      * Function SetLayer()
      *
      * Sets the current routing layer.
      */
-    void SetLayer( int aLayer );
+    bool SetLayer( int aLayer );
 
-    /**
-     * Function SetWidth()
-     *
-     * Sets the current track width.
-     */
-    void SetWidth( int aWidth );
 
     /**
      * Function Head()
@@ -109,7 +103,7 @@ public:
      * that has not "settled" yet.
      */
     const PNS_LINE& Head() const { return m_head; }
-    
+
     /**
      * Function Tail()
      *
@@ -137,7 +131,7 @@ public:
      *
      * Returns the current end of the line being placed. It may not be equal
      * to the cursor position due to collisions.
-     */ 
+     */
     const VECTOR2I& CurrentEnd() const
     {
         return m_currentEnd;
@@ -147,8 +141,8 @@ public:
      * Function CurrentNet()
      *
      * Returns the net code of currently routed track.
-     */ 
-    int CurrentNet() const 
+     */
+    int CurrentNet() const
     {
         return m_currentNet;
     }
@@ -157,8 +151,8 @@ public:
      * Function CurrentLayer()
      *
      * Returns the layer of currently routed track.
-     */ 
-    int CurrentLayer() const 
+     */
+    int CurrentLayer() const
     {
         return m_currentLayer;
     }
@@ -169,14 +163,14 @@ public:
      * Returns the most recent world state.
      */
     PNS_NODE* CurrentNode( bool aLoopsRemoved = false ) const;
-    
+
     /**
      * Function FlipPosture()
      *
      * Toggles the current posture (straight/diagonal) of the trace head.
      */
     void FlipPosture();
-    
+
     /**
      * Function UpdateSizes()
      *
@@ -184,8 +178,9 @@ public:
      * a settings class. Used to dynamically change these parameters as
      * the track is routed.
      */
-    void UpdateSizes( const PNS_ROUTING_SETTINGS& aSettings );
+    void UpdateSizes( const PNS_SIZES_SETTINGS& aSizes );
 
+    bool IsPlacingVia() const { return m_placingVia; }
 private:
     /**
      * Function route()
@@ -203,24 +198,24 @@ private:
      * Function updateLeadingRatLine()
      *
      * Draws the "leading" ratsnest line, which connects the end of currently
-     * routed track and the nearest yet unrouted item. If the routing for 
+     * routed track and the nearest yet unrouted item. If the routing for
      * current net is complete, draws nothing.
      */
     void updateLeadingRatLine();
-    
+
     /**
      * Function setWorld()
      *
      * Sets the board to route.
      */
     void setWorld( PNS_NODE* aWorld );
-    
+
     /**
      * Function startPlacement()
      *
      * Initializes placement of a new line with given parameters.
      */
-    void startPlacement( const VECTOR2I& aStart, int aNet, int aWidth, int aLayer );
+    void initPlacement( bool aSplitSeg = false );
 
     /**
      * Function setInitialDirection()
@@ -250,10 +245,10 @@ private:
      * Function simplifyNewLine()
      *
      * Assembles a line starting from segment aLatest, removes collinear segments
-     * and redundant vertexes. If a simplification bhas been found, replaces the 
+     * and redundant vertexes. If a simplification bhas been found, replaces the
      * old line with the simplified one in aNode.
      */
-    void simplifyNewLine( PNS_NODE *aNode, PNS_SEGMENT *aLatest );
+    void simplifyNewLine( PNS_NODE* aNode, PNS_SEGMENT* aLatest );
 
     /**
      * Function handleViaPlacement()
@@ -346,7 +341,9 @@ private:
 
     ///> route step, mark obstacles mode
     bool rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead );
-    
+
+    const PNS_VIA makeVia ( const VECTOR2I& aP );
+
     ///> current routing direction
     DIRECTION_45 m_direction;
 
@@ -378,6 +375,8 @@ private:
     ///> Postprocessed world state (including marked collisions & removed loops)
     PNS_NODE* m_lastNode;
 
+    PNS_SIZES_SETTINGS m_sizes;
+
     ///> Are we placing a via?
     bool m_placingVia;
 
@@ -386,9 +385,6 @@ private:
 
     ///> current via drill
     int m_viaDrill;
-    
-    ///> current via type
-    VIATYPE_T m_viaType;
 
     ///> current track width
     int m_currentWidth;
@@ -397,11 +393,16 @@ private:
     int m_currentLayer;
 
     bool m_startsOnVia;
-    
-    VECTOR2I m_originalStart, m_currentEnd, m_currentStart;
+
+    VECTOR2I m_currentEnd, m_currentStart;
     PNS_LINE m_currentTrace;
 
     PNS_MODE m_currentMode;
+    PNS_ITEM* m_startItem;
+
+    bool m_idle;
+    bool m_chainedPlacement;
+    bool m_splitSeg;
 };
 
 #endif    // __PNS_LINE_PLACER_H

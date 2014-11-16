@@ -402,12 +402,12 @@ void LIB_POLYLINE::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
     msg = StringFromValue( g_UserUnit, m_Width, true );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Line width" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Bounding box" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Bounding Box" ), msg, BROWN ) );
 }
 
 

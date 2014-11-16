@@ -1,11 +1,10 @@
-
 [Desktop Entry]
-Categories=Development;Electronics
-Comment=Design a printed circuit board
+Categories=Development;Electronics;
+Comment=Calculator for various electronics related computations
 Exec=pcb_calculator
 GenericName=EDA Suite
 Icon=pcbcalculator
 MimeType=application/x-pcbcalculator-project;
-Name=pcbcalculator
+Name=Pcb Calculator
 Type=Application
-Name[en_US]=pcbcalculator
+Name[en_US]=Pcb Calculator

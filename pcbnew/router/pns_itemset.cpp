@@ -24,32 +24,13 @@
 
 PNS_ITEMSET::PNS_ITEMSET( PNS_ITEM* aInitialItem )
 {
-    if(aInitialItem)
-        m_items.push_back(aInitialItem);
+    if( aInitialItem )
+        m_items.push_back( aInitialItem );
 }
 
-
-PNS_ITEMSET::~PNS_ITEMSET()
+PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd, bool aInvert )
 {
-    Clear();
-}
-
-
-void PNS_ITEMSET::Clear()
-{
-    BOOST_FOREACH(PNS_ITEM* item, m_ownedItems)
-    {
-        delete item;
-    }
-
-    m_items.clear();
-    m_ownedItems.clear();
-}
-
-
-PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd )
-{
-    ITEM_VECTOR newItems;
+    ITEMS newItems;
     PNS_LAYERSET l;
 
     if( aEnd < 0 )
@@ -59,7 +40,7 @@ PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd )
 
     BOOST_FOREACH( PNS_ITEM* item, m_items )
 
-    if( item->Layers().Overlaps( l ) )
+    if( item->Layers().Overlaps( l ) ^ aInvert )
         newItems.push_back( item );
 
     m_items = newItems;
@@ -68,13 +49,13 @@ PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd )
 }
 
 
-PNS_ITEMSET& PNS_ITEMSET::FilterKinds( int aKindMask )
+PNS_ITEMSET& PNS_ITEMSET::FilterKinds( int aKindMask, bool aInvert )
 {
-    ITEM_VECTOR newItems;
+    ITEMS newItems;
 
     BOOST_FOREACH( PNS_ITEM* item, m_items )
     {
-        if( item->OfKind ( aKindMask ) )
+        if( item->OfKind( aKindMask ) ^ aInvert )
             newItems.push_back( item );
     }
 
@@ -84,13 +65,28 @@ PNS_ITEMSET& PNS_ITEMSET::FilterKinds( int aKindMask )
 }
 
 
-PNS_ITEMSET& PNS_ITEMSET::FilterNet( int aNet )
+PNS_ITEMSET& PNS_ITEMSET::FilterNet( int aNet, bool aInvert )
 {
-    ITEM_VECTOR newItems;
+    ITEMS newItems;
 
     BOOST_FOREACH( PNS_ITEM* item, m_items )
     {
-        if( item->Net() == aNet )
+        if( ( item->Net() == aNet ) ^ aInvert )
+            newItems.push_back( item );
+    }
+
+    m_items = newItems;
+
+    return *this;
+}
+
+PNS_ITEMSET& PNS_ITEMSET::ExcludeItem( const PNS_ITEM* aItem )
+{
+    ITEMS newItems;
+
+    BOOST_FOREACH( PNS_ITEM* item, m_items )
+    {
+        if( item != aItem )
             newItems.push_back( item );
     }
 

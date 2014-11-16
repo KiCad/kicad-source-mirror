@@ -247,8 +247,9 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         }
 
         if( mode == LINE )
+        {
             GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle, radius, color );
-
+        }
         else if( mode == SKETCH )
         {
             GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
@@ -264,14 +265,17 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         break;
 
     case S_CURVE:
-        m_BezierPoints = Bezier2Poly(m_Start, m_BezierC1, m_BezierC2, m_End);
+        m_BezierPoints = Bezier2Poly( m_Start, m_BezierC1, m_BezierC2, m_End );
 
-        for (unsigned int i=1; i < m_BezierPoints.size(); i++) {
+        for( unsigned int i=1; i < m_BezierPoints.size(); i++ )
+        {
             if( mode == LINE )
+            {
                 GRLine( panel->GetClipBox(), DC,
                         m_BezierPoints[i].x, m_BezierPoints[i].y,
                         m_BezierPoints[i-1].x, m_BezierPoints[i-1].y, 0,
                         color );
+            }
             else if( mode == SKETCH )
             {
                 GRCSegm( panel->GetClipBox(), DC,
@@ -317,7 +321,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     wxASSERT( m_Parent );
 
-    msg = wxT( "DRAWING" );
+    msg = _( "Drawing" );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
 
@@ -332,7 +336,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     case S_ARC:
         aList.push_back( MSG_PANEL_ITEM( shape, _( "Arc" ), RED ) );
         msg.Printf( wxT( "%.1f" ), m_Angle / 10.0 );
-        aList.push_back( MSG_PANEL_ITEM( _("Angle"), msg, RED ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, RED ) );
         break;
 
     case S_CURVE:
@@ -340,7 +344,18 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         break;
 
     default:
+    {
         aList.push_back( MSG_PANEL_ITEM( shape, _( "Segment" ), RED ) );
+
+        msg = ::CoordinateToString( GetLineLength( m_Start, m_End ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKGREEN ) );
+
+        // angle counter-clockwise from 3'o-clock
+        const double deg = RAD2DEG( atan2( m_Start.y - m_End.y,
+                                           m_End.x - m_Start.x ) );
+        msg.Printf( wxT( "%.1f" ), deg );
+        aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, DARKGREEN ) );
+    }
     }
 
     wxString start;
@@ -373,93 +388,93 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
         break;
 
     case S_ARC:
+    {
+        bbox.Merge( m_End );
+        wxPoint end = m_End;
+        RotatePoint( &end, m_Start, -m_Angle );
+        bbox.Merge( end );
+
+        // Determine the starting quarter
+        // 0 right-bottom
+        // 1 left-bottom
+        // 2 left-top
+        // 3 right-top
+        unsigned int quarter = 0;       // assume right-bottom
+
+        if( m_End.y < m_Start.y )       // change to left-top
+            quarter |= 3;
+
+        if( m_End.x < m_Start.x )       // for left side, the LSB is 2nd bit negated
+            quarter ^= 1;
+
+        int radius = GetRadius();
+        int angle = (int) GetArcAngleStart() % 900 + m_Angle;
+        bool directionCW = ( m_Angle > 0 );      // Is the direction of arc clockwise?
+
+        if( !directionCW )
         {
-            bbox.Merge( m_End );
-            wxPoint end = m_End;
-            RotatePoint( &end, m_Start, -m_Angle );
-            bbox.Merge( end );
-
-            // Determine the starting quarter
-            // 0 right-bottom
-            // 1 left-bottom
-            // 2 left-top
-            // 3 right-top
-            unsigned int quarter = 0;       // assume right-bottom
-
-            if( m_End.y < m_Start.y )       // change to left-top
-                quarter |= 3;
-
-            if( m_End.x < m_Start.x )       // for left side, the LSB is 2nd bit negated
-                quarter ^= 1;
-
-            int radius = GetRadius();
-            int angle = (int) GetArcAngleStart() % 900 + m_Angle;
-            bool directionCW = ( m_Angle > 0 );      // Is the direction of arc clockwise?
-
-            if( !directionCW )
-            {
-                angle = 900 - angle;
-                quarter = ( quarter + 3 ) % 4;       // -1 modulo arithmetic
-            }
-
-            while( angle > 900 )
-            {
-                switch( quarter )
-                {
-                case 0:
-                    bbox.Merge( wxPoint( m_Start.x, m_Start.y + radius ) );     // down
-                    break;
-
-                case 1:
-                    bbox.Merge( wxPoint( m_Start.x - radius, m_Start.y ) );     // left
-                    break;
-
-                case 2:
-                    bbox.Merge( wxPoint( m_Start.x, m_Start.y - radius ) );     // up
-                    break;
-
-                case 3:
-                    bbox.Merge( wxPoint( m_Start.x + radius, m_Start.y ) );     // right
-                    break;
-                }
-
-                if( directionCW )
-                    ++quarter;
-                else
-                    quarter += 3;       // -1 modulo arithmetic
-
-                quarter %= 4;
-                angle -= 900;
-            }
+            angle = 900 - angle;
+            quarter = ( quarter + 3 ) % 4;       // -1 modulo arithmetic
         }
+
+        while( angle > 900 )
+        {
+            switch( quarter )
+            {
+            case 0:
+                bbox.Merge( wxPoint( m_Start.x, m_Start.y + radius ) );     // down
+                break;
+
+            case 1:
+                bbox.Merge( wxPoint( m_Start.x - radius, m_Start.y ) );     // left
+                break;
+
+            case 2:
+                bbox.Merge( wxPoint( m_Start.x, m_Start.y - radius ) );     // up
+                break;
+
+            case 3:
+                bbox.Merge( wxPoint( m_Start.x + radius, m_Start.y ) );     // right
+                break;
+            }
+
+            if( directionCW )
+                ++quarter;
+            else
+                quarter += 3;       // -1 modulo arithmetic
+
+            quarter %= 4;
+            angle -= 900;
+        }
+    }
         break;
 
     case S_POLYGON:
+    {
+        wxPoint p_end;
+        MODULE* module = GetParentModule();
+
+        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
         {
-            wxPoint p_end;
-            MODULE* module = GetParentModule();
+            wxPoint pt = m_PolyPoints[ii];
 
-            for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
+            if( module ) // Transform, if we belong to a module
             {
-                wxPoint pt = m_PolyPoints[ii];
-
-                if( module ) // Transform, if we belong to a module
-                {
-                    RotatePoint( &pt, module->GetOrientation() );
-                    pt += module->GetPosition();
-                }
-
-                if( ii == 0 )
-                    p_end = pt;
-
-                bbox.SetX( std::min( bbox.GetX(), pt.x ) );
-                bbox.SetY( std::min( bbox.GetY(), pt.y ) );
-                p_end.x   = std::max( p_end.x, pt.x );
-                p_end.y   = std::max( p_end.y, pt.y );
+                RotatePoint( &pt, module->GetOrientation() );
+                pt += module->GetPosition();
             }
 
-            bbox.SetEnd( p_end );
+            if( ii == 0 )
+                p_end = pt;
+
+            bbox.SetX( std::min( bbox.GetX(), pt.x ) );
+            bbox.SetY( std::min( bbox.GetY(), pt.y ) );
+            p_end.x   = std::max( p_end.x, pt.x );
+            p_end.y   = std::max( p_end.y, pt.y );
         }
+
+        bbox.SetEnd( p_end );
+    }
         break;
 
     default:
@@ -479,46 +494,46 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
     {
     case S_CIRCLE:
     case S_ARC:
+    {
+        wxPoint relPos = aPosition - GetCenter();
+        int radius = GetRadius();
+        int dist   = KiROUND( EuclideanNorm( relPos ) );
+
+        if( abs( radius - dist ) <= ( m_Width / 2 ) )
         {
-            wxPoint relPos = aPosition - GetCenter();
-            int radius = GetRadius();
-            int dist   = KiROUND( EuclideanNorm( relPos ) );
+            if( m_Shape == S_CIRCLE )
+                return true;
 
-            if( abs( radius - dist ) <= ( m_Width / 2 ) )
+            // For arcs, the test point angle must be >= arc angle start
+            // and <= arc angle end
+            // However angle values > 360 deg are not easy to handle
+            // so we calculate the relative angle between arc start point and teast point
+            // this relative arc should be < arc angle if arc angle > 0 (CW arc)
+            // and > arc angle if arc angle < 0 (CCW arc)
+            double arc_angle_start = GetArcAngleStart();    // Always 0.0 ... 360 deg, in 0.1 deg
+
+            double arc_hittest = ArcTangente( relPos.y, relPos.x );
+
+            // Calculate relative angle between the starting point of the arc, and the test point
+            arc_hittest -= arc_angle_start;
+
+            // Normalise arc_hittest between 0 ... 360 deg
+            NORMALIZE_ANGLE_POS( arc_hittest );
+
+            // Check angle: inside the arc angle when it is > 0
+            // and outside the not drawn arc when it is < 0
+            if( GetAngle() >= 0.0 )
             {
-                if( m_Shape == S_CIRCLE )
+                if( arc_hittest <= GetAngle() )
                     return true;
-
-                // For arcs, the test point angle must be >= arc angle start
-                // and <= arc angle end
-                // However angle values > 360 deg are not easy to handle
-                // so we calculate the relative angle between arc start point and teast point
-                // this relative arc should be < arc angle if arc angle > 0 (CW arc)
-                // and > arc angle if arc angle < 0 (CCW arc)
-                double arc_angle_start = GetArcAngleStart();    // Always 0.0 ... 360 deg, in 0.1 deg
-
-                double arc_hittest = ArcTangente( relPos.y, relPos.x );
-
-                // Calculate relative angle between the starting point of the arc, and the test point
-                arc_hittest -= arc_angle_start;
-
-                // Normalise arc_hittest between 0 ... 360 deg
-                NORMALIZE_ANGLE_POS( arc_hittest );
-
-                // Check angle: inside the arc angle when it is > 0
-                // and outside the not drawn arc when it is < 0
-                if( GetAngle() >= 0.0 )
-                {
-                    if( arc_hittest <= GetAngle() )
-                        return true;
-                }
-                else
-                {
-                    if( arc_hittest >= (3600.0 + GetAngle()) )
-                        return true;
-                }
+            }
+            else
+            {
+                if( arc_hittest >= (3600.0 + GetAngle()) )
+                    return true;
             }
         }
+    }
         break;
 
     case S_CURVE:
@@ -538,6 +553,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
         wxASSERT( 0 );
         break;
     }
+
     return false;
 }
 

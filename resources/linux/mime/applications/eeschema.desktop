@@ -1,5 +1,5 @@
 [Desktop Entry]
-Categories=Development;Electronics
+Categories=Development;Electronics;
 Comment=Design an electronic schematic
 Comment[fr]=Dessiner des schémas électroniques
 Exec=eeschema %f

@@ -1,5 +1,5 @@
 [Desktop Entry]
-Categories=Development;Electronics
+Categories=Development;Electronics;
 Comment=Design a printed circuit board
 Comment[fr]=Concevoir un circuit imprimé
 Exec=kicad %f

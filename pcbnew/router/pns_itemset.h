@@ -22,6 +22,7 @@
 #define __PNS_ITEMSET_H
 
 #include <vector>
+#include <boost/foreach.hpp>
 
 #include "pns_item.h"
 
@@ -35,53 +36,96 @@
 class PNS_ITEMSET
 {
 public:
-    typedef std::vector<PNS_ITEM*> ITEM_VECTOR;
+    typedef std::vector<PNS_ITEM*> ITEMS;
 
     PNS_ITEMSET( PNS_ITEM* aInitialItem = NULL );
 
     PNS_ITEMSET( const PNS_ITEMSET& aOther )
     {
         m_items = aOther.m_items;
-        m_ownedItems = ITEM_VECTOR();
     }
-    
+
     const PNS_ITEMSET& operator=( const PNS_ITEMSET& aOther )
     {
         m_items = aOther.m_items;
-        m_ownedItems = ITEM_VECTOR();
-
         return *this;
     }
 
-    ~PNS_ITEMSET();
+    int Count( int aKindMask = -1 ) const
+    {
+        int n = 0;
+        BOOST_FOREACH( PNS_ITEM* item, m_items )
+        {
+            if( item->Kind() & aKindMask )
+                n++;
+        }
+        return n;
+    }
 
-    ITEM_VECTOR& Items() { return m_items; }
-    const ITEM_VECTOR& CItems() const { return m_items; } 
+    ITEMS& Items() { return m_items; }
+    const ITEMS& CItems() const { return m_items; }
 
-    PNS_ITEMSET& FilterLayers( int aStart, int aEnd = -1 );
-    PNS_ITEMSET& FilterKinds( int aKindMask );
-    PNS_ITEMSET& FilterNet( int aNet );
+    PNS_ITEMSET& FilterLayers( int aStart, int aEnd = -1, bool aInvert = false );
+    PNS_ITEMSET& FilterKinds( int aKindMask, bool aInvert = false );
+    PNS_ITEMSET& FilterNet( int aNet, bool aInvert = false );
 
-    int Size() { return m_items.size(); }
+    PNS_ITEMSET& ExcludeLayers( int aStart, int aEnd = -1 )
+    {
+        return FilterLayers( aStart, aEnd, true );
+    }
+
+    PNS_ITEMSET& ExcludeKinds( int aKindMask )
+    {
+        return FilterKinds( aKindMask, true );
+    }
+
+    PNS_ITEMSET& ExcludeNet( int aNet )
+    {
+        return FilterNet( aNet, true );
+    }
+
+    PNS_ITEMSET& ExcludeItem( const PNS_ITEM* aItem );
+
+    int Size() const
+    {
+        return m_items.size();
+    }
 
     void Add( PNS_ITEM* aItem )
     {
         m_items.push_back( aItem );
     }
 
-    PNS_ITEM* Get( int index ) const { return m_items[index]; }
-
-    void Clear();
-
-    void AddOwned( PNS_ITEM *aItem )
+    PNS_ITEM* Get( int index ) const
     {
-        m_items.push_back( aItem );
-        m_ownedItems.push_back( aItem );
+        return m_items[index];
     }
-    
+
+    PNS_ITEM* operator[] ( int index ) const
+    {
+        return m_items[index];
+    }
+
+    void Clear()
+    {
+        m_items.clear();
+    }
+
+    bool Contains( const PNS_ITEM* aItem ) const
+    {
+        return std::find( m_items.begin(), m_items.end(), aItem ) != m_items.end();
+    }
+
+    void Erase( const PNS_ITEM* aItem )
+    {
+        ITEMS::iterator f = std::find( m_items.begin(), m_items.end(), aItem );
+
+        if( f != m_items.end() )
+            m_items.erase( f );
+    }
+
 private:
-    ITEM_VECTOR m_items;
-    ITEM_VECTOR m_ownedItems;
+    ITEMS m_items;
 };
 
 #endif

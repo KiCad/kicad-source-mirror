@@ -121,7 +121,6 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
     switch( aPad->GetAttribute() )
     {
     case PAD_STANDARD:
-        layers = PNS_LAYERSET( 0, MAX_CU_LAYERS - 1 ); // TODO necessary? it is already initialized
         break;
 
     case PAD_SMD:
@@ -249,31 +248,6 @@ void PNS_ROUTER::SetBoard( BOARD* aBoard )
     TRACE( 1, "m_board = %p\n", m_board );
 }
 
-
-int PNS_ROUTER::NextCopperLayer( bool aUp )
-{
-    LSET        mask = m_board->GetEnabledLayers() & m_board->GetVisibleLayers();
-    LAYER_NUM   l = m_currentLayer;
-
-    do
-    {
-        l += ( aUp ? 1 : -1 );
-
-        if( l >= MAX_CU_LAYERS )
-            l = 0;
-
-        if( l < 0 )
-            l = MAX_CU_LAYERS - 1;
-
-        if( mask[l] )
-            return l;
-    }
-    while( l != m_currentLayer );
-
-    return l;
-}
-
-
 void PNS_ROUTER::SyncWorld()
 {
     if( !m_board )
@@ -324,10 +298,6 @@ PNS_ROUTER::PNS_ROUTER()
 
     m_clearanceFunc = NULL;
 
-    m_currentLayer = 1;
-    m_placingVia = false;
-    m_startsOnVia = false;
-    m_currentNet = -1;
     m_state = IDLE;
     m_world = NULL;
     m_placer = NULL;
@@ -483,50 +453,20 @@ bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     return true;
 }
 
-
-bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem )
+bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLayer )
 {
-    m_state = ROUTE_TRACK;
-
     m_placer = new PNS_LINE_PLACER( this );
-    m_placer->SetLayer( m_currentLayer );
 
-    const BOARD_DESIGN_SETTINGS& dsnSettings = m_board->GetDesignSettings();
-
-    if( dsnSettings.UseNetClassTrack() && aStartItem != NULL ) // netclass value
-    {
-        m_settings.SetTrackWidth( aStartItem->Parent()->GetNetClass()->GetTrackWidth() );
-    }
-    else
-    {
-        m_settings.SetTrackWidth( dsnSettings.GetCurrentTrackWidth() );
-    }
-
-    if( dsnSettings.UseNetClassVia() && aStartItem != NULL )   // netclass value
-    {
-        m_settings.SetViaDiameter( aStartItem->Parent()->GetNetClass()->GetViaDiameter() );
-        m_settings.SetViaDrill( aStartItem->Parent()->GetNetClass()->GetViaDrill() );
-    }
-    else
-    {
-        m_settings.SetViaDiameter( dsnSettings.GetCurrentViaSize() );
-        m_settings.SetViaDrill( dsnSettings.GetCurrentViaDrill() );
-    }
-
-    m_placer->UpdateSizes( m_settings );
+    m_placer->UpdateSizes ( m_sizes );
+    m_placer->SetLayer( aLayer );
     m_placer->Start( aP, aStartItem );
+
     m_currentEnd = aP;
     m_currentEndItem = NULL;
+    m_state = ROUTE_TRACK;
 
     return true;
 }
-
-
-const VECTOR2I PNS_ROUTER::CurrentEnd() const
-{
-    return m_currentEnd;
-}
-
 
 void PNS_ROUTER::eraseView()
 {
@@ -564,7 +504,7 @@ void PNS_ROUTER::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClearance 
 
 void PNS_ROUTER::DisplayItems( const PNS_ITEMSET& aItems )
 {
-    BOOST_FOREACH( const PNS_ITEM *item, aItems.CItems() )
+    BOOST_FOREACH( const PNS_ITEM* item, aItems.CItems() )
         DisplayItem( item );
 }
 
@@ -664,7 +604,7 @@ void PNS_ROUTER::updateView( PNS_NODE* aNode, PNS_ITEMSET& aCurrent )
         return;
 
     if( Settings().Mode() == RM_MarkObstacles )
-        markViolations(aNode, aCurrent, removed);
+        markViolations( aNode, aCurrent, removed );
 
     aNode->GetUpdatedItems( removed, added );
 
@@ -689,13 +629,14 @@ void PNS_ROUTER::updateView( PNS_NODE* aNode, PNS_ITEMSET& aCurrent )
 }
 
 
-void PNS_ROUTER::ApplySettings()
+void PNS_ROUTER::UpdateSizes ( const PNS_SIZES_SETTINGS& aSizes )
 {
+    m_sizes = aSizes;
+
     // Change track/via size settings
     if( m_state == ROUTE_TRACK)
     {
-        m_placer->UpdateSizes( m_settings );
-        m_placer->Move( m_currentEnd, m_currentEndItem );
+        m_placer->UpdateSizes( m_sizes );
         movePlacing( m_currentEnd, m_currentEndItem );
     }
 }
@@ -791,26 +732,6 @@ void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
 }
 
 
-PNS_VIA* PNS_ROUTER::checkLoneVia( PNS_JOINT* aJoint ) const
-{
-    PNS_VIA* theVia = NULL;
-    PNS_LAYERSET l;
-
-    BOOST_FOREACH( PNS_ITEM* item, aJoint->LinkList() )
-    {
-        if( item->Kind() == PNS_ITEM::VIA )
-            theVia = static_cast<PNS_VIA*>( item );
-
-        l.Merge( item->Layers() );
-    }
-
-    if( l.Start() == l.End() )
-        return theVia;
-
-    return NULL;
-}
-
-
 bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 {
     bool rv = false;
@@ -819,8 +740,6 @@ bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     {
         case ROUTE_TRACK:
             rv = m_placer->FixRoute( aP, aEndItem );
-            m_startsOnVia = m_placingVia;
-            m_placingVia = false;
             break;
 
         case DRAG_SEGMENT:
@@ -841,7 +760,17 @@ bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 void PNS_ROUTER::StopRouting()
 {
     // Update the ratsnest with new changes
-    m_board->GetRatsnest()->Recalculate( m_currentNet );
+    if( m_placer )
+    {
+        int n = m_placer->CurrentNet();
+
+        if( n >= 0)
+        {
+            // Update the ratsnest with new changes
+            m_board->GetRatsnest()->Recalculate( n );
+        }
+    }
+
 
     if( !RoutingInProgress() )
         return;
@@ -868,7 +797,7 @@ void PNS_ROUTER::FlipPosture()
     if( m_state == ROUTE_TRACK )
     {
         m_placer->FlipPosture();
-        m_placer->Move( m_currentEnd, m_currentEndItem );
+        movePlacing ( m_currentEnd, m_currentEndItem );
     }
 }
 
@@ -877,77 +806,38 @@ void PNS_ROUTER::SwitchLayer( int aLayer )
 {
     switch( m_state )
     {
-    case IDLE:
-        m_currentLayer = aLayer;
-        break;
-
-    case ROUTE_TRACK:
-        if( m_startsOnVia )
-        {
-            m_currentLayer = aLayer;
+        case ROUTE_TRACK:
             m_placer->SetLayer( aLayer );
-        }
-        break;
-
-    default:
-        break;
+            break;
+        default:
+            break;
     }
 }
 
 
-void PNS_ROUTER::ToggleViaPlacement(VIATYPE_T type)
+void PNS_ROUTER::ToggleViaPlacement()
 {
-    const int layercount = m_board->GetDesignSettings().GetCopperLayerCount();
-
-    // Cannot place microvias or blind vias if not allowed (obvious)
-    if( ( type == VIA_BLIND_BURIED ) && ( !m_board->GetDesignSettings().m_BlindBuriedViaAllowed ) )
-        return;
-    if( ( type == VIA_MICROVIA ) && ( !m_board->GetDesignSettings().m_MicroViasAllowed ) )
-        return;
-    
-    //Can only place through vias on 2-layer boards
-    if( ( type != VIA_THROUGH ) && ( layercount <= 2 ) )
-        return;
-    
-    //Can only place microvias if we're on an outer layer, or directly adjacent to one
-    if( ( type == VIA_MICROVIA ) && ( m_currentLayer > In1_Cu ) && ( m_currentLayer < layercount-2 ) )
-        return;
-    
-    //Cannot place blind vias with front/back as the layer pair, this doesn't make sense
-    if( ( type == VIA_BLIND_BURIED ) && ( Settings().GetLayerTop() == F_Cu ) && ( Settings().GetLayerBottom() == B_Cu ) )
-        return;
-    
-    if( m_state == ROUTE_TRACK )
+	if( m_state == ROUTE_TRACK )
     {
-        m_placingVia = !m_placingVia;
-        m_placer->AddVia( m_placingVia, m_settings.GetViaDiameter(), m_settings.GetViaDrill(), type );
+		bool toggle = !m_placer->IsPlacingVia();
+        m_placer->ToggleVia( toggle );
     }
 }
 
 
 int PNS_ROUTER::GetCurrentNet() const
 {
-    switch( m_state )
-    {
-        case ROUTE_TRACK:
-            return m_placer->CurrentNet();
-
-        default:
-            return m_currentNet;
-    }
+    if( m_placer )
+        return m_placer->CurrentNet();
+    return -1;
 }
 
 
 int PNS_ROUTER::GetCurrentLayer() const
 {
-    switch( m_state )
-    {
-        case ROUTE_TRACK:
-            return m_placer->CurrentLayer();
-
-        default:
-            return m_currentLayer;
-    }
+    if( m_placer )
+        return m_placer->CurrentLayer();
+    return -1;
 }
 
 
@@ -968,3 +858,11 @@ void PNS_ROUTER::DumpLog()
     if( logger )
         logger->Save( "/tmp/shove.log" );
 }
+
+bool PNS_ROUTER::IsPlacingVia() const
+{
+    if(!m_placer)
+        return NULL;
+    return m_placer->IsPlacingVia();
+}
+

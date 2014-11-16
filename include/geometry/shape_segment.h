@@ -31,60 +31,71 @@
 class SHAPE_SEGMENT : public SHAPE {
 
 public:
-	SHAPE_SEGMENT(): 
-		SHAPE( SH_SEGMENT ), m_width( 0 ) {};
-			
-	SHAPE_SEGMENT( const VECTOR2I& aA, const VECTOR2I& aB, int aWidth = 0 ): 
-		SHAPE( SH_SEGMENT ), m_seg( aA, aB ), m_width( aWidth ) {};
+    SHAPE_SEGMENT():
+        SHAPE( SH_SEGMENT ), m_width( 0 ) {};
 
-	SHAPE_SEGMENT( const SEG& aSeg, int aWidth = 0 ): 
-		SHAPE( SH_SEGMENT ), m_seg( aSeg ), m_width( aWidth ) {};
+    SHAPE_SEGMENT( const VECTOR2I& aA, const VECTOR2I& aB, int aWidth = 0 ):
+        SHAPE( SH_SEGMENT ), m_seg( aA, aB ), m_width( aWidth ) {};
 
-	~SHAPE_SEGMENT() {};
+    SHAPE_SEGMENT( const SEG& aSeg, int aWidth = 0 ):
+        SHAPE( SH_SEGMENT ), m_seg( aSeg ), m_width( aWidth ) {};
+
+    ~SHAPE_SEGMENT() {};
 
     SHAPE* Clone() const
     {
         return new SHAPE_SEGMENT( m_seg, m_width );
     }
 
-	const BOX2I BBox( int aClearance = 0 ) const
-	{
-		return BOX2I( m_seg.A, m_seg.B - m_seg.A ).Inflate( aClearance + m_width / 2 );
-	}
+    const BOX2I BBox( int aClearance = 0 ) const
+    {
+        return BOX2I( m_seg.A, m_seg.B - m_seg.A ).Inflate( aClearance + m_width / 2 );
+    }
 
-	bool Collide( const SEG& aSeg, int aClearance = 0 ) const
-	{
-		return m_seg.Distance( aSeg ) <= m_width / 2 + aClearance;
-	}
+    bool Collide( const SEG& aSeg, int aClearance = 0 ) const
+    {
+        return m_seg.Distance( aSeg ) <= m_width / 2 + aClearance;
+    }
 
-	bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const
-	{
-		return m_seg.Distance( aP ) <= m_width / 2 + aClearance;
-	}
-	
-	void SetSeg ( const SEG& aSeg )
-	{
-		m_seg = aSeg;
-	}	
-	
-	const SEG& GetSeg () const
-	{
-		return m_seg;
-	}
+    bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const
+    {
+        return m_seg.Distance( aP ) <= m_width / 2 + aClearance;
+    }
 
-	void SetWidth ( int aWidth )
-	{
-		m_width = aWidth;
-	}
+    void SetSeg( const SEG& aSeg )
+    {
+        m_seg = aSeg;
+    }
 
-	int GetWidth() const 
-	{
-		return m_width;
-	}
+    const SEG& GetSeg() const
+    {
+        return m_seg;
+    }
+
+    void SetWidth( int aWidth )
+    {
+        m_width = aWidth;
+    }
+
+    int GetWidth() const
+    {
+        return m_width;
+    }
+
+    bool IsSolid() const
+    {
+        return true;
+    }
+
+    void Move( const VECTOR2I& aVector )
+    {
+        m_seg.A += aVector;
+        m_seg.B += aVector;
+    }
 
 private:
-	SEG m_seg;
-	int m_width;
+    SEG m_seg;
+    int m_width;
 };
 
 #endif

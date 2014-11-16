@@ -38,7 +38,7 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS_ITEM* aItem, VIEW_GROUP* aPa
     EDA_ITEM( NOT_USED )
 {
     m_parent = aParent;
-    
+
     m_shape = NULL;
     m_clearance = -1;
     m_originLayer = m_layer = ITEM_GAL_LAYER( GP_OVERLAY );
@@ -64,7 +64,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS_ITEM* aItem )
     m_color.a = 0.8;
     m_depth = BaseOverlayDepth - aItem->Layers().Start();
     m_shape  = aItem->Shape()->Clone();
-    
+
     switch( aItem->Kind() )
     {
     case PNS_ITEM::LINE:
@@ -81,6 +81,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS_ITEM* aItem )
     }
 
     case PNS_ITEM::VIA:
+        m_originLayer = m_layer = ITEM_GAL_LAYER( VIAS_VISIBLE );
         m_type = PR_SHAPE;
         m_width = 0;
         m_color = COLOR4D( 0.7, 0.7, 0.7, 0.8 );
@@ -98,7 +99,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS_ITEM* aItem )
 
     if( aItem->Marker() & MK_VIOLATION )
         m_color = COLOR4D( 0, 1, 0, 1 );
-    
+
     if( aItem->Marker() & MK_HEAD )
         m_color.Brighten( 0.7 );
 
@@ -177,7 +178,7 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
                     aGal->SetLineWidth( m_width + 2 * m_clearance );
                     aGal->DrawLine( s->GetSeg().A, s->GetSeg().B );
                 }
-                
+
                 break;
             }
 
@@ -193,7 +194,7 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
                     aGal->SetIsStroke( false );
                     aGal->DrawCircle( c->GetCenter(), c->GetRadius() + m_clearance );
                 }
-                
+
                 break;
             }
 
@@ -224,7 +225,7 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
 
 void ROUTER_PREVIEW_ITEM::Line( const SHAPE_LINE_CHAIN& aLine, int aWidth, int aStyle )
 {
-    m_originLayer = m_layer = 0; 
+    m_originLayer = m_layer = 0;
     m_width = aWidth;
     m_color = assignColor( aStyle );
     m_type = PR_SHAPE;

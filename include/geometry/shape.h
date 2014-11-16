@@ -40,7 +40,10 @@ enum SHAPE_TYPE
     SH_RECT = 0,        ///> axis-aligned rectangle
     SH_SEGMENT,         ///> line segment
     SH_LINE_CHAIN,      ///> line chain (polyline)
-    SH_CIRCLE           ///> circle
+    SH_CIRCLE,          ///> circle
+    SH_CONVEX,          ///> convex polygon
+    SH_POLYGON,         ///> any polygon (with holes, etc.)
+    SH_COMPOUND         ///> compound shape, consisting of multiple simple shapes
 };
 
 /**
@@ -60,7 +63,7 @@ public:
      * Creates an empty shape of type aType
      */
 
-    SHAPE ( SHAPE_TYPE aType ) : m_type( aType )
+    SHAPE( SHAPE_TYPE aType ) : m_type( aType )
     {}
 
     // Destructor
@@ -146,7 +149,11 @@ public:
         return BBox( 0 ).Centre(); // if nothing better is available....
     }
 
-private:
+    virtual void Move ( const VECTOR2I& aVector ) = 0;
+
+    virtual bool IsSolid() const = 0;
+
+protected:
     ///> type of our shape
     SHAPE_TYPE m_type;
 };

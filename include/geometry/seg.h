@@ -52,7 +52,7 @@ public:
     /** Default constructor
      * Creates an empty (0, 0) segment, locally-referenced
      */
-    SEG() 
+    SEG()
     {
         m_index = -1;
     }
@@ -61,8 +61,8 @@ public:
      * Constructor
      * Creates a segment between (aX1, aY1) and (aX2, aY2), locally referenced
      */
-    SEG( int aX1, int aY1, int aX2, int aY2 ) : 
-        A ( VECTOR2I( aX1, aY1 ) ), 
+    SEG( int aX1, int aY1, int aX2, int aY2 ) :
+        A ( VECTOR2I( aX1, aY1 ) ),
         B ( VECTOR2I( aX2, aY2 ) )
     {
         m_index = -1;
@@ -84,7 +84,7 @@ public:
      * @param aB reference to the end point in the parent shape
      * @param aIndex index of the segment within the parent shape
      */
-    SEG ( const VECTOR2I& aA, const VECTOR2I& aB, int aIndex ) : A( aA ), B( aB )
+    SEG( const VECTOR2I& aA, const VECTOR2I& aB, int aIndex ) : A( aA ), B( aB )
     {
         m_index = aIndex;
     }
@@ -92,7 +92,7 @@ public:
     /**
      * Copy constructor
      */
-    SEG ( const SEG& aSeg ) : A( aSeg.A ), B( aSeg.B ), m_index ( aSeg.m_index )
+    SEG( const SEG& aSeg ) : A( aSeg.A ), B( aSeg.B ), m_index( aSeg.m_index )
     {
     }
 
@@ -101,7 +101,7 @@ public:
         A = aSeg.A;
         B = aSeg.B;
         m_index = aSeg.m_index;
-    
+
         return *this;
     }
 
@@ -215,14 +215,35 @@ public:
      */
     bool Collinear( const SEG& aSeg ) const
     {
-        ecoord qa1 = A.y - B.y;
-        ecoord qb1 = B.x - A.x;
-        ecoord qc1 = -qa1 * A.x - qb1 * A.y;
-        ecoord qa2 = aSeg.A.y - aSeg.B.y;
-        ecoord qb2 = aSeg.B.x - aSeg.A.x;
-        ecoord qc2 = -qa2 * aSeg.A.x - qb2 * aSeg.A.y;
+        ecoord qa = A.y - B.y;
+        ecoord qb = B.x - A.x;
+        ecoord qc = -qa * A.x - qb * A.y;
 
-        return ( qa1 == qa2 ) && ( qb1 == qb2 ) && ( qc1 == qc2 );
+        ecoord d1 = std::abs( aSeg.A.x * qa + aSeg.A.y * qb + qc );
+        ecoord d2 = std::abs( aSeg.B.x * qa + aSeg.B.y * qb + qc );
+
+        return ( d1 <= 1 && d2 <= 1 );
+    }
+
+    bool Overlaps( const SEG& aSeg ) const
+    {
+        if( aSeg.A == aSeg.B ) // single point corner case
+        {
+            if( A == aSeg.A || B == aSeg.A )
+                return false;
+
+            return Contains( aSeg.A );
+        }
+
+        if( !Collinear( aSeg ) )
+            return false;
+
+        if( Contains( aSeg.A ) || Contains( aSeg.B ) )
+            return true;
+        if( aSeg.Contains( A ) || aSeg.Contains( B ) )
+            return true;
+
+        return false;
     }
 
     /**
