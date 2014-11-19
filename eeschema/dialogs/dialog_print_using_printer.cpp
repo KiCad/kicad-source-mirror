@@ -197,7 +197,10 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
     pageSetupDialogData.GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );
 
     if ( GetSizer() )
+    {
         GetSizer()->SetSizeHints( this );
+        GetSizer()->Fit( this );
+    }
 
     // Rely on the policy in class DIALOG_SHIM, which centers the dialog
     // initially during a runtime session but gives user the ability to move it in
