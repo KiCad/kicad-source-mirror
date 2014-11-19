@@ -26,7 +26,6 @@
 //#define wxTEST_POSTSCRIPT_IN_MSW 1
 
 #include <fctsys.h>
-//#include <pgm_base.h>
 #include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -146,22 +145,18 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( PCB_EDIT_FRAME* parent )
 {
     m_parent = parent;
     m_config = Kiface().KifaceSettings();
-
     memset( m_BoxSelectLayer, 0, sizeof( m_BoxSelectLayer ) );
 
     initValues( );
 
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
-
+    GetSizer()->SetSizeHints( this );
     Center();
 #ifdef __WXMAC__
     /* Problems with modal on wx-2.9 - Anyway preview is standard for OSX */
    m_buttonPreview->Hide();
 #endif
 
+    GetSizer()->Fit( this );
 }
 
 
@@ -469,8 +464,11 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     preview->SetZoom( 100 );
 
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
+    frame->SetMinSize( wxSize( 550, 350 ) );
 
     frame->Initialize();
+
+    frame->Raise(); // Needed on Ubuntu/Unity to display the frame
     frame->Show( true );
 }
 

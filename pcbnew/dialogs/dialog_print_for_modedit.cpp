@@ -25,7 +25,6 @@
 /* File: dialog_print_for_modedit.cpp */
 
 #include <fctsys.h>
-//#include <pgm_base.h>
 #include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -116,6 +115,7 @@ DIALOG_PRINT_FOR_MODEDIT::DIALOG_PRINT_FOR_MODEDIT( PCB_BASE_FRAME* parent ) :
 
     m_buttonPrint->SetDefault();
     GetSizer()->SetSizeHints( this );
+    GetSizer()->Fit( this ); // Needed on Ubuntu/Unity to display the dialog
 }
 
 
@@ -188,8 +188,11 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintPreview( wxCommandEvent& event )
     wxSize          WSize = m_parent->GetSize();
 
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
+    frame->SetMinSize( wxSize( 550, 350 ) );
 
     frame->Initialize();
+
+    frame->Raise(); // Needed on Ubuntu/Unity to display the frame
     frame->Show( true );
 }
 

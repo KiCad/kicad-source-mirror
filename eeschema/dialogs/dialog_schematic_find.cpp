@@ -90,6 +90,8 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData,
     }
 
     SetSize( size );
+
+    GetSizer()->Fit( this ); // Needed on Ubuntu/Unity to display the dialog
 }
 
 
