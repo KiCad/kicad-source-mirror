@@ -199,7 +199,7 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
     m_config = Kiface().KifaceSettings();
     installPluginsList();
 
-    GetSizer()->SetSizeHints( this );
+    GetSizer()->Fit( this );
     Centre();
 }
 

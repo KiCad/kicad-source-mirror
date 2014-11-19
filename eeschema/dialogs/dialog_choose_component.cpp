@@ -24,7 +24,6 @@
 #include <dialog_choose_component.h>
 
 #include <set>
-#include <boost/foreach.hpp>
 #include <wx/tokenzr.h>
 
 #include <class_library.h>
@@ -36,15 +35,14 @@ static wxTreeItemId GetPrevItem( const wxTreeCtrl& tree, const wxTreeItemId& ite
 static wxTreeItemId GetNextItem( const wxTreeCtrl& tree, const wxTreeItemId& item );
 
 DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                                                  COMPONENT_TREE_SEARCH_CONTAINER* aContainer,
+                                                  COMPONENT_TREE_SEARCH_CONTAINER* const aContainer,
                                                   int aDeMorganConvert )
-    : DIALOG_CHOOSE_COMPONENT_BASE( aParent, wxID_ANY, aTitle ),
-      m_search_container( aContainer ),
-      m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
-      m_external_browser_requested( false ),
-      m_received_doubleclick_in_tree( false )
+    : DIALOG_CHOOSE_COMPONENT_BASE( aParent, wxID_ANY, aTitle ), m_search_container( aContainer )
 {
     m_parent = aParent;
+    m_deMorganConvert = aDeMorganConvert >= 0 ? aDeMorganConvert : 0;
+    m_external_browser_requested = false;
+    m_received_doubleclick_in_tree = false;
     m_search_container->SetTree( m_libraryComponentTree );
     m_searchBox->SetFocus();
     m_componentDetails->SetEditable( false );
@@ -59,6 +57,11 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     m_libraryComponentTree->SetFont( wxFont( font.GetPointSize(),
              wxFONTFAMILY_MODERN,  wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ) );
+
+    // this line fixes an issue on Linux Ubuntu using Unity (dialog not shown),
+    // and works fine on all systems
+    GetSizer()->Fit( this );
+    Centre();
 }
 
 

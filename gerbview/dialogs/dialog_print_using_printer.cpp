@@ -133,6 +133,8 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( GERBVIEW_FRAME* parent )
     /* Problems with modal on wx-2.9 - Anyway preview is standard for OSX */
    m_buttonPreview->Hide();
 #endif
+
+    GetSizer()->Fit( this );
 }
 
 
@@ -368,8 +370,11 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     wxSize          WSize = m_Parent->GetSize();
 
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
+    frame->SetMinSize( wxSize( 550, 350 ) );
 
     frame->Initialize();
+
+    frame->Raise(); // Needed on Ubuntu/Unity to display the frame
     frame->Show( true );
 }
 

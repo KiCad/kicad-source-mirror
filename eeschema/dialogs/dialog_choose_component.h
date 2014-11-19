@@ -36,7 +36,7 @@ class DIALOG_CHOOSE_COMPONENT : public DIALOG_CHOOSE_COMPONENT_BASE
 {
     SCH_BASE_FRAME* m_parent;
     COMPONENT_TREE_SEARCH_CONTAINER* const m_search_container;
-    const int       m_deMorganConvert;
+    int             m_deMorganConvert;
     bool            m_external_browser_requested;
     bool            m_received_doubleclick_in_tree;
 
@@ -51,7 +51,7 @@ public:
      * @param aDeMorganConvert preferred deMorgan conversion (TODO: should happen in dialog)
      */
     DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                             COMPONENT_TREE_SEARCH_CONTAINER* aSearchContainer,
+                             COMPONENT_TREE_SEARCH_CONTAINER* const aSearchContainer,
                              int aDeMorganConvert );
     virtual ~DIALOG_CHOOSE_COMPONENT();
 
