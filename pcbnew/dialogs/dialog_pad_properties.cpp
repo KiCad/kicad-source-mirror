@@ -151,6 +151,7 @@ private:
     void PadPropertiesAccept( wxCommandEvent& event );
 };
 
+
 void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
 {
     DIALOG_PAD_PROPERTIES dlg( this, aPad );
@@ -245,14 +246,41 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
     // Calculate a suitable scale to fit the available draw area
-    int dim = m_dummyPad->GetSize().x + std::abs( m_dummyPad->GetDelta().y);
+    int dim = m_dummyPad->GetSize().x + std::abs( m_dummyPad->GetDelta().y );
+
+    // Invalid x size. User could enter zero, or have deleted all text prior to
+    // entering a new value; this is also treated as zero. If dim is left at
+    // zero, the drawing scale is zero and we get a crash.
+    if( dim == 0 )
+    {
+        // If drill size has been set, use that. Otherwise default to 1mm.
+        dim = m_dummyPad->GetDrillSize().x;
+        if( dim == 0 )
+            dim = 1000000;
+    }
 
     if( m_dummyPad->GetLocalClearance() > 0 )
         dim += m_dummyPad->GetLocalClearance() * 2;
 
     double scale = (double) dc_size.x / dim;
 
-    dim = m_dummyPad->GetSize().y + std::abs( m_dummyPad->GetDelta().x);
+    // If the pad is a circle, use the x size here instead.
+    int ysize;
+    if( m_dummyPad->GetShape() == PAD_CIRCLE )
+        ysize = m_dummyPad->GetSize().x;
+    else
+        ysize = m_dummyPad->GetSize().y;
+
+    dim = ysize + std::abs( m_dummyPad->GetDelta().x );
+
+    // Invalid y size. See note about x size above.
+    if( dim == 0 )
+    {
+        dim = m_dummyPad->GetDrillSize().y;
+        if( dim == 0 )
+            dim = 1000000;
+    }
+
     if( m_dummyPad->GetLocalClearance() > 0 )
         dim += m_dummyPad->GetLocalClearance() * 2;
 
@@ -666,13 +694,13 @@ void DIALOG_PAD_PROPERTIES::setPadLayersList( LSET layer_mask )
     LSET cu_set = layer_mask & LSET::AllCuMask();
 
     if( cu_set == LSET( F_Cu ) )
-        m_rbCopperLayersSel->SetSelection(0);
+        m_rbCopperLayersSel->SetSelection( 0 );
     else if( cu_set == LSET( B_Cu ) )
-        m_rbCopperLayersSel->SetSelection(1);
+        m_rbCopperLayersSel->SetSelection( 1 );
     else if( cu_set.any() )
-        m_rbCopperLayersSel->SetSelection(2);
+        m_rbCopperLayersSel->SetSelection( 2 );
     else
-        m_rbCopperLayersSel->SetSelection(3);
+        m_rbCopperLayersSel->SetSelection( 3 );
 
     m_PadLayerAdhCmp->SetValue( layer_mask[F_Adhes] );
     m_PadLayerAdhCu->SetValue( layer_mask[B_Adhes] );
@@ -710,6 +738,12 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     wxString msg;
 
     // Test for incorrect values
+    if( (m_dummyPad->GetSize().x <= 0) ||
+       ((m_dummyPad->GetSize().y <= 0) && (m_dummyPad->GetShape() != PAD_CIRCLE)) )
+    {
+        error_msgs.Add( _( "Pad size must be greater than zero" ) );
+    }
+
     if( (m_dummyPad->GetSize().x < m_dummyPad->GetDrillSize().x) ||
         (m_dummyPad->GetSize().y < m_dummyPad->GetDrillSize().y) )
     {
@@ -730,10 +764,10 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
             if( m_dummyPad->GetAttribute() == PAD_HOLE_NOT_PLATED )
             {
-                msg += wxT("<br><br><i>");
-                msg += _(   "For NPTH pad, set pad size value to pad drill value,"
-                            " if you do not want this pad plotted in gerber files"
-                            );
+                msg += wxT( "<br><br><i>" );
+                msg += _( "For NPTH pad, set pad size value to pad drill value,"
+                          " if you do not want this pad plotted in gerber files"
+                    );
             }
 
             error_msgs.Add( msg );
