@@ -96,7 +96,10 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
 
 
     m_modal_resultant_parent = aResultantFocusWindow;
+
+    Raise();    // Needed on Ubuntu-14/Unity to display the frame
     Show( true );
+
     SetFocus();
 
     {
