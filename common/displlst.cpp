@@ -47,6 +47,27 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
     m_cb_data     = aCallBackFunctionData;
     m_itemsListCp = &aItemList;
 
+    initDialog( aItemHeaders, aSelection );
+
+    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
+    // because so many dialogs share this same class, with different numbers of
+    // columns, different column names, and column widths.
+    m_hash_key = TO_UTF8( aTitle );
+
+    m_filterBox->SetFocus();
+
+    // this line fixes an issue on Linux Ubuntu using Unity (dialog not shown),
+    // and works fine on all systems
+    GetSizer()->Fit(  this );
+
+    Centre();
+}
+
+
+void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders,
+                                  const wxString& aSelection)
+{
+
     for( unsigned i = 0; i < aItemHeaders.Count(); i++ )
     {
         wxListItem column;
@@ -57,7 +78,7 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
         m_listBox->InsertColumn( i, column );
     }
 
-    InsertItems( aItemList, 0 );
+    InsertItems( *m_itemsListCp, 0 );
 
     if( m_cb_func == NULL )
     {
@@ -112,14 +133,11 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
     }
 #endif
 
-    Fit();
-    Centre();
-
     if( !!aSelection )
     {
-        for( unsigned row = 0; row < aItemList.size(); ++row )
+        for( unsigned row = 0; row < m_itemsListCp->size(); ++row )
         {
-            if( aItemList[row][0] == aSelection )
+            if( (*m_itemsListCp)[row][0] == aSelection )
             {
                 m_listBox->SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
                 m_listBox->EnsureVisible( row );
@@ -127,13 +145,6 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
             }
         }
     }
-
-    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
-    // because so many dialogs share this same class, with different numbers of
-    // columns, different column names, and column widths.
-    m_hash_key = TO_UTF8( aTitle );
-
-    m_filterBox->SetFocus();
 }
 
 
