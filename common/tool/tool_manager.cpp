@@ -292,21 +292,19 @@ void TOOL_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 }
 
 
-bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow )
+bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, void* aParam )
 {
     TOOL_ACTION* action = m_actionMgr->FindAction( aActionName );
 
     if( action )
     {
+        TOOL_EVENT event = action->MakeEvent();
+        event.SetParameter( aParam );
+
         if( aNow )
-        {
-            TOOL_EVENT event = action->MakeEvent();
             ProcessEvent( event );
-        }
         else
-        {
-            PostEvent( action->MakeEvent() );
-        }
+            PostEvent( event );
 
         return true;
     }
@@ -315,17 +313,15 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow )
 }
 
 
-void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow )
+void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aParam )
 {
+    TOOL_EVENT event = aAction.MakeEvent();
+    event.SetParameter( aParam );
+
     if( aNow )
-    {
-        TOOL_EVENT event = aAction.MakeEvent();
         ProcessEvent( event );
-    }
     else
-    {
-        PostEvent( aAction.MakeEvent() );
-    }
+        PostEvent( event );
 }
 
 
