@@ -1925,7 +1925,7 @@ msgstr "Навигатор по иерархии схемы"
 
 #: eeschema/tool_sch.cpp:149
 msgid "Perform electric rules check"
-msgstr "Выполнить проверку электрический правил проектирования"
+msgstr "Выполнить проверку электрических правил проектирования"
 
 #: eeschema/tool_sch.cpp:152
 msgid "Generate netlist"
