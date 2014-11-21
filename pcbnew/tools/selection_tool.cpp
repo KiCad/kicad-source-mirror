@@ -187,6 +187,16 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             findMove( *evt );
         }
 
+        else if( evt->IsAction( &COMMON_ACTIONS::selectItem ) )
+        {
+            SelectItem( *evt );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::unselectItem ) )
+        {
+            UnselectItem( *evt );
+        }
+
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO ||
                  evt->IsAction( &COMMON_ACTIONS::selectionClear ) )
         {
@@ -397,6 +407,8 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
     Go( &SELECTION_TOOL::CursorSelection, COMMON_ACTIONS::selectionCursor.MakeEvent() );
     Go( &SELECTION_TOOL::ClearSelection, COMMON_ACTIONS::selectionClear.MakeEvent() );
+    Go( &SELECTION_TOOL::SelectItem, COMMON_ACTIONS::selectItem.MakeEvent() );
+    Go( &SELECTION_TOOL::UnselectItem, COMMON_ACTIONS::unselectItem.MakeEvent() );
     Go( &SELECTION_TOOL::find, COMMON_ACTIONS::find.MakeEvent() );
     Go( &SELECTION_TOOL::findMove, COMMON_ACTIONS::findMove.MakeEvent() );
 }
@@ -461,6 +473,43 @@ int SELECTION_TOOL::ClearSelection( TOOL_EVENT& aEvent )
     return 0;
 }
 
+int SELECTION_TOOL::SelectItem( TOOL_EVENT& aEvent )
+{
+    // Check if there is an item to be selected
+    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aEvent.Parameter() );
+
+    if( item )
+    {
+        select( item );
+
+        // Inform other potentially interested tools
+        TOOL_EVENT select( SelectedEvent );
+        m_toolMgr->ProcessEvent( select );
+    }
+
+    setTransitions();
+
+    return 0;
+}
+
+int SELECTION_TOOL::UnselectItem( TOOL_EVENT& aEvent )
+{
+    // Check if there is an item to be selected
+    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aEvent.Parameter() );
+
+    if( item )
+    {
+        unselect( item );
+
+        // Inform other potentially interested tools
+        TOOL_EVENT unselect( UnselectedEvent );
+        m_toolMgr->ProcessEvent( unselect );
+    }
+
+    setTransitions();
+
+    return 0;
+}
 
 void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
 {
@@ -525,8 +574,6 @@ void SELECTION_TOOL::clearSelection()
     // Inform other potentially interested tools
     TOOL_EVENT clearEvent( ClearedEvent );
     m_toolMgr->ProcessEvent( clearEvent );
-
-    return;
 }
 
 

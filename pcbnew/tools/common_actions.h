@@ -46,6 +46,12 @@ public:
     /// Clears the current selection
     static TOOL_ACTION selectionClear;
 
+    /// Selects an item (specified as the event parameter).
+    static TOOL_ACTION selectItem;
+
+    /// Unselects an item (specified as the event parameter).
+    static TOOL_ACTION unselectItem;
+
     // Edit Tool
     /// Activation of the edit tool
     static TOOL_ACTION editActivate;

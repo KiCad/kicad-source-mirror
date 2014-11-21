@@ -36,6 +36,14 @@ TOOL_ACTION COMMON_ACTIONS::selectionCursor( "pcbnew.InteractiveSelection.Cursor
         AS_GLOBAL, 0,
         "", "" );    // No description, it is not supposed to be shown anywhere
 
+TOOL_ACTION COMMON_ACTIONS::selectItem( "pcbnew.InteractiveSelection.SelectItem",
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
+
+TOOL_ACTION COMMON_ACTIONS::unselectItem( "pcbnew.InteractiveSelection.UnselectItem",
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
+
 TOOL_ACTION COMMON_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
         AS_GLOBAL, 0,
         "", "" );    // No description, it is not supposed to be shown anywhere

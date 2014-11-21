@@ -157,6 +157,12 @@ public:
     ///> Clear current selection event handler.
     int ClearSelection( TOOL_EVENT& aEvent );
 
+    ///> Item selection event handler.
+    int SelectItem( TOOL_EVENT& aEvent );
+
+    ///> Item unselection event handler.
+    int UnselectItem( TOOL_EVENT& aEvent );
+
     ///> Event sent after an item is selected.
     const TOOL_EVENT SelectedEvent;
 
