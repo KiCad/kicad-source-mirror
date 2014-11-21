@@ -151,7 +151,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	int m_radio_PCBLayerNChoices = sizeof( m_radio_PCBLayerChoices ) / sizeof( wxString );
 	m_radio_PCBLayer = new wxRadioBox( m_panelRight, wxID_ANY, _("Board Layer for Outline:"), wxDefaultPosition, wxDefaultSize, m_radio_PCBLayerNChoices, m_radio_PCBLayerChoices, 1, wxRA_SPECIFY_COLS );
 	m_radio_PCBLayer->SetSelection( 0 );
-	m_radio_PCBLayer->SetToolTip( _("Choose the board layer to place the outline.\nThe 2 invisible fields reference and value and always placed on the silk screen layer.") );
+	m_radio_PCBLayer->SetToolTip( _("Choose the board layer to place the outline.\nThe 2 invisible fields reference and value are always placed on the silk screen layer.") );
 	
 	brightSizer->Add( m_radio_PCBLayer, 0, wxALL|wxEXPAND, 5 );
 	

@@ -151,24 +151,30 @@ public:
     ///> Checks if the user has agreed to modify locked items for the given selection.
     bool CheckLock();
 
-    ///> Select single item event handler.
-    int SingleSelection( TOOL_EVENT& aEvent );
+    ///> Select a single item under cursor event handler.
+    int CursorSelection( TOOL_EVENT& aEvent );
 
     ///> Clear current selection event handler.
     int ClearSelection( TOOL_EVENT& aEvent );
 
+    ///> Item selection event handler.
+    int SelectItem( TOOL_EVENT& aEvent );
+
+    ///> Item unselection event handler.
+    int UnselectItem( TOOL_EVENT& aEvent );
+
     ///> Event sent after an item is selected.
     const TOOL_EVENT SelectedEvent;
 
-    ///> Event sent after an item is deselected.
-    const TOOL_EVENT DeselectedEvent;
+    ///> Event sent after an item is unselected.
+    const TOOL_EVENT UnselectedEvent;
 
     ///> Event sent after selection is cleared.
     const TOOL_EVENT ClearedEvent;
 
 private:
     /**
-     * Function selectSingle()
+     * Function selectCursor()
      * Selects an item pointed by the parameter aWhere. If there is more than one item at that
      * place, there is a menu displayed that allows to choose the item.
      *
@@ -177,7 +183,7 @@ private:
      * a menu is shown, otherise function finishes without selecting anything.
      * @return True if an item was selected, false otherwise.
      */
-    bool selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
+    bool selectCursor( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
 
     /**
      * Function selectMultiple()
@@ -208,7 +214,7 @@ private:
     /**
      * Function disambiguationMenu()
      * Handles the menu that allows to select one of many items in case there is more than one
-     * item at the selected point (@see selectSingle()).
+     * item at the selected point (@see selectCursor()).
      *
      * @param aItems contains list of items that are displayed to the user.
      */
@@ -247,26 +253,26 @@ private:
     void select( BOARD_ITEM* aItem );
 
     /**
-     * Function deselectItem()
-     * Takes necessary action mark an item as deselected.
+     * Function unselectItem()
+     * Takes necessary action mark an item as unselected.
      *
-     * @param aItem is an item to be deselected.
+     * @param aItem is an item to be unselected.
      */
-    void deselect( BOARD_ITEM* aItem );
+    void unselect( BOARD_ITEM* aItem );
 
     /**
-     * Function deselectVisually()
+     * Function unselectVisually()
      * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
      * @param aItem is an item to be be marked.
      */
     void selectVisually( BOARD_ITEM* aItem ) const;
 
     /**
-     * Function deselectVisually()
+     * Function unselectVisually()
      * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
      * @param aItem is an item to be be marked.
      */
-    void deselectVisually( BOARD_ITEM* aItem ) const;
+    void unselectVisually( BOARD_ITEM* aItem ) const;
 
     /**
      * Function containsSelected()

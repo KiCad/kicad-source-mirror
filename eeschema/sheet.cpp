@@ -62,10 +62,12 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
      * column from being sized correctly.  It doesn't cause any problems
      * on win32 so it doesn't need to wrapped in ugly #ifdef __WXGTK__
      * #endif.
+     * Still presen in wxWidgets 3.0.2
      */
     dlg.Layout();
     dlg.Fit();
     dlg.SetMinSize( dlg.GetSize() );
+    dlg.GetSizer()->Fit( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;

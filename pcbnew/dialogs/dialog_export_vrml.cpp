@@ -40,7 +40,7 @@
 
 #define OPTKEY_OUTPUT_UNIT wxT( "VrmlExportUnit" )
 #define OPTKEY_3DFILES_OPT wxT( "VrmlExportCopyFiles" )
-#define OPTKEY_USE_ABS_PATHS wxT( "VrmlUseRelativePaths" )
+#define OPTKEY_USE_RELATIVE_PATHS wxT( "VrmlUseRelativePaths" )
 
 
 class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
@@ -61,10 +61,10 @@ public:
         m_filePicker->SetFocus();
         m_config->Read( OPTKEY_OUTPUT_UNIT, &m_unitsOpt );
         m_config->Read( OPTKEY_3DFILES_OPT, &m_copy3DFilesOpt );
-        m_config->Read( OPTKEY_USE_ABS_PATHS, &m_useRelativePathsOpt );
+        m_config->Read( OPTKEY_USE_RELATIVE_PATHS, &m_useRelativePathsOpt );
         m_rbSelectUnits->SetSelection( m_unitsOpt );
         m_cbCopyFiles->SetValue( m_copy3DFilesOpt );
-        m_cbUseAbsolutePaths->SetValue( m_useRelativePathsOpt );
+        m_cbUseRelativePaths->SetValue( m_useRelativePathsOpt );
         wxButton* okButton = (wxButton*) FindWindowByLabel( wxT( "OK" ) );
 
         if( okButton )
@@ -74,7 +74,7 @@ public:
         Centre();
 
         Connect( ID_USE_ABS_PATH, wxEVT_UPDATE_UI,
-                 wxUpdateUIEventHandler( DIALOG_EXPORT_3DFILE::OnUpdateUseAbsolutPath ) );
+                 wxUpdateUIEventHandler( DIALOG_EXPORT_3DFILE::OnUpdateUseRelativePath ) );
     }
 
     ~DIALOG_EXPORT_3DFILE()
@@ -83,7 +83,7 @@ public:
         m_copy3DFilesOpt = GetCopyFilesOption();
         m_config->Write( OPTKEY_OUTPUT_UNIT, m_unitsOpt );
         m_config->Write( OPTKEY_3DFILES_OPT, m_copy3DFilesOpt );
-        m_config->Write( OPTKEY_USE_ABS_PATHS, m_useRelativePathsOpt );
+        m_config->Write( OPTKEY_USE_RELATIVE_PATHS, m_useRelativePathsOpt );
     };
 
     void SetSubdir( const wxString & aDir )
@@ -111,12 +111,12 @@ public:
         return m_copy3DFilesOpt = m_cbCopyFiles->GetValue();
     }
 
-    bool GetUseAbsolutePathsOption()
+    bool GetUseRelativePathsOption()
     {
-        return m_useRelativePathsOpt = m_cbUseAbsolutePaths->GetValue();
+        return m_useRelativePathsOpt = m_cbUseRelativePaths->GetValue();
     }
 
-    void OnUpdateUseAbsolutPath( wxUpdateUIEvent& event )
+    void OnUpdateUseRelativePath( wxUpdateUIEvent& event )
     {
         // Making path relative or absolute has no meaning when VRML files are not copied.
         event.Enable( m_cbCopyFiles->GetValue() );
@@ -157,7 +157,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
 
     double scale = scaleList[dlg.GetUnits()];     // final scale export
     bool export3DFiles = dlg.GetCopyFilesOption();
-    bool useRelativePaths = dlg.GetUseAbsolutePathsOption();
+    bool useRelativePaths = dlg.GetUseRelativePathsOption();
     wxString fullFilename = dlg.FilePicker()->GetPath();
     wxFileName modelPath = fullFilename;
     wxBusyCursor dummy;

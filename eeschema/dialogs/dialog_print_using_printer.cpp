@@ -165,6 +165,8 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent 
     // Problems with modal on wx-2.9 - Anyway preview is standard for OSX
    m_buttonPreview->Hide();
 #endif
+
+    GetSizer()->Fit( this );
 }
 
 
@@ -274,6 +276,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     preview->SetZoom( 100 );
 
     SCH_PREVIEW_FRAME* frame = new SCH_PREVIEW_FRAME( preview, this, title );
+    frame->SetMinSize( wxSize( 550, 350 ) );
 
     // on first invocation in this runtime session, set to 2/3 size of my parent,
     // but will be changed in Show() if not first time as will position.
@@ -281,6 +284,8 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     frame->Center();
 
     frame->Initialize();
+
+    frame->Raise(); // Needed on Ubuntu/Unity to display the frame
     frame->Show( true );
 }
 

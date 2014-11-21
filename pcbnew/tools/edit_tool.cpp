@@ -581,7 +581,7 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION& aSelection )
 bool EDIT_TOOL::makeSelection( const SELECTION& aSelection )
 {
     if( aSelection.Empty() )                        // Try to find an item that could be modified
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionSingle, true );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
 
     return !aSelection.Empty();
 }

@@ -41,10 +41,16 @@ public:
     static TOOL_ACTION selectionActivate;
 
     /// Select a single item under the cursor position
-    static TOOL_ACTION selectionSingle;
+    static TOOL_ACTION selectionCursor;
 
     /// Clears the current selection
     static TOOL_ACTION selectionClear;
+
+    /// Selects an item (specified as the event parameter).
+    static TOOL_ACTION selectItem;
+
+    /// Unselects an item (specified as the event parameter).
+    static TOOL_ACTION unselectItem;
 
     // Edit Tool
     /// Activation of the edit tool

@@ -165,7 +165,8 @@ public:
         m_scope( aScope ),
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
-        m_modifiers( 0 ) {}
+        m_modifiers( 0 ),
+        m_param( NULL ) {}
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory, TOOL_ACTIONS aAction, int aExtraParam,
             TOOL_ACTION_SCOPE aScope = AS_GLOBAL ) :
@@ -174,7 +175,8 @@ public:
         m_scope( aScope ),
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
-        m_modifiers( 0 )
+        m_modifiers( 0 ),
+        m_param( NULL )
     {
         if( aCategory == TC_MOUSE )
         {
@@ -202,7 +204,8 @@ public:
         m_scope( aScope ),
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
-        m_modifiers( 0 )
+        m_modifiers( 0 ),
+        m_param( NULL )
     {
         if( aCategory == TC_COMMAND || aCategory == TC_MESSAGE )
             m_commandStr = aExtraParam;
@@ -352,6 +355,27 @@ public:
      */
     bool IsAction( const TOOL_ACTION* aAction ) const;
 
+    /**
+     * Function Parameter()
+     * Returns a non-standard parameter assigned to the event. Its meaning depends on the
+     * target tool.
+     */
+    void* Parameter() const
+    {
+        return m_param;
+    }
+
+    /**
+     * Function SetParameter()
+     * Sets a non-standard parameter assigned to the event. Its meaning depends on the
+     * target tool.
+     * @param aParam is the new parameter.
+     */
+    void SetParameter(void* aParam)
+    {
+        m_param = aParam;
+    }
+
     boost::optional<int> GetCommandId() const
     {
         return m_commandId;
@@ -387,6 +411,9 @@ private:
 
     ///> State of key modifierts (Ctrl/Alt/etc.)
     int m_modifiers;
+
+    ///> Generic parameter used for passing non-standard data.
+    void* m_param;
 
     boost::optional<int> m_commandId;
     boost::optional<std::string> m_commandStr;

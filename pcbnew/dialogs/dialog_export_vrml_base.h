@@ -49,7 +49,7 @@ class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText3;
 		wxTextCtrl* m_SubdirNameCtrl;
 		wxCheckBox* m_cbCopyFiles;
-		wxCheckBox* m_cbUseAbsolutePaths;
+		wxCheckBox* m_cbUseRelativePaths;
 		wxRadioBox* m_rbSelectUnits;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;

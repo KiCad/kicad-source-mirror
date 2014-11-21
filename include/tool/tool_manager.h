@@ -108,9 +108,11 @@ public:
      * @param aActionName is the name of action to be invoked.
      * @param aNow decides if the action has to be run immediately or after the current coroutine
      * is preemptied.
+     * @param aParam is an optional parameter that might be used by the invoked action. Its meaning
+     * depends on the action.
      * @return False if the action was not found.
      */
-    bool RunAction( const std::string& aActionName, bool aNow = false );
+    bool RunAction( const std::string& aActionName, bool aNow = false, void* aParam = NULL );
 
     /**
      * Function RunAction()
@@ -119,8 +121,10 @@ public:
      * @param aAction is the action to be invoked.
      * @param aNow decides if the action has to be run immediately or after the current coroutine
      * is preemptied.
+     * @param aParam is an optional parameter that might be used by the invoked action. Its meaning
+     * depends on the action.
      */
-    void RunAction( const TOOL_ACTION& aAction, bool aNow = false );
+    void RunAction( const TOOL_ACTION& aAction, bool aNow = false, void* aParam = NULL );
 
     /**
      * Function FindTool()

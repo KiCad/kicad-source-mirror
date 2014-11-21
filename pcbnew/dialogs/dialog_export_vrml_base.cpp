@@ -47,9 +47,10 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	m_cbCopyFiles->SetValue(true); 
 	bSizer4->Add( m_cbCopyFiles, 0, wxALL, 5 );
 	
-	m_cbUseAbsolutePaths = new wxCheckBox( this, ID_USE_ABS_PATH, _("Use absolute paths to model files in board VRML file"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbUseAbsolutePaths->SetValue(true); 
-	bSizer4->Add( m_cbUseAbsolutePaths, 0, wxALL, 5 );
+	m_cbUseRelativePaths = new wxCheckBox( this, ID_USE_ABS_PATH, _("Use relative paths to model files in board VRML file"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUseRelativePaths->SetToolTip( _("Use paths for model files in board VRML file relative to the vrml file") );
+	
+	bSizer4->Add( m_cbUseRelativePaths, 0, wxALL, 5 );
 	
 	
 	bLowerSizer->Add( bSizer4, 3, wxEXPAND, 5 );
