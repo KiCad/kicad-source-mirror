@@ -160,8 +160,8 @@ public:
     ///> Event sent after an item is selected.
     const TOOL_EVENT SelectedEvent;
 
-    ///> Event sent after an item is deselected.
-    const TOOL_EVENT DeselectedEvent;
+    ///> Event sent after an item is unselected.
+    const TOOL_EVENT UnselectedEvent;
 
     ///> Event sent after selection is cleared.
     const TOOL_EVENT ClearedEvent;
@@ -247,26 +247,26 @@ private:
     void select( BOARD_ITEM* aItem );
 
     /**
-     * Function deselectItem()
-     * Takes necessary action mark an item as deselected.
+     * Function unselectItem()
+     * Takes necessary action mark an item as unselected.
      *
-     * @param aItem is an item to be deselected.
+     * @param aItem is an item to be unselected.
      */
-    void deselect( BOARD_ITEM* aItem );
+    void unselect( BOARD_ITEM* aItem );
 
     /**
-     * Function deselectVisually()
+     * Function unselectVisually()
      * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
      * @param aItem is an item to be be marked.
      */
     void selectVisually( BOARD_ITEM* aItem ) const;
 
     /**
-     * Function deselectVisually()
+     * Function unselectVisually()
      * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
      * @param aItem is an item to be be marked.
      */
-    void deselectVisually( BOARD_ITEM* aItem ) const;
+    void unselectVisually( BOARD_ITEM* aItem ) const;
 
     /**
      * Function containsSelected()

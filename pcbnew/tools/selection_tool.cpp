@@ -52,7 +52,7 @@
 SELECTION_TOOL::SELECTION_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
         SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" ),
-        DeselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.deselected" ),
+        UnselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.unselected" ),
         ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" ),
         m_frame( NULL ), m_additive( false ), m_multiple( false ),
         m_editModules( false ), m_locked( true )
@@ -221,11 +221,11 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 {
     if( aItem->IsSelected() )
     {
-        deselect( aItem );
+        unselect( aItem );
 
         // Inform other potentially interested tools
-        TOOL_EVENT deselectEvent( DeselectedEvent );
-        m_toolMgr->ProcessEvent( deselectEvent );
+        TOOL_EVENT unselectEvent( UnselectedEvent );
+        m_toolMgr->ProcessEvent( unselectEvent );
     }
     else
     {
@@ -734,17 +734,17 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 }
 
 
-void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
+void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
     // Modules are treated in a special way - when they are selected, we have to
-    // deselect all the parts that make the module, not the module itself
+    // unselect all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
-        module->RunOnChildren( boost::bind( &SELECTION_TOOL::deselectVisually, this, _1 ) );
+        module->RunOnChildren( boost::bind( &SELECTION_TOOL::unselectVisually, this, _1 ) );
     }
 
-    deselectVisually( aItem );
+    unselectVisually( aItem );
 
     int itemIdx = m_selection.items.FindItem( aItem );
     if( itemIdx >= 0 )
@@ -757,8 +757,8 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
     }
 
     // Inform other potentially interested tools
-    TOOL_EVENT deselected( DeselectedEvent );
-    m_toolMgr->ProcessEvent( deselected );
+    TOOL_EVENT unselected( UnselectedEvent );
+    m_toolMgr->ProcessEvent( unselected );
 }
 
 
@@ -772,7 +772,7 @@ void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem ) const
 }
 
 
-void SELECTION_TOOL::deselectVisually( BOARD_ITEM* aItem ) const
+void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem ) const
 {
     m_selection.group->Remove( aItem );
 

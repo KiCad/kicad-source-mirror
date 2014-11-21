@@ -233,7 +233,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         {
             if( !m_editPoints ||
                 evt->Matches( m_selectionTool->ClearedEvent ) ||
-                evt->Matches( m_selectionTool->DeselectedEvent ) ||
+                evt->Matches( m_selectionTool->UnselectedEvent ) ||
                 evt->Matches( m_selectionTool->SelectedEvent ) )
             {
                 break;
@@ -783,7 +783,7 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
 void POINT_EDITOR::setTransitions()
 {
     Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->SelectedEvent );
-    Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->DeselectedEvent );
+    Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->UnselectedEvent );
 }
 
 
