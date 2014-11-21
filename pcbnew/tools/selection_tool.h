@@ -151,8 +151,8 @@ public:
     ///> Checks if the user has agreed to modify locked items for the given selection.
     bool CheckLock();
 
-    ///> Select single item event handler.
-    int SingleSelection( TOOL_EVENT& aEvent );
+    ///> Select a single item under cursor event handler.
+    int CursorSelection( TOOL_EVENT& aEvent );
 
     ///> Clear current selection event handler.
     int ClearSelection( TOOL_EVENT& aEvent );
@@ -168,7 +168,7 @@ public:
 
 private:
     /**
-     * Function selectSingle()
+     * Function selectCursor()
      * Selects an item pointed by the parameter aWhere. If there is more than one item at that
      * place, there is a menu displayed that allows to choose the item.
      *
@@ -177,7 +177,7 @@ private:
      * a menu is shown, otherise function finishes without selecting anything.
      * @return True if an item was selected, false otherwise.
      */
-    bool selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
+    bool selectCursor( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
 
     /**
      * Function selectMultiple()
@@ -208,7 +208,7 @@ private:
     /**
      * Function disambiguationMenu()
      * Handles the menu that allows to select one of many items in case there is more than one
-     * item at the selected point (@see selectSingle()).
+     * item at the selected point (@see selectCursor()).
      *
      * @param aItems contains list of items that are displayed to the user.
      */

@@ -41,7 +41,7 @@ public:
     static TOOL_ACTION selectionActivate;
 
     /// Select a single item under the cursor position
-    static TOOL_ACTION selectionSingle;
+    static TOOL_ACTION selectionCursor;
 
     /// Clears the current selection
     static TOOL_ACTION selectionClear;

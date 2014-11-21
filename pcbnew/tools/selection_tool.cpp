@@ -111,7 +111,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
                 if( !m_additive )
                     clearSelection();
 
-                selectSingle( evt->Position() );
+                selectCursor( evt->Position() );
             }
         }
 
@@ -119,7 +119,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             if( m_selection.Empty() )
-                selectSingle( evt->Position() );
+                selectCursor( evt->Position() );
 
             generateMenu();
         }
@@ -128,7 +128,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
             if( m_selection.Empty() )
-                selectSingle( evt->Position() );
+                selectCursor( evt->Position() );
 
             m_toolMgr->RunAction( COMMON_ACTIONS::properties );
         }
@@ -143,7 +143,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             else if( m_selection.Empty() )
             {
                 // There is nothing selected, so try to select something
-                if( !selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ), false ) )
+                if( !selectCursor( getView()->ToWorld( getViewControls()->GetMousePosition() ), false ) )
                 {
                     // If nothings has been selected or user wants to select more
                     // draw the selection box
@@ -171,10 +171,10 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsAction( &COMMON_ACTIONS::selectionSingle ) )
+        else if( evt->IsAction( &COMMON_ACTIONS::selectionCursor ) )
         {
             // GetMousePosition() is used, as it is independent of snapping settings
-            selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+            selectCursor( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::find ) )
@@ -245,7 +245,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 }
 
 
-bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation )
+bool SELECTION_TOOL::selectCursor( const VECTOR2I& aWhere, bool aAllowDisambiguation )
 {
     BOARD_ITEM* item;
     GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
@@ -395,7 +395,7 @@ bool SELECTION_TOOL::selectMultiple()
 void SELECTION_TOOL::setTransitions()
 {
     Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &SELECTION_TOOL::SingleSelection, COMMON_ACTIONS::selectionSingle.MakeEvent() );
+    Go( &SELECTION_TOOL::CursorSelection, COMMON_ACTIONS::selectionCursor.MakeEvent() );
     Go( &SELECTION_TOOL::ClearSelection, COMMON_ACTIONS::selectionClear.MakeEvent() );
     Go( &SELECTION_TOOL::find, COMMON_ACTIONS::find.MakeEvent() );
     Go( &SELECTION_TOOL::findMove, COMMON_ACTIONS::findMove.MakeEvent() );
@@ -444,9 +444,9 @@ bool SELECTION_TOOL::CheckLock()
 }
 
 
-int SELECTION_TOOL::SingleSelection( TOOL_EVENT& aEvent )
+int SELECTION_TOOL::CursorSelection( TOOL_EVENT& aEvent )
 {
-    selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+    selectCursor( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
     setTransitions();
 
     return 0;
