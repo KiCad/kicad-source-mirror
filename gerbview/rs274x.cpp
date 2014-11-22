@@ -33,6 +33,7 @@
 
 #include <gerbview.h>
 #include <class_GERBER.h>
+#include <class_X2_gerber_attributes.h>
 
 extern int ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
@@ -77,6 +78,13 @@ enum RS274X_PARAMETERS {
     // Usually for the whole file
     AP_DEFINITION   = CODE( 'A', 'D' ),
     AP_MACRO = CODE( 'A', 'M' ),
+
+    // X2 extention attribute commands
+    // Mainly are found standard attributes and user attributes
+    // standard attributes commands are:
+    // TF (file attribute)
+    // TA (aperture attribute) and TD (delete aperture attribute)
+    FILE_ATTRIBUTE   = CODE( 'T', 'F' ),
 
     // Layer specific parameters
     // May be used singly or may be layer specfic
@@ -307,7 +315,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
             m_SwapAxis = true;
         break;
 
-    case MIRROR_IMAGE:      // commanf %MIA0B0*%, %MIA0B1*%, %MIA1B0*%, %MIA1B1*%
+    case MIRROR_IMAGE:      // command %MIA0B0*%, %MIA0B1*%, %MIA1B0*%, %MIA1B1*%
         m_MirrorA = m_MirrorB = 0;
         while( *text && *text != '*' )
         {
@@ -339,6 +347,27 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         else if( code == MILLIMETER )
             m_GerbMetric = true;
         conv_scale = m_GerbMetric ? IU_PER_MILS / 25.4 : IU_PER_MILS;
+        break;
+
+    case FILE_ATTRIBUTE:    // Command %TF ...
+        m_IsX2_file = true;
+    {
+        X2_ATTRIBUTE dummy;
+        dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text );
+        if( dummy.IsFileFunction() )
+        {
+            delete m_FileFunction;
+            m_FileFunction = new X2_ATTRIBUTE_FILEFUNCTION( dummy );
+        }
+        else if( dummy.IsFileMD5() )
+        {
+            m_MD5_value = dummy.GetPrm( 1 );
+        }
+        else if( dummy.IsFilePart() )
+        {
+            m_PartString = dummy.GetPrm( 1 );
+        }
+     }
         break;
 
     case OFFSET:        // command: OFAnnBnn (nn = float number) = layer Offset

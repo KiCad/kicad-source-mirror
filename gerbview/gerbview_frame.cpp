@@ -348,7 +348,7 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 
     for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; ++i )
     {
-        GERBER_IMAGE* gerber = g_GERBER_List[ layer ];
+        GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
         if( gerber == NULL || gerber->m_FileName.IsEmpty() )
             return layer;
@@ -378,9 +378,11 @@ void GERBVIEW_FRAME::syncLayerWidget()
  */
 void GERBVIEW_FRAME::syncLayerBox()
 {
+    m_SelLayerBox->Resync();
     m_SelLayerBox->SetSelection( getActiveLayer() );
+
     int             dcodeSelected = -1;
-    GERBER_IMAGE*   gerber = g_GERBER_List[getActiveLayer()];
+    GERBER_IMAGE*   gerber = g_GERBER_List.GetGbrImage( getActiveLayer() );
 
     if( gerber )
         dcodeSelected = gerber->m_Selected_Tool;
@@ -406,7 +408,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 
     for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
-        GERBER_IMAGE* gerber = g_GERBER_List[layer];
+        GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
         if( gerber == NULL )
             continue;
@@ -474,7 +476,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
  */
 void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
-    GERBER_IMAGE*   gerber = g_GERBER_List[ getActiveLayer() ];
+    GERBER_IMAGE*   gerber = g_GERBER_List.GetGbrImage(  getActiveLayer() );
     wxString        text;
 
     // Display the gerber filename
@@ -491,6 +493,8 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
 
     text = _( "File:" );
     text << wxT( " " ) << gerber->m_FileName;
+    if( gerber->m_IsX2_file )
+        text << wxT( " " ) << _( "(with X2 Attributes)" );
     SetTitle( text );
 
     gerber->DisplayImageInfo();
@@ -508,7 +512,13 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
                  gerber->m_FmtLen.y - gerber->m_FmtScale.y, gerber->m_FmtScale.y,
                  gerber->m_NoTrailingZeros ? 'T' : 'L' );
 
+    if( gerber->m_IsX2_file )
+        text << wxT(" ") << _( "X2 attr" );
+
     m_TextInfo->SetValue( text );
+
+    if( EnsureTextCtrlWidth( m_TextInfo, &text ) )  // Resized
+       m_auimgr.Update();
 }
 
 /*

@@ -84,6 +84,7 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
         Zoom_Automatique( false );
         m_canvas->Refresh();
         ClearMsgPanel();
+        ReFillLayerWidget();
         break;
 
     case ID_GERBVIEW_LOAD_DRILL_FILE:
@@ -200,6 +201,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     Zoom_Automatique( false );
 
     // Synchronize layers tools with actual active layer:
+    ReFillLayerWidget();
     setActiveLayer( getActiveLayer() );
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
@@ -282,6 +284,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
     Zoom_Automatique( false );
 
     // Synchronize layers tools with actual active layer:
+    ReFillLayerWidget();
     setActiveLayer( getActiveLayer() );
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();

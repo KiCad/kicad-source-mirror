@@ -169,13 +169,20 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 {
     wxString msg;
     int layer = getActiveLayer();      // current layer used in GerbView
+    EXCELLON_IMAGE* drill_Layer = (EXCELLON_IMAGE*) g_GERBER_List.GetGbrImage( layer );
 
-    if( g_GERBER_List[layer] == NULL )
+    if( drill_Layer == NULL )
     {
-        g_GERBER_List[layer] = new EXCELLON_IMAGE( this, layer );
+        drill_Layer = new EXCELLON_IMAGE( this, layer );
+        layer = g_GERBER_List.AddGbrImage( drill_Layer, layer );
     }
 
-    EXCELLON_IMAGE* drill_Layer = (EXCELLON_IMAGE*) g_GERBER_List[layer];
+    if( layer < 0 )
+    {
+        DisplayError( this, _( "No room to load file" ) );
+        return false;
+    }
+
     ClearMessageList();
 
     /* Read the gerber file */
@@ -183,7 +190,7 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     if( file == NULL )
     {
         msg.Printf( _( "File %s not found" ), GetChars( aFullFileName ) );
-        DisplayError( this, msg, 10 );
+        DisplayError( this, msg );
         return false;
     }
 

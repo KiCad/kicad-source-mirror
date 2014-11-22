@@ -34,7 +34,7 @@
 #include <html_messagebox.h>
 #include <macros.h>
 
-/* Read a gerber file, RS274D or RS274X format.
+/* Read a gerber file, RS274D, RS274X or RS274X2 format.
  */
 bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
                                            const wxString& D_Code_FullFileName )
@@ -49,13 +49,14 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
     int layer;         // current layer used in GerbView
 
     layer = getActiveLayer();
+    GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
-    if( g_GERBER_List[layer] == NULL )
+    if( gerber == NULL )
     {
-        g_GERBER_List[layer] = new GERBER_IMAGE( this, layer );
+        gerber = new GERBER_IMAGE( this, layer );
+        g_GERBER_List.AddGbrImage( gerber, layer );
     }
 
-    GERBER_IMAGE* gerber = g_GERBER_List[layer];
     ClearMessageList( );
 
     /* Set the gerber scale: */

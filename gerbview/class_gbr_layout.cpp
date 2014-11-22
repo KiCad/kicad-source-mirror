@@ -39,7 +39,6 @@ GBR_LAYOUT::GBR_LAYOUT()
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
     SetPageSettings( pageInfo );
 
-// no    m_printLayersMask = -1;
     m_printLayersMask.set();
 }
 

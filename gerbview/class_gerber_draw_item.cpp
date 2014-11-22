@@ -225,7 +225,9 @@ D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr()
 {
     if( (m_DCode < FIRST_DCODE) || (m_DCode > LAST_DCODE) )
         return NULL;
-    GERBER_IMAGE* gerber = g_GERBER_List[m_Layer];
+
+    GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( m_Layer );
+
     if( gerber == NULL )
         return NULL;
 

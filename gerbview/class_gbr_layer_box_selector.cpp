@@ -33,11 +33,14 @@
 #include <colors_selection.h>
 #include <layers_id_colors_and_visibility.h>
 #include <gerbview_frame.h>
+#include <class_GERBER.h>
+#include <class_X2_gerber_attributes.h>
 
 #include <class_gbr_layer_box_selector.h>
 
 void GBR_LAYER_BOX_SELECTOR::Resync()
 {
+    Freeze();
     Clear();
 
     for( int layerid = 0; layerid < GERBER_DRAWLAYERS_COUNT; ++layerid )
@@ -55,6 +58,8 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
 
         Append( layername, layerbmp, (void*)(intptr_t) layerid );
     }
+
+    Thaw();
 }
 
 
@@ -70,7 +75,7 @@ EDA_COLOR_T GBR_LAYER_BOX_SELECTOR::GetLayerColor( int aLayer ) const
 // Returns the name of the layer id
 wxString GBR_LAYER_BOX_SELECTOR::GetLayerName( int aLayer ) const
 {
-    wxString name;
-    name.Printf( _( "Layer %d" ), aLayer + 1 );
+    wxString name = g_GERBER_List.GetDisplayName( aLayer );
+
     return name;
 }
