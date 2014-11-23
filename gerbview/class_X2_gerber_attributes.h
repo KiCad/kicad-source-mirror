@@ -97,7 +97,7 @@ public:
      *  or the end of line if the line does not contain '%' or aBuffer == NULL (X1 mode)
      * @return true if no error.
      */
-    bool ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, char*& aText );
+    bool ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, char* &aText );
 
     /**
      * Debug function: pring using wxLogMessage le list of parameters

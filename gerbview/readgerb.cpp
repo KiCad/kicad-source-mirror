@@ -77,7 +77,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
     if( path != wxEmptyString )
         wxSetWorkingDirectory( path );
 
-    SetLocaleTo_C_standard();
+    LOCALE_IO toggleIo;
 
     while( true )
     {
@@ -171,8 +171,8 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
             }
         }
     }
+
     fclose( gerber->m_Current_File );
-    SetLocaleTo_Default();
 
     gerber->m_InUse = true;
 

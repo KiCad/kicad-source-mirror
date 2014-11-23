@@ -95,7 +95,7 @@ void X2_ATTRIBUTE::DbgListPrms()
  * buff = the buffer containing current Gerber data (GERBER_BUFZ size)
  * text = a pointer to the first char to read in Gerber data
  */
-bool X2_ATTRIBUTE::ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, char*& aText )
+bool X2_ATTRIBUTE::ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, char* &aText )
 {
     bool ok = true;
     wxString data;

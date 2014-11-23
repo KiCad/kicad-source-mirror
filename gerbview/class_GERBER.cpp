@@ -455,7 +455,7 @@ const wxString GERBER_IMAGE_LIST::GetDisplayName( int aIdx )
     if( aIdx >= 0 && aIdx < (int)m_GERBER_List.size() )
         gerber = m_GERBER_List[aIdx];
 
-    if( gerber && gerber->m_InUse)
+    if( IsUsed(aIdx ) )
     {
         if( gerber->m_FileFunction )
             name.Printf( _( "Layer %d (%s, %s)" ), aIdx + 1,
