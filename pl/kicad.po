@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-16 08:59+0100\n"
-"PO-Revision-Date: 2014-11-16 09:12+0100\n"
+"POT-Creation-Date: 2014-11-23 09:42+0100\n"
+"PO-Revision-Date: 2014-11-23 09:49+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1258,8 +1258,8 @@ msgstr "Skonwertowany"
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:104
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:100
-#: gerbview/class_GERBER.cpp:345 gerbview/class_GERBER.cpp:349
-#: gerbview/class_GERBER.cpp:352 common/eda_text.cpp:382
+#: gerbview/class_GERBER.cpp:354 gerbview/class_GERBER.cpp:358
+#: gerbview/class_GERBER.cpp:361 common/eda_text.cpp:382
 #: bitmap2component/bitmap2cmp_gui_base.cpp:135
 msgid "Normal"
 msgstr "Normalny"
@@ -1282,7 +1282,7 @@ msgstr "Element "
 #: pcbnew/class_text_mod.cpp:391 pcbnew/class_track.cpp:1123
 #: pcbnew/class_track.cpp:1150 pcbnew/class_track.cpp:1199
 #: pcbnew/class_zone.cpp:604 pcbnew/dialogs/dialog_layers_setup.cpp:354
-#: gerbview/class_gerber_draw_item.cpp:548
+#: gerbview/class_gerber_draw_item.cpp:550
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:167
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
@@ -2110,8 +2110,8 @@ msgstr "Numer"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:42
 #: pcbnew/class_pcb_text.cpp:143 pcbnew/class_text_mod.cpp:396
 #: pcbnew/dialogs/dialog_display_options_base.cpp:128
-#: gerbview/class_gerber_draw_item.cpp:571
-#: gerbview/class_gerber_draw_item.cpp:572
+#: gerbview/class_gerber_draw_item.cpp:573
+#: gerbview/class_gerber_draw_item.cpp:574
 msgid "Yes"
 msgstr "Tak"
 
@@ -2119,8 +2119,8 @@ msgstr "Tak"
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:983
 #: pcbnew/class_pcb_text.cpp:141 pcbnew/class_text_mod.cpp:394
 #: pcbnew/dialogs/dialog_display_options_base.cpp:128
-#: gerbview/class_gerber_draw_item.cpp:571
-#: gerbview/class_gerber_draw_item.cpp:572
+#: gerbview/class_gerber_draw_item.cpp:573
+#: gerbview/class_gerber_draw_item.cpp:574
 msgid "No"
 msgstr "Nie"
 
@@ -2556,7 +2556,7 @@ msgstr "Numeruj schemat"
 msgid "Electric Rules &Checker"
 msgstr "Sprawdź poprawność elektryczną (ERC)"
 
-#: eeschema/menubar.cpp:450
+#: eeschema/menubar.cpp:450 eeschema/tool_sch.cpp:149
 msgid "Perform electrical rule check"
 msgstr "Przeprowadź kontrolę reguł projektowych"
 
@@ -3587,26 +3587,26 @@ msgstr "Nie są załadowane żadne biblioteki."
 msgid "Select Library"
 msgstr "Wybór biblioteki"
 
-#: eeschema/sheet.cpp:78
+#: eeschema/sheet.cpp:80
 msgid "File name is not valid!"
 msgstr "Nazwa pliku jest niepoprawna!"
 
-#: eeschema/sheet.cpp:91
+#: eeschema/sheet.cpp:93
 #, c-format
 msgid "A sheet named \"%s\" already exists."
 msgstr "Arkusz o nazwie \"%s\" już istnieje."
 
-#: eeschema/sheet.cpp:128
+#: eeschema/sheet.cpp:130
 #, c-format
 msgid "A file named '%s' already exists in the current schematic hierarchy."
 msgstr "Plik o nazwie '%s' już istnieje w bieżącej hierarchii schematu."
 
-#: eeschema/sheet.cpp:133
+#: eeschema/sheet.cpp:135
 #, c-format
 msgid "A file named '%s' already exists."
 msgstr "Plik o nazwie '%s' już istnieje."
 
-#: eeschema/sheet.cpp:137
+#: eeschema/sheet.cpp:139
 msgid ""
 "\n"
 "\n"
@@ -3616,21 +3616,21 @@ msgstr ""
 "\n"
 "Czy chcesz utworzyć arkusz z zawartością tego pliku?"
 
-#: eeschema/sheet.cpp:166
+#: eeschema/sheet.cpp:168
 msgid "Changing the sheet file name cannot be undone.  "
 msgstr "Zmiana nazwy pliku arkusza nie może być cofnięta."
 
-#: eeschema/sheet.cpp:173
+#: eeschema/sheet.cpp:175
 #, c-format
 msgid "A file named <%s> already exists in the current schematic hierarchy."
 msgstr "Plik o nazwie <%s> już istnieje w bieżącej hierarchii schematu."
 
-#: eeschema/sheet.cpp:178
+#: eeschema/sheet.cpp:180
 #, c-format
 msgid "A file named <%s> already exists."
 msgstr "Plik o nazwie <%s> już istnieje."
 
-#: eeschema/sheet.cpp:183
+#: eeschema/sheet.cpp:185
 msgid ""
 "\n"
 "\n"
@@ -3640,7 +3640,7 @@ msgstr ""
 "\n"
 "Czy chcesz zamienić arkusz z zawartością tego pliku?"
 
-#: eeschema/sheet.cpp:195
+#: eeschema/sheet.cpp:197
 msgid ""
 "This sheet uses shared data in a complex hierarchy.\n"
 "\n"
@@ -3648,7 +3648,7 @@ msgstr ""
 "Ten arkusz używa danych współdzielonych w zaawansowanej hierarchii.\n"
 "\n"
 
-#: eeschema/sheet.cpp:196
+#: eeschema/sheet.cpp:198
 msgid "Do you wish to convert it to a simple hierarchical sheet?"
 msgstr "Czy chcesz go zamienić na prosty arkusz kierarchiczny?"
 
@@ -3841,10 +3841,6 @@ msgstr "Wyszukuje i zamienia tekst"
 #: eeschema/tool_sch.cpp:131
 msgid "Navigate schematic hierarchy"
 msgstr "Nawigacja w hierarchii schematu"
-
-#: eeschema/tool_sch.cpp:149
-msgid "Perform electric rules check"
-msgstr "Kontrola reguł projektowych PCB"
 
 #: eeschema/tool_sch.cpp:152
 msgid "Generate netlist"
@@ -4097,7 +4093,7 @@ msgstr "Usuń numerację"
 msgid "Annotate"
 msgstr "Numeruj"
 
-#: eeschema/dialogs/dialog_bom.cpp:299 eeschema/dialogs/dialog_netlist.cpp:573
+#: eeschema/dialogs/dialog_bom.cpp:299 eeschema/dialogs/dialog_netlist.cpp:535
 msgid "Save Netlist File"
 msgstr "Zapisz pliki z listą sieci"
 
@@ -4105,11 +4101,11 @@ msgstr "Zapisz pliki z listą sieci"
 msgid "Plugin"
 msgstr "Wtyczka"
 
-#: eeschema/dialogs/dialog_bom.cpp:364 eeschema/dialogs/dialog_netlist.cpp:822
+#: eeschema/dialogs/dialog_bom.cpp:364 eeschema/dialogs/dialog_netlist.cpp:783
 msgid "This plugin already exists. Abort"
 msgstr "Ta wtyczka już istnieje. Przerwano."
 
-#: eeschema/dialogs/dialog_bom.cpp:388 eeschema/dialogs/dialog_netlist.cpp:879
+#: eeschema/dialogs/dialog_bom.cpp:388 eeschema/dialogs/dialog_netlist.cpp:840
 msgid "Plugin files:"
 msgstr "Pliki wtyczek:"
 
@@ -4164,19 +4160,19 @@ msgstr "Edytuj plik wtyczki"
 msgid "Command line:"
 msgstr "Polecenie:"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:238
+#: eeschema/dialogs/dialog_choose_component.cpp:241
 msgid "Description\n"
 msgstr "Opis\n"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:251
+#: eeschema/dialogs/dialog_choose_component.cpp:254
 msgid "Keywords\n"
 msgstr "Słowa kluczowe\n"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:259
+#: eeschema/dialogs/dialog_choose_component.cpp:262
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:265
+#: eeschema/dialogs/dialog_choose_component.cpp:268
 msgid "Alias of "
 msgstr "Alias "
 
@@ -4263,7 +4259,7 @@ msgstr "Błąd ERC"
 
 #: eeschema/dialogs/dialog_color_config.cpp:96
 #: pcbnew/class_pcb_layer_widget.cpp:74
-#: gerbview/class_gerbview_layer_widget.cpp:109
+#: gerbview/class_gerbview_layer_widget.cpp:110
 msgid "Grid"
 msgstr "Siatka"
 
@@ -4824,7 +4820,7 @@ msgstr "Odbij pionowo |"
 #: pcbnew/class_text_mod.cpp:408 pcbnew/modedit_onclick.cpp:287
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:97
-#: gerbview/class_gerber_draw_item.cpp:573
+#: gerbview/class_gerber_draw_item.cpp:575
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:79
 msgid "Mirror"
 msgstr "Odbicie"
@@ -4935,7 +4931,7 @@ msgstr "Przesuń zaznaczone pola dodatkowe o jedną pozycję w górę"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:106
-#: gerbview/class_GERBER.cpp:349 gerbview/class_GERBER.cpp:352
+#: gerbview/class_GERBER.cpp:358 gerbview/class_GERBER.cpp:361
 #: common/zoom.cpp:229 pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Center"
@@ -5588,7 +5584,7 @@ msgid "&Width:"
 msgstr "Szerokość:"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:45
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:57
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:58
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:52
 #: common/common.cpp:144 common/common.cpp:194 common/draw_frame.cpp:505
 #: common/dialogs/dialog_page_settings.cpp:453
@@ -5781,76 +5777,64 @@ msgstr "Pokaż nazwę pinu"
 msgid "Pin name inside"
 msgstr "Nazwa pinu wewnątrz"
 
-#: eeschema/dialogs/dialog_netlist.cpp:308
+#: eeschema/dialogs/dialog_netlist.cpp:295
 #: pcbnew/dialogs/dialog_drc_base.cpp:25
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:80
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:77
 msgid "Options:"
 msgstr "Opcje:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:312
+#: eeschema/dialogs/dialog_netlist.cpp:299
 msgid "Default format"
 msgstr "Format domyślny"
 
-#: eeschema/dialogs/dialog_netlist.cpp:318
-msgid "Legacy Format"
-msgstr "Starszy format"
-
-#: eeschema/dialogs/dialog_netlist.cpp:318
-msgid "Advanced Format"
-msgstr "Format rozszerzony"
-
-#: eeschema/dialogs/dialog_netlist.cpp:319
-msgid "Netlist Options:"
-msgstr "Opcje listy sieci:"
-
-#: eeschema/dialogs/dialog_netlist.cpp:418
+#: eeschema/dialogs/dialog_netlist.cpp:380
 msgid "Prefix references 'U' and 'IC' with 'X'"
 msgstr "Przedrostek odnośnika 'U' i 'IC' z 'X'"
 
-#: eeschema/dialogs/dialog_netlist.cpp:423
+#: eeschema/dialogs/dialog_netlist.cpp:385
 msgid "Use net number as net name"
 msgstr "Użyj numeru sieci jako nazwa sieci"
 
-#: eeschema/dialogs/dialog_netlist.cpp:427
+#: eeschema/dialogs/dialog_netlist.cpp:389
 msgid "Simulator command:"
 msgstr "Polecenie symulatora:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:440
+#: eeschema/dialogs/dialog_netlist.cpp:402
 msgid "&Run Simulator"
 msgstr "&Uruchom symulator"
 
-#: eeschema/dialogs/dialog_netlist.cpp:480
+#: eeschema/dialogs/dialog_netlist.cpp:442
 #: eeschema/dialogs/dialog_netlist_base.cpp:105
 msgid "Netlist command:"
 msgstr "Polecenie listy sieci:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:493
+#: eeschema/dialogs/dialog_netlist.cpp:455
 msgid "Title:"
 msgstr "Tytuł:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:610
+#: eeschema/dialogs/dialog_netlist.cpp:571
 #, c-format
 msgid "%s Export"
 msgstr "%s Eksportuj"
 
-#: eeschema/dialogs/dialog_netlist.cpp:661
+#: eeschema/dialogs/dialog_netlist.cpp:622
 msgid "SPICE netlist file (.cir)|*.cir"
 msgstr "Lista sieci programu SPICE (.cir)|*cir"
 
-#: eeschema/dialogs/dialog_netlist.cpp:666
+#: eeschema/dialogs/dialog_netlist.cpp:627
 msgid "CadStar netlist file (.frp)|*.frp"
 msgstr "Lista sieci programu CadStar (.frp)|*.frp"
 
-#: eeschema/dialogs/dialog_netlist.cpp:849
+#: eeschema/dialogs/dialog_netlist.cpp:810
 msgid "Error. You must provide a command String"
 msgstr "Błąd. Musisz wypełnić pole \"Polecenie netlisty\""
 
-#: eeschema/dialogs/dialog_netlist.cpp:855
+#: eeschema/dialogs/dialog_netlist.cpp:816
 msgid "Error. You must provide a Title"
 msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
 
-#: eeschema/dialogs/dialog_netlist.cpp:913
+#: eeschema/dialogs/dialog_netlist.cpp:874
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
@@ -6111,7 +6095,7 @@ msgstr "Rysuj bieżącą stronę"
 msgid "Plot All Pages"
 msgstr "Rysuj wszystkie strony"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:263
+#: eeschema/dialogs/dialog_print_using_printer.cpp:265
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:47
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:51
@@ -6121,20 +6105,20 @@ msgstr "Rysuj wszystkie strony"
 msgid "Preview"
 msgstr "Podgląd"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:301
+#: eeschema/dialogs/dialog_print_using_printer.cpp:306
 msgid "Print Schematic"
 msgstr "Drukuj schemat"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:306
+#: eeschema/dialogs/dialog_print_using_printer.cpp:311
 msgid "An error occurred attempting to print the schematic."
 msgstr "Wystąpił błąd podczas próby wydruku schematu."
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:307
+#: eeschema/dialogs/dialog_print_using_printer.cpp:312
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:225
 msgid "Printing"
 msgstr "Drukuj"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:320
+#: eeschema/dialogs/dialog_print_using_printer.cpp:325
 #, c-format
 msgid "Print page %d"
 msgstr "Drukuj stronę %d"
@@ -6157,9 +6141,9 @@ msgstr "Ustawienia strony"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:50
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:54
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:494
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:492
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:138
-#: gerbview/dialogs/dialog_print_using_printer.cpp:385
+#: gerbview/dialogs/dialog_print_using_printer.cpp:391
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:105
 #: eeschema/dialogs/dialog_print_using_printer_base.h:55
 #: pcbnew/dialogs/dialog_print_for_modedit_base.h:61
@@ -6521,8 +6505,8 @@ msgstr "Segment"
 #: pcbnew/class_pcb_text.cpp:138 pcbnew/class_text_mod.cpp:401
 #: pcbnew/class_track.cpp:1133 pcbnew/class_track.cpp:1160
 #: pcbnew/class_zone.cpp:656 pcbnew/layer_widget.cpp:545
-#: gerbview/class_gerbview_layer_widget.cpp:88
-#: gerbview/dialogs/dialog_print_using_printer.cpp:160
+#: gerbview/class_gerbview_layer_widget.cpp:89
+#: gerbview/dialogs/dialog_print_using_printer.cpp:163
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163
 msgid "Layer"
 msgstr "Warstwy sygnałowe"
@@ -6911,7 +6895,7 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Pokaż punkty bazowe footprintu i opisy w postaci krzyżyka"
 
 #: pcbnew/class_pcb_layer_widget.cpp:74
-#: gerbview/class_gerbview_layer_widget.cpp:109
+#: gerbview/class_gerbview_layer_widget.cpp:110
 msgid "Show the (x,y) grid dots"
 msgstr "Pokaż punkty siatki (x,y)"
 
@@ -6973,7 +6957,7 @@ msgid "Hide All Copper Layers"
 msgstr "Ukryj wszystkie warstwy sygnałowe"
 
 #: pcbnew/class_pcb_layer_widget.cpp:209 pcbnew/layer_widget.cpp:565
-#: gerbview/class_gerbview_layer_widget.cpp:89
+#: gerbview/class_gerbview_layer_widget.cpp:90
 msgid "Render"
 msgstr "Pokaż"
 
@@ -9912,7 +9896,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcbnew_config.cpp:214 pcbnew/pcbnew_config.cpp:485
-#: gerbview/excellon_read_drill_file.cpp:185
+#: gerbview/excellon_read_drill_file.cpp:192
 #, c-format
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
@@ -11970,7 +11954,7 @@ msgstr "Lokalny prześwit"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:168
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:205
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:57
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:58
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:50
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:64
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:87
@@ -12125,14 +12109,18 @@ msgstr ""
 "Kopiuj pliki modeli 3D do miejsca wskazywanego przez ścieżkę do modeli 3D"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:50
-msgid "Use absolute paths to model files in board VRML file"
-msgstr "Użyj ścieżek bezwzględnych do plików modeli w pliku VRML"
+msgid "Use relative paths to model files in board VRML file"
+msgstr "Użyj ścieżek względnych do plików modeli w pliku VRML"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:57
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:51
+msgid "Use paths for model files in board VRML file relative to the vrml file"
+msgstr "Dla modeli w pliku VRML używane są ścieżki względne wobec tego pliku"
+
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:58
 msgid "Meter"
 msgstr "Pomiar"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:59
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:60
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:54
 msgid "Units:"
 msgstr "Jednostki"
@@ -14198,24 +14186,28 @@ msgstr "Dołącz zablokowane footprinty"
 msgid "Force locked footprints to be modified"
 msgstr "Wymuś zmianę zablokowanych footprintów"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:315
+#: pcbnew/dialogs/dialog_pad_properties.cpp:343
 msgid "Back side (footprint is mirrored)"
 msgstr "Strona dolna (footprint jest obrócony)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:716
+#: pcbnew/dialogs/dialog_pad_properties.cpp:744
+msgid "Pad size must be greater than zero"
+msgstr "Rozmiar pola musi być większa niż zero"
+
+#: pcbnew/dialogs/dialog_pad_properties.cpp:750
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr ""
 "Niewłaściwa średnica otworu pola lutowniczego: otwór większy od rozmiaru pola"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:722
+#: pcbnew/dialogs/dialog_pad_properties.cpp:756
 msgid "Error: pad has no layer"
 msgstr "Błąd: Pole lutownicze nie posiada warstwy"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:729
+#: pcbnew/dialogs/dialog_pad_properties.cpp:763
 msgid "Error: the pad is not on a copper layer and has a hole"
 msgstr "Błąd: Pole lutownicze nie jest na wartwie sygnałowej i posiada otwór."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:734
+#: pcbnew/dialogs/dialog_pad_properties.cpp:768
 msgid ""
 "For NPTH pad, set pad size value to pad drill value, if you do not want this "
 "pad plotted in gerber files"
@@ -14223,19 +14215,19 @@ msgstr ""
 "Jeśli nie chcesz by punkt lutowniczy NPTH został umieszczony w plikach "
 "Gerber ustaw jego rozmiar i średnicę owiertu na tą samą wartość."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:752
+#: pcbnew/dialogs/dialog_pad_properties.cpp:786
 msgid "Incorrect value for pad offset"
 msgstr "Niewłaściwa wartość dla przesunięcia pola lutowniczego"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:757
+#: pcbnew/dialogs/dialog_pad_properties.cpp:791
 msgid "Too large value for pad delta size"
 msgstr "Zbyt duża wartość dla przesunięcia pola lutowniczego"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:765
+#: pcbnew/dialogs/dialog_pad_properties.cpp:799
 msgid "Error: Through hole pad: drill diameter set to 0"
 msgstr "Błąd: Pole lutownicze PTH o średnicy wiercenia 0"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:770
+#: pcbnew/dialogs/dialog_pad_properties.cpp:804
 msgid ""
 "Error: Connector pads are not on the solder paste layer\n"
 "Use SMD pads instead"
@@ -14243,11 +14235,11 @@ msgstr ""
 "Błąd: Pola lutownicze złącza nie są na warstwie pasty\n"
 "Należy użyć pól SMD"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:783
+#: pcbnew/dialogs/dialog_pad_properties.cpp:817
 msgid "Pad setup errors list"
 msgstr "Lista błędów ustawień pól lutowniczych"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:901
+#: pcbnew/dialogs/dialog_pad_properties.cpp:935
 msgid "Unknown netname, netname not changed"
 msgstr "Nieznana nazwa sieci, nie dokonano zmian"
 
@@ -14573,14 +14565,14 @@ msgid "Could not write plot files to folder \"%s\"."
 msgstr "Nie mogę zapisać plików z rysunkami w folderze \"%s\"."
 
 #: pcbnew/dialogs/dialog_plot.cpp:770
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:382
-#: gerbview/dialogs/dialog_print_using_printer.cpp:303
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:377
+#: gerbview/dialogs/dialog_print_using_printer.cpp:306
 msgid "Warning: Scale option set to a very small value"
 msgstr "Ostrzeżenie: skala została ustawiona na bardzo małą wartość"
 
 #: pcbnew/dialogs/dialog_plot.cpp:774
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:374
-#: gerbview/dialogs/dialog_print_using_printer.cpp:295
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:369
+#: gerbview/dialogs/dialog_print_using_printer.cpp:298
 msgid "Warning: Scale option set to a very large value"
 msgstr "Ostrzeżenie: Skala została ustawiona na bardzo dużą wartość"
 
@@ -14596,9 +14588,9 @@ msgid "Unable to create <%s>"
 msgstr "Nie mogę utworzyć <%s>"
 
 #: pcbnew/dialogs/dialog_plot.cpp:824
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:448
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:486
-#: gerbview/dialogs/dialog_print_using_printer.cpp:338
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:443
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:484
+#: gerbview/dialogs/dialog_print_using_printer.cpp:341
 msgid "No layer selected"
 msgstr "Nie wybrano warstwy"
 
@@ -14934,26 +14926,26 @@ msgstr "Niska"
 msgid "high"
 msgstr "Wysoka"
 
-#: pcbnew/dialogs/dialog_print_for_modedit.cpp:88
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:115
-#: gerbview/dialogs/dialog_print_using_printer.cpp:106
+#: pcbnew/dialogs/dialog_print_for_modedit.cpp:87
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:114
+#: gerbview/dialogs/dialog_print_using_printer.cpp:107
 #: pagelayout_editor/events_functions.cpp:508
 msgid "Error Init Printer info"
 msgstr "Błąd inicjalizacji drukarki"
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:173
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:453
-#: gerbview/dialogs/dialog_print_using_printer.cpp:352
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:448
+#: gerbview/dialogs/dialog_print_using_printer.cpp:355
 msgid "Print Preview"
 msgstr "Podgląd wydruku"
 
-#: pcbnew/dialogs/dialog_print_for_modedit.cpp:213
+#: pcbnew/dialogs/dialog_print_for_modedit.cpp:216
 msgid "Print Footprint"
 msgstr "Drukuj footprinty"
 
-#: pcbnew/dialogs/dialog_print_for_modedit.cpp:223
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:506
-#: gerbview/dialogs/dialog_print_using_printer.cpp:396
+#: pcbnew/dialogs/dialog_print_for_modedit.cpp:226
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:504
+#: gerbview/dialogs/dialog_print_using_printer.cpp:402
 msgid "There was a problem printing"
 msgstr "Wystąpił problem podczas drukowania"
 
@@ -15506,12 +15498,12 @@ msgstr "Obecnie jeszcze nie działa."
 msgid "Align/distribute"
 msgstr "Wyrównywanie/rozkładanie"
 
-#: pcbnew/tools/selection_tool.cpp:436
+#: pcbnew/tools/selection_tool.cpp:448
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr ""
 "Zaznaczony obszar zawiera zablokowane elementy. Czy chcesz kontynuować?"
 
-#: pcbnew/tools/selection_tool.cpp:549
+#: pcbnew/tools/selection_tool.cpp:596
 msgid "Clarify selection"
 msgstr "Sprecyzuj Wybór"
 
@@ -15904,83 +15896,91 @@ msgstr "Przypisanie ze schematu"
 msgid "Cmp file assignment"
 msgstr "Przypisanie z pliku CMP"
 
-#: gerbview/class_gbr_layer_box_selector.cpp:74
-#: gerbview/class_gerbview_layer_widget.cpp:231
-#: gerbview/select_layers_to_pcb.cpp:183
+#: gerbview/class_GERBER.cpp:342
+msgid "Image name"
+msgstr "Nazwa obrazu"
+
+#: gerbview/class_GERBER.cpp:347
+msgid "Graphic layer"
+msgstr "Warstwa grafiki"
+
+#: gerbview/class_GERBER.cpp:351
+msgid "Img Rot."
+msgstr "Obróć obraz"
+
+#: gerbview/class_GERBER.cpp:354 bitmap2component/bitmap2cmp_gui_base.cpp:135
+msgid "Negative"
+msgstr "Negatyw"
+
+#: gerbview/class_GERBER.cpp:355 gerbview/class_gerber_draw_item.cpp:569
+msgid "Polarity"
+msgstr "Polaryzacja"
+
+#: gerbview/class_GERBER.cpp:359
+msgid "X Justify"
+msgstr "Wyrównanie w pionie"
+
+#: gerbview/class_GERBER.cpp:362
+msgid "Y Justify"
+msgstr "Wyrównanie w pionie"
+
+#: gerbview/class_GERBER.cpp:370
+msgid "Image Justify Offset"
+msgstr "Przesunięcie obrazu dla wyśrodkowania"
+
+#: gerbview/class_GERBER.cpp:461
+#, c-format
+msgid "Layer %d (%s, %s)"
+msgstr "Warstwa %d (%s, %s)"
+
+#: gerbview/class_GERBER.cpp:465
+#, c-format
+msgid "Layer %d *"
+msgstr "Warstwa %d *"
+
+#: gerbview/class_GERBER.cpp:468 gerbview/select_layers_to_pcb.cpp:183
 #, c-format
 msgid "Layer %d"
 msgstr "Warstwa  %d"
 
-#: gerbview/class_GERBER.cpp:333
-msgid "Image name"
-msgstr "Nazwa obrazu"
-
-#: gerbview/class_GERBER.cpp:338
-msgid "Graphic layer"
-msgstr "Warstwa grafiki"
-
-#: gerbview/class_GERBER.cpp:342
-msgid "Img Rot."
-msgstr "Obróć obraz"
-
-#: gerbview/class_GERBER.cpp:345 bitmap2component/bitmap2cmp_gui_base.cpp:135
-msgid "Negative"
-msgstr "Negatyw"
-
-#: gerbview/class_GERBER.cpp:346 gerbview/class_gerber_draw_item.cpp:567
-msgid "Polarity"
-msgstr "Polaryzacja"
-
-#: gerbview/class_GERBER.cpp:350
-msgid "X Justify"
-msgstr "Wyrównanie w pionie"
-
-#: gerbview/class_GERBER.cpp:353
-msgid "Y Justify"
-msgstr "Wyrównanie w pionie"
-
-#: gerbview/class_GERBER.cpp:361
-msgid "Image Justify Offset"
-msgstr "Przesunięcie obrazu dla wyśrodkowania"
-
-#: gerbview/class_gerber_draw_item.cpp:552
+#: gerbview/class_gerber_draw_item.cpp:554
 msgid "D Code"
 msgstr "D Code"
 
-#: gerbview/class_gerber_draw_item.cpp:556
+#: gerbview/class_gerber_draw_item.cpp:558
 msgid "Graphic Layer"
 msgstr "Warstwa graficzna"
 
-#: gerbview/class_gerber_draw_item.cpp:563
+#: gerbview/class_gerber_draw_item.cpp:565
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:350
 msgid "Rotation"
 msgstr "Obrót"
 
-#: gerbview/class_gerber_draw_item.cpp:566
+#: gerbview/class_gerber_draw_item.cpp:568
 msgid "Clear"
 msgstr "Wyczyść"
 
-#: gerbview/class_gerber_draw_item.cpp:566
+#: gerbview/class_gerber_draw_item.cpp:568
 msgid "Dark"
 msgstr "Ciemniej"
 
-#: gerbview/class_gerber_draw_item.cpp:577
+#: gerbview/class_gerber_draw_item.cpp:579
 msgid "AB axis"
 msgstr "oś AB"
 
-#: gerbview/class_gerbview_layer_widget.cpp:110
+#: gerbview/class_gerbview_layer_widget.cpp:111
 msgid "DCodes"
 msgstr "DCodes"
 
-#: gerbview/class_gerbview_layer_widget.cpp:110
+#: gerbview/class_gerbview_layer_widget.cpp:111
 msgid "Show DCodes identification"
 msgstr "Pokaż identyfikatory DCodes"
 
-#: gerbview/class_gerbview_layer_widget.cpp:111
+#: gerbview/class_gerbview_layer_widget.cpp:112
 msgid "Neg. Obj."
 msgstr "Obiekty negatywowe"
 
-#: gerbview/class_gerbview_layer_widget.cpp:112
+#: gerbview/class_gerbview_layer_widget.cpp:113
 msgid "Show negative objects in this color"
 msgstr "Pokaż obiekty negatywowe w tym kolorze"
 
@@ -16000,6 +16000,10 @@ msgstr "Zawsze ukrywaj wszystkie warstwy sygnałowe oprócz aktywnej"
 msgid "Hide All Layers"
 msgstr "Ukryj wszystkie warstwy"
 
+#: gerbview/class_gerbview_layer_widget.cpp:165
+msgid "Sort Layers if X2 Mode"
+msgstr "Sortuj warstwy gdy Tryb X2"
+
 #: gerbview/events_called_functions.cpp:280
 msgid "No editor defined. Please select one"
 msgstr "Edytor nie został zdefiniowany. Proszę wybrać"
@@ -16009,54 +16013,58 @@ msgstr "Edytor nie został zdefiniowany. Proszę wybrać"
 msgid "No file loaded on the active layer %d"
 msgstr "Nie załadowano pliku na aktywną warstwę %d"
 
-#: gerbview/excellon_read_drill_file.cpp:200
+#: gerbview/excellon_read_drill_file.cpp:182
+msgid "No room to load file"
+msgstr "Brak miejsca by załadować plik"
+
+#: gerbview/excellon_read_drill_file.cpp:207
 msgid "Files not found"
 msgstr "Nie znaleziono plików"
 
-#: gerbview/excellon_read_drill_file.cpp:365
+#: gerbview/excellon_read_drill_file.cpp:372
 msgid "METRIC command has no parameter"
 msgstr "Polecenie METRIC nie posiada parametru"
 
-#: gerbview/excellon_read_drill_file.cpp:383
+#: gerbview/excellon_read_drill_file.cpp:390
 msgid "INCH command has no parameter"
 msgstr "Polecenie INCH nie posiada parametru"
 
-#: gerbview/excellon_read_drill_file.cpp:411
+#: gerbview/excellon_read_drill_file.cpp:418
 msgid "ICI command has no parameter"
 msgstr "Polecenie INI nie posiada parametru"
 
-#: gerbview/excellon_read_drill_file.cpp:421
+#: gerbview/excellon_read_drill_file.cpp:428
 msgid "ICI command has incorrect parameter"
 msgstr "Polecenie INI posiada nieprawidłowy parametr"
 
-#: gerbview/excellon_read_drill_file.cpp:459
+#: gerbview/excellon_read_drill_file.cpp:466
 #, c-format
 msgid "Tool definition <%c> not supported"
 msgstr "Definicja narzędzia <%c> nie jest obsługiwana"
 
-#: gerbview/excellon_read_drill_file.cpp:511
+#: gerbview/excellon_read_drill_file.cpp:518
 #, c-format
 msgid "Tool <%d> not defined"
 msgstr "Narzędzie <%d> nie zostało zdefiniowane"
 
-#: gerbview/excellon_read_drill_file.cpp:638
+#: gerbview/excellon_read_drill_file.cpp:645
 #, c-format
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
 msgstr "Nieznany G-kod Excellon: &lt;%s&gt;"
 
-#: gerbview/export_to_pcbnew.cpp:169
+#: gerbview/export_to_pcbnew.cpp:170
 msgid "None of the Gerber layers contain any data"
 msgstr "Żadna z warstw Gerbera nie zawiera danych"
 
-#: gerbview/export_to_pcbnew.cpp:176
+#: gerbview/export_to_pcbnew.cpp:177
 msgid "Board file name:"
 msgstr "Nazwa pliku płytki:"
 
-#: gerbview/export_to_pcbnew.cpp:197
+#: gerbview/export_to_pcbnew.cpp:198
 msgid "OK to change the existing file ?"
 msgstr "Czy zmienić istniejący plik?"
 
-#: gerbview/export_to_pcbnew.cpp:217
+#: gerbview/export_to_pcbnew.cpp:218
 #, c-format
 msgid "Cannot create file '%s'"
 msgstr "Nie mogę utworzyć pliku '%s'"
@@ -16069,89 +16077,97 @@ msgstr "Pliki Gerber"
 msgid "Drill files"
 msgstr "Pliki wierceń"
 
-#: gerbview/files.cpp:120
+#: gerbview/files.cpp:121
 msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Plik Gerber (.g* .lgr .pho)"
 
-#: gerbview/files.cpp:126
+#: gerbview/files.cpp:127
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
 msgstr "Top layer (*.GTL)|*.GTL;*.gtl|"
 
-#: gerbview/files.cpp:127
+#: gerbview/files.cpp:128
 msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
 msgstr "Bottom layer (*.GBL)|*.GBL;*.gbl|"
 
-#: gerbview/files.cpp:128
+#: gerbview/files.cpp:129
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
 msgstr "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
 
-#: gerbview/files.cpp:129
+#: gerbview/files.cpp:130
 msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
 msgstr "Top solder resist (*.GTS)|*.GTS;*.gts|"
 
-#: gerbview/files.cpp:130
+#: gerbview/files.cpp:131
 msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
 msgstr "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
 
-#: gerbview/files.cpp:131
+#: gerbview/files.cpp:132
 msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
 msgstr "Top overlay (*.GTO)|*.GTO;*.gto|"
 
-#: gerbview/files.cpp:132
+#: gerbview/files.cpp:133
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
 msgstr "Bottom paste (*.GBP)|*.GBP;*.gbp|"
 
-#: gerbview/files.cpp:133
+#: gerbview/files.cpp:134
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
 msgstr "Top paste (*.GTP)|*.GTP;*.gtp|"
 
-#: gerbview/files.cpp:134
+#: gerbview/files.cpp:135
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
 msgstr "Keep-out layer (*.GKO)|*.GKO;*.gko|"
 
-#: gerbview/files.cpp:135
+#: gerbview/files.cpp:136
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 msgstr "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
-#: gerbview/files.cpp:136
+#: gerbview/files.cpp:137
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
 msgstr "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
 
-#: gerbview/files.cpp:137
+#: gerbview/files.cpp:138
 msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 
-#: gerbview/files.cpp:149
+#: gerbview/files.cpp:150
 msgid "Open Gerber File"
 msgstr "Otwórz plik Gerber"
 
-#: gerbview/files.cpp:230
+#: gerbview/files.cpp:232
 msgid "Open Drill File"
 msgstr "Otwórz plik wierceń"
 
-#: gerbview/gerbview_frame.cpp:455 gerbview/gerbview_frame.cpp:458
+#: gerbview/gerbview_frame.cpp:457 gerbview/gerbview_frame.cpp:460
 msgid "D Codes"
 msgstr "D Codes"
 
-#: gerbview/gerbview_frame.cpp:486
+#: gerbview/gerbview_frame.cpp:488
 #, c-format
 msgid "Layer %d not in use"
 msgstr "Warstwa %d nie jest używana"
 
-#: gerbview/gerbview_frame.cpp:492
+#: gerbview/gerbview_frame.cpp:494
 msgid "File:"
 msgstr "Plik:"
 
-#: gerbview/gerbview_frame.cpp:499
+#: gerbview/gerbview_frame.cpp:497
+msgid "(with X2 Attributes)"
+msgstr "(z atrybutami X2)"
+
+#: gerbview/gerbview_frame.cpp:503
 #, c-format
 msgid "Image name: '%s'  Layer name: '%s'"
 msgstr "Nazwa obrazu: '%s'  Nazwa warstwy: '%s'"
 
-#: gerbview/init_gbr_drawlayers.cpp:50
+#: gerbview/gerbview_frame.cpp:516
+msgid "X2 attr"
+msgstr "atrybuty X2"
+
+#: gerbview/init_gbr_drawlayers.cpp:48
 msgid "Current data will be lost?"
 msgstr "Bieżące dane zostaną utracone?"
 
-#: gerbview/init_gbr_drawlayers.cpp:81
+#: gerbview/init_gbr_drawlayers.cpp:72
 #, c-format
 msgid "Clear layer %d?"
 msgstr "Wyczyścić warstwę %d?"
@@ -16279,16 +16295,16 @@ msgstr "&Różne"
 msgid "Delete Block (ctrl + drag mouse)"
 msgstr "Usuń blok (ctrl + przeciąganie myszką)"
 
-#: gerbview/readgerb.cpp:68
+#: gerbview/readgerb.cpp:69
 #, c-format
 msgid "File <%s> not found"
 msgstr "Nie znaleziono pliku <%s>"
 
-#: gerbview/readgerb.cpp:181
+#: gerbview/readgerb.cpp:182
 msgid "Errors"
 msgstr "Błędy"
 
-#: gerbview/readgerb.cpp:191
+#: gerbview/readgerb.cpp:192
 msgid ""
 "Warning: this file has no D-Code definition\n"
 "It is perhaps an old RS274D file\n"
@@ -16298,15 +16314,15 @@ msgstr ""
 "Jest to prawdopodobnie plik w starszym formacie RS274D\n"
 "dlatego rozmiar elementów jest niezdefiniowany"
 
-#: gerbview/rs274x.cpp:415
+#: gerbview/rs274x.cpp:444
 msgid "RS274X: Command \"IR\" rotation value not allowed"
 msgstr "RS274X: Wartość w poleceniu obrotu \"IR\" jest niedozwolona"
 
-#: gerbview/rs274x.cpp:506
+#: gerbview/rs274x.cpp:535
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
 msgstr "RS274X: Polecenie KNOCKOUT ignorowane przez GerbView"
 
-#: gerbview/rs274x.cpp:568
+#: gerbview/rs274x.cpp:597
 msgid "Too many include files!!"
 msgstr "Dołączono zbyt dużo plików!!!"
 
@@ -18044,7 +18060,7 @@ msgstr "Obrys umieszczony na warstwie:"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:154
 msgid ""
 "Choose the board layer to place the outline.\n"
-"The 2 invisible fields reference and value and always placed on the silk "
+"The 2 invisible fields reference and value are always placed on the silk "
 "screen layer."
 msgstr ""
 "Wybiera warstwę na której umieścić obrys.\n"
@@ -20084,3 +20100,15 @@ msgstr "Kalkulator PCB"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nowy element"
+
+#~ msgid "Perform electric rules check"
+#~ msgstr "Kontrola reguł projektowych PCB"
+
+#~ msgid "Legacy Format"
+#~ msgstr "Starszy format"
+
+#~ msgid "Advanced Format"
+#~ msgstr "Format rozszerzony"
+
+#~ msgid "Netlist Options:"
+#~ msgstr "Opcje listy sieci:"
