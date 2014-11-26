@@ -127,15 +127,20 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
     case PAD_CONN:
         {
             LSET lmsk = aPad->GetLayerSet();
+            bool is_copper = false;
 
             for( int i = 0; i < MAX_CU_LAYERS; i++ )
             {
                 if( lmsk[i] )
                 {
+                    is_copper = true;
                     layers = PNS_LAYERSET( i );
                     break;
                 }
             }
+
+            if( !is_copper )
+                return NULL;
         }
         break;
 
