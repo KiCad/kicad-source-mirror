@@ -38,8 +38,6 @@ BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype 
     BOARD_ITEM( aParent, idtype ), m_netinfo( &NETINFO_LIST::ORPHANED ),
     m_Subnet( 0 ), m_ZoneSubnet( 0 )
 {
-    // The unconnected net is set only in case the item belongs to a BOARD
-    SetNetCode( NETINFO_LIST::UNCONNECTED );
 }
 
 
@@ -52,12 +50,15 @@ BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem ) 
 
 void BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode )
 {
+    assert( aNetCode >= 0 );
     BOARD* board = GetBoard();
 
     if( board )
         m_netinfo = board->FindNet( aNetCode );
     else
         m_netinfo = &NETINFO_LIST::ORPHANED;
+
+    assert( m_netinfo );
 }
 
 

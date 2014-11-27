@@ -698,7 +698,7 @@ void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
             track->SetEnd( wxPoint( s.B.x, s.B.y ) );
             track->SetWidth( seg->Width() );
             track->SetLayer( ToLAYER_ID( seg->Layers().Start() ) );
-            track->SetNetCode( seg->Net() );
+            track->SetNetCode( seg->Net() > 0 ? seg->Net() : 0 );
             newBI = track;
             break;
         }
@@ -710,7 +710,7 @@ void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
             via_board->SetPosition( wxPoint( via->Pos().x, via->Pos().y ) );
             via_board->SetWidth( via->Diameter() );
             via_board->SetDrill( via->Drill() );
-            via_board->SetNetCode( via->Net() );
+            via_board->SetNetCode( via->Net() > 0 ? seg->Net() : 0 );
             via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
             via_board->SetLayerPair( ToLAYER_ID( via->Layers().Start() ),
                                      ToLAYER_ID( via->Layers().End() ) );
