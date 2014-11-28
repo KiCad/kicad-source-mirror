@@ -226,8 +226,8 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     if( APPLE )
 
-        set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
+        set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__" )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__" )
 
         # Allows .dylib relocation in the future - needed by fixbundle
         set( CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS} -headerpad_max_install_names")
@@ -238,6 +238,12 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
         if( NOT CMAKE_CXX_COMPILER )
             EXEC_PROGRAM( wx-config ARGS --cxx OUTPUT_VARIABLE CMAKE_CXX_COMPILER )
+        endif()
+
+        # There seems to be no consistent behavior when -mmacosx-min-version is
+        # not specified, so force user to set minimum OSX version to build for
+        if( NOT CMAKE_OSX_DEPLOYMENT_TARGET )
+            message( FATAL_ERROR "Please specify target OS X version using -DCMAKE_OSX_DEPLOYMENT_TARGET=10.x" )
         endif()
 
     endif()

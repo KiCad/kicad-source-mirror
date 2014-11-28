@@ -140,11 +140,8 @@ endif()
 
 
 if( APPLE )
-    # I set this to being compatible with wxWidgets
-    # wxWidgets still using libstdc++ (gcc), meanwhile OSX
-    # has switched to libc++ (llvm) by default
-    set( BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=10.5  -fno-common" )
-    set( BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=10.5 -fno-common" )
+    set( BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} -fno-common" )
+    set( BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} -fno-common" )
     set( BOOST_TOOLSET   "toolset=darwin" )
 
     if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
