@@ -249,11 +249,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 continue;
             }
 
-            if( ( GetPadConnection( pad ) == PAD_NOT_IN_ZONE )
-                || ( pad->GetShape() == PAD_TRAPEZOID ) )
-
-            // PAD_TRAPEZOID shapes are not in zones because they are used in microwave apps
-            // and i think it is good that shapes are not changed by thermal pads or others
+            if( GetPadConnection( pad ) == PAD_NOT_IN_ZONE )
             {
                 int gap = zone_clearance;
                 int thermalGap = GetThermalReliefGap( pad );
