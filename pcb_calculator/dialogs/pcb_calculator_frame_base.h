@@ -293,7 +293,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 	
 	public:
 		
-		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pcb Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 670,489 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL );
+		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 670,489 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL );
 		
 		~PCB_CALCULATOR_FRAME_BASE();
 	

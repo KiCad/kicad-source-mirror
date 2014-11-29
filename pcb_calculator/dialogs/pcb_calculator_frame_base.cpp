@@ -333,7 +333,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizeRight = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizerTW_Result;
-	sbSizerTW_Result = new wxStaticBoxSizer( new wxStaticBox( m_panelTrackWidth, wxID_ANY, _("Tracks Caracteristics (External Layers):") ), wxVERTICAL );
+	sbSizerTW_Result = new wxStaticBoxSizer( new wxStaticBox( m_panelTrackWidth, wxID_ANY, _("Track Characteristics (External Layers):") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerTW_Results;
 	fgSizerTW_Results = new wxFlexGridSizer( 5, 3, 0, 0 );
@@ -409,7 +409,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizeRight->Add( sbSizerTW_Result, 1, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizerTW_Result1;
-	sbSizerTW_Result1 = new wxStaticBoxSizer( new wxStaticBox( m_panelTrackWidth, wxID_ANY, _("Tracks Caracteristics (Internal Layers):") ), wxVERTICAL );
+	sbSizerTW_Result1 = new wxStaticBoxSizer( new wxStaticBox( m_panelTrackWidth, wxID_ANY, _("Track Characteristics (Internal Layers):") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerTW_Results1;
 	fgSizerTW_Results1 = new wxFlexGridSizer( 6, 3, 0, 0 );

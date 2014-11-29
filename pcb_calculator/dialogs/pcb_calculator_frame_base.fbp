@@ -47,7 +47,7 @@
             <property name="size">670,489</property>
             <property name="style">wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">KIWAY_PLAYER; kiway_player.h</property>
-            <property name="title">Pcb Calculator</property>
+            <property name="title">PCB Calculator</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -4687,7 +4687,7 @@
                                                 <property name="proportion">1</property>
                                                 <object class="wxStaticBoxSizer" expanded="0">
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Tracks Caracteristics (External Layers):</property>
+                                                    <property name="label">Track Characteristics (External Layers):</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbSizerTW_Result</property>
                                                     <property name="orient">wxVERTICAL</property>
@@ -6009,7 +6009,7 @@
                                                 <property name="proportion">1</property>
                                                 <object class="wxStaticBoxSizer" expanded="0">
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Tracks Caracteristics (Internal Layers):</property>
+                                                    <property name="label">Track Characteristics (Internal Layers):</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbSizerTW_Result1</property>
                                                     <property name="orient">wxVERTICAL</property>
