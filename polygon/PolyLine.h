@@ -54,6 +54,7 @@
 #include <layers_id_colors_and_visibility.h>    // for LAYER_NUM definition
 #include <class_eda_rect.h>                     // for EDA_RECT definition
 #include <polygons_defs.h>
+#include <clipper.hpp>
 
 class CSegment
 {
@@ -187,28 +188,6 @@ public:
     }
 
     /**
-     * Function ExportTo
-     * Copy all contours to a KI_POLYGON_SET
-     * @param aPolygons = the KI_POLYGON_WITH_HOLES to populate
-     */
-    void    ExportTo( KI_POLYGON_SET& aPolygons ) const;
-
-    /**
-     * Function ExportTo
-     * Copy the contours to a KI_POLYGON_WITH_HOLES
-     * The first contour is the main outline, others are holes
-     * @param aPolygoneWithHole = the KI_POLYGON_WITH_HOLES to populate
-     */
-    void    ExportTo( KI_POLYGON_WITH_HOLES& aPolygoneWithHole ) const;
-
-    /**
-     * Function ImportFrom
-     * Copy all polygons from a KI_POLYGON_SET in list
-     * @param aPolygons = the KI_POLYGON_SET to import
-     */
-    void    ImportFrom( KI_POLYGON_SET& aPolygons );
-
-    /**
      * function AddCorner
      * add a corner to the list
      */
@@ -226,6 +205,56 @@ public:
         if( m_cornersList.size() > 0 )
             m_cornersList.back().end_contour = true;
     }
+
+    /**
+     * Function ExportTo
+     * Copy all contours to a KI_POLYGON_SET, each contour is exported
+     * to a KI_POLYGON
+     * @param aPolygons = the KI_POLYGON_SET to populate
+     */
+    void    ExportTo( KI_POLYGON_SET& aPolygons ) const;
+
+    /**
+     * Function ExportTo
+     * Copy the contours to a KI_POLYGON_WITH_HOLES
+     * The first contour is the main outline, others are holes
+     * @param aPolygoneWithHole = the KI_POLYGON_WITH_HOLES to populate
+     */
+    void    ExportTo( KI_POLYGON_WITH_HOLES& aPolygoneWithHole ) const;
+
+    /**
+     * Function ExportTo
+     * Copy all contours to a ClipperLib::Paths, each contour is exported
+     * to a ClipperLib::Path
+     * @param aPolygons = the ClipperLib::Paths to populate
+     */
+    void    ExportTo( ClipperLib::Paths& aPolygons ) const;
+
+    /**
+     * Function ImportFrom
+     * Copy all polygons from a KI_POLYGON_SET in list
+     * @param aPolygons = the KI_POLYGON_SET to import
+     */
+    void    ImportFrom( KI_POLYGON_SET& aPolygons );
+
+    /**
+     * Function ImportFrom
+     * Copy all polygons from a ClipperLib::Paths in list
+     * @param aPolygons = the ClipperLib::Paths to import
+     */
+    void    ImportFrom( ClipperLib::Paths& aPolygons );
+
+    /**
+     * Function InflateOutline
+     * Inflate the outline stored in m_cornersList.
+     * The first polygon is the external outline. It is inflated
+     * The other polygons are holes. they are deflated
+     * @param aResult = the Inflated outline
+     * @param aInflateValue = the Inflate value. when < 0, this is a deflate transform
+     * @param aLinkHoles = if true, aResult contains only one polygon,
+     * with holes linked by overlapping segments
+     */
+    void InflateOutline( CPOLYGONS_LIST& aResult, int aInflateValue, bool aLinkHoles );
 };
 
 class CPolyLine
@@ -488,5 +517,18 @@ public:
  */
 void    ConvertPolysListWithHolesToOnePolygon( const CPOLYGONS_LIST&    aPolysListWithHoles,
                                                CPOLYGONS_LIST&          aOnePolyList );
+
+/**
+ * Function ConvertOnePolygonToPolysListWithHoles
+ * converts the outline aOnePolyList (only one contour,
+ * holes are linked by overlapping segments) to
+ * to one main polygon and holes (polygons inside main polygon)
+ * @param aOnePolyList = a polygon with no holes
+ * @param aPolysListWithHoles = the list of corners of contours
+ *                             (main outline and holes)
+ */
+void    ConvertOnePolygonToPolysListWithHoles( const CPOLYGONS_LIST&    aOnePolyList,
+                                               CPOLYGONS_LIST&          aPolysListWithHoles );
+
 
 #endif    // #ifndef POLYLINE_H

@@ -1140,25 +1140,9 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
         clip_engine.Execute( ClipperLib::ctDifference, thermalShape );
 
         // put thermal shapes (holes) to list:
-        wxPoint corner_position;
-
-        for( unsigned ii = 0; ii < thermalShape.size(); ii++ )
-        {
-            ClipperLib::Path& polygon = thermalShape[ii];
-
-            for( unsigned jj = 0; jj < polygon.size(); jj++ )
-            {
-                corner_position.x = int( polygon[jj].X );
-                corner_position.y = int( polygon[jj].Y );
-                CPolyPt polypoint( corner_position.x, corner_position.y );
-                aCornerBuffer.Append( polypoint );
-            }
-
-            aCornerBuffer.CloseLastContour();
-        }
-
+        aCornerBuffer.ImportFrom( thermalShape );
         break;
-    }
+        }
 
     default:
         ;
