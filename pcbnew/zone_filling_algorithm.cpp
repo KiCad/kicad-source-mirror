@@ -43,22 +43,19 @@
   ( holes are linked by overlapping segments to the main outline)
  * aPcb: the current board (can be NULL for non copper zones)
  * aCornerBuffer: A reference to a buffer to store polygon corners, or NULL
- * if NULL:
+ * if aCornerBuffer == NULL:
  * - m_FilledPolysList is used to store solid areas polygons.
  * - on copper layers, tracks and other items shapes of other nets are
  * removed from solid areas
  * if not null:
  * Only the zone outline (with holes, if any) are stored in aCornerBuffer
- * with holes linked. Therfore only one polygon is created
+ * with holes linked. Therefore only one polygon is created
  * This function calls AddClearanceAreasPolygonsToPolysList()
  * to add holes for pads and tracks and other items not in net.
  */
 
-bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST* aCornerBuffer )
+bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST* aOutlineBuffer )
 {
-    if( aCornerBuffer == NULL )
-        m_FilledPolysList.RemoveAllContours();
-
     /* convert outlines + holes to outlines without holes (adding extra segments if necessary)
      * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building
      * this zone
@@ -90,47 +87,33 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST*
         break;
     }
 
-    if( aCornerBuffer )
-        ConvertPolysListWithHolesToOnePolygon( m_smoothedPoly->m_CornersList, *aCornerBuffer );
-    else
-        ConvertPolysListWithHolesToOnePolygon( m_smoothedPoly->m_CornersList, m_FilledPolysList );
+    if( aOutlineBuffer )
+        aOutlineBuffer->Append( m_smoothedPoly->m_CornersList );
 
     /* For copper layers, we now must add holes in the Polygon list.
      * holes are pads and tracks with their clearance area
      * for non copper layers just recalculate the m_FilledPolysList
      * with m_ZoneMinThickness taken in account
      */
-    if( !aCornerBuffer )
+    else
     {
+        m_FilledPolysList.RemoveAllContours();
+
         if( IsOnCopperLayer() )
             AddClearanceAreasPolygonsToPolysList( aPcb );
         else
         {
-            // This KI_POLYGON_SET is the area(s) to fill, with m_ZoneMinThickness/2
-            KI_POLYGON_SET polyset_zone_solid_areas;
             int         margin = m_ZoneMinThickness / 2;
-
-            /* First, creates the main polygon (i.e. the filled area using only one outline)
-             * to reserve a m_ZoneMinThickness/2 margin around the outlines and holes
-             * this margin is the room to redraw outlines with segments having a width set to
-             * m_ZoneMinThickness
-             * so m_ZoneMinThickness is the min thickness of the filled zones areas
-             * the polygon is stored in polyset_zone_solid_areas
-             */
-            CopyPolygonsFromFilledPolysListToKiPolygonList( polyset_zone_solid_areas );
-            polyset_zone_solid_areas -= margin;
-            // put solid area in m_FilledPolysList:
-            m_FilledPolysList.RemoveAllContours();
-            CopyPolygonsFromKiPolygonListToFilledPolysList( polyset_zone_solid_areas );
+            m_smoothedPoly->m_CornersList.InflateOutline(m_FilledPolysList, margin, true );
         }
 
         if( m_FillMode )   // if fill mode uses segments, create them:
             FillZoneAreasWithSegments();
+
+        m_IsFilled = true;
     }
 
-    m_IsFilled = true;
-
-    return 1;
+    return true;
 }
 
 
