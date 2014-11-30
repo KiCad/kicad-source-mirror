@@ -33,6 +33,18 @@
 
 #include <layer_widget.h>
 
+// popup menu ids. in layer manager
+enum LAYER_MANAGER
+{
+    ID_LAYER_MANAGER_START = wxID_HIGHEST+1,
+    ID_SHOW_ALL_LAYERS = ID_LAYER_MANAGER_START,
+    ID_SHOW_NO_LAYERS,
+    ID_SHOW_NO_LAYERS_BUT_ACTIVE,
+    ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE,
+    ID_SORT_GBR_LAYERS,
+    ID_LAYER_MANAGER_END = ID_SORT_GBR_LAYERS,
+};
+
 /**
  * Class GERBER_LAYER_WIDGET
  * is here to implement the abtract functions of LAYER_WIDGET so they
@@ -45,11 +57,6 @@ class GERBER_LAYER_WIDGET : public LAYER_WIDGET
     bool m_alwaysShowActiveLayer;   // If true: Only shows the current active layer
                                     // even if it is changed
 
-    // popup menu ids.
-#define ID_SHOW_ALL_LAYERS                      wxID_HIGHEST
-#define ID_SHOW_NO_LAYERS                       (wxID_HIGHEST+1)
-#define ID_SHOW_NO_LAYERS_BUT_ACTIVE            (wxID_HIGHEST+2)
-#define ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE     (wxID_HIGHEST+3)
 
     /**
      * Function OnRightDownLayers

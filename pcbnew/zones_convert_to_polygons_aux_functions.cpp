@@ -51,12 +51,13 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
             CPOLYGONS_LIST& aCornerBuffer,
             int aClearanceValue, bool aAddClearance )
 {
-    // Creates the zone outlines polygon (with linked holes if any)
-    CPOLYGONS_LIST zoneOutines;
-    BuildFilledSolidAreasPolygons( NULL, &zoneOutines );
+    // Creates the zone outline polygon (with linked holes if any)
+    CPOLYGONS_LIST zoneOutline;
+    BuildFilledSolidAreasPolygons( NULL, &zoneOutline );
 
     // add clearance to outline
     int clearance = 0;
+
     if( aAddClearance )
     {
         clearance = GetClearance();
@@ -64,51 +65,11 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
             clearance = aClearanceValue;
     }
     // Calculate the polygon with clearance
-    // holes are linked to the main outline, so only one polygon should be created.
-    KI_POLYGON_SET polyset_zone_solid_areas;
-    std::vector<KI_POLY_POINT> cornerslist;
-    unsigned ic = 0;
-    unsigned corners_count = zoneOutines.GetCornersCount();
-    while( ic < corners_count )
-    {
-        cornerslist.clear();
-        KI_POLYGON poly;
-        {
-            for( ; ic < corners_count; ic++ )
-            {
-                CPolyPt* corner = &zoneOutines[ic];
-                cornerslist.push_back( KI_POLY_POINT( corner->x, corner->y ) );
-                if( corner->end_contour )
-                {
-                    ic++;
-                    break;
-                }
-            }
-
-            bpl::set_points( poly, cornerslist.begin(), cornerslist.end() );
-            polyset_zone_solid_areas.push_back( poly );
-        }
-    }
-
-    polyset_zone_solid_areas += clearance;
-
-    // Put the resulting polygon in aCornerBuffer corners list
-    for( unsigned ii = 0; ii < polyset_zone_solid_areas.size(); ii++ )
-    {
-        KI_POLYGON& poly = polyset_zone_solid_areas[ii];
-        CPolyPt   corner( 0, 0, false );
-
-        for( unsigned jj = 0; jj < poly.size(); jj++ )
-        {
-            KI_POLY_POINT point = *(poly.begin() + jj);
-            corner.x = point.x();
-            corner.y = point.y();
-            corner.end_contour = false;
-            aCornerBuffer.Append( corner );
-        }
-
-        aCornerBuffer.CloseLastContour();
-    }
+    // holes are linked to the main outline, so only one polygon is created.
+    if( clearance )
+        zoneOutline.InflateOutline( aCornerBuffer, clearance, true );
+    else
+        ConvertPolysListWithHolesToOnePolygon( zoneOutline, aCornerBuffer );
 }
 
 

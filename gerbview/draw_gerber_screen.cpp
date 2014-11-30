@@ -214,14 +214,16 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     bool end = false;
 
-    for( int layer = 0; !end; ++layer )
+    // Draw layers from bottom to top, and active layer last
+    // in non transparent modes, the last layer drawn mask mask previously drawn layer
+    for( int layer = GERBER_DRAWLAYERS_COUNT-1; !end; --layer )
     {
         int active_layer = gerbFrame->getActiveLayer();
 
         if( layer == active_layer ) // active layer will be drawn after other layers
             continue;
 
-        if( layer == GERBER_DRAWLAYERS_COUNT )   // last loop: draw active layer
+        if( layer < 0 )   // last loop: draw active layer
         {
             end   = true;
             layer = active_layer;
@@ -230,7 +232,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( !gerbFrame->IsLayerVisible( layer ) )
             continue;
 
-        GERBER_IMAGE* gerber = g_GERBER_List[layer];
+        GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
         if( gerber == NULL )    // Graphic layer not yet used
             continue;

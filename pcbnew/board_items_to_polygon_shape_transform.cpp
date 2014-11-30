@@ -27,8 +27,8 @@
  * @brief function to convert shapes of items ( pads, tracks... ) to polygons
  */
 
-/* Function to convert pads and tranck shapes to polygons
- * Used to fill zones areas
+/* Function to convert pad and track shapes to polygons
+ * Used to fill zones areas and in 3D viewer
  */
 #include <vector>
 
@@ -520,22 +520,19 @@ void TRACK:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
  * clearance when the circle is approximated by segment bigger or equal
  * to the real clearance value (usually near from 1.0)
  */
+#include <clipper.hpp>
 void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                                    int             aClearanceValue,
                                                    int             aCircleToSegmentsCount,
                                                    double          aCorrectionFactor ) const
 {
     wxPoint corner_position;
-    double  angle;
+    double  angle = m_Orient;
     int     dx = (m_Size.x / 2) + aClearanceValue;
     int     dy = (m_Size.y / 2) + aClearanceValue;
 
-    double  delta = 3600.0 / aCircleToSegmentsCount; // rot angle in 0.1 degree
-    wxPoint PadShapePos = ShapePos();         /* Note: for pad having a shape offset,
+    wxPoint PadShapePos = ShapePos();               /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
-    wxSize  psize = m_Size;                         /* pad size unsed in RECT and TRAPEZOIDAL pads
-                                                     * trapezoidal pads are considered as rect
-                                                     * pad shape having they boudary box size */
 
     switch( GetShape() )
     {
@@ -547,7 +544,6 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
 
     case PAD_OVAL:
         // An oval pad has the same shape as a segment with rounded ends
-        angle = m_Orient;
         {
         int width;
         wxPoint shape_offset;
@@ -573,77 +569,51 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
         break;
 
     case PAD_TRAPEZOID:
-        psize.x += std::abs( m_DeltaSize.y );
-        psize.y += std::abs( m_DeltaSize.x );
-
-    // fall through
     case PAD_RECT:
-        // Easy implementation for rectangular cutouts with rounded corners
-        angle = m_Orient;
+    {
+        wxPoint corners[4];
+        BuildPadPolygon( corners, wxSize( 0, 0 ), angle );
 
-        // Corner rounding radius
-        int rounding_radius = KiROUND( aClearanceValue * aCorrectionFactor );
-        double angle_pg;  // Polygon increment angle
+        // We are using ClipperLib to inflate the polygon shape, using
+        // arcs to connect moved segments.
+        ClipperLib::Path outline;
+        ClipperLib::Paths shapeWithClearance;
 
-        for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
+        for( int ii = 0; ii < 4; ii++ )
+            outline << ClipperLib::IntPoint( corners[ii].x, corners[ii].y );
+
+        ClipperLib::ClipperOffset offset_engine;
+        // Prepare an offset (inflate) transform, with edges connected by arcs
+        offset_engine.AddPath( outline, ClipperLib::jtRound, ClipperLib::etClosedPolygon );
+
+        // Clipper approximates arcs by segments
+        // It uses a value called ArcTolerance which is the max error between the arc
+        // and segments created to approximate this arc
+        // the number of segm per circle is:
+        // n = PI / acos(1 - arc_tolerance / (arc radius))
+        // the arc radius is aClearanceValue
+        // because arc_tolerance is << aClearanceValue and aClearanceValue >= 0
+        // n = PI / (arc_tolerance / aClearanceValue )
+        offset_engine.ArcTolerance = (double)aClearanceValue / 3.14 / aCircleToSegmentsCount;
+
+        double rounding_radius = aClearanceValue * aCorrectionFactor;
+        offset_engine.Execute( shapeWithClearance, rounding_radius );
+
+        // get new outline (only one polygon is expected)
+        // For info, ClipperLib uses long long to handle integer coordinates
+        ClipperLib::Path& polygon = shapeWithClearance[0];
+
+        for( unsigned jj = 0; jj < polygon.size(); jj++ )
         {
-            corner_position = wxPoint( 0, -rounding_radius );
-            RotatePoint( &corner_position, (1800.0 / aCircleToSegmentsCount) );
-
-            // Start at half increment offset
-            angle_pg = i * delta;
-            RotatePoint( &corner_position, angle_pg );
-
-            // Rounding vector rotation
-            corner_position -= psize / 2;            // Rounding vector + Pad corner offset
-            RotatePoint( &corner_position, angle );
-
-            // Rotate according to module orientation
-            corner_position += PadShapePos;          // Shift origin to position
-            CPolyPt polypoint( corner_position.x, corner_position.y );
-            aCornerBuffer.Append( polypoint );
-        }
-
-        for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
-        {
-            corner_position = wxPoint( -rounding_radius, 0 );
-            RotatePoint( &corner_position, (1800.0 / aCircleToSegmentsCount) );
-            angle_pg = i * delta;
-            RotatePoint( &corner_position, angle_pg );
-            corner_position -= wxPoint( psize.x / 2, -psize.y / 2 );
-            RotatePoint( &corner_position, angle );
-            corner_position += PadShapePos;
-            CPolyPt polypoint( corner_position.x, corner_position.y );
-            aCornerBuffer.Append( polypoint );
-        }
-
-        for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
-        {
-            corner_position = wxPoint( 0, rounding_radius );
-            RotatePoint( &corner_position, (1800.0 / aCircleToSegmentsCount) );
-            angle_pg = i * delta;
-            RotatePoint( &corner_position, angle_pg );
-            corner_position += psize / 2;
-            RotatePoint( &corner_position, angle );
-            corner_position += PadShapePos;
-            CPolyPt polypoint( corner_position.x, corner_position.y );
-            aCornerBuffer.Append( polypoint );
-        }
-
-        for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
-        {
-            corner_position = wxPoint( rounding_radius, 0 );
-            RotatePoint( &corner_position, (1800.0 / aCircleToSegmentsCount) );
-            angle_pg = i * delta;
-            RotatePoint( &corner_position, angle_pg );
-            corner_position -= wxPoint( -psize.x / 2, psize.y / 2 );
-            RotatePoint( &corner_position, angle );
+            corner_position.x = int( polygon[jj].X );
+            corner_position.y = int( polygon[jj].Y );
             corner_position += PadShapePos;
             CPolyPt polypoint( corner_position.x, corner_position.y );
             aCornerBuffer.Append( polypoint );
         }
 
         aCornerBuffer.CloseLastContour();
+    }
         break;
     }
 }
@@ -1090,9 +1060,89 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                 aCornerBuffer.CloseLastContour();
                 angle = AddAngles( angle, 1800 );
             }
-
         }
         break;
+
+    case PAD_TRAPEZOID:
+        {
+        CPOLYGONS_LIST cbuffer;
+        // We need a length to build the stubs of the thermal reliefs
+        // the value is not very important. The pad bounding box gives a reasonable value
+        EDA_RECT bbox = aPad.GetBoundingBox();
+        int stub_len = std::max( bbox.GetWidth(), bbox.GetHeight() );
+
+        aPad.TransformShapeWithClearanceToPolygon( cbuffer, aThermalGap,
+                    aCircleToSegmentsCount, aCorrectionFactor );
+
+        // We are using ClipperLib to substract stubs to clearance area (antipad area).
+        ClipperLib::Path antipad;       // The full antipad area
+        ClipperLib::Path stub;          // A basic stub ( a rectangle)
+        ClipperLib::Paths stubs;        // the full stubs shape
+        ClipperLib::Paths thermalShape; // the holes in copper zone
+
+        // cbuffer is expected to contain only one polygon, which is
+        // area of the pad + the thermal gap (the antipad)
+        for( unsigned ii = 0; ii < cbuffer.GetCornersCount(); ii++ )
+            antipad << ClipperLib::IntPoint( cbuffer.GetPos(ii).x, cbuffer.GetPos(ii).y );
+
+        // We now substract the stubs (connections to the copper zone)
+        ClipperLib::Clipper clip_engine;
+        // Prepare a clipping transform
+        clip_engine.AddPath( antipad, ClipperLib::ptSubject, true );
+
+        // Create stubs and add them to clipper engine
+        wxPoint stubBuffer[4];
+        stubBuffer[0].x = stub_len;
+        stubBuffer[0].y = copper_thickness.y/2;
+        stubBuffer[1] = stubBuffer[0];
+        stubBuffer[1].y = -copper_thickness.y/2;
+        stubBuffer[2] = stubBuffer[1];
+        stubBuffer[2].x = -stub_len;
+        stubBuffer[3] = stubBuffer[2];
+        stubBuffer[3].y = copper_thickness.y/2;
+
+        for( unsigned ii = 0; ii < DIM( stubBuffer ); ii++ )
+        {
+            wxPoint cpos = stubBuffer[ii];
+            RotatePoint( &cpos, aPad.GetOrientation() );
+            cpos += PadShapePos;
+            stub << ClipperLib::IntPoint( cpos.x, cpos.y );
+        }
+
+        ClipperLib::Clipper stubs_engine;
+        stubs_engine.AddPath( stub, ClipperLib::ptSubject, true );
+
+        stubBuffer[0].y = stub_len;
+        stubBuffer[0].x = copper_thickness.x/2;
+        stubBuffer[1] = stubBuffer[0];
+        stubBuffer[1].x = -copper_thickness.x/2;
+        stubBuffer[2] = stubBuffer[1];
+        stubBuffer[2].y = -stub_len;
+        stubBuffer[3] = stubBuffer[2];
+        stubBuffer[3].x = copper_thickness.x/2;
+        stub.clear();
+
+        for( unsigned ii = 0; ii < DIM( stubBuffer ); ii++ )
+        {
+            wxPoint cpos = stubBuffer[ii];
+            RotatePoint( &cpos, aPad.GetOrientation() );
+            cpos += PadShapePos;
+            stub << ClipperLib::IntPoint( cpos.x, cpos.y );
+        }
+
+        stubs_engine.AddPath( stub, ClipperLib::ptClip, true );
+
+        // Build the full stubs shape:
+        stubs_engine.Execute( ClipperLib::ctUnion, stubs );
+
+        // remove stubs to antipad area (i.e. add copper stubs)
+        clip_engine.AddPath( stubs[0], ClipperLib::ptClip, true );
+        clip_engine.Execute( ClipperLib::ctDifference, thermalShape );
+
+        // put thermal shapes (holes) to list:
+        aCornerBuffer.ImportFrom( thermalShape );
+        break;
+        }
 
     default:
         ;

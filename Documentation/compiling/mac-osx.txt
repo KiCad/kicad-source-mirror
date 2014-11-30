@@ -1,9 +1,9 @@
 Compiling KiCad on Apple Mac OS X
 =================================
 
-Building on OSX is very similar to building on Linux. This document will provide
-a complete walk-through on what to do but it will focus on OSX specific things.
-See general documentation on non-OSX specific KiCad build switches, etc.
+Building on OS X is very similar to building on Linux. This document will provide
+a complete walk-through on what to do but it will focus on OS X specific things.
+See general documentation on non OS X specific KiCad build switches, etc.
 
 
 Prerequisites
@@ -24,6 +24,7 @@ Mandatory library dependencies needed to compile KiCad:
    OR
   wxPython  - A blending of the wxWidgets C++ class library with the Python
               programming language
+* SWIG      - Interface compiler (only needed for scripting/wxPython builds)
 
 Optional library dependencies, depends on used KiCad features
 * OpenSSL - The Open Source toolkit for SSL/TLS
@@ -31,7 +32,7 @@ Optional library dependencies, depends on used KiCad features
 
 All tools (except XCode, of course) and all dependencies except wxWidgets/wxPython
 can be compiled manually, but it is advised to install them using your favorite
-package manager for OSX like MacPorts or Homebrew.
+package manager for OS X like MacPorts or Homebrew.
 Depending on the package manager the development packages of the library
 dependencies may have to be installed (usually something like <pkg>-dev or
 <pkg>-devel).
@@ -44,7 +45,7 @@ automatically by KiCad build process.
 IMPORTANT:
 At the moment you *must not* use a wxWidgets/wxPython version installed by any
 package manager.
-KiCad on OSX needs overlay support and some other fixes, which are not yet
+KiCad on OS X needs overlay support and some other fixes, which are not yet
 contained in mainline wxWidgets/wxPython sources and builds.
 If you don't use a patched wxWidgets you will get graphical artifacts (something
 like a magnifying glass effect in the upper left corner of KiCad windows) or
@@ -92,13 +93,15 @@ It is recommended to use the latest stable version. As of this writing this is
 
 There is a little helper script osx_build_wx.sh in kicad/scripts that does all
 the patching/configuring/compiling of wxWidgets or wxPython for you.
-Go to your working root "KiCad" and run:
-  # kicad/scripts/osx_build_wx.sh wx-src wx-bin kicad "-j4"
+Go to your working root "KiCad" and for example run:
+  # kicad/scripts/osx_build_wx.sh wx-src wx-bin kicad 10.7 "-j4"
 
 First parameter is the source folder of wxWidgets/wxPython, second parameter the
-target folder for compiled binaries, third parameter is the kicad folder, and
-the last optional parameter are make options used during the build (in this
-case for building with 4 jobs in parallel).
+target folder for compiled binaries, and third parameter is the kicad folder.
+The fourth parameter is the minimum OS X version you are building for (see the
+section about compiling KiCad for further notes on minimum OS X version).
+The last parameter is optional and contains make options used during the build
+(in this example for building with 4 jobs in parallel).
 The script will automatically detect if you are compiling wxWidgets or wxPython.
 NOTE: All paths are assumed to be relative to the current directory, i.e., the
 working root you are in.
@@ -137,10 +140,8 @@ work:
       --with-zlib=builtin \
       --with-expat=builtin \
       --without-liblzma \
-      --with-macosx-version-min=10.5 \
+      --with-macosx-version-min=<osxtarget> \
       --enable-universal-binary=i386,x86_64 \
-      CPPFLAGS="-stdlib=libstdc++" \
-      LDFLAGS="-stdlib=libstdc++" \
       CC=clang \
       CXX=clang++
 If you know what you are doing, you can of course use different settings.
@@ -157,6 +158,7 @@ Now, configure KiCad without scripting support:
   # cmake ../kicad \
       -DCMAKE_C_COMPILER=clang \
       -DCMAKE_CXX_COMPILER=clang++ \
+      -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 \
       -DwxWidgets_CONFIG_EXECUTABLE=../wx-bin/bin/wx-config \
       -DKICAD_SCRIPTING=OFF \
       -DKICAD_SCRIPTING_MODULES=OFF \
@@ -168,6 +170,7 @@ or, configure KiCad with scripting support:
   # cmake ../kicad \
       -DCMAKE_C_COMPILER=clang \
       -DCMAKE_CXX_COMPILER=clang++ \
+      -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 \
       -DwxWidgets_CONFIG_EXECUTABLE=../wx-bin/bin/wx-config \
       -DPYTHON_EXECUTABLE=`which python` \
       -DPYTHON_SITE_PACKAGE_PATH=`pwd`/../wx-bin/lib/python2.7/site-packages \
@@ -182,7 +185,19 @@ been generated when compiling/installing wxPython. If you want to use a specific
 python, you can also specify it via "-DPYTHON_EXECUTABLE" instead of using
 `which python` (this one will just detect/use you default python).
 
-Now KiCad is configured using default features/build-switches. To add Magic
+The parameter "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.x" is mandatory, you have to
+specify the (minimum) OS X version you intend to build for. It is important that
+at least wxWidgets/wxPython and KiCad (and boost, if you use an external build)
+are built using the same or compatible settings. If not, you might get linker
+errors, because this parameter influences which standard C++ library is being
+used (libstdc++ vs. libc++).
+If you don't know what to use and you are only building for your machine, just
+set it to your current OS X version (e.g., MacPorts always builds this way).
+Binaries built with a target OS X version <10.7 are known to show strange
+behavior in some situations on recent systems (maybe because libc++ is standard
+on everything >= 10.7 and problems arise due to mixing libstdc++/libc++).
+
+Now KiCad is configured using default features/build-switches.  To add Magic
 Trackpad pinch-to-zoom support, add -DUSE_OSX_MAGNIFY_EVENT=ON to the above.
 See Documentation/compiling/build-config.txt for a list of all CMake options
 available when compiling KiCad.

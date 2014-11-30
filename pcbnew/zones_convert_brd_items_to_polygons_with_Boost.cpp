@@ -138,6 +138,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      */
     s_Correction = 1.0 / cos( M_PI / s_CircleToSegmentsCount );
 
+    // this is a place to store holes (i.e. tracks, pads ... areas as polygons outlines)
+    // static to avoid unnecessary memory allocation when filling many zones.
+    static CPOLYGONS_LIST cornerBufferPolysToSubstract;
+    cornerBufferPolysToSubstract.RemoveAllContours();
+
     // This KI_POLYGON_SET is the area(s) to fill, with m_ZoneMinThickness/2
     KI_POLYGON_SET polyset_zone_solid_areas;
     int         margin = m_ZoneMinThickness / 2;
@@ -149,12 +154,34 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * so m_ZoneMinThickness is the min thickness of the filled zones areas
      * the main polygon is stored in polyset_zone_solid_areas
      */
-
-    CopyPolygonsFromFilledPolysListToKiPolygonList( polyset_zone_solid_areas );
-    polyset_zone_solid_areas -= margin;
+#if 1
+    m_smoothedPoly->m_CornersList.ExportTo( polyset_zone_solid_areas );
 
     if( polyset_zone_solid_areas.size() == 0 )
         return;
+
+    // Extract holes (cutout areas) and add them to the hole buffer
+    KI_POLYGON_SET outlineHoles;
+
+    while( polyset_zone_solid_areas.size() > 1 )
+    {
+        outlineHoles.push_back( polyset_zone_solid_areas.back() );
+        polyset_zone_solid_areas.pop_back();
+    }
+
+    // deflate main outline reserve room for thick outline
+    polyset_zone_solid_areas -= margin;
+    // inflate outline holes
+    if( outlineHoles.size() )
+        outlineHoles += margin;
+
+    if( outlineHoles.size() )
+        cornerBufferPolysToSubstract.ImportFrom( outlineHoles );
+#else
+    CPOLYGONS_LIST tmp;
+    m_smoothedPoly->m_CornersList.InflateOutline( tmp, -margin, true );
+    tmp.ExportTo( polyset_zone_solid_areas );
+#endif
 
     /* Calculates the clearance value that meet DRC requirements
      * from m_ZoneClearance and clearance from the corresponding netclass
@@ -185,10 +212,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * Thermal shapes will be created later if necessary
      */
     int item_clearance;
-
-    // static to avoid unnecessary memory allocation when filling many zones.
-    static CPOLYGONS_LIST cornerBufferPolysToSubstract;
-    cornerBufferPolysToSubstract.RemoveAllContours();
 
     /* Use a dummy pad to calculate hole clerance when a pad is not on all copper layers
      * and this pad has a hole
@@ -249,11 +272,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 continue;
             }
 
-            if( ( GetPadConnection( pad ) == PAD_NOT_IN_ZONE )
-                || ( pad->GetShape() == PAD_TRAPEZOID ) )
-
-            // PAD_TRAPEZOID shapes are not in zones because they are used in microwave apps
-            // and i think it is good that shapes are not changed by thermal pads or others
+            if( GetPadConnection( pad ) == PAD_NOT_IN_ZONE )
             {
                 int gap = zone_clearance;
                 int thermalGap = GetThermalReliefGap( pad );

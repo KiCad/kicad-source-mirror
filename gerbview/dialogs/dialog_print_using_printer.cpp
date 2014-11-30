@@ -37,6 +37,7 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
+#include <class_GERBER.h>
 #include <pcbplot.h>
 
 static double s_ScaleList[] =
@@ -163,7 +164,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
         msg << wxT( " " ) << ii + 1;
         m_BoxSelectLayer[ii] = new wxCheckBox( this, -1, msg );
 
-        if( g_GERBER_List[ii] == NULL )     // Nothing loaded on this draw layer
+        if( g_GERBER_List.GetGbrImage( ii ) == NULL )     // Nothing loaded on this draw layer
             m_BoxSelectLayer[ii]->Enable( false );
 
         if( ii < 16 )

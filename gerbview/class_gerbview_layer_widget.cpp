@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2010 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
+ * Copyright (C) 2004-2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
  *
@@ -41,6 +41,7 @@
 #include <class_GERBER.h>
 #include <layer_widget.h>
 #include <class_gerbview_layer_widget.h>
+#include <class_X2_gerber_attributes.h>
 
 
 /*
@@ -70,7 +71,7 @@ GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFo
 
     // since Popupmenu() calls this->ProcessEvent() we must call this->Connect()
     // and not m_LayerScrolledWindow->Connect()
-    Connect( ID_SHOW_ALL_LAYERS, ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE,
+    Connect( ID_LAYER_MANAGER_START, ID_LAYER_MANAGER_END,
         wxEVT_COMMAND_MENU_SELECTED,
         wxCommandEventHandler( GERBER_LAYER_WIDGET::onPopupSelection ), NULL, this );
 
@@ -146,8 +147,7 @@ void GERBER_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
 {
     wxMenu          menu;
 
-    // menu text is capitalized:
-    // http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
+    // Remember: menu text is capitalized (see our rules_for_capitalization_in_Kicad_UI.txt)
     menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_LAYERS,
                                  _("Show All Layers") ) );
 
@@ -160,6 +160,9 @@ void GERBER_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
     menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_LAYERS,
                                  _( "Hide All Layers" ) ) );
 
+    menu.AppendSeparator();
+    menu.Append( new wxMenuItem( &menu, ID_SORT_GBR_LAYERS,
+                                 _( "Sort Layers if X2 Mode" ) ) );
     PopupMenu( &menu );
 
     passOnFocus();
@@ -204,6 +207,13 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         myframe->SetVisibleLayers( visibleLayers );
         myframe->GetCanvas()->Refresh();
         break;
+
+    case ID_SORT_GBR_LAYERS:
+        g_GERBER_List.SortImagesByZOrder( myframe->GetItemsList() );
+        myframe->ReFillLayerWidget();
+        myframe->syncLayerBox();
+        myframe->GetCanvas()->Refresh();
+        break;
     }
 }
 
@@ -212,7 +222,7 @@ bool  GERBER_LAYER_WIDGET::OnLayerSelected()
     if( !m_alwaysShowActiveLayer )
         return false;
 
-    // postprocess after an active layer selection
+    // postprocess after active layer selection
     // ensure active layer visible
     wxCommandEvent event;
     event.SetId( ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE );
@@ -223,15 +233,19 @@ bool  GERBER_LAYER_WIDGET::OnLayerSelected()
 
 void GERBER_LAYER_WIDGET::ReFill()
 {
+    Freeze();
+
     ClearLayerRows();
 
     for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
-        wxString msg;
-        msg.Printf( _("Layer %d"), layer+1 );
+        wxString msg = g_GERBER_List.GetDisplayName( layer );
+
         AppendLayerRow( LAYER_WIDGET::ROW( msg, layer,
                         myframe->GetLayerColor( layer ), wxEmptyString, true ) );
     }
+
+    Thaw();
 
     installRightLayerClickHandler();
 }
@@ -298,17 +312,10 @@ void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
  */
 bool GERBER_LAYER_WIDGET::useAlternateBitmap(int aRow)
 {
-    bool inUse = false;
-    GERBER_IMAGE* gerber = g_GERBER_List[aRow];
-
-    if( gerber != NULL && gerber->m_InUse )
-        inUse = true;
-
-    return inUse;
+    return g_GERBER_List.IsUsed( aRow );
 }
 
-/**
- * Function UpdateLayerIcons
+/*
  * Update the layer manager icons (layers only)
  * Useful when loading a file or clearing a layer because they change
  */
@@ -322,7 +329,8 @@ void GERBER_LAYER_WIDGET::UpdateLayerIcons()
             continue;
 
         if( row == m_CurrentRow )
-            bm->SetBitmap( useAlternateBitmap(row) ? *m_RightArrowAlternateBitmap : *m_RightArrowBitmap );
+            bm->SetBitmap( useAlternateBitmap(row) ? *m_RightArrowAlternateBitmap :
+                           *m_RightArrowBitmap );
         else
             bm->SetBitmap( useAlternateBitmap(row) ? *m_BlankAlternateBitmap : *m_BlankBitmap );
     }

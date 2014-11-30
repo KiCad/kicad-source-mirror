@@ -45,7 +45,6 @@
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
-int g_Default_GERBER_Format;
 
 
 const wxChar* g_GerberPageSizeList[] = {
@@ -58,9 +57,6 @@ const wxChar* g_GerberPageSizeList[] = {
     wxT( "B" ),
     wxT( "C" ),
 };
-
-
-GERBER_IMAGE*  g_GERBER_List[32];
 
 
 namespace GERBV {

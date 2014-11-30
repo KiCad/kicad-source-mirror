@@ -61,6 +61,7 @@ class D_CODE;
  */
 
 class GERBER_IMAGE;
+class X2_ATTRIBUTE_FILEFUNCTION;
 
 class GERBER_LAYER
 {
@@ -104,6 +105,11 @@ public:
                                                                 // (a file is loaded in it)
     wxString           m_FileName;                              // Full File Name for this layer
     wxString           m_ImageName;                             // Image name, from IN <name>* command
+    bool               m_IsX2_file;                             // true if a X2 gerber attribute was found in file
+    X2_ATTRIBUTE_FILEFUNCTION* m_FileFunction;                  // file function parameters, found in a %TF command
+                                                                // or a G04
+    wxString           m_MD5_value;                             // MD5 value found in a %TF.MD5 command
+    wxString           m_PartString;                            // string found in a %TF.Part command
     int                m_GraphicLayer;                          // Graphic layer Number
     bool               m_ImageNegative;                         // true = Negative image
     bool               m_ImageJustifyXCenter;                   // Image Justify Center on X axis (default = false)
@@ -306,5 +312,67 @@ public:
     void DisplayImageInfo( void );
 };
 
+/**
+ * @brief GERBER_IMAGE_LIST is a helper class to handle a list of GERBER_IMAGE files
+ * which are loaded and can be displayed
+ * there are 32 images max which can be loaded
+ */
+class GERBER_IMAGE_LIST
+{
+    // the list of loaded images (1 image = 1 gerber file)
+    std::vector<GERBER_IMAGE*> m_GERBER_List;
+
+public:
+    GERBER_IMAGE_LIST();
+    ~GERBER_IMAGE_LIST();
+
+    //Accessor
+    GERBER_IMAGE* GetGbrImage( int aIdx );
+
+    /**
+     * Add a GERBER_IMAGE* at index aIdx
+     * or at the first free location if aIdx < 0
+     * @param aGbrImage = the image to add
+     * @param aIdx = the location to use ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
+     * @return true if the index used, or -1 if no room to add image
+     */
+    int AddGbrImage( GERBER_IMAGE* aGbrImage, int aIdx );
+
+
+    /**
+     * remove all loaded data in list
+     */
+    void ClearList();
+
+    /**
+     * remove the loaded data of image aIdx
+     * @param aIdx = the index ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
+     */
+    void ClearImage( int aIdx );
+
+    /**
+     * @return a name for image aIdx which can be used in layers manager
+     * and layer selector
+     * is is "Layer n" (n = aIdx+1), followed by file attribute info (if X2 format)
+     * @param aIdx = the index ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
+     */
+    const wxString GetDisplayName( int aIdx );
+
+    /**
+     * @return true if image is used (loaded and with items)
+     * @param aIdx = the index ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
+     */
+    bool IsUsed( int aIdx );
+
+    /**
+     * Sort loaded images by Z order priority, if they have the X2 FileFormat info
+     * @param aDrawList: the draw list associated to the gerber images
+     * (SortImagesByZOrder updates the graphic layer of these items)
+     */
+    void SortImagesByZOrder( GERBER_DRAW_ITEM* aDrawList );
+};
+
+
+extern GERBER_IMAGE_LIST g_GERBER_List;
 
 #endif  // ifndef _CLASS_GERBER_H_

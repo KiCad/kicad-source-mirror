@@ -39,6 +39,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
+#include <class_GERBER.h>
 #include <select_layers_to_pcb.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
@@ -159,7 +160,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
     // Count the Gerber layers which are actually currently used
     for( LAYER_NUM ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
-        if( g_GERBER_List[ii] != NULL )
+        if( g_GERBER_List.GetGbrImage( ii ) )
             layercount++;
     }
 

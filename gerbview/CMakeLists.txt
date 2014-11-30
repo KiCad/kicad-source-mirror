@@ -40,6 +40,7 @@ set( GERBVIEW_SRCS
     class_gerber_draw_item.cpp
     class_gerbview_layer_widget.cpp
     class_gbr_layer_box_selector.cpp
+    class_X2_gerber_attributes.cpp
     controle.cpp
     dcode.cpp
     draw_gerber_screen.cpp

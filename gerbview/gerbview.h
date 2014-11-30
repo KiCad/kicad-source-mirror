@@ -109,6 +109,4 @@ enum Gerb_Analyse_Cmd
     ENTER_RS274X_CMD
 };
 
-extern GERBER_IMAGE* g_GERBER_List[GERBER_DRAWLAYERS_COUNT];
-
 #endif  // ifndef GERBVIEW_H

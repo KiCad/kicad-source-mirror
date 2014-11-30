@@ -35,6 +35,7 @@
 #include <macros.h>
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
+#include <class_X2_gerber_attributes.h>
 
 #include <cmath>
 
@@ -43,7 +44,8 @@
  * G01 linear interpolation (right trace)
  * G02, G20, G21 Circular interpolation, meaning trig <0 (clockwise)
  * G03, G30, G31 Circular interpolation, meaning trigo> 0 (counterclockwise)
- * G04 = comment
+ * G04 = comment. Since Sept 2014, file attributes can be found here
+ *       if the line starts by G04 #@!
  * G06 parabolic interpolation
  * G07 Cubic Interpolation
  * G10 linear interpolation (scale x10)
@@ -473,9 +475,22 @@ bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_command )
         break;
 
     case GC_COMMENT:
-        // Skip comment
+        // Skip comment, but only if the line does not start by "G04 #@! TF"
+        // which is a metadata
+        if( strncmp( text, " #@! TF", 7 ) == 0 )
+        {
+            text += 7;
+            X2_ATTRIBUTE dummy;
+            dummy.ParseAttribCmd( m_Current_File, NULL, 0, text );
+            if( dummy.IsFileFunction() )
+            {
+                delete m_FileFunction;
+                m_FileFunction = new X2_ATTRIBUTE_FILEFUNCTION( dummy );
+            }
+        }
+
         while ( *text && (*text != '*') )
-            text++;
+                    text++;
         break;
 
     case GC_LINEAR_INTERPOL_10X:

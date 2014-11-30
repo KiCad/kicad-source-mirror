@@ -1347,6 +1347,44 @@ void CPOLYGONS_LIST::ExportTo( KI_POLYGON_SET& aPolygons ) const
     }
 }
 
+/*
+ * Copy all contours to a ClipperLib::Paths& aPolygons
+ * Each contour is copied into a ClipperLib::Path, and each ClipperLib::Path
+ * is append to aPolygons
+ */
+void CPOLYGONS_LIST::ExportTo( ClipperLib::Paths& aPolygons ) const
+{
+    unsigned    corners_count = GetCornersCount();
+
+    // Count the number of polygons in aCornersBuffer
+    int         polycount = 0;
+
+    for( unsigned ii = 0; ii < corners_count; ii++ )
+    {
+        if( IsEndContour( ii ) )
+            polycount++;
+    }
+
+    aPolygons.reserve( polycount );
+
+    for( unsigned icnt = 0; icnt < corners_count; )
+    {
+        ClipperLib::Path poly;
+        unsigned    ii;
+
+        for( ii = icnt; ii < corners_count; ii++ )
+        {
+            poly << ClipperLib::IntPoint( GetX( ii ), GetY( ii ) );
+
+            if( IsEndContour( ii ) )
+                break;
+        }
+
+        aPolygons.push_back( poly );
+        icnt = ii + 1;
+    }
+}
+
 
 /* Imports all polygons found in a KI_POLYGON_SET in list
  */
@@ -1372,6 +1410,72 @@ void CPOLYGONS_LIST::ImportFrom( KI_POLYGON_SET& aPolygons )
 }
 
 
+/* Imports all polygons found in a ClipperLib::Paths in list
+ */
+void CPOLYGONS_LIST::ImportFrom( ClipperLib::Paths& aPolygons )
+{
+    CPolyPt corner;
+
+    for( unsigned ii = 0; ii < aPolygons.size(); ii++ )
+    {
+        ClipperLib::Path& polygon = aPolygons[ii];
+
+        for( unsigned jj = 0; jj < polygon.size(); jj++ )
+        {
+            corner.x    = int( polygon[jj].X );
+            corner.y    = int( polygon[jj].Y );
+            corner.end_contour = false;
+            AddCorner( corner );
+        }
+
+        CloseLastContour();
+    }
+}
+
+/* Inflate the outline stored in m_cornersList.
+ * The first polygon is the external outline. It is inflated
+ * The other polygons are holes. they are deflated
+ * aResult = the Inflated outline
+ * aInflateValue = the Inflate value. when < 0, this is a deflate transform
+ * aLinkHoles = if true, aResult contains only one polygon,
+ * with holes linked by overlapping segments
+ */
+void CPOLYGONS_LIST::InflateOutline( CPOLYGONS_LIST& aResult, int aInflateValue, bool aLinkHoles )
+{
+    KI_POLYGON_SET polyset_outline;
+    ExportTo( polyset_outline );
+
+    // Extract holes (cutout areas) and add them to the hole buffer
+    KI_POLYGON_SET outlineHoles;
+
+    while( polyset_outline.size() > 1 )
+    {
+        outlineHoles.push_back( polyset_outline.back() );
+        polyset_outline.pop_back();
+    }
+
+    // inflate main outline
+    if( polyset_outline.size() )
+        polyset_outline += aInflateValue;
+
+    // deflate outline holes
+    if( outlineHoles.size() )
+        outlineHoles -= aInflateValue;
+
+    // Copy modified polygons
+    if( !aLinkHoles )
+    {
+        aResult.ImportFrom( polyset_outline );
+
+        if( outlineHoles.size() )
+            aResult.ImportFrom( outlineHoles );
+    }
+    else
+    {
+        polyset_outline -= outlineHoles;
+        aResult.ImportFrom( polyset_outline );
+    }
+}
 
 /**
  * Function ConvertPolysListWithHolesToOnePolygon
@@ -1438,26 +1542,14 @@ void ConvertPolysListWithHolesToOnePolygon( const CPOLYGONS_LIST& aPolysListWith
             polysholes.push_back( poly_tmp );
         }
     }
+
     mainpoly -= polysholes;
 
     // copy polygon with no holes to destination
     // Because all holes are now linked to the main outline
     // by overlapping segments, we should have only one polygon in list
     wxASSERT( mainpoly.size() == 1 );
-
-    KI_POLYGON& poly_nohole = mainpoly[0];
-    CPolyPt   corner( 0, 0, false );
-
-    for( unsigned jj = 0; jj < poly_nohole.size(); jj++ )
-    {
-        KI_POLY_POINT point = *(poly_nohole.begin() + jj);
-        corner.x = point.x();
-        corner.y = point.y();
-        corner.end_contour = false;
-        aOnePolyList.AddCorner( corner );
-    }
-
-    aOnePolyList.CloseLastContour();
+    aOnePolyList.ImportFrom( mainpoly );
 }
 
 /**
@@ -1552,4 +1644,23 @@ bool CPolyLine::IsPolygonSelfIntersecting()
     }
 
     return false;
+}
+
+
+/* converts the outline aOnePolyList (only one contour,
+ * holes are linked by overlapping segments) to
+ * to one main polygon and holes (polygons inside main polygon)
+ * aOnePolyList = a only one polygon ( holes are linked )
+ * aPolysListWithHoles = the list of corners of contours
+ *                       (main outline and holes)
+ */
+void ConvertOnePolygonToPolysListWithHoles( const CPOLYGONS_LIST&    aOnePolyList,
+                                            CPOLYGONS_LIST&          aPolysListWithHoles )
+{
+    ClipperLib::Paths initialPoly;
+    ClipperLib::Paths modifiedPoly;
+
+    aOnePolyList.ExportTo( initialPoly );
+    SimplifyPolygon(initialPoly[0], modifiedPoly );
+    aPolysListWithHoles.ImportFrom( modifiedPoly );
 }

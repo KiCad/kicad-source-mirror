@@ -86,7 +86,7 @@ public:
     wxBoxSizer*       m_RightBoxSizer;
     wxBoxSizer*       m_RightOptionsBoxSizer;
     wxBoxSizer*       m_LowBoxSizer;
-    wxRadioBox*       m_NetOption;
+
 private:
     wxString          m_pageNetFmtName;
 
@@ -104,14 +104,12 @@ public:
     /**
      * function GetPageNetFmtName
      * @return the name of the netlist format for this page
-     * This is usually the page label.
-     * For the pcbnew netlist, this is "LegacyPcbnew"
-     * when the "old" format is selected
-     * and "PcbnewAdvanced" when the advanced format (S expr fmt)is selected
+     * This is also the page label.
      */
-    const wxString GetPageNetFmtName();
-
-    void SetPageNetFmtName( const wxString &aName ) { m_pageNetFmtName = aName; }
+    const wxString GetPageNetFmtName()
+    {
+        return m_pageNetFmtName;
+    }
 };
 
 
@@ -242,9 +240,6 @@ enum id_netlist {
 #define NETLIST_USE_DEFAULT_NETNAME wxT( "NetlistUseDefaultNetname" )
 #define NETLIST_PSPICE_USE_NETNAME  wxT( "SpiceUseNetNames" )
 
-#define NETLIST_PCBNEW_LEGACY wxT("LegacyPcbnew" )
-#define NETLIST_PCBNEW_NEWFMT wxT("PcbnewAdvanced" )
-
 
 BEGIN_EVENT_TABLE( NETLIST_DIALOG, NETLIST_DIALOG_BASE )
     EVT_BUTTON( ID_CREATE_NETLIST, NETLIST_DIALOG::GenNetlist )
@@ -269,23 +264,15 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     m_AddSubPrefix = NULL;
     m_SpiceUseNetcodeAsNetname = NULL;
     m_ButtonCancel = NULL;
-    m_NetOption = NULL;
 
     wxString netfmtName = ((NETLIST_DIALOG*)parent->GetParent())->m_NetFmtName;
-    int fmtOption = 1;  // Default Pcbnew netlist fmt is advanced fmt
 
     bool selected = m_pageNetFmtName == netfmtName;
 
     // PCBNEW Format is a special type:
     if( id_NetType == NET_TYPE_PCBNEW )
     {
-        if( netfmtName.IsEmpty() || netfmtName == NETLIST_PCBNEW_NEWFMT )
-            selected = true;
-        if( netfmtName == NETLIST_PCBNEW_LEGACY )
-        {
-            selected = true;
-            fmtOption = 0;
-        }
+        selected = true;
     }
 
 
@@ -312,33 +299,8 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
                                         _( "Default format" ) );
     m_LeftBoxSizer->Add( m_IsCurrentFormat, 0, wxGROW | wxALL, 5 );
     m_IsCurrentFormat->SetValue( selected );
-
-    if( id_NetType == NET_TYPE_PCBNEW )
-    {
-        wxString netlist_opt[2] = { _( "Legacy Format" ), _( "Advanced Format" ) };
-        m_NetOption = new wxRadioBox( this, -1, _( "Netlist Options:" ),
-                                      wxDefaultPosition, wxDefaultSize,
-                                      2, netlist_opt, 1,
-                                      wxRA_SPECIFY_COLS );
-        m_NetOption->SetSelection( fmtOption );
-        m_LeftBoxSizer->Add( m_NetOption, 0, wxGROW | wxALL, 5 );
-    }
 }
 
-
-const wxString NETLIST_PAGE_DIALOG::GetPageNetFmtName()
-{
-    // PCBNEW Format is a special type:
-    if( m_IdNetType == NET_TYPE_PCBNEW )
-    {
-        if( m_NetOption->GetSelection() )
-            return NETLIST_PCBNEW_NEWFMT;
-        else
-            return NETLIST_PCBNEW_LEGACY;
-    }
-
-    return m_pageNetFmtName;
-}
 
 
 NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
@@ -599,8 +561,7 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
         break;
 
     case NET_TYPE_PCBNEW:
-        if( currPage->m_NetOption->GetSelection() != 0 )
-            netlist_opt = NET_PCBNEW_USE_NEW_FORMAT;
+        netlist_opt = NET_PCBNEW_USE_NEW_FORMAT;
         break;
 
     case NET_TYPE_ORCADPCB2:
