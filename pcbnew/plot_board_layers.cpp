@@ -773,12 +773,25 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
         zone->TransformOutlinesShapeWithClearanceToPolygon( bufferPolys,
                     inflate, true );
+        zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys,
+                    0, true );
     }
 
+    // To avoid a lot of code, use a ZONE_CONTAINER
+    // to handle and plot polygons, because our polygons look exactly like
+    // filled areas in zones
+    // Note, also this code is not optimized: it creates a lot of copy/duplicate data
+    // However it is not complex, and fast enough for plot purposes (copy/convert data
+    // is only a very small calculation time for these calculations)
+    ZONE_CONTAINER zone( aBoard );
+    zone.SetArcSegmentCount( 32 );
+    zone.SetMinThickness( 0 );      // trace polygons only
+    zone.SetLayer ( layer );
+
     // Now:
-    // 1 - merge areas which are intersecting, i.e. remove gaps
+    // 1 - merge polygons which are intersecting, i.e. remove gaps
     //     having a thickness < aMinThickness
-    // 2 - deflate resulting areas by aMinThickness/2
+    // 2 - deflate resulting polygons by aMinThickness/2
     KI_POLYGON_SET areasToMerge;
     bufferPolys.ExportTo( areasToMerge );
     KI_POLYGON_SET initialAreas;
@@ -788,29 +801,44 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // = aMinThickness/2, shapes too close ( dist < aMinThickness )
     // will be merged, because they are overlapping
     KI_POLYGON_SET areas;
-    areas |= areasToMerge;
+    areas |= areasToMerge;      // Populates with merged polygons
 
     // Deflate: remove the extra margin, to create the actual shapes
     // Here I am using polygon:resize, because this function creates better shapes
     // than deflate algo.
-    // Use here deflate with arc creation and 18 segments per circle to create arcs
-    // In boost polygon (at least v 1.54 and previous) in very rare cases resize crashes
-    // with 16 segments (perhaps related to 45 degrees pads). So using 18 segments
-    // is a workaround to try to avoid these crashes
-    areas = resize( areas, -inflate , true, 18 );
+    // Use here deflate made by Clipper, because:
+    // Clipper is (by far) faster and better, event using arcs to deflate shapes
+    // boost::polygon < 1.56 polygon resize function sometimes crashes when deflating using arcs
+    // boost::polygon >=1.56 polygon resize function just does not work
+    // Note also we combine polygons using boost::polygon, which works better than Clipper,
+    // especially with zones using holes linked to main outlines by overlapping segments
+    CPOLYGONS_LIST tmp;
+    tmp.ImportFrom( areas );
 
-    // Resize slightly changes shapes. So *ensure* initial shapes are kept
+    // Deflate area using Clipper, better than boost::polygon
+    ClipperLib::Paths areasDeflate;
+    tmp.ExportTo( areasDeflate );
+
+    // Deflate areas: they will have the right size after deflate
+    ClipperLib::ClipperOffset offset_engine;
+    circleToSegmentsCount = 16;
+    offset_engine.ArcTolerance = (double)inflate / 3.14 / circleToSegmentsCount;
+    offset_engine.AddPaths( areasDeflate, ClipperLib::jtRound, ClipperLib::etClosedPolygon );
+    offset_engine.Execute( areasDeflate, -inflate );
+
+    // Combine the current areas to initial areas. This is mandatory because
+    // inflate/deflate transform is not perfect, and we want the initial areas perfectly kept
+    tmp.RemoveAllContours();
+    tmp.ImportFrom( areasDeflate );
+    areas.clear();
+    tmp.ExportTo( areas );
+
+    // Resize slightly changes shapes (the transform is not perfect).
+    // So *ensure* initial shapes are kept
     areas |= initialAreas;
 
-    // To avoid a lot of code, use a ZONE_CONTAINER
-    // to plot polygons, because they are exactly like
-    // filled areas in zones
-    ZONE_CONTAINER zone( aBoard );
-    zone.SetArcSegmentCount( 32 );
-    zone.SetMinThickness( 0 );      // trace polygons only
-    zone.SetLayer ( layer );
-
     zone.CopyPolygonsFromKiPolygonListToFilledPolysList( areas );
+
     itemplotter.PlotFilledAreas( &zone );
 }
 

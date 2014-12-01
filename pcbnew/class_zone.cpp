@@ -898,3 +898,14 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
 
     return msg;
 }
+
+
+/* Copy polygons stored in aKiPolyList to m_FilledPolysList
+ * The previous m_FilledPolysList contents is replaced.
+ */
+void ZONE_CONTAINER::CopyPolygonsFromClipperPathsToFilledPolysList(
+                            ClipperLib::Paths& aClipperPolyList )
+{
+    m_FilledPolysList.RemoveAllContours();
+    m_FilledPolysList.ImportFrom( aClipperPolyList );
+}

@@ -306,6 +306,14 @@ public:
     void CopyPolygonsFromKiPolygonListToFilledPolysList( KI_POLYGON_SET& aKiPolyList );
 
     /**
+     * Function CopyPolygonsFromClipperPathsToFilledPolysList
+     * Copy polygons stored in aKiPolyList to m_FilledPolysList
+     * The previous m_FilledPolysList contents is replaced.
+     * @param aClipperPolyList = a ClipperLib::Paths containing polygons.
+     */
+    void CopyPolygonsFromClipperPathsToFilledPolysList( ClipperLib::Paths& aClipperPolyList );
+
+    /**
      * Function CopyPolygonsFromFilledPolysListToKiPolygonList
      * Copy polygons from m_FilledPolysList to aKiPolyList
      * @param aKiPolyList = a KI_POLYGON_SET to fill by polygons.
