@@ -90,9 +90,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
 
-    EVT_TOOL( wxID_CUT, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_COPY, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_PASTE, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_UNDO, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_PRINT, GERBVIEW_FRAME::ToPrinter )
     EVT_COMBOBOX( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
@@ -145,9 +142,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )
     {
-    case wxID_CUT:
-    case wxID_COPY:
-    case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
         break;
@@ -215,12 +209,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_ZOOM_BLOCK:
         GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
-        break;
-
-    case ID_POPUP_DELETE_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DELETE );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;

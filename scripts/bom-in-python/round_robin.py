@@ -21,7 +21,8 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 try:
     f = open(sys.argv[2], 'w')
 except IOError:
-    print( __file__, ":", e, file=sys.stderr)
-    f = stdout
+    e = "Can't open output file for writing: " + sys.argv[2]
+    print( __file__, ":", e, sys.stderr)
+    f = sys.stdout
 
 print(net.formatXML(), file=f)

@@ -4,6 +4,15 @@
 # Example: Sorted and Grouped HTML BOM with more advanced grouping
 #
 
+"""
+    @package
+    Generate a HTML BOM list.
+    Components are sorted and grouped by ref
+    Fields are (if exist)
+    Ref, Quantity, Value, Part, Datasheet, Description, Vendor
+"""
+
+
 from __future__ import print_function
 
 # Import the KiCad python helper module and the csv formatter
@@ -74,8 +83,9 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 try:
     f = open(sys.argv[2], 'w')
 except IOError:
-    print(__file__, ":", e, file=sys.stderr)
-    f = stdout
+    e = "Can't open output file for writing: " + sys.argv[2]
+    print( __file__, ":", e, sys.stderr )
+    f = sys.stdout
 
 components = net.getInterestingComponents()
 

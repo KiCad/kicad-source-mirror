@@ -13,7 +13,7 @@ from sys import argv,exit
 
 if len(argv)<2:
     print "usage:"
-    print "   fixswigimports.py file.py"
+    print "   fix_swig_imports.py file.py"
     print ""
     print "   will fix the swig import code for working inside KiCad"
     print "   where it happended that the external _pcbnew.so/dll was"
@@ -52,7 +52,7 @@ if doneOk:
     print "swig_import_helper fixed for",filename
 else:
     print "Error: the swig import helper was not fixed, check",filename
-    print "       and fix this script: fixswigimports.py"
+    print "       and fix this script: fix_swig_imports.py"
     exit(2)
 
 

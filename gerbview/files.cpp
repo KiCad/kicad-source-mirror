@@ -80,7 +80,7 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
         break;
 
     case ID_GERBVIEW_ERASE_ALL:
-        Clear_DrawLayers( true );
+        Clear_DrawLayers( false );
         Zoom_Automatique( false );
         m_canvas->Refresh();
         ClearMsgPanel();

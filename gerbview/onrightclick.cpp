@@ -24,7 +24,6 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
 #include <id.h>
 
 #include <gerbview.h>
@@ -75,8 +74,6 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
                 PopMenu->AppendSeparator();
                 AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK,
                              _( "Place Block" ), KiBitmap( checked_ok_xpm ) );
-                AddMenuItem( PopMenu, ID_POPUP_DELETE_BLOCK,
-                             _( "Delete Block (ctrl + drag mouse)" ), KiBitmap( delete_xpm ) );
             }
             else
             {

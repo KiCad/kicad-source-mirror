@@ -541,6 +541,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_ZONE_CONTAINER:
+        // Force the main contour selection, to remove the entire zone:
+        ((ZONE_CONTAINER*) GetCurItem())->SetSelectedCorner( 0 );
+        // Fall through
     case ID_POPUP_PCB_DELETE_ZONE_CUTOUT:
         m_canvas->MoveCursorToCrossHair();
         {

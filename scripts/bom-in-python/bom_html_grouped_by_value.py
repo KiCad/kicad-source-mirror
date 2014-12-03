@@ -3,6 +3,13 @@
 #
 # Example: Sorted and Grouped HTML BOM
 #
+"""
+    @package
+    Generate a HTML BOM list.
+    Components are sorted by ref and grouped by value
+    Fields are (if exist)
+    Ref, Quantity, Value, Part, Datasheet, Description, Vendor
+"""
 
 from __future__ import print_function
 
@@ -39,8 +46,9 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 try:
     f = open(sys.argv[2], 'w')
 except IOError:
+    e = "Can't open output file for writing: " + sys.argv[2]
     print(__file__, ":", e, file=sys.stderr)
-    f = stdout
+    f = sys.stdout
 
 components = net.getInterestingComponents()
 
@@ -51,7 +59,8 @@ html = html.replace('<!--TOOL-->', net.getTool())
 html = html.replace('<!--COMPCOUNT-->', "<b>Component Count:</b>" + \
     str(len(components)))
 
-row = "<tr><th style='width:640px'>Ref</th>" + "<th>Qnty</th>"
+row = "<tr><th style='width:640px'>Ref</th>"
+row += "<th>Qnty</th>"
 row += "<th>Value</th>" + "<th>Part</th>" + "<th>Datasheet</th>"
 row += "<th>Description</th>" + "<th>Vendor</th></tr>"
 
@@ -74,10 +83,11 @@ for group in grouped:
         c = component
 
     row = "<tr><td>" + refs +"</td><td>" + str(len(group))
-    row += "</td><td>" + c.getValue() + "</td><td>" + c.getLibName() + ":"
-    row += c.getPartName() + "</td><td>" + c.getDatasheet() + "</td><td>"
-    row += c.getDescription() + "</td><td>" + c.getField("Vendor")
-    row += "</td></tr>"
+    row += "</td><td>" + c.getValue()
+    row += "</td><td>" + c.getLibName() + ":" + c.getPartName()
+    row += "</td><td>" + c.getDatasheet()
+    row += "</td><td>" + c.getDescription()
+    row += "</td><td>" + c.getField("Vendor")+ "</td></tr>"
 
     html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 

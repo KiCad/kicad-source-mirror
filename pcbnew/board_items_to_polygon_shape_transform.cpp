@@ -999,7 +999,6 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
 
             double angle = aPad.GetOrientation();
             int rounding_radius = KiROUND( aThermalGap * aCorrectionFactor );   // Corner rounding radius
-            double angle_pg;                                                    // Polygon increment angle
 
             for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
             {
@@ -1007,7 +1006,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
 
                 // Start at half increment offset
                 RotatePoint( &corner_position, 1800.0 / aCircleToSegmentsCount );
-                angle_pg = i * delta;
+                double angle_pg = i * delta;
 
                 RotatePoint( &corner_position, angle_pg );          // Rounding vector rotation
                 corner_position -= aPad.GetSize() / 2;              // Rounding vector + Pad corner offset
