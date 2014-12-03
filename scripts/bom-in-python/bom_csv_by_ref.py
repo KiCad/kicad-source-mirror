@@ -7,7 +7,7 @@
     Components are sorted by ref and grouped by value
     One component per line
     Fields are (if exist)
-    Ref, Quantity, value, Part, 'footprint', 'Description', 'Vendor'
+    Ref, Quantity, value, Part, footprint, 'Description', 'Vendor'
 """
 
 from __future__ import print_function

@@ -161,7 +161,7 @@ private:
     // the first is the title
     // the second is the command line
     wxArrayString     m_plugins;
-    wxConfigBase*         m_config;     // to store the "plugins"
+    wxConfigBase*     m_config;         // to store the "plugins"
 
 public:
     // Constructor and destructor
@@ -181,18 +181,25 @@ private:
 
     void pluginInit();
     void installPluginsList();
-    wxString getPluginFileName();
+
+    /**
+     * @return the Plugin filename from a command line
+     * @param aCommand = the command line
+     */
+    wxString getPluginFileName( const wxString& aCommand );
 
     /**
      * display (when exists) the text found between the keyword "@package"
+     * (compatible with doxygen comments)
      * and the end of comment block (""" in python", --> in xml)
      */
     void displayPluginInfo( FILE * aFile, const wxString& aFilename );
 
     /**
      * Browse plugin files, and set m_CommandStringCtrl field
+     * @return a command line ro run the plugin
      */
-    void choosePlugin();
+    wxString choosePlugin();
 };
 
 // Create and show DIALOG_BOM.
@@ -299,7 +306,7 @@ void DIALOG_BOM::pluginInit()
     m_textCtrlName->SetValue( m_plugins[2 * ii] );
     m_textCtrlCommand->SetValue( m_plugins[(2 * ii)+1] );
 
-    wxString pluginName = getPluginFileName();
+    wxString pluginName = getPluginFileName( m_textCtrlCommand->GetValue() );
 
     if( pluginName.IsEmpty() )
         return;
@@ -317,14 +324,13 @@ void DIALOG_BOM::pluginInit()
     displayPluginInfo( pluginFile, pluginName );
 }
 
-/* display (when exists) the text found between the keyword "@package"
- * and the end of comment block (""" in python", --> in xml)
- */
+
 void DIALOG_BOM::displayPluginInfo( FILE * aFile, const wxString& aFilename )
 {
     m_Messages->Clear();
 
     // display (when exists) the text found between the keyword "@package"
+    // (compatible with doxygen comments)
     // and the end of comment block (""" in python", --> in xml)
 
     wxString data;
@@ -340,6 +346,10 @@ void DIALOG_BOM::displayPluginInfo( FILE * aFile, const wxString& aFilename )
 
     if( fn.GetExt().IsSameAs( wxT("py"), false ) )
         endsection = wxT( "\"\"\"" );
+    else if( !fn.GetExt().IsSameAs( wxT("xsl"), false ) )
+        // If this is not a python file, we know nothing about file
+        // and the info cannot be found
+        return;
 
     // Extract substring between @package and """
     int strstart = data.Find( header );
@@ -422,8 +432,17 @@ void DIALOG_BOM::OnRemovePlugin( wxCommandEvent& event )
  */
 void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
 {
+    wxString cmdLine = choosePlugin();
+
+    if( cmdLine.IsEmpty() )
+        return;
+
     // Creates a new plugin entry
-    wxString name = wxGetTextFromUser( _("Plugin name in plugin list") );
+    wxFileName fn( getPluginFileName( cmdLine ) );
+
+    wxString defaultName = fn.GetName();
+    wxString name = wxGetTextFromUser( _("Plugin name in plugin list") ,
+                                       _("Plugin name"), defaultName );
 
     if( name.IsEmpty() )
         return;
@@ -438,12 +457,13 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
         }
     }
 
+    // Eppend the new plugin
     m_plugins.Add( name );
     m_plugins.Add( wxEmptyString );
+    m_lbPlugins->SetSelection( m_lbPlugins->GetCount() - 1 );
     m_lbPlugins->Append( name );
     m_lbPlugins->SetSelection( m_lbPlugins->GetCount() - 1 );
-
-    choosePlugin();
+    m_textCtrlCommand->SetValue( cmdLine );
 
     pluginInit();
 }
@@ -451,7 +471,7 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
 /*
  * Browse plugin files, and set m_CommandStringCtrl field
  */
-void DIALOG_BOM::choosePlugin()
+wxString DIALOG_BOM::choosePlugin()
 {
     wxString mask = wxT( "*" );
 #ifndef __WXMAC__
@@ -470,7 +490,7 @@ void DIALOG_BOM::choosePlugin()
                                      true
                                      );
     if( fullFileName.IsEmpty() )
-        return;
+        return wxEmptyString;
 
     // Creates a default command line,
     // suitable to run the external tool xslproc or python
@@ -489,36 +509,35 @@ void DIALOG_BOM::choosePlugin()
     else
         cmdLine.Printf(wxT("\"%s\""), GetChars( fullFileName ) );
 
-    m_textCtrlCommand->SetValue( cmdLine );
+    return cmdLine;
 }
 
 
-wxString DIALOG_BOM::getPluginFileName()
+wxString DIALOG_BOM::getPluginFileName(  const wxString& aCommand )
 {
     wxString pluginName;
 
     // Try to find the plugin name.
     // This is possible if the name ends by .py or .xsl
-    wxString cmdline = m_textCtrlCommand->GetValue();
     int pos = -1;
 
-    if( (pos = cmdline.Find( wxT(".py") )) != wxNOT_FOUND )
+    if( (pos = aCommand.Find( wxT(".py") )) != wxNOT_FOUND )
         pos += 2;
-    else if( (pos = cmdline.Find( wxT(".xsl") )) != wxNOT_FOUND )
+    else if( (pos = aCommand.Find( wxT(".xsl") )) != wxNOT_FOUND )
         pos += 3;
 
     // the end of plugin name is at position pos.
     if( pos > 0 )
     {
         // Be sure this is the end of the name: the next char is " or space
-        int eos = cmdline[pos+1];
+        int eos = aCommand[pos+1];
 
         if( eos == ' '|| eos == '\"' )
         {
             // search for the starting point of the name
             int jj = pos-1;
             while( jj >= 0 )
-                if( cmdline[jj] != eos )
+                if( aCommand[jj] != eos )
                     jj--;
                 else
                     break;
@@ -526,12 +545,12 @@ wxString DIALOG_BOM::getPluginFileName()
             // extract the name
             if( jj >= 0 )
             {
-                eos = cmdline[jj];
+                eos = aCommand[jj];
 
                 if( eos == ' '|| eos == '\"' )  // do not include delimiters
                     jj++;
 
-                pluginName = cmdline.SubString( jj, pos );
+                pluginName = aCommand.SubString( jj, pos );
             }
         }
     }
@@ -541,7 +560,7 @@ wxString DIALOG_BOM::getPluginFileName()
 
 void DIALOG_BOM::OnEditPlugin( wxCommandEvent& event )
 {
-    wxString    pluginName = getPluginFileName();
+    wxString    pluginName = getPluginFileName( m_textCtrlCommand->GetValue() );
 
     if( pluginName.Length() <= 2 )      // if name != ""
     {

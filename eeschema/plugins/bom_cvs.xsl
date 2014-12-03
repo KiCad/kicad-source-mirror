@@ -9,11 +9,11 @@
 -->
 <!--
     @package
-    Generate a Tab delimited list (csv file type).
+    Generate a comma separated value BOM list (csv file type).
     Components are sorted by value
     One component per line
     Fields are
-    Quantity, 'Part name', 'Description', 'lib'
+    Quantity, 'Part name', Description, lib
 -->
 
 <!DOCTYPE xsl:stylesheet [

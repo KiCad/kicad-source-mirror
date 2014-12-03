@@ -1,210 +1,262 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
-	<TITLE>kicad help</TITLE>
-	<META NAME="GENERATOR" CONTENT="LibreOffice 4.0.2.2 (Windows)">
-	<META NAME="CREATED" CONTENT="0;0">
-	<META NAME="CHANGED" CONTENT="20130614;10225357">
-	<STYLE TYPE="text/css">
-	<!--
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=windows-1252"/>
+	<title>kicad help</title>
+	<meta name="generator" content="LibreOffice 4.3.4.1 (Windows)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="2014-12-03T20:04:24.723000000"/>
+	<meta name="created" content="00:00:00">
+	<meta name="changed" content="2014-12-03T20:04:06.003000000">
+	<meta name="created" content="00:00:00">
+	<meta name="changed" content="2014-12-03T19:59:24.882000000">
+	<style type="text/css">
 		@page { margin: 2cm }
-		P { margin-bottom: 0.21cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto }
-		P.western { font-family: "Arial", sans-serif; font-size: 10pt; so-language: en-US }
-		A:link { color: #004586; text-decoration: none }
-		A.western:link { font-family: "Liberation Sans", sans-serif; so-language: zxx; font-style: italic }
-		A.sdfootnotesym-western { font-family: "DejaVu Serif", serif }
-	-->
-	</STYLE>
-</HEAD>
-<BODY LANG="en-AU" LINK="#004586" DIR="LTR">
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto"><A NAME="__RefHeading__2925_482973253"></A>
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><B>1 - Full
-documentation:</B></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN LANG="en-US"><B>The
-</B></SPAN></FONT></FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN LANG="en-US"><I><B>Eeschema
-documentation, chapter 14</B></I></SPAN></FONT></FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN LANG="en-US"><B>
-describes this intermediate netlist and gives examples<BR>See also
-</B></SPAN></FONT></FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN LANG="en-US"><I><B>https://answers.launchpad.net/kicad/+faq/2265</B></I></SPAN></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><B><I>2 - </I>The
-intermediate Netlist File</B></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>BOM files (and
-netlist files) can be created from an Intermediate netlist file
-created by Eeschema.</FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>This file uses XML
-syntax and is called the intermediate netlist. The intermediate
-netlist includes a large amount of data about your board and because
-of this, it can be used with post-processing to create a BOM or other
-reports.</FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>Depending on the
-output (BOM or netlist), different subsets of the complete
-Intermediate Netlist file will be used in the post-processing.</FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><B>3 - Conversion to
-a new format</B></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>By applying a
-post-processing filter to the Intermediate netlist file you can
-generate foreign netlist files as well as BOM files. Because this
-conversion is a text to text transformation.</FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>this post-processing
-filter can be written using Python, XSLT, or any other tool capable
-of taking XML as input.</FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">XSLT
+		p { margin-bottom: 0.21cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto }
+		p.western { font-family: "Arial", sans-serif; font-size: 10pt; so-language: en-US }
+		a:link { color: #004586; text-decoration: none }
+		a.western:link { font-family: "Liberation Sans", sans-serif; so-language: zxx; font-style: italic }
+		a.sdfootnotesym-western { font-family: "DejaVu Serif", serif }
+	</style>
+</head>
+<body lang="en-AU" link="#004586" dir="ltr">
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto"><a name="__RefHeading__2925_482973253"></a>
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>1
+- Full documentation:</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>The
+</b></font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><i><b>Eeschema
+documentation, chapter 14</b></i></font></font> <font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>describes
+this intermediate netlist and gives examples<br>See also
+</b></font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><i><b>https://answers.launchpad.net/kicad/+faq/2265</b></i></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b><i>2
+- </i>The intermediate Netlist File</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">BOM
+files (and netlist files) can be created from an Intermediate netlist
+file created by Eeschema.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">This
+file uses XML syntax and is called the intermediate netlist. The
+intermediate netlist includes a large amount of data about your board
+and because of this, it can be used with post-processing to create a
+BOM or other reports.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Depending
+on the output (BOM or netlist), different subsets of the complete
+Intermediate Netlist file will be used in the post-processing.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>3
+- Conversion to a new format</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">By
+applying a post-processing filter to the Intermediate netlist file
+you can generate foreign netlist files as well as BOM files. Because
+this conversion is a text to text transformation.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">this
+post-processing filter can be written using Python, XSLT, or any
+other tool capable of taking XML as input.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">XSLT
 itself is a XML language very suitable for XML transformations. There
-is a free program called </SPAN></SPAN></SPAN><I><SPAN STYLE="font-weight: normal">xsltproc</SPAN></I><SPAN STYLE="font-variant: normal">
-</SPAN><SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">that
-you can download and install. The</SPAN></SPAN></SPAN><SPAN STYLE="font-variant: normal">
-</SPAN><SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">xsltproc
+is a free program called </span></span></span><i><span style="font-weight: normal">xsltproc</span></i><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">that
+you can download and install. The</span></span></span><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">xsltproc
 program can be used to read the Intermediate XML netlist input file,
-apply</SPAN></SPAN></SPAN><SPAN STYLE="font-variant: normal"> </SPAN><SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">a
+apply</span></span></span><span style="font-variant: normal"> </span><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">a
 style-sheet to transform the input, and save the results in an output
 file. Use of xsltproc requires a style-sheet file using XSLT
-conventions. The full conversion process is handled</SPAN></SPAN></SPAN><SPAN STYLE="font-variant: normal">
-</SPAN><SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">by
+conventions. The full conversion process is handled</span></span></span><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">by
 Eeschema, after it is configured once to run xsltproc in a specific
-way.</SPAN></SPAN></SPAN></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><B>4 -
-Initialization of the dialog window</B></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>You should add a new
-pluging (a script) in plugin list by clicking on the Add Plugin
-button.</FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><B>4.1 - Plugin
-Configuration Parameters</B></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>The Eeschema plug-in
-configuration dialog requires the following information:</FONT></FONT></P>
-<UL>
-	<LI><P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-	<FONT FACE="Times New Roman, serif"><FONT SIZE=3>The title: for
-	instance, the name of the netlist format.</FONT></FONT></P>
-	<LI><P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-	<FONT FACE="Times New Roman, serif"><FONT SIZE=3>The command line to
-	launch the converter (usually a script).</FONT></FONT></P>
-</UL>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>Once you click on
-the generate button the following will happen:</FONT></FONT></P>
-<OL>
-	<LI><P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-	<FONT FACE="Times New Roman, serif"><FONT SIZE=3>Eeschema creates an
-	intermediate netlist file *.xml, for instance <I>test.xml.</I></FONT></FONT></P>
-	<LI><P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-	<FONT FACE="Times New Roman, serif"><FONT SIZE=3>Eeschema runs the
-	script from the command line to create the final output file.</FONT></FONT></P>
-</OL>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><B>4.2 - Generate
-netlist files with the command line</B></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>Assuming we are
-using the program <I>xsltproc.exe</I><SPAN STYLE="font-variant: normal">
-</SPAN><SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal">to
-apply the sheet style to the intermediate file, </SPAN></SPAN><I>xsltproc.exe</I><SPAN STYLE="font-variant: normal">
-</SPAN><SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal">is
-executed with the following command.</SPAN></SPAN></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>xsltproc.exe -o &lt;
-output filename &gt; &lt; style-sheet filename &gt; &lt; input XML
-file to convert &gt;</FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><FONT SIZE=2 STYLE="font-size: 11pt">On</FONT>
-<FONT SIZE=2 STYLE="font-size: 11pt">Windows the command line is the
-following.<BR></FONT><FONT SIZE=2 STYLE="font-size: 11pt"><I>f:/kicad/bin/xsltproc.exe
--o &ldquo;%O&rdquo; f:/kicad/bin/plugins/myconverter.xsl &ldquo;%I&rdquo;</I></FONT></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><FONT SIZE=2 STYLE="font-size: 11pt">On</FONT>
-<FONT SIZE=2 STYLE="font-size: 11pt">Linux the command becomes as
-following.<BR></FONT><FONT SIZE=2 STYLE="font-size: 11pt"><I>xsltproc
+way.</span></span></span></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>4
+- Initialization of the dialog window</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">You
+should add a new pluging (a script) in plugin list by clicking on the
+Add Plugin button.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>4.1
+- Plugin Configuration Parameters</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">The
+Eeschema plug-in configuration dialog requires the following
+information:</font></font></p>
+<ul>
+	<li/>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+	<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">The
+	title: for instance, the name of the netlist format.</font></font></p>
+	<li/>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+	<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">The
+	command line to launch the converter (usually a script).</font></font></p>
+</ul>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Once
+you click on the generate button the following will happen:</font></font></p>
+<ol>
+	<li/>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+	<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Eeschema
+	creates an intermediate netlist file *.xml, for instance <i>test.xml.</i></font></font></p>
+	<li/>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+	<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Eeschema
+	runs the script from the command line to create the final output
+	file.</font></font></p>
+</ol>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>4.2
+- Generate netlist files with the command line</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Assuming
+we are using the program <i>xsltproc.exe</i><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">to
+apply the sheet style to the intermediate file, </span></span><i>xsltproc.exe</i><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">is
+executed with the following command.</span></span></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">xsltproc.exe
+-o &lt; output filename &gt; &lt; style-sheet filename &gt; &lt;
+input XML file to convert &gt;</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><font size="2" style="font-size: 11pt">On</font>
+<font size="2" style="font-size: 11pt">Windows the command line is
+the following.<br></font><font size="2" style="font-size: 11pt"><i>f:/kicad/bin/xsltproc.exe
+-o &ldquo;%O&rdquo; f:/kicad/bin/plugins/myconverter.xsl &ldquo;%I&rdquo;</i></font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><font size="2" style="font-size: 11pt">On</font>
+<font size="2" style="font-size: 11pt">Linux the command becomes as
+following.<br></font><font size="2" style="font-size: 11pt"><i>xsltproc
 -o &ldquo;%O&rdquo; /usr/local/kicad/bin/plugins/myconverter .xsl
-&ldquo;%I&rdquo;</I></FONT></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-variant: normal"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Where
-</SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT SIZE=2 STYLE="font-size: 11pt"><I><SPAN STYLE="font-weight: normal">myconverter</SPAN></I></FONT></SPAN><FONT SIZE=2 STYLE="font-size: 11pt"><I><SPAN STYLE="font-weight: normal">.xsl</SPAN></I></FONT><SPAN STYLE="font-variant: normal">
-</SPAN><SPAN STYLE="font-variant: normal"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">is
+&ldquo;%I&rdquo;</i></font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="font-variant: normal"><font size="2" style="font-size: 11pt"><span style="font-style: normal"><span style="font-weight: normal">Where
+</span></span></font></span><span style="font-variant: normal"><font size="2" style="font-size: 11pt"><i><span style="font-weight: normal">myconverter</span></i></font></span><font size="2" style="font-size: 11pt"><i><span style="font-weight: normal">.xsl</span></i></font><span style="font-variant: normal">
+</span><span style="font-variant: normal"><font size="2" style="font-size: 11pt"><span style="font-style: normal"><span style="font-weight: normal">is
 the style-sheet that you are applying. Do not forget the double
-quotes</SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal">
-</SPAN><SPAN STYLE="font-variant: normal"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">around
+quotes</span></span></font></span><span style="font-variant: normal">
+</span><span style="font-variant: normal"><font size="2" style="font-size: 11pt"><span style="font-style: normal"><span style="font-weight: normal">around
 the file names, this allows them to have spaces after the
-substitution by Eeschema.</SPAN></SPAN></FONT></SPAN></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>The command line
-format accepts parameters for filenames:</FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>The supported
-formatting parameters are.</FONT></FONT></P>
-<UL>
-	<LI><P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-	<FONT FACE="Times New Roman, serif"><FONT SIZE=3>%B =&gt; base
-	filename and path of selected output file, minus path and extension.</FONT></FONT></P>
-	<LI><P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-	<FONT FACE="Times New Roman, serif"><FONT SIZE=3>%I =&gt; complete
-	filename and path of the temporary input file (the intermediate net
-	file).</FONT></FONT></P>
-	<LI><P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-	<FONT FACE="Times New Roman, serif"><FONT SIZE=3>%O =&gt; complete
-	filename and path of the user chosen output file.</FONT></FONT></P>
-</UL>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>%I will be replaced
-by the actual intermediate file name<BR><SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">%O
-will be replaced by the actual output file name.</SPAN></SPAN></SPAN></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><B>4.3 - Command
-line format: example for <SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal">xsltproc</SPAN></SPAN></B></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal">The
-command line format for xsltproc is the following:<BR>&lt; path of
-</SPAN></SPAN>xsltproc &gt; <SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal">xsltproc
-&lt; </SPAN></SPAN>xsltproc parameters &gt;</FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>On
-Windows:<BR><I><B>f:/kicad/bin/xsltproc.exe -o &ldquo;%O&rdquo;
-f:/kicad/bin/plugins/netlist_form_pads-pcb.xsl &ldquo;%I&rdquo;</B></I></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><FONT SIZE=2 STYLE="font-size: 11pt">On</FONT>
-<FONT SIZE=2 STYLE="font-size: 11pt">Linux:<BR></FONT><FONT SIZE=2 STYLE="font-size: 11pt"><I><B>xsltproc
+substitution by Eeschema.</span></span></font></span></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">The
+command line format accepts parameters for filenames:</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">The
+supported formatting parameters are.</font></font></p>
+<ul>
+	<li/>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+	<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">%B
+	=&gt; base filename and path of selected output file, minus path and
+	extension.</font></font></p>
+	<li/>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+	<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">%I
+	=&gt; complete filename and path of the temporary input file (the
+	intermediate net file).</font></font></p>
+	<li/>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+	<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">%O
+	=&gt; complete filename and path (but without extension) of the user
+	chosen output file.</font></font></p>
+</ul>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">%I
+will be replaced by the actual intermediate file name<br><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">%O
+will be replaced by the actual output file name.</span></span></span></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>4.3
+- Command line format: example for <span style="font-variant: normal"><span style="font-style: normal">xsltproc</span></span></b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; font-variant: normal; font-style: normal; widows: 0; orphans: 0">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>4.3.1
+- Command line</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="font-variant: normal"><span style="font-style: normal">The
+command line format for xsltproc is the following:<br>&lt; path of
+</span></span>xsltproc &gt; <span style="font-variant: normal"><span style="font-style: normal">xsltproc
+&lt; </span></span>xsltproc parameters &gt;</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">On
+Windows:<br><i><b>f:/kicad/bin/xsltproc.exe -o &ldquo;%O&rdquo;
+f:/kicad/bin/plugins/netlist_form_pads-pcb.xsl &ldquo;%I&rdquo;</b></i></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><font size="2" style="font-size: 11pt">On</font>
+<font size="2" style="font-size: 11pt">Linux:<br></font><font size="2" style="font-size: 11pt"><i><b>xsltproc
 -o &ldquo;%O&rdquo;
-/usr/local/kicad/bin/plugins/netlist_form_pads-pcb.xsl &ldquo;%I&rdquo;</B></I></FONT></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-variant: normal"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">The
-above examples assume</SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal">
-</SPAN><SPAN STYLE="font-variant: normal"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">xsltproc
+/usr/local/kicad/bin/plugins/netlist_form_pads-pcb.xsl &ldquo;%I&rdquo;</b></i></font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="font-variant: normal"><font size="2" style="font-size: 11pt"><span style="font-style: normal"><span style="font-weight: normal">The
+above examples assume</span></span></font></span><span style="font-variant: normal">
+</span><span style="font-variant: normal"><font size="2" style="font-size: 11pt"><span style="font-style: normal"><span style="font-weight: normal">xsltproc
 is installed on your PC under Windows and all files located in
-kicad/bin.</SPAN></SPAN></FONT></SPAN></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3><B>4.4 - Command
-line format: example fo<SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal">r
-python scripts</SPAN></SPAN></B></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>The command line
-format for python is something like:<BR><SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal">python</SPAN></SPAN><SPAN STYLE="font-variant: normal">
-</SPAN><SPAN STYLE="font-variant: normal"><SPAN STYLE="font-style: normal">&lt;
-script file name </SPAN></SPAN>&gt; &lt; input filename &gt; &lt;
-output filename &gt;</FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>On
-Windows:<BR><I><B>python.exe f:/kicad/python/my_python_script.py</B></I>
-&ldquo;<I><B>%I&rdquo; &ldquo;%O&rdquo;</B></I></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>On Linux:<BR><I><B>python</B></I>
-<I><B>/usr/local/kicad/python/my_python_script.py</B></I> &ldquo;<I><B>%I&rdquo;
-&ldquo;%O&rdquo;</B></I></FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
-<FONT FACE="Times New Roman, serif"><FONT SIZE=3>Assuming python is
-installed on your PC.</FONT></FONT></P>
-<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto"><A NAME="__RefHeading__1787_435485510"></A>
-<BR>
-</P>
-</BODY>
-</HTML>
+kicad/bin.</span></span></font></span></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; font-variant: normal; font-style: normal; widows: 0; orphans: 0">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>4.3.2
+- Remark:</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Most
+of time, the created file must have an extension, depending on its
+type.<br>Therefore you have to add to the option <i><b>%O</b></i> the
+right file extension.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">For
+instance <i><b>%O.csv</b></i> to create a .csv file (comma separated
+value file).</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0">
+<br/>
+
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>4.4
+- Command line format: example fo<span style="font-variant: normal"><span style="font-style: normal">r
+python scripts</span></span></b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; font-variant: normal; font-style: normal; widows: 0; orphans: 0">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>4.4.1
+- Command line</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">The
+command line format for python is something like:<br><span style="font-variant: normal"><span style="font-style: normal">python</span></span><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">&lt;
+script file name </span></span>&gt; &lt; input filename &gt; &lt;
+output filename &gt;</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">On
+Windows:<br><i><b>python.exe f:/kicad/python/my_python_script.py</b></i>
+&ldquo;<i><b>%I&rdquo; &ldquo;%O&rdquo;</b></i></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">On
+Linux:<br><i><b>python</b></i>
+<i><b>/usr/local/kicad/python/my_python_script.py</b></i> &ldquo;<i><b>%I&rdquo;
+&ldquo;%O&rdquo;</b></i></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Assuming
+python is installed on your PC.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0; page-break-before: auto; page-break-after: auto">
+<br/>
+
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; font-variant: normal; font-style: normal; widows: 0; orphans: 0"><a name="__RefHeading__1787_435485510"></a>
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>4.4.2
+- Remark:</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Most
+of time, the created file must have an extension, depending on its
+type.<br>Therefore you have to add to the option <i><b>%O</b></i> the
+right file extension.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0">
+<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">For
+instance <i><b>%O.html</b></i> to create a .html file.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; widows: 0; orphans: 0">
+<br/>
+
+</p>
+</body>
+</html>
