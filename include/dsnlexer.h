@@ -71,7 +71,7 @@ enum DSN_SYNTAX_T {
 
 
 /**
- * Class DLEXER
+ * Class DSNLEXER
  * implements a lexical analyzer for the SPECCTRA DSN file format.  It
  * reads lexical tokens from the current LINE_READER through the NextTok()
  * function.
@@ -214,6 +214,16 @@ public:
               LINE_READER* aLineReader = NULL );
 
     virtual ~DSNLEXER();
+
+    /**
+     * Useable only for DSN lexers which share the same LINE_READER
+     * Synchronizes the pointers handling the data read by the LINE_READER
+     * Allows 2 DNSLEXER to share the same current line, when switching from a
+     * DNSLEXER to an other DNSLEXER
+     * @param aLexer = the model
+     * @return true if the sync can be made ( at least the same line reader )
+     */
+    bool SyncLineReaderWith( DSNLEXER& aLexer );
 
     /**
      * Function SetSpecctraMode

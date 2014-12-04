@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
+//#include <wx/wx.h>
 #include <pcb_plot_params_parser.h>
 #include <pcb_plot_params.h>
 #include <layers_id_colors_and_visibility.h>
