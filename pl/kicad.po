@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-23 09:42+0100\n"
-"PO-Revision-Date: 2014-11-23 09:49+0100\n"
+"POT-Creation-Date: 2014-12-06 09:07+0100\n"
+"PO-Revision-Date: 2014-12-06 09:11+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -979,7 +979,7 @@ msgstr "Pliki schematów"
 msgid "Could not save backup of file '%s'"
 msgstr "Nie mogę zapisać kopii zapasowej pliku '%s'"
 
-#: eeschema/files-io.cpp:109
+#: eeschema/files-io.cpp:109 eeschema/netform.cpp:393
 #, c-format
 msgid "Failed to create file '%s'"
 msgstr "Błąd przy tworzeniu pliku '%s'"
@@ -1417,7 +1417,7 @@ msgid "Set pin options"
 msgstr "Ustaw opcje pinu"
 
 #: eeschema/libeditframe.cpp:1107 eeschema/schedit.cpp:541
-#: pcbnew/edit.cpp:1453 pcbnew/modedit.cpp:865
+#: pcbnew/edit.cpp:1456 pcbnew/modedit.cpp:865
 #: pcbnew/tools/drawing_tool.cpp:1449 pcbnew/tools/drawing_tool.cpp:1567
 msgid "Add text"
 msgstr "Dodaj tekst"
@@ -1451,7 +1451,7 @@ msgid "Export"
 msgstr "Eksportuj"
 
 #: eeschema/libeditframe.cpp:1149 eeschema/schedit.cpp:577
-#: pcbnew/edit.cpp:1465 pcbnew/modedit.cpp:890
+#: pcbnew/edit.cpp:1468 pcbnew/modedit.cpp:890
 #: eeschema/help_common_strings.h:48
 msgid "Delete item"
 msgstr "Usuń element"
@@ -1465,7 +1465,7 @@ msgstr "Usuń element"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:382
 #: pcbnew/dialogs/dialog_display_options_base.cpp:143
 #: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:55
-#: gerbview/onrightclick.cpp:60 gerbview/onrightclick.cpp:84
+#: gerbview/onrightclick.cpp:59 gerbview/onrightclick.cpp:81
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:182
 #: common/selcolor.cpp:243 common/dialogs/dialog_exit_base.cpp:69
 #: common/dialogs/dialog_get_component_base.cpp:52
@@ -1475,7 +1475,7 @@ msgstr "Anuluj"
 
 #: eeschema/libedit_onrightclick.cpp:88 eeschema/onrightclick.cpp:158
 #: pcbnew/modedit_onclick.cpp:232 pcbnew/onrightclick.cpp:91
-#: gerbview/onrightclick.cpp:63
+#: gerbview/onrightclick.cpp:62
 msgid "End Tool"
 msgstr "Wyłącz narzędzie"
 
@@ -1629,7 +1629,7 @@ msgstr "Rozmiar numeru pinu dla innych"
 
 #: eeschema/libedit_onrightclick.cpp:323 eeschema/onrightclick.cpp:806
 #: pcbnew/modedit_onclick.cpp:244 pcbnew/onrightclick.cpp:447
-#: gerbview/onrightclick.cpp:74
+#: gerbview/onrightclick.cpp:73
 msgid "Cancel Block"
 msgstr "Anuluj blok"
 
@@ -1639,7 +1639,7 @@ msgstr "Powiększ blok (shift + przeciąganie myszką)"
 
 #: eeschema/libedit_onrightclick.cpp:333 eeschema/onrightclick.cpp:814
 #: pcbnew/modedit_onclick.cpp:250 pcbnew/onrightclick.cpp:451
-#: gerbview/onrightclick.cpp:77
+#: gerbview/onrightclick.cpp:76
 msgid "Place Block"
 msgstr "Dodaj blok"
 
@@ -2735,11 +2735,6 @@ msgid "Open the \"Getting Started in KiCad\" guide for beginners"
 msgstr ""
 "Otwiera przewodnik dla początkujących zatytułowany \"Pierwsze kroki w "
 "programie KiCad\""
-
-#: eeschema/netform.cpp:393
-#, c-format
-msgid "Failed to create file <%s>"
-msgstr "Błąd przy tworzeniu pliku <%s>"
 
 #: eeschema/netlist.cpp:64
 msgid ""
@@ -4066,7 +4061,7 @@ msgid "Silent mode"
 msgstr "Nie potwierdzaj"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:202
-#: eeschema/dialogs/dialog_bom_base.cpp:63
+#: eeschema/dialogs/dialog_bom_base.cpp:62
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:132
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:53
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
@@ -4093,72 +4088,86 @@ msgstr "Usuń numerację"
 msgid "Annotate"
 msgstr "Numeruj"
 
-#: eeschema/dialogs/dialog_bom.cpp:299 eeschema/dialogs/dialog_netlist.cpp:535
+#: eeschema/dialogs/dialog_bom.cpp:319
+#, c-format
+msgid "Failed to open file '%s'"
+msgstr "Nie można otworzyć pliku '%s'"
+
+#: eeschema/dialogs/dialog_bom.cpp:381 eeschema/dialogs/dialog_netlist.cpp:535
 msgid "Save Netlist File"
 msgstr "Zapisz pliki z listą sieci"
 
-#: eeschema/dialogs/dialog_bom.cpp:354
-msgid "Plugin"
-msgstr "Wtyczka"
+#: eeschema/dialogs/dialog_bom.cpp:444
+msgid "Plugin name in plugin list"
+msgstr "Nazwa wtyczki na liście wtyczek"
 
-#: eeschema/dialogs/dialog_bom.cpp:364 eeschema/dialogs/dialog_netlist.cpp:783
-msgid "This plugin already exists. Abort"
-msgstr "Ta wtyczka już istnieje. Przerwano."
+#: eeschema/dialogs/dialog_bom.cpp:445
+msgid "Plugin name"
+msgstr "Nazwa wtyczki"
 
-#: eeschema/dialogs/dialog_bom.cpp:388 eeschema/dialogs/dialog_netlist.cpp:840
+#: eeschema/dialogs/dialog_bom.cpp:455
+msgid "This name already exists. Abort"
+msgstr "Ta nazwa już istnieje. Przerwano."
+
+#: eeschema/dialogs/dialog_bom.cpp:483 eeschema/dialogs/dialog_netlist.cpp:840
 msgid "Plugin files:"
 msgstr "Pliki wtyczek:"
 
-#: eeschema/dialogs/dialog_bom.cpp:461
+#: eeschema/dialogs/dialog_bom.cpp:567
+msgid "Plugin file name not found. Cannot edit plugin file"
+msgstr ""
+"Nazwa pliku wtyczki nie została znaleziona. Nie można edytować pliku wtyczki."
+
+#: eeschema/dialogs/dialog_bom.cpp:577
 msgid "No text editor selected in KiCad. Please choose it"
 msgstr "Edytor tekstu nie został zdefiniowany. Proszę wybrać."
 
-#: eeschema/dialogs/dialog_bom.cpp:466
+#: eeschema/dialogs/dialog_bom.cpp:582
 msgid "Bom Generation Help"
 msgstr "Tworzenie list materiałowych - Pomoc"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:38
+#: eeschema/dialogs/dialog_bom_base.cpp:37
 msgid "Plugins"
 msgstr "Dostępne wtyczki:"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:45
+#: eeschema/dialogs/dialog_bom_base.cpp:44
 #: eeschema/dialogs/dialog_netlist_base.cpp:115
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:28
 #: pcbnew/librairi.cpp:622 common/dialogs/dialog_get_component_base.cpp:22
 msgid "Name:"
 msgstr "Nazwa:"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:59
+#: eeschema/dialogs/dialog_bom_base.cpp:58
 #: eeschema/dialogs/dialog_netlist_base.cpp:46
 msgid "Generate"
 msgstr "Utwórz listę"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:66
+#: eeschema/dialogs/dialog_bom_base.cpp:65
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:97
 msgid "Help"
 msgstr "Pomo&c"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:72
+#: eeschema/dialogs/dialog_bom_base.cpp:71
 #: eeschema/dialogs/dialog_netlist_base.cpp:52
 msgid "Add Plugin"
 msgstr "Dodaj wtyczkę"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:75
-msgid "Set Plugin Cmd"
-msgstr "Przeglądaj..."
-
-#: eeschema/dialogs/dialog_bom_base.cpp:78
+#: eeschema/dialogs/dialog_bom_base.cpp:74
 #: eeschema/dialogs/dialog_netlist_base.cpp:55
 msgid "Remove Plugin"
 msgstr "Usuń wtyczkę"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:81
+#: eeschema/dialogs/dialog_bom_base.cpp:77
 msgid "Edit Plugin File"
 msgstr "Edytuj plik wtyczki"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:93
+#: eeschema/dialogs/dialog_bom_base.cpp:89
 msgid "Command line:"
 msgstr "Polecenie:"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:102
+msgid "Plugin Info:"
+msgstr "Informacja o wtyczce:"
 
 #: eeschema/dialogs/dialog_choose_component.cpp:241
 msgid "Description\n"
@@ -5826,6 +5835,10 @@ msgstr "Lista sieci programu SPICE (.cir)|*cir"
 msgid "CadStar netlist file (.frp)|*.frp"
 msgstr "Lista sieci programu CadStar (.frp)|*.frp"
 
+#: eeschema/dialogs/dialog_netlist.cpp:783
+msgid "This plugin already exists. Abort"
+msgstr "Ta wtyczka już istnieje. Przerwano."
+
 #: eeschema/dialogs/dialog_netlist.cpp:810
 msgid "Error. You must provide a command String"
 msgstr "Błąd. Musisz wypełnić pole \"Polecenie netlisty\""
@@ -6386,72 +6399,72 @@ msgstr "Połączeń"
 msgid "Unconnected"
 msgstr "Niepołączone"
 
-#: pcbnew/class_board.cpp:2216
+#: pcbnew/class_board.cpp:2218
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Sprawdzam footprint komponentu z listy sieci \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2234
+#: pcbnew/class_board.cpp:2236
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Dodaję nowy komponent \"%s:%s\" o footprincie \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2244
+#: pcbnew/class_board.cpp:2246
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Nie mogę dodać nowego komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s"
 "\".\n"
 
-#: pcbnew/class_board.cpp:2277
+#: pcbnew/class_board.cpp:2279
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Zamieniam footprint komponentu \"%s:%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2289
+#: pcbnew/class_board.cpp:2291
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Nie mogę zamienić komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2323
+#: pcbnew/class_board.cpp:2325
 #, c-format
 msgid "Changing footprint \"%s:%s\" reference to \"%s\".\n"
 msgstr "Zmieniam odnośnik footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2339
+#: pcbnew/class_board.cpp:2341
 #, c-format
 msgid "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Zmieniam wartość footprintu \"%s:%s\" z \"%s\" do \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2356
+#: pcbnew/class_board.cpp:2358
 #, c-format
 msgid "Changing footprint path \"%s:%s\" to \"%s\".\n"
 msgstr "Zmieniam ścieżkę footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2382
+#: pcbnew/class_board.cpp:2384
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Kasuje nazwę sieci z komponentu \"%s:%s\" pin \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2399
+#: pcbnew/class_board.cpp:2401
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr ""
 "Zmieniam nazwę sieci komponentu \"%s:%s\" pin \"%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2448
+#: pcbnew/class_board.cpp:2450
 #, c-format
 msgid "Removing footprint \"%s:%s\".\n"
 msgstr "Usuwam footprint \"%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2486
+#: pcbnew/class_board.cpp:2488
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr "Usunięcie niepołączonej sieci \"%s\" z \"%s\" pole '%s'\n"
 
-#: pcbnew/class_board.cpp:2537
+#: pcbnew/class_board.cpp:2539
 #, c-format
 msgid "*** Error: Component '%s' pad '%s' not found in footprint '%s' ***\n"
 msgstr ""
@@ -7427,79 +7440,79 @@ msgstr "Nowa szerokość:"
 msgid "Edge Width"
 msgstr "Szerokość krawędzi"
 
-#: pcbnew/edit.cpp:684 pcbnew/edit.cpp:706 pcbnew/edit.cpp:732
-#: pcbnew/edit.cpp:760 pcbnew/edit.cpp:788 pcbnew/edit.cpp:816
+#: pcbnew/edit.cpp:687 pcbnew/edit.cpp:709 pcbnew/edit.cpp:735
+#: pcbnew/edit.cpp:763 pcbnew/edit.cpp:791 pcbnew/edit.cpp:819
 #, c-format
 msgid "Footprint %s found, but it is locked"
 msgstr "Znaleziono footprint %s, ale jest on zablokowany"
 
-#: pcbnew/edit.cpp:877 pcbnew/edit.cpp:896
+#: pcbnew/edit.cpp:880 pcbnew/edit.cpp:899
 #, c-format
 msgid "The parent (%s) of the pad is locked"
 msgstr "Element nadrzędny (%s) dla wyprowadzenia jest zablokowany"
 
-#: pcbnew/edit.cpp:1398 pcbnew/edit.cpp:1400
+#: pcbnew/edit.cpp:1401 pcbnew/edit.cpp:1403
 msgid "Add tracks"
 msgstr "Dodaj ścieżki"
 
-#: pcbnew/edit.cpp:1410 pcbnew/edit.cpp:1457 pcbnew/tools/drawing_tool.cpp:542
+#: pcbnew/edit.cpp:1413 pcbnew/edit.cpp:1460 pcbnew/tools/drawing_tool.cpp:542
 msgid "Add module"
 msgstr "Dodaj footprint"
 
-#: pcbnew/edit.cpp:1414 pcbnew/tools/drawing_tool.cpp:426
+#: pcbnew/edit.cpp:1417 pcbnew/tools/drawing_tool.cpp:426
 msgid "Add zones"
 msgstr "Dodaj strefy"
 
-#: pcbnew/edit.cpp:1417
+#: pcbnew/edit.cpp:1420
 msgid "Warning: zone display is OFF!!!"
 msgstr "Ostrzeżenie: Wyświetlanie stref jest WYŁĄCZONE!!!"
 
-#: pcbnew/edit.cpp:1425 pcbnew/tools/drawing_tool.cpp:434
+#: pcbnew/edit.cpp:1428 pcbnew/tools/drawing_tool.cpp:434
 msgid "Add keepout"
 msgstr "Dodaj strefę chronioną"
 
-#: pcbnew/edit.cpp:1429 pcbnew/menubar_pcbframe.cpp:406
+#: pcbnew/edit.cpp:1432 pcbnew/menubar_pcbframe.cpp:406
 #: pcbnew/tool_pcb.cpp:472 pcbnew/tools/drawing_tool.cpp:462
 msgid "Add layer alignment target"
 msgstr "Dodaj element pozycjonujący warstwy"
 
-#: pcbnew/edit.cpp:1433
+#: pcbnew/edit.cpp:1436
 msgid "Adjust zero"
 msgstr "Ustaw zero"
 
-#: pcbnew/edit.cpp:1437 pcbnew/tools/pcbnew_control.cpp:452
+#: pcbnew/edit.cpp:1440 pcbnew/tools/pcbnew_control.cpp:452
 msgid "Adjust grid origin"
 msgstr "Dostosuj punkt bazowy siatki"
 
-#: pcbnew/edit.cpp:1441 pcbnew/tools/drawing_tool.cpp:83
+#: pcbnew/edit.cpp:1444 pcbnew/tools/drawing_tool.cpp:83
 #: pcbnew/tools/drawing_tool.cpp:109
 msgid "Add graphic line"
 msgstr "Dodaj linię (grafika)"
 
-#: pcbnew/edit.cpp:1445 pcbnew/menubar_modedit.cpp:263
+#: pcbnew/edit.cpp:1448 pcbnew/menubar_modedit.cpp:263
 #: pcbnew/menubar_pcbframe.cpp:388 pcbnew/tool_modedit.cpp:180
 #: pcbnew/tool_pcb.cpp:462 pcbnew/tools/drawing_tool.cpp:191
 #: pcbnew/tools/drawing_tool.cpp:212
 msgid "Add graphic arc"
 msgstr "Dodaj łuk (grafika)"
 
-#: pcbnew/edit.cpp:1449 pcbnew/menubar_modedit.cpp:252
+#: pcbnew/edit.cpp:1452 pcbnew/menubar_modedit.cpp:252
 #: pcbnew/menubar_pcbframe.cpp:391 pcbnew/tool_modedit.cpp:177
 #: pcbnew/tool_pcb.cpp:459 pcbnew/tools/drawing_tool.cpp:142
 #: pcbnew/tools/drawing_tool.cpp:163
 msgid "Add graphic circle"
 msgstr "Dodaj okrąg (grafika)"
 
-#: pcbnew/edit.cpp:1461 pcbnew/menubar_pcbframe.cpp:402
+#: pcbnew/edit.cpp:1464 pcbnew/menubar_pcbframe.cpp:402
 #: pcbnew/tool_pcb.cpp:469 pcbnew/tools/drawing_tool.cpp:259
 msgid "Add dimension"
 msgstr "Dodaj wymiar"
 
-#: pcbnew/edit.cpp:1469 pcbnew/tool_pcb.cpp:434
+#: pcbnew/edit.cpp:1472 pcbnew/tool_pcb.cpp:434
 msgid "Highlight net"
 msgstr "Podświetl sieć"
 
-#: pcbnew/edit.cpp:1473
+#: pcbnew/edit.cpp:1476
 msgid "Select rats nest"
 msgstr "Wybierz połączenia wspomagające"
 
@@ -7801,7 +7814,7 @@ msgstr "Nieznana wartość PCB_FILE_T: %d"
 msgid "Cannot find component with reference \"%s\" in netlist."
 msgstr "Nie mogę odnaleźć komponentu z oznaczeniem \"%s\" na liście sieci."
 
-#: pcbnew/kicad_netlist_reader.cpp:371 pcbnew/pcb_parser.cpp:1677
+#: pcbnew/kicad_netlist_reader.cpp:371 pcbnew/pcb_parser.cpp:1679
 #, c-format
 msgid ""
 "invalid PFID in\n"
@@ -9107,7 +9120,7 @@ msgid "Set Line Width"
 msgstr "Ustaw szerokość linii"
 
 #: pcbnew/moduleframe.cpp:245 pcbnew/pcbframe.cpp:415 pcbnew/pcbframe.cpp:916
-#: gerbview/events_called_functions.cpp:330 gerbview/gerbview_frame.cpp:142
+#: gerbview/events_called_functions.cpp:318 gerbview/gerbview_frame.cpp:142
 msgid "Visibles"
 msgstr "Widoczność"
 
@@ -9857,13 +9870,13 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcbnew_config.cpp:79 pcbnew/dialogs/dialog_general_options.cpp:238
-#: gerbview/events_called_functions.cpp:393 gerbview/menubar.cpp:155
+#: gerbview/events_called_functions.cpp:381 gerbview/menubar.cpp:155
 #: gerbview/menubar.cpp:157 gerbview/options.cpp:88
 msgid "Hide &Layers Manager"
 msgstr "Ukryj menadżera warstw"
 
 #: pcbnew/pcbnew_config.cpp:79 pcbnew/dialogs/dialog_general_options.cpp:238
-#: gerbview/events_called_functions.cpp:393 gerbview/menubar.cpp:157
+#: gerbview/events_called_functions.cpp:381 gerbview/menubar.cpp:157
 #: gerbview/options.cpp:88
 msgid "Show &Layers Manager"
 msgstr "Pokaż menadżera warstw"
@@ -9896,7 +9909,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcbnew_config.cpp:214 pcbnew/pcbnew_config.cpp:485
-#: gerbview/excellon_read_drill_file.cpp:192
+#: gerbview/excellon_read_drill_file.cpp:199
 #, c-format
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
@@ -9964,18 +9977,18 @@ msgstr ""
 "w linii %d, pozycja %d\n"
 "nie została zdefiniowana w sekcji warstw"
 
-#: pcbnew/pcb_parser.cpp:1268
+#: pcbnew/pcb_parser.cpp:1270
 #, c-format
 msgid "duplicate NETCLASS name '%s' in file <%s> at line %d, offset %d"
 msgstr ""
 "zduplikowana nazwa Klasy Sieci '%s' w pliku <%s> w linii %d, przesunięcie %d"
 
-#: pcbnew/pcb_parser.cpp:1911
+#: pcbnew/pcb_parser.cpp:1913
 #, c-format
 msgid "cannot handle module text type %s"
 msgstr "nie mogę obsłużyć tekstu footprintu typu %s"
 
-#: pcbnew/pcb_parser.cpp:2555
+#: pcbnew/pcb_parser.cpp:2557
 #, c-format
 msgid ""
 "There is a zone that belongs to a not existing net(%s), you should verify it."
@@ -10472,26 +10485,26 @@ msgstr "Zapisz pliki komponentów"
 msgid "Could not create file '%s'"
 msgstr "Nie mogę utworzyć pliku '%s'"
 
-#: pcbnew/zones_by_polygon.cpp:152
+#: pcbnew/zones_by_polygon.cpp:151
 msgid "Duplicate Zone: The outline of the duplicated zone fails DRC check!"
 msgstr ""
 "Powielona strefa: Obrys powielonej strefy powoduje niepowodzenie przy "
 "sprawdzaniu DRC!"
 
-#: pcbnew/zones_by_polygon.cpp:356 pcbnew/zones_by_polygon.cpp:414
-#: pcbnew/zones_by_polygon.cpp:801
+#: pcbnew/zones_by_polygon.cpp:355 pcbnew/zones_by_polygon.cpp:413
+#: pcbnew/zones_by_polygon.cpp:800
 msgid "Area: DRC outline error"
 msgstr "Obszar: błąd DRC obrysu"
 
-#: pcbnew/zones_by_polygon.cpp:529
+#: pcbnew/zones_by_polygon.cpp:528
 msgid "Error: a keepout area is allowed only on copper layers"
 msgstr "BŁĄD: strefa chroniona jest dozwolona tylko na wartwach sygnałowych"
 
-#: pcbnew/zones_by_polygon.cpp:676
+#: pcbnew/zones_by_polygon.cpp:675
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr "Błąd DRC: punkt początkowy jest wewnątrz lub za blisko innego obszaru"
 
-#: pcbnew/zones_by_polygon.cpp:735
+#: pcbnew/zones_by_polygon.cpp:734
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr "Błąd DRC: zamknięcie tego obszaru wywołuje błąd DRC z innym obszarem"
 
@@ -16004,50 +16017,50 @@ msgstr "Ukryj wszystkie warstwy"
 msgid "Sort Layers if X2 Mode"
 msgstr "Sortuj warstwy gdy Tryb X2"
 
-#: gerbview/events_called_functions.cpp:280
+#: gerbview/events_called_functions.cpp:268
 msgid "No editor defined. Please select one"
 msgstr "Edytor nie został zdefiniowany. Proszę wybrać"
 
-#: gerbview/events_called_functions.cpp:286
+#: gerbview/events_called_functions.cpp:274
 #, c-format
 msgid "No file loaded on the active layer %d"
 msgstr "Nie załadowano pliku na aktywną warstwę %d"
 
-#: gerbview/excellon_read_drill_file.cpp:182
+#: gerbview/excellon_read_drill_file.cpp:189
 msgid "No room to load file"
 msgstr "Brak miejsca by załadować plik"
 
-#: gerbview/excellon_read_drill_file.cpp:207
+#: gerbview/excellon_read_drill_file.cpp:214
 msgid "Files not found"
 msgstr "Nie znaleziono plików"
 
-#: gerbview/excellon_read_drill_file.cpp:372
+#: gerbview/excellon_read_drill_file.cpp:388
 msgid "METRIC command has no parameter"
 msgstr "Polecenie METRIC nie posiada parametru"
 
-#: gerbview/excellon_read_drill_file.cpp:390
+#: gerbview/excellon_read_drill_file.cpp:406
 msgid "INCH command has no parameter"
 msgstr "Polecenie INCH nie posiada parametru"
 
-#: gerbview/excellon_read_drill_file.cpp:418
+#: gerbview/excellon_read_drill_file.cpp:434
 msgid "ICI command has no parameter"
 msgstr "Polecenie INI nie posiada parametru"
 
-#: gerbview/excellon_read_drill_file.cpp:428
+#: gerbview/excellon_read_drill_file.cpp:444
 msgid "ICI command has incorrect parameter"
 msgstr "Polecenie INI posiada nieprawidłowy parametr"
 
-#: gerbview/excellon_read_drill_file.cpp:466
+#: gerbview/excellon_read_drill_file.cpp:482
 #, c-format
 msgid "Tool definition <%c> not supported"
 msgstr "Definicja narzędzia <%c> nie jest obsługiwana"
 
-#: gerbview/excellon_read_drill_file.cpp:518
+#: gerbview/excellon_read_drill_file.cpp:534
 #, c-format
 msgid "Tool <%d> not defined"
 msgstr "Narzędzie <%d> nie zostało zdefiniowane"
 
-#: gerbview/excellon_read_drill_file.cpp:645
+#: gerbview/excellon_read_drill_file.cpp:661
 #, c-format
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
 msgstr "Nieznany G-kod Excellon: &lt;%s&gt;"
@@ -16290,10 +16303,6 @@ msgstr "O przeglądarce plików GerbView"
 #: gerbview/menubar.cpp:238
 msgid "&Miscellaneous"
 msgstr "&Różne"
-
-#: gerbview/onrightclick.cpp:79
-msgid "Delete Block (ctrl + drag mouse)"
-msgstr "Usuń blok (ctrl + przeciąganie myszką)"
 
 #: gerbview/readgerb.cpp:69
 #, c-format
@@ -17063,31 +17072,31 @@ msgstr "Pokaż siatkę"
 msgid "clipboard"
 msgstr "schowek"
 
-#: common/dsnlexer.cpp:319 common/dsnlexer.cpp:327
+#: common/dsnlexer.cpp:347 common/dsnlexer.cpp:355
 #, c-format
 msgid "Expecting '%s'"
 msgstr "Spodziewano się '%s'"
 
-#: common/dsnlexer.cpp:335 common/dsnlexer.cpp:351
+#: common/dsnlexer.cpp:363 common/dsnlexer.cpp:379
 #, c-format
 msgid "Unexpected '%s'"
 msgstr "Niespodziewano się '%s'"
 
-#: common/dsnlexer.cpp:343
+#: common/dsnlexer.cpp:371
 #, c-format
 msgid "%s is a duplicate"
 msgstr "%s jest duplikatem"
 
-#: common/dsnlexer.cpp:396
+#: common/dsnlexer.cpp:424
 #, c-format
 msgid "need a NUMBER for '%s'"
 msgstr "potrzebny NUMER dla '%s'"
 
-#: common/dsnlexer.cpp:668 common/dsnlexer.cpp:728
+#: common/dsnlexer.cpp:696 common/dsnlexer.cpp:756
 msgid "Un-terminated delimited string"
 msgstr "Niezakończony separator tekstu"
 
-#: common/dsnlexer.cpp:690
+#: common/dsnlexer.cpp:718
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "Separator musi być pojedynczym znakiem: ', \" lub $"
 
@@ -17195,53 +17204,53 @@ msgstr "Zaznacz wszystkie komórki"
 msgid "Hotkeys List"
 msgstr "Lista skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:690
+#: common/hotkeys_basic.cpp:693
 msgid "Read Hotkey Configuration File:"
 msgstr "Wczytaj plik konfiguracji klawiszy skrótów:"
 
-#: common/hotkeys_basic.cpp:719
+#: common/hotkeys_basic.cpp:722
 msgid "Write Hotkey Configuration File:"
 msgstr "Zapisz plik konfiguracji klawiszy skrótów:"
 
-#: common/hotkeys_basic.cpp:747
+#: common/hotkeys_basic.cpp:750
 msgid "&List Current Keys"
 msgstr "&Lista bieżących skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:748
+#: common/hotkeys_basic.cpp:751
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Wyświetl bieżące skróty klawiszowe i odpowiadające im polecenia"
 
-#: common/hotkeys_basic.cpp:753
+#: common/hotkeys_basic.cpp:756
 msgid "&Edit Hotkeys"
 msgstr "&Edytuj plik konfiguracji klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:754
+#: common/hotkeys_basic.cpp:757
 msgid "Call the hotkeys editor"
 msgstr "Uruchom edytor skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:761
+#: common/hotkeys_basic.cpp:764
 msgid "E&xport Hotkeys"
 msgstr "Eksportuj plik konfiguracji klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:762
+#: common/hotkeys_basic.cpp:765
 msgid "Create a hotkey configuration file to export the current hotkeys"
 msgstr ""
 "Utwórz plik konfiguracji klawiszy skrótów by wyeksportować bieżącą "
 "konfigurację klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:767
+#: common/hotkeys_basic.cpp:770
 msgid "&Import Hotkeys"
 msgstr "&Importuj konfigurację skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:768
+#: common/hotkeys_basic.cpp:771
 msgid "Load an existing hotkey configuration file"
 msgstr "Wczytaj istniejący plik konfiguracji klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:773
+#: common/hotkeys_basic.cpp:776
 msgid "&Hotkeys"
 msgstr "Skróty klawiszowe"
 
-#: common/hotkeys_basic.cpp:774
+#: common/hotkeys_basic.cpp:777
 msgid "Hotkeys configuration and preferences"
 msgstr "Konfiguracja i właściwości skrótów klawiszowych"
 
@@ -18112,12 +18121,12 @@ msgstr "Złe lub brakujące parametry!"
 
 #: pcb_calculator/regulators_funct.cpp:226
 #, c-format
-msgid "Pcb Calculator data  file (*.%s)|*.%s"
-msgstr "Plik danych o regulatorach (*.%s)|*.%s"
+msgid "PCB Calculator data  file (*.%s)|*.%s"
+msgstr "Plik danych kalkulatora PCB (*.%s)|*.%s"
 
 #: pcb_calculator/regulators_funct.cpp:231
-msgid "Select a Pcb Calculator data file"
-msgstr "Wybierz plik danych dla Pcb Calculator-a"
+msgid "Select a PCB Calculator data file"
+msgstr "Wybierz plik danych dla kalkulatora PCB"
 
 #: pcb_calculator/regulators_funct.cpp:246
 msgid "Do you want to load this file and replace current regulator list?"
@@ -18795,8 +18804,8 @@ msgid "Conductor length"
 msgstr "Długość łącza"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:336
-msgid "Tracks Caracteristics (External Layers):"
-msgstr "Charakterystyka ścieżek (warstwy zewnętrzne):"
+msgid "Track Characteristics (External Layers):"
+msgstr "Charakterystyki ścieżki (warstwy zewnętrzne):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:344
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:420
@@ -18834,8 +18843,8 @@ msgid "Watt"
 msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:412
-msgid "Tracks Caracteristics (Internal Layers):"
-msgstr "Charakterystyka ścieżek (warstwy wewnętrzne):"
+msgid "Track Characteristics (Internal Layers):"
+msgstr "Charakterystyki ścieżki (warstwy wewnętrzne):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:510
 msgid "Voltage > 500V:"
@@ -19821,7 +19830,7 @@ msgstr "Niepołączone"
 msgid "Annotate Schematic"
 msgstr "Numeruj schemat"
 
-#: eeschema/dialogs/dialog_bom_base.h:95
+#: eeschema/dialogs/dialog_bom_base.h:93
 msgid "Bill of Material"
 msgstr "Lista materiałowa"
 
@@ -20094,12 +20103,24 @@ msgid "Regulator Parameters"
 msgstr "Parametry regulatora"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:296
-msgid "Pcb Calculator"
+msgid "PCB Calculator"
 msgstr "Kalkulator PCB"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nowy element"
+
+#~ msgid "Failed to create file <%s>"
+#~ msgstr "Błąd przy tworzeniu pliku <%s>"
+
+#~ msgid "Plugin"
+#~ msgstr "Wtyczka"
+
+#~ msgid "Set Plugin Cmd"
+#~ msgstr "Przeglądaj..."
+
+#~ msgid "Delete Block (ctrl + drag mouse)"
+#~ msgstr "Usuń blok (ctrl + przeciąganie myszką)"
 
 #~ msgid "Perform electric rules check"
 #~ msgstr "Kontrola reguł projektowych PCB"
