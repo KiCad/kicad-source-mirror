@@ -1938,14 +1938,39 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
         wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
         int     width = kicad( w.width );
 
-        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_SEGMENT );
-        aModule->GraphicalItems().PushBack( dwg );
+        EDGE_MODULE* dwg;
+        if( !w.curve )
+        {
+            dwg = new EDGE_MODULE( aModule, S_SEGMENT );
 
-        dwg->SetStart0( start );
-        dwg->SetEnd0( end );
+            dwg->SetStart0( start );
+            dwg->SetEnd0( end );
+        }
+        else
+        {
+            dwg = new EDGE_MODULE( aModule, S_ARC );
+            // Eagle give us start and end.
+            // S_ARC wants start to give the centre, and end to give the start
+            double dx = end.x - start.x, dy = end.y - start.y;
+            wxPoint mid = (start + end) / 2;
+
+            double dlen = sqrt( dx*dx + dy*dy );
+            double dist = dlen / ( 2 * tan( DEG2RAD( *w.curve ) / 2 ) );
+
+            wxPoint centre(
+                mid.x + dist * ( dy / dlen ),
+                mid.y - dist * ( dx / dlen )
+            );
+
+            dwg->SetStart0( centre );
+            dwg->SetEnd0( start );
+            dwg->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
+        }
 
         dwg->SetLayer( layer );
         dwg->SetWidth( width );
+
+        aModule->GraphicalItems().PushBack( dwg );
     }
 }
 

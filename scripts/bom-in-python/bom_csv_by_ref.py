@@ -1,8 +1,14 @@
 #
 # Example python script to generate a BOM from a KiCad generic netlist
 #
-# Example: Tab delimited list (The same as std output) Ungrouped
-#
+"""
+    @package
+    Generate a csv list file.
+    Components are sorted by ref and grouped by value
+    One component per line
+    Fields are (if exist)
+    Ref, Quantity, value, Part, footprint, 'Description', 'Vendor'
+"""
 
 from __future__ import print_function
 
@@ -20,8 +26,9 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 try:
     f = open(sys.argv[2], 'w')
 except IOError:
-    print(__file__, ":", e, file=sys.stderr)
-    f = stdout
+    e = "Can't open output file for writing: " + sys.argv[2]
+    print(__file__, ":", e, sys.stderr)
+    f = sys.stdout
 
 # Create a new csv writer object to use as the output formatter, although we
 # are created a tab delimited list instead!

@@ -275,6 +275,9 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* a
 
 FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
 {
+    if( aFootprintName.IsEmpty() )
+        return NULL;
+
     BOOST_FOREACH( FOOTPRINT_INFO& fp, m_list )
     {
         FPID fpid;

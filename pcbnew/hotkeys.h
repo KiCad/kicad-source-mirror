@@ -114,7 +114,9 @@ enum hotkey_id_commnand {
     HK_CANVAS_OPENGL,
     HK_CANVAS_CAIRO,
     HK_LEFT_CLICK,
-    HK_LEFT_DCLICK
+    HK_LEFT_DCLICK,
+    HK_ZONE_FILL_OR_REFILL,
+    HK_ZONE_REMOVE_FILLED
 };
 
 // Full list of hotkey descriptors for board editor and footprint editor

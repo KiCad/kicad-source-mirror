@@ -126,6 +126,10 @@ static EDA_HOTKEY HkCanvasOpenGL( wxT( "Switch to OpenGL Canvas" ),
 static EDA_HOTKEY HkCanvasCairo( wxT( "Switch to Cairo Canvas" ),
                                  HK_CANVAS_CAIRO, WXK_F12 );
 
+static EDA_HOTKEY HkZoneFillOrRefill( wxT( "Fill or Refill All Zones" ),
+                                 HK_ZONE_FILL_OR_REFILL, 'B' );
+static EDA_HOTKEY HkZoneRemoveFilled( wxT( "Remove Filled Areas in All Zones" ),
+                                 HK_ZONE_REMOVE_FILLED, 'N' );
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
@@ -289,6 +293,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkRecordMacros8,          &HkCallMacros8,    &HkRecordMacros9,          &HkCallMacros9,
     &HkSwitchHighContrastMode,
     &HkCanvasDefault,          &HkCanvasCairo,               &HkCanvasOpenGL,
+    &HkZoneFillOrRefill,       &HkZoneRemoveFilled,
     NULL
 };
 

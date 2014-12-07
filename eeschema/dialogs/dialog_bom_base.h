@@ -44,7 +44,6 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 		void _wxFB_OnCancelClick( wxCommandEvent& event ){ OnCancelClick( event ); }
 		void _wxFB_OnHelp( wxCommandEvent& event ){ OnHelp( event ); }
 		void _wxFB_OnAddPlugin( wxCommandEvent& event ){ OnAddPlugin( event ); }
-		void _wxFB_OnChoosePlugin( wxCommandEvent& event ){ OnChoosePlugin( event ); }
 		void _wxFB_OnRemovePlugin( wxCommandEvent& event ){ OnRemovePlugin( event ); }
 		void _wxFB_OnEditPlugin( wxCommandEvent& event ){ OnEditPlugin( event ); }
 		void _wxFB_OnCommandLineEdited( wxCommandEvent& event ){ OnCommandLineEdited( event ); }
@@ -57,7 +56,6 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 			ID_CREATE_BOM,
 			ID_HELP,
 			ID_ADD_PLUGIN,
-			wxID_BROWSE_PLUGINS,
 			ID_REMOVEL_PLUGIN,
 			ID_CMDLINE
 		};
@@ -71,11 +69,12 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 		wxButton* m_buttonHelp;
 		wxStaticLine* m_staticline2;
 		wxButton* m_buttonAddPlugin;
-		wxButton* m_buttonBrowsePlugin;
 		wxButton* m_buttonDelPlugin;
 		wxButton* m_buttonEdit;
 		wxStaticText* m_staticTextCmd;
 		wxTextCtrl* m_textCtrlCommand;
+		wxStaticText* m_staticTextInfo;
+		wxTextCtrl* m_Messages;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPluginSelected( wxCommandEvent& event ) { event.Skip(); }
@@ -84,7 +83,6 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnHelp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddPlugin( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnChoosePlugin( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemovePlugin( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditPlugin( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCommandLineEdited( wxCommandEvent& event ) { event.Skip(); }
@@ -92,7 +90,7 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bill of Material"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 404,315 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bill of Material"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 409,393 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_BOM_BASE();
 	
 };

@@ -580,7 +580,10 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
         ClipperLib::Paths shapeWithClearance;
 
         for( int ii = 0; ii < 4; ii++ )
+        {
+            corners[ii] += PadShapePos;
             outline << ClipperLib::IntPoint( corners[ii].x, corners[ii].y );
+        }
 
         ClipperLib::ClipperOffset offset_engine;
         // Prepare an offset (inflate) transform, with edges connected by arcs
@@ -600,19 +603,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
         offset_engine.Execute( shapeWithClearance, rounding_radius );
 
         // get new outline (only one polygon is expected)
-        // For info, ClipperLib uses long long to handle integer coordinates
-        ClipperLib::Path& polygon = shapeWithClearance[0];
-
-        for( unsigned jj = 0; jj < polygon.size(); jj++ )
-        {
-            corner_position.x = int( polygon[jj].X );
-            corner_position.y = int( polygon[jj].Y );
-            corner_position += PadShapePos;
-            CPolyPt polypoint( corner_position.x, corner_position.y );
-            aCornerBuffer.Append( polypoint );
-        }
-
-        aCornerBuffer.CloseLastContour();
+        aCornerBuffer.ImportFrom( shapeWithClearance );
     }
         break;
     }
@@ -1008,7 +999,6 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
 
             double angle = aPad.GetOrientation();
             int rounding_radius = KiROUND( aThermalGap * aCorrectionFactor );   // Corner rounding radius
-            double angle_pg;                                                    // Polygon increment angle
 
             for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
             {
@@ -1016,7 +1006,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
 
                 // Start at half increment offset
                 RotatePoint( &corner_position, 1800.0 / aCircleToSegmentsCount );
-                angle_pg = i * delta;
+                double angle_pg = i * delta;
 
                 RotatePoint( &corner_position, angle_pg );          // Rounding vector rotation
                 corner_position -= aPad.GetSize() / 2;              // Rounding vector + Pad corner offset

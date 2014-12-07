@@ -7,6 +7,14 @@
     How to use:
         Eeschema.pdf: chapter 14
 -->
+<!--
+    @package
+    Generate a comma separated value BOM list (csv file type).
+    Components are sorted by value
+    One component per line
+    Fields are
+    Quantity, 'Part name', Description, lib
+-->
 
 <!DOCTYPE xsl:stylesheet [
   <!ENTITY nl  "&#xd;&#xa;"> <!--new line CR, LF -->
@@ -18,20 +26,18 @@
 <!-- for each component -->
 <xsl:template match="libpart">
 
-<!--
-    <xsl:value-of select="count(//comp/libsource/@part[@part])"/><xsl:text>,</xsl:text>
--->
-
-    <xsl:value-of select="@part"/><xsl:text>,</xsl:text>
-    <xsl:value-of select="description"/><xsl:text>,</xsl:text>
+<!-- -->
+    <xsl:value-of select="count(//comp/libsource/@part[@part])"/><xsl:text>,"</xsl:text>
+    <xsl:value-of select="@part"/><xsl:text>","</xsl:text>
+    <xsl:value-of select="description"/><xsl:text>","</xsl:text>
     <xsl:value-of select="@lib"/>
 
-    <xsl:text>&nl;</xsl:text>
+    <xsl:text>"&nl;</xsl:text>
 </xsl:template>
 
 
 <xsl:template match="/export">
-    <xsl:text>qty,partname,description,lib&nl;</xsl:text>
+    <xsl:text>Qty,partname,description,lib&nl;</xsl:text>
     <xsl:apply-templates select="libparts/libpart"/>
 </xsl:template>
 

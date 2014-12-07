@@ -64,8 +64,9 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 try:
     f = open(sys.argv[2], 'w')
 except IOError:
+    e = "Can't open output file for writing: " + sys.argv[2]
     print(__file__, ":", e, file=sys.stderr)
-    f = stdout
+    f = sys.stdout
 
 for c in net.components:
     c.checkvalue()

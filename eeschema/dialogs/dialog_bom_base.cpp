@@ -16,7 +16,6 @@ BEGIN_EVENT_TABLE( DIALOG_BOM_BASE, DIALOG_SHIM )
 	EVT_BUTTON( wxID_CANCEL, DIALOG_BOM_BASE::_wxFB_OnCancelClick )
 	EVT_BUTTON( ID_HELP, DIALOG_BOM_BASE::_wxFB_OnHelp )
 	EVT_BUTTON( ID_ADD_PLUGIN, DIALOG_BOM_BASE::_wxFB_OnAddPlugin )
-	EVT_BUTTON( wxID_BROWSE_PLUGINS, DIALOG_BOM_BASE::_wxFB_OnChoosePlugin )
 	EVT_BUTTON( ID_REMOVEL_PLUGIN, DIALOG_BOM_BASE::_wxFB_OnRemovePlugin )
 	EVT_BUTTON( wxID_ANY, DIALOG_BOM_BASE::_wxFB_OnEditPlugin )
 	EVT_TEXT( ID_CMDLINE, DIALOG_BOM_BASE::_wxFB_OnCommandLineEdited )
@@ -72,9 +71,6 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_buttonAddPlugin = new wxButton( this, ID_ADD_PLUGIN, _("Add Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonAddPlugin, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_buttonBrowsePlugin = new wxButton( this, wxID_BROWSE_PLUGINS, _("Set Plugin Cmd"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonBrowsePlugin, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
 	m_buttonDelPlugin = new wxButton( this, ID_REMOVEL_PLUGIN, _("Remove Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonDelPlugin, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -102,6 +98,13 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	
 	bMainSizer->Add( bbottomSizer, 0, wxEXPAND, 5 );
+	
+	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Plugin Info:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo->Wrap( -1 );
+	bMainSizer->Add( m_staticTextInfo, 0, wxRIGHT|wxLEFT, 5 );
+	
+	m_Messages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
+	bMainSizer->Add( m_Messages, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

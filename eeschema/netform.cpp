@@ -381,7 +381,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
 
     NETLIST_EXPORT_TOOL helper( aConnectedItemsList, Prj().SchLibs() );
 
-    bool open_file = aFormat < NET_TYPE_CUSTOM1;
+    bool open_file = (aFormat < NET_TYPE_CUSTOM1) && (aFormat >= 0);
     if( (aFormat == NET_TYPE_PCBNEW) && (aNetlistOptions & NET_PCBNEW_USE_NEW_FORMAT ) )
         open_file = false;
 
@@ -390,7 +390,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
         if( ( f = wxFopen( aFullFileName, wxT( "wt" ) ) ) == NULL )
         {
             wxString msg;
-            msg.Printf( _( "Failed to create file <%s>" ),
+            msg.Printf( _( "Failed to create file '%s'" ),
                         GetChars( aFullFileName ) );
             DisplayError( this, msg );
             return false;

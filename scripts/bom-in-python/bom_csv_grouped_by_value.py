@@ -27,7 +27,7 @@ try:
     f = open(sys.argv[2], 'w')
 except IOError:
     e = "Can't open output file for writing: " + sys.argv[2]
-    print(__file__, ":", e, file=sys.stderr)
+    print( __file__, ":", e, sys.stderr )
     f = sys.stdout
 
 # subset the components to those wanted in the BOM, controlled
@@ -46,7 +46,7 @@ columnset = compfields | partfields     # union
 columns = ['Item', 'Qty', 'Reference(s)', 'Value', 'LibPart', 'Footprint', 'Datasheet'] + sorted(list(columnset))
 
 # Create a new csv writer object to use as the output formatter
-out = csv.writer(f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=csv.QUOTE_MINIMAL)
+out = csv.writer( f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=csv.QUOTE_MINIMAL )
 
 # override csv.writer's writerow() to support utf8 encoding:
 def writerow( acsvwriter, columns ):
