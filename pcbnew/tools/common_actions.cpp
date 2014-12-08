@@ -308,12 +308,16 @@ TOOL_ACTION COMMON_ACTIONS::zoneFill( "pcbnew.EditorControl.zoneFill",
         "Fill", "Fill zone(s)" );
 
 TOOL_ACTION COMMON_ACTIONS::zoneFillAll( "pcbnew.EditorControl.zoneFillAll",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, int( 'B' ),
         "Fill all", "Fill all zones" );
 
 TOOL_ACTION COMMON_ACTIONS::zoneUnfill( "pcbnew.EditorControl.zoneUnfill",
         AS_GLOBAL, 0,
         "Unfill", "Unfill zone(s)" );
+
+TOOL_ACTION COMMON_ACTIONS::zoneUnfillAll( "pcbnew.EditorControl.zoneUnfillAll",
+        AS_GLOBAL, int( 'N' ),
+        "Unfill all", "Unfill all zones" );
 
 
 // Module editor tools
