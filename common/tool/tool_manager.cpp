@@ -411,6 +411,9 @@ TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
 
 void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 {
+    TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, "" );      // deactivate the active tool
+    ProcessEvent( evt );
+
     BOOST_FOREACH( TOOL_BASE* tool, m_toolState | boost::adaptors::map_keys )
         tool->Reset( aReason );
 }

@@ -70,7 +70,9 @@ install_prerequisites()
             sed
     else
         echo
-        echo "Incompatible System. Neither 'yum' nor 'apt-get' found. Not possible to continue."
+        echo "Incompatible System. Neither 'yum' nor 'apt-get' found. Not possible to"
+        echo "continue. Please make sure to install git, curl, and sed before using this"
+        echo "script."
         echo
         exit 1
     fi
@@ -107,11 +109,23 @@ cmake_uninstall()
 
 detect_pretty_repos()
 {
+    # Check for the correct option to enable extended regular expressions in
+    # sed. This is '-r' for GNU sed and '-E' for (older) BSD-like sed, as on
+    # Mac OSX.
+    if [ $(echo | sed -r '' &>/dev/null; echo $?) -eq 0 ]; then
+        SED_EREGEXP="-r"
+    elif [ $(echo | sed -E '' &>/dev/null; echo $?) -eq 0 ]; then
+        SED_EREGEXP="-E"
+    else
+        echo "Your sed command does not support extended regular expressions. Cannot continue."
+        exit 1
+    fi
+
     # Use github API to list repos for org KiCad, then subset the JSON reply for only
     # *.pretty repos
     PRETTY_REPOS=`curl https://api.github.com/orgs/KiCad/repos?per_page=2000 2> /dev/null \
         | grep full_name | grep pretty \
-        | sed -r  's:.+ "KiCad/(.+)",:\1:'`
+        | sed $SED_EREGEXP 's:.+ "KiCad/(.+)",:\1:'`
 
     #echo "PRETTY_REPOS:$PRETTY_REPOS"
 

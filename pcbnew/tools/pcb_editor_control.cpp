@@ -41,6 +41,7 @@ public:
         Add( COMMON_ACTIONS::zoneFill );
         Add( COMMON_ACTIONS::zoneFillAll );
         Add( COMMON_ACTIONS::zoneUnfill );
+        Add( COMMON_ACTIONS::zoneUnfillAll );
     }
 };
 
@@ -219,6 +220,24 @@ int PCB_EDITOR_CONTROL::ZoneUnfill( TOOL_EVENT& aEvent )
 }
 
 
+int PCB_EDITOR_CONTROL::ZoneUnfillAll( TOOL_EVENT& aEvent )
+{
+    BOARD* board = getModel<BOARD>();
+
+    for( int i = 0; i < board->GetAreaCount(); ++i )
+    {
+        ZONE_CONTAINER* zone = board->GetArea( i );
+        zone->SetIsFilled( false );
+        zone->ClearFilledPolysList();
+        zone->ViewUpdate();
+    }
+
+    setTransitions();
+
+    return 0;
+}
+
+
 void PCB_EDITOR_CONTROL::setTransitions()
 {
     // Track & via size control
@@ -231,4 +250,5 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ZoneFill,           COMMON_ACTIONS::zoneFill.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ZoneFillAll,        COMMON_ACTIONS::zoneFillAll.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ZoneUnfill,         COMMON_ACTIONS::zoneUnfill.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ZoneUnfillAll,      COMMON_ACTIONS::zoneUnfillAll.MakeEvent() );
 }
