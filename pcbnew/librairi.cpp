@@ -402,9 +402,11 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 
     // prompt user for libPath
 //    wxDirDialog dlg( this, FMT_CREATE_LIB, fn.GetPath(), wxDD_DEFAULT_STYLE  );
-    DIALOG_SELECT_PRETTY_LIB dlg( this );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    wxString initialPath = wxPathOnly( Prj().GetProjectFullName() );
+    DIALOG_SELECT_PRETTY_LIB dlg( this, initialPath );
+
+    if( dlg.ShowModal() != wxID_OK )
         return wxEmptyString;
 
     fn = dlg.GetPath();

@@ -14,7 +14,7 @@
    width="26"
    height="26"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="library_table.svg">
   <metadata
      id="metadata166">
@@ -37,15 +37,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="849"
+     inkscape:window-width="1920"
+     inkscape:window-height="1033"
      id="namedview164"
      showgrid="true"
      inkscape:zoom="13.906433"
      inkscape:cx="-4.4802673"
      inkscape:cy="18.405854"
-     inkscape:window-x="0"
-     inkscape:window-y="29"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      inkscape:snap-to-guides="false"
@@ -554,16 +554,9 @@
        id="path95"
        inkscape:connector-curvature="0" />
   </g>
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:none"
-     id="rect3143"
-     width="16.179562"
-     height="13.087469"
-     x="9.8515558"
-     y="8.6698914" />
   <g
      id="g4431"
-     transform="matrix(0.4598514,0,0,0.4598514,-17.774359,-2.6879261)">
+     transform="matrix(0.55787064,0,0,0.54301839,-27.23632,-8.0655491)">
     <path
        inkscape:connector-curvature="0"
        style="color:#000000;fill:url(#linearGradient4444);stroke:#676b6a;stroke-width:0.8774851;stroke-opacity:1"

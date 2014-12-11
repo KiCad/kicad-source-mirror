@@ -200,6 +200,7 @@ set( COMMON_SRCS
     systemdirsappend.cpp
     trigo.cpp
     utf8.cpp
+    validators.cpp
     wildcards_and_files_ext.cpp
     worksheet.cpp
     wxwineda.cpp
