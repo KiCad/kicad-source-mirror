@@ -300,6 +300,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 {
     wxString newname = chipnameTextCtrl->GetValue();
 
+    // Save current flags which could be modified by next change settings
+    STATUS_FLAGS flags = m_Cmp->GetFlags();
+
     newname.Replace( wxT( " " ), wxT( "_" ) );
 
     if( newname.IsEmpty() )
@@ -332,12 +335,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     if( m_Cmp->GetUnit() )
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
-        STATUS_FLAGS flags = m_Cmp->GetFlags();
 
         m_Cmp->SetUnitSelection( &m_Parent->GetCurrentSheet(), unit_selection );
         m_Cmp->SetUnit( unit_selection );
-        m_Cmp->ClearFlags();
-        m_Cmp->SetFlags( flags );   // Restore m_Flag modified by SetUnit()
     }
 
     switch( orientationRadioBox->GetSelection() )
@@ -374,6 +374,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
         m_Cmp->SetOrientation( CMP_MIRROR_Y );
         break;
     }
+
+    // Restore m_Flag modified by SetUnit() and other change settings
+    m_Cmp->ClearFlags();
+    m_Cmp->SetFlags( flags );
 }
 
 

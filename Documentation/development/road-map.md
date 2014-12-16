@@ -689,7 +689,7 @@ document for more information.
 - None
 
 **Progress:**
-- Under investigation.
+- Done both in Pcbnew and Gerbview.
 
 ## Net Highlighting ## {#pcb_net_highlight}
 **Goal:**
