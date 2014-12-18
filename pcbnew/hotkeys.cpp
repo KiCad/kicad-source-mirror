@@ -78,9 +78,9 @@ static EDA_HOTKEY HkSwitch2InnerLayer3( wxT( "Switch to Inner layer 3" ),
 static EDA_HOTKEY HkSwitch2InnerLayer4( wxT( "Switch to Inner layer 4" ),
                                         HK_SWITCH_LAYER_TO_INNER4, WXK_F8 );
 static EDA_HOTKEY HkSwitch2InnerLayer5( wxT( "Switch to Inner layer 5" ),
-                                        HK_SWITCH_LAYER_TO_INNER5, WXK_F9 );
+                                        HK_SWITCH_LAYER_TO_INNER5, GR_KB_SHIFT+WXK_F5 );
 static EDA_HOTKEY HkSwitch2InnerLayer6( wxT( "Switch to Inner layer 6" ),
-                                        HK_SWITCH_LAYER_TO_INNER6, WXK_F10 );
+                                        HK_SWITCH_LAYER_TO_INNER6, GR_KB_SHIFT+WXK_F6 );
 
 static EDA_HOTKEY HkSwitch2NextCopperLayer( wxT( "Switch to Next Layer" ),
                                             HK_SWITCH_LAYER_TO_NEXT, '+' );

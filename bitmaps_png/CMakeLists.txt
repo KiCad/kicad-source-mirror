@@ -168,6 +168,7 @@ set( BMAPS_MID
     browse_files
     cancel
     change_entry_orient
+    contrast_mode
     create_cmp_file
     checked_ok
     component_select_unit
