@@ -342,13 +342,15 @@ public:
      * Used in filling zones calculations
      * Circles (vias) and arcs (ends of tracks) are approximated by segments
      * @param aCornerBuffer = a buffer to store the polygon
-     * @param aClearanceValue = the clearance around the pad
-     * @param aAddClearance = true to add a clearance area to the polygon
-     *                      false to create the outline polygon.
+     * @param aMinClearanceValue = the min clearance around outlines
+     * @param aUseNetClearance = true to use a clearance which is the max value between
+     *          aMinClearanceValue and the net clearance
+     *          false to use aMinClearanceValue only
+     * if both aMinClearanceValue = 0 and aUseNetClearance = false: create the zone outline polygon.
      */
     void TransformOutlinesShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
-                                               int                    aClearanceValue,
-                                               bool                   aAddClearance );
+                                               int                    aMinClearanceValue,
+                                               bool                   aUseNetClearance );
     /**
      * Function HitTestForCorner
      * tests if the given wxPoint near a corner

@@ -48,22 +48,22 @@
   *                      false to create the outline polygon.
   */
 void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
-            CPOLYGONS_LIST& aCornerBuffer,
-            int aClearanceValue, bool aAddClearance )
+        CPOLYGONS_LIST& aCornerBuffer, int aMinClearanceValue, bool aUseNetClearance )
 {
     // Creates the zone outline polygon (with linked holes if any)
     CPOLYGONS_LIST zoneOutline;
     BuildFilledSolidAreasPolygons( NULL, &zoneOutline );
 
     // add clearance to outline
-    int clearance = 0;
+    int clearance = aMinClearanceValue;
 
-    if( aAddClearance )
+    if( aUseNetClearance )
     {
         clearance = GetClearance();
-        if( aClearanceValue > clearance )
-            clearance = aClearanceValue;
+        if( aMinClearanceValue > clearance )
+            clearance = aMinClearanceValue;
     }
+
     // Calculate the polygon with clearance
     // holes are linked to the main outline, so only one polygon is created.
     if( clearance )
