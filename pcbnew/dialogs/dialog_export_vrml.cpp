@@ -41,6 +41,7 @@
 #define OPTKEY_OUTPUT_UNIT wxT( "VrmlExportUnit" )
 #define OPTKEY_3DFILES_OPT wxT( "VrmlExportCopyFiles" )
 #define OPTKEY_USE_RELATIVE_PATHS wxT( "VrmlUseRelativePaths" )
+#define OPTKEY_USE_PLAIN_PCB wxT( "VrmlUsePlainPCB" )
 
 
 class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
@@ -48,9 +49,10 @@ class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
 private:
     PCB_EDIT_FRAME* m_parent;
     wxConfigBase*   m_config;
-    int             m_unitsOpt;          // Remember last units option
-    bool            m_copy3DFilesOpt;    // Remember last copy model files option
-    bool            m_useRelativePathsOpt;    // Remember last use absolut paths option
+    int             m_unitsOpt;             // Remember last units option
+    bool            m_copy3DFilesOpt;       // Remember last copy model files option
+    bool            m_useRelativePathsOpt;  // Remember last use absolut paths option
+    bool            m_usePlainPCBOpt;       // Remember last Plain Board option
 
 public:
     DIALOG_EXPORT_3DFILE( PCB_EDIT_FRAME* parent ) :
@@ -59,12 +61,14 @@ public:
         m_parent = parent;
         m_config = Kiface().KifaceSettings();
         m_filePicker->SetFocus();
-        m_config->Read( OPTKEY_OUTPUT_UNIT, &m_unitsOpt );
-        m_config->Read( OPTKEY_3DFILES_OPT, &m_copy3DFilesOpt );
-        m_config->Read( OPTKEY_USE_RELATIVE_PATHS, &m_useRelativePathsOpt );
+        m_config->Read( OPTKEY_OUTPUT_UNIT, &m_unitsOpt, 1 );
+        m_config->Read( OPTKEY_3DFILES_OPT, &m_copy3DFilesOpt, false );
+        m_config->Read( OPTKEY_USE_RELATIVE_PATHS, &m_useRelativePathsOpt, false );
+        m_config->Read( OPTKEY_USE_PLAIN_PCB, &m_usePlainPCBOpt, false );
         m_rbSelectUnits->SetSelection( m_unitsOpt );
         m_cbCopyFiles->SetValue( m_copy3DFilesOpt );
         m_cbUseRelativePaths->SetValue( m_useRelativePathsOpt );
+        m_cbPlainPCB->SetValue( m_usePlainPCBOpt );
         wxButton* okButton = (wxButton*) FindWindowByLabel( wxT( "OK" ) );
 
         if( okButton )
@@ -84,6 +88,7 @@ public:
         m_config->Write( OPTKEY_OUTPUT_UNIT, m_unitsOpt );
         m_config->Write( OPTKEY_3DFILES_OPT, m_copy3DFilesOpt );
         m_config->Write( OPTKEY_USE_RELATIVE_PATHS, m_useRelativePathsOpt );
+        m_config->Write( OPTKEY_USE_PLAIN_PCB, m_usePlainPCBOpt );
     };
 
     void SetSubdir( const wxString & aDir )
@@ -114,6 +119,11 @@ public:
     bool GetUseRelativePathsOption()
     {
         return m_useRelativePathsOpt = m_cbUseRelativePaths->GetValue();
+    }
+
+    bool GetUsePlainPCBOption()
+    {
+        return m_usePlainPCBOpt = m_cbPlainPCB->GetValue();
     }
 
     void OnUpdateUseRelativePath( wxUpdateUIEvent& event )
@@ -158,6 +168,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     double scale = scaleList[dlg.GetUnits()];     // final scale export
     bool export3DFiles = dlg.GetCopyFilesOption();
     bool useRelativePaths = dlg.GetUseRelativePathsOption();
+    bool usePlainPCB = dlg.GetUsePlainPCBOption();
     wxString fullFilename = dlg.FilePicker()->GetPath();
     wxFileName modelPath = fullFilename;
     wxBusyCursor dummy;
@@ -174,7 +185,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     }
 
     if( !ExportVRML_File( fullFilename, scale, export3DFiles, useRelativePaths,
-                          modelPath.GetPath() ) )
+                          usePlainPCB, modelPath.GetPath() ) )
     {
         wxString msg = _( "Unable to create " ) + fullFilename;
         wxMessageBox( msg );
