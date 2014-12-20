@@ -948,31 +948,28 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 {
-    int choiceCount = unitChoice->GetCount();
-
     // Remove non existing choices (choiceCount must be <= number for parts)
     int unitcount = m_part ? m_part->GetUnitCount() : 1;
 
     if( unitcount < 1 )
         unitcount = 1;
 
-    if( unitcount < choiceCount )
+    if( unitcount > 26 )
+        unitcount = 26;
+
+    unitChoice->Clear();
+
+    for( int ii=0;  ii < unitcount;  ii++ )
     {
-        while( unitcount < choiceCount )
-        {
-            choiceCount--;
-            unitChoice->Delete( choiceCount );
-        }
+        unitChoice->Append( wxString::Format( "%c", "?ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ ii + 1 ] ) );
     }
 
     // For components with multiple parts per package, set the unit selection
-    choiceCount = unitChoice->GetCount();
-
-    if( m_Cmp->GetUnit() <= choiceCount )
+    if( m_Cmp->GetUnit() <= unitChoice->GetCount() )
         unitChoice->SetSelection( m_Cmp->GetUnit() - 1 );
 
     // Disable unit selection if only one unit exists:
-    if( choiceCount <= 1 )
+    if( m_Cmp->GetUnit() <= 1 )
     {
         unitChoice->Enable( false );
         unitsInterchageableLabel->Show( false );
@@ -982,13 +979,12 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     {
         // Show the "Units are not interchangeable" message option?
         if( !m_part || !m_part->UnitsLocked() )
-            unitsInterchageableLabel->SetLabel( _("Yes") );
+            unitsInterchageableLabel->SetLabel( _( "Yes" ) );
         else
-            unitsInterchageableLabel->SetLabel( _("No") );
+            unitsInterchageableLabel->SetLabel( _( "No" ) );
     }
 
-    int orientation = m_Cmp->GetOrientation()
-        & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
+    int orientation = m_Cmp->GetOrientation() & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
 
     if( orientation == CMP_ORIENT_90 )
         orientationRadioBox->SetSelection( 1 );
@@ -1026,7 +1022,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     chipnameTextCtrl->SetValue( m_Cmp->m_part_name );
 
     // Set the component's unique ID time stamp.
-    m_textCtrlTimeStamp->SetValue( wxString::Format( wxT("%8.8lX"),
+    m_textCtrlTimeStamp->SetValue( wxString::Format( wxT( "%8.8lX" ),
                                    (unsigned long) m_Cmp->GetTimeStamp() ) );
 }
 
