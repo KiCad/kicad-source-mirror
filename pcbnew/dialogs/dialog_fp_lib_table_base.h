@@ -47,6 +47,7 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		wxPanel* m_project_panel;
 		wxGrid* m_project_grid;
 		wxButton* m_append_button;
+		wxButton* m_buttonWizard;
 		wxButton* m_delete_button;
 		wxButton* m_move_up_button;
 		wxButton* m_move_down_button;
@@ -61,6 +62,7 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		virtual void onKeyDown( wxKeyEvent& event ) = 0;
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) = 0;
 		virtual void appendRowHandler( wxMouseEvent& event ) = 0;
+		virtual void OnClickLibraryWizard( wxCommandEvent& event ) = 0;
 		virtual void deleteRowHandler( wxMouseEvent& event ) = 0;
 		virtual void moveUpHandler( wxMouseEvent& event ) = 0;
 		virtual void moveDownHandler( wxMouseEvent& event ) = 0;

@@ -36,6 +36,21 @@ option( KICAD_KEEPCASE
     ON
     )
 
+# The footprint library wizard uses wxWEBVIEW, which needs a system webkit to be built
+# The default build option in wxWidgets is to build wxWEBVIEW, but it colud be not built
+# if web kit devel tools are missing
+# So this option disable use of wxWEBVIEW, if building wxWEBVIEW creates issues
+# see:
+# http://docs.wxwidgets.org/3.0/classwx_web_view.html
+# No issues on Windows, needs webkitgtk-devel package installed on Linux.
+# (I don't know the OSX status)
+# However the default option is on
+# This option could be removed soon, if no serious issue happens on Linux or OSX
+option( KICAD_USE_WEBKIT
+    "Use system web kit to build a web viewer in footprint library wizard to easily select github libraries (default ON)."
+    ON
+    )
+
 option( USE_WX_GRAPHICS_CONTEXT
     "Use wxGraphicsContext for rendering (default OFF).  Warning, this is experimental" )
 
@@ -403,7 +418,13 @@ add_definitions( -DWX_COMPATIBILITY )
 # See line 41 of CMakeModules/FindwxWidgets.cmake
 set( wxWidgets_CONFIG_OPTIONS --static=no )
 
-find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml REQUIRED )
+if( KICAD_USE_WEBKIT )
+    set( webkitlib "webview" )
+else()
+    set( webkitlib "" )
+endif()
+
+find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml ${webkitlib} stc REQUIRED )
 
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
@@ -684,6 +705,9 @@ add_subdirectory( cvpcb )
 add_subdirectory( eeschema )
 add_subdirectory( gerbview )
 add_subdirectory( lib_dxf )
+if( KICAD_USE_WEBKIT )
+    add_subdirectory( webviewer )
+endif()
 add_subdirectory( pcbnew )
 add_subdirectory( polygon )
 add_subdirectory( pagelayout_editor )
