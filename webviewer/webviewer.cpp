@@ -739,7 +739,7 @@ void WEB_NAVIGATOR::OnFindText( wxCommandEvent& evt )
     // On windows, for an unknwon reason (bug ?) some texts in some
     // html pages hang the search.
     // Waiting for 2 chars before starting a search reduces the risk
-    // (but the hang still exists)
+    // (but the risk still exists)
 #ifdef __WINDOWS__
     #define MIN_CHAR_CNT 2
     if( find_text.Length() >= MIN_CHAR_CNT )
@@ -747,6 +747,7 @@ void WEB_NAVIGATOR::OnFindText( wxCommandEvent& evt )
     else // Reset search
         m_browser->Find( wxEmptyString, flags );
 #else
+    #define MIN_CHAR_CNT 1
     count = m_browser->Find( find_text, flags );
 #endif
 
