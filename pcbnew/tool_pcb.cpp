@@ -390,7 +390,7 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
                                wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, wxEmptyString,
-                               KiBitmap( palette_xpm ),
+                               KiBitmap( contrast_mode_xpm ),
                                _( "Enable high contrast display mode" ),
                                wxITEM_CHECK );
 

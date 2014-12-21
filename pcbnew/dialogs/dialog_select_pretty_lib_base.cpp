@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -27,12 +27,17 @@ DIALOG_SELECT_PRETTY_LIB_BASE::DIALOG_SELECT_PRETTY_LIB_BASE( wxWindow* parent, 
 	m_dirCtrl->ShowHidden( false );
 	bSizerMain->Add( m_dirCtrl, 1, wxEXPAND | wxALL, 5 );
 	
+	m_SizerNewLibName = new wxBoxSizer( wxVERTICAL );
+	
 	m_staticTextDirname = new wxStaticText( this, wxID_ANY, _("Library (.pretty folder)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDirname->Wrap( -1 );
-	bSizerMain->Add( m_staticTextDirname, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_SizerNewLibName->Add( m_staticTextDirname, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_libName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerMain->Add( m_libName, 0, wxALL|wxEXPAND, 5 );
+	m_SizerNewLibName->Add( m_libName, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	bSizerMain->Add( m_SizerNewLibName, 0, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMain->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );

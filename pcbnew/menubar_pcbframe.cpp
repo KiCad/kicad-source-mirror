@@ -123,12 +123,12 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( filesMenu, ID_MENU_READ_BOARD_BACKUP_FILE,
                  _( "Revert to Last" ),
                  _( "Clear board and get previous backup version of board" ),
-                 KiBitmap( help_xpm ) );
+                 KiBitmap( revert_pcbnew_xpm ) );
 
     AddMenuItem( filesMenu, ID_MENU_RECOVER_BOARD_AUTOSAVE,
             _( "Rescue" ),
             _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
-            KiBitmap( help_xpm ) );
+            KiBitmap( rescue_pcbnew_xpm ) );
     filesMenu->AppendSeparator();
 
     //----- Fabrication Outputs submenu -----------------------------------------

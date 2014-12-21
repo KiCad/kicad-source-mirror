@@ -536,7 +536,7 @@ Add features such as matched length and microwave tools to the P&S router.
 - None
 
 **Status:**
-- No progress.
+- Match trace length work in progress.
 
 ## Layer Improvements ## {#pcb_layers}
 **Goal:**
@@ -553,7 +553,7 @@ Increase the number of usable technical and user defined layers in Pcbnew.
 - None
 
 **Status:**
-- No progress.
+- Work complete on 32 copper and 32 technical layers is complete.
 
 ## Pin and Part Swapping ## {#pcb_drc}
 **Goal:**
@@ -620,6 +620,7 @@ Create additional DRC tests for improved error checking.
 - Remove floating point code from clearance calculations to prevent rounding
   errors.
 - Add checks for component, silk screen, and mask clearances.
+- Add checks for keep out zones.
 - Remove DRC related limitations such as no arc or text on copper layers.
 - Add option for saving and loading DRC options.
 
@@ -655,6 +656,23 @@ GAL rendering.
 **Progress:**
 - Initial discussion.
 
+## Keepout Zones. ## {#keepout_zones}
+**Goal:**
+
+Add support for keepout zones on boards and footprints.
+
+**Task:**
+- Add keepout support to zone classes.
+- Add keepout zone support to board editor.
+- Add keepout zone support to library editor.
+
+**Dependencies:**
+- [DRC Improvements.](#drc_improvements)
+
+**Progress:**
+- Planning
+
+
 ## Gerber File Attributes ## {#gerber_attributes}
 **Goal:**
 
@@ -671,7 +689,7 @@ document for more information.
 - None
 
 **Progress:**
-- Under investigation.
+- Done both in Pcbnew and Gerbview.
 
 ## Net Highlighting ## {#pcb_net_highlight}
 **Goal:**

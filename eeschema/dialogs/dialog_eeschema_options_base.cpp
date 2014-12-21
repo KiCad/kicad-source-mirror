@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -15,6 +15,9 @@ BEGIN_EVENT_TABLE( DIALOG_EESCHEMA_OPTIONS_BASE, DIALOG_SHIM )
 	EVT_CHECKBOX( xwID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnMiddleBtnPanEnbl )
 	EVT_LIST_ITEM_DESELECTED( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnTemplateFieldDeselected )
 	EVT_LIST_ITEM_SELECTED( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnTemplateFieldSelected )
+	EVT_TEXT_ENTER( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnEnterKey )
+	EVT_TEXT_ENTER( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnEnterKey )
+	EVT_CHECKBOX( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnVisibleFieldClick )
 	EVT_BUTTON( wxID_ADD_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnAddButtonClick )
 	EVT_BUTTON( wxID_DELETE_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnDeleteButtonClick )
 END_EVENT_TABLE()
@@ -29,10 +32,10 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bOptionsSizer;
 	bOptionsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_notebook1 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_notebook1->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_notebook->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	
-	m_panel1 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panel1 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* p1mainSizer;
 	p1mainSizer = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -213,14 +216,14 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel1->SetSizer( p1mainSizer );
 	m_panel1->Layout();
 	p1mainSizer->Fit( m_panel1 );
-	m_notebook1->AddPage( m_panel1, _("General Options"), false );
-	m_panel2 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_notebook->AddPage( m_panel1, _("General Options"), false );
+	m_panel2 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panel2->SetToolTip( _("User defined field names for schematic components. ") );
 	
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 	
-	templateFieldListCtrl = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
+	templateFieldListCtrl = new wxListView( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
 	templateFieldListCtrl->SetMinSize( wxSize( 500,-1 ) );
 	
 	bSizer6->Add( templateFieldListCtrl, 1, wxALIGN_TOP|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
@@ -232,14 +235,14 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fieldNameLabel->Wrap( -1 );
 	fieldSizer->Add( fieldNameLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	fieldNameTextCtrl = new wxTextCtrl( fieldSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fieldNameTextCtrl = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	fieldSizer->Add( fieldNameTextCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	fieldDefaultValueLabel = new wxStaticText( fieldSizer->GetStaticBox(), wxID_ANY, _("Default Value"), wxDefaultPosition, wxDefaultSize, 0 );
 	fieldDefaultValueLabel->Wrap( -1 );
 	fieldSizer->Add( fieldDefaultValueLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	fieldDefaultValueTextCtrl = new wxTextCtrl( fieldSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fieldDefaultValueTextCtrl = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	fieldSizer->Add( fieldDefaultValueTextCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	fieldVisibleCheckbox = new wxCheckBox( fieldSizer->GetStaticBox(), wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -258,18 +261,18 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook1->AddPage( m_panel2, _("Template Field Names"), false );
+	m_notebook->AddPage( m_panel2, _("Template Field Names"), true );
 	
-	bOptionsSizer->Add( m_notebook1, 1, wxALL|wxEXPAND, 5 );
+	bOptionsSizer->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
 	
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
 	
-	bOptionsSizer->Add( m_sdbSizer1, 0, wxALIGN_BOTTOM|wxALL|wxEXPAND, 6 );
+	bOptionsSizer->Add( m_sdbSizer, 0, wxALIGN_BOTTOM|wxALL|wxEXPAND, 6 );
 	
 	
 	mainSizer->Add( bOptionsSizer, 1, wxEXPAND, 12 );

@@ -1402,19 +1402,30 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
         break;
     }
 
-    if( event.ControlDown() )
-        localkey |= GR_KB_CTRL;
-    if( event.AltDown() )
-        localkey |= GR_KB_ALT;
-    if( event.ShiftDown() && (event.GetKeyCode() > 256) )
-        localkey |= GR_KB_SHIFT;
-
     /* Normalize keys code to easily handle keys from Ctrl+A to Ctrl+Z
      * They have an ascii code from 1 to 27 remapped
      * to GR_KB_CTRL + 'A' to GR_KB_CTRL + 'Z'
      */
-    if( (localkey > GR_KB_CTRL) && (localkey <= GR_KB_CTRL+26) )
+    if( event.ControlDown() && localkey >= WXK_CONTROL_A && localkey <= WXK_CONTROL_Z )
         localkey += 'A' - 1;
+
+    /* Disallow shift for keys that have two keycodes on them (e.g. number and
+     * punctuation keys) leaving only the "letter keys" of A-Z.
+     * Then, you can have, e.g. Ctrl-5 and Ctrl-% (GB layout)
+     * and Ctrl-( and Ctrl-5 (FR layout).
+     * Otherwise, you'd have to have to say Ctrl-Shift-5 on a FR layout
+     */
+    bool keyIsLetter = ( localkey >= 'A' && localkey <= 'Z' ) ||
+                       ( localkey >= 'a' && localkey <= 'z' );
+
+    if( event.ShiftDown() && ( keyIsLetter || localkey > 256 ) )
+        localkey |= GR_KB_SHIFT;
+
+    if( event.ControlDown() )
+        localkey |= GR_KB_CTRL;
+
+    if( event.AltDown() )
+        localkey |= GR_KB_ALT;
 
     INSTALL_UNBUFFERED_DC( DC, this );
 

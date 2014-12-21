@@ -39,7 +39,8 @@
 class DIALOG_SELECT_PRETTY_LIB : public DIALOG_SELECT_PRETTY_LIB_BASE
 {
 public:
-    DIALOG_SELECT_PRETTY_LIB( wxWindow* parent );
+    DIALOG_SELECT_PRETTY_LIB( wxWindow* parent,
+                              const wxString& aDefaultPath );
     ~DIALOG_SELECT_PRETTY_LIB() {};
 
     const wxString GetPath() { return m_libName->GetValue(); }

@@ -230,8 +230,12 @@ void FP_CACHE::Save()
         if( fn.FileExists() && !it->second->IsModified() )
             continue;
 
-        wxString tempFileName = fn.CreateTempFileName( fn.GetPath() );
-
+        wxString tempFileName =
+#ifdef USE_TMP_FILE
+        fn.CreateTempFileName( fn.GetPath() );
+#else
+        fn.GetFullPath();
+#endif
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
@@ -244,6 +248,7 @@ void FP_CACHE::Save()
             m_owner->Format( (BOARD_ITEM*) it->second->GetModule() );
         }
 
+#ifdef USE_TMP_FILE
         wxRemove( fn.GetFullPath() );     // it is not an error if this does not exist
 
         // Even on linux you can see an _intermittent_ error when calling wxRename(),
@@ -259,7 +264,7 @@ void FP_CACHE::Save()
                     );
             THROW_IO_ERROR( msg );
         }
-
+#endif
         it->second->UpdateModificationTime();
         m_mod_time = GetLibModificationTime();
     }

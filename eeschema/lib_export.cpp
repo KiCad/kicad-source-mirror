@@ -146,6 +146,24 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
         return;
     }
 
+    try
+    {
+        wxFileName              docFileName = fn;
+
+        docFileName.SetExt( DOC_EXT );
+
+        FILE_OUTPUTFORMATTER    formatter( docFileName.GetFullPath() );
+
+        result = temp_lib.get()->SaveDocs( formatter );
+    }
+    catch( ... /* IO_ERROR ioe */ )
+    {
+        fn.MakeAbsolute();
+        msg = wxT( "Failed to create component library document file " ) + fn.GetFullPath();
+        DisplayError( this, msg );
+        return;
+    }
+
     if( result )
         m_lastLibExportPath = fn.GetPath();
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class wxListView;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -52,6 +53,8 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		void _wxFB_OnMiddleBtnPanEnbl( wxCommandEvent& event ){ OnMiddleBtnPanEnbl( event ); }
 		void _wxFB_OnTemplateFieldDeselected( wxListEvent& event ){ OnTemplateFieldDeselected( event ); }
 		void _wxFB_OnTemplateFieldSelected( wxListEvent& event ){ OnTemplateFieldSelected( event ); }
+		void _wxFB_OnEnterKey( wxCommandEvent& event ){ OnEnterKey( event ); }
+		void _wxFB_OnVisibleFieldClick( wxCommandEvent& event ){ OnVisibleFieldClick( event ); }
 		void _wxFB_OnAddButtonClick( wxCommandEvent& event ){ OnAddButtonClick( event ); }
 		void _wxFB_OnDeleteButtonClick( wxCommandEvent& event ){ OnDeleteButtonClick( event ); }
 		
@@ -65,7 +68,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 			wxID_DELETE_FIELD
 		};
 		
-		wxNotebook* m_notebook1;
+		wxNotebook* m_notebook;
 		wxPanel* m_panel1;
 		wxStaticText* m_staticText2;
 		wxChoice* m_choiceUnits;
@@ -105,7 +108,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkHVOrientation;
 		wxCheckBox* m_checkPageLimits;
 		wxPanel* m_panel2;
-		wxListCtrl* templateFieldListCtrl;
+		wxListView* templateFieldListCtrl;
 		wxStaticText* fieldNameLabel;
 		wxTextCtrl* fieldNameTextCtrl;
 		wxStaticText* fieldDefaultValueLabel;
@@ -113,9 +116,9 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* fieldVisibleCheckbox;
 		wxButton* addFieldButton;
 		wxButton* deleteFieldButton;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
@@ -123,6 +126,8 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		virtual void OnMiddleBtnPanEnbl( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTemplateFieldDeselected( wxListEvent& event ) { event.Skip(); }
 		virtual void OnTemplateFieldSelected( wxListEvent& event ) { event.Skip(); }
+		virtual void OnEnterKey( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnVisibleFieldClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		

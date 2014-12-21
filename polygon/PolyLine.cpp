@@ -1501,7 +1501,7 @@ void ConvertPolysListWithHolesToOnePolygon( const CPOLYGONS_LIST& aPolysListWith
     // If polycount<= 1, there is no holes found, and therefore just copy the polygon.
     if( polycount <= 1 )
     {
-        aOnePolyList = aPolysListWithHoles;
+        aOnePolyList.Append( aPolysListWithHoles );
         return;
     }
 

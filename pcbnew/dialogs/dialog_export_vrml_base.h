@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Aug 17 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -50,6 +50,7 @@ class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_SubdirNameCtrl;
 		wxCheckBox* m_cbCopyFiles;
 		wxCheckBox* m_cbUseRelativePaths;
+		wxCheckBox* m_cbPlainPCB;
 		wxRadioBox* m_rbSelectUnits;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;

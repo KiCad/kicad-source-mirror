@@ -376,7 +376,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         if( zone->GetIsKeepout() && ! zone->GetDoNotAllowCopperPour() )
             continue;
 
-        // A highter priority zone or keepout area is found: remove its area
+        // A highter priority zone or keepout area is found: remove this area
         item_boundingbox = zone->GetBoundingBox();
         if( !item_boundingbox.Intersects( zone_boundingbox ) )
             continue;
@@ -386,18 +386,21 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         // do not add clearance.
         // the zone will be connected to the current zone, but filled areas
         // will use different parameters (clearance, thermal shapes )
-        bool addclearance = GetNetCode() != zone->GetNetCode();
-        int clearance = zone_clearance;
+        bool same_net = GetNetCode() == zone->GetNetCode();
+        int min_clearance = zone_clearance;
+        bool use_net_clearance = true;
 
-        if( zone->GetIsKeepout() )
+        if( zone->GetIsKeepout() || same_net )
         {
-            addclearance = true;
-            clearance = m_ZoneMinThickness / 2;
+            // Just take in account the fact the outline has a thickness, so
+            // the actual area to substract is inflated to take in account this fact
+            min_clearance = m_ZoneMinThickness / 2;
+            use_net_clearance = false;
         }
 
         zone->TransformOutlinesShapeWithClearanceToPolygon(
                     cornerBufferPolysToSubstract,
-                    clearance, addclearance );
+                    min_clearance, use_net_clearance );
     }
 
    // Remove thermal symbols
