@@ -60,7 +60,7 @@
 #if wxUSE_STC
 #include "wx/stc/stc.h"
 #else
-#error "wxStyledTextControl is needed by this sample"
+#error "wxStyledTextControl is needed by the web viewer"
 #endif
 
 #include <dialog_shim.h>
@@ -227,8 +227,6 @@ WEB_NAVIGATOR::WEB_NAVIGATOR( wxWindow* aParent,
     SetMinSize( wxSize( 700, 500 ) );
 
     GetSizer()->Fit( this );
-
-    SetSize( wxSize( 800, 600 ) );
     Centre();
 }
 
@@ -268,11 +266,12 @@ void WEB_NAVIGATOR::InitNavigator( const wxString& aUrlOnStart )
     m_info = new wxInfoBar( this );
     topsizer->Add( m_info, wxSizerFlags().Expand() );
 
-    // Create the webview
-    if( aUrlOnStart.IsEmpty() )
-        m_browser = wxWebView::New( this, wxID_ANY );
+    // Create the webview engine
+    if( aUrlOnStart.IsEmpty() )     // Start on a blank page:
+        m_browser = wxWebView::New( this, wxID_ANY, wxT( "about:blank")  );
     else
-        m_browser = wxWebView::New( this, wxID_ANY, aUrlOnStart );
+        m_browser = wxWebView::New( this, wxID_ANY, aUrlOnStart,
+                                    wxDefaultPosition, wxSize( 900, 600 ) );
 
     m_browser->EnableHistory( true );
 
