@@ -27,7 +27,6 @@
  */
 
 #include <fctsys.h>
-//#include <pgm_base.h>
 #include <kiface_i.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -45,7 +44,6 @@
 #endif
 
 
-#define FREEROUTE_URL_KEY wxT( "freeroute_url" )
 #define FREEROUTE_RUN_KEY wxT( "freeroute_command" )
 
 
@@ -63,7 +61,7 @@ DIALOG_FREEROUTE::DIALOG_FREEROUTE( PCB_EDIT_FRAME* parent ):
     m_Parent = parent;
     MyInit();
 
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Centre();
 }
@@ -76,27 +74,25 @@ DIALOG_FREEROUTE::DIALOG_FREEROUTE( PCB_EDIT_FRAME* parent ):
 void DIALOG_FREEROUTE::MyInit()
 {
     SetFocus();
-    m_FreeRouteSetupChanged = false;
-    m_freeRouterIsLocal = false;
+    m_freeRouterFound = false;
 
-    wxString msg;
-
+/*    wxString msg;
     wxConfigBase* cfg = Kiface().KifaceSettings();
-
-    cfg->Read( FREEROUTE_URL_KEY, &msg );
-
-    if( msg.IsEmpty() )
-        m_FreerouteURLName->SetValue( wxT( "http://www.freerouting.net/" ) );
-    else
-        m_FreerouteURLName->SetValue( msg );
-
+    cfg->Read( FREEROUTE_RUN_KEY, &msg );
+*/
     wxFileName fileName( FindKicadFile( wxT( "freeroute.jar" ) ), wxPATH_UNIX );
 
     if( fileName.FileExists() )
     {
-        m_freeRouterIsLocal = true;
+        m_freeRouterFound = true;
         m_buttonLaunchFreeroute->SetLabel( _("Create .dsn File and Launch FreeRouter") );
     }
+
+    else
+        m_buttonLaunchFreeroute->SetLabel( _("Create .dsn File") );
+
+    m_buttonLaunchFreeroute->Enable( m_freeRouterFound );
+
 }
 
 const char * s_FreeRouteHelpInfo =
@@ -138,144 +134,95 @@ void DIALOG_FREEROUTE::OnImportButtonClick( wxCommandEvent& event )
  */
 void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
 {
-    wxString javaCommand;
-    wxString command;
+    wxString dsnFile;
 
-    if( m_freeRouterIsLocal )
+    if( m_freeRouterFound )
     {
-        javaCommand = CmdRunFreeRouterLocal();
+        dsnFile = createDSN_File();
 
-        if( javaCommand.IsEmpty() )     // Something is wrong
+        if( dsnFile.IsEmpty() )     // Something is wrong or command cancelled
             return;
     }
-    else
-        javaCommand = wxT( "javaws" );
 
-    wxString url;
-    wxFileName fileName( FindKicadFile( wxT( "freeroute.jnlp" ) ), wxPATH_UNIX );
+    wxFileName jarfileName( FindKicadFile( wxT( "freeroute.jar" ) ), wxPATH_UNIX );
+    wxString command;
 
-    if( m_freeRouterIsLocal || fileName.FileExists() )
-    {
-
-        // Find the Java web start application on Windows.
+    // Find the Java application on Windows.
+    // Colud be no more needed since we now have to run only java, not java web start
 #ifdef __WINDOWS__
-#if wxCHECK_VERSION( 2, 9, 0  )
 
-        // If you thought the registry was brain dead before, now you have to deal with
-        // accessing it in either 64 or 32 bit mode depending on the build version of
-        // Windows and the build version of KiCad.
+    // If you thought the registry was brain dead before, now you have to deal with
+    // accessing it in either 64 or 32 bit mode depending on the build version of
+    // Windows and the build version of KiCad.
 
-        // This key works for 32 bit Java on 32 bit Windows and 64 bit Java on 64 bit Windows.
-        wxString keyName = m_freeRouterIsLocal ? wxT( "SOFTWARE\\JavaSoft\\Java Runtime Environment" )
-                                               : wxT( "SOFTWARE\\JavaSoft\\Java Web Start" );
-        wxRegKey key( wxRegKey::HKLM, keyName,
-                      wxIsPlatform64Bit() ? wxRegKey::WOW64ViewMode_64 :
-                      wxRegKey::WOW64ViewMode_Default );
+    // This key works for 32 bit Java on 32 bit Windows and 64 bit Java on 64 bit Windows.
+    wxString keyName = wxT( "SOFTWARE\\JavaSoft\\Java Runtime Environment" );
+    wxRegKey key( wxRegKey::HKLM, keyName,
+                  wxIsPlatform64Bit() ? wxRegKey::WOW64ViewMode_64 :
+                  wxRegKey::WOW64ViewMode_Default );
 
-        // It's possible that 32 bit Java is installed on 64 bit Windows.
-        if( !key.Exists() && wxIsPlatform64Bit() )
-        {
-            keyName = m_freeRouterIsLocal ?
-                      wxT( "SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment" )
-                      : wxT( "SOFTWARE\\Wow6432Node\\JavaSoft\\Java Web Start" );
-            key.SetName( wxRegKey::HKLM, keyName );
-        }
+    // It's possible that 32 bit Java is installed on 64 bit Windows.
+    if( !key.Exists() && wxIsPlatform64Bit() )
+    {
+        keyName = wxT( "SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment" );
+        key.SetName( wxRegKey::HKLM, keyName );
+    }
 
-        if( !key.Exists() )
-        {
-            ::wxMessageBox( _( "It appears that the Java run time environment is not "
-                               "installed on this computer.  Java is required to use "
-                               "FreeRoute." ),
-                            _( "Pcbnew Error" ), wxOK | wxICON_ERROR );
-            return;
-        }
-
-        key.Open( wxRegKey::Read );
-
-        // Get the current version of java installed to determine the executable path.
-        wxString value;
-        key.QueryValue( wxT( "CurrentVersion" ), value );
-        key.SetName( key.GetName() + wxT( "\\" ) + value );
-
-        key.QueryValue( m_freeRouterIsLocal ? wxT( "JavaHome" ) : wxT( "Home" ), value );
-        wxString javaCommandPath = value + wxFileName::GetPathSeparator();
-        command = javaCommandPath;
-#else
-    #warning Kicad needs wxWidgets >= 2.9.4. version 2.8 is only supported for testing purposes
-#endif  // wxCHECK_VERSION( 2, 9, 0  )
-
-        if( m_freeRouterIsLocal )
-            command << wxT("bin\\") << javaCommand;
-#else   //  __WINDOWS__
-
-        if( m_freeRouterIsLocal )
-            command << javaCommand;
-#endif
-        else
-            // Wrap FullFileName in double quotes in case it has C:\Program Files in it.
-            // The space is interpreted as an argument separator.
-            command << javaCommand << wxChar( ' ' ) << wxChar( '"' )
-                    << fileName.GetFullPath() << wxChar( '"' );
-
-        ProcessExecute( command );
+    if( !key.Exists() )
+    {
+        ::wxMessageBox( _( "It appears that the Java run time environment is not "
+                           "installed on this computer.  Java is required to use "
+                           "FreeRoute." ),
+                        _( "Pcbnew Error" ), wxOK | wxICON_ERROR );
         return;
     }
 
-    url = m_FreerouteURLName->GetValue() + wxT( "/java/freeroute.jnlp" );
+    key.Open( wxRegKey::Read );
 
-    wxLaunchDefaultBrowser( url );
-}
+    // Get the current version of java installed to determine the executable path.
+    wxString value;
+    key.QueryValue( wxT( "CurrentVersion" ), value );
+    key.SetName( key.GetName() + wxT( "\\" ) + value );
 
-wxString DIALOG_FREEROUTE::CmdRunFreeRouterLocal()
-{
-    wxString fullFileName = m_Parent->GetBoard()->GetFileName();
-    wxString path;
-    wxString name;
-    wxString ext;
-    wxString dsn_ext = wxT( ".dsn" );
-    wxString mask    = wxT( "*" ) + dsn_ext;
+    key.QueryValue( wxT( "JavaHome" ), value );
+    command = value + wxFileName::GetPathSeparator();
+    command << wxT("bin\\java");
+#else   //  __WINDOWS__
+        command = wxT( "java" );;
+#endif
 
-    wxFileName::SplitPath( fullFileName, &path, &name, &ext );
-
-    name += dsn_ext;
-
-    fullFileName = EDA_FileSelector( _( "Specctra DSN file:" ),
-                                     path,
-                                     name,      // name.ext without path!
-                                     dsn_ext,
-                                     mask,
-                                     this,
-                                     wxFD_SAVE,
-                                     false
-                                     );
-
-    if( fullFileName == wxEmptyString )
-        return fullFileName;
-
-    if( ! m_Parent->ExportSpecctraFile( fullFileName ) ) // the file was not created
-        return fullFileName;
-
-    wxFileName jarfileName( FindKicadFile( wxT( "freeroute.jar" ) ), wxPATH_UNIX );
-
-    wxString command = wxT("java -jar ");
+    command << wxT(" -jar ");
     // add "freeroute.jar" to command line:
     command << wxChar( '"' ) << jarfileName.GetFullPath() << wxChar( '"' );
     // add option to load the .dsn file
     command << wxT( " -de " );
     // add *.dsn full filename (quoted):
-    command << wxChar( '"' ) << fullFileName << wxChar( '"' );
+    command << wxChar( '"' ) << dsnFile << wxChar( '"' );
 
-    return command;
+    ProcessExecute( command );
 }
 
-/* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
- */
-void DIALOG_FREEROUTE::OnVisitButtonClick( wxCommandEvent& event )
+const wxString DIALOG_FREEROUTE::createDSN_File()
 {
-    wxString command = m_FreerouteURLName->GetValue();
+    wxFileName fn( m_Parent->GetBoard()->GetFileName() );
+    wxString dsn_ext = wxT( "dsn" );
+    fn.SetExt( dsn_ext );
+    wxString mask    = wxT( "*." ) + dsn_ext;
 
-    wxLaunchDefaultBrowser( command );
+    wxString fullFileName = EDA_FileSelector( _( "Specctra DSN file:" ),
+                                     fn.GetPath(), fn.GetFullName(),
+                                     dsn_ext, mask,
+                                     this, wxFD_SAVE, false );
+
+    if( !fullFileName.IsEmpty() )
+    {
+        if( ! m_Parent->ExportSpecctraFile( fullFileName ) ) // the file was not created
+            return wxEmptyString;
+    }
+
+    return fullFileName;
 }
+
 
 
 /*  wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
@@ -288,19 +235,6 @@ void DIALOG_FREEROUTE::OnCancelButtonClick( wxCommandEvent& event )
 
 void DIALOG_FREEROUTE::OnOKButtonClick( wxCommandEvent& event )
 {
-    if( m_FreeRouteSetupChanged )  // Save new config
-    {
-        Kiface().KifaceSettings()->Write(
-            FREEROUTE_URL_KEY, m_FreerouteURLName->GetValue() );
-    }
-
     EndModal(wxID_OK);
 }
 
-
-/* wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXT_EDIT_FR_URL
- */
-void DIALOG_FREEROUTE::OnTextEditFrUrlUpdated( wxCommandEvent& event )
-{
-    m_FreeRouteSetupChanged = true;
-}
