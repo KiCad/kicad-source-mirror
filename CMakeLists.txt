@@ -803,10 +803,6 @@ install( FILES INSTALL.txt
     DESTINATION ${KICAD_DOCS}
     COMPONENT resources )
 
-install( FILES resources/freeroute.jnlp
-    DESTINATION ${KICAD_BIN}
-    COMPONENT resources )
-
 ###
 # Install scripts
 ###
