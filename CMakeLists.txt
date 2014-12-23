@@ -42,8 +42,9 @@ option( KICAD_KEEPCASE
 # So this option disable use of wxWEBVIEW, if building wxWEBVIEW creates issues
 # see:
 # http://docs.wxwidgets.org/3.0/classwx_web_view.html
-# No issues on Windows, needs webkitgtk-devel package installed on Linux.
-# (I don't know the OSX status)
+# * No issues on Windows.
+# * needs webkitgtk-devel package installed on Linux, and wxWidgets rebuilt with this package.
+# * Seems also OK on OSX.
 # However the default option is on
 # This option could be removed soon, if no serious issue happens on Linux or OSX
 option( KICAD_USE_WEBKIT

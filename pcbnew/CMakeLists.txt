@@ -370,8 +370,8 @@ if( UNIX AND NOT APPLE )
     list( APPEND PCBNEW_EXTRA_LIBS rt )
 endif()
 
-if( KICAD_USE_WEBKIT )
-    set( WEBVIEWERTOOL "webviewer" )
+if( KICAD_USE_WEBKIT AND BUILD_GITHUB_PLUGIN )
+    set( WEBVIEWER_WXLIB "webviewer" )
     add_definitions( -DKICAD_USE_WEBKIT )
 endif()
 
@@ -402,7 +402,7 @@ if( KICAD_SCRIPTING_MODULES )
         idf3
         ${GITHUB_PLUGIN_LIBRARIES}
         polygon
-        ${WEBVIEWERTOOL}
+        ${WEBVIEWER_WXLIB}
         bitmaps
         gal
         ${GLEW_LIBRARIES}
@@ -569,7 +569,7 @@ target_link_libraries( pcbnew_kiface
     common
     pcad2kicadpcb
     polygon
-    ${WEBVIEWERTOOL}    # before bitmaps, because it uses some bitmaps defined in bitmap
+    ${WEBVIEWER_WXLIB}    # before bitmaps, because it uses some bitmaps defined in bitmap
     bitmaps
     gal
     lib_dxf

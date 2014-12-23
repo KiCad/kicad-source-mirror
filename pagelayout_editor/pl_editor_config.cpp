@@ -38,7 +38,6 @@
 #include <dialog_hotkeys_editor.h>
 #include <pl_editor_id.h>
 
-
 #define GROUP wxT("/pl_editor")
 
 
