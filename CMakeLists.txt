@@ -36,17 +36,17 @@ option( KICAD_KEEPCASE
     ON
     )
 
-# The footprint library wizard uses wxWEBVIEW, which needs a system webkit to be built
-# The default build option in wxWidgets is to build wxWEBVIEW, but it colud be not built
+# The footprint library wizard uses wxWebview, which needs a system webkit to be built
+# The default build option in wxWidgets is to build wxWebview, but it could be not built
 # if web kit devel tools are missing
-# So this option disable use of wxWEBVIEW, if building wxWEBVIEW creates issues
+# So this option disable use of wxWebview, if building wxWebview creates issues
 # see:
 # http://docs.wxwidgets.org/3.0/classwx_web_view.html
 # * No issues on Windows.
 # * needs webkitgtk-devel package installed on Linux, and wxWidgets rebuilt with this package.
 # * Seems also OK on OSX.
-# However the default option is on
-# This option could be removed soon, if no serious issue happens on Linux or OSX
+# However the default option is on and has effect only if BUILD_GITHUB_PLUGIN is ON
+# This option could be removed soon, if no serious issue happens on Linux
 option( KICAD_USE_WEBKIT
     "Use system web kit to build a web viewer in footprint library wizard to easily select github libraries (default ON)."
     ON
@@ -419,7 +419,7 @@ add_definitions( -DWX_COMPATIBILITY )
 # See line 41 of CMakeModules/FindwxWidgets.cmake
 set( wxWidgets_CONFIG_OPTIONS --static=no )
 
-if( KICAD_USE_WEBKIT )
+if( KICAD_USE_WEBKIT AND BUILD_GITHUB_PLUGIN )
     set( webkitlib "webview" )
 else()
     set( webkitlib "" )
