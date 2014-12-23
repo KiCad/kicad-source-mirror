@@ -72,6 +72,14 @@ WIZARD_FPLIB_TABLE::WIZARD_FPLIB_TABLE( wxWindow* aParent, wxArrayString& aEnvVa
 {
     initDlg( aEnvVariableList );
 
+    // Allows github plugin selection only when the plugin is compiled:
+#ifndef BUILD_GITHUB_PLUGIN
+    m_rbFpLibFormat->Enable( GITHUB_PLUGIN, false );
+
+    if( m_rbFpLibFormat->GetSelection() == GITHUB_PLUGIN )
+        m_rbFpLibFormat->SetSelection( KICAD_PLUGIN );
+#endif
+
     // Currently, I (JPC) do not know the best way to add/store
     // what is currently called env variables
     // So do not show tools to change them,

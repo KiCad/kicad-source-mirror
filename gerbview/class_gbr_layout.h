@@ -50,7 +50,6 @@ class GBR_LAYOUT
 {
 private:
     EDA_RECT            m_BoundingBox;
-    PAGE_INFO           m_paper;
     TITLE_BLOCK         m_titles;
     wxPoint             m_originAxisPosition;
     std::bitset <GERBER_DRAWLAYERS_COUNT> m_printLayersMask; // When printing: the list of layers to print
@@ -60,9 +59,6 @@ public:
 
     GBR_LAYOUT();
     ~GBR_LAYOUT();
-
-    const PAGE_INFO&    GetPageSettings() const { return m_paper; }
-    void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
 
     const wxPoint&      GetAuxOrigin() const
     {

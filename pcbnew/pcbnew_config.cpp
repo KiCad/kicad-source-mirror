@@ -36,6 +36,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <xnode.h>
+#include <common.h>
 #include <macros.h>
 #include <wxPcbStruct.h>
 #include <class_board_design_settings.h>
@@ -268,7 +269,17 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
     // If empty, the default descr is loaded
     WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    pglayout.SetPageLayout( BASE_SCREEN::m_PageLayoutDescrFileName );
+    wxString pg_fullfilename = ExpandEnvVarSubstitutions(
+                                BASE_SCREEN::m_PageLayoutDescrFileName );
+
+    if( !pg_fullfilename.IsEmpty() )
+    {
+        // When the page layout filename is not absolute, therefore
+        // relative to the current project, make it absolute
+        pg_fullfilename = Prj().AbsolutePath( pg_fullfilename  );
+    }
+
+    pglayout.SetPageLayout( pg_fullfilename );
 
     return rc;
 }

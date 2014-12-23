@@ -42,7 +42,7 @@
 #include "wx/wx.h"
 
 #if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_IE
-#error "A wxWebView backend is required by this sample"
+#error "wxWidgets must be built with wxWebView support enabled. Please rebuild wxWidgets"
 #endif
 
 #include "wx/artprov.h"
@@ -60,7 +60,7 @@
 #if wxUSE_STC
 #include "wx/stc/stc.h"
 #else
-#error "wxStyledTextControl is needed by the web viewer"
+#error "wxWidgets must be built with wxStyledTextControl enabled. Please rebuild wxWidgets"
 #endif
 
 #include <dialog_shim.h>

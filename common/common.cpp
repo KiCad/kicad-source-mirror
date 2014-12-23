@@ -346,6 +346,19 @@ wxString GetKicadConfigPath()
 }
 
 
+#include <ki_mutex.h>
+const wxString ExpandEnvVarSubstitutions( const wxString& aString )
+{
+    // wxGetenv( wchar_t* ) is not re-entrant on linux.
+    // Put a lock on multithreaded use of wxGetenv( wchar_t* ), called from wxEpandEnvVars(),
+    static MUTEX    getenv_mutex;
+
+    MUTLOCK lock( getenv_mutex );
+
+    // We reserve the right to do this another way, by providing our own member
+    // function.
+    return wxExpandEnvVars( aString );
+}
 
 bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
                                 const wxString& aBaseFilename,

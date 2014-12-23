@@ -32,9 +32,6 @@
 #define CURSEUR_ON_GRILLE  0
 #define CURSEUR_OFF_GRILLE 1
 
-class GERBVIEW_FRAME;
-class GERBER_IMAGE;
-class PAGE_INFO;
 /**
 * size of single line of a text from a gerber file.
 * warning: some files can have very long lines, so the buffer must be large.

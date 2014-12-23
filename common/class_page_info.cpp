@@ -24,6 +24,7 @@
 
 
 #include <common.h>
+#include <class_page_info.h>
 #include <macros.h>
 
 

@@ -8,8 +8,8 @@ endif()
 
 add_definitions( -DCVPCB )
 
-if( KICAD_USE_WEBKIT )
-    set( WEBVIEWERTOOL "webviewer" )
+if( KICAD_USE_WEBKITT AND BUILD_GITHUB_PLUGIN )
+    set( WEBVIEWER_WXLIB "webviewer" )
     add_definitions( -DKICAD_USE_WEBKIT )
 endif()
 
@@ -117,7 +117,7 @@ target_link_libraries( cvpcb_kiface
     pcbcommon
     pcad2kicadpcb
     common
-    ${WEBVIEWERTOOL}   # before bitmaps, because it uses some bitmaps defined in bitmaps
+    ${WEBVIEWER_WXLIB}   # before bitmaps, because it uses some bitmaps defined in bitmaps
     bitmaps
     polygon
     gal
