@@ -47,8 +47,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-27 01:55+0100\n"
-"PO-Revision-Date: 2014-12-27 01:55+0100\n"
+"POT-Creation-Date: 2014-12-27 19:08+0100\n"
+"PO-Revision-Date: 2014-12-27 19:08+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -439,7 +439,7 @@ msgstr "Pcbnew - Editor di circuiti stampati"
 
 #: kicad/commandframe.cpp:81
 msgid "PCB footprint editor"
-msgstr "Editor impronte C.S."
+msgstr "Editor impronte di circuiti stampati"
 
 #: kicad/commandframe.cpp:84
 msgid "GerbView - Gerber viewer"
@@ -4451,11 +4451,11 @@ msgstr "Ma&cro"
 
 #: pcbnew/menubar_pcbframe.cpp:502
 msgid "Macros save/read operations"
-msgstr "Operazione di salvataggio/apertura macro"
+msgstr "Operazioni di salvataggio/caricamento macro"
 
 #: pcbnew/menubar_pcbframe.cpp:508 eeschema/menubar.cpp:416
 msgid "&Save Preferences"
-msgstr "&Salva Preferenze"
+msgstr "&Salva le preferenze"
 
 #: pcbnew/menubar_pcbframe.cpp:509 eeschema/menubar.cpp:417
 msgid "Save application preferences"
@@ -4463,11 +4463,11 @@ msgstr "Salva le preferenze dell'applicazione"
 
 #: pcbnew/menubar_pcbframe.cpp:513 eeschema/menubar.cpp:422
 msgid "&Read Preferences"
-msgstr "Leggi le p&referenze"
+msgstr "Carica le p&referenze"
 
 #: pcbnew/menubar_pcbframe.cpp:514 eeschema/menubar.cpp:423
 msgid "Read application preferences"
-msgstr "Vedi Preferenze dell'applicazione"
+msgstr "Carica le preferenze dell'applicazione"
 
 #: pcbnew/menubar_pcbframe.cpp:521
 msgid "&Netlist"
@@ -4475,7 +4475,7 @@ msgstr "&Netlist"
 
 #: pcbnew/menubar_pcbframe.cpp:522
 msgid "Read the netlist and update board connectivity"
-msgstr "Verifica la Lista componenti e aggiorna i collegamenti "
+msgstr "Verifica la netlist e aggiorna i collegamenti"
 
 #: pcbnew/menubar_pcbframe.cpp:526
 msgid "&Layer Pair"
@@ -4483,11 +4483,11 @@ msgstr "&Coppia di strati"
 
 #: pcbnew/menubar_pcbframe.cpp:526
 msgid "Change the active layer pair"
-msgstr "Cambia la corrente coppia di strati"
+msgstr "Cambia la coppia di strati attiva"
 
 #: pcbnew/menubar_pcbframe.cpp:530
 msgid "&DRC"
-msgstr "&Controllo regole"
+msgstr "&DRC"
 
 #: pcbnew/menubar_pcbframe.cpp:534
 msgid "&FreeRoute"
@@ -4503,11 +4503,11 @@ msgstr "&Scripting Console"
 
 #: pcbnew/menubar_pcbframe.cpp:548
 msgid "Design Rules"
-msgstr "Preferenze circuito stampato"
+msgstr "Regole di progettazione"
 
 #: pcbnew/menubar_pcbframe.cpp:549
 msgid "Open the design rules editor"
-msgstr "Apri le regole del disegno "
+msgstr "Apri l'editor delle regole di progettazione"
 
 #: pcbnew/menubar_pcbframe.cpp:552
 msgid "&Layers Setup"
@@ -4524,11 +4524,11 @@ msgstr "&Manuale"
 
 #: pcbnew/menubar_pcbframe.cpp:561
 msgid "Open the Pcbnew handbook"
-msgstr "Apri il manuale"
+msgstr "Apri il manuale di Pcbnew"
 
 #: pcbnew/menubar_pcbframe.cpp:572
 msgid "About Pcbnew printed circuit board designer"
-msgstr "Informazioni"
+msgstr "Informazioni su Pcbnew"
 
 #: pcbnew/menubar_pcbframe.cpp:580 eeschema/menubar.cpp:511
 #: eeschema/menubar_libedit.cpp:287
@@ -12664,7 +12664,7 @@ msgstr "Chiudu visualizzatore componente dello schema"
 
 #: eeschema/tool_viewlib.cpp:250 eeschema/menubar.cpp:489
 msgid "Eesc&hema Manual"
-msgstr "Manuale Eesc&hema"
+msgstr "Manuale di Eesc&hema"
 
 #: eeschema/tool_viewlib.cpp:251 eeschema/menubar.cpp:490
 msgid "Open Eeschema manual"
@@ -13237,15 +13237,15 @@ msgstr "Imposta &colori"
 
 #: eeschema/menubar.cpp:389 eeschema/menubar_libedit.cpp:245
 msgid "Set color preferences"
-msgstr "Preferenze colori"
+msgstr "Imposta le preferenze colori"
 
 #: eeschema/menubar.cpp:399
 msgid "Schematic Editor &Options"
-msgstr "Opzioni"
+msgstr "&Opzioni editor degli schemi"
 
 #: eeschema/menubar.cpp:400
 msgid "Set Eeschema preferences"
-msgstr "Preferenze"
+msgstr "Imposta le preferenze di Eeschema"
 
 #: eeschema/menubar.cpp:431
 msgid "Library &Editor"
@@ -13261,23 +13261,23 @@ msgstr "&Annota schema"
 
 #: eeschema/menubar.cpp:449
 msgid "Electric Rules &Checker"
-msgstr "Controllo Regole dello &schema"
+msgstr "&Controllo regole elettriche"
 
 #: eeschema/menubar.cpp:450 eeschema/tool_sch.cpp:149
 msgid "Perform electrical rule check"
-msgstr "Esegui controllo regole "
+msgstr "Esegui un controllo regole elettriche"
 
 #: eeschema/menubar.cpp:455
 msgid "Generate &Netlist File"
-msgstr "Genera &Lista componenti "
+msgstr "Genera file &netlist"
 
 #: eeschema/menubar.cpp:456
 msgid "Generate the component netlist file"
-msgstr "Genera Lista dei collegamenti del componente"
+msgstr "Genera il file elenco dei collegamenti componente (Netlist)"
 
 #: eeschema/menubar.cpp:461
 msgid "Generate Bill of &Materials"
-msgstr "Genera distinta &materiali"
+msgstr "Genera la distinta &materiali"
 
 #: eeschema/menubar.cpp:470
 msgid "A&ssign Component Footprint"
