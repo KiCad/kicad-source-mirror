@@ -70,6 +70,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 {
     m_colorsSettings = &g_ColorsSettings;
     m_gerberLayout = NULL;
+    PAGE_INFO pageInfo( wxT( "GERBER" ) );
+    SetPageSettings( pageInfo );
 
     m_FrameName = GERBVIEW_FRAME_NAME;
     m_show_layer_manager_tools = true;
@@ -94,7 +96,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     SetVisibleLayers( -1 );         // All draw layers visible.
 
-    SetScreen( new GBR_SCREEN( GetGerberLayout()->GetPageSettings().GetSizeIU() ) );
+    SetScreen( new GBR_SCREEN( GetPageSettings().GetSizeIU() ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetLayout():
     wxFont  font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -720,8 +722,7 @@ void GERBVIEW_FRAME::setActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 
 void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
-    wxASSERT( m_gerberLayout );
-    m_gerberLayout->SetPageSettings( aPageSettings );
+    m_paper = aPageSettings;
 
     if( GetScreen() )
         GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
@@ -730,19 +731,16 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
 const PAGE_INFO& GERBVIEW_FRAME::GetPageSettings() const
 {
-    wxASSERT( m_gerberLayout );
-    return m_gerberLayout->GetPageSettings();
+    return m_paper;
 }
 
 
 const wxSize GERBVIEW_FRAME::GetPageSizeIU() const
 {
-    wxASSERT( m_gerberLayout );
-
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
     // into an application specific source file.
-    return m_gerberLayout->GetPageSettings().GetSizeIU();
+    return GetPageSettings().GetSizeIU();
 }
 
 

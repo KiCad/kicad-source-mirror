@@ -433,20 +433,24 @@ void PCB_BASE_FRAME::OnTogglePolarCoords( wxCommandEvent& aEvent )
 void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 {
     m_DisplayPadFill = DisplayOpt.DisplayPadFill = !m_DisplayPadFill;
+    EDA_DRAW_PANEL_GAL* gal = GetGalCanvas();
 
-    // Apply new display options to the GAL canvas
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*> ( GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
-    settings->LoadDisplayOptions( DisplayOpt );
-
-    // Update pads
-    BOARD* board = GetBoard();
-    for( MODULE* module = board->m_Modules; module; module = module->Next() )
+    if( gal )
     {
-        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
-            pad->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    // Apply new display options to the GAL canvas
+        KIGFX::PCB_PAINTER* painter =
+                static_cast<KIGFX::PCB_PAINTER*> ( gal->GetView()->GetPainter() );
+        KIGFX::PCB_RENDER_SETTINGS* settings =
+                static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+        settings->LoadDisplayOptions( DisplayOpt );
+
+        // Update pads
+        BOARD* board = GetBoard();
+        for( MODULE* module = board->m_Modules; module; module = module->Next() )
+        {
+            for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+                pad->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
     }
 
     m_canvas->Refresh();

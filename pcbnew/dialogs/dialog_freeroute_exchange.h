@@ -31,8 +31,7 @@ class DIALOG_FREEROUTE : public DIALOG_FREEROUTE_BASE
 {
 private:
     PCB_EDIT_FRAME* m_Parent;
-    bool m_FreeRouteSetupChanged;
-    bool m_freeRouterIsLocal;
+    bool m_freeRouterFound;
 
 private:
     // Virtual event handlers
@@ -40,12 +39,11 @@ private:
     void OnExportButtonClick( wxCommandEvent& event );
     void OnLaunchButtonClick( wxCommandEvent& event );
     void OnImportButtonClick( wxCommandEvent& event );
-    void OnVisitButtonClick( wxCommandEvent& event );
     void OnHelpButtonClick( wxCommandEvent& event );
     void OnCancelButtonClick( wxCommandEvent& event );
-    void OnTextEditFrUrlUpdated( wxCommandEvent& event );
+
     void MyInit ( );
-    wxString CmdRunFreeRouterLocal();
+    const wxString createDSN_File();
 
 public:
     DIALOG_FREEROUTE( PCB_EDIT_FRAME* parent );

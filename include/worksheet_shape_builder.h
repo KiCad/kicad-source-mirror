@@ -38,6 +38,7 @@
 
 class WORKSHEET_DATAITEM;        // Forward declaration
 class TITLE_BLOCK;
+class PAGE_INFO;
 
 #define TB_DEFAULT_TEXTSIZE             1.5  // default worksheet text size in mm
 

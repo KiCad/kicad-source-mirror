@@ -37,6 +37,7 @@
 #include <gerbview.h>
 #include <class_gbr_layout.h>
 #include <class_gbr_screen.h>
+#include <class_page_info.h>
 
 #define NO_AVAILABLE_LAYERS UNDEFINED_LAYER
 
@@ -83,6 +84,7 @@ class GERBVIEW_FRAME : public EDA_DRAW_FRAME    // PCB_BASE_FRAME
 {
     GBR_LAYOUT*     m_gerberLayout;
     wxPoint         m_grid_origin;
+    PAGE_INFO       m_paper;            // used only to show paper limits to screen
 
 public:
     GBR_DISPLAY_OPTIONS m_DisplayOptions;

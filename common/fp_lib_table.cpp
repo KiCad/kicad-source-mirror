@@ -639,6 +639,9 @@ const FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
 
 const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString& aString )
 {
+// Duplicate code: the same is now in common.cpp, due to the fact it is used
+// in many other places than FP_LIB_TABLE
+#if 0
     static MUTEX    getenv_mutex;
 
     MUTLOCK lock( getenv_mutex );
@@ -646,6 +649,9 @@ const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString& aString )
     // We reserve the right to do this another way, by providing our own member
     // function.
     return wxExpandEnvVars( aString );
+#else
+    return ExpandEnvVarSubstitutions( aString );
+#endif
 }
 
 

@@ -965,7 +965,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     }
 
     // For components with multiple parts per package, set the unit selection
-    if( m_Cmp->GetUnit() <= unitChoice->GetCount() )
+    if( m_Cmp->GetUnit() <= (int)unitChoice->GetCount() )
         unitChoice->SetSelection( m_Cmp->GetUnit() - 1 );
 
     // Disable unit selection if only one unit exists:

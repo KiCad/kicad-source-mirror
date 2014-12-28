@@ -8,6 +8,12 @@ endif()
 
 add_definitions( -DCVPCB )
 
+if( KICAD_USE_WEBKITT AND BUILD_GITHUB_PLUGIN )
+    set( WEBVIEWER_WXLIB "webviewer" )
+    add_definitions( -DKICAD_USE_WEBKIT )
+endif()
+
+
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
@@ -29,6 +35,8 @@ set( CVPCB_DIALOGS
     ../pcbnew/dialogs/dialog_fp_lib_table_base.cpp
     ../pcbnew/dialogs/dialog_fp_plugin_options.cpp
     ../pcbnew/dialogs/dialog_fp_plugin_options_base.cpp
+    ../pcbnew/dialogs/wizard_add_fplib_base.cpp
+    ../pcbnew/dialogs/wizard_add_fplib.cpp
     )
 
 set( CVPCB_SRCS
@@ -75,9 +83,11 @@ add_executable( cvpcb WIN32 MACOSX_BUNDLE
     ../common/pgm_base.cpp
     ${CVPCB_RESOURCES}
     )
+
 set_source_files_properties( ../common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_CVPCB;PGM_DATA_FILE_EXT=\"net\";BUILD_KIWAY_DLL"
     )
+
 target_link_libraries( cvpcb
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
@@ -107,6 +117,7 @@ target_link_libraries( cvpcb_kiface
     pcbcommon
     pcad2kicadpcb
     common
+    ${WEBVIEWER_WXLIB}   # before bitmaps, because it uses some bitmaps defined in bitmaps
     bitmaps
     polygon
     gal

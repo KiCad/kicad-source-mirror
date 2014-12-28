@@ -8,12 +8,12 @@
 #define WORKSHEET_H_
 
 #include <colors.h>     // EDA_COLOR_T definition
+#include <class_page_info.h>
 
 // Forward declarations:
 class EDA_DRAW_PANEL;
 class EDA_RECT;
 class TITLE_BLOCK;
-class PAGE_INFO;
 
 /**
  * Function DrawPageLayout is a core function to draw the page layout with

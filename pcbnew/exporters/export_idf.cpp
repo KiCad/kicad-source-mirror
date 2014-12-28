@@ -76,6 +76,10 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
         {
         case S_SEGMENT:
             {
+                if( ( graphic->GetStart().x == graphic->GetEnd().x )
+                    && ( graphic->GetStart().y == graphic->GetEnd().y ) )
+                    break;
+
                 sp.x    = graphic->GetStart().x * scale + offX;
                 sp.y    = -graphic->GetStart().y * scale + offY;
                 ep.x    = graphic->GetEnd().x * scale + offX;
@@ -89,6 +93,10 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
 
         case S_ARC:
             {
+                if( ( graphic->GetCenter().x == graphic->GetArcStart().x )
+                    && ( graphic->GetCenter().y == graphic->GetArcStart().y ) )
+                    break;
+
                 sp.x = graphic->GetCenter().x * scale + offX;
                 sp.y = -graphic->GetCenter().y * scale + offY;
                 ep.x = graphic->GetArcStart().x * scale + offX;
@@ -102,6 +110,9 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
 
         case S_CIRCLE:
             {
+                if( graphic->GetRadius() == 0 )
+                    break;
+
                 sp.x = graphic->GetCenter().x * scale + offX;
                 sp.y = -graphic->GetCenter().y * scale + offY;
                 ep.x = sp.x - graphic->GetRadius() * scale;

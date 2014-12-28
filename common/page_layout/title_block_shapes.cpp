@@ -56,6 +56,7 @@
 
 #include <fctsys.h>
 #include <drawtxt.h>
+#include <class_page_info.h>
 #include <worksheet.h>
 #include <class_title_block.h>
 #include <worksheet_shape_builder.h>
