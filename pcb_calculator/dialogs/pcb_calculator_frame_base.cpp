@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  5 2013)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -166,7 +166,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_staticTextRegType = new wxStaticText( m_panelRegulators, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRegType->Wrap( -1 );
-	m_staticTextRegType->SetToolTip( _("Type of the regulator.\nThere are 2 types:\n- regulators which have a dedicted sense pin for the voltage regulation.\n- 3 terminal pins.") );
+	m_staticTextRegType->SetToolTip( _("Type of the regulator.\nThere are 2 types:\n- regulators which have a dedicated sense pin for the voltage regulation.\n- 3 terminal pins.") );
 	
 	fgSizerRegParams->Add( m_staticTextRegType, 0, wxALL, 5 );
 	
@@ -1232,7 +1232,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	wxArrayString m_BoardClassesUnitsSelectorChoices;
 	m_BoardClassesUnitsSelector = new UNIT_SELECTOR_LEN( m_panelBoardClass, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_BoardClassesUnitsSelectorChoices, 0 );
-	m_BoardClassesUnitsSelector->SetSelection( -1 );
+	m_BoardClassesUnitsSelector->SetSelection( 0 );
 	bSizerBoardClass->Add( m_BoardClassesUnitsSelector, 0, wxALL, 5 );
 	
 	wxBoxSizer* brdclsSizerRight;

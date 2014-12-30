@@ -42,8 +42,8 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	
 	bLeftButtonsSizer->Add( m_ExportDSN, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonLaunchFreeroute = new wxButton( this, wxID_BUTTON_LAUNCH, _("Launch FreeRouter and Launch FreeRouter"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonLaunchFreeroute->SetToolTip( _("Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)") );
+	m_buttonLaunchFreeroute = new wxButton( this, wxID_BUTTON_LAUNCH, _("Export a Specctra Design and Launch FreeRoute"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonLaunchFreeroute->SetToolTip( _("FreeRouter can be run only if freeroute.jar is found in Kicad binaries folder") );
 	
 	bLeftButtonsSizer->Add( m_buttonLaunchFreeroute, 0, wxALL|wxEXPAND, 5 );
 	

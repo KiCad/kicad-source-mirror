@@ -47,7 +47,25 @@ REVISION=$TESTING
 # CMake Options
 OPTS="$OPTS -DBUILD_GITHUB_PLUGIN=ON"       # needed by $STABLE revision
 
-# Python scripting, uncomment to enable
+# Uncomment this line if you have issues to build kicad with a wxWidgets with is not built
+# with webkit/webview support, i.e. if you have this error:
+# error "wxWidgets must be built with wxWebView support enabled. Please rebuild wxWidgets"
+# but you will lose the wizard which allows you to easily add .pretty libs on github server
+# (you will need to enter by hand their url in footprint lib table dialog)
+#OPTS="$OPTS -DKICAD_USE_WEBKIT=OFF"
+
+# Python scripting, uncomment only one to enable:
+
+# Basic python scripting: gives access to wizards like footprint wizards (recommended)
+# be sure you have python 2.7 installed
+#OPTS="$OPTS -DKICAD_SCRIPTING=ON"
+
+# More advanced python scripting: gives access to wizards like footprint wizards and creates a python module
+# to edit board files (.kicad_pcb files) outside kicad, by python scripts
+#OPTS="$OPTS -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_MODULES=ON"
+
+# Most advanced python scripting: you can execute python scripts inside Pcbnew to edit the current loaded board
+# mainly for advanced users
 #OPTS="$OPTS -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_MODULES=ON -DKICAD_SCRIPTING_WXPYTHON=ON"
 
 # Use https under bazaar to retrieve repos because this does not require a

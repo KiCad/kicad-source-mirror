@@ -16,7 +16,7 @@ DIALOG_SELECT_DIRLIST_BASE::DIALOG_SELECT_DIRLIST_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText = new wxStaticText( this, wxID_ANY, _("The footprint library is a folde.\nFootprints are files inside this folder."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText = new wxStaticText( this, wxID_ANY, _("The footprint library is a folder.\nFootprints are files inside this folder."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText->Wrap( -1 );
 	m_staticText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	

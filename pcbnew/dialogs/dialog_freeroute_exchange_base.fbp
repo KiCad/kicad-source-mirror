@@ -343,7 +343,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_BUTTON_LAUNCH</property>
-                                                        <property name="label">Launch FreeRouter and Launch FreeRouter</property>
+                                                        <property name="label">Export a Specctra Design and Launch FreeRoute</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -364,7 +364,7 @@
                                                         <property name="style"></property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)</property>
+                                                        <property name="tooltip">FreeRouter can be run only if freeroute.jar is found in Kicad binaries folder</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
