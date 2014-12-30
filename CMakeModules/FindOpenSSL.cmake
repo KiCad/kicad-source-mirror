@@ -165,7 +165,7 @@ if(WIN32 AND NOT CYGWIN)
     find_library(LIB_EAY
       NAMES
         ${LIB_EAY_NAMES}
-      ${_OPENSLL_ROOT_HINTS_AND_PATHS}
+      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
         "lib"
         "lib/MinGW"
@@ -177,7 +177,7 @@ if(WIN32 AND NOT CYGWIN)
     find_library(SSL_EAY
       NAMES
         ${SSL_EAY_NAMES}
-      ${_OPENSLL_ROOT_HINTS_AND_PATHS}
+      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
         "lib"
         "lib/MinGW"
