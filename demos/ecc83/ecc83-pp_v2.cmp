@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-12-31 BZR 5344)-product   date = 01/01/2015 18:02:29
+Cmp-Mod V01 Created by Cvpcb (2014-12-31 BZR 5344)-product   date = 01/01/2015 18:25:40
 
 BeginCmp
 TimeStamp = /4549F4BE;
@@ -11,60 +11,60 @@ BeginCmp
 TimeStamp = /4549F3BE;
 Reference = C2;
 ValeurCmp = 680nF;
-IdModule  = discret:C2;
+IdModule  = discret:CP8;
 EndCmp
 
 BeginCmp
 TimeStamp = /4549F464;
 Reference = P1;
 ValeurCmp = IN;
-IdModule  = connect:bornier2;
+IdModule  = pin_array:pin_array_1x02;
 EndCmp
 
 BeginCmp
 TimeStamp = /4549F46C;
 Reference = P2;
 ValeurCmp = OUT;
-IdModule  = connect:bornier2;
+IdModule  = pin_array:pin_array_1x02;
 EndCmp
 
 BeginCmp
 TimeStamp = /4549F4A5;
 Reference = P3;
 ValeurCmp = POWER;
-IdModule  = connect:bornier2;
+IdModule  = pin_array:pin_array_1x02;
 EndCmp
 
 BeginCmp
 TimeStamp = /456A8ACC;
 Reference = P4;
 ValeurCmp = CONN_2;
-IdModule  = connect:bornier2;
+IdModule  = pin_array:pin_array_1x02;
 EndCmp
 
 BeginCmp
-TimeStamp = /54A5890A;
+TimeStamp = /54A5830A;
 Reference = P5;
 ValeurCmp = CONN_1;
 IdModule  = connect:1pin;
 EndCmp
 
 BeginCmp
-TimeStamp = /54A58C65;
+TimeStamp = /54A58363;
 Reference = P6;
 ValeurCmp = CONN_1;
 IdModule  = connect:1pin;
 EndCmp
 
 BeginCmp
-TimeStamp = /54A58C8A;
+TimeStamp = /54A5837A;
 Reference = P7;
 ValeurCmp = CONN_1;
 IdModule  = connect:1pin;
 EndCmp
 
 BeginCmp
-TimeStamp = /54A58CA3;
+TimeStamp = /54A58391;
 Reference = P8;
 ValeurCmp = CONN_1;
 IdModule  = connect:1pin;

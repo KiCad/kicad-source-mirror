@@ -77,6 +77,7 @@ bool Set3DShapesDefaultPath( const wxString& aKiSys3Dmod, const PGM_BASE* aProce
     // Attempt to determine where the 3D shape libraries were installed using the
     // legacy path:
     // on Unix: /usr/local/kicad/share/modules/packages3d
+    // oor /usr/local/kicad/share/kicad/modules/packages3d
     // or  /usr/share/kicad/modules/packages3d
     // On Windows: bin../share/modules/packages3d
     wxString relpath( wxT( "modules/" ) );
@@ -112,6 +113,16 @@ bool Set3DShapesDefaultPath( const wxString& aKiSys3Dmod, const PGM_BASE* aProce
         return true;
     }
 
+    path.Empty();
+    wxGetEnv( wxT("HOME"), &path );
+    path += wxT("/kicad/share/kicad/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
     // Try the standard install path:
     path = wxT("/usr/local/kicad/share/") + relpath;
 
@@ -121,6 +132,14 @@ bool Set3DShapesDefaultPath( const wxString& aKiSys3Dmod, const PGM_BASE* aProce
         return true;
     }
 
+    // Try the new standard install path:
+    path = wxT("/usr/local/kicad/share/kicad/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
     // Try the official distrib standard install path:
     path = wxT("/usr/share/kicad/") + relpath;
 
