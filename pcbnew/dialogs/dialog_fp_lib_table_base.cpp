@@ -24,6 +24,22 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* m_global_sizer;
 	m_global_sizer = new wxBoxSizer( wxVERTICAL );
 	
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 1, 2, 0, 0 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText3 = new wxStaticText( m_global_panel, wxID_ANY, _("Table:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3->Wrap( -1 );
+	fgSizer1->Add( m_staticText3, 0, wxRIGHT|wxLEFT, 5 );
+	
+	m_GblTableFilename = new wxStaticText( m_global_panel, wxID_ANY, _("Table Name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_GblTableFilename->Wrap( -1 );
+	fgSizer1->Add( m_GblTableFilename, 0, wxRIGHT|wxLEFT, 5 );
+	
+	
+	m_global_sizer->Add( fgSizer1, 0, wxEXPAND, 5 );
+	
 	m_global_grid = new wxGrid( m_global_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
@@ -59,6 +75,22 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_project_panel = new wxPanel( m_auinotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_project_sizer;
 	m_project_sizer = new wxBoxSizer( wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer2;
+	fgSizer2 = new wxFlexGridSizer( 1, 2, 0, 0 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText4 = new wxStaticText( m_project_panel, wxID_ANY, _("Table:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4->Wrap( -1 );
+	fgSizer2->Add( m_staticText4, 0, wxRIGHT|wxLEFT, 5 );
+	
+	m_PrjTableFilename = new wxStaticText( m_project_panel, wxID_ANY, _("Table Name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PrjTableFilename->Wrap( -1 );
+	fgSizer2->Add( m_PrjTableFilename, 0, wxRIGHT|wxLEFT, 5 );
+	
+	
+	m_project_sizer->Add( fgSizer2, 0, wxEXPAND, 5 );
 	
 	m_project_grid = new wxGrid( m_project_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	

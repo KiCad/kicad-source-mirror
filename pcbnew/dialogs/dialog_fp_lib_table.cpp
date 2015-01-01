@@ -295,6 +295,10 @@ public:
         m_global( aGlobal ),
         m_project( aProject )
     {
+        // For user info, shows the table filenames:
+        m_PrjTableFilename->SetLabel( Prj().FootprintLibTblName() );
+        m_GblTableFilename->SetLabel( FP_LIB_TABLE::GetGlobalTableFileName() );
+
         // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
         // so make it a grid owned table.
         m_global_grid->SetTable(  new FP_TBL_MODEL( *aGlobal ),  true );

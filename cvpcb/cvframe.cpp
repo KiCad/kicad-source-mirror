@@ -438,25 +438,39 @@ void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
 
 bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
-    if( aFileSet.size() == 1 )
+    if( aFileSet.size() != 1 )  // Unexpected comand
+        return false;
+
+    m_NetlistFileName = aFileSet[0];
+    ReadNetListAndLinkFiles();
+
+    UpdateTitle();
+
+    // Resize the components list box. This is needed in case the
+    // contents have shrunk compared to the previous netlist.
+    m_compListBox->UpdateWidth();
+
+    // OSX need it since some objects are "rebuild" just make aware AUI
+    // Fixes #1258081
+    m_auimgr.Update();
+
+    if( Kiface().IsSingle() )
     {
-        m_NetlistFileName = aFileSet[0];
-        ReadNetListAndLinkFiles();
+        // PROJECT::SetProjectFullName() is an impactful function.  It should only be
+        // called under carefully considered circumstances.
 
-        UpdateTitle();
-
-        // Resize the components list box. This is needed in case the
-        // contents have shrunk compared to the previous netlist.
-        m_compListBox->UpdateWidth();
-
-        // OSX need it since some objects are "rebuild" just make aware AUI
-        // Fixes #1258081
-        m_auimgr.Update();
-
-        return true;
+        // The calling code should know not to ask me here to change projects unless
+        // it knows what consequences that will have on other KIFACEs running and using
+        // this same PROJECT.  It can be very harmful if that calling code is stupid.
+        //
+        // In Cvpcb, we call SetProjectFullName only in Single mode, i.e. it is not
+        // called from a project
+        wxFileName pro = m_NetlistFileName;
+        pro.SetExt( ProjectFileExtension );
+        Prj().SetProjectFullName( pro.GetFullPath() );
     }
 
-    return false;
+    return true;
 }
 
 
