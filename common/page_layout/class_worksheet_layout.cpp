@@ -60,7 +60,8 @@
 
 // The layout shape used in the application
 // It is accessible by WORKSHEET_LAYOUT::GetTheInstance()
-WORKSHEET_LAYOUT wksTheInstance;
+static WORKSHEET_LAYOUT wksTheInstance;
+static WORKSHEET_LAYOUT* wksAltInstance;
 
 WORKSHEET_LAYOUT::WORKSHEET_LAYOUT()
 {
@@ -69,6 +70,28 @@ WORKSHEET_LAYOUT::WORKSHEET_LAYOUT()
     m_rightMargin = 10.0;   // the right page margin in mm
     m_topMargin = 10.0;     // the top page margin in mm
     m_bottomMargin = 10.0;  // the bottom page margin in mm
+}
+
+/* static function: returns the instance of WORKSHEET_LAYOUT
+ * used in the application
+ */
+WORKSHEET_LAYOUT& WORKSHEET_LAYOUT::GetTheInstance()
+{
+    if( wksAltInstance )
+        return *wksAltInstance;
+    else
+        return wksTheInstance;
+}
+
+/**
+ * static function: Set an alternate instance of WORKSHEET_LAYOUT
+ * mainly used in page setting dialog
+ * @param aLayout = the alternate page layout.
+ * if null, restore the basic page layout
+ */
+void WORKSHEET_LAYOUT::SetAltInstance( WORKSHEET_LAYOUT* aLayout )
+{
+    wksAltInstance = aLayout;
 }
 
 
@@ -163,10 +186,22 @@ WORKSHEET_DATAITEM* WORKSHEET_LAYOUT::GetItem( unsigned aIdx ) const
 }
 
 
-const wxString WORKSHEET_LAYOUT::MakeShortFileName( const wxString& aFullFileName )
+const wxString WORKSHEET_LAYOUT::MakeShortFileName( const wxString& aFullFileName,
+                                                    const wxString& aProjectPath  )
 {
-    wxFileName  fn = aFullFileName;
     wxString    shortFileName = aFullFileName;
+    wxFileName  fn = aFullFileName;
+
+    if( fn.IsRelative() )
+        return shortFileName;
+
+    if( ! aProjectPath.IsEmpty() && aFullFileName.StartsWith( aProjectPath ) )
+    {
+        fn.MakeRelativeTo( aProjectPath );
+        shortFileName = fn.GetFullPath();
+        return shortFileName;
+    }
+
     wxString    fileName = Kiface().KifaceSearch().FindValidPath( fn.GetFullName() );
 
     if( !fileName.IsEmpty() )
@@ -180,17 +215,34 @@ const wxString WORKSHEET_LAYOUT::MakeShortFileName( const wxString& aFullFileNam
 }
 
 
-const wxString WORKSHEET_LAYOUT::MakeFullFileName( const wxString& aShortFileName )
+const wxString WORKSHEET_LAYOUT::MakeFullFileName( const wxString& aShortFileName,
+                                                   const wxString& aProjectPath )
 {
-    wxFileName  fn = aShortFileName;
-    wxString    fullFileName = aShortFileName;
+    wxString    fullFileName = ExpandEnvVarSubstitutions( aShortFileName );
 
-    if( fn.GetPath().IsEmpty() && !fn.GetFullName().IsEmpty() )
+    if( fullFileName.IsEmpty() )
+        return fullFileName;
+
+    wxFileName fn = fullFileName;
+
+    if( fn.IsAbsolute() )
+        return fullFileName;
+
+    // the path is not absolute: search it in project path, and then in
+    // kicad valid paths
+    if( !aProjectPath.IsEmpty() )
     {
-        wxString name = Kiface().KifaceSearch().FindValidPath( fn.GetFullName() );
-        if( !name.IsEmpty() )
-            fullFileName = name;
+        fn.MakeAbsolute( aProjectPath );
+
+        if( wxFileExists( fn.GetFullPath() ) )
+            return fn.GetFullPath();
     }
+
+    fn = fullFileName;
+    wxString name = Kiface().KifaceSearch().FindValidPath( fn.GetFullName() );
+
+    if( !name.IsEmpty() )
+        fullFileName = name;
 
     return fullFileName;
 }

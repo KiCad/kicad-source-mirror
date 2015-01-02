@@ -116,7 +116,7 @@ LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} )
 if( UNIX )
     set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specific KiCad config files" )
 elseif( MINGW )
-    set( KICAD_USER_CONFIG_DIR $ENV{%APPDATA%} CACHE PATH "Location of user specific KiCad config files" )
+    set( KICAD_USER_CONFIG_DIR $ENV{APPDATA} CACHE PATH "Location of user specific KiCad config files" )
 endif()
 mark_as_advanced( KICAD_USER_CONFIG_DIR )
 

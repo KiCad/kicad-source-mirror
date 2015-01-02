@@ -85,16 +85,18 @@ void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 }
 
 
-DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent ) :
+DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent  ) :
     DIALOG_PAGES_SETTINGS_BASE( parent ),
     m_initialized( false )
 {
     m_parent   = parent;
     m_screen   = m_parent->GetScreen();
+    m_projectPath = Prj().GetProjectPath();
     m_page_bitmap = NULL;
     m_tb = m_parent->GetTitleBlock();
     m_customFmt = false;
     m_localPrjConfigChanged = false;
+    m_pagelayout = NULL;
 
     initDialog();
 
@@ -105,8 +107,8 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent ) :
 
 DIALOG_PAGES_SETTINGS::~DIALOG_PAGES_SETTINGS()
 {
-    if( m_page_bitmap )
-        delete m_page_bitmap;
+    delete m_page_bitmap;
+    delete m_pagelayout;
 }
 
 
@@ -225,7 +227,7 @@ void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
         m_screen->SetModify();
         m_parent->GetCanvas()->Refresh();
 
-        if( m_localPrjConfigChanged )
+        if( LocalPrjConfigChanged() )
             m_parent->SaveProjectSettings( true );
 
         EndModal( true );
@@ -409,9 +411,12 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
     if( fileName != BASE_SCREEN::m_PageLayoutDescrFileName )
     {
-        if( !fileName.IsEmpty() )
+        wxString fullFileName =
+                    WORKSHEET_LAYOUT::MakeFullFileName( fileName, m_projectPath );
+
+        if( !fullFileName.IsEmpty() )
         {
-            wxString fullFileName = WORKSHEET_LAYOUT::MakeFullFileName( fileName );
+
             if( !wxFileExists( fullFileName ) )
             {
                 wxString msg;
@@ -424,7 +429,7 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
         BASE_SCREEN::m_PageLayoutDescrFileName = fileName;
         WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-        pglayout.SetPageLayout( fileName );
+        pglayout.SetPageLayout( fullFileName );
         m_localPrjConfigChanged = true;
     }
 
@@ -663,6 +668,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         wxString emptyString;
         GRResetPenAndBrush( &memDC );
 
+        WORKSHEET_LAYOUT::SetAltInstance( m_pagelayout );
         DrawPageLayout( &memDC, NULL, pageDUMMY,
                         emptyString, emptyString,
                         m_tb, m_screen->m_NumberOfScreens,
@@ -670,6 +676,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 
         memDC.SelectObject( wxNullBitmap );
         m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );
+        WORKSHEET_LAYOUT::SetAltInstance( NULL );
 
         // Refresh the dialog.
         Layout();
@@ -782,11 +789,9 @@ void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
 // Called on .kicad_wks file description selection change
 void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 {
-    wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
-
     // Display a file picker dialog
     wxFileDialog fileDialog( this, _( "Select Page Layout Descr File" ),
-                             pro_dir, GetWksFileName(),
+                             m_projectPath, GetWksFileName(),
                              PageLayoutDescrFileWildcard,
                              wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
@@ -796,24 +801,30 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     wxString fileName = fileDialog.GetPath();
 
     // Try to remove the path, if the path is the current working dir,
-    // or the dir of kicad.pro (template)
-    wxString shortFileName = WORKSHEET_LAYOUT::MakeShortFileName( fileName );
-    wxFileName fn = shortFileName;
+    // or the dir of kicad.pro (template), and use a relative path
+    wxString shortFileName = WORKSHEET_LAYOUT::MakeShortFileName( fileName, m_projectPath );
 
     // For Win/Linux/macOS compatibility, a relative path is a good idea
-    if( fn.IsAbsolute() && fileName != GetWksFileName() )
+    if( shortFileName != GetWksFileName() && shortFileName != fileName )
     {
-        fn.MakeRelativeTo( pro_dir );
-
         wxString msg = wxString::Format( _(
                 "The page layout descr filename has changed.\n"
                 "Do you want to use the relative path:\n"
-                "'%s'" ),
-                GetChars( fn.GetFullPath() )
-                );
-        if( IsOK( this, msg ) )
-            shortFileName = fn.GetFullPath();
+                "'%s'\n"
+                "instead of\n"
+                "'%s'" ), GetChars( shortFileName ), GetChars( fileName ) );
+
+        if( !IsOK( this, msg ) )
+            shortFileName = fileName;
     }
 
     SetWksFileName( shortFileName );
+
+    if( m_pagelayout == NULL )
+        m_pagelayout = new WORKSHEET_LAYOUT;
+
+    m_pagelayout->SetPageLayout( fileName );
+
+    GetPageLayoutInfoFromDialog();
+    UpdatePageLayoutExample();
 }

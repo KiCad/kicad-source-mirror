@@ -55,6 +55,7 @@
 #include <project.h>        // For PROJECT_VAR_NAME definition
 #include <io_mgr.h>
 #include <wizard_add_fplib.h>
+#include <dialog_select_dirlist_base.h>
 
 // a key to store the default Kicad Github libs URL
 #define KICAD_FPLIBS_URL_KEY wxT( "kicad_fplib_url" )
@@ -640,6 +641,11 @@ public:
     {
         if( !aDefaultPath.IsEmpty() )
             m_dirCtrl->SetPath( aDefaultPath );
+
+        Layout();
+        GetSizer()->Fit( this );
+        GetSizer()->SetSizeHints(this);
+        Centre();
     }
 
     ~DIALOG_SELECT_DIRLIST() {};

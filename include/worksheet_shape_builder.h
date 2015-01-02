@@ -550,11 +550,15 @@ public:
      * static function: returns the instance of WORKSHEET_LAYOUT
      * used in the application
      */
-    static WORKSHEET_LAYOUT& GetTheInstance()
-    {
-        extern WORKSHEET_LAYOUT wksTheInstance;
-        return wksTheInstance;
-    }
+    static WORKSHEET_LAYOUT& GetTheInstance();
+
+    /**
+     * static function: Set an alternate instance of WORKSHEET_LAYOUT
+     * mainly used in page setting dialog
+     * @param aLayout = the alternate page layout.
+     * if null, restore the basic page layout
+     */
+    static void SetAltInstance( WORKSHEET_LAYOUT* aLayout = NULL );
 
     // Accessors:
     double GetLeftMargin() { return m_leftMargin; }
@@ -664,19 +668,28 @@ public:
 
     /**
      * @return a short filename  from a full filename:
-     * if the path is the current path, or if the path
+     * if the path is the current project path, or if the path
      * is the same as kicad.pro (in template), returns the shortname
      * else do nothing and returns a full filename
+     * @param aFullFileName = the full filename, which can be a relative
+     * @param aProjectPath = the curr project absolute path (can be empty)
      */
-    static const wxString MakeShortFileName( const wxString& aFullFileName );
+    static const wxString MakeShortFileName( const wxString& aFullFileName,
+                                             const wxString& aProjectPath );
 
     /**
-     * @return a full filename from a short filename,
-     * if the short filename path is void
-     * In this case the path is the same as kicad.pro (in template)
-     * else return the short filename (which have an absolute os relative path
-      */
-    static const wxString MakeFullFileName( const wxString& aShortFileName );
+     * Static function
+     * @return a full filename from a short filename.
+     * @param aShortFileName = the short filename, which can be a relative
+     * @param aProjectPath = the curr project absolute path (can be empty)
+     * or absolute path, and can include env variable reference ( ${envvar} expression )
+     * if the short filename path is relative, it is expected relative to the project path
+     * or (if aProjectPath is empty or if the file does not exist)
+     * relative to kicad.pro (in template)
+     * If aShortFileName is absolute return aShortFileName
+     */
+    static const wxString MakeFullFileName( const wxString& aShortFileName,
+                                            const wxString& aProjectPath );
 };
 
 #endif      // WORKSHEET_SHAPE_BUILDER_H

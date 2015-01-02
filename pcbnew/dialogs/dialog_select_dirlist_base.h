@@ -39,18 +39,20 @@ class DIALOG_SELECT_DIRLIST_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticText;
 		wxGenericDirCtrl* m_dirCtrl;
-		wxStaticLine* m_staticline1;
+		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSelectFolder( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOKClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_SELECT_DIRLIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Footprint Library Folder"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,300 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_SELECT_DIRLIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Footprint Library Folder"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,321 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SELECT_DIRLIST_BASE();
 	
 };

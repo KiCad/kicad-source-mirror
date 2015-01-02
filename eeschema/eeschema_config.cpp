@@ -479,16 +479,11 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
 
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
-    // If empty, the default descr is loaded
+    // If empty, or not existing, the default descr is loaded
     WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    wxString pg_fullfilename = ExpandEnvVarSubstitutions( BASE_SCREEN::m_PageLayoutDescrFileName );
-
-    if( !pg_fullfilename.IsEmpty() )
-    {
-        // When the page layout filename is not absolute, therefore
-        // relative to the current project, make it absolute
-        pg_fullfilename = Prj().AbsolutePath( pg_fullfilename  );
-     }
+    wxString pg_fullfilename = WORKSHEET_LAYOUT::MakeFullFileName(
+                                    BASE_SCREEN::m_PageLayoutDescrFileName,
+                                    Prj().GetProjectPath() );
 
     pglayout.SetPageLayout( pg_fullfilename );
 

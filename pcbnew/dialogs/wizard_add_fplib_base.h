@@ -31,8 +31,6 @@
 #include <wx/wizard.h>
 #include <wx/dynarray.h>
 WX_DEFINE_ARRAY_PTR( wxWizardPageSimple*, WizardPages );
-#include <wx/dirctrl.h>
-#include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -84,33 +82,6 @@ class WIZARD_FPLIB_TABLE_BASE : public wxWizard
 		WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Library Wizard"), const wxBitmap& bitmap = wxArtProvider::GetBitmap( wxART_HELP_BOOK, wxART_FRAME_ICON ), const wxPoint& pos = wxDefaultPosition, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		WizardPages m_pages;
 		~WIZARD_FPLIB_TABLE_BASE();
-	
-};
-
-///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_SELECT_DIRLIST_BASE
-///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SELECT_DIRLIST_BASE : public wxDialog 
-{
-	private:
-	
-	protected:
-		wxStaticText* m_staticTextInfo;
-		wxGenericDirCtrl* m_dirCtrl;
-		wxStaticLine* m_staticline1;
-		wxStdDialogButtonSizer* m_sdbSizer;
-		wxButton* m_sdbSizerOK;
-		wxButton* m_sdbSizerCancel;
-		
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOKClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
-	public:
-		
-		DIALOG_SELECT_DIRLIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Footprint Library Folder"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 346,325 ), long style = wxDEFAULT_DIALOG_STYLE ); 
-		~DIALOG_SELECT_DIRLIST_BASE();
 	
 };
 
