@@ -386,6 +386,9 @@ void KICAD_NETLIST_PARSER::parseLibPartList() throw( IO_ERROR, PARSE_ERROR )
 {
    /* Parses a section like
     *   (libpart (lib device) (part C)
+    *  (aliases
+    *    (alias Cxx)
+    *    (alias Cyy))
     *     (description "Condensateur non polarise")
     *     (footprints
     *       (fp SM*)
@@ -405,6 +408,7 @@ void KICAD_NETLIST_PARSER::parseLibPartList() throw( IO_ERROR, PARSE_ERROR )
     wxString          libName;
     wxString          libPartName;
     wxArrayString     footprintFilters;
+    wxArrayString     aliases;
 
     // The last token read was libpart, so read the next token
     while( (token = NextTok()) != T_RIGHT )
@@ -443,6 +447,20 @@ void KICAD_NETLIST_PARSER::parseLibPartList() throw( IO_ERROR, PARSE_ERROR )
 
             break;
 
+        case T_aliases:
+            while( (token = NextTok()) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                if( token != T_alias )
+                    Expecting( T_alias );
+
+                NeedSYMBOLorNUMBER();
+                aliases.Add( FROM_UTF8( CurText() ) );
+                NeedRIGHT();
+            }
+            break;
         default:
             // Skip not used data (i.e all other tokens)
             skipCurrent();
@@ -457,5 +475,12 @@ void KICAD_NETLIST_PARSER::parseLibPartList() throw( IO_ERROR, PARSE_ERROR )
 
         if( component->IsLibSource( libName, libPartName ) )
             component->SetFootprintFilters( footprintFilters );
+
+        for( unsigned jj = 0; jj < aliases.GetCount(); jj++ )
+        {
+            if( component->IsLibSource( libName, aliases[jj] ) )
+                component->SetFootprintFilters( footprintFilters );
+        }
+
     }
 }
