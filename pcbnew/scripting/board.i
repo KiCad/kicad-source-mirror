@@ -31,7 +31,7 @@
 %extend BOARD
 {
   %pythoncode
-  {
+  %{
     def GetModules(self):             return self.m_Modules
     def GetDrawings(self):            return self.m_Drawings
     def GetTracks(self):              return self.m_Track
@@ -48,7 +48,7 @@
     def Add(self,item):
         item.thisown=0
         self.AddNative(item)
-  }
+  %}
 
 }
 

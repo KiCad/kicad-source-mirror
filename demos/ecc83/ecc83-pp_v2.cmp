@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-12-31 BZR 5344)-product   date = 01/01/2015 18:25:40
+Cmp-Mod V01 Created by Cvpcb (2014-12-31 BZR 5344)-product   date = 01/01/2015 20:57:19
 
 BeginCmp
 TimeStamp = /4549F4BE;
@@ -102,7 +102,7 @@ BeginCmp
 TimeStamp = /48B4F266;
 Reference = U1;
 ValeurCmp = ECC83;
-IdModule  = Valves:VALVE-ECC-83-1;
+IdModule  = Valves:VALVE-ECC-83-2;
 EndCmp
 
 EndListe

@@ -136,7 +136,7 @@
     const char*   Cast_to_CChar()    { return (self->c_str()); }
 
     %pythoncode
-    {
+    %{
 
     # Get the char buffer of the UTF8 string
     def GetChars(self):
@@ -147,6 +147,6 @@
     def __str__(self):
         return self.GetChars()
 
-    }
+    %}
 }
 
