@@ -1,12 +1,12 @@
 (export (version D)
   (design
     (source F:/kicad-launchpad/testing/demos/ecc83/ecc83-pp_v2.sch)
-    (date "01/01/2015 18:25:50")
+    (date "01/01/2015 20:57:24")
     (tool "Eeschema (2014-12-31 BZR 5344)-product"))
   (components
     (comp (ref U1)
       (value ECC83)
-      (footprint Valves:VALVE-ECC-83-1)
+      (footprint Valves:VALVE-ECC-83-2)
       (libsource (lib valves) (part ECC83))
       (sheetpath (names /) (tstamps /))
       (tstamp 48B4F266))
@@ -95,18 +95,6 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 54A58391)))
   (libparts
-    (libpart (lib device) (part C)
-      (description "Condensateur non polarise")
-      (footprints
-        (fp SM*)
-        (fp C?)
-        (fp C1-1))
-      (fields
-        (field (name Reference) C)
-        (field (name Value) C))
-      (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))))
     (libpart (lib device) (part R)
       (description Resistance)
       (footprints
@@ -138,6 +126,18 @@
         (pin (num 7) (name G) (type input))
         (pin (num 8) (name K) (type BiDi))
         (pin (num 9) (name F2) (type power_in))))
+    (libpart (lib device) (part C)
+      (description "Condensateur non polarise")
+      (footprints
+        (fp SM*)
+        (fp C?)
+        (fp C1-1))
+      (fields
+        (field (name Reference) C)
+        (field (name Value) C))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
     (libpart (lib conn) (part CONN_1)
       (description "1 pin")
       (fields

@@ -80,7 +80,7 @@ enum EDA_DRAW_MODE_T {
 class EDA_TEXT
 {
 protected:
-    wxString            m_Text;             ///< The 'base' text, maybe later processed for display    
+    wxString            m_Text;             ///< The 'base' text, maybe later processed for display
     int                 m_Thickness;        ///< pen size used to draw this text
     double              m_Orient;           ///< Orient in 0.1 degrees
     wxPoint             m_Pos;              ///< XY position of anchor text.
@@ -200,12 +200,12 @@ public:
      * @param aColor = text color
      * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
      * @param aDisplay_mode = LINE, FILLED or SKETCH
-     * @param aAnchor_color = anchor color ( UNSPECIFIED = do not draw anchor ).
+     * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
      */
     void Draw( EDA_RECT* aClipBox, wxDC* aDC,
                const wxPoint& aOffset, EDA_COLOR_T aColor,
                GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = LINE,
-               EDA_COLOR_T aAnchor_color = UNSPECIFIED_COLOR );
+               EDA_COLOR_T aAnchor_color = EDA_COLOR_T(UNSPECIFIED_COLOR) );
 
     /**
      * Convert the text shape to a list of segment

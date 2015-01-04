@@ -52,6 +52,12 @@ class BOARD;
 class MSG_PANEL_ITEM;
 
 
+enum INCLUDE_NPTH_T
+{
+    DO_NOT_INCLUDE_NPTH = false,
+    INCLUDE_NPTH = true
+};
+
 /**
  * Enum MODULE_ATTR_T
  * is the set of attributes allowed within a MODULE, using MODULE::SetAttributes()
@@ -425,12 +431,6 @@ public:
      */
     D_PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask = LSET::AllLayersMask() );
 
-    enum INCLUDE_NPTH_T
-    {
-        DO_NOT_INCLUDE_NPTH = false,
-        INCLUDE_NPTH = true
-    };
-
     /**
      * GetPadCount
      * returns the number of pads.
@@ -439,7 +439,7 @@ public:
      *                     non-plated through holes when false.
      * @return the number of pads according to \a aIncludeNPTH.
      */
-    unsigned GetPadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH ) const;
+    unsigned GetPadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T( INCLUDE_NPTH ) ) const;
 
     double GetArea() const                  { return m_Surface; }
 
