@@ -153,7 +153,7 @@
                             <property name="caption"></property>
                             <property name="caption_visible">1</property>
                             <property name="center_pane">0</property>
-                            <property name="choices">&quot;KiCad (*.Pretty folder containing .kicad_mod files)&quot; &quot;GitHub (.Pretty lib stored on GitHub depos)&quot; &quot;Legacy ( old *.mod lib file)&quot; &quot;Eagle V6 xml library file&quot; &quot;Geda footprint folder (folder containing *.fp files)&quot;</property>
+                            <property name="choices">&quot;KiCad (*.Pretty folder containing .kicad_mod files)&quot; &quot;GitHub (.Pretty lib stored on GitHub repos)&quot; &quot;Legacy ( old *.mod lib file)&quot; &quot;Eagle V6 xml library file&quot; &quot;Geda footprint folder (folder containing *.fp files)&quot;</property>
                             <property name="close_button">1</property>
                             <property name="context_help"></property>
                             <property name="context_menu">1</property>

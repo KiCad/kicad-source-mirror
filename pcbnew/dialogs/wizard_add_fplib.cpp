@@ -714,7 +714,7 @@ void WIZARD_FPLIB_TABLE::selectLibsGithub()    // select a set of library on Git
     wxArrayString urls;
 
     // Run the web viewer and open the default URL: the default path
-    // or our github library depos
+    // or our github library repos
     wxString defaultURL = m_currLibDescr->m_DefaultPath;
 
     if( defaultURL.IsEmpty() )
