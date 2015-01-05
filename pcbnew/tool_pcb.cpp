@@ -46,13 +46,6 @@
 
 #include <wx/wupdlock.h>
 
-
-#ifdef __UNIX__
-#define LISTBOX_WIDTH 150
-#else
-#define LISTBOX_WIDTH 130
-#endif
-
 #define SEL_LAYER_HELP _( \
         "Show active layer selections\nand select layer pair for route and place via" )
 
@@ -551,7 +544,20 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     wxWindowUpdateLocker dummy( this );
 
     if( m_auxiliaryToolBar )
+    {
+        updateTraceWidthSelectBox();
+        updateViaSizeSelectBox();
+
+        // combobox sizes can have changed: apply new best sizes
+        wxAuiToolBarItem* item = m_auxiliaryToolBar->FindTool( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH );
+        item->SetMinSize( m_SelTrackWidthBox->GetBestSize() );
+        item = m_auxiliaryToolBar->FindTool( ID_AUX_TOOLBAR_PCB_VIA_SIZE );
+        item->SetMinSize( m_SelViaSizeBox->GetBestSize() );
+
+        m_auxiliaryToolBar->Realize();
+        m_auimgr.Update();
         return;
+    }
 
     m_auxiliaryToolBar = new wxAuiToolBar( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                            wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
@@ -562,19 +568,19 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     m_SelTrackWidthBox = new wxComboBox( m_auxiliaryToolBar,
                                          ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
                                          wxEmptyString,
-                                         wxPoint( -1, -1 ),
-                                         wxSize( LISTBOX_WIDTH, -1 ),
+                                         wxDefaultPosition, wxDefaultSize,
                                          0, NULL, wxCB_READONLY );
+    updateTraceWidthSelectBox();
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
-    m_auxiliaryToolBar->AddSeparator();
+//    m_auxiliaryToolBar->AddSeparator();
 
     // Creates box to display and choose vias diameters:
     m_SelViaSizeBox = new wxComboBox( m_auxiliaryToolBar,
                                       ID_AUX_TOOLBAR_PCB_VIA_SIZE,
                                       wxEmptyString,
-                                      wxPoint( -1, -1 ),
-                                      wxSize( (LISTBOX_WIDTH*12)/10, -1 ),
+                                      wxDefaultPosition, wxDefaultSize,
                                       0, NULL, wxCB_READONLY );
+    updateViaSizeSelectBox();
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
     m_auxiliaryToolBar->AddSeparator();
 
@@ -591,9 +597,9 @@ an existing track use its width\notherwise, use current width setting" ),
     m_gridSelectBox = new wxComboBox( m_auxiliaryToolBar,
                                       ID_ON_GRID_SELECT,
                                       wxEmptyString,
-                                      wxPoint( -1, -1 ),
-                                      wxSize( LISTBOX_WIDTH, -1 ),
+                                      wxDefaultPosition, wxDefaultSize,
                                       0, NULL, wxCB_READONLY );
+    updateGridSelectBox();
     m_auxiliaryToolBar->AddControl( m_gridSelectBox );
 
     //  Add the box to display and select the current Zoom
@@ -601,19 +607,14 @@ an existing track use its width\notherwise, use current width setting" ),
     m_zoomSelectBox = new wxComboBox( m_auxiliaryToolBar,
                                       ID_ON_ZOOM_SELECT,
                                       wxEmptyString,
-                                      wxPoint( -1, -1 ),
-                                      wxSize( LISTBOX_WIDTH, -1 ),
+                                      wxDefaultPosition, wxDefaultSize,
                                       0, NULL, wxCB_READONLY );
-    m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
-
     updateZoomSelectBox();
-    updateGridSelectBox();
-    updateTraceWidthSelectBox();
-    updateViaSizeSelectBox();
+    m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
 
     // after adding the buttons to the toolbar, must call Realize()
     m_auxiliaryToolBar->Realize();
-    m_auxiliaryToolBar->AddSeparator();
+//    m_auxiliaryToolBar->AddSeparator();
 }
 
 
@@ -623,13 +624,25 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
         return;
 
     wxString msg;
+    bool mmFirst = g_UserUnit != INCHES;
 
     m_SelTrackWidthBox->Clear();
 
     for( unsigned ii = 0; ii < GetDesignSettings().m_TrackWidthList.size(); ii++ )
     {
-        msg = _( "Track " ) + CoordinateToString( GetDesignSettings().m_TrackWidthList[ii], true );
+        int size = GetDesignSettings().m_TrackWidthList[ii];
 
+        double valueMils = To_User_Unit( INCHES, size ) * 1000;
+        double value_mm = To_User_Unit( MILLIMETRES, size );
+
+        if( mmFirst )
+            msg.Printf( _( "Track: %.3f mm (%.2f mils)" ),
+                        value_mm, valueMils );
+        else
+            msg.Printf( _( "Track: %.2f mils (%.3f mm)" ),
+                        valueMils, value_mm );
+
+        // Mark the netclass track width value (the first in list)
         if( ii == 0 )
             msg << wxT( " *" );
 
@@ -651,16 +664,42 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
     wxString msg;
 
     m_SelViaSizeBox->Clear();
+    bool mmFirst = g_UserUnit != INCHES;
 
     for( unsigned ii = 0; ii < GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
     {
-        msg = _( "Via " );
-        msg << CoordinateToString( GetDesignSettings().m_ViasDimensionsList[ii].m_Diameter, true );
+        int diam = GetDesignSettings().m_ViasDimensionsList[ii].m_Diameter;
 
-        if( GetDesignSettings().m_ViasDimensionsList[ii].m_Drill )
-            msg  << wxT("/ ")
-                 << CoordinateToString( GetDesignSettings().m_ViasDimensionsList[ii].m_Drill, true );
+        double valueMils = To_User_Unit( INCHES, diam ) * 1000;
+        double value_mm = To_User_Unit( MILLIMETRES, diam );
 
+        if( mmFirst )
+            msg.Printf( _( "Via: %.2f mm (%.1f mils)" ),
+                        value_mm, valueMils );
+        else
+            msg.Printf( _( "Via: %.1f mils (%.2f mm)" ),
+                        valueMils, value_mm );
+
+        int hole = GetDesignSettings().m_ViasDimensionsList[ii].m_Drill;
+
+        if( hole )
+        {
+            msg  << wxT("/ ");
+            wxString hole_str;
+            double valueMils = To_User_Unit( INCHES, hole ) * 1000;
+            double value_mm = To_User_Unit( MILLIMETRES, hole );
+
+            if( mmFirst )
+                hole_str.Printf( _( "%.2f mm (%.1f mils)" ),
+                            value_mm, valueMils );
+            else
+                hole_str.Printf( _( "%.1f mils (%.2f mm)" ),
+                            valueMils, value_mm );
+
+            msg += hole_str;
+        }
+
+        // Mark the netclass via size value (the first in list)
         if( ii == 0 )
             msg << wxT( " *" );
 

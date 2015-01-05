@@ -810,42 +810,16 @@ void PCB_BASE_FRAME::updateGridSelectBox()
 
     // Update grid values with the current units setting.
     m_gridSelectBox->Clear();
-
-    wxString msg;
-    wxString format = _( "Grid:");
-
-    switch( g_UserUnit )
-    {
-    case INCHES:    // the grid size is displayed in mils
-    case MILLIMETRES:
-        format += wxT( " %.6f" );
-        break;
-
-    case UNSCALED_UNITS:
-        format += wxT( " %f" );
-        break;
-    }
+    wxArrayString gridsList;
+    int icurr = GetScreen()->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );
 
     for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {
         GRID_TYPE& grid = GetScreen()->GetGrid( i );
-        double value = To_User_Unit( g_UserUnit, grid.m_Size.x );
-        if( g_UserUnit == INCHES )
-            value *= 1000;
-
-        if( grid.m_Id != ID_POPUP_GRID_USER )
-        {
-            msg.Printf( format.GetData(), value );
-            StripTrailingZeros( msg );
-        }
-        else
-            msg = _( "User Grid" );
-
-        m_gridSelectBox->Append( msg, (void*) &grid.m_Id );
-
-        if( ( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) == GetScreen()->GetGrid( i ).m_Id )
-            m_gridSelectBox->SetSelection( i );
+        m_gridSelectBox->Append( gridsList[i], (void*) &grid.m_Id );
     }
+
+    m_gridSelectBox->SetSelection( icurr );
 }
 
 void PCB_BASE_FRAME::updateZoomSelectBox()
@@ -856,19 +830,17 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
     wxString msg;
 
     m_zoomSelectBox->Clear();
-    m_zoomSelectBox->Append( _( "Auto" ) );
+    m_zoomSelectBox->Append( _( "Zoom Auto" ) );
     m_zoomSelectBox->SetSelection( 0 );
 
     for( unsigned i = 0;  i < GetScreen()->m_ZoomList.size();  ++i )
     {
         msg = _( "Zoom " );
 
-        wxString value = wxString::Format( wxT( "%g" ),
-
-                                // @todo could do scaling here and show a "percentage"
-                                GetScreen()->m_ZoomList[i]
-                                );
-
+        // @todo could do scaling here and show the "percentage" depending on
+        // the screen pixel size
+        double level =  254000.0 / (double)GetScreen()->m_ZoomList[i];
+        wxString value = wxString::Format( wxT( "%d%%" ), int(level * 100) );
         msg += value;
 
         m_zoomSelectBox->Append( msg );
