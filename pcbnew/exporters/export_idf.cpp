@@ -548,7 +548,7 @@ bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName, bool aUseThou )
     idfBoard.SetLibraryVersion( 0 );
 
     std::ostringstream ostr;
-    ostr << "Created by KiCad " << TO_UTF8( GetBuildVersion() );
+    ostr << "KiCad " << TO_UTF8( GetBuildVersion() );
     idfBoard.SetIDFSource( ostr.str() );
 
     try
