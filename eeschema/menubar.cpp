@@ -419,8 +419,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( preferencesMenu,
                  ID_CONFIG_READ,
-                 _( "&Read Preferences" ),
-                 _( "Read application preferences" ),
+                 _( "Load Prefe&rences" ),
+                 _( "Load application preferences" ),
                  KiBitmap( read_setup_xpm ) );
 
     // Menu Tools:
@@ -446,8 +446,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // ERC
     AddMenuItem( toolsMenu,
                  ID_GET_ERC,
-                 _( "Electric Rules &Checker" ),
-                 _( "Perform electrical rule check" ),
+                 _( "Electrical Rules &Checker" ),
+                 _( "Perform electrical rules check" ),
                  KiBitmap( erc_xpm ) );
 
     AddMenuItem( toolsMenu,

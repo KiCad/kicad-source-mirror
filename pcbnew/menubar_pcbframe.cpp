@@ -510,8 +510,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( save_setup_xpm ) );
 
     AddMenuItem( configmenu, ID_CONFIG_READ,
-                 _( "&Read Preferences" ),
-                 _( "Read application preferences" ),
+                 _( "Load Prefe&rences" ),
+                 _( "Load application preferences" ),
                  KiBitmap( read_setup_xpm ) );
 
     //----- Tools menu ----------------------------------------------------------
