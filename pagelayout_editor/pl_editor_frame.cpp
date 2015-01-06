@@ -27,7 +27,6 @@
  */
 
 #include <fctsys.h>
-//#include <pgm_base.h>
 #include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <build_version.h>
@@ -58,6 +57,10 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )
 {
     m_FrameName = PL_EDITOR_FRAME_NAME;
+    m_zoomLevelCoeff = 290.0;   // Adjusted to roughly displays zoom level = 1
+                                // when the screen shows a 1:1 image
+                                // obviously depends on the monitor,
+                                // but this is an acceptable value
 
     m_showAxis = false;                 // true to show X and Y axis on screen
     m_showGridAxis = true;
@@ -404,6 +407,9 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     if( !screen )
         return;
 
+    // Display Zoom level:
+    EDA_DRAW_FRAME::UpdateStatusBar();
+
     // coodinate origin can be the paper Top Left corner,
     // or each of 4 page corners
     // We know the origin, and the orientation of axis
@@ -490,10 +496,6 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     dYpos = To_User_Unit( g_UserUnit, dy * Ysign );
     line.Printf( locformatter, dXpos, dYpos );
     SetStatusText( line, 3 );
-
-    // Display Zoom level: zoom = zoom_coeff/ZoomScalar
-    line.Printf( wxT( "Z %.1f" ), screen->GetZoom() );
-    SetStatusText( line, 1 );
 
     // Display corner reference for coord origin
     line.Printf( _("coord origin: %s"),
@@ -772,4 +774,10 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
     RebuildDesignTree();
     Zoom_Automatique( true );
     m_canvas->Refresh();
+}
+
+
+const wxString PL_EDITOR_FRAME::GetZoomLevelIndicator() const
+{
+    return EDA_DRAW_FRAME::GetZoomLevelIndicator();
 }

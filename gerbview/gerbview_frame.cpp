@@ -70,6 +70,11 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 {
     m_colorsSettings = &g_ColorsSettings;
     m_gerberLayout = NULL;
+    m_zoomLevelCoeff = ZOOM_FACTOR( 110 );   // Adjusted to roughly displays zoom level = 1
+                                        // when the screen shows a 1:1 image
+                                        // obviously depends on the monitor,
+                                        // but this is an acceptable value
+
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
     SetPageSettings( pageInfo );
 
@@ -863,12 +868,12 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     {
     case INCHES:
         absformatter = wxT( "X %.6f  Y %.6f" );
-        locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
+        locformatter = wxT( "dx %.6f  dy %.6f  dist %.4f" );
         break;
 
     case MILLIMETRES:
         absformatter = wxT( "X %.5f  Y %.5f" );
-        locformatter = wxT( "dx %.5f  dy %.5f  d %.5f" );
+        locformatter = wxT( "dx %.5f  dy %.5f  dist %.3f" );
         break;
 
     case UNSCALED_UNITS:
@@ -894,3 +899,8 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     }
 }
 
+
+const wxString GERBVIEW_FRAME::GetZoomLevelIndicator() const
+{
+    return EDA_DRAW_FRAME::GetZoomLevelIndicator();
+}

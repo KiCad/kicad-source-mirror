@@ -108,6 +108,14 @@ public:
     const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
     const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME
 
+    /**
+     * Function GetZoomLevelIndicator
+     * returns a human readable value which can be displayed as zoom
+     * level indicator in dialogs.
+     * Virtual from the base class
+     */
+    const wxString GetZoomLevelIndicator() const;
+
     PL_EDITOR_SCREEN* GetScreen() const                         // overload EDA_DRAW_FRAME
     {
         return (PL_EDITOR_SCREEN*) EDA_DRAW_FRAME::GetScreen();

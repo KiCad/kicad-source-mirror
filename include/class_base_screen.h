@@ -453,6 +453,18 @@ public:
     }
 
     /**
+     * Function BuildGridsChoiceList().
+     * Build the human readable list of grid list, for menus or combo boxes
+     * the list shows the grid size both in mils or mm.
+     * @param aGridsList = a wxArrayString to populate
+     * @param aMmFirst = true to have mm first and mils after
+     *                   false to have mils first and mm after
+     * @return the index of the curr grid in list, if found or -1
+     */
+    int BuildGridsChoiceList( wxArrayString& aGridsList, bool aMmFirst) const;
+
+
+    /**
      * Function GetClass
      * returns the class name.
      * @return wxString

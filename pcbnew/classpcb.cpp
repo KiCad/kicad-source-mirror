@@ -62,6 +62,8 @@
     Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
     functions )
 */
+#define DEFAULT_ZOOM ZOOM_FACTOR( 120 )
+
 static const double pcbZoomList[] =
 {
     ZOOM_FACTOR( 0.1 ),
@@ -73,17 +75,18 @@ static const double pcbZoomList[] =
     ZOOM_FACTOR( 2.0 ),
     ZOOM_FACTOR( 3.0 ),
     ZOOM_FACTOR( 4.5 ),
-    ZOOM_FACTOR( 7.0 ),
-    ZOOM_FACTOR( 10.0 ),
+    ZOOM_FACTOR( 6.0 ),
+    ZOOM_FACTOR( 8.0 ),
+    ZOOM_FACTOR( 11.0 ),
     ZOOM_FACTOR( 15.0 ),
     ZOOM_FACTOR( 22.0 ),
     ZOOM_FACTOR( 35.0 ),
     ZOOM_FACTOR( 50.0 ),
     ZOOM_FACTOR( 80.0 ),
-    ZOOM_FACTOR( 120.0 ),
+    ZOOM_FACTOR( 110.0 ),
+    ZOOM_FACTOR( 150.0 ),
     ZOOM_FACTOR( 200.0 ),
     ZOOM_FACTOR( 300.0 ),
-
 /*
     The largest distance that wx can support is INT_MAX, since it represents
     distance often in a wxCoord or wxSize. As a scalar, a distance is always
@@ -179,7 +182,7 @@ PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     m_Route_Layer_TOP    = F_Cu;     // default layers pair for vias (bottom to top)
     m_Route_Layer_BOTTOM = B_Cu;
 
-    SetZoom( ZOOM_FACTOR( 120 ) );             // a default value for zoom
+    SetZoom( DEFAULT_ZOOM );             // a default value for zoom
 
     InitDataPoints( aPageSizeIU );
 }

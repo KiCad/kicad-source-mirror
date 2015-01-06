@@ -201,6 +201,14 @@ public:
      */
     virtual double BestZoom();
 
+    /**
+     * Function GetZoomLevelIndicator
+     * returns a human readable value which can be displayed as zoom
+     * level indicator in dialogs.
+     * Virtual from the base class
+     */
+    const wxString GetZoomLevelIndicator() const;
+
     virtual void Show3D_Frame( wxCommandEvent& event );
 
     // Read/write functions:

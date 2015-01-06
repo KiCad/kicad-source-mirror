@@ -65,6 +65,9 @@ protected:
     EDA_COLOR_T m_gridColor;                // Grid color
     EDA_COLOR_T m_drawBgColor;              ///< the background color of the draw canvas
                                             ///< BLACK for Pcbnew, BLACK or WHITE for eeschema
+    double      m_zoomLevelCoeff;           ///< a suitable value to convert the internal zoom scaling factor
+                                            // to a zoom level value which rougly gives 1.0 when the board/schematic
+                                            // is at scale = 1
 
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
@@ -328,6 +331,17 @@ public:
      * @param aMasterMenu = the menu to populate.
      */
     virtual void AddMenuZoomAndGrid( wxMenu* aMasterMenu );
+
+    /**
+     * Function GetZoomLevelIndicator
+     * returns a human readable value which can be displayed as zoom
+     * level indicator in dialogs.
+     * this can be a percentage or other indicator.
+     * it is virtual because it could be different for pcbnew, gerbview or eeschema
+     * (different internal units and different purposes)
+     * note also adjust m_zoomLevelCoeff is the way to adjust the displayed value
+     */
+    virtual const wxString GetZoomLevelIndicator() const;
 
     void EraseMsgBox();
     void Process_PageSettings( wxCommandEvent& event );

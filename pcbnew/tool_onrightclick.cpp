@@ -51,8 +51,7 @@ void PCB_EDIT_FRAME::ToolOnRightClick( wxCommandEvent& event )
 
         if( dlg.ShowModal() == wxID_OK )
         {
-            updateTraceWidthSelectBox();
-            updateViaSizeSelectBox();
+            ReCreateAuxiliaryToolbar();
         }
 
         break;
