@@ -57,21 +57,13 @@
 
 #define EESCHEMA_FILE_STAMP   "EESchema"
 
-/* Default Eeschema zoom values. Limited to 17 values to keep a decent size
+/* Default zoom values. Limited to these values to keep a decent size
  * to menus
- */
-/* Please, note: wxMSW before version 2.9 seems have
- * problems with zoom values < 1 ( i.e. userscale > 1) and needs to be patched:
- * edit file <wxWidgets>/src/msw/dc.cpp
- * search for line static const int VIEWPORT_EXTENT = 1000;
- * and replace by static const int VIEWPORT_EXTENT = 10000;
- * see http://trac.wxwidgets.org/ticket/9554
- * This is a workaround that is not a full fix, but remaining artifacts are acceptable
  */
 static double SchematicZoomList[] =
 {
-    0.5, 0.7, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0,
-    12.0, 16.0, 23.0, 32.0, 48.0, 64.0, 80.0, 128.0
+    0.5, 0.7, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0, 11.0,
+    13.0, 16.0, 20.0, 26.0, 32.0, 48.0, 64.0, 80.0, 128.0
 };
 
 #define MM_TO_SCH_UNITS 1000.0 / 25.4       //schematic internal unites are mils

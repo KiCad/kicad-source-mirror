@@ -296,11 +296,11 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
         fpid = pcbnew.FPID(self.module.GetValue())  # the name in library
         self.module.SetFPID(fpid)
 
-        self.BuildThisFootprint()  # implementer's build function
-
         self.SetModule3DModel()  # add a 3d module if specified
 
         thick = self.GetTextThickness()
 
         self.module.Reference().SetThickness(thick)
         self.module.Value().SetThickness(thick)
+
+        self.BuildThisFootprint()  # implementer's build function

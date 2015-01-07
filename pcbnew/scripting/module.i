@@ -31,7 +31,7 @@
 %extend MODULE
 {
   %pythoncode
-  {
+  %{
 
     #def SaveToLibrary(self,filename):
     #  return SaveModuleToLibrary(filename,self)
@@ -51,7 +51,7 @@
         elif type(itemC) in [ TEXTE_PCB, DIMENSION, TEXTE_MODULE, DRAWSEGMENT,EDGE_MODULE]:
             item.thisown = 0
             self.GraphicalItems().PushBack(item)
-  }
+  %}
 
 }
 

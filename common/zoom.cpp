@@ -251,7 +251,7 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     // Populate zoom submenu.
     for( int i = 0; i < maxZoomIds; i++ )
     {
-        msg.Printf( wxT( "%g" ), screen->m_ZoomList[i] );
+        msg.Printf( wxT( "%.2f" ), m_zoomLevelCoeff / screen->m_ZoomList[i] );
 
         zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_START + i, _( "Zoom: " ) + msg,
                              wxEmptyString, wxITEM_CHECK );
@@ -266,43 +266,16 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
         AddMenuItem( MasterMenu, gridMenu, ID_POPUP_GRID_SELECT,
                      _( "Grid Select" ), KiBitmap( grid_select_xpm ) );
 
-        GRID_TYPE   tmp;
-        wxRealPoint grid = screen->GetGridSize();
+        wxArrayString gridsList;
+        int icurr = screen->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );
 
-        for( size_t i = 0; i < screen->GetGridCount(); i++ )
+        for( unsigned i = 0; i < gridsList.GetCount(); i++ )
         {
-            tmp = screen->GetGrid( i );
-            double gridValueInch = To_User_Unit( INCHES, tmp.m_Size.x );
-            double gridValue_mm = To_User_Unit( MILLIMETRES, tmp.m_Size.x );
+            GRID_TYPE& grid = screen->GetGrid( i );
+            gridMenu->Append( grid.m_Id, gridsList[i], wxEmptyString, true );
 
-            if( tmp.m_Id == ID_POPUP_GRID_USER )
-            {
-                msg = _( "User Grid" );
-            }
-            else
-            {
-                switch( g_UserUnit )
-                {
-                case INCHES:
-                    msg.Printf( wxT( "%.1f mils, (%.4f mm)" ),
-                                gridValueInch * 1000, gridValue_mm );
-                    break;
-
-                case MILLIMETRES:
-                    msg.Printf( wxT( "%.4f mm, (%.1f mils)" ),
-                                gridValue_mm, gridValueInch * 1000 );
-                    break;
-
-                case UNSCALED_UNITS:
-                    msg = wxT( "???" );
-                    break;
-                }
-            }
-
-            gridMenu->Append( tmp.m_Id, msg, wxEmptyString, true );
-
-            if( grid == tmp.m_Size )
-                gridMenu->Check( tmp.m_Id, true );
+            if( (int)i == icurr )
+                gridMenu->Check( grid.m_Id, true );
         }
     }
 

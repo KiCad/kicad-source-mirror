@@ -116,6 +116,11 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_FastGrid2           = 0;
 
     m_auxiliaryToolBar    = NULL;
+
+    m_zoomLevelCoeff      = 110.0 * IU_PER_DECIMILS;  // Adjusted to roughly displays zoom level = 1
+                                        // when the screen shows a 1:1 image
+                                        // obviously depends on the monitor,
+                                        // but this is an acceptable value
 }
 
 
@@ -630,8 +635,6 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
  */
 void PCB_BASE_FRAME::UpdateStatusBar()
 {
-    EDA_DRAW_FRAME::UpdateStatusBar();
-
     PCB_SCREEN* screen = GetScreen();
 
     if( !screen )
@@ -643,6 +646,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     double dYpos;
     wxString line;
     wxString locformatter;
+
+    EDA_DRAW_FRAME::UpdateStatusBar();
 
     if( DisplayOpt.DisplayPolarCood )  // display polar coordinates
     {
@@ -657,26 +662,16 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         wxString formatter;
         switch( g_UserUnit )
         {
-#if defined( USE_PCBNEW_NANOMETRE )
         case INCHES:
-            formatter = wxT( "Ro %.6f Th %.1f" );
+            formatter = wxT( "Ro %.6f  Th %.1f" );
             break;
 
         case MILLIMETRES:
-            formatter = wxT( "Ro %.6f Th %.1f" );
+            formatter = wxT( "Ro %.6f  Th %.1f" );
             break;
-#else
-        case INCHES:
-            formatter = wxT( "Ro %.4f Th %.1f" );
-            break;
-
-        case MILLIMETRES:
-            formatter = wxT( "Ro %.3f Th %.1f" );
-            break;
-#endif
 
         case UNSCALED_UNITS:
-            formatter = wxT( "Ro %f Th %f" );
+            formatter = wxT( "Ro %f  Th %f" );
             break;
         }
 
@@ -696,17 +691,17 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     {
     case INCHES:
         absformatter = wxT( "X %.6f  Y %.6f" );
-        locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
+        locformatter = wxT( "dx %.6f dy %.6f dist %.4f" );
         break;
 
     case MILLIMETRES:
         absformatter = wxT( "X %.6f  Y %.6f" );
-        locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
+        locformatter = wxT( "dx %.6f dy %.6f dist %.3f" );
         break;
 
     case UNSCALED_UNITS:
         absformatter = wxT( "X %f  Y %f" );
-        locformatter = wxT( "dx %f  dy %f  d %f" );
+        locformatter = wxT( "dx %f dy %f dist %f" );
         break;
     }
 
@@ -800,6 +795,12 @@ void PCB_BASE_FRAME::OnModify()
 }
 
 
+const wxString PCB_BASE_FRAME::GetZoomLevelIndicator() const
+{
+    return EDA_DRAW_FRAME::GetZoomLevelIndicator();
+}
+
+
 void PCB_BASE_FRAME::updateGridSelectBox()
 {
     UpdateStatusBar();
@@ -810,42 +811,16 @@ void PCB_BASE_FRAME::updateGridSelectBox()
 
     // Update grid values with the current units setting.
     m_gridSelectBox->Clear();
-
-    wxString msg;
-    wxString format = _( "Grid:");
-
-    switch( g_UserUnit )
-    {
-    case INCHES:    // the grid size is displayed in mils
-    case MILLIMETRES:
-        format += wxT( " %.6f" );
-        break;
-
-    case UNSCALED_UNITS:
-        format += wxT( " %f" );
-        break;
-    }
+    wxArrayString gridsList;
+    int icurr = GetScreen()->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );
 
     for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {
         GRID_TYPE& grid = GetScreen()->GetGrid( i );
-        double value = To_User_Unit( g_UserUnit, grid.m_Size.x );
-        if( g_UserUnit == INCHES )
-            value *= 1000;
-
-        if( grid.m_Id != ID_POPUP_GRID_USER )
-        {
-            msg.Printf( format.GetData(), value );
-            StripTrailingZeros( msg );
-        }
-        else
-            msg = _( "User Grid" );
-
-        m_gridSelectBox->Append( msg, (void*) &grid.m_Id );
-
-        if( ( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) == GetScreen()->GetGrid( i ).m_Id )
-            m_gridSelectBox->SetSelection( i );
+        m_gridSelectBox->Append( gridsList[i], (void*) &grid.m_Id );
     }
+
+    m_gridSelectBox->SetSelection( icurr );
 }
 
 void PCB_BASE_FRAME::updateZoomSelectBox()
@@ -856,19 +831,15 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
     wxString msg;
 
     m_zoomSelectBox->Clear();
-    m_zoomSelectBox->Append( _( "Auto" ) );
+    m_zoomSelectBox->Append( _( "Zoom Auto" ) );
     m_zoomSelectBox->SetSelection( 0 );
 
     for( unsigned i = 0;  i < GetScreen()->m_ZoomList.size();  ++i )
     {
         msg = _( "Zoom " );
 
-        wxString value = wxString::Format( wxT( "%g" ),
-
-                                // @todo could do scaling here and show a "percentage"
-                                GetScreen()->m_ZoomList[i]
-                                );
-
+        double level =  m_zoomLevelCoeff / (double)GetScreen()->m_ZoomList[i];
+        wxString value = wxString::Format( wxT( "%.2f" ), level );
         msg += value;
 
         m_zoomSelectBox->Append( msg );

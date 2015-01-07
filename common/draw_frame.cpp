@@ -128,6 +128,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_snapToGrid          = true;
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
     m_movingCursorWithKeyboard = false;
+    m_zoomLevelCoeff      = 1.0;
 
     m_auimgr.SetFlags(wxAUI_MGR_DEFAULT|wxAUI_MGR_LIVE_RESIZE);
 
@@ -613,22 +614,29 @@ bool EDA_DRAW_FRAME::HandleBlockEnd( wxDC* DC )
 
 void EDA_DRAW_FRAME::UpdateStatusBar()
 {
-    wxString        Line;
-    BASE_SCREEN*    screen = GetScreen();
-
-    if( !screen )
-        return;
-
-    // Display Zoom level: zoom = zoom_coeff/ZoomScalar
-    Line.Printf( wxT( "Z %g" ), screen->GetZoom() );
-
-    SetStatusText( Line, 1 );
+    SetStatusText( GetZoomLevelIndicator(), 1 );
 
     // Absolute and relative cursor positions are handled by overloading this function and
     // handling the internal to user units conversion at the appropriate level.
 
     // refresh units display
     DisplayUnitsMsg();
+}
+
+const wxString EDA_DRAW_FRAME::GetZoomLevelIndicator() const
+{
+    BASE_SCREEN*    screen = GetScreen();
+    wxString Line;
+
+    if( screen )
+    {
+        // returns a human readable value which can be displayed as zoom
+        // level indicator in dialogs.
+        double level =  m_zoomLevelCoeff / (double)screen->GetZoom();
+        Line.Printf( wxT( "Z %.2f" ), level );
+    }
+
+    return Line;
 }
 
 

@@ -442,17 +442,6 @@ bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
         return false;
 
     m_NetlistFileName = aFileSet[0];
-    ReadNetListAndLinkFiles();
-
-    UpdateTitle();
-
-    // Resize the components list box. This is needed in case the
-    // contents have shrunk compared to the previous netlist.
-    m_compListBox->UpdateWidth();
-
-    // OSX need it since some objects are "rebuild" just make aware AUI
-    // Fixes #1258081
-    m_auimgr.Update();
 
     if( Kiface().IsSingle() )
     {
@@ -469,6 +458,18 @@ bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
         pro.SetExt( ProjectFileExtension );
         Prj().SetProjectFullName( pro.GetFullPath() );
     }
+
+    ReadNetListAndLinkFiles();
+
+    UpdateTitle();
+
+    // Resize the components list box. This is needed in case the
+    // contents have shrunk compared to the previous netlist.
+    m_compListBox->UpdateWidth();
+
+    // OSX need it since some objects are "rebuild" just make aware AUI
+    // Fixes #1258081
+    m_auimgr.Update();
 
     return true;
 }

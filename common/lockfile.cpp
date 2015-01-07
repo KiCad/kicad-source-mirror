@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2014-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 
 #include <wx/filename.h>
 #include <wx/snglinst.h>
+#include <common.h>
 
 
 wxSingleInstanceChecker* LockFile( const wxString& aFileName )
@@ -41,7 +42,8 @@ wxSingleInstanceChecker* LockFile( const wxString& aFileName )
     // We can have filenames coming from Windows, so also convert Windows separator
     lockFileName.Replace( wxT( "\\" ), wxT( "_" ) );
 
-    wxSingleInstanceChecker* p = new wxSingleInstanceChecker( lockFileName );
+    wxSingleInstanceChecker* p = new wxSingleInstanceChecker( lockFileName,
+                                                              GetKicadLockFilePath() );
 
     if( p->IsAnotherRunning() )
     {

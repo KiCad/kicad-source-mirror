@@ -22,7 +22,7 @@ WIZARD_FPLIB_TABLE_BASE::WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerPage1;
 	bSizerPage1 = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_rbFpLibFormatChoices[] = { _("KiCad (*.Pretty folder containing .kicad_mod files)"), _("GitHub (.Pretty lib stored on GitHub depos)"), _("Legacy ( old *.mod lib file)"), _("Eagle V6 xml library file"), _("Geda footprint folder (folder containing *.fp files)") };
+	wxString m_rbFpLibFormatChoices[] = { _("KiCad (*.Pretty folder containing .kicad_mod files)"), _("GitHub (.Pretty lib stored on GitHub repos)"), _("Legacy ( old *.mod lib file)"), _("Eagle V6 xml library file"), _("Geda footprint folder (folder containing *.fp files)") };
 	int m_rbFpLibFormatNChoices = sizeof( m_rbFpLibFormatChoices ) / sizeof( wxString );
 	m_rbFpLibFormat = new wxRadioBox( m_wizPage1, wxID_ANY, _("Library Format:"), wxDefaultPosition, wxDefaultSize, m_rbFpLibFormatNChoices, m_rbFpLibFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbFpLibFormat->SetSelection( 0 );

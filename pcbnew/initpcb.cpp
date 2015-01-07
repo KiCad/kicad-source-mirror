@@ -52,7 +52,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     GetScreen()->ClearUndoRedoList();
     GetScreen()->ClrModify();
 
-    // Items visibility flags will be set becuse a new board will be created.
+    // Items visibility flags will be set because a new board will be created.
     // Grid and ratsnest can be left to their previous state
     bool showGrid = IsElementVisible( GRID_VISIBLE );
     bool showRats = IsElementVisible( RATSNEST_VISIBLE );
@@ -68,11 +68,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     // clear filename, to avoid overwriting an old file
     GetBoard()->SetFileName( wxEmptyString );
 
-    // preserve grid size accross call to InitDataPoints()
-
-//  wxRealPoint gridsize = GetScreen()->GetGridSize();
     GetScreen()->InitDataPoints( GetPageSizeIU() );
-//  GetScreen()->SetGrid( gridsize );
 
     GetBoard()->ResetHighLight();
 
@@ -82,9 +78,10 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     // Default copper layers count set to 2: double layer board
     GetBoard()->SetCopperLayerCount( 2 );
 
-    // Update display
+    // Update display (some options depend on the board setup)
     GetBoard()->SetVisibleLayers( LSET().set() );
-
+    ReCreateLayerBox();
+    ReCreateAuxiliaryToolbar();
     ReFillLayerWidget();
 
     Zoom_Automatique( false );
@@ -116,10 +113,7 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
 
     SetCurItem( NULL );
 
-    // preserve grid size accross call to InitDataPoints()
-//    wxRealPoint gridsize = GetScreen()->GetGridSize();
     GetScreen()->InitDataPoints( GetPageSizeIU() );
-//    GetScreen()->SetGrid( gridsize );
 
     Zoom_Automatique( false );
 

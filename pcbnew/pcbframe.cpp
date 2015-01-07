@@ -731,8 +731,7 @@ void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
     if( returncode == wxID_OK )     // New rules, or others changes.
     {
         ReCreateLayerBox();
-        updateTraceWidthSelectBox();
-        updateViaSizeSelectBox();
+        ReCreateAuxiliaryToolbar();
         OnModify();
     }
 }
@@ -876,8 +875,7 @@ void PCB_EDIT_FRAME::unitsChangeRefresh()
 {
     PCB_BASE_FRAME::unitsChangeRefresh();    // Update the grid size select box.
 
-    updateTraceWidthSelectBox();
-    updateViaSizeSelectBox();
+    ReCreateAuxiliaryToolbar();
 }
 
 
@@ -1064,8 +1062,7 @@ bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
 
     if( change )
     {
-        updateTraceWidthSelectBox();
-        updateViaSizeSelectBox();
+        ReCreateAuxiliaryToolbar();
     }
 
     return change;
