@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -38,6 +38,7 @@
 
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
+#include <module_editor_frame.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -62,36 +63,43 @@ static double  TextInitialOrientation;  // module text initial orientation for
  *  Note there always are 2 mandatory texts: reference and value.
  *  New texts have the member TEXTE_MODULE.GetType() set to TEXT_is_DIVERS
  */
-TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
+TEXTE_MODULE* FOOTPRINT_EDIT_FRAME::CreateTextModule( MODULE* aModule, wxDC* aDC )
 {
-    TEXTE_MODULE* Text = new TEXTE_MODULE( Module );
+    TEXTE_MODULE* text = new TEXTE_MODULE( aModule );
 
-    // Add the new text object to the beginning of the draw item list.
-    if( Module )
-        Module->GraphicalItems().PushFront( Text );
-
-    Text->SetFlags( IS_NEW );
-
-    Text->SetText( wxT( "text" ) );
+    text->SetFlags( IS_NEW );
 
     GetDesignSettings().m_ModuleTextWidth = Clamp_Text_PenSize( GetDesignSettings().m_ModuleTextWidth,
-                                                                std::min( GetDesignSettings().m_ModuleTextSize.x, GetDesignSettings().m_ModuleTextSize.y ), true );
-    Text->SetSize( GetDesignSettings().m_ModuleTextSize );
-    Text->SetThickness( GetDesignSettings().m_ModuleTextWidth );
-    Text->SetTextPosition( GetCrossHairPosition() );
-    Text->SetLocalCoord();
+            std::min( GetDesignSettings().m_ModuleTextSize.x, GetDesignSettings().m_ModuleTextSize.y ), true );
+    text->SetSize( GetDesignSettings().m_ModuleTextSize );
+    text->SetThickness( GetDesignSettings().m_ModuleTextWidth );
+    text->SetPosition( GetCrossHairPosition() );
 
-    InstallTextModOptionsFrame( Text, NULL );
+    if( LSET::AllTechMask().test( GetActiveLayer() ) )    // i.e. a possible layer for a text
+        text->SetLayer( GetActiveLayer() );
+
+    InstallTextModOptionsFrame( text, NULL );
+
     m_canvas->MoveCursorToCrossHair();
 
-    Text->ClearFlags();
+    if( text->GetText().IsEmpty() )
+    {
+        delete text;
+        return NULL;
+    }
 
-    if( DC )
-        Text->Draw( m_canvas, DC, GR_OR );
+    // Add the new text object to the beginning of the footprint draw list.
+    if( aModule )
+        aModule->GraphicalItems().PushFront( text );
 
-    SetMsgPanel( Text );
+    text->ClearFlags();
 
-    return Text;
+    if( aDC )
+        text->Draw( m_canvas, aDC, GR_OR );
+
+    SetMsgPanel( text );
+
+    return text;
 }
 
 

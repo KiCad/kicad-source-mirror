@@ -343,7 +343,6 @@ public:
     void DeleteTextModule( TEXTE_MODULE* Text );
     void PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC );
     void StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC );
-    TEXTE_MODULE* CreateTextModule( MODULE* Module, wxDC* DC );
 
     /**
      * Function ResetTextSize

@@ -126,22 +126,6 @@ enum LAYER_ID
 
 #define MAX_CU_LAYERS       (B_Cu - F_Cu + 1)
 
-/* These were moved to legacy_plugin.cpp, please don't ever use them
-   outside there.  Now with the advent of class LSEQ, we don't iterate over
-   LAYER_ID any more, so therefore FIRST_COPPER_LAYER and LAST_COPPER_LAYER are
-   dead concepts.  They in fact failed to do what they were intended to do because
-   they implied a particular sequence which in and of itself was subject to change
-   and actually did when we flipped the pretty and *.kicad_pcb copper layer stack.
-   LSEQ is the way to go, use it.  It gives a level of manipulation between
-   LAYER_ID and iteration.
-#define FIRST_COPPER_LAYER      brain dead
-#define LAST_COPPER_LAYER       brain dead
-#define FIRST_LAYER             brain dead
-#define NB_LAYERS               use LAYER_ID_COUNT instead
-#define NB_COPPER_LAYERS        was always a max, not a number, use MAX_CU_LAYERS now.
-*/
-
-
 /// A sequence of layers, a sequence provides a certain order.
 typedef std::vector<LAYER_ID>   BASE_SEQ;
 
