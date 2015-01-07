@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2012 Jean-Pierre Charras
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 Jean-Pierre Charras
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -259,7 +259,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     wxString nameless_prj = NAMELESS_PROJECT  wxT( ".pro" );
 
     // Check if project file exists and if it is not noname.pro
-    if( !wxFileExists( prj_filename ) && !prj_filename.IsSameAs( nameless_prj ) )
+    if( !wxFileExists( prj_filename ) && !wxFileName( prj_filename ).GetFullName().IsSameAs( nameless_prj ) )
     {
         wxString msg = wxString::Format( _(
                 "KiCad project file '%s' not found" ),
