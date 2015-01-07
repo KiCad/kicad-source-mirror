@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -278,7 +278,7 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = NULL );
  *               wxExecute())
  */
 int ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC,
-                     wxProcess *callback = NULL );
+                    wxProcess *callback = NULL );
 
 
 /*******************/
@@ -432,6 +432,12 @@ const wxString PrePendPath( const wxString& aEnvVar, const wxString& aPriorityPa
  *  of deleting it.
  */
 wxConfigBase* GetNewConfig( const wxString& aProgName );
+
+/**
+ * Function GetKicadLockFilePath
+ * @return A wxString containing the path for lockfiles in Kicad
+ */
+wxString GetKicadLockFilePath();
 
 /**
  * Function GetKicadConfigPath
