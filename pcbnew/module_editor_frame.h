@@ -416,6 +416,43 @@ public:
      */
     bool DeleteModuleFromCurrentLibrary();
 
+    /**
+     * Function IsElementVisible
+     * tests whether a given element category is visible. Keep this as an
+     * inline function.
+     * @param aElement is from the enum by the same name
+     * @return bool - true if the element is visible.
+     * @see enum PCB_VISIBLE
+     */
+    bool IsElementVisible( int aElement ) const;
+
+    /**
+     * Function SetElementVisibility
+     * changes the visibility of an element category
+     * @param aElement is from the enum by the same name
+     * @param aNewState = The new visibility state of the element category
+     * @see enum PCB_VISIBLE
+     */
+    void SetElementVisibility( int aElement, bool aNewState );
+
+    /**
+     * Function IsGridVisible() , virtual
+     * @return true if the grid must be shown
+     */
+    virtual bool IsGridVisible() const;
+
+    /**
+     * Function SetGridVisibility() , virtual
+     * It may be overloaded by derived classes
+     * if you want to store/retrieve the grid visibility in configuration.
+     * @param aVisible = true if the grid must be shown
+     */
+    virtual void SetGridVisibility( bool aVisible );
+
+    /**
+     * Function GetGridColor() , virtual
+     * @return the color of the grid
+     */
     virtual EDA_COLOR_T GetGridColor() const;
 
     ///> @copydoc PCB_BASE_FRAME::SetActiveLayer()
@@ -447,6 +484,14 @@ protected:
 
     void restoreLastFootprint();
     void retainLastFootprint();
+
+    /**
+     * Creates a new text for the footprint
+     * @param aModule is the owner of the text
+     * @param aDC is the current DC (can be NULL )
+     * @return a pointer to the new text, or NULL if aborted
+     */
+    TEXTE_MODULE* CreateTextModule( MODULE* aModule, wxDC* aDC );
 };
 
 #endif      // MODULE_EDITOR_FRAME_H_

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2010 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
  *
@@ -79,15 +79,22 @@ const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
     RR( _( "References" ),      MOD_REFERENCES_VISIBLE, UNSPECIFIED_COLOR,  _( "Show footprint's references") ),
 };
 
+static int s_allowed_in_FpEditor[] =
+{
+    MOD_TEXT_INVISIBLE, PAD_FR_VISIBLE, PAD_BK_VISIBLE,
+    GRID_VISIBLE, MOD_VALUES_VISIBLE, MOD_REFERENCES_VISIBLE
+};
 
-PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize ) :
-    LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
-    myframe( aParent )
+PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner,
+                                    int aPointSize, bool aFpEditorMode ) :
+        LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
+        myframe( aParent )
 {
     m_alwaysShowActiveCopperLayer = false;
+    m_fp_editor_mode = aFpEditorMode;
     ReFillRender();
 
-    // Update default tabs labels for GerbView
+    // Update default tabs labels
     SetLayersManagerTabsText();
 
     //-----<Popup menu>-------------------------------------------------
@@ -105,6 +112,33 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwn
     // using installRightLayerClickHandler
 }
 
+
+/* return true if item aId has meaning in footprint editor mode,
+ * i.e. is in s_allowed_in_FpEditor and therefore is shown in render panel
+ */
+bool PCB_LAYER_WIDGET::isAllowedInFpMode( int aId )
+{
+    for( unsigned ii = 0; ii < DIM( s_allowed_in_FpEditor ); ii++ )
+        if( s_allowed_in_FpEditor[ii] == aId )
+            return true;
+
+    return false;
+}
+
+/* return true if item aId has meaning in footprint editor mode,
+ * i.e. is in s_allowed_in_FpEditor and therefore is shown in render panel
+ * Note: User layers, which are not paired, are not shown in layers manager.
+ * However a not listed layer can be reachable in the graphic item proprerties
+ * dialog.
+ */
+bool PCB_LAYER_WIDGET::isLayerAllowedInFpMode( LAYER_ID aLayer )
+{
+    static LSET allowed = LSET::AllTechMask();
+    // Currently not in use because putting a graphic item on a copper layer
+    // is not currently supported by DRC.
+    // allowed.set( F_Cu ).set( B_Cu );
+    return allowed.test( aLayer );
+}
 
 void PCB_LAYER_WIDGET::installRightLayerClickHandler()
 {
@@ -223,6 +257,9 @@ void PCB_LAYER_WIDGET::ReFillRender()
     {
         LAYER_WIDGET::ROW renderRow = s_render_rows[row];
 
+        if( !isAllowedInFpMode( renderRow.id ) )
+            continue;
+
         renderRow.tooltip = wxGetTranslation( s_render_rows[row].tooltip );
         renderRow.rowName = wxGetTranslation( s_render_rows[row].rowName );
 
@@ -246,6 +283,9 @@ void PCB_LAYER_WIDGET::SyncRenderStates()
     for( unsigned row=0;  row<DIM(s_render_rows);  ++row )
     {
         int rowId = s_render_rows[row].id;
+
+        if( !isAllowedInFpMode( rowId ) )
+            continue;
 
         // this does not fire a UI event
         SetRenderState( rowId, board->IsElementVisible( rowId ) );
@@ -305,6 +345,13 @@ void PCB_LAYER_WIDGET::ReFill()
         AppendLayerRow( LAYER_WIDGET::ROW(
             brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ),
             dsc, true ) );
+
+        if( m_fp_editor_mode && !isLayerAllowedInFpMode( layer ) )
+        {
+            getLayerComp( GetLayerRowCount()-1, COLUMN_COLOR_LYRNAME )->Enable( false );
+            getLayerComp( GetLayerRowCount()-1,
+                          COLUMN_COLORBM )->SetToolTip( wxEmptyString );
+        }
     }
 
 
@@ -345,6 +392,13 @@ void PCB_LAYER_WIDGET::ReFill()
         AppendLayerRow( LAYER_WIDGET::ROW(
             brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ),
             wxGetTranslation( non_cu_seq[i].tooltip ), true ) );
+
+        if( m_fp_editor_mode && !isLayerAllowedInFpMode( layer ) )
+        {
+            getLayerComp( GetLayerRowCount()-1, COLUMN_COLOR_LYRNAME )->Enable( false );
+            getLayerComp( GetLayerRowCount()-1,
+                          COLUMN_COLORBM )->SetToolTip( wxEmptyString );
+        }
     }
 
     installRightLayerClickHandler();
@@ -371,7 +425,12 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
 {
     // the layer change from the PCB_LAYER_WIDGET can be denied by returning
     // false from this function.
-    myframe->SetActiveLayer( ToLAYER_ID( aLayer ) );
+    LAYER_ID layer = ToLAYER_ID( aLayer );
+
+    if( m_fp_editor_mode && !isLayerAllowedInFpMode( layer ) )
+        return false;
+
+    myframe->SetActiveLayer( layer );
 
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();
@@ -382,7 +441,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
 }
 
 
-bool  PCB_LAYER_WIDGET::OnLayerSelected()
+bool PCB_LAYER_WIDGET::OnLayerSelected()
 {
     if( !m_alwaysShowActiveCopperLayer )
         return false;

@@ -39,6 +39,7 @@
 #include <kicad_device_context.h>
 #include <macros.h>
 #include <invoke_pcb_dialog.h>
+#include <class_pcb_layer_widget.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -908,6 +909,9 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
 
     GetGalCanvas()->SetHighContrastLayer( aLayer );
+
+    m_Layers->SelectLayer( GetActiveLayer() );
+    m_Layers->OnLayerSelected();
 
     if( IsGalCanvasActive() )
         GetGalCanvas()->Refresh();

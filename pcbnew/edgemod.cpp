@@ -207,10 +207,11 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
 
     if( IsCopperLayer( new_layer ) )
     {
-        /* an edge is put on a copper layer, and it is very dangerous. a
-         *confirmation is requested */
+        // an edge is put on a copper layer, and it is very dangerous.
+        // A confirmation is requested
         if( !IsOK( this,
-                   _( "The graphic item will be on a copper layer. This is very dangerous. Are you sure?" ) ) )
+                   _( "The graphic item will be on a copper layer.\n"
+                      "This is very dangerous. Are you sure?" ) ) )
             return;
     }
 
@@ -346,13 +347,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
             aEdge->SetAngle( ArcValue );
 
         aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
-        aEdge->SetLayer( module->GetLayer() );
-
-        // The default layer for an edge is the corresponding silk layer
-        if( module->IsFlipped() )
-            aEdge->SetLayer( B_SilkS );
-        else
-            aEdge->SetLayer( F_SilkS );
+        aEdge->SetLayer( GetActiveLayer() );
 
         // Initialize the starting point of the new segment or arc
         aEdge->SetStart( GetCrossHairPosition() );

@@ -401,7 +401,7 @@ public:
      * is called to notify client code about a layer visibility change.
      *
      * @param aLayer is the board layer to select
-     * @param isVisible is the new vosible state
+     * @param isVisible is the new visible state
      * @param isFinal is true when this is the last of potentially several
      *  such calls, and can be used to decide when to update the screen only
      *  one time instead of several times in the midst of a multiple layer change.
