@@ -63,9 +63,10 @@ void DIALOG_GENERALOPTIONS::init()
     m_sdbSizerOK->SetDefault();
 
     m_Board = GetParent()->GetBoard();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetParent()->GetDisplayOptions();
 
     /* Set display options */
-    m_PolarDisplay->SetSelection( DisplayOpt.DisplayPolarCood ? 1 : 0 );
+    m_PolarDisplay->SetSelection( displ_opts->m_DisplayPolarCood ? 1 : 0 );
     m_UnitsSelection->SetSelection( g_UserUnit ? 1 : 0 );
     m_CursorShape->SetSelection( GetParent()->GetCursorShape() ? 1 : 0 );
 
@@ -77,10 +78,10 @@ void DIALOG_GENERALOPTIONS::init()
     wxString timevalue;
     timevalue << GetParent()->GetAutoSaveInterval() / 60;
     m_SaveTime->SetValue( timevalue );
-    m_MaxShowLinks->SetValue( g_MaxLinksShowed );
+    m_MaxShowLinks->SetValue( displ_opts->m_MaxLinksShowed );
 
     m_DrcOn->SetValue( g_Drc_On );
-    m_ShowModuleRatsnest->SetValue( g_Show_Module_Ratsnest );
+    m_ShowModuleRatsnest->SetValue( displ_opts->m_Show_Module_Ratsnest );
     m_ShowGlobalRatsnest->SetValue( m_Board->IsElementVisible( RATSNEST_VISIBLE ) );
     m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
@@ -107,8 +108,9 @@ void DIALOG_GENERALOPTIONS::OnCancelClick( wxCommandEvent& event )
 void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
 {
     EDA_UNITS_T ii;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetParent()->GetDisplayOptions();
 
-    DisplayOpt.DisplayPolarCood = ( m_PolarDisplay->GetSelection() == 0 ) ? false : true;
+    displ_opts->m_DisplayPolarCood = ( m_PolarDisplay->GetSelection() == 0 ) ? false : true;
     ii = g_UserUnit;
     g_UserUnit = ( m_UnitsSelection->GetSelection() == 0 )  ? INCHES : MILLIMETRES;
 
@@ -120,7 +122,7 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
     GetParent()->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
 
     /* Updating the combobox to display the active layer. */
-    g_MaxLinksShowed = m_MaxShowLinks->GetValue();
+    displ_opts->m_MaxLinksShowed = m_MaxShowLinks->GetValue();
     g_Drc_On = m_DrcOn->GetValue();
 
     if( m_Board->IsElementVisible(RATSNEST_VISIBLE) != m_ShowGlobalRatsnest->GetValue() )
@@ -129,7 +131,7 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
         GetParent()->GetCanvas()->Refresh( );
     }
 
-    g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
+    displ_opts->m_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
     g_Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
     g_Track_45_Only_Allowed    = m_Track_45_Only_Ctrl->GetValue();
@@ -157,6 +159,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
     bool state = event.IsChecked();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     switch( id )
     {
@@ -182,7 +185,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
-        g_Show_Module_Ratsnest = state; // TODO: use the visibility list
+        displ_opts->m_Show_Module_Ratsnest = state; // TODO: see if we can use the visibility list
         break;
 
     case ID_TB_OPTIONS_AUTO_DEL_TRACK:
@@ -190,33 +193,33 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES:
-        DisplayOpt.DisplayZonesMode = 0;
+        displ_opts->m_DisplayZonesMode = 0;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
-        DisplayOpt.DisplayZonesMode = 1;
+        displ_opts->m_DisplayZonesMode = 1;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
-        DisplayOpt.DisplayZonesMode = 2;
+        displ_opts->m_DisplayZonesMode = 2;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
-        m_DisplayViaFill = DisplayOpt.DisplayViaFill = !state;
+        displ_opts->m_DisplayViaFill = !state;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
-        m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = !state;
+        displ_opts->m_DisplayPcbTrackFill = !state;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
     {
-        DisplayOpt.ContrastModeDisplay = state;
+        displ_opts->m_ContrastModeDisplay = state;
         m_canvas->Refresh();
         break;
     }

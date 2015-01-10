@@ -730,6 +730,14 @@ public:
     EDA_DRAW_PANEL_GAL* GetGalCanvas() const        { return m_galCanvas; }
     void SetGalCanvas( EDA_DRAW_PANEL_GAL* aPanel ) { m_galCanvas = aPanel; }
 
+    /**
+     * Function GetDisplayOptions
+     * A way to pass info to draw functions. the base class has no knowledge about
+     * these options. It is virtual because this function must be overloaded to
+     * pass usefull info.
+     */
+    virtual void* GetDisplayOptions() { return NULL; }
+
     DECLARE_EVENT_TABLE()
 };
 

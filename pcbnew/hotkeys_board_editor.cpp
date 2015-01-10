@@ -118,6 +118,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     MODULE* module = NULL;
     int evt_type = 0;       //Used to post a wxCommandEvent on demand
     PCB_SCREEN* screen = GetScreen();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     /* Convert lower to upper case
      * (the usual toupper function has problem with non ascii codes like function keys
@@ -362,8 +363,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_TRACK_DISPLAY_MODE:
-        DisplayOpt.DisplayPcbTrackFill = !DisplayOpt.DisplayPcbTrackFill;
-        m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
+        displ_opts->m_DisplayPcbTrackFill = !displ_opts->m_DisplayPcbTrackFill;
         m_canvas->Refresh();
         break;
 
@@ -457,7 +457,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( !itemCurrentlyEdited ) // no track in progress: switch layer only
         {
             Other_Layer_Route( NULL, aDC );
-            if( DisplayOpt.ContrastModeDisplay )
+            if( displ_opts->m_ContrastModeDisplay )
                 m_canvas->Refresh();
             break;
         }
@@ -552,7 +552,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_HIGHCONTRAST_MODE: // switch to high contrast mode and refresh the canvas
-        DisplayOpt.ContrastModeDisplay = !DisplayOpt.ContrastModeDisplay;
+        displ_opts->m_ContrastModeDisplay = !displ_opts->m_ContrastModeDisplay;
         m_canvas->Refresh();
         break;
 

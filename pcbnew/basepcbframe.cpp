@@ -98,14 +98,6 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_Pcb                 = NULL;
     m_toolManager         = NULL;
     m_toolDispatcher      = NULL;
-
-    m_DisplayPadFill      = true;   // How to draw pads
-    m_DisplayViaFill      = true;   // How to draw vias
-    m_DisplayPadNum       = true;   // show pads number
-
-    m_DisplayModEdge      = FILLED; // How to display module drawings (line/ filled / sketch)
-    m_DisplayModText      = FILLED; // How to display module texts (line/ filled / sketch)
-    m_DisplayPcbTrackFill = true;   // false = sketch , true = filled
     m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
 
     m_UserGridSize        = wxRealPoint( 100.0, 100.0 );
@@ -381,6 +373,7 @@ void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
 {
     LAYER_ID preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // Check if the specified layer matches the present layer
     if( layer == preslayer )
@@ -422,22 +415,27 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
 
     GetScreen()->m_Active_Layer = layer;
 
-    if( DisplayOpt.ContrastModeDisplay )
+    if( displ_opts->m_ContrastModeDisplay )
         m_canvas->Refresh();
 }
 
 
 void PCB_BASE_FRAME::OnTogglePolarCoords( wxCommandEvent& aEvent )
 {
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
     SetStatusText( wxEmptyString );
-    DisplayOpt.DisplayPolarCood = !DisplayOpt.DisplayPolarCood;
+
+    displ_opts->m_DisplayPolarCood = !displ_opts->m_DisplayPolarCood;
+
     UpdateStatusBar();
 }
 
 
 void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 {
-    m_DisplayPadFill = DisplayOpt.DisplayPadFill = !m_DisplayPadFill;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+
+    displ_opts->m_DisplayPadFill = !displ_opts->m_DisplayPadFill;
     EDA_DRAW_PANEL_GAL* gal = GetGalCanvas();
 
     if( gal )
@@ -447,7 +445,7 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
                 static_cast<KIGFX::PCB_PAINTER*> ( gal->GetView()->GetPainter() );
         KIGFX::PCB_RENDER_SETTINGS* settings =
                 static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
-        settings->LoadDisplayOptions( DisplayOpt );
+        settings->LoadDisplayOptions( displ_opts );
 
         // Update pads
         BOARD* board = GetBoard();
@@ -464,9 +462,11 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 
 void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( DisplayOpt.DisplayPolarCood );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+
+    aEvent.Check( displ_opts->m_DisplayPolarCood );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                                        DisplayOpt.DisplayPolarCood ?
+                                        displ_opts->m_DisplayPolarCood ?
                                         _( "Display rectangular coordinates" ) :
                                         _( "Display polar coordinates" ) );
 }
@@ -474,9 +474,10 @@ void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 
 void PCB_BASE_FRAME::OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( !m_DisplayPadFill );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    aEvent.Check( !displ_opts->m_DisplayPadFill );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                        m_DisplayPadFill ?
+                                        displ_opts->m_DisplayPadFill ?
                                         _( "Show pads in outline mode" ) :
                                         _( "Show pads in fill mode" ) );
 }
@@ -615,16 +616,18 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     if( aId < 0 )
         return;
 
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+
     // handle color changes for transitions in and out of ID_TRACK_BUTT
     if( ( GetToolId() == ID_TRACK_BUTT && aId != ID_TRACK_BUTT )
         || ( GetToolId() != ID_TRACK_BUTT && aId == ID_TRACK_BUTT ) )
     {
-        if( DisplayOpt.ContrastModeDisplay )
+        if( displ_opts->m_ContrastModeDisplay )
             redraw = true;
     }
 
     // must do this after the tool has been set, otherwise pad::Draw() does
-    // not show proper color when DisplayOpt.ContrastModeDisplay is true.
+    // not show proper color when GetDisplayOptions().ContrastModeDisplay is true.
     if( redraw && m_canvas )
         m_canvas->Refresh();
 }
@@ -646,10 +649,11 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     double dYpos;
     wxString line;
     wxString locformatter;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     EDA_DRAW_FRAME::UpdateStatusBar();
 
-    if( DisplayOpt.DisplayPolarCood )  // display polar coordinates
+    if( displ_opts->m_DisplayPolarCood )  // display polar coordinates
     {
         double       theta, ro;
 
@@ -708,7 +712,7 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     line.Printf( absformatter, dXpos, dYpos );
     SetStatusText( line, 2 );
 
-    if( !DisplayOpt.DisplayPolarCood )  // display relative cartesian coordinates
+    if( !displ_opts->m_DisplayPolarCood )  // display relative cartesian coordinates
     {
         // Display relative coordinates:
         dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
@@ -746,23 +750,23 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     long itmp;
     aCfg->Read( m_FrameName + UserGridUnitsEntry, &itmp, ( long )INCHES );
     m_UserGridUnit = (EDA_UNITS_T) itmp;
-    aCfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
-    aCfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );
-    aCfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );
-    aCfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge, ( long )FILLED );
+    aCfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayOptions.m_DisplayPadFill, true );
+    aCfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayOptions.m_DisplayViaFill, true );
+    aCfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayOptions.m_DisplayPadNum, true );
+    aCfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayOptions.m_DisplayModEdge, ( long )FILLED );
 
     aCfg->Read( m_FrameName + FastGrid1Entry, &itmp, ( long )0);
     m_FastGrid1 = itmp;
     aCfg->Read( m_FrameName + FastGrid2Entry, &itmp, ( long )0);
     m_FastGrid2 = itmp;
 
-    if( m_DisplayModEdge < LINE || m_DisplayModEdge > SKETCH )
-        m_DisplayModEdge = FILLED;
+    if( m_DisplayOptions.m_DisplayModEdge < LINE || m_DisplayOptions.m_DisplayModEdge > SKETCH )
+        m_DisplayOptions.m_DisplayModEdge = FILLED;
 
-    aCfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText, ( long )FILLED );
+    aCfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayOptions.m_DisplayModText, ( long )FILLED );
 
-    if( m_DisplayModText < LINE || m_DisplayModText > SKETCH )
-        m_DisplayModText = FILLED;
+    if( m_DisplayOptions.m_DisplayModText < LINE || m_DisplayOptions.m_DisplayModText > SKETCH )
+        m_DisplayOptions.m_DisplayModText = FILLED;
 
     // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
     // when reading doubles in config,
@@ -778,11 +782,11 @@ void PCB_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( m_FrameName + UserGridSizeXEntry, m_UserGridSize.x );
     aCfg->Write( m_FrameName + UserGridSizeYEntry, m_UserGridSize.y );
     aCfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnit );
-    aCfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayPadFill );
-    aCfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayViaFill );
-    aCfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayPadNum );
-    aCfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayModEdge );
-    aCfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayModText );
+    aCfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayOptions.m_DisplayPadFill );
+    aCfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayOptions.m_DisplayViaFill );
+    aCfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayOptions.m_DisplayPadNum );
+    aCfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayOptions.m_DisplayModEdge );
+    aCfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayOptions.m_DisplayModText );
     aCfg->Write( m_FrameName + FastGrid1Entry, ( long )m_FastGrid1 );
     aCfg->Write( m_FrameName + FastGrid2Entry, ( long )m_FastGrid2 );
 }

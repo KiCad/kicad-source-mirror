@@ -619,12 +619,13 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
     wxPoint LastPosOK;
     double  min_cost, curr_cost, Score;
     bool    TstOtherSide;
-    bool    showRats = g_Show_Module_Ratsnest;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)aFrame->GetDisplayOptions();
     BOARD*  brd = aFrame->GetBoard();
 
     aModule->CalculateBoundingBox();
 
-    g_Show_Module_Ratsnest = false;
+    bool showRats = displ_opts->m_Show_Module_Ratsnest;
+    displ_opts->m_Show_Module_Ratsnest = false;
 
     brd->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
     aFrame->SetMsgPanel( aModule );
@@ -735,7 +736,7 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
     // erasing the last traces
     GRRect( aFrame->GetCanvas()->GetClipBox(), aDC, fpBBox, 0, BROWN );
 
-    g_Show_Module_Ratsnest = showRats;
+    displ_opts->m_Show_Module_Ratsnest = showRats;
 
     // Regeneration of the modified variable.
     CurrPosition = LastPosOK;

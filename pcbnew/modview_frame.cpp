@@ -30,14 +30,12 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiway.h>
-#include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <wxPcbStruct.h>
 #include <3d_viewer.h>
 #include <dialog_helpers.h>
 #include <msgpanel.h>
-#include <macros.h>
 #include <fp_lib_table.h>
 #include <fpid.h>
 #include <confirm.h>
@@ -133,6 +131,10 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
             wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL );
 
     SetBoard( new BOARD() );
+    // In viewer, the default net clearance is not known (it depends on the actual board).
+    // So we do not show the default clearance, by setting it to 0
+    // The footprint or pad specific clearance will be shown
+    GetBoard()->GetDesignSettings().GetDefault()->SetClearance(0);
 
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();

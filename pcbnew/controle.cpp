@@ -104,6 +104,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     BOARD_ITEM* item;
 
     GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // Assign to scanList the proper item types desired based on tool type
     // or hotkey that is in play.
@@ -120,7 +121,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         if( m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_MODULE ) )
             scanList = GENERAL_COLLECTOR::Modules;
         else
-            scanList = (DisplayOpt.DisplayZonesMode == 0) ?
+            scanList = (displ_opts->m_DisplayZonesMode == 0) ?
                        GENERAL_COLLECTOR::AllBoardItems :
                        GENERAL_COLLECTOR::AllButZones;
     }
@@ -146,7 +147,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             break;
 
         default:
-            scanList = DisplayOpt.DisplayZonesMode == 0 ?
+            scanList = displ_opts->m_DisplayZonesMode == 0 ?
                        GENERAL_COLLECTOR::AllBoardItems :
                        GENERAL_COLLECTOR::AllButZones;
         }

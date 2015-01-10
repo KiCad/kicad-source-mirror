@@ -64,6 +64,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     MODULE* module;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     m_canvas->CrossHairOff( &dc );
 
@@ -442,7 +443,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             settings.m_CurrentViaType = v_type;
 
-            if( DisplayOpt.ContrastModeDisplay )
+            if( displ_opts->m_ContrastModeDisplay )
                 m_canvas->Refresh();
         }
         break;
@@ -967,7 +968,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             {
                 // if user changed colors and we are in high contrast mode, then redraw
                 // because the PAD_SMD pads may change color.
-                if( DisplayOpt.ContrastModeDisplay && GetActiveLayer() != itmp )
+                if( displ_opts->m_ContrastModeDisplay && GetActiveLayer() != itmp )
                 {
                     m_canvas->Refresh();
                 }
@@ -1010,7 +1011,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_TOOLBARH_PCB_SELECT_LAYER:
         SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 
-        if( DisplayOpt.ContrastModeDisplay )
+        if( displ_opts->m_ContrastModeDisplay )
             m_canvas->Refresh( true );
         break;
 
@@ -1310,6 +1311,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
 {
     LAYER_ID curLayer = GetActiveLayer();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // Check if the specified layer matches the present layer
     if( layer == curLayer )
@@ -1354,7 +1356,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
 
                 if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
                 {
-                    if( DisplayOpt.ContrastModeDisplay )
+                    if( displ_opts->m_ContrastModeDisplay )
                         m_canvas->Refresh();
                 }
 
@@ -1373,7 +1375,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
 
     SetActiveLayer( layer );
 
-    if( DisplayOpt.ContrastModeDisplay )
+    if( displ_opts->m_ContrastModeDisplay )
         m_canvas->Refresh();
 }
 
@@ -1386,6 +1388,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         return;
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // Stop the current command and deselect the current tool.
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
@@ -1416,7 +1419,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     case ID_PCB_ZONES_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add zones" ) );
 
-        if( DisplayOpt.DisplayZonesMode != 0 )
+        if( displ_opts->m_DisplayZonesMode != 0 )
             DisplayInfoMessage( this, _( "Warning: zone display is OFF!!!" ) );
 
         if( !GetBoard()->IsHighLightNetON() && (GetBoard()->GetHighLightNetCode() > 0 ) )

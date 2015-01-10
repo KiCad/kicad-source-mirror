@@ -183,6 +183,12 @@ EDA_DRAW_FRAME* EDA_DRAW_PANEL::GetParent() const
 }
 
 
+void* EDA_DRAW_PANEL::GetDisplayOptions()
+{
+    return GetParent()->GetDisplayOptions();
+}
+
+
 BASE_SCREEN* EDA_DRAW_PANEL::GetScreen()
 {
     EDA_DRAW_FRAME* parentFrame = GetParent();

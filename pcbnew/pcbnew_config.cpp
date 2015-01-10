@@ -322,6 +322,8 @@ PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
 
 PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
 {
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+
     if( m_configSettings.empty() )
     {
         COLORS_DESIGN_SETTINGS cds;         // constructor fills this with sensible colors
@@ -331,35 +333,35 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                        (int*)&g_UserUnit, MILLIMETRES ) );
 
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "DisplayPolarCoords" ),
-                                                        &DisplayOpt.DisplayPolarCood, false ) );
+                                                        &displ_opts->m_DisplayPolarCood, false ) );
         // Display options and modes:
         m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ViaHoleDisplayMode" ),
-                                                       (int*) &DisplayOpt.m_DisplayViaMode,
+                                                       (int*) &displ_opts->m_DisplayViaMode,
                                                        VIA_SPECIAL_HOLE_SHOW, VIA_HOLE_NOT_SHOW,
                                                        OPT_VIA_HOLE_END - 1 ) );
         m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ShowNetNamesMode" ),
-                                                       &DisplayOpt.DisplayNetNamesMode, 3, 0, 3 ) );
+                                                       &displ_opts->m_DisplayNetNamesMode, 3, 0, 3 ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "DisplayTrackFilled" ),
-                                                        &DisplayOpt.DisplayPcbTrackFill, true ) );
+                                                        &displ_opts->m_DisplayPcbTrackFill, true ) );
         m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "TrackDisplayClearance" ),
-                                                       (int*) &DisplayOpt.ShowTrackClearanceMode,
+                                                       (int*) &displ_opts->m_ShowTrackClearanceMode,
                                                        SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PadFill" ),
-                                                        &DisplayOpt.DisplayPadFill, true ) );
+                                                        &displ_opts->m_DisplayPadFill, true ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ViaFill" ),
-                                                        &DisplayOpt.DisplayViaFill, true ) );
+                                                        &displ_opts->m_DisplayViaFill, true ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PadAffG" ),
-                                                        &DisplayOpt.DisplayPadIsol, true ) );
+                                                        &displ_opts->m_DisplayPadIsol, true ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PadSNum" ),
-                                                        &DisplayOpt.DisplayPadNum, true ) );
+                                                        &displ_opts->m_DisplayPadNum, true ) );
         m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ModAffC" ),
-                                                       &DisplayOpt.DisplayModEdge, FILLED, 0, 2 ) );
+                                                       &displ_opts->m_DisplayModEdge, FILLED, 0, 2 ) );
         m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ModAffT" ),
-                                                       &DisplayOpt.DisplayModText, FILLED, 0, 2 ) );
+                                                       &displ_opts->m_DisplayModText, FILLED, 0, 2 ) );
         m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PcbAffT" ),
-                                                       &DisplayOpt.DisplayDrawItems, FILLED, 0, 2 ) );
+                                                       &displ_opts->m_DisplayDrawItems, FILLED, 0, 2 ) );
         m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PcbShowZonesMode" ),
-                                                       &DisplayOpt.DisplayZonesMode, 0, 0, 2 ) );
+                                                       &displ_opts->m_DisplayZonesMode, 0, 0, 2 ) );
 
         // layer colors:
         wxASSERT( DIM( cds.m_LayersColors ) == LAYER_ID_COUNT );
@@ -406,10 +408,11 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
         // Miscellaneous:
         m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RotationAngle" ), &m_rotationAngle,
                                                        900, 1, 900 ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "MaxLnkS" ), &g_MaxLinksShowed,
+        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "MaxLnkS" ),
+                                                       &displ_opts->m_MaxLinksShowed,
                                                        3, 0, 15 ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ShowMRa" ),
-                                                        &g_Show_Module_Ratsnest, true ) );
+                                                        &displ_opts->m_Show_Module_Ratsnest, true ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "TwoSegT" ),
                                                         &g_TwoSegmentTrackBuild, true ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SegmPcb45Only" )

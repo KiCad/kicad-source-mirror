@@ -565,8 +565,9 @@ static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     BASE_SCREEN* screen = aPanel->GetScreen();
 
     // do not show local module rastnest in block move, it is not usable.
-    bool tmp = g_Show_Module_Ratsnest;
-    g_Show_Module_Ratsnest = false;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)aPanel->GetDisplayOptions();
+    bool showRats = displ_opts->m_Show_Module_Ratsnest;
+    displ_opts->m_Show_Module_Ratsnest = false;
 
     if( aErase )
     {
@@ -596,7 +597,7 @@ static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
             drawPickedItems( aPanel, aDC, screen->m_BlockLocate.GetMoveVector() );
     }
 
-    g_Show_Module_Ratsnest = tmp;
+    displ_opts->m_Show_Module_Ratsnest = showRats;
 }
 
 

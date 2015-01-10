@@ -287,12 +287,12 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     }
 
     // Draw mode compensation for the width
-    PCB_BASE_FRAME* frame = static_cast<PCB_BASE_FRAME*>( panel->GetParent() );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
     int width = m_Thickness;
-    if( ( frame->m_DisplayModText == LINE )
+    if( ( displ_opts && displ_opts->m_DisplayModText == LINE )
         || ( DC->LogicalToDeviceXRel( width ) <= MIN_DRAW_WIDTH ) )
         width = 0;
-    else if( frame->m_DisplayModText == SKETCH )
+    else if( displ_opts && displ_opts->m_DisplayModText == SKETCH )
         width = -width;
 
     GRSetDrawMode( DC, draw_mode );

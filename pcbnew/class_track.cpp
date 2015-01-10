@@ -52,14 +52,14 @@
  * tests to see if the clearance border is drawn on the given track.
  * @return bool - true if should draw clearance, else false.
  */
-static bool ShowClearance( const TRACK* aTrack )
+static bool ShowClearance( DISPLAY_OPTIONS* aDisplOpts, const TRACK* aTrack )
 {
     // maybe return true for tracks and vias, not for zone segments
     return IsCopperLayer( aTrack->GetLayer() )
            && ( aTrack->Type() == PCB_TRACE_T || aTrack->Type() == PCB_VIA_T )
-           && ( ( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
+           && ( ( aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
                   && ( aTrack->IsDragging() || aTrack->IsMoving() || aTrack->IsNew() ) )
-            || ( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS )
+            || ( aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS )
             );
 
 }
@@ -312,11 +312,8 @@ const EDA_RECT TRACK::GetBoundingBox() const
         xmin = std::min( m_Start.x, m_End.x );
     }
 
-    if( ShowClearance( this ) )
-    {
-        // + 1 is for the clearance line itself.
-        radius += GetClearance() + 1;
-    }
+    // + 1 is for the clearance line itself.
+    radius += GetClearance() + 1;
 
     ymax += radius;
     xmax += radius;
@@ -538,7 +535,9 @@ void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
      *  - only tracks with a length > 10 * thickness are eligible
      * and, of course, if we are not printing the board
      */
-    if( DisplayOpt.DisplayNetNamesMode == 0 || DisplayOpt.DisplayNetNamesMode == 1 )
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+
+    if( displ_opts->m_DisplayNetNamesMode == 0 || displ_opts->m_DisplayNetNamesMode == 1 )
         return;
 
     #define THRESHOLD 10
@@ -596,7 +595,7 @@ void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
 
         LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
         if( ( aDC->LogicalToDeviceXRel( tsize ) >= MIN_TEXT_SIZE )
-         && ( !(!IsOnLayer( curr_layer )&& DisplayOpt.ContrastModeDisplay) ) )
+         && ( !(!IsOnLayer( curr_layer )&& displ_opts->m_ContrastModeDisplay) ) )
         {
             if( (aDrawMode & GR_XOR) == 0 )
                 GRSetDrawMode( aDC, GR_COPY );
@@ -629,7 +628,9 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
       return;
 #endif
 
-    if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && DisplayOpt.ContrastModeDisplay )
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) panel->GetDisplayOptions();
+
+    if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
     {
         LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
@@ -654,7 +655,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         return;
     }
 
-    if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
+    if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
     {
         GRCSegm( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset, m_Width, color );
     }
@@ -669,7 +670,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         return;
 
     // Show clearance for tracks, not for zone segments
-    if( ShowClearance( this ) )
+    if( ShowClearance( displ_opts, this ) )
     {
         GRCSegm( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset,
                  m_Width + (GetClearance() * 2), color );
@@ -682,7 +683,9 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 void SEGZONE::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                     const wxPoint& aOffset )
 {
-    if( DisplayOpt.DisplayZonesMode != 0 )
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+
+    if( displ_opts->m_DisplayZonesMode != 0 )
         return;
 
     BOARD * brd = GetBoard( );
@@ -697,7 +700,7 @@ void SEGZONE::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
       return;
 #endif
 
-    if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && DisplayOpt.ContrastModeDisplay )
+    if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
     {
         LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
@@ -722,7 +725,7 @@ void SEGZONE::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         return;
     }
 
-    if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
+    if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
     {
         GRCSegm( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset, m_Width, color );
     }
@@ -768,8 +771,9 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     int fillvia = 0;
     PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) panel->GetParent();
     PCB_SCREEN*     screen = frame->GetScreen();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)frame->GetDisplayOptions();
 
-    if( frame->m_DisplayViaFill == FILLED )
+    if( displ_opts->m_DisplayViaFill == FILLED )
         fillvia = 1;
 
     GRSetDrawMode( aDC, aDrawMode );
@@ -785,7 +789,7 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     if( !( brd->GetVisibleLayers() & GetLayerSet() ).any() )
         return;
 
-    if( DisplayOpt.ContrastModeDisplay )
+    if( displ_opts->m_ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
             ColorTurnToDarkDarkGray( &color );
@@ -832,10 +836,10 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     }
 
     // Draw the via hole if the display option allows it
-    if( DisplayOpt.m_DisplayViaMode != VIA_HOLE_NOT_SHOW )
+    if( displ_opts->m_DisplayViaMode != VIA_HOLE_NOT_SHOW )
     {
         // Display all drill holes requested or Display non default holes requested
-        if( (DisplayOpt.m_DisplayViaMode == ALL_VIA_HOLE_SHOW)
+        if( (displ_opts->m_DisplayViaMode == ALL_VIA_HOLE_SHOW)
           || ( (drill_radius > 0 ) && !IsDrillDefault() ) )
         {
             if( fillvia )
@@ -871,7 +875,7 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         }
     }
 
-    if( ShowClearance( this ) )
+    if( ShowClearance( displ_opts, this ) )
     {
         GRCircle( panel->GetClipBox(), aDC, m_Start + aOffset, radius + GetClearance(), 0, color );
     }
@@ -945,7 +949,7 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     if( GetNetCode() == NETINFO_LIST::UNCONNECTED )
         return;
 
-    if( DisplayOpt.DisplayNetNamesMode == 0 || DisplayOpt.DisplayNetNamesMode == 1 )
+    if( displ_opts->m_DisplayNetNamesMode == 0 || displ_opts->m_DisplayNetNamesMode == 1 )
         return;
 
     NETINFO_ITEM* net = GetNet();

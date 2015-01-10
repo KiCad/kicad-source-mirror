@@ -122,6 +122,13 @@ public:
     EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id, const wxPoint& pos, const wxSize& size );
     ~EDA_DRAW_PANEL();
 
+    /**
+     * Function GetDisplayOptions
+     * A way to pass info to draw functions.
+     * this is just an accessor to the GetDisplayOptions() parent frame function.
+     */
+    void* GetDisplayOptions();
+
     BASE_SCREEN* GetScreen();
 
     EDA_DRAW_FRAME* GetParent() const;

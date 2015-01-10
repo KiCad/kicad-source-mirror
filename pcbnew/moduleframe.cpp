@@ -113,6 +113,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
 
     // popup commands
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
@@ -160,6 +161,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI_RANGE( ID_MODEDIT_PAD_TOOL, ID_MODEDIT_PLACE_GRID_COORD,
                          FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
+                   FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI( ID_GEN_IMPORT_DXF_FILE,
                    FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
 
@@ -193,6 +196,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetGalCanvas( drawPanel );
 
     SetBoard( new BOARD() );
+    // In modedit, the default net clearance is not known.
+    // (it depends on the actual board)
+    // So we do not show the default clearance, by setting it to 0
+    // The footprint or pad specific clearance will be shown
+    GetBoard()->GetDesignSettings().GetDefault()->SetClearance(0);
 
     // restore the last footprint from the project, if any
     restoreLastFootprint();

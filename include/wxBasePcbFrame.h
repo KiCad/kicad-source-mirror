@@ -39,6 +39,7 @@
 #include <eda_text.h>                // EDA_DRAW_MODE_T
 #include <richio.h>
 #include <class_pcb_screen.h>
+#include <pcbstruct.h>
 
 
 /* Forward declarations of classes. */
@@ -66,13 +67,7 @@ class TOOL_DISPATCHER;
 class PCB_BASE_FRAME : public EDA_DRAW_FRAME
 {
 public:
-    bool m_DisplayPadFill;          // How show pads
-    bool m_DisplayViaFill;          // How show vias
-    bool m_DisplayPadNum;           // show pads numbers
-
-    int  m_DisplayModEdge;          // How to display module drawings (line/ filled / sketch)
-    int  m_DisplayModText;          // How to display module texts (line/ filled / sketch)
-    bool m_DisplayPcbTrackFill;     // false : tracks are show in sketch mode, true = filled.
+    DISPLAY_OPTIONS m_DisplayOptions;
     EDA_UNITS_T m_UserGridUnit;
     wxRealPoint m_UserGridSize;
 
@@ -155,6 +150,16 @@ public:
      */
     virtual BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
     virtual void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );
+
+    /**
+     * Function GetDisplayOptions
+     * returns the display options current in use
+     * Display options are relative to the way tracks, vias, outlines
+     * and other things are shown (for instance solid or sketch mode)
+     * Must be overloaded in frames which have display options
+     * (board editor and footprint editor)
+     */
+    void* GetDisplayOptions() { return &m_DisplayOptions; }
 
     const ZONE_SETTINGS& GetZoneSettings() const;
     void SetZoneSettings( const ZONE_SETTINGS& aSettings );

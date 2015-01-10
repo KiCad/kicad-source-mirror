@@ -387,7 +387,9 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
         s_PickedList.ClearItemsList();
     }
 
-    if( g_Show_Module_Ratsnest && ( GetBoard()->m_Status_Pcb & LISTE_PAD_OK ) && aDC )
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+
+    if( displ_opts->m_Show_Module_Ratsnest && ( GetBoard()->m_Status_Pcb & LISTE_PAD_OK ) && aDC )
         TraceModuleRatsNest( aDC );
 
     newpos = GetCrossHairPosition();
@@ -506,19 +508,20 @@ void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module )
         return;
 
     module->DrawEdgesOnly( panel, DC, g_Offset_Module, GR_XOR );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 
     // Show pads in sketch mode to speedu up drawings
-    pad_fill_tmp = DisplayOpt.DisplayPadFill;
-    DisplayOpt.DisplayPadFill = true;
+    pad_fill_tmp = displ_opts->m_DisplayPadFill;
+    displ_opts->m_DisplayPadFill = true;
 
     pt_pad = module->Pads();
 
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
         pt_pad->Draw( panel, DC, GR_XOR, g_Offset_Module );
 
-    DisplayOpt.DisplayPadFill = pad_fill_tmp;
+    displ_opts->m_DisplayPadFill = pad_fill_tmp;
 
-    if( g_Show_Module_Ratsnest && panel )
+    if( displ_opts->m_Show_Module_Ratsnest && panel )
     {
         PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
         frame->build_ratsnest_module( module );

@@ -71,9 +71,7 @@ void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     // Redraw the footprints
     for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
-    {
-        module->Draw( m_canvas, DC, GR_OR );
-    }
+        module->Draw( m_canvas, DC, GR_OR | GR_ALLOW_HIGHCONTRAST );
 
 #ifdef USE_WX_OVERLAY
 
@@ -297,11 +295,11 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
 static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* aModule,
                              int ox, int oy, LSET aLayerMask, GR_DRAWMODE draw_mode )
 {
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 
-    int             tmp = frame->m_DisplayPadFill;
+    int tmp = displ_opts->m_DisplayPadFill;
 
-    frame->m_DisplayPadFill = false;
+    displ_opts->m_DisplayPadFill = false;
 
     // Draw pads.
     for( D_PAD* pad = aModule->Pads(); pad; pad = pad->Next() )
@@ -312,5 +310,5 @@ static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* aModule,
         pad->Draw( panel, DC, draw_mode, wxPoint( ox, oy ) );
     }
 
-    frame->m_DisplayPadFill = tmp;
+    displ_opts->m_DisplayPadFill = tmp;
 }

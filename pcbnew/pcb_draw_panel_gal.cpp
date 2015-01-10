@@ -33,6 +33,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
+#include <draw_frame.h>
 
 #include <boost/bind.hpp>
 
@@ -148,8 +149,16 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aGalType )
     m_view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
     m_view->SetLayerTarget( ITEM_GAL_LAYER( RATSNEST_VISIBLE ), KIGFX::TARGET_OVERLAY );
 
-    // Load display options (such as filled/outline display of items)
-    static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( DisplayOpt );
+    // Load display options (such as filled/outline display of items).
+    // Can be made only if the parent windos is a EDA_DRAW_FRAME (or a derived class)
+    // which is not always the case (namely when it is used from a wxDialog like the pad editor)
+    EDA_DRAW_FRAME* frame = dynamic_cast <EDA_DRAW_FRAME*> ( aParentWindow );
+
+    if( frame )
+    {
+        DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) frame->GetDisplayOptions();
+        static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
+    }
 }
 
 
@@ -198,7 +207,16 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
     m_view->Add( m_ratsnest );
 
     UseColorScheme( aBoard->GetColorsSettings() );
-    static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( DisplayOpt );
+
+    // We are expecting here the parent frame is a EDA_DRAW_FRAME or a derived class
+    // (usually a BASE_PCB_FRAME, PCB_EDIT_FRAME ...)
+    EDA_DRAW_FRAME* frame = dynamic_cast <EDA_DRAW_FRAME*> ( GetParent() );
+
+    if( frame )
+    {
+        DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) frame->GetDisplayOptions();
+        static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
+    }
 
     m_view->RecacheAllItems( true );
 }

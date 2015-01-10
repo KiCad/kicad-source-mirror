@@ -65,7 +65,6 @@ COLORS_DESIGN_SETTINGS g_ColorsSettings;
 
 bool        g_Drc_On = true;
 bool        g_AutoDeleteOldTrack = true;
-bool        g_Show_Module_Ratsnest;
 bool        g_Raccord_45_Auto = true;
 bool        g_Alternate_Track_Posture = false;
 bool        g_Track_45_Only_Allowed = true;  // True to allow horiz, vert. and 45deg only tracks
@@ -74,13 +73,10 @@ bool        g_TwoSegmentTrackBuild = true;
 
 LAYER_ID    g_Route_Layer_TOP;
 LAYER_ID    g_Route_Layer_BOTTOM;
-int         g_MaxLinksShowed;
 int         g_MagneticPadOption   = capture_cursor_in_track_tool;
 int         g_MagneticTrackOption = capture_cursor_in_track_tool;
 
 wxPoint     g_Offset_Module;     // module offset used when moving a footprint
-
-DISPLAY_OPTIONS DisplayOpt;      // General display options
 
 /* Name of the document footprint list
  * usually located in share/modules/footprints_doc
