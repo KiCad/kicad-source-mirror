@@ -98,19 +98,22 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
 }
 
 
-void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions )
+void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS* aOptions )
 {
-    m_hiContrastEnabled = aOptions.ContrastModeDisplay;
-    m_padNumbers        = aOptions.DisplayPadNum;
+    if( aOptions == NULL )
+        return;
+
+    m_hiContrastEnabled = aOptions->m_ContrastModeDisplay;
+    m_padNumbers        = aOptions->m_DisplayPadNum;
 
     // Whether to draw tracks, vias & pads filled or as outlines
-    m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )]         = !aOptions.DisplayPadFill;
-    m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )]  = !aOptions.DisplayViaFill;
-    m_sketchMode[ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE )]   = !aOptions.DisplayViaFill;
-    m_sketchMode[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )] = !aOptions.DisplayViaFill;
-    m_sketchMode[ITEM_GAL_LAYER( TRACKS_VISIBLE )]       = !aOptions.DisplayPcbTrackFill;
+    m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )]         = !aOptions->m_DisplayPadFill;
+    m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )]  = !aOptions->m_DisplayViaFill;
+    m_sketchMode[ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE )]   = !aOptions->m_DisplayViaFill;
+    m_sketchMode[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )] = !aOptions->m_DisplayViaFill;
+    m_sketchMode[ITEM_GAL_LAYER( TRACKS_VISIBLE )]       = !aOptions->m_DisplayPcbTrackFill;
 
-    switch( aOptions.DisplayNetNamesMode )
+    switch( aOptions->m_DisplayNetNamesMode )
     {
     case 0:
         m_netNamesOnPads = false;
@@ -133,7 +136,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions )
         break;
     }
 
-    switch( aOptions.DisplayZonesMode )
+    switch( aOptions->m_DisplayZonesMode )
     {
     case 0:
         m_displayZoneMode = DZ_SHOW_FILLED;

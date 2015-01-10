@@ -183,7 +183,9 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
     color = brd->GetLayerColor( GetLayer() );
 
-    if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) &&  DisplayOpt.ContrastModeDisplay )
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+
+    if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) &&  displ_opts && displ_opts->m_ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) && !IsOnLayer( Edge_Cuts ) )
             ColorTurnToDarkDarkGray( &color );
@@ -200,7 +202,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     dx = m_End.x + aOffset.x;
     dy = m_End.y + aOffset.y;
 
-    mode = DisplayOpt.DisplayDrawItems;
+    mode = displ_opts ? displ_opts->m_DisplayDrawItems : FILLED;
 
     if( m_Flags & FORCE_SKETCH )
         mode = SKETCH;

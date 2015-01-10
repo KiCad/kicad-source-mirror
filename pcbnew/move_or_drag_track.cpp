@@ -103,11 +103,12 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                            bool aErase )
 {
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) aPanel->GetDisplayOptions();
     wxPoint      moveVector;
-    int          tmp = DisplayOpt.DisplayPcbTrackFill;
+    int          tmp = displ_opts->m_DisplayPcbTrackFill;
     GR_DRAWMODE  draw_mode = GR_XOR | GR_HIGHLIGHT;
 
-    DisplayOpt.DisplayPcbTrackFill = false;
+    displ_opts->m_DisplayPcbTrackFill = false;
 
 #ifndef USE_WX_OVERLAY
     aErase = true;
@@ -142,7 +143,7 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
         track->Draw( aPanel, aDC, draw_mode );
     }
 
-    DisplayOpt.DisplayPcbTrackFill = tmp;
+    displ_opts->m_DisplayPcbTrackFill = tmp;
 
     // Display track length
     if( track )

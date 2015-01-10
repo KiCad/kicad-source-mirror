@@ -240,6 +240,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
                                KiBitmap( show_mod_edge_xpm ),
                                _( "Show Edges Sketch" ), wxITEM_CHECK  );
 
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, wxEmptyString,
+                               KiBitmap( contrast_mode_xpm ),
+                               _( "Enable high contrast display mode" ),
+                               wxITEM_CHECK );
+
     m_optionsToolBar->Realize();
 }
 

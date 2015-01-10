@@ -530,13 +530,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
     }
 
-    // Update the option toolbar
-    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-    m_DisplayModText = DisplayOpt.DisplayModText;
-    m_DisplayModEdge = DisplayOpt.DisplayModEdge;
-    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-
     {
         wxFileName fn = fullFileName;
 

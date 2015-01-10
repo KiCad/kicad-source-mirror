@@ -53,9 +53,6 @@
 #include <3d_viewer.h>
 
 
-DISPLAY_OPTIONS DisplayOpt;      // General display options
-
-
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
     EVT_SIZE( DISPLAY_FOOTPRINTS_FRAME::OnSize )
@@ -100,10 +97,11 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, CVPCB_MAINFRA
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
 
     // Initialize some display options
-    DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    displ_opts->m_DisplayPadIsol = false;      // Pad clearance has no meaning here
 
     // Track and via clearance has no meaning here.
-    DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
+    displ_opts->m_ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateHToolbar();
@@ -248,34 +246,36 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 
 void DISPLAY_FOOTPRINTS_FRAME::OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent )
 {
-    wxString msgTextsFill[3] = { _( "Show texts in line mode" ),
-                                 _( "Show texts in filled mode" ),
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+
+    wxString msgTextsFill[2] = { _( "Show texts in filled mode" ),
                                  _( "Show texts in sketch mode" ) };
 
-    unsigned i = m_DisplayModText + 1;
+    unsigned i = displ_opts->m_DisplayModText + 1;
 
     if ( i > 2 )
-        i = 0;
+        i = 1;
 
-    aEvent.Check( m_DisplayModText == 0 );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, msgTextsFill[i] );
+    aEvent.Check( displ_opts->m_DisplayModText == 1 );
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, msgTextsFill[i-1] );
 
 }
 
 
 void DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent )
 {
-    wxString msgEdgesFill[3] = { _( "Show outlines in line mode" ),
-                                 _( "Show outlines in filled mode" ),
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+
+    wxString msgEdgesFill[3] = { _( "Show outlines in filled mode" ),
                                  _( "Show outlines in sketch mode" ) };
 
-    int i = m_DisplayModEdge + 1;
+    int i = displ_opts->m_DisplayModEdge + 1;
 
     if ( i > 2 )
-        i = 0;
+        i = 1;
 
-    aEvent.Check( m_DisplayModEdge == 0 );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, msgEdgesFill[i] );
+    aEvent.Check( displ_opts->m_DisplayModEdge == 2 );
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, msgEdgesFill[i-1] );
 }
 
 
@@ -298,23 +298,24 @@ bool DISPLAY_FOOTPRINTS_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* Po
 void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int        id = event.GetId();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     switch( id )
     {
     case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
-        m_DisplayModText++;
+        displ_opts->m_DisplayModText++;
 
-        if( m_DisplayModText > 2 )
-            m_DisplayModText = 0;
+        if( displ_opts->m_DisplayModText > 2 )
+            displ_opts->m_DisplayModText = 0;
 
         m_canvas->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
-        m_DisplayModEdge++;
+        displ_opts->m_DisplayModEdge++;
 
-        if( m_DisplayModEdge > 2 )
-            m_DisplayModEdge = 0;
+        if( displ_opts->m_DisplayModEdge > 2 )
+            displ_opts->m_DisplayModEdge = 0;
 
         m_canvas->Refresh();
         break;

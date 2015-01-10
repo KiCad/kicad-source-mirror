@@ -113,7 +113,8 @@ static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
 void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 {
     EDA_ITEM* PtStruct;
-    int       track_fill_copy = DisplayOpt.DisplayDrawItems;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    int tmp = displ_opts->m_DisplayDrawItems;
 
     if( Segment == NULL )
         return;
@@ -121,7 +122,7 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     if( Segment->IsNew() )  // Trace in progress.
     {
         // Delete current segment.
-        DisplayOpt.DisplayDrawItems = SKETCH;
+        displ_opts->m_DisplayDrawItems = SKETCH;
         Segment->Draw( m_canvas, DC, GR_XOR );
         PtStruct = Segment->Back();
         Segment ->DeleteStructure();
@@ -129,7 +130,7 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         if( PtStruct && (PtStruct->Type() == PCB_LINE_T ) )
             Segment = (DRAWSEGMENT*) PtStruct;
 
-        DisplayOpt.DisplayDrawItems = track_fill_copy;
+        displ_opts->m_DisplayDrawItems = tmp;
         SetCurItem( NULL );
     }
     else if( Segment->GetFlags() == 0 )
@@ -334,13 +335,14 @@ void PCB_EDIT_FRAME::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
  */
 static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)aPanel->GetDisplayOptions();
     DRAWSEGMENT* Segment = (DRAWSEGMENT*) aPanel->GetScreen()->GetCurItem();
-    int          t_fill = DisplayOpt.DisplayDrawItems;
+    int tmp = displ_opts->m_DisplayDrawItems;
 
     if( Segment == NULL )
         return;
 
-    DisplayOpt.DisplayDrawItems = SKETCH;
+    displ_opts->m_DisplayDrawItems = SKETCH;
 
     if( aErase )
         Segment->Draw( aPanel, aDC, GR_XOR );
@@ -360,5 +362,5 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     }
 
     Segment->Draw( aPanel, aDC, GR_XOR );
-    DisplayOpt.DisplayDrawItems = t_fill;
+    displ_opts->m_DisplayDrawItems = tmp;
 }
