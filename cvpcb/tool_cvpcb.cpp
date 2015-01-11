@@ -69,10 +69,6 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             KiBitmap( show_footprint_xpm ),
                             _( "View selected footprint" ) );
 
-    m_mainToolBar->AddTool( ID_CVPCB_AUTO_ASSOCIE, wxEmptyString,
-                            KiBitmap( auto_associe_xpm ),
-                            _( "Perform automatic footprint association" ) );
-
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_GOTO_PREVIOUSNA, wxEmptyString,
                             KiBitmap( left_xpm ),
@@ -83,6 +79,10 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             _( "Select next unlinked component" ) );
 
     m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_CVPCB_AUTO_ASSOCIE, wxEmptyString,
+                            KiBitmap( auto_associe_xpm ),
+                            _( "Perform automatic footprint association" ) );
+
     m_mainToolBar->AddTool( ID_CVPCB_DEL_ASSOCIATIONS, wxEmptyString,
                             KiBitmap( delete_association_xpm ),
                             _( "Delete all associations (links)" ) );
@@ -92,7 +92,6 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             KiBitmap( datasheet_xpm ),
                             _( "Display footprint documentation" ) );
 
-    m_mainToolBar->AddSeparator();
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
                             KiBitmap( module_filtered_list_xpm ),

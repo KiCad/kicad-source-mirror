@@ -31,6 +31,8 @@ set( CVPCB_DIALOGS
     dialogs/fp_conflict_assignment_selector.cpp
     dialogs/dialog_display_options.cpp
     dialogs/dialog_display_options_base.cpp
+    dialogs/dialog_config_equfiles_base.cpp
+    dialogs/dialog_config_equfiles.cpp
     ../pcbnew/dialogs/dialog_fp_lib_table.cpp
     ../pcbnew/dialogs/dialog_fp_lib_table_base.cpp
     ../pcbnew/dialogs/dialog_fp_plugin_options.cpp

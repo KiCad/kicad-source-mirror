@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,6 @@
 #include <common.h>
 #include <kiface_i.h>
 #include <project.h>
-#include <confirm.h>
 #include <gestfich.h>
 #include <pgm_base.h>
 #include <kicad_string.h>
@@ -99,25 +98,18 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
         return;
 
     // Find equivalents in all available files.
-    for( ii = 0; ii < m_AliasLibNames.GetCount(); ii++ )
+    for( ii = 0; ii < m_EquFilesNames.GetCount(); ii++ )
     {
-        fn = m_AliasLibNames[ii];
-
-        if( !fn.HasExt() )
-        {
-            fn.SetExt( FootprintAliasFileExtension );
-            // above fails if filename has more than one point
-        }
+        if( m_EquFilesNames[ii].StartsWith( wxT("${") ) )
+            fn =  wxExpandEnvVars( m_EquFilesNames[ii] );
         else
-        {
-            fn.SetExt( fn.GetExt() + wxT( "." ) + FootprintAliasFileExtension );
-        }
+            fn =  m_EquFilesNames[ii];
 
         tmp = search.FindValidPath( fn.GetFullPath() );
 
         if( !tmp )
         {
-            msg.Printf( _( "Footprint alias library file '%s' could not be found in the "
+            msg.Printf( _( "Footprint equ file '%s' could not be found in the "
                            "default search paths." ),
                         GetChars( fn.GetFullName() ) );
             wxMessageBox( msg, FMT_TITLE_LIB_LOAD_ERROR, wxOK | wxICON_ERROR );
@@ -128,7 +120,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 
         if( file == NULL )
         {
-            msg.Printf( _( "Error opening alias library '%s'." ), GetChars( tmp ) );
+            msg.Printf( _( "Error opening equ file '%s'." ), GetChars( tmp ) );
             wxMessageBox( msg, FMT_TITLE_LIB_LOAD_ERROR, wxOK | wxICON_ERROR );
             continue;
         }
@@ -160,7 +152,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
     }
 
     // Display the number of footprint aliases.
-    msg.Printf( _( "%d footprint aliases found." ), aliases.size() );
+    msg.Printf( _( "%d footprint/cmp equivalences found." ), aliases.size() );
     SetStatusText( msg, 0 );
 
     m_skipComponentSelect = true;

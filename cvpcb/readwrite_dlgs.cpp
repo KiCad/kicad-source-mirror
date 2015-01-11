@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras
+ * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -385,8 +385,9 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
     }
     else
     {
-        wxFileDialog dlg( this, _( "Save Component Footprint Link File" ), wxEmptyString,
-                          _( "Unnamed file" ), ComponentFileWildcard, wxFD_SAVE );
+        wxFileDialog dlg( this, _( "Save Component Footprint Link File" ),
+                          Prj().GetProjectPath(),
+                          wxT( "noname" ), ComponentFileWildcard, wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return -1;
@@ -395,47 +396,13 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
 
         if( !fn.HasExt() )
             fn.SetExt( ComponentFileExtension );
-
-#if 0   // RHH 6-Jul-14: We did not auto generate the
-        // footprint table.  And the dialog which does suppport editing does the saving.
-        // Besides, this is not the place to do this, it belies the name of this
-        // function.
-
-        // Save the project specific footprint library table.
-        if( !Prj().PcbFootprintLibs()->IsEmpty( false ) )
-        {
-            wxString fp_lib_tbl = Prj().FootprintLibTblName();
-
-            if( wxFileName::FileExists( fp_lib_tbl )
-              && IsOK( this, _( "A footprint library table already exists in this path.\n\nDo "
-                                "you want to overwrite it?" ) ) )
-            {
-                try
-                {
-                    Prj().PcbFootprintLibs()->Save( fp_lib_tbl );
-                }
-                catch( const IO_ERROR& ioe )
-                {
-                    wxString msg = wxString::Format( _(
-                        "An error occurred attempting to save the "
-                        "footprint library table '%s'\n\n%s" ),
-                        GetChars( fp_lib_tbl ),
-                        GetChars( ioe.errorText )
-                        );
-                    DisplayError( this, msg );
-                }
-            }
-        }
-#endif
-
     }
 
-    if( !IsWritable( fn.GetFullPath() ) )
-        return 0;
-
-    if( WriteComponentLinkFile( fn.GetFullPath() ) == 0 )
+    if( !IsWritable( fn.GetFullPath() ) || WriteComponentLinkFile( fn.GetFullPath() ) == 0 )
     {
-        DisplayError( this, _( "Unable to create component footprint link file (.cmp)" ) );
+        DisplayError( this,
+            wxString::Format( _( "Unable to create component footprint link file '%s'" ),
+                             fn.GetFullPath() ) );
         return 0;
     }
 

@@ -51,10 +51,10 @@
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
 
 // Constant string definitions for CvPcb
-const wxString FootprintAliasFileExtension( wxT( "equ" ) );
+const wxString EquFileExtension( wxT( "equ" ) );
 
 // Wildcard for schematic retroannotation (import footprint names in schematic):
-const wxString FootprintAliasFileWildcard( _( "KiCad footprint alias files (*.equ)|*.equ" ) );
+const wxString EquFilesWildcard( _( "Component/footprint equ files (*.equ)|*.equ" ) );
 
 #if 0   // add this logic to OpenProjectFiles()
 

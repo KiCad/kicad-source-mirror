@@ -66,7 +66,7 @@ public:
     wxAuiToolBar*             m_mainToolBar;
     wxFileName                m_NetlistFileName;
     wxArrayString             m_ModuleLibNames;
-    wxArrayString             m_AliasLibNames;
+    wxArrayString             m_EquFilesNames;
     wxString                  m_NetlistFileExtension;
     wxString                  m_DocModulesFileName;
     FOOTPRINT_LIST            m_footprints;
@@ -137,9 +137,15 @@ public:
 
     /**
      * Function OnEditLibraryTable
-     * envokes the footpirnt library table edit dialog.
+     * envokes the footprint library table edit dialog.
      */
     void             OnEditFootprintLibraryTable( wxCommandEvent& aEvent );
+
+    /**
+     * Function OnEditEquFilesList
+     * envokes the equ files list edit dialog.
+     */
+    void             OnEditEquFilesList( wxCommandEvent& aEvent );
 
     void             OnKeepOpenOnSave( wxCommandEvent& event );
     void             DisplayModule( wxCommandEvent& event );

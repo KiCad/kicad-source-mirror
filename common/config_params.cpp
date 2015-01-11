@@ -490,6 +490,7 @@ void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig ) const
         id_lib << indexlib;
         indexlib++;
         libname = aConfig->Read( id_lib, wxT( "" ) );
+
         if( libname.IsEmpty() )
             break;
         // file names are stored using Unix notation
