@@ -687,32 +687,33 @@ void CVPCB_MAINFRAME::DisplayStatus()
     }
 
     msg.Empty();
+    wxString filters;
 
     if( m_footprintListBox )
     {
         if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
-            msg = _( "key words" );
+            filters = _( "key words" );
 
         if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST ) )
         {
-            if( !msg.IsEmpty() )
-                msg += wxT( ", " );
+            if( !filters.IsEmpty() )
+                filters += wxT( "+" );
 
-            msg += _( "pin count" );
+            filters += _( "pin count" );
         }
 
         if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST ) )
         {
-            if( !msg.IsEmpty() )
-                msg += wxT( ", " );
+            if( !filters.IsEmpty() )
+                filters += wxT( "+" );
 
-            msg += _( "library" );
+            filters += _( "library" );
         }
 
-        if( msg.IsEmpty() )
+        if( filters.IsEmpty() )
             msg = _( "No filtering" );
         else
-            msg = _( "Filtered by " ) + msg;
+            msg.Printf( _( "Filtered by %s" ), GetChars( filters ) );
 
         msg << wxT( ": " ) << m_footprintListBox->GetCount();
 
@@ -750,7 +751,7 @@ void CVPCB_MAINFRAME::UpdateTitle()
     PROJECT&    prj = Prj();
     wxFileName fn = prj.GetProjectFullName();
 
-    if( fn.IsOk() && fn.FileExists() )
+    if( fn.IsOk() && !prj.GetProjectFullName().IsEmpty() && fn.FileExists() )
     {
         title += wxString::Format( _("Project: '%s'  (netlist: '%s')"),
                                    GetChars( fn.GetFullPath() ),
