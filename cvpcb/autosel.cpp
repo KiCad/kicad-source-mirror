@@ -220,9 +220,12 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
             unsigned next = idx+1;
             unsigned previous = idx-1;
 
-            if( next < equiv_List.size() && previous >= 0 &&
-                ( equivItem.m_ComponentValue == equiv_List[next].m_ComponentValue ||
-                equivItem.m_ComponentValue == equiv_List[previous].m_ComponentValue ) )
+            if( next < equiv_List.size() &&
+                equivItem.m_ComponentValue == equiv_List[next].m_ComponentValue )
+                equ_is_unique = false;
+
+            if( previous >= 0 &&
+                equivItem.m_ComponentValue == equiv_List[previous].m_ComponentValue )
                 equ_is_unique = false;
 
             // If the equivalence is unique, no ambiguity: use the association

@@ -17,7 +17,7 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbEquivChoiceSizer;
-	sbEquivChoiceSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint alias files (.equ files)") ), wxHORIZONTAL );
+	sbEquivChoiceSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint/Component equ files (.equ files)") ), wxHORIZONTAL );
 	
 	wxBoxSizer* bSizerFlist;
 	bSizerFlist = new wxBoxSizer( wxVERTICAL );
