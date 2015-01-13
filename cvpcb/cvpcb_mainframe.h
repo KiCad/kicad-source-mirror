@@ -36,6 +36,7 @@
 
 #include <wxBasePcbFrame.h>
 #include <config_params.h>
+#include <autosel.h>
 
 
 /*  Forward declarations of all top-level window classes. */
@@ -158,7 +159,7 @@ public:
      * format of a line:
      * 'cmp_ref' 'footprint_name'
      */
-    void             AssocieModule( wxCommandEvent& event );
+    void             AutomaticFootprintMatching( wxCommandEvent& event );
 
     void             DisplayDocFile( wxCommandEvent& event );
 
@@ -177,6 +178,7 @@ public:
      * @param aFootprintName = the selected footprint
      */
     void             SetNewPkg( const wxString& aFootprintName );
+
     void             BuildCmpListBox();
     void             BuildFOOTPRINTS_LISTBOX();
     void             BuildLIBRARY_LISTBOX();
@@ -291,6 +293,17 @@ public:
     void SendMessageToEESCHEMA();
 
     COMPONENT* GetSelectedComponent();
+
+private:
+
+    /**
+     * read the .equ files and populate the list of equvalents
+     * @param aList the list to populate
+     * @param aErrorMessages is a pointer to a wxString to store error messages
+     *  (can be NULL)
+     * @return the error count ( 0 = no error)
+     */
+    int buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages = NULL );
 
     DECLARE_EVENT_TABLE()
 };

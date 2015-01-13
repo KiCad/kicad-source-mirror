@@ -270,7 +270,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Regulators</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -8181,7 +8181,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">TransLine</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -8288,7 +8288,7 @@
                                                     <property name="caption"></property>
                                                     <property name="caption_visible">1</property>
                                                     <property name="center_pane">0</property>
-                                                    <property name="choices">&quot;Microstrip Line&quot; &quot;Coplanar wave guide&quot; &quot;Grounded Coplanar wave guide&quot; &quot;Rectangular Waveguide&quot; &quot;Coaxial Line&quot; &quot;Coupled Microstrip Line&quot; &quot;Stripline&quot; &quot;Twisted Pair&quot;</property>
+                                                    <property name="choices">&quot;Microstrip Line&quot; &quot;Coplanar wave guide&quot; &quot;Coplanar wave guide with ground plane&quot; &quot;Rectangular Waveguide&quot; &quot;Coaxial Line&quot; &quot;Coupled Microstrip Line&quot; &quot;Stripline&quot; &quot;Twisted Pair&quot;</property>
                                                     <property name="close_button">1</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>

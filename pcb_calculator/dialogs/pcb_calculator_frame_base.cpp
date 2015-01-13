@@ -247,7 +247,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelRegulators->SetSizer( bSizerMainReg );
 	m_panelRegulators->Layout();
 	bSizerMainReg->Fit( m_panelRegulators );
-	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), true );
+	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), false );
 	m_panelTrackWidth = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerTrackWidth;
 	bSizerTrackWidth = new wxBoxSizer( wxHORIZONTAL );
@@ -593,7 +593,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_TranslineSelectionChoices[] = { _("Microstrip Line"), _("Coplanar wave guide"), _("Grounded Coplanar wave guide"), _("Rectangular Waveguide"), _("Coaxial Line"), _("Coupled Microstrip Line"), _("Stripline"), _("Twisted Pair") };
+	wxString m_TranslineSelectionChoices[] = { _("Microstrip Line"), _("Coplanar wave guide"), _("Coplanar wave guide with ground plane"), _("Rectangular Waveguide"), _("Coaxial Line"), _("Coupled Microstrip Line"), _("Stripline"), _("Twisted Pair") };
 	int m_TranslineSelectionNChoices = sizeof( m_TranslineSelectionChoices ) / sizeof( wxString );
 	m_TranslineSelection = new wxRadioBox( m_panelTransline, wxID_ANY, _("Transmission Line Type:"), wxDefaultPosition, wxDefaultSize, m_TranslineSelectionNChoices, m_TranslineSelectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_TranslineSelection->SetSelection( 0 );
@@ -998,7 +998,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelTransline->SetSizer( bSizeTransline );
 	m_panelTransline->Layout();
 	bSizeTransline->Fit( m_panelTransline );
-	m_Notebook->AddPage( m_panelTransline, _("TransLine"), false );
+	m_Notebook->AddPage( m_panelTransline, _("TransLine"), true );
 	m_panelAttenuators = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxStaticBoxSizer* sbSizerAtt;
 	sbSizerAtt = new wxStaticBoxSizer( new wxStaticBox( m_panelAttenuators, wxID_ANY, _("label") ), wxHORIZONTAL );
