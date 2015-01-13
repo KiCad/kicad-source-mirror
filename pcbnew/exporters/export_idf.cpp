@@ -378,7 +378,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
 
         IDF3_COMP_OUTLINE* outline;
 
-        outline = aIDFBoard.GetComponentOutline( modfile->GetShape3DName() );
+        outline = aIDFBoard.GetComponentOutline( modfile->GetShape3DFullFilename() );
 
         if( !outline )
             throw( std::runtime_error( aIDFBoard.GetError() ) );
