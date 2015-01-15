@@ -112,13 +112,38 @@ public:
 
 private:
     void initDlg( wxArrayString& aEnvVariableList );
-    wxString GetSelectedEnvVar();       // return the selected env variable
-    wxString GetSelectedEnvVarValue();  // return the selected env variable value
+    wxString getSelectedEnvVar();       // return the selected env variable
+    wxString getSelectedEnvVarValue();  // return the selected env variable value
     bool setSecondPage();               // Init prms for the second wizard page
     bool setLastPage();                 // Init prms for the last wizard page
     void selectLibsFiles();             // select a set of library files
     void selectLibsFolders();           // select a set of library folders
-    void selectLibsGithub();            // select a set of library on Github
+
+    /** select a set of library on Github, using the Web viewer to explore
+     * the repos
+     */
+    void selectLibsGithubWithWebViewer();
+
+    /** Get the list of .pretty libraries on Github,
+     * without using the viewer, from the lib list extracted from the KiCad repos
+     */
+    void getLibsListGithub( wxArrayString& aList );
+
+    /** Helper function.
+     * add the .pretty libraries found in aUrlList, after calculating a nickname and
+     * replacing the path by an env variable, if allowed and possible
+     */
+    void installGithubLibsFromList( wxArrayString& aUrlList );
+
+    /**
+     * Download the .pretty libraries found in aUrlLis and store them on disk
+     * in a master folder
+     * @return true if OK, false on error
+     * @param aUrlList is the list of Github .pretty libs to download
+     * @param aErrorMessage is a wxString pointer to store error messages if any.
+     */
+    bool downloadGithubLibsFromList( wxArrayString& aUrlList, wxString * aErrorMessage = NULL );
+
     void updateFromPlugingChoice();     // update dialog options and widgets
                                         // depending on the plugin choice
     int GetEnvVarCount()                // Get the number of rows in env var table
@@ -134,6 +159,12 @@ private:
     bool IsGithubPlugin()               // Helper funct, return true if
     {                                   // the Github plugin is the choice
         return m_rbFpLibFormat->GetSelection() == GITHUB_PLUGIN;
+    }
+
+
+    bool IsKicadPlugin()                // Helper funct, return true if
+    {                                   // the Kicad plugin is the choice
+        return m_rbFpLibFormat->GetSelection() == KICAD_PLUGIN;
     }
 
     int HasGithubEnvVarCompatible();    // Return the first index to one env var
@@ -156,6 +187,9 @@ private:
     void OnPathManagementSelection( wxCommandEvent& event );
     void OnSelectEnvVarCell( wxGridEvent& event );
 	void OnPluginSelection( wxCommandEvent& event );
+#ifdef BUILD_GITHUB_PLUGIN
+    void OnGithubLibsList( wxCommandEvent& event );
+#endif
 	bool ValidateOptions();
 };
 

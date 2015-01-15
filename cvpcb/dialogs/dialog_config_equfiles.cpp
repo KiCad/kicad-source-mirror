@@ -90,6 +90,31 @@ void DIALOG_CONFIG_EQUFILES::Init()
 
 }
 
+void DIALOG_CONFIG_EQUFILES::OnEditEquFile( wxCommandEvent& event )
+{
+    wxString    editorname = Pgm().GetEditorName();
+
+    if( editorname.IsEmpty() )
+    {
+        wxMessageBox( _( "No editor defined in Kicad. Please chose it" ) );
+        return;
+    }
+
+    wxArrayInt selections;
+    m_ListEquiv->GetSelections( selections );
+
+    wxString fullFileNames, tmp;
+
+    for( unsigned ii = 0; ii < selections.GetCount(); ii++ )
+    {
+        tmp = m_ListEquiv->GetString( selections[ii] );
+        fullFileNames << wxT( " \"" ) << wxExpandEnvVars( tmp ) << wxT( "\"" );
+        m_ListChanged = true;
+    }
+
+    ExecuteFile( this, editorname, fullFileNames );
+}
+
 
 void DIALOG_CONFIG_EQUFILES::OnCancelClick( wxCommandEvent& event )
 {
@@ -126,10 +151,9 @@ void DIALOG_CONFIG_EQUFILES::OnCloseWindow( wxCloseEvent& event )
 void DIALOG_CONFIG_EQUFILES::OnButtonMoveUp( wxCommandEvent& event )
 /********************************************************************/
 {
-    wxListBox * list = m_ListEquiv;
     wxArrayInt selections;
 
-    list->GetSelections( selections );
+    m_ListEquiv->GetSelections( selections );
 
     if ( selections.GetCount() <= 0 )   // No selection.
         return;
@@ -137,7 +161,7 @@ void DIALOG_CONFIG_EQUFILES::OnButtonMoveUp( wxCommandEvent& event )
     if( selections[0] == 0 )            // The first lib is selected. cannot move up it
         return;
 
-    wxArrayString libnames = list->GetStrings();
+    wxArrayString libnames = m_ListEquiv->GetStrings();
 
     for( size_t ii = 0; ii < selections.GetCount(); ii++ )
     {
@@ -145,13 +169,13 @@ void DIALOG_CONFIG_EQUFILES::OnButtonMoveUp( wxCommandEvent& event )
         EXCHG( libnames[jj],  libnames[jj-1] );
     }
 
-    list->Set( libnames );
+    m_ListEquiv->Set( libnames );
 
     // Reselect previously selected names
     for( size_t ii = 0; ii < selections.GetCount(); ii++ )
     {
         int jj = selections[ii];
-        list->SetSelection( jj-1 );
+        m_ListEquiv->SetSelection( jj-1 );
     }
 
     m_ListChanged = true;

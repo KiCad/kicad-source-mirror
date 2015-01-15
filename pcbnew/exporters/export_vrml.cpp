@@ -635,14 +635,15 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
 
     if( text->IsMultilineAllowed() )
     {
-        wxArrayString* list = wxStringSplit( text->GetShownText(), '\n' );
+        wxArrayString strings_list;
+        wxStringSplit( text->GetShownText(), strings_list, '\n' );
         std::vector<wxPoint> positions;
-        positions.reserve( list->Count() );
-        text->GetPositionsOfLinesOfMultilineText( positions, list->Count() );
+        positions.reserve( strings_list.Count() );
+        text->GetPositionsOfLinesOfMultilineText( positions, strings_list.Count() );
 
-        for( unsigned ii = 0; ii < list->Count(); ii++ )
+        for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
-            wxString txt = list->Item( ii );
+            wxString& txt = strings_list.Item( ii );
             DrawGraphicText( NULL, NULL, positions[ii], color,
                              txt, text->GetOrientation(), size,
                              text->GetHorizJustify(), text->GetVertJustify(),
@@ -650,8 +651,6 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
                              true,
                              vrml_text_callback );
         }
-
-        delete (list);
     }
     else
     {

@@ -61,6 +61,7 @@ class WIZARD_FPLIB_TABLE_BASE : public wxWizard
 		wxStaticText* m_textPath;
 		wxStaticText* m_staticText2;
 		wxGrid* m_gridFpListLibs;
+		wxButton* m_buttonGithubLibList;
 		wxButton* m_buttonAddLib;
 		wxButton* m_buttonRemoveLib;
 		
@@ -73,6 +74,7 @@ class WIZARD_FPLIB_TABLE_BASE : public wxWizard
 		virtual void OnSelectEnvVarCell( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnAddEVariable( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveEVariable( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGithubLibsList( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddFpLibs( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveFpLibs( wxCommandEvent& event ) { event.Skip(); }
 		

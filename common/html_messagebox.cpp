@@ -51,23 +51,20 @@ void HTML_MESSAGE_BOX::ListClear()
 
 void HTML_MESSAGE_BOX::ListSet( const wxString& aList )
 {
-    // wxArrayString* wxStringSplit( wxString txt, wxChar splitter );
-
-    wxArrayString* strings_list = wxStringSplit( aList, wxChar( '\n' ) );
+    wxArrayString strings_list;
+    wxStringSplit( aList, strings_list, wxChar( '\n' ) );
 
     wxString msg = wxT( "<ul>" );
 
-    for ( unsigned ii = 0; ii < strings_list->GetCount(); ii++ )
+    for ( unsigned ii = 0; ii < strings_list.GetCount(); ii++ )
     {
         msg += wxT( "<li>" );
-        msg += strings_list->Item( ii ) + wxT( "</li>" );
+        msg += strings_list.Item( ii ) + wxT( "</li>" );
     }
 
     msg += wxT( "</ul>" );
 
     m_htmlWindow->AppendToPage( msg );
-
-    delete strings_list;
 }
 
 

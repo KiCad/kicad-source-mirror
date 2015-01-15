@@ -52,6 +52,7 @@ class DIALOG_CONFIG_EQUFILES_BASE : public DIALOG_SHIM
 		wxButton* m_buttonRemoveEqu;
 		wxButton* m_buttonMoveUp;
 		wxButton* m_buttonMoveDown;
+		wxButton* m_buttonEdit;
 		wxStaticText* m_staticText2;
 		wxGrid* m_gridEnvVars;
 		wxRadioBox* m_rbPathOptionChoice;
@@ -66,13 +67,14 @@ class DIALOG_CONFIG_EQUFILES_BASE : public DIALOG_SHIM
 		virtual void OnRemoveFiles( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonMoveDown( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEditEquFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 454,284 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 454,338 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_CONFIG_EQUFILES_BASE();
 	
 };

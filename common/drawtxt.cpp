@@ -636,6 +636,7 @@ void PLOTTER::Text( const wxPoint&              aPos,
     {
         // EDA_TEXT needs for calculations of the position of every
         // line according to orientation and justifications
+        wxArrayString strings;
         EDA_TEXT* multilineText = new EDA_TEXT( aText );
         multilineText->SetSize( aSize );
         multilineText->SetTextPosition( aPos );
@@ -646,15 +647,15 @@ void PLOTTER::Text( const wxPoint&              aPos,
         multilineText->SetMultilineAllowed( aMultilineAllowed );
 
         std::vector<wxPoint> positions;
-        wxArrayString* list = wxStringSplit( aText, '\n' );
-        positions.reserve( list->Count() );
+        wxStringSplit( aText, strings, '\n' );
+        positions.reserve( strings.Count() );
 
         multilineText->GetPositionsOfLinesOfMultilineText(
-                positions, list->Count() );
+                positions, strings.Count() );
 
-        for( unsigned ii = 0; ii < list->Count(); ii++ )
+        for( unsigned ii = 0; ii < strings.Count(); ii++ )
         {
-            wxString& txt = list->Item( ii );
+            wxString& txt = strings.Item( ii );
             DrawGraphicText( NULL, NULL, positions[ii], aColor, txt,
                              aOrient, aSize,
                              aH_justify, aV_justify,
@@ -663,8 +664,8 @@ void PLOTTER::Text( const wxPoint&              aPos,
                              NULL,
                              this );
         }
+
         delete multilineText;
-        delete list;
     }
     else
     {
