@@ -54,15 +54,15 @@ if( Bazaar_EXECUTABLE )
 
     # Fetch the Bazaar executable version.
     execute_process( COMMAND ${Bazaar_EXECUTABLE} --version
-                     OUTPUT_VARIABLE bzr_version_output
+                     OUTPUT_VARIABLE _bzr_version_output
                      ERROR_VARIABLE _bzr_version_error
                      RESULT_VARIABLE _bzr_version_result
                      OUTPUT_STRIP_TRAILING_WHITESPACE )
 
     if( ${_bzr_version_result} EQUAL 0 )
         set( Bazaar_FOUND TRUE )
-        string( REGEX REPLACE "^(.*\n)? \(bzr\) ([^\n]+).*"
-                "\\2" Bazaar_VERSION "${_bzr_version_output}" )
+        string( REGEX REPLACE "^[\n]*Bazaar \\(bzr\\) ([0-9.a-z]+).*"
+                "\\1" Bazaar_VERSION "${_bzr_version_output}" )
         message( STATUS "Bazaar version control system version ${Bazaar_VERSION} found." )
     endif( ${_bzr_version_result} EQUAL 0 )
 
