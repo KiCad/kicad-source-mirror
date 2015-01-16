@@ -136,14 +136,18 @@ void WIZARD_FPLIB_TABLE::initDlg( wxArrayString& aEnvVariableList )
 
     wxString msg;
     wxConfigBase* cfg = Pgm().CommonSettings();
-    cfg->Read( KICAD_FPLIBS_URL_KEY, &msg );
     cfg->Read( WIZARD_LAST_PLUGIN_KEY, &m_last_plugin_choice );
     cfg->Read( WIZARD_LAST_PATHOPTION_KEY, &m_last_defaultpath_choice );
+    cfg->Read( KICAD_FPLIBS_URL_KEY, &msg );
 
-    if( msg.IsEmpty() )
-        m_textCtrlGithubURL->SetValue( wxT( "http://github.com/KiCad/" ) );
-    else
-        m_textCtrlGithubURL->SetValue( msg );
+    if( msg.IsEmpty() )     // Give our current KiCad github URL
+        msg = wxT( "http://github.com/KiCad" );
+
+    // Be sure there is no trailing '/' at the end of the repo name
+    if( msg.EndsWith( wxT("/" ) ) )
+        msg.RemoveLast();
+
+    m_textCtrlGithubURL->SetValue( msg );
 
     // KIGITHUB is frequently used (examples in docs, and other place)
     // So add it if it not yet in list, but if it is defined as env var
@@ -744,11 +748,13 @@ void WIZARD_FPLIB_TABLE::selectLibsGithubWithWebViewer()    // select a set of l
         defaultURL = wxT( "https://github.com/KiCad" );
 #ifdef KICAD_USE_WEBKIT
     RunWebViewer( this, defaultURL, &urls );
-    installGithubLibsFromList( urls );
 #else
-    urls.Add( defaultURL + wxT("newlibname.pretty") );
+    // If the Web Viewer is not available, just add a template
+    // to the fp lib table.
+    // The user have to edit it
+    urls.Add( defaultURL + wxT("/newlibname.pretty") );
 #endif
-
+    installGithubLibsFromList( urls );
 }
 
 void WIZARD_FPLIB_TABLE::installGithubLibsFromList( wxArrayString& aUrlList )
@@ -843,11 +849,21 @@ void WIZARD_FPLIB_TABLE::OnGithubLibsList( wxCommandEvent& event )
 void WIZARD_FPLIB_TABLE::getLibsListGithub( wxArrayString& aList )
 {
     wxBeginBusyCursor();
-    GITHUB_GETLIBLIST getter( m_textCtrlGithubURL->GetValue() );
-    wxEndBusyCursor();
+
+    // Be sure there is no trailing '/' at the end of the repo name
+    wxString git_url = m_textCtrlGithubURL->GetValue();
+    if( git_url.EndsWith( wxT("/" ) ) )
+    {
+        git_url.RemoveLast();
+        m_textCtrlGithubURL->SetValue( git_url );
+    }
+
+    GITHUB_GETLIBLIST getter( git_url );
 
     wxArrayString fullList;
     getter.GetLibraryList( fullList );
+
+    wxEndBusyCursor();
 
     wxArrayInt choices;
     wxString msg( _( "Urls detected as footprint .pretty libraries.\n"
