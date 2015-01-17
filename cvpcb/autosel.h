@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,22 +21,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __CVPCB_H__
-#define __CVPCB_H__
+#ifndef AUTOSEL_H
+#define AUTOSEL_H
 
-// config for footprints doc file access
-#define DEFAULT_FOOTPRINTS_LIST_FILENAME wxT( "footprints_doc/footprints.pdf" )
-
-// Define print format to display a schematic component line
-#define CMP_FORMAT wxT( "%3d %8s - %16s : %s" )
-
-#define FILTERFOOTPRINTKEY "FilterFootprint"
-
-#define LISTB_STYLE     ( wxSUNKEN_BORDER | wxLC_NO_HEADER | wxLC_REPORT | wxLC_VIRTUAL | \
-                          wxLC_SINGLE_SEL | wxVSCROLL | wxHSCROLL )
-
-extern const wxString EquFileExtension;
-extern const wxString EquFilesWildcard;
+// A helper class to handle info read in .equ files, which gives a footprint FPID
+// corresponding to a component value.
+// Each line is something like:
+// 'FT232BL'		'QFP:LQFP-32_7x7mm_Pitch0.8mm'
+//
 
 
-#endif /* __CVPCB_H__ */
+class FOOTPRINT_EQUIVALENCE
+{
+public:
+    wxString    m_ComponentValue;   // The value of a component
+    wxString    m_FootprintFPID;    // the footprint FPID corresponding to this value
+
+    FOOTPRINT_EQUIVALENCE() {}
+};
+
+typedef boost::ptr_vector< FOOTPRINT_EQUIVALENCE > FOOTPRINT_EQUIVALENCE_LIST;
+
+#endif      // ifndef AUTOSEL_H

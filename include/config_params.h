@@ -47,7 +47,7 @@
 #define GROUP_SCH_LIBS      wxT( "/eeschema/libraries" )    /// library list section
 
 #define GROUP_CVP           wxT("/cvpcb")
-#define GROUP_CVP_EQU       wxT("/cvpcb/libraries")
+#define GROUP_CVP_EQU       wxT("/cvpcb/equfiles")
 
 
 #define CONFIG_VERSION      1

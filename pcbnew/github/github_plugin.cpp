@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,6 +101,7 @@ Vary: Accept-Encoding
 #include <class_module.h>
 #include <macros.h>
 #include <fp_lib_table.h>       // ExpandSubstitutions()
+#include <github_getliblist.h>
 
 using namespace std;
 
@@ -549,6 +550,57 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
     }
 }
 
+// This GITHUB_GETLIBLIST method should not be here, but in github_getliblist.cpp!
+// However it is here just because we need to include <avhttp.hpp> to compile it.
+// and if we include avhttp in 2 .cpp files, the link fails becuse it detects duplicate
+// avhttp functions.
+// So until it is fixed, this code is here.
+bool GITHUB_GETLIBLIST::remote_get_json( std::string* aFullURLCommand, wxString* aMsgError )
+{
+    boost::asio::io_service io;
+    avhttp::http_stream     h( io );
+    avhttp::request_opts    options;
+
+    options.insert( "Accept",       "application/json" );
+    options.insert( "User-Agent",   "http://kicad-pcb.org" );   // THAT WOULD BE ME.
+    h.request_options( options );
+
+    try
+    {
+        std::ostringstream os;
+
+        h.open( *aFullURLCommand );      // only one file, therefore do it synchronously.
+        os << &h;
+
+        // Keep json text file image in RAM.
+        m_json_image = os.str();
+
+        // 4 lines, using SSL, top that.
+    }
+    catch( boost::system::system_error& e )
+    {
+        // https "GET" has faild, report this to API caller.
+        static const char errorcmd[] = "https GET command failed";  // Do not translate this message
+
+        UTF8 fmt( _( "%s\nCannot get/download json data from: '%s'\nReason: '%s'" ) );
+
+        std::string msg = StrPrintf( fmt.c_str(),
+                errorcmd,
+                // Report secret list_url to user.  The secret
+                // list_url may go bad at some point in future if github changes
+                // their server architecture.  Then fix repoURL_zipURL() to reflect
+                // new architecture.
+                aFullURLCommand->c_str(), e.what() );
+
+        if( aMsgError )
+        {
+            *aMsgError =  msg;
+            return false;
+        }
+    }
+
+    return true;
+}
 
 #if 0 && defined(STANDALONE)
 

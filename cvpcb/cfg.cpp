@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jean-pierre.charras
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@ PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters()
     m_projectFileParams.push_back( new PARAM_CFG_BASE( GROUP_PCB_LIBS, PARAM_COMMAND_ERASE ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST(
-        wxT( "EquName" ), &m_AliasLibNames, GROUP_CVP_EQU ) );
+        wxT( "EquName" ), &m_EquFilesNames, GROUP_CVP_EQU ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING(
         wxT( "NetIExt" ), &m_NetlistFileExtension ) );
@@ -64,9 +64,8 @@ void CVPCB_MAINFRAME::LoadProjectFile()
     PROJECT&    prj = Prj();
 
     m_ModuleLibNames.Clear();
-    m_AliasLibNames.Clear();
+    m_EquFilesNames.Clear();
 
-    // was: Pgm().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
     prj.ConfigLoad( Kiface().KifaceSearch(), GROUP_CVP, GetProjectFileParameters() );
 
     if( m_NetlistFileExtension.IsEmpty() )
@@ -77,26 +76,14 @@ void CVPCB_MAINFRAME::LoadProjectFile()
 void CVPCB_MAINFRAME::SaveProjectFile( wxCommandEvent& aEvent )
 {
     PROJECT&    prj = Prj();
-    wxFileName  fn = prj.AbsolutePath( m_NetlistFileName.GetFullPath() );
-
-    fn.SetExt( ProjectFileExtension );
-
-    if( aEvent.GetId() == ID_SAVE_PROJECT_AS || !m_NetlistFileName.IsOk() )
-    {
-        wxFileDialog dlg( this, _( "Save Project File" ), fn.GetPath(),
-                          wxEmptyString, ProjectFileWildcard, wxFD_SAVE );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return;
-
-        fn = dlg.GetPath();
-
-        if( !fn.HasExt() )
-            fn.SetExt( ProjectFileExtension );
-    }
+    SetTitle( wxString::Format( _( "Project file: '%s'" ), GetChars( prj.GetProjectFullName() ) ) );
+    wxFileName  fn = prj.GetProjectFullName();
 
     if( !IsWritable( fn ) )
+    {
+        wxMessageBox( _( "Project file '%s' is not writable" ), fn.GetFullPath() );
         return;
+    }
 
     wxString pro_name = fn.GetFullPath();
 

@@ -8,7 +8,7 @@ endif()
 
 add_definitions( -DCVPCB )
 
-if( KICAD_USE_WEBKITT AND BUILD_GITHUB_PLUGIN )
+if( KICAD_USE_WEBKIT AND BUILD_GITHUB_PLUGIN )
     set( WEBVIEWER_WXLIB "webviewer" )
     add_definitions( -DKICAD_USE_WEBKIT )
 endif()
@@ -31,6 +31,8 @@ set( CVPCB_DIALOGS
     dialogs/fp_conflict_assignment_selector.cpp
     dialogs/dialog_display_options.cpp
     dialogs/dialog_display_options_base.cpp
+    dialogs/dialog_config_equfiles_base.cpp
+    dialogs/dialog_config_equfiles.cpp
     ../pcbnew/dialogs/dialog_fp_lib_table.cpp
     ../pcbnew/dialogs/dialog_fp_lib_table_base.cpp
     ../pcbnew/dialogs/dialog_fp_plugin_options.cpp

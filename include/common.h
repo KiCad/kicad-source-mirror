@@ -339,11 +339,11 @@ double RoundTo0( double x, double precision );
 /**
  * Function wxStringSplit
  * splits \a aString to a string list separated at \a aSplitter.
- * @return the list
- * @param aString is the text to split
+ * @param aText is the text to split
+ * @param aStrings will contain the splitted lines
  * @param aSplitter is the 'split' character
  */
-wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter );
+void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter );
 
 /**
  * Function GetRunningMicroSecs

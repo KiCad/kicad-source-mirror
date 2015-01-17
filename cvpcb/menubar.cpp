@@ -95,11 +95,11 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     // Save the .cmp file
     AddMenuItem( filesMenu, wxID_SAVE,
-                 _( "&Save\tCtrl+S" ), SAVE_HLP_MSG, KiBitmap( save_xpm ) );
+                 _( "&Save Cmp File\tCtrl+S" ), SAVE_HLP_MSG, KiBitmap( save_xpm ) );
 
     // Save as the .cmp file
     AddMenuItem( filesMenu, wxID_SAVEAS,
-                 _( "Save &As...\tCtrl+Shift+S" ), SAVE_AS_HLP_MSG, KiBitmap( save_xpm ) );
+                 _( "Save Cmp File &As...\tCtrl+Shift+S" ), SAVE_AS_HLP_MSG, KiBitmap( save_xpm ) );
 
     // Separator
     filesMenu->AppendSeparator();
@@ -114,6 +114,12 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
                  _( "Edit Li&brary Table" ), _( "Setup footprint libraries" ),
+                 KiBitmap( library_table_xpm ) );
+
+    AddMenuItem( preferencesMenu, ID_CVPCB_EQUFILES_LIST_EDIT,
+                 _( "Edit &Equ Files List" ),
+                 _( "Setup equ files list (.equ files)\n"
+                    "They are files which give the footprint name from the component value"),
                  KiBitmap( library_table_xpm ) );
 
     // Language submenu
@@ -132,11 +138,6 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     AddMenuItem( preferencesMenu, ID_SAVE_PROJECT,
                  _( "&Save Project File" ),
                  _( "Save changes to the project configuration file" ),
-                 KiBitmap( save_setup_xpm ) );
-
-    AddMenuItem( preferencesMenu, ID_SAVE_PROJECT_AS,
-                 _( "&Save Project File As" ),
-                 _( "Save changes to a new project configuration file" ),
                  KiBitmap( save_setup_xpm ) );
 
     // Menu Help:

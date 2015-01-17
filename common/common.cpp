@@ -212,29 +212,26 @@ void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit )
 }
 
 
-wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter )
+void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter )
 {
-    wxArrayString* list = new wxArrayString();
+    wxString tmp;
 
-    while( 1 )
+    for( unsigned ii = 0; ii < aText.Length(); ii++ )
     {
-        int index = aString.Find( aSplitter );
+        if( aText[ii] == aSplitter )
+        {
+            aStrings.Add( tmp );
+            tmp.Clear();
+        }
 
-        if( index == wxNOT_FOUND )
-            break;
-
-        wxString tmp;
-        tmp = aString.Mid( 0, index );
-        aString = aString.Mid( index + 1, aString.size() - index );
-        list->Add( tmp );
+        else
+            tmp << aText[ii];
     }
 
-    if( !aString.IsEmpty() )
+    if( !tmp.IsEmpty() )
     {
-        list->Add( aString );
+        aStrings.Add( tmp );
     }
-
-    return list;
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +25,16 @@
  * @file autosel.cpp
  */
 
-// Routines for automatic selection of modules.
+// This file handle automatic selection of footprints, from .equ files which give
+// a footprint FPID associated to a component value.
+// Thse assiciations have this form:
+// 'FT232BL'		'QFP:LQFP-32_7x7mm_Pitch0.8mm'
+
 
 #include <fctsys.h>
 #include <common.h>
 #include <kiface_i.h>
 #include <project.h>
-#include <confirm.h>
 #include <gestfich.h>
 #include <pgm_base.h>
 #include <kicad_string.h>
@@ -40,23 +43,9 @@
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
 #include <cvstruct.h>
+#include <autosel.h>
 
 #define QUOTE   '\''
-
-#define FMT_TITLE_LIB_LOAD_ERROR    _( "Library Load Error" )
-
-
-class FOOTPRINT_ALIAS
-{
-public:
-    int         m_Type;
-    wxString    m_Name;
-    wxString    m_FootprintName;
-
-    FOOTPRINT_ALIAS() { m_Type = 0; }
-};
-
-typedef boost::ptr_vector< FOOTPRINT_ALIAS > FOOTPRINT_ALIAS_LIST;
 
 
 /*
@@ -82,45 +71,48 @@ wxString GetQuotedText( wxString & text )
 }
 
 
-void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
+// A sort compare function, used to sort a FOOTPRINT_EQUIVALENCE_LIST by cmp values
+// (m_ComponentValue member)
+bool sortListbyCmpValue( const FOOTPRINT_EQUIVALENCE& ref, const FOOTPRINT_EQUIVALENCE& test )
 {
-    FOOTPRINT_ALIAS_LIST aliases;
-    FOOTPRINT_ALIAS*     alias;
-    COMPONENT*           component;
-    wxFileName           fn;
-    wxString             msg, tmp;
-    char                 Line[1024];
-    FILE*                file;
-    size_t               ii;
+    return ref.m_ComponentValue.Cmp( test.m_ComponentValue ) >= 0;
+}
 
-    SEARCH_STACK&        search = Kiface().KifaceSearch();
+// read the .equ files and populate the list of equvalents
+int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages )
+{
+    char        Line[1024];
+    int         error_count = 0;
+    FILE*       file;
+    wxFileName  fn;
+    wxString    tmp, error_msg;
 
-    if( m_netlist.IsEmpty() )
-        return;
+    SEARCH_STACK& search = Kiface().KifaceSearch();
 
-    // Find equivalents in all available files.
-    for( ii = 0; ii < m_AliasLibNames.GetCount(); ii++ )
+    // Find equivalences in all available files, and populates the
+    // equiv_List with all equivalences found in .equ files
+    for( unsigned ii = 0; ii < m_EquFilesNames.GetCount(); ii++ )
     {
-        fn = m_AliasLibNames[ii];
-
-        if( !fn.HasExt() )
-        {
-            fn.SetExt( FootprintAliasFileExtension );
-            // above fails if filename has more than one point
-        }
-        else
-        {
-            fn.SetExt( fn.GetExt() + wxT( "." ) + FootprintAliasFileExtension );
-        }
+        fn =  wxExpandEnvVars( m_EquFilesNames[ii] );
 
         tmp = search.FindValidPath( fn.GetFullPath() );
 
         if( !tmp )
         {
-            msg.Printf( _( "Footprint alias library file '%s' could not be found in the "
-                           "default search paths." ),
-                        GetChars( fn.GetFullName() ) );
-            wxMessageBox( msg, FMT_TITLE_LIB_LOAD_ERROR, wxOK | wxICON_ERROR );
+            error_count++;
+
+            if( aErrorMessages )
+            {
+                error_msg.Printf( _( "Equ file '%s' could not be found in the "
+                                     "default search paths." ),
+                            GetChars( fn.GetFullName() ) );
+
+                if( ! aErrorMessages->IsEmpty() )
+                    *aErrorMessages << wxT("\n\n");
+
+                *aErrorMessages += error_msg;
+            }
+
             continue;
         }
 
@@ -128,8 +120,18 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 
         if( file == NULL )
         {
-            msg.Printf( _( "Error opening alias library '%s'." ), GetChars( tmp ) );
-            wxMessageBox( msg, FMT_TITLE_LIB_LOAD_ERROR, wxOK | wxICON_ERROR );
+            error_count++;
+
+            if( aErrorMessages )
+            {
+                error_msg.Printf( _( "Error opening equ file '%s'." ), GetChars( tmp ) );
+
+                if( ! aErrorMessages->IsEmpty() )
+                    *aErrorMessages << wxT("\n\n");
+
+                *aErrorMessages += error_msg;
+            }
+
             continue;
         }
 
@@ -150,21 +152,46 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 
             value.Replace( wxT( " " ), wxT( "_" ) );
 
-            alias = new FOOTPRINT_ALIAS();
-            alias->m_Name = value;
-            alias->m_FootprintName = footprint;
-            aliases.push_back( alias );
+            FOOTPRINT_EQUIVALENCE* equivItem = new FOOTPRINT_EQUIVALENCE();
+            equivItem->m_ComponentValue = value;
+            equivItem->m_FootprintFPID = footprint;
+            aList.push_back( equivItem );
         }
 
         fclose( file );
     }
 
-    // Display the number of footprint aliases.
-    msg.Printf( _( "%d footprint aliases found." ), aliases.size() );
+    return error_count;
+}
+
+
+void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
+{
+    FOOTPRINT_EQUIVALENCE_LIST equiv_List;
+    COMPONENT*           component;
+    wxString             msg, error_msg;
+    size_t               ii;
+
+    if( m_netlist.IsEmpty() )
+        return;
+
+    if( buildEquivalenceList( equiv_List, &error_msg ) )
+        wxMessageBox( error_msg, _( "Equ files Load Error" ), wxOK |  wxICON_WARNING, this );
+
+    // Sort the association list by component value.
+    // When sorted, find duplicate definitions (i.e. 2 or more items
+    // having the same component value) is more easy.
+    std::sort( equiv_List.begin(), equiv_List.end(), sortListbyCmpValue );
+
+    // Display the number of footprint/component equivalences.
+    msg.Printf( _( "%d footprint/cmp equivalences found." ), equiv_List.size() );
     SetStatusText( msg, 0 );
 
+    // Now, associe each free component with a footprint, when the association
+    // is found in list
     m_skipComponentSelect = true;
     ii = 0;
+    error_msg.Empty();
 
     for( unsigned kk = 0;  kk < m_netlist.GetCount();  kk++ )
     {
@@ -173,19 +200,44 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
         bool found = false;
         m_compListBox->SetSelection( ii++, true );
 
-        if( !component->GetFPID().empty() )
+        if( !component->GetFPID().empty() ) // the component has already a footprint
             continue;
 
-        BOOST_FOREACH( FOOTPRINT_ALIAS& alias, aliases )
+        // Here a first attempt is made. We can have multiple equivItem of the same value.
+        // When happens, using the footprint filter of components can remove the ambiguity by
+        // filtering equivItem so one can use multiple equiv_List (for polar and
+        // nonpolar caps for example)
+        for( unsigned idx = 0; idx < equiv_List.size(); idx++ )
         {
+            FOOTPRINT_EQUIVALENCE& equivItem = equiv_List[idx];
 
-            if( alias.m_Name.CmpNoCase( component->GetValue() ) != 0 )
+            if( equivItem.m_ComponentValue.CmpNoCase( component->GetValue() ) != 0 )
                 continue;
 
-            // filter alias so one can use multiple aliases (for polar and
-            // nonpolar caps for example)
-            const FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( alias.m_FootprintName );
+            const FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( equivItem.m_FootprintFPID );
 
+            bool equ_is_unique = true;
+            unsigned next = idx+1;
+            unsigned previous = idx-1;
+
+            if( next < equiv_List.size() &&
+                equivItem.m_ComponentValue == equiv_List[next].m_ComponentValue )
+                equ_is_unique = false;
+
+            if( previous >= 0 &&
+                equivItem.m_ComponentValue == equiv_List[previous].m_ComponentValue )
+                equ_is_unique = false;
+
+            // If the equivalence is unique, no ambiguity: use the association
+            if( module && equ_is_unique )
+            {
+                SetNewPkg( equivItem.m_FootprintFPID );
+                found = true;
+                break;
+            }
+
+            // The equivalence is not unique: use the footprint filter to try to remove
+            // ambiguity
             if( module )
             {
                 size_t filtercount = component->GetFootprintFilters().GetCount();
@@ -201,31 +253,38 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
                 msg.Printf( _( "Component %s: footprint %s not found in any of the project "
                                "footprint libraries." ),
                             GetChars( component->GetReference() ),
-                            GetChars( alias.m_FootprintName ) );
-                wxMessageBox( msg, _( "CvPcb Error" ), wxOK | wxICON_ERROR, this );
+                            GetChars( equivItem.m_FootprintFPID ) );
+
+                if( ! error_msg.IsEmpty() )
+                    error_msg << wxT("\n\n");
+
+                error_msg += msg;
             }
 
             if( found )
             {
-                SetNewPkg( alias.m_FootprintName );
+                SetNewPkg( equivItem.m_FootprintFPID );
                 break;
             }
-
         }
 
+        if( found )
+            continue;
+
         // obviously the last chance: there's only one filter matching one footprint
-        if( !found && 1 == component->GetFootprintFilters().GetCount() )
+        if( 1 == component->GetFootprintFilters().GetCount() )
         {
             // we do not need to analyse wildcards: single footprint do not
             // contain them and if there are wildcards it just will not match any
             const FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( component->GetFootprintFilters()[0] );
 
             if( module )
-            {
                 SetNewPkg( component->GetFootprintFilters()[0] );
-            }
         }
     }
+
+    if( !error_msg.IsEmpty() )
+        wxMessageBox( error_msg, _( "CvPcb Warning" ), wxOK | wxICON_WARNING, this );
 
     m_skipComponentSelect = false;
 }

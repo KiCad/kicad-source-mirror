@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras
+ * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -69,8 +69,8 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
     EVT_MENU( wxID_HELP, CVPCB_MAINFRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, CVPCB_MAINFRAME::GetKicadAbout )
     EVT_MENU( ID_SAVE_PROJECT, CVPCB_MAINFRAME::SaveProjectFile )
-    EVT_MENU( ID_SAVE_PROJECT_AS, CVPCB_MAINFRAME::SaveProjectFile )
     EVT_MENU( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE, CVPCB_MAINFRAME::OnKeepOpenOnSave )
+    EVT_MENU( ID_CVPCB_EQUFILES_LIST_EDIT, CVPCB_MAINFRAME::OnEditEquFilesList )
 
     // Toolbar events
     EVT_TOOL( ID_CVPCB_QUIT, CVPCB_MAINFRAME::OnQuit )
@@ -80,7 +80,7 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
     EVT_TOOL( ID_CVPCB_GOTO_FIRSTNA, CVPCB_MAINFRAME::ToFirstNA )
     EVT_TOOL( ID_CVPCB_GOTO_PREVIOUSNA, CVPCB_MAINFRAME::ToPreviousNA )
     EVT_TOOL( ID_CVPCB_DEL_ASSOCIATIONS, CVPCB_MAINFRAME::DelAssociations )
-    EVT_TOOL( ID_CVPCB_AUTO_ASSOCIE, CVPCB_MAINFRAME::AssocieModule )
+    EVT_TOOL( ID_CVPCB_AUTO_ASSOCIE, CVPCB_MAINFRAME::AutomaticFootprintMatching )
     EVT_TOOL( ID_PCB_DISPLAY_FOOTPRINT_DOC, CVPCB_MAINFRAME::DisplayDocFile )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
@@ -160,6 +160,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.SetManagedWindow( this );
 
+    UpdateTitle();
 
     EDA_PANEINFO horiz;
     horiz.HorizontalToolbarPane();
@@ -369,10 +370,12 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
 
 void CVPCB_MAINFRAME::SaveQuitCvpcb( wxCommandEvent& aEvent )
 {
-    if( aEvent.GetId() == wxID_SAVEAS )
-        m_NetlistFileName.Clear();
+    wxString fullFilename;
 
-    if( SaveCmpLinkFile( m_NetlistFileName.GetFullPath() ) > 0 )
+    if( aEvent.GetId() != wxID_SAVEAS )
+        fullFilename = m_NetlistFileName.GetFullPath();
+
+    if( SaveCmpLinkFile( fullFilename ) > 0 )
     {
         m_modified = false;
 
@@ -684,32 +687,33 @@ void CVPCB_MAINFRAME::DisplayStatus()
     }
 
     msg.Empty();
+    wxString filters;
 
     if( m_footprintListBox )
     {
         if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
-            msg = _( "key words" );
+            filters = _( "key words" );
 
         if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST ) )
         {
-            if( !msg.IsEmpty() )
-                msg += wxT( ", " );
+            if( !filters.IsEmpty() )
+                filters += wxT( "+" );
 
-            msg += _( "pin count" );
+            filters += _( "pin count" );
         }
 
         if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST ) )
         {
-            if( !msg.IsEmpty() )
-                msg += wxT( ", " );
+            if( !filters.IsEmpty() )
+                filters += wxT( "+" );
 
-            msg += _( "library" );
+            filters += _( "library" );
         }
 
-        if( msg.IsEmpty() )
+        if( filters.IsEmpty() )
             msg = _( "No filtering" );
         else
-            msg = _( "Filtered by " ) + msg;
+            msg.Printf( _( "Filtered by %s" ), GetChars( filters ) );
 
         msg << wxT( ": " ) << m_footprintListBox->GetCount();
 
@@ -744,18 +748,21 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
 void CVPCB_MAINFRAME::UpdateTitle()
 {
     wxString    title = wxString::Format( wxT( "Cvpcb %s  " ), GetChars( GetBuildVersion() ) );
+    PROJECT&    prj = Prj();
+    wxFileName fn = prj.GetProjectFullName();
 
-    if( m_NetlistFileName.IsOk() && m_NetlistFileName.FileExists() )
+    if( fn.IsOk() && !prj.GetProjectFullName().IsEmpty() && fn.FileExists() )
     {
-        title += m_NetlistFileName.GetFullPath();
+        title += wxString::Format( _("Project: '%s'  (netlist: '%s')"),
+                                   GetChars( fn.GetFullPath() ),
+                                   GetChars( m_NetlistFileName.GetFullName() )
+                                 );
 
-        if( !m_NetlistFileName.IsFileWritable() )
+        if( !fn.IsFileWritable() )
             title += _( " [Read Only]" );
     }
     else
-    {
-        title += _( "[no file]" );
-    }
+        title += _( "[no project]" );
 
     SetTitle( title );
 }

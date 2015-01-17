@@ -200,6 +200,9 @@ WIZARD_FPLIB_TABLE_BASE::WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 	
+	m_buttonGithubLibList = new wxButton( m_wizPage3, wxID_ANY, _("Github Libs List"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer5->Add( m_buttonGithubLibList, 0, wxALL, 5 );
+	
 	m_buttonAddLib = new wxButton( m_wizPage3, wxID_ANY, _("Add FP Libraries"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_buttonAddLib, 0, wxALL, 5 );
 	
@@ -231,6 +234,7 @@ WIZARD_FPLIB_TABLE_BASE::WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_gridEnvironmentVariablesList->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WIZARD_FPLIB_TABLE_BASE::OnSelectEnvVarCell ), NULL, this );
 	m_buttonAddEV->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnAddEVariable ), NULL, this );
 	m_buttonRemoveEV->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnRemoveEVariable ), NULL, this );
+	m_buttonGithubLibList->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnGithubLibsList ), NULL, this );
 	m_buttonAddLib->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnAddFpLibs ), NULL, this );
 	m_buttonRemoveLib->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnRemoveFpLibs ), NULL, this );
 }
@@ -246,6 +250,7 @@ WIZARD_FPLIB_TABLE_BASE::~WIZARD_FPLIB_TABLE_BASE()
 	m_gridEnvironmentVariablesList->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WIZARD_FPLIB_TABLE_BASE::OnSelectEnvVarCell ), NULL, this );
 	m_buttonAddEV->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnAddEVariable ), NULL, this );
 	m_buttonRemoveEV->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnRemoveEVariable ), NULL, this );
+	m_buttonGithubLibList->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnGithubLibsList ), NULL, this );
 	m_buttonAddLib->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnAddFpLibs ), NULL, this );
 	m_buttonRemoveLib->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnRemoveFpLibs ), NULL, this );
 	

@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,10 +49,13 @@
 
 #include <wx/wx.h>
 #include <wx/url.h>
+#include <wx/progdlg.h>
+
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <dialog_helpers.h>
 #include <project.h>        // For PROJECT_VAR_NAME definition
+#include <fp_lib_table.h>   // For KISYSMOD definition
 #include <io_mgr.h>
 #include <wizard_add_fplib.h>
 #include <dialog_select_dirlist_base.h>
@@ -88,6 +91,9 @@ WIZARD_FPLIB_TABLE::WIZARD_FPLIB_TABLE( wxWindow* aParent, wxArrayString& aEnvVa
 	m_buttonAddEV->Show( false );
 	m_buttonRemoveEV->Show( false );
 
+#ifndef BUILD_GITHUB_PLUGIN
+    m_buttonGithubLibList->Show( false );
+#endif
 
     // Gives a minimal size to the dialog, which allows displaying any page
     wxSize minsize;
@@ -130,14 +136,18 @@ void WIZARD_FPLIB_TABLE::initDlg( wxArrayString& aEnvVariableList )
 
     wxString msg;
     wxConfigBase* cfg = Pgm().CommonSettings();
-    cfg->Read( KICAD_FPLIBS_URL_KEY, &msg );
     cfg->Read( WIZARD_LAST_PLUGIN_KEY, &m_last_plugin_choice );
     cfg->Read( WIZARD_LAST_PATHOPTION_KEY, &m_last_defaultpath_choice );
+    cfg->Read( KICAD_FPLIBS_URL_KEY, &msg );
 
-    if( msg.IsEmpty() )
-        m_textCtrlGithubURL->SetValue( wxT( "http://github.com/KiCad/" ) );
-    else
-        m_textCtrlGithubURL->SetValue( msg );
+    if( msg.IsEmpty() )     // Give our current KiCad github URL
+        msg = wxT( "http://github.com/KiCad" );
+
+    // Be sure there is no trailing '/' at the end of the repo name
+    if( msg.EndsWith( wxT("/" ) ) )
+        msg.RemoveLast();
+
+    m_textCtrlGithubURL->SetValue( msg );
 
     // KIGITHUB is frequently used (examples in docs, and other place)
     // So add it if it not yet in list, but if it is defined as env var
@@ -211,7 +221,7 @@ bool WIZARD_FPLIB_TABLE::ValidateOptions()
     // Warn the user when this is the case
     wxString msg;
 
-    if( GetSelectedEnvVarValue().IsEmpty() )
+    if( getSelectedEnvVarValue().IsEmpty() )
     {
         // PROJECT_PATH option cannot be used with empty local path
         if( m_rbPathManagement->GetSelection() == PROJECT_PATH )
@@ -225,7 +235,7 @@ bool WIZARD_FPLIB_TABLE::ValidateOptions()
         {
             wxMessageBox( wxString::Format(
                 _("The default path defined by env var \"%s\" is empty.\nCannot use it"),
-                GetChars( GetSelectedEnvVar() ) ) );
+                GetChars( getSelectedEnvVar() ) ) );
             return false;
         }
     }
@@ -234,7 +244,7 @@ bool WIZARD_FPLIB_TABLE::ValidateOptions()
         if( IsGithubPlugin() )
         {
             // Github plugin cannot be used with local path; Need absolute path or valid URL
-            if( !GetSelectedEnvVarValue().Lower().StartsWith( "http" ) )
+            if( !getSelectedEnvVarValue().Lower().StartsWith( "http" ) )
             {
                 msg = _("Github Plugin uses a valid Internet URL starting by http.\n"
                         "Cannot be used as URL");
@@ -244,7 +254,7 @@ bool WIZARD_FPLIB_TABLE::ValidateOptions()
         }
         else
         {
-            if( GetSelectedEnvVarValue().Lower().StartsWith( "http" ) )
+            if( getSelectedEnvVarValue().Lower().StartsWith( "http" ) )
             {
                 msg = _("This default path looks strange.\n"
                         "Cannot be used for a file path");
@@ -267,6 +277,10 @@ void WIZARD_FPLIB_TABLE::OnPluginSelection( wxCommandEvent& event )
 
 void WIZARD_FPLIB_TABLE::updateFromPlugingChoice()
 {
+    #ifdef BUILD_GITHUB_PLUGIN
+    m_buttonGithubLibList->Show( IsGithubPlugin() || IsKicadPlugin() );
+    #endif
+
     // update dialog options and widgets depending on a plugin choice
     // Project path has no sense for GITHUB_PLUGIN
     bool enablePrjPathOpt = not IsGithubPlugin();
@@ -293,7 +307,7 @@ void WIZARD_FPLIB_TABLE::updateFromPlugingChoice()
     {
         if( first_github_envvar < 0 )
             force_absolute_path = true;
-        else if( !GetSelectedEnvVarValue().StartsWith( "http" ) )
+        else if( !getSelectedEnvVarValue().StartsWith( "http" ) )
                 m_gridEnvironmentVariablesList->SelectRow( first_github_envvar );
 
     }
@@ -378,7 +392,7 @@ void WIZARD_FPLIB_TABLE::OnSelectEnvVarCell( wxGridEvent& event )
     m_gridEnvironmentVariablesList->SelectRow( event.GetRow() );
 }
 
-wxString WIZARD_FPLIB_TABLE::GetSelectedEnvVar()
+wxString WIZARD_FPLIB_TABLE::getSelectedEnvVar()
 {
     wxString envVar;
     wxArrayInt selectedRows	= m_gridEnvironmentVariablesList->GetSelectedRows();
@@ -405,7 +419,7 @@ wxString WIZARD_FPLIB_TABLE::GetSelectedEnvVar()
 }
 
 
-wxString WIZARD_FPLIB_TABLE::GetSelectedEnvVarValue()
+wxString WIZARD_FPLIB_TABLE::getSelectedEnvVarValue()
 {
     wxString envVarValue;
     wxArrayInt selectedRows	= m_gridEnvironmentVariablesList->GetSelectedRows();
@@ -454,7 +468,7 @@ void WIZARD_FPLIB_TABLE::OnPageChanging( wxWizardEvent& event )
     if( ( m_rbPathManagement->GetSelection() != ABSOLUTE_PATH ) &&
         ( IsGithubPlugin() ) )
     {
-        wxURI uri( GetSelectedEnvVarValue() );
+        wxURI uri( getSelectedEnvVarValue() );
 
         // We cannot use wxURL to test the validity of the url, because
         // wxURL does not know https protocol we are using, and aways returns
@@ -465,7 +479,7 @@ void WIZARD_FPLIB_TABLE::OnPageChanging( wxWizardEvent& event )
         {
             wxMessageBox( wxString::Format(
                 _("The URL defined by env var \"%s\" is an incorrect URL.\nCannot use it"),
-                GetChars( GetSelectedEnvVar() ) ) );
+                GetChars( getSelectedEnvVar() ) ) );
             event.Veto();
         }
     }
@@ -484,10 +498,12 @@ bool WIZARD_FPLIB_TABLE::setSecondPage()
     {
         case 0:     // Kicad lib type
             m_currLibDescr = new LIB_DESCR_KICAD;
+            m_buttonGithubLibList->SetLabel( _("Download Github Libs") );
             break;
 
         case 1:     // Github lib type
             m_currLibDescr = new LIB_DESCR_GITHUB;
+            m_buttonGithubLibList->SetLabel( _("Github Libs List") );
             break;
 
         case 2:     // Legacy lib type
@@ -503,6 +519,17 @@ bool WIZARD_FPLIB_TABLE::setSecondPage()
             break;
     }
 
+    if( IsGithubPlugin() )
+    {
+#ifdef KICAD_USE_WEBKIT
+        m_buttonAddLib->SetLabel( _("Add Libs with WebViewer") );
+#else
+        m_buttonAddLib->SetLabel( _("Add FP Library entry") );
+#endif
+    }
+    else
+        m_buttonAddLib->SetLabel( _("Add FP Libraries") );
+
     return m_currLibDescr!= NULL;
 }
 
@@ -515,15 +542,15 @@ bool WIZARD_FPLIB_TABLE::setLastPage()     // Init prms for the last wizard page
     {
         case ENV_VAR_PATH:    // Choice = path relative env var
         case PROJECT_PATH:    // Choice = path relative to the project
-            m_currLibDescr->m_EnvVarName = GetSelectedEnvVar();
-            m_currLibDescr->m_DefaultPath = GetSelectedEnvVarValue();
+            m_currLibDescr->m_EnvVarName = getSelectedEnvVar();
+            m_currLibDescr->m_DefaultPath = getSelectedEnvVarValue();
             m_currLibDescr->m_IsAbsolutePath = false;
 
             m_textOption->SetLabel( wxString::Format( wxT("%s (%s)"),
                 m_rbPathManagement->GetStringSelection().GetData(),
-                GetSelectedEnvVar().GetData() ) );
+                getSelectedEnvVar().GetData() ) );
 
-            m_textPath->SetLabel( GetSelectedEnvVarValue() );
+            m_textPath->SetLabel( getSelectedEnvVarValue() );
             break;
 
         case ABSOLUTE_PATH:    // Choice = absolute path
@@ -548,7 +575,7 @@ void WIZARD_FPLIB_TABLE::OnAddFpLibs( wxCommandEvent& event )
     if( m_currLibDescr->m_IsFile )
         selectLibsFiles();
     else if( m_currLibDescr->m_IsGitHub )
-        selectLibsGithub();
+        selectLibsGithubWithWebViewer();
     else
         selectLibsFolders();
 
@@ -708,7 +735,7 @@ extern int RunWebViewer( wxWindow * aParent, const wxString& aUrlOnStart,
                          wxArrayString* aUrlListSelection = NULL );
 #endif
 
-void WIZARD_FPLIB_TABLE::selectLibsGithub()    // select a set of library on Github
+void WIZARD_FPLIB_TABLE::selectLibsGithubWithWebViewer()    // select a set of library on Github
 {
     // A string array to store the URLs selected from the web viewer:
     wxArrayString urls;
@@ -722,16 +749,25 @@ void WIZARD_FPLIB_TABLE::selectLibsGithub()    // select a set of library on Git
 #ifdef KICAD_USE_WEBKIT
     RunWebViewer( this, defaultURL, &urls );
 #else
-    urls.Add( defaultURL + wxT("newlibname.pretty") );
+    // If the Web Viewer is not available, just add a template
+    // to the fp lib table.
+    // The user have to edit it
+    urls.Add( defaultURL + wxT("/newlibname.pretty") );
 #endif
+    installGithubLibsFromList( urls );
+}
 
+void WIZARD_FPLIB_TABLE::installGithubLibsFromList( wxArrayString& aUrlList )
+{
+    // add the libs found in aUrlList, after calculating a nickname and
+    // replacing the path by an env variable, if needed
     // Create the nickname: currently make it from the url
     wxArrayString filepaths;
     wxArrayString nicknames;
 
-    for( unsigned ii = 0; ii < urls.GetCount(); ii++ )
+    for( unsigned ii = 0; ii < aUrlList.GetCount(); ii++ )
     {
-        wxString urlstring( urls[ii] );
+        wxString urlstring( aUrlList[ii] );
 
         wxURI uri( urlstring );
 
@@ -746,19 +782,19 @@ void WIZARD_FPLIB_TABLE::selectLibsGithub()    // select a set of library on Git
         if( m_currLibDescr->m_IsAbsolutePath ||
             m_currLibDescr->m_DefaultPath.IsEmpty() )
         {
-            filepaths.Add( urls[ii] );  // use the full URL
+            filepaths.Add( aUrlList[ii] );  // use the full URL
         }
         else
         {
             wxString shortURI;
-            if( urls[ii].Lower().StartsWith(
+            if( aUrlList[ii].Lower().StartsWith(
                         m_currLibDescr->m_DefaultPath.Lower(), &shortURI ) )
             {
                 shortURI.Prepend( wxT("${") + m_currLibDescr->m_EnvVarName + wxT("}") );
                 filepaths.Add( shortURI );
             }
             else    //  keep the full URL
-                filepaths.Add( urls[ii] );   // use the full URL
+                filepaths.Add( aUrlList[ii] );   // use the full URL
         }
     }
 
@@ -784,3 +820,142 @@ void WIZARD_FPLIB_TABLE::OnRemoveFpLibs( wxCommandEvent& event )
 
     m_gridFpListLibs->SelectRow( m_gridFpListLibs->GetGridCursorRow() );
 }
+
+#ifdef BUILD_GITHUB_PLUGIN
+#include <../github/github_getliblist.h>
+
+void WIZARD_FPLIB_TABLE::OnGithubLibsList( wxCommandEvent& event )
+{
+    wxArrayString liblist;
+    getLibsListGithub( liblist );
+
+    if( liblist.GetCount() == 0 )   // No lib selected
+        return;
+
+    if( IsKicadPlugin() )
+    {
+        wxString msg;
+
+        if( !downloadGithubLibsFromList( liblist, &msg ) )
+        {
+            wxMessageBox( msg );
+            return;
+        }
+    }
+    else
+        installGithubLibsFromList( liblist );
+}
+
+void WIZARD_FPLIB_TABLE::getLibsListGithub( wxArrayString& aList )
+{
+    wxBeginBusyCursor();
+
+    // Be sure there is no trailing '/' at the end of the repo name
+    wxString git_url = m_textCtrlGithubURL->GetValue();
+    if( git_url.EndsWith( wxT("/" ) ) )
+    {
+        git_url.RemoveLast();
+        m_textCtrlGithubURL->SetValue( git_url );
+    }
+
+    GITHUB_GETLIBLIST getter( git_url );
+
+    wxArrayString fullList;
+    getter.GetLibraryList( fullList );
+
+    wxEndBusyCursor();
+
+    wxArrayInt choices;
+    wxString msg( _( "Urls detected as footprint .pretty libraries.\n"
+                     "Selected urls will be added to the current footprint library list" ) );
+
+    if( wxGetSelectedChoices( choices, msg,
+                _( "Footprint libraries" ), fullList, this ) <= 0 )
+        return;
+
+    // Add selected url in list
+    for( unsigned ii = 0; ii < choices.GetCount(); ii++ )
+    {
+        wxString& url = fullList[choices[ii]];
+        aList.Add( url );
+    }
+}
+
+
+// Download the .pretty libraries found in aUrlLis and store them on disk
+// in a master folder
+bool WIZARD_FPLIB_TABLE::downloadGithubLibsFromList( wxArrayString& aUrlList,
+                                                     wxString * aErrorMessage )
+{
+    wxString masterFolder;
+    wxString default_path;
+    wxGetEnv(  FP_LIB_TABLE::GlobalPathEnvVariableName(), &default_path );
+
+    masterFolder =	wxDirSelector( _("Output Folder" ),
+                                   default_path, 0, wxDefaultPosition, this );
+
+    if( masterFolder.IsEmpty() )    // Aborted by user
+    {
+        if( aErrorMessage )
+            *aErrorMessage = _( "Aborted" );
+
+        return false;
+    }
+
+    if( !wxDirExists( masterFolder ) )
+    {
+        if( aErrorMessage )
+            aErrorMessage->Printf( _( "Folder '%s' does not exists" ),
+                                   GetChars( masterFolder ) );
+
+        return false;
+    }
+
+    // Display a progress bar to show the downlaod state
+    wxProgressDialog pdlg( _("Download libraries"), wxEmptyString, aUrlList.GetCount() );
+
+    // Download libs:
+    for( unsigned ii = 0; ii < aUrlList.GetCount(); ii++ )
+    {
+        wxString& libsrc_name = aUrlList[ii];
+        wxString libdst_name;
+
+        // Extract the lib name from the full URL:
+        wxURI url( libsrc_name );
+        wxFileName fn( url.GetPath() );
+        // Set our local path
+        fn.SetPath( masterFolder );
+        libdst_name = fn.GetFullPath();
+
+        if( !wxDirExists( libdst_name ) )
+            wxMkdir( libdst_name );
+
+        pdlg.Update( ii, libsrc_name);
+
+        try
+        {
+            PLUGIN::RELEASER src( IO_MGR::PluginFind( IO_MGR::GITHUB ) );
+            PLUGIN::RELEASER dst( IO_MGR::PluginFind( IO_MGR::KICAD ) );
+
+            wxArrayString footprints = src->FootprintEnumerate( libsrc_name );
+
+            for( unsigned i = 0;  i < footprints.size();  ++i )
+            {
+                std::auto_ptr<MODULE> m( src->FootprintLoad( libsrc_name, footprints[i] ) );
+                dst->FootprintSave( libdst_name, m.get() );
+                // m is deleted here by auto_ptr.
+            }
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            if( aErrorMessage )
+                aErrorMessage->Printf( _("Error:\n'%s'\nwhile downloading library:\n'%s'"),
+                                       GetChars( ioe.errorText ), GetChars( libsrc_name ) );
+            return false;
+        }
+    }
+
+    return true;
+}
+#endif
+

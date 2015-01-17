@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013  Cirilo Bernardo
+ * Copyright (C) 2013-2015  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,15 +46,6 @@ private:
     wxConfigBase* m_config;
     bool m_idfThouOpt;  // remember last preference for units in THOU
 
-    void OnCancelClick( wxCommandEvent& event )
-    {
-        EndModal( wxID_CANCEL );
-    }
-    void OnOkClick( wxCommandEvent& event )
-    {
-        EndModal( wxID_OK );
-    }
-
 public:
     DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* parent ) :
             DIALOG_EXPORT_IDF3_BASE( parent )
@@ -65,6 +56,11 @@ public:
         m_idfThouOpt = false;
         m_config->Read( OPTKEY_IDF_THOU, &m_idfThouOpt );
         m_rbUnitSelection->SetSelection( m_idfThouOpt ? 1 : 0 );
+
+        wxWindow* button = FindWindowByLabel( wxT( "OK" ) );
+
+        if( button )
+            SetDefaultItem( button );
 
         GetSizer()->SetSizeHints( this );
         Centre();
@@ -112,9 +108,9 @@ void PCB_EDIT_FRAME::ExportToIDF3( wxCommandEvent& event )
 
     wxString fullFilename = dlg.FilePicker()->GetPath();
 
-    if ( !Export_IDF3( GetBoard(), fullFilename, thou ) )
+    if( !Export_IDF3( GetBoard(), fullFilename, thou ) )
     {
-        wxString msg = _("Unable to create ") + fullFilename;
+        wxString msg = _( "Unable to create " ) + fullFilename;
         wxMessageBox( msg );
         return;
     }

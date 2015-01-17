@@ -403,22 +403,21 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
 
     if( IsMultilineAllowed() )
     {
-        wxArrayString* list = wxStringSplit( GetShownText(), '\n' );
+        wxArrayString strings_list;
+        wxStringSplit( GetShownText(), strings_list, '\n' );
         std::vector<wxPoint> positions;
-        positions.reserve( list->Count() );
-        GetPositionsOfLinesOfMultilineText( positions, list->Count() );
+        positions.reserve( strings_list.Count() );
+        GetPositionsOfLinesOfMultilineText( positions, strings_list.Count() );
 
-        for( unsigned ii = 0; ii < list->Count(); ii++ )
+        for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
-            wxString txt = list->Item( ii );
+            wxString txt = strings_list.Item( ii );
             DrawGraphicText( NULL, NULL, positions[ii], color,
                              txt, GetOrientation(), size,
                              GetHorizJustify(), GetVertJustify(),
                              GetThickness(), IsItalic(),
                              true, addTextSegmToPoly );
         }
-
-        delete list;
     }
     else
     {
