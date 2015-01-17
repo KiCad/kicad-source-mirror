@@ -373,7 +373,6 @@ endif()
 
 if( KICAD_USE_WEBKIT AND BUILD_GITHUB_PLUGIN )
     set( WEBVIEWER_WXLIB "webviewer" )
-    add_definitions( -DKICAD_USE_WEBKIT )
 endif()
 
 

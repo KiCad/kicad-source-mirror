@@ -172,7 +172,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 {
     int  rowCount;
     int  menuId = event.GetId();
-    bool visible = (menuId == ID_SHOW_ALL_LAYERS) ? true : false;;
+    bool visible = (menuId == ID_SHOW_ALL_LAYERS) ? true : false;
     long visibleLayers = 0;
     bool force_active_layer_visible;
 

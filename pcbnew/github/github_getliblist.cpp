@@ -101,7 +101,7 @@ bool GITHUB_GETLIBLIST::GetLibraryList( wxArrayString& aList )
     // The URL lib names are relative to the server name.
     // so add the server name to them.
     wxURI repo( m_repoURL );
-    wxString urlPrefix = wxT( "https://" ) + repo.GetServer() + wxT( "/" );;
+    wxString urlPrefix = wxT( "https://" ) + repo.GetServer() + wxT( "/" );
 
     wxString errorMsg;
     const char  sep = ',';      // Separator fields, in json returned file

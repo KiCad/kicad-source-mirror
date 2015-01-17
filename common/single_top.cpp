@@ -125,7 +125,7 @@ struct APP_SINGLE_TOP : public wxApp
         {
             wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
                 GetChars( FROM_UTF8( typeid(e).name() )),
-                GetChars( FROM_UTF8( e.what() ) ) );;
+                GetChars( FROM_UTF8( e.what() ) ) );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -158,7 +158,7 @@ struct APP_SINGLE_TOP : public wxApp
         {
             wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
                 GetChars( FROM_UTF8( typeid(e).name() )),
-                GetChars( FROM_UTF8( e.what() ) ) );;
+                GetChars( FROM_UTF8( e.what() ) ) );
         }
         catch( const IO_ERROR& ioe )
         {

@@ -678,7 +678,7 @@ void D_PAD::GetOblongDrillGeometry( wxPoint& aStartPoint,
     // of an equivalent segment which have the same position and width as the hole
     int delta_cx, delta_cy;
 
-    wxSize halfsize = GetDrillSize();;
+    wxSize halfsize = GetDrillSize();
     halfsize.x /= 2;
     halfsize.y /= 2;
 

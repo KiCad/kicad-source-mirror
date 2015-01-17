@@ -64,7 +64,7 @@ public:
 
     const wxString& GetTitle() const
     {
-        return getTbText( titleIdx );;
+        return getTbText( titleIdx );
     }
 
     /**

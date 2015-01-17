@@ -41,7 +41,7 @@ DIALOG_IMAGE_EDITOR::DIALOG_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem 
     m_buttonUndoLast->Enable( false );
     wxString msg;
     msg.Printf( wxT("%f"), m_workingImage->m_Scale );
-    m_textCtrlScale->SetValue( msg );;
+    m_textCtrlScale->SetValue( msg );
 
     GetSizer()->SetSizeHints( this );
     Layout();

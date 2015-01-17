@@ -198,7 +198,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
         WORKSHEET_DATAITEM_TEXT* item = (WORKSHEET_DATAITEM_TEXT*) aItem;
         item->m_FullText = item->m_TextBase;
         // Replace our '\' 'n' sequence by the EOL char
-        item->ReplaceAntiSlashSequence();;
+        item->ReplaceAntiSlashSequence();
         m_textCtrlText->SetValue( item->m_FullText );
 
         msg.Printf( wxT("%d"), item->m_IncrementLabel );

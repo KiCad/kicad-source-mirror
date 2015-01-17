@@ -883,7 +883,7 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
             if( track->GetNetCode() < net_code )
                 continue;
             if( track->GetNetCode() > net_code )
-                break;;
+                break;
 
             if( !track->GetSubNet() || (track->GetSubNet() != subnet) )
             {
