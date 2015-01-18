@@ -186,6 +186,7 @@ PyObject* wx2PyString( const wxString& src )
 void wxSetDefaultPyEncoding( const char* encoding )
 {
     strncpy( wxPythonEncoding, encoding, WX_DEFAULTENCODING_SIZE );
+    wxPythonEncoding[ WX_DEFAULTENCODING_SIZE - 1 ] = '\0';
 }
 
 

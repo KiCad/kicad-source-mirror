@@ -158,6 +158,12 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
     st = potrace_trace( param, aPotrace_bitmap );
     if( !st || st->status != POTRACE_STATUS_OK )
     {
+        if( st )
+        {
+            potrace_state_free( st );
+        }
+        potrace_param_free( param );
+
         fprintf( stderr, "Error tracing bitmap: %s\n", strerror( errno ) );
         return 1;
     }
