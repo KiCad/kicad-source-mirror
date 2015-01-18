@@ -611,7 +611,7 @@ int CPolyLine::GetEndContour( int ic )
 }
 
 
-EDA_RECT CPolyLine::GetBoundingBox()
+const EDA_RECT CPolyLine::GetBoundingBox()
 {
     int xmin    = INT_MAX;
     int ymin    = INT_MAX;
@@ -634,7 +634,7 @@ EDA_RECT CPolyLine::GetBoundingBox()
 }
 
 
-EDA_RECT CPolyLine::GetBoundingBox( int icont )
+const EDA_RECT CPolyLine::GetBoundingBox( int icont )
 {
     int xmin    = INT_MAX;
     int ymin    = INT_MAX;

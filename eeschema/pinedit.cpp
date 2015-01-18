@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
@@ -110,9 +110,9 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     dlg.SetElectricalTypeList( LIB_PIN::GetElectricalTypeNames(),
                                LIB_PIN::GetElectricalTypeSymbols() );
     dlg.SetElectricalType( pin->GetType() );
-    dlg.SetName( pin->GetName() );
-    dlg.SetNameTextSize( StringFromValue( g_UserUnit, pin->GetNameTextSize() ) );
-    dlg.SetNameTextSizeUnits( units );
+    dlg.SetPinName( pin->GetName() );
+    dlg.SetPinNameTextSize( StringFromValue( g_UserUnit, pin->GetNameTextSize() ) );
+    dlg.SetPinNameTextSizeUnits( units );
     dlg.SetPadName( pin->GetNumberString() );
     dlg.SetPadNameTextSize( StringFromValue( g_UserUnit, pin->GetNumberTextSize() ) );
 
@@ -132,7 +132,6 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     dlg.Layout();
     dlg.Fit();
     dlg.SetMinSize( dlg.GetSize() );
-    // dlg.SetLastSizeAndPosition();    // done in DIALOG_SHIM::Show()
 
     if( dlg.ShowModal() == wxID_CANCEL )
     {
@@ -145,7 +144,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     }
 
     // Save the pin properties to use for the next new pin.
-    LastPinNameSize = ValueFromString( g_UserUnit, dlg.GetNameTextSize() );
+    LastPinNameSize = ValueFromString( g_UserUnit, dlg.GetPinNameTextSize() );
     LastPinNumSize = ValueFromString( g_UserUnit, dlg.GetPadNameTextSize() );
     LastPinOrient = LIB_PIN::GetOrientationCode( dlg.GetOrientation() );
     LastPinLength = ValueFromString( g_UserUnit, dlg.GetLength() );
@@ -156,7 +155,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     LastPinVisible = dlg.GetVisible();
 
     pin->EnableEditMode( true, m_editPinsPerPartOrConvert );
-    pin->SetName( dlg.GetName() );
+    pin->SetName( dlg.GetPinName() );
     pin->SetNameTextSize( GetLastPinNameSize() );
     pin->SetNumber( dlg.GetPadName() );
     pin->SetNumberTextSize( GetLastPinNumSize() );
