@@ -140,9 +140,9 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
      * schematic coordinate system.  It is OK to overestimate the size
      * by a few counts.
      */
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;
 
-    void     DrawBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos );
+    void  DrawBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos );
 
     /**
      * Function ReadImageFile

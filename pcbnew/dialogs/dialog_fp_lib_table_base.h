@@ -14,13 +14,14 @@
 class DIALOG_SHIM;
 
 #include "dialog_shim.h"
+#include <wx/string.h>
+#include <wx/stattext.h>
+#include <wx/gdicmn.h>
+#include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
-#include <wx/font.h>
-#include <wx/grid.h>
-#include <wx/gdicmn.h>
 #include <wx/sizer.h>
+#include <wx/grid.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -43,10 +44,15 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 	protected:
 		wxAuiNotebook* m_auinotebook;
 		wxPanel* m_global_panel;
+		wxStaticText* m_staticText3;
+		wxStaticText* m_GblTableFilename;
 		wxGrid* m_global_grid;
 		wxPanel* m_project_panel;
+		wxStaticText* m_staticText4;
+		wxStaticText* m_PrjTableFilename;
 		wxGrid* m_project_grid;
 		wxButton* m_append_button;
+		wxButton* m_buttonWizard;
 		wxButton* m_delete_button;
 		wxButton* m_move_up_button;
 		wxButton* m_move_down_button;
@@ -61,6 +67,7 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		virtual void onKeyDown( wxKeyEvent& event ) = 0;
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) = 0;
 		virtual void appendRowHandler( wxMouseEvent& event ) = 0;
+		virtual void OnClickLibraryWizard( wxCommandEvent& event ) = 0;
 		virtual void deleteRowHandler( wxMouseEvent& event ) = 0;
 		virtual void moveUpHandler( wxMouseEvent& event ) = 0;
 		virtual void moveDownHandler( wxMouseEvent& event ) = 0;

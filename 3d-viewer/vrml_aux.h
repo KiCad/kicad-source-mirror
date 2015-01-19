@@ -49,7 +49,6 @@
 #include <wx/glcanvas.h>
 
 int read_NotImplemented( FILE* File, char closeChar);
-char SkipGetChar ( FILE* File );
 int parseVertexList( FILE* File, std::vector< glm::vec3 > &dst_vector);
 int parseVertex( FILE* File, glm::vec3 &dst_vertex );
 int parseFloat( FILE* File, float *dst_float );

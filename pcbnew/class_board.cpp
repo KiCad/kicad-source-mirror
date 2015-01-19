@@ -1214,9 +1214,11 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
     // the first valid netcode is 1 and the last is m_NetInfo.GetCount()-1.
     // zero is reserved for "no connection" and is not used.
     // NULL is returned for non valid netcodes
-    NETINFO_ITEM* net = m_NetInfo.GetNetItem( aNetcode );
 
-    return net;
+    if( aNetcode == NETINFO_LIST::UNCONNECTED )
+        return &NETINFO_LIST::ORPHANED;
+    else
+        return m_NetInfo.GetNetItem( aNetcode );
 }
 
 

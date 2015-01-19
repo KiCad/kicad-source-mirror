@@ -200,6 +200,9 @@ void BOARD_OUTLINE::readOutlines( std::ifstream& aBoardFile, IDF3::IDF_VERSION a
             // rewind to the start of the last line; the routine invoking
             // this is responsible for checking that the current '.END_ ...'
             // matches the section header.
+            if(aBoardFile.eof())
+                aBoardFile.clear();
+
             aBoardFile.seekg( pos );
 
             if( outlines.size() > 0 )
@@ -2998,6 +3001,9 @@ void IDF3_COMP_OUTLINE::readProperties( std::ifstream& aLibFile )
 
         if( token.size() >= 5 && CompareToken( ".END_", token.substr( 0, 5 ) ) )
         {
+            if(aLibFile.eof())
+                aLibFile.clear();
+
             aLibFile.seekg( pos );
             return;
         }

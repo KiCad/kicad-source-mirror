@@ -52,6 +52,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
 {
     GR_DRAWMODE drawmode = GR_COPY;
     int     defaultPenSize = Millimeter2iu( 0.2 );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     DISPLAY_OPTIONS save_opt;
 
@@ -61,25 +62,22 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     if( printParameters )
          defaultPenSize = printParameters->m_PenDefaultSize;
 
-    save_opt = DisplayOpt;
+    save_opt = *displ_opts;
 
-    DisplayOpt.ContrastModeDisplay = false;
-    DisplayOpt.DisplayPadFill = true;
-    DisplayOpt.DisplayViaFill = true;
-
-    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    m_DisplayPadNum = DisplayOpt.DisplayPadNum = false;
+    displ_opts->m_ContrastModeDisplay = false;
+    displ_opts->m_DisplayPadFill = true;
+    displ_opts->m_DisplayViaFill = true;
+    displ_opts->m_DisplayPadNum = false;
     bool nctmp = GetBoard()->IsElementVisible(NO_CONNECTS_VISIBLE);
     GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, false);
-    DisplayOpt.DisplayPadIsol    = false;
-    DisplayOpt.DisplayModEdge    = FILLED;
-    DisplayOpt.DisplayModText    = FILLED;
-    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = true;
-    DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
-    DisplayOpt.DisplayDrawItems    = FILLED;
-    DisplayOpt.DisplayZonesMode    = 0;
-    DisplayOpt.DisplayNetNamesMode = 0;
+    displ_opts->m_DisplayPadIsol    = false;
+    displ_opts->m_DisplayModEdge    = FILLED;
+    displ_opts->m_DisplayModText    = FILLED;
+    displ_opts->m_DisplayPcbTrackFill = true;
+    displ_opts->m_ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
+    displ_opts->m_DisplayDrawItems    = FILLED;
+    displ_opts->m_DisplayZonesMode    = 0;
+    displ_opts->m_DisplayNetNamesMode = 0;
 
     m_canvas->SetPrintMirrored( aPrintMirrorMode );
 
@@ -109,11 +107,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     m_canvas->SetPrintMirrored( false );
 
-    DisplayOpt = save_opt;
-    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
+    *displ_opts = save_opt;
     GetBoard()->SetElementVisibility( NO_CONNECTS_VISIBLE, nctmp );
 }
 
@@ -130,6 +124,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     bool            onePagePerLayer = false;
 
     PRINT_PARAMETERS* printParameters = (PRINT_PARAMETERS*) aData; // can be null
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     if( printParameters && printParameters->m_OptionPrintPage == 0 )
         onePagePerLayer = true;
@@ -142,13 +137,13 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         defaultPenSize = printParameters->m_PenDefaultSize;
     }
 
-    save_opt = DisplayOpt;
+    save_opt = *displ_opts;
 
     LAYER_ID activeLayer = GetScreen()->m_Active_Layer;
 
-    DisplayOpt.ContrastModeDisplay = false;
-    DisplayOpt.DisplayPadFill = true;
-    DisplayOpt.DisplayViaFill = true;
+    displ_opts->m_ContrastModeDisplay = false;
+    displ_opts->m_DisplayPadFill = true;
+    displ_opts->m_DisplayViaFill = true;
 
     if( !( aPrintMask & LSET::AllCuMask() ).any() )
     {
@@ -157,8 +152,8 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             // We can print mask layers (solder mask and solder paste) with the actual
             // pad sizes.  To do that, we must set ContrastModeDisplay to true and set
             // the GetScreen()->m_Active_Layer to the current printed layer
-            DisplayOpt.ContrastModeDisplay = true;
-            DisplayOpt.DisplayPadFill = true;
+            displ_opts->m_ContrastModeDisplay = true;
+            displ_opts->m_DisplayPadFill = true;
 
             // Calculate the active layer number to print from its mask layer:
             GetScreen()->m_Active_Layer = B_Cu;
@@ -176,18 +171,16 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             if( GetScreen()->m_Active_Layer == B_SilkS ||
                 GetScreen()->m_Active_Layer == F_SilkS )
             {
-                DisplayOpt.DisplayPadFill = false;
+                displ_opts->m_DisplayPadFill = false;
             }
         }
         else
         {
-            DisplayOpt.DisplayPadFill = false;
+            displ_opts->m_DisplayPadFill = false;
         }
     }
 
-    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    m_DisplayPadNum = DisplayOpt.DisplayPadNum = false;
+    displ_opts->m_DisplayPadNum = false;
 
     bool nctmp = GetBoard()->IsElementVisible( NO_CONNECTS_VISIBLE );
 
@@ -197,14 +190,14 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     GetBoard()->SetElementVisibility( ANCHOR_VISIBLE, false );
 
-    DisplayOpt.DisplayPadIsol = false;
-    m_DisplayModEdge = DisplayOpt.DisplayModEdge    = FILLED;
-    m_DisplayModText = DisplayOpt.DisplayModText    = FILLED;
-    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = true;
-    DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
-    DisplayOpt.DisplayDrawItems    = FILLED;
-    DisplayOpt.DisplayZonesMode    = 0;
-    DisplayOpt.DisplayNetNamesMode = 0;
+    displ_opts->m_DisplayPadIsol = false;
+    displ_opts->m_DisplayModEdge = FILLED;
+    displ_opts->m_DisplayModText = FILLED;
+    displ_opts->m_DisplayPcbTrackFill = true;
+    displ_opts->m_ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
+    displ_opts->m_DisplayDrawItems    = FILLED;
+    displ_opts->m_DisplayZonesMode    = 0;
+    displ_opts->m_DisplayNetNamesMode = 0;
 
     m_canvas->SetPrintMirrored( aPrintMirrorMode );
 
@@ -331,14 +324,8 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     m_canvas->SetPrintMirrored( false );
 
-    DisplayOpt = save_opt;
+    *displ_opts = save_opt;
     GetScreen()->m_Active_Layer = activeLayer;
-    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
-    m_DisplayModEdge = DisplayOpt.DisplayModEdge;
-    m_DisplayModText = DisplayOpt.DisplayModText;
 
     GetBoard()->SetElementVisibility( NO_CONNECTS_VISIBLE, nctmp );
     GetBoard()->SetElementVisibility( ANCHOR_VISIBLE, anchorsTmp );

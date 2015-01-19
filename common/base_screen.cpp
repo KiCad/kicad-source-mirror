@@ -165,6 +165,51 @@ bool BASE_SCREEN::SetPreviousZoom()
     return false;
 }
 
+/* Build the list of human readable grid list.
+ * The list shows the grid size both in mils or mm.
+ * aMmFirst = true to have mm first and mils after
+ *            false to have mils first and mm after
+ */
+int BASE_SCREEN::BuildGridsChoiceList( wxArrayString& aGridsList, bool aMmFirst) const
+{
+    wxString msg;
+    wxRealPoint curr_grid_size = GetGridSize();
+    int idx = -1;
+    int idx_usergrid = -1;
+
+    for( size_t i = 0; i < GetGridCount(); i++ )
+    {
+        const GRID_TYPE& grid = m_grids[i];
+        double gridValueMils = To_User_Unit( INCHES, grid.m_Size.x ) * 1000;
+        double gridValue_mm = To_User_Unit( MILLIMETRES, grid.m_Size.x );
+
+        if( grid.m_Id == ID_POPUP_GRID_USER )
+        {
+            msg = _( "User Grid" );
+            idx_usergrid = i;
+        }
+        else
+        {
+            if( aMmFirst )
+                msg.Printf( _( "Grid: %.4f mm (%.2f mils)" ),
+                            gridValue_mm, gridValueMils );
+            else
+                msg.Printf( _( "Grid: %.2f mils (%.4f mm)" ),
+                            gridValueMils, gridValue_mm );
+        }
+
+        aGridsList.Add( msg );
+
+        if( curr_grid_size == grid.m_Size )
+            idx = i;
+    }
+
+    if( idx < 0 )
+        idx = idx_usergrid;
+
+    return idx;
+}
+
 
 void BASE_SCREEN::SetGridList( GRIDS& gridlist )
 {

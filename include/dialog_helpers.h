@@ -94,8 +94,10 @@ private:
     void     onListItemSelected( wxListEvent& event );
     void     onListItemActivated( wxListEvent& event );
     void     textChangeInFilterBox(wxCommandEvent& event);
-    void     sortList();
 
+    void    initDialog( const wxArrayString& aItemHeaders,
+                        const wxString& aSelection);
+    void    sortList();
     bool    m_sortList;
     void    (* m_cb_func)( wxString& text, void* data );
     void*   m_cb_data;

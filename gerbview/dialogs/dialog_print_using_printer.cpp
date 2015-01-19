@@ -37,6 +37,7 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
+#include <class_GERBER.h>
 #include <pcbplot.h>
 
 static double s_ScaleList[] =
@@ -133,6 +134,8 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( GERBVIEW_FRAME* parent )
     /* Problems with modal on wx-2.9 - Anyway preview is standard for OSX */
    m_buttonPreview->Hide();
 #endif
+
+    GetSizer()->Fit( this );
 }
 
 
@@ -161,7 +164,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
         msg << wxT( " " ) << ii + 1;
         m_BoxSelectLayer[ii] = new wxCheckBox( this, -1, msg );
 
-        if( g_GERBER_List[ii] == NULL )     // Nothing loaded on this draw layer
+        if( g_GERBER_List.GetGbrImage( ii ) == NULL )     // Nothing loaded on this draw layer
             m_BoxSelectLayer[ii]->Enable( false );
 
         if( ii < 16 )
@@ -368,8 +371,11 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     wxSize          WSize = m_Parent->GetSize();
 
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
+    frame->SetMinSize( wxSize( 550, 350 ) );
 
     frame->Initialize();
+
+    frame->Raise(); // Needed on Ubuntu/Unity to display the frame
     frame->Show( true );
 }
 

@@ -117,9 +117,10 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         return;
 
     PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)frame->GetDisplayOptions();
     PCB_SCREEN*     screen = frame->GetScreen();
 
-    if( frame->m_DisplayPadFill == FILLED )
+    if( displ_opts->m_DisplayPadFill == FILLED )
         drawInfo.m_ShowPadFilled = true;
     else
         drawInfo.m_ShowPadFilled = false;
@@ -165,7 +166,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     // if SMD or connector pad and high contrast mode
     if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
         ( GetAttribute() == PAD_SMD || GetAttribute() == PAD_CONN ) &&
-        DisplayOpt.ContrastModeDisplay )
+        displ_opts && displ_opts->m_ContrastModeDisplay )
     {
         // when routing tracks
         if( frame && frame->GetToolId() == ID_TRACK_BUTT )
@@ -229,7 +230,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     // layer so we can see pads on paste or solder layer and the size of the
     // mask
     if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
-        DisplayOpt.ContrastModeDisplay && !IsCopperLayer( screen->m_Active_Layer ) )
+        displ_opts && displ_opts->m_ContrastModeDisplay && !IsCopperLayer( screen->m_Active_Layer ) )
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
         {
@@ -263,7 +264,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 
     ColorApplyHighlightFlag( &color );
 
-    bool DisplayIsol = DisplayOpt.DisplayPadIsol;
+    bool DisplayIsol = displ_opts && displ_opts->m_DisplayPadIsol;
 
     if( !( m_layerMask & LSET::AllCuMask() ).any() )
         DisplayIsol = false;
@@ -284,23 +285,24 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     SetAlpha( &color, 170 );
 
     /* Get the pad clearance. This has a meaning only for Pcbnew.
-     *  for CvPcb (and GerbView) GetClearance() creates debug errors because
+     *  for CvPcb GetClearance() creates debug errors because
      *  there is no net classes so a call to GetClearance() is made only when
-     *   needed (never needed in CvPcb nor in GerbView)
+     *   needed (never needed in CvPcb)
      */
     drawInfo.m_PadClearance = DisplayIsol ? GetClearance() : 0;
 
     // Draw the pad number
-    if( frame && !frame->m_DisplayPadNum )
+    if( displ_opts && !displ_opts->m_DisplayPadNum )
         drawInfo.m_Display_padnum = false;
 
-    if( ( DisplayOpt.DisplayNetNamesMode == 0 ) || ( DisplayOpt.DisplayNetNamesMode == 2 ) )
+    if( displ_opts &&
+        (( displ_opts ->m_DisplayNetNamesMode == 0 ) || ( displ_opts->m_DisplayNetNamesMode == 2 )) )
         drawInfo.m_Display_netname = false;
 
     // Display net names is restricted to pads that are on the active layer
     // in high contrast mode display
     if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
-        !IsOnLayer( screen->m_Active_Layer ) && DisplayOpt.ContrastModeDisplay )
+        !IsOnLayer( screen->m_Active_Layer ) && displ_opts && displ_opts->m_ContrastModeDisplay )
         drawInfo.m_Display_netname = false;
 
     DrawShape( aPanel->GetClipBox(), aDC, drawInfo );

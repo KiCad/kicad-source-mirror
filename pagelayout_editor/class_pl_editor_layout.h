@@ -28,8 +28,8 @@
 #ifndef CLASS_PL_EDITOR_LAYOUT_H
 #define CLASS_PL_EDITOR_LAYOUT_H
 
-#include <base_struct.h>                         // PAGE_INFO
-#include <common.h>                         // PAGE_INFO
+#include <base_struct.h>
+#include <class_page_info.h>
 #include <class_title_block.h>
 
 class EDA_DRAW_PANEL;
@@ -84,7 +84,7 @@ public:
      * may be called soon after ComputeBoundingBox() to return the same EDA_RECT,
      * as long as the CLASS_PL_EDITOR_LAYOUT has not changed.
      */
-    EDA_RECT GetBoundingBox() const { return m_BoundingBox; }    // override
+    const EDA_RECT GetBoundingBox() const { return m_BoundingBox; }    // override
 
     void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
 

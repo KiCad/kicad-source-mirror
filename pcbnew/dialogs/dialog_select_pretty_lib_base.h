@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,8 +22,8 @@ class DIALOG_SHIM;
 #include <wx/settings.h>
 #include <wx/dirctrl.h>
 #include <wx/textctrl.h>
-#include <wx/statline.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -40,6 +40,7 @@ class DIALOG_SELECT_PRETTY_LIB_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticText;
 		wxGenericDirCtrl* m_dirCtrl;
+		wxBoxSizer* m_SizerNewLibName;
 		wxStaticText* m_staticTextDirname;
 		wxTextCtrl* m_libName;
 		wxStaticLine* m_staticline1;

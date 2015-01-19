@@ -55,6 +55,7 @@ public:
     int ZoneFill( TOOL_EVENT& aEvent );
     int ZoneFillAll( TOOL_EVENT& aEvent );
     int ZoneUnfill( TOOL_EVENT& aEvent );
+    int ZoneUnfillAll( TOOL_EVENT& aEvent );
 
 private:
     ///> Sets up handlers for various events.

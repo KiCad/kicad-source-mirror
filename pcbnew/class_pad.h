@@ -207,7 +207,7 @@ public:
     void TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                                int aClearanceValue,
                                                int aCircleToSegmentsCount,
-                                               double aCorrectionFactor ) const;;
+                                               double aCorrectionFactor ) const;
 
      /**
      * Function GetClearance

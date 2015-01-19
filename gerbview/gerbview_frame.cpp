@@ -70,6 +70,13 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 {
     m_colorsSettings = &g_ColorsSettings;
     m_gerberLayout = NULL;
+    m_zoomLevelCoeff = ZOOM_FACTOR( 110 );   // Adjusted to roughly displays zoom level = 1
+                                        // when the screen shows a 1:1 image
+                                        // obviously depends on the monitor,
+                                        // but this is an acceptable value
+
+    PAGE_INFO pageInfo( wxT( "GERBER" ) );
+    SetPageSettings( pageInfo );
 
     m_FrameName = GERBVIEW_FRAME_NAME;
     m_show_layer_manager_tools = true;
@@ -94,7 +101,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     SetVisibleLayers( -1 );         // All draw layers visible.
 
-    SetScreen( new GBR_SCREEN( GetGerberLayout()->GetPageSettings().GetSizeIU() ) );
+    SetScreen( new GBR_SCREEN( GetPageSettings().GetSizeIU() ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetLayout():
     wxFont  font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -348,7 +355,7 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 
     for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; ++i )
     {
-        GERBER_IMAGE* gerber = g_GERBER_List[ layer ];
+        GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
         if( gerber == NULL || gerber->m_FileName.IsEmpty() )
             return layer;
@@ -378,9 +385,11 @@ void GERBVIEW_FRAME::syncLayerWidget()
  */
 void GERBVIEW_FRAME::syncLayerBox()
 {
+    m_SelLayerBox->Resync();
     m_SelLayerBox->SetSelection( getActiveLayer() );
+
     int             dcodeSelected = -1;
-    GERBER_IMAGE*   gerber = g_GERBER_List[getActiveLayer()];
+    GERBER_IMAGE*   gerber = g_GERBER_List.GetGbrImage( getActiveLayer() );
 
     if( gerber )
         dcodeSelected = gerber->m_Selected_Tool;
@@ -406,7 +415,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 
     for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
-        GERBER_IMAGE* gerber = g_GERBER_List[layer];
+        GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
         if( gerber == NULL )
             continue;
@@ -474,7 +483,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
  */
 void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
-    GERBER_IMAGE*   gerber = g_GERBER_List[ getActiveLayer() ];
+    GERBER_IMAGE*   gerber = g_GERBER_List.GetGbrImage(  getActiveLayer() );
     wxString        text;
 
     // Display the gerber filename
@@ -491,6 +500,8 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
 
     text = _( "File:" );
     text << wxT( " " ) << gerber->m_FileName;
+    if( gerber->m_IsX2_file )
+        text << wxT( " " ) << _( "(with X2 Attributes)" );
     SetTitle( text );
 
     gerber->DisplayImageInfo();
@@ -508,7 +519,13 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
                  gerber->m_FmtLen.y - gerber->m_FmtScale.y, gerber->m_FmtScale.y,
                  gerber->m_NoTrailingZeros ? 'T' : 'L' );
 
+    if( gerber->m_IsX2_file )
+        text << wxT(" ") << _( "X2 attr" );
+
     m_TextInfo->SetValue( text );
+
+    if( EnsureTextCtrlWidth( m_TextInfo, &text ) )  // Resized
+       m_auimgr.Update();
 }
 
 /*
@@ -710,8 +727,7 @@ void GERBVIEW_FRAME::setActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 
 void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
-    wxASSERT( m_gerberLayout );
-    m_gerberLayout->SetPageSettings( aPageSettings );
+    m_paper = aPageSettings;
 
     if( GetScreen() )
         GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
@@ -720,19 +736,16 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
 const PAGE_INFO& GERBVIEW_FRAME::GetPageSettings() const
 {
-    wxASSERT( m_gerberLayout );
-    return m_gerberLayout->GetPageSettings();
+    return m_paper;
 }
 
 
 const wxSize GERBVIEW_FRAME::GetPageSizeIU() const
 {
-    wxASSERT( m_gerberLayout );
-
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
     // into an application specific source file.
-    return m_gerberLayout->GetPageSettings().GetSizeIU();
+    return GetPageSettings().GetSizeIU();
 }
 
 
@@ -855,12 +868,12 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     {
     case INCHES:
         absformatter = wxT( "X %.6f  Y %.6f" );
-        locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
+        locformatter = wxT( "dx %.6f  dy %.6f  dist %.4f" );
         break;
 
     case MILLIMETRES:
         absformatter = wxT( "X %.5f  Y %.5f" );
-        locformatter = wxT( "dx %.5f  dy %.5f  d %.5f" );
+        locformatter = wxT( "dx %.5f  dy %.5f  dist %.3f" );
         break;
 
     case UNSCALED_UNITS:
@@ -886,3 +899,8 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     }
 }
 
+
+const wxString GERBVIEW_FRAME::GetZoomLevelIndicator() const
+{
+    return EDA_DRAW_FRAME::GetZoomLevelIndicator();
+}

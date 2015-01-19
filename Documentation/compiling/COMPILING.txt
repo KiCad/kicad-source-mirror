@@ -1,7 +1,7 @@
 Compiling KiCad from Source
 ===========================
 KiCad Documentation Team
-Last revised on 12-mars-2012 by jp Charras
+Last revised on 2014-december-24 by JP Charras
 
 Introduction
 ------------
@@ -32,7 +32,7 @@ KiCad from source.
 * CMake   - Cross-platform make
 * GLUT    - The OpenGL Utility Library
 * GLEW
-* wxGTK or wxWidgets  - The wxWidgets GUI toolkit with GTK+ bindings
+* wxWidgets  - The wxWidgets GUI toolkit with GTK+ bindings version 3.0 or more
 * libbz2    (dev)
 * libcairo  (dev)
 
@@ -57,7 +57,7 @@ Compiler and basic development tools
 Make sure g++, make and other tools are in your path.
 If windows, then try running g++ and make from within your msys bash shell.
 
-PLEASE NOTE: g++ 4.7.1 at least (possibly the 4.7.x series) is known to
+PLEASE NOTE: g++ 4.7.1 and 4.7.2 are known to
 miscompile pcbnew (it get zones wrong) with -O2; using -O1 is a suitable
 workaround until they fix the compiler.
 
@@ -68,7 +68,7 @@ WARNING:
  see wxWidgets_patch_notes.txt for patches and issues in wxWidgets.
 
 On Windows, download
-http://sourceforge.net/projects/wxwindows/files/3.0.0/wxWidgets-3.0.0.zip/download
+http://sourceforge.net/projects/wxwindows/files/3.0.2/wxWidgets-3.0.2.zip/download
 or a newer version.
 Do NOT use previous versions which all have annoying issues for KiCad.
 Start msys so you have a bash shell.
@@ -94,6 +94,10 @@ The recommended way is to build wxWidgets from source, and use wxWidgets 3.0
 or more recent (Older versions have a print function which does not work).
 Verify that wx-config is in your path by running it from a command prompt.
 Linux users then go to next step.
+
+Note also wxWidgets must be compiled with the wxWebView support.
+This is the default when building wxWidgets, but only if the libwebkitgtk-dev is installed
+before building wxWidgets (sudo apt-get install libwebkitgtk-dev)
 
 Install CMake
 -------------
@@ -167,9 +171,12 @@ Linux and windows users both then make two "out of source" build directories:
 
 On either cmake command line shown below, you can optionally include
     -DCMAKE_INSTALL_PREFIX=<finallInstallDir>
+For instance on Linux: <finallInstallDir>=/usr/local/kicad or ~/kicad
 
 On windows, run the following command:
     cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
+Avoid installing Kicad on C: disk, which is protected by Windows.
+Use D: or E: ...
 
 On linux, run instead the following command:
     cmake -DCMAKE_BUILD_TYPE=Release ../../

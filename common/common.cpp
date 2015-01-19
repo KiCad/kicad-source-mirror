@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -212,29 +212,26 @@ void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit )
 }
 
 
-wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter )
+void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter )
 {
-    wxArrayString* list = new wxArrayString();
+    wxString tmp;
 
-    while( 1 )
+    for( unsigned ii = 0; ii < aText.Length(); ii++ )
     {
-        int index = aString.Find( aSplitter );
+        if( aText[ii] == aSplitter )
+        {
+            aStrings.Add( tmp );
+            tmp.Clear();
+        }
 
-        if( index == wxNOT_FOUND )
-            break;
-
-        wxString tmp;
-        tmp = aString.Mid( 0, index );
-        aString = aString.Mid( index + 1, aString.size() - index );
-        list->Add( tmp );
+        else
+            tmp << aText[ii];
     }
 
-    if( !aString.IsEmpty() )
+    if( !tmp.IsEmpty() )
     {
-        list->Add( aString );
+        aStrings.Add( tmp );
     }
-
-    return list;
 }
 
 
@@ -271,9 +268,9 @@ double RoundTo0( double x, double precision )
 
     int remainder = ix % 10;   // remainder is in precision mm
 
-    if ( remainder <= 2 )
+    if( remainder <= 2 )
         ix -= remainder;       // truncate to the near number
-    else if (remainder >= 8 )
+    else if( remainder >= 8 )
         ix += 10 - remainder;  // round to near number
 
     if ( x < 0 )
@@ -303,6 +300,46 @@ wxConfigBase* GetNewConfig( const wxString& aProgName )
 
     cfg = new wxFileConfig( wxT( "" ), wxT( "" ), configname.GetFullPath() );
     return cfg;
+}
+
+wxString GetKicadLockFilePath()
+{
+    wxFileName lockpath;
+    lockpath.AssignDir( wxGetHomeDir() ); // Default wx behavior
+
+#if defined( __WXMAC__ )
+    // In OSX use the standard per user cache directory
+    lockpath.AppendDir( wxT( "Library" ) );
+    lockpath.AppendDir( wxT( "Caches" ) );
+    lockpath.AppendDir( wxT( "kicad" ) );
+#elif defined( __UNIX__ )
+    wxString envstr;
+    // Try first the standard XDG_RUNTIME_DIR, falling back to XDG_CACHE_HOME
+    if( wxGetEnv( wxT( "XDG_RUNTIME_DIR" ), &envstr ) && !envstr.IsEmpty() )
+    {
+        lockpath.AssignDir( envstr );
+    }
+    else if( wxGetEnv( wxT( "XDG_CACHE_HOME" ), &envstr ) && !envstr.IsEmpty() )
+    {
+        lockpath.AssignDir( envstr );
+    }
+    else
+    {
+        // If all fails, just use ~/.cache
+        lockpath.AppendDir( wxT( ".cache" ) );
+    }
+
+    lockpath.AppendDir( wxT( "kicad" ) );
+#endif
+
+#if defined( __WXMAC__ ) || defined( __UNIX__ )
+    if( !lockpath.DirExists() )
+    {
+        // Lockfiles should be only readable by the user
+        lockpath.Mkdir( 0700, wxPATH_MKDIR_FULL );
+    }
+#endif
+    return lockpath.GetPath();
 }
 
 
@@ -346,6 +383,19 @@ wxString GetKicadConfigPath()
 }
 
 
+#include <ki_mutex.h>
+const wxString ExpandEnvVarSubstitutions( const wxString& aString )
+{
+    // wxGetenv( wchar_t* ) is not re-entrant on linux.
+    // Put a lock on multithreaded use of wxGetenv( wchar_t* ), called from wxEpandEnvVars(),
+    static MUTEX    getenv_mutex;
+
+    MUTLOCK lock( getenv_mutex );
+
+    // We reserve the right to do this another way, by providing our own member
+    // function.
+    return wxExpandEnvVars( aString );
+}
 
 bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
                                 const wxString& aBaseFilename,

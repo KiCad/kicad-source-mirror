@@ -101,7 +101,7 @@ void FOOTPRINT_INFO::load()
 
     std::auto_ptr<MODULE> m( fptable->FootprintLoad( m_nickname, m_fpname ) );
 
-    m_pad_count = m->GetPadCount( MODULE::DO_NOT_INCLUDE_NPTH );
+    m_pad_count = m->GetPadCount( DO_NOT_INCLUDE_NPTH );
     m_keywords  = m->GetKeywords();
     m_doc       = m->GetDescription();
 
@@ -275,6 +275,9 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* a
 
 FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
 {
+    if( aFootprintName.IsEmpty() )
+        return NULL;
+
     BOOST_FOREACH( FOOTPRINT_INFO& fp, m_list )
     {
         FPID fpid;

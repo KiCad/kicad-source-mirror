@@ -938,7 +938,7 @@ public:
      * @todo Use mm inside the file.  A general scale transform is applied to the whole
      *       file (1.0 to have the actual WRML unit im mm, 0.001 to have the actual WRML
      *       unit in meters.
-     * @note For 3D models built by a 3D modeler, the unit is 0,1 inches.  A specfic scale
+     * @note For 3D models built by a 3D modeler, the unit is 0,1 inches.  A specific scale
      *       is applied to 3D models to convert them to internal units.
      *
      * @param aFullFileName = the full filename of the file to create
@@ -947,13 +947,16 @@ public:
      * @param aExport3DFiles = true to copy 3D shapes in the subir a3D_Subdir
      * @param aUseRelativePaths set to true to use relative paths instead of absolute paths
      *                          in the board VRML file URLs.
+     * @param aUsePlainPCB set to true to export a board with no copper or silkskreen;
+     *                          this is useful for generating a VRML file which can be
+     *                          converted to a STEP model.
      * @param a3D_Subdir = sub directory where 3D shapes files are copied.  This is only used
      *                     when aExport3DFiles == true
      * @return true if Ok.
      */
     bool ExportVRML_File( const wxString & aFullFileName, double aMMtoWRMLunit,
                           bool aExport3DFiles, bool aUseRelativePaths,
-                          const wxString & a3D_Subdir );
+                          bool aUsePlainPCB, const wxString & a3D_Subdir );
 
     /**
      * Function ExportToIDF3

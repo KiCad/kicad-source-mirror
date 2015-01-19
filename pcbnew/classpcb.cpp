@@ -62,6 +62,8 @@
     Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
     functions )
 */
+#define DEFAULT_ZOOM ZOOM_FACTOR( 120 )
+
 static const double pcbZoomList[] =
 {
     ZOOM_FACTOR( 0.1 ),
@@ -73,17 +75,18 @@ static const double pcbZoomList[] =
     ZOOM_FACTOR( 2.0 ),
     ZOOM_FACTOR( 3.0 ),
     ZOOM_FACTOR( 4.5 ),
-    ZOOM_FACTOR( 7.0 ),
-    ZOOM_FACTOR( 10.0 ),
+    ZOOM_FACTOR( 6.0 ),
+    ZOOM_FACTOR( 8.0 ),
+    ZOOM_FACTOR( 11.0 ),
     ZOOM_FACTOR( 15.0 ),
     ZOOM_FACTOR( 22.0 ),
     ZOOM_FACTOR( 35.0 ),
     ZOOM_FACTOR( 50.0 ),
     ZOOM_FACTOR( 80.0 ),
-    ZOOM_FACTOR( 120.0 ),
+    ZOOM_FACTOR( 110.0 ),
+    ZOOM_FACTOR( 150.0 ),
     ZOOM_FACTOR( 200.0 ),
     ZOOM_FACTOR( 300.0 ),
-
 /*
     The largest distance that wx can support is INT_MAX, since it represents
     distance often in a wxCoord or wxSize. As a scalar, a distance is always
@@ -179,7 +182,7 @@ PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     m_Route_Layer_TOP    = F_Cu;     // default layers pair for vias (bottom to top)
     m_Route_Layer_BOTTOM = B_Cu;
 
-    SetZoom( ZOOM_FACTOR( 120 ) );             // a default value for zoom
+    SetZoom( DEFAULT_ZOOM );             // a default value for zoom
 
     InitDataPoints( aPageSizeIU );
 }
@@ -199,26 +202,28 @@ int PCB_SCREEN::MilsToIuScalar()
 
 DISPLAY_OPTIONS::DISPLAY_OPTIONS()
 {
-    DisplayPadFill          = FILLED;
-    DisplayViaFill          = FILLED;
-    DisplayPadNum           = true;
-    DisplayPadIsol          = true;
+    m_DisplayPadFill        = FILLED;
+    m_DisplayViaFill        = FILLED;
+    m_DisplayPadNum           = true;
+    m_DisplayPadIsol          = true;
 
-    DisplayModEdge          = true;
-    DisplayModText          = true;
-    DisplayPcbTrackFill     = true;  // false = sketch , true = filled
-    ShowTrackClearanceMode  = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
+    m_DisplayModEdge          = true;
+    m_DisplayModText          = true;
+    m_DisplayPcbTrackFill     = true;   // false = sketch , true = filled
+    m_ShowTrackClearanceMode  = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
     m_DisplayViaMode        = VIA_HOLE_NOT_SHOW;
 
-    DisplayPolarCood        = false; /* false = display absolute coordinates,
-                                      * true = display polar cordinates */
-    DisplayZonesMode        = 0;     /* 0 = Show filled areas outlines in zones,
-                                      * 1 = do not show filled areas outlines
-                                      * 2 = show outlines of filled areas */
-    DisplayNetNamesMode     = 3;     /* 0 do not show netnames,
-                                      * 1 show netnames on pads
-                                      * 2 show netnames on tracks
-                                      * 3 show netnames on tracks and pads */
-    DisplayDrawItems        = true;
-    ContrastModeDisplay     = false;
+    m_DisplayPolarCood        = false;  /* false = display absolute coordinates,
+                                         * true = display polar cordinates */
+    m_DisplayZonesMode        = 0;      /* 0 = Show filled areas outlines in zones,
+                                         * 1 = do not show filled areas outlines
+                                         * 2 = show outlines of filled areas */
+    m_DisplayNetNamesMode     = 3;      /* 0 do not show netnames,
+                                         * 1 show netnames on pads
+                                         * 2 show netnames on tracks
+                                         * 3 show netnames on tracks and pads */
+    m_DisplayDrawItems        = true;
+    m_ContrastModeDisplay     = false;
+    m_MaxLinksShowed   = 3;             // in track creation: number of hairwires shown
+    m_Show_Module_Ratsnest  = true;     // When moving a footprint: allows displaying a ratsnest
 }

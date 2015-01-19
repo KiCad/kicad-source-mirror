@@ -54,6 +54,14 @@ public:
 
     SCH_SCREEN* GetScreen() const;                              // overload EDA_DRAW_FRAME
 
+    /**
+     * Function GetZoomLevelIndicator
+     * returns a human readable value which can be displayed as zoom
+     * level indicator in dialogs.
+     * Virtual from the base class
+     */
+    const wxString GetZoomLevelIndicator() const;
+
     void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload EDA_DRAW_FRAME
     const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
     const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME

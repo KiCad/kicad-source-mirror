@@ -447,8 +447,7 @@ void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_L
         {
             wxString num_unit;
             int unit = Component->GetUnit();
-            num_unit.Printf( _( "Unit %d %c" ), ii + 1,
-                             "?ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ ii + 1 ] );
+            num_unit.Printf( _( "Unit %c" ), "?ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ ii + 1 ] );
             wxMenuItem * item = sel_unit_menu->Append( ID_POPUP_SCH_SELECT_UNIT1 + ii,
                                                        num_unit, wxEmptyString,
                                                        wxITEM_CHECK );

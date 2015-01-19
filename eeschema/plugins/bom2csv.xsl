@@ -19,6 +19,14 @@
     in the filename.
 -->
 
+<!--
+    @package
+    Generate a Tab delimited list (csv file type).
+    One component per line
+    Fields are
+    Ref,Value, Footprint, Datasheet, Field5, Field4, price
+-->
+
 <!DOCTYPE xsl:stylesheet [
   <!ENTITY nl  "&#xd;&#xa;">    <!--new line CR, LF, or LF, your choice -->
 ]>

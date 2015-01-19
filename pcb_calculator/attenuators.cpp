@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 12011 jean-pierre.charras
+ * Copyright (C) 2011 jean-pierre.charras
  * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -83,10 +83,12 @@ void PCB_CALCULATOR_FRAME::TransfAttenuatorDataToPanel()
     m_AttValueCtrl->Enable( m_currAttenuator->m_Attenuation_Enable );
 
     m_ZinValueCtrl->Enable( m_currAttenuator->m_Zin_Enable );
+
     if( m_currAttenuator->m_Zin_Enable )
         msg.Printf( wxT( "%g" ), m_currAttenuator->m_Zin );
     else
-        msg.Clear();;
+        msg.Clear();
+
     m_ZinValueCtrl->SetValue( msg );
 
     msg.Printf( wxT( "%g" ), m_currAttenuator->m_Zout );

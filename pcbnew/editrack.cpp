@@ -677,10 +677,11 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
     PCB_SCREEN*     screen = (PCB_SCREEN*) aPanel->GetScreen();
     PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) aPanel->GetDisplayOptions();
 
-    bool      Track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
-    DisplayOpt.DisplayPcbTrackFill = true;
-    TRACE_CLEARANCE_DISPLAY_MODE_T showTrackClearanceMode = DisplayOpt.ShowTrackClearanceMode;
+    bool tmp = displ_opts->m_DisplayPcbTrackFill;
+    displ_opts->m_DisplayPcbTrackFill = true;
+    TRACE_CLEARANCE_DISPLAY_MODE_T showTrackClearanceMode = displ_opts->m_ShowTrackClearanceMode;
 
     if ( g_FirstTrackSegment == NULL )
         return;
@@ -688,7 +689,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     NETCLASSPTR netclass = g_FirstTrackSegment->GetNetClass();
 
     if( showTrackClearanceMode != DO_NOT_SHOW_CLEARANCE )
-        DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
+        displ_opts->m_ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
 
     // Values to Via circle
     int boardViaRadius = frame->GetDesignSettings().GetCurrentViaSize()/2;
@@ -824,8 +825,8 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     msg.Printf( wxT( "%d" ), g_CurrentTrackList.GetCount() );
     frame->AppendMsgPanel( _( "Segs Count" ), msg, DARKCYAN );
 
-    DisplayOpt.ShowTrackClearanceMode = showTrackClearanceMode;
-    DisplayOpt.DisplayPcbTrackFill    = Track_fill_copy;
+    displ_opts->m_ShowTrackClearanceMode = showTrackClearanceMode;
+    displ_opts->m_DisplayPcbTrackFill    = tmp;
 
     frame->BuildAirWiresTargetsList( NULL, g_CurrentTrackSegment->GetEnd(), false );
     frame->TraceAirWiresToTargets( aDC );

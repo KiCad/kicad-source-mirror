@@ -8,8 +8,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2011 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2014 Jean-Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,6 +75,7 @@
 #include <class_GERBER.h>
 #include <class_excellon.h>
 #include <kicad_string.h>
+#include <class_X2_gerber_attributes.h>
 
 #include <cmath>
 
@@ -93,17 +94,23 @@ extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 extern void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                                  APERTURE_T        aAperture,
                                  int               Dcode_index,
-                                 int         aLayer,
+                                 int               aLayer,
                                  const wxPoint&    aPos,
                                  wxSize            aSize,
                                  bool              aLayerNegative );
 void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               int               Dcode_index,
-                              int         aLayer,
+                              int               aLayer,
                               const wxPoint&    aStart,
                               const wxPoint&    aEnd,
                               wxSize            aPenSize,
                               bool              aLayerNegative  );
+
+// Getber X2 files have a file attribute which specify the type of image
+// (copper, solder paste ... and sides tpo, bottom or inner copper layers)
+// Excellon drill files do not have attributes, so, just to identify the image
+// In gerbview, we add this attribute, like a Gerber drill file
+static const char file_attribute[] = ".FileFunction,Other,Drill*";
 
 static EXCELLON_CMD excellonHeaderCmdList[] =
 {
@@ -168,14 +175,21 @@ static EXCELLON_CMD excellon_G_CmdList[] =
 bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 {
     wxString msg;
-    int layer = getActiveLayer();      // current layer used in GerbView
+    int layerId = getActiveLayer();      // current layer used in GerbView
+    EXCELLON_IMAGE* drill_Layer = (EXCELLON_IMAGE*) g_GERBER_List.GetGbrImage( layerId );
 
-    if( g_GERBER_List[layer] == NULL )
+    if( drill_Layer == NULL )
     {
-        g_GERBER_List[layer] = new EXCELLON_IMAGE( this, layer );
+        drill_Layer = new EXCELLON_IMAGE( this, layerId );
+        layerId = g_GERBER_List.AddGbrImage( drill_Layer, layerId );
     }
 
-    EXCELLON_IMAGE* drill_Layer = (EXCELLON_IMAGE*) g_GERBER_List[layer];
+    if( layerId < 0 )
+    {
+        DisplayError( this, _( "No room to load file" ) );
+        return false;
+    }
+
     ClearMessageList();
 
     /* Read the gerber file */
@@ -183,7 +197,7 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     if( file == NULL )
     {
         msg.Printf( _( "File %s not found" ), GetChars( aFullFileName ) );
-        DisplayError( this, msg, 10 );
+        DisplayError( this, msg );
         return false;
     }
 
@@ -213,7 +227,7 @@ bool EXCELLON_IMAGE::Read_EXCELLON_File( FILE * aFile,
     m_FileName = aFullFileName;
     m_Current_File = aFile;
 
-    SetLocaleTo_C_standard();
+    LOCALE_IO toggleIo;
 
     // FILE_LINE_READER will close the file.
     if( m_Current_File == NULL )
@@ -282,7 +296,16 @@ bool EXCELLON_IMAGE::Read_EXCELLON_File( FILE * aFile,
             }   // End switch
         }
     }
-    SetLocaleTo_Default();
+
+    // Add our file attribute, to identify the drill file
+    X2_ATTRIBUTE dummy;
+    char* text = (char*)file_attribute;
+    dummy.ParseAttribCmd( m_Current_File, NULL, 0, text );
+    delete m_FileFunction;
+    m_FileFunction = new X2_ATTRIBUTE_FILEFUNCTION( dummy );
+
+    m_InUse = true;
+
     return true;
 }
 

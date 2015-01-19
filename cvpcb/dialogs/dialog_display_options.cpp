@@ -72,10 +72,12 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
     /* mandatory to use escape key as cancel under wxGTK. */
     SetFocus();
 
-    m_EdgesDisplayOption->SetSelection( m_Parent->m_DisplayModEdge );
-    m_TextDisplayOption->SetSelection( m_Parent->m_DisplayModText );
-    m_IsShowPadFill->SetValue( m_Parent->m_DisplayPadFill );
-    m_IsShowPadNum->SetValue( m_Parent->m_DisplayPadNum );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+
+    m_EdgesDisplayOption->SetSelection( displ_opts->m_DisplayModEdge );
+    m_TextDisplayOption->SetSelection( displ_opts->m_DisplayModText );
+    m_IsShowPadFill->SetValue( displ_opts->m_DisplayPadFill );
+    m_IsShowPadNum->SetValue( displ_opts->m_DisplayPadNum );
     m_IsZoomNoCenter->SetValue( m_Parent->GetCanvas()->GetEnableZoomNoCenter() );
     m_IsMiddleButtonPan->SetValue( m_Parent->GetCanvas()->GetEnableMiddleButtonPan() );
     m_IsMiddleButtonPanLimited->SetValue( m_Parent->GetCanvas()->GetMiddleButtonPanLimited() );
@@ -90,10 +92,12 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
 
 void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::UpdateObjectSettings( void )
 {
-    m_Parent->m_DisplayModEdge = m_EdgesDisplayOption->GetSelection();
-    m_Parent->m_DisplayModText = m_TextDisplayOption->GetSelection();
-    m_Parent->m_DisplayPadNum  = m_IsShowPadNum->GetValue();
-    m_Parent->m_DisplayPadFill = m_IsShowPadFill->GetValue();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+
+    displ_opts->m_DisplayModEdge = m_EdgesDisplayOption->GetSelection();
+    displ_opts->m_DisplayModText = m_TextDisplayOption->GetSelection();
+    displ_opts->m_DisplayPadNum  = m_IsShowPadNum->GetValue();
+    displ_opts->m_DisplayPadFill = m_IsShowPadFill->GetValue();
     m_Parent->GetCanvas()->SetEnableZoomNoCenter( m_IsZoomNoCenter->GetValue() );
     m_Parent->GetCanvas()->SetEnableMiddleButtonPan( m_IsMiddleButtonPan->GetValue() );
     m_Parent->GetCanvas()->SetMiddleButtonPanLimited( m_IsMiddleButtonPanLimited->GetValue() );

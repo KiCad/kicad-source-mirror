@@ -79,7 +79,6 @@ extern wxString g_DocModulesFileName;
 // variables
 extern bool     g_Drc_On;
 extern bool     g_AutoDeleteOldTrack;
-extern bool     g_Show_Module_Ratsnest;
 extern bool     g_Raccord_45_Auto;
 extern bool     g_Track_45_Only_Allowed;
 extern bool     g_Alternate_Track_Posture;
@@ -89,7 +88,6 @@ extern bool     g_Segments_45_Only;
 extern LAYER_ID g_Route_Layer_TOP;
 extern LAYER_ID g_Route_Layer_BOTTOM;
 
-extern int      g_MaxLinksShowed;        // Max count links showed in routing
 extern bool     g_TwoSegmentTrackBuild;
 
 extern int      g_MagneticPadOption;
@@ -103,9 +101,6 @@ extern DLIST<TRACK> g_CurrentTrackList;
 #define g_CurrentTrackSegment g_CurrentTrackList.GetLast()    ///< most recently created segment
 #define g_FirstTrackSegment   g_CurrentTrackList.GetFirst()   ///< first segment created
 
-
-class DISPLAY_OPTIONS;
-extern DISPLAY_OPTIONS DisplayOpt;
 
 enum MagneticPadOptionValues {
     no_effect,

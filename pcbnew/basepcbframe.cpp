@@ -98,14 +98,6 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_Pcb                 = NULL;
     m_toolManager         = NULL;
     m_toolDispatcher      = NULL;
-
-    m_DisplayPadFill      = true;   // How to draw pads
-    m_DisplayViaFill      = true;   // How to draw vias
-    m_DisplayPadNum       = true;   // show pads number
-
-    m_DisplayModEdge      = FILLED; // How to display module drawings (line/ filled / sketch)
-    m_DisplayModText      = FILLED; // How to display module texts (line/ filled / sketch)
-    m_DisplayPcbTrackFill = true;   // false = sketch , true = filled
     m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
 
     m_UserGridSize        = wxRealPoint( 100.0, 100.0 );
@@ -116,6 +108,11 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_FastGrid2           = 0;
 
     m_auxiliaryToolBar    = NULL;
+
+    m_zoomLevelCoeff      = 110.0 * IU_PER_DECIMILS;  // Adjusted to roughly displays zoom level = 1
+                                        // when the screen shows a 1:1 image
+                                        // obviously depends on the monitor,
+                                        // but this is an acceptable value
 }
 
 
@@ -376,6 +373,7 @@ void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
 {
     LAYER_ID preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // Check if the specified layer matches the present layer
     if( layer == preslayer )
@@ -417,36 +415,45 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
 
     GetScreen()->m_Active_Layer = layer;
 
-    if( DisplayOpt.ContrastModeDisplay )
+    if( displ_opts->m_ContrastModeDisplay )
         m_canvas->Refresh();
 }
 
 
 void PCB_BASE_FRAME::OnTogglePolarCoords( wxCommandEvent& aEvent )
 {
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
     SetStatusText( wxEmptyString );
-    DisplayOpt.DisplayPolarCood = !DisplayOpt.DisplayPolarCood;
+
+    displ_opts->m_DisplayPolarCood = !displ_opts->m_DisplayPolarCood;
+
     UpdateStatusBar();
 }
 
 
 void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 {
-    m_DisplayPadFill = DisplayOpt.DisplayPadFill = !m_DisplayPadFill;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
-    // Apply new display options to the GAL canvas
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*> ( GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
-    settings->LoadDisplayOptions( DisplayOpt );
+    displ_opts->m_DisplayPadFill = !displ_opts->m_DisplayPadFill;
+    EDA_DRAW_PANEL_GAL* gal = GetGalCanvas();
 
-    // Update pads
-    BOARD* board = GetBoard();
-    for( MODULE* module = board->m_Modules; module; module = module->Next() )
+    if( gal )
     {
-        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
-            pad->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    // Apply new display options to the GAL canvas
+        KIGFX::PCB_PAINTER* painter =
+                static_cast<KIGFX::PCB_PAINTER*> ( gal->GetView()->GetPainter() );
+        KIGFX::PCB_RENDER_SETTINGS* settings =
+                static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+        settings->LoadDisplayOptions( displ_opts );
+
+        // Update pads
+        BOARD* board = GetBoard();
+        for( MODULE* module = board->m_Modules; module; module = module->Next() )
+        {
+            for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+                pad->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
     }
 
     m_canvas->Refresh();
@@ -455,9 +462,11 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 
 void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( DisplayOpt.DisplayPolarCood );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+
+    aEvent.Check( displ_opts->m_DisplayPolarCood );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                                        DisplayOpt.DisplayPolarCood ?
+                                        displ_opts->m_DisplayPolarCood ?
                                         _( "Display rectangular coordinates" ) :
                                         _( "Display polar coordinates" ) );
 }
@@ -465,9 +474,10 @@ void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 
 void PCB_BASE_FRAME::OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( !m_DisplayPadFill );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    aEvent.Check( !displ_opts->m_DisplayPadFill );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                        m_DisplayPadFill ?
+                                        displ_opts->m_DisplayPadFill ?
                                         _( "Show pads in outline mode" ) :
                                         _( "Show pads in fill mode" ) );
 }
@@ -606,16 +616,18 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     if( aId < 0 )
         return;
 
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+
     // handle color changes for transitions in and out of ID_TRACK_BUTT
     if( ( GetToolId() == ID_TRACK_BUTT && aId != ID_TRACK_BUTT )
         || ( GetToolId() != ID_TRACK_BUTT && aId == ID_TRACK_BUTT ) )
     {
-        if( DisplayOpt.ContrastModeDisplay )
+        if( displ_opts->m_ContrastModeDisplay )
             redraw = true;
     }
 
     // must do this after the tool has been set, otherwise pad::Draw() does
-    // not show proper color when DisplayOpt.ContrastModeDisplay is true.
+    // not show proper color when GetDisplayOptions().ContrastModeDisplay is true.
     if( redraw && m_canvas )
         m_canvas->Refresh();
 }
@@ -626,8 +638,6 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
  */
 void PCB_BASE_FRAME::UpdateStatusBar()
 {
-    EDA_DRAW_FRAME::UpdateStatusBar();
-
     PCB_SCREEN* screen = GetScreen();
 
     if( !screen )
@@ -639,8 +649,11 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     double dYpos;
     wxString line;
     wxString locformatter;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
-    if( DisplayOpt.DisplayPolarCood )  // display polar coordinates
+    EDA_DRAW_FRAME::UpdateStatusBar();
+
+    if( displ_opts->m_DisplayPolarCood )  // display polar coordinates
     {
         double       theta, ro;
 
@@ -653,26 +666,16 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         wxString formatter;
         switch( g_UserUnit )
         {
-#if defined( USE_PCBNEW_NANOMETRE )
         case INCHES:
-            formatter = wxT( "Ro %.6f Th %.1f" );
+            formatter = wxT( "Ro %.6f  Th %.1f" );
             break;
 
         case MILLIMETRES:
-            formatter = wxT( "Ro %.6f Th %.1f" );
+            formatter = wxT( "Ro %.6f  Th %.1f" );
             break;
-#else
-        case INCHES:
-            formatter = wxT( "Ro %.4f Th %.1f" );
-            break;
-
-        case MILLIMETRES:
-            formatter = wxT( "Ro %.3f Th %.1f" );
-            break;
-#endif
 
         case UNSCALED_UNITS:
-            formatter = wxT( "Ro %f Th %f" );
+            formatter = wxT( "Ro %f  Th %f" );
             break;
         }
 
@@ -692,24 +695,24 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     {
     case INCHES:
         absformatter = wxT( "X %.6f  Y %.6f" );
-        locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
+        locformatter = wxT( "dx %.6f dy %.6f dist %.4f" );
         break;
 
     case MILLIMETRES:
         absformatter = wxT( "X %.6f  Y %.6f" );
-        locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
+        locformatter = wxT( "dx %.6f dy %.6f dist %.3f" );
         break;
 
     case UNSCALED_UNITS:
         absformatter = wxT( "X %f  Y %f" );
-        locformatter = wxT( "dx %f  dy %f  d %f" );
+        locformatter = wxT( "dx %f dy %f dist %f" );
         break;
     }
 
     line.Printf( absformatter, dXpos, dYpos );
     SetStatusText( line, 2 );
 
-    if( !DisplayOpt.DisplayPolarCood )  // display relative cartesian coordinates
+    if( !displ_opts->m_DisplayPolarCood )  // display relative cartesian coordinates
     {
         // Display relative coordinates:
         dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
@@ -747,23 +750,23 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     long itmp;
     aCfg->Read( m_FrameName + UserGridUnitsEntry, &itmp, ( long )INCHES );
     m_UserGridUnit = (EDA_UNITS_T) itmp;
-    aCfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
-    aCfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );
-    aCfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );
-    aCfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge, ( long )FILLED );
+    aCfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayOptions.m_DisplayPadFill, true );
+    aCfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayOptions.m_DisplayViaFill, true );
+    aCfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayOptions.m_DisplayPadNum, true );
+    aCfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayOptions.m_DisplayModEdge, ( long )FILLED );
 
     aCfg->Read( m_FrameName + FastGrid1Entry, &itmp, ( long )0);
     m_FastGrid1 = itmp;
     aCfg->Read( m_FrameName + FastGrid2Entry, &itmp, ( long )0);
     m_FastGrid2 = itmp;
 
-    if( m_DisplayModEdge < LINE || m_DisplayModEdge > SKETCH )
-        m_DisplayModEdge = FILLED;
+    if( m_DisplayOptions.m_DisplayModEdge < LINE || m_DisplayOptions.m_DisplayModEdge > SKETCH )
+        m_DisplayOptions.m_DisplayModEdge = FILLED;
 
-    aCfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText, ( long )FILLED );
+    aCfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayOptions.m_DisplayModText, ( long )FILLED );
 
-    if( m_DisplayModText < LINE || m_DisplayModText > SKETCH )
-        m_DisplayModText = FILLED;
+    if( m_DisplayOptions.m_DisplayModText < LINE || m_DisplayOptions.m_DisplayModText > SKETCH )
+        m_DisplayOptions.m_DisplayModText = FILLED;
 
     // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
     // when reading doubles in config,
@@ -779,11 +782,11 @@ void PCB_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( m_FrameName + UserGridSizeXEntry, m_UserGridSize.x );
     aCfg->Write( m_FrameName + UserGridSizeYEntry, m_UserGridSize.y );
     aCfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnit );
-    aCfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayPadFill );
-    aCfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayViaFill );
-    aCfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayPadNum );
-    aCfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayModEdge );
-    aCfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayModText );
+    aCfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayOptions.m_DisplayPadFill );
+    aCfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayOptions.m_DisplayViaFill );
+    aCfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayOptions.m_DisplayPadNum );
+    aCfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayOptions.m_DisplayModEdge );
+    aCfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayOptions.m_DisplayModText );
     aCfg->Write( m_FrameName + FastGrid1Entry, ( long )m_FastGrid1 );
     aCfg->Write( m_FrameName + FastGrid2Entry, ( long )m_FastGrid2 );
 }
@@ -793,6 +796,12 @@ void PCB_BASE_FRAME::OnModify()
 {
     GetScreen()->SetModify();
     GetScreen()->SetSave();
+}
+
+
+const wxString PCB_BASE_FRAME::GetZoomLevelIndicator() const
+{
+    return EDA_DRAW_FRAME::GetZoomLevelIndicator();
 }
 
 
@@ -806,42 +815,16 @@ void PCB_BASE_FRAME::updateGridSelectBox()
 
     // Update grid values with the current units setting.
     m_gridSelectBox->Clear();
-
-    wxString msg;
-    wxString format = _( "Grid:");
-
-    switch( g_UserUnit )
-    {
-    case INCHES:    // the grid size is displayed in mils
-    case MILLIMETRES:
-        format += wxT( " %.6f" );
-        break;
-
-    case UNSCALED_UNITS:
-        format += wxT( " %f" );
-        break;
-    }
+    wxArrayString gridsList;
+    int icurr = GetScreen()->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );
 
     for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {
         GRID_TYPE& grid = GetScreen()->GetGrid( i );
-        double value = To_User_Unit( g_UserUnit, grid.m_Size.x );
-        if( g_UserUnit == INCHES )
-            value *= 1000;
-
-        if( grid.m_Id != ID_POPUP_GRID_USER )
-        {
-            msg.Printf( format.GetData(), value );
-            StripTrailingZeros( msg );
-        }
-        else
-            msg = _( "User Grid" );
-
-        m_gridSelectBox->Append( msg, (void*) &grid.m_Id );
-
-        if( ( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) == GetScreen()->GetGrid( i ).m_Id )
-            m_gridSelectBox->SetSelection( i );
+        m_gridSelectBox->Append( gridsList[i], (void*) &grid.m_Id );
     }
+
+    m_gridSelectBox->SetSelection( icurr );
 }
 
 void PCB_BASE_FRAME::updateZoomSelectBox()
@@ -852,19 +835,15 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
     wxString msg;
 
     m_zoomSelectBox->Clear();
-    m_zoomSelectBox->Append( _( "Auto" ) );
+    m_zoomSelectBox->Append( _( "Zoom Auto" ) );
     m_zoomSelectBox->SetSelection( 0 );
 
     for( unsigned i = 0;  i < GetScreen()->m_ZoomList.size();  ++i )
     {
         msg = _( "Zoom " );
 
-        wxString value = wxString::Format( wxT( "%g" ),
-
-                                // @todo could do scaling here and show a "percentage"
-                                GetScreen()->m_ZoomList[i]
-                                );
-
+        double level =  m_zoomLevelCoeff / (double)GetScreen()->m_ZoomList[i];
+        wxString value = wxString::Format( wxT( "%.2f" ), level );
         msg += value;
 
         m_zoomSelectBox->Append( msg );

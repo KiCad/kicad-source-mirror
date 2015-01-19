@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2012 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,6 +173,13 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
             prjloaded = true;    // OnFileHistory() loads the project
         }
     }
+    else	// there is no history
+    {
+            wxFileName namelessProject( wxGetCwd(), NAMELESS_PROJECT,
+                                        ProjectFileExtension );
+
+            frame->SetProjectFileName( namelessProject.GetFullPath() );
+    }
 
     if( !prjloaded )
     {
@@ -264,7 +271,7 @@ struct APP_KICAD : public wxApp
         {
             wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
                 GetChars( FROM_UTF8( typeid(e).name() )),
-                GetChars( FROM_UTF8( e.what() ) ) );;
+                GetChars( FROM_UTF8( e.what() ) ) );
         }
         catch( const IO_ERROR& ioe )
         {

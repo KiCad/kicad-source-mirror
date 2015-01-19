@@ -338,11 +338,14 @@ PNS_ITEM* ROUTER_TOOL::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLa
     }
 
     PNS_ITEM* rv = NULL;
+    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME> ();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)frame->GetDisplayOptions();
+
     for( int i = 0; i < 4; i++ )
     {
         PNS_ITEM* item = prioritized[i];
 
-        if( DisplayOpt.ContrastModeDisplay )
+        if( displ_opts->m_ContrastModeDisplay )
             if( item && !item->Layers().Overlaps( tl ) )
                 item = NULL;
 

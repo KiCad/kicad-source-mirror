@@ -95,7 +95,7 @@ void VRML2_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == '}' ) || ( *text == ']' ) )
+        if( ( *text == '}' ) || ( *text == ']' ) )
         {
             continue;
         }
@@ -140,7 +140,7 @@ int VRML2_MODEL_PARSER::read_Transform()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -259,7 +259,7 @@ int VRML2_MODEL_PARSER::read_DEF()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             // DBG( printf( "  skiping %c\n", *text) );
             continue;
@@ -316,7 +316,7 @@ int VRML2_MODEL_PARSER::read_Shape()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -363,7 +363,7 @@ int VRML2_MODEL_PARSER::read_Appearance()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -468,7 +468,7 @@ int VRML2_MODEL_PARSER::read_Material()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -561,7 +561,7 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -744,7 +744,7 @@ int VRML2_MODEL_PARSER::read_Color()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -774,7 +774,7 @@ int VRML2_MODEL_PARSER::read_Normal()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -812,7 +812,7 @@ int VRML2_MODEL_PARSER::read_Coordinate()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }

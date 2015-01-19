@@ -83,7 +83,7 @@ std::string Double2Str( double aValue )
         len = sprintf( buf, "%.16g", aValue );
     }
 
-    return std::string( buf, len );;
+    return std::string( buf, len );
 }
 
 

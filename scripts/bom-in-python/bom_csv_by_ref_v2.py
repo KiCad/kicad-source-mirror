@@ -4,6 +4,15 @@
 # Example: Ungrouped (One component per row) CSV output
 #
 
+"""
+    @package
+    Generate a csv list file.
+    Components are sorted by ref and grouped by value
+    One component per line
+    Fields are (if exist)
+    Ref, value, Part, footprint, Datasheet, Manufacturer, Vendor
+"""
+
 from __future__ import print_function
 
 # Import the KiCad python helper module
@@ -20,8 +29,9 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 try:
     f = open(sys.argv[2], 'w')
 except IOError:
-    print(__file__, ":", e, file=sys.stderr)
-    f = stdout
+    e = "Can't open output file for writing: " + sys.argv[2]
+    print( __file__, ":", e, sys.stderr )
+    f = sys.stdout
 
 # Create a new csv writer object to use as the output formatter
 out = csv.writer(f, lineterminator='\n', delimiter=',', quotechar="\"", quoting=csv.QUOTE_ALL)

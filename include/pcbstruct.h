@@ -71,32 +71,33 @@ enum TRACE_CLEARANCE_DISPLAY_MODE_T {
 class DISPLAY_OPTIONS
 {
 public:
-    bool DisplayPadFill;
-    bool DisplayViaFill;
-    bool DisplayPadNum;
-    bool DisplayPadIsol;
-
-    int  DisplayModEdge;
-    int  DisplayModText;
-    bool DisplayPcbTrackFill;     /* false = sketch , true = filled */
+    bool m_DisplayPadFill;
+    bool m_DisplayViaFill;
+    bool m_DisplayPadNum;           // show pads numbers
+    bool m_DisplayPadIsol;
+    int  m_DisplayModEdge;          // How to display module drawings (line/ filled / sketch)
+    int  m_DisplayModText;          // How to display module texts (line/ filled / sketch)
+    bool m_DisplayPcbTrackFill;     // false : tracks are show in sketch mode, true = filled.
 
     /// How trace clearances are displayed.  @see TRACE_CLEARANCE_DISPLAY_MODE_T.
-    TRACE_CLEARANCE_DISPLAY_MODE_T  ShowTrackClearanceMode;
+    TRACE_CLEARANCE_DISPLAY_MODE_T  m_ShowTrackClearanceMode;
 
     VIA_DISPLAY_MODE_T m_DisplayViaMode;  /* 0 do not show via hole,
                                            * 1 show via hole for non default value
                                            * 2 show all via hole */
 
-    bool DisplayPolarCood;
-    int  DisplayZonesMode;
-    int  DisplayNetNamesMode;   /* 0 do not show netnames,
+    bool m_DisplayPolarCood;
+    int  m_DisplayZonesMode;
+    int  m_DisplayNetNamesMode; /* 0 do not show netnames,
                                  * 1 show netnames on pads
                                  * 2 show netnames on tracks
                                  * 3 show netnames on tracks and pads
                                  */
 
-    int  DisplayDrawItems;
-    bool ContrastModeDisplay;
+    int  m_DisplayDrawItems;
+    bool m_ContrastModeDisplay;
+    int  m_MaxLinksShowed;          // in track creation: number of hairwires shown
+    bool m_Show_Module_Ratsnest;    // When moving a footprint: allows displaying a ratsnest
 
 public:
     DISPLAY_OPTIONS();

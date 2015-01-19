@@ -148,6 +148,30 @@ void DSNLEXER::SetSpecctraMode( bool aMode )
     }
 }
 
+
+bool DSNLEXER::SyncLineReaderWith( DSNLEXER& aLexer )
+{
+    // Synchronize the pointers handling the data read by the LINE_READER
+    // only if aLexer shares the same LINE_READER, because only in this case
+    // the char buffer is be common
+
+    if( reader != aLexer.reader )
+        return false;
+
+    // We can synchronize the pointers which handle the data currently read
+    start = aLexer.start;
+    next = aLexer.next;
+    limit = aLexer.limit;
+
+    // Sync these parameters is not mandatory, but could help
+    // for instance in debug
+    curText = aLexer.curText;
+    curOffset = aLexer.curOffset;
+
+    return true;
+}
+
+
 void DSNLEXER::PushReader( LINE_READER* aLineReader )
 {
     readerStack.push_back( aLineReader );

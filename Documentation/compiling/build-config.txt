@@ -100,9 +100,12 @@ USE_IMAGES_IN_MENUS (ON/OFF)
 ----------------------------
 Default: OFF for OSX, ON for other platforms.
 
-This option is used to enable or disable building KiCad with images in menu
+This option is used to enable or disable building KiCad with images (icons) in menu
 items.  If this is not defined when CMake is used to create the build files,
 images will be included in menu items on all platforms except OSX.
+Note also, on Linux, some window managers do not show icons in menu, or
+show them only if the current option is activated.
+Therefore, even if you have icons in menus, they will be not always displayed
 
 
 DOWNLOAD_DIR (PATH)
@@ -138,6 +141,7 @@ Default: OFF
 This option enables or disables building Python scripting support within KiCad.
 Currently only Pcbnew is supported.  This option requires SWIG and Python to be
 installed on the system.
+It allows using footprint wizards in footprint editor to create new footprints
 
 
 KICAD_SCRIPTING_MODULES (ON/OFF)
@@ -147,6 +151,8 @@ Default: OFF
 This option enables or disables building KiCad Python modules that can be used
 externally by Python.  Currently only Pcbnew is supported.  This option
 requires SWIG and Python to be installed on the system.
+This python module is used to edit board files (.kicad_pcb files) from a
+python script, outside kicad.
 
 
 KICAD_SCRIPTING_WXPYTHON (ON/OFF)
@@ -156,6 +162,7 @@ Default: OFF
 This option enables or disables building wxPython support into the KiCad
 scripting support.  Currently only Pcbnew has scripting support.  This option requires
 SWIG, Python, and wxPython to be installed on the system.
+It allows execution of python scripts insided Pcbnew, during a session.
 
 
 PYTHON_SITE_PACKAGE_PATH (PATH)
@@ -169,10 +176,20 @@ different path, set this variable to the desired path.
 
 BUILD_GITHUB_PLUGIN (ON/OFF)
 ----------------------------
-Default: OFF
+Default: ON
 
 This option enables or disables building KiCad with a pcbnew plugin for loading
 footprints from a GitHub repository.
+
+KICAD_USE_WEBKIT (ON/OFF)
+----------------------------
+Default: ON (and OFF when BUILD_GITHUB_PLUGIN is OFF)
+
+This option enables or disables building a web viewer used if the
+footprint library table wizard to easily add footprints library entries
+to this tables when libraries are on a GitHub repository.
+This option need the full support of wxWebview/WebKit in wxWidgets, which is not
+always the case on Linux.
 
 
 KICAD_REPO_NAME (STRING)

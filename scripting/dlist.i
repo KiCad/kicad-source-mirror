@@ -27,7 +27,7 @@
 %extend DLIST
 {
     %pythoncode
-    {
+    %{
         class DLISTIter:
             def __init__(self,aList):
                 self.last = aList   # last item is the start of list
@@ -63,5 +63,5 @@
         def __iter__(self):
             return self.DLISTIter(self)
 
-    }
+    %}
 }

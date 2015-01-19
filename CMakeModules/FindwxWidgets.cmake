@@ -330,7 +330,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
 
     # Find wxWidgets multilib libraries.
     foreach(LIB core adv aui html media xrc dbgrid gl qa richtext
-                stc ribbon propgrid)
+                webview stc ribbon propgrid)
       find_library(WX_${LIB}${_DBG}
         NAMES
         wxmsw${_UNV}31${_UCD}${_DBG}_${LIB}
@@ -374,7 +374,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
 
     # Clear wxWidgets multilib libraries.
     foreach(LIB core adv aui html media xrc dbgrid gl qa richtext
-                stc ribbon propgrid)
+                webview stc ribbon propgrid)
       wx_clear_lib(WX_${LIB}${_DBG})
     endforeach(LIB)
   endmacro(wx_clear_all_libs)
@@ -448,6 +448,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
       D:/
       $ENV{ProgramFiles}
     PATH_SUFFIXES
+      wxWidgets-3.0.2
       wxWidgets-3.0.1
       wxWidgets-3.0.0
       wxWidgets-2.9.5

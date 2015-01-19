@@ -331,7 +331,13 @@ bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString&  aGroupNam
 
     m_pro_date_and_time = timestamp;
 
+    // We do not want expansion of env var values when reading our project config file
+    bool state = cfg.get()->IsExpandingEnvVars();
+    cfg.get()->SetExpandEnvVars( false );
+
     wxConfigLoadParams( cfg.get(), aParams, aGroupName );
+
+    cfg.get()->SetExpandEnvVars( state );
 
     return true;
 }

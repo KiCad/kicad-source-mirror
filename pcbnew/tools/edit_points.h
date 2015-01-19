@@ -243,7 +243,6 @@ public:
         return m_constraint.get();
     }
 
-
     /**
      * Function GetOrigin()
      *
@@ -372,15 +371,64 @@ public:
     }
 
     /**
+     * Function AddBreak()
+     *
+     * Adds a break, indicating the end of a contour.
+     */
+    void AddBreak()
+    {
+        assert( m_points.size() > 0 );
+        m_contours.push_back( m_points.size() - 1 );
+    }
+
+    /**
+     * Function GetContourStartIdx()
+     *
+     * Returns index of the contour origin for a point with given index.
+     * @param aPointIdx is the index of point for which the contour origin is searched.
+     * @return Index of the contour origin point.
+     */
+    int GetContourStartIdx( int aPointIdx ) const;
+
+    /**
+     * Function GetContourEndIdx()
+     *
+     * Returns index of the contour finish for a point with given index.
+     * @param aPointIdx is the index of point for which the contour finish is searched.
+     * @return Index of the contour finish point.
+     */
+    int GetContourEndIdx( int aPointIdx ) const;
+
+    /**
+     * Function IsContourStart()
+     *
+     * Checks is a point with given index is a contour origin.
+     * @param aPointIdx is the index of the point to be checked.
+     * @return True if the point is an origin of a contour.
+     */
+    bool IsContourStart( int aPointIdx ) const;
+
+    /**
+     * Function IsContourEnd()
+     *
+     * Checks is a point with given index is a contour finish.
+     * @param aPointIdx is the index of the point to be checked.
+     * @return True if the point is a finish of a contour.
+     */
+    bool IsContourEnd( int aPointIdx ) const;
+
+    /**
      * Function Previous()
      *
      * Returns the point that is after the given point in the list.
      * @param aPoint is the point that is supposed to be preceding the searched point.
+     * @param aTraverseContours decides if in case of breaks should we return to the origin
+     * of contour or continue with the next contour.
      * @return The point following aPoint in the list. If aPoint is the first in
      * the list, the last from the list will be returned. If there are no points at all, NULL
      * is returned.
      */
-    EDIT_POINT* Previous( const EDIT_POINT& aPoint );
+    EDIT_POINT* Previous( const EDIT_POINT& aPoint, bool aTraverseContours = true );
 
     EDIT_LINE* Previous( const EDIT_LINE& aLine );
 
@@ -389,11 +437,13 @@ public:
      *
      * Returns the point that is before the given point in the list.
      * @param aPoint is the point that is supposed to be following the searched point.
+     * @param aTraverseContours decides if in case of breaks should we return to the origin
+     * of contour or continue with the next contour.
      * @return The point preceding aPoint in the list. If aPoint is the last in
      * the list, the first point from the list will be returned. If there are no points at all,
      * NULL is returned.
      */
-    EDIT_POINT* Next( const EDIT_POINT& aPoint );
+    EDIT_POINT* Next( const EDIT_POINT& aPoint, bool aTraverseContours = true );
 
     EDIT_LINE* Next( const EDIT_LINE& aLine );
 
@@ -461,6 +511,7 @@ private:
     EDA_ITEM* m_parent;                 ///< Parent of the EDIT_POINTs
     std::deque<EDIT_POINT> m_points;    ///< EDIT_POINTs for modifying m_parent
     std::deque<EDIT_LINE> m_lines;      ///< EDIT_LINEs for modifying m_parent
+    std::list<int> m_contours;          ///< Indices of end contour points
 };
 
 #endif /* EDIT_POINTS_H_ */

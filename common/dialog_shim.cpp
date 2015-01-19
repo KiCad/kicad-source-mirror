@@ -411,14 +411,14 @@ public:
         // wxModalEventLoop depends on this (so we can't just use ON_BLOCK_EXIT or
         // something similar here)
     #if wxUSE_EXCEPTIONS
-        for ( ;; )
+        for( ; ; )
         {
             try
             {
     #endif // wxUSE_EXCEPTIONS
 
                 // this is the event loop itself
-                for ( ;; )
+                for( ; ; )
                 {
                     // generate and process idle events for as long as we don't
                     // have anything else to do
@@ -446,7 +446,7 @@ public:
                 // handlers endlessly generate new events but they shouldn't do
                 // this in a well-behaved program and we shouldn't just discard the
                 // events we already have, they might be important.
-                for ( ;; )
+                for( ; ; )
                 {
                     bool hasMoreEvents = false;
                     if ( wxTheApp && wxTheApp->HasPendingEvents() )

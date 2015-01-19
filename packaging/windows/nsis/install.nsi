@@ -126,12 +126,12 @@ Section $(TITLE_SEC01) SEC01
   File /nonfatal "..\AUTHORS.txt"
   File /nonfatal "..\COPYRIGHT.txt"
   File /nonfatal "..\license_for_documentation.txt"
-  SetOutPath "$INSTDIR\share\template"
-  File /nonfatal /r "..\share\template\*"
+  SetOutPath "$INSTDIR\share\kicad\template"
+  File /nonfatal /r "..\share\kicad\template\*"
   SetOutPath "$INSTDIR\bin"
   File /r "..\bin\*"
-  SetOutPath "$INSTDIR\share\internat"
-  File /r "..\share\internat\*"
+  SetOutPath "$INSTDIR\share\kicad\internat"
+  File /r "..\share\kicad\internat\*"
 SectionEnd
 
 Section $(TITLE_SEC02) SEC02
@@ -144,16 +144,16 @@ SectionEnd
 
 Section $(TITLE_SEC03) SEC03
   SetOverwrite try
-  SetOutPath "$INSTDIR\share\demos"
-  File /nonfatal /r "..\share\demos\*"
-  SetOutPath "$INSTDIR\doc\tutorials"
-  File /nonfatal /r "..\doc\tutorials\*"
+  SetOutPath "$INSTDIR\share\kicad\demos"
+  File /nonfatal /r "..\share\kicad\demos\*"
+  SetOutPath "$INSTDIR\share\doc\kicad\tutorials"
+  File /nonfatal /r "..\share\doc\kicad\tutorials\*"
 SectionEnd
 
 Section $(TITLE_SEC04) SEC04
   SetOverwrite try
-  SetOutPath "$INSTDIR\doc\help"
-  File /nonfatal /r "..\doc\help\*"
+  SetOutPath "$INSTDIR\share\doc\kicad\help"
+  File /nonfatal /r "..\share\doc\kicad\help\*"
 SectionEnd
 
 Section -CreateShortcuts
@@ -250,11 +250,11 @@ Section Uninstall
   RMDir /r "$INSTDIR\help"
   RMDir /r "$INSTDIR\share\library"
   RMDir /r "$INSTDIR\share\modules"
-  RMDir /r "$INSTDIR\share\template"
-  RMDir /r "$INSTDIR\share\internat"
-  RMDir /r "$INSTDIR\share\demos"
-  RMDir /r "$INSTDIR\doc\tutorials"
-  RMDir /r "$INSTDIR\doc\help"
+  RMDir /r "$INSTDIR\share\kicad\template"
+  RMDir /r "$INSTDIR\share\kicad\internat"
+  RMDir /r "$INSTDIR\share\kicad\demos"
+  RMDir /r "$INSTDIR\share\doc\kicad\tutorials"
+  RMDir /r "$INSTDIR\share\doc\kicad\help"
   RMDir /r "$INSTDIR\wings3d"
   ;don't remove $INSTDIR recursively just in case the user has installed it in c:\ or
   ;c:\program files as this would attempt to delete a lot more than just this package

@@ -37,6 +37,7 @@ class DIALOG_PAGES_SETTINGS: public DIALOG_PAGES_SETTINGS_BASE
 private:
     EDA_DRAW_FRAME* m_parent;
     BASE_SCREEN*    m_screen;
+    wxString        m_projectPath;      // the curr project path
     wxArrayString   m_pageFmt;          /// list of page sizes (not translated)
     bool            m_initialized;
     bool            m_localPrjConfigChanged;    /// the page layuout filename was changed
@@ -45,6 +46,8 @@ private:
     PAGE_INFO       m_pageInfo;         /// Temporary page info.
     bool            m_customFmt;        /// true if the page selection is custom
     TITLE_BLOCK     m_tb;               /// Temporary title block (basic inscriptions).
+    WORKSHEET_LAYOUT *m_pagelayout;     // the alternate and temporary page layout shown by the dialog
+                                        // when the initial one is replaced by a new one
 
 public:
     DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent );

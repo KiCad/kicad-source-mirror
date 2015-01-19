@@ -52,7 +52,7 @@
 SELECTION_TOOL::SELECTION_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
         SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" ),
-        DeselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.deselected" ),
+        UnselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.unselected" ),
         ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" ),
         m_frame( NULL ), m_additive( false ), m_multiple( false ),
         m_editModules( false ), m_locked( true )
@@ -111,7 +111,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
                 if( !m_additive )
                     clearSelection();
 
-                selectSingle( evt->Position() );
+                selectCursor( evt->Position() );
             }
         }
 
@@ -119,7 +119,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             if( m_selection.Empty() )
-                selectSingle( evt->Position() );
+                selectCursor( evt->Position() );
 
             generateMenu();
         }
@@ -128,7 +128,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
             if( m_selection.Empty() )
-                selectSingle( evt->Position() );
+                selectCursor( evt->Position() );
 
             m_toolMgr->RunAction( COMMON_ACTIONS::properties );
         }
@@ -143,7 +143,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             else if( m_selection.Empty() )
             {
                 // There is nothing selected, so try to select something
-                if( !selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ), false ) )
+                if( !selectCursor( getView()->ToWorld( getViewControls()->GetMousePosition() ), false ) )
                 {
                     // If nothings has been selected or user wants to select more
                     // draw the selection box
@@ -171,10 +171,10 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsAction( &COMMON_ACTIONS::selectionSingle ) )
+        else if( evt->IsAction( &COMMON_ACTIONS::selectionCursor ) )
         {
             // GetMousePosition() is used, as it is independent of snapping settings
-            selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+            selectCursor( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::find ) )
@@ -185,6 +185,16 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         else if( evt->IsAction( &COMMON_ACTIONS::findMove ) )
         {
             findMove( *evt );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::selectItem ) )
+        {
+            SelectItem( *evt );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::unselectItem ) )
+        {
+            UnselectItem( *evt );
         }
 
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO ||
@@ -221,11 +231,11 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 {
     if( aItem->IsSelected() )
     {
-        deselect( aItem );
+        unselect( aItem );
 
         // Inform other potentially interested tools
-        TOOL_EVENT deselectEvent( DeselectedEvent );
-        m_toolMgr->ProcessEvent( deselectEvent );
+        TOOL_EVENT unselectEvent( UnselectedEvent );
+        m_toolMgr->ProcessEvent( unselectEvent );
     }
     else
     {
@@ -245,7 +255,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 }
 
 
-bool SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAllowDisambiguation )
+bool SELECTION_TOOL::selectCursor( const VECTOR2I& aWhere, bool aAllowDisambiguation )
 {
     BOARD_ITEM* item;
     GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
@@ -395,8 +405,10 @@ bool SELECTION_TOOL::selectMultiple()
 void SELECTION_TOOL::setTransitions()
 {
     Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &SELECTION_TOOL::SingleSelection, COMMON_ACTIONS::selectionSingle.MakeEvent() );
+    Go( &SELECTION_TOOL::CursorSelection, COMMON_ACTIONS::selectionCursor.MakeEvent() );
     Go( &SELECTION_TOOL::ClearSelection, COMMON_ACTIONS::selectionClear.MakeEvent() );
+    Go( &SELECTION_TOOL::SelectItem, COMMON_ACTIONS::selectItem.MakeEvent() );
+    Go( &SELECTION_TOOL::UnselectItem, COMMON_ACTIONS::unselectItem.MakeEvent() );
     Go( &SELECTION_TOOL::find, COMMON_ACTIONS::find.MakeEvent() );
     Go( &SELECTION_TOOL::findMove, COMMON_ACTIONS::findMove.MakeEvent() );
 }
@@ -444,9 +456,9 @@ bool SELECTION_TOOL::CheckLock()
 }
 
 
-int SELECTION_TOOL::SingleSelection( TOOL_EVENT& aEvent )
+int SELECTION_TOOL::CursorSelection( TOOL_EVENT& aEvent )
 {
-    selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+    selectCursor( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
     setTransitions();
 
     return 0;
@@ -461,6 +473,43 @@ int SELECTION_TOOL::ClearSelection( TOOL_EVENT& aEvent )
     return 0;
 }
 
+int SELECTION_TOOL::SelectItem( TOOL_EVENT& aEvent )
+{
+    // Check if there is an item to be selected
+    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aEvent.Parameter() );
+
+    if( item )
+    {
+        select( item );
+
+        // Inform other potentially interested tools
+        TOOL_EVENT select( SelectedEvent );
+        m_toolMgr->ProcessEvent( select );
+    }
+
+    setTransitions();
+
+    return 0;
+}
+
+int SELECTION_TOOL::UnselectItem( TOOL_EVENT& aEvent )
+{
+    // Check if there is an item to be selected
+    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aEvent.Parameter() );
+
+    if( item )
+    {
+        unselect( item );
+
+        // Inform other potentially interested tools
+        TOOL_EVENT unselect( UnselectedEvent );
+        m_toolMgr->ProcessEvent( unselect );
+    }
+
+    setTransitions();
+
+    return 0;
+}
 
 void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
 {
@@ -525,8 +574,6 @@ void SELECTION_TOOL::clearSelection()
     // Inform other potentially interested tools
     TOOL_EVENT clearEvent( ClearedEvent );
     m_toolMgr->ProcessEvent( clearEvent );
-
-    return;
 }
 
 
@@ -734,17 +781,17 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 }
 
 
-void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
+void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
     // Modules are treated in a special way - when they are selected, we have to
-    // deselect all the parts that make the module, not the module itself
+    // unselect all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
-        module->RunOnChildren( boost::bind( &SELECTION_TOOL::deselectVisually, this, _1 ) );
+        module->RunOnChildren( boost::bind( &SELECTION_TOOL::unselectVisually, this, _1 ) );
     }
 
-    deselectVisually( aItem );
+    unselectVisually( aItem );
 
     int itemIdx = m_selection.items.FindItem( aItem );
     if( itemIdx >= 0 )
@@ -757,8 +804,8 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
     }
 
     // Inform other potentially interested tools
-    TOOL_EVENT deselected( DeselectedEvent );
-    m_toolMgr->ProcessEvent( deselected );
+    TOOL_EVENT unselected( UnselectedEvent );
+    m_toolMgr->ProcessEvent( unselected );
 }
 
 
@@ -772,7 +819,7 @@ void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem ) const
 }
 
 
-void SELECTION_TOOL::deselectVisually( BOARD_ITEM* aItem ) const
+void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem ) const
 {
     m_selection.group->Remove( aItem );
 

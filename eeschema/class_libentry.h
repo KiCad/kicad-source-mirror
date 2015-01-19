@@ -296,7 +296,7 @@ public:
      *  if aConvert == 0 Convert is non used
      *  Invisible fields are not taken in account
      **/
-    EDA_RECT GetBoundingBox( int aUnit, int aConvert ) const;
+    const EDA_RECT GetBoundingBox( int aUnit, int aConvert ) const;
 
     /**
      * Function GetBodyBoundingBox
@@ -307,7 +307,7 @@ public:
      *  if aConvert == 0 Convert is non used
      *  Fields are not taken in account
      **/
-    EDA_RECT GetBodyBoundingBox( int aUnit, int aConvert ) const;
+    const EDA_RECT GetBodyBoundingBox( int aUnit, int aConvert ) const;
 
     /**
      * Function SaveDateAndTime

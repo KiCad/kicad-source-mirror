@@ -6,7 +6,8 @@
 #   $1  wxWidgets/wxPython source folder (relative to current dir)
 #   $2  Target bin folder
 #   $3  KiCad source folder (relative to current dir)
-#   $4  Make options (e.g., "-j4")
+#   $4  OSX target version (e.g., "10.8")
+#   $5  Extra make options (e.g., "-j4")
 
 createPaths() {
     echo "*** Creating/wiping build and bin folder..."
@@ -59,10 +60,8 @@ wxWidgets_configure() {
         --with-zlib=builtin \
         --with-expat=builtin \
         --without-liblzma \
-        --with-macosx-version-min=10.5 \
+        --with-macosx-version-min=$3 \
         --enable-universal-binary=i386,x86_64 \
-        CPPFLAGS="-stdlib=libstdc++" \
-        LDFLAGS="-stdlib=libstdc++" \
         CC=clang \
         CXX=clang++
     if [ $? -ne 0 ];
@@ -119,16 +118,17 @@ wxPython_buildInst() {
 
 
 # check parameters
-if [ "$#" -lt 3 ];
+if [ "$#" -lt 4 ];
 then
     echo "OSX wxWidgets/wxPython build script"
     echo
     echo "Usage:"
-    echo "  osx_build_wx.sh <src> <bin> <kicad> <makeopts>"
+    echo "  osx_build_wx.sh <src> <bin> <kicad> <osxtarget> [makeopts]"
     echo "    <src>       wxWidgets/wxPython source folder"
     echo "    <bin>       Destination folder"
     echo "    <kicad>     KiCad folder"
-    echo "    <makeopts>  Optional: make options for building wxWidgets (e.g., -j4)"
+    echo "    <osxtarget> OSX target (e.g., 10.7)"
+    echo "    [makeopts]  Optional: make options for building wxWidgets (e.g., -j4)"
     exit 1
 fi
 
@@ -142,8 +142,8 @@ doPatch "$1" "$3/patches/wxwidgets-3.0.0_macosx_bug_15908.patch"
 doPatch "$1" "$3/patches/wxwidgets-3.0.0_macosx_soname.patch"
 
 # configure and build wxWidgets
-wxWidgets_configure "$1" "$2"
-wxWidgets_buildInst "$4"
+wxWidgets_configure "$1" "$2" "$4"
+wxWidgets_buildInst "$5"
 
 # check if source is wxPython
 if [ -d $1/wxPython ];

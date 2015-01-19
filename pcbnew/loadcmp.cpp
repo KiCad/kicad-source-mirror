@@ -521,6 +521,9 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
     if( !dstLibPath )
         return;             // user aborted in CreateNewLibrary()
 
+    wxBusyCursor dummy;
+    wxString msg;
+
     IO_MGR::PCB_FILE_T  dstType = IO_MGR::GuessPluginTypeFromLibPath( dstLibPath );
     IO_MGR::PCB_FILE_T  curType = IO_MGR::GuessPluginTypeFromLibPath( curLibPath );
 
@@ -530,10 +533,15 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
         PLUGIN::RELEASER dst( IO_MGR::PluginFind( dstType ) );
 
         wxArrayString mods = cur->FootprintEnumerate( curLibPath );
+
         for( unsigned i = 0;  i < mods.size();  ++i )
         {
             std::auto_ptr<MODULE> m( cur->FootprintLoad( curLibPath, mods[i] ) );
             dst->FootprintSave( dstLibPath, m.get() );
+
+            msg = wxString::Format( _( "Footprint '%s' saved" ),
+                                    GetChars( mods[i] ) );
+            SetStatusText( msg );
 
             // m is deleted here by auto_ptr.
         }
@@ -544,9 +552,11 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
         return;
     }
 
-    wxString msg = wxString::Format(
+    msg = wxString::Format(
                     _( "Footprint library '%s' saved as '%s'." ),
                     GetChars( curLibPath ), GetChars( dstLibPath ) );
 
     DisplayInfoMessage( this, msg );
+
+    SetStatusText( wxEmptyString );
 }

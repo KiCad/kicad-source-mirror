@@ -7,6 +7,15 @@
 # is due to be deprecated in 3.0+ soon
 #
 
+"""
+    @package
+    Generate a HTML BOM list.
+    Components are sorted and grouped by value
+    Fields are (if exist)
+    Ref, Quantity, Value, Part, Datasheet, Description, Vendor
+"""
+
+
 from __future__ import print_function
 import sys
 import xml.sax as sax

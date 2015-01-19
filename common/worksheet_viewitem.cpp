@@ -33,6 +33,7 @@
 #include <painter.h>
 #include <layers_id_colors_and_visibility.h>
 #include <boost/foreach.hpp>
+#include <class_page_info.h>
 
 using namespace KIGFX;
 

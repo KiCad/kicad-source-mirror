@@ -883,7 +883,7 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
             if( track->GetNetCode() < net_code )
                 continue;
             if( track->GetNetCode() > net_code )
-                break;;
+                break;
 
             if( !track->GetSubNet() || (track->GetSubNet() != subnet) )
             {
@@ -917,10 +917,11 @@ void PCB_BASE_FRAME::TraceAirWiresToTargets( wxDC* aDC )
         return;
 
     GRSetDrawMode( aDC, GR_XOR );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     for( int ii = 0; ii < (int) s_TargetsLocations.size(); ii++ )
     {
-        if( ii >= g_MaxLinksShowed )
+        if( ii >= displ_opts->m_MaxLinksShowed )
             break;
 
         GRLine( m_canvas->GetClipBox(), aDC, s_CursorPos, s_TargetsLocations[ii], 0, YELLOW );

@@ -43,6 +43,8 @@
 #include <invoke_pcb_dialog.h>
 #include <grid_tricks.h>
 #include <confirm.h>
+#include <wizard_add_fplib.h>
+
 
 /// grid column order is established by this sequence
 enum COL_ORDER
@@ -293,6 +295,10 @@ public:
         m_global( aGlobal ),
         m_project( aProject )
     {
+        // For user info, shows the table filenames:
+        m_PrjTableFilename->SetLabel( Prj().FootprintLibTblName() );
+        m_GblTableFilename->SetLabel( FP_LIB_TABLE::GetGlobalTableFileName() );
+
         // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
         // so make it a grid owned table.
         m_global_grid->SetTable(  new FP_TBL_MODEL( *aGlobal ),  true );
@@ -355,6 +361,11 @@ public:
         // event call later, but too late.
         wxAuiNotebookEvent uneventful;
         pageChangedHandler( uneventful );
+
+        // Gives a selection for each grid, mainly for delete lib button.
+        // Without that, we do not see what lib will be deleted
+        m_global_grid->SelectRow(0);
+        m_project_grid->SelectRow(0);
 
         // for ALT+A handling, we want the initial focus to be on the first selected grid.
         m_cur_grid->SetFocus();
@@ -512,11 +523,32 @@ private:
             // wx documentation is wrong, SetGridCursor does not make visible.
             m_cur_grid->MakeCellVisible( last_row, 0 );
             m_cur_grid->SetGridCursor( last_row, 0 );
+            m_cur_grid->SelectRow( m_cur_grid->GetGridCursorRow() );
         }
     }
 
     void deleteRowHandler( wxMouseEvent& event )
     {
+#if 1
+        int currRow = getCursorRow();
+        wxArrayInt selectedRows	= m_cur_grid->GetSelectedRows();
+
+        if( selectedRows.size() == 0 && getCursorRow() >= 0 )
+            selectedRows.Add( getCursorRow() );
+
+        std::sort( selectedRows.begin(), selectedRows.end() );
+
+        for( int ii = selectedRows.GetCount()-1; ii >= 0; ii-- )
+        {
+            int row = selectedRows[ii];
+            m_cur_grid->DeleteRows( row, 1 );
+        }
+
+        if( currRow >= m_cur_grid->GetNumberRows() )
+            m_cur_grid->SetGridCursor(m_cur_grid->GetNumberRows()-1, getCursorCol() );
+
+        m_cur_grid->SelectRow( m_cur_grid->GetGridCursorRow() );
+#else
         int rowCount = m_cur_grid->GetNumberRows();
         int curRow   = getCursorRow();
 
@@ -525,8 +557,11 @@ private:
             m_cur_grid->DeleteRows( curRow );
 
             if( curRow && curRow == rowCount - 1 )
+            {
                 m_cur_grid->SetGridCursor( curRow-1, getCursorCol() );
+            }
         }
+#endif
     }
 
     void moveUpHandler( wxMouseEvent& event )
@@ -557,6 +592,7 @@ private:
 
             m_cur_grid->MakeCellVisible( curRow, curCol );
             m_cur_grid->SetGridCursor( curRow, curCol );
+            m_cur_grid->SelectRow( getCursorRow() );
         }
     }
 
@@ -588,6 +624,7 @@ private:
 
             m_cur_grid->MakeCellVisible( curRow, curCol );
             m_cur_grid->SetGridCursor( curRow, curCol );
+            m_cur_grid->SelectRow( getCursorRow() );
         }
     }
 
@@ -622,6 +659,8 @@ private:
             }
         }
     }
+
+	void OnClickLibraryWizard( wxCommandEvent& event );
 
     void onCancelButtonClick( wxCommandEvent& event )
     {
@@ -719,7 +758,7 @@ private:
         // the current project.
         unique.insert( PROJECT_VAR_NAME );
         unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
-        // This special environment variable is used to locad 3d shapes
+        // This special environment variable is used to locate 3d shapes
         unique.insert( KISYS3DMOD );
         unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
 
@@ -755,6 +794,50 @@ private:
 };
 
 int DIALOG_FP_LIB_TABLE::m_pageNdx = 0;
+
+
+void DIALOG_FP_LIB_TABLE::OnClickLibraryWizard( wxCommandEvent& event )
+{
+    wxArrayString envVariableList;
+
+    // Build the environment variables in use:
+    for( int ii = 0; ii <  m_path_subs_grid->GetTable()->GetRowsCount(); ii ++ )
+        envVariableList.Add( m_path_subs_grid->GetCellValue( wxGridCellCoords( ii, 0 ) ) );
+
+    WIZARD_FPLIB_TABLE dlg( this, envVariableList );
+
+    if( ! dlg.RunWizard( dlg.GetFirstPage() ) )
+        return;     // Aborted by user
+
+    wxGrid* libgrid = m_cur_grid;
+    FP_TBL_MODEL*  tbl = (FP_TBL_MODEL*) libgrid->GetTable();
+
+    // Import fp library list
+    int idx = 0;
+    wxArrayString libDescr;   // Will contain nickname, URI, plugin
+
+    while( dlg.GetLibDescr( idx++, libDescr ) )
+    {
+        if( ! libDescr[0].IsEmpty() && m_cur_grid->AppendRows( 1 ) )
+        {
+            int last_row = libgrid->GetNumberRows() - 1;
+
+            // Add the nickname: currently make it from filename
+            tbl->SetValue( last_row, COL_NICKNAME, libDescr[0] );
+            // Add the full path:
+            tbl->SetValue( last_row, COL_URI, libDescr[1] );
+            // Add the plugin name:
+            tbl->SetValue( last_row, COL_TYPE, libDescr[2] );
+
+            libgrid->MakeCellVisible( last_row, 0 );
+            libgrid->SetGridCursor( last_row, 0 );
+        }
+
+        libDescr.Clear();
+    }
+
+    libgrid->SelectRow( libgrid->GetGridCursorRow() );
+}
 
 
 int InvokePcbLibTableEditor( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject )

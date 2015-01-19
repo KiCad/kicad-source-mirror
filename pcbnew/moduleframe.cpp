@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
@@ -113,6 +113,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
 
     // popup commands
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
@@ -160,6 +161,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI_RANGE( ID_MODEDIT_PAD_TOOL, ID_MODEDIT_PLACE_GRID_COORD,
                          FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
+                   FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI( ID_GEN_IMPORT_DXF_FILE,
                    FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
 
@@ -193,15 +196,23 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetGalCanvas( drawPanel );
 
     SetBoard( new BOARD() );
+    // In modedit, the default net clearance is not known.
+    // (it depends on the actual board)
+    // So we do not show the default clearance, by setting it to 0
+    // The footprint or pad specific clearance will be shown
+    GetBoard()->GetDesignSettings().GetDefault()->SetClearance(0);
 
     // restore the last footprint from the project, if any
     restoreLastFootprint();
 
     // Ensure all layers and items are visible:
+    // In footprint editor, some layers have no meaning or
+    // cannot be used, but we show all of them, at least to be able
+    // to edit a bad layer
     GetBoard()->SetVisibleAlls();
 
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), font.GetPointSize() );
+    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), font.GetPointSize(), true );
 
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
 
@@ -257,7 +268,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Add the layer manager ( most right side of pcbframe )
     m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 2 ) );
     // Layers manager is visible and served only in GAL canvas mode.
-    m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( parentFrame->IsGalCanvasActive() );
+    m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( true );   // parentFrame->IsGalCanvasActive() );
 
     // The left vertical toolbar (fast acces to display options)
     m_auimgr.AddPane( m_optionsToolBar,
@@ -295,15 +306,17 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
         m_toolManager->ResetTools( TOOL_BASE::RUN );
         m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+        UseGalCanvas( true );
+    }
 
+    if( m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).IsShown() )
+    {
         m_Layers->ReFill();
         m_Layers->ReFillRender();
 
         GetScreen()->m_Active_Layer = F_SilkS;
         m_Layers->SelectLayer( F_SilkS );
         m_Layers->OnLayerSelected();
-
-        UseGalCanvas( true );
     }
 
     m_auimgr.Update();
@@ -714,3 +727,30 @@ void FOOTPRINT_EDIT_FRAME::updateView()
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     m_toolManager->RunAction( COMMON_ACTIONS::zoomFitScreen, true );
 }
+
+
+bool FOOTPRINT_EDIT_FRAME::IsGridVisible() const
+{
+    return IsElementVisible( GRID_VISIBLE );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::SetGridVisibility(bool aVisible)
+{
+    SetElementVisibility( GRID_VISIBLE, aVisible );
+}
+
+
+bool FOOTPRINT_EDIT_FRAME::IsElementVisible( int aElement ) const
+{
+    return GetBoard()->IsElementVisible( aElement );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::SetElementVisibility( int aElement, bool aNewState )
+{
+    GetGalCanvas()->GetView()->SetLayerVisible( ITEM_GAL_LAYER( aElement ), aNewState );
+    GetBoard()->SetElementVisibility( aElement, aNewState );
+    m_Layers->SetRenderState( aElement, aNewState );
+}
+

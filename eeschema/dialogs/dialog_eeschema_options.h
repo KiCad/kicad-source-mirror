@@ -41,15 +41,31 @@ protected:
     TEMPLATE_FIELDNAMES templateFields;
 
     /** @brief The current row selected in the template fieldname wxListCtrl which is also in the
-        edit panel */
+     * edit panel
+     * selectedField = -1 when no valid item selected
+     */
     size_t selectedField;
 
-    /** @brief The selectedField value is only valid when this bool is set to true */
-    bool selectionValid;
+    /** @brief return true if aFieldId is a valid field selection
+     */
+    bool fieldSelectionValid( size_t aFieldId )
+    {
+        return ( aFieldId >= 0 ) && ( aFieldId < templateFields.size() );
+    }
 
-    /** @brief Set to true internally when OnTemplateFieldSelected() an event needs to be
-        ignored */
-    bool ignoreSelection;
+    /**
+     * Function OnEnterKey (virtual)
+     * Process the wxWidgets @a event produced when the user presses enter key
+     * in template fieldname text control or template fieldvalue text control
+     */
+    void OnEnterKey( wxCommandEvent& event );
+
+    /**
+     * Function OnVisibleFieldClick (virtual)
+     * Process the wxWidgets @a event produced when the user click on
+     * the check box which controls the field visibility
+     */
+	void OnVisibleFieldClick( wxCommandEvent& event );
 
     /**
      * Function OnAddButtonClick
@@ -60,7 +76,6 @@ protected:
      *
      * Adds a new template fieldname (with default values) to the template fieldnames data
      */
-
     void OnAddButtonClick( wxCommandEvent& event );
 
     /**

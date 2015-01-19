@@ -370,15 +370,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // initialize parameters in m_LayersManager
     LoadSettings( config() );
 
-    // Be sure options are updated
-    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
-
-    m_DisplayModEdge = DisplayOpt.DisplayModEdge;
-    m_DisplayModText = DisplayOpt.DisplayModText;
-
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
@@ -731,8 +722,7 @@ void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
     if( returncode == wxID_OK )     // New rules, or others changes.
     {
         ReCreateLayerBox();
-        updateTraceWidthSelectBox();
-        updateViaSizeSelectBox();
+        ReCreateAuxiliaryToolbar();
         OnModify();
     }
 }
@@ -876,8 +866,7 @@ void PCB_EDIT_FRAME::unitsChangeRefresh()
 {
     PCB_BASE_FRAME::unitsChangeRefresh();    // Update the grid size select box.
 
-    updateTraceWidthSelectBox();
-    updateViaSizeSelectBox();
+    ReCreateAuxiliaryToolbar();
 }
 
 
@@ -1064,8 +1053,7 @@ bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
 
     if( change )
     {
-        updateTraceWidthSelectBox();
-        updateViaSizeSelectBox();
+        ReCreateAuxiliaryToolbar();
     }
 
     return change;

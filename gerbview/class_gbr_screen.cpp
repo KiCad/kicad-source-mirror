@@ -46,6 +46,7 @@
 static const double gbrZoomList[] =
 {
     ZOOM_FACTOR( 0.5 ),
+    ZOOM_FACTOR( 0.75 ),
     ZOOM_FACTOR( 1.0 ),
     ZOOM_FACTOR( 1.5 ),
     ZOOM_FACTOR( 2.0 ),
@@ -58,7 +59,8 @@ static const double gbrZoomList[] =
     ZOOM_FACTOR( 35.0 ),
     ZOOM_FACTOR( 50.0 ),
     ZOOM_FACTOR( 80.0 ),
-    ZOOM_FACTOR( 120.0 ),
+    ZOOM_FACTOR( 110.0 ),
+    ZOOM_FACTOR( 150.0 ),
     ZOOM_FACTOR( 200.0 ),
     ZOOM_FACTOR( 350.0 ),
     ZOOM_FACTOR( 500.0 ),

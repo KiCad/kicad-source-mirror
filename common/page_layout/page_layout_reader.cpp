@@ -773,9 +773,9 @@ void WORKSHEET_LAYOUT::SetPageLayout( const char* aPageLayout, bool Append )
 
 #include <wx/file.h>
 
-// SetLayout() try to load a custom layout file,
-// currently defined by the environment variable KICAD_WKSFILE
-// (a *.kicad_wks file).
+// SetLayout() try to load the aFullFileName custom layout file,
+// if aFullFileName is empty, try the filename defined by the
+// environment variable KICAD_WKSFILE (a *.kicad_wks filename).
 // if does not exists, loads the default page layout.
 void WORKSHEET_LAYOUT::SetPageLayout( const wxString& aFullFileName, bool Append )
 {
@@ -783,8 +783,6 @@ void WORKSHEET_LAYOUT::SetPageLayout( const wxString& aFullFileName, bool Append
 
     if( !Append )
     {
-        fullFileName = MakeFullFileName( aFullFileName );
-
         if( fullFileName.IsEmpty() )
             wxGetEnv( wxT( "KICAD_WKSFILE" ), &fullFileName );
 
@@ -816,17 +814,19 @@ void WORKSHEET_LAYOUT::SetPageLayout( const wxString& aFullFileName, bool Append
 
     if( wksFile.Read( buffer, filelen ) != filelen )
         wxLogMessage( _("The file <%s> was not fully read"),
-            fullFileName.GetData() );
+                      fullFileName.GetData() );
     else
     {
         buffer[filelen]=0;
+
         if( ! Append )
             ClearList();
-        PAGE_LAYOUT_READER_PARSER lp_parser( buffer, fullFileName );
+
+        PAGE_LAYOUT_READER_PARSER pl_parser( buffer, fullFileName );
 
         try
         {
-            lp_parser.Parse( this );
+            pl_parser.Parse( this );
         }
         catch( const IO_ERROR& ioe )
         {

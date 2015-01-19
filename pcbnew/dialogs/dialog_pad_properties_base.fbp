@@ -8228,7 +8228,7 @@
                             <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                             <property name="proportion">1</property>
                             <object class="wxBoxSizer" expanded="1">
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">100,-1</property>
                                 <property name="name">bSizerDisplayPad</property>
                                 <property name="orient">wxVERTICAL</property>
                                 <property name="permission">none</property>

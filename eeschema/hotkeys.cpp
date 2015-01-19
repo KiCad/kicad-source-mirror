@@ -31,6 +31,7 @@
 #include <eeschema_id.h>
 #include <hotkeys.h>
 #include <wxEeschemaStruct.h>
+#include <class_drawpanel.h>
 
 #include <general.h>
 #include <libeditframe.h>
@@ -348,8 +349,6 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
 
-    cmd.SetEventObject( this );
-
     SCH_SCREEN* screen = GetScreen();
 
     // itemInEdit == false means no item currently edited. We can ask for editing a new item
@@ -393,12 +392,19 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_LEFT_CLICK:
-        OnLeftClick( aDC, aPosition );
-        break;
-
     case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
-        OnLeftClick( aDC, aPosition );
-        OnLeftDClick( aDC, aPosition );
+        if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
+        {
+            GetCanvas()->SetAutoPanRequest( false );
+            HandleBlockPlace( aDC );
+        }
+        else if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
+        {
+            OnLeftClick( aDC, aPosition );
+
+            if( hotKey->m_Idcommand == HK_LEFT_DCLICK )
+                OnLeftDClick( aDC, aPosition );
+        }
         break;
 
     case HK_ZOOM_IN:

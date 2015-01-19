@@ -319,10 +319,14 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         if(  GetBoard()->m_ZoneDescriptorList.size() > 0 )
         {
             aPopMenu->AppendSeparator();
+            msg = AddHotkeyName( _( "Fill or Refill All Zones" ),
+                                 g_Board_Editor_Hokeys_Descr, HK_ZONE_FILL_OR_REFILL );
             AddMenuItem( aPopMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
-                         _( "Fill or Refill All Zones" ), KiBitmap( fill_zone_xpm ) );
+                         msg, KiBitmap( fill_zone_xpm ) );
+            msg = AddHotkeyName( _( "Remove Filled Areas in All Zones" ),
+                                 g_Board_Editor_Hokeys_Descr, HK_ZONE_REMOVE_FILLED );
             AddMenuItem( aPopMenu, ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES,
-                         _( "Remove Filled Areas in All Zones" ), KiBitmap( zone_unfill_xpm ) );
+                         msg, KiBitmap( zone_unfill_xpm ) );
             aPopMenu->AppendSeparator();
         }
 

@@ -35,25 +35,12 @@
  * This class provides a custom wxValidator object for limiting the allowable characters when
  * defining footprint names.  Since the introduction of the PRETTY footprint library format,
  * footprint names cannot have any characters that would prevent file creation on any platform.
+ * The characters \/:*?|"<> are illegal and filtered by the validator.
  */
 class FILE_NAME_CHAR_VALIDATOR : public wxTextValidator
 {
 public:
-    FILE_NAME_CHAR_VALIDATOR( wxString* aValue = NULL ) :
-        wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
-    {
-        // The Windows (DOS) file system forbidden characters already include the forbidden
-        // file name characters for both Posix and OSX systems.  The characters \/:*?|"<> are
-        // illegal and filtered by the validator.
-        wxString illegalChars = wxFileName::GetForbiddenChars( wxPATH_DOS );
-        wxTextValidator nameValidator( wxFILTER_EXCLUDE_CHAR_LIST );
-        wxArrayString illegalCharList;
-
-        for( unsigned i = 0;  i < illegalChars.size();  i++ )
-            illegalCharList.Add( wxString( illegalChars[i] ) );
-
-        SetExcludes( illegalCharList );
-    }
+    FILE_NAME_CHAR_VALIDATOR( wxString* aValue = NULL );
 };
 
 /**
@@ -61,32 +48,11 @@ public:
  *
  * This class provides a custom wxValidator object for limiting the allowable characters when
  * defining file names with path, for instance in schematic sheet file names.
+ * The characters *?|"<> are illegal and filtered by the validator,
+ * but /\: are valid (\ and : only on Windows.)
  */
 class FILE_NAME_WITH_PATH_CHAR_VALIDATOR : public wxTextValidator
 {
 public:
-    FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString* aValue = NULL ) :
-        wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
-    {
-        // The Windows (DOS) file system forbidden characters already include the forbidden
-        // file name characters for both Posix and OSX systems.  The characters *?|"<> are
-        // illegal and filtered by the validator, but /\: are valid (\ and : only on Windows.
-        wxString illegalChars = wxFileName::GetForbiddenChars(wxPATH_DOS );
-        wxTextValidator nameValidator( wxFILTER_EXCLUDE_CHAR_LIST );
-        wxArrayString illegalCharList;
-
-        for( unsigned i = 0;  i < illegalChars.size();  i++ )
-        {
-            if( illegalChars[i] == '/' )
-                continue;
-
-#if defined (__WINDOWS__)
-            if( illegalChars[i] == '\\' || illegalChars[i] == ':' )
-                continue;
-#endif
-            illegalCharList.Add( wxString( illegalChars[i] ) );
-        }
-
-        SetExcludes( illegalCharList );
-    }
+    FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString* aValue = NULL );
 };

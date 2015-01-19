@@ -40,8 +40,6 @@
 
 bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
 {
-    int layer;
-
     if( GetGerberLayout() == NULL )
         return false;
 
@@ -53,14 +51,7 @@ bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
 
     GetGerberLayout()->m_Drawings.DeleteAll();
 
-    for( layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
-    {
-        if( g_GERBER_List[layer] )
-        {
-            g_GERBER_List[layer]->InitToolTable();
-            g_GERBER_List[layer]->ResetDefaultValues();
-        }
-    }
+    g_GERBER_List.ClearList();
 
     GetGerberLayout()->SetBoundingBox( EDA_RECT() );
 
@@ -98,11 +89,7 @@ void GERBVIEW_FRAME::Erase_Current_DrawLayer( bool query )
         item->DeleteStructure();
     }
 
-    if( g_GERBER_List[layer] )
-    {
-        g_GERBER_List[layer]->InitToolTable();
-        g_GERBER_List[layer]->ResetDefaultValues();
-    }
+    g_GERBER_List.ClearImage( layer );
 
     GetScreen()->SetModify();
     m_canvas->Refresh();

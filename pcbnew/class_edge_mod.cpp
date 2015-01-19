@@ -144,14 +144,13 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         return;
 
     EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 
-    if(( draw_mode & GR_ALLOW_HIGHCONTRAST ) && DisplayOpt.ContrastModeDisplay )
+    if(( draw_mode & GR_ALLOW_HIGHCONTRAST ) && displ_opts && displ_opts->m_ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
             ColorTurnToDarkDarkGray( &color );
     }
-
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
 
     ux0 = m_Start.x - offset.x;
     uy0 = m_Start.y - offset.y;
@@ -160,11 +159,11 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     dy = m_End.y - offset.y;
 
     GRSetDrawMode( DC, draw_mode );
-    typeaff = frame->m_DisplayModEdge;
+    typeaff = displ_opts ? displ_opts->m_DisplayModEdge : FILLED;
 
     if( IsCopperLayer( m_Layer ) )
     {
-        typeaff = frame->m_DisplayPcbTrackFill;
+        typeaff = displ_opts ? displ_opts->m_DisplayPcbTrackFill : FILLED;
 
         if( !typeaff )
             typeaff = SKETCH;

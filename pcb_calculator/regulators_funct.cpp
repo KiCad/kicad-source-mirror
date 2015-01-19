@@ -223,12 +223,12 @@ void PCB_CALCULATOR_FRAME::OnDataFileSelection( wxCommandEvent& event )
     wxString fullfilename = GetDataFilename();
 
     wxString wildcard;
-    wildcard.Printf( _("Pcb Calculator data  file (*.%s)|*.%s"),
+    wildcard.Printf( _("PCB Calculator data  file (*.%s)|*.%s"),
                      GetChars( DataFileNameExt ),
                      GetChars( DataFileNameExt ) );
 
     wxFileDialog dlg( m_panelRegulators,
-                      _("Select a Pcb Calculator data file"),
+                      _("Select a PCB Calculator data file"),
                       wxEmptyString, fullfilename,
                       wildcard, wxFD_OPEN );
 

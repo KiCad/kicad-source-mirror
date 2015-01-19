@@ -117,11 +117,12 @@ void PCB_EDIT_FRAME::OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent )
 void PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
 {
     int selected = aEvent.GetId() - ID_TB_OPTIONS_SHOW_ZONES;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
-    if( aEvent.IsChecked() && ( DisplayOpt.DisplayZonesMode == selected ) )
+    if( aEvent.IsChecked() && ( displ_opts->m_DisplayZonesMode == selected ) )
         return;
 
-    aEvent.Check( DisplayOpt.DisplayZonesMode == selected );
+    aEvent.Check( displ_opts->m_DisplayZonesMode == selected );
 }
 
 
@@ -147,9 +148,10 @@ void PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateShowModuleRatsnest( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( g_Show_Module_Ratsnest );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    aEvent.Check( displ_opts->m_Show_Module_Ratsnest );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
-                                        g_Show_Module_Ratsnest ?
+                                        displ_opts->m_Show_Module_Ratsnest ?
                                         _( "Hide footprint ratsnest" ) :
                                         _( "Show footprint ratsnest" ) );
 }
@@ -167,9 +169,10 @@ void PCB_EDIT_FRAME::OnUpdateAutoDeleteTrack( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( !m_DisplayViaFill );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    aEvent.Check( !displ_opts->m_DisplayViaFill );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                                        m_DisplayViaFill ?
+                                        displ_opts->m_DisplayViaFill ?
                                         _( "Show vias in outline mode" ) :
                                         _( "Show vias in fill mode" ) );
 }
@@ -177,9 +180,10 @@ void PCB_EDIT_FRAME::OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( !m_DisplayPcbTrackFill );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    aEvent.Check( !displ_opts->m_DisplayPcbTrackFill );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                                        m_DisplayPcbTrackFill ?
+                                        displ_opts->m_DisplayPcbTrackFill ?
                                         _( "Show tracks in outline mode" ) :
                                         _( "Show tracks in fill mode" ) );
 }
@@ -187,9 +191,10 @@ void PCB_EDIT_FRAME::OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( DisplayOpt.ContrastModeDisplay );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    aEvent.Check( displ_opts->m_ContrastModeDisplay );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
-                                        DisplayOpt.ContrastModeDisplay ?
+                                        displ_opts->m_ContrastModeDisplay ?
                                         _( "Normal contrast display mode" ) :
                                         _( "High contrast display mode" ) );
 }

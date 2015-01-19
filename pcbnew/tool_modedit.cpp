@@ -38,12 +38,6 @@
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 
-#ifdef __UNIX__
-#define LISTBOX_WIDTH 140
-#else
-#define LISTBOX_WIDTH 120
-#endif
-
 
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 {
@@ -240,6 +234,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
                                KiBitmap( show_mod_edge_xpm ),
                                _( "Show Edges Sketch" ), wxITEM_CHECK  );
 
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, wxEmptyString,
+                               KiBitmap( contrast_mode_xpm ),
+                               _( "Enable high contrast display mode" ),
+                               wxITEM_CHECK );
+
     m_optionsToolBar->Realize();
 }
 
@@ -261,9 +260,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     m_gridSelectBox = new wxComboBox( m_auxiliaryToolBar,
                                       ID_ON_GRID_SELECT,
                                       wxEmptyString,
-                                      wxPoint( -1, -1 ),
-                                      wxSize( LISTBOX_WIDTH, -1 ),
+                                      wxDefaultPosition, wxDefaultSize,
                                       0, NULL, wxCB_READONLY );
+    // Update tool bar to reflect setting.
+    updateGridSelectBox();
     m_auxiliaryToolBar->AddControl( m_gridSelectBox );
 
     // Zoom selection choice box.
@@ -271,14 +271,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     m_zoomSelectBox = new wxComboBox( m_auxiliaryToolBar,
                                       ID_ON_ZOOM_SELECT,
                                       wxEmptyString,
-                                      wxPoint( -1, -1 ),
-                                      wxSize( LISTBOX_WIDTH, -1 ),
+                                      wxDefaultPosition, wxDefaultSize,
                                       0, NULL, wxCB_READONLY );
-    m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
-
-    // Update tool bar to reflect setting.
-    updateGridSelectBox();
     updateZoomSelectBox();
+    m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_auxiliaryToolBar->Realize();

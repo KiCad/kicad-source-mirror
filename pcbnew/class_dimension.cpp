@@ -346,7 +346,8 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
     gcolor = brd->GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, mode_color );
-    typeaff = DisplayOpt.DisplayDrawItems;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+    typeaff = displ_opts ? displ_opts->m_DisplayDrawItems : FILLED;
     width   = m_Width;
 
     if( DC->LogicalToDeviceXRel( width ) <= MIN_DRAW_WIDTH )

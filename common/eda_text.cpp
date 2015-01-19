@@ -120,23 +120,23 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
 {
     EDA_RECT       rect;
     wxPoint        pos;
-    wxArrayString* list = NULL;
+    wxArrayString  strings;
     wxString       text = GetShownText();
     int            thickness = ( aThickness < 0 ) ? m_Thickness : aThickness;
     int            linecount = 1;
 
     if( m_MultilineAllowed )
     {
-        list = wxStringSplit( text, '\n' );
+        wxStringSplit( text, strings, '\n' );
 
-        if ( list->GetCount() )     // GetCount() == 0 for void strings
+        if ( strings.GetCount() )     // GetCount() == 0 for void strings
         {
-            if( aLine >= 0 && (aLine < (int)list->GetCount()) )
-                text = list->Item( aLine );
+            if( aLine >= 0 && (aLine < (int)strings.GetCount()) )
+                text = strings.Item( aLine );
             else
-                text = list->Item( 0 );
+                text = strings.Item( 0 );
 
-            linecount = list->GetCount();
+            linecount = strings.GetCount();
         }
     }
 
@@ -157,18 +157,16 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     rect.Move( wxPoint( 0, -extra_dy / 2 ) ); // move origin by the half extra interval
 
     // for multiline texts and aLine < 0, merge all rectangles
-    if( m_MultilineAllowed && list && aLine < 0 )
+    if( m_MultilineAllowed && aLine < 0 )
     {
-        for( unsigned ii = 1; ii < list->GetCount(); ii++ )
+        for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
-            text = list->Item( ii );
+            text = strings.Item( ii );
             dx   = LenSize( text );
             textsize.x  = std::max( textsize.x, dx );
             textsize.y += dy;
         }
     }
-
-    delete list;
 
     rect.SetSize( textsize );
 
@@ -272,19 +270,18 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
     if( m_MultilineAllowed )
     {
         std::vector<wxPoint> positions;
-        wxArrayString* list = wxStringSplit( GetShownText(), '\n' );
-        positions.reserve( list->Count() );
+        wxArrayString  strings;
+        wxStringSplit( GetShownText(), strings, '\n' );
+        positions.reserve( strings.Count() );
 
-        GetPositionsOfLinesOfMultilineText(positions, list->Count() );
+        GetPositionsOfLinesOfMultilineText(positions, strings.Count() );
 
-        for( unsigned ii = 0; ii < list->Count(); ii++ )
+        for( unsigned ii = 0; ii < strings.Count(); ii++ )
         {
-            wxString& txt = list->Item( ii );
+            wxString& txt = strings.Item( ii );
             drawOneLineOfText( aClipBox, aDC, aOffset, aColor,
                                aDrawMode, aFillMode, txt, positions[ii] );
         }
-
-        delete (list);
     }
     else
         drawOneLineOfText( aClipBox, aDC, aOffset, aColor,
@@ -489,22 +486,21 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
 
     if( IsMultilineAllowed() )
     {
-        wxArrayString* list = wxStringSplit( GetShownText(), '\n' );
+        wxArrayString strings_list;
+        wxStringSplit( GetShownText(), strings_list, wxChar('\n') );
         std::vector<wxPoint> positions;
-        positions.reserve( list->Count() );
-        GetPositionsOfLinesOfMultilineText( positions, list->Count() );
+        positions.reserve( strings_list.Count() );
+        GetPositionsOfLinesOfMultilineText( positions,strings_list.Count() );
 
-        for( unsigned ii = 0; ii < list->Count(); ii++ )
+        for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
-            wxString txt = list->Item( ii );
+            wxString txt = strings_list.Item( ii );
             DrawGraphicText( NULL, NULL, positions[ii], color,
                              txt, GetOrientation(), size,
                              GetHorizJustify(), GetVertJustify(),
                              GetThickness(), IsItalic(),
                              true, addTextSegmToBuffer );
         }
-
-        delete list;
     }
     else
     {

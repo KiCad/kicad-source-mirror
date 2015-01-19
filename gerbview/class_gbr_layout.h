@@ -24,7 +24,8 @@
 
 /**
  * @file class_gbr_layout.h
- * @brief Class CLASS_GBR_LAYOUT to handle a board.
+ * @brief Class CLASS_GBR_LAYOUT to handle info to draw/print loaded Gerber images
+ * and page frame reference
  */
 
 #ifndef CLASS_GBR_LAYOUT_H
@@ -49,19 +50,15 @@ class GBR_LAYOUT
 {
 private:
     EDA_RECT            m_BoundingBox;
-    PAGE_INFO           m_paper;
     TITLE_BLOCK         m_titles;
     wxPoint             m_originAxisPosition;
     std::bitset <GERBER_DRAWLAYERS_COUNT> m_printLayersMask; // When printing: the list of layers to print
 public:
 
-    DLIST<GERBER_DRAW_ITEM> m_Drawings;     // linked list of Gerber Items
+    DLIST<GERBER_DRAW_ITEM> m_Drawings;     // linked list of Gerber Items to draw
 
     GBR_LAYOUT();
     ~GBR_LAYOUT();
-
-    const PAGE_INFO&    GetPageSettings() const { return m_paper; }
-    void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
 
     const wxPoint&      GetAuxOrigin() const
     {

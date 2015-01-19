@@ -33,6 +33,7 @@
 #include <gestfich.h>
 #include <wxEeschemaStruct.h>
 #include <invoke_sch_dialog.h>
+#include <common.h>
 
 #include <eeschema_id.h>
 #include <general.h>
@@ -476,10 +477,13 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
 
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
-    // If empty, the default descr is loaded
+    // If empty, or not existing, the default descr is loaded
     WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    wxString pg_fullfilename = WORKSHEET_LAYOUT::MakeFullFileName(
+                                    BASE_SCREEN::m_PageLayoutDescrFileName,
+                                    Prj().GetProjectPath() );
 
-    pglayout.SetPageLayout( BASE_SCREEN::m_PageLayoutDescrFileName );
+    pglayout.SetPageLayout( pg_fullfilename );
 
     return isRead;
 }

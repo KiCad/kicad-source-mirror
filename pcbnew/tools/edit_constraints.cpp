@@ -98,8 +98,8 @@ EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
     EDIT_POINT& end = aLine.GetEnd();
 
     // Previous and next points, to make constraining lines (adjacent to the dragged line)
-    EDIT_POINT& prevOrigin = *aPoints.Previous( origin );
-    EDIT_POINT& nextEnd = *aPoints.Next( end );
+    EDIT_POINT& prevOrigin = *aPoints.Previous( origin, false );
+    EDIT_POINT& nextEnd = *aPoints.Next( end, false );
 
     // Constraints for segments adjacent to the dragged one
     m_originSideConstraint = new EC_LINE( origin, prevOrigin );
@@ -147,8 +147,8 @@ void EC_CONVERGING::Apply( EDIT_LINE& aHandle )
     m_originSideConstraint->Apply();
     m_endSideConstraint->Apply();
 
-    EDIT_POINT& prevOrigin = *m_editPoints.Previous( origin );
-    EDIT_POINT& nextEnd = *m_editPoints.Next( end );
+    EDIT_POINT& prevOrigin = *m_editPoints.Previous( origin, false );
+    EDIT_POINT& nextEnd = *m_editPoints.Next( end, false );
 
     // Two segments adjacent to the dragged segment
     SEG originSide = SEG( origin.GetPosition(), prevOrigin.GetPosition() );

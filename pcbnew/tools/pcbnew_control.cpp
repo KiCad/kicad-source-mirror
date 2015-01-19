@@ -148,9 +148,9 @@ int PCBNEW_CONTROL::TrackDisplayMode( TOOL_EVENT& aEvent )
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
 
     // Apply new display options to the GAL canvas
-    DisplayOpt.DisplayPcbTrackFill = !DisplayOpt.DisplayPcbTrackFill;
-    m_frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-    settings->LoadDisplayOptions( DisplayOpt );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+    displ_opts->m_DisplayPcbTrackFill = !displ_opts->m_DisplayPcbTrackFill;
+    settings->LoadDisplayOptions( displ_opts );
 
     for( TRACK* track = getModel<BOARD>()->m_Track; track; track = track->Next() )
     {
@@ -171,11 +171,11 @@ int PCBNEW_CONTROL::PadDisplayMode( TOOL_EVENT& aEvent )
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
-    DisplayOpt.DisplayPadFill = !DisplayOpt.DisplayPadFill;
-    m_frame->m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-    settings->LoadDisplayOptions( DisplayOpt );
+    displ_opts->m_DisplayPadFill = !displ_opts->m_DisplayPadFill;
+    settings->LoadDisplayOptions( displ_opts );
 
     for( MODULE* module = getModel<BOARD>()->m_Modules; module; module = module->Next() )
     {
@@ -196,11 +196,11 @@ int PCBNEW_CONTROL::ViaDisplayMode( TOOL_EVENT& aEvent )
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
-    DisplayOpt.DisplayViaFill = !DisplayOpt.DisplayViaFill;
-    m_frame->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    settings->LoadDisplayOptions( DisplayOpt );
+    displ_opts->m_DisplayViaFill = !displ_opts->m_DisplayViaFill;
+    settings->LoadDisplayOptions( displ_opts );
 
     for( TRACK* track = getModel<BOARD>()->m_Track; track; track = track->Next() )
     {
@@ -221,18 +221,19 @@ int PCBNEW_CONTROL::ZoneDisplayMode( TOOL_EVENT& aEvent )
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
     if( aEvent.IsAction( &COMMON_ACTIONS::zoneDisplayEnable ) )
-        DisplayOpt.DisplayZonesMode = 0;
+        displ_opts->m_DisplayZonesMode = 0;
     else if( aEvent.IsAction( &COMMON_ACTIONS::zoneDisplayDisable ) )
-        DisplayOpt.DisplayZonesMode = 1;
+        displ_opts->m_DisplayZonesMode = 1;
     else if( aEvent.IsAction( &COMMON_ACTIONS::zoneDisplayOutlines ) )
-        DisplayOpt.DisplayZonesMode = 2;
+        displ_opts->m_DisplayZonesMode = 2;
     else
         assert( false );
 
-    settings->LoadDisplayOptions( DisplayOpt );
+    settings->LoadDisplayOptions( displ_opts );
 
     BOARD* board = getModel<BOARD>();
     for( int i = 0; i < board->GetAreaCount(); ++i )
@@ -251,9 +252,10 @@ int PCBNEW_CONTROL::HighContrastMode( TOOL_EVENT& aEvent )
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
-    DisplayOpt.ContrastModeDisplay = !DisplayOpt.ContrastModeDisplay;
-    settings->LoadDisplayOptions( DisplayOpt );
+    displ_opts->m_ContrastModeDisplay = !displ_opts->m_ContrastModeDisplay;
+    settings->LoadDisplayOptions( displ_opts );
     m_frame->GetGalCanvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
 
     setTransitions();

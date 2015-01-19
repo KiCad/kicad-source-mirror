@@ -64,50 +64,49 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Menu File:
     wxMenu* filesMenu = new wxMenu;
 
-    // Open
-    AddMenuItem( filesMenu,
-                 ID_LOAD_PROJECT,
-                 _( "&Open Netlist" ), LOAD_FILE_HELP, KiBitmap( open_document_xpm ) );
+    // Open files can be used only outside a project, because opening a netlist
+    // which is not the project netlist is a non sense.
+    if( Kiface().IsSingle() )
+    {
+        AddMenuItem( filesMenu, ID_LOAD_PROJECT,
+                     _( "&Open Netlist" ), LOAD_FILE_HELP, KiBitmap( open_document_xpm ) );
 
-    // Open Recent submenu
-    static wxMenu* openRecentMenu;
+        // Open Recent submenu
+        static wxMenu* openRecentMenu;
 
-    // Add this menu to list menu managed by m_fileHistory
-    // (the file history will be updated when adding/removing files in history
-    if( openRecentMenu )
-        Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
+        // Add this menu to list menu managed by m_fileHistory
+        // (the file history will be updated when adding/removing files in history
+        if( openRecentMenu )
+            Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
 
-    openRecentMenu = new wxMenu();
+        openRecentMenu = new wxMenu();
 
-    Kiface().GetFileHistory().UseMenu( openRecentMenu );
-    Kiface().GetFileHistory().AddFilesToMenu();
+        Kiface().GetFileHistory().UseMenu( openRecentMenu );
+        Kiface().GetFileHistory().AddFilesToMenu();
 
-    AddMenuItem( filesMenu, openRecentMenu, -1,
-                 _( "Open &Recent" ),
-                 _( "Open recent netlist" ),
-                 KiBitmap( open_project_xpm ) );
+        AddMenuItem( filesMenu, openRecentMenu, -1,
+                     _( "Open &Recent" ),
+                     _( "Open recent netlist" ),
+                     KiBitmap( open_project_xpm ) );
 
-    // Separator
-    filesMenu->AppendSeparator();
+        // Separator
+        filesMenu->AppendSeparator();
+    }
 
     // Save the .cmp file
-    AddMenuItem( filesMenu,
-                 wxID_SAVE,
-                 _( "&Save\tCtrl+S" ), SAVE_HLP_MSG, KiBitmap( save_xpm ) );
+    AddMenuItem( filesMenu, wxID_SAVE,
+                 _( "&Save Cmp File\tCtrl+S" ), SAVE_HLP_MSG, KiBitmap( save_xpm ) );
 
     // Save as the .cmp file
-    AddMenuItem( filesMenu,
-                 wxID_SAVEAS,
-                 _( "Save &As...\tCtrl+Shift+S" ), SAVE_AS_HLP_MSG, KiBitmap( save_xpm ) );
+    AddMenuItem( filesMenu, wxID_SAVEAS,
+                 _( "Save Cmp File &As...\tCtrl+Shift+S" ), SAVE_AS_HLP_MSG, KiBitmap( save_xpm ) );
 
     // Separator
     filesMenu->AppendSeparator();
 
     // Quit
-    AddMenuItem( filesMenu,
-                 wxID_EXIT,
-                 _( "&Quit" ),
-                 _( "Quit CvPcb" ),
+    AddMenuItem( filesMenu, wxID_EXIT,
+                 _( "&Quit" ), _( "Quit CvPcb" ),
                  KiBitmap( exit_xpm ) );
 
     // Menu Preferences:
@@ -115,6 +114,12 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
                  _( "Edit Li&brary Table" ), _( "Setup footprint libraries" ),
+                 KiBitmap( library_table_xpm ) );
+
+    AddMenuItem( preferencesMenu, ID_CVPCB_EQUFILES_LIST_EDIT,
+                 _( "Edit &Equ Files List" ),
+                 _( "Setup equ files list (.equ files)\n"
+                    "They are files which give the footprint name from the component value"),
                  KiBitmap( library_table_xpm ) );
 
     // Language submenu
@@ -133,11 +138,6 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     AddMenuItem( preferencesMenu, ID_SAVE_PROJECT,
                  _( "&Save Project File" ),
                  _( "Save changes to the project configuration file" ),
-                 KiBitmap( save_setup_xpm ) );
-
-    AddMenuItem( preferencesMenu, ID_SAVE_PROJECT_AS,
-                 _( "&Save Project File As" ),
-                 _( "Save changes to a new project configuration file" ),
                  KiBitmap( save_setup_xpm ) );
 
     // Menu Help:

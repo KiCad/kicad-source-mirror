@@ -60,22 +60,86 @@ EDIT_POINT* EDIT_POINTS::FindPoint( const VECTOR2I& aLocation )
     std::deque<EDIT_LINE>::iterator lit, litEnd;
     for( lit = m_lines.begin(), litEnd = m_lines.end(); lit != litEnd; ++lit )
     {
-        EDIT_LINE& point = *lit;
+        EDIT_LINE& line = *lit;
 
-        if( point.WithinPoint( aLocation, size ) )
-            return &point;
+        if( line.WithinPoint( aLocation, size ) )
+            return &line;
     }
 
     return NULL;
 }
 
 
-EDIT_POINT* EDIT_POINTS::Previous( const EDIT_POINT& aPoint )
+int EDIT_POINTS::GetContourStartIdx( int aPointIdx ) const
+{
+    int lastIdx = 0;
+
+    BOOST_FOREACH( int idx, m_contours )
+    {
+        if( idx >= aPointIdx )
+            return lastIdx;
+
+        lastIdx = idx + 1;
+    }
+
+    return lastIdx;
+}
+
+
+int EDIT_POINTS::GetContourEndIdx( int aPointIdx ) const
+{
+    BOOST_FOREACH( int idx, m_contours )
+    {
+        if( idx >= aPointIdx )
+            return idx;
+    }
+
+    return m_points.size() - 1;
+}
+
+
+bool EDIT_POINTS::IsContourStart( int aPointIdx ) const
+{
+    BOOST_FOREACH( int idx, m_contours )
+    {
+        if( idx + 1 == aPointIdx )
+            return true;
+
+        // the list is sorted, so we cannot expect it any further
+        if( idx > aPointIdx )
+            break;
+    }
+
+    return ( aPointIdx == 0 );
+}
+
+
+bool EDIT_POINTS::IsContourEnd( int aPointIdx ) const
+{
+    BOOST_FOREACH( int idx, m_contours )
+    {
+        if( idx == aPointIdx )
+            return true;
+
+        // the list is sorted, so we cannot expect it any further
+        if( idx > aPointIdx )
+            break;
+    }
+
+    // the end of the list surely is the end of a contour
+    return ( aPointIdx == (int) m_points.size() - 1 );
+}
+
+
+EDIT_POINT* EDIT_POINTS::Previous( const EDIT_POINT& aPoint, bool aTraverseContours )
 {
     for( unsigned int i = 0; i < m_points.size(); ++i )
     {
         if( m_points[i] == aPoint )
         {
+            if( !aTraverseContours && IsContourStart( i ) )
+                return &m_points[GetContourEndIdx( i )];
+
             if( i == 0 )
                 return &m_points[m_points.size() - 1];
             else
@@ -104,12 +168,15 @@ EDIT_LINE* EDIT_POINTS::Previous( const EDIT_LINE& aLine )
 }
 
 
-EDIT_POINT* EDIT_POINTS::Next( const EDIT_POINT& aPoint )
+EDIT_POINT* EDIT_POINTS::Next( const EDIT_POINT& aPoint, bool aTraverseContours )
 {
     for( unsigned int i = 0; i < m_points.size(); ++i )
     {
         if( m_points[i] == aPoint )
         {
+            if( !aTraverseContours && IsContourEnd( i ) )
+                return &m_points[GetContourStartIdx( i )];
+
             if( i == m_points.size() - 1 )
                 return &m_points[0];
             else
@@ -152,7 +219,9 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
         aGal->DrawRectangle( point.GetPosition() - size / 2, point.GetPosition() + size / 2 );
 
     BOOST_FOREACH( const EDIT_LINE& line, m_lines )
+    {
         aGal->DrawCircle( line.GetPosition(), size / 2 );
+    }
 
     aGal->PopDepth();
 }

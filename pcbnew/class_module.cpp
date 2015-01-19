@@ -45,7 +45,6 @@
 #include <3d_struct.h>
 #include <msgpanel.h>
 
-#include <drag.h>
 #include <class_board.h>
 #include <class_edge_mod.h>
 #include <class_module.h>

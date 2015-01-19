@@ -1,6 +1,7 @@
 include_directories(
     "${CMAKE_SOURCE_DIR}/lib_dxf"
     "${CMAKE_SOURCE_DIR}/utils/idftools"
+    ${OPENGL_INCLUDE_DIR}
   )
 
 link_directories(

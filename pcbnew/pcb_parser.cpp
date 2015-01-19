@@ -1135,12 +1135,14 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             {
                 PCB_PLOT_PARAMS plotParams;
                 PCB_PLOT_PARAMS_PARSER parser( reader );
+                // parser must share the same current line as our current PCB parser
+                // synchronize it.
+                parser.SyncLineReaderWith( *this );
 
                 plotParams.Parse( &parser );
-                m_board->SetPlotOptions( plotParams );
+                SyncLineReaderWith( parser );
 
-                // I don't know why but this seems to fix a problem in PCB_PLOT_PARAMS::Parse().
-                NextTok();
+                m_board->SetPlotOptions( plotParams );
             }
             break;
 

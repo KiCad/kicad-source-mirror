@@ -49,8 +49,13 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                       wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    m_mainToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString,
-                            KiBitmap( open_document_xpm ), LOAD_FILE_HELP );
+    // Open files can be used only outside a project, because opening a netlist
+    // which is not the project netlist is a non sense.
+    if( Kiface().IsSingle() )
+    {
+        m_mainToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString,
+                                KiBitmap( open_document_xpm ), LOAD_FILE_HELP );
+    }
 
     m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiBitmap( save_xpm ), SAVE_HLP_MSG );
 
@@ -64,10 +69,6 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             KiBitmap( show_footprint_xpm ),
                             _( "View selected footprint" ) );
 
-    m_mainToolBar->AddTool( ID_CVPCB_AUTO_ASSOCIE, wxEmptyString,
-                            KiBitmap( auto_associe_xpm ),
-                            _( "Perform automatic footprint association" ) );
-
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_GOTO_PREVIOUSNA, wxEmptyString,
                             KiBitmap( left_xpm ),
@@ -78,6 +79,10 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             _( "Select next unlinked component" ) );
 
     m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_CVPCB_AUTO_ASSOCIE, wxEmptyString,
+                            KiBitmap( auto_associe_xpm ),
+                            _( "Perform automatic footprint association" ) );
+
     m_mainToolBar->AddTool( ID_CVPCB_DEL_ASSOCIATIONS, wxEmptyString,
                             KiBitmap( delete_association_xpm ),
                             _( "Delete all associations (links)" ) );
@@ -87,7 +92,6 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             KiBitmap( datasheet_xpm ),
                             _( "Display footprint documentation" ) );
 
-    m_mainToolBar->AddSeparator();
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
                             KiBitmap( module_filtered_list_xpm ),

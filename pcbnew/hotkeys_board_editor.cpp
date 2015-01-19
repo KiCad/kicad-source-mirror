@@ -41,6 +41,7 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
+#include <class_zone.h>
 
 /* How to add a new hotkey:
  * see hotkeys.cpp
@@ -117,6 +118,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     MODULE* module = NULL;
     int evt_type = 0;       //Used to post a wxCommandEvent on demand
     PCB_SCREEN* screen = GetScreen();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     /* Convert lower to upper case
      * (the usual toupper function has problem with non ascii codes like function keys
@@ -361,8 +363,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_TRACK_DISPLAY_MODE:
-        DisplayOpt.DisplayPcbTrackFill = !DisplayOpt.DisplayPcbTrackFill;
-        m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
+        displ_opts->m_DisplayPcbTrackFill = !displ_opts->m_DisplayPcbTrackFill;
         m_canvas->Refresh();
         break;
 
@@ -456,7 +457,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( !itemCurrentlyEdited ) // no track in progress: switch layer only
         {
             Other_Layer_Route( NULL, aDC );
-            if( DisplayOpt.ContrastModeDisplay )
+            if( displ_opts->m_ContrastModeDisplay )
                 m_canvas->Refresh();
             break;
         }
@@ -551,7 +552,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_HIGHCONTRAST_MODE: // switch to high contrast mode and refresh the canvas
-        DisplayOpt.ContrastModeDisplay = !DisplayOpt.ContrastModeDisplay;
+        displ_opts->m_ContrastModeDisplay = !displ_opts->m_ContrastModeDisplay;
         m_canvas->Refresh();
         break;
 
@@ -566,6 +567,13 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     case HK_CANVAS_DEFAULT:
         evt_type = ID_MENU_CANVAS_DEFAULT;
         break;
+    case HK_ZONE_FILL_OR_REFILL:
+        evt_type = ID_POPUP_PCB_FILL_ALL_ZONES;
+        break;
+    case HK_ZONE_REMOVE_FILLED:
+        evt_type = ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES;
+        break;
+
     }
 
     if( evt_type != 0 )

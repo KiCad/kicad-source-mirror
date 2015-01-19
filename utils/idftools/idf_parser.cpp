@@ -2306,7 +2306,7 @@ void IDF3_BOARD::readBoardFile( const std::string& aFileName, bool aNoSubstitute
 
     try
     {
-        brd.open( aFileName.c_str(), std::ios_base::in );
+        brd.open( aFileName.c_str(), std::ios_base::in | std::ios_base::binary );
 
         if( !brd.is_open() )
         {
@@ -2682,7 +2682,7 @@ void IDF3_BOARD::readLibFile( const std::string& aFileName )
 
     try
     {
-        lib.open( aFileName.c_str(), std::ios_base::in );
+        lib.open( aFileName.c_str(), std::ios_base::in | std::ios_base::binary );
 
         IDF3::FILE_STATE state = IDF3::FILE_START;
 
@@ -3883,7 +3883,7 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( wxString aFullFileName )
 
     try
     {
-        model.open( fname.c_str(), std::ios_base::in );
+        model.open( fname.c_str(), std::ios_base::in | std::ios_base::binary );
 
 
         std::string iline;      // the input line
