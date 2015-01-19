@@ -218,7 +218,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
 
             bool equ_is_unique = true;
             unsigned next = idx+1;
-            unsigned previous = idx-1;
+            int  previous = idx-1;
 
             if( next < equiv_List.size() &&
                 equivItem.m_ComponentValue == equiv_List[next].m_ComponentValue )
