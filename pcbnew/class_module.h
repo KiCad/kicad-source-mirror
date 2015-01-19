@@ -281,6 +281,18 @@ public:
                const wxPoint&  aOffset = ZeroOffset );
 
     /**
+     * Function DrawOutlinesWhenMoving
+     * draws in XOR mode the footprint when moving it to the \a aDC.
+     * To speed up the drawing, only a simplified shape is drawn
+     * @param aPanel = draw panel, Used to know the clip box
+     * @param aDC = Current Device Context
+     * @param aMoveVector = the offset between the curr position and
+     * the draw position.
+     */
+    void DrawOutlinesWhenMoving( EDA_DRAW_PANEL* aPanel,
+               wxDC* aDC, const wxPoint&  aMoveVector );
+
+    /**
      * function ReadandInsert3DComponentShape
      * read the 3D component shape(s) of the footprint (physical shape)
      * and insert mesh in gl list
