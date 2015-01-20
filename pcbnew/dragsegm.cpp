@@ -320,16 +320,16 @@ void AddSegmentToDragList( int flag, TRACK* aTrack )
     DRAG_SEGM_PICKER wrapper( aTrack );
 
     if( flag & STARTPOINT )
-        wrapper.m_TempFlags |= 1;
-
-    if( flag & ENDPOINT )
-        wrapper.m_TempFlags |= 2;
-
-    if( flag & STARTPOINT )
+    {
+        wrapper.m_TempFlags |= STARTPOINT;
         aTrack->SetFlags( STARTPOINT );
+    }
 
     if( flag & ENDPOINT )
+    {
+        wrapper.m_TempFlags |= ENDPOINT;
         aTrack->SetFlags( ENDPOINT );
+    }
 
     g_DragSegmentList.push_back( wrapper );
 }
