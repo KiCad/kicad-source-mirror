@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013-2015 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -72,7 +72,6 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
 
     m_Ident = aFrameType;
     m_mainToolBar = NULL;
-    m_FrameIsActive = true;
     m_hasAutoSave = false;
     m_autoSaveState = false;
     m_autoSaveInterval = -1;
