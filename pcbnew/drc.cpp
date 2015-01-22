@@ -2,9 +2,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -564,6 +564,10 @@ void DRC::testZones()
     // if a netcode is < 0 the netname was not found when reading a netlist
     // if a netcode is == 0 the netname is void, and the zone is not connected.
     // This is allowed, but i am not sure this is a good idea
+    //
+    // In recent Pcbnew versions, the netcode is always >= 0, but an internal net name
+    // is stored, and initalized from the file or the zone properpies editor.
+    // if it differs from the net name from net code, there is a DRC issue
     for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* test_area = m_pcb->GetArea( ii );
@@ -571,13 +575,21 @@ void DRC::testZones()
         if( !test_area->IsOnCopperLayer() )
             continue;
 
-        if( test_area->GetNetCode() < 0 )
+        int netcode = test_area->GetNetCode();
+
+        // a netcode < 0 or > 0 and no pad in net  is a error or strange
+        // perhaps a "dead" net, which happens when all pads in this net were removed
+        // Remark: a netcode < 0 should not happen (this is more a bug somewhere)
+        int pads_in_net = (test_area->GetNetCode() > 0) ?
+                            test_area->GetNet()->GetNodesCount() : 1;
+
+        if( ( netcode < 0 ) || pads_in_net == 0 )
         {
             m_currentMarker = fillMarker( test_area,
-                                          DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE, m_currentMarker );
+                                          DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE, m_currentMarker );
             m_pcb->Add( m_currentMarker );
             m_mainWindow->GetGalCanvas()->GetView()->Add( m_currentMarker );
-            m_currentMarker = 0;
+            m_currentMarker = NULL;
         }
     }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,8 +75,10 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Copper area inside copper area" ) );
     case COPPERAREA_CLOSE_TO_COPPERAREA:
         return wxString( _( "Copper areas intersect or are too close" ) );
-    case DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE:
-        return wxString( _( "Copper area has a nonexistent net name" ) );
+
+    case DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE:
+        return wxString( _( "Copper area belongs a net which has no pads. This is strange" ) );
+
     case DRCE_HOLE_NEAR_PAD:
         return wxString( _( "Hole near pad" ) );
     case DRCE_HOLE_NEAR_TRACK:
