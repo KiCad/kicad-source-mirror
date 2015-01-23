@@ -51,7 +51,7 @@ int main( int argc, char** argv )
     SPECCTRA_DB     db;
     bool            failed = false;
 
-    SetLocaleTo_C_standard( );    // Switch the locale to standard C
+    LOCALE_IO toggle;   // Temporary switch the locale to standard C to r/w floats
 
     if( argc == 2 )
     {
@@ -87,8 +87,6 @@ int main( int argc, char** argv )
     DSN::SESSION* ses = db.GetSESSION();
     ses->Format( &db, 0 );
 #endif
-
-    SetLocaleTo_Default( );      // revert to the current locale
 }
 
 //-----<dummy code>---------------------------------------------------

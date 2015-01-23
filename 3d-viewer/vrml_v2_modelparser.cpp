@@ -88,8 +88,7 @@ void VRML2_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
 
     glScalef( matScale.x, matScale.y, matScale.z );
 
-    // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    SetLocaleTo_C_standard();
+    LOCALE_IO toggle;   // Temporary switch the locale to standard C to r/w floats
 
     childs.clear();
 
@@ -117,7 +116,6 @@ void VRML2_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
     }
 
     fclose( m_file );
-    SetLocaleTo_Default();       // revert to the current locale
 
 
     // DBG( printf( "chils size:%lu\n", childs.size() ) );

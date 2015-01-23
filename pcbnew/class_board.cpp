@@ -1212,10 +1212,12 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
 {
     // the first valid netcode is 1 and the last is m_NetInfo.GetCount()-1.
-    // zero is reserved for "no connection" and is not used.
+    // zero is reserved for "no connection" and is not actually a net.
     // NULL is returned for non valid netcodes
 
-    if( aNetcode == NETINFO_LIST::UNCONNECTED )
+    wxASSERT( m_NetInfo.GetNetCount() > 0 );    // net zero should exist
+
+    if( aNetcode == NETINFO_LIST::UNCONNECTED && m_NetInfo.GetNetCount() == 0 )
         return &NETINFO_LIST::ORPHANED;
     else
         return m_NetInfo.GetNetItem( aNetcode );

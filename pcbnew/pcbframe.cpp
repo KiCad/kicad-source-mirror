@@ -754,11 +754,6 @@ void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
     aCfg->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
     aCfg->Read( SHOW_LAYER_MANAGER_TOOLS, &m_show_layer_manager_tools );
-
-    // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
-    // when reading doubles in cfg,
-    // but forget to back to current locale. So we call SetLocaleTo_Default
-    SetLocaleTo_Default( );
 }
 
 
