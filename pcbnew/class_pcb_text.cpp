@@ -74,7 +74,7 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
     m_Bold      = source->m_Bold;
     m_HJustify  = source->m_HJustify;
     m_VJustify  = source->m_VJustify;
-    m_MultilineAllowed = m_MultilineAllowed;
+    m_MultilineAllowed = source->m_MultilineAllowed;
 
     m_Text = source->m_Text;
 }

@@ -65,7 +65,7 @@ void GRID_TRICKS::getSelectedArea()
     wxArrayInt  cols = m_grid->GetSelectedCols();
     wxArrayInt  rows = m_grid->GetSelectedRows();
 
-    DBG(printf("topLeft.Count():%zd botRight:Count():%zd\n", topLeft.Count(), botRight.Count() );)
+    DBG(printf("topLeft.Count():%d botRight:Count():%d\n", int( topLeft.Count() ), int( botRight.Count() ) );)
 
     if( topLeft.Count() && botRight.Count() )
     {

@@ -37,6 +37,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <potracelib.h>
 #include <auxiliary.h>
+#include <common.h>
 
 #include <bitmap2component.h>
 
@@ -158,6 +159,12 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
     st = potrace_trace( param, aPotrace_bitmap );
     if( !st || st->status != POTRACE_STATUS_OK )
     {
+        if( st )
+        {
+            potrace_state_free( st );
+        }
+        potrace_param_free( param );
+
         fprintf( stderr, "Error tracing bitmap: %s\n", strerror( errno ) );
         return 1;
     }
@@ -431,7 +438,7 @@ void BITMAPCONV_INFO::CreateOutputFile( BMP2CMP_MOD_LAYER aModLayer )
 
     potrace_dpoint_t( *c )[3];
 
-    setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C
+    LOCALE_IO toggle;   // Temporary switch the locale to standard C to r/w floats
 
     // The layer name has meaning only for .kicad_mod files.
     // For these files the header creates 2 invisible texts: value and ref
@@ -524,8 +531,6 @@ void BITMAPCONV_INFO::CreateOutputFile( BMP2CMP_MOD_LAYER aModLayer )
     }
 
     OuputFileEnd();
-
-    setlocale( LC_NUMERIC, "" );      // revert to the current locale
 }
 
 

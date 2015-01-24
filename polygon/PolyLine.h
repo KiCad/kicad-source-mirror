@@ -355,14 +355,14 @@ public:
     /**
      * @return the full bounding box of polygons
      */
-    EDA_RECT    GetBoundingBox();
+    const EDA_RECT GetBoundingBox();
 
     /**
      * @return the bounding box of a given polygon
      * @param icont = the index of the polygon contour
      * (0 = main contour, 1 ... n = other contours, usually holes)
      */
-    EDA_RECT    GetBoundingBox( int icont );
+    const EDA_RECT GetBoundingBox( int icont );
 
     void        Copy( const CPolyLine* src );
     bool        TestPointInside( int x, int y );

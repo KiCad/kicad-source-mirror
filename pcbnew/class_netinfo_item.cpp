@@ -80,10 +80,7 @@ void NETINFO_ITEM::Draw( EDA_DRAW_PANEL* panel,
 
 void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
-    int       count;
     wxString  txt;
-    MODULE*   module;
-    D_PAD*    pad;
     double    lengthnet = 0.0;      // This  is the lenght of tracks on pcb
     double    lengthPadToDie = 0.0; // this is the lenght of internal ICs connections
 
@@ -92,12 +89,17 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     txt.Printf( wxT( "%d" ), GetNet() );
     aList.push_back( MSG_PANEL_ITEM( _( "Net Code" ), txt, RED ) );
 
-    count  = 0;
-    module = m_parent->GetBoard()->m_Modules;
+    // Warning: for netcode == NETINFO_LIST::ORPHANED, the parent or the board
+    // can be NULL
+    BOARD * board = m_parent ? m_parent->GetBoard() : NULL;
 
-    for( ; module != 0; module = module->Next() )
+    if( board == NULL )
+        return;
+
+    int count = 0;
+    for( MODULE* module = board->m_Modules; module != NULL; module = module->Next() )
     {
-        for( pad = module->Pads(); pad != 0; pad = pad->Next() )
+        for( D_PAD* pad = module->Pads(); pad != 0; pad = pad->Next() )
         {
             if( pad->GetNetCode() == GetNet() )
             {
@@ -112,7 +114,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     count  = 0;
 
-    for( const TRACK *track = m_parent->GetBoard()->m_Track; track != NULL; track = track->Next() )
+    for( const TRACK *track = board->m_Track; track != NULL; track = track->Next() )
     {
         if( track->Type() == PCB_VIA_T )
         {

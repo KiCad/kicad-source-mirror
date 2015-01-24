@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,13 +89,16 @@ public:
     void Rotate( wxPoint aPosition );
 
     /**
+     * Function Matches, virtual from the base class EDA_ITEM
      * Compare DRC marker main and auxiliary text against search string.
      *
      * @param aSearchData - Criteria to search against.
+     * @param aAuxData A pointer to optional data required for the search or NULL
+     *                 if not used.
      * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if the DRC main or auxiliary text matches the search criteria.
      */
-    bool Matches( wxFindReplaceData& aSearchData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 

@@ -71,19 +71,19 @@ public:
     void SetStyle( int style ) { m_choiceStyle->SetSelection( style ); }
     int GetStyle( void ) { return m_choiceStyle->GetSelection(); }
 
-    void SetName( const wxString& name ) { m_textPinName->SetValue( name ); }
-    wxString GetName( void ) { return m_textPinName->GetValue(); }
+    void SetPinName( const wxString& name ) { m_textPinName->SetValue( name ); }
+    wxString GetPinName( void ) { return m_textPinName->GetValue(); }
 
-    void SetNameTextSize( const wxString& size )
+    void SetPinNameTextSize( const wxString& size )
     {
         m_textPinNameTextSize->SetValue( size );
     }
-    wxString GetNameTextSize( void )
+    wxString GetPinNameTextSize( void )
     {
         return m_textPinNameTextSize->GetValue();
     }
 
-    void SetNameTextSizeUnits( const wxString& units )
+    void SetPinNameTextSizeUnits( const wxString& units )
     {
         m_staticNameTextSizeUnits->SetLabel( units );
     }

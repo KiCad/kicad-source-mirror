@@ -1919,38 +1919,44 @@ void LIB_PIN::SetWidth( int aWidth )
 
 void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
-    wxString Text;
+    wxString text;
 
     LIB_ITEM::GetMsgPanelInfo( aList );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Name" ), m_name, DARKCYAN ) );
 
     if( m_number == 0 )
-        Text = wxT( "?" );
+        text = wxT( "?" );
     else
-        PinStringNum( Text );
+        PinStringNum( text );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), Text, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), text, DARKCYAN ) );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ),
                                      wxGetTranslation( pin_electrical_type_names[ m_type ] ),
                                      RED ) );
-    Text = wxGetTranslation( pin_style_names[ GetStyleCodeIndex( m_shape ) ] );
-    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), Text, BLUE ) );
+
+    int styleCodeIndex = GetStyleCodeIndex( m_shape );
+    if( styleCodeIndex >= 0 )
+        text = wxGetTranslation( pin_style_names[ styleCodeIndex ] );
+    else
+        text = wxT( "?" );
+
+    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), text, BLUE ) );
 
     if( IsVisible() )
-        Text = _( "Yes" );
+        text = _( "Yes" );
     else
-        Text = _( "No" );
+        text = _( "No" );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), Text, DARKGREEN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), text, DARKGREEN ) );
 
     // Display pin length
-    Text = StringFromValue( g_UserUnit, m_length, true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Length" ), Text, MAGENTA ) );
+    text = StringFromValue( g_UserUnit, m_length, true );
+    aList.push_back( MSG_PANEL_ITEM( _( "Length" ), text, MAGENTA ) );
 
-    Text = wxGetTranslation( pin_orientation_names[ GetOrientationCodeIndex( m_orientation ) ] );
-    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), Text, DARKMAGENTA ) );
+    text = wxGetTranslation( pin_orientation_names[ GetOrientationCodeIndex( m_orientation ) ] );
+    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text, DARKMAGENTA ) );
 }
 
 
@@ -2201,11 +2207,18 @@ BITMAP_DEF LIB_PIN::GetMenuImage() const
 wxString LIB_PIN::GetSelectMenuText() const
 {
     wxString tmp;
+    wxString style;
+
+    int styleCode = GetStyleCodeIndex( m_shape );
+    if( styleCode >= 0 )
+        style = wxGetTranslation( pin_style_names[ styleCode ] );
+    else
+        style = wxT( "?" );
 
     tmp.Printf( _( "Pin %s, %s, %s" ),
                 GetChars( GetNumberString() ),
                 GetChars( GetTypeString() ),
-                GetChars( wxGetTranslation( pin_style_names[ GetStyleCodeIndex( m_shape ) ] ) )
+                GetChars( style )
                 );
     return tmp;
 }

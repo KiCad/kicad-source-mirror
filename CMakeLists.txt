@@ -425,6 +425,7 @@ set( wxWidgets_CONFIG_OPTIONS --static=no )
 
 if( KICAD_USE_WEBKIT AND BUILD_GITHUB_PLUGIN )
     set( webkitlib "webview" )
+    add_definitions( -DKICAD_USE_WEBKIT )
 else()
     set( webkitlib "" )
 endif()

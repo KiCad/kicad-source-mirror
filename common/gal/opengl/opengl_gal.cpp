@@ -815,10 +815,11 @@ void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
 
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
     double   lineLength     = startEndVector.EuclideanNorm();
-    double   scale          = 0.5 * lineWidth / lineLength;
 
     if( lineLength <= 0.0 )
         return;
+        
+    double   scale          = 0.5 * lineWidth / lineLength;
 
     // The perpendicular vector also needs transformations
     glm::vec4 vector = currentManager->GetTransformation() *

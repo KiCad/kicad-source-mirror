@@ -112,6 +112,17 @@ void PCB_PARSER::init()
 }
 
 
+void PCB_PARSER::pushValueIntoMap( int aIndex, int aValue )
+{
+    // Add aValue in netcode mapping (m_netCodes) at index aNetCode
+    // ensure there is room in m_netCodes for that, and add room if needed.
+
+    if( (int)m_netCodes.size() <= aIndex )
+        m_netCodes.resize( aIndex+1 );
+
+    m_netCodes[aIndex] = aValue;
+}
+
 double PCB_PARSER::parseDouble() throw( IO_ERROR )
 {
     char* tmp;
@@ -1194,7 +1205,7 @@ void PCB_PARSER::parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR )
         m_board->AppendNet( net );
 
         // Store the new code mapping
-        m_netCodes[netCode] = net->GetNet();
+        pushValueIntoMap( netCode, net->GetNet() );
     }
 }
 
@@ -2526,6 +2537,8 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
     int     hatchPitch = Mils2iu( CPolyLine::GetDefaultHatchPitchMils() );
     wxPoint pt;
     T       token;
+    int     tmp;
+    wxString    netnameFromfile;    // the zone net name find in file
 
     // bigger scope since each filled_polygon is concatenated in here
     CPOLYGONS_LIST pts;
@@ -2545,20 +2558,19 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             // Init the net code only, not the netname, to be sure
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
-            zone->SetNetCode( getNetCode( parseInt( "net number" ) ) );
+            tmp = getNetCode( parseInt( "net number" ) );
+
+            if( tmp < 0 )
+                tmp = 0;
+
+            zone->SetNetCode( tmp );
+
             NeedRIGHT();
             break;
 
         case T_net_name:
             NeedSYMBOLorNUMBER();
-            if( zone->GetNet()->GetNetname() != FromUTF8() )
-            {
-                wxString msg;
-                msg.Printf( _( "There is a zone that belongs to a not existing net"
-                               "(%s), you should verify it." ), GetChars( FromUTF8() ) );
-                DisplayError( NULL, msg );
-                zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
-            }
+            netnameFromfile = FromUTF8();
             NeedRIGHT();
             break;
 
@@ -2829,9 +2841,44 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
     if( pts.GetCornersCount() )
         zone->AddFilledPolysList( pts );
 
-    // Ensure keepout does not have a net (which have no sense for a keepout zone)
-    if( zone->GetIsKeepout() )
+    // Ensure keepout and non copper zones do not have a net
+    // (which have no sense for these zones)
+    // the netcode 0 is used for these zones
+    bool zone_has_net = zone->IsOnCopperLayer() && !zone->GetIsKeepout();
+
+    if( !zone_has_net )
         zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
+
+    // Ensure the zone net name is valid, and matches the net code, for copper zones
+    if( zone_has_net && ( zone->GetNet()->GetNetname() != netnameFromfile ) )
+    {
+        // Can happens which old boards, with nonexistent nets ...
+        // or after being edited by hand
+        // We try to fix the mismatch.
+        NETINFO_ITEM* net = m_board->FindNet( netnameFromfile );
+
+        if( net )   // An existing net has the same net name. use it for the zone
+            zone->SetNetCode( net->GetNet() );
+        else    // Not existing net: add a new net to keep trace of the zone netname
+        {
+            int newnetcode = m_board->GetNetCount();
+            net = new NETINFO_ITEM( m_board, netnameFromfile, newnetcode );
+            m_board->AppendNet( net );
+
+            // Store the new code mapping
+            pushValueIntoMap( newnetcode, net->GetNet() );
+            // and update the zone netcode
+            zone->SetNetCode( net->GetNet() );
+
+            // Prompt the user
+            wxString msg;
+            msg.Printf( _( "There is a zone that belongs to a not existing net\n"
+                           "\"%s\"\n"
+                           "you should verify and edit it (run DRC test)." ),
+                           GetChars( netnameFromfile ) );
+            DisplayError( NULL, msg );
+        }
+    }
 
     return zone.release();
 }

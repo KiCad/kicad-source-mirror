@@ -532,7 +532,7 @@ static void drawPickedItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint aOffset 
         {
         case PCB_MODULE_T:
             frame->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
-            DrawModuleOutlines( aPanel, aDC, (MODULE*) item );
+            ((MODULE*) item)->DrawOutlinesWhenMoving( aPanel, aDC, g_Offset_Module );
             break;
 
         case PCB_LINE_T:

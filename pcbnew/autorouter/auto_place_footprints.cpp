@@ -652,8 +652,7 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
     CurrPosition = initialPos;
 
     // Undraw the current footprint
-    g_Offset_Module = wxPoint( 0, 0 );
-    DrawModuleOutlines( aFrame->GetCanvas(), aDC, aModule );
+    aModule->DrawOutlinesWhenMoving( aFrame->GetCanvas(), aDC, wxPoint( 0, 0 ) );
 
     g_Offset_Module = mod_pos - CurrPosition;
 

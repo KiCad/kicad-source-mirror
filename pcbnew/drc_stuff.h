@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@
 #define DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR    21   ///< micro via's layer pair incorrect (layers must be adjacent)
 #define COPPERAREA_INSIDE_COPPERAREA           22   ///< copper area outlines intersect
 #define COPPERAREA_CLOSE_TO_COPPERAREA         23   ///< copper area outlines are too close
-#define DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE 24   ///< copper area outline has an incorrect netcode due to a netname not found
+#define DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE   24   ///< copper area has a net but no pads in nets, which is suspicious
 #define DRCE_HOLE_NEAR_PAD                     25   ///< hole too close to pad
 #define DRCE_HOLE_NEAR_TRACK                   26   ///< hole too close to track
 #define DRCE_TOO_SMALL_TRACK_WIDTH             27   ///< Too small track width

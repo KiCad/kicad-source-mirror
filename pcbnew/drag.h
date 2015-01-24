@@ -49,10 +49,10 @@ class CONNECTIONS;
 
  /*
   * a DRAG_LIST manages the list of track segments to modify
-  * when the pad or the module is moving
+  * when the pad or the module is moving in drag mode
   */
 
-/*
+/**
   * a DRAG_SEGM_PICKER manage one track segment or a via
   */
 class DRAG_SEGM_PICKER
@@ -65,7 +65,7 @@ public:
     D_PAD*  m_Pad_End;          // pointer to the moving pad
                                 // if the end point should follow this pad
                                 // or NULL
-    bool    m_Flag;             // flag used in drag vias and drag track segment functions
+    int     m_TempFlags;        // flag used in drag vias and drag track segment functions
 
 private:
     double  m_RotationOffset;   // initial orientation of the parent module

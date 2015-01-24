@@ -172,7 +172,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
     }
 
     wxString        fileName;
-    wxString        path = wxGetCwd();;
+    wxString        path = wxGetCwd();
 
     wxFileDialog    filedlg( this, _( "Board file name:" ),
                              path, fileName, PcbFileWildcard,

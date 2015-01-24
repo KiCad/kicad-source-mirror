@@ -1055,7 +1055,7 @@ bool LIB_PART::LoadFootprints( LINE_READER& aLineReader, wxString& aErrorMsg )
 }
 
 
-EDA_RECT LIB_PART::GetBoundingBox( int aUnit, int aConvert ) const
+const EDA_RECT LIB_PART::GetBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
@@ -1080,7 +1080,7 @@ EDA_RECT LIB_PART::GetBoundingBox( int aUnit, int aConvert ) const
 }
 
 
-EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
+const EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 

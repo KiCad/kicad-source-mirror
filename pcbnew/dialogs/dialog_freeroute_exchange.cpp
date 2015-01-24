@@ -188,7 +188,7 @@ void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
     command = value + wxFileName::GetPathSeparator();
     command << wxT("bin\\java");
 #else   //  __WINDOWS__
-        command = wxT( "java" );;
+        command = wxT( "java" );
 #endif
 
     command << wxT(" -jar ");

@@ -320,7 +320,7 @@ public:
             return NULL;
     }
 
-    ///> Constant that holds the unconnected net number
+    ///> Constant that holds the unconnected net number (typically 0)
     static const int UNCONNECTED;
 
     ///> NETINFO_ITEM meaning that there was no net assigned for an item, as there was no

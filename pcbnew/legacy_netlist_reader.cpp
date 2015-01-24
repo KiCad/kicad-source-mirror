@@ -185,6 +185,7 @@ void LEGACY_NETLIST_READER::loadNet( char* aText, COMPONENT* aComponent ) throw(
     char     line[256];
 
     strncpy( line, aText, sizeof( line ) );
+    line[ sizeof(line) - 1 ] = '\0';
 
     if( ( p = strtok( line, " ()\t\n" ) ) == NULL )
     {

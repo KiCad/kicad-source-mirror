@@ -767,11 +767,6 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     if( m_DisplayOptions.m_DisplayModText < LINE || m_DisplayOptions.m_DisplayModText > SKETCH )
         m_DisplayOptions.m_DisplayModText = FILLED;
-
-    // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
-    // when reading doubles in config,
-    // but forget to back to current locale. So we call SetLocaleTo_Default
-    SetLocaleTo_Default( );
 }
 
 

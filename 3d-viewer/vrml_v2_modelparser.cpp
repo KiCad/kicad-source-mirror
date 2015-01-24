@@ -88,14 +88,13 @@ void VRML2_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
 
     glScalef( matScale.x, matScale.y, matScale.z );
 
-    // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    SetLocaleTo_C_standard();
+    LOCALE_IO toggle;   // Temporary switch the locale to standard C to r/w floats
 
     childs.clear();
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == '}' ) || ( *text == ']' ) )
+        if( ( *text == '}' ) || ( *text == ']' ) )
         {
             continue;
         }
@@ -117,7 +116,6 @@ void VRML2_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
     }
 
     fclose( m_file );
-    SetLocaleTo_Default();       // revert to the current locale
 
 
     // DBG( printf( "chils size:%lu\n", childs.size() ) );
@@ -140,7 +138,7 @@ int VRML2_MODEL_PARSER::read_Transform()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -259,7 +257,7 @@ int VRML2_MODEL_PARSER::read_DEF()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             // DBG( printf( "  skiping %c\n", *text) );
             continue;
@@ -316,7 +314,7 @@ int VRML2_MODEL_PARSER::read_Shape()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -363,7 +361,7 @@ int VRML2_MODEL_PARSER::read_Appearance()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -468,7 +466,7 @@ int VRML2_MODEL_PARSER::read_Material()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -561,7 +559,7 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -744,7 +742,7 @@ int VRML2_MODEL_PARSER::read_Color()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -774,7 +772,7 @@ int VRML2_MODEL_PARSER::read_Normal()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }
@@ -812,7 +810,7 @@ int VRML2_MODEL_PARSER::read_Coordinate()
 
     while( GetNextTag( m_file, text ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
         {
             continue;
         }

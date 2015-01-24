@@ -431,7 +431,7 @@ void DIALOG_DESIGN_RULES::InitializeRulesSelectionBoxes()
     m_leftClassChoice->Select( 0 );
 
     m_buttonRightToLeft->Enable( false );
-    m_buttonLeftToRight->Enable( false );;
+    m_buttonLeftToRight->Enable( false );
 
     FillListBoxWithNetNames( m_leftListCtrl, m_leftClassChoice->GetStringSelection() );
     FillListBoxWithNetNames( m_rightListCtrl, m_rightClassChoice->GetStringSelection() );
@@ -821,7 +821,7 @@ void DIALOG_DESIGN_RULES::OnRightCBSelection( wxCommandEvent& event )
     if( m_leftClassChoice->GetStringSelection() ==  m_rightClassChoice->GetStringSelection() )
     {
         m_buttonRightToLeft->Enable( false );
-        m_buttonLeftToRight->Enable( false );;
+        m_buttonLeftToRight->Enable( false );
     }
     else
     {

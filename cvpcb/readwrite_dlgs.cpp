@@ -306,7 +306,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
         if( component->GetFPID().IsLegacy() || component->GetAltFPID().IsLegacy())
             continue;
 
-        m_indexes.push_back( ii );;
+        m_indexes.push_back( ii );
     }
 
     // If a n assignment conflict is found,

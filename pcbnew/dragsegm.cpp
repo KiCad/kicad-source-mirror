@@ -56,7 +56,7 @@ DRAG_SEGM_PICKER::DRAG_SEGM_PICKER( TRACK* aTrack )
     m_endInitialValue   = m_Track->GetEnd();
     m_Pad_Start = m_Track->GetState( START_ON_PAD ) ? (D_PAD*)m_Track->start : NULL;
     m_Pad_End = m_Track->GetState( END_ON_PAD ) ? (D_PAD*)m_Track->end : NULL;
-    m_Flag = 0;
+    m_TempFlags = 0;
     m_RotationOffset = 0.0;
     m_Flipped = false;
 }
@@ -320,16 +320,16 @@ void AddSegmentToDragList( int flag, TRACK* aTrack )
     DRAG_SEGM_PICKER wrapper( aTrack );
 
     if( flag & STARTPOINT )
-        wrapper.m_Flag |= 1;
-
-    if( flag & ENDPOINT )
-        wrapper.m_Flag |= 2;
-
-    if( flag & STARTPOINT )
+    {
+        wrapper.m_TempFlags |= STARTPOINT;
         aTrack->SetFlags( STARTPOINT );
+    }
 
     if( flag & ENDPOINT )
+    {
+        wrapper.m_TempFlags |= ENDPOINT;
         aTrack->SetFlags( ENDPOINT );
+    }
 
     g_DragSegmentList.push_back( wrapper );
 }
@@ -411,10 +411,10 @@ void UndrawAndMarkSegmentsToDrag( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
         track->SetState( IN_EDIT, false );
         track->SetFlags( IS_DRAGGED );
 
-        if( g_DragSegmentList[ii].m_Flag & STARTPOINT )
+        if( g_DragSegmentList[ii].m_TempFlags & STARTPOINT )
             track->SetFlags( STARTPOINT );
 
-        if( g_DragSegmentList[ii].m_Flag & ENDPOINT )
+        if( g_DragSegmentList[ii].m_TempFlags & ENDPOINT )
             track->SetFlags( ENDPOINT );
 
         track->Draw( aCanvas, aDC, GR_XOR );

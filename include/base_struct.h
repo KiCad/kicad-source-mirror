@@ -186,7 +186,7 @@ protected:
 
 private:
 
-    void InitVars();
+    void initVars();
 
 public:
 
@@ -428,6 +428,7 @@ public:
     /**
      * Function Matches
      * compares \a aText against search criteria in \a aSearchData.
+     * Helper function used in search and replace dialog
      *
      * @param aText A reference to a wxString object containing the string to test.
      * @param aSearchData The criteria to search against.

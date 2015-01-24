@@ -550,7 +550,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
             if( !it->m_Visible )
                 fld.SetVisible( false );
             else
-                fld.SetVisible( true );;
+                fld.SetVisible( true );
         }
         else
         {

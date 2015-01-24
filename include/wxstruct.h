@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,7 +118,6 @@ protected:
     wxSize       m_FrameSize;
 
     wxAuiToolBar* m_mainToolBar;    ///< Standard horizontal Toolbar
-    bool         m_FrameIsActive;
     wxString     m_FrameName;       ///< name used for writing and reading setup
                                     ///< It is "SchematicFrame", "PcbFrame" ....
     wxString     m_AboutTitle;      ///< Name of program displayed in About.
@@ -199,8 +198,6 @@ public:
     int GetAutoSaveInterval() const { return m_autoSaveInterval; }
 
     wxString GetName() const { return m_FrameName; }
-
-    bool IsActive() const { return m_FrameIsActive; }
 
     bool IsType( FRAME_T aType ) const { return m_Ident == aType; }
 

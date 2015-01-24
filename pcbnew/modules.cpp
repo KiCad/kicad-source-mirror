@@ -24,7 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/*
+/**
  * @file modules.cpp
  */
 
@@ -40,7 +40,6 @@
 #include <class_module.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <drag.h>
 
 
@@ -166,7 +165,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( module )
     {
         // Erase the current footprint on screen
-        DrawModuleOutlines( Panel, DC, module );
+        module->DrawOutlinesWhenMoving( Panel, DC, g_Offset_Module );
 
         /* If a move command: return to old position
          * If a copy command, delete the new footprint
@@ -239,12 +238,12 @@ void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
     /* Erase current footprint. */
     if( aErase )
     {
-        DrawModuleOutlines( aPanel, aDC, module );
+        module->DrawOutlinesWhenMoving( aPanel, aDC, g_Offset_Module );
     }
 
     /* Redraw the module at the new position. */
     g_Offset_Module = module->GetPosition() - aPanel->GetParent()->GetCrossHairPosition();
-    DrawModuleOutlines( aPanel, aDC, module );
+    module->DrawOutlinesWhenMoving( aPanel, aDC, g_Offset_Module );
 
     DrawSegmentWhileMovingFootprint( aPanel, aDC );
 }
@@ -323,7 +322,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
         /* Erase footprint and draw outline if it has been already drawn. */
         if( DC )
         {
-            DrawModuleOutlines( m_canvas, DC, Module );
+            Module->DrawOutlinesWhenMoving( m_canvas, DC, g_Offset_Module );
             DrawSegmentWhileMovingFootprint( m_canvas, DC );
         }
     }
@@ -347,7 +346,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
     {
         if( DC )
         {
-            DrawModuleOutlines( m_canvas, DC, Module );
+            Module->DrawOutlinesWhenMoving( m_canvas, DC, g_Offset_Module );
             DrawSegmentWhileMovingFootprint( m_canvas, DC );
         }
 
@@ -459,7 +458,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool
     {
         if( DC )
         {
-            DrawModuleOutlines( m_canvas, DC, module );
+            module->DrawOutlinesWhenMoving( m_canvas, DC, g_Offset_Module );
             DrawSegmentWhileMovingFootprint( m_canvas, DC );
         }
     }
@@ -486,7 +485,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool
         else
         {
             // Beiing moved: just redraw it
-            DrawModuleOutlines( m_canvas, DC, module );
+            module->DrawOutlinesWhenMoving( m_canvas, DC, g_Offset_Module );
             DrawSegmentWhileMovingFootprint( m_canvas, DC );
         }
 
@@ -496,35 +495,31 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool
 }
 
 
-/*************************************************/
-/* Redraw in XOR mode the outlines of a module. */
-/*************************************************/
-void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module )
+// Redraw in XOR mode the outlines of the module.
+void MODULE::DrawOutlinesWhenMoving( EDA_DRAW_PANEL* panel, wxDC* DC,
+                                     const wxPoint&  aMoveVector )
 {
     int    pad_fill_tmp;
     D_PAD* pt_pad;
 
-    if( module == NULL )
-        return;
-
-    module->DrawEdgesOnly( panel, DC, g_Offset_Module, GR_XOR );
+    DrawEdgesOnly( panel, DC, aMoveVector, GR_XOR );
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 
     // Show pads in sketch mode to speedu up drawings
     pad_fill_tmp = displ_opts->m_DisplayPadFill;
     displ_opts->m_DisplayPadFill = true;
 
-    pt_pad = module->Pads();
+    pt_pad = Pads();
 
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
-        pt_pad->Draw( panel, DC, GR_XOR, g_Offset_Module );
+        pt_pad->Draw( panel, DC, GR_XOR, aMoveVector );
 
     displ_opts->m_DisplayPadFill = pad_fill_tmp;
 
-    if( displ_opts->m_Show_Module_Ratsnest && panel )
+    if( displ_opts->m_Show_Module_Ratsnest )
     {
         PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
-        frame->build_ratsnest_module( module );
+        frame->build_ratsnest_module( this );
         frame->TraceModuleRatsNest( DC );
     }
 }

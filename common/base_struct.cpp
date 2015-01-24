@@ -49,7 +49,7 @@ enum textbox {
 
 EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType )
 {
-    InitVars();
+    initVars();
     m_StructType = idType;
     m_Parent     = parent;
 }
@@ -57,14 +57,14 @@ EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType )
 
 EDA_ITEM::EDA_ITEM( KICAD_T idType )
 {
-    InitVars();
+    initVars();
     m_StructType = idType;
 }
 
 
 EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
 {
-    InitVars();
+    initVars();
     m_StructType = base.m_StructType;
     m_Parent     = base.m_Parent;
     m_Flags      = base.m_Flags;
@@ -75,7 +75,7 @@ EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
 }
 
 
-void EDA_ITEM::InitVars()
+void EDA_ITEM::initVars()
 {
     m_StructType = TYPE_NOT_INIT;
     Pnext       = NULL;     // Linked list: Link (next struct)
