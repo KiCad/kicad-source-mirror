@@ -292,6 +292,8 @@ public:
      */
     inline void SetLayerVisible( int aLayer, bool aVisible = true )
     {
+        wxASSERT( aLayer < (int) m_layers.size() );
+
         if( m_layers[aLayer].visible != aVisible )
         {
             // Target has to be redrawn after changing its visibility
@@ -307,7 +309,16 @@ public:
      */
     inline bool IsLayerVisible( int aLayer ) const
     {
+        wxASSERT( aLayer < (int) m_layers.size() );
+
         return m_layers.at( aLayer ).visible;
+    }
+
+    inline void SetLayerDisplayOnly( int aLayer, bool aDisplayOnly = true )
+    {
+        wxASSERT( aLayer < (int) m_layers.size() );
+
+        m_layers[aLayer].displayOnly = aDisplayOnly;
     }
 
     /**
@@ -318,6 +329,8 @@ public:
      */
     inline void SetLayerTarget( int aLayer, RENDER_TARGET aTarget )
     {
+        wxASSERT( aLayer < (int) m_layers.size() );
+
         m_layers[aLayer].target = aTarget;
     }
 
@@ -477,6 +490,8 @@ public:
     /// Returns true if the layer is cached
     inline bool IsCached( int aLayer ) const
     {
+        wxASSERT( aLayer < (int) m_layers.size() );
+
         return m_layers.at( aLayer ).target == TARGET_CACHED;
     }
 
