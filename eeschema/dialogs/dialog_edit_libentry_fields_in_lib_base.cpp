@@ -57,7 +57,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	m_FieldHJustifyCtrl->SetSelection( 1 );
 	m_FieldHJustifyCtrl->SetToolTip( _("Select if the component is to be rotated when drawn") );
 	
-	bSizerJustify->Add( m_FieldHJustifyCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerJustify->Add( m_FieldHJustifyCtrl, 1, wxEXPAND|wxALL, 5 );
 	
 	wxString m_FieldVJustifyCtrlChoices[] = { _("Bottom"), _("Center"), _("Top") };
 	int m_FieldVJustifyCtrlNChoices = sizeof( m_FieldVJustifyCtrlChoices ) / sizeof( wxString );
@@ -65,10 +65,10 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	m_FieldVJustifyCtrl->SetSelection( 0 );
 	m_FieldVJustifyCtrl->SetToolTip( _("Pick the graphical transformation to be used when displaying the component, if any") );
 	
-	bSizerJustify->Add( m_FieldVJustifyCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizerJustify->Add( m_FieldVJustifyCtrl, 1, wxEXPAND|wxALL, 5 );
 	
 	
-	fieldEditBoxSizer->Add( bSizerJustify, 0, wxEXPAND|wxBOTTOM, 5 );
+	fieldEditBoxSizer->Add( bSizerJustify, 1, wxEXPAND|wxBOTTOM, 5 );
 	
 	wxBoxSizer* bSizerAspect;
 	bSizerAspect = new wxBoxSizer( wxHORIZONTAL );
@@ -93,10 +93,10 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	int m_StyleRadioBoxNChoices = sizeof( m_StyleRadioBoxChoices ) / sizeof( wxString );
 	m_StyleRadioBox = new wxRadioBox( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, m_StyleRadioBoxNChoices, m_StyleRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
 	m_StyleRadioBox->SetSelection( 0 );
-	bSizerAspect->Add( m_StyleRadioBox, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerAspect->Add( m_StyleRadioBox, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
-	fieldEditBoxSizer->Add( bSizerAspect, 0, wxEXPAND|wxTOP, 5 );
+	fieldEditBoxSizer->Add( bSizerAspect, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	wxBoxSizer* fieldNameBoxSizer;
 	fieldNameBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -199,7 +199,6 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
-	mainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnCloseDialog ) );

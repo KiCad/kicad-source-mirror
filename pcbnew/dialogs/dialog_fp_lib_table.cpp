@@ -514,7 +514,7 @@ private:
         m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
     }
 
-    void appendRowHandler( wxMouseEvent& event )
+    void appendRowHandler( wxCommandEvent& event )
     {
         if( m_cur_grid->AppendRows( 1 ) )
         {
@@ -527,7 +527,7 @@ private:
         }
     }
 
-    void deleteRowHandler( wxMouseEvent& event )
+    void deleteRowHandler( wxCommandEvent& event )
     {
 #if 1
         int currRow = getCursorRow();
@@ -564,7 +564,7 @@ private:
 #endif
     }
 
-    void moveUpHandler( wxMouseEvent& event )
+    void moveUpHandler( wxCommandEvent& event )
     {
         int curRow = getCursorRow();
         if( curRow >= 1 )
@@ -596,7 +596,7 @@ private:
         }
     }
 
-    void moveDownHandler( wxMouseEvent& event )
+    void moveDownHandler( wxCommandEvent& event )
     {
         FP_TBL_MODEL* tbl = cur_model();
 
@@ -628,7 +628,7 @@ private:
         }
     }
 
-    void optionsEditor( wxMouseEvent& event )
+    void optionsEditor( wxCommandEvent& event )
     {
         FP_TBL_MODEL*   tbl = cur_model();
 

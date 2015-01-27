@@ -266,7 +266,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
     /* End unused code */
 
     // save old cmp in undo list
-    m_parent->SaveCopyInUndoList( m_libEntry, IS_CHANGED );
+    m_parent->SaveCopyInUndoList( m_libEntry );
 
     // delete any fields with no name or no value before we copy all of m_FieldsBuf
     // back into the component
