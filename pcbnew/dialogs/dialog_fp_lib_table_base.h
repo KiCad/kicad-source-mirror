@@ -58,27 +58,27 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		wxButton* m_move_down_button;
 		wxButton* m_edit_options;
 		wxGrid* m_path_subs_grid;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onCancelCaptionButtonClick( wxCloseEvent& event ) = 0;
 		virtual void onKeyDown( wxKeyEvent& event ) = 0;
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) = 0;
-		virtual void appendRowHandler( wxMouseEvent& event ) = 0;
+		virtual void appendRowHandler( wxCommandEvent& event ) = 0;
 		virtual void OnClickLibraryWizard( wxCommandEvent& event ) = 0;
-		virtual void deleteRowHandler( wxMouseEvent& event ) = 0;
-		virtual void moveUpHandler( wxMouseEvent& event ) = 0;
-		virtual void moveDownHandler( wxMouseEvent& event ) = 0;
-		virtual void optionsEditor( wxMouseEvent& event ) = 0;
+		virtual void deleteRowHandler( wxCommandEvent& event ) = 0;
+		virtual void moveUpHandler( wxCommandEvent& event ) = 0;
+		virtual void moveDownHandler( wxCommandEvent& event ) = 0;
+		virtual void optionsEditor( wxCommandEvent& event ) = 0;
 		virtual void onCancelButtonClick( wxCommandEvent& event ) = 0;
 		virtual void onOKButtonClick( wxCommandEvent& event ) = 0;
 		
 	
 	public:
 		
-		DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Library Tables"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 900,600 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Library Tables"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 634,600 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_FP_LIB_TABLE_BASE();
 	
 };
