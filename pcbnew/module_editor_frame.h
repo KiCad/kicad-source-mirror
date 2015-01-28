@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,6 +157,22 @@ public:
      * called from the main toolbar to load a footprint from board mainly to edit it.
      */
     void LoadModuleFromBoard( wxCommandEvent& event );
+
+    /**
+     * Function SaveFootprintInLibrary
+     * Save in an existing library a given footprint
+     * @param aLibName = name of the library to use
+     * @param aModule = the given footprint
+     * @param aOverwrite = true to overwrite an existing footprint, false to
+     *                     abort if an existing footprint with same name is found
+     * @param aDisplayDialog = true to display a dialog to enter or confirm the
+     *                         footprint name
+     * @return : true if OK, false if abort
+     */
+    bool SaveFootprintInLibrary( const wxString& aLibName,
+                                 MODULE*         aModule,
+                                 bool            aOverwrite,
+                                 bool            aDisplayDialog );
 
     /**
      * Virtual Function OnModify()
