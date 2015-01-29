@@ -661,7 +661,15 @@ public:
         return LSET::Name( aLayerId );
     }
 
-    bool SetLayer( LAYER_ID aIndex, const LAYER& aLayer );
+    /**
+     * Function SetLayerDescr
+     * returns the type of the copper layer given by aLayer.
+     *
+     * @param aIndex A layer index in m_Layer
+     * @param aLayer A reference to a LAYER description.
+     * @return false if the index was out of range.
+     */
+    bool SetLayerDescr( LAYER_ID aIndex, const LAYER& aLayer );
 
     /**
      * Function GetLayerType
