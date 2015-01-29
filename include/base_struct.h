@@ -188,11 +188,14 @@ private:
 
     void initVars();
 
-public:
+protected:
 
     EDA_ITEM( EDA_ITEM* parent, KICAD_T idType );
     EDA_ITEM( KICAD_T idType );
     EDA_ITEM( const EDA_ITEM& base );
+
+public:
+
     virtual ~EDA_ITEM() { };
 
     /**
