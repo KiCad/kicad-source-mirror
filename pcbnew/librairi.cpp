@@ -750,22 +750,33 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     module->SetFPID( FPID( moduleName ) );
 
     wxPoint default_pos;
+    BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
     // Update reference:
-    module->SetReference( wxT( "REF**" ) );
-    module->Reference().SetThickness( GetDesignSettings().m_ModuleTextWidth );
-    module->Reference().SetSize( GetDesignSettings().m_ModuleTextSize );
+    if( settings.m_RefDefaultText.IsEmpty() )
+        module->SetReference( moduleName );
+    else
+        module->SetReference( settings.m_RefDefaultText );
+
+    module->Reference().SetThickness( settings.m_ModuleTextWidth );
+    module->Reference().SetSize( settings.m_ModuleTextSize );
     default_pos.y = GetDesignSettings().m_ModuleTextSize.y / 2;
     module->Reference().SetPosition( default_pos );
-    module->Reference().SetLayer( F_SilkS );
+    module->Reference().SetLayer( ToLAYER_ID( settings.m_RefDefaultlayer ) );
+    module->Reference().SetVisible( settings.m_RefDefaultVisibility );
 
     // Set the value field to a default value
-    module->SetValue( moduleName );
+    if( settings.m_ValueDefaultText.IsEmpty() )
+        module->SetValue( moduleName );
+    else
+        module->SetValue( settings.m_ValueDefaultText );
+
     module->Value().SetThickness( GetDesignSettings().m_ModuleTextWidth );
     module->Value().SetSize( GetDesignSettings().m_ModuleTextSize );
     default_pos.y = -default_pos.y;
     module->Value().SetPosition( default_pos );
-    module->Value().SetLayer( F_Fab );
+    module->Value().SetLayer( ToLAYER_ID( settings.m_ValueDefaultlayer ) );
+    module->Value().SetVisible( settings.m_ValueDefaultVisibility );
 
     SetMsgPanel( module );
     return module;
