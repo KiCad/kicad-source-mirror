@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 08:01+0100\n"
-"PO-Revision-Date: 2015-01-31 08:01+0100\n"
+"PO-Revision-Date: 2015-01-31 12:03+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -6432,7 +6432,7 @@ msgstr "Segment"
 #: gerbview/dialogs/dialog_print_using_printer.cpp:163
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163
 msgid "Layer"
-msgstr "Warstwy sygnałowe"
+msgstr "Warstwa"
 
 #: pcbnew/class_drawsegment.cpp:619
 #, c-format
@@ -12214,7 +12214,7 @@ msgstr "Przesuń zaznaczony wpis o jedną pozycję w górę"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:47
 #: 3d-viewer/3d_canvas.cpp:384
 msgid "Move Down"
-msgstr "Przesuń w dół v"
+msgstr "Przesuń w dół"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:152
 msgid "Move the currently selected row down one position"
@@ -13914,15 +13914,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:22
 msgid "On new graphic item creation:"
-msgstr "Przy tworzeniu nowego elementu graficznego:"
+msgstr "Domyślne wartości przy tworzeniu nowego elementu graficznego:"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:34
 msgid "Graphic line width"
-msgstr "Grubość lini grafiki"
+msgstr "Grubość linii grafiki"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:46
 msgid "Text width"
-msgstr "Szerokość tekstu"
+msgstr "Grubość linii tekstu"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:58
 msgid "Text size V"
