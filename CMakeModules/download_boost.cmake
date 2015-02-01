@@ -311,6 +311,10 @@ ExternalProject_Add_Step( boost bzr_add_boost
 
 ExternalProject_Add_Step( boost bzr_init_boost
     COMMAND bzr init -q <SOURCE_DIR>
+    #creates a .bzrignore file in boost root dir, to avoid copying useless files
+    #moreover these files have a very very long name, and sometimes
+    #have a too long full file name to be handled by DOS commands
+    COMMAND echo "*.htm*" > ${PREFIX}/src/boost/.bzrignore
     COMMENT "creating 'boost scratch repo' specifically for boost to track boost patches"
     DEPENDERS bzr_add_boost
     DEPENDEES download

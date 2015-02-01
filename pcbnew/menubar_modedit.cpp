@@ -2,10 +2,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
 *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
  * @brief (Re)Create the main menubar for the module editor
  */
 #include <fctsys.h>
+#include <pgm_base.h>
 
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
@@ -150,7 +151,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Close footprint editor" ),
                  KiBitmap( exit_xpm ) );
 
-    // Menu Edit:
+    //----- Edit menu ------------------
     wxMenu* editMenu = new wxMenu;
 
     // Undo
@@ -198,7 +199,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "&User Grid Size" ), _( "Adjust user grid" ),
                  KiBitmap( grid_xpm ) );
 
-    // View menu
+    //--------- View menu ----------------
     wxMenu* viewMenu = new wxMenu;
 
     /* Important Note for ZOOM IN and ZOOM OUT commands from menubar:
@@ -237,7 +238,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Show board in 3D viewer" ),
                  KiBitmap( three_d_xpm ) );
 
-    // Menu Place:
+    //-------- Place menu --------------------
     wxMenu* placeMenu = new wxMenu;
 
     // Pad
@@ -276,7 +277,26 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Place footprint reference anchor" ),
                  KiBitmap( anchor_xpm ) );
 
-    // Menu Help:
+
+    //----- Preferences menu -----------------
+    wxMenu* prefs_menu = new wxMenu;
+
+    AddMenuItem( prefs_menu, ID_PCB_LIB_TABLE_EDIT,
+                _( "Li&brary Tables" ), _( "Setup footprint libraries" ),
+                KiBitmap( library_table_xpm ) );
+
+    // Settings
+    AddMenuItem( prefs_menu, wxID_PREFERENCES,
+                 _( "&Settings" ), _( "Select default parameters values in Footprint Editor" ),
+                 KiBitmap( preference_xpm ) );
+
+    // Language submenu
+    Pgm().AddMenuLanguageList( prefs_menu );
+
+    // Hotkey submenu
+    AddHotkeyConfigMenu( prefs_menu );
+
+    //----- Help menu --------------------
     wxMenu* helpMenu = new wxMenu;
 
     // Version info
@@ -303,10 +323,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
-    menuBar->Append( dimensions_Submenu, _( "Di&mensions" ) );
-
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
+    menuBar->Append( prefs_menu, _( "P&references" ) );
+    menuBar->Append( dimensions_Submenu, _( "Di&mensions" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     menuBar->Thaw();

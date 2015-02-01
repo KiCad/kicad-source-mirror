@@ -152,7 +152,7 @@ public:
     }
 
 protected:
-    OPT_TOOL_EVENT handleCustomEvent( const wxEvent& aEvent )
+    OPT_TOOL_EVENT handleCustomEvent( const wxMenuEvent& aEvent )
     {
 #if ID_POPUP_PCB_SELECT_VIASIZE1 < ID_POPUP_PCB_SELECT_WIDTH1
 #error You have changed event ids order, it breaks code. Check the source code for more details.
@@ -183,7 +183,7 @@ protected:
             bds.SetTrackWidthIndex( 0 );
         }
 
-        else if( id > ID_POPUP_PCB_SELECT_VIASIZE1 )     // via size has changed
+        else if( id >= ID_POPUP_PCB_SELECT_VIASIZE1 )     // via size has changed
         {
             assert( id < ID_POPUP_PCB_SELECT_WIDTH_END_RANGE );
 

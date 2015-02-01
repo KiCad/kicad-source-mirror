@@ -303,7 +303,7 @@ void BOARD::PopHighLight()
 }
 
 
-bool BOARD::SetLayer( LAYER_ID aIndex, const LAYER& aLayer )
+bool BOARD::SetLayerDescr( LAYER_ID aIndex, const LAYER& aLayer )
 {
     if( unsigned( aIndex ) < DIM( m_Layer ) )
     {

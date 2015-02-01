@@ -123,10 +123,12 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aGalType )
             // Netnames are drawn only when scale is sufficient (level of details)
             // so there is no point in caching them
             m_view->SetLayerTarget( layer, KIGFX::TARGET_NONCACHED );
+            m_view->SetLayerDisplayOnly( layer );
         }
     }
 
     m_view->SetLayerTarget( ITEM_GAL_LAYER( ANCHOR_VISIBLE ), KIGFX::TARGET_NONCACHED );
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( ANCHOR_VISIBLE ) );
 
     // Some more required layers settings
     m_view->SetRequired( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ) );
@@ -147,7 +149,13 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aGalType )
     m_view->SetRequired( ITEM_GAL_LAYER( PAD_BK_VISIBLE ), ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
 
     m_view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( GP_OVERLAY ) );
     m_view->SetLayerTarget( ITEM_GAL_LAYER( RATSNEST_VISIBLE ), KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( RATSNEST_VISIBLE ) );
+
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( WORKSHEET ) );
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( GRID_VISIBLE ) );
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( DRC_VISIBLE ) );
 
     // Load display options (such as filled/outline display of items).
     // Can be made only if the parent windos is a EDA_DRAW_FRAME (or a derived class)

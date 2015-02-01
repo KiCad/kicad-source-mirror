@@ -516,7 +516,14 @@ void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
     clearSelection();
 
     if( aItem )
-        toggleSelection( aItem );
+    {
+        clearSelection();
+        select( aItem );
+
+        // Inform other potentially interested tools
+        TOOL_EVENT selectEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( selectEvent );
+    }
 
     m_frame->GetGalCanvas()->ForceRefresh();
 }

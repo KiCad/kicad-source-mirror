@@ -800,7 +800,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
             if( it->m_visible )
                 visibleLayers.set( it->m_number );
 
-            m_board->SetLayer( LAYER_ID( it->m_number ), *it );
+            m_board->SetLayerDescr( LAYER_ID( it->m_number ), *it );
 
             UTF8 name = it->m_name;
 
@@ -838,7 +838,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 
         // DBG( printf( "aux m_visible:%s\n", layer.m_visible ? "true" : "false" );)
 
-        m_board->SetLayer( it->second, layer );
+        m_board->SetLayerDescr( it->second, layer );
 
         token = NextTok();
 

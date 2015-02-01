@@ -96,6 +96,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_layer_selection_base.cpp
     dialogs/dialog_layers_setup.cpp
     dialogs/dialog_layers_setup_base.cpp
+    dialogs/dialog_modedit_options.cpp
+    dialogs/dialog_modedit_options_base.cpp
     dialogs/dialog_netlist.cpp
     dialogs/dialog_netlist_fbp.cpp
     dialogs/dialog_pcb_text_properties.cpp

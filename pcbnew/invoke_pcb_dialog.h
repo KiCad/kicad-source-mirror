@@ -46,7 +46,6 @@
 class wxTopLevelWindow;
 class wxPoint;
 class wxSize;
-//class wxRealPoint;
 class wxString;
 
 class BOARD;
@@ -55,6 +54,7 @@ class MODULE;
 // Often this is not used in the prototypes, since wxFrame is good enough and would
 // represent maximum information hiding.
 class PCB_BASE_FRAME;
+class FOOTPRINT_EDIT_FRAME;
 class FP_LIB_TABLE;
 class BOARD;
 class PCB_PLOT_PARAMS;
@@ -123,5 +123,13 @@ bool InvokeLayerSetup( wxTopLevelWindow* aCaller, BOARD* aBoard );
  * @return bool - true if user pressed OK (did not abort), else false.
  */
 bool InvokeSVGPrint( wxTopLevelWindow* aCaller, BOARD* aBoard, PCB_PLOT_PARAMS* aSettings );
+
+/**
+ * Function InvokeSVGPrint
+ * shows the SVG print dialog
+ * @param aCaller is the FOOTPRINT_EDIT_FRAME which is invoking the dialog.
+ * @return bool - true if user pressed OK (did not abort), else false.
+ */
+bool InvokeFPEditorPrefsDlg( FOOTPRINT_EDIT_FRAME* aCaller );
 
 #endif  // INVOKE_A_DIALOG_H_

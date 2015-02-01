@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,12 +60,31 @@ public:
     const PCB_PLOT_PARAMS& GetPlotSettings() const;             // overload PCB_BASE_FRAME, get parent's
     void SetPlotSettings( const PCB_PLOT_PARAMS& aSettings );   // overload
 
+    void LoadSettings( wxConfigBase* aCfg );         // Virtual
+    void SaveSettings( wxConfigBase* aCfg );         // Virtual
+
+    /**
+     * Function GetConfigurationSettings
+     * returns the footprçint editor settings list.
+     *
+     * Currently, only the settings that are needed at start
+     * up by the main window are defined here.  There are other locally used
+     * settings that are scattered throughout the Pcbnew source code.  If you need
+     * to define a configuration setting that needs to be loaded at run time,
+     * this is the place to define it.
+     *
+     * @return - Reference to the list of applications settings.
+     */
+    PARAM_CFG_ARRAY& GetConfigurationSettings();
+
     void InstallOptionsFrame( const wxPoint& pos );
 
     void OnCloseWindow( wxCloseEvent& Event );
     void CloseModuleEditor( wxCommandEvent& Event );
 
     void Process_Special_Functions( wxCommandEvent& event );
+
+    void ProcessPreferences( wxCommandEvent& event );
 
     /**
      * Function RedrawActiveWindoow
@@ -141,6 +160,7 @@ public:
     void OnVerticalToolbar( wxCommandEvent& aEvent );
 
     void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
+    void OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent );
     void OnUpdateLibSelected( wxUpdateUIEvent& aEvent );
     void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
     void OnUpdateLibAndModuleSelected( wxUpdateUIEvent& aEvent );
@@ -157,6 +177,22 @@ public:
      * called from the main toolbar to load a footprint from board mainly to edit it.
      */
     void LoadModuleFromBoard( wxCommandEvent& event );
+
+    /**
+     * Function SaveFootprintInLibrary
+     * Save in an existing library a given footprint
+     * @param aLibName = name of the library to use
+     * @param aModule = the given footprint
+     * @param aOverwrite = true to overwrite an existing footprint, false to
+     *                     abort if an existing footprint with same name is found
+     * @param aDisplayDialog = true to display a dialog to enter or confirm the
+     *                         footprint name
+     * @return : true if OK, false if abort
+     */
+    bool SaveFootprintInLibrary( const wxString& aLibName,
+                                 MODULE*         aModule,
+                                 bool            aOverwrite,
+                                 bool            aDisplayDialog );
 
     /**
      * Virtual Function OnModify()
@@ -469,6 +505,8 @@ protected:
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
     PCB_LAYER_WIDGET* m_Layers;
+
+    PARAM_CFG_ARRAY   m_configSettings;         ///< List of footprint editor configuration settings.
 
     /**
      * Function UpdateTitle

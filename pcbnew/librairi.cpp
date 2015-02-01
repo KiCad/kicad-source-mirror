@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -594,7 +594,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aNewModulesOnly )
 }
 
 
-bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
+bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( const wxString& aLibrary,
                                              MODULE*         aModule,
                                              bool            aOverwrite,
                                              bool            aDisplayDialog )
@@ -708,15 +708,18 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
 }
 
 
-MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
+MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
 {
-    MODULE*  module;
-    wxString moduleName;
-    wxPoint  newpos;
+    // Creates a new footprint at position 0,0 which contains the minimal items:
+    // the reference and the value.
+    //   Value : initialized to the footprint name.
+    //           put on fab layer (front side)
+    //   Reference : initialized to a default value (REF**).
+    //               put on silkscreen layer (front side)
 
-    moduleName = aModuleName;
+    wxString moduleName = aModuleName;
 
-    // Ask for the new module reference
+    // Ask for the new module name
     if( moduleName.IsEmpty() )
     {
         wxTextEntryDialog dlg( this, FMT_MOD_REF, FMT_MOD_CREATE, moduleName );
@@ -736,28 +739,44 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
     }
 
     // Creates the new module and add it to the head of the linked list of modules
-    module = new MODULE( GetBoard() );
+    MODULE* module = new MODULE( GetBoard() );
 
     GetBoard()->Add( module );
 
-    // Update parameters: position, timestamp ...
-    newpos = GetCrossHairPosition();
-    module->SetPosition( newpos );
+    // Update parameters: timestamp ...
     module->SetLastEditTime();
 
     // Update its name in lib
     module->SetFPID( FPID( moduleName ) );
 
+    wxPoint default_pos;
+    BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
+
     // Update reference:
-    module->SetReference( moduleName );
-    module->Reference().SetThickness( GetDesignSettings().m_ModuleTextWidth );
-    module->Reference().SetSize( GetDesignSettings().m_ModuleTextSize );
+    if( settings.m_RefDefaultText.IsEmpty() )
+        module->SetReference( moduleName );
+    else
+        module->SetReference( settings.m_RefDefaultText );
+
+    module->Reference().SetThickness( settings.m_ModuleTextWidth );
+    module->Reference().SetSize( settings.m_ModuleTextSize );
+    default_pos.y = GetDesignSettings().m_ModuleTextSize.y / 2;
+    module->Reference().SetPosition( default_pos );
+    module->Reference().SetLayer( ToLAYER_ID( settings.m_RefDefaultlayer ) );
+    module->Reference().SetVisible( settings.m_RefDefaultVisibility );
 
     // Set the value field to a default value
-    module->SetValue( wxT( "VAL**" ) );
+    if( settings.m_ValueDefaultText.IsEmpty() )
+        module->SetValue( moduleName );
+    else
+        module->SetValue( settings.m_ValueDefaultText );
+
     module->Value().SetThickness( GetDesignSettings().m_ModuleTextWidth );
     module->Value().SetSize( GetDesignSettings().m_ModuleTextSize );
-    module->SetPosition( wxPoint( 0, 0 ) );
+    default_pos.y = -default_pos.y;
+    module->Value().SetPosition( default_pos );
+    module->Value().SetLayer( ToLAYER_ID( settings.m_ValueDefaultlayer ) );
+    module->Value().SetVisible( settings.m_ValueDefaultVisibility );
 
     SetMsgPanel( module );
     return module;

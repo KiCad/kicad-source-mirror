@@ -300,7 +300,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-            MODULE* module = Create_1_Module( wxEmptyString );
+            MODULE* module = CreateNewModule( wxEmptyString );
 
             if( module )        // i.e. if create module command not aborted
             {
@@ -375,7 +375,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_SAVE_LIBMODULE:
         if( GetBoard()->m_Modules && GetCurrentLib().size() )
         {
-            Save_Module_In_Library( GetCurrentLib(), GetBoard()->m_Modules, true, true );
+            SaveFootprintInLibrary( GetCurrentLib(), GetBoard()->m_Modules, true, true );
             GetScreen()->ClrModify();
         }
         break;

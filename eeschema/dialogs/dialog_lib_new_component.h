@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2009-2105 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public:
     DIALOG_LIB_NEW_COMPONENT( wxWindow* parent );
 
     void SetName( const wxString& name ) { m_textName->SetValue( name ); }
-    wxString GetName( void ) { return m_textName->GetValue(); }
+    wxString GetName( void ) const { return m_textName->GetValue(); }
 
     void SetReference( const wxString& reference )
     {

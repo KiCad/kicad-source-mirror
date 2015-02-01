@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,9 +49,12 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
+#include <dialog_hotkeys_editor.h>
 #include <module_editor_frame.h>
+#include <modview_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <class_pcb_layer_widget.h>
+#include <invoke_pcb_dialog.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -115,6 +118,20 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
 
+    // Preferences et option menus
+    EVT_MENU( ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
+              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
+    EVT_MENU( ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
+              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
+    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
+              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
+    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
+              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
+    EVT_MENU( ID_PCB_LIB_TABLE_EDIT,
+              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
+    EVT_MENU( wxID_PREFERENCES,
+              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
+
     // popup commands
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
                     FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
@@ -159,10 +176,20 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_UPDATE_UI( ID_MODEDIT_UPDATE_MODULE_IN_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
+
     EVT_UPDATE_UI_RANGE( ID_MODEDIT_PAD_TOOL, ID_MODEDIT_PLACE_GRID_COORD,
                          FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
+
+    // Option toolbar:
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
+                   FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
+                   FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
+                   FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
-                   FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
+                   FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar )
+
     EVT_UPDATE_UI( ID_GEN_IMPORT_DXF_FILE,
                    FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
 
@@ -425,11 +452,10 @@ BOARD_DESIGN_SETTINGS& FOOTPRINT_EDIT_FRAME::GetDesignSettings() const
     // get the BOARD_DESIGN_SETTINGS from the parent editor, not our BOARD.
 
     // @todo(DICK) change the routing to some default or the board directly, parent may not exist
-    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
+//    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
+//    wxASSERT( parentFrame );
 
-    wxASSERT( parentFrame );
-
-    return parentFrame->GetDesignSettings();
+    return GetBoard()->GetDesignSettings();
 }
 
 
@@ -438,11 +464,10 @@ void FOOTPRINT_EDIT_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSett
     // set the BOARD_DESIGN_SETTINGS into parent editor, not our BOARD.
 
     // @todo(DICK) change the routing to some default or the board directly, parent may not exist
-    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
+//    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
+//    wxASSERT( parentFrame );
 
-    wxASSERT( parentFrame );
-
-    parentFrame->SetDesignSettings( aSettings );
+    GetBoard()->SetDesignSettings( aSettings );
 }
 
 
@@ -452,7 +477,6 @@ const PCB_PLOT_PARAMS& FOOTPRINT_EDIT_FRAME::GetPlotSettings() const
 
     // @todo(DICK) change the routing to some default or the board directly, parent may not exist
     PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
-
     wxASSERT( parentFrame );
 
     return parentFrame->GetPlotSettings();
@@ -465,10 +489,32 @@ void FOOTPRINT_EDIT_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
 
     // @todo(DICK) change the routing to some default or the board directly, parent may not exist
     PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
-
     wxASSERT( parentFrame );
 
     parentFrame->SetPlotSettings( aSettings );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
+{
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
+    wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
+
+    // Ensure some params are valid
+    BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
+
+    if( ( settings.m_RefDefaultlayer != F_SilkS ) && ( settings.m_RefDefaultlayer != F_Fab ) )
+        settings.m_RefDefaultlayer = F_SilkS;
+
+    if( ( settings.m_ValueDefaultlayer != F_SilkS ) && ( settings.m_ValueDefaultlayer != F_Fab ) )
+        settings.m_ValueDefaultlayer = F_Fab;
+}
+
+
+void FOOTPRINT_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
+{
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
+    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 }
 
 
@@ -488,7 +534,7 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             // at case ID_MODEDIT_SAVE_LIBMODULE
             if( GetBoard()->m_Modules && GetCurrentLib().size() )
             {
-                if( Save_Module_In_Library( GetCurrentLib(), GetBoard()->m_Modules, true, true ) )
+                if( SaveFootprintInLibrary( GetCurrentLib(), GetBoard()->m_Modules, true, true ) )
                 {
                     // save was correct
                     GetScreen()->ClrModify();
@@ -524,6 +570,43 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 
     if( aEvent.GetEventObject() == m_drawToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
+}
+
+void FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent )
+{
+    int        id = aEvent.GetId();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+
+    bool state = false;
+
+    switch( id )
+    {
+    case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
+        state = !displ_opts->m_DisplayPadFill;
+        break;
+
+    case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
+        state = !displ_opts->m_DisplayViaFill;
+        break;
+
+    case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
+        state = displ_opts->m_DisplayModText == SKETCH;
+        break;
+
+    case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
+        state = displ_opts->m_DisplayModEdge == SKETCH;
+        break;
+
+    case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
+        state = displ_opts->m_ContrastModeDisplay;
+        break;
+
+    default:
+        wxMessageBox( wxT( "FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar error" ) );
+        break;
+    }
+
+    aEvent.Check( state );
 }
 
 
@@ -752,5 +835,92 @@ void FOOTPRINT_EDIT_FRAME::SetElementVisibility( int aElement, bool aNewState )
     GetGalCanvas()->GetView()->SetLayerVisible( ITEM_GAL_LAYER( aElement ), aNewState );
     GetBoard()->SetElementVisibility( aElement, aNewState );
     m_Layers->SetRenderState( aElement, aNewState );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
+{
+    int id = event.GetId();
+
+    switch( id )
+    {
+    // Hotkey IDs
+    case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
+        ExportHotkeyConfigToFile( g_Module_Editor_Hokeys_Descr );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
+        ImportHotkeyConfigFromFile( g_Module_Editor_Hokeys_Descr );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
+        InstallHotkeyFrame( this, g_Module_Editor_Hokeys_Descr );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
+        // Display current hotkey list for the footprint editor.
+        DisplayHotkeyList( this, g_Module_Editor_Hokeys_Descr );
+        break;
+
+    case ID_PCB_LIB_TABLE_EDIT:
+        {
+            bool tableChanged = false;
+            int r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
+
+            if( r & 1 )
+            {
+                try
+                {
+                    FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
+
+                    GFootprintTable.Format( &sf, 0 );
+                    tableChanged = true;
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    wxString msg = wxString::Format( _(
+                        "Error occurred saving the global footprint library "
+                        "table:\n\n%s" ),
+                        GetChars( ioe.errorText.GetData() )
+                        );
+                    wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+                }
+            }
+
+            if( r & 2 )
+            {
+                wxString tblName = Prj().FootprintLibTblName();
+
+                try
+                {
+                    Prj().PcbFootprintLibs()->Save( tblName );
+                    tableChanged = true;
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    wxString msg = wxString::Format( _(
+                        "Error occurred saving project specific footprint library "
+                        "table:\n\n%s" ),
+                        GetChars( ioe.errorText )
+                        );
+                    wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+                }
+            }
+
+            FOOTPRINT_VIEWER_FRAME* viewer;
+            viewer = (FOOTPRINT_VIEWER_FRAME*)Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
+
+            if( tableChanged && viewer != NULL )
+                viewer->ReCreateLibraryList();
+        }
+        break;
+
+    case wxID_PREFERENCES:
+        InvokeFPEditorPrefsDlg( this );
+        break;
+
+    default:
+        DisplayError( this, wxT( "FOOTPRINT_EDIT_FRAME::ProcessPreferences error" ) );
+    }
 }
 

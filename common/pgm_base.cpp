@@ -383,9 +383,15 @@ bool PGM_BASE::initPgm()
     App().SetAppName( pgm_name.GetName().Lower() );
 
     // Install some image handlers, mainly for help
-    wxImage::AddHandler( new wxPNGHandler );
-    wxImage::AddHandler( new wxGIFHandler );
-    wxImage::AddHandler( new wxJPEGHandler );
+    if( wxImage::FindHandler( wxBITMAP_TYPE_PNG ) == NULL )
+        wxImage::AddHandler( new wxPNGHandler );
+
+    if( wxImage::FindHandler( wxBITMAP_TYPE_GIF ) == NULL )
+        wxImage::AddHandler( new wxGIFHandler );
+
+    if( wxImage::FindHandler( wxBITMAP_TYPE_JPEG ) == NULL )
+        wxImage::AddHandler( new wxJPEGHandler );
+
     wxFileSystem::AddHandler( new wxZipFSHandler );
 
     // Analyze the command line & initialize the binary path
