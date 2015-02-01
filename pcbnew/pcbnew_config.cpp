@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
@@ -96,8 +96,8 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         {
             LAYER_ID cur_layer = GetActiveLayer();
 
-            // If after showing the dialog the user removed the active layer,
-            // then use a sensible alternative layer to set as the active layer.
+            // If after showing the dialog the user has removed the active layer,
+            // then select a new active layer (front copper layer).
             if( !GetBoard()->GetEnabledLayers()[ cur_layer ] )
                 cur_layer = F_Cu;
 
