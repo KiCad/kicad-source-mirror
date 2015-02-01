@@ -12,7 +12,7 @@ if __name__ == '__main__':
     results = unittest.TextTestRunner(verbosity=100).run(testsuite)
 
     # Return an error code if any of the testsuite tests fail
-    if len(results.errors) > 0:
+    if not results.wasSuccessful():
         sys.exit(1)
 
 
