@@ -27,6 +27,9 @@
  * @brief Custom text control validator definitions.
  */
 
+#ifndef VALIDATORS_H
+#define VALIDATORS_H
+
 #include <wx/valtext.h>
 
 /**
@@ -56,3 +59,5 @@ class FILE_NAME_WITH_PATH_CHAR_VALIDATOR : public wxTextValidator
 public:
     FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString* aValue = NULL );
 };
+
+#endif  // #ifndef VALIDATORS_H
