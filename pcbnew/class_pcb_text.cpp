@@ -93,7 +93,7 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     EDA_DRAW_MODE_T fillmode = FILLED;
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 
-    if( displ_opts && displ_opts->m_DisplayDrawItems == SKETCH )
+    if( displ_opts && displ_opts->m_DisplayDrawItemsFill == SKETCH )
         fillmode = SKETCH;
 
     EDA_COLOR_T anchor_color = UNSPECIFIED_COLOR;

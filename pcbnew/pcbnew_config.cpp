@@ -354,12 +354,12 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                         &displ_opts->m_DisplayPadIsol, true ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PadSNum" ),
                                                         &displ_opts->m_DisplayPadNum, true ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ModAffC" ),
-                                                       &displ_opts->m_DisplayModEdge, FILLED, 0, 2 ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ModAffT" ),
-                                                       &displ_opts->m_DisplayModText, FILLED, 0, 2 ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PcbAffT" ),
-                                                       &displ_opts->m_DisplayDrawItems, FILLED, 0, 2 ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ModAffC" ),
+                                                       &displ_opts->m_DisplayModEdgeFill, FILLED ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ModAffT" ),
+                                                       &displ_opts->m_DisplayModTextFill, FILLED ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PcbAffT" ),
+                                                       &displ_opts->m_DisplayDrawItemsFill, FILLED ) );
         m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PcbShowZonesMode" ),
                                                        &displ_opts->m_DisplayZonesMode, 0, 0, 2 ) );
 

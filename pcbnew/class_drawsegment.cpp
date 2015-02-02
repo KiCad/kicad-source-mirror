@@ -170,7 +170,6 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 {
     int ux0, uy0, dx, dy;
     int l_trace;
-    int mode;
     int radius;
 
     LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
@@ -202,31 +201,24 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     dx = m_End.x + aOffset.x;
     dy = m_End.y + aOffset.y;
 
-    mode = displ_opts ? displ_opts->m_DisplayDrawItems : FILLED;
+    bool filled = displ_opts ? displ_opts->m_DisplayDrawItemsFill : FILLED;
 
     if( m_Flags & FORCE_SKETCH )
-        mode = SKETCH;
-
-    if( DC->LogicalToDeviceXRel( l_trace ) <= MIN_DRAW_WIDTH )
-        mode = LINE;
+        filled = SKETCH;
 
     switch( m_Shape )
     {
     case S_CIRCLE:
         radius = KiROUND( Distance( ux0, uy0, dx, dy ) );
 
-        if( mode == LINE )
+        if( filled )
         {
-            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius, color );
-        }
-        else if( mode == SKETCH )
-        {
-            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius - l_trace, color );
-            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius + l_trace, color );
+            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius, m_Width, color );
         }
         else
         {
-            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius, m_Width, color );
+            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius - l_trace, color );
+            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius + l_trace, color );
         }
 
         break;
@@ -248,22 +240,19 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                 EXCHG( StAngle, EndAngle );
         }
 
-        if( mode == LINE )
+        if( filled )
         {
-            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle, radius, color );
+            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
+                   radius, m_Width, color );
         }
-        else if( mode == SKETCH )
+        else
         {
             GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
                    radius - l_trace, color );
             GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
                    radius + l_trace, color );
         }
-        else
-        {
-            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
-                   radius, m_Width, color );
-        }
+
         break;
 
     case S_CURVE:
@@ -271,43 +260,32 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
         for( unsigned int i=1; i < m_BezierPoints.size(); i++ )
         {
-            if( mode == LINE )
-            {
-                GRLine( panel->GetClipBox(), DC,
-                        m_BezierPoints[i].x, m_BezierPoints[i].y,
-                        m_BezierPoints[i-1].x, m_BezierPoints[i-1].y, 0,
-                        color );
-            }
-            else if( mode == SKETCH )
-            {
-                GRCSegm( panel->GetClipBox(), DC,
-                         m_BezierPoints[i].x, m_BezierPoints[i].y,
-                         m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
-                         m_Width, color );
-            }
-            else
+            if( filled )
             {
                 GRFillCSegm( panel->GetClipBox(), DC,
                              m_BezierPoints[i].x, m_BezierPoints[i].y,
                              m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
                              m_Width, color );
             }
+            else
+            {
+                GRCSegm( panel->GetClipBox(), DC,
+                         m_BezierPoints[i].x, m_BezierPoints[i].y,
+                         m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
+                         m_Width, color );
+            }
         }
 
         break;
 
     default:
-        if( mode == LINE )
+        if( filled )
         {
-            GRLine( panel->GetClipBox(), DC, ux0, uy0, dx, dy, 0, color );
-        }
-        else if( mode == SKETCH )
-        {
-            GRCSegm( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
+            GRFillCSegm( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
         }
         else
         {
-            GRFillCSegm( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
+            GRCSegm( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
         }
 
         break;

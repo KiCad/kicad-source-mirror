@@ -467,15 +467,7 @@ void DXF_PLOTTER::SetDash( bool dashed )
 void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int aWidth,
                                 EDA_DRAW_MODE_T aPlotMode )
 {
-    if( aPlotMode == LINE )  // In line mode, just a line is OK
-    {
-        MoveTo( aStart );
-        FinishTo( aEnd );
-    }
-    else
-    {
-        segmentAsOval( aStart, aEnd, aWidth, aPlotMode );
-    }
+    segmentAsOval( aStart, aEnd, aWidth, aPlotMode );
 }
 
 /* Plot an arc in DXF format

@@ -252,9 +252,9 @@ void DISPLAY_FOOTPRINTS_FRAME::OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent )
     wxString msgTextsFill[2] = { _( "Show texts in filled mode" ),
                                  _( "Show texts in sketch mode" ) };
 
-    unsigned i = displ_opts->m_DisplayModText == SKETCH ? 0 : 1;
+    unsigned i = displ_opts->m_DisplayModTextFill == SKETCH ? 0 : 1;
 
-    aEvent.Check( displ_opts->m_DisplayModText == SKETCH );
+    aEvent.Check( displ_opts->m_DisplayModTextFill == SKETCH );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, msgTextsFill[i] );
 
 }
@@ -267,9 +267,9 @@ void DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent )
     wxString msgEdgesFill[2] = { _( "Show outlines in filled mode" ),
                                  _( "Show outlines in sketch mode" ) };
 
-    int i = displ_opts->m_DisplayModEdge == SKETCH ? 0 : 1;
+    int i = displ_opts->m_DisplayModEdgeFill == SKETCH ? 0 : 1;
 
-    aEvent.Check( displ_opts->m_DisplayModEdge == SKETCH );
+    aEvent.Check( displ_opts->m_DisplayModEdgeFill == SKETCH );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, msgEdgesFill[i] );
 }
 
@@ -298,12 +298,12 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
-        displ_opts->m_DisplayModText = displ_opts->m_DisplayModText == FILLED ? SKETCH : FILLED;
+        displ_opts->m_DisplayModTextFill = displ_opts->m_DisplayModTextFill == FILLED ? SKETCH : FILLED;
         m_canvas->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
-        displ_opts->m_DisplayModEdge = displ_opts->m_DisplayModEdge == FILLED ? SKETCH : FILLED;
+        displ_opts->m_DisplayModEdgeFill = displ_opts->m_DisplayModEdgeFill == FILLED ? SKETCH : FILLED;
         m_canvas->Refresh();
         break;
 

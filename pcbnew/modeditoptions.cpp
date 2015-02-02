@@ -60,12 +60,12 @@ void FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
-        displ_opts->m_DisplayModText = state ? SKETCH : FILLED;
+        displ_opts->m_DisplayModTextFill = state ? SKETCH : FILLED;
         m_canvas->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
-        displ_opts->m_DisplayModEdge = state ? SKETCH : FILLED;
+        displ_opts->m_DisplayModEdgeFill = state ? SKETCH : FILLED;
         m_canvas->Refresh( );
         break;
 
@@ -95,12 +95,12 @@ PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
                                                         &displ_opts->m_DisplayPolarCood, false ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorPadDisplayMode" ),
                                                         &displ_opts->m_DisplayPadFill, true ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorGraphicLinesDisplayMode" ),
-                                                       &displ_opts->m_DisplayModEdge, FILLED, 0, 2 ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorTextsDisplayMode" ),
-                                                       &displ_opts->m_DisplayModText, FILLED, 0, 2 ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorTextsDisplayMode" ),
-                                                       &displ_opts->m_DisplayModText, FILLED, 0, 2 ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorGraphicLinesDisplayMode" ),
+                                                       &displ_opts->m_DisplayModEdgeFill, FILLED ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorTextsDisplayMode" ),
+                                                       &displ_opts->m_DisplayModTextFill, FILLED ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorTextsDisplayMode" ),
+                                                       &displ_opts->m_DisplayModTextFill, FILLED ) );
         m_configSettings.push_back( new PARAM_CFG_WXSTRING( true, wxT( "FpEditorTextsRefDefaultText" ),
                                                        &settings.m_RefDefaultText, wxT( "REF**" ) ) );
 

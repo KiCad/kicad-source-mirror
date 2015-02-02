@@ -346,9 +346,6 @@ void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
 {
     int width = m_Thickness;
 
-    if( aFillMode == LINE )
-        width = 0;
-
     if( aDrawMode != UNSPECIFIED_DRAWMODE )
         GRSetDrawMode( aDC, aDrawMode );
 

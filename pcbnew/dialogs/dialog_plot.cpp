@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -193,7 +193,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_scaleOpt->SetSelection( m_plotOpts.GetScaleSelection() );
 
     // Plot mode
-    m_plotModeOpt->SetSelection( m_plotOpts.GetMode() );
+    m_plotModeOpt->SetSelection( m_plotOpts.GetPlotMode() == SKETCH ? 1 : 0 );
 
     // Plot mirror option
     m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
@@ -576,7 +576,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetDrillMarksType( static_cast<PCB_PLOT_PARAMS::DrillMarksType>
                                    ( m_drillShapeOpt->GetSelection() ) );
     tempOptions.SetMirror( m_plotMirrorOpt->GetValue() );
-    tempOptions.SetMode( static_cast<EDA_DRAW_MODE_T>( m_plotModeOpt->GetSelection() ) );
+    tempOptions.SetPlotMode( m_plotModeOpt->GetSelection() == 1 ? SKETCH : FILLED );
     tempOptions.SetPlotViaOnMaskLayer( m_plotNoViaOnMaskOpt->GetValue() );
 
     // Update settings from text fields. Rewrite values back to the fields,

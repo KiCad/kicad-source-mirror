@@ -578,11 +578,11 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent )
     switch( id )
     {
     case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
-        state = displ_opts->m_DisplayModText == SKETCH;
+        state = displ_opts->m_DisplayModTextFill == SKETCH;
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
-        state = displ_opts->m_DisplayModEdge == SKETCH;
+        state = displ_opts->m_DisplayModEdgeFill == SKETCH;
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
