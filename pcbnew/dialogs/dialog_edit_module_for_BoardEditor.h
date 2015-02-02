@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2015 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@ private:
     S3DPOINT_VALUE_CTRL * m_3D_Scale;
     S3DPOINT_VALUE_CTRL * m_3D_Offset;
     S3DPOINT_VALUE_CTRL * m_3D_Rotation;
+    static size_t m_page;     // remember the last open page during session
 
 public:
 
@@ -51,17 +52,22 @@ private:
     void InitModeditProperties();
     void Transfert3DValuesToDisplay( S3D_MASTER * aStruct3DSource );
     void TransfertDisplayTo3DValues( int aIndexSelection );
+    void Edit3DShapeFileName();
 
     // virtual event functions
     void OnEditValue( wxCommandEvent& event );
     void OnEditReference( wxCommandEvent& event );
     void On3DShapeSelection( wxCommandEvent& event );
     void On3DShapeNameSelected( wxCommandEvent& event );
-    void Add3DShape( wxCommandEvent& event )
+    void Edit3DShapeFilename( wxCommandEvent& event )
+    {
+        Edit3DShapeFileName();
+    }
+    void Remove3DShape( wxCommandEvent& event );
+	void Add3DShape( wxCommandEvent& event )
     {
         BrowseAndAdd3DShapeFile();
     }
-    void Remove3DShape( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );
     void GotoModuleEditor( wxCommandEvent& event );

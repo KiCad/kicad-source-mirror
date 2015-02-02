@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -356,14 +356,14 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	wxBoxSizer* bSizer3DButtons;
 	bSizer3DButtons = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonBrowse = new wxButton( m_Panel3D, ID_BROWSE_3D_LIB, _("Browse Shapes"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3DButtons->Add( m_buttonBrowse, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
-	
 	m_buttonAdd = new wxButton( m_Panel3D, ID_ADD_3D_SHAPE, _("Add 3D Shape"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3DButtons->Add( m_buttonAdd, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bSizer3DButtons->Add( m_buttonAdd, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonRemove = new wxButton( m_Panel3D, ID_REMOVE_3D_SHAPE, _("Remove 3D Shape"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3DButtons->Add( m_buttonRemove, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bSizer3DButtons->Add( m_buttonRemove, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_buttonEdit = new wxButton( m_Panel3D, wxID_ANY, _("Edit Filename"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3DButtons->Add( m_buttonEdit, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bLowerSizer3D->Add( bSizer3DButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -399,9 +399,9 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	m_buttonExchange->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::ExchangeModule ), NULL, this );
 	m_buttonModuleEditor->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::GotoModuleEditor ), NULL, this );
 	m_3D_ShapeNameListBox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::On3DShapeNameSelected ), NULL, this );
-	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::Browse3DLib ), NULL, this );
 	m_buttonAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::Add3DShape ), NULL, this );
 	m_buttonRemove->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::Remove3DShape ), NULL, this );
+	m_buttonEdit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::Edit3DShapeFilename ), NULL, this );
 	m_sdbSizerStdButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerStdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::OnOkClick ), NULL, this );
 }
@@ -415,9 +415,9 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::~DIALOG_MODULE_BOARD_EDITOR_BASE()
 	m_buttonExchange->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::ExchangeModule ), NULL, this );
 	m_buttonModuleEditor->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::GotoModuleEditor ), NULL, this );
 	m_3D_ShapeNameListBox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::On3DShapeNameSelected ), NULL, this );
-	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::Browse3DLib ), NULL, this );
 	m_buttonAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::Add3DShape ), NULL, this );
 	m_buttonRemove->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::Remove3DShape ), NULL, this );
+	m_buttonEdit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::Edit3DShapeFilename ), NULL, this );
 	m_sdbSizerStdButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerStdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::OnOkClick ), NULL, this );
 	
