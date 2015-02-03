@@ -193,7 +193,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_scaleOpt->SetSelection( m_plotOpts.GetScaleSelection() );
 
     // Plot mode
-    m_plotModeOpt->SetSelection( m_plotOpts.GetPlotMode() == SKETCH ? 1 : 0 );
+    setPlotModeChoiceSelection( m_plotOpts.GetPlotMode() );
 
     // Plot mirror option
     m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
@@ -335,7 +335,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 }
 
 
-PlotFormat DIALOG_PLOT::GetPlotFormat()
+PlotFormat DIALOG_PLOT::getPlotFormat()
 {
     // plot format id's are ordered like displayed in m_plotFormatOpt
     static const PlotFormat plotFmt[] =
@@ -356,13 +356,13 @@ PlotFormat DIALOG_PLOT::GetPlotFormat()
 // and clear also some optional values
 void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 {
-    switch( GetPlotFormat() )
+    switch( getPlotFormat() )
     {
     case PLOT_FORMAT_PDF:
     case PLOT_FORMAT_SVG:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( false );
-        m_plotModeOpt->SetSelection( 1 );
+        setPlotModeChoiceSelection( FILLED );
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
@@ -422,7 +422,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_drillShapeOpt->Enable( false );
         m_drillShapeOpt->SetSelection( 0 );
         m_plotModeOpt->Enable( false );
-        m_plotModeOpt->SetSelection( 1 );
+        setPlotModeChoiceSelection( FILLED );
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
@@ -669,7 +669,7 @@ void DIALOG_PLOT::applyPlotSettings()
     ConfigBaseWriteDouble( m_config, CONFIG_PS_FINEWIDTH_ADJ,
                            (double)m_PSWidthAdjust / IU_PER_MM );
 
-    tempOptions.SetFormat( GetPlotFormat() );
+    tempOptions.SetFormat( getPlotFormat() );
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
     tempOptions.SetUseGerberAttributes( m_useGerberAttributes->GetValue() );

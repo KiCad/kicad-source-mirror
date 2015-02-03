@@ -57,6 +57,7 @@ private:
 
     PCB_PLOT_PARAMS     m_plotOpts;
 
+    // Event called functions
     void        Init_Dialog();
     void        Plot( wxCommandEvent& event );
     void        OnQuit( wxCommandEvent& event );
@@ -66,7 +67,14 @@ private:
     void        OnPopUpLayers( wxCommandEvent& event );
     void        SetPlotFormat( wxCommandEvent& event );
     void        OnSetScaleOpt( wxCommandEvent& event );
-    void        applyPlotSettings();
     void        CreateDrillFile( wxCommandEvent& event );
-    PlotFormat  GetPlotFormat();
+
+    // orther functions
+    void        applyPlotSettings();
+    PlotFormat  getPlotFormat();
+
+    void        setPlotModeChoiceSelection( EDA_DRAW_MODE_T aPlotMode )
+    {
+        m_plotModeOpt->SetSelection( aPlotMode == SKETCH ? 1 : 0 );
+    }
 };
