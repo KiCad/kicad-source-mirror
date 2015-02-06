@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,6 +73,22 @@ PART_LIB::PART_LIB( int aType, const wxString& aFileName ) :
 
 PART_LIB::~PART_LIB()
 {
+    // When the library is destroyed, all of the alias objects on the heap should be deleted.
+    for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it != m_amap.end();  ++it )
+    {
+        wxLogTrace( traceSchLibMem, wxT( "Removing alias %s from library %s." ),
+                    GetChars( it->second->GetName() ), GetChars( GetLogicalName() ) );
+        LIB_PART* part = it->second->GetPart();
+        LIB_ALIAS* alias = it->second;
+        delete alias;
+
+        // When the last alias of a part is destroyed, the part is no longer required and it
+        // too is destroyed.
+        if( part && part->GetAliasCount() == 0 )
+            delete part;
+    }
+
+    m_amap.clear();
 }
 
 
