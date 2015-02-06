@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -226,8 +226,6 @@ void EDA_DRAW_FRAME::EraseMsgBox()
 
 void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
 {
-    m_FrameIsActive = event.GetActive();
-
     if( m_canvas )
         m_canvas->SetCanStartBlock( -1 );
 

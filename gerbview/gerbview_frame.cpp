@@ -269,11 +269,6 @@ void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->SetPath( wxT( "drl_files" ) );
     m_drillFileHistory.Load( *aCfg );
     aCfg->SetPath( wxT( ".." ) );
-
-    // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
-    // when reading doubles in config,
-    // but forget to back to current locale. So we call SetLocaleTo_Default
-    SetLocaleTo_Default();
 }
 
 

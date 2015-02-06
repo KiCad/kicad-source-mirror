@@ -69,14 +69,23 @@ class PCB_PARSER : public PCB_LEXER
     std::vector<int>    m_netCodes;         ///< net codes mapping for boards being loaded
 
     ///> Converts net code using the mapping table if available,
-    ///> otherwise returns unchanged net code
+    ///> otherwise returns unchanged net code if < 0 or if is is out of range
     inline int getNetCode( int aNetCode )
     {
-        if( aNetCode < (int) m_netCodes.size() )
+        if( ( aNetCode >= 0 ) && ( aNetCode < (int) m_netCodes.size() ) )
             return m_netCodes[aNetCode];
 
         return aNetCode;
     }
+
+    /**
+     * function pushValueIntoMap
+     * Add aValue value in netcode mapping (m_netCodes) at index aIndex
+     * ensure there is room in m_netCodes for that, and add room if needed.
+     * @param aIndex = the index ( expected >=0 )of the location to use in m_netCodes
+     * @param aValue = the netcode value to map
+     */
+    void pushValueIntoMap( int aIndex, int aValue );
 
     /**
      * Function init

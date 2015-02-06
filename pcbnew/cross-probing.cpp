@@ -45,6 +45,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     wxPoint         pos;
 
     strncpy( line, cmdline, sizeof(line) - 1 );
+    line[sizeof(line) - 1] = 0;
 
     idcmd = strtok( line, " \n\r" );
     text  = strtok( NULL, " \n\r" );

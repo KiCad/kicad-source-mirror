@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
 #include <lib_draw_item.h>
 #include <lib_field.h>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 class LINE_READER;
 class OUTPUTFORMATTER;
@@ -67,6 +68,10 @@ enum  LibrEntryOptions
     ENTRY_NORMAL,   // Libentry is a standard part (real or alias)
     ENTRY_POWER     // Libentry is a power symbol
 };
+
+
+/// WXTRACE value to enable schematic library memory deletion debug output.
+extern const wxChar traceSchLibMem[];
 
 
 /**
@@ -153,7 +158,7 @@ public:
 
     /**
      * Function SaveDocs
-     * rrite the entry document information to \a aFormatter in "*.dcm" format.
+     * write the entry document information to \a aFormatter in "*.dcm" format.
      *
      * @param aFormatter The #OUTPUTFORMATTER to write the alias documents to.
      * @return True if success writing else false.

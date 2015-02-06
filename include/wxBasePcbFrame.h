@@ -277,22 +277,6 @@ public:
     void CursorGoto( const wxPoint& aPos, bool aWarp = true );
 
     /**
-     * Function Save_Module_In_Library
-     *  Save in an existing library a given footprint
-     * @param aLibName = name of the library to use
-     * @param aModule = the given footprint
-     * @param aOverwrite = true to overwrite an existing footprint, false to
-     *                     abort if an existing footprint with same name is found
-     * @param aDisplayDialog = true to display a dialog to enter or confirm the
-     *                         footprint name
-     * @return : true if OK, false if abort
-     */
-    bool Save_Module_In_Library( const wxString& aLibName,
-                                 MODULE*         aModule,
-                                 bool            aOverwrite,
-                                 bool            aDisplayDialog );
-
-    /**
      * Function SelectLibrary
      * puts up a dialog and allows the user to pick a library, for unspecified use.
      *
@@ -316,17 +300,19 @@ public:
     virtual void OnModify();
 
     // Modules (footprints)
+
     /**
-     * Function Create_1_Module
-     * Creates a new module or footprint : A new module contains 2 texts :
-     *  First = REFERENCE
-     *  Second = VALUE: "VAL**"
-     * the new module is added to the board module list
-     * @param aModuleName = name of the new footprint
-     *                  (will be the component reference in board)
-     * @return a pointer to the new module
+     * Function CreateNewModule
+     * Creates a new module or footprint, at position 0,0
+     * The new module contains only 2 texts: a reference and a value:
+     *  Reference = REF**
+     *  Value = "VAL**" or Footprint name in lib
+     * Note: they are dummy texts, which will be replaced by the actual texts
+     * when the fooprint is placed on a board and a netlist is read
+     * @param aModuleName = name of the new footprint in library
+     * @return a reference to the new module
      */
-    MODULE* Create_1_Module( const wxString& aModuleName );
+    MODULE* CreateNewModule( const wxString& aModuleName );
 
     void Edit_Module( MODULE* module, wxDC* DC );
     void Rotate_Module( wxDC* DC, MODULE* module, double angle, bool incremental );

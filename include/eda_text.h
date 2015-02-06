@@ -52,11 +52,10 @@ enum EDA_TEXT_VJUSTIFY_T {
 };
 
 
-/* Options to show solid segments (segments, texts...) */
+/* Options to draw items with thickness ( segments, arcs, circles, texts...) */
 enum EDA_DRAW_MODE_T {
-    LINE = 0,           // segments are drawn as lines
-    FILLED,             // normal mode: segments have thickness
-    SKETCH              // sketch mode: segments have thickness, but are not filled
+    FILLED = true,      // normal mode: solid segments
+    SKETCH = false      // sketch mode: draw segments outlines only
 };
 
 
@@ -199,12 +198,12 @@ public:
      * @param aOffset = draw offset (usually (0,0))
      * @param aColor = text color
      * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
-     * @param aDisplay_mode = LINE, FILLED or SKETCH
+     * @param aDisplay_mode = FILLED or SKETCH
      * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
      */
     void Draw( EDA_RECT* aClipBox, wxDC* aDC,
                const wxPoint& aOffset, EDA_COLOR_T aColor,
-               GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = LINE,
+               GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = FILLED,
                EDA_COLOR_T aAnchor_color = EDA_COLOR_T(UNSPECIFIED_COLOR) );
 
     /**
@@ -318,7 +317,7 @@ private:
      * @param aOffset = draw offset (usually (0,0))
      * @param aColor = text color
      * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
-     * @param aFillMode = LINE, FILLED or SKETCH
+     * @param aFillMode = FILLED or SKETCH
      * @param aText = the single line of text to draw.
      * @param aPos = the position of this line ).
      */

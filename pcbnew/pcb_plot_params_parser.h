@@ -24,7 +24,6 @@
  */
 
 #include <pcb_plot_params_lexer.h>
-//#include <plot_common.h>
 
 class PCB_PLOT_PARAMS;
 class LINE_READER;

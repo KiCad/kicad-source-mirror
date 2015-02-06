@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,16 +96,28 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
                                                 // The final margin is the sum of these 2 values
                                                 // Usually < 0 because the mask is smaller than pad
 
-    m_ModuleTextSize = wxSize( DEFAULT_TEXT_MODULE_SIZE,
-                               DEFAULT_TEXT_MODULE_SIZE );
-    m_ModuleTextWidth = DEFAULT_GR_MODULE_THICKNESS;
-    m_ModuleSegmentWidth = DEFAULT_GR_MODULE_THICKNESS;
-
     // Layer thickness for 3D viewer
     m_boardThickness = Millimeter2iu( DEFAULT_BOARD_THICKNESS_MM );
 
     m_viaSizeIndex = 0;
     m_trackWidthIndex = 0;
+
+    // Default values for the footprint editor and fp creation
+    // (also covers footprints created on the fly by micor-waves tools)
+    m_ModuleTextSize = wxSize( DEFAULT_TEXT_MODULE_SIZE,
+                               DEFAULT_TEXT_MODULE_SIZE );
+    m_ModuleTextWidth = DEFAULT_GR_MODULE_THICKNESS;
+    m_ModuleSegmentWidth = DEFAULT_GR_MODULE_THICKNESS;
+
+    // These values will be overriden by config values after reading the config
+    // Default ref text on fp creation. if empty, use footprint name as default
+    m_RefDefaultText = wxT( "REF**" );
+    m_RefDefaultVisibility = true;          // Default ref text visibility on fp creation
+    m_RefDefaultlayer = int( F_SilkS );     // Default ref text layer on fp creation
+    // Default value text on fp creation. if empty, use footprint name as default
+    m_ValueDefaultText = wxEmptyString;
+    m_ValueDefaultVisibility = true;
+    m_ValueDefaultlayer = int( F_Fab );
 }
 
 // Add parameters to save in project config.

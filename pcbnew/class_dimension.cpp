@@ -334,7 +334,6 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
                       const wxPoint& offset )
 {
-    int         typeaff, width;
     EDA_COLOR_T gcolor;
     BOARD*      brd = GetBoard();
 
@@ -347,18 +346,11 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
 
     GRSetDrawMode( DC, mode_color );
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
-    typeaff = displ_opts ? displ_opts->m_DisplayDrawItems : FILLED;
-    width   = m_Width;
+    bool filled = displ_opts ? displ_opts->m_DisplayDrawItemsFill : FILLED;
+    int width   = m_Width;
 
-    if( DC->LogicalToDeviceXRel( width ) <= MIN_DRAW_WIDTH )
-        typeaff = LINE;
-
-    switch( typeaff )
+    if( filled )
     {
-    case LINE:
-        width = 0;
-
-    case FILLED:
         GRLine( panel->GetClipBox(), DC, m_crossBarO + offset,
                 m_crossBarF + offset, width, gcolor );
         GRLine( panel->GetClipBox(), DC, m_featureLineGO + offset,
@@ -373,9 +365,9 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
                 m_arrowG1F + offset, width, gcolor );
         GRLine( panel->GetClipBox(), DC, m_crossBarO + offset,
                 m_arrowG2F + offset, width, gcolor );
-        break;
-
-    case SKETCH:
+    }
+    else
+    {
         GRCSegm( panel->GetClipBox(), DC, m_crossBarO + offset,
                  m_crossBarF + offset, width, gcolor );
         GRCSegm( panel->GetClipBox(), DC, m_featureLineGO + offset,
@@ -390,7 +382,6 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
                  m_arrowG1F + offset, width, gcolor );
         GRCSegm( panel->GetClipBox(), DC, m_crossBarO + offset,
                  m_arrowG2F + offset, width, gcolor );
-        break;
     }
 }
 

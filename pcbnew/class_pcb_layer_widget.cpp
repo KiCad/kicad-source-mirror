@@ -257,7 +257,7 @@ void PCB_LAYER_WIDGET::ReFillRender()
     {
         LAYER_WIDGET::ROW renderRow = s_render_rows[row];
 
-        if( !isAllowedInFpMode( renderRow.id ) )
+        if( m_fp_editor_mode && !isAllowedInFpMode( renderRow.id ) )
             continue;
 
         renderRow.tooltip = wxGetTranslation( s_render_rows[row].tooltip );
@@ -284,7 +284,7 @@ void PCB_LAYER_WIDGET::SyncRenderStates()
     {
         int rowId = s_render_rows[row].id;
 
-        if( !isAllowedInFpMode( rowId ) )
+        if( m_fp_editor_mode && !isAllowedInFpMode( rowId ) )
             continue;
 
         // this does not fire a UI event

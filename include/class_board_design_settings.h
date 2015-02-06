@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2009-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,15 +111,64 @@ public:
     double  m_SolderPasteMarginRatio;       ///< Solder pask margin ratio value of pad size
                                             ///< The final margin is the sum of these 2 values
 
-    // Variables used in footprint handling
+    // Variables used in footprint edition (default value in item/footprint creation)
+    int     m_ModuleSegmentWidth;           ///< Default width for all graphic lines
+                                            // Note: the default layer is the active layer
     wxSize  m_ModuleTextSize;               ///< Default footprint texts size
-    int     m_ModuleTextWidth;
-    int     m_ModuleSegmentWidth;
+    int     m_ModuleTextWidth;              ///< Default footprint texts thickness
+
+    wxString    m_RefDefaultText;           ///< Default ref text on fp creation
+                                            // if empty, use footprint name as default
+    bool    m_RefDefaultVisibility;         ///< Default ref text visibility on fp creation
+    int     m_RefDefaultlayer;              ///< Default ref text layer on fp creation
+                                            // should be a LAYER_ID, but use an int
+                                            // to save this param in config
+
+    wxString    m_ValueDefaultText;         ///< Default value text on fp creation
+                                            // if empty, use footprint name as default
+    bool    m_ValueDefaultVisibility;       ///< Default value text visibility on fp creation
+    int     m_ValueDefaultlayer;            ///< Default value text layer on fp creation
+                                            // should be a LAYER_ID, but use an int
+                                            // to save this param in config
+
+    // Miscellaneous
     wxPoint m_AuxOrigin;                    ///< origin for plot exports
     wxPoint m_GridOrigin;                   ///< origin for grid offsets
 
-    D_PAD   m_Pad_Master;
+    D_PAD   m_Pad_Master;                   ///< A dummy pad to store all default parameters
+                                            // when importing values or create a new pad
 
+private:
+    /// Index for #m_ViasDimensionsList to select the current via size.
+    /// 0 is the index selection of the default value Netclass
+    unsigned m_viaSizeIndex;
+
+    // Index for m_TrackWidthList to select the value.
+    /// 0 is the index selection of the default value Netclass
+    unsigned m_trackWidthIndex;
+
+    ///> Use custom values for track/via sizes (not specified in net class nor in the size lists).
+    bool m_useCustomTrackVia;
+
+    ///> Custom track width (used after UseCustomTrackViaSize( true ) was called).
+    int m_customTrackWidth;
+
+    ///> Custom via size (used after UseCustomTrackViaSize( true ) was called).
+    VIA_DIMENSION m_customViaSize;
+
+    int     m_copperLayerCount; ///< Number of copper layers for this design
+
+    LSET    m_enabledLayers;    ///< Bit-mask for layer enabling
+    LSET    m_visibleLayers;    ///< Bit-mask for layer visibility
+
+    int     m_visibleElements;  ///< Bit-mask for element category visibility
+    int     m_boardThickness;   ///< Board thickness for 3D viewer
+
+    /// Current net class name used to display netclass info.
+    /// This is also the last used netclass after starting a track.
+    wxString  m_currentNetClassName;
+
+public:
     BOARD_DESIGN_SETTINGS();
 
     /**
@@ -489,35 +538,6 @@ public:
     inline void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
 
 private:
-    /// Index for #m_ViasDimensionsList to select the current via size.
-    /// 0 is the index selection of the default value Netclass
-    unsigned m_viaSizeIndex;
-
-    // Index for m_TrackWidthList to select the value.
-    /// 0 is the index selection of the default value Netclass
-    unsigned m_trackWidthIndex;
-
-    ///> Use custom values for track/via sizes (not specified in net class nor in the size lists).
-    bool m_useCustomTrackVia;
-
-    ///> Custom track width (used after UseCustomTrackViaSize( true ) was called).
-    int m_customTrackWidth;
-
-    ///> Custom via size (used after UseCustomTrackViaSize( true ) was called).
-    VIA_DIMENSION m_customViaSize;
-
-    int     m_copperLayerCount; ///< Number of copper layers for this design
-
-    LSET    m_enabledLayers;    ///< Bit-mask for layer enabling
-    LSET    m_visibleLayers;    ///< Bit-mask for layer visibility
-
-    int     m_visibleElements;  ///< Bit-mask for element category visibility
-    int     m_boardThickness;   ///< Board thickness for 3D viewer
-
-    /// Current net class name used to display netclass info.
-    /// This is also the last used netclass after starting a track.
-    wxString  m_currentNetClassName;
-
     void formatNetClass( NETCLASS* aNetClass, OUTPUTFORMATTER* aFormatter, int aNestLevel,
                          int aControlBits ) const throw( IO_ERROR );
 };

@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2008-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -186,13 +186,16 @@ protected:
 
 private:
 
-    void InitVars();
+    void initVars();
 
-public:
+protected:
 
     EDA_ITEM( EDA_ITEM* parent, KICAD_T idType );
     EDA_ITEM( KICAD_T idType );
     EDA_ITEM( const EDA_ITEM& base );
+
+public:
+
     virtual ~EDA_ITEM() { };
 
     /**
@@ -426,16 +429,7 @@ public:
     }
 
     /**
-     * Function Matches
-     * compares \a aText against search criteria in \a aSearchData.
-     *
-     * @param aText A reference to a wxString object containing the string to test.
-     * @param aSearchData The criteria to search against.
-     * @return True if \a aText matches the search criteria in \a aSearchData.
-     */
-    bool Matches( const wxString& aText, wxFindReplaceData& aSearchData );
-
-    /**
+     * Helper function used in search and replace dialog
      * Function Replace
      * performs a text replace on \a aText using the find and replace criteria in
      * \a aSearchData on items that support text find and replace.
@@ -533,6 +527,18 @@ public:
     static std::ostream& NestedSpace( int nestLevel, std::ostream& os );
 
 #endif
+
+protected:
+    /**
+     * Function Matches
+     * compares \a aText against search criteria in \a aSearchData.
+     * This is a helper function for simplify derived class logic.
+     *
+     * @param aText A reference to a wxString object containing the string to test.
+     * @param aSearchData The criteria to search against.
+     * @return True if \a aText matches the search criteria in \a aSearchData.
+     */
+    bool Matches( const wxString& aText, wxFindReplaceData& aSearchData );
 };
 
 

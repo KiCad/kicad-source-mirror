@@ -7,10 +7,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2008-2014 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,8 @@
 #include <dialog_edit_module_for_Modedit.h>
 #include <wildcards_and_files_ext.h>
 
+size_t DIALOG_MODULE_MODULE_EDITOR::m_page = 0;     // remember the last open page during session
+
 
 DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
                                                           MODULE* aModule ) :
@@ -66,6 +68,9 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
 
     m_FootprintNameCtrl->SetValidator( FILE_NAME_CHAR_VALIDATOR() );
     initModeditProperties();
+
+    m_NoteBook->SetSelection( m_page );
+
     m_sdbSizerStdButtonsOK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -74,6 +79,8 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
 
 DIALOG_MODULE_MODULE_EDITOR::~DIALOG_MODULE_MODULE_EDITOR()
 {
+    m_page = m_NoteBook->GetSelection();
+
     for( unsigned ii = 0; ii < m_shapes3D_list.size(); ii++ )
         delete m_shapes3D_list[ii];
 
@@ -284,6 +291,26 @@ void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape(wxCommandEvent& event)
         m_3D_ShapeNameListBox->SetSelection( m_lastSelected3DShapeIndex );
         Transfert3DValuesToDisplay( m_shapes3D_list[m_lastSelected3DShapeIndex] );
     }
+}
+
+
+void DIALOG_MODULE_MODULE_EDITOR::Edit3DShapeFileName()
+{
+    int idx = m_3D_ShapeNameListBox->GetSelection();
+
+    if( idx < 0 )
+        return;
+
+    // Edit filename
+    wxString filename = m_3D_ShapeNameListBox->GetStringSelection();
+
+    wxTextEntryDialog dlg( this, wxEmptyString, wxEmptyString, filename );
+    dlg.SetTextValidator( FILE_NAME_WITH_PATH_CHAR_VALIDATOR( &filename ) );
+
+    if( dlg.ShowModal() != wxID_OK || filename.IsEmpty() )
+        return;    //Aborted by user
+
+    m_3D_ShapeNameListBox->SetString( idx, filename );
 }
 
 

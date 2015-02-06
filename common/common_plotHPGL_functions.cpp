@@ -388,8 +388,8 @@ void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
     wxPoint center;
     wxSize  size;
 
-    // Suppress overlap if pen is too big or in line mode
-    if( (penDiameter >= width) || (tracemode == LINE) )
+    // Suppress overlap if pen is too big
+    if( penDiameter >= width )
     {
         MoveTo( start );
         FinishTo( end );
@@ -491,15 +491,10 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
     int     delta   = KiROUND( penDiameter - penOverlap );
     int     radius  = diametre / 2;
 
-    if( trace_mode != LINE )
-    {
-        radius = ( diametre - KiROUND( penDiameter ) ) / 2;
-    }
+    radius = ( diametre - KiROUND( penDiameter ) ) / 2;
 
     if( radius < 0 )
-    {
         radius = 0;
-    }
 
     double rsize = userToDeviceSize( radius );
 
@@ -534,11 +529,8 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
     size.x  = padsize.x / 2;
     size.y  = padsize.y / 2;
 
-    if( trace_mode != LINE )
-    {
-        size.x  = (padsize.x - (int) penDiameter) / 2;
-        size.y  = (padsize.y - (int) penDiameter) / 2;
-    }
+    size.x  = (padsize.x - (int) penDiameter) / 2;
+    size.y  = (padsize.y - (int) penDiameter) / 2;
 
     if( size.x < 0 )
         size.x = 0;

@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP</property>
             <property name="pos"></property>
-            <property name="size">677,586</property>
+            <property name="size">688,586</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Component Properties</property>
@@ -744,7 +744,7 @@
                                         <event name="OnUpdateUI"></event>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
-                                            <property name="flag">wxEXPAND|wxBOTTOM</property>
+                                            <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                                             <property name="proportion">0</property>
                                             <object class="wxTextCtrl" expanded="0">
                                                 <property name="BottomDockable">1</property>
@@ -1774,7 +1774,7 @@
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
                                             <property name="flag">wxEXPAND|wxBOTTOM</property>
-                                            <property name="proportion">0</property>
+                                            <property name="proportion">1</property>
                                             <object class="wxBoxSizer" expanded="1">
                                                 <property name="minimum_size"></property>
                                                 <property name="name">bSizerJustification</property>
@@ -1782,7 +1782,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                                                     <property name="proportion">1</property>
                                                     <object class="wxRadioBox" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -1872,7 +1872,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                                                     <property name="proportion">1</property>
                                                     <object class="wxRadioBox" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -1964,7 +1964,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxEXPAND</property>
+                                            <property name="flag">wxEXPAND|wxBOTTOM</property>
                                             <property name="proportion">1</property>
                                             <object class="wxBoxSizer" expanded="1">
                                                 <property name="minimum_size"></property>
@@ -2521,7 +2521,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND</property>
+                                                    <property name="flag">wxEXPAND|wxBOTTOM</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>

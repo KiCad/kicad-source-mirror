@@ -11,7 +11,7 @@
 
 DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 280,480 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 350,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
@@ -47,6 +47,9 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_suggestEnding->Enable( false );
 	
 	bOptions->Add( m_suggestEnding, 0, wxALL, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bOptions->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
 	wxBoxSizer* bEffort;
 	bEffort = new wxBoxSizer( wxHORIZONTAL );

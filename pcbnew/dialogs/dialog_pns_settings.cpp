@@ -41,6 +41,9 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS_ROUTING_SETTING
     m_effort->SetValue( m_settings.OptimizerEffort() );
     m_smoothDragged->SetValue( m_settings.SmoothDraggedSegments() );
     m_violateDrc->SetValue( m_settings.CanViolateDRC() );
+
+    GetSizer()->Fit( this );
+    GetSizer()->SetSizeHints( this );
 }
 
 

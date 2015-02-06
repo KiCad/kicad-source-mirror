@@ -367,9 +367,6 @@ public:
      * to define a configuration setting that needs to be loaded at run time,
      * this is the place to define it.
      *
-     * @todo: Define the configuration variables as member variables instead of
-     *        global variables or move them to the object class where they are
-     *        used.
      * @return - Reference to the list of applications settings.
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings();
@@ -1602,12 +1599,15 @@ public:
     void Edit_Gap( wxDC* DC, MODULE* Module );
 
     /**
-     * Function Create_MuWaveBasicShape
-     * create a footprint with pad_count pads for micro wave applications.
-     * This footprint has pad_count pads:
+     * Function CreateMuWaveBaseFootprint
+     * create a basic footprint for micro wave applications.
+     * @param aValue = the text value
+     * @param aTextSize = the size of ref and value texts ( <= 0 to use board default values )
+     * @param aPadCount = number of pads
+     * Pads settings are:
      *  PAD_SMD, rectangular, H size = V size = current track width.
      */
-    MODULE* Create_MuWaveBasicShape( const wxString& name, int pad_count );
+    MODULE* CreateMuWaveBaseFootprint( const wxString& aValue, int aTextSize, int aPadCount );
 
     /**
      * Create_MuWaveComponent

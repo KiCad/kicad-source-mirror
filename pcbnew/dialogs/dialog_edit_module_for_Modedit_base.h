@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -101,6 +101,7 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextShapeRotation;
 		wxButton* m_buttonBrowse;
 		wxButton* m_buttonRemove;
+		wxButton* m_buttonEdit;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;
@@ -111,6 +112,7 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public DIALOG_SHIM
 		virtual void On3DShapeNameSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Add3DShape( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Remove3DShape( wxCommandEvent& event ) { event.Skip(); }
+		virtual void Edit3DShapeFilename( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		

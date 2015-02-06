@@ -506,7 +506,13 @@ private:
 
     // General editing
 public:
-    void SaveCopyInUndoList( EDA_ITEM* ItemToCopy, int flag_type_command = 0 );
+    /**
+     * Function SaveCopyInUndoList.
+     * Create a copy of the current component, and save it in the undo list.
+     * Because a component in library editor does not a lot of primitives,
+     * the full data is duplicated. It is not worth to try to optimize this save funtion
+     */
+    void SaveCopyInUndoList( EDA_ITEM* ItemToCopy );
 
 private:
     void GetComponentFromUndoList( wxCommandEvent& event );

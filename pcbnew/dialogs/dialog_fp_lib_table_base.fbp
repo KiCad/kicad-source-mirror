@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_FP_LIB_TABLE_BASE</property>
             <property name="pos"></property>
-            <property name="size">900,600</property>
+            <property name="size">634,600</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">PCB Library Tables</property>
@@ -1093,7 +1093,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnButtonClick"></event>
+                                        <event name="OnButtonClick">appendRowHandler</event>
                                         <event name="OnChar"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
@@ -1102,7 +1102,7 @@
                                         <event name="OnKillFocus"></event>
                                         <event name="OnLeaveWindow"></event>
                                         <event name="OnLeftDClick"></event>
-                                        <event name="OnLeftDown">appendRowHandler</event>
+                                        <event name="OnLeftDown"></event>
                                         <event name="OnLeftUp"></event>
                                         <event name="OnMiddleDClick"></event>
                                         <event name="OnMiddleDown"></event>
@@ -1269,7 +1269,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnButtonClick"></event>
+                                        <event name="OnButtonClick">deleteRowHandler</event>
                                         <event name="OnChar"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
@@ -1278,7 +1278,7 @@
                                         <event name="OnKillFocus"></event>
                                         <event name="OnLeaveWindow"></event>
                                         <event name="OnLeftDClick"></event>
-                                        <event name="OnLeftDown">deleteRowHandler</event>
+                                        <event name="OnLeftDown"></event>
                                         <event name="OnLeftUp"></event>
                                         <event name="OnMiddleDClick"></event>
                                         <event name="OnMiddleDown"></event>
@@ -1357,7 +1357,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnButtonClick"></event>
+                                        <event name="OnButtonClick">moveUpHandler</event>
                                         <event name="OnChar"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
@@ -1366,7 +1366,7 @@
                                         <event name="OnKillFocus"></event>
                                         <event name="OnLeaveWindow"></event>
                                         <event name="OnLeftDClick"></event>
-                                        <event name="OnLeftDown">moveUpHandler</event>
+                                        <event name="OnLeftDown"></event>
                                         <event name="OnLeftUp"></event>
                                         <event name="OnMiddleDClick"></event>
                                         <event name="OnMiddleDown"></event>
@@ -1445,7 +1445,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnButtonClick"></event>
+                                        <event name="OnButtonClick">moveDownHandler</event>
                                         <event name="OnChar"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
@@ -1454,7 +1454,7 @@
                                         <event name="OnKillFocus"></event>
                                         <event name="OnLeaveWindow"></event>
                                         <event name="OnLeftDClick"></event>
-                                        <event name="OnLeftDown">moveDownHandler</event>
+                                        <event name="OnLeftDown"></event>
                                         <event name="OnLeftUp"></event>
                                         <event name="OnMiddleDClick"></event>
                                         <event name="OnMiddleDown"></event>
@@ -1533,7 +1533,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnButtonClick"></event>
+                                        <event name="OnButtonClick">optionsEditor</event>
                                         <event name="OnChar"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
@@ -1542,7 +1542,7 @@
                                         <event name="OnKillFocus"></event>
                                         <event name="OnLeaveWindow"></event>
                                         <event name="OnLeftDClick"></event>
-                                        <event name="OnLeftDown">optionsEditor</event>
+                                        <event name="OnLeftDown"></event>
                                         <event name="OnLeftUp"></event>
                                         <event name="OnMiddleDClick"></event>
                                         <event name="OnMiddleDown"></event>
@@ -1743,7 +1743,7 @@
                                 <property name="Save">0</property>
                                 <property name="Yes">0</property>
                                 <property name="minimum_size"></property>
-                                <property name="name">m_sdbSizer1</property>
+                                <property name="name">m_sdbSizer</property>
                                 <property name="permission">protected</property>
                                 <event name="OnApplyButtonClick"></event>
                                 <event name="OnCancelButtonClick">onCancelButtonClick</event>

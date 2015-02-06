@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 #ifndef  PGM_BASE_H_
 #define  PGM_BASE_H_
 
+#include <map>
 #include <wx/filename.h>
 #include <search_stack.h>
 #include <wx/gdicmn.h>
@@ -109,7 +110,7 @@ public:
     /**
      * Function UseSystemPdfBrowser
      * returns true if the PDF browser is the default (system) PDF browser
-     * and false if the PDF browser is the prefered (selected) browser, else
+     * and false if the PDF browser is the preferred (selected) browser, else
      * returns false if there is no selected browser
      */
     VTBL_ENTRY bool UseSystemPdfBrowser() const
@@ -119,7 +120,7 @@ public:
 
     /**
      * Function ForceSystemPdfBrowser
-     * forces the use of system PDF browser, even if a preferend PDF browser is set.
+     * forces the use of system PDF browser, even if a preferred PDF browser is set.
      */
     VTBL_ENTRY void ForceSystemPdfBrowser( bool aFlg ) { m_use_system_pdf_browser = aFlg; }
 
@@ -167,6 +168,22 @@ public:
      * saves the PDF browser choice to the common configuration.
      */
     VTBL_ENTRY void WritePdfBrowserInfos();
+
+    /**
+     * Function SetLocalEnvVariable
+     *
+     * Sets the environment variable \a aName to \a aValue.
+     *
+     * This function first checks to see if the environment variable \a aName is already
+     * defined.  If it is not defined, then the environment variable \a aName is set to
+     * a value.  Otherwise, the environment variable is left unchanged.  This allows the user
+     * to override environment variables for testing purposes.
+     *
+     * @param aName is a wxString containing the environment variable name.
+     * @param aValue is a wxString containing the environment variable value.
+     * @return true if the environment variable \a Name was set to \a aValue.
+     */
+    VTBL_ENTRY bool SetLocalEnvVariable( const wxString& aName, const wxString& aValue );
 
     /**
      * Function App
@@ -246,6 +263,10 @@ protected:
     wxString        m_pdf_browser;
     wxString        m_editor_name;
     wxSize          m_help_size;
+
+    /// Local environment variable expansion settings such as KIGITHUB, KISYSMOD, and KISYS3DMOD.
+    /// library table.
+    std::map<wxString, wxString>  m_local_env_vars;
 
     wxApp*          m_wx_app;
 

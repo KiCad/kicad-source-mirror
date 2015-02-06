@@ -71,11 +71,11 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     bool nctmp = GetBoard()->IsElementVisible(NO_CONNECTS_VISIBLE);
     GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, false);
     displ_opts->m_DisplayPadIsol    = false;
-    displ_opts->m_DisplayModEdge    = FILLED;
-    displ_opts->m_DisplayModText    = FILLED;
+    displ_opts->m_DisplayModEdgeFill    = FILLED;
+    displ_opts->m_DisplayModTextFill    = FILLED;
     displ_opts->m_DisplayPcbTrackFill = true;
     displ_opts->m_ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
-    displ_opts->m_DisplayDrawItems    = FILLED;
+    displ_opts->m_DisplayDrawItemsFill    = FILLED;
     displ_opts->m_DisplayZonesMode    = 0;
     displ_opts->m_DisplayNetNamesMode = 0;
 
@@ -191,11 +191,11 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     GetBoard()->SetElementVisibility( ANCHOR_VISIBLE, false );
 
     displ_opts->m_DisplayPadIsol = false;
-    displ_opts->m_DisplayModEdge = FILLED;
-    displ_opts->m_DisplayModText = FILLED;
+    displ_opts->m_DisplayModEdgeFill = FILLED;
+    displ_opts->m_DisplayModTextFill = FILLED;
     displ_opts->m_DisplayPcbTrackFill = true;
     displ_opts->m_ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
-    displ_opts->m_DisplayDrawItems    = FILLED;
+    displ_opts->m_DisplayDrawItemsFill    = FILLED;
     displ_opts->m_DisplayZonesMode    = 0;
     displ_opts->m_DisplayNetNamesMode = 0;
 

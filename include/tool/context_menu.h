@@ -95,12 +95,12 @@ public:
     }
 
 protected:
-    void setCustomEventHandler( boost::function<OPT_TOOL_EVENT(const wxEvent&)> aHandler )
+    void setCustomEventHandler( boost::function<OPT_TOOL_EVENT(const wxMenuEvent&)> aHandler )
     {
         m_customHandler = aHandler;
     }
 
-    virtual OPT_TOOL_EVENT handleCustomEvent( const wxEvent& aEvent )
+    virtual OPT_TOOL_EVENT handleCustomEvent( const wxMenuEvent& aEvent )
     {
         return OPT_TOOL_EVENT();
     }
@@ -116,7 +116,7 @@ private:
     void setupEvents();
 
     ///> Event handler.
-    void onMenuEvent( wxEvent& aEvent );
+    void onMenuEvent( wxMenuEvent& aEvent );
 
     /**
      * Function setTool()
@@ -144,7 +144,7 @@ private:
     std::map<int, const TOOL_ACTION*> m_toolActions;
 
     /// Custom events handler, allows to translate wxEvents to TOOL_EVENTs.
-    boost::function<OPT_TOOL_EVENT(const wxEvent& aEvent)> m_customHandler;
+    boost::function<OPT_TOOL_EVENT(const wxMenuEvent& aEvent)> m_customHandler;
 
     friend class TOOL_INTERACTIVE;
 };

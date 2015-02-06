@@ -3,7 +3,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,9 +49,10 @@ private:
     // (mainly used to disable NPTH pads plotting on copper layers)
     bool        m_skipNPTH_Pads;
 
-    /** LINE, FILLED or SKETCH selects how to plot filled objects.
-     *  FILLED is not available with all drivers */
-    EDA_DRAW_MODE_T m_mode;
+    /** FILLED or SKETCH selects how to plot filled objects.
+     *  FILLED or SKETCH not available with all drivers: some have fixed mode
+     */
+    EDA_DRAW_MODE_T m_plotMode;
 
     /// Plot format type (chooses the driver to be used)
     PlotFormat  m_format;
@@ -178,8 +179,8 @@ public:
     void        SetTextMode( PlotTextMode aVal ) { m_textMode = aVal; }
     PlotTextMode GetTextMode() const { return m_textMode; }
 
-    void        SetMode( EDA_DRAW_MODE_T aVal ) { m_mode = aVal; }
-    EDA_DRAW_MODE_T GetMode() const { return m_mode; }
+    void        SetPlotMode( EDA_DRAW_MODE_T aPlotMode ) { m_plotMode = aPlotMode; }
+    EDA_DRAW_MODE_T GetPlotMode() const { return m_plotMode; }
 
     void        SetDrillMarksType( DrillMarksType aVal ) { m_drillMarks = aVal; }
     DrillMarksType GetDrillMarksType() const { return m_drillMarks; }

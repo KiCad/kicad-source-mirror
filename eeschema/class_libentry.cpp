@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,6 +61,9 @@ int LIB_PART::m_subpartIdSeparator = 0;
 int LIB_PART::m_subpartFirstId = 'A';
 
 
+const wxChar traceSchLibMem[] = wxT( "KISCHLIBMEM" );     // public
+
+
 LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ):
     EDA_ITEM( LIB_ALIAS_T ),
     shared( aRootPart )
@@ -85,10 +88,10 @@ LIB_ALIAS::~LIB_ALIAS()
 {
     wxASSERT_MSG( shared, wxT( "~LIB_ALIAS() without a LIB_PART" ) );
 
-#if defined(DEBUG) && 1
-    printf( "%s: destroying alias:'%s' of part:'%s' alias count:%d.\n",
-        __func__, TO_UTF8( name ), TO_UTF8( shared->GetName() ), int( shared->m_aliases.size() ) );
-#endif
+    wxLogTrace( traceSchLibMem,
+                wxT( "%s: destroying alias:'%s' of part:'%s'." ),
+                GetChars( wxString::FromAscii( __WXFUNCTION__ ) ), GetChars( name ),
+                GetChars( shared->GetName() ) );
 
     if( shared )
         shared->RemoveAlias( this );
@@ -241,17 +244,10 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
 
 LIB_PART::~LIB_PART()
 {
-#if defined(DEBUG) && 1
-
-    if( m_aliases.size() )
-    {
-        int breakhere = 1;
-        (void) breakhere;
-    }
-
-    printf( "%s: destroying part '%s' with alias list count of %d\n",
-        __func__, TO_UTF8( GetName() ), int( m_aliases.size() ) );
-#endif
+    wxLogTrace( traceSchLibMem,
+                wxT( "%s: destroying part '%s' with alias list count of %u." ),
+                GetChars( wxString::FromAscii( __WXFUNCTION__ ) ), GetChars( GetName() ),
+                m_aliases.size() );
 
     // If the part is being deleted directly rather than through the library,
     // delete all of the aliases.
@@ -298,8 +294,9 @@ void LIB_PART::SetName( const wxString& aName )
 
 
 void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, int aMulti,
-                          int aConvert, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor, const TRANSFORM& aTransform,
-                          bool aShowPinText, bool aDrawFields, bool aOnlySelected )
+                     int aConvert, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor,
+                     const TRANSFORM& aTransform, bool aShowPinText, bool aDrawFields,
+                     bool aOnlySelected )
 {
     BASE_SCREEN*   screen = aPanel ? aPanel->GetScreen() : NULL;
 
@@ -469,7 +466,7 @@ void LIB_PART::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        // The reference is a special case: we shoud change the basic text
+        // The reference is a special case: we should change the basic text
         // to add '?' and the part id
         LIB_FIELD& field = (LIB_FIELD&) item;
         wxString tmp = field.GetShownText();
@@ -488,7 +485,7 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aD
 {
     wxASSERT( aItem != NULL );
 
-    // none of the MANDATOR_FIELDS may be removed in RAM, but they may be
+    // none of the MANDATORY_FIELDS may be removed in RAM, but they may be
     // omitted when saving to disk.
     if( aItem->Type() == LIB_FIELD_T )
     {
@@ -511,7 +508,8 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aD
         if( *i == aItem )
         {
             if( aDc != NULL )
-                aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL, DefaultTransform );
+                aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR,
+                             g_XorMode, NULL, DefaultTransform );
 
             drawings.erase( i );
             SetModified();
@@ -1466,7 +1464,7 @@ void LIB_PART::RotateSelectedItems( const wxPoint& aCenter )
 
 
 LIB_ITEM* LIB_PART::LocateDrawItem( int aUnit, int aConvert,
-                                         KICAD_T aType, const wxPoint& aPoint )
+                                    KICAD_T aType, const wxPoint& aPoint )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
@@ -1484,7 +1482,7 @@ LIB_ITEM* LIB_PART::LocateDrawItem( int aUnit, int aConvert,
 
 
 LIB_ITEM* LIB_PART::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
-                                         const wxPoint& aPoint, const TRANSFORM& aTransform )
+                                    const wxPoint& aPoint, const TRANSFORM& aTransform )
 {
     /* we use LocateDrawItem( int aUnit, int convert, KICAD_T type, const
      * wxPoint& pt ) to search items.
@@ -1698,10 +1696,13 @@ LIB_ALIAS* LIB_PART::RemoveAlias( LIB_ALIAS* aAlias )
     {
         bool rename = aAlias->IsRoot();
 
-        DBG( printf( "%s: part:'%s'  alias:'%s'\n", __func__,
-            TO_UTF8( m_name ),
-            TO_UTF8( aAlias->GetName() )
-            );)
+        wxLogTrace( traceSchLibMem,
+                    wxT( "%s: part:'%s', alias:'%s', alias count %u, reference count %d." ),
+                    GetChars( wxString::FromAscii( __WXFUNCTION__ ) ),
+                    GetChars( m_name ),
+                    GetChars( aAlias->GetName() ),
+                    m_aliases.size(),
+                    m_me.use_count() );
 
         it = m_aliases.erase( it );
 
@@ -1763,15 +1764,6 @@ void LIB_PART::AddAlias( const wxString& aName )
 }
 
 
-/** Set the separator char between the subpart id and the reference
- * 0 (no separator) or '.' , '-' and '_'
- * and the ascii char value to calculate the subpart symbol id from the part number:
- * 'A' or '1' only are allowed. (to print U1.A or U1.1)
- * if this is a digit, a number is used as id symbol
- * Note also if the subpart symbol is a digit, the separator cannot be null.
- * @param aSep = the separator symbol (0 (no separator) or '.' , '-' and '_')
- * @param aFirstId = the Id of the first part ('A' or '1')
- */
 void LIB_PART::SetSubpartIdNotation( int aSep, int aFirstId )
 {
     m_subpartFirstId = 'A';

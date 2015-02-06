@@ -74,10 +74,10 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
 
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
 
-    m_EdgesDisplayOption->SetSelection( displ_opts->m_DisplayModEdge );
-    m_TextDisplayOption->SetSelection( displ_opts->m_DisplayModText );
-    m_IsShowPadFill->SetValue( displ_opts->m_DisplayPadFill );
-    m_IsShowPadNum->SetValue( displ_opts->m_DisplayPadNum );
+    m_EdgesDisplayOption->SetValue( not displ_opts->m_DisplayModEdgeFill );
+    m_TextDisplayOption->SetValue( not displ_opts->m_DisplayModTextFill );
+    m_ShowPadSketch->SetValue( not displ_opts->m_DisplayPadFill );
+    m_ShowPadNum->SetValue( displ_opts->m_DisplayPadNum );
     m_IsZoomNoCenter->SetValue( m_Parent->GetCanvas()->GetEnableZoomNoCenter() );
     m_IsMiddleButtonPan->SetValue( m_Parent->GetCanvas()->GetEnableMiddleButtonPan() );
     m_IsMiddleButtonPanLimited->SetValue( m_Parent->GetCanvas()->GetMiddleButtonPanLimited() );
@@ -94,10 +94,10 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::UpdateObjectSettings( void )
 {
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
 
-    displ_opts->m_DisplayModEdge = m_EdgesDisplayOption->GetSelection();
-    displ_opts->m_DisplayModText = m_TextDisplayOption->GetSelection();
-    displ_opts->m_DisplayPadNum  = m_IsShowPadNum->GetValue();
-    displ_opts->m_DisplayPadFill = m_IsShowPadFill->GetValue();
+    displ_opts->m_DisplayModEdgeFill = not m_EdgesDisplayOption->GetValue();
+    displ_opts->m_DisplayModTextFill = not m_TextDisplayOption->GetValue();
+    displ_opts->m_DisplayPadNum  = m_ShowPadNum->GetValue();
+    displ_opts->m_DisplayPadFill = not m_ShowPadSketch->GetValue();
     m_Parent->GetCanvas()->SetEnableZoomNoCenter( m_IsZoomNoCenter->GetValue() );
     m_Parent->GetCanvas()->SetEnableMiddleButtonPan( m_IsMiddleButtonPan->GetValue() );
     m_Parent->GetCanvas()->SetMiddleButtonPanLimited( m_IsMiddleButtonPanLimited->GetValue() );

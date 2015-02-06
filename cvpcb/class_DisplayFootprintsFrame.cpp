@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2007-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2007-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,7 @@ BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_SIZE( DISPLAY_FOOTPRINTS_FRAME::OnSize )
     EVT_TOOL( ID_OPTIONS_SETUP, DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay )
     EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame )
+
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
               DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
@@ -251,13 +252,10 @@ void DISPLAY_FOOTPRINTS_FRAME::OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent )
     wxString msgTextsFill[2] = { _( "Show texts in filled mode" ),
                                  _( "Show texts in sketch mode" ) };
 
-    unsigned i = displ_opts->m_DisplayModText + 1;
+    unsigned i = displ_opts->m_DisplayModTextFill == SKETCH ? 0 : 1;
 
-    if ( i > 2 )
-        i = 1;
-
-    aEvent.Check( displ_opts->m_DisplayModText == 1 );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, msgTextsFill[i-1] );
+    aEvent.Check( displ_opts->m_DisplayModTextFill == SKETCH );
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, msgTextsFill[i] );
 
 }
 
@@ -266,16 +264,13 @@ void DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent )
 {
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
-    wxString msgEdgesFill[3] = { _( "Show outlines in filled mode" ),
+    wxString msgEdgesFill[2] = { _( "Show outlines in filled mode" ),
                                  _( "Show outlines in sketch mode" ) };
 
-    int i = displ_opts->m_DisplayModEdge + 1;
+    int i = displ_opts->m_DisplayModEdgeFill == SKETCH ? 0 : 1;
 
-    if ( i > 2 )
-        i = 1;
-
-    aEvent.Check( displ_opts->m_DisplayModEdge == 2 );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, msgEdgesFill[i-1] );
+    aEvent.Check( displ_opts->m_DisplayModEdgeFill == SKETCH );
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, msgEdgesFill[i] );
 }
 
 
@@ -303,20 +298,12 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
-        displ_opts->m_DisplayModText++;
-
-        if( displ_opts->m_DisplayModText > 2 )
-            displ_opts->m_DisplayModText = 0;
-
+        displ_opts->m_DisplayModTextFill = displ_opts->m_DisplayModTextFill == FILLED ? SKETCH : FILLED;
         m_canvas->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
-        displ_opts->m_DisplayModEdge++;
-
-        if( displ_opts->m_DisplayModEdge > 2 )
-            displ_opts->m_DisplayModEdge = 0;
-
+        displ_opts->m_DisplayModEdgeFill = displ_opts->m_DisplayModEdgeFill == FILLED ? SKETCH : FILLED;
         m_canvas->Refresh();
         break;
 
