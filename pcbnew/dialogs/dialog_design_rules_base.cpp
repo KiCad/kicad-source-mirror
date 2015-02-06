@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -54,8 +54,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
-	m_grid->AutoSizeRows();
-	m_grid->EnableDragRowSize( true );
+	m_grid->EnableDragRowSize( false );
 	m_grid->SetRowLabelSize( 120 );
 	m_grid->SetRowLabelValue( 0, _("Default") );
 	m_grid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
@@ -65,6 +64,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_grid->SetToolTip( _("Net Class parameters") );
+	m_grid->SetMinSize( wxSize( -1,150 ) );
 	
 	sbSizerUpper->Add( m_grid, 1, wxEXPAND, 5 );
 	

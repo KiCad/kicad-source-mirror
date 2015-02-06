@@ -95,7 +95,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* s_otherSizer;
 	s_otherSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Others:") ), wxVERTICAL );
 	
-	m_OptDisplayDrawings = new wxCheckBox( this, wxID_ANY, _("Graphic items  sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptDisplayDrawings = new wxCheckBox( this, wxID_ANY, _("Graphic items sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptDisplayDrawings->SetValue(true); 
 	s_otherSizer->Add( m_OptDisplayDrawings, 0, wxALL, 5 );
 	

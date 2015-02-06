@@ -21,6 +21,7 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/checkbox.h>
+#include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/slider.h>
 #include <wx/sizer.h>
@@ -47,6 +48,7 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_smoothDragged;
 		wxCheckBox* m_violateDrc;
 		wxCheckBox* m_suggestEnding;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_effortLabel;
 		wxSlider* m_effort;
 		wxStaticText* m_lowLabel;
@@ -63,7 +65,7 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Interactive Router settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 286,480 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Interactive Router settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 358,393 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PNS_SETTINGS_BASE();
 	
 };

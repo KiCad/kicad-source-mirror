@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="11" />
+    <FileVersion major="1" minor="13" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -284,7 +284,7 @@
                                                     <property name="aui_position"></property>
                                                     <property name="aui_row"></property>
                                                     <property name="autosize_cols">0</property>
-                                                    <property name="autosize_rows">1</property>
+                                                    <property name="autosize_rows">0</property>
                                                     <property name="best_size"></property>
                                                     <property name="bg"></property>
                                                     <property name="caption"></property>
@@ -311,7 +311,7 @@
                                                     <property name="drag_col_move">0</property>
                                                     <property name="drag_col_size">1</property>
                                                     <property name="drag_grid_size">0</property>
-                                                    <property name="drag_row_size">1</property>
+                                                    <property name="drag_row_size">0</property>
                                                     <property name="editing">1</property>
                                                     <property name="enabled">1</property>
                                                     <property name="fg"></property>
@@ -332,7 +332,7 @@
                                                     <property name="maximum_size"></property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
-                                                    <property name="minimum_size">-1,-1</property>
+                                                    <property name="minimum_size">-1,150</property>
                                                     <property name="moveable">1</property>
                                                     <property name="name">m_grid</property>
                                                     <property name="pane_border">1</property>
