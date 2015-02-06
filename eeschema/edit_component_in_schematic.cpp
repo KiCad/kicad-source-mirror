@@ -63,7 +63,7 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
     if( fieldNdx == VALUE && part->IsPower() )
     {
         wxString msg = wxString::Format( _(
-            "%s is a power component and it's value cannot be modified!\n\n"
+            "%s is a power component and its value cannot be modified!\n\n"
             "You must create a new power component with the new value." ),
             GetChars( part->GetName() )
             );
