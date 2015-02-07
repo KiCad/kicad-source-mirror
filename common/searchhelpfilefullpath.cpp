@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2015 CERN
+ * Copyright (C) 2014-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@
  * Function FindFileInSearchPaths
  * looks in "this" for \a aFilename, but first modifies every search
  * path by appending a list of path fragments from aSubdirs.  That modification
- * is not rentative.
+ * is not relative.
  */
 wxString FindFileInSearchPaths( const SEARCH_STACK& aStack,
         const wxString& aFilename, const wxArrayString* aSubdirs )
@@ -73,7 +73,12 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
     // If there's a KICAD environment variable set, use that guy's path also
     ss.AddPaths( Pgm().GetKicadEnvVariable(), 0 );
 
-#if 1 // && defined(__linux__)
+#if defined(__WXMAC__)
+    ss.AddPaths( GetOSXKicadMachineDataDir() );
+    ss.AddPaths( Pgm().GetExecutablePath(), 0 );
+#endif
+
+#if ! defined(__WXMAC__) // && defined(__linux__)
     // Based on kicad-doc.bzr/CMakeLists.txt, line 20, the help files are
     // installed into "<CMAKE_INSTALL_PREFIX>/share/doc/kicad/help" for linux.
     // This is ${KICAD_HELP} var in that CMakeLists.txt file.
@@ -84,12 +89,24 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
     subdirs.Add( wxT( "help" ) );
 #endif
 
-#if 1 // && defined(__WINDOWS__)
+#if ! defined(__WXMAC__) // && defined(__WINDOWS__)
     // Based on kicad-doc.bzr/CMakeLists.txt, line 35, the help files are
     // installed into "<CMAKE_INSTALL_PREFIX>/doc/help" for Windows.
     // This is ${KICAD_HELP} var in that CMakeLists.txt file.
     // Below we account for an international subdirectory.
     altsubdirs.Add( wxT( "doc" ) );
+    altsubdirs.Add( wxT( "help" ) );
+#endif
+
+#if defined (__WXMAC__)
+    // OS X packages can have the help files in
+    // /Library/Application\ Support/kicad/help,
+    // and in Contents/SharedSupport/help inside the
+    // bundle.
+    // Below we account for an international subdirectory.
+    subdirs.Add( wxT( "help" ) );
+    altsubdirs.Add( wxT( "Contents" ) );
+    altsubdirs.Add( wxT( "SharedSupport" ) );
     altsubdirs.Add( wxT( "help" ) );
 #endif
 
@@ -110,7 +127,7 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
     locale_name_dirs.Add( i18n->GetCanonicalName() );           // canonical name like fr_FR
     // wxLocale::GetName() does not return always the short name
     locale_name_dirs.Add( i18n->GetName().BeforeLast( '_' ) );  // short canonical name like fr
-    locale_name_dirs.Add( wxT("en") );                          // default (en)
+    locale_name_dirs.Add( wxT( "en" ) );                        // default (en)
 
 #if defined(DEBUG) && 0
     ss.Show( __func__ );
@@ -127,22 +144,22 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
         subdirs.Add( locale_name_dirs[ii] );
         altsubdirs.Add( locale_name_dirs[ii] );
 
-        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &altsubdirs );
+        fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".html" ), &altsubdirs );
 
         if( !fn.IsEmpty() )
             break;
 
-        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &altsubdirs );
+        fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".pdf" ), &altsubdirs );
 
         if( !fn.IsEmpty() )
             break;
 
-        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".html"), &subdirs );
+        fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".html" ), &subdirs );
 
         if( !fn.IsEmpty() )
             break;
 
-        fn = FindFileInSearchPaths( ss, aBaseName + wxT(".pdf"), &subdirs );
+        fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".pdf" ), &subdirs );
 
         if( !fn.IsEmpty() )
             break;

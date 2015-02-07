@@ -132,7 +132,7 @@ void CONTEXT_MENU::SetTitle( const wxString& aTitle )
     else
     {
         InsertSeparator( 0 );
-        Insert( 0, new wxMenuItem( this, -1, aTitle, wxEmptyString, wxITEM_NORMAL ) );
+        Insert( 0, new wxMenuItem( this, wxID_NONE, aTitle, wxEmptyString, wxITEM_NORMAL ) );
         m_titleSet = true;
     }
 }
