@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
  */
 
 /**
- @file dialog_graphic_item_properties_for_Modedit.cpp
+ * @file dialog_graphic_item_properties_for_Modedit.cpp
  */
 
 /* Edit parameters values of graphic items in a footprint body:
@@ -49,25 +49,27 @@
 
 #include <dialog_graphic_item_properties_base.h>
 #include <class_pcb_layer_box_selector.h>
+#include <html_messagebox.h>
 
-class DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES: public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
+class DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES : public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
 {
 private:
-    FOOTPRINT_EDIT_FRAME* m_parent;
-    EDGE_MODULE* m_item;
+    FOOTPRINT_EDIT_FRAME*  m_parent;
+    EDGE_MODULE*           m_item;
     BOARD_DESIGN_SETTINGS  m_brdSettings;
-    MODULE * m_module;
+    MODULE*                m_module;
 
 public:
     DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES( FOOTPRINT_EDIT_FRAME* aParent,
-                                            EDGE_MODULE * aItem);
+                                            EDGE_MODULE* aItem );
     ~DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES() {};
 
 private:
-    void initDlg( );
+    void initDlg();
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
     void OnLayerChoice( wxCommandEvent& event );
+    bool itemValuesOK();
 };
 
 DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES(
@@ -85,14 +87,15 @@ DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES(
     Centre();
 }
 
+
 /*
  * Dialog to edit a graphic item of a footprint body.
  */
-void FOOTPRINT_EDIT_FRAME::InstallFootprintBodyItemPropertiesDlg(EDGE_MODULE * aItem)
+void FOOTPRINT_EDIT_FRAME::InstallFootprintBodyItemPropertiesDlg( EDGE_MODULE* aItem )
 {
-    if ( aItem == NULL )
+    if( aItem == NULL )
     {
-        wxMessageBox( wxT("InstallGraphicItemPropertiesDialog() error: NULL item"));
+        wxMessageBox( wxT( "InstallGraphicItemPropertiesDialog() error: NULL item" ) );
         return;
     }
 
@@ -112,7 +115,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
     m_StandardButtonsSizerOK->SetDefault();
 
     // Set unit symbol
-    wxStaticText * texts_unit[] =
+    wxStaticText* texts_unit[] =
     {
         m_StartPointXUnit,
         m_StartPointYUnit,
@@ -134,34 +137,40 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
     wxString msg;
 
     // Change texts according to the segment shape:
-    switch ( m_item->GetShape() )
+    switch( m_item->GetShape() )
     {
     case S_CIRCLE:
-        m_StartPointXLabel->SetLabel(_("Center X"));
-        m_StartPointYLabel->SetLabel(_("Center Y"));
-        m_EndPointXLabel->SetLabel(_("Point X"));
-        m_EndPointYLabel->SetLabel(_("Point Y"));
-        m_Angle_Text->Show(false);
-        m_Angle_Ctrl->Show(false);
-        m_AngleUnit->Show(false);
+        SetTitle( _( "Circle Properties" ) );
+        m_StartPointXLabel->SetLabel( _( "Center X" ) );
+        m_StartPointYLabel->SetLabel( _( "Center Y" ) );
+        m_EndPointXLabel->SetLabel( _( "Point X" ) );
+        m_EndPointYLabel->SetLabel( _( "Point Y" ) );
+        m_Angle_Text->Show( false );
+        m_Angle_Ctrl->Show( false );
+        m_AngleUnit->Show( false );
         break;
 
     case S_ARC:
-        m_StartPointXLabel->SetLabel(_("Center X"));
-        m_StartPointYLabel->SetLabel(_("Center Y"));
-        m_EndPointXLabel->SetLabel(_("Start Point X"));
-        m_EndPointYLabel->SetLabel(_("Start Point Y"));
+        SetTitle( _( "Arc Properties" ) );
+        m_StartPointXLabel->SetLabel( _( "Center X" ) );
+        m_StartPointYLabel->SetLabel( _( "Center Y" ) );
+        m_EndPointXLabel->SetLabel( _( "Start Point X" ) );
+        m_EndPointYLabel->SetLabel( _( "Start Point Y" ) );
 
         // Here the angle is a double, but the UI is still working
         // with integers
         msg << int( m_item->GetAngle() );
-        m_Angle_Ctrl->SetValue(msg);
+        m_Angle_Ctrl->SetValue( msg );
         break;
 
+    case S_SEGMENT:
+        SetTitle( _( "Line Segment Properties" ) );
+
+        // Fall through.
     default:
-        m_Angle_Text->Show(false);
-        m_Angle_Ctrl->Show(false);
-        m_AngleUnit->Show(false);
+        m_Angle_Text->Show( false );
+        m_Angle_Ctrl->Show( false );
+        m_AngleUnit->Show( false );
         break;
     }
 
@@ -185,8 +194,8 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
 
     if( m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() ) < 0 )
     {
-        wxMessageBox( _( "This item has an illegal layer id.\n"
-                        "Now, forced on the front silk screen layer. Please, fix it" ) );
+        wxMessageBox( _( "This item was on an unknown layer.\n"
+                         "It has been moved to the front silk screen layer. Please fix it." ) );
         m_LayerSelectionCtrl->SetLayerSelection( F_SilkS );
     }
 }
@@ -198,12 +207,16 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnLayerChoice( wxCommandEvent& even
 {
 }
 
+
 /*******************************************************************/
 void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
 /*******************************************************************/
 /* Copy values in text control to the item parameters
-*/
+ */
 {
+    if( !itemValuesOK() )
+        return;
+
     LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
 
     if( IsCopperLayer( layer ) )
@@ -250,7 +263,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     {
         double angle;
         m_Angle_Ctrl->GetValue().ToDouble( &angle );
-        NORMALIZE_ANGLE_360(angle);
+        NORMALIZE_ANGLE_360( angle );
         m_item->SetAngle( angle );
     }
 
@@ -258,4 +271,69 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     m_parent->SetMsgPanel( m_item );
 
     Close( true );
+}
+
+
+bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::itemValuesOK()
+{
+    wxArrayString error_msgs;
+
+    // Load the start and end points -- all types use these in the checks.
+    int startx = ValueFromString( g_UserUnit, m_Center_StartXCtrl->GetValue() );
+    int starty = ValueFromString( g_UserUnit, m_Center_StartYCtrl->GetValue() );
+    int endx   = ValueFromString( g_UserUnit, m_EndX_Radius_Ctrl->GetValue() );
+    int endy   = ValueFromString( g_UserUnit, m_EndY_Ctrl->GetValue() );
+
+    // Type specific checks.
+    switch( m_item->GetShape() )
+    {
+    case S_ARC:
+        // Check angle of arc.
+        double angle;
+        m_Angle_Ctrl->GetValue().ToDouble( &angle );
+        NORMALIZE_ANGLE_360( angle );
+
+        if( angle == 0 )
+        {
+            error_msgs.Add( _( "The arc angle must be greater than zero." ) );
+        }
+
+        // Fall through.
+    case S_CIRCLE:
+
+        // Check radius.
+        if( (startx == endx) && (starty == endy) )
+            error_msgs.Add( _( "The radius must be greater than zero." ) );
+
+        break;
+
+    default:
+
+        // Check start and end are not the same.
+        if( (startx == endx) && (starty == endy) )
+            error_msgs.Add( _( "The start and end points cannot be the same." ) );
+
+        break;
+    }
+
+    // Check the item thickness.
+    int thickness = ValueFromString( g_UserUnit, m_ThicknessCtrl->GetValue() );
+
+    if( thickness <= 0 )
+        error_msgs.Add( _( "The item thickness must be greater than zero." ) );
+
+    // And the default thickness.
+    thickness = ValueFromString( g_UserUnit, m_DefaultThicknessCtrl->GetValue() );
+
+    if( thickness <= 0 )
+        error_msgs.Add( _( "The default thickness must be greater than zero." ) );
+
+    if( error_msgs.GetCount() )
+    {
+        HTML_MESSAGE_BOX dlg( this, _( "Error list" ) );
+        dlg.ListSet( error_msgs );
+        dlg.ShowModal();
+    }
+
+    return error_msgs.GetCount() == 0;
 }

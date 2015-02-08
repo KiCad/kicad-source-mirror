@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -42,9 +42,8 @@ class DIALOG_SHIM;
 #define ID_LISTBOX_ORIENT_SELECT 1001
 #define ID_MODULE_PROPERTIES_EXCHANGE 1002
 #define ID_GOTO_MODULE_EDITOR 1003
-#define ID_BROWSE_3D_LIB 1004
-#define ID_ADD_3D_SHAPE 1005
-#define ID_REMOVE_3D_SHAPE 1006
+#define ID_ADD_3D_SHAPE 1004
+#define ID_REMOVE_3D_SHAPE 1005
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_MODULE_BOARD_EDITOR_BASE
@@ -114,9 +113,9 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextShapeOffset;
 		wxBoxSizer* m_bSizerShapeRotation;
 		wxStaticText* m_staticTextShapeRotation;
-		wxButton* m_buttonBrowse;
 		wxButton* m_buttonAdd;
 		wxButton* m_buttonRemove;
+		wxButton* m_buttonEdit;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;
@@ -128,9 +127,9 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		virtual void ExchangeModule( wxCommandEvent& event ) { event.Skip(); }
 		virtual void GotoModuleEditor( wxCommandEvent& event ) { event.Skip(); }
 		virtual void On3DShapeNameSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void Browse3DLib( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Add3DShape( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Remove3DShape( wxCommandEvent& event ) { event.Skip(); }
+		virtual void Edit3DShapeFilename( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		

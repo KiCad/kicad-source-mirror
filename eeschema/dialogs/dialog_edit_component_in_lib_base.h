@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -88,6 +88,7 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextFootprints;
 		wxListBox* m_FootprintFilterListBox;
 		wxButton* m_buttonAddFpF;
+		wxButton* m_buttonEditOneFootprintFilter;
 		wxButton* m_ButtonDeleteOneFootprintFilter;
 		wxButton* m_ButtonDeleteAllFootprintFilter;
 		wxStdDialogButtonSizer* m_stdSizerButton;
@@ -101,6 +102,7 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		virtual void DeleteAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
 		virtual void DeleteAllAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
 		virtual void AddFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void EditOneFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void DeleteOneFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void DeleteAllFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }

@@ -111,9 +111,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL_RANGE( ID_MODEDIT_PAD_TOOL, ID_MODEDIT_PLACE_GRID_COORD,
                     FOOTPRINT_EDIT_FRAME::OnVerticalToolbar )
 
-    // Options Toolbar
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
+    // Options Toolbar (ID_TB_OPTIONS_SHOW_PADS_SKETCH id is managed in PCB_BASE_FRAME)
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
@@ -181,8 +179,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
                          FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
 
     // Option toolbar:
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                   FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
                    FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
@@ -581,20 +577,12 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent )
 
     switch( id )
     {
-    case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
-        state = !displ_opts->m_DisplayPadFill;
-        break;
-
-    case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
-        state = !displ_opts->m_DisplayViaFill;
-        break;
-
     case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
-        state = displ_opts->m_DisplayModText == SKETCH;
+        state = displ_opts->m_DisplayModTextFill == SKETCH;
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
-        state = displ_opts->m_DisplayModEdge == SKETCH;
+        state = displ_opts->m_DisplayModEdgeFill == SKETCH;
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:

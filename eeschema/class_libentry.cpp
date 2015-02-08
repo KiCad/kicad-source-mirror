@@ -61,6 +61,9 @@ int LIB_PART::m_subpartIdSeparator = 0;
 int LIB_PART::m_subpartFirstId = 'A';
 
 
+const wxChar traceSchLibMem[] = wxT( "KISCHLIBMEM" );     // public
+
+
 LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ):
     EDA_ITEM( LIB_ALIAS_T ),
     shared( aRootPart )
@@ -85,10 +88,10 @@ LIB_ALIAS::~LIB_ALIAS()
 {
     wxASSERT_MSG( shared, wxT( "~LIB_ALIAS() without a LIB_PART" ) );
 
-#if defined(DEBUG) && 1
-    printf( "%s: destroying alias:'%s' of part:'%s' alias count:%d.\n",
-        __func__, TO_UTF8( name ), TO_UTF8( shared->GetName() ), int( shared->m_aliases.size() ) );
-#endif
+    wxLogTrace( traceSchLibMem,
+                wxT( "%s: destroying alias:'%s' of part:'%s'." ),
+                GetChars( wxString::FromAscii( __WXFUNCTION__ ) ), GetChars( name ),
+                GetChars( shared->GetName() ) );
 
     if( shared )
         shared->RemoveAlias( this );
@@ -241,9 +244,10 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
 
 LIB_PART::~LIB_PART()
 {
-    wxLogDebug( wxT( "%s: destroying part '%s' with alias list count of %d\n" ),
+    wxLogTrace( traceSchLibMem,
+                wxT( "%s: destroying part '%s' with alias list count of %u." ),
                 GetChars( wxString::FromAscii( __WXFUNCTION__ ) ), GetChars( GetName() ),
-                int( m_aliases.size() ) );
+                m_aliases.size() );
 
     // If the part is being deleted directly rather than through the library,
     // delete all of the aliases.
@@ -481,7 +485,7 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aD
 {
     wxASSERT( aItem != NULL );
 
-    // none of the MANDATOR_FIELDS may be removed in RAM, but they may be
+    // none of the MANDATORY_FIELDS may be removed in RAM, but they may be
     // omitted when saving to disk.
     if( aItem->Type() == LIB_FIELD_T )
     {
@@ -1692,10 +1696,13 @@ LIB_ALIAS* LIB_PART::RemoveAlias( LIB_ALIAS* aAlias )
     {
         bool rename = aAlias->IsRoot();
 
-        DBG( printf( "%s: part:'%s'  alias:'%s'\n", __func__,
-            TO_UTF8( m_name ),
-            TO_UTF8( aAlias->GetName() )
-            );)
+        wxLogTrace( traceSchLibMem,
+                    wxT( "%s: part:'%s', alias:'%s', alias count %u, reference count %d." ),
+                    GetChars( wxString::FromAscii( __WXFUNCTION__ ) ),
+                    GetChars( m_name ),
+                    GetChars( aAlias->GetName() ),
+                    m_aliases.size(),
+                    m_me.use_count() );
 
         it = m_aliases.erase( it );
 

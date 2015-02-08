@@ -51,14 +51,16 @@
 #include <confirm.h>
 
 
-#define KICAD_COMMON                    wxT( "kicad_common" )
+#define KICAD_COMMON                     wxT( "kicad_common" )
 
 // some key strings used to store parameters in KICAD_COMMON
 
-const wxChar PGM_BASE::workingDirKey[]  =  wxT( "WorkingDir" );     // public
+const wxChar PGM_BASE::workingDirKey[] = wxT( "WorkingDir" );     // public
 
-static const wxChar languageCfgKey[] =  wxT( "LanguageID" );
-static const wxChar kicadFpLibPath[] =  wxT( "KicadFootprintLibraryPath" );
+static const wxChar languageCfgKey[]   = wxT( "LanguageID" );
+static const wxChar kicadFpLibPath[]   = wxT( "KicadFootprintLibraryPath" );
+static const wxChar pathEnvVariables[] = wxT( "EnvironmentVariables" );
+static const wxChar traceEnvVars[]     = wxT( "KIENVVARS" );
 
 
 /**
@@ -353,7 +355,8 @@ bool PGM_BASE::initPgm()
 
     wxInitAllImageHandlers();
 
-    m_pgm_checker = new wxSingleInstanceChecker( pgm_name.GetName().Lower() + wxT( "-" ) + wxGetUserId(), GetKicadLockFilePath() );
+    m_pgm_checker = new wxSingleInstanceChecker( pgm_name.GetName().Lower() + wxT( "-" ) +
+                                                 wxGetUserId(), GetKicadLockFilePath() );
 
     if( m_pgm_checker->IsAnotherRunning() )
     {
@@ -361,6 +364,7 @@ bool PGM_BASE::initPgm()
             _( "%s is already running, Continue?" ),
             GetChars( pgm_name.GetName() )
             );
+
         if( !IsOK( NULL, quiz ) )
             return false;
     }
@@ -399,6 +403,17 @@ bool PGM_BASE::initPgm()
 
     SetLanguagePath();
 
+    // Useful local environment variable settings.
+    m_local_env_vars[ wxString( wxT( "KIGITHUB" ) ) ] =
+                      wxString( wxT( "https://github.com/KiCad" ) );
+
+    wxFileName tmpFileName;
+    tmpFileName.AssignDir( wxString( wxT( KICAD_DATA_PATH ) ) );
+    tmpFileName.AppendDir( wxT( "modules" ) );
+    m_local_env_vars[ wxString( wxT( "KISYSMOD" ) ) ] = tmpFileName.GetPath();
+    tmpFileName.AppendDir( wxT( "packages3d" ) );
+    m_local_env_vars[ wxString( wxT( "KISYS3DMOD" ) ) ] = tmpFileName.GetPath();
+
     // OS specific instantiation of wxConfigBase derivative:
     m_common_settings = GetNewConfig( KICAD_COMMON );
 
@@ -425,6 +440,7 @@ bool PGM_BASE::setExecutablePath()
     // bundle directory, e.g., /Applications/kicad.app/
 
     wxFileName fn( m_bin_dir );
+
     if( fn.GetName() == wxT( "kicad" ) )
     {
         // kicad launcher, so just remove the Contents/MacOS part
@@ -440,6 +456,7 @@ bool PGM_BASE::setExecutablePath()
         fn.RemoveLastDir();
         fn.RemoveLastDir();
     }
+
     m_bin_dir = fn.GetPath() + wxT( "/" );
 #else
     // Use unix notation for paths. I am not sure this is a good idea,
@@ -479,6 +496,33 @@ void PGM_BASE::loadCommonSettings()
     }
 
     m_editor_name = m_common_settings->Read( wxT( "Editor" ) );
+
+    wxString entry, oldPath;
+    wxArrayString entries;
+    long index = 0L;
+
+    oldPath = m_common_settings->GetPath();
+    m_common_settings->SetPath( pathEnvVariables );
+
+    while( m_common_settings->GetNextEntry( entry, index ) )
+    {
+        wxLogTrace( traceEnvVars,
+                    wxT( "Enumerating over entry %s, %ld." ), GetChars( entry ), index );
+        entries.Add( entry );
+    }
+
+    for( unsigned i = 0;  i < entries.GetCount();  i++ )
+    {
+        wxString val = m_common_settings->Read( entries[i], wxEmptyString );
+        m_local_env_vars[ entries[i]  ] = val;
+    }
+
+    for( std::map<wxString, wxString>::iterator it = m_local_env_vars.begin();
+         it != m_local_env_vars.end();
+         ++it )
+        SetLocalEnvVariable( it->first, it->second );
+
+    m_common_settings->SetPath( oldPath );
 }
 
 
@@ -491,6 +535,20 @@ void PGM_BASE::saveCommonSettings()
         wxString cur_dir = wxGetCwd();
 
         m_common_settings->Write( workingDirKey, cur_dir );
+
+        // Save the local environment variables.
+        m_common_settings->SetPath( pathEnvVariables );
+
+        for( std::map<wxString, wxString>::iterator it = m_local_env_vars.begin();
+             it != m_local_env_vars.end();
+             ++it )
+        {
+            wxLogTrace( traceEnvVars, wxT( "Saving environment varaiable config entry %s as %s" ),
+                        GetChars( it->first ),  GetChars( it->second ) );
+            m_common_settings->Write( it->first, it->second );
+        }
+
+        m_common_settings->SetPath( wxT( ".." ) );
     }
 }
 
@@ -665,3 +723,21 @@ void PGM_BASE::AddMenuLanguageList( wxMenu* MasterMenu )
     }
 }
 
+
+bool PGM_BASE::SetLocalEnvVariable( const wxString& aName, const wxString& aValue )
+{
+    wxString env;
+
+    // Check to see if the environment variable is already set.
+    if( wxGetEnv( aName, &env ) )
+    {
+        wxLogTrace( traceEnvVars, wxT( "Environment variable %s already set to %s." ),
+                    GetChars( aName ), GetChars( env ) );
+        return env == aValue;
+    }
+
+    wxLogTrace( traceEnvVars, wxT( "Setting local environment variable %s to %s." ),
+                GetChars( aName ), GetChars( aValue ) );
+
+    return wxSetEnv( aName, aValue );
+}

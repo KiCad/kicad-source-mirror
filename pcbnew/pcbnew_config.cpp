@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
@@ -96,8 +96,8 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         {
             LAYER_ID cur_layer = GetActiveLayer();
 
-            // If after showing the dialog the user removed the active layer,
-            // then use a sensible alternative layer to set as the active layer.
+            // If after showing the dialog the user has removed the active layer,
+            // then select a new active layer (front copper layer).
             if( !GetBoard()->GetEnabledLayers()[ cur_layer ] )
                 cur_layer = F_Cu;
 
@@ -354,12 +354,12 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                         &displ_opts->m_DisplayPadIsol, true ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PadSNum" ),
                                                         &displ_opts->m_DisplayPadNum, true ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ModAffC" ),
-                                                       &displ_opts->m_DisplayModEdge, FILLED, 0, 2 ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ModAffT" ),
-                                                       &displ_opts->m_DisplayModText, FILLED, 0, 2 ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PcbAffT" ),
-                                                       &displ_opts->m_DisplayDrawItems, FILLED, 0, 2 ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ModAffC" ),
+                                                       &displ_opts->m_DisplayModEdgeFill, FILLED ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ModAffT" ),
+                                                       &displ_opts->m_DisplayModTextFill, FILLED ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PcbAffT" ),
+                                                       &displ_opts->m_DisplayDrawItemsFill, FILLED ) );
         m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PcbShowZonesMode" ),
                                                        &displ_opts->m_DisplayZonesMode, 0, 0, 2 ) );
 

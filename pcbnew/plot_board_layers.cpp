@@ -103,7 +103,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 if( layersmask_plotpads[F_SilkS] )
                     color = ColorFromInt( color | aBoard->GetLayerColor( F_SilkS ) );
 
-                itemplotter.PlotPad( pad, color, LINE );
+                itemplotter.PlotPad( pad, color, SKETCH );
             }
         }
     }
@@ -137,7 +137,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             continue;
 
         aPlotter->ThickSegment( seg->GetStart(), seg->GetEnd(), seg->GetWidth(),
-                                itemplotter.GetMode() );
+                                itemplotter.GetPlotMode() );
     }
 }
 
@@ -285,7 +285,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
     itemplotter.SetLayerSet( aLayerMask );
 
-    EDA_DRAW_MODE_T plotMode = aPlotOpt.GetMode();
+    EDA_DRAW_MODE_T plotMode = aPlotOpt.GetPlotMode();
 
      // Plot edge layer and graphic items
     itemplotter.PlotBoardGraphicItems();

@@ -51,8 +51,9 @@ class TestBoardClass(unittest.TestCase):
         bounding_box = pcb.ComputeBoundingBox()
         height, width = ToMM(bounding_box.GetSize())
 
-        self.assertAlmostEqual(width, (30-10) + 0.5, 2)
-        self.assertAlmostEqual(height,  (20-10) + 0.5, 2)
+        clearance = ToMM(track.GetClearance()*2)
+        self.assertAlmostEqual(width, (30-10) + 0.5 + clearance, 2)
+        self.assertAlmostEqual(height,  (20-10) + 0.5 + clearance, 2)
 
     def test_pcb_get_pad(self):
         pcb = BOARD()

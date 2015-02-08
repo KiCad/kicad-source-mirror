@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -15,13 +15,12 @@ class DIALOG_SHIM;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/radiobox.h>
+#include <wx/checkbox.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/checkbox.h>
 #include <wx/statbox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
@@ -29,9 +28,7 @@ class DIALOG_SHIM;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_EDGE_SELECT 1000
-#define ID_TEXT_SELECT 1001
-#define ID_PADFILL_OPT 1002
+#define ID_PADFILL_OPT 1000
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE
@@ -41,10 +38,10 @@ class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxRadioBox* m_EdgesDisplayOption;
-		wxRadioBox* m_TextDisplayOption;
-		wxCheckBox* m_IsShowPadFill;
-		wxCheckBox* m_IsShowPadNum;
+		wxCheckBox* m_EdgesDisplayOption;
+		wxCheckBox* m_TextDisplayOption;
+		wxCheckBox* m_ShowPadSketch;
+		wxCheckBox* m_ShowPadNum;
 		wxCheckBox* m_IsZoomNoCenter;
 		wxCheckBox* m_IsMiddleButtonPan;
 		wxCheckBox* m_IsMiddleButtonPanLimited;
@@ -63,7 +60,7 @@ class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 425,206 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE();
 	
 };

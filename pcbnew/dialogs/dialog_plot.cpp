@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -193,7 +193,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_scaleOpt->SetSelection( m_plotOpts.GetScaleSelection() );
 
     // Plot mode
-    m_plotModeOpt->SetSelection( m_plotOpts.GetMode() );
+    setPlotModeChoiceSelection( m_plotOpts.GetPlotMode() );
 
     // Plot mirror option
     m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
@@ -335,7 +335,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 }
 
 
-PlotFormat DIALOG_PLOT::GetPlotFormat()
+PlotFormat DIALOG_PLOT::getPlotFormat()
 {
     // plot format id's are ordered like displayed in m_plotFormatOpt
     static const PlotFormat plotFmt[] =
@@ -356,13 +356,13 @@ PlotFormat DIALOG_PLOT::GetPlotFormat()
 // and clear also some optional values
 void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 {
-    switch( GetPlotFormat() )
+    switch( getPlotFormat() )
     {
     case PLOT_FORMAT_PDF:
     case PLOT_FORMAT_SVG:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( false );
-        m_plotModeOpt->SetSelection( 1 );
+        setPlotModeChoiceSelection( FILLED );
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
@@ -422,7 +422,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_drillShapeOpt->Enable( false );
         m_drillShapeOpt->SetSelection( 0 );
         m_plotModeOpt->Enable( false );
-        m_plotModeOpt->SetSelection( 1 );
+        setPlotModeChoiceSelection( FILLED );
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
@@ -576,7 +576,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetDrillMarksType( static_cast<PCB_PLOT_PARAMS::DrillMarksType>
                                    ( m_drillShapeOpt->GetSelection() ) );
     tempOptions.SetMirror( m_plotMirrorOpt->GetValue() );
-    tempOptions.SetMode( static_cast<EDA_DRAW_MODE_T>( m_plotModeOpt->GetSelection() ) );
+    tempOptions.SetPlotMode( m_plotModeOpt->GetSelection() == 1 ? SKETCH : FILLED );
     tempOptions.SetPlotViaOnMaskLayer( m_plotNoViaOnMaskOpt->GetValue() );
 
     // Update settings from text fields. Rewrite values back to the fields,
@@ -669,7 +669,7 @@ void DIALOG_PLOT::applyPlotSettings()
     ConfigBaseWriteDouble( m_config, CONFIG_PS_FINEWIDTH_ADJ,
                            (double)m_PSWidthAdjust / IU_PER_MM );
 
-    tempOptions.SetFormat( GetPlotFormat() );
+    tempOptions.SetFormat( getPlotFormat() );
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
     tempOptions.SetUseGerberAttributes( m_useGerberAttributes->GetValue() );

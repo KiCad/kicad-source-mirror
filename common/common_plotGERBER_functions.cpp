@@ -432,19 +432,16 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, EDA_DRAW_
     wxASSERT( outputFile );
     wxSize size( diametre, diametre );
 
-    switch( trace_mode )
+    if( trace_mode == SKETCH )
     {
-    case LINE:
-    case SKETCH:
         SetCurrentLineWidth( -1 );
         Circle( pos, diametre - currentPenWidth, NO_FILL );
-        break;
-
-    case FILLED:
+    }
+    else
+    {
         DPOINT pos_dev = userToDeviceCoordinates( pos );
         selectAperture( size, APERTURE::Circle );
         emitDcode( pos_dev, 3 );
-        break;
     }
 }
 
@@ -519,23 +516,20 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
 	// Pass through
     case 0:
     case 1800:
-        switch( trace_mode )
+        if( trace_mode == SKETCH )
         {
-        case LINE:
-        case SKETCH:
             SetCurrentLineWidth( -1 );
             Rect( wxPoint( pos.x - (size.x - currentPenWidth) / 2,
                            pos.y - (size.y - currentPenWidth) / 2 ),
                   wxPoint( pos.x + (size.x - currentPenWidth) / 2,
                            pos.y + (size.y - currentPenWidth) / 2 ),
                   NO_FILL );
-            break;
-
-        case FILLED:
+        }
+        else
+        {
             DPOINT pos_dev = userToDeviceCoordinates( pos );
             selectAperture( size, APERTURE::Rect );
             emitDcode( pos_dev, 3 );
-            break;
         }
         break;
 

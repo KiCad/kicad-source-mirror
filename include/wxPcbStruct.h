@@ -367,9 +367,6 @@ public:
      * to define a configuration setting that needs to be loaded at run time,
      * this is the place to define it.
      *
-     * @todo: Define the configuration variables as member variables instead of
-     *        global variables or move them to the object class where they are
-     *        used.
      * @return - Reference to the list of applications settings.
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings();

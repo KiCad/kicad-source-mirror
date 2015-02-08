@@ -2,7 +2,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,7 +89,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS() :
     m_lineWidth            = g_DrawDefaultLineThickness;
     m_plotFrameRef         = false;
     m_plotViaOnMaskLayer   = false;
-    m_mode                 = FILLED;
+    m_plotMode             = FILLED;
     m_useAuxOrigin         = false;
     m_HPGLPenNum           = 1;
     m_HPGLPenSpeed         = 20;        // this param is always in cm/s
@@ -167,7 +167,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_viasonmask ),
                        m_plotViaOnMaskLayer ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_mode ),
-                       m_mode );
+                       GetPlotMode() == SKETCH ? 2 : 1 );       // Value 0 (LINE mode) no more used
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_useauxorigin ),
                        m_useAuxOrigin ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpennumber ),
@@ -237,7 +237,7 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
     if( m_plotViaOnMaskLayer != aPcbPlotParams.m_plotViaOnMaskLayer )
         return false;
-    if( m_mode != aPcbPlotParams.m_mode )
+    if( m_plotMode != aPcbPlotParams.m_plotMode )
         return false;
     if( m_useAuxOrigin != aPcbPlotParams.m_useAuxOrigin )
         return false;
@@ -430,7 +430,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_mode:
-            aPcbPlotParams->m_mode = static_cast<EDA_DRAW_MODE_T>( parseInt( 0, 2 ) );
+            aPcbPlotParams->SetPlotMode( parseInt( 0, 2 ) > 1 ? SKETCH : FILLED );
             break;
 
         case T_useauxorigin:

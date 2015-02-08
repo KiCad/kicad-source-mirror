@@ -753,20 +753,14 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayOptions.m_DisplayPadFill, true );
     aCfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayOptions.m_DisplayViaFill, true );
     aCfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayOptions.m_DisplayPadNum, true );
-    aCfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayOptions.m_DisplayModEdge, ( long )FILLED );
+    aCfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayOptions.m_DisplayModEdgeFill, true );
 
     aCfg->Read( m_FrameName + FastGrid1Entry, &itmp, ( long )0);
     m_FastGrid1 = itmp;
     aCfg->Read( m_FrameName + FastGrid2Entry, &itmp, ( long )0);
     m_FastGrid2 = itmp;
 
-    if( m_DisplayOptions.m_DisplayModEdge < LINE || m_DisplayOptions.m_DisplayModEdge > SKETCH )
-        m_DisplayOptions.m_DisplayModEdge = FILLED;
-
-    aCfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayOptions.m_DisplayModText, ( long )FILLED );
-
-    if( m_DisplayOptions.m_DisplayModText < LINE || m_DisplayOptions.m_DisplayModText > SKETCH )
-        m_DisplayOptions.m_DisplayModText = FILLED;
+    aCfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayOptions.m_DisplayModTextFill, true );
 }
 
 
@@ -780,8 +774,8 @@ void PCB_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayOptions.m_DisplayPadFill );
     aCfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayOptions.m_DisplayViaFill );
     aCfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayOptions.m_DisplayPadNum );
-    aCfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayOptions.m_DisplayModEdge );
-    aCfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayOptions.m_DisplayModText );
+    aCfg->Write( m_FrameName + DisplayModuleEdgeEntry, m_DisplayOptions.m_DisplayModEdgeFill );
+    aCfg->Write( m_FrameName + DisplayModuleTextEntry, m_DisplayOptions.m_DisplayModTextFill );
     aCfg->Write( m_FrameName + FastGrid1Entry, ( long )m_FastGrid1 );
     aCfg->Write( m_FrameName + FastGrid2Entry, ( long )m_FastGrid2 );
 }

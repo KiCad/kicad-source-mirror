@@ -222,9 +222,6 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, EDA_COLOR_T aColo
 
     thickness = pt_texte->GetThickness();
 
-    if( GetMode() == LINE )
-        thickness = -1;
-
     if( pt_texte->IsMirrored() )
         NEGATE( size.x );  // Text is mirrored
 
@@ -249,7 +246,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
 
     DRAWSEGMENT draw;
 
-    draw.SetWidth( (GetMode() == LINE) ? -1 : aDim->GetWidth() );
+    draw.SetWidth( aDim->GetWidth() );
     draw.SetLayer( aDim->GetLayer() );
 
     EDA_COLOR_T color = aDim->GetBoard()->GetLayerColor( aDim->GetLayer() );
@@ -302,7 +299,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
     DRAWSEGMENT  draw;
 
     draw.SetShape( S_CIRCLE );
-    draw.SetWidth( ( GetMode() == LINE ) ? -1 : aMire->GetWidth() );
+    draw.SetWidth( aMire->GetWidth() );
     draw.SetLayer( aMire->GetLayer() );
     draw.SetStart( aMire->GetPosition() );
     radius = aMire->GetSize() / 3;
@@ -382,12 +379,12 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
     switch( type_trace )
     {
     case S_SEGMENT:
-        m_plotter->ThickSegment( pos, end, thickness, GetMode() );
+        m_plotter->ThickSegment( pos, end, thickness, GetPlotMode() );
         break;
 
     case S_CIRCLE:
         radius = KiROUND( GetLineLength( end, pos ) );
-        m_plotter->ThickCircle( pos, radius * 2, thickness, GetMode() );
+        m_plotter->ThickCircle( pos, radius * 2, thickness, GetPlotMode() );
         break;
 
     case S_ARC:
@@ -396,7 +393,7 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
         double startAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
         double endAngle = startAngle + aEdge->GetAngle();
 
-        m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetMode() );
+        m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetPlotMode() );
     }
     break;
 
@@ -455,7 +452,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     size      = pt_texte->GetSize();
     pos       = pt_texte->GetTextPosition();
     orient    = pt_texte->GetOrientation();
-    thickness = ( GetMode() == LINE ) ? -1 : pt_texte->GetThickness();
+    thickness = pt_texte->GetThickness();
 
     if( pt_texte->IsMirrored() )
         size.x = -size.x;
@@ -528,7 +525,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
             }
 
             // Plot the current filled area and its outline
-            if( GetMode() == FILLED )
+            if( GetPlotMode() == FILLED )
             {
                 // Plot the filled area polygon.
                 // The area can be filled by segments or uses solid polygons
@@ -544,7 +541,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
                         wxPoint end   = aZone->FillSegments()[iseg].m_End;
                         m_plotter->ThickSegment( start, end,
                                                  aZone->GetMinThickness(),
-                                                 GetMode() );
+                                                 GetPlotMode() );
                     }
 
                 // Plot the area outline only
@@ -558,9 +555,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
                 {
                     for( unsigned jj = 1; jj<cornerList.size(); jj++ )
                         m_plotter->ThickSegment( cornerList[jj -1], cornerList[jj],
-                                                 ( GetMode() == LINE ) ? -1 :
                                                  aZone->GetMinThickness(),
-                                                 GetMode() );
+                                                 GetPlotMode() );
                 }
 
                 m_plotter->SetCurrentLineWidth( -1 );
@@ -576,17 +572,12 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
  */
 void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 {
-    int     thickness;
-    int     radius = 0;
-    double  StAngle = 0, EndAngle = 0;
-
     if( !m_layerMask[aSeg->GetLayer()] )
         return;
 
-    if( GetMode() == LINE )
-        thickness = GetLineWidth();
-    else
-        thickness = aSeg->GetWidth();
+    int     radius = 0;
+    double  StAngle = 0, EndAngle = 0;
+    int thickness = aSeg->GetWidth();
 
     m_plotter->SetColor( getColor( aSeg->GetLayer() ) );
 
@@ -599,14 +590,14 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
     {
     case S_CIRCLE:
         radius = KiROUND( GetLineLength( end, start ) );
-        m_plotter->ThickCircle( start, radius * 2, thickness, GetMode() );
+        m_plotter->ThickCircle( start, radius * 2, thickness, GetPlotMode() );
         break;
 
     case S_ARC:
         radius = KiROUND( GetLineLength( end, start ) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
         EndAngle = StAngle + aSeg->GetAngle();
-        m_plotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, GetMode() );
+        m_plotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, GetPlotMode() );
         break;
 
     case S_CURVE:
@@ -616,12 +607,12 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
             for( unsigned i = 1; i < bezierPoints.size(); i++ )
                 m_plotter->ThickSegment( bezierPoints[i - 1],
                                          bezierPoints[i],
-                                         thickness, GetMode() );
+                                         thickness, GetPlotMode() );
         }
         break;
 
     default:
-        m_plotter->ThickSegment( start, end, thickness, GetMode() );
+        m_plotter->ThickSegment( start, end, thickness, GetPlotMode() );
     }
 }
 
@@ -646,10 +637,10 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape,
     {
         aDrillSize.y -= getFineWidthAdj();
         aDrillSize.y = Clamp( 1, aDrillSize.y, aPadSize.y - 1 );
-        m_plotter->FlashPadOval( aDrillPos, aDrillSize, aOrientation, GetMode() );
+        m_plotter->FlashPadOval( aDrillPos, aDrillSize, aOrientation, GetPlotMode() );
     }
     else
-        m_plotter->FlashPadCircle( aDrillPos, aDrillSize.x, GetMode() );
+        m_plotter->FlashPadCircle( aDrillPos, aDrillSize.x, GetPlotMode() );
 }
 
 
@@ -671,7 +662,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
          you could start a layer with negative polarity to scrape the film.
        - In DXF they go into the 'WHITE' layer. This could be useful.
      */
-    if( GetMode() == FILLED )
+    if( GetPlotMode() == FILLED )
          m_plotter->SetColor( WHITE );
 
     for( TRACK *pts = m_board->m_Track; pts != NULL; pts = pts->Next() )
@@ -698,6 +689,6 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
         }
     }
 
-    if( GetMode() == FILLED )
+    if( GetPlotMode() == FILLED )
         m_plotter->SetColor( GetColor() );
 }

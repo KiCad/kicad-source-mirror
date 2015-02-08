@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -159,7 +159,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_staticText13->Wrap( -1 );
 	bSizer14->Add( m_staticText13, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	wxString m_plotModeOptChoices[] = { _("Line"), _("Filled"), _("Sketch") };
+	wxString m_plotModeOptChoices[] = { _("Filled"), _("Sketch") };
 	int m_plotModeOptNChoices = sizeof( m_plotModeOptChoices ) / sizeof( wxString );
 	m_plotModeOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotModeOptNChoices, m_plotModeOptChoices, 0 );
 	m_plotModeOpt->SetSelection( 0 );

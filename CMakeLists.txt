@@ -45,12 +45,16 @@ option( KICAD_KEEPCASE
 # * No issues on Windows.
 # * needs webkitgtk-devel package installed on Linux, and wxWidgets rebuilt with this package.
 # * Seems also OK on OSX.
-# However the default option is on and has effect only if BUILD_GITHUB_PLUGIN is ON
-# This option could be removed soon, if no serious issue happens on Linux
+# This option has effect only if BUILD_GITHUB_PLUGIN is ON
+#
+# This option is set to OFF because Kicad developers cannot be sure the use of Webkit does no open
+# a security issue when runnig Kicad.
+# the probability is low, but not zero.
 option( KICAD_USE_WEBKIT
     "Use system web kit to build a web viewer in footprint library wizard to easily select github libraries (default ON)."
-    ON
+    OFF
     )
+
 
 option( USE_WX_GRAPHICS_CONTEXT
     "Use wxGraphicsContext for rendering (default OFF).  Warning, this is experimental" )
@@ -90,7 +94,6 @@ option( KICAD_SKIP_BOOST
     )
 mark_as_advanced( KICAD_SKIP_BOOST )    # Normal builders should build Boost.
 
-
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -98,6 +101,18 @@ mark_as_advanced( KICAD_SKIP_BOOST )    # Normal builders should build Boost.
 # python binary file should be is exec path.
 
 option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." ON )
+
+# When KICAD_USE_WEBKIT in on, the Kicad web viewer has access to the www.
+# Kicad developers cannot be sure the use of Web viewer does no open a security issue when runnig Kicad.
+# the probability is low, but not zero.
+#so warn the user:
+if( KICAD_USE_WEBKIT )
+    message( STATUS "by setting KICAD_USE_WEBKIT ON, you are building a web viewer inside Kicad.
+Kicad developers cannot be sure the Web access does no open a security issue,
+when running a Web Viewer inside Kicad. The probability is low, but not zero.
+You are warned" )
+endif()
+
 
 # This can be set to a custom name to brag about a particular branch in the "About" dialog:
 set( KICAD_REPO_NAME "product" CACHE STRING "Name of the tree from which this build came." )

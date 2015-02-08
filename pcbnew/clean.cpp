@@ -294,6 +294,7 @@ const ZONE_CONTAINER* TRACKS_CLEANER::zoneForTrackEndpoint( const TRACK *aTrack,
         top_layer = aTrack->GetLayer();
         bottom_layer = top_layer;
     }
+
     return m_Brd->HitTestForAnyFilledArea( aTrack->GetEndPoint( aEndPoint ),
             top_layer, bottom_layer, aTrack->GetNetCode() );
 }
@@ -305,8 +306,8 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK *aTrack, ENDPOINT_T aEndPo
     bool flag_erase = false;
 
     TRACK* other = aTrack->GetTrack( m_Brd->m_Track, NULL, aEndPoint, true, false );
-    if( (other == NULL) &&
-            (zoneForTrackEndpoint( aTrack, aEndPoint ) == NULL) )
+
+    if( (other == NULL) && (zoneForTrackEndpoint( aTrack, aEndPoint ) == NULL) )
         flag_erase = true; // Start endpoint is neither on pad, zone or other track
     else    // segment, via or zone connected to this end
     {
@@ -336,6 +337,7 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK *aTrack, ENDPOINT_T aEndPo
             aTrack->SetState( BUSY, false );
         }
     }
+
     return flag_erase;
 }
 

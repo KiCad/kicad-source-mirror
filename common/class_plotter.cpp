@@ -433,19 +433,16 @@ void PLOTTER::sketchOval( const wxPoint& pos, const wxSize& aSize, double orient
 void PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                             EDA_DRAW_MODE_T tracemode )
 {
-    switch( tracemode )
+    if( tracemode == FILLED )
     {
-    case FILLED:
-    case LINE:
-        SetCurrentLineWidth( tracemode==FILLED ? width : -1 );
+        SetCurrentLineWidth( width );
         MoveTo( start );
         FinishTo( end );
-        break;
-
-    case SKETCH:
+    }
+    else
+    {
         SetCurrentLineWidth( -1 );
         segmentAsOval( start, end, width, tracemode );
-        break;
     }
 }
 
@@ -453,24 +450,15 @@ void PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
 void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
                         int radius, int width, EDA_DRAW_MODE_T tracemode )
 {
-    switch( tracemode )
-    {
-    case LINE:
-        SetCurrentLineWidth( -1 );
-        Arc( centre, StAngle, EndAngle, radius, NO_FILL, -1 );
-        break;
-
-    case FILLED:
+    if( tracemode == FILLED )
         Arc( centre, StAngle, EndAngle, radius, NO_FILL, width );
-        break;
-
-    case SKETCH:
+    else
+    {
         SetCurrentLineWidth( -1 );
         Arc( centre, StAngle, EndAngle,
              radius - ( width - currentPenWidth ) / 2, NO_FILL, -1 );
         Arc( centre, StAngle, EndAngle,
              radius + ( width - currentPenWidth ) / 2, NO_FILL, -1 );
-        break;
     }
 }
 
@@ -478,17 +466,10 @@ void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
 void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
                          EDA_DRAW_MODE_T tracemode )
 {
-    switch( tracemode )
-    {
-    case LINE:
-        Rect( p1, p2, NO_FILL, -1 );
-        break;
-
-    case FILLED:
+    if( tracemode == FILLED )
         Rect( p1, p2, NO_FILL, width );
-        break;
-
-    case SKETCH:
+    else
+    {
         SetCurrentLineWidth( -1 );
         wxPoint offsetp1( p1.x - (width - currentPenWidth) / 2,
                           p1.y - (width - currentPenWidth) / 2 );
@@ -500,28 +481,19 @@ void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
         offsetp2.x -= (width - currentPenWidth);
         offsetp2.y -= (width - currentPenWidth);
         Rect( offsetp1, offsetp2, NO_FILL, -1 );
-        break;
     }
 }
 
 
 void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width, EDA_DRAW_MODE_T tracemode )
 {
-    switch( tracemode )
-    {
-    case LINE:
-        Circle( pos, diametre, NO_FILL, -1 );
-        break;
-
-    case FILLED:
+    if( tracemode == FILLED )
         Circle( pos, diametre, NO_FILL, width );
-        break;
-
-    case SKETCH:
+    else
+    {
         SetCurrentLineWidth( -1 );
         Circle( pos, diametre - width + currentPenWidth, NO_FILL, -1 );
         Circle( pos, diametre + width - currentPenWidth, NO_FILL, -1 );
-        break;
     }
 }
 

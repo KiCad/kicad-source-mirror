@@ -107,6 +107,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::initDlg()
     {
         m_ButtonDeleteAllFootprintFilter->Enable( false );
         m_ButtonDeleteOneFootprintFilter->Enable( false );
+        m_buttonEditOneFootprintFilter->Enable( false );
     }
 
     m_NoteBook->SetSelection( m_lastOpenedPage );
@@ -486,6 +487,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter( wxCommandEvent&
         m_FootprintFilterListBox->Clear();
         m_ButtonDeleteAllFootprintFilter->Enable( false );
         m_ButtonDeleteOneFootprintFilter->Enable( false );
+        m_buttonEditOneFootprintFilter->Enable( false );
     }
 }
 
@@ -526,6 +528,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& event
     m_FootprintFilterListBox->Append( Line );
     m_ButtonDeleteAllFootprintFilter->Enable( true );
     m_ButtonDeleteOneFootprintFilter->Enable( true );
+    m_buttonEditOneFootprintFilter->Enable( true );
 }
 
 
@@ -540,5 +543,28 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter( wxCommandEvent&
     {
         m_ButtonDeleteAllFootprintFilter->Enable( false );
         m_ButtonDeleteOneFootprintFilter->Enable( false );
+        m_buttonEditOneFootprintFilter->Enable( false );
     }
+}
+
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::EditOneFootprintFilter( wxCommandEvent& event )
+{
+    int idx = m_FootprintFilterListBox->GetSelection();
+
+    if( idx < 0 )
+        return;
+
+    wxString filter = m_FootprintFilterListBox->GetStringSelection();
+
+    wxTextEntryDialog dlg( this, wxEmptyString, _( "Edit footprint filter" ), filter );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;    // Aborted by user
+
+    filter = dlg.GetValue();
+
+    if( filter.IsEmpty() )
+        return;    // do not accept blank filter.
+
+    m_FootprintFilterListBox->SetString( idx, filter );
 }

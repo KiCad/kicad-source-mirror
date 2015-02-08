@@ -89,7 +89,6 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
 {
     int radius, ox, oy, width;
     int dx1, dx2, dy1, dy2;
-    int typeaff;
 
     ox = m_Pos.x + offset.x;
     oy = m_Pos.y + offset.y;
@@ -103,29 +102,20 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
 
     GRSetDrawMode( DC, mode_color );
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
-    typeaff = displ_opts ? displ_opts->m_DisplayDrawItems : FILLED;
+    bool filled = displ_opts ? displ_opts->m_DisplayDrawItemsFill : FILLED;
     width   = m_Width;
 
-    if( DC->LogicalToDeviceXRel( width ) <= MIN_DRAW_WIDTH )
-        typeaff = LINE;
-
     radius = m_Size / 3;
+
     if( GetShape() )   // shape X
         radius = m_Size / 2;
 
-    switch( typeaff )
-    {
-    case LINE:
-        width = 0;
-
-    case FILLED:
+    if( filled )
         GRCircle( panel->GetClipBox(), DC, ox, oy, radius, width, gcolor );
-        break;
-
-    case SKETCH:
+    else
+    {
         GRCircle( panel->GetClipBox(), DC, ox, oy, radius + (width / 2), gcolor );
         GRCircle( panel->GetClipBox(), DC, ox, oy, radius - (width / 2), gcolor );
-        break;
     }
 
 
@@ -142,18 +132,15 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
         dy2 = -dy1;
     }
 
-    switch( typeaff )
+    if( filled )
     {
-    case LINE:
-    case FILLED:
         GRLine( panel->GetClipBox(), DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
         GRLine( panel->GetClipBox(), DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
-        break;
-
-    case SKETCH:
+    }
+    else
+    {
         GRCSegm( panel->GetClipBox(), DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
         GRCSegm( panel->GetClipBox(), DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
-        break;
     }
 }
 
