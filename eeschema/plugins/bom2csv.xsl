@@ -4,11 +4,8 @@
 
     Functionality:
         Generation of csv table with table head of all existing field names
-        and correct assigned cell entries
+        and correct assigned cell entries.
 
-    How to use this is explained in eeschema.pdf chapter 14.  You enter a command line into the
-    netlist exporter using a new (custom) tab in the netlist export dialog.  The command is
-    similar to
         on Windows:
             xsltproc -o "%O.csv" "C:\Program Files (x86)\KiCad\bin\plugins\bom2csv.xsl" "%I"
         on Linux:
@@ -21,10 +18,22 @@
 
 <!--
     @package
-    Generate a Tab delimited list (csv file type).
-    One component per line
-    Fields are
-    Ref,Value, Footprint, Datasheet, Field5, Field4, price
+    Generate a command seperated file (.csv). One component per line
+    
+    Ouput Example:
+        Kicad Rev:  working director and file source
+        Generated Date: date this file was generated
+        Document Title: the project tile
+        Company: the project company
+        Revision: the project revision
+        Issue Date: project issue date
+        Comment: This is comment 1
+        Comment: This is comment 2
+        Comment: This is comment 3
+        Comment: This is comment 4
+
+        Reference, Value, Fields[n], Library, Library Ref
+        U1, PIC32MX, Fields[n], KicadLib, PIC
 -->
 
 <!DOCTYPE xsl:stylesheet [
@@ -40,14 +49,50 @@
 
     <!-- main part -->
     <xsl:template match="/export">
-        <xsl:text>Reference, Value, Footprint, Datasheet</xsl:text>
+			
+        <xsl:text>Source: </xsl:text><xsl:value-of  select="design/source"/><xsl:text>&nl;</xsl:text>
+        <xsl:text>Kicad Rev: </xsl:text><xsl:value-of  select="design/tool"/><xsl:text>&nl;</xsl:text>
+        <xsl:text>Generated Date: </xsl:text><xsl:value-of  select="design/generatedDate"/><xsl:text>&nl;</xsl:text>
+        <xsl:text>&nl;</xsl:text>
+        <xsl:text>Document Title: </xsl:text><xsl:value-of  select="design/title"/><xsl:text>&nl;</xsl:text>
+        <xsl:text>Company: </xsl:text><xsl:value-of  select="design/company"/><xsl:text>&nl;</xsl:text>
+        <xsl:text>Revision: </xsl:text><xsl:value-of  select="design/revision"/><xsl:text>&nl;</xsl:text>
+        <xsl:text>Issue Date: </xsl:text><xsl:value-of  select="design/issueDate"/><xsl:text>&nl;</xsl:text>
 
-            <!-- find all existing table head entries and list each one once -->
-            <xsl:for-each select="components/comp/fields/field[generate-id(.) = generate-id(key('headentr',@name)[1])]">
-                <xsl:text>, </xsl:text>
-                <xsl:value-of select="@name"/>
-            </xsl:for-each>
-            <xsl:text>&nl;</xsl:text>
+        <xsl:choose>
+            <xsl:when test="design/comment1 !=''">
+            <xsl:text>Comment: </xsl:text><xsl:value-of  select="design/comment1"/><xsl:text>&nl;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+
+        <xsl:choose>
+            <xsl:when test="design/comment2 !=''">
+            <xsl:text>Comment: </xsl:text><xsl:value-of  select="design/comment2"/><xsl:text>&nl;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+
+        <xsl:choose>
+            <xsl:when test="design/comment3 !=''">
+            <xsl:text>Comment: </xsl:text><xsl:value-of  select="design/comment3"/><xsl:text>&nl;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+
+        <xsl:choose>
+            <xsl:when test="design/comment4 !=''">
+            <xsl:text>Comment: </xsl:text><xsl:value-of  select="design/comment4"/><xsl:text>&nl;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+
+		<xsl:text>&nl;</xsl:text>
+			
+		<!-- Output table header -->
+        <xsl:text>Reference, Value, </xsl:text>
+        <xsl:for-each select="components/comp/fields/field[generate-id(.) = generate-id(key('headentr',@name)[1])]">
+            <xsl:value-of select="@name"/>
+            <xsl:text>, </xsl:text>
+        </xsl:for-each>
+        <xsl:text>Library, Library Ref</xsl:text>
+        <xsl:text>&nl;</xsl:text>
 
         <!-- all table entries -->
         <xsl:apply-templates select="components/comp"/>
@@ -57,10 +102,15 @@
     <xsl:template match="components/comp">
         <xsl:value-of select="@ref"/><xsl:text>,</xsl:text>
         <xsl:value-of select="value"/><xsl:text>,</xsl:text>
-        <xsl:value-of select="footprint"/><xsl:text>,</xsl:text>
-        <xsl:value-of select="datasheet"/>
         <xsl:apply-templates select="fields"/>
+        <xsl:apply-templates select="libsource"/>
         <xsl:text>&nl;</xsl:text>
+    </xsl:template>
+
+    <!-- the library selection -->
+    <xsl:template match="libsource">
+        <xsl:value-of select="@lib"/><xsl:text>,</xsl:text>
+        <xsl:value-of select="@part"/>
     </xsl:template>
 
     <!-- table entries with dynamic table head -->
@@ -72,7 +122,6 @@
         <!-- for all existing head entries -->
         <xsl:for-each select="/export/components/comp/fields/field[generate-id(.) = generate-id(key('headentr',@name)[1])]">
             <xsl:variable name="allnames" select="@name"/>
-            <xsl:text>,</xsl:text>
 
             <!-- for all field entries in the remembered fields section -->
             <xsl:for-each select="$fieldvar">
@@ -87,6 +136,7 @@
                     Every non-blank entry is assigned to its proper column.
                 -->
             </xsl:for-each>
+            <xsl:text>,</xsl:text>
         </xsl:for-each>
     </xsl:template>
 

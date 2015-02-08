@@ -47,6 +47,7 @@
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
 #include <build_version.h>
 #include <set>
+#include <sch_base_frame.h>
 
 #define INTERMEDIATE_NETLIST_EXT wxT("xml")
 
@@ -652,15 +653,34 @@ static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxE
 
 XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
 {
+    SCH_SCREEN* screen;
+    SCH_SCREENS ScreenList;
+    screen = ScreenList.GetFirst();
     XNODE*  xdesign = node( wxT("design") );
 
     // the root sheet is a special sheet, call it source
     xdesign->AddChild( node( wxT( "source" ), g_RootSheet->GetScreen()->GetFileName() ) );
 
-    xdesign->AddChild( node( wxT( "date" ), DateAndTime() ) );
+    xdesign->AddChild( node( wxT( "generatedDate" ), DateAndTime() ) );
 
     // which Eeschema tool
     xdesign->AddChild( node( wxT( "tool" ), wxT( "Eeschema " ) + GetBuildVersion() ) );
+
+    // export project information
+    if( screen != NULL )
+    {
+
+        TITLE_BLOCK tb2 = screen->GetTitleBlock();
+
+        xdesign->AddChild( node( wxT( "title" ), tb2.GetTitle() ));
+        xdesign->AddChild( node( wxT( "company" ), tb2.GetCompany()));
+        xdesign->AddChild( node( wxT( "revision" ), tb2.GetRevision()));
+        xdesign->AddChild( node( wxT( "issueDate" ), tb2.GetDate()));
+        xdesign->AddChild( node( wxT( "comment1" ), tb2.GetComment1()));
+        xdesign->AddChild( node( wxT( "comment2" ), tb2.GetComment2()));
+        xdesign->AddChild( node( wxT( "comment3" ), tb2.GetComment3()));
+        xdesign->AddChild( node( wxT( "comment4" ), tb2.GetComment4()));
+    } 
 
     /*  @todo might do a list of schematic pages
 
