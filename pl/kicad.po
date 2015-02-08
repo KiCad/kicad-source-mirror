@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-03 05:58+0100\n"
-"PO-Revision-Date: 2015-02-03 06:12+0100\n"
+"POT-Creation-Date: 2015-02-08 07:56+0100\n"
+"PO-Revision-Date: 2015-02-08 08:01+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -585,11 +585,11 @@ msgstr "Niezgodność etykiet hierarchicznych z arkuszem pinów"
 msgid "A no connect symbol is connected to more than 1 pin"
 msgstr "Symbol \"Niepołączone\" jest połączony do więcej niż jednego pinu"
 
-#: eeschema/class_libentry.cpp:105 eeschema/class_libentry.cpp:264
+#: eeschema/class_libentry.cpp:108 eeschema/class_libentry.cpp:268
 msgid "none"
 msgstr "bez_nazwy"
 
-#: eeschema/class_libentry.cpp:493
+#: eeschema/class_libentry.cpp:497
 #, c-format
 msgid ""
 "An attempt was made to remove the %s field from component %s in library %s."
@@ -605,61 +605,61 @@ msgstr ""
 "Biblioteka '%s' posiada zdublowany wpis '%s'.\n"
 "Może to spowodować niespodziewane efekty przy ładowaniu symboli do schematu."
 
-#: eeschema/class_library.cpp:238
+#: eeschema/class_library.cpp:254
 #, c-format
 msgid "Cannot add duplicate alias '%s' to library '%s'."
 msgstr "Nie można dodać zdublowanego aliasu '%s' do biblioteki '%s'."
 
-#: eeschema/class_library.cpp:405
+#: eeschema/class_library.cpp:421
 msgid "The component library file name is not set."
 msgstr "Nazwa pliku biblioteki nie została ustalona."
 
-#: eeschema/class_library.cpp:413
+#: eeschema/class_library.cpp:429
 msgid "The file could not be opened."
 msgstr "Ten plik nie może zostac otwarty."
 
-#: eeschema/class_library.cpp:421
+#: eeschema/class_library.cpp:437
 msgid "The file is empty!"
 msgstr "Plik jest pusty!"
 
-#: eeschema/class_library.cpp:446
+#: eeschema/class_library.cpp:462
 msgid "The file is NOT an Eeschema library!"
 msgstr "Plik NIE jest biblioteką programu Eeschema!"
 
-#: eeschema/class_library.cpp:452
+#: eeschema/class_library.cpp:468
 msgid "The file header is missing version and time stamp information."
 msgstr "Nagłówek pliku nie posiada numeru wersji i odcisku czasowego."
 
-#: eeschema/class_library.cpp:496
+#: eeschema/class_library.cpp:512
 msgid "An error occurred attempting to read the header."
 msgstr "Wystąpił błąd podczas próby odczytu nagłówka."
 
-#: eeschema/class_library.cpp:525
+#: eeschema/class_library.cpp:541
 #, c-format
 msgid "Library '%s' component load error %s."
 msgstr "Biblioteka '%s'. Błąd ładowania symbolu %s."
 
-#: eeschema/class_library.cpp:598
+#: eeschema/class_library.cpp:614
 #, c-format
 msgid "Could not open component document library file '%s'."
 msgstr "Nie można otworzyc pliku dokumentacji biblioteki '%s'."
 
-#: eeschema/class_library.cpp:605
+#: eeschema/class_library.cpp:621
 #, c-format
 msgid "Part document library file '%s' is empty."
 msgstr "Plik dokumentacji biblioteki '%s' jest pusty."
 
-#: eeschema/class_library.cpp:613
+#: eeschema/class_library.cpp:629
 #, c-format
 msgid "File '%s' is not a valid component library document file."
 msgstr "Plik '%s' nie jest poprawnym plikiem dokumentacji biblioteki."
 
-#: eeschema/class_library.cpp:999
+#: eeschema/class_library.cpp:1015
 #, c-format
 msgid "Unable to load project's '%s' file"
 msgstr "Nie mogę załadować pliku '%s' należącego do projektu"
 
-#: eeschema/class_library.cpp:1090
+#: eeschema/class_library.cpp:1106
 #, c-format
 msgid ""
 "Part library '%s' failed to load. Error:\n"
@@ -668,7 +668,7 @@ msgstr ""
 "Biblioteka symboli '%s' nie może zostać załadowana. Błąd:\n"
 "%s"
 
-#: eeschema/class_library.cpp:1112
+#: eeschema/class_library.cpp:1128
 #, c-format
 msgid ""
 "Part library '%s' failed to load.\n"
@@ -7217,13 +7217,12 @@ msgid "Delete NET?"
 msgstr "Usunąć sieć?"
 
 #: pcbnew/dimension.cpp:144
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:188
 msgid ""
 "This item has an illegal layer id.\n"
 "Now, forced on the drawings layer. Please, fix it"
 msgstr ""
 "Ten element posiada niepoprawny identyfikator warstwy.\n"
-"Obecnie został przeniesiony na warstwę rysunkową. Proszę to naprawić."
+"Obecnie został przeniesiony na warstwę rysunkową. Proszę to poprawić."
 
 #: pcbnew/dimension.cpp:202 pcbnew/dialogs/dialog_edit_module_text.cpp:231
 #: pcbnew/dialogs/dialog_pcb_text_properties.cpp:248
@@ -11014,17 +11013,17 @@ msgstr "Średnica mikroprzelotki"
 msgid "uVia Drill"
 msgstr "Otwór mikroprzelotki"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:60
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:59
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:102
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:116
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:126
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:136
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:148
-#: common/pgm_base.cpp:104
+#: common/pgm_base.cpp:106
 msgid "Default"
 msgstr "Domyślny"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:67
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:66
 msgid "Net Class parameters"
 msgstr "Parametry klas połączeń"
 
@@ -11439,7 +11438,8 @@ msgid "Others:"
 msgstr "Pozostałe:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:98
-msgid "Graphic items  sketch mode"
+#: cvpcb/dialogs/dialog_display_options_base.cpp:25
+msgid "Graphic items sketch mode"
 msgstr "Pokaż tylko zarys elementów graficznych"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:102
@@ -11925,13 +11925,12 @@ msgid "Value:"
 msgstr "Wartość:"
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:172
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:188
 msgid ""
 "This item has an illegal layer id.\n"
 "Now, forced on the front silk screen layer. Please, fix it"
 msgstr ""
 "Ten element posiada niepoprawny identyfikator warstwy.\n"
-"Obecnie został przeniesiony na górną warstwę opisową. Proszę to naprawić."
+"Obecnie został przeniesiony na górną warstwę opisową. Proszę to poprawić."
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:19
 #, c-format
@@ -13067,39 +13066,92 @@ msgstr ""
 "pisaka.\n"
 "Używane do rysowania elementów w trybie szkicu."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:134
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:132
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:143
+msgid "Circle Properties"
+msgstr "Właściwości Okręgów"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:133
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:144
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:140
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:150
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:144
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:155
 msgid "Center X"
 msgstr "Pkt. centralny X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:135
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:134
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:145
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:141
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:151
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:145
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:156
 msgid "Center Y"
 msgstr "Pkt. centralny Y"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:136
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:142
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:135
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:146
 msgid "Point X"
 msgstr "Promień X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:137
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:143
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:136
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:147
 msgid "Point Y"
 msgstr "Promień Y"
 
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:143
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:154
+msgid "Arc Properties"
+msgstr "Właściwości Łuków"
+
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:146
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:152
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:157
 msgid "Start Point X"
 msgstr "Pozycja początkowa X"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:147
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:153
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:158
 msgid "Start Point Y"
 msgstr "Pozycja początkowa Y"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:155
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:167
+msgid "Line Segment Properties"
+msgstr "Właściwości Segmentów"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:192
+msgid ""
+"This item was on an unknown layer.\n"
+"It has been moved to the drawings layer. Please fix it."
+msgstr ""
+"Ten element znajduje się na nieznanej warstwie.\n"
+"Obecnie został przeniesiony na warstwę rysunkową. Proszę to poprawić."
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:291
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:298
+msgid "The arc angle must be greater than zero."
+msgstr "Kąt łuku musi być większy niż zero"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:300
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:306
+msgid "The radius must be greater than zero."
+msgstr "Promień musi być większy niż zero."
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:310
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:314
+msgid "The start and end points cannot be the same."
+msgstr "Punkt początkowy i końcowy nie mogą być takie same."
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:320
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:323
+msgid "The item thickness must be greater than zero."
+msgstr "Grubość musi być większa niż zero."
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:326
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:329
+msgid "The default thickness must be greater than zero."
+msgstr "Domyślna grubość musi być większa niż zero."
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:330
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:333
+msgid "Error list"
+msgstr "Lista błędów"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:30
 msgid "Start point X"
@@ -13133,7 +13185,15 @@ msgstr "Grubość:"
 msgid "Default thickness:"
 msgstr "Domyślna grubość:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:214
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:197
+msgid ""
+"This item was on an unknown layer.\n"
+"It has been moved to the front silk screen layer. Please fix it."
+msgstr ""
+"Ten element znajduje się na nieznanej warstwie.\n"
+"Obecnie został przeniesiony na górną warstwę opisową. Proszę to poprawić."
+
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:227
 msgid ""
 "The graphic item will be on a copper layer. This is very dangerous. Are you "
 "sure?"
@@ -14980,15 +15040,15 @@ msgstr "Zezwól na łamanie zasad DRC"
 msgid "Suggest track finish"
 msgstr "Proponuj zakończenie ścieżki"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:54
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid "Optimizer effort"
 msgstr "Głębokość optymalizacji"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:70
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:73
 msgid "low"
 msgstr "Niska"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:79
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:82
 msgid "high"
 msgstr "Wysoka"
 
@@ -16243,10 +16303,6 @@ msgstr "Opcje ścieżek:"
 #: cvpcb/dialogs/dialog_display_options_base.cpp:23
 msgid "Draw options"
 msgstr "Opcje rysowania"
-
-#: cvpcb/dialogs/dialog_display_options_base.cpp:25
-msgid "Graphic items sketch mode"
-msgstr "Pokaż tylko zarys elementów graficznych"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:31
 msgid "Pad sketch mode"
@@ -17639,96 +17695,96 @@ msgstr "Wewnętrzne"
 msgid "Non-copper"
 msgstr "Poza warstwami ścieżek"
 
-#: common/pgm_base.cpp:121
+#: common/pgm_base.cpp:123
 msgid "French"
 msgstr "Francuski"
 
-#: common/pgm_base.cpp:129
+#: common/pgm_base.cpp:131
 msgid "Finnish"
 msgstr "Suomi (Fiński)"
 
-#: common/pgm_base.cpp:137
+#: common/pgm_base.cpp:139
 msgid "Spanish"
 msgstr "Hiszpański"
 
-#: common/pgm_base.cpp:145
+#: common/pgm_base.cpp:147
 msgid "Portuguese"
 msgstr "Portugalski"
 
-#: common/pgm_base.cpp:153
+#: common/pgm_base.cpp:155
 msgid "Italian"
 msgstr "Włoski"
 
-#: common/pgm_base.cpp:161
+#: common/pgm_base.cpp:163
 msgid "German"
 msgstr "Niemiecki"
 
-#: common/pgm_base.cpp:169
+#: common/pgm_base.cpp:171
 msgid "Greek"
 msgstr "Grecki"
 
-#: common/pgm_base.cpp:177
+#: common/pgm_base.cpp:179
 msgid "Slovenian"
 msgstr "Słoweński"
 
-#: common/pgm_base.cpp:185
+#: common/pgm_base.cpp:187
 msgid "Hungarian"
 msgstr "Węgierski"
 
-#: common/pgm_base.cpp:193
+#: common/pgm_base.cpp:195
 msgid "Polish"
 msgstr "Polski"
 
-#: common/pgm_base.cpp:201
+#: common/pgm_base.cpp:203
 msgid "Czech"
 msgstr "Czeski"
 
-#: common/pgm_base.cpp:209
+#: common/pgm_base.cpp:211
 msgid "Russian"
 msgstr "Rosyjski"
 
-#: common/pgm_base.cpp:217
+#: common/pgm_base.cpp:219
 msgid "Korean"
 msgstr "Koreański"
 
-#: common/pgm_base.cpp:225
+#: common/pgm_base.cpp:227
 msgid "Chinese simplified"
 msgstr "Chiński uproszczony"
 
-#: common/pgm_base.cpp:233
+#: common/pgm_base.cpp:235
 msgid "Catalan"
 msgstr "Kataloński"
 
-#: common/pgm_base.cpp:241
+#: common/pgm_base.cpp:243
 msgid "Dutch"
 msgstr "Holenderski"
 
-#: common/pgm_base.cpp:249
+#: common/pgm_base.cpp:251
 msgid "Japanese"
 msgstr "Japoński"
 
-#: common/pgm_base.cpp:257
+#: common/pgm_base.cpp:259
 msgid "Bulgarian"
 msgstr "Bułgarski"
 
-#: common/pgm_base.cpp:326
+#: common/pgm_base.cpp:328
 msgid "No default editor found, you must choose it"
 msgstr "Nie znaleziono domyślnego edytora. Musisz go wybrać."
 
-#: common/pgm_base.cpp:333
+#: common/pgm_base.cpp:335
 msgid "Preferred Editor:"
 msgstr "Preferowany edytor:"
 
-#: common/pgm_base.cpp:361
+#: common/pgm_base.cpp:364
 #, c-format
 msgid "%s is already running, Continue?"
 msgstr "%s jest już uruchomiony. Kontynuować?"
 
-#: common/pgm_base.cpp:654
+#: common/pgm_base.cpp:712
 msgid "Language"
 msgstr "Język"
 
-#: common/pgm_base.cpp:655
+#: common/pgm_base.cpp:713
 msgid "Select application language (only for testing!)"
 msgstr "Wybierz język aplikacji (tylko do testowania!)"
 
@@ -20389,7 +20445,7 @@ msgstr "Orientacja footprintów"
 msgid "Pad Properties"
 msgstr "Właściwości pola lutowniczego"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.h:66
+#: pcbnew/dialogs/dialog_pns_settings_base.h:68
 msgid "Interactive Router settings"
 msgstr "Ustawienia interaktywnego routera"
 
@@ -20478,39 +20534,3 @@ msgstr "Kalkulator PCB"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nowy element"
-
-#~ msgid "Tracks:"
-#~ msgstr "Ścieżki:"
-
-#~ msgid "Select how tracks are displayed"
-#~ msgstr "Wybierz sposób wyświetlania ścieżek"
-
-#~ msgid "Via Shapes:"
-#~ msgstr "Kształty przelotek:"
-
-#~ msgid "Footprint Edges:"
-#~ msgstr "Krawędzie Footprintów:"
-
-#~ msgid "Texts:"
-#~ msgstr "Teksty:"
-
-#~ msgid "Pad Options:"
-#~ msgstr "Opcje pola:"
-
-#~ msgid "Pad Shapes:"
-#~ msgstr "Kształty pola:"
-
-#~ msgid "Display other items:"
-#~ msgstr "Pokaż pozostałe elementy:"
-
-#~ msgid "Browse Shapes"
-#~ msgstr "Przeglądaj kształty"
-
-#~ msgid "Edges"
-#~ msgstr "Krawędzie"
-
-#~ msgid "Fill &pad"
-#~ msgstr "&Pole lutownicze wypełnione"
-
-#~ msgid "Length:"
-#~ msgstr "Długość:"
