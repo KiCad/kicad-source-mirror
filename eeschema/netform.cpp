@@ -670,16 +670,16 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
     if( screen != NULL )
     {
 
-        TITLE_BLOCK tb2 = screen->GetTitleBlock();
+        TITLE_BLOCK tb = screen->GetTitleBlock();
 
-        xdesign->AddChild( node( wxT( "title" ), tb2.GetTitle() ));
-        xdesign->AddChild( node( wxT( "company" ), tb2.GetCompany()));
-        xdesign->AddChild( node( wxT( "revision" ), tb2.GetRevision()));
-        xdesign->AddChild( node( wxT( "issueDate" ), tb2.GetDate()));
-        xdesign->AddChild( node( wxT( "comment1" ), tb2.GetComment1()));
-        xdesign->AddChild( node( wxT( "comment2" ), tb2.GetComment2()));
-        xdesign->AddChild( node( wxT( "comment3" ), tb2.GetComment3()));
-        xdesign->AddChild( node( wxT( "comment4" ), tb2.GetComment4()));
+        xdesign->AddChild( node( wxT( "title" ), tb.GetTitle() ) );
+        xdesign->AddChild( node( wxT( "company" ), tb.GetCompany() ) );
+        xdesign->AddChild( node( wxT( "revision" ), tb.GetRevision() ) );
+        xdesign->AddChild( node( wxT( "issueDate" ), tb.GetDate() ) );
+        xdesign->AddChild( node( wxT( "comment1" ), tb.GetComment1() ) );
+        xdesign->AddChild( node( wxT( "comment2" ), tb.GetComment2() ) );
+        xdesign->AddChild( node( wxT( "comment3" ), tb.GetComment3() ) );
+        xdesign->AddChild( node( wxT( "comment4" ), tb.GetComment4() ) );
     } 
 
     /*  @todo might do a list of schematic pages
