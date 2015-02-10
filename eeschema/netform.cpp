@@ -654,32 +654,37 @@ static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxE
 XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
 {
     SCH_SCREEN* screen;
-    SCH_SCREENS ScreenList;
-    screen = ScreenList.GetFirst();
+    SCH_SCREENS screenList;
+    screen = screenList.GetFirst();
     XNODE*  xdesign = node( wxT("design") );
+    XNODE*  xsheetNode;
+    XNODE*  xsheetInfo;
 
     // the root sheet is a special sheet, call it source
     xdesign->AddChild( node( wxT( "source" ), g_RootSheet->GetScreen()->GetFileName() ) );
 
-    xdesign->AddChild( node( wxT( "generatedDate" ), DateAndTime() ) );
+    xdesign->AddChild( node( wxT( "date" ), DateAndTime() ) );
 
     // which Eeschema tool
     xdesign->AddChild( node( wxT( "tool" ), wxT( "Eeschema " ) + GetBuildVersion() ) );
 
-    // export project information
-    if( screen != NULL )
-    {
+    xdesign->AddChild( xsheetNode = node( wxT( "sheets" ) ) );
 
+    for( screen = screenList.GetFirst(); screen != NULL; screen = screenList.GetNext() )
+    {
+        
         TITLE_BLOCK tb = screen->GetTitleBlock();
 
-        xdesign->AddChild( node( wxT( "title" ), tb.GetTitle() ) );
-        xdesign->AddChild( node( wxT( "company" ), tb.GetCompany() ) );
-        xdesign->AddChild( node( wxT( "revision" ), tb.GetRevision() ) );
-        xdesign->AddChild( node( wxT( "issueDate" ), tb.GetDate() ) );
-        xdesign->AddChild( node( wxT( "comment1" ), tb.GetComment1() ) );
-        xdesign->AddChild( node( wxT( "comment2" ), tb.GetComment2() ) );
-        xdesign->AddChild( node( wxT( "comment3" ), tb.GetComment3() ) );
-        xdesign->AddChild( node( wxT( "comment4" ), tb.GetComment4() ) );
+        xsheetNode->AddChild( xsheetInfo = node( wxT( "sheet" ) ) );
+        
+        xsheetInfo->AddChild( node( wxT( "title" ), tb.GetTitle() ) );
+        xsheetInfo->AddChild( node( wxT( "company" ), tb.GetCompany() ) );
+        xsheetInfo->AddChild( node( wxT( "revision" ), tb.GetRevision() ) );
+        xsheetInfo->AddChild( node( wxT( "issueDate" ), tb.GetDate() ) );
+        xsheetInfo->AddChild( node( wxT( "comment1" ), tb.GetComment1() ) );
+        xsheetInfo->AddChild( node( wxT( "comment2" ), tb.GetComment2() ) );
+        xsheetInfo->AddChild( node( wxT( "comment3" ), tb.GetComment3() ) );
+        xsheetInfo->AddChild( node( wxT( "comment4" ), tb.GetComment4() ) );
     } 
 
     /*  @todo might do a list of schematic pages
