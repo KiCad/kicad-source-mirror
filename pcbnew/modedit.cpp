@@ -315,9 +315,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 Zoom_Automatique( false );
             }
 
-            if( IsGalCanvasActive() )
-                updateView();
-
+            updateView();
             m_canvas->Refresh();
 
             GetScreen()->ClrModify();
@@ -562,10 +560,10 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( m_Draw3DFrame )
             m_Draw3DFrame->NewDisplay();
 
-        m_canvas->Refresh();
-
         GetScreen()->ClrModify();
+
         updateView();
+        m_canvas->Refresh();
 
         break;
 
