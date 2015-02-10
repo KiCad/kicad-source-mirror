@@ -120,8 +120,8 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
     {
         wxMenu      itemMenu;
 
-        // Give a title to the selection menu. This is also a cancel menu item *
-        wxMenuItem* item_title = new wxMenuItem( &itemMenu, -1, _( "Selection Clarification" ) );
+        // Give a title to the selection menu. It also allow to close the popup menu without any action
+        wxMenuItem* item_title = new wxMenuItem( &itemMenu, wxID_NONE, _( "Selection Clarification" ) );
 
 #ifdef __WINDOWS__
         wxFont      bold_font( *wxNORMAL_FONT );
@@ -195,7 +195,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
-    bool       redraw = false;
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
@@ -308,7 +307,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 // module the defaults are used)
                 // This is mandatory to handle and draw pads
                 GetBoard()->BuildListOfNets();
-                redraw = true;
                 module->SetPosition( wxPoint( 0, 0 ) );
 
                 if( GetBoard()->m_Modules )
@@ -319,6 +317,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( IsGalCanvasActive() )
                 updateView();
+
+            m_canvas->Refresh();
 
             GetScreen()->ClrModify();
         }
@@ -349,18 +349,18 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 SetCrossHairPosition( wxPoint( 0, 0 ) );
 
                 //  Add the new object to board
-                module->SetParent( (EDA_ITEM*)GetBoard() );
-                GetBoard()->m_Modules.Append( module );
+                GetBoard()->Add( module, ADD_APPEND );
 
                 // Initialize data relative to nets and netclasses (for a new
                 // module the defaults are used)
                 // This is mandatory to handle and draw pads
                 GetBoard()->BuildListOfNets();
-                redraw = true;
                 module->SetPosition( wxPoint( 0, 0 ) );
                 module->ClearFlags();
 
                 Zoom_Automatique( false );
+                updateView();
+                m_canvas->Refresh();
 
                 if( m_Draw3DFrame )
                     m_Draw3DFrame->NewDisplay();
@@ -492,13 +492,13 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         SetCrossHairPosition( wxPoint( 0, 0 ) );
         Import_Module();
-        redraw = true;
 
         if( GetBoard()->m_Modules )
             GetBoard()->m_Modules->ClearFlags();
 
         GetScreen()->ClrModify();
         Zoom_Automatique( false );
+        m_canvas->Refresh();
 
         if( m_Draw3DFrame )
             m_Draw3DFrame->NewDisplay();
@@ -532,7 +532,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetCrossHairPosition( wxPoint( 0, 0 ) );
 
         LoadModuleFromLibrary( GetCurrentLib(), Prj().PcbFootprintLibs(), true );
-        redraw = true;
 
         if( GetBoard()->m_Modules )
              GetBoard()->m_Modules->ClearFlags();
@@ -562,6 +561,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( m_Draw3DFrame )
             m_Draw3DFrame->NewDisplay();
+
+        m_canvas->Refresh();
 
         GetScreen()->ClrModify();
         updateView();
@@ -600,24 +601,22 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
         m_canvas->MoveCursorToCrossHair();
         Rotate_Module( NULL, (MODULE*) GetScreen()->GetCurItem(), 900, true );
-        redraw = true;
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
         m_canvas->MoveCursorToCrossHair();
         Rotate_Module( NULL, (MODULE*) GetScreen()->GetCurItem(), -900, true );
-        redraw = true;
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_PCB_EDIT_MODULE_PRMS:
         {
             DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
-            int ret = dialog.ShowModal();
+            dialog.ShowModal();
             GetScreen()->GetCurItem()->ClearFlags();
             m_canvas->MoveCursorToCrossHair();
-
-            if( ret > 0 )
-                m_canvas->Refresh();
+            m_canvas->Refresh();
         }
         break;
 
@@ -696,6 +695,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_MODEDIT_ENTER_EDGE_WIDTH:
         {
             EDGE_MODULE* edge = NULL;
+
             if( GetScreen()->GetCurItem()
               && ( GetScreen()->GetCurItem()->Type() == PCB_MODULE_EDGE_T ) )
             {
@@ -739,7 +739,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_MODULE_MIRROR:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         Transform( (MODULE*) GetScreen()->GetCurItem(), id );
-        redraw = true;
+        m_canvas->Refresh();
         break;
 
     case ID_PCB_DRAWINGS_WIDTHS_SETUP:
@@ -811,9 +811,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                       wxT( "FOOTPRINT_EDIT_FRAME::Process_Special_Functions error" ) );
         break;
     }
-
-    if( redraw )
-        m_canvas->Refresh();
 }
 
 
