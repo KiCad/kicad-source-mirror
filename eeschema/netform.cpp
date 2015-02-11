@@ -653,12 +653,15 @@ static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxE
 
 XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
 {
-    SCH_SCREEN* screen;
     SCH_SCREENS screenList;
-    screen = screenList.GetFirst();
+    SCH_SCREEN* screen;
     XNODE*  xdesign = node( wxT("design") );
-    XNODE*  xsheetNode;
     XNODE*  xsheetInfo;
+    XNODE*  xcommentNode;
+    XNODE*  xpagesNode;
+    XNODE*  xpageNode;
+    wxString    sheetNumTxt;
+    wxString    sheetNumTxtFormat = wxT( "%d" );
 
     // the root sheet is a special sheet, call it source
     xdesign->AddChild( node( wxT( "source" ), g_RootSheet->GetScreen()->GetFileName() ) );
@@ -668,46 +671,43 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
     // which Eeschema tool
     xdesign->AddChild( node( wxT( "tool" ), wxT( "Eeschema " ) + GetBuildVersion() ) );
 
-    xdesign->AddChild( xsheetNode = node( wxT( "sheets" ) ) );
+    /*
+        Export the sheets information
+    */
+    SCH_SHEET_LIST sheetList;
+    xdesign->AddChild( xpagesNode = node( wxT( "sheets" ) ) );
 
-    for( screen = screenList.GetFirst(); screen != NULL; screen = screenList.GetNext() )
+    for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
     {
+        xpagesNode->AddChild( xpageNode = node( wxT( "sheet" ) ) );
+
+        // get the string representation of the sheet index number. 
+        // Note that sheet->GetIndex() is zero index base and we need to increment the number by one to make 
+        // human readable
+        sheetNumTxt.Printf( sheetNumTxtFormat, ( sheetList.GetIndex() + 1 )  );
+
+        xpageNode->AddChild( node( wxT( "number" ), sheetNumTxt ) );
+        xpageNode->AddChild( node( wxT( "names" ), sheet->PathHumanReadable() ) );
+        xpageNode->AddChild( node( wxT( "tstamps" ), sheet->Path() ) );
         
+        screen = sheet->LastScreen();
         TITLE_BLOCK tb = screen->GetTitleBlock();
 
-        xsheetNode->AddChild( xsheetInfo = node( wxT( "sheet" ) ) );
-        
+        xpageNode->AddChild( xsheetInfo = node( wxT( "page" ) ) );
+    
         xsheetInfo->AddChild( node( wxT( "title" ), tb.GetTitle() ) );
         xsheetInfo->AddChild( node( wxT( "company" ), tb.GetCompany() ) );
         xsheetInfo->AddChild( node( wxT( "revision" ), tb.GetRevision() ) );
         xsheetInfo->AddChild( node( wxT( "issueDate" ), tb.GetDate() ) );
-        xsheetInfo->AddChild( node( wxT( "comment1" ), tb.GetComment1() ) );
-        xsheetInfo->AddChild( node( wxT( "comment2" ), tb.GetComment2() ) );
-        xsheetInfo->AddChild( node( wxT( "comment3" ), tb.GetComment3() ) );
-        xsheetInfo->AddChild( node( wxT( "comment4" ), tb.GetComment4() ) );
-    } 
+        xsheetInfo->AddChild( node( wxT( "source" ), screen->GetFileName() ) );
 
-    /*  @todo might do a list of schematic pages
+        xsheetInfo->AddChild( xcommentNode = node( wxT( "comments" ) ) );
+        xcommentNode->AddChild( node( wxT( "comment" ), tb.GetComment1() ) );
+        xcommentNode->AddChild( node( wxT( "comment" ), tb.GetComment2() ) );
+        xcommentNode->AddChild( node( wxT( "comment" ), tb.GetComment3() ) );
+        xcommentNode->AddChild( node( wxT( "comment" ), tb.GetComment4() ) );
 
-        <page name="">
-            <title/>
-            <revision/>
-            <company/>
-            <comments>
-                <comment>blah</comment> <!-- comment1 -->
-                <comment>blah</comment> <!-- comment2 -->
-            </comments>
-            <pagesize/>
-        </page>
-        :
-
-        and a sheet hierarchy report here
-        <sheets>
-            <sheet name="sheetname1" page="pagenameA">
-                <sheet name="sheetname2" page="pagenameB"/>  use recursion to output?
-            </sheet>
-        </sheets>
-    */
+    }
 
     return xdesign;
 }

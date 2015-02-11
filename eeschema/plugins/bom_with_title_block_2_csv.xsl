@@ -73,8 +73,8 @@
     <xsl:template match="/export/design/sheets/sheet[1]">
         
         <xsl:choose>
-            <xsl:when test="title !=''">
-                <xsl:text>Title,</xsl:text><xsl:value-of  select="title"/><xsl:text>&nl;</xsl:text>
+            <xsl:when test="page/title !=''">
+                <xsl:text>Title,</xsl:text><xsl:value-of  select="page/title"/><xsl:text>&nl;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>Title,Not Set</xsl:text><xsl:text>&nl;</xsl:text>
@@ -83,8 +83,8 @@
         
    
         <xsl:choose>
-            <xsl:when test="company !=''">
-                <xsl:text>Company,</xsl:text><xsl:value-of  select="company"/><xsl:text>&nl;</xsl:text>
+            <xsl:when test="page/company !=''">
+                <xsl:text>Company,</xsl:text><xsl:value-of  select="page/company"/><xsl:text>&nl;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>Company,Not Set</xsl:text><xsl:text>&nl;</xsl:text>
@@ -92,8 +92,8 @@
         </xsl:choose>
         
         <xsl:choose>
-            <xsl:when test="revision !=''">
-                <xsl:text>Revision,</xsl:text><xsl:value-of  select="revision"/><xsl:text>&nl;</xsl:text>
+            <xsl:when test="page/revision !=''">
+                <xsl:text>Revision,</xsl:text><xsl:value-of  select="page/revision"/><xsl:text>&nl;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>Revision,Not Set</xsl:text><xsl:text>&nl;</xsl:text>
@@ -101,38 +101,26 @@
         </xsl:choose>
         
         <xsl:choose>
-            <xsl:when test="issueDate !=''">
-                <xsl:text>Date Issue,</xsl:text><xsl:value-of  select="issueDate"/><xsl:text>&nl;</xsl:text>
+            <xsl:when test="page/issueDate !=''">
+                <xsl:text>Date Issue,</xsl:text><xsl:value-of  select="page/issueDate"/><xsl:text>&nl;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>Date Issue,Not Set</xsl:text><xsl:text>&nl;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
 
+        <xsl:apply-templates select="page/comments/comment"/><xsl:text>&nl;</xsl:text> 
+    </xsl:template>
+    
+    <xsl:template match="page/comments/comment">
         <xsl:choose>
-            <xsl:when test="comment1 !=''">
-            <xsl:text>Comment,</xsl:text><xsl:value-of  select="comment1"/><xsl:text>&nl;</xsl:text>
-            </xsl:when>
-        </xsl:choose>
-
-        <xsl:choose>
-            <xsl:when test="comment2 !=''">
-            <xsl:text>Comment,</xsl:text><xsl:value-of  select="comment2"/><xsl:text>&nl;</xsl:text>
-            </xsl:when>
-        </xsl:choose>
-
-        <xsl:choose>
-            <xsl:when test="comment3 !=''">
-            <xsl:text>Comment,</xsl:text><xsl:value-of  select="comment3"/><xsl:text>&nl;</xsl:text>
-            </xsl:when>
-        </xsl:choose>
-
-        <xsl:choose>
-            <xsl:when test="comment4 !=''">
-            <xsl:text>Comment,</xsl:text><xsl:value-of  select="comment4"/><xsl:text>&nl;</xsl:text>
+            <xsl:when test=". !=''">
+            <xsl:text>Comment,</xsl:text><xsl:value-of  select="."/><xsl:text>&nl;</xsl:text>
             </xsl:when>
         </xsl:choose>
     </xsl:template>
+    
+
     
     <!-- the table entries -->
     <xsl:template match="components/comp">
