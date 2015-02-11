@@ -222,7 +222,8 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
         // Under Linux, every submenu can have a separate event handler, under
         // Windows all submenus are handled by the main menu.
 #ifdef __WINDOWS__
-            if( !evt ) {
+            if( !evt )
+            {
                 // Try to find the submenu which holds the selected item
                 wxMenu* menu = NULL;
                 FindItem( m_selected, &menu );

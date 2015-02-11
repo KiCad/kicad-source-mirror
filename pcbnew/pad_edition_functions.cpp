@@ -161,9 +161,10 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
     // Add the new pad to end of the module pad list.
     aModule->Pads().PushBack( pad );
 
-    // Update the pad properties.
+    // Update the pad properties,
+    // and keep NETINFO_LIST::ORPHANED as net info
+    // which is the default when nets cannot be handled.
     Import_Pad_Settings( pad, false );
-    pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     pad->SetPosition( GetCrossHairPosition() );
 
