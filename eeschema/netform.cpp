@@ -653,7 +653,6 @@ static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxE
 
 XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
 {
-    SCH_SCREENS screenList;
     SCH_SCREEN* screen;
     XNODE*  xdesign = node( wxT("design") );
     XNODE*  xsheetInfo;
@@ -687,7 +686,7 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
         sheetNumTxt.Printf( sheetNumTxtFormat, ( sheetList.GetIndex() + 1 )  );
 
         xpageNode->AddChild( node( wxT( "number" ), sheetNumTxt ) );
-        xpageNode->AddChild( node( wxT( "names" ), sheet->PathHumanReadable() ) );
+        xpageNode->AddChild( node( wxT( "name" ), sheet->PathHumanReadable() ) );
         xpageNode->AddChild( node( wxT( "tstamps" ), sheet->Path() ) );
         
         screen = sheet->LastScreen();
