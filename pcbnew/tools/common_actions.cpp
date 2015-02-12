@@ -341,6 +341,10 @@ TOOL_ACTION COMMON_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         AS_GLOBAL, 0,
         "Enumerate pads", "Enumerate pads", AF_ACTIVATE );
 
+TOOL_ACTION COMMON_ACTIONS::createArray( "pcbnew.ModuleEditor.createArray",
+        AS_GLOBAL, MD_CTRL + int('N'),
+        "Create array", "Create array", AF_ACTIVATE );
+
 TOOL_ACTION COMMON_ACTIONS::copyItems( "pcbnew.ModuleEditor.copyItems",
         AS_GLOBAL, MD_CTRL + int( 'C' ),
         "Copy items", "Copy items", AF_ACTIVATE );

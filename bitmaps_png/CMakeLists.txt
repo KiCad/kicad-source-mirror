@@ -151,6 +151,9 @@ set( BMAPS_MID
     annotate_down_right
     annotate_right_down
     annotate
+    array_line
+    array_pad
+    array_text
     auto_associe
     auto_delete_track
     auto_track_width

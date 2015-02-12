@@ -324,6 +324,10 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             msg = AddHotkeyName( _("Move Pad Exactly" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
             AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EXACT, msg, KiBitmap( move_pad_xpm ) );
 
+            msg = AddHotkeyName( _("Create Pad Array" ), g_Module_Editor_Hokeys_Descr, HK_CREATE_ARRAY );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_CREATE_ARRAY, msg, KiBitmap( array_pad_xpm ) );
+
+
             if( !flags )
             {
                 PopMenu->AppendSeparator();
@@ -347,7 +351,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             AddMenuItem( PopMenu, ID_POPUP_PCB_ROTATE_TEXTMODULE, msg, KiBitmap( rotate_field_xpm ) );
 
             {
-                // Do not show option to duplicate value or reference fields
+                // Do not show option to replicate value or reference fields
                 // (there can only be one of each)
 
                 const MODULE* module = static_cast<MODULE*>( item->GetParent() );
@@ -359,6 +363,11 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                                          g_Module_Editor_Hokeys_Descr, HK_DUPLICATE_ITEM );
                     AddMenuItem( PopMenu, ID_POPUP_PCB_DUPLICATE_ITEM,
                                  msg, KiBitmap( duplicate_text_xpm ) );
+
+                    msg = AddHotkeyName( _("Create Text Array" ),
+                                         g_Module_Editor_Hokeys_Descr, HK_CREATE_ARRAY );
+                    AddMenuItem( PopMenu, ID_POPUP_PCB_CREATE_ARRAY,
+                                 msg, KiBitmap( array_text_xpm ) );
                 }
             }
 
@@ -398,6 +407,9 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
 
             msg = AddHotkeyName( _("Move Edge Exactly" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
             AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EXACT, msg, KiBitmap( move_line_xpm ) );
+
+            msg = AddHotkeyName( _("Create Edge Array" ), g_Module_Editor_Hokeys_Descr, HK_CREATE_ARRAY );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_CREATE_ARRAY, msg, KiBitmap( array_line_xpm ) );
 
             if( ( flags & (IS_NEW | IS_MOVED) ) == IS_MOVED )
                 AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_EDGE, _( "Place edge" ),

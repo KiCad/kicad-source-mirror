@@ -36,6 +36,7 @@
 #include <collectors.h>
 #include <confirm.h>
 #include <dialogs/dialog_enum_pads.h>
+#include <dialogs/dialog_create_array.h>
 
 #include <wxPcbStruct.h>
 #include <class_board.h>
@@ -75,6 +76,7 @@ bool MODULE_TOOLS::Init()
 
     selectionTool->AddMenuItem( COMMON_ACTIONS::enumeratePads );
     selectionTool->AddMenuItem( COMMON_ACTIONS::duplicate );
+    selectionTool->AddMenuItem( COMMON_ACTIONS::createArray );
 
     setTransitions();
 
@@ -494,6 +496,7 @@ int MODULE_TOOLS::DuplicateItems( TOOL_EVENT& aEvent )
     bool increment = aEvent.IsAction( &COMMON_ACTIONS::duplicateIncrement );
 
     MODULE* module = m_board->m_Modules;
+
     assert( module );
 
     // first, check if we have a selection, or try to get one
@@ -554,7 +557,7 @@ int MODULE_TOOLS::DuplicateItems( TOOL_EVENT& aEvent )
     }
 
     m_frame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
-                             (int) old_items.size() ) );
+            (int) old_items.size() ) );
 
     // pick up the selected item(s) and start moving
     // this works well for "dropping" copies around
@@ -562,6 +565,95 @@ int MODULE_TOOLS::DuplicateItems( TOOL_EVENT& aEvent )
 
     // and re-enable undos
     m_toolMgr->DecUndoInhibit();
+
+    setTransitions();
+
+    return 0;
+}
+
+
+int MODULE_TOOLS::CreateArray( TOOL_EVENT& aEvent )
+{
+    MODULE* module = m_board->m_Modules;
+    assert( module );
+
+    // first, check if we have a selection, or try to get one
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+    if( selTool->GetSelection().Empty() )
+    {
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
+    }
+
+    const SELECTION& selection = selTool->GetSelection();
+
+    // if we don't have a selection by now, this tool can't do anything
+    if( selection.Empty() || selTool->CheckLock() )
+    {
+        setTransitions();
+        return 0;
+    }
+
+    // we have a selection to work on now, so start the tool process
+
+    m_frame->OnModify();
+    m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+
+    DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* array_opts = NULL;
+
+    PCB_BASE_FRAME* baseFrame = getEditFrame<PCB_BASE_FRAME>();
+
+    DIALOG_CREATE_ARRAY dialog( baseFrame, &array_opts );
+    int ret = dialog.ShowModal();
+
+    if( ret == DIALOG_CREATE_ARRAY::CREATE_ARRAY_OK && array_opts != NULL )
+    {
+        wxPoint rotPoint = selection.GetCenter();
+
+        for( int i = 0; i < selection.Size(); ++i )
+        {
+            BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+
+            if( !item )
+                continue;
+
+            // iterate across the array, laying out the item at the
+            // correct position
+            // skip the first one - we already have that object
+            const unsigned nPoints = array_opts->GetArraySize();
+
+            for( unsigned ptN = 0; ptN < nPoints; ++ptN )
+            {
+                BOARD_ITEM* newItem = NULL;
+
+                if( ptN == 0 )
+                {
+                    newItem = item;
+                }
+                else
+                {
+                    newItem = module->DuplicateAndAddItem( item, true );
+
+                    if( newItem )
+                    {
+                        array_opts->TransformItem( ptN, newItem, rotPoint );
+
+                        m_toolMgr->RunAction( COMMON_ACTIONS::unselectItem, true, newItem );
+                        m_view->Add( newItem );
+                    }
+                }
+
+                // set the number if needed:
+                if( newItem->Type() == PCB_PAD_T && array_opts->ShouldRenumberItems() )
+                {
+                    const std::string padName = array_opts->GetItemNumber( ptN );
+                    static_cast<D_PAD*>( newItem )->SetPadName( padName );
+                }
+            }
+        }
+
+        m_frame->GetGalCanvas()->Refresh();
+    }
 
     setTransitions();
 
@@ -648,4 +740,5 @@ void MODULE_TOOLS::setTransitions()
     Go( &MODULE_TOOLS::DuplicateItems,      COMMON_ACTIONS::duplicateIncrement.MakeEvent() );
     Go( &MODULE_TOOLS::ModuleTextOutlines,  COMMON_ACTIONS::moduleTextOutlines.MakeEvent() );
     Go( &MODULE_TOOLS::ModuleEdgeOutlines,  COMMON_ACTIONS::moduleEdgeOutlines.MakeEvent() );
+    Go( &MODULE_TOOLS::CreateArray,         COMMON_ACTIONS::createArray.MakeEvent() );
 }

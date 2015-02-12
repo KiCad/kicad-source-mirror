@@ -172,6 +172,9 @@ bool FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
     case HK_DUPLICATE_ITEM_AND_INCREMENT:
         OnHotkeyDuplicateItem( HK_Descr->m_Idcommand );
         break;
+
+    case HK_CREATE_ARRAY:
+        PostCommandMenuEvent( ID_POPUP_PCB_CREATE_ARRAY );
     }
 
     return true;

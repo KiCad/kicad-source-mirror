@@ -213,6 +213,9 @@ public:
     /// Tool for quick pad enumeration
     static TOOL_ACTION enumeratePads;
 
+    /// Tool for creating an array of objects
+    static TOOL_ACTION createArray;
+
     /// Copying module items to clipboard
     static TOOL_ACTION copyItems;
 

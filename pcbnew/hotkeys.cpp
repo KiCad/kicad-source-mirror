@@ -112,6 +112,7 @@ static EDA_HOTKEY HkMoveItemExact( wxT( "Move Item Exactly" ), HK_MOVE_ITEM_EXAC
 static EDA_HOTKEY HkDuplicateItem( wxT( "Duplicate Item" ), HK_DUPLICATE_ITEM, 'D' + GR_KB_CTRL );
 static EDA_HOTKEY HkDuplicateItemAndIncrement( wxT( "Duplicate Item and Increment" ),
                                    HK_DUPLICATE_ITEM_AND_INCREMENT, 'D' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkCreateArray( wxT( "Create Array" ), HK_CREATE_ARRAY, 'N' + GR_KB_CTRL );
 static EDA_HOTKEY HkCopyItem( wxT( "Copy Item" ), HK_COPY_ITEM, 'C' );
 static EDA_HOTKEY HkDragFootprint( wxT( "Drag Item" ), HK_DRAG_ITEM, 'G' );
 static EDA_HOTKEY HkGetAndMoveFootprint( wxT( "Get and Move Footprint" ), HK_GET_AND_MOVE_FOOTPRINT, 'T' );
@@ -305,8 +306,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
 EDA_HOTKEY* module_edit_Hotkey_List[] = {
     &HkMoveItem,               &HkRotateItem,                &HkEditBoardItem,
     &HkMoveItemExact,          &HkDuplicateItem,             &HkDuplicateItemAndIncrement,
-    &HkDelete,
-    &HkSaveModule,
+    &HkCreateArray,            &HkDelete,                    &HkSaveModule,
     NULL
  };
 

@@ -46,6 +46,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_cleaning_options.cpp
     dialogs/dialog_copper_zones.cpp
     dialogs/dialog_copper_zones_base.cpp
+    dialogs/dialog_create_array.cpp
+    dialogs/dialog_create_array_base.cpp
     dialogs/dialog_design_rules.cpp
     dialogs/dialog_design_rules_base.cpp
     dialogs/dialog_dimension_editor_base.cpp
