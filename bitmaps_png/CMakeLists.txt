@@ -217,6 +217,9 @@ set( BMAPS_MID
     drag_track_segment
     drc_off
     drc
+    duplicate_line
+    duplicate_pad
+    duplicate_text
     edges_sketch
     edit_comp_footprint
     edit_component

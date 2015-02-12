@@ -453,6 +453,16 @@ public:
      */
     unsigned GetPadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T( INCLUDE_NPTH ) ) const;
 
+    /**
+     * Function GetNextPadName
+     * returns the next available pad name in the module
+     *
+     * @param aFillSequenceGaps true if the numbering should "fill in" gaps in
+     * the sequence, else return the highest value + 1
+     * @return the next available pad name
+     */
+    wxString GetNextPadName( bool aFillSequenceGaps ) const;
+
     double GetArea() const                  { return m_Surface; }
 
     time_t GetLink() const                  { return m_Link; }
@@ -463,6 +473,9 @@ public:
 
     int GetPlacementCost90() const          { return m_CntRot90; }
     void SetPlacementCost90( int aCost )    { m_CntRot90 = aCost; }
+
+    BOARD_ITEM* DuplicateAndAddItem( const BOARD_ITEM* item,
+                                     bool aIncrementPadNumbers );
 
     /**
      * Function Add3DModel

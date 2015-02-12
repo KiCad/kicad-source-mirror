@@ -104,6 +104,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_pcb_text_properties_base.cpp
     dialogs/dialog_pns_settings.cpp
     dialogs/dialog_pns_settings_base.cpp
+    dialogs/dialog_move_exact.cpp
+    dialogs/dialog_move_exact_base.cpp
     dialogs/dialog_non_copper_zones_properties.cpp
     dialogs/dialog_non_copper_zones_properties_base.cpp
     dialogs/dialog_pad_properties.cpp

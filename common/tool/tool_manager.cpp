@@ -195,7 +195,8 @@ private:
 
 
 TOOL_MANAGER::TOOL_MANAGER() :
-    m_model( NULL ), m_view( NULL ), m_viewControls( NULL ), m_editFrame( NULL )
+    m_model( NULL ), m_view( NULL ), m_viewControls( NULL ), m_editFrame( NULL ),
+    m_undoInhibit( false )
 {
     m_actionMgr = new ACTION_MANAGER( this );
 
@@ -712,4 +713,24 @@ bool TOOL_MANAGER::isActive( TOOL_BASE* aTool )
 
     // Just check if the tool is on the active tools stack
     return std::find( m_activeTools.begin(), m_activeTools.end(), aTool->GetId() ) != m_activeTools.end();
+}
+
+
+void TOOL_MANAGER::IncUndoInhibit()
+{
+    m_undoInhibit++;
+}
+
+
+void TOOL_MANAGER::DecUndoInhibit()
+{
+    m_undoInhibit--;
+
+    wxASSERT_MSG( m_undoInhibit >= 0, wxT( "Undo inhibit count decremented past zero" ) );
+}
+
+
+bool TOOL_MANAGER::IsUndoInhibited() const
+{
+    return m_undoInhibit > 0;
 }

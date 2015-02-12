@@ -408,6 +408,16 @@ void D_PAD::SetPadName( const wxString& name )
 }
 
 
+void D_PAD::IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps )
+{
+    bool skip = aSkipUnconnectable
+            && ( GetAttribute() == PAD_HOLE_NOT_PLATED );
+
+    if( !skip )
+        SetPadName(GetParent()->GetNextPadName( aFillSequenceGaps ));
+}
+
+
 void D_PAD::Copy( D_PAD* source )
 {
     if( source == NULL )

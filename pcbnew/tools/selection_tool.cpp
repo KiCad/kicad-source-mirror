@@ -939,3 +939,27 @@ void SELECTION::clear()
     items.ClearItemsList();
     group->Clear();
 }
+
+
+wxPoint SELECTION::GetCenter() const
+{
+    wxPoint centre;
+
+    if( Size() == 1 )
+    {
+        centre = Item<BOARD_ITEM>( 0 )->GetCenter();
+    }
+    else
+    {
+        EDA_RECT bbox =  Item<BOARD_ITEM>( 0 )->GetBoundingBox();
+        for( unsigned int i = 1; i < items.GetCount(); ++i )
+        {
+            BOARD_ITEM* item = Item<BOARD_ITEM>( i );
+            bbox.Merge( item->GetBoundingBox() );
+        }
+
+        centre = bbox.Centre();
+    }
+
+    return centre;
+}

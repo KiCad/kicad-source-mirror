@@ -74,48 +74,11 @@ bool MODULE_TOOLS::Init()
     }
 
     selectionTool->AddMenuItem( COMMON_ACTIONS::enumeratePads );
+    selectionTool->AddMenuItem( COMMON_ACTIONS::duplicate );
 
     setTransitions();
 
     return true;
-}
-
-
-static wxString getNextPadName( MODULE* aModule )
-{
-    std::set<int> usedNumbers;
-
-    // Create a set of used pad numbers
-    for( D_PAD* pad = aModule->Pads(); pad; pad = pad->Next() )
-    {
-        wxString padName = pad->GetPadName();
-        int padNumber = 0;
-        int base = 1;
-
-        // Trim and extract the trailing numeric part
-        while( padName.Len() && padName.Last() >= '0' && padName.Last() <= '9' )
-        {
-            padNumber += ( padName.Last() - '0' ) * base;
-            padName.RemoveLast();
-            base *= 10;
-        }
-
-        usedNumbers.insert( padNumber );
-    }
-
-    int candidate = *usedNumbers.begin();
-
-    // Look for a gap in pad numbering
-    for( std::set<int>::iterator it = usedNumbers.begin(),
-            itEnd = usedNumbers.end(); it != itEnd; ++it )
-    {
-        if( *it - candidate > 1 )
-            break;
-
-        candidate = *it;
-    }
-
-    return wxString::Format( wxT( "%i" ), ++candidate );
 }
 
 
@@ -189,14 +152,8 @@ int MODULE_TOOLS::PlacePad( TOOL_EVENT& aEvent )
             // ( pad position for module orient, 0, and relative to the module position)
             pad->SetLocalCoord();
 
-            /* NPTH pads take empty pad number (since they can't be connected),
-             * other pads get incremented from the last one edited */
-            wxString padName;
-
-            if( pad->GetAttribute() != PAD_HOLE_NOT_PLATED )
-                padName = getNextPadName( module );
-
-            pad->SetPadName( padName );
+            // Take the next available pad number
+            pad->IncrementPadName( true, true );
 
             // Handle the view aspect
             preview.Remove( pad );
@@ -532,6 +489,85 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
     return 0;
 }
 
+int MODULE_TOOLS::DuplicateItems( TOOL_EVENT& aEvent )
+{
+    bool increment = aEvent.IsAction( &COMMON_ACTIONS::duplicateIncrement );
+
+    MODULE* module = m_board->m_Modules;
+    assert( module );
+
+    // first, check if we have a selection, or try to get one
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+    if( selTool->GetSelection().Empty() )
+    {
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
+    }
+
+    const SELECTION& selection = selTool->GetSelection();
+
+    // if we don't have a selection by now, this tool can't do anything
+    if( selection.Empty() || selTool->CheckLock() )
+    {
+        setTransitions();
+        return 0;
+    }
+
+    // we have a selection to work on now, so start the tool process
+
+    m_frame->OnModify();
+    m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+
+    // prevent other tools making undo points while the duplicate is going on
+    // so that if you cancel, you don't get a duplicate object hiding over
+    // the original
+    m_toolMgr->IncUndoInhibit();
+
+    std::vector<BOARD_ITEM*> old_items;
+
+    for( int i = 0; i < selection.Size(); ++i )
+    {
+        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+
+        if( item )
+            old_items.push_back( item );
+    }
+
+    for( unsigned i = 0; i < old_items.size(); ++i )
+    {
+        BOARD_ITEM* item = old_items[i];
+
+        // Unselect the item, so we won't pick it up again
+        // Do this first, so a single-item duplicate will correctly call
+        // SetCurItem and show the item properties
+        m_toolMgr->RunAction( COMMON_ACTIONS::unselectItem, true, item );
+
+        BOARD_ITEM* new_item = module->DuplicateAndAddItem( item, increment );
+
+        if( new_item )
+        {
+            m_view->Add( new_item );
+
+            // Select the new item, so we can pick it up
+            m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, new_item );
+        }
+    }
+
+    m_frame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
+                             (int) old_items.size() ) );
+
+    // pick up the selected item(s) and start moving
+    // this works well for "dropping" copies around
+    m_toolMgr->RunAction( COMMON_ACTIONS::editActivate, true );
+
+    // and re-enable undos
+    m_toolMgr->DecUndoInhibit();
+
+    setTransitions();
+
+    return 0;
+}
+
 
 int MODULE_TOOLS::ModuleTextOutlines( TOOL_EVENT& aEvent )
 {
@@ -608,6 +644,8 @@ void MODULE_TOOLS::setTransitions()
     Go( &MODULE_TOOLS::EnumeratePads,       COMMON_ACTIONS::enumeratePads.MakeEvent() );
     Go( &MODULE_TOOLS::CopyItems,           COMMON_ACTIONS::copyItems.MakeEvent() );
     Go( &MODULE_TOOLS::PasteItems,          COMMON_ACTIONS::pasteItems.MakeEvent() );
+    Go( &MODULE_TOOLS::DuplicateItems,      COMMON_ACTIONS::duplicate.MakeEvent() );
+    Go( &MODULE_TOOLS::DuplicateItems,      COMMON_ACTIONS::duplicateIncrement.MakeEvent() );
     Go( &MODULE_TOOLS::ModuleTextOutlines,  COMMON_ACTIONS::moduleTextOutlines.MakeEvent() );
     Go( &MODULE_TOOLS::ModuleEdgeOutlines,  COMMON_ACTIONS::moduleEdgeOutlines.MakeEvent() );
 }

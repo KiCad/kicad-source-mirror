@@ -144,6 +144,10 @@ wxString ReturnUnitSymbol( EDA_UNITS_T aUnit, const wxString& formatString )
         tmp = _( "mm" );
         break;
 
+    case DEGREES:
+        label = _( "\u00b0" ); // Ring symbol
+        break;
+
     case UNSCALED_UNITS:
         break;
     }
@@ -171,6 +175,10 @@ wxString GetUnitsLabel( EDA_UNITS_T aUnit )
         label = _( "millimeters" );
         break;
 
+    case DEGREES:
+        label = _( "degrees" );
+        break;
+
     case UNSCALED_UNITS:
         label = _( "units" );
         break;
@@ -192,6 +200,10 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit )
 
     case MILLIMETRES:
         label = _( "mm" );
+        break;
+
+    case DEGREES:
+        label = _( "deg" );
         break;
 
     case UNSCALED_UNITS:

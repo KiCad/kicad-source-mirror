@@ -77,6 +77,9 @@ public:
      */
     int PasteItems( TOOL_EVENT& aEvent );
 
+
+    int DuplicateItems ( TOOL_EVENT& aEvent );
+
     /**
      * Function ModuleTextOutlines()
      *

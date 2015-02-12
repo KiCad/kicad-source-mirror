@@ -471,6 +471,10 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
         SetStatusText( _("mm"), 5 );
         break;
 
+    case DEGREES:
+        wxASSERT_MSG( false, wxT( "Not a length unit: " + g_UserUnit ) );
+        // no break
+
     case UNSCALED_UNITS:
         SetStatusText( wxEmptyString, 5 );
         break;

@@ -156,6 +156,11 @@ void SCH_BASE_FRAME::UpdateStatusBar()
         locformatter = wxT( "dx %.2f  dy %.2f  d %.2f" );
         break;
 
+    // Not a length unit, shouldn't be possible in g_UserUnit?
+    case DEGREES:
+        wxASSERT_MSG( false, wxT( "Not a length unit: " + g_UserUnit ) );
+        // no break
+
     case UNSCALED_UNITS:
         absformatter = wxT( "X %f  Y %f" );
         locformatter = wxT( "dx %f  dy %f  d %f" );

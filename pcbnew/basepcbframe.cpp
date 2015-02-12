@@ -607,6 +607,7 @@ GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
     return guide;
 }
 
+
 void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 {
     bool redraw = false;
@@ -674,6 +675,10 @@ void PCB_BASE_FRAME::UpdateStatusBar()
             formatter = wxT( "Ro %.6f  Th %.1f" );
             break;
 
+        case DEGREES:
+            wxASSERT_MSG( false, wxT( "Not a length unit " + g_UserUnit ) );
+            // no break
+
         case UNSCALED_UNITS:
             formatter = wxT( "Ro %f  Th %f" );
             break;
@@ -702,6 +707,10 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         absformatter = wxT( "X %.6f  Y %.6f" );
         locformatter = wxT( "dx %.6f dy %.6f dist %.3f" );
         break;
+
+    case DEGREES: // not a length unit, shouldn't be possible in g_UserUnit?
+        wxASSERT_MSG( false, wxT( "Not a length unit: " + g_UserUnit ) );
+        //no break;
 
     case UNSCALED_UNITS:
         absformatter = wxT( "X %f  Y %f" );
@@ -804,6 +813,7 @@ void PCB_BASE_FRAME::updateGridSelectBox()
 
     // Update grid values with the current units setting.
     m_gridSelectBox->Clear();
+
     wxArrayString gridsList;
     int icurr = GetScreen()->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );
 

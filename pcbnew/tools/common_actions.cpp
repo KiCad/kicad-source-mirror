@@ -64,6 +64,18 @@ TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 'M',
         "Move", "Moves the selected item(s)", AF_ACTIVATE );
 
+TOOL_ACTION COMMON_ACTIONS::duplicate( "pcbnew.InteractiveEdit.duplicate",
+        AS_GLOBAL, MD_CTRL + int( 'D' ),
+        "Duplicate", "Duplicates the selected item(s)" );
+
+TOOL_ACTION COMMON_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
+        AS_GLOBAL, MD_CTRL + MD_SHIFT + int( 'D' ),
+        "Duplicate", "Duplicates the selected item(s), incrementing pad numbers" );
+
+TOOL_ACTION COMMON_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
+        AS_GLOBAL, MD_CTRL + int( 'M' ),
+        "Move Exactly...", "Moves the selected item(s) by an exact amount" );
+
 TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveEdit.rotate",
         AS_GLOBAL, 'R',
         "Rotate", "Rotates selected item(s)" );

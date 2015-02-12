@@ -173,7 +173,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             // so deselect the active tool
             SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
             SetCurItem( NULL );
-	        m_canvas->Refresh();
+            m_canvas->Refresh();
         }
         break;
 
@@ -260,6 +260,11 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                 AddMenuItem( PopMenu, ID_POPUP_DELETE_BLOCK,
                              _( "Delete Block (shift+ctrl + drag mouse)" ),
                              KiBitmap( delete_xpm ) );
+
+                msg = AddHotkeyName( _("Move Block Exactly" ),
+                        g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
+                AddMenuItem( PopMenu, ID_POPUP_MOVE_BLOCK_EXACT,
+                             msg, KiBitmap( move_xpm ) );
             }
             else
             {
@@ -286,10 +291,14 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                          KiBitmap( rotate_module_ccw_xpm ) );
             AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MIRROR, _( "Mirror" ),
                          KiBitmap( mirror_footprint_axisY_xpm ) );
+            AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MOVE_EXACT, _( "Move Exactly" ),
+                         KiBitmap( move_module_xpm ) );
+
             msg = AddHotkeyName( _( "Edit Footprint" ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_MODULE_PRMS, msg, KiBitmap( edit_module_xpm ) );
             AddMenuItem( PopMenu, transform_choice, ID_MODEDIT_TRANSFORM_MODULE,
                          _( "Transform Footprint" ), KiBitmap( edit_xpm ) );
+
             break;
             }
 
@@ -308,6 +317,12 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                          _( "Export Pad Settings" ), KiBitmap( export_options_pad_xpm ) );
             msg = AddHotkeyName( _("Delete Pad" ), g_Module_Editor_Hokeys_Descr, HK_DELETE );
             AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_PAD, msg, KiBitmap( delete_pad_xpm ) );
+
+            msg = AddHotkeyName( _( "Duplicate Pad" ), g_Module_Editor_Hokeys_Descr, HK_DUPLICATE_ITEM );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_DUPLICATE_ITEM, msg, KiBitmap( duplicate_pad_xpm ) );
+
+            msg = AddHotkeyName( _("Move Pad Exactly" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EXACT, msg, KiBitmap( move_pad_xpm ) );
 
             if( !flags )
             {
@@ -330,6 +345,25 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             msg = AddHotkeyName( _("Rotate Text" ), g_Module_Editor_Hokeys_Descr,
                                  HK_ROTATE_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_PCB_ROTATE_TEXTMODULE, msg, KiBitmap( rotate_field_xpm ) );
+
+            {
+                // Do not show option to duplicate value or reference fields
+                // (there can only be one of each)
+
+                const MODULE* module = static_cast<MODULE*>( item->GetParent() );
+                const TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+
+                if( &module->Reference() != text && &module->Value() != text )
+                {
+                    msg = AddHotkeyName( _( "Duplicate Text" ),
+                                         g_Module_Editor_Hokeys_Descr, HK_DUPLICATE_ITEM );
+                    AddMenuItem( PopMenu, ID_POPUP_PCB_DUPLICATE_ITEM,
+                                 msg, KiBitmap( duplicate_text_xpm ) );
+                }
+            }
+
+            msg = AddHotkeyName( _("Move Text Exactly" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EXACT, msg, KiBitmap( move_field_xpm ) );
 
             if( !flags )
             {
@@ -358,6 +392,12 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                 msg = AddHotkeyName( _("Move Edge" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EDGE, msg, KiBitmap( move_line_xpm ) );
             }
+
+            msg = AddHotkeyName( _( "Duplicate Edge" ), g_Module_Editor_Hokeys_Descr, HK_DUPLICATE_ITEM );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_DUPLICATE_ITEM, msg, KiBitmap( duplicate_line_xpm ) );
+
+            msg = AddHotkeyName( _("Move Edge Exactly" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EXACT, msg, KiBitmap( move_line_xpm ) );
 
             if( ( flags & (IS_NEW | IS_MOVED) ) == IS_MOVED )
                 AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_EDGE, _( "Place edge" ),

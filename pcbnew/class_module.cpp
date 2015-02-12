@@ -1111,3 +1111,101 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
+BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
+                                         bool aIncrementPadNumbers )
+{
+    BOARD_ITEM* new_item = NULL;
+
+    switch( aItem->Type() )
+    {
+    case PCB_PAD_T:
+    {
+        D_PAD* new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
+
+        if( aIncrementPadNumbers )
+        {
+            // Take the next available pad number
+            new_pad->IncrementPadName( true, true );
+        }
+
+        Pads().PushBack( new_pad );
+        new_item = new_pad;
+        break;
+    }
+    case PCB_MODULE_TEXT_T:
+    {
+        const TEXTE_MODULE* old_text = static_cast<const TEXTE_MODULE*>( aItem );
+
+        // do not duplicate value or reference fields
+        // (there can only be one of each)
+        if( old_text->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
+        {
+            TEXTE_MODULE* new_text = new TEXTE_MODULE( *old_text );
+
+            GraphicalItems().PushBack( new_text );
+            new_item = new_text;
+        }
+        break;
+    }
+    case PCB_MODULE_EDGE_T:
+    {
+        EDGE_MODULE* new_edge = new EDGE_MODULE(
+                *static_cast<const EDGE_MODULE*>(aItem) );
+
+        GraphicalItems().PushBack( new_edge );
+        new_item = new_edge;
+        break;
+    }
+    default:
+        // Un-handled item for duplication
+        wxASSERT_MSG( false, "Duplication not supported for items of class "
+                      + aItem->GetClass() );
+        break;
+    }
+
+    return new_item;
+}
+
+wxString MODULE::GetNextPadName( bool aFillSequenceGaps ) const
+{
+    std::set<int> usedNumbers;
+
+    // Create a set of used pad numbers
+    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+    {
+        wxString padName = pad->GetPadName();
+        int padNumber = 0;
+        int base = 1;
+
+        // Trim and extract the trailing numeric part
+        while( padName.Len() && padName.Last() >= '0' && padName.Last() <= '9' )
+        {
+            padNumber += ( padName.Last() - '0' ) * base;
+            padName.RemoveLast();
+            base *= 10;
+        }
+
+        usedNumbers.insert( padNumber );
+    }
+
+    // By default go to the end of the sequence
+    int candidate = *usedNumbers.end();
+
+    // Filling in gaps in pad numbering
+    if( aFillSequenceGaps )
+    {
+        // start at the beginning
+        candidate = *usedNumbers.begin();
+
+        for( std::set<int>::iterator it = usedNumbers.begin(),
+            itEnd = usedNumbers.end(); it != itEnd; ++it )
+        {
+            if( *it - candidate > 1 )
+                break;
+
+            candidate = *it;
+        }
+    }
+
+    return wxString::Format( wxT( "%i" ), ++candidate );
+}

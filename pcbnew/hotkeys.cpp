@@ -108,6 +108,10 @@ static EDA_HOTKEY HkEditBoardItem( wxT( "Edit Item" ), HK_EDIT_ITEM, 'E' );
 static EDA_HOTKEY HkFlipItem( wxT( "Flip Item" ), HK_FLIP_ITEM, 'F' );
 static EDA_HOTKEY HkRotateItem( wxT( "Rotate Item" ), HK_ROTATE_ITEM, 'R' );
 static EDA_HOTKEY HkMoveItem( wxT( "Move Item" ), HK_MOVE_ITEM, 'M' );
+static EDA_HOTKEY HkMoveItemExact( wxT( "Move Item Exactly" ), HK_MOVE_ITEM_EXACT, 'M' + GR_KB_CTRL );
+static EDA_HOTKEY HkDuplicateItem( wxT( "Duplicate Item" ), HK_DUPLICATE_ITEM, 'D' + GR_KB_CTRL );
+static EDA_HOTKEY HkDuplicateItemAndIncrement( wxT( "Duplicate Item and Increment" ),
+                                   HK_DUPLICATE_ITEM_AND_INCREMENT, 'D' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkCopyItem( wxT( "Copy Item" ), HK_COPY_ITEM, 'C' );
 static EDA_HOTKEY HkDragFootprint( wxT( "Drag Item" ), HK_DRAG_ITEM, 'G' );
 static EDA_HOTKEY HkGetAndMoveFootprint( wxT( "Get and Move Footprint" ), HK_GET_AND_MOVE_FOOTPRINT, 'T' );
@@ -300,6 +304,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
 // List of hotkey descriptors for the module editor
 EDA_HOTKEY* module_edit_Hotkey_List[] = {
     &HkMoveItem,               &HkRotateItem,                &HkEditBoardItem,
+    &HkMoveItemExact,          &HkDuplicateItem,             &HkDuplicateItemAndIncrement,
     &HkDelete,
     &HkSaveModule,
     NULL

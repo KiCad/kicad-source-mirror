@@ -145,10 +145,15 @@ public:
      */
     bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
+    BOARD_ITEM* PrepareItemForHotkey( bool failIfCurrentlyEdited );
+    bool PostCommandMenuEvent( int evt_type );
+
     bool OnHotkeyEditItem( int aIdCommand );
     bool OnHotkeyDeleteItem( int aIdCommand );
     bool OnHotkeyMoveItem( int aIdCommand );
+    bool OnHotkeyMoveItemExact();
     bool OnHotkeyRotateItem( int aIdCommand );
+    bool OnHotkeyDuplicateItem( int aIdCommand );
 
     /**
      * Function Show3D_Frame
@@ -530,6 +535,14 @@ protected:
      * @return a pointer to the new text, or NULL if aborted
      */
     TEXTE_MODULE* CreateTextModule( MODULE* aModule, wxDC* aDC );
+
+private:
+
+    /**
+     * Duplicate the item under the cursor
+     * @param aIncrement increment the number of pad (if that is what is selected)
+     */
+    void duplicateItems( bool aIncrement );
 };
 
 #endif      // MODULE_EDITOR_FRAME_H_

@@ -64,6 +64,7 @@ void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
 
     case BLOCK_MOVE:                // Move
     case BLOCK_PRESELECT_MOVE:      // Move with preselection list
+    case BLOCK_MOVE_EXACT:
         msg = _( "Block Move" );
         break;
 

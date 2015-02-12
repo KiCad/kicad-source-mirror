@@ -55,6 +55,7 @@
 #include <tool/tool_manager.h>
 
 #include <dialog_edit_module_for_Modedit.h>
+#include <dialog_move_exact.h>
 #include <wildcards_and_files_ext.h>
 #include <menus_helpers.h>
 #include <footprint_wizard_frame.h>
@@ -64,10 +65,13 @@
 
 
 // Functions defined in block_module_editor, but used here
-// These 2 functions are used in modedit to rotate or mirror the whole footprint
-// so they are called with force_all = true
+// These 3 functions are used in modedit to rotate, mirror or move the
+// whole footprint so they are called with force_all = true
 void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all = false );
 void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all = false );
+void MoveMarkedItemsExactly( MODULE* module, const wxPoint& centre,
+                             const wxPoint& translation, double rotation,
+                             bool force_all = false );
 
 
 BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
@@ -635,6 +639,38 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         break;
 
+    case ID_POPUP_PCB_DUPLICATE_ITEM:
+        duplicateItems( false );
+        break;
+
+    case ID_POPUP_PCB_DUPLICATE_ITEM_AND_INCREMENT:
+        duplicateItems( true );
+        break;
+
+    case ID_POPUP_PCB_MOVE_EXACT:
+    {
+        wxPoint translation;
+        double rotation = 0;
+
+        DIALOG_MOVE_EXACT dialog( this, translation, rotation );
+        int ret = dialog.ShowModal();
+
+        if( ret == DIALOG_MOVE_EXACT::MOVE_OK )
+        {
+            SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+
+            BOARD_ITEM* item = GetScreen()->GetCurItem();
+
+            item->Move( translation );
+            item->Rotate( item->GetPosition(), rotation );
+            m_canvas->Refresh();
+        }
+
+        m_canvas->MoveCursorToCrossHair();
+
+    break;
+    }
+
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         m_canvas->MoveCursorToCrossHair();
@@ -735,6 +771,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_MODULE_ROTATE:
     case ID_MODEDIT_MODULE_MIRROR:
+    case ID_MODEDIT_MODULE_MOVE_EXACT:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         Transform( (MODULE*) GetScreen()->GetCurItem(), id );
         m_canvas->Refresh();
@@ -799,6 +836,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         HandleBlockEnd( &dc );
         break;
 
+    case ID_POPUP_MOVE_BLOCK_EXACT:
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MOVE_EXACT );
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
+        break;
+
     case ID_GEN_IMPORT_DXF_FILE:
         InvokeDXFDialogModuleImport( this, GetBoard()->m_Modules );
         m_canvas->Refresh();
@@ -808,6 +851,49 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DisplayError( this,
                       wxT( "FOOTPRINT_EDIT_FRAME::Process_Special_Functions error" ) );
         break;
+    }
+}
+
+
+void FOOTPRINT_EDIT_FRAME::DuplicateItems( bool aIncrement )
+{
+    SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+
+    BOARD_ITEM* item = GetScreen()->GetCurItem();
+    MODULE* module = static_cast<MODULE*>( item->GetParent() );
+
+    int move_cmd = 0;
+
+    BOARD_ITEM* new_item = module->DuplicateAndAddItem(
+            item, aIncrement );
+
+    if( new_item )
+    {
+        switch( new_item->Type() )
+        {
+        case PCB_PAD_T:
+            move_cmd = ID_POPUP_PCB_MOVE_PAD_REQUEST;
+            break;
+        case PCB_MODULE_TEXT_T:
+            move_cmd = ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST;
+            break;
+        case PCB_MODULE_EDGE_T:
+            move_cmd = ID_POPUP_PCB_MOVE_EDGE;
+            break;
+        default:
+            break;
+        }
+
+        if( move_cmd )
+        {
+            SetMsgPanel( new_item );
+            SetCurItem( new_item );
+
+            m_canvas->MoveCursorToCrossHair();
+
+            // pick up the item and start moving
+            PostCommandMenuEvent( move_cmd );
+        }
     }
 }
 
@@ -823,6 +909,23 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
     case ID_MODEDIT_MODULE_MIRROR:
         MirrorMarkedItems( module, wxPoint(0,0), true );
         break;
+
+    case ID_MODEDIT_MODULE_MOVE_EXACT:
+    {
+        wxPoint translation;
+        double rotation = 0;
+
+        DIALOG_MOVE_EXACT dialog( this, translation, rotation  );
+        int ret = dialog.ShowModal();
+
+        if( ret == DIALOG_MOVE_EXACT::MOVE_OK )
+        {
+            MoveMarkedItemsExactly( module, wxPoint(0, 0),
+                                    translation, rotation, true );
+        }
+
+        break;
+    }
 
     default:
         DisplayInfoMessage( this, wxT( "Not available" ) );
