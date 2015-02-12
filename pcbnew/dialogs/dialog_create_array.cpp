@@ -110,6 +110,8 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, wxPoint aOrig
     // Run the callbacks once to process the dialog contents
     setControlEnablement();
     calculateCircularArrayProperties();
+
+    Fit();
 }
 
 

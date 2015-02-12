@@ -54,6 +54,8 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME* aParent,
     m_xEntry->SetValue( wxString::FromDouble( m_options.entry1 ) );
     m_yEntry->SetValue( wxString::FromDouble( m_options.entry2 ) );
     m_rotEntry->SetValue( wxString::FromDouble( m_options.entryRotation ) );
+
+    Fit();
 }
 
 
