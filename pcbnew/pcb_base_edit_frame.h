@@ -69,9 +69,19 @@ public:
     int GetRotationAngle() const { return m_rotationAngle; }
     void SetRotationAngle( int aRotationAngle );
 
+    bool PostCommandMenuEvent( int evt_type );
+
 protected:
     /// User defined rotation angle (in tenths of a degree).
     int m_rotationAngle;
+
+    /**
+     * Function createArray
+     * Create an array of the selected item (invokes the dialogue)
+     * This function is shared between pcbnew and modedit, as it is virtually
+     * the same
+     */
+    void createArray();
 };
 
 #endif

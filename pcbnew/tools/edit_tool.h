@@ -94,7 +94,7 @@ public:
     /**
      * Function Duplicate()
      *
-     * Duplicates a component and starts a move action
+     * Duplicates a selection and starts a move action
      */
     int Duplicate( TOOL_EVENT& aEvent );
 
@@ -104,6 +104,14 @@ public:
      * Invokes a dialog box to allow moving of the item by an exact amount.
      */
     int MoveExact( TOOL_EVENT& aEvent );
+
+    /**
+     * Function CreateArray()
+     *
+     * Creates an array of the selected items, invoking the array editor dialog
+     * to set the array options
+     */
+    int CreateArray( TOOL_EVENT& aEvent );
 
     /**
      * Function EditModules()

@@ -86,6 +86,8 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxStaticText* m_labelCentreY;
 		wxTextCtrl* m_entryCentreY;
 		wxStaticText* m_unitLabelCentreY;
+		wxStaticText* m_labelCircRadius;
+		wxStaticText* m_labelCircRadiusValue;
 		wxStaticText* m_labelCircAngle;
 		wxTextCtrl* m_entryCircAngle;
 		wxStaticText* m_unitLabelCircAngle;
@@ -96,6 +98,8 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxCircRestartNumbering;
 		wxStaticText* m_labelCircNumbering;
 		wxChoice* m_choiceCircNumberingType;
+		wxStaticText* m_labelCircNumStart;
+		wxTextCtrl* m_entryCircNumberingStart;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;

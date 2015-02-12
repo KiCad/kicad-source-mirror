@@ -46,13 +46,17 @@ static const wxString charSetDescriptions[] =
 };
 
 
-DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, ARRAY_OPTIONS** settings ) :
+DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, wxPoint aOrigPos,
+                                          ARRAY_OPTIONS** aSettings ) :
     DIALOG_CREATE_ARRAY_BASE( aParent ),
     CONFIG_SAVE_RESTORE_WINDOW( m_options.m_optionsSet ),
-    m_settings( settings )
+    m_settings( aSettings ),
+    m_originalItemPosition( aOrigPos )
 {
+    // Set up numbering scheme drop downs
     m_choicePriAxisNumbering->Set( boost::size( charSetDescriptions ), charSetDescriptions );
     m_choiceSecAxisNumbering->Set( boost::size( charSetDescriptions ), charSetDescriptions );
+    m_choiceCircNumberingType->Set( boost::size( charSetDescriptions ), charSetDescriptions );;
 
     m_choicePriAxisNumbering->SetSelection( 0 );
     m_choiceSecAxisNumbering->SetSelection( 0 );
@@ -77,6 +81,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, ARRAY_OPTIONS
     Add( m_entryCircAngle, m_options.m_circAngle );
     Add( m_entryCircCount, m_options.m_circCount );
     Add( m_entryRotateItemsCb, m_options.m_circRotate );
+    Add( m_entryCircNumberingStart, m_options.m_circNumberingOffset );
 
     Add( m_gridTypeNotebook, m_options.m_arrayTypeTab );
 
@@ -90,7 +95,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, ARRAY_OPTIONS
 
     RestoreConfigToControls();
 
-    // load units into labels
+    // Load units into labels
     {
         const wxString lengthUnit = GetAbbreviatedUnitsLabel( g_UserUnit );
 
@@ -102,7 +107,9 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, ARRAY_OPTIONS
         m_unitLabelOffsetY->SetLabelText( lengthUnit );
     }
 
+    // Run the callbacks once to process the dialog contents
     setControlEnablement();
+    calculateCircularArrayProperties();
 }
 
 
@@ -115,6 +122,10 @@ void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
         || evObj == m_checkBoxGridRestartNumbering )
     {
         setControlEnablement();
+    }
+    if( evObj == m_entryCentreX || evObj == m_entryCentreY )
+    {
+        calculateCircularArrayProperties();
     }
 }
 
@@ -211,23 +222,16 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
     {
         ARRAY_GRID_OPTIONS* newGrid = new ARRAY_GRID_OPTIONS();
         bool ok = true;
-        double x, y;
 
         // ints
         ok  = ok && m_entryNx->GetValue().ToLong( &newGrid->m_nx );
         ok  = ok && m_entryNy->GetValue().ToLong( &newGrid->m_ny );
 
-        ok  = ok && m_entryDx->GetValue().ToDouble( &x );
-        ok  = ok && m_entryDy->GetValue().ToDouble( &y );
+        newGrid->m_delta.x = DoubleValueFromString( g_UserUnit, m_entryDx->GetValue() );
+        newGrid->m_delta.y = DoubleValueFromString( g_UserUnit, m_entryDy->GetValue() );
 
-        newGrid->m_delta.x  = From_User_Unit( g_UserUnit, x );
-        newGrid->m_delta.y  = From_User_Unit( g_UserUnit, y );
-
-        ok  = ok && m_entryOffsetX->GetValue().ToDouble( &x );
-        ok  = ok && m_entryOffsetY->GetValue().ToDouble( &y );
-
-        newGrid->m_offset.x = From_User_Unit( g_UserUnit, x );
-        newGrid->m_offset.y = From_User_Unit( g_UserUnit, y );
+        newGrid->m_offset.x = DoubleValueFromString( g_UserUnit, m_entryOffsetX->GetValue() );
+        newGrid->m_offset.y = DoubleValueFromString( g_UserUnit, m_entryOffsetY->GetValue() );
 
         ok = ok && m_entryStagger->GetValue().ToLong( &newGrid->m_stagger );
 
@@ -272,27 +276,25 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
         ARRAY_CIRCULAR_OPTIONS* newCirc = new ARRAY_CIRCULAR_OPTIONS();
         bool ok = true;
 
-        double x, y;
-        ok  = ok && m_entryCentreX->GetValue().ToDouble( &x );
-        ok  = ok &&m_entryCentreY->GetValue().ToDouble( &y );
+        newCirc->m_centre.x = DoubleValueFromString( g_UserUnit, m_entryCentreX->GetValue() );
+        newCirc->m_centre.y = DoubleValueFromString( g_UserUnit, m_entryCentreY->GetValue() );
 
-        newCirc->m_centre.x = From_User_Unit( g_UserUnit, x );
-        newCirc->m_centre.y = From_User_Unit( g_UserUnit, y );
-
-        ok  = ok && m_entryCircAngle->GetValue().ToDouble( &newCirc->m_angle );
-        ok  = ok && m_entryCircCount->GetValue().ToLong( &newCirc->m_nPts );
+        newCirc->m_angle = DoubleValueFromString( DEGREES, m_entryCircAngle->GetValue() );
+        ok = ok && m_entryCircCount->GetValue().ToLong( &newCirc->m_nPts );
 
         newCirc->m_rotateItems = m_entryRotateItemsCb->GetValue();
 
         newCirc->m_shouldRenumber = m_checkBoxCircRestartNumbering->GetValue();
 
-        // this is only correct if you set the choice up according to the enum size and order
+        // This is only correct if you set the choice up according to the enum size and order
         ok = ok && m_choiceCircNumberingType->GetSelection() < NUMBERING_TYPE_Max;
 
-        // mind undefined casts to enums (should not be able to happen)
+        // Mind undefined casts to enums (should not be able to happen)
         if( ok )
             newCirc->m_numberingType =
                 (ARRAY_NUMBERING_TYPE_T) m_choiceCircNumberingType->GetSelection();
+
+        ok = ok && m_entryCircNumberingStart->GetValue().ToLong( &newCirc->m_numberingOffset );
 
         // Only use settings if all values are good
         if( ok )
@@ -343,6 +345,22 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
 }
 
 
+void DIALOG_CREATE_ARRAY::calculateCircularArrayProperties()
+{
+    wxPoint centre;
+
+    centre.x = DoubleValueFromString( g_UserUnit, m_entryCentreX->GetValue() );
+    centre.y = DoubleValueFromString( g_UserUnit, m_entryCentreY->GetValue() );
+
+    // FInd the radius, etc of the circle
+    centre -= m_originalItemPosition;
+
+    const double radius = VECTOR2I(centre.x, centre.y).EuclideanNorm();
+
+    m_labelCircRadiusValue->SetLabelText( StringFromValue( g_UserUnit, int(radius), true ) );
+}
+
+
 // ARRAY OPTION implementation functions --------------------------------------
 
 std::string DIALOG_CREATE_ARRAY::ARRAY_OPTIONS::getCoordinateNumber( int n,
@@ -372,6 +390,16 @@ std::string DIALOG_CREATE_ARRAY::ARRAY_OPTIONS::getCoordinateNumber( int n,
     }
 
     return itemNum;
+}
+
+
+wxString DIALOG_CREATE_ARRAY::ARRAY_OPTIONS::InterpolateNumberIntoString(
+        int aN, const wxString& aPattern ) const
+{
+    wxString newStr( aPattern );
+    newStr.Replace( "%s", GetItemNumber( aN ), false );
+
+    return newStr;
 }
 
 
@@ -430,9 +458,9 @@ void DIALOG_CREATE_ARRAY::ARRAY_GRID_OPTIONS::TransformItem( int n, BOARD_ITEM* 
 }
 
 
-std::string DIALOG_CREATE_ARRAY::ARRAY_GRID_OPTIONS::GetItemNumber( int n ) const
+wxString DIALOG_CREATE_ARRAY::ARRAY_GRID_OPTIONS::GetItemNumber( int n ) const
 {
-    std::string itemNum;
+    wxString itemNum;
 
     if( m_2dArrayNumbering )
     {
@@ -466,7 +494,7 @@ void DIALOG_CREATE_ARRAY::ARRAY_CIRCULAR_OPTIONS::TransformItem( int n, BOARD_IT
         angle = 3600.0 * n / float(m_nPts);
     else
         // n'th step
-        angle = m_angle * n * 10.0;
+        angle = m_angle * n;
 
     item->Rotate( m_centre, angle );
 
@@ -476,7 +504,7 @@ void DIALOG_CREATE_ARRAY::ARRAY_CIRCULAR_OPTIONS::TransformItem( int n, BOARD_IT
 }
 
 
-std::string DIALOG_CREATE_ARRAY::ARRAY_CIRCULAR_OPTIONS::GetItemNumber( int n ) const
+wxString DIALOG_CREATE_ARRAY::ARRAY_CIRCULAR_OPTIONS::GetItemNumber( int aN ) const
 {
-    return getCoordinateNumber( n, m_numberingType );
+    return getCoordinateNumber( aN + m_numberingOffset, m_numberingType );
 }

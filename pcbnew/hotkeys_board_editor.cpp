@@ -551,6 +551,13 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         OnHotkeyRotateItem( HK_FLIP_ITEM );
         break;
 
+    case HK_MOVE_ITEM_EXACT:
+    case HK_DUPLICATE_ITEM:
+    case HK_DUPLICATE_ITEM_AND_INCREMENT:
+    case HK_CREATE_ARRAY:
+        OnHotkeyDuplicateOrArrayItem( HK_Descr->m_Idcommand );
+        break;
+
     case HK_SWITCH_HIGHCONTRAST_MODE: // switch to high contrast mode and refresh the canvas
         displ_opts->m_ContrastModeDisplay = !displ_opts->m_ContrastModeDisplay;
         m_canvas->Refresh();
@@ -1062,4 +1069,72 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
     }
 
     return false;
+}
+
+bool PCB_EDIT_FRAME::OnHotkeyDuplicateOrArrayItem( int aIdCommand )
+{
+    BOARD_ITEM* item = GetCurItem();
+    bool itemCurrentlyEdited = item && item->GetFlags();
+
+    if( itemCurrentlyEdited )
+        return false;
+
+    item = PcbGeneralLocateAndDisplay();
+
+    if( item == NULL )
+        return false;
+
+    SetCurItem( item );
+
+    int evt_type = 0;       // Used to post a wxCommandEvent on demand
+
+    bool canDuplicate = true;
+
+    switch( item->Type() )
+    {
+    // Only handle items we know we can handle
+    case PCB_PAD_T:
+        canDuplicate = false;
+        // no break
+    case PCB_MODULE_T:
+    case PCB_LINE_T:
+    case PCB_TEXT_T:
+    case PCB_TRACE_T:
+    case PCB_ZONE_AREA_T:
+    case PCB_TARGET_T:
+    case PCB_DIMENSION_T:
+        switch( aIdCommand )
+        {
+        case HK_CREATE_ARRAY:
+            if( canDuplicate )
+                evt_type = ID_POPUP_PCB_CREATE_ARRAY;
+            break;
+
+        case HK_DUPLICATE_ITEM_AND_INCREMENT:
+            if( canDuplicate )
+                evt_type = ID_POPUP_PCB_DUPLICATE_ITEM_AND_INCREMENT;
+            break;
+
+        case HK_DUPLICATE_ITEM:
+            if( canDuplicate )
+                evt_type = ID_POPUP_PCB_DUPLICATE_ITEM;
+            break;
+
+        case HK_MOVE_ITEM_EXACT:
+            evt_type = ID_POPUP_PCB_MOVE_EXACT;
+            break;
+
+        default:
+            // We don't handle other commands here
+            break;
+        }
+        break;
+
+    default:
+        wxASSERT_MSG( false, "Unhandled move, duplicate or array for "
+                      "object type " + item->Type() );
+        break;
+    }
+
+    return PostCommandMenuEvent( evt_type );
 }

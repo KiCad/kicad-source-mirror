@@ -35,6 +35,7 @@
 
 
 class FP_LIB_TABLE;
+class PCB_LAYER_WIDGET;
 
 namespace PCB { struct IFACE; }     // A KIFACE_I coded in pcbnew.c
 
@@ -146,7 +147,6 @@ public:
     bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
     BOARD_ITEM* PrepareItemForHotkey( bool failIfCurrentlyEdited );
-    bool PostCommandMenuEvent( int evt_type );
 
     bool OnHotkeyEditItem( int aIdCommand );
     bool OnHotkeyDeleteItem( int aIdCommand );
@@ -371,7 +371,7 @@ public:
     /**
      * Function SelectFootprint
      * Display the list of modules currently existing on the BOARD
-     * @return a pointer to a module if this module is selected or NULL otherwise
+     * @return a pointer to a modulvoid FOOTPRINT_EDIT_FRAME::moveExact()e if this module is selected or NULL otherwise
      * @param aPcb = the board from modules can be loaded
      */
     MODULE* SelectFootprint( BOARD* aPcb );
@@ -539,6 +539,14 @@ protected:
 private:
 
     /**
+     * Function moveExact
+     * Move the selected item exactly, popping up a dialog to allow the
+     * user the enter the move delta
+     */
+    void moveExact();
+
+    /**
+     * Function duplicateItems
      * Duplicate the item under the cursor
      * @param aIncrement increment the number of pad (if that is what is selected)
      */

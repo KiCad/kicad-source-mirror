@@ -397,6 +397,15 @@ public:
     }
 
     /**
+     * Function GetReference prefix
+     * Gets the alphabetic prefix of the module reference - e.g.
+     *      R1    -> R
+     *      IC34  -> IC
+     * @return the reference prefix (may be empty)
+     */
+    wxString GetReferencePrefix() const;
+
+    /**
      * Function GetValue
      * @return const wxString& - the value text.
      */
@@ -422,6 +431,17 @@ public:
     TEXTE_MODULE& Value() const       { return *m_Value; }
     TEXTE_MODULE& Reference() const   { return *m_Reference; }
 
+    /**
+     * Function INcrementReference
+     * Increments the module's reference, if possible. A reference with
+     * a numerical suffix and an optional alphabetical prefix can be
+     * incremented: "A1" and "1" can be, "B" can't.
+     *
+     * @param aFillSequenceGaps if true, the next reference in a sequence
+     * like A1,A3,A4 will be A2. If false, it will be A5.
+     * @return true if the reference was incremented.
+     */
+    bool IncrementReference( bool aFillSequenceGaps );
 
     /**
      * Function FindPadByName
@@ -474,6 +494,11 @@ public:
     int GetPlacementCost90() const          { return m_CntRot90; }
     void SetPlacementCost90( int aCost )    { m_CntRot90 = aCost; }
 
+    /**
+     * Function DuplicateAndAddItem
+     * Duplicate a given item within the module
+     * @return the new item, or NULL if the item could not be duplicated
+     */
     BOARD_ITEM* DuplicateAndAddItem( const BOARD_ITEM* item,
                                      bool aIncrementPadNumbers );
 

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1"
+   width="26"
+   height="26"
+   id="svg18970">
+  <metadata
+     id="metadata18987">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs18972">
+    <mask
+       id="w">
+      <rect
+         width="25.032"
+         height="26.091999"
+         x="-4.6403999"
+         y="-3.7337"
+         id="rect3301"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="x">
+      <rect
+         width="25.032"
+         height="26.091999"
+         x="-4.6403999"
+         y="-3.7337"
+         id="rect3304"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="q">
+      <rect
+         width="25.032"
+         height="26.091999"
+         x="-4.6403999"
+         y="-3.7337"
+         id="rect3307"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="v">
+      <rect
+         width="25.032"
+         height="26.091999"
+         x="-4.6403999"
+         y="-3.7337"
+         id="rect3310"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="r">
+      <rect
+         width="25.032"
+         height="26.091999"
+         x="-4.6403999"
+         y="-3.7337"
+         id="rect3313"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="u">
+      <rect
+         width="25.032"
+         height="26.091999"
+         x="-4.6403999"
+         y="-3.7337"
+         id="rect3316"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="s">
+      <rect
+         width="25.032"
+         height="26.091999"
+         x="-4.6403999"
+         y="-3.7337"
+         id="rect3319"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="t">
+      <rect
+         width="25.032"
+         height="26.091999"
+         x="-4.6403999"
+         y="-3.7337"
+         id="rect3322"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+  </defs>
+  <g
+     transform="translate(20,-1.5)"
+     id="g3939">
+    <path
+       d="m -15.5,8 5,0 2.1269625,4.84375"
+       id="path3917"
+       style="fill:none;stroke:#888a85;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       d="m -18.5,3 0,10 8.25,0 -1.25,-3.25 c -0.781147,0.971226 -1.5,1.75 -3,1.75 -1.932997,0 -3.5,-1.5670035 -3.5,-3.5 0,-1.9329967 1.567003,-3.5 3.5,-3.5 1.295542,0 2.33235,0.4225334 2.9375,1.46875 l 1.9375,0 L -8.5,8.5 -8.5,3 z"
+       id="rect3811"
+       style="fill:#008000;fill-opacity:0.62745098;stroke:#008000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <path
+       d="m -13.46875,7 a 1.53125,1.53125 0 1 1 -3.0625,0 1.53125,1.53125 0 1 1 3.0625,0 z"
+       transform="matrix(1.0081529,0,0,1.0081529,0.57855937,0.9429297)"
+       id="path3915"
+       style="fill:#eeeeec;stroke:#888a85;stroke-width:0.99191302;stroke-opacity:1" />
+  </g>
+  <use
+     id="use4178"
+     x="0"
+     y="0"
+     width="26"
+     height="26"
+     xlink:href="#g3939" />
+  <use
+     transform="translate(13,0)"
+     id="use4180"
+     style="opacity:0.75"
+     x="0"
+     y="0"
+     width="26"
+     height="26"
+     xlink:href="#g3939" />
+  <use
+     transform="translate(13,13)"
+     id="use4182"
+     style="opacity:0.75"
+     x="0"
+     y="0"
+     width="26"
+     height="26"
+     xlink:href="#g3939" />
+  <use
+     transform="translate(0,13)"
+     id="use4184"
+     style="opacity:0.75"
+     x="0"
+     y="0"
+     width="26"
+     height="26"
+     xlink:href="#g3939" />
+</svg>

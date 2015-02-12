@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="26"
+   width="26"
+   version="1.1"
+   id="svg18970"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="duplicate_footprint.svg">
+  <metadata
+     id="metadata18987">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1005"
+     id="namedview18985"
+     showgrid="true"
+     inkscape:zoom="1"
+     inkscape:cx="18.169469"
+     inkscape:cy="8.9416575"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg18970"
+     inkscape:object-paths="true"
+     inkscape:object-nodes="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3029"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs18972" />
+  <use
+     x="0"
+     y="0"
+     xlink:href="#g3527"
+     id="use3537"
+     transform="translate(0,12)"
+     width="26"
+     height="26"
+     style="opacity:0.75" />
+  <g
+     id="g3527"
+     transform="translate(-1,1)">
+    <rect
+       y="2.499999"
+       x="2.5"
+       height="7"
+       width="10"
+       id="rect3503"
+       style="fill:none;stroke:#545454;stroke-width:1;stroke-opacity:1" />
+    <rect
+       y="1.5"
+       x="3.5"
+       height="3"
+       width="2"
+       id="rect3505"
+       style="fill:#00c921;fill-opacity:1;stroke:#545454;stroke-opacity:1" />
+    <rect
+       y="1.5"
+       x="6.5"
+       height="3"
+       width="2"
+       id="rect3509"
+       style="fill:#00c921;fill-opacity:1;stroke:#545454;stroke-opacity:1" />
+    <rect
+       style="fill:#00c921;fill-opacity:1;stroke:#545454;stroke-opacity:1"
+       id="rect3514"
+       width="2"
+       height="3"
+       x="9.5"
+       y="1.5" />
+    <rect
+       style="fill:#00c921;fill-opacity:1;stroke:#545454;stroke-opacity:1"
+       id="rect3516"
+       width="2"
+       height="3"
+       x="3.5"
+       y="7.5" />
+    <rect
+       style="fill:#00c921;fill-opacity:1;stroke:#545454;stroke-opacity:1"
+       id="rect3518"
+       width="2"
+       height="3"
+       x="6.5"
+       y="7.5" />
+    <rect
+       y="7.5"
+       x="9.5"
+       height="3"
+       width="2"
+       id="rect3520"
+       style="fill:#00c921;fill-opacity:1;stroke:#545454;stroke-opacity:1" />
+  </g>
+  <use
+     style="opacity:0.75"
+     height="26"
+     width="26"
+     transform="translate(13,12)"
+     id="use3539"
+     xlink:href="#g3527"
+     y="0"
+     x="0" />
+  <use
+     x="0"
+     y="0"
+     xlink:href="#g3527"
+     id="use3559"
+     transform="translate(13,0)"
+     width="26"
+     height="26"
+     style="opacity:0.75" />
+</svg>

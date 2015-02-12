@@ -32,6 +32,8 @@
 #include <class_zone.h>
 #include <class_draw_panel_gal.h>
 
+#include <dialogs/dialog_create_array.h>
+
 
 class ZONE_CONTEXT_MENU : public CONTEXT_MENU
 {
@@ -67,6 +69,7 @@ bool PCB_EDITOR_CONTROL::Init()
         selTool->AddSubMenu( new ZONE_CONTEXT_MENU, wxT( "Zones" ),
                              SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) );
     }
+
 
     setTransitions();
 

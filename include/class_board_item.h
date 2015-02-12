@@ -78,6 +78,9 @@ class BOARD_ITEM : public EDA_ITEM
 protected:
     LAYER_ID    m_Layer;
 
+    static int getTrailingInt( wxString aStr );
+    static int getNextNumberInSequence( std::set<int> aSeq, bool aFillSequenceGaps);
+
 public:
 
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :

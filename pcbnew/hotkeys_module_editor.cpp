@@ -211,21 +211,6 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::PrepareItemForHotkey( bool failIfCurrentlyEdit
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::PostCommandMenuEvent( int evt_type )
-{
-    if( evt_type != 0 )
-    {
-        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
-        evt.SetEventObject( this );
-        evt.SetId( evt_type );
-        wxPostEvent( this, evt );
-        return true;
-    }
-
-    return false;
-}
-
-
 bool FOOTPRINT_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 {
     BOARD_ITEM* item = PrepareItemForHotkey( true );

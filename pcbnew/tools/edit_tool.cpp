@@ -26,6 +26,8 @@
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <class_zone.h>
+#include <class_draw_panel_gal.h>
+#include <module_editor_frame.h>
 #include <wxPcbStruct.h>
 
 #include <tool/tool_manager.h>
@@ -42,6 +44,7 @@
 #include "selection_tool.h"
 #include "edit_tool.h"
 
+#include <dialogs/dialog_create_array.h>
 #include <dialogs/dialog_move_exact.h>
 
 EDIT_TOOL::EDIT_TOOL() :
@@ -74,6 +77,8 @@ bool EDIT_TOOL::Init()
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::properties, SELECTION_CONDITIONS::NotEmpty );
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
 
     m_offset.x = 0;
     m_offset.y = 0;
@@ -187,7 +192,8 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
+        else if( evt->IsAction( &COMMON_ACTIONS::editActivate )
+                || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
             m_cursor = controls->GetCursorPosition();
 
@@ -647,6 +653,255 @@ int EDIT_TOOL::MoveExact( TOOL_EVENT& aEvent )
 }
 
 
+int EDIT_TOOL::Duplicate( TOOL_EVENT& aEvent )
+{
+    bool increment = aEvent.IsAction( &COMMON_ACTIONS::duplicateIncrement );
+
+    // first, check if we have a selection, or try to get one
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
+
+    // Be sure that there is at least one item that we can modify
+    if( !makeSelection( selection ) || selTool->CheckLock() )
+    {
+        setTransitions();
+        return 0;
+    }
+
+    // we have a selection to work on now, so start the tool process
+
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
+    editFrame->OnModify();
+
+    // prevent other tools making undo points while the duplicate is going on
+    // so that if you cancel, you don't get a duplicate object hiding over
+    // the original
+    m_toolMgr->IncUndoInhibit();
+
+    std::vector<BOARD_ITEM*> old_items;
+
+    for( int i = 0; i < selection.Size(); ++i )
+    {
+        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+
+        if( item )
+            old_items.push_back( item );
+    }
+
+    for( unsigned i = 0; i < old_items.size(); ++i )
+    {
+        BOARD_ITEM* item = old_items[i];
+
+        // Unselect the item, so we won't pick it up again
+        // Do this first, so a single-item duplicate will correctly call
+        // SetCurItem and show the item properties
+        m_toolMgr->RunAction( COMMON_ACTIONS::unselectItem, true, item );
+
+        BOARD_ITEM* new_item = NULL;
+
+        if ( PCB_EDIT_FRAME* frame = dynamic_cast<PCB_EDIT_FRAME*>( editFrame ) )
+            new_item = frame->GetBoard()->DuplicateAndAddItem( item, increment );
+        else if ( FOOTPRINT_EDIT_FRAME* frame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( editFrame ) )
+            new_item = frame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
+
+        if( new_item )
+        {
+            if( new_item->Type() == PCB_MODULE_T )
+            {
+                static_cast<MODULE*>( new_item )->RunOnChildren( boost::bind( &KIGFX::VIEW::Add,
+                        getView(), _1 ) );
+            }
+
+            editFrame->GetGalCanvas()->GetView()->Add( new_item );
+
+            // Select the new item, so we can pick it up
+            m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, new_item );
+        }
+    }
+
+    // record the new items as added
+    editFrame->SaveCopyInUndoList( selection.items, UR_NEW );
+
+    editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
+            (int) old_items.size() ) );
+
+    // pick up the selected item(s) and start moving
+    // this works well for "dropping" copies around
+    TOOL_EVENT evt = COMMON_ACTIONS::editActivate.MakeEvent();
+    Main( evt );
+
+    // and re-enable undos
+    m_toolMgr->DecUndoInhibit();
+
+    setTransitions();
+
+    return 0;
+}
+
+
+int EDIT_TOOL::CreateArray( TOOL_EVENT& aEvent )
+{
+    // first, check if we have a selection, or try to get one
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
+
+    // Be sure that there is at least one item that we can modify
+    if( !makeSelection( selection ) || selTool->CheckLock() )
+    {
+        setTransitions();
+        return 0;
+    }
+
+    bool originalItemsModified = false;
+
+    // we have a selection to work on now, so start the tool process
+
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
+    editFrame->OnModify();
+
+    const bool editingModule = NULL != dynamic_cast<FOOTPRINT_EDIT_FRAME*>( editFrame );
+
+    if( editingModule )
+    {
+        // Module editors do their undo point upfront for the whole module
+        editFrame->SaveCopyInUndoList( editFrame->GetBoard()->m_Modules, UR_MODEDIT );
+    }
+    else
+    {
+        // We may also change the original item
+        editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+    }
+
+    DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* array_opts = NULL;
+
+    const wxPoint rotPoint = selection.GetCenter();
+
+    DIALOG_CREATE_ARRAY dialog( editFrame, rotPoint, &array_opts );
+    int ret = dialog.ShowModal();
+
+    if( ret == DIALOG_CREATE_ARRAY::CREATE_ARRAY_OK && array_opts != NULL )
+    {
+        PICKED_ITEMS_LIST newItemList;
+
+        for( int i = 0; i < selection.Size(); ++i )
+        {
+            BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+
+            if( !item )
+                continue;
+
+            wxString cachedString;
+
+            if( item->Type() == PCB_MODULE_T )
+            {
+                cachedString = static_cast<MODULE*>( item )->GetReferencePrefix();
+            }
+            else if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
+            {
+                // Copy the text (not just take a reference
+                cachedString = text->GetText();
+            }
+
+            // iterate across the array, laying out the item at the
+            // correct position
+            const unsigned nPoints = array_opts->GetArraySize();
+
+            for( unsigned ptN = 0; ptN < nPoints; ++ptN )
+            {
+                BOARD_ITEM* newItem = NULL;
+
+                if( ptN == 0 )
+                {
+                    newItem = item;
+                }
+                else
+                {
+                    // if renumbering, no need to increment
+                    const bool increment = !array_opts->ShouldRenumberItems();
+
+                    if ( PCB_EDIT_FRAME* frame = dynamic_cast<PCB_EDIT_FRAME*>( editFrame ) )
+                        newItem = frame->GetBoard()->DuplicateAndAddItem( item, increment );
+                    else if ( FOOTPRINT_EDIT_FRAME* frame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( editFrame ) )
+                        newItem = frame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
+
+                    if( newItem )
+                    {
+                        array_opts->TransformItem( ptN, newItem, rotPoint );
+
+                        m_toolMgr->RunAction( COMMON_ACTIONS::unselectItem, true, newItem );
+
+                        newItemList.PushItem( newItem );
+
+                        if( newItem->Type() == PCB_MODULE_T)
+                        {
+                            static_cast<MODULE*>( newItem )->RunOnChildren( boost::bind( &KIGFX::VIEW::Add,
+                                    getView(), _1 ) );
+                        }
+
+                        editFrame->GetGalCanvas()->GetView()->Add( newItem );
+                    }
+                }
+
+                // set the number if needed:
+                if( array_opts->ShouldRenumberItems() )
+                {
+                    switch( newItem->Type() )
+                    {
+                    case PCB_PAD_T:
+                    {
+                        const wxString padName = array_opts->GetItemNumber( ptN );
+                        static_cast<D_PAD*>( newItem )->SetPadName( padName );
+
+                        originalItemsModified = true;
+                        break;
+                    }
+                    case PCB_MODULE_T:
+                    {
+                        const wxString moduleName = array_opts->GetItemNumber( ptN );
+                        MODULE* module = static_cast<MODULE*>( newItem );
+                        module->SetReference( cachedString + moduleName );
+
+                        originalItemsModified = true;
+                        break;
+                    }
+                    case PCB_MODULE_TEXT_T:
+                    case PCB_TEXT_T:
+                    {
+                        EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( newItem );
+                        text->SetText( array_opts->InterpolateNumberIntoString( ptN, cachedString ) );
+
+                        originalItemsModified = true;
+                        break;
+                    }
+                    default:
+                        // no renumbering of other items
+                        break;
+                    }
+                }
+            }
+        }
+
+        if( !editingModule )
+        {
+            if( originalItemsModified )
+            {
+                // Update the appearance of the original items
+                selection.group->ItemsViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+
+            // Add all items as a single undo point for PCB editors
+            // TODO: Can this be merged into the previous undo point (where
+            //       we saved the original items)
+            editFrame->SaveCopyInUndoList( newItemList, UR_NEW );
+        }
+    }
+
+    setTransitions();
+
+    return 0;
+}
+
+
 void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::Main,       COMMON_ACTIONS::editActivate.MakeEvent() );
@@ -655,6 +910,9 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Remove,     COMMON_ACTIONS::remove.MakeEvent() );
     Go( &EDIT_TOOL::Properties, COMMON_ACTIONS::properties.MakeEvent() );
     Go( &EDIT_TOOL::MoveExact,  COMMON_ACTIONS::moveExact.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,  COMMON_ACTIONS::duplicate.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,  COMMON_ACTIONS::duplicateIncrement.MakeEvent() );
+    Go( &EDIT_TOOL::CreateArray,COMMON_ACTIONS::createArray.MakeEvent() );
 }
 
 

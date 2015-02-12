@@ -193,6 +193,19 @@ protected:
      */
     void duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone );
 
+    /**
+     * Function moveExact
+     * Move the selected item exactly
+     */
+    void moveExact();
+
+    /**
+     * Function duplicateItems
+     * Duplicate selected item if possible and start a move
+     * @param aIncrement increment the item number if appropriate
+     */
+    void duplicateItem( bool aIncrement );
+
     // protected so that PCB::IFACE::CreateWindow() is the only factory.
     PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
@@ -458,6 +471,15 @@ public:
      * @return Event id of a suitable copy event, zero when no copyable item found.
      */
     int OnHotkeyCopyItem();
+
+    /**
+     * Function OnHotkeyDuplicateOrArrayItem
+     * Duplicate an item (optionally incrementing if necessary and possible)
+     * or invoke array dialog and create an array
+     * @param aIdCommand = the hotkey command id
+     * @return true if item duplicated or arrayed
+     */
+    bool OnHotkeyDuplicateOrArrayItem( int aIdCommand );
 
     /**
      * Function OnHotkeyMoveItem

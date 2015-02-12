@@ -649,67 +649,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_MOVE_EXACT:
-    {
-        wxPoint translation;
-        double rotation = 0;
-
-        DIALOG_MOVE_EXACT dialog( this, translation, rotation );
-        int ret = dialog.ShowModal();
-
-        if( ret == DIALOG_MOVE_EXACT::MOVE_OK )
-        {
-            SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-
-            BOARD_ITEM* item = GetScreen()->GetCurItem();
-
-            item->Move( translation );
-            item->Rotate( item->GetPosition(), rotation );
-            m_canvas->Refresh();
-        }
-
-        m_canvas->MoveCursorToCrossHair();
+        moveExact();
         break;
-    }
 
     case ID_POPUP_PCB_CREATE_ARRAY:
-    {
-        BOARD_ITEM* item = GetScreen()->GetCurItem();
-
-        if( !item )
-            break;
-
-        MODULE* module = static_cast<MODULE*>( item->GetParent() );
-
-        if( !module )
-            break;
-
-        DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* array_opts = NULL;
-
-        DIALOG_CREATE_ARRAY dialog( this, &array_opts );
-        int ret = dialog.ShowModal();
-
-        if( ret == DIALOG_CREATE_ARRAY::CREATE_ARRAY_OK && array_opts != NULL )
-        {
-            SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-
-            for( int i = 0; i < array_opts->GetArraySize(); i++)
-            {
-                BOARD_ITEM* new_item = module->DuplicateAndAddItem(
-                        item, true );
-
-                array_opts->TransformItem( i, new_item, new_item->GetCenter() );
-
-                if( new_item->Type() == PCB_PAD_T && array_opts->ShouldRenumberItems() )
-                {
-                    const std::string padName = array_opts->GetItemNumber( i );
-                    static_cast<D_PAD*>( new_item )->SetPadName( padName );
-                }
-            }
-
-            m_canvas->Refresh();
-        }
+        createArray();
         break;
-    }
 
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
@@ -895,7 +840,30 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::DuplicateItems( bool aIncrement )
+void FOOTPRINT_EDIT_FRAME::moveExact()
+{
+    wxPoint translation;
+    double rotation = 0;
+
+    DIALOG_MOVE_EXACT dialog( this, translation, rotation );
+    int ret = dialog.ShowModal();
+
+    if( ret == DIALOG_MOVE_EXACT::MOVE_OK )
+    {
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+
+        BOARD_ITEM* item = GetScreen()->GetCurItem();
+
+        item->Move( translation );
+        item->Rotate( item->GetPosition(), rotation );
+        m_canvas->Refresh();
+    }
+
+    m_canvas->MoveCursorToCrossHair();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::duplicateItems( bool aIncrement )
 {
     SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
 

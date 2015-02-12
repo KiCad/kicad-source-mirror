@@ -54,6 +54,10 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_marker_pcb.h>
+#include <class_drawsegment.h>
+#include <class_pcb_text.h>
+#include <class_mire.h>
+#include <class_dimension.h>
 
 
 /* This is an odd place for this, but CvPcb won't link if it is
@@ -2590,6 +2594,131 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             }
         }
     }
+}
+
+
+BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem,
+                                        bool aIncrementReferences )
+{
+    BOARD_ITEM* new_item = NULL;
+
+    switch( aItem->Type() )
+    {
+    case PCB_MODULE_T:
+    {
+        MODULE* new_module = new MODULE( *static_cast<const MODULE*>( aItem ) );
+
+        if( aIncrementReferences )
+        {
+            // Take the next available module number
+            new_module->IncrementReference( true );
+        }
+
+        m_Modules.PushBack( new_module );
+        new_item = new_module;
+        break;
+    }
+    case PCB_TEXT_T:
+    {
+        const TEXTE_PCB* old_text = static_cast<const TEXTE_PCB*>( aItem );
+
+        TEXTE_PCB* new_text = new TEXTE_PCB( *old_text );
+
+        m_Drawings.PushBack( new_text );
+        new_item = new_text;
+
+        break;
+    }
+    case PCB_LINE_T:
+    {
+        DRAWSEGMENT* new_edge = new DRAWSEGMENT(
+                *static_cast<const DRAWSEGMENT*>(aItem) );
+
+        m_Drawings.PushBack( new_edge );
+        new_item = new_edge;
+        break;
+    }
+    case PCB_TRACE_T:
+    {
+        TRACK* new_track = new TRACK(
+                *static_cast<const TRACK*>(aItem) );
+
+        m_Track.PushBack( new_track );
+        new_item = new_track;
+        break;
+    }
+    case PCB_ZONE_AREA_T:
+    {
+        ZONE_CONTAINER* new_zone = new ZONE_CONTAINER(
+                *static_cast<const ZONE_CONTAINER*>(aItem) );
+
+        m_ZoneDescriptorList.push_back( new_zone );
+        new_item = new_zone;
+        break;
+    }
+    case PCB_TARGET_T:
+    {
+        PCB_TARGET* new_target = new PCB_TARGET(
+                *static_cast<const PCB_TARGET*>(aItem) );
+
+        m_Drawings.PushBack( new_target );
+        new_item = new_target;
+        break;
+    }
+    case PCB_DIMENSION_T:
+    {
+        DIMENSION* new_dim = new DIMENSION(
+                *static_cast<const DIMENSION*>(aItem) );
+
+        m_Drawings.PushBack( new_dim );
+        new_item = new_dim;
+        break;
+    }
+    default:
+        // Un-handled item for duplication
+        wxASSERT_MSG( false, "Duplication not supported for items of class "
+                      + aItem->GetClass() );
+        break;
+    }
+
+    return new_item;
+}
+
+
+wxString BOARD::GetNextModuleReferenceWithPrefix( const wxString& aPrefix,
+                                                  bool aFillSequenceGaps )
+{
+    wxString nextRef;
+
+    std::set<int> usedNumbers;
+
+    for( MODULE* module = m_Modules; module; module = module->Next() )
+    {
+        const wxString ref = module->GetReference();
+        wxString remainder;
+
+        // ONly interested in modules with the right prefix
+        if( !ref.StartsWith( aPrefix, &remainder ) )
+            continue;
+
+        // the suffix must be a number
+        if ( !remainder.IsNumber() )
+            continue;
+
+        long number;
+        if( remainder.ToCLong( &number ) )
+            usedNumbers.insert( number );
+    }
+
+    int nextNum = 1;
+
+    if( usedNumbers.size() )
+    {
+        nextNum = getNextNumberInSequence( usedNumbers, aFillSequenceGaps );
+        nextRef = wxString::Format( wxT( "%s%i" ), aPrefix, nextNum );
+    }
+
+    return nextRef;
 }
 
 

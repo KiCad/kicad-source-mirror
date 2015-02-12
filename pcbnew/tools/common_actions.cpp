@@ -76,6 +76,10 @@ TOOL_ACTION COMMON_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
         AS_GLOBAL, MD_CTRL + int( 'M' ),
         "Move Exactly...", "Moves the selected item(s) by an exact amount" );
 
+TOOL_ACTION COMMON_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
+        AS_GLOBAL, MD_CTRL + int('N'),
+        "Create array", "Create array", AF_ACTIVATE );
+
 TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveEdit.rotate",
         AS_GLOBAL, 'R',
         "Rotate", "Rotates selected item(s)" );
@@ -340,10 +344,6 @@ TOOL_ACTION COMMON_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
 TOOL_ACTION COMMON_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         AS_GLOBAL, 0,
         "Enumerate pads", "Enumerate pads", AF_ACTIVATE );
-
-TOOL_ACTION COMMON_ACTIONS::createArray( "pcbnew.ModuleEditor.createArray",
-        AS_GLOBAL, MD_CTRL + int('N'),
-        "Create array", "Create array", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::copyItems( "pcbnew.ModuleEditor.copyItems",
         AS_GLOBAL, MD_CTRL + int( 'C' ),

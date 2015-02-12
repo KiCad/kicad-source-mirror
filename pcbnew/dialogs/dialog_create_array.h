@@ -224,7 +224,8 @@ public:
         virtual void TransformItem( int n, BOARD_ITEM* item,
                 const wxPoint& rotPoint ) const = 0;
         virtual int         GetArraySize() const = 0;
-        virtual std::string GetItemNumber( int n ) const = 0;
+        virtual wxString GetItemNumber( int n ) const = 0;
+        virtual wxString InterpolateNumberIntoString( int n, const wxString& pattern ) const;
 
         bool        ShouldRenumberItems() const
         {
@@ -263,7 +264,7 @@ protected:
 
         void        TransformItem( int n, BOARD_ITEM* item, const wxPoint& rotPoint ) const;    // override virtual
         int         GetArraySize() const;                                                       // override virtual
-        std::string GetItemNumber( int n ) const;                                               // override virtual
+        wxString    GetItemNumber( int n ) const;                                               // override virtual
 
 private:
         wxPoint getGridCoords( int n ) const;
@@ -276,7 +277,8 @@ private:
             m_nPts( 0 ),
             m_angle( 0.0f ),
             m_rotateItems( false ),
-            m_numberingType( NUMBERING_NUMERIC )
+            m_numberingType( NUMBERING_NUMERIC ),
+            m_numberingOffset( 0 )
         {}
 
         long m_nPts;
@@ -284,27 +286,38 @@ private:
         wxPoint m_centre;
         bool m_rotateItems;
         ARRAY_NUMBERING_TYPE_T m_numberingType;
+        long m_numberingOffset;
 
         void        TransformItem( int n, BOARD_ITEM* item, const wxPoint& rotPoint ) const;    // override virtual
         int         GetArraySize() const;                                                       // override virtual
-        std::string GetItemNumber( int n ) const;                                               // override virtual
+        wxString    GetItemNumber( int n ) const;                                               // override virtual
     };
 
     // Constructor and destructor
-    DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, ARRAY_OPTIONS** settings );
+    DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, wxPoint aOrigPos, ARRAY_OPTIONS** settings );
     virtual ~DIALOG_CREATE_ARRAY() {};
 
 private:
 
-    // the settings object returned to the caller
-    // we update the caller's object and never have ownership
+    /**
+     * The settings object returned to the caller.
+     * We update the caller's object and never have ownership
+     */
     ARRAY_OPTIONS** m_settings;
 
+    /*
+     * The position of the original item(s), used for finding radius, etc
+     */
+    const wxPoint m_originalItemPosition;
+
+    // Event callbacks
     void    OnParameterChanged( wxCommandEvent& event );
     void    OnCancelClick( wxCommandEvent& event );
     void    OnOkClick( wxCommandEvent& event );
 
+    // Internal callback handlers
     void setControlEnablement();
+    void calculateCircularArrayProperties();
 
     struct CREATE_ARRAY_DIALOG_ENTRIES
     {
@@ -334,13 +347,14 @@ private:
         std::string m_gridPriNumberingOffset, m_gridSecNumberingOffset;
 
         std::string m_circCentreX, m_circCentreY,
-                    m_circAngle, m_circCount;
+                    m_circAngle, m_circCount, m_circNumberingOffset;
         bool m_circRotate;
 
         int m_arrayTypeTab;
     };
 
     static CREATE_ARRAY_DIALOG_ENTRIES m_options;
+
 };
 
 #endif      // __DIALOG_CREATE_ARRAY__

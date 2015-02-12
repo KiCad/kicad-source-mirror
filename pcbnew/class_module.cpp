@@ -1156,6 +1156,10 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
         new_item = new_edge;
         break;
     }
+    case PCB_MODULE_T:
+        // Ignore the module itself
+        break;
+
     default:
         // Un-handled item for duplication
         wxASSERT_MSG( false, "Duplication not supported for items of class "
@@ -1166,6 +1170,7 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
     return new_item;
 }
 
+
 wxString MODULE::GetNextPadName( bool aFillSequenceGaps ) const
 {
     std::set<int> usedNumbers;
@@ -1173,39 +1178,55 @@ wxString MODULE::GetNextPadName( bool aFillSequenceGaps ) const
     // Create a set of used pad numbers
     for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
     {
-        wxString padName = pad->GetPadName();
-        int padNumber = 0;
-        int base = 1;
-
-        // Trim and extract the trailing numeric part
-        while( padName.Len() && padName.Last() >= '0' && padName.Last() <= '9' )
-        {
-            padNumber += ( padName.Last() - '0' ) * base;
-            padName.RemoveLast();
-            base *= 10;
-        }
-
+        int padNumber = getTrailingInt( pad->GetPadName() );
         usedNumbers.insert( padNumber );
     }
 
-    // By default go to the end of the sequence
-    int candidate = *usedNumbers.end();
+    const int nextNum = getNextNumberInSequence( usedNumbers, aFillSequenceGaps );
 
-    // Filling in gaps in pad numbering
-    if( aFillSequenceGaps )
+    return wxString::Format( wxT( "%i" ), nextNum );
+}
+
+
+wxString MODULE::GetReferencePrefix() const
+{
+    wxString prefix = GetReference();
+
+    int strIndex = prefix.length() - 1;
+    while( strIndex >= 0 )
     {
-        // start at the beginning
-        candidate = *usedNumbers.begin();
+        const wxUniChar chr = prefix.GetChar( strIndex );
 
-        for( std::set<int>::iterator it = usedNumbers.begin(),
-            itEnd = usedNumbers.end(); it != itEnd; ++it )
-        {
-            if( *it - candidate > 1 )
-                break;
+        // numeric suffix
+        if( chr >= '0' && chr <= '9' )
+            break;
 
-            candidate = *it;
-        }
+        strIndex--;
     }
 
-    return wxString::Format( wxT( "%i" ), ++candidate );
+    prefix = prefix.Mid( 0, strIndex );
+
+    return prefix;
+}
+
+
+bool MODULE::IncrementReference( bool aFillSequenceGaps )
+{
+    BOARD* board = GetBoard();
+
+    if( !board )
+        return false;
+
+    bool success = false;
+    const wxString prefix = GetReferencePrefix();
+    const wxString newReference = board->GetNextModuleReferenceWithPrefix(
+            prefix, aFillSequenceGaps );
+
+    if( !newReference.IsEmpty() )
+    {
+        SetReference( newReference );
+        success = true;
+    }
+
+    return success;
 }
