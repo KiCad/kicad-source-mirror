@@ -101,7 +101,7 @@ struct TOOL_MANAGER::TOOL_STATE
     CONTEXT_MENU_TRIGGER contextMenuTrigger;
 
     /// Tool execution context
-    COROUTINE<int, TOOL_EVENT&>* cofunc;
+    COROUTINE<int, const TOOL_EVENT&>* cofunc;
 
     /// The event that triggered the execution/wakeup of the tool after Wait() call
     TOOL_EVENT wakeupEvent;
@@ -464,7 +464,7 @@ optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 }
 
 
-void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
+void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
     // iterate over all registered tools
     BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
@@ -512,7 +512,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
                     // as the state changes, the transition table has to be set up again
                     st->transitions.clear();
 
-                    st->cofunc = new COROUTINE<int, TOOL_EVENT&>( tr.second );
+                    st->cofunc = new COROUTINE<int, const TOOL_EVENT&>( tr.second );
 
                     // got match? Run the handler.
                     st->cofunc->Call( aEvent );
@@ -529,7 +529,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 }
 
 
-bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
+bool TOOL_MANAGER::dispatchStandardEvents( const TOOL_EVENT& aEvent )
 {
     if( aEvent.Action() == TA_KEY_PRESSED )
     {
@@ -542,7 +542,7 @@ bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
 }
 
 
-bool TOOL_MANAGER::dispatchActivation( TOOL_EVENT& aEvent )
+bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 {
     if( aEvent.IsActivate() )
     {
@@ -559,7 +559,7 @@ bool TOOL_MANAGER::dispatchActivation( TOOL_EVENT& aEvent )
 }
 
 
-void TOOL_MANAGER::dispatchContextMenu( TOOL_EVENT& aEvent )
+void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 {
     BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
     {
@@ -614,7 +614,7 @@ void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 }
 
 
-bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
+bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 {
     // Early dispatch of events destined for the TOOL_MANAGER
     if( !dispatchStandardEvents( aEvent ) )

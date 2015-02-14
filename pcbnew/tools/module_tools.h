@@ -55,41 +55,41 @@ public:
      * Function PlacePad()
      * Places a pad in module editor.
      */
-    int PlacePad( TOOL_EVENT& aEvent );
+    int PlacePad( const TOOL_EVENT& aEvent );
 
     /**
      * Function EnumeratePads()
      * Tool for quick pad enumeration.
      */
-    int EnumeratePads( TOOL_EVENT& aEvent );
+    int EnumeratePads( const TOOL_EVENT& aEvent );
 
     /**
      * Function CopyItems()
      *
      * Copies selected items to the clipboard. Works only in "edit modules" mode.
      */
-    int CopyItems( TOOL_EVENT& aEvent );
+    int CopyItems( const TOOL_EVENT& aEvent );
 
     /**
      * Function PastePad()
      *
      * Pastes items from the clipboard. Works only in "edit modules" mode.
      */
-    int PasteItems( TOOL_EVENT& aEvent );
+    int PasteItems( const TOOL_EVENT& aEvent );
 
     /**
      * Function ModuleTextOutlines()
      *
      * Toggles display mode for module texts (outline/filled).
      */
-    int ModuleTextOutlines( TOOL_EVENT& aEvent );
+    int ModuleTextOutlines( const TOOL_EVENT& aEvent );
 
     /**
      * Function ModuleEdgeOutlines()
      *
      * Toggles display mode for module edges (outline/filled).
      */
-    int ModuleEdgeOutlines( TOOL_EVENT& aEvent );
+    int ModuleEdgeOutlines( const TOOL_EVENT& aEvent );
 
 private:
     ///> Sets up handlers for various events.

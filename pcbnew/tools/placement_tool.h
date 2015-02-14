@@ -46,22 +46,22 @@ public:
     bool Init();
 
     /// TODO
-    int AlignTop( TOOL_EVENT& aEvent );
+    int AlignTop( const TOOL_EVENT& aEvent );
 
     /// TODO
-    int AlignBottom( TOOL_EVENT& aEvent );
+    int AlignBottom( const TOOL_EVENT& aEvent );
 
     /// TODO
-    int AlignLeft( TOOL_EVENT& aEvent );
+    int AlignLeft( const TOOL_EVENT& aEvent );
 
     /// TODO
-    int AlignRight( TOOL_EVENT& aEvent );
+    int AlignRight( const TOOL_EVENT& aEvent );
 
     /// TODO
-    int DistributeHorizontally( TOOL_EVENT& aEvent );
+    int DistributeHorizontally( const TOOL_EVENT& aEvent );
 
     /// TODO
-    int DistributeVertically( TOOL_EVENT& aEvent );
+    int DistributeVertically( const TOOL_EVENT& aEvent );
 
 private:
     /// TODO

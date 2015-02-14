@@ -61,35 +61,35 @@ public:
      * Main loop in which events are handled.
      * @param aEvent is the handled event.
      */
-    int Main( TOOL_EVENT& aEvent );
+    int Main( const TOOL_EVENT& aEvent );
 
     /**
      * Function Edit()
      *
      * Displays properties window for the selected object.
      */
-    int Properties( TOOL_EVENT& aEvent );
+    int Properties( const TOOL_EVENT& aEvent );
 
     /**
      * Function Rotate()
      *
      * Rotates currently selected items.
      */
-    int Rotate( TOOL_EVENT& aEvent );
+    int Rotate( const TOOL_EVENT& aEvent );
 
     /**
      * Function Flip()
      *
      * Rotates currently selected items. The rotation point is the current cursor position.
      */
-    int Flip( TOOL_EVENT& aEvent );
+    int Flip( const TOOL_EVENT& aEvent );
 
     /**
      * Function Remove()
      *
      * Deletes currently selected items. The rotation point is the current cursor position.
      */
-    int Remove( TOOL_EVENT& aEvent );
+    int Remove( const TOOL_EVENT& aEvent );
 
     /**
      * Function EditModules()

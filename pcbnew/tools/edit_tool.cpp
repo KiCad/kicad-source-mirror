@@ -81,7 +81,7 @@ bool EDIT_TOOL::Init()
 }
 
 
-int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
+int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -238,7 +238,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 }
 
 
-int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
+int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
@@ -307,7 +307,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 }
 
 
-int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
+int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
@@ -361,7 +361,7 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 }
 
 
-int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
+int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
@@ -415,7 +415,7 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
 }
 
 
-int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
+int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 

@@ -51,7 +51,7 @@ enum TOOL_TYPE
 
 /// Unique identifier for tools
 typedef int TOOL_ID;
-typedef DELEGATE<int, TOOL_EVENT&> TOOL_STATE_FUNC;
+typedef DELEGATE<int, const TOOL_EVENT&> TOOL_STATE_FUNC;
 
 /**
  * Class TOOL_BASE

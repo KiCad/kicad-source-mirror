@@ -53,7 +53,7 @@ public:
      *
      * Change selection event handler.
      */
-    int OnSelectionChange( TOOL_EVENT& aEvent );
+    int OnSelectionChange( const TOOL_EVENT& aEvent );
 
 private:
     ///> Selection tool used for obtaining selected items
