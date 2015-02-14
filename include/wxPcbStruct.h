@@ -848,12 +848,14 @@ public:
     /**
      * Function AppendBoardFile
      * appends a board file onto the current one, creating God knows what.
+     * the main purpose is only to allow panelizing boards.
      */
     bool AppendBoardFile( const wxString& aFullFileName, int aCtl );
 
     /**
      * Function SavePcbFile
      * writes the board data structures to \a a aFileName
+     * Creates backup when requested and update flags (modified and saved flgs)
      *
      * @param aFileName The file name to write or wxEmptyString to prompt user for
      *                  file name.
@@ -864,8 +866,18 @@ public:
      */
     bool SavePcbFile( const wxString& aFileName, bool aCreateBackupFile = CREATE_BACKUP_FILE );
 
-    int SavePcbFormatAscii( FILE* File );
-    bool WriteGeneralDescrPcb( FILE* File );
+    /**
+     * Function SavePcbCopy
+     * writes the board data structures to \a a aFileName
+     * but unlike SavePcbFile, does not make anything else
+     * (no backup, borad fliename change, no flag changes ...)
+     * Used under a project mgr to save under a new name the current board
+     *
+     * When not under a project mgr, the full SavePcbFile is used.
+     * @param aFileName The file name to write.
+     * @return True if file was saved successfully.
+     */
+    bool SavePcbCopy( const wxString& aFileName );
 
     // BOARD handling
 

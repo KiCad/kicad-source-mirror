@@ -81,7 +81,16 @@ void DIALOG_CHOOSE_COMPONENT::OnSearchBoxChange( wxCommandEvent& aEvent )
 {
     m_search_container->UpdateSearchTerm( m_searchBox->GetLineText( 0 ) );
     updateSelection();
+
+    // On Windows, but not on Linux, the focus is given to
+    // the m_libraryComponentTree, after modificatuons.
+    // We want the focus for m_searchBox.
+    //
+    // We cannot call SetFocus on Linux because it changes the current text selection
+    // and the text edit cursor position.
+#ifdef __WINDOWS__
     m_searchBox->SetFocus();
+#endif
 }
 
 
