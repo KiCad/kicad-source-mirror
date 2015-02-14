@@ -511,6 +511,7 @@ void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
     {
         clearSelection();
         select( aItem );
+        getView()->SetCenter( VECTOR2D( aItem->GetPosition() ) );
 
         // Inform other potentially interested tools
         m_toolMgr->ProcessEvent( SelectedEvent );
