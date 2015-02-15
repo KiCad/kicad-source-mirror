@@ -47,7 +47,7 @@ public:
 
 
 PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
-    TOOL_INTERACTIVE( "pcbnew.EditorControl" )
+    TOOL_INTERACTIVE( "pcbnew.EditorControl" ), m_frame( NULL )
 {
 }
 
@@ -75,7 +75,7 @@ bool PCB_EDITOR_CONTROL::Init()
 
 
 // Track & via size control
-int PCB_EDITOR_CONTROL::TrackWidthInc( TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>();
     int widthIndex = board->GetDesignSettings().GetTrackWidthIndex() + 1;
@@ -96,7 +96,7 @@ int PCB_EDITOR_CONTROL::TrackWidthInc( TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::TrackWidthDec( TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>();
     int widthIndex = board->GetDesignSettings().GetTrackWidthIndex() - 1;
@@ -117,7 +117,7 @@ int PCB_EDITOR_CONTROL::TrackWidthDec( TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ViaSizeInc( TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>();
     int sizeIndex = board->GetDesignSettings().GetViaSizeIndex() + 1;
@@ -138,7 +138,7 @@ int PCB_EDITOR_CONTROL::ViaSizeInc( TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ViaSizeDec( TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>();
     int sizeIndex = board->GetDesignSettings().GetViaSizeIndex() - 1;
@@ -160,7 +160,7 @@ int PCB_EDITOR_CONTROL::ViaSizeDec( TOOL_EVENT& aEvent )
 
 
 // Zone actions
-int PCB_EDITOR_CONTROL::ZoneFill( TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
 {
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const SELECTION& selection = selTool->GetSelection();
@@ -181,7 +181,7 @@ int PCB_EDITOR_CONTROL::ZoneFill( TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ZoneFillAll( TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::ZoneFillAll( const TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>();
 
@@ -199,7 +199,7 @@ int PCB_EDITOR_CONTROL::ZoneFillAll( TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ZoneUnfill( TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::ZoneUnfill( const TOOL_EVENT& aEvent )
 {
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const SELECTION& selection = selTool->GetSelection();
@@ -220,7 +220,7 @@ int PCB_EDITOR_CONTROL::ZoneUnfill( TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ZoneUnfillAll( TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>();
 
@@ -231,6 +231,20 @@ int PCB_EDITOR_CONTROL::ZoneUnfillAll( TOOL_EVENT& aEvent )
         zone->ClearFilledPolysList();
         zone->ViewUpdate();
     }
+
+    setTransitions();
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::SelectionCrossProbe( const TOOL_EVENT& aEvent )
+{
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
+
+    if( selection.Size() == 1 )
+        m_frame->SendMessageToEESCHEMA( selection.Item<BOARD_ITEM>( 0 ) );
 
     setTransitions();
 
@@ -251,4 +265,6 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ZoneFillAll,        COMMON_ACTIONS::zoneFillAll.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ZoneUnfill,         COMMON_ACTIONS::zoneUnfill.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ZoneUnfillAll,      COMMON_ACTIONS::zoneUnfillAll.MakeEvent() );
+
+    Go( &PCB_EDITOR_CONTROL::SelectionCrossProbe, SELECTION_TOOL::SelectedEvent );
 }

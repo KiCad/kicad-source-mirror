@@ -5,7 +5,7 @@
  * Copyright (C) 2013 Tuomas Vaherkoski <tuomasvaherkoski@gmail.com>
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,16 @@
 #include "modelparsers.h"
 #include "vrml_aux.h"
 
+
+/**
+ * Trace mask used to enable or disable the trace output of the VRML V2 parser code.
+ * The debug output can be turned on by setting the WXTRACE environment variable to
+ * "KI_TRACE_VRML_V2_PARSER".  See the wxWidgets documentation on wxLogTrace for
+ * more information.
+ */
+static const wxChar* traceVrmlV2Parser = wxT( "KI_TRACE_VRML_V2_PARSER" );
+
+
 VRML2_MODEL_PARSER::VRML2_MODEL_PARSER( S3D_MASTER* aMaster ) :
     S3D_MODEL_PARSER( aMaster )
 {
@@ -59,7 +69,7 @@ void VRML2_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
 {
     char text[128];
 
-    // DBG( printf( "Load %s\n", GetChars(aFilename) ) );
+    wxLogTrace( traceVrmlV2Parser, wxT( "Load %s" ), GetChars( aFilename ) );
     m_file = wxFopen( aFilename, wxT( "rt" ) );
 
     if( m_file == NULL )
@@ -117,9 +127,6 @@ void VRML2_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
 
     fclose( m_file );
 
-
-    // DBG( printf( "chils size:%lu\n", childs.size() ) );
-
     if( GetMaster()->IsOpenGlAllowed() )
     {
         for( unsigned int idx = 0; idx < childs.size(); idx++ )
@@ -134,8 +141,6 @@ int VRML2_MODEL_PARSER::read_Transform()
 {
     char text[128];
 
-    // DBG( printf( "Transform\n" ) );
-
     while( GetNextTag( m_file, text ) )
     {
         if( *text == ']' )
@@ -145,7 +150,6 @@ int VRML2_MODEL_PARSER::read_Transform()
 
         if( *text == '}' )
         {
-            // DBG( printf( "  } Exit Transform\n" ) );
             break;
         }
 
@@ -239,7 +243,7 @@ int VRML2_MODEL_PARSER::read_Transform()
         }
         else
         {
-            // DBG( printf( "    %s NotImplemented\n", text ) );
+            wxLogTrace( traceVrmlV2Parser, wxT( "    %s NotImplemented" ), text );
             read_NotImplemented( m_file, '}' );
         }
     }
@@ -248,24 +252,56 @@ int VRML2_MODEL_PARSER::read_Transform()
 }
 
 
+/**
+ * Read the DEF for a Coordinate
+ */
+int VRML2_MODEL_PARSER::read_DEF_Coordinate()
+{
+    char text[128];
+
+    // Get the name of the definition.
+    GetNextTag( m_file, text );
+    std::string coordinateName = text;
+
+    while( GetNextTag( m_file, text ) )
+    {
+        if( ( text == NULL ) || ( *text == ']' ) )
+            continue;
+
+        if( ( *text == '}' ) )
+            return 0;
+
+        if( strcmp( text, "Coordinate" ) == 0 )
+        {
+            int retVal = read_CoordinateDef();
+
+            if( retVal == 0 )
+                m_defCoordinateMap.insert( std::make_pair( coordinateName, m_model->m_Point ) );
+
+            return retVal;
+        }
+    }
+
+    return -1;
+}
+
+
 int VRML2_MODEL_PARSER::read_DEF()
 {
     char text[128];
 
     GetNextTag( m_file, text );
-    // DBG( printf( "DEF %s ", text ) );
 
     while( GetNextTag( m_file, text ) )
     {
         if( *text == ']' )
         {
-            // DBG( printf( "  skiping %c\n", *text) );
+            wxLogTrace( traceVrmlV2Parser, wxT( "  skipping %c" ), *text );
             continue;
         }
 
         if( *text == '}' )
         {
-            // DBG( printf( "  } Exit DEF\n") );
             return 0;
         }
 
@@ -301,16 +337,39 @@ int VRML2_MODEL_PARSER::read_DEF()
         }
     }
 
-    // DBG( printf( "  DEF failed\n" ) );
+    wxLogTrace( traceVrmlV2Parser, wxT( "  DEF failed" ) );
     return -1;
+}
+
+
+int VRML2_MODEL_PARSER::read_USE()
+{
+    char text[128];
+
+    // Get the name of the definition.
+    GetNextTag( m_file, text );
+    std::string coordinateName = text;
+
+    // Look for it in our coordinate map.
+    VRML2_COORDINATE_MAP::iterator coordinate;
+    coordinate = m_defCoordinateMap.find( coordinateName );
+
+    // Not previously defined.
+    if( coordinate == m_defCoordinateMap.end() )
+    {
+        wxLogTrace( traceVrmlV2Parser, wxT( "USE: coordinate %s not previously defined "
+                                            "in a DEF section." ), text );
+        return -1;
+    }
+
+    m_model->m_Point = coordinate->second;
+    return 0;
 }
 
 
 int VRML2_MODEL_PARSER::read_Shape()
 {
     char text[128];
-
-    // DBG( printf( "  Shape\n") );
 
     while( GetNextTag( m_file, text ) )
     {
@@ -321,12 +380,12 @@ int VRML2_MODEL_PARSER::read_Shape()
 
         if( *text == '}' )
         {
-            // DBG( printf( "  } Exit Shape\n") );
             return 0;
         }
 
         if( strcmp( text, "appearance" ) == 0 )
         {
+            wxLogTrace( traceVrmlV2Parser, wxT( "\"appearance\" key word not supported." ) );
             // skip
         }
         else if( strcmp( text, "Appearance" ) == 0 )
@@ -335,20 +394,25 @@ int VRML2_MODEL_PARSER::read_Shape()
         }
         else if( strcmp( text, "geometry" ) == 0 )
         {
+            wxLogTrace( traceVrmlV2Parser, wxT( "\"geometry\" key word not supported." ) );
             // skip
         }
         else if( strcmp( text, "IndexedFaceSet" ) == 0 )
         {
             read_IndexedFaceSet();
         }
+        else if( strcmp( text, "IndexedLineSet" ) == 0 )
+        {
+            read_IndexedLineSet();
+        }
         else
         {
-            // DBG( printf( "    %s NotImplemented\n", text ) );
+            wxLogTrace( traceVrmlV2Parser, wxT( "    %s NotImplemented" ), text );
             read_NotImplemented( m_file, '}' );
         }
     }
 
-    // DBG( printf( "  Shape failed\n" ) );
+    wxLogTrace( traceVrmlV2Parser, wxT( "  Shape failed" ) );
     return -1;
 }
 
@@ -356,8 +420,6 @@ int VRML2_MODEL_PARSER::read_Shape()
 int VRML2_MODEL_PARSER::read_Appearance()
 {
     char text[128];
-
-    // DBG( printf( "  Appearance\n") );
 
     while( GetNextTag( m_file, text ) )
     {
@@ -377,7 +439,7 @@ int VRML2_MODEL_PARSER::read_Appearance()
         }
     }
 
-    // DBG( printf( "  Appearance failed\n" ) );
+    wxLogTrace( traceVrmlV2Parser, wxT( "  Appearance failed" ) );
     return -1;
 }
 
@@ -386,8 +448,6 @@ int VRML2_MODEL_PARSER::read_material()
 {
     S3D_MATERIAL* material = NULL;
     char text[128];
-
-    // DBG( printf( "  material ") );
 
     if( GetNextTag( m_file, text ) )
     {
@@ -405,12 +465,8 @@ int VRML2_MODEL_PARSER::read_material()
         }
         else if( strcmp( text, "DEF" ) == 0 )
         {
-            // DBG( printf( "DEF") );
-
             if( GetNextTag( m_file, text ) )
             {
-                // DBG( printf( "%s", text ) );
-
                 wxString mat_name;
                 mat_name = FROM_UTF8( text );
 
@@ -429,12 +485,8 @@ int VRML2_MODEL_PARSER::read_material()
         }
         else if( strcmp( text, "USE" ) == 0 )
         {
-            // DBG( printf( "USE") );
-
             if( GetNextTag( m_file, text ) )
             {
-                // DBG( printf( "%s\n", text ) );
-
                 wxString mat_name;
                 mat_name = FROM_UTF8( text );
 
@@ -447,12 +499,12 @@ int VRML2_MODEL_PARSER::read_material()
                     }
                 }
 
-                DBG( printf( "   read_material error: material not found\n" ) );
+                wxLogTrace( traceVrmlV2Parser, wxT( "   read_material error: material not found" ) );
             }
         }
     }
 
-    // DBG( printf( "  failed material\n" ) );
+    wxLogTrace( traceVrmlV2Parser, wxT( "  failed material" ) );
     return -1;
 }
 
@@ -461,8 +513,6 @@ int VRML2_MODEL_PARSER::read_Material()
 {
     char text[128];
     glm::vec3 vertex;
-
-    // DBG( printf( "  Material\n") );
 
     while( GetNextTag( m_file, text ) )
     {
@@ -478,17 +528,13 @@ int VRML2_MODEL_PARSER::read_Material()
 
         if( strcmp( text, "diffuseColor" ) == 0 )
         {
-            // DBG( printf( "  diffuseColor") );
             parseVertex( m_file, vertex );
-            // DBG( printf( "\n") );
             m_model->m_Materials->m_DiffuseColor.push_back( vertex );
         }
         else if( strcmp( text, "emissiveColor" ) == 0 )
         {
-            // DBG( printf( "  emissiveColor") );
             parseVertex( m_file, vertex );
 
-            // DBG( printf( "\n") );
             if( GetMaster()->m_use_modelfile_emissiveColor == true )
             {
                 m_model->m_Materials->m_EmissiveColor.push_back( vertex );
@@ -496,9 +542,7 @@ int VRML2_MODEL_PARSER::read_Material()
         }
         else if( strcmp( text, "specularColor" ) == 0 )
         {
-            // DBG( printf( "  specularColor") );
             parseVertex( m_file, vertex );
-            // DBG( printf( "\n") );
 
             if( GetMaster()->m_use_modelfile_specularColor == true )
             {
@@ -509,7 +553,6 @@ int VRML2_MODEL_PARSER::read_Material()
         {
             float ambientIntensity;
             parseFloat( m_file, &ambientIntensity );
-            // DBG( printf( "  ambientIntensity %f\n", ambientIntensity) );
 
             if( GetMaster()->m_use_modelfile_ambientIntensity == true )
             {
@@ -521,7 +564,6 @@ int VRML2_MODEL_PARSER::read_Material()
         {
             float transparency;
             parseFloat( m_file, &transparency );
-            // DBG( printf( "  transparency %f\n", transparency) );
 
             if( GetMaster()->m_use_modelfile_transparency == true )
             {
@@ -533,7 +575,6 @@ int VRML2_MODEL_PARSER::read_Material()
             float shininess;
             parseFloat( m_file, &shininess );
 
-            // DBG( printf( "  shininess %f\n", shininess) );
             // VRML value is normalized and openGL expects a value 0 - 128
             if( GetMaster()->m_use_modelfile_shininess == true )
             {
@@ -543,7 +584,7 @@ int VRML2_MODEL_PARSER::read_Material()
         }
     }
 
-    // DBG( printf( "  Material failed\n" ) );
+    wxLogTrace( traceVrmlV2Parser, wxT( "  Material failed\n" ) );
     return -1;
 }
 
@@ -551,8 +592,6 @@ int VRML2_MODEL_PARSER::read_Material()
 int VRML2_MODEL_PARSER::read_IndexedFaceSet()
 {
     char text[128];
-
-    // DBG( printf( "  IndexedFaceSet\n") );
 
     m_normalPerVertex = false;
     colorPerVertex = false;
@@ -566,7 +605,6 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
 
         if( *text == '}' )
         {
-            // DBG( printf( "  } Exit IndexedFaceSet\n") );
             return 0;
         }
 
@@ -576,7 +614,6 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
             {
                 if( strcmp( text, "TRUE" ) == 0 )
                 {
-                    // DBG( printf( "  m_normalPerVertex TRUE\n") );
                     m_normalPerVertex = true;
                 }
             }
@@ -587,7 +624,6 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
 
             if( strcmp( text, "TRUE" ) )
             {
-                // DBG( printf( "  colorPerVertex = true\n") );
                 colorPerVertex = true;
             }
             else
@@ -619,17 +655,43 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
         {
             read_colorIndex();
         }
+        else if( strcmp( text, "USE" ) == 0 )
+        {
+            read_USE();
+        }
     }
 
-    // DBG( printf( "  IndexedFaceSet failed %s\n", text ) );
+    wxLogTrace( traceVrmlV2Parser, wxT( "  IndexedFaceSet failed %s" ), text );
+    return -1;
+}
+
+
+int VRML2_MODEL_PARSER::read_IndexedLineSet()
+{
+    char text[128];
+
+    while( GetNextTag( m_file, text ) )
+    {
+        if( ( text == NULL ) || ( *text == ']' ) )
+            continue;
+
+        if( ( *text == '}' ) )
+            return 0;
+
+        if( strcmp( text, "Coordinate" ) == 0 )
+            read_Coordinate();
+        else if( strcmp( text, "coordIndex" ) == 0 )
+            read_coordIndex();
+        else if( strcmp( text, "DEF" ) == 0 )
+            read_DEF_Coordinate();
+    }
+
     return -1;
 }
 
 
 int VRML2_MODEL_PARSER::read_colorIndex()
 {
-    // DBG( printf( "    read_colorIndex\n" ) );
-
     m_model->m_MaterialIndex.clear();
 
     if( colorPerVertex == true )
@@ -660,16 +722,12 @@ int VRML2_MODEL_PARSER::read_colorIndex()
         }
     }
 
-    // DBG( printf( "    m_MaterialIndex.size: %ld\n", m_model->m_MaterialIndex.size() ) );
-
     return 0;
 }
 
 
 int VRML2_MODEL_PARSER::read_NormalIndex()
 {
-    // DBG( printf( "    read_NormalIndex\n" ) );
-
     m_model->m_NormalIndex.clear();
 
     glm::ivec3 coord;
@@ -684,17 +742,13 @@ int VRML2_MODEL_PARSER::read_NormalIndex()
         if( dummy == -1 )
         {
             m_model->m_NormalIndex.push_back( coord_list );
-            // DBG( printf( " size: %lu ", coord_list.size()) );
             coord_list.clear();
         }
         else
         {
             coord_list.push_back( dummy );
-            // DBG( printf( "%d ", dummy) );
         }
     }
-
-    // DBG( printf( "    m_NormalIndex.size: %ld\n", m_model->m_NormalIndex.size() ) );
 
     return 0;
 }
@@ -702,8 +756,6 @@ int VRML2_MODEL_PARSER::read_NormalIndex()
 
 int VRML2_MODEL_PARSER::read_coordIndex()
 {
-    // DBG( printf( "    read_coordIndex\n" ) );
-
     m_model->m_CoordIndex.clear();
 
     glm::ivec3 coord;
@@ -718,17 +770,13 @@ int VRML2_MODEL_PARSER::read_coordIndex()
         if( dummy == -1 )
         {
             m_model->m_CoordIndex.push_back( coord_list );
-            // DBG( printf( " size: %lu ", coord_list.size()) );
             coord_list.clear();
         }
         else
         {
             coord_list.push_back( dummy );
-            // DBG( printf( "%d ", dummy) );
         }
     }
-
-    // DBG( printf( "    m_CoordIndex.size: %ld\n", m_model->m_CoordIndex.size() ) );
 
     return 0;
 }
@@ -738,8 +786,6 @@ int VRML2_MODEL_PARSER::read_Color()
 {
     char text[128];
 
-    // DBG( printf( "  read_Color\n") );
-
     while( GetNextTag( m_file, text ) )
     {
         if( *text == ']' )
@@ -749,7 +795,6 @@ int VRML2_MODEL_PARSER::read_Color()
 
         if( *text == '}' )
         {
-            // DBG( printf( "    m_DiffuseColor.size: %ld\n", m_model->m_Materials->m_DiffuseColor.size() ) );
             return 0;
         }
 
@@ -759,7 +804,7 @@ int VRML2_MODEL_PARSER::read_Color()
         }
     }
 
-    // DBG( printf( "  read_Color failed\n") );
+    wxLogTrace( traceVrmlV2Parser, wxT( "  read_Color failed" ) );
     return -1;
 }
 
@@ -767,8 +812,6 @@ int VRML2_MODEL_PARSER::read_Color()
 int VRML2_MODEL_PARSER::read_Normal()
 {
     char text[128];
-
-    // DBG( printf( "  Normal\n") );
 
     while( GetNextTag( m_file, text ) )
     {
@@ -779,7 +822,6 @@ int VRML2_MODEL_PARSER::read_Normal()
 
         if( *text == '}' )
         {
-            // DBG( printf( "    m_PerFaceNormalsNormalized.size: %lu\n", m_model->m_PerFaceNormalsNormalized.size() ) );
             return 0;
         }
 
@@ -792,8 +834,6 @@ int VRML2_MODEL_PARSER::read_Normal()
             else
             {
                 parseVertexList( m_file, m_model->m_PerVertexNormalsNormalized );
-
-                // DBG( printf( "    m_PerVertexNormalsNormalized.size: %lu\n", m_model->m_PerVertexNormalsNormalized.size() ) );
             }
         }
     }
@@ -806,8 +846,6 @@ int VRML2_MODEL_PARSER::read_Coordinate()
 {
     char text[128];
 
-    // DBG( printf( "  Coordinate\n") );
-
     while( GetNextTag( m_file, text ) )
     {
         if( *text == ']' )
@@ -817,7 +855,6 @@ int VRML2_MODEL_PARSER::read_Coordinate()
 
         if( *text == '}' )
         {
-            // DBG( printf( "    m_Point.size: %lu\n", m_model->m_Point.size() ) );
             return 0;
         }
 
@@ -825,6 +862,29 @@ int VRML2_MODEL_PARSER::read_Coordinate()
         {
             parseVertexList( m_file, m_model->m_Point );
         }
+    }
+
+    return -1;
+}
+
+
+/**
+ * Read the point of the Coordinate for a DEF
+ */
+int VRML2_MODEL_PARSER::read_CoordinateDef()
+{
+    char text[128];
+
+    while( GetNextTag( m_file, text ) )
+    {
+        if( ( text == NULL ) || ( *text == ']' ) )
+            continue;
+
+        if( ( *text == '}' ) )
+            return 0;
+
+        if( strcmp( text, "point" ) == 0 )
+            parseVertexList( m_file, m_model->m_Point );
     }
 
     return -1;

@@ -47,40 +47,40 @@ public:
     bool Init();
 
     // View controls
-    int ZoomInOut( TOOL_EVENT& aEvent );
-    int ZoomInOutCenter( TOOL_EVENT& aEvent );
-    int ZoomCenter( TOOL_EVENT& aEvent );
-    int ZoomFitScreen( TOOL_EVENT& aEvent );
+    int ZoomInOut( const TOOL_EVENT& aEvent );
+    int ZoomInOutCenter( const TOOL_EVENT& aEvent );
+    int ZoomCenter( const TOOL_EVENT& aEvent );
+    int ZoomFitScreen( const TOOL_EVENT& aEvent );
 
     // Display modes
-    int TrackDisplayMode( TOOL_EVENT& aEvent );
-    int PadDisplayMode( TOOL_EVENT& aEvent );
-    int ViaDisplayMode( TOOL_EVENT& aEvent );
-    int ZoneDisplayMode( TOOL_EVENT& aEvent );
-    int HighContrastMode( TOOL_EVENT& aEvent );
-    int HighContrastInc( TOOL_EVENT& aEvent );
-    int HighContrastDec( TOOL_EVENT& aEvent );
+    int TrackDisplayMode( const TOOL_EVENT& aEvent );
+    int PadDisplayMode( const TOOL_EVENT& aEvent );
+    int ViaDisplayMode( const TOOL_EVENT& aEvent );
+    int ZoneDisplayMode( const TOOL_EVENT& aEvent );
+    int HighContrastMode( const TOOL_EVENT& aEvent );
+    int HighContrastInc( const TOOL_EVENT& aEvent );
+    int HighContrastDec( const TOOL_EVENT& aEvent );
 
     // Layer control
-    int LayerSwitch( TOOL_EVENT& aEvent );
-    int LayerNext( TOOL_EVENT& aEvent );
-    int LayerPrev( TOOL_EVENT& aEvent );
-    int LayerAlphaInc( TOOL_EVENT& aEvent );
-    int LayerAlphaDec( TOOL_EVENT& aEvent );
+    int LayerSwitch( const TOOL_EVENT& aEvent );
+    int LayerNext( const TOOL_EVENT& aEvent );
+    int LayerPrev( const TOOL_EVENT& aEvent );
+    int LayerAlphaInc( const TOOL_EVENT& aEvent );
+    int LayerAlphaDec( const TOOL_EVENT& aEvent );
 
     // Grid control
-    int GridFast1( TOOL_EVENT& aEvent );
-    int GridFast2( TOOL_EVENT& aEvent );
-    int GridNext( TOOL_EVENT& aEvent );
-    int GridPrev( TOOL_EVENT& aEvent );
-    int GridSetOrigin( TOOL_EVENT& aEvent );
+    int GridFast1( const TOOL_EVENT& aEvent );
+    int GridFast2( const TOOL_EVENT& aEvent );
+    int GridNext( const TOOL_EVENT& aEvent );
+    int GridPrev( const TOOL_EVENT& aEvent );
+    int GridSetOrigin( const TOOL_EVENT& aEvent );
 
     // Miscellaneous
-    int ResetCoords( TOOL_EVENT& aEvent );
-    int SwitchCursor( TOOL_EVENT& aEvent );
-    int SwitchUnits( TOOL_EVENT& aEvent );
-    int ShowHelp( TOOL_EVENT& aEvent );
-    int ToBeDone( TOOL_EVENT& aEvent );
+    int ResetCoords( const TOOL_EVENT& aEvent );
+    int SwitchCursor( const TOOL_EVENT& aEvent );
+    int SwitchUnits( const TOOL_EVENT& aEvent );
+    int ShowHelp( const TOOL_EVENT& aEvent );
+    int ToBeDone( const TOOL_EVENT& aEvent );
 
 private:
     ///> Sets up handlers for various events.

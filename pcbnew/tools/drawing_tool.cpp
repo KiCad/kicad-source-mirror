@@ -52,7 +52,8 @@
 #include <class_module.h>
 
 DRAWING_TOOL::DRAWING_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.InteractiveDrawing" ), m_editModules( false )
+    TOOL_INTERACTIVE( "pcbnew.InteractiveDrawing" ), m_view( NULL ),
+    m_controls( NULL ), m_board( NULL ), m_frame( NULL ), m_editModules( false ), m_lineWidth( 1 )
 {
 }
 
@@ -74,7 +75,7 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 {
     boost::optional<VECTOR2D> startingPoint;
 
@@ -135,7 +136,7 @@ int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::DrawCircle( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 {
     if( m_editModules )
     {
@@ -184,7 +185,7 @@ int DRAWING_TOOL::DrawCircle( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 {
     if( m_editModules )
     {
@@ -233,7 +234,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::PlaceText( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 {
     if( m_editModules )
         return placeTextModule();
@@ -242,7 +243,7 @@ int DRAWING_TOOL::PlaceText( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 {
     DIMENSION* dimension = NULL;
     int width, maxThickness;
@@ -421,7 +422,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_PCB_ZONES_BUTT, wxCURSOR_PENCIL, _( "Add zones" ) );
 
@@ -429,7 +430,7 @@ int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::DrawKeepout( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_PCB_KEEPOUT_AREA_BUTT, wxCURSOR_PENCIL, _( "Add keepout" ) );
 
@@ -437,7 +438,7 @@ int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::PlaceTarget( const TOOL_EVENT& aEvent )
 {
     PCB_TARGET* target = new PCB_TARGET( m_board );
 
@@ -525,7 +526,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::PlaceModule( const TOOL_EVENT& aEvent )
 {
     MODULE* module = NULL;
 
@@ -635,7 +636,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::PlaceDXF( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
 {
     DIALOG_DXF_IMPORT dlg( m_frame );
     int dlgResult = dlg.ShowModal();
@@ -825,7 +826,7 @@ int DRAWING_TOOL::PlaceDXF( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::SetAnchor( TOOL_EVENT& aEvent )
+int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 {
     assert( m_editModules );
 
@@ -901,7 +902,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
         // Init the new item attributes
         aGraphic->SetShape( (STROKE_T) aShape );
-        aGraphic->SetWidth( lineWidth );
+        aGraphic->SetWidth( m_lineWidth );
         aGraphic->SetStart( wxPoint( aStartingPoint->x, aStartingPoint->y ) );
         aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
         aGraphic->SetLayer( layer );
@@ -963,8 +964,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 {
                     // Init the new item attributes
                     aGraphic->SetShape( (STROKE_T) aShape );
-                    lineWidth = getSegmentWidth( layer );
-                    aGraphic->SetWidth( lineWidth );
+                    m_lineWidth = getSegmentWidth( layer );
+                    aGraphic->SetWidth( m_lineWidth );
                     aGraphic->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
                     aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
                     aGraphic->SetLayer( layer );
@@ -1012,17 +1013,17 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
         {
-            lineWidth += WIDTH_STEP;
-            aGraphic->SetWidth( lineWidth );
+            m_lineWidth += WIDTH_STEP;
+            aGraphic->SetWidth( m_lineWidth );
             updatePreview = true;
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
         {
-            if( lineWidth > (unsigned) WIDTH_STEP )
+            if( m_lineWidth > (unsigned) WIDTH_STEP )
             {
-                lineWidth -= WIDTH_STEP;
-                aGraphic->SetWidth( lineWidth );
+                m_lineWidth -= WIDTH_STEP;
+                aGraphic->SetWidth( m_lineWidth );
                 updatePreview = true;
             }
         }

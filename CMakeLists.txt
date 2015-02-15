@@ -639,7 +639,6 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     # FindPythonInterp unless the user specifically defined a custom path.
     if( NOT PYTHON_SITE_PACKAGE_PATH )
         execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "import distutils.sysconfig;print\"%s\"%distutils.sysconfig.get_python_lib(plat_specific=0, standard_lib=0, prefix='')"
-#        execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "import distutils.sysconfig;print\"%s\"%distutils.sysconfig.get_python_lib()"
             OUTPUT_VARIABLE PYTHON_SITE_PACKAGE_PATH
             OUTPUT_STRIP_TRAILING_WHITESPACE
             )
@@ -665,6 +664,33 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     message( STATUS "Python module install path: ${PYTHON_DEST}" )
 
     find_package( PythonLibs 2.6 )
+
+    if( KICAD_SCRIPTING_WXPYTHON )
+        # Check to see if the correct version of wxPython is installed based on the version of
+        # wxWidgets found.  At least the major an minor version should match.
+        set( _wxpy_version "${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}" )
+        set( _py_cmd "import wxversion;print wxversion.checkInstalled('${_wxpy_version}')" )
+        execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "${_py_cmd}"
+            RESULT_VARIABLE WXPYTHON_VERSION_RESULT
+            OUTPUT_VARIABLE WXPYTHON_VERSION_FOUND
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            )
+
+        # message( STATUS "WXPYTHON_VERSION_FOUND: ${WXPYTHON_VERSION_FOUND}" )
+        # message( STATUS "WXPYTHON_VERSION_RESULT: ${WXPYTHON_VERSION_RESULT}" )
+
+        # Check to see if any version of wxPython is installed on the system.
+        if( WXPYTHON_VERSION_RESULT GREATER 0 )
+            message( FATAL_ERROR "wxPython does not appear to be installed on the system." )
+        endif()
+
+        if( NOT WXPYTHON_VERSION_FOUND STREQUAL "True" )
+            message( FATAL_ERROR "wxPython version ${_wxpy_version} does not appear to be installed on the system." )
+        else()
+            set( WXPYTHON_VERSION_FOUND "${_wxpy_version}"
+                CACHE STRING "wxPython version found." )
+        endif()
+    endif()
 
     #message( STATUS "PYTHON_INCLUDE_DIRS:${PYTHON_INCLUDE_DIRS}" )
 

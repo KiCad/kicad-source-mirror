@@ -8,6 +8,12 @@ import tempfile
 
 from pcbnew import *
 
+
+BACK_COPPER = 'Back_Copper'
+B_CU = 'B.Cu'
+NEW_NAME = 'My_Fancy_Layer_Name'
+
+
 class TestBoardClass(unittest.TestCase):
 
     def setUp(self):
@@ -96,6 +102,27 @@ class TestBoardClass(unittest.TestCase):
         self.assertEqual(tb.GetComment1(),self.COMMENT1)
 
         os.remove(self.FILENAME)
+
+    def test_pcb_layer_name_set_get(self):
+        pcb = BOARD()
+        pcb.SetLayerName(31, BACK_COPPER)
+        self.assertEqual(pcb.GetLayerName(31), BACK_COPPER)
+
+    def test_pcb_layer_name_set_get(self):
+        pcb = BOARD()
+        pcb.SetLayerName(31, BACK_COPPER)
+        self.assertEqual(pcb.GetLayerName(31), BACK_COPPER)
+
+    def test_pcb_layer_id_get(self):
+        pcb = BOARD()
+        b_cu_id = pcb.GetLayerID(B_CU)
+        pcb.SetLayerName(b_cu_id, NEW_NAME)
+
+        # ensure we can get the ID for the new name
+        self.assertEqual(pcb.GetLayerID(NEW_NAME), b_cu_id)
+
+        # ensure we can get to the ID via the STD name too
+        self.assertEqual(pcb.GetLayerID(B_CU), b_cu_id)
 
     #def test_interactive(self):
     # 	code.interact(local=locals())

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ static void swigAddModule( const char* name, void (* initfunc)() )
 }
 
 
-/* Add the builting python modules */
+/* Add the builtin python modules */
 
 static void swigAddBuiltin()
 {
@@ -140,6 +140,13 @@ bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
 #ifdef KICAD_SCRIPTING_WXPYTHON
     PyEval_InitThreads();
 
+    char cmd[1024];
+    // Make sure that that the correct version of wxPython is loaded. In systems where there
+    // are different versions of wxPython installed this can lead to select wrong wxPython
+    // version being selected.
+    snprintf( cmd, 1023, "import wxversion; wxversion.select('%s')", WXPYTHON_VERSION );
+    PyRun_SimpleString( cmd );
+
     // Load the wxPython core API.  Imports the wx._core_ module and sets a
     // local pointer to a function table located there.  The pointer is used
     // internally by the rest of the API functions.
@@ -181,7 +188,7 @@ void pcbnewFinishPythonScripting()
 }
 
 
-#if defined(KICAD_SCRIPTING_WXPYTHON)
+#if defined( KICAD_SCRIPTING_WXPYTHON )
 
 void RedirectStdio()
 {

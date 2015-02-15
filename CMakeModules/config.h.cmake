@@ -70,6 +70,11 @@
 #define KICAD_DATA_PATH                 "@CMAKE_INSTALL_PREFIX@/@KICAD_DATA@"
 #endif
 
+/// The wxPython version found during configuration.
+#if defined( KICAD_SCRIPTING_WXPYTHON )
+#define WXPYTHON_VERSION                "@WXPYTHON_VERSION_FOUND@"
+#endif
+
 /// When defined, build the GITHUB_PLUGIN for pcbnew.
 #cmakedefine BUILD_GITHUB_PLUGIN
 

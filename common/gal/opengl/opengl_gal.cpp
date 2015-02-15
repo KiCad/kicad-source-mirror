@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * Graphics Abstraction Layer (GAL) for OpenGL
@@ -31,7 +31,6 @@
 
 #include <wx/log.h>
 #include <macros.h>
-#include <confirm.h>
 #ifdef __WXDEBUG__
 #include <profile.h>
 #endif /* __WXDEBUG__ */
@@ -51,6 +50,9 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                         wxEvtHandler* aPaintListener, const wxString& aName ) :
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
+    parentWindow( aParent ),
+    mouseListener( aMouseListener ),
+    paintListener( aPaintListener ),
     cachedManager( true ),
     nonCachedManager( false ),
     overlayManager( false )
@@ -59,14 +61,29 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     if( glContext == NULL )
         glContext = new wxGLContext( this );
 
-    parentWindow    = aParent;
-    mouseListener   = aMouseListener;
-    paintListener   = aPaintListener;
+    aParent->Show();   // wxWidgets require the window to be visible to set its GL context
+
+    // Initialize GLEW, FBOs & VBOs
+    SetCurrent( *glContext );
+    initGlew();
+
+    // Prepare shaders
+    if( !shader.LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
+        throw std::runtime_error( "Cannot compile vertex shader!" );
+
+    if( !shader.LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
+        throw std::runtime_error( "Cannot compile fragment shader!" );
+
+    if( !shader.Link() )
+        throw std::runtime_error( "Cannot link the shaders!" );
+
+    // Make VBOs use shaders
+    cachedManager.SetShader( shader );
+    nonCachedManager.SetShader( shader );
+    overlayManager.SetShader( shader );
 
     // Initialize the flags
-    isGlewInitialized        = false;
     isFramebufferInitialized = false;
-    isShaderInitialized      = false;
     isGrouping               = false;
     groupCounter             = 0;
 
@@ -103,10 +120,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     InitTesselatorCallbacks( tesselator );
 
     if( tesselator == NULL )
-    {
-        DisplayError( parentWindow, wxT( "Could not create the tesselator" ) );
-        exit( 1 );
-    }
+        throw std::runtime_error( "Could not create the tesselator" );
 
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 
@@ -126,12 +140,7 @@ OPENGL_GAL::~OPENGL_GAL()
 void OPENGL_GAL::BeginDrawing()
 {
     SetCurrent( *glContext );
-
     clientDC = new wxClientDC( this );
-
-    // Initialize GLEW, FBOs & VBOs
-    if( !isGlewInitialized )
-        initGlew();
 
     // Set up the view port
     glMatrixMode( GL_PROJECTION );
@@ -149,35 +158,6 @@ void OPENGL_GAL::BeginDrawing()
         overlayBuffer = compositor.CreateBuffer();
 
         isFramebufferInitialized = true;
-    }
-
-    // Compile the shaders
-    if( !isShaderInitialized )
-    {
-        if( !shader.LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
-        {
-            DisplayError( parentWindow, wxT( "Cannot compile vertex shader!" ) );
-            exit( 1 );
-        }
-
-        if( !shader.LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
-        {
-            DisplayError( parentWindow, wxT( "Cannot compile fragment shader!" ) );
-            exit( 1 );
-        }
-
-        if( !shader.Link() )
-        {
-            DisplayError( parentWindow, wxT( "Cannot link the shaders!" ) );
-            exit( 1 );
-        }
-
-        // Make VBOs use shaders
-        cachedManager.SetShader( shader );
-        nonCachedManager.SetShader( shader );
-        overlayManager.SetShader( shader );
-
-        isShaderInitialized = true;
     }
 
     // Disable 2D Textures
@@ -818,7 +798,7 @@ void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
 
     if( lineLength <= 0.0 )
         return;
-        
+
     double   scale          = 0.5 * lineWidth / lineLength;
 
     // The perpendicular vector also needs transformations
@@ -944,8 +924,7 @@ void OPENGL_GAL::initGlew()
 
     if( GLEW_OK != err )
     {
-        DisplayError( parentWindow, wxString::FromUTF8( (char*) glewGetErrorString( err ) ) );
-        exit( 1 );
+        throw std::runtime_error( (const char*) glewGetErrorString( err ) );
     }
     else
     {
@@ -955,30 +934,17 @@ void OPENGL_GAL::initGlew()
 
     // Check the OpenGL version (minimum 2.1 is required)
     if( GLEW_VERSION_2_1 )
-    {
         wxLogInfo( wxT( "OpenGL 2.1 supported." ) );
-    }
     else
-    {
-        DisplayError( parentWindow, wxT( "OpenGL 2.1 or higher is required!" ) );
-        exit( 1 );
-    }
+        throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
 
     // Framebuffers have to be supported
     if( !GLEW_EXT_framebuffer_object )
-    {
-        DisplayError( parentWindow, wxT( "Framebuffer objects are not supported!" ) );
-        exit( 1 );
-    }
+        throw std::runtime_error( "Framebuffer objects are not supported!" );
 
     // Vertex buffer has to be supported
     if( !GLEW_ARB_vertex_buffer_object )
-    {
-        DisplayError( parentWindow, wxT( "Vertex buffer objects are not supported!" ) );
-        exit( 1 );
-    }
-
-    isGlewInitialized = true;
+        throw std::runtime_error( "Vertex buffer objects are not supported!" );
 }
 
 
@@ -1061,12 +1027,8 @@ void CALLBACK EdgeCallback( GLboolean aEdgeFlag )
 
 void CALLBACK ErrorCallback( GLenum aErrorCode )
 {
-    const GLubyte* eString = gluErrorString( aErrorCode );
-
-    DisplayError( NULL, wxT( "Tessellation error: " ) +
-                        wxString( (const char*)( eString ), wxConvUTF8 ) );
-
-    exit( 1 );
+    //throw std::runtime_error( std::string( "Tessellation error: " ) +
+                              //std::string( (const char*) gluErrorString( aErrorCode ) );
 }
 
 

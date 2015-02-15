@@ -47,7 +47,8 @@
 #include <wx/defs.h>
 
 MODULE_TOOLS::MODULE_TOOLS() :
-    TOOL_INTERACTIVE( "pcbnew.ModuleEditor" )
+    TOOL_INTERACTIVE( "pcbnew.ModuleEditor" ), m_view( NULL ), m_controls( NULL ),
+    m_board( NULL ), m_frame( NULL )
 {
 }
 
@@ -119,7 +120,7 @@ static wxString getNextPadName( MODULE* aModule )
 }
 
 
-int MODULE_TOOLS::PlacePad( TOOL_EVENT& aEvent )
+int MODULE_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
 
@@ -222,7 +223,7 @@ int MODULE_TOOLS::PlacePad( TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_TOOLS::EnumeratePads( TOOL_EVENT& aEvent )
+int MODULE_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 {
     std::list<D_PAD*> pads;
     std::set<D_PAD*> allPads;
@@ -329,7 +330,7 @@ int MODULE_TOOLS::EnumeratePads( TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_TOOLS::CopyItems( TOOL_EVENT& aEvent )
+int MODULE_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
@@ -401,7 +402,7 @@ int MODULE_TOOLS::CopyItems( TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
+int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
 {
     // Parse clipboard
     PCB_IO io( CTL_FOR_CLIPBOARD );
@@ -533,7 +534,7 @@ int MODULE_TOOLS::PasteItems( TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_TOOLS::ModuleTextOutlines( TOOL_EVENT& aEvent )
+int MODULE_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
 {
     KIGFX::PCB_PAINTER* painter =
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
@@ -570,7 +571,7 @@ int MODULE_TOOLS::ModuleTextOutlines( TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_TOOLS::ModuleEdgeOutlines( TOOL_EVENT& aEvent )
+int MODULE_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
 {
     KIGFX::PCB_PAINTER* painter =
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );

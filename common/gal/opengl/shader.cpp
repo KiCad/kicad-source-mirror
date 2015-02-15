@@ -28,10 +28,10 @@
 
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 
-#include <wx/log.h>
-#include <wx/gdicmn.h>
-#include <confirm.h>
+#include <cstring>
+#include <cassert>
 
 #include <gal/opengl/shader.h>
 #include "shader_src.h"
@@ -102,8 +102,7 @@ bool SHADER::Link()
     glGetObjectParameterivARB( programNumber, GL_OBJECT_LINK_STATUS_ARB,
                                (GLint*) &isShaderLinked );
 
-#ifdef __WXDEBUG__
-
+#ifdef DEBUG
     if( !isShaderLinked )
     {
         int maxLength;
@@ -115,8 +114,7 @@ bool SHADER::Link()
         std::cerr << linkInfoLog;
         delete[] linkInfoLog;
     }
-
-#endif /* __WXDEBUG__ */
+#endif /* DEBUG */
 
     return isShaderLinked;
 }
@@ -127,9 +125,7 @@ int SHADER::AddParameter( const std::string& aParameterName )
     GLint location = glGetUniformLocation( programNumber, aParameterName.c_str() );
 
     if( location != -1 )
-    {
         parameterLocation.push_back( location );
-    }
 
     return location;
 }
@@ -167,7 +163,7 @@ void SHADER::programInfo( GLuint aProgram )
         GLchar* glInfoLog = new GLchar[glInfoLogLength];
         glGetProgramInfoLog( aProgram, glInfoLogLength, &writtenChars, glInfoLog );
 
-        wxLogInfo( wxString::FromUTF8( (char*) glInfoLog ) );
+        std::cerr << glInfoLog << std::endl;
 
         delete[] glInfoLog;
     }
@@ -188,7 +184,7 @@ void SHADER::shaderInfo( GLuint aShader )
         GLchar* glInfoLog = new GLchar[glInfoLogLength];
         glGetShaderInfoLog( aShader, glInfoLogLength, &writtenChars, glInfoLog );
 
-        wxLogInfo( wxString::FromUTF8( (char*) glInfoLog ) );
+        std::cerr << glInfoLog << std::endl;
 
         delete[] glInfoLog;
     }
@@ -202,11 +198,7 @@ std::string SHADER::readSource( std::string aShaderSourceName )
     std::string   shaderSource;
 
     if( !inputFile )
-    {
-        DisplayError( NULL, wxString::FromUTF8( "Can't read the shader source: " ) +
-                    wxString( aShaderSourceName.c_str(), wxConvUTF8 ) );
-        exit( 1 );
-    }
+        throw std::runtime_error( "Can't read the shader source: " + aShaderSourceName );
 
     std::string shaderSourceLine;
 
@@ -223,10 +215,7 @@ std::string SHADER::readSource( std::string aShaderSourceName )
 
 bool SHADER::addSource( const std::string& aShaderSource, SHADER_TYPE aShaderType )
 {
-    if( isShaderLinked )
-    {
-        wxLogDebug( wxT( "Shader is already linked!" ) );
-    }
+    assert( !isShaderLinked );
 
     // Create the program
     if( !isProgramCreated )
@@ -244,7 +233,7 @@ bool SHADER::addSource( const std::string& aShaderSource, SHADER_TYPE aShaderTyp
 
     // Copy to char array
     char* source = new char[aShaderSource.size() + 1];
-    strcpy( source, aShaderSource.c_str() );
+    strncpy( source, aShaderSource.c_str(), aShaderSource.size() + 1 );
     const char** source_ = (const char**) ( &source );
 
     // Attach the source
@@ -261,11 +250,8 @@ bool SHADER::addSource( const std::string& aShaderSource, SHADER_TYPE aShaderTyp
 
     if( status != GL_TRUE )
     {
-        DisplayError( NULL, wxT( "Shader compilation error" ) );
-
         shaderInfo( shaderNumber );
-
-        return false;
+        throw std::runtime_error( "Shader compilation error" );
     }
 
     glAttachShader( programNumber, shaderNumber );

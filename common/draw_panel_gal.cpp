@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +29,7 @@
 #include <wx/event.h>
 #include <wx/colour.h>
 #include <wx/filename.h>
+#include <confirm.h>
 
 #include <kiface_i.h>
 #include <class_draw_panel_gal.h>
@@ -133,30 +135,30 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     m_pendingRefresh = false;
     m_lastRefresh = wxGetLocalTimeMillis();
 
-    if( !m_drawing )
+    if( m_drawing )
+        return;
+
+    m_drawing = true;
+
+    m_view->UpdateItems();
+    m_gal->BeginDrawing();
+    m_gal->ClearScreen( m_painter->GetSettings()->GetBackgroundColor() );
+
+    if( m_view->IsDirty() )
     {
-        m_drawing = true;
+        m_view->ClearTargets();
 
-        m_view->UpdateItems();
-        m_gal->BeginDrawing();
-        m_gal->ClearScreen( m_painter->GetSettings()->GetBackgroundColor() );
-
-        if( m_view->IsDirty() )
-        {
-            m_view->ClearTargets();
-
-            // Grid has to be redrawn only when the NONCACHED target is redrawn
-            if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+        // Grid has to be redrawn only when the NONCACHED target is redrawn
+        if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
                 m_gal->DrawGrid();
 
-            m_view->Redraw();
-        }
-
-        m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
-        m_gal->EndDrawing();
-
-        m_drawing = false;
+        m_view->Redraw();
     }
+
+    m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
+    m_gal->EndDrawing();
+
+    m_drawing = false;
 }
 
 
@@ -250,7 +252,8 @@ void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
 
 void EDA_DRAW_PANEL_GAL::StartDrawing()
 {
-    m_pendingRefresh = false;
+    m_drawing = false;
+    m_pendingRefresh = true;
     Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
 
     wxPaintEvent redrawEvent;
@@ -260,7 +263,8 @@ void EDA_DRAW_PANEL_GAL::StartDrawing()
 
 void EDA_DRAW_PANEL_GAL::StopDrawing()
 {
-    m_pendingRefresh = true;
+    m_pendingRefresh = false;
+    m_drawing = true;
     m_refreshTimer.Stop();
     Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
 }
@@ -288,41 +292,54 @@ void EDA_DRAW_PANEL_GAL::SetTopLayer( LAYER_ID aLayer )
 }
 
 
-void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
+bool EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 {
     // Do not do anything if the currently used GAL is correct
     if( aGalType == m_backend && m_gal != NULL )
-        return;
+        return true;
 
     // Prevent refreshing canvas during backend switch
     StopDrawing();
 
-    delete m_gal;
+    KIGFX::GAL* new_gal = NULL;
 
-    switch( aGalType )
+    try
     {
-    case GAL_TYPE_OPENGL:
-        m_gal = new KIGFX::OPENGL_GAL( this, this, this );
-        break;
+        switch( aGalType )
+        {
+        case GAL_TYPE_OPENGL:
+            new_gal = new KIGFX::OPENGL_GAL( this, this, this );
+            break;
 
-    case GAL_TYPE_CAIRO:
-        m_gal = new KIGFX::CAIRO_GAL( this, this, this );
-        break;
+        case GAL_TYPE_CAIRO:
+            new_gal = new KIGFX::CAIRO_GAL( this, this, this );
+            break;
 
-    case GAL_TYPE_NONE:
-        return;
+        case GAL_TYPE_NONE:
+            return false;
+        }
+
+        delete m_gal;
+        m_gal = new_gal;
+
+        wxSize size = GetClientSize();
+        m_gal->ResizeScreen( size.GetX(), size.GetY() );
+
+        if( m_painter )
+            m_painter->SetGAL( m_gal );
+
+        if( m_view )
+            m_view->SetGAL( m_gal );
+
+        m_backend = aGalType;
+    }
+    catch (std::runtime_error& err)
+    {
+            DisplayError( m_parent, wxString( err.what() ) );
+            return false;
     }
 
-    wxSize size = GetClientSize();
-    m_gal->ResizeScreen( size.GetX(), size.GetY() );
-
-    if( m_painter )
-        m_painter->SetGAL( m_gal );
-
-    if( m_view )
-        m_view->SetGAL( m_gal );
-
-    m_backend = aGalType;
+    return true;
 }
 
 

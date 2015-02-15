@@ -800,14 +800,21 @@ EDA_ITEM* MODULE::Clone() const
 
 void MODULE::RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction )
 {
-    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
-        aFunction( static_cast<BOARD_ITEM*>( pad ) );
+    try
+    {
+        for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+            aFunction( static_cast<BOARD_ITEM*>( pad ) );
 
-    for( BOARD_ITEM* drawing = m_Drawings; drawing; drawing = drawing->Next() )
-        aFunction( drawing );
+        for( BOARD_ITEM* drawing = m_Drawings; drawing; drawing = drawing->Next() )
+            aFunction( drawing );
 
-    aFunction( static_cast<BOARD_ITEM*>( m_Reference ) );
-    aFunction( static_cast<BOARD_ITEM*>( m_Value ) );
+        aFunction( static_cast<BOARD_ITEM*>( m_Reference ) );
+        aFunction( static_cast<BOARD_ITEM*>( m_Value ) );
+    }
+    catch( boost::bad_function_call& e )
+    {
+        DisplayError( NULL, wxT( "Error running MODULE::RunOnChildren" ) );
+    }
 }
 
 

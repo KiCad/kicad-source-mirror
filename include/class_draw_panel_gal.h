@@ -66,7 +66,7 @@ public:
      * Switches method of rendering graphics.
      * @param aGalType is a type of rendering engine that you want to use.
      */
-    void SwitchBackend( GalType aGalType );
+    bool SwitchBackend( GalType aGalType );
 
     /**
      * Function GetBackend

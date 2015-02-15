@@ -70,7 +70,7 @@ public:
      * No conditions means any event.
      */
     template <class T>
-    void Go( int (T::* aStateFunc)( TOOL_EVENT& ),
+    void Go( int (T::* aStateFunc)( const TOOL_EVENT& ),
             const TOOL_EVENT_LIST& aConditions = TOOL_EVENT( TC_ANY, TA_ANY ) );
 
     /**
@@ -110,7 +110,7 @@ private:
 
 // hide TOOL_MANAGER implementation
 template <class T>
-void TOOL_INTERACTIVE::Go( int (T::* aStateFunc)( TOOL_EVENT& ),
+void TOOL_INTERACTIVE::Go( int (T::* aStateFunc)( const TOOL_EVENT& ),
                            const TOOL_EVENT_LIST& aConditions )
 {
     TOOL_STATE_FUNC sptr( static_cast<T*>( this ), aStateFunc );

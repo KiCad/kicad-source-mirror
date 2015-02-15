@@ -34,7 +34,7 @@
 #include <boost/foreach.hpp>
 
 PLACEMENT_TOOL::PLACEMENT_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.Placement" )
+    TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL )
 {
 }
 
@@ -72,7 +72,7 @@ bool PLACEMENT_TOOL::Init()
 }
 
 
-int PLACEMENT_TOOL::AlignTop( TOOL_EVENT& aEvent )
+int PLACEMENT_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -115,7 +115,7 @@ int PLACEMENT_TOOL::AlignTop( TOOL_EVENT& aEvent )
 }
 
 
-int PLACEMENT_TOOL::AlignBottom( TOOL_EVENT& aEvent )
+int PLACEMENT_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -158,7 +158,7 @@ int PLACEMENT_TOOL::AlignBottom( TOOL_EVENT& aEvent )
 }
 
 
-int PLACEMENT_TOOL::AlignLeft( TOOL_EVENT& aEvent )
+int PLACEMENT_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -201,7 +201,7 @@ int PLACEMENT_TOOL::AlignLeft( TOOL_EVENT& aEvent )
 }
 
 
-int PLACEMENT_TOOL::AlignRight( TOOL_EVENT& aEvent )
+int PLACEMENT_TOOL::AlignRight( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -256,7 +256,7 @@ static bool compareY( const BOARD_ITEM* aA, const BOARD_ITEM* aB )
 }
 
 
-int PLACEMENT_TOOL::DistributeHorizontally( TOOL_EVENT& aEvent )
+int PLACEMENT_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -305,7 +305,7 @@ int PLACEMENT_TOOL::DistributeHorizontally( TOOL_EVENT& aEvent )
 }
 
 
-int PLACEMENT_TOOL::DistributeVertically( TOOL_EVENT& aEvent )
+int PLACEMENT_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 

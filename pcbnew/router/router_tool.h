@@ -41,7 +41,7 @@ public:
     ~ROUTER_TOOL();
 
     void Reset( RESET_REASON aReason );
-    int Main( TOOL_EVENT& aEvent );
+    int Main( const TOOL_EVENT& aEvent );
 
 private:
     PNS_ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1 );

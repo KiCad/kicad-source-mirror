@@ -622,6 +622,18 @@ public:
     void ConvertBrdLayerToPolygonalContours( LAYER_ID aLayer, CPOLYGONS_LIST& aOutlines );
 
     /**
+     * Function GetLayerID
+     * returns the ID of a layer given by aLayerName.  Copper layers may
+     * have custom names.
+     *
+     * @param aLayerName = A layer name, like wxT("B.Cu"), etc.
+     *
+     * @return LAYER_ID -   the layer id, which for copper layers may
+     *                      be custom, else standard.
+     */
+    const LAYER_ID GetLayerID( wxString aLayerName ) const;
+
+    /**
      * Function GetLayerName
      * returns the name of a layer given by aLayer.  Copper layers may
      * have custom names.

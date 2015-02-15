@@ -110,8 +110,7 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     if( module )
     {
         //  Add the object to board
-        module->SetParent( (EDA_ITEM*) GetBoard() );
-        GetBoard()->m_Modules.Append( module );
+        GetBoard()->Add( module, ADD_APPEND );
         module->SetPosition( wxPoint( 0, 0 ) );
     }
     else

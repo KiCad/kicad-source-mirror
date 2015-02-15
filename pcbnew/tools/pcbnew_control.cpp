@@ -41,7 +41,7 @@
 
 
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
-    TOOL_INTERACTIVE( "pcbnew.Control" )
+    TOOL_INTERACTIVE( "pcbnew.Control" ), m_frame( NULL )
 {
 }
 
@@ -60,7 +60,7 @@ bool PCBNEW_CONTROL::Init()
 }
 
 
-int PCBNEW_CONTROL::ZoomInOut( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ZoomInOut( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     double zoomScale = 1.0;
@@ -77,7 +77,7 @@ int PCBNEW_CONTROL::ZoomInOut( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ZoomInOutCenter( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ZoomInOutCenter( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     double zoomScale = 1.0;
@@ -94,7 +94,7 @@ int PCBNEW_CONTROL::ZoomInOutCenter( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ZoomCenter( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ZoomCenter( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     view->SetCenter( getViewControls()->GetCursorPosition() );
@@ -104,7 +104,7 @@ int PCBNEW_CONTROL::ZoomCenter( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ZoomFitScreen( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ZoomFitScreen( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
@@ -140,7 +140,7 @@ int PCBNEW_CONTROL::ZoomFitScreen( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::TrackDisplayMode( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 {
     KIGFX::PCB_PAINTER* painter =
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
@@ -165,7 +165,7 @@ int PCBNEW_CONTROL::TrackDisplayMode( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::PadDisplayMode( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
 {
     KIGFX::PCB_PAINTER* painter =
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
@@ -190,7 +190,7 @@ int PCBNEW_CONTROL::PadDisplayMode( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ViaDisplayMode( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 {
     KIGFX::PCB_PAINTER* painter =
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
@@ -215,7 +215,7 @@ int PCBNEW_CONTROL::ViaDisplayMode( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ZoneDisplayMode( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 {
     KIGFX::PCB_PAINTER* painter =
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
@@ -246,7 +246,7 @@ int PCBNEW_CONTROL::ZoneDisplayMode( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::HighContrastMode( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 {
     KIGFX::PCB_PAINTER* painter =
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
@@ -264,7 +264,7 @@ int PCBNEW_CONTROL::HighContrastMode( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::HighContrastInc( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::HighContrastInc( const TOOL_EVENT& aEvent )
 {
     std::cout << __PRETTY_FUNCTION__ << std::endl;
     setTransitions();
@@ -273,7 +273,7 @@ int PCBNEW_CONTROL::HighContrastInc( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::HighContrastDec( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::HighContrastDec( const TOOL_EVENT& aEvent )
 {
     std::cout << __PRETTY_FUNCTION__ << std::endl;
     setTransitions();
@@ -283,7 +283,7 @@ int PCBNEW_CONTROL::HighContrastDec( TOOL_EVENT& aEvent )
 
 
 // Layer control
-int PCBNEW_CONTROL::LayerSwitch( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 {
     if( aEvent.IsAction( &COMMON_ACTIONS::layerTop ) )
         m_frame->SwitchLayer( NULL, F_Cu );
@@ -308,7 +308,7 @@ int PCBNEW_CONTROL::LayerSwitch( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::LayerNext( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_FRAME* editFrame = m_frame;
     LAYER_NUM layer = editFrame->GetActiveLayer();
@@ -336,7 +336,7 @@ int PCBNEW_CONTROL::LayerNext( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::LayerPrev( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_FRAME* editFrame = m_frame;
     LAYER_NUM layer = editFrame->GetActiveLayer();
@@ -364,7 +364,7 @@ int PCBNEW_CONTROL::LayerPrev( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::LayerAlphaInc( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
     KIGFX::PCB_PAINTER* painter =
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
@@ -387,7 +387,7 @@ int PCBNEW_CONTROL::LayerAlphaInc( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::LayerAlphaDec( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 {
     KIGFX::PCB_PAINTER* painter =
             static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
@@ -411,7 +411,7 @@ int PCBNEW_CONTROL::LayerAlphaDec( TOOL_EVENT& aEvent )
 
 
 // Grid control
-int PCBNEW_CONTROL::GridFast1( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::GridFast1( const TOOL_EVENT& aEvent )
 {
     m_frame->SetFastGrid1();
     setTransitions();
@@ -420,7 +420,7 @@ int PCBNEW_CONTROL::GridFast1( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::GridFast2( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::GridFast2( const TOOL_EVENT& aEvent )
 {
     m_frame->SetFastGrid2();
     setTransitions();
@@ -429,7 +429,7 @@ int PCBNEW_CONTROL::GridFast2( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::GridNext( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::GridNext( const TOOL_EVENT& aEvent )
 {
     m_frame->SetNextGrid();
     setTransitions();
@@ -438,7 +438,7 @@ int PCBNEW_CONTROL::GridNext( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::GridPrev( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::GridPrev( const TOOL_EVENT& aEvent )
 {
     m_frame->SetPrevGrid();
     setTransitions();
@@ -447,7 +447,7 @@ int PCBNEW_CONTROL::GridPrev( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::GridSetOrigin( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 {
     Activate();
     m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL,
@@ -481,7 +481,7 @@ int PCBNEW_CONTROL::GridSetOrigin( TOOL_EVENT& aEvent )
 
 
 // Miscellaneous
-int PCBNEW_CONTROL::ResetCoords( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ResetCoords( const TOOL_EVENT& aEvent )
 {
     VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
 
@@ -493,7 +493,7 @@ int PCBNEW_CONTROL::ResetCoords( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::SwitchCursor( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::SwitchCursor( const TOOL_EVENT& aEvent )
 {
     const unsigned int BIG_CURSOR = 4000;
     const unsigned int SMALL_CURSOR = 80;
@@ -511,7 +511,7 @@ int PCBNEW_CONTROL::SwitchCursor( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::SwitchUnits( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
 {
     // TODO should not it be refactored to pcb_frame member function?
     wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
@@ -528,7 +528,7 @@ int PCBNEW_CONTROL::SwitchUnits( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ShowHelp( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 {
     // TODO
     DisplayInfoMessage( m_frame, _( "Not implemented yet." ) );
@@ -538,7 +538,7 @@ int PCBNEW_CONTROL::ShowHelp( TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ToBeDone( TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ToBeDone( const TOOL_EVENT& aEvent )
 {
     DisplayInfoMessage( m_frame, _( "Not implemented yet." ) );
     setTransitions();

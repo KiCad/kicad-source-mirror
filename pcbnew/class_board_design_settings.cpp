@@ -82,6 +82,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_PcbTextSize       = wxSize( DEFAULT_TEXT_PCB_SIZE,
                                   DEFAULT_TEXT_PCB_SIZE );  // current Pcb (not module) Text size
 
+    m_useCustomTrackVia = false;
+    m_customTrackWidth  = DMils2iu( 100 );
     m_TrackMinWidth     = DMils2iu( 100 );      // track min value for width (min copper size value)
     m_ViasMinSize       = DMils2iu( 350 );      // vias (not micro vias) min diameter
     m_ViasMinDrill      = DMils2iu( 200 );      // vias (not micro vias) min drill diameter

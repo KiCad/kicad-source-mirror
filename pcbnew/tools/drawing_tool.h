@@ -58,7 +58,7 @@ public:
      * to click at least two times to determine the origin and the end for a line. If there are
      * more clicks, the line is drawn as a continous polyline.
      */
-    int DrawLine( TOOL_EVENT& aEvent );
+    int DrawLine( const TOOL_EVENT& aEvent );
 
     /**
      * Function DrawCircle()
@@ -66,7 +66,7 @@ public:
      * to first click on a point that is going to be used as the center of the circle. The second
      * click determines the circle radius.
      */
-    int DrawCircle( TOOL_EVENT& aEvent );
+    int DrawCircle( const TOOL_EVENT& aEvent );
 
     /**
      * Function DrawArc()
@@ -74,14 +74,14 @@ public:
      * to first click on a point that is going to be used as the center of the arc. The second
      * click determines the origin and radius, the third one - the angle.
      */
-    int DrawArc( TOOL_EVENT& aEvent );
+    int DrawArc( const TOOL_EVENT& aEvent );
 
     /**
      * Function PlaceText()
      * Displays a dialog that allows to input text and its settings and then lets the user decide
      * where to place the text in editor.
      */
-    int PlaceText( TOOL_EVENT& aEvent );
+    int PlaceText( const TOOL_EVENT& aEvent );
 
     /**
      * Function DrawDimension()
@@ -89,7 +89,7 @@ public:
      * to first click on a point that is going to be used as the origin of the dimension.
      * The second click determines the end and the third click modifies its height.
      */
-    int DrawDimension( TOOL_EVENT& aEvent );
+    int DrawDimension( const TOOL_EVENT& aEvent );
 
     /**
      * Function DrawZone()
@@ -98,7 +98,7 @@ public:
      * as a boundary polygon of the zone. Double click or clicking on the origin of the boundary
      * polyline finishes the drawing.
      */
-    int DrawZone( TOOL_EVENT& aEvent );
+    int DrawZone( const TOOL_EVENT& aEvent );
 
     /**
      * Function DrawKeepout()
@@ -107,31 +107,31 @@ public:
      * be used as a boundary polygon of the area. Double click or clicking on the origin of the
      * boundary polyline finishes the drawing.
      */
-    int DrawKeepout( TOOL_EVENT& aEvent );
+    int DrawKeepout( const TOOL_EVENT& aEvent );
 
     /**
      * Function PlaceTarget()
      * Allows user to place a layer alignment target.
      */
-    int PlaceTarget( TOOL_EVENT& aEvent );
+    int PlaceTarget( const TOOL_EVENT& aEvent );
 
     /**
      * Function PlaceModule()
      * Displays a dialog to select a module to be added and allows the user to set its position.
      */
-    int PlaceModule( TOOL_EVENT& aEvent );
+    int PlaceModule( const TOOL_EVENT& aEvent );
 
     /**
      * Function PlaceDXF()
      * Places a drawing imported from a DXF file in module editor.
      */
-    int PlaceDXF( TOOL_EVENT& aEvent );
+    int PlaceDXF( const TOOL_EVENT& aEvent );
 
     /**
      * Function SetAnchor()
      * Places the footprint anchor (only in module editor).
      */
-    int SetAnchor( TOOL_EVENT& aEvent );
+    int SetAnchor( const TOOL_EVENT& aEvent );
 
     /**
      * Function EditModules()
@@ -203,7 +203,7 @@ private:
     bool m_editModules;
 
     /// Stores the current line width for multisegment drawing.
-    unsigned int lineWidth;
+    unsigned int m_lineWidth;
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP = 100000;
