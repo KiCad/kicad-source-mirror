@@ -41,7 +41,7 @@
 
 
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
-    TOOL_INTERACTIVE( "pcbnew.Control" )
+    TOOL_INTERACTIVE( "pcbnew.Control" ), m_frame( NULL )
 {
 }
 

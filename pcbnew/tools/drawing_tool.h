@@ -203,7 +203,7 @@ private:
     bool m_editModules;
 
     /// Stores the current line width for multisegment drawing.
-    unsigned int lineWidth;
+    unsigned int m_lineWidth;
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP = 100000;

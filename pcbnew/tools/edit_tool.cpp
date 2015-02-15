@@ -43,7 +43,8 @@
 #include "edit_tool.h"
 
 EDIT_TOOL::EDIT_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ), m_editModules( false )
+    TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
+    m_dragging( false ), m_editModules( false ), m_updateFlag( KIGFX::VIEW_ITEM::NONE )
 {
 }
 
@@ -51,6 +52,7 @@ EDIT_TOOL::EDIT_TOOL() :
 void EDIT_TOOL::Reset( RESET_REASON aReason )
 {
     m_dragging = false;
+    m_updateFlag = KIGFX::VIEW_ITEM::NONE;
 }
 
 

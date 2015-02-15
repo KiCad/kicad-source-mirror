@@ -47,7 +47,8 @@
 #include <wx/defs.h>
 
 MODULE_TOOLS::MODULE_TOOLS() :
-    TOOL_INTERACTIVE( "pcbnew.ModuleEditor" )
+    TOOL_INTERACTIVE( "pcbnew.ModuleEditor" ), m_view( NULL ), m_controls( NULL ),
+    m_board( NULL ), m_frame( NULL )
 {
 }
 

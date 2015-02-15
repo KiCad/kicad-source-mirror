@@ -34,7 +34,7 @@
 #include <boost/foreach.hpp>
 
 PLACEMENT_TOOL::PLACEMENT_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.Placement" )
+    TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL )
 {
 }
 

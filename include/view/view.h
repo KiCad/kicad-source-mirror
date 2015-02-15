@@ -492,7 +492,14 @@ public:
     {
         wxASSERT( aLayer < (int) m_layers.size() );
 
-        return m_layers.at( aLayer ).target == TARGET_CACHED;
+        try
+        {
+            return m_layers.at( aLayer ).target == TARGET_CACHED;
+        }
+        catch( std::out_of_range )
+        {
+            return false;
+        }
     }
 
     /**

@@ -47,7 +47,7 @@ public:
 
 
 PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
-    TOOL_INTERACTIVE( "pcbnew.EditorControl" )
+    TOOL_INTERACTIVE( "pcbnew.EditorControl" ), m_frame( NULL )
 {
 }
 

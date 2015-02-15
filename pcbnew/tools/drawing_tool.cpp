@@ -52,7 +52,8 @@
 #include <class_module.h>
 
 DRAWING_TOOL::DRAWING_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.InteractiveDrawing" ), m_editModules( false )
+    TOOL_INTERACTIVE( "pcbnew.InteractiveDrawing" ), m_view( NULL ),
+    m_controls( NULL ), m_board( NULL ), m_frame( NULL ), m_editModules( false ), m_lineWidth( 1 )
 {
 }
 
@@ -901,7 +902,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
         // Init the new item attributes
         aGraphic->SetShape( (STROKE_T) aShape );
-        aGraphic->SetWidth( lineWidth );
+        aGraphic->SetWidth( m_lineWidth );
         aGraphic->SetStart( wxPoint( aStartingPoint->x, aStartingPoint->y ) );
         aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
         aGraphic->SetLayer( layer );
@@ -963,8 +964,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 {
                     // Init the new item attributes
                     aGraphic->SetShape( (STROKE_T) aShape );
-                    lineWidth = getSegmentWidth( layer );
-                    aGraphic->SetWidth( lineWidth );
+                    m_lineWidth = getSegmentWidth( layer );
+                    aGraphic->SetWidth( m_lineWidth );
                     aGraphic->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
                     aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
                     aGraphic->SetLayer( layer );
@@ -1012,17 +1013,17 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
         {
-            lineWidth += WIDTH_STEP;
-            aGraphic->SetWidth( lineWidth );
+            m_lineWidth += WIDTH_STEP;
+            aGraphic->SetWidth( m_lineWidth );
             updatePreview = true;
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
         {
-            if( lineWidth > (unsigned) WIDTH_STEP )
+            if( m_lineWidth > (unsigned) WIDTH_STEP )
             {
-                lineWidth -= WIDTH_STEP;
-                aGraphic->SetWidth( lineWidth );
+                m_lineWidth -= WIDTH_STEP;
+                aGraphic->SetWidth( m_lineWidth );
                 updatePreview = true;
             }
         }
