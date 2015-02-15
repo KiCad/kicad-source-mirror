@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Tuomas Vaherkoski <tuomasvaherkoski@gmail.com>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ class X3D_MODEL_PARSER;
 class S3D_MODEL_PARSER
 {
 public:
-    S3D_MODEL_PARSER(S3D_MASTER* aMaster) :
+    S3D_MODEL_PARSER( S3D_MASTER* aMaster ) :
         master( aMaster )
     {}
 
@@ -96,7 +96,7 @@ public:
     void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits );
 
     typedef std::map< wxString, wxString > PROPERTY_MAP;
-    typedef std::vector< wxXmlNode* > NODE_LIST;
+    typedef std::vector< wxXmlNode* >      NODE_LIST;
 
     /**
      * Function GetChildsByName
@@ -125,9 +125,9 @@ public:
     wxString VRML2_representation();
 
 private:
-    wxString m_Filename;
-    S3D_MESH *m_model;
-    std::vector<S3D_MESH *> childs;
+    wxString                 m_Filename;
+    S3D_MESH*                m_model;
+    std::vector< S3D_MESH* > childs;
 
     std::vector< wxString > vrml_materials;
     std::vector< wxString > vrml_points;
@@ -142,6 +142,7 @@ private:
 };
 
 
+typedef std::map< std::string, std::vector< glm::vec3 > > VRML2_COORDINATE_MAP;
 
 /**
  * class VRML2_MODEL_PARSER
@@ -165,25 +166,30 @@ public:
 private:
     int read_Transform();
     int read_DEF();
+    int read_DEF_Coordinate();
     int read_Shape();
     int read_Appearance();
     int read_material();
     int read_Material();
     int read_IndexedFaceSet();
+    int read_IndexedLineSet();
     int read_Coordinate();
+    int read_CoordinateDef();
     int read_Normal();
     int read_NormalIndex();
     int read_Color();
     int read_coordIndex();
     int read_colorIndex();
+    int read_USE();
 
-    bool m_normalPerVertex;
-    bool colorPerVertex;
-    S3D_MESH *m_model;
-    std::vector<S3D_MESH *> childs;
-    FILE *m_file;
-    S3D_MATERIAL *m_Materials;
-    wxString m_Filename;
+    bool                      m_normalPerVertex;
+    bool                      colorPerVertex;
+    S3D_MESH*                 m_model;
+    std::vector< S3D_MESH* >  childs;
+    FILE*                     m_file;
+    S3D_MATERIAL*             m_Materials;
+    wxString                  m_Filename;
+    VRML2_COORDINATE_MAP      m_defCoordinateMap;
 };
 
 
@@ -224,13 +230,13 @@ private:
     int readIndexedFaceSet_coordIndex();
     int readIndexedFaceSet_materialIndex();
 
-    bool m_normalPerVertex;
-    bool colorPerVertex;
-    S3D_MESH *m_model;
-    std::vector<S3D_MESH *> childs;
-    S3D_MATERIAL *m_Materials;
-    FILE *m_file;
-    wxString m_Filename;
+    bool                     m_normalPerVertex;
+    bool                     colorPerVertex;
+    S3D_MESH*                m_model;
+    std::vector< S3D_MESH* > childs;
+    S3D_MATERIAL*            m_Materials;
+    FILE*                    m_file;
+    wxString                 m_Filename;
 };
 
 /**
@@ -246,8 +252,8 @@ public:
     void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits );
 
 private:
-    VRML1_MODEL_PARSER *vrml1_parser;
-    VRML2_MODEL_PARSER *vrml2_parser;
+    VRML1_MODEL_PARSER* vrml1_parser;
+    VRML2_MODEL_PARSER* vrml2_parser;
 };
 
 
