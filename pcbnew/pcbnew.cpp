@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,57 +109,46 @@ static struct IFACE : public KIFACE_I
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {
+        wxWindow* frame = NULL;
+
         switch( aClassId )
         {
         case FRAME_PCB:
-            {
-                PCB_EDIT_FRAME* frame = new PCB_EDIT_FRAME( aKiway, aParent );
+            frame = dynamic_cast< wxWindow* >( new PCB_EDIT_FRAME( aKiway, aParent ) );
 
-#if defined(KICAD_SCRIPTING)
-                // give the scripting helpers access to our frame
-                ScriptingSetPcbEditFrame( frame );
+#if defined( KICAD_SCRIPTING )
+            // give the scripting helpers access to our frame
+            ScriptingSetPcbEditFrame( (PCB_EDIT_FRAME*) frame );
 #endif
 
-                if( Kiface().IsSingle() )
-                {
-                    // only run this under single_top, not under a project manager.
-                    CreateServer( frame, KICAD_PCB_PORT_SERVICE_NUMBER );
-                }
-                return frame;
+            if( Kiface().IsSingle() )
+            {
+                // only run this under single_top, not under a project manager.
+                CreateServer( frame, KICAD_PCB_PORT_SERVICE_NUMBER );
             }
+
             break;
 
         case FRAME_PCB_MODULE_EDITOR:
-            {
-                FOOTPRINT_EDIT_FRAME* frame = new FOOTPRINT_EDIT_FRAME( aKiway, aParent );
-                return frame;
-            }
+            frame = dynamic_cast< wxWindow* >( new FOOTPRINT_EDIT_FRAME( aKiway, aParent ) );
             break;
 
         case FRAME_PCB_MODULE_VIEWER:
         case FRAME_PCB_MODULE_VIEWER_MODAL:
-            {
-                FOOTPRINT_VIEWER_FRAME* frame = new FOOTPRINT_VIEWER_FRAME(
-                        aKiway, aParent, FRAME_T( aClassId ) );
-
-                return frame;
-            }
+            frame = dynamic_cast< wxWindow* >( new FOOTPRINT_VIEWER_FRAME( aKiway, aParent,
+                                                                           FRAME_T( aClassId ) ) );
             break;
 
         case FRAME_PCB_FOOTPRINT_WIZARD_MODAL:
-            {
-                FOOTPRINT_WIZARD_FRAME* frame = new FOOTPRINT_WIZARD_FRAME(
-                        aKiway, aParent, FRAME_T( aClassId ) );
-
-                return frame;
-            }
+            frame = dynamic_cast< wxWindow* >( new FOOTPRINT_WIZARD_FRAME( aKiway, aParent,
+                                                                           FRAME_T( aClassId ) ) );
             break;
 
         default:
             ;
         }
 
-        return NULL;
+        return frame;
     }
 
     /**
@@ -193,13 +182,13 @@ KIFACE_I& Kiface() { return kiface; }
 
 // KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.
 // KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
-MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKiwayVersion, PGM_BASE* aProgram )
+MY_API( KIFACE* ) KIFACE_GETTER( int* aKIFACEversion, int aKiwayVersion, PGM_BASE* aProgram )
 {
     process = (PGM_BASE*) aProgram;
     return &kiface;
 }
 
-#if defined(BUILD_KIWAY_DLL)
+#if defined( BUILD_KIWAY_DLL )
 PGM_BASE& Pgm()
 {
     wxASSERT( process );    // KIFACE_GETTER has already been called.
@@ -208,7 +197,7 @@ PGM_BASE& Pgm()
 #endif
 
 
-#if defined(KICAD_SCRIPTING)
+#if defined( KICAD_SCRIPTING )
 static bool scriptingSetup()
 {
     wxString path_frag;
@@ -218,7 +207,7 @@ static bool scriptingSetup()
     const wxString python_us( "python27_us" );
 
     // Build our python path inside kicad
-    wxString kipython =  FindKicadFile( python_us + wxT("/python.exe") );
+    wxString kipython =  FindKicadFile( python_us + wxT( "/python.exe" ) );
 
     //we need only the path:
     wxFileName fn( kipython );
@@ -231,19 +220,20 @@ static bool scriptingSetup()
 
         if( !wxGetEnv( wxT( "PYTHONPATH" ), &ppath ) || !ppath.Contains( python_us ) )
         {
-            ppath << kipython << wxT("/pylib;");
-            ppath << kipython << wxT("/lib;");
-            ppath << kipython << wxT("/dll");
+            ppath << kipython << wxT( "/pylib;" );
+            ppath << kipython << wxT( "/lib;" );
+            ppath << kipython << wxT( "/dll" );
             wxSetEnv( wxT( "PYTHONPATH" ), ppath );
-            DBG( std::cout << "set PYTHONPATH to "  << TO_UTF8(ppath) << "\n"; )
+            // DBG( std::cout << "set PYTHONPATH to "  << TO_UTF8( ppath ) << "\n"; )
 
             // Add python executable path:
             wxGetEnv( wxT( "PATH" ), &ppath );
+
             if( !ppath.Contains( python_us ) )
             {
-                kipython << wxT(";") << ppath;
+                kipython << wxT( ";" ) << ppath;
                 wxSetEnv( wxT( "PATH" ), kipython );
-                DBG( std::cout << "set PATH to " << TO_UTF8(kipython) << "\n"; )
+                // DBG( std::cout << "set PATH to " << TO_UTF8( kipython ) << "\n"; )
             }
         }
     }
@@ -263,14 +253,20 @@ static bool scriptingSetup()
 
     // Add default paths to PYTHONPATH
     wxString pypath;
+
     // User scripting folder (~/Library/Application Support/kicad/scripting/plugins)
     pypath = GetOSXKicadUserDataDir() + wxT( "/scripting/plugins" );
+
     // Machine scripting folder (/Library/Application Support/kicad/scripting/plugins)
     pypath += wxT( ":" ) + GetOSXKicadMachineDataDir() + wxT( "/scripting/plugins" );
+
     // Bundle scripting folder (<kicad.app>/Contents/SharedSupport/scripting/plugins)
     pypath += wxT( ":" ) + GetOSXKicadDataDir() + wxT( "/scripting/plugins" );
+
     // Bundle wxPython folder (<kicad.app>/Contents/Frameworks/python/site-packages)
-    pypath += wxT( ":" ) + Pgm().GetExecutablePath() + wxT( "Contents/Frameworks/python/site-packages" );
+    pypath += wxT( ":" ) + Pgm().GetExecutablePath() +
+              wxT( "Contents/Frameworks/python/site-packages" );
+
     // Original content of $PYTHONPATH
     if( wxGetenv("PYTHONPATH") != NULL )
     {
@@ -289,6 +285,7 @@ static bool scriptingSetup()
         wxLogSysError( wxT( "pcbnewInitPythonScripting() failed." ) );
         return false;
     }
+
     return true;
 }
 #endif  // KICAD_SCRIPTING
