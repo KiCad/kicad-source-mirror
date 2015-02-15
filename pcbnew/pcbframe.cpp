@@ -694,24 +694,26 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
+    bool use_gal = false;
 
     switch( id )
     {
     case ID_MENU_CANVAS_DEFAULT:
-        Compile_Ratsnest( NULL, true );
-        UseGalCanvas( false );
         break;
 
     case ID_MENU_CANVAS_CAIRO:
-        GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-        UseGalCanvas( true );
+        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
         break;
 
     case ID_MENU_CANVAS_OPENGL:
-        GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-        UseGalCanvas( true );
+        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
         break;
     }
+
+    if( !use_gal )
+        Compile_Ratsnest( NULL, true );
+
+    UseGalCanvas( use_gal );
 }
 
 

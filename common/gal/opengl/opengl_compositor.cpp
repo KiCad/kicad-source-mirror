@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -24,13 +24,14 @@
 
 /**
  * @file opengl_compositor.cpp
- * @brief Class that handles multitarget rendering (ie. to different textures/surfaces) and
+ * @brief Class that handles multitarget rendering (i.e. to different textures/surfaces) and
  * later compositing into a single image (OpenGL flavour).
  */
 
 #include <gal/opengl/opengl_compositor.h>
-#include <wx/msgdlg.h>
-#include <confirm.h>
+
+#include <stdexcept>
+#include <cassert>
 
 using namespace KIGFX;
 
@@ -89,7 +90,7 @@ void OPENGL_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
 
 unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 {
-    wxASSERT( m_initialized );
+    assert( m_initialized );
 
     unsigned int maxBuffers;
 
@@ -98,10 +99,9 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 
     if( usedBuffers() >= maxBuffers )
     {
-        DisplayError( NULL, wxT( "Cannot create more framebuffers. OpenGL rendering "
+        throw std::runtime_error("Cannot create more framebuffers. OpenGL rendering "
                         "backend requires at least 3 framebuffers. You may try to update/change "
-                        "your graphic drivers." ) );
-        return 0;    // Unfortunately we have no more free buffers left
+                        "your graphic drivers.");
     }
 
     // GL_COLOR_ATTACHMENTn are consecutive integers
@@ -133,38 +133,38 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
         switch( status )
         {
         case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-            DisplayError( NULL,wxT( "Cannot create the framebuffer." ) );
+            throw std::runtime_error( "Cannot create the framebuffer." );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-            DisplayError( NULL, wxT( "The framebuffer attachment points are incomplete." ) );
+            throw std::runtime_error(  "The framebuffer attachment points are incomplete." );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-            DisplayError( NULL, wxT( "The framebuffer does not have at least "
-                                   "one image attached to it." ) );
+            throw std::runtime_error(  "The framebuffer does not have at least one "
+                    "image attached to it." );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-            DisplayError( NULL, wxT( "The framebuffer read buffer is incomplete." ) );
+            throw std::runtime_error(  "The framebuffer read buffer is incomplete." );
             break;
 
         case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-            DisplayError( NULL, wxT( "The combination of internal formats of the attached images "
-                                   "violates an implementation-dependent set of restrictions." ) );
+            throw std::runtime_error(  "The combination of internal formats of the attached "
+                    "images violates an implementation-dependent set of restrictions." );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
-            DisplayError( NULL, wxT( "GL_RENDERBUFFER_SAMPLES is not the same "
-                                   "for all attached renderbuffers" ) );
+            throw std::runtime_error(  "GL_RENDERBUFFER_SAMPLES is not the same for "
+                    "all attached renderbuffers" );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
-            DisplayError( NULL, wxT( "Framebuffer incomplete layer targets errors." ) );
+            throw std::runtime_error(  "Framebuffer incomplete layer targets errors." );
             break;
 
         default:
-            DisplayError( NULL, wxT( "Cannot create the framebuffer." ) );
+            throw std::runtime_error(  "Cannot create the framebuffer." );
             break;
         }
 
@@ -211,7 +211,7 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 
 void OPENGL_COMPOSITOR::ClearBuffer()
 {
-    wxASSERT( m_initialized );
+    assert( m_initialized );
 
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -220,8 +220,8 @@ void OPENGL_COMPOSITOR::ClearBuffer()
 
 void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 {
-    wxASSERT( m_initialized );
-    wxASSERT( aBufferHandle != 0 && aBufferHandle <= usedBuffers() );
+    assert( m_initialized );
+    assert( aBufferHandle != 0 && aBufferHandle <= usedBuffers() );
 
     // Switch to the main framebuffer and blit the scene
     glBindFramebufferEXT( GL_FRAMEBUFFER, DIRECT_RENDERING );
@@ -267,7 +267,7 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 
 void OPENGL_COMPOSITOR::clean()
 {
-    wxASSERT( m_initialized );
+    assert( m_initialized );
 
     glBindFramebufferEXT( GL_FRAMEBUFFER, DIRECT_RENDERING );
     m_currentFbo = DIRECT_RENDERING;
