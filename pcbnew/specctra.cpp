@@ -602,7 +602,8 @@ void SPECCTRA_DB::doLAYER_PAIR( LAYER_PAIR* growth ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth )
+    throw( IO_ERROR, boost::bad_pointer )
 {
     T       tok;
 
@@ -755,7 +756,7 @@ L_place:
 }
 
 
-void SPECCTRA_DB::doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IO_ERROR, boost::bad_pointer )
 {
     /*
     <structure_out_descriptor >::=
@@ -1862,7 +1863,7 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IO_ERROR, boost::bad_pointer )
 {
     T       tok = NextTok();
 
@@ -2130,7 +2131,7 @@ L_done_that:
 }
 
 
-void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IO_ERROR, boost::bad_pointer )
 {
     T       tok = NextTok();
 
@@ -2327,7 +2328,7 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::doNET( NET* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doNET( NET* growth ) throw( IO_ERROR, boost::bad_pointer )
 {
     T           tok = NextTok();
     PIN_REFS*   pin_refs;
@@ -2615,7 +2616,7 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IO_ERROR, boost::bad_pointer )
 {
     T       tok;
 
@@ -2764,7 +2765,7 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IO_ERROR, boost::bad_pointer )
 {
     T       tok;
 
@@ -3083,7 +3084,7 @@ void SPECCTRA_DB::doANCESTOR( ANCESTOR* growth ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::doHISTORY( HISTORY* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doHISTORY( HISTORY* growth ) throw( IO_ERROR, boost::bad_pointer )
 {
     T       tok;
 
@@ -3257,7 +3258,7 @@ void SPECCTRA_DB::doWAS_IS( WAS_IS* growth ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IO_ERROR, boost::bad_pointer )
 {
     T       tok;
 
@@ -3340,7 +3341,7 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IO_ERROR, boost::bad_pointer )
 {
     T       tok;
 

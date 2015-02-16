@@ -3695,8 +3695,8 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     void doRESOLUTION( UNIT_RES* growth ) throw( IO_ERROR );
     void doUNIT( UNIT_RES* growth ) throw( IO_ERROR );
     void doSTRUCTURE( STRUCTURE* growth ) throw( IO_ERROR );
-    void doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IO_ERROR );
-    void doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IO_ERROR );
+    void doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IO_ERROR, boost::bad_pointer );
+    void doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doLAYER_PAIR( LAYER_PAIR* growth ) throw( IO_ERROR );
     void doBOUNDARY( BOUNDARY* growth ) throw( IO_ERROR );
     void doRECTANGLE( RECTANGLE* growth ) throw( IO_ERROR );
@@ -3718,29 +3718,29 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     void doCLASSES( CLASSES* growth ) throw( IO_ERROR );
     void doGRID( GRID* growth ) throw( IO_ERROR );
     void doPLACE( PLACE* growth ) throw( IO_ERROR );
-    void doCOMPONENT( COMPONENT* growth ) throw( IO_ERROR );
+    void doCOMPONENT( COMPONENT* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doPLACEMENT( PLACEMENT* growth ) throw( IO_ERROR );
     void doPROPERTIES( PROPERTIES* growth ) throw( IO_ERROR );
     void doPADSTACK( PADSTACK* growth ) throw( IO_ERROR );
     void doSHAPE( SHAPE* growth ) throw( IO_ERROR );
-    void doIMAGE( IMAGE* growth ) throw( IO_ERROR );
+    void doIMAGE( IMAGE* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doLIBRARY( LIBRARY* growth ) throw( IO_ERROR );
     void doPIN( PIN* growth ) throw( IO_ERROR );
-    void doNET( NET* growth ) throw( IO_ERROR );
-    void doNETWORK( NETWORK* growth ) throw( IO_ERROR );
+    void doNET( NET* growth ) throw( IO_ERROR, boost::bad_pointer );
+    void doNETWORK( NETWORK* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doCLASS( CLASS* growth ) throw( IO_ERROR );
     void doTOPOLOGY( TOPOLOGY* growth ) throw( IO_ERROR );
     void doFROMTO( FROMTO* growth ) throw( IO_ERROR );
     void doCOMP_ORDER( COMP_ORDER* growth ) throw( IO_ERROR );
-    void doWIRE( WIRE* growth ) throw( IO_ERROR );
+    void doWIRE( WIRE* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doWIRE_VIA( WIRE_VIA* growth ) throw( IO_ERROR );
     void doWIRING( WIRING* growth ) throw( IO_ERROR );
     void doSESSION( SESSION* growth ) throw( IO_ERROR );
     void doANCESTOR( ANCESTOR* growth ) throw( IO_ERROR );
-    void doHISTORY( HISTORY* growth ) throw( IO_ERROR );
-    void doROUTE( ROUTE* growth ) throw( IO_ERROR );
+    void doHISTORY( HISTORY* growth ) throw( IO_ERROR, boost::bad_pointer );
+    void doROUTE( ROUTE* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doWAS_IS( WAS_IS* growth ) throw( IO_ERROR );
-    void doNET_OUT( NET_OUT* growth ) throw( IO_ERROR );
+    void doNET_OUT( NET_OUT* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IO_ERROR );
 
     //-----<FromBOARD>-------------------------------------------------------
