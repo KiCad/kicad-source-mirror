@@ -1050,9 +1050,7 @@ bool IDF3_COMPONENT::DelDrill( double aDia, double aXpos, double aYpos )
         {
             val = true;
             delete *itS;
-            drills.erase( itS );
-            itS = drills.begin();
-            itE = drills.end();
+            itS = drills.erase( itS );
             continue;
         }
         ++itS;
@@ -1341,6 +1339,7 @@ IDF3_BOARD::IDF3_BOARD( IDF3::CAD_TYPE aCadType )
     brdFileVersion = 0;
     libFileVersion = 0;
     iRefDes        = 0;
+    unit           = UNIT_MM;
 
     // unlike other outlines which are created as necessary,
     // the board outline always exists and its parent must
@@ -2002,14 +2001,13 @@ void IDF3_BOARD::readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aB
 
             if( olnOther.insert( pair<string, OTHER_OUTLINE*>(op->GetOutlineIdentifier(), op) ).second == false )
             {
-                delete op;
-
                 ostringstream ostr;
                 ostr << "invalid IDF file\n";
                 ostr << "* Violation of specification. Non-unique ID in OTHER_OUTLINE '";
                 ostr << op->GetOutlineIdentifier() << "'\n";
                 ostr << "* line: '" << iline << "'\n";
                 ostr << "* pos: " << pos;
+                delete op;
 
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
             }
@@ -2491,6 +2489,7 @@ void IDF3_BOARD::readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLib
                 ostr << "* Violation of specification: multiple outlines have the same GEOM and PART name\n";
                 ostr << "* line: '" << iline << "'\n";
                 ostr << "* pos: " << pos;
+                delete pout;
 
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
             }
@@ -2504,6 +2503,7 @@ void IDF3_BOARD::readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLib
             ostr << "* Expecting .ELECTRICAL or .MECHANICAL, got '" << token << "'\n";
             ostr << "* line: '" << iline << "'\n";
             ostr << "* pos: " << pos;
+            delete pout;
 
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
@@ -3429,10 +3429,6 @@ bool IDF3_BOARD::DelBoardDrill( double aDia, double aXpos, double aYpos )
 
                 switch( keyo )
                 {
-                case UNOWNED:
-                    ostr << "UNOWNED";
-                    break;
-
                 case ECAD:
                     ostr << "ECAD";
                     break;

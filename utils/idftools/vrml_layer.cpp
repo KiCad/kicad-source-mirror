@@ -178,6 +178,8 @@ VRML_LAYER::VRML_LAYER()
     fix = false;
     Fault = false;
     idx = 0;
+    hidx = 0;
+    eidx = 0;
     ord = 0;
     glcmd   = 0;
     pholes  = NULL;
