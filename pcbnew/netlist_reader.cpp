@@ -126,9 +126,9 @@ NETLIST_READER* NETLIST_READER::GetNetlistReader( NETLIST*        aNetlist,
 
     default:    // Unrecognized format:
         break;
-
     }
 
+    delete cmpFileReader;
     return NULL;
 }
 

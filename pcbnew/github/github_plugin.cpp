@@ -379,7 +379,7 @@ void GITHUB_PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
 }
 
 
-void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aProperties ) throw( IO_ERROR )
+void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     // This is edge triggered based on a change in 'aLibraryPath',
     // usually it does nothing.  When the edge fires, m_pretty_dir is set

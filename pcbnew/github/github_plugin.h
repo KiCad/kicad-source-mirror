@@ -200,7 +200,7 @@ protected:
 
     void init( const PROPERTIES* aProperties );
 
-    void cacheLib( const wxString& aLibraryPath, const PROPERTIES* aProperties ) throw( IO_ERROR );
+    void cacheLib( const wxString& aLibraryPath, const PROPERTIES* aProperties );
 
     /**
      * Function repoURL_zipURL
