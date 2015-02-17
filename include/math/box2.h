@@ -30,6 +30,7 @@
 #include <math/vector2d.h>
 #include <limits>
 
+#include <boost/optional.hpp>
 
 /**
  * Class BOX2
@@ -466,6 +467,8 @@ public:
 /* Default specializations */
 typedef BOX2<VECTOR2I>    BOX2I;
 typedef BOX2<VECTOR2D>    BOX2D;
+
+typedef boost::optional<BOX2I> OPT_BOX2I;
 
 // FIXME should be removed to avoid multiple typedefs for the same type
 typedef BOX2D             DBOX;
