@@ -21,6 +21,7 @@ enum pcbnew_ids
     ID_OPEN_MODULE_VIEWER,
     ID_READ_NETLIST,
     ID_SET_RELATIVE_OFFSET,
+    ID_COPY_BOARD_AS,
 
     // Right vertical tool bar command IDs.
     ID_PCB_HIGHLIGHT_BUTT,

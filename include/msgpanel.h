@@ -71,7 +71,8 @@ public:
     {
     }
 
-    MSG_PANEL_ITEM()
+    MSG_PANEL_ITEM() :
+        m_Pad( MSG_PANEL_DEFAULT_PAD )
     {
     }
 

@@ -426,14 +426,13 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
 void make_hcyl( bool inch, bool axial, double dia, double length,
                 double z, double wireDia )
 {
-    bool ok = false;
     stringstream tstr;
     string line;
 
     double pitch = 0.0;
     double lead  = 0.0; // lead length for radial leads
 
-    ok = false;
+    bool ok = false;
     while( !ok )
     {
         if( axial )

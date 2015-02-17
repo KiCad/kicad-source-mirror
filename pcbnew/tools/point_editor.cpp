@@ -219,7 +219,7 @@ bool POINT_EDITOR::Init()
 }
 
 
-int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
+int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -797,8 +797,8 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
 
 void POINT_EDITOR::setTransitions()
 {
-    Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->SelectedEvent );
-    Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->UnselectedEvent );
+    Go( &POINT_EDITOR::OnSelectionChange, SELECTION_TOOL::SelectedEvent );
+    Go( &POINT_EDITOR::OnSelectionChange, SELECTION_TOOL::UnselectedEvent );
 }
 
 

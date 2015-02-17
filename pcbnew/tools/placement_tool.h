@@ -29,10 +29,6 @@
 
 class SELECTION_TOOL;
 
-/**
- * TODO description
- */
-
 class PLACEMENT_TOOL : public TOOL_INTERACTIVE
 {
 public:
@@ -45,26 +41,44 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init();
 
-    /// TODO
-    int AlignTop( TOOL_EVENT& aEvent );
+    /**
+     * Function AlignTop()
+     * Sets Y coordinate of the selected items to the value of the top-most selected item Y coordinate.
+     */
+    int AlignTop( const TOOL_EVENT& aEvent );
 
-    /// TODO
-    int AlignBottom( TOOL_EVENT& aEvent );
+    /**
+     * Function AlignBottom()
+     * Sets Y coordinate of the selected items to the value of the bottom-most selected item Y coordinate.
+     */
+    int AlignBottom( const TOOL_EVENT& aEvent );
 
-    /// TODO
-    int AlignLeft( TOOL_EVENT& aEvent );
+    /**
+     * Function AlignLeft()
+     * Sets X coordinate of the selected items to the value of the left-most selected item X coordinate.
+     */
+    int AlignLeft( const TOOL_EVENT& aEvent );
 
-    /// TODO
-    int AlignRight( TOOL_EVENT& aEvent );
+    /**
+     * Function AlignRight()
+     * Sets X coordinate of the selected items to the value of the right-most selected item X coordinate.
+     */
+    int AlignRight( const TOOL_EVENT& aEvent );
 
-    /// TODO
-    int DistributeHorizontally( TOOL_EVENT& aEvent );
+    /**
+     * Function DistributeHorizontally()
+     * Distributes the selected items along the X axis.
+     */
+    int DistributeHorizontally( const TOOL_EVENT& aEvent );
 
-    /// TODO
-    int DistributeVertically( TOOL_EVENT& aEvent );
+    /**
+     * Function DistributeVertically()
+     * Distributes the selected items along the Y axis.
+     */
+    int DistributeVertically( const TOOL_EVENT& aEvent );
 
 private:
-    /// TODO
+    ///> Sets up handlers for various events.
     void setTransitions();
 
     SELECTION_TOOL* m_selectionTool;

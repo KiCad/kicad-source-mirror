@@ -277,9 +277,7 @@ private:
     SHADER                  shader;         ///< There is only one shader used for different objects
 
     // Internal flags
-    bool                    isGlewInitialized;          ///< Is GLEW initialized?
     bool                    isFramebufferInitialized;   ///< Are the framebuffers initialized?
-    bool                    isShaderInitialized;        ///< Was the shader initialized?
     bool                    isGrouping;                 ///< Was a group started?
 
     // Polygon tesselation

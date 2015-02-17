@@ -170,6 +170,7 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SaveCopyInUndoList();
         idx =  m_treePagelayout->GetSelectedItemIndex();
         item = AddPageLayoutItem( WORKSHEET_DATAITEM::WS_SEGMENT, idx );
+
         if( InvokeDialogNewItem( this, item ) == wxID_CANCEL )
         {
             RemoveLastCommandInUndoList();
@@ -199,6 +200,7 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SaveCopyInUndoList();
         idx =  m_treePagelayout->GetSelectedItemIndex();
         item = AddPageLayoutItem( WORKSHEET_DATAITEM::WS_RECT, idx );
+
         if( InvokeDialogNewItem( this, item ) == wxID_CANCEL )
         {
             RemoveLastCommandInUndoList();
@@ -353,9 +355,10 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
     // (does not happen each time the mouse is moved, because the
     // item is placed on grid)
     // to avoid useless computation time.
-    if( aPanel && ( previous_position != position ) )
+    if(  previous_position != position )
         aPanel->Refresh();
 }
+
 
 /*
  * Function abortMoveItem: called when an item is currently moving,
@@ -367,7 +370,7 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     PL_EDITOR_SCREEN* screen = (PL_EDITOR_SCREEN*) aPanel->GetScreen();
     WORKSHEET_DATAITEM *item = screen->GetCurItem();
 
-    if( (item->GetFlags() & NEW_ITEM ) )
+    if( item->GetFlags() & NEW_ITEM )
     {
         PL_EDITOR_FRAME* plframe = (PL_EDITOR_FRAME*) aPanel->GetParent();
         plframe->RemoveLastCommandInUndoList();
@@ -394,6 +397,7 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     aPanel->Refresh();
 }
 
+
 void PL_EDITOR_FRAME::MoveItem( WORKSHEET_DATAITEM* aItem )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot move NULL item" ) );
@@ -411,6 +415,7 @@ void PL_EDITOR_FRAME::MoveItem( WORKSHEET_DATAITEM* aItem )
     {
         SetCrossHairPosition( initialPositionUi, false );
         initialCursorPosition = GetCrossHairPosition();
+
         if( m_canvas->IsPointOnDisplay( initialCursorPosition ) )
         {
             m_canvas->MoveCursorToCrossHair();
@@ -443,7 +448,7 @@ void PL_EDITOR_FRAME::PlaceItem( WORKSHEET_DATAITEM* aItem )
     {
         aItem->MoveStartPointTo( initialPosition );
     }
-    else if( (aItem->GetFlags() & LOCATE_ENDPOINT) )
+    else if( aItem->GetFlags() & LOCATE_ENDPOINT )
     {
         aItem->MoveEndPointTo( initialPosition );
     }
@@ -471,11 +476,13 @@ void PL_EDITOR_FRAME::OnSelectCoordOriginCorner( wxCommandEvent& event )
     m_canvas->Refresh();
 }
 
+
 void PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode( wxCommandEvent& event )
 {
     WORKSHEET_DATAITEM::m_SpecialMode = (event.GetId() == ID_SHOW_PL_EDITOR_MODE);
     m_canvas->Refresh();
 }
+
 
 void PL_EDITOR_FRAME::OnQuit( wxCommandEvent& event )
 {
@@ -485,7 +492,7 @@ void PL_EDITOR_FRAME::OnQuit( wxCommandEvent& event )
 
 void PL_EDITOR_FRAME::ToPlotter(wxCommandEvent& event)
 {
-    wxMessageBox( wxT("Not yet available"));
+    wxMessageBox( wxT( "Not yet available" ) );
 }
 
 
@@ -533,6 +540,7 @@ void PL_EDITOR_FRAME::ToPrinter(wxCommandEvent& event)
         InvokeDialogPrint( this, s_PrintData, s_pageSetupData );
 }
 
+
 void PL_EDITOR_FRAME::OnTreeSelection( wxTreeEvent& event )
 {
     WORKSHEET_DATAITEM* item = GetSelectedItem();
@@ -543,11 +551,15 @@ void PL_EDITOR_FRAME::OnTreeSelection( wxTreeEvent& event )
     m_canvas->Refresh();
 }
 
+
 void PL_EDITOR_FRAME::OnTreeMiddleClick( wxTreeEvent& event )
 {
 }
 
+
 extern void AddNewItemsCommand( wxMenu* aMainMenu );
+
+
 void PL_EDITOR_FRAME::OnTreeRightClick( wxTreeEvent& event )
 {
     m_treePagelayout->SelectCell( event.GetItem() );
@@ -567,6 +579,7 @@ void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& even
 {
     event.Check( WORKSHEET_DATAITEM::m_SpecialMode == false );
 }
+
 
 void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& event )
 {

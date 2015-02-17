@@ -100,7 +100,6 @@ private:
     bool    fix;                            // when true, no more vertices may be added by the user
     int     idx;                            // vertex index (number of contained vertices)
     int     ord;                            // vertex order (number of ordered vertices)
-    unsigned int idxout;                    // outline index to first point in 3D outline
     std::vector<VERTEX_3D*> vertices;       // vertices of all contours
     std::vector<std::list<int>*> contours;  // lists of vertices for each contour
     std::vector<bool>pth;                   // indicates whether a 'contour' is a PTH or not

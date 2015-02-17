@@ -327,14 +327,20 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
             break;
         }
         // Fall through
-    case ID_SAVE_BOARD_AS:
+        case ID_COPY_BOARD_AS:
+        case ID_SAVE_BOARD_AS:
         {
             wxString    pro_dir = wxPathOnly( Prj().GetProjectFullName() );
             wxFileName  fn( pro_dir, _( "noname" ), KiCadPcbFileExtension );
             wxString    filename = fn.GetFullPath();
 
             if( AskSaveBoardFileName( this, &filename ) )
-                SavePcbFile( filename, true );
+            {
+                if( id == ID_COPY_BOARD_AS )
+                    SavePcbCopy( filename );
+                else
+                    SavePcbFile( filename, NO_BACKUP_FILE );
+            }
         }
         break;
 
@@ -412,7 +418,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         if( response == wxID_CANCEL )
             return false;
         else if( response == wxID_YES )
-            SavePcbFile( GetBoard()->GetFileName(), true );
+            SavePcbFile( GetBoard()->GetFileName(), CREATE_BACKUP_FILE );
         else
         {
             // response == wxID_NO, fall thru
@@ -660,6 +666,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     wxString backupFileName;
 
+    // aCreateBackupFile == false is mainly used to write autosave files
+    // or new files in save as... command
     if( aCreateBackupFile )
     {
         backupFileName = create_backup_file( aFileName );
@@ -729,6 +737,58 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     GetScreen()->ClrModify();
     GetScreen()->ClrSave();
+    return true;
+}
+
+
+bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
+{
+    wxFileName  pcbFileName = aFileName;
+
+    // Ensure the file ext is the right ext:
+    pcbFileName.SetExt( KiCadPcbFileExtension );
+
+    if( !IsWritable( pcbFileName ) )
+    {
+        wxString msg = wxString::Format( _(
+            "No access rights to write to file '%s'" ),
+            GetChars( pcbFileName.GetFullPath() )
+            );
+
+        DisplayError( this, msg );
+        return false;
+    }
+
+    GetBoard()->m_Status_Pcb &= ~CONNEXION_OK;
+    GetBoard()->SynchronizeNetsAndNetClasses();
+
+    // Select default Netclass before writing file.
+    // Useful to save default values in headers
+    SetCurrentNetClass( NETCLASS::Default );
+
+    try
+    {
+        PLUGIN::RELEASER    pi( IO_MGR::PluginFind( IO_MGR::KICAD ) );
+
+        wxASSERT( pcbFileName.IsAbsolute() );
+
+        pi->Save( pcbFileName.GetFullPath(), GetBoard(), NULL );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg = wxString::Format( _(
+                "Error saving board file '%s'.\n%s" ),
+                GetChars( pcbFileName.GetFullPath() ),
+                GetChars( ioe.errorText )
+                );
+        DisplayError( this, msg );
+
+        return false;
+    }
+
+    DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n'%s'" ),
+                                GetChars( pcbFileName.GetFullPath() ) ) );
+
     return true;
 }
 

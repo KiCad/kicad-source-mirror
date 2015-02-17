@@ -498,7 +498,6 @@ private:
 
 protected:
     IDF3::IDF_LAYER side;   // Board Side [TOP/BOTTOM/BOTH ONLY] (IDF spec)
-    double height;          // Max Height (IDF spec)
 
 public:
     PLACE_OUTLINE( IDF3_BOARD* aParent );

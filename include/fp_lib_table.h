@@ -31,6 +31,7 @@
 #include <map>
 #include <io_mgr.h>
 #include <project.h>
+#include <boost/interprocess/exceptions.hpp>
 
 #define FP_LATE_ENVVAR  1           ///< late=1/early=0 environment variable expansion
 
@@ -221,7 +222,7 @@ public:
          *   Actual indentation will be 2 spaces for each nestLevel.
          */
         void Format( OUTPUTFORMATTER* out, int nestLevel ) const
-            throw( IO_ERROR );
+            throw( IO_ERROR, boost::interprocess::lock_exception );
 
     private:
 
@@ -468,7 +469,7 @@ public:
      * @throw   PARSE_ERROR if @a aFootprintId is not parsed OK.
      */
     MODULE* FootprintLoadWithOptionalNickname( const FPID& aFootprintId )
-        throw( IO_ERROR, PARSE_ERROR );
+        throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
 
     /**
      * Function GetDescription

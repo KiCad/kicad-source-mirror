@@ -725,7 +725,7 @@ void ROUTER_TOOL::performRouting()
 }
 
 
-int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
+int ROUTER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     VIEW_CONTROLS* ctls = getViewControls();
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();

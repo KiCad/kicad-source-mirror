@@ -529,8 +529,11 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
             return true;
         break;
 
+    case S_POLYGON:     // not yet handled
+        break;
+
     default:
-        wxASSERT( 0 );
+        wxASSERT_MSG( 0, wxString::Format( "unknown DRAWSEGMENT shape: %d", m_Shape ) );
         break;
     }
 
@@ -582,9 +585,15 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 
         break;
 
+    case S_CURVE:
+    case S_POLYGON:     // not yet handled
+        break;
+
     default:
-        ;
+        wxASSERT_MSG( 0, wxString::Format( "unknown DRAWSEGMENT shape: %d", m_Shape ) );
+        break;
     }
+
     return false;
 }
 

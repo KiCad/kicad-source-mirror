@@ -377,7 +377,7 @@ void BOARD_OUTLINE::readOutlines( std::ifstream& aBoardFile, IDF3::IDF_VERSION a
                 }
 
                 // verify winding of previous outline
-                if( ( loopidx = 0 && !op->IsCCW() )
+                if( ( loopidx == 0 && !op->IsCCW() )
                     || ( loopidx > 0 && op->IsCCW() ) )
                 {
                     ostringstream ostr;
@@ -2232,9 +2232,10 @@ PLACE_OUTLINE::PLACE_OUTLINE( IDF3_BOARD* aParent )
     setParent( aParent );
     outlineType = OTLN_PLACE;
     single = true;
-    thickness = 0.0;
+    thickness = -1.0;
     side = LYR_INVALID;
 }
+
 
 bool PLACE_OUTLINE::SetSide( IDF3::IDF_LAYER aSide )
 {
@@ -2424,64 +2425,74 @@ void PLACE_OUTLINE::readData( std::ifstream& aBoardFile, const std::string& aHea
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
 
-        if( !GetIDFString( iline, token, quoted, idx ) )
+        if( GetIDFString( iline, token, quoted, idx ) )
         {
-            ostringstream ostr;
+            std::stringstream teststr;
+            teststr << token;
 
-            ostr << "\n* invalid outline: " << GetOutlineTypeString( outlineType ) << "\n";
-            ostr << "* violation: no height specified\n";
-            ostr << "* line: '" << iline << "'\n";
-            ostr << "* file position: " << pos;
+            teststr >> thickness;
 
-            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+            if( teststr.fail() )
+            {
+                ostringstream ostr;
+
+                ostr << "\n* invalid outline: " << GetOutlineTypeString( outlineType ) << "\n";
+                ostr << "* violation: invalid height\n";
+                ostr << "* line: '" << iline << "'\n";
+                ostr << "* file position: " << pos;
+
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+            }
+
+            if( thickness < 0.0 )
+            {
+                ostringstream ostr;
+
+                ostr << "\n* invalid outline: " << GetOutlineTypeString( outlineType ) << "\n";
+                ostr << "* violation: thickness < 0\n";
+                ostr << "* line: '" << iline << "'\n";
+                ostr << "* file position: " << pos;
+
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+            }
+
+            if( unit == UNIT_THOU )
+            {
+                thickness *= IDF_THOU_TO_MM;
+            }
+            else if( ( aIdfVersion == IDF_V2 ) && ( unit == UNIT_TNM ) )
+            {
+                thickness *= IDF_TNM_TO_MM;
+            }
+            else if( unit != UNIT_MM )
+            {
+                ostringstream ostr;
+                ostr << "\n* BUG: invalid UNIT type: " << unit;
+
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+            }
+
+            if( thickness < 0.0 )
+                thickness = 0.0;
+
         }
-
-        std::stringstream teststr;
-        teststr << token;
-
-        teststr >> thickness;
-        if( teststr.fail() )
+        else
         {
-            ostringstream ostr;
+            // for OTLN_PLACE, thickness may be omitted, but is required for OTLN_PLACE_KEEPOUT
+            if( outlineType == OTLN_PLACE_KEEPOUT )
+            {
+                ostringstream ostr;
 
-            ostr << "\n* invalid outline: " << GetOutlineTypeString( outlineType ) << "\n";
-            ostr << "* violation: invalid height\n";
-            ostr << "* line: '" << iline << "'\n";
-            ostr << "* file position: " << pos;
+                ostr << "\n* invalid outline: " << GetOutlineTypeString( outlineType ) << "\n";
+                ostr << "* violation: missing thickness\n";
+                ostr << "* line: '" << iline << "'\n";
+                ostr << "* file position: " << pos;
 
-            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+            }
+
+            thickness = -1.0;
         }
-
-        if( thickness < 0.0 )
-        {
-            ostringstream ostr;
-
-            ostr << "\n* invalid outline: " << GetOutlineTypeString( outlineType ) << "\n";
-            ostr << "* violation: thickness < 0\n";
-            ostr << "* line: '" << iline << "'\n";
-            ostr << "* file position: " << pos;
-
-            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
-        }
-
-        if( unit == UNIT_THOU )
-        {
-            thickness *= IDF_THOU_TO_MM;
-        }
-        else if( ( aIdfVersion == IDF_V2 ) && ( unit == UNIT_TNM ) )
-        {
-            thickness *= IDF_TNM_TO_MM;
-        }
-        else if( unit != UNIT_MM )
-        {
-            ostringstream ostr;
-            ostr << "\n* BUG: invalid UNIT type: " << unit;
-
-            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
-        }
-
-        if( thickness < 0.0 )
-            thickness = 0.0;
     }
     else
     {
@@ -2574,12 +2585,20 @@ void PLACE_OUTLINE::writeData( std::ofstream& aBoardFile )
             break;
     }
 
-    aBoardFile << " ";
-
-    if( unit != UNIT_THOU )
-        aBoardFile << setiosflags(ios::fixed) << setprecision(5) << thickness << "\n";
+    // thickness is optional for OTLN_PLACE, but mandatory for OTLN_PLACE_KEEPOUT
+    if( thickness < 0.0 && outlineType == OTLN_PLACE_KEEPOUT)
+    {
+        aBoardFile << "\n";
+    }
     else
-        aBoardFile << setiosflags(ios::fixed) << setprecision(1) << (thickness / IDF_THOU_TO_MM) << "\n";
+    {
+        aBoardFile << " ";
+
+        if( unit != UNIT_THOU )
+            aBoardFile << setiosflags(ios::fixed) << setprecision(5) << thickness << "\n";
+        else
+            aBoardFile << setiosflags(ios::fixed) << setprecision(1) << (thickness / IDF_THOU_TO_MM) << "\n";
+    }
 
     // write RECORD 3
     writeOutlines( aBoardFile );

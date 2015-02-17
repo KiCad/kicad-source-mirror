@@ -46,16 +46,19 @@ public:
     bool Init();
 
     // Track & via size control
-    int TrackWidthInc( TOOL_EVENT& aEvent );
-    int TrackWidthDec( TOOL_EVENT& aEvent );
-    int ViaSizeInc( TOOL_EVENT& aEvent );
-    int ViaSizeDec( TOOL_EVENT& aEvent );
+    int TrackWidthInc( const TOOL_EVENT& aEvent );
+    int TrackWidthDec( const TOOL_EVENT& aEvent );
+    int ViaSizeInc( const TOOL_EVENT& aEvent );
+    int ViaSizeDec( const TOOL_EVENT& aEvent );
 
     // Zone actions
-    int ZoneFill( TOOL_EVENT& aEvent );
-    int ZoneFillAll( TOOL_EVENT& aEvent );
-    int ZoneUnfill( TOOL_EVENT& aEvent );
-    int ZoneUnfillAll( TOOL_EVENT& aEvent );
+    int ZoneFill( const TOOL_EVENT& aEvent );
+    int ZoneFillAll( const TOOL_EVENT& aEvent );
+    int ZoneUnfill( const TOOL_EVENT& aEvent );
+    int ZoneUnfillAll( const TOOL_EVENT& aEvent );
+
+    ///> Notifies eeschema about the selected item.
+    int SelectionCrossProbe( const TOOL_EVENT& aEvent );
 
 private:
     ///> Sets up handlers for various events.

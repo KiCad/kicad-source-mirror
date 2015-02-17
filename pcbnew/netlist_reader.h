@@ -214,7 +214,7 @@ class LEGACY_NETLIST_READER : public NETLIST_READER
      * @return the new component created by parsing \a aLine
      * @throw PARSE_ERROR when \a aLine is not a valid component description.
      */
-    COMPONENT* loadComponent( char* aText ) throw( PARSE_ERROR );
+    COMPONENT* loadComponent( char* aText ) throw( PARSE_ERROR, boost::bad_pointer );
 
     /**
      * Function loadFootprintFilters

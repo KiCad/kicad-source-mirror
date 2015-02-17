@@ -889,7 +889,8 @@ static void makeCircle( PATH* aPath, DRAWSEGMENT* aGraphic )
 }
 
 
-void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ERROR )
+void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
+    throw( IO_ERROR, boost::bad_pointer )
 {
     PCB_TYPE_COLLECTOR  items;
 
@@ -1369,7 +1370,8 @@ typedef std::set<std::string>                   STRINGSET;
 typedef std::pair<STRINGSET::iterator, bool>    STRINGSET_PAIR;
 
 
-void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
+void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
+    throw( IO_ERROR, boost::bad_ptr_container_operation )
 {
     PCB_TYPE_COLLECTOR     items;
 

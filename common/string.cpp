@@ -231,13 +231,13 @@ int StrNumCmp( const wxString& aString1, const wxString& aString2, int aLength, 
             while( isdigit( *str1 ) )
             {
                 nb1 = nb1 * 10 + (int) *str1 - '0';
-                str1++;
+                ++str1;
             }
 
             while( isdigit( *str2 ) )
             {
                 nb2 = nb2 * 10 + (int) *str2 - '0';
-                str2++;
+                ++str2;
             }
 
             if( nb1 < nb2 )
@@ -270,8 +270,8 @@ int StrNumCmp( const wxString& aString1, const wxString& aString2, int aLength, 
                 return 0;
         }
 
-        str1++;
-        str2++;
+        ++str1;
+        ++str2;
     }
 
     return 0;

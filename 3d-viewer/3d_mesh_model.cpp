@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Mario Luzeiro <mrluzeiro@gmail.com>
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,8 +46,8 @@ S3D_MESH::S3D_MESH()
     m_translation = glm::vec3( 0.0f, 0.0f, 0.0f );
     m_rotation = glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f );
     m_scale = glm::vec3( 1.0f, 1.0f, 1.0f );
-    m_scaleOrientation = glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ); // not used
-    m_center = glm::vec3( 0.0f, 0.0f, 0.0f ); // not used
+    m_scaleOrientation = glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f );  // not used
+    m_center = glm::vec3( 0.0f, 0.0f, 0.0f );                  // not used
 }
 
 
@@ -55,9 +55,10 @@ S3D_MESH::~S3D_MESH()
 {
     for( unsigned int idx = 0; idx < childs.size(); idx++ )
     {
-       delete childs[idx];
+        delete childs[idx];
     }
 }
+
 
 void S3D_MESH::openGL_RenderAllChilds()
 {
@@ -82,7 +83,6 @@ void S3D_MESH::openGL_RenderAllChilds()
     SetOpenGlDefaultMaterial();
 
     glPopMatrix();
-
 }
 
 
@@ -94,15 +94,10 @@ void S3D_MESH::openGL_Render()
                         && g_Parm_3D_Visu.GetFlag( FL_RENDER_SMOOTH );
 
     if( m_Materials )
-    {
         m_Materials->SetOpenGLMaterial( 0, useMaterial );
-    }
 
-    if( m_CoordIndex.size() == 0)
-    {
-
+    if( m_CoordIndex.size() == 0 )
         return;
-    }
 
     glPushMatrix();
     glTranslatef( m_translation.x, m_translation.y, m_translation.z );
@@ -117,9 +112,7 @@ void S3D_MESH::openGL_Render()
     if( m_PerVertexNormalsNormalized.size() == 0 )
     {
         if( smoothShapes )
-        {
             calcPerPointNormals();
-        }
     }
 
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
@@ -127,17 +120,21 @@ void S3D_MESH::openGL_Render()
         if( m_MaterialIndex.size() > 1 )
         {
             if( m_Materials )
-            {
                 m_Materials->SetOpenGLMaterial( m_MaterialIndex[idx], useMaterial );
-            }
         }
 
 
         switch( m_CoordIndex[idx].size() )
         {
-        case 3:     glBegin( GL_TRIANGLES );break;
-        case 4:     glBegin( GL_QUADS );    break;
-        default:    glBegin( GL_POLYGON );  break;
+        case 3:
+            glBegin( GL_TRIANGLES );
+            break;
+        case 4:
+            glBegin( GL_QUADS );
+            break;
+        default:
+            glBegin( GL_POLYGON );
+            break;
         }
 
 
@@ -187,34 +184,36 @@ void S3D_MESH::openGL_Render()
 }
 
 
-void S3D_MESH::calcPointNormalized ()
+void S3D_MESH::calcPointNormalized()
 {
     //DBG( printf( "calcPointNormalized\n" ) );
 
     if( isPointNormalizedComputed == true )
-    {
         return;
-    }
+
     isPointNormalizedComputed = true;
 
     if( m_PerVertexNormalsNormalized.size() > 0 )
-    {
         return;
-    }
 
     m_PointNormalized.clear();
 
     float biggerPoint = 0.0f;
     for( unsigned int i = 0; i< m_Point.size(); i++ )
     {
-        if( fabs( m_Point[i].x ) > biggerPoint) biggerPoint = fabs( m_Point[i].x );
-        if( fabs( m_Point[i].y ) > biggerPoint) biggerPoint = fabs( m_Point[i].y );
-        if( fabs( m_Point[i].z ) > biggerPoint) biggerPoint = fabs( m_Point[i].z );
+        if( fabs( m_Point[i].x ) > biggerPoint )
+            biggerPoint = fabs( m_Point[i].x );
+
+        if( fabs( m_Point[i].y ) > biggerPoint )
+            biggerPoint = fabs( m_Point[i].y );
+
+        if( fabs( m_Point[i].z ) > biggerPoint )
+            biggerPoint = fabs( m_Point[i].z );
     }
 
     biggerPoint = 1.0 / biggerPoint;
 
-    for( unsigned int i= 0; i< m_Point.size(); i++ )
+    for( unsigned int i = 0; i < m_Point.size(); i++ )
     {
         glm::vec3 p;
         p = m_Point[i] * biggerPoint;
@@ -237,30 +236,22 @@ bool IsClockwise( glm::vec3 v0, glm::vec3 v1, glm::vec3 v2 )
 }
 
 
-void S3D_MESH::calcPerFaceNormals ()
+void S3D_MESH::calcPerFaceNormals()
 {
     //DBG( printf( "calcPerFaceNormals" ) );
 
     if( isPerFaceNormalsComputed == true )
-    {
-
         return;
-    }
+
     isPerFaceNormalsComputed = true;
 
-
     if( m_PerVertexNormalsNormalized.size() > 0 )
-    {
-
         return;
-    }
 
     bool haveAlreadyNormals_from_model_file = false;
 
     if( m_PerFaceNormalsNormalized.size() > 0 )
-    {
         haveAlreadyNormals_from_model_file = true;
-    }
 
     m_PerFaceNormalsRaw.clear();
     m_PerFaceSquaredArea.clear();
@@ -268,9 +259,15 @@ void S3D_MESH::calcPerFaceNormals ()
     //DBG( printf("m_CoordIndex.size %u\n", m_CoordIndex.size()) );
     //DBG( printf("m_PointNormalized.size %u\n", m_PointNormalized.size()) );
 
+    // There are no points defined for the coordIndex
+    if( m_PointNormalized.size() == 0 )
+    {
+        m_CoordIndex.clear();
+        return;
+    }
+
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
     {
-
         // User normalized and multiply to get better resolution
         glm::vec3 v0 = m_PointNormalized[m_CoordIndex[idx][0]];
         glm::vec3 v1 = m_PointNormalized[m_CoordIndex[idx][1]];
@@ -300,14 +297,10 @@ void S3D_MESH::calcPerFaceNormals ()
         float area = glm::dot( cross_prod, cross_prod );
 
         if( cross_prod[2] < 0.0 )
-        {
             area = -area;
-        }
 
         if( area < FLT_EPSILON )
-        {
             area = FLT_EPSILON * 2.0f;
-        }
 
         m_PerFaceSquaredArea.push_back( area );
 
@@ -315,52 +308,55 @@ void S3D_MESH::calcPerFaceNormals ()
 
         if( haveAlreadyNormals_from_model_file == false )
         {
-
             // normalize vertex normal
             float l = glm::length( cross_prod );
 
             if( l > FLT_EPSILON ) // avoid division by zero
             {
-                cross_prod =  cross_prod / l;
+                cross_prod = cross_prod / l;
             }
             else
             {
                 // Cannot calc normal
                 if( ( cross_prod.x > cross_prod.y ) && ( cross_prod.x > cross_prod.z ) )
                 {
-                    cross_prod.x = 1.0;    cross_prod.y = 0.0; cross_prod.z = 0.0;
-                } else if( ( cross_prod.y > cross_prod.x ) && ( cross_prod.y > cross_prod.z ))
+                    cross_prod.x = 1.0;
+                    cross_prod.y = 0.0;
+                    cross_prod.z = 0.0;
+                }
+                else if( ( cross_prod.y > cross_prod.x ) && ( cross_prod.y > cross_prod.z ) )
                 {
-                    cross_prod.x = 0.0;    cross_prod.y = 1.0; cross_prod.z = 0.0;
-                } else
+                    cross_prod.x = 0.0;
+                    cross_prod.y = 1.0;
+                    cross_prod.z = 0.0;
+                }
+                else
                 {
-                    cross_prod.x = 0.0;    cross_prod.y = 1.0; cross_prod.z = 0.0;
+                    cross_prod.x = 0.0;
+                    cross_prod.y = 0.0;
+                    cross_prod.z = 1.0;
                 }
             }
 
             m_PerFaceNormalsNormalized.push_back( cross_prod );
         }
-
     }
-
 }
+
 
 // http://www.bytehazard.com/code/vertnorm.html
 // http://www.emeyex.com/site/tuts/VertexNormals.pdf
-void S3D_MESH::calcPerPointNormals ()
+void S3D_MESH::calcPerPointNormals()
 {
     //DBG( printf( "calcPerPointNormals" ) );
 
     if( isPerPointNormalsComputed == true )
-    {
         return;
-    }
+
     isPerPointNormalsComputed = true;
 
     if( m_PerVertexNormalsNormalized.size() > 0 )
-    {
         return;
-    }
 
     m_PerFaceVertexNormals.clear();
 
@@ -371,6 +367,7 @@ void S3D_MESH::calcPerPointNormals ()
     #ifdef USE_OPENMP
     #pragma omp parallel for
     #endif /* USE_OPENMP */
+
     for( unsigned int each_face_A_idx = 0; each_face_A_idx < m_CoordIndex.size(); each_face_A_idx++ )
     {
         // n = face A facet normal
@@ -390,15 +387,16 @@ void S3D_MESH::calcPerPointNormals ()
             for( unsigned int each_face_B_idx = 0; each_face_B_idx < m_CoordIndex.size(); each_face_B_idx++ )
             {
                 //if A != B { // ignore self
-                if ( each_face_A_idx != each_face_B_idx)
+                if( each_face_A_idx != each_face_B_idx )
                 {
-                    if( (m_CoordIndex[each_face_B_idx][0] == vertexIndex) ||
-                        (m_CoordIndex[each_face_B_idx][1] == vertexIndex) ||
-                        (m_CoordIndex[each_face_B_idx][2] == vertexIndex) )
+                    if( (m_CoordIndex[each_face_B_idx][0] == vertexIndex)
+                      || (m_CoordIndex[each_face_B_idx][1] == vertexIndex)
+                      || (m_CoordIndex[each_face_B_idx][2] == vertexIndex) )
                     {
                         glm::vec3 vector_face_B = m_PerFaceNormalsNormalized[each_face_B_idx];
 
-                        float dot_prod = glm::dot(vector_face_A, vector_face_B);
+                        float dot_prod = glm::dot( vector_face_A, vector_face_B );
+
                         if( dot_prod > 0.05f )
                         {
                             face_A_normals[each_vert_A_idx] += m_PerFaceNormalsRaw[each_face_B_idx] * (m_PerFaceSquaredArea[each_face_B_idx] * dot_prod);
@@ -411,10 +409,7 @@ void S3D_MESH::calcPerPointNormals ()
             float l = glm::length( face_A_normals[each_vert_A_idx] );
 
             if( l > FLT_EPSILON ) // avoid division by zero
-            {
                 face_A_normals[each_vert_A_idx] /= l;
-            }
-
         }
     }
 }

@@ -320,8 +320,13 @@ public:
             return NULL;
     }
 
-    ///> Constant that holds the unconnected net number (typically 0)
+    ///> Constant that holds the "unconnected net" number (typically 0)
+    ///> all items "connected" to this net are actually not connected items
     static const int UNCONNECTED;
+
+    ///> Constant that forces initialization of a netinfo item to the NETINFO_ITEM ORPHANED
+    ///> (typically -1) when calling SetNetCode od board connected items
+    static const int FORCE_ORPHANED;
 
     ///> NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
     ///> board storing net list available.
