@@ -50,7 +50,7 @@ public:
     /**
      * Function GetSize()
      * Returns information about number of vertices stored.
-     * @return Number of vertices.
+     * @param Number of vertices.
      */
     inline unsigned int GetSize() const
     {
@@ -69,7 +69,7 @@ public:
 
     /**
      * Function GetVertices()
-     * areturn a pointer to the data used by the VERTEX_ITEM.
+     * Returns pointer to the data used by the VERTEX_ITEM.
      */
     VERTEX* GetVertices() const;
 
