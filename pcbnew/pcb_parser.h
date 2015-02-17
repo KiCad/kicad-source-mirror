@@ -185,7 +185,7 @@ class PCB_PARSER : public PCB_LEXER
      */
     void parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR );
 
-    S3D_MASTER* parse3DModel() throw( PARSE_ERROR );
+    S3D_MASTER* parse3DModel() throw( PARSE_ERROR, IO_ERROR );
 
     /**
      * Function parseDouble
@@ -219,7 +219,7 @@ class PCB_PARSER : public PCB_LEXER
         return KiROUND( parseDouble() * IU_PER_MM );
     }
 
-    inline int parseBoardUnits( const char* aExpected ) throw( PARSE_ERROR )
+    inline int parseBoardUnits( const char* aExpected ) throw( PARSE_ERROR, IO_ERROR )
     {
         // Use here KiROUND, not KIROUND (see comments about them)
         // when having a function as argument, because it will be called twice

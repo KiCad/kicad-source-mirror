@@ -179,7 +179,6 @@ class COMPONENTS_LISTBOX : public ITEMS_LISTBOX_BASE
 {
 public:
     wxArrayString      m_ComponentList;
-    CVPCB_MAINFRAME*   m_Parent;
 
 public:
 

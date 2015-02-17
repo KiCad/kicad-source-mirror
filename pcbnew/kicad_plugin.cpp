@@ -88,7 +88,6 @@ void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
 class FP_CACHE_ITEM
 {
     wxFileName              m_file_name; ///< The the full file name and path of the footprint to cache.
-    bool                    m_writable;  ///< Writability status of the footprint file.
     wxDateTime              m_mod_time;  ///< The last file modified time stamp.
     std::auto_ptr<MODULE>   m_module;
 
