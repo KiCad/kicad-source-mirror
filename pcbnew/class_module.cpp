@@ -112,8 +112,6 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_Value->SetParent( this );
 
     // Copy auxiliary data: Pads
-    // m_Pads.DeleteAll();
-
     for( D_PAD* pad = aModule.m_Pads;  pad;  pad = pad->Next() )
     {
         D_PAD* newpad = new D_PAD( *pad );

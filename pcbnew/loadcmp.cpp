@@ -96,12 +96,13 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     newModule->ClearFlags();
 
-    // Clear references to net info, because the footprint editor
+    // Clear references to any net info, because the footprint editor
     // does know any thing about nets handled by the current edited board.
-    // Morever the main board can change or the net info relative to this main board
-    // can change while editing this footprint in the footprint editor
+    // Morever we do not want to save any reference to an unknown net when
+    // saving the footprint in lib cache
+    // so we force the ORPHANED dummy net info for all pads
     for( D_PAD* pad = newModule->Pads(); pad; pad = pad->Next() )
-        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+        pad->SetNetCode( NETINFO_LIST::FORCE_ORPHANED );
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
     PlaceModule( newModule, NULL );
@@ -269,6 +270,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
     if( module )
     {
         GetBoard()->Add( module, ADD_APPEND );
+
         lastComponentName = moduleName;
         AddHistoryComponentName( HistoryList, moduleName );
 
@@ -328,7 +330,14 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
 
     wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
 
-    return fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
+    MODULE* module = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
+
+    // Clear all references to any net info, to be sure there is no broken links
+    // to any netinfo list (This should be the case, but...)
+    for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+        pad->SetNetCode( NETINFO_LIST::FORCE_ORPHANED );
+
+    return module;
 }
 
 

@@ -84,7 +84,6 @@ void S3D_MASTER::ObjectCoordsTo3DUnits( std::vector< S3D_VERTEX >& aVertices )
         }
 
         /* adjust offset position (offset is given in UNIT 3D (0.1 inch) */
-#define SCALE_3D_CONV ((IU_PER_MILS * 1000) / UNITS3D_TO_UNITSPCB)
         aVertices[ii].x += m_MatPosition.x * SCALE_3D_CONV;
         aVertices[ii].y += m_MatPosition.y * SCALE_3D_CONV;
         aVertices[ii].z += m_MatPosition.z * SCALE_3D_CONV;

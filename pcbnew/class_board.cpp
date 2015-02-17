@@ -2404,20 +2404,17 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 
             if( !net.IsValid() )                // Footprint pad had no net.
             {
-                if( !pad->GetNetname().IsEmpty() )
+                if( aReporter && aReporter->ReportAll() )
                 {
-                    if( aReporter && aReporter->ReportAll() )
-                    {
-                        msg.Printf( _( "Clearing component \"%s:%s\" pin \"%s\" net name.\n" ),
-                                    GetChars( footprint->GetReference() ),
-                                    GetChars( footprint->GetPath() ),
-                                    GetChars( pad->GetPadName() ) );
-                        aReporter->Report( msg );
-                    }
-
-                    if( !aNetlist.IsDryRun() )
-                        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                    msg.Printf( _( "Clearing component \"%s:%s\" pin \"%s\" net name.\n" ),
+                                GetChars( footprint->GetReference() ),
+                                GetChars( footprint->GetPath() ),
+                                GetChars( pad->GetPadName() ) );
+                    aReporter->Report( msg );
                 }
+
+                if( !aNetlist.IsDryRun() )
+                    pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
             }
             else                                 // Footprint pad has a net.
             {
