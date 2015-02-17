@@ -185,7 +185,11 @@ public:
         colors[ VRML_COLOR_TIN ]    = VRML_COLOR( .749, .756, .761, .749, .756, .761,
                                                   0, 0, 0, 0.8, 0, 0.8 );
 
-        precision = 5;
+        plainPCB = false;
+        SetScale( 1.0 );
+        SetOffset( 0.0, 0.0 );
+        s_text_layer = F_Cu;
+        s_text_width = 1;
     }
 
     VRML_COLOR& GetColor( VRML_COLOR_INDEX aIndex )
@@ -889,11 +893,11 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
         const CPOLYGONS_LIST& poly = zone->GetFilledPolysList();
         int nvert = poly.GetCornersCount();
         int i = 0;
+        bool cutout = false;
 
         while( i < nvert )
         {
             int seg = vl->NewContour();
-            bool first = true;
 
             if( seg < 0 )
                 break;
@@ -914,10 +918,10 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
 
             // KiCad ensures that the first polygon is the outline
             // and all others are holes
-             vl->EnsureWinding( seg, first ? false : true );
+             vl->EnsureWinding( seg, cutout );
 
-            if( first )
-                first = false;
+             if( !cutout )
+                 cutout = true;
 
             ++i;
         }

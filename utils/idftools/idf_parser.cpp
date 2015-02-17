@@ -2425,12 +2425,18 @@ void IDF3_BOARD::readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLib
         while( !FetchIDFLine( aLibFile, iline, isComment, pos ) && aLibFile.good() );
 
         if( !aLibFile.good() && !aLibFile.eof() )
+        {
+            delete pout;
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                               "problems reading library section" ) );
+        }
 
         // no data was read; this only happens at eof()
         if( iline.empty() )
+        {
+            delete pout;
             return;
+        }
 
         if( isComment )
         {
@@ -2448,6 +2454,7 @@ void IDF3_BOARD::readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLib
             ostr << "* Violation of specification: quoted string where .ELECTRICAL or .MECHANICAL expected\n";
             ostr << "* line: '" << iline << "'\n";
             ostr << "* pos: " << pos;
+            delete pout;
 
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
@@ -2508,6 +2515,8 @@ void IDF3_BOARD::readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLib
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
     }
+
+    delete pout;
 
     if( !aLibFile.eof() )
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
