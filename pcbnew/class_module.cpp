@@ -57,7 +57,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_Attributs    = MOD_DEFAULT;
     m_Layer        = F_Cu;
     m_Orient       = 0;
-    m_ModuleStatus = 0;
+    m_ModuleStatus = MODULE_PADS_LOCKED;
     flag = 0;
     m_CntRot90 = m_CntRot180 = 0;
     m_Surface  = 0.0;
@@ -815,6 +815,11 @@ void MODULE::RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction )
     }
 }
 
+const BOX2I MODULE::ViewBBox() const
+{
+    return BOX2I( VECTOR2I( GetFootprintRect().GetOrigin() ),
+                  VECTOR2I( GetFootprintRect().GetSize() ) );
+}
 
 void MODULE::ViewUpdate( int aUpdateFlags )
 {
@@ -867,12 +872,6 @@ unsigned int MODULE::ViewGetLOD( int aLayer ) const
         return 30;
 }
 
-const BOX2I MODULE::ViewBBox() const
-{
-    EDA_RECT fpRect = GetFootprintRect();
-
-    return BOX2I( VECTOR2I( fpRect.GetOrigin() ), VECTOR2I( fpRect.GetSize() ) );
-}
 
 /* Test for validity of the name in a library of the footprint
  * ( no spaces, dir separators ... )
@@ -1116,3 +1115,18 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
+double MODULE::PadCoverageRatio() const
+{
+    double padArea = 0.0;
+    double moduleArea = GetFootprintRect().GetArea();
+
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+        padArea += pad->GetBoundingBox().GetArea();
+
+    if(moduleArea == 0.0)
+        return 1.0;
+
+    double ratio = padArea / moduleArea;
+
+    return std::min(ratio, 1.0);
+}
