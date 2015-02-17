@@ -2204,7 +2204,6 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     wxString       msg;
     D_PAD*         pad;
     MODULE*        footprint;
-    COMPONENT_NET  net;
 
     if( !IsEmpty() )
     {
@@ -2400,11 +2399,11 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
         // At this point, the component footprint is updated.  Now update the nets.
         for( pad = footprint->Pads();  pad;  pad = pad->Next() )
         {
-            net = component->GetNet( pad->GetPadName() );
+            COMPONENT_NET net = component->GetNet( pad->GetPadName() );
 
             if( !net.IsValid() )                // Footprint pad had no net.
             {
-                if( aReporter && aReporter->ReportAll() )
+                if( aReporter && aReporter->ReportAll() && !pad->GetNetname().IsEmpty() )
                 {
                     msg.Printf( _( "Clearing component \"%s:%s\" pin \"%s\" net name.\n" ),
                                 GetChars( footprint->GetReference() ),
@@ -2581,7 +2580,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             // Explore all pins/pads in component
             for( unsigned jj = 0; jj < component->GetNetCount(); jj++ )
             {
-                net = component->GetNet( jj );
+                COMPONENT_NET net = component->GetNet( jj );
                 padname = net.GetPinName();
 
                 if( footprint->FindPadByName( padname ) )

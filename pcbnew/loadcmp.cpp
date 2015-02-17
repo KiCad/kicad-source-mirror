@@ -333,9 +333,11 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
     MODULE* module = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
 
     // Clear all references to any net info, to be sure there is no broken links
-    // to any netinfo list (This should be the case, but...)
+    // to any netinfo list (should be not needed, but...)
+#if 0   // FIXME : currently crashes Pcbnew. should not.
     for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
         pad->SetNetCode( NETINFO_LIST::FORCE_ORPHANED );
+#endif
 
     return module;
 }
